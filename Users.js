@@ -52,7 +52,6 @@ class Users extends React.Component{
     if (!this.props.data.users) return <div/>;
     const resultMenu = <PaneMenu><button><Icon icon="bookmark"/></button></PaneMenu>
     const fineHistory = [{"Due Date": "11/12/2014", "Amount":"34.23", "Status":"Unpaid"}];
-    console.log(this.props.data.users);
     const displayUsers = this.props.data.users.reduce((results, user) => {
       results.push({Name: user.personal.full_name, Username: user.username, Email: user.personal.email_primary});
       return results;
