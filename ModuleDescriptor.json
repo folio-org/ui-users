@@ -1,0 +1,13 @@
+{ 
+  "id":"ui-users",
+  "name":"Users",
+  "uiDescriptor": {
+    "npm": "@folio/users"
+  },
+  "requires": [
+    {
+      "id":"users",
+      "version":"0.1.1"
+    }
+  ]
+}
