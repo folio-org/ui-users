@@ -27,19 +27,13 @@ class Users extends React.Component{
     };
   }
   
-  static manifest = { 
-    searchResults: [],
-    /*detail: {
-      fineHistory:[]
-    }*/
+  static manifest = {
+    users: {
+      type: 'okapi',
+      records: 'users',
+      path: 'users' 
+    } 
   };
-                        
-  componentWillMount() {
-    const resultData = [{Name:'Pete Sherman', Address:'391 W. Richardson St. Duarte, CA 91010', Fines:'$34.23'}];
-    //const fineHistory = [{"Due Date": "11/12/2014", "Amount":"34.23", "Status":"Unpaid"}];
-    this.props.mutator.searchResults.replace(resultData);
-    //this.props.mutator.detail.replace({fineHistory: fineHistory});
-  }
 
   //search Handlers...
   onChangeFilter(e){
@@ -55,8 +49,13 @@ class Users extends React.Component{
   //end search Handlers
 
   render(){
+    if (!this.props.data.users) return <div/>;
     const resultMenu = <PaneMenu><button><Icon icon="bookmark"/></button></PaneMenu>
     const fineHistory = [{"Due Date": "11/12/2014", "Amount":"34.23", "Status":"Unpaid"}];
+    const displayUsers = this.props.data.users.reduce((results, user) => {
+      results.push({Name: user.username, Group: user.patron_group});
+      return results;
+    }, []); 
     
     /*searchHeader is a 'custom pane header'*/
     const searchHeader = <FilterPaneSearch id="SearchField" onChange={this.onChangeSearch.bind(this)} />
@@ -90,7 +89,7 @@ class Users extends React.Component{
               
               {/*Results Pane*/}
               <Pane defaultWidth="fit-content" paneTitle="Results" lastMenu={resultMenu}>
-                     <MultiColumnList contentData={this.props.data.searchResults}/>
+                     <MultiColumnList contentData={displayUsers}/>
               </Pane>
               
               {/*Details Pane*/}
