@@ -12,7 +12,7 @@ import KeyValue from '@folio/stripes-components/lib/KeyValue'
 import {Row, Col} from 'react-bootstrap'
 import TextField from '@folio/stripes-components/lib/TextField'
 import Checkbox from '@folio/stripes-components/lib/Checkbox'
-import FilterPaneSearch from '@folio/stripes-components/lib/FilterPaneSearch'
+import FilterPaneSearch from './lib/FilterPaneSearch'
 import FilterControlGroup from '@folio/stripes-components/lib/FilterControlGroup'
 import Select from '@folio/stripes-components/lib/Select'
 
