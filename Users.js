@@ -1,5 +1,4 @@
 import React from 'react'
-import { connect } from 'stripes-connect';
 
 /* shared stripes components */
 import Pane from '@folio/stripes-components/lib/Pane'
@@ -101,6 +100,4 @@ class Users extends React.Component{
     
 }
 
-export default connect(Users, 'Users');
-
-
+export default Users;
