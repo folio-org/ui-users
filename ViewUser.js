@@ -13,13 +13,14 @@ import Icon from '@folio/stripes-components/lib/Icon'
 export default class ViewUser extends React.Component{
   render () {
     const { fineHistory, user } =  this.props;
+    if (!user) return <div/>;
     return (
       <Pane defaultWidth="fill">
         <Row>
           <Col xs={8} >
             <Row>
               <Col xs={12}>
-                <h2>Pete Sherman</h2>
+                <h2>{user.personal.full_name}</h2>
               </Col>
             </Row>
             <Row>
@@ -43,7 +44,7 @@ export default class ViewUser extends React.Component{
         <br/>
         <Row>
         <Col xs={3}>
-          <h3 className="marginTopHalf">Fines</h3>        
+          <h3 className="marginTopHalf">Fines</h3>
         </Col>
         <Col xs={4} sm={3}>
             <TextField 
@@ -55,7 +56,7 @@ export default class ViewUser extends React.Component{
               
         </Col>
         <Col xs={5} sm={6}>
-          <Button align="end" bottomMargin0 >View Full History</Button>        
+          <Button align="end" bottomMargin0 >View Full History</Button>
         </Col>
         </Row>
         <MultiColumnList fullWidth contentData={fineHistory} />

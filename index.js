@@ -16,7 +16,8 @@ export default ({pathname, connect}) => {
   return <div>
     <h1>Users module</h1>
     <Match exactly pattern={`${pathname}`} component={connect(Users)}/> 
-    <Match pattern={`${pathname}/:query`} component={connect(Users)}/> 
+    <Match exactly pattern={`${pathname}/:query`} component={connect(Users)}/>
+    <Match         pattern={`${pathname}/:query?/view/:userid`} component={connect(Users)}/>
     <Miss component={NoMatch}/>
   </div>
 };

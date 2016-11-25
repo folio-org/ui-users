@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
 
 /* shared stripes components */
 import Pane from '@folio/stripes-components/lib/Pane'
@@ -17,6 +17,10 @@ import Select from '@folio/stripes-components/lib/Select'
 import ViewUser from './ViewUser'
 
 class Users extends React.Component{
+  static contextTypes = {
+    router: PropTypes.object.isRequired
+  };
+
   constructor(props){
     super(props);
     this.state={
@@ -34,7 +38,11 @@ class Users extends React.Component{
       path: 'users' 
 // Does at least pull in query from UI URL -- path: 'users/:query'
 // Does at least submit a query that mod-users honours -- path: 'users/?query={"username":"river"}'
-    } 
+    }, 
+    user: {
+      type: 'okapi',
+      path: 'users/:userid'
+    }
   };
 
   //search Handlers...
@@ -52,16 +60,15 @@ class Users extends React.Component{
 
   onClickItemHandler (userId) {
     console.log("User clicked: ",userId);
+    this.context.router.transitionTo("/users/view/"+userId);
   }
 
   render(){
-    if (!this.props.data.users) return <div/>;
+    const { data } = this.props;
+    if (!data.users) return <div/>;
     const resultMenu = <PaneMenu><button><Icon icon="bookmark"/></button></PaneMenu>
     const fineHistory = [{"Due Date": "11/12/2014", "Amount":"34.23", "Status":"Unpaid"}];
-    const user = { "address":"391 W. Richardson St. Duarte, CA 91010", 
-                   "phone": "714-445-1124",
-                   "fines": "$34.75" };
-    const displayUsers = this.props.data.users.reduce((results, user) => {
+    const displayUsers = data.users.reduce((results, user) => {
       results.push({"id": user.id, Name: user.personal.full_name, Username: user.username, Email: user.personal.email_primary});
       return results;
     }, []); 
@@ -102,7 +109,7 @@ class Users extends React.Component{
               </Pane>
               
               {/*Details Pane*/}
-              <ViewUser user={user} fineHistory={fineHistory}/>
+              {(data.user && data.user.length>0) ? <ViewUser user={data.user[0]} fineHistory={fineHistory}/> : null}
             </Paneset>
             )
   }
