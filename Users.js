@@ -32,6 +32,8 @@ class Users extends React.Component{
       type: 'okapi',
       records: 'users',
       path: 'users' 
+// Does at least pull in query from UI URL -- path: 'users/:query'
+// Does at least submit a query that mod-users honours -- path: 'users/?query={"username":"river"}'
     } 
   };
 

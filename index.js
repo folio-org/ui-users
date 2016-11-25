@@ -4,9 +4,10 @@ import Miss from 'react-router/Miss';
 import Users from './Users';
 
 const NoMatch = ({ location }) => (
+  // Why is location undefined here?
   <div>
-    <h2>Whoops</h2>
-    <p>Sorry but {location.pathname} didn’t match any pages</p>
+    <h2>Uh-oh!</h2>
+    <p>How did you get here?</p>
   </div>
 );
 
