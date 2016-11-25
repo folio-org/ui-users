@@ -12,8 +12,7 @@ import Icon from '@folio/stripes-components/lib/Icon'
 
 export default class ViewUser extends React.Component{
   render () {
-    const { fineHistory } =  this.props;
-    console.log("this.props",this.props);
+    const { fineHistory, user } =  this.props;
     return (
       <Pane defaultWidth="fill">
         <Row>
@@ -25,13 +24,13 @@ export default class ViewUser extends React.Component{
             </Row>
             <Row>
               <Col xs={4}>
-                <KeyValue label="Address" value="391 W. Richardson St. Duarte, CA 91010"/>
+                <KeyValue label="Address" value={user.address}/>
               </Col>
               <Col xs={4}>
-                <KeyValue label="Phone" value="714-445-1124"/>
+                <KeyValue label="Phone" value={user.phone}/>
               </Col>
               <Col xs={4}>
-                <KeyValue label="Fines" value="$34.75"/>
+                <KeyValue label="Fines" value={user.fines}/>
               </Col>
             </Row>
           </Col>

@@ -6,7 +6,7 @@ import Paneset from '@folio/stripes-components/lib/Paneset'
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu'
 import Button from '@folio/stripes-components/lib/Button'
 import Icon from '@folio/stripes-components/lib/Icon'
-import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList'
+import MultiColumnList from './lib/MultiColumnList'
 import KeyValue from '@folio/stripes-components/lib/KeyValue'
 import {Row, Col} from 'react-bootstrap'
 import TextField from '@folio/stripes-components/lib/TextField'
@@ -52,8 +52,11 @@ class Users extends React.Component{
     if (!this.props.data.users) return <div/>;
     const resultMenu = <PaneMenu><button><Icon icon="bookmark"/></button></PaneMenu>
     const fineHistory = [{"Due Date": "11/12/2014", "Amount":"34.23", "Status":"Unpaid"}];
+    const user = { "address":"391 W. Richardson St. Duarte, CA 91010", 
+                   "phone": "714-445-1124",
+                   "fines": "$34.75" };
     const displayUsers = this.props.data.users.reduce((results, user) => {
-      results.push({Name: user.personal.full_name, Username: user.username, Email: user.personal.email_primary});
+      results.push({"id": user.id, Name: user.personal.full_name, Username: user.username, Email: user.personal.email_primary});
       return results;
     }, []); 
     
@@ -93,7 +96,7 @@ class Users extends React.Component{
               </Pane>
               
               {/*Details Pane*/}
-              <ViewUser fineHistory={fineHistory}/>
+              <ViewUser user={user} fineHistory={fineHistory}/>
             </Paneset>
             )
   }
