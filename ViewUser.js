@@ -31,14 +31,8 @@ class ViewUser extends React.Component{
               </Col>
             </Row>
             <Row>
-              <Col xs={4}>
-                <KeyValue label="Address" value={user[0].address}/>
-              </Col>
-              <Col xs={4}>
-                <KeyValue label="Phone" value={user[0].phone}/>
-              </Col>
-              <Col xs={4}>
-                <KeyValue label="Fines" value={user[0].fines}/>
+              <Col xs={12}>
+                <KeyValue label="Email" value={user[0].personal.email_primary}/>
               </Col>
             </Row>
           </Col>
