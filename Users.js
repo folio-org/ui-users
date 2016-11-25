@@ -6,7 +6,7 @@ import Paneset from '@folio/stripes-components/lib/Paneset'
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu'
 import Button from '@folio/stripes-components/lib/Button'
 import Icon from '@folio/stripes-components/lib/Icon'
-import MultiColumnList from './lib/MultiColumnList'
+import MultiColumnListUsers from './lib/MultiColumnList'
 import KeyValue from '@folio/stripes-components/lib/KeyValue'
 import {Row, Col} from 'react-bootstrap'
 import TextField from '@folio/stripes-components/lib/TextField'
@@ -47,6 +47,10 @@ class Users extends React.Component{
     this.setState({searchTerm:term});
   }
   //end search Handlers
+
+  onClickItemHandler (userId) {
+    console.log("User clicked: ",userId);
+  }
 
   render(){
     if (!this.props.data.users) return <div/>;
@@ -92,7 +96,7 @@ class Users extends React.Component{
               
               {/*Results Pane*/}
               <Pane defaultWidth="fit-content" paneTitle="Results" lastMenu={resultMenu}>
-                     <MultiColumnList contentData={displayUsers}/>
+                     <MultiColumnListUsers contentData={displayUsers} onClickItemHandler={this.onClickItemHandler.bind(this)}/>
               </Pane>
               
               {/*Details Pane*/}
