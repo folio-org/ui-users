@@ -1,5 +1,5 @@
 import React from 'react'
-
+import { connect } from 'stripes-connect';
 import Pane from '@folio/stripes-components/lib/Pane'
 import Button from '@folio/stripes-components/lib/Button'
 import KeyValue from '@folio/stripes-components/lib/KeyValue'
@@ -10,28 +10,35 @@ import Icon from '@folio/stripes-components/lib/Icon'
 
 
 
-export default class ViewUser extends React.Component{
+class ViewUser extends React.Component{
+  static manifest = {
+    user: {
+      type: 'okapi',
+      path: 'users/:userid'
+    }
+  };
+
   render () {
-    const { fineHistory, user } =  this.props;
-    if (!user) return <div/>;
+    const { fineHistory, data: {user} } =  this.props;
+    if (!user || user.length==0) return <div/>;
     return (
       <Pane defaultWidth="fill">
         <Row>
           <Col xs={8} >
             <Row>
               <Col xs={12}>
-                <h2>{user.personal.full_name}</h2>
+                <h2>{user[0].personal.full_name}</h2>
               </Col>
             </Row>
             <Row>
               <Col xs={4}>
-                <KeyValue label="Address" value={user.address}/>
+                <KeyValue label="Address" value={user[0].address}/>
               </Col>
               <Col xs={4}>
-                <KeyValue label="Phone" value={user.phone}/>
+                <KeyValue label="Phone" value={user[0].phone}/>
               </Col>
               <Col xs={4}>
-                <KeyValue label="Fines" value={user.fines}/>
+                <KeyValue label="Fines" value={user[0].fines}/>
               </Col>
             </Row>
           </Col>
@@ -64,3 +71,5 @@ export default class ViewUser extends React.Component{
     );
   }
 }
+
+export default connect(ViewUser, 'users');

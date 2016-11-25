@@ -38,10 +38,6 @@ class Users extends React.Component{
       path: 'users' 
 // Does at least pull in query from UI URL -- path: 'users/:query'
 // Does at least submit a query that mod-users honours -- path: 'users/?query={"username":"river"}'
-    }, 
-    user: {
-      type: 'okapi',
-      path: 'users/:userid'
     }
   };
 
@@ -64,7 +60,7 @@ class Users extends React.Component{
   }
 
   render(){
-    const { data } = this.props;
+    const { data, params } = this.props;
     if (!data.users) return <div/>;
     const resultMenu = <PaneMenu><button><Icon icon="bookmark"/></button></PaneMenu>
     const fineHistory = [{"Due Date": "11/12/2014", "Amount":"34.23", "Status":"Unpaid"}];
@@ -109,7 +105,7 @@ class Users extends React.Component{
               </Pane>
               
               {/*Details Pane*/}
-              {(data.user && data.user.length>0) ? <ViewUser user={data.user[0]} fineHistory={fineHistory}/> : null}
+              {(params.userid) ? <ViewUser userid={params.userid} fineHistory={fineHistory}/> : null}
             </Paneset>
             )
   }
