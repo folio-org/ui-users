@@ -3,15 +3,14 @@ import Match from 'react-router/Match';
 import Miss from 'react-router/Miss';
 import Users from './Users';
 
-const NoMatch = ({ location }) => (
-  // Why is location undefined here?
-  <div>
-    <h2>Uh-oh!</h2>
-    <p>How did you get here?</p>
-  </div>
-);
-
 class UsersRouting extends React.Component {
+  NoMatch() {
+    return <div>
+      <h2>Uh-oh!</h2>
+      <p>How did you get to <tt>{this.props.location.pathname}</tt>?</p>
+    </div>
+  }
+
   render() {
     var pathname = this.props.pathname;
     var connect = this.props.connect;
@@ -22,7 +21,7 @@ class UsersRouting extends React.Component {
       <Match exactly pattern={`${pathname}`} component={connect(Users)}/> 
       <Match exactly pattern={`${pathname}/:query`} component={connect(Users)}/>
       <Match         pattern={`${pathname}/:query?/view/:userid`} component={connect(Users)}/>
-      <Miss component={NoMatch}/>
+      <Miss component={this.NoMatch.bind(this)}/>
     </div>
   }
 }
