@@ -11,14 +11,20 @@ const NoMatch = ({ location }) => (
   </div>
 );
 
-export default ({pathname, connect}) => {
-  console.log("matching", pathname, ": this =", this);
-  // Location should be in this.props.location, but this is undefined.
-  return <div>
-    <h1>Users module</h1>
-    <Match exactly pattern={`${pathname}`} component={connect(Users)}/> 
-    <Match exactly pattern={`${pathname}/:query`} component={connect(Users)}/>
-    <Match         pattern={`${pathname}/:query?/view/:userid`} component={connect(Users)}/>
-    <Miss component={NoMatch}/>
-  </div>
-};
+class UsersRouting extends React.Component {
+  render() {
+    var pathname = this.props.pathname;
+    var connect = this.props.connect;
+    console.log("matching location:", this.props.location.pathname);
+
+    return <div>
+      <h1>Users module</h1>
+      <Match exactly pattern={`${pathname}`} component={connect(Users)}/> 
+      <Match exactly pattern={`${pathname}/:query`} component={connect(Users)}/>
+      <Match         pattern={`${pathname}/:query?/view/:userid`} component={connect(Users)}/>
+      <Miss component={NoMatch}/>
+    </div>
+  }
+}
+
+export default UsersRouting;
