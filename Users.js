@@ -51,6 +51,7 @@ class Users extends React.Component{
   onChangeSearch(e){
     let term = e.target.value;
     console.log("User searched:", term);
+    this.setState({ 'searchTerm': term });
     this.context.router.transitionTo("/users/" + term);
   }
   //end search Handlers
@@ -71,7 +72,7 @@ class Users extends React.Component{
     }, []); 
     
     /*searchHeader is a 'custom pane header'*/
-    const searchHeader = <FilterPaneSearch id="SearchField" onChange={this.onChangeSearch.bind(this)} />
+    const searchHeader = <FilterPaneSearch id="SearchField" onChange={this.onChangeSearch.bind(this)} value={this.state.term} />
     
     return(
             <Paneset>
