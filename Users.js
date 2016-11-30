@@ -74,7 +74,7 @@ class Users extends React.Component{
     }, []); 
     
     /*searchHeader is a 'custom pane header'*/
-    const searchHeader = <FilterPaneSearch id="SearchField" onChange={this.onChangeSearch} value={this.state.term} />
+    const searchHeader = <FilterPaneSearch id="SearchField" onChange={this.onChangeSearch} value={this.state.searchTerm} />
     
     return(
             <Paneset>
