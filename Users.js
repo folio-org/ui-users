@@ -29,6 +29,8 @@ class Users extends React.Component{
       employeeFilter: false,
       searchTerm: ''
     };
+
+    this.onChangeSearch = this.onChangeSearch.bind(this);
   }
   
   static manifest = {
@@ -72,7 +74,7 @@ class Users extends React.Component{
     }, []); 
     
     /*searchHeader is a 'custom pane header'*/
-    const searchHeader = <FilterPaneSearch id="SearchField" onChange={this.onChangeSearch.bind(this)} value={this.state.term} />
+    const searchHeader = <FilterPaneSearch id="SearchField" onChange={this.onChangeSearch} value={this.state.term} />
     
     return(
             <Paneset>
