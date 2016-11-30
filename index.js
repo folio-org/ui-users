@@ -12,7 +12,8 @@ const NoMatch = ({ location }) => (
 );
 
 export default ({pathname, connect}) => {
-  console.log("matching", pathname);
+  console.log("matching", pathname, ": this =", this);
+  // Location should be in this.props.location, but this is undefined.
   return <div>
     <h1>Users module</h1>
     <Match exactly pattern={`${pathname}`} component={connect(Users)}/> 
