@@ -31,6 +31,7 @@ class Users extends React.Component{
     };
 
     this.onChangeSearch = this.onChangeSearch.bind(this);
+    this.onClearSearch = this.onClearSearch.bind(this);
   }
   
   static manifest = {
@@ -56,6 +57,12 @@ class Users extends React.Component{
     this.setState({ 'searchTerm': term });
     this.context.router.transitionTo("/users/" + term);
   }
+
+  onClearSearch(e){
+    console.log("User cleared search");
+    this.setState({ 'searchTerm': '' });
+    this.context.router.transitionTo("/users");
+  }
   //end search Handlers
 
   onClickItemHandler (userId) {
@@ -74,7 +81,7 @@ class Users extends React.Component{
     }, []); 
     
     /*searchHeader is a 'custom pane header'*/
-    const searchHeader = <FilterPaneSearch id="SearchField" onChange={this.onChangeSearch} value={this.state.searchTerm} />
+    const searchHeader = <FilterPaneSearch id="SearchField" onChange={this.onChangeSearch} onClear={this.onClearSearch} value={this.state.searchTerm} />
     
     return(
             <Paneset>
