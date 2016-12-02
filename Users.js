@@ -38,8 +38,7 @@ class Users extends React.Component{
     users: {
       type: 'okapi',
       records: 'users',
-      path: 'users?query=?{query}' 
-// Does at least submit a query that mod-users honours -- path: 'users/?query={"username":"river"}'
+      path: 'users!{query}' // vile bespoke magic in !{query} -- see STRIPES-104
     }
   };
 
