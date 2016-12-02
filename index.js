@@ -4,6 +4,11 @@ import Miss from 'react-router/Miss';
 import Users from './Users';
 
 class UsersRouting extends React.Component {
+  constructor(props){
+    super(props);
+    this.connectedUsers = props.connect(Users);
+  }
+
   NoMatch() {
     return <div>
       <h2>Uh-oh!</h2>
@@ -18,9 +23,9 @@ class UsersRouting extends React.Component {
 
     return <div>
       <h1>Users module</h1>
-      <Match exactly pattern={`${pathname}`} component={connect(Users)}/> 
-      <Match exactly pattern={`${pathname}/:query`} component={connect(Users)}/>
-      <Match         pattern={`${pathname}/:query?/view/:userid`} component={connect(Users)}/>
+      <Match exactly pattern={`${pathname}`} component={this.connectedUsers}/> 
+      <Match exactly pattern={`${pathname}/:query`} component={this.connectedUsers}/>
+      <Match         pattern={`${pathname}/:query?/view/:userid`} component={this.connectedUsers}/>
       <Miss component={this.NoMatch.bind(this)}/>
     </div>
   }
