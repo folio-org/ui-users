@@ -38,8 +38,7 @@ class Users extends React.Component{
     users: {
       type: 'okapi',
       records: 'users',
-      path: 'users' 
-// Does at least pull in query from UI URL -- path: 'users/:query'
+      path: 'users?query=?{query}' 
 // Does at least submit a query that mod-users honours -- path: 'users/?query={"username":"river"}'
     }
   };
@@ -55,7 +54,7 @@ class Users extends React.Component{
     let term = e.target.value;
     console.log("User searched:", term);
     this.setState({ 'searchTerm': term });
-    this.context.router.transitionTo("/users/" + term);
+    this.context.router.transitionTo('/users?query=' + term);
   }
 
   onClearSearch(e){
