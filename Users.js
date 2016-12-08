@@ -40,6 +40,7 @@ class Users extends React.Component{
       type: 'okapi',
       records: 'users',
       path: 'users?query={"username":"?{query}"}',
+      // And when we move to PostgreSQL: ?query=[{"field":"'username'","value":"knord","op":"="}]
       staticFallback: { path: 'users' },
     }
   };
