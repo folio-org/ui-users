@@ -14,12 +14,13 @@ class ViewUser extends React.Component{
   static manifest = {
     user: {
       type: 'okapi',
-      path: 'users/:userid'
+      path: 'users/:{userid}'
     }
   };
 
   render () {
-    const { fineHistory, data: {user} } =  this.props;
+    const fineHistory = [{"Due Date": "11/12/2014", "Amount":"34.23", "Status":"Unpaid"}];
+    const { data: {user} } =  this.props;
     if (!user || user.length==0) return <div/>;
     return (
       <Pane defaultWidth="fill">

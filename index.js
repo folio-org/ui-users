@@ -22,9 +22,7 @@ class UsersRouting extends React.Component {
     console.log("matching location:", this.props.location.pathname);
 
     return <div>
-      <Match exactly pattern={`${pathname}`} component={this.connectedUsers}/> 
-      <Match exactly pattern={`${pathname}/:query`} component={this.connectedUsers}/>
-      <Match         pattern={`${pathname}/:query?/view/:userid`} component={this.connectedUsers}/>
+      <Match pattern={`${pathname}`} component={this.connectedUsers}/>
       <Miss component={this.NoMatch.bind(this)}/>
     </div>
   }

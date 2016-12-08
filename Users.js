@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react'
+import Match from 'react-router/Match';
 
 /* shared stripes components */
 import Pane from '@folio/stripes-components/lib/Pane'
@@ -38,7 +39,8 @@ class Users extends React.Component{
     users: {
       type: 'okapi',
       records: 'users',
-      path: 'users!{query}' // vile bespoke magic in !{query} -- see STRIPES-104
+      path: 'users?query={"username":"?{query}"}',
+      staticFallback: { path: 'users' },
     }
   };
 
@@ -69,10 +71,9 @@ class Users extends React.Component{
   }
 
   render(){
-    const { data, params } = this.props;
+    const { data, params, pathname } = this.props;
     if (!data.users) return <div/>;
     const resultMenu = <PaneMenu><button><Icon icon="bookmark"/></button></PaneMenu>
-    const fineHistory = [{"Due Date": "11/12/2014", "Amount":"34.23", "Status":"Unpaid"}];
     const displayUsers = data.users.reduce((results, user) => {
       results.push({"id": user.id, Name: user.personal.full_name, Username: user.username, Email: user.personal.email_primary});
       return results;
@@ -80,6 +81,7 @@ class Users extends React.Component{
     
     /*searchHeader is a 'custom pane header'*/
     const searchHeader = <FilterPaneSearch id="SearchField" onChange={this.onChangeSearch} onClear={this.onClearSearch} value={this.state.searchTerm} />
+    console.log(params);
     
     return(
             <Paneset>
@@ -114,7 +116,7 @@ class Users extends React.Component{
               </Pane>
               
               {/*Details Pane*/}
-              {(params.userid) ? <ViewUser userid={params.userid} fineHistory={fineHistory}/> : null}
+              <Match pattern={`${pathname}/view/:userid`} component={ViewUser}/>
             </Paneset>
             )
   }
