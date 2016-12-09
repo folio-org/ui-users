@@ -67,8 +67,8 @@ class Users extends React.Component{
   }
 
   onClickItemHandler (userId) {
-    console.log("User clicked: ",userId);
-    this.context.router.transitionTo("/users/view/"+userId);
+    console.log("User clicked", userId, "location = ", this.props.location);
+    this.context.router.transitionTo("/users/view/" + userId + this.props.location.search);
   }
 
   render(){
