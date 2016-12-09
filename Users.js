@@ -62,7 +62,7 @@ class Users extends React.Component{
   onClearSearch(e){
     console.log("User cleared search");
     this.setState({ 'searchTerm': '' });
-    this.context.router.transitionTo("/users");
+    this.context.router.transitionTo(this.props.location.pathname);
   }
   //end search Handlers
 
