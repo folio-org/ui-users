@@ -54,9 +54,9 @@ class Users extends React.Component{
   
   onChangeSearch(e){
     let term = e.target.value;
-    console.log("User searched:", term);
+    console.log("User searched:", term, "at", this.props.location.pathname);
     this.setState({ 'searchTerm': term });
-    this.context.router.transitionTo('/users?query=' + term);
+    this.context.router.transitionTo(this.props.location.pathname + '?query=' + term);
   }
 
   onClearSearch(e){
