@@ -31,8 +31,10 @@ class Users extends React.Component{
       searchTerm: ''
     };
 
+    this.onChangeFilter = this.onChangeFilter.bind(this);
     this.onChangeSearch = this.onChangeSearch.bind(this);
     this.onClearSearch = this.onClearSearch.bind(this);
+    this.onClickItemHandler =this.onClickItemHandler.bind(this);
   }
   
   static manifest = {
@@ -45,7 +47,6 @@ class Users extends React.Component{
     }
   };
 
-  //search Handlers...
   onChangeFilter(e){
     let stateObj = {};
     stateObj[e.target.id] = !this.state[e.target.id];
@@ -64,7 +65,6 @@ class Users extends React.Component{
     this.setState({ 'searchTerm': '' });
     this.context.router.transitionTo(this.props.location.pathname);
   }
-  //end search Handlers
 
   onClickItemHandler (userId) {
     console.log("User clicked: ",userId);
@@ -93,7 +93,7 @@ class Users extends React.Component{
                     id="patronFilter" 
                     label="Patrons" 
                     checked={this.state.patronFilter} 
-                    onChange={this.onChangeFilter.bind(this)}
+                    onChange={this.onChangeFilter}
                     marginBottom0 
                     hover 
                     fullWidth 
@@ -102,7 +102,7 @@ class Users extends React.Component{
                     id="employeeFilter" 
                     label="Employees" 
                     checked={this.state.employeeFilter} 
-                    onChange={this.onChangeFilter.bind(this)}
+                    onChange={this.onChangeFilter}
                     marginBottom0 hover fullWidth 
                   />
                 </FilterControlGroup>
@@ -113,7 +113,7 @@ class Users extends React.Component{
               
               {/*Results Pane*/}
               <Pane defaultWidth="fit-content" paneTitle="Results" lastMenu={resultMenu}>
-                     <MultiColumnListUsers contentData={displayUsers} onClickItemHandler={this.onClickItemHandler.bind(this)}/>
+                     <MultiColumnListUsers contentData={displayUsers} onClickItemHandler={this.onClickItemHandler}/>
               </Pane>
               
               {/*Details Pane*/}
