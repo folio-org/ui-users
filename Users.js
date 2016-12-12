@@ -118,7 +118,7 @@ class Users extends React.Component {
         </Pane>
 
         { /* Results Pane */ }
-        <Pane defaultWidth="fit-content" paneTitle="Results" lastMenu={resultMenu}>
+        <Pane defaultWidth="32%" paneTitle="Results" lastMenu={resultMenu}>
           <MultiColumnListUsers
             contentData={displayUsers}
             onClickItemHandler={this.onClickItemHandler}
