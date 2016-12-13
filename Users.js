@@ -19,10 +19,10 @@ class Users extends React.Component {
   };
 
   static propTypes = {
-    data: PropTypes.shape.isRequired,
-    params: PropTypes.shape.isOptional,
+    data: PropTypes.object.isRequired,
+    params: PropTypes.object,
     pathname: PropTypes.string.isRequired,
-    location: PropTypes.string.isRequired,
+    location: PropTypes.object.isRequired,
   };
 
   static manifest = {
