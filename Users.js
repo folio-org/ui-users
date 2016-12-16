@@ -1,5 +1,5 @@
-import React from 'react'
-import { connect } from 'stripes-connect';
+import React, { PropTypes } from 'react'
+import Match from 'react-router/Match';
 
 /* shared stripes components */
 import Pane from '@folio/stripes-components/lib/Pane'
@@ -7,7 +7,7 @@ import Paneset from '@folio/stripes-components/lib/Paneset'
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu'
 import Button from '@folio/stripes-components/lib/Button'
 import Icon from '@folio/stripes-components/lib/Icon'
-import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList'
+import MultiColumnListUsers from './lib/MultiColumnList'
 import KeyValue from '@folio/stripes-components/lib/KeyValue'
 import {Row, Col} from 'react-bootstrap'
 import TextField from '@folio/stripes-components/lib/TextField'
@@ -18,8 +18,13 @@ import Select from '@folio/stripes-components/lib/Select'
 import Layer from '@folio/stripes-components/lib/Layer'
 
 import UserForm from './UserForm';
+import ViewUser from './ViewUser'
 
 class Users extends React.Component{
+  static contextTypes = {
+    router: PropTypes.object.isRequired
+  };
+
   constructor(props){
     super(props);
     this.state={
@@ -34,6 +39,8 @@ class Users extends React.Component{
     this.onClickCloseNewUser = this.onClickCloseNewUser.bind(this);
     this.onChangeFilter = this.onChangeFilter.bind(this);
     this.onChangeSearch = this.onChangeSearch.bind(this);
+    this.onClearSearch = this.onClearSearch.bind(this);
+    this.onClickItemHandler =this.onClickItemHandler.bind(this);
   }
   
   static manifest = { 
@@ -41,11 +48,19 @@ class Users extends React.Component{
     /*detail: {
       fineHistory:[]
     }*/
-    users: {
+    user: {
       type: 'okapi',
       path: 'users',
       fetch: false
+    },
+    users: {
+      type: 'okapi',
+      records: 'users',
+      path: 'users?query={"username":"?{query}"}',
+      // And when we move to PostgreSQL: ?query=[{"field":"'username'","value":"knord","op":"="}]
+      staticFallback: { path: 'users' },
     }
+
   };
 
   componentWillMount() {
@@ -56,10 +71,9 @@ class Users extends React.Component{
   }
 
   create(data) {
-    this.props.mutator['users'].POST(data);
-      // .then(() =>
-      // this.context.router.transitionTo('/okapi-console/tenants')
-      // );
+    this.props.mutator['user'].POST(data).then(() =>
+           this.context.router.transitionTo('/users')
+    );
   }
 
   //search Handlers...
@@ -71,8 +85,22 @@ class Users extends React.Component{
   
   onChangeSearch(e){
     let term = e.target.value;
-    this.setState({searchTerm:term});
+    console.log("User searched:", term, "at", this.props.location.pathname);
+    this.setState({ 'searchTerm': term });
+    this.context.router.transitionTo(this.props.location.pathname + '?query=' + term);
   }
+  
+  onClearSearch(e){
+    console.log("User cleared search");
+    this.setState({ 'searchTerm': '' });
+    this.context.router.transitionTo(this.props.location.pathname);
+  }
+
+  onClickItemHandler (userId) {
+    console.log("User clicked", userId, "location = ", this.props.location);
+    this.context.router.transitionTo("/users/view/" + userId + this.props.location.search);
+  }
+
   //end search Handlers
 
   //AddUser Handlers
@@ -91,11 +119,18 @@ class Users extends React.Component{
   //end AddUser Handlers
   
   render(){
+    const { data, params, pathname } = this.props;
+    if (!data.users) return <div/>;
     const resultMenu = <PaneMenu><button><Icon icon="bookmark"/></button></PaneMenu>
     const fineHistory = [{"Due Date": "11/12/2014", "Amount":"34.23", "Status":"Unpaid"}];
+    const displayUsers = data.users.reduce((results, user) => {
+      results.push({"id": user.id, Name: user.personal.full_name, Username: user.username, Email: user.personal.email_primary});
+      return results;
+    }, []);     
     
     /*searchHeader is a 'custom pane header'*/
-    const searchHeader = <FilterPaneSearch id="SearchField" onChange={this.onChangeSearch.bind(this)} />
+    const searchHeader = <FilterPaneSearch id="SearchField" onChange={this.onChangeSearch} onClear={this.onClearSearch} value={this.state.searchTerm} />
+    console.log(params);
     
     return (
       <Paneset>
@@ -106,7 +141,7 @@ class Users extends React.Component{
               id="patronFilter"
               label="Patrons"
               checked={this.state.patronFilter} 
-              onChange={this.onChangeFilter.bind(this)}
+              onChange={this.onChangeFilter}
               marginBottom0
               hover
               fullWidth
@@ -115,7 +150,7 @@ class Users extends React.Component{
               id="employeeFilter"
               label="Employees"
               checked={this.state.employeeFilter}
-              onChange={this.onChangeFilter.bind(this)}
+              onChange={this.onChangeFilter}
               marginBottom0 hover fullWidth
             />
           </FilterControlGroup>
@@ -126,56 +161,11 @@ class Users extends React.Component{
 
         {/*Results Pane*/}
         <Pane defaultWidth="fit-content" paneTitle="Results" lastMenu={resultMenu}>
-               <MultiColumnList contentData={this.props.data.searchResults} />
+          <MultiColumnListUsers contentData={displayUsers} onClickItemHandler={this.onClickItemHandler}/>
         </Pane>
         
         {/*Details Pane*/}
-        <Pane defaultWidth="fill">
-          <Row>
-            <Col xs={8} >
-              <Row>
-                <Col xs={12}>
-                  <h2>Pete Sherman</h2>
-                </Col>
-              </Row>
-              <Row>
-                <Col xs={4}>
-                  <KeyValue label="Address" value="391 W. Richardson St. Duarte, CA 91010"/>
-                </Col>
-                <Col xs={4}>
-                  <KeyValue label="Phone" value="714-445-1124"/>
-                </Col>
-                <Col xs={4}>
-                  <KeyValue label="Fines" value="$34.75"/>
-                </Col>
-              </Row>
-            </Col>
-            <Col xs={4} >
-              <img className="floatEnd" src="http://placehold.it/175x175"/>
-            </Col>
-          </Row>
-          <br/>
-          <hr/>
-          <br/>
-          <Row>
-          <Col xs={3}>
-            <h3 className="marginTopHalf">Fines</h3>
-          </Col>
-          <Col xs={4} sm={3}>
-              <TextField 
-                rounded 
-                endControl={<Button buttonStyle="fieldControl"><Icon icon='clearX' /></Button>}
-                startControl={<Icon icon='search'/>}
-                placeholder="Search"
-                fullWidth
-                />
-          </Col>
-          <Col xs={5} sm={6}>
-            <Button align="end" bottomMargin0 >View Full History</Button>
-          </Col>
-          </Row>
-          <MultiColumnList fullWidth contentData={fineHistory} />
-        </Pane>
+        <Match pattern={`${pathname}/view/:userid`} component={ViewUser}/>
         <Layer isOpen={this.state.addUserMode} label="Add New User Dialog">
           <UserForm
             onSubmit={this.create.bind(this)}
@@ -186,6 +176,4 @@ class Users extends React.Component{
   }
 }
 
-export default connect(Users, 'Users');
-
-
+export default Users;
