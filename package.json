@@ -34,9 +34,5 @@
     "eslint-plugin-react": "^6.4.1",
     "eslint-import-resolver-webpack": "0.7.1",
     "webpack": "1.11.0"
-  },
-  "dependencies": {
-    "react": "15",
-    "react-router": "next"
   }
 }
