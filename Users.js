@@ -78,9 +78,7 @@ class Users extends React.Component{
   }
 
   create(data) {
-    this.props.mutator['user'].POST(data).then(() =>
-           this.context.router.transitionTo('/users')
-    );
+    this.props.mutator['user'].POST(data);
   }
 
   //search Handlers...
