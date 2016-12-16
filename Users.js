@@ -1,135 +1,191 @@
-import React, { PropTypes } from 'react';
-import Match from 'react-router/Match';
+import React from 'react'
+import { connect } from 'stripes-connect';
 
 /* shared stripes components */
-import Pane from '@folio/stripes-components/lib/Pane';
-import Paneset from '@folio/stripes-components/lib/Paneset';
-import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
-import Button from '@folio/stripes-components/lib/Button';
-import Icon from '@folio/stripes-components/lib/Icon';
-import Checkbox from '@folio/stripes-components/lib/Checkbox';
-import FilterPaneSearch from '@folio/stripes-components/lib/FilterPaneSearch';
-import FilterControlGroup from '@folio/stripes-components/lib/FilterControlGroup';
-import ViewUser from './ViewUser';
-import MultiColumnListUsers from './lib/MultiColumnList';
+import Pane from '@folio/stripes-components/lib/Pane'
+import Paneset from '@folio/stripes-components/lib/Paneset'
+import PaneMenu from '@folio/stripes-components/lib/PaneMenu'
+import Button from '@folio/stripes-components/lib/Button'
+import Icon from '@folio/stripes-components/lib/Icon'
+import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList'
+import KeyValue from '@folio/stripes-components/lib/KeyValue'
+import {Row, Col} from 'react-bootstrap'
+import TextField from '@folio/stripes-components/lib/TextField'
+import Checkbox from '@folio/stripes-components/lib/Checkbox'
+import FilterPaneSearch from '@folio/stripes-components/lib/FilterPaneSearch'
+import FilterControlGroup from '@folio/stripes-components/lib/FilterControlGroup'
+import Select from '@folio/stripes-components/lib/Select'
+import Layer from '@folio/stripes-components/lib/Layer'
 
-class Users extends React.Component {
-  static contextTypes = {
-    router: PropTypes.object.isRequired,
-  };
+import UserForm from './UserForm';
 
-  static propTypes = {
-    data: PropTypes.shape.isRequired,
-    params: PropTypes.shape.isOptional,
-    pathname: PropTypes.string.isRequired,
-    location: PropTypes.string.isRequired,
-  };
-
-  static manifest = {
-    users: {
-      type: 'okapi',
-      records: 'users',
-      path: 'users?query={"username":"?{query}"}',
-      // And when we move to PostgreSQL: ?query=[{"field":"'username'","value":"knord","op":"="}]
-      staticFallback: { path: 'users' },
-    },
-  };
-
-  constructor(props) {
+class Users extends React.Component{
+  constructor(props){
     super(props);
-    this.state = {
-      // Search/Filter state...
+    this.state={
+      //Search/Filter state...
       patronFilter: true,
       employeeFilter: false,
       searchTerm: '',
+      addUserMode: false
     };
-
+    
+    this.onClickAddNewUser = this.onClickAddNewUser.bind(this);
+    this.onClickCloseNewUser = this.onClickCloseNewUser.bind(this);
     this.onChangeFilter = this.onChangeFilter.bind(this);
     this.onChangeSearch = this.onChangeSearch.bind(this);
-    this.onClearSearch = this.onClearSearch.bind(this);
-    this.onClickItemHandler = this.onClickItemHandler.bind(this);
+  }
+  
+  static manifest = { 
+    searchResults: [],
+    /*detail: {
+      fineHistory:[]
+    }*/
+    users: {
+      type: 'okapi',
+      path: 'users',
+      fetch: false
+    }
+  };
+
+  componentWillMount() {
+    const resultData = [{Name:'Pete Sherman', Address:'391 W. Richardson St. Duarte, CA 91010', Fines:'$34.23'}];
+    //const fineHistory = [{"Due Date": "11/12/2014", "Amount":"34.23", "Status":"Unpaid"}];
+    this.props.mutator.searchResults.replace(resultData);
+    //this.props.mutator.detail.replace({fineHistory: fineHistory});
   }
 
-  onChangeFilter(e) {
-    const stateObj = {};
+  create(data) {
+    this.props.mutator['users'].POST(data);
+      // .then(() =>
+      // this.context.router.transitionTo('/okapi-console/tenants')
+      // );
+  }
+
+  //search Handlers...
+  onChangeFilter(e){
+    let stateObj = {};
     stateObj[e.target.id] = !this.state[e.target.id];
     this.setState(stateObj);
   }
-
-  onChangeSearch(e) {
-    const term = e.target.value;
-    console.log('User searched:', term, 'at', this.props.location.pathname);
-    this.setState({ searchTerm: term });
-    this.context.router.transitionTo(`${this.props.location.pathname}?query=${term}`);
+  
+  onChangeSearch(e){
+    let term = e.target.value;
+    this.setState({searchTerm:term});
   }
+  //end search Handlers
 
-  onClearSearch() {
-    console.log('User cleared search');
-    this.setState({ searchTerm: '' });
-    this.context.router.transitionTo(this.props.location.pathname);
+  //AddUser Handlers
+  onClickAddNewUser(){
+    console.log('add Clicked')
+    this.setState({
+      addUserMode: true
+    });
   }
-
-  onClickItemHandler(userId) {
-    console.log('User clicked', userId, 'location = ', this.props.location);
-    this.context.router.transitionTo(`/users/view/${userId}${this.props.location.search}`);
-  }
-
-  render() {
-    const { data, params, pathname } = this.props;
-    if (!data.users) return <div />;
-    const resultMenu = <PaneMenu><button><Icon icon="bookmark" /></button></PaneMenu>;
-    const displayUsers = data.users.reduce((results, user) => {
-      results.push({
-        id: user.id,
-        Name: user.personal.full_name,
-        Username: user.username,
-        Email: user.personal.email_primary });
-      return results;
-    }, []);
-
-    /* searchHeader is a 'custom pane header' */
-    const searchHeader = <FilterPaneSearch id="SearchField" onChange={this.onChangeSearch} onClear={this.onClearSearch} value={this.state.searchTerm} />;
-    console.log(params);
+  
+  onClickCloseNewUser(){
+    this.setState({
+      addUserMode: false
+    });
+  }  
+  //end AddUser Handlers
+  
+  render(){
+    const resultMenu = <PaneMenu><button><Icon icon="bookmark"/></button></PaneMenu>
+    const fineHistory = [{"Due Date": "11/12/2014", "Amount":"34.23", "Status":"Unpaid"}];
+    
+    /*searchHeader is a 'custom pane header'*/
+    const searchHeader = <FilterPaneSearch id="SearchField" onChange={this.onChangeSearch.bind(this)} />
+    
     return (
       <Paneset>
-        { /* Filter Pane */ }
+        {/*Filter Pane */}
         <Pane defaultWidth="16%" header={searchHeader}>
           <FilterControlGroup label="Filters">
-            <Checkbox
+            <Checkbox 
               id="patronFilter"
               label="Patrons"
-              checked={this.state.patronFilter}
-              onChange={this.onChangeFilter}
+              checked={this.state.patronFilter} 
+              onChange={this.onChangeFilter.bind(this)}
               marginBottom0
               hover
               fullWidth
             />
-            <Checkbox
+            <Checkbox 
               id="employeeFilter"
               label="Employees"
               checked={this.state.employeeFilter}
-              onChange={this.onChangeFilter}
+              onChange={this.onChangeFilter.bind(this)}
               marginBottom0 hover fullWidth
             />
           </FilterControlGroup>
           <FilterControlGroup label="Actions">
-            <Button fullWidth>Add User</Button>
+            <Button fullWidth onClick={this.onClickAddNewUser}>Add User</Button>
           </FilterControlGroup>
         </Pane>
 
-        { /* Results Pane */ }
-        <Pane defaultWidth="32%" paneTitle="Results" lastMenu={resultMenu}>
-          <MultiColumnListUsers
-            contentData={displayUsers}
-            onClickItemHandler={this.onClickItemHandler}
-          />
+        {/*Results Pane*/}
+        <Pane defaultWidth="fit-content" paneTitle="Results" lastMenu={resultMenu}>
+               <MultiColumnList contentData={this.props.data.searchResults} />
         </Pane>
-
-        { /* Details Pane */ }
-        <Match pattern={`${pathname}/view/:userid`} component={ViewUser} />
+        
+        {/*Details Pane*/}
+        <Pane defaultWidth="fill">
+          <Row>
+            <Col xs={8} >
+              <Row>
+                <Col xs={12}>
+                  <h2>Pete Sherman</h2>
+                </Col>
+              </Row>
+              <Row>
+                <Col xs={4}>
+                  <KeyValue label="Address" value="391 W. Richardson St. Duarte, CA 91010"/>
+                </Col>
+                <Col xs={4}>
+                  <KeyValue label="Phone" value="714-445-1124"/>
+                </Col>
+                <Col xs={4}>
+                  <KeyValue label="Fines" value="$34.75"/>
+                </Col>
+              </Row>
+            </Col>
+            <Col xs={4} >
+              <img className="floatEnd" src="http://placehold.it/175x175"/>
+            </Col>
+          </Row>
+          <br/>
+          <hr/>
+          <br/>
+          <Row>
+          <Col xs={3}>
+            <h3 className="marginTopHalf">Fines</h3>
+          </Col>
+          <Col xs={4} sm={3}>
+              <TextField 
+                rounded 
+                endControl={<Button buttonStyle="fieldControl"><Icon icon='clearX' /></Button>}
+                startControl={<Icon icon='search'/>}
+                placeholder="Search"
+                fullWidth
+                />
+          </Col>
+          <Col xs={5} sm={6}>
+            <Button align="end" bottomMargin0 >View Full History</Button>
+          </Col>
+          </Row>
+          <MultiColumnList fullWidth contentData={fineHistory} />
+        </Pane>
+        <Layer isOpen={this.state.addUserMode} label="Add New User Dialog">
+          <UserForm
+            onSubmit={this.create.bind(this)}
+            onCancel={this.onClickCloseNewUser} />
+        </Layer>
       </Paneset>
-    );
+    )
   }
 }
 
-export default Users;
+export default connect(Users, 'Users');
+
+
