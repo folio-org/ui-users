@@ -1,30 +1,38 @@
-import React from 'react';
-import Match from 'react-router/Match';
-import Miss from 'react-router/Miss';
+import React, { Component, PropTypes } from 'react'; // eslint-disable-line
+import Match from 'react-router/Match'; // eslint-disable-line
+import Miss from 'react-router/Miss'; // eslint-disable-line
 import Users from './Users';
 
-class UsersRouting extends React.Component {
-  constructor(props){
+class UsersRouting extends Component {
+
+  static propTypes = {
+    connect: PropTypes.func.isRequired,
+    location: PropTypes.func.isRequired,
+    pathname: PropTypes.string,
+  }
+
+  constructor(props) {
     super(props);
     this.connectedUsers = props.connect(Users);
   }
 
   NoMatch() {
-    return <div>
-      <h2>Uh-oh!</h2>
-      <p>How did you get to <tt>{this.props.location.pathname}</tt>?</p>
-    </div>
+    return (
+      <div>
+        <h2>Uh-oh!</h2>
+        <p>How did you get to <tt>{this.props.location.pathname}</tt>?</p>
+      </div>
+    );
   }
 
   render() {
-    var pathname = this.props.pathname;
-    var connect = this.props.connect;
-    console.log("matching location:", this.props.location.pathname);
-
-    return <div>
-      <Match pattern={`${pathname}`} component={this.connectedUsers}/>
-      <Miss component={this.NoMatch.bind(this)}/>
-    </div>
+    const { pathname } = this.props;
+    return (
+      <div>
+        <Match pattern={`${pathname}`} component={this.connectedUsers} />
+        <Miss component={() => { this.NoMatch(); }} />
+      </div>
+    );
   }
 }
 
