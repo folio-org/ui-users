@@ -46,8 +46,7 @@ class Users extends Component {
     users: {
       type: 'okapi',
       records: 'users',
-      path: 'users?query={"username":"?{query}"}',
-      // And when we move to PostgreSQL: ?query=[{"field":"'username'","value":"knord","op":"="}]
+      path: 'users?query=[{"field":"' + "'" + 'username' + "'" + '","value":"?{query}","op":"="}]',
       staticFallback: { path: 'users' },
     },
   };
