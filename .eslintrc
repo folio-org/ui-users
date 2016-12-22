@@ -9,6 +9,7 @@
   "rules": {
     "react/jsx-filename-extension":"off",
     "import/extensions": [ 1, "never" ],
-    "no-console": "off"
+    "no-console": "off",
+    "react/forbid-prop-types": "off"
   }
 }
