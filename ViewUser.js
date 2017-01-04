@@ -47,6 +47,9 @@ class ViewUser extends Component {
     });
   }
 
+  update(data) {
+    this.props.mutator.user.PUT(data);
+  }
 
   render() {
     const fineHistory = [{ 'Due Date': '11/12/2014', 'Amount': '34.23', 'Status': 'Unpaid' }]; // eslint-disable-line quote-props
@@ -96,7 +99,7 @@ class ViewUser extends Component {
         <MultiColumnList fullWidth contentData={fineHistory} />
         <Layer isOpen={this.state.editUserMode} label="Edit User Dialog">
           <UserForm
-            onSubmit={(record) => { return; }}
+            onSubmit={(record) => { this.update(record); }}
             initialValues={user[0]}
             onCancel={this.onClickCloseEditUser}
           />
