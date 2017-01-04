@@ -7,6 +7,9 @@ import {Row, Col} from 'react-bootstrap' // eslint-disable-line
 import TextField from '@folio/stripes-components/lib/TextField' // eslint-disable-line
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList' // eslint-disable-line
 import Icon from '@folio/stripes-components/lib/Icon' // eslint-disable-line
+import Layer from '@folio/stripes-components/lib/Layer'; // eslint-disable-line
+
+import UserForm from './UserForm';
 
 class ViewUser extends Component {
 
@@ -20,6 +23,30 @@ class ViewUser extends Component {
       path: 'users/:{userid}',
     },
   };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      editUserMode: false,
+    };
+    this.onClickEditUser = this.onClickEditUser.bind(this);
+    this.onClickCloseEditUser = this.onClickCloseEditUser.bind(this);
+  }
+
+  // EditUser Handlers
+  onClickEditUser() {
+    console.log('edit Clicked');
+    this.setState({
+      editUserMode: true,
+    });
+  }
+
+  onClickCloseEditUser() {
+    this.setState({
+      editUserMode: false,
+    });
+  }
+
 
   render() {
     const fineHistory = [{ 'Due Date': '11/12/2014', 'Amount': '34.23', 'Status': 'Unpaid' }]; // eslint-disable-line quote-props
@@ -38,6 +65,9 @@ class ViewUser extends Component {
               <Col xs={12}>
                 <KeyValue label="Email" value={user[0].personal.email_primary} />
               </Col>
+            </Row>
+            <Row>
+              <Button buttonStyle="fieldControl" onClick={this.onClickEditUser}><Icon icon="edit" /></Button>
             </Row>
           </Col>
           <Col xs={4} >
@@ -64,6 +94,13 @@ class ViewUser extends Component {
           </Col>
         </Row>
         <MultiColumnList fullWidth contentData={fineHistory} />
+        <Layer isOpen={this.state.editUserMode} label="Edit User Dialog">
+          <UserForm
+            onSubmit={(record) => { return; }}
+            initialValues={user[0]}
+            onCancel={this.onClickCloseEditUser}
+          />
+        </Layer>
       </Pane>
     );
   }
