@@ -7,7 +7,7 @@ class UsersRouting extends Component {
 
   static propTypes = {
     connect: PropTypes.func.isRequired,
-    location: PropTypes.func.isRequired,
+    location: PropTypes.object.isRequired,
     pathname: PropTypes.string,
   }
 

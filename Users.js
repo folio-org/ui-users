@@ -22,15 +22,15 @@ import ViewUser from './ViewUser';
 
 class Users extends Component {
   static contextTypes = {
-    router: PropTypes.func.isRequired,
+    router: PropTypes.object.isRequired,
   }
 
   static propTypes = {
-    data: PropTypes.shape.isRequired,
-    params: PropTypes.func,
+    data: PropTypes.object.isRequired,
+    params: PropTypes.object,
     pathname: PropTypes.string.isRequired,
-    location: PropTypes.func.isRequired,
-    mutator: PropTypes.func,
+    location: PropTypes.object.isRequired,
+    mutator: PropTypes.object,
   };
 
   static manifest = {
@@ -46,8 +46,7 @@ class Users extends Component {
     users: {
       type: 'okapi',
       records: 'users',
-      path: 'users?query={"username":"?{query}"}',
-      // And when we move to PostgreSQL: ?query=[{"field":"'username'","value":"knord","op":"="}]
+      path: 'users?query=[{"field":"\'username\'","value":"?{query}","op":"="}]',
       staticFallback: { path: 'users' },
     },
   };
