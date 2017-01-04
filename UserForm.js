@@ -28,16 +28,18 @@ function UserForm(props) {
     pristine,
     submitting,
     onCancel,
+    initialValues
   } = props;
 
   /* Menues for Add User workflow */
   const addUserFirstMenu = <PaneMenu><button onClick={onCancel} title="close" aria-label="Close New User Dialog"><span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span></button></PaneMenu>;
   const addUserLastMenu = <PaneMenu><Button type="submit" title="Create New User" disabled={pristine || submitting} onClick={handleSubmit}>Create User</Button></PaneMenu>;
+  const editUserLastMenu = <PaneMenu><Button type="submit" title="Update User" disabled={pristine || submitting} onClick={handleSubmit}>Update User</Button></PaneMenu>;
 
   return (
     <form>
       <Paneset>
-        <Pane defaultWidth="100%" firstMenu={addUserFirstMenu} lastMenu={addUserLastMenu} paneTitle="New User">
+        <Pane defaultWidth="100%" firstMenu={addUserFirstMenu} lastMenu={initialValues ? editUserLastMenu : addUserLastMenu} paneTitle="New User">
           <Row>
             <Col sm={5} smOffset={1}>
               <h2>User Record</h2>
