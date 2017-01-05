@@ -19,6 +19,7 @@ const propTypes = {
   pristine: PropTypes.bool,
   submitting: PropTypes.bool,
   onCancel: PropTypes.func,
+  initialValues: PropTypes.bool,
 };
 
 function UserForm(props) {
@@ -28,7 +29,7 @@ function UserForm(props) {
     pristine,
     submitting,
     onCancel,
-    initialValues
+    initialValues,
   } = props;
 
   /* Menues for Add User workflow */
