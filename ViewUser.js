@@ -13,9 +13,13 @@ import Layer from '@folio/stripes-components/lib/Layer'; // eslint-disable-line
 import UserForm from './UserForm';
 
 class ViewUser extends Component {
-
   static propTypes = {
     data: PropTypes.shape,
+    mutator: React.PropTypes.shape({
+      user: React.PropTypes.shape({
+        PUT: React.PropTypes.func.isRequired,
+      }),
+    }),
   };
 
   static manifest = {
@@ -49,16 +53,16 @@ class ViewUser extends Component {
   }
 
   update(data) {
-    this.props.mutator.user.PUT(data).then (
+    this.props.mutator.user.PUT(data).then(
       () => this.onClickCloseEditUser()
     );
   }
 
   render() {
     const fineHistory = [{ 'Due Date': '11/12/2014', 'Amount': '34.23', 'Status': 'Unpaid' }]; // eslint-disable-line quote-props
-    
-    const detailMenu =  <PaneMenu><button onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button></PaneMenu>;
-  
+
+    const detailMenu = <PaneMenu><button onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button></PaneMenu>;
+
     const { data: { user } } = this.props;
     if (!user || user.length === 0) return <div />;
     return (
