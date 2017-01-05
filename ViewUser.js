@@ -53,9 +53,9 @@ class ViewUser extends Component {
   }
 
   update(data) {
-    this.props.mutator.user.PUT(data).then(
-      () => this.onClickCloseEditUser()
-    );
+    this.props.mutator.user.PUT(data).then(() => {
+      this.onClickCloseEditUser();
+    });
   }
 
   render() {
