@@ -61,6 +61,7 @@ class Users extends Component {
       addUserMode: false,
     };
 
+    this.searchTimer = null;
     this.onClickAddNewUser = this.onClickAddNewUser.bind(this);
     this.onClickCloseNewUser = this.onClickCloseNewUser.bind(this);
     this.onChangeFilter = this.onChangeFilter.bind(this);
@@ -84,10 +85,20 @@ class Users extends Component {
   }
 
   onChangeSearch(e) {
+
+    const users = this;
     const term = e.target.value;
-    console.log('User searched:', term, 'at', this.props.location.pathname);
-    this.setState({ searchTerm: term });
-    this.context.router.transitionTo(`${this.props.location.pathname}?query=${term}`);
+
+    users.setState({ searchTerm: term });
+    
+    if(users.searchTimer) window.clearTimeout(users.searchTimer);
+
+    users.searchTimer = setTimeout(function() {
+      console.log('User searched:', term, 'at', users.props.location.pathname);
+      const transitionLoc = term === "" ?  users.props.location.pathname : `${users.props.location.pathname}?query=${term}`;     
+      users.context.router.transitionTo(transitionLoc);
+    }, 250);
+
   }
 
   onClearSearch() {
