@@ -17,7 +17,7 @@
     "route": "/users"
   },
   "scripts": {
-    "lint": "eslint *.js"
+    "lint": "eslint *.js || true"
   },
   "devDependencies": {
     "babel-core": "^6.17.0",
