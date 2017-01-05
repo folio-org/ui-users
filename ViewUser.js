@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react' // eslint-disable-line
 import { connect } from 'stripes-connect'; // eslint-disable-line
 import Pane from '@folio/stripes-components/lib/Pane' // eslint-disable-line
+import PaneMenu from '@folio/stripes-components/lib/PaneMenu' // eslint-disable-line
 import Button from '@folio/stripes-components/lib/Button' // eslint-disable-line
 import KeyValue from '@folio/stripes-components/lib/KeyValue' // eslint-disable-line
 import {Row, Col} from 'react-bootstrap' // eslint-disable-line
@@ -55,10 +56,13 @@ class ViewUser extends Component {
 
   render() {
     const fineHistory = [{ 'Due Date': '11/12/2014', 'Amount': '34.23', 'Status': 'Unpaid' }]; // eslint-disable-line quote-props
+    
+    const detailMenu =  <PaneMenu><button onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button></PaneMenu>;
+  
     const { data: { user } } = this.props;
     if (!user || user.length === 0) return <div />;
     return (
-      <Pane defaultWidth="fill">
+      <Pane defaultWidth="fill" paneTitle="User Details" lastMenu={detailMenu}>
         <Row>
           <Col xs={8} >
             <Row>
@@ -70,9 +74,6 @@ class ViewUser extends Component {
               <Col xs={12}>
                 <KeyValue label="Email" value={user[0].personal.email_primary} />
               </Col>
-            </Row>
-            <Row>
-              <Button buttonStyle="fieldControl" onClick={this.onClickEditUser}><Icon icon="edit" /></Button>
             </Row>
           </Col>
           <Col xs={4} >
@@ -92,6 +93,7 @@ class ViewUser extends Component {
               endControl={<Button buttonStyle="fieldControl"><Icon icon="clearX" /></Button>}
               startControl={<Icon icon="search" />}
               placeholder="Search"
+              fullWidth
             />
           </Col>
           <Col xs={5} sm={6}>
