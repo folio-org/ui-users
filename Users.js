@@ -46,7 +46,7 @@ class Users extends Component {
     users: {
       type: 'okapi',
       records: 'users',
-      path: 'users?query=[{"field":"\'username\'","value":"?{query}","op":"="}]',
+      path: 'users?query=username="?{query}"',
       staticFallback: { path: 'users' },
     },
   };
@@ -84,7 +84,6 @@ class Users extends Component {
   }
 
   onChangeSearch(e) {
-
     const term = e.target.value;
     const transitionLoc = term === "" ?  this.props.location.pathname : `${this.props.location.pathname}?query=${term}`;     
 
