@@ -84,10 +84,14 @@ class Users extends Component {
   }
 
   onChangeSearch(e) {
+
     const term = e.target.value;
+    const transitionLoc = term === "" ?  this.props.location.pathname : `${this.props.location.pathname}?query=${term}`;     
+
     console.log('User searched:', term, 'at', this.props.location.pathname);
     this.setState({ searchTerm: term });
-    this.context.router.transitionTo(`${this.props.location.pathname}?query=${term}`);
+    this.context.router.transitionTo(transitionLoc);
+
   }
 
   onClearSearch() {
