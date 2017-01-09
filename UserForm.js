@@ -19,7 +19,7 @@ const propTypes = {
   pristine: PropTypes.bool,
   submitting: PropTypes.bool,
   onCancel: PropTypes.func,
-  initialValues: PropTypes.bool,
+  initialValues: PropTypes.object,
 };
 
 function UserForm(props) {
