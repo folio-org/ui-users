@@ -14,7 +14,9 @@ import UserForm from './UserForm';
 
 class ViewUser extends Component {
   static propTypes = {
-    data: PropTypes.shape,
+    data: PropTypes.shape({
+      user: PropTypes.arrayOf(PropTypes.object)
+    }),
     mutator: React.PropTypes.shape({
       user: React.PropTypes.shape({
         PUT: React.PropTypes.func.isRequired,
