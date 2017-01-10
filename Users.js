@@ -46,7 +46,7 @@ class Users extends Component {
     users: {
       type: 'okapi',
       records: 'users',
-      path: 'users?query=username="?{query}*" or personal.full_name="?{query}*"',
+      path: 'users?query=(username="?{query}*" or personal.full_name="?{query}*") ?{sort:+sortby} ?{sort:-}',
       staticFallback: { path: 'users' },
     },
   };
@@ -108,7 +108,13 @@ class Users extends Component {
     this.context.router.transitionTo(this.props.location.pathname);
   }
 
-  onSortHandler(sortOrder) {
+  onSortHandler(heading) {
+    const sortMap = {
+      Name: "personal.full_name",
+      Username: "username",
+      Email: "personal.email_primary"
+    }
+    const sortOrder = sortMap[heading];
     console.log('User sorted by', sortOrder);
     this.setState({ sortOrder: sortOrder });
     this.updateSearchSort(this.state.searchTerm, sortOrder);
