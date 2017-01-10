@@ -85,15 +85,6 @@ class Users extends Component {
     this.setState(stateObj);
   }
 
-  updateSearchSort(query, sortOrder) {
-    console.log(`updateSearchSort(${query}, ${sortOrder})`);
-    let transitionLoc = this.props.location.pathname;
-    // if (sortOrder && !query) query = "cql.allRecords=1";
-    if (query) transitionLoc += `?query=${query}`;
-    if (sortOrder) transitionLoc += `&sort=${sortOrder}`;
-    this.context.router.transitionTo(transitionLoc);
-  }
-
   onChangeSearch(e) {
     const query = e.target.value;
     console.log('User searched:', query, 'at', this.props.location.pathname);
@@ -141,6 +132,16 @@ class Users extends Component {
     });
   }
   // end AddUser Handlers
+
+  updateSearchSort(query, sortOrder) {
+    console.log(`updateSearchSort(${query}, ${sortOrder})`);
+    let transitionLoc = this.props.location.pathname;
+    // if (sortOrder && !query) query = "cql.allRecords=1";
+    if (query) transitionLoc += `?query=${query}`;
+    if (sortOrder) transitionLoc += `&sort=${sortOrder}`;
+    this.context.router.transitionTo(transitionLoc);
+  }
+
   create(data) {
     this.props.mutator.user.POST(data);
   }
