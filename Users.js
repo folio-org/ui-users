@@ -46,7 +46,7 @@ class Users extends Component {
     users: {
       type: 'okapi',
       records: 'users',
-      path: 'users?query=username="?{query}" or personal.full_name="?{query}"',
+      path: 'users?query=username="?{query}*" or personal.full_name="?{query}*"',
       staticFallback: { path: 'users' },
     },
   };
