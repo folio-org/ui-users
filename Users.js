@@ -58,6 +58,7 @@ class Users extends Component {
       patronFilter: true,
       employeeFilter: false,
       searchTerm: '',
+      sortOrder: '',
       addUserMode: false,
     };
 
@@ -84,14 +85,21 @@ class Users extends Component {
     this.setState(stateObj);
   }
 
-  onChangeSearch(e) {
-    const term = e.target.value;
-    const transitionLoc = term === "" ?  this.props.location.pathname : `${this.props.location.pathname}?query=${term}`;     
-
-    console.log('User searched:', term, 'at', this.props.location.pathname);
-    this.setState({ searchTerm: term });
+  updateSearchSort(query, sortOrder) {
+    console.log("updateSearchSort(" + query + ", " + sortOrder + ")");
+    let transitionLoc = this.props.location.pathname;
+    //if (sortOrder && !query) query = "cql.allRecords=1";
+    if (query) transitionLoc += `?query=${query}`;
+    if (sortOrder) transitionLoc += `&sort=${sortOrder}`;
     this.context.router.transitionTo(transitionLoc);
+  }
 
+  onChangeSearch(e) {
+    const query = e.target.value;
+    console.log('User searched:', query, 'at', this.props.location.pathname);
+
+    this.setState({ searchTerm: query });
+    this.updateSearchSort(query, this.state.sortOrder);
   }
 
   onClearSearch() {
@@ -100,8 +108,10 @@ class Users extends Component {
     this.context.router.transitionTo(this.props.location.pathname);
   }
 
-  onSortHandler(criterion) {
-    console.log('User sorted by', criterion);
+  onSortHandler(sortOrder) {
+    console.log('User sorted by', sortOrder);
+    this.setState({ sortOrder: sortOrder });
+    this.updateSearchSort(this.state.searchTerm, sortOrder);
   }
 
   onClickItemHandler(userId) {
