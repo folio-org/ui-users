@@ -67,6 +67,7 @@ class Users extends Component {
     this.onChangeSearch = this.onChangeSearch.bind(this);
     this.onClearSearch = this.onClearSearch.bind(this);
     this.onClickItemHandler = this.onClickItemHandler.bind(this);
+    this.onSortHandler = this.onSortHandler.bind(this);
   }
 
   componentWillMount() {
@@ -102,6 +103,10 @@ class Users extends Component {
   onClickItemHandler(userId) {
     console.log('User clicked', userId, 'location = ', this.props.location);
     this.context.router.transitionTo(`/users/view/${userId}${this.props.location.search}`);
+  }
+
+  onSortHandler(criterion) {
+    console.log('User sorted by', criterion);
   }
 
   // end search Handlers
@@ -175,6 +180,7 @@ class Users extends Component {
           <MultiColumnListUsers
             contentData={displayUsers}
             onClickItemHandler={this.onClickItemHandler}
+            onSortHandler={this.onSortHandler}
           />
         </Pane>
 
