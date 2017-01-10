@@ -66,8 +66,8 @@ class Users extends Component {
     this.onChangeFilter = this.onChangeFilter.bind(this);
     this.onChangeSearch = this.onChangeSearch.bind(this);
     this.onClearSearch = this.onClearSearch.bind(this);
-    this.onClickItemHandler = this.onClickItemHandler.bind(this);
     this.onSortHandler = this.onSortHandler.bind(this);
+    this.onClickItemHandler = this.onClickItemHandler.bind(this);
   }
 
   componentWillMount() {
@@ -100,13 +100,13 @@ class Users extends Component {
     this.context.router.transitionTo(this.props.location.pathname);
   }
 
+  onSortHandler(criterion) {
+    console.log('User sorted by', criterion);
+  }
+
   onClickItemHandler(userId) {
     console.log('User clicked', userId, 'location = ', this.props.location);
     this.context.router.transitionTo(`/users/view/${userId}${this.props.location.search}`);
-  }
-
-  onSortHandler(criterion) {
-    console.log('User sorted by', criterion);
   }
 
   // end search Handlers
