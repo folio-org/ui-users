@@ -86,9 +86,9 @@ class Users extends Component {
   }
 
   updateSearchSort(query, sortOrder) {
-    console.log("updateSearchSort(" + query + ", " + sortOrder + ")");
+    console.log(`updateSearchSort(${query}, ${sortOrder})`);
     let transitionLoc = this.props.location.pathname;
-    //if (sortOrder && !query) query = "cql.allRecords=1";
+    // if (sortOrder && !query) query = "cql.allRecords=1";
     if (query) transitionLoc += `?query=${query}`;
     if (sortOrder) transitionLoc += `&sort=${sortOrder}`;
     this.context.router.transitionTo(transitionLoc);
@@ -110,13 +110,13 @@ class Users extends Component {
 
   onSortHandler(heading) {
     const sortMap = {
-      Name: "personal.full_name",
-      Username: "username",
-      Email: "personal.email_primary"
-    }
+      Name: 'personal.full_name',
+      Username: 'username',
+      Email: 'personal.email_primary',
+    };
     const sortOrder = sortMap[heading];
     console.log('User sorted by', sortOrder);
-    this.setState({ sortOrder: sortOrder });
+    this.setState({ sortOrder });
     this.updateSearchSort(this.state.searchTerm, sortOrder);
   }
 
