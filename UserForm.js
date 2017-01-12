@@ -40,7 +40,7 @@ function UserForm(props) {
   return (
     <form>
       <Paneset>
-        <Pane defaultWidth="100%" firstMenu={addUserFirstMenu} lastMenu={initialValues ? editUserLastMenu : addUserLastMenu} paneTitle={ initialValues ? "Edit User" : "New User" }>
+        <Pane defaultWidth="100%" firstMenu={addUserFirstMenu} lastMenu={initialValues ? editUserLastMenu : addUserLastMenu} paneTitle={initialValues ? 'Edit User' : 'New User'}>
           <Row>
             <Col sm={5} smOffset={1}>
               <h2>User Record</h2>
