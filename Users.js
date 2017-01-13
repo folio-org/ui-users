@@ -27,7 +27,6 @@ class Users extends Component {
 
   static propTypes = {
     data: PropTypes.object.isRequired,
-    params: PropTypes.object,
     pathname: PropTypes.string.isRequired,
     location: PropTypes.object.isRequired,
     mutator: PropTypes.object,
@@ -150,7 +149,7 @@ class Users extends Component {
   }
 
   render() {
-    const { data, params, pathname } = this.props;
+    const { data, pathname } = this.props;
     if (!data.users) return <div />;
     const resultMenu = <PaneMenu><button><Icon icon="bookmark" /></button></PaneMenu>;
     const fineHistory = [{ 'Due Date': '11/12/2014', 'Amount': '34.23', 'Status': 'Unpaid' }]; // eslint-disable-line 
