@@ -138,7 +138,10 @@ class Users extends Component {
     let transitionLoc = this.props.location.pathname;
     // if (sortOrder && !query) query = "cql.allRecords=1";
     if (query) transitionLoc += `?query=${query}`;
-    if (sortOrder) transitionLoc += `&sort=${sortOrder}`;
+    if (sortOrder) {
+      transitionLoc += query ? '&' : '?';
+      transitionLoc += `sort=${sortOrder}`;
+    }
     this.context.router.transitionTo(transitionLoc);
   }
 
