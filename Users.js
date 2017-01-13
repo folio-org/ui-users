@@ -163,7 +163,6 @@ class Users extends Component {
 
     /* searchHeader is a 'custom pane header'*/
     const searchHeader = <FilterPaneSearch id="SearchField" onChange={this.onChangeSearch} onClear={this.onClearSearch} value={this.state.searchTerm} />;
-    console.log(params);
 
     return (
       <Paneset>
