@@ -87,7 +87,7 @@ class Users extends Component {
 
   onChangeSearch(e) {
     const query = e.target.value;
-    console.log('User searched:', query, 'at', this.props.location.pathname);
+    console.log(`User searched for '${query}' at '${this.props.location.pathname}'`);
 
     this.setState({ searchTerm: query });
     this.updateSearchSort(query, this.state.sortOrder);
@@ -134,7 +134,7 @@ class Users extends Component {
   // end AddUser Handlers
 
   updateSearchSort(query, sortOrder) {
-    console.log(`updateSearchSort(${query}, ${sortOrder})`);
+    console.log(`updateSearchSort('${query}', '${sortOrder}')`);
     let transitionLoc = this.props.location.pathname;
     // if (sortOrder && !query) query = "cql.allRecords=1";
     if (query) transitionLoc += `?query=${query}`;
