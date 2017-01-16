@@ -186,8 +186,8 @@ class Users extends Component {
               label="Inactive"
               checked={this.state.inactiveFilter}
               onChange={this.onChangeFilter}
-              marginBottom0 
-              hover 
+              marginBottom0
+              hover
               fullWidth
               checkedIcon={<Icon icon="eye" />}
             />
