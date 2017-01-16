@@ -45,7 +45,7 @@ class Users extends Component {
     users: {
       type: 'okapi',
       records: 'users',
-      path: 'users?query=(username="?{query}*" or personal.full_name="?{query}*") ?{sort:+sortby} ?{sort:-}',
+      path: 'users?query=(username="?{query}*" or personal.first_name="?{query}*" or personal.last_name="?{query}*") ?{sort:+sortby} ?{sort:-}',
       staticFallback: { path: 'users' },
     },
   };
@@ -100,9 +100,9 @@ class Users extends Component {
 
   onSortHandler(heading) {
     const sortMap = {
-      Name: 'personal.full_name',
+      Name: 'personal.last_name, personal.first_name',
       Username: 'username',
-      Email: 'personal.email_primary',
+      Email: 'personal.email',
     };
     const sortOrder = sortMap[heading];
     console.log('User sorted by', sortOrder);
@@ -156,9 +156,9 @@ class Users extends Component {
     const displayUsers = data.users.reduce((results, user) => {
       results.push({
         id: user.id,
-        Name: user.personal.full_name,
+        Name: `${user.personal.last_name}, ${user.personal.first_name}`,
         Username: user.username,
-        Email: user.personal.email_primary,
+        Email: user.personal.email,
       });
       return results;
     }, []);
