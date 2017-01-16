@@ -73,12 +73,12 @@ class ViewUser extends Component {
           <Col xs={8} >
             <Row>
               <Col xs={12}>
-                <h2>{user[0].personal.full_name}</h2>
+                <h2>{user[0].personal.last_name}, {user[0].personal.first_name}</h2>
               </Col>
             </Row>
             <Row>
               <Col xs={12}>
-                <KeyValue label="Email" value={user[0].personal.email_primary} />
+                <KeyValue label="Email" value={user[0].personal.email} />
               </Col>
             </Row>
           </Col>
