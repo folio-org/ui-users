@@ -51,9 +51,9 @@ function UserForm(props) {
               </Field>
               <fieldset>
                 <legend>Personal Info</legend>
-                <Field label="Full Name" name="personal.full_name" id="adduser_fullname" component={TextField} required fullWidth />
-                <Field label="Primary Email" name="personal.email_primary" id="adduser_primaryemail" component={TextField} required fullWidth />
-                <Field label="Secondary Email" name="personal.email_secondary" id="adduser_secondemail" component={TextField} fullWidth />
+                <Field label="First Name" name="personal.first_name" id="adduser_firstname" component={TextField} required fullWidth />
+                <Field label="Last Name" name="personal.last_name" id="adduser_lastname" component={TextField} fullWidth />
+                <Field label="Email" name="personal.email" id="adduser_email" component={TextField} required fullWidth />
               </fieldset>
               <Field
                 label="Type"
