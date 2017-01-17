@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, { Component, PropTypes } from 'react'; // eslint-disable-line
 import Match from 'react-router/Match'; // eslint-disable-line
 import {Row, Col} from 'react-bootstrap'; // eslint-disable-line
@@ -156,9 +157,9 @@ class Users extends Component {
     const displayUsers = data.users.reduce((results, user) => {
       results.push({
         id: user.id,
-        Name: `${user.personal.last_name}, ${user.personal.first_name}`,
+        Name: `${_.get(user, ['personal', 'last_name'], '')}, ${_.get(user, ['personal', 'first_name'], '')}`,
         Username: user.username,
-        Email: user.personal.email,
+        Email: _.get(user, ['personal', 'email']),
       });
       return results;
     }, []);
