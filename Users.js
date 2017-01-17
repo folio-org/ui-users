@@ -100,7 +100,7 @@ class Users extends Component {
 
   onSortHandler(heading) {
     const sortMap = {
-      Name: 'personal.last_name, personal.first_name',
+      Name: 'personal.last_name personal.first_name',
       Username: 'username',
       Email: 'personal.email',
     };
