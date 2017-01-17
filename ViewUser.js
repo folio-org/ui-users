@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, { Component, PropTypes } from 'react' // eslint-disable-line
 import { connect } from 'stripes-connect'; // eslint-disable-line
 import Pane from '@folio/stripes-components/lib/Pane' // eslint-disable-line
@@ -73,12 +74,12 @@ class ViewUser extends Component {
           <Col xs={8} >
             <Row>
               <Col xs={12}>
-                <h2>{user[0].personal.last_name}, {user[0].personal.first_name}</h2>
+                <h2>{_.get(user[0], ['personal', 'last_name'], '')}, {_.get(user[0], ['personal', 'first_name'], '')}</h2>
               </Col>
             </Row>
             <Row>
               <Col xs={12}>
-                <KeyValue label="Email" value={user[0].personal.email} />
+                <KeyValue label="Email" value={_.get(user[0], ['personal', 'email'], '')} />
               </Col>
             </Row>
           </Col>
