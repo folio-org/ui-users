@@ -24,7 +24,7 @@ class ViewUser extends Component {
       user: React.PropTypes.shape({
         PUT: React.PropTypes.func.isRequired,
       }),
-    }),
+    })
   };
 
   static manifest = {
