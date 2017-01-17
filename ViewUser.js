@@ -13,6 +13,8 @@ import Layer from '@folio/stripes-components/lib/Layer'; // eslint-disable-line
 
 import UserForm from './UserForm';
 
+import UserPermissions from './UserPermissions';
+
 class ViewUser extends Component {
   static propTypes = {
     data: PropTypes.shape({
@@ -63,6 +65,7 @@ class ViewUser extends Component {
 
   render() {
     const fineHistory = [{ 'Due Date': '11/12/2014', 'Amount': '34.23', 'Status': 'Unpaid' }]; // eslint-disable-line quote-props
+    const availablePermissions = [{id: 1, name: "Can view user profile"}, {id: 2, name: "Can edit user profile"}, {id: 3, name: "Can create new user"}];
 
     const detailMenu = <PaneMenu><button onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button></PaneMenu>;
 
@@ -108,6 +111,10 @@ class ViewUser extends Component {
           </Col>
         </Row>
         <MultiColumnList fullWidth contentData={fineHistory} />
+        <UserPermissions availablePermissions={availablePermissions} />
+
+
+
         <Layer isOpen={this.state.editUserMode} label="Edit User Dialog">
           <UserForm
             onSubmit={(record) => { this.update(record); }}
