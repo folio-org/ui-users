@@ -65,7 +65,7 @@ class ViewUser extends Component {
 
   render() {
     const fineHistory = [{ 'Due Date': '11/12/2014', 'Amount': '34.23', 'Status': 'Unpaid' }]; // eslint-disable-line quote-props
-    const availablePermissions = [{id: 1, name: "Can view user profile"}, {id: 2, name: "Can edit user profile"}, {id: 3, name: "Can create new user"}];
+    const availablePermissions = [{id: 3, name: "Can view user profile"}, {id: 2, name: "Can edit user profile"}, {id: 1, name: "Can create new user"}];
 
     const detailMenu = <PaneMenu><button onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button></PaneMenu>;
 

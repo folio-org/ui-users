@@ -37,7 +37,11 @@ class UserPermissions extends React.Component {
   addPermission(id) {
     // placeholder add logic...
     const currentPermissions = this.state.activePermissions;
-    currentPermissions.push(this.props.availablePermissions[id]);
+        
+    _.forEach(this.props.availablePermissions, function(perm) {
+      if(id === perm.id) currentPermissions.push(perm);
+    });
+
     this.setState({
       activePermissions: currentPermissions,
     });
