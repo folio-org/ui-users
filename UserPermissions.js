@@ -40,7 +40,7 @@ class UserPermissions extends React.Component {
     const currentPermission = _.find(this.props.availablePermissions, function(perm) {
       return perm.id === id;
     });
-    
+
     if(currentPermission) currentPermissions.push(currentPermission);
 
     this.setState({
@@ -62,7 +62,9 @@ class UserPermissions extends React.Component {
   render() {
     const permissionsDD = (
       <ListDropdown
-        items={this.props.availablePermissions}
+        items={_.filter(this.props.availablePermissions, function(perm) {
+          return !_.includes(this.state.activePermissions, perm);
+        }.bind(this))}
         onClickItem={this.addPermission}
       />
     );
