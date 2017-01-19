@@ -18,13 +18,14 @@ class UserPermissions extends React.Component {
     super(props);
     this.state = {
       addPermissionOpen: false,
-
+      searchTerm: '',
       // handling active Permissions in state for presentation purposes only.
       activePermissions: [],
     };
 
     this.onToggleAddPermDD = this.onToggleAddPermDD.bind(this);
     this.addPermission = this.addPermission.bind(this);
+    this.onChangeSearch = this.onChangeSearch.bind(this);
   }
 
   onToggleAddPermDD() {
@@ -32,6 +33,16 @@ class UserPermissions extends React.Component {
     this.setState({
       addPermissionOpen: !isOpen,
     });
+  }
+
+  onChangeSearch(e) {
+
+    const searchTerm = e.target.value;
+
+    this.setState({
+      searchTerm: searchTerm,
+    });
+
   }
 
   addPermission(id) {
@@ -63,9 +74,17 @@ class UserPermissions extends React.Component {
     const permissionsDD = (
       <ListDropdown
         items={_.filter(this.props.availablePermissions, function(perm) {
-          return !_.includes(this.state.activePermissions, perm);
+
+          const permInUse = _.includes(this.state.activePermissions, perm);
+
+          // This should be replaced with proper search when possible.
+          const permNotFiltered = _.includes(perm.name.toLowerCase(),this.state.searchTerm.toLowerCase());
+
+          return !permInUse && permNotFiltered;
+
         }.bind(this))}
         onClickItem={this.addPermission}
+        onChangeSearch={this.onChangeSearch}
       />
     );
 

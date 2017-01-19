@@ -12,13 +12,13 @@ import Icon from '@folio/stripes-components/lib/Icon' // eslint-disable-line
 import Layer from '@folio/stripes-components/lib/Layer'; // eslint-disable-line
 
 import UserForm from './UserForm';
-
 import UserPermissions from './UserPermissions';
 
 class ViewUser extends Component {
   static propTypes = {
     data: PropTypes.shape({
       user: PropTypes.arrayOf(PropTypes.object),
+      availablePermissions: PropTypes.arrayOf(PropTypes.object)
     }),
     mutator: React.PropTypes.shape({
       user: React.PropTypes.shape({
@@ -31,6 +31,12 @@ class ViewUser extends Component {
     user: {
       type: 'okapi',
       path: 'users/:{userid}',
+    },
+    availablePermissions: {
+      type: 'okapi',
+      records: 'users',
+      path: 'users?query=(username="?{query:-}*" or personal.first_name="?{query:-}*" or personal.last_name="?{query:-}*") ?{sort:+sortby} ?{sort:-}',
+      staticFallback: { path: 'users' },
     },
   };
 
@@ -65,11 +71,16 @@ class ViewUser extends Component {
 
   render() {
     const fineHistory = [{ 'Due Date': '11/12/2014', 'Amount': '34.23', 'Status': 'Unpaid' }]; // eslint-disable-line quote-props
-    const availablePermissions = [{id: 3, name: "Can view user profile"}, {id: 2, name: "Can edit user profile"}, {id: 1, name: "Can create new user"}];
+    //const availablePermissions = [{id: 3, name: "Can view user profile"}, {id: 2, name: "Can edit user profile"}, {id: 1, name: "Can create new user"}];
 
     const detailMenu = <PaneMenu><button onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button></PaneMenu>;
 
-    const { data: { user } } = this.props;
+    const { data: { user, availablePermissions } } = this.props;
+
+    _.forEach(availablePermissions, function(perm) {
+      perm.name = perm.username;
+    });
+
     if (!user || user.length === 0) return <div />;
     return (
       <Pane defaultWidth="fill" paneTitle="User Details" lastMenu={detailMenu}>
@@ -111,7 +122,7 @@ class ViewUser extends Component {
           </Col>
         </Row>
         <MultiColumnList fullWidth contentData={fineHistory} />
-        <UserPermissions availablePermissions={availablePermissions} />
+        <UserPermissions availablePermissions={availablePermissions}  />
 
 
 
