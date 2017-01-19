@@ -105,6 +105,7 @@ class Users extends Component {
 
   onSortHandler(heading) {
     const sortMap = {
+      Active: 'active',
       Name: 'personal.last_name personal.first_name',
       Username: 'username',
       Email: 'personal.email',
@@ -167,6 +168,7 @@ class Users extends Component {
     const displayUsers = data.users.reduce((results, user) => {
       results.push({
         id: user.id,
+        Active: user.active,
         Name: `${_.get(user, ['personal', 'last_name'], '')}, ${_.get(user, ['personal', 'first_name'], '')}`,
         Username: user.username,
         Email: _.get(user, ['personal', 'email']),
