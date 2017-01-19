@@ -49,6 +49,7 @@ class Users extends Component {
       path: 'users?query=' +
         '(username="?{query:-}*" or personal.first_name="?{query:-}*" or personal.last_name="?{query:-}*")' +
         '?{filter_active:+ and active=true}' +
+        '?{filter_inactive:+ and active=false}' +
         '?{sort:+sortby} ?{sort:-}',
       staticFallback: { path: 'users' },
     },
