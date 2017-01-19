@@ -82,6 +82,7 @@ class Users extends Component {
   onChangeFilter(e) {
     const stateObj = {};
     stateObj[e.target.id] = !this.state[e.target.id];
+    console.log('onChangeFilter setting state', stateObj);
     this.setState(stateObj);
   }
 
@@ -90,7 +91,7 @@ class Users extends Component {
     console.log(`User searched for '${query}' at '${this.props.location.pathname}'`);
 
     this.setState({ searchTerm: query });
-    this.updateSearchSort(query, this.state.sortOrder);
+    this.updateSearch(query, this.state.sortOrder);
   }
 
   onClearSearch() {
@@ -108,7 +109,7 @@ class Users extends Component {
     const sortOrder = sortMap[heading];
     console.log('User sorted by', sortOrder);
     this.setState({ sortOrder });
-    this.updateSearchSort(this.state.searchTerm, sortOrder);
+    this.updateSearch(this.state.searchTerm, sortOrder);
   }
 
   onClickItemHandler(userId) {
@@ -133,8 +134,8 @@ class Users extends Component {
   }
   // end AddUser Handlers
 
-  updateSearchSort(query, sortOrder) {
-    console.log(`updateSearchSort('${query}', '${sortOrder}')`);
+  updateSearch(query, sortOrder) {
+    console.log(`updateSearch('${query}', '${sortOrder}')`);
     let transitionLoc = this.props.location.pathname;
     // if (sortOrder && !query) query = "cql.allRecords=1";
     if (query) transitionLoc += `?query=${query}`;
