@@ -55,8 +55,10 @@ class Users extends Component {
     super(props);
     this.state = {
       // Search/Filter state
-      active: true,
-      inactive: false,
+      filter: {
+        active: true,
+        inactive: false,
+      },
       searchTerm: '',
       sortOrder: '',
       addUserMode: false,
@@ -80,10 +82,10 @@ class Users extends Component {
 
   // search Handlers...
   onChangeFilter(e) {
-    const stateObj = {};
-    stateObj[e.target.id] = !this.state[e.target.id];
-    console.log('onChangeFilter setting state', stateObj);
-    this.setState(stateObj);
+    const filter = this.state.filter;
+    filter[e.target.id] = !filter[e.target.id];
+    console.log('onChangeFilter setting state', filter);
+    this.setState({ filter });
   }
 
   onChangeSearch(e) {
@@ -176,7 +178,7 @@ class Users extends Component {
             <Checkbox
               id="active"
               label="Active"
-              checked={this.state.active}
+              checked={this.state.filter.active}
               onChange={this.onChangeFilter}
               marginBottom0
               hover
@@ -186,7 +188,7 @@ class Users extends Component {
             <Checkbox
               id="inactive"
               label="Inactive"
-              checked={this.state.inactive}
+              checked={this.state.filter.inactive}
               onChange={this.onChangeFilter}
               marginBottom0
               hover
