@@ -142,7 +142,6 @@ class Users extends Component {
   updateSearch(query, sortOrder, filter) {
     console.log(`updateSearch('${query}', '${sortOrder}', '${filter}')`);
     let transitionLoc = this.props.location.pathname;
-    // if (sortOrder && !query) query = "cql.allRecords=1";
     if (query) transitionLoc += `?query=${query}`;
     if (sortOrder) {
       transitionLoc += query ? '&' : '?';
