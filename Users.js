@@ -142,10 +142,15 @@ class Users extends Component {
   updateSearch(query, sortOrder, filter) {
     console.log(`updateSearch('${query}', '${sortOrder}', '${filter}')`);
     let transitionLoc = this.props.location.pathname;
-    if (query) transitionLoc += `?query=${query}`;
-    if (sortOrder) {
-      transitionLoc += query ? '&' : '?';
-      transitionLoc += `sort=${sortOrder}`;
+    const params = {};
+    if (query) params.query = query;
+    if (sortOrder) params.sort = sortOrder;
+    if (filter.active) params.filter_active = true;
+    if (filter.inactive) params.filter_inactive = true;
+    const keys = Object.keys(params);
+    if (keys.length) {
+      // eslint-disable-next-line prefer-template
+      transitionLoc += '?' + keys.map(key => `${key}=${params[key]}`).join('&');
     }
     this.context.router.transitionTo(transitionLoc);
   }
