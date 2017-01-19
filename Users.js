@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _ from 'lodash'; // eslint-disable-line
 import React, { Component, PropTypes } from 'react'; // eslint-disable-line
 import Match from 'react-router/Match'; // eslint-disable-line
 import {Row, Col} from 'react-bootstrap'; // eslint-disable-line
@@ -86,6 +86,7 @@ class Users extends Component {
     filter[e.target.id] = !filter[e.target.id];
     console.log('onChangeFilter setting state', filter);
     this.setState({ filter });
+    this.updateSearch(this.state.searchTerm, this.state.sortOrder, filter);
   }
 
   onChangeSearch(e) {
@@ -93,7 +94,7 @@ class Users extends Component {
     console.log(`User searched for '${query}' at '${this.props.location.pathname}'`);
 
     this.setState({ searchTerm: query });
-    this.updateSearch(query, this.state.sortOrder);
+    this.updateSearch(query, this.state.sortOrder, this.state.filter);
   }
 
   onClearSearch() {
@@ -111,7 +112,7 @@ class Users extends Component {
     const sortOrder = sortMap[heading];
     console.log('User sorted by', sortOrder);
     this.setState({ sortOrder });
-    this.updateSearch(this.state.searchTerm, sortOrder);
+    this.updateSearch(this.state.searchTerm, sortOrder, this.state.filter);
   }
 
   onClickItemHandler(userId) {
@@ -136,8 +137,10 @@ class Users extends Component {
   }
   // end AddUser Handlers
 
-  updateSearch(query, sortOrder) {
-    console.log(`updateSearch('${query}', '${sortOrder}')`);
+  // We need to explicitly pass changed values into this function,
+  // as state-change only happens after event is handled.
+  updateSearch(query, sortOrder, filter) {
+    console.log(`updateSearch('${query}', '${sortOrder}', '${filter}')`);
     let transitionLoc = this.props.location.pathname;
     // if (sortOrder && !query) query = "cql.allRecords=1";
     if (query) transitionLoc += `?query=${query}`;
