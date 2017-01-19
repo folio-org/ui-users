@@ -55,8 +55,8 @@ class Users extends Component {
     super(props);
     this.state = {
       // Search/Filter state
-      activeFilter: true,
-      inactiveFilter: false,
+      active: true,
+      inactive: false,
       searchTerm: '',
       sortOrder: '',
       addUserMode: false,
@@ -174,9 +174,9 @@ class Users extends Component {
         <Pane defaultWidth="16%" header={searchHeader}>
           <FilterControlGroup label="Filters">
             <Checkbox
-              id="activeFilter"
+              id="active"
               label="Active"
-              checked={this.state.activeFilter}
+              checked={this.state.active}
               onChange={this.onChangeFilter}
               marginBottom0
               hover
@@ -184,9 +184,9 @@ class Users extends Component {
               checkedIcon={<Icon icon="eye" />}
             />
             <Checkbox
-              id="inactiveFilter"
+              id="inactive"
               label="Inactive"
-              checked={this.state.inactiveFilter}
+              checked={this.state.inactive}
               onChange={this.onChangeFilter}
               marginBottom0
               hover
