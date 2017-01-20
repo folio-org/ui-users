@@ -46,11 +46,45 @@ class Users extends Component {
     users: {
       type: 'okapi',
       records: 'users',
-      path: 'users?query=' +
-        '(username="?{query:-}*" or personal.first_name="?{query:-}*" or personal.last_name="?{query:-}*")' +
-        '?{filter_active:+ and active=true}' +
-        '?{filter_inactive:+ and active=false}' +
-        '?{sort:+sortby} ?{sort:-}',
+      path: (queryParams, pathParams) => {
+        console.log('Users manifest "users" path function, queryParams = ', queryParams, 'pathParams =', pathParams);
+        const { query, filter_active, filter_inactive, sort } = queryParams || {};
+
+        let cql;
+        if (query) {
+          cql = `username="${query}*" or personal.first_name="${query}*" or personal.last_name="${query}*"`;
+        }
+
+        let filterCql;
+        if (filter_active && !filter_inactive) {
+          filterCql = 'active=true';
+        } else if (filter_inactive && !filter_active) {
+          filterCql = 'active=false';
+        } else if (!filter_active && !filter_inactive) {
+          // Technically, we should force this configuration to find
+          // no records; but it probably makes more sense to do
+          // nothing, and allow both active AND inactive records.
+        }
+
+        if (filterCql) {
+          if (cql) {
+            cql = `(${cql}) and ${filterCql}`;
+          } else {
+            cql = filterCql;
+          }
+        }
+
+        if (sort) {
+          if (cql === undefined) cql = 'username=*';
+          cql += ` sortby ${sort}`;
+        }
+
+        let path = 'users';
+        if (cql) path += `?query=${cql}`;
+
+        console.log(`query=${query} active=${filter_active} inactive=${filter_inactive} sort=${sort} -> ${path}`);
+        return path;
+      },
       staticFallback: { path: 'users' },
     },
   };
