@@ -48,7 +48,7 @@ class Users extends Component {
       records: 'users',
       path: (queryParams, pathParams) => {
         console.log('Users manifest "users" path function, queryParams = ', queryParams, 'pathParams =', pathParams);
-        const { query, filter_active, filter_inactive, sort } = queryParams || {};
+        const { query, filterActive, filterInactive, sort } = queryParams || {};
 
         let cql;
         if (query) {
@@ -56,11 +56,11 @@ class Users extends Component {
         }
 
         let filterCql;
-        if (filter_active && !filter_inactive) {
+        if (filterActive && !filterInactive) {
           filterCql = 'active=true';
-        } else if (filter_inactive && !filter_active) {
+        } else if (filterInactive && !filterActive) {
           filterCql = 'active=false';
-        } else if (!filter_active && !filter_inactive) {
+        } else if (!filterActive && !filterInactive) {
           // Technically, we should force this configuration to find
           // no records; but it probably makes more sense to do
           // nothing, and allow both active AND inactive records.
@@ -82,7 +82,7 @@ class Users extends Component {
         let path = 'users';
         if (cql) path += `?query=${cql}`;
 
-        console.log(`query=${query} active=${filter_active} inactive=${filter_inactive} sort=${sort} -> ${path}`);
+        console.log(`query=${query} active=${filterActive} inactive=${filterInactive} sort=${sort} -> ${path}`);
         return path;
       },
       staticFallback: { path: 'users' },
@@ -184,8 +184,8 @@ class Users extends Component {
     const params = {};
     if (query) params.query = query;
     if (sortOrder) params.sort = sortOrder;
-    if (filter.active) params.filter_active = true;
-    if (filter.inactive) params.filter_inactive = true;
+    if (filter.active) params.filterActive = true;
+    if (filter.inactive) params.filterInactive = true;
     const keys = Object.keys(params);
     if (keys.length) {
       // eslint-disable-next-line prefer-template
