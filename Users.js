@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _ from 'lodash'; // eslint-disable-line
 import React, { Component, PropTypes } from 'react'; // eslint-disable-line
 import Match from 'react-router/Match'; // eslint-disable-line
 import {Row, Col} from 'react-bootstrap'; // eslint-disable-line
@@ -46,7 +46,45 @@ class Users extends Component {
     users: {
       type: 'okapi',
       records: 'users',
-      path: 'users?query=(username="?{query:-}*" or personal.first_name="?{query:-}*" or personal.last_name="?{query:-}*") ?{sort:+sortby} ?{sort:-}',
+      path: (queryParams, pathParams) => {
+        console.log('Users manifest "users" path function, queryParams = ', queryParams, 'pathParams =', pathParams);
+        const { query, filterActive, filterInactive, sort } = queryParams || {};
+
+        let cql;
+        if (query) {
+          cql = `username="${query}*" or personal.first_name="${query}*" or personal.last_name="${query}*"`;
+        }
+
+        let filterCql;
+        if (filterActive && !filterInactive) {
+          filterCql = 'active=true';
+        } else if (filterInactive && !filterActive) {
+          filterCql = 'active=false';
+        } else if (!filterActive && !filterInactive) {
+          // Technically, we should force this configuration to find
+          // no records; but it probably makes more sense to do
+          // nothing, and allow both active AND inactive records.
+        }
+
+        if (filterCql) {
+          if (cql) {
+            cql = `(${cql}) and ${filterCql}`;
+          } else {
+            cql = filterCql;
+          }
+        }
+
+        if (sort) {
+          if (cql === undefined) cql = 'username=*';
+          cql += ` sortby ${sort}`;
+        }
+
+        let path = 'users';
+        if (cql) path += `?query=${cql}`;
+
+        console.log(`query=${query} active=${filterActive} inactive=${filterInactive} sort=${sort} -> ${path}`);
+        return path;
+      },
       staticFallback: { path: 'users' },
     },
   };
@@ -55,8 +93,10 @@ class Users extends Component {
     super(props);
     this.state = {
       // Search/Filter state
-      activeFilter: true,
-      inactiveFilter: false,
+      filter: {
+        active: true,
+        inactive: false,
+      },
       searchTerm: '',
       sortOrder: '',
       addUserMode: false,
@@ -80,9 +120,11 @@ class Users extends Component {
 
   // search Handlers...
   onChangeFilter(e) {
-    const stateObj = {};
-    stateObj[e.target.id] = !this.state[e.target.id];
-    this.setState(stateObj);
+    const filter = this.state.filter;
+    filter[e.target.id] = !filter[e.target.id];
+    console.log('onChangeFilter setting state', filter);
+    this.setState({ filter });
+    this.updateSearch(this.state.searchTerm, this.state.sortOrder, filter);
   }
 
   onChangeSearch(e) {
@@ -90,7 +132,7 @@ class Users extends Component {
     console.log(`User searched for '${query}' at '${this.props.location.pathname}'`);
 
     this.setState({ searchTerm: query });
-    this.updateSearchSort(query, this.state.sortOrder);
+    this.updateSearch(query, this.state.sortOrder, this.state.filter);
   }
 
   onClearSearch() {
@@ -101,6 +143,7 @@ class Users extends Component {
 
   onSortHandler(heading) {
     const sortMap = {
+      Active: 'active',
       Name: 'personal.last_name personal.first_name',
       Username: 'username',
       Email: 'personal.email',
@@ -108,7 +151,7 @@ class Users extends Component {
     const sortOrder = sortMap[heading];
     console.log('User sorted by', sortOrder);
     this.setState({ sortOrder });
-    this.updateSearchSort(this.state.searchTerm, sortOrder);
+    this.updateSearch(this.state.searchTerm, sortOrder, this.state.filter);
   }
 
   onClickItemHandler(userId) {
@@ -133,14 +176,20 @@ class Users extends Component {
   }
   // end AddUser Handlers
 
-  updateSearchSort(query, sortOrder) {
-    console.log(`updateSearchSort('${query}', '${sortOrder}')`);
+  // We need to explicitly pass changed values into this function,
+  // as state-change only happens after event is handled.
+  updateSearch(query, sortOrder, filter) {
+    console.log(`updateSearch('${query}', '${sortOrder}', '${filter}')`);
     let transitionLoc = this.props.location.pathname;
-    // if (sortOrder && !query) query = "cql.allRecords=1";
-    if (query) transitionLoc += `?query=${query}`;
-    if (sortOrder) {
-      transitionLoc += query ? '&' : '?';
-      transitionLoc += `sort=${sortOrder}`;
+    const params = {};
+    if (query) params.query = query;
+    if (sortOrder) params.sort = sortOrder;
+    if (filter.active) params.filterActive = true;
+    if (filter.inactive) params.filterInactive = true;
+    const keys = Object.keys(params);
+    if (keys.length) {
+      // eslint-disable-next-line prefer-template
+      transitionLoc += '?' + keys.map(key => `${key}=${params[key]}`).join('&');
     }
     this.context.router.transitionTo(transitionLoc);
   }
@@ -157,6 +206,7 @@ class Users extends Component {
     const displayUsers = data.users.reduce((results, user) => {
       results.push({
         id: user.id,
+        Active: user.active,
         Name: `${_.get(user, ['personal', 'last_name'], '')}, ${_.get(user, ['personal', 'first_name'], '')}`,
         Username: user.username,
         Email: _.get(user, ['personal', 'email']),
@@ -173,9 +223,9 @@ class Users extends Component {
         <Pane defaultWidth="16%" header={searchHeader}>
           <FilterControlGroup label="Filters">
             <Checkbox
-              id="activeFilter"
+              id="active"
               label="Active"
-              checked={this.state.activeFilter}
+              checked={this.state.filter.active}
               onChange={this.onChangeFilter}
               marginBottom0
               hover
@@ -183,9 +233,9 @@ class Users extends Component {
               checkedIcon={<Icon icon="eye" />}
             />
             <Checkbox
-              id="inactiveFilter"
+              id="inactive"
               label="Inactive"
-              checked={this.state.inactiveFilter}
+              checked={this.state.filter.inactive}
               onChange={this.onChangeFilter}
               marginBottom0
               hover
@@ -199,7 +249,7 @@ class Users extends Component {
         </Pane>
 
         {/* Results Pane */}
-        <Pane defaultWidth="32%" paneTitle="Results" lastMenu={resultMenu}>
+        <Pane defaultWidth="40%" paneTitle="Results" lastMenu={resultMenu}>
           <MultiColumnListUsers
             contentData={displayUsers}
             onClickItemHandler={this.onClickItemHandler}
