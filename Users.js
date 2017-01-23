@@ -47,7 +47,7 @@ class Users extends Component {
       type: 'okapi',
       records: 'users',
       path: (queryParams, pathParams) => {
-        console.log('Users manifest "users" path function, queryParams = ', queryParams, 'pathParams =', pathParams);
+        // console.log('Users manifest "users" path function, queryParams = ', queryParams, 'pathParams =', pathParams);
         const { query, filterActive, filterInactive, sort } = queryParams || {};
 
         let cql;
