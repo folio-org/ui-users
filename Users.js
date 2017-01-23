@@ -75,8 +75,17 @@ class Users extends Component {
         }
 
         if (sort) {
-          if (cql === undefined) cql = 'username=*';
-          cql += ` sortby ${sort}`;
+          const sortMap = {
+            Active: 'active',
+            Name: 'personal.last_name personal.first_name',
+            Username: 'username',
+            Email: 'personal.email',
+          };
+          const sortIndex = sortMap[sort];
+          if (sortIndex) {
+            if (cql === undefined) cql = 'username=*';
+            cql += ` sortby ${sortIndex}`;
+          }
         }
 
         let path = 'users';
@@ -98,8 +107,7 @@ class Users extends Component {
         inactive: false,
       },
       searchTerm: '',
-      sortHeading: '', // Visible heading as clicked by user
-      sortOrder: '',   // Corresponding sort-order as a CQL index
+      sortOrder: '',
       addUserMode: false,
     };
 
@@ -142,16 +150,9 @@ class Users extends Component {
     this.context.router.transitionTo(this.props.location.pathname);
   }
 
-  onSortHandler(sortHeading) {
-    const sortMap = {
-      Active: 'active',
-      Name: 'personal.last_name personal.first_name',
-      Username: 'username',
-      Email: 'personal.email',
-    };
-    const sortOrder = sortMap[sortHeading];
+  onSortHandler(sortOrder) {
     console.log('User sorted by', sortOrder);
-    this.setState({ sortHeading, sortOrder });
+    this.setState({ sortOrder });
     this.updateSearch(this.state.searchTerm, sortOrder, this.state.filter);
   }
 
@@ -255,7 +256,7 @@ class Users extends Component {
             contentData={displayUsers}
             onClickItemHandler={this.onClickItemHandler}
             onSortHandler={this.onSortHandler}
-            sortHeading={this.state.sortHeading}
+            sortHeading={this.state.sortOrder}
           />
         </Pane>
 
