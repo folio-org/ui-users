@@ -98,7 +98,8 @@ class Users extends Component {
         inactive: false,
       },
       searchTerm: '',
-      sortOrder: '',
+      sortHeading: '', // Visible heading as clicked by user
+      sortOrder: '',   // Corresponding sort-order as a CQL index
       addUserMode: false,
     };
 
@@ -141,16 +142,16 @@ class Users extends Component {
     this.context.router.transitionTo(this.props.location.pathname);
   }
 
-  onSortHandler(heading) {
+  onSortHandler(sortHeading) {
     const sortMap = {
       Active: 'active',
       Name: 'personal.last_name personal.first_name',
       Username: 'username',
       Email: 'personal.email',
     };
-    const sortOrder = sortMap[heading];
+    const sortOrder = sortMap[sortHeading];
     console.log('User sorted by', sortOrder);
-    this.setState({ sortOrder });
+    this.setState({ sortHeading, sortOrder });
     this.updateSearch(this.state.searchTerm, sortOrder, this.state.filter);
   }
 
@@ -254,6 +255,7 @@ class Users extends Component {
             contentData={displayUsers}
             onClickItemHandler={this.onClickItemHandler}
             onSortHandler={this.onSortHandler}
+            sortHeading={this.state.sortHeading}
           />
         </Pane>
 
