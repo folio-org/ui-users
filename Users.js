@@ -181,7 +181,7 @@ class Users extends Component {
   // We need to explicitly pass changed values into this function,
   // as state-change only happens after event is handled.
   updateSearch(query, sortOrder, filter) {
-    console.log(`updateSearch('${query}', '${sortOrder}', '${filter}')`);
+    console.log(`updateSearch('${query}', '${sortOrder}',`, filter, ')');
     let transitionLoc = this.props.location.pathname;
     const params = {};
     if (query) params.query = query;
