@@ -256,7 +256,7 @@ class Users extends Component {
             contentData={displayUsers}
             onClickItemHandler={this.onClickItemHandler}
             onSortHandler={this.onSortHandler}
-            sortHeading={this.state.sortOrder}
+            sortOrder={this.state.sortOrder}
           />
         </Pane>
 
