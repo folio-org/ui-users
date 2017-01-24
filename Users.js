@@ -46,7 +46,7 @@ class Users extends Component {
     users: {
       type: 'okapi',
       records: 'users',
-      path: (queryParams, pathParams) => {
+      path: (queryParams, pathParams) => { // eslint-disable-line no-unused-vars
         // console.log('Users manifest "users" path function, queryParams = ', queryParams, 'pathParams =', pathParams);
         const { query, filterActive, filterInactive, sort } = queryParams || {};
 
@@ -191,7 +191,7 @@ class Users extends Component {
     const keys = Object.keys(params);
     if (keys.length) {
       // eslint-disable-next-line prefer-template
-      transitionLoc += '?' + keys.map(key => `${key}=${params[key]}`).join('&');
+      transitionLoc += '?' + keys.map(key => `${key}=${encodeURIComponent(params[key])}`).join('&');
     }
     this.context.router.transitionTo(transitionLoc);
   }
