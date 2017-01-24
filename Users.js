@@ -46,7 +46,7 @@ class Users extends Component {
     users: {
       type: 'okapi',
       records: 'users',
-      path: (queryParams, pathParams) => { // eslint-disable-line no-unused-vars
+      path: (queryParams, _pathParams) => {
         // console.log('Users manifest "users" path function, queryParams = ', queryParams, 'pathParams =', pathParams);
         const { query, filterActive, filterInactive, sort } = queryParams || {};
 
