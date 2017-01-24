@@ -89,7 +89,7 @@ class Users extends Component {
         }
 
         let path = 'users';
-        if (cql) path += `?query=${cql}`;
+        if (cql) path += `?query=${encodeURIComponent(cql)}`;
 
         console.log(`query=${query} active=${filterActive} inactive=${filterInactive} sort=${sort} -> ${path}`);
         return path;
