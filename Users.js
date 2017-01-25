@@ -33,7 +33,7 @@ class Users extends Component {
     mutator: PropTypes.object,
   };
 
-  static manifest = {
+  static manifest = Object.freeze({
     searchResults: [],
     /* detail: {
       fineHistory:[]
@@ -96,7 +96,7 @@ class Users extends Component {
       },
       staticFallback: { path: 'users' },
     },
-  };
+  });
 
   constructor(props) {
     super(props);
