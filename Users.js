@@ -38,11 +38,6 @@ class Users extends Component {
     /* detail: {
       fineHistory:[]
     } */
-    user: {
-      type: 'okapi',
-      path: 'users',
-      fetch: false,
-    },
     users: {
       type: 'okapi',
       records: 'users',
@@ -199,7 +194,7 @@ class Users extends Component {
   }
 
   create(data) {
-    this.props.mutator.user.POST(data);
+    this.props.mutator.users.POST(data);
   }
 
   render() {
