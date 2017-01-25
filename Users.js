@@ -119,14 +119,15 @@ class Users extends Component {
   // end search Handlers
 
   // AddUser Handlers
-  onClickAddNewUser() {
-    console.log('add Clicked');
+  onClickAddNewUser(e) {
+    if (e) e.preventDefault();
     this.setState({
       addUserMode: true,
     });
   }
 
-  onClickCloseNewUser() {
+  onClickCloseNewUser(e) {
+    if (e) e.preventDefault();
     this.setState({
       addUserMode: false,
     });
