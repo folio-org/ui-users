@@ -14,7 +14,8 @@
   "stripes": {
     "type": "app",
     "displayName": "Users",
-    "route": "/users"
+    "route": "/users",
+    "home": "/users?filterActive=true"
   },
   "scripts": {
     "lint": "eslint *.js || true"

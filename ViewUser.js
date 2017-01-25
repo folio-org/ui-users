@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _ from 'lodash'; // eslint-disable-line
 import React, { Component, PropTypes } from 'react' // eslint-disable-line
 import { connect } from 'stripes-connect'; // eslint-disable-line
 import Pane from '@folio/stripes-components/lib/Pane' // eslint-disable-line
@@ -25,12 +25,12 @@ class ViewUser extends Component {
     }),
   };
 
-  static manifest = {
+  static manifest = Object.freeze({
     user: {
       type: 'okapi',
       path: 'users/:{userid}',
     },
-  };
+  });
 
   constructor(props) {
     super(props);
