@@ -25,12 +25,12 @@ class ViewUser extends Component {
     }),
   };
 
-  static manifest = {
+  static manifest = Object.freeze({
     user: {
       type: 'okapi',
       path: 'users/:{userid}',
     },
-  };
+  });
 
   constructor(props) {
     super(props);
