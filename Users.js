@@ -263,7 +263,7 @@ class Users extends Component {
         </Pane>
 
         {/* Details Pane */}
-        <Match pattern={`${pathname}/view/:userid`} component={ViewUser} />
+        <Match pattern={`${pathname}/view/:userid`} render={(props) => <ViewUser placeholder={"placeholder"} {...props} /> } />
         <Layer isOpen={this.state.addUserMode} label="Add New User Dialog">
           <UserForm
             onSubmit={(record) => { this.create(record); }}
