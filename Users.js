@@ -100,14 +100,15 @@ class Users extends Component {
 
   constructor(props) {
     super(props);
+
+    const query = props.location.query;
     this.state = {
-      // Search/Filter state
       filter: {
-        active: true,
-        inactive: false,
+        active: query.filterActive || false,
+        inactive: query.filterInactive || false,
       },
-      searchTerm: '',
-      sortOrder: '',
+      searchTerm: query.query || '',
+      sortOrder: query.sort || '',
       addUserMode: false,
     };
 
