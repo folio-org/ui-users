@@ -9,7 +9,7 @@ import Paneset from '@folio/stripes-components/lib/Paneset'; // eslint-disable-l
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu'; // eslint-disable-line
 import Button from '@folio/stripes-components/lib/Button'; // eslint-disable-line
 import Icon from '@folio/stripes-components/lib/Icon'; // eslint-disable-line
-import MultiColumnListUsers from './lib/MultiColumnList'; // eslint-disable-line 
+import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList'; // eslint-disable-line 
 import KeyValue from '@folio/stripes-components/lib/KeyValue'; // eslint-disable-line
 import TextField from '@folio/stripes-components/lib/TextField'; // eslint-disable-line
 import Checkbox from '@folio/stripes-components/lib/Checkbox'; // eslint-disable-line
@@ -151,13 +151,15 @@ class Users extends Component {
     this.context.router.transitionTo(this.props.location.pathname);
   }
 
-  onSortHandler(sortOrder) {
+  onSortHandler(e, meta) {
+    const sortOrder = meta.name;
     console.log('User sorted by', sortOrder);
     this.setState({ sortOrder });
     this.updateSearch(this.state.searchTerm, sortOrder, this.state.filter);
   }
 
-  onClickItemHandler(userId) {
+  onClickItemHandler(e, meta) {
+    var userId = meta.id;
     console.log('User clicked', userId, 'location = ', this.props.location);
     this.context.router.transitionTo(`/users/view/${userId}${this.props.location.search}`);
   }
@@ -253,10 +255,12 @@ class Users extends Component {
 
         {/* Results Pane */}
         <Pane defaultWidth="40%" paneTitle="Results" lastMenu={resultMenu}>
-          <MultiColumnListUsers
+          <MultiColumnList
             contentData={displayUsers}
-            onClickItemHandler={this.onClickItemHandler}
-            onSortHandler={this.onSortHandler}
+            rowMetadata={['id']}
+            visibleColumns={['Active', 'Name', 'Username', 'Email']}
+            onRowClick={this.onClickItemHandler}
+            onHeaderClick={this.onSortHandler}
             sortOrder={this.state.sortOrder}
           />
         </Pane>
