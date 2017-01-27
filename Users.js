@@ -101,7 +101,7 @@ class Users extends Component {
   constructor(props) {
     super(props);
 
-    const query = props.location.query;
+    const query = props.location.query || {};
     this.state = {
       filter: {
         active: query.filterActive || false,
