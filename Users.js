@@ -38,11 +38,6 @@ class Users extends Component {
     /* detail: {
       fineHistory:[]
     } */
-    user: {
-      type: 'okapi',
-      path: 'users',
-      fetch: false,
-    },
     users: {
       type: 'okapi',
       records: 'users',
@@ -167,14 +162,15 @@ class Users extends Component {
   // end search Handlers
 
   // AddUser Handlers
-  onClickAddNewUser() {
-    console.log('add Clicked');
+  onClickAddNewUser(e) {
+    if (e) e.preventDefault();
     this.setState({
       addUserMode: true,
     });
   }
 
-  onClickCloseNewUser() {
+  onClickCloseNewUser(e) {
+    if (e) e.preventDefault();
     this.setState({
       addUserMode: false,
     });
@@ -200,7 +196,7 @@ class Users extends Component {
   }
 
   create(data) {
-    this.props.mutator.user.POST(data);
+    this.props.mutator.users.POST(data);
   }
 
   render() {
@@ -266,7 +262,7 @@ class Users extends Component {
         </Pane>
 
         {/* Details Pane */}
-        <Match pattern={`${pathname}/view/:userid`} component={ViewUser} />
+        <Match pattern={`${pathname}/view/:userid`} render={(props) => <ViewUser placeholder={"placeholder"} {...props} /> } />
         <Layer isOpen={this.state.addUserMode} label="Add New User Dialog">
           <UserForm
             onSubmit={(record) => { this.create(record); }}

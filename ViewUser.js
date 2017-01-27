@@ -42,14 +42,15 @@ class ViewUser extends Component {
   }
 
   // EditUser Handlers
-  onClickEditUser() {
-    console.log('edit Clicked');
+  onClickEditUser(e) {
+    if (e) e.preventDefault();
     this.setState({
       editUserMode: true,
     });
   }
 
-  onClickCloseEditUser() {
+  onClickCloseEditUser(e) {
+    if (e) e.preventDefault();
     this.setState({
       editUserMode: false,
     });
