@@ -42,7 +42,7 @@ class Users extends Component {
       type: 'okapi',
       records: 'users',
       path: (queryParams, _pathParams) => {
-        // console.log('Users manifest "users" path function, queryParams = ', queryParams, 'pathParams =', pathParams);
+        // console.log('Users manifest "users" path function, queryParams = ', queryParams);
         const { query, filterActive, filterInactive, sort } = queryParams || {};
 
         let cql;
@@ -154,7 +154,7 @@ class Users extends Component {
   }
 
   onClickItemHandler(e, meta) {
-    var userId = meta.id;
+    const userId = meta.id;
     console.log('User clicked', userId, 'location = ', this.props.location);
     this.context.router.transitionTo(`/users/view/${userId}${this.props.location.search}`);
   }
@@ -262,7 +262,7 @@ class Users extends Component {
         </Pane>
 
         {/* Details Pane */}
-        <Match pattern={`${pathname}/view/:userid`} render={(props) => <ViewUser placeholder={"placeholder"} {...props} /> } />
+        <Match pattern={`${pathname}/view/:userid`} render={props => <ViewUser placeholder={'placeholder'} {...props} />} />
         <Layer isOpen={this.state.addUserMode} label="Add New User Dialog">
           <UserForm
             onSubmit={(record) => { this.create(record); }}
