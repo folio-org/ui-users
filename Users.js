@@ -9,7 +9,7 @@ import Paneset from '@folio/stripes-components/lib/Paneset'; // eslint-disable-l
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu'; // eslint-disable-line
 import Button from '@folio/stripes-components/lib/Button'; // eslint-disable-line
 import Icon from '@folio/stripes-components/lib/Icon'; // eslint-disable-line
-import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList'; // eslint-disable-line 
+import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList'; // eslint-disable-line
 import KeyValue from '@folio/stripes-components/lib/KeyValue'; // eslint-disable-line
 import TextField from '@folio/stripes-components/lib/TextField'; // eslint-disable-line
 import Checkbox from '@folio/stripes-components/lib/Checkbox'; // eslint-disable-line
@@ -203,7 +203,7 @@ class Users extends Component {
     const { data, pathname } = this.props;
     if (!data.users) return <div />;
     const resultMenu = <PaneMenu><button><Icon icon="bookmark" /></button></PaneMenu>;
-    const fineHistory = [{ 'Due Date': '11/12/2014', 'Amount': '34.23', 'Status': 'Unpaid' }]; // eslint-disable-line 
+    const fineHistory = [{ 'Due Date': '11/12/2014', 'Amount': '34.23', 'Status': 'Unpaid' }]; // eslint-disable-line
     const displayUsers = data.users.reduce((results, user) => {
       results.push({
         id: user.id,
