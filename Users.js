@@ -1,9 +1,8 @@
 import _ from 'lodash'; // eslint-disable-line
-import React, { Component, PropTypes } from 'react'; // eslint-disable-line
+import React, { PropTypes } from 'react'; // eslint-disable-line
 import Match from 'react-router/Match'; // eslint-disable-line
 import {Row, Col} from 'react-bootstrap'; // eslint-disable-line
 
-/* shared stripes components */
 import Pane from '@folio/stripes-components/lib/Pane'; // eslint-disable-line
 import Paneset from '@folio/stripes-components/lib/Paneset'; // eslint-disable-line
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu'; // eslint-disable-line
@@ -21,7 +20,7 @@ import Layer from '@folio/stripes-components/lib/Layer'; // eslint-disable-line
 import UserForm from './UserForm';
 import ViewUser from './ViewUser';
 
-class Users extends Component {
+class Users extends React.Component {
   static contextTypes = {
     router: PropTypes.object.isRequired,
   }
