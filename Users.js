@@ -1,18 +1,17 @@
-import _ from 'lodash';
-import React, { Component, PropTypes } from 'react'; // eslint-disable-line
+import _ from 'lodash'; // eslint-disable-line
+import React, { PropTypes } from 'react'; // eslint-disable-line
 import Match from 'react-router/Match'; // eslint-disable-line
 import {Row, Col} from 'react-bootstrap'; // eslint-disable-line
 
-/* shared stripes components */
 import Pane from '@folio/stripes-components/lib/Pane'; // eslint-disable-line
 import Paneset from '@folio/stripes-components/lib/Paneset'; // eslint-disable-line
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu'; // eslint-disable-line
 import Button from '@folio/stripes-components/lib/Button'; // eslint-disable-line
 import Icon from '@folio/stripes-components/lib/Icon'; // eslint-disable-line
-import MultiColumnListUsers from './lib/MultiColumnList'; // eslint-disable-line 
-import KeyValue from '@folio/stripes-components/lib/KeyValue'; // eslint-disable-line
-import TextField from '@folio/stripes-components/lib/TextField'; // eslint-disable-line
 import Checkbox from '@folio/stripes-components/lib/Checkbox'; // eslint-disable-line
+import TextField from '@folio/stripes-components/lib/TextField'; // eslint-disable-line
+import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList'; // eslint-disable-line
+import KeyValue from '@folio/stripes-components/lib/KeyValue'; // eslint-disable-line
 import FilterPaneSearch from '@folio/stripes-components/lib/FilterPaneSearch'; // eslint-disable-line
 import FilterControlGroup from '@folio/stripes-components/lib/FilterControlGroup'; // eslint-disable-line
 import Select from '@folio/stripes-components/lib/Select'; // eslint-disable-line
@@ -21,7 +20,7 @@ import Layer from '@folio/stripes-components/lib/Layer'; // eslint-disable-line
 import UserForm from './UserForm';
 import ViewUser from './ViewUser';
 
-class Users extends Component {
+class Users extends React.Component {
   static contextTypes = {
     router: PropTypes.object.isRequired,
   }
@@ -33,32 +32,77 @@ class Users extends Component {
     mutator: PropTypes.object,
   };
 
-  static manifest = {
+  static manifest = Object.freeze({
     searchResults: [],
     /* detail: {
       fineHistory:[]
     } */
-    user: {
-      type: 'okapi',
-      path: 'users',
-      fetch: false,
-    },
     users: {
       type: 'okapi',
       records: 'users',
-      path: 'users?query=(username="?{query:-}*" or personal.first_name="?{query:-}*" or personal.last_name="?{query:-}*") ?{sort:+sortby} ?{sort:-}',
+      path: (queryParams, _pathParams) => {
+        // console.log('Users manifest "users" path function, queryParams = ', queryParams);
+        const { query, filterActive, filterInactive, sort } = queryParams || {};
+
+        let cql;
+        if (query) {
+          cql = `username="${query}*" or personal.first_name="${query}*" or personal.last_name="${query}*"`;
+        }
+
+        let filterCql;
+        if (filterActive && !filterInactive) {
+          filterCql = 'active=true';
+        } else if (filterInactive && !filterActive) {
+          filterCql = 'active=false';
+        } else if (!filterActive && !filterInactive) {
+          // Technically, we should force this configuration to find
+          // no records; but it probably makes more sense to do
+          // nothing, and allow both active AND inactive records.
+        }
+
+        if (filterCql) {
+          if (cql) {
+            cql = `(${cql}) and ${filterCql}`;
+          } else {
+            cql = filterCql;
+          }
+        }
+
+        if (sort) {
+          const sortMap = {
+            Active: 'active',
+            Name: 'personal.last_name personal.first_name',
+            Username: 'username',
+            Email: 'personal.email',
+          };
+          const sortIndex = sortMap[sort];
+          if (sortIndex) {
+            if (cql === undefined) cql = 'username=*';
+            cql += ` sortby ${sortIndex}`;
+          }
+        }
+
+        let path = 'users';
+        if (cql) path += `?query=title=${encodeURIComponent(cql)}`;
+
+        console.log(`query=${query} active=${filterActive} inactive=${filterInactive} sort=${sort} -> ${path}`);
+        return path;
+      },
       staticFallback: { path: 'users' },
     },
-  };
+  });
 
   constructor(props) {
     super(props);
+
+    const query = props.location.query || {};
     this.state = {
-      // Search/Filter state
-      activeFilter: true,
-      inactiveFilter: false,
-      searchTerm: '',
-      sortOrder: '',
+      filter: {
+        active: query.filterActive || false,
+        inactive: query.filterInactive || false,
+      },
+      searchTerm: query.query || '',
+      sortOrder: query.sort || '',
       addUserMode: false,
     };
 
@@ -80,9 +124,11 @@ class Users extends Component {
 
   // search Handlers...
   onChangeFilter(e) {
-    const stateObj = {};
-    stateObj[e.target.id] = !this.state[e.target.id];
-    this.setState(stateObj);
+    const filter = this.state.filter;
+    filter[e.target.id] = !filter[e.target.id];
+    console.log('onChangeFilter setting state', filter);
+    this.setState({ filter });
+    this.updateSearch(this.state.searchTerm, this.state.sortOrder, filter);
   }
 
   onChangeSearch(e) {
@@ -90,7 +136,7 @@ class Users extends Component {
     console.log(`User searched for '${query}' at '${this.props.location.pathname}'`);
 
     this.setState({ searchTerm: query });
-    this.updateSearchSort(query, this.state.sortOrder);
+    this.updateSearch(query, this.state.sortOrder, this.state.filter);
   }
 
   onClearSearch() {
@@ -99,19 +145,15 @@ class Users extends Component {
     this.context.router.transitionTo(this.props.location.pathname);
   }
 
-  onSortHandler(heading) {
-    const sortMap = {
-      Name: 'personal.last_name personal.first_name',
-      Username: 'username',
-      Email: 'personal.email',
-    };
-    const sortOrder = sortMap[heading];
+  onSortHandler(e, meta) {
+    const sortOrder = meta.name;
     console.log('User sorted by', sortOrder);
     this.setState({ sortOrder });
-    this.updateSearchSort(this.state.searchTerm, sortOrder);
+    this.updateSearch(this.state.searchTerm, sortOrder, this.state.filter);
   }
 
-  onClickItemHandler(userId) {
+  onClickItemHandler(e, meta) {
+    const userId = meta.id;
     console.log('User clicked', userId, 'location = ', this.props.location);
     this.context.router.transitionTo(`/users/view/${userId}${this.props.location.search}`);
   }
@@ -119,44 +161,52 @@ class Users extends Component {
   // end search Handlers
 
   // AddUser Handlers
-  onClickAddNewUser() {
-    console.log('add Clicked');
+  onClickAddNewUser(e) {
+    if (e) e.preventDefault();
     this.setState({
       addUserMode: true,
     });
   }
 
-  onClickCloseNewUser() {
+  onClickCloseNewUser(e) {
+    if (e) e.preventDefault();
     this.setState({
       addUserMode: false,
     });
   }
   // end AddUser Handlers
 
-  updateSearchSort(query, sortOrder) {
-    console.log(`updateSearchSort('${query}', '${sortOrder}')`);
+  // We need to explicitly pass changed values into this function,
+  // as state-change only happens after event is handled.
+  updateSearch(query, sortOrder, filter) {
+    console.log(`updateSearch('${query}', '${sortOrder}',`, filter, ')');
     let transitionLoc = this.props.location.pathname;
-    // if (sortOrder && !query) query = "cql.allRecords=1";
-    if (query) transitionLoc += `?query=${query}`;
-    if (sortOrder) {
-      transitionLoc += query ? '&' : '?';
-      transitionLoc += `sort=${sortOrder}`;
+    const params = {};
+    if (query) params.query = query;
+    if (sortOrder) params.sort = sortOrder;
+    if (filter.active) params.filterActive = true;
+    if (filter.inactive) params.filterInactive = true;
+    const keys = Object.keys(params);
+    if (keys.length) {
+      // eslint-disable-next-line prefer-template
+      transitionLoc += '?' + keys.map(key => `${key}=${encodeURIComponent(params[key])}`).join('&');
     }
     this.context.router.transitionTo(transitionLoc);
   }
 
   create(data) {
-    this.props.mutator.user.POST(data);
+    this.props.mutator.users.POST(data);
   }
 
   render() {
     const { data, pathname } = this.props;
     if (!data.users) return <div />;
     const resultMenu = <PaneMenu><button><Icon icon="bookmark" /></button></PaneMenu>;
-    const fineHistory = [{ 'Due Date': '11/12/2014', 'Amount': '34.23', 'Status': 'Unpaid' }]; // eslint-disable-line 
+    const fineHistory = [{ 'Due Date': '11/12/2014', 'Amount': '34.23', 'Status': 'Unpaid' }]; // eslint-disable-line
     const displayUsers = data.users.reduce((results, user) => {
       results.push({
         id: user.id,
+        Active: user.active,
         Name: `${_.get(user, ['personal', 'last_name'], '')}, ${_.get(user, ['personal', 'first_name'], '')}`,
         Username: user.username,
         Email: _.get(user, ['personal', 'email']),
@@ -173,9 +223,9 @@ class Users extends Component {
         <Pane defaultWidth="16%" header={searchHeader}>
           <FilterControlGroup label="Filters">
             <Checkbox
-              id="activeFilter"
+              id="active"
               label="Active"
-              checked={this.state.activeFilter}
+              checked={this.state.filter.active}
               onChange={this.onChangeFilter}
               marginBottom0
               hover
@@ -183,9 +233,9 @@ class Users extends Component {
               checkedIcon={<Icon icon="eye" />}
             />
             <Checkbox
-              id="inactiveFilter"
+              id="inactive"
               label="Inactive"
-              checked={this.state.inactiveFilter}
+              checked={this.state.filter.inactive}
               onChange={this.onChangeFilter}
               marginBottom0
               hover
@@ -199,16 +249,23 @@ class Users extends Component {
         </Pane>
 
         {/* Results Pane */}
-        <Pane defaultWidth="32%" paneTitle="Results" lastMenu={resultMenu}>
-          <MultiColumnListUsers
+        <Pane defaultWidth="40%" paneTitle="Results" lastMenu={resultMenu}>
+          <MultiColumnList
             contentData={displayUsers}
-            onClickItemHandler={this.onClickItemHandler}
-            onSortHandler={this.onSortHandler}
+            x-selectedRow="### consider setting this"
+            rowMetadata={['id']}
+            x-headerMetadata="### consider setting this"
+            x-formatter="### consider setting this instead of building displayUsers"
+            onRowClick={this.onClickItemHandler}
+            onHeaderClick={this.onSortHandler}
+            visibleColumns={['Active', 'Name', 'Username', 'Email']}
+            x-fullWidth="### consider setting this"
+            sortOrder={this.state.sortOrder}
           />
         </Pane>
 
         {/* Details Pane */}
-        <Match pattern={`${pathname}/view/:userid`} component={ViewUser} />
+        <Match pattern={`${pathname}/view/:userid`} render={props => <ViewUser placeholder={'placeholder'} {...props} />} />
         <Layer isOpen={this.state.addUserMode} label="Add New User Dialog">
           <UserForm
             onSubmit={(record) => { this.create(record); }}

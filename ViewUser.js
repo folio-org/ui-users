@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _ from 'lodash'; // eslint-disable-line
 import React, { Component, PropTypes } from 'react' // eslint-disable-line
 import { connect } from 'stripes-connect'; // eslint-disable-line
 import Pane from '@folio/stripes-components/lib/Pane' // eslint-disable-line
@@ -23,11 +23,11 @@ class ViewUser extends Component {
     mutator: React.PropTypes.shape({
       user: React.PropTypes.shape({
         PUT: React.PropTypes.func.isRequired,
-      }),
+      })
     })
   };
 
-  static manifest = {
+  static manifest = Object.freeze({
     user: {
       type: 'okapi',
       path: 'users/:{userid}',
@@ -38,7 +38,7 @@ class ViewUser extends Component {
       path: 'users?query=(username="?{query:-}*" or personal.first_name="?{query:-}*" or personal.last_name="?{query:-}*") ?{sort:+sortby} ?{sort:-}',
       staticFallback: { path: 'users' },
     },
-  };
+  });
 
   constructor(props) {
     super(props);
@@ -50,14 +50,15 @@ class ViewUser extends Component {
   }
 
   // EditUser Handlers
-  onClickEditUser() {
-    console.log('edit Clicked');
+  onClickEditUser(e) {
+    if (e) e.preventDefault();
     this.setState({
       editUserMode: true,
     });
   }
 
-  onClickCloseEditUser() {
+  onClickCloseEditUser(e) {
+    if (e) e.preventDefault();
     this.setState({
       editUserMode: false,
     });
