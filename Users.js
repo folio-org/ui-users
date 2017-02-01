@@ -253,9 +253,9 @@ class Users extends React.Component {
           <MultiColumnList
             contentData={displayUsers}
             rowMetadata={['id']}
-            visibleColumns={['Active', 'Name', 'Username', 'Email']}
             onRowClick={this.onClickItemHandler}
             onHeaderClick={this.onSortHandler}
+            visibleColumns={['Active', 'Name', 'Username', 'Email']}
             sortOrder={this.state.sortOrder}
           />
         </Pane>
