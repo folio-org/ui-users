@@ -83,7 +83,7 @@ class Users extends React.Component {
         }
 
         let path = 'users';
-        if (cql) path += `?query=${encodeURIComponent(cql)}`;
+        if (cql) path += `?query=title=${encodeURIComponent(cql)}`;
 
         console.log(`query=${query} active=${filterActive} inactive=${filterInactive} sort=${sort} -> ${path}`);
         return path;
@@ -252,14 +252,14 @@ class Users extends React.Component {
         <Pane defaultWidth="40%" paneTitle="Results" lastMenu={resultMenu}>
           <MultiColumnList
             contentData={displayUsers}
-            <!-- ### consider setting selectedRow -->
+            x-selectedRow="### consider setting this"
             rowMetadata={['id']}
-            <!-- ### consider setting headerMetadata -->
-            <!-- ### consider using a formatter object instead of building displayUsers -->
+            x-headerMetadata="### consider setting this"
+            x-formatter="### consider setting this instead of building displayUsers"
             onRowClick={this.onClickItemHandler}
             onHeaderClick={this.onSortHandler}
             visibleColumns={['Active', 'Name', 'Username', 'Email']}
-            <!-- ### consider setting fullWidth -->
+            x-fullWidth="### consider setting this"
             sortOrder={this.state.sortOrder}
           />
         </Pane>
