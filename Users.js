@@ -252,10 +252,14 @@ class Users extends React.Component {
         <Pane defaultWidth="40%" paneTitle="Results" lastMenu={resultMenu}>
           <MultiColumnList
             contentData={displayUsers}
+            <!-- ### consider setting selectedRow -->
             rowMetadata={['id']}
+            <!-- ### consider setting headerMetadata -->
+            <!-- ### consider using a formatter object instead of building displayUsers -->
             onRowClick={this.onClickItemHandler}
             onHeaderClick={this.onSortHandler}
             visibleColumns={['Active', 'Name', 'Username', 'Email']}
+            <!-- ### consider setting fullWidth -->
             sortOrder={this.state.sortOrder}
           />
         </Pane>
