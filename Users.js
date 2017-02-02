@@ -275,7 +275,7 @@ class Users extends React.Component {
             onRowClick={this.onClickItemHandler}
             onHeaderClick={this.onSortHandler}
             visibleColumns={['Active', 'Name', 'Username', 'Email']}
-            x-fullWidth="### consider setting this"
+            fullWidth
             sortOrder={this.state.sortOrder}
           />
         </Pane>
