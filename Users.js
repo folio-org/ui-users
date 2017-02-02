@@ -196,6 +196,8 @@ class Users extends React.Component {
     const { data, pathname } = this.props;
     const users = data.users || [];
 
+    /* searchHeader is a 'custom pane header'*/
+    const searchHeader = <FilterPaneSearch id="SearchField" onChange={this.onChangeSearch} onClear={this.onClearSearch} value={this.state.searchTerm} />;
     const resultMenu = <PaneMenu><button><Icon icon="bookmark" /></button></PaneMenu>;
     const fineHistory = [{ 'Due Date': '11/12/2014', 'Amount': '34.23', 'Status': 'Unpaid' }]; // eslint-disable-line
 
@@ -205,9 +207,6 @@ class Users extends React.Component {
       Username: user => user.username,
       Email: user => _.get(user, ['personal', 'email']),
     };
-
-    /* searchHeader is a 'custom pane header'*/
-    const searchHeader = <FilterPaneSearch id="SearchField" onChange={this.onChangeSearch} onClear={this.onClearSearch} value={this.state.searchTerm} />;
 
     return (
       <Paneset>
@@ -239,7 +238,6 @@ class Users extends React.Component {
             <Button fullWidth onClick={this.onClickAddNewUser}>Add User</Button>
           </FilterControlGroup>
         </Pane>
-
         {/* Results Pane */}
         <Pane
           defaultWidth="40%"
