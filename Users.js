@@ -267,7 +267,6 @@ class Users extends React.Component {
             contentData={data.users}
             selectedRow={this.state.selectedItem}
             rowMetadata={['id']}
-            x-headerMetadata="### consider setting this"
             formatter={resultsFormatter}
             onRowClick={this.onClickItemHandler}
             onHeaderClick={this.onSortHandler}
