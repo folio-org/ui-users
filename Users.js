@@ -111,7 +111,7 @@ class Users extends React.Component {
     this.onChangeFilter = this.onChangeFilter.bind(this);
     this.onChangeSearch = this.onChangeSearch.bind(this);
     this.onClearSearch = this.onClearSearch.bind(this);
-    this.onSortHandler = this.onSortHandler.bind(this);
+    this.onSort = this.onSort.bind(this);
     this.onSelectRow = this.onSelectRow.bind(this);
   }
 
@@ -138,7 +138,7 @@ class Users extends React.Component {
     this.context.router.transitionTo(this.props.location.pathname);
   }
 
-  onSortHandler(e, meta) {
+  onSort(e, meta) {
     const sortOrder = meta.name;
     console.log('User sorted by', sortOrder);
     this.setState({ sortOrder });
@@ -258,7 +258,7 @@ class Users extends React.Component {
             rowMetadata={['id']}
             formatter={resultsFormatter}
             onRowClick={this.onSelectRow}
-            onHeaderClick={this.onSortHandler}
+            onHeaderClick={this.onSort}
             visibleColumns={['Active', 'Name', 'Username', 'Email']}
             fullWidth
             sortOrder={this.state.sortOrder}
