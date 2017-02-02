@@ -23,7 +23,7 @@ import ViewUser from './ViewUser';
 class Users extends React.Component {
   static contextTypes = {
     router: PropTypes.object.isRequired,
-  }
+  };
 
   static propTypes = {
     data: PropTypes.object.isRequired,
