@@ -112,7 +112,7 @@ class Users extends React.Component {
     this.onChangeSearch = this.onChangeSearch.bind(this);
     this.onClearSearch = this.onClearSearch.bind(this);
     this.onSortHandler = this.onSortHandler.bind(this);
-    this.onClickItemHandler = this.onClickItemHandler.bind(this);
+    this.onSelectRow = this.onSelectRow.bind(this);
   }
 
   // search Handlers...
@@ -145,7 +145,7 @@ class Users extends React.Component {
     this.updateSearch(this.state.searchTerm, sortOrder, this.state.filter);
   }
 
-  onClickItemHandler(e, meta) {
+  onSelectRow(e, meta) {
     const userId = meta.id;
     console.log('User clicked', userId, 'location = ', this.props.location);
     this.setState({ selectedItem: meta });
@@ -257,7 +257,7 @@ class Users extends React.Component {
             selectedRow={this.state.selectedItem}
             rowMetadata={['id']}
             formatter={resultsFormatter}
-            onRowClick={this.onClickItemHandler}
+            onRowClick={this.onSelectRow}
             onHeaderClick={this.onSortHandler}
             visibleColumns={['Active', 'Name', 'Username', 'Email']}
             fullWidth
