@@ -104,6 +104,7 @@ class Users extends React.Component {
         active: query.filterActive || false,
         inactive: query.filterInactive || false,
       },
+      selectedItem: {},
       searchTerm: query.query || '',
       sortOrder: query.sort || '',
       addUserMode: false,
@@ -158,6 +159,7 @@ class Users extends React.Component {
   onClickItemHandler(e, meta) {
     const userId = meta.id;
     console.log('User clicked', userId, 'location = ', this.props.location);
+    this.setState({ selectedItem: meta });
     this.context.router.transitionTo(`/users/view/${userId}${this.props.location.search}`);
   }
 
@@ -266,7 +268,7 @@ class Users extends React.Component {
         >
           <MultiColumnList
             contentData={displayUsers}
-            x-selectedRow="### consider setting this"
+            selectedRow={this.state.selectedItem}
             rowMetadata={['id']}
             x-headerMetadata="### consider setting this"
             x-formatter="### consider setting this instead of building displayUsers"
