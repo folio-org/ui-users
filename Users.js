@@ -208,16 +208,13 @@ class Users extends React.Component {
     if (!data.users) return <div />;
     const resultMenu = <PaneMenu><button><Icon icon="bookmark" /></button></PaneMenu>;
     const fineHistory = [{ 'Due Date': '11/12/2014', 'Amount': '34.23', 'Status': 'Unpaid' }]; // eslint-disable-line
-    const displayUsers = data.users.reduce((results, user) => {
-      results.push({
-        id: user.id,
-        Active: user.active,
-        Name: `${_.get(user, ['personal', 'last_name'], '')}, ${_.get(user, ['personal', 'first_name'], '')}`,
-        Username: user.username,
-        Email: _.get(user, ['personal', 'email']),
-      });
-      return results;
-    }, []);
+
+    const resultsFormatter = {
+      Active: user => user.active,
+      Name: user => `${_.get(user, ['personal', 'last_name'], '')}, ${_.get(user, ['personal', 'first_name'], '')}`,
+      Username: user => user.username,
+      Email: user => _.get(user, ['personal', 'email']),
+    };
 
     /* searchHeader is a 'custom pane header'*/
     const searchHeader = <FilterPaneSearch id="SearchField" onChange={this.onChangeSearch} onClear={this.onClearSearch} value={this.state.searchTerm} />;
@@ -260,18 +257,18 @@ class Users extends React.Component {
             <div style={{ textAlign: 'center' }}>
               <strong>Results</strong>
               <div>
-                <em>{displayUsers.length} Result{displayUsers.length === 1 ? '' : 's'} Found</em>
+                <em>{data.users.length} Result{data.users.length === 1 ? '' : 's'} Found</em>
               </div>
             </div>
           }
           lastMenu={resultMenu}
         >
           <MultiColumnList
-            contentData={displayUsers}
+            contentData={data.users}
             selectedRow={this.state.selectedItem}
             rowMetadata={['id']}
             x-headerMetadata="### consider setting this"
-            x-formatter="### consider setting this instead of building displayUsers"
+            formatter={resultsFormatter}
             onRowClick={this.onClickItemHandler}
             onHeaderClick={this.onSortHandler}
             visibleColumns={['Active', 'Name', 'Username', 'Email']}
