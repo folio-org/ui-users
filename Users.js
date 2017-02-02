@@ -30,7 +30,8 @@ class Users extends React.Component {
     pathname: PropTypes.string.isRequired,
     location: PropTypes.shape({
       pathname: PropTypes.string.isRequired,
-      query: PropTypes.object,
+      query: PropTypes.object, // object of key=value pairs
+      search: PropTypes.string, // string combining all parts of query
     }).isRequired,
     mutator: PropTypes.object,
   };
