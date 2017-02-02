@@ -28,7 +28,10 @@ class Users extends React.Component {
   static propTypes = {
     data: PropTypes.object.isRequired,
     pathname: PropTypes.string.isRequired,
-    location: PropTypes.object.isRequired,
+    location: PropTypes.shape({
+      pathname: PropTypes.string.isRequired,
+      query: PropTypes.object,
+    }).isRequired,
     mutator: PropTypes.object,
   };
 
