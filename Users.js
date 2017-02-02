@@ -194,7 +194,8 @@ class Users extends React.Component {
 
   render() {
     const { data, pathname } = this.props;
-    if (!data.users) return <div />;
+    const users = data.users || [];
+
     const resultMenu = <PaneMenu><button><Icon icon="bookmark" /></button></PaneMenu>;
     const fineHistory = [{ 'Due Date': '11/12/2014', 'Amount': '34.23', 'Status': 'Unpaid' }]; // eslint-disable-line
 
@@ -246,14 +247,14 @@ class Users extends React.Component {
             <div style={{ textAlign: 'center' }}>
               <strong>Results</strong>
               <div>
-                <em>{data.users.length} Result{data.users.length === 1 ? '' : 's'} Found</em>
+                <em>{users.length} Result{users.length === 1 ? '' : 's'} Found</em>
               </div>
             </div>
           }
           lastMenu={resultMenu}
         >
           <MultiColumnList
-            contentData={data.users}
+            contentData={users}
             selectedRow={this.state.selectedItem}
             rowMetadata={['id']}
             formatter={resultsFormatter}
