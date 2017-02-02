@@ -36,10 +36,6 @@ class Users extends React.Component {
   };
 
   static manifest = Object.freeze({
-    searchResults: [],
-    /* detail: {
-      fineHistory:[]
-    } */
     users: {
       type: 'okapi',
       records: 'users',
@@ -117,13 +113,6 @@ class Users extends React.Component {
     this.onClearSearch = this.onClearSearch.bind(this);
     this.onSortHandler = this.onSortHandler.bind(this);
     this.onClickItemHandler = this.onClickItemHandler.bind(this);
-  }
-
-  componentWillMount() {
-    const resultData = [{ Name: 'Pete Sherman', Address: '391 W. Richardson St. Duarte, CA 91010', Fines: '$34.23' }];
-    // const fineHistory = [{"Due Date": "11/12/2014", "Amount":"34.23", "Status":"Unpaid"}];
-    this.props.mutator.searchResults.replace(resultData);
-    // this.props.mutator.detail.replace({fineHistory: fineHistory});
   }
 
   // search Handlers...
