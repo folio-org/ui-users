@@ -249,7 +249,18 @@ class Users extends React.Component {
         </Pane>
 
         {/* Results Pane */}
-        <Pane defaultWidth="40%" paneTitle="Results" lastMenu={resultMenu}>
+        <Pane
+          defaultWidth="40%"
+          paneTitle={
+            <div style={{ textAlign: 'center' }}>
+              <strong>Results</strong>
+              <div>
+                <em>{displayUsers.length} Result{displayUsers.length === 1 ? '' : 's'} Found</em>
+              </div>
+            </div>
+          }
+          lastMenu={resultMenu}
+        >
           <MultiColumnList
             contentData={displayUsers}
             x-selectedRow="### consider setting this"
