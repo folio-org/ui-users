@@ -261,6 +261,7 @@ class Users extends React.Component {
             visibleColumns={['Active', 'Name', 'Username', 'Email']}
             fullWidth
             sortOrder={this.state.sortOrder}
+            isEmptyMessage={`No results found for "${this.state.searchTerm}". Please check your spelling and filters.`}
           />
         </Pane>
 
