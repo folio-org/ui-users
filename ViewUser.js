@@ -69,6 +69,7 @@ class ViewUser extends Component {
 
     const { data: { user } } = this.props;
     if (!user || user.length === 0) return <div />;
+    const userStatus = (_.get(user[0], ['active'], '') ? 'active' : 'inactive');
     return (
       <Pane defaultWidth="fill" paneTitle="User Details" lastMenu={detailMenu}>
         <Row>
@@ -80,7 +81,31 @@ class ViewUser extends Component {
             </Row>
             <Row>
               <Col xs={12}>
+                <KeyValue label="Username" value={_.get(user[0], ['username'], '')} />
+              </Col>
+            </Row>
+            <br/>
+            <Row>
+              <Col xs={12}>
+                <KeyValue label="Status" value={userStatus} />
+              </Col>
+            </Row>
+            <br/>
+            <Row>
+              <Col xs={12}>
+                <KeyValue label="Password" value={'PASSWORD'} />
+              </Col>
+            </Row>
+            <br/>
+            <Row>
+              <Col xs={12}>
                 <KeyValue label="Email" value={_.get(user[0], ['personal', 'email'], '')} />
+              </Col>
+            </Row>
+            <br/>
+            <Row>
+              <Col xs={12}>
+                <KeyValue label="Patron group" value={_.get(user[0], ['patron_group'], '')} />
               </Col>
             </Row>
           </Col>
