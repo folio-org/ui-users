@@ -14,6 +14,7 @@ import Layer from '@folio/stripes-components/lib/Layer'; // eslint-disable-line
 import UserForm from './UserForm';
 
 class ViewUser extends Component {
+
   static propTypes = {
     data: PropTypes.shape({
       user: PropTypes.arrayOf(PropTypes.object),
@@ -57,9 +58,14 @@ class ViewUser extends Component {
   }
 
   update(data) {
+    // extract creds object from user object
+    // const creds = Object.assign({}, data.creds, { username: data.username });
+    if (data.creds) delete data.creds;
+    //
     this.props.mutator.user.PUT(data).then(() => {
       this.onClickCloseEditUser();
     });
+    // then PUT creds to authn/user (or similar)
   }
 
   render() {
@@ -69,6 +75,9 @@ class ViewUser extends Component {
 
     const { data: { user } } = this.props;
     if (!user || user.length === 0) return <div />;
+    // Piggyback creds in user object
+    // user[0].creds = { password: "data from authn/user query"};
+    // 
     return (
       <Pane defaultWidth="fill" paneTitle="User Details" lastMenu={detailMenu}>
         <Row>

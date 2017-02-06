@@ -23,6 +23,7 @@ import ViewUser from './ViewUser';
 class Users extends React.Component {
   static contextTypes = {
     router: PropTypes.object.isRequired,
+    store: PropTypes.object,
   };
 
   static propTypes = {
@@ -89,10 +90,10 @@ class Users extends React.Component {
         return path;
       },
       staticFallback: { path: 'users' },
-    },
+    }
   });
 
-  constructor(props) {
+  constructor(props, context) {
     super(props);
 
     const query = props.location.query || {};
@@ -106,6 +107,8 @@ class Users extends React.Component {
       sortOrder: query.sort || '',
       addUserMode: false,
     };
+
+    this.okapi = context.store.getState().okapi;
 
     this.onClickAddNewUser = this.onClickAddNewUser.bind(this);
     this.onClickCloseNewUser = this.onClickCloseNewUser.bind(this);
@@ -190,7 +193,43 @@ class Users extends React.Component {
   }
 
   create(data) {
+    // extract creds object from user object
+    const creds = Object.assign({}, data.creds, { username: data.username });
+    if (data.creds) delete data.creds;
+    //
     this.props.mutator.users.POST(data);
+    this.postCreds(data.username, { credentials: creds });
+    this.onClickCloseNewUser();
+  }
+
+  postCreds(username, creds) {
+    fetch(`${this.okapi.url}/authn/users`, {
+      method: 'POST',
+      headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token }),
+      body: JSON.stringify(creds),
+    }).then((response) => {
+      if (response.status >= 400) {
+        console.log("Users. POST of creds failed.");
+      } else {
+        console.log("Users. POST of creds succeeded.");
+        this.postPerms(username, 'users.super');
+      }
+    });
+  }
+
+  postPerms(username, perm) {
+    fetch(`${this.okapi.url}/perms/users/${username}/permissions`, {
+      method: 'POST',
+      headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token }),
+      body: JSON.stringify({ permission_name: perm }),
+    }).then((response) => {
+      if (response.status >= 400) {
+        console.log("Users. POST of perms failed.");
+      } else {
+        console.log("Users. POST of perms succeeded.");
+      }
+    });
+
   }
 
   render() {
