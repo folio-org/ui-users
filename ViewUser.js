@@ -27,9 +27,10 @@ class ViewUser extends Component {
   };
 
   static manifest = Object.freeze({
-    user: {
+    users: {
       type: 'okapi',
       path: 'users/:{userid}',
+      clear: false,
     },
   });
 
@@ -58,14 +59,11 @@ class ViewUser extends Component {
   }
 
   update(data) {
-    // extract creds object from user object
-    // const creds = Object.assign({}, data.creds, { username: data.username });
-    if (data.creds) delete data.creds;
+    if (data.creds) delete data.creds; // not handled on edit (yet at least)
     //
-    this.props.mutator.user.PUT(data).then(() => {
+    this.props.mutator.users.PUT(data).then(() => {
       this.onClickCloseEditUser();
     });
-    // then PUT creds to authn/user (or similar)
   }
 
   render() {
@@ -73,23 +71,23 @@ class ViewUser extends Component {
 
     const detailMenu = <PaneMenu><button onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button></PaneMenu>;
 
-    const { data: { user } } = this.props;
-    if (!user || user.length === 0) return <div />;
-    // Piggyback creds in user object
-    // user[0].creds = { password: "data from authn/user query"};
-    // 
+    const { data: { users }, params: { userid } } = this.props;
+    if (!users || users.length === 0 || !userid) return <div />;
+    const user = users.find(u => u.id === userid)
+    if (!user) return <div />
+
     return (
       <Pane defaultWidth="fill" paneTitle="User Details" lastMenu={detailMenu}>
         <Row>
           <Col xs={8} >
             <Row>
               <Col xs={12}>
-                <h2>{_.get(user[0], ['personal', 'last_name'], '')}, {_.get(user[0], ['personal', 'first_name'], '')}</h2>
+                <h2>{_.get(user, ['personal', 'last_name'], '')}, {_.get(user, ['personal', 'first_name'], '')}</h2>
               </Col>
             </Row>
             <Row>
               <Col xs={12}>
-                <KeyValue label="Email" value={_.get(user[0], ['personal', 'email'], '')} />
+                <KeyValue label="Email" value={_.get(user, ['personal', 'email'], '')} />
               </Col>
             </Row>
           </Col>
@@ -121,7 +119,7 @@ class ViewUser extends Component {
         <Layer isOpen={this.state.editUserMode} label="Edit User Dialog">
           <UserForm
             onSubmit={(record) => { this.update(record); }}
-            initialValues={user[0]}
+            initialValues={user}
             onCancel={this.onClickCloseEditUser}
           />
         </Layer>
@@ -130,4 +128,4 @@ class ViewUser extends Component {
   }
 }
 
-export default connect(ViewUser, 'users');
+export default connect(ViewUser, '@folio-sample-modules/ui-users');
