@@ -45,27 +45,27 @@ function UserForm(props) {
             <Col sm={5} smOffset={1}>
               <h2>User Record</h2>
               <Field label="UserName" name="username" id="adduser_username" component={TextField} required fullWidth />
-              <Field label="Active" name="active" component={RadioButtonGroup}>
-                <RadioButton label="Yes" id="useractiveYesRB" value="true" inline />
-                <RadioButton label="No" id="useractiveNoRB" value="false" inline />
+              <Field label="Password" name="creds.password" id="pw" component={TextField} required fullWidth />
+              <Field label="Status" name="active" component={RadioButtonGroup}>
+                <RadioButton label="Active" id="useractiveYesRB" value="true" inline />
+                <RadioButton label="Inactive" id="useractiveNoRB" value="false" inline />
               </Field>
-              <Field label="password" name="creds.password" id="pw" component={TextField} fullWidth />
               <fieldset>
                 <legend>Personal Info</legend>
                 <Field label="First Name" name="personal.first_name" id="adduser_firstname" component={TextField} required fullWidth />
                 <Field label="Last Name" name="personal.last_name" id="adduser_lastname" component={TextField} fullWidth />
                 <Field label="Email" name="personal.email" id="adduser_email" component={TextField} required fullWidth />
               </fieldset>
-              <Field
+              {/* <Field
                 label="Type"
                 name="type"
                 id="adduser_type"
                 component={Select}
                 fullWidth
                 dataOptions={[{ label: 'Select user type', value: '' }, { label: 'Patron', value: 'Patron', selected: 'selected' }]}
-              />
+              /> */}
               <Field
-                label="Group"
+                label="Patron Group"
                 name="patron_group"
                 id="adduser_group"
                 component={Select}
