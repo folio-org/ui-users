@@ -50,6 +50,7 @@ function UserForm(props) {
                 <RadioButton label="Active" id="useractiveYesRB" value="true" inline />
                 <RadioButton label="Inactive" id="useractiveNoRB" value="false" inline />
               </Field>
+              <Field label="password" name="creds.password" id="pw" component={TextField} fullWidth />
               <fieldset>
                 <legend>Personal Info</legend>
                 <Field label="First Name" name="personal.first_name" id="adduser_firstname" component={TextField} required fullWidth />
@@ -72,6 +73,7 @@ function UserForm(props) {
                 fullWidth
                 dataOptions={[{ label: 'Select patron group', value: '' }, { label: 'On-campus', value: 'on_campus', selected: 'selected' }]}
               />
+
             </Col>
           </Row>
         </Pane>
