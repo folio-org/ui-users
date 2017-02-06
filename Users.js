@@ -1,18 +1,17 @@
 import _ from 'lodash'; // eslint-disable-line
-import React, { Component, PropTypes } from 'react'; // eslint-disable-line
+import React, { PropTypes } from 'react'; // eslint-disable-line
 import Match from 'react-router/Match'; // eslint-disable-line
 import {Row, Col} from 'react-bootstrap'; // eslint-disable-line
 
-/* shared stripes components */
 import Pane from '@folio/stripes-components/lib/Pane'; // eslint-disable-line
 import Paneset from '@folio/stripes-components/lib/Paneset'; // eslint-disable-line
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu'; // eslint-disable-line
 import Button from '@folio/stripes-components/lib/Button'; // eslint-disable-line
 import Icon from '@folio/stripes-components/lib/Icon'; // eslint-disable-line
-import MultiColumnListUsers from './lib/MultiColumnList'; // eslint-disable-line 
-import KeyValue from '@folio/stripes-components/lib/KeyValue'; // eslint-disable-line
-import TextField from '@folio/stripes-components/lib/TextField'; // eslint-disable-line
 import Checkbox from '@folio/stripes-components/lib/Checkbox'; // eslint-disable-line
+import TextField from '@folio/stripes-components/lib/TextField'; // eslint-disable-line
+import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList'; // eslint-disable-line
+import KeyValue from '@folio/stripes-components/lib/KeyValue'; // eslint-disable-line
 import FilterPaneSearch from '@folio/stripes-components/lib/FilterPaneSearch'; // eslint-disable-line
 import FilterControlGroup from '@folio/stripes-components/lib/FilterControlGroup'; // eslint-disable-line
 import Select from '@folio/stripes-components/lib/Select'; // eslint-disable-line
@@ -21,29 +20,29 @@ import Layer from '@folio/stripes-components/lib/Layer'; // eslint-disable-line
 import UserForm from './UserForm';
 import ViewUser from './ViewUser';
 
-class Users extends Component {
+class Users extends React.Component {
   static contextTypes = {
     router: PropTypes.object.isRequired,
     store: PropTypes.object,
-  }
+  };
 
   static propTypes = {
     data: PropTypes.object.isRequired,
     pathname: PropTypes.string.isRequired,
-    location: PropTypes.object.isRequired,
+    location: PropTypes.shape({
+      pathname: PropTypes.string.isRequired,
+      query: PropTypes.object, // object of key=value pairs
+      search: PropTypes.string, // string combining all parts of query
+    }).isRequired,
     mutator: PropTypes.object,
   };
 
   static manifest = Object.freeze({
-    searchResults: [],
-    /* detail: {
-      fineHistory:[]
-    } */
     users: {
       type: 'okapi',
       records: 'users',
       path: (queryParams, _pathParams) => {
-        // console.log('Users manifest "users" path function, queryParams = ', queryParams, 'pathParams =', pathParams);
+        // console.log('Users manifest "users" path function, queryParams = ', queryParams);
         const { query, filterActive, filterInactive, sort } = queryParams || {};
 
         let cql;
@@ -85,7 +84,7 @@ class Users extends Component {
         }
 
         let path = 'users';
-        if (cql) path += `?query=${encodeURIComponent(cql)}`;
+        if (cql) path += `?query=title=${encodeURIComponent(cql)}`;
 
         console.log(`query=${query} active=${filterActive} inactive=${filterInactive} sort=${sort} -> ${path}`);
         return path;
@@ -97,12 +96,13 @@ class Users extends Component {
   constructor(props, context) {
     super(props);
 
-    const query = props.location.query;
+    const query = props.location.query || {};
     this.state = {
       filter: {
         active: query.filterActive || false,
         inactive: query.filterInactive || false,
       },
+      selectedItem: {},
       searchTerm: query.query || '',
       sortOrder: query.sort || '',
       addUserMode: false,
@@ -115,8 +115,8 @@ class Users extends Component {
     this.onChangeFilter = this.onChangeFilter.bind(this);
     this.onChangeSearch = this.onChangeSearch.bind(this);
     this.onClearSearch = this.onClearSearch.bind(this);
-    this.onSortHandler = this.onSortHandler.bind(this);
-    this.onClickItemHandler = this.onClickItemHandler.bind(this);
+    this.onSort = this.onSort.bind(this);
+    this.onSelectRow = this.onSelectRow.bind(this);
   }
 
   // search Handlers...
@@ -142,14 +142,17 @@ class Users extends Component {
     this.context.router.transitionTo(this.props.location.pathname);
   }
 
-  onSortHandler(sortOrder) {
+  onSort(e, meta) {
+    const sortOrder = meta.name;
     console.log('User sorted by', sortOrder);
     this.setState({ sortOrder });
     this.updateSearch(this.state.searchTerm, sortOrder, this.state.filter);
   }
 
-  onClickItemHandler(userId) {
+  onSelectRow(e, meta) {
+    const userId = meta.id;
     console.log('User clicked', userId, 'location = ', this.props.location);
+    this.setState({ selectedItem: meta });
     this.context.router.transitionTo(`/users/view/${userId}${this.props.location.search}`);
   }
 
@@ -231,22 +234,19 @@ class Users extends Component {
 
   render() {
     const { data, pathname } = this.props;
-    if (!data.users) return <div />;
-    const resultMenu = <PaneMenu><button><Icon icon="bookmark" /></button></PaneMenu>;
-    const fineHistory = [{ 'Due Date': '11/12/2014', 'Amount': '34.23', 'Status': 'Unpaid' }]; // eslint-disable-line 
-    const displayUsers = data.users.reduce((results, user) => {
-      results.push({
-        id: user.id,
-        Active: user.active,
-        Name: `${_.get(user, ['personal', 'last_name'], '')}, ${_.get(user, ['personal', 'first_name'], '')}`,
-        Username: user.username,
-        Email: _.get(user, ['personal', 'email']),
-      });
-      return results;
-    }, []);
+    const users = data.users || [];
 
     /* searchHeader is a 'custom pane header'*/
     const searchHeader = <FilterPaneSearch id="SearchField" onChange={this.onChangeSearch} onClear={this.onClearSearch} value={this.state.searchTerm} />;
+    const resultMenu = <PaneMenu><button><Icon icon="bookmark" /></button></PaneMenu>;
+    const fineHistory = [{ 'Due Date': '11/12/2014', 'Amount': '34.23', 'Status': 'Unpaid' }]; // eslint-disable-line
+
+    const resultsFormatter = {
+      Active: user => user.active,
+      Name: user => `${_.get(user, ['personal', 'last_name'], '')}, ${_.get(user, ['personal', 'first_name'], '')}`,
+      Username: user => user.username,
+      Email: user => _.get(user, ['personal', 'email']),
+    };
 
     return (
       <Paneset>
@@ -278,19 +278,35 @@ class Users extends Component {
             <Button fullWidth onClick={this.onClickAddNewUser}>Add User</Button>
           </FilterControlGroup>
         </Pane>
-
         {/* Results Pane */}
-        <Pane defaultWidth="40%" paneTitle="Results" lastMenu={resultMenu}>
-          <MultiColumnListUsers
-            contentData={displayUsers}
-            onClickItemHandler={this.onClickItemHandler}
-            onSortHandler={this.onSortHandler}
+        <Pane
+          defaultWidth="40%"
+          paneTitle={
+            <div style={{ textAlign: 'center' }}>
+              <strong>Results</strong>
+              <div>
+                <em>{users.length} Result{users.length === 1 ? '' : 's'} Found</em>
+              </div>
+            </div>
+          }
+          lastMenu={resultMenu}
+        >
+          <MultiColumnList
+            contentData={users}
+            selectedRow={this.state.selectedItem}
+            rowMetadata={['id']}
+            formatter={resultsFormatter}
+            onRowClick={this.onSelectRow}
+            onHeaderClick={this.onSort}
+            visibleColumns={['Active', 'Name', 'Username', 'Email']}
+            fullWidth
             sortOrder={this.state.sortOrder}
+            isEmptyMessage={`No results found for "${this.state.searchTerm}". Please check your spelling and filters.`}
           />
         </Pane>
 
         {/* Details Pane */}
-        <Match pattern={`${pathname}/view/:userid`} render={(props) => <ViewUser placeholder={"placeholder"} {...props} /> } />
+        <Match pattern={`${pathname}/view/:userid`} render={props => <ViewUser placeholder={'placeholder'} {...props} />} />
         <Layer isOpen={this.state.addUserMode} label="Add New User Dialog">
           <UserForm
             onSubmit={(record) => { this.create(record); }}

@@ -2,7 +2,7 @@
   "name": "@folio-sample-modules/users",
   "version": "0.0.1-test",
   "description": "User management",
-  "repository": "folio-org/stripes-components",
+  "repository": "folio-org/ui-users",
   "publishConfig" : {
     "registry" : "https://repository.folio.org/repository/npm-folio/"
   },
