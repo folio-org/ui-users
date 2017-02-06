@@ -196,6 +196,7 @@ class Users extends Component {
     //
     this.props.mutator.users.POST(data);
     this.postCreds(data.username, { credentials: creds });
+    this.onClickCloseNewUser();
   }
 
   postCreds(username, creds) {
