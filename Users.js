@@ -1,5 +1,5 @@
 import _ from 'lodash'; // eslint-disable-line
-import React, { PropTypes } from 'react'; // eslint-disable-line
+import React, { PropTypes, Component } from 'react'; // eslint-disable-line
 import Match from 'react-router/Match'; // eslint-disable-line
 import {Row, Col} from 'react-bootstrap'; // eslint-disable-line
 
@@ -20,7 +20,7 @@ import Layer from '@folio/stripes-components/lib/Layer'; // eslint-disable-line
 import UserForm from './UserForm';
 import ViewUser from './ViewUser';
 
-class Users extends React.Component {
+class Users extends Component {
   static contextTypes = {
     router: PropTypes.object.isRequired,
     store: PropTypes.object,
@@ -38,6 +38,7 @@ class Users extends React.Component {
   };
 
   static manifest = Object.freeze({
+    addUserMode: { },
     users: {
       type: 'okapi',
       records: 'users',
@@ -105,8 +106,8 @@ class Users extends React.Component {
       selectedItem: {},
       searchTerm: query.query || '',
       sortOrder: query.sort || '',
-      addUserMode: false,
     };
+    props.mutator.addUserMode.replace({ mode: false });
 
     this.okapi = context.store.getState().okapi;
 
@@ -161,16 +162,12 @@ class Users extends React.Component {
   // AddUser Handlers
   onClickAddNewUser(e) {
     if (e) e.preventDefault();
-    this.setState({
-      addUserMode: true,
-    });
+    this.props.mutator.addUserMode.replace({ mode: true })
   }
 
   onClickCloseNewUser(e) {
     if (e) e.preventDefault();
-    this.setState({
-      addUserMode: false,
-    });
+    this.props.mutator.addUserMode.replace({ mode: false })
   }
   // end AddUser Handlers
 
@@ -196,8 +193,9 @@ class Users extends React.Component {
     // extract creds object from user object
     const creds = Object.assign({}, data.creds, { username: data.username });
     if (data.creds) delete data.creds;
-    //
+    // POST user record
     this.props.mutator.users.POST(data);
+    // POST credentials, permission-user, permissions;
     this.postCreds(data.username, { credentials: creds });
     this.onClickCloseNewUser();
   }
@@ -211,22 +209,34 @@ class Users extends React.Component {
       if (response.status >= 400) {
         console.log("Users. POST of creds failed.");
       } else {
-        console.log("Users. POST of creds succeeded.");
         this.postPerms(username, 'users.super');
       }
     });
   }
 
-  postPerms(username, perm) {
+  postPerms (username, perms) {
+    fetch(`${this.okapi.url}/perms/users`, {
+      method: 'POST',
+      headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token }),
+      body: username,
+    }).then((response) => {
+      if (response.status >= 400) {
+        console.log("Users. POST of username failed.");
+      } else {
+        this.postUsersPerms(username, perms);
+      }
+    });
+  }
+
+  postUsersPerms(username, perm) {
     fetch(`${this.okapi.url}/perms/users/${username}/permissions`, {
       method: 'POST',
       headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token }),
       body: JSON.stringify({ permission_name: perm }),
     }).then((response) => {
       if (response.status >= 400) {
-        console.log("Users. POST of perms failed.");
+        console.log("Users. POST of user's perms failed.");
       } else {
-        console.log("Users. POST of perms succeeded.");
       }
     });
 
@@ -307,7 +317,7 @@ class Users extends React.Component {
 
         {/* Details Pane */}
         <Match pattern={`${pathname}/view/:userid`} render={props => <ViewUser placeholder={'placeholder'} {...props} />} />
-        <Layer isOpen={this.state.addUserMode} label="Add New User Dialog">
+        <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false } label="Add New User Dialog">
           <UserForm
             onSubmit={(record) => { this.create(record); }}
             onCancel={this.onClickCloseNewUser}
