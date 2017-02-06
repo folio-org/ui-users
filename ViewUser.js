@@ -76,7 +76,7 @@ class ViewUser extends Component {
     const { data: { user } } = this.props;
     if (!user || user.length === 0) return <div />;
     // Piggyback creds in user object
-    user[0].creds = { password: "data from authn/user query"};
+    // user[0].creds = { password: "data from authn/user query"};
     // 
     return (
       <Pane defaultWidth="fill" paneTitle="User Details" lastMenu={detailMenu}>
