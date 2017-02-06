@@ -275,7 +275,7 @@ class Users extends React.Component {
             />
           </FilterControlGroup>
           <FilterControlGroup label="Actions">
-            <Button fullWidth onClick={this.onClickAddNewUser}>Add User</Button>
+            <Button fullWidth onClick={this.onClickAddNewUser}>New user</Button>
           </FilterControlGroup>
         </Pane>
         {/* Results Pane */}
