@@ -78,7 +78,7 @@ class ViewUser extends Component {
     const userStatus = (_.get(user[0], ['active'], '') ? 'active' : 'inactive');
     // Piggyback creds in user object
     // user[0].creds = { password: "data from authn/user query"};
-    // 
+    //
     return (
       <Pane defaultWidth="fill" paneTitle="User Details" lastMenu={detailMenu}>
         <Row>
@@ -97,12 +97,6 @@ class ViewUser extends Component {
             <Row>
               <Col xs={12}>
                 <KeyValue label="Status" value={userStatus} />
-              </Col>
-            </Row>
-            <br/>
-            <Row>
-              <Col xs={12}>
-                <KeyValue label="Password" value={'PASSWORD'} />
               </Col>
             </Row>
             <br/>
