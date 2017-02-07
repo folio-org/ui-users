@@ -17,6 +17,7 @@ import FilterControlGroup from '@folio/stripes-components/lib/FilterControlGroup
 import Select from '@folio/stripes-components/lib/Select'; // eslint-disable-line
 import Layer from '@folio/stripes-components/lib/Layer'; // eslint-disable-line
 
+import _ from 'lodash';
 import UserForm from './UserForm';
 import ViewUser from './ViewUser';
 
@@ -114,6 +115,7 @@ class Users extends Component {
     this.onClickAddNewUser = this.onClickAddNewUser.bind(this);
     this.onClickCloseNewUser = this.onClickCloseNewUser.bind(this);
     this.onChangeFilter = this.onChangeFilter.bind(this);
+    this.performSearch = _.debounce(this.performSearch.bind(this), 250);
     this.onChangeSearch = this.onChangeSearch.bind(this);
     this.onClearSearch = this.onClearSearch.bind(this);
     this.onSort = this.onSort.bind(this);
@@ -130,11 +132,15 @@ class Users extends Component {
   }
 
   onChangeSearch(e) {
-    const query = e.target.value;
-    console.log(`User searched for '${query}' at '${this.props.location.pathname}'`);
+    const term = e.target.value;
+    this.setState({ searchTerm: term });
+    this.performSearch(term);
+  }
 
-    this.setState({ searchTerm: query });
-    this.updateSearch(query, this.state.sortOrder, this.state.filter);
+  performSearch(term) {
+    console.log('User searched:', term, 'at', this.props.location.pathname);
+    const transitionPath = term === "" ?  this.props.location.pathname : `${this.props.location.pathname}?query=${term}`;
+    this.context.router.transitionTo(transitionPath);     
   }
 
   onClearSearch() {
