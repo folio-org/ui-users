@@ -17,7 +17,6 @@ import FilterControlGroup from '@folio/stripes-components/lib/FilterControlGroup
 import Select from '@folio/stripes-components/lib/Select'; // eslint-disable-line
 import Layer from '@folio/stripes-components/lib/Layer'; // eslint-disable-line
 
-import _ from 'lodash';
 import UserForm from './UserForm';
 import ViewUser from './ViewUser';
 
