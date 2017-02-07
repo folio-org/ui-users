@@ -19,7 +19,7 @@ const propTypes = {
   pristine: PropTypes.bool,
   submitting: PropTypes.bool,
   onCancel: PropTypes.func,
-  initialValues: PropTypes.bool,
+  initialValues: PropTypes.object,
 };
 
 function UserForm(props) {
@@ -40,37 +40,39 @@ function UserForm(props) {
   return (
     <form>
       <Paneset>
-        <Pane defaultWidth="100%" firstMenu={addUserFirstMenu} lastMenu={initialValues ? editUserLastMenu : addUserLastMenu} paneTitle="New User">
+        <Pane defaultWidth="100%" firstMenu={addUserFirstMenu} lastMenu={initialValues ? editUserLastMenu : addUserLastMenu} paneTitle={initialValues ? 'Edit User' : 'New User'}>
           <Row>
             <Col sm={5} smOffset={1}>
               <h2>User Record</h2>
               <Field label="UserName" name="username" id="adduser_username" component={TextField} required fullWidth />
-              <Field label="Active" name="active" component={RadioButtonGroup}>
-                <RadioButton label="Yes" id="useractiveYesRB" value="true" inline />
-                <RadioButton label="No" id="useractiveNoRB" value="false" inline />
+              <Field label="Password" name="creds.password" id="pw" component={TextField} required fullWidth />
+              <Field label="Status" name="active" component={RadioButtonGroup}>
+                <RadioButton label="Active" id="useractiveYesRB" value="true" inline />
+                <RadioButton label="Inactive" id="useractiveNoRB" value="false" inline />
               </Field>
               <fieldset>
                 <legend>Personal Info</legend>
-                <Field label="Full Name" name="personal.full_name" id="adduser_fullname" component={TextField} required fullWidth />
-                <Field label="Primary Email" name="personal.email_primary" id="adduser_primaryemail" component={TextField} required fullWidth />
-                <Field label="Secondary Email" name="personal.email_secondary" id="adduser_secondemail" component={TextField} fullWidth />
+                <Field label="First Name" name="personal.first_name" id="adduser_firstname" component={TextField} required fullWidth />
+                <Field label="Last Name" name="personal.last_name" id="adduser_lastname" component={TextField} fullWidth />
+                <Field label="Email" name="personal.email" id="adduser_email" component={TextField} required fullWidth />
               </fieldset>
-              <Field
+              {/* <Field
                 label="Type"
                 name="type"
                 id="adduser_type"
                 component={Select}
                 fullWidth
                 dataOptions={[{ label: 'Select user type', value: '' }, { label: 'Patron', value: 'Patron', selected: 'selected' }]}
-              />
+              /> */}
               <Field
-                label="Group"
+                label="Patron Group"
                 name="patron_group"
                 id="adduser_group"
                 component={Select}
                 fullWidth
                 dataOptions={[{ label: 'Select patron group', value: '' }, { label: 'On-campus', value: 'on_campus', selected: 'selected' }]}
               />
+
             </Col>
           </Row>
         </Pane>

@@ -1,3 +1,4 @@
+import _ from 'lodash'; // eslint-disable-line
 import React, { Component, PropTypes } from 'react' // eslint-disable-line
 import { connect } from 'stripes-connect'; // eslint-disable-line
 import Pane from '@folio/stripes-components/lib/Pane' // eslint-disable-line
@@ -13,8 +14,11 @@ import Layer from '@folio/stripes-components/lib/Layer'; // eslint-disable-line
 import UserForm from './UserForm';
 
 class ViewUser extends Component {
+
   static propTypes = {
-    data: PropTypes.shape,
+    data: PropTypes.shape({
+      user: PropTypes.arrayOf(PropTypes.object),
+    }),
     mutator: React.PropTypes.shape({
       user: React.PropTypes.shape({
         PUT: React.PropTypes.func.isRequired,
@@ -22,12 +26,13 @@ class ViewUser extends Component {
     }),
   };
 
-  static manifest = {
-    user: {
+  static manifest = Object.freeze({
+    users: {
       type: 'okapi',
       path: 'users/:{userid}',
+      clear: false,
     },
-  };
+  });
 
   constructor(props) {
     super(props);
@@ -39,21 +44,24 @@ class ViewUser extends Component {
   }
 
   // EditUser Handlers
-  onClickEditUser() {
-    console.log('edit Clicked');
+  onClickEditUser(e) {
+    if (e) e.preventDefault();
     this.setState({
       editUserMode: true,
     });
   }
 
-  onClickCloseEditUser() {
+  onClickCloseEditUser(e) {
+    if (e) e.preventDefault();
     this.setState({
       editUserMode: false,
     });
   }
 
   update(data) {
-    this.props.mutator.user.PUT(data).then(() => {
+    if (data.creds) delete data.creds; // not handled on edit (yet at least)
+    //
+    this.props.mutator.users.PUT(data).then(() => {
       this.onClickCloseEditUser();
     });
   }
@@ -63,20 +71,41 @@ class ViewUser extends Component {
 
     const detailMenu = <PaneMenu><button onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button></PaneMenu>;
 
-    const { data: { user } } = this.props;
-    if (!user || user.length === 0) return <div />;
+    const { data: { users }, params: { userid } } = this.props;
+    if (!users || users.length === 0 || !userid) return <div />;
+    const user = users.find(u => u.id === userid)
+    if (!user) return <div />
+    const userStatus = (_.get(user, ['active'], '') ? 'active' : 'inactive');
     return (
       <Pane defaultWidth="fill" paneTitle="User Details" lastMenu={detailMenu}>
         <Row>
           <Col xs={8} >
             <Row>
               <Col xs={12}>
-                <h2>{user[0].personal.full_name}</h2>
+                <h2>{_.get(user, ['personal', 'last_name'], '')}, {_.get(user, ['personal', 'first_name'], '')}</h2>
               </Col>
             </Row>
             <Row>
               <Col xs={12}>
-                <KeyValue label="Email" value={user[0].personal.email_primary} />
+                <KeyValue label="Username" value={_.get(user, ['username'], '')} />
+              </Col>
+            </Row>
+            <br/>
+            <Row>
+              <Col xs={12}>
+                <KeyValue label="Status" value={userStatus} />
+              </Col>
+            </Row>
+            <br/>
+            <Row>
+              <Col xs={12}>
+                <KeyValue label="Email" value={_.get(user, ['personal', 'email'], '')} />
+              </Col>
+            </Row>
+            <br/>
+            <Row>
+              <Col xs={12}>
+                <KeyValue label="Patron group" value={_.get(user, ['patron_group'], '')} />
               </Col>
             </Row>
           </Col>
@@ -108,7 +137,7 @@ class ViewUser extends Component {
         <Layer isOpen={this.state.editUserMode} label="Edit User Dialog">
           <UserForm
             onSubmit={(record) => { this.update(record); }}
-            initialValues={user[0]}
+            initialValues={user}
             onCancel={this.onClickCloseEditUser}
           />
         </Layer>
@@ -117,4 +146,4 @@ class ViewUser extends Component {
   }
 }
 
-export default connect(ViewUser, 'users');
+export default connect(ViewUser, '@folio-sample-modules/ui-users');
