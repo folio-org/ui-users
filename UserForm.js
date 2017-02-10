@@ -62,7 +62,8 @@ function UserForm(props) {
                 id="adduser_type"
                 component={Select}
                 fullWidth
-                dataOptions={[{ label: 'Select user type', value: '' }, { label: 'Patron', value: 'Patron', selected: 'selected' }]}
+                dataOptions={[{ label: 'Select user type', value: '' },
+                              { label: 'Patron', value: 'Patron', selected: 'selected' }]}
               /> */}
               <Field
                 label="Patron Group"
