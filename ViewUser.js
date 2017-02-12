@@ -1,6 +1,6 @@
 import _ from 'lodash'; // eslint-disable-line
 import React, { Component, PropTypes } from 'react' // eslint-disable-line
-import { connect } from 'stripes-connect'; // eslint-disable-line
+import { connect } from '@folio/stripes-connect'; // eslint-disable-line
 import Pane from '@folio/stripes-components/lib/Pane' // eslint-disable-line
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu' // eslint-disable-line
 import Button from '@folio/stripes-components/lib/Button' // eslint-disable-line
