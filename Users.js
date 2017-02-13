@@ -1,5 +1,5 @@
 import _ from 'lodash'; // eslint-disable-line
-import React, { PropTypes } from 'react'; // eslint-disable-line
+import React, { PropTypes, Component } from 'react'; // eslint-disable-line
 import Match from 'react-router/Match'; // eslint-disable-line
 import {Row, Col} from 'react-bootstrap'; // eslint-disable-line
 
@@ -20,23 +20,25 @@ import Layer from '@folio/stripes-components/lib/Layer'; // eslint-disable-line
 import UserForm from './UserForm';
 import ViewUser from './ViewUser';
 
-class Users extends React.Component {
+class Users extends Component {
   static contextTypes = {
     router: PropTypes.object.isRequired,
-  }
+    store: PropTypes.object,
+  };
 
   static propTypes = {
     data: PropTypes.object.isRequired,
     pathname: PropTypes.string.isRequired,
-    location: PropTypes.object.isRequired,
+    location: PropTypes.shape({
+      pathname: PropTypes.string.isRequired,
+      query: PropTypes.object, // object of key=value pairs
+      search: PropTypes.string, // string combining all parts of query
+    }).isRequired,
     mutator: PropTypes.object,
   };
 
   static manifest = Object.freeze({
-    searchResults: [],
-    /* detail: {
-      fineHistory:[]
-    } */
+    addUserMode: { },
     users: {
       type: 'okapi',
       records: 'users',
@@ -89,10 +91,10 @@ class Users extends React.Component {
         return path;
       },
       staticFallback: { path: 'users' },
-    },
+    }
   });
 
-  constructor(props) {
+  constructor(props, context) {
     super(props);
 
     const query = props.location.query || {};
@@ -101,25 +103,22 @@ class Users extends React.Component {
         active: query.filterActive || false,
         inactive: query.filterInactive || false,
       },
+      selectedItem: {},
       searchTerm: query.query || '',
       sortOrder: query.sort || '',
-      addUserMode: false,
     };
+    props.mutator.addUserMode.replace({ mode: false });
+
+    this.okapi = context.store.getState().okapi;
 
     this.onClickAddNewUser = this.onClickAddNewUser.bind(this);
     this.onClickCloseNewUser = this.onClickCloseNewUser.bind(this);
     this.onChangeFilter = this.onChangeFilter.bind(this);
+    this.performSearch = _.debounce(this.performSearch.bind(this), 250);
     this.onChangeSearch = this.onChangeSearch.bind(this);
     this.onClearSearch = this.onClearSearch.bind(this);
-    this.onSortHandler = this.onSortHandler.bind(this);
-    this.onClickItemHandler = this.onClickItemHandler.bind(this);
-  }
-
-  componentWillMount() {
-    const resultData = [{ Name: 'Pete Sherman', Address: '391 W. Richardson St. Duarte, CA 91010', Fines: '$34.23' }];
-    // const fineHistory = [{"Due Date": "11/12/2014", "Amount":"34.23", "Status":"Unpaid"}];
-    this.props.mutator.searchResults.replace(resultData);
-    // this.props.mutator.detail.replace({fineHistory: fineHistory});
+    this.onSort = this.onSort.bind(this);
+    this.onSelectRow = this.onSelectRow.bind(this);
   }
 
   // search Handlers...
@@ -132,11 +131,15 @@ class Users extends React.Component {
   }
 
   onChangeSearch(e) {
-    const query = e.target.value;
-    console.log(`User searched for '${query}' at '${this.props.location.pathname}'`);
+    const term = e.target.value;
+    this.setState({ searchTerm: term });
+    this.performSearch(term);
+  }
 
-    this.setState({ searchTerm: query });
-    this.updateSearch(query, this.state.sortOrder, this.state.filter);
+  performSearch(term) {
+    console.log('User searched:', term, 'at', this.props.location.pathname);
+    const transitionPath = term === "" ?  this.props.location.pathname : `${this.props.location.pathname}?query=${term}`;
+    this.context.router.transitionTo(transitionPath);     
   }
 
   onClearSearch() {
@@ -145,16 +148,17 @@ class Users extends React.Component {
     this.context.router.transitionTo(this.props.location.pathname);
   }
 
-  onSortHandler(e, meta) {
+  onSort(e, meta) {
     const sortOrder = meta.name;
     console.log('User sorted by', sortOrder);
     this.setState({ sortOrder });
     this.updateSearch(this.state.searchTerm, sortOrder, this.state.filter);
   }
 
-  onClickItemHandler(e, meta) {
+  onSelectRow(e, meta) {
     const userId = meta.id;
     console.log('User clicked', userId, 'location = ', this.props.location);
+    this.setState({ selectedItem: meta });
     this.context.router.transitionTo(`/users/view/${userId}${this.props.location.search}`);
   }
 
@@ -163,16 +167,12 @@ class Users extends React.Component {
   // AddUser Handlers
   onClickAddNewUser(e) {
     if (e) e.preventDefault();
-    this.setState({
-      addUserMode: true,
-    });
+    this.props.mutator.addUserMode.replace({ mode: true })
   }
 
   onClickCloseNewUser(e) {
     if (e) e.preventDefault();
-    this.setState({
-      addUserMode: false,
-    });
+    this.props.mutator.addUserMode.replace({ mode: false })
   }
   // end AddUser Handlers
 
@@ -195,27 +195,73 @@ class Users extends React.Component {
   }
 
   create(data) {
+    // extract creds object from user object
+    const creds = Object.assign({}, data.creds, { username: data.username });
+    if (data.creds) delete data.creds;
+    // POST user record
     this.props.mutator.users.POST(data);
+    // POST credentials, permission-user, permissions;
+    this.postCreds(data.username, { credentials: creds });
+    this.onClickCloseNewUser();
+  }
+
+  postCreds(username, creds) {
+    fetch(`${this.okapi.url}/authn/users`, {
+      method: 'POST',
+      headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token }),
+      body: JSON.stringify(creds),
+    }).then((response) => {
+      if (response.status >= 400) {
+        console.log("Users. POST of creds failed.");
+      } else {
+        this.postPerms(username, 'users.super');
+      }
+    });
+  }
+
+  postPerms (username, perms) {
+    fetch(`${this.okapi.url}/perms/users`, {
+      method: 'POST',
+      headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token }),
+      body: username,
+    }).then((response) => {
+      if (response.status >= 400) {
+        console.log("Users. POST of username failed.");
+      } else {
+        this.postUsersPerms(username, perms);
+      }
+    });
+  }
+
+  postUsersPerms(username, perm) {
+    fetch(`${this.okapi.url}/perms/users/${username}/permissions`, {
+      method: 'POST',
+      headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token }),
+      body: JSON.stringify({ permission_name: perm }),
+    }).then((response) => {
+      if (response.status >= 400) {
+        console.log("Users. POST of user's perms failed.");
+      } else {
+      }
+    });
+
   }
 
   render() {
     const { data, pathname } = this.props;
-    if (!data.users) return <div />;
-    const resultMenu = <PaneMenu><button><Icon icon="bookmark" /></button></PaneMenu>;
-    const fineHistory = [{ 'Due Date': '11/12/2014', 'Amount': '34.23', 'Status': 'Unpaid' }]; // eslint-disable-line
-    const displayUsers = data.users.reduce((results, user) => {
-      results.push({
-        id: user.id,
-        Active: user.active,
-        Name: `${_.get(user, ['personal', 'last_name'], '')}, ${_.get(user, ['personal', 'first_name'], '')}`,
-        Username: user.username,
-        Email: _.get(user, ['personal', 'email']),
-      });
-      return results;
-    }, []);
+    const users = data.users || [];
 
     /* searchHeader is a 'custom pane header'*/
     const searchHeader = <FilterPaneSearch id="SearchField" onChange={this.onChangeSearch} onClear={this.onClearSearch} value={this.state.searchTerm} />;
+    const resultMenu = <PaneMenu><button><Icon icon="bookmark" /></button></PaneMenu>;
+    const fineHistory = [{ 'Due Date': '11/12/2014', 'Amount': '34.23', 'Status': 'Unpaid' }]; // eslint-disable-line
+
+    const resultsFormatter = {
+      Active: user => user.active,
+      Name: user => `${_.get(user, ['personal', 'last_name'], '')}, ${_.get(user, ['personal', 'first_name'], '')}`,
+      Username: user => user.username,
+      Email: user => _.get(user, ['personal', 'email']),
+    };
 
     return (
       <Paneset>
@@ -244,29 +290,39 @@ class Users extends React.Component {
             />
           </FilterControlGroup>
           <FilterControlGroup label="Actions">
-            <Button fullWidth onClick={this.onClickAddNewUser}>Add User</Button>
+            <Button fullWidth onClick={this.onClickAddNewUser}>New user</Button>
           </FilterControlGroup>
         </Pane>
-
         {/* Results Pane */}
-        <Pane defaultWidth="40%" paneTitle="Results" lastMenu={resultMenu}>
+        <Pane
+          defaultWidth="40%"
+          paneTitle={
+            <div style={{ textAlign: 'center' }}>
+              <strong>Results</strong>
+              <div>
+                <em>{users.length} Result{users.length === 1 ? '' : 's'} Found</em>
+              </div>
+            </div>
+          }
+          lastMenu={resultMenu}
+        >
           <MultiColumnList
-            contentData={displayUsers}
-            x-selectedRow="### consider setting this"
+            contentData={users}
+            selectedRow={this.state.selectedItem}
             rowMetadata={['id']}
-            x-headerMetadata="### consider setting this"
-            x-formatter="### consider setting this instead of building displayUsers"
-            onRowClick={this.onClickItemHandler}
-            onHeaderClick={this.onSortHandler}
+            formatter={resultsFormatter}
+            onRowClick={this.onSelectRow}
+            onHeaderClick={this.onSort}
             visibleColumns={['Active', 'Name', 'Username', 'Email']}
-            x-fullWidth="### consider setting this"
+            fullWidth
             sortOrder={this.state.sortOrder}
+            isEmptyMessage={`No results found for "${this.state.searchTerm}". Please check your spelling and filters.`}
           />
         </Pane>
 
         {/* Details Pane */}
         <Match pattern={`${pathname}/view/:userid`} render={props => <ViewUser placeholder={'placeholder'} {...props} />} />
-        <Layer isOpen={this.state.addUserMode} label="Add New User Dialog">
+        <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false } label="Add New User Dialog">
           <UserForm
             onSubmit={(record) => { this.create(record); }}
             onCancel={this.onClickCloseNewUser}

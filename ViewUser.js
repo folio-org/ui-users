@@ -1,20 +1,21 @@
 import _ from 'lodash'; // eslint-disable-line
-import React, { Component, PropTypes } from 'react' // eslint-disable-line
+import React, { Component, PropTypes } from 'react'; // eslint-disable-line
 import { connect } from 'stripes-connect'; // eslint-disable-line
-import Pane from '@folio/stripes-components/lib/Pane' // eslint-disable-line
-import PaneMenu from '@folio/stripes-components/lib/PaneMenu' // eslint-disable-line
-import Button from '@folio/stripes-components/lib/Button' // eslint-disable-line
-import KeyValue from '@folio/stripes-components/lib/KeyValue' // eslint-disable-line
-import {Row, Col} from 'react-bootstrap' // eslint-disable-line
-import TextField from '@folio/stripes-components/lib/TextField' // eslint-disable-line
-import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList' // eslint-disable-line
-import Icon from '@folio/stripes-components/lib/Icon' // eslint-disable-line
+import Pane from '@folio/stripes-components/lib/Pane'; // eslint-disable-line
+import PaneMenu from '@folio/stripes-components/lib/PaneMenu'; // eslint-disable-line
+import Button from '@folio/stripes-components/lib/Button'; // eslint-disable-line
+import KeyValue from '@folio/stripes-components/lib/KeyValue'; // eslint-disable-line
+import {Row, Col} from 'react-bootstrap'; // eslint-disable-line
+import TextField from '@folio/stripes-components/lib/TextField'; // eslint-disable-line
+import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList'; // eslint-disable-line
+import Icon from '@folio/stripes-components/lib/Icon'; // eslint-disable-line
 import Layer from '@folio/stripes-components/lib/Layer'; // eslint-disable-line
 
 import UserForm from './UserForm';
 import UserPermissions from './UserPermissions';
 
 class ViewUser extends Component {
+
   static propTypes = {
     data: PropTypes.shape({
       user: PropTypes.arrayOf(PropTypes.object),
@@ -28,16 +29,25 @@ class ViewUser extends Component {
   };
 
   static manifest = Object.freeze({
-    user: {
+    users: {
       type: 'okapi',
       path: 'users/:{userid}',
+      clear: false,
     },
     availablePermissions: {
       type: 'okapi',
-      records: 'users',
-      path: 'users?query=(username="?{query:-}*" or personal.first_name="?{query:-}*" or personal.last_name="?{query:-}*") ?{sort:+sortby} ?{sort:-}',
-      staticFallback: { path: 'users' },
+      records: 'permissions',
+      pk: 'permission_name',
+      path: "perms/permissions",
+      clear: false
     },
+    usersPermissions: {
+      type: 'okapi',
+      records: 'users',
+      path: "perms/users/:{username}/permissions",
+      clear: false
+    }
+
   });
 
   constructor(props) {
@@ -65,36 +75,59 @@ class ViewUser extends Component {
   }
 
   update(data) {
-    this.props.mutator.user.PUT(data).then(() => {
+    if (data.creds) delete data.creds; // not handled on edit (yet at least)
+    //
+    this.props.mutator.users.PUT(data).then(() => {
       this.onClickCloseEditUser();
     });
   }
 
   render() {
     const fineHistory = [{ 'Due Date': '11/12/2014', 'Amount': '34.23', 'Status': 'Unpaid' }]; // eslint-disable-line quote-props
-    //const availablePermissions = [{id: 3, name: "Can view user profile"}, {id: 2, name: "Can edit user profile"}, {id: 1, name: "Can create new user"}];
-
+    
     const detailMenu = <PaneMenu><button onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button></PaneMenu>;
 
-    const { data: { user, availablePermissions } } = this.props;
 
-    _.forEach(availablePermissions, function(perm) {
-      perm.name = perm.username;
-    });
+    const { data: { users, availablePermissions, usersPermissions }, params: { userid } } = this.props;
+    let count = 0;
 
-    if (!user || user.length === 0) return <div />;
+    console.log(usersPermissions);
+    
+    if (!users || users.length === 0 || !userid) return <div />;
+    const user = users.find(u => u.id === userid)
+    if (!user) return <div />
+    const userStatus = (_.get(user, ['active'], '') ? 'active' : 'inactive');
+
     return (
       <Pane defaultWidth="fill" paneTitle="User Details" lastMenu={detailMenu}>
         <Row>
           <Col xs={8} >
             <Row>
               <Col xs={12}>
-                <h2>{_.get(user[0], ['personal', 'last_name'], '')}, {_.get(user[0], ['personal', 'first_name'], '')}</h2>
+                <h2>{_.get(user, ['personal', 'last_name'], '')}, {_.get(user, ['personal', 'first_name'], '')}</h2>
               </Col>
             </Row>
             <Row>
               <Col xs={12}>
-                <KeyValue label="Email" value={_.get(user[0], ['personal', 'email'], '')} />
+                <KeyValue label="Username" value={_.get(user, ['username'], '')} />
+              </Col>
+            </Row>
+            <br/>
+            <Row>
+              <Col xs={12}>
+                <KeyValue label="Status" value={userStatus} />
+              </Col>
+            </Row>
+            <br/>
+            <Row>
+              <Col xs={12}>
+                <KeyValue label="Email" value={_.get(user, ['personal', 'email'], '')} />
+              </Col>
+            </Row>
+            <br/>
+            <Row>
+              <Col xs={12}>
+                <KeyValue label="Patron group" value={_.get(user, ['patron_group'], '')} />
               </Col>
             </Row>
           </Col>
@@ -130,7 +163,7 @@ class ViewUser extends Component {
         <Layer isOpen={this.state.editUserMode} label="Edit User Dialog">
           <UserForm
             onSubmit={(record) => { this.update(record); }}
-            initialValues={user[0]}
+            initialValues={user}
             onCancel={this.onClickCloseEditUser}
           />
         </Layer>
@@ -139,4 +172,4 @@ class ViewUser extends Component {
   }
 }
 
-export default connect(ViewUser, 'users');
+export default connect(ViewUser, '@folio-sample-modules/ui-users');
