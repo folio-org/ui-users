@@ -40,7 +40,7 @@ class Users extends React.Component {
     users: {
       type: 'okapi',
       records: 'users',
-      path: (queryParams, _pathParams) => {
+      path: (queryParams, _pathComponents, _resourceValues) => {
         // console.log('Users manifest "users" path function, queryParams = ', queryParams);
         const { query, filterActive, filterInactive, sort } = queryParams || {};
 
