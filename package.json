@@ -1,5 +1,5 @@
 {
-  "name": "@folio-sample-modules/users",
+  "name": "@folio/users",
   "version": "0.0.1-test",
   "description": "User management",
   "repository": "folio-org/ui-users",
@@ -32,8 +32,6 @@
     "eslint-plugin-babel": "^3.3.0",
     "eslint-plugin-import": "^2.0.1",
     "eslint-plugin-jsx-a11y": "^2.2.3",
-    "eslint-plugin-react": "^6.4.1",
-    "eslint-import-resolver-webpack": "0.7.1",
-    "webpack": "1.11.0"
+    "eslint-plugin-react": "^6.4.1"
   }
 }

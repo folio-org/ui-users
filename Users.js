@@ -1,5 +1,5 @@
 import _ from 'lodash'; // eslint-disable-line
-import React, { PropTypes } from 'react'; // eslint-disable-line
+import React, { PropTypes, Component } from 'react'; // eslint-disable-line
 import Match from 'react-router/Match'; // eslint-disable-line
 import {Row, Col} from 'react-bootstrap'; // eslint-disable-line
 
@@ -20,9 +20,10 @@ import Layer from '@folio/stripes-components/lib/Layer'; // eslint-disable-line
 import UserForm from './UserForm';
 import ViewUser from './ViewUser';
 
-class Users extends React.Component {
+class Users extends Component {
   static contextTypes = {
     router: PropTypes.object.isRequired,
+    store: PropTypes.object,
   };
 
   static propTypes = {
@@ -37,6 +38,7 @@ class Users extends React.Component {
   };
 
   static manifest = Object.freeze({
+    addUserMode: { },
     users: {
       type: 'okapi',
       records: 'users',
@@ -89,10 +91,10 @@ class Users extends React.Component {
         return path;
       },
       staticFallback: { path: 'users' },
-    },
+    }
   });
 
-  constructor(props) {
+  constructor(props, context) {
     super(props);
 
     const query = props.location.query || {};
@@ -104,12 +106,15 @@ class Users extends React.Component {
       selectedItem: {},
       searchTerm: query.query || '',
       sortOrder: query.sort || '',
-      addUserMode: false,
     };
+    props.mutator.addUserMode.replace({ mode: false });
+
+    this.okapi = context.store.getState().okapi;
 
     this.onClickAddNewUser = this.onClickAddNewUser.bind(this);
     this.onClickCloseNewUser = this.onClickCloseNewUser.bind(this);
     this.onChangeFilter = this.onChangeFilter.bind(this);
+    this.performSearch = _.debounce(this.performSearch.bind(this), 250);
     this.onChangeSearch = this.onChangeSearch.bind(this);
     this.onClearSearch = this.onClearSearch.bind(this);
     this.onSort = this.onSort.bind(this);
@@ -126,11 +131,15 @@ class Users extends React.Component {
   }
 
   onChangeSearch(e) {
-    const query = e.target.value;
-    console.log(`User searched for '${query}' at '${this.props.location.pathname}'`);
+    const term = e.target.value;
+    this.setState({ searchTerm: term });
+    this.performSearch(term);
+  }
 
-    this.setState({ searchTerm: query });
-    this.updateSearch(query, this.state.sortOrder, this.state.filter);
+  performSearch(term) {
+    console.log('User searched:', term, 'at', this.props.location.pathname);
+    const transitionPath = term === "" ?  this.props.location.pathname : `${this.props.location.pathname}?query=${term}`;
+    this.context.router.transitionTo(transitionPath);     
   }
 
   onClearSearch() {
@@ -158,16 +167,12 @@ class Users extends React.Component {
   // AddUser Handlers
   onClickAddNewUser(e) {
     if (e) e.preventDefault();
-    this.setState({
-      addUserMode: true,
-    });
+    this.props.mutator.addUserMode.replace({ mode: true })
   }
 
   onClickCloseNewUser(e) {
     if (e) e.preventDefault();
-    this.setState({
-      addUserMode: false,
-    });
+    this.props.mutator.addUserMode.replace({ mode: false })
   }
   // end AddUser Handlers
 
@@ -190,7 +195,56 @@ class Users extends React.Component {
   }
 
   create(data) {
+    // extract creds object from user object
+    const creds = Object.assign({}, data.creds, { username: data.username });
+    if (data.creds) delete data.creds;
+    // POST user record
     this.props.mutator.users.POST(data);
+    // POST credentials, permission-user, permissions;
+    this.postCreds(data.username, { credentials: creds });
+    this.onClickCloseNewUser();
+  }
+
+  postCreds(username, creds) {
+    fetch(`${this.okapi.url}/authn/users`, {
+      method: 'POST',
+      headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token }),
+      body: JSON.stringify(creds),
+    }).then((response) => {
+      if (response.status >= 400) {
+        console.log("Users. POST of creds failed.");
+      } else {
+        this.postPerms(username, 'users.super');
+      }
+    });
+  }
+
+  postPerms (username, perms) {
+    fetch(`${this.okapi.url}/perms/users`, {
+      method: 'POST',
+      headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token }),
+      body: username,
+    }).then((response) => {
+      if (response.status >= 400) {
+        console.log("Users. POST of username failed.");
+      } else {
+        this.postUsersPerms(username, perms);
+      }
+    });
+  }
+
+  postUsersPerms(username, perm) {
+    fetch(`${this.okapi.url}/perms/users/${username}/permissions`, {
+      method: 'POST',
+      headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token }),
+      body: JSON.stringify({ permission_name: perm }),
+    }).then((response) => {
+      if (response.status >= 400) {
+        console.log("Users. POST of user's perms failed.");
+      } else {
+      }
+    });
+
   }
 
   render() {
@@ -236,7 +290,7 @@ class Users extends React.Component {
             />
           </FilterControlGroup>
           <FilterControlGroup label="Actions">
-            <Button fullWidth onClick={this.onClickAddNewUser}>Add User</Button>
+            <Button fullWidth onClick={this.onClickAddNewUser}>New user</Button>
           </FilterControlGroup>
         </Pane>
         {/* Results Pane */}
@@ -268,7 +322,7 @@ class Users extends React.Component {
 
         {/* Details Pane */}
         <Match pattern={`${pathname}/view/:userid`} render={props => <ViewUser placeholder={'placeholder'} {...props} />} />
-        <Layer isOpen={this.state.addUserMode} label="Add New User Dialog">
+        <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false } label="Add New User Dialog">
           <UserForm
             onSubmit={(record) => { this.create(record); }}
             onCancel={this.onClickCloseNewUser}
