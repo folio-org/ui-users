@@ -114,7 +114,8 @@ class Users extends Component {
     this.onClickAddNewUser = this.onClickAddNewUser.bind(this);
     this.onClickCloseNewUser = this.onClickCloseNewUser.bind(this);
     this.onChangeFilter = this.onChangeFilter.bind(this);
-    this.performSearch = _.debounce(this.performSearch.bind(this), 250);
+    //this.performSearch = _.debounce(this.performSearch.bind(this), 250);
+    this.performSearch = this.performSearch.bind(this); // For now, prefer instant response
     this.onChangeSearch = this.onChangeSearch.bind(this);
     this.onClearSearch = this.onClearSearch.bind(this);
     this.onSort = this.onSort.bind(this);
