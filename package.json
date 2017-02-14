@@ -1,5 +1,5 @@
 {
-  "name": "@folio-sample-modules/users",
+  "name": "@folio/users",
   "version": "0.0.1-test",
   "description": "User management",
   "repository": "folio-org/ui-users",
