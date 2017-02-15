@@ -238,7 +238,7 @@ class Users extends Component {
     fetch(`${this.okapi.url}/perms/users/${username}/permissions`, {
       method: 'POST',
       headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token }),
-      body: JSON.stringify({ permission_name: perm }),
+      body: JSON.stringify({ permissionName: perm }),
     }).then((response) => {
       if (response.status >= 400) {
         console.log("Users. POST of user's perms failed.");

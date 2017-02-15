@@ -60,10 +60,10 @@ class UserPermissions extends React.Component {
     this.onToggleAddPermDD();
   }
 
-  removePermission(permission_name) {
+  removePermission(permissionName) {
     // placeholder removal logic...
     const currentPermissions = this.state.activePermissions;
-    const ind = currentPermissions.findIndex(p => p.permission_name === permission_name);
+    const ind = currentPermissions.findIndex(p => p.permissionName === permissionName);
     currentPermissions.splice(ind, 1);
     this.setState({
       activePermissions: currentPermissions,
@@ -78,7 +78,7 @@ class UserPermissions extends React.Component {
           const permInUse = _.includes(this.state.activePermissions, perm);
 
           // This should be replaced with proper search when possible.
-          const permNotFiltered = _.includes(perm.permission_name.toLowerCase(),this.state.searchTerm.toLowerCase());
+          const permNotFiltered = _.includes(perm.permissionName.toLowerCase(),this.state.searchTerm.toLowerCase());
 
           return !permInUse && permNotFiltered;
 
@@ -89,14 +89,14 @@ class UserPermissions extends React.Component {
     );
 
     const listFormatter = item => (
-      <li key={item.permission_name} >
-        {item.permission_name}
+      <li key={item.permissionName} >
+        {item.permissionName}
         <Button
           buttonStyle="fieldControl"
           align="end"
           type="button"
-          onClick={() => this.removePermission(item.permission_name)}
-          aria-label={`Remove Permission: ${item.permission_name}`}
+          onClick={() => this.removePermission(item.permissionName)}
+          aria-label={`Remove Permission: ${item.permissionName}`}
           title="Remove Permission"
         >
           <Icon icon="hollowX" iconClassName={css.removePermissionIcon} iconRootClass={css.removePermissionButton} />

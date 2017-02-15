@@ -37,7 +37,7 @@ class ViewUser extends Component {
     availablePermissions: {
       type: 'okapi',
       records: 'permissions',
-      pk: 'permission_name',
+      pk: 'permissionName',
       path: "perms/permissions",
       clear: false
     },
