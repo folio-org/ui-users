@@ -1,14 +1,14 @@
 import _ from 'lodash'; // eslint-disable-line
-import React, { Component, PropTypes } from 'react'; // eslint-disable-line
-import { connect } from 'stripes-connect'; // eslint-disable-line
-import Pane from '@folio/stripes-components/lib/Pane'; // eslint-disable-line
-import PaneMenu from '@folio/stripes-components/lib/PaneMenu'; // eslint-disable-line
-import Button from '@folio/stripes-components/lib/Button'; // eslint-disable-line
-import KeyValue from '@folio/stripes-components/lib/KeyValue'; // eslint-disable-line
-import {Row, Col} from 'react-bootstrap'; // eslint-disable-line
-import TextField from '@folio/stripes-components/lib/TextField'; // eslint-disable-line
-import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList'; // eslint-disable-line
-import Icon from '@folio/stripes-components/lib/Icon'; // eslint-disable-line
+import React, { Component, PropTypes } from 'react' // eslint-disable-line
+import { connect } from '@folio/stripes-connect'; // eslint-disable-line
+import Pane from '@folio/stripes-components/lib/Pane' // eslint-disable-line
+import PaneMenu from '@folio/stripes-components/lib/PaneMenu' // eslint-disable-line
+import Button from '@folio/stripes-components/lib/Button' // eslint-disable-line
+import KeyValue from '@folio/stripes-components/lib/KeyValue' // eslint-disable-line
+import {Row, Col} from 'react-bootstrap' // eslint-disable-line
+import TextField from '@folio/stripes-components/lib/TextField' // eslint-disable-line
+import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList' // eslint-disable-line
+import Icon from '@folio/stripes-components/lib/Icon' // eslint-disable-line
 import Layer from '@folio/stripes-components/lib/Layer'; // eslint-disable-line
 
 import UserForm from './UserForm';

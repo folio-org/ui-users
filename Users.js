@@ -42,7 +42,7 @@ class Users extends Component {
     users: {
       type: 'okapi',
       records: 'users',
-      path: (queryParams, _pathParams) => {
+      path: (queryParams, _pathComponents, _resourceValues) => {
         // console.log('Users manifest "users" path function, queryParams = ', queryParams);
         const { query, filterActive, filterInactive, sort } = queryParams || {};
 
@@ -85,7 +85,7 @@ class Users extends Component {
         }
 
         let path = 'users';
-        if (cql) path += `?query=title=${encodeURIComponent(cql)}`;
+        if (cql) path += `?query=${encodeURIComponent(cql)}`;
 
         console.log(`query=${query} active=${filterActive} inactive=${filterInactive} sort=${sort} -> ${path}`);
         return path;
@@ -114,7 +114,8 @@ class Users extends Component {
     this.onClickAddNewUser = this.onClickAddNewUser.bind(this);
     this.onClickCloseNewUser = this.onClickCloseNewUser.bind(this);
     this.onChangeFilter = this.onChangeFilter.bind(this);
-    this.performSearch = _.debounce(this.performSearch.bind(this), 250);
+    //this.performSearch = _.debounce(this.performSearch.bind(this), 250);
+    this.performSearch = this.performSearch.bind(this); // For now, prefer instant response
     this.onChangeSearch = this.onChangeSearch.bind(this);
     this.onClearSearch = this.onClearSearch.bind(this);
     this.onSort = this.onSort.bind(this);
