@@ -20,7 +20,6 @@ class UserPermissions extends React.Component {
       addPermissionOpen: false,
       searchTerm: '',
       // handling active Permissions in state for presentation purposes only.
-      activePermissions: [],
     };
 
     this.onToggleAddPermDD = this.onToggleAddPermDD.bind(this);
@@ -47,35 +46,51 @@ class UserPermissions extends React.Component {
 
   addPermission(id) {
     // placeholder add logic...
-    const currentPermissions = this.state.activePermissions;
-    const currentPermission = _.find(this.props.availablePermissions, function(perm) {
-      return perm.id === id;
-    });
+    // const currentPermissions = this.props.usersPermissions;
+    // const currentPermission = _.find(this.props.availablePermissions, function(perm) {
+    //   return perm.id === id;
+    // });
 
-    if(currentPermission) currentPermissions.push(currentPermission);
+    // if(currentPermission) currentPermissions.push(currentPermission);
 
-    this.setState({
-      activePermissions: currentPermissions,
-    });
+    // console.log(this.props.usersPermissions);
+    console.log(this.props.usersPermissions);    
+
     this.onToggleAddPermDD();
   }
 
   removePermission(permissionName) {
     // placeholder removal logic...
-    const currentPermissions = this.state.activePermissions;
-    const ind = currentPermissions.findIndex(p => p.permissionName === permissionName);
-    currentPermissions.splice(ind, 1);
-    this.setState({
-      activePermissions: currentPermissions,
-    });
+    // const currentPermissions = this.props.usersPermissions;
+
+    // const ind = currentPermissions.findIndex(p => p.permissionName === permissionName);
+    // currentPermissions.splice(ind, 1);
+    
+    console.log(this.props.usersPermissions); 
+
   }
 
   render() {
+
+    const {usersPermissions} = this.props;
+
     const permissionsDD = (
       <ListDropdown
         items={_.filter(this.props.availablePermissions, function(perm) {
 
-          const permInUse = _.includes(this.state.activePermissions, perm);
+
+          // Though it would be better to use lowdash
+          // this did not work as expected
+          //const permInUse = _.some(this.props.usersPermissions, ["id", perm.id]);
+          
+          let permInUse = false;
+          for(let i in usersPermissions) {
+            let permToCompare = usersPermissions[i];
+            if(permToCompare.id === perm.id) {
+              permInUse = true;
+              break;
+            }
+          }
 
           // This should be replaced with proper search when possible.
           const permNotFiltered = _.includes(perm.permissionName.toLowerCase(),this.state.searchTerm.toLowerCase());
@@ -127,7 +142,7 @@ class UserPermissions extends React.Component {
             </Dropdown>
           </Col>
         </Row>
-        <List itemFormatter={listFormatter} items={this.state.activePermissions} isEmptyMessage="This user has no permissions applied." />
+        <List itemFormatter={listFormatter} items={usersPermissions} isEmptyMessage="This user has no permissions applied." />
       </div>
     );
   }

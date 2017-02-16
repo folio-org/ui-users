@@ -38,15 +38,13 @@ class ViewUser extends Component {
       type: 'okapi',
       records: 'permissions',
       path: "perms/permissions",
-      clear: false
     },
     usersPermissions: {
       type: 'okapi',
       records: "permissionNames",
       path: function(queryParams, _pathComponents, _resourceValues) {
-        return `perms/users/${_pathComponents.username}/permissions`
-      },
-      clear: false
+        return `perms/users/${_pathComponents.username}/permissions?full=true`
+      }
     }
 
   });
@@ -89,7 +87,8 @@ class ViewUser extends Component {
     
     const detailMenu = <PaneMenu><button onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button></PaneMenu>;
 
-    const { data: { users, availablePermissions }, params: { userid } } = this.props;
+    const { data: { users, availablePermissions, usersPermissions }, params: { userid } } = this.props;
+
     let count = 0;
     
     if (!users || users.length === 0 || !userid) return <div />;
@@ -155,7 +154,7 @@ class ViewUser extends Component {
           </Col>
         </Row>
         <MultiColumnList fullWidth contentData={fineHistory} />
-        <UserPermissions availablePermissions={availablePermissions}  />
+        <UserPermissions availablePermissions={availablePermissions} usersPermissions={usersPermissions} />
 
 
 
