@@ -23,7 +23,7 @@ class ViewUser extends Component {
     }),
     mutator: React.PropTypes.shape({
       user: React.PropTypes.shape({
-        PUT: React.PropTypes.func.isRequired,
+        PUT: React.PropTypes.func.isRequired
       })
     })
   };
@@ -37,14 +37,15 @@ class ViewUser extends Component {
     availablePermissions: {
       type: 'okapi',
       records: 'permissions',
-      pk: 'permissionName',
       path: "perms/permissions",
       clear: false
     },
     usersPermissions: {
       type: 'okapi',
-      records: 'users',
-      path: "perms/users/:{username}/permissions",
+      records: "permissionNames",
+      path: function(queryParams, _pathComponents, _resourceValues) {
+        return `perms/users/${_pathComponents.username}/permissions`
+      },
       clear: false
     }
 
@@ -57,6 +58,7 @@ class ViewUser extends Component {
     };
     this.onClickEditUser = this.onClickEditUser.bind(this);
     this.onClickCloseEditUser = this.onClickCloseEditUser.bind(this);
+
   }
 
   // EditUser Handlers
@@ -87,11 +89,8 @@ class ViewUser extends Component {
     
     const detailMenu = <PaneMenu><button onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button></PaneMenu>;
 
-
-    const { data: { users, availablePermissions, usersPermissions }, params: { userid } } = this.props;
+    const { data: { users, availablePermissions }, params: { userid } } = this.props;
     let count = 0;
-
-    console.log(usersPermissions);
     
     if (!users || users.length === 0 || !userid) return <div />;
     const user = users.find(u => u.id === userid)
