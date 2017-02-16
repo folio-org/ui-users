@@ -44,30 +44,13 @@ class UserPermissions extends React.Component {
 
   }
 
-  addPermission(id) {
-    // placeholder add logic...
-    // const currentPermissions = this.props.usersPermissions;
-    // const currentPermission = _.find(this.props.availablePermissions, function(perm) {
-    //   return perm.id === id;
-    // });
-
-    // if(currentPermission) currentPermissions.push(currentPermission);
-
-    // console.log(this.props.usersPermissions);
-    console.log(this.props.usersPermissions);    
-
+  addPermission(perm) {
+    this.props.usersPermissionsMutators.PUT(perm);
     this.onToggleAddPermDD();
   }
 
-  removePermission(permissionName) {
-    // placeholder removal logic...
-    // const currentPermissions = this.props.usersPermissions;
-
-    // const ind = currentPermissions.findIndex(p => p.permissionName === permissionName);
-    // currentPermissions.splice(ind, 1);
-    
-    console.log(this.props.usersPermissions); 
-
+  removePermission(perm) {
+    this.props.usersPermissionsMutators.DELETE(perm);
   }
 
   render() {
@@ -110,7 +93,7 @@ class UserPermissions extends React.Component {
           buttonStyle="fieldControl"
           align="end"
           type="button"
-          onClick={() => this.removePermission(item.permissionName)}
+          onClick={() => this.removePermission(item)}
           aria-label={`Remove Permission: ${item.permissionName}`}
           title="Remove Permission"
         >

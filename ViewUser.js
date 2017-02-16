@@ -24,6 +24,9 @@ class ViewUser extends Component {
     mutator: React.PropTypes.shape({
       user: React.PropTypes.shape({
         PUT: React.PropTypes.func.isRequired
+      }),
+      usersPermissions: React.PropTypes.shape({
+        PUT: React.PropTypes.func.isRequired
       })
     })
   };
@@ -88,6 +91,8 @@ class ViewUser extends Component {
     const detailMenu = <PaneMenu><button onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button></PaneMenu>;
 
     const { data: { users, availablePermissions, usersPermissions }, params: { userid } } = this.props;
+
+    console.log(this.props);
 
     let count = 0;
     
@@ -154,7 +159,7 @@ class ViewUser extends Component {
           </Col>
         </Row>
         <MultiColumnList fullWidth contentData={fineHistory} />
-        <UserPermissions availablePermissions={availablePermissions} usersPermissions={usersPermissions} />
+        <UserPermissions availablePermissions={availablePermissions} usersPermissions={usersPermissions} usersPermissionsMutators={this.props.mutator.usersPermissions} />
 
 
 
