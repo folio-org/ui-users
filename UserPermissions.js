@@ -64,17 +64,8 @@ class UserPermissions extends React.Component {
 
           // Though it would be better to use lowdash
           // this did not work as expected
-          //const permInUse = _.some(this.props.usersPermissions, ["id", perm.id]);
+          const permInUse = _.some(usersPermissions, perm);
           
-          let permInUse = false;
-          for(let i in usersPermissions) {
-            let permToCompare = usersPermissions[i];
-            if(permToCompare.id === perm.id) {
-              permInUse = true;
-              break;
-            }
-          }
-
           // This should be replaced with proper search when possible.
           const permNotFiltered = _.includes(perm.permissionName.toLowerCase(),this.state.searchTerm.toLowerCase());
 

@@ -45,8 +45,13 @@ class ViewUser extends Component {
     usersPermissions: {
       type: 'okapi',
       records: "permissionNames",
-      path: function(queryParams, _pathComponents, _resourceValues) {
-        return `perms/users/${_pathComponents.username}/permissions?full=true`
+      GET: { 
+        path: (queryParams, _pathComponents, _resourceValues) => {
+          return `perms/users/${_pathComponents.username}/permissions?full=true`
+        }
+      },
+      path: (queryParams, _pathComponents, _resourceValues) => {
+        return `perms/users/${_pathComponents.username}/permissions`
       }
     }
 
