@@ -61,9 +61,6 @@ class UserPermissions extends React.Component {
       <ListDropdown
         items={_.filter(this.props.availablePermissions, function(perm) {
 
-
-          // Though it would be better to use lowdash
-          // this did not work as expected
           const permInUse = _.some(usersPermissions, perm);
           
           // This should be replaced with proper search when possible.

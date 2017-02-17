@@ -47,11 +47,11 @@ class ViewUser extends Component {
       records: "permissionNames",
       GET: { 
         path: (queryParams, _pathComponents, _resourceValues) => {
-          return `perms/users/${_pathComponents.username}/permissions?full=true`
+          return _pathComponents.username?`perms/users/${_pathComponents.username}/permissions?full=true`:undefined;
         }
       },
       path: (queryParams, _pathComponents, _resourceValues) => {
-        return `perms/users/${_pathComponents.username}/permissions`
+        return _pathComponents.username?`perms/users/${_pathComponents.username}/permissions`:undefined;
       }
     }
 
