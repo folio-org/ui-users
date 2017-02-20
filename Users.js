@@ -132,18 +132,6 @@ class Users extends Component {
     this.updateSearch(this.state.searchTerm, this.state.sortOrder, filter);
   }
 
-  onChangeSearch(e) {
-    const term = e.target.value;
-    this.setState({ searchTerm: term });
-    this.performSearch(term);
-  }
-
-  performSearch(term) {
-    console.log('User searched:', term, 'at', this.props.location.pathname);
-    const transitionPath = term === '' ? this.props.location.pathname : `${this.props.location.pathname}?query=${term}`;
-    this.context.router.transitionTo(transitionPath);
-  }
-
   onClearSearch() {
     console.log('User cleared search');
     this.setState({ searchTerm: '' });
@@ -177,6 +165,20 @@ class Users extends Component {
     this.props.mutator.addUserMode.replace({ mode: false });
   }
   // end AddUser Handlers
+
+
+  onChangeSearch(e) {
+    const term = e.target.value;
+    this.setState({ searchTerm: term });
+    this.performSearch(term);
+  }
+
+  performSearch(term) {
+    console.log('User searched:', term, 'at', this.props.location.pathname);
+    const transitionPath = term === '' ? this.props.location.pathname : `${this.props.location.pathname}?query=${term}`;
+    this.context.router.transitionTo(transitionPath);
+  }
+
 
   // We need to explicitly pass changed values into this function,
   // as state-change only happens after event is handled.
