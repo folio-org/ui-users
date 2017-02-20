@@ -91,7 +91,7 @@ class Users extends Component {
         return path;
       },
       staticFallback: { path: 'users' },
-    }
+    },
   });
 
   constructor(props, context) {
@@ -114,7 +114,7 @@ class Users extends Component {
     this.onClickAddNewUser = this.onClickAddNewUser.bind(this);
     this.onClickCloseNewUser = this.onClickCloseNewUser.bind(this);
     this.onChangeFilter = this.onChangeFilter.bind(this);
-    //this.performSearch = _.debounce(this.performSearch.bind(this), 250);
+    // this.performSearch = _.debounce(this.performSearch.bind(this), 250);
     this.performSearch = this.performSearch.bind(this); // For now, prefer instant response
     this.onChangeSearch = this.onChangeSearch.bind(this);
     this.onClearSearch = this.onClearSearch.bind(this);
@@ -139,8 +139,8 @@ class Users extends Component {
 
   performSearch(term) {
     console.log('User searched:', term, 'at', this.props.location.pathname);
-    const transitionPath = term === "" ?  this.props.location.pathname : `${this.props.location.pathname}?query=${term}`;
-    this.context.router.transitionTo(transitionPath);     
+    const transitionPath = term === '' ? this.props.location.pathname : `${this.props.location.pathname}?query=${term}`;
+    this.context.router.transitionTo(transitionPath);
   }
 
   onClearSearch() {
@@ -168,12 +168,12 @@ class Users extends Component {
   // AddUser Handlers
   onClickAddNewUser(e) {
     if (e) e.preventDefault();
-    this.props.mutator.addUserMode.replace({ mode: true })
+    this.props.mutator.addUserMode.replace({ mode: true });
   }
 
   onClickCloseNewUser(e) {
     if (e) e.preventDefault();
-    this.props.mutator.addUserMode.replace({ mode: false })
+    this.props.mutator.addUserMode.replace({ mode: false });
   }
   // end AddUser Handlers
 
@@ -198,7 +198,7 @@ class Users extends Component {
   create(data) {
     // extract creds object from user object
     const creds = Object.assign({}, data.creds, { username: data.username });
-    if (data.creds) delete data.creds;
+    if (data.creds) delete data.creds; // eslint-disable-line no-param-reassign
     // POST user record
     this.props.mutator.users.POST(data);
     // POST credentials, permission-user, permissions;
@@ -213,21 +213,21 @@ class Users extends Component {
       body: JSON.stringify(creds),
     }).then((response) => {
       if (response.status >= 400) {
-        console.log("Users. POST of creds failed.");
+        console.log('Users. POST of creds failed.');
       } else {
         this.postPerms(username, 'users.super');
       }
     });
   }
 
-  postPerms (username, perms) {
+  postPerms(username, perms) {
     fetch(`${this.okapi.url}/perms/users`, {
       method: 'POST',
       headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token }),
       body: username,
     }).then((response) => {
       if (response.status >= 400) {
-        console.log("Users. POST of username failed.");
+        console.log('Users. POST of username failed.');
       } else {
         this.postUsersPerms(username, perms);
       }
@@ -243,9 +243,9 @@ class Users extends Component {
       if (response.status >= 400) {
         console.log("Users. POST of user's perms failed.");
       } else {
+        // nothing to do
       }
     });
-
   }
 
   render() {
@@ -323,7 +323,7 @@ class Users extends Component {
 
         {/* Details Pane */}
         <Match pattern={`${pathname}/view/:userid`} render={props => <ViewUser placeholder={'placeholder'} {...props} />} />
-        <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false } label="Add New User Dialog">
+        <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false} label="Add New User Dialog">
           <UserForm
             onSubmit={(record) => { this.create(record); }}
             onCancel={this.onClickCloseNewUser}
