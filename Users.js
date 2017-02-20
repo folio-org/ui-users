@@ -1,4 +1,5 @@
 import _ from 'lodash'; // eslint-disable-line
+import fetch from 'isomorphic-fetch'; // eslint-disable-line
 import React, { PropTypes, Component } from 'react'; // eslint-disable-line
 import Match from 'react-router/Match'; // eslint-disable-line
 import {Row, Col} from 'react-bootstrap'; // eslint-disable-line
