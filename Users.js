@@ -1,22 +1,18 @@
-import _ from 'lodash'; // eslint-disable-line
-import fetch from 'isomorphic-fetch'; // eslint-disable-line
-import React, { PropTypes, Component } from 'react'; // eslint-disable-line
-import Match from 'react-router/Match'; // eslint-disable-line
-import {Row, Col} from 'react-bootstrap'; // eslint-disable-line
+import _ from 'lodash';
+import fetch from 'isomorphic-fetch';
+import React, { PropTypes, Component } from 'react';
+import Match from 'react-router/Match';
 
-import Pane from '@folio/stripes-components/lib/Pane'; // eslint-disable-line
-import Paneset from '@folio/stripes-components/lib/Paneset'; // eslint-disable-line
-import PaneMenu from '@folio/stripes-components/lib/PaneMenu'; // eslint-disable-line
-import Button from '@folio/stripes-components/lib/Button'; // eslint-disable-line
-import Icon from '@folio/stripes-components/lib/Icon'; // eslint-disable-line
-import Checkbox from '@folio/stripes-components/lib/Checkbox'; // eslint-disable-line
-import TextField from '@folio/stripes-components/lib/TextField'; // eslint-disable-line
-import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList'; // eslint-disable-line
-import KeyValue from '@folio/stripes-components/lib/KeyValue'; // eslint-disable-line
-import FilterPaneSearch from '@folio/stripes-components/lib/FilterPaneSearch'; // eslint-disable-line
-import FilterControlGroup from '@folio/stripes-components/lib/FilterControlGroup'; // eslint-disable-line
-import Select from '@folio/stripes-components/lib/Select'; // eslint-disable-line
-import Layer from '@folio/stripes-components/lib/Layer'; // eslint-disable-line
+import Pane from '@folio/stripes-components/lib/Pane';
+import Paneset from '@folio/stripes-components/lib/Paneset';
+import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
+import Button from '@folio/stripes-components/lib/Button';
+import Icon from '@folio/stripes-components/lib/Icon';
+import Checkbox from '@folio/stripes-components/lib/Checkbox';
+import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
+import FilterPaneSearch from '@folio/stripes-components/lib/FilterPaneSearch';
+import FilterControlGroup from '@folio/stripes-components/lib/FilterControlGroup';
+import Layer from '@folio/stripes-components/lib/Layer';
 
 import UserForm from './UserForm';
 import ViewUser from './ViewUser';
@@ -258,7 +254,6 @@ class Users extends Component {
     /* searchHeader is a 'custom pane header'*/
     const searchHeader = <FilterPaneSearch id="SearchField" onChange={this.onChangeSearch} onClear={this.onClearSearch} value={this.state.searchTerm} />;
     const resultMenu = <PaneMenu><button><Icon icon="bookmark" /></button></PaneMenu>;
-    const fineHistory = [{ 'Due Date': '11/12/2014', 'Amount': '34.23', 'Status': 'Unpaid' }]; // eslint-disable-line
 
     const resultsFormatter = {
       Active: user => user.active,
