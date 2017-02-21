@@ -41,6 +41,6 @@
     "lodash": "^4.17.4",
     "react": "^15.4.2",
     "react-bootstrap": "^0.30.7",
-    "react-router": "^3.0.2"
+    "react-router": "4.0.0-alpha.6"
   }
 }
