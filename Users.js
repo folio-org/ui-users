@@ -199,7 +199,7 @@ class Users extends Component {
     const creds = Object.assign({}, data.creds, { username: data.username });
     if (data.creds) delete data.creds; // eslint-disable-line no-param-reassign
     // POST user record
-    this.props.mutator.users.POST(data);
+    this.props.mutator.users.POST(data, this.props);
     // POST credentials, permission-user, permissions;
     this.postCreds(data.username, { credentials: creds });
     this.onClickCloseNewUser();
