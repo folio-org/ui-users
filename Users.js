@@ -175,8 +175,7 @@ class Users extends Component {
 
   performSearch(term) {
     console.log('User searched:', term, 'at', this.props.location.pathname);
-    const transitionPath = term === '' ? this.props.location.pathname : `${this.props.location.pathname}?query=${term}`;
-    this.context.router.transitionTo(transitionPath);
+    this.updateSearch(term, this.state.sortOrder, this.state.filter);
   }
 
 
