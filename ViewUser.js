@@ -16,11 +16,12 @@ import UserForm from './UserForm';
 class ViewUser extends Component {
 
   static propTypes = {
+    params: PropTypes.object,
     data: PropTypes.shape({
       user: PropTypes.arrayOf(PropTypes.object),
     }),
     mutator: React.PropTypes.shape({
-      user: React.PropTypes.shape({
+      users: React.PropTypes.shape({
         PUT: React.PropTypes.func.isRequired,
       }),
     }),
@@ -59,6 +60,7 @@ class ViewUser extends Component {
   }
 
   update(data) {
+    // eslint-disable-next-line no-param-reassign
     if (data.creds) delete data.creds; // not handled on edit (yet at least)
     //
     this.props.mutator.users.PUT(data).then(() => {
@@ -73,8 +75,8 @@ class ViewUser extends Component {
 
     const { data: { users }, params: { userid } } = this.props;
     if (!users || users.length === 0 || !userid) return <div />;
-    const user = users.find(u => u.id === userid)
-    if (!user) return <div />
+    const user = users.find(u => u.id === userid);
+    if (!user) return <div />;
     const userStatus = (_.get(user, ['active'], '') ? 'active' : 'inactive');
     return (
       <Pane defaultWidth="fill" paneTitle="User Details" lastMenu={detailMenu}>
@@ -90,19 +92,19 @@ class ViewUser extends Component {
                 <KeyValue label="Username" value={_.get(user, ['username'], '')} />
               </Col>
             </Row>
-            <br/>
+            <br />
             <Row>
               <Col xs={12}>
                 <KeyValue label="Status" value={userStatus} />
               </Col>
             </Row>
-            <br/>
+            <br />
             <Row>
               <Col xs={12}>
                 <KeyValue label="Email" value={_.get(user, ['personal', 'email'], '')} />
               </Col>
             </Row>
-            <br/>
+            <br />
             <Row>
               <Col xs={12}>
                 <KeyValue label="Patron group" value={_.get(user, ['patron_group'], '')} />
