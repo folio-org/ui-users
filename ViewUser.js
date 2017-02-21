@@ -17,6 +17,7 @@ import UserPermissions from './UserPermissions';
 class ViewUser extends Component {
 
   static propTypes = {
+    params: PropTypes.object,
     data: PropTypes.shape({
       user: PropTypes.arrayOf(PropTypes.object),
       availablePermissions: PropTypes.arrayOf(PropTypes.object)
@@ -83,9 +84,9 @@ class ViewUser extends Component {
   }
 
   update(data) {
+    // eslint-disable-next-line no-param-reassign
     if (data.creds) delete data.creds; // not handled on edit (yet at least)
-    //
-    this.props.mutator.users.PUT(data).then(() => {
+    this.props.mutator.users.PUT(data, this.props).then(() => {
       this.onClickCloseEditUser();
     });
   }
@@ -102,8 +103,8 @@ class ViewUser extends Component {
     let count = 0;
     
     if (!users || users.length === 0 || !userid) return <div />;
-    const user = users.find(u => u.id === userid)
-    if (!user) return <div />
+    const user = users.find(u => u.id === userid);
+    if (!user) return <div />;
     const userStatus = (_.get(user, ['active'], '') ? 'active' : 'inactive');
 
     return (
@@ -120,19 +121,19 @@ class ViewUser extends Component {
                 <KeyValue label="Username" value={_.get(user, ['username'], '')} />
               </Col>
             </Row>
-            <br/>
+            <br />
             <Row>
               <Col xs={12}>
                 <KeyValue label="Status" value={userStatus} />
               </Col>
             </Row>
-            <br/>
+            <br />
             <Row>
               <Col xs={12}>
                 <KeyValue label="Email" value={_.get(user, ['personal', 'email'], '')} />
               </Col>
             </Row>
-            <br/>
+            <br />
             <Row>
               <Col xs={12}>
                 <KeyValue label="Patron group" value={_.get(user, ['patron_group'], '')} />

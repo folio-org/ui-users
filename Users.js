@@ -1,21 +1,18 @@
-import _ from 'lodash'; // eslint-disable-line
-import React, { PropTypes, Component } from 'react'; // eslint-disable-line
-import Match from 'react-router/Match'; // eslint-disable-line
-import {Row, Col} from 'react-bootstrap'; // eslint-disable-line
+import _ from 'lodash';
+import fetch from 'isomorphic-fetch';
+import React, { PropTypes, Component } from 'react';
+import Match from 'react-router/Match';
 
-import Pane from '@folio/stripes-components/lib/Pane'; // eslint-disable-line
-import Paneset from '@folio/stripes-components/lib/Paneset'; // eslint-disable-line
-import PaneMenu from '@folio/stripes-components/lib/PaneMenu'; // eslint-disable-line
-import Button from '@folio/stripes-components/lib/Button'; // eslint-disable-line
-import Icon from '@folio/stripes-components/lib/Icon'; // eslint-disable-line
-import Checkbox from '@folio/stripes-components/lib/Checkbox'; // eslint-disable-line
-import TextField from '@folio/stripes-components/lib/TextField'; // eslint-disable-line
-import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList'; // eslint-disable-line
-import KeyValue from '@folio/stripes-components/lib/KeyValue'; // eslint-disable-line
-import FilterPaneSearch from '@folio/stripes-components/lib/FilterPaneSearch'; // eslint-disable-line
-import FilterControlGroup from '@folio/stripes-components/lib/FilterControlGroup'; // eslint-disable-line
-import Select from '@folio/stripes-components/lib/Select'; // eslint-disable-line
-import Layer from '@folio/stripes-components/lib/Layer'; // eslint-disable-line
+import Pane from '@folio/stripes-components/lib/Pane';
+import Paneset from '@folio/stripes-components/lib/Paneset';
+import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
+import Button from '@folio/stripes-components/lib/Button';
+import Icon from '@folio/stripes-components/lib/Icon';
+import Checkbox from '@folio/stripes-components/lib/Checkbox';
+import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
+import FilterPaneSearch from '@folio/stripes-components/lib/FilterPaneSearch';
+import FilterControlGroup from '@folio/stripes-components/lib/FilterControlGroup';
+import Layer from '@folio/stripes-components/lib/Layer';
 
 import UserForm from './UserForm';
 import ViewUser from './ViewUser';
@@ -91,7 +88,7 @@ class Users extends Component {
         return path;
       },
       staticFallback: { path: 'users' },
-    }
+    },
   });
 
   constructor(props, context) {
@@ -114,7 +111,7 @@ class Users extends Component {
     this.onClickAddNewUser = this.onClickAddNewUser.bind(this);
     this.onClickCloseNewUser = this.onClickCloseNewUser.bind(this);
     this.onChangeFilter = this.onChangeFilter.bind(this);
-    //this.performSearch = _.debounce(this.performSearch.bind(this), 250);
+    // this.performSearch = _.debounce(this.performSearch.bind(this), 250);
     this.performSearch = this.performSearch.bind(this); // For now, prefer instant response
     this.onChangeSearch = this.onChangeSearch.bind(this);
     this.onClearSearch = this.onClearSearch.bind(this);
@@ -129,18 +126,6 @@ class Users extends Component {
     console.log('onChangeFilter setting state', filter);
     this.setState({ filter });
     this.updateSearch(this.state.searchTerm, this.state.sortOrder, filter);
-  }
-
-  onChangeSearch(e) {
-    const term = e.target.value;
-    this.setState({ searchTerm: term });
-    this.performSearch(term);
-  }
-
-  performSearch(term) {
-    console.log('User searched:', term, 'at', this.props.location.pathname);
-    const transitionPath = term === "" ?  this.props.location.pathname : `${this.props.location.pathname}?query=${term}`;
-    this.context.router.transitionTo(transitionPath);     
   }
 
   onClearSearch() {
@@ -169,14 +154,27 @@ class Users extends Component {
   // AddUser Handlers
   onClickAddNewUser(e) {
     if (e) e.preventDefault();
-    this.props.mutator.addUserMode.replace({ mode: true })
+    this.props.mutator.addUserMode.replace({ mode: true });
   }
 
   onClickCloseNewUser(e) {
     if (e) e.preventDefault();
-    this.props.mutator.addUserMode.replace({ mode: false })
+    this.props.mutator.addUserMode.replace({ mode: false });
   }
   // end AddUser Handlers
+
+
+  onChangeSearch(e) {
+    const term = e.target.value;
+    this.setState({ searchTerm: term });
+    this.performSearch(term);
+  }
+
+  performSearch(term) {
+    console.log('User searched:', term, 'at', this.props.location.pathname);
+    this.updateSearch(term, this.state.sortOrder, this.state.filter);
+  }
+
 
   // We need to explicitly pass changed values into this function,
   // as state-change only happens after event is handled.
@@ -199,9 +197,9 @@ class Users extends Component {
   create(data) {
     // extract creds object from user object
     const creds = Object.assign({}, data.creds, { username: data.username });
-    if (data.creds) delete data.creds;
+    if (data.creds) delete data.creds; // eslint-disable-line no-param-reassign
     // POST user record
-    this.props.mutator.users.POST(data);
+    this.props.mutator.users.POST(data, this.props);
     // POST credentials, permission-user, permissions;
     this.postCreds(data.username, { credentials: creds });
     this.onClickCloseNewUser();
@@ -214,21 +212,21 @@ class Users extends Component {
       body: JSON.stringify(creds),
     }).then((response) => {
       if (response.status >= 400) {
-        console.log("Users. POST of creds failed.");
+        console.log('Users. POST of creds failed.');
       } else {
         this.postPerms(username, 'users.super');
       }
     });
   }
 
-  postPerms (username, perms) {
+  postPerms(username, perms) {
     fetch(`${this.okapi.url}/perms/users`, {
       method: 'POST',
       headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token }),
       body: username,
     }).then((response) => {
       if (response.status >= 400) {
-        console.log("Users. POST of username failed.");
+        console.log('Users. POST of username failed.');
       } else {
         this.postUsersPerms(username, perms);
       }
@@ -244,9 +242,9 @@ class Users extends Component {
       if (response.status >= 400) {
         console.log("Users. POST of user's perms failed.");
       } else {
+        // nothing to do
       }
     });
-
   }
 
   render() {
@@ -256,7 +254,6 @@ class Users extends Component {
     /* searchHeader is a 'custom pane header'*/
     const searchHeader = <FilterPaneSearch id="SearchField" onChange={this.onChangeSearch} onClear={this.onClearSearch} value={this.state.searchTerm} />;
     const resultMenu = <PaneMenu><button><Icon icon="bookmark" /></button></PaneMenu>;
-    const fineHistory = [{ 'Due Date': '11/12/2014', 'Amount': '34.23', 'Status': 'Unpaid' }]; // eslint-disable-line
 
     const resultsFormatter = {
       Active: user => user.active,
@@ -324,7 +321,7 @@ class Users extends Component {
 
         {/* Details Pane */}
         <Match pattern={`${pathname}/view/:userid/:username`} render={props => <ViewUser placeholder={'placeholder'} {...props} />} />
-        <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false } label="Add New User Dialog">
+        <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false} label="Add New User Dialog">
           <UserForm
             onSubmit={(record) => { this.create(record); }}
             onCancel={this.onClickCloseNewUser}

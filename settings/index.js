@@ -6,6 +6,7 @@ import NavList from '@folio/stripes-components/lib/NavList';
 import NavListSection from '@folio/stripes-components/lib/NavListSection';
 
 import PermissionSets from './PermissionSets';
+import PatronGroupsSettings from './PatronGroupsSettings';
 
 class UsersSettings extends React.Component {
   constructor(props) {
@@ -15,6 +16,7 @@ class UsersSettings extends React.Component {
       selectedPage: 'PermissionSets',
       pages: [
         { label: 'Permission sets', name: 'PermissionSets', component: PermissionSets },
+        { label: 'Patron groups', name: 'PatronGroupsSettings', component: PatronGroupsSettings },
       ],
     };
 
@@ -39,7 +41,7 @@ class UsersSettings extends React.Component {
         <Pane defaultWidth="25%" paneTitle="Users">
           <NavList>
             <NavListSection activeLink={`#${this.state.selectedPage}`}>
-              {/* <a href="#PatronGroups" onClick={this.onSelectPage}>Patron Groups</a> */}
+              <a href="#PatronGroupsSettings" onClick={this.onSelectPage}>Patron Groups</a>
               <a href="#PermissionSets" onClick={this.onSelectPage}>Permission sets</a>
             </NavListSection>
           </NavList>
