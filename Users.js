@@ -147,9 +147,10 @@ class Users extends Component {
 
   onSelectRow(e, meta) {
     const userId = meta.id;
+    const username = meta.username;
     console.log('User clicked', userId, 'location = ', this.props.location);
     this.setState({ selectedItem: meta });
-    this.context.router.transitionTo(`/users/view/${userId}${this.props.location.search}`);
+    this.context.router.transitionTo(`/users/view/${userId}/${username}${this.props.location.search}`);
   }
 
   // end search Handlers
@@ -312,7 +313,7 @@ class Users extends Component {
           <MultiColumnList
             contentData={users}
             selectedRow={this.state.selectedItem}
-            rowMetadata={['id']}
+            rowMetadata={['id', 'username']}
             formatter={resultsFormatter}
             onRowClick={this.onSelectRow}
             onHeaderClick={this.onSort}
@@ -324,7 +325,7 @@ class Users extends Component {
         </Pane>
 
         {/* Details Pane */}
-        <Match pattern={`${pathname}/view/:userid`} render={props => <ViewUser placeholder={'placeholder'} {...props} />} />
+        <Match pattern={`${pathname}/view/:userid/:username`} render={props => <ViewUser placeholder={'placeholder'} {...props} />} />
         <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false} label="Add New User Dialog">
           <UserForm
             onSubmit={(record) => { this.create(record); }}
