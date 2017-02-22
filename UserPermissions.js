@@ -45,12 +45,13 @@ class UserPermissions extends React.Component {
   }
 
   addPermission(perm) {
-    this.props.usersPermissionsMutators.PUT(perm);
-    this.onToggleAddPermDD();
+    this.props.viewUserProps.mutator.usersPermissions.POST(perm, this.props.viewUserProps).then(() => {
+      this.onToggleAddPermDD();
+    });
   }
 
   removePermission(perm) {
-    this.props.usersPermissionsMutators.DELETE(perm);
+    this.props.viewUserProps.mutator.usersPermissions.DELETE(perm, this.props.viewUserProps, perm.permissionName);
   }
 
   render() {

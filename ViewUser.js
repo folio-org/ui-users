@@ -27,7 +27,7 @@ class ViewUser extends Component {
         PUT: React.PropTypes.func.isRequired
       }),
       usersPermissions: React.PropTypes.shape({
-        PUT: React.PropTypes.func.isRequired
+        POST: React.PropTypes.func.isRequired
       })
     })
   };
@@ -41,19 +41,19 @@ class ViewUser extends Component {
     availablePermissions: {
       type: 'okapi',
       records: 'permissions',
-      path: "perms/permissions",
+      path: "perms/permissions?length=100",
     },
     usersPermissions: {
       type: 'okapi',
       records: "permissionNames",
-      GET: { 
-        path: (queryParams, _pathComponents, _resourceValues) => {
-          return _pathComponents.username?`perms/users/${_pathComponents.username}/permissions?full=true`:undefined;
-        }
+      DELETE: {
+        pk: "permissionName", 
+        path: "perms/users/:{username}/permissions"
       },
-      path: (queryParams, _pathComponents, _resourceValues) => {
-        return _pathComponents.username?`perms/users/${_pathComponents.username}/permissions`:undefined;
-      }
+      GET: { 
+        path: "perms/users/:{username}/permissions?full=true"
+      },
+      path: "perms/users/:{username}/permissions"
     }
 
   });
@@ -97,8 +97,6 @@ class ViewUser extends Component {
     const detailMenu = <PaneMenu><button onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button></PaneMenu>;
 
     const { data: { users, availablePermissions, usersPermissions }, params: { userid } } = this.props;
-
-    console.log(this.props);
 
     let count = 0;
     
@@ -165,7 +163,7 @@ class ViewUser extends Component {
           </Col>
         </Row>
         <MultiColumnList fullWidth contentData={fineHistory} />
-        <UserPermissions availablePermissions={availablePermissions} usersPermissions={usersPermissions} usersPermissionsMutators={this.props.mutator.usersPermissions} />
+        <UserPermissions availablePermissions={availablePermissions} usersPermissions={usersPermissions} viewUserProps={this.props} />
 
 
 
