@@ -15,7 +15,7 @@
     "type": "app",
     "displayName": "Users",
     "route": "/users",
-    "home": "/users?filterActive=true"
+    "home": "/users?filters=active.Active"
   },
   "scripts": {
     "lint": "eslint *.js || true"
