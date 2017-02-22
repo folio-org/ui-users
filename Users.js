@@ -14,8 +14,22 @@ import FilterPaneSearch from '@folio/stripes-components/lib/FilterPaneSearch';
 import FilterControlGroup from '@folio/stripes-components/lib/FilterControlGroup';
 import Layer from '@folio/stripes-components/lib/Layer';
 
+import FilterGroups, { initialFilterState, filters2cql } from '@folio/stripes-components/lib/FilterGroups';
+
 import UserForm from './UserForm';
 import ViewUser from './ViewUser';
+
+const filterConfig = [
+  {
+    label: 'Filters',
+    name: 'active',
+    cql: 'active',
+    values: [
+      { name: 'Active', cql: 'true' },
+      { name: 'Inactive', cql: 'false' },
+    ],
+  },
+];
 
 class Users extends Component {
   static contextTypes = {
@@ -41,24 +55,14 @@ class Users extends Component {
       records: 'users',
       path: (queryParams, _pathComponents, _resourceValues) => {
         // console.log('Users manifest "users" path function, queryParams = ', queryParams);
-        const { query, filterActive, filterInactive, sort } = queryParams || {};
+        const { query, filters, sort } = queryParams || {};
 
         let cql;
         if (query) {
           cql = `username="${query}*" or personal.first_name="${query}*" or personal.last_name="${query}*"`;
         }
 
-        let filterCql;
-        if (filterActive && !filterInactive) {
-          filterCql = 'active=true';
-        } else if (filterInactive && !filterActive) {
-          filterCql = 'active=false';
-        } else if (!filterActive && !filterInactive) {
-          // Technically, we should force this configuration to find
-          // no records; but it probably makes more sense to do
-          // nothing, and allow both active AND inactive records.
-        }
-
+        const filterCql = filters2cql(filterConfig, filters);
         if (filterCql) {
           if (cql) {
             cql = `(${cql}) and ${filterCql}`;
@@ -84,7 +88,7 @@ class Users extends Component {
         let path = 'users';
         if (cql) path += `?query=${encodeURIComponent(cql)}`;
 
-        console.log(`query=${query} active=${filterActive} inactive=${filterInactive} sort=${sort} -> ${path}`);
+        console.log(`query=${query} filters=${filters} sort=${sort} -> ${path}`);
         return path;
       },
       staticFallback: { path: 'users' },
@@ -96,10 +100,7 @@ class Users extends Component {
 
     const query = props.location.query || {};
     this.state = {
-      filter: {
-        active: query.filterActive || false,
-        inactive: query.filterInactive || false,
-      },
+      filters: initialFilterState(filterConfig, query.filters),
       selectedItem: {},
       searchTerm: query.query || '',
       sortOrder: query.sort || '',
@@ -121,11 +122,11 @@ class Users extends Component {
 
   // search Handlers...
   onChangeFilter(e) {
-    const filter = this.state.filter;
-    filter[e.target.id] = !filter[e.target.id];
-    console.log('onChangeFilter setting state', filter);
-    this.setState({ filter });
-    this.updateSearch(this.state.searchTerm, this.state.sortOrder, filter);
+    const filters = Object.assign({}, this.state.filters);
+    filters[e.target.name] = e.target.checked;
+    console.log('onChangeFilter setting state', filters);
+    this.setState({ filters });
+    this.updateSearch(this.state.searchTerm, this.state.sortOrder, filters);
   }
 
   onClearSearch() {
@@ -138,7 +139,7 @@ class Users extends Component {
     const sortOrder = meta.name;
     console.log('User sorted by', sortOrder);
     this.setState({ sortOrder });
-    this.updateSearch(this.state.searchTerm, sortOrder, this.state.filter);
+    this.updateSearch(this.state.searchTerm, sortOrder, this.state.filters);
   }
 
   onSelectRow(e, meta) {
@@ -172,20 +173,26 @@ class Users extends Component {
 
   performSearch(term) {
     console.log('User searched:', term, 'at', this.props.location.pathname);
-    this.updateSearch(term, this.state.sortOrder, this.state.filter);
+    this.updateSearch(term, this.state.sortOrder, this.state.filters);
   }
 
 
   // We need to explicitly pass changed values into this function,
   // as state-change only happens after event is handled.
-  updateSearch(query, sortOrder, filter) {
-    console.log(`updateSearch('${query}', '${sortOrder}',`, filter, ')');
+  updateSearch(query, sortOrder, filters) {
+    console.log(`updateSearch('${query}', '${sortOrder}',`, filters, ')');
     let transitionLoc = this.props.location.pathname;
     const params = {};
     if (query) params.query = query;
     if (sortOrder) params.sort = sortOrder;
-    if (filter.active) params.filterActive = true;
-    if (filter.inactive) params.filterInactive = true;
+
+    const activeFilters = [];
+    for (const name in filters) {
+      if (filters[name]) activeFilters.push(name);
+    }
+
+    if (activeFilters) params.filters = activeFilters.join(',');
+
     const keys = Object.keys(params);
     if (keys.length) {
       // eslint-disable-next-line prefer-template
@@ -272,28 +279,7 @@ class Users extends Component {
       <Paneset>
         {/* Filter Pane */}
         <Pane defaultWidth="16%" header={searchHeader}>
-          <FilterControlGroup label="Filters">
-            <Checkbox
-              id="active"
-              label="Active"
-              checked={this.state.filter.active}
-              onChange={this.onChangeFilter}
-              marginBottom0
-              hover
-              fullWidth
-              checkedIcon={<Icon icon="eye" />}
-            />
-            <Checkbox
-              id="inactive"
-              label="Inactive"
-              checked={this.state.filter.inactive}
-              onChange={this.onChangeFilter}
-              marginBottom0
-              hover
-              fullWidth
-              checkedIcon={<Icon icon="eye" />}
-            />
-          </FilterControlGroup>
+          <FilterGroups config={filterConfig} filters={this.state.filters} onChangeFilter={this.onChangeFilter} />
           <FilterControlGroup label="Actions">
             <Button fullWidth onClick={this.onClickAddNewUser}>New user</Button>
           </FilterControlGroup>
