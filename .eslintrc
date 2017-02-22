@@ -11,6 +11,8 @@
     "import/extensions": [ 1, "never" ],
     "no-console": "off",
     "react/forbid-prop-types": [ 1, { 'forbid' : [ 'any', 'array' ] } ],
-    "no-unused-vars": [ 1, { argsIgnorePattern: "^_" } ]
+    "no-unused-vars": [ 1, { argsIgnorePattern: "^_" } ],
+    "max-len": "off",
+    "no-restricted-syntax": ["error", "LabeledStatement", "WithStatement"]
   }
 }
