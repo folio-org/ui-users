@@ -207,7 +207,7 @@ class Users extends Component {
     const creds = Object.assign({}, data.creds, { username: data.username });
     if (data.creds) delete data.creds; // eslint-disable-line no-param-reassign
     // POST user record
-    const p = this.props.mutator.users.POST(data, this.props);
+    const p = this.props.mutator.users.POST(data);
     console.log('got promise', p);
     p.then((x) => {
       console.log('POST promise was OK:', x);
