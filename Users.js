@@ -127,6 +127,10 @@ class Users extends Component {
     filters[e.target.name] = e.target.checked;
     console.log('onChangeFilter setting state', filters);
     this.setState({ filters });
+    this.updateFilters(filters);
+  }
+
+  updateFilters(filters) {
     this.updateSearch(this.state.searchTerm, this.state.sortOrder, filters);
   }
 
