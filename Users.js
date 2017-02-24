@@ -15,7 +15,7 @@ import FilterPaneSearch from '@folio/stripes-components/lib/FilterPaneSearch';
 import FilterControlGroup from '@folio/stripes-components/lib/FilterControlGroup';
 import Layer from '@folio/stripes-components/lib/Layer';
 
-import FilterGroups, { initialFilterState, filters2cql } from '@folio/stripes-components/lib/FilterGroups';
+import FilterGroups, { initialFilterState, filters2cql, onChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
 
 import UserForm from './UserForm';
 import ViewUser from './ViewUser';
@@ -112,7 +112,7 @@ class Users extends Component {
 
     this.onClickAddNewUser = this.onClickAddNewUser.bind(this);
     this.onClickCloseNewUser = this.onClickCloseNewUser.bind(this);
-    this.onChangeFilter = this.onChangeFilter.bind(this);
+    this.onChangeFilter = onChangeFilter.bind(this);
     // this.performSearch = _.debounce(this.performSearch.bind(this), 250);
     this.performSearch = this.performSearch.bind(this); // For now, prefer instant response
     this.onChangeSearch = this.onChangeSearch.bind(this);
@@ -122,15 +122,7 @@ class Users extends Component {
   }
 
   // search Handlers...
-  onChangeFilter(e) {
-    const filters = Object.assign({}, this.state.filters);
-    filters[e.target.name] = e.target.checked;
-    console.log('onChangeFilter setting state', filters);
-    this.setState({ filters });
-    this.updateFilters(filters);
-  }
-
-  updateFilters(filters) {
+  updateFilters(filters) { // provided for onChangeFilter
     this.updateSearch(this.state.searchTerm, this.state.sortOrder, filters);
   }
 
