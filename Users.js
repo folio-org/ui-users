@@ -122,10 +122,6 @@ class Users extends React.Component {
   }
 
   // search Handlers...
-  updateFilters(filters) { // provided for onChangeFilter
-    this.updateSearch(this.state.searchTerm, this.state.sortOrder, filters);
-  }
-
   onClearSearch() {
     console.log('User cleared search');
     this.setState({ searchTerm: '' });
@@ -171,6 +167,10 @@ class Users extends React.Component {
   performSearch(term) {
     console.log('User searched:', term, 'at', this.props.location.pathname);
     this.updateSearch(term, this.state.sortOrder, this.state.filters);
+  }
+
+  updateFilters(filters) { // provided for onChangeFilter
+    this.updateSearch(this.state.searchTerm, this.state.sortOrder, filters);
   }
 
 
