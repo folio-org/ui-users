@@ -2,7 +2,7 @@ import _ from 'lodash';
 import fetch from 'isomorphic-fetch';
 // We have to remove node_modules/react to avoid having multiple copies loaded.
 // eslint-disable-next-line import/no-unresolved
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes } from 'react';
 import Match from 'react-router/Match';
 
 import Pane from '@folio/stripes-components/lib/Pane';
@@ -32,7 +32,7 @@ const filterConfig = [
   },
 ];
 
-class Users extends Component {
+class Users extends React.Component {
   static contextTypes = {
     router: PropTypes.object.isRequired,
     store: PropTypes.object,
