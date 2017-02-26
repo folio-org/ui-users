@@ -132,7 +132,7 @@ class Users extends React.Component {
     const sortOrder = meta.name;
     console.log('User sorted by', sortOrder);
     this.setState({ sortOrder });
-    this.transitionToParams({ 'sort': sortOrder });
+    this.transitionToParams({ sort: sortOrder });
   }
 
   onSelectRow(e, meta) {
@@ -166,7 +166,7 @@ class Users extends React.Component {
 
   performSearch(term) {
     console.log('User searched:', term, 'at', this.props.location.pathname);
-    this.transitionToParams({ 'query': term });
+    this.transitionToParams({ query: term });
   }
 
   updateFilters(filters) { // provided for onChangeFilter
@@ -179,8 +179,9 @@ class Users extends React.Component {
     const keys = Object.keys(allParams);
 
     let url = location.pathname;
-    if (keys.length)
+    if (keys.length) {
       url += `?${keys.map(key => `${key}=${encodeURIComponent(allParams[key])}`).join('&')}`;
+    }
 
     this.context.router.transitionTo(url);
   }
