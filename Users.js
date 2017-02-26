@@ -175,17 +175,14 @@ class Users extends React.Component {
 
   transitionToParams(params) {
     const location = this.props.location;
-    const router = this.context.router;
     const allParams = Object.assign({}, location.query, params);
+    const keys = Object.keys(allParams);
 
     let url = location.pathname;
-    const keys = Object.keys(allParams);
-    if (keys.length) {
-      // eslint-disable-next-line prefer-template
-      url += '?' + keys.map(key => `${key}=${encodeURIComponent(allParams[key])}`).join('&');
-    }
+    if (keys.length)
+      url += `?${keys.map(key => `${key}=${encodeURIComponent(allParams[key])}`).join('&')}`;
 
-    router.transitionTo(url);
+    this.context.router.transitionTo(url);
   }
 
   create(data) {
