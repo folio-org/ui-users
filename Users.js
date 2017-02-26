@@ -132,7 +132,7 @@ class Users extends React.Component {
     const sortOrder = meta.name;
     console.log('User sorted by', sortOrder);
     this.setState({ sortOrder });
-    this.updateSearch(this.state.searchTerm, sortOrder, this.state.filters);
+    this.transitionToParams({ 'sort': sortOrder });
   }
 
   onSelectRow(e, meta) {
@@ -166,7 +166,7 @@ class Users extends React.Component {
 
   performSearch(term) {
     console.log('User searched:', term, 'at', this.props.location.pathname);
-    this.updateSearch(term, this.state.sortOrder, this.state.filters);
+    this.transitionToParams({ 'query': term });
   }
 
   updateFilters(filters) { // provided for onChangeFilter
@@ -196,6 +196,21 @@ class Users extends React.Component {
       transitionLoc += '?' + keys.map(key => `${key}=${encodeURIComponent(params[key])}`).join('&');
     }
     this.context.router.transitionTo(transitionLoc);
+  }
+
+  transitionToParams(params) {
+    const location = this.props.location;
+    const router = this.context.router;
+    const allParams = Object.assign({}, location.query, params);
+
+    let url = location.pathname;
+    const keys = Object.keys(allParams);
+    if (keys.length) {
+      // eslint-disable-next-line prefer-template
+      url += '?' + keys.map(key => `${key}=${encodeURIComponent(allParams[key])}`).join('&');
+    }
+
+    router.transitionTo(url);
   }
 
   create(data) {
