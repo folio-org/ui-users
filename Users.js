@@ -170,32 +170,7 @@ class Users extends React.Component {
   }
 
   updateFilters(filters) { // provided for onChangeFilter
-    this.updateSearch(this.state.searchTerm, this.state.sortOrder, filters);
-  }
-
-
-  // We need to explicitly pass changed values into this function,
-  // as state-change only happens after event is handled.
-  updateSearch(query, sortOrder, filters) {
-    console.log(`updateSearch('${query}', '${sortOrder}',`, filters, ')');
-    let transitionLoc = this.props.location.pathname;
-    const params = {};
-    if (query) params.query = query;
-    if (sortOrder) params.sort = sortOrder;
-
-    const activeFilters = [];
-    for (const name in filters) {
-      if (filters[name]) activeFilters.push(name);
-    }
-
-    if (activeFilters) params.filters = activeFilters.join(',');
-
-    const keys = Object.keys(params);
-    if (keys.length) {
-      // eslint-disable-next-line prefer-template
-      transitionLoc += '?' + keys.map(key => `${key}=${encodeURIComponent(params[key])}`).join('&');
-    }
-    this.context.router.transitionTo(transitionLoc);
+    this.transitionToParams({ filters: Object.keys(filters).filter(key => filters[key]).join(',') });
   }
 
   transitionToParams(params) {
