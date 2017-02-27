@@ -15,8 +15,9 @@ The Users UI module is important because it is the first user-facing module to h
 
 First, a Stripes UI development server needs to be running. See the [quick start](https://github.com/folio-org/stripes-core/blob/master/doc/quick-start.md) instructions, which explain how to run it using packages from the FOLIO NPM repository or use some parts from local in-development versions.
 
+The "ui-users" module is already enabled by that default configuration.
 
-You will then need to build and install Okapi and the server-side Users module as described in [Running a complete FOLIO system](https://github.com/folio-org/ui-okapi-console/blob/master/doc/running-a-complete-system.md), and install the Users UI module as [described](https://github.com/folio-org/ui-okapi-console/blob/master/doc/running-a-complete-system.md#set-up-the-module-tenant-and-users) further down that same document.
+The other parts that are needed are the Okapi gateway, various server-side modules (including mod-users), and sample data. Ways to achieve that are described in [Running a complete FOLIO system](https://github.com/folio-org/ui-okapi-console/blob/master/doc/running-a-complete-system.md).
 
 (At some point, this process will be dramatically streamlined; but at present, this software is primarily for developers to work on, rather then for users to use.)
 
