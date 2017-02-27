@@ -50,7 +50,7 @@ class Users extends Component {
   };
 
   static manifest = Object.freeze({
-    addUserMode: { },
+    addUserMode: { mode: false },
     users: {
       type: 'okapi',
       records: 'users',
@@ -106,7 +106,6 @@ class Users extends Component {
       searchTerm: query.query || '',
       sortOrder: query.sort || '',
     };
-    props.mutator.addUserMode.replace({ mode: false });
 
     this.okapi = context.store.getState().okapi;
 
