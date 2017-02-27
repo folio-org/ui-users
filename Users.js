@@ -2,7 +2,7 @@ import _ from 'lodash';
 import fetch from 'isomorphic-fetch';
 // We have to remove node_modules/react to avoid having multiple copies loaded.
 // eslint-disable-next-line import/no-unresolved
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes } from 'react';
 import Match from 'react-router/Match';
 
 import Pane from '@folio/stripes-components/lib/Pane';
@@ -15,7 +15,7 @@ import FilterPaneSearch from '@folio/stripes-components/lib/FilterPaneSearch';
 import FilterControlGroup from '@folio/stripes-components/lib/FilterControlGroup';
 import Layer from '@folio/stripes-components/lib/Layer';
 
-import FilterGroups, { initialFilterState, filters2cql } from '@folio/stripes-components/lib/FilterGroups';
+import FilterGroups, { initialFilterState, filters2cql, onChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
 
 import UserForm from './UserForm';
 import ViewUser from './ViewUser';
@@ -32,7 +32,7 @@ const filterConfig = [
   },
 ];
 
-class Users extends Component {
+class Users extends React.Component {
   static contextTypes = {
     router: PropTypes.object.isRequired,
     store: PropTypes.object,
@@ -111,7 +111,7 @@ class Users extends Component {
 
     this.onClickAddNewUser = this.onClickAddNewUser.bind(this);
     this.onClickCloseNewUser = this.onClickCloseNewUser.bind(this);
-    this.onChangeFilter = this.onChangeFilter.bind(this);
+    this.onChangeFilter = onChangeFilter.bind(this);
     // this.performSearch = _.debounce(this.performSearch.bind(this), 250);
     this.performSearch = this.performSearch.bind(this); // For now, prefer instant response
     this.onChangeSearch = this.onChangeSearch.bind(this);
@@ -121,14 +121,6 @@ class Users extends Component {
   }
 
   // search Handlers...
-  onChangeFilter(e) {
-    const filters = Object.assign({}, this.state.filters);
-    filters[e.target.name] = e.target.checked;
-    console.log('onChangeFilter setting state', filters);
-    this.setState({ filters });
-    this.updateSearch(this.state.searchTerm, this.state.sortOrder, filters);
-  }
-
   onClearSearch() {
     console.log('User cleared search');
     this.setState({ searchTerm: '' });
@@ -139,7 +131,7 @@ class Users extends Component {
     const sortOrder = meta.name;
     console.log('User sorted by', sortOrder);
     this.setState({ sortOrder });
-    this.updateSearch(this.state.searchTerm, sortOrder, this.state.filters);
+    this.transitionToParams({ sort: sortOrder });
   }
 
   onSelectRow(e, meta) {
@@ -173,32 +165,24 @@ class Users extends Component {
 
   performSearch(term) {
     console.log('User searched:', term, 'at', this.props.location.pathname);
-    this.updateSearch(term, this.state.sortOrder, this.state.filters);
+    this.transitionToParams({ query: term });
   }
 
+  updateFilters(filters) { // provided for onChangeFilter
+    this.transitionToParams({ filters: Object.keys(filters).filter(key => filters[key]).join(',') });
+  }
 
-  // We need to explicitly pass changed values into this function,
-  // as state-change only happens after event is handled.
-  updateSearch(query, sortOrder, filters) {
-    console.log(`updateSearch('${query}', '${sortOrder}',`, filters, ')');
-    let transitionLoc = this.props.location.pathname;
-    const params = {};
-    if (query) params.query = query;
-    if (sortOrder) params.sort = sortOrder;
+  transitionToParams(params) {
+    const location = this.props.location;
+    const allParams = Object.assign({}, location.query, params);
+    const keys = Object.keys(allParams);
 
-    const activeFilters = [];
-    for (const name in filters) {
-      if (filters[name]) activeFilters.push(name);
-    }
-
-    if (activeFilters) params.filters = activeFilters.join(',');
-
-    const keys = Object.keys(params);
+    let url = location.pathname;
     if (keys.length) {
-      // eslint-disable-next-line prefer-template
-      transitionLoc += '?' + keys.map(key => `${key}=${encodeURIComponent(params[key])}`).join('&');
+      url += `?${keys.map(key => `${key}=${encodeURIComponent(allParams[key])}`).join('&')}`;
     }
-    this.context.router.transitionTo(transitionLoc);
+
+    this.context.router.transitionTo(url);
   }
 
   create(data) {
@@ -206,7 +190,7 @@ class Users extends Component {
     const creds = Object.assign({}, data.creds, { username: data.username });
     if (data.creds) delete data.creds; // eslint-disable-line no-param-reassign
     // POST user record
-    const p = this.props.mutator.users.POST(data, this.props);
+    const p = this.props.mutator.users.POST(data);
     console.log('got promise', p);
     p.then((x) => {
       console.log('POST promise was OK:', x);

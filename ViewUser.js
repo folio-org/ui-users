@@ -62,7 +62,7 @@ class ViewUser extends Component {
   update(data) {
     // eslint-disable-next-line no-param-reassign
     if (data.creds) delete data.creds; // not handled on edit (yet at least)
-    this.props.mutator.users.PUT(data, this.props).then(() => {
+    this.props.mutator.users.PUT(data).then(() => {
       this.onClickCloseEditUser();
     });
   }
