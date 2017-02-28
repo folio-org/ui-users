@@ -147,4 +147,4 @@ class ViewUser extends Component {
   }
 }
 
-export default connect(ViewUser, '@folio-sample-modules/ui-users');
+export default connect(ViewUser, '@folio/users');
