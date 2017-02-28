@@ -12,6 +12,7 @@ import Icon from '@folio/stripes-components/lib/Icon' // eslint-disable-line
 import Layer from '@folio/stripes-components/lib/Layer'; // eslint-disable-line
 
 import UserForm from './UserForm';
+import UserPermissions from './UserPermissions';
 
 class ViewUser extends Component {
 
@@ -19,6 +20,7 @@ class ViewUser extends Component {
     params: PropTypes.object,
     data: PropTypes.shape({
       user: PropTypes.arrayOf(PropTypes.object),
+      availablePermissions: PropTypes.arrayOf(PropTypes.object),
     }),
     mutator: React.PropTypes.shape({
       users: React.PropTypes.shape({
@@ -32,6 +34,23 @@ class ViewUser extends Component {
       type: 'okapi',
       path: 'users/:{userid}',
       clear: false,
+    },
+    availablePermissions: {
+      type: 'okapi',
+      records: 'permissions',
+      path: 'perms/permissions?length=100',
+    },
+    usersPermissions: {
+      type: 'okapi',
+      records: 'permissionNames',
+      DELETE: {
+        pk: 'permissionName',
+        path: 'perms/users/:{username}/permissions',
+      },
+      GET: {
+        path: 'perms/users/:{username}/permissions?full=true',
+      },
+      path: 'perms/users/:{username}/permissions',
     },
   });
 
@@ -72,11 +91,13 @@ class ViewUser extends Component {
 
     const detailMenu = <PaneMenu><button onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button></PaneMenu>;
 
-    const { data: { users }, params: { userid } } = this.props;
+    const { data: { users, availablePermissions, usersPermissions }, params: { userid } } = this.props;
+
     if (!users || users.length === 0 || !userid) return <div />;
     const user = users.find(u => u.id === userid);
     if (!user) return <div />;
     const userStatus = (_.get(user, ['active'], '') ? 'active' : 'inactive');
+
     return (
       <Pane defaultWidth="fill" paneTitle="User Details" lastMenu={detailMenu}>
         <Row>
@@ -135,6 +156,8 @@ class ViewUser extends Component {
           </Col>
         </Row>
         <MultiColumnList fullWidth contentData={fineHistory} />
+        <UserPermissions availablePermissions={availablePermissions} usersPermissions={usersPermissions} viewUserProps={this.props} />
+
         <Layer isOpen={this.state.editUserMode} label="Edit User Dialog">
           <UserForm
             onSubmit={(record) => { this.update(record); }}
@@ -147,4 +170,4 @@ class ViewUser extends Component {
   }
 }
 
-export default connect(ViewUser, '@folio-sample-modules/ui-users');
+export default connect(ViewUser, '@folio/users');
