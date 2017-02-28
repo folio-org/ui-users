@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React from 'react'; // eslint-disable-line
 import {Row, Col, Dropdown} from 'react-bootstrap'; // eslint-disable-line
 import DropdownMenu from '@folio/stripes-components/lib/DropdownMenu'; // eslint-disable-line
@@ -35,13 +36,8 @@ class UserPermissions extends React.Component {
   }
 
   onChangeSearch(e) {
-
     const searchTerm = e.target.value;
-
-    this.setState({
-      searchTerm: searchTerm,
-    });
-
+    this.setState({ searchTerm });
   }
 
   addPermission(perm) {
@@ -55,20 +51,17 @@ class UserPermissions extends React.Component {
   }
 
   render() {
-
-    const {usersPermissions} = this.props;
+    const { usersPermissions } = this.props;
 
     const permissionsDD = (
       <ListDropdown
         items={_.filter(this.props.availablePermissions, function(perm) {
-
           const permInUse = _.some(usersPermissions, perm);
-          
+
           // This should be replaced with proper search when possible.
-          const permNotFiltered = _.includes(perm.permissionName.toLowerCase(),this.state.searchTerm.toLowerCase());
+          const permNotFiltered = _.includes(perm.permissionName.toLowerCase(), this.state.searchTerm.toLowerCase());
 
           return !permInUse && permNotFiltered;
-
         }.bind(this))}
         onClickItem={this.addPermission}
         onChangeSearch={this.onChangeSearch}
