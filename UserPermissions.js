@@ -11,7 +11,15 @@ import css from './UserPermissions.css'; // eslint-disable-line
 
 const propTypes = {
   availablePermissions: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
-  // userId: React.PropTypes.number,
+  usersPermissions: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
+  viewUserProps: React.PropTypes.shape({
+    mutator: React.PropTypes.shape({
+      usersPermissions: React.PropTypes.shape({
+        POST: React.PropTypes.func.isRequired,
+        DELETE: React.PropTypes.func.isRequired,
+      }),
+    }),
+  }),
 };
 
 class UserPermissions extends React.Component {
