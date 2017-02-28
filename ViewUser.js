@@ -20,16 +20,13 @@ class ViewUser extends Component {
     params: PropTypes.object,
     data: PropTypes.shape({
       user: PropTypes.arrayOf(PropTypes.object),
-      availablePermissions: PropTypes.arrayOf(PropTypes.object)
+      availablePermissions: PropTypes.arrayOf(PropTypes.object),
     }),
     mutator: React.PropTypes.shape({
-      user: React.PropTypes.shape({
-        PUT: React.PropTypes.func.isRequired
+      users: React.PropTypes.shape({
+        PUT: React.PropTypes.func.isRequired,
       }),
-      usersPermissions: React.PropTypes.shape({
-        POST: React.PropTypes.func.isRequired
-      })
-    })
+    }),
   };
 
   static manifest = Object.freeze({
@@ -41,21 +38,20 @@ class ViewUser extends Component {
     availablePermissions: {
       type: 'okapi',
       records: 'permissions',
-      path: "perms/permissions?length=100",
+      path: 'perms/permissions?length=100',
     },
     usersPermissions: {
       type: 'okapi',
-      records: "permissionNames",
+      records: 'permissionNames',
       DELETE: {
-        pk: "permissionName", 
-        path: "perms/users/:{username}/permissions"
+        pk: 'permissionName',
+        path: 'perms/users/:{username}/permissions',
       },
-      GET: { 
-        path: "perms/users/:{username}/permissions?full=true"
+      GET: {
+        path: 'perms/users/:{username}/permissions?full=true',
       },
-      path: "perms/users/:{username}/permissions"
-    }
-
+      path: 'perms/users/:{username}/permissions',
+    },
   });
 
   constructor(props) {
@@ -65,7 +61,6 @@ class ViewUser extends Component {
     };
     this.onClickEditUser = this.onClickEditUser.bind(this);
     this.onClickCloseEditUser = this.onClickCloseEditUser.bind(this);
-
   }
 
   // EditUser Handlers
@@ -93,13 +88,11 @@ class ViewUser extends Component {
 
   render() {
     const fineHistory = [{ 'Due Date': '11/12/2014', 'Amount': '34.23', 'Status': 'Unpaid' }]; // eslint-disable-line quote-props
-    
+
     const detailMenu = <PaneMenu><button onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button></PaneMenu>;
 
     const { data: { users, availablePermissions, usersPermissions }, params: { userid } } = this.props;
 
-    let count = 0;
-    
     if (!users || users.length === 0 || !userid) return <div />;
     const user = users.find(u => u.id === userid);
     if (!user) return <div />;
@@ -164,8 +157,6 @@ class ViewUser extends Component {
         </Row>
         <MultiColumnList fullWidth contentData={fineHistory} />
         <UserPermissions availablePermissions={availablePermissions} usersPermissions={usersPermissions} viewUserProps={this.props} />
-
-
 
         <Layer isOpen={this.state.editUserMode} label="Edit User Dialog">
           <UserForm
