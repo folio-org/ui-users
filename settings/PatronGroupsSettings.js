@@ -7,14 +7,14 @@ import PatronGroupsList from './PatronGroupsList';
 class PatronGroupsSettings extends React.Component { // eslint-disable-line
   constructor(props){
     super(props);
-    
+
     //placeholder data...
     this.state = {
       groups: [{name:"Orange", email:"orange@colors.com", id:"0", inUse:false},
         {name:"Red", email:"red@colors.com", id:"1", inUse:true},
         {name:"Blue", email:"blue@colors.com", id:"2", inUse: true}],
     }
-    
+
     this.onUpdateGroup = this.onUpdateGroup.bind(this);
     this.onCreateGroup = this.onCreateGroup.bind(this);
     this.onDeleteGroup = this.onDeleteGroup.bind(this);
@@ -24,7 +24,7 @@ class PatronGroupsSettings extends React.Component { // eslint-disable-line
     console.log('updating');
     console.log(groupObject);
   }
-  
+
   onCreateGroup(groupObject){
     //placeholder logic
     console.log('create');
@@ -35,9 +35,9 @@ class PatronGroupsSettings extends React.Component { // eslint-disable-line
     this.setState({
       groups
     });
-   
+
   }
-  
+
   onDeleteGroup(groupId){
     //placeholder logic
     console.log('deleting');
@@ -49,20 +49,20 @@ class PatronGroupsSettings extends React.Component { // eslint-disable-line
       groups: tempGroups,
     });
   }
-  
+
   render() {
-    
+
     const suppressor = {
       delete: (item) => { return (!item.inUse)}, // suppress delete action based on 'inUse' prop
       edit: item => false, // suppress all editting of existing items...
     }
-    
+
     return (
       <Paneset>
         <Pane defaultWidth="fill" >
           <PatronGroupsList
-            contentData={this.state.groups} 
-            label="Access Groups"
+            contentData={this.state.groups}
+            label="Patron Groups"
             createButtonLabel="+ Add Group"
             visibleFields={['name', 'email']}
             itemTemplate={{name:'string', id:'string', description:'string', inUse:'bool'}}
