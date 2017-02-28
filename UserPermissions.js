@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React from 'react'; // eslint-disable-line
+import React, { PropTypes } from 'react'; // eslint-disable-line
 import {Row, Col, Dropdown} from 'react-bootstrap'; // eslint-disable-line
 import DropdownMenu from '@folio/stripes-components/lib/DropdownMenu'; // eslint-disable-line
 import Button from '@folio/stripes-components/lib/Button'; // eslint-disable-line
@@ -10,13 +10,13 @@ import ListDropdown from './lib/ListDropdown'; // eslint-disable-line
 import css from './UserPermissions.css'; // eslint-disable-line
 
 const propTypes = {
-  availablePermissions: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
-  usersPermissions: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
-  viewUserProps: React.PropTypes.shape({
-    mutator: React.PropTypes.shape({
-      usersPermissions: React.PropTypes.shape({
-        POST: React.PropTypes.func.isRequired,
-        DELETE: React.PropTypes.func.isRequired,
+  availablePermissions: PropTypes.arrayOf(PropTypes.object).isRequired,
+  usersPermissions: PropTypes.arrayOf(PropTypes.object).isRequired,
+  viewUserProps: PropTypes.shape({
+    mutator: PropTypes.shape({
+      usersPermissions: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+        DELETE: PropTypes.func.isRequired,
       }),
     }),
   }),
