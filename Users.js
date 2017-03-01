@@ -120,8 +120,8 @@ class Users extends React.Component {
     this.onSelectRow = this.onSelectRow.bind(this);
   }
 
-  getInitialState() {
-    this.props.mutator.addUserMode.replace({ mode: false });
+  componentWillMount() {
+    if (_.isEmpty(this.props.data.addUserMode)) this.props.mutator.addUserMode.replace({ mode: false });
   }
 
   // search Handlers...
