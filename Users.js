@@ -50,7 +50,7 @@ class Users extends React.Component {
   };
 
   static manifest = Object.freeze({
-    addUserMode: { mode: false },
+    addUserMode: {},
     users: {
       type: 'okapi',
       records: 'users',
@@ -118,6 +118,10 @@ class Users extends React.Component {
     this.onClearSearch = this.onClearSearch.bind(this);
     this.onSort = this.onSort.bind(this);
     this.onSelectRow = this.onSelectRow.bind(this);
+  }
+
+  getInitialState() {
+    this.props.mutator.addUserMode.replace({ mode: false });
   }
 
   // search Handlers...
