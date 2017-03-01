@@ -115,7 +115,7 @@ class UserPermissions extends React.Component {
             </Dropdown>
           </Col>
         </Row>
-        <List itemFormatter={listFormatter} items={usersPermissions} isEmptyMessage="This user has no permissions applied." />
+        <List itemFormatter={listFormatter} items={usersPermissions || []} isEmptyMessage="This user has no permissions applied." />
       </div>
     );
   }
