@@ -1,4 +1,5 @@
-import React from 'react'; // eslint-disable-line
+import _ from 'lodash';
+import React, { PropTypes } from 'react'; // eslint-disable-line
 import {Row, Col, Dropdown} from 'react-bootstrap'; // eslint-disable-line
 import DropdownMenu from '@folio/stripes-components/lib/DropdownMenu'; // eslint-disable-line
 import Button from '@folio/stripes-components/lib/Button'; // eslint-disable-line
@@ -9,8 +10,16 @@ import ListDropdown from './lib/ListDropdown'; // eslint-disable-line
 import css from './UserPermissions.css'; // eslint-disable-line
 
 const propTypes = {
-  availablePermissions: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
-  // userId: React.PropTypes.number,
+  availablePermissions: PropTypes.arrayOf(PropTypes.object),
+  usersPermissions: PropTypes.arrayOf(PropTypes.object),
+  viewUserProps: PropTypes.shape({
+    mutator: PropTypes.shape({
+      usersPermissions: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+        DELETE: PropTypes.func.isRequired,
+      }),
+    }),
+  }),
 };
 
 class UserPermissions extends React.Component {
@@ -18,13 +27,13 @@ class UserPermissions extends React.Component {
     super(props);
     this.state = {
       addPermissionOpen: false,
-
+      searchTerm: '',
       // handling active Permissions in state for presentation purposes only.
-      activePermissions: [],
     };
 
     this.onToggleAddPermDD = this.onToggleAddPermDD.bind(this);
     this.addPermission = this.addPermission.bind(this);
+    this.onChangeSearch = this.onChangeSearch.bind(this);
   }
 
   onToggleAddPermDD() {
@@ -34,43 +43,48 @@ class UserPermissions extends React.Component {
     });
   }
 
-  addPermission(id) {
-    // placeholder add logic...
-    const currentPermissions = this.state.activePermissions;
-    currentPermissions.push(this.props.availablePermissions[id]);
-    this.setState({
-      activePermissions: currentPermissions,
-    });
-    this.onToggleAddPermDD();
+  onChangeSearch(e) {
+    const searchTerm = e.target.value;
+    this.setState({ searchTerm });
   }
 
-  removePermission(id) {
-    // placeholder removal logic...
-    const currentPermissions = this.state.activePermissions;
-    const ind = currentPermissions.findIndex(p => p.id === id);
-    currentPermissions.splice(ind, 1);
-    this.setState({
-      activePermissions: currentPermissions,
+  addPermission(perm) {
+    this.props.viewUserProps.mutator.usersPermissions.POST(perm, this.props.viewUserProps).then(() => {
+      this.onToggleAddPermDD();
     });
+  }
+
+  removePermission(perm) {
+    this.props.viewUserProps.mutator.usersPermissions.DELETE(perm, this.props.viewUserProps, perm.permissionName);
   }
 
   render() {
+    const { usersPermissions } = this.props;
+
     const permissionsDD = (
       <ListDropdown
-        items={this.props.availablePermissions}
+        items={_.filter(this.props.availablePermissions, function(perm) {
+          const permInUse = _.some(usersPermissions, perm);
+
+          // This should be replaced with proper search when possible.
+          const permNotFiltered = _.includes(perm.permissionName.toLowerCase(), this.state.searchTerm.toLowerCase());
+
+          return !permInUse && permNotFiltered;
+        }.bind(this))}
         onClickItem={this.addPermission}
+        onChangeSearch={this.onChangeSearch}
       />
     );
 
     const listFormatter = item => (
-      <li key={item.name + item.id} >
-        {item.name}
+      <li key={item.permissionName} >
+        {item.permissionName}
         <Button
           buttonStyle="fieldControl"
           align="end"
           type="button"
-          onClick={() => this.removePermission(item.id)}
-          aria-label={`Remove Permission: ${item.name}`}
+          onClick={() => this.removePermission(item)}
+          aria-label={`Remove Permission: ${item.permissionName}`}
           title="Remove Permission"
         >
           <Icon icon="hollowX" iconClassName={css.removePermissionIcon} iconRootClass={css.removePermissionButton} />
@@ -101,7 +115,7 @@ class UserPermissions extends React.Component {
             </Dropdown>
           </Col>
         </Row>
-        <List itemFormatter={listFormatter} items={this.state.activePermissions} isEmptyMessage="This user has no permissions applied." />
+        <List itemFormatter={listFormatter} items={usersPermissions || []} isEmptyMessage="This user has no permissions applied." />
       </div>
     );
   }
