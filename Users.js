@@ -51,7 +51,7 @@ class Users extends React.Component {
   };
 
   static manifest = Object.freeze({
-    addUserMode: { mode: false },
+    addUserMode: {},
     users: {
       type: 'okapi',
       records: 'users',
@@ -120,6 +120,10 @@ class Users extends React.Component {
     this.onSort = this.onSort.bind(this);
     this.onSelectRow = this.onSelectRow.bind(this);
     this.transitionToParams = transitionToParams.bind(this);
+  }
+
+  componentWillMount() {
+    if (_.isEmpty(this.props.data.addUserMode)) this.props.mutator.addUserMode.replace({ mode: false });
   }
 
   // search Handlers...
