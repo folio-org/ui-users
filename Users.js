@@ -16,6 +16,7 @@ import FilterControlGroup from '@folio/stripes-components/lib/FilterControlGroup
 import Layer from '@folio/stripes-components/lib/Layer';
 
 import FilterGroups, { initialFilterState, filters2cql, onChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
+import transitionToParams from '@folio/stripes-components/util/transitionToParams';
 
 import UserForm from './UserForm';
 import ViewUser from './ViewUser';
@@ -50,7 +51,7 @@ class Users extends React.Component {
   };
 
   static manifest = Object.freeze({
-    addUserMode: { mode: false },
+    addUserMode: {},
     users: {
       type: 'okapi',
       records: 'users',
@@ -118,6 +119,11 @@ class Users extends React.Component {
     this.onClearSearch = this.onClearSearch.bind(this);
     this.onSort = this.onSort.bind(this);
     this.onSelectRow = this.onSelectRow.bind(this);
+    this.transitionToParams = transitionToParams.bind(this);
+  }
+
+  componentWillMount() {
+    if (_.isEmpty(this.props.data.addUserMode)) this.props.mutator.addUserMode.replace({ mode: false });
   }
 
   // search Handlers...
@@ -170,19 +176,6 @@ class Users extends React.Component {
 
   updateFilters(filters) { // provided for onChangeFilter
     this.transitionToParams({ filters: Object.keys(filters).filter(key => filters[key]).join(',') });
-  }
-
-  transitionToParams(params) {
-    const location = this.props.location;
-    const allParams = Object.assign({}, location.query, params);
-    const keys = Object.keys(allParams);
-
-    let url = location.pathname;
-    if (keys.length) {
-      url += `?${keys.map(key => `${key}=${encodeURIComponent(allParams[key])}`).join('&')}`;
-    }
-
-    this.context.router.transitionTo(url);
   }
 
   create(data) {
