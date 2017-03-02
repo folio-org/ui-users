@@ -10,8 +10,8 @@ import ListDropdown from './lib/ListDropdown'; // eslint-disable-line
 import css from './UserPermissions.css'; // eslint-disable-line
 
 const propTypes = {
-  availablePermissions: PropTypes.arrayOf(PropTypes.object).isRequired,
-  usersPermissions: PropTypes.arrayOf(PropTypes.object).isRequired,
+  availablePermissions: PropTypes.arrayOf(PropTypes.object),
+  usersPermissions: PropTypes.arrayOf(PropTypes.object),
   viewUserProps: PropTypes.shape({
     mutator: PropTypes.shape({
       usersPermissions: PropTypes.shape({
@@ -115,7 +115,7 @@ class UserPermissions extends React.Component {
             </Dropdown>
           </Col>
         </Row>
-        <List itemFormatter={listFormatter} items={usersPermissions} isEmptyMessage="This user has no permissions applied." />
+        <List itemFormatter={listFormatter} items={usersPermissions || []} isEmptyMessage="This user has no permissions applied." />
       </div>
     );
   }
