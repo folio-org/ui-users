@@ -10,9 +10,9 @@ class PatronGroupsSettings extends React.Component { // eslint-disable-line
 
     //placeholder data...
     this.state = {
-      groups: [{name:"Orange", email:"orange@colors.com", id:"0", inUse:false},
-        {name:"Red", email:"red@colors.com", id:"1", inUse:true},
-        {name:"Blue", email:"blue@colors.com", id:"2", inUse: true}],
+      groups: [{name:"Orange", desc:"orange group", id:"0", inUse:false},
+        {name:"Red", desc:"red group", id:"1", inUse:true},
+        {name:"Blue", desc:"blue group", id:"2", inUse: true}],
     }
 
     this.onUpdateGroup = this.onUpdateGroup.bind(this);
@@ -64,7 +64,7 @@ class PatronGroupsSettings extends React.Component { // eslint-disable-line
             contentData={this.state.groups}
             label="Patron Groups"
             createButtonLabel="+ Add Group"
-            visibleFields={['name', 'email']}
+            visibleFields={['name', 'desc']}
             itemTemplate={{name:'string', id:'string', description:'string', inUse:'bool'}}
             actionSuppression={suppressor}
             onUpdate={this.onUpdateGroup}
