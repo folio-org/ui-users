@@ -14,7 +14,6 @@ import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import FilterPaneSearch from '@folio/stripes-components/lib/FilterPaneSearch';
 import FilterControlGroup from '@folio/stripes-components/lib/FilterControlGroup';
 import Layer from '@folio/stripes-components/lib/Layer';
-
 import FilterGroups, { initialFilterState, filters2cql, onChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
 
@@ -47,7 +46,14 @@ class Users extends React.Component {
       query: PropTypes.object, // object of key=value pairs
       search: PropTypes.string, // string combining all parts of query
     }).isRequired,
-    mutator: PropTypes.object,
+    mutator: PropTypes.shape({
+      addUserMode: PropTypes.shape({
+        replace: PropTypes.func,
+      }),
+      users: PropTypes.shape({
+        POST: PropTypes.func,
+      }),
+    }).isRequired,
   };
 
   static manifest = Object.freeze({
@@ -56,7 +62,6 @@ class Users extends React.Component {
       type: 'okapi',
       records: 'users',
       path: (queryParams, _pathComponents, _resourceValues) => {
-        // console.log('Users manifest "users" path function, queryParams = ', queryParams);
         const { query, filters, sort } = queryParams || {};
 
         let cql;
