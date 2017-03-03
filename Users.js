@@ -191,20 +191,20 @@ class Users extends React.Component {
       console.log('POST promise failed:', x);
     });
     // POST credentials, permission-user, permissions;
-    this.postCreds(data.username, { credentials: creds });
+    this.postCreds(data.username, creds);
     this.onClickCloseNewUser();
   }
 
   postCreds(username, creds) {
-    fetch(`${this.okapi.url}/authn/users`, {
+    fetch(`${this.okapi.url}/authn/credentials`, {
       method: 'POST',
-      headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token }),
+      headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token, 'Content-Type': 'application/json' }),
       body: JSON.stringify(creds),
     }).then((response) => {
       if (response.status >= 400) {
         console.log('Users. POST of creds failed.');
       } else {
-        this.postPerms(username, 'users.super');
+        this.postPerms(username, 'users');
       }
     });
   }
@@ -212,25 +212,11 @@ class Users extends React.Component {
   postPerms(username, perms) {
     fetch(`${this.okapi.url}/perms/users`, {
       method: 'POST',
-      headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token }),
-      body: username,
+      headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token, 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ username, "permissions" : [ perms ] }),
     }).then((response) => {
       if (response.status >= 400) {
-        console.log('Users. POST of username failed.');
-      } else {
-        this.postUsersPerms(username, perms);
-      }
-    });
-  }
-
-  postUsersPerms(username, perm) {
-    fetch(`${this.okapi.url}/perms/users/${username}/permissions`, {
-      method: 'POST',
-      headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token }),
-      body: JSON.stringify({ permissionName: perm }),
-    }).then((response) => {
-      if (response.status >= 400) {
-        console.log("Users. POST of user's perms failed.");
+        console.log('Users. POST of users permissions failed.');
       } else {
         // nothing to do
       }
