@@ -204,7 +204,7 @@ class Users extends React.Component {
       if (response.status >= 400) {
         console.log('Users. POST of creds failed.');
       } else {
-        this.postPerms(username, 'users');
+        this.postPerms(username, ['users', 'perms', 'login']);
       }
     });
   }
@@ -213,7 +213,7 @@ class Users extends React.Component {
     fetch(`${this.okapi.url}/perms/users`, {
       method: 'POST',
       headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token, 'Content-Type': 'application/json' }),
-      body: JSON.stringify({ username, "permissions" : [ perms ] }),
+      body: JSON.stringify({ username, "permissions" : perms }),
     }).then((response) => {
       if (response.status >= 400) {
         console.log('Users. POST of users permissions failed.');
