@@ -115,15 +115,16 @@ class Users extends React.Component {
 
     this.okapi = context.store.getState().okapi;
 
-    this.onClickAddNewUser = this.onClickAddNewUser.bind(this);
-    this.onClickCloseNewUser = this.onClickCloseNewUser.bind(this);
-    this.onChangeFilter = onChangeFilter.bind(this);
-    // this.performSearch = _.debounce(this.performSearch.bind(this), 250);
-    this.performSearch = this.performSearch.bind(this); // For now, prefer instant response
-    this.onChangeSearch = this.onChangeSearch.bind(this);
     this.onClearSearch = this.onClearSearch.bind(this);
     this.onSort = this.onSort.bind(this);
     this.onSelectRow = this.onSelectRow.bind(this);
+    this.onClickAddNewUser = this.onClickAddNewUser.bind(this);
+    this.onClickCloseNewUser = this.onClickCloseNewUser.bind(this);
+    this.onChangeSearch = this.onChangeSearch.bind(this);
+    this.performSearch = this.performSearch.bind(this); // For now, prefer instant response
+    // this.performSearch = _.debounce(this.performSearch.bind(this), 250);
+
+    this.onChangeFilter = onChangeFilter.bind(this);
     this.transitionToParams = transitionToParams.bind(this);
   }
 
