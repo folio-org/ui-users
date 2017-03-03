@@ -1,9 +1,9 @@
 import _ from 'lodash';
-import fetch from 'isomorphic-fetch';
 // We have to remove node_modules/react to avoid having multiple copies loaded.
 // eslint-disable-next-line import/no-unresolved
 import React, { PropTypes } from 'react';
 import Match from 'react-router/Match';
+import fetch from 'isomorphic-fetch';
 
 import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
