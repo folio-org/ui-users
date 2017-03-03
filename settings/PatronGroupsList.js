@@ -45,7 +45,7 @@ const propTypes= {
   /**
    * Fieldname that includes the unique identifier for the list.
    */
-  edittingItem: React.PropTypes.string,
+  editingItem: React.PropTypes.string,
   /**
    * Object containing properties of list action names: 'delete', 'edit' and
    * values of sentinel functions that return booleans based on object properties" { delete: (item) => {return (!item.item.inUse)} }
@@ -84,10 +84,10 @@ class PatronGroupsList extends React.Component{
       editArray: [],
     };
 
-    this.actionSuppression = { delete : (item) => true, edit: (item) => true, };
+    this.actionSuppression = { delete : (item) => false, edit: (item) => false, };
 
-    this.edittingRow = null;
-    this.edittingItem = '';
+    this.editingRow = null;
+    this.editingItem = '';
 
     this.creatingRow = null;
     this.creatingItem = '';
@@ -106,8 +106,8 @@ class PatronGroupsList extends React.Component{
   }
 
   componentDidUpdate(prevProps, prevState){
-    if(prevState.creating != this.state.creating && this.edittingRow !== null){
-      this.edittingRow.getElementsByTagName('input')[0].focus();
+    if(prevState.creating != this.state.creating && this.editingRow !== null){
+      this.editingRow.getElementsByTagName('input')[0].focus();
     }
   }
 
@@ -180,8 +180,8 @@ class PatronGroupsList extends React.Component{
     this.setState({
       creatingArray: tempArray,
     });
-    this.edittingRow = null;
-    this.edittingItem = '';
+    this.editingRow = null;
+    this.editingItem = '';
   }
 
   handleCreateFieldChange(e){
@@ -190,7 +190,7 @@ class PatronGroupsList extends React.Component{
     if(tempArray.length === 1){
       ind = 0;
     } else {
-      ind = this.getItemIndex(this.edittingItem, this.state.creatingArray);
+      ind = this.getItemIndex(this.editingItem, this.state.creatingArray);
     }
     tempArray[ind][e.target.name] = e.target.value;
     this.setState({
@@ -200,7 +200,7 @@ class PatronGroupsList extends React.Component{
 
   handleCreateFieldFocus(e){
     const id = e.target.parentNode.parentNode.parentNode.getAttribute("data-id");
-    this.edittingRow = e.target.parentNode.parentNode.parentNode;
+    this.editingRow = e.target.parentNode.parentNode.parentNode;
     this.createdItem = id;
   }
 
@@ -220,17 +220,17 @@ class PatronGroupsList extends React.Component{
     const fieldStyle = this.getFieldStyle();
     //For each field passed, render data from list item.
     let renderedData = [];
-    let edittingIndex;
+    let editingIndex;
     if(this.state.creatingArray.length === 1){
-      edittingIndex = 0;
+      editingIndex = 0;
     }else{
-      edittingIndex = this.getItemIndex(item[uniqueField], this.state.creatingArray);
+      editingIndex = this.getItemIndex(item[uniqueField], this.state.creatingArray);
     }
 
     visibleFields.forEach(
       (field) => {
         const fieldContent = <TextField
-            value={this.state.creatingArray[edittingIndex][field]}
+            value={this.state.creatingArray[editingIndex][field]}
             onChange={this.handleCreateFieldChange}
             placeholder={(field === 'desc') ? 'description' : field}
             name={field}
@@ -255,7 +255,7 @@ class PatronGroupsList extends React.Component{
         data-id={item[uniqueField]}
         style={{ display: 'block', paddingTop: '6px' }}
         ref={item[uniqueField] === this.state.tempItem[uniqueField] ?
-          (ref) => {this.edittingRow = ref} : null
+          (ref) => {this.editingRow = ref} : null
         }
       >
         <div style={{display: 'flex', justifyContent:'space-between'}}>
@@ -276,7 +276,7 @@ class PatronGroupsList extends React.Component{
   handleFieldChange(e){
     let tempArray = this.state.editArray;
     const ind = tempArray.length === 1 ?
-      0 : this.getItemIndex(this.edittingItem, this.state.editArray);
+      0 : this.getItemIndex(this.editingItem, this.state.editArray);
 
     tempArray[ind][e.target.name] = e.target.value;
     this.setState({
@@ -286,8 +286,8 @@ class PatronGroupsList extends React.Component{
 
   handleFieldFocus(e){
     const id = e.target.parentNode.parentNode.parentNode.getAttribute("data-id");
-    this.edittingRow = e.target.parentNode.parentNode.parentNode;
-    this.edittingItem = id;
+    this.editingRow = e.target.parentNode.parentNode.parentNode;
+    this.editingItem = id;
   }
 
   handleEditClick(e){
@@ -340,8 +340,8 @@ class PatronGroupsList extends React.Component{
       editingIdentifier: null,
       editArray: tempArray,
     });
-    this.edittingRow = null;
-    this.edittingItem = '';
+    this.editingRow = null;
+    this.editingItem = '';
   }
 
   EditItemFormatter = (item) => {
@@ -351,8 +351,8 @@ class PatronGroupsList extends React.Component{
     const fieldStyle = this.getFieldStyle();
 
     let renderedData = [];
-    const edittingIndex = this.getItemIndex(item[uniqueField], this.state.editArray);
-    const isEditing = edittingIndex !== -1;
+    const editingIndex = this.getItemIndex(item[uniqueField], this.state.editArray);
+    const isEditing = editingIndex !== -1;
     visibleFields.forEach(
       (field) => {
         if(field !== uniqueField){
@@ -361,7 +361,7 @@ class PatronGroupsList extends React.Component{
              instead of textual data.*/
           if(isEditing/*this.state.editingIdentifier === item[uniqueField]*/){
             fieldContent = <TextField
-              value={this.state.editArray[edittingIndex][field]}
+              value={this.state.editArray[editingIndex][field]}
               onChange={this.handleFieldChange}
               placeholder={field}
               name={field}
@@ -391,9 +391,10 @@ class PatronGroupsList extends React.Component{
       actions = <div style={{ float:'right' }}><button onClick={this.handleEditCancelClick}>Cancel</button> <button onClick={this.handleSaveEditClick}>Save</button></div>;
     }else{
       // read mode: 'remove' button
+      console.log("matt: suppression: ", this.actionSuppression.edit(item))
       actions = (
         <div style={{ float:'right' }}>
-          { this.actionSuppression.edit(item) &&
+          { !this.actionSuppression.edit(item) &&
             <button onClick={this.handleEditClick} aria-label="Edit Item">Edit</button>
           }
           { this.actionSuppression.delete(item) &&
@@ -408,7 +409,7 @@ class PatronGroupsList extends React.Component{
         data-id={item[uniqueField]}
         style={{ display: 'block', paddingTop: '6px' }}
         ref={item[uniqueField] === this.state.tempItem[uniqueField] ?
-          (ref) => {this.edittingRow = ref} : null
+          (ref) => {this.editingRow = ref} : null
         }
       >
         <div style={{display: 'flex', justifyContent:'space-between'}}>
