@@ -68,7 +68,8 @@ class UserPermissions extends React.Component {
           const permInUse = _.some(usersPermissions, perm);
 
           // This should be replaced with proper search when possible.
-          const permNotFiltered = _.includes(perm.displayName.toLowerCase(), this.state.searchTerm.toLowerCase());
+          const nameToCompare = !perm.displayName?perm.permissionName.toLowerCase():perm.displayName.toLowerCase();
+          const permNotFiltered = _.includes(nameToCompare, this.state.searchTerm.toLowerCase());
 
           return !permInUse && permNotFiltered;
         }.bind(this))}
@@ -79,7 +80,7 @@ class UserPermissions extends React.Component {
 
     const listFormatter = item => (
       <li key={item.permissionName} >
-        {item.displayName}
+        {!item.displayName?item.permissionName:item.displayName}
         <Button
           buttonStyle="fieldControl"
           align="end"
