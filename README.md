@@ -19,5 +19,8 @@ The "ui-users" module is already enabled by that default configuration.
 
 The other parts that are needed are the Okapi gateway, various server-side modules (including mod-users), and sample data. Ways to achieve that are described in [Running a complete FOLIO system](https://github.com/folio-org/ui-okapi-console/blob/master/doc/running-a-complete-system.md).
 
-(At some point, this process will be dramatically streamlined; but at present, this software is primarily for developers to work on, rather then for users to use.)
+(At some point, this process will be dramatically streamlined; but at present, this software is primarily for developers to work on, rather than for users to use.)
 
+## Additional information
+
+Other FOLIO Developer documentation is at [dev.folio.org](http://dev.folio.org/)
