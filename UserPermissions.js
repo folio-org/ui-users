@@ -64,10 +64,12 @@ class UserPermissions extends React.Component {
     const permissionsDD = (
       <ListDropdown
         items={_.filter(this.props.availablePermissions, function(perm) {
+
           const permInUse = _.some(usersPermissions, perm);
 
           // This should be replaced with proper search when possible.
-          const permNotFiltered = _.includes(perm.permissionName.toLowerCase(), this.state.searchTerm.toLowerCase());
+          const nameToCompare = !perm.displayName?perm.permissionName.toLowerCase():perm.displayName.toLowerCase();
+          const permNotFiltered = _.includes(nameToCompare, this.state.searchTerm.toLowerCase());
 
           return !permInUse && permNotFiltered;
         }.bind(this))}
@@ -78,7 +80,7 @@ class UserPermissions extends React.Component {
 
     const listFormatter = item => (
       <li key={item.permissionName} >
-        {item.permissionName}
+        {!item.displayName?item.permissionName:item.displayName}
         <Button
           buttonStyle="fieldControl"
           align="end"
