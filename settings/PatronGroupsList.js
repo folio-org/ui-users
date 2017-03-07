@@ -391,7 +391,6 @@ class PatronGroupsList extends React.Component{
       actions = <div style={{ float:'right' }}><button onClick={this.handleEditCancelClick}>Cancel</button> <button onClick={this.handleSaveEditClick}>Save</button></div>;
     }else{
       // read mode: 'remove' button
-      console.log("matt: suppression: ", this.actionSuppression.edit(item))
       actions = (
         <div style={{ float:'right' }}>
           { !this.actionSuppression.edit(item) &&

@@ -12,8 +12,13 @@ class PatronGroupsSettings extends React.Component { // eslint-disable-line
       type: 'okapi',
       path: 'groups',
       records: 'usergroups',
-      pk: '_id' // Not sure why this is required here and not in other sample manifests
-    }
+      pk: '_id',
+      PUT: {
+        pk: '_id',
+        path: 'groups/${editingRecord.item}',
+      },
+    },
+    editingRecord: {}
   });
 
   constructor(props){
@@ -34,6 +39,8 @@ class PatronGroupsSettings extends React.Component { // eslint-disable-line
     //placeholder logic
     console.log('updating');
     console.log(groupObject);
+    this.props.mutator.editingRecord.update({'item': 'f515c091-d3c1-4711-843a-91f63dcc8d59'});
+    this.props.mutator.groups.PUT(groupObject);
   }
 
   onCreateGroup(groupObject){
@@ -47,19 +54,20 @@ class PatronGroupsSettings extends React.Component { // eslint-disable-line
     //   groups
     // });
     this.props.mutator.groups.POST(groupObject);
-
   }
 
   onDeleteGroup(groupId){
     //placeholder logic
-    console.log('deleting');
-    console.log(groupId);
-    let tempGroups = this.state.groups;
-    const ind = tempGroups.findIndex(obj => obj.id === groupId);
-    tempGroups.splice(ind, 1);
-    this.setState({
-      groups: tempGroups,
-    });
+    // console.log('deleting');
+    // console.log(groupId);
+    // let tempGroups = this.state.groups;
+    // const ind = tempGroups.findIndex(obj => obj.id === groupId);
+    // tempGroups.splice(ind, 1);
+    // this.setState({
+    //   groups: tempGroups,
+    // });
+
+    //this.props.mutator.groups.DELETE(groupId)
   }
 
   render() {
@@ -69,9 +77,8 @@ class PatronGroupsSettings extends React.Component { // eslint-disable-line
       edit: item => false, // suppress all editting of existing items...
     }
 
-
-        console.log("from manifest: props:" + JSON.stringify(this.props));
-        console.log("from manifest: state:" + JSON.stringify(this.state));
+    console.log("from manifest: props:" + JSON.stringify(this.props));
+    console.log("from manifest: state:" + JSON.stringify(this.state));
 
     return (
       <Paneset>
@@ -84,7 +91,7 @@ class PatronGroupsSettings extends React.Component { // eslint-disable-line
             label="Patron Groups"
             createButtonLabel="+ Add Group"
             visibleFields={['group', 'desc']}
-            itemTemplate={{group:'string', _id:'string', description:'string', inUse:'bool'}}
+            itemTemplate={{group:'string', _id:'string', desc:'string', inUse:'bool'}}
             actionSuppression={suppressor}
             onUpdate={this.onUpdateGroup}
             onCreate={this.onCreateGroup}
