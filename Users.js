@@ -1,9 +1,9 @@
 import _ from 'lodash';
-import fetch from 'isomorphic-fetch';
 // We have to remove node_modules/react to avoid having multiple copies loaded.
 // eslint-disable-next-line import/no-unresolved
 import React, { PropTypes } from 'react';
 import Match from 'react-router/Match';
+import fetch from 'isomorphic-fetch';
 
 import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
@@ -14,7 +14,6 @@ import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import FilterPaneSearch from '@folio/stripes-components/lib/FilterPaneSearch';
 import FilterControlGroup from '@folio/stripes-components/lib/FilterControlGroup';
 import Layer from '@folio/stripes-components/lib/Layer';
-
 import FilterGroups, { initialFilterState, filters2cql, onChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
 
@@ -47,7 +46,14 @@ class Users extends React.Component {
       query: PropTypes.object, // object of key=value pairs
       search: PropTypes.string, // string combining all parts of query
     }).isRequired,
-    mutator: PropTypes.object,
+    mutator: PropTypes.shape({
+      addUserMode: PropTypes.shape({
+        replace: PropTypes.func,
+      }),
+      users: PropTypes.shape({
+        POST: PropTypes.func,
+      }),
+    }).isRequired,
   };
 
   static manifest = Object.freeze({
@@ -56,7 +62,6 @@ class Users extends React.Component {
       type: 'okapi',
       records: 'users',
       path: (queryParams, _pathComponents, _resourceValues) => {
-        // console.log('Users manifest "users" path function, queryParams = ', queryParams);
         const { query, filters, sort } = queryParams || {};
 
         let cql;
@@ -110,15 +115,16 @@ class Users extends React.Component {
 
     this.okapi = context.store.getState().okapi;
 
-    this.onClickAddNewUser = this.onClickAddNewUser.bind(this);
-    this.onClickCloseNewUser = this.onClickCloseNewUser.bind(this);
-    this.onChangeFilter = onChangeFilter.bind(this);
-    // this.performSearch = _.debounce(this.performSearch.bind(this), 250);
-    this.performSearch = this.performSearch.bind(this); // For now, prefer instant response
-    this.onChangeSearch = this.onChangeSearch.bind(this);
     this.onClearSearch = this.onClearSearch.bind(this);
     this.onSort = this.onSort.bind(this);
     this.onSelectRow = this.onSelectRow.bind(this);
+    this.onClickAddNewUser = this.onClickAddNewUser.bind(this);
+    this.onClickCloseNewUser = this.onClickCloseNewUser.bind(this);
+    this.onChangeSearch = this.onChangeSearch.bind(this);
+    this.performSearch = this.performSearch.bind(this); // For now, prefer instant response
+    // this.performSearch = _.debounce(this.performSearch.bind(this), 250);
+
+    this.onChangeFilter = onChangeFilter.bind(this);
     this.transitionToParams = transitionToParams.bind(this);
   }
 
@@ -191,20 +197,20 @@ class Users extends React.Component {
       console.log('POST promise failed:', x);
     });
     // POST credentials, permission-user, permissions;
-    this.postCreds(data.username, { credentials: creds });
+    this.postCreds(data.username, creds);
     this.onClickCloseNewUser();
   }
 
   postCreds(username, creds) {
-    fetch(`${this.okapi.url}/authn/users`, {
+    fetch(`${this.okapi.url}/authn/credentials`, {
       method: 'POST',
-      headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token }),
+      headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token, 'Content-Type': 'application/json' }),
       body: JSON.stringify(creds),
     }).then((response) => {
       if (response.status >= 400) {
         console.log('Users. POST of creds failed.');
       } else {
-        this.postPerms(username, 'users.super');
+        this.postPerms(username, ['users.read', 'perms.users.read']);
       }
     });
   }
@@ -212,25 +218,11 @@ class Users extends React.Component {
   postPerms(username, perms) {
     fetch(`${this.okapi.url}/perms/users`, {
       method: 'POST',
-      headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token }),
-      body: username,
+      headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token, 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ username, "permissions" : perms }),
     }).then((response) => {
       if (response.status >= 400) {
-        console.log('Users. POST of username failed.');
-      } else {
-        this.postUsersPerms(username, perms);
-      }
-    });
-  }
-
-  postUsersPerms(username, perm) {
-    fetch(`${this.okapi.url}/perms/users/${username}/permissions`, {
-      method: 'POST',
-      headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token }),
-      body: JSON.stringify({ permissionName: perm }),
-    }).then((response) => {
-      if (response.status >= 400) {
-        console.log("Users. POST of user's perms failed.");
+        console.log('Users. POST of users permissions failed.');
       } else {
         // nothing to do
       }
