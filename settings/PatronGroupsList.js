@@ -37,7 +37,7 @@ const propTypes= {
    * Object that reflects the shape of list item objects. values should be strings indicating the type: {name:'string'}
    * This is used to create new items.
    */
-  itemTemplate: React.PropTypes.object.isRequired, // eslint-disable-line
+  itemTemplate: React.PropTypes.object.isRequired,
   /**
    * Fieldname that includes the unique identifier for the list.
    */
