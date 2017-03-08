@@ -1,4 +1,6 @@
 import _ from 'lodash';
+// We have to remove node_modules/react to avoid having multiple copies loaded.
+// eslint-disable-next-line import/no-unresolved
 import React, { PropTypes } from 'react';
 import { Row, Col, Dropdown } from 'react-bootstrap';
 import DropdownMenu from '@folio/stripes-components/lib/DropdownMenu';
