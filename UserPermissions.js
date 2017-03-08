@@ -1,13 +1,12 @@
 import _ from 'lodash';
-import React, { PropTypes } from 'react'; // eslint-disable-line
-import {Row, Col, Dropdown} from 'react-bootstrap'; // eslint-disable-line
-import DropdownMenu from '@folio/stripes-components/lib/DropdownMenu'; // eslint-disable-line
-import Button from '@folio/stripes-components/lib/Button'; // eslint-disable-line
-import Icon from '@folio/stripes-components/lib/Icon'; // eslint-disable-line
-import TextField from '@folio/stripes-components/lib/TextField'; // eslint-disable-line
-import List from '@folio/stripes-components/lib/List'; // eslint-disable-line
-import ListDropdown from './lib/ListDropdown'; // eslint-disable-line
-import css from './UserPermissions.css'; // eslint-disable-line
+import React, { PropTypes } from 'react';
+import { Row, Col, Dropdown } from 'react-bootstrap';
+import DropdownMenu from '@folio/stripes-components/lib/DropdownMenu';
+import Button from '@folio/stripes-components/lib/Button';
+import Icon from '@folio/stripes-components/lib/Icon';
+import List from '@folio/stripes-components/lib/List';
+import ListDropdown from './lib/ListDropdown';
+import css from './UserPermissions.css';
 
 const propTypes = {
   availablePermissions: PropTypes.arrayOf(PropTypes.object),
