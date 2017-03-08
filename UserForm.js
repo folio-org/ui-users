@@ -1,15 +1,15 @@
-import React, { Component, PropTypes } from 'react'; // eslint-disable-line
-import Paneset from '@folio/stripes-components/lib/Paneset'; // eslint-disable-line
-import Pane from '@folio/stripes-components/lib/Pane'; // eslint-disable-line
-import PaneMenu from '@folio/stripes-components/lib/PaneMenu'; // eslint-disable-line
-import {Row, Col} from 'react-bootstrap'; // eslint-disable-line
-import Button from '@folio/stripes-components/lib/Button'; // eslint-disable-line
-import TextField from '@folio/stripes-components/lib/TextField'; // eslint-disable-line
-import Select from '@folio/stripes-components/lib/Select'; // eslint-disable-line
-import RadioButtonGroup from '@folio/stripes-components/lib/RadioButtonGroup'; // eslint-disable-line
-import RadioButton from '@folio/stripes-components/lib/RadioButton'; // eslint-disable-line
+import React, { PropTypes } from 'react';
+import Paneset from '@folio/stripes-components/lib/Paneset';
+import Pane from '@folio/stripes-components/lib/Pane';
+import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
+import { Row, Col } from 'react-bootstrap';
+import Button from '@folio/stripes-components/lib/Button';
+import TextField from '@folio/stripes-components/lib/TextField';
+import Select from '@folio/stripes-components/lib/Select';
+import RadioButtonGroup from '@folio/stripes-components/lib/RadioButtonGroup';
+import RadioButton from '@folio/stripes-components/lib/RadioButton';
 
-import {Field, reducer as formReducer, reduxForm} from 'redux-form'; // eslint-disable-line
+import { Field, reduxForm } from 'redux-form';
 
 const propTypes = {
   onClose: PropTypes.func, // eslint-disable-line react/no-unused-prop-types
