@@ -35,6 +35,7 @@ class UserPermissions extends React.Component {
     this.onToggleAddPermDD = this.onToggleAddPermDD.bind(this);
     this.addPermission = this.addPermission.bind(this);
     this.onChangeSearch = this.onChangeSearch.bind(this);
+    this.isPermAvailable = this.isPermAvailable.bind(this);
   }
 
   onToggleAddPermDD() {
@@ -66,7 +67,6 @@ class UserPermissions extends React.Component {
     const nameToCompare = !perm.displayName ? perm.permissionName.toLowerCase() : perm.displayName.toLowerCase();
     const permNotFiltered = _.includes(nameToCompare, this.state.searchTerm.toLowerCase());
 
-    console.log('perm', perm, `-- permInUse=${permInUse}, permNotFiltered=${permNotFiltered}`);
     return !permInUse && permNotFiltered;
   }
 
@@ -75,7 +75,7 @@ class UserPermissions extends React.Component {
 
     const permissionsDD = (
       <ListDropdown
-        items={_.filter(this.props.availablePermissions, this.isPermAvailable.bind(this))}
+        items={_.filter(this.props.availablePermissions, this.isPermAvailable)}
         onClickItem={this.addPermission}
         onChangeSearch={this.onChangeSearch}
       />
