@@ -8,17 +8,16 @@ import NavList from '@folio/stripes-components/lib/NavList';
 import NavListSection from '@folio/stripes-components/lib/NavListSection';
 import PermissionSetDetails from './PermissionSetDetails';
 
-
 class PermissionSets extends React.Component {
   constructor(props) {
     super(props);
 
     // 'Manager' just for example...
     this.state = {
-      selectedSet: 'Manager',
+      selectedSet: null,
       permissionSets: [
-        { id: '1', title: 'Manager' },
-        { id: '2', title: 'Cataloger' },
+        { id: '1', title: 'Manager', description: 'Permissions for Manager'},
+        { id: '2', title: 'Cataloger', description: 'Permissions for Cataloger'},
       ],
     };
 
@@ -30,7 +29,11 @@ class PermissionSets extends React.Component {
     e.preventDefault();
     const href = e.target.href;
     const setTitle = href.substring(href.indexOf('#') + 1);
-    this.setState({ selectedSet: setTitle });
+    let selectedSet = null;
+    _.forEach(this.state.permissionSets, function(set) {
+      if(set.title===setTitle) selectedSet=set; 
+    });
+    this.setState({ selectedSet: selectedSet });
   }
 
   createNewPermissionSet() {
@@ -41,7 +44,7 @@ class PermissionSets extends React.Component {
     sets.push(newSetObject);
     this.setState({
       permissionSets: sets,
-      selectedSet: newSetObject.title,
+      selectedSet: newSetObject,
     });
   }
 
@@ -62,12 +65,12 @@ class PermissionSets extends React.Component {
       <Paneset nested>
         <Pane defaultWidth="20%" lastMenu={PermissionsSetsLastMenu}>
           <NavList>
-            <NavListSection activeLink={`#${this.state.selectedSet}`}>
+            <NavListSection activeLink={this.state.selectedSet?`#${this.state.selectedSet.title}`:''}>
               {RenderedPermissionSets}
             </NavListSection>
           </NavList>
         </Pane>
-        <PermissionSetDetails />
+        {this.state.selectedSet && <PermissionSetDetails initialValues={this.state.selectedSet} selectedSet={this.state.selectedSet} />}
       </Paneset>
     );
   }
