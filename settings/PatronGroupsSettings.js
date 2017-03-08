@@ -4,7 +4,7 @@ import Paneset from '@folio/stripes-components/lib/Paneset';
 import Pane from '@folio/stripes-components/lib/Pane';
 import PatronGroupsList from './PatronGroupsList';
 
-class PatronGroupsSettings extends React.Component { // eslint-disable-line
+class PatronGroupsSettings extends React.Component {
   constructor(props){
     super(props);
     
