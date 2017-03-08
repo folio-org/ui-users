@@ -1,6 +1,6 @@
-import React, { Component, PropTypes } from 'react'; // eslint-disable-line
-import Match from 'react-router/Match'; // eslint-disable-line
-import Miss from 'react-router/Miss'; // eslint-disable-line
+import React, { Component, PropTypes } from 'react';
+import Match from 'react-router/Match';
+import Miss from 'react-router/Miss';
 import Users from './Users';
 
 class UsersRouting extends Component {
