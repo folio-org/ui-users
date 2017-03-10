@@ -15,10 +15,14 @@ class PatronGroupsSettings extends React.Component { // eslint-disable-line
       pk: '_id',
       PUT: {
         pk: '_id',
-        path: 'groups/${editingRecord.item}',
+        path: 'groups/${activeRecord.id}',
       },
+      DELETE: {
+        pk: '_id',
+        path: 'groups/${activeRecord.id}'
+      }
     },
-    editingRecord: {}
+    activeRecord: {}
   });
 
   constructor(props){
@@ -39,7 +43,7 @@ class PatronGroupsSettings extends React.Component { // eslint-disable-line
     //placeholder logic
     console.log('updating');
     console.log(groupObject);
-    this.props.mutator.editingRecord.update({'item': 'f515c091-d3c1-4711-843a-91f63dcc8d59'});
+    this.props.mutator.activeRecord.update({'id': groupObject._id });
     this.props.mutator.groups.PUT(groupObject);
   }
 
@@ -58,16 +62,16 @@ class PatronGroupsSettings extends React.Component { // eslint-disable-line
 
   onDeleteGroup(groupId){
     //placeholder logic
-    // console.log('deleting');
-    // console.log(groupId);
+    console.log('deleting');
+    console.log(groupId);
     // let tempGroups = this.state.groups;
     // const ind = tempGroups.findIndex(obj => obj.id === groupId);
     // tempGroups.splice(ind, 1);
     // this.setState({
     //   groups: tempGroups,
     // });
-
-    //this.props.mutator.groups.DELETE(groupId)
+    this.props.mutator.activeRecord.update({'id': groupId });
+    this.props.mutator.groups.DELETE(this.props.data.groups.find((g) => { return g._id == groupId }))
   }
 
   render() {
