@@ -6,7 +6,6 @@ import Miss from 'react-router/Miss';
 import Users from './Users';
 
 class UsersRouting extends Component {
-
   static propTypes = {
     connect: PropTypes.func.isRequired,
     location: PropTypes.object.isRequired,
@@ -15,7 +14,7 @@ class UsersRouting extends Component {
 
   constructor(props) {
     super(props);
-    this.connectedUsers = props.connect(Users);
+    this.connectedApp = props.connect(Users);
   }
 
   NoMatch() {
@@ -31,7 +30,10 @@ class UsersRouting extends Component {
     const { pathname } = this.props;
     return (
       <div>
-        <Match pattern={`${pathname}`} component={this.connectedUsers} />
+        <Match
+          pattern={`${pathname}`}
+          render={() => <this.connectedApp {...this.props} />}
+        />
         <Miss component={() => { this.NoMatch(); }} />
       </div>
     );
