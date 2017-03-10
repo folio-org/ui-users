@@ -15,6 +15,7 @@ import Layer from '@folio/stripes-components/lib/Layer';
 
 import UserForm from './UserForm';
 import UserPermissions from './UserPermissions';
+import UserLoans from './UserLoans';
 
 class ViewUser extends Component {
 
@@ -158,8 +159,9 @@ class ViewUser extends Component {
           </Col>
         </Row>
         <MultiColumnList fullWidth contentData={fineHistory} />
+        <hr />
+        <UserLoans />
         <UserPermissions availablePermissions={availablePermissions} usersPermissions={usersPermissions} viewUserProps={this.props} />
-
         <Layer isOpen={this.state.editUserMode} label="Edit User Dialog">
           <UserForm
             onSubmit={(record) => { this.update(record); }}
