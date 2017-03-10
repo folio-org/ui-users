@@ -39,6 +39,7 @@ class Users extends React.Component {
   };
 
   static propTypes = {
+    connect: PropTypes.func.isRequired,
     data: PropTypes.object.isRequired,
     pathname: PropTypes.string.isRequired,
     location: PropTypes.shape({
@@ -126,6 +127,8 @@ class Users extends React.Component {
 
     this.onChangeFilter = onChangeFilter.bind(this);
     this.transitionToParams = transitionToParams.bind(this);
+
+    this.connectedViewUser = this.props.connect(ViewUser);
   }
 
   componentWillMount() {
@@ -281,7 +284,7 @@ class Users extends React.Component {
         </Pane>
 
         {/* Details Pane */}
-        <Match pattern={`${pathname}/view/:userid/:username`} render={props => <ViewUser placeholder={'placeholder'} {...props} />} />
+        <Match pattern={`${pathname}/view/:userid/:username`} render={props => <this.connectedViewUser placeholder={'placeholder'} {...props} />} />
         <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false} label="Add New User Dialog">
           <UserForm
             onSubmit={(record) => { this.create(record); }}
