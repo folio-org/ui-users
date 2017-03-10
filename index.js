@@ -32,7 +32,7 @@ class UsersRouting extends Component {
       <div>
         <Match
           pattern={`${pathname}`}
-          component={this.connectedApp} />
+          render={() => <this.connectedApp {...this.props} />}
         <Miss component={() => { this.NoMatch(); }} />
       </div>
     );
