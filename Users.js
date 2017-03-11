@@ -233,7 +233,7 @@ class Users extends React.Component {
   }
 
   render() {
-    const { data, pathname } = this.props;
+    const { data, pathname, currentPerms } = this.props;
     const users = data.users || [];
 
     /* searchHeader is a 'custom pane header'*/
@@ -253,7 +253,7 @@ class Users extends React.Component {
         <Pane defaultWidth="16%" header={searchHeader}>
           <FilterGroups config={filterConfig} filters={this.state.filters} onChangeFilter={this.onChangeFilter} />
           <FilterControlGroup label="Actions">
-            <Button fullWidth onClick={this.onClickAddNewUser}>New user</Button>
+        <MaybeAddUserButton currentPerms={currentPerms} onClick={this.onClickAddNewUser} />
           </FilterControlGroup>
         </Pane>
         {/* Results Pane */}
@@ -294,6 +294,12 @@ class Users extends React.Component {
       </Paneset>
     );
   }
+}
+
+const MaybeAddUserButton = props => {
+  return props.currentPerms['users.create'] ?
+    <Button fullWidth onClick={props.onClick}>New user</Button> :
+    <span />;
 }
 
 export default Users;
