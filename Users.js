@@ -41,6 +41,9 @@ class Users extends React.Component {
 
   static propTypes = {
     connect: PropTypes.func.isRequired,
+    logger: PropTypes.shape({
+      log: PropTypes.func.isRequired,
+    }).isRequired,
     currentPerms: PropTypes.object, // eslint-disable-line react/forbid-prop-types
     data: PropTypes.object.isRequired,
     pathname: PropTypes.string.isRequired,
