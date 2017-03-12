@@ -18,7 +18,6 @@ import UserPermissions from './UserPermissions';
 class ViewUser extends Component {
 
   static propTypes = {
-    currentPerms: PropTypes.object, // eslint-disable-line react/forbid-prop-types
     params: PropTypes.object,
     data: PropTypes.shape({
       user: PropTypes.arrayOf(PropTypes.object),
@@ -91,9 +90,13 @@ class ViewUser extends Component {
   render() {
     const fineHistory = [{ 'Due Date': '11/12/2014', Amount: '34.23', Status: 'Unpaid' }];
 
-    const { data: { users, availablePermissions, usersPermissions }, params: { userid }, currentPerms } = this.props;
+    const { data: { users, availablePermissions, usersPermissions }, params: { userid } } = this.props;
 
-    const detailMenu = <PaneMenu><MaybeEditUserButton currentPerms={currentPerms} onClick={this.onClickEditUser} /></PaneMenu>;
+    const detailMenu = (<PaneMenu>
+      <RenderIfPermission {...this.props} perm="users.edit">
+        <button onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button>
+      </RenderIfPermission>
+    </PaneMenu>);
 
     if (!users || users.length === 0 || !userid) return <div />;
     const user = users.find(u => u.id === userid);
@@ -171,16 +174,6 @@ class ViewUser extends Component {
     );
   }
 }
-
-
-const MaybeEditUserButton = props =>
-  <RenderIfPermission {...props} perm="users.edit">
-    <button onClick={props.onClick} title="Edit User"><Icon icon="edit" />Edit</button>
-  </RenderIfPermission>;
-
-MaybeEditUserButton.propTypes = {
-  onClick: PropTypes.func.isRequired,
-};
 
 
 const RenderIfPermission = props =>
