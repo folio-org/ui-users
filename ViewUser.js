@@ -52,6 +52,12 @@ class ViewUser extends Component {
       },
       path: 'perms/users/:{username}/permissions',
     },
+    patronGroups: {
+      type: 'okapi',
+      path: 'groups',
+      records: 'usergroups',
+      pk: '_id',
+    },
   });
 
   constructor(props) {
@@ -91,12 +97,17 @@ class ViewUser extends Component {
 
     const detailMenu = <PaneMenu><button onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button></PaneMenu>;
 
-    const { data: { users, availablePermissions, usersPermissions }, params: { userid } } = this.props;
+    const { data: { users, availablePermissions, usersPermissions, patronGroups }, params: { userid } } = this.props;
 
+console.log('data:', this.props.data)
     if (!users || users.length === 0 || !userid) return <div />;
     const user = users.find(u => u.id === userid);
     if (!user) return <div />;
     const userStatus = (_.get(user, ['active'], '') ? 'active' : 'inactive');
+    const patronGroupId = _.get(user, ['patron_group'], '')
+    console.log('pgi', patronGroupId, 'groups', patronGroups)
+    const patronGroup = patronGroups.find(g => g._id === patronGroupId ) || {'group': ''}
+    console.log('patrongroup:', patronGroup)
 
     return (
       <Pane defaultWidth="fill" paneTitle="User Details" lastMenu={detailMenu}>
@@ -127,7 +138,7 @@ class ViewUser extends Component {
             <br />
             <Row>
               <Col xs={12}>
-                <KeyValue label="Patron group" value={_.get(user, ['patron_group'], '')} />
+                <KeyValue label="Patron group" value={patronGroup.group} />
               </Col>
             </Row>
           </Col>
@@ -160,8 +171,8 @@ class ViewUser extends Component {
 
         <Layer isOpen={this.state.editUserMode} label="Edit User Dialog">
           <UserForm
+            initialValues={_.merge(user, {'available_patron_groups': this.props.data.patronGroups })}
             onSubmit={(record) => { this.update(record); }}
-            initialValues={user}
             onCancel={this.onClickCloseEditUser}
           />
         </Layer>

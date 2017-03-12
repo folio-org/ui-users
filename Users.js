@@ -100,6 +100,12 @@ class Users extends React.Component {
       },
       staticFallback: { path: 'users' },
     },
+    patronGroups: {
+      type: 'okapi',
+      path: 'groups',
+      records: 'usergroups',
+      pk: '_id',
+    },
   });
 
   constructor(props, context) {
@@ -243,7 +249,7 @@ class Users extends React.Component {
       Username: user => user.username,
       Email: user => _.get(user, ['personal', 'email']),
     };
-
+    
     return (
       <Paneset>
         {/* Filter Pane */}
@@ -284,6 +290,7 @@ class Users extends React.Component {
         <Match pattern={`${pathname}/view/:userid/:username`} render={props => <ViewUser placeholder={'placeholder'} {...props} />} />
         <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false} label="Add New User Dialog">
           <UserForm
+            initialValues={{'available_patron_groups': this.props.data.patronGroups }}
             onSubmit={(record) => { this.create(record); }}
             onCancel={this.onClickCloseNewUser}
           />
