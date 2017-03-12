@@ -40,6 +40,7 @@ class Users extends React.Component {
 
   static propTypes = {
     connect: PropTypes.func.isRequired,
+    currentPerms: PropTypes.object, // eslint-disable-line react/forbid-prop-types
     data: PropTypes.object.isRequired,
     pathname: PropTypes.string.isRequired,
     location: PropTypes.shape({
@@ -253,7 +254,7 @@ class Users extends React.Component {
         <Pane defaultWidth="16%" header={searchHeader}>
           <FilterGroups config={filterConfig} filters={this.state.filters} onChangeFilter={this.onChangeFilter} />
           <FilterControlGroup label="Actions">
-        <MaybeAddUserButton currentPerms={currentPerms} onClick={this.onClickAddNewUser} />
+            <MaybeAddUserButton currentPerms={currentPerms} onClick={this.onClickAddNewUser} />
           </FilterControlGroup>
         </Pane>
         {/* Results Pane */}
@@ -296,10 +297,15 @@ class Users extends React.Component {
   }
 }
 
-const MaybeAddUserButton = props => {
-  return _.get(props, ['currentPerms', 'users.create']) ?
+
+const MaybeAddUserButton = props =>
+  (_.get(props, ['currentPerms', 'users.create']) ?
     <Button fullWidth onClick={props.onClick}>New user</Button> :
-    <span />;
-}
+    <span />);
+
+MaybeAddUserButton.propTypes = {
+  onClick: PropTypes.func.isRequired,
+};
+
 
 export default Users;
