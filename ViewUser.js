@@ -90,9 +90,9 @@ class ViewUser extends Component {
   render() {
     const fineHistory = [{ 'Due Date': '11/12/2014', Amount: '34.23', Status: 'Unpaid' }];
 
-    const detailMenu = <PaneMenu><button onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button></PaneMenu>;
+    const { data: { users, availablePermissions, usersPermissions }, params: { userid }, currentPerms } = this.props;
 
-    const { data: { users, availablePermissions, usersPermissions }, params: { userid } } = this.props;
+    const detailMenu = <PaneMenu><MaybeEditUserButton currentPerms={currentPerms} onClick={this.onClickEditUser} /></PaneMenu>;
 
     if (!users || users.length === 0 || !userid) return <div />;
     const user = users.find(u => u.id === userid);
@@ -170,5 +170,14 @@ class ViewUser extends Component {
     );
   }
 }
+
+
+const MaybeEditUserButton = props => {
+  console.log('MaybeEditUserButton, perms =', props.currentPerms);
+  return _.get(props, ['currentPerms', 'users.edit']) ?
+    <button onClick={this.onClick} title="Edit User"><Icon icon="edit" />Edit</button> :
+    <span />;
+}
+
 
 export default ViewUser;
