@@ -139,14 +139,14 @@ class Users extends React.Component {
 
   // search Handlers...
   onClearSearch() {
-    console.log('User cleared search');
+    this.props.logger.log('action', 'cleared search');
     this.setState({ searchTerm: '' });
     this.context.router.transitionTo(this.props.location.pathname);
   }
 
   onSort(e, meta) {
     const sortOrder = meta.name;
-    console.log('User sorted by', sortOrder);
+    this.props.logger.log('action', `sorted by ${sortOrder}`);
     this.setState({ sortOrder });
     this.transitionToParams({ sort: sortOrder });
   }
@@ -154,7 +154,7 @@ class Users extends React.Component {
   onSelectRow(e, meta) {
     const userId = meta.id;
     const username = meta.username;
-    console.log('User clicked', userId, 'location = ', this.props.location);
+    this.props.logger.log('action', `clicked ${userId}, location =`, this.props.location, 'selected user =', meta);
     this.setState({ selectedItem: meta });
     this.context.router.transitionTo(`/users/view/${userId}/${username}${this.props.location.search}`);
   }
@@ -181,7 +181,7 @@ class Users extends React.Component {
   }
 
   performSearch(term) {
-    console.log('User searched:', term, 'at', this.props.location.pathname);
+    this.props.logger.log('action', `searched for '${term}'`);
     this.transitionToParams({ query: term });
   }
 
@@ -195,11 +195,11 @@ class Users extends React.Component {
     if (data.creds) delete data.creds; // eslint-disable-line no-param-reassign
     // POST user record
     const p = this.props.mutator.users.POST(data);
-    console.log('got promise', p);
+    this.props.logger.log('got promise', p);
     p.then((x) => {
-      console.log('POST promise was OK:', x);
+      this.props.logger.log('POST promise was OK:', x);
     }).catch((x) => {
-      console.log('POST promise failed:', x);
+      this.props.logger.log('POST promise failed:', x);
     });
     // POST credentials, permission-user, permissions;
     this.postCreds(data.username, creds);
@@ -213,7 +213,7 @@ class Users extends React.Component {
       body: JSON.stringify(creds),
     }).then((response) => {
       if (response.status >= 400) {
-        console.log('Users. POST of creds failed.');
+        this.props.logger.log('Users. POST of creds failed.');
       } else {
         this.postPerms(username, ['users.read', 'perms.users.read']);
       }
@@ -227,7 +227,7 @@ class Users extends React.Component {
       body: JSON.stringify({ username, permissions: perms }),
     }).then((response) => {
       if (response.status >= 400) {
-        console.log('Users. POST of users permissions failed.');
+        this.props.logger.log('Users. POST of users permissions failed.');
       } else {
         // nothing to do
       }
