@@ -67,7 +67,7 @@ class Users extends React.Component {
     users: {
       type: 'okapi',
       records: 'users',
-      path: (queryParams, _pathComponents, _resourceValues) => {
+      path: (queryParams, _pathComponents, _resourceValues, logger) => {
         const { query, filters, sort } = queryParams || {};
 
         let cql;
@@ -101,7 +101,7 @@ class Users extends React.Component {
         let path = 'users';
         if (cql) path += `?query=${encodeURIComponent(cql)}`;
 
-        console.log(`query=${query} filters=${filters} sort=${sort} -> ${path}`);
+        logger.log('path', `query=${query} filters=${filters} sort=${sort} -> ${path}`);
         return path;
       },
       staticFallback: { path: 'users' },
