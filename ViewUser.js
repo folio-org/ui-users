@@ -174,13 +174,17 @@ class ViewUser extends Component {
 
 
 const MaybeEditUserButton = props =>
-  (_.get(props, ['currentPerms', 'users.edit']) ?
-    <button onClick={props.onClick} title="Edit User"><Icon icon="edit" />Edit</button> :
-    null);
+  <RenderIfPermission {...props} perm="users.edit">
+    <button onClick={props.onClick} title="Edit User"><Icon icon="edit" />Edit</button>
+  </RenderIfPermission>;
 
 MaybeEditUserButton.propTypes = {
   onClick: PropTypes.func.isRequired,
 };
+
+
+const RenderIfPermission = props =>
+  (_.get(props, ['currentPerms', props.perm]) ? props.children : null);
 
 
 export default ViewUser;
