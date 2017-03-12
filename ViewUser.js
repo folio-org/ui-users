@@ -18,6 +18,7 @@ import UserPermissions from './UserPermissions';
 class ViewUser extends Component {
 
   static propTypes = {
+    currentPerms: PropTypes.object, // eslint-disable-line react/forbid-prop-types
     params: PropTypes.object,
     data: PropTypes.shape({
       user: PropTypes.arrayOf(PropTypes.object),
@@ -172,12 +173,10 @@ class ViewUser extends Component {
 }
 
 
-const MaybeEditUserButton = props => {
-  console.log('MaybeEditUserButton, perms =', props.currentPerms);
-  return _.get(props, ['currentPerms', 'users.edit']) ?
+const MaybeEditUserButton = props =>
+  (_.get(props, ['currentPerms', 'users.edit']) ?
     <button onClick={this.onClick} title="Edit User"><Icon icon="edit" />Edit</button> :
-    <span />;
-}
+    <span />);
 
 
 export default ViewUser;
