@@ -284,7 +284,7 @@ class Users extends React.Component {
         </Pane>
 
         {/* Details Pane */}
-        <Match pattern={`${pathname}/view/:userid/:username`} render={props => <this.connectedViewUser placeholder={'placeholder'} {...props} />} />
+        <Match pattern={`${pathname}/view/:userid/:username`} render={props => <this.connectedViewUser currentPerms={currentPerms} placeholder={'placeholder'} {...props} />} />
         <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false} label="Add New User Dialog">
           <UserForm
             onSubmit={(record) => { this.create(record); }}
@@ -297,7 +297,7 @@ class Users extends React.Component {
 }
 
 const MaybeAddUserButton = props => {
-  return props.currentPerms['users.create'] ?
+  return _.get(props, ['currentPerms', 'users.create']) ?
     <Button fullWidth onClick={props.onClick}>New user</Button> :
     <span />;
 }
