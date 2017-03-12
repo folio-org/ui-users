@@ -301,7 +301,7 @@ class Users extends React.Component {
 const MaybeAddUserButton = props =>
   (_.get(props, ['currentPerms', 'users.create']) ?
     <Button fullWidth onClick={props.onClick}>New user</Button> :
-    <span />);
+    null);
 
 MaybeAddUserButton.propTypes = {
   onClick: PropTypes.func.isRequired,
