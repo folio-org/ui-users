@@ -23,12 +23,22 @@ import ViewUser from './ViewUser';
 
 const filterConfig = [
   {
-    label: 'Filters',
+    label: 'User status',
     name: 'active',
     cql: 'active',
     values: [
       { name: 'Active', cql: 'true' },
       { name: 'Inactive', cql: 'false' },
+    ],
+  },
+  {
+    label: 'Patron group',
+    name: 'pg',
+    cql: 'patron_group',
+    values: [
+      { name: 'On-campus', cql: 'on_campus' },
+      { name: 'Off-campus', cql: 'off_campus' },
+      { name: 'Other', cql: 'other' },
     ],
   },
 ];
