@@ -249,7 +249,14 @@ class Users extends React.Component {
     const resultsFormatter = {
       Active: user => user.active,
       Name: user => `${_.get(user, ['personal', 'last_name'], '')}, ${_.get(user, ['personal', 'first_name'], '')}`,
-      'Patron Group': user => user.patron_group,
+      'Patron Group': (user) => {
+        const map = {
+          on_campus: 'On-campus',
+          off_campus: 'Off-campus',
+          other: 'Other',
+        };
+        return map[user.patron_group] || '?';
+      },
       Username: user => user.username,
       Email: user => _.get(user, ['personal', 'email']),
     };
