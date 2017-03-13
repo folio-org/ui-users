@@ -73,7 +73,12 @@ function UserForm(props) {
                 id="adduser_group"
                 component={Select}
                 fullWidth
-                dataOptions={[{ label: 'Select patron group', value: '' }, { label: 'On-campus', value: 'on_campus', selected: 'selected' }]}
+                dataOptions={[
+                  { label: 'Select patron group', value: '' },
+                  { label: 'On-campus', value: 'on_campus', selected: 'selected' },
+                  { label: 'Off-campus', value: 'off_campus' },
+                  { label: 'Other', value: 'other' },
+                ]}
               />
 
             </Col>
