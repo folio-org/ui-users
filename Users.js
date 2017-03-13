@@ -88,6 +88,7 @@ class Users extends React.Component {
           const sortMap = {
             Active: 'active',
             Name: 'personal.last_name personal.first_name',
+            'Patron Group': 'patron_group',
             Username: 'username',
             Email: 'personal.email',
           };
@@ -248,6 +249,7 @@ class Users extends React.Component {
     const resultsFormatter = {
       Active: user => user.active,
       Name: user => `${_.get(user, ['personal', 'last_name'], '')}, ${_.get(user, ['personal', 'first_name'], '')}`,
+      'Patron Group': user => user.patron_group,
       Username: user => user.username,
       Email: user => _.get(user, ['personal', 'email']),
     };
@@ -283,7 +285,7 @@ class Users extends React.Component {
             formatter={resultsFormatter}
             onRowClick={this.onSelectRow}
             onHeaderClick={this.onSort}
-            visibleColumns={['Active', 'Name', 'Username', 'Email']}
+            visibleColumns={['Active', 'Name', 'Patron Group', 'Username', 'Email']}
             fullWidth
             sortOrder={this.state.sortOrder}
             isEmptyMessage={`No results found for "${this.state.searchTerm}". Please check your spelling and filters.`}
