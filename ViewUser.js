@@ -1,15 +1,17 @@
-import _ from 'lodash'; // eslint-disable-line
-import React, { Component, PropTypes } from 'react' // eslint-disable-line
-import { connect } from '@folio/stripes-connect'; // eslint-disable-line
-import Pane from '@folio/stripes-components/lib/Pane' // eslint-disable-line
-import PaneMenu from '@folio/stripes-components/lib/PaneMenu' // eslint-disable-line
-import Button from '@folio/stripes-components/lib/Button' // eslint-disable-line
-import KeyValue from '@folio/stripes-components/lib/KeyValue' // eslint-disable-line
-import {Row, Col} from 'react-bootstrap' // eslint-disable-line
-import TextField from '@folio/stripes-components/lib/TextField' // eslint-disable-line
-import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList' // eslint-disable-line
-import Icon from '@folio/stripes-components/lib/Icon' // eslint-disable-line
-import Layer from '@folio/stripes-components/lib/Layer'; // eslint-disable-line
+import _ from 'lodash';
+// We have to remove node_modules/react to avoid having multiple copies loaded.
+// eslint-disable-next-line import/no-unresolved
+import React, { Component, PropTypes } from 'react';
+import Pane from '@folio/stripes-components/lib/Pane';
+import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
+import Button from '@folio/stripes-components/lib/Button';
+import KeyValue from '@folio/stripes-components/lib/KeyValue';
+import { Row, Col } from 'react-bootstrap';
+import TextField from '@folio/stripes-components/lib/TextField';
+import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
+import Icon from '@folio/stripes-components/lib/Icon';
+import Layer from '@folio/stripes-components/lib/Layer';
+import IfPermission from './lib/IfPermission';
 
 import UserForm from './UserForm';
 import UserPermissions from './UserPermissions';
@@ -93,11 +95,15 @@ class ViewUser extends Component {
   }
 
   render() {
-    const fineHistory = [{ 'Due Date': '11/12/2014', 'Amount': '34.23', 'Status': 'Unpaid' }]; // eslint-disable-line quote-props
-
-    const detailMenu = <PaneMenu><button onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button></PaneMenu>;
+    const fineHistory = [{ 'Due Date': '11/12/2014', Amount: '34.23', Status: 'Unpaid' }];
 
     const { data: { users, availablePermissions, usersPermissions, patronGroups }, params: { userid } } = this.props;
+
+    const detailMenu = (<PaneMenu>
+      <IfPermission {...this.props} perm="users.edit">
+        <button onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button>
+      </IfPermission>
+    </PaneMenu>);
 
     if (!users || users.length === 0 || !userid) return <div />;
     const user = users.find(u => u.id === userid);
@@ -178,4 +184,5 @@ class ViewUser extends Component {
   }
 }
 
-export default connect(ViewUser, '@folio/users');
+
+export default ViewUser;
