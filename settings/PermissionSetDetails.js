@@ -4,7 +4,7 @@ import Pane from '@folio/stripes-components/lib/Pane';
 import Textfield from '@folio/stripes-components/lib/TextField';
 import TextArea from '@folio/stripes-components/lib/TextArea';
 
-import {Field, reducer as formReducer, reduxForm} from 'redux-form'; // eslint-disable-line
+import {Field, reducer as formReducer, reduxForm} from 'redux-form';
 
 import UserPermissions from '../UserPermissions';
 
