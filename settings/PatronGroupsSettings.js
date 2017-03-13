@@ -40,36 +40,15 @@ class PatronGroupsSettings extends React.Component { // eslint-disable-line
     this.onDeleteGroup = this.onDeleteGroup.bind(this);
   }
   onUpdateGroup(groupObject){
-    //placeholder logic
-    console.log('updating');
-    console.log(groupObject);
     this.props.mutator.activeRecord.update({'id': groupObject._id });
     this.props.mutator.groups.PUT(groupObject);
   }
 
   onCreateGroup(groupObject){
-    //placeholder logic
-    // console.log('create');
-    // console.log(groupObject);
-    // let groups = this.state.groups;
-    // groupObject.id = groups.length.toString();
-    // groups.unshift(groupObject);
-    // this.setState({
-    //   groups
-    // });
     this.props.mutator.groups.POST(groupObject);
   }
 
   onDeleteGroup(groupId){
-    //placeholder logic
-    console.log('deleting');
-    console.log(groupId);
-    // let tempGroups = this.state.groups;
-    // const ind = tempGroups.findIndex(obj => obj.id === groupId);
-    // tempGroups.splice(ind, 1);
-    // this.setState({
-    //   groups: tempGroups,
-    // });
     this.props.mutator.activeRecord.update({'id': groupId });
     this.props.mutator.groups.DELETE(this.props.data.groups.find((g) => { return g._id == groupId }))
   }
@@ -81,9 +60,6 @@ class PatronGroupsSettings extends React.Component { // eslint-disable-line
       edit: item => false, // suppress all editting of existing items...
     }
 
-    console.log("from manifest: props:" + JSON.stringify(this.props));
-    console.log("from manifest: state:" + JSON.stringify(this.state));
-
     return (
       <Paneset>
         <Pane defaultWidth="fill" >
@@ -93,7 +69,7 @@ class PatronGroupsSettings extends React.Component { // eslint-disable-line
             // is pulled in. This still causes a JS warning, but not an error
             contentData={this.props.data.groups || []}
             label="Patron Groups"
-            createButtonLabel="+ Add Group"
+            createButtonLabel="+ Add group"
             visibleFields={['group', 'desc']}
             itemTemplate={{group:'string', _id:'string', desc:'string', inUse:'bool'}}
             actionSuppression={suppressor}
