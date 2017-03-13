@@ -39,7 +39,6 @@ function UserForm(props) {
     console.log("IPG: ", initialValues)
   const patronGroupOptions = initialValues['available_patron_groups'] ? initialValues['available_patron_groups'].map((g) => { return {'label': g.group, 'value': g._id, selected: initialValues['patron_group'] == g._id }}) : []
 
-console.log('initial values', initialValues)
   return (
     <form>
       <Paneset>
@@ -74,7 +73,7 @@ console.log('initial values', initialValues)
                 id="adduser_group"
                 component={Select}
                 fullWidth
-                dataOptions={patronGroupOptions}
+                dataOptions={[{'label': '', 'value': null},...patronGroupOptions]}
               />
 
             </Col>
