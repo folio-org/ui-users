@@ -432,7 +432,7 @@ class PatronGroupsList extends React.Component{
         <Row>
           <Col xs={12}>
             <List items={this.state.creatingArray} itemFormatter={this.CreateItemFormatter} isEmptyMessage={''} marginBottom0 />
-            <List items={contentData} itemFormatter={this.EditItemFormatter} isEmptyMessage={isEmptyMessage} />
+            <List items={_.sortBy(contentData, [(g) => g.group.toLowerCase()] )} itemFormatter={this.EditItemFormatter} isEmptyMessage={isEmptyMessage} />
           </Col>
         </Row>
       </div>
