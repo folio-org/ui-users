@@ -54,6 +54,13 @@ class ViewUser extends Component {
       },
       path: 'perms/users/:{username}/permissions',
     },
+    usersLoans: {
+      type: 'okapi',
+      records: 'loans',
+      GET: {
+        path: 'loan-storage/loans?query=(userId=:{userid} AND status="Open")',
+      },
+    },
   });
 
   constructor(props) {
@@ -93,7 +100,7 @@ class ViewUser extends Component {
 
     const detailMenu = <PaneMenu><button onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button></PaneMenu>;
 
-    const { data: { users, availablePermissions, usersPermissions }, params: { userid } } = this.props;
+    const { data: { users, availablePermissions, usersPermissions, usersLoans }, params: { userid } } = this.props;
 
     if (!users || users.length === 0 || !userid) return <div />;
     const user = users.find(u => u.id === userid);
@@ -159,7 +166,7 @@ class ViewUser extends Component {
         </Row>
         <MultiColumnList fullWidth contentData={fineHistory} />
         <hr />
-        <UserLoans />
+        <UserLoans loans={usersLoans} />
         <UserPermissions availablePermissions={availablePermissions} usersPermissions={usersPermissions} viewUserProps={this.props} />
         <Layer isOpen={this.state.editUserMode} label="Edit User Dialog">
           <UserForm
