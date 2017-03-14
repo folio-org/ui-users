@@ -191,7 +191,7 @@ class Users extends React.Component {
   onChangeSearch(e) {
     const query = e.target.value;
     this.setState({ searchTerm: query });
-    this.performSearch(term);
+    this.performSearch(query);
   }
 
   performSearch(query) {
