@@ -11,6 +11,7 @@ import TextField from '@folio/stripes-components/lib/TextField';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import Icon from '@folio/stripes-components/lib/Icon';
 import Layer from '@folio/stripes-components/lib/Layer';
+import IfPermission from './lib/IfPermission';
 
 import UserForm from './UserForm';
 import UserPermissions from './UserPermissions';
@@ -98,9 +99,13 @@ class ViewUser extends Component {
   render() {
     const fineHistory = [{ 'Due Date': '11/12/2014', Amount: '34.23', Status: 'Unpaid' }];
 
-    const detailMenu = <PaneMenu><button onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button></PaneMenu>;
-
     const { data: { users, availablePermissions, usersPermissions, usersLoans }, params: { userid } } = this.props;
+
+    const detailMenu = (<PaneMenu>
+      <IfPermission {...this.props} perm="users.edit">
+        <button onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button>
+      </IfPermission>
+    </PaneMenu>);
 
     if (!users || users.length === 0 || !userid) return <div />;
     const user = users.find(u => u.id === userid);
@@ -179,5 +184,6 @@ class ViewUser extends Component {
     );
   }
 }
+
 
 export default ViewUser;
