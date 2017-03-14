@@ -151,7 +151,6 @@ class Users extends React.Component {
     if (_.isEmpty(this.props.data.addUserMode)) this.props.mutator.addUserMode.replace({ mode: false });
   }
 
-  // search Handlers...
   onClearSearch() {
     this.props.logger.log('action', 'cleared search');
     this.setState({ searchTerm: '' });
@@ -173,30 +172,27 @@ class Users extends React.Component {
     this.context.router.transitionTo(`/users/view/${userId}/${username}${this.props.location.search}`);
   }
 
-  // end search Handlers
-
-  // AddUser Handlers
   onClickAddNewUser(e) {
     if (e) e.preventDefault();
+    this.props.logger.log('action', 'clicked "add new user"');
     this.props.mutator.addUserMode.replace({ mode: true });
   }
 
   onClickCloseNewUser(e) {
     if (e) e.preventDefault();
+    this.props.logger.log('action', 'clicked "close new user"');
     this.props.mutator.addUserMode.replace({ mode: false });
   }
-  // end AddUser Handlers
-
 
   onChangeSearch(e) {
-    const term = e.target.value;
-    this.setState({ searchTerm: term });
+    const query = e.target.value;
+    this.setState({ searchTerm: query });
     this.performSearch(term);
   }
 
-  performSearch(term) {
-    this.props.logger.log('action', `searched for '${term}'`);
-    this.transitionToParams({ query: term });
+  performSearch(query) {
+    this.props.logger.log('action', `searched for '${query}'`);
+    this.transitionToParams({ query });
   }
 
   updateFilters(filters) { // provided for onChangeFilter
@@ -321,6 +317,5 @@ class Users extends React.Component {
     );
   }
 }
-
 
 export default Users;
