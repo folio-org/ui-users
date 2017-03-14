@@ -112,7 +112,7 @@ class Users extends React.Component {
         let path = 'users';
         if (cql) path += `?query=${encodeURIComponent(cql)}`;
 
-        logger.log('path', `query=${query} filters=${filters} sort=${sort} -> ${path}`);
+        logger.log('mpath', `query=${query} filters=${filters} sort=${sort} -> ${path}`);
         return path;
       },
       staticFallback: { path: 'users' },
