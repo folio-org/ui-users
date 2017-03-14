@@ -15,6 +15,7 @@ import IfPermission from './lib/IfPermission';
 
 import UserForm from './UserForm';
 import UserPermissions from './UserPermissions';
+import UserLoans from './UserLoans';
 
 class ViewUser extends Component {
 
@@ -54,6 +55,13 @@ class ViewUser extends Component {
       },
       path: 'perms/users/:{username}/permissions',
     },
+    usersLoans: {
+      type: 'okapi',
+      records: 'loans',
+      GET: {
+        path: 'loan-storage/loans?query=(userId=:{userid} AND status="Open")',
+      },
+    },
   });
 
   constructor(props) {
@@ -91,7 +99,7 @@ class ViewUser extends Component {
   render() {
     const fineHistory = [{ 'Due Date': '11/12/2014', Amount: '34.23', Status: 'Unpaid' }];
 
-    const { data: { users, availablePermissions, usersPermissions }, params: { userid } } = this.props;
+    const { data: { users, availablePermissions, usersPermissions, usersLoans }, params: { userid } } = this.props;
 
     const detailMenu = (<PaneMenu>
       <IfPermission {...this.props} perm="users.edit">
@@ -162,8 +170,9 @@ class ViewUser extends Component {
           </Col>
         </Row>
         <MultiColumnList fullWidth contentData={fineHistory} />
+        <hr />
+        <UserLoans loans={usersLoans} />
         <UserPermissions availablePermissions={availablePermissions} usersPermissions={usersPermissions} viewUserProps={this.props} />
-
         <Layer isOpen={this.state.editUserMode} label="Edit User Dialog">
           <UserForm
             onSubmit={(record) => { this.update(record); }}
