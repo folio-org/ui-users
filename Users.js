@@ -16,6 +16,7 @@ import FilterControlGroup from '@folio/stripes-components/lib/FilterControlGroup
 import Layer from '@folio/stripes-components/lib/Layer';
 import FilterGroups, { initialFilterState, filters2cql, onChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
+import makePathFunction from '@folio/stripes-components/util/makePathFunction';
 import IfPermission from './lib/IfPermission';
 
 import UserForm from './UserForm';
@@ -42,36 +43,6 @@ const filterConfig = [
     ],
   },
 ];
-
-function makePath(basePath, findAll, queryTemplate, sortMap) {
-  return (queryParams, _pathComponents, _resourceValues, logger) => {
-    const { query, filters, sort } = queryParams || {};
-
-    let cql = !query ? undefined : queryTemplate.replace(/\${query}/g, query);
-    const filterCql = filters2cql(filterConfig, filters);
-    if (filterCql) {
-      if (cql) {
-        cql = `(${cql}) and ${filterCql}`;
-      } else {
-        cql = filterCql;
-      }
-    }
-
-    if (sort) {
-      const sortIndex = sortMap[sort];
-      if (sortIndex) {
-        if (cql === undefined) cql = findAll;
-        cql += ` sortby ${sortIndex}`;
-      }
-    }
-
-    let path = basePath;
-    if (cql) path += `?query=${encodeURIComponent(cql)}`;
-
-    logger.log('mpath', `query='${query}' filters='${filters}' sort='${sort}' -> ${path}`);
-    return path;
-  };
-}
 
 class Users extends React.Component {
   static contextTypes = {
@@ -107,7 +78,7 @@ class Users extends React.Component {
     users: {
       type: 'okapi',
       records: 'users',
-      path: makePath(
+      path: makePathFunction(
         'users',
         'username=*',
         'username="${query}*" or personal.first_name="${query}*" or personal.last_name="${query}*"',
@@ -117,7 +88,8 @@ class Users extends React.Component {
           'Patron Group': 'patron_group',
           Username: 'username',
           Email: 'personal.email',
-        }
+        },
+        filterConfig,
       ),
       staticFallback: { path: 'users' },
     },
