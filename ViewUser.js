@@ -108,6 +108,14 @@ class ViewUser extends Component {
     </PaneMenu>);
 
     if (!users || users.length === 0 || !userid) return <div />;
+
+    if (!_.get(this.props, ['currentPerms', 'users.read.basic'])) {
+      return (<div>
+        <h2>Permission Error</h2>
+        <p>Sorry - your user permissions do not allow access to this page.</p>
+      </div>);
+    }
+
     const user = users.find(u => u.id === userid);
     if (!user) return <div />;
     const userStatus = (_.get(user, ['active'], '') ? 'active' : 'inactive');
