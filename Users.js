@@ -181,11 +181,11 @@ class Users extends React.Component {
     if (data.creds) delete data.creds; // eslint-disable-line no-param-reassign
     // POST user record
     const p = this.props.mutator.users.POST(data);
-    this.props.logger.log('got promise', p);
+    this.props.logger.log('xhr', 'got promise', p);
     p.then((x) => {
-      this.props.logger.log('POST promise was OK:', x);
+      this.props.logger.log('xhr', 'POST promise was OK:', x);
     }).catch((x) => {
-      this.props.logger.log('POST promise failed:', x);
+      this.props.logger.log('xhr', 'POST promise failed:', x);
     });
     // POST credentials, permission-user, permissions;
     this.postCreds(data.username, creds);
@@ -199,7 +199,7 @@ class Users extends React.Component {
       body: JSON.stringify(creds),
     }).then((response) => {
       if (response.status >= 400) {
-        this.props.logger.log('Users. POST of creds failed.');
+        this.props.logger.log('xhr', 'Users. POST of creds failed.');
       } else {
         this.postPerms(username, ['users.read', 'perms.users.read']);
       }
@@ -213,7 +213,7 @@ class Users extends React.Component {
       body: JSON.stringify({ username, permissions: perms }),
     }).then((response) => {
       if (response.status >= 400) {
-        this.props.logger.log('Users. POST of users permissions failed.');
+        this.props.logger.log('xhr', 'Users. POST of users permissions failed.');
       } else {
         // nothing to do
       }
