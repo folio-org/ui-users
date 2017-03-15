@@ -73,6 +73,9 @@ class UserPermissions extends React.Component {
   render() {
     const { usersPermissions } = this.props;
 
+    if (!_.get(this.props, ['currentPerms', 'perms.users.read']))
+      return null;
+
     const permissionsDD = (
       <ListDropdown
         items={_.filter(this.props.availablePermissions, this.isPermAvailable)}
