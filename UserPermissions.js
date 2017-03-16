@@ -7,8 +7,8 @@ import DropdownMenu from '@folio/stripes-components/lib/DropdownMenu';
 import Button from '@folio/stripes-components/lib/Button';
 import Icon from '@folio/stripes-components/lib/Icon';
 import List from '@folio/stripes-components/lib/List';
+import IfPermission from '@folio/stripes-components/lib/IfPermission';
 import ListDropdown from './lib/ListDropdown';
-import IfPermission from './lib/IfPermission';
 import css from './UserPermissions.css';
 
 const propTypes = {

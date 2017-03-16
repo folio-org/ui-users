@@ -11,7 +11,7 @@ import TextField from '@folio/stripes-components/lib/TextField';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import Icon from '@folio/stripes-components/lib/Icon';
 import Layer from '@folio/stripes-components/lib/Layer';
-import IfPermission from './lib/IfPermission';
+import IfPermission from '@folio/stripes-components/lib/IfPermission';
 
 import UserForm from './UserForm';
 import UserPermissions from './UserPermissions';

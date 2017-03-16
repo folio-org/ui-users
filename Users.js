@@ -17,7 +17,7 @@ import Layer from '@folio/stripes-components/lib/Layer';
 import FilterGroups, { initialFilterState, onChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
 import makePathFunction from '@folio/stripes-components/util/makePathFunction';
-import IfPermission from './lib/IfPermission';
+import IfPermission from '@folio/stripes-components/lib/IfPermission';
 
 import UserForm from './UserForm';
 import ViewUser from './ViewUser';
