@@ -1,71 +1,77 @@
 import React from 'react';
-
+import { Component } from 'react';
+import { connect } from '@folio/stripes-connect';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import Pane from '@folio/stripes-components/lib/Pane';
 import PatronGroupsList from './PatronGroupsList';
 
-class PatronGroupsSettings extends React.Component {
+class PatronGroupsSettings extends React.Component { 
+
+  static manifest = Object.freeze({
+    groups: {
+      type: 'okapi',
+      path: 'groups',
+      records: 'usergroups',
+      pk: '_id',
+      PUT: {
+        pk: '_id',
+        path: 'groups/${activeRecord.id}',
+      },
+      DELETE: {
+        pk: '_id',
+        path: 'groups/${activeRecord.id}'
+      }
+    },
+    activeRecord: {}
+  });
+
   constructor(props){
     super(props);
-    
+
     //placeholder data...
     this.state = {
-      groups: [{name:"Orange", email:"orange@colors.com", id:"0", inUse:false},
-        {name:"Red", email:"red@colors.com", id:"1", inUse:true},
-        {name:"Blue", email:"blue@colors.com", id:"2", inUse: true}],
+      // groups: [{group:"Orange", desc:"orange group", id:"0", inUse:false},
+      //   {group:"Red", desc:"red group", id:"1", inUse:true},
+      //   {group:"Blue", desc:"blue group", id:"2", inUse: true}],
     }
-    
+
     this.onUpdateGroup = this.onUpdateGroup.bind(this);
     this.onCreateGroup = this.onCreateGroup.bind(this);
     this.onDeleteGroup = this.onDeleteGroup.bind(this);
   }
   onUpdateGroup(groupObject){
-    //placeholder logic
-    console.log('updating');
-    console.log(groupObject);
+    this.props.mutator.activeRecord.update({'id': groupObject._id });
+    this.props.mutator.groups.PUT(groupObject);
   }
-  
+
   onCreateGroup(groupObject){
-    //placeholder logic
-    console.log('create');
-    console.log(groupObject);
-    let groups = this.state.groups;
-    groupObject.id = groups.length.toString();
-    groups.unshift(groupObject);
-    this.setState({
-      groups
-    });
-   
+    this.props.mutator.groups.POST(groupObject);
   }
-  
+
   onDeleteGroup(groupId){
-    //placeholder logic
-    console.log('deleting');
-    console.log(groupId);
-    let tempGroups = this.state.groups;
-    const ind = tempGroups.findIndex(obj => obj.id === groupId);
-    tempGroups.splice(ind, 1);
-    this.setState({
-      groups: tempGroups,
-    });
+    this.props.mutator.activeRecord.update({'id': groupId });
+    this.props.mutator.groups.DELETE(this.props.data.groups.find((g) => { return g._id == groupId }))
   }
-  
+
   render() {
-    
+
     const suppressor = {
       delete: (item) => { return (!item.inUse)}, // suppress delete action based on 'inUse' prop
       edit: item => false, // suppress all editting of existing items...
     }
-    
+
     return (
       <Paneset>
         <Pane defaultWidth="fill" >
           <PatronGroupsList
-            contentData={this.state.groups} 
-            label="Access Groups"
-            createButtonLabel="+ Add Group"
-            visibleFields={['name', 'email']}
-            itemTemplate={{name:'string', id:'string', description:'string', inUse:'bool'}}
+            // TODO: not sure why we need this OR if there are no groups
+            // Seems to load this once before the groups data from the manifest
+            // is pulled in. This still causes a JS warning, but not an error
+            contentData={this.props.data.groups || []}
+            label="Patron Groups"
+            createButtonLabel="+ Add group"
+            visibleFields={['group', 'desc']}
+            itemTemplate={{group:'string', _id:'string', desc:'string', inUse:'bool'}}
             actionSuppression={suppressor}
             onUpdate={this.onUpdateGroup}
             onCreate={this.onCreateGroup}
@@ -78,4 +84,4 @@ class PatronGroupsSettings extends React.Component {
   }
 }
 
-export default PatronGroupsSettings;
+export default connect(PatronGroupsSettings, '@folio/ui-users');

@@ -11,20 +11,22 @@ import TextField from '@folio/stripes-components/lib/TextField';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import Icon from '@folio/stripes-components/lib/Icon';
 import Layer from '@folio/stripes-components/lib/Layer';
-import IfPermission from './lib/IfPermission';
+import IfPermission from '@folio/stripes-components/lib/IfPermission';
 
 import UserForm from './UserForm';
 import UserPermissions from './UserPermissions';
+import UserLoans from './UserLoans';
 
 class ViewUser extends Component {
 
   static propTypes = {
-    match: PropTypes.shape({
-      params: PropTypes.object,
-    }),
+    currentPerms: PropTypes.object, // eslint-disable-line react/forbid-prop-types
     data: PropTypes.shape({
       user: PropTypes.arrayOf(PropTypes.object),
       availablePermissions: PropTypes.arrayOf(PropTypes.object),
+    }),
+    match: PropTypes.shape({
+      params: PropTypes.object,
     }),
     mutator: React.PropTypes.shape({
       users: React.PropTypes.shape({
@@ -55,6 +57,19 @@ class ViewUser extends Component {
         path: 'perms/users/:{username}/permissions?full=true',
       },
       path: 'perms/users/:{username}/permissions',
+    },
+    usersLoans: {
+      type: 'okapi',
+      records: 'loans',
+      GET: {
+        path: 'circulation/loans?query=(userId=:{userid} AND status="Open")',
+      },
+    },
+    patronGroups: {
+      type: 'okapi',
+      path: 'groups',
+      records: 'usergroups',
+      pk: '_id',
     },
   });
 
@@ -93,7 +108,7 @@ class ViewUser extends Component {
   render() {
     const fineHistory = [{ 'Due Date': '11/12/2014', Amount: '34.23', Status: 'Unpaid' }];
 
-    const { data: { users, availablePermissions, usersPermissions }, match: { params: { userid } } } = this.props;
+    const { data: { users, availablePermissions, usersPermissions, usersLoans, patronGroups }, match: { params: { userid } } } = this.props;
 
     const detailMenu = (<PaneMenu>
       <IfPermission {...this.props} perm="users.edit">
@@ -102,9 +117,19 @@ class ViewUser extends Component {
     </PaneMenu>);
 
     if (!users || users.length === 0 || !userid) return <div />;
+
+    if (!_.get(this.props, ['currentPerms', 'users.read.basic'])) {
+      return (<div>
+        <h2>Permission Error</h2>
+        <p>Sorry - your user permissions do not allow access to this page.</p>
+      </div>);
+    }
+
     const user = users.find(u => u.id === userid);
     if (!user) return <div />;
     const userStatus = (_.get(user, ['active'], '') ? 'active' : 'inactive');
+    const patronGroupId = _.get(user, ['patron_group'], '')
+    const patronGroup = patronGroups.find(g => g._id === patronGroupId ) || {'group': ''}
 
     return (
       <Pane defaultWidth="fill" paneTitle="User Details" lastMenu={detailMenu}>
@@ -135,7 +160,7 @@ class ViewUser extends Component {
             <br />
             <Row>
               <Col xs={12}>
-                <KeyValue label="Patron group" value={_.get(user, ['patron_group'], '')} />
+                <KeyValue label="Patron group" value={patronGroup.group} />
               </Col>
             </Row>
           </Col>
@@ -164,12 +189,15 @@ class ViewUser extends Component {
           </Col>
         </Row>
         <MultiColumnList fullWidth contentData={fineHistory} />
-        <UserPermissions availablePermissions={availablePermissions} usersPermissions={usersPermissions} viewUserProps={this.props} />
-
+        <hr />
+        <UserLoans loans={usersLoans} />
+        {!_.get(this.props, ['currentPerms', 'perms.users.read']) ? null :
+        <UserPermissions availablePermissions={availablePermissions} usersPermissions={usersPermissions} viewUserProps={this.props} currentPerms={this.props.currentPerms} />
+        }
         <Layer isOpen={this.state.editUserMode} label="Edit User Dialog">
           <UserForm
+            initialValues={_.merge(user, {'available_patron_groups': this.props.data.patronGroups })}
             onSubmit={(record) => { this.update(record); }}
-            initialValues={user}
             onCancel={this.onClickCloseEditUser}
           />
         </Layer>

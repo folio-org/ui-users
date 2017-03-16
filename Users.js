@@ -14,9 +14,10 @@ import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import FilterPaneSearch from '@folio/stripes-components/lib/FilterPaneSearch';
 import FilterControlGroup from '@folio/stripes-components/lib/FilterControlGroup';
 import Layer from '@folio/stripes-components/lib/Layer';
-import FilterGroups, { initialFilterState, filters2cql, onChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
+import FilterGroups, { initialFilterState, onChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
-import IfPermission from './lib/IfPermission';
+import makePathFunction from '@folio/stripes-components/util/makePathFunction';
+import IfPermission from '@folio/stripes-components/lib/IfPermission';
 
 import UserForm from './UserForm';
 import ViewUser from './ViewUser';
@@ -81,45 +82,26 @@ class Users extends React.Component {
     users: {
       type: 'okapi',
       records: 'users',
-      path: (queryParams, _pathComponents, _resourceValues, logger) => {
-        const { query, filters, sort } = queryParams || {};
-
-        let cql;
-        if (query) {
-          cql = `username="${query}*" or personal.first_name="${query}*" or personal.last_name="${query}*"`;
-        }
-
-        const filterCql = filters2cql(filterConfig, filters);
-        if (filterCql) {
-          if (cql) {
-            cql = `(${cql}) and ${filterCql}`;
-          } else {
-            cql = filterCql;
-          }
-        }
-
-        if (sort) {
-          const sortMap = {
-            Active: 'active',
-            Name: 'personal.last_name personal.first_name',
-            'Patron Group': 'patron_group',
-            Username: 'username',
-            Email: 'personal.email',
-          };
-          const sortIndex = sortMap[sort];
-          if (sortIndex) {
-            if (cql === undefined) cql = 'username=*';
-            cql += ` sortby ${sortIndex}`;
-          }
-        }
-
-        let path = 'users';
-        if (cql) path += `?query=${encodeURIComponent(cql)}`;
-
-        logger.log('path', `query=${query} filters=${filters} sort=${sort} -> ${path}`);
-        return path;
-      },
+      path: makePathFunction(
+        'users',
+        'username=*',
+        'username="$QUERY*" or personal.first_name="$QUERY*" or personal.last_name="$QUERY*"',
+        {
+          Active: 'active',
+          Name: 'personal.last_name personal.first_name',
+          'Patron Group': 'patron_group',
+          Username: 'username',
+          Email: 'personal.email',
+        },
+        filterConfig,
+      ),
       staticFallback: { path: 'users' },
+    },
+    patronGroups: {
+      type: 'okapi',
+      path: 'groups',
+      records: 'usergroups',
+      pk: '_id',
     },
   });
 
@@ -155,7 +137,6 @@ class Users extends React.Component {
     if (_.isEmpty(this.props.data.addUserMode)) this.props.mutator.addUserMode.replace({ mode: false });
   }
 
-  // search Handlers...
   onClearSearch() {
     this.props.logger.log('action', 'cleared search');
     this.setState({ searchTerm: '' });
@@ -177,30 +158,27 @@ class Users extends React.Component {
     this.props.history.push(`/users/view/${userId}/${username}${this.props.location.search}`);
   }
 
-  // end search Handlers
-
-  // AddUser Handlers
   onClickAddNewUser(e) {
     if (e) e.preventDefault();
+    this.props.logger.log('action', 'clicked "add new user"');
     this.props.mutator.addUserMode.replace({ mode: true });
   }
 
   onClickCloseNewUser(e) {
     if (e) e.preventDefault();
+    this.props.logger.log('action', 'clicked "close new user"');
     this.props.mutator.addUserMode.replace({ mode: false });
   }
-  // end AddUser Handlers
-
 
   onChangeSearch(e) {
-    const term = e.target.value;
-    this.setState({ searchTerm: term });
-    this.performSearch(term);
+    const query = e.target.value;
+    this.setState({ searchTerm: query });
+    this.performSearch(query);
   }
 
-  performSearch(term) {
-    this.props.logger.log('action', `searched for '${term}'`);
-    this.transitionToParams({ query: term });
+  performSearch(query) {
+    this.props.logger.log('action', `searched for '${query}'`);
+    this.transitionToParams({ query });
   }
 
   updateFilters(filters) { // provided for onChangeFilter
@@ -212,13 +190,7 @@ class Users extends React.Component {
     const creds = Object.assign({}, data.creds, { username: data.username });
     if (data.creds) delete data.creds; // eslint-disable-line no-param-reassign
     // POST user record
-    const p = this.props.mutator.users.POST(data);
-    this.props.logger.log('got promise', p);
-    p.then((x) => {
-      this.props.logger.log('POST promise was OK:', x);
-    }).catch((x) => {
-      this.props.logger.log('POST promise failed:', x);
-    });
+    this.props.mutator.users.POST(data);
     // POST credentials, permission-user, permissions;
     this.postCreds(data.username, creds);
     this.onClickCloseNewUser();
@@ -231,7 +203,7 @@ class Users extends React.Component {
       body: JSON.stringify(creds),
     }).then((response) => {
       if (response.status >= 400) {
-        this.props.logger.log('Users. POST of creds failed.');
+        this.props.logger.log('xhr', 'Users. POST of creds failed.');
       } else {
         this.postPerms(username, ['users.read', 'perms.users.read']);
       }
@@ -245,7 +217,7 @@ class Users extends React.Component {
       body: JSON.stringify({ username, permissions: perms }),
     }).then((response) => {
       if (response.status >= 400) {
-        this.props.logger.log('Users. POST of users permissions failed.');
+        this.props.logger.log('xhr', 'Users. POST of users permissions failed.');
       } else {
         // nothing to do
       }
@@ -274,7 +246,7 @@ class Users extends React.Component {
       Username: user => user.username,
       Email: user => _.get(user, ['personal', 'email']),
     };
-
+    
     return (
       <Paneset>
         {/* Filter Pane */}
@@ -317,6 +289,7 @@ class Users extends React.Component {
         <Route path={`${this.props.match.path}/view/:userid/:username`} render={props => <this.connectedViewUser currentPerms={currentPerms} placeholder={'placeholder'} {...props} />} />
         <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false} label="Add New User Dialog">
           <UserForm
+            initialValues={{'available_patron_groups': this.props.data.patronGroups }}
             onSubmit={(record) => { this.create(record); }}
             onCancel={this.onClickCloseNewUser}
           />
@@ -325,6 +298,5 @@ class Users extends React.Component {
     );
   }
 }
-
 
 export default Users;
