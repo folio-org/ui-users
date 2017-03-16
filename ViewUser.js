@@ -19,7 +19,9 @@ import UserPermissions from './UserPermissions';
 class ViewUser extends Component {
 
   static propTypes = {
-    params: PropTypes.object,
+    match: PropTypes.shape({
+      params: PropTypes.object,
+    }),
     data: PropTypes.shape({
       user: PropTypes.arrayOf(PropTypes.object),
       availablePermissions: PropTypes.arrayOf(PropTypes.object),
@@ -91,7 +93,7 @@ class ViewUser extends Component {
   render() {
     const fineHistory = [{ 'Due Date': '11/12/2014', Amount: '34.23', Status: 'Unpaid' }];
 
-    const { data: { users, availablePermissions, usersPermissions }, params: { userid } } = this.props;
+    const { data: { users, availablePermissions, usersPermissions }, match: { params: { userid } } } = this.props;
 
     const detailMenu = (<PaneMenu>
       <IfPermission {...this.props} perm="users.edit">

@@ -2,7 +2,7 @@ import _ from 'lodash';
 // We have to remove node_modules/react to avoid having multiple copies loaded.
 // eslint-disable-next-line import/no-unresolved
 import React, { PropTypes } from 'react';
-import Match from 'react-router/Match';
+import Route from 'react-router-dom/Route';
 import fetch from 'isomorphic-fetch';
 
 import Pane from '@folio/stripes-components/lib/Pane';
@@ -45,7 +45,6 @@ const filterConfig = [
 
 class Users extends React.Component {
   static contextTypes = {
-    router: PropTypes.object.isRequired,
     store: PropTypes.object,
   };
 
@@ -56,11 +55,16 @@ class Users extends React.Component {
     }).isRequired,
     currentPerms: PropTypes.object, // eslint-disable-line react/forbid-prop-types
     data: PropTypes.object.isRequired,
-    pathname: PropTypes.string.isRequired,
+    history: PropTypes.shape({
+      push: PropTypes.func.isRequired,
+    }).isRequired,
     location: PropTypes.shape({
+      query: PropTypes.object,
       pathname: PropTypes.string.isRequired,
-      query: PropTypes.object, // object of key=value pairs
-      search: PropTypes.string, // string combining all parts of query
+      search: PropTypes.string,
+    }).isRequired,
+    match: PropTypes.shape({
+      path: PropTypes.string.isRequired,
     }).isRequired,
     mutator: PropTypes.shape({
       addUserMode: PropTypes.shape({
@@ -155,7 +159,7 @@ class Users extends React.Component {
   onClearSearch() {
     this.props.logger.log('action', 'cleared search');
     this.setState({ searchTerm: '' });
-    this.context.router.transitionTo(this.props.location.pathname);
+    this.props.history.push(this.props.location.pathname);
   }
 
   onSort(e, meta) {
@@ -170,7 +174,7 @@ class Users extends React.Component {
     const username = meta.username;
     this.props.logger.log('action', `clicked ${userId}, location =`, this.props.location, 'selected user =', meta);
     this.setState({ selectedItem: meta });
-    this.context.router.transitionTo(`/users/view/${userId}/${username}${this.props.location.search}`);
+    this.props.history.push(`/users/view/${userId}/${username}${this.props.location.search}`);
   }
 
   // end search Handlers
@@ -249,7 +253,7 @@ class Users extends React.Component {
   }
 
   render() {
-    const { data, pathname, currentPerms } = this.props;
+    const { data, currentPerms } = this.props;
     const users = data.users || [];
 
     /* searchHeader is a 'custom pane header'*/
@@ -310,7 +314,7 @@ class Users extends React.Component {
         </Pane>
 
         {/* Details Pane */}
-        <Match pattern={`${pathname}/view/:userid/:username`} render={props => <this.connectedViewUser currentPerms={currentPerms} placeholder={'placeholder'} {...props} />} />
+        <Route path={`${this.props.match.path}/view/:userid/:username`} render={props => <this.connectedViewUser currentPerms={currentPerms} placeholder={'placeholder'} {...props} />} />
         <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false} label="Add New User Dialog">
           <UserForm
             onSubmit={(record) => { this.create(record); }}

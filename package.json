@@ -41,11 +41,11 @@
     "lodash": "^4.17.4",
     "react": "^15.4.2",
     "react-bootstrap": "^0.30.7",
-    "react-router": "4.0.0-alpha.6",
+    "react-router-dom": "^4.0.0",
     "redux-form": "^6.1.1"
   },
   "peerDependencies": {
-    "@folio/stripes-core": "^0.2.0",
-    "@folio/stripes-connect": "^0.0.9"
+    "@folio/stripes-connect": "^0.0.9",
+    "@folio/stripes-core": "^0.2.0"
   }
 }
