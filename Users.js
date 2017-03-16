@@ -3,6 +3,7 @@ import _ from 'lodash';
 // eslint-disable-next-line import/no-unresolved
 import React, { PropTypes } from 'react';
 import Route from 'react-router-dom/Route';
+import queryString from 'query-string';
 import fetch from 'isomorphic-fetch';
 
 import Pane from '@folio/stripes-components/lib/Pane';
@@ -60,7 +61,6 @@ class Users extends React.Component {
       push: PropTypes.func.isRequired,
     }).isRequired,
     location: PropTypes.shape({
-      query: PropTypes.object,
       pathname: PropTypes.string.isRequired,
       search: PropTypes.string,
     }).isRequired,
@@ -108,7 +108,7 @@ class Users extends React.Component {
   constructor(props, context) {
     super(props);
 
-    const query = props.location.query || {};
+    const query = props.location.search ? queryString.parse(props.location.search) : {};
     this.state = {
       filters: initialFilterState(filterConfig, query.filters),
       selectedItem: {},
