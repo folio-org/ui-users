@@ -20,6 +20,7 @@ import UserLoans from './UserLoans';
 class ViewUser extends Component {
 
   static propTypes = {
+    currentPerms: PropTypes.object, // eslint-disable-line react/forbid-prop-types
     params: PropTypes.object,
     data: PropTypes.shape({
       user: PropTypes.arrayOf(PropTypes.object),
@@ -108,6 +109,14 @@ class ViewUser extends Component {
     </PaneMenu>);
 
     if (!users || users.length === 0 || !userid) return <div />;
+
+    if (!_.get(this.props, ['currentPerms', 'users.read.basic'])) {
+      return (<div>
+        <h2>Permission Error</h2>
+        <p>Sorry - your user permissions do not allow access to this page.</p>
+      </div>);
+    }
+
     const user = users.find(u => u.id === userid);
     if (!user) return <div />;
     const userStatus = (_.get(user, ['active'], '') ? 'active' : 'inactive');
@@ -172,7 +181,7 @@ class ViewUser extends Component {
         <MultiColumnList fullWidth contentData={fineHistory} />
         <hr />
         <UserLoans loans={usersLoans} />
-        <UserPermissions availablePermissions={availablePermissions} usersPermissions={usersPermissions} viewUserProps={this.props} />
+        <UserPermissions availablePermissions={availablePermissions} usersPermissions={usersPermissions} viewUserProps={this.props} currentPerms={this.props.currentPerms} />
         <Layer isOpen={this.state.editUserMode} label="Edit User Dialog">
           <UserForm
             onSubmit={(record) => { this.update(record); }}

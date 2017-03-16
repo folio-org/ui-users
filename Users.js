@@ -14,7 +14,7 @@ import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import FilterPaneSearch from '@folio/stripes-components/lib/FilterPaneSearch';
 import FilterControlGroup from '@folio/stripes-components/lib/FilterControlGroup';
 import Layer from '@folio/stripes-components/lib/Layer';
-import FilterGroups, { initialFilterState, filters2cql, onChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
+import FilterGroups, { initialFilterState, onChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
 import makePathFunction from '@folio/stripes-components/util/makePathFunction';
 import IfPermission from './lib/IfPermission';
@@ -180,13 +180,7 @@ class Users extends React.Component {
     const creds = Object.assign({}, data.creds, { username: data.username });
     if (data.creds) delete data.creds; // eslint-disable-line no-param-reassign
     // POST user record
-    const p = this.props.mutator.users.POST(data);
-    this.props.logger.log('xhr', 'got promise', p);
-    p.then((x) => {
-      this.props.logger.log('xhr', 'POST promise was OK:', x);
-    }).catch((x) => {
-      this.props.logger.log('xhr', 'POST promise failed:', x);
-    });
+    this.props.mutator.users.POST(data);
     // POST credentials, permission-user, permissions;
     this.postCreds(data.username, creds);
     this.onClickCloseNewUser();
