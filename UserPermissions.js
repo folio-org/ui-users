@@ -8,6 +8,7 @@ import Button from '@folio/stripes-components/lib/Button';
 import Icon from '@folio/stripes-components/lib/Icon';
 import List from '@folio/stripes-components/lib/List';
 import ListDropdown from './lib/ListDropdown';
+import IfPermission from './lib/IfPermission';
 import css from './UserPermissions.css';
 
 const propTypes = {
@@ -117,10 +118,12 @@ class UserPermissions extends React.Component {
               />
           </Col>*/}
           <Col xs={7}>
-            <Dropdown open={this.state.addPermissionOpen} pullRight onToggle={this.onToggleAddPermDD} id="AddPermissionDropdown" style={{ float: 'right' }}>
-              <Button align="end" bottomMargin0 bsRole="toggle" aria-haspopup="true">&#43; Add Permission</Button>
-              <DropdownMenu bsRole="menu" onToggle={this.onToggleAddPermDD} aria-label="available permissions">{permissionsDD}</DropdownMenu>
-            </Dropdown>
+            <IfPermission {...this.props} perm="perms.users.modify">
+              <Dropdown open={this.state.addPermissionOpen} pullRight onToggle={this.onToggleAddPermDD} id="AddPermissionDropdown" style={{ float: 'right' }}>
+                <Button align="end" bottomMargin0 bsRole="toggle" aria-haspopup="true">&#43; Add Permission</Button>
+                <DropdownMenu bsRole="menu" onToggle={this.onToggleAddPermDD} aria-label="available permissions">{permissionsDD}</DropdownMenu>
+              </Dropdown>
+            </IfPermission>
           </Col>
         </Row>
         <List itemFormatter={listFormatter} items={usersPermissions || []} isEmptyMessage="This user has no permissions applied." />
