@@ -81,7 +81,7 @@ class Users extends React.Component {
       path: makePathFunction(
         'users',
         'username=*',
-        'username="${query}*" or personal.first_name="${query}*" or personal.last_name="${query}*"',
+        'username="$QUERY*" or personal.first_name="$QUERY*" or personal.last_name="$QUERY*"',
         {
           Active: 'active',
           Name: 'personal.last_name personal.first_name',
