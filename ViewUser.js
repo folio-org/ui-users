@@ -181,7 +181,9 @@ class ViewUser extends Component {
         <MultiColumnList fullWidth contentData={fineHistory} />
         <hr />
         <UserLoans loans={usersLoans} />
+        {!_.get(this.props, ['currentPerms', 'perms.users.read']) ? null :
         <UserPermissions availablePermissions={availablePermissions} usersPermissions={usersPermissions} viewUserProps={this.props} currentPerms={this.props.currentPerms} />
+        }
         <Layer isOpen={this.state.editUserMode} label="Edit User Dialog">
           <UserForm
             onSubmit={(record) => { this.update(record); }}
