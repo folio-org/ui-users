@@ -96,7 +96,9 @@ class UserPermissions extends React.Component {
           aria-label={`Remove Permission: ${item.permissionName}`}
           title="Remove Permission"
         >
-          <Icon icon="hollowX" iconClassName={css.removePermissionIcon} iconRootClass={css.removePermissionButton} />
+          <IfPermission {...this.props} perm="perms.users.delete">
+            <Icon icon="hollowX" iconClassName={css.removePermissionIcon} iconRootClass={css.removePermissionButton} />
+          </IfPermission>
         </Button>
       </li>
     );
