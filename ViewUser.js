@@ -59,7 +59,7 @@ class ViewUser extends Component {
       type: 'okapi',
       records: 'loans',
       GET: {
-        path: 'loan-storage/loans?query=(userId=:{userid} AND status="Open")',
+        path: 'circulation/loans?query=(userId=:{userid} AND status="Open")',
       },
     },
   });

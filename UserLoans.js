@@ -17,6 +17,8 @@ function UserLoans(props) {
   const { loans } = props;
 
   const loansFormatter = {
+    title:  loan => `${_.get(loan, ['item', 'title'], '')}`,
+    barcode: loan => `${_.get(loan, ['item', 'barcode'], '')}`,
     status: loan => `${_.get(loan, ['status', 'name'], '')}`,
     loanDate: loan => loan.loanDate.substr(0, 10),
   };
