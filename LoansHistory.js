@@ -58,6 +58,7 @@ class LoansHistory extends Component {
       barcode: loan => `${_.get(loan, ['item', 'barcode'], '')}`,
       status: loan => `${_.get(loan, ['status', 'name'], '')}`,
       loanDate: loan => loan.loanDate.substr(0, 10),
+      returnDate: loan => (loan.returnDate ? loan.returnDate.substr(0, 10) : ''),
     };
 
     return (
@@ -66,7 +67,7 @@ class LoansHistory extends Component {
           <MultiColumnList
             fullWidth
             formatter={loansFormatter}
-            visibleColumns={['title', 'barcode', 'loanDate', 'status']}
+            visibleColumns={['title', 'barcode', 'loanDate', 'returnDate', 'status']}
             contentData={loansHistory}
           />
         </Pane>
