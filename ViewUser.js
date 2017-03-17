@@ -21,10 +21,12 @@ class ViewUser extends Component {
 
   static propTypes = {
     currentPerms: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-    params: PropTypes.object,
     data: PropTypes.shape({
       user: PropTypes.arrayOf(PropTypes.object),
       availablePermissions: PropTypes.arrayOf(PropTypes.object),
+    }),
+    match: PropTypes.shape({
+      params: PropTypes.object,
     }),
     mutator: React.PropTypes.shape({
       users: React.PropTypes.shape({
@@ -63,6 +65,12 @@ class ViewUser extends Component {
         path: 'circulation/loans?query=(userId=:{userid} AND status="Open")',
       },
     },
+    patronGroups: {
+      type: 'okapi',
+      path: 'groups',
+      records: 'usergroups',
+      pk: '_id',
+    },
   });
 
   constructor(props) {
@@ -100,7 +108,7 @@ class ViewUser extends Component {
   render() {
     const fineHistory = [{ 'Due Date': '11/12/2014', Amount: '34.23', Status: 'Unpaid' }];
 
-    const { data: { users, availablePermissions, usersPermissions, usersLoans }, params: { userid } } = this.props;
+    const { data: { users, availablePermissions, usersPermissions, usersLoans, patronGroups }, match: { params: { userid } } } = this.props;
 
     const detailMenu = (<PaneMenu>
       <IfPermission {...this.props} perm="users.edit">
@@ -120,6 +128,8 @@ class ViewUser extends Component {
     const user = users.find(u => u.id === userid);
     if (!user) return <div />;
     const userStatus = (_.get(user, ['active'], '') ? 'active' : 'inactive');
+    const patronGroupId = _.get(user, ['patron_group'], '')
+    const patronGroup = patronGroups.find(g => g._id === patronGroupId ) || {'group': ''}
 
     return (
       <Pane defaultWidth="fill" paneTitle="User Details" lastMenu={detailMenu}>
@@ -150,7 +160,7 @@ class ViewUser extends Component {
             <br />
             <Row>
               <Col xs={12}>
-                <KeyValue label="Patron group" value={_.get(user, ['patron_group'], '')} />
+                <KeyValue label="Patron group" value={patronGroup.group} />
               </Col>
             </Row>
           </Col>
@@ -186,8 +196,8 @@ class ViewUser extends Component {
         }
         <Layer isOpen={this.state.editUserMode} label="Edit User Dialog">
           <UserForm
+            initialValues={_.merge(user, {'available_patron_groups': this.props.data.patronGroups })}
             onSubmit={(record) => { this.update(record); }}
-            initialValues={user}
             onCancel={this.onClickCloseEditUser}
           />
         </Layer>
