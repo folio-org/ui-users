@@ -2,6 +2,7 @@ import _ from 'lodash';
 // We have to remove node_modules/react to avoid having multiple copies loaded.
 // eslint-disable-next-line import/no-unresolved
 import React, { Component, PropTypes } from 'react';
+import Route from 'react-router-dom/Route';
 import Pane from '@folio/stripes-components/lib/Pane';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import Button from '@folio/stripes-components/lib/Button';
@@ -16,23 +17,25 @@ import IfPermission from '@folio/stripes-components/lib/IfPermission';
 import UserForm from './UserForm';
 import UserPermissions from './UserPermissions';
 import UserLoans from './UserLoans';
+import LoansHistory from './LoansHistory';
 
 class ViewUser extends Component {
 
   static propTypes = {
+    connect: PropTypes.func.isRequired,
     currentPerms: PropTypes.object, // eslint-disable-line react/forbid-prop-types
     data: PropTypes.shape({
       user: PropTypes.arrayOf(PropTypes.object),
       availablePermissions: PropTypes.arrayOf(PropTypes.object),
-    }),
-    match: PropTypes.shape({
-      params: PropTypes.object,
     }),
     mutator: React.PropTypes.shape({
       users: React.PropTypes.shape({
         PUT: React.PropTypes.func.isRequired,
       }),
     }),
+    match: PropTypes.shape({
+      path: PropTypes.string.isRequired,
+    }).isRequired,
   };
 
   static manifest = Object.freeze({
@@ -58,13 +61,6 @@ class ViewUser extends Component {
       },
       path: 'perms/users/:{username}/permissions',
     },
-    usersLoans: {
-      type: 'okapi',
-      records: 'loans',
-      GET: {
-        path: 'circulation/loans?query=(userId=:{userid} AND status="Open")',
-      },
-    },
     patronGroups: {
       type: 'okapi',
       path: 'groups',
@@ -77,9 +73,14 @@ class ViewUser extends Component {
     super(props);
     this.state = {
       editUserMode: false,
+      viewLoansHistoryMode: false,
     };
     this.onClickEditUser = this.onClickEditUser.bind(this);
     this.onClickCloseEditUser = this.onClickCloseEditUser.bind(this);
+    this.connectedUserLoans = this.props.connect(UserLoans);
+    this.connectedLoansHistory = this.props.connect(LoansHistory);
+    this.onClickViewLoansHistory = this.onClickViewLoansHistory.bind(this);
+    this.onClickCloseLoansHistory = this.onClickCloseLoansHistory.bind(this);
   }
 
   // EditUser Handlers
@@ -97,6 +98,20 @@ class ViewUser extends Component {
     });
   }
 
+  onClickViewLoansHistory(e) {
+    if (e) e.preventDefault();
+    this.setState({
+      viewLoansHistoryMode: true,
+    });
+  }
+
+  onClickCloseLoansHistory(e) {
+    if (e) e.preventDefault();
+    this.setState({
+      viewLoansHistoryMode: false,
+    });
+  }
+
   update(data) {
     // eslint-disable-next-line no-param-reassign
     if (data.creds) delete data.creds; // not handled on edit (yet at least)
@@ -108,7 +123,7 @@ class ViewUser extends Component {
   render() {
     const fineHistory = [{ 'Due Date': '11/12/2014', Amount: '34.23', Status: 'Unpaid' }];
 
-    const { data: { users, availablePermissions, usersPermissions, usersLoans, patronGroups }, match: { params: { userid } } } = this.props;
+    const { data: { users, availablePermissions, usersPermissions, patronGroups }, match: { params: { userid } } } = this.props;
 
     const detailMenu = (<PaneMenu>
       <IfPermission {...this.props} perm="users.edit">
@@ -128,7 +143,7 @@ class ViewUser extends Component {
     const user = users.find(u => u.id === userid);
     if (!user) return <div />;
     const userStatus = (_.get(user, ['active'], '') ? 'active' : 'inactive');
-    const patronGroupId = _.get(user, ['patron_group'], '')
+    const patronGroupId = _.get(user, ['patron_group'], '');
     const patronGroup = patronGroups.find(g => g._id === patronGroupId ) || {'group': ''}
 
     return (
@@ -190,16 +205,19 @@ class ViewUser extends Component {
         </Row>
         <MultiColumnList fullWidth contentData={fineHistory} />
         <hr />
-        <UserLoans loans={usersLoans} />
+        <Route path={`${this.props.match.path}`} render={props => <this.connectedUserLoans connect={this.props.connect} onClickViewLoansHistory={this.onClickViewLoansHistory} placeholder={'placeholder'} {...props} />} />
         {!_.get(this.props, ['currentPerms', 'perms.users.read']) ? null :
         <UserPermissions availablePermissions={availablePermissions} usersPermissions={usersPermissions} viewUserProps={this.props} currentPerms={this.props.currentPerms} />
         }
         <Layer isOpen={this.state.editUserMode} label="Edit User Dialog">
           <UserForm
-            initialValues={_.merge(user, {'available_patron_groups': this.props.data.patronGroups })}
+            initialValues={_.merge(user, { available_patron_groups: this.props.data.patronGroups })}
             onSubmit={(record) => { this.update(record); }}
             onCancel={this.onClickCloseEditUser}
           />
+        </Layer>
+        <Layer isOpen={this.state.viewLoansHistoryMode} label="Loans History">
+          <this.connectedLoansHistory userid={userid} onCancel={this.onClickCloseLoansHistory} />
         </Layer>
       </Pane>
     );

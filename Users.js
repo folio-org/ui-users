@@ -246,7 +246,7 @@ class Users extends React.Component {
       Username: user => user.username,
       Email: user => _.get(user, ['personal', 'email']),
     };
-    
+
     return (
       <Paneset>
         {/* Filter Pane */}
@@ -286,10 +286,10 @@ class Users extends React.Component {
         </Pane>
 
         {/* Details Pane */}
-        <Route path={`${this.props.match.path}/view/:userid/:username`} render={props => <this.connectedViewUser currentPerms={currentPerms} placeholder={'placeholder'} {...props} />} />
+        <Route path={`${this.props.match.path}/view/:userid/:username`} render={props => <this.connectedViewUser currentPerms={currentPerms} connect={this.props.connect} placeholder={'placeholder'} {...props} />} />
         <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false} label="Add New User Dialog">
           <UserForm
-            initialValues={{'available_patron_groups': this.props.data.patronGroups }}
+            initialValues={{ available_patron_groups: this.props.data.patronGroups }}
             onSubmit={(record) => { this.create(record); }}
             onCancel={this.onClickCloseNewUser}
           />

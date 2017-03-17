@@ -9,49 +9,67 @@ import Icon from '@folio/stripes-components/lib/Icon';
 import TextField from '@folio/stripes-components/lib/TextField';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 
-const propTypes = {
-  loans: PropTypes.arrayOf(PropTypes.object),
-};
 
-function UserLoans(props) {
-  const { loans } = props;
+class UserLoans extends React.Component {
 
-  const loansFormatter = {
-    title: loan => `${_.get(loan, ['item', 'title'], '')}`,
-    barcode: loan => `${_.get(loan, ['item', 'barcode'], '')}`,
-    status: loan => `${_.get(loan, ['status', 'name'], '')}`,
-    loanDate: loan => loan.loanDate.substr(0, 10),
+  static propTypes = {
+    data: PropTypes.shape({
+      userLoans: PropTypes.arrayOf(PropTypes.object),
+      loansHistory: PropTypes.arrayOf(PropTypes.object),
+    }),
+    onClickViewLoansHistory: PropTypes.func.isRequired,
   };
 
-  if (!loans) return <div />;
+  static manifest = Object.freeze({
+    usersLoans: {
+      type: 'okapi',
+      records: 'loans',
+      GET: {
+        path: 'circulation/loans?query=(userId=:{userid} AND status="Open")',
+      },
+    },
+    userid: {},
+  });
 
-  return (<div>
-    <Row>
-      <Col xs={3}>
-        <h3 className="marginTopHalf">Current loans</h3>
-      </Col>
-      <Col xs={4} sm={3}>
-        <TextField
-          rounded
-          endControl={<Button buttonStyle="fieldControl"><Icon icon="clearX" /></Button>}
-          startControl={<Icon icon="search" />}
-          placeholder="Search"
+  render() {
+    const { data: { usersLoans } } = this.props;
+
+    const loansFormatter = {
+      title: loan => `${_.get(loan, ['item', 'title'], '')}`,
+      barcode: loan => `${_.get(loan, ['item', 'barcode'], '')}`,
+      status: loan => `${_.get(loan, ['status', 'name'], '')}`,
+      loanDate: loan => loan.loanDate.substr(0, 10),
+    };
+
+    if (!usersLoans) return <div />;
+
+    return (
+      <div>
+        <Row>
+          <Col xs={3}>
+            <h3 className="marginTopHalf">Current loans</h3>
+          </Col>
+          <Col xs={4} sm={3}>
+            <TextField
+              rounded
+              endControl={<Button buttonStyle="fieldControl"><Icon icon="clearX" /></Button>}
+              startControl={<Icon icon="search" />}
+              placeholder="Search"
+              fullWidth
+            />
+          </Col>
+          <Col xs={5} sm={6}>
+            <Button align="end" bottomMargin0 onClick={this.props.onClickViewLoansHistory}>View Full History</Button>
+          </Col>
+        </Row>
+        <MultiColumnList
           fullWidth
+          formatter={loansFormatter}
+          visibleColumns={['title', 'barcode', 'loanDate', 'status']}
+          contentData={usersLoans}
         />
-      </Col>
-      <Col xs={5} sm={6}>
-        <Button align="end" bottomMargin0 >View Full History</Button>
-      </Col>
-    </Row>
-    <MultiColumnList
-      fullWidth
-      formatter={loansFormatter}
-      visibleColumns={['title', 'barcode', 'loanDate', 'status']}
-      contentData={loans}
-    />
-  </div>);
+      </div>);
+  }
 }
-
-UserLoans.propTypes = propTypes;
 
 export default UserLoans;
