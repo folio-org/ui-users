@@ -49,7 +49,7 @@ function UserForm(props) {
             <Col sm={5} smOffset={1}>
               <h2>User Record</h2>
               <Field label="UserName" name="username" id="adduser_username" component={TextField} required fullWidth />
-              {!initialValues ? <Field label="Password" name="creds.password" id="pw" component={TextField} required fullWidth /> : null}
+              {!initialValues.id ? <Field label="Password" name="creds.password" id="pw" component={TextField} required fullWidth /> : null}
               <Field label="Status" name="active" component={RadioButtonGroup}>
                 <RadioButton label="Active" id="useractiveYesRB" value="true" inline />
                 <RadioButton label="Inactive" id="useractiveNoRB" value="false" inline />
