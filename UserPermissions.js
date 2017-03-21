@@ -12,6 +12,9 @@ import ListDropdown from './lib/ListDropdown';
 import css from './UserPermissions.css';
 
 const propTypes = {
+  stripes: PropTypes.shape({
+    hasPerm: PropTypes.func.isRequired,
+  }).isRequired,
   availablePermissions: PropTypes.arrayOf(PropTypes.object),
   usersPermissions: PropTypes.arrayOf(PropTypes.object),
   viewUserProps: PropTypes.shape({
