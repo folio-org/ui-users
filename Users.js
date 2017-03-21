@@ -52,10 +52,11 @@ class Users extends React.Component {
 
   static propTypes = {
     connect: PropTypes.func.isRequired,
-    logger: PropTypes.shape({
-      log: PropTypes.func.isRequired,
+    stripes: PropTypes.shape({
+      logger: PropTypes.shape({
+        log: PropTypes.func.isRequired,
+      }).isRequired,
     }).isRequired,
-    currentPerms: PropTypes.object, // eslint-disable-line react/forbid-prop-types
     data: PropTypes.object.isRequired,
     history: PropTypes.shape({
       push: PropTypes.func.isRequired,
@@ -138,14 +139,14 @@ class Users extends React.Component {
   }
 
   onClearSearch() {
-    this.props.logger.log('action', 'cleared search');
+    this.props.stripes.logger.log('action', 'cleared search');
     this.setState({ searchTerm: '' });
     this.props.history.push(this.props.location.pathname);
   }
 
   onSort(e, meta) {
     const sortOrder = meta.name;
-    this.props.logger.log('action', `sorted by ${sortOrder}`);
+    this.props.stripes.logger.log('action', `sorted by ${sortOrder}`);
     this.setState({ sortOrder });
     this.transitionToParams({ sort: sortOrder });
   }
@@ -153,20 +154,20 @@ class Users extends React.Component {
   onSelectRow(e, meta) {
     const userId = meta.id;
     const username = meta.username;
-    this.props.logger.log('action', `clicked ${userId}, location =`, this.props.location, 'selected user =', meta);
+    this.props.stripes.logger.log('action', `clicked ${userId}, location =`, this.props.location, 'selected user =', meta);
     this.setState({ selectedItem: meta });
     this.props.history.push(`/users/view/${userId}/${username}${this.props.location.search}`);
   }
 
   onClickAddNewUser(e) {
     if (e) e.preventDefault();
-    this.props.logger.log('action', 'clicked "add new user"');
+    this.props.stripes.logger.log('action', 'clicked "add new user"');
     this.props.mutator.addUserMode.replace({ mode: true });
   }
 
   onClickCloseNewUser(e) {
     if (e) e.preventDefault();
-    this.props.logger.log('action', 'clicked "close new user"');
+    this.props.stripes.logger.log('action', 'clicked "close new user"');
     this.props.mutator.addUserMode.replace({ mode: false });
   }
 
@@ -177,7 +178,7 @@ class Users extends React.Component {
   }
 
   performSearch(query) {
-    this.props.logger.log('action', `searched for '${query}'`);
+    this.props.stripes.logger.log('action', `searched for '${query}'`);
     this.transitionToParams({ query });
   }
 
@@ -203,7 +204,7 @@ class Users extends React.Component {
       body: JSON.stringify(creds),
     }).then((response) => {
       if (response.status >= 400) {
-        this.props.logger.log('xhr', 'Users. POST of creds failed.');
+        this.props.stripes.logger.log('xhr', 'Users. POST of creds failed.');
       } else {
         this.postPerms(username, ['users.read', 'perms.users.read']);
       }
@@ -217,7 +218,7 @@ class Users extends React.Component {
       body: JSON.stringify({ username, permissions: perms }),
     }).then((response) => {
       if (response.status >= 400) {
-        this.props.logger.log('xhr', 'Users. POST of users permissions failed.');
+        this.props.stripes.logger.log('xhr', 'Users. POST of users permissions failed.');
       } else {
         // nothing to do
       }
@@ -225,7 +226,7 @@ class Users extends React.Component {
   }
 
   render() {
-    const { data, currentPerms } = this.props;
+    const { data, stripes } = this.props;
     const users = data.users || [];
 
     /* searchHeader is a 'custom pane header'*/
@@ -286,7 +287,7 @@ class Users extends React.Component {
         </Pane>
 
         {/* Details Pane */}
-        <Route path={`${this.props.match.path}/view/:userid/:username`} render={props => <this.connectedViewUser currentPerms={currentPerms} connect={this.props.connect} placeholder={'placeholder'} {...props} />} />
+        <Route path={`${this.props.match.path}/view/:userid/:username`} render={props => <this.connectedViewUser stripes={stripes} connect={this.props.connect} placeholder={'placeholder'} {...props} />} />
         <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false} label="Add New User Dialog">
           <UserForm
             initialValues={{ available_patron_groups: this.props.data.patronGroups }}

@@ -23,7 +23,6 @@ class ViewUser extends Component {
 
   static propTypes = {
     connect: PropTypes.func.isRequired,
-    currentPerms: PropTypes.object, // eslint-disable-line react/forbid-prop-types
     data: PropTypes.shape({
       user: PropTypes.arrayOf(PropTypes.object),
       availablePermissions: PropTypes.arrayOf(PropTypes.object),
@@ -133,7 +132,7 @@ class ViewUser extends Component {
 
     if (!users || users.length === 0 || !userid) return <div />;
 
-    if (!_.get(this.props, ['currentPerms', 'users.read.basic'])) {
+    if (!this.props.stripes.hasPerm('users.read.basic')) {
       return (<div>
         <h2>Permission Error</h2>
         <p>Sorry - your user permissions do not allow access to this page.</p>
@@ -206,8 +205,8 @@ class ViewUser extends Component {
         <MultiColumnList fullWidth contentData={fineHistory} />
         <hr />
         <Route path={`${this.props.match.path}`} render={props => <this.connectedUserLoans connect={this.props.connect} onClickViewLoansHistory={this.onClickViewLoansHistory} placeholder={'placeholder'} {...props} />} />
-        {!_.get(this.props, ['currentPerms', 'perms.users.read']) ? null :
-        <UserPermissions availablePermissions={availablePermissions} usersPermissions={usersPermissions} viewUserProps={this.props} currentPerms={this.props.currentPerms} />
+        {!this.props.stripes.hasPerm('perms.users.read') ? null :
+        <UserPermissions availablePermissions={availablePermissions} usersPermissions={usersPermissions} viewUserProps={this.props} stripes={this.props.stripes} />
         }
         <Layer isOpen={this.state.editUserMode} label="Edit User Dialog">
           <UserForm

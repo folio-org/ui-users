@@ -74,7 +74,7 @@ class UserPermissions extends React.Component {
   render() {
     const { usersPermissions } = this.props;
 
-    if (!_.get(this.props, ['currentPerms', 'perms.users.read']))
+    if (!this.props.stripes.hasPerm('perms.users.read'))
       return null;
 
     const permissionsDD = (
