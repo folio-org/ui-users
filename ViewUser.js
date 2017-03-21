@@ -22,6 +22,9 @@ import LoansHistory from './LoansHistory';
 class ViewUser extends Component {
 
   static propTypes = {
+    stripes: PropTypes.shape({
+      hasPerm: PropTypes.func.isRequired,
+    }).isRequired,
     connect: PropTypes.func.isRequired,
     data: PropTypes.shape({
       user: PropTypes.arrayOf(PropTypes.object),
@@ -143,7 +146,7 @@ class ViewUser extends Component {
     if (!user) return <div />;
     const userStatus = (_.get(user, ['active'], '') ? 'active' : 'inactive');
     const patronGroupId = _.get(user, ['patron_group'], '');
-    const patronGroup = patronGroups.find(g => g._id === patronGroupId ) || {'group': ''}
+    const patronGroup = patronGroups.find(g => g._id === patronGroupId) || { group: '' };
 
     return (
       <Pane defaultWidth="fill" paneTitle="User Details" lastMenu={detailMenu}>
