@@ -132,6 +132,8 @@ class Users extends React.Component {
     this.transitionToParams = transitionToParams.bind(this);
 
     this.connectedViewUser = this.props.connect(ViewUser);
+    const logger = this.props.stripes.logger;
+    this.log = logger.log.bind(logger);
   }
 
   componentWillMount() {
@@ -139,14 +141,14 @@ class Users extends React.Component {
   }
 
   onClearSearch() {
-    this.props.stripes.logger.log('action', 'cleared search');
+    this.log('action', 'cleared search');
     this.setState({ searchTerm: '' });
     this.props.history.push(this.props.location.pathname);
   }
 
   onSort(e, meta) {
     const sortOrder = meta.name;
-    this.props.stripes.logger.log('action', `sorted by ${sortOrder}`);
+    this.log('action', `sorted by ${sortOrder}`);
     this.setState({ sortOrder });
     this.transitionToParams({ sort: sortOrder });
   }
@@ -154,20 +156,20 @@ class Users extends React.Component {
   onSelectRow(e, meta) {
     const userId = meta.id;
     const username = meta.username;
-    this.props.stripes.logger.log('action', `clicked ${userId}, location =`, this.props.location, 'selected user =', meta);
+    this.log('action', `clicked ${userId}, location =`, this.props.location, 'selected user =', meta);
     this.setState({ selectedItem: meta });
     this.props.history.push(`/users/view/${userId}/${username}${this.props.location.search}`);
   }
 
   onClickAddNewUser(e) {
     if (e) e.preventDefault();
-    this.props.stripes.logger.log('action', 'clicked "add new user"');
+    this.log('action', 'clicked "add new user"');
     this.props.mutator.addUserMode.replace({ mode: true });
   }
 
   onClickCloseNewUser(e) {
     if (e) e.preventDefault();
-    this.props.stripes.logger.log('action', 'clicked "close new user"');
+    this.log('action', 'clicked "close new user"');
     this.props.mutator.addUserMode.replace({ mode: false });
   }
 
@@ -178,7 +180,7 @@ class Users extends React.Component {
   }
 
   performSearch(query) {
-    this.props.stripes.logger.log('action', `searched for '${query}'`);
+    this.log('action', `searched for '${query}'`);
     this.transitionToParams({ query });
   }
 
@@ -204,7 +206,7 @@ class Users extends React.Component {
       body: JSON.stringify(creds),
     }).then((response) => {
       if (response.status >= 400) {
-        this.props.stripes.logger.log('xhr', 'Users. POST of creds failed.');
+        this.log('xhr', 'Users. POST of creds failed.');
       } else {
         this.postPerms(username, ['users.read', 'perms.users.read']);
       }
@@ -218,7 +220,7 @@ class Users extends React.Component {
       body: JSON.stringify({ username, permissions: perms }),
     }).then((response) => {
       if (response.status >= 400) {
-        this.props.stripes.logger.log('xhr', 'Users. POST of users permissions failed.');
+        this.log('xhr', 'Users. POST of users permissions failed.');
       } else {
         // nothing to do
       }
