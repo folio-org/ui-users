@@ -38,13 +38,13 @@ function UserForm(props) {
   const addUserFirstMenu = <PaneMenu><button onClick={onCancel} title="close" aria-label="Close New User Dialog"><span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span></button></PaneMenu>;
   const addUserLastMenu = <PaneMenu><Button type="submit" title="Create New User" disabled={pristine || submitting} onClick={handleSubmit}>Create User</Button></PaneMenu>;
   const editUserLastMenu = <PaneMenu><Button type="submit" title="Update User" disabled={pristine || submitting} onClick={handleSubmit}>Update User</Button></PaneMenu>;
-    console.log("IPG: ", initialValues)
-  const patronGroupOptions = initialValues['available_patron_groups'] ? initialValues['available_patron_groups'].map((g) => { return {'label': g.group, 'value': g._id, selected: initialValues['patron_group'] == g._id }}) : []
+  console.log('IPG: ', initialValues);
+  const patronGroupOptions = initialValues.available_patron_groups ? initialValues.available_patron_groups.map((g) => { return { label: g.group, value: g._id, selected: initialValues.patron_group === g._id }; }) : [];
 
   return (
     <form>
       <Paneset>
-        <Pane defaultWidth="100%" firstMenu={addUserFirstMenu} lastMenu={initialValues['username'] ? editUserLastMenu : addUserLastMenu} paneTitle={initialValues['username'] ? 'Edit User' : 'New User'}>
+        <Pane defaultWidth="100%" firstMenu={addUserFirstMenu} lastMenu={initialValues.username ? editUserLastMenu : addUserLastMenu} paneTitle={initialValues.username ? 'Edit User' : 'New User'}>
           <Row>
             <Col sm={5} smOffset={1}>
               <h2>User Record</h2>
@@ -75,7 +75,7 @@ function UserForm(props) {
                 id="adduser_group"
                 component={Select}
                 fullWidth
-                dataOptions={[{'label': 'Select patron group', 'value': null},...patronGroupOptions]}
+                dataOptions={[{ label: 'Select patron group', value: null }, ...patronGroupOptions]}
               />
             </Col>
           </Row>
