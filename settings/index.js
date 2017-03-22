@@ -32,7 +32,8 @@ class UsersSettings extends React.Component {
 
   getPage() {
     const result = this.state.pages.filter(obj => obj.name === this.state.selectedPage);
-    return React.createElement(result[0].component);
+    const Component = result[0].component;
+    return <Component stripes={this.props.stripes} />;
   }
 
   render() {
