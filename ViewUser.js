@@ -24,8 +24,8 @@ class ViewUser extends Component {
   static propTypes = {
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func.isRequired,
+      connect: PropTypes.func.isRequired,
     }).isRequired,
-    connect: PropTypes.func.isRequired,
     data: PropTypes.shape({
       user: PropTypes.arrayOf(PropTypes.object),
       availablePermissions: PropTypes.arrayOf(PropTypes.object),
@@ -79,8 +79,8 @@ class ViewUser extends Component {
     };
     this.onClickEditUser = this.onClickEditUser.bind(this);
     this.onClickCloseEditUser = this.onClickCloseEditUser.bind(this);
-    this.connectedUserLoans = this.props.connect(UserLoans);
-    this.connectedLoansHistory = this.props.connect(LoansHistory);
+    this.connectedUserLoans = this.props.stripes.connect(UserLoans);
+    this.connectedLoansHistory = this.props.stripes.connect(LoansHistory);
     this.onClickViewLoansHistory = this.onClickViewLoansHistory.bind(this);
     this.onClickCloseLoansHistory = this.onClickCloseLoansHistory.bind(this);
   }
@@ -207,7 +207,7 @@ class ViewUser extends Component {
         </Row>
         <MultiColumnList fullWidth contentData={fineHistory} />
         <hr />
-        <Route path={`${this.props.match.path}`} render={props => <this.connectedUserLoans connect={this.props.connect} onClickViewLoansHistory={this.onClickViewLoansHistory} placeholder={'placeholder'} {...props} />} />
+        <Route path={`${this.props.match.path}`} render={props => <this.connectedUserLoans stripes={this.props.stripes} onClickViewLoansHistory={this.onClickViewLoansHistory} placeholder={'placeholder'} {...props} />} />
         {!this.props.stripes.hasPerm('perms.users.read') ? null :
         <UserPermissions availablePermissions={availablePermissions} usersPermissions={usersPermissions} viewUserProps={this.props} stripes={this.props.stripes} />
         }

@@ -51,11 +51,11 @@ class Users extends React.Component {
   };
 
   static propTypes = {
-    connect: PropTypes.func.isRequired,
     stripes: PropTypes.shape({
       logger: PropTypes.shape({
         log: PropTypes.func.isRequired,
       }).isRequired,
+      connect: PropTypes.func.isRequired,
     }).isRequired,
     data: PropTypes.object.isRequired,
     history: PropTypes.shape({
@@ -131,7 +131,7 @@ class Users extends React.Component {
     this.onChangeFilter = onChangeFilter.bind(this);
     this.transitionToParams = transitionToParams.bind(this);
 
-    this.connectedViewUser = this.props.connect(ViewUser);
+    this.connectedViewUser = this.props.stripes.connect(ViewUser);
     const logger = this.props.stripes.logger;
     this.log = logger.log.bind(logger);
   }
@@ -289,7 +289,7 @@ class Users extends React.Component {
         </Pane>
 
         {/* Details Pane */}
-        <Route path={`${this.props.match.path}/view/:userid/:username`} render={props => <this.connectedViewUser stripes={stripes} connect={this.props.connect} placeholder={'placeholder'} {...props} />} />
+        <Route path={`${this.props.match.path}/view/:userid/:username`} render={props => <this.connectedViewUser stripes={stripes} stripes={this.props.stripes} placeholder={'placeholder'} {...props} />} />
         <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false} label="Add New User Dialog">
           <UserForm
             initialValues={{ available_patron_groups: this.props.data.patronGroups }}
