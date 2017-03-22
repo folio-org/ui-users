@@ -131,8 +131,8 @@ class Users extends React.Component {
     this.onChangeFilter = onChangeFilter.bind(this);
     this.transitionToParams = transitionToParams.bind(this);
 
-    this.connectedViewUser = this.props.stripes.connect(ViewUser);
-    const logger = this.props.stripes.logger;
+    this.connectedViewUser = props.stripes.connect(ViewUser);
+    const logger = props.stripes.logger;
     this.log = logger.log.bind(logger);
   }
 

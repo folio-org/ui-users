@@ -79,8 +79,8 @@ class ViewUser extends Component {
     };
     this.onClickEditUser = this.onClickEditUser.bind(this);
     this.onClickCloseEditUser = this.onClickCloseEditUser.bind(this);
-    this.connectedUserLoans = this.props.stripes.connect(UserLoans);
-    this.connectedLoansHistory = this.props.stripes.connect(LoansHistory);
+    this.connectedUserLoans = props.stripes.connect(UserLoans);
+    this.connectedLoansHistory = props.stripes.connect(LoansHistory);
     this.onClickViewLoansHistory = this.onClickViewLoansHistory.bind(this);
     this.onClickCloseLoansHistory = this.onClickCloseLoansHistory.bind(this);
   }
