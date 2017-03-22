@@ -67,7 +67,7 @@ class PermissionSets extends React.Component {
             </NavListSection>
           </NavList>
         </Pane>
-        <PermissionSetDetails />
+        <PermissionSetDetails {...this.props} />
       </Paneset>
     );
   }
