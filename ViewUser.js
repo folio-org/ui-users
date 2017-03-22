@@ -207,7 +207,7 @@ class ViewUser extends Component {
         </Row>
         <MultiColumnList fullWidth contentData={fineHistory} />
         <hr />
-        <Route path={`${this.props.match.path}`} render={props => <this.connectedUserLoans stripes={this.props.stripes} onClickViewLoansHistory={this.onClickViewLoansHistory} placeholder={'placeholder'} {...props} />} />
+        <Route path={`${this.props.match.path}`} render={props => <this.connectedUserLoans stripes={this.props.stripes} onClickViewLoansHistory={this.onClickViewLoansHistory} {...props} />} />
         {!this.props.stripes.hasPerm('perms.users.read') ? null :
         <UserPermissions availablePermissions={availablePermissions} usersPermissions={usersPermissions} viewUserProps={this.props} stripes={this.props.stripes} />
         }
