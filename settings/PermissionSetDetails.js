@@ -22,7 +22,7 @@ class PermissionSetDetails extends React.Component {
             <Field label="Title" name="title" id="permissionset_title" component={Textfield} required fullWidth />
             <Field label="Description" name="description" id="permissionset_description" component={TextArea} required fullWidth />
           </section>
-          <UserPermissions availablePermissions={[]} />
+          <UserPermissions {...this.props} availablePermissions={[]} />
         </form>
       </Pane>
     );
