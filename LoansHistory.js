@@ -22,7 +22,7 @@ class LoansHistory extends Component {
         replace: PropTypes.func,
       }),
     }),
-    userid: PropTypes.object.isRequired,
+    userid: PropTypes.string.isRequired,
     onCancel: PropTypes.func.isRequired,
   };
 
@@ -47,6 +47,7 @@ class LoansHistory extends Component {
   }
 
   render() {
+
     const { data: { loansHistory } } = this.props;
 
     if (!loansHistory) return <div />;
