@@ -24,6 +24,20 @@ const propTypes = {
   initialValues: PropTypes.object,
 };
 
+function validate(formProps) {
+  const errors = {};
+
+  if (formProps.personal && !formProps.personal.last_name) {
+    errors.personal = {last_name: 'Please fill this in to continue'};
+  }
+
+  if (!formProps.username) {
+    errors.username = 'Please fill this in to continue';
+  }
+
+  return errors;
+}
+
 function UserForm(props) {
   const {
     handleSubmit,
@@ -90,4 +104,5 @@ UserForm.propTypes = propTypes;
 
 export default reduxForm({
   form: 'userForm',
+  validate,
 })(UserForm);
