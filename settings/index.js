@@ -13,7 +13,7 @@ class UsersSettings extends React.Component {
     super(props);
 
     this.state = {
-      selectedPage: 'PermissionSets',
+      selectedPage: 'PatronGroupsSettings',
       pages: [
         { label: 'Permission sets', name: 'PermissionSets', component: PermissionSets },
         { label: 'Patron groups', name: 'PatronGroupsSettings', component: PatronGroupsSettings },
@@ -31,8 +31,9 @@ class UsersSettings extends React.Component {
   }
 
   getPage() {
-    const result = this.state.pages.filter(obj => obj.component.name === this.state.selectedPage);
-    return React.createElement(result[0].component);
+    const result = this.state.pages.filter(obj => obj.name === this.state.selectedPage);
+    const Component = result[0].component;
+    return <Component stripes={this.props.stripes} />;
   }
 
   render() {

@@ -1,19 +1,22 @@
-import React, { Component, PropTypes } from 'react'; // eslint-disable-line
-import Match from 'react-router/Match'; // eslint-disable-line
-import Miss from 'react-router/Miss'; // eslint-disable-line
+// We have to remove node_modules/react to avoid having multiple copies loaded.
+// eslint-disable-next-line import/no-unresolved
+import React, { Component, PropTypes } from 'react';
+import Route from 'react-router-dom/Route';
+import Switch from 'react-router-dom/Switch';
 import Users from './Users';
 
 class UsersRouting extends Component {
-
   static propTypes = {
-    connect: PropTypes.func.isRequired,
+    stripes: PropTypes.shape({
+      connect: PropTypes.func.isRequired,
+    }).isRequired,
     location: PropTypes.object.isRequired,
-    pathname: PropTypes.string,
+    match: PropTypes.object.isRequired,
   }
 
   constructor(props) {
     super(props);
-    this.connectedUsers = props.connect(Users);
+    this.connectedApp = props.stripes.connect(Users);
   }
 
   NoMatch() {
@@ -26,12 +29,15 @@ class UsersRouting extends Component {
   }
 
   render() {
-    const { pathname } = this.props;
+    const pathname = this.props.match.path;
     return (
-      <div>
-        <Match pattern={`${pathname}`} component={this.connectedUsers} />
-        <Miss component={() => { this.NoMatch(); }} />
-      </div>
+      <Switch>
+        <Route
+          path={`${pathname}`}
+          render={() => <this.connectedApp {...this.props} />}
+        />
+        <Route component={() => { this.NoMatch(); }} />
+      </Switch>
     );
   }
 }

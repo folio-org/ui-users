@@ -2,7 +2,8 @@ import _ from 'lodash';
 // We have to remove node_modules/react to avoid having multiple copies loaded.
 // eslint-disable-next-line import/no-unresolved
 import React, { PropTypes } from 'react';
-import Match from 'react-router/Match';
+import Route from 'react-router-dom/Route';
+import queryString from 'query-string';
 import fetch from 'isomorphic-fetch';
 
 import Pane from '@folio/stripes-components/lib/Pane';
@@ -14,15 +15,17 @@ import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import FilterPaneSearch from '@folio/stripes-components/lib/FilterPaneSearch';
 import FilterControlGroup from '@folio/stripes-components/lib/FilterControlGroup';
 import Layer from '@folio/stripes-components/lib/Layer';
-import FilterGroups, { initialFilterState, filters2cql, onChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
+import FilterGroups, { initialFilterState, onChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
+import makePathFunction from '@folio/stripes-components/util/makePathFunction';
+import IfPermission from '@folio/stripes-components/lib/IfPermission';
 
 import UserForm from './UserForm';
 import ViewUser from './ViewUser';
 
 const filterConfig = [
   {
-    label: 'Filters',
+    label: 'User status',
     name: 'active',
     cql: 'active',
     values: [
@@ -30,21 +33,40 @@ const filterConfig = [
       { name: 'Inactive', cql: 'false' },
     ],
   },
+  {
+    label: 'Patron group',
+    name: 'pg',
+    cql: 'patron_group',
+    values: [
+      { name: 'On-campus', cql: 'on_campus' },
+      { name: 'Off-campus', cql: 'off_campus' },
+      { name: 'Other', cql: 'other' },
+    ],
+  },
 ];
 
 class Users extends React.Component {
   static contextTypes = {
-    router: PropTypes.object.isRequired,
     store: PropTypes.object,
   };
 
   static propTypes = {
+    stripes: PropTypes.shape({
+      logger: PropTypes.shape({
+        log: PropTypes.func.isRequired,
+      }).isRequired,
+      connect: PropTypes.func.isRequired,
+    }).isRequired,
     data: PropTypes.object.isRequired,
-    pathname: PropTypes.string.isRequired,
+    history: PropTypes.shape({
+      push: PropTypes.func.isRequired,
+    }).isRequired,
     location: PropTypes.shape({
       pathname: PropTypes.string.isRequired,
-      query: PropTypes.object, // object of key=value pairs
-      search: PropTypes.string, // string combining all parts of query
+      search: PropTypes.string,
+    }).isRequired,
+    match: PropTypes.shape({
+      path: PropTypes.string.isRequired,
     }).isRequired,
     mutator: PropTypes.shape({
       addUserMode: PropTypes.shape({
@@ -61,51 +83,33 @@ class Users extends React.Component {
     users: {
       type: 'okapi',
       records: 'users',
-      path: (queryParams, _pathComponents, _resourceValues) => {
-        const { query, filters, sort } = queryParams || {};
-
-        let cql;
-        if (query) {
-          cql = `username="${query}*" or personal.first_name="${query}*" or personal.last_name="${query}*"`;
-        }
-
-        const filterCql = filters2cql(filterConfig, filters);
-        if (filterCql) {
-          if (cql) {
-            cql = `(${cql}) and ${filterCql}`;
-          } else {
-            cql = filterCql;
-          }
-        }
-
-        if (sort) {
-          const sortMap = {
-            Active: 'active',
-            Name: 'personal.last_name personal.first_name',
-            Username: 'username',
-            Email: 'personal.email',
-          };
-          const sortIndex = sortMap[sort];
-          if (sortIndex) {
-            if (cql === undefined) cql = 'username=*';
-            cql += ` sortby ${sortIndex}`;
-          }
-        }
-
-        let path = 'users';
-        if (cql) path += `?query=${encodeURIComponent(cql)}`;
-
-        console.log(`query=${query} filters=${filters} sort=${sort} -> ${path}`);
-        return path;
-      },
+      path: makePathFunction(
+        'users',
+        'username=*',
+        'username="$QUERY*" or personal.first_name="$QUERY*" or personal.last_name="$QUERY*"',
+        {
+          Active: 'active',
+          Name: 'personal.last_name personal.first_name',
+          'Patron Group': 'patron_group',
+          Username: 'username',
+          Email: 'personal.email',
+        },
+        filterConfig,
+      ),
       staticFallback: { path: 'users' },
+    },
+    patronGroups: {
+      type: 'okapi',
+      path: 'groups',
+      records: 'usergroups',
+      pk: '_id',
     },
   });
 
   constructor(props, context) {
     super(props);
 
-    const query = props.location.query || {};
+    const query = props.location.search ? queryString.parse(props.location.search) : {};
     this.state = {
       filters: initialFilterState(filterConfig, query.filters),
       selectedItem: {},
@@ -126,22 +130,25 @@ class Users extends React.Component {
 
     this.onChangeFilter = onChangeFilter.bind(this);
     this.transitionToParams = transitionToParams.bind(this);
+
+    this.connectedViewUser = props.stripes.connect(ViewUser);
+    const logger = props.stripes.logger;
+    this.log = logger.log.bind(logger);
   }
 
   componentWillMount() {
     if (_.isEmpty(this.props.data.addUserMode)) this.props.mutator.addUserMode.replace({ mode: false });
   }
 
-  // search Handlers...
   onClearSearch() {
-    console.log('User cleared search');
+    this.log('action', 'cleared search');
     this.setState({ searchTerm: '' });
-    this.context.router.transitionTo(this.props.location.pathname);
+    this.props.history.push(this.props.location.pathname);
   }
 
   onSort(e, meta) {
     const sortOrder = meta.name;
-    console.log('User sorted by', sortOrder);
+    this.log('action', `sorted by ${sortOrder}`);
     this.setState({ sortOrder });
     this.transitionToParams({ sort: sortOrder });
   }
@@ -149,35 +156,32 @@ class Users extends React.Component {
   onSelectRow(e, meta) {
     const userId = meta.id;
     const username = meta.username;
-    console.log('User clicked', userId, 'location = ', this.props.location);
+    this.log('action', `clicked ${userId}, location =`, this.props.location, 'selected user =', meta);
     this.setState({ selectedItem: meta });
-    this.context.router.transitionTo(`/users/view/${userId}/${username}${this.props.location.search}`);
+    this.props.history.push(`/users/view/${userId}/${username}${this.props.location.search}`);
   }
 
-  // end search Handlers
-
-  // AddUser Handlers
   onClickAddNewUser(e) {
     if (e) e.preventDefault();
+    this.log('action', 'clicked "add new user"');
     this.props.mutator.addUserMode.replace({ mode: true });
   }
 
   onClickCloseNewUser(e) {
     if (e) e.preventDefault();
+    this.log('action', 'clicked "close new user"');
     this.props.mutator.addUserMode.replace({ mode: false });
   }
-  // end AddUser Handlers
-
 
   onChangeSearch(e) {
-    const term = e.target.value;
-    this.setState({ searchTerm: term });
-    this.performSearch(term);
+    const query = e.target.value;
+    this.setState({ searchTerm: query });
+    this.performSearch(query);
   }
 
-  performSearch(term) {
-    console.log('User searched:', term, 'at', this.props.location.pathname);
-    this.transitionToParams({ query: term });
+  performSearch(query) {
+    this.log('action', `searched for '${query}'`);
+    this.transitionToParams({ query });
   }
 
   updateFilters(filters) { // provided for onChangeFilter
@@ -189,13 +193,7 @@ class Users extends React.Component {
     const creds = Object.assign({}, data.creds, { username: data.username });
     if (data.creds) delete data.creds; // eslint-disable-line no-param-reassign
     // POST user record
-    const p = this.props.mutator.users.POST(data);
-    console.log('got promise', p);
-    p.then((x) => {
-      console.log('POST promise was OK:', x);
-    }).catch((x) => {
-      console.log('POST promise failed:', x);
-    });
+    this.props.mutator.users.POST(data);
     // POST credentials, permission-user, permissions;
     this.postCreds(data.username, creds);
     this.onClickCloseNewUser();
@@ -208,7 +206,7 @@ class Users extends React.Component {
       body: JSON.stringify(creds),
     }).then((response) => {
       if (response.status >= 400) {
-        console.log('Users. POST of creds failed.');
+        this.log('xhr', 'Users. POST of creds failed.');
       } else {
         this.postPerms(username, ['users.read', 'perms.users.read']);
       }
@@ -219,10 +217,10 @@ class Users extends React.Component {
     fetch(`${this.okapi.url}/perms/users`, {
       method: 'POST',
       headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token, 'Content-Type': 'application/json' }),
-      body: JSON.stringify({ username, "permissions" : perms }),
+      body: JSON.stringify({ username, permissions: perms }),
     }).then((response) => {
       if (response.status >= 400) {
-        console.log('Users. POST of users permissions failed.');
+        this.log('xhr', 'Users. POST of users permissions failed.');
       } else {
         // nothing to do
       }
@@ -230,7 +228,7 @@ class Users extends React.Component {
   }
 
   render() {
-    const { data, pathname } = this.props;
+    const { data, stripes } = this.props;
     const users = data.users || [];
 
     /* searchHeader is a 'custom pane header'*/
@@ -240,6 +238,14 @@ class Users extends React.Component {
     const resultsFormatter = {
       Active: user => user.active,
       Name: user => `${_.get(user, ['personal', 'last_name'], '')}, ${_.get(user, ['personal', 'first_name'], '')}`,
+      'Patron Group': (user) => {
+        const map = {
+          on_campus: 'On-campus',
+          off_campus: 'Off-campus',
+          other: 'Other',
+        };
+        return map[user.patron_group] || '?';
+      },
       Username: user => user.username,
       Email: user => _.get(user, ['personal', 'email']),
     };
@@ -250,7 +256,9 @@ class Users extends React.Component {
         <Pane defaultWidth="16%" header={searchHeader}>
           <FilterGroups config={filterConfig} filters={this.state.filters} onChangeFilter={this.onChangeFilter} />
           <FilterControlGroup label="Actions">
-            <Button fullWidth onClick={this.onClickAddNewUser}>New user</Button>
+            <IfPermission {...this.props} perm="users.create">
+              <Button fullWidth onClick={this.onClickAddNewUser}>New user</Button>
+            </IfPermission>
           </FilterControlGroup>
         </Pane>
         {/* Results Pane */}
@@ -273,7 +281,7 @@ class Users extends React.Component {
             formatter={resultsFormatter}
             onRowClick={this.onSelectRow}
             onHeaderClick={this.onSort}
-            visibleColumns={['Active', 'Name', 'Username', 'Email']}
+            visibleColumns={['Active', 'Name', 'Patron Group', 'Username', 'Email']}
             fullWidth
             sortOrder={this.state.sortOrder}
             isEmptyMessage={`No results found for "${this.state.searchTerm}". Please check your spelling and filters.`}
@@ -281,9 +289,10 @@ class Users extends React.Component {
         </Pane>
 
         {/* Details Pane */}
-        <Match pattern={`${pathname}/view/:userid/:username`} render={props => <ViewUser placeholder={'placeholder'} {...props} />} />
+        <Route path={`${this.props.match.path}/view/:userid/:username`} render={props => <this.connectedViewUser stripes={stripes} stripes={this.props.stripes} {...props} />} />
         <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false} label="Add New User Dialog">
           <UserForm
+            initialValues={{ available_patron_groups: this.props.data.patronGroups }}
             onSubmit={(record) => { this.create(record); }}
             onCancel={this.onClickCloseNewUser}
           />

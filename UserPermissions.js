@@ -1,15 +1,20 @@
 import _ from 'lodash';
-import React, { PropTypes } from 'react'; // eslint-disable-line
-import {Row, Col, Dropdown} from 'react-bootstrap'; // eslint-disable-line
-import DropdownMenu from '@folio/stripes-components/lib/DropdownMenu'; // eslint-disable-line
-import Button from '@folio/stripes-components/lib/Button'; // eslint-disable-line
-import Icon from '@folio/stripes-components/lib/Icon'; // eslint-disable-line
-import TextField from '@folio/stripes-components/lib/TextField'; // eslint-disable-line
-import List from '@folio/stripes-components/lib/List'; // eslint-disable-line
-import ListDropdown from './lib/ListDropdown'; // eslint-disable-line
-import css from './UserPermissions.css'; // eslint-disable-line
+// We have to remove node_modules/react to avoid having multiple copies loaded.
+// eslint-disable-next-line import/no-unresolved
+import React, { PropTypes } from 'react';
+import { Row, Col, Dropdown } from 'react-bootstrap';
+import DropdownMenu from '@folio/stripes-components/lib/DropdownMenu';
+import Button from '@folio/stripes-components/lib/Button';
+import Icon from '@folio/stripes-components/lib/Icon';
+import List from '@folio/stripes-components/lib/List';
+import IfPermission from '@folio/stripes-components/lib/IfPermission';
+import ListDropdown from './lib/ListDropdown';
+import css from './UserPermissions.css';
 
 const propTypes = {
+  stripes: PropTypes.shape({
+    hasPerm: PropTypes.func.isRequired,
+  }).isRequired,
   availablePermissions: PropTypes.arrayOf(PropTypes.object),
   usersPermissions: PropTypes.arrayOf(PropTypes.object),
   viewUserProps: PropTypes.shape({
@@ -34,6 +39,7 @@ class UserPermissions extends React.Component {
     this.onToggleAddPermDD = this.onToggleAddPermDD.bind(this);
     this.addPermission = this.addPermission.bind(this);
     this.onChangeSearch = this.onChangeSearch.bind(this);
+    this.isPermAvailable = this.isPermAvailable.bind(this);
   }
 
   onToggleAddPermDD() {
@@ -58,21 +64,25 @@ class UserPermissions extends React.Component {
     this.props.viewUserProps.mutator.usersPermissions.DELETE(perm, this.props.viewUserProps, perm.permissionName);
   }
 
+  isPermAvailable(perm) {
+    const permInUse = _.some(this.props.usersPermissions, perm);
+
+    // This should be replaced with proper search when possible.
+    const nameToCompare = !perm.displayName ? perm.permissionName.toLowerCase() : perm.displayName.toLowerCase();
+    const permNotFiltered = _.includes(nameToCompare, this.state.searchTerm.toLowerCase());
+
+    return !permInUse && permNotFiltered;
+  }
+
   render() {
     const { usersPermissions } = this.props;
 
+    if (!this.props.stripes.hasPerm('perms.users.read'))
+      return null;
+
     const permissionsDD = (
       <ListDropdown
-        items={_.filter(this.props.availablePermissions, function(perm) {
-
-          const permInUse = _.some(usersPermissions, perm);
-
-          // This should be replaced with proper search when possible.
-          const nameToCompare = !perm.displayName?perm.permissionName.toLowerCase():perm.displayName.toLowerCase();
-          const permNotFiltered = _.includes(nameToCompare, this.state.searchTerm.toLowerCase());
-
-          return !permInUse && permNotFiltered;
-        }.bind(this))}
+        items={_.filter(this.props.availablePermissions, this.isPermAvailable)}
         onClickItem={this.addPermission}
         onChangeSearch={this.onChangeSearch}
       />
@@ -80,7 +90,7 @@ class UserPermissions extends React.Component {
 
     const listFormatter = item => (
       <li key={item.permissionName} >
-        {!item.displayName?item.permissionName:item.displayName}
+        {!item.displayName ? item.permissionName : item.displayName}
         <Button
           buttonStyle="fieldControl"
           align="end"
@@ -89,7 +99,9 @@ class UserPermissions extends React.Component {
           aria-label={`Remove Permission: ${item.permissionName}`}
           title="Remove Permission"
         >
-          <Icon icon="hollowX" iconClassName={css.removePermissionIcon} iconRootClass={css.removePermissionButton} />
+          <IfPermission {...this.props} perm="perms.users.delete">
+            <Icon icon="hollowX" iconClassName={css.removePermissionIcon} iconRootClass={css.removePermissionButton} />
+          </IfPermission>
         </Button>
       </li>
     );
@@ -111,10 +123,12 @@ class UserPermissions extends React.Component {
               />
           </Col>*/}
           <Col xs={7}>
-            <Dropdown open={this.state.addPermissionOpen} pullRight onToggle={this.onToggleAddPermDD} id="AddPermissionDropdown" style={{ float: 'right' }}>
-              <Button align="end" bottomMargin0 bsRole="toggle" aria-haspopup="true">&#43; Add Permission</Button>
-              <DropdownMenu bsRole="menu" onToggle={this.onToggleAddPermDD} aria-label="available permissions">{permissionsDD}</DropdownMenu>
-            </Dropdown>
+            <IfPermission {...this.props} perm="perms.users.modify">
+              <Dropdown open={this.state.addPermissionOpen} pullRight onToggle={this.onToggleAddPermDD} id="AddPermissionDropdown" style={{ float: 'right' }}>
+                <Button align="end" bottomMargin0 bsRole="toggle" aria-haspopup="true">&#43; Add Permission</Button>
+                <DropdownMenu bsRole="menu" onToggle={this.onToggleAddPermDD} aria-label="available permissions" width="40em">{permissionsDD}</DropdownMenu>
+              </Dropdown>
+            </IfPermission>
           </Col>
         </Row>
         <List itemFormatter={listFormatter} items={usersPermissions || []} isEmptyMessage="This user has no permissions applied." />

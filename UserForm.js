@@ -1,15 +1,17 @@
-import React, { Component, PropTypes } from 'react'; // eslint-disable-line
-import Paneset from '@folio/stripes-components/lib/Paneset'; // eslint-disable-line
-import Pane from '@folio/stripes-components/lib/Pane'; // eslint-disable-line
-import PaneMenu from '@folio/stripes-components/lib/PaneMenu'; // eslint-disable-line
-import {Row, Col} from 'react-bootstrap'; // eslint-disable-line
-import Button from '@folio/stripes-components/lib/Button'; // eslint-disable-line
-import TextField from '@folio/stripes-components/lib/TextField'; // eslint-disable-line
-import Select from '@folio/stripes-components/lib/Select'; // eslint-disable-line
-import RadioButtonGroup from '@folio/stripes-components/lib/RadioButtonGroup'; // eslint-disable-line
-import RadioButton from '@folio/stripes-components/lib/RadioButton'; // eslint-disable-line
+// We have to remove node_modules/react to avoid having multiple copies loaded.
+// eslint-disable-next-line import/no-unresolved
+import React, { PropTypes } from 'react';
+import Paneset from '@folio/stripes-components/lib/Paneset';
+import Pane from '@folio/stripes-components/lib/Pane';
+import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
+import { Row, Col } from 'react-bootstrap';
+import Button from '@folio/stripes-components/lib/Button';
+import TextField from '@folio/stripes-components/lib/TextField';
+import Select from '@folio/stripes-components/lib/Select';
+import RadioButtonGroup from '@folio/stripes-components/lib/RadioButtonGroup';
+import RadioButton from '@folio/stripes-components/lib/RadioButton';
 
-import {Field, reducer as formReducer, reduxForm} from 'redux-form'; // eslint-disable-line
+import { Field, reduxForm } from 'redux-form';
 
 const propTypes = {
   onClose: PropTypes.func, // eslint-disable-line react/no-unused-prop-types
@@ -21,6 +23,20 @@ const propTypes = {
   onCancel: PropTypes.func,
   initialValues: PropTypes.object,
 };
+
+function validate(formProps) {
+  const errors = {};
+
+  if (formProps.personal && !formProps.personal.last_name) {
+    errors.personal = {last_name: 'Please fill this in to continue'};
+  }
+
+  if (!formProps.username) {
+    errors.username = 'Please fill this in to continue';
+  }
+
+  return errors;
+}
 
 function UserForm(props) {
   const {
@@ -36,16 +52,18 @@ function UserForm(props) {
   const addUserFirstMenu = <PaneMenu><button onClick={onCancel} title="close" aria-label="Close New User Dialog"><span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span></button></PaneMenu>;
   const addUserLastMenu = <PaneMenu><Button type="submit" title="Create New User" disabled={pristine || submitting} onClick={handleSubmit}>Create User</Button></PaneMenu>;
   const editUserLastMenu = <PaneMenu><Button type="submit" title="Update User" disabled={pristine || submitting} onClick={handleSubmit}>Update User</Button></PaneMenu>;
+  console.log('IPG: ', initialValues);
+  const patronGroupOptions = initialValues.available_patron_groups ? initialValues.available_patron_groups.map((g) => { return { label: g.group, value: g._id, selected: initialValues.patron_group === g._id }; }) : [];
 
   return (
     <form>
       <Paneset>
-        <Pane defaultWidth="100%" firstMenu={addUserFirstMenu} lastMenu={initialValues ? editUserLastMenu : addUserLastMenu} paneTitle={initialValues ? 'Edit User' : 'New User'}>
+        <Pane defaultWidth="100%" firstMenu={addUserFirstMenu} lastMenu={initialValues.username ? editUserLastMenu : addUserLastMenu} paneTitle={initialValues.username ? 'Edit User' : 'New User'}>
           <Row>
             <Col sm={5} smOffset={1}>
               <h2>User Record</h2>
               <Field label="UserName" name="username" id="adduser_username" component={TextField} required fullWidth />
-              {!initialValues ? <Field label="Password" name="creds.password" id="pw" component={TextField} required fullWidth /> : null}
+              {!initialValues.id ? <Field label="Password" name="creds.password" id="pw" component={TextField} required fullWidth /> : null}
               <Field label="Status" name="active" component={RadioButtonGroup}>
                 <RadioButton label="Active" id="useractiveYesRB" value="true" inline />
                 <RadioButton label="Inactive" id="useractiveNoRB" value="false" inline />
@@ -71,9 +89,8 @@ function UserForm(props) {
                 id="adduser_group"
                 component={Select}
                 fullWidth
-                dataOptions={[{ label: 'Select patron group', value: '' }, { label: 'On-campus', value: 'on_campus', selected: 'selected' }]}
+                dataOptions={[{ label: 'Select patron group', value: null }, ...patronGroupOptions]}
               />
-
             </Col>
           </Row>
         </Pane>
@@ -87,4 +104,5 @@ UserForm.propTypes = propTypes;
 
 export default reduxForm({
   form: 'userForm',
+  validate,
 })(UserForm);
