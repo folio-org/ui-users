@@ -28,7 +28,7 @@ function validate(formProps) {
   const errors = {};
 
   if (formProps.personal && !formProps.personal.last_name) {
-    errors.personal = {last_name: 'Please fill this in to continue'};
+    errors.personal = { last_name: 'Please fill this in to continue' };
   }
 
   if (!formProps.username) {
