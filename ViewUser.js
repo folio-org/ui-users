@@ -51,18 +51,6 @@ class ViewUser extends Component {
       records: 'permissions',
       path: 'perms/permissions?length=100',
     },
-    usersPermissions: {
-      type: 'okapi',
-      records: 'permissionNames',
-      DELETE: {
-        pk: 'permissionName',
-        path: 'perms/users/:{username}/permissions',
-      },
-      GET: {
-        path: 'perms/users/:{username}/permissions?full=true',
-      },
-      path: 'perms/users/:{username}/permissions',
-    },
     patronGroups: {
       type: 'okapi',
       path: 'groups',
@@ -126,7 +114,7 @@ class ViewUser extends Component {
   render() {
     const fineHistory = [{ 'Due Date': '11/12/2014', Amount: '34.23', Status: 'Unpaid' }];
 
-    const { data: { users, availablePermissions, usersPermissions, patronGroups }, match: { params: { userid } } } = this.props;
+    const { data: { users, availablePermissions, patronGroups }, match: { params: { userid } } } = this.props;
 
     const detailMenu = (<PaneMenu>
       <IfPermission {...this.props} perm="users.edit">
@@ -210,7 +198,7 @@ class ViewUser extends Component {
         <hr />
         <this.connectedUserLoans onClickViewLoansHistory={this.onClickViewLoansHistory} {...this.props} />
         {!this.props.stripes.hasPerm('perms.users.read') ? null :
-        <this.connectedUserPermissions availablePermissions={availablePermissions} usersPermissions={usersPermissions} viewUserProps={this.props} stripes={this.props.stripes} />
+        <this.connectedUserPermissions availablePermissions={availablePermissions} viewUserProps={this.props} stripes={this.props.stripes} match={this.props.match} />
         }
         <Layer isOpen={this.state.editUserMode} label="Edit User Dialog">
           <UserForm
