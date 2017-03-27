@@ -117,9 +117,7 @@ class ViewUser extends Component {
     const { data: { users, availablePermissions, patronGroups }, match: { params: { userid } } } = this.props;
 
     const detailMenu = (<PaneMenu>
-      <IfPermission {...this.props} perm="users.edit">
         <button onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button>
-      </IfPermission>
     </PaneMenu>);
 
     if (!users || users.length === 0 || !userid) return <div />;
@@ -148,7 +146,7 @@ class ViewUser extends Component {
             </Row>
             <Row>
               <Col xs={12}>
-                <KeyValue label="Username" value={_.get(user, ['username'], '')} />
+                <KeyValue label="User ID" value={_.get(user, ['username'], '')} />
               </Col>
             </Row>
             <br />

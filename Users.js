@@ -147,7 +147,7 @@ class Users extends React.Component {
   }
 
   onSort(e, meta) {
-    const sortOrder = meta.name;
+    const sortOrder = meta.name === "User ID" ? "username" : meta.name;
     this.log('action', `sorted by ${sortOrder}`);
     this.setState({ sortOrder });
     this.transitionToParams({ sort: sortOrder });
@@ -246,7 +246,7 @@ class Users extends React.Component {
         };
         return map[user.patron_group] || '?';
       },
-      Username: user => user.username,
+      'User ID': user => user.username,
       Email: user => _.get(user, ['personal', 'email']),
     };
 
@@ -256,9 +256,7 @@ class Users extends React.Component {
         <Pane defaultWidth="16%" header={searchHeader}>
           <FilterGroups config={filterConfig} filters={this.state.filters} onChangeFilter={this.onChangeFilter} />
           <FilterControlGroup label="Actions">
-            <IfPermission {...this.props} perm="users.create">
               <Button fullWidth onClick={this.onClickAddNewUser}>New user</Button>
-            </IfPermission>
           </FilterControlGroup>
         </Pane>
         {/* Results Pane */}
@@ -281,7 +279,7 @@ class Users extends React.Component {
             formatter={resultsFormatter}
             onRowClick={this.onSelectRow}
             onHeaderClick={this.onSort}
-            visibleColumns={['Active', 'Name', 'Patron Group', 'Username', 'Email']}
+            visibleColumns={['Active', 'Name', 'Patron Group', 'User ID', 'Email']}
             fullWidth
             sortOrder={this.state.sortOrder}
             isEmptyMessage={`No results found for "${this.state.searchTerm}". Please check your spelling and filters.`}
