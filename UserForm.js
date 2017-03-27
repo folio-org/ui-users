@@ -33,27 +33,35 @@ function validate(values) {
   return errors;
 }
 
-function asyncValidate(values, dispatch, props) {
-  return new Promise((resolve, reject) => {
-    fetch(`${okapiUrl}/users?query=(username="${values.username}")`,
-      { headers: Object.assign({}, {
-        'X-Okapi-Tenant': tenant,
-        'X-Okapi-Token': okapiToken,
-        'Content-Type': 'application/json' }),
-      },
-    ).then((response) => {
-      if (response.status >= 400) {
-        console.log('Error fetching user');
-      } else {
-        response.json().then((json) => {
-          if (json.total_records > 0)
-            reject({ username: 'This User ID has already been taken' });
-          else
-            resolve();
-        });
-      }
+function checkUniqueUserID(username) {
+  return fetch(`${okapiUrl}/users?query=(username="${username}")`,
+    { headers: Object.assign({}, {
+      'X-Okapi-Tenant': tenant,
+      'X-Okapi-Token': okapiToken,
+      'Content-Type': 'application/json' }),
+    },
+  );
+}
+
+function asyncValidate(values, dispatch, props, blurredField) {
+  if (blurredField === 'username' && values.username !== props.initialValues.username) {
+    return new Promise((resolve, reject) => {
+      // TODO: Should use stripes-connect (dispatching an action and update state)
+      checkUniqueUserID(values.username).then((response) => {
+        if (response.status >= 400) {
+          console.log('Error fetching user');
+        } else {
+          response.json().then((json) => {
+            if (json.total_records > 0)
+              reject({ username: 'This User ID has already been taken' });
+            else
+              resolve();
+          });
+        }
+      });
     });
-  });
+  }
+  return new Promise(resolve => resolve());
 }
 
 class UserForm extends React.Component {
@@ -144,4 +152,5 @@ export default reduxForm({
   form: 'userForm',
   validate,
   asyncValidate,
+  asyncBlurFields: ['username'],
 })(UserForm);
