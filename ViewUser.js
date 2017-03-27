@@ -2,7 +2,6 @@ import _ from 'lodash';
 // We have to remove node_modules/react to avoid having multiple copies loaded.
 // eslint-disable-next-line import/no-unresolved
 import React, { Component, PropTypes } from 'react';
-import Route from 'react-router-dom/Route';
 import Pane from '@folio/stripes-components/lib/Pane';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import Button from '@folio/stripes-components/lib/Button';
@@ -12,7 +11,6 @@ import TextField from '@folio/stripes-components/lib/TextField';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import Icon from '@folio/stripes-components/lib/Icon';
 import Layer from '@folio/stripes-components/lib/Layer';
-import IfPermission from '@folio/stripes-components/lib/IfPermission';
 
 import UserForm from './UserForm';
 import UserPermissions from './UserPermissions';
@@ -29,6 +27,7 @@ class ViewUser extends Component {
     data: PropTypes.shape({
       user: PropTypes.arrayOf(PropTypes.object),
       availablePermissions: PropTypes.arrayOf(PropTypes.object),
+      patronGroups: PropTypes.arrayOf(PropTypes.object),
     }),
     mutator: React.PropTypes.shape({
       users: React.PropTypes.shape({
@@ -117,7 +116,7 @@ class ViewUser extends Component {
     const { data: { users, availablePermissions, patronGroups }, match: { params: { userid } } } = this.props;
 
     const detailMenu = (<PaneMenu>
-        <button onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button>
+      <button onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button>
     </PaneMenu>);
 
     if (!users || users.length === 0 || !userid) return <div />;

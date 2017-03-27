@@ -15,6 +15,9 @@ const propTypes = {
   stripes: PropTypes.shape({
     hasPerm: PropTypes.func.isRequired,
   }).isRequired,
+  data: PropTypes.shape({
+    usersPermissions: PropTypes.arrayOf(PropTypes.object),
+  }).isRequired,
   availablePermissions: PropTypes.arrayOf(PropTypes.object),
   mutator: PropTypes.shape({
     usersPermissions: PropTypes.shape({

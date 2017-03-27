@@ -18,7 +18,6 @@ import Layer from '@folio/stripes-components/lib/Layer';
 import FilterGroups, { initialFilterState, onChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
 import makePathFunction from '@folio/stripes-components/util/makePathFunction';
-import IfPermission from '@folio/stripes-components/lib/IfPermission';
 
 import UserForm from './UserForm';
 import ViewUser from './ViewUser';
@@ -147,7 +146,7 @@ class Users extends React.Component {
   }
 
   onSort(e, meta) {
-    const sortOrder = meta.name === "User ID" ? "username" : meta.name;
+    const sortOrder = meta.name === 'User ID' ? 'username' : meta.name;
     this.log('action', `sorted by ${sortOrder}`);
     this.setState({ sortOrder });
     this.transitionToParams({ sort: sortOrder });
@@ -256,7 +255,7 @@ class Users extends React.Component {
         <Pane defaultWidth="16%" header={searchHeader}>
           <FilterGroups config={filterConfig} filters={this.state.filters} onChangeFilter={this.onChangeFilter} />
           <FilterControlGroup label="Actions">
-              <Button fullWidth onClick={this.onClickAddNewUser}>New user</Button>
+            <Button fullWidth onClick={this.onClickAddNewUser}>New user</Button>
           </FilterControlGroup>
         </Pane>
         {/* Results Pane */}
