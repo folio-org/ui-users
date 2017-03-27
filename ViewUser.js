@@ -81,6 +81,7 @@ class ViewUser extends Component {
     this.onClickCloseEditUser = this.onClickCloseEditUser.bind(this);
     this.connectedUserLoans = props.stripes.connect(UserLoans);
     this.connectedLoansHistory = props.stripes.connect(LoansHistory);
+    this.connectedUserPermissions = props.stripes.connect(UserPermissions);
     this.onClickViewLoansHistory = this.onClickViewLoansHistory.bind(this);
     this.onClickCloseLoansHistory = this.onClickCloseLoansHistory.bind(this);
   }
@@ -209,7 +210,7 @@ class ViewUser extends Component {
         <hr />
         <this.connectedUserLoans onClickViewLoansHistory={this.onClickViewLoansHistory} {...this.props} />
         {!this.props.stripes.hasPerm('perms.users.read') ? null :
-        <UserPermissions availablePermissions={availablePermissions} usersPermissions={usersPermissions} viewUserProps={this.props} stripes={this.props.stripes} />
+        <this.connectedUserPermissions availablePermissions={availablePermissions} usersPermissions={usersPermissions} viewUserProps={this.props} stripes={this.props.stripes} />
         }
         <Layer isOpen={this.state.editUserMode} label="Edit User Dialog">
           <UserForm
