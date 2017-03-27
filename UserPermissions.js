@@ -16,11 +16,11 @@ const propTypes = {
     hasPerm: PropTypes.func.isRequired,
   }).isRequired,
   data: PropTypes.shape({
-    usersPermissions: PropTypes.arrayOf(PropTypes.object),
+    userPermissions: PropTypes.arrayOf(PropTypes.object),
   }).isRequired,
   availablePermissions: PropTypes.arrayOf(PropTypes.object),
   mutator: PropTypes.shape({
-    usersPermissions: PropTypes.shape({
+    userPermissions: PropTypes.shape({
       POST: PropTypes.func.isRequired,
       DELETE: PropTypes.func.isRequired,
     }),
@@ -31,7 +31,7 @@ const propTypes = {
 
 class UserPermissions extends React.Component {
   static manifest = Object.freeze({
-    usersPermissions: {
+    userPermissions: {
       type: 'okapi',
       records: 'permissionNames',
       DELETE: {
@@ -72,17 +72,17 @@ class UserPermissions extends React.Component {
   }
 
   addPermission(perm) {
-    this.props.mutator.usersPermissions.POST(perm, this.props.viewUserProps).then(() => {
+    this.props.mutator.userPermissions.POST(perm, this.props.viewUserProps).then(() => {
       this.onToggleAddPermDD();
     });
   }
 
   removePermission(perm) {
-    this.props.mutator.usersPermissions.DELETE(perm, this.props.viewUserProps, perm.permissionName);
+    this.props.mutator.userPermissions.DELETE(perm, this.props.viewUserProps, perm.permissionName);
   }
 
   isPermAvailable(perm) {
-    const permInUse = _.some(this.props.data.usersPermissions, perm);
+    const permInUse = _.some(this.props.data.userPermissions, perm);
 
     // This should be replaced with proper search when possible.
     const nameToCompare = !perm.displayName ? perm.permissionName.toLowerCase() : perm.displayName.toLowerCase();
@@ -92,7 +92,7 @@ class UserPermissions extends React.Component {
   }
 
   render() {
-    const { usersPermissions } = this.props.data;
+    const { userPermissions } = this.props.data;
 
     if (!this.props.stripes.hasPerm('perms.users.read'))
       return null;
@@ -148,7 +148,7 @@ class UserPermissions extends React.Component {
             </IfPermission>
           </Col>
         </Row>
-        <List itemFormatter={listFormatter} items={usersPermissions || []} isEmptyMessage="This user has no permissions applied." />
+        <List itemFormatter={listFormatter} items={userPermissions || []} isEmptyMessage="This user has no permissions applied." />
       </div>
     );
   }
