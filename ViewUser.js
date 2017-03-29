@@ -209,7 +209,7 @@ class ViewUser extends Component {
         <hr />
         <this.connectedUserLoans onClickViewLoansHistory={this.onClickViewLoansHistory} {...this.props} />
         {!this.props.stripes.hasPerm('perms.users.read') ? null :
-        <UserPermissions availablePermissions={availablePermissions} usersPermissions={usersPermissions} viewUserProps={this.props} stripes={this.props.stripes} />
+        <UserPermissions availablePermissions={availablePermissions} setPermissions={usersPermissions} sectionHeading="User Permissions" parentProps={this.props} stripes={this.props.stripes} />
         }
         <Layer isOpen={this.state.editUserMode} label="Edit User Dialog">
           <UserForm

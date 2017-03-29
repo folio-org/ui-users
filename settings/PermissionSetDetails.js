@@ -11,6 +11,9 @@ import UserPermissions from '../UserPermissions';
 class PermissionSetDetails extends Component {
 
   static propTypes = {
+    stripes: PropTypes.shape({
+      hasPerm: PropTypes.func.isRequired,
+    }).isRequired,
     initialValues: PropTypes.object,
     data: PropTypes.shape({
       availablePermissions: PropTypes.arrayOf(PropTypes.object)
@@ -21,7 +24,16 @@ class PermissionSetDetails extends Component {
     availablePermissions: {
       type: 'okapi',
       records: 'permissions',
-      path: 'perms/permissions?length=100'
+      // DELETE: {
+      //   pk: 'permissionName',
+      //   path: 'perms/users/:{username}/permissions',
+      // },
+      // GET: {
+      //   path: 'perms/users/:{username}/permissions?full=true',
+      // },
+      GET: {
+        path: 'perms/permissions?length=100&query=(mutable=false)'
+      }
     }
   });
 
@@ -30,18 +42,17 @@ class PermissionSetDetails extends Component {
   }
 
   render() {
-    console.log(this.props);
     const { data: { availablePermissions }, selectedSet } = this.props;
-    
+    console.log(this);
     return (
-      <Pane paneTitle={"Permission Set "+selectedSet.title} defaultWidth="fill" >
+      <Pane paneTitle={"Permission Set "+selectedSet.permissionName} defaultWidth="fill" >
         <form>
           <section>
             <h2 style={{ marginTop: '0' }}>About</h2>
-            <Field label="Title" name="title" id="permissionset_title" component={Textfield} required fullWidth rounded />
+            <Field label="Title" name="permissionName" id="permissionName" component={Textfield} required fullWidth rounded />
             <Field label="Description" name="description" id="permissionset_description" component={TextArea} required fullWidth rounded />
           </section>
-          <UserPermissions sectionHeading="Contains" availablePermissions={availablePermissions} />
+          <UserPermissions sectionHeading="Contains" setPermissions={selectedSet.subPermissions} availablePermissions={availablePermissions} parentProps={this.props} stripes={this.props.stripes} />
         </form>
       </Pane>
     );

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
+import { connect } from '@folio/stripes-connect'; // eslint-disable-line
 
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import Pane from '@folio/stripes-components/lib/Pane';
@@ -8,17 +9,42 @@ import NavList from '@folio/stripes-components/lib/NavList';
 import NavListSection from '@folio/stripes-components/lib/NavListSection';
 import PermissionSetDetails from './PermissionSetDetails';
 
-class PermissionSets extends React.Component {
+class PermissionSets extends Component {
+
+  static propTypes = {
+    stripes: PropTypes.shape({
+      hasPerm: PropTypes.func.isRequired,
+    }).isRequired,
+    data: PropTypes.shape({
+      permissionSets: PropTypes.arrayOf(PropTypes.object),
+    })
+  };
+
+  static manifest = Object.freeze({
+    permissionSets: {
+      type: 'okapi',
+      records: 'permissions',
+      // DELETE: {
+      //   pk: 'permissionName',
+      //   path: 'perms/permissions',
+      // },
+      // POST: {
+      //   pk: 'permissionName',
+      //   path: 'perms/permissions',
+      // },
+      GET: {
+        path: 'perms/permissions?length=100&expandSubs=true&query=(mutable=true)'
+      },
+      path: 'perms/permissions'
+    }
+  });
+
   constructor(props) {
     super(props);
 
     // 'Manager' just for example...
     this.state = {
       selectedSet: null,
-      permissionSets: [
-        { id: '1', title: 'Manager', description: 'Permissions for Manager'},
-        { id: '2', title: 'Cataloger', description: 'Permissions for Cataloger'},
-      ],
     };
 
     this.onSelectSet = this.onSelectSet.bind(this);
@@ -28,10 +54,10 @@ class PermissionSets extends React.Component {
   onSelectSet(e) {
     e.preventDefault();
     const href = e.target.href;
-    const setTitle = href.substring(href.indexOf('#') + 1);
+    const permissionName = href.substring(href.indexOf('#') + 1);
     let selectedSet = null;
-    _.forEach(this.state.permissionSets, function(set) {
-      if(set.title===setTitle) selectedSet=set; 
+    _.forEach(this.props.data.permissionSets, function(set) {
+      if(set.permissionName===permissionName) selectedSet=set; 
     });
     this.setState({ selectedSet: selectedSet });
   }
@@ -49,9 +75,12 @@ class PermissionSets extends React.Component {
   }
 
   render() {
-    const RenderedPermissionSets = this.state.permissionSets.map(
-      set => <a data-id={set.id} key={set.id} href={`#${set.title}`} onClick={this.onSelectSet}>{set.title}</a>,
-    );
+
+    const { data: { permissionSets } } = this.props;
+
+    const RenderedPermissionSets = this.props.data.permissionSets?this.props.data.permissionSets.map(
+      set => <a data-id={set.id} key={set.id} href={`#${set.permissionName}`} onClick={this.onSelectSet}>{set.permissionName}</a>,
+    ):[];
 
     const PermissionsSetsLastMenu = (
       <PaneMenu>
@@ -70,10 +99,10 @@ class PermissionSets extends React.Component {
             </NavListSection>
           </NavList>
         </Pane>
-        {this.state.selectedSet && <PermissionSetDetails initialValues={this.state.selectedSet} selectedSet={this.state.selectedSet} />}
+        {this.state.selectedSet && <PermissionSetDetails stripes={this.props.stripes} initialValues={this.state.selectedSet} selectedSet={this.state.selectedSet} />}
       </Paneset>
     );
   }
 }
 
-export default PermissionSets;
+export default connect(PermissionSets, '@folio/users')

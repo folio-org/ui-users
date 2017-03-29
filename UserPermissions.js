@@ -13,13 +13,14 @@ import css from './UserPermissions.css';
 
 const propTypes = {
   stripes: PropTypes.shape({
-    hasPerm: PropTypes.func.isRequired,
-  }).isRequired,
+      hasPerm: PropTypes.func.isRequired,
+    }).isRequired,
+  sectionHeading: PropTypes.string,
   availablePermissions: PropTypes.arrayOf(PropTypes.object),
-  usersPermissions: PropTypes.arrayOf(PropTypes.object),
-  viewUserProps: PropTypes.shape({
+  setPermissions: PropTypes.arrayOf(PropTypes.object),
+  parentProps: PropTypes.shape({
     mutator: PropTypes.shape({
-      usersPermissions: PropTypes.shape({
+      setPermissions: PropTypes.shape({
         POST: PropTypes.func.isRequired,
         DELETE: PropTypes.func.isRequired,
       }),
@@ -55,17 +56,18 @@ class UserPermissions extends React.Component {
   }
 
   addPermission(perm) {
-    this.props.viewUserProps.mutator.usersPermissions.POST(perm, this.props.viewUserProps).then(() => {
+    this.props.parentProps.mutator.setPermissions.POST(perm, this.props.parentProps).then(() => {
       this.onToggleAddPermDD();
     });
   }
 
   removePermission(perm) {
-    this.props.viewUserProps.mutator.usersPermissions.DELETE(perm, this.props.viewUserProps, perm.permissionName);
+    console.log(this.props);
+    this.props.parentProps.mutator.setPermissions.DELETE(perm, this.props.parentProps, perm.permissionName);
   }
 
   isPermAvailable(perm) {
-    const permInUse = _.some(this.props.usersPermissions, perm);
+    const permInUse = _.some(this.props.setPermissions, perm);
 
     // This should be replaced with proper search when possible.
     const nameToCompare = !perm.displayName ? perm.permissionName.toLowerCase() : perm.displayName.toLowerCase();
@@ -75,10 +77,10 @@ class UserPermissions extends React.Component {
   }
 
   render() {
-    const { usersPermissions } = this.props;
+    const { setPermissions } = this.props;
 
-    if (!this.props.stripes.hasPerm('perms.users.read'))
-      return null;
+    //if (!this.props.stripes.hasPerm('perms.users.read'))
+      //return null;
 
     const permissionsDD = (
       <ListDropdown
@@ -99,9 +101,9 @@ class UserPermissions extends React.Component {
           aria-label={`Remove Permission: ${item.permissionName}`}
           title="Remove Permission"
         >
-          <IfPermission {...this.props} perm="perms.users.delete">
+          {/* <IfPermission {...this.props} perm="perms.users.delete"> */}
             <Icon icon="hollowX" iconClassName={css.removePermissionIcon} iconRootClass={css.removePermissionButton} />
-          </IfPermission>
+          {/* </IfPermission> */}
         </Button>
       </li>
     );
@@ -111,7 +113,7 @@ class UserPermissions extends React.Component {
         <hr />
         <Row>
           <Col xs={5}>
-            <h3 className="marginTop0">User permissions</h3>
+            <h3 className="marginTop0">{this.props.sectionHeading}</h3>
           </Col>
           {/* <Col xs={4} sm={3}>
             <TextField
@@ -123,15 +125,15 @@ class UserPermissions extends React.Component {
               />
           </Col>*/}
           <Col xs={7}>
-            <IfPermission {...this.props} perm="perms.users.modify">
+            {/* <IfPermission {...this.props} perm="perms.users.modify"> */}
               <Dropdown open={this.state.addPermissionOpen} pullRight onToggle={this.onToggleAddPermDD} id="AddPermissionDropdown" style={{ float: 'right' }}>
                 <Button align="end" bottomMargin0 bsRole="toggle" aria-haspopup="true">&#43; Add Permission</Button>
                 <DropdownMenu bsRole="menu" onToggle={this.onToggleAddPermDD} aria-label="available permissions" width="40em">{permissionsDD}</DropdownMenu>
               </Dropdown>
-            </IfPermission>
+            {/* </IfPermission> */}
           </Col>
         </Row>
-        <List itemFormatter={listFormatter} items={usersPermissions || []} isEmptyMessage="This user has no permissions applied." />
+        <List itemFormatter={listFormatter} items={setPermissions || []} isEmptyMessage="This user has no permissions applied." />
       </div>
     );
   }
