@@ -23,7 +23,7 @@ let okapiToken = '';
 function validate(values) {
   const errors = {};
 
-  if (values.personal && !values.personal.last_name) {
+  if (!values.personal || !values.personal.last_name) {
     errors.personal = { last_name: 'Please fill this in to continue' };
   }
 
