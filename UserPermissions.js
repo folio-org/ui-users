@@ -13,22 +13,38 @@ import css from './UserPermissions.css';
 
 const propTypes = {
   stripes: PropTypes.shape({
-      hasPerm: PropTypes.func.isRequired,
-    }).isRequired,
-  sectionHeading: PropTypes.string,
+    hasPerm: PropTypes.func.isRequired,
+  }).isRequired,
+  data: PropTypes.shape({
+    userPermissions: PropTypes.arrayOf(PropTypes.object),
+  }).isRequired,
   availablePermissions: PropTypes.arrayOf(PropTypes.object),
-  setPermissions: PropTypes.arrayOf(PropTypes.object),
-  parentProps: PropTypes.shape({
-    mutator: PropTypes.shape({
-      setPermissions: PropTypes.shape({
-        POST: PropTypes.func.isRequired,
-        DELETE: PropTypes.func.isRequired,
-      }),
-    }),
+  mutator: PropTypes.shape({
+    userPermissions: PropTypes.shape({
+      POST: PropTypes.func.isRequired,
+      DELETE: PropTypes.func.isRequired,
+    })
+  }),
+  viewUserProps: PropTypes.shape({
   }),
 };
 
 class UserPermissions extends React.Component {
+  static manifest = Object.freeze({
+    userPermissions: {
+      type: 'okapi',
+      records: 'permissionNames',
+      DELETE: {
+        pk: 'permissionName',
+        path: 'perms/users/:{username}/permissions',
+      },
+      GET: {
+        path: 'perms/users/:{username}/permissions?full=true',
+      },
+      path: 'perms/users/:{username}/permissions',
+    },
+  });
+
   constructor(props) {
     super(props);
     this.state = {
@@ -56,18 +72,17 @@ class UserPermissions extends React.Component {
   }
 
   addPermission(perm) {
-    this.props.parentProps.mutator.setPermissions.POST(perm, this.props.parentProps).then(() => {
+    this.props.mutator.userPermissions.POST(perm, this.props.viewUserProps).then(() => {
       this.onToggleAddPermDD();
     });
   }
 
   removePermission(perm) {
-    console.log(this.props);
-    this.props.parentProps.mutator.setPermissions.DELETE(perm, this.props.parentProps, perm.permissionName);
+    this.props.mutator.userPermissions.DELETE(perm, this.props.viewUserProps, perm.permissionName);
   }
 
   isPermAvailable(perm) {
-    const permInUse = _.some(this.props.setPermissions, perm);
+    const permInUse = _.some(this.props.data.userPermissions, perm);
 
     // This should be replaced with proper search when possible.
     const nameToCompare = !perm.displayName ? perm.permissionName.toLowerCase() : perm.displayName.toLowerCase();
@@ -77,7 +92,7 @@ class UserPermissions extends React.Component {
   }
 
   render() {
-    const { setPermissions } = this.props;
+    const { userPermissions } = this.props.data;
 
     //if (!this.props.stripes.hasPerm('perms.users.read'))
       //return null;
@@ -133,7 +148,7 @@ class UserPermissions extends React.Component {
             {/* </IfPermission> */}
           </Col>
         </Row>
-        <List itemFormatter={listFormatter} items={setPermissions || []} isEmptyMessage="This user has no permissions applied." />
+        <List itemFormatter={listFormatter} items={userPermissions || []} isEmptyMessage="This user has no permissions applied." />
       </div>
     );
   }

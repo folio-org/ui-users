@@ -18,7 +18,6 @@ import Layer from '@folio/stripes-components/lib/Layer';
 import FilterGroups, { initialFilterState, onChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
 import makePathFunction from '@folio/stripes-components/util/makePathFunction';
-import IfPermission from '@folio/stripes-components/lib/IfPermission';
 
 import UserForm from './UserForm';
 import ViewUser from './ViewUser';
@@ -147,7 +146,7 @@ class Users extends React.Component {
   }
 
   onSort(e, meta) {
-    const sortOrder = meta.name;
+    const sortOrder = meta.name === 'User ID' ? 'username' : meta.name;
     this.log('action', `sorted by ${sortOrder}`);
     this.setState({ sortOrder });
     this.transitionToParams({ sort: sortOrder });
@@ -246,7 +245,7 @@ class Users extends React.Component {
         };
         return map[user.patron_group] || '?';
       },
-      Username: user => user.username,
+      'User ID': user => user.username,
       Email: user => _.get(user, ['personal', 'email']),
     };
 
@@ -256,9 +255,7 @@ class Users extends React.Component {
         <Pane defaultWidth="16%" header={searchHeader}>
           <FilterGroups config={filterConfig} filters={this.state.filters} onChangeFilter={this.onChangeFilter} />
           <FilterControlGroup label="Actions">
-            <IfPermission {...this.props} perm="users.create">
-              <Button fullWidth onClick={this.onClickAddNewUser}>New user</Button>
-            </IfPermission>
+            <Button fullWidth onClick={this.onClickAddNewUser}>New user</Button>
           </FilterControlGroup>
         </Pane>
         {/* Results Pane */}
@@ -281,7 +278,7 @@ class Users extends React.Component {
             formatter={resultsFormatter}
             onRowClick={this.onSelectRow}
             onHeaderClick={this.onSort}
-            visibleColumns={['Active', 'Name', 'Patron Group', 'Username', 'Email']}
+            visibleColumns={['Active', 'Name', 'Patron Group', 'User ID', 'Email']}
             fullWidth
             sortOrder={this.state.sortOrder}
             isEmptyMessage={`No results found for "${this.state.searchTerm}". Please check your spelling and filters.`}
@@ -289,7 +286,7 @@ class Users extends React.Component {
         </Pane>
 
         {/* Details Pane */}
-        <Route path={`${this.props.match.path}/view/:userid/:username`} render={props => <this.connectedViewUser stripes={stripes} stripes={this.props.stripes} {...props} />} />
+        <Route path={`${this.props.match.path}/view/:userid/:username`} render={props => <this.connectedViewUser stripes={stripes} {...props} />} />
         <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false} label="Add New User Dialog">
           <UserForm
             initialValues={{ available_patron_groups: this.props.data.patronGroups }}

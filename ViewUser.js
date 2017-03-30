@@ -2,7 +2,6 @@ import _ from 'lodash';
 // We have to remove node_modules/react to avoid having multiple copies loaded.
 // eslint-disable-next-line import/no-unresolved
 import React, { Component, PropTypes } from 'react';
-import Route from 'react-router-dom/Route';
 import Pane from '@folio/stripes-components/lib/Pane';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import Button from '@folio/stripes-components/lib/Button';
@@ -12,7 +11,6 @@ import TextField from '@folio/stripes-components/lib/TextField';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import Icon from '@folio/stripes-components/lib/Icon';
 import Layer from '@folio/stripes-components/lib/Layer';
-import IfPermission from '@folio/stripes-components/lib/IfPermission';
 
 import UserForm from './UserForm';
 import UserPermissions from './UserPermissions';
@@ -29,6 +27,7 @@ class ViewUser extends Component {
     data: PropTypes.shape({
       user: PropTypes.arrayOf(PropTypes.object),
       availablePermissions: PropTypes.arrayOf(PropTypes.object),
+      patronGroups: PropTypes.arrayOf(PropTypes.object),
     }),
     mutator: React.PropTypes.shape({
       users: React.PropTypes.shape({
@@ -51,18 +50,6 @@ class ViewUser extends Component {
       records: 'permissions',
       path: 'perms/permissions?length=100',
     },
-    usersPermissions: {
-      type: 'okapi',
-      records: 'permissionNames',
-      DELETE: {
-        pk: 'permissionName',
-        path: 'perms/users/:{username}/permissions',
-      },
-      GET: {
-        path: 'perms/users/:{username}/permissions?full=true',
-      },
-      path: 'perms/users/:{username}/permissions',
-    },
     patronGroups: {
       type: 'okapi',
       path: 'groups',
@@ -81,6 +68,7 @@ class ViewUser extends Component {
     this.onClickCloseEditUser = this.onClickCloseEditUser.bind(this);
     this.connectedUserLoans = props.stripes.connect(UserLoans);
     this.connectedLoansHistory = props.stripes.connect(LoansHistory);
+    this.connectedUserPermissions = props.stripes.connect(UserPermissions);
     this.onClickViewLoansHistory = this.onClickViewLoansHistory.bind(this);
     this.onClickCloseLoansHistory = this.onClickCloseLoansHistory.bind(this);
   }
@@ -125,12 +113,10 @@ class ViewUser extends Component {
   render() {
     const fineHistory = [{ 'Due Date': '11/12/2014', Amount: '34.23', Status: 'Unpaid' }];
 
-    const { data: { users, availablePermissions, usersPermissions, patronGroups }, match: { params: { userid } } } = this.props;
+    const { data: { users, availablePermissions, patronGroups }, match: { params: { userid } } } = this.props;
 
     const detailMenu = (<PaneMenu>
-      <IfPermission {...this.props} perm="users.edit">
-        <button onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button>
-      </IfPermission>
+      <button onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button>
     </PaneMenu>);
 
     if (!users || users.length === 0 || !userid) return <div />;
@@ -159,7 +145,7 @@ class ViewUser extends Component {
             </Row>
             <Row>
               <Col xs={12}>
-                <KeyValue label="Username" value={_.get(user, ['username'], '')} />
+                <KeyValue label="User ID" value={_.get(user, ['username'], '')} />
               </Col>
             </Row>
             <br />
@@ -209,7 +195,7 @@ class ViewUser extends Component {
         <hr />
         <this.connectedUserLoans onClickViewLoansHistory={this.onClickViewLoansHistory} {...this.props} />
         {!this.props.stripes.hasPerm('perms.users.read') ? null :
-        <UserPermissions availablePermissions={availablePermissions} setPermissions={usersPermissions} sectionHeading="User Permissions" parentProps={this.props} stripes={this.props.stripes} />
+        <this.connectedUserPermissions availablePermissions={availablePermissions} viewUserProps={this.props} stripes={this.props.stripes} match={this.props.match} {...this.props} />
         }
         <Layer isOpen={this.state.editUserMode} label="Edit User Dialog">
           <UserForm

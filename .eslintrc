@@ -14,6 +14,7 @@
     "no-unused-vars": [ 1, { argsIgnorePattern: "^_" } ],
     "max-len": "off",
     "no-restricted-syntax": ["error", "LabeledStatement", "WithStatement"],
-    "curly": "off"
+    "curly": "off",
+    "no-template-curly-in-string": "off",
   }
 }

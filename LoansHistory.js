@@ -47,7 +47,6 @@ class LoansHistory extends Component {
   }
 
   render() {
-
     const { data: { loansHistory } } = this.props;
 
     if (!loansHistory) return <div />;
