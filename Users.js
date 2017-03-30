@@ -288,7 +288,8 @@ class Users extends React.Component {
         {/* Details Pane */}
         <Route
           path={`${this.props.match.path}/view/:userid/:username`}
-          render={props => <this.connectedViewUser stripes={stripes} paneWidth="44%" {...props} />} />
+          render={props => <this.connectedViewUser stripes={stripes} paneWidth="44%" {...props} />}
+        />
         <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false} label="Add New User Dialog">
           <UserForm
             initialValues={{ available_patron_groups: this.props.data.patronGroups }}
