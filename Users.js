@@ -146,7 +146,7 @@ class Users extends React.Component {
   }
 
   onSort(e, meta) {
-    const sortOrder = meta.name === 'User ID' ? 'username' : meta.name;
+    const sortOrder = meta.alias;
     this.log('action', `sorted by ${sortOrder}`);
     this.setState({ sortOrder });
     this.transitionToParams({ sort: sortOrder });
@@ -282,6 +282,7 @@ class Users extends React.Component {
             fullWidth
             sortOrder={this.state.sortOrder}
             isEmptyMessage={`No results found for "${this.state.searchTerm}". Please check your spelling and filters.`}
+            columnMapping={{'User ID': 'username'}}
           />
         </Pane>
 
