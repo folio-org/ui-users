@@ -207,7 +207,7 @@ class Users extends React.Component {
       if (response.status >= 400) {
         this.log('xhr', 'Users. POST of creds failed.');
       } else {
-        this.postPerms(username, ['users.read', 'perms.users.read']);
+        this.postPerms(username, ['users.read', 'usergroups.read', 'perms.permissions.read']);
       }
     });
   }
