@@ -285,7 +285,7 @@ class Users extends React.Component {
             fullWidth
             sortOrder={this.state.sortOrder}
             isEmptyMessage={`No results found for "${this.state.searchTerm}". Please check your spelling and filters.`}
-            columnMapping={{'User ID': 'username'}}
+            columnMapping={{ 'User ID': 'username' }}
           />
         </Pane>
 
