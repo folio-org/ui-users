@@ -25,6 +25,7 @@ class ViewUser extends Component {
       hasPerm: PropTypes.func.isRequired,
       connect: PropTypes.func.isRequired,
     }).isRequired,
+    paneWidth: PropTypes.string.isRequired,
     data: PropTypes.shape({
       user: PropTypes.arrayOf(PropTypes.object),
       availablePermissions: PropTypes.arrayOf(PropTypes.object),
@@ -138,7 +139,7 @@ class ViewUser extends Component {
     const patronGroup = patronGroups.find(g => g._id === patronGroupId) || { group: '' };
 
     return (
-      <Pane defaultWidth="fill" paneTitle="User Details" lastMenu={detailMenu}>
+      <Pane defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu}>
         <Row>
           <Col xs={8} >
             <Row>

@@ -147,7 +147,7 @@ class Users extends React.Component {
   }
 
   onSort(e, meta) {
-    const sortOrder = meta.name === 'User ID' ? 'username' : meta.name;
+    const sortOrder = meta.alias;
     this.log('action', `sorted by ${sortOrder}`);
     this.setState({ sortOrder });
     this.transitionToParams({ sort: sortOrder });
@@ -208,7 +208,7 @@ class Users extends React.Component {
       if (response.status >= 400) {
         this.log('xhr', 'Users. POST of creds failed.');
       } else {
-        this.postPerms(username, ['users.read', 'perms.users.read']);
+        this.postPerms(username, ['users.read', 'usergroups.read', 'perms.permissions.read']);
       }
     });
   }
@@ -285,11 +285,15 @@ class Users extends React.Component {
             fullWidth
             sortOrder={this.state.sortOrder}
             isEmptyMessage={`No results found for "${this.state.searchTerm}". Please check your spelling and filters.`}
+            columnMapping={{'User ID': 'username'}}
           />
         </Pane>
 
         {/* Details Pane */}
-        <Route path={`${this.props.match.path}/view/:userid/:username`} render={props => <this.connectedViewUser stripes={stripes} {...props} />} />
+        <Route
+          path={`${this.props.match.path}/view/:userid/:username`}
+          render={props => <this.connectedViewUser stripes={stripes} paneWidth="44%" {...props} />}
+        />
         <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false} label="Add New User Dialog">
           <UserForm
             initialValues={{ available_patron_groups: this.props.data.patronGroups }}
