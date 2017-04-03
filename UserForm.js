@@ -23,7 +23,7 @@ let okapiToken = '';
 function validate(values) {
   const errors = {};
 
-  if (values.personal && !values.personal.last_name) {
+  if (!values.personal || !values.personal.last_name) {
     errors.personal = { last_name: 'Please fill this in to continue' };
   }
 
@@ -100,7 +100,8 @@ class UserForm extends React.Component {
     const addUserFirstMenu = <PaneMenu><button onClick={onCancel} title="close" aria-label="Close New User Dialog"><span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span></button></PaneMenu>;
     const addUserLastMenu = <PaneMenu><Button type="submit" title="Create New User" disabled={pristine || submitting} onClick={handleSubmit}>Create User</Button></PaneMenu>;
     const editUserLastMenu = <PaneMenu><Button type="submit" title="Update User" disabled={pristine || submitting} onClick={handleSubmit}>Update User</Button></PaneMenu>;
-    const patronGroupOptions = initialValues.available_patron_groups ? initialValues.available_patron_groups.map((g) => { return { label: g.group, value: g._id, selected: initialValues.patron_group === g._id }; }) : [];
+    const patronGroupOptions = (initialValues.available_patron_groups || []).map(g => ({
+      label: g.group, value: g._id, selected: initialValues.patron_group === g._id }));
 
     return (
       <form>

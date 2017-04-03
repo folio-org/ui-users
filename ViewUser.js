@@ -11,6 +11,7 @@ import TextField from '@folio/stripes-components/lib/TextField';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import Icon from '@folio/stripes-components/lib/Icon';
 import Layer from '@folio/stripes-components/lib/Layer';
+import IfPermission from '@folio/stripes-components/lib/IfPermission';
 
 import UserForm from './UserForm';
 import UserPermissions from './UserPermissions';
@@ -24,6 +25,7 @@ class ViewUser extends Component {
       hasPerm: PropTypes.func.isRequired,
       connect: PropTypes.func.isRequired,
     }).isRequired,
+    paneWidth: PropTypes.string.isRequired,
     data: PropTypes.shape({
       user: PropTypes.arrayOf(PropTypes.object),
       availablePermissions: PropTypes.arrayOf(PropTypes.object),
@@ -116,7 +118,9 @@ class ViewUser extends Component {
     const { data: { users, availablePermissions, patronGroups }, match: { params: { userid } } } = this.props;
 
     const detailMenu = (<PaneMenu>
-      <button onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button>
+      <IfPermission {...this.props} perm="users.edit">
+        <button onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button>
+      </IfPermission>
     </PaneMenu>);
 
     if (!users || users.length === 0 || !userid) return <div />;
@@ -135,7 +139,7 @@ class ViewUser extends Component {
     const patronGroup = patronGroups.find(g => g._id === patronGroupId) || { group: '' };
 
     return (
-      <Pane defaultWidth="fill" paneTitle="User Details" lastMenu={detailMenu}>
+      <Pane defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu}>
         <Row>
           <Col xs={8} >
             <Row>

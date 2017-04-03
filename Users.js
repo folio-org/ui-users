@@ -18,6 +18,7 @@ import Layer from '@folio/stripes-components/lib/Layer';
 import FilterGroups, { initialFilterState, onChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
 import makePathFunction from '@folio/stripes-components/util/makePathFunction';
+import IfPermission from '@folio/stripes-components/lib/IfPermission';
 
 import UserForm from './UserForm';
 import ViewUser from './ViewUser';
@@ -146,7 +147,7 @@ class Users extends React.Component {
   }
 
   onSort(e, meta) {
-    const sortOrder = meta.name === 'User ID' ? 'username' : meta.name;
+    const sortOrder = meta.alias;
     this.log('action', `sorted by ${sortOrder}`);
     this.setState({ sortOrder });
     this.transitionToParams({ sort: sortOrder });
@@ -207,7 +208,7 @@ class Users extends React.Component {
       if (response.status >= 400) {
         this.log('xhr', 'Users. POST of creds failed.');
       } else {
-        this.postPerms(username, ['users.read', 'perms.users.read']);
+        this.postPerms(username, ['users.read', 'usergroups.read', 'perms.permissions.read']);
       }
     });
   }
@@ -255,7 +256,9 @@ class Users extends React.Component {
         <Pane defaultWidth="16%" header={searchHeader}>
           <FilterGroups config={filterConfig} filters={this.state.filters} onChangeFilter={this.onChangeFilter} />
           <FilterControlGroup label="Actions">
-            <Button fullWidth onClick={this.onClickAddNewUser}>New user</Button>
+            <IfPermission {...this.props} perm="users.create">
+              <Button fullWidth onClick={this.onClickAddNewUser}>New user</Button>
+            </IfPermission>
           </FilterControlGroup>
         </Pane>
         {/* Results Pane */}
@@ -282,11 +285,15 @@ class Users extends React.Component {
             fullWidth
             sortOrder={this.state.sortOrder}
             isEmptyMessage={`No results found for "${this.state.searchTerm}". Please check your spelling and filters.`}
+            columnMapping={{ 'User ID': 'username' }}
           />
         </Pane>
 
         {/* Details Pane */}
-        <Route path={`${this.props.match.path}/view/:userid/:username`} render={props => <this.connectedViewUser stripes={stripes} {...props} />} />
+        <Route
+          path={`${this.props.match.path}/view/:userid/:username`}
+          render={props => <this.connectedViewUser stripes={stripes} paneWidth="fill" {...props} />}
+        />
         <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false} label="Add New User Dialog">
           <UserForm
             initialValues={{ available_patron_groups: this.props.data.patronGroups }}
