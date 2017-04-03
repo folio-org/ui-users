@@ -14,8 +14,6 @@ const propTypes = {
       DELETE: PropTypes.func.isRequired,
     }),
   }),
-  viewUserProps: PropTypes.shape({
-  }),
 };
 
 class UserPermissions extends React.Component {
@@ -47,11 +45,11 @@ class UserPermissions extends React.Component {
   }
 
   addPermission(perm) {
-    this.props.mutator.userPermissions.POST(perm, this.props.viewUserProps);
+    this.props.mutator.userPermissions.POST(perm);
   }
 
   removePermission(perm) {
-    this.props.mutator.userPermissions.DELETE(perm, this.props.viewUserProps);
+    this.props.mutator.userPermissions.DELETE(perm);
   }
 
   render() {
