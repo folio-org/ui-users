@@ -28,7 +28,6 @@ class ViewUser extends Component {
     paneWidth: PropTypes.string.isRequired,
     data: PropTypes.shape({
       user: PropTypes.arrayOf(PropTypes.object),
-      availablePermissions: PropTypes.arrayOf(PropTypes.object),
       patronGroups: PropTypes.arrayOf(PropTypes.object),
     }),
     mutator: React.PropTypes.shape({
@@ -46,11 +45,6 @@ class ViewUser extends Component {
       type: 'okapi',
       path: 'users/:{userid}',
       clear: false,
-    },
-    availablePermissions: {
-      type: 'okapi',
-      records: 'permissions',
-      path: 'perms/permissions?length=100',
     },
     patronGroups: {
       type: 'okapi',
@@ -115,7 +109,7 @@ class ViewUser extends Component {
   render() {
     const fineHistory = [{ 'Due Date': '11/12/2014', Amount: '34.23', Status: 'Unpaid' }];
 
-    const { data: { users, availablePermissions, patronGroups }, match: { params: { userid } } } = this.props;
+    const { data: { users, patronGroups }, match: { params: { userid } } } = this.props;
 
     const detailMenu = (<PaneMenu>
       <IfPermission {...this.props} perm="users.edit">
@@ -199,7 +193,7 @@ class ViewUser extends Component {
         <hr />
         <this.connectedUserLoans onClickViewLoansHistory={this.onClickViewLoansHistory} {...this.props} />
         {!this.props.stripes.hasPerm('perms.users.read') ? null :
-        <this.connectedUserPermissions availablePermissions={availablePermissions} viewUserProps={this.props} stripes={this.props.stripes} match={this.props.match} {...this.props} />
+        <this.connectedUserPermissions viewUserProps={this.props} stripes={this.props.stripes} match={this.props.match} {...this.props} />
         }
         <Layer isOpen={this.state.editUserMode} label="Edit User Dialog">
           <UserForm

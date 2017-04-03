@@ -6,6 +6,7 @@ import RenderPermissions from './lib/RenderPermissions';
 const propTypes = {
   data: PropTypes.shape({
     userPermissions: PropTypes.arrayOf(PropTypes.object),
+    availablePermissions: PropTypes.arrayOf(PropTypes.object),
   }).isRequired,
   mutator: PropTypes.shape({
     userPermissions: PropTypes.shape({
@@ -19,6 +20,11 @@ const propTypes = {
 
 class UserPermissions extends React.Component {
   static manifest = Object.freeze({
+    availablePermissions: {
+      type: 'okapi',
+      records: 'permissions',
+      path: 'perms/permissions?length=100',
+    },
     userPermissions: {
       type: 'okapi',
       records: 'permissionNames',
@@ -49,13 +55,14 @@ class UserPermissions extends React.Component {
   }
 
   render() {
-    const { userPermissions } = this.props.data;
+    const { availablePermissions, userPermissions } = this.props.data;
 
     return (<RenderPermissions
       {...this.props}
       heading="User Permissions"
       addPermission={this.addPermission}
       removePermission={this.removePermission}
+      availablePermissions={availablePermissions}
       listedPermissions={userPermissions}
     />);
   }
