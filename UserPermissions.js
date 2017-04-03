@@ -51,7 +51,7 @@ class UserPermissions extends React.Component {
   }
 
   removePermission(perm) {
-    this.props.mutator.userPermissions.DELETE(perm, this.props.viewUserProps, perm.permissionName);
+    this.props.mutator.userPermissions.DELETE(perm, this.props.viewUserProps);
   }
 
   render() {
