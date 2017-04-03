@@ -1,17 +1,12 @@
-import _ from 'lodash';
 // We have to remove node_modules/react to avoid having multiple copies loaded.
 // eslint-disable-next-line import/no-unresolved
 import React, { PropTypes } from 'react';
 import RenderPermissions from './lib/RenderPermissions';
 
 const propTypes = {
-  stripes: PropTypes.shape({
-    hasPerm: PropTypes.func.isRequired,
-  }).isRequired,
   data: PropTypes.shape({
     userPermissions: PropTypes.arrayOf(PropTypes.object),
   }).isRequired,
-  availablePermissions: PropTypes.arrayOf(PropTypes.object),
   mutator: PropTypes.shape({
     userPermissions: PropTypes.shape({
       POST: PropTypes.func.isRequired,
@@ -43,7 +38,6 @@ class UserPermissions extends React.Component {
 
     this.addPermission = this.addPermission.bind(this);
     this.removePermission = this.removePermission.bind(this);
-
   }
 
   addPermission(perm) {
@@ -55,17 +49,15 @@ class UserPermissions extends React.Component {
   }
 
   render() {
-
     const { userPermissions } = this.props.data;
 
-    return (<RenderPermissions 
-              {...this.props}
-              heading="User Permissions" 
-              addPermission={this.addPermission} 
-              removePermission={this.removePermission} 
-              listedPermissions={userPermissions}
-           ></RenderPermissions>);
-      
+    return (<RenderPermissions
+      {...this.props}
+      heading="User Permissions"
+      addPermission={this.addPermission}
+      removePermission={this.removePermission}
+      listedPermissions={userPermissions}
+    />);
   }
 }
 
