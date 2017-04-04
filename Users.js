@@ -244,7 +244,11 @@ class Users extends React.Component {
           off_campus: 'Off-campus',
           other: 'Other',
         };
-        return map[user.patron_group] || '?';
+        const maybe = map[user.patron_group];
+        if (maybe) return maybe;
+        // ### Why do we have available_patron_groups stashed in each user object?!
+        const pg = user.available_patron_groups.filter(g => g._id === user.patron_group)[0];
+        return pg ? pg.group : '?';
       },
       'User ID': user => user.username,
       Email: user => _.get(user, ['personal', 'email']),
