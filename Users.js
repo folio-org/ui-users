@@ -156,7 +156,7 @@ class Users extends React.Component {
   onSelectRow(e, meta) {
     const userId = meta.id;
     const username = meta.username;
-    this.log('action', `clicked ${userId}, location =`, this.props.location, 'selected user =', meta);
+    this.log('action', `clicked ${userId}, selected user =`, meta);
     this.setState({ selectedItem: meta });
     this.props.history.push(`/users/view/${userId}/${username}${this.props.location.search}`);
   }
