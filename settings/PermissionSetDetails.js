@@ -6,7 +6,7 @@ import TextArea from '@folio/stripes-components/lib/TextArea';
 
 import {Field, reducer as formReducer, reduxForm} from 'redux-form';
 
-import UserPermissions from '../UserPermissions';
+import PermissionSet from './PermissionSet';
 
 class PermissionSetDetails extends Component {
 
@@ -52,7 +52,7 @@ class PermissionSetDetails extends Component {
             <Field label="Title" name="permissionName" id="permissionName" component={Textfield} required fullWidth rounded />
             <Field label="Description" name="description" id="permissionset_description" component={TextArea} required fullWidth rounded />
           </section>
-          <UserPermissions sectionHeading="Contains" setPermissions={selectedSet.subPermissions} availablePermissions={availablePermissions} parentProps={this.props} stripes={this.props.stripes} />
+          <PermissionSet availablePermissions={availablePermissions} parentProps={this.props} stripes={this.props.stripes} {...this.props} />
         </form>
       </Pane>
     );
