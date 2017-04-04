@@ -18,7 +18,7 @@
     "home": "/users?filters=active.Active"
   },
   "scripts": {
-    "lint": "eslint *.js || true"
+    "lint": "eslint *.js lib || true"
   },
   "devDependencies": {
     "babel-core": "^6.17.0",
