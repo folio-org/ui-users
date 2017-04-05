@@ -24,14 +24,12 @@ class PermissionSets extends Component {
     permissionSets: {
       type: 'okapi',
       records: 'permissions',
-      // DELETE: {
-      //   pk: 'permissionName',
-      //   path: 'perms/permissions',
-      // },
-      // POST: {
-      //   pk: 'permissionName',
-      //   path: 'perms/permissions',
-      // },
+      DELETE: {
+        path: 'perms/permissions',
+      },
+      POST: {
+        path: 'perms/permissions',
+      },
       GET: {
         path: 'perms/permissions?length=100&expandSubs=true&query=(mutable=true)'
       },
@@ -49,6 +47,7 @@ class PermissionSets extends Component {
 
     this.onSelectSet = this.onSelectSet.bind(this);
     this.createNewPermissionSet = this.createNewPermissionSet.bind(this);
+    this.clearSelection = this.clearSelection.bind(this);
   }
 
   onSelectSet(e) {
@@ -63,14 +62,18 @@ class PermissionSets extends Component {
   }
 
   createNewPermissionSet() {
-    const sets = this.state.permissionSets;
-    let nextSetID = parseInt(sets[sets.length - 1].id, 10);
-    nextSetID += 1;
-    const newSetObject = { id: nextSetID.toString(), title: 'Untitled Permission Set' };
-    sets.push(newSetObject);
+
+    this.props.mutator.permissionSets.POST({
+      mutable:true
+    }).then(()=>{
+      this.clearSelection();
+    });
+ 
+  }
+
+  clearSelection() {
     this.setState({
-      permissionSets: sets,
-      selectedSet: newSetObject,
+      selectedSet: null,
     });
   }
 
@@ -79,7 +82,7 @@ class PermissionSets extends Component {
     const { data: { permissionSets } } = this.props;
 
     const RenderedPermissionSets = this.props.data.permissionSets?this.props.data.permissionSets.map(
-      set => <a data-id={set.id} key={set.id} href={`#${set.permissionName}`} onClick={this.onSelectSet}>{set.permissionName}</a>,
+      set => <a data-id={set.id} key={set.id} href={`#${set.permissionName}`} onClick={this.onSelectSet}>{set.displayName?set.displayName:"Untitles permission set"}</a>,
     ):[];
 
     const PermissionsSetsLastMenu = (
@@ -99,7 +102,7 @@ class PermissionSets extends Component {
             </NavListSection>
           </NavList>
         </Pane>
-        {this.state.selectedSet && <PermissionSetDetails stripes={this.props.stripes} initialValues={this.state.selectedSet} selectedSet={this.state.selectedSet} />}
+        {this.state.selectedSet && <PermissionSetDetails parentMutator={this.props.mutator} clearSelection={this.clearSelection} stripes={this.props.stripes} initialValues={this.state.selectedSet} selectedSet={this.state.selectedSet} />}
       </Paneset>
     );
   }

@@ -119,7 +119,7 @@ class ViewUser extends Component {
 
     if (!users || users.length === 0 || !userid) return <div />;
 
-    if (!this.props.stripes.hasPerm('users.read.basic')) {
+    if (!this.props.stripes.hasPerm('users.read')) {
       return (<div>
         <h2>Permission Error</h2>
         <p>Sorry - your user permissions do not allow access to this page.</p>
@@ -191,7 +191,7 @@ class ViewUser extends Component {
         </Row>
         <MultiColumnList fullWidth contentData={fineHistory} />
         <hr />
-        <this.connectedUserLoans onClickViewLoansHistory={this.onClickViewLoansHistory} {...this.props} />
+        {/*<this.connectedUserLoans onClickViewLoansHistory={this.onClickViewLoansHistory} {...this.props} />*/}
         {!this.props.stripes.hasPerm('perms.users.read') ? null :
         <this.connectedUserPermissions stripes={this.props.stripes} match={this.props.match} {...this.props} />
         }
