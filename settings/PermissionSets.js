@@ -82,7 +82,7 @@ class PermissionSets extends Component {
     const { data: { permissionSets } } = this.props;
 
     const RenderedPermissionSets = this.props.data.permissionSets?this.props.data.permissionSets.map(
-      set => <a data-id={set.id} key={set.id} href={`#${set.permissionName}`} onClick={this.onSelectSet}>{set.displayName?set.displayName:"Untitles permission set"}</a>,
+      set => <a data-id={set.id} key={set.id} href={`#${set.permissionName}`} onClick={this.onSelectSet}>{set.displayName?set.displayName:"Untitled Permission Set"}</a>,
     ):[];
 
     const PermissionsSetsLastMenu = (
