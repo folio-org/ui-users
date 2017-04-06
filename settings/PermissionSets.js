@@ -31,7 +31,7 @@ class PermissionSets extends Component {
         path: 'perms/permissions',
       },
       GET: {
-        path: 'perms/permissions?length=100&expandSubs=true&query=(mutable=true)'
+        path: 'perms/permissions?length=100&query=(mutable=true)'
       },
       path: 'perms/permissions'
     }
