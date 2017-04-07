@@ -69,7 +69,7 @@ const propTypes= {
 const defaultProps = {
   createButtonLabel: '+ Add Item',
   actionSuppression: { delete : (item) => true, edit: (item) => true, },
-  uniqueField: '_id',
+  uniqueField: 'id',
 }
 
 class PatronGroupsList extends React.Component{

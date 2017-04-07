@@ -50,7 +50,6 @@ class ViewUser extends Component {
       type: 'okapi',
       path: 'groups',
       records: 'usergroups',
-      pk: '_id',
     },
   });
 
@@ -112,14 +111,14 @@ class ViewUser extends Component {
     const { data: { users, patronGroups }, match: { params: { userid } } } = this.props;
 
     const detailMenu = (<PaneMenu>
-      <IfPermission {...this.props} perm="users.edit">
+      <IfPermission {...this.props} perm="users-bl.edituser">
         <button onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button>
       </IfPermission>
     </PaneMenu>);
 
     if (!users || users.length === 0 || !userid) return <div />;
 
-    if (!this.props.stripes.hasPerm('users.read')) {
+    if (!this.props.stripes.hasPerm('users-bl.viewuser')) {
       return (<div>
         <h2>Permission Error</h2>
         <p>Sorry - your user permissions do not allow access to this page.</p>
@@ -130,7 +129,7 @@ class ViewUser extends Component {
     if (!user) return <div />;
     const userStatus = (_.get(user, ['active'], '') ? 'active' : 'inactive');
     const patronGroupId = _.get(user, ['patron_group'], '');
-    const patronGroup = patronGroups.find(g => g._id === patronGroupId) || { group: '' };
+    const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
 
     return (
       <Pane defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu}>

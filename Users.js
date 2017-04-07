@@ -102,7 +102,6 @@ class Users extends React.Component {
       type: 'okapi',
       path: 'groups',
       records: 'usergroups',
-      pk: '_id',
     },
   });
 
@@ -244,7 +243,10 @@ class Users extends React.Component {
           off_campus: 'Off-campus',
           other: 'Other',
         };
-        return map[user.patron_group] || '?';
+        const maybe = map[user.patron_group];
+        if (maybe) return maybe;
+        const pg = data.patronGroups.filter(g => g.id === user.patron_group)[0];
+        return pg ? pg.group : '?';
       },
       'User ID': user => user.username,
       Email: user => _.get(user, ['personal', 'email']),
@@ -256,7 +258,7 @@ class Users extends React.Component {
         <Pane defaultWidth="16%" header={searchHeader}>
           <FilterGroups config={filterConfig} filters={this.state.filters} onChangeFilter={this.onChangeFilter} />
           <FilterControlGroup label="Actions">
-            <IfPermission {...this.props} perm="users.create">
+            <IfPermission {...this.props} perm="users-bl.createuser">
               <Button fullWidth onClick={this.onClickAddNewUser}>New user</Button>
             </IfPermission>
           </FilterControlGroup>
