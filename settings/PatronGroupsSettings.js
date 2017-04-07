@@ -12,13 +12,10 @@ class PatronGroupsSettings extends React.Component {
       type: 'okapi',
       path: 'groups',
       records: 'usergroups',
-      pk: '_id',
       PUT: {
-        pk: '_id',
         path: 'groups/${activeRecord.id}',
       },
       DELETE: {
-        pk: '_id',
         path: 'groups/${activeRecord.id}'
       }
     },
@@ -40,7 +37,7 @@ class PatronGroupsSettings extends React.Component {
     this.onDeleteGroup = this.onDeleteGroup.bind(this);
   }
   onUpdateGroup(groupObject){
-    this.props.mutator.activeRecord.update({'id': groupObject._id });
+    this.props.mutator.activeRecord.update({'id': groupObject.id });
     this.props.mutator.groups.PUT(groupObject);
   }
 
@@ -50,7 +47,7 @@ class PatronGroupsSettings extends React.Component {
 
   onDeleteGroup(groupId){
     this.props.mutator.activeRecord.update({'id': groupId });
-    this.props.mutator.groups.DELETE(this.props.data.groups.find((g) => { return g._id == groupId }))
+    this.props.mutator.groups.DELETE(this.props.data.groups.find((g) => { return g.id == groupId }))
   }
 
   render() {
@@ -71,7 +68,7 @@ class PatronGroupsSettings extends React.Component {
             label="Patron Groups"
             createButtonLabel="+ Add group"
             visibleFields={['group', 'desc']}
-            itemTemplate={{group:'string', _id:'string', desc:'string', inUse:'bool'}}
+            itemTemplate={{group:'string', id:'string', desc:'string', inUse:'bool'}}
             actionSuppression={suppressor}
             onUpdate={this.onUpdateGroup}
             onCreate={this.onCreateGroup}

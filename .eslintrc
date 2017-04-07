@@ -16,7 +16,6 @@
     "no-restricted-syntax": ["error", "LabeledStatement", "WithStatement"],
     "curly": "off",
     "no-template-curly-in-string": "off",
-    "no-underscore-dangle": ["error", { "allow": ["_id"] }],
     "TURN OFF THE PREVIOUS RULE ONCE WE'VE SORTED OUT THE PATRON-GROUP RECORD FORMAT": 0
   }
 }

@@ -102,7 +102,6 @@ class Users extends React.Component {
       type: 'okapi',
       path: 'groups',
       records: 'usergroups',
-      pk: '_id',
     },
   });
 
@@ -246,7 +245,7 @@ class Users extends React.Component {
         };
         const maybe = map[user.patron_group];
         if (maybe) return maybe;
-        const pg = data.patronGroups.filter(g => g._id === user.patron_group)[0];
+        const pg = data.patronGroups.filter(g => g.id === user.patron_group)[0];
         return pg ? pg.group : '?';
       },
       'User ID': user => user.username,
