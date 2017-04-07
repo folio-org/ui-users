@@ -91,7 +91,7 @@ class Users extends React.Component {
           Active: 'active',
           Name: 'personal.last_name personal.first_name',
           'Patron Group': 'patron_group',
-          Username: 'username',
+          'User ID': 'username',
           Email: 'personal.email',
         },
         filterConfig,
