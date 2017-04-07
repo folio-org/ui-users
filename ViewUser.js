@@ -127,6 +127,7 @@ class ViewUser extends Component {
         width: '34%',
         zIndex: '9999',
         padding: '1rem',
+        backgroundColor: "#fff",
       }}>
         <h2>Permission Error</h2>
         <p>Sorry - your user permissions do not allow access to this page.</p>
