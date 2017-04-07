@@ -111,14 +111,14 @@ class ViewUser extends Component {
     const { data: { users, patronGroups }, match: { params: { userid } } } = this.props;
 
     const detailMenu = (<PaneMenu>
-      <IfPermission {...this.props} perm="users.edit">
+      <IfPermission {...this.props} perm="users-bl.edituser">
         <button onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button>
       </IfPermission>
     </PaneMenu>);
 
     if (!users || users.length === 0 || !userid) return <div />;
 
-    if (!this.props.stripes.hasPerm('users.read.basic')) {
+    if (!this.props.stripes.hasPerm('users-bl.viewuser')) {
       return (<div>
         <h2>Permission Error</h2>
         <p>Sorry - your user permissions do not allow access to this page.</p>
@@ -191,7 +191,7 @@ class ViewUser extends Component {
         <MultiColumnList fullWidth contentData={fineHistory} />
         <hr />
         <this.connectedUserLoans onClickViewLoansHistory={this.onClickViewLoansHistory} {...this.props} />
-        {!this.props.stripes.hasPerm('perms.users.read') ? null :
+        {!this.props.stripes.hasPerm('perms.users.get') ? null :
         <this.connectedUserPermissions stripes={this.props.stripes} match={this.props.match} {...this.props} />
         }
         <Layer isOpen={this.state.editUserMode} label="Edit User Dialog">

@@ -258,7 +258,7 @@ class Users extends React.Component {
         <Pane defaultWidth="16%" header={searchHeader}>
           <FilterGroups config={filterConfig} filters={this.state.filters} onChangeFilter={this.onChangeFilter} />
           <FilterControlGroup label="Actions">
-            <IfPermission {...this.props} perm="users.create">
+            <IfPermission {...this.props} perm="users-bl.createuser">
               <Button fullWidth onClick={this.onClickAddNewUser}>New user</Button>
             </IfPermission>
           </FilterControlGroup>
