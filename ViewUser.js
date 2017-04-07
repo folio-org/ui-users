@@ -192,9 +192,7 @@ class ViewUser extends Component {
         <MultiColumnList fullWidth contentData={fineHistory} />
         <hr />
         <this.connectedUserLoans onClickViewLoansHistory={this.onClickViewLoansHistory} {...this.props} />
-        {!this.props.stripes.hasPerm('perms.users.read') ? null :
-          <this.connectedUserPermissions stripes={this.props.stripes} match={this.props.match} {...this.props} />
-        }
+        <this.connectedUserPermissions stripes={this.props.stripes} match={this.props.match} {...this.props} />
         <Layer isOpen={this.state.editUserMode} label="Edit User Dialog">
           <UserForm
             initialValues={_.merge(user, { available_patron_groups: this.props.data.patronGroups })}

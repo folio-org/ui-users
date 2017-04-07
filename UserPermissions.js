@@ -58,6 +58,9 @@ class UserPermissions extends React.Component {
     return (<RenderPermissions
       {...this.props}
       heading="User Permissions"
+      permToRead="perms.users"
+      permToDelete="perms.users"
+      permToModify="perms.users"
       addPermission={this.addPermission}
       removePermission={this.removePermission}
       availablePermissions={availablePermissions}
