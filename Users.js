@@ -226,6 +226,13 @@ class Users extends React.Component {
     });
   }
 
+  collapseDetails(){
+    this.setState({
+      selectedItem: {}
+    });
+    this.props.history.push(`${this.props.match.path}${this.props.location.search}`);
+  }
+
   render() {
     const { data, stripes } = this.props;
     const users = data.users || [];
@@ -265,7 +272,7 @@ class Users extends React.Component {
         </Pane>
         {/* Results Pane */}
         <Pane
-          defaultWidth="40%"
+          defaultWidth="fill"
           paneTitle={
             <div style={{ textAlign: 'center' }}>
               <strong>Results</strong>
@@ -284,7 +291,6 @@ class Users extends React.Component {
             onRowClick={this.onSelectRow}
             onHeaderClick={this.onSort}
             visibleColumns={['Active', 'Name', 'Patron Group', 'User ID', 'Email']}
-            fullWidth
             sortOrder={this.state.sortOrder}
             isEmptyMessage={`No results found for "${this.state.searchTerm}". Please check your spelling and filters.`}
             columnMapping={{ 'User ID': 'username' }}
@@ -294,7 +300,7 @@ class Users extends React.Component {
         {/* Details Pane */}
         <Route
           path={`${this.props.match.path}/view/:userid/:username`}
-          render={props => <this.connectedViewUser stripes={stripes} paneWidth="fill" {...props} />}
+          render={props => <this.connectedViewUser stripes={stripes} paneWidth="44%" onClose={this.collapseDetails} {...props} />}
         />
         <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false} label="Add New User Dialog">
           <UserForm

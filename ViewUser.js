@@ -38,6 +38,7 @@ class ViewUser extends Component {
     match: PropTypes.shape({
       path: PropTypes.string.isRequired,
     }).isRequired,
+    onClose: PropTypes.func,
   };
 
   static manifest = Object.freeze({
@@ -132,7 +133,7 @@ class ViewUser extends Component {
     const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
 
     return (
-      <Pane defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu}>
+      <Pane defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
         <Row>
           <Col xs={8} >
             <Row>
