@@ -62,7 +62,7 @@ class LoansHistory extends Component {
     };
 
     return (
-      <Paneset>
+      <Paneset isRoot>
         <Pane defaultWidth="100%" firstMenu={historyFirstMenu} paneTitle={'Loans History'}>
           <MultiColumnList
             fullWidth
