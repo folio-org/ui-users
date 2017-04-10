@@ -91,7 +91,7 @@ class Users extends React.Component {
           Active: 'active',
           Name: 'personal.last_name personal.first_name',
           'Patron Group': 'patron_group',
-          Username: 'username',
+          'User ID': 'username',
           Email: 'personal.email',
         },
         filterConfig,
@@ -130,6 +130,7 @@ class Users extends React.Component {
     this.onChangeFilter = onChangeFilter.bind(this);
     this.transitionToParams = transitionToParams.bind(this);
 
+    this.collapseDetails = this.collapseDetails.bind(this);
     this.connectedViewUser = props.stripes.connect(ViewUser);
     const logger = props.stripes.logger;
     this.log = logger.log.bind(logger);
@@ -207,7 +208,7 @@ class Users extends React.Component {
       if (response.status >= 400) {
         this.log('xhr', 'Users. POST of creds failed.');
       } else {
-        this.postPerms(username, ['users.read', 'usergroups.read', 'perms.permissions.read']);
+        this.postPerms(username, ['users.read', 'usergroups.read', 'perms.permissions.get']);
       }
     });
   }
@@ -224,6 +225,13 @@ class Users extends React.Component {
         // nothing to do
       }
     });
+  }
+
+  collapseDetails(){
+    this.setState({
+      selectedItem: {}
+    });
+    this.props.history.push(`${this.props.match.path}${this.props.location.search}`);
   }
 
   render() {
@@ -265,7 +273,7 @@ class Users extends React.Component {
         </Pane>
         {/* Results Pane */}
         <Pane
-          defaultWidth="40%"
+          defaultWidth="fill"
           paneTitle={
             <div style={{ textAlign: 'center' }}>
               <strong>Results</strong>
@@ -284,7 +292,6 @@ class Users extends React.Component {
             onRowClick={this.onSelectRow}
             onHeaderClick={this.onSort}
             visibleColumns={['Active', 'Name', 'Patron Group', 'User ID', 'Email']}
-            fullWidth
             sortOrder={this.state.sortOrder}
             isEmptyMessage={`No results found for "${this.state.searchTerm}". Please check your spelling and filters.`}
             columnMapping={{ 'User ID': 'username' }}
@@ -294,7 +301,7 @@ class Users extends React.Component {
         {/* Details Pane */}
         <Route
           path={`${this.props.match.path}/view/:userid/:username`}
-          render={props => <this.connectedViewUser stripes={stripes} paneWidth="fill" {...props} />}
+          render={props => <this.connectedViewUser stripes={stripes} paneWidth="44%" onClose={this.collapseDetails} {...props} />}
         />
         <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false} label="Add New User Dialog">
           <UserForm
