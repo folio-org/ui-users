@@ -227,9 +227,9 @@ class Users extends React.Component {
     });
   }
 
-  collapseDetails(){
+  collapseDetails() {
     this.setState({
-      selectedItem: {}
+      selectedItem: {},
     });
     this.props.history.push(`${this.props.match.path}${this.props.location.search}`);
   }

@@ -12,7 +12,7 @@ const propTypes = {
     userPermissions: PropTypes.shape({
       POST: PropTypes.func.isRequired,
       DELETE: PropTypes.func.isRequired,
-    })
+    }),
   }),
 };
 

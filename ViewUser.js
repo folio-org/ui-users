@@ -120,15 +120,17 @@ class ViewUser extends Component {
     if (!users || users.length === 0 || !userid) return <div />;
 
     if (!this.props.stripes.hasPerm('users-bl.viewuser')) {
-      return (<div style={{
-        position: 'absolute',
-        right: '1rem',
-        bottom: '1rem',
-        width: '34%',
-        zIndex: '9999',
-        padding: '1rem',
-        backgroundColor: "#fff",
-      }}>
+      return (<div
+        style={{
+          position: 'absolute',
+          right: '1rem',
+          bottom: '1rem',
+          width: '34%',
+          zIndex: '9999',
+          padding: '1rem',
+          backgroundColor: '#fff',
+        }}
+      >
         <h2>Permission Error</h2>
         <p>Sorry - your user permissions do not allow access to this page.</p>
       </div>);
