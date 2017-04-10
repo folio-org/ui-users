@@ -105,7 +105,7 @@ class UserForm extends React.Component {
 
     return (
       <form>
-        <Paneset>
+        <Paneset isRoot>
           <Pane defaultWidth="100%" firstMenu={addUserFirstMenu} lastMenu={initialValues.username ? editUserLastMenu : addUserLastMenu} paneTitle={initialValues.username ? 'Edit User' : 'New User'}>
             <Row>
               <Col sm={5} smOffset={1}>
