@@ -7,25 +7,18 @@ import RenderPermissions from '../lib/RenderPermissions';
 class PermissionSet extends React.Component {
 
   static propTypes = {
-    stripes: PropTypes.shape({
-      hasPerm: PropTypes.func.isRequired,
-    }).isRequired,
     data: PropTypes.shape({
       availablePermissions: PropTypes.arrayOf(PropTypes.object),
-    }).isRequired
+    }).isRequired,
   };
 
   static manifest = Object.freeze({
-     availablePermissions: {
+    availablePermissions: {
       type: 'okapi',
       records: 'permissions',
-      path: 'perms/permissions?length=100&query=(mutable=false)'
-    }
+      path: 'perms/permissions?length=100&query=(mutable=false)',
+    },
   });
-
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     return (<RenderPermissions
