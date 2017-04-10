@@ -27,7 +27,7 @@ class PermissionSetDetails extends Component {
     this.confirmDeleteSet = this.confirmDeleteSet.bind(this);
     this.addPermission = this.addPermission.bind(this);
     this.removePermission = this.removePermission.bind(this);
-
+    
     this.state = {
       confirmDelete: false,
     };

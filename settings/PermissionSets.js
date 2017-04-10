@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import _ from 'lodash';
 import { connect } from '@folio/stripes-connect'; // eslint-disable-line
 
 import Paneset from '@folio/stripes-components/lib/Paneset';
@@ -17,7 +18,7 @@ class PermissionSets extends Component {
     }).isRequired,
     data: PropTypes.shape({
       permissionSets: PropTypes.arrayOf(PropTypes.object),
-    })
+    }).isRequired,
   };
 
   static manifest = Object.freeze({
@@ -31,10 +32,10 @@ class PermissionSets extends Component {
         path: 'perms/permissions',
       },
       GET: {
-        path: 'perms/permissions?length=100&query=(mutable=true)'
+        path: 'perms/permissions?length=100&query=(mutable=true)',
       },
-      path: 'perms/permissions'
-    }
+      path: 'perms/permissions',
+    },
   });
 
   constructor(props) {
@@ -55,20 +56,18 @@ class PermissionSets extends Component {
     const href = e.target.href;
     const permissionName = href.substring(href.indexOf('#') + 1);
     let selectedSet = null;
-    _.forEach(this.props.data.permissionSets, function(set) {
-      if(set.permissionName===permissionName) selectedSet=set; 
+    _.forEach(this.props.data.permissionSets, (set) => {
+      if (set.permissionName === permissionName) selectedSet = set;
     });
     this.setState({ selectedSet: selectedSet });
   }
 
   createNewPermissionSet() {
-
     this.props.mutator.permissionSets.POST({
-      mutable:true
-    }).then(()=>{
+      mutable: true,
+    }).then(() => {
       this.clearSelection();
     });
- 
   }
 
   clearSelection() {
@@ -78,9 +77,6 @@ class PermissionSets extends Component {
   }
 
   render() {
-
-    const { data: { permissionSets } } = this.props;
-
     const RenderedPermissionSets = this.props.data.permissionSets?this.props.data.permissionSets.map(
       set => <a data-id={set.id} key={set.id} href={`#${set.permissionName}`} onClick={this.onSelectSet}>{set.displayName?set.displayName:"Untitled Permission Set"}</a>,
     ):[];
@@ -108,4 +104,4 @@ class PermissionSets extends Component {
   }
 }
 
-export default connect(PermissionSets, '@folio/users')
+export default connect(PermissionSets, '@folio/users');
