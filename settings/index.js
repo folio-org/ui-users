@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import Pane from '@folio/stripes-components/lib/Pane';
@@ -9,6 +9,13 @@ import PermissionSets from './PermissionSets';
 import PatronGroupsSettings from './PatronGroupsSettings';
 
 class UsersSettings extends React.Component {
+
+  static propTypes = {
+    stripes: PropTypes.shape({
+      hasPerm: PropTypes.func.isRequired,
+    }).isRequired  
+  };
+
   constructor(props) {
     super(props);
 
