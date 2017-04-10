@@ -19,6 +19,13 @@ class PermissionSets extends Component {
     data: PropTypes.shape({
       permissionSets: PropTypes.arrayOf(PropTypes.object),
     }).isRequired,
+    mutator: PropTypes.shape({
+      permissionSets: PropTypes.shape({
+        POST: PropTypes.func,
+        DELETE: PropTypes.func,
+        GET: PropTypes.func,
+      }),
+    }).isRequired,
   };
 
   static manifest = Object.freeze({
@@ -59,7 +66,9 @@ class PermissionSets extends Component {
     _.forEach(this.props.data.permissionSets, (set) => {
       if (set.permissionName === permissionName) selectedSet = set;
     });
-    this.setState({ selectedSet: selectedSet });
+    this.setState({ 
+      selectedSet: selectedSet, 
+    });
   }
 
   createNewPermissionSet() {
@@ -77,9 +86,9 @@ class PermissionSets extends Component {
   }
 
   render() {
-    const RenderedPermissionSets = this.props.data.permissionSets?this.props.data.permissionSets.map(
-      set => <a data-id={set.id} key={set.id} href={`#${set.permissionName}`} onClick={this.onSelectSet}>{set.displayName?set.displayName:"Untitled Permission Set"}</a>,
-    ):[];
+    const RenderedPermissionSets = this.props.data.permissionSets ? this.props.data.permissionSets.map(
+      set => <a data-id={set.id} key={set.id} href={`#${set.permissionName}`} onClick={this.onSelectSet}>{set.displayName ? set.displayName:'Untitled Permission Set'}</a>,
+    ) : [];
 
     const PermissionsSetsLastMenu = (
       <PaneMenu>
@@ -93,7 +102,7 @@ class PermissionSets extends Component {
       <Paneset nested>
         <Pane defaultWidth="20%" lastMenu={PermissionsSetsLastMenu}>
           <NavList>
-            <NavListSection activeLink={this.state.selectedSet?`#${this.state.selectedSet.title}`:''}>
+            <NavListSection activeLink={this.state.selectedSet ? `#${this.state.selectedSet.title}` : ''}>
               {RenderedPermissionSets}
             </NavListSection>
           </NavList>

@@ -10,6 +10,10 @@ class PermissionSet extends React.Component {
     data: PropTypes.shape({
       availablePermissions: PropTypes.arrayOf(PropTypes.object),
     }).isRequired,
+    addPermission: PropTypes.func.isRequired,
+    removePermission: PropTypes.func.isRequired,
+    availablePermissions: PropTypes.func.isRequired,
+    selectedSet: PropTypes.object.isRequired,
   };
 
   static manifest = Object.freeze({
