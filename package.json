@@ -46,7 +46,7 @@
     "redux-form": "^6.1.1"
   },
   "peerDependencies": {
-    "@folio/stripes-connect": "^0.3.0",
+    "@folio/stripes-connect": "^0.4.0",
     "@folio/stripes-core": "^0.5.0"
   }
 }

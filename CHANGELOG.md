@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## In progress
+
+* Request more results where available.
+
 ## [1.1.0](https://github.com/folio-org/ui-users/tree/v1.1.0) (IN PROGRESS)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v1.0.0...v1.1.0)
 

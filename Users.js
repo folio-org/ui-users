@@ -83,6 +83,8 @@ class Users extends React.Component {
     users: {
       type: 'okapi',
       records: 'users',
+      recordsRequired: 30,
+      perRequest: 10,
       path: makePathFunction(
         'users',
         'username=*',
