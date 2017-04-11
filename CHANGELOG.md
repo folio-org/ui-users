@@ -6,8 +6,6 @@
 * Add ability to manager permission sets (LIBAPP-83).
 * Upgrade dependencies; stripes-core v0.5.0 and stripes-connect v0.3.0.
 
-LIBAPP-83
-
 ## [1.0.0](https://github.com/folio-org/ui-users/tree/v1.0.0) (2017-04-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v0.0.2...v1.0.0)
 
