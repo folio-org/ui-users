@@ -3,7 +3,7 @@
 ## [1.1.0](https://github.com/folio-org/ui-users/tree/v1.1.0) (2017-04-12)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v1.0.0...v1.1.0)
 
-* Add ability to manager permission sets (LIBAPP-83).
+* Add ability to manage permission sets (LIBAPP-83).
 * Upgrade dependencies; stripes-core v0.6.0, stripes-connect v0.3.0, and stripes-components v0.6.0.
 
 ## [1.0.0](https://github.com/folio-org/ui-users/tree/v1.0.0) (2017-04-10)
