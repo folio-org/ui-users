@@ -1,14 +1,10 @@
 # Change history for ui-users
 
-## In progress
-
-* Request more results where available.
-
-## [1.1.0](https://github.com/folio-org/ui-users/tree/v1.1.0) (IN PROGRESS)
+## [1.1.0](https://github.com/folio-org/ui-users/tree/v1.1.0) (2017-04-12)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v1.0.0...v1.1.0)
 
 * Add ability to manager permission sets (LIBAPP-83).
-* Upgrade dependencies; stripes-core v0.5.0 and stripes-connect v0.3.0.
+* Upgrade dependencies; stripes-core v0.6.0, stripes-connect v0.3.0, and stripes-components v0.6.0.
 
 ## [1.0.0](https://github.com/folio-org/ui-users/tree/v1.0.0) (2017-04-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v0.0.2...v1.0.0)
