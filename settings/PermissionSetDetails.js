@@ -94,7 +94,7 @@ class PermissionSetDetails extends Component {
           <PermissionSet 
             addPermission={this.addPermission}
             removePermission={this.removePermission}
-            selectedSet="selectedSet"
+            selectedSet={selectedSet}
             permToRead="perms.permissions"
             permToDelete="perms.permissions"
             permToModify="perms.permissions" 
