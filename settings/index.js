@@ -45,7 +45,7 @@ class UsersSettings extends React.Component {
 
   render() {
     return (
-      <Paneset nested>
+      <Paneset nested defaultWidth="80%">
         <Pane defaultWidth="25%" paneTitle="Users">
           <NavList>
             <NavListSection activeLink={`#${this.state.selectedPage}`}>

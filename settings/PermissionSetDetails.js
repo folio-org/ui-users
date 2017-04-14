@@ -76,7 +76,7 @@ class PermissionSetDetails extends Component {
   render() {
     const { selectedSet, handleSubmit } = this.props;
     return (
-      <Pane paneTitle={"Permission Set "+selectedSet.displayName?selectedSet.displayName:selectedSet.permissionName} defaultWidth="fill" >
+      <Pane paneTitle={"Permission Set "+selectedSet.displayName?selectedSet.displayName:selectedSet.permissionName} defaultWidth="fill" fluidContentWidth>
         <form>
         
           <section>

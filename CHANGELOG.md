@@ -1,5 +1,11 @@
 # Change history for ui-users
 
+## [1.1.1](https://github.com/folio-org/ui-users/tree/v1.1.0) (IN PROGRESS)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v1.0.0...v1.1.1)
+* Settings - `<Pane>` components in PermissionSetDetails.js and PatronGroupsSettings.js make use of the `fluidContentWidth` prop to resolve page cut-off issues.
+* Settings - index.js sets a `defaultWidth` to its paneset.
+* Upgrade dependency - stripes-components v0.6.1.
+
 ## [1.1.0](https://github.com/folio-org/ui-users/tree/v1.1.0) (2017-04-12)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v1.0.0...v1.1.0)
 

@@ -59,7 +59,7 @@ class PatronGroupsSettings extends React.Component {
 
     return (
       <Paneset>
-        <Pane defaultWidth="fill" >
+        <Pane defaultWidth="fill" fluidContentWidth>
           <PatronGroupsList
             // TODO: not sure why we need this OR if there are no groups
             // Seems to load this once before the groups data from the manifest
