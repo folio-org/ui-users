@@ -29,11 +29,10 @@ class UsersRouting extends Component {
   }
 
   render() {
-    const pathname = this.props.match.path;
     return (
       <Switch>
         <Route
-          path={`${pathname}`}
+          path={`${this.props.match.path}`}
           render={() => <this.connectedApp {...this.props} />}
         />
         <Route component={() => { this.NoMatch(); }} />
