@@ -51,11 +51,12 @@ class Users extends React.Component {
   };
 
   static propTypes = {
-    connect: PropTypes.func.isRequired,
-    logger: PropTypes.shape({
-      log: PropTypes.func.isRequired,
+    stripes: PropTypes.shape({
+      logger: PropTypes.shape({
+        log: PropTypes.func.isRequired,
+      }).isRequired,
+      connect: PropTypes.func.isRequired,
     }).isRequired,
-    currentPerms: PropTypes.object, // eslint-disable-line react/forbid-prop-types
     data: PropTypes.object.isRequired,
     history: PropTypes.shape({
       push: PropTypes.func.isRequired,
@@ -82,6 +83,8 @@ class Users extends React.Component {
     users: {
       type: 'okapi',
       records: 'users',
+      recordsRequired: 30,
+      perRequest: 10,
       path: makePathFunction(
         'users',
         'username=*',
@@ -90,7 +93,7 @@ class Users extends React.Component {
           Active: 'active',
           Name: 'personal.last_name personal.first_name',
           'Patron Group': 'patron_group',
-          Username: 'username',
+          'User ID': 'username',
           Email: 'personal.email',
         },
         filterConfig,
@@ -101,7 +104,6 @@ class Users extends React.Component {
       type: 'okapi',
       path: 'groups',
       records: 'usergroups',
-      pk: '_id',
     },
   });
 
@@ -130,7 +132,10 @@ class Users extends React.Component {
     this.onChangeFilter = onChangeFilter.bind(this);
     this.transitionToParams = transitionToParams.bind(this);
 
-    this.connectedViewUser = this.props.connect(ViewUser);
+    this.collapseDetails = this.collapseDetails.bind(this);
+    this.connectedViewUser = props.stripes.connect(ViewUser);
+    const logger = props.stripes.logger;
+    this.log = logger.log.bind(logger);
   }
 
   componentWillMount() {
@@ -138,14 +143,14 @@ class Users extends React.Component {
   }
 
   onClearSearch() {
-    this.props.logger.log('action', 'cleared search');
+    this.log('action', 'cleared search');
     this.setState({ searchTerm: '' });
     this.props.history.push(this.props.location.pathname);
   }
 
   onSort(e, meta) {
-    const sortOrder = meta.name;
-    this.props.logger.log('action', `sorted by ${sortOrder}`);
+    const sortOrder = meta.alias;
+    this.log('action', `sorted by ${sortOrder}`);
     this.setState({ sortOrder });
     this.transitionToParams({ sort: sortOrder });
   }
@@ -153,20 +158,20 @@ class Users extends React.Component {
   onSelectRow(e, meta) {
     const userId = meta.id;
     const username = meta.username;
-    this.props.logger.log('action', `clicked ${userId}, location =`, this.props.location, 'selected user =', meta);
+    this.log('action', `clicked ${userId}, selected user =`, meta);
     this.setState({ selectedItem: meta });
     this.props.history.push(`/users/view/${userId}/${username}${this.props.location.search}`);
   }
 
   onClickAddNewUser(e) {
     if (e) e.preventDefault();
-    this.props.logger.log('action', 'clicked "add new user"');
+    this.log('action', 'clicked "add new user"');
     this.props.mutator.addUserMode.replace({ mode: true });
   }
 
   onClickCloseNewUser(e) {
     if (e) e.preventDefault();
-    this.props.logger.log('action', 'clicked "close new user"');
+    this.log('action', 'clicked "close new user"');
     this.props.mutator.addUserMode.replace({ mode: false });
   }
 
@@ -177,7 +182,7 @@ class Users extends React.Component {
   }
 
   performSearch(query) {
-    this.props.logger.log('action', `searched for '${query}'`);
+    this.log('action', `searched for '${query}'`);
     this.transitionToParams({ query });
   }
 
@@ -203,9 +208,9 @@ class Users extends React.Component {
       body: JSON.stringify(creds),
     }).then((response) => {
       if (response.status >= 400) {
-        this.props.logger.log('xhr', 'Users. POST of creds failed.');
+        this.log('xhr', 'Users. POST of creds failed.');
       } else {
-        this.postPerms(username, ['users.read', 'perms.users.read']);
+        this.postPerms(username, ['users.read', 'usergroups.read', 'perms.permissions.get']);
       }
     });
   }
@@ -217,15 +222,22 @@ class Users extends React.Component {
       body: JSON.stringify({ username, permissions: perms }),
     }).then((response) => {
       if (response.status >= 400) {
-        this.props.logger.log('xhr', 'Users. POST of users permissions failed.');
+        this.log('xhr', 'Users. POST of users permissions failed.');
       } else {
         // nothing to do
       }
     });
   }
 
+  collapseDetails() {
+    this.setState({
+      selectedItem: {},
+    });
+    this.props.history.push(`${this.props.match.path}${this.props.location.search}`);
+  }
+
   render() {
-    const { data, currentPerms } = this.props;
+    const { data, stripes } = this.props;
     const users = data.users || [];
 
     /* searchHeader is a 'custom pane header'*/
@@ -241,26 +253,29 @@ class Users extends React.Component {
           off_campus: 'Off-campus',
           other: 'Other',
         };
-        return map[user.patron_group] || '?';
+        const maybe = map[user.patron_group];
+        if (maybe) return maybe;
+        const pg = data.patronGroups.filter(g => g.id === user.patron_group)[0];
+        return pg ? pg.group : '?';
       },
-      Username: user => user.username,
+      'User ID': user => user.username,
       Email: user => _.get(user, ['personal', 'email']),
     };
-    
+
     return (
       <Paneset>
         {/* Filter Pane */}
         <Pane defaultWidth="16%" header={searchHeader}>
           <FilterGroups config={filterConfig} filters={this.state.filters} onChangeFilter={this.onChangeFilter} />
           <FilterControlGroup label="Actions">
-            <IfPermission {...this.props} perm="users.create">
+            <IfPermission {...this.props} perm="users-bl.createuser">
               <Button fullWidth onClick={this.onClickAddNewUser}>New user</Button>
             </IfPermission>
           </FilterControlGroup>
         </Pane>
         {/* Results Pane */}
         <Pane
-          defaultWidth="40%"
+          defaultWidth="fill"
           paneTitle={
             <div style={{ textAlign: 'center' }}>
               <strong>Results</strong>
@@ -278,18 +293,21 @@ class Users extends React.Component {
             formatter={resultsFormatter}
             onRowClick={this.onSelectRow}
             onHeaderClick={this.onSort}
-            visibleColumns={['Active', 'Name', 'Patron Group', 'Username', 'Email']}
-            fullWidth
+            visibleColumns={['Active', 'Name', 'Patron Group', 'User ID', 'Email']}
             sortOrder={this.state.sortOrder}
             isEmptyMessage={`No results found for "${this.state.searchTerm}". Please check your spelling and filters.`}
+            columnMapping={{ 'User ID': 'username' }}
           />
         </Pane>
 
         {/* Details Pane */}
-        <Route path={`${this.props.match.path}/view/:userid/:username`} render={props => <this.connectedViewUser currentPerms={currentPerms} placeholder={'placeholder'} {...props} />} />
+        <Route
+          path={`${this.props.match.path}/view/:userid/:username`}
+          render={props => <this.connectedViewUser stripes={stripes} paneWidth="44%" onClose={this.collapseDetails} {...props} />}
+        />
         <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false} label="Add New User Dialog">
           <UserForm
-            initialValues={{'available_patron_groups': this.props.data.patronGroups }}
+            initialValues={{ available_patron_groups: this.props.data.patronGroups }}
             onSubmit={(record) => { this.create(record); }}
             onCancel={this.onClickCloseNewUser}
           />

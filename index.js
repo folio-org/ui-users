@@ -4,17 +4,20 @@ import React, { Component, PropTypes } from 'react';
 import Route from 'react-router-dom/Route';
 import Switch from 'react-router-dom/Switch';
 import Users from './Users';
+import Settings from './settings';
 
 class UsersRouting extends Component {
   static propTypes = {
-    connect: PropTypes.func.isRequired,
+    stripes: PropTypes.shape({
+      connect: PropTypes.func.isRequired,
+    }).isRequired,
     location: PropTypes.object.isRequired,
     match: PropTypes.object.isRequired,
   }
 
   constructor(props) {
     super(props);
-    this.connectedApp = props.connect(Users);
+    this.connectedApp = props.stripes.connect(Users);
   }
 
   NoMatch() {
@@ -27,11 +30,14 @@ class UsersRouting extends Component {
   }
 
   render() {
-    const pathname = this.props.match.path;
+    if (this.props.showSettings) {
+      return <Settings {...this.props} />
+    }
+
     return (
       <Switch>
         <Route
-          path={`${pathname}`}
+          path={`${this.props.match.path}`}
           render={() => <this.connectedApp {...this.props} />}
         />
         <Route component={() => { this.NoMatch(); }} />

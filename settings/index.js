@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import Pane from '@folio/stripes-components/lib/Pane';
@@ -9,6 +9,13 @@ import PermissionSets from './PermissionSets';
 import PatronGroupsSettings from './PatronGroupsSettings';
 
 class UsersSettings extends React.Component {
+
+  static propTypes = {
+    stripes: PropTypes.shape({
+      hasPerm: PropTypes.func.isRequired,
+    }).isRequired  
+  };
+
   constructor(props) {
     super(props);
 
@@ -32,12 +39,13 @@ class UsersSettings extends React.Component {
 
   getPage() {
     const result = this.state.pages.filter(obj => obj.name === this.state.selectedPage);
-    return React.createElement(result[0].component);
+    const Component = result[0].component;
+    return <Component stripes={this.props.stripes} />;
   }
 
   render() {
     return (
-      <Paneset nested>
+      <Paneset nested defaultWidth="80%">
         <Pane defaultWidth="25%" paneTitle="Users">
           <NavList>
             <NavListSection activeLink={`#${this.state.selectedPage}`}>
