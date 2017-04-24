@@ -21,7 +21,7 @@ class UserPermissions extends React.Component {
     availablePermissions: {
       type: 'okapi',
       records: 'permissions',
-      path: 'perms/permissions?length=100',
+      path: 'perms/permissions?length=1000',
     },
     userPermissions: {
       type: 'okapi',
