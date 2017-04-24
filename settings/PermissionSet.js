@@ -20,7 +20,7 @@ class PermissionSet extends React.Component {
     availablePermissions: {
       type: 'okapi',
       records: 'permissions',
-      path: 'perms/permissions?length=100&query=(mutable=false)',
+      path: 'perms/permissions?length=1000&query=(mutable=false)',
     },
   });
 
