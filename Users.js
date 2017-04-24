@@ -202,6 +202,7 @@ class Users extends React.Component {
   }
 
   postCreds(username, creds) {
+    this.log('xhr', `POST credentials for new user '${username}':`, creds);
     fetch(`${this.okapi.url}/authn/credentials`, {
       method: 'POST',
       headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token, 'Content-Type': 'application/json' }),
@@ -216,6 +217,7 @@ class Users extends React.Component {
   }
 
   postPerms(username, perms) {
+    this.log('xhr', `POST permissions for new user '${username}':`, perms);
     fetch(`${this.okapi.url}/perms/users`, {
       method: 'POST',
       headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token, 'Content-Type': 'application/json' }),
