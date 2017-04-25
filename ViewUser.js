@@ -119,7 +119,7 @@ class ViewUser extends Component {
 
     if (!users || users.length === 0 || !userid) return <div />;
 
-    if (!this.props.stripes.hasPerm('users-bl.viewuser')) {
+    if (!this.props.stripes.hasPerm('users.item.get')) {
       return (<div
         style={{
           position: 'absolute',

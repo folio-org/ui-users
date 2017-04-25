@@ -211,7 +211,12 @@ class Users extends React.Component {
       if (response.status >= 400) {
         this.log('xhr', 'Users. POST of creds failed.');
       } else {
-        this.postPerms(username, ['users.read', 'usergroups.read', 'perms.permissions.get']);
+        this.postPerms(username, [
+          'users.collection.get',       // so the user can search for his own user record after login
+          'perms.permissions.get',      // so the user can fetch his own permissions after login
+          'usergroups.collection.get',  // so patron groups can be listed in the Users module
+          'module.trivial.enabled',     // so that at least one module is available to new users
+        ]);
       }
     });
   }
@@ -270,7 +275,7 @@ class Users extends React.Component {
         <Pane defaultWidth="16%" header={searchHeader}>
           <FilterGroups config={filterConfig} filters={this.state.filters} onChangeFilter={this.onChangeFilter} />
           <FilterControlGroup label="Actions">
-            <IfPermission {...this.props} perm="users-bl.createuser">
+            <IfPermission {...this.props} perm="users-bl.item.put">
               <Button fullWidth onClick={this.onClickAddNewUser}>New user</Button>
             </IfPermission>
           </FilterControlGroup>
