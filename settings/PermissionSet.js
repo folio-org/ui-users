@@ -12,7 +12,6 @@ class PermissionSet extends React.Component {
     }).isRequired,
     addPermission: PropTypes.func.isRequired,
     removePermission: PropTypes.func.isRequired,
-    availablePermissions: PropTypes.func.isRequired,
     selectedSet: PropTypes.object.isRequired,
   };
 
