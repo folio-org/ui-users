@@ -22,6 +22,7 @@ class UsersSettings extends React.Component {
     this.state = {
       selectedPage: 'PatronGroupsSettings',
       pages: [
+        // ### Should only be offered Permission sets if the user has perms.permissions.get
         { label: 'Permission sets', name: 'PermissionSets', component: PermissionSets },
         { label: 'Patron groups', name: 'PatronGroupsSettings', component: PatronGroupsSettings },
       ],
