@@ -269,6 +269,25 @@ class Users extends React.Component {
       Email: user => _.get(user, ['personal', 'email']),
     };
 
+    const detailsPane = (
+      this.props.stripes.hasPerm('users.item.get') ?
+        <Route
+          path={`${this.props.match.path}/view/:userid/:username`}
+          render={props => <this.connectedViewUser stripes={stripes} paneWidth="44%" onClose={this.collapseDetails} {...props} />}
+        /> :
+        <div style={{
+          position: 'absolute',
+          right: '1rem',
+          bottom: '1rem',
+          width: '34%',
+          zIndex: '9999',
+          padding: '1rem',
+          backgroundColor: '#fff',
+        }}>
+          <h2>Permission Error</h2>
+          <p>Sorry - your user permissions do not allow access to this page.</p>
+        </div>);
+          
     return (
       <Paneset>
         {/* Filter Pane */}
@@ -311,11 +330,7 @@ class Users extends React.Component {
           />
         </Pane>
 
-        {/* Details Pane */}
-        <Route
-          path={`${this.props.match.path}/view/:userid/:username`}
-          render={props => <this.connectedViewUser stripes={stripes} paneWidth="44%" onClose={this.collapseDetails} {...props} />}
-        />
+        {detailsPane}
         <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false} label="Add New User Dialog">
           <UserForm
             initialValues={{ available_patron_groups: this.props.data.patronGroups }}
