@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## pending
+
+* Use params rather than path to express the query
+
 ## [1.3.0](https://github.com/folio-org/ui-users/tree/v1.2.0) (IN PROGRESS)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v1.2.0...v1.3.0)
 
