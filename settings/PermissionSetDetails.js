@@ -96,8 +96,8 @@ class PermissionSetDetails extends Component {
             removePermission={this.removePermission}
             selectedSet={selectedSet}
             permToRead="perms.permissions.get"
-            permToDelete="perms.permissions.item.delete"
-            permToModify="perms.permissions.item.post" 
+            permToDelete="perms.users.item.put"
+            permToModify="perms.users.item.put" 
             stripes={this.props.stripes} 
             {...this.props} 
           />
