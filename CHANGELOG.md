@@ -1,6 +1,11 @@
 # Change history for ui-users
 
-## [1.2.0](https://github.com/folio-org/ui-users/tree/v1.2.0) (IN PROGRESS)
+## [1.3.0](https://github.com/folio-org/ui-users/tree/v1.2.0) (IN PROGRESS)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v1.2.0...v1.3.0)
+
+* Trying to view a user when you do not have the users.item.get permission no longer results in an unsuccessful HTTP request.
+
+## [1.2.0](https://github.com/folio-org/ui-users/tree/v1.2.0) (2017-04-26)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v1.1.0...v1.2.0)
 
 * Many, many changes to client-side permission checking. Fixes STRIPES-326.
