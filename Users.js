@@ -17,7 +17,7 @@ import FilterControlGroup from '@folio/stripes-components/lib/FilterControlGroup
 import Layer from '@folio/stripes-components/lib/Layer';
 import FilterGroups, { initialFilterState, onChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
-import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
+import makePathFunction from '@folio/stripes-components/util/makePathFunction';
 import IfPermission from '@folio/stripes-components/lib/IfPermission';
 
 import UserForm from './UserForm';
@@ -85,24 +85,20 @@ class Users extends React.Component {
       records: 'users',
       recordsRequired: 30,
       perRequest: 10,
-      path: 'users',
-      GET: {
-        params: {
-          query: makeQueryFunction(
-            'username=*',
-            'username="$QUERY*" or personal.first_name="$QUERY*" or personal.last_name="$QUERY*"',
-            {
-              Active: 'active',
-              Name: 'personal.last_name personal.first_name',
-              'Patron Group': 'patron_group',
-              'User ID': 'username',
-              Email: 'personal.email',
-            },
-            filterConfig,
-          ),
+      path: makePathFunction(
+        'users',
+        'username=*',
+        'username="$QUERY*" or personal.first_name="$QUERY*" or personal.last_name="$QUERY*"',
+        {
+          Active: 'active',
+          Name: 'personal.last_name personal.first_name',
+          'Patron Group': 'patron_group',
+          'User ID': 'username',
+          Email: 'personal.email',
         },
-        staticFallback: { params: {} },
-      },
+        filterConfig,
+      ),
+      staticFallback: { path: 'users' },
     },
     patronGroups: {
       type: 'okapi',
