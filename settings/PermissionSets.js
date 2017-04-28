@@ -66,9 +66,7 @@ class PermissionSets extends Component {
     _.forEach(this.props.data.permissionSets, (set) => {
       if (set.permissionName === permissionName) selectedSet = set;
     });
-    this.setState({ 
-      selectedSet: selectedSet, 
-    });
+    this.setState({ selectedSet });
   }
 
   createNewPermissionSet() {
@@ -87,7 +85,7 @@ class PermissionSets extends Component {
 
   render() {
     const RenderedPermissionSets = this.props.data.permissionSets ? this.props.data.permissionSets.map(
-      set => <a data-id={set.id} key={set.id} href={`#${set.permissionName}`} onClick={this.onSelectSet}>{set.displayName ? set.displayName:'Untitled Permission Set'}</a>,
+      set => <a data-id={set.id} key={set.id} href={`#${set.permissionName}`} onClick={this.onSelectSet}>{set.displayName ? set.displayName : 'Untitled Permission Set'}</a>,
     ) : [];
 
     const PermissionsSetsLastMenu = (
