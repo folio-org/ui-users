@@ -80,10 +80,11 @@ class Users extends React.Component {
 
   static manifest = Object.freeze({
     addUserMode: {},
+    userCount: { initialValue: 30 },
     users: {
       type: 'okapi',
       records: 'users',
-      recordsRequired: 30,
+      recordsRequired: '${userCount}',
       perRequest: 10,
       path: 'users',
       GET: {
@@ -183,6 +184,10 @@ class Users extends React.Component {
     const query = e.target.value;
     this.setState({ searchTerm: query });
     this.performSearch(query);
+  }
+
+  onNeedMore = () => {
+    this.props.mutator.userCount.replace(this.props.data.userCount + 30);
   }
 
   performSearch(query) {
@@ -327,6 +332,7 @@ class Users extends React.Component {
             formatter={resultsFormatter}
             onRowClick={this.onSelectRow}
             onHeaderClick={this.onSort}
+            onFetch={this.onNeedMore}
             visibleColumns={['Active', 'Name', 'Patron Group', 'User ID', 'Email']}
             sortOrder={this.state.sortOrder}
             isEmptyMessage={`No results found for "${this.state.searchTerm}". Please check your spelling and filters.`}
