@@ -19,7 +19,7 @@
     "hasSettings": true
   },
   "scripts": {
-    "lint": "eslint *.js lib || true"
+    "lint": "eslint *.js lib settings || true"
   },
   "devDependencies": {
     "babel-core": "^6.17.0",
