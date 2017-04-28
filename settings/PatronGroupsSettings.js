@@ -1,12 +1,29 @@
 // We have to remove node_modules/react to avoid having multiple copies loaded.
 // eslint-disable-next-line import/no-unresolved
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from '@folio/stripes-connect';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import Pane from '@folio/stripes-components/lib/Pane';
 import PatronGroupsList from './PatronGroupsList';
 
 class PatronGroupsSettings extends React.Component {
+  static propTypes = {
+    data: PropTypes.shape({
+      groups: PropTypes.arrayOf(
+        PropTypes.object,
+      ),
+    }).isRequired,
+    mutator: PropTypes.shape({
+      activeRecord: PropTypes.shape({
+        update: PropTypes.func.isRequired,
+      }),
+      groups: PropTypes.shape({
+        DELETE: PropTypes.func.isRequired,
+        POST: PropTypes.func.isRequired,
+        PUT: PropTypes.func.isRequired,
+      }),
+    }),
+  };
 
   static manifest = Object.freeze({
     groups: {
