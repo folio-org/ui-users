@@ -5,8 +5,8 @@ import Textfield from '@folio/stripes-components/lib/TextField';
 import TextArea from '@folio/stripes-components/lib/TextArea';
 import Button from '@folio/stripes-components/lib/Button';
 
-import {Field, reducer as formReducer, reduxForm} from 'redux-form';
- 
+import { Field, reduxForm } from 'redux-form';
+
 import PermissionSet from './PermissionSet';
 
 class PermissionSetDetails extends Component {
@@ -15,29 +15,27 @@ class PermissionSetDetails extends Component {
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func.isRequired,
     }).isRequired,
-    initialValues: PropTypes.object
   };
 
   constructor(props) {
     super(props);
-    
+
     this.validateSet = this.validateSet.bind(this);
     this.saveSet = this.saveSet.bind(this);
     this.beginDelete = this.beginDelete.bind(this);
     this.confirmDeleteSet = this.confirmDeleteSet.bind(this);
     this.addPermission = this.addPermission.bind(this);
     this.removePermission = this.removePermission.bind(this);
-    
+
     this.state = {
       confirmDelete: false,
     };
-
   }
 
-  validateSet(newValue, dirtySet, props) {
-    this.setState({ 
-      selectedSet: dirtySet 
-    });  
+  validateSet(newValue, dirtySet) {
+    this.setState({
+      selectedSet: dirtySet,
+    });
   }
 
   saveSet() {
@@ -51,10 +49,10 @@ class PermissionSetDetails extends Component {
   }
 
   confirmDeleteSet(confirmation) {
-    if(confirmation) {
-      this.props.parentMutator.permissionSets.DELETE(this.props.selectedSet).then(()=>{
+    if (confirmation) {
+      this.props.parentMutator.permissionSets.DELETE(this.props.selectedSet).then(() => {
         this.props.clearSelection();
-      });  
+      });
     } else {
       this.setState({
         confirmDelete: false,
@@ -74,11 +72,11 @@ class PermissionSetDetails extends Component {
   }
 
   render() {
-    const { selectedSet, handleSubmit } = this.props;
+    const { selectedSet } = this.props;
     return (
-      <Pane paneTitle={"Permission Set "+selectedSet.displayName?selectedSet.displayName:selectedSet.permissionName} defaultWidth="fill" fluidContentWidth>
+      <Pane paneTitle={'Permission Set ' + selectedSet.displayName ? selectedSet.displayName : selectedSet.permissionName} defaultWidth="fill" fluidContentWidth>
         <form>
-        
+
           <section>
             <h2 style={{ marginTop: '0' }}>About</h2>
             <Field label="Title" name="displayName" id="displayName" component={Textfield} required fullWidth rounded validate={this.validateSet} onBlur={this.saveSet} />
@@ -86,22 +84,22 @@ class PermissionSetDetails extends Component {
           </section>
 
           <Button title="Delete Permission Set" onClick={this.beginDelete} disabled={this.state.confirmDelete}> Delete Set </Button>
-          {this.state.confirmDelete && <div> 
-             <Button title="Confirm Delete Permission Set" onClick={()=>{this.confirmDeleteSet(true)}} > Confirm </Button>
-              <Button title="Cancel Delete Permission Set" onClick={()=>{this.confirmDeleteSet(false)}}> Cancel </Button>
+          {this.state.confirmDelete && <div>
+            <Button title="Confirm Delete Permission Set" onClick={() => { this.confirmDeleteSet(true); }}>Confirm</Button>
+            <Button title="Cancel Delete Permission Set" onClick={() => { this.confirmDeleteSet(false); }}>Cancel</Button>
           </div>}
 
-          <PermissionSet 
+          <PermissionSet
             addPermission={this.addPermission}
             removePermission={this.removePermission}
             selectedSet={selectedSet}
             permToRead="perms.permissions.get"
             permToDelete="perms.users.item.put"
-            permToModify="perms.users.item.put" 
-            stripes={this.props.stripes} 
-            {...this.props} 
+            permToModify="perms.users.item.put"
+            stripes={this.props.stripes}
+            {...this.props}
           />
-          
+
         </form>
       </Pane>
     );
@@ -110,5 +108,5 @@ class PermissionSetDetails extends Component {
 
 export default reduxForm({
   form: 'permissionSetForm',
-  enableReinitialize: true
+  enableReinitialize: true,
 })(connect(PermissionSetDetails, '@folio/users'));
