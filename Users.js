@@ -56,6 +56,7 @@ class Users extends React.Component {
         log: PropTypes.func.isRequired,
       }).isRequired,
       connect: PropTypes.func.isRequired,
+      hasPerm: PropTypes.func.isRequired,
     }).isRequired,
     data: PropTypes.object.isRequired,
     history: PropTypes.shape({
@@ -275,23 +276,25 @@ class Users extends React.Component {
 
     const detailsPane = (
       this.props.stripes.hasPerm('users.item.get') ?
-        <Route
+        (<Route
           path={`${this.props.match.path}/view/:userid/:username`}
           render={props => <this.connectedViewUser stripes={stripes} paneWidth="44%" onClose={this.collapseDetails} {...props} />}
-        /> :
-        <div style={{
-          position: 'absolute',
-          right: '1rem',
-          bottom: '1rem',
-          width: '34%',
-          zIndex: '9999',
-          padding: '1rem',
-          backgroundColor: '#fff',
-        }}>
+        />) :
+        (<div
+          style={{
+            position: 'absolute',
+            right: '1rem',
+            bottom: '1rem',
+            width: '34%',
+            zIndex: '9999',
+            padding: '1rem',
+            backgroundColor: '#fff',
+          }}
+        >
           <h2>Permission Error</h2>
           <p>Sorry - your user permissions do not allow access to this page.</p>
-        </div>);
-          
+        </div>));
+
     return (
       <Paneset>
         {/* Filter Pane */}
