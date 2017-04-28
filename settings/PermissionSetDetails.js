@@ -15,6 +15,14 @@ class PermissionSetDetails extends Component {
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func.isRequired,
     }).isRequired,
+    clearSelection: PropTypes.func.isRequired,
+    selectedSet: PropTypes.object,
+    parentMutator: PropTypes.shape({
+      permissionSets: PropTypes.shape({
+        DELETE: PropTypes.func.isRequired,
+        PUT: PropTypes.func.isRequired,
+      }),
+    }),
   };
 
   constructor(props) {
@@ -74,7 +82,7 @@ class PermissionSetDetails extends Component {
   render() {
     const { selectedSet } = this.props;
     return (
-      <Pane paneTitle={'Permission Set ' + selectedSet.displayName ? selectedSet.displayName : selectedSet.permissionName} defaultWidth="fill" fluidContentWidth>
+      <Pane paneTitle={`Permission Set ${selectedSet.displayName || selectedSet.permissionName}`} defaultWidth="fill" fluidContentWidth>
         <form>
 
           <section>
