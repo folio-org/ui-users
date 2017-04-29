@@ -186,7 +186,7 @@ class PatronGroupsList extends React.Component {
     const id = e.target.parentNode.parentNode.parentNode.parentNode.getAttribute('data-id');
     const ind = this.getItemIndex(id, this.state.creatingArray);
     const tempArray = this.state.creatingArray;
-    ind !== -1 ? tempArray.splice(ind, 1) : null;
+    if (ind !== -1) tempArray.splice(ind, 1);
     this.setState({
       creatingArray: tempArray,
     });
@@ -288,7 +288,7 @@ class PatronGroupsList extends React.Component {
     }
 
     const tempArray = this.state.editArray;
-    ind !== -1 ? tempArray.splice(ind, 1) : null;
+    if (ind !== -1) tempArray.splice(ind, 1);
     this.setState({
       editArray: tempArray,
     });
