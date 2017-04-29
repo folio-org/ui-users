@@ -120,12 +120,6 @@ class PatronGroupsList extends React.Component {
     return fieldStyle;
   }
 
-  shallowCopy(arr) {
-    const newArr = new Array(arr.length);
-    for (let i = 0; i < arr.length; i++) newArr[i] = arr[i];
-    return newArr;
-  }
-
   // "Create" Worflow Methods/Handlers ================================= //
 
   handleAddClick() {
