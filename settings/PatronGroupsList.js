@@ -34,7 +34,7 @@ const propTypes = {
    */
   visibleFields: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
   /**
-   * Object that reflects the shape of list item objects. values should be strings indicating the type: {n ame:'string' }
+   * Object that reflects the shape of list item objects. values should be strings indicating the type: { name: 'string' }
    * This is used to create new items.
    */
   itemTemplate: React.PropTypes.object.isRequired,
@@ -125,29 +125,29 @@ class PatronGroupsList extends React.Component {
   }
 
   shallowCopy(arr) {
-    let newArr = new Array(arr.length);
-    for ( var i = 0;i < arr.length; i++ ) newArr[i] = arr[i];
+    const newArr = new Array(arr.length);
+    for (let i = 0; i < arr.length; i++) newArr[i] = arr[i];
     return newArr;
   }
 
   getFieldStyle() {
     const fieldCount = this.props.visibleFields.length;
-    const fieldWidth = 80/fieldCount;
-    const fieldStyle = { width: fieldWidth+'%', padding: '0 6px' };
+    const fieldWidth = 80 / fieldCount;
+    const fieldStyle = { width: fieldWidth + '%', padding: '0 6px' };
     return fieldStyle;
   }
 
   // "Create" Worflow Methods/Handlers ================================= //
 
   handleAddClick() {
-    let newTempObject = {};
-    for(var k of Object.keys(this.props.itemTemplate)){ newTempObject[k] = ''};
+    const newTempObject = {};
+    for (let k of Object.keys(this.props.itemTemplate)) { newTempObject[k] = ''; }
     newTempObject[this.props.uniqueField] = this.state.creatingArray.length.toString();
 
-    let tempArray = this.state.creatingArray;
+    const tempArray = this.state.creatingArray;
     tempArray.push(newTempObject);
 
-    this.setState( {
+    this.setState({
       creatingArray: tempArray,
     });
   }
@@ -159,15 +159,15 @@ class PatronGroupsList extends React.Component {
     if (this.state.creatingArray.length === 1) {
       savingIndex = 0;
     } else {
-      const id = e.target.parentNode.parentNode.parentNode.parentNode.getAttribute("data-id");
+      const id = e.target.parentNode.parentNode.parentNode.parentNode.getAttribute('data-id');
       savingIndex = this.getItemIndex(id, this.state.creatingArray);
     }
 
-    //clean temp id from object...
-    let tempArray = this.state.creatingArray;
+    // clean temp id from object...
+    const tempArray = this.state.creatingArray;
     tempArray[savingIndex][uniqueField] = '';
 
-    //send row object to the application...
+    // send row object to the application...
     this.props.onCreate(tempArray[savingIndex]);
 
     tempArray.splice(savingIndex, 1);
@@ -180,7 +180,7 @@ class PatronGroupsList extends React.Component {
   }
 
   handleCreateFieldChange(e) {
-    let tempArray = this.state.creatingArray;
+    const tempArray = this.state.creatingArray;
     let ind;
     if (tempArray.length === 1) {
       ind = 0;
@@ -194,15 +194,15 @@ class PatronGroupsList extends React.Component {
   }
 
   handleCreateFieldFocus(e) {
-    const id = e.target.parentNode.parentNode.parentNode.getAttribute("data-id");
+    const id = e.target.parentNode.parentNode.parentNode.getAttribute('data-id');
     this.editingRow = e.target.parentNode.parentNode.parentNode;
     this.createdItem = id;
   }
 
   handleCreateCancelClick(e) {
-    const id = e.target.parentNode.parentNode.parentNode.parentNode.getAttribute("data-id");
+    const id = e.target.parentNode.parentNode.parentNode.parentNode.getAttribute('data-id');
     const ind = this.getItemIndex(id, this.state.creatingArray);
-    let tempArray = this.state.creatingArray;
+    const tempArray = this.state.creatingArray;
     ind !== -1 ? tempArray.splice(ind, 1) : null;
     this.setState({
       creatingArray: tempArray,
@@ -213,8 +213,8 @@ class PatronGroupsList extends React.Component {
     const { uniqueField, visibleFields } = this.props;
 
     const fieldStyle = this.getFieldStyle();
-    //For each field passed, render data from list item.
-    let renderedData = [];
+    // For each field passed, render data from list item.
+    const renderedData = [];
     let editingIndex;
     if (this.state.creatingArray.length === 1) {
       editingIndex = 0;
@@ -238,11 +238,11 @@ class PatronGroupsList extends React.Component {
           </div>
         );
         renderedData.push(renderedField);
-      }
+      },
     );
 
     // item actions
-    const actions = <div style={{float:'right'}}><button onClick={this.handleCreateCancelClick}>Cancel</button> <button onClick={this.handleCreateSave}>Save</button></div>;
+    const actions = <div style={{ float: 'right' }}><button onClick={this.handleCreateCancelClick}>Cancel</button> <button onClick={this.handleCreateSave}>Save</button></div>;
 
     return (
       <li
@@ -250,12 +250,12 @@ class PatronGroupsList extends React.Component {
         data-id={item[uniqueField]}
         style={{ display: 'block', paddingTop: '6px' }}
         ref={item[uniqueField] === this.state.tempItem[uniqueField] ?
-          (ref) => {this.editingRow = ref} : null
+          (ref) => { this.editingRow = ref; } : null
         }
       >
-        <div style={{display: 'flex', justifyContent:'space-between'}}>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           {renderedData}
-          <div style={{ width: '20%', padding: '0 6px'}}>{actions}</div>
+          <div style={{ width: '20%', padding: '0 6px' }}>{actions}</div>
         </div>
       </li>
     );
@@ -264,12 +264,12 @@ class PatronGroupsList extends React.Component {
   // "Edit" Worflow Methods/Handlers ================================= //
 
   handleDeleteClick(e) {
-    const id = e.target.parentNode.parentNode.parentNode.parentNode.getAttribute("data-id");
+    const id = e.target.parentNode.parentNode.parentNode.parentNode.getAttribute('data-id');
     this.props.onDelete(id);
   }
 
   handleFieldChange(e) {
-    let tempArray = this.state.editArray;
+    const tempArray = this.state.editArray;
     const ind = tempArray.length === 1 ?
       0 : this.getItemIndex(this.editingItem, this.state.editArray);
 
@@ -280,7 +280,7 @@ class PatronGroupsList extends React.Component {
   }
 
   handleFieldFocus(e) {
-    const id = e.target.parentNode.parentNode.parentNode.getAttribute("data-id");
+    const id = e.target.parentNode.parentNode.parentNode.getAttribute('data-id');
     this.editingRow = e.target.parentNode.parentNode.parentNode;
     this.editingItem = id;
   }
@@ -290,26 +290,24 @@ class PatronGroupsList extends React.Component {
     const ind = this.props.contentData.findIndex(
       (item) => {
         return item[this.props.uniqueField] === id;
-      }
+      },
     );
-    let editArray = this.state.editArray;
+    const editArray = this.state.editArray;
     editArray.push(this.props.contentData[ind]);
-    this.setState({
-      editArray: editArray,
-    });
+    this.setState({ editArray });
   }
 
   handleEditCancelClick(e) {
     let ind;
     if (this.state.editArray.length === 1) {
-      ind = 0
+      ind = 0;
     } else {
-      const id = e.target.parentNode.parentNode.parentNode.parentNode.getAttribute("data-id");
-      const ind = this.getItemIndex(id, this.state.editArray);
+      const id = e.target.parentNode.parentNode.parentNode.parentNode.getAttribute('data-id');
+      ind = this.getItemIndex(id, this.state.editArray);
     }
 
-    let tempArray = this.state.editArray;
-    ind !== -1? tempArray.splice(ind, 1) : null;
+    const tempArray = this.state.editArray;
+    ind !== -1 ? tempArray.splice(ind, 1) : null;
     this.setState({
       editArray: tempArray,
     });
@@ -320,14 +318,14 @@ class PatronGroupsList extends React.Component {
     if (this.state.editArray.length >= 1) {
       savingIndex = 0;
     } else {
-      const id = e.target.parentNode.parentNode.parentNode.parentNode.getAttribute("data-id");
+      const id = e.target.parentNode.parentNode.parentNode.parentNode.getAttribute('data-id');
       this.getItemIndex(id, this.state.editArray);
     }
 
     // Send object to application layer
     this.props.onUpdate(this.state.editArray[savingIndex]);
 
-    let tempArray = this.state.editArray;
+    const tempArray = this.state.editArray;
     tempArray.splice(savingIndex, 1);
 
     this.setState({
@@ -341,11 +339,11 @@ class PatronGroupsList extends React.Component {
 
   EditItemFormatter = (item) => {
     const { uniqueField, visibleFields } = this.props;
-    //For each field passed, render data from list item.
+    // For each field passed, render data from list item.
 
     const fieldStyle = this.getFieldStyle();
 
-    let renderedData = [];
+    const renderedData = [];
     const editingIndex = this.getItemIndex(item[uniqueField], this.state.editArray);
     const isEditing = editingIndex !== -1;
     visibleFields.forEach(
@@ -354,7 +352,7 @@ class PatronGroupsList extends React.Component {
           let fieldContent;
           /* if state.editingIndentifier matches the user-specified unique field, the row is in 'edit mode' so it renders textfields
              instead of textual data.*/
-          if (isEditing/*this.state.editingIdentifier === item[uniqueField]*/) {
+          if (isEditing/* this.state.editingIdentifier === item[uniqueField] */) {
             fieldContent = <TextField
               value={this.state.editArray[editingIndex][field]}
               onChange={this.handleFieldChange}
@@ -374,20 +372,20 @@ class PatronGroupsList extends React.Component {
           );
           renderedData.push(renderedField);
         }
-      }
+      },
     );
 
     // If the row is in edit mode, the inputs will be different...
     let actions;
 
 
-    if (isEditing/*this.state.editingIdentifier === item[uniqueField]*/) {
+    if (isEditing/* this.state.editingIdentifier === item[uniqueField] */) {
       // edit mode: 'save' button
-      actions = <div style={{ float:'right' }}><button onClick={this.handleEditCancelClick}>Cancel</button> <button onClick={this.handleSaveEditClick}>Save</button></div>;
+      actions = <div style={{ float: 'right' }}><button onClick={this.handleEditCancelClick}>Cancel</button> <button onClick={this.handleSaveEditClick}>Save</button></div>;
     } else {
       // read mode: 'remove' button
       actions = (
-        <div style={{ float:'right' }}>
+        <div style={{ float: 'right' }}>
           { !this.actionSuppression.edit(item) &&
             <button onClick={this.handleEditClick} aria-label="Edit Item">Edit</button>
           }
@@ -403,12 +401,12 @@ class PatronGroupsList extends React.Component {
         data-id={item[uniqueField]}
         style={{ display: 'block', paddingTop: '6px' }}
         ref={item[uniqueField] === this.state.tempItem[uniqueField] ?
-          (ref) => {this.editingRow = ref} : null
+          (ref) => { this.editingRow = ref; } : null
         }
       >
-        <div style={{display: 'flex', justifyContent:'space-between'}}>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           {renderedData}
-          <div style={{ width: '25%', padding: '0 6px'}}>{actions}</div>
+          <div style={{ width: '25%', padding: '0 6px' }}>{actions}</div>
         </div>
       </li>
     );
@@ -420,14 +418,14 @@ class PatronGroupsList extends React.Component {
     return (
       <div>
         <Row>
-          <Col xs={4}><h3 style={{ marginTop:"0" }}>{label}</h3></Col>
+          <Col xs={4}><h3 style={{ marginTop: '0' }}>{label}</h3></Col>
           <Col xs={4}><Button onClick={this.handleAddClick}>{createButtonLabel}</Button></Col>
         </Row>
 
         <Row>
           <Col xs={12}>
             <List items={this.state.creatingArray} itemFormatter={this.CreateItemFormatter} isEmptyMessage={''} marginBottom0 />
-            <List items={_.sortBy(contentData, [g => g.group.toLowerCase()] )} itemFormatter={this.EditItemFormatter} isEmptyMessage={isEmptyMessage} />
+            <List items={_.sortBy(contentData, [g => g.group.toLowerCase()])} itemFormatter={this.EditItemFormatter} isEmptyMessage={isEmptyMessage} />
           </Col>
         </Row>
       </div>
