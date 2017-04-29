@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React from 'react';
 import { Row, Col } from 'react-bootstrap';
 import Button from '@folio/stripes-components/lib/Button';
@@ -43,22 +44,10 @@ const propTypes = {
    */
   uniqueField: React.PropTypes.string.isRequired,
   /**
-   * Fieldname that includes the unique identifier for the list.
-   */
-  editingItem: React.PropTypes.string,
-  /**
    * Object containing properties of list action names: 'delete', 'edit' and
    * values of sentinel functions that return booleans based on object properties" { delete: (item) => { return (!item.item.inUse)} }
    */
   actionSuppression: React.PropTypes.object,
-  /**
-   * Object containing properties of list action names: 'delete', 'edit' and
-   * values of sentinel functions that return booleans based on object properties" { delete: (item) => { return (!item.item.inUse)} }
-   */
-  validationFeedback: React.PropTypes.shape({
-    type: React.PropTypes.string,
-    message: React.PropTypes.string,
-  }),
   /**
    * Message to display for an empty list.
    */
@@ -104,15 +93,15 @@ class PatronGroupsList extends React.Component {
     this.handleCreateSave = this.handleCreateSave.bind(this);
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.creating !== this.state.creating && this.editingRow !== null) {
-      this.editingRow.getElementsByTagName('input')[0].focus();
-    }
-  }
-
   componentWillMount() {
     if (this.props.actionSuppression) {
       Object.assign(this.actionSuppression, this.props.actionSuppression);
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.creating !== this.state.creating && this.editingRow !== null) {
+      this.editingRow.getElementsByTagName('input')[0].focus();
     }
   }
 
@@ -124,24 +113,24 @@ class PatronGroupsList extends React.Component {
     return ind;
   }
 
+  getFieldStyle() {
+    const fieldCount = this.props.visibleFields.length;
+    const fieldWidth = 80 / fieldCount;
+    const fieldStyle = { width: `${fieldWidth}%`, padding: '0 6px' };
+    return fieldStyle;
+  }
+
   shallowCopy(arr) {
     const newArr = new Array(arr.length);
     for (let i = 0; i < arr.length; i++) newArr[i] = arr[i];
     return newArr;
   }
 
-  getFieldStyle() {
-    const fieldCount = this.props.visibleFields.length;
-    const fieldWidth = 80 / fieldCount;
-    const fieldStyle = { width: fieldWidth + '%', padding: '0 6px' };
-    return fieldStyle;
-  }
-
   // "Create" Worflow Methods/Handlers ================================= //
 
   handleAddClick() {
     const newTempObject = {};
-    for (let k of Object.keys(this.props.itemTemplate)) { newTempObject[k] = ''; }
+    for (const k of Object.keys(this.props.itemTemplate)) { newTempObject[k] = ''; }
     newTempObject[this.props.uniqueField] = this.state.creatingArray.length.toString();
 
     const tempArray = this.state.creatingArray;
@@ -224,14 +213,14 @@ class PatronGroupsList extends React.Component {
 
     visibleFields.forEach(
       (field) => {
-        const fieldContent = <TextField
+        const fieldContent = (<TextField
           value={this.state.creatingArray[editingIndex][field]}
           onChange={this.handleCreateFieldChange}
           placeholder={(field === 'desc') ? 'description' : field}
           name={field}
           onFocus={this.handleCreateFieldFocus}
           fullWidth
-        />;
+        />);
         const renderedField = (
           <div key={field || 'e'} style={fieldStyle}>
             {fieldContent}
@@ -288,9 +277,7 @@ class PatronGroupsList extends React.Component {
   handleEditClick(e) {
     const id = e.target.parentNode.parentNode.parentNode.parentNode.getAttribute('data-id');
     const ind = this.props.contentData.findIndex(
-      (item) => {
-        return item[this.props.uniqueField] === id;
-      },
+      item => item[this.props.uniqueField] === id,
     );
     const editArray = this.state.editArray;
     editArray.push(this.props.contentData[ind]);
@@ -353,7 +340,7 @@ class PatronGroupsList extends React.Component {
           /* if state.editingIndentifier matches the user-specified unique field, the row is in 'edit mode' so it renders textfields
              instead of textual data.*/
           if (isEditing/* this.state.editingIdentifier === item[uniqueField] */) {
-            fieldContent = <TextField
+            fieldContent = (<TextField
               value={this.state.editArray[editingIndex][field]}
               onChange={this.handleFieldChange}
               placeholder={field}
@@ -361,7 +348,7 @@ class PatronGroupsList extends React.Component {
               onFocus={this.handleFieldFocus}
               fullWidth
               marginBottom0
-            />;
+            />);
           } else {
             fieldContent = item[field];
           }
