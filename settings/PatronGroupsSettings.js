@@ -1,11 +1,29 @@
-import React from 'react';
-import { Component } from 'react';
+// We have to remove node_modules/react to avoid having multiple copies loaded.
+// eslint-disable-next-line import/no-unresolved
+import React, { PropTypes } from 'react';
 import { connect } from '@folio/stripes-connect';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import Pane from '@folio/stripes-components/lib/Pane';
 import PatronGroupsList from './PatronGroupsList';
 
-class PatronGroupsSettings extends React.Component { 
+class PatronGroupsSettings extends React.Component {
+  static propTypes = {
+    data: PropTypes.shape({
+      groups: PropTypes.arrayOf(
+        PropTypes.object,
+      ),
+    }).isRequired,
+    mutator: PropTypes.shape({
+      activeRecord: PropTypes.shape({
+        update: PropTypes.func.isRequired,
+      }),
+      groups: PropTypes.shape({
+        DELETE: PropTypes.func.isRequired,
+        POST: PropTypes.func.isRequired,
+        PUT: PropTypes.func.isRequired,
+      }),
+    }),
+  };
 
   static manifest = Object.freeze({
     groups: {
@@ -16,46 +34,45 @@ class PatronGroupsSettings extends React.Component {
         path: 'groups/${activeRecord.id}',
       },
       DELETE: {
-        path: 'groups/${activeRecord.id}'
-      }
+        path: 'groups/${activeRecord.id}',
+      },
     },
-    activeRecord: {}
+    activeRecord: {},
   });
 
-  constructor(props){
+  constructor(props) {
     super(props);
 
-    //placeholder data...
+    // placeholder data...
     this.state = {
       // groups: [{group:"Orange", desc:"orange group", id:"0", inUse:false},
       //   {group:"Red", desc:"red group", id:"1", inUse:true},
       //   {group:"Blue", desc:"blue group", id:"2", inUse: true}],
-    }
+    };
 
     this.onUpdateGroup = this.onUpdateGroup.bind(this);
     this.onCreateGroup = this.onCreateGroup.bind(this);
     this.onDeleteGroup = this.onDeleteGroup.bind(this);
   }
-  onUpdateGroup(groupObject){
-    this.props.mutator.activeRecord.update({'id': groupObject.id });
+  onUpdateGroup(groupObject) {
+    this.props.mutator.activeRecord.update({ id: groupObject.id });
     this.props.mutator.groups.PUT(groupObject);
   }
 
-  onCreateGroup(groupObject){
+  onCreateGroup(groupObject) {
     this.props.mutator.groups.POST(groupObject);
   }
 
-  onDeleteGroup(groupId){
-    this.props.mutator.activeRecord.update({'id': groupId });
-    this.props.mutator.groups.DELETE(this.props.data.groups.find((g) => { return g.id == groupId }))
+  onDeleteGroup(groupId) {
+    this.props.mutator.activeRecord.update({ id: groupId });
+    this.props.mutator.groups.DELETE(this.props.data.groups.find(g => (g.id === groupId)));
   }
 
   render() {
-
     const suppressor = {
-      delete: (item) => { return (!item.inUse)}, // suppress delete action based on 'inUse' prop
-      edit: item => false, // suppress all editting of existing items...
-    }
+      delete: item => item.inUse, // suppress delete action based on 'inUse' prop
+      edit: () => false, // suppress all editting of existing items...
+    };
 
     return (
       <Paneset>
@@ -68,7 +85,7 @@ class PatronGroupsSettings extends React.Component {
             label="Patron Groups"
             createButtonLabel="+ Add group"
             visibleFields={['group', 'desc']}
-            itemTemplate={{group:'string', id:'string', desc:'string', inUse:'bool'}}
+            itemTemplate={{ group: 'string', id: 'string', desc: 'string', inUse: 'bool' }}
             actionSuppression={suppressor}
             onUpdate={this.onUpdateGroup}
             onCreate={this.onCreateGroup}

@@ -112,29 +112,12 @@ class ViewUser extends Component {
     const { data: { users, patronGroups }, match: { params: { userid } } } = this.props;
 
     const detailMenu = (<PaneMenu>
-      <IfPermission {...this.props} perm="users-bl.edituser">
+      <IfPermission {...this.props} perm="users.item.put">
         <button onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button>
       </IfPermission>
     </PaneMenu>);
 
     if (!users || users.length === 0 || !userid) return <div />;
-
-    if (!this.props.stripes.hasPerm('users-bl.viewuser')) {
-      return (<div
-        style={{
-          position: 'absolute',
-          right: '1rem',
-          bottom: '1rem',
-          width: '34%',
-          zIndex: '9999',
-          padding: '1rem',
-          backgroundColor: '#fff',
-        }}
-      >
-        <h2>Permission Error</h2>
-        <p>Sorry - your user permissions do not allow access to this page.</p>
-      </div>);
-    }
 
     const user = users.find(u => u.id === userid);
     if (!user) return <div />;
@@ -201,8 +184,12 @@ class ViewUser extends Component {
         </Row>
         <MultiColumnList fullWidth contentData={fineHistory} />
         <hr />
-        <this.connectedUserLoans onClickViewLoansHistory={this.onClickViewLoansHistory} {...this.props} />
-        <this.connectedUserPermissions stripes={this.props.stripes} match={this.props.match} {...this.props} />
+        <IfPermission {...this.props} perm="circulation.loans.collection.get">
+          <this.connectedUserLoans onClickViewLoansHistory={this.onClickViewLoansHistory} {...this.props} />
+        </IfPermission>
+        <IfPermission {...this.props} perm="perms.users.get">
+          <this.connectedUserPermissions stripes={this.props.stripes} match={this.props.match} {...this.props} />
+        </IfPermission>
         <Layer isOpen={this.state.editUserMode} label="Edit User Dialog">
           <UserForm
             initialValues={_.merge(user, { available_patron_groups: this.props.data.patronGroups })}

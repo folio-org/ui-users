@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -19,7 +19,7 @@
     "hasSettings": true
   },
   "scripts": {
-    "lint": "eslint *.js lib || true"
+    "lint": "eslint *.js lib settings || true"
   },
   "devDependencies": {
     "babel-core": "^6.17.0",
@@ -48,6 +48,6 @@
   },
   "peerDependencies": {
     "@folio/stripes-connect": "^0.3.0",
-    "@folio/stripes-core": "^0.6.0"
+    "@folio/stripes-core": "^1.0.0"
   }
 }

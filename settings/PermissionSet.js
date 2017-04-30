@@ -12,7 +12,6 @@ class PermissionSet extends React.Component {
     }).isRequired,
     addPermission: PropTypes.func.isRequired,
     removePermission: PropTypes.func.isRequired,
-    availablePermissions: PropTypes.func.isRequired,
     selectedSet: PropTypes.object.isRequired,
   };
 
@@ -20,7 +19,7 @@ class PermissionSet extends React.Component {
     availablePermissions: {
       type: 'okapi',
       records: 'permissions',
-      path: 'perms/permissions?length=100&query=(mutable=false)',
+      path: 'perms/permissions?length=1000&query=(mutable=false)',
     },
   });
 

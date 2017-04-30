@@ -1,4 +1,6 @@
-import React, { Component, PropTypes } from 'react';
+// We have to remove node_modules/react to avoid having multiple copies loaded.
+// eslint-disable-next-line import/no-unresolved
+import React, { PropTypes } from 'react';
 
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import Pane from '@folio/stripes-components/lib/Pane';
@@ -13,7 +15,7 @@ class UsersSettings extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func.isRequired,
-    }).isRequired  
+    }).isRequired,
   };
 
   constructor(props) {
@@ -22,6 +24,7 @@ class UsersSettings extends React.Component {
     this.state = {
       selectedPage: 'PatronGroupsSettings',
       pages: [
+        // ### Should only be offered Permission sets if the user has perms.permissions.get
         { label: 'Permission sets', name: 'PermissionSets', component: PermissionSets },
         { label: 'Patron groups', name: 'PatronGroupsSettings', component: PatronGroupsSettings },
       ],
