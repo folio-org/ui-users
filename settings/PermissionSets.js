@@ -2,7 +2,6 @@
 // eslint-disable-next-line import/no-unresolved
 import React, { Component, PropTypes } from 'react';
 import _ from 'lodash';
-import { connect } from '@folio/stripes-connect'; // eslint-disable-line
 
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import Pane from '@folio/stripes-components/lib/Pane';
@@ -113,4 +112,4 @@ class PermissionSets extends Component {
   }
 }
 
-export default connect(PermissionSets, '@folio/users');
+export default PermissionSets;
