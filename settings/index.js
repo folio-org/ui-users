@@ -36,7 +36,7 @@ const UsersSettings = (props) => {
     return (
       <Link
         key={p.route}
-        to={`/settings/users/${p.route}`}
+        to={`${props.match.path}/${p.route}`}
       >{p.label}</Link>
     );
   }).filter(l => l);
@@ -45,7 +45,7 @@ const UsersSettings = (props) => {
     const Current = props.stripes.connect(p.component);
     return (<Route
       key={p.route}
-      path={`/settings/users/${p.route}`}
+      path={`${props.match.path}/${p.route}`}
       render={props2 => <Current {...props2} stripes={props.stripes} />}
     />);
   });
