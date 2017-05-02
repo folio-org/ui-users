@@ -20,7 +20,6 @@ const pages = [
     label: 'Permission sets',
     component: PermissionSets,
     perm: 'perms.permissions.get',
-
   },
   {
     route: 'groups',
