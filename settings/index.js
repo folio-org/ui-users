@@ -42,9 +42,7 @@ const UsersSettings = (props) => {
   }).filter(l => l);
 
   const routes = pages.map((p) => {
-    const connect = props.stripes.connect;
-    const Current = connect(p.component);
-
+    const Current = props.stripes.connect(p.component);
     return (<Route
       key={p.route}
       path={`/settings/users/${p.route}`}
