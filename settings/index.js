@@ -18,7 +18,6 @@ const pages = [
   {
     route: 'perms',
     label: 'Permission sets',
-    name: 'PermissionSets',
     component: PermissionSets,
     perm: 'perms.permissions.get',
 
@@ -26,7 +25,6 @@ const pages = [
   {
     route: 'groups',
     label: 'Patron groups',
-    name: 'PatronGroupsSettings',
     component: PatronGroupsSettings,
     // No perm needed yet
   },
