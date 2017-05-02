@@ -32,12 +32,15 @@ const pages = [
 
 
 const UsersSettings = (props) => {
-  const navLinks = pages.map(p => (
-    <Link
-      key={p.route}
-      to={`/settings/users/${p.route}`}
-    >{p.label}</Link>
-  ));
+  const navLinks = pages.map((p) => {
+    if (p.perm && !props.stripes.hasPerm(p.perm)) return null;
+    return (
+      <Link
+        key={p.route}
+        to={`/settings/users/${p.route}`}
+      >{p.label}</Link>
+    );
+  }).filter(l => l);
 
   const routes = pages.map((p) => {
     const connect = props.stripes.connect;
