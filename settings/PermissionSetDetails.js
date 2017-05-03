@@ -38,6 +38,8 @@ class PermissionSetDetails extends Component {
     this.addPermission = this.addPermission.bind(this);
     this.removePermission = this.removePermission.bind(this);
 
+    this.connectedPermissionSet = props.stripes.connect(PermissionSet);
+
     this.state = {
       confirmDelete: false,
     };
@@ -104,7 +106,7 @@ class PermissionSetDetails extends Component {
             <Button title="Cancel Delete Permission Set" onClick={() => { this.confirmDeleteSet(false); }}>Cancel</Button>
           </div>}
 
-          <PermissionSet
+          <this.connectedPermissionSet
             addPermission={this.addPermission}
             removePermission={this.removePermission}
             selectedSet={selectedSet}
