@@ -6,6 +6,7 @@ import Pane from '@folio/stripes-components/lib/Pane';
 import Textfield from '@folio/stripes-components/lib/TextField';
 import TextArea from '@folio/stripes-components/lib/TextArea';
 import Button from '@folio/stripes-components/lib/Button';
+import IfPermission from '@folio/stripes-components/lib/IfPermission';
 
 import { Field, reduxForm } from 'redux-form';
 
@@ -93,7 +94,9 @@ class PermissionSetDetails extends Component {
             <Field label="Description" name="description" id="permissionset_description" component={TextArea} validate={this.validateSet} onBlur={this.saveSet} required fullWidth rounded />
           </section>
 
-          <Button title="Delete Permission Set" onClick={this.beginDelete} disabled={this.state.confirmDelete}> Delete Set </Button>
+          <IfPermission {...this.props} perm="perms.permissions.item.delete">
+            <Button title="Delete Permission Set" onClick={this.beginDelete} disabled={this.state.confirmDelete}> Delete Set </Button>
+          </IfPermission>
           {this.state.confirmDelete && <div>
             <Button title="Confirm Delete Permission Set" onClick={() => { this.confirmDeleteSet(true); }}>Confirm</Button>
             <Button title="Cancel Delete Permission Set" onClick={() => { this.confirmDeleteSet(false); }}>Cancel</Button>
