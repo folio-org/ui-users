@@ -83,15 +83,17 @@ class PermissionSetDetails extends Component {
   }
 
   render() {
-    const { selectedSet } = this.props;
+    const { selectedSet, stripes } = this.props;
+    const disabled = !stripes.hasPerm('perms.permissions.item.put');
+
     return (
       <Pane paneTitle={`Permission Set ${selectedSet.displayName || selectedSet.permissionName}`} defaultWidth="fill" fluidContentWidth>
         <form>
 
           <section>
             <h2 style={{ marginTop: '0' }}>About</h2>
-            <Field label="Title" name="displayName" id="displayName" component={Textfield} required fullWidth rounded validate={this.validateSet} onBlur={this.saveSet} />
-            <Field label="Description" name="description" id="permissionset_description" component={TextArea} validate={this.validateSet} onBlur={this.saveSet} required fullWidth rounded />
+        <Field label="Title" name="displayName" id="displayName" component={Textfield} required fullWidth rounded validate={this.validateSet} onBlur={this.saveSet} disabled={disabled} />
+            <Field label="Description" name="description" id="permissionset_description" component={TextArea} validate={this.validateSet} onBlur={this.saveSet} required fullWidth rounded disabled={disabled} />
           </section>
 
           <IfPermission {...this.props} perm="perms.permissions.item.delete">
