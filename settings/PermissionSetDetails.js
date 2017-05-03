@@ -16,6 +16,7 @@ class PermissionSetDetails extends Component {
   static propTypes = {
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func.isRequired,
+      connect: PropTypes.func.isRequired,
     }).isRequired,
     clearSelection: PropTypes.func.isRequired,
     selectedSet: PropTypes.object,
