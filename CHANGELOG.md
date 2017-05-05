@@ -5,6 +5,7 @@
 
 * Trying to view a user when you do not have the users.item.get permission no longer results in an unsuccessful HTTP request.
 * Use params rather than path to express the query
+* Render loan dates in locale-specific format. Fixes LIBAPP-179.
 
 ## [1.2.0](https://github.com/folio-org/ui-users/tree/v1.2.0) (2017-04-26)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v1.1.0...v1.2.0)
