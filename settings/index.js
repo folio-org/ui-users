@@ -1,64 +1,78 @@
-import React, { Component, PropTypes } from 'react';
+// We have to remove node_modules/react to avoid having multiple copies loaded.
+// eslint-disable-next-line import/no-unresolved
+import React, { PropTypes } from 'react';
+import Switch from 'react-router-dom/Switch';
+import Route from 'react-router-dom/Route';
+import Link from 'react-router-dom/Link';
 
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import Pane from '@folio/stripes-components/lib/Pane';
 import NavList from '@folio/stripes-components/lib/NavList';
 import NavListSection from '@folio/stripes-components/lib/NavListSection';
 
+// Should this list be loaded dynamically from configuration?
 import PermissionSets from './PermissionSets';
 import PatronGroupsSettings from './PatronGroupsSettings';
 
-class UsersSettings extends React.Component {
+const pages = [
+  {
+    route: 'perms',
+    label: 'Permission sets',
+    component: PermissionSets,
+    perm: 'perms.permissions.get',
+  },
+  {
+    route: 'groups',
+    label: 'Patron groups',
+    component: PatronGroupsSettings,
+    // No perm needed yet
+  },
+];
 
-  static propTypes = {
-    stripes: PropTypes.shape({
-      hasPerm: PropTypes.func.isRequired,
-    }).isRequired  
-  };
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      selectedPage: 'PatronGroupsSettings',
-      pages: [
-        // ### Should only be offered Permission sets if the user has perms.permissions.get
-        { label: 'Permission sets', name: 'PermissionSets', component: PermissionSets },
-        { label: 'Patron groups', name: 'PatronGroupsSettings', component: PatronGroupsSettings },
-      ],
-    };
-
-    this.onSelectPage = this.onSelectPage.bind(this);
-  }
-
-  onSelectPage(e) {
-    e.preventDefault();
-    const href = e.target.href;
-    const page = href.substring(href.indexOf('#') + 1);
-    this.setState({ selectedPage: page });
-  }
-
-  getPage() {
-    const result = this.state.pages.filter(obj => obj.name === this.state.selectedPage);
-    const Component = result[0].component;
-    return <Component stripes={this.props.stripes} />;
-  }
-
-  render() {
+const UsersSettings = (props) => {
+  const navLinks = pages.map((p) => {
+    if (p.perm && !props.stripes.hasPerm(p.perm)) return null;
     return (
-      <Paneset nested defaultWidth="80%">
-        <Pane defaultWidth="25%" paneTitle="Users">
-          <NavList>
-            <NavListSection activeLink={`#${this.state.selectedPage}`}>
-              <a href="#PatronGroupsSettings" onClick={this.onSelectPage}>Patron Groups</a>
-              <a href="#PermissionSets" onClick={this.onSelectPage}>Permission sets</a>
-            </NavListSection>
-          </NavList>
-        </Pane>
-        {this.getPage()}
-      </Paneset>
+      <Link
+        key={p.route}
+        to={`${props.match.path}/${p.route}`}
+      >{p.label}</Link>
     );
-  }
-}
+  }).filter(l => l);
+
+  const routes = pages.map((p) => {
+    const Current = props.stripes.connect(p.component);
+    return (<Route
+      key={p.route}
+      path={`${props.match.path}/${p.route}`}
+      render={props2 => <Current {...props2} stripes={props.stripes} />}
+    />);
+  });
+
+  return (
+    <Paneset nested defaultWidth="80%">
+      <Pane defaultWidth="25%" paneTitle="Users">
+        <NavList>
+          <NavListSection activeLink="">
+            {navLinks}
+          </NavListSection>
+        </NavList>
+      </Pane>
+
+      <Switch>
+        {routes}
+        <Route component={() => <div>Choose category</div>} />
+      </Switch>
+    </Paneset>
+  );
+};
+
+UsersSettings.propTypes = {
+  stripes: PropTypes.shape({
+    connect: PropTypes.func.isRequired,
+    hasPerm: PropTypes.func.isRequired,
+  }).isRequired,
+};
 
 export default UsersSettings;

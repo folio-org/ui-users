@@ -1,6 +1,7 @@
+// We have to remove node_modules/react to avoid having multiple copies loaded.
+// eslint-disable-next-line import/no-unresolved
 import React, { Component, PropTypes } from 'react';
 import _ from 'lodash';
-import { connect } from '@folio/stripes-connect'; // eslint-disable-line
 
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import Pane from '@folio/stripes-components/lib/Pane';
@@ -66,9 +67,7 @@ class PermissionSets extends Component {
     _.forEach(this.props.data.permissionSets, (set) => {
       if (set.permissionName === permissionName) selectedSet = set;
     });
-    this.setState({ 
-      selectedSet: selectedSet, 
-    });
+    this.setState({ selectedSet });
   }
 
   createNewPermissionSet() {
@@ -87,7 +86,7 @@ class PermissionSets extends Component {
 
   render() {
     const RenderedPermissionSets = this.props.data.permissionSets ? this.props.data.permissionSets.map(
-      set => <a data-id={set.id} key={set.id} href={`#${set.permissionName}`} onClick={this.onSelectSet}>{set.displayName ? set.displayName:'Untitled Permission Set'}</a>,
+      set => <a data-id={set.id} key={set.id} href={`#${set.permissionName}`} onClick={this.onSelectSet}>{set.displayName ? set.displayName : 'Untitled Permission Set'}</a>,
     ) : [];
 
     const PermissionsSetsLastMenu = (
@@ -113,4 +112,4 @@ class PermissionSets extends Component {
   }
 }
 
-export default connect(PermissionSets, '@folio/users');
+export default PermissionSets;
