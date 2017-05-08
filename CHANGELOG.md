@@ -1,6 +1,6 @@
 # Change history for ui-users
 
-## [1.3.0](https://github.com/folio-org/ui-users/tree/v1.3.0) (IN PROGRESS)
+## [1.3.0](https://github.com/folio-org/ui-users/tree/v1.3.0) (2017-05-08)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v1.2.0...v1.3.0)
 
 * Settings pages are now navigated using react-router, not manually maintained local state. Fixes STRIPES-339.
