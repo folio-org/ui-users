@@ -1,11 +1,11 @@
 // We have to remove node_modules/react to avoid having multiple copies loaded.
 // eslint-disable-next-line import/no-unresolved
 import React, { Component, PropTypes } from 'react';
-import { connect } from '@folio/stripes-connect'; // eslint-disable-line
 import Pane from '@folio/stripes-components/lib/Pane';
 import Textfield from '@folio/stripes-components/lib/TextField';
 import TextArea from '@folio/stripes-components/lib/TextArea';
 import Button from '@folio/stripes-components/lib/Button';
+import IfPermission from '@folio/stripes-components/lib/IfPermission';
 
 import { Field, reduxForm } from 'redux-form';
 
@@ -16,6 +16,7 @@ class PermissionSetDetails extends Component {
   static propTypes = {
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func.isRequired,
+      connect: PropTypes.func.isRequired,
     }).isRequired,
     clearSelection: PropTypes.func.isRequired,
     selectedSet: PropTypes.object,
@@ -36,6 +37,8 @@ class PermissionSetDetails extends Component {
     this.confirmDeleteSet = this.confirmDeleteSet.bind(this);
     this.addPermission = this.addPermission.bind(this);
     this.removePermission = this.removePermission.bind(this);
+
+    this.connectedPermissionSet = props.stripes.connect(PermissionSet);
 
     this.state = {
       confirmDelete: false,
@@ -82,24 +85,28 @@ class PermissionSetDetails extends Component {
   }
 
   render() {
-    const { selectedSet } = this.props;
+    const { selectedSet, stripes } = this.props;
+    const disabled = !stripes.hasPerm('perms.permissions.item.put');
+
     return (
       <Pane paneTitle={`Permission Set ${selectedSet.displayName || selectedSet.permissionName}`} defaultWidth="fill" fluidContentWidth>
         <form>
 
           <section>
             <h2 style={{ marginTop: '0' }}>About</h2>
-            <Field label="Title" name="displayName" id="displayName" component={Textfield} required fullWidth rounded validate={this.validateSet} onBlur={this.saveSet} />
-            <Field label="Description" name="description" id="permissionset_description" component={TextArea} validate={this.validateSet} onBlur={this.saveSet} required fullWidth rounded />
+            <Field label="Title" name="displayName" id="displayName" component={Textfield} required fullWidth rounded validate={this.validateSet} onBlur={this.saveSet} disabled={disabled} />
+            <Field label="Description" name="description" id="permissionset_description" component={TextArea} validate={this.validateSet} onBlur={this.saveSet} required fullWidth rounded disabled={disabled} />
           </section>
 
-          <Button title="Delete Permission Set" onClick={this.beginDelete} disabled={this.state.confirmDelete}> Delete Set </Button>
+          <IfPermission {...this.props} perm="perms.permissions.item.delete">
+            <Button title="Delete Permission Set" onClick={this.beginDelete} disabled={this.state.confirmDelete}> Delete Set </Button>
+          </IfPermission>
           {this.state.confirmDelete && <div>
             <Button title="Confirm Delete Permission Set" onClick={() => { this.confirmDeleteSet(true); }}>Confirm</Button>
             <Button title="Cancel Delete Permission Set" onClick={() => { this.confirmDeleteSet(false); }}>Cancel</Button>
           </div>}
 
-          <PermissionSet
+          <this.connectedPermissionSet
             addPermission={this.addPermission}
             removePermission={this.removePermission}
             selectedSet={selectedSet}
@@ -119,4 +126,4 @@ class PermissionSetDetails extends Component {
 export default reduxForm({
   form: 'permissionSetForm',
   enableReinitialize: true,
-})(connect(PermissionSetDetails, '@folio/users'));
+})(PermissionSetDetails);

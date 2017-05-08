@@ -17,6 +17,9 @@ class UserLoans extends React.Component {
       userLoans: PropTypes.arrayOf(PropTypes.object),
       loansHistory: PropTypes.arrayOf(PropTypes.object),
     }),
+    stripes: PropTypes.shape({
+      locale: PropTypes.string.isRequired,
+    }).isRequired,
     onClickViewLoansHistory: PropTypes.func.isRequired,
   };
 
@@ -38,7 +41,7 @@ class UserLoans extends React.Component {
       title: loan => `${_.get(loan, ['item', 'title'], '')}`,
       barcode: loan => `${_.get(loan, ['item', 'barcode'], '')}`,
       status: loan => `${_.get(loan, ['status', 'name'], '')}`,
-      loanDate: loan => loan.loanDate.substr(0, 10),
+      loanDate: loan => new Date(Date.parse(loan.loanDate)).toLocaleDateString(this.props.stripes.locale),
     };
 
     if (!usersLoans) return <div />;
