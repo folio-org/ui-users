@@ -12,7 +12,7 @@ import RadioButtonGroup from '@folio/stripes-components/lib/RadioButtonGroup';
 import RadioButton from '@folio/stripes-components/lib/RadioButton';
 import fetch from 'isomorphic-fetch';
 
-import StripesForm from '@folio/stripes-form';
+import stripesForm from '@folio/stripes-form';
 
 import { Field, reduxForm } from 'redux-form';
 
@@ -150,7 +150,7 @@ class UserForm extends React.Component {
   }
 }
 
-export default StripesForm({
+export default stripesForm({
   form: 'userForm',
   validate,
   asyncValidate,
