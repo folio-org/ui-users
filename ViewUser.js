@@ -159,7 +159,7 @@ class ViewUser extends Component {
             </Row>
           </Col>
           <Col xs={4} >
-            <img className="floatEnd" src="http://placehold.it/175x175" role="presentation" />
+            <img className="floatEnd" src="https://placehold.it/175x175" role="presentation" />
           </Col>
         </Row>
         <br />
