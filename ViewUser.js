@@ -31,7 +31,7 @@ class ViewUser extends Component {
       patronGroups: PropTypes.arrayOf(PropTypes.object),
     }),
     mutator: React.PropTypes.shape({
-      users: React.PropTypes.shape({
+      selUser: React.PropTypes.shape({
         PUT: React.PropTypes.func.isRequired,
       }),
     }),
@@ -42,7 +42,7 @@ class ViewUser extends Component {
   };
 
   static manifest = Object.freeze({
-    users: {
+    selUser: {
       type: 'okapi',
       path: 'users/:{userid}',
       clear: false,
@@ -101,7 +101,7 @@ class ViewUser extends Component {
   update(data) {
     // eslint-disable-next-line no-param-reassign
     if (data.creds) delete data.creds; // not handled on edit (yet at least)
-    this.props.mutator.users.PUT(data).then(() => {
+    this.props.mutator.selUser.PUT(data).then(() => {
       this.onClickCloseEditUser();
     });
   }
@@ -109,17 +109,17 @@ class ViewUser extends Component {
   render() {
     const fineHistory = [{ 'Due Date': '11/12/2014', Amount: '34.23', Status: 'Unpaid' }];
 
-    const { data: { users, patronGroups }, match: { params: { userid } } } = this.props;
+    const { data: { selUser, patronGroups }, match: { params: { userid } } } = this.props;
 
     const detailMenu = (<PaneMenu>
-      <IfPermission {...this.props} perm="users.item.put">
+      <IfPermission {...this.props} perm="selUser.item.put">
         <button onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button>
       </IfPermission>
     </PaneMenu>);
 
-    if (!users || users.length === 0 || !userid) return <div />;
+    if (!selUser || selUser.length === 0 || !userid) return <div />;
 
-    const user = users.find(u => u.id === userid);
+    const user = selUser.find(u => u.id === userid);
     if (!user) return <div />;
     const userStatus = (_.get(user, ['active'], '') ? 'active' : 'inactive');
     const patronGroupId = _.get(user, ['patron_group'], '');
