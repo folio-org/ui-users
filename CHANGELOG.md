@@ -1,5 +1,10 @@
 # Change history for ui-users
 
+## [1.4.0](https://github.com/folio-org/ui-users/tree/v1.4.0) (2017-05-09)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v1.3.0...v1.4.0)
+
+* Depend on v1.0.0 of stripes-connect.
+
 ## [1.3.0](https://github.com/folio-org/ui-users/tree/v1.3.0) (2017-05-08)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v1.2.0...v1.3.0)
 
