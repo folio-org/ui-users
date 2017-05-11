@@ -25,7 +25,7 @@ The other parts that are needed are the Okapi gateway, various server-side modul
 
 Other [modules](http://dev.folio.org/source-code/#client-side).
 
-See project [STRIPES](https://issues.folio.org/browse/STRIPES)
+See project [UIU](https://issues.folio.org/browse/UIU)
 at the [FOLIO issue tracker](http://dev.folio.org/community/guide-issues).
 
 Other FOLIO Developer documentation is at [dev.folio.org](http://dev.folio.org/)

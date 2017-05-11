@@ -200,7 +200,7 @@ class ViewUser extends Component {
           />
         </Layer>
         <Layer isOpen={this.state.viewLoansHistoryMode} label="Loans History">
-          <this.connectedLoansHistory userid={userid} onCancel={this.onClickCloseLoansHistory} />
+          <this.connectedLoansHistory userid={userid} stripes={this.props.stripes} onCancel={this.onClickCloseLoansHistory} />
         </Layer>
       </Pane>
     );

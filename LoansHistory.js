@@ -10,6 +10,9 @@ import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 class LoansHistory extends Component {
 
   static propTypes = {
+    stripes: PropTypes.shape({
+      locale: PropTypes.string.isRequired,
+    }).isRequired,
     data: PropTypes.shape({
       loansHistory: PropTypes.arrayOf(PropTypes.object),
       userid: PropTypes.object.required,
@@ -57,8 +60,8 @@ class LoansHistory extends Component {
       title: loan => `${_.get(loan, ['item', 'title'], '')}`,
       barcode: loan => `${_.get(loan, ['item', 'barcode'], '')}`,
       status: loan => `${_.get(loan, ['status', 'name'], '')}`,
-      loanDate: loan => loan.loanDate.substr(0, 10),
-      returnDate: loan => (loan.returnDate ? loan.returnDate.substr(0, 10) : ''),
+      loanDate: loan => new Date(Date.parse(loan.loanDate)).toLocaleDateString(this.props.stripes.locale),
+      returnDate: loan => (loan.returnDate ? new Date(Date.parse(loan.loanDate)).toLocaleDateString(this.props.stripes.locale) : ''),
     };
 
     return (
