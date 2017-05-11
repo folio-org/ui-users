@@ -101,6 +101,8 @@ class ViewUser extends Component {
   update(data) {
     // eslint-disable-next-line no-param-reassign
     if (data.creds) delete data.creds; // not handled on edit (yet at least)
+    // eslint-disable-next-line no-param-reassign
+    if (data.available_patron_groups) delete data.available_patron_groups;
     this.props.mutator.users.PUT(data).then(() => {
       this.onClickCloseEditUser();
     });
@@ -122,8 +124,8 @@ class ViewUser extends Component {
     const user = users.find(u => u.id === userid);
     if (!user) return <div />;
     const userStatus = (_.get(user, ['active'], '') ? 'active' : 'inactive');
-    const patronGroupId = _.get(user, ['patron_group'], '');
-    const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
+    const patronGroupId = _.get(user, ['patronGroup'], '');
+    const patron_group = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
 
     return (
       <Pane defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
@@ -131,7 +133,7 @@ class ViewUser extends Component {
           <Col xs={8} >
             <Row>
               <Col xs={12}>
-                <h2>{_.get(user, ['personal', 'last_name'], '')}, {_.get(user, ['personal', 'first_name'], '')}</h2>
+                <h2>{_.get(user, ['personal', 'lastName'], '')}, {_.get(user, ['personal', 'firstName'], '')}</h2>
               </Col>
             </Row>
             <Row>
@@ -154,7 +156,7 @@ class ViewUser extends Component {
             <br />
             <Row>
               <Col xs={12}>
-                <KeyValue label="Patron group" value={patronGroup.group} />
+                <KeyValue label="Patron group" value={patron_group.group} />
               </Col>
             </Row>
           </Col>
