@@ -5,7 +5,6 @@ import { connect } from '@folio/stripes-connect'; // eslint-disable-line
 import RenderPermissions from '../lib/RenderPermissions';
 
 class PermissionSet extends React.Component {
-
   static propTypes = {
     data: PropTypes.shape({
       availablePermissions: PropTypes.arrayOf(PropTypes.object),
@@ -35,4 +34,4 @@ class PermissionSet extends React.Component {
   }
 }
 
-export default connect(PermissionSet, '@folio/users');
+export default PermissionSet;

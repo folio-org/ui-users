@@ -1,6 +1,7 @@
+// We have to remove node_modules/react to avoid having multiple copies loaded.
+// eslint-disable-next-line import/no-unresolved
 import React, { Component, PropTypes } from 'react';
 import _ from 'lodash';
-import { connect } from '@folio/stripes-connect'; // eslint-disable-line
 
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import Pane from '@folio/stripes-components/lib/Pane';
@@ -8,10 +9,10 @@ import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import Icon from '@folio/stripes-components/lib/Icon';
 import NavList from '@folio/stripes-components/lib/NavList';
 import NavListSection from '@folio/stripes-components/lib/NavListSection';
+import IfPermission from '@folio/stripes-components/lib/IfPermission';
 import PermissionSetDetails from './PermissionSetDetails';
 
 class PermissionSets extends Component {
-
   static propTypes = {
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func.isRequired,
@@ -89,11 +90,16 @@ class PermissionSets extends Component {
     ) : [];
 
     const PermissionsSetsLastMenu = (
-      <PaneMenu>
-        <button title="Add Permission Set" onClick={this.createNewPermissionSet}>
-          <Icon icon="plus-sign" />
-        </button>
-      </PaneMenu>
+      <IfPermission {...this.props} perm="perms.permissions.item.post">
+        {/* In practice, there is point letting someone create a set if they can't set its name */}
+        <IfPermission {...this.props} perm="perms.permissions.item.put">
+          <PaneMenu>
+            <button title="Add Permission Set" onClick={this.createNewPermissionSet}>
+              <Icon icon="plus-sign" />
+            </button>
+          </PaneMenu>
+        </IfPermission>
+      </IfPermission>
     );
 
     return (
@@ -111,4 +117,4 @@ class PermissionSets extends Component {
   }
 }
 
-export default connect(PermissionSets, '@folio/users');
+export default PermissionSets;

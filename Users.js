@@ -81,10 +81,11 @@ class Users extends React.Component {
 
   static manifest = Object.freeze({
     addUserMode: {},
+    userCount: { initialValue: 30 },
     users: {
       type: 'okapi',
       records: 'users',
-      recordsRequired: 30,
+      recordsRequired: '${userCount}',
       perRequest: 10,
       path: 'users',
       GET: {
@@ -186,6 +187,10 @@ class Users extends React.Component {
     this.performSearch(query);
   }
 
+  onNeedMore = () => {
+    this.props.mutator.userCount.replace(this.props.data.userCount + 30);
+  }
+
   performSearch(query) {
     this.log('action', `searched for '${query}'`);
     this.transitionToParams({ query });
@@ -199,6 +204,7 @@ class Users extends React.Component {
     // extract creds object from user object
     const creds = Object.assign({}, data.creds, { username: data.username });
     if (data.creds) delete data.creds; // eslint-disable-line no-param-reassign
+    if (data.available_patron_groups) delete data.available_patron_groups; // eslint-disable-line no-param-reassign
     // POST user record
     this.props.mutator.users.POST(data);
     // POST credentials, permission-user, permissions;
@@ -258,16 +264,16 @@ class Users extends React.Component {
 
     const resultsFormatter = {
       Active: user => user.active,
-      Name: user => `${_.get(user, ['personal', 'last_name'], '')}, ${_.get(user, ['personal', 'first_name'], '')}`,
+      Name: user => `${_.get(user, ['personal', 'lastName'], '')}, ${_.get(user, ['personal', 'firstName'], '')}`,
       'Patron Group': (user) => {
         const map = {
           on_campus: 'On-campus',
           off_campus: 'Off-campus',
           other: 'Other',
         };
-        const maybe = map[user.patron_group];
+        const maybe = map[user.patronGroup];
         if (maybe) return maybe;
-        const pg = data.patronGroups.filter(g => g.id === user.patron_group)[0];
+        const pg = data.patronGroups.filter(g => g.id === user.patronGroup)[0];
         return pg ? pg.group : '?';
       },
       'User ID': user => user.username,
@@ -330,6 +336,7 @@ class Users extends React.Component {
             formatter={resultsFormatter}
             onRowClick={this.onSelectRow}
             onHeaderClick={this.onSort}
+            onFetch={this.onNeedMore}
             visibleColumns={['Active', 'Name', 'Patron Group', 'User ID', 'Email']}
             sortOrder={this.state.sortOrder}
             isEmptyMessage={`No results found for "${this.state.searchTerm}". Please check your spelling and filters.`}
