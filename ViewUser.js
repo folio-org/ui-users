@@ -114,7 +114,7 @@ class ViewUser extends Component {
     const { data: { selUser, patronGroups }, match: { params: { userid } } } = this.props;
 
     const detailMenu = (<PaneMenu>
-      <IfPermission {...this.props} perm="selUser.item.put">
+      <IfPermission {...this.props} perm="users.item.put">
         <button onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button>
       </IfPermission>
     </PaneMenu>);
