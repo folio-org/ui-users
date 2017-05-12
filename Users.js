@@ -16,6 +16,7 @@ import FilterPaneSearch from '@folio/stripes-components/lib/FilterPaneSearch';
 import FilterControlGroup from '@folio/stripes-components/lib/FilterControlGroup';
 import Layer from '@folio/stripes-components/lib/Layer';
 import FilterGroups, { initialFilterState, onChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
+
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
 import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
 import IfPermission from '@folio/stripes-components/lib/IfPermission';
@@ -126,19 +127,7 @@ class Users extends React.Component {
 
     this.okapi = context.store.getState().okapi;
 
-    this.onClearSearch = this.onClearSearch.bind(this);
-    this.onSort = this.onSort.bind(this);
-    this.onSelectRow = this.onSelectRow.bind(this);
-    this.onClickAddNewUser = this.onClickAddNewUser.bind(this);
-    this.onClickCloseNewUser = this.onClickCloseNewUser.bind(this);
-    this.onChangeSearch = this.onChangeSearch.bind(this);
-    this.performSearch = this.performSearch.bind(this); // For now, prefer instant response
-    // this.performSearch = _.debounce(this.performSearch.bind(this), 250);
-
-    this.onChangeFilter = onChangeFilter.bind(this);
     this.transitionToParams = transitionToParams.bind(this);
-
-    this.collapseDetails = this.collapseDetails.bind(this);
     this.connectedViewUser = props.stripes.connect(ViewUser);
     const logger = props.stripes.logger;
     this.log = logger.log.bind(logger);
@@ -148,20 +137,20 @@ class Users extends React.Component {
     if (_.isEmpty(this.props.data.addUserMode)) this.props.mutator.addUserMode.replace({ mode: false });
   }
 
-  onClearSearch() {
+  onClearSearch = () => {
     this.log('action', 'cleared search');
     this.setState({ searchTerm: '' });
     this.props.history.push(this.props.location.pathname);
   }
 
-  onSort(e, meta) {
+  onSort = (e, meta) => {
     const sortOrder = meta.alias;
     this.log('action', `sorted by ${sortOrder}`);
     this.setState({ sortOrder });
     this.transitionToParams({ sort: sortOrder });
   }
 
-  onSelectRow(e, meta) {
+  onSelectRow = (e, meta) => {
     const userId = meta.id;
     const username = meta.username;
     this.log('action', `clicked ${userId}, selected user =`, meta);
@@ -169,19 +158,19 @@ class Users extends React.Component {
     this.props.history.push(`/users/view/${userId}/${username}${this.props.location.search}`);
   }
 
-  onClickAddNewUser(e) {
+  onClickAddNewUser = (e) => {
     if (e) e.preventDefault();
     this.log('action', 'clicked "add new user"');
     this.props.mutator.addUserMode.replace({ mode: true });
   }
 
-  onClickCloseNewUser(e) {
+  onClickCloseNewUser = (e) => {
     if (e) e.preventDefault();
     this.log('action', 'clicked "close new user"');
     this.props.mutator.addUserMode.replace({ mode: false });
   }
 
-  onChangeSearch(e) {
+  onChangeSearch = (e) => {
     const query = e.target.value;
     this.setState({ searchTerm: query });
     this.performSearch(query);
@@ -191,16 +180,16 @@ class Users extends React.Component {
     this.props.mutator.userCount.replace(this.props.data.userCount + 30);
   }
 
-  performSearch(query) {
+  performSearch = (query) => {
     this.log('action', `searched for '${query}'`);
     this.transitionToParams({ query });
   }
 
-  updateFilters(filters) { // provided for onChangeFilter
+  updateFilters = (filters) => { // provided for onChangeFilter
     this.transitionToParams({ filters: Object.keys(filters).filter(key => filters[key]).join(',') });
   }
 
-  create(data) {
+  create = (data) => {
     // extract creds object from user object
     const creds = Object.assign({}, data.creds, { username: data.username });
     if (data.creds) delete data.creds; // eslint-disable-line no-param-reassign
@@ -212,7 +201,7 @@ class Users extends React.Component {
     this.onClickCloseNewUser();
   }
 
-  postCreds(username, creds) {
+  postCreds = (username, creds) => {
     this.log('xhr', `POST credentials for new user '${username}':`, creds);
     fetch(`${this.okapi.url}/authn/credentials`, {
       method: 'POST',
@@ -232,7 +221,7 @@ class Users extends React.Component {
     });
   }
 
-  postPerms(username, perms) {
+  postPerms = (username, perms) => {
     this.log('xhr', `POST permissions for new user '${username}':`, perms);
     fetch(`${this.okapi.url}/perms/users`, {
       method: 'POST',
@@ -247,7 +236,7 @@ class Users extends React.Component {
     });
   }
 
-  collapseDetails() {
+  collapseDetails = () => {
     this.setState({
       selectedItem: {},
     });
