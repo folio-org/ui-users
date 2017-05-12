@@ -24,6 +24,9 @@ import IfPermission from '@folio/stripes-components/lib/IfPermission';
 import UserForm from './UserForm';
 import ViewUser from './ViewUser';
 
+const INITIAL_RESULT_COUNT = 30;
+const RESULT_COUNT_INCREMENT = 30;
+
 const filterConfig = [
   {
     label: 'User status',
@@ -82,7 +85,7 @@ class Users extends React.Component {
 
   static manifest = Object.freeze({
     addUserMode: {},
-    userCount: { initialValue: 30 },
+    userCount: { initialValue: INITIAL_RESULT_COUNT },
     users: {
       type: 'okapi',
       records: 'users',
@@ -172,12 +175,13 @@ class Users extends React.Component {
 
   onChangeSearch = (e) => {
     const query = e.target.value;
+    this.props.mutator.userCount.replace(INITIAL_RESULT_COUNT);
     this.setState({ searchTerm: query });
     this.performSearch(query);
   }
 
   onNeedMore = () => {
-    this.props.mutator.userCount.replace(this.props.data.userCount + 30);
+    this.props.mutator.userCount.replace(this.props.data.userCount + RESULT_COUNT_INCREMENT);
   }
 
   performSearch = _.debounce((query) => {
