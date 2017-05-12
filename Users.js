@@ -15,7 +15,7 @@ import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import FilterPaneSearch from '@folio/stripes-components/lib/FilterPaneSearch';
 import FilterControlGroup from '@folio/stripes-components/lib/FilterControlGroup';
 import Layer from '@folio/stripes-components/lib/Layer';
-import FilterGroups, { initialFilterState, onChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
+import FilterGroups, { initialFilterState, onChangeFilter as commonChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
 
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
 import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
@@ -130,6 +130,7 @@ class Users extends React.Component {
 
     this.okapi = context.store.getState().okapi;
 
+    this.commonChangeFilter = commonChangeFilter.bind(this);
     this.transitionToParams = transitionToParams.bind(this);
     this.connectedViewUser = props.stripes.connect(ViewUser);
     const logger = props.stripes.logger;
@@ -171,6 +172,11 @@ class Users extends React.Component {
     if (e) e.preventDefault();
     this.log('action', 'clicked "close new user"');
     this.props.mutator.addUserMode.replace({ mode: false });
+  }
+
+  onChangeFilter = (e) => {
+    this.props.mutator.userCount.replace(INITIAL_RESULT_COUNT);
+    this.commonChangeFilter(e);
   }
 
   onChangeSearch = (e) => {
