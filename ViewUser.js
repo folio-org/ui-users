@@ -39,6 +39,7 @@ class ViewUser extends Component {
       path: PropTypes.string.isRequired,
     }).isRequired,
     onClose: PropTypes.func,
+    okapi: PropTypes.object,
   };
 
   static manifest = Object.freeze({
@@ -197,6 +198,7 @@ class ViewUser extends Component {
             initialValues={_.merge(user, { available_patron_groups: this.props.data.patronGroups })}
             onSubmit={(record) => { this.update(record); }}
             onCancel={this.onClickCloseEditUser}
+            okapi={this.props.okapi}
           />
         </Layer>
         <Layer isOpen={this.state.viewLoansHistoryMode} label="Loans History">

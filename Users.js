@@ -50,10 +50,6 @@ const filterConfig = [
 ];
 
 class Users extends React.Component {
-  static contextTypes = {
-    store: PropTypes.object,
-  };
-
   static propTypes = {
     stripes: PropTypes.shape({
       logger: PropTypes.shape({
@@ -128,7 +124,7 @@ class Users extends React.Component {
       sortOrder: query.sort || '',
     };
 
-    this.okapi = context.store.getState().okapi;
+    this.okapi = props.okapi;
 
     this.commonChangeFilter = commonChangeFilter.bind(this);
     this.transitionToParams = transitionToParams.bind(this);
@@ -283,7 +279,7 @@ class Users extends React.Component {
       this.props.stripes.hasPerm('users.item.get') ?
         (<Route
           path={`${this.props.match.path}/view/:userid/:username`}
-          render={props => <this.connectedViewUser stripes={stripes} paneWidth="44%" onClose={this.collapseDetails} {...props} />}
+          render={props => <this.connectedViewUser stripes={stripes} okapi={this.okapi} paneWidth="44%" onClose={this.collapseDetails} {...props} />}
         />) :
         (<div
           style={{
@@ -349,6 +345,7 @@ class Users extends React.Component {
             initialValues={{ available_patron_groups: this.props.data.patronGroups }}
             onSubmit={(record) => { this.create(record); }}
             onCancel={this.onClickCloseNewUser}
+            okapi={this.props.okapi}
           />
         </Layer>
       </Paneset>
