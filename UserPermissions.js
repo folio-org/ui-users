@@ -21,7 +21,7 @@ class UserPermissions extends React.Component {
     availablePermissions: {
       type: 'okapi',
       records: 'permissions',
-      path: 'perms/permissions?length=100',
+      path: 'perms/permissions?length=1000',
     },
     userPermissions: {
       type: 'okapi',
@@ -59,7 +59,7 @@ class UserPermissions extends React.Component {
       {...this.props}
       heading="User Permissions"
       permToRead="perms.users.get"
-      permToDelete="perms.users.item.post"
+      permToDelete="perms.users.item.delete"
       permToModify="perms.users.item.post"
       addPermission={this.addPermission}
       removePermission={this.removePermission}

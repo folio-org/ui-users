@@ -23,8 +23,8 @@ let okapiToken = '';
 function validate(values) {
   const errors = {};
 
-  if (!values.personal || !values.personal.last_name) {
-    errors.personal = { last_name: 'Please fill this in to continue' };
+  if (!values.personal || !values.personal.lastName) {
+    errors.personal = { lastName: 'Please fill this in to continue' };
   }
 
   if (!values.username) {
@@ -66,10 +66,6 @@ function asyncValidate(values, dispatch, props, blurredField) {
 
 class UserForm extends React.Component {
 
-  static contextTypes = {
-    store: PropTypes.object,
-  };
-
   static propTypes = {
     onClose: PropTypes.func, // eslint-disable-line react/no-unused-prop-types
     newUser: PropTypes.bool, // eslint-disable-line react/no-unused-prop-types
@@ -79,11 +75,12 @@ class UserForm extends React.Component {
     submitting: PropTypes.bool,
     onCancel: PropTypes.func,
     initialValues: PropTypes.object,
+    okapi: PropTypes.object,
   };
 
   constructor(props, context) {
     super(props);
-    okapiToken = context.store.getState().okapi.token;
+    okapiToken = props.okapi.token;
   }
 
   render() {
@@ -101,7 +98,7 @@ class UserForm extends React.Component {
     const addUserLastMenu = <PaneMenu><Button type="submit" title="Create New User" disabled={pristine || submitting} onClick={handleSubmit}>Create User</Button></PaneMenu>;
     const editUserLastMenu = <PaneMenu><Button type="submit" title="Update User" disabled={pristine || submitting} onClick={handleSubmit}>Update User</Button></PaneMenu>;
     const patronGroupOptions = (initialValues.available_patron_groups || []).map(g => ({
-      label: g.group, value: g.id, selected: initialValues.patron_group === g.id }));
+      label: g.group, value: g.id, selected: initialValues.patronGroup === g.id }));
 
     return (
       <form>
@@ -118,8 +115,8 @@ class UserForm extends React.Component {
                 </Field>
                 <fieldset>
                   <legend>Personal Info</legend>
-                  <Field label="First Name" name="personal.first_name" id="adduser_firstname" component={TextField} required fullWidth />
-                  <Field label="Last Name" name="personal.last_name" id="adduser_lastname" component={TextField} fullWidth />
+                  <Field label="First Name" name="personal.firstName" id="adduser_firstname" component={TextField} required fullWidth />
+                  <Field label="Last Name" name="personal.lastName" id="adduser_lastname" component={TextField} fullWidth />
                   <Field label="Email" name="personal.email" id="adduser_email" component={TextField} required fullWidth />
                 </fieldset>
                 {/* <Field
@@ -133,7 +130,7 @@ class UserForm extends React.Component {
                 /> */}
                 <Field
                   label="Patron Group"
-                  name="patron_group"
+                  name="patronGroup"
                   id="adduser_group"
                   component={Select}
                   fullWidth

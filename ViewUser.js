@@ -31,7 +31,7 @@ class ViewUser extends Component {
       patronGroups: PropTypes.arrayOf(PropTypes.object),
     }),
     mutator: React.PropTypes.shape({
-      users: React.PropTypes.shape({
+      selUser: React.PropTypes.shape({
         PUT: React.PropTypes.func.isRequired,
       }),
     }),
@@ -39,10 +39,11 @@ class ViewUser extends Component {
       path: PropTypes.string.isRequired,
     }).isRequired,
     onClose: PropTypes.func,
+    okapi: PropTypes.object,
   };
 
   static manifest = Object.freeze({
-    users: {
+    selUser: {
       type: 'okapi',
       path: 'users/:{userid}',
       clear: false,
@@ -101,7 +102,9 @@ class ViewUser extends Component {
   update(data) {
     // eslint-disable-next-line no-param-reassign
     if (data.creds) delete data.creds; // not handled on edit (yet at least)
-    this.props.mutator.users.PUT(data).then(() => {
+    // eslint-disable-next-line no-param-reassign
+    if (data.available_patron_groups) delete data.available_patron_groups;
+    this.props.mutator.selUser.PUT(data).then(() => {
       this.onClickCloseEditUser();
     });
   }
@@ -109,38 +112,21 @@ class ViewUser extends Component {
   render() {
     const fineHistory = [{ 'Due Date': '11/12/2014', Amount: '34.23', Status: 'Unpaid' }];
 
-    const { data: { users, patronGroups }, match: { params: { userid } } } = this.props;
+    const { data: { selUser, patronGroups }, match: { params: { userid } } } = this.props;
 
     const detailMenu = (<PaneMenu>
-      <IfPermission {...this.props} perm="users-bl.edituser">
+      <IfPermission {...this.props} perm="users.item.put">
         <button onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button>
       </IfPermission>
     </PaneMenu>);
 
-    if (!users || users.length === 0 || !userid) return <div />;
+    if (!selUser || selUser.length === 0 || !userid) return <div />;
 
-    if (!this.props.stripes.hasPerm('users-bl.viewuser')) {
-      return (<div
-        style={{
-          position: 'absolute',
-          right: '1rem',
-          bottom: '1rem',
-          width: '34%',
-          zIndex: '9999',
-          padding: '1rem',
-          backgroundColor: '#fff',
-        }}
-      >
-        <h2>Permission Error</h2>
-        <p>Sorry - your user permissions do not allow access to this page.</p>
-      </div>);
-    }
-
-    const user = users.find(u => u.id === userid);
+    const user = selUser.find(u => u.id === userid);
     if (!user) return <div />;
     const userStatus = (_.get(user, ['active'], '') ? 'active' : 'inactive');
-    const patronGroupId = _.get(user, ['patron_group'], '');
-    const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
+    const patronGroupId = _.get(user, ['patronGroup'], '');
+    const patron_group = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
 
     return (
       <Pane defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
@@ -148,7 +134,7 @@ class ViewUser extends Component {
           <Col xs={8} >
             <Row>
               <Col xs={12}>
-                <h2>{_.get(user, ['personal', 'last_name'], '')}, {_.get(user, ['personal', 'first_name'], '')}</h2>
+                <h2>{_.get(user, ['personal', 'lastName'], '')}, {_.get(user, ['personal', 'firstName'], '')}</h2>
               </Col>
             </Row>
             <Row>
@@ -171,7 +157,7 @@ class ViewUser extends Component {
             <br />
             <Row>
               <Col xs={12}>
-                <KeyValue label="Patron group" value={patronGroup.group} />
+                <KeyValue label="Patron group" value={patron_group.group} />
               </Col>
             </Row>
           </Col>
@@ -201,17 +187,22 @@ class ViewUser extends Component {
         </Row>
         <MultiColumnList fullWidth contentData={fineHistory} />
         <hr />
-        <this.connectedUserLoans onClickViewLoansHistory={this.onClickViewLoansHistory} {...this.props} />
-        <this.connectedUserPermissions stripes={this.props.stripes} match={this.props.match} {...this.props} />
+        <IfPermission {...this.props} perm="circulation.loans.collection.get">
+          <this.connectedUserLoans onClickViewLoansHistory={this.onClickViewLoansHistory} {...this.props} />
+        </IfPermission>
+        <IfPermission {...this.props} perm="perms.users.get">
+          <this.connectedUserPermissions stripes={this.props.stripes} match={this.props.match} {...this.props} />
+        </IfPermission>
         <Layer isOpen={this.state.editUserMode} label="Edit User Dialog">
           <UserForm
             initialValues={_.merge(user, { available_patron_groups: this.props.data.patronGroups })}
             onSubmit={(record) => { this.update(record); }}
             onCancel={this.onClickCloseEditUser}
+            okapi={this.props.okapi}
           />
         </Layer>
         <Layer isOpen={this.state.viewLoansHistoryMode} label="Loans History">
-          <this.connectedLoansHistory userid={userid} onCancel={this.onClickCloseLoansHistory} />
+          <this.connectedLoansHistory userid={userid} stripes={this.props.stripes} onCancel={this.onClickCloseLoansHistory} />
         </Layer>
       </Pane>
     );

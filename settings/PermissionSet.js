@@ -5,14 +5,12 @@ import { connect } from '@folio/stripes-connect'; // eslint-disable-line
 import RenderPermissions from '../lib/RenderPermissions';
 
 class PermissionSet extends React.Component {
-
   static propTypes = {
     data: PropTypes.shape({
       availablePermissions: PropTypes.arrayOf(PropTypes.object),
     }).isRequired,
     addPermission: PropTypes.func.isRequired,
     removePermission: PropTypes.func.isRequired,
-    availablePermissions: PropTypes.func.isRequired,
     selectedSet: PropTypes.object.isRequired,
   };
 
@@ -20,7 +18,7 @@ class PermissionSet extends React.Component {
     availablePermissions: {
       type: 'okapi',
       records: 'permissions',
-      path: 'perms/permissions?length=100&query=(mutable=false)',
+      path: 'perms/permissions?length=1000&query=(mutable=false)',
     },
   });
 
@@ -36,4 +34,4 @@ class PermissionSet extends React.Component {
   }
 }
 
-export default connect(PermissionSet, '@folio/users');
+export default PermissionSet;
