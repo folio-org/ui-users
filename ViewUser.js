@@ -126,7 +126,7 @@ class ViewUser extends Component {
     if (!user) return <div />;
     const userStatus = (_.get(user, ['active'], '') ? 'active' : 'inactive');
     const patronGroupId = _.get(user, ['patronGroup'], '');
-    const patron_group = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
+    const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
 
     return (
       <Pane defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
@@ -157,7 +157,7 @@ class ViewUser extends Component {
             <br />
             <Row>
               <Col xs={12}>
-                <KeyValue label="Patron group" value={patron_group.group} />
+                <KeyValue label="Patron group" value={patronGroup.group} />
               </Col>
             </Row>
           </Col>
