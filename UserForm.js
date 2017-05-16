@@ -78,7 +78,7 @@ class UserForm extends React.Component {
     okapi: PropTypes.object,
   };
 
-  constructor(props, context) {
+  constructor(props) {
     super(props);
     okapiToken = props.okapi.token;
   }
