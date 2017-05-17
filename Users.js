@@ -24,6 +24,8 @@ import IfPermission from '@folio/stripes-components/lib/IfPermission';
 import UserForm from './UserForm';
 import ViewUser from './ViewUser';
 
+import Pluggable from '@folio/stripes-components/lib/Pluggable';
+
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
 
@@ -309,6 +311,9 @@ class Users extends React.Component {
                 </IfPermission>
               </IfPermission>
             </IfPermission>
+            <Pluggable {...this.props} type="markdown-editor">
+              <div style={{ color: 'red' }}>LOOK OUT!</div>
+            </Pluggable>
           </FilterControlGroup>
         </Pane>
         {/* Results Pane */}
