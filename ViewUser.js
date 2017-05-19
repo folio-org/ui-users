@@ -31,7 +31,7 @@ class ViewUser extends Component {
       patronGroups: PropTypes.arrayOf(PropTypes.object),
     }),
     mutator: React.PropTypes.shape({
-      users: React.PropTypes.shape({
+      selUser: React.PropTypes.shape({
         PUT: React.PropTypes.func.isRequired,
       }),
     }),
@@ -39,10 +39,11 @@ class ViewUser extends Component {
       path: PropTypes.string.isRequired,
     }).isRequired,
     onClose: PropTypes.func,
+    okapi: PropTypes.object,
   };
 
   static manifest = Object.freeze({
-    users: {
+    selUser: {
       type: 'okapi',
       path: 'users/:{userid}',
       clear: false,
@@ -103,7 +104,7 @@ class ViewUser extends Component {
     if (data.creds) delete data.creds; // not handled on edit (yet at least)
     // eslint-disable-next-line no-param-reassign
     if (data.available_patron_groups) delete data.available_patron_groups;
-    this.props.mutator.users.PUT(data).then(() => {
+    this.props.mutator.selUser.PUT(data).then(() => {
       this.onClickCloseEditUser();
     });
   }
@@ -111,7 +112,7 @@ class ViewUser extends Component {
   render() {
     const fineHistory = [{ 'Due Date': '11/12/2014', Amount: '34.23', Status: 'Unpaid' }];
 
-    const { data: { users, patronGroups }, match: { params: { userid } } } = this.props;
+    const { data: { selUser, patronGroups }, match: { params: { userid } } } = this.props;
 
     const detailMenu = (<PaneMenu>
       <IfPermission {...this.props} perm="users.item.put">
@@ -119,13 +120,13 @@ class ViewUser extends Component {
       </IfPermission>
     </PaneMenu>);
 
-    if (!users || users.length === 0 || !userid) return <div />;
+    if (!selUser || selUser.length === 0 || !userid) return <div />;
 
-    const user = users.find(u => u.id === userid);
+    const user = selUser.find(u => u.id === userid);
     if (!user) return <div />;
     const userStatus = (_.get(user, ['active'], '') ? 'active' : 'inactive');
     const patronGroupId = _.get(user, ['patronGroup'], '');
-    const patron_group = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
+    const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
 
     return (
       <Pane defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
@@ -156,7 +157,7 @@ class ViewUser extends Component {
             <br />
             <Row>
               <Col xs={12}>
-                <KeyValue label="Patron group" value={patron_group.group} />
+                <KeyValue label="Patron group" value={patronGroup.group} />
               </Col>
             </Row>
           </Col>
@@ -197,6 +198,7 @@ class ViewUser extends Component {
             initialValues={_.merge(user, { available_patron_groups: this.props.data.patronGroups })}
             onSubmit={(record) => { this.update(record); }}
             onCancel={this.onClickCloseEditUser}
+            okapi={this.props.okapi}
           />
         </Layer>
         <Layer isOpen={this.state.viewLoansHistoryMode} label="Loans History">

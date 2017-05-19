@@ -15,13 +15,17 @@ import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import FilterPaneSearch from '@folio/stripes-components/lib/FilterPaneSearch';
 import FilterControlGroup from '@folio/stripes-components/lib/FilterControlGroup';
 import Layer from '@folio/stripes-components/lib/Layer';
-import FilterGroups, { initialFilterState, onChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
+import FilterGroups, { initialFilterState, onChangeFilter as commonChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
+
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
 import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
 import IfPermission from '@folio/stripes-components/lib/IfPermission';
 
 import UserForm from './UserForm';
 import ViewUser from './ViewUser';
+
+const INITIAL_RESULT_COUNT = 30;
+const RESULT_COUNT_INCREMENT = 30;
 
 const filterConfig = [
   {
@@ -46,10 +50,6 @@ const filterConfig = [
 ];
 
 class Users extends React.Component {
-  static contextTypes = {
-    store: PropTypes.object,
-  };
-
   static propTypes = {
     stripes: PropTypes.shape({
       logger: PropTypes.shape({
@@ -81,10 +81,11 @@ class Users extends React.Component {
 
   static manifest = Object.freeze({
     addUserMode: {},
+    userCount: { initialValue: INITIAL_RESULT_COUNT },
     users: {
       type: 'okapi',
       records: 'users',
-      recordsRequired: 30,
+      recordsRequired: '${userCount}',
       perRequest: 10,
       path: 'users',
       GET: {
@@ -123,21 +124,10 @@ class Users extends React.Component {
       sortOrder: query.sort || '',
     };
 
-    this.okapi = context.store.getState().okapi;
+    this.okapi = props.okapi;
 
-    this.onClearSearch = this.onClearSearch.bind(this);
-    this.onSort = this.onSort.bind(this);
-    this.onSelectRow = this.onSelectRow.bind(this);
-    this.onClickAddNewUser = this.onClickAddNewUser.bind(this);
-    this.onClickCloseNewUser = this.onClickCloseNewUser.bind(this);
-    this.onChangeSearch = this.onChangeSearch.bind(this);
-    this.performSearch = this.performSearch.bind(this); // For now, prefer instant response
-    // this.performSearch = _.debounce(this.performSearch.bind(this), 250);
-
-    this.onChangeFilter = onChangeFilter.bind(this);
+    this.commonChangeFilter = commonChangeFilter.bind(this);
     this.transitionToParams = transitionToParams.bind(this);
-
-    this.collapseDetails = this.collapseDetails.bind(this);
     this.connectedViewUser = props.stripes.connect(ViewUser);
     const logger = props.stripes.logger;
     this.log = logger.log.bind(logger);
@@ -147,20 +137,20 @@ class Users extends React.Component {
     if (_.isEmpty(this.props.data.addUserMode)) this.props.mutator.addUserMode.replace({ mode: false });
   }
 
-  onClearSearch() {
+  onClearSearch = () => {
     this.log('action', 'cleared search');
     this.setState({ searchTerm: '' });
     this.props.history.push(this.props.location.pathname);
   }
 
-  onSort(e, meta) {
+  onSort = (e, meta) => {
     const sortOrder = meta.alias;
     this.log('action', `sorted by ${sortOrder}`);
     this.setState({ sortOrder });
     this.transitionToParams({ sort: sortOrder });
   }
 
-  onSelectRow(e, meta) {
+  onSelectRow = (e, meta) => {
     const userId = meta.id;
     const username = meta.username;
     this.log('action', `clicked ${userId}, selected user =`, meta);
@@ -168,34 +158,44 @@ class Users extends React.Component {
     this.props.history.push(`/users/view/${userId}/${username}${this.props.location.search}`);
   }
 
-  onClickAddNewUser(e) {
+  onClickAddNewUser = (e) => {
     if (e) e.preventDefault();
     this.log('action', 'clicked "add new user"');
     this.props.mutator.addUserMode.replace({ mode: true });
   }
 
-  onClickCloseNewUser(e) {
+  onClickCloseNewUser = (e) => {
     if (e) e.preventDefault();
     this.log('action', 'clicked "close new user"');
     this.props.mutator.addUserMode.replace({ mode: false });
   }
 
-  onChangeSearch(e) {
+  onChangeFilter = (e) => {
+    this.props.mutator.userCount.replace(INITIAL_RESULT_COUNT);
+    this.commonChangeFilter(e);
+  }
+
+  onChangeSearch = (e) => {
     const query = e.target.value;
+    this.props.mutator.userCount.replace(INITIAL_RESULT_COUNT);
     this.setState({ searchTerm: query });
     this.performSearch(query);
   }
 
-  performSearch(query) {
-    this.log('action', `searched for '${query}'`);
-    this.transitionToParams({ query });
+  onNeedMore = () => {
+    this.props.mutator.userCount.replace(this.props.data.userCount + RESULT_COUNT_INCREMENT);
   }
 
-  updateFilters(filters) { // provided for onChangeFilter
+  performSearch = _.debounce((query) => {
+    this.log('action', `searched for '${query}'`);
+    this.transitionToParams({ query });
+  }, 150);
+
+  updateFilters = (filters) => { // provided for onChangeFilter
     this.transitionToParams({ filters: Object.keys(filters).filter(key => filters[key]).join(',') });
   }
 
-  create(data) {
+  create = (data) => {
     // extract creds object from user object
     const creds = Object.assign({}, data.creds, { username: data.username });
     if (data.creds) delete data.creds; // eslint-disable-line no-param-reassign
@@ -207,7 +207,7 @@ class Users extends React.Component {
     this.onClickCloseNewUser();
   }
 
-  postCreds(username, creds) {
+  postCreds = (username, creds) => {
     this.log('xhr', `POST credentials for new user '${username}':`, creds);
     fetch(`${this.okapi.url}/authn/credentials`, {
       method: 'POST',
@@ -227,7 +227,7 @@ class Users extends React.Component {
     });
   }
 
-  postPerms(username, perms) {
+  postPerms = (username, perms) => {
     this.log('xhr', `POST permissions for new user '${username}':`, perms);
     fetch(`${this.okapi.url}/perms/users`, {
       method: 'POST',
@@ -242,7 +242,7 @@ class Users extends React.Component {
     });
   }
 
-  collapseDetails() {
+  collapseDetails = () => {
     this.setState({
       selectedItem: {},
     });
@@ -279,7 +279,7 @@ class Users extends React.Component {
       this.props.stripes.hasPerm('users.item.get') ?
         (<Route
           path={`${this.props.match.path}/view/:userid/:username`}
-          render={props => <this.connectedViewUser stripes={stripes} paneWidth="44%" onClose={this.collapseDetails} {...props} />}
+          render={props => <this.connectedViewUser stripes={stripes} okapi={this.okapi} paneWidth="44%" onClose={this.collapseDetails} {...props} />}
         />) :
         (<div
           style={{
@@ -331,6 +331,7 @@ class Users extends React.Component {
             formatter={resultsFormatter}
             onRowClick={this.onSelectRow}
             onHeaderClick={this.onSort}
+            onFetch={this.onNeedMore}
             visibleColumns={['Active', 'Name', 'Patron Group', 'User ID', 'Email']}
             sortOrder={this.state.sortOrder}
             isEmptyMessage={`No results found for "${this.state.searchTerm}". Please check your spelling and filters.`}
@@ -344,6 +345,7 @@ class Users extends React.Component {
             initialValues={{ available_patron_groups: this.props.data.patronGroups }}
             onSubmit={(record) => { this.create(record); }}
             onCancel={this.onClickCloseNewUser}
+            okapi={this.props.okapi}
           />
         </Layer>
       </Paneset>

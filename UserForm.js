@@ -66,10 +66,6 @@ function asyncValidate(values, dispatch, props, blurredField) {
 
 class UserForm extends React.Component {
 
-  static contextTypes = {
-    store: PropTypes.object,
-  };
-
   static propTypes = {
     onClose: PropTypes.func, // eslint-disable-line react/no-unused-prop-types
     newUser: PropTypes.bool, // eslint-disable-line react/no-unused-prop-types
@@ -79,11 +75,12 @@ class UserForm extends React.Component {
     submitting: PropTypes.bool,
     onCancel: PropTypes.func,
     initialValues: PropTypes.object,
+    okapi: PropTypes.object,
   };
 
-  constructor(props, context) {
+  constructor(props) {
     super(props);
-    okapiToken = context.store.getState().okapi.token;
+    okapiToken = props.okapi.token;
   }
 
   render() {
