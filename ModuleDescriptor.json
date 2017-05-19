@@ -7,7 +7,13 @@
   "requires": [
     {
       "id":"users",
-      "version":"0.1.1"
+      "version":"9.0"
+    },
+    { "id":"circulation",
+      "version":"1.0"
+    },
+    { "id":"permissions",
+      "version":"3.0"
     }
   ]
 }
