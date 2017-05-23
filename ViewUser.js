@@ -131,10 +131,10 @@ class ViewUser extends Component {
     return (
       <Pane defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
         <Row>
-          <Col xs={8} >
+          <Col xs={7} >
             <Row>
               <Col xs={12}>
-                <h2>{_.get(user, ['personal', 'lastName'], '')}, {_.get(user, ['personal', 'firstName'], '')}</h2>
+                <h2>{_.get(user, ['personal', 'lastName'], '')}, {_.get(user, ['personal', 'firstName'], '')} {_.get(user, ['personal', 'middleName'], '')}</h2>
               </Col>
             </Row>
             <Row>
@@ -154,15 +154,57 @@ class ViewUser extends Component {
                 <KeyValue label="Email" value={_.get(user, ['personal', 'email'], '')} />
               </Col>
             </Row>
+            <Row>
+              <Col xs={12}>
+                <KeyValue label="Phone" value={_.get(user, ['personal', 'phone'], '')} />
+              </Col>
+            </Row>
+            <br />
+            <Row>
+              <Col xs={12}>
+                <KeyValue label="Mobile phone" value={_.get(user, ['personal', 'mobilePhone'], '')} />
+              </Col>
+            </Row>
             <br />
             <Row>
               <Col xs={12}>
                 <KeyValue label="Patron group" value={patronGroup.group} />
               </Col>
             </Row>
+            <br />
+            <Row>
+              <Col xs={12}>
+                <KeyValue label="Date of birth" value={new Date(Date.parse(_.get(user, ['personal','dateOfBirth'], '').substring(0,19)+'Z')).toLocaleDateString(this.props.stripes.locale)} />
+              </Col>
+            </Row>
           </Col>
-          <Col xs={4} >
-            <img className="floatEnd" src="http://placehold.it/175x175" role="presentation" />
+          <Col xs={5} >
+            <Row>
+              <Col xs={12}>
+                <img className="floatEnd" src="http://placehold.it/175x175" role="presentation" />
+              </Col>
+            </Row>
+            <br />
+            <Row>
+              <Col xs={12}>
+                <KeyValue label="Date enrolled" value={new Date(Date.parse(_.get(user, ['enrollmentDate'], '').substring(0,19)+'Z')).toLocaleDateString(this.props.stripes.locale)} />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12}>
+                <KeyValue label="Expiration date" value={new Date(Date.parse(_.get(user, ['expirationDate'], '').substring(0,19)+'Z')).toLocaleDateString(this.props.stripes.locale)} />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12}>
+                <KeyValue label="Bar code" value={_.get(user, ['barcode'], '')} />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12}>
+                <KeyValue label="FOLIO record number" value={_.get(user, ['id'], '')} />
+              </Col>
+            </Row>
           </Col>
         </Row>
         <br />

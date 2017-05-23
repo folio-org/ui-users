@@ -7,9 +7,11 @@ import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import { Row, Col } from 'react-bootstrap';
 import Button from '@folio/stripes-components/lib/Button';
 import TextField from '@folio/stripes-components/lib/TextField';
+import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import Select from '@folio/stripes-components/lib/Select';
 import RadioButtonGroup from '@folio/stripes-components/lib/RadioButtonGroup';
 import RadioButton from '@folio/stripes-components/lib/RadioButton';
+import Datepicker  from '@folio/stripes-components/lib/Datepicker';
 import fetch from 'isomorphic-fetch';
 
 
@@ -116,8 +118,11 @@ class UserForm extends React.Component {
                 <fieldset>
                   <legend>Personal Info</legend>
                   <Field label="First Name" name="personal.firstName" id="adduser_firstname" component={TextField} required fullWidth />
+                  <Field label="Middle Name" name="personal.middleName" id="adduser_middlename" component={TextField} fullWidth />
                   <Field label="Last Name" name="personal.lastName" id="adduser_lastname" component={TextField} fullWidth />
                   <Field label="Email" name="personal.email" id="adduser_email" component={TextField} required fullWidth />
+                  <Field label="Phone" name="personal.phone" id="adduser_phone" component={TextField} fullWidth />
+                  <Field label="Mobile Phone" name="personal.mobilePhone" id="adduser_mobilePhone" component={TextField} fullWidth />
                 </fieldset>
                 {/* <Field
                   label="Type"
@@ -136,6 +141,8 @@ class UserForm extends React.Component {
                   fullWidth
                   dataOptions={[{ label: 'Select patron group', value: null }, ...patronGroupOptions]}
                 />
+                <Field label="Bar Code" name="barcode" id="adduser_barcode" component={TextField} fullWidth />
+                <Field label="FOLIO record number" name="id" id="adduser_id" readOnly="true" component={TextField} fullWidth />
               </Col>
             </Row>
           </Pane>
