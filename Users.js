@@ -41,11 +41,7 @@ const filterConfig = [
     label: 'Patron group',
     name: 'pg',
     cql: 'patronGroup',
-    values: [
-      { name: 'On-campus', cql: 'on_campus' },
-      { name: 'Off-campus', cql: 'off_campus' },
-      { name: 'Other', cql: 'other' },
-    ],
+    values: [], // will be filled in by componentWillUpdate
   },
 ];
 
@@ -143,6 +139,13 @@ class Users extends React.Component {
 
   componentWillMount() {
     if (_.isEmpty(this.props.data.addUserMode)) this.props.mutator.addUserMode.replace({ mode: false });
+  }
+
+  componentWillUpdate() {
+    const pg = this.props.data.patronGroups;
+    if (pg && pg.length) {
+      filterConfig[1].values = pg.map(rec => ({ name: rec.desc, cql: rec.id }));
+    }
   }
 
   onClearSearch = () => {
