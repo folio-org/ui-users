@@ -345,7 +345,7 @@ class Users extends React.Component {
             initialValues={{ available_patron_groups: this.props.data.patronGroups }}
             onSubmit={(record) => { this.create(record); }}
             onCancel={this.onClickCloseNewUser}
-            okapi={this.props.okapi}
+            okapi={this.okapi}
           />
         </Layer>
       </Paneset>
