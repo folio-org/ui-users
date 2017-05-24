@@ -16,7 +16,10 @@
     "displayName": "Users",
     "route": "/users",
     "home": "/users?filters=active.Active",
-    "hasSettings": true
+    "hasSettings": true,
+    "okapiInterfaces": {
+      "users":"9.0"
+    }
   },
   "scripts": {
     "lint": "eslint *.js lib settings || true"
