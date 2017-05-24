@@ -269,15 +269,8 @@ class Users extends React.Component {
       Active: user => user.active,
       Name: user => `${_.get(user, ['personal', 'lastName'], '')}, ${_.get(user, ['personal', 'firstName'], '')}`,
       'Patron Group': (user) => {
-        const map = {
-          on_campus: 'On-campus',
-          off_campus: 'Off-campus',
-          other: 'Other',
-        };
-        const maybe = map[user.patronGroup];
-        if (maybe) return maybe;
         const pg = data.patronGroups.filter(g => g.id === user.patronGroup)[0];
-        return pg ? pg.group : '?';
+        return pg ? pg.desc : '?';
       },
       'User ID': user => user.username,
       Email: user => _.get(user, ['personal', 'email']),
