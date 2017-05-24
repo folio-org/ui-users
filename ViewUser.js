@@ -154,6 +154,7 @@ class ViewUser extends Component {
                 <KeyValue label="Email" value={_.get(user, ['personal', 'email'], '')} />
               </Col>
             </Row>
+            <br />
             <Row>
               <Col xs={12}>
                 <KeyValue label="Phone" value={_.get(user, ['personal', 'phone'], '')} />
@@ -168,13 +169,13 @@ class ViewUser extends Component {
             <br />
             <Row>
               <Col xs={12}>
-                <KeyValue label="Patron group" value={patronGroup.group} />
+                <KeyValue label="Date of birth" value={new Date(Date.parse(_.get(user, ['personal','dateOfBirth'], '').substring(0,19)+'Z')).toLocaleDateString(this.props.stripes.locale)} />
               </Col>
             </Row>
             <br />
             <Row>
               <Col xs={12}>
-                <KeyValue label="Date of birth" value={new Date(Date.parse(_.get(user, ['personal','dateOfBirth'], '').substring(0,19)+'Z')).toLocaleDateString(this.props.stripes.locale)} />
+                <KeyValue label="Patron group" value={patronGroup.group} />
               </Col>
             </Row>
           </Col>
@@ -205,6 +206,12 @@ class ViewUser extends Component {
                 <KeyValue label="FOLIO record number" value={_.get(user, ['id'], '')} />
               </Col>
             </Row>
+            <Row>
+              <Col xs={12}>
+                <KeyValue label="External System ID" value={_.get(user, ['externalSystemId'], '')} />
+              </Col>
+            </Row>
+
           </Col>
         </Row>
         <br />
