@@ -113,7 +113,7 @@ class Users extends React.Component {
     },
   });
 
-  constructor(props, context) {
+  constructor(props) {
     super(props);
 
     const query = props.location.search ? queryString.parse(props.location.search) : {};
