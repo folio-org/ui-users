@@ -73,9 +73,17 @@ class Users extends React.Component {
       addUserMode: PropTypes.shape({
         replace: PropTypes.func,
       }),
+      userCount: PropTypes.shape({
+        replace: PropTypes.func,
+      }),
       users: PropTypes.shape({
         POST: PropTypes.func,
       }),
+    }).isRequired,
+    okapi: PropTypes.shape({
+      url: PropTypes.string.isRequired,
+      tenant: PropTypes.string.isRequired,
+      token: PropTypes.string.isRequired,
     }).isRequired,
   };
 
