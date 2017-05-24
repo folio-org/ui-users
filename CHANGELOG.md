@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## IN PROGRESS
+
+* Patron-group filters are driven from what is in the database. Fixes UIU-32.
+
 ## [2.0.0](https://github.com/folio-org/ui-users/tree/v2.0.0) (2017-05-11)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v1.4.0...v2.0.0)
 
