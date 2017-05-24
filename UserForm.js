@@ -98,7 +98,7 @@ class UserForm extends React.Component {
     const addUserLastMenu = <PaneMenu><Button type="submit" title="Create New User" disabled={pristine || submitting} onClick={handleSubmit}>Create User</Button></PaneMenu>;
     const editUserLastMenu = <PaneMenu><Button type="submit" title="Update User" disabled={pristine || submitting} onClick={handleSubmit}>Update User</Button></PaneMenu>;
     const patronGroupOptions = (initialValues.available_patron_groups || []).map(g => ({
-      label: g.group, value: g.id, selected: initialValues.patronGroup === g.id }));
+      label: g.desc, value: g.id, selected: initialValues.patronGroup === g.id }));
 
     return (
       <form>
