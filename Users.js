@@ -40,7 +40,7 @@ const filterConfig = [
   {
     label: 'Patron group',
     name: 'pg',
-    cql: 'patron_group',
+    cql: 'patronGroup',
     values: [
       { name: 'On-campus', cql: 'on_campus' },
       { name: 'Off-campus', cql: 'off_campus' },
@@ -104,7 +104,7 @@ class Users extends React.Component {
             {
               Active: 'active',
               Name: 'personal.last_name personal.first_name',
-              'Patron Group': 'patron_group',
+              'Patron Group': 'patronGroup',
               'User ID': 'username',
               Email: 'personal.email',
             },
