@@ -69,7 +69,7 @@ class PatronGroupsSettings extends React.Component {
 
   render() {
     const suppressor = {
-      delete: item => item.inUse, // suppress delete action based on 'inUse' prop
+      delete: item => true,
       edit: () => false, // suppress all editting of existing items...
     };
 
