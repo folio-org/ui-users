@@ -84,7 +84,7 @@ class PatronGroupsSettings extends React.Component {
             label="Patron Groups"
             createButtonLabel="+ Add group"
             visibleFields={['group', 'desc']}
-            itemTemplate={{ group: 'string', id: 'string', desc: 'string', inUse: 'bool' }}
+            itemTemplate={{ group: 'string', id: 'string', desc: 'string' }}
             actionSuppression={suppressor}
             onUpdate={this.onUpdateGroup}
             onCreate={this.onCreateGroup}
