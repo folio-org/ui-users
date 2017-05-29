@@ -5,6 +5,8 @@
 * Patron-group filters are driven from what is in the database. Fixes UIU-32.
 * Settings panes are sorted alphabetically. Fixes ui-users bit of STRIPES-358.
 * Status of new users defaults to 'active'. Fixes UIU-2.
+* Towards working correctly against mod-users v10.x, which rejects records containing unrecognised fields:
+  * Patron-groups no longer contain the unsupported `inUse` field. Fixes UIU-43.
 
 ## [2.0.0](https://github.com/folio-org/ui-users/tree/v2.0.0) (2017-05-11)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v1.4.0...v2.0.0)
