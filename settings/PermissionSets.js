@@ -61,26 +61,34 @@ class PermissionSets extends Component {
 
   onSelectSet(e) {
     e.preventDefault();
-    const href = e.target.href;
-    const permissionName = href.substring(href.indexOf('#') + 1);
-    let selectedSet = null;
+    const permissionId = e.target.dataset.id;
     _.forEach(this.props.data.permissionSets, (set) => {
-      if (set.permissionName === permissionName) selectedSet = set;
-    });
-    this.setState({ selectedSet });
+      if (set.id === permissionId) {
+        this.setSelectedSet(set);    
+      }
+    });    
   }
 
   createNewPermissionSet() {
+    const originalPermSets = _.cloneDeep(this.props.data.permissionSets);
+
     this.props.mutator.permissionSets.POST({
-      mutable: true,
+      mutable: true
     }).then(() => {
-      this.clearSelection();
+      const newPermSet = _.differenceBy(this.props.data.permissionSets, originalPermSets, 'id')[0];
+      console.log(newPermSet);
+      this.setSelectedSet(newPermSet);
     });
+    
   }
 
   clearSelection() {
+    this.setSelectedSet(null); 
+  }
+
+  setSelectedSet(set) {
     this.setState({
-      selectedSet: null,
+      selectedSet:set
     });
   }
 
@@ -106,7 +114,7 @@ class PermissionSets extends Component {
       <Paneset nested>
         <Pane defaultWidth="20%" lastMenu={PermissionsSetsLastMenu}>
           <NavList>
-            <NavListSection activeLink={this.state.selectedSet ? `#${this.state.selectedSet.title}` : ''}>
+            <NavListSection activeLink={this.state.selectedSet ? `#${this.state.selectedSet.id}` : ''}>
               {RenderedPermissionSets}
             </NavListSection>
           </NavList>
