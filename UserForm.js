@@ -7,11 +7,10 @@ import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import { Row, Col } from 'react-bootstrap';
 import Button from '@folio/stripes-components/lib/Button';
 import TextField from '@folio/stripes-components/lib/TextField';
-import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import Select from '@folio/stripes-components/lib/Select';
 import RadioButtonGroup from '@folio/stripes-components/lib/RadioButtonGroup';
 import RadioButton from '@folio/stripes-components/lib/RadioButton';
-import Datepicker  from '@folio/stripes-components/lib/Datepicker';
+import Datepicker from '@folio/stripes-components/lib/Datepicker';
 import fetch from 'isomorphic-fetch';
 
 
@@ -100,7 +99,7 @@ class UserForm extends React.Component {
     const addUserLastMenu = <PaneMenu><Button type="submit" title="Create New User" disabled={pristine || submitting} onClick={handleSubmit}>Create User</Button></PaneMenu>;
     const editUserLastMenu = <PaneMenu><Button type="submit" title="Update User" disabled={pristine || submitting} onClick={handleSubmit}>Update User</Button></PaneMenu>;
     const patronGroupOptions = (initialValues.available_patron_groups || []).map(g => ({
-      label: g.group, value: g.id, selected: initialValues.patronGroup === g.id }));
+      label: g.desc, value: g.id, selected: initialValues.patronGroup === g.id }));
 
     return (
       <form>
@@ -112,7 +111,7 @@ class UserForm extends React.Component {
                 <Field label="User ID" name="username" id="adduser_username" component={TextField} required fullWidth />
                 {!initialValues.id ? <Field label="Password" name="creds.password" id="pw" component={TextField} required fullWidth /> : null}
                 <Field label="Status" name="active" component={RadioButtonGroup}>
-                  <RadioButton label="Active" id="useractiveYesRB" value="true" inline />
+                  <RadioButton label="Active" id="useractiveYesRB" value="true" inline checked="true" />
                   <RadioButton label="Inactive" id="useractiveNoRB" value="false" inline />
                 </Field>
                 <fieldset>

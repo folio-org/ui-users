@@ -40,12 +40,8 @@ const filterConfig = [
   {
     label: 'Patron group',
     name: 'pg',
-    cql: 'patron_group',
-    values: [
-      { name: 'On-campus', cql: 'on_campus' },
-      { name: 'Off-campus', cql: 'off_campus' },
-      { name: 'Other', cql: 'other' },
-    ],
+    cql: 'patronGroup',
+    values: [], // will be filled in by componentWillUpdate
   },
 ];
 
@@ -73,9 +69,17 @@ class Users extends React.Component {
       addUserMode: PropTypes.shape({
         replace: PropTypes.func,
       }),
+      userCount: PropTypes.shape({
+        replace: PropTypes.func,
+      }),
       users: PropTypes.shape({
         POST: PropTypes.func,
       }),
+    }).isRequired,
+    okapi: PropTypes.shape({
+      url: PropTypes.string.isRequired,
+      tenant: PropTypes.string.isRequired,
+      token: PropTypes.string.isRequired,
     }).isRequired,
   };
 
@@ -92,11 +96,11 @@ class Users extends React.Component {
         params: {
           query: makeQueryFunction(
             'username=*',
-            'username="$QUERY*" or personal.first_name="$QUERY*" or personal.last_name="$QUERY*"',
+            'username="$QUERY*" or personal.firstName="$QUERY*" or personal.lastName="$QUERY*"',
             {
               Active: 'active',
-              Name: 'personal.last_name personal.first_name',
-              'Patron Group': 'patron_group',
+              Name: 'personal.lastName personal.firstName',
+              'Patron Group': 'patronGroup',
               'User ID': 'username',
               Email: 'personal.email',
             },
@@ -113,7 +117,7 @@ class Users extends React.Component {
     },
   });
 
-  constructor(props, context) {
+  constructor(props) {
     super(props);
 
     const query = props.location.search ? queryString.parse(props.location.search) : {};
@@ -135,6 +139,13 @@ class Users extends React.Component {
 
   componentWillMount() {
     if (_.isEmpty(this.props.data.addUserMode)) this.props.mutator.addUserMode.replace({ mode: false });
+  }
+
+  componentWillUpdate() {
+    const pg = this.props.data.patronGroups;
+    if (pg && pg.length) {
+      filterConfig[1].values = pg.map(rec => ({ name: rec.desc, cql: rec.id }));
+    }
   }
 
   onClearSearch = () => {
@@ -261,15 +272,8 @@ class Users extends React.Component {
       Active: user => user.active,
       Name: user => `${_.get(user, ['personal', 'lastName'], '')}, ${_.get(user, ['personal', 'firstName'], '')}`,
       'Patron Group': (user) => {
-        const map = {
-          on_campus: 'On-campus',
-          off_campus: 'Off-campus',
-          other: 'Other',
-        };
-        const maybe = map[user.patronGroup];
-        if (maybe) return maybe;
         const pg = data.patronGroups.filter(g => g.id === user.patronGroup)[0];
-        return pg ? pg.group : '?';
+        return pg ? pg.desc : '?';
       },
       'User ID': user => user.username,
       Email: user => _.get(user, ['personal', 'email']),
@@ -345,7 +349,7 @@ class Users extends React.Component {
             initialValues={{ available_patron_groups: this.props.data.patronGroups }}
             onSubmit={(record) => { this.create(record); }}
             onCancel={this.onClickCloseNewUser}
-            okapi={this.props.okapi}
+            okapi={this.okapi}
           />
         </Layer>
       </Paneset>

@@ -24,6 +24,7 @@ class ViewUser extends Component {
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func.isRequired,
       connect: PropTypes.func.isRequired,
+      locale: PropTypes.string.isRequired,
     }).isRequired,
     paneWidth: PropTypes.string.isRequired,
     data: PropTypes.shape({
@@ -169,13 +170,13 @@ class ViewUser extends Component {
             <br />
             <Row>
               <Col xs={12}>
-                <KeyValue label="Date of birth" value={new Date(Date.parse(_.get(user, ['personal','dateOfBirth'], ''))).toLocaleDateString(this.props.stripes.locale)} />
+                <KeyValue label="Date of birth" value={new Date(Date.parse(_.get(user, ['personal', 'dateOfBirth'], ''))).toLocaleDateString(this.props.stripes.locale)} />
               </Col>
             </Row>
             <br />
             <Row>
               <Col xs={12}>
-                <KeyValue label="Patron group" value={patronGroup.group} />
+                <KeyValue label="Patron group" value={patronGroup.desc} />
               </Col>
             </Row>
           </Col>
@@ -211,7 +212,6 @@ class ViewUser extends Component {
                 <KeyValue label="External System ID" value={_.get(user, ['externalSystemId'], '')} />
               </Col>
             </Row>
-
           </Col>
         </Row>
         <br />
