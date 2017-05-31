@@ -124,6 +124,11 @@ class UserForm extends React.Component {
                   <Field label="Phone" name="personal.phone" id="adduser_phone" component={TextField} fullWidth />
                   <Field label="Mobile Phone" name="personal.mobilePhone" id="adduser_mobilePhone" component={TextField} fullWidth />
                 </fieldset>
+                <Field
+                  component={Datepicker}
+                  name="personal.dateOfBirth"
+                  id="adduser_dateofbirth"
+                />
                 {/* <Field
                   label="Type"
                   name="type"
