@@ -1,6 +1,7 @@
 // We have to remove node_modules/react to avoid having multiple copies loaded.
 // eslint-disable-next-line import/no-unresolved
 import React, { Component, PropTypes } from 'react';
+
 import _ from 'lodash';
 
 import Paneset from '@folio/stripes-components/lib/Paneset';
@@ -50,9 +51,12 @@ class PermissionSets extends Component {
     super(props);
 
     // 'Manager' just for example...
+
     this.state = {
       selectedSet: null,
     };
+
+    this.navList = null;
 
     this.onSelectSet = this.onSelectSet.bind(this);
     this.createNewPermissionSet = this.createNewPermissionSet.bind(this);
@@ -69,17 +73,16 @@ class PermissionSets extends Component {
     });    
   }
 
-  createNewPermissionSet() {
-    const originalPermSets = _.cloneDeep(this.props.data.permissionSets);
+   createNewPermissionSet() {
+
+    this.setState({
+      lastPermissionSets: _.cloneDeep(this.props.data.permissionSets),
+      permissionSetCreated: true
+    });
 
     this.props.mutator.permissionSets.POST({
       mutable: true
-    }).then(() => {
-      const newPermSet = _.differenceBy(this.props.data.permissionSets, originalPermSets, 'id')[0];
-      console.log(newPermSet);
-      this.setSelectedSet(newPermSet);
     });
-    
   }
 
   clearSelection() {
@@ -92,7 +95,30 @@ class PermissionSets extends Component {
     });
   }
 
+ componentDidUpdate(prevProps) {
+
+    const permSetsDiffs = _.differenceBy(this.props.data.permissionSets, prevProps.data.permissionSets, 'id');
+    const newPermSet = permSetsDiffs[0];
+
+    if(newPermSet && !newPermSet.pendingCreate) {
+      
+      // At this point in the lifecycle the CID is still on the object, and 
+      // this messes up the saveing of the Permission Set. It should not be needed any longer
+      // and will be removed.
+      delete newPermSet._cid; 
+     
+      this.setState({
+        selectedSet:newPermSet
+      });
+      
+    }
+
+ }
+
   render() {
+
+    console.log(this.state.selectedSet);
+
     const RenderedPermissionSets = this.props.data.permissionSets ? this.props.data.permissionSets.map(
       set => <a data-id={set.id} key={set.id} href={`#${set.permissionName}`} onClick={this.onSelectSet}>{set.displayName ? set.displayName : 'Untitled Permission Set'}</a>,
     ) : [];
@@ -113,7 +139,7 @@ class PermissionSets extends Component {
     return (
       <Paneset nested>
         <Pane defaultWidth="20%" lastMenu={PermissionsSetsLastMenu}>
-          <NavList>
+          <NavList ref={(ref) => {this.navList = ref;}}>
             <NavListSection activeLink={this.state.selectedSet ? `#${this.state.selectedSet.id}` : ''}>
               {RenderedPermissionSets}
             </NavListSection>
