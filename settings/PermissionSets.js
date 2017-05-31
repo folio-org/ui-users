@@ -63,62 +63,54 @@ class PermissionSets extends Component {
     this.clearSelection = this.clearSelection.bind(this);
   }
 
+  componentDidUpdate(prevProps) {
+    const permSetsDiffs = _.differenceBy(this.props.data.permissionSets, prevProps.data.permissionSets, 'id');
+    const newPermSet = permSetsDiffs[0];
+
+    if (newPermSet && !newPermSet.pendingCreate) {
+      // At this point in the lifecycle the CID is still on the object, and
+      // this messes up the saveing of the Permission Set. It should not be needed any longer
+      // and will be removed.
+      delete newPermSet._cid;
+
+      this.setState({
+        selectedSet: newPermSet,
+      });
+    }
+  }
+
   onSelectSet(e) {
     e.preventDefault();
     const permissionId = e.target.dataset.id;
     _.forEach(this.props.data.permissionSets, (set) => {
       if (set.id === permissionId) {
-        this.setSelectedSet(set);    
+        this.setSelectedSet(set);
       }
-    });    
-  }
-
-   createNewPermissionSet() {
-
-    this.setState({
-      lastPermissionSets: _.cloneDeep(this.props.data.permissionSets),
-      permissionSetCreated: true
     });
-
-    this.props.mutator.permissionSets.POST({
-      mutable: true
-    });
-  }
-
-  clearSelection() {
-    this.setSelectedSet(null); 
   }
 
   setSelectedSet(set) {
     this.setState({
-      selectedSet:set
+      selectedSet: set,
     });
   }
 
- componentDidUpdate(prevProps) {
+  clearSelection() {
+    this.setSelectedSet(null);
+  }
 
-    const permSetsDiffs = _.differenceBy(this.props.data.permissionSets, prevProps.data.permissionSets, 'id');
-    const newPermSet = permSetsDiffs[0];
+  createNewPermissionSet() {
+    this.setState({
+      lastPermissionSets: _.cloneDeep(this.props.data.permissionSets),
+      permissionSetCreated: true,
+    });
 
-    if(newPermSet && !newPermSet.pendingCreate) {
-      
-      // At this point in the lifecycle the CID is still on the object, and 
-      // this messes up the saveing of the Permission Set. It should not be needed any longer
-      // and will be removed.
-      delete newPermSet._cid; 
-     
-      this.setState({
-        selectedSet:newPermSet
-      });
-      
-    }
-
- }
+    this.props.mutator.permissionSets.POST({
+      mutable: true,
+    });
+  }
 
   render() {
-
-    console.log(this.state.selectedSet);
-
     const RenderedPermissionSets = this.props.data.permissionSets ? this.props.data.permissionSets.map(
       set => <a data-id={set.id} key={set.id} href={`#${set.permissionName}`} onClick={this.onSelectSet}>{set.displayName ? set.displayName : 'Untitled Permission Set'}</a>,
     ) : [];
@@ -139,7 +131,7 @@ class PermissionSets extends Component {
     return (
       <Paneset nested>
         <Pane defaultWidth="20%" lastMenu={PermissionsSetsLastMenu}>
-          <NavList ref={(ref) => {this.navList = ref;}}>
+          <NavList ref={(ref) => { this.navList = ref; }}>
             <NavListSection activeLink={this.state.selectedSet ? `#${this.state.selectedSet.id}` : ''}>
               {RenderedPermissionSets}
             </NavListSection>
