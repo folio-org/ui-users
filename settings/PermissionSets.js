@@ -130,7 +130,7 @@ class PermissionSets extends Component {
     return (
       <Paneset nested>
         <Pane defaultWidth="20%" lastMenu={PermissionsSetsLastMenu}>
-          <NavList ref={(ref) => { this.navList = ref; }}>
+          <NavList>
             <NavListSection activeLink={this.state.selectedSet ? `#${this.state.selectedSet.id}` : ''}>
               {RenderedPermissionSets}
             </NavListSection>
