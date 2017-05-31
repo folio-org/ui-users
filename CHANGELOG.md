@@ -1,7 +1,8 @@
 # Change history for ui-users
 
 ## IN PROGRESS
-
+* Okapi interface dependency updates: users:10.0, circulation:1.0, permissions:3.0
+* User metadata extended in detailed view and form. UIU-28. 
 * Patron-group filters are driven from what is in the database. Fixes UIU-32.
 * Settings panes are sorted alphabetically. Fixes ui-users bit of STRIPES-358.
 * Status of new users defaults to 'active'. Fixes UIU-2.
