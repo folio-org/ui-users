@@ -89,7 +89,7 @@ class PermissionSetDetails extends Component {
     const disabled = !stripes.hasPerm('perms.permissions.item.put');
 
     return (
-      <Pane paneTitle={`Permission Set ${selectedSet.displayName || selectedSet.permissionName}`} defaultWidth="fill" fluidContentWidth>
+      <Pane paneTitle={`Permission Set ${selectedSet.displayName || selectedSet.permissionName || selectedSet.id}`} defaultWidth="fill" fluidContentWidth>
         <form>
 
           <section>
