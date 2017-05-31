@@ -125,6 +125,8 @@ class UserForm extends React.Component {
                 </fieldset>
                 <Field
                   component={Datepicker}
+                  label="Date of Birth"
+                  dateFormat="YYYY-MM-DD"
                   name="personal.dateOfBirth"
                   id="adduser_dateofbirth"
                 />
@@ -144,6 +146,20 @@ class UserForm extends React.Component {
                   component={Select}
                   fullWidth
                   dataOptions={[{ label: 'Select patron group', value: null }, ...patronGroupOptions]}
+                />
+                <Field
+                  component={Datepicker}
+                  label="Date Enrolled"
+                  dateFormat="YYYY-MM-DD"
+                  name="enrollmentDate"
+                  id="adduser_enrollmentdate"
+                />
+                <Field
+                  component={Datepicker}
+                  label="Expiration Date"
+                  dateFormat="YYYY-MM-DD"
+                  name="expirationDate"
+                  id="adduser_expirationdate"
                 />
                 <Field label="Bar Code" name="barcode" id="adduser_barcode" component={TextField} fullWidth />
                 <Field label="FOLIO Record Number" name="id" id="adduser_id" readOnly="true" component={TextField} fullWidth />
