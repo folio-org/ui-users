@@ -169,7 +169,7 @@ class ViewUser extends Component {
             <br />
             <Row>
               <Col xs={12}>
-                <KeyValue label="Date of birth" value={new Date(Date.parse(_.get(user, ['personal','dateOfBirth'], '').substring(0,19)+'Z')).toLocaleDateString(this.props.stripes.locale)} />
+                <KeyValue label="Date of birth" value={new Date(Date.parse(_.get(user, ['personal','dateOfBirth'], ''))).toLocaleDateString(this.props.stripes.locale)} />
               </Col>
             </Row>
             <br />
@@ -188,12 +188,12 @@ class ViewUser extends Component {
             <br />
             <Row>
               <Col xs={12}>
-                <KeyValue label="Date enrolled" value={new Date(Date.parse(_.get(user, ['enrollmentDate'], '').substring(0,19)+'Z')).toLocaleDateString(this.props.stripes.locale)} />
+                <KeyValue label="Date enrolled" value={new Date(Date.parse(_.get(user, ['enrollmentDate'], ''))).toLocaleDateString(this.props.stripes.locale)} />
               </Col>
             </Row>
             <Row>
               <Col xs={12}>
-                <KeyValue label="Expiration date" value={new Date(Date.parse(_.get(user, ['expirationDate'], '').substring(0,19)+'Z')).toLocaleDateString(this.props.stripes.locale)} />
+                <KeyValue label="Expiration date" value={new Date(Date.parse(_.get(user, ['expirationDate'], ''))).toLocaleDateString(this.props.stripes.locale)} />
               </Col>
             </Row>
             <Row>
