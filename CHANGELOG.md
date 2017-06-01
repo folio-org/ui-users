@@ -6,8 +6,8 @@
 * Patron-group filters are driven from what is in the database. Fixes UIU-32.
 * Settings panes are sorted alphabetically. Fixes ui-users bit of STRIPES-358.
 * Status of new users defaults to 'active'. Fixes UIU-2.
-* Towards working correctly against mod-users v10.x, which rejects records containing unrecognised fields:
-  * Patron-groups no longer contain the unsupported `inUse` field. Fixes UIU-43.
+* Towards 
+* Patron-groups no longer contain the unsupported `inUse` field. This means these records work correctly against mod-users v10.x, which rejects records containing unrecognised fields. Fixes UIU-43.
 * Delete patron-group action is always available. Fixes UIU-42.
 * When adding permissions, only "logical permissions" (those with `visible:true`) are displayed as available to add. (But when the `listInvisiblePerms` setting is true, all permissions are still listed, as before). Fixes UIU-30.
 
