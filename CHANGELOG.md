@@ -1,15 +1,23 @@
 # Change history for ui-users
 
-## IN PROGRESS
-* Okapi interface dependency updates: users:10.0, circulation:1.0, permissions:3.0
-* User metadata extended in detailed view and form. UIU-28. 
-* Patron-group filters are driven from what is in the database. Fixes UIU-32.
-* Settings panes are sorted alphabetically. Fixes ui-users bit of STRIPES-358.
+## [2.1.0](https://github.com/folio-org/ui-users/tree/v2.1.0) (2017-06-01)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.0.0...v2.1.0)
+
+* User metadata extended in detailed view and form: add support for new middle name, phone, mobile phone, date-of-birth, date-enrolled, expiration-date, barcode, FOLIO record-number and external system ID fields. Fixes UIU-28.
+* Use new `Datepicker` component on user form. Related to LIBAPP-87.
 * Status of new users defaults to 'active'. Fixes UIU-2.
-* Towards 
+* Patron-group filters are driven from what is in the database. Fixes UIU-32.
+* Change old snake-case fieldnames to new camel-case (e.g. `firstName` instead of `first_name`) to match what's used by mod-users v10.x.
+* When adding permissions to user or a set, only "logical permissions" (those with `visible:true`) are displayed as available to add. (But when the `listInvisiblePerms` setting is true, all permissions are still listed, as before). Fixes UIU-30.
+* Towards better support for infinite-scroll paging. Not yet complete. Towards STRIPES-361.
+* Settings panes are sorted alphabetically. Fixes the ui-users part of STRIPES-358.
 * Patron-groups no longer contain the unsupported `inUse` field. This means these records work correctly against mod-users v10.x, which rejects records containing unrecognised fields. Fixes UIU-43.
 * Delete patron-group action is always available. Fixes UIU-42.
-* When adding permissions, only "logical permissions" (those with `visible:true`) are displayed as available to add. (But when the `listInvisiblePerms` setting is true, all permissions are still listed, as before). Fixes UIU-30.
+* When a new permission-set is created, it is highlighted. Fixes UIU-1.
+* Get Okapi token information from new `okapi` prop rather than context.
+* Upgrade dependencies: stripes-components v0.10.0, stripes-core v1.8.0.
+* Remove unused `ModuleDescriptor.json`; move relevant information into `package.json`, whence we hope future toold will extract it.
+* Add Okapi interface dependencies to `package.json`: users v10.0, circulation v1.0 and permissions v3.0.
 
 ## [2.0.0](https://github.com/folio-org/ui-users/tree/v2.0.0) (2017-05-11)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v1.4.0...v2.0.0)
