@@ -100,10 +100,6 @@ class PermissionSets extends Component {
   }
 
   createNewPermissionSet() {
-    this.setState({
-      lastPermissionSets: _.cloneDeep(this.props.data.permissionSets),
-    });
-
     this.props.mutator.permissionSets.POST({
       mutable: true,
     });
