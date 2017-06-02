@@ -116,7 +116,7 @@ class ViewUser extends Component {
     const { data: { selUser, patronGroups }, match: { params: { userid } } } = this.props;
 
     const detailMenu = (<PaneMenu>
-      <IfPermission {...this.props} perm="users.item.put">
+      <IfPermission perm="users.item.put">
         <button onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button>
       </IfPermission>
     </PaneMenu>);
@@ -236,10 +236,10 @@ class ViewUser extends Component {
         </Row>
         <MultiColumnList fullWidth contentData={fineHistory} />
         <hr />
-        <IfPermission {...this.props} perm="circulation.loans.collection.get">
+        <IfPermission perm="circulation.loans.collection.get">
           <this.connectedUserLoans onClickViewLoansHistory={this.onClickViewLoansHistory} {...this.props} />
         </IfPermission>
-        <IfPermission {...this.props} perm="perms.users.get">
+        <IfPermission perm="perms.users.get">
           <this.connectedUserPermissions stripes={this.props.stripes} match={this.props.match} {...this.props} />
         </IfPermission>
         <Layer isOpen={this.state.editUserMode} label="Edit User Dialog">

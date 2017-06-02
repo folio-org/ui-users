@@ -111,9 +111,9 @@ class PermissionSets extends Component {
     ) : [];
 
     const PermissionsSetsLastMenu = (
-      <IfPermission {...this.props} perm="perms.permissions.item.post">
+      <IfPermission perm="perms.permissions.item.post">
         {/* In practice, there is point letting someone create a set if they can't set its name */}
-        <IfPermission {...this.props} perm="perms.permissions.item.put">
+        <IfPermission perm="perms.permissions.item.put">
           <PaneMenu>
             <button title="Add Permission Set" onClick={this.createNewPermissionSet}>
               <Icon icon="plus-sign" />
