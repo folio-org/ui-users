@@ -306,9 +306,9 @@ class Users extends React.Component {
         <Pane defaultWidth="16%" header={searchHeader}>
           <FilterGroups config={filterConfig} filters={this.state.filters} onChangeFilter={this.onChangeFilter} />
           <FilterControlGroup label="Actions">
-            <IfPermission {...this.props} perm="users.item.post">
-              <IfPermission {...this.props} perm="login.item.post">
-                <IfPermission {...this.props} perm="perms.users.item.post">
+            <IfPermission perm="users.item.post">
+              <IfPermission perm="login.item.post">
+                <IfPermission perm="perms.users.item.post">
                   <Button fullWidth onClick={this.onClickAddNewUser}>New user</Button>
                 </IfPermission>
               </IfPermission>
