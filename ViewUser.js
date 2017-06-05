@@ -24,6 +24,7 @@ class ViewUser extends Component {
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func.isRequired,
       connect: PropTypes.func.isRequired,
+      locale: PropTypes.string.isRequired,
     }).isRequired,
     paneWidth: PropTypes.string.isRequired,
     data: PropTypes.shape({
@@ -39,6 +40,7 @@ class ViewUser extends Component {
       path: PropTypes.string.isRequired,
     }).isRequired,
     onClose: PropTypes.func,
+    okapi: PropTypes.object,
   };
 
   static manifest = Object.freeze({
@@ -114,7 +116,7 @@ class ViewUser extends Component {
     const { data: { selUser, patronGroups }, match: { params: { userid } } } = this.props;
 
     const detailMenu = (<PaneMenu>
-      <IfPermission {...this.props} perm="users.item.put">
+      <IfPermission perm="users.item.put">
         <button onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button>
       </IfPermission>
     </PaneMenu>);
@@ -125,15 +127,15 @@ class ViewUser extends Component {
     if (!user) return <div />;
     const userStatus = (_.get(user, ['active'], '') ? 'active' : 'inactive');
     const patronGroupId = _.get(user, ['patronGroup'], '');
-    const patron_group = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
+    const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
 
     return (
       <Pane defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
         <Row>
-          <Col xs={8} >
+          <Col xs={7} >
             <Row>
               <Col xs={12}>
-                <h2>{_.get(user, ['personal', 'lastName'], '')}, {_.get(user, ['personal', 'firstName'], '')}</h2>
+                <h2>{_.get(user, ['personal', 'lastName'], '')}, {_.get(user, ['personal', 'firstName'], '')} {_.get(user, ['personal', 'middleName'], '')}</h2>
               </Col>
             </Row>
             <Row>
@@ -156,12 +158,60 @@ class ViewUser extends Component {
             <br />
             <Row>
               <Col xs={12}>
-                <KeyValue label="Patron group" value={patron_group.group} />
+                <KeyValue label="Phone" value={_.get(user, ['personal', 'phone'], '')} />
+              </Col>
+            </Row>
+            <br />
+            <Row>
+              <Col xs={12}>
+                <KeyValue label="Mobile phone" value={_.get(user, ['personal', 'mobilePhone'], '')} />
+              </Col>
+            </Row>
+            <br />
+            <Row>
+              <Col xs={12}>
+                <KeyValue label="Date of birth" value={(_.get(user, ['personal', 'dateOfBirth'], '')) ? new Date(Date.parse(_.get(user, ['personal', 'dateOfBirth'], ''))).toLocaleDateString(this.props.stripes.locale) : ''} />
+              </Col>
+            </Row>
+            <br />
+            <Row>
+              <Col xs={12}>
+                <KeyValue label="Patron group" value={patronGroup.desc} />
               </Col>
             </Row>
           </Col>
-          <Col xs={4} >
-            <img className="floatEnd" src="http://placehold.it/175x175" role="presentation" />
+          <Col xs={5} >
+            <Row>
+              <Col xs={12}>
+                <img className="floatEnd" src="http://placehold.it/175x175" role="presentation" />
+              </Col>
+            </Row>
+            <br />
+            <Row>
+              <Col xs={12}>
+                <KeyValue label="Date enrolled" value={(_.get(user, ['enrollmentDate'],'')) ? new Date(Date.parse(_.get(user, ['enrollmentDate'], ''))).toLocaleDateString(this.props.stripes.locale) : ''} />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12}>
+                <KeyValue label="Expiration date" value={(_.get(user, ['expirationDate'],'')) ? new Date(Date.parse(_.get(user, ['expirationDate'], ''))).toLocaleDateString(this.props.stripes.locale) : ''} />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12}>
+                <KeyValue label="Bar code" value={_.get(user, ['barcode'], '')} />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12}>
+                <KeyValue label="FOLIO record number" value={_.get(user, ['id'], '')} />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12}>
+                <KeyValue label="External System ID" value={_.get(user, ['externalSystemId'], '')} />
+              </Col>
+            </Row>
           </Col>
         </Row>
         <br />
@@ -186,10 +236,10 @@ class ViewUser extends Component {
         </Row>
         <MultiColumnList fullWidth contentData={fineHistory} />
         <hr />
-        <IfPermission {...this.props} perm="circulation.loans.collection.get">
+        <IfPermission perm="circulation.loans.collection.get">
           <this.connectedUserLoans onClickViewLoansHistory={this.onClickViewLoansHistory} {...this.props} />
         </IfPermission>
-        <IfPermission {...this.props} perm="perms.users.get">
+        <IfPermission perm="perms.users.get">
           <this.connectedUserPermissions stripes={this.props.stripes} match={this.props.match} {...this.props} />
         </IfPermission>
         <Layer isOpen={this.state.editUserMode} label="Edit User Dialog">
@@ -197,6 +247,7 @@ class ViewUser extends Component {
             initialValues={_.merge(user, { available_patron_groups: this.props.data.patronGroups })}
             onSubmit={(record) => { this.update(record); }}
             onCancel={this.onClickCloseEditUser}
+            okapi={this.props.okapi}
           />
         </Layer>
         <Layer isOpen={this.state.viewLoansHistoryMode} label="Loans History">

@@ -69,7 +69,7 @@ class PatronGroupsSettings extends React.Component {
 
   render() {
     const suppressor = {
-      delete: item => item.inUse, // suppress delete action based on 'inUse' prop
+      delete: item => true,
       edit: () => false, // suppress all editting of existing items...
     };
 
@@ -84,7 +84,7 @@ class PatronGroupsSettings extends React.Component {
             label="Patron Groups"
             createButtonLabel="+ Add group"
             visibleFields={['group', 'desc']}
-            itemTemplate={{ group: 'string', id: 'string', desc: 'string', inUse: 'bool' }}
+            itemTemplate={{ group: 'string', id: 'string', desc: 'string' }}
             actionSuppression={suppressor}
             onUpdate={this.onUpdateGroup}
             onCreate={this.onCreateGroup}

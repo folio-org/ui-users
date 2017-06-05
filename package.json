@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -16,7 +16,12 @@
     "displayName": "Users",
     "route": "/users",
     "home": "/users?filters=active.Active",
-    "hasSettings": true
+    "hasSettings": true,
+    "okapiInterfaces": {
+      "users": "10.0",
+      "circulation": "1.0",
+      "permissions": "3.0"
+    }
   },
   "scripts": {
     "lint": "eslint *.js lib settings || true"
@@ -37,7 +42,7 @@
     "eslint-plugin-react": "^6.4.1"
   },
   "dependencies": {
-    "@folio/stripes-components": "^0.7.0",
+    "@folio/stripes-components": "^0.10.0",
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.17.4",
     "query-string": "^4.3.2",
@@ -47,7 +52,7 @@
     "redux-form": "^6.1.1"
   },
   "peerDependencies": {
-    "@folio/stripes-connect": "^1.0.0",
-    "@folio/stripes-core": "^1.1.0"
+    "@folio/stripes-connect": "^2.1.0",
+    "@folio/stripes-core": "^1.8.0"
   }
 }

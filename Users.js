@@ -15,13 +15,17 @@ import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import FilterPaneSearch from '@folio/stripes-components/lib/FilterPaneSearch';
 import FilterControlGroup from '@folio/stripes-components/lib/FilterControlGroup';
 import Layer from '@folio/stripes-components/lib/Layer';
-import FilterGroups, { initialFilterState, onChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
+import FilterGroups, { initialFilterState, onChangeFilter as commonChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
+
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
 import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
 import IfPermission from '@folio/stripes-components/lib/IfPermission';
 
 import UserForm from './UserForm';
 import ViewUser from './ViewUser';
+
+const INITIAL_RESULT_COUNT = 30;
+const RESULT_COUNT_INCREMENT = 30;
 
 const filterConfig = [
   {
@@ -36,20 +40,12 @@ const filterConfig = [
   {
     label: 'Patron group',
     name: 'pg',
-    cql: 'patron_group',
-    values: [
-      { name: 'On-campus', cql: 'on_campus' },
-      { name: 'Off-campus', cql: 'off_campus' },
-      { name: 'Other', cql: 'other' },
-    ],
+    cql: 'patronGroup',
+    values: [], // will be filled in by componentWillUpdate
   },
 ];
 
 class Users extends React.Component {
-  static contextTypes = {
-    store: PropTypes.object,
-  };
-
   static propTypes = {
     stripes: PropTypes.shape({
       logger: PropTypes.shape({
@@ -73,15 +69,23 @@ class Users extends React.Component {
       addUserMode: PropTypes.shape({
         replace: PropTypes.func,
       }),
+      userCount: PropTypes.shape({
+        replace: PropTypes.func,
+      }),
       users: PropTypes.shape({
         POST: PropTypes.func,
       }),
+    }).isRequired,
+    okapi: PropTypes.shape({
+      url: PropTypes.string.isRequired,
+      tenant: PropTypes.string.isRequired,
+      token: PropTypes.string.isRequired,
     }).isRequired,
   };
 
   static manifest = Object.freeze({
     addUserMode: {},
-    userCount: { initialValue: 30 },
+    userCount: { initialValue: INITIAL_RESULT_COUNT },
     users: {
       type: 'okapi',
       records: 'users',
@@ -92,11 +96,11 @@ class Users extends React.Component {
         params: {
           query: makeQueryFunction(
             'username=*',
-            'username="$QUERY*" or personal.first_name="$QUERY*" or personal.last_name="$QUERY*"',
+            'username="$QUERY*" or personal.firstName="$QUERY*" or personal.lastName="$QUERY*"',
             {
               Active: 'active',
-              Name: 'personal.last_name personal.first_name',
-              'Patron Group': 'patron_group',
+              Name: 'personal.lastName personal.firstName',
+              'Patron Group': 'patronGroup',
               'User ID': 'username',
               Email: 'personal.email',
             },
@@ -113,7 +117,7 @@ class Users extends React.Component {
     },
   });
 
-  constructor(props, context) {
+  constructor(props) {
     super(props);
 
     const query = props.location.search ? queryString.parse(props.location.search) : {};
@@ -124,21 +128,10 @@ class Users extends React.Component {
       sortOrder: query.sort || '',
     };
 
-    this.okapi = context.store.getState().okapi;
+    this.okapi = props.okapi;
 
-    this.onClearSearch = this.onClearSearch.bind(this);
-    this.onSort = this.onSort.bind(this);
-    this.onSelectRow = this.onSelectRow.bind(this);
-    this.onClickAddNewUser = this.onClickAddNewUser.bind(this);
-    this.onClickCloseNewUser = this.onClickCloseNewUser.bind(this);
-    this.onChangeSearch = this.onChangeSearch.bind(this);
-    this.performSearch = this.performSearch.bind(this); // For now, prefer instant response
-    // this.performSearch = _.debounce(this.performSearch.bind(this), 250);
-
-    this.onChangeFilter = onChangeFilter.bind(this);
+    this.commonChangeFilter = commonChangeFilter.bind(this);
     this.transitionToParams = transitionToParams.bind(this);
-
-    this.collapseDetails = this.collapseDetails.bind(this);
     this.connectedViewUser = props.stripes.connect(ViewUser);
     const logger = props.stripes.logger;
     this.log = logger.log.bind(logger);
@@ -148,20 +141,27 @@ class Users extends React.Component {
     if (_.isEmpty(this.props.data.addUserMode)) this.props.mutator.addUserMode.replace({ mode: false });
   }
 
-  onClearSearch() {
+  componentWillUpdate() {
+    const pg = this.props.data.patronGroups;
+    if (pg && pg.length) {
+      filterConfig[1].values = pg.map(rec => ({ name: rec.desc, cql: rec.id }));
+    }
+  }
+
+  onClearSearch = () => {
     this.log('action', 'cleared search');
     this.setState({ searchTerm: '' });
     this.props.history.push(this.props.location.pathname);
   }
 
-  onSort(e, meta) {
+  onSort = (e, meta) => {
     const sortOrder = meta.alias;
     this.log('action', `sorted by ${sortOrder}`);
     this.setState({ sortOrder });
     this.transitionToParams({ sort: sortOrder });
   }
 
-  onSelectRow(e, meta) {
+  onSelectRow = (e, meta) => {
     const userId = meta.id;
     const username = meta.username;
     this.log('action', `clicked ${userId}, selected user =`, meta);
@@ -169,38 +169,44 @@ class Users extends React.Component {
     this.props.history.push(`/users/view/${userId}/${username}${this.props.location.search}`);
   }
 
-  onClickAddNewUser(e) {
+  onClickAddNewUser = (e) => {
     if (e) e.preventDefault();
     this.log('action', 'clicked "add new user"');
     this.props.mutator.addUserMode.replace({ mode: true });
   }
 
-  onClickCloseNewUser(e) {
+  onClickCloseNewUser = (e) => {
     if (e) e.preventDefault();
     this.log('action', 'clicked "close new user"');
     this.props.mutator.addUserMode.replace({ mode: false });
   }
 
-  onChangeSearch(e) {
+  onChangeFilter = (e) => {
+    this.props.mutator.userCount.replace(INITIAL_RESULT_COUNT);
+    this.commonChangeFilter(e);
+  }
+
+  onChangeSearch = (e) => {
     const query = e.target.value;
+    this.props.mutator.userCount.replace(INITIAL_RESULT_COUNT);
     this.setState({ searchTerm: query });
     this.performSearch(query);
   }
 
   onNeedMore = () => {
-    this.props.mutator.userCount.replace(this.props.data.userCount + 30);
+    this.props.mutator.userCount.replace(this.props.data.userCount + RESULT_COUNT_INCREMENT);
   }
 
-  performSearch(query) {
+  performSearch = _.debounce((query) => {
     this.log('action', `searched for '${query}'`);
     this.transitionToParams({ query });
-  }
+  }, 150);
 
-  updateFilters(filters) { // provided for onChangeFilter
+  updateFilters = (filters) => { // provided for onChangeFilter
     this.transitionToParams({ filters: Object.keys(filters).filter(key => filters[key]).join(',') });
   }
 
-  create(data) {
+  create = (data) => {
     // extract creds object from user object
     const creds = Object.assign({}, data.creds, { username: data.username });
     if (data.creds) delete data.creds; // eslint-disable-line no-param-reassign
@@ -212,7 +218,7 @@ class Users extends React.Component {
     this.onClickCloseNewUser();
   }
 
-  postCreds(username, creds) {
+  postCreds = (username, creds) => {
     this.log('xhr', `POST credentials for new user '${username}':`, creds);
     fetch(`${this.okapi.url}/authn/credentials`, {
       method: 'POST',
@@ -232,7 +238,7 @@ class Users extends React.Component {
     });
   }
 
-  postPerms(username, perms) {
+  postPerms = (username, perms) => {
     this.log('xhr', `POST permissions for new user '${username}':`, perms);
     fetch(`${this.okapi.url}/perms/users`, {
       method: 'POST',
@@ -247,7 +253,7 @@ class Users extends React.Component {
     });
   }
 
-  collapseDetails() {
+  collapseDetails = () => {
     this.setState({
       selectedItem: {},
     });
@@ -266,15 +272,8 @@ class Users extends React.Component {
       Active: user => user.active,
       Name: user => `${_.get(user, ['personal', 'lastName'], '')}, ${_.get(user, ['personal', 'firstName'], '')}`,
       'Patron Group': (user) => {
-        const map = {
-          on_campus: 'On-campus',
-          off_campus: 'Off-campus',
-          other: 'Other',
-        };
-        const maybe = map[user.patronGroup];
-        if (maybe) return maybe;
         const pg = data.patronGroups.filter(g => g.id === user.patronGroup)[0];
-        return pg ? pg.group : '?';
+        return pg ? pg.desc : '?';
       },
       'User ID': user => user.username,
       Email: user => _.get(user, ['personal', 'email']),
@@ -284,7 +283,7 @@ class Users extends React.Component {
       this.props.stripes.hasPerm('users.item.get') ?
         (<Route
           path={`${this.props.match.path}/view/:userid/:username`}
-          render={props => <this.connectedViewUser stripes={stripes} paneWidth="44%" onClose={this.collapseDetails} {...props} />}
+          render={props => <this.connectedViewUser stripes={stripes} okapi={this.okapi} paneWidth="44%" onClose={this.collapseDetails} {...props} />}
         />) :
         (<div
           style={{
@@ -307,9 +306,9 @@ class Users extends React.Component {
         <Pane defaultWidth="16%" header={searchHeader}>
           <FilterGroups config={filterConfig} filters={this.state.filters} onChangeFilter={this.onChangeFilter} />
           <FilterControlGroup label="Actions">
-            <IfPermission {...this.props} perm="users.item.post">
-              <IfPermission {...this.props} perm="login.item.post">
-                <IfPermission {...this.props} perm="perms.users.item.post">
+            <IfPermission perm="users.item.post">
+              <IfPermission perm="login.item.post">
+                <IfPermission perm="perms.users.item.post">
                   <Button fullWidth onClick={this.onClickAddNewUser}>New user</Button>
                 </IfPermission>
               </IfPermission>
@@ -350,6 +349,7 @@ class Users extends React.Component {
             initialValues={{ available_patron_groups: this.props.data.patronGroups }}
             onSubmit={(record) => { this.create(record); }}
             onCancel={this.onClickCloseNewUser}
+            okapi={this.okapi}
           />
         </Layer>
       </Paneset>

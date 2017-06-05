@@ -10,6 +10,7 @@ import TextField from '@folio/stripes-components/lib/TextField';
 import Select from '@folio/stripes-components/lib/Select';
 import RadioButtonGroup from '@folio/stripes-components/lib/RadioButtonGroup';
 import RadioButton from '@folio/stripes-components/lib/RadioButton';
+import Datepicker from '@folio/stripes-components/lib/Datepicker';
 import fetch from 'isomorphic-fetch';
 
 
@@ -66,10 +67,6 @@ function asyncValidate(values, dispatch, props, blurredField) {
 
 class UserForm extends React.Component {
 
-  static contextTypes = {
-    store: PropTypes.object,
-  };
-
   static propTypes = {
     onClose: PropTypes.func, // eslint-disable-line react/no-unused-prop-types
     newUser: PropTypes.bool, // eslint-disable-line react/no-unused-prop-types
@@ -79,11 +76,12 @@ class UserForm extends React.Component {
     submitting: PropTypes.bool,
     onCancel: PropTypes.func,
     initialValues: PropTypes.object,
+    okapi: PropTypes.object,
   };
 
-  constructor(props, context) {
+  constructor(props) {
     super(props);
-    okapiToken = context.store.getState().okapi.token;
+    okapiToken = props.okapi.token;
   }
 
   render() {
@@ -101,10 +99,10 @@ class UserForm extends React.Component {
     const addUserLastMenu = <PaneMenu><Button type="submit" title="Create New User" disabled={pristine || submitting} onClick={handleSubmit}>Create User</Button></PaneMenu>;
     const editUserLastMenu = <PaneMenu><Button type="submit" title="Update User" disabled={pristine || submitting} onClick={handleSubmit}>Update User</Button></PaneMenu>;
     const patronGroupOptions = (initialValues.available_patron_groups || []).map(g => ({
-      label: g.group, value: g.id, selected: initialValues.patronGroup === g.id }));
+      label: g.desc, value: g.id, selected: initialValues.patronGroup === g.id }));
 
     return (
-      <form>
+      <form style={{height: "100%", overflow: 'auto'}}>
         <Paneset isRoot>
           <Pane defaultWidth="100%" firstMenu={addUserFirstMenu} lastMenu={initialValues.username ? editUserLastMenu : addUserLastMenu} paneTitle={initialValues.username ? 'Edit User' : 'New User'}>
             <Row>
@@ -119,9 +117,19 @@ class UserForm extends React.Component {
                 <fieldset>
                   <legend>Personal Info</legend>
                   <Field label="First Name" name="personal.firstName" id="adduser_firstname" component={TextField} required fullWidth />
+                  <Field label="Middle Name" name="personal.middleName" id="adduser_middlename" component={TextField} fullWidth />
                   <Field label="Last Name" name="personal.lastName" id="adduser_lastname" component={TextField} fullWidth />
                   <Field label="Email" name="personal.email" id="adduser_email" component={TextField} required fullWidth />
+                  <Field label="Phone" name="personal.phone" id="adduser_phone" component={TextField} fullWidth />
+                  <Field label="Mobile Phone" name="personal.mobilePhone" id="adduser_mobilePhone" component={TextField} fullWidth />
                 </fieldset>
+                <Field
+                  component={Datepicker}
+                  label="Date of Birth"
+                  dateFormat="YYYY-MM-DD"
+                  name="personal.dateOfBirth"
+                  id="adduser_dateofbirth"
+                />
                 {/* <Field
                   label="Type"
                   name="type"
@@ -139,6 +147,23 @@ class UserForm extends React.Component {
                   fullWidth
                   dataOptions={[{ label: 'Select patron group', value: null }, ...patronGroupOptions]}
                 />
+                <Field
+                  component={Datepicker}
+                  label="Date Enrolled"
+                  dateFormat="YYYY-MM-DD"
+                  name="enrollmentDate"
+                  id="adduser_enrollmentdate"
+                />
+                <Field
+                  component={Datepicker}
+                  label="Expiration Date"
+                  dateFormat="YYYY-MM-DD"
+                  name="expirationDate"
+                  id="adduser_expirationdate"
+                />
+                <Field label="Bar Code" name="barcode" id="adduser_barcode" component={TextField} fullWidth />
+                <Field label="FOLIO Record Number" name="id" id="adduser_id" readOnly="true" component={TextField} fullWidth />
+                <Field label="External System ID" name="externalSystemId" id="adduser_externalsystemid" component={TextField} fullWidth />
               </Col>
             </Row>
           </Pane>

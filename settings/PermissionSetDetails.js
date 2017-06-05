@@ -89,7 +89,7 @@ class PermissionSetDetails extends Component {
     const disabled = !stripes.hasPerm('perms.permissions.item.put');
 
     return (
-      <Pane paneTitle={`Permission Set ${selectedSet.displayName || selectedSet.permissionName}`} defaultWidth="fill" fluidContentWidth>
+      <Pane paneTitle={`${selectedSet.displayName || 'Untitled'}`} defaultWidth="fill" fluidContentWidth>
         <form>
 
           <section>
@@ -98,7 +98,7 @@ class PermissionSetDetails extends Component {
             <Field label="Description" name="description" id="permissionset_description" component={TextArea} validate={this.validateSet} onBlur={this.saveSet} required fullWidth rounded disabled={disabled} />
           </section>
 
-          <IfPermission {...this.props} perm="perms.permissions.item.delete">
+          <IfPermission perm="perms.permissions.item.delete">
             <Button title="Delete Permission Set" onClick={this.beginDelete} disabled={this.state.confirmDelete}> Delete Set </Button>
           </IfPermission>
           {this.state.confirmDelete && <div>

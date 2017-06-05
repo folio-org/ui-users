@@ -1,6 +1,7 @@
 // We have to remove node_modules/react to avoid having multiple copies loaded.
 // eslint-disable-next-line import/no-unresolved
 import React, { Component, PropTypes } from 'react';
+
 import _ from 'lodash';
 
 import Paneset from '@folio/stripes-components/lib/Paneset';
@@ -50,37 +51,57 @@ class PermissionSets extends Component {
     super(props);
 
     // 'Manager' just for example...
+
     this.state = {
       selectedSet: null,
     };
+
+    this.navList = null;
 
     this.onSelectSet = this.onSelectSet.bind(this);
     this.createNewPermissionSet = this.createNewPermissionSet.bind(this);
     this.clearSelection = this.clearSelection.bind(this);
   }
 
+  componentDidUpdate(prevProps) {
+    const permSetsDiffs = _.differenceBy(this.props.data.permissionSets, prevProps.data.permissionSets, 'id');
+    const newPermSet = permSetsDiffs[0];
+
+    if (newPermSet && !newPermSet.pendingCreate) {
+      // At this point in the lifecycle the CID is still on the object, and
+      // this messes up the saveing of the Permission Set. It should not be needed any longer
+      // and will be removed.
+      delete newPermSet._cid;
+
+      this.setState({
+        selectedSet: newPermSet,
+      });
+    }
+  }
+
   onSelectSet(e) {
     e.preventDefault();
-    const href = e.target.href;
-    const permissionName = href.substring(href.indexOf('#') + 1);
-    let selectedSet = null;
+    const permissionId = e.target.dataset.id;
     _.forEach(this.props.data.permissionSets, (set) => {
-      if (set.permissionName === permissionName) selectedSet = set;
+      if (set.id === permissionId) {
+        this.setSelectedSet(set);
+      }
     });
-    this.setState({ selectedSet });
+  }
+
+  setSelectedSet(set) {
+    this.setState({
+      selectedSet: set,
+    });
+  }
+
+  clearSelection() {
+    this.setSelectedSet(null);
   }
 
   createNewPermissionSet() {
     this.props.mutator.permissionSets.POST({
       mutable: true,
-    }).then(() => {
-      this.clearSelection();
-    });
-  }
-
-  clearSelection() {
-    this.setState({
-      selectedSet: null,
     });
   }
 
@@ -90,9 +111,9 @@ class PermissionSets extends Component {
     ) : [];
 
     const PermissionsSetsLastMenu = (
-      <IfPermission {...this.props} perm="perms.permissions.item.post">
+      <IfPermission perm="perms.permissions.item.post">
         {/* In practice, there is point letting someone create a set if they can't set its name */}
-        <IfPermission {...this.props} perm="perms.permissions.item.put">
+        <IfPermission perm="perms.permissions.item.put">
           <PaneMenu>
             <button title="Add Permission Set" onClick={this.createNewPermissionSet}>
               <Icon icon="plus-sign" />
@@ -106,7 +127,7 @@ class PermissionSets extends Component {
       <Paneset nested>
         <Pane defaultWidth="20%" lastMenu={PermissionsSetsLastMenu}>
           <NavList>
-            <NavListSection activeLink={this.state.selectedSet ? `#${this.state.selectedSet.title}` : ''}>
+            <NavListSection activeLink={this.state.selectedSet ? `#${this.state.selectedSet.id}` : ''}>
               {RenderedPermissionSets}
             </NavListSection>
           </NavList>
