@@ -3,6 +3,8 @@
 ## IN PROGRESS
 
 * New users default to active=true, not only in the form but in the record that gets created. Fixes UI-46, and also UIU-2 (properly this time).
+* Newly created permission sets are imediately selected. Related to UIU-1.
+* The header for the permission set details pane now reads "Untitled" when aplicable and never displays the permission set ID. Related to UIU-41.
 
 ## [2.1.0](https://github.com/folio-org/ui-users/tree/v2.1.0) (2017-06-01)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.0.0...v2.1.0)
