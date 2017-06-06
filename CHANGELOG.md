@@ -2,11 +2,11 @@
 
 ## 2.3.0 IN PROGRESS
 
-* The editMode boolean is now in a stripes-core local resource instead of a piece of React component state. This makes edit-mode persistent because it's in the Redux store -- so navigating away from an edit-user page to another app, then returning to the Users app, will remain in edit mode. Fixes the ui-users half of scenario 3 of STRIPES-362.
-* New users no longer get 'usergroups.collection.get' and 'module.trivial.enabled' permissions. Part of MODUSERBL-5.
+* The editMode boolean is now in a stripes-core local resource instead of a piece of React component state. This makes edit-mode persistent because it's in the Redux store -- so navigating away from an edit-user page to another app, then returning to the Users app, will remain in edit mode. Fixes UIU-62.
+* New users no longer get 'usergroups.collection.get' and 'module.trivial.enabled' permissions. Fixes UIU-61.
 * Default to sorting by name (i.e. surname, first name). Fixes UIU-51.
-* Require stripes-components v0.10.1.
 * Make patron-group mandatory. Fixes UIU-45.
+* Require stripes-components v0.10.1.
 
 ## [2.2.0](https://github.com/folio-org/ui-users/tree/v2.2.0) (2017-06-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.1.0...v2.2.0)
