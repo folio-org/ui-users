@@ -231,8 +231,6 @@ class Users extends React.Component {
         this.postPerms(username, [
           'users.collection.get',       // so the user can search for his own user record after login
           'perms.permissions.get',      // so the user can fetch his own permissions after login
-          'usergroups.collection.get',  // so patron groups can be listed in the Users module
-          'module.trivial.enabled',     // so that at least one module is available to new users
         ]);
       }
     });
