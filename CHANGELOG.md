@@ -6,6 +6,7 @@
 * New users no longer get 'usergroups.collection.get' and 'module.trivial.enabled' permissions. Fixes UIU-61.
 * Default to sorting by name (i.e. surname, first name). Fixes UIU-51.
 * Make patron-group mandatory. Fixes UIU-45.
+* Use patron-group name rather than description throughout (in facets, list, display, edit-form). Fixes UIU-56.
 * Require stripes-components v0.10.1.
 
 ## [2.2.0](https://github.com/folio-org/ui-users/tree/v2.2.0) (2017-06-05)
