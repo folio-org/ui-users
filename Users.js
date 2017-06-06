@@ -144,7 +144,7 @@ class Users extends React.Component {
   componentWillUpdate() {
     const pg = this.props.data.patronGroups;
     if (pg && pg.length) {
-      filterConfig[1].values = pg.map(rec => ({ name: rec.desc, cql: rec.id }));
+      filterConfig[1].values = pg.map(rec => ({ name: rec.group, cql: rec.id }));
     }
   }
 
@@ -271,7 +271,7 @@ class Users extends React.Component {
       Name: user => `${_.get(user, ['personal', 'lastName'], '')}, ${_.get(user, ['personal', 'firstName'], '')}`,
       'Patron Group': (user) => {
         const pg = data.patronGroups.filter(g => g.id === user.patronGroup)[0];
-        return pg ? pg.desc : '?';
+        return pg ? pg.group : '?';
       },
       'User ID': user => user.username,
       Email: user => _.get(user, ['personal', 'email']),

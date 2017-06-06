@@ -181,7 +181,7 @@ class ViewUser extends Component {
             <br />
             <Row>
               <Col xs={12}>
-                <KeyValue label="Patron group" value={patronGroup.desc} />
+                <KeyValue label="Patron group" value={patronGroup.group} />
               </Col>
             </Row>
           </Col>
