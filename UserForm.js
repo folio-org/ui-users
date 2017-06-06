@@ -100,6 +100,9 @@ class UserForm extends React.Component {
     const editUserLastMenu = <PaneMenu><Button type="submit" title="Update User" disabled={pristine || submitting} onClick={handleSubmit}>Update User</Button></PaneMenu>;
     const patronGroupOptions = (initialValues.available_patron_groups || []).map(g => ({
       label: g.desc, value: g.id, selected: initialValues.patronGroup === g.id }));
+    const contactTypeOptions = (initialValues.contactTypes || []).map(g => ({
+      label: g.desc, value: g.id, selected: initialValues.preferredContactTypeId === g.id }));
+
 
     return (
       <form style={{height: "100%", overflow: 'auto'}}>
@@ -122,6 +125,7 @@ class UserForm extends React.Component {
                   <Field label="Email" name="personal.email" id="adduser_email" component={TextField} required fullWidth />
                   <Field label="Phone" name="personal.phone" id="adduser_phone" component={TextField} fullWidth />
                   <Field label="Mobile Phone" name="personal.mobilePhone" id="adduser_mobilePhone" component={TextField} fullWidth />
+                  <Field label="Preferred Contact" name="personal.preferredContactTypeId" id="adduser_preferredcontact" component={Select} dataOptions={[{ label: 'Select contact type', value: null }, ...contactTypeOptions ]} fullWidth />
                 </fieldset>
                 <Field
                   component={Datepicker}
