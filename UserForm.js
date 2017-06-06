@@ -31,6 +31,11 @@ function validate(values) {
   if (!values.username) {
     errors.username = 'Please fill this in to continue';
   }
+
+  if (!values.patronGroup) {
+    errors.patronGroup = 'Please select a patron group';
+  }
+
   return errors;
 }
 
