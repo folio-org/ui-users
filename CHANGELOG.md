@@ -6,6 +6,7 @@
 * New users no longer get 'usergroups.collection.get' and 'module.trivial.enabled' permissions. Part of MODUSERBL-5.
 * Default to sorting by name (i.e. surname, first name). Fixes UIU-51.
 * Require stripes-components v0.10.1.
+* Make patron-group mandatory. Fixes UIU-45.
 
 ## [2.2.0](https://github.com/folio-org/ui-users/tree/v2.2.0) (2017-06-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.1.0...v2.2.0)
