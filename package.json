@@ -15,7 +15,7 @@
     "type": "app",
     "displayName": "Users",
     "route": "/users",
-    "home": "/users?filters=active.Active",
+    "home": "/users?filters=active.Active&sort=Name",
     "hasSettings": true,
     "okapiInterfaces": {
       "users": "10.0",
