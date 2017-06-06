@@ -35,6 +35,9 @@ class ViewUser extends Component {
       selUser: React.PropTypes.shape({
         PUT: React.PropTypes.func.isRequired,
       }),
+      editMode: PropTypes.shape({
+        replace: PropTypes.func,
+      }),
     }),
     match: PropTypes.shape({
       path: PropTypes.string.isRequired,
@@ -44,6 +47,7 @@ class ViewUser extends Component {
   };
 
   static manifest = Object.freeze({
+    editMode: {},
     selUser: {
       type: 'okapi',
       path: 'users/:{userid}',
@@ -59,7 +63,6 @@ class ViewUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      editUserMode: false,
       viewLoansHistoryMode: false,
     };
     this.onClickEditUser = this.onClickEditUser.bind(this);
@@ -71,19 +74,21 @@ class ViewUser extends Component {
     this.onClickCloseLoansHistory = this.onClickCloseLoansHistory.bind(this);
   }
 
+  componentWillMount() {
+    if (_.isEmpty(this.props.data.editMode)) this.props.mutator.editMode.replace({ mode: false });
+  }
+
   // EditUser Handlers
   onClickEditUser(e) {
     if (e) e.preventDefault();
-    this.setState({
-      editUserMode: true,
-    });
+    this.props.stripes.logger.log('action', 'clicked "edit user"');
+    this.props.mutator.editMode.replace({ mode: true });
   }
 
   onClickCloseEditUser(e) {
     if (e) e.preventDefault();
-    this.setState({
-      editUserMode: false,
-    });
+    this.props.stripes.logger.log('action', 'clicked "close edit user"');
+    this.props.mutator.editMode.replace({ mode: false });
   }
 
   onClickViewLoansHistory(e) {
@@ -242,7 +247,7 @@ class ViewUser extends Component {
         <IfPermission perm="perms.users.get">
           <this.connectedUserPermissions stripes={this.props.stripes} match={this.props.match} {...this.props} />
         </IfPermission>
-        <Layer isOpen={this.state.editUserMode} label="Edit User Dialog">
+        <Layer isOpen={this.props.data.editMode ? this.props.data.editMode.mode : false} label="Edit User Dialog">
           <UserForm
             initialValues={_.merge(user, { available_patron_groups: this.props.data.patronGroups })}
             onSubmit={(record) => { this.update(record); }}
