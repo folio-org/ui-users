@@ -1,6 +1,6 @@
 # Change history for ui-users
 
-## IN PROGRESS
+## 2.3.0 IN PROGRESS
 
 * The editMode boolean is now in a stripes-core local resource instead of a piece of React component state. This makes edit-mode persistent because it's in the Redux store -- so navigating away from an edit-user page to another app, then returning to the Users app, will remain in edit mode. Fixes the ui-users half of scenario 3 of STRIPES-362.
 * New users no longer get 'usergroups.collection.get' and 'module.trivial.enabled' permissions. Part of MODUSERBL-5.
