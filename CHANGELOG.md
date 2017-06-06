@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## IN PROGRESS
+
+* The editMode boolean is now in a stripes-core local resource instead of a piece of React component state. This makes edit-mode persistent because it's in the Redux store -- so navigating away from an edit-user page to another app, then returning to the Users app, will remain in edit mode. Fixes the ui-users half of scenario 3 of STRIPES-362.
+
 ## [2.2.0](https://github.com/folio-org/ui-users/tree/v2.2.0) (2017-06-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.1.0...v2.2.0)
 
