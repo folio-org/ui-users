@@ -345,7 +345,7 @@ class Users extends React.Component {
         {detailsPane}
         <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false} label="Add New User Dialog">
           <UserForm
-            initialValues={{ active: true }}
+            initialValues={{ active: true, personal: { preferredContactTypeId: '002' }}}
             onSubmit={(record) => { this.create(record); }}
             onCancel={this.onClickCloseNewUser}
             okapi={this.okapi}
