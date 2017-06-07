@@ -71,7 +71,7 @@ class PermissionSets extends Component {
       // At this point in the lifecycle the CID is still on the object, and
       // this messes up the saveing of the Permission Set. It should not be needed any longer
       // and will be removed.
-      delete newPermSet._cid;
+      delete newPermSet._cid; // eslint-disable-line no-underscore-dangle
 
       this.setState({
         selectedSet: newPermSet,

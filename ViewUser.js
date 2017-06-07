@@ -25,11 +25,17 @@ class ViewUser extends Component {
       hasPerm: PropTypes.func.isRequired,
       connect: PropTypes.func.isRequired,
       locale: PropTypes.string.isRequired,
+      logger: PropTypes.shape({
+        log: PropTypes.func.isRequired,
+      }).isRequired,
     }).isRequired,
     paneWidth: PropTypes.string.isRequired,
     data: PropTypes.shape({
       user: PropTypes.arrayOf(PropTypes.object),
       patronGroups: PropTypes.arrayOf(PropTypes.object),
+      editMode: PropTypes.shape({
+        mode: PropTypes.bool,
+      }),
     }),
     mutator: React.PropTypes.shape({
       selUser: React.PropTypes.shape({
@@ -195,12 +201,12 @@ class ViewUser extends Component {
             <br />
             <Row>
               <Col xs={12}>
-                <KeyValue label="Date enrolled" value={(_.get(user, ['enrollmentDate'],'')) ? new Date(Date.parse(_.get(user, ['enrollmentDate'], ''))).toLocaleDateString(this.props.stripes.locale) : ''} />
+                <KeyValue label="Date enrolled" value={(_.get(user, ['enrollmentDate'], '')) ? new Date(Date.parse(_.get(user, ['enrollmentDate'], ''))).toLocaleDateString(this.props.stripes.locale) : ''} />
               </Col>
             </Row>
             <Row>
               <Col xs={12}>
-                <KeyValue label="Expiration date" value={(_.get(user, ['expirationDate'],'')) ? new Date(Date.parse(_.get(user, ['expirationDate'], ''))).toLocaleDateString(this.props.stripes.locale) : ''} />
+                <KeyValue label="Expiration date" value={(_.get(user, ['expirationDate'], '')) ? new Date(Date.parse(_.get(user, ['expirationDate'], ''))).toLocaleDateString(this.props.stripes.locale) : ''} />
               </Col>
             </Row>
             <Row>

@@ -107,7 +107,7 @@ class UserForm extends React.Component {
       label: `${g.group} (${g.desc})`, value: g.id, selected: initialValues.patronGroup === g.id }));
 
     return (
-      <form style={{height: "100%", overflow: 'auto'}}>
+      <form style={{ height: '100%', overflow: 'auto' }}>
         <Paneset isRoot>
           <Pane defaultWidth="100%" firstMenu={addUserFirstMenu} lastMenu={initialValues.username ? editUserLastMenu : addUserLastMenu} paneTitle={initialValues.username ? 'Edit User' : 'New User'}>
             <Row>
