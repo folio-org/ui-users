@@ -1,5 +1,22 @@
 # Change history for ui-users
 
+## [2.3.0](https://github.com/folio-org/ui-users/tree/v2.3.0) (2017-06-07)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.2.0...v2.3.0)
+
+* The editMode boolean is now in a stripes-core local resource instead of a piece of React component state. This makes edit-mode persistent because it's in the Redux store -- so navigating away from an edit-user page to another app, then returning to the Users app, will remain in edit mode. Fixes UIU-62.
+* New users no longer get 'usergroups.collection.get' and 'module.trivial.enabled' permissions. Fixes UIU-61.
+* Default to sorting by name (i.e. surname, first name). Fixes UIU-51.
+* Make patron-group mandatory. Fixes UIU-45.
+* Use patron-group name rather than description throughout (in facets, list, display, edit-form). Fixes UIU-56.
+* Require stripes-components v0.10.1.
+
+## [2.2.0](https://github.com/folio-org/ui-users/tree/v2.2.0) (2017-06-05)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.1.0...v2.2.0)
+
+* New users default to active=true, not only in the form but in the record that gets created. Fixes UI-46, and UI-44, and also UIU-2 (properly this time).
+* Newly created permission sets are immediately selected. Related to UIU-1.
+* The header for the permission set details pane now reads "Untitled" when applicable and never displays the permission set ID. Related to UIU-41.
+
 ## [2.1.0](https://github.com/folio-org/ui-users/tree/v2.1.0) (2017-06-01)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.0.0...v2.1.0)
 
@@ -16,7 +33,7 @@
 * When a new permission-set is created, it is highlighted. Fixes UIU-1.
 * Get Okapi token information from new `okapi` prop rather than context.
 * Upgrade dependencies: stripes-components v0.10.0, stripes-core v1.8.0.
-* Remove unused `ModuleDescriptor.json`; move relevant information into `package.json`, whence we hope future toold will extract it.
+* Remove unused `ModuleDescriptor.json`; move relevant information into `package.json`, whence we hope future tools will extract it.
 * Add Okapi interface dependencies to `package.json`: users v10.0, circulation v1.0 and permissions v3.0.
 
 ## [2.0.0](https://github.com/folio-org/ui-users/tree/v2.0.0) (2017-05-11)

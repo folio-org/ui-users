@@ -31,6 +31,11 @@ function validate(values) {
   if (!values.username) {
     errors.username = 'Please fill this in to continue';
   }
+
+  if (!values.patronGroup) {
+    errors.patronGroup = 'Please select a patron group';
+  }
+
   return errors;
 }
 
@@ -99,13 +104,12 @@ class UserForm extends React.Component {
     const addUserLastMenu = <PaneMenu><Button type="submit" title="Create New User" disabled={pristine || submitting} onClick={handleSubmit}>Create User</Button></PaneMenu>;
     const editUserLastMenu = <PaneMenu><Button type="submit" title="Update User" disabled={pristine || submitting} onClick={handleSubmit}>Update User</Button></PaneMenu>;
     const patronGroupOptions = (initialValues.available_patron_groups || []).map(g => ({
-      label: g.desc, value: g.id, selected: initialValues.patronGroup === g.id }));
+      label: `${g.group} (${g.desc})`, value: g.id, selected: initialValues.patronGroup === g.id }));
     const contactTypeOptions = (initialValues.contactTypes || []).map(g => ({
       label: g.desc, value: g.id, selected: initialValues.preferredContactTypeId === g.id }));
 
-
     return (
-      <form style={{height: "100%", overflow: 'auto'}}>
+      <form style={{ height: '100%', overflow: 'auto' }}>
         <Paneset isRoot>
           <Pane defaultWidth="100%" firstMenu={addUserFirstMenu} lastMenu={initialValues.username ? editUserLastMenu : addUserLastMenu} paneTitle={initialValues.username ? 'Edit User' : 'New User'}>
             <Row>

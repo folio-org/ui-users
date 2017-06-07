@@ -25,15 +25,24 @@ class ViewUser extends Component {
       hasPerm: PropTypes.func.isRequired,
       connect: PropTypes.func.isRequired,
       locale: PropTypes.string.isRequired,
+      logger: PropTypes.shape({
+        log: PropTypes.func.isRequired,
+      }).isRequired,
     }).isRequired,
     paneWidth: PropTypes.string.isRequired,
     data: PropTypes.shape({
       user: PropTypes.arrayOf(PropTypes.object),
       patronGroups: PropTypes.arrayOf(PropTypes.object),
+      editMode: PropTypes.shape({
+        mode: PropTypes.bool,
+      }),
     }),
     mutator: React.PropTypes.shape({
       selUser: React.PropTypes.shape({
         PUT: React.PropTypes.func.isRequired,
+      }),
+      editMode: PropTypes.shape({
+        replace: PropTypes.func,
       }),
     }),
     match: PropTypes.shape({
@@ -44,6 +53,7 @@ class ViewUser extends Component {
   };
 
   static manifest = Object.freeze({
+    editMode: {},
     selUser: {
       type: 'okapi',
       path: 'users/:{userid}',
@@ -59,7 +69,6 @@ class ViewUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      editUserMode: false,
       viewLoansHistoryMode: false,
     };
     this.onClickEditUser = this.onClickEditUser.bind(this);
@@ -71,19 +80,21 @@ class ViewUser extends Component {
     this.onClickCloseLoansHistory = this.onClickCloseLoansHistory.bind(this);
   }
 
+  componentWillMount() {
+    if (_.isEmpty(this.props.data.editMode)) this.props.mutator.editMode.replace({ mode: false });
+  }
+
   // EditUser Handlers
   onClickEditUser(e) {
     if (e) e.preventDefault();
-    this.setState({
-      editUserMode: true,
-    });
+    this.props.stripes.logger.log('action', 'clicked "edit user"');
+    this.props.mutator.editMode.replace({ mode: true });
   }
 
   onClickCloseEditUser(e) {
     if (e) e.preventDefault();
-    this.setState({
-      editUserMode: false,
-    });
+    this.props.stripes.logger.log('action', 'clicked "close edit user"');
+    this.props.mutator.editMode.replace({ mode: false });
   }
 
   onClickViewLoansHistory(e) {
@@ -112,7 +123,8 @@ class ViewUser extends Component {
   }
 
   render() {
-    const fineHistory = [{ 'Due Date': '11/12/2014', Amount: '34.23', Status: 'Unpaid' }];
+    const dueDate = new Date(Date.parse('2014-11-12')).toLocaleDateString(this.props.stripes.locale);
+    const fineHistory = [{ 'Due Date': dueDate, Amount: '34.23', Status: 'Unpaid' }];
 
     const { data: { selUser, patronGroups }, match: { params: { userid } } } = this.props;
 
@@ -189,7 +201,7 @@ class ViewUser extends Component {
             <br />
             <Row>
               <Col xs={12}>
-                <KeyValue label="Patron group" value={patronGroup.desc} />
+                <KeyValue label="Patron group" value={patronGroup.group} />
               </Col>
             </Row>
           </Col>
@@ -202,12 +214,12 @@ class ViewUser extends Component {
             <br />
             <Row>
               <Col xs={12}>
-                <KeyValue label="Date enrolled" value={(_.get(user, ['enrollmentDate'],'')) ? new Date(Date.parse(_.get(user, ['enrollmentDate'], ''))).toLocaleDateString(this.props.stripes.locale) : ''} />
+                <KeyValue label="Date enrolled" value={(_.get(user, ['enrollmentDate'], '')) ? new Date(Date.parse(_.get(user, ['enrollmentDate'], ''))).toLocaleDateString(this.props.stripes.locale) : ''} />
               </Col>
             </Row>
             <Row>
               <Col xs={12}>
-                <KeyValue label="Expiration date" value={(_.get(user, ['expirationDate'],'')) ? new Date(Date.parse(_.get(user, ['expirationDate'], ''))).toLocaleDateString(this.props.stripes.locale) : ''} />
+                <KeyValue label="Expiration date" value={(_.get(user, ['expirationDate'], '')) ? new Date(Date.parse(_.get(user, ['expirationDate'], ''))).toLocaleDateString(this.props.stripes.locale) : ''} />
               </Col>
             </Row>
             <Row>
@@ -255,7 +267,7 @@ class ViewUser extends Component {
         <IfPermission perm="perms.users.get">
           <this.connectedUserPermissions stripes={this.props.stripes} match={this.props.match} {...this.props} />
         </IfPermission>
-        <Layer isOpen={this.state.editUserMode} label="Edit User Dialog">
+        <Layer isOpen={this.props.data.editMode ? this.props.data.editMode.mode : false} label="Edit User Dialog">
           <UserForm
             initialValues={_.merge(user, { available_patron_groups: this.props.data.patronGroups, contactTypes })}
             onSubmit={(record) => { this.update(record); }}

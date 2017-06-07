@@ -144,7 +144,7 @@ class Users extends React.Component {
   componentWillUpdate() {
     const pg = this.props.data.patronGroups;
     if (pg && pg.length) {
-      filterConfig[1].values = pg.map(rec => ({ name: rec.desc, cql: rec.id }));
+      filterConfig[1].values = pg.map(rec => ({ name: rec.group, cql: rec.id }));
     }
   }
 
@@ -231,8 +231,6 @@ class Users extends React.Component {
         this.postPerms(username, [
           'users.collection.get',       // so the user can search for his own user record after login
           'perms.permissions.get',      // so the user can fetch his own permissions after login
-          'usergroups.collection.get',  // so patron groups can be listed in the Users module
-          'module.trivial.enabled',     // so that at least one module is available to new users
         ]);
       }
     });
@@ -273,7 +271,7 @@ class Users extends React.Component {
       Name: user => `${_.get(user, ['personal', 'lastName'], '')}, ${_.get(user, ['personal', 'firstName'], '')}`,
       'Patron Group': (user) => {
         const pg = data.patronGroups.filter(g => g.id === user.patronGroup)[0];
-        return pg ? pg.desc : '?';
+        return pg ? pg.group : '?';
       },
       'User ID': user => user.username,
       Email: user => _.get(user, ['personal', 'email']),
@@ -346,7 +344,7 @@ class Users extends React.Component {
         {detailsPane}
         <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false} label="Add New User Dialog">
           <UserForm
-            initialValues={{ available_patron_groups: this.props.data.patronGroups }}
+            initialValues={{ available_patron_groups: this.props.data.patronGroups, active: true }}
             onSubmit={(record) => { this.create(record); }}
             onCancel={this.onClickCloseNewUser}
             okapi={this.okapi}
