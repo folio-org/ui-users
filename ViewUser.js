@@ -116,7 +116,8 @@ class ViewUser extends Component {
   }
 
   render() {
-    const fineHistory = [{ 'Due Date': '11/12/2014', Amount: '34.23', Status: 'Unpaid' }];
+    const dueDate = new Date(Date.parse('2014-11-12')).toLocaleDateString(this.props.stripes.locale);
+    const fineHistory = [{ 'Due Date': dueDate, Amount: '34.23', Status: 'Unpaid' }];
 
     const { data: { selUser, patronGroups }, match: { params: { userid } } } = this.props;
 
