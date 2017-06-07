@@ -17,6 +17,7 @@ import UserForm from './UserForm';
 import UserPermissions from './UserPermissions';
 import UserLoans from './UserLoans';
 import LoansHistory from './LoansHistory';
+import contactTypes from './data/contactTypes';
 
 class ViewUser extends Component {
 
@@ -141,11 +142,6 @@ class ViewUser extends Component {
     const userStatus = (_.get(user, ['active'], '') ? 'active' : 'inactive');
     const patronGroupId = _.get(user, ['patronGroup'], '');
     const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
-    const contactTypes = [ { "id": "001", "desc": "Mail (Primary Address)"},
-                           { "id": "002", "desc": "Email" },
-                           { "id": "003", "desc": "Text message" },
-                           { "id": "004", "desc": "Phone" },
-                           { "id": "005", "desc": "Mobile phone"} ];
     const preferredContact = contactTypes.find(g => g.id === _.get(user, ['personal','preferredContactTypeId'], '')) || { type: '' };
 
     return (
