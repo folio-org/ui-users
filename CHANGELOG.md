@@ -1,6 +1,7 @@
 # Change history for ui-users
 
-## 2.3.0 IN PROGRESS
+## [2.3.0](https://github.com/folio-org/ui-users/tree/v2.3.0) (2017-06-07)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.2.0...v2.3.0)
 
 * The editMode boolean is now in a stripes-core local resource instead of a piece of React component state. This makes edit-mode persistent because it's in the Redux store -- so navigating away from an edit-user page to another app, then returning to the Users app, will remain in edit mode. Fixes UIU-62.
 * New users no longer get 'usergroups.collection.get' and 'module.trivial.enabled' permissions. Fixes UIU-61.
