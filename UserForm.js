@@ -82,6 +82,10 @@ class UserForm extends React.Component {
     onCancel: PropTypes.func,
     initialValues: PropTypes.object,
     okapi: PropTypes.object,
+    optionLists: PropTypes.shape({
+      userGroups: PropTypes.arrayOf(PropTypes.object),
+      contactTypes: PropTypes.arrayOf(PropTypes.object),
+    }),
   };
 
   constructor(props) {
@@ -97,14 +101,17 @@ class UserForm extends React.Component {
       submitting,
       onCancel,
       initialValues,
+      optionLists,
     } = this.props;
 
     /* Menues for Add User workflow */
     const addUserFirstMenu = <PaneMenu><button onClick={onCancel} title="close" aria-label="Close New User Dialog"><span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span></button></PaneMenu>;
     const addUserLastMenu = <PaneMenu><Button type="submit" title="Create New User" disabled={pristine || submitting} onClick={handleSubmit}>Create User</Button></PaneMenu>;
     const editUserLastMenu = <PaneMenu><Button type="submit" title="Update User" disabled={pristine || submitting} onClick={handleSubmit}>Update User</Button></PaneMenu>;
-    const patronGroupOptions = (initialValues.available_patron_groups || []).map(g => ({
+    const patronGroupOptions = (optionLists.patronGroups || []).map(g => ({
       label: `${g.group} (${g.desc})`, value: g.id, selected: initialValues.patronGroup === g.id }));
+    const contactTypeOptions = (optionLists.contactTypes || []).map(g => ({
+      label: g.desc, value: g.id, selected: initialValues.preferredContactTypeId === g.id }));
 
     return (
       <form style={{ height: '100%', overflow: 'auto' }}>
@@ -127,6 +134,7 @@ class UserForm extends React.Component {
                   <Field label="Email" name="personal.email" id="adduser_email" component={TextField} required fullWidth />
                   <Field label="Phone" name="personal.phone" id="adduser_phone" component={TextField} fullWidth />
                   <Field label="Mobile Phone" name="personal.mobilePhone" id="adduser_mobilePhone" component={TextField} fullWidth />
+                  <Field label="Preferred Contact" name="personal.preferredContactTypeId" id="adduser_preferredcontact" component={Select} dataOptions={[{ label: 'Select contact type', value: null }, ...contactTypeOptions]} fullWidth />
                 </fieldset>
                 <Field
                   component={Datepicker}

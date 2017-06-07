@@ -24,6 +24,8 @@ import IfPermission from '@folio/stripes-components/lib/IfPermission';
 import UserForm from './UserForm';
 import ViewUser from './ViewUser';
 
+import contactTypes from './data/contactTypes';
+
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
 
@@ -210,7 +212,6 @@ class Users extends React.Component {
     // extract creds object from user object
     const creds = Object.assign({}, data.creds, { username: data.username });
     if (data.creds) delete data.creds; // eslint-disable-line no-param-reassign
-    if (data.available_patron_groups) delete data.available_patron_groups; // eslint-disable-line no-param-reassign
     // POST user record
     this.props.mutator.users.POST(data);
     // POST credentials, permission-user, permissions;
@@ -344,10 +345,11 @@ class Users extends React.Component {
         {detailsPane}
         <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false} label="Add New User Dialog">
           <UserForm
-            initialValues={{ available_patron_groups: this.props.data.patronGroups, active: true }}
+            initialValues={{ active: true }}
             onSubmit={(record) => { this.create(record); }}
             onCancel={this.onClickCloseNewUser}
             okapi={this.okapi}
+            optionLists={{ patronGroups: this.props.data.patronGroups, contactTypes }}
           />
         </Layer>
       </Paneset>

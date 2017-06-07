@@ -17,6 +17,7 @@ import UserForm from './UserForm';
 import UserPermissions from './UserPermissions';
 import UserLoans from './UserLoans';
 import LoansHistory from './LoansHistory';
+import contactTypes from './data/contactTypes';
 
 class ViewUser extends Component {
 
@@ -114,8 +115,6 @@ class ViewUser extends Component {
   update(data) {
     // eslint-disable-next-line no-param-reassign
     if (data.creds) delete data.creds; // not handled on edit (yet at least)
-    // eslint-disable-next-line no-param-reassign
-    if (data.available_patron_groups) delete data.available_patron_groups;
     this.props.mutator.selUser.PUT(data).then(() => {
       this.onClickCloseEditUser();
     });
@@ -140,6 +139,7 @@ class ViewUser extends Component {
     const userStatus = (_.get(user, ['active'], '') ? 'active' : 'inactive');
     const patronGroupId = _.get(user, ['patronGroup'], '');
     const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
+    const preferredContact = contactTypes.find(g => g.id === _.get(user, ['personal', 'preferredContactTypeId'], '')) || { type: '' };
 
     return (
       <Pane defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
@@ -177,6 +177,12 @@ class ViewUser extends Component {
             <Row>
               <Col xs={12}>
                 <KeyValue label="Mobile phone" value={_.get(user, ['personal', 'mobilePhone'], '')} />
+              </Col>
+            </Row>
+            <br />
+            <Row>
+              <Col xs={12}>
+                <KeyValue label="Preferred contact" value={preferredContact.desc} />
               </Col>
             </Row>
             <br />
@@ -256,10 +262,11 @@ class ViewUser extends Component {
         </IfPermission>
         <Layer isOpen={this.props.data.editMode ? this.props.data.editMode.mode : false} label="Edit User Dialog">
           <UserForm
-            initialValues={_.merge(user, { available_patron_groups: this.props.data.patronGroups })}
+            initialValues={user}
             onSubmit={(record) => { this.update(record); }}
             onCancel={this.onClickCloseEditUser}
             okapi={this.props.okapi}
+            optionLists={{ patronGroups: this.props.data.patronGroups, contactTypes }}
           />
         </Layer>
         <Layer isOpen={this.state.viewLoansHistoryMode} label="Loans History">
