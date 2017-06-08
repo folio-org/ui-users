@@ -1,6 +1,7 @@
 # Change history for ui-users
 
 * New field 'preferred contact'. Requires users interface v11.0  (UIU-28)
+* Use `props.resources` to determine actual hit count
 
 ## [2.3.0](https://github.com/folio-org/ui-users/tree/v2.3.0) (2017-06-07)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.2.0...v2.3.0)

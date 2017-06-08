@@ -321,7 +321,7 @@ class Users extends React.Component {
             <div style={{ textAlign: 'center' }}>
               <strong>Results</strong>
               <div>
-                <em>{users.length} Result{users.length === 1 ? '' : 's'} Found</em>
+                <em>{this.props.resources.users && this.props.resources.users.hasLoaded ? this.props.resources.users.other.total_records : ''} Result{users.length === 1 ? '' : 's'} Found</em>
               </div>
             </div>
           }
