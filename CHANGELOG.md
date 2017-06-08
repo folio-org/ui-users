@@ -1,6 +1,6 @@
 # Change history for ui-users
 
-## IN PROGRESS
+## [2.4.0](https://github.com/folio-org/ui-users/tree/v2.4.0) (2017-06-08)
 * Updated dependency version of stripes-components to 0.12.0
 * Props added to results list to use infinite scroll capability (STRIPES-361)
 * New field 'preferred contact'. Requires users interface v11.0  (UIU-28)
