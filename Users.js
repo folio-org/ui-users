@@ -339,6 +339,7 @@ class Users extends React.Component {
             sortOrder={this.state.sortOrder}
             isEmptyMessage={`No results found for "${this.state.searchTerm}". Please check your spelling and filters.`}
             columnMapping={{ 'User ID': 'username' }}
+            loading={this.props.resources.users ? this.props.resources.users.isPending : false}
             autosize
             virtualize
           />
