@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## 2.5.0 IN PROGRESS
+
+* Accept either total_records or totalRecords field in search-responses. Fixes UIU-68 (and so clears the way for MODUSERS-19).
+
 ## [2.4.0](https://github.com/folio-org/ui-users/tree/v2.4.0) (2017-06-08)
 * Updated dependency version of stripes-components to 0.12.0
 * Props added to results list to use infinite scroll capability (STRIPES-361)
