@@ -299,6 +299,7 @@ class Users extends React.Component {
           <p>Sorry - your user permissions do not allow access to this page.</p>
         </div>));
 
+    const resource = this.props.resources.users;
     return (
       <Paneset>
         {/* Filter Pane */}
@@ -321,7 +322,7 @@ class Users extends React.Component {
             <div style={{ textAlign: 'center' }}>
               <strong>Results</strong>
               <div>
-                <em>{this.props.resources.users && this.props.resources.users.hasLoaded ? this.props.resources.users.other.total_records : ''} Result{users.length === 1 ? '' : 's'} Found</em>
+                <em>{resource && resource.hasLoaded ? (resource.other.totalRecords || resource.other.total_records) : ''} Result{users.length === 1 ? '' : 's'} Found</em>
               </div>
             </div>
           }
@@ -339,7 +340,7 @@ class Users extends React.Component {
             sortOrder={this.state.sortOrder}
             isEmptyMessage={`No results found for "${this.state.searchTerm}". Please check your spelling and filters.`}
             columnMapping={{ 'User ID': 'username' }}
-            loading={this.props.resources.users ? this.props.resources.users.isPending : false}
+            loading={resource ? resource.isPending : false}
             autosize
             virtualize
           />
