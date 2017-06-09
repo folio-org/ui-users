@@ -161,7 +161,7 @@ class UserForm extends React.Component {
                   id="adduser_group"
                   component={Select}
                   fullWidth
-                  dataOptions={[{ label: 'Select patron group', value: null }, ...patronGroupOptions]}
+                  dataOptions={[{ label: 'Select patron group', value: '' }, ...patronGroupOptions]}
                 />
                 <Field
                   component={Datepicker}
