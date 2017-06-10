@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## 2.6.0 IN PROGRESS
+
+* Display loans only if interface loan-storage v1.0 is available. Fixes UIU-74.
+
 ## [2.5.0](https://github.com/folio-org/ui-users/tree/v2.5.0) (2017-06-09)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.4.0...v2.5.0)
 
