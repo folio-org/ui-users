@@ -12,6 +12,7 @@ import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import Icon from '@folio/stripes-components/lib/Icon';
 import Layer from '@folio/stripes-components/lib/Layer';
 import IfPermission from '@folio/stripes-components/lib/IfPermission';
+import IfInterface from '@folio/stripes-components/lib/IfInterface';
 
 import UserForm from './UserForm';
 import UserPermissions from './UserPermissions';
@@ -255,7 +256,9 @@ class ViewUser extends Component {
         <MultiColumnList fullWidth contentData={fineHistory} />
         <hr />
         <IfPermission perm="circulation.loans.collection.get">
-          <this.connectedUserLoans onClickViewLoansHistory={this.onClickViewLoansHistory} {...this.props} />
+          <IfInterface name="loan-storage" version="1.0">
+            <this.connectedUserLoans onClickViewLoansHistory={this.onClickViewLoansHistory} {...this.props} />
+          </IfInterface>
         </IfPermission>
         <IfPermission perm="perms.users.get">
           <this.connectedUserPermissions stripes={this.props.stripes} match={this.props.match} {...this.props} />
