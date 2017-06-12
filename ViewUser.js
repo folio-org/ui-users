@@ -106,7 +106,7 @@ class ViewUser extends Component {
     this.props.mutator.editMode.replace({ mode: false });
   }
 
-  onClickViewLoansHistory(e,) {
+  onClickViewLoansHistory(e) {
     if (e) e.preventDefault();
     this.setState({
       viewLoansHistoryMode: true,
