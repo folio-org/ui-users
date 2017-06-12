@@ -21,6 +21,7 @@ class UserLoans extends React.Component {
       locale: PropTypes.string.isRequired,
     }).isRequired,
     onClickViewLoansHistory: PropTypes.func.isRequired,
+    onClickViewLoanActionsHistory: PropTypes.func.isRequired
   };
 
   static manifest = Object.freeze({
@@ -69,6 +70,7 @@ class UserLoans extends React.Component {
           fullWidth
           formatter={loansFormatter}
           visibleColumns={['title', 'barcode', 'loanDate', 'status']}
+          onRowClick={this.props.onClickViewLoanActionsHistory}
           contentData={usersLoans}
         />
       </div>);

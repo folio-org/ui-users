@@ -18,6 +18,8 @@ import UserForm from './UserForm';
 import UserPermissions from './UserPermissions';
 import UserLoans from './UserLoans';
 import LoansHistory from './LoansHistory';
+import LoanActionsHistory from './LoanActionsHistory';
+
 import contactTypes from './data/contactTypes';
 
 class ViewUser extends Component {
@@ -72,14 +74,19 @@ class ViewUser extends Component {
     super(props);
     this.state = {
       viewLoansHistoryMode: false,
+      viewLoanActionsHistoryMode: false,
+      selectedLoan: {}
     };
     this.onClickEditUser = this.onClickEditUser.bind(this);
     this.onClickCloseEditUser = this.onClickCloseEditUser.bind(this);
     this.connectedUserLoans = props.stripes.connect(UserLoans);
     this.connectedLoansHistory = props.stripes.connect(LoansHistory);
+    this.connectedLoanActionsHistory = props.stripes.connect(LoanActionsHistory);
     this.connectedUserPermissions = props.stripes.connect(UserPermissions);
     this.onClickViewLoansHistory = this.onClickViewLoansHistory.bind(this);
     this.onClickCloseLoansHistory = this.onClickCloseLoansHistory.bind(this);
+    this.onClickViewLoanActionsHistory = this.onClickViewLoanActionsHistory.bind(this);
+    this.onClickCloseLoanActionsHistory = this.onClickCloseLoanActionsHistory.bind(this);
   }
 
   componentWillMount() {
@@ -99,7 +106,7 @@ class ViewUser extends Component {
     this.props.mutator.editMode.replace({ mode: false });
   }
 
-  onClickViewLoansHistory(e) {
+  onClickViewLoansHistory(e,) {
     if (e) e.preventDefault();
     this.setState({
       viewLoansHistoryMode: true,
@@ -110,6 +117,22 @@ class ViewUser extends Component {
     if (e) e.preventDefault();
     this.setState({
       viewLoansHistoryMode: false,
+    });
+  }
+
+  onClickViewLoanActionsHistory(e, selectedLoan) {
+    if (e) e.preventDefault();
+    this.setState({
+      viewLoanActionsHistoryMode: true,
+      selectedLoan,
+    });
+  }
+
+  onClickCloseLoanActionsHistory(e) {
+    if (e) e.preventDefault();
+    this.setState({
+      viewLoanActionsHistoryMode: false,
+      selectedLoan: {},
     });
   }
 
@@ -124,7 +147,6 @@ class ViewUser extends Component {
   render() {
     const dueDate = new Date(Date.parse('2014-11-12')).toLocaleDateString(this.props.stripes.locale);
     const fineHistory = [{ 'Due Date': dueDate, Amount: '34.23', Status: 'Unpaid' }];
-
     const { data: { selUser, patronGroups }, match: { params: { userid } } } = this.props;
 
     const detailMenu = (<PaneMenu>
@@ -136,6 +158,7 @@ class ViewUser extends Component {
     if (!selUser || selUser.length === 0 || !userid) return <div />;
 
     const user = selUser.find(u => u.id === userid);
+
     if (!user) return <div />;
     const userStatus = (_.get(user, ['active'], '') ? 'active' : 'inactive');
     const patronGroupId = _.get(user, ['patronGroup'], '');
@@ -257,7 +280,7 @@ class ViewUser extends Component {
         <hr />
         <IfPermission perm="circulation.loans.collection.get">
           <IfInterface name="loan-storage" version="1.0">
-            <this.connectedUserLoans onClickViewLoansHistory={this.onClickViewLoansHistory} {...this.props} />
+            <this.connectedUserLoans onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory} onClickViewLoansHistory={this.onClickViewLoansHistory} {...this.props} />
           </IfInterface>
         </IfPermission>
         <IfPermission perm="perms.users.get">
@@ -274,6 +297,9 @@ class ViewUser extends Component {
         </Layer>
         <Layer isOpen={this.state.viewLoansHistoryMode} label="Loans History">
           <this.connectedLoansHistory userid={userid} stripes={this.props.stripes} onCancel={this.onClickCloseLoansHistory} />
+        </Layer>
+        <Layer isOpen={this.state.viewLoanActionsHistoryMode} label="Loans Actions History">
+          <this.connectedLoanActionsHistory user={user} loan={this.state.selectedLoan} stripes={this.props.stripes} onCancel={this.onClickCloseLoanActionsHistory} />
         </Layer>
       </Pane>
     );
