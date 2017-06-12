@@ -57,6 +57,16 @@ class Users extends React.Component {
       hasPerm: PropTypes.func.isRequired,
     }).isRequired,
     data: PropTypes.object.isRequired,
+    resources: PropTypes.shape({
+      users: PropTypes.shape({
+        hasLoaded: PropTypes.bool.isRequired,
+        other: PropTypes.shape({
+          totalRecords: PropTypes.number,
+          total_records: PropTypes.number,
+        }).isRequired,
+        isPending: PropTypes.bool.isPending,
+      }),
+    }).isRequired,
     history: PropTypes.shape({
       push: PropTypes.func.isRequired,
     }).isRequired,
@@ -349,7 +359,7 @@ class Users extends React.Component {
         {detailsPane}
         <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false} label="Add New User Dialog">
           <UserForm
-            initialValues={{ active: true, personal: { preferredContactTypeId: '002' }}}
+            initialValues={{ active: true, personal: { preferredContactTypeId: '002' } }}
             onSubmit={(record) => { this.create(record); }}
             onCancel={this.onClickCloseNewUser}
             okapi={this.okapi}
