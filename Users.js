@@ -239,10 +239,7 @@ class Users extends React.Component {
       if (response.status >= 400) {
         this.log('xhr', 'Users. POST of creds failed.');
       } else {
-        this.postPerms(username, [
-          'users.collection.get',       // so the user can search for his own user record after login
-          'perms.permissions.get',      // so the user can fetch his own permissions after login
-        ]);
+        this.postPerms(username, []); // create empty permissions user
       }
     });
   }
