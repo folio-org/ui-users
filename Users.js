@@ -63,7 +63,7 @@ class Users extends React.Component {
         other: PropTypes.shape({
           totalRecords: PropTypes.number,
           total_records: PropTypes.number,
-        }).isRequired,
+        }),
         isPending: PropTypes.bool.isPending,
       }),
     }).isRequired,
