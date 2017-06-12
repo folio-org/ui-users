@@ -1,6 +1,7 @@
 # Change history for ui-users
 
-## 2.6.0 IN PROGRESS
+## [2.6.0](https://github.com/folio-org/ui-users/tree/v2.6.0) (2017-06-12)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.5.0...v2.6.0)
 
 * Display loans only if interface loan-storage v1.0 is available. Fixes UIU-74.
 * Do not assign _any_ permissions to new user -- no longer needed for login, since stripes-core v1.13.0 uses the all-in-one call `/bl-users/login`. Fixes UIU-60.
