@@ -21,12 +21,38 @@ class LoanActionsHistory extends Component {
     onCancel: PropTypes.func.isRequired,
   };
 
+  constructor(props) {
+    super(props);
+
+    // TODO: remove after back-end is ready
+    this.state = {
+      loanActions: [
+        { id: 1, actionDate: '2017-06-12T22:56:25Z', action: 'Renew', dueDate: '2017-07-12T22:56:25Z',
+          status: { name: 'Active' },
+          desk: 'Main Desk', operator: 'Edward Ford', info: 'Lorem ipsum. Lorem ipsum.' },
+        { id: 2, actionDate: '2017-06-12T22:56:25Z', action: 'Renew', dueDate: '2017-07-12T22:56:25Z',
+          status: { name: 'Active' },
+          desk: 'Reference Desk', operator: 'Gerald Estrada', info: 'Lorem ipsum.' }
+      ]
+    };
+  }
+
   render() {
     const { loan, user, stripes: { locale } } = this.props;
 
     if (!loan) return <div />;
 
+    const loanActions = this.state.loanActions;
     const historyFirstMenu = <PaneMenu><button onClick={this.props.onCancel} title="close" aria-label="Close Loan Actions History"><span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span></button></PaneMenu>;
+    const loanActionsFormatter = {
+      Action: la => la.action,
+      Operator: la => la.operator,
+      Desk: la => la.desk,
+      Status: la => `${_.get(la, ['status', 'name'], '')}`,
+      'Action Date': la => formatDate(la.actionDate, locale),
+      'Due Date': la => formatDate(la.dueDate, locale),
+      'Additional Information': la => la.info,
+    };
 
     return (
       <Paneset isRoot>
@@ -72,7 +98,7 @@ class LoanActionsHistory extends Component {
             <Col xs={4}>
               <Row>
                 <Col xs={12}>
-                  <KeyValue label="Process Id" value={item.id} />
+                  <KeyValue label="Process Id" value={loan.id} />
                 </Col>
               </Row>
               <br />
@@ -89,9 +115,11 @@ class LoanActionsHistory extends Component {
               </Row>
             </Col>
           </Row>
-
+          <br />
           <MultiColumnList
-            visibleColumns={['title', 'barcode', 'loanDate', 'returnDate', 'status']}
+            formatter={loanActionsFormatter}
+            visibleColumns={['Action Date', 'Action', 'Due Date', 'Status', 'Desk', 'Operator', 'Additional Information']}
+            contentData={loanActions}
           />
         </Pane>
       </Paneset>);
