@@ -167,7 +167,8 @@ class Users extends React.Component {
   }
 
   onSort = (e, meta) => {
-    const sortOrder = meta.alias;
+    let sortOrder = meta.alias;
+    if (sortOrder === this.state.sortOrder) sortOrder = `-${sortOrder}`;
     this.log('action', `sorted by ${sortOrder}`);
     this.setState({ sortOrder });
     this.transitionToParams({ sort: sortOrder });
@@ -344,7 +345,8 @@ class Users extends React.Component {
             onHeaderClick={this.onSort}
             onNeedMoreData={this.onNeedMore}
             visibleColumns={['Active', 'Name', 'Patron Group', 'User ID', 'Email']}
-            sortOrder={this.state.sortOrder}
+            sortOrder={this.state.sortOrder.replace(/^-/, '')}
+            sortDirection={this.state.sortOrder.startsWith('-') ? 'descending' : 'ascending'}
             isEmptyMessage={`No results found for "${this.state.searchTerm}". Please check your spelling and filters.`}
             columnMapping={{ 'User ID': 'username' }}
             loading={resource ? resource.isPending : false}
