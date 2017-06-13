@@ -37,7 +37,7 @@ function validate(values) {
   }
 
   if (!values.personal || !values.personal.preferredContactTypeId) {
-    errors.personal = { preferredContactTypeId : 'Please select a preferred form of contact' };
+    errors.personal = { preferredContactTypeId: 'Please select a preferred form of contact' };
   }
   return errors;
 }

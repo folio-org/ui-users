@@ -73,6 +73,8 @@ class PermissionSets extends Component {
       // and will be removed.
       delete newPermSet._cid; // eslint-disable-line no-underscore-dangle
 
+      // Jeremy has investigated that and confirmed that it is harmless.
+      // eslint-disable-next-line react/no-did-update-set-state
       this.setState({
         selectedSet: newPermSet,
       });
