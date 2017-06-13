@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## 2.7.0 IN PROGRESS
+
+* Support reverse-sorting. Fixes UIU-81.
+
 ## [2.6.0](https://github.com/folio-org/ui-users/tree/v2.6.0) (2017-06-12)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.5.0...v2.6.0)
 
