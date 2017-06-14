@@ -3,7 +3,7 @@
 ## [2.7.0](https://github.com/folio-org/ui-users/tree/v2.7.0) (2017-06-14)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.6.0...v2.7.0)
 
-* View loan details with first loan action. Fixes UIS-21.
+* View loan details with first loan action. Fixes UIU-87.
 * Support reverse-sorting. Fixes UIU-81.
 * Stable sorting: when moving from one sort criterion to another, the old one is retained as the secondary key. Fixes UIU-83.
 * Remove non-functional search boxes from user details pane. Fixes UIU-76.
