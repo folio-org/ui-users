@@ -2,6 +2,7 @@
 
 ## 2.7.0 IN PROGRESS
 
+* View loan details with first loan action (UIS-21)
 * Support reverse-sorting. Fixes UIU-81.
 * Stable sorting: when moving from one sort criterion to another, the old one is retained as the secondary key. Fixes UIU-83.
 
