@@ -21,7 +21,7 @@ class UserLoans extends React.Component {
       locale: PropTypes.string.isRequired,
     }).isRequired,
     onClickViewLoansHistory: PropTypes.func.isRequired,
-    onClickViewLoanActionsHistory: PropTypes.func.isRequired
+    onClickViewLoanActionsHistory: PropTypes.func.isRequired,
   };
 
   static manifest = Object.freeze({

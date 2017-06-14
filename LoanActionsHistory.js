@@ -21,37 +21,25 @@ class LoanActionsHistory extends Component {
     onCancel: PropTypes.func.isRequired,
   };
 
-  constructor(props) {
-    super(props);
-
-    // TODO: remove after back-end is ready
-    this.state = {
-      loanActions: [
-        { id: 1, actionDate: '2017-06-12T22:56:25Z', action: 'Renew', dueDate: '2017-07-12T22:56:25Z',
-          status: { name: 'Active' },
-          desk: 'Main Desk', operator: 'Edward Ford', info: 'Lorem ipsum. Lorem ipsum.' },
-        { id: 2, actionDate: '2017-06-12T22:56:25Z', action: 'Renew', dueDate: '2017-07-12T22:56:25Z',
-          status: { name: 'Active' },
-          desk: 'Reference Desk', operator: 'Gerald Estrada', info: 'Lorem ipsum.' }
-      ]
-    };
-  }
-
   render() {
     const { loan, user, stripes: { locale } } = this.props;
 
     if (!loan) return <div />;
 
-    const loanActions = this.state.loanActions;
+    // TODO: remove after back-end is ready
+    const loanActions = [{
+      action: 'Loan',
+      actionDate: loan.loanDate,
+      dueDate: loan.dueDate,
+      operator: user,
+    }];
+
     const historyFirstMenu = <PaneMenu><button onClick={this.props.onCancel} title="close" aria-label="Close Loan Actions History"><span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span></button></PaneMenu>;
     const loanActionsFormatter = {
       Action: la => la.action,
-      Operator: la => la.operator,
-      Desk: la => la.desk,
-      Status: la => `${_.get(la, ['status', 'name'], '')}`,
       'Action Date': la => formatDate(la.actionDate, locale),
       'Due Date': la => formatDate(la.dueDate, locale),
-      'Additional Information': la => la.info,
+      Operator: la => getFullName(la.operator),
     };
 
     return (
@@ -86,11 +74,6 @@ class LoanActionsHistory extends Component {
                <br />
               <Row>
                 <Col xs={12}>
-                  <KeyValue label="Due Date" value={formatDate(loan.dueDate, locale) || '-'} />
-                </Col>
-              </Row>
-              <Row>
-                <Col xs={12}>
                   <KeyValue label="Loan Status" value={_.get(loan, ['status', 'name'], '-')} />
                 </Col>
               </Row>
@@ -98,19 +81,7 @@ class LoanActionsHistory extends Component {
             <Col xs={4}>
               <Row>
                 <Col xs={12}>
-                  <KeyValue label="Process Id" value={loan.id} />
-                </Col>
-              </Row>
-              <br />
-              <Row>
-                <Col xs={12}>
-                  <KeyValue label="Return Date" value={formatDate(loan.returnDate, locale) || '-'} />
-                </Col>
-              </Row>
-               <br />
-              <Row>
-                <Col xs={12}>
-                  <KeyValue label="Booking Loan" value={_.get(loan, ['item', 'bookingLoan'], '-')}  />
+                  <KeyValue label="Due Date" value={formatDate(loan.dueDate, locale) || '-'} />
                 </Col>
               </Row>
             </Col>
@@ -118,7 +89,7 @@ class LoanActionsHistory extends Component {
           <br />
           <MultiColumnList
             formatter={loanActionsFormatter}
-            visibleColumns={['Action Date', 'Action', 'Due Date', 'Status', 'Desk', 'Operator', 'Additional Information']}
+            visibleColumns={['Action Date', 'Action', 'Due Date', 'Operator']}
             contentData={loanActions}
           />
         </Pane>

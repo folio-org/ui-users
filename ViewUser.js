@@ -19,7 +19,6 @@ import UserPermissions from './UserPermissions';
 import UserLoans from './UserLoans';
 import LoansHistory from './LoansHistory';
 import LoanActionsHistory from './LoanActionsHistory';
-
 import contactTypes from './data/contactTypes';
 
 class ViewUser extends Component {
@@ -75,7 +74,7 @@ class ViewUser extends Component {
     this.state = {
       viewLoansHistoryMode: false,
       viewLoanActionsHistoryMode: false,
-      selectedLoan: {}
+      selectedLoan: {},
     };
     this.onClickEditUser = this.onClickEditUser.bind(this);
     this.onClickCloseEditUser = this.onClickCloseEditUser.bind(this);
@@ -147,6 +146,7 @@ class ViewUser extends Component {
   render() {
     const dueDate = new Date(Date.parse('2014-11-12')).toLocaleDateString(this.props.stripes.locale);
     const fineHistory = [{ 'Due Date': dueDate, Amount: '34.23', Status: 'Unpaid' }];
+
     const { data: { selUser, patronGroups }, match: { params: { userid } } } = this.props;
 
     const detailMenu = (<PaneMenu>
@@ -158,7 +158,6 @@ class ViewUser extends Component {
     if (!selUser || selUser.length === 0 || !userid) return <div />;
 
     const user = selUser.find(u => u.id === userid);
-
     if (!user) return <div />;
     const userStatus = (_.get(user, ['active'], '') ? 'active' : 'inactive');
     const patronGroupId = _.get(user, ['patronGroup'], '');
