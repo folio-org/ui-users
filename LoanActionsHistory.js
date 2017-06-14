@@ -31,15 +31,15 @@ class LoanActionsHistory extends Component {
       action: 'Loan',
       actionDate: loan.loanDate,
       dueDate: loan.dueDate,
-      operator: user,
+      operator: '',
     }];
 
     const historyFirstMenu = <PaneMenu><button onClick={this.props.onCancel} title="close" aria-label="Close Loan Actions History"><span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span></button></PaneMenu>;
     const loanActionsFormatter = {
       Action: la => la.action,
       'Action Date': la => formatDate(la.actionDate, locale),
-      'Due Date': la => formatDate(la.dueDate, locale),
-      Operator: la => getFullName(la.operator),
+      'Due Date': la => formatDate(la.dueDate, locale) || '-',
+      Operator: la => la.operator || '-',
     };
 
     return (
