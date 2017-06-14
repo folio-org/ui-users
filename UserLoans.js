@@ -50,17 +50,8 @@ class UserLoans extends React.Component {
     return (
       <div>
         <Row>
-          <Col xs={3}>
+          <Col xs={7} sm={6}>
             <h3 className="marginTopHalf">Current loans</h3>
-          </Col>
-          <Col xs={4} sm={3}>
-            <TextField
-              rounded
-              endControl={<Button buttonStyle="fieldControl"><Icon icon="clearX" /></Button>}
-              startControl={<Icon icon="search" />}
-              placeholder="Search"
-              fullWidth
-            />
           </Col>
           <Col xs={5} sm={6}>
             <Button align="end" bottomMargin0 onClick={this.props.onClickViewLoansHistory}>View Full History</Button>

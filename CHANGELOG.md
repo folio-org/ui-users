@@ -3,6 +3,7 @@
 ## 2.7.0 IN PROGRESS
 
 * Support reverse-sorting. Fixes UIU-81.
+* Stable sorting: when moving from one sort criterion to another, the old one is retained as the secondary key. Fixes UIU-83.
 
 ## [2.6.0](https://github.com/folio-org/ui-users/tree/v2.6.0) (2017-06-12)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.5.0...v2.6.0)

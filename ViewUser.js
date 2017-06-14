@@ -259,17 +259,8 @@ class ViewUser extends Component {
         <hr />
         <br />
         <Row>
-          <Col xs={3}>
+          <Col xs={7} sm={6}>
             <h3 className="marginTopHalf">Fines</h3>
-          </Col>
-          <Col xs={4} sm={3}>
-            <TextField
-              rounded
-              endControl={<Button buttonStyle="fieldControl"><Icon icon="clearX" /></Button>}
-              startControl={<Icon icon="search" />}
-              placeholder="Search"
-              fullWidth
-            />
           </Col>
           <Col xs={5} sm={6}>
             <Button align="end" bottomMargin0 >View Full History</Button>
