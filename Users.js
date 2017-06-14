@@ -354,7 +354,7 @@ class Users extends React.Component {
             onHeaderClick={this.onSort}
             onNeedMoreData={this.onNeedMore}
             visibleColumns={['Active', 'Name', 'Patron Group', 'User ID', 'Email']}
-            sortOrder={this.state.sortOrder.replace(/^-/, '')}
+            sortOrder={this.state.sortOrder.replace(/^-/, '').replace(/,.*/, '')}
             sortDirection={this.state.sortOrder.startsWith('-') ? 'descending' : 'ascending'}
             isEmptyMessage={`No results found for "${this.state.searchTerm}". Please check your spelling and filters.`}
             columnMapping={{ 'User ID': 'username' }}
