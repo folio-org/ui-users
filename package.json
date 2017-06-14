@@ -45,7 +45,8 @@
     ]
   },
   "scripts": {
-    "lint": "eslint *.js lib settings || true"
+    "lint": "eslint *.js lib settings || true",
+    "mkmd": "node ../stripes-core/util/package2md.js package.json > ModuleDescriptor.json"
   },
   "devDependencies": {
     "babel-core": "^6.17.0",
