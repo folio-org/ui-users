@@ -167,8 +167,17 @@ class Users extends React.Component {
   }
 
   onSort = (e, meta) => {
-    let sortOrder = meta.alias;
-    if (sortOrder === this.state.sortOrder) sortOrder = `-${sortOrder}`;
+    let newOrder = meta.alias;
+    const oldOrder = this.state.sortOrder
+
+    const orders = oldOrder ? oldOrder.split(',') : [];
+    if (newOrder === orders[0].replace(/^-/, '')) {
+      orders[0] = `-${orders[0]}`.replace(/^--/, '');
+    } else {
+      orders.unshift(newOrder);
+    }
+
+    const sortOrder = orders.slice(0, 2).join(',');
     this.log('action', `sorted by ${sortOrder}`);
     this.setState({ sortOrder });
     this.transitionToParams({ sort: sortOrder });
