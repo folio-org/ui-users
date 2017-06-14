@@ -5,8 +5,6 @@ import React, { PropTypes } from 'react';
 
 import { Row, Col } from 'react-bootstrap';
 import Button from '@folio/stripes-components/lib/Button';
-import Icon from '@folio/stripes-components/lib/Icon';
-import TextField from '@folio/stripes-components/lib/TextField';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 
 

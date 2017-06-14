@@ -7,7 +7,6 @@ import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import Button from '@folio/stripes-components/lib/Button';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import { Row, Col } from 'react-bootstrap';
-import TextField from '@folio/stripes-components/lib/TextField';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import Icon from '@folio/stripes-components/lib/Icon';
 import Layer from '@folio/stripes-components/lib/Layer';
