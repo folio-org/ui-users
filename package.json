@@ -20,7 +20,7 @@
     "okapiInterfaces": {
       "users": "11.0",
       "circulation": "1.0",
-      "permissions": "3.0"
+      "permissions": "4.0"
     },
     "permissionsets": [
       {
