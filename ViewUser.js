@@ -273,7 +273,9 @@ class ViewUser extends Component {
           </IfInterface>
         </IfPermission>
         <IfPermission perm="perms.users.get">
-          <this.connectedUserPermissions stripes={this.props.stripes} match={this.props.match} {...this.props} />
+          <IfInterface name="permissions" version="4.0">
+            <this.connectedUserPermissions stripes={this.props.stripes} match={this.props.match} {...this.props} />
+          </IfInterface>
         </IfPermission>
         <Layer isOpen={this.props.data.editMode ? this.props.data.editMode.mode : false} label="Edit User Dialog">
           <UserForm
