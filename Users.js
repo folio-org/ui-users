@@ -222,7 +222,7 @@ class Users extends React.Component {
   performSearch = _.debounce((query) => {
     this.log('action', `searched for '${query}'`);
     this.transitionToParams({ query });
-  }, 150);
+  }, 350);
 
   updateFilters = (filters) => { // provided for onChangeFilter
     this.transitionToParams({ filters: Object.keys(filters).filter(key => filters[key]).join(',') });
