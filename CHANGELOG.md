@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## 2.8.0 IN PROGRESS
+
+* Display user permissions only if interface "permissions" v4.0 is available. Fixes the new part of UIU-74.
+
 ## [2.7.0](https://github.com/folio-org/ui-users/tree/v2.7.0) (2017-06-14)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.6.0...v2.7.0)
 
