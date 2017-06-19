@@ -3,7 +3,7 @@
 ## 2.8.0 IN PROGRESS
 
 * Display user permissions only if interface "permissions" v4.0 is available. Fixes the new part of UIU-74.
-* Add two high-level permissions to the `package.json`, and a new `yarn mkmd` rule to create a module-descriptor from this and other information in the package-file. Fixes UIU-82.
+* Add two high-level permissions to the `package.json`, and a new `yarn mkmd` rule to create a module-descriptor from this and other information in the package-file. Fixes UIU-88.
 * Update search debounce time from 150ms to 350ms, Ameliorates UIU-77.
 
 ## [2.7.0](https://github.com/folio-org/ui-users/tree/v2.7.0) (2017-06-14)
