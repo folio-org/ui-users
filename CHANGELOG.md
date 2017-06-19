@@ -1,6 +1,41 @@
 # Change history for ui-users
 
+## 2.8.0 IN PROGRESS
+
+* Display user permissions only if interface "permissions" v4.0 is available. Fixes the new part of UIU-74.
+* Add two high-level permissions to the `package.json`, and a new `yarn mkmd` rule to create a module-descriptor from this and other information in the package-file. Fixes UIU-88.
+* Update search debounce time from 150ms to 350ms, Ameliorates UIU-77.
+
+## [2.7.0](https://github.com/folio-org/ui-users/tree/v2.7.0) (2017-06-14)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.6.0...v2.7.0)
+
+* View loan details with first loan action. Fixes UIU-87.
+* Support reverse-sorting. Fixes UIU-81.
+* Stable sorting: when moving from one sort criterion to another, the old one is retained as the secondary key. Fixes UIU-83.
+* Remove non-functional search boxes from user details pane. Fixes UIU-76.
+* Upgrade stripes-components dependency to v0.15.0, needed for stable sorting.
+
+## [2.6.0](https://github.com/folio-org/ui-users/tree/v2.6.0) (2017-06-12)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.5.0...v2.6.0)
+
+* Display loans only if interface loan-storage v1.0 is available. Fixes UIU-74.
+* Do not assign _any_ permissions to new user -- no longer needed for login, since stripes-core v1.13.0 uses the all-in-one call `/bl-users/login`. Fixes UIU-60.
+
+## [2.5.0](https://github.com/folio-org/ui-users/tree/v2.5.0) (2017-06-09)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.4.0...v2.5.0)
+
+* Accept either total_records or totalRecords field in search-responses. Fixes UIU-68 (and so clears the way for MODUSERS-19).
+* Mark five fields mandatory in users form (UIU-28)
+* Validate preferred-contact setting (mandatory) (UIU-28)
+* Bug-fix (patron-group setting, when set to "undefined")
+
+## [2.4.0](https://github.com/folio-org/ui-users/tree/v2.4.0) (2017-06-08)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.3.0...v2.4.0)
+
+* Updated dependency version of stripes-components to 0.12.0
+* Props added to results list to use infinite scroll capability (STRIPES-361)
 * New field 'preferred contact'. Requires users interface v11.0  (UIU-28)
+* Use `props.resources` to determine actual hit count
 
 ## [2.3.0](https://github.com/folio-org/ui-users/tree/v2.3.0) (2017-06-07)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.2.0...v2.3.0)

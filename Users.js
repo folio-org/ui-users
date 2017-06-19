@@ -57,6 +57,16 @@ class Users extends React.Component {
       hasPerm: PropTypes.func.isRequired,
     }).isRequired,
     data: PropTypes.object.isRequired,
+    resources: PropTypes.shape({
+      users: PropTypes.shape({
+        hasLoaded: PropTypes.bool.isRequired,
+        other: PropTypes.shape({
+          totalRecords: PropTypes.number,
+          total_records: PropTypes.number,
+        }),
+        isPending: PropTypes.bool.isPending,
+      }),
+    }).isRequired,
     history: PropTypes.shape({
       push: PropTypes.func.isRequired,
     }).isRequired,
@@ -92,7 +102,7 @@ class Users extends React.Component {
       type: 'okapi',
       records: 'users',
       recordsRequired: '${userCount}',
-      perRequest: 10,
+      perRequest: RESULT_COUNT_INCREMENT,
       path: 'users',
       GET: {
         params: {
@@ -157,7 +167,17 @@ class Users extends React.Component {
   }
 
   onSort = (e, meta) => {
-    const sortOrder = meta.alias;
+    const newOrder = meta.alias;
+    const oldOrder = this.state.sortOrder;
+
+    const orders = oldOrder ? oldOrder.split(',') : [];
+    if (newOrder === orders[0].replace(/^-/, '')) {
+      orders[0] = `-${orders[0]}`.replace(/^--/, '');
+    } else {
+      orders.unshift(newOrder);
+    }
+
+    const sortOrder = orders.slice(0, 2).join(',');
     this.log('action', `sorted by ${sortOrder}`);
     this.setState({ sortOrder });
     this.transitionToParams({ sort: sortOrder });
@@ -202,7 +222,7 @@ class Users extends React.Component {
   performSearch = _.debounce((query) => {
     this.log('action', `searched for '${query}'`);
     this.transitionToParams({ query });
-  }, 150);
+  }, 350);
 
   updateFilters = (filters) => { // provided for onChangeFilter
     this.transitionToParams({ filters: Object.keys(filters).filter(key => filters[key]).join(',') });
@@ -229,10 +249,7 @@ class Users extends React.Component {
       if (response.status >= 400) {
         this.log('xhr', 'Users. POST of creds failed.');
       } else {
-        this.postPerms(username, [
-          'users.collection.get',       // so the user can search for his own user record after login
-          'perms.permissions.get',      // so the user can fetch his own permissions after login
-        ]);
+        this.postPerms(username, []); // create empty permissions user
       }
     });
   }
@@ -299,6 +316,7 @@ class Users extends React.Component {
           <p>Sorry - your user permissions do not allow access to this page.</p>
         </div>));
 
+    const resource = this.props.resources.users;
     return (
       <Paneset>
         {/* Filter Pane */}
@@ -321,7 +339,7 @@ class Users extends React.Component {
             <div style={{ textAlign: 'center' }}>
               <strong>Results</strong>
               <div>
-                <em>{users.length} Result{users.length === 1 ? '' : 's'} Found</em>
+                <em>{resource && resource.hasLoaded ? (resource.other.totalRecords || resource.other.total_records) : ''} Result{users.length === 1 ? '' : 's'} Found</em>
               </div>
             </div>
           }
@@ -334,18 +352,22 @@ class Users extends React.Component {
             formatter={resultsFormatter}
             onRowClick={this.onSelectRow}
             onHeaderClick={this.onSort}
-            onFetch={this.onNeedMore}
+            onNeedMoreData={this.onNeedMore}
             visibleColumns={['Active', 'Name', 'Patron Group', 'User ID', 'Email']}
-            sortOrder={this.state.sortOrder}
+            sortOrder={this.state.sortOrder.replace(/^-/, '').replace(/,.*/, '')}
+            sortDirection={this.state.sortOrder.startsWith('-') ? 'descending' : 'ascending'}
             isEmptyMessage={`No results found for "${this.state.searchTerm}". Please check your spelling and filters.`}
             columnMapping={{ 'User ID': 'username' }}
+            loading={resource ? resource.isPending : false}
+            autosize
+            virtualize
           />
         </Pane>
 
         {detailsPane}
         <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false} label="Add New User Dialog">
           <UserForm
-            initialValues={{ active: true, personal: { preferredContactTypeId: '002' }}}
+            initialValues={{ active: true, personal: { preferredContactTypeId: '002' } }}
             onSubmit={(record) => { this.create(record); }}
             onCancel={this.onClickCloseNewUser}
             okapi={this.okapi}

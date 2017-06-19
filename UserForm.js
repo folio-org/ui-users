@@ -36,6 +36,9 @@ function validate(values) {
     errors.patronGroup = 'Please select a patron group';
   }
 
+  if (!values.personal || !values.personal.preferredContactTypeId) {
+    errors.personal = { preferredContactTypeId: 'Please select a preferred form of contact' };
+  }
   return errors;
 }
 
@@ -120,9 +123,9 @@ class UserForm extends React.Component {
             <Row>
               <Col sm={5} smOffset={1}>
                 <h2>User Record</h2>
-                <Field label="User ID" name="username" id="adduser_username" component={TextField} required fullWidth />
+                <Field label="User ID *" name="username" id="adduser_username" component={TextField} required fullWidth />
                 {!initialValues.id ? <Field label="Password" name="creds.password" id="pw" component={TextField} required fullWidth /> : null}
-                <Field label="Status" name="active" component={RadioButtonGroup}>
+                <Field label="Status *" name="active" component={RadioButtonGroup}>
                   <RadioButton label="Active" id="useractiveYesRB" value="true" inline />
                   <RadioButton label="Inactive" id="useractiveNoRB" value="false" inline />
                 </Field>
@@ -130,11 +133,11 @@ class UserForm extends React.Component {
                   <legend>Personal Info</legend>
                   <Field label="First Name" name="personal.firstName" id="adduser_firstname" component={TextField} required fullWidth />
                   <Field label="Middle Name" name="personal.middleName" id="adduser_middlename" component={TextField} fullWidth />
-                  <Field label="Last Name" name="personal.lastName" id="adduser_lastname" component={TextField} fullWidth />
+                  <Field label="Last Name *" name="personal.lastName" id="adduser_lastname" component={TextField} fullWidth />
                   <Field label="Email" name="personal.email" id="adduser_email" component={TextField} required fullWidth />
                   <Field label="Phone" name="personal.phone" id="adduser_phone" component={TextField} fullWidth />
                   <Field label="Mobile Phone" name="personal.mobilePhone" id="adduser_mobilePhone" component={TextField} fullWidth />
-                  <Field label="Preferred Contact" name="personal.preferredContactTypeId" id="adduser_preferredcontact" component={Select} dataOptions={[{ label: 'Select contact type', value: null }, ...contactTypeOptions]} fullWidth />
+                  <Field label="Preferred Contact *" name="personal.preferredContactTypeId" id="adduser_preferredcontact" component={Select} dataOptions={[{ label: 'Select contact type', value: '' }, ...contactTypeOptions]} fullWidth />
                 </fieldset>
                 <Field
                   component={Datepicker}
@@ -153,12 +156,12 @@ class UserForm extends React.Component {
                                 { label: 'Patron', value: 'Patron', selected: 'selected' }]}
                 /> */}
                 <Field
-                  label="Patron Group"
+                  label="Patron Group *"
                   name="patronGroup"
                   id="adduser_group"
                   component={Select}
                   fullWidth
-                  dataOptions={[{ label: 'Select patron group', value: null }, ...patronGroupOptions]}
+                  dataOptions={[{ label: 'Select patron group', value: '' }, ...patronGroupOptions]}
                 />
                 <Field
                   component={Datepicker}
@@ -180,7 +183,6 @@ class UserForm extends React.Component {
               </Col>
             </Row>
           </Pane>
-
         </Paneset>
       </form>
     );

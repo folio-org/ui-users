@@ -7,6 +7,8 @@ import Users from './Users';
 import Settings from './settings';
 
 class UsersRouting extends Component {
+  static actionNames = ['stripesHome', 'usersSortByName'];
+
   static propTypes = {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,

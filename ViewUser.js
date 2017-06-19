@@ -7,16 +7,17 @@ import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import Button from '@folio/stripes-components/lib/Button';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import { Row, Col } from 'react-bootstrap';
-import TextField from '@folio/stripes-components/lib/TextField';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import Icon from '@folio/stripes-components/lib/Icon';
 import Layer from '@folio/stripes-components/lib/Layer';
 import IfPermission from '@folio/stripes-components/lib/IfPermission';
+import IfInterface from '@folio/stripes-components/lib/IfInterface';
 
 import UserForm from './UserForm';
 import UserPermissions from './UserPermissions';
 import UserLoans from './UserLoans';
 import LoansHistory from './LoansHistory';
+import LoanActionsHistory from './LoanActionsHistory';
 import contactTypes from './data/contactTypes';
 
 class ViewUser extends Component {
@@ -71,14 +72,19 @@ class ViewUser extends Component {
     super(props);
     this.state = {
       viewLoansHistoryMode: false,
+      viewLoanActionsHistoryMode: false,
+      selectedLoan: {},
     };
     this.onClickEditUser = this.onClickEditUser.bind(this);
     this.onClickCloseEditUser = this.onClickCloseEditUser.bind(this);
     this.connectedUserLoans = props.stripes.connect(UserLoans);
     this.connectedLoansHistory = props.stripes.connect(LoansHistory);
+    this.connectedLoanActionsHistory = props.stripes.connect(LoanActionsHistory);
     this.connectedUserPermissions = props.stripes.connect(UserPermissions);
     this.onClickViewLoansHistory = this.onClickViewLoansHistory.bind(this);
     this.onClickCloseLoansHistory = this.onClickCloseLoansHistory.bind(this);
+    this.onClickViewLoanActionsHistory = this.onClickViewLoanActionsHistory.bind(this);
+    this.onClickCloseLoanActionsHistory = this.onClickCloseLoanActionsHistory.bind(this);
   }
 
   componentWillMount() {
@@ -109,6 +115,22 @@ class ViewUser extends Component {
     if (e) e.preventDefault();
     this.setState({
       viewLoansHistoryMode: false,
+    });
+  }
+
+  onClickViewLoanActionsHistory(e, selectedLoan) {
+    if (e) e.preventDefault();
+    this.setState({
+      viewLoanActionsHistoryMode: true,
+      selectedLoan,
+    });
+  }
+
+  onClickCloseLoanActionsHistory(e) {
+    if (e) e.preventDefault();
+    this.setState({
+      viewLoanActionsHistoryMode: false,
+      selectedLoan: {},
     });
   }
 
@@ -236,17 +258,8 @@ class ViewUser extends Component {
         <hr />
         <br />
         <Row>
-          <Col xs={3}>
+          <Col xs={7} sm={6}>
             <h3 className="marginTopHalf">Fines</h3>
-          </Col>
-          <Col xs={4} sm={3}>
-            <TextField
-              rounded
-              endControl={<Button buttonStyle="fieldControl"><Icon icon="clearX" /></Button>}
-              startControl={<Icon icon="search" />}
-              placeholder="Search"
-              fullWidth
-            />
           </Col>
           <Col xs={5} sm={6}>
             <Button align="end" bottomMargin0 >View Full History</Button>
@@ -255,10 +268,14 @@ class ViewUser extends Component {
         <MultiColumnList fullWidth contentData={fineHistory} />
         <hr />
         <IfPermission perm="circulation.loans.collection.get">
-          <this.connectedUserLoans onClickViewLoansHistory={this.onClickViewLoansHistory} {...this.props} />
+          <IfInterface name="loan-storage" version="1.0">
+            <this.connectedUserLoans onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory} onClickViewLoansHistory={this.onClickViewLoansHistory} {...this.props} />
+          </IfInterface>
         </IfPermission>
         <IfPermission perm="perms.users.get">
-          <this.connectedUserPermissions stripes={this.props.stripes} match={this.props.match} {...this.props} />
+          <IfInterface name="permissions" version="4.0">
+            <this.connectedUserPermissions stripes={this.props.stripes} match={this.props.match} {...this.props} />
+          </IfInterface>
         </IfPermission>
         <Layer isOpen={this.props.data.editMode ? this.props.data.editMode.mode : false} label="Edit User Dialog">
           <UserForm
@@ -271,6 +288,9 @@ class ViewUser extends Component {
         </Layer>
         <Layer isOpen={this.state.viewLoansHistoryMode} label="Loans History">
           <this.connectedLoansHistory userid={userid} stripes={this.props.stripes} onCancel={this.onClickCloseLoansHistory} />
+        </Layer>
+        <Layer isOpen={this.state.viewLoanActionsHistoryMode} label="Loans Actions History">
+          <this.connectedLoanActionsHistory user={user} loan={this.state.selectedLoan} stripes={this.props.stripes} onCancel={this.onClickCloseLoanActionsHistory} />
         </Layer>
       </Pane>
     );

@@ -3,3 +3,4 @@
 *.swo
 node_modules
 yarn.lock
+ModuleDescriptor.json
