@@ -12,6 +12,7 @@ import Icon from '@folio/stripes-components/lib/Icon';
 import Layer from '@folio/stripes-components/lib/Layer';
 import IfPermission from '@folio/stripes-components/lib/IfPermission';
 import IfInterface from '@folio/stripes-components/lib/IfInterface';
+import AddressList from '@folio/stripes-components/lib/structures/AddressFieldGroup/AddressList';
 
 import UserForm from './UserForm';
 import UserPermissions from './UserPermissions';
@@ -19,6 +20,7 @@ import UserLoans from './UserLoans';
 import LoansHistory from './LoansHistory';
 import LoanActionsHistory from './LoanActionsHistory';
 import contactTypes from './data/contactTypes';
+import { getAddresses } from './util';
 
 class ViewUser extends Component {
 
@@ -163,6 +165,8 @@ class ViewUser extends Component {
     const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
     const preferredContact = contactTypes.find(g => g.id === _.get(user, ['personal', 'preferredContactTypeId'], '')) || { type: '' };
 
+    console.log('addresses', getAddresses(user));
+
     return (
       <Pane defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
         <Row>
@@ -213,12 +217,6 @@ class ViewUser extends Component {
                 <KeyValue label="Date of birth" value={(_.get(user, ['personal', 'dateOfBirth'], '')) ? new Date(Date.parse(_.get(user, ['personal', 'dateOfBirth'], ''))).toLocaleDateString(this.props.stripes.locale) : ''} />
               </Col>
             </Row>
-            <br />
-            <Row>
-              <Col xs={12}>
-                <KeyValue label="Patron group" value={patronGroup.group} />
-              </Col>
-            </Row>
           </Col>
           <Col xs={5} >
             <Row>
@@ -252,8 +250,15 @@ class ViewUser extends Component {
                 <KeyValue label="External System ID" value={_.get(user, ['externalSystemId'], '')} />
               </Col>
             </Row>
+            <br />
+            <Row>
+              <Col xs={12}>
+                <KeyValue label="Patron group" value={patronGroup.group} />
+              </Col>
+            </Row>
           </Col>
         </Row>
+        <AddressList addresses={getAddresses(user)} canEdit canDelete />
         <br />
         <hr />
         <br />
