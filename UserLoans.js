@@ -5,8 +5,6 @@ import React, { PropTypes } from 'react';
 
 import { Row, Col } from 'react-bootstrap';
 import Button from '@folio/stripes-components/lib/Button';
-import Icon from '@folio/stripes-components/lib/Icon';
-import TextField from '@folio/stripes-components/lib/TextField';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 
 
@@ -21,6 +19,7 @@ class UserLoans extends React.Component {
       locale: PropTypes.string.isRequired,
     }).isRequired,
     onClickViewLoansHistory: PropTypes.func.isRequired,
+    onClickViewLoanActionsHistory: PropTypes.func.isRequired,
   };
 
   static manifest = Object.freeze({
@@ -49,17 +48,8 @@ class UserLoans extends React.Component {
     return (
       <div>
         <Row>
-          <Col xs={3}>
+          <Col xs={7} sm={6}>
             <h3 className="marginTopHalf">Current loans</h3>
-          </Col>
-          <Col xs={4} sm={3}>
-            <TextField
-              rounded
-              endControl={<Button buttonStyle="fieldControl"><Icon icon="clearX" /></Button>}
-              startControl={<Icon icon="search" />}
-              placeholder="Search"
-              fullWidth
-            />
           </Col>
           <Col xs={5} sm={6}>
             <Button align="end" bottomMargin0 onClick={this.props.onClickViewLoansHistory}>View Full History</Button>
@@ -69,6 +59,7 @@ class UserLoans extends React.Component {
           fullWidth
           formatter={loansFormatter}
           visibleColumns={['title', 'barcode', 'loanDate', 'status']}
+          onRowClick={this.props.onClickViewLoanActionsHistory}
           contentData={usersLoans}
         />
       </div>);

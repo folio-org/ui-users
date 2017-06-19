@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "2.1.0",
+  "version": "2.7.0",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -15,16 +15,38 @@
     "type": "app",
     "displayName": "Users",
     "route": "/users",
-    "home": "/users?filters=active.Active",
+    "home": "/users?filters=active.Active&sort=Name",
     "hasSettings": true,
     "okapiInterfaces": {
-      "users": "10.0",
+      "users": "11.0",
       "circulation": "1.0",
-      "permissions": "3.0"
-    }
+      "permissions": "4.0"
+    },
+    "permissionsets": [
+      {
+        "permissionName": "users-bl.view",
+        "displayName": "Can view user profile",
+        "description": "Some subperms can be deleted later when submodules use modern permission names",
+        "subPermissions": ["users-bl.collection.get", "users-bl.item.get",
+          "module.users.enabled",
+          "users.collection.get", "users.item.get",
+          "usergroups.collection.get",
+          "login.item.get"],
+        "visible": true
+      }, {
+        "permissionName": "users-bl.edit",
+        "displayName": "Can edit user profile",
+        "description": "Some subperms can be deleted later when bl does updates and ModulePermissions can be used",
+        "subPermissions": [ "users-bl.view", "users-bl.item.put",
+          "users.item.put",
+          "login.item.put"],
+        "visible": true
+      }
+    ]
   },
   "scripts": {
-    "lint": "eslint *.js lib settings || true"
+    "lint": "eslint *.js lib settings || true",
+    "mkmd": "node ../stripes-core/util/package2md.js package.json > ModuleDescriptor.json"
   },
   "devDependencies": {
     "babel-core": "^6.17.0",
@@ -42,7 +64,7 @@
     "eslint-plugin-react": "^6.4.1"
   },
   "dependencies": {
-    "@folio/stripes-components": "^0.10.0",
+    "@folio/stripes-components": "^0.15.0",
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.17.4",
     "query-string": "^4.3.2",
@@ -52,7 +74,7 @@
     "redux-form": "^6.1.1"
   },
   "peerDependencies": {
-    "@folio/stripes-connect": "^2.1.0",
-    "@folio/stripes-core": "^1.8.0"
+    "@folio/stripes-connect": "^2.2.1",
+    "@folio/stripes-core": "^1.13.0"
   }
 }

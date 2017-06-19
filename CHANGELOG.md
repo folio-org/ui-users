@@ -1,9 +1,58 @@
 # Change history for ui-users
 
-## In Progress
+## 2.8.0 IN PROGRESS
 
-* Newly created permission sets are imediately selected. Related to UIU-1.
-* The header for the permission set details pane now reads "Untitled" when aplicable and never displays the permission set ID. Related to UIU-41.
+* Display user permissions only if interface "permissions" v4.0 is available. Fixes the new part of UIU-74.
+* Add two high-level permissions to the `package.json`, and a new `yarn mkmd` rule to create a module-descriptor from this and other information in the package-file. Fixes UIU-88.
+* Update search debounce time from 150ms to 350ms, Ameliorates UIU-77.
+
+## [2.7.0](https://github.com/folio-org/ui-users/tree/v2.7.0) (2017-06-14)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.6.0...v2.7.0)
+
+* View loan details with first loan action. Fixes UIU-87.
+* Support reverse-sorting. Fixes UIU-81.
+* Stable sorting: when moving from one sort criterion to another, the old one is retained as the secondary key. Fixes UIU-83.
+* Remove non-functional search boxes from user details pane. Fixes UIU-76.
+* Upgrade stripes-components dependency to v0.15.0, needed for stable sorting.
+
+## [2.6.0](https://github.com/folio-org/ui-users/tree/v2.6.0) (2017-06-12)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.5.0...v2.6.0)
+
+* Display loans only if interface loan-storage v1.0 is available. Fixes UIU-74.
+* Do not assign _any_ permissions to new user -- no longer needed for login, since stripes-core v1.13.0 uses the all-in-one call `/bl-users/login`. Fixes UIU-60.
+
+## [2.5.0](https://github.com/folio-org/ui-users/tree/v2.5.0) (2017-06-09)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.4.0...v2.5.0)
+
+* Accept either total_records or totalRecords field in search-responses. Fixes UIU-68 (and so clears the way for MODUSERS-19).
+* Mark five fields mandatory in users form (UIU-28)
+* Validate preferred-contact setting (mandatory) (UIU-28)
+* Bug-fix (patron-group setting, when set to "undefined")
+
+## [2.4.0](https://github.com/folio-org/ui-users/tree/v2.4.0) (2017-06-08)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.3.0...v2.4.0)
+
+* Updated dependency version of stripes-components to 0.12.0
+* Props added to results list to use infinite scroll capability (STRIPES-361)
+* New field 'preferred contact'. Requires users interface v11.0  (UIU-28)
+* Use `props.resources` to determine actual hit count
+
+## [2.3.0](https://github.com/folio-org/ui-users/tree/v2.3.0) (2017-06-07)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.2.0...v2.3.0)
+
+* The editMode boolean is now in a stripes-core local resource instead of a piece of React component state. This makes edit-mode persistent because it's in the Redux store -- so navigating away from an edit-user page to another app, then returning to the Users app, will remain in edit mode. Fixes UIU-62.
+* New users no longer get 'usergroups.collection.get' and 'module.trivial.enabled' permissions. Fixes UIU-61.
+* Default to sorting by name (i.e. surname, first name). Fixes UIU-51.
+* Make patron-group mandatory. Fixes UIU-45.
+* Use patron-group name rather than description throughout (in facets, list, display, edit-form). Fixes UIU-56.
+* Require stripes-components v0.10.1.
+
+## [2.2.0](https://github.com/folio-org/ui-users/tree/v2.2.0) (2017-06-05)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.1.0...v2.2.0)
+
+* New users default to active=true, not only in the form but in the record that gets created. Fixes UI-46, and UI-44, and also UIU-2 (properly this time).
+* Newly created permission sets are immediately selected. Related to UIU-1.
+* The header for the permission set details pane now reads "Untitled" when applicable and never displays the permission set ID. Related to UIU-41.
 
 ## [2.1.0](https://github.com/folio-org/ui-users/tree/v2.1.0) (2017-06-01)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.0.0...v2.1.0)
@@ -21,7 +70,7 @@
 * When a new permission-set is created, it is highlighted. Fixes UIU-1.
 * Get Okapi token information from new `okapi` prop rather than context.
 * Upgrade dependencies: stripes-components v0.10.0, stripes-core v1.8.0.
-* Remove unused `ModuleDescriptor.json`; move relevant information into `package.json`, whence we hope future toold will extract it.
+* Remove unused `ModuleDescriptor.json`; move relevant information into `package.json`, whence we hope future tools will extract it.
 * Add Okapi interface dependencies to `package.json`: users v10.0, circulation v1.0 and permissions v3.0.
 
 ## [2.0.0](https://github.com/folio-org/ui-users/tree/v2.0.0) (2017-05-11)
