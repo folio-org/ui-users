@@ -54,7 +54,7 @@ class PermissionSetDetails extends Component {
   saveSet() {
     const set = this.state.selectedSet;
     this.props.parentMutator.permissionSets.PUT(Object.assign({}, set, {
-      subPermissions: set.subPermissions.map(p => p.id),
+      subPermissions: set.subPermissions.map(p => p.permissionName),
     }));
   }
 
