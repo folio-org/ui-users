@@ -21,6 +21,7 @@ import LoansHistory from './LoansHistory';
 import LoanActionsHistory from './LoanActionsHistory';
 import contactTypes from './data/contactTypes';
 import { getAddresses } from './util';
+import CountryAutocomplete from './lib/CountryAutocomplete';
 
 class ViewUser extends Component {
 
@@ -136,6 +137,10 @@ class ViewUser extends Component {
     });
   }
 
+  onAddressUpdate(data) {
+    console.log('data', data, this);
+  }
+
   update(data) {
     // eslint-disable-next-line no-param-reassign
     if (data.creds) delete data.creds; // not handled on edit (yet at least)
@@ -164,8 +169,6 @@ class ViewUser extends Component {
     const patronGroupId = _.get(user, ['patronGroup'], '');
     const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
     const preferredContact = contactTypes.find(g => g.id === _.get(user, ['personal', 'preferredContactTypeId'], '')) || { type: '' };
-
-    console.log('addresses', getAddresses(user));
 
     return (
       <Pane defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
@@ -258,7 +261,7 @@ class ViewUser extends Component {
             </Row>
           </Col>
         </Row>
-        <AddressList addresses={getAddresses(user)} canEdit canDelete />
+        <AddressList onUpdate={this.onAddressUpdate} fieldComponents={{ country: CountryAutocomplete }} addresses={getAddresses(user)} canEdit canDelete />
         <br />
         <hr />
         <br />
@@ -301,6 +304,5 @@ class ViewUser extends Component {
     );
   }
 }
-
 
 export default ViewUser;

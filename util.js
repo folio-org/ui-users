@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import countries from './data/countries';
+import { countriesByCode } from './data/countries';
 
 export function formatDate(dateStr, locale) {
   if (!dateStr) return dateStr;
@@ -17,10 +17,10 @@ export function getAddresses(user) {
 
   if (!addresses.length) return addresses;
 
-  return addresses.map(addr => {
-    return Object.assign(addr, {
+  return addresses.map(addr =>
+    Object.assign(addr, {
       id: addr.id || _.uniqueId(),
-      country: countries[addr.countryId].country,
-    });
-  });
+      country: countriesByCode[addr.countryId].country,
+    }),
+  );
 }
