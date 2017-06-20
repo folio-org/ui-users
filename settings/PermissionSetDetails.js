@@ -52,7 +52,10 @@ class PermissionSetDetails extends Component {
   }
 
   saveSet() {
-    this.props.parentMutator.permissionSets.PUT(this.state.selectedSet);
+    const set = this.state.selectedSet;
+    this.props.parentMutator.permissionSets.PUT(Object.assign({}, set, {
+      subPermissions: set.subPermissions.map(p => p.id),
+    }));
   }
 
   beginDelete() {
