@@ -95,7 +95,7 @@ class PermissionSetDetails extends Component {
           <section>
             <h2 style={{ marginTop: '0' }}>About</h2>
             <Field label="Title" name="displayName" id="displayName" component={Textfield} required fullWidth rounded validate={this.validateSet} onBlur={this.saveSet} disabled={disabled} />
-            <Field label="Description" name="description" id="permissionset_description" component={TextArea} validate={this.validateSet} onBlur={this.saveSet} required fullWidth rounded disabled={disabled} />
+            <Field label="Description" name="description" id="permissionset_description" component={TextArea} validate={this.validateSet} onBlur={this.saveSet} fullWidth rounded disabled={disabled} />
           </section>
 
           <IfPermission perm="perms.permissions.item.delete">
