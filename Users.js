@@ -147,9 +147,6 @@ class Users extends React.Component {
     this.connectedViewUser = props.stripes.connect(ViewUser);
     const logger = props.stripes.logger;
     this.log = logger.log.bind(logger);
-
-    // Doesn't need to be React state; and if it is, we have problems updating it in the render method
-    this.numberOfRecordCreated = 0;
   }
 
   componentWillMount() {
@@ -281,16 +278,7 @@ class Users extends React.Component {
 
   render() {
     const { data, stripes } = this.props;
-    const resource = this.props.resources.users;
     const users = data.users || [];
-
-    const sm = resource ? resource.successfulMutations : [];
-    if (sm.length > this.numberOfRecordCreated) {
-      this.numberOfRecordCreated = sm.length;
-      const rec = sm[0].record;
-      console.log('new record created:', rec);
-      this.onSelectRow(undefined, { id: rec.id, username: rec.username });
-    }
 
     /* searchHeader is a 'custom pane header'*/
     const searchHeader = <FilterPaneSearch id="SearchField" onChange={this.onChangeSearch} onClear={this.onClearSearch} value={this.state.searchTerm} />;
@@ -328,6 +316,7 @@ class Users extends React.Component {
           <p>Sorry - your user permissions do not allow access to this page.</p>
         </div>));
 
+    const resource = this.props.resources.users;
     return (
       <Paneset>
         {/* Filter Pane */}
