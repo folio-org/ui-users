@@ -52,7 +52,10 @@ class PermissionSetDetails extends Component {
   }
 
   saveSet() {
-    this.props.parentMutator.permissionSets.PUT(this.state.selectedSet);
+    const set = this.state.selectedSet;
+    this.props.parentMutator.permissionSets.PUT(Object.assign({}, set, {
+      subPermissions: set.subPermissions.map(p => p.permissionName),
+    }));
   }
 
   beginDelete() {
@@ -95,7 +98,7 @@ class PermissionSetDetails extends Component {
           <section>
             <h2 style={{ marginTop: '0' }}>About</h2>
             <Field label="Title" name="displayName" id="displayName" component={Textfield} required fullWidth rounded validate={this.validateSet} onBlur={this.saveSet} disabled={disabled} />
-            <Field label="Description" name="description" id="permissionset_description" component={TextArea} validate={this.validateSet} onBlur={this.saveSet} required fullWidth rounded disabled={disabled} />
+            <Field label="Description" name="description" id="permissionset_description" component={TextArea} validate={this.validateSet} onBlur={this.saveSet} fullWidth rounded disabled={disabled} />
           </section>
 
           <IfPermission perm="perms.permissions.item.delete">
