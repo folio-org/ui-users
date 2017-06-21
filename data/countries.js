@@ -254,4 +254,9 @@ export const countriesByCode = countries.reduce((map, c) =>
 export const countriesByName = countries.reduce((map, c) =>
   (Object.assign(map, { [c.country]: c })), {});
 
+export const countriesOptions = countries.map(c => ({
+  label: c.country,
+  value: c.alpha2,
+}));
+
 export default countries;

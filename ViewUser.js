@@ -20,8 +20,10 @@ import UserLoans from './UserLoans';
 import LoansHistory from './LoansHistory';
 import LoanActionsHistory from './LoanActionsHistory';
 import contactTypes from './data/contactTypes';
+import Autocomplete from './lib/Autocomplete';
+
 import { getAddresses } from './util';
-import CountryAutocomplete from './lib/CountryAutocomplete';
+import { countriesOptions } from './data/countries';
 
 class ViewUser extends Component {
 
@@ -261,7 +263,13 @@ class ViewUser extends Component {
             </Row>
           </Col>
         </Row>
-        <AddressList onUpdate={this.onAddressUpdate} fieldComponents={{ country: CountryAutocomplete }} addresses={getAddresses(user)} canEdit canDelete />
+        <AddressList
+          onUpdate={this.onAddressUpdate}
+          fieldComponents={{ country: (props) => Autocomplete({ options: countriesOptions, ...props }) }}
+          addresses={getAddresses(user)}
+          canEdit
+          canDelete
+        />
         <br />
         <hr />
         <br />
