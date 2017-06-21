@@ -65,6 +65,14 @@ class Users extends React.Component {
           total_records: PropTypes.number,
         }),
         isPending: PropTypes.bool.isPending,
+        successfulMutations: PropTypes.arrayOf(
+          PropTypes.shape({
+            record: PropTypes.shape({
+              id: PropTypes.string.isRequired,
+              username: PropTypes.string.isRequired,
+            }).isRequired,
+          }),
+        ),
       }),
     }).isRequired,
     history: PropTypes.shape({
