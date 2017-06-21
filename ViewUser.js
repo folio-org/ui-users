@@ -12,6 +12,8 @@ import Icon from '@folio/stripes-components/lib/Icon';
 import Layer from '@folio/stripes-components/lib/Layer';
 import IfPermission from '@folio/stripes-components/lib/IfPermission';
 import IfInterface from '@folio/stripes-components/lib/IfInterface';
+import Select from '@folio/stripes-components/lib/Select';
+
 import AddressList from '@folio/stripes-components/lib/structures/AddressFieldGroup/AddressList';
 
 import UserForm from './UserForm';
@@ -22,8 +24,9 @@ import LoanActionsHistory from './LoanActionsHistory';
 import contactTypes from './data/contactTypes';
 import Autocomplete from './lib/Autocomplete';
 
-import { getAddresses } from './util';
+import { getAddresses, updateAddresses } from './util';
 import { countriesOptions } from './data/countries';
+import { addressTypeOptions } from './data/addressTypes';
 
 class ViewUser extends Component {
 
@@ -90,6 +93,7 @@ class ViewUser extends Component {
     this.onClickCloseLoansHistory = this.onClickCloseLoansHistory.bind(this);
     this.onClickViewLoanActionsHistory = this.onClickViewLoanActionsHistory.bind(this);
     this.onClickCloseLoanActionsHistory = this.onClickCloseLoanActionsHistory.bind(this);
+    this.onAddressUpdate = this.onAddressUpdate.bind(this);
   }
 
   componentWillMount() {
@@ -139,8 +143,17 @@ class ViewUser extends Component {
     });
   }
 
-  onAddressUpdate(data) {
-    console.log('data', data, this);
+  onAddressUpdate(address) {
+    const user = this.getUser();
+    if (!user) return;
+    updateAddresses(user, address);
+    // TODO save user
+  }
+
+  getUser() {
+    const { data: { selUser }, match: { params: { userid } } } = this.props;
+    if (!selUser || selUser.length === 0 || !userid) return null;
+    return selUser.find(u => u.id === userid);
   }
 
   update(data) {
@@ -154,8 +167,8 @@ class ViewUser extends Component {
   render() {
     const dueDate = new Date(Date.parse('2014-11-12')).toLocaleDateString(this.props.stripes.locale);
     const fineHistory = [{ 'Due Date': dueDate, Amount: '34.23', Status: 'Unpaid' }];
-
-    const { data: { selUser, patronGroups }, match: { params: { userid } } } = this.props;
+    const { data: { patronGroups } } = this.props;
+    const user = this.getUser();
 
     const detailMenu = (<PaneMenu>
       <IfPermission perm="users.item.put">
@@ -163,14 +176,16 @@ class ViewUser extends Component {
       </IfPermission>
     </PaneMenu>);
 
-    if (!selUser || selUser.length === 0 || !userid) return <div />;
-
-    const user = selUser.find(u => u.id === userid);
     if (!user) return <div />;
+
     const userStatus = (_.get(user, ['active'], '') ? 'active' : 'inactive');
     const patronGroupId = _.get(user, ['patronGroup'], '');
     const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
     const preferredContact = contactTypes.find(g => g.id === _.get(user, ['personal', 'preferredContactTypeId'], '')) || { type: '' };
+    const addressFields = {
+      country: { component: Autocomplete, props: { dataOptions: countriesOptions } },
+      addressType: { component: Select, props: { dataOptions: addressTypeOptions } },
+    };
 
     return (
       <Pane defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
@@ -265,7 +280,8 @@ class ViewUser extends Component {
         </Row>
         <AddressList
           onUpdate={this.onAddressUpdate}
-          fieldComponents={{ country: (props) => Autocomplete({ options: countriesOptions, ...props }) }}
+          onCreate={this.onAddressUpdate}
+          fieldComponents={addressFields}
           addresses={getAddresses(user)}
           canEdit
           canDelete
@@ -303,7 +319,7 @@ class ViewUser extends Component {
           />
         </Layer>
         <Layer isOpen={this.state.viewLoansHistoryMode} label="Loans History">
-          <this.connectedLoansHistory userid={userid} stripes={this.props.stripes} onCancel={this.onClickCloseLoansHistory} />
+          <this.connectedLoansHistory userid={user.id} stripes={this.props.stripes} onCancel={this.onClickCloseLoansHistory} />
         </Layer>
         <Layer isOpen={this.state.viewLoanActionsHistoryMode} label="Loans Actions History">
           <this.connectedLoanActionsHistory user={user} loan={this.state.selectedLoan} stripes={this.props.stripes} onCancel={this.onClickCloseLoanActionsHistory} />
