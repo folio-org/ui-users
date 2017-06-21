@@ -153,6 +153,15 @@ class Users extends React.Component {
     if (_.isEmpty(this.props.data.addUserMode)) this.props.mutator.addUserMode.replace({ mode: false });
   }
 
+  componentWillReceiveProps(nextProps) {
+    const resource = this.props.resources.users;
+    if (resource) {
+      const sm = nextProps.resources.users.successfulMutations;
+      if (sm.length > resource.successfulMutations.length)
+        this.onSelectRow(undefined, { id: sm[0].record.id, username: sm[0].record.username });
+    }
+  }
+
   componentWillUpdate() {
     const pg = this.props.data.patronGroups;
     if (pg && pg.length) {
