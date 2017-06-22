@@ -268,7 +268,7 @@ class ViewUser extends Component {
         <MultiColumnList fullWidth contentData={fineHistory} />
         <hr />
         <IfPermission perm="circulation.loans.collection.get">
-          <IfInterface name="loan-storage" version="1.0">
+          <IfInterface name="loan-storage" version="2.0">
             <this.connectedUserLoans onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory} onClickViewLoansHistory={this.onClickViewLoansHistory} {...this.props} />
           </IfInterface>
         </IfPermission>
