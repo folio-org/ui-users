@@ -7,7 +7,7 @@
 * Update search debounce time from 150ms to 350ms, Ameliorates UIU-77.
 * Description field for permission-sets is not mandatory. Fixes UIU-93.
 * When maintaining permissions sets, post only the IDs of subpermissions, not whole permissions. Fixes UIU-73.
-* When a new record is created, navigate to it, and higlight it in the search-results if present. Fixes UIU-95.
+* When a new record is created, navigate to it, and highlight it in the search-results if present. Fixes UIU-95.
 
 ## [2.7.0](https://github.com/folio-org/ui-users/tree/v2.7.0) (2017-06-14)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.6.0...v2.7.0)
