@@ -23,7 +23,7 @@
       "permissions": "4.0",
       "login": "3.0"
     },
-    "permissionsets": [
+    "permissionSets": [
       {
         "permissionName": "users-bl.view",
         "displayName": "Can view user profile",
