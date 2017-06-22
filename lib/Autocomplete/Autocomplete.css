@@ -11,7 +11,7 @@
   text-transform: Uppercase;
 }
 
-.Autocomplete input {
+.autocomplete input {
   border-radius: 0px;
   height: 28px;
   min-height: 28px;
@@ -22,7 +22,7 @@
   color: #333;
 }
 
-.Autocomplete button {
+.autocomplete button {
   float: none;
   position: absolute;
   top: -9px;
@@ -31,7 +31,7 @@
   opacity: 1;
 }
 
-.Autocomplete button span {
+.autocomplete button span {
   font-size: 40px;
   font-weight: 300;
   color: #999;

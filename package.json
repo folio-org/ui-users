@@ -27,19 +27,27 @@
         "permissionName": "users-bl.view",
         "displayName": "Can view user profile",
         "description": "Some subperms can be deleted later when submodules use modern permission names",
-        "subPermissions": ["users-bl.collection.get", "users-bl.item.get",
+        "subPermissions": [
+          "users-bl.collection.get",
+          "users-bl.item.get",
           "module.users.enabled",
-          "users.collection.get", "users.item.get",
+          "users.collection.get",
+          "users.item.get",
           "usergroups.collection.get",
-          "login.item.get"],
+          "login.item.get"
+        ],
         "visible": true
-      }, {
+      },
+      {
         "permissionName": "users-bl.edit",
         "displayName": "Can edit user profile",
         "description": "Some subperms can be deleted later when bl does updates and ModulePermissions can be used",
-        "subPermissions": [ "users-bl.view", "users-bl.item.put",
+        "subPermissions": [
+          "users-bl.view",
+          "users-bl.item.put",
           "users.item.put",
-          "login.item.put"],
+          "login.item.put"
+        ],
         "visible": true
       }
     ]
@@ -70,8 +78,8 @@
     "query-string": "^4.3.2",
     "react": "^15.4.2",
     "react-bootstrap": "^0.30.7",
-    "react-router-dom": "^4.0.0",
     "react-bootstrap-typeahead": "^1.4.0",
+    "react-router-dom": "^4.0.0",
     "redux-form": "^6.1.1"
   },
   "peerDependencies": {

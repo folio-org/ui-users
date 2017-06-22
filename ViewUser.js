@@ -12,9 +12,6 @@ import Icon from '@folio/stripes-components/lib/Icon';
 import Layer from '@folio/stripes-components/lib/Layer';
 import IfPermission from '@folio/stripes-components/lib/IfPermission';
 import IfInterface from '@folio/stripes-components/lib/IfInterface';
-import Select from '@folio/stripes-components/lib/Select';
-
-import AddressList from '@folio/stripes-components/lib/structures/AddressFieldGroup/AddressList';
 
 import UserForm from './UserForm';
 import UserPermissions from './UserPermissions';
@@ -22,11 +19,7 @@ import UserLoans from './UserLoans';
 import LoansHistory from './LoansHistory';
 import LoanActionsHistory from './LoanActionsHistory';
 import contactTypes from './data/contactTypes';
-import Autocomplete from './lib/Autocomplete';
-
-import { getAddresses, updateAddresses } from './util';
-import { countriesOptions } from './data/countries';
-import { addressTypeOptions } from './data/addressTypes';
+import UserAddresses from './lib/UserAddresses';
 
 class ViewUser extends Component {
 
@@ -93,7 +86,7 @@ class ViewUser extends Component {
     this.onClickCloseLoansHistory = this.onClickCloseLoansHistory.bind(this);
     this.onClickViewLoanActionsHistory = this.onClickViewLoanActionsHistory.bind(this);
     this.onClickCloseLoanActionsHistory = this.onClickCloseLoanActionsHistory.bind(this);
-    this.onAddressUpdate = this.onAddressUpdate.bind(this);
+    this.onAddressesUpdate = this.onAddressesUpdate.bind(this);
   }
 
   componentWillMount() {
@@ -143,11 +136,12 @@ class ViewUser extends Component {
     });
   }
 
-  onAddressUpdate(address) {
+  onAddressesUpdate(addresses) {
     const user = this.getUser();
     if (!user) return;
-    updateAddresses(user, address);
-    // TODO save user
+
+    user.personal.addresses = addresses;
+    this.update(user);
   }
 
   getUser() {
@@ -182,10 +176,6 @@ class ViewUser extends Component {
     const patronGroupId = _.get(user, ['patronGroup'], '');
     const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
     const preferredContact = contactTypes.find(g => g.id === _.get(user, ['personal', 'preferredContactTypeId'], '')) || { type: '' };
-    const addressFields = {
-      country: { component: Autocomplete, props: { dataOptions: countriesOptions } },
-      addressType: { component: Select, props: { dataOptions: addressTypeOptions } },
-    };
 
     return (
       <Pane defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
@@ -278,14 +268,7 @@ class ViewUser extends Component {
             </Row>
           </Col>
         </Row>
-        <AddressList
-          onUpdate={this.onAddressUpdate}
-          onCreate={this.onAddressUpdate}
-          fieldComponents={addressFields}
-          addresses={getAddresses(user)}
-          canEdit
-          canDelete
-        />
+        <UserAddresses onUpdate={this.onAddressesUpdate} addresses={_.get(user, ['personal', 'addresses'], [])} />
         <br />
         <hr />
         <br />
