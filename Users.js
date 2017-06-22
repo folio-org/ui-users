@@ -168,6 +168,10 @@ class Users extends React.Component {
       if (sm.length > resource.successfulMutations.length)
         this.onSelectRow(undefined, { id: sm[0].record.id, username: sm[0].record.username });
     }
+
+    if (resource && resource.isPending && !nextProps.resources.users.isPending) {
+      this.log('event', 'new search-result');
+    }
   }
 
   componentWillUpdate() {
