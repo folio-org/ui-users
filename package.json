@@ -73,6 +73,7 @@
   },
   "dependencies": {
     "@folio/stripes-components": "^0.15.0",
+    "deep-diff": "^0.3.8",
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.17.4",
     "query-string": "^4.3.2",
@@ -83,6 +84,6 @@
   },
   "peerDependencies": {
     "@folio/stripes-connect": "^2.2.1",
-    "@folio/stripes-core": "^1.13.0"
+    "@folio/stripes-core": "^1.14.0"
   }
 }
