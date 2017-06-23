@@ -8,7 +8,7 @@
 * Description field for permission-sets is not mandatory. Fixes UIU-93.
 * When maintaining permissions sets, post only the IDs of subpermissions, not whole permissions. Fixes UIU-73.
 * When a new record is created, navigate to it, and highlight it in the search-results if present. Fixes UIU-95.
-* Interface dependency for user loans is upgraded to `loan-storage` 1.0 to `circulation` 1.0. Fixes UIU-100.
+* Interface dependency for user loans is upgraded from `loan-storage` 1.0 to `circulation` 1.0. Fixes UIU-100.
 * Revise okapiInterfaces and permissionSets in `package.json`. Fixes UIU-105.
 
 ## [2.7.0](https://github.com/folio-org/ui-users/tree/v2.7.0) (2017-06-14)
