@@ -11,10 +11,18 @@ import Select from '@folio/stripes-components/lib/Select';
 import RadioButtonGroup from '@folio/stripes-components/lib/RadioButtonGroup';
 import RadioButton from '@folio/stripes-components/lib/RadioButton';
 import Datepicker from '@folio/stripes-components/lib/Datepicker';
+import AddressEditList from '@folio/stripes-components/lib/structures/AddressFieldGroup/AddressEdit/AddressEditList';
 import fetch from 'isomorphic-fetch';
-
-
 import { Field, reduxForm } from 'redux-form';
+
+import { countriesOptions } from './data/countries';
+import { addressTypeOptions } from './data/addressTypes';
+import Autocomplete from './lib/Autocomplete';
+
+const addressFields = {
+  country: { component: Autocomplete, props: { dataOptions: countriesOptions } },
+  addressType: { component: Select, props: { dataOptions: addressTypeOptions } },
+};
 
 const sys = require('stripes-loader'); // eslint-disable-line
 const okapiUrl = sys.okapi.url;
@@ -180,6 +188,8 @@ class UserForm extends React.Component {
                 <Field label="Bar Code" name="barcode" id="adduser_barcode" component={TextField} fullWidth />
                 <Field label="FOLIO Record Number" name="id" id="adduser_id" readOnly="true" component={TextField} fullWidth />
                 <Field label="External System ID" name="externalSystemId" id="adduser_externalsystemid" component={TextField} fullWidth />
+
+                <AddressEditList name="address" fieldComponents={addressFields} canDelete />
               </Col>
             </Row>
           </Pane>
