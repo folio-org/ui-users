@@ -25,6 +25,10 @@
     },
     "permissionSets": [
       {
+        "permissionName": "module.users.enabled",
+        "displayName": "UI: Users module is enabled"
+      },
+      {
         "permissionName": "users-bl.view",
         "displayName": "Can view user profile",
         "description": "Some subperms can be deleted later when submodules use modern permission names",
