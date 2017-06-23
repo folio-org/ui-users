@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import { countriesByCode, countriesByName } from '../../data/countries';
-import { addressTypesByDesc, addressTypesById } from '../../data/addressTypes';
+import { countriesByCode, countriesByName } from '../data/countries';
+import { addressTypesByDesc, addressTypesById } from '../data/addressTypes';
 
 function toListAddress(addr) {
   const country = (addr.countryId) ? countriesByCode[addr.countryId].country : '';

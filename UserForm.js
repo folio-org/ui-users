@@ -189,7 +189,7 @@ class UserForm extends React.Component {
                 <Field label="FOLIO Record Number" name="id" id="adduser_id" readOnly="true" component={TextField} fullWidth />
                 <Field label="External System ID" name="externalSystemId" id="adduser_externalsystemid" component={TextField} fullWidth />
 
-                <AddressEditList name="address" fieldComponents={addressFields} canDelete />
+                <AddressEditList name="personal.addresses" fieldComponents={addressFields} canDelete />
               </Col>
             </Row>
           </Pane>

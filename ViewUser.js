@@ -20,6 +20,7 @@ import LoansHistory from './LoansHistory';
 import LoanActionsHistory from './LoanActionsHistory';
 import contactTypes from './data/contactTypes';
 import UserAddresses from './lib/UserAddresses';
+import { toListAddresses, toUserAddresses } from './converters/address';
 
 class ViewUser extends Component {
 
@@ -140,7 +141,7 @@ class ViewUser extends Component {
     const user = this.getUser();
     if (!user) return;
 
-    user.personal.addresses = addresses;
+    user.personal.addresses = toUserAddresses(addresses);
     this.update(user);
   }
 
@@ -176,6 +177,7 @@ class ViewUser extends Component {
     const patronGroupId = _.get(user, ['patronGroup'], '');
     const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
     const preferredContact = contactTypes.find(g => g.id === _.get(user, ['personal', 'preferredContactTypeId'], '')) || { type: '' };
+    const addreses = toListAddresses(_.get(user, ['personal', 'addresses'], []));
 
     return (
       <Pane defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
@@ -268,7 +270,7 @@ class ViewUser extends Component {
             </Row>
           </Col>
         </Row>
-        <UserAddresses onUpdate={this.onAddressesUpdate} addresses={_.get(user, ['personal', 'addresses'], [])} />
+        <UserAddresses onUpdate={this.onAddressesUpdate} addresses={addreses} />
         <br />
         <hr />
         <br />

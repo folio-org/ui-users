@@ -25,6 +25,7 @@ import UserForm from './UserForm';
 import ViewUser from './ViewUser';
 
 import contactTypes from './data/contactTypes';
+import { toUserAddresses } from './converters/address';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
@@ -250,6 +251,10 @@ class Users extends React.Component {
   }
 
   create = (data) => {
+    if (data.personal.addresses) {
+      Object.assign(data.personal, { addresses: toUserAddresses(data.addresses) });
+    }
+
     // extract creds object from user object
     const creds = Object.assign({}, data.creds, { username: data.username });
     if (data.creds) delete data.creds; // eslint-disable-line no-param-reassign
