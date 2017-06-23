@@ -21,7 +21,7 @@ import Autocomplete from './lib/Autocomplete';
 
 const addressFields = {
   country: { component: Autocomplete, props: { dataOptions: countriesOptions } },
-  addressType: { component: Select, props: { dataOptions: addressTypeOptions } },
+  addressType: { component: Select, props: { dataOptions: addressTypeOptions, fullWidth: true, placeholder: 'select address type' } },
 };
 
 const sys = require('stripes-loader'); // eslint-disable-line
