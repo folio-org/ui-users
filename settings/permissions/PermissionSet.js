@@ -1,7 +1,7 @@
 // We have to remove node_modules/react to avoid having multiple copies loaded.
 // eslint-disable-next-line import/no-unresolved
 import React, { PropTypes } from 'react';
-import RenderPermissions from '../lib/RenderPermissions';
+import RenderPermissions from '../../lib/RenderPermissions';
 
 class PermissionSet extends React.Component {
   static propTypes = {
