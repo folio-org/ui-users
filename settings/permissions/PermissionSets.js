@@ -25,7 +25,6 @@ class PermissionSets extends Component {
       permissionSets: PropTypes.shape({
         POST: PropTypes.func,
         DELETE: PropTypes.func,
-        GET: PropTypes.func,
       }),
     }).isRequired,
   };
