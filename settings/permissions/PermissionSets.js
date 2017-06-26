@@ -50,10 +50,9 @@ class PermissionSets extends Component {
   constructor(props) {
     super(props);
 
-    // 'Manager' just for example...
-
     this.state = {
       selectedSet: null,
+      newSet: false,
     };
 
     this.navList = null;
@@ -61,6 +60,7 @@ class PermissionSets extends Component {
     this.onSelectSet = this.onSelectSet.bind(this);
     this.createNewPermissionSet = this.createNewPermissionSet.bind(this);
     this.clearSelection = this.clearSelection.bind(this);
+    this.recordHasBeenCreated = this.recordHasBeenCreated.bind(this);
   }
 
   componentDidUpdate(prevProps) {
@@ -75,9 +75,7 @@ class PermissionSets extends Component {
 
       // Jeremy has investigated that and confirmed that it is harmless.
       // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({
-        selectedSet: newPermSet,
-      });
+      this.setSelectedSet(newPermSet);
     }
   }
 
@@ -101,10 +99,13 @@ class PermissionSets extends Component {
     this.setSelectedSet(null);
   }
 
+  // It's ugly that we need this. Too much state shared between this and <PermissionSetDetails>
+  recordHasBeenCreated() {
+    this.setState({ newSet: false });
+  }
+
   createNewPermissionSet() {
-    this.props.mutator.permissionSets.POST({
-      mutable: true,
-    });
+    this.setState({ newSet: true });
   }
 
   render() {
@@ -134,7 +135,8 @@ class PermissionSets extends Component {
             </NavListSection>
           </NavList>
         </Pane>
-        {this.state.selectedSet && <PermissionSetDetails parentMutator={this.props.mutator} clearSelection={this.clearSelection} stripes={this.props.stripes} initialValues={this.state.selectedSet} selectedSet={this.state.selectedSet} />}
+        {this.state.newSet && <PermissionSetDetails parentMutator={this.props.mutator} clearSelection={this.clearSelection} stripes={this.props.stripes} selectedSet={{}} initialValues={{}} tellParentTheRecordHasBeenCreated={this.recordHasBeenCreated}/>}
+        {this.state.selectedSet && !this.state.newSet && <PermissionSetDetails parentMutator={this.props.mutator} clearSelection={this.clearSelection} stripes={this.props.stripes} initialValues={this.state.selectedSet} selectedSet={this.state.selectedSet} />}
       </Paneset>
     );
   }
