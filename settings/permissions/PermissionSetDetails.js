@@ -23,6 +23,7 @@ class PermissionSetDetails extends Component {
       permissionSets: PropTypes.shape({
         DELETE: PropTypes.func.isRequired,
         PUT: PropTypes.func.isRequired,
+        POST: PropTypes.func.isRequired,
       }),
     }),
     initialValues: PropTypes.object,
@@ -58,7 +59,7 @@ class PermissionSetDetails extends Component {
     const set = this.state.selectedSet;
     if (this.state.newSet) {
       this.props.parentMutator.permissionSets.POST(Object.assign({}, set, {
-        mutable: true
+        mutable: true,
       }));
       this.setState({ newSet: false });
       this.props.tellParentTheRecordHasBeenCreated();
