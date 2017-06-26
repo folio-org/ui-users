@@ -10,6 +10,7 @@
 * When a new record is created, navigate to it, and highlight it in the search-results if present. Fixes UIU-95.
 * Interface dependency for user loans is upgraded from `loan-storage` 1.0 to `circulation` 1.0. Fixes UIU-100.
 * Revise okapiInterfaces and permissionSets in `package.json`. Fixes UIU-105.
+* Move patron-group and permissions settings source files down into their own subdirectories.
 
 ## [2.7.0](https://github.com/folio-org/ui-users/tree/v2.7.0) (2017-06-14)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.6.0...v2.7.0)

@@ -4,8 +4,8 @@ import _ from 'lodash';
 import React from 'react';
 import Settings from '@folio/stripes-components/lib/Settings';
 
-import PermissionSets from './PermissionSets';
-import PatronGroupsSettings from './PatronGroupsSettings';
+import PermissionSets from './permissions/PermissionSets';
+import PatronGroupsSettings from './patrongroups/PatronGroupsSettings';
 
 const pages = [
   {
