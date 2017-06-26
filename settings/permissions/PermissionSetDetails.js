@@ -58,7 +58,7 @@ class PermissionSetDetails extends Component {
   saveSet() {
     const set = this.state.selectedSet;
     if (this.state.newSet) {
-(??)      this.props.parentMutator.updater.POST(Object.assign({}, set, {
+      this.props.parentMutator.updater.POST(Object.assign({}, set, {
         mutable: true,
       }));
       this.setState({ newSet: false });
