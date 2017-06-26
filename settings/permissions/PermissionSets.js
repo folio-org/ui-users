@@ -135,7 +135,7 @@ class PermissionSets extends Component {
             </NavListSection>
           </NavList>
         </Pane>
-        {this.state.newSet && <PermissionSetDetails parentMutator={this.props.mutator} clearSelection={this.clearSelection} stripes={this.props.stripes} selectedSet={{}} initialValues={{}} tellParentTheRecordHasBeenCreated={this.recordHasBeenCreated}/>}
+        {this.state.newSet && <PermissionSetDetails parentMutator={this.props.mutator} clearSelection={this.clearSelection} stripes={this.props.stripes} selectedSet={{}} initialValues={{}} tellParentTheRecordHasBeenCreated={this.recordHasBeenCreated} />}
         {this.state.selectedSet && !this.state.newSet && <PermissionSetDetails parentMutator={this.props.mutator} clearSelection={this.clearSelection} stripes={this.props.stripes} initialValues={this.state.selectedSet} selectedSet={this.state.selectedSet} />}
       </Paneset>
     );
