@@ -1,6 +1,4 @@
 import _ from 'lodash';
-// We have to remove node_modules/react to avoid having multiple copies loaded.
-// eslint-disable-next-line import/no-unresolved
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Pane from '@folio/stripes-components/lib/Pane';
