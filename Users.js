@@ -250,7 +250,7 @@ class Users extends React.Component {
 
   create = (data) => {
     if (data.personal.addresses) {
-      Object.assign(data.personal, { addresses: toUserAddresses(data.addresses) });
+      data.personal.addresses = toUserAddresses(data.personal.addresses); // eslint-disable-line no-param-reassign
     }
 
     // extract creds object from user object
