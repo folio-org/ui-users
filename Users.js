@@ -61,8 +61,7 @@ class Users extends React.Component {
       users: PropTypes.shape({
         hasLoaded: PropTypes.bool.isRequired,
         other: PropTypes.shape({
-          totalRecords: PropTypes.number,
-          total_records: PropTypes.number,
+          totalRecords: PropTypes.number.isRequired,
         }),
         isPending: PropTypes.bool.isPending,
         successfulMutations: PropTypes.arrayOf(
@@ -364,7 +363,7 @@ class Users extends React.Component {
             <div style={{ textAlign: 'center' }}>
               <strong>Results</strong>
               <div>
-                <em>{resource && resource.hasLoaded ? (resource.other.totalRecords || resource.other.total_records) : ''} Result{users.length === 1 ? '' : 's'} Found</em>
+                <em>{resource && resource.hasLoaded ? resource.other.totalRecords : ''} Result{users.length === 1 ? '' : 's'} Found</em>
               </div>
             </div>
           }
