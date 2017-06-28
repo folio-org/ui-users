@@ -1,7 +1,6 @@
 import _ from 'lodash';
-// We have to remove node_modules/react to avoid having multiple copies loaded.
-// eslint-disable-next-line import/no-unresolved
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Pane from '@folio/stripes-components/lib/Pane';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import Button from '@folio/stripes-components/lib/Button';
@@ -19,8 +18,10 @@ import UserLoans from './UserLoans';
 import LoansHistory from './LoansHistory';
 import LoanActionsHistory from './LoanActionsHistory';
 import contactTypes from './data/contactTypes';
+import UserAddresses from './lib/UserAddresses';
+import { toListAddresses, toUserAddresses } from './converters/address';
 
-class ViewUser extends Component {
+class ViewUser extends React.Component {
 
   static propTypes = {
     stripes: PropTypes.shape({
@@ -85,6 +86,7 @@ class ViewUser extends Component {
     this.onClickCloseLoansHistory = this.onClickCloseLoansHistory.bind(this);
     this.onClickViewLoanActionsHistory = this.onClickViewLoanActionsHistory.bind(this);
     this.onClickCloseLoanActionsHistory = this.onClickCloseLoanActionsHistory.bind(this);
+    this.onAddressesUpdate = this.onAddressesUpdate.bind(this);
   }
 
   componentWillMount() {
@@ -134,6 +136,20 @@ class ViewUser extends Component {
     });
   }
 
+  onAddressesUpdate(addresses) {
+    const user = this.getUser();
+    if (!user) return;
+
+    user.personal.addresses = toUserAddresses(addresses);
+    this.update(user);
+  }
+
+  getUser() {
+    const { data: { selUser }, match: { params: { userid } } } = this.props;
+    if (!selUser || selUser.length === 0 || !userid) return null;
+    return selUser.find(u => u.id === userid);
+  }
+
   update(data) {
     // eslint-disable-next-line no-param-reassign
     if (data.creds) delete data.creds; // not handled on edit (yet at least)
@@ -145,8 +161,8 @@ class ViewUser extends Component {
   render() {
     const dueDate = new Date(Date.parse('2014-11-12')).toLocaleDateString(this.props.stripes.locale);
     const fineHistory = [{ 'Due Date': dueDate, Amount: '34.23', Status: 'Unpaid' }];
-
-    const { data: { selUser, patronGroups }, match: { params: { userid } } } = this.props;
+    const { data: { patronGroups } } = this.props;
+    const user = this.getUser();
 
     const detailMenu = (<PaneMenu>
       <IfPermission perm="users.item.put">
@@ -154,14 +170,13 @@ class ViewUser extends Component {
       </IfPermission>
     </PaneMenu>);
 
-    if (!selUser || selUser.length === 0 || !userid) return <div />;
-
-    const user = selUser.find(u => u.id === userid);
     if (!user) return <div />;
+
     const userStatus = (_.get(user, ['active'], '') ? 'active' : 'inactive');
     const patronGroupId = _.get(user, ['patronGroup'], '');
     const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
     const preferredContact = contactTypes.find(g => g.id === _.get(user, ['personal', 'preferredContactTypeId'], '')) || { type: '' };
+    const addreses = toListAddresses(_.get(user, ['personal', 'addresses'], []));
 
     return (
       <Pane defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
@@ -213,12 +228,6 @@ class ViewUser extends Component {
                 <KeyValue label="Date of birth" value={(_.get(user, ['personal', 'dateOfBirth'], '')) ? new Date(Date.parse(_.get(user, ['personal', 'dateOfBirth'], ''))).toLocaleDateString(this.props.stripes.locale) : ''} />
               </Col>
             </Row>
-            <br />
-            <Row>
-              <Col xs={12}>
-                <KeyValue label="Patron group" value={patronGroup.group} />
-              </Col>
-            </Row>
           </Col>
           <Col xs={5} >
             <Row>
@@ -252,8 +261,15 @@ class ViewUser extends Component {
                 <KeyValue label="External System ID" value={_.get(user, ['externalSystemId'], '')} />
               </Col>
             </Row>
+            <br />
+            <Row>
+              <Col xs={12}>
+                <KeyValue label="Patron group" value={patronGroup.group} />
+              </Col>
+            </Row>
           </Col>
         </Row>
+        <UserAddresses onUpdate={this.onAddressesUpdate} addresses={addreses} />
         <br />
         <hr />
         <br />
@@ -268,7 +284,7 @@ class ViewUser extends Component {
         <MultiColumnList fullWidth contentData={fineHistory} />
         <hr />
         <IfPermission perm="circulation.loans.collection.get">
-          <IfInterface name="loan-storage" version="1.0">
+          <IfInterface name="circulation" version="1.0">
             <this.connectedUserLoans onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory} onClickViewLoansHistory={this.onClickViewLoansHistory} {...this.props} />
           </IfInterface>
         </IfPermission>
@@ -287,7 +303,7 @@ class ViewUser extends Component {
           />
         </Layer>
         <Layer isOpen={this.state.viewLoansHistoryMode} label="Loans History">
-          <this.connectedLoansHistory userid={userid} stripes={this.props.stripes} onCancel={this.onClickCloseLoansHistory} />
+          <this.connectedLoansHistory userid={user.id} stripes={this.props.stripes} onCancel={this.onClickCloseLoansHistory} />
         </Layer>
         <Layer isOpen={this.state.viewLoanActionsHistoryMode} label="Loans Actions History">
           <this.connectedLoanActionsHistory user={user} loan={this.state.selectedLoan} stripes={this.props.stripes} onCancel={this.onClickCloseLoanActionsHistory} />
@@ -296,6 +312,5 @@ class ViewUser extends Component {
     );
   }
 }
-
 
 export default ViewUser;

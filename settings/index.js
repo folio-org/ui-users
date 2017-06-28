@@ -1,11 +1,9 @@
 import _ from 'lodash';
-// We have to remove node_modules/react to avoid having multiple copies loaded.
-// eslint-disable-next-line import/no-unresolved
 import React from 'react';
 import Settings from '@folio/stripes-components/lib/Settings';
 
-import PermissionSets from './PermissionSets';
-import PatronGroupsSettings from './PatronGroupsSettings';
+import PermissionSets from './permissions/PermissionSets';
+import PatronGroupsSettings from './patrongroups/PatronGroupsSettings';
 
 const pages = [
   {

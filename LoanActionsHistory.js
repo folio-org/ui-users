@@ -1,7 +1,6 @@
 import _ from 'lodash';
-// We have to remove node_modules/react to avoid having multiple copies loaded.
-// eslint-disable-next-line import/no-unresolved
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Row, Col } from 'react-bootstrap';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';

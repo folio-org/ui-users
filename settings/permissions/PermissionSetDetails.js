@@ -1,6 +1,5 @@
-// We have to remove node_modules/react to avoid having multiple copies loaded.
-// eslint-disable-next-line import/no-unresolved
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Pane from '@folio/stripes-components/lib/Pane';
 import Textfield from '@folio/stripes-components/lib/TextField';
 import TextArea from '@folio/stripes-components/lib/TextArea';
@@ -11,8 +10,7 @@ import { Field, reduxForm } from 'redux-form';
 
 import PermissionSet from './PermissionSet';
 
-class PermissionSetDetails extends Component {
-
+class PermissionSetDetails extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func.isRequired,
@@ -21,11 +19,14 @@ class PermissionSetDetails extends Component {
     clearSelection: PropTypes.func.isRequired,
     selectedSet: PropTypes.object,
     parentMutator: PropTypes.shape({
-      permissionSets: PropTypes.shape({
+      updater: PropTypes.shape({
         DELETE: PropTypes.func.isRequired,
         PUT: PropTypes.func.isRequired,
+        POST: PropTypes.func.isRequired,
       }),
     }),
+    initialValues: PropTypes.object,
+    tellParentTheRecordHasBeenCreated: PropTypes.func,
   };
 
   constructor(props) {
@@ -41,6 +42,8 @@ class PermissionSetDetails extends Component {
     this.connectedPermissionSet = props.stripes.connect(PermissionSet);
 
     this.state = {
+      newSet: !props.initialValues.permissionName,
+      selectedSet: undefined,
       confirmDelete: false,
     };
   }
@@ -52,7 +55,18 @@ class PermissionSetDetails extends Component {
   }
 
   saveSet() {
-    this.props.parentMutator.permissionSets.PUT(this.state.selectedSet);
+    const set = this.state.selectedSet;
+    if (this.state.newSet) {
+      this.props.parentMutator.updater.POST(Object.assign({}, set, {
+        mutable: true,
+      }));
+      this.setState({ newSet: false });
+      this.props.tellParentTheRecordHasBeenCreated();
+    } else {
+      this.props.parentMutator.updater.PUT(Object.assign({}, set, {
+        subPermissions: (set.subPermissions || []).map(p => p.permissionName),
+      }));
+    }
   }
 
   beginDelete() {
@@ -63,7 +77,7 @@ class PermissionSetDetails extends Component {
 
   confirmDeleteSet(confirmation) {
     if (confirmation) {
-      this.props.parentMutator.permissionSets.DELETE(this.props.selectedSet).then(() => {
+      this.props.parentMutator.updater.DELETE(this.props.selectedSet).then(() => {
         this.props.clearSelection();
       });
     } else {
@@ -85,17 +99,17 @@ class PermissionSetDetails extends Component {
   }
 
   render() {
-    const { selectedSet, stripes } = this.props;
+    const { selectedSet, stripes, initialValues } = this.props;
     const disabled = !stripes.hasPerm('perms.permissions.item.put');
-
     return (
       <Pane paneTitle={`${selectedSet.displayName || 'Untitled'}`} defaultWidth="fill" fluidContentWidth>
         <form>
 
           <section>
-            <h2 style={{ marginTop: '0' }}>About</h2>
+            <h2 style={{ marginTop: '0' }}>{this.state.newSet ? 'Create' : 'Edit'} permission-set</h2>
+            <Field label="Name" name="permissionName" id="permissionName" component={Textfield} required fullWidth rounded validate={this.validateSet} onBlur={this.saveSet} disabled={disabled || initialValues.permissionName} />
             <Field label="Title" name="displayName" id="displayName" component={Textfield} required fullWidth rounded validate={this.validateSet} onBlur={this.saveSet} disabled={disabled} />
-            <Field label="Description" name="description" id="permissionset_description" component={TextArea} validate={this.validateSet} onBlur={this.saveSet} required fullWidth rounded disabled={disabled} />
+            <Field label="Description" name="description" id="permissionset_description" component={TextArea} validate={this.validateSet} onBlur={this.saveSet} fullWidth rounded disabled={disabled} />
           </section>
 
           <IfPermission perm="perms.permissions.item.delete">

@@ -1,7 +1,6 @@
 import _ from 'lodash';
-// We have to remove node_modules/react to avoid having multiple copies loaded.
-// eslint-disable-next-line import/no-unresolved
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Route from 'react-router-dom/Route';
 import queryString from 'query-string';
 import fetch from 'isomorphic-fetch';
@@ -25,6 +24,7 @@ import UserForm from './UserForm';
 import ViewUser from './ViewUser';
 
 import contactTypes from './data/contactTypes';
+import { toUserAddresses } from './converters/address';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
@@ -65,6 +65,14 @@ class Users extends React.Component {
           total_records: PropTypes.number,
         }),
         isPending: PropTypes.bool.isPending,
+        successfulMutations: PropTypes.arrayOf(
+          PropTypes.shape({
+            record: PropTypes.shape({
+              id: PropTypes.string.isRequired,
+              username: PropTypes.string.isRequired,
+            }).isRequired,
+          }),
+        ),
       }),
     }).isRequired,
     history: PropTypes.shape({
@@ -153,6 +161,19 @@ class Users extends React.Component {
     if (_.isEmpty(this.props.data.addUserMode)) this.props.mutator.addUserMode.replace({ mode: false });
   }
 
+  componentWillReceiveProps(nextProps) {
+    const resource = this.props.resources.users;
+    if (resource) {
+      const sm = nextProps.resources.users.successfulMutations;
+      if (sm.length > resource.successfulMutations.length)
+        this.onSelectRow(undefined, { id: sm[0].record.id, username: sm[0].record.username });
+    }
+
+    if (resource && resource.isPending && !nextProps.resources.users.isPending) {
+      this.log('event', 'new search-result');
+    }
+  }
+
   componentWillUpdate() {
     const pg = this.props.data.patronGroups;
     if (pg && pg.length) {
@@ -229,6 +250,10 @@ class Users extends React.Component {
   }
 
   create = (data) => {
+    if (data.personal.addresses) {
+      Object.assign(data.personal, { addresses: toUserAddresses(data.addresses) });
+    }
+
     // extract creds object from user object
     const creds = Object.assign({}, data.creds, { username: data.username });
     if (data.creds) delete data.creds; // eslint-disable-line no-param-reassign

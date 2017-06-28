@@ -3,8 +3,16 @@
 ## 2.8.0 IN PROGRESS
 
 * Display user permissions only if interface "permissions" v4.0 is available. Fixes the new part of UIU-74.
-* Add two high-level permissions to the `package.json`, and a new `yarn mkmd` rule to create a module-descriptor from this and other information in the package-file. Fixes UIU-88.
+* Add two high-level permissions to the `package.json`, and a new `yarn mkmd` rule to create a module-descriptor from this and other information in the package-file. Fixes UIU-94.
 * Update search debounce time from 150ms to 350ms, Ameliorates UIU-77.
+* Description field for permission-sets is not mandatory. Fixes UIU-93.
+* When maintaining permissions sets, post only the IDs of subpermissions, not whole permissions. Fixes UIU-73.
+* When a new record is created, navigate to it, and highlight it in the search-results if present. Fixes UIU-95.
+* Interface dependency for user loans is upgraded from `loan-storage` 1.0 to `circulation` 1.0. Fixes UIU-100.
+* Revise okapiInterfaces and permissionSets in `package.json`. Fixes UIU-105.
+* Move patron-group and permissions settings source files down into their own subdirectories.
+* Add repeatable address fieldgroup to user form and user details. Fixes UIU-29.
+* When creating new permissions, it is possible to set their {{permissionName}}. Fixes UIU-98.
 
 ## [2.7.0](https://github.com/folio-org/ui-users/tree/v2.7.0) (2017-06-14)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.6.0...v2.7.0)

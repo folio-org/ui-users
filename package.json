@@ -20,27 +20,85 @@
     "okapiInterfaces": {
       "users": "11.0",
       "circulation": "1.0",
-      "permissions": "4.0"
+      "permissions": "4.0",
+      "login": "3.0"
     },
-    "permissionsets": [
+    "permissionSets": [
+      {
+        "permissionName": "module.users.enabled",
+        "displayName": "UI: Users module is enabled"
+      },
       {
         "permissionName": "users-bl.view",
         "displayName": "Can view user profile",
         "description": "Some subperms can be deleted later when submodules use modern permission names",
-        "subPermissions": ["users-bl.collection.get", "users-bl.item.get",
+        "subPermissions": [
+          "users-bl.collection.get",
+          "users-bl.item.get",
           "module.users.enabled",
-          "users.collection.get", "users.item.get",
+          "users.collection.get",
+          "users.item.get",
           "usergroups.collection.get",
-          "login.item.get"],
+          "login.item.get"
+        ],
         "visible": true
-      }, {
+      },
+      {
         "permissionName": "users-bl.edit",
         "displayName": "Can edit user profile",
         "description": "Some subperms can be deleted later when bl does updates and ModulePermissions can be used",
-        "subPermissions": [ "users-bl.view", "users-bl.item.put",
+        "subPermissions": [
+          "users-bl.view",
+          "users-bl.item.put",
           "users.item.put",
-          "login.item.put"],
+          "login.item.put"
+        ],
         "visible": true
+      }, {
+        "permissionName": "users-bl.create",
+        "displayName": "Can create new user",
+        "description": "Some subperms can be deleted later when bl does updates and ModulePermissions can be used",
+        "subPermissions": ["users-bl.edit", "users-bl.item.post",
+          "users.item.post",
+          "perms.users.item.post",
+          "login.item.post"],
+        "visible": true
+      }, {
+        "permissionName": "users-bl.viewperms",
+        "displayName": "Can view permissions assigned to users",
+        "description": "Includes all of view",
+        "subPermissions": ["users-bl.view", "perms.users.get"],
+        "visible": true
+      }, {
+        "permissionName": "users-bl.editperms",
+        "displayName": "Can assign and unassign permissions to users",
+        "description": "",
+        "subPermissions": ["users-bl.viewperms",
+          "perms.users.item.put", "perms.users.item.post", "perms.users.item.delete"],
+        "visible": true
+      }, {
+        "permissionName": "users-bl.editpermsets",
+        "displayName": "Can create, edit and remove permission sets",
+        "description": "This seems out of place in users-bl, maybe it belongs under perms or settings",
+        "subPermissions": [
+          "perms.permissions.get","perms.permissions.item.put",
+          "perms.permissions.item.post", "perms.permissions.item.delete"],
+        "visible": true
+
+      },
+      {
+        "permissionName" : "users-bl.all",
+        "displayName" : "users-bl all",
+        "description" : "All user business-logic permissions",
+        "subPermissions" : [
+          "users-bl.view",
+          "users-bl.edit",
+          "users-bl.create",
+          "users-bl.viewperms",
+          "users-bl.editperms",
+          "users-bl.editpermsets"
+        ],
+        "visible" : false
       }
     ]
   },
@@ -64,17 +122,19 @@
     "eslint-plugin-react": "^6.4.1"
   },
   "dependencies": {
-    "@folio/stripes-components": "^0.15.0",
+    "@folio/stripes-components": "^1.1.0",
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.17.4",
+    "prop-types": "^15.5.10",
     "query-string": "^4.3.2",
     "react": "^15.4.2",
     "react-bootstrap": "^0.30.7",
+    "react-bootstrap-typeahead": "^1.4.0",
     "react-router-dom": "^4.0.0",
     "redux-form": "^6.1.1"
   },
   "peerDependencies": {
     "@folio/stripes-connect": "^2.2.1",
-    "@folio/stripes-core": "^1.13.0"
+    "@folio/stripes-core": "^1.14.0"
   }
 }
