@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import _ from 'lodash';
@@ -12,7 +12,7 @@ import NavListSection from '@folio/stripes-components/lib/NavListSection';
 import IfPermission from '@folio/stripes-components/lib/IfPermission';
 import PermissionSetDetails from './PermissionSetDetails';
 
-class PermissionSets extends Component {
+class PermissionSets extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func.isRequired,

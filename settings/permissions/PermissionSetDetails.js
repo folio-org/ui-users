@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Pane from '@folio/stripes-components/lib/Pane';
 import Textfield from '@folio/stripes-components/lib/TextField';
@@ -10,7 +10,7 @@ import { Field, reduxForm } from 'redux-form';
 
 import PermissionSet from './PermissionSet';
 
-class PermissionSetDetails extends Component {
+class PermissionSetDetails extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func.isRequired,
