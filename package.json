@@ -18,7 +18,7 @@
     "home": "/users?filters=active.Active&sort=Name",
     "hasSettings": true,
     "okapiInterfaces": {
-      "users": "11.0",
+      "users": "13.0",
       "circulation": "1.0",
       "permissions": "4.0",
       "login": "3.0"
