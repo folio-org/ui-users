@@ -13,6 +13,7 @@
 * Move patron-group and permissions settings source files down into their own subdirectories.
 * Add repeatable address fieldgroup to user form and user details. Fixes UIU-29.
 * When creating new permissions, it is possible to set their {{permissionName}}. Fixes UIU-98.
+* `<PatronGroupsSettings>` uses generic `<EditableList>` instead of PG-specific `<PatronGroupsList>`, which we no longer need. Fixes UIU-48.
 * Depends on v13.0 of the `users` interface for `totalRecords` metadata and `dateCreated` and `dateUpdated` fields. Fixes UIU-114.
 
 ## [2.7.0](https://github.com/folio-org/ui-users/tree/v2.7.0) (2017-06-14)
