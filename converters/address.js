@@ -26,7 +26,7 @@ function toUserAddress(addr) {
     city: addr.city,
     region: addr.stateRegion,
     postalCode: addr.zipCode,
-    primaryAddress: addr.primary,
+    primaryAddress: addr.primary || addr.primaryAddress, // TODO: cleanup after <AddressFieldGroup> is fixed
     addressTypeId,
     countryId,
   };
