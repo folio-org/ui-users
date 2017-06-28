@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import Pane from '@folio/stripes-components/lib/Pane';
-import PatronGroupsList from './PatronGroupsList';
+import EditableList from '@folio/stripes-components/lib/structures/EditableList';
 
 class PatronGroupsSettings extends React.Component {
   static propTypes = {
@@ -75,7 +75,7 @@ class PatronGroupsSettings extends React.Component {
     return (
       <Paneset>
         <Pane defaultWidth="fill" fluidContentWidth>
-          <PatronGroupsList
+          <EditableList
             // TODO: not sure why we need this OR if there are no groups
             // Seems to load this once before the groups data from the manifest
             // is pulled in. This still causes a JS warning, but not an error
@@ -89,6 +89,7 @@ class PatronGroupsSettings extends React.Component {
             onCreate={this.onCreateGroup}
             onDelete={this.onDeleteGroup}
             isEmptyMessage="There are no Patron Groups"
+            nameKey="group"
           />
         </Pane>
       </Paneset>
