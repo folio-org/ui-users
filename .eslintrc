@@ -16,7 +16,6 @@
     "no-restricted-syntax": ["error", "LabeledStatement", "WithStatement"],
     "curly": "off",
     "no-nested-ternary": "off",
-    "no-plusplus": "off",
-    "no-template-curly-in-string": "off"
+    "no-plusplus": "off"
   }
 }

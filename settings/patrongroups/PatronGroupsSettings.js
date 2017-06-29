@@ -29,10 +29,10 @@ class PatronGroupsSettings extends React.Component {
       path: 'groups',
       records: 'usergroups',
       PUT: {
-        path: 'groups/${activeRecord.id}',
+        path: 'groups/%{activeRecord.id}',
       },
       DELETE: {
-        path: 'groups/${activeRecord.id}',
+        path: 'groups/%{activeRecord.id}',
       },
     },
     activeRecord: {},

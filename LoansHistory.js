@@ -33,7 +33,7 @@ class LoansHistory extends React.Component {
       type: 'okapi',
       records: 'loans',
       GET: {
-        path: 'circulation/loans?query=(userId=${userid})',
+        path: 'circulation/loans?query=(userId=%{userid})',
       },
     },
     userid: {},

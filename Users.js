@@ -108,7 +108,7 @@ class Users extends React.Component {
     users: {
       type: 'okapi',
       records: 'users',
-      recordsRequired: '${userCount}',
+      recordsRequired: '%{userCount}',
       perRequest: RESULT_COUNT_INCREMENT,
       path: 'users',
       GET: {
