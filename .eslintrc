@@ -17,7 +17,6 @@
     "curly": "off",
     "no-nested-ternary": "off",
     "no-plusplus": "off",
-    "no-template-curly-in-string": "off",
-    "TURN OFF THE PREVIOUS RULE ONCE WE'VE SORTED OUT THE PATRON-GROUP RECORD FORMAT": 0
+    "no-template-curly-in-string": "off"
   }
 }
