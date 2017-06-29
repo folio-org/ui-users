@@ -42,6 +42,7 @@ class PermissionSetDetails extends React.Component {
 
     this.state = {
       confirmDelete: false,
+      selectedSet: props.selectedSet
     };
   }
 
@@ -75,7 +76,7 @@ class PermissionSetDetails extends React.Component {
 
   confirmDeleteSet(confirmation) {
     if (confirmation) {
-      this.props.parentMutator.permissionSets.DELETE(this.props.selectedSet).then(() => {
+      this.props.parentMutator.permissionSets.DELETE(this.state.selectedSet).then(() => {
         this.props.clearSelection();
       });
     } else {
@@ -97,11 +98,11 @@ class PermissionSetDetails extends React.Component {
   }
 
   render() {
-    const { selectedSet, stripes } = this.props;
+    const { stripes } = this.props;
     const disabled = !stripes.hasPerm('perms.permissions.item.put');
 
     return (
-      <Pane paneTitle={`${selectedSet.displayName || 'Untitled'}`} defaultWidth="fill" fluidContentWidth>
+      <Pane paneTitle={`${this.state.selectedSet.displayName || 'Untitled'}`} defaultWidth="fill" fluidContentWidth>
         <form>
 
           <section>
@@ -121,7 +122,7 @@ class PermissionSetDetails extends React.Component {
           <this.connectedPermissionSet
             addPermission={this.addPermission}
             removePermission={this.removePermission}
-            selectedSet={selectedSet}
+            selectedSet={this.state.selectedSet}
             permToRead="perms.permissions.get"
             permToDelete="perms.users.item.put"
             permToModify="perms.users.item.put"
