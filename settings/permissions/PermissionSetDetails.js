@@ -11,6 +11,7 @@ import { Field, reduxForm } from 'redux-form';
 import PermissionSet from './PermissionSet';
 
 class PermissionSetDetails extends React.Component {
+
   static propTypes = {
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func.isRequired,
@@ -25,8 +26,6 @@ class PermissionSetDetails extends React.Component {
         POST: PropTypes.func.isRequired,
       }),
     }),
-    initialValues: PropTypes.object,
-    tellParentTheRecordHasBeenCreated: PropTypes.func,
   };
 
   constructor(props) {
@@ -42,8 +41,6 @@ class PermissionSetDetails extends React.Component {
     this.connectedPermissionSet = props.stripes.connect(PermissionSet);
 
     this.state = {
-      newSet: !props.initialValues.permissionName,
-      selectedSet: undefined,
       confirmDelete: false,
     };
   }
@@ -67,6 +64,7 @@ class PermissionSetDetails extends React.Component {
         subPermissions: (set.subPermissions || []).map(p => p.permissionName),
       }));
     }
+    
   }
 
   beginDelete() {
@@ -99,15 +97,15 @@ class PermissionSetDetails extends React.Component {
   }
 
   render() {
-    const { selectedSet, stripes, initialValues } = this.props;
+    const { selectedSet, stripes } = this.props;
     const disabled = !stripes.hasPerm('perms.permissions.item.put');
+
     return (
       <Pane paneTitle={`${selectedSet.displayName || 'Untitled'}`} defaultWidth="fill" fluidContentWidth>
         <form>
 
           <section>
-            <h2 style={{ marginTop: '0' }}>{this.state.newSet ? 'Create' : 'Edit'} permission-set</h2>
-            <Field label="Name" name="permissionName" id="permissionName" component={Textfield} required fullWidth rounded validate={this.validateSet} onBlur={this.saveSet} disabled={disabled || initialValues.permissionName} />
+            <h2 style={{ marginTop: '0' }}>About</h2>
             <Field label="Title" name="displayName" id="displayName" component={Textfield} required fullWidth rounded validate={this.validateSet} onBlur={this.saveSet} disabled={disabled} />
             <Field label="Description" name="description" id="permissionset_description" component={TextArea} validate={this.validateSet} onBlur={this.saveSet} fullWidth rounded disabled={disabled} />
           </section>

@@ -44,9 +44,10 @@ class PermissionSets extends React.Component {
   constructor(props) {
     super(props);
 
+    // 'Manager' just for example...
+
     this.state = {
       selectedSet: null,
-      newSet: false,
     };
 
     this.navList = null;
@@ -54,7 +55,6 @@ class PermissionSets extends React.Component {
     this.onSelectSet = this.onSelectSet.bind(this);
     this.createNewPermissionSet = this.createNewPermissionSet.bind(this);
     this.clearSelection = this.clearSelection.bind(this);
-    this.recordHasBeenCreated = this.recordHasBeenCreated.bind(this);
   }
 
   componentDidUpdate(prevProps) {
@@ -69,7 +69,9 @@ class PermissionSets extends React.Component {
 
       // Jeremy has investigated that and confirmed that it is harmless.
       // eslint-disable-next-line react/no-did-update-set-state
-      this.setSelectedSet(newPermSet);
+      this.setState({
+        selectedSet: newPermSet,
+      });
     }
   }
 
@@ -93,13 +95,10 @@ class PermissionSets extends React.Component {
     this.setSelectedSet(null);
   }
 
-  // It's ugly that we need this. Too much state shared between this and <PermissionSetDetails>
-  recordHasBeenCreated() {
-    this.setState({ newSet: false });
-  }
-
   createNewPermissionSet() {
-    this.setState({ newSet: true });
+    this.props.mutator.permissionSets.POST({
+      mutable: true,
+    });
   }
 
   render() {
