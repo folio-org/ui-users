@@ -18,14 +18,14 @@ class PermissionSetDetails extends React.Component {
       connect: PropTypes.func.isRequired,
     }).isRequired,
     clearSelection: PropTypes.func.isRequired,
-    selectedSet: PropTypes.object,
+    selectedSet: PropTypes.object.isRequired,
     parentMutator: PropTypes.shape({
       permissionSets: PropTypes.shape({
         DELETE: PropTypes.func.isRequired,
         PUT: PropTypes.func.isRequired,
         POST: PropTypes.func.isRequired,
       }),
-    }),
+    }).isRequired,
   };
 
   constructor(props) {
@@ -42,7 +42,7 @@ class PermissionSetDetails extends React.Component {
 
     this.state = {
       confirmDelete: false,
-      selectedSet: props.selectedSet
+      selectedSet: props.selectedSet,
     };
   }
 
@@ -59,13 +59,11 @@ class PermissionSetDetails extends React.Component {
         mutable: true,
       }));
       this.setState({ newSet: false });
-      this.props.tellParentTheRecordHasBeenCreated();
     } else {
       this.props.parentMutator.permissionSets.PUT(Object.assign({}, set, {
         subPermissions: (set.subPermissions || []).map(p => p.permissionName),
       }));
     }
-    
   }
 
   beginDelete() {
