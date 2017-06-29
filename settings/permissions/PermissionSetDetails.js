@@ -8,7 +8,7 @@ import IfPermission from '@folio/stripes-components/lib/IfPermission';
 
 import { Field, reduxForm } from 'redux-form';
 
-import PermissionSet from './PermissionSet';
+import containedPermissions from './ContainedPermissions';
 
 class PermissionSetDetails extends React.Component {
 
@@ -38,7 +38,7 @@ class PermissionSetDetails extends React.Component {
     this.addPermission = this.addPermission.bind(this);
     this.removePermission = this.removePermission.bind(this);
 
-    this.connectedPermissionSet = props.stripes.connect(PermissionSet);
+    this.containedPermissions = props.stripes.connect(containedPermissions);
 
     this.state = {
       confirmDelete: false,
@@ -119,7 +119,7 @@ class PermissionSetDetails extends React.Component {
             <Button title="Cancel Delete Permission Set" onClick={() => { this.confirmDeleteSet(false); }}>Cancel</Button>
           </div>}
 
-          <this.connectedPermissionSet
+          <this.containedPermissions
             addPermission={this.addPermission}
             removePermission={this.removePermission}
             selectedSet={this.state.selectedSet}
