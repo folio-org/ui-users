@@ -1,4 +1,6 @@
-import React, { PropTypes } from 'react';
+// eslint-disable-next-line import/no-unresolved
+import React from 'react';
+import PropTypes from 'prop-types';
 import AuthorityList from '@folio/stripes-components/lib/AuthorityList';
 
 class PatronGroupsSettings extends React.Component {
