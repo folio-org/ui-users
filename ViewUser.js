@@ -166,7 +166,7 @@ class ViewUser extends React.Component {
 
     const detailMenu = (<PaneMenu>
       <IfPermission perm="users.item.put">
-        <button onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button>
+        <button id="button-edituser" onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button>
       </IfPermission>
     </PaneMenu>);
 
@@ -179,7 +179,7 @@ class ViewUser extends React.Component {
     const addreses = toListAddresses(_.get(user, ['personal', 'addresses'], []));
 
     return (
-      <Pane defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
+      <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
         <Row>
           <Col xs={7} >
             <Row>
@@ -281,7 +281,7 @@ class ViewUser extends React.Component {
             <Button align="end" bottomMargin0 >View Full History</Button>
           </Col>
         </Row>
-        <MultiColumnList fullWidth contentData={fineHistory} />
+        <MultiColumnList id="list-finehistory" fullWidth contentData={fineHistory} />
         <hr />
         <IfPermission perm="circulation.loans.collection.get">
           <IfInterface name="circulation" version="1.0">
