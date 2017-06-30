@@ -26,6 +26,7 @@ class PermissionSetDetails extends React.Component {
         POST: PropTypes.func.isRequired,
       }),
     }),
+    tellParentTheRecordHasBeenCreated: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -64,7 +65,6 @@ class PermissionSetDetails extends React.Component {
         subPermissions: (set.subPermissions || []).map(p => p.permissionName),
       }));
     }
-    
   }
 
   beginDelete() {
