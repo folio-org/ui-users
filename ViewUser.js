@@ -140,8 +140,7 @@ class ViewUser extends React.Component {
   onAddressesUpdate(addresses) {
     const user = this.getUser();
     if (!user) return;
-
-    user.personal.addresses = toUserAddresses(addresses);
+    user.personal.addresses = addresses;
     this.update(user);
   }
 
@@ -152,6 +151,10 @@ class ViewUser extends React.Component {
   }
 
   update(data) {
+    if (data.personal.addresses) {
+      data.personal.addresses = toUserAddresses(data.personal.addresses); // eslint-disable-line no-param-reassign
+    }
+
     // eslint-disable-next-line no-param-reassign
     if (data.creds) delete data.creds; // not handled on edit (yet at least)
     this.props.mutator.selUser.PUT(data).then(() => {

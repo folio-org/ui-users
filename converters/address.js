@@ -6,14 +6,17 @@ function toListAddress(addr) {
   const country = (addr.countryId) ? countriesByCode[addr.countryId].country : '';
   const addressType = (addr.addressTypeId) ? addressTypesById[addr.addressTypeId].desc : '';
 
-  return Object.assign(addr, {
-    id: addr.id || _.uniqueId(),
+  return {
+    id: _.kebabCase(`'id-${addr.addressLine1}-${country}`), // TODO: id should come from the server
+    addressLine1: addr.addressLine1,
+    addressLine2: addr.addressLine2,
+    city: addr.city,
     stateRegion: addr.region,
     primary: addr.primaryAddress,
     zipCode: addr.postalCode,
     country,
     addressType,
-  });
+  };
 }
 
 function toUserAddress(addr) {
