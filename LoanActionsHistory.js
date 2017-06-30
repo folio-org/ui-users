@@ -30,7 +30,7 @@ const LoanActionsHistory = ({ onCancel, loan, user, stripes: { locale } }) => {
 
   return (
     <Paneset isRoot>
-      <Pane defaultWidth="100%" firstMenu={historyFirstMenu} paneTitle={'Loan Actions History'}>
+      <Pane id="pane-loanactionshistory" defaultWidth="100%" firstMenu={historyFirstMenu} paneTitle={'Loan Actions History'}>
         <Row>
           <Col xs={5} >
             <Row>
@@ -74,6 +74,7 @@ const LoanActionsHistory = ({ onCancel, loan, user, stripes: { locale } }) => {
         </Row>
         <br />
         <MultiColumnList
+          id="list-loanactions"
           formatter={loanActionsFormatter}
           visibleColumns={['Action Date', 'Action', 'Due Date', 'Operator']}
           contentData={loanActions}

@@ -344,13 +344,13 @@ class Users extends React.Component {
     return (
       <Paneset>
         {/* Filter Pane */}
-        <Pane defaultWidth="16%" header={searchHeader}>
+        <Pane id="pane-filter" defaultWidth="16%" header={searchHeader}>
           <FilterGroups config={filterConfig} filters={this.state.filters} onChangeFilter={this.onChangeFilter} />
           <FilterControlGroup label="Actions">
             <IfPermission perm="users.item.post">
               <IfPermission perm="login.item.post">
                 <IfPermission perm="perms.users.item.post">
-                  <Button fullWidth onClick={this.onClickAddNewUser}>New user</Button>
+                  <Button id="button-newuser" fullWidth onClick={this.onClickAddNewUser}>New user</Button>
                 </IfPermission>
               </IfPermission>
             </IfPermission>
@@ -358,6 +358,7 @@ class Users extends React.Component {
         </Pane>
         {/* Results Pane */}
         <Pane
+          id="pane-results"
           defaultWidth="fill"
           paneTitle={
             <div style={{ textAlign: 'center' }}>
@@ -370,6 +371,7 @@ class Users extends React.Component {
           lastMenu={resultMenu}
         >
           <MultiColumnList
+            id="list-users"
             contentData={users}
             selectedRow={this.state.selectedItem}
             rowMetadata={['id', 'username']}
@@ -391,6 +393,7 @@ class Users extends React.Component {
         {detailsPane}
         <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false} label="Add New User Dialog">
           <UserForm
+            id="userform-adduser"
             initialValues={{ active: true, personal: { preferredContactTypeId: '002' } }}
             onSubmit={(record) => { this.create(record); }}
             onCancel={this.onClickCloseNewUser}

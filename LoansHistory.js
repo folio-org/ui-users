@@ -65,8 +65,9 @@ class LoansHistory extends React.Component {
 
     return (
       <Paneset isRoot>
-        <Pane defaultWidth="100%" firstMenu={historyFirstMenu} paneTitle={'Loans History'}>
+        <Pane id="pane-loanshistory" defaultWidth="100%" firstMenu={historyFirstMenu} paneTitle={'Loans History'}>
           <MultiColumnList
+            id="list-loanshistory"
             fullWidth
             formatter={loansFormatter}
             visibleColumns={['title', 'barcode', 'loanDate', 'returnDate', 'status']}

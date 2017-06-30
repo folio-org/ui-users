@@ -51,10 +51,11 @@ class UserLoans extends React.Component {
             <h3 className="marginTopHalf">Current loans</h3>
           </Col>
           <Col xs={5} sm={6}>
-            <Button align="end" bottomMargin0 onClick={this.props.onClickViewLoansHistory}>View Full History</Button>
+            <Button id="button-viewfullhistory" align="end" bottomMargin0 onClick={this.props.onClickViewLoansHistory}>View Full History</Button>
           </Col>
         </Row>
         <MultiColumnList
+          id="list-usersloans"
           fullWidth
           formatter={loansFormatter}
           visibleColumns={['title', 'barcode', 'loanDate', 'status']}
