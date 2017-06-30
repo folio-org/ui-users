@@ -1,4 +1,5 @@
 import _ from 'lodash';
+// eslint-disable-next-line import/no-unresolved
 import React from 'react';
 import PropTypes from 'prop-types';
 import Pane from '@folio/stripes-components/lib/Pane';
@@ -139,8 +140,7 @@ class ViewUser extends React.Component {
   onAddressesUpdate(addresses) {
     const user = this.getUser();
     if (!user) return;
-
-    user.personal.addresses = toUserAddresses(addresses);
+    user.personal.addresses = addresses;
     this.update(user);
   }
 
@@ -151,6 +151,10 @@ class ViewUser extends React.Component {
   }
 
   update(data) {
+    if (data.personal.addresses) {
+      data.personal.addresses = toUserAddresses(data.personal.addresses); // eslint-disable-line no-param-reassign
+    }
+
     // eslint-disable-next-line no-param-reassign
     if (data.creds) delete data.creds; // not handled on edit (yet at least)
     this.props.mutator.selUser.PUT(data).then(() => {
@@ -176,7 +180,7 @@ class ViewUser extends React.Component {
     const patronGroupId = _.get(user, ['patronGroup'], '');
     const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
     const preferredContact = contactTypes.find(g => g.id === _.get(user, ['personal', 'preferredContactTypeId'], '')) || { type: '' };
-    const addreses = toListAddresses(_.get(user, ['personal', 'addresses'], []));
+    const addresses = toListAddresses(_.get(user, ['personal', 'addresses'], []));
 
     return (
       <Pane defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
@@ -269,7 +273,7 @@ class ViewUser extends React.Component {
             </Row>
           </Col>
         </Row>
-        <UserAddresses onUpdate={this.onAddressesUpdate} addresses={addreses} />
+        <UserAddresses onUpdate={this.onAddressesUpdate} addresses={addresses} />
         <br />
         <hr />
         <br />

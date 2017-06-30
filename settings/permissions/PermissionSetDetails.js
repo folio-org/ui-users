@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-unresolved
 import React from 'react';
 import PropTypes from 'prop-types';
 import Pane from '@folio/stripes-components/lib/Pane';
@@ -20,12 +21,13 @@ class PermissionSetDetails extends React.Component {
     clearSelection: PropTypes.func.isRequired,
     selectedSet: PropTypes.object,
     parentMutator: PropTypes.shape({
-      updater: PropTypes.shape({
+      permissionSets: PropTypes.shape({
         DELETE: PropTypes.func.isRequired,
         PUT: PropTypes.func.isRequired,
         POST: PropTypes.func.isRequired,
       }),
     }),
+    tellParentTheRecordHasBeenCreated: PropTypes.func,
   };
 
   constructor(props) {
@@ -54,17 +56,16 @@ class PermissionSetDetails extends React.Component {
   saveSet() {
     const set = this.state.selectedSet;
     if (this.state.newSet) {
-      this.props.parentMutator.updater.POST(Object.assign({}, set, {
+      this.props.parentMutator.permissionSets.POST(Object.assign({}, set, {
         mutable: true,
       }));
       this.setState({ newSet: false });
       this.props.tellParentTheRecordHasBeenCreated();
     } else {
-      this.props.parentMutator.updater.PUT(Object.assign({}, set, {
+      this.props.parentMutator.permissionSets.PUT(Object.assign({}, set, {
         subPermissions: (set.subPermissions || []).map(p => p.permissionName),
       }));
     }
-    
   }
 
   beginDelete() {
@@ -75,7 +76,7 @@ class PermissionSetDetails extends React.Component {
 
   confirmDeleteSet(confirmation) {
     if (confirmation) {
-      this.props.parentMutator.updater.DELETE(this.props.selectedSet).then(() => {
+      this.props.parentMutator.permissionSets.DELETE(this.props.selectedSet).then(() => {
         this.props.clearSelection();
       });
     } else {

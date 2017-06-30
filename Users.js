@@ -1,4 +1,5 @@
 import _ from 'lodash';
+// eslint-disable-next-line import/no-unresolved
 import React from 'react';
 import PropTypes from 'prop-types';
 import Route from 'react-router-dom/Route';
@@ -108,7 +109,7 @@ class Users extends React.Component {
     users: {
       type: 'okapi',
       records: 'users',
-      recordsRequired: '${userCount}',
+      recordsRequired: '%{userCount}',
       perRequest: RESULT_COUNT_INCREMENT,
       path: 'users',
       GET: {

@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-unresolved
 import React from 'react';
 import PropTypes from 'prop-types';
 import Paneset from '@folio/stripes-components/lib/Paneset';
@@ -12,7 +13,8 @@ import RadioButton from '@folio/stripes-components/lib/RadioButton';
 import Datepicker from '@folio/stripes-components/lib/Datepicker';
 import AddressEditList from '@folio/stripes-components/lib/structures/AddressFieldGroup/AddressEdit/AddressEditList';
 import fetch from 'isomorphic-fetch';
-import { Field, reduxForm } from 'redux-form';
+import { Field } from 'redux-form';
+import stripesForm from '@folio/stripes-form';
 
 import { countriesOptions } from './data/countries';
 import { addressTypeOptions } from './data/addressTypes';
@@ -198,9 +200,10 @@ class UserForm extends React.Component {
   }
 }
 
-export default reduxForm({
+export default stripesForm({
   form: 'userForm',
   validate,
   asyncValidate,
   asyncBlurFields: ['username'],
+  navigationCheck: true,
 })(UserForm);

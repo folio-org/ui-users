@@ -15,6 +15,8 @@
 * When creating new permissions, it is possible to set their {{permissionName}}. Fixes UIU-98.
 * `<PatronGroupsSettings>` uses generic `<EditableList>` instead of PG-specific `<PatronGroupsList>`, which we no longer need. Fixes UIU-48.
 * Depends on v13.0 of the `users` interface for `totalRecords` metadata and `dateCreated` and `dateUpdated` fields. Fixes UIU-114.
+* Use new %{name} syntax instead of old ${name} throughout. See STRPCONN-5.
+* Prompt on navigation away from dirty User form. See UIU-112.
 
 ## [2.7.0](https://github.com/folio-org/ui-users/tree/v2.7.0) (2017-06-14)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.6.0...v2.7.0)
@@ -132,4 +134,3 @@ Previous versions of ui-users are not compatible with version 9.0.0 of mod-users
 * First version to have a documented change-log.
 * Handles `id` field, rather then `_id`, as unique key of patron groups. Enables this module to interoperate with new versions of mod-users (since commit 022b8b8c) but of course makes it unable to run against older versions.
 * Updates the permissions checked, to match what is used by folio-backend-auth v0.8.3.
-

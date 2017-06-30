@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-unresolved
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -21,7 +22,7 @@ class PermissionSets extends React.Component {
       permissionSets: PropTypes.arrayOf(PropTypes.object),
     }).isRequired,
     mutator: PropTypes.shape({
-      updater: PropTypes.shape({
+      permissionSets: PropTypes.shape({
         POST: PropTypes.func,
         DELETE: PropTypes.func,
       }),
@@ -32,11 +33,15 @@ class PermissionSets extends React.Component {
     permissionSets: {
       type: 'okapi',
       records: 'permissions',
-      path: 'perms/permissions?length=1000&query=(mutable=true)&expandSubs=true',
-    },
-    updater: {
-      type: 'okapi',
-      records: 'permissions',
+      DELETE: {
+        path: 'perms/permissions',
+      },
+      POST: {
+        path: 'perms/permissions',
+      },
+      GET: {
+        path: 'perms/permissions?length=1000&query=(mutable=true)&expandSubs=true',
+      },
       path: 'perms/permissions',
     },
   });

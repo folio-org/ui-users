@@ -1,4 +1,5 @@
 import _ from 'lodash';
+// eslint-disable-next-line import/no-unresolved
 import React from 'react';
 import PropTypes from 'prop-types';
 import Paneset from '@folio/stripes-components/lib/Paneset';
@@ -33,7 +34,7 @@ class LoansHistory extends React.Component {
       type: 'okapi',
       records: 'loans',
       GET: {
-        path: 'circulation/loans?query=(userId=${userid})',
+        path: 'circulation/loans?query=(userId=%{userid})',
       },
     },
     userid: {},
