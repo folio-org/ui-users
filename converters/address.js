@@ -1,18 +1,23 @@
 import _ from 'lodash';
+import hash from 'object-hash';
 import { countriesByCode, countriesByName } from '../data/countries';
 import { addressTypesByDesc, addressTypesById } from '../data/addressTypes';
+import { hashCode } from 'hashcode';
 
 function toListAddress(addr) {
+  if (addr.id) return { ...addr };
   const country = (addr.countryId) ? countriesByCode[addr.countryId].country : '';
   const addressType = (addr.addressTypeId) ? addressTypesById[addr.addressTypeId].desc : '';
+  const id = hashCode().value(addr).toString(); // TODO: remove when id comes from the server
 
   return {
-    id: _.kebabCase(`'id-${addr.addressLine1}-${country}`), // TODO: id should come from the server
+    id,
     addressLine1: addr.addressLine1,
     addressLine2: addr.addressLine2,
     city: addr.city,
-    stateRegion: addr.region,
+    primaryAddress: addr.primaryAddress,
     primary: addr.primaryAddress,
+    stateRegion: addr.region,
     zipCode: addr.postalCode,
     country,
     addressType,
@@ -20,6 +25,7 @@ function toListAddress(addr) {
 }
 
 function toUserAddress(addr) {
+  if (!addr.id) return { ...addr };
   const addressTypeId = (addr.addressType) ? addressTypesByDesc[addr.addressType].id : '';
   const countryId = (addr.country) ? countriesByName[addr.country].alpha2 : '';
 
@@ -27,9 +33,9 @@ function toUserAddress(addr) {
     addressLine1: addr.addressLine1,
     addressLine2: addr.addressLine2,
     city: addr.city,
+    primaryAddress: addr.primaryAddress,
     region: addr.stateRegion,
     postalCode: addr.zipCode,
-    primaryAddress: addr.primary || addr.primaryAddress, // TODO: cleanup after <AddressFieldGroup> is fixed
     addressTypeId,
     countryId,
   };
@@ -37,9 +43,10 @@ function toUserAddress(addr) {
 
 export function toListAddresses(addresses) {
   if (!addresses || !addresses.length) return addresses;
-  return Array.from(addresses).map(toListAddress);
+  return addresses.map(toListAddress);
 }
 
 export function toUserAddresses(addresses) {
+  if (!addresses || !addresses.length) return addresses;
   return addresses.map(toUserAddress);
 }

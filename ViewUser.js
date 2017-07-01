@@ -147,7 +147,8 @@ class ViewUser extends React.Component {
   getUser() {
     const { data: { selUser }, match: { params: { userid } } } = this.props;
     if (!selUser || selUser.length === 0 || !userid) return null;
-    return selUser.find(u => u.id === userid);
+    const user = selUser.find(u => u.id === userid);
+    return user ? _.cloneDeep(user) : user;
   }
 
   update(data) {
