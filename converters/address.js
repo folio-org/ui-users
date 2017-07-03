@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import hash from 'object-hash';
 import { countriesByCode, countriesByName } from '../data/countries';
 import { addressTypesByDesc, addressTypesById } from '../data/addressTypes';
 import { hashCode } from 'hashcode';
