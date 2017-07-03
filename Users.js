@@ -101,6 +101,7 @@ class Users extends React.Component {
       tenant: PropTypes.string.isRequired,
       token: PropTypes.string.isRequired,
     }).isRequired,
+    onSelectRow: PropTypes.func,
   };
 
   static manifest = Object.freeze({
