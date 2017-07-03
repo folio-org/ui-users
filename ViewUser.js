@@ -75,6 +75,7 @@ class ViewUser extends React.Component {
       viewLoansHistoryMode: false,
       viewLoanActionsHistoryMode: false,
       selectedLoan: {},
+      lastUpdate: null,
     };
     this.onClickEditUser = this.onClickEditUser.bind(this);
     this.onClickCloseEditUser = this.onClickCloseEditUser.bind(this);
@@ -82,6 +83,7 @@ class ViewUser extends React.Component {
     this.connectedLoansHistory = props.stripes.connect(LoansHistory);
     this.connectedLoanActionsHistory = props.stripes.connect(LoanActionsHistory);
     this.connectedUserPermissions = props.stripes.connect(UserPermissions);
+    this.dateLastUpdated = this.dateLastUpdated.bind(this);
     this.onClickViewLoansHistory = this.onClickViewLoansHistory.bind(this);
     this.onClickCloseLoansHistory = this.onClickCloseLoansHistory.bind(this);
     this.onClickViewLoanActionsHistory = this.onClickViewLoanActionsHistory.bind(this);
@@ -154,8 +156,28 @@ class ViewUser extends React.Component {
     // eslint-disable-next-line no-param-reassign
     if (data.creds) delete data.creds; // not handled on edit (yet at least)
     this.props.mutator.selUser.PUT(data).then(() => {
+      this.setState({
+        lastUpdate: new Date().toISOString(),
+      });
       this.onClickCloseEditUser();
     });
+  }
+
+  dateLastUpdated(user) {
+    const updatedDateRec = _.get(user, ['updatedDate'], '');
+    const updatedDateLocal = this.state.lastUpdate;
+
+    if (!updatedDateRec) { return ''; }
+
+    let dateToShow;
+    if (updatedDateLocal && updatedDateLocal > updatedDateRec) {
+      dateToShow = updatedDateLocal;
+    }
+    else {
+      dateToShow = updatedDateRec;
+    }
+
+    return new Date(dateToShow).toLocaleString(this.props.stripes.locale);
   }
 
   render() {
@@ -244,6 +266,16 @@ class ViewUser extends React.Component {
             <Row>
               <Col xs={12}>
                 <KeyValue label="Expiration date" value={(_.get(user, ['expirationDate'], '')) ? new Date(Date.parse(_.get(user, ['expirationDate'], ''))).toLocaleDateString(this.props.stripes.locale) : ''} />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12}>
+                <KeyValue label="Open date" value={(_.get(user, ['createdDate'], '')) ? new Date(Date.parse(_.get(user, ['createdDate'], ''))).toLocaleString(this.props.stripes.locale) : ''} />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12}>
+                <KeyValue label="Record last updated" value={this.dateLastUpdated(user)} />
               </Col>
             </Row>
             <Row>
