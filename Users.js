@@ -204,7 +204,7 @@ class Users extends React.Component {
     this.transitionToParams({ sort: sortOrder });
   }
 
-  onSelectRow = (e, meta) => {
+  onSelectRow = this.props.onSelectRow ? this.props.onSelectRow : (e, meta) => {
     const userId = meta.id;
     const username = meta.username;
     this.log('action', `clicked ${userId}, selected user =`, meta);
