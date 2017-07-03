@@ -1,5 +1,4 @@
 import _ from 'lodash';
-// eslint-disable-next-line import/no-unresolved
 import React from 'react';
 import Settings from '@folio/stripes-components/lib/Settings';
 

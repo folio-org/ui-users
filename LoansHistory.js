@@ -1,5 +1,4 @@
 import _ from 'lodash';
-// eslint-disable-next-line import/no-unresolved
 import React from 'react';
 import PropTypes from 'prop-types';
 import Paneset from '@folio/stripes-components/lib/Paneset';
