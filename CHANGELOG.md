@@ -17,6 +17,8 @@
 * Depends on v13.0 of the `users` interface for `totalRecords` metadata and `dateCreated` and `dateUpdated` fields. Fixes UIU-114.
 * Use new %{name} syntax instead of old ${name} throughout. See STRPCONN-5.
 * Prompt on navigation away from dirty User form. See UIU-112.
+* Specify module name in settings second column. Part of STRPCOMP-1.
+* Include label in permission-set editor pane-title. Part of STRPCOMP-1.
 
 ## [2.7.0](https://github.com/folio-org/ui-users/tree/v2.7.0) (2017-06-14)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.6.0...v2.7.0)
