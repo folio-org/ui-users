@@ -125,7 +125,7 @@ class PermissionSets extends React.Component {
 
     return (
       <Paneset nested>
-        <Pane defaultWidth="20%" lastMenu={PermissionsSetsLastMenu}>
+        <Pane defaultWidth="25%" lastMenu={PermissionsSetsLastMenu} paneTitle={this.props.label}>
           <NavList>
             <NavListSection activeLink={this.state.selectedSet ? `#${this.state.selectedSet.id}` : ''}>
               {RenderedPermissionSets}
