@@ -19,6 +19,7 @@
 * Prompt on navigation away from dirty User form. See UIU-112.
 * Specify module name in settings second column. Part of STRPCOMP-1.
 * Include label in permission-set editor pane-title. Part of STRPCOMP-1.
+* Change title on loan history. Fixes UIU-119.
 * Users created with no password are given an empty one. Fixes UIU-120.
 
 ## [2.7.0](https://github.com/folio-org/ui-users/tree/v2.7.0) (2017-06-14)
