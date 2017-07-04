@@ -266,6 +266,7 @@ class Users extends React.Component {
 
   postCreds = (username, creds) => {
     this.log('xhr', `POST credentials for new user '${username}':`, creds);
+    if (creds.password === undefined) creds.password = '';
     fetch(`${this.okapi.url}/authn/credentials`, {
       method: 'POST',
       headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token, 'Content-Type': 'application/json' }),
@@ -391,7 +392,7 @@ class Users extends React.Component {
 
         {detailsPane}
         <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false} label="Add New User Dialog">
-          <UserForm
+        <UserForm
             initialValues={{ active: true, personal: { preferredContactTypeId: '002' } }}
             onSubmit={(record) => { this.create(record); }}
             onCancel={this.onClickCloseNewUser}
