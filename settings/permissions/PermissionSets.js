@@ -14,6 +14,7 @@ import PermissionSetDetails from './PermissionSetDetails';
 
 class PermissionSets extends React.Component {
   static propTypes = {
+    label: PropTypes.string.isRequired,
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func.isRequired,
     }).isRequired,

@@ -266,11 +266,11 @@ class Users extends React.Component {
 
   postCreds = (username, creds) => {
     this.log('xhr', `POST credentials for new user '${username}':`, creds);
-    if (creds.password === undefined) creds.password = '';
+    const localCreds = Object.assign({}, creds, creds.password ? {} : { password: "" });
     fetch(`${this.okapi.url}/authn/credentials`, {
       method: 'POST',
       headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token, 'Content-Type': 'application/json' }),
-      body: JSON.stringify(creds),
+      body: JSON.stringify(localCreds),
     }).then((response) => {
       if (response.status >= 400) {
         this.log('xhr', 'Users. POST of creds failed.');
@@ -392,7 +392,7 @@ class Users extends React.Component {
 
         {detailsPane}
         <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false} label="Add New User Dialog">
-        <UserForm
+          <UserForm
             initialValues={{ active: true, personal: { preferredContactTypeId: '002' } }}
             onSubmit={(record) => { this.create(record); }}
             onCancel={this.onClickCloseNewUser}
