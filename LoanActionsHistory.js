@@ -20,7 +20,7 @@ const LoanActionsHistory = ({ onCancel, loan, user, stripes: { locale } }) => {
     operator: '',
   }];
 
-  const historyFirstMenu = <PaneMenu><button onClick={onCancel} title="close" aria-label="Close Loan Actions History"><span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span></button></PaneMenu>;
+  const historyFirstMenu = <PaneMenu><button onClick={onCancel} title="close" aria-label="Close Loan Details"><span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span></button></PaneMenu>;
   const loanActionsFormatter = {
     Action: la => la.action,
     'Action Date': la => formatDate(la.actionDate, locale),
@@ -30,7 +30,7 @@ const LoanActionsHistory = ({ onCancel, loan, user, stripes: { locale } }) => {
 
   return (
     <Paneset isRoot>
-      <Pane defaultWidth="100%" firstMenu={historyFirstMenu} paneTitle={'Loan Actions History'}>
+      <Pane defaultWidth="100%" firstMenu={historyFirstMenu} paneTitle={'Loan Details'}>
         <Row>
           <Col xs={5} >
             <Row>
