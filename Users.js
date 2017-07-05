@@ -104,7 +104,7 @@ class Users extends React.Component {
   };
 
   static manifest = Object.freeze({
-    addUserMode: {},
+    addUserMode: { initialValue: { mode: false } },
     userCount: { initialValue: INITIAL_RESULT_COUNT },
     users: {
       type: 'okapi',
@@ -155,10 +155,6 @@ class Users extends React.Component {
     this.connectedViewUser = props.stripes.connect(ViewUser);
     const logger = props.stripes.logger;
     this.log = logger.log.bind(logger);
-  }
-
-  componentWillMount() {
-    if (_.isEmpty(this.props.data.addUserMode)) this.props.mutator.addUserMode.replace({ mode: false });
   }
 
   componentWillReceiveProps(nextProps) {

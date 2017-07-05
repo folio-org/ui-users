@@ -56,7 +56,7 @@ class ViewUser extends React.Component {
   };
 
   static manifest = Object.freeze({
-    editMode: {},
+    editMode: { initialValue: { mode: false } },
     selUser: {
       type: 'okapi',
       path: 'users/:{userid}',
@@ -87,10 +87,6 @@ class ViewUser extends React.Component {
     this.onClickViewLoanActionsHistory = this.onClickViewLoanActionsHistory.bind(this);
     this.onClickCloseLoanActionsHistory = this.onClickCloseLoanActionsHistory.bind(this);
     this.onAddressesUpdate = this.onAddressesUpdate.bind(this);
-  }
-
-  componentWillMount() {
-    if (_.isEmpty(this.props.data.editMode)) this.props.mutator.editMode.replace({ mode: false });
   }
 
   // EditUser Handlers
