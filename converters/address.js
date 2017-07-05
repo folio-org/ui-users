@@ -24,7 +24,6 @@ function toListAddress(addr) {
 }
 
 function toUserAddress(addr) {
-  if (!addr.id) return { ...addr };
   const addressTypeId = (addr.addressType) ? addressTypesByDesc[addr.addressType].id : '';
   const countryId = (addr.country) ? countriesByName[addr.country].alpha2 : '';
 
