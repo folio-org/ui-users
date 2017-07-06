@@ -310,7 +310,7 @@ class Users extends React.Component {
       Active: user => user.active,
       Name: user => `${_.get(user, ['personal', 'lastName'], '')}, ${_.get(user, ['personal', 'firstName'], '')}`,
       'Patron Group': (user) => {
-        const pg = data.patronGroups.filter(g => g.id === user.patronGroup)[0];
+        const pg = this.props.data.patronGroups.filter(g => g.id === user.patronGroup)[0];
         return pg ? pg.group : '?';
       },
       'User ID': user => user.username,
