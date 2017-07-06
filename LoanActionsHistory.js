@@ -7,24 +7,24 @@ import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import Pane from '@folio/stripes-components/lib/Pane';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import Paneset from '@folio/stripes-components/lib/Paneset';
-import { formatDate, getFullName } from './util';
+import { formatDate, futureDate, getFullName } from './util';
 
 const LoanActionsHistory = ({ onCancel, loan, user, stripes: { locale } }) => {
   if (!loan) return <div />;
 
   // TODO: remove after back-end is ready
   const loanActions = [{
-    action: 'Loan',
     actionDate: loan.loanDate,
-    dueDate: loan.dueDate,
-    operator: '',
+    action: 'Check Out',
+    dueDate: loan.loanDate,
+    operator: 'Admin',
   }];
 
   const historyFirstMenu = <PaneMenu><button onClick={onCancel} title="close" aria-label="Close Loan Details"><span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span></button></PaneMenu>;
   const loanActionsFormatter = {
     Action: la => la.action,
     'Action Date': la => formatDate(la.actionDate, locale),
-    'Due Date': la => formatDate(la.dueDate, locale) || '-',
+    'Due Date': la => futureDate(la.dueDate, locale, 30),
     Operator: la => la.operator || '-',
   };
 
@@ -41,7 +41,7 @@ const LoanActionsHistory = ({ onCancel, loan, user, stripes: { locale } }) => {
             <br />
             <Row>
               <Col xs={12}>
-                <KeyValue label="Description" value={_.get(loan, ['item', 'description'], '-')} />
+                <KeyValue label="Loan Status" value={_.get(loan, ['status', 'name'], '-')} />
               </Col>
             </Row>
           </Col>
@@ -51,7 +51,8 @@ const LoanActionsHistory = ({ onCancel, loan, user, stripes: { locale } }) => {
                 <KeyValue label="Borrower" value={getFullName(user)} />
               </Col>
             </Row>
-            <br />
+          </Col>
+          <Col xs={4}>
             <Row>
               <Col xs={12}>
                 <KeyValue label="Loan Date" value={formatDate(loan.loanDate, locale) || '-'} />
@@ -60,14 +61,7 @@ const LoanActionsHistory = ({ onCancel, loan, user, stripes: { locale } }) => {
             <br />
             <Row>
               <Col xs={12}>
-                <KeyValue label="Loan Status" value={_.get(loan, ['status', 'name'], '-')} />
-              </Col>
-            </Row>
-          </Col>
-          <Col xs={4}>
-            <Row>
-              <Col xs={12}>
-                <KeyValue label="Due Date" value={formatDate(loan.dueDate, locale) || '-'} />
+                <KeyValue label="Due Date" value={futureDate(loan.loanDate, locale, 30) || '-'} />
               </Col>
             </Row>
           </Col>
