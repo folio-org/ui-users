@@ -2,6 +2,8 @@
 
 ## 2.8.0 IN PROGRESS
 
+* Dependencies for stripes-components raised to "1.3.0".
+* Results list renders as block anchors to support right-click functionality. Part of STRIPES-409.
 * Display user permissions only if interface "permissions" v4.0 is available. Fixes the new part of UIU-74.
 * Add two high-level permissions to the `package.json`, and a new `yarn mkmd` rule to create a module-descriptor from this and other information in the package-file. Fixes UIU-94.
 * Update search debounce time from 150ms to 350ms, Ameliorates UIU-77.

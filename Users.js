@@ -141,9 +141,16 @@ class Users extends React.Component {
     super(props);
 
     const query = props.location.search ? queryString.parse(props.location.search) : {};
+
+    let initiallySelected = {};
+    if (/users\/view/.test(this.props.location.pathname)) {
+      const id = /view\/(.*)\//.exec(this.props.location.pathname)[1];
+      initiallySelected = { id };
+    }
+
     this.state = {
       filters: initialFilterState(filterConfig, query.filters),
-      selectedItem: {},
+      selectedItem: initiallySelected,
       searchTerm: query.query || '',
       sortOrder: query.sort || '',
     };
@@ -155,6 +162,8 @@ class Users extends React.Component {
     this.connectedViewUser = props.stripes.connect(ViewUser);
     const logger = props.stripes.logger;
     this.log = logger.log.bind(logger);
+
+    this.anchoredRowFormatter = this.anchoredRowFormatter.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -236,6 +245,10 @@ class Users extends React.Component {
     this.props.mutator.userCount.replace(this.props.data.userCount + RESULT_COUNT_INCREMENT);
   }
 
+  getRowURL(rowData) {
+    return `/users/view/${rowData.id}/${rowData.username}${this.props.location.search}`;
+  }
+
   performSearch = _.debounce((query) => {
     this.log('action', `searched for '${query}'`);
     this.transitionToParams({ query });
@@ -296,6 +309,29 @@ class Users extends React.Component {
       selectedItem: {},
     });
     this.props.history.push(`${this.props.match.path}${this.props.location.search}`);
+  }
+
+  // custom row formatter to wrap rows in anchor tags.
+  anchoredRowFormatter(
+    { rowIndex,
+      rowClass,
+      rowData,
+      cells,
+      rowProps,
+      labelStrings,
+    },
+  ) {
+    return (
+      <a
+        href={this.getRowURL(rowData)} key={`row-${rowIndex}`}
+        aria-label={labelStrings.join('...')}
+        role="listitem"
+        className={rowClass}
+        {...rowProps}
+      >
+        {cells}
+      </a>
+    );
   }
 
   render() {
@@ -383,6 +419,8 @@ class Users extends React.Component {
             loading={resource ? resource.isPending : false}
             autosize
             virtualize
+            ariaLabel={'User search results'}
+            rowFormatter={this.anchoredRowFormatter}
           />
         </Pane>
 
