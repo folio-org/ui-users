@@ -262,7 +262,7 @@ class Users extends React.Component {
 
   postCreds = (username, creds) => {
     this.log('xhr', `POST credentials for new user '${username}':`, creds);
-    const localCreds = Object.assign({}, creds, creds.password ? {} : { password: "" });
+    const localCreds = Object.assign({}, creds, creds.password ? {} : { password: '' });
     fetch(`${this.okapi.url}/authn/credentials`, {
       method: 'POST',
       headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token, 'Content-Type': 'application/json' }),
