@@ -6,7 +6,8 @@ import { hashCode } from 'hashcode';
 function toListAddress(addr) {
   if (addr.id) return { ...addr };
   const country = (addr.countryId) ? countriesByCode[addr.countryId].country : '';
-  const addressType = (addr.addressTypeId) ? addressTypesById[addr.addressTypeId].desc : '';
+  //const addressType = (addr.addressTypeId) ? addressTypesById[addr.addressTypeId].desc : '';
+  const addressType = ''; // TODO fix when UIU-79 and UIU-80 are in place
   const id = hashCode().value(addr).toString(); // TODO: remove when id comes from the server
 
   return {
@@ -24,7 +25,8 @@ function toListAddress(addr) {
 }
 
 function toUserAddress(addr) {
-  const addressTypeId = (addr.addressType) ? addressTypesByDesc[addr.addressType].id : '';
+  //const addressTypeId = (addr.addressType) ? addressTypesByDesc[addr.addressType].id : '';
+  const addressTypeId = ''; // TODO: fix when UIU-79 and UIU-80 are in place
   const countryId = (addr.country) ? countriesByName[addr.country].alpha2 : '';
 
   return {
