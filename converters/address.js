@@ -26,7 +26,7 @@ function toListAddress(addr) {
 
 function toUserAddress(addr) {
   //const addressTypeId = (addr.addressType) ? addressTypesByDesc[addr.addressType].id : '';
-  const addressTypeId = ''; // TODO: fix when UIU-79 and UIU-80 are in place
+  const addressTypeId = null; // TODO: fix when UIU-79 and UIU-80 are in place
   const countryId = (addr.country) ? countriesByName[addr.country].alpha2 : '';
 
   return {
