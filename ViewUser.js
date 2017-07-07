@@ -179,7 +179,7 @@ class ViewUser extends React.Component {
     const addresses = toListAddresses(_.get(user, ['personal', 'addresses'], []));
 
     return (
-      <Pane defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
+      <div>
         <Row>
           <Col xs={7} >
             <Row>
@@ -308,7 +308,7 @@ class ViewUser extends React.Component {
         <Layer isOpen={this.state.viewLoanActionsHistoryMode} label="Loans Actions History">
           <this.connectedLoanActionsHistory user={user} loan={this.state.selectedLoan} stripes={this.props.stripes} onCancel={this.onClickCloseLoanActionsHistory} />
         </Layer>
-      </Pane>
+      </div>
     );
   }
 }

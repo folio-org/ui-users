@@ -270,7 +270,7 @@ class Users extends React.Component {
     this.props.mutator.users.POST(data);
     // POST credentials, permission-user, permissions;
     this.postCreds(data.username, creds);
-    this.onClickCloseNewUser();
+    this.setState({selectedItem:data}, () => {this.onClickCloseNewUser();});
   }
 
   postCreds = (username, creds) => {
@@ -357,7 +357,7 @@ class Users extends React.Component {
       this.props.stripes.hasPerm('users.item.get') ?
         (<Route
           path={`${this.props.match.path}/view/:userid/:username`}
-          render={props => <this.connectedViewUser stripes={stripes} okapi={this.okapi} paneWidth="44%" onClose={this.collapseDetails} {...props} />}
+          render={props => <this.connectedViewUser stripes={stripes} okapi={this.okapi} {...props} />}
         />) :
         (<div
           style={{
@@ -424,7 +424,11 @@ class Users extends React.Component {
           />
         </Pane>
 
-        {detailsPane}
+        { !_.isEmpty(this.state.selectedItem) && 
+          <Pane defaultWidth="44%" paneTitle="User Details" dismissible onClose={this.collapseDetails}>
+            {detailsPane}
+          </Pane>
+        }
         <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false} label="Add New User Dialog">
           <UserForm
             initialValues={{ active: true, personal: { preferredContactTypeId: '002' } }}
