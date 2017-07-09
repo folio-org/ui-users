@@ -163,6 +163,11 @@ class ViewUser extends React.Component {
     });
   }
 
+  // This is a helper function for the "last updated" date element. Since the
+  // date/time is actually set on the server when the record is updated, the
+  // lastUpdated element of the record on the client side might contain a stale
+  // value. If so, this returns a locally stored update date until the data
+  // is refreshed.
   dateLastUpdated(user) {
     const updatedDateRec = _.get(user, ['updatedDate'], '');
     const updatedDateLocal = this.state.lastUpdate;
