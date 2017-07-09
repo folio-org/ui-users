@@ -12,11 +12,13 @@ import RadioButton from '@folio/stripes-components/lib/RadioButton';
 import Datepicker from '@folio/stripes-components/lib/Datepicker';
 import AddressEditList from '@folio/stripes-components/lib/structures/AddressFieldGroup/AddressEdit/AddressEditList';
 import fetch from 'isomorphic-fetch';
-import { Field, reduxForm } from 'redux-form';
+import { Field } from 'redux-form';
+import stripesForm from '@folio/stripes-form';
 
 import { countriesOptions } from './data/countries';
 import { addressTypeOptions } from './data/addressTypes';
 import Autocomplete from './lib/Autocomplete';
+import { toListAddresses } from './converters/address';
 
 const addressFields = {
   country: { component: Autocomplete, props: { dataOptions: countriesOptions } },
@@ -122,6 +124,7 @@ class UserForm extends React.Component {
       label: `${g.group} (${g.desc})`, value: g.id, selected: initialValues.patronGroup === g.id }));
     const contactTypeOptions = (optionLists.contactTypes || []).map(g => ({
       label: g.desc, value: g.id, selected: initialValues.preferredContactTypeId === g.id }));
+    initialValues.personal.addresses = toListAddresses(initialValues.personal.addresses);
 
     return (
       <form style={{ height: '100%', overflow: 'auto' }}>
@@ -198,9 +201,10 @@ class UserForm extends React.Component {
   }
 }
 
-export default reduxForm({
+export default stripesForm({
   form: 'userForm',
   validate,
   asyncValidate,
   asyncBlurFields: ['username'],
+  navigationCheck: true,
 })(UserForm);
