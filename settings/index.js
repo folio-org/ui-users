@@ -3,7 +3,7 @@ import React from 'react';
 import Settings from '@folio/stripes-components/lib/Settings';
 
 import PermissionSets from './permissions/PermissionSets';
-import PatronGroupsSettings from './patrongroups/PatronGroupsSettings';
+import PatronGroupsSettings from './PatronGroupsSettings';
 
 const pages = [
   {
@@ -20,4 +20,4 @@ const pages = [
   },
 ];
 
-export default props => <Settings {...props} pages={_.sortBy(pages, ['label'])} />;
+export default props => <Settings {...props} pages={_.sortBy(pages, ['label'])} paneTitle="Users" />;

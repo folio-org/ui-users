@@ -61,8 +61,7 @@ class Users extends React.Component {
       users: PropTypes.shape({
         hasLoaded: PropTypes.bool.isRequired,
         other: PropTypes.shape({
-          totalRecords: PropTypes.number,
-          total_records: PropTypes.number,
+          totalRecords: PropTypes.number.isRequired,
         }),
         isPending: PropTypes.bool.isPending,
         successfulMutations: PropTypes.arrayOf(
@@ -101,15 +100,16 @@ class Users extends React.Component {
       tenant: PropTypes.string.isRequired,
       token: PropTypes.string.isRequired,
     }).isRequired,
+    onSelectRow: PropTypes.func,
   };
 
   static manifest = Object.freeze({
-    addUserMode: {},
+    addUserMode: { initialValue: { mode: false } },
     userCount: { initialValue: INITIAL_RESULT_COUNT },
     users: {
       type: 'okapi',
       records: 'users',
-      recordsRequired: '${userCount}',
+      recordsRequired: '%{userCount}',
       perRequest: RESULT_COUNT_INCREMENT,
       path: 'users',
       GET: {
@@ -141,9 +141,16 @@ class Users extends React.Component {
     super(props);
 
     const query = props.location.search ? queryString.parse(props.location.search) : {};
+
+    let initiallySelected = {};
+    if (/users\/view/.test(this.props.location.pathname)) {
+      const id = /view\/(.*)\//.exec(this.props.location.pathname)[1];
+      initiallySelected = { id };
+    }
+
     this.state = {
       filters: initialFilterState(filterConfig, query.filters),
-      selectedItem: {},
+      selectedItem: initiallySelected,
       searchTerm: query.query || '',
       sortOrder: query.sort || '',
     };
@@ -155,10 +162,8 @@ class Users extends React.Component {
     this.connectedViewUser = props.stripes.connect(ViewUser);
     const logger = props.stripes.logger;
     this.log = logger.log.bind(logger);
-  }
 
-  componentWillMount() {
-    if (_.isEmpty(this.props.data.addUserMode)) this.props.mutator.addUserMode.replace({ mode: false });
+    this.anchoredRowFormatter = this.anchoredRowFormatter.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -204,7 +209,7 @@ class Users extends React.Component {
     this.transitionToParams({ sort: sortOrder });
   }
 
-  onSelectRow = (e, meta) => {
+  onSelectRow = this.props.onSelectRow ? this.props.onSelectRow : (e, meta) => {
     const userId = meta.id;
     const username = meta.username;
     this.log('action', `clicked ${userId}, selected user =`, meta);
@@ -240,6 +245,10 @@ class Users extends React.Component {
     this.props.mutator.userCount.replace(this.props.data.userCount + RESULT_COUNT_INCREMENT);
   }
 
+  getRowURL(rowData) {
+    return `/users/view/${rowData.id}/${rowData.username}${this.props.location.search}`;
+  }
+
   performSearch = _.debounce((query) => {
     this.log('action', `searched for '${query}'`);
     this.transitionToParams({ query });
@@ -251,7 +260,7 @@ class Users extends React.Component {
 
   create = (data) => {
     if (data.personal.addresses) {
-      Object.assign(data.personal, { addresses: toUserAddresses(data.addresses) });
+      data.personal.addresses = toUserAddresses(data.personal.addresses); // eslint-disable-line no-param-reassign
     }
 
     // extract creds object from user object
@@ -266,10 +275,11 @@ class Users extends React.Component {
 
   postCreds = (username, creds) => {
     this.log('xhr', `POST credentials for new user '${username}':`, creds);
+    const localCreds = Object.assign({}, creds, creds.password ? {} : { password: '' });
     fetch(`${this.okapi.url}/authn/credentials`, {
       method: 'POST',
       headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token, 'Content-Type': 'application/json' }),
-      body: JSON.stringify(creds),
+      body: JSON.stringify(localCreds),
     }).then((response) => {
       if (response.status >= 400) {
         this.log('xhr', 'Users. POST of creds failed.');
@@ -301,6 +311,29 @@ class Users extends React.Component {
     this.props.history.push(`${this.props.match.path}${this.props.location.search}`);
   }
 
+  // custom row formatter to wrap rows in anchor tags.
+  anchoredRowFormatter(
+    { rowIndex,
+      rowClass,
+      rowData,
+      cells,
+      rowProps,
+      labelStrings,
+    },
+  ) {
+    return (
+      <a
+        href={this.getRowURL(rowData)} key={`row-${rowIndex}`}
+        aria-label={labelStrings.join('...')}
+        role="listitem"
+        className={rowClass}
+        {...rowProps}
+      >
+        {cells}
+      </a>
+    );
+  }
+
   render() {
     const { data, stripes } = this.props;
     const users = data.users || [];
@@ -313,7 +346,7 @@ class Users extends React.Component {
       Active: user => user.active,
       Name: user => `${_.get(user, ['personal', 'lastName'], '')}, ${_.get(user, ['personal', 'firstName'], '')}`,
       'Patron Group': (user) => {
-        const pg = data.patronGroups.filter(g => g.id === user.patronGroup)[0];
+        const pg = this.props.data.patronGroups.filter(g => g.id === user.patronGroup)[0];
         return pg ? pg.group : '?';
       },
       'User ID': user => user.username,
@@ -364,7 +397,7 @@ class Users extends React.Component {
             <div style={{ textAlign: 'center' }}>
               <strong>Results</strong>
               <div>
-                <em>{resource && resource.hasLoaded ? (resource.other.totalRecords || resource.other.total_records) : ''} Result{users.length === 1 ? '' : 's'} Found</em>
+                <em>{resource && resource.hasLoaded ? resource.other.totalRecords : ''} Result{users.length === 1 ? '' : 's'} Found</em>
               </div>
             </div>
           }
@@ -386,6 +419,8 @@ class Users extends React.Component {
             loading={resource ? resource.isPending : false}
             autosize
             virtualize
+            ariaLabel={'User search results'}
+            rowFormatter={this.anchoredRowFormatter}
           />
         </Pane>
 

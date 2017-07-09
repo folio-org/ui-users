@@ -56,7 +56,7 @@ class ViewUser extends React.Component {
   };
 
   static manifest = Object.freeze({
-    editMode: {},
+    editMode: { initialValue: { mode: false } },
     selUser: {
       type: 'okapi',
       path: 'users/:{userid}',
@@ -87,10 +87,6 @@ class ViewUser extends React.Component {
     this.onClickViewLoanActionsHistory = this.onClickViewLoanActionsHistory.bind(this);
     this.onClickCloseLoanActionsHistory = this.onClickCloseLoanActionsHistory.bind(this);
     this.onAddressesUpdate = this.onAddressesUpdate.bind(this);
-  }
-
-  componentWillMount() {
-    if (_.isEmpty(this.props.data.editMode)) this.props.mutator.editMode.replace({ mode: false });
   }
 
   // EditUser Handlers
@@ -139,18 +135,22 @@ class ViewUser extends React.Component {
   onAddressesUpdate(addresses) {
     const user = this.getUser();
     if (!user) return;
-
-    user.personal.addresses = toUserAddresses(addresses);
+    user.personal.addresses = addresses;
     this.update(user);
   }
 
   getUser() {
     const { data: { selUser }, match: { params: { userid } } } = this.props;
     if (!selUser || selUser.length === 0 || !userid) return null;
-    return selUser.find(u => u.id === userid);
+    const user = selUser.find(u => u.id === userid);
+    return user ? _.cloneDeep(user) : user;
   }
 
   update(data) {
+    if (data.personal.addresses) {
+      data.personal.addresses = toUserAddresses(data.personal.addresses); // eslint-disable-line no-param-reassign
+    }
+
     // eslint-disable-next-line no-param-reassign
     if (data.creds) delete data.creds; // not handled on edit (yet at least)
     this.props.mutator.selUser.PUT(data).then(() => {
@@ -176,7 +176,7 @@ class ViewUser extends React.Component {
     const patronGroupId = _.get(user, ['patronGroup'], '');
     const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
     const preferredContact = contactTypes.find(g => g.id === _.get(user, ['personal', 'preferredContactTypeId'], '')) || { type: '' };
-    const addreses = toListAddresses(_.get(user, ['personal', 'addresses'], []));
+    const addresses = toListAddresses(_.get(user, ['personal', 'addresses'], []));
 
     return (
       <Pane defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
@@ -269,7 +269,7 @@ class ViewUser extends React.Component {
             </Row>
           </Col>
         </Row>
-        <UserAddresses onUpdate={this.onAddressesUpdate} addresses={addreses} />
+        <UserAddresses onUpdate={this.onAddressesUpdate} addresses={addresses} />
         <br />
         <hr />
         <br />

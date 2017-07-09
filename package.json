@@ -18,7 +18,7 @@
     "home": "/users?filters=active.Active&sort=Name",
     "hasSettings": true,
     "okapiInterfaces": {
-      "users": "11.0",
+      "users": "13.0",
       "circulation": "1.0",
       "permissions": "4.0",
       "login": "3.0"
@@ -54,43 +54,59 @@
           "login.item.put"
         ],
         "visible": true
-      }, {
+      },
+      {
         "permissionName": "users-bl.create",
         "displayName": "Can create new user",
         "description": "Some subperms can be deleted later when bl does updates and ModulePermissions can be used",
-        "subPermissions": ["users-bl.edit", "users-bl.item.post",
+        "subPermissions": [
+          "users-bl.edit",
+          "users-bl.item.post",
           "users.item.post",
           "perms.users.item.post",
-          "login.item.post"],
+          "login.item.post"
+        ],
         "visible": true
-      }, {
+      },
+      {
         "permissionName": "users-bl.viewperms",
         "displayName": "Can view permissions assigned to users",
         "description": "Includes all of view",
-        "subPermissions": ["users-bl.view", "perms.users.get"],
+        "subPermissions": [
+          "users-bl.view",
+          "perms.users.get"
+        ],
         "visible": true
-      }, {
+      },
+      {
         "permissionName": "users-bl.editperms",
         "displayName": "Can assign and unassign permissions to users",
         "description": "",
-        "subPermissions": ["users-bl.viewperms",
-          "perms.users.item.put", "perms.users.item.post", "perms.users.item.delete"],
+        "subPermissions": [
+          "users-bl.viewperms",
+          "perms.users.item.put",
+          "perms.users.item.post",
+          "perms.users.item.delete"
+        ],
         "visible": true
-      }, {
+      },
+      {
         "permissionName": "users-bl.editpermsets",
         "displayName": "Can create, edit and remove permission sets",
         "description": "This seems out of place in users-bl, maybe it belongs under perms or settings",
         "subPermissions": [
-          "perms.permissions.get","perms.permissions.item.put",
-          "perms.permissions.item.post", "perms.permissions.item.delete"],
+          "perms.permissions.get",
+          "perms.permissions.item.put",
+          "perms.permissions.item.post",
+          "perms.permissions.item.delete"
+        ],
         "visible": true
-
       },
       {
-        "permissionName" : "users-bl.all",
-        "displayName" : "users-bl all",
-        "description" : "All user business-logic permissions",
-        "subPermissions" : [
+        "permissionName": "users-bl.all",
+        "displayName": "users-bl all",
+        "description": "All user business-logic permissions",
+        "subPermissions": [
           "users-bl.view",
           "users-bl.edit",
           "users-bl.create",
@@ -98,13 +114,13 @@
           "users-bl.editperms",
           "users-bl.editpermsets"
         ],
-        "visible" : false
+        "visible": false
       }
     ]
   },
   "scripts": {
     "lint": "eslint *.js lib settings || true",
-    "mkmd": "node ../stripes-core/util/package2md.js package.json > ModuleDescriptor.json"
+    "prepublishOnly": "node ../stripes-core/util/package2md.js package.json > ModuleDescriptor.json"
   },
   "devDependencies": {
     "babel-core": "^6.17.0",
@@ -122,7 +138,9 @@
     "eslint-plugin-react": "^6.4.1"
   },
   "dependencies": {
-    "@folio/stripes-components": "^1.1.0",
+    "@folio/stripes-components": "^1.3.0",
+    "@folio/stripes-form": "^0.8.0",
+    "hashcode": "^1.0.3",
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.17.4",
     "prop-types": "^15.5.10",
@@ -131,10 +149,10 @@
     "react-bootstrap": "^0.30.7",
     "react-bootstrap-typeahead": "^1.4.0",
     "react-router-dom": "^4.0.0",
-    "redux-form": "^6.1.1"
+    "redux-form": "^6.8.0"
   },
   "peerDependencies": {
-    "@folio/stripes-connect": "^2.2.1",
+    "@folio/stripes-connect": "^2.3.0",
     "@folio/stripes-core": "^1.14.0"
   }
 }
