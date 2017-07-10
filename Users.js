@@ -153,6 +153,7 @@ class Users extends React.Component {
       selectedItem: initiallySelected,
       searchTerm: query.query || '',
       sortOrder: query.sort || '',
+      localDetails: false,
     };
 
     this.okapi = props.okapi;
@@ -171,7 +172,7 @@ class Users extends React.Component {
     if (resource) {
       const sm = nextProps.resources.users.successfulMutations;
       if (sm.length > resource.successfulMutations.length)
-        this.onSelectRow(undefined, { id: sm[0].record.id, username: sm[0].record.username });
+        this.onSelectRow(undefined, { ...sm[0].record });
     }
 
     if (resource && resource.isPending && !nextProps.resources.users.isPending) {
@@ -213,7 +214,7 @@ class Users extends React.Component {
     const userId = meta.id;
     const username = meta.username;
     this.log('action', `clicked ${userId}, selected user =`, meta);
-    this.setState({ selectedItem: meta });
+    this.setState({ selectedItem: meta, localDetails: true });
     this.props.history.push(`/users/view/${userId}/${username}${this.props.location.search}`);
   }
 
@@ -270,7 +271,8 @@ class Users extends React.Component {
     this.props.mutator.users.POST(data);
     // POST credentials, permission-user, permissions;
     this.postCreds(data.username, creds);
-    this.setState({selectedItem:data}, () => {this.onClickCloseNewUser();});
+    this.collapseDetails();
+    this.onClickCloseNewUser();
   }
 
   postCreds = (username, creds) => {
@@ -307,6 +309,7 @@ class Users extends React.Component {
   collapseDetails = () => {
     this.setState({
       selectedItem: {},
+      localDetails: false,
     });
     this.props.history.push(`${this.props.match.path}${this.props.location.search}`);
   }
@@ -353,13 +356,7 @@ class Users extends React.Component {
       Email: user => _.get(user, ['personal', 'email']),
     };
 
-    const detailsPane = (
-      this.props.stripes.hasPerm('users.item.get') ?
-        (<Route
-          path={`${this.props.match.path}/view/:userid/:username`}
-          render={props => <this.connectedViewUser stripes={stripes} okapi={this.okapi} {...props} />}
-        />) :
-        (<div
+    const permissionsError = (<div
           style={{
             position: 'absolute',
             right: '1rem',
@@ -372,7 +369,24 @@ class Users extends React.Component {
         >
           <h2>Permission Error</h2>
           <p>Sorry - your user permissions do not allow access to this page.</p>
-        </div>));
+        </div>);
+
+    const routedDetailsPane = (
+      this.props.stripes.hasPerm('users.item.get') ?
+        (
+          <Route
+            path={`${this.props.match.path}/view/:userid/:username`}
+            render={props => <this.connectedViewUser stripes={stripes} okapi={this.okapi} paneWidth="44%" onClose={this.collapseDetails} {...props} />}
+          />
+        ) :
+        permissionsError );
+
+    const localDetailsPane = props =>{
+      return this.props.stripes.hasPerm('users.item.get') ?
+        (<this.connectedViewUser stripes={stripes} user={this.state.selectedItem} okapi={this.okapi} paneWidth="44%" onClose={this.collapseDetails} {...props} />) :
+        permissionsError;
+    }
+      
 
     const resource = this.props.resources.users;
     return (
@@ -424,11 +438,7 @@ class Users extends React.Component {
           />
         </Pane>
 
-        { !_.isEmpty(this.state.selectedItem) && 
-          <Pane defaultWidth="44%" paneTitle="User Details" dismissible onClose={this.collapseDetails}>
-            {detailsPane}
-          </Pane>
-        }
+        { this.state.localDetails ? localDetailsPane(this.props) : routedDetailsPane }
         <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false} label="Add New User Dialog">
           <UserForm
             initialValues={{ active: true, personal: { preferredContactTypeId: '002' } }}

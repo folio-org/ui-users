@@ -140,9 +140,14 @@ class ViewUser extends React.Component {
   }
 
   getUser() {
-    const { data: { selUser }, match: { params: { userid } } } = this.props;
-    if (!selUser || selUser.length === 0 || !userid) return null;
-    const user = selUser.find(u => u.id === userid);
+    let user;
+    if(this.props.user){
+      user = this.props.user; 
+    } else {
+      const { data: { selUser }, match: { params: { userid } } } = this.props;
+      if (!selUser || selUser.length === 0 || !userid) return null;
+      user = selUser.find(u => u.id === userid);
+    }
     return user ? _.cloneDeep(user) : user;
   }
 
@@ -179,7 +184,7 @@ class ViewUser extends React.Component {
     const addresses = toListAddresses(_.get(user, ['personal', 'addresses'], []));
 
     return (
-      <div>
+      <Pane defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
         <Row>
           <Col xs={7} >
             <Row>
@@ -308,7 +313,7 @@ class ViewUser extends React.Component {
         <Layer isOpen={this.state.viewLoanActionsHistoryMode} label="Loans Actions History">
           <this.connectedLoanActionsHistory user={user} loan={this.state.selectedLoan} stripes={this.props.stripes} onCancel={this.onClickCloseLoanActionsHistory} />
         </Layer>
-      </div>
+      </Pane>
     );
   }
 }
