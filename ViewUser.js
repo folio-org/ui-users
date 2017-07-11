@@ -53,10 +53,11 @@ class ViewUser extends React.Component {
     }).isRequired,
     onClose: PropTypes.func,
     okapi: PropTypes.object,
+    addressTypes: PropTypes.arrayOf(PropTypes.object),
   };
 
   static manifest = Object.freeze({
-    editMode: {},
+    editMode: { initialValue: { mode: false } },
     selUser: {
       type: 'okapi',
       path: 'users/:{userid}',
@@ -75,6 +76,7 @@ class ViewUser extends React.Component {
       viewLoansHistoryMode: false,
       viewLoanActionsHistoryMode: false,
       selectedLoan: {},
+      lastUpdate: null,
     };
     this.onClickEditUser = this.onClickEditUser.bind(this);
     this.onClickCloseEditUser = this.onClickCloseEditUser.bind(this);
@@ -82,15 +84,12 @@ class ViewUser extends React.Component {
     this.connectedLoansHistory = props.stripes.connect(LoansHistory);
     this.connectedLoanActionsHistory = props.stripes.connect(LoanActionsHistory);
     this.connectedUserPermissions = props.stripes.connect(UserPermissions);
+    this.dateLastUpdated = this.dateLastUpdated.bind(this);
     this.onClickViewLoansHistory = this.onClickViewLoansHistory.bind(this);
     this.onClickCloseLoansHistory = this.onClickCloseLoansHistory.bind(this);
     this.onClickViewLoanActionsHistory = this.onClickViewLoanActionsHistory.bind(this);
     this.onClickCloseLoanActionsHistory = this.onClickCloseLoanActionsHistory.bind(this);
     this.onAddressesUpdate = this.onAddressesUpdate.bind(this);
-  }
-
-  componentWillMount() {
-    if (_.isEmpty(this.props.data.editMode)) this.props.mutator.editMode.replace({ mode: false });
   }
 
   // EditUser Handlers
@@ -139,23 +138,51 @@ class ViewUser extends React.Component {
   onAddressesUpdate(addresses) {
     const user = this.getUser();
     if (!user) return;
-
-    user.personal.addresses = toUserAddresses(addresses);
+    user.personal.addresses = addresses;
     this.update(user);
   }
 
   getUser() {
     const { data: { selUser }, match: { params: { userid } } } = this.props;
     if (!selUser || selUser.length === 0 || !userid) return null;
-    return selUser.find(u => u.id === userid);
+    const user = selUser.find(u => u.id === userid);
+    return user ? _.cloneDeep(user) : user;
   }
 
   update(data) {
+    if (data.personal.addresses) {
+      data.personal.addresses = toUserAddresses(data.personal.addresses, this.props.addressTypes); // eslint-disable-line no-param-reassign
+    }
+
     // eslint-disable-next-line no-param-reassign
     if (data.creds) delete data.creds; // not handled on edit (yet at least)
     this.props.mutator.selUser.PUT(data).then(() => {
+      this.setState({
+        lastUpdate: new Date().toISOString(),
+      });
       this.onClickCloseEditUser();
     });
+  }
+
+  // This is a helper function for the "last updated" date element. Since the
+  // date/time is actually set on the server when the record is updated, the
+  // lastUpdated element of the record on the client side might contain a stale
+  // value. If so, this returns a locally stored update date until the data
+  // is refreshed.
+  dateLastUpdated(user) {
+    const updatedDateRec = _.get(user, ['updatedDate'], '');
+    const updatedDateLocal = this.state.lastUpdate;
+
+    if (!updatedDateRec) { return ''; }
+
+    let dateToShow;
+    if (updatedDateLocal && updatedDateLocal > updatedDateRec) {
+      dateToShow = updatedDateLocal;
+    } else {
+      dateToShow = updatedDateRec;
+    }
+
+    return new Date(dateToShow).toLocaleString(this.props.stripes.locale);
   }
 
   render() {
@@ -176,7 +203,7 @@ class ViewUser extends React.Component {
     const patronGroupId = _.get(user, ['patronGroup'], '');
     const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
     const preferredContact = contactTypes.find(g => g.id === _.get(user, ['personal', 'preferredContactTypeId'], '')) || { type: '' };
-    const addreses = toListAddresses(_.get(user, ['personal', 'addresses'], []));
+    const addresses = toListAddresses(_.get(user, ['personal', 'addresses'], []), this.props.addressTypes);
 
     return (
       <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
@@ -248,6 +275,16 @@ class ViewUser extends React.Component {
             </Row>
             <Row>
               <Col xs={12}>
+                <KeyValue label="Open date" value={(_.get(user, ['createdDate'], '')) ? new Date(Date.parse(_.get(user, ['createdDate'], ''))).toLocaleString(this.props.stripes.locale) : ''} />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12}>
+                <KeyValue label="Record last updated" value={this.dateLastUpdated(user)} />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12}>
                 <KeyValue label="Bar code" value={_.get(user, ['barcode'], '')} />
               </Col>
             </Row>
@@ -269,7 +306,11 @@ class ViewUser extends React.Component {
             </Row>
           </Col>
         </Row>
-        <UserAddresses onUpdate={this.onAddressesUpdate} addresses={addreses} />
+        <UserAddresses
+          onUpdate={this.onAddressesUpdate}
+          addressTypes={this.props.addressTypes}
+          addresses={addresses}
+        />
         <br />
         <hr />
         <br />
@@ -296,6 +337,7 @@ class ViewUser extends React.Component {
         <Layer isOpen={this.props.data.editMode ? this.props.data.editMode.mode : false} label="Edit User Dialog">
           <UserForm
             initialValues={user}
+            addressTypes={this.props.addressTypes}
             onSubmit={(record) => { this.update(record); }}
             onCancel={this.onClickCloseEditUser}
             okapi={this.props.okapi}

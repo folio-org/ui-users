@@ -2,6 +2,9 @@
 
 ## 2.8.0 IN PROGRESS
 
+* Include create date and date updated fields in user view. Completes UIU-31.
+* Dependencies for stripes-components raised to "1.3.0".
+* Results list renders as block anchors to support right-click functionality. Part of STRIPES-409.
 * Display user permissions only if interface "permissions" v4.0 is available. Fixes the new part of UIU-74.
 * Add two high-level permissions to the `package.json`, and a new `yarn mkmd` rule to create a module-descriptor from this and other information in the package-file. Fixes UIU-94.
 * Update search debounce time from 150ms to 350ms, Ameliorates UIU-77.
@@ -16,6 +19,14 @@
 * `<PatronGroupsSettings>` uses generic `<EditableList>` instead of PG-specific `<PatronGroupsList>`, which we no longer need. Fixes UIU-48.
 * Depends on v13.0 of the `users` interface for `totalRecords` metadata and `dateCreated` and `dateUpdated` fields. Fixes UIU-114.
 * Use new %{name} syntax instead of old ${name} throughout. See STRPCONN-5.
+* Prompt on navigation away from dirty User form. See UIU-112.
+* Specify module name in settings second column. Part of STRPCOMP-1.
+* Include label in permission-set editor pane-title. Part of STRPCOMP-1.
+* Change title on loan history. Fixes UIU-119.
+* Users created with no password are given an empty one. Fixes UIU-120.
+* Fix `toUserAddress` converter. Fixes UIU-121.
+* Eliminate all uses of `componentWillMount` to provide initial values to resources. Part of STRIPES-433.
+* Add Address Type to User Associations. Completes UIU-80.
 
 ## [2.7.0](https://github.com/folio-org/ui-users/tree/v2.7.0) (2017-06-14)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.6.0...v2.7.0)
@@ -133,4 +144,3 @@ Previous versions of ui-users are not compatible with version 9.0.0 of mod-users
 * First version to have a documented change-log.
 * Handles `id` field, rather then `_id`, as unique key of patron groups. Enables this module to interoperate with new versions of mod-users (since commit 022b8b8c) but of course makes it unable to run against older versions.
 * Updates the permissions checked, to match what is used by folio-backend-auth v0.8.3.
-

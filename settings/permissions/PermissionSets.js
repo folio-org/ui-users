@@ -14,6 +14,7 @@ import PermissionSetDetails from './PermissionSetDetails';
 
 class PermissionSets extends React.Component {
   static propTypes = {
+    label: PropTypes.string.isRequired,
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func.isRequired,
     }).isRequired,
@@ -125,7 +126,7 @@ class PermissionSets extends React.Component {
 
     return (
       <Paneset nested>
-        <Pane defaultWidth="20%" lastMenu={PermissionsSetsLastMenu}>
+        <Pane defaultWidth="25%" lastMenu={PermissionsSetsLastMenu} paneTitle={this.props.label}>
           <NavList>
             <NavListSection activeLink={this.state.selectedSet ? `#${this.state.selectedSet.id}` : ''}>
               {RenderedPermissionSets}
