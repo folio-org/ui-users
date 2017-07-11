@@ -26,6 +26,7 @@
 * Users created with no password are given an empty one. Fixes UIU-120.
 * Fix `toUserAddress` converter. Fixes UIU-121.
 * Eliminate all uses of `componentWillMount` to provide initial values to resources. Part of STRIPES-433.
+* Add Address Type to User Associations. Completes UIU-80.
 
 ## [2.7.0](https://github.com/folio-org/ui-users/tree/v2.7.0) (2017-06-14)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.6.0...v2.7.0)

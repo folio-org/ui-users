@@ -53,6 +53,7 @@ class ViewUser extends React.Component {
     }).isRequired,
     onClose: PropTypes.func,
     okapi: PropTypes.object,
+    addressTypes: PropTypes.arrayOf(PropTypes.object),
   };
 
   static manifest = Object.freeze({
@@ -150,7 +151,7 @@ class ViewUser extends React.Component {
 
   update(data) {
     if (data.personal.addresses) {
-      data.personal.addresses = toUserAddresses(data.personal.addresses); // eslint-disable-line no-param-reassign
+      data.personal.addresses = toUserAddresses(data.personal.addresses, this.props.addressTypes); // eslint-disable-line no-param-reassign
     }
 
     // eslint-disable-next-line no-param-reassign
@@ -177,8 +178,7 @@ class ViewUser extends React.Component {
     let dateToShow;
     if (updatedDateLocal && updatedDateLocal > updatedDateRec) {
       dateToShow = updatedDateLocal;
-    }
-    else {
+    } else {
       dateToShow = updatedDateRec;
     }
 
@@ -203,7 +203,7 @@ class ViewUser extends React.Component {
     const patronGroupId = _.get(user, ['patronGroup'], '');
     const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
     const preferredContact = contactTypes.find(g => g.id === _.get(user, ['personal', 'preferredContactTypeId'], '')) || { type: '' };
-    const addresses = toListAddresses(_.get(user, ['personal', 'addresses'], []));
+    const addresses = toListAddresses(_.get(user, ['personal', 'addresses'], []), this.props.addressTypes);
 
     return (
       <Pane defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
@@ -306,7 +306,11 @@ class ViewUser extends React.Component {
             </Row>
           </Col>
         </Row>
-        <UserAddresses onUpdate={this.onAddressesUpdate} addresses={addresses} />
+        <UserAddresses
+          onUpdate={this.onAddressesUpdate}
+          addressTypes={this.props.addressTypes}
+          addresses={addresses}
+        />
         <br />
         <hr />
         <br />
@@ -333,6 +337,7 @@ class ViewUser extends React.Component {
         <Layer isOpen={this.props.data.editMode ? this.props.data.editMode.mode : false} label="Edit User Dialog">
           <UserForm
             initialValues={user}
+            addressTypes={this.props.addressTypes}
             onSubmit={(record) => { this.update(record); }}
             onCancel={this.onClickCloseEditUser}
             okapi={this.props.okapi}
