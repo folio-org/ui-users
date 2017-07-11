@@ -16,14 +16,9 @@ import { Field } from 'redux-form';
 import stripesForm from '@folio/stripes-form';
 
 import { countriesOptions } from './data/countries';
-import { addressTypeOptions } from './data/addressTypes';
 import Autocomplete from './lib/Autocomplete';
 import { toListAddresses } from './converters/address';
-
-const addressFields = {
-  country: { component: Autocomplete, props: { dataOptions: countriesOptions } },
-  addressType: { component: Select, props: { dataOptions: addressTypeOptions, fullWidth: true, placeholder: 'select address type' } },
-};
+import { toAddressTypeOptions } from './converters/address_type';
 
 const sys = require('stripes-loader'); // eslint-disable-line
 const okapiUrl = sys.okapi.url;
@@ -98,6 +93,7 @@ class UserForm extends React.Component {
       userGroups: PropTypes.arrayOf(PropTypes.object),
       contactTypes: PropTypes.arrayOf(PropTypes.object),
     }),
+    addressTypes: PropTypes.arrayOf(PropTypes.object),
   };
 
   constructor(props) {
@@ -114,6 +110,7 @@ class UserForm extends React.Component {
       onCancel,
       initialValues,
       optionLists,
+      addressTypes,
     } = this.props;
 
     /* Menues for Add User workflow */
@@ -124,7 +121,13 @@ class UserForm extends React.Component {
       label: `${g.group} (${g.desc})`, value: g.id, selected: initialValues.patronGroup === g.id }));
     const contactTypeOptions = (optionLists.contactTypes || []).map(g => ({
       label: g.desc, value: g.id, selected: initialValues.preferredContactTypeId === g.id }));
-    initialValues.personal.addresses = toListAddresses(initialValues.personal.addresses);
+
+    initialValues.personal.addresses = toListAddresses(initialValues.personal.addresses, addressTypes);
+
+    const addressFields = {
+      country: { component: Autocomplete, props: { dataOptions: countriesOptions } },
+      addressType: { component: Select, props: { dataOptions: toAddressTypeOptions(addressTypes), fullWidth: true, placeholder: 'Select address type' } },
+    };
 
     return (
       <form style={{ height: '100%', overflow: 'auto' }}>

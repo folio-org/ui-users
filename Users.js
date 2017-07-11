@@ -135,6 +135,11 @@ class Users extends React.Component {
       path: 'groups',
       records: 'usergroups',
     },
+    addressTypes: {
+      type: 'okapi',
+      path: 'addresstypes',
+      records: 'addressTypes',
+    },
   });
 
   constructor(props) {
@@ -260,7 +265,7 @@ class Users extends React.Component {
 
   create = (data) => {
     if (data.personal.addresses) {
-      data.personal.addresses = toUserAddresses(data.personal.addresses); // eslint-disable-line no-param-reassign
+      data.personal.addresses = toUserAddresses(data.personal.addresses, this.props.data.addressTypes); // eslint-disable-line no-param-reassign
     }
 
     // extract creds object from user object
@@ -357,7 +362,7 @@ class Users extends React.Component {
       this.props.stripes.hasPerm('users.item.get') ?
         (<Route
           path={`${this.props.match.path}/view/:userid/:username`}
-          render={props => <this.connectedViewUser stripes={stripes} okapi={this.okapi} paneWidth="44%" onClose={this.collapseDetails} {...props} />}
+          render={props => <this.connectedViewUser stripes={stripes} okapi={this.okapi} paneWidth="44%" onClose={this.collapseDetails} addressTypes={data.addressTypes} {...props} />}
         />) :
         (<div
           style={{
@@ -428,6 +433,7 @@ class Users extends React.Component {
         <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false} label="Add New User Dialog">
           <UserForm
             initialValues={{ active: true, personal: { preferredContactTypeId: '002' } }}
+            addressTypes={data.addressTypes}
             onSubmit={(record) => { this.create(record); }}
             onCancel={this.onClickCloseNewUser}
             okapi={this.okapi}
