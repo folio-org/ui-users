@@ -324,7 +324,7 @@ class Users extends React.Component {
     return (
       <a
         href={this.getRowURL(rowData)} key={`row-${rowIndex}`}
-        aria-label={labelStrings.join('...')}
+        aria-label={labelStrings && labelStrings.join('...')}
         role="listitem"
         className={rowClass}
         {...rowProps}
