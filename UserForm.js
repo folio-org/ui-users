@@ -114,9 +114,9 @@ class UserForm extends React.Component {
     } = this.props;
 
     /* Menues for Add User workflow */
-    const addUserFirstMenu = <PaneMenu><button onClick={onCancel} title="close" aria-label="Close New User Dialog"><span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span></button></PaneMenu>;
-    const addUserLastMenu = <PaneMenu><Button type="submit" title="Create New User" disabled={pristine || submitting} onClick={handleSubmit}>Create User</Button></PaneMenu>;
-    const editUserLastMenu = <PaneMenu><Button type="submit" title="Update User" disabled={pristine || submitting} onClick={handleSubmit}>Update User</Button></PaneMenu>;
+    const addUserFirstMenu = <PaneMenu><button id="button-closenewuserdialog" onClick={onCancel} title="close" aria-label="Close New User Dialog"><span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span></button></PaneMenu>;
+    const addUserLastMenu = <PaneMenu><Button id="button-createnewuser" type="submit" title="Create New User" disabled={pristine || submitting} onClick={handleSubmit}>Create User</Button></PaneMenu>;
+    const editUserLastMenu = <PaneMenu><Button id="button-updateuser" type="submit" title="Update User" disabled={pristine || submitting} onClick={handleSubmit}>Update User</Button></PaneMenu>;
     const patronGroupOptions = (optionLists.patronGroups || []).map(g => ({
       label: `${g.group} (${g.desc})`, value: g.id, selected: initialValues.patronGroup === g.id }));
     const contactTypeOptions = (optionLists.contactTypes || []).map(g => ({
@@ -130,7 +130,7 @@ class UserForm extends React.Component {
     };
 
     return (
-      <form style={{ height: '100%', overflow: 'auto' }}>
+      <form id="form-user" style={{ height: '100%', overflow: 'auto' }}>
         <Paneset isRoot>
           <Pane defaultWidth="100%" firstMenu={addUserFirstMenu} lastMenu={initialValues.username ? editUserLastMenu : addUserLastMenu} paneTitle={initialValues.username ? 'Edit User' : 'New User'}>
             <Row>
