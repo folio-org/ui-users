@@ -30,7 +30,7 @@
       },
       {
         "permissionName": "users-bl.view",
-        "displayName": "Can view user profile",
+        "displayName": "Users: Can view user profile",
         "description": "Some subperms can be deleted later when submodules use modern permission names",
         "subPermissions": [
           "users-bl.collection.get",
@@ -45,7 +45,7 @@
       },
       {
         "permissionName": "users-bl.edit",
-        "displayName": "Can edit user profile",
+        "displayName": "Users: Can edit user profile",
         "description": "Some subperms can be deleted later when bl does updates and ModulePermissions can be used",
         "subPermissions": [
           "users-bl.view",
@@ -57,7 +57,7 @@
       },
       {
         "permissionName": "users-bl.create",
-        "displayName": "Can create new user",
+        "displayName": "Users: Can create new user",
         "description": "Some subperms can be deleted later when bl does updates and ModulePermissions can be used",
         "subPermissions": [
           "users-bl.edit",
@@ -70,7 +70,7 @@
       },
       {
         "permissionName": "users-bl.viewperms",
-        "displayName": "Can view permissions assigned to users",
+        "displayName": "Users: Can view permissions assigned to users",
         "description": "Includes all of view",
         "subPermissions": [
           "users-bl.view",
@@ -80,7 +80,7 @@
       },
       {
         "permissionName": "users-bl.editperms",
-        "displayName": "Can assign and unassign permissions to users",
+        "displayName": "Users: Can assign and unassign permissions to users",
         "description": "",
         "subPermissions": [
           "users-bl.viewperms",
@@ -92,7 +92,7 @@
       },
       {
         "permissionName": "users-bl.editpermsets",
-        "displayName": "Can create, edit and remove permission sets",
+        "displayName": "Settings (Users): Can create, edit and remove permission sets",
         "description": "This seems out of place in users-bl, maybe it belongs under perms or settings",
         "subPermissions": [
           "perms.permissions.get",
