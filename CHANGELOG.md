@@ -30,6 +30,7 @@
 * Add Address Type to User Associations. Completes UIU-80.
 * Add Address Type CRUD. Completes UIU-79.
 * Change some permission-names. Fixes the ui-users part of STRIPES-435.
+* Move "New User" button from filter pane to results pane. Fixes UIU-125.
 
 ## [2.7.0](https://github.com/folio-org/ui-users/tree/v2.7.0) (2017-06-14)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.6.0...v2.7.0)
