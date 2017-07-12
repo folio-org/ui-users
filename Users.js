@@ -345,7 +345,14 @@ class Users extends React.Component {
 
     /* searchHeader is a 'custom pane header'*/
     const searchHeader = <FilterPaneSearch id="SearchField" onChange={this.onChangeSearch} onClear={this.onClearSearch} value={this.state.searchTerm} />;
-    const resultMenu = <PaneMenu><button><Icon icon="bookmark" /></button></PaneMenu>;
+
+    const newUserButton = <IfPermission perm="users.item.post">
+      <IfPermission perm="login.item.post">
+        <IfPermission perm="perms.users.item.post">
+          <Button id="button-newuser" onClick={this.onClickAddNewUser}>+ New</Button>
+        </IfPermission>
+      </IfPermission>
+    </IfPermission>
 
     const resultsFormatter = {
       Active: user => user.active,
@@ -385,15 +392,6 @@ class Users extends React.Component {
         {/* Filter Pane */}
         <Pane id="pane-filter" defaultWidth="16%" header={searchHeader}>
           <FilterGroups config={filterConfig} filters={this.state.filters} onChangeFilter={this.onChangeFilter} />
-          <FilterControlGroup label="Actions">
-            <IfPermission perm="users.item.post">
-              <IfPermission perm="login.item.post">
-                <IfPermission perm="perms.users.item.post">
-                  <Button id="button-newuser" fullWidth onClick={this.onClickAddNewUser}>New user</Button>
-                </IfPermission>
-              </IfPermission>
-            </IfPermission>
-          </FilterControlGroup>
         </Pane>
         {/* Results Pane */}
         <Pane
@@ -407,7 +405,7 @@ class Users extends React.Component {
               </div>
             </div>
           }
-          lastMenu={resultMenu}
+          lastMenu={newUserButton}
         >
           <MultiColumnList
             id="list-users"
