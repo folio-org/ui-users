@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 
 import { Row, Col } from 'react-bootstrap';
 import Button from '@folio/stripes-components/lib/Button';
-import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 
 
 class UserLoans extends React.Component {
@@ -18,31 +17,27 @@ class UserLoans extends React.Component {
       locale: PropTypes.string.isRequired,
     }).isRequired,
     onClickViewLoansHistory: PropTypes.func.isRequired,
-    onClickViewLoanActionsHistory: PropTypes.func.isRequired,
+    onClickViewOpenLoans: PropTypes.func.isRequired,
+    onClickViewClosedLoans: PropTypes.func.isRequired,
   };
 
   static manifest = Object.freeze({
-    usersLoans: {
+    loansHistory: {
       type: 'okapi',
       records: 'loans',
       GET: {
-        path: 'circulation/loans?query=(userId=:{userid} AND status="Open")',
+        path: 'circulation/loans?query=(userId=:{userid})',
       },
     },
     userid: {},
   });
 
   render() {
-    const { data: { usersLoans } } = this.props;
+    const { data: { loansHistory } } = this.props;
+    const openLoans = _.filter(loansHistory, loan => _.get(loan, ['status', 'name']) === 'Open');
+    const closedLoans = _.filter(loansHistory, loan => _.get(loan, ['status', 'name']) === 'Closed');
 
-    const loansFormatter = {
-      title: loan => `${_.get(loan, ['item', 'title'], '')}`,
-      barcode: loan => `${_.get(loan, ['item', 'barcode'], '')}`,
-      status: loan => `${_.get(loan, ['status', 'name'], '')}`,
-      loanDate: loan => new Date(Date.parse(loan.loanDate)).toLocaleDateString(this.props.stripes.locale),
-    };
-
-    if (!usersLoans) return <div />;
+    if (!loansHistory) return <div />;
 
     return (
       <div>
@@ -54,14 +49,10 @@ class UserLoans extends React.Component {
             <Button id="button-viewfullhistory" align="end" bottomMargin0 onClick={this.props.onClickViewLoansHistory}>View Loans</Button>
           </Col>
         </Row>
-        <MultiColumnList
-          id="list-usersloans"
-          fullWidth
-          formatter={loansFormatter}
-          visibleColumns={['title', 'barcode', 'loanDate', 'status']}
-          onRowClick={this.props.onClickViewLoanActionsHistory}
-          contentData={usersLoans}
-        />
+        <ul>
+          <li><Button id="button-viewcurrentloans" onClick={this.props.onClickViewOpenLoans}>{ openLoans.length } Current Loans</Button></li>
+          <li><Button id="button-viewclosedloans" onClick={this.props.onClickViewClosedLoans}>{ closedLoans.length } Past Loans</Button></li>
+        </ul>
       </div>);
   }
 }

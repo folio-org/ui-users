@@ -26,6 +26,9 @@ class LoansHistory extends React.Component {
     }),
     userid: PropTypes.string.isRequired,
     onCancel: PropTypes.func.isRequired,
+    openLoans: PropTypes.bool,
+    allLoans: PropTypes.bool,
+    onClickViewLoanActionsHistory: PropTypes.func.isRequired,
   };
 
   static manifest = Object.freeze({
@@ -50,8 +53,9 @@ class LoansHistory extends React.Component {
 
   render() {
     const { data: { loansHistory } } = this.props;
-
-    if (!loansHistory) return <div />;
+    const loanStatus = this.props.openLoans ? 'Open' : 'Closed';
+    const loans = this.props.allLoans ? loansHistory : _.filter(loansHistory, loan => loanStatus === _.get(loan, ['status', 'name']));
+    if (!loans) return <div />;
 
     const historyFirstMenu = <PaneMenu><button onClick={this.props.onCancel} title="close" aria-label="Close Loans History"><span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span></button></PaneMenu>;
 
@@ -71,7 +75,8 @@ class LoansHistory extends React.Component {
             fullWidth
             formatter={loansFormatter}
             visibleColumns={['title', 'barcode', 'loanDate', 'returnDate', 'status']}
-            contentData={loansHistory}
+            contentData={loans}
+            onRowClick={this.props.onClickViewLoanActionsHistory}
           />
         </Pane>
       </Paneset>);
