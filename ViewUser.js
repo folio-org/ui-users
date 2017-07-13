@@ -75,6 +75,8 @@ class ViewUser extends React.Component {
     this.state = {
       viewLoansHistoryMode: false,
       viewLoanActionsHistoryMode: false,
+      viewOpenLoansMode: false,
+      viewClosedLoansMode: false,
       selectedLoan: {},
       lastUpdate: null,
     };
@@ -87,6 +89,8 @@ class ViewUser extends React.Component {
     this.dateLastUpdated = this.dateLastUpdated.bind(this);
     this.onClickViewLoansHistory = this.onClickViewLoansHistory.bind(this);
     this.onClickCloseLoansHistory = this.onClickCloseLoansHistory.bind(this);
+    this.onClickViewOpenLoans = this.onClickViewOpenLoans.bind(this);
+    this.onClickViewClosedLoans = this.onClickViewClosedLoans.bind(this);
     this.onClickViewLoanActionsHistory = this.onClickViewLoanActionsHistory.bind(this);
     this.onClickCloseLoanActionsHistory = this.onClickCloseLoanActionsHistory.bind(this);
     this.onAddressesUpdate = this.onAddressesUpdate.bind(this);
@@ -111,11 +115,25 @@ class ViewUser extends React.Component {
       viewLoansHistoryMode: true,
     });
   }
+  onClickViewOpenLoans(e) {
+    if (e) e.preventDefault();
+    this.setState({
+      viewOpenLoansMode: true,
+    });
+  }
+  onClickViewClosedLoans(e) {
+    if (e) e.preventDefault();
+    this.setState({
+      viewClosedLoansMode: true,
+    });
+  }
 
   onClickCloseLoansHistory(e) {
     if (e) e.preventDefault();
     this.setState({
       viewLoansHistoryMode: false,
+      viewOpenLoansMode: false,
+      viewClosedLoansMode: false,
     });
   }
 
@@ -326,7 +344,13 @@ class ViewUser extends React.Component {
         <hr />
         <IfPermission perm="circulation.loans.collection.get">
           <IfInterface name="circulation" version="1.0">
-            <this.connectedUserLoans onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory} onClickViewLoansHistory={this.onClickViewLoansHistory} {...this.props} />
+            <this.connectedUserLoans
+              onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
+              onClickViewLoansHistory={this.onClickViewLoansHistory}
+              onClickViewOpenLoans={this.onClickViewOpenLoans}
+              onClickViewClosedLoans={this.onClickViewClosedLoans}
+              {...this.props}
+            />
           </IfInterface>
         </IfPermission>
         <IfPermission perm="perms.users.get">
@@ -345,10 +369,32 @@ class ViewUser extends React.Component {
           />
         </Layer>
         <Layer isOpen={this.state.viewLoansHistoryMode} label="Loans History">
-          <this.connectedLoansHistory userid={user.id} stripes={this.props.stripes} onCancel={this.onClickCloseLoansHistory} />
+          <this.connectedLoansHistory userid={user.id} stripes={this.props.stripes} onCancel={this.onClickCloseLoansHistory} onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory} allLoans />
+        </Layer>
+        <Layer isOpen={this.state.viewOpenLoansMode} label="Open Loans">
+          <this.connectedLoansHistory
+            userid={user.id}
+            stripes={this.props.stripes}
+            onCancel={this.onClickCloseLoansHistory}
+            onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
+            openLoans
+          />
+        </Layer>
+        <Layer isOpen={this.state.viewClosedLoansMode} label="Closed Loans">
+          <this.connectedLoansHistory
+            userid={user.id}
+            stripes={this.props.stripes}
+            onCancel={this.onClickCloseLoansHistory}
+            onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
+          />
         </Layer>
         <Layer isOpen={this.state.viewLoanActionsHistoryMode} label="Loans Actions History">
-          <this.connectedLoanActionsHistory user={user} loan={this.state.selectedLoan} stripes={this.props.stripes} onCancel={this.onClickCloseLoanActionsHistory} />
+          <this.connectedLoanActionsHistory
+            user={user}
+            loan={this.state.selectedLoan}
+            stripes={this.props.stripes}
+            onCancel={this.onClickCloseLoanActionsHistory}
+          />
         </Layer>
       </Pane>
     );
