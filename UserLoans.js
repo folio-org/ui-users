@@ -48,7 +48,7 @@ class UserLoans extends React.Component {
       <div>
         <Row>
           <Col xs={7} sm={6}>
-            <h3 className="marginTopHalf">Current loans</h3>
+            <h3 className="marginTopHalf">Loans</h3>
           </Col>
           <Col xs={5} sm={6}>
             <Button id="button-viewfullhistory" align="end" bottomMargin0 onClick={this.props.onClickViewLoansHistory}>View Full History</Button>
