@@ -2,8 +2,8 @@
 
 ## 2.8.0 IN PROGRESS
 
-* Add `<SRStatus>` component to main module page. After search is performed, screen readers will announce the number of results. Integrates STCOM-3.
-* Add "Skip to Results" link to User search input (accessibility feature - tab twice on input to see it. Enter key will focus the results list). Integrates STCOM-7.
+* Add [`<SRStatus>`](https://github.com/folio-org/stripes-components/tree/master/lib/SRStatus) component to main module page. After search is performed, screen readers will announce the number of results. Integrates STCOM-3.
+* Add "Skip to Results" [`<FocusLink>`](https://github.com/folio-org/stripes-components/tree/master/lib/FocusLink) component to search input (accessibility feature - tab twice on input to see it appear after 'clear search' button. When it is focused, pressing the 'enter' key will focus the results list). Integrates STCOM-7.
 * Add unique tag IDs to UI elements for automated testing, so far to main sections like panes and multi-column lists. STRIPES-300.
 * Include create date and date updated fields in user view. Completes UIU-31.
 * Dependencies for stripes-components raised to "1.3.0".
