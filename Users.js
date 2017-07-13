@@ -15,6 +15,7 @@ import FilterPaneSearch from '@folio/stripes-components/lib/FilterPaneSearch';
 import FilterControlGroup from '@folio/stripes-components/lib/FilterControlGroup';
 import Layer from '@folio/stripes-components/lib/Layer';
 import FilterGroups, { initialFilterState, onChangeFilter as commonChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
+import SRStatus from '@folio/stripes-components/lib/SRStatus';
 
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
 import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
@@ -169,6 +170,9 @@ class Users extends React.Component {
     this.log = logger.log.bind(logger);
 
     this.anchoredRowFormatter = this.anchoredRowFormatter.bind(this);
+
+    this.resultsList = null;
+    this.SRStatus = null;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -181,6 +185,8 @@ class Users extends React.Component {
 
     if (resource && resource.isPending && !nextProps.resources.users.isPending) {
       this.log('event', 'new search-result');
+      const resultAmount = nextProps.resources.users.other.totalRecords;
+      this.SRStatus.sendMessage(`Search returned ${resultAmount} result${resultAmount != 1 ? 's' : ''}`);
     }
   }
 
@@ -344,12 +350,14 @@ class Users extends React.Component {
     const users = data.users || [];
 
     /* searchHeader is a 'custom pane header'*/
-    const searchHeader = <FilterPaneSearch id="SearchField" onChange={this.onChangeSearch} onClear={this.onClearSearch} value={this.state.searchTerm} />;
+    const searchHeader = <FilterPaneSearch id="SearchField" onChange={this.onChangeSearch} onClear={this.onClearSearch} resultsList={this.resultsList} value={this.state.searchTerm} />;
 
     const newUserButton = <IfPermission perm="users.item.post">
       <IfPermission perm="login.item.post">
         <IfPermission perm="perms.users.item.post">
-          <Button id="button-newuser" onClick={this.onClickAddNewUser}>+ New</Button>
+          <PaneMenu>
+            <Button id="button-newuser" title="Add New User" onClick={this.onClickAddNewUser}>+ New</Button>
+          </PaneMenu>
         </IfPermission>
       </IfPermission>
     </IfPermission>
@@ -389,6 +397,7 @@ class Users extends React.Component {
     const resource = this.props.resources.users;
     return (
       <Paneset>
+        <SRStatus ref={(ref) => {this.SRStatus = ref;}}/>
         {/* Filter Pane */}
         <Pane id="pane-filter" defaultWidth="16%" header={searchHeader}>
           <FilterGroups config={filterConfig} filters={this.state.filters} onChangeFilter={this.onChangeFilter} />
@@ -426,6 +435,7 @@ class Users extends React.Component {
             virtualize
             ariaLabel={'User search results'}
             rowFormatter={this.anchoredRowFormatter}
+            containerRef={(ref)=>{this.resultsList = ref;}}
           />
         </Pane>
 
