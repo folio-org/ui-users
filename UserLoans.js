@@ -11,7 +11,6 @@ class UserLoans extends React.Component {
     data: PropTypes.shape({
       loansHistory: PropTypes.arrayOf(PropTypes.object),
     }),
-    onClickViewLoansHistory: PropTypes.func.isRequired,
     onClickViewOpenLoans: PropTypes.func.isRequired,
     onClickViewClosedLoans: PropTypes.func.isRequired,
   };
@@ -41,7 +40,7 @@ class UserLoans extends React.Component {
             <h3 className="marginTopHalf">Loans</h3>
           </Col>
           <Col xs={5} sm={6}>
-            <Button id="clickable-viewfullhistory" align="end" bottomMargin0 onClick={this.props.onClickViewLoansHistory}>View Loans</Button>
+            <Button id="clickable-viewfullhistory" align="end" bottomMargin0 onClick={this.props.onClickViewOpenLoans}>View Loans</Button>
           </Col>
         </Row>
         <ul>
