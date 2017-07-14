@@ -191,7 +191,7 @@ class UserForm extends React.Component {
                   id="adduser_expirationdate"
                 />
                 <Field label="Bar Code" name="barcode" id="adduser_barcode" component={TextField} fullWidth />
-                <Field label="FOLIO Record Number" name="id" id="adduser_id" readOnly="true" component={TextField} fullWidth />
+                <Field label="FOLIO Record Number" name="id" id="adduser_id" readOnly component={TextField} fullWidth />
                 <Field label="External System ID" name="externalSystemId" id="adduser_externalsystemid" component={TextField} fullWidth />
 
                 <AddressEditList name="personal.addresses" fieldComponents={addressFields} canDelete />

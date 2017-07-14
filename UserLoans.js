@@ -13,9 +13,6 @@ class UserLoans extends React.Component {
       userLoans: PropTypes.arrayOf(PropTypes.object),
       loansHistory: PropTypes.arrayOf(PropTypes.object),
     }),
-    stripes: PropTypes.shape({
-      locale: PropTypes.string.isRequired,
-    }).isRequired,
     onClickViewLoansHistory: PropTypes.func.isRequired,
     onClickViewOpenLoans: PropTypes.func.isRequired,
     onClickViewClosedLoans: PropTypes.func.isRequired,
