@@ -49,7 +49,7 @@ class LoansHistory extends React.Component {
 
     return (
       <Paneset isRoot>
-        <Pane id="pane-loanshistory" defaultWidth="100%" firstMenu={historyFirstMenu} paneTitle={'Loans History'}>
+        <Pane id="pane-loanshistory" defaultWidth="100%" firstMenu={historyFirstMenu} paneTitle={'Loans'}>
           <MultiColumnList
             id="list-loanshistory"
             fullWidth
