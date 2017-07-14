@@ -9,10 +9,8 @@ import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import Button from '@folio/stripes-components/lib/Button';
-import Icon from '@folio/stripes-components/lib/Icon';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import FilterPaneSearch from '@folio/stripes-components/lib/FilterPaneSearch';
-import FilterControlGroup from '@folio/stripes-components/lib/FilterControlGroup';
 import Layer from '@folio/stripes-components/lib/Layer';
 import FilterGroups, { initialFilterState, onChangeFilter as commonChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
 import SRStatus from '@folio/stripes-components/lib/SRStatus';
@@ -186,7 +184,7 @@ class Users extends React.Component {
     if (resource && resource.isPending && !nextProps.resources.users.isPending) {
       this.log('event', 'new search-result');
       const resultAmount = nextProps.resources.users.other.totalRecords;
-      this.SRStatus.sendMessage(`Search returned ${resultAmount} result${resultAmount != 1 ? 's' : ''}`);
+      this.SRStatus.sendMessage(`Search returned ${resultAmount} result${resultAmount !== 1 ? 's' : ''}`);
     }
   }
 
@@ -352,15 +350,17 @@ class Users extends React.Component {
     /* searchHeader is a 'custom pane header'*/
     const searchHeader = <FilterPaneSearch id="SearchField" onChange={this.onChangeSearch} onClear={this.onClearSearch} resultsList={this.resultsList} value={this.state.searchTerm} />;
 
-    const newUserButton = <IfPermission perm="users.item.post">
-      <IfPermission perm="login.item.post">
-        <IfPermission perm="perms.users.item.post">
-          <PaneMenu>
-            <Button id="button-newuser" title="Add New User" onClick={this.onClickAddNewUser}>+ New</Button>
-          </PaneMenu>
+    const newUserButton = (
+      <IfPermission perm="users.item.post">
+        <IfPermission perm="login.item.post">
+          <IfPermission perm="perms.users.item.post">
+            <PaneMenu>
+              <Button id="button-newuser" title="Add New User" onClick={this.onClickAddNewUser}>+ New</Button>
+            </PaneMenu>
+          </IfPermission>
         </IfPermission>
       </IfPermission>
-    </IfPermission>
+    );
 
     const resultsFormatter = {
       Active: user => user.active,
@@ -397,7 +397,7 @@ class Users extends React.Component {
     const resource = this.props.resources.users;
     return (
       <Paneset>
-        <SRStatus ref={(ref) => {this.SRStatus = ref;}}/>
+        <SRStatus ref={(ref) => { this.SRStatus = ref; }} />
         {/* Filter Pane */}
         <Pane id="pane-filter" defaultWidth="16%" header={searchHeader}>
           <FilterGroups config={filterConfig} filters={this.state.filters} onChangeFilter={this.onChangeFilter} />
@@ -435,7 +435,7 @@ class Users extends React.Component {
             virtualize
             ariaLabel={'User search results'}
             rowFormatter={this.anchoredRowFormatter}
-            containerRef={(ref)=>{this.resultsList = ref;}}
+            containerRef={(ref) => { this.resultsList = ref; }}
           />
         </Pane>
 
