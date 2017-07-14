@@ -17,8 +17,8 @@ class LoansHistory extends React.Component {
       userid: PropTypes.object.required,
     }),
     mutator: PropTypes.shape({
-      users: React.PropTypes.shape({
-        PUT: React.PropTypes.func.isRequired,
+      users: PropTypes.shape({
+        PUT: PropTypes.func.isRequired,
       }),
       userid: PropTypes.shape({
         replace: PropTypes.func,
