@@ -115,6 +115,19 @@
           "users-bl.editpermsets"
         ],
         "visible": false
+      },
+      {
+        "permissionName": "settings.usergroups.all",
+        "displayName": "Settings (Users): Can create, edit and remove patron groups",
+        "subPermissions": [
+          "usergroups.collection.get",
+          "usergroups.item.delete",
+          "usergroups.item.get",
+          "usergroups.item.post",
+          "usergroups.item.put",
+          "settings.enabled"
+        ],
+        "visible": false
       }
     ]
   },
