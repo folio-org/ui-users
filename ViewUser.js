@@ -343,7 +343,7 @@ class ViewUser extends React.Component {
         <MultiColumnList id="list-finehistory" fullWidth contentData={fineHistory} />
         <hr />
         <IfPermission perm="circulation.loans.collection.get">
-          <IfInterface name="circulation" version="1.0">
+          <IfInterface name="circulation" version="2.0">
             <this.connectedUserLoans
               onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
               onClickViewLoansHistory={this.onClickViewLoansHistory}
@@ -369,7 +369,13 @@ class ViewUser extends React.Component {
           />
         </Layer>
         <Layer isOpen={this.state.viewLoansHistoryMode} label="Loans History">
-          <this.connectedLoansHistory userid={user.id} stripes={this.props.stripes} onCancel={this.onClickCloseLoansHistory} onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory} allLoans />
+          <this.connectedLoansHistory
+            userid={user.id}
+            stripes={this.props.stripes}
+            onCancel={this.onClickCloseLoansHistory}
+            onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
+            allLoans
+          />
         </Layer>
         <Layer isOpen={this.state.viewOpenLoansMode} label="Open Loans">
           <this.connectedLoansHistory
@@ -392,6 +398,7 @@ class ViewUser extends React.Component {
           <this.connectedLoanActionsHistory
             user={user}
             loan={this.state.selectedLoan}
+            loanid={this.state.selectedLoan.id}
             stripes={this.props.stripes}
             onCancel={this.onClickCloseLoanActionsHistory}
           />

@@ -5,12 +5,10 @@ import PropTypes from 'prop-types';
 import { Row, Col } from 'react-bootstrap';
 import Button from '@folio/stripes-components/lib/Button';
 
-
 class UserLoans extends React.Component {
 
   static propTypes = {
     data: PropTypes.shape({
-      userLoans: PropTypes.arrayOf(PropTypes.object),
       loansHistory: PropTypes.arrayOf(PropTypes.object),
     }),
     onClickViewLoansHistory: PropTypes.func.isRequired,
