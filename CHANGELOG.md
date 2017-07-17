@@ -18,7 +18,6 @@
 * Revise okapiInterfaces and permissionSets in `package.json`. Fixes UIU-105.
 * Move patron-group and permissions settings source files down into their own subdirectories.
 * Add repeatable address fieldgroup to user form and user details. Fixes UIU-29.
-* When creating new permissions, it is possible to set their {{permissionName}}. Fixes UIU-98.
 * `<PatronGroupsSettings>` uses generic `<EditableList>` instead of PG-specific `<PatronGroupsList>`, which we no longer need. Fixes UIU-48.
 * Depends on v13.0 of the `users` interface for `totalRecords` metadata and `dateCreated` and `dateUpdated` fields. Fixes UIU-114.
 * Use new %{name} syntax instead of old ${name} throughout. See STRPCONN-5.
@@ -36,6 +35,7 @@
 * New permission `settings.usergroups.all`. Fixes UIU-130.
 * Connect to Loan Actions API. Fixes UIU-103.
 * Support circulation interface v2.0. Fixes UIU-133.
+* Release ui-users v2.8.0. Fixes UIU-137.
 
 ## [2.7.0](https://github.com/folio-org/ui-users/tree/v2.7.0) (2017-06-14)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.6.0...v2.7.0)
