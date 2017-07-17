@@ -1,6 +1,7 @@
 # Change history for ui-users
 
-## 2.8.0 IN PROGRESS
+## [2.8.0](https://github.com/folio-org/ui-users/tree/v2.8.0) (2017-07-17)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.7.0...v2.8.0)
 
 * Add [`<SRStatus>`](https://github.com/folio-org/stripes-components/tree/master/lib/SRStatus) component to main module page. After search is performed, screen readers will announce the number of results. Integrates STCOM-3.
 * Add "Skip to Results" [`<FocusLink>`](https://github.com/folio-org/stripes-components/tree/master/lib/FocusLink) component to search input (accessibility feature - tab twice on input to see it appear after 'clear search' button. When it is focused, pressing the 'enter' key will focus the results list). Integrates STCOM-7.
