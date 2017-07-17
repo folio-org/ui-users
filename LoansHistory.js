@@ -18,7 +18,6 @@ class LoansHistory extends React.Component {
     }),
     onCancel: PropTypes.func.isRequired,
     openLoans: PropTypes.bool,
-    allLoans: PropTypes.bool,
     onClickViewLoanActionsHistory: PropTypes.func.isRequired,
   };
 
@@ -44,8 +43,15 @@ class LoansHistory extends React.Component {
       <Button title="Closed Loans" aria-label="Closed Loans" onClick={this.props.onClickViewClosedLoans}>Closed Loans</Button>
     </PaneMenu>);
 
+    const loanTitleFormatter = loan => {
+      return <a onClick={(e) => {
+        e.preventDefault();
+        this.props.onClickViewLoanActionsHistory(e, loan);
+      }}>{_.get(loan, ['item', 'title'], '')}</a>;
+    }
+
     const loansFormatter = {
-      title: loan => `${_.get(loan, ['item', 'title'], '')}`,
+      title: loanTitleFormatter,
       barcode: loan => `${_.get(loan, ['item', 'barcode'], '')}`,
       status: loan => `${_.get(loan, ['status', 'name'], '')}`,
       loanDate: loan => new Date(Date.parse(loan.loanDate)).toLocaleDateString(this.props.stripes.locale),
@@ -61,7 +67,6 @@ class LoansHistory extends React.Component {
             formatter={loansFormatter}
             visibleColumns={['title', 'barcode', 'loanDate', 'returnDate', 'status']}
             contentData={loans}
-            onRowClick={this.props.onClickViewLoanActionsHistory}
           />
         </Pane>
       </Paneset>);
