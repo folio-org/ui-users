@@ -6,7 +6,6 @@
 * Add "Skip to Results" [`<FocusLink>`](https://github.com/folio-org/stripes-components/tree/master/lib/FocusLink) component to search input (accessibility feature - tab twice on input to see it appear after 'clear search' button. When it is focused, pressing the 'enter' key will focus the results list). Integrates STCOM-7.
 * Add unique tag IDs to UI elements for automated testing, so far to main sections like panes and multi-column lists. STRIPES-300.
 * Include create date and date updated fields in user view. Completes UIU-31.
-* Dependencies for stripes-components raised to "1.3.0".
 * Results list renders as block anchors to support right-click functionality. Part of STRIPES-409.
 * Display user permissions only if interface "permissions" v4.0 is available. Fixes the new part of UIU-74.
 * Add two high-level permissions to the `package.json`, and a new `yarn mkmd` rule to create a module-descriptor from this and other information in the package-file. Fixes UIU-94.
@@ -36,6 +35,10 @@
 * Connect to Loan Actions API. Fixes UIU-103.
 * Support circulation interface v2.0. Fixes UIU-133.
 * Release ui-users v2.8.0. Fixes UIU-137.
+* Raised Stripes dependencies:
+  * stripes-components from v0.15.0 to v1.3.0
+  * stripes-connect from v2.2.1 to v2.4.0
+  * stripes-core from v1.13.0 to v2.2.0
 
 ## [2.7.0](https://github.com/folio-org/ui-users/tree/v2.7.0) (2017-06-14)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.6.0...v2.7.0)
