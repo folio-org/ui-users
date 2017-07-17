@@ -18,9 +18,10 @@
     "home": "/users?filters=active.Active&sort=Name",
     "hasSettings": true,
     "okapiInterfaces": {
-      "users": "13.0",
-      "circulation": "1.0",
+      "users": "14.0",
+      "circulation": "2.0",
       "permissions": "4.0",
+      "loan-storage": "3.0",
       "login": "3.0"
     },
     "permissionSets": [

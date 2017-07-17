@@ -14,17 +14,7 @@ class LoansHistory extends React.Component {
     }).isRequired,
     data: PropTypes.shape({
       loansHistory: PropTypes.arrayOf(PropTypes.object),
-      userid: PropTypes.object.required,
     }),
-    mutator: PropTypes.shape({
-      users: PropTypes.shape({
-        PUT: PropTypes.func.isRequired,
-      }),
-      userid: PropTypes.shape({
-        replace: PropTypes.func,
-      }),
-    }),
-    userid: PropTypes.string.isRequired,
     onCancel: PropTypes.func.isRequired,
     openLoans: PropTypes.bool,
     allLoans: PropTypes.bool,
@@ -36,20 +26,10 @@ class LoansHistory extends React.Component {
       type: 'okapi',
       records: 'loans',
       GET: {
-        path: 'circulation/loans?query=(userId=%{userid})',
+        path: 'circulation/loans?query=(userId=!{userid})',
       },
     },
-    userid: {},
   });
-
-  constructor(props) {
-    super(props);
-    props.mutator.userid.replace(props.userid);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.props.mutator.userid.replace(nextProps.userid);
-  }
 
   render() {
     const { data: { loansHistory } } = this.props;
