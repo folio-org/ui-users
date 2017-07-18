@@ -3,6 +3,7 @@
 ## 2.9.0 (IN PROGRESS)
 
 * Add barcode column to Users list. Fixes UIU-123.
+* Make barcode searchable. Fixes UIU-124.
 
 ## [2.8.0](https://github.com/folio-org/ui-users/tree/v2.8.0) (2017-07-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.7.0...v2.8.0)
