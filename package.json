@@ -17,6 +17,7 @@
     "route": "/users",
     "home": "/users?filters=active.Active&sort=Name",
     "hasSettings": true,
+    "actionNames": ["stripesHome", "usersSortByName"],
     "okapiInterfaces": {
       "users": "14.0",
       "circulation": "2.0",
