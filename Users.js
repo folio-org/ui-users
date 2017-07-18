@@ -365,6 +365,7 @@ class Users extends React.Component {
     const resultsFormatter = {
       Active: user => user.active,
       Name: user => `${_.get(user, ['personal', 'lastName'], '')}, ${_.get(user, ['personal', 'firstName'], '')}`,
+      Barcode: user => user.barcode,
       'Patron Group': (user) => {
         const pg = this.props.data.patronGroups.filter(g => g.id === user.patronGroup)[0];
         return pg ? pg.group : '?';
@@ -425,7 +426,7 @@ class Users extends React.Component {
             onRowClick={this.onSelectRow}
             onHeaderClick={this.onSort}
             onNeedMoreData={this.onNeedMore}
-            visibleColumns={['Active', 'Name', 'Patron Group', 'User ID', 'Email']}
+            visibleColumns={['Active', 'Name', 'Barcode', 'Patron Group', 'User ID', 'Email']}
             sortOrder={this.state.sortOrder.replace(/^-/, '').replace(/,.*/, '')}
             sortDirection={this.state.sortOrder.startsWith('-') ? 'descending' : 'ascending'}
             isEmptyMessage={`No results found for "${this.state.searchTerm}". Please check your spelling and filters.`}
