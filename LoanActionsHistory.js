@@ -15,9 +15,9 @@ class LoanActionsHistory extends React.Component {
     stripes: PropTypes.shape({
       locale: PropTypes.string.isRequired,
     }).isRequired,
-    data: {
-      loanActionsHistory: PropTypes.arrayOf(PropTypes.object),
-    },
+    resources: PropTypes.shape({
+      loanActionsHistory: PropTypes.object,
+    }).isRequired,
     loan: PropTypes.object,
     user: PropTypes.object,
     onCancel: PropTypes.func.isRequired,
@@ -34,7 +34,7 @@ class LoanActionsHistory extends React.Component {
   });
 
   render() {
-    const { onCancel, loan, user, stripes: { locale }, data: { loanActionsHistory } } = this.props;
+    const { onCancel, loan, user, stripes: { locale }, resources: { loanActionsHistory } } = this.props;
     if (!loanActionsHistory) return <div />;
     const historyFirstMenu = <PaneMenu><button onClick={onCancel} title="close" aria-label="Close Loan Details"><span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span></button></PaneMenu>;
     const loanActionsFormatter = {
@@ -87,7 +87,7 @@ class LoanActionsHistory extends React.Component {
             id="list-loanactions"
             formatter={loanActionsFormatter}
             visibleColumns={['Action Date', 'Action', 'Due Date', 'Operator']}
-            contentData={loanActionsHistory}
+            contentData={loanActionsHistory.records}
           />
         </Pane>
       </Paneset>

@@ -32,3 +32,4 @@ Use the `Autocomplete` component in your jsx...
 Name | description | default | required
 --- | --- | --- | ---
 dataOptions | Array of objects with `label` and `value` properties |
+filterBy | Callback for filtering options |
