@@ -115,7 +115,7 @@ class Users extends React.Component {
         params: {
           query: makeQueryFunction(
             'username=*',
-            'username="$QUERY*" or personal.firstName="$QUERY*" or barcode="$QUERY*" or personal.lastName="$QUERY*"',
+            'username="$QUERY*" or personal.firstName="$QUERY*" or barcode="$QUERY*" or personal.lastName="$QUERY*" or personal.email="$QUERY*"',
             {
               Active: 'active',
               Name: 'personal.lastName personal.firstName',
