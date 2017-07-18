@@ -2,6 +2,7 @@
 
 ## 2.9.0 (IN PROGRESS)
 
+* Add filterBy callback prop to `<Autocomplete>`. Fixes UIU-139.
 * Add barcode column to Users list. Fixes UIU-123.
 * Make barcode searchable. Fixes UIU-124.
 * Make email-address searchable. Fixes UIU-146.
