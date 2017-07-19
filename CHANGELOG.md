@@ -6,6 +6,7 @@
 * Add barcode column to Users list. Fixes UIU-123.
 * Make barcode searchable. Fixes UIU-124.
 * Make email-address searchable. Fixes UIU-146.
+* Support sorting by barcode. Fixes UIU-151.
 * Use new-style specification of action-names in ui-users. Fixes UIU-149.
 
 ## [2.8.0](https://github.com/folio-org/ui-users/tree/v2.8.0) (2017-07-17)

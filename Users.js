@@ -121,6 +121,7 @@ class Users extends React.Component {
               Name: 'personal.lastName personal.firstName',
               'Patron Group': 'patronGroup',
               'User ID': 'username',
+              Barcode: 'barcode',
               Email: 'personal.email',
             },
             filterConfig,
