@@ -345,8 +345,8 @@ class Users extends React.Component {
   }
 
   render() {
-    const { data, stripes } = this.props;
-    const users = data.users || [];
+    const { data, resources, stripes } = this.props;
+    const users = (resources.users || {}).records || [];
 
     /* searchHeader is a 'custom pane header'*/
     const searchHeader = <FilterPaneSearch id="SearchField" onChange={this.onChangeSearch} onClear={this.onClearSearch} resultsList={this.resultsList} value={this.state.searchTerm} />;
