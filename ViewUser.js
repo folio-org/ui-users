@@ -74,9 +74,8 @@ class ViewUser extends React.Component {
     super(props);
     this.state = {
       viewLoansHistoryMode: false,
-      viewLoanActionsHistoryMode: false,
       viewOpenLoansMode: false,
-      viewClosedLoansMode: false,
+      viewLoanActionsHistoryMode: false,
       selectedLoan: {},
       lastUpdate: null,
     };
@@ -87,7 +86,6 @@ class ViewUser extends React.Component {
     this.connectedLoanActionsHistory = props.stripes.connect(LoanActionsHistory);
     this.connectedUserPermissions = props.stripes.connect(UserPermissions);
     this.dateLastUpdated = this.dateLastUpdated.bind(this);
-    this.onClickViewLoansHistory = this.onClickViewLoansHistory.bind(this);
     this.onClickCloseLoansHistory = this.onClickCloseLoansHistory.bind(this);
     this.onClickViewOpenLoans = this.onClickViewOpenLoans.bind(this);
     this.onClickViewClosedLoans = this.onClickViewClosedLoans.bind(this);
@@ -109,22 +107,19 @@ class ViewUser extends React.Component {
     this.props.mutator.editMode.replace({ mode: false });
   }
 
-  onClickViewLoansHistory(e) {
-    if (e) e.preventDefault();
-    this.setState({
-      viewLoansHistoryMode: true,
-    });
-  }
   onClickViewOpenLoans(e) {
     if (e) e.preventDefault();
     this.setState({
+      viewLoansHistoryMode: true,
       viewOpenLoansMode: true,
     });
   }
+
   onClickViewClosedLoans(e) {
     if (e) e.preventDefault();
     this.setState({
-      viewClosedLoansMode: true,
+      viewLoansHistoryMode: true,
+      viewOpenLoansMode: false,
     });
   }
 
@@ -133,7 +128,6 @@ class ViewUser extends React.Component {
     this.setState({
       viewLoansHistoryMode: false,
       viewOpenLoansMode: false,
-      viewClosedLoansMode: false,
     });
   }
 
@@ -346,7 +340,6 @@ class ViewUser extends React.Component {
           <IfInterface name="circulation" version="2.0">
             <this.connectedUserLoans
               onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
-              onClickViewLoansHistory={this.onClickViewLoansHistory}
               onClickViewOpenLoans={this.onClickViewOpenLoans}
               onClickViewClosedLoans={this.onClickViewClosedLoans}
               {...this.props}
@@ -368,30 +361,15 @@ class ViewUser extends React.Component {
             optionLists={{ patronGroups: this.props.data.patronGroups, contactTypes }}
           />
         </Layer>
-        <Layer isOpen={this.state.viewLoansHistoryMode} label="Loans History">
+        <Layer isOpen={this.state.viewLoansHistoryMode} label="Loans">
           <this.connectedLoansHistory
             userid={user.id}
             stripes={this.props.stripes}
             onCancel={this.onClickCloseLoansHistory}
+            onClickViewOpenLoans={this.onClickViewOpenLoans}
+            onClickViewClosedLoans={this.onClickViewClosedLoans}
             onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
-            allLoans
-          />
-        </Layer>
-        <Layer isOpen={this.state.viewOpenLoansMode} label="Open Loans">
-          <this.connectedLoansHistory
-            userid={user.id}
-            stripes={this.props.stripes}
-            onCancel={this.onClickCloseLoansHistory}
-            onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
-            openLoans
-          />
-        </Layer>
-        <Layer isOpen={this.state.viewClosedLoansMode} label="Closed Loans">
-          <this.connectedLoansHistory
-            userid={user.id}
-            stripes={this.props.stripes}
-            onCancel={this.onClickCloseLoansHistory}
-            onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
+            openLoans={this.state.viewOpenLoansMode}
           />
         </Layer>
         <Layer isOpen={this.state.viewLoanActionsHistoryMode} label="Loans Actions History">

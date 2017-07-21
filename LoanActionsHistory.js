@@ -5,7 +5,6 @@ import { Row, Col } from 'react-bootstrap';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import Pane from '@folio/stripes-components/lib/Pane';
-import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import { formatDate, futureDate, getFullName } from './util';
 
@@ -36,7 +35,6 @@ class LoanActionsHistory extends React.Component {
   render() {
     const { onCancel, loan, user, stripes: { locale }, resources: { loanActionsHistory } } = this.props;
     if (!loanActionsHistory) return <div />;
-    const historyFirstMenu = <PaneMenu><button onClick={onCancel} title="close" aria-label="Close Loan Details"><span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span></button></PaneMenu>;
     const loanActionsFormatter = {
       Action: la => _.startCase(la.action),
       'Action Date': la => formatDate(la.loanDate, locale),
@@ -46,7 +44,7 @@ class LoanActionsHistory extends React.Component {
 
     return (
       <Paneset isRoot>
-        <Pane id="pane-loandetails" defaultWidth="100%" firstMenu={historyFirstMenu} paneTitle={'Loan Details'}>
+        <Pane id="pane-loandetails" defaultWidth="100%" dismissible onClose={onCancel} paneTitle={'Loan Details'}>
           <Row>
             <Col xs={5} >
               <Row>

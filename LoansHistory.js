@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
+import Button from '@folio/stripes-components/lib/Button';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import Pane from '@folio/stripes-components/lib/Pane';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
@@ -17,8 +18,9 @@ class LoansHistory extends React.Component {
     }),
     onCancel: PropTypes.func.isRequired,
     openLoans: PropTypes.bool,
-    allLoans: PropTypes.bool,
     onClickViewLoanActionsHistory: PropTypes.func.isRequired,
+    onClickViewOpenLoans: PropTypes.func.isRequired,
+    onClickViewClosedLoans: PropTypes.func.isRequired,
   };
 
   static manifest = Object.freeze({
@@ -34,29 +36,44 @@ class LoansHistory extends React.Component {
   render() {
     const { data: { loansHistory } } = this.props;
     const loanStatus = this.props.openLoans ? 'Open' : 'Closed';
-    const loans = this.props.allLoans ? loansHistory : _.filter(loansHistory, loan => loanStatus === _.get(loan, ['status', 'name']));
+    const loans = _.filter(loansHistory, loan => loanStatus === _.get(loan, ['status', 'name']));
     if (!loans) return <div />;
 
-    const historyFirstMenu = <PaneMenu><button onClick={this.props.onCancel} title="close" aria-label="Close Loans History"><span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span></button></PaneMenu>;
+    const historyLastMenu = (<PaneMenu>
+      <Button title="Open Loans" aria-label="Open Loans" onClick={this.props.onClickViewOpenLoans}>Open Loans</Button>
+      <Button title="Closed Loans" aria-label="Closed Loans" onClick={this.props.onClickViewClosedLoans}>Closed Loans</Button>
+    </PaneMenu>);
+
+    const loanTitleFormatter = loan => (
+      <a
+        onClick={(e) => {
+          e.preventDefault();
+          this.props.onClickViewLoanActionsHistory(e, loan);
+        }}
+      >{_.get(loan, ['item', 'title'], '')}</a>
+    );
 
     const loansFormatter = {
-      title: loan => `${_.get(loan, ['item', 'title'], '')}`,
+      title: loanTitleFormatter,
       barcode: loan => `${_.get(loan, ['item', 'barcode'], '')}`,
       status: loan => `${_.get(loan, ['status', 'name'], '')}`,
       loanDate: loan => new Date(Date.parse(loan.loanDate)).toLocaleDateString(this.props.stripes.locale),
       returnDate: loan => (loan.returnDate ? new Date(Date.parse(loan.loanDate)).toLocaleDateString(this.props.stripes.locale) : ''),
+      ' ': (loan) => {
+        const loanStatusName = _.get(loan, ['status', 'name'], '');
+        return (loanStatusName === 'Closed') ? '' : <select><option value="">•••</option><option>Renew</option></select>;
+      },
     };
 
     return (
       <Paneset isRoot>
-        <Pane id="pane-loanshistory" defaultWidth="100%" firstMenu={historyFirstMenu} paneTitle={'Loans History'}>
+        <Pane id="pane-loanshistory" defaultWidth="100%" lastMenu={historyLastMenu} dismissible onClose={this.props.onCancel} paneTitle={'Loans'}>
           <MultiColumnList
             id="list-loanshistory"
             fullWidth
             formatter={loansFormatter}
-            visibleColumns={['title', 'barcode', 'loanDate', 'returnDate', 'status']}
+            visibleColumns={['title', 'barcode', 'loanDate', 'returnDate', 'status', ' ']}
             contentData={loans}
-            onRowClick={this.props.onClickViewLoanActionsHistory}
           />
         </Pane>
       </Paneset>);

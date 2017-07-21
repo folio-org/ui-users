@@ -11,7 +11,6 @@ class UserLoans extends React.Component {
     data: PropTypes.shape({
       loansHistory: PropTypes.arrayOf(PropTypes.object),
     }),
-    onClickViewLoansHistory: PropTypes.func.isRequired,
     onClickViewOpenLoans: PropTypes.func.isRequired,
     onClickViewClosedLoans: PropTypes.func.isRequired,
   };
@@ -29,7 +28,7 @@ class UserLoans extends React.Component {
 
   render() {
     const { data: { loansHistory } } = this.props;
-    const openLoans = _.filter(loansHistory, loan => _.get(loan, ['status', 'name']) === 'Open');
+    const openLoans = _.filter(loansHistory, loan => _.get(loan, ['status', 'name']) !== 'Closed');
     const closedLoans = _.filter(loansHistory, loan => _.get(loan, ['status', 'name']) === 'Closed');
 
     if (!loansHistory) return <div />;
@@ -38,10 +37,12 @@ class UserLoans extends React.Component {
       <div>
         <Row>
           <Col xs={7} sm={6}>
-            <h3 className="marginTopHalf">Loans</h3>
+            <h3 className="marginTop0">Loans</h3>
           </Col>
           <Col xs={5} sm={6}>
-            <Button id="clickable-viewfullhistory" align="end" bottomMargin0 onClick={this.props.onClickViewLoansHistory}>View Loans</Button>
+            <div style={{ float: 'right' }}>
+              <Button id="clickable-viewfullhistory" align="end" bottomMargin0 onClick={this.props.onClickViewOpenLoans}>View Loans</Button>
+            </div>
           </Col>
         </Row>
         <ul>
