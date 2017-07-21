@@ -410,7 +410,7 @@ class Users extends React.Component {
           defaultWidth="fill"
           paneTitle={
             <div style={{ textAlign: 'center' }}>
-              <strong>Results</strong>
+              <strong>Users</strong>
               <div>
                 <em>{resource && resource.hasLoaded ? resource.other.totalRecords : ''} Result{users.length === 1 ? '' : 's'} Found</em>
               </div>

@@ -8,6 +8,7 @@
 * Make email-address searchable. Fixes UIU-146.
 * Support sorting by barcode. Fixes UIU-151.
 * Use new-style specification of action-names in ui-users. Fixes UIU-149.
+* Change title in results pane. See comments in UIU-125. 
 
 ## [2.8.0](https://github.com/folio-org/ui-users/tree/v2.8.0) (2017-07-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.7.0...v2.8.0)
