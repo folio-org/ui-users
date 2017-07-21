@@ -211,7 +211,7 @@ class ViewUser extends React.Component {
 
     const detailMenu = (<PaneMenu>
       <IfPermission perm="users.item.put">
-        <button id="button-edituser" onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button>
+        <button id="clickable-edituser" onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button>
       </IfPermission>
     </PaneMenu>);
 

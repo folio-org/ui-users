@@ -41,12 +41,12 @@ class UserLoans extends React.Component {
             <h3 className="marginTopHalf">Loans</h3>
           </Col>
           <Col xs={5} sm={6}>
-            <Button id="button-viewfullhistory" align="end" bottomMargin0 onClick={this.props.onClickViewLoansHistory}>View Loans</Button>
+            <Button id="clickable-viewfullhistory" align="end" bottomMargin0 onClick={this.props.onClickViewLoansHistory}>View Loans</Button>
           </Col>
         </Row>
         <ul>
-          <li><Button id="button-viewcurrentloans" onClick={this.props.onClickViewOpenLoans}>{ openLoans.length } Current Loans</Button></li>
-          <li><Button id="button-viewclosedloans" onClick={this.props.onClickViewClosedLoans}>{ closedLoans.length } Past Loans</Button></li>
+          <li><Button id="clickable-viewcurrentloans" onClick={this.props.onClickViewOpenLoans}>{ openLoans.length } Current Loans</Button></li>
+          <li><Button id="clickable-viewclosedloans" onClick={this.props.onClickViewClosedLoans}>{ closedLoans.length } Past Loans</Button></li>
         </ul>
       </div>);
   }
