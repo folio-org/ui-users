@@ -28,7 +28,7 @@ class UserLoans extends React.Component {
 
   render() {
     const { data: { loansHistory } } = this.props;
-    const openLoans = _.filter(loansHistory, loan => _.get(loan, ['status', 'name']) === 'Open');
+    const openLoans = _.filter(loansHistory, loan => _.get(loan, ['status', 'name']) !== 'Closed');
     const closedLoans = _.filter(loansHistory, loan => _.get(loan, ['status', 'name']) === 'Closed');
 
     if (!loansHistory) return <div />;
@@ -41,7 +41,7 @@ class UserLoans extends React.Component {
           </Col>
           <Col xs={5} sm={6}>
             <div style={{ float: 'right' }}>
-            <Button id="clickable-viewfullhistory" align="end" bottomMargin0 onClick={this.props.onClickViewOpenLoans}>View Loans</Button>
+              <Button id="clickable-viewfullhistory" align="end" bottomMargin0 onClick={this.props.onClickViewOpenLoans}>View Loans</Button>
             </div>
           </Col>
         </Row>

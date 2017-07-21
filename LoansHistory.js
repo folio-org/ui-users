@@ -19,6 +19,8 @@ class LoansHistory extends React.Component {
     onCancel: PropTypes.func.isRequired,
     openLoans: PropTypes.bool,
     onClickViewLoanActionsHistory: PropTypes.func.isRequired,
+    onClickViewOpenLoans: PropTypes.func.isRequired,
+    onClickViewClosedLoans: PropTypes.func.isRequired,
   };
 
   static manifest = Object.freeze({
@@ -42,12 +44,14 @@ class LoansHistory extends React.Component {
       <Button title="Closed Loans" aria-label="Closed Loans" onClick={this.props.onClickViewClosedLoans}>Closed Loans</Button>
     </PaneMenu>);
 
-    const loanTitleFormatter = loan => {
-      return <a onClick={(e) => {
-        e.preventDefault();
-        this.props.onClickViewLoanActionsHistory(e, loan);
-      }}>{_.get(loan, ['item', 'title'], '')}</a>;
-    }
+    const loanTitleFormatter = loan => (
+      <a
+        onClick={(e) => {
+          e.preventDefault();
+          this.props.onClickViewLoanActionsHistory(e, loan);
+        }}
+      >{_.get(loan, ['item', 'title'], '')}</a>
+    );
 
     const loansFormatter = {
       title: loanTitleFormatter,
@@ -55,6 +59,10 @@ class LoansHistory extends React.Component {
       status: loan => `${_.get(loan, ['status', 'name'], '')}`,
       loanDate: loan => new Date(Date.parse(loan.loanDate)).toLocaleDateString(this.props.stripes.locale),
       returnDate: loan => (loan.returnDate ? new Date(Date.parse(loan.loanDate)).toLocaleDateString(this.props.stripes.locale) : ''),
+      ' ': (loan) => {
+        const loanStatusName = _.get(loan, ['status', 'name'], '');
+        return (loanStatusName === 'Closed') ? '' : <select><option value="">•••</option><option>Renew</option></select>;
+      },
     };
 
     return (
@@ -64,7 +72,7 @@ class LoansHistory extends React.Component {
             id="list-loanshistory"
             fullWidth
             formatter={loansFormatter}
-            visibleColumns={['title', 'barcode', 'loanDate', 'returnDate', 'status',]}
+            visibleColumns={['title', 'barcode', 'loanDate', 'returnDate', 'status', ' ']}
             contentData={loans}
           />
         </Pane>
