@@ -37,7 +37,6 @@ class LoansHistory extends React.Component {
     const loans = _.filter(loansHistory, loan => loanStatus === _.get(loan, ['status', 'name']));
     if (!loans) return <div />;
 
-    const historyFirstMenu = <PaneMenu><button onClick={this.props.onCancel} title="close" aria-label="Close Loans History"><span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span></button></PaneMenu>;
     const historyLastMenu = (<PaneMenu>
       <Button title="Open Loans" aria-label="Open Loans" onClick={this.props.onClickViewOpenLoans}>Open Loans</Button>
       <Button title="Closed Loans" aria-label="Closed Loans" onClick={this.props.onClickViewClosedLoans}>Closed Loans</Button>
@@ -60,12 +59,12 @@ class LoansHistory extends React.Component {
 
     return (
       <Paneset isRoot>
-        <Pane id="pane-loanshistory" defaultWidth="100%" firstMenu={historyFirstMenu} lastMenu={historyLastMenu} paneTitle={'Loans'}>
+        <Pane id="pane-loanshistory" defaultWidth="100%" lastMenu={historyLastMenu} dismissible onClose={this.props.onCancel} paneTitle={'Loans'}>
           <MultiColumnList
             id="list-loanshistory"
             fullWidth
             formatter={loansFormatter}
-            visibleColumns={['title', 'barcode', 'loanDate', 'returnDate', 'status']}
+            visibleColumns={['title', 'barcode', 'loanDate', 'returnDate', 'status',]}
             contentData={loans}
           />
         </Pane>
