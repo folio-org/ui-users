@@ -356,7 +356,7 @@ class Users extends React.Component {
         <IfPermission perm="login.item.post">
           <IfPermission perm="perms.users.item.post">
             <PaneMenu>
-              <Button id="clickable-newuser" title="Add New User" onClick={this.onClickAddNewUser}>+ New</Button>
+              <Button id="clickable-newuser" title="Add New User" onClick={this.onClickAddNewUser} buttonStyle="primary paneHeaderNewButton">+ New</Button>
             </PaneMenu>
           </IfPermission>
         </IfPermission>
