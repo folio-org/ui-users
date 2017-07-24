@@ -33,6 +33,31 @@ class LoansHistory extends React.Component {
     },
   });
 
+  constructor(props) {
+    super(props);
+
+    this.handleOptionsChange = this.handleOptionsChange.bind(this);
+    this.handleOptionsClick = this.handleOptionsClick.bind(this);
+  }
+
+  /**
+   * change handler for the options-menu prevents the event from bubbling
+   * up to the event handler attached to the row.
+   */
+  handleOptionsChange(e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  /**
+   * click handler for the options-menu prevents the event from bubbling
+   * up to the event handler attached to the row.
+   */
+  handleOptionsClick(e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
   render() {
     const { data: { loansHistory } } = this.props;
     const loanStatus = this.props.openLoans ? 'Open' : 'Closed';
@@ -44,24 +69,38 @@ class LoansHistory extends React.Component {
       <Button title="Closed Loans" aria-label="Closed Loans" onClick={this.props.onClickViewClosedLoans}>Closed Loans</Button>
     </PaneMenu>);
 
+    /*
+     * loanTitleFormatter isn't currently in use, but apparently there's a use
+     * case for having the cell content link to a different location than the
+     * cell background. On a scale from 1 to WTF, I give this a 10, but I digress.
+     * Note that both e.preventDefault() and e.stopPropagation() are required to
+     * achieve this behavior.
+     *
     const loanTitleFormatter = loan => (
       <a
         onClick={(e) => {
           e.preventDefault();
-          this.props.onClickViewLoanActionsHistory(e, loan);
+          e.stopPropagation();
+          this.props.doSomethingWithThisClick(e, loan);
         }}
       >{_.get(loan, ['item', 'title'], '')}</a>
     );
 
     const loansFormatter = {
       title: loanTitleFormatter,
+      ...
+    };
+    */
+
+    const loansFormatter = {
+      title: loan => `${_.get(loan, ['item', 'title'], '')}`,
       barcode: loan => `${_.get(loan, ['item', 'barcode'], '')}`,
       status: loan => `${_.get(loan, ['status', 'name'], '')}`,
       loanDate: loan => new Date(Date.parse(loan.loanDate)).toLocaleDateString(this.props.stripes.locale),
       returnDate: loan => (loan.returnDate ? new Date(Date.parse(loan.loanDate)).toLocaleDateString(this.props.stripes.locale) : ''),
       ' ': (loan) => {
         const loanStatusName = _.get(loan, ['status', 'name'], '');
-        return (loanStatusName === 'Closed') ? '' : <select><option value="">•••</option><option>Renew</option></select>;
+        return (loanStatusName === 'Closed') ? '' : <select onChange={this.handleOptionsChange} onClick={this.handleOptionsClick}><option value="">•••</option><option>Renew</option></select>;
       },
     };
 
@@ -74,6 +113,7 @@ class LoansHistory extends React.Component {
             formatter={loansFormatter}
             visibleColumns={['title', 'barcode', 'loanDate', 'returnDate', 'status', ' ']}
             contentData={loans}
+            onRowClick={this.props.onClickViewLoanActionsHistory}
           />
         </Pane>
       </Paneset>);
