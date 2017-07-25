@@ -397,6 +397,7 @@ class Users extends React.Component {
         </div>));
 
     const resource = this.props.resources.users;
+    const maybeTerm = this.state.searchTerm ? ` for "${this.state.searchTerm}"` : '';
     return (
       <Paneset>
         <SRStatus ref={(ref) => { this.SRStatus = ref; }} />
@@ -430,7 +431,7 @@ class Users extends React.Component {
             visibleColumns={['Active', 'Name', 'Barcode', 'Patron Group', 'User ID', 'Email']}
             sortOrder={this.state.sortOrder.replace(/^-/, '').replace(/,.*/, '')}
             sortDirection={this.state.sortOrder.startsWith('-') ? 'descending' : 'ascending'}
-            isEmptyMessage={`No results found for "${this.state.searchTerm}". Please check your spelling and filters.`}
+            isEmptyMessage={`No results found${maybeTerm}. Please check your spelling and filters.`}
             columnMapping={{ 'User ID': 'username' }}
             loading={resource ? resource.isPending : false}
             autosize
