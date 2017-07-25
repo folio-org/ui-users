@@ -9,12 +9,7 @@ import Paneset from '@folio/stripes-components/lib/Paneset';
 import fetch from 'isomorphic-fetch';
 import { formatDate, futureDate, getFullName } from './util';
 
-
 class LoanActionsHistory extends React.Component {
-  static contextTypes = {
-    stripes: PropTypes.object,
-  };
-
   static propTypes = {
     stripes: PropTypes.object.isRequired,
     resources: PropTypes.shape({
