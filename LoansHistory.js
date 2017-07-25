@@ -44,6 +44,7 @@ class LoansHistory extends React.Component {
    * change handler for the options-menu prevents the event from bubbling
    * up to the event handler attached to the row.
    */
+   // eslint-disable-next-line class-methods-use-this
   handleOptionsChange(e) {
     e.preventDefault();
     e.stopPropagation();
@@ -53,6 +54,7 @@ class LoansHistory extends React.Component {
    * click handler for the options-menu prevents the event from bubbling
    * up to the event handler attached to the row.
    */
+   // eslint-disable-next-line class-methods-use-this
   handleOptionsClick(e) {
     e.preventDefault();
     e.stopPropagation();
