@@ -6,16 +6,20 @@ import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
+import fetch from 'isomorphic-fetch';
 import { formatDate, futureDate, getFullName } from './util';
 
 class LoanActionsHistory extends React.Component {
-
   static propTypes = {
-    stripes: PropTypes.shape({
-      locale: PropTypes.string.isRequired,
-    }).isRequired,
+    stripes: PropTypes.object.isRequired,
     resources: PropTypes.shape({
-      loanActionsHistory: PropTypes.object,
+      loanActions: PropTypes.object,
+      loanActionsWithUser: PropTypes.object,
+    }).isRequired,
+    mutator: PropTypes.shape({
+      loanActionsWithUser: PropTypes.shape({
+        replace: PropTypes.func,
+      }),
     }).isRequired,
     loan: PropTypes.object,
     user: PropTypes.object,
@@ -23,7 +27,8 @@ class LoanActionsHistory extends React.Component {
   };
 
   static manifest = Object.freeze({
-    loanActionsHistory: {
+    loanActionsWithUser: { initialValue: null },
+    loanActions: {
       type: 'okapi',
       records: 'loans',
       GET: {
@@ -32,14 +37,49 @@ class LoanActionsHistory extends React.Component {
     },
   });
 
+  componentWillReceiveProps(nextProps) {
+    const curLoanActions = this.props.resources.loanActions;
+    const nextLoanActions = nextProps.resources.loanActions;
+
+    if (curLoanActions && !curLoanActions.hasLoaded && nextLoanActions.records.length) {
+      const userIds = nextLoanActions.records.map(r => r.userId);
+      this.getUsersByIds(userIds).then(users =>
+        this.addUsersToLoanActions(users, nextLoanActions.records));
+    }
+  }
+
+  getUsersByIds(userIds) {
+    const ids = userIds.map(id => `id=${id}`).join(' or ');
+    const stripes = this.props.stripes;
+    const okapiUrl = stripes.okapi.url;
+    const headers = {
+      'X-Okapi-Tenant': stripes.okapi.tenant,
+      'X-Okapi-Token': stripes.store.getState().okapi.token,
+      'Content-Type': 'application/json',
+    };
+
+    return fetch(`${okapiUrl}/users?query=(${ids})`, { headers })
+      .then(resp => resp.json())
+      .then(json => json.users);
+  }
+
+  addUsersToLoanActions(users, loanActions) {
+    const userMap = users.reduce((memo, user) =>
+      Object.assign(memo, { [user.id]: user }), {});
+    const records = loanActions.map(la =>
+      Object.assign({}, la, { user: userMap[la.userId] }));
+    this.props.mutator.loanActionsWithUser.replace({ records });
+  }
+
   render() {
-    const { onCancel, loan, user, stripes: { locale }, resources: { loanActionsHistory } } = this.props;
-    if (!loanActionsHistory) return <div />;
+    const { onCancel, loan, user, stripes, resources: { loanActionsWithUser } } = this.props;
+
+    if (!loanActionsWithUser || !loanActionsWithUser.records) return <div />;
     const loanActionsFormatter = {
       Action: la => _.startCase(la.action),
-      'Action Date': la => formatDate(la.loanDate, locale),
-      'Due Date': la => futureDate(la.loanDate, locale, 14),
-      Operator: la => la.userId || '-',
+      'Action Date': la => formatDate(la.loanDate, stripes.locale),
+      'Due Date': la => futureDate(la.loanDate, stripes.locale, 14),
+      Operator: () => `${stripes.user.user.lastName} ${stripes.user.user.firstName}`, // TODO: replace with operator after CIRCSTORE-16
     };
 
     return (
@@ -69,13 +109,13 @@ class LoanActionsHistory extends React.Component {
             <Col xs={4}>
               <Row>
                 <Col xs={12}>
-                  <KeyValue label="Loan Date" value={formatDate(loan.loanDate, locale) || '-'} />
+                  <KeyValue label="Loan Date" value={formatDate(loan.loanDate, stripes.locale) || '-'} />
                 </Col>
               </Row>
               <br />
               <Row>
                 <Col xs={12}>
-                  <KeyValue label="Due Date" value={futureDate(loan.loanDate, locale, 14) || '-'} />
+                  <KeyValue label="Due Date" value={futureDate(loan.loanDate, stripes.locale, 14) || '-'} />
                 </Col>
               </Row>
             </Col>
@@ -85,7 +125,7 @@ class LoanActionsHistory extends React.Component {
             id="list-loanactions"
             formatter={loanActionsFormatter}
             visibleColumns={['Action Date', 'Action', 'Due Date', 'Operator']}
-            contentData={loanActionsHistory.records}
+            contentData={loanActionsWithUser.records}
           />
         </Pane>
       </Paneset>
