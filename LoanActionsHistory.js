@@ -8,6 +8,7 @@ import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import fetch from 'isomorphic-fetch';
 import { formatDate, futureDate, getFullName } from './util';
+import loanActionsMap from './data/loanActionMap';
 
 class LoanActionsHistory extends React.Component {
   static propTypes = {
@@ -76,7 +77,7 @@ class LoanActionsHistory extends React.Component {
 
     if (!loanActionsWithUser || !loanActionsWithUser.records) return <div />;
     const loanActionsFormatter = {
-      Action: la => _.startCase(la.action),
+      Action: la => loanActionsMap[la.action],
       'Action Date': la => formatDate(la.loanDate, stripes.locale),
       'Due Date': la => futureDate(la.loanDate, stripes.locale, 14),
       Operator: () => `${stripes.user.user.lastName} ${stripes.user.user.firstName}`, // TODO: replace with operator after CIRCSTORE-16
