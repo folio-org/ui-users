@@ -8,6 +8,13 @@ import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import { formatDate, futureDate, getFullName } from './util';
 
+function getUserIdsMap(loans) {
+  return loans.reduce((ids, l) => {
+    ids[l.userId] = l.userId;
+    return ids;
+  }, {});
+}
+
 class LoanActionsHistory extends React.Component {
 
   static propTypes = {
@@ -16,6 +23,12 @@ class LoanActionsHistory extends React.Component {
     }).isRequired,
     resources: PropTypes.shape({
       loanActionsHistory: PropTypes.object,
+      users: PropTypes.object,
+    }).isRequired,
+    mutator: PropTypes.shape({
+      userIds: PropTypes.shape({
+        replace: PropTypes.func,
+      }),
     }).isRequired,
     loan: PropTypes.object,
     user: PropTypes.object,
@@ -23,6 +36,7 @@ class LoanActionsHistory extends React.Component {
   };
 
   static manifest = Object.freeze({
+    userIds: { initialValue: null },
     loanActionsHistory: {
       type: 'okapi',
       records: 'loans',
@@ -30,7 +44,29 @@ class LoanActionsHistory extends React.Component {
         path: 'loan-storage/loan-history?query=(id=!{loan.id})',
       },
     },
+    users: {
+      type: 'okapi',
+      records: 'users',
+      recordsRequired: '%{userIds}',
+      path: 'users',
+      GET: {
+        params: {
+          query: (queryParams, pathComponents, resourceValues) => {
+            return 'active="true"';
+          }
+        },
+        staticFallback: { params: {} },
+      },
+    },
   });
+
+  componentWillReceiveProps(nextProps) {
+    const resource = nextProps.resources.loanActionsHistory;
+    if (resource && !resource.isPending && resource.records.length) {
+      const userIds = getUserIdsMap(resource.records);
+      this.props.mutator.userIds.replace(userIds);
+    }
+  }
 
   render() {
     const { onCancel, loan, user, stripes: { locale }, resources: { loanActionsHistory } } = this.props;
