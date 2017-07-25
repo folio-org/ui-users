@@ -10,8 +10,6 @@ import fetch from 'isomorphic-fetch';
 import { formatDate, futureDate, getFullName } from './util';
 import loanActionsMap from './data/loanActionMap';
 
-console.log('loanActionsMap', loanActionsMap);
-
 class LoanActionsHistory extends React.Component {
   static propTypes = {
     stripes: PropTypes.object.isRequired,
