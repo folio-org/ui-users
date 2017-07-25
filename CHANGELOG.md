@@ -11,6 +11,7 @@
 * Change title in results pane. See comments in UIU-125.
 * Show open- and closed-loans counts on the user-details pain. See UIU-128
 * Show "Open Loans" and "Closed Loans" tabs on the loans-list panes. See UIU-128.
+* Do not mention search-term in "No Results Found" message if there is none. Fixes UIU-158.
 * Show Operator name on loan action history. Fixes UIU-163.
 
 ## [2.8.0](https://github.com/folio-org/ui-users/tree/v2.8.0) (2017-07-17)
