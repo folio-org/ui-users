@@ -38,6 +38,7 @@
           "users-bl.collection.get",
           "users-bl.item.get",
           "module.users.enabled",
+          "addresstypes.collection.get",
           "users.collection.get",
           "users.item.get",
           "usergroups.collection.get",
