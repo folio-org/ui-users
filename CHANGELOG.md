@@ -15,6 +15,7 @@
 * Show Operator name on loan action history. Fixes UIU-163.
 * Rename action names. Fixes UIU-161 and UIU-161.
 * The clear-search button goes back to Users starting state. Fixes UIU-155.
+* Display Loan Due Date. Upgrade `circulation` dependency to 2.1 and `loan-storage` to 3.1. Fixes UIS-52
 
 ## [2.8.0](https://github.com/folio-org/ui-users/tree/v2.8.0) (2017-07-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.7.0...v2.8.0)
