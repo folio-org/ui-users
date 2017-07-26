@@ -116,7 +116,7 @@ class Users extends React.Component {
         params: {
           query: makeQueryFunction(
             'username=*',
-            'username="$QUERY*" or personal.firstName="$QUERY*" or barcode="$QUERY*" or personal.lastName="$QUERY*" or personal.email="$QUERY*"',
+            'username="$QUERY*" or personal.firstName="$QUERY*" or personal.lastName="$QUERY*" or personal.email="$QUERY*" or barcode="$QUERY*" or id="$QUERY*" or externalSystemId="$QUERY*"',
             {
               Active: 'active',
               Name: 'personal.lastName personal.firstName',
@@ -200,7 +200,11 @@ class Users extends React.Component {
   onClearSearch = () => {
     const path = (_.get(packageInfo, ['stripes', 'home']) ||
                   _.get(packageInfo, ['stripes', 'route']));
-    this.setState({ searchTerm: '' }); // XXX should set ALL state to correspond to path
+    this.setState({
+      searchTerm: '',
+      sortOrder: 'Name',
+      filters: { 'active.Active': true },
+    });
     this.log('action', `cleared search: navigating to ${path}`);
     this.props.history.push(path);
   }
@@ -352,7 +356,7 @@ class Users extends React.Component {
     const users = (resources.users || {}).records || [];
 
     /* searchHeader is a 'custom pane header'*/
-    const searchHeader = <FilterPaneSearch id="SearchField" onChange={this.onChangeSearch} onClear={this.onClearSearch} resultsList={this.resultsList} value={this.state.searchTerm} />;
+    const searchHeader = <FilterPaneSearch id="SearchField" onChange={this.onChangeSearch} onClear={this.onClearSearch} resultsList={this.resultsList} value={this.state.searchTerm} placeholder="Search by Name or ID" />;
 
     const newUserButton = (
       <IfPermission perm="users.item.post">
