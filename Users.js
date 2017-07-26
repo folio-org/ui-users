@@ -24,6 +24,7 @@ import ViewUser from './ViewUser';
 
 import contactTypes from './data/contactTypes';
 import { toUserAddresses } from './converters/address';
+import packageInfo from './package.json';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
@@ -197,9 +198,11 @@ class Users extends React.Component {
   }
 
   onClearSearch = () => {
-    this.log('action', 'cleared search');
-    this.setState({ searchTerm: '' });
-    this.props.history.push(this.props.location.pathname);
+    const path = (_.get(packageInfo, ['stripes', 'home']) ||
+                  _.get(packageInfo, ['stripes', 'route']));
+    this.setState({ searchTerm: '' }); // XXX should set ALL state to correspond to path
+    this.log('action', `cleared search: navigating to ${path}`);
+    this.props.history.push(path);
   }
 
   onSort = (e, meta) => {
