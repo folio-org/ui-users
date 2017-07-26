@@ -7,6 +7,8 @@ import Pane from '@folio/stripes-components/lib/Pane';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 
+import { formatDate } from './util';
+
 class LoansHistory extends React.Component {
 
   static propTypes = {
@@ -98,9 +100,10 @@ class LoansHistory extends React.Component {
       title: loan => `${_.get(loan, ['item', 'title'], '')}`,
       barcode: loan => `${_.get(loan, ['item', 'barcode'], '')}`,
       status: loan => `${_.get(loan, ['status', 'name'], '')}`,
-      loanDate: loan => new Date(Date.parse(loan.loanDate)).toLocaleDateString(this.props.stripes.locale),
+      loanDate: loan => formatDate(loan.loanDate, this.props.stripes.locale),
+      dueDate: loan => (loan.dueDate ? formatDate(loan.dueDate, this.props.stripes.locale) : ''),
       renewals: () => '',
-      returnDate: loan => (loan.returnDate ? new Date(Date.parse(loan.loanDate)).toLocaleDateString(this.props.stripes.locale) : ''),
+      returnDate: loan => (loan.returnDate ? formatDate(loan.returnDate, this.props.stripes.locale) : ''),
       ' ': (loan) => {
         const loanStatusName = _.get(loan, ['status', 'name'], '');
         return (loanStatusName === 'Closed') ? '' : <select onChange={this.handleOptionsChange} onClick={this.handleOptionsClick}><option value="">•••</option><option>Renew</option></select>;
@@ -114,7 +117,7 @@ class LoansHistory extends React.Component {
             id="list-loanshistory"
             fullWidth
             formatter={loansFormatter}
-            visibleColumns={['title', 'barcode', 'loanDate', 'returnDate', 'status', 'renewals', ' ']}
+            visibleColumns={['title', 'barcode', 'loanDate', 'dueDate', 'returnDate', 'status', 'renewals', ' ']}
             contentData={loans}
             onRowClick={this.props.onClickViewLoanActionsHistory}
           />

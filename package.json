@@ -20,9 +20,9 @@
     "actionNames": ["stripesHome", "usersSortByName"],
     "okapiInterfaces": {
       "users": "14.0",
-      "circulation": "2.0",
+      "circulation": "2.1",
       "permissions": "4.0",
-      "loan-storage": "3.0",
+      "loan-storage": "3.1",
       "login": "3.0"
     },
     "permissionSets": [
