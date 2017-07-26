@@ -200,7 +200,11 @@ class Users extends React.Component {
   onClearSearch = () => {
     const path = (_.get(packageInfo, ['stripes', 'home']) ||
                   _.get(packageInfo, ['stripes', 'route']));
-    this.setState({ searchTerm: '' }); // XXX should set ALL state to correspond to path
+    this.setState({
+      searchTerm: '',
+      sortOrder: 'Name',
+      filters: { 'active.Active': true },
+    });
     this.log('action', `cleared search: navigating to ${path}`);
     this.props.history.push(path);
   }
