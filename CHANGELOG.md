@@ -14,6 +14,7 @@
 * Do not mention search-term in "No Results Found" message if there is none. Fixes UIU-158.
 * Show Operator name on loan action history. Fixes UIU-163.
 * Rename action names. Fixes UIU-161 and UIU-161.
+* The clear-search button goes back to Users starting state. Fixes UIU-155.
 
 ## [2.8.0](https://github.com/folio-org/ui-users/tree/v2.8.0) (2017-07-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.7.0...v2.8.0)
