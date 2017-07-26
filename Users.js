@@ -24,7 +24,7 @@ import ViewUser from './ViewUser';
 
 import contactTypes from './data/contactTypes';
 import { toUserAddresses } from './converters/address';
-import packageInfo from './package.json';
+import packageInfo from './package';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;

@@ -99,7 +99,7 @@ class LoansHistory extends React.Component {
       barcode: loan => `${_.get(loan, ['item', 'barcode'], '')}`,
       status: loan => `${_.get(loan, ['status', 'name'], '')}`,
       loanDate: loan => new Date(Date.parse(loan.loanDate)).toLocaleDateString(this.props.stripes.locale),
-      renewals: loan => '',
+      renewals: () => '',
       returnDate: loan => (loan.returnDate ? new Date(Date.parse(loan.loanDate)).toLocaleDateString(this.props.stripes.locale) : ''),
       ' ': (loan) => {
         const loanStatusName = _.get(loan, ['status', 'name'], '');
