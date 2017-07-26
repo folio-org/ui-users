@@ -99,6 +99,7 @@ class LoansHistory extends React.Component {
       barcode: loan => `${_.get(loan, ['item', 'barcode'], '')}`,
       status: loan => `${_.get(loan, ['status', 'name'], '')}`,
       loanDate: loan => new Date(Date.parse(loan.loanDate)).toLocaleDateString(this.props.stripes.locale),
+      renewals: loan => '',
       returnDate: loan => (loan.returnDate ? new Date(Date.parse(loan.loanDate)).toLocaleDateString(this.props.stripes.locale) : ''),
       ' ': (loan) => {
         const loanStatusName = _.get(loan, ['status', 'name'], '');
@@ -108,12 +109,12 @@ class LoansHistory extends React.Component {
 
     return (
       <Paneset isRoot>
-        <Pane id="pane-loanshistory" defaultWidth="100%" lastMenu={historyLastMenu} dismissible onClose={this.props.onCancel} paneTitle={'Loans'}>
+        <Pane id="pane-loanshistory" defaultWidth="100%" lastMenu={historyLastMenu} dismissible onClose={this.props.onCancel} paneTitle="Loans" >
           <MultiColumnList
             id="list-loanshistory"
             fullWidth
             formatter={loansFormatter}
-            visibleColumns={['title', 'barcode', 'loanDate', 'returnDate', 'status', ' ']}
+            visibleColumns={['title', 'barcode', 'loanDate', 'returnDate', 'status', 'renewals', ' ']}
             contentData={loans}
             onRowClick={this.props.onClickViewLoanActionsHistory}
           />
