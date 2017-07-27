@@ -53,6 +53,8 @@ class ViewUser extends React.Component {
     }).isRequired,
     onClose: PropTypes.func,
     okapi: PropTypes.object,
+    addressTypes: PropTypes.arrayOf(PropTypes.object),
+    onUserPopulated: PropTypes.func,
   };
 
   static manifest = Object.freeze({
@@ -148,7 +150,11 @@ class ViewUser extends React.Component {
       if (!selUser || selUser.length === 0 || !userid) return null;
       user = selUser.find(u => u.id === userid);
     }
-    return user ? _.cloneDeep(user) : user;
+    if (user) {
+      this.props.onUserPopulated();
+      return _.cloneDeep(user);
+    } 
+    return user;
   }
 
   update(data) {

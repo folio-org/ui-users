@@ -10,6 +10,7 @@ import Select from '@folio/stripes-components/lib/Select';
 import RadioButtonGroup from '@folio/stripes-components/lib/RadioButtonGroup';
 import RadioButton from '@folio/stripes-components/lib/RadioButton';
 import Datepicker from '@folio/stripes-components/lib/Datepicker';
+import Icon from '@folio/stripes-components/lib/Icon';
 import AddressEditList from '@folio/stripes-components/lib/structures/AddressFieldGroup/AddressEdit/AddressEditList';
 import fetch from 'isomorphic-fetch';
 import { Field } from 'redux-form';
@@ -114,12 +115,23 @@ class UserForm extends React.Component {
       onCancel,
       initialValues,
       optionLists,
+      newUser,
     } = this.props;
 
     /* Menues for Add User workflow */
     const addUserFirstMenu = <PaneMenu><button onClick={onCancel} title="close" aria-label="Close New User Dialog"><span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span></button></PaneMenu>;
-    const addUserLastMenu = <PaneMenu><Button type="submit" title="Create New User" disabled={pristine || submitting} onClick={handleSubmit}>Create User</Button></PaneMenu>;
-    const editUserLastMenu = <PaneMenu><Button type="submit" title="Update User" disabled={pristine || submitting} onClick={handleSubmit}>Update User</Button></PaneMenu>;
+    let buttonLabel;
+    if ( newUser ) {
+      buttonLabel = 'Create User';
+    } else {
+      buttonLabel = 'Update User';
+    }
+    if ( submitting ) {
+      buttonLabel = 'Submitting';
+    }
+    const addUserLastMenu = <PaneMenu><Button type="submit" title="Create New User" disabled={pristine || submitting} onClick={handleSubmit}>{buttonLabel} {submitting && <div style={{float: "right", margin: '0 6px'}}><Icon icon="spinner-ellipsis" /></div>}</Button></PaneMenu>;
+
+    const editUserLastMenu = <PaneMenu><Button type="submit" title="Update User" disabled={pristine || submitting} onClick={handleSubmit}>{buttonLabel} {submitting && <div style={{float: "right", margin: '0 6px'}}><Icon icon="spinner-ellipsis" /></div>}</Button></PaneMenu>;
     const patronGroupOptions = (optionLists.patronGroups || []).map(g => ({
       label: `${g.group} (${g.desc})`, value: g.id, selected: initialValues.patronGroup === g.id }));
     const contactTypeOptions = (optionLists.contactTypes || []).map(g => ({
@@ -129,7 +141,7 @@ class UserForm extends React.Component {
     return (
       <form style={{ height: '100%', overflow: 'auto' }}>
         <Paneset isRoot>
-          <Pane defaultWidth="100%" firstMenu={addUserFirstMenu} lastMenu={initialValues.username ? editUserLastMenu : addUserLastMenu} paneTitle={initialValues.username ? 'Edit User' : 'New User'}>
+          <Pane defaultWidth="100%" firstMenu={addUserFirstMenu} lastMenu={newUser ?  addUserLastMenu : editUserLastMenu } paneTitle={newUser ?  'New User' : 'Edit User'}>
             <Row>
               <Col sm={5} smOffset={1}>
                 <h2>User Record</h2>

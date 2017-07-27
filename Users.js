@@ -9,12 +9,11 @@ import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import Button from '@folio/stripes-components/lib/Button';
-import Icon from '@folio/stripes-components/lib/Icon';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import FilterPaneSearch from '@folio/stripes-components/lib/FilterPaneSearch';
-import FilterControlGroup from '@folio/stripes-components/lib/FilterControlGroup';
 import Layer from '@folio/stripes-components/lib/Layer';
 import FilterGroups, { initialFilterState, onChangeFilter as commonChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
+import SRStatus from '@folio/stripes-components/lib/SRStatus';
 
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
 import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
@@ -25,6 +24,7 @@ import ViewUser from './ViewUser';
 
 import contactTypes from './data/contactTypes';
 import { toUserAddresses } from './converters/address';
+import packageInfo from './package';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
@@ -116,12 +116,13 @@ class Users extends React.Component {
         params: {
           query: makeQueryFunction(
             'username=*',
-            'username="$QUERY*" or personal.firstName="$QUERY*" or personal.lastName="$QUERY*"',
+            'username="$QUERY*" or personal.firstName="$QUERY*" or personal.lastName="$QUERY*" or personal.email="$QUERY*" or barcode="$QUERY*" or id="$QUERY*" or externalSystemId="$QUERY*"',
             {
               Active: 'active',
               Name: 'personal.lastName personal.firstName',
               'Patron Group': 'patronGroup',
               'User ID': 'username',
+              Barcode: 'barcode',
               Email: 'personal.email',
             },
             filterConfig,
@@ -134,6 +135,11 @@ class Users extends React.Component {
       type: 'okapi',
       path: 'groups',
       records: 'usergroups',
+    },
+    addressTypes: {
+      type: 'okapi',
+      path: 'addresstypes',
+      records: 'addressTypes',
     },
   });
 
@@ -153,7 +159,6 @@ class Users extends React.Component {
       selectedItem: initiallySelected,
       searchTerm: query.query || '',
       sortOrder: query.sort || '',
-      localDetails: false,
     };
 
     this.okapi = props.okapi;
@@ -165,6 +170,12 @@ class Users extends React.Component {
     this.log = logger.log.bind(logger);
 
     this.anchoredRowFormatter = this.anchoredRowFormatter.bind(this);
+
+    this.resultsList = null;
+    this.SRStatus = null;
+
+    this.onUserDetailsPopulated = this.onUserDetailsPopulated.bind(this);
+    this.newUserInitValues = { active: true, personal: { preferredContactTypeId: '002' } };
   }
 
   componentWillReceiveProps(nextProps) {
@@ -172,11 +183,13 @@ class Users extends React.Component {
     if (resource) {
       const sm = nextProps.resources.users.successfulMutations;
       if (sm.length > resource.successfulMutations.length)
-        this.onSelectRow(undefined, { ...sm[0].record });
+        this.onSelectRow(undefined, { id: sm[0].record.id, username: sm[0].record.username });
     }
 
     if (resource && resource.isPending && !nextProps.resources.users.isPending) {
       this.log('event', 'new search-result');
+      const resultAmount = nextProps.resources.users.other.totalRecords;
+      this.SRStatus.sendMessage(`Search returned ${resultAmount} result${resultAmount !== 1 ? 's' : ''}`);
     }
   }
 
@@ -188,9 +201,15 @@ class Users extends React.Component {
   }
 
   onClearSearch = () => {
-    this.log('action', 'cleared search');
-    this.setState({ searchTerm: '' });
-    this.props.history.push(this.props.location.pathname);
+    const path = (_.get(packageInfo, ['stripes', 'home']) ||
+                  _.get(packageInfo, ['stripes', 'route']));
+    this.setState({
+      searchTerm: '',
+      sortOrder: 'Name',
+      filters: { 'active.Active': true },
+    });
+    this.log('action', `cleared search: navigating to ${path}`);
+    this.props.history.push(path);
   }
 
   onSort = (e, meta) => {
@@ -214,12 +233,13 @@ class Users extends React.Component {
     const userId = meta.id;
     const username = meta.username;
     this.log('action', `clicked ${userId}, selected user =`, meta);
-    this.setState({ selectedItem: meta, localDetails: true });
+    this.setState({ selectedItem: meta });
     this.props.history.push(`/users/view/${userId}/${username}${this.props.location.search}`);
   }
 
   onClickAddNewUser = (e) => {
     if (e) e.preventDefault();
+    this.newUserInitValues = { active: true, personal: { preferredContactTypeId: '002' } }; 
     this.log('action', 'clicked "add new user"');
     this.props.mutator.addUserMode.replace({ mode: true });
   }
@@ -260,8 +280,11 @@ class Users extends React.Component {
   }
 
   create = (data) => {
+    // reset dirty state of user form
+    this.newUserInitValues = data;
+
     if (data.personal.addresses) {
-      data.personal.addresses = toUserAddresses(data.personal.addresses); // eslint-disable-line no-param-reassign
+      data.personal.addresses = toUserAddresses(data.personal.addresses, this.props.data.addressTypes); // eslint-disable-line no-param-reassign
     }
 
     // extract creds object from user object
@@ -271,8 +294,9 @@ class Users extends React.Component {
     this.props.mutator.users.POST(data);
     // POST credentials, permission-user, permissions;
     this.postCreds(data.username, creds);
-    this.collapseDetails();
-    this.onClickCloseNewUser();
+
+    // original point of exit for New User screen
+    // this.onClickCloseNewUser();
   }
 
   postCreds = (username, creds) => {
@@ -309,7 +333,6 @@ class Users extends React.Component {
   collapseDetails = () => {
     this.setState({
       selectedItem: {},
-      localDetails: false,
     });
     this.props.history.push(`${this.props.match.path}${this.props.location.search}`);
   }
@@ -327,7 +350,7 @@ class Users extends React.Component {
     return (
       <a
         href={this.getRowURL(rowData)} key={`row-${rowIndex}`}
-        aria-label={labelStrings.join('...')}
+        aria-label={labelStrings && labelStrings.join('...')}
         role="listitem"
         className={rowClass}
         {...rowProps}
@@ -337,17 +360,35 @@ class Users extends React.Component {
     );
   }
 
+  onUserDetailsPopulated() {
+    if (this.props.resources.addUserMode.mode) {
+      this.onClickCloseNewUser();
+    }
+  }
+
   render() {
-    const { data, stripes } = this.props;
-    const users = data.users || [];
+    const { data, resources, stripes } = this.props;
+    const users = (resources.users || {}).records || [];
 
     /* searchHeader is a 'custom pane header'*/
-    const searchHeader = <FilterPaneSearch id="SearchField" onChange={this.onChangeSearch} onClear={this.onClearSearch} value={this.state.searchTerm} />;
-    const resultMenu = <PaneMenu><button><Icon icon="bookmark" /></button></PaneMenu>;
+    const searchHeader = <FilterPaneSearch id="SearchField" onChange={this.onChangeSearch} onClear={this.onClearSearch} resultsList={this.resultsList} value={this.state.searchTerm} placeholder="Search by Name or ID" />;
+
+    const newUserButton = (
+      <IfPermission perm="users.item.post">
+        <IfPermission perm="login.item.post">
+          <IfPermission perm="perms.users.item.post">
+            <PaneMenu>
+              <Button id="clickable-newuser" title="Add New User" onClick={this.onClickAddNewUser} buttonStyle="primary paneHeaderNewButton">+ New</Button>
+            </PaneMenu>
+          </IfPermission>
+        </IfPermission>
+      </IfPermission>
+    );
 
     const resultsFormatter = {
       Active: user => user.active,
       Name: user => `${_.get(user, ['personal', 'lastName'], '')}, ${_.get(user, ['personal', 'firstName'], '')}`,
+      Barcode: user => user.barcode,
       'Patron Group': (user) => {
         const pg = this.props.data.patronGroups.filter(g => g.id === user.patronGroup)[0];
         return pg ? pg.group : '?';
@@ -356,7 +397,13 @@ class Users extends React.Component {
       Email: user => _.get(user, ['personal', 'email']),
     };
 
-    const permissionsError = (<div
+    const detailsPane = (
+      this.props.stripes.hasPerm('users.item.get') ?
+        (<Route
+          path={`${this.props.match.path}/view/:userid/:username`}
+          render={props => <this.connectedViewUser stripes={stripes} okapi={this.okapi} paneWidth="44%" onClose={this.collapseDetails} onUserPopulated={this.onUserDetailsPopulated} addressTypes={data.addressTypes} {...props} />}
+        />) :
+        (<div
           style={{
             position: 'absolute',
             right: '1rem',
@@ -369,55 +416,33 @@ class Users extends React.Component {
         >
           <h2>Permission Error</h2>
           <p>Sorry - your user permissions do not allow access to this page.</p>
-        </div>);
-
-    const routedDetailsPane = (
-      this.props.stripes.hasPerm('users.item.get') ?
-        (
-          <Route
-            path={`${this.props.match.path}/view/:userid/:username`}
-            render={props => <this.connectedViewUser stripes={stripes} okapi={this.okapi} paneWidth="44%" onClose={this.collapseDetails} {...props} />}
-          />
-        ) :
-        permissionsError );
-
-    const localDetailsPane = props =>{
-      return this.props.stripes.hasPerm('users.item.get') ?
-        (<this.connectedViewUser stripes={stripes} user={this.state.selectedItem} okapi={this.okapi} paneWidth="44%" onClose={this.collapseDetails} {...props} />) :
-        permissionsError;
-    }
-      
+        </div>));
 
     const resource = this.props.resources.users;
+    const maybeTerm = this.state.searchTerm ? ` for "${this.state.searchTerm}"` : '';
     return (
       <Paneset>
+        <SRStatus ref={(ref) => { this.SRStatus = ref; }} />
         {/* Filter Pane */}
-        <Pane defaultWidth="16%" header={searchHeader}>
+        <Pane id="pane-filter" defaultWidth="16%" header={searchHeader}>
           <FilterGroups config={filterConfig} filters={this.state.filters} onChangeFilter={this.onChangeFilter} />
-          <FilterControlGroup label="Actions">
-            <IfPermission perm="users.item.post">
-              <IfPermission perm="login.item.post">
-                <IfPermission perm="perms.users.item.post">
-                  <Button fullWidth onClick={this.onClickAddNewUser}>New user</Button>
-                </IfPermission>
-              </IfPermission>
-            </IfPermission>
-          </FilterControlGroup>
         </Pane>
         {/* Results Pane */}
         <Pane
+          id="pane-results"
           defaultWidth="fill"
           paneTitle={
             <div style={{ textAlign: 'center' }}>
-              <strong>Results</strong>
+              <strong>Users</strong>
               <div>
                 <em>{resource && resource.hasLoaded ? resource.other.totalRecords : ''} Result{users.length === 1 ? '' : 's'} Found</em>
               </div>
             </div>
           }
-          lastMenu={resultMenu}
+          lastMenu={newUserButton}
         >
           <MultiColumnList
+            id="list-users"
             contentData={users}
             selectedRow={this.state.selectedItem}
             rowMetadata={['id', 'username']}
@@ -425,27 +450,31 @@ class Users extends React.Component {
             onRowClick={this.onSelectRow}
             onHeaderClick={this.onSort}
             onNeedMoreData={this.onNeedMore}
-            visibleColumns={['Active', 'Name', 'Patron Group', 'User ID', 'Email']}
+            visibleColumns={['Active', 'Name', 'Barcode', 'Patron Group', 'User ID', 'Email']}
             sortOrder={this.state.sortOrder.replace(/^-/, '').replace(/,.*/, '')}
             sortDirection={this.state.sortOrder.startsWith('-') ? 'descending' : 'ascending'}
-            isEmptyMessage={`No results found for "${this.state.searchTerm}". Please check your spelling and filters.`}
+            isEmptyMessage={`No results found${maybeTerm}. Please check your spelling and filters.`}
             columnMapping={{ 'User ID': 'username' }}
             loading={resource ? resource.isPending : false}
             autosize
             virtualize
             ariaLabel={'User search results'}
             rowFormatter={this.anchoredRowFormatter}
+            containerRef={(ref) => { this.resultsList = ref; }}
           />
         </Pane>
 
-        { this.state.localDetails ? localDetailsPane(this.props) : routedDetailsPane }
+        {detailsPane}
         <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false} label="Add New User Dialog">
           <UserForm
-            initialValues={{ active: true, personal: { preferredContactTypeId: '002' } }}
+            id="userform-adduser"
+            initialValues={this.newUserInitValues}
+            addressTypes={data.addressTypes}
             onSubmit={(record) => { this.create(record); }}
             onCancel={this.onClickCloseNewUser}
             okapi={this.okapi}
             optionLists={{ patronGroups: this.props.data.patronGroups, contactTypes }}
+            newUser
           />
         </Layer>
       </Paneset>
