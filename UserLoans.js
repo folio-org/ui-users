@@ -4,63 +4,51 @@ import PropTypes from 'prop-types';
 
 import { Row, Col } from 'react-bootstrap';
 import Button from '@folio/stripes-components/lib/Button';
-import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
-
 
 class UserLoans extends React.Component {
 
   static propTypes = {
     data: PropTypes.shape({
-      userLoans: PropTypes.arrayOf(PropTypes.object),
       loansHistory: PropTypes.arrayOf(PropTypes.object),
     }),
-    stripes: PropTypes.shape({
-      locale: PropTypes.string.isRequired,
-    }).isRequired,
-    onClickViewLoansHistory: PropTypes.func.isRequired,
-    onClickViewLoanActionsHistory: PropTypes.func.isRequired,
+    onClickViewOpenLoans: PropTypes.func.isRequired,
+    onClickViewClosedLoans: PropTypes.func.isRequired,
   };
 
   static manifest = Object.freeze({
-    usersLoans: {
+    loansHistory: {
       type: 'okapi',
       records: 'loans',
       GET: {
-        path: 'circulation/loans?query=(userId=:{userid} AND status="Open")',
+        path: 'circulation/loans?query=(userId=:{userid})',
       },
     },
     userid: {},
   });
 
   render() {
-    const { data: { usersLoans } } = this.props;
+    const { data: { loansHistory } } = this.props;
+    const openLoans = _.filter(loansHistory, loan => _.get(loan, ['status', 'name']) !== 'Closed');
+    const closedLoans = _.filter(loansHistory, loan => _.get(loan, ['status', 'name']) === 'Closed');
 
-    const loansFormatter = {
-      title: loan => `${_.get(loan, ['item', 'title'], '')}`,
-      barcode: loan => `${_.get(loan, ['item', 'barcode'], '')}`,
-      status: loan => `${_.get(loan, ['status', 'name'], '')}`,
-      loanDate: loan => new Date(Date.parse(loan.loanDate)).toLocaleDateString(this.props.stripes.locale),
-    };
-
-    if (!usersLoans) return <div />;
+    if (!loansHistory) return <div >Nada</div>;
 
     return (
       <div>
         <Row>
           <Col xs={7} sm={6}>
-            <h3 className="marginTopHalf">Current loans</h3>
+            <h3 className="marginTop0">Loans</h3>
           </Col>
           <Col xs={5} sm={6}>
-            <Button align="end" bottomMargin0 onClick={this.props.onClickViewLoansHistory}>View Full History</Button>
+            <div style={{ float: 'right' }}>
+              <Button id="clickable-viewfullhistory" align="end" bottomMargin0 onClick={this.props.onClickViewOpenLoans}>View Loans</Button>
+            </div>
           </Col>
         </Row>
-        <MultiColumnList
-          fullWidth
-          formatter={loansFormatter}
-          visibleColumns={['title', 'barcode', 'loanDate', 'status']}
-          onRowClick={this.props.onClickViewLoanActionsHistory}
-          contentData={usersLoans}
-        />
+        <ul>
+          <li><a id="clickable-viewcurrentloans" href="" onClick={this.props.onClickViewOpenLoans}>{ openLoans.length } Open Loans</a></li>
+          <li><a id="clickable-viewclosedloans" href="" onClick={this.props.onClickViewClosedLoans}>{ closedLoans.length } Closed Loans</a></li>
+        </ul>
       </div>);
   }
 }

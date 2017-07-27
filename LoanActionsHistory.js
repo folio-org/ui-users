@@ -5,84 +5,144 @@ import { Row, Col } from 'react-bootstrap';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import Pane from '@folio/stripes-components/lib/Pane';
-import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import Paneset from '@folio/stripes-components/lib/Paneset';
-import { formatDate, futureDate, getFullName } from './util';
+import fetch from 'isomorphic-fetch';
+import { formatDate, getFullName } from './util';
+import loanActionsMap from './data/loanActionMap';
 
-const LoanActionsHistory = ({ onCancel, loan, user, stripes: { locale } }) => {
-  if (!loan) return <div />;
-
-  // TODO: remove after back-end is ready
-  const loanActions = [{
-    actionDate: loan.loanDate,
-    action: 'Check Out',
-    dueDate: loan.loanDate,
-    operator: 'Admin',
-  }];
-
-  const historyFirstMenu = <PaneMenu><button onClick={onCancel} title="close" aria-label="Close Loan Details"><span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span></button></PaneMenu>;
-  const loanActionsFormatter = {
-    Action: la => la.action,
-    'Action Date': la => formatDate(la.actionDate, locale),
-    'Due Date': la => futureDate(la.dueDate, locale, 30),
-    Operator: la => la.operator || '-',
+class LoanActionsHistory extends React.Component {
+  static propTypes = {
+    stripes: PropTypes.object.isRequired,
+    resources: PropTypes.shape({
+      loanActions: PropTypes.object,
+      loanActionsWithUser: PropTypes.object,
+    }).isRequired,
+    mutator: PropTypes.shape({
+      loanActionsWithUser: PropTypes.shape({
+        replace: PropTypes.func,
+      }),
+    }).isRequired,
+    loan: PropTypes.object,
+    user: PropTypes.object,
+    onCancel: PropTypes.func.isRequired,
   };
 
-  return (
-    <Paneset isRoot>
-      <Pane defaultWidth="100%" firstMenu={historyFirstMenu} paneTitle={'Loan Details'}>
-        <Row>
-          <Col xs={5} >
-            <Row>
-              <Col xs={12}>
-                <KeyValue label="Title" value={_.get(loan, ['item', 'title'], '')} />
-              </Col>
-            </Row>
-            <br />
-            <Row>
-              <Col xs={12}>
-                <KeyValue label="Loan Status" value={_.get(loan, ['status', 'name'], '-')} />
-              </Col>
-            </Row>
-          </Col>
-          <Col xs={3} >
-            <Row>
-              <Col xs={12}>
-                <KeyValue label="Borrower" value={getFullName(user)} />
-              </Col>
-            </Row>
-          </Col>
-          <Col xs={4}>
-            <Row>
-              <Col xs={12}>
-                <KeyValue label="Loan Date" value={formatDate(loan.loanDate, locale) || '-'} />
-              </Col>
-            </Row>
-            <br />
-            <Row>
-              <Col xs={12}>
-                <KeyValue label="Due Date" value={futureDate(loan.loanDate, locale, 30) || '-'} />
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-        <br />
-        <MultiColumnList
-          formatter={loanActionsFormatter}
-          visibleColumns={['Action Date', 'Action', 'Due Date', 'Operator']}
-          contentData={loanActions}
-        />
-      </Pane>
-    </Paneset>);
-};
+  static manifest = Object.freeze({
+    loanActionsWithUser: { initialValue: null },
+    loanActions: {
+      type: 'okapi',
+      records: 'loans',
+      GET: {
+        path: 'loan-storage/loan-history?query=(id=!{loan.id})',
+      },
+    },
+  });
 
-LoanActionsHistory.propTypes = {
-  stripes: PropTypes.shape({
-    locale: PropTypes.string.isRequired,
-  }).isRequired,
-  loan: PropTypes.object,
-  user: PropTypes.object,
-  onCancel: PropTypes.func.isRequired,
-};
+  constructor(props) {
+    super(props);
+    this.joinUsersWithLoans = _.debounce(this.joinUsersWithLoans, 100);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const loanActions = nextProps.resources.loanActions;
+    const loanActionsWithUser = nextProps.resources.loanActionsWithUser;
+
+    if (loanActions.records.length &&
+      (!loanActionsWithUser.records ||
+        loanActionsWithUser.records[0].id !== nextProps.loan.id)) {
+      this.joinUsersWithLoans(loanActions);
+    }
+  }
+
+  getUsersByIds(userIds) {
+    const ids = userIds.map(id => `id=${id}`).join(' or ');
+    const stripes = this.props.stripes;
+    const okapiUrl = stripes.okapi.url;
+    const headers = {
+      'X-Okapi-Tenant': stripes.okapi.tenant,
+      'X-Okapi-Token': stripes.store.getState().okapi.token,
+      'Content-Type': 'application/json',
+    };
+
+    return fetch(`${okapiUrl}/users?query=(${ids})`, { headers })
+      .then(resp => resp.json())
+      .then(json => json.users);
+  }
+
+  joinUsersWithLoans(loanActions) {
+    const userIds = loanActions.records.map(r => r.userId);
+    this.getUsersByIds(userIds).then(users =>
+      this.addUsersToLoanActions(users, loanActions.records));
+  }
+
+  addUsersToLoanActions(users, loanActions) {
+    const userMap = users.reduce((memo, user) =>
+      Object.assign(memo, { [user.id]: user }), {});
+    const records = loanActions.map(la =>
+      Object.assign({}, la, { user: userMap[la.userId] }));
+    this.props.mutator.loanActionsWithUser.replace({ records });
+  }
+
+  render() {
+    const { onCancel, loan, user, stripes, resources: { loanActionsWithUser } } = this.props;
+
+    if (!loanActionsWithUser || !loanActionsWithUser.records) return <div />;
+    const loanActionsFormatter = {
+      Action: la => loanActionsMap[la.action],
+      'Action Date': la => formatDate(la.loanDate, stripes.locale),
+      'Due Date': la => (la.dueDate ? formatDate(la.dueDate, stripes.locale) : ''),
+      Operator: () => `${stripes.user.user.lastName} ${stripes.user.user.firstName}`, // TODO: replace with operator after CIRCSTORE-16
+    };
+
+    return (
+      <Paneset isRoot>
+        <Pane id="pane-loandetails" defaultWidth="100%" dismissible onClose={onCancel} paneTitle={'Loan Details'}>
+          <Row>
+            <Col xs={5} >
+              <Row>
+                <Col xs={12}>
+                  <KeyValue label="Title" value={_.get(loan, ['item', 'title'], '')} />
+                </Col>
+              </Row>
+              <br />
+              <Row>
+                <Col xs={12}>
+                  <KeyValue label="Loan Status" value={_.get(loan, ['status', 'name'], '-')} />
+                </Col>
+              </Row>
+            </Col>
+            <Col xs={3} >
+              <Row>
+                <Col xs={12}>
+                  <KeyValue label="Borrower" value={getFullName(user)} />
+                </Col>
+              </Row>
+            </Col>
+            <Col xs={4}>
+              <Row>
+                <Col xs={12}>
+                  <KeyValue label="Loan Date" value={formatDate(loan.loanDate, stripes.locale) || '-'} />
+                </Col>
+              </Row>
+              <br />
+              <Row>
+                <Col xs={12}>
+                  <KeyValue label="Due Date" value={formatDate(loan.dueDate, stripes.locale) || '-'} />
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+          <br />
+          <MultiColumnList
+            id="list-loanactions"
+            formatter={loanActionsFormatter}
+            visibleColumns={['Action Date', 'Action', 'Due Date', 'Operator']}
+            contentData={loanActionsWithUser.records}
+          />
+        </Pane>
+      </Paneset>
+    );
+  }
+}
 
 export default LoanActionsHistory;

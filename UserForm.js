@@ -17,14 +17,9 @@ import { Field } from 'redux-form';
 import stripesForm from '@folio/stripes-form';
 
 import { countriesOptions } from './data/countries';
-import { addressTypeOptions } from './data/addressTypes';
 import Autocomplete from './lib/Autocomplete';
 import { toListAddresses } from './converters/address';
-
-const addressFields = {
-  country: { component: Autocomplete, props: { dataOptions: countriesOptions } },
-  addressType: { component: Select, props: { dataOptions: addressTypeOptions, fullWidth: true, placeholder: 'select address type' } },
-};
+import { toAddressTypeOptions } from './converters/address_type';
 
 const sys = require('stripes-loader'); // eslint-disable-line
 const okapiUrl = sys.okapi.url;
@@ -99,6 +94,7 @@ class UserForm extends React.Component {
       userGroups: PropTypes.arrayOf(PropTypes.object),
       contactTypes: PropTypes.arrayOf(PropTypes.object),
     }),
+    addressTypes: PropTypes.arrayOf(PropTypes.object),
   };
 
   constructor(props) {
@@ -115,31 +111,28 @@ class UserForm extends React.Component {
       onCancel,
       initialValues,
       optionLists,
+      addressTypes,
       newUser,
     } = this.props;
 
     /* Menues for Add User workflow */
-    const addUserFirstMenu = <PaneMenu><button onClick={onCancel} title="close" aria-label="Close New User Dialog"><span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span></button></PaneMenu>;
-    let buttonLabel;
-    if ( newUser ) {
-      buttonLabel = 'Create User';
-    } else {
-      buttonLabel = 'Update User';
-    }
-    if ( submitting ) {
-      buttonLabel = 'Submitting';
-    }
-    const addUserLastMenu = <PaneMenu><Button type="submit" title="Create New User" disabled={pristine || submitting} onClick={handleSubmit}>{buttonLabel} {submitting && <div style={{float: "right", margin: '0 6px'}}><Icon icon="spinner-ellipsis" /></div>}</Button></PaneMenu>;
-
-    const editUserLastMenu = <PaneMenu><Button type="submit" title="Update User" disabled={pristine || submitting} onClick={handleSubmit}>{buttonLabel} {submitting && <div style={{float: "right", margin: '0 6px'}}><Icon icon="spinner-ellipsis" /></div>}</Button></PaneMenu>;
+    const addUserFirstMenu = <PaneMenu><button id="clickable-closenewuserdialog" onClick={onCancel} title="close" aria-label="Close New User Dialog"><span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span></button></PaneMenu>;
+    const addUserLastMenu = <PaneMenu><Button id="clickable-createnewuser" type="submit" title="Create New User" disabled={pristine || submitting} onClick={handleSubmit}>Create User</Button></PaneMenu>;
+    const editUserLastMenu = <PaneMenu><Button id="clickable-updateuser" type="submit" title="Update User" disabled={pristine || submitting} onClick={handleSubmit}>Update User</Button></PaneMenu>;
     const patronGroupOptions = (optionLists.patronGroups || []).map(g => ({
       label: `${g.group} (${g.desc})`, value: g.id, selected: initialValues.patronGroup === g.id }));
     const contactTypeOptions = (optionLists.contactTypes || []).map(g => ({
       label: g.desc, value: g.id, selected: initialValues.preferredContactTypeId === g.id }));
-    initialValues.personal.addresses = toListAddresses(initialValues.personal.addresses);
+
+    initialValues.personal.addresses = toListAddresses(initialValues.personal.addresses, addressTypes);
+
+    const addressFields = {
+      country: { component: Autocomplete, props: { dataOptions: countriesOptions } },
+      addressType: { component: Select, props: { dataOptions: toAddressTypeOptions(addressTypes), fullWidth: true, placeholder: 'Select address type' } },
+    };
 
     return (
-      <form style={{ height: '100%', overflow: 'auto' }}>
+      <form id="form-user" style={{ height: '100%', overflow: 'auto' }}>
         <Paneset isRoot>
           <Pane defaultWidth="100%" firstMenu={addUserFirstMenu} lastMenu={newUser ?  addUserLastMenu : editUserLastMenu } paneTitle={newUser ?  'New User' : 'Edit User'}>
             <Row>
@@ -200,7 +193,7 @@ class UserForm extends React.Component {
                   id="adduser_expirationdate"
                 />
                 <Field label="Bar Code" name="barcode" id="adduser_barcode" component={TextField} fullWidth />
-                <Field label="FOLIO Record Number" name="id" id="adduser_id" readOnly="true" component={TextField} fullWidth />
+                <Field label="FOLIO Record Number" name="id" id="adduser_id" readOnly component={TextField} fullWidth />
                 <Field label="External System ID" name="externalSystemId" id="adduser_externalsystemid" component={TextField} fullWidth />
 
                 <AddressEditList name="personal.addresses" fieldComponents={addressFields} canDelete />

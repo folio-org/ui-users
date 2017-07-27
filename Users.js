@@ -120,7 +120,7 @@ class Users extends React.Component {
             {
               Active: 'active',
               Name: 'personal.lastName personal.firstName',
-              'Patron Group': 'patronGroup',
+              'Patron Group': 'patronGroup.group',
               'User ID': 'username',
               Barcode: 'barcode',
               Email: 'personal.email',
@@ -214,10 +214,10 @@ class Users extends React.Component {
 
   onSort = (e, meta) => {
     const newOrder = meta.alias;
-    const oldOrder = this.state.sortOrder;
+    const oldOrder = this.state.sortOrder || '';
 
     const orders = oldOrder ? oldOrder.split(',') : [];
-    if (newOrder === orders[0].replace(/^-/, '')) {
+    if (orders[0] && newOrder === orders[0].replace(/^-/, '')) {
       orders[0] = `-${orders[0]}`.replace(/^--/, '');
     } else {
       orders.unshift(newOrder);
@@ -371,7 +371,7 @@ class Users extends React.Component {
     const users = (resources.users || {}).records || [];
 
     /* searchHeader is a 'custom pane header'*/
-    const searchHeader = <FilterPaneSearch id="SearchField" onChange={this.onChangeSearch} onClear={this.onClearSearch} resultsList={this.resultsList} value={this.state.searchTerm} placeholder="Search by Name or ID" />;
+    const searchHeader = <FilterPaneSearch searchFieldId="input-user-search" onChange={this.onChangeSearch} onClear={this.onClearSearch} resultsList={this.resultsList} value={this.state.searchTerm} placeholder={"Search"} />;
 
     const newUserButton = (
       <IfPermission perm="users.item.post">
@@ -420,6 +420,7 @@ class Users extends React.Component {
 
     const resource = this.props.resources.users;
     const maybeTerm = this.state.searchTerm ? ` for "${this.state.searchTerm}"` : '';
+    const maybeSpelling = this.state.searchTerm ? 'spelling and ' : '';
     return (
       <Paneset>
         <SRStatus ref={(ref) => { this.SRStatus = ref; }} />
@@ -453,7 +454,7 @@ class Users extends React.Component {
             visibleColumns={['Active', 'Name', 'Barcode', 'Patron Group', 'User ID', 'Email']}
             sortOrder={this.state.sortOrder.replace(/^-/, '').replace(/,.*/, '')}
             sortDirection={this.state.sortOrder.startsWith('-') ? 'descending' : 'ascending'}
-            isEmptyMessage={`No results found${maybeTerm}. Please check your spelling and filters.`}
+            isEmptyMessage={`No results found${maybeTerm}. Please check your ${maybeSpelling}filters.`}
             columnMapping={{ 'User ID': 'username' }}
             loading={resource ? resource.isPending : false}
             autosize

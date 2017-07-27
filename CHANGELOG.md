@@ -1,8 +1,32 @@
 # Change history for ui-users
 
-## 2.8.0 IN PROGRESS
+## 2.9.0 (IN PROGRESS)
 
-* Dependencies for stripes-components raised to "1.3.0".
+* Add filterBy callback prop to `<Autocomplete>`. Fixes UIU-139.
+* Add barcode column to Users list. Fixes UIU-123.
+* Make barcode searchable. Fixes UIU-124.
+* Make email-address searchable. Fixes UIU-146.
+* Support sorting by barcode. Fixes UIU-151.
+* Use new-style specification of action-names in ui-users. Fixes UIU-149.
+* Change title in results pane. See comments in UIU-125.
+* Show open- and closed-loans counts on the user-details pain. See UIU-128
+* Show "Open Loans" and "Closed Loans" tabs on the loans-list panes. See UIU-128.
+* Do not mention search-term in "No Results Found" message if there is none. Fixes UIU-158.
+* Show Operator name on loan action history. Fixes UIU-163.
+* Rename action names. Fixes UIU-161 and UIU-161.
+* The clear-search button goes back to Users starting state. Fixes UIU-155.
+* Explicitly reset component state in onClearSearch. Fixes UIU-167.
+* Add searching for internal ID and External system ID. Fixes UIU-5.
+* Display Loan Due Date. Upgrade `circulation` dependency to 2.1 and `loan-storage` to 3.1. Fixes UIU-171
+* Sorting by patron-group uses group-name, not ID. Fixes UIU-101.
+
+## [2.8.0](https://github.com/folio-org/ui-users/tree/v2.8.0) (2017-07-17)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.7.0...v2.8.0)
+
+* Add [`<SRStatus>`](https://github.com/folio-org/stripes-components/tree/master/lib/SRStatus) component to main module page. After search is performed, screen readers will announce the number of results. Integrates STCOM-3.
+* Add "Skip to Results" [`<FocusLink>`](https://github.com/folio-org/stripes-components/tree/master/lib/FocusLink) component to search input (accessibility feature - tab twice on input to see it appear after 'clear search' button. When it is focused, pressing the 'enter' key will focus the results list). Integrates STCOM-7.
+* Add unique tag IDs to UI elements for automated testing, so far to main sections like panes and multi-column lists. STRIPES-300.
+* Include create date and date updated fields in user view. Completes UIU-31.
 * Results list renders as block anchors to support right-click functionality. Part of STRIPES-409.
 * Display user permissions only if interface "permissions" v4.0 is available. Fixes the new part of UIU-74.
 * Add two high-level permissions to the `package.json`, and a new `yarn mkmd` rule to create a module-descriptor from this and other information in the package-file. Fixes UIU-94.
@@ -14,7 +38,6 @@
 * Revise okapiInterfaces and permissionSets in `package.json`. Fixes UIU-105.
 * Move patron-group and permissions settings source files down into their own subdirectories.
 * Add repeatable address fieldgroup to user form and user details. Fixes UIU-29.
-* When creating new permissions, it is possible to set their {{permissionName}}. Fixes UIU-98.
 * `<PatronGroupsSettings>` uses generic `<EditableList>` instead of PG-specific `<PatronGroupsList>`, which we no longer need. Fixes UIU-48.
 * Depends on v13.0 of the `users` interface for `totalRecords` metadata and `dateCreated` and `dateUpdated` fields. Fixes UIU-114.
 * Use new %{name} syntax instead of old ${name} throughout. See STRPCONN-5.
@@ -25,6 +48,18 @@
 * Users created with no password are given an empty one. Fixes UIU-120.
 * Fix `toUserAddress` converter. Fixes UIU-121.
 * Eliminate all uses of `componentWillMount` to provide initial values to resources. Part of STRIPES-433.
+* Add Address Type to User Associations. Completes UIU-80.
+* Add Address Type CRUD. Completes UIU-79.
+* Change some permission-names. Fixes the ui-users part of STRIPES-435.
+* Move "New User" button from filter pane to results pane. Fixes UIU-125.
+* New permission `settings.usergroups.all`. Fixes UIU-130.
+* Connect to Loan Actions API. Fixes UIU-103.
+* Support circulation interface v2.0. Fixes UIU-133.
+* Release ui-users v2.8.0. Fixes UIU-137.
+* Raised Stripes dependencies:
+  * stripes-components from v0.15.0 to v1.3.0
+  * stripes-connect from v2.2.1 to v2.4.0
+  * stripes-core from v1.13.0 to v2.2.0
 
 ## [2.7.0](https://github.com/folio-org/ui-users/tree/v2.7.0) (2017-06-14)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.6.0...v2.7.0)

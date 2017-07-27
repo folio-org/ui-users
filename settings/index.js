@@ -4,6 +4,7 @@ import Settings from '@folio/stripes-components/lib/Settings';
 
 import PermissionSets from './permissions/PermissionSets';
 import PatronGroupsSettings from './PatronGroupsSettings';
+import AddressTypesSettings from './AddressTypesSettings';
 
 const pages = [
   {
@@ -16,6 +17,13 @@ const pages = [
     route: 'groups',
     label: 'Patron groups',
     component: PatronGroupsSettings,
+    // No perm needed yet
+  },
+
+  {
+    route: 'addresstypes',
+    label: 'Address Types',
+    component: AddressTypesSettings,
     // No perm needed yet
   },
 ];

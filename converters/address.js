@@ -1,13 +1,14 @@
 import _ from 'lodash';
 import { countriesByCode, countriesByName } from '../data/countries';
-import { addressTypesByDesc, addressTypesById } from '../data/addressTypes';
+import { getAddressTypesByName, getAddressTypesById } from './address_type';
 import { hashCode } from 'hashcode';
 
-function toListAddress(addr) {
+function toListAddress(addr, addrType) {
   if (addr.id) return { ...addr };
+
   const country = (addr.countryId) ? countriesByCode[addr.countryId].country : '';
-  const addressType = (addr.addressTypeId) ? addressTypesById[addr.addressTypeId].desc : '';
-  const id = hashCode().value(addr).toString(); // TODO: remove when id comes from the server
+  const addressType = _.get(addrType, ['addressType'], '');
+  const id = hashCode().value(addr).toString();
 
   return {
     id,
@@ -23,10 +24,9 @@ function toListAddress(addr) {
   };
 }
 
-function toUserAddress(addr) {
-  const addressTypeId = (addr.addressType) ? addressTypesByDesc[addr.addressType].id : '';
+function toUserAddress(addr, addrType) {
   const countryId = (addr.country) ? countriesByName[addr.country].alpha2 : '';
-
+  const addressTypeId = _.get(addrType, ['id'], '');
   return {
     addressLine1: addr.addressLine1,
     addressLine2: addr.addressLine2,
@@ -39,12 +39,18 @@ function toUserAddress(addr) {
   };
 }
 
-export function toListAddresses(addresses) {
+export function toListAddresses(addresses, addressTypes) {
   if (!addresses || !addresses.length) return addresses;
-  return addresses.map(toListAddress);
+
+  const addressTypesById = getAddressTypesById(addressTypes);
+  return addresses.map(addr =>
+    toListAddress(addr, addressTypesById[addr.addressTypeId]));
 }
 
-export function toUserAddresses(addresses) {
+export function toUserAddresses(addresses, addressTypes) {
   if (!addresses || !addresses.length) return addresses;
-  return addresses.map(toUserAddress);
+
+  const addressTypesByName = getAddressTypesByName(addressTypes);
+  return addresses.map(addr =>
+    toUserAddress(addr, addressTypesByName[addr.addressType]));
 }

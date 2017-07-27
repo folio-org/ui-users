@@ -75,8 +75,10 @@ class ViewUser extends React.Component {
     super(props);
     this.state = {
       viewLoansHistoryMode: false,
+      viewOpenLoansMode: false,
       viewLoanActionsHistoryMode: false,
       selectedLoan: {},
+      lastUpdate: null,
     };
     this.onClickEditUser = this.onClickEditUser.bind(this);
     this.onClickCloseEditUser = this.onClickCloseEditUser.bind(this);
@@ -84,8 +86,10 @@ class ViewUser extends React.Component {
     this.connectedLoansHistory = props.stripes.connect(LoansHistory);
     this.connectedLoanActionsHistory = props.stripes.connect(LoanActionsHistory);
     this.connectedUserPermissions = props.stripes.connect(UserPermissions);
-    this.onClickViewLoansHistory = this.onClickViewLoansHistory.bind(this);
+    this.dateLastUpdated = this.dateLastUpdated.bind(this);
     this.onClickCloseLoansHistory = this.onClickCloseLoansHistory.bind(this);
+    this.onClickViewOpenLoans = this.onClickViewOpenLoans.bind(this);
+    this.onClickViewClosedLoans = this.onClickViewClosedLoans.bind(this);
     this.onClickViewLoanActionsHistory = this.onClickViewLoanActionsHistory.bind(this);
     this.onClickCloseLoanActionsHistory = this.onClickCloseLoanActionsHistory.bind(this);
     this.onAddressesUpdate = this.onAddressesUpdate.bind(this);
@@ -104,10 +108,19 @@ class ViewUser extends React.Component {
     this.props.mutator.editMode.replace({ mode: false });
   }
 
-  onClickViewLoansHistory(e) {
+  onClickViewOpenLoans(e) {
     if (e) e.preventDefault();
     this.setState({
       viewLoansHistoryMode: true,
+      viewOpenLoansMode: true,
+    });
+  }
+
+  onClickViewClosedLoans(e) {
+    if (e) e.preventDefault();
+    this.setState({
+      viewLoansHistoryMode: true,
+      viewOpenLoansMode: false,
     });
   }
 
@@ -115,6 +128,7 @@ class ViewUser extends React.Component {
     if (e) e.preventDefault();
     this.setState({
       viewLoansHistoryMode: false,
+      viewOpenLoansMode: false,
     });
   }
 
@@ -159,14 +173,38 @@ class ViewUser extends React.Component {
 
   update(data) {
     if (data.personal.addresses) {
-      data.personal.addresses = toUserAddresses(data.personal.addresses); // eslint-disable-line no-param-reassign
+      data.personal.addresses = toUserAddresses(data.personal.addresses, this.props.addressTypes); // eslint-disable-line no-param-reassign
     }
 
     // eslint-disable-next-line no-param-reassign
     if (data.creds) delete data.creds; // not handled on edit (yet at least)
     this.props.mutator.selUser.PUT(data).then(() => {
+      this.setState({
+        lastUpdate: new Date().toISOString(),
+      });
       this.onClickCloseEditUser();
     });
+  }
+
+  // This is a helper function for the "last updated" date element. Since the
+  // date/time is actually set on the server when the record is updated, the
+  // lastUpdated element of the record on the client side might contain a stale
+  // value. If so, this returns a locally stored update date until the data
+  // is refreshed.
+  dateLastUpdated(user) {
+    const updatedDateRec = _.get(user, ['updatedDate'], '');
+    const updatedDateLocal = this.state.lastUpdate;
+
+    if (!updatedDateRec) { return ''; }
+
+    let dateToShow;
+    if (updatedDateLocal && updatedDateLocal > updatedDateRec) {
+      dateToShow = updatedDateLocal;
+    } else {
+      dateToShow = updatedDateRec;
+    }
+
+    return new Date(dateToShow).toLocaleString(this.props.stripes.locale);
   }
 
   render() {
@@ -177,7 +215,7 @@ class ViewUser extends React.Component {
 
     const detailMenu = (<PaneMenu>
       <IfPermission perm="users.item.put">
-        <button onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button>
+        <button id="clickable-edituser" onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button>
       </IfPermission>
     </PaneMenu>);
 
@@ -187,10 +225,10 @@ class ViewUser extends React.Component {
     const patronGroupId = _.get(user, ['patronGroup'], '');
     const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
     const preferredContact = contactTypes.find(g => g.id === _.get(user, ['personal', 'preferredContactTypeId'], '')) || { type: '' };
-    const addresses = toListAddresses(_.get(user, ['personal', 'addresses'], []));
+    const addresses = toListAddresses(_.get(user, ['personal', 'addresses'], []), this.props.addressTypes);
 
     return (
-      <Pane defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
+      <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
         <Row>
           <Col xs={7} >
             <Row>
@@ -259,6 +297,16 @@ class ViewUser extends React.Component {
             </Row>
             <Row>
               <Col xs={12}>
+                <KeyValue label="Open date" value={(_.get(user, ['createdDate'], '')) ? new Date(Date.parse(_.get(user, ['createdDate'], ''))).toLocaleString(this.props.stripes.locale) : ''} />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12}>
+                <KeyValue label="Record last updated" value={this.dateLastUpdated(user)} />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12}>
                 <KeyValue label="Bar code" value={_.get(user, ['barcode'], '')} />
               </Col>
             </Row>
@@ -280,7 +328,11 @@ class ViewUser extends React.Component {
             </Row>
           </Col>
         </Row>
-        <UserAddresses onUpdate={this.onAddressesUpdate} addresses={addresses} />
+        <UserAddresses
+          onUpdate={this.onAddressesUpdate}
+          addressTypes={this.props.addressTypes}
+          addresses={addresses}
+        />
         <br />
         <hr />
         <br />
@@ -292,11 +344,16 @@ class ViewUser extends React.Component {
             <Button align="end" bottomMargin0 >View Full History</Button>
           </Col>
         </Row>
-        <MultiColumnList fullWidth contentData={fineHistory} />
+        <MultiColumnList id="list-finehistory" fullWidth contentData={fineHistory} />
         <hr />
         <IfPermission perm="circulation.loans.collection.get">
-          <IfInterface name="circulation" version="1.0">
-            <this.connectedUserLoans onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory} onClickViewLoansHistory={this.onClickViewLoansHistory} {...this.props} />
+          <IfInterface name="circulation" version="2.1">
+            <this.connectedUserLoans
+              onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
+              onClickViewOpenLoans={this.onClickViewOpenLoans}
+              onClickViewClosedLoans={this.onClickViewClosedLoans}
+              {...this.props}
+            />
           </IfInterface>
         </IfPermission>
         <IfPermission perm="perms.users.get">
@@ -307,17 +364,32 @@ class ViewUser extends React.Component {
         <Layer isOpen={this.props.data.editMode ? this.props.data.editMode.mode : false} label="Edit User Dialog">
           <UserForm
             initialValues={user}
+            addressTypes={this.props.addressTypes}
             onSubmit={(record) => { this.update(record); }}
             onCancel={this.onClickCloseEditUser}
             okapi={this.props.okapi}
             optionLists={{ patronGroups: this.props.data.patronGroups, contactTypes }}
           />
         </Layer>
-        <Layer isOpen={this.state.viewLoansHistoryMode} label="Loans History">
-          <this.connectedLoansHistory userid={user.id} stripes={this.props.stripes} onCancel={this.onClickCloseLoansHistory} />
+        <Layer isOpen={this.state.viewLoansHistoryMode} label="Loans">
+          <this.connectedLoansHistory
+            userid={user.id}
+            stripes={this.props.stripes}
+            onCancel={this.onClickCloseLoansHistory}
+            onClickViewOpenLoans={this.onClickViewOpenLoans}
+            onClickViewClosedLoans={this.onClickViewClosedLoans}
+            onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
+            openLoans={this.state.viewOpenLoansMode}
+          />
         </Layer>
         <Layer isOpen={this.state.viewLoanActionsHistoryMode} label="Loans Actions History">
-          <this.connectedLoanActionsHistory user={user} loan={this.state.selectedLoan} stripes={this.props.stripes} onCancel={this.onClickCloseLoanActionsHistory} />
+          <this.connectedLoanActionsHistory
+            user={user}
+            loan={this.state.selectedLoan}
+            loanid={this.state.selectedLoan.id}
+            stripes={this.props.stripes}
+            onCancel={this.onClickCloseLoanActionsHistory}
+          />
         </Layer>
       </Pane>
     );
