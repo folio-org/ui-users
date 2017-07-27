@@ -120,7 +120,7 @@ class Users extends React.Component {
             {
               Active: 'active',
               Name: 'personal.lastName personal.firstName',
-              'Patron Group': 'patronGroup.name',
+              'Patron Group': 'patronGroup.group',
               'User ID': 'username',
               Barcode: 'barcode',
               Email: 'personal.email',
