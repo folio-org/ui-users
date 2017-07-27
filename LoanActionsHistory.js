@@ -7,7 +7,7 @@ import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import fetch from 'isomorphic-fetch';
-import { formatDate, futureDate, getFullName } from './util';
+import { formatDate, getFullName } from './util';
 import loanActionsMap from './data/loanActionMap';
 
 class LoanActionsHistory extends React.Component {
@@ -38,14 +38,19 @@ class LoanActionsHistory extends React.Component {
     },
   });
 
-  componentWillReceiveProps(nextProps) {
-    const curLoanActions = this.props.resources.loanActions;
-    const nextLoanActions = nextProps.resources.loanActions;
+  constructor(props) {
+    super(props);
+    this.joinUsersWithLoans = _.debounce(this.joinUsersWithLoans, 100);
+  }
 
-    if (curLoanActions && !curLoanActions.hasLoaded && nextLoanActions.records.length) {
-      const userIds = nextLoanActions.records.map(r => r.userId);
-      this.getUsersByIds(userIds).then(users =>
-        this.addUsersToLoanActions(users, nextLoanActions.records));
+  componentWillReceiveProps(nextProps) {
+    const loanActions = nextProps.resources.loanActions;
+    const loanActionsWithUser = nextProps.resources.loanActionsWithUser;
+
+    if (loanActions.records.length &&
+      (!loanActionsWithUser.records ||
+        loanActionsWithUser.records[0].id !== nextProps.loan.id)) {
+      this.joinUsersWithLoans(loanActions);
     }
   }
 
@@ -64,6 +69,12 @@ class LoanActionsHistory extends React.Component {
       .then(json => json.users);
   }
 
+  joinUsersWithLoans(loanActions) {
+    const userIds = loanActions.records.map(r => r.userId);
+    this.getUsersByIds(userIds).then(users =>
+      this.addUsersToLoanActions(users, loanActions.records));
+  }
+
   addUsersToLoanActions(users, loanActions) {
     const userMap = users.reduce((memo, user) =>
       Object.assign(memo, { [user.id]: user }), {});
@@ -79,7 +90,7 @@ class LoanActionsHistory extends React.Component {
     const loanActionsFormatter = {
       Action: la => loanActionsMap[la.action],
       'Action Date': la => formatDate(la.loanDate, stripes.locale),
-      'Due Date': la => futureDate(la.loanDate, stripes.locale, 14),
+      'Due Date': la => (la.dueDate ? formatDate(la.dueDate, stripes.locale) : ''),
       Operator: () => `${stripes.user.user.lastName} ${stripes.user.user.firstName}`, // TODO: replace with operator after CIRCSTORE-16
     };
 
@@ -116,7 +127,7 @@ class LoanActionsHistory extends React.Component {
               <br />
               <Row>
                 <Col xs={12}>
-                  <KeyValue label="Due Date" value={futureDate(loan.loanDate, stripes.locale, 14) || '-'} />
+                  <KeyValue label="Due Date" value={formatDate(loan.dueDate, stripes.locale) || '-'} />
                 </Col>
               </Row>
             </Col>

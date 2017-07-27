@@ -337,7 +337,7 @@ class ViewUser extends React.Component {
         <MultiColumnList id="list-finehistory" fullWidth contentData={fineHistory} />
         <hr />
         <IfPermission perm="circulation.loans.collection.get">
-          <IfInterface name="circulation" version="2.0">
+          <IfInterface name="circulation" version="2.1">
             <this.connectedUserLoans
               onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
               onClickViewOpenLoans={this.onClickViewOpenLoans}
