@@ -18,6 +18,7 @@
 * Explicitly reset component state in onClearSearch. Fixes UIU-167.
 * Add searching for internal ID and External system ID. Fixes UIU-5.
 * Display Loan Due Date. Upgrade `circulation` dependency to 2.1 and `loan-storage` to 3.1. Fixes UIU-171
+* Sorting by patron-group uses group-name, not ID. Fixes UIU-101.
 
 ## [2.8.0](https://github.com/folio-org/ui-users/tree/v2.8.0) (2017-07-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.7.0...v2.8.0)
