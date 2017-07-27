@@ -356,7 +356,7 @@ class Users extends React.Component {
     const users = (resources.users || {}).records || [];
 
     /* searchHeader is a 'custom pane header'*/
-    const searchHeader = <FilterPaneSearch id="SearchField" onChange={this.onChangeSearch} onClear={this.onClearSearch} resultsList={this.resultsList} value={this.state.searchTerm} placeholder="Search" />;
+    const searchHeader = <FilterPaneSearch searchFieldId="input-user-search" onChange={this.onChangeSearch} onClear={this.onClearSearch} resultsList={this.resultsList} value={this.state.searchTerm} placeholder={"Search"} />;
 
     const newUserButton = (
       <IfPermission perm="users.item.post">
