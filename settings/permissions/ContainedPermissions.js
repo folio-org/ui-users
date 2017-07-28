@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import RenderPermissions from '../../lib/RenderPermissions';
 
-class PermissionSet extends React.Component {
+class ContainedPermissions extends React.Component {
   static propTypes = {
     data: PropTypes.shape({
       availablePermissions: PropTypes.arrayOf(PropTypes.object),
@@ -32,4 +32,4 @@ class PermissionSet extends React.Component {
   }
 }
 
-export default PermissionSet;
+export default ContainedPermissions;

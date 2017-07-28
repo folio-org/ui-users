@@ -8,7 +8,7 @@ import IfPermission from '@folio/stripes-components/lib/IfPermission';
 
 import { Field, reduxForm } from 'redux-form';
 
-import PermissionSet from './PermissionSet';
+import containedPermissions from './ContainedPermissions';
 
 class PermissionSetDetails extends React.Component {
 
@@ -18,15 +18,14 @@ class PermissionSetDetails extends React.Component {
       connect: PropTypes.func.isRequired,
     }).isRequired,
     clearSelection: PropTypes.func.isRequired,
-    selectedSet: PropTypes.object,
+    selectedSet: PropTypes.object.isRequired,
     parentMutator: PropTypes.shape({
       permissionSets: PropTypes.shape({
         DELETE: PropTypes.func.isRequired,
         PUT: PropTypes.func.isRequired,
         POST: PropTypes.func.isRequired,
       }),
-    }),
-    tellParentTheRecordHasBeenCreated: PropTypes.func,
+    }).isRequired
   };
 
   constructor(props) {
@@ -39,10 +38,11 @@ class PermissionSetDetails extends React.Component {
     this.addPermission = this.addPermission.bind(this);
     this.removePermission = this.removePermission.bind(this);
 
-    this.connectedPermissionSet = props.stripes.connect(PermissionSet);
+    this.containedPermissions = props.stripes.connect(containedPermissions);
 
     this.state = {
       confirmDelete: false,
+      selectedSet: props.selectedSet,
     };
   }
 
@@ -59,7 +59,6 @@ class PermissionSetDetails extends React.Component {
         mutable: true,
       }));
       this.setState({ newSet: false });
-      this.props.tellParentTheRecordHasBeenCreated();
     } else {
       this.props.parentMutator.permissionSets.PUT(Object.assign({}, set, {
         subPermissions: (set.subPermissions || []).map(p => p.permissionName),
@@ -75,7 +74,7 @@ class PermissionSetDetails extends React.Component {
 
   confirmDeleteSet(confirmation) {
     if (confirmation) {
-      this.props.parentMutator.permissionSets.DELETE(this.props.selectedSet).then(() => {
+      this.props.parentMutator.permissionSets.DELETE(this.state.selectedSet).then(() => {
         this.props.clearSelection();
       });
     } else {
@@ -97,11 +96,11 @@ class PermissionSetDetails extends React.Component {
   }
 
   render() {
-    const { selectedSet, stripes } = this.props;
+    const { stripes } = this.props;
     const disabled = !stripes.hasPerm('perms.permissions.item.put');
 
     return (
-      <Pane paneTitle={`${selectedSet.displayName || 'Untitled'}`} defaultWidth="fill" fluidContentWidth>
+      <Pane paneTitle={`${this.state.selectedSet.displayName || 'Untitled'}`} defaultWidth="fill" fluidContentWidth>
         <form>
 
           <section>
@@ -118,10 +117,10 @@ class PermissionSetDetails extends React.Component {
             <Button title="Cancel Delete Permission Set" onClick={() => { this.confirmDeleteSet(false); }}>Cancel</Button>
           </div>}
 
-          <this.connectedPermissionSet
+          <this.containedPermissions
             addPermission={this.addPermission}
             removePermission={this.removePermission}
-            selectedSet={selectedSet}
+            selectedSet={this.state.selectedSet}
             permToRead="perms.permissions.get"
             permToDelete="perms.users.item.put"
             permToModify="perms.users.item.put"
