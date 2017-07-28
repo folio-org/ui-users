@@ -17,7 +17,10 @@
     "route": "/users",
     "home": "/users?filters=active.Active&sort=Name",
     "hasSettings": true,
-    "actionNames": ["stripesHome", "usersSortByName"],
+    "actionNames": [
+      "stripesHome",
+      "usersSortByName"
+    ],
     "okapiInterfaces": {
       "users": "14.0",
       "circulation": "2.1",
@@ -165,7 +168,7 @@
     "react-bootstrap": "^0.30.7",
     "react-bootstrap-typeahead": "^1.4.0",
     "react-router-dom": "^4.0.0",
-    "redux-form": "^6.8.0"
+    "redux-form": "^7.0.3"
   },
   "peerDependencies": {
     "@folio/stripes-connect": "^2.4.0",
