@@ -216,6 +216,7 @@ class ViewUser extends React.Component {
     const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
     const preferredContact = contactTypes.find(g => g.id === _.get(user, ['personal', 'preferredContactTypeId'], '')) || { type: '' };
     const addresses = toListAddresses(_.get(user, ['personal', 'addresses'], []), this.props.addressTypes);
+    user.personal.addresses = addresses;
 
     return (
       <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>

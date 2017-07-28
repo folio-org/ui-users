@@ -6,7 +6,6 @@ import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
-import fetch from 'isomorphic-fetch';
 import { formatDate, getFullName } from './util';
 import loanActionsMap from './data/loanActionMap';
 
@@ -16,9 +15,13 @@ class LoanActionsHistory extends React.Component {
     resources: PropTypes.shape({
       loanActions: PropTypes.object,
       loanActionsWithUser: PropTypes.object,
+      userIds: PropTypes.object,
     }).isRequired,
     mutator: PropTypes.shape({
       loanActionsWithUser: PropTypes.shape({
+        replace: PropTypes.func,
+      }),
+      userIds: PropTypes.shape({
         replace: PropTypes.func,
       }),
     }).isRequired,
@@ -28,7 +31,13 @@ class LoanActionsHistory extends React.Component {
   };
 
   static manifest = Object.freeze({
-    loanActionsWithUser: { initialValue: null },
+    userIds: {},
+    loanActionsWithUser: {},
+    users: {
+      type: 'okapi',
+      records: 'users',
+      path: 'users?query=(%{userIds.query})',
+    },
     loanActions: {
       type: 'okapi',
       records: 'loans',
@@ -38,55 +47,35 @@ class LoanActionsHistory extends React.Component {
     },
   });
 
-  constructor(props) {
-    super(props);
-    this.joinUsersWithLoans = _.debounce(this.joinUsersWithLoans, 100);
-  }
-
+  // TODO refactor after join is supported
   componentWillReceiveProps(nextProps) {
-    const loanActions = nextProps.resources.loanActions;
-    const loanActionsWithUser = nextProps.resources.loanActionsWithUser;
+    const { loan, resources: { loanActions, userIds, users, loanActionsWithUser } } = nextProps;
 
-    if (loanActions.records.length &&
-      (!loanActionsWithUser.records ||
-        loanActionsWithUser.records[0].id !== nextProps.loan.id)) {
-      this.joinUsersWithLoans(loanActions);
+    if (!loanActions.records.length ||
+      loanActions.records[0].id !== loan.id) return;
+
+    if (!userIds.query || userIds.loan.id !== loan.id) {
+      const query = loanActions.records.map(r => `id=${r.userId}`).join(' or ');
+      this.props.mutator.userIds.replace({ query, loan });
+    }
+
+    if (!users.records.length) return;
+
+    if (!loanActionsWithUser.records || loanActionsWithUser.loan.id !== loan.id) {
+      this.joinLoanActionsWithUser(loanActions.records, users.records, loan);
     }
   }
 
-  getUsersByIds(userIds) {
-    const ids = userIds.map(id => `id=${id}`).join(' or ');
-    const stripes = this.props.stripes;
-    const okapiUrl = stripes.okapi.url;
-    const headers = {
-      'X-Okapi-Tenant': stripes.okapi.tenant,
-      'X-Okapi-Token': stripes.store.getState().okapi.token,
-      'Content-Type': 'application/json',
-    };
-
-    return fetch(`${okapiUrl}/users?query=(${ids})`, { headers })
-      .then(resp => resp.json())
-      .then(json => json.users);
-  }
-
-  joinUsersWithLoans(loanActions) {
-    const userIds = loanActions.records.map(r => r.userId);
-    this.getUsersByIds(userIds).then(users =>
-      this.addUsersToLoanActions(users, loanActions.records));
-  }
-
-  addUsersToLoanActions(users, loanActions) {
+  joinLoanActionsWithUser(loanActions, users, loan) {
     const userMap = users.reduce((memo, user) =>
       Object.assign(memo, { [user.id]: user }), {});
     const records = loanActions.map(la =>
       Object.assign({}, la, { user: userMap[la.userId] }));
-    this.props.mutator.loanActionsWithUser.replace({ records });
+    this.props.mutator.loanActionsWithUser.replace({ loan, records });
   }
 
   render() {
     const { onCancel, loan, user, stripes, resources: { loanActionsWithUser } } = this.props;
-
-    if (!loanActionsWithUser || !loanActionsWithUser.records) return <div />;
     const loanActionsFormatter = {
       Action: la => loanActionsMap[la.action],
       'Action Date': la => formatDate(la.loanDate, stripes.locale),
@@ -133,12 +122,14 @@ class LoanActionsHistory extends React.Component {
             </Col>
           </Row>
           <br />
-          <MultiColumnList
-            id="list-loanactions"
-            formatter={loanActionsFormatter}
-            visibleColumns={['Action Date', 'Action', 'Due Date', 'Operator']}
-            contentData={loanActionsWithUser.records}
-          />
+          {loanActionsWithUser && loanActionsWithUser.records &&
+            <MultiColumnList
+              id="list-loanactions"
+              formatter={loanActionsFormatter}
+              visibleColumns={['Action Date', 'Action', 'Due Date', 'Operator']}
+              contentData={loanActionsWithUser.records}
+            />
+          }
         </Pane>
       </Paneset>
     );
