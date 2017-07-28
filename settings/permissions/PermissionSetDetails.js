@@ -25,7 +25,7 @@ class PermissionSetDetails extends React.Component {
         PUT: PropTypes.func.isRequired,
         POST: PropTypes.func.isRequired,
       }),
-    }).isRequired
+    }).isRequired,
   };
 
   constructor(props) {
