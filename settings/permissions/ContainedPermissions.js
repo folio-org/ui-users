@@ -1,11 +1,14 @@
+import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import RenderPermissions from '../../lib/RenderPermissions';
 
 class ContainedPermissions extends React.Component {
   static propTypes = {
-    data: PropTypes.shape({
-      availablePermissions: PropTypes.arrayOf(PropTypes.object),
+    resources: PropTypes.shape({
+      availablePermissions: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
     }).isRequired,
     addPermission: PropTypes.func.isRequired,
     removePermission: PropTypes.func.isRequired,
@@ -26,7 +29,7 @@ class ContainedPermissions extends React.Component {
       heading="Contains"
       addPermission={this.props.addPermission}
       removePermission={this.props.removePermission}
-      availablePermissions={this.props.data.availablePermissions}
+      availablePermissions={_.get(this.props.resources, ['availablePermissions', 'records'])}
       listedPermissions={this.props.selectedSet.subPermissions}
     />);
   }
