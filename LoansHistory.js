@@ -15,8 +15,10 @@ class LoansHistory extends React.Component {
     stripes: PropTypes.shape({
       locale: PropTypes.string.isRequired,
     }).isRequired,
-    data: PropTypes.shape({
-      loansHistory: PropTypes.arrayOf(PropTypes.object),
+    resources: PropTypes.shape({
+      loansHistory: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
     }),
     onCancel: PropTypes.func.isRequired,
     openLoans: PropTypes.bool,
@@ -63,7 +65,7 @@ class LoansHistory extends React.Component {
   }
 
   render() {
-    const { data: { loansHistory } } = this.props;
+    const loansHistory = _.get(this.props.resources, ['loansHistory', 'records']);
     const loanStatus = this.props.openLoans ? 'Open' : 'Closed';
     const loans = _.filter(loansHistory, loan => loanStatus === _.get(loan, ['status', 'name']));
     if (!loans) return <div />;
