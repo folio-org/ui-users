@@ -10,7 +10,6 @@ import Select from '@folio/stripes-components/lib/Select';
 import RadioButtonGroup from '@folio/stripes-components/lib/RadioButtonGroup';
 import RadioButton from '@folio/stripes-components/lib/RadioButton';
 import Datepicker from '@folio/stripes-components/lib/Datepicker';
-import Icon from '@folio/stripes-components/lib/Icon';
 import AddressEditList from '@folio/stripes-components/lib/structures/AddressFieldGroup/AddressEdit/AddressEditList';
 import fetch from 'isomorphic-fetch';
 import { Field } from 'redux-form';
@@ -112,7 +111,6 @@ class UserForm extends React.Component {
       initialValues,
       optionLists,
       addressTypes,
-      newUser,
     } = this.props;
 
     /* Menues for Add User workflow */
@@ -134,7 +132,7 @@ class UserForm extends React.Component {
     return (
       <form id="form-user" style={{ height: '100%', overflow: 'auto' }}>
         <Paneset isRoot>
-          <Pane defaultWidth="100%" firstMenu={addUserFirstMenu} lastMenu={newUser ?  addUserLastMenu : editUserLastMenu } paneTitle={newUser ?  'New User' : 'Edit User'}>
+          <Pane defaultWidth="100%" firstMenu={addUserFirstMenu} lastMenu={initialValues.username ? editUserLastMenu : addUserLastMenu} paneTitle={initialValues.username ? 'Edit User' : 'New User'}>
             <Row>
               <Col sm={5} smOffset={1}>
                 <h2>User Record</h2>

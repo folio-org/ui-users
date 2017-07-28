@@ -120,7 +120,7 @@ class Users extends React.Component {
             {
               Active: 'active',
               Name: 'personal.lastName personal.firstName',
-              'Patron Group': 'patronGroup.group',
+              'Patron Group': 'patronGroup',
               'User ID': 'username',
               Barcode: 'barcode',
               Email: 'personal.email',
@@ -173,9 +173,6 @@ class Users extends React.Component {
 
     this.resultsList = null;
     this.SRStatus = null;
-
-    this.onUserDetailsPopulated = this.onUserDetailsPopulated.bind(this);
-    this.newUserInitValues = { active: true, personal: { preferredContactTypeId: '002' } };
   }
 
   componentWillReceiveProps(nextProps) {
@@ -214,10 +211,10 @@ class Users extends React.Component {
 
   onSort = (e, meta) => {
     const newOrder = meta.alias;
-    const oldOrder = this.state.sortOrder || '';
+    const oldOrder = this.state.sortOrder;
 
     const orders = oldOrder ? oldOrder.split(',') : [];
-    if (orders[0] && newOrder === orders[0].replace(/^-/, '')) {
+    if (newOrder === orders[0].replace(/^-/, '')) {
       orders[0] = `-${orders[0]}`.replace(/^--/, '');
     } else {
       orders.unshift(newOrder);
@@ -239,7 +236,6 @@ class Users extends React.Component {
 
   onClickAddNewUser = (e) => {
     if (e) e.preventDefault();
-    this.newUserInitValues = { active: true, personal: { preferredContactTypeId: '002' } }; 
     this.log('action', 'clicked "add new user"');
     this.props.mutator.addUserMode.replace({ mode: true });
   }
@@ -280,9 +276,6 @@ class Users extends React.Component {
   }
 
   create = (data) => {
-    // reset dirty state of user form
-    this.newUserInitValues = data;
-
     if (data.personal.addresses) {
       data.personal.addresses = toUserAddresses(data.personal.addresses, this.props.data.addressTypes); // eslint-disable-line no-param-reassign
     }
@@ -294,9 +287,7 @@ class Users extends React.Component {
     this.props.mutator.users.POST(data);
     // POST credentials, permission-user, permissions;
     this.postCreds(data.username, creds);
-
-    // original point of exit for New User screen
-    // this.onClickCloseNewUser();
+    this.onClickCloseNewUser();
   }
 
   postCreds = (username, creds) => {
@@ -360,18 +351,12 @@ class Users extends React.Component {
     );
   }
 
-  onUserDetailsPopulated() {
-    if (this.props.resources.addUserMode.mode) {
-      this.onClickCloseNewUser();
-    }
-  }
-
   render() {
     const { data, resources, stripes } = this.props;
     const users = (resources.users || {}).records || [];
 
     /* searchHeader is a 'custom pane header'*/
-    const searchHeader = <FilterPaneSearch searchFieldId="input-user-search" onChange={this.onChangeSearch} onClear={this.onClearSearch} resultsList={this.resultsList} value={this.state.searchTerm} placeholder={"Search"} />;
+    const searchHeader = <FilterPaneSearch id="SearchField" onChange={this.onChangeSearch} onClear={this.onClearSearch} resultsList={this.resultsList} value={this.state.searchTerm} placeholder="Search by Name or ID" />;
 
     const newUserButton = (
       <IfPermission perm="users.item.post">
@@ -401,7 +386,7 @@ class Users extends React.Component {
       this.props.stripes.hasPerm('users.item.get') ?
         (<Route
           path={`${this.props.match.path}/view/:userid/:username`}
-          render={props => <this.connectedViewUser stripes={stripes} okapi={this.okapi} paneWidth="44%" onClose={this.collapseDetails} onUserPopulated={this.onUserDetailsPopulated} addressTypes={data.addressTypes} {...props} />}
+          render={props => <this.connectedViewUser stripes={stripes} okapi={this.okapi} paneWidth="44%" onClose={this.collapseDetails} addressTypes={data.addressTypes} {...props} />}
         />) :
         (<div
           style={{
@@ -420,7 +405,6 @@ class Users extends React.Component {
 
     const resource = this.props.resources.users;
     const maybeTerm = this.state.searchTerm ? ` for "${this.state.searchTerm}"` : '';
-    const maybeSpelling = this.state.searchTerm ? 'spelling and ' : '';
     return (
       <Paneset>
         <SRStatus ref={(ref) => { this.SRStatus = ref; }} />
@@ -454,7 +438,7 @@ class Users extends React.Component {
             visibleColumns={['Active', 'Name', 'Barcode', 'Patron Group', 'User ID', 'Email']}
             sortOrder={this.state.sortOrder.replace(/^-/, '').replace(/,.*/, '')}
             sortDirection={this.state.sortOrder.startsWith('-') ? 'descending' : 'ascending'}
-            isEmptyMessage={`No results found${maybeTerm}. Please check your ${maybeSpelling}filters.`}
+            isEmptyMessage={`No results found${maybeTerm}. Please check your spelling and filters.`}
             columnMapping={{ 'User ID': 'username' }}
             loading={resource ? resource.isPending : false}
             autosize
@@ -469,13 +453,12 @@ class Users extends React.Component {
         <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false} label="Add New User Dialog">
           <UserForm
             id="userform-adduser"
-            initialValues={this.newUserInitValues}
+            initialValues={{ active: true, personal: { preferredContactTypeId: '002' } }}
             addressTypes={data.addressTypes}
             onSubmit={(record) => { this.create(record); }}
             onCancel={this.onClickCloseNewUser}
             okapi={this.okapi}
             optionLists={{ patronGroups: this.props.data.patronGroups, contactTypes }}
-            newUser
           />
         </Layer>
       </Paneset>
