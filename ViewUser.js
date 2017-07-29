@@ -205,11 +205,15 @@ class ViewUser extends React.Component {
 
     const detailMenu = (<PaneMenu>
       <IfPermission perm="users.item.put">
-        <button id="clickable-edituser" onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button>
+        <button id="clickable-edituser" style={{visibility: !user ? 'hidden' : 'visible' }} onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button>
       </IfPermission>
     </PaneMenu>);
 
-    if (!user) return <div />;
+    if(!user) return (
+      <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
+        <div style={{paddingTop: '1rem'}}><Icon icon="spinner-ellipsis" width="100px" /></div>
+      </Pane>
+    );
 
     const userStatus = (_.get(user, ['active'], '') ? 'active' : 'inactive');
     const patronGroupId = _.get(user, ['patronGroup'], '');
