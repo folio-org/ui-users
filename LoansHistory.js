@@ -6,6 +6,7 @@ import Paneset from '@folio/stripes-components/lib/Paneset';
 import Pane from '@folio/stripes-components/lib/Pane';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
+import dateFormat from 'dateformat';
 
 import { formatDate } from './util';
 
@@ -20,7 +21,17 @@ class LoansHistory extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }),
+    mutator: PropTypes.shape({
+      loanId: PropTypes.shape({
+        replace: PropTypes.func,
+      }),
+      loansHistory: PropTypes.shape({
+        PUT: PropTypes.func.isRequired,
+      }),
+    }).isRequired,
     onCancel: PropTypes.func.isRequired,
+    refreshRemote: PropTypes.func,
+
     openLoans: PropTypes.bool,
     onClickViewLoanActionsHistory: PropTypes.func.isRequired,
     onClickViewOpenLoans: PropTypes.func.isRequired,
@@ -28,11 +39,15 @@ class LoansHistory extends React.Component {
   };
 
   static manifest = Object.freeze({
+    loanId: {},
     loansHistory: {
       type: 'okapi',
       records: 'loans',
       GET: {
         path: 'circulation/loans?query=(userId=!{userid})',
+      },
+      PUT: {
+        path: 'circulation/loans/%{loanId}',
       },
     },
   });
@@ -49,9 +64,32 @@ class LoansHistory extends React.Component {
    * up to the event handler attached to the row.
    */
    // eslint-disable-next-line class-methods-use-this
-  handleOptionsChange(e) {
+  handleOptionsChange(e, loan) {
+    const action = e.target.value;
+    action && this[action](loan);
     e.preventDefault();
     e.stopPropagation();
+  }
+
+  renew(loan) {
+    const loanDate = new Date();
+    const dueDate = new Date();
+    dueDate.setDate(loanDate.getDate() + 30);
+
+    Object.assign(loan, {
+      renewalCount: (loan.renewalCount || 0) + 1,
+      loanDate: dateFormat(loanDate, "yyyy-mm-dd'T'HH:MM:ss'Z'"),
+      dueDate: dateFormat(dueDate, "yyyy-mm-dd'T'HH:MM:ss'Z'"),
+    })
+
+    const data = Object.assign(_.omit(loan, ['item', 'rowIndex']), {
+      action: 'renewed',
+    });
+
+    this.props.mutator.loanId.replace(loan.id);
+    this.props.mutator.loansHistory.PUT(data).then(() => {
+      this.props.refreshRemote(this.props);
+    });
   }
 
   /**
@@ -62,6 +100,15 @@ class LoansHistory extends React.Component {
   handleOptionsClick(e) {
     e.preventDefault();
     e.stopPropagation();
+  }
+
+  renderActions(loan) {
+    return (
+      <select onChange={e => this.handleOptionsChange(e, loan)} onClick={this.handleOptionsClick}>
+        <option value="">•••</option>
+        <option value="renew">Renew</option>
+      </select>
+    );
   }
 
   render() {
@@ -104,17 +151,14 @@ class LoansHistory extends React.Component {
       status: loan => `${_.get(loan, ['status', 'name'], '')}`,
       loanDate: loan => formatDate(loan.loanDate, this.props.stripes.locale),
       dueDate: loan => (loan.dueDate ? formatDate(loan.dueDate, this.props.stripes.locale) : ''),
-      renewals: () => '',
+      renewals: loan => loan.renewalCount,
       returnDate: loan => (loan.returnDate ? formatDate(loan.returnDate, this.props.stripes.locale) : ''),
-      ' ': (loan) => {
-        const loanStatusName = _.get(loan, ['status', 'name'], '');
-        return (loanStatusName === 'Closed') ? '' : <select onChange={this.handleOptionsChange} onClick={this.handleOptionsClick}><option value="">•••</option><option>Renew</option></select>;
-      },
+      ' ': loan => (_.get(loan, ['status', 'name'], '') !== 'Closed' && this.renderActions(loan)),
     };
 
     return (
       <Paneset isRoot>
-        <Pane id="pane-loanshistory" defaultWidth="100%" lastMenu={historyLastMenu} dismissible onClose={this.props.onCancel} paneTitle="Loans" >
+        <Pane id="pane-loanshistory" defaultWidth="100%" lastMenu={historyLastMenu} dismissible onClose={this.props.onCancel} paneTitle="Loans">
           <MultiColumnList
             id="list-loanshistory"
             fullWidth
