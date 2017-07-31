@@ -109,20 +109,6 @@
         "visible": true
       },
       {
-        "permissionName": "users-bl.all",
-        "displayName": "users-bl all",
-        "description": "All user business-logic permissions",
-        "subPermissions": [
-          "users-bl.view",
-          "users-bl.edit",
-          "users-bl.create",
-          "users-bl.viewperms",
-          "users-bl.editperms",
-          "users-bl.editpermsets"
-        ],
-        "visible": false
-      },
-      {
         "permissionName": "settings.usergroups.all",
         "displayName": "Settings (Users): Can create, edit and remove patron groups",
         "subPermissions": [
