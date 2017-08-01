@@ -80,14 +80,11 @@ class LoansHistory extends React.Component {
       renewalCount: (loan.renewalCount || 0) + 1,
       loanDate: dateFormat(loanDate, "yyyy-mm-dd'T'HH:MM:ss'Z'"),
       dueDate: dateFormat(dueDate, "yyyy-mm-dd'T'HH:MM:ss'Z'"),
-    });
-
-    const data = Object.assign(_.omit(loan, ['item', 'rowIndex']), {
       action: 'renewed',
     });
 
     this.props.mutator.loanId.replace(loan.id);
-    this.props.mutator.loansHistory.PUT(data);
+    this.props.mutator.loansHistory.PUT(_.omit(loan, ['item', 'rowIndex']));
   }
 
   /**
