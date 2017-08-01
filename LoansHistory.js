@@ -30,8 +30,6 @@ class LoansHistory extends React.Component {
       }),
     }).isRequired,
     onCancel: PropTypes.func.isRequired,
-    refreshRemote: PropTypes.func,
-
     openLoans: PropTypes.bool,
     onClickViewLoanActionsHistory: PropTypes.func.isRequired,
     onClickViewOpenLoans: PropTypes.func.isRequired,
@@ -43,9 +41,7 @@ class LoansHistory extends React.Component {
     loansHistory: {
       type: 'okapi',
       records: 'loans',
-      GET: {
-        path: 'circulation/loans?query=(userId=!{userid})',
-      },
+      path: 'circulation/loans?query=(userId=!{userid})',
       PUT: {
         path: 'circulation/loans/%{loanId}',
       },
@@ -66,7 +62,11 @@ class LoansHistory extends React.Component {
    // eslint-disable-next-line class-methods-use-this
   handleOptionsChange(e, loan) {
     const action = e.target.value;
-    action && this[action](loan);
+
+    if (action && this[action]) {
+      this[action](loan);
+    }
+
     e.preventDefault();
     e.stopPropagation();
   }
@@ -87,9 +87,7 @@ class LoansHistory extends React.Component {
     });
 
     this.props.mutator.loanId.replace(loan.id);
-    this.props.mutator.loansHistory.PUT(data).then(() => {
-      this.props.refreshRemote(this.props);
-    });
+    this.props.mutator.loansHistory.PUT(data);
   }
 
   /**
