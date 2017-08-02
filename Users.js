@@ -22,6 +22,7 @@ import IfPermission from '@folio/stripes-components/lib/IfPermission';
 import UserForm from './UserForm';
 import ViewUser from './ViewUser';
 
+import removeQueryParam from './removeQueryParam';
 import contactTypes from './data/contactTypes';
 import { toUserAddresses } from './converters/address';
 import packageInfo from './package';
@@ -85,9 +86,6 @@ class Users extends React.Component {
       path: PropTypes.string.isRequired,
     }).isRequired,
     mutator: PropTypes.shape({
-      addUserMode: PropTypes.shape({
-        replace: PropTypes.func,
-      }),
       userCount: PropTypes.shape({
         replace: PropTypes.func,
       }),
@@ -104,7 +102,6 @@ class Users extends React.Component {
   };
 
   static manifest = Object.freeze({
-    addUserMode: { initialValue: { mode: false } },
     userCount: { initialValue: INITIAL_RESULT_COUNT },
     users: {
       type: 'okapi',
@@ -237,13 +234,13 @@ class Users extends React.Component {
   onClickAddNewUser = (e) => {
     if (e) e.preventDefault();
     this.log('action', 'clicked "add new user"');
-    this.props.mutator.addUserMode.replace({ mode: true });
+    this.transitionToParams({ layer: 'create' });
   }
 
   onClickCloseNewUser = (e) => {
     if (e) e.preventDefault();
     this.log('action', 'clicked "close new user"');
-    this.props.mutator.addUserMode.replace({ mode: false });
+    removeQueryParam('layer', this.props.location, this.props.history);
   }
 
   onChangeFilter = (e) => {
@@ -352,8 +349,9 @@ class Users extends React.Component {
   }
 
   render() {
-    const { data, resources, stripes } = this.props;
+    const { data, location, resources, stripes } = this.props;
     const users = (resources.users || {}).records || [];
+    const query = location.search ? queryString.parse(location.search) : {};
 
     /* searchHeader is a 'custom pane header'*/
     const searchHeader = <FilterPaneSearch searchFieldId="input-user-search" onChange={this.onChangeSearch} onClear={this.onClearSearch} resultsList={this.resultsList} value={this.state.searchTerm} placeholder={'Search'} />;
@@ -451,7 +449,7 @@ class Users extends React.Component {
         </Pane>
 
         {detailsPane}
-        <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false} label="Add New User Dialog">
+        <Layer isOpen={query.layer ? query.layer === 'create' : false} label="Add New User Dialog">
           <UserForm
             id="userform-adduser"
             initialValues={{ active: true, personal: { preferredContactTypeId: '002' } }}
