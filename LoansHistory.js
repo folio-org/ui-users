@@ -41,7 +41,7 @@ class LoansHistory extends React.Component {
     loansHistory: {
       type: 'okapi',
       records: 'loans',
-      path: 'circulation/loans?query=(userId=!{userid})',
+      path: 'circulation/loans?query=(userId=!{userid}) sortby id',
       PUT: {
         path: 'circulation/loans/%{loanId}',
       },
@@ -146,9 +146,9 @@ class LoansHistory extends React.Component {
       status: loan => `${_.get(loan, ['status', 'name'], '')}`,
       loanDate: loan => formatDate(loan.loanDate, this.props.stripes.locale),
       dueDate: loan => (loan.dueDate ? formatDate(loan.dueDate, this.props.stripes.locale) : ''),
-      renewals: loan => loan.renewalCount,
+      renewals: loan => loan.renewalCount || 0,
       returnDate: loan => (loan.returnDate ? formatDate(loan.returnDate, this.props.stripes.locale) : ''),
-      ' ': loan => (_.get(loan, ['status', 'name'], '') !== 'Closed' && this.renderActions(loan)),
+      ' ': loan => (_.get(loan, ['status', 'name'], '') !== 'Closed' && (this.renderActions(loan))),
     };
 
     return (
