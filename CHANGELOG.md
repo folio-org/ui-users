@@ -1,6 +1,7 @@
 # Change history for ui-users
 
-## 2.9.0 (IN PROGRESS)
+## [2.9.0](https://github.com/folio-org/ui-users/tree/v2.9.0) (2017-08-03)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.8.0...v2.9.0)
 
 * Details Pane remains open while switching selected user. Fixes UIU-153.
 * Add filterBy callback prop to `<Autocomplete>`. Fixes UIU-139.
