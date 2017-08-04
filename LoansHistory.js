@@ -148,7 +148,10 @@ class LoansHistory extends React.Component {
       dueDate: loan => (loan.dueDate ? formatDate(loan.dueDate, this.props.stripes.locale) : ''),
       renewals: loan => loan.renewalCount || 0,
       returnDate: loan => (loan.returnDate ? formatDate(loan.returnDate, this.props.stripes.locale) : ''),
-      ' ': loan => (_.get(loan, ['status', 'name'], '') !== 'Closed' && (this.renderActions(loan))),
+      ' ': (loan) => {
+        const status = _.get(loan, ['status', 'name'], '');
+        return (status === 'Closed') ? (<div />) : this.renderActions(loan);
+      },
     };
 
     return (
