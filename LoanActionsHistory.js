@@ -6,7 +6,7 @@ import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
-import { formatDate, getFullName } from './util';
+import { formatDate, formatDateTime, getFullName } from './util';
 import loanActionMap from './data/loanActionMap';
 
 class LoanActionsHistory extends React.Component {
@@ -78,7 +78,7 @@ class LoanActionsHistory extends React.Component {
     const { onCancel, loan, user, stripes, resources: { loanActionsWithUser } } = this.props;
     const loanActionsFormatter = {
       Action: la => loanActionMap[la.action],
-      'Action Date': la => formatDate(la.loanDate, stripes.locale),
+      'Action Date': la => formatDateTime(la.loanDate, stripes.locale),
       'Due Date': la => (la.dueDate ? formatDate(la.dueDate, stripes.locale) : ''),
       Operator: () => `${stripes.user.user.lastName} ${stripes.user.user.firstName}`, // TODO: replace with operator after CIRCSTORE-16
     };
@@ -110,7 +110,7 @@ class LoanActionsHistory extends React.Component {
             <Col xs={4}>
               <Row>
                 <Col xs={12}>
-                  <KeyValue label="Loan Date" value={formatDate(loan.loanDate, stripes.locale) || '-'} />
+                  <KeyValue label="Loan Date" value={formatDateTime(loan.loanDate, stripes.locale) || '-'} />
                 </Col>
               </Row>
               <br />
