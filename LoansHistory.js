@@ -7,7 +7,7 @@ import Pane from '@folio/stripes-components/lib/Pane';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import dateFormat from 'dateformat';
-
+import loanHistoryMap from './data/loanHistoryMap';
 import { formatDate } from './util';
 
 class LoansHistory extends React.Component {
@@ -162,6 +162,7 @@ class LoansHistory extends React.Component {
             fullWidth
             formatter={loansFormatter}
             visibleColumns={['title', 'barcode', 'loanDate', 'dueDate', 'returnDate', 'status', 'renewals', ' ']}
+            columnMapping={loanHistoryMap}
             contentData={loans}
             onRowClick={this.props.onClickViewLoanActionsHistory}
           />
