@@ -1,6 +1,7 @@
 # Change history for ui-users
 
 ## 2.10.0 (IN PROGRESS)
+* Correctly format column titles. Fixes UIU-176.
 
 ## [2.9.0](https://github.com/folio-org/ui-users/tree/v2.9.0) (2017-08-03)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.8.0...v2.9.0)
