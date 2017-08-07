@@ -47,7 +47,7 @@ class LoanActionsHistory extends React.Component {
     },
   });
 
-  // TODO refactor after join is supported
+  // TODO: refactor after join is supported in stripes-connect
   componentWillReceiveProps(nextProps) {
     const { loan, resources: { loanActions, userIds, users, loanActionsWithUser } } = nextProps;
 
@@ -55,7 +55,8 @@ class LoanActionsHistory extends React.Component {
       loanActions.records[0].id !== loan.id) return;
 
     if (!userIds.query || userIds.loan.id !== loan.id) {
-      const query = loanActions.records.map(r => `id=${r.userId}`).join(' or ');
+      const query = loanActions.records
+        .map(r => `id=${r.metaData.createdByUserId}`).join(' or ');
       this.props.mutator.userIds.replace({ query, loan });
     }
 
@@ -70,7 +71,7 @@ class LoanActionsHistory extends React.Component {
     const userMap = users.reduce((memo, user) =>
       Object.assign(memo, { [user.id]: user }), {});
     const records = loanActions.map(la =>
-      Object.assign({}, la, { user: userMap[la.userId] }));
+      Object.assign({}, la, { user: userMap[la.metaData.createdByUserId] }));
     this.props.mutator.loanActionsWithUser.replace({ loan, records });
   }
 
@@ -80,7 +81,7 @@ class LoanActionsHistory extends React.Component {
       Action: la => loanActionMap[la.action],
       'Action Date': la => formatDateTime(la.loanDate, stripes.locale),
       'Due Date': la => (la.dueDate ? formatDate(la.dueDate, stripes.locale) : ''),
-      Operator: () => `${stripes.user.user.lastName} ${stripes.user.user.firstName}`, // TODO: replace with operator after CIRCSTORE-16
+      Operator: la => getFullName(la.user),
     };
 
     return (
