@@ -8,6 +8,7 @@
 * Show Operator name on loan action history. Fixes UIU-163.
 * Username uniqueness check works again -- it had broken. Fixes UIU-183.
 * Visible fieldname "user ID" changed to "username" throughout. Fixes UIU-169.
+* Made the diplay of the create new user button conditional (UIS-71).
 
 ## [2.9.0](https://github.com/folio-org/ui-users/tree/v2.9.0) (2017-08-03)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.8.0...v2.9.0)
