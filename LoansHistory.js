@@ -143,7 +143,7 @@ class LoansHistory extends React.Component {
     const loansFormatter = {
       title: loan => `${_.get(loan, ['item', 'title'], '')}`,
       barcode: loan => `${_.get(loan, ['item', 'barcode'], '')}`,
-      status: loan => `${_.get(loan, ['status', 'name'], '')}`,
+      itemStatus: loan => `${_.get(loan, ['item', 'status', 'name'], '')}`,
       loanDate: loan => formatDate(loan.loanDate, this.props.stripes.locale),
       dueDate: loan => (loan.dueDate ? formatDate(loan.dueDate, this.props.stripes.locale) : ''),
       renewals: loan => loan.renewalCount || 0,
@@ -161,7 +161,7 @@ class LoansHistory extends React.Component {
             id="list-loanshistory"
             fullWidth
             formatter={loansFormatter}
-            visibleColumns={['title', 'barcode', 'loanDate', 'dueDate', 'returnDate', 'status', 'renewals', ' ']}
+            visibleColumns={['title', 'itemStatus', 'barcode', 'loanDate', 'dueDate', 'returnDate', 'renewals', ' ']}
             columnMapping={loanHistoryMap}
             contentData={loans}
             onRowClick={this.props.onClickViewLoanActionsHistory}
