@@ -64,7 +64,7 @@ function asyncValidate(values, dispatch, props, blurredField) {
           console.log('Error fetching user');
         } else {
           response.json().then((json) => {
-            if (json.total_records > 0)
+            if (json.totalRecords > 0)
               reject({ username: 'This User ID has already been taken' });
             else
               resolve();
