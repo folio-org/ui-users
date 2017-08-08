@@ -425,7 +425,7 @@ class Users extends React.Component {
               </div>
             </div>
           }
-          lastMenu={newUserButton}
+          lastMenu={!this.props.dissableUserCreation?newUserButton:null}
         >
           <MultiColumnList
             id="list-users"
