@@ -121,7 +121,7 @@ class Users extends React.Component {
               Active: 'active',
               Name: 'personal.lastName personal.firstName',
               'Patron Group': 'patronGroup.group',
-              'User ID': 'username',
+              'Username': 'username',
               Barcode: 'barcode',
               Email: 'personal.email',
             },
@@ -378,7 +378,7 @@ class Users extends React.Component {
         const pg = this.props.data.patronGroups.filter(g => g.id === user.patronGroup)[0];
         return pg ? pg.group : '?';
       },
-      'User ID': user => user.username,
+      'Username': user => user.username,
       Email: user => _.get(user, ['personal', 'email']),
     };
 
@@ -436,11 +436,11 @@ class Users extends React.Component {
             onRowClick={this.onSelectRow}
             onHeaderClick={this.onSort}
             onNeedMoreData={this.onNeedMore}
-            visibleColumns={['Active', 'Name', 'Barcode', 'Patron Group', 'User ID', 'Email']}
+            visibleColumns={['Active', 'Name', 'Barcode', 'Patron Group', 'Username', 'Email']}
             sortOrder={this.state.sortOrder.replace(/^-/, '').replace(/,.*/, '')}
             sortDirection={this.state.sortOrder.startsWith('-') ? 'descending' : 'ascending'}
             isEmptyMessage={`No results found${maybeTerm}. Please check your ${maybeSpelling}filters.`}
-            columnMapping={{ 'User ID': 'username' }}
+            columnMapping={{ 'Username': 'username' }}
             loading={resource ? resource.isPending : false}
             autosize
             virtualize

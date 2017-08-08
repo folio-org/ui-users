@@ -233,7 +233,7 @@ class ViewUser extends React.Component {
             </Row>
             <Row>
               <Col xs={12}>
-                <KeyValue label="User ID" value={_.get(user, ['username'], '')} />
+                <KeyValue label="Username" value={_.get(user, ['username'], '')} />
               </Col>
             </Row>
             <br />
