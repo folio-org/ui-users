@@ -121,7 +121,7 @@ class Users extends React.Component {
               Active: 'active',
               Name: 'personal.lastName personal.firstName',
               'Patron Group': 'patronGroup.group',
-              'Username': 'username',
+              Username: 'username',
               Barcode: 'barcode',
               Email: 'personal.email',
             },
@@ -378,7 +378,7 @@ class Users extends React.Component {
         const pg = this.props.data.patronGroups.filter(g => g.id === user.patronGroup)[0];
         return pg ? pg.group : '?';
       },
-      'Username': user => user.username,
+      Username: user => user.username,
       Email: user => _.get(user, ['personal', 'email']),
     };
 
@@ -425,7 +425,7 @@ class Users extends React.Component {
               </div>
             </div>
           }
-          lastMenu={!this.props.dissableUserCreation?newUserButton:null}
+          lastMenu={!this.props.dissableUserCreation ? newUserButton : null}
         >
           <MultiColumnList
             id="list-users"
@@ -440,7 +440,7 @@ class Users extends React.Component {
             sortOrder={this.state.sortOrder.replace(/^-/, '').replace(/,.*/, '')}
             sortDirection={this.state.sortOrder.startsWith('-') ? 'descending' : 'ascending'}
             isEmptyMessage={`No results found${maybeTerm}. Please check your ${maybeSpelling}filters.`}
-            columnMapping={{ 'Username': 'username' }}
+            columnMapping={{ Username: 'username' }}
             loading={resource ? resource.isPending : false}
             autosize
             virtualize
