@@ -8,7 +8,7 @@ import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import dateFormat from 'dateformat';
 import loanHistoryMap from './data/loanHistoryMap';
-import { formatDate } from './util';
+import { formatDate, formatDateTime } from './util';
 
 class LoansHistory extends React.Component {
 
@@ -145,9 +145,9 @@ class LoansHistory extends React.Component {
       barcode: loan => `${_.get(loan, ['item', 'barcode'], '')}`,
       status: loan => `${_.get(loan, ['status', 'name'], '')}`,
       loanDate: loan => formatDate(loan.loanDate, this.props.stripes.locale),
-      dueDate: loan => (loan.dueDate ? formatDate(loan.dueDate, this.props.stripes.locale) : ''),
+      dueDate: loan => (loan.dueDate ? formatDateTime(loan.dueDate, this.props.stripes.locale) : ''),
       renewals: loan => loan.renewalCount || 0,
-      returnDate: loan => (loan.returnDate ? formatDate(loan.returnDate, this.props.stripes.locale) : ''),
+      returnDate: loan => (loan.returnDate ? formatDateTime(loan.returnDate, this.props.stripes.locale) : ''),
       ' ': (loan) => {
         const status = _.get(loan, ['status', 'name'], '');
         return (status === 'Closed') ? (<div />) : this.renderActions(loan);

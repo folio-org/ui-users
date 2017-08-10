@@ -81,7 +81,7 @@ class LoanActionsHistory extends React.Component {
     const loanActionsFormatter = {
       Action: la => loanActionMap[la.action],
       'Action Date': la => formatDateTime(la.loanDate, stripes.locale),
-      'Due Date': la => (la.dueDate ? formatDate(la.dueDate, stripes.locale) : ''),
+      'Due Date': la => (la.dueDate ? formatDateTime(la.dueDate, stripes.locale) : ''),
       Operator: la => getFullName(la.user),
     };
 
@@ -113,7 +113,7 @@ class LoanActionsHistory extends React.Component {
               <KeyValue label="Call Number" value="TODO" />
             </Col>
             <Col xs={2} >
-              <KeyValue label="Due Date" value={formatDate(loan.dueDate, stripes.locale) || '-'} />
+              <KeyValue label="Due Date" value={formatDateTime(loan.dueDate, stripes.locale) || '-'} />
             </Col>
             <Col xs={2} >
               <KeyValue label="Claimed Returned" value="TODO" />
