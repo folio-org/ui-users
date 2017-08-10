@@ -14,6 +14,7 @@ import FilterPaneSearch from '@folio/stripes-components/lib/FilterPaneSearch';
 import Layer from '@folio/stripes-components/lib/Layer';
 import FilterGroups, { initialFilterState, onChangeFilter as commonChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
 import SRStatus from '@folio/stripes-components/lib/SRStatus';
+import Notes from '@folio/stripes-components/lib/structures/Notes';
 
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
 import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
@@ -159,6 +160,7 @@ class Users extends React.Component {
       selectedItem: initiallySelected,
       searchTerm: query.query || '',
       sortOrder: query.sort || '',
+      showNotesPane: false,
     };
 
     this.okapi = props.okapi;
@@ -166,6 +168,7 @@ class Users extends React.Component {
     this.commonChangeFilter = commonChangeFilter.bind(this);
     this.transitionToParams = transitionToParams.bind(this);
     this.connectedViewUser = props.stripes.connect(ViewUser);
+
     const logger = props.stripes.logger;
     this.log = logger.log.bind(logger);
 
@@ -173,6 +176,8 @@ class Users extends React.Component {
 
     this.resultsList = null;
     this.SRStatus = null;
+
+    this.toggleNotes = this.toggleNotes.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -287,6 +292,7 @@ class Users extends React.Component {
     this.props.mutator.users.POST(data);
     // POST credentials, permission-user, permissions;
     this.postCreds(data.username, creds);
+   
     this.onClickCloseNewUser();
   }
 
@@ -326,6 +332,15 @@ class Users extends React.Component {
       selectedItem: {},
     });
     this.props.history.push(`${this.props.match.path}${this.props.location.search}`);
+  }
+
+  toggleNotes() {
+    this.setState((curState) => {
+      const show = !curState.showNotesPane;
+      return {
+        showNotesPane: show,
+      };
+    });
   }
 
   // custom row formatter to wrap rows in anchor tags.
@@ -386,7 +401,7 @@ class Users extends React.Component {
       this.props.stripes.hasPerm('users.item.get') ?
         (<Route
           path={`${this.props.match.path}/view/:userid/:username`}
-          render={props => <this.connectedViewUser stripes={stripes} okapi={this.okapi} paneWidth="44%" onClose={this.collapseDetails} addressTypes={data.addressTypes} {...props} />}
+          render={props => <this.connectedViewUser stripes={stripes} okapi={this.okapi} paneWidth="44%" onClose={this.collapseDetails} addressTypes={data.addressTypes} notesToggle={this.toggleNotes} {...props} />}
         />) :
         (<div
           style={{
@@ -451,6 +466,9 @@ class Users extends React.Component {
         </Pane>
 
         {detailsPane}
+
+        
+
         <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false} label="Add New User Dialog">
           <UserForm
             id="userform-adduser"
@@ -462,6 +480,9 @@ class Users extends React.Component {
             optionLists={{ patronGroups: this.props.data.patronGroups, contactTypes }}
           />
         </Layer>
+        {this.state.showNotesPane && 
+          <Notes onToggle={this.toggleNotes}/>
+        }
       </Paneset>
     );
   }
