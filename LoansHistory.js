@@ -1,12 +1,13 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { DropdownButton, MenuItem } from 'react-bootstrap';
+import dateFormat from 'dateformat';
 import Button from '@folio/stripes-components/lib/Button';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import Pane from '@folio/stripes-components/lib/Pane';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
-import dateFormat from 'dateformat';
 import loanHistoryMap from './data/loanHistoryMap';
 import { formatDate, formatDateTime } from './util';
 
@@ -59,16 +60,13 @@ class LoansHistory extends React.Component {
    * change handler for the options-menu prevents the event from bubbling
    * up to the event handler attached to the row.
    */
-   // eslint-disable-next-line class-methods-use-this
-  handleOptionsChange(e, loan) {
-    const action = e.target.value;
-
-    if (action && this[action]) {
-      this[action](loan);
-    }
-
+  handleOptionsChange(key, e) {
     e.preventDefault();
     e.stopPropagation();
+
+    if (key.action && this[key.action]) {
+      this[key.action](key.loan);
+    }
   }
 
   renew(loan) {
@@ -99,10 +97,15 @@ class LoansHistory extends React.Component {
 
   renderActions(loan) {
     return (
-      <select onChange={e => this.handleOptionsChange(e, loan)} onClick={this.handleOptionsClick}>
-        <option value="">•••</option>
-        <option value="renew">Renew</option>
-      </select>
+      <DropdownButton
+        title="•••"
+        id={`bg-nested-dropdown-${loan.id}`}
+        noCaret
+        pullRight onClick={this.handleOptionsClick}
+        onSelect={this.handleOptionsChange}
+      >
+        <MenuItem eventKey={{ loan, action: 'renew' }}>Renew</MenuItem>
+      </DropdownButton>
     );
   }
 
@@ -163,6 +166,7 @@ class LoansHistory extends React.Component {
             formatter={loansFormatter}
             visibleColumns={['title', 'itemStatus', 'barcode', 'loanDate', 'dueDate', 'returnDate', 'renewals', ' ']}
             columnMapping={loanHistoryMap}
+            columnOverflow={{ ' ': true }}
             contentData={loans}
             onRowClick={this.props.onClickViewLoanActionsHistory}
           />
