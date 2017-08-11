@@ -100,6 +100,7 @@ class Users extends React.Component {
       token: PropTypes.string.isRequired,
     }).isRequired,
     onSelectRow: PropTypes.func,
+    disableUserCreation: PropTypes.bool,
   };
 
   static manifest = Object.freeze({
@@ -427,7 +428,7 @@ class Users extends React.Component {
               </div>
             </div>
           }
-          lastMenu={!this.props.dissableUserCreation ? newUserButton : null}
+          lastMenu={!this.props.disableUserCreation ? newUserButton : null}
         >
           <MultiColumnList
             id="list-users"
