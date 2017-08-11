@@ -5,6 +5,7 @@
 * Use "Source" in place of "Operator" on loan details. Fixes UIU-178.
 * Add Time Stamp to Loan Dates. Fixes UIU-180.
 * Show Operator name on loan action history. Fixes UIU-163.
+* Switch from props.data to props.resources. Fixes UIU-136.
 
 ## [2.9.0](https://github.com/folio-org/ui-users/tree/v2.9.0) (2017-08-03)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.8.0...v2.9.0)
