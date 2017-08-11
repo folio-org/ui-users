@@ -8,8 +8,10 @@ import Button from '@folio/stripes-components/lib/Button';
 class UserLoans extends React.Component {
 
   static propTypes = {
-    data: PropTypes.shape({
-      loansHistory: PropTypes.arrayOf(PropTypes.object),
+    resources: PropTypes.shape({
+      loansHistory: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
     }),
     onClickViewOpenLoans: PropTypes.func.isRequired,
     onClickViewClosedLoans: PropTypes.func.isRequired,
@@ -27,11 +29,12 @@ class UserLoans extends React.Component {
   });
 
   render() {
-    const { data: { loansHistory } } = this.props;
+    const resources = this.props.resources;
+    const loansHistory = (resources.loansHistory || {}).records || [];
     const openLoans = _.filter(loansHistory, loan => _.get(loan, ['status', 'name']) !== 'Closed');
     const closedLoans = _.filter(loansHistory, loan => _.get(loan, ['status', 'name']) === 'Closed');
 
-    if (!loansHistory) return <div >Nada</div>;
+    if (!loansHistory) return (<div></div>);
 
     return (
       <div>
