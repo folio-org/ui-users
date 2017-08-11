@@ -42,7 +42,7 @@ class LoansHistory extends React.Component {
     loansHistory: {
       type: 'okapi',
       records: 'loans',
-      path: 'circulation/loans?query=(userId=!{userid}) sortby id',
+      path: 'circulation/loans?query=(userId=!{userid}) sortby id&limit=100',
       PUT: {
         path: 'circulation/loans/%{loanId}',
       },
