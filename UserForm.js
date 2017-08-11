@@ -64,8 +64,8 @@ function asyncValidate(values, dispatch, props, blurredField) {
           console.log('Error fetching user');
         } else {
           response.json().then((json) => {
-            if (json.total_records > 0)
-              reject({ username: 'This User ID has already been taken' });
+            if (json.totalRecords > 0)
+              reject({ username: 'This username has already been taken' });
             else
               resolve();
           });
@@ -133,7 +133,7 @@ class UserForm extends React.Component {
             <Row>
               <Col sm={5} smOffset={1}>
                 <h2>User Record</h2>
-                <Field label="User ID *" name="username" id="adduser_username" component={TextField} required fullWidth />
+                <Field label="Username *" name="username" id="adduser_username" component={TextField} required fullWidth />
                 {!initialValues.id ? <Field label="Password" name="creds.password" id="pw" component={TextField} required fullWidth /> : null}
                 <Field label="Status *" name="active" component={RadioButtonGroup}>
                   <RadioButton label="Active" id="useractiveYesRB" value="true" inline />

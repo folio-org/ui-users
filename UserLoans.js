@@ -22,7 +22,7 @@ class UserLoans extends React.Component {
       type: 'okapi',
       records: 'loans',
       GET: {
-        path: 'circulation/loans?query=(userId=:{userid})',
+        path: 'circulation/loans?query=(userId=:{userid})&limit=100',
       },
     },
     userid: {},
