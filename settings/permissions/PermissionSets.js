@@ -18,8 +18,10 @@ class PermissionSets extends React.Component {
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func.isRequired,
     }).isRequired,
-    data: PropTypes.shape({
-      permissionSets: PropTypes.arrayOf(PropTypes.object),
+    resources: PropTypes.shape({
+      permissionSets: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
     }).isRequired,
     mutator: PropTypes.shape({
       permissionSets: PropTypes.shape({
@@ -63,7 +65,10 @@ class PermissionSets extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const permSetsDiffs = _.differenceBy(this.props.data.permissionSets, prevProps.data.permissionSets, 'id');
+    const permSets = (this.props.resources.permissionSets || {}).records || [];
+    const prevPermSets = (prevProps.resources.permissionSets || {}).records || [];
+
+    const permSetsDiffs = _.differenceBy(permSets, prevPermSets, 'id');
     const newPermSet = permSetsDiffs[0];
 
     if (newPermSet && !newPermSet.pendingCreate) {
@@ -82,8 +87,10 @@ class PermissionSets extends React.Component {
 
   onSelectSet(e) {
     e.preventDefault();
+    const permissionSets = (this.props.resources.permissionSets || {}).records || [];
     const permissionId = e.target.dataset.id;
-    _.forEach(this.props.data.permissionSets, (set) => {
+
+    _.forEach(permissionSets, (set) => {
       if (set.id === permissionId) {
         this.setSelectedSet(set);
       }
@@ -107,7 +114,9 @@ class PermissionSets extends React.Component {
   }
 
   render() {
-    const RenderedPermissionSets = this.props.data.permissionSets ? this.props.data.permissionSets.map(
+    const permissionSets = (this.props.resources.permissionSets || {}).records || [];
+
+    const RenderedPermissionSets = permissionSets.length ? permissionSets.map(
       set => <a data-id={set.id} key={set.id} href={`#${set.permissionName}`} onClick={this.onSelectSet}>{set.displayName ? set.displayName : 'Untitled Permission Set'}</a>,
     ) : [];
 
