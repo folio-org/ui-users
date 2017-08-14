@@ -1,13 +1,14 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { DropdownButton, MenuItem } from 'react-bootstrap';
+import { DropdownButton, MenuItem, Row, Col } from 'react-bootstrap';
 import dateFormat from 'dateformat';
-import Button from '@folio/stripes-components/lib/Button';
+import Icon from '@folio/stripes-components/lib/Icon';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import Pane from '@folio/stripes-components/lib/Pane';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
+import TabButton from '@folio/stripes-components/lib/TabButton';
 import loanHistoryMap from './data/loanHistoryMap';
 import { formatDate, formatDateTime } from './util';
 
@@ -115,10 +116,25 @@ class LoansHistory extends React.Component {
     const loans = _.filter(loansHistory, loan => loanStatus === _.get(loan, ['status', 'name']));
     if (!loans) return <div />;
 
-    const historyLastMenu = (<PaneMenu>
-      <Button title="Open Loans" aria-label="Open Loans" onClick={this.props.onClickViewOpenLoans}>Open Loans</Button>
-      <Button title="Closed Loans" aria-label="Closed Loans" onClick={this.props.onClickViewClosedLoans}>Closed Loans</Button>
-    </PaneMenu>);
+    const paneHeader = (
+      <Row style={{ width: '100%' }}>
+        <Col xs={1}><PaneMenu><button
+          onClick={this.props.onCancel}
+          title="Close pane"
+          aria-label="Close Loans"
+        >
+          <Icon icon="closeX" /></button></PaneMenu>
+        </Col>
+        <Col xs={2}><PaneMenu><TabButton title="Loans" aria-label="Loans">Loans</TabButton></PaneMenu>
+        </Col>
+        <Col xs={9}>
+          <PaneMenu>
+            <TabButton title="Open Loans" aria-label="Open Loans" onClick={this.props.onClickViewOpenLoans} selected={this.props.openLoans}>Open Loans</TabButton>
+            <TabButton title="Closed Loans" aria-label="Closed Loans" onClick={this.props.onClickViewClosedLoans} selected={!this.props.openLoans}>Closed Loans</TabButton>
+          </PaneMenu>
+        </Col>
+      </Row>
+    );
 
     /*
      * loanTitleFormatter isn't currently in use, but apparently there's a use
@@ -159,7 +175,13 @@ class LoansHistory extends React.Component {
 
     return (
       <Paneset isRoot>
-        <Pane id="pane-loanshistory" defaultWidth="100%" lastMenu={historyLastMenu} dismissible onClose={this.props.onCancel} paneTitle="Loans">
+        <Pane
+          id="pane-loanshistory"
+          defaultWidth="100%"
+          dismissible
+          onClose={this.props.onCancel}
+          header={paneHeader}
+        >
           <MultiColumnList
             id="list-loanshistory"
             fullWidth
