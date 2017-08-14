@@ -1,14 +1,15 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { DropdownButton, MenuItem } from 'react-bootstrap';
+import dateFormat from 'dateformat';
 import Button from '@folio/stripes-components/lib/Button';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import Pane from '@folio/stripes-components/lib/Pane';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
-import dateFormat from 'dateformat';
-
-import { formatDate } from './util';
+import loanHistoryMap from './data/loanHistoryMap';
+import { formatDate, formatDateTime } from './util';
 
 class LoansHistory extends React.Component {
 
@@ -41,7 +42,7 @@ class LoansHistory extends React.Component {
     loansHistory: {
       type: 'okapi',
       records: 'loans',
-      path: 'circulation/loans?query=(userId=!{userid}) sortby id',
+      path: 'circulation/loans?query=(userId=!{userid}) sortby id&limit=100',
       PUT: {
         path: 'circulation/loans/%{loanId}',
       },
@@ -59,16 +60,13 @@ class LoansHistory extends React.Component {
    * change handler for the options-menu prevents the event from bubbling
    * up to the event handler attached to the row.
    */
-   // eslint-disable-next-line class-methods-use-this
-  handleOptionsChange(e, loan) {
-    const action = e.target.value;
-
-    if (action && this[action]) {
-      this[action](loan);
-    }
-
+  handleOptionsChange(key, e) {
     e.preventDefault();
     e.stopPropagation();
+
+    if (key.action && this[key.action]) {
+      this[key.action](key.loan);
+    }
   }
 
   renew(loan) {
@@ -99,10 +97,15 @@ class LoansHistory extends React.Component {
 
   renderActions(loan) {
     return (
-      <select onChange={e => this.handleOptionsChange(e, loan)} onClick={this.handleOptionsClick}>
-        <option value="">•••</option>
-        <option value="renew">Renew</option>
-      </select>
+      <DropdownButton
+        title="•••"
+        id={`bg-nested-dropdown-${loan.id}`}
+        noCaret
+        pullRight onClick={this.handleOptionsClick}
+        onSelect={this.handleOptionsChange}
+      >
+        <MenuItem eventKey={{ loan, action: 'renew' }}>Renew</MenuItem>
+      </DropdownButton>
     );
   }
 
@@ -143,11 +146,11 @@ class LoansHistory extends React.Component {
     const loansFormatter = {
       title: loan => `${_.get(loan, ['item', 'title'], '')}`,
       barcode: loan => `${_.get(loan, ['item', 'barcode'], '')}`,
-      status: loan => `${_.get(loan, ['status', 'name'], '')}`,
+      itemStatus: loan => `${_.get(loan, ['item', 'status', 'name'], '')}`,
       loanDate: loan => formatDate(loan.loanDate, this.props.stripes.locale),
-      dueDate: loan => (loan.dueDate ? formatDate(loan.dueDate, this.props.stripes.locale) : ''),
+      dueDate: loan => (loan.dueDate ? formatDateTime(loan.dueDate, this.props.stripes.locale) : ''),
       renewals: loan => loan.renewalCount || 0,
-      returnDate: loan => (loan.returnDate ? formatDate(loan.returnDate, this.props.stripes.locale) : ''),
+      returnDate: loan => (loan.returnDate ? formatDateTime(loan.returnDate, this.props.stripes.locale) : ''),
       ' ': (loan) => {
         const status = _.get(loan, ['status', 'name'], '');
         return (status === 'Closed') ? (<div />) : this.renderActions(loan);
@@ -161,7 +164,9 @@ class LoansHistory extends React.Component {
             id="list-loanshistory"
             fullWidth
             formatter={loansFormatter}
-            visibleColumns={['title', 'barcode', 'loanDate', 'dueDate', 'returnDate', 'status', 'renewals', ' ']}
+            visibleColumns={['title', 'itemStatus', 'barcode', 'loanDate', 'dueDate', 'returnDate', 'renewals', ' ']}
+            columnMapping={loanHistoryMap}
+            columnOverflow={{ ' ': true }}
             contentData={loans}
             onRowClick={this.props.onClickViewLoanActionsHistory}
           />

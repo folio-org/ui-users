@@ -2,6 +2,17 @@
 
 ## 2.10.0 (IN PROGRESS)
 
+* Correctly format column titles. Fixes UIU-176.
+* Use "Source" in place of "Operator" on loan details. Fixes UIU-178.
+* Add Time Stamp to Loan Dates. Fixes UIU-180.
+* Show Operator name on loan action history. Fixes UIU-163.
+* Username uniqueness check works again -- it had broken. Fixes UIU-183.
+* Visible fieldname "user ID" changed to "username" throughout. Fixes UIU-169.
+* Made the diplay of the create new user button conditional (UIS-71).
+* Fetch up to 100 loan records rather then the default of 10. Fixes UIU-173.
+* Displayed number of loans is now stable (side-effect of UIU-173 fix). Fixes UIU-184.
+* Switch from props.data to props.resources. Fixes UIU-136.
+
 ## [2.9.0](https://github.com/folio-org/ui-users/tree/v2.9.0) (2017-08-03)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.8.0...v2.9.0)
 

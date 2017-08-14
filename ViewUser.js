@@ -33,9 +33,11 @@ class ViewUser extends React.Component {
       }).isRequired,
     }).isRequired,
     paneWidth: PropTypes.string.isRequired,
-    data: PropTypes.shape({
+    resources: PropTypes.shape({
       user: PropTypes.arrayOf(PropTypes.object),
-      patronGroups: PropTypes.arrayOf(PropTypes.object),
+      patronGroups: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
       editMode: PropTypes.shape({
         mode: PropTypes.bool,
       }),
@@ -156,20 +158,21 @@ class ViewUser extends React.Component {
   }
 
   getUser() {
-    const { data: { selUser }, match: { params: { userid } } } = this.props;
+    const { resources, match: { params: { userid } } } = this.props;
+    const selUser = (resources.selUser || {}).records || [];
     if (!selUser || selUser.length === 0 || !userid) return null;
     const user = selUser.find(u => u.id === userid);
     return user ? _.cloneDeep(user) : user;
   }
 
-  update(data) {
-    if (data.personal.addresses) {
-      data.personal.addresses = toUserAddresses(data.personal.addresses, this.props.addressTypes); // eslint-disable-line no-param-reassign
+  update(user) {
+    if (user.personal.addresses) {
+      user.personal.addresses = toUserAddresses(user.personal.addresses, this.props.addressTypes); // eslint-disable-line no-param-reassign
     }
 
     // eslint-disable-next-line no-param-reassign
-    if (data.creds) delete data.creds; // not handled on edit (yet at least)
-    this.props.mutator.selUser.PUT(data).then(() => {
+    if (user.creds) delete user.creds; // not handled on edit (yet at least)
+    this.props.mutator.selUser.PUT(user).then(() => {
       this.setState({
         lastUpdate: new Date().toISOString(),
       });
@@ -203,8 +206,9 @@ class ViewUser extends React.Component {
   render() {
     const dueDate = new Date(Date.parse('2014-11-12')).toLocaleDateString(this.props.stripes.locale);
     const fineHistory = [{ 'Due Date': dueDate, Amount: '34.23', Status: 'Unpaid' }];
-    const { data: { patronGroups } } = this.props;
+    const { resources } = this.props;
     const user = this.getUser();
+    const patronGroups = (resources.patronGroups || {}).records || [];
 
     const detailMenu = (<PaneMenu>
       <button id="clickable-edituser" style={{ visibility: !user ? 'hidden' : 'visible' }} onClick={this.props.notesToggle} title="Show Notes"><Icon icon="comment" />Notes</button>
@@ -237,7 +241,7 @@ class ViewUser extends React.Component {
             </Row>
             <Row>
               <Col xs={12}>
-                <KeyValue label="User ID" value={_.get(user, ['username'], '')} />
+                <KeyValue label="Username" value={_.get(user, ['username'], '')} />
               </Col>
             </Row>
             <br />
@@ -360,14 +364,14 @@ class ViewUser extends React.Component {
             <this.connectedUserPermissions stripes={this.props.stripes} match={this.props.match} {...this.props} />
           </IfInterface>
         </IfPermission>
-        <Layer isOpen={this.props.data.editMode ? this.props.data.editMode.mode : false} label="Edit User Dialog">
+        <Layer isOpen={resources.editMode ? resources.editMode.mode : false} label="Edit User Dialog">
           <UserForm
             initialValues={user}
             addressTypes={this.props.addressTypes}
             onSubmit={(record) => { this.update(record); }}
             onCancel={this.onClickCloseEditUser}
             okapi={this.props.okapi}
-            optionLists={{ patronGroups: this.props.data.patronGroups, contactTypes }}
+            optionLists={{ patronGroups, contactTypes }}
           />
         </Layer>
         <Layer isOpen={this.state.viewLoansHistoryMode} label="Loans">

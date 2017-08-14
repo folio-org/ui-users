@@ -5,6 +5,11 @@ export function formatDate(dateStr, locale) {
   return new Date(Date.parse(dateStr)).toLocaleDateString(locale);
 }
 
+export function formatDateTime(dateStr, locale) {
+  if (!dateStr) return dateStr;
+  return new Date(Date.parse(dateStr)).toLocaleString(locale);
+}
+
 export function futureDate(dateStr, locale, days) {
   if (!dateStr) return dateStr;
   const date = new Date(Date.parse(dateStr));

@@ -57,7 +57,6 @@ class Users extends React.Component {
       connect: PropTypes.func.isRequired,
       hasPerm: PropTypes.func.isRequired,
     }).isRequired,
-    data: PropTypes.object.isRequired,
     resources: PropTypes.shape({
       users: PropTypes.shape({
         hasLoaded: PropTypes.bool.isRequired,
@@ -122,7 +121,7 @@ class Users extends React.Component {
               Active: 'active',
               Name: 'personal.lastName personal.firstName',
               'Patron Group': 'patronGroup.group',
-              'User ID': 'username',
+              Username: 'username',
               Barcode: 'barcode',
               Email: 'personal.email',
             },
@@ -196,7 +195,8 @@ class Users extends React.Component {
   }
 
   componentWillUpdate() {
-    const pg = this.props.data.patronGroups;
+    const pg = (this.props.resources.patronGroups || {}).records || [];
+
     if (pg && pg.length) {
       filterConfig[1].values = pg.map(rec => ({ name: rec.group, cql: rec.id }));
     }
@@ -264,7 +264,7 @@ class Users extends React.Component {
   }
 
   onNeedMore = () => {
-    this.props.mutator.userCount.replace(this.props.data.userCount + RESULT_COUNT_INCREMENT);
+    this.props.mutator.userCount.replace(this.props.resources.userCount + RESULT_COUNT_INCREMENT);
   }
 
   getRowURL(rowData) {
@@ -280,19 +280,19 @@ class Users extends React.Component {
     this.transitionToParams({ filters: Object.keys(filters).filter(key => filters[key]).join(',') });
   }
 
-  create = (data) => {
-    if (data.personal.addresses) {
-      data.personal.addresses = toUserAddresses(data.personal.addresses, this.props.data.addressTypes); // eslint-disable-line no-param-reassign
+  create = (user) => {
+    if (user.personal.addresses) {
+      user.personal.addresses = toUserAddresses(user.personal.addresses, this.props.user.addressTypes); // eslint-disable-line no-param-reassign
     }
 
     // extract creds object from user object
-    const creds = Object.assign({}, data.creds, { username: data.username });
-    if (data.creds) delete data.creds; // eslint-disable-line no-param-reassign
+    const creds = Object.assign({}, user.creds, { username: user.username });
+    if (user.creds) delete user.creds; // eslint-disable-line no-param-reassign
     // POST user record
-    this.props.mutator.users.POST(data);
+    this.props.mutator.users.POST(user);
     // POST credentials, permission-user, permissions;
-    this.postCreds(data.username, creds);
    
+    this.postCreds(user.username, creds);
     this.onClickCloseNewUser();
   }
 
@@ -367,8 +367,10 @@ class Users extends React.Component {
   }
 
   render() {
-    const { data, resources, stripes } = this.props;
+    const { resources, stripes } = this.props;
     const users = (resources.users || {}).records || [];
+    const patronGroups = (resources.patronGroups || {}).records || [];
+    const addressTypes = (resources.addressTypes || {}).records || [];
 
     /* searchHeader is a 'custom pane header'*/
     const searchHeader = <FilterPaneSearch searchFieldId="input-user-search" onChange={this.onChangeSearch} onClear={this.onClearSearch} resultsList={this.resultsList} value={this.state.searchTerm} placeholder={'Search'} />;
@@ -390,10 +392,10 @@ class Users extends React.Component {
       Name: user => `${_.get(user, ['personal', 'lastName'], '')}, ${_.get(user, ['personal', 'firstName'], '')}`,
       Barcode: user => user.barcode,
       'Patron Group': (user) => {
-        const pg = this.props.data.patronGroups.filter(g => g.id === user.patronGroup)[0];
+        const pg = patronGroups.filter(g => g.id === user.patronGroup)[0];
         return pg ? pg.group : '?';
       },
-      'User ID': user => user.username,
+      Username: user => user.username,
       Email: user => _.get(user, ['personal', 'email']),
     };
 
@@ -401,7 +403,7 @@ class Users extends React.Component {
       this.props.stripes.hasPerm('users.item.get') ?
         (<Route
           path={`${this.props.match.path}/view/:userid/:username`}
-          render={props => <this.connectedViewUser stripes={stripes} okapi={this.okapi} paneWidth="44%" onClose={this.collapseDetails} addressTypes={data.addressTypes} notesToggle={this.toggleNotes} {...props} />}
+          render={props => <this.connectedViewUser stripes={stripes} okapi={this.okapi} paneWidth="44%" onClose={this.collapseDetails} addressTypes={addressTypes} notesToggle={this.toggleNotes} {...props} />}
         />) :
         (<div
           style={{
@@ -440,7 +442,7 @@ class Users extends React.Component {
               </div>
             </div>
           }
-          lastMenu={newUserButton}
+          lastMenu={!this.props.dissableUserCreation ? newUserButton : null}
         >
           <MultiColumnList
             id="list-users"
@@ -451,11 +453,11 @@ class Users extends React.Component {
             onRowClick={this.onSelectRow}
             onHeaderClick={this.onSort}
             onNeedMoreData={this.onNeedMore}
-            visibleColumns={['Active', 'Name', 'Barcode', 'Patron Group', 'User ID', 'Email']}
+            visibleColumns={['Active', 'Name', 'Barcode', 'Patron Group', 'Username', 'Email']}
             sortOrder={this.state.sortOrder.replace(/^-/, '').replace(/,.*/, '')}
             sortDirection={this.state.sortOrder.startsWith('-') ? 'descending' : 'ascending'}
             isEmptyMessage={`No results found${maybeTerm}. Please check your ${maybeSpelling}filters.`}
-            columnMapping={{ 'User ID': 'username' }}
+            columnMapping={{ Username: 'username' }}
             loading={resource ? resource.isPending : false}
             autosize
             virtualize
@@ -467,17 +469,15 @@ class Users extends React.Component {
 
         {detailsPane}
 
-        
-
-        <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false} label="Add New User Dialog">
+        <Layer isOpen={resources.addUserMode ? resources.addUserMode.mode : false} label="Add New User Dialog">
           <UserForm
             id="userform-adduser"
             initialValues={{ active: true, personal: { preferredContactTypeId: '002' } }}
-            addressTypes={data.addressTypes}
+            addressTypes={addressTypes}
             onSubmit={(record) => { this.create(record); }}
             onCancel={this.onClickCloseNewUser}
             okapi={this.okapi}
-            optionLists={{ patronGroups: this.props.data.patronGroups, contactTypes }}
+            optionLists={{ patronGroups, contactTypes }}
           />
         </Layer>
         {this.state.showNotesPane && 
