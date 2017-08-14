@@ -57,6 +57,12 @@ class Users extends React.Component {
       hasPerm: PropTypes.func.isRequired,
     }).isRequired,
     resources: PropTypes.shape({
+      patronGroups: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      addressTypes: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
       users: PropTypes.shape({
         hasLoaded: PropTypes.bool.isRequired,
         other: PropTypes.shape({
@@ -72,6 +78,7 @@ class Users extends React.Component {
           }),
         ),
       }),
+      userCount: PropTypes.number,
     }).isRequired,
     history: PropTypes.shape({
       push: PropTypes.func.isRequired,
@@ -100,6 +107,7 @@ class Users extends React.Component {
       token: PropTypes.string.isRequired,
     }).isRequired,
     onSelectRow: PropTypes.func,
+    disableUserCreation: PropTypes.bool,
   };
 
   static manifest = Object.freeze({
@@ -277,7 +285,8 @@ class Users extends React.Component {
 
   create = (user) => {
     if (user.personal.addresses) {
-      user.personal.addresses = toUserAddresses(user.personal.addresses, this.props.user.addressTypes); // eslint-disable-line no-param-reassign
+      const addressTypes = (this.props.resources.addressTypes || {}).records || [];
+      user.personal.addresses = toUserAddresses(user.personal.addresses, addressTypes); // eslint-disable-line no-param-reassign
     }
 
     // extract creds object from user object
@@ -427,7 +436,7 @@ class Users extends React.Component {
               </div>
             </div>
           }
-          lastMenu={!this.props.dissableUserCreation ? newUserButton : null}
+          lastMenu={!this.props.disableUserCreation ? newUserButton : null}
         >
           <MultiColumnList
             id="list-users"

@@ -34,7 +34,7 @@ class UserLoans extends React.Component {
     const openLoans = _.filter(loansHistory, loan => _.get(loan, ['status', 'name']) !== 'Closed');
     const closedLoans = _.filter(loansHistory, loan => _.get(loan, ['status', 'name']) === 'Closed');
 
-    if (!loansHistory) return (<div></div>);
+    if (!loansHistory) return (<div />);
 
     return (
       <div>
