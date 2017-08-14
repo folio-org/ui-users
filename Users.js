@@ -78,7 +78,7 @@ class Users extends React.Component {
           }),
         ),
       }),
-      userCount: PropTypes.object,
+      userCount: PropTypes.number,
     }).isRequired,
     history: PropTypes.shape({
       push: PropTypes.func.isRequired,
