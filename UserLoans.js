@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import { Row, Col } from 'react-bootstrap';
+import { FormattedMessage } from 'react-intl';
 import Button from '@folio/stripes-components/lib/Button';
 
 class UserLoans extends React.Component {
@@ -40,7 +40,7 @@ class UserLoans extends React.Component {
       <div>
         <Row>
           <Col xs={7} sm={6}>
-            <h3 className="marginTop0">Loans</h3>
+            <h3 className="marginTop0"><FormattedMessage id="ui-users.loans.title" /></h3>
           </Col>
           <Col xs={5} sm={6}>
             <div style={{ float: 'right' }}>
@@ -49,8 +49,8 @@ class UserLoans extends React.Component {
           </Col>
         </Row>
         <ul>
-          <li><a id="clickable-viewcurrentloans" href="" onClick={this.props.onClickViewOpenLoans}>{ openLoans.length } Open Loans</a></li>
-          <li><a id="clickable-viewclosedloans" href="" onClick={this.props.onClickViewClosedLoans}>{ closedLoans.length } Closed Loans</a></li>
+          <li><a id="clickable-viewcurrentloans" href="" onClick={this.props.onClickViewOpenLoans}>{ openLoans.length } <FormattedMessage id="ui-users.loans.openLoans" /></a></li>
+          <li><a id="clickable-viewclosedloans" href="" onClick={this.props.onClickViewClosedLoans}>{ closedLoans.length } <FormattedMessage id="ui-users.loans.closedLoans" /></a></li>
         </ul>
       </div>);
   }
