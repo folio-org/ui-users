@@ -14,6 +14,7 @@
 * Displayed number of loans is now stable (side-effect of UIU-173 fix). Fixes UIU-184.
 * Switch from props.data to props.resources. Fixes UIU-136.
 * Better formatting of "Open Loans" and "Closed Loans" tabs. See UIU-128.
+* Use translations for some loan-related messages. Fixes UIU-186.
 
 ## [2.9.0](https://github.com/folio-org/ui-users/tree/v2.9.0) (2017-08-03)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.8.0...v2.9.0)
