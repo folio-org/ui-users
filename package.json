@@ -127,9 +127,9 @@
         "search.placeholder": "Search",
         "search.resultsFound": "results found"
       },
-      "fr": {
-        "search.placeholder": "Chercher",
-        "search.resultsFound": "résultats trouvés"
+      "de": {
+        "search.placeholder": "Suche",
+        "search.resultsFound": "Ergebnisse gefunden"
       }
     }
   },
