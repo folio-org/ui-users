@@ -121,7 +121,17 @@
         ],
         "visible": false
       }
-    ]
+    ],
+    "translations": {
+      "en": {
+        "search.placeholder": "Search",
+        "search.resultsFound": "results found"
+      },
+      "fr": {
+        "search.placeholder": "Chercher",
+        "search.resultsFound": "résultats trouvés"
+      }
+    }
   },
   "scripts": {
     "lint": "eslint *.js lib settings || true",
