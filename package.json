@@ -121,7 +121,19 @@
         ],
         "visible": false
       }
-    ]
+    ],
+    "translations": {
+      "en": {
+        "loans.title": "Loans",
+        "loans.openLoans": "open loans",
+        "loans.closedLoans": "closed loans"
+      },
+      "de": {
+        "loans.title": "Darlehen",
+        "loans.openLoans": "Offene Kredite",
+        "loans.closedLoans": "Geschlossene Darlehen"
+      }
+    }
   },
   "scripts": {
     "lint": "eslint *.js lib settings || true",
@@ -158,7 +170,7 @@
     "redux-form": "^7.0.3"
   },
   "peerDependencies": {
-    "@folio/stripes-connect": "^2.4.0",
-    "@folio/stripes-core": "^2.2.0"
+    "@folio/stripes-connect": "^2.5.0",
+    "@folio/stripes-core": "^2.5.0"
   }
 }
