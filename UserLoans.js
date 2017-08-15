@@ -6,7 +6,6 @@ import { FormattedMessage } from 'react-intl';
 import Button from '@folio/stripes-components/lib/Button';
 
 class UserLoans extends React.Component {
-
   static propTypes = {
     resources: PropTypes.shape({
       loansHistory: PropTypes.shape({
@@ -17,6 +16,11 @@ class UserLoans extends React.Component {
     onClickViewClosedLoans: PropTypes.func.isRequired,
   };
 
+  // "limit=1" on the openLoansCount and closedLoansCount fields is a hack
+  // to get at the "totalRecords" field without pulling down too much other
+  // data. Instead we should be able to construct a query to retrieve this
+  // metadata directly without pulling any item records.
+  // see https://issues.folio.org/browse/FOLIO-773
   static manifest = Object.freeze({
     loansHistory: {
       type: 'okapi',
@@ -25,16 +29,27 @@ class UserLoans extends React.Component {
         path: 'circulation/loans?query=(userId=:{userid})&limit=100',
       },
     },
+    openLoansCount: {
+      type: 'okapi',
+      GET: {
+        path: 'circulation/loans?query=(userId=:{userid} and status.name<>Closed)&limit=1',
+      },
+    },
+    closedLoansCount: {
+      type: 'okapi',
+      GET: {
+        path: 'circulation/loans?query=(userId=:{userid} and status.name=Closed)&limit=1',
+      },
+    },
     userid: {},
   });
 
   render() {
     const resources = this.props.resources;
-    const loansHistory = (resources.loansHistory || {}).records || [];
-    const openLoans = _.filter(loansHistory, loan => _.get(loan, ['status', 'name']) !== 'Closed');
-    const closedLoans = _.filter(loansHistory, loan => _.get(loan, ['status', 'name']) === 'Closed');
+    const openLoansCount = _.get(resources.openLoansCount, ['records', '0', 'totalRecords'], 0);
+    const closedLoansCount = _.get(resources.closedLoansCount, ['records', '0', 'totalRecords'], 0);
 
-    if (!loansHistory) return (<div />);
+    if (openLoansCount === 0 && closedLoansCount === 0) return (<div />);
 
     return (
       <div>
@@ -49,8 +64,8 @@ class UserLoans extends React.Component {
           </Col>
         </Row>
         <ul>
-          <li><a id="clickable-viewcurrentloans" href="" onClick={this.props.onClickViewOpenLoans}>{ openLoans.length } <FormattedMessage id="ui-users.loans.openLoans" /></a></li>
-          <li><a id="clickable-viewclosedloans" href="" onClick={this.props.onClickViewClosedLoans}>{ closedLoans.length } <FormattedMessage id="ui-users.loans.closedLoans" /></a></li>
+          <li><a id="clickable-viewcurrentloans" href="" onClick={this.props.onClickViewOpenLoans}>{ openLoansCount } <FormattedMessage id="ui-users.loans.openLoans" /></a></li>
+          <li><a id="clickable-viewclosedloans" href="" onClick={this.props.onClickViewClosedLoans}>{ closedLoansCount } <FormattedMessage id="ui-users.loans.closedLoans" /></a></li>
         </ul>
       </div>);
   }
