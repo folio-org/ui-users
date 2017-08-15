@@ -2,6 +2,7 @@
 
 ## 2.10.0 (IN PROGRESS)
 
+* Update permissions namespace in package.json. Towards STRIPES-435.
 * Correctly format column titles. Fixes UIU-176.
 * Use "Source" in place of "Operator" on loan details. Fixes UIU-178.
 * Add Time Stamp to Loan Dates. Fixes UIU-180.
