@@ -131,9 +131,9 @@
       },
       "de": {
         "search": "Suche",
-        "loans.title": "Darlehen",
-        "loans.openLoans": "Offene Kredite",
-        "loans.closedLoans": "Geschlossene Darlehen"
+        "loans.title": "Ausleihen",
+        "loans.openLoans": "Offene Ausleihen",
+        "loans.closedLoans": "Abgeschlossene Ausleihen"
       }
     }
   },
