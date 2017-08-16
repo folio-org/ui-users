@@ -49,8 +49,6 @@ class UserLoans extends React.Component {
     const openLoansCount = _.get(resources.openLoansCount, ['records', '0', 'totalRecords'], 0);
     const closedLoansCount = _.get(resources.closedLoansCount, ['records', '0', 'totalRecords'], 0);
 
-    if (openLoansCount === 0 && closedLoansCount === 0) return (<div />);
-
     return (
       <div>
         <Row>
