@@ -203,7 +203,7 @@ class ViewUser extends React.Component {
   render() {
     const dueDate = new Date(Date.parse('2014-11-12')).toLocaleDateString(this.props.stripes.locale);
     const fineHistory = [{ 'Due Date': dueDate, Amount: '34.23', Status: 'Unpaid' }];
-    const { resources } = this.props;
+    const resources = this.props;
     const user = this.getUser();
     const patronGroups = (resources.patronGroups || {}).records || [];
 

@@ -399,7 +399,7 @@ class Users extends React.Component {
     };
 
     const detailsPane = (
-      this.props.stripes.hasPerm('users.item.get') ?
+      stripes.hasPerm('users.item.get') ?
         (<Route
           path={`${this.props.match.path}/view/:userid/:username`}
           render={props => <this.connectedViewUser stripes={stripes} okapi={this.okapi} paneWidth="44%" onClose={this.collapseDetails} addressTypes={addressTypes} {...props} />}
@@ -419,7 +419,6 @@ class Users extends React.Component {
           <p>Sorry - your user permissions do not allow access to this page.</p>
         </div>));
 
-    const resource = this.props.resources.users;
     const maybeTerm = this.state.searchTerm ? ` for "${this.state.searchTerm}"` : '';
     const maybeSpelling = this.state.searchTerm ? 'spelling and ' : '';
     return (
@@ -437,7 +436,7 @@ class Users extends React.Component {
             <div style={{ textAlign: 'center' }}>
               <strong>Users</strong>
               <div>
-                <em>{resource && resource.hasLoaded ? resource.other.totalRecords : ''} Result{users.length === 1 ? '' : 's'} Found</em>
+                <em>{resources && resources.hasLoaded ? resources.other.totalRecords : ''} Result{users.length === 1 ? '' : 's'} Found</em>
               </div>
             </div>
           }
@@ -457,7 +456,7 @@ class Users extends React.Component {
             sortDirection={this.state.sortOrder.startsWith('-') ? 'descending' : 'ascending'}
             isEmptyMessage={`No results found${maybeTerm}. Please check your ${maybeSpelling}filters.`}
             columnMapping={{ Username: 'username' }}
-            loading={resource ? resource.isPending : false}
+            loading={resources ? resources.isPending : false}
             autosize
             virtualize
             ariaLabel={'User search results'}
