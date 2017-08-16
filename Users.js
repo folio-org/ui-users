@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Route from 'react-router-dom/Route';
 import queryString from 'query-string';
 import fetch from 'isomorphic-fetch';
+import { intlShape } from 'react-intl';
 
 import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
@@ -108,6 +109,10 @@ class Users extends React.Component {
     }).isRequired,
     onSelectRow: PropTypes.func,
     disableUserCreation: PropTypes.bool,
+  };
+
+  static contextTypes = {
+    intl: intlShape.isRequired,
   };
 
   static manifest = Object.freeze({
@@ -367,7 +372,7 @@ class Users extends React.Component {
     const addressTypes = (resources.addressTypes || {}).records || [];
 
     /* searchHeader is a 'custom pane header'*/
-    const searchHeader = <FilterPaneSearch searchFieldId="input-user-search" onChange={this.onChangeSearch} onClear={this.onClearSearch} resultsList={this.resultsList} value={this.state.searchTerm} placeholder={'Search'} />;
+    const searchHeader = <FilterPaneSearch searchFieldId="input-user-search" onChange={this.onChangeSearch} onClear={this.onClearSearch} resultsList={this.resultsList} value={this.state.searchTerm} placeholder={this.context.intl.formatMessage({ id: 'ui-users.search' })} />;
 
     const newUserButton = (
       <IfPermission perm="users.item.post">
