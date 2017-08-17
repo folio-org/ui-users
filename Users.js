@@ -360,6 +360,7 @@ class Users extends React.Component {
     const users = (resources.users || {}).records || [];
     const patronGroups = (resources.patronGroups || {}).records || [];
     const addressTypes = (resources.addressTypes || {}).records || [];
+    const resource = resources.users;
 
     /* searchHeader is a 'custom pane header'*/
     const searchHeader = <FilterPaneSearch searchFieldId="input-user-search" onChange={this.onChangeSearch} onClear={this.onClearSearch} resultsList={this.resultsList} value={this.state.searchTerm} placeholder={stripes.intl.formatMessage({ id: 'ui-users.search' })} />;
@@ -426,7 +427,7 @@ class Users extends React.Component {
             <div style={{ textAlign: 'center' }}>
               <strong>Users</strong>
               <div>
-                <em>{resources && resources.hasLoaded ? resources.other.totalRecords : ''} Result{users.length === 1 ? '' : 's'} Found</em>
+                <em>{resource && resource.hasLoaded ? resource.other.totalRecords : ''} Result{users.length === 1 ? '' : 's'} Found</em>
               </div>
             </div>
           }
@@ -446,7 +447,7 @@ class Users extends React.Component {
             sortDirection={this.state.sortOrder.startsWith('-') ? 'descending' : 'ascending'}
             isEmptyMessage={`No results found${maybeTerm}. Please check your ${maybeSpelling}filters.`}
             columnMapping={{ Username: 'username' }}
-            loading={resources ? resources.isPending : false}
+            loading={resource ? resource.isPending : false}
             autosize
             virtualize
             ariaLabel={'User search results'}
