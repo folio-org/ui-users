@@ -18,6 +18,7 @@ import SRStatus from '@folio/stripes-components/lib/SRStatus';
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
 import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
 import IfPermission from '@folio/stripes-components/lib/IfPermission';
+import { stripesShape } from '@folio/stripes-core/src/Stripes';
 
 import UserForm from './UserForm';
 import ViewUser from './ViewUser';
@@ -49,13 +50,7 @@ const filterConfig = [
 
 class Users extends React.Component {
   static propTypes = {
-    stripes: PropTypes.shape({
-      logger: PropTypes.shape({
-        log: PropTypes.func.isRequired,
-      }).isRequired,
-      connect: PropTypes.func.isRequired,
-      hasPerm: PropTypes.func.isRequired,
-    }).isRequired,
+    stripes: stripesShape.isRequired,
     resources: PropTypes.shape({
       patronGroups: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
