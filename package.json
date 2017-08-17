@@ -34,13 +34,13 @@
         "displayName": "UI: Users module is enabled"
       },
       {
-        "permissionName": "users-bl.view",
+        "permissionName": "ui-users.view",
         "displayName": "Users: Can view user profile",
         "description": "Some subperms can be deleted later when submodules use modern permission names",
         "subPermissions": [
+          "module.users.enabled",
           "users-bl.collection.get",
           "users-bl.item.get",
-          "module.users.enabled",
           "addresstypes.collection.get",
           "users.collection.get",
           "users.item.get",
@@ -50,11 +50,11 @@
         "visible": true
       },
       {
-        "permissionName": "users-bl.edit",
+        "permissionName": "ui-users.edit",
         "displayName": "Users: Can edit user profile",
         "description": "Some subperms can be deleted later when bl does updates and ModulePermissions can be used",
         "subPermissions": [
-          "users-bl.view",
+          "ui-users.view",
           "users-bl.item.put",
           "users.item.put",
           "login.item.put"
@@ -62,11 +62,11 @@
         "visible": true
       },
       {
-        "permissionName": "users-bl.create",
+        "permissionName": "ui-users.create",
         "displayName": "Users: Can create new user",
         "description": "Some subperms can be deleted later when bl does updates and ModulePermissions can be used",
         "subPermissions": [
-          "users-bl.edit",
+          "ui-users.edit",
           "users-bl.item.post",
           "users.item.post",
           "perms.users.item.post",
@@ -75,21 +75,21 @@
         "visible": true
       },
       {
-        "permissionName": "users-bl.viewperms",
+        "permissionName": "ui-users.viewperms",
         "displayName": "Users: Can view permissions assigned to users",
         "description": "Includes all of view",
         "subPermissions": [
-          "users-bl.view",
+          "ui-users.view",
           "perms.users.get"
         ],
         "visible": true
       },
       {
-        "permissionName": "users-bl.editperms",
+        "permissionName": "ui-users.editperms",
         "displayName": "Users: Can assign and unassign permissions to users",
         "description": "",
         "subPermissions": [
-          "users-bl.viewperms",
+          "ui-users.viewperms",
           "perms.users.item.put",
           "perms.users.item.post",
           "perms.users.item.delete"
@@ -97,9 +97,9 @@
         "visible": true
       },
       {
-        "permissionName": "users-bl.editpermsets",
+        "permissionName": "ui-users.editpermsets",
         "displayName": "Settings (Users): Can create, edit and remove permission sets",
-        "description": "This seems out of place in users-bl, maybe it belongs under perms or settings",
+        "description": "",
         "subPermissions": [
           "perms.permissions.get",
           "perms.permissions.item.put",
@@ -121,7 +121,19 @@
         ],
         "visible": false
       }
-    ]
+    ],
+    "translations": {
+      "en": {
+        "loans.title": "Loans",
+        "loans.openLoans": "open loans",
+        "loans.closedLoans": "closed loans"
+      },
+      "de": {
+        "loans.title": "Darlehen",
+        "loans.openLoans": "Offene Kredite",
+        "loans.closedLoans": "Geschlossene Darlehen"
+      }
+    }
   },
   "scripts": {
     "lint": "eslint *.js lib settings || true",
@@ -154,11 +166,12 @@
     "react": "^15.4.2",
     "react-bootstrap": "^0.31.1",
     "react-bootstrap-typeahead": "^1.4.0",
+    "react-intl": "^2.3.0",
     "react-router-dom": "^4.0.0",
     "redux-form": "^7.0.3"
   },
   "peerDependencies": {
-    "@folio/stripes-connect": "^2.4.0",
-    "@folio/stripes-core": "^2.2.0"
+    "@folio/stripes-connect": "^2.5.0",
+    "@folio/stripes-core": "^2.5.0"
   }
 }

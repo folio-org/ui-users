@@ -7,7 +7,7 @@ import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
-import { formatDate, formatDateTime, getFullName } from './util';
+import { formatDateTime, getFullName } from './util';
 import loanActionMap from './data/loanActionMap';
 
 class LoanActionsHistory extends React.Component {

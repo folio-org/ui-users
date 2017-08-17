@@ -2,6 +2,7 @@
 
 ## 2.10.0 (IN PROGRESS)
 
+* Update permissions namespace in package.json. Towards STRIPES-435.
 * Correctly format column titles. Fixes UIU-176.
 * Use "Source" in place of "Operator" on loan details. Fixes UIU-178.
 * Add Time Stamp to Loan Dates. Fixes UIU-180.
@@ -12,6 +13,8 @@
 * Fetch up to 100 loan records rather then the default of 10. Fixes UIU-173.
 * Displayed number of loans is now stable (side-effect of UIU-173 fix). Fixes UIU-184.
 * Switch from props.data to props.resources. Fixes UIU-136.
+* Better formatting of "Open Loans" and "Closed Loans" tabs. See UIU-128.
+* Use translations for some loan-related messages. Fixes UIU-186.
 
 ## [2.9.0](https://github.com/folio-org/ui-users/tree/v2.9.0) (2017-08-03)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.8.0...v2.9.0)
