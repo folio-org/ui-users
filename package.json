@@ -124,14 +124,16 @@
     ],
     "translations": {
       "en": {
+        "search": "Search",
         "loans.title": "Loans",
         "loans.openLoans": "open loans",
         "loans.closedLoans": "closed loans"
       },
       "de": {
-        "loans.title": "Darlehen",
-        "loans.openLoans": "Offene Kredite",
-        "loans.closedLoans": "Geschlossene Darlehen"
+        "search": "Suche",
+        "loans.title": "Ausleihen",
+        "loans.openLoans": "Offene Ausleihen",
+        "loans.closedLoans": "Abgeschlossene Ausleihen"
       }
     }
   },
