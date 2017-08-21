@@ -148,7 +148,7 @@ class UserForm extends React.Component {
                     <Field label="Password" name="creds.password" id="pw" type={this.state.showPassword ? 'text' : 'password'} component={TextField} required fullWidth />
                     <span className={classNames("input-group-btn", css.togglePw)}>
                       <Button buttonStyle="secondary hollow" id="toggle_pw_btn" onClick={() => this.togglePassword()}>
-                        {this.state.showPassword ? <Glyphicon glyph="eye-close" /> : <Glyphicon glyph="eye-open" />}
+                        {this.state.showPassword ? <Glyphicon glyph="eye-open" /> : <Glyphicon glyph="eye-close" />}
                       </Button>
                     </span>
                   </div>
