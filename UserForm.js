@@ -145,7 +145,7 @@ class UserForm extends React.Component {
                 <Field label="Username *" name="username" id="adduser_username" component={TextField} required fullWidth />
                 {!initialValues.id &&
                   <div className="input-group">
-                    <Field label="Password" name="creds.password" id="pw" type={this.state.showPassword ? 'text' : 'password'} component={TextField} required fullWidth />
+                    <Field label="Password" name="creds.password" id="pw" autoComplete="new-password" type={this.state.showPassword ? 'text' : 'password'} component={TextField} required fullWidth />
                     <span className={classNames("input-group-btn", css.togglePw)}>
                       <Button buttonStyle="secondary hollow" id="toggle_pw_btn" onClick={() => this.togglePassword()}>
                         {this.state.showPassword ? <Glyphicon glyph="eye-open" /> : <Glyphicon glyph="eye-close" />}
