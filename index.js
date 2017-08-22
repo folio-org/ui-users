@@ -19,7 +19,7 @@ class UsersRouting extends React.Component {
 
   constructor(props) {
     super(props);
-    this.connectedApp = props.stripes.connect(Users);
+    this.runningModule = props.stripes.runModule(Users);
   }
 
   NoMatch() {
@@ -40,7 +40,7 @@ class UsersRouting extends React.Component {
       <Switch>
         <Route
           path={`${this.props.match.path}`}
-          render={() => <this.connectedApp {...this.props} />}
+          render={() => <this.runningModule {...this.props} />}
         />
         <Route component={() => { this.NoMatch(); }} />
       </Switch>
