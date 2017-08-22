@@ -2,6 +2,7 @@
 
 ## 2.10.0 (IN PROGRESS)
 
+* Using `stripes.runModule` instead of `stripes.connect` (STRIPES-464)
 * Update permissions namespace in package.json. Towards STRIPES-435.
 * Correctly format column titles. Fixes UIU-176.
 * Use "Source" in place of "Operator" on loan details. Fixes UIU-178.
