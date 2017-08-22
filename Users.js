@@ -228,10 +228,9 @@ class Users extends React.Component {
 
   onSelectRow = this.props.onSelectRow ? this.props.onSelectRow : (e, meta) => {
     const userId = meta.id;
-    const username = meta.username;
     this.log('action', `clicked ${userId}, selected user =`, meta);
     this.setState({ selectedItem: meta });
-    this.props.history.push(`/users/view/${userId}/${username}${this.props.location.search}`);
+    this.props.history.push(`/users/view/${userId}${this.props.location.search}`);
   }
 
   onClickAddNewUser = (e) => {
@@ -263,7 +262,7 @@ class Users extends React.Component {
   }
 
   getRowURL(rowData) {
-    return `/users/view/${rowData.id}/${rowData.username}${this.props.location.search}`;
+    return `/users/view/${rowData.id}${this.props.location.search}`;
   }
 
   performSearch = _.debounce((query) => {
@@ -385,7 +384,7 @@ class Users extends React.Component {
     const detailsPane = (
       this.props.stripes.hasPerm('users.item.get') ?
         (<Route
-          path={`${this.props.match.path}/view/:userid/:username`}
+          path={`${this.props.match.path}/view/:userid`}
           render={props => <this.connectedViewUser stripes={stripes} okapi={this.okapi} paneWidth="44%" onClose={this.collapseDetails} addressTypes={data.addressTypes} {...props} />}
         />) :
         (<div
