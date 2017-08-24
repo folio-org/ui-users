@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import Route from 'react-router-dom/Route';
 import queryString from 'query-string';
 import fetch from 'isomorphic-fetch';
-import { intlShape } from 'react-intl';
 
 import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
@@ -19,6 +18,7 @@ import SRStatus from '@folio/stripes-components/lib/SRStatus';
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
 import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
 import IfPermission from '@folio/stripes-components/lib/IfPermission';
+import { stripesShape } from '@folio/stripes-core/src/Stripes';
 
 import UserForm from './UserForm';
 import ViewUser from './ViewUser';
@@ -50,13 +50,7 @@ const filterConfig = [
 
 class Users extends React.Component {
   static propTypes = {
-    stripes: PropTypes.shape({
-      logger: PropTypes.shape({
-        log: PropTypes.func.isRequired,
-      }).isRequired,
-      connect: PropTypes.func.isRequired,
-      hasPerm: PropTypes.func.isRequired,
-    }).isRequired,
+    stripes: stripesShape.isRequired,
     resources: PropTypes.shape({
       patronGroups: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
@@ -109,10 +103,6 @@ class Users extends React.Component {
     }).isRequired,
     onSelectRow: PropTypes.func,
     disableUserCreation: PropTypes.bool,
-  };
-
-  static contextTypes = {
-    intl: intlShape.isRequired,
   };
 
   static manifest = Object.freeze({
@@ -370,9 +360,10 @@ class Users extends React.Component {
     const users = (resources.users || {}).records || [];
     const patronGroups = (resources.patronGroups || {}).records || [];
     const addressTypes = (resources.addressTypes || {}).records || [];
+    const resource = resources.users;
 
     /* searchHeader is a 'custom pane header'*/
-    const searchHeader = <FilterPaneSearch searchFieldId="input-user-search" onChange={this.onChangeSearch} onClear={this.onClearSearch} resultsList={this.resultsList} value={this.state.searchTerm} placeholder={this.context.intl.formatMessage({ id: 'ui-users.search' })} />;
+    const searchHeader = <FilterPaneSearch searchFieldId="input-user-search" onChange={this.onChangeSearch} onClear={this.onClearSearch} resultsList={this.resultsList} value={this.state.searchTerm} placeholder={stripes.intl.formatMessage({ id: 'ui-users.search' })} />;
 
     const newUserButton = (
       <IfPermission perm="users.item.post">
@@ -436,7 +427,7 @@ class Users extends React.Component {
             <div style={{ textAlign: 'center' }}>
               <strong>Users</strong>
               <div>
-                <em>{resources && resources.hasLoaded ? resources.other.totalRecords : ''} Result{users.length === 1 ? '' : 's'} Found</em>
+                <em>{resource && resource.hasLoaded ? resource.other.totalRecords : ''} Result{users.length === 1 ? '' : 's'} Found</em>
               </div>
             </div>
           }
@@ -456,7 +447,7 @@ class Users extends React.Component {
             sortDirection={this.state.sortOrder.startsWith('-') ? 'descending' : 'ascending'}
             isEmptyMessage={`No results found${maybeTerm}. Please check your ${maybeSpelling}filters.`}
             columnMapping={{ Username: 'username' }}
-            loading={resources ? resources.isPending : false}
+            loading={resource ? resource.isPending : false}
             autosize
             virtualize
             ariaLabel={'User search results'}
