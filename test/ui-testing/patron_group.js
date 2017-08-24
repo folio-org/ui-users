@@ -12,7 +12,7 @@ module.exports.test = function(uiTestCtx) {
     let alert = null;
     const wait = 1000;
 
-    describe("Login > Add new patron group > Assign to user > Try to delete patron group > Logout\n", () => {
+    describe("Login > Add new patron group > Assign to user > Try to delete patron group > Unassign from user > Try to delete again > Logout\n", () => {
 
       const gid = 'alumni'
       const gidlabel = 'Alumni'
