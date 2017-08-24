@@ -1,11 +1,11 @@
 module.exports.test = function(uitestctx) {
 
-  describe('Using the App FOLIO UI App /users ("test-new-user")', function () {
+  describe('Module test: users:new_user', function () {
     const { config, utils: { auth, names } } = uitestctx;
 
+    this.timeout(Number(config.test_timeout))
     const nightmare = new Nightmare(config.nightmare);
 
-    this.timeout(Number(config.test_timeout))
     let pgroup = null
     const user = names.namegen();
 

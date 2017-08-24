@@ -1,7 +1,7 @@
-module.exports.test = function(uitestctx) {
+module.exports.test = function(uiTestCtx) {
 
-  describe('Using the App FOLIO UI App /settings/users/groups ("test-patron-group")', function () {
-    const { config, utils: { auth, names } } = uitestctx;
+  describe('Module test: users:patron_group', function () {
+    const { config, utils: { auth, names } } = uiTestCtx;
 
     const nightmare = new Nightmare(config.nightmare);
 
