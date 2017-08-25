@@ -353,6 +353,7 @@ class Users extends React.Component {
   }
 
   render() {
+    const { resources, stripes } = this.props;
     const users = (resources.users || {}).records || [];
     const patronGroups = (resources.patronGroups || {}).records || [];
     const addressTypes = (resources.addressTypes || {}).records || [];
