@@ -14,6 +14,7 @@ import IfInterface from '@folio/stripes-components/lib/IfInterface';
 
 import UserForm from './UserForm';
 import UserPermissions from './UserPermissions';
+import ProxyPermissions from './ProxyPermissions';
 import UserLoans from './UserLoans';
 import LoansHistory from './LoansHistory';
 import LoanActionsHistory from './LoanActionsHistory';
@@ -87,6 +88,8 @@ class ViewUser extends React.Component {
     this.connectedLoansHistory = props.stripes.connect(LoansHistory);
     this.connectedLoanActionsHistory = props.stripes.connect(LoanActionsHistory);
     this.connectedUserPermissions = props.stripes.connect(UserPermissions);
+    this.connectedProxyPermissions = props.stripes.connect(ProxyPermissions);
+
     this.dateLastUpdated = this.dateLastUpdated.bind(this);
     this.onClickCloseLoansHistory = this.onClickCloseLoansHistory.bind(this);
     this.onClickViewOpenLoans = this.onClickViewOpenLoans.bind(this);
@@ -355,6 +358,7 @@ class ViewUser extends React.Component {
             />
           </IfInterface>
         </IfPermission>
+        <this.connectedProxyPermissions stripes={this.props.stripes} match={this.props.match} {...this.props} />
         <IfPermission perm="perms.users.get">
           <IfInterface name="permissions" version="4.0">
             <this.connectedUserPermissions stripes={this.props.stripes} match={this.props.match} {...this.props} />
