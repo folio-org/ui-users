@@ -285,16 +285,20 @@ class Users extends React.Component {
     const creds = Object.assign({}, user.creds, { username: user.username });
     if (user.creds) delete user.creds; // eslint-disable-line no-param-reassign
     // POST user record
-    this.props.mutator.users.POST(user);
+    return this.props.mutator.users.POST(user)
     // POST credentials, permission-user, permissions;
-    this.postCreds(user.username, creds);
-    this.onClickCloseNewUser();
+    .then(() => this.postCreds(user.username, creds))
+    .then(() => this.onClickCloseNewUser())
+    .catch((e) => {
+      // TODO: rethrow appropriate SubmissionError
+      // http://redux-form.com/7.0.3/docs/api/SubmissionError.md/
+    });
   }
 
   postCreds = (username, creds) => {
     this.log('xhr', `POST credentials for new user '${username}':`, creds);
     const localCreds = Object.assign({}, creds, creds.password ? {} : { password: '' });
-    fetch(`${this.okapi.url}/authn/credentials`, {
+    return fetch(`${this.okapi.url}/authn/credentials`, {
       method: 'POST',
       headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token, 'Content-Type': 'application/json' }),
       body: JSON.stringify(localCreds),
