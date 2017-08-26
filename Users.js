@@ -150,7 +150,7 @@ class Users extends React.Component {
 
     let initiallySelected = {};
     if (/users\/view/.test(this.props.location.pathname)) {
-      const id = /view\/(.*)\//.exec(this.props.location.pathname)[1];
+      const id = /view\/(.*)$/.exec(this.props.location.pathname)[1];
       initiallySelected = { id };
     }
 
