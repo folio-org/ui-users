@@ -80,7 +80,7 @@ module.exports.test = function(uiTestCtx) {
         })
         .then(function(result) {
           userid = result
-          console.log('Found ' + userid)
+          console.log('        (found user ID ' + userid + ")")
           done()
         })
         .catch(done)
@@ -96,7 +96,7 @@ module.exports.test = function(uiTestCtx) {
         .xtract('id("adduser_group")/option[contains(.,"' + gid + '" )]/@value')
         .then(function(result) {
           communityid = result
-          console.log('Found ' + communityid)
+          console.log('        (found patron group ID ' + communityid + ")")
           done()
         })
         .catch(done)
@@ -152,7 +152,7 @@ module.exports.test = function(uiTestCtx) {
         .xtract('id("adduser_group")/option[contains(.,"Staff")]/@value')
         .then(function(result) {
           staffid = result
-          console.log('Found ' + staffid)
+          console.log('        (found "Staff" group ID ' + staffid +")")
           done()
         })
         .catch(done)
