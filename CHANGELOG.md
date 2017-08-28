@@ -16,6 +16,9 @@
 * Better formatting of "Open Loans" and "Closed Loans" tabs. See UIU-128.
 * Use translations for some loan-related messages. Fixes UIU-186.
 * Add password toggle. Fixes UIU-97.
+* Turn off autocomplete for username and password. Fixes UIU-190.
+* Add module test suites, carried over from ui-testing. FOLIO-800.
+* Update stripes-components to 1.5.0. 
 
 ## [2.9.0](https://github.com/folio-org/ui-users/tree/v2.9.0) (2017-08-03)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.8.0...v2.9.0)
