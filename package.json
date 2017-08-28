@@ -157,8 +157,9 @@
     "eslint-plugin-react": "^6.4.1"
   },
   "dependencies": {
-    "@folio/stripes-components": "^1.4.0",
+    "@folio/stripes-components": "^1.5.0",
     "@folio/stripes-form": "^0.8.0",
+    "classnames": "^2.2.5",
     "dateformat": "^2.0.0",
     "hashcode": "^1.0.3",
     "isomorphic-fetch": "^2.2.1",
