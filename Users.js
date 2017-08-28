@@ -23,6 +23,7 @@ import { stripesShape } from '@folio/stripes-core/src/Stripes';
 import UserForm from './UserForm';
 import ViewUser from './ViewUser';
 
+import removeQueryParam from './removeQueryParam';
 import contactTypes from './data/contactTypes';
 import { toUserAddresses } from './converters/address';
 import packageInfo from './package';
@@ -86,9 +87,6 @@ class Users extends React.Component {
       path: PropTypes.string.isRequired,
     }).isRequired,
     mutator: PropTypes.shape({
-      addUserMode: PropTypes.shape({
-        replace: PropTypes.func,
-      }),
       userCount: PropTypes.shape({
         replace: PropTypes.func,
       }),
@@ -106,7 +104,6 @@ class Users extends React.Component {
   };
 
   static manifest = Object.freeze({
-    addUserMode: { initialValue: { mode: false } },
     userCount: { initialValue: INITIAL_RESULT_COUNT },
     users: {
       type: 'okapi',
@@ -240,13 +237,13 @@ class Users extends React.Component {
   onClickAddNewUser = (e) => {
     if (e) e.preventDefault();
     this.log('action', 'clicked "add new user"');
-    this.props.mutator.addUserMode.replace({ mode: true });
+    this.transitionToParams({ layer: 'create' });
   }
 
   onClickCloseNewUser = (e) => {
     if (e) e.preventDefault();
     this.log('action', 'clicked "close new user"');
-    this.props.mutator.addUserMode.replace({ mode: false });
+    removeQueryParam('layer', this.props.location, this.props.history);
   }
 
   onChangeFilter = (e) => {
@@ -288,16 +285,20 @@ class Users extends React.Component {
     const creds = Object.assign({}, user.creds, { username: user.username });
     if (user.creds) delete user.creds; // eslint-disable-line no-param-reassign
     // POST user record
-    this.props.mutator.users.POST(user);
+    return this.props.mutator.users.POST(user)
     // POST credentials, permission-user, permissions;
-    this.postCreds(user.username, creds);
-    this.onClickCloseNewUser();
+    .then(() => this.postCreds(user.username, creds))
+    .then(() => this.onClickCloseNewUser())
+    .catch((e) => {
+      // TODO: rethrow appropriate SubmissionError
+      // http://redux-form.com/7.0.3/docs/api/SubmissionError.md/
+    });
   }
 
   postCreds = (username, creds) => {
     this.log('xhr', `POST credentials for new user '${username}':`, creds);
     const localCreds = Object.assign({}, creds, creds.password ? {} : { password: '' });
-    fetch(`${this.okapi.url}/authn/credentials`, {
+    return fetch(`${this.okapi.url}/authn/credentials`, {
       method: 'POST',
       headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token, 'Content-Type': 'application/json' }),
       body: JSON.stringify(localCreds),
@@ -361,6 +362,7 @@ class Users extends React.Component {
     const patronGroups = (resources.patronGroups || {}).records || [];
     const addressTypes = (resources.addressTypes || {}).records || [];
     const resource = resources.users;
+    const query = location.search ? queryString.parse(location.search) : {};
 
     /* searchHeader is a 'custom pane header'*/
     const searchHeader = <FilterPaneSearch searchFieldId="input-user-search" onChange={this.onChangeSearch} onClear={this.onClearSearch} resultsList={this.resultsList} value={this.state.searchTerm} placeholder={stripes.intl.formatMessage({ id: 'ui-users.search' })} />;
@@ -457,7 +459,7 @@ class Users extends React.Component {
         </Pane>
 
         {detailsPane}
-        <Layer isOpen={resources.addUserMode ? resources.addUserMode.mode : false} label="Add New User Dialog">
+        <Layer isOpen={query.layer ? query.layer === 'create' : false} label="Add New User Dialog">
           <UserForm
             id="userform-adduser"
             initialValues={{ active: true, personal: { preferredContactTypeId: '002' } }}
