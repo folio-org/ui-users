@@ -8,13 +8,26 @@ import { getFullName } from './util';
 
 const propTypes = {
   resources: PropTypes.shape({
-
+    sponorIds: PropTypes.object,
   }).isRequired,
+
+  mutator: PropTypes.shape({
+    sponorIds: PropTypes.shape({
+      replace: PropTypes.func,
+    }),
+  }).isRequired,
+
+  user: PropTypes.object,
 };
 
 class ProxyPermissions extends React.Component {
   static manifest = Object.freeze({
-
+    sponorIds: {},
+    users: {
+      type: 'okapi',
+      records: 'users',
+      path: 'users?query=(%{sponorIds.query})',
+    },
   });
 
   constructor(props) {
@@ -23,6 +36,13 @@ class ProxyPermissions extends React.Component {
   }
 
   editItem() {
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { user, resources: { sponorIds } } = nextProps;
+    if (user.proxyFor && user.proxyFor.length && !sponorIds.query) {
+      const query = user.proxyFor.map(id => `id=${id}`).join(' or ');
+    }
   }
 
   render() {

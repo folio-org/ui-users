@@ -358,7 +358,7 @@ class ViewUser extends React.Component {
             />
           </IfInterface>
         </IfPermission>
-        <this.connectedProxyPermissions stripes={this.props.stripes} match={this.props.match} {...this.props} />
+        <this.connectedProxyPermissions user={user} stripes={this.props.stripes} match={this.props.match} {...this.props} />
         <IfPermission perm="perms.users.get">
           <IfInterface name="permissions" version="4.0">
             <this.connectedUserPermissions stripes={this.props.stripes} match={this.props.match} {...this.props} />
