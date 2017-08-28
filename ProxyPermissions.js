@@ -4,63 +4,58 @@ import { Row, Col } from 'react-bootstrap';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import Button from '@folio/stripes-components/lib/Button';
 
+import Pluggable from '@folio/stripes-components/lib/Pluggable';
+
 import { getFullName } from './util';
 
 const propTypes = {
   resources: PropTypes.shape({
     sponorIds: PropTypes.object,
+    sponsors: PropTypes.object,
   }).isRequired,
-
   mutator: PropTypes.shape({
     sponorIds: PropTypes.shape({
       replace: PropTypes.func,
     }),
   }).isRequired,
-
   user: PropTypes.object,
 };
 
 class ProxyPermissions extends React.Component {
   static manifest = Object.freeze({
     sponorIds: {},
-    users: {
+    sponsors: {
       type: 'okapi',
       records: 'users',
       path: 'users?query=(%{sponorIds.query})',
     },
+    proxies: {
+      type: 'okapi',
+      records: 'users',
+      path: 'users?query=(proxyFor=!{user.id})',
+    },
   });
 
-  constructor(props) {
-    super(props);
-    this.editItem = this.editItem.bind(this);
-  }
-
-  editItem() {
-  }
-
   componentWillReceiveProps(nextProps) {
-    const { user, resources: { sponorIds } } = nextProps;
+    const { user, resources: { sponorIds, sponsors }, mutator } = nextProps;
     if (user.proxyFor && user.proxyFor.length && !sponorIds.query) {
       const query = user.proxyFor.map(id => `id=${id}`).join(' or ');
+      mutator.sponorIds.replace({ query });
     }
   }
 
+  selectUser() {
+  }
+
   render() {
-    // TODO: get sponsors via manifest
-    const sponsors = [
-      { user: { personal: { firstName: 'John', lastName: 'Brown' } }, status: 'Active' },
-    ];
-
-    // TODO: get proxies via manifest
-    const proxies = [
-      { user: { personal: { firstName: 'John', lastName: 'Brown' } }, status: 'Active' },
-    ];
-
-    const sponsorsFormatter = {
-      Sponsor: sp => getFullName(sp.user),
-      Status: sp => sp.status,
-      ' ': () => (<a id="clickable-editproxy" onClick={this.editItem}>Edit</a>),
+    const resources = this.props.resources;
+    const sponsors = (resources.sponsors || {}).records || [];
+    const proxies = (resources.proxies || {}).records || [];
+    const formatter = {
+      Sponsor: sp => getFullName(sp),
     };
+
+    const disableUserCreation = true;
 
     return (<div>
       <hr />
@@ -73,31 +68,50 @@ class ProxyPermissions extends React.Component {
         <Col xs={12}>
           <MultiColumnList
             id="list-sponsors"
-            formatter={sponsorsFormatter}
-            visibleColumns={['Sponsor', 'Status', ' ']}
+            formatter={formatter}
+            visibleColumns={['Sponsor']}
             contentData={sponsors}
+            isEmptyMessage="No sponsors found"
           />
         </Col>
       </Row>
       <Row className="marginTopHalf">
         <Col xs={12}>
-          <Button aria-haspopup="true">&#43; Add Sponsor</Button>
+          <Pluggable
+            aria-haspopup="true"
+            type="find-user"
+            {...this.props}
+            searchLabel="&#43; Add Sponsor"
+            searchButtonStyle="primary"
+            selectUser={this.selectUser}
+            visibleColumns={['Name', 'Patron Group', 'Username', 'Barcode']}
+            disableUserCreation={disableUserCreation} />
         </Col>
       </Row>
-      <br />
+      <hr />
+
       <Row>
         <Col xs={12}>
           <MultiColumnList
             id="list-proxies"
-            formatter={sponsorsFormatter}
-            visibleColumns={['Sponsor', 'Status', ' ']}
+            formatter={formatter}
+            visibleColumns={['Sponsor']}
             contentData={proxies}
+            isEmptyMessage="No proxies found"
           />
         </Col>
       </Row>
       <Row className="marginTopHalf">
         <Col xs={12}>
-          <Button aria-haspopup="true">&#43; Add Proxy</Button>
+          <Pluggable
+            aria-haspopup="true"
+            type="find-user"
+            {...this.props}
+            searchLabel="&#43; Add Proxy"
+            searchButtonStyle="primary"
+            selectUser={this.selectUser}
+            visibleColumns={['Name', 'Patron Group', 'Username', 'Barcode']}
+            disableUserCreation={disableUserCreation} />
         </Col>
       </Row>
     </div>);
