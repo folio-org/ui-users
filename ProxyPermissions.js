@@ -2,8 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col } from 'react-bootstrap';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
-import Button from '@folio/stripes-components/lib/Button';
-
 import Pluggable from '@folio/stripes-components/lib/Pluggable';
 
 import { getFullName } from './util';
@@ -37,7 +35,7 @@ class ProxyPermissions extends React.Component {
   });
 
   componentWillReceiveProps(nextProps) {
-    const { user, resources: { sponorIds, sponsors }, mutator } = nextProps;
+    const { user, resources: { sponorIds }, mutator } = nextProps;
     if (user.proxyFor && user.proxyFor.length && !sponorIds.query) {
       const query = user.proxyFor.map(id => `id=${id}`).join(' or ');
       mutator.sponorIds.replace({ query });
@@ -85,7 +83,8 @@ class ProxyPermissions extends React.Component {
             searchButtonStyle="primary"
             selectUser={this.selectUser}
             visibleColumns={['Name', 'Patron Group', 'Username', 'Barcode']}
-            disableUserCreation={disableUserCreation} />
+            disableUserCreation={disableUserCreation}
+          />
         </Col>
       </Row>
       <hr />
@@ -111,7 +110,8 @@ class ProxyPermissions extends React.Component {
             searchButtonStyle="primary"
             selectUser={this.selectUser}
             visibleColumns={['Name', 'Patron Group', 'Username', 'Barcode']}
-            disableUserCreation={disableUserCreation} />
+            disableUserCreation={disableUserCreation}
+          />
         </Col>
       </Row>
     </div>);
