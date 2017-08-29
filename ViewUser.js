@@ -163,8 +163,14 @@ class ViewUser extends React.Component {
     const { resources, match: { params: { userid } } } = this.props;
     const selUser = (resources.selUser || {}).records || [];
     if (!selUser || selUser.length === 0 || !userid) return null;
-    const user = selUser.find(u => u.id === userid);
-    return user ? _.cloneDeep(user) : user;
+    return selUser.find(u => u.id === userid);
+  }
+
+   // eslint-disable-next-line class-methods-use-this
+  getUserFormData(user, addresses) {
+    const userForData = user ? _.cloneDeep(user) : user;
+    userForData.personal.addresses = addresses;
+    return userForData;
   }
 
   update(user) {
@@ -227,7 +233,7 @@ class ViewUser extends React.Component {
     const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
     const preferredContact = contactTypes.find(g => g.id === _.get(user, ['personal', 'preferredContactTypeId'], '')) || { type: '' };
     const addresses = toListAddresses(_.get(user, ['personal', 'addresses'], []), this.props.addressTypes);
-    user.personal.addresses = addresses;
+    const userFormData = this.getUserFormData(user, addresses);
 
     return (
       <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
@@ -366,7 +372,7 @@ class ViewUser extends React.Component {
         </IfPermission>
         <Layer isOpen={resources.editMode ? resources.editMode.mode : false} label="Edit User Dialog">
           <UserForm
-            initialValues={user}
+            initialValues={userFormData}
             addressTypes={this.props.addressTypes}
             onSubmit={(record) => { this.update(record); }}
             onCancel={this.onClickCloseEditUser}
