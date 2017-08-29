@@ -209,7 +209,7 @@ class ViewUser extends React.Component {
     const patronGroups = (resources.patronGroups || {}).records || [];
 
     const detailMenu = (<PaneMenu>
-      <button id="clickable-edituser" style={{ visibility: !user ? 'hidden' : 'visible' }} onClick={this.props.notesToggle} title="Show Notes"><Icon icon="comment" />Notes</button>
+      <button id="clickable-show-notes" style={{ visibility: !user ? 'hidden' : 'visible' }} onClick={this.props.notesToggle} title="Show Notes"><Icon icon="comment" />Notes</button>
       <IfPermission perm="users.item.put">
         <button id="clickable-edituser" style={{ visibility: !user ? 'hidden' : 'visible' }} onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button>
       </IfPermission>
