@@ -295,7 +295,7 @@ class Users extends React.Component {
     // POST credentials, permission-user, permissions;
     .then(() => this.postCreds(user.username, creds))
     .then(() => this.onClickCloseNewUser())
-    .catch((e) => {
+    .catch(() => {
       // TODO: rethrow appropriate SubmissionError
       // http://redux-form.com/7.0.3/docs/api/SubmissionError.md/
     });
@@ -372,7 +372,7 @@ class Users extends React.Component {
   }
 
   render() {
-    const { resources, stripes } = this.props;
+    const { resources, stripes, location } = this.props;
     const users = (resources.users || {}).records || [];
     const patronGroups = (resources.patronGroups || {}).records || [];
     const addressTypes = (resources.addressTypes || {}).records || [];
@@ -489,7 +489,7 @@ class Users extends React.Component {
           this.state.showNotesPane &&
           <Route
             path={`${this.props.match.path}/view/:id/:username`}
-            render={props => <this.connectedNotes stripes={stripes} okapi={this.okapi} onToggle={this.toggleNotes} link='users' {...props} />}
+            render={props => <this.connectedNotes stripes={stripes} okapi={this.okapi} onToggle={this.toggleNotes} link="users" {...props} />}
           />
           }
       </Paneset>

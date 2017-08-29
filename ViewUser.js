@@ -55,6 +55,8 @@ class ViewUser extends React.Component {
     okapi: PropTypes.object,
     addressTypes: PropTypes.arrayOf(PropTypes.object),
     notesToggle: PropTypes.func,
+    location: PropTypes.object,
+    history: PropTypes.object,
   };
 
   static manifest = Object.freeze({
@@ -206,8 +208,6 @@ class ViewUser extends React.Component {
 
     return new Date(dateToShow).toLocaleString(this.props.stripes.locale);
   }
-
-
 
   render() {
     const dueDate = new Date(Date.parse('2014-11-12')).toLocaleDateString(this.props.stripes.locale);
