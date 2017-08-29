@@ -170,6 +170,7 @@ class Users extends React.Component {
     this.commonChangeFilter = commonChangeFilter.bind(this);
     this.transitionToParams = transitionToParams.bind(this);
     this.connectedViewUser = props.stripes.connect(ViewUser);
+    this.connectedNotes = props.stripes.connect(Notes);
 
     const logger = props.stripes.logger;
     this.log = logger.log.bind(logger);
@@ -295,7 +296,6 @@ class Users extends React.Component {
     // POST user record
     this.props.mutator.users.POST(user);
     // POST credentials, permission-user, permissions;
-   
     this.postCreds(user.username, creds);
     this.onClickCloseNewUser();
   }
@@ -484,9 +484,13 @@ class Users extends React.Component {
             optionLists={{ patronGroups, contactTypes }}
           />
         </Layer>
-        {this.state.showNotesPane && 
-          <Notes onToggle={this.toggleNotes}/>
-        }
+        {
+          this.state.showNotesPane &&
+          <Route
+            path={`${this.props.match.path}/view/:id/:username`}
+            render={props => <this.connectedNotes stripes={stripes} okapi={this.okapi} onToggle={this.toggleNotes} link='users' {...props} />}
+          />
+          }
       </Paneset>
     );
   }
