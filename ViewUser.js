@@ -16,6 +16,7 @@ import IfInterface from '@folio/stripes-components/lib/IfInterface';
 
 import UserForm from './UserForm';
 import UserPermissions from './UserPermissions';
+import ProxyPermissions from './ProxyPermissions';
 import UserLoans from './UserLoans';
 import LoansHistory from './LoansHistory';
 import LoanActionsHistory from './LoanActionsHistory';
@@ -84,6 +85,8 @@ class ViewUser extends React.Component {
     this.connectedLoansHistory = props.stripes.connect(LoansHistory);
     this.connectedLoanActionsHistory = props.stripes.connect(LoanActionsHistory);
     this.connectedUserPermissions = props.stripes.connect(UserPermissions);
+    this.connectedProxyPermissions = props.stripes.connect(ProxyPermissions);
+
     this.dateLastUpdated = this.dateLastUpdated.bind(this);
     this.onClickCloseLoansHistory = this.onClickCloseLoansHistory.bind(this);
     this.onClickViewOpenLoans = this.onClickViewOpenLoans.bind(this);
@@ -158,8 +161,14 @@ class ViewUser extends React.Component {
     const { resources, match: { params: { userid } } } = this.props;
     const selUser = (resources.selUser || {}).records || [];
     if (!selUser || selUser.length === 0 || !userid) return null;
-    const user = selUser.find(u => u.id === userid);
-    return user ? _.cloneDeep(user) : user;
+    return selUser.find(u => u.id === userid);
+  }
+
+   // eslint-disable-next-line class-methods-use-this
+  getUserFormData(user, addresses) {
+    const userForData = user ? _.cloneDeep(user) : user;
+    userForData.personal.addresses = addresses;
+    return userForData;
   }
 
   update(user) {
@@ -226,7 +235,7 @@ class ViewUser extends React.Component {
     const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
     const preferredContact = contactTypes.find(g => g.id === _.get(user, ['personal', 'preferredContactTypeId'], '')) || { type: '' };
     const addresses = toListAddresses(_.get(user, ['personal', 'addresses'], []), this.props.addressTypes);
-    user.personal.addresses = addresses;
+    const userFormData = this.getUserFormData(user, addresses);
 
     return (
       <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
@@ -357,6 +366,7 @@ class ViewUser extends React.Component {
             />
           </IfInterface>
         </IfPermission>
+        <this.connectedProxyPermissions user={user} stripes={this.props.stripes} match={this.props.match} {...this.props} />
         <IfPermission perm="perms.users.get">
           <IfInterface name="permissions" version="4.0">
             <this.connectedUserPermissions stripes={this.props.stripes} match={this.props.match} {...this.props} />
@@ -364,7 +374,7 @@ class ViewUser extends React.Component {
         </IfPermission>
         <Layer isOpen={query.layer ? query.layer === 'edit' : false} label="Edit User Dialog">
           <UserForm
-            initialValues={user}
+            initialValues={userFormData}
             addressTypes={this.props.addressTypes}
             onSubmit={(record) => { this.update(record); }}
             onCancel={this.onClickCloseEditUser}
