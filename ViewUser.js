@@ -53,6 +53,7 @@ class ViewUser extends React.Component {
     onClose: PropTypes.func,
     okapi: PropTypes.object,
     addressTypes: PropTypes.arrayOf(PropTypes.object),
+    notesToggle: PropTypes.func,
   };
 
   static manifest = Object.freeze({
@@ -197,6 +198,8 @@ class ViewUser extends React.Component {
     return new Date(dateToShow).toLocaleString(this.props.stripes.locale);
   }
 
+
+
   render() {
     const dueDate = new Date(Date.parse('2014-11-12')).toLocaleDateString(this.props.stripes.locale);
     const fineHistory = [{ 'Due Date': dueDate, Amount: '34.23', Status: 'Unpaid' }];
@@ -206,6 +209,7 @@ class ViewUser extends React.Component {
     const patronGroups = (resources.patronGroups || {}).records || [];
 
     const detailMenu = (<PaneMenu>
+      <button id="clickable-edituser" style={{ visibility: !user ? 'hidden' : 'visible' }} onClick={this.props.notesToggle} title="Show Notes"><Icon icon="comment" />Notes</button>
       <IfPermission perm="users.item.put">
         <button id="clickable-edituser" style={{ visibility: !user ? 'hidden' : 'visible' }} onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button>
       </IfPermission>
@@ -389,6 +393,7 @@ class ViewUser extends React.Component {
           />
         </Layer>
       </Pane>
+
     );
   }
 }

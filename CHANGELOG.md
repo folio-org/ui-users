@@ -18,7 +18,8 @@
 * Add password toggle. Fixes UIU-97.
 * Turn off autocomplete for username and password. Fixes UIU-190.
 * Add module test suites, carried over from ui-testing. FOLIO-800.
-* Update stripes-components to 1.5.0. 
+* Update stripes-components to 1.5.0.
+* First pass at integrating `<Notes>`. See LIBAPP-188. 
 
 ## [2.9.0](https://github.com/folio-org/ui-users/tree/v2.9.0) (2017-08-03)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.8.0...v2.9.0)

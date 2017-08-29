@@ -14,6 +14,7 @@ import FilterPaneSearch from '@folio/stripes-components/lib/FilterPaneSearch';
 import Layer from '@folio/stripes-components/lib/Layer';
 import FilterGroups, { initialFilterState, onChangeFilter as commonChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
 import SRStatus from '@folio/stripes-components/lib/SRStatus';
+import Notes from '@folio/stripes-components/lib/structures/Notes';
 
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
 import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
@@ -158,6 +159,7 @@ class Users extends React.Component {
       selectedItem: initiallySelected,
       searchTerm: query.query || '',
       sortOrder: query.sort || '',
+      showNotesPane: false,
     };
 
     this.okapi = props.okapi;
@@ -165,6 +167,8 @@ class Users extends React.Component {
     this.commonChangeFilter = commonChangeFilter.bind(this);
     this.transitionToParams = transitionToParams.bind(this);
     this.connectedViewUser = props.stripes.connect(ViewUser);
+    this.connectedNotes = props.stripes.connect(Notes);
+
     const logger = props.stripes.logger;
     this.log = logger.log.bind(logger);
 
@@ -172,6 +176,8 @@ class Users extends React.Component {
 
     this.resultsList = null;
     this.SRStatus = null;
+
+    this.toggleNotes = this.toggleNotes.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -333,6 +339,15 @@ class Users extends React.Component {
     this.props.history.push(`${this.props.match.path}${this.props.location.search}`);
   }
 
+  toggleNotes() {
+    this.setState((curState) => {
+      const show = !curState.showNotesPane;
+      return {
+        showNotesPane: show,
+      };
+    });
+  }
+
   // custom row formatter to wrap rows in anchor tags.
   anchoredRowFormatter(
     { rowIndex,
@@ -395,7 +410,7 @@ class Users extends React.Component {
       stripes.hasPerm('users.item.get') ?
         (<Route
           path={`${this.props.match.path}/view/:userid/:username`}
-          render={props => <this.connectedViewUser stripes={stripes} okapi={this.okapi} paneWidth="44%" onClose={this.collapseDetails} addressTypes={addressTypes} {...props} />}
+          render={props => <this.connectedViewUser stripes={stripes} okapi={this.okapi} paneWidth="44%" onClose={this.collapseDetails} addressTypes={addressTypes} notesToggle={this.toggleNotes} {...props} />}
         />) :
         (<div
           style={{
@@ -470,6 +485,13 @@ class Users extends React.Component {
             optionLists={{ patronGroups, contactTypes }}
           />
         </Layer>
+        {
+          this.state.showNotesPane &&
+          <Route
+            path={`${this.props.match.path}/view/:id/:username`}
+            render={props => <this.connectedNotes stripes={stripes} okapi={this.okapi} onToggle={this.toggleNotes} link='users' {...props} />}
+          />
+          }
       </Paneset>
     );
   }
