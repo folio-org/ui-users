@@ -1,7 +1,7 @@
 module.exports.test = function(uiTestCtx) {
 
   describe('Module test: users:patron_group', function () {
-    const { config, utils: { auth, names } } = uiTestCtx;
+    const { config, helpers: { openApp }, meta: { testVersion } } = uiTestCtx;
 
     const nightmare = new Nightmare(config.nightmare);
 
@@ -46,6 +46,11 @@ module.exports.test = function(uiTestCtx) {
         })
       }
       flogin(config.username, config.password)
+      it('should open app and find version tag', done => {
+        nightmare
+         .use(openApp(nightmare, config, done, 'users', testVersion ))
+         .then(result => result )
+      })
       it('should create a patron group for "' + gidlabel + '"', done => {
         nightmare
         .click(config.select.settings)
@@ -75,7 +80,7 @@ module.exports.test = function(uiTestCtx) {
         })
         .then(function(result) {
           userid = result
-          console.log('Found ' + userid)
+          console.log('        (found user ID ' + userid + ")")
           done()
         })
         .catch(done)
@@ -91,7 +96,7 @@ module.exports.test = function(uiTestCtx) {
         .xtract('id("adduser_group")/option[contains(.,"' + gid + '" )]/@value')
         .then(function(result) {
           communityid = result
-          console.log('Found ' + communityid)
+          console.log('        (found patron group ID ' + communityid + ")")
           done()
         })
         .catch(done)
@@ -147,7 +152,7 @@ module.exports.test = function(uiTestCtx) {
         .xtract('id("adduser_group")/option[contains(.,"Staff")]/@value')
         .then(function(result) {
           staffid = result
-          console.log('Found ' + staffid)
+          console.log('        (found "Staff" group ID ' + staffid +")")
           done()
         })
         .catch(done)

@@ -14,6 +14,7 @@ import FilterPaneSearch from '@folio/stripes-components/lib/FilterPaneSearch';
 import Layer from '@folio/stripes-components/lib/Layer';
 import FilterGroups, { initialFilterState, onChangeFilter as commonChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
 import SRStatus from '@folio/stripes-components/lib/SRStatus';
+import Notes from '@folio/stripes-components/lib/structures/Notes';
 
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
 import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
@@ -23,6 +24,7 @@ import { stripesShape } from '@folio/stripes-core/src/Stripes';
 import UserForm from './UserForm';
 import ViewUser from './ViewUser';
 
+import removeQueryParam from './removeQueryParam';
 import contactTypes from './data/contactTypes';
 import { toUserAddresses } from './converters/address';
 import packageInfo from './package';
@@ -86,9 +88,6 @@ class Users extends React.Component {
       path: PropTypes.string.isRequired,
     }).isRequired,
     mutator: PropTypes.shape({
-      addUserMode: PropTypes.shape({
-        replace: PropTypes.func,
-      }),
       userCount: PropTypes.shape({
         replace: PropTypes.func,
       }),
@@ -106,7 +105,6 @@ class Users extends React.Component {
   };
 
   static manifest = Object.freeze({
-    addUserMode: { initialValue: { mode: false } },
     userCount: { initialValue: INITIAL_RESULT_COUNT },
     users: {
       type: 'okapi',
@@ -161,6 +159,7 @@ class Users extends React.Component {
       selectedItem: initiallySelected,
       searchTerm: query.query || '',
       sortOrder: query.sort || '',
+      showNotesPane: false,
     };
 
     this.okapi = props.okapi;
@@ -168,6 +167,8 @@ class Users extends React.Component {
     this.commonChangeFilter = commonChangeFilter.bind(this);
     this.transitionToParams = transitionToParams.bind(this);
     this.connectedViewUser = props.stripes.connect(ViewUser);
+    this.connectedNotes = props.stripes.connect(Notes);
+
     const logger = props.stripes.logger;
     this.log = logger.log.bind(logger);
 
@@ -175,6 +176,8 @@ class Users extends React.Component {
 
     this.resultsList = null;
     this.SRStatus = null;
+
+    this.toggleNotes = this.toggleNotes.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -240,13 +243,13 @@ class Users extends React.Component {
   onClickAddNewUser = (e) => {
     if (e) e.preventDefault();
     this.log('action', 'clicked "add new user"');
-    this.props.mutator.addUserMode.replace({ mode: true });
+    this.transitionToParams({ layer: 'create' });
   }
 
   onClickCloseNewUser = (e) => {
     if (e) e.preventDefault();
     this.log('action', 'clicked "close new user"');
-    this.props.mutator.addUserMode.replace({ mode: false });
+    removeQueryParam('layer', this.props.location, this.props.history);
   }
 
   onChangeFilter = (e) => {
@@ -288,16 +291,20 @@ class Users extends React.Component {
     const creds = Object.assign({}, user.creds, { username: user.username });
     if (user.creds) delete user.creds; // eslint-disable-line no-param-reassign
     // POST user record
-    this.props.mutator.users.POST(user);
+    return this.props.mutator.users.POST(user)
     // POST credentials, permission-user, permissions;
-    this.postCreds(user.username, creds);
-    this.onClickCloseNewUser();
+    .then(() => this.postCreds(user.username, creds))
+    .then(() => this.onClickCloseNewUser())
+    .catch((e) => {
+      // TODO: rethrow appropriate SubmissionError
+      // http://redux-form.com/7.0.3/docs/api/SubmissionError.md/
+    });
   }
 
   postCreds = (username, creds) => {
     this.log('xhr', `POST credentials for new user '${username}':`, creds);
     const localCreds = Object.assign({}, creds, creds.password ? {} : { password: '' });
-    fetch(`${this.okapi.url}/authn/credentials`, {
+    return fetch(`${this.okapi.url}/authn/credentials`, {
       method: 'POST',
       headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token, 'Content-Type': 'application/json' }),
       body: JSON.stringify(localCreds),
@@ -332,6 +339,15 @@ class Users extends React.Component {
     this.props.history.push(`${this.props.match.path}${this.props.location.search}`);
   }
 
+  toggleNotes() {
+    this.setState((curState) => {
+      const show = !curState.showNotesPane;
+      return {
+        showNotesPane: show,
+      };
+    });
+  }
+
   // custom row formatter to wrap rows in anchor tags.
   anchoredRowFormatter(
     { rowIndex,
@@ -361,6 +377,7 @@ class Users extends React.Component {
     const patronGroups = (resources.patronGroups || {}).records || [];
     const addressTypes = (resources.addressTypes || {}).records || [];
     const resource = resources.users;
+    const query = location.search ? queryString.parse(location.search) : {};
 
     /* searchHeader is a 'custom pane header'*/
     const searchHeader = <FilterPaneSearch searchFieldId="input-user-search" onChange={this.onChangeSearch} onClear={this.onClearSearch} resultsList={this.resultsList} value={this.state.searchTerm} placeholder={stripes.intl.formatMessage({ id: 'ui-users.search' })} />;
@@ -393,7 +410,7 @@ class Users extends React.Component {
       stripes.hasPerm('users.item.get') ?
         (<Route
           path={`${this.props.match.path}/view/:userid/:username`}
-          render={props => <this.connectedViewUser stripes={stripes} okapi={this.okapi} paneWidth="44%" onClose={this.collapseDetails} addressTypes={addressTypes} {...props} />}
+          render={props => <this.connectedViewUser stripes={stripes} okapi={this.okapi} paneWidth="44%" onClose={this.collapseDetails} addressTypes={addressTypes} notesToggle={this.toggleNotes} {...props} />}
         />) :
         (<div
           style={{
@@ -457,7 +474,7 @@ class Users extends React.Component {
         </Pane>
 
         {detailsPane}
-        <Layer isOpen={resources.addUserMode ? resources.addUserMode.mode : false} label="Add New User Dialog">
+        <Layer isOpen={query.layer ? query.layer === 'create' : false} label="Add New User Dialog">
           <UserForm
             id="userform-adduser"
             initialValues={{ active: true, personal: { preferredContactTypeId: '002' } }}
@@ -468,6 +485,13 @@ class Users extends React.Component {
             optionLists={{ patronGroups, contactTypes }}
           />
         </Layer>
+        {
+          this.state.showNotesPane &&
+          <Route
+            path={`${this.props.match.path}/view/:id/:username`}
+            render={props => <this.connectedNotes stripes={stripes} okapi={this.okapi} onToggle={this.toggleNotes} link='users' {...props} />}
+          />
+          }
       </Paneset>
     );
   }

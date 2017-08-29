@@ -1,13 +1,13 @@
 module.exports.test = function(uitestctx) {
 
   describe('Module test: users:new_user', function () {
-    const { config, utils: { auth, names } } = uitestctx;
+    const { config, helpers: { namegen, openApp }, meta: { testVersion } } = uitestctx;
 
     this.timeout(Number(config.test_timeout))
     const nightmare = new Nightmare(config.nightmare);
 
     let pgroup = null
-    const user = names.namegen();
+    const user = namegen();
 
     describe('Login > Create new user > Logout > Login as new user > Logout > Login > Edit new user and confirm changes', () => {
       
@@ -52,6 +52,11 @@ module.exports.test = function(uitestctx) {
         })
       }
       flogin(config.username, config.password)
+      it('should open app and find version tag', done => {
+        nightmare
+         .use(openApp(nightmare, config, done, 'users', testVersion ))
+         .then(result => result )
+      })
       it('should extract a patron group value', done => {
         nightmare
         .wait('#clickable-users-module')
