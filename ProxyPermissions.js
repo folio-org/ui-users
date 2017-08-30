@@ -139,6 +139,7 @@ class ProxyPermissions extends React.Component {
             aria-haspopup="true"
             type="find-user"
             {...this.props}
+            dataKey="sponsors"
             searchLabel="&#43; Add Sponsor"
             searchButtonStyle="primary"
             selectUser={this.addSponsor}
@@ -167,6 +168,7 @@ class ProxyPermissions extends React.Component {
             aria-haspopup="true"
             type="find-user"
             {...this.props}
+            dataKey="proxies"
             searchLabel="&#43; Add Proxy"
             searchButtonStyle="primary"
             selectUser={this.addProxy}
