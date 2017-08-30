@@ -9,8 +9,8 @@
 * Show Operator name on loan action history. Fixes UIU-163.
 * Username uniqueness check works again -- it had broken. Fixes UIU-183.
 * Visible fieldname "user ID" changed to "username" throughout. Fixes UIU-169.
-* Made the diplay of the create new user button conditional (UIS-71).
-* Fetch up to 100 loan records rather then the default of 10. Fixes UIU-173.
+* Made the display of the create new user button conditional (UIS-71).
+* Fetch up to 100 loan records rather than the default of 10. Fixes UIU-173.
 * Displayed number of loans is now stable (side-effect of UIU-173 fix). Fixes UIU-184.
 * Switch from props.data to props.resources. Fixes UIU-136.
 * Better formatting of "Open Loans" and "Closed Loans" tabs. See UIU-128.
@@ -32,7 +32,7 @@
 * Support sorting by barcode. Fixes UIU-151.
 * Use new-style specification of action-names in ui-users. Fixes UIU-149.
 * Change title in results pane. See comments in UIU-125.
-* Show open- and closed-loans counts on the user-details pain. See UIU-128
+* Show open- and closed-loans counts on the user-details pane. See UIU-128
 * Show "Open Loans" and "Closed Loans" tabs on the loans-list panes. See UIU-128.
 * Do not mention search-term in "No Results Found" message if there is none. Fixes UIU-158.
 * Show Operator name on loan action history. Fixes UIU-163.
