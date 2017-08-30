@@ -104,7 +104,8 @@
           "perms.permissions.get",
           "perms.permissions.item.put",
           "perms.permissions.item.post",
-          "perms.permissions.item.delete"
+          "perms.permissions.item.delete",
+          "settings.enabled"
         ],
         "visible": true
       },
