@@ -11,7 +11,7 @@ const pages = [
     route: 'perms',
     label: 'Permission sets',
     component: PermissionSets,
-    perm: 'perms.permissions.get',
+    perm: 'ui-users.editpermsets',
   },
   {
     route: 'groups',
