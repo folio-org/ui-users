@@ -23,9 +23,6 @@ const propTypes = {
     curUser: PropTypes.shape({
       replace: PropTypes.func,
     }),
-    sponsors: PropTypes.shape({
-      replace: PropTypes.func,
-    }),
     user: React.PropTypes.shape({
       PUT: React.PropTypes.func.isRequired,
     }),
@@ -37,11 +34,8 @@ class ProxyPermissions extends React.Component {
     sponorQuery: {
       initialValue: {},
     },
-    sponsors: {
-      initialValue: {},
-    },
     curUser: {},
-    sponsorUsers: {
+    sponsors: {
       type: 'okapi',
       records: 'users',
       path: 'users?query=(%{sponorQuery.ids})',
@@ -67,19 +61,11 @@ class ProxyPermissions extends React.Component {
 
   // TODO: refactor after join is supported in stripes-connect
   componentWillReceiveProps(nextProps) {
-    const { user, resources: { sponorQuery, sponsorUsers }, mutator } = nextProps;
-    const hasProxy = user.proxyFor && user.proxyFor.length;
-
-    if (!hasProxy) return;
-    const ids = user.proxyFor.map(id => `id=${id}`).join(' or ');
+    const { user, resources: { sponorQuery }, mutator } = nextProps;
+    const ids = user.proxyFor.map(id => `id=${id}`).join(' or ') || 'id=noid';
 
     if (sponorQuery.userId !== user.id || sponorQuery.ids !== ids) {
       mutator.sponorQuery.replace({ ids, userId: user.id });
-    }
-
-    if (sponorQuery.userId === user.id &&
-      this.props.resources.sponsorUsers.isPending && !sponsorUsers.isPending) {
-      mutator.sponsors.replace({ records: sponsorUsers.records });
     }
   }
 
