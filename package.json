@@ -119,7 +119,7 @@
           "usergroups.item.put",
           "settings.enabled"
         ],
-        "visible": false
+        "visible": true
       }
     ],
     "translations": {
