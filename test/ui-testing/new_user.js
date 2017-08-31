@@ -120,7 +120,9 @@ module.exports.test = function(uitestctx) {
         .wait(555)
         .type('#adduser_mobilePhone',null)
         .type('#adduser_mobilePhone',phone)
-        .wait(555)
+        .select('#adduser_group', pgroup)
+        .select('#adduser_preferredcontact', '002')
+        .wait(5555)
         .click('#clickable-updateuser')
         .wait(555)
         .wait(function(pn) {
