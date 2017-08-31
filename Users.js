@@ -290,10 +290,10 @@ class Users extends React.Component {
     // extract creds object from user object
     const creds = Object.assign({}, user.creds, { username: user.username });
     if (user.creds) delete user.creds; // eslint-disable-line no-param-reassign
-    // POST user record
-    return this.props.mutator.users.POST(user)
     // POST credentials, permission-user, permissions;
-    .then(() => this.postCreds(user.username, creds))
+    return this.postCreds(user.username, creds)
+    // POST user record
+    .then(() => this.props.mutator.users.POST(user))
     .then(() => this.onClickCloseNewUser())
     .catch(() => {
       // TODO: rethrow appropriate SubmissionError
