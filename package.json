@@ -121,6 +121,19 @@
           "settings.enabled"
         ],
         "visible": true
+      },
+      {
+        "permissionName": "settings.addresstypes.all",
+        "displayName": "Settings (Users): Can create, edit and remove address types",
+        "subPermissions": [
+          "addresstypes.collection.get",
+          "addresstypes.item.get",
+          "addresstypes.item.post",
+          "addresstypes.item.put",
+          "addresstypes.item.delete",
+          "settings.enabled"
+        ],
+        "visible": true
       }
     ],
     "translations": {
