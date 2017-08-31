@@ -21,6 +21,8 @@
 * Update stripes-components to 1.5.0.
 * First pass at integrating `<Notes>`. See LIBAPP-188.
 * The `settings.usergroups.all` permission is visible. Part of UIU-130.
+* Add item's status, barcode, and return-date to loan-details pane. See UIU-177.
+* Link item's barcode to item-details pane. See UIU-177.
 
 ## [2.9.0](https://github.com/folio-org/ui-users/tree/v2.9.0) (2017-08-03)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.8.0...v2.9.0)
