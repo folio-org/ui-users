@@ -23,6 +23,7 @@
 * The `settings.usergroups.all` permission is visible. Part of UIU-130.
 * Add item's status, barcode, and return-date to loan-details pane. See UIU-177.
 * Link item's barcode to item-details pane. See UIU-177.
+* Add various settings-related permssions. Part of UIU-197.
 
 ## [2.9.0](https://github.com/folio-org/ui-users/tree/v2.9.0) (2017-08-03)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.8.0...v2.9.0)
