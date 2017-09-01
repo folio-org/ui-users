@@ -125,7 +125,7 @@
       {
         "permissionName": "settings.usergroups.all",
         "displayName": "Settings (Users): Can create, edit and remove patron groups [LEGACY]",
-        "subPermissions": [ "ui-users.settings.usergroups" ],
+        "subPermissions": [ "ui-users.settings.usergroups" ]
       },
       {
         "permissionName": "ui-users.settings.addresstypes",
@@ -143,7 +143,7 @@
       {
         "permissionName": "settings.addresstypes.all",
         "displayName": "Settings (Users): Can create, edit and remove address types [LEGACY]",
-        "subPermissions": [ "ui-users.settings.addresstypes" ],
+        "subPermissions": [ "ui-users.settings.addresstypes" ]
       },
       {
         "permissionName": "settings.users.enabled",
