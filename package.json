@@ -97,7 +97,7 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.editpermsets",
+        "permissionName": "ui-users.settings.permsets",
         "displayName": "Settings (Users): Can create, edit and remove permission sets",
         "description": "",
         "subPermissions": [
@@ -107,6 +107,13 @@
           "perms.permissions.item.delete",
           "settings.users.enabled"
         ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.editpermsets",
+        "displayName": "Settings (Users): Can create, edit and remove permission sets [LEGACY]",
+        "description": "",
+        "subPermissions": [ "ui-users.settings.permsets" ],
         "visible": true
       },
       {
