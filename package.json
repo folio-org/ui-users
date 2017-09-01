@@ -110,7 +110,7 @@
         "visible": true
       },
       {
-        "permissionName": "settings.usergroups.all",
+        "permissionName": "ui-users.settings.usergroups",
         "displayName": "Settings (Users): Can create, edit and remove patron groups",
         "subPermissions": [
           "usergroups.collection.get",
@@ -123,7 +123,13 @@
         "visible": true
       },
       {
-        "permissionName": "settings.addresstypes.all",
+        "permissionName": "settings.usergroups.all",
+        "displayName": "Settings (Users): Can create, edit and remove patron groups [LEGACY]",
+        "subPermissions": [ "ui-users.settings.usergroups" ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.addresstypes",
         "displayName": "Settings (Users): Can create, edit and remove address types",
         "subPermissions": [
           "addresstypes.collection.get",
@@ -133,6 +139,12 @@
           "addresstypes.item.delete",
           "settings.users.enabled"
         ],
+        "visible": true
+      },
+      {
+        "permissionName": "settings.addresstypes.all",
+        "displayName": "Settings (Users): Can create, edit and remove address types [LEGACY]",
+        "subPermissions": [ "ui-users.settings.addresstypes" ],
         "visible": true
       },
       {
