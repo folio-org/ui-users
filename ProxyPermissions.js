@@ -27,6 +27,11 @@ const propTypes = {
       PUT: React.PropTypes.func.isRequired,
     }),
   }).isRequired,
+  displayHeading: PropTypes.bool,
+};
+
+const defaultProps = {
+  displayHeading: true,
 };
 
 class ProxyPermissions extends React.Component {
@@ -100,12 +105,13 @@ class ProxyPermissions extends React.Component {
     };
 
     return (<div>
-      <hr />
-      <Row>
-        <Col xs={5}>
-          <h3 className="marginTop0">Proxy Permissions</h3>
-        </Col>
-      </Row>
+      { this.props.displayHeading &&
+        <Row>
+          <Col xs={5}>
+            <h3 className="marginTop0">Proxy Permissions</h3>
+          </Col>
+        </Row>
+      }
       <Row>
         <Col xs={12}>
           <MultiColumnList

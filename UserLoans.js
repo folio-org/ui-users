@@ -14,6 +14,11 @@ class UserLoans extends React.Component {
     }),
     onClickViewOpenLoans: PropTypes.func.isRequired,
     onClickViewClosedLoans: PropTypes.func.isRequired,
+    displayHeading: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    displayHeading: true,
   };
 
   // "limit=1" on the openLoansCount and closedLoansCount fields is a hack
@@ -51,6 +56,7 @@ class UserLoans extends React.Component {
 
     return (
       <div>
+        { this.props.displayHeading && 
         <Row>
           <Col xs={7} sm={6}>
             <h3 className="marginTop0"><FormattedMessage id="ui-users.loans.title" /></h3>
@@ -61,6 +67,7 @@ class UserLoans extends React.Component {
             </div>
           </Col>
         </Row>
+        }
         <ul>
           <li><a id="clickable-viewcurrentloans" href="" onClick={this.props.onClickViewOpenLoans}>{ openLoansCount } <FormattedMessage id="ui-users.loans.openLoans" /></a></li>
           <li><a id="clickable-viewclosedloans" href="" onClick={this.props.onClickViewClosedLoans}>{ closedLoansCount } <FormattedMessage id="ui-users.loans.closedLoans" /></a></li>

@@ -7,12 +7,15 @@ import Pane from '@folio/stripes-components/lib/Pane';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import Button from '@folio/stripes-components/lib/Button';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import Icon from '@folio/stripes-components/lib/Icon';
 import Layer from '@folio/stripes-components/lib/Layer';
 import IfPermission from '@folio/stripes-components/lib/IfPermission';
 import IfInterface from '@folio/stripes-components/lib/IfInterface';
+import DropdownMenu from '@folio/stripes-components/lib/DropdownMenu';
+import { Accordion } from '@folio/stripes-components/lib/Accordion';
+import { Dropdown } from 'react-bootstrap';
 
 import UserForm from './UserForm';
 import UserPermissions from './UserPermissions';
@@ -80,6 +83,13 @@ class ViewUser extends React.Component {
       viewLoanActionsHistoryMode: false,
       selectedLoan: {},
       lastUpdate: null,
+      accordionSections: {
+        'user_info': true,
+        'user_addresses': true,
+        'user_loans': true,
+        'user_proxy': true,
+        'user_perms': true,
+      },
     };
     this.onClickEditUser = this.onClickEditUser.bind(this);
     this.onClickCloseEditUser = this.onClickCloseEditUser.bind(this);
@@ -97,6 +107,12 @@ class ViewUser extends React.Component {
     this.onClickCloseLoanActionsHistory = this.onClickCloseLoanActionsHistory.bind(this);
     this.onAddressesUpdate = this.onAddressesUpdate.bind(this);
     this.transitionToParams = transitionToParams.bind(this);
+    this.onToggleSection = this.onToggleSection.bind(this);
+    this.handleAddAddress = this.handleAddAddress.bind(this);
+
+    // refs for accordion actions...
+    this.addressesSection = null;
+    this.permsSection = null;
   }
 
   // EditUser Handlers
@@ -209,6 +225,20 @@ class ViewUser extends React.Component {
     return new Date(dateToShow).toLocaleString(this.props.stripes.locale);
   }
 
+  onToggleSection({id}){
+    this.setState((curState) => {
+      const newState = curState;
+      newState.accordionSections[id] = !curState.accordionSections[id];
+      return newState;
+    });
+  }
+
+  handleAddAddress(){
+    if(this.addressesSection) {
+      this.addressesSection.addressList.handleAddNew();
+    }
+  }
+
   render() {
     const dueDate = new Date(Date.parse('2014-11-12')).toLocaleDateString(this.props.stripes.locale);
     const fineHistory = [{ 'Due Date': dueDate, Amount: '34.23', Status: 'Unpaid' }];
@@ -239,11 +269,18 @@ class ViewUser extends React.Component {
 
     return (
       <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
+        <Accordion 
+          label={<h2>Information</h2>} 
+          id='user_info' 
+          onToggle={this.onToggleSection} 
+          open={this.state.accordionSections['user_info']} 
+          
+        >
         <Row>
           <Col xs={7} >
             <Row>
               <Col xs={12}>
-                <h2>{_.get(user, ['personal', 'lastName'], '')}, {_.get(user, ['personal', 'firstName'], '')} {_.get(user, ['personal', 'middleName'], '')}</h2>
+                <h3>{_.get(user, ['personal', 'lastName'], '')}, {_.get(user, ['personal', 'firstName'], '')} {_.get(user, ['personal', 'middleName'], '')}</h3>
               </Col>
             </Row>
             <Row>
@@ -338,40 +375,68 @@ class ViewUser extends React.Component {
             </Row>
           </Col>
         </Row>
+        </Accordion>
+        <Accordion 
+          label={<h2>Addresses</h2>} 
+          id='user_addresses' 
+          onToggle={this.onToggleSection} 
+          open={this.state.accordionSections['user_addresses']}
+          displayWhenOpen={<Button onClick={this.handleAddAddress}>Add Address</Button>}
+        >
         <UserAddresses
           onUpdate={this.onAddressesUpdate}
           addressTypes={this.props.addressTypes}
           addresses={addresses}
+          ref={(ref)=>{this.addressesSection = ref;}}
+          displayHeading={false}
         />
-        <br />
-        <hr />
-        <br />
-        <Row>
-          <Col xs={7} sm={6}>
-            <h3 className="marginTopHalf">Fines</h3>
-          </Col>
-          <Col xs={5} sm={6}>
-            <Button align="end" bottomMargin0 >View Full History</Button>
-          </Col>
-        </Row>
-        <MultiColumnList id="list-finehistory" fullWidth contentData={fineHistory} />
-        <hr />
-        <IfPermission perm="circulation.loans.collection.get">
-          <IfInterface name="circulation" version="2.1">
-            <this.connectedUserLoans
-              onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
-              onClickViewOpenLoans={this.onClickViewOpenLoans}
-              onClickViewClosedLoans={this.onClickViewClosedLoans}
-              {...this.props}
-            />
-          </IfInterface>
-        </IfPermission>
-        <this.connectedProxyPermissions user={user} stripes={this.props.stripes} match={this.props.match} {...this.props} />
-        <IfPermission perm="perms.users.get">
-          <IfInterface name="permissions" version="4.0">
-            <this.connectedUserPermissions stripes={this.props.stripes} match={this.props.match} {...this.props} />
-          </IfInterface>
-        </IfPermission>
+        </Accordion>
+        <Accordion 
+          label={<h2>Loans</h2>} 
+          id='user_loans' 
+          onToggle={this.onToggleSection} 
+          open={this.state.accordionSections['user_loans']}
+          displayWhenOpen={<Button onClick={this.onClickViewOpenLoans}>View Loans</Button>}
+        >
+          <IfPermission perm="circulation.loans.collection.get">
+            <IfInterface name="circulation" version="2.1">
+              <this.connectedUserLoans
+                onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
+                onClickViewOpenLoans={this.onClickViewOpenLoans}
+                onClickViewClosedLoans={this.onClickViewClosedLoans}
+                displayHeading={false}
+                {...this.props}
+              />
+            </IfInterface>
+          </IfPermission>
+        </Accordion>
+        <Accordion label={<h2>Proxy Permissions</h2>} id='user_proxy' onToggle={this.onToggleSection} open={this.state.accordionSections['user_proxy']}>
+          <this.connectedProxyPermissions 
+            user={user} 
+            stripes={this.props.stripes} 
+            match={this.props.match} 
+            displayHeading={false}
+            {...this.props} 
+          />
+        </Accordion>
+        <Accordion 
+          label={<h2>Permissions</h2>} 
+          id='user_perms' 
+          onToggle={this.onToggleSection} 
+          open={this.state.accordionSections['user_perms']}
+        >
+          <IfPermission perm="perms.users.get">
+            <IfInterface name="permissions" version="4.0">
+              <this.connectedUserPermissions 
+                stripes={this.props.stripes}
+                match={this.props.match}
+                displayHeading={false}
+                ref={(ref) => {this.permsSection = ref;}}
+                {...this.props} 
+              />
+            </IfInterface>
+          </IfPermission>
+        </Accordion>
         <Layer isOpen={query.layer ? query.layer === 'edit' : false} label="Edit User Dialog">
           <UserForm
             initialValues={userFormData}
