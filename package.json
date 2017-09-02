@@ -196,7 +196,7 @@
     "eslint-plugin-react": "^6.4.1"
   },
   "dependencies": {
-    "@folio/stripes-components": "^1.5.0",
+    "@folio/stripes-components": "^1.7.0",
     "@folio/stripes-form": "^0.8.0",
     "classnames": "^2.2.5",
     "dateformat": "^2.0.0",
@@ -213,7 +213,7 @@
     "redux-form": "^7.0.3"
   },
   "peerDependencies": {
-    "@folio/stripes-connect": "^2.6.0",
-    "@folio/stripes-core": "^2.5.0"
+    "@folio/stripes-connect": "^2.7.0",
+    "@folio/stripes-core": "^2.7.0"
   }
 }
