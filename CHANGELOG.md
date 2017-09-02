@@ -1,6 +1,7 @@
 # Change history for ui-users
 
-## 2.10.0 (IN PROGRESS)
+## [2.10.0](https://github.com/folio-org/ui-users/tree/v2.10.0) (2017-09-01)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.9.0...v2.10.0)
 
 * Update permissions namespace in package.json. Towards STRIPES-435.
 * Correctly format column titles. Fixes UIU-176.
@@ -28,6 +29,7 @@
 * Selected part of settings is consistently highlighted. Fixes UIU-182.
 * Fixed a race-condition that sometimes caused an error when creating new users. UIU-195.
 * Initial integration with notes. Fixes UIU-196.
+* Upgrade dependencies to stripes-components 1.7.0, stripes-connect 2.7.0 and stripes-core 2.7.0.
 
 ## [2.9.0](https://github.com/folio-org/ui-users/tree/v2.9.0) (2017-08-03)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.8.0...v2.9.0)
