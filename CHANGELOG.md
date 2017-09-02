@@ -11,19 +11,23 @@
 * Visible fieldname "user ID" changed to "username" throughout. Fixes UIU-169.
 * Made the display of the create new user button conditional (UIS-71).
 * Fetch up to 100 loan records rather than the default of 10. Fixes UIU-173.
-* Displayed number of loans is now stable (side-effect of UIU-173 fix). Fixes UIU-184.
+* Displayed number of loans is now stable. Fixes UIU-184.
 * Switch from props.data to props.resources. Fixes UIU-136.
-* Better formatting of "Open Loans" and "Closed Loans" tabs. See UIU-128.
+* Better formatting of "Open Loans" and "Closed Loans" tabs. Fixes UIU-128.
 * Use translations for some loan-related messages. Fixes UIU-186.
 * Add password toggle. Fixes UIU-97.
 * Turn off autocomplete for username and password. Fixes UIU-190.
 * Add module test suites, carried over from ui-testing. FOLIO-800.
 * Update stripes-components to 1.5.0.
 * First pass at integrating `<Notes>`. See LIBAPP-188.
-* The `settings.usergroups.all` permission is visible. Part of UIU-130.
-* Add item's status, barcode, and return-date to loan-details pane. See UIU-177.
-* Link item's barcode to item-details pane. See UIU-177.
+* The `settings.usergroups.all` permission is visible. Fixes UIU-130.
+* Add item's status, barcode, and return-date to loan-details pane, and link item's barcode to item-details pane. Part of UIU-177.
 * Add various settings-related permssions. Part of UIU-197.
+* Verson 1 of Select User Proxy. Fixes UIU-104.
+* Add Item Status column to, and remove loan status from, loans display. Fixes UIU-175.
+* Selected part of settings is consistently highlighted. Fixes UIU-182.
+* Fixed a race-condition that sometimes caused an error when creating new users. UIU-195.
+* Initial integration with notes. Fixes UIU-196.
 
 ## [2.9.0](https://github.com/folio-org/ui-users/tree/v2.9.0) (2017-08-03)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.8.0...v2.9.0)
