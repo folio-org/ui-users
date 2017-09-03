@@ -98,7 +98,7 @@ module.exports.test = function(uitestctx) {
         .select('select[name*="addressType"]','Home')
         .click('#clickable-createnewuser')
         .wait('#clickable-newuser')
-        .wait(parseInt(process.env.FOLIO_UI_DEBUG) ? parseInt(config.debug_sleep) : 555) // debugging
+        .wait(parseInt(process.env.FOLIO_UI_DEBUG) ? parseInt(config.debug_sleep) : 3000) // debugging
         .then(result => { done() })
         .catch(done)
       })
