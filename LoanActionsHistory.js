@@ -1,13 +1,14 @@
 import _ from 'lodash';
 import React from 'react';
+import Link from 'react-router-dom/Link';
 import PropTypes from 'prop-types';
 import { Row, Col } from 'react-bootstrap';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
-import { formatDate, getFullName } from './util';
-import loanActionsMap from './data/loanActionMap';
+import { formatDateTime, getFullName } from './util';
+import loanActionMap from './data/loanActionMap';
 
 class LoanActionsHistory extends React.Component {
   static propTypes = {
@@ -47,7 +48,7 @@ class LoanActionsHistory extends React.Component {
     },
   });
 
-  // TODO refactor after join is supported
+  // TODO: refactor after join is supported in stripes-connect
   componentWillReceiveProps(nextProps) {
     const { loan, resources: { loanActions, userIds, users, loanActionsWithUser } } = nextProps;
 
@@ -55,7 +56,8 @@ class LoanActionsHistory extends React.Component {
       loanActions.records[0].id !== loan.id) return;
 
     if (!userIds.query || userIds.loan.id !== loan.id) {
-      const query = loanActions.records.map(r => `id=${r.userId}`).join(' or ');
+      const query = loanActions.records
+        .map(r => `id=${r.metaData.createdByUserId}`).join(' or ');
       this.props.mutator.userIds.replace({ query, loan });
     }
 
@@ -70,55 +72,79 @@ class LoanActionsHistory extends React.Component {
     const userMap = users.reduce((memo, user) =>
       Object.assign(memo, { [user.id]: user }), {});
     const records = loanActions.map(la =>
-      Object.assign({}, la, { user: userMap[la.userId] }));
+      Object.assign({}, la, { user: userMap[la.metaData.createdByUserId] }));
     this.props.mutator.loanActionsWithUser.replace({ loan, records });
   }
 
   render() {
     const { onCancel, loan, user, stripes, resources: { loanActionsWithUser } } = this.props;
     const loanActionsFormatter = {
-      Action: la => loanActionsMap[la.action],
-      'Action Date': la => formatDate(la.loanDate, stripes.locale),
-      'Due Date': la => (la.dueDate ? formatDate(la.dueDate, stripes.locale) : ''),
-      Operator: () => `${stripes.user.user.lastName} ${stripes.user.user.firstName}`, // TODO: replace with operator after CIRCSTORE-16
+      Action: la => loanActionMap[la.action],
+      'Action Date': la => formatDateTime(la.loanDate, stripes.locale),
+      'Due Date': la => (la.dueDate ? formatDateTime(la.dueDate, stripes.locale) : ''),
+      Operator: la => getFullName(la.user),
     };
 
     return (
       <Paneset isRoot>
         <Pane id="pane-loandetails" defaultWidth="100%" dismissible onClose={onCancel} paneTitle={'Loan Details'}>
           <Row>
-            <Col xs={5} >
-              <Row>
-                <Col xs={12}>
-                  <KeyValue label="Title" value={_.get(loan, ['item', 'title'], '')} />
-                </Col>
-              </Row>
-              <br />
-              <Row>
-                <Col xs={12}>
-                  <KeyValue label="Loan Status" value={_.get(loan, ['status', 'name'], '-')} />
-                </Col>
-              </Row>
+            <Col xs={4} >
+              <KeyValue label="Title" value={_.get(loan, ['item', 'title'], '')} />
             </Col>
-            <Col xs={3} >
-              <Row>
-                <Col xs={12}>
-                  <KeyValue label="Borrower" value={getFullName(user)} />
-                </Col>
-              </Row>
+            <Col xs={2} >
+              <KeyValue label="Barcode" value={<Link to={`/items/view/${_.get(loan, ['itemId'], '')}?query=${_.get(loan, ['item', 'barcode'], '')}`}>{_.get(loan, ['item', 'barcode'], '')}</Link>} />
             </Col>
-            <Col xs={4}>
-              <Row>
-                <Col xs={12}>
-                  <KeyValue label="Loan Date" value={formatDate(loan.loanDate, stripes.locale) || '-'} />
-                </Col>
-              </Row>
-              <br />
-              <Row>
-                <Col xs={12}>
-                  <KeyValue label="Due Date" value={formatDate(loan.dueDate, stripes.locale) || '-'} />
-                </Col>
-              </Row>
+            <Col xs={2} >
+              <KeyValue label="Item Status" value={_.get(loan, ['item', 'status', 'name'], '-')} />
+            </Col>
+            <Col xs={2} >
+              <KeyValue label="Location" value={_.get(loan, ['item', 'location', 'name'], '-')} />
+            </Col>
+            <Col xs={2} >
+              <KeyValue label="Request Queue" value="TODO" />
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={4} >
+              <KeyValue label="Authors" value="TODO" />
+            </Col>
+            <Col xs={2} >
+              <KeyValue label="Call Number" value="TODO" />
+            </Col>
+            <Col xs={2} >
+              <KeyValue label="Due Date" value={formatDateTime(loan.dueDate, stripes.locale) || '-'} />
+            </Col>
+            <Col xs={2} >
+              <KeyValue label="Claimed Returned" value="TODO" />
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={4} >
+              <KeyValue label="Borrower" value={getFullName(user)} />
+            </Col>
+            <Col xs={2} >
+              <KeyValue label="Loan Policy" value="TODO" />
+            </Col>
+            <Col xs={2} >
+              <KeyValue label="Loan Date" value={formatDateTime(loan.loanDate, stripes.locale) || '-'} />
+            </Col>
+            <Col xs={2} >
+              <KeyValue label="Lost" value="TODO" />
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={4} >
+              <KeyValue label="Proxy Borrower" value="TODO" />
+            </Col>
+            <Col xs={2} >
+              <KeyValue label="Renewal Count" value={_.get(loan, ['renewalCount'], '-')} />
+            </Col>
+            <Col xs={2} >
+              <KeyValue label="Return Date" value={formatDateTime(loan.returnDate, stripes.locale) || '-'} />
+            </Col>
+            <Col xs={2} >
+              <KeyValue label="Fine" value="TODO" />
             </Col>
           </Row>
           <br />
@@ -127,6 +153,7 @@ class LoanActionsHistory extends React.Component {
               id="list-loanactions"
               formatter={loanActionsFormatter}
               visibleColumns={['Action Date', 'Action', 'Due Date', 'Operator']}
+              columnMapping={loanActionMap}
               contentData={loanActionsWithUser.records}
             />
           }

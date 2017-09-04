@@ -1,0 +1,9 @@
+.UserFormRoot {
+  height: 100%;
+  overflow: auto;
+}
+
+.togglePw {
+  padding-left: 5px;
+  padding-top: 18px;
+}

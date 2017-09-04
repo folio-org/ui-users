@@ -1,6 +1,38 @@
 # Change history for ui-users
 
-## 2.9.0 (IN PROGRESS)
+## [2.10.0](https://github.com/folio-org/ui-users/tree/v2.10.0) (2017-09-01)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.9.0...v2.10.0)
+
+* Update permissions namespace in package.json. Towards STRIPES-435.
+* Correctly format column titles. Fixes UIU-176.
+* Use "Source" in place of "Operator" on loan details. Fixes UIU-178.
+* Add Time Stamp to Loan Dates. Fixes UIU-180.
+* Show Operator name on loan action history. Fixes UIU-163.
+* Username uniqueness check works again -- it had broken. Fixes UIU-183.
+* Visible fieldname "user ID" changed to "username" throughout. Fixes UIU-169.
+* Made the display of the create new user button conditional (UIS-71).
+* Fetch up to 100 loan records rather than the default of 10. Fixes UIU-173.
+* Displayed number of loans is now stable. Fixes UIU-184.
+* Switch from props.data to props.resources. Fixes UIU-136.
+* Better formatting of "Open Loans" and "Closed Loans" tabs. Fixes UIU-128.
+* Use translations for some loan-related messages. Fixes UIU-186.
+* Add password toggle. Fixes UIU-97.
+* Turn off autocomplete for username and password. Fixes UIU-190.
+* Add module test suites, carried over from ui-testing. FOLIO-800.
+* Update stripes-components to 1.5.0.
+* First pass at integrating `<Notes>`. See LIBAPP-188.
+* The `settings.usergroups.all` permission is visible. Fixes UIU-130.
+* Add item's status, barcode, and return-date to loan-details pane, and link item's barcode to item-details pane. Part of UIU-177.
+* Add various settings-related permssions. Part of UIU-197.
+* Verson 1 of Select User Proxy. Fixes UIU-104.
+* Add Item Status column to, and remove loan status from, loans display. Fixes UIU-175.
+* Selected part of settings is consistently highlighted. Fixes UIU-182.
+* Fixed a race-condition that sometimes caused an error when creating new users. UIU-195.
+* Initial integration with notes. Fixes UIU-196.
+* Upgrade dependencies to stripes-components 1.7.0, stripes-connect 2.7.0 and stripes-core 2.7.0.
+
+## [2.9.0](https://github.com/folio-org/ui-users/tree/v2.9.0) (2017-08-03)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.8.0...v2.9.0)
 
 * Details Pane remains open while switching selected user. Fixes UIU-153.
 * Add filterBy callback prop to `<Autocomplete>`. Fixes UIU-139.
@@ -10,7 +42,7 @@
 * Support sorting by barcode. Fixes UIU-151.
 * Use new-style specification of action-names in ui-users. Fixes UIU-149.
 * Change title in results pane. See comments in UIU-125.
-* Show open- and closed-loans counts on the user-details pain. See UIU-128
+* Show open- and closed-loans counts on the user-details pane. See UIU-128
 * Show "Open Loans" and "Closed Loans" tabs on the loans-list panes. See UIU-128.
 * Do not mention search-term in "No Results Found" message if there is none. Fixes UIU-158.
 * Show Operator name on loan action history. Fixes UIU-163.

@@ -1,6 +1,8 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
+import queryString from 'query-string';
+import transitionToParams from '@folio/stripes-components/util/transitionToParams';
 import Pane from '@folio/stripes-components/lib/Pane';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import Button from '@folio/stripes-components/lib/Button';
@@ -14,12 +16,14 @@ import IfInterface from '@folio/stripes-components/lib/IfInterface';
 
 import UserForm from './UserForm';
 import UserPermissions from './UserPermissions';
+import ProxyPermissions from './ProxyPermissions';
 import UserLoans from './UserLoans';
 import LoansHistory from './LoansHistory';
 import LoanActionsHistory from './LoanActionsHistory';
 import contactTypes from './data/contactTypes';
 import UserAddresses from './lib/UserAddresses';
 import { toListAddresses, toUserAddresses } from './converters/address';
+import removeQueryParam from './removeQueryParam';
 
 class ViewUser extends React.Component {
 
@@ -33,19 +37,15 @@ class ViewUser extends React.Component {
       }).isRequired,
     }).isRequired,
     paneWidth: PropTypes.string.isRequired,
-    data: PropTypes.shape({
+    resources: PropTypes.shape({
       user: PropTypes.arrayOf(PropTypes.object),
-      patronGroups: PropTypes.arrayOf(PropTypes.object),
-      editMode: PropTypes.shape({
-        mode: PropTypes.bool,
+      patronGroups: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
       }),
     }),
     mutator: React.PropTypes.shape({
       selUser: React.PropTypes.shape({
         PUT: React.PropTypes.func.isRequired,
-      }),
-      editMode: PropTypes.shape({
-        replace: PropTypes.func,
       }),
     }),
     match: PropTypes.shape({
@@ -54,10 +54,12 @@ class ViewUser extends React.Component {
     onClose: PropTypes.func,
     okapi: PropTypes.object,
     addressTypes: PropTypes.arrayOf(PropTypes.object),
+    notesToggle: PropTypes.func,
+    location: PropTypes.object,
+    history: PropTypes.object,
   };
 
   static manifest = Object.freeze({
-    editMode: { initialValue: { mode: false } },
     selUser: {
       type: 'okapi',
       path: 'users/:{userid}',
@@ -85,6 +87,8 @@ class ViewUser extends React.Component {
     this.connectedLoansHistory = props.stripes.connect(LoansHistory);
     this.connectedLoanActionsHistory = props.stripes.connect(LoanActionsHistory);
     this.connectedUserPermissions = props.stripes.connect(UserPermissions);
+    this.connectedProxyPermissions = props.stripes.connect(ProxyPermissions);
+
     this.dateLastUpdated = this.dateLastUpdated.bind(this);
     this.onClickCloseLoansHistory = this.onClickCloseLoansHistory.bind(this);
     this.onClickViewOpenLoans = this.onClickViewOpenLoans.bind(this);
@@ -92,19 +96,20 @@ class ViewUser extends React.Component {
     this.onClickViewLoanActionsHistory = this.onClickViewLoanActionsHistory.bind(this);
     this.onClickCloseLoanActionsHistory = this.onClickCloseLoanActionsHistory.bind(this);
     this.onAddressesUpdate = this.onAddressesUpdate.bind(this);
+    this.transitionToParams = transitionToParams.bind(this);
   }
 
   // EditUser Handlers
   onClickEditUser(e) {
     if (e) e.preventDefault();
     this.props.stripes.logger.log('action', 'clicked "edit user"');
-    this.props.mutator.editMode.replace({ mode: true });
+    this.transitionToParams({ layer: 'edit' });
   }
 
   onClickCloseEditUser(e) {
     if (e) e.preventDefault();
     this.props.stripes.logger.log('action', 'clicked "close edit user"');
-    this.props.mutator.editMode.replace({ mode: false });
+    removeQueryParam('layer', this.props.location, this.props.history);
   }
 
   onClickViewOpenLoans(e) {
@@ -155,20 +160,27 @@ class ViewUser extends React.Component {
   }
 
   getUser() {
-    const { data: { selUser }, match: { params: { userid } } } = this.props;
+    const { resources, match: { params: { userid } } } = this.props;
+    const selUser = (resources.selUser || {}).records || [];
     if (!selUser || selUser.length === 0 || !userid) return null;
-    const user = selUser.find(u => u.id === userid);
-    return user ? _.cloneDeep(user) : user;
+    return selUser.find(u => u.id === userid);
   }
 
-  update(data) {
-    if (data.personal.addresses) {
-      data.personal.addresses = toUserAddresses(data.personal.addresses, this.props.addressTypes); // eslint-disable-line no-param-reassign
+   // eslint-disable-next-line class-methods-use-this
+  getUserFormData(user, addresses) {
+    const userForData = user ? _.cloneDeep(user) : user;
+    userForData.personal.addresses = addresses;
+    return userForData;
+  }
+
+  update(user) {
+    if (user.personal.addresses) {
+      user.personal.addresses = toUserAddresses(user.personal.addresses, this.props.addressTypes); // eslint-disable-line no-param-reassign
     }
 
     // eslint-disable-next-line no-param-reassign
-    if (data.creds) delete data.creds; // not handled on edit (yet at least)
-    this.props.mutator.selUser.PUT(data).then(() => {
+    if (user.creds) delete user.creds; // not handled on edit (yet at least)
+    this.props.mutator.selUser.PUT(user).then(() => {
       this.setState({
         lastUpdate: new Date().toISOString(),
       });
@@ -200,10 +212,13 @@ class ViewUser extends React.Component {
   render() {
     const dueDate = new Date(Date.parse('2014-11-12')).toLocaleDateString(this.props.stripes.locale);
     const fineHistory = [{ 'Due Date': dueDate, Amount: '34.23', Status: 'Unpaid' }];
-    const { data: { patronGroups } } = this.props;
+    const { resources, location } = this.props;
+    const query = location.search ? queryString.parse(location.search) : {};
     const user = this.getUser();
+    const patronGroups = (resources.patronGroups || {}).records || [];
 
     const detailMenu = (<PaneMenu>
+      <button id="clickable-show-notes" style={{ visibility: !user ? 'hidden' : 'visible' }} onClick={this.props.notesToggle} title="Show Notes"><Icon icon="comment" />Notes</button>
       <IfPermission perm="users.item.put">
         <button id="clickable-edituser" style={{ visibility: !user ? 'hidden' : 'visible' }} onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button>
       </IfPermission>
@@ -220,8 +235,7 @@ class ViewUser extends React.Component {
     const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
     const preferredContact = contactTypes.find(g => g.id === _.get(user, ['personal', 'preferredContactTypeId'], '')) || { type: '' };
     const addresses = toListAddresses(_.get(user, ['personal', 'addresses'], []), this.props.addressTypes);
-    if (user.personal)
-      user.personal.addresses = addresses;
+    const userFormData = this.getUserFormData(user, addresses);
 
     return (
       <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
@@ -234,7 +248,7 @@ class ViewUser extends React.Component {
             </Row>
             <Row>
               <Col xs={12}>
-                <KeyValue label="User ID" value={_.get(user, ['username'], '')} />
+                <KeyValue label="Username" value={_.get(user, ['username'], '')} />
               </Col>
             </Row>
             <br />
@@ -352,19 +366,20 @@ class ViewUser extends React.Component {
             />
           </IfInterface>
         </IfPermission>
+        <this.connectedProxyPermissions user={user} stripes={this.props.stripes} match={this.props.match} {...this.props} />
         <IfPermission perm="perms.users.get">
           <IfInterface name="permissions" version="4.0">
             <this.connectedUserPermissions stripes={this.props.stripes} match={this.props.match} {...this.props} />
           </IfInterface>
         </IfPermission>
-        <Layer isOpen={this.props.data.editMode ? this.props.data.editMode.mode : false} label="Edit User Dialog">
+        <Layer isOpen={query.layer ? query.layer === 'edit' : false} label="Edit User Dialog">
           <UserForm
-            initialValues={user}
+            initialValues={userFormData}
             addressTypes={this.props.addressTypes}
             onSubmit={(record) => { this.update(record); }}
             onCancel={this.onClickCloseEditUser}
             okapi={this.props.okapi}
-            optionLists={{ patronGroups: this.props.data.patronGroups, contactTypes }}
+            optionLists={{ patronGroups, contactTypes }}
           />
         </Layer>
         <Layer isOpen={this.state.viewLoansHistoryMode} label="Loans">
@@ -388,6 +403,7 @@ class ViewUser extends React.Component {
           />
         </Layer>
       </Pane>
+
     );
   }
 }

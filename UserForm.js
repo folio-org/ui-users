@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import Pane from '@folio/stripes-components/lib/Pane';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Glyphicon } from 'react-bootstrap';
 import Button from '@folio/stripes-components/lib/Button';
 import TextField from '@folio/stripes-components/lib/TextField';
 import Select from '@folio/stripes-components/lib/Select';
@@ -14,10 +14,12 @@ import AddressEditList from '@folio/stripes-components/lib/structures/AddressFie
 import fetch from 'isomorphic-fetch';
 import { Field } from 'redux-form';
 import stripesForm from '@folio/stripes-form';
+import classNames from 'classnames';
 
 import { countriesOptions } from './data/countries';
 import Autocomplete from './lib/Autocomplete';
 import { toAddressTypeOptions } from './converters/address_type';
+import css from './UserForm.css';
 
 const sys = require('stripes-loader'); // eslint-disable-line
 const okapiUrl = sys.okapi.url;
@@ -64,8 +66,8 @@ function asyncValidate(values, dispatch, props, blurredField) {
           console.log('Error fetching user');
         } else {
           response.json().then((json) => {
-            if (json.total_records > 0)
-              reject({ username: 'This User ID has already been taken' });
+            if (json.totalRecords > 0)
+              reject({ username: 'This username has already been taken' });
             else
               resolve();
           });
@@ -98,6 +100,13 @@ class UserForm extends React.Component {
   constructor(props) {
     super(props);
     okapiToken = props.okapi.token;
+    this.state = { showPassword: false };
+  }
+
+  togglePassword() {
+    this.setState({
+      showPassword: !this.state.showPassword,
+    });
   }
 
   render() {
@@ -127,14 +136,23 @@ class UserForm extends React.Component {
     };
 
     return (
-      <form id="form-user" style={{ height: '100%', overflow: 'auto' }}>
+      <form className={css.UserFormRoot} id="form-user">
         <Paneset isRoot>
           <Pane defaultWidth="100%" firstMenu={addUserFirstMenu} lastMenu={initialValues.username ? editUserLastMenu : addUserLastMenu} paneTitle={initialValues.username ? 'Edit User' : 'New User'}>
             <Row>
               <Col sm={5} smOffset={1}>
                 <h2>User Record</h2>
-                <Field label="User ID *" name="username" id="adduser_username" component={TextField} required fullWidth />
-                {!initialValues.id ? <Field label="Password" name="creds.password" id="pw" component={TextField} required fullWidth /> : null}
+                <Field label="Username *" name="username" id="adduser_username" component={TextField} required fullWidth />
+                {!initialValues.id &&
+                  <div className="input-group">
+                    <Field label="Password" name="creds.password" id="pw" autoComplete="new-password" type={this.state.showPassword ? 'text' : 'password'} component={TextField} required fullWidth />
+                    <span className={classNames('input-group-btn', css.togglePw)}>
+                      <Button buttonStyle="secondary hollow" id="toggle_pw_btn" onClick={() => this.togglePassword()}>
+                        {this.state.showPassword ? <Glyphicon glyph="eye-open" /> : <Glyphicon glyph="eye-close" />}
+                      </Button>
+                    </span>
+                  </div>
+                }
                 <Field label="Status *" name="active" component={RadioButtonGroup}>
                   <RadioButton label="Active" id="useractiveYesRB" value="true" inline />
                   <RadioButton label="Inactive" id="useractiveNoRB" value="false" inline />
