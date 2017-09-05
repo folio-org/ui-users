@@ -1,5 +1,11 @@
 # Change history for ui-users
 
+## [2.10.1](https://github.com/folio-org/ui-users/tree/v2.10.1) (2017-09-05)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.10.0...v2.10.1)
+
+* Add wait time after create-user request in 'new_user' test. UIU-205
+
+
 ## [2.10.0](https://github.com/folio-org/ui-users/tree/v2.10.0) (2017-09-01)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.9.0...v2.10.0)
 
