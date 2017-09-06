@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Row, Col } from 'react-bootstrap';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import Pluggable from '@folio/stripes-components/lib/Pluggable';
+import { Accordion } from '@folio/stripes-components/lib/Accordion';
 
 import { getFullName, getRowURL, getAnchoredRowFormatter } from './util';
 
@@ -27,11 +28,9 @@ const propTypes = {
       PUT: React.PropTypes.func.isRequired,
     }),
   }).isRequired,
-  displayHeading: PropTypes.bool,
-};
-
-const defaultProps = {
-  displayHeading: true,
+  expanded: PropTypes.bool,
+  onToggle: PropTypes.func,
+  accordionId: PropTypes.string.isRequired,
 };
 
 class ProxyPermissions extends React.Component {
@@ -104,72 +103,75 @@ class ProxyPermissions extends React.Component {
       Proxy: pr => getFullName(pr),
     };
 
-    return (<div>
-      { this.props.displayHeading &&
+    const { onToggle, accordionId, expanded } = this.props;
+
+    return (
+      <Accordion
+        open={expanded}
+        id={accordionId}
+        onToggle={onToggle}
+        label={
+          <h2>Proxy Permissions</h2>
+        }
+      >
         <Row>
-          <Col xs={5}>
-            <h3 className="marginTop0">Proxy Permissions</h3>
+          <Col xs={12}>
+            <MultiColumnList
+              id="list-sponsors"
+              formatter={sponsorFormatter}
+              rowFormatter={getAnchoredRowFormatter}
+              visibleColumns={['Sponsor']}
+              contentData={sponsors}
+              isEmptyMessage="No sponsors found"
+              onRowClick={this.onSelectRow}
+            />
           </Col>
         </Row>
-      }
-      <Row>
-        <Col xs={12}>
-          <MultiColumnList
-            id="list-sponsors"
-            formatter={sponsorFormatter}
-            rowFormatter={getAnchoredRowFormatter}
-            visibleColumns={['Sponsor']}
-            contentData={sponsors}
-            isEmptyMessage="No sponsors found"
-            onRowClick={this.onSelectRow}
-          />
-        </Col>
-      </Row>
-      <Row className="marginTopHalf">
-        <Col xs={12}>
-          <Pluggable
-            aria-haspopup="true"
-            type="find-user"
-            {...this.props}
-            dataKey="sponsors"
-            searchLabel="&#43; Add Sponsor"
-            searchButtonStyle="primary"
-            selectUser={this.addSponsor}
-            visibleColumns={['Name', 'Patron Group', 'Username', 'Barcode']}
-            disableUserCreation={disableUserCreation}
-          />
-        </Col>
-      </Row>
-      <hr />
-      <Row>
-        <Col xs={12}>
-          <MultiColumnList
-            id="list-proxies"
-            formatter={proxyFormatter}
-            rowFormatter={getAnchoredRowFormatter}
-            visibleColumns={['Proxy']}
-            contentData={proxies}
-            isEmptyMessage="No proxies found"
-            onRowClick={this.onSelectRow}
-          />
-        </Col>
-      </Row>
-      <Row className="marginTopHalf">
-        <Col xs={12}>
-          <Pluggable
-            aria-haspopup="true"
-            type="find-user"
-            {...this.props}
-            dataKey="proxies"
-            searchLabel="&#43; Add Proxy"
-            searchButtonStyle="primary"
-            selectUser={this.addProxy}
-            visibleColumns={['Name', 'Patron Group', 'Username', 'Barcode']}
-            disableUserCreation={disableUserCreation}
-          />
-        </Col>
-      </Row>
-    </div>);
+        <Row className="marginTopHalf">
+          <Col xs={12}>
+            <Pluggable
+              aria-haspopup="true"
+              type="find-user"
+              {...this.props}
+              dataKey="sponsors"
+              searchLabel="&#43; Add Sponsor"
+              searchButtonStyle="primary"
+              selectUser={this.addSponsor}
+              visibleColumns={['Name', 'Patron Group', 'Username', 'Barcode']}
+              disableUserCreation={disableUserCreation}
+            />
+          </Col>
+        </Row>
+        <hr />
+        <Row>
+          <Col xs={12}>
+            <MultiColumnList
+              id="list-proxies"
+              formatter={proxyFormatter}
+              rowFormatter={getAnchoredRowFormatter}
+              visibleColumns={['Proxy']}
+              contentData={proxies}
+              isEmptyMessage="No proxies found"
+              onRowClick={this.onSelectRow}
+            />
+          </Col>
+        </Row>
+        <Row className="marginTopHalf">
+          <Col xs={12}>
+            <Pluggable
+              aria-haspopup="true"
+              type="find-user"
+              {...this.props}
+              dataKey="proxies"
+              searchLabel="&#43; Add Proxy"
+              searchButtonStyle="primary"
+              selectUser={this.addProxy}
+              visibleColumns={['Name', 'Patron Group', 'Username', 'Barcode']}
+              disableUserCreation={disableUserCreation}
+            />
+          </Col>
+        </Row>
+      </Accordion>);
   }
 }
 
