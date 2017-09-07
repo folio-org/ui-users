@@ -445,10 +445,7 @@ class Users extends React.Component {
             <div style={{ textAlign: 'center' }}>
               <strong>Users</strong>
               <div>
-                <em>{stripes.intl.formatMessage({ id: 'ui-users.resultCount' }, {
-                  count,
-                  maybeS: count === 1 ? '' : 's',
-                })}</em>
+                <em>{stripes.intl.formatMessage({ id: 'ui-users.resultCount' }, { count })}</em>
               </div>
             </div>
           }
