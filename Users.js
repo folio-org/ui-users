@@ -429,6 +429,7 @@ class Users extends React.Component {
 
     const maybeTerm = this.state.searchTerm ? ` for "${this.state.searchTerm}"` : '';
     const maybeSpelling = this.state.searchTerm ? 'spelling and ' : '';
+    const count = resource && resource.hasLoaded ? resource.other.totalRecords : '';
     return (
       <Paneset>
         <SRStatus ref={(ref) => { this.SRStatus = ref; }} />
@@ -445,7 +446,8 @@ class Users extends React.Component {
               <strong>Users</strong>
               <div>
                 <em>{stripes.intl.formatMessage({ id: 'ui-users.resultCount' }, {
-                  count: resource && resource.hasLoaded ? resource.other.totalRecords : '',
+                  count,
+                  maybeS: count === 1 ? '' : 's',
                 })}</em>
               </div>
             </div>

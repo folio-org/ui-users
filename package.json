@@ -167,14 +167,14 @@
         "loans.title": "Loans",
         "loans.openLoans": "open loans",
         "loans.closedLoans": "closed loans",
-        "resultCount": "{count} Results Found"
+        "resultCount": "{count} Result{maybeS} Found"
       },
       "de": {
         "search": "Suche",
         "loans.title": "Ausleihen",
         "loans.openLoans": "Offene Ausleihen",
         "loans.closedLoans": "Abgeschlossene Ausleihen",
-        "resultCount": "Gefunden {count} Datensätze"
+        "resultCount": "Gefunden {count} Datensätze{maybeS}"
       }
     }
   },
