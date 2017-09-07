@@ -444,7 +444,9 @@ class Users extends React.Component {
             <div style={{ textAlign: 'center' }}>
               <strong>Users</strong>
               <div>
-                <em>{resource && resource.hasLoaded ? resource.other.totalRecords : ''} Result{users.length === 1 ? '' : 's'} Found</em>
+                <em>{stripes.intl.formatMessage({ id: 'ui-users.resultCount' }, {
+                  count: resource && resource.hasLoaded ? resource.other.totalRecords : '',
+                })}</em>
               </div>
             </div>
           }

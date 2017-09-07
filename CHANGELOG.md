@@ -1,5 +1,10 @@
 # Change history for ui-users
 
+## 2.11.0 (IN PROGRESS)
+
+* Add and use new translation `ui-users.resultCount`. Allows us to exercise the use of placeholders. Fixes UIU-204.
+
+
 ## [2.10.1](https://github.com/folio-org/ui-users/tree/v2.10.1) (2017-09-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.10.0...v2.10.1)
 
