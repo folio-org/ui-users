@@ -290,9 +290,11 @@ class Users extends React.Component {
     const creds = Object.assign({}, user.creds, { username: user.username });
     if (user.creds) delete user.creds; // eslint-disable-line no-param-reassign
     // POST credentials, permission-user, permissions;
-    return this.postCreds(user.username, creds)
-    // POST user record
-    .then(() => this.props.mutator.users.POST(user))
+    this.props.mutator.users.POST(user)
+    .then(newUser => {
+      console.log("new user is ", newUser);
+      this.postCreds(newUser.id, creds);
+    })
     .then(() => this.onClickCloseNewUser())
     .catch(() => {
       // TODO: rethrow appropriate SubmissionError
@@ -300,9 +302,9 @@ class Users extends React.Component {
     });
   }
 
-  postCreds = (username, creds) => {
-    this.log('xhr', `POST credentials for new user '${username}':`, creds);
-    const localCreds = Object.assign({}, creds, creds.password ? {} : { password: '' });
+  postCreds = (userId, creds) => {
+    this.log('xhr', `POST credentials for new user '${userId}':`, creds);
+    const localCreds = Object.assign({}, creds, creds.password ? {} : { password: '' }, { userId: userId });
     return fetch(`${this.okapi.url}/authn/credentials`, {
       method: 'POST',
       headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token, 'Content-Type': 'application/json' }),
@@ -311,17 +313,17 @@ class Users extends React.Component {
       if (response.status >= 400) {
         this.log('xhr', 'Users. POST of creds failed.');
       } else {
-        this.postPerms(username, []); // create empty permissions user
+        this.postPerms(userId, []); // create empty permissions user
       }
     });
   }
 
-  postPerms = (username, perms) => {
-    this.log('xhr', `POST permissions for new user '${username}':`, perms);
+  postPerms = (userId, perms) => {
+    this.log('xhr', `POST permissions for new user '${userId}':`, perms);
     fetch(`${this.okapi.url}/perms/users`, {
       method: 'POST',
       headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token, 'Content-Type': 'application/json' }),
-      body: JSON.stringify({ username, permissions: perms }),
+      body: JSON.stringify({ userId, permissions: perms }),
     }).then((response) => {
       if (response.status >= 400) {
         this.log('xhr', 'Users. POST of users permissions failed.');
