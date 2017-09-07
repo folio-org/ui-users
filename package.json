@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "2.8.0",
+  "version": "2.10.1",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -34,13 +34,13 @@
         "displayName": "UI: Users module is enabled"
       },
       {
-        "permissionName": "users-bl.view",
+        "permissionName": "ui-users.view",
         "displayName": "Users: Can view user profile",
         "description": "Some subperms can be deleted later when submodules use modern permission names",
         "subPermissions": [
+          "module.users.enabled",
           "users-bl.collection.get",
           "users-bl.item.get",
-          "module.users.enabled",
           "addresstypes.collection.get",
           "users.collection.get",
           "users.item.get",
@@ -50,11 +50,11 @@
         "visible": true
       },
       {
-        "permissionName": "users-bl.edit",
+        "permissionName": "ui-users.edit",
         "displayName": "Users: Can edit user profile",
         "description": "Some subperms can be deleted later when bl does updates and ModulePermissions can be used",
         "subPermissions": [
-          "users-bl.view",
+          "ui-users.view",
           "users-bl.item.put",
           "users.item.put",
           "login.item.put"
@@ -62,11 +62,11 @@
         "visible": true
       },
       {
-        "permissionName": "users-bl.create",
+        "permissionName": "ui-users.create",
         "displayName": "Users: Can create new user",
         "description": "Some subperms can be deleted later when bl does updates and ModulePermissions can be used",
         "subPermissions": [
-          "users-bl.edit",
+          "ui-users.edit",
           "users-bl.item.post",
           "users.item.post",
           "perms.users.item.post",
@@ -75,21 +75,21 @@
         "visible": true
       },
       {
-        "permissionName": "users-bl.viewperms",
+        "permissionName": "ui-users.viewperms",
         "displayName": "Users: Can view permissions assigned to users",
         "description": "Includes all of view",
         "subPermissions": [
-          "users-bl.view",
+          "ui-users.view",
           "perms.users.get"
         ],
         "visible": true
       },
       {
-        "permissionName": "users-bl.editperms",
+        "permissionName": "ui-users.editperms",
         "displayName": "Users: Can assign and unassign permissions to users",
         "description": "",
         "subPermissions": [
-          "users-bl.viewperms",
+          "ui-users.viewperms",
           "perms.users.item.put",
           "perms.users.item.post",
           "perms.users.item.delete"
@@ -97,19 +97,27 @@
         "visible": true
       },
       {
-        "permissionName": "users-bl.editpermsets",
+        "permissionName": "ui-users.settings.permsets",
         "displayName": "Settings (Users): Can create, edit and remove permission sets",
-        "description": "This seems out of place in users-bl, maybe it belongs under perms or settings",
+        "description": "",
         "subPermissions": [
           "perms.permissions.get",
           "perms.permissions.item.put",
           "perms.permissions.item.post",
-          "perms.permissions.item.delete"
+          "perms.permissions.item.delete",
+          "settings.users.enabled"
         ],
         "visible": true
       },
       {
-        "permissionName": "settings.usergroups.all",
+        "permissionName": "ui-users.editpermsets",
+        "displayName": "Settings (Users): Can create, edit and remove permission sets [LEGACY]",
+        "description": "",
+        "subPermissions": [ "ui-users.settings.permsets" ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.usergroups",
         "displayName": "Settings (Users): Can create, edit and remove patron groups",
         "subPermissions": [
           "usergroups.collection.get",
@@ -117,11 +125,56 @@
           "usergroups.item.get",
           "usergroups.item.post",
           "usergroups.item.put",
+          "settings.users.enabled"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "settings.usergroups.all",
+        "displayName": "Settings (Users): Can create, edit and remove patron groups [LEGACY]",
+        "subPermissions": [ "ui-users.settings.usergroups" ]
+      },
+      {
+        "permissionName": "ui-users.settings.addresstypes",
+        "displayName": "Settings (Users): Can create, edit and remove address types",
+        "subPermissions": [
+          "addresstypes.collection.get",
+          "addresstypes.item.get",
+          "addresstypes.item.post",
+          "addresstypes.item.put",
+          "addresstypes.item.delete",
+          "settings.users.enabled"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "settings.addresstypes.all",
+        "displayName": "Settings (Users): Can create, edit and remove address types [LEGACY]",
+        "subPermissions": [ "ui-users.settings.addresstypes" ]
+      },
+      {
+        "permissionName": "settings.users.enabled",
+        "displayName": "Settings (Users): display list of settings pages",
+        "subPermissions": [
           "settings.enabled"
         ],
-        "visible": false
+        "visible": true
       }
-    ]
+    ],
+    "translations": {
+      "en": {
+        "search": "Search",
+        "loans.title": "Loans",
+        "loans.openLoans": "open loans",
+        "loans.closedLoans": "closed loans"
+      },
+      "de": {
+        "search": "Suche",
+        "loans.title": "Ausleihen",
+        "loans.openLoans": "Offene Ausleihen",
+        "loans.closedLoans": "Abgeschlossene Ausleihen"
+      }
+    }
   },
   "scripts": {
     "lint": "eslint *.js lib settings || true",
@@ -143,8 +196,9 @@
     "eslint-plugin-react": "^6.4.1"
   },
   "dependencies": {
-    "@folio/stripes-components": "^1.4.0",
+    "@folio/stripes-components": "^1.7.0",
     "@folio/stripes-form": "^0.8.0",
+    "classnames": "^2.2.5",
     "dateformat": "^2.0.0",
     "hashcode": "^1.0.3",
     "isomorphic-fetch": "^2.2.1",
@@ -154,11 +208,13 @@
     "react": "^15.4.2",
     "react-bootstrap": "^0.31.1",
     "react-bootstrap-typeahead": "^1.4.0",
+    "react-intl": "^2.3.0",
     "react-router-dom": "^4.0.0",
     "redux-form": "^7.0.3"
   },
   "peerDependencies": {
-    "@folio/stripes-connect": "^2.4.0",
-    "@folio/stripes-core": "^2.2.0"
+    "@folio/stripes-connect": "^2.7.0",
+    "@folio/stripes-core": "^2.7.0",
+    "@folio/stripes-logger": "^0.0.2"
   }
 }

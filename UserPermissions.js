@@ -3,9 +3,13 @@ import PropTypes from 'prop-types';
 import RenderPermissions from './lib/RenderPermissions';
 
 const propTypes = {
-  data: PropTypes.shape({
-    userPermissions: PropTypes.arrayOf(PropTypes.object),
-    availablePermissions: PropTypes.arrayOf(PropTypes.object),
+  resources: PropTypes.shape({
+    userPermissions: PropTypes.shape({
+      records: PropTypes.arrayOf(PropTypes.object),
+    }),
+    availablePermissions: PropTypes.shape({
+      records: PropTypes.arrayOf(PropTypes.object),
+    }),
   }).isRequired,
   mutator: PropTypes.shape({
     userPermissions: PropTypes.shape({
@@ -52,7 +56,9 @@ class UserPermissions extends React.Component {
   }
 
   render() {
-    const { availablePermissions, userPermissions } = this.props.data;
+    const resources = this.props.resources;
+    const availablePermissions = (resources.availablePermissions || {}).records || [];
+    const userPermissions = (resources.userPermissions || {}).records || [];
 
     return (<RenderPermissions
       {...this.props}

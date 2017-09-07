@@ -11,20 +11,20 @@ const pages = [
     route: 'perms',
     label: 'Permission sets',
     component: PermissionSets,
-    perm: 'perms.permissions.get',
+    perm: 'ui-users.editpermsets',
   },
   {
     route: 'groups',
     label: 'Patron groups',
     component: PatronGroupsSettings,
-    // No perm needed yet
+    perm: 'settings.usergroups.all',
   },
 
   {
     route: 'addresstypes',
     label: 'Address Types',
     component: AddressTypesSettings,
-    // No perm needed yet
+    perm: 'settings.addresstypes.all',
   },
 ];
 

@@ -14,14 +14,17 @@ import FilterPaneSearch from '@folio/stripes-components/lib/FilterPaneSearch';
 import Layer from '@folio/stripes-components/lib/Layer';
 import FilterGroups, { initialFilterState, onChangeFilter as commonChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
 import SRStatus from '@folio/stripes-components/lib/SRStatus';
+import Notes from '@folio/stripes-components/lib/structures/Notes';
 
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
 import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
 import IfPermission from '@folio/stripes-components/lib/IfPermission';
+import { stripesShape } from '@folio/stripes-core/src/Stripes';
 
 import UserForm from './UserForm';
 import ViewUser from './ViewUser';
 
+import removeQueryParam from './removeQueryParam';
 import contactTypes from './data/contactTypes';
 import { toUserAddresses } from './converters/address';
 import packageInfo from './package';
@@ -49,15 +52,14 @@ const filterConfig = [
 
 class Users extends React.Component {
   static propTypes = {
-    stripes: PropTypes.shape({
-      logger: PropTypes.shape({
-        log: PropTypes.func.isRequired,
-      }).isRequired,
-      connect: PropTypes.func.isRequired,
-      hasPerm: PropTypes.func.isRequired,
-    }).isRequired,
-    data: PropTypes.object.isRequired,
+    stripes: stripesShape.isRequired,
     resources: PropTypes.shape({
+      patronGroups: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      addressTypes: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
       users: PropTypes.shape({
         hasLoaded: PropTypes.bool.isRequired,
         other: PropTypes.shape({
@@ -73,6 +75,7 @@ class Users extends React.Component {
           }),
         ),
       }),
+      userCount: PropTypes.number,
     }).isRequired,
     history: PropTypes.shape({
       push: PropTypes.func.isRequired,
@@ -85,9 +88,6 @@ class Users extends React.Component {
       path: PropTypes.string.isRequired,
     }).isRequired,
     mutator: PropTypes.shape({
-      addUserMode: PropTypes.shape({
-        replace: PropTypes.func,
-      }),
       userCount: PropTypes.shape({
         replace: PropTypes.func,
       }),
@@ -101,10 +101,10 @@ class Users extends React.Component {
       token: PropTypes.string.isRequired,
     }).isRequired,
     onSelectRow: PropTypes.func,
+    disableUserCreation: PropTypes.bool,
   };
 
   static manifest = Object.freeze({
-    addUserMode: { initialValue: { mode: false } },
     userCount: { initialValue: INITIAL_RESULT_COUNT },
     users: {
       type: 'okapi',
@@ -121,7 +121,7 @@ class Users extends React.Component {
               Active: 'active',
               Name: 'personal.lastName personal.firstName',
               'Patron Group': 'patronGroup.group',
-              'User ID': 'username',
+              Username: 'username',
               Barcode: 'barcode',
               Email: 'personal.email',
             },
@@ -159,6 +159,7 @@ class Users extends React.Component {
       selectedItem: initiallySelected,
       searchTerm: query.query || '',
       sortOrder: query.sort || '',
+      showNotesPane: false,
     };
 
     this.okapi = props.okapi;
@@ -166,6 +167,8 @@ class Users extends React.Component {
     this.commonChangeFilter = commonChangeFilter.bind(this);
     this.transitionToParams = transitionToParams.bind(this);
     this.connectedViewUser = props.stripes.connect(ViewUser);
+    this.connectedNotes = props.stripes.connect(Notes);
+
     const logger = props.stripes.logger;
     this.log = logger.log.bind(logger);
 
@@ -173,6 +176,8 @@ class Users extends React.Component {
 
     this.resultsList = null;
     this.SRStatus = null;
+
+    this.toggleNotes = this.toggleNotes.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -191,7 +196,8 @@ class Users extends React.Component {
   }
 
   componentWillUpdate() {
-    const pg = this.props.data.patronGroups;
+    const pg = (this.props.resources.patronGroups || {}).records || [];
+
     if (pg && pg.length) {
       filterConfig[1].values = pg.map(rec => ({ name: rec.group, cql: rec.id }));
     }
@@ -236,13 +242,13 @@ class Users extends React.Component {
   onClickAddNewUser = (e) => {
     if (e) e.preventDefault();
     this.log('action', 'clicked "add new user"');
-    this.props.mutator.addUserMode.replace({ mode: true });
+    this.transitionToParams({ layer: 'create' });
   }
 
   onClickCloseNewUser = (e) => {
     if (e) e.preventDefault();
     this.log('action', 'clicked "close new user"');
-    this.props.mutator.addUserMode.replace({ mode: false });
+    removeQueryParam('layer', this.props.location, this.props.history);
   }
 
   onChangeFilter = (e) => {
@@ -258,7 +264,7 @@ class Users extends React.Component {
   }
 
   onNeedMore = () => {
-    this.props.mutator.userCount.replace(this.props.data.userCount + RESULT_COUNT_INCREMENT);
+    this.props.mutator.userCount.replace(this.props.resources.userCount + RESULT_COUNT_INCREMENT);
   }
 
   getRowURL(rowData) {
@@ -274,25 +280,30 @@ class Users extends React.Component {
     this.transitionToParams({ filters: Object.keys(filters).filter(key => filters[key]).join(',') });
   }
 
-  create = (data) => {
-    if (data.personal.addresses) {
-      data.personal.addresses = toUserAddresses(data.personal.addresses, this.props.data.addressTypes); // eslint-disable-line no-param-reassign
+  create = (user) => {
+    if (user.personal.addresses) {
+      const addressTypes = (this.props.resources.addressTypes || {}).records || [];
+      user.personal.addresses = toUserAddresses(user.personal.addresses, addressTypes); // eslint-disable-line no-param-reassign
     }
 
     // extract creds object from user object
-    const creds = Object.assign({}, data.creds, { username: data.username });
-    if (data.creds) delete data.creds; // eslint-disable-line no-param-reassign
-    // POST user record
-    this.props.mutator.users.POST(data);
+    const creds = Object.assign({}, user.creds, { username: user.username });
+    if (user.creds) delete user.creds; // eslint-disable-line no-param-reassign
     // POST credentials, permission-user, permissions;
-    this.postCreds(data.username, creds);
-    this.onClickCloseNewUser();
+    return this.postCreds(user.username, creds)
+    // POST user record
+    .then(() => this.props.mutator.users.POST(user))
+    .then(() => this.onClickCloseNewUser())
+    .catch(() => {
+      // TODO: rethrow appropriate SubmissionError
+      // http://redux-form.com/7.0.3/docs/api/SubmissionError.md/
+    });
   }
 
   postCreds = (username, creds) => {
     this.log('xhr', `POST credentials for new user '${username}':`, creds);
     const localCreds = Object.assign({}, creds, creds.password ? {} : { password: '' });
-    fetch(`${this.okapi.url}/authn/credentials`, {
+    return fetch(`${this.okapi.url}/authn/credentials`, {
       method: 'POST',
       headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token, 'Content-Type': 'application/json' }),
       body: JSON.stringify(localCreds),
@@ -327,6 +338,15 @@ class Users extends React.Component {
     this.props.history.push(`${this.props.match.path}${this.props.location.search}`);
   }
 
+  toggleNotes() {
+    this.setState((curState) => {
+      const show = !curState.showNotesPane;
+      return {
+        showNotesPane: show,
+      };
+    });
+  }
+
   // custom row formatter to wrap rows in anchor tags.
   anchoredRowFormatter(
     { rowIndex,
@@ -351,11 +371,15 @@ class Users extends React.Component {
   }
 
   render() {
-    const { data, resources, stripes } = this.props;
+    const { resources, stripes, location } = this.props;
     const users = (resources.users || {}).records || [];
+    const patronGroups = (resources.patronGroups || {}).records || [];
+    const addressTypes = (resources.addressTypes || {}).records || [];
+    const resource = resources.users;
+    const query = location.search ? queryString.parse(location.search) : {};
 
     /* searchHeader is a 'custom pane header'*/
-    const searchHeader = <FilterPaneSearch searchFieldId="input-user-search" onChange={this.onChangeSearch} onClear={this.onClearSearch} resultsList={this.resultsList} value={this.state.searchTerm} placeholder={'Search'} />;
+    const searchHeader = <FilterPaneSearch searchFieldId="input-user-search" onChange={this.onChangeSearch} onClear={this.onClearSearch} resultsList={this.resultsList} value={this.state.searchTerm} placeholder={stripes.intl.formatMessage({ id: 'ui-users.search' })} />;
 
     const newUserButton = (
       <IfPermission perm="users.item.post">
@@ -374,18 +398,18 @@ class Users extends React.Component {
       Name: user => `${_.get(user, ['personal', 'lastName'], '')}, ${_.get(user, ['personal', 'firstName'], '')}`,
       Barcode: user => user.barcode,
       'Patron Group': (user) => {
-        const pg = this.props.data.patronGroups.filter(g => g.id === user.patronGroup)[0];
+        const pg = patronGroups.filter(g => g.id === user.patronGroup)[0];
         return pg ? pg.group : '?';
       },
-      'User ID': user => user.username,
+      Username: user => user.username,
       Email: user => _.get(user, ['personal', 'email']),
     };
 
     const detailsPane = (
-      this.props.stripes.hasPerm('users.item.get') ?
+      stripes.hasPerm('users.item.get') ?
         (<Route
           path={`${this.props.match.path}/view/:userid`}
-          render={props => <this.connectedViewUser stripes={stripes} okapi={this.okapi} paneWidth="44%" onClose={this.collapseDetails} addressTypes={data.addressTypes} {...props} />}
+          render={props => <this.connectedViewUser stripes={stripes} okapi={this.okapi} paneWidth="44%" onClose={this.collapseDetails} addressTypes={addressTypes} notesToggle={this.toggleNotes} {...props} />}
         />) :
         (<div
           style={{
@@ -402,7 +426,6 @@ class Users extends React.Component {
           <p>Sorry - your user permissions do not allow access to this page.</p>
         </div>));
 
-    const resource = this.props.resources.users;
     const maybeTerm = this.state.searchTerm ? ` for "${this.state.searchTerm}"` : '';
     const maybeSpelling = this.state.searchTerm ? 'spelling and ' : '';
     return (
@@ -424,7 +447,7 @@ class Users extends React.Component {
               </div>
             </div>
           }
-          lastMenu={newUserButton}
+          lastMenu={!this.props.disableUserCreation ? newUserButton : null}
         >
           <MultiColumnList
             id="list-users"
@@ -435,11 +458,11 @@ class Users extends React.Component {
             onRowClick={this.onSelectRow}
             onHeaderClick={this.onSort}
             onNeedMoreData={this.onNeedMore}
-            visibleColumns={['Active', 'Name', 'Barcode', 'Patron Group', 'User ID', 'Email']}
+            visibleColumns={['Active', 'Name', 'Barcode', 'Patron Group', 'Username', 'Email']}
             sortOrder={this.state.sortOrder.replace(/^-/, '').replace(/,.*/, '')}
             sortDirection={this.state.sortOrder.startsWith('-') ? 'descending' : 'ascending'}
             isEmptyMessage={`No results found${maybeTerm}. Please check your ${maybeSpelling}filters.`}
-            columnMapping={{ 'User ID': 'username' }}
+            columnMapping={{ Username: 'username' }}
             loading={resource ? resource.isPending : false}
             autosize
             virtualize
@@ -450,17 +473,24 @@ class Users extends React.Component {
         </Pane>
 
         {detailsPane}
-        <Layer isOpen={data.addUserMode ? data.addUserMode.mode : false} label="Add New User Dialog">
+        <Layer isOpen={query.layer ? query.layer === 'create' : false} label="Add New User Dialog">
           <UserForm
             id="userform-adduser"
             initialValues={{ active: true, personal: { preferredContactTypeId: '002' } }}
-            addressTypes={data.addressTypes}
+            addressTypes={addressTypes}
             onSubmit={(record) => { this.create(record); }}
             onCancel={this.onClickCloseNewUser}
             okapi={this.okapi}
-            optionLists={{ patronGroups: this.props.data.patronGroups, contactTypes }}
+            optionLists={{ patronGroups, contactTypes }}
           />
         </Layer>
+        {
+          this.state.showNotesPane &&
+          <Route
+            path={`${this.props.match.path}/view/:id/:username`}
+            render={props => <this.connectedNotes stripes={stripes} okapi={this.okapi} onToggle={this.toggleNotes} link="users" {...props} />}
+          />
+          }
       </Paneset>
     );
   }
