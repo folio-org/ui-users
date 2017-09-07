@@ -4,6 +4,7 @@
 
 * Add and use new translation `ui-users.resultCount`. Allows us to exercise the use of placeholders. Fixes UIU-204.
 * Modfify translation support to handle pluralisation of record-count. Fixes UIU-206.
+* Refactor `<Notes>` into a separate repository. See STUTILNOTE-2.
 
 ## [2.10.1](https://github.com/folio-org/ui-users/tree/v2.10.1) (2017-09-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.10.0...v2.10.1)
