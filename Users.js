@@ -489,7 +489,7 @@ class Users extends React.Component {
         {
           this.state.showNotesPane &&
           <Route
-            path={`${this.props.match.path}/view/:id/:username`}
+            path={`${this.props.match.path}/view/:id`}
             render={props => <this.connectedNotes stripes={stripes} okapi={this.okapi} onToggle={this.toggleNotes} link="users" {...props} />}
           />
           }
