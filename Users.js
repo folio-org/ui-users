@@ -291,8 +291,8 @@ class Users extends React.Component {
     if (user.creds) delete user.creds; // eslint-disable-line no-param-reassign
     // POST credentials, permission-user, permissions;
     this.props.mutator.users.POST(user)
-    .then(newUser => {
-      console.log("new user is ", newUser);
+    .then((newUser) => {
+      this.log('xhr', 'created new user', newUser);
       this.postCreds(newUser.id, creds);
     })
     .then(() => this.onClickCloseNewUser())
@@ -304,7 +304,7 @@ class Users extends React.Component {
 
   postCreds = (userId, creds) => {
     this.log('xhr', `POST credentials for new user '${userId}':`, creds);
-    const localCreds = Object.assign({}, creds, creds.password ? {} : { password: '' }, { userId: userId });
+    const localCreds = Object.assign({}, creds, creds.password ? {} : { password: '' }, { userId });
     return fetch(`${this.okapi.url}/authn/credentials`, {
       method: 'POST',
       headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token, 'Content-Type': 'application/json' }),
@@ -380,7 +380,7 @@ class Users extends React.Component {
     const resource = resources.users;
     const query = location.search ? queryString.parse(location.search) : {};
 
-    /* searchHeader is a 'custom pane header'*/
+    /* searchHeader is a 'custom pane header' */
     const searchHeader = <FilterPaneSearch searchFieldId="input-user-search" onChange={this.onChangeSearch} onClear={this.onClearSearch} resultsList={this.resultsList} value={this.state.searchTerm} placeholder={stripes.intl.formatMessage({ id: 'ui-users.search' })} />;
 
     const newUserButton = (
