@@ -1,5 +1,11 @@
 # Change history for ui-users
 
+## [2.10.1](https://github.com/folio-org/ui-users/tree/v2.10.1) (2017-09-05)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.10.0...v2.10.1)
+
+* Add wait time after create-user request in 'new_user' test. UIU-205
+
+
 ## [2.10.0](https://github.com/folio-org/ui-users/tree/v2.10.0) (2017-09-01)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.9.0...v2.10.0)
 
@@ -23,8 +29,8 @@
 * First pass at integrating `<Notes>`. See LIBAPP-188.
 * The `settings.usergroups.all` permission is visible. Fixes UIU-130.
 * Add item's status, barcode, and return-date to loan-details pane, and link item's barcode to item-details pane. Part of UIU-177.
-* Add various settings-related permssions. Part of UIU-197.
-* Verson 1 of Select User Proxy. Fixes UIU-104.
+* Add various settings-related permissions. Part of UIU-197.
+* Version 1 of Select User Proxy. Fixes UIU-104.
 * Add Item Status column to, and remove loan status from, loans display. Fixes UIU-175.
 * Selected part of settings is consistently highlighted. Fixes UIU-182.
 * Fixed a race-condition that sometimes caused an error when creating new users. UIU-195.
