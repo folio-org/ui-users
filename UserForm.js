@@ -173,6 +173,7 @@ class UserForm extends React.Component {
                   dateFormat="YYYY-MM-DD"
                   name="personal.dateOfBirth"
                   id="adduser_dateofbirth"
+                  backendDateStandard="YYYY-MM-DD"
                 />
                 {/* <Field
                   label="Type"

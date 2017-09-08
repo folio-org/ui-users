@@ -5,14 +5,13 @@ import queryString from 'query-string';
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
 import Pane from '@folio/stripes-components/lib/Pane';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
-import Button from '@folio/stripes-components/lib/Button';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
-import { Row, Col } from 'react-bootstrap';
-import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
+import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import Icon from '@folio/stripes-components/lib/Icon';
 import Layer from '@folio/stripes-components/lib/Layer';
 import IfPermission from '@folio/stripes-components/lib/IfPermission';
 import IfInterface from '@folio/stripes-components/lib/IfInterface';
+import { Accordion } from '@folio/stripes-components/lib/Accordion';
 
 import UserForm from './UserForm';
 import UserPermissions from './UserPermissions';
@@ -80,6 +79,13 @@ class ViewUser extends React.Component {
       viewLoanActionsHistoryMode: false,
       selectedLoan: {},
       lastUpdate: null,
+      sections: {
+        infoSection: true,
+        addressSection: true,
+        loansSection: true,
+        proxySection: true,
+        permissionsSection: true,
+      },
     };
     this.onClickEditUser = this.onClickEditUser.bind(this);
     this.onClickCloseEditUser = this.onClickCloseEditUser.bind(this);
@@ -97,6 +103,8 @@ class ViewUser extends React.Component {
     this.onClickCloseLoanActionsHistory = this.onClickCloseLoanActionsHistory.bind(this);
     this.onAddressesUpdate = this.onAddressesUpdate.bind(this);
     this.transitionToParams = transitionToParams.bind(this);
+
+    this.handleSectionToggle = this.handleSectionToggle.bind(this);
   }
 
   // EditUser Handlers
@@ -209,9 +217,15 @@ class ViewUser extends React.Component {
     return new Date(dateToShow).toLocaleString(this.props.stripes.locale);
   }
 
+  handleSectionToggle({ id }) {
+    this.setState((curState) => {
+      const newState = _.cloneDeep(curState);
+      newState.sections[id] = !newState.sections[id];
+      return newState;
+    });
+  }
+
   render() {
-    const dueDate = new Date(Date.parse('2014-11-12')).toLocaleDateString(this.props.stripes.locale);
-    const fineHistory = [{ 'Due Date': dueDate, Amount: '34.23', Status: 'Unpaid' }];
     const { resources, location } = this.props;
     const query = location.search ? queryString.parse(location.search) : {};
     const user = this.getUser();
@@ -239,137 +253,147 @@ class ViewUser extends React.Component {
 
     return (
       <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
-        <Row>
-          <Col xs={7} >
-            <Row>
-              <Col xs={12}>
-                <h2>{_.get(user, ['personal', 'lastName'], '')}, {_.get(user, ['personal', 'firstName'], '')} {_.get(user, ['personal', 'middleName'], '')}</h2>
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={12}>
-                <KeyValue label="Username" value={_.get(user, ['username'], '')} />
-              </Col>
-            </Row>
-            <br />
-            <Row>
-              <Col xs={12}>
-                <KeyValue label="Status" value={userStatus} />
-              </Col>
-            </Row>
-            <br />
-            <Row>
-              <Col xs={12}>
-                <KeyValue label="Email" value={_.get(user, ['personal', 'email'], '')} />
-              </Col>
-            </Row>
-            <br />
-            <Row>
-              <Col xs={12}>
-                <KeyValue label="Phone" value={_.get(user, ['personal', 'phone'], '')} />
-              </Col>
-            </Row>
-            <br />
-            <Row>
-              <Col xs={12}>
-                <KeyValue label="Mobile phone" value={_.get(user, ['personal', 'mobilePhone'], '')} />
-              </Col>
-            </Row>
-            <br />
-            <Row>
-              <Col xs={12}>
-                <KeyValue label="Preferred contact" value={preferredContact.desc} />
-              </Col>
-            </Row>
-            <br />
-            <Row>
-              <Col xs={12}>
-                <KeyValue label="Date of birth" value={(_.get(user, ['personal', 'dateOfBirth'], '')) ? new Date(Date.parse(_.get(user, ['personal', 'dateOfBirth'], ''))).toLocaleDateString(this.props.stripes.locale) : ''} />
-              </Col>
-            </Row>
-          </Col>
-          <Col xs={5} >
-            <Row>
-              <Col xs={12}>
-                <img className="floatEnd" src="http://placehold.it/175x175" role="presentation" />
-              </Col>
-            </Row>
-            <br />
-            <Row>
-              <Col xs={12}>
-                <KeyValue label="Date enrolled" value={(_.get(user, ['enrollmentDate'], '')) ? new Date(Date.parse(_.get(user, ['enrollmentDate'], ''))).toLocaleDateString(this.props.stripes.locale) : ''} />
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={12}>
-                <KeyValue label="Expiration date" value={(_.get(user, ['expirationDate'], '')) ? new Date(Date.parse(_.get(user, ['expirationDate'], ''))).toLocaleDateString(this.props.stripes.locale) : ''} />
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={12}>
-                <KeyValue label="Open date" value={(_.get(user, ['createdDate'], '')) ? new Date(Date.parse(_.get(user, ['createdDate'], ''))).toLocaleString(this.props.stripes.locale) : ''} />
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={12}>
-                <KeyValue label="Record last updated" value={this.dateLastUpdated(user)} />
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={12}>
-                <KeyValue label="Bar code" value={_.get(user, ['barcode'], '')} />
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={12}>
-                <KeyValue label="FOLIO record number" value={_.get(user, ['id'], '')} />
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={12}>
-                <KeyValue label="External System ID" value={_.get(user, ['externalSystemId'], '')} />
-              </Col>
-            </Row>
-            <br />
-            <Row>
-              <Col xs={12}>
-                <KeyValue label="Patron group" value={patronGroup.group} />
-              </Col>
-            </Row>
-          </Col>
-        </Row>
+        <Accordion
+          open={this.state.sections.infoSection}
+          id="infoSection"
+          onToggle={this.handleSectionToggle}
+          label={<h2>{_.get(user, ['personal', 'lastName'], '')}, {_.get(user, ['personal', 'firstName'], '')} {_.get(user, ['personal', 'middleName'], '')}</h2>}
+        >
+          <Row>
+            <Col xs={7} >
+              <Row>
+                <Col xs={12}>
+                  <KeyValue label="Username" value={_.get(user, ['username'], '')} />
+                </Col>
+              </Row>
+              <br />
+              <Row>
+                <Col xs={12}>
+                  <KeyValue label="Status" value={userStatus} />
+                </Col>
+              </Row>
+              <br />
+              <Row>
+                <Col xs={12}>
+                  <KeyValue label="Email" value={_.get(user, ['personal', 'email'], '')} />
+                </Col>
+              </Row>
+              <br />
+              <Row>
+                <Col xs={12}>
+                  <KeyValue label="Phone" value={_.get(user, ['personal', 'phone'], '')} />
+                </Col>
+              </Row>
+              <br />
+              <Row>
+                <Col xs={12}>
+                  <KeyValue label="Mobile phone" value={_.get(user, ['personal', 'mobilePhone'], '')} />
+                </Col>
+              </Row>
+              <br />
+              <Row>
+                <Col xs={12}>
+                  <KeyValue label="Preferred contact" value={preferredContact.desc} />
+                </Col>
+              </Row>
+              <br />
+              <Row>
+                <Col xs={12}>
+                  <KeyValue label="Date of birth" value={(_.get(user, ['personal', 'dateOfBirth'], '')) ? new Date(Date.parse(_.get(user, ['personal', 'dateOfBirth'], ''))).toLocaleDateString(this.props.stripes.locale) : ''} />
+                </Col>
+              </Row>
+            </Col>
+            <Col xs={5} >
+              <Row>
+                <Col xs={12}>
+                  <img className="floatEnd" src="http://placehold.it/175x175" role="presentation" />
+                </Col>
+              </Row>
+              <br />
+              <Row>
+                <Col xs={12}>
+                  <KeyValue label="Date enrolled" value={(_.get(user, ['enrollmentDate'], '')) ? new Date(Date.parse(_.get(user, ['enrollmentDate'], ''))).toLocaleDateString(this.props.stripes.locale) : ''} />
+                </Col>
+              </Row>
+              <Row>
+                <Col xs={12}>
+                  <KeyValue label="Expiration date" value={(_.get(user, ['expirationDate'], '')) ? new Date(Date.parse(_.get(user, ['expirationDate'], ''))).toLocaleDateString(this.props.stripes.locale) : ''} />
+                </Col>
+              </Row>
+              <Row>
+                <Col xs={12}>
+                  <KeyValue label="Open date" value={(_.get(user, ['createdDate'], '')) ? new Date(Date.parse(_.get(user, ['createdDate'], ''))).toLocaleString(this.props.stripes.locale) : ''} />
+                </Col>
+              </Row>
+              <Row>
+                <Col xs={12}>
+                  <KeyValue label="Record last updated" value={this.dateLastUpdated(user)} />
+                </Col>
+              </Row>
+              <Row>
+                <Col xs={12}>
+                  <KeyValue label="Bar code" value={_.get(user, ['barcode'], '')} />
+                </Col>
+              </Row>
+              <Row>
+                <Col xs={12}>
+                  <KeyValue label="FOLIO record number" value={_.get(user, ['id'], '')} />
+                </Col>
+              </Row>
+              <Row>
+                <Col xs={12}>
+                  <KeyValue label="External System ID" value={_.get(user, ['externalSystemId'], '')} />
+                </Col>
+              </Row>
+              <br />
+              <Row>
+                <Col xs={12}>
+                  <KeyValue label="Patron group" value={patronGroup.group} />
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </Accordion>
         <UserAddresses
           onUpdate={this.onAddressesUpdate}
           addressTypes={this.props.addressTypes}
           addresses={addresses}
+          expanded={this.state.sections.addressSection}
+          onToggle={this.handleSectionToggle}
+          accordionId="addressSection"
         />
-        <br />
-        <hr />
-        <br />
-        <Row>
-          <Col xs={7} sm={6}>
-            <h3 className="marginTopHalf">Fines</h3>
-          </Col>
-          <Col xs={5} sm={6}>
-            <Button align="end" bottomMargin0 >View Full History</Button>
-          </Col>
-        </Row>
-        <MultiColumnList id="list-finehistory" fullWidth contentData={fineHistory} />
-        <hr />
         <IfPermission perm="circulation.loans.collection.get">
           <IfInterface name="circulation" version="2.1">
             <this.connectedUserLoans
               onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
               onClickViewOpenLoans={this.onClickViewOpenLoans}
               onClickViewClosedLoans={this.onClickViewClosedLoans}
+              expanded={this.state.sections.loansSection}
+              onToggle={this.handleSectionToggle}
+              accordionId="loansSection"
               {...this.props}
             />
           </IfInterface>
         </IfPermission>
-        <this.connectedProxyPermissions user={user} stripes={this.props.stripes} match={this.props.match} {...this.props} />
+        <this.connectedProxyPermissions
+          user={user}
+          stripes={this.props.stripes}
+          match={this.props.match}
+          expanded={this.state.sections.proxySection}
+          onToggle={this.handleSectionToggle}
+          accordionId="proxySection"
+          {...this.props}
+        />
         <IfPermission perm="perms.users.get">
           <IfInterface name="permissions" version="4.0">
-            <this.connectedUserPermissions stripes={this.props.stripes} match={this.props.match} {...this.props} />
+            <this.connectedUserPermissions
+              stripes={this.props.stripes}
+              match={this.props.match}
+              expanded={this.state.sections.permissionsSection}
+              onToggle={this.handleSectionToggle}
+              accordionId="permissionsSection"
+              {...this.props}
+            />
           </IfInterface>
         </IfPermission>
         <Layer isOpen={query.layer ? query.layer === 'edit' : false} label="Edit User Dialog">
