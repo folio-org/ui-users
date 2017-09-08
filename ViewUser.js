@@ -219,7 +219,7 @@ class ViewUser extends React.Component {
 
   handleSectionToggle({ id }) {
     this.setState((curState) => {
-      const newState = curState;
+      const newState = _.cloneDeep(curState);
       newState.sections[id] = !newState.sections[id];
       return newState;
     });
