@@ -1,4 +1,8 @@
 # Change history for ui-users
+ 
+## IN PROGRESS
+
+* Path URLs, permission calls, and credentials now use UUID instead of username where appropriate. Fixes UIU-172.
 
 ## [2.10.1](https://github.com/folio-org/ui-users/tree/v2.10.1) (2017-09-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.10.0...v2.10.1)
