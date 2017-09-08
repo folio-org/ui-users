@@ -14,12 +14,12 @@ import FilterPaneSearch from '@folio/stripes-components/lib/FilterPaneSearch';
 import Layer from '@folio/stripes-components/lib/Layer';
 import FilterGroups, { initialFilterState, onChangeFilter as commonChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
 import SRStatus from '@folio/stripes-components/lib/SRStatus';
-import Notes from '@folio/stripes-components/lib/structures/Notes';
 
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
 import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
 import IfPermission from '@folio/stripes-components/lib/IfPermission';
 import { stripesShape } from '@folio/stripes-core/src/Stripes';
+import NotesPane from '@folio/util-notes/NotesPane';
 
 import UserForm from './UserForm';
 import ViewUser from './ViewUser';
@@ -76,6 +76,9 @@ class Users extends React.Component {
         ),
       }),
       userCount: PropTypes.number,
+      notes: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
     }).isRequired,
     history: PropTypes.shape({
       push: PropTypes.func.isRequired,
@@ -141,6 +144,17 @@ class Users extends React.Component {
       path: 'addresstypes',
       records: 'addressTypes',
     },
+    notes: {
+      type: 'okapi',
+      path: 'notes',
+      records: 'notes',
+      clear: false,
+      GET: {
+        params: {
+          query: 'link=:{id}',
+        },
+      },
+    },
   });
 
   constructor(props) {
@@ -167,7 +181,7 @@ class Users extends React.Component {
     this.commonChangeFilter = commonChangeFilter.bind(this);
     this.transitionToParams = transitionToParams.bind(this);
     this.connectedViewUser = props.stripes.connect(ViewUser);
-    this.connectedNotes = props.stripes.connect(Notes);
+    this.connectedNotes = props.stripes.connect(NotesPane);
 
     const logger = props.stripes.logger;
     this.log = logger.log.bind(logger);
@@ -490,7 +504,15 @@ class Users extends React.Component {
           this.state.showNotesPane &&
           <Route
             path={`${this.props.match.path}/view/:id/:username`}
-            render={props => <this.connectedNotes stripes={stripes} okapi={this.okapi} onToggle={this.toggleNotes} link="users" {...props} />}
+            render={props => <this.connectedNotes
+              stripes={stripes}
+              okapi={this.okapi}
+              onToggle={this.toggleNotes}
+              link="users"
+              notesResource={this.props.resources.notes}
+              usersResource={this.props.resources.users}
+              {...props}
+            />}
           />
           }
       </Paneset>
