@@ -1,7 +1,10 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { DropdownButton, MenuItem, Row, Col } from 'react-bootstrap';
+import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
+import DropdownMenu from '@folio/stripes-components/lib/DropdownMenu';
+import { UncontrolledDropdown } from '@folio/stripes-components/lib/Dropdown';
+import Button from '@folio/stripes-components/lib/Button';
 import dateFormat from 'dateformat';
 import Icon from '@folio/stripes-components/lib/Icon';
 import Paneset from '@folio/stripes-components/lib/Paneset';
@@ -61,12 +64,12 @@ class LoansHistory extends React.Component {
    * change handler for the options-menu prevents the event from bubbling
    * up to the event handler attached to the row.
    */
-  handleOptionsChange(key, e) {
+  handleOptionsChange(loan, e) {
     e.preventDefault();
     e.stopPropagation();
-
-    if (key.action && this[key.action]) {
-      this[key.action](key.loan);
+    const action = e.target.dataset['action']
+    if (action && this[action]) {
+      this[action](loan);
     }
   }
 
@@ -97,16 +100,28 @@ class LoansHistory extends React.Component {
   }
 
   renderActions(loan) {
+    const handleOptionsChange = _.partialRight(this.handleOptionsChange, loan, _);
+    const tether = {
+      attachment: 'bottom left',
+      targetAttachment: 'top left',
+      targetOffset: '0 100%',
+      classPrefix: 'loans',
+    };
     return (
-      <DropdownButton
-        title="•••"
+      <UncontrolledDropdown
+        tether={tether}
         id={`bg-nested-dropdown-${loan.id}`}
-        noCaret
-        pullRight onClick={this.handleOptionsClick}
-        onSelect={this.handleOptionsChange}
+        pullRight onToggle={this.handleOptionsClick}
       >
-        <MenuItem eventKey={{ loan, action: 'renew' }}>Renew</MenuItem>
-      </DropdownButton>
+        <Button hollow data-role="toggle" aria-haspopup="true" >&#46;&#46;&#46;</Button>
+        <DropdownMenu
+          data-role="menu"
+          aria-label="available permissions"
+          onSelect={e => handleOptionsChange(e)}
+        >
+          <Button fullWidth buttonStyle="transparent slim" style={{ textAlign: 'left' }} type="button" data-action="renew" >Renew</Button>
+        </DropdownMenu>
+      </UncontrolledDropdown>
     );
   }
 
