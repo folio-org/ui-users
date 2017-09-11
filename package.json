@@ -166,13 +166,15 @@
         "search": "Search",
         "loans.title": "Loans",
         "loans.openLoans": "open loans",
-        "loans.closedLoans": "closed loans"
+        "loans.closedLoans": "closed loans",
+        "resultCount": "{count, number} {count, plural, one {Result} other {Results}} Found"
       },
       "de": {
         "search": "Suche",
         "loans.title": "Ausleihen",
         "loans.openLoans": "Offene Ausleihen",
-        "loans.closedLoans": "Abgeschlossene Ausleihen"
+        "loans.closedLoans": "Abgeschlossene Ausleihen",
+        "resultCount": "Gefunden {count, number} {count, plural, one {Aufzeichnung} other {Aufzeichnungen}}"
       }
     }
   },
@@ -198,6 +200,7 @@
   "dependencies": {
     "@folio/stripes-components": "^1.7.0",
     "@folio/stripes-form": "^0.8.0",
+    "@folio/util-notes": "^0.1.0",
     "classnames": "^2.2.5",
     "dateformat": "^2.0.0",
     "hashcode": "^1.0.3",
