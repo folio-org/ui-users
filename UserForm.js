@@ -206,7 +206,7 @@ class UserForm extends React.Component {
                   name="expirationDate"
                   id="adduser_expirationdate"
                 />
-                <Field label="Bar Code" name="barcode" id="adduser_barcode" component={TextField} fullWidth />
+                <Field label="Barcode" name="barcode" id="adduser_barcode" component={TextField} fullWidth />
                 <Field label="FOLIO Record Number" name="id" id="adduser_id" readOnly component={TextField} fullWidth />
                 <Field label="External System ID" name="externalSystemId" id="adduser_externalsystemid" component={TextField} fullWidth />
 

@@ -31,12 +31,12 @@ class UserPermissions extends React.Component {
       records: 'permissionNames',
       DELETE: {
         pk: 'permissionName',
-        path: 'perms/users/:{username}/permissions',
+        path: 'perms/users/:{userid}/permissions',
       },
       GET: {
-        path: 'perms/users/:{username}/permissions?full=true',
+        path: 'perms/users/:{userid}/permissions?full=true',
       },
-      path: 'perms/users/:{username}/permissions',
+      path: 'perms/users/:{userid}/permissions',
     },
   });
 

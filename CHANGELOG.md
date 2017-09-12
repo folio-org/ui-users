@@ -1,4 +1,8 @@
 # Change history for ui-users
+ 
+## IN PROGRESS
+
+* Path URLs, permission calls, and credentials now use UUID instead of username where appropriate. Fixes UIU-172.
 
 ## 2.11.0 (IN PROGRESS)
 
