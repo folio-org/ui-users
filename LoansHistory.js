@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import DropdownMenu from '@folio/stripes-components/lib/DropdownMenu';
+import MenuItem from '@folio/stripes-components/lib/MenuItem';
 import { UncontrolledDropdown } from '@folio/stripes-components/lib/Dropdown';
 import Button from '@folio/stripes-components/lib/Button';
 import dateFormat from 'dateformat';
@@ -112,14 +113,16 @@ class LoansHistory extends React.Component {
         tether={tether}
         id={`bg-nested-dropdown-${loan.id}`}
         pullRight onToggle={this.handleOptionsClick}
+        onSelect={e => handleOptionsChange(e)}
       >
         <Button hollow data-role="toggle" aria-haspopup="true" >&#46;&#46;&#46;</Button>
         <DropdownMenu
           data-role="menu"
           aria-label="available permissions"
-          onSelect={e => handleOptionsChange(e)}
         >
-          <Button fullWidth buttonStyle="transparent slim" style={{ textAlign: 'left' }} type="button" data-action="renew" >Renew</Button>
+          <MenuItem>
+            <Button fullWidth buttonStyle="transparent slim" style={{ textAlign: 'left' }} type="button" data-action="renew">Renew</Button>
+          </MenuItem>
         </DropdownMenu>
       </UncontrolledDropdown>
     );
