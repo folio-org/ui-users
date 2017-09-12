@@ -4,11 +4,17 @@
 
 * Path URLs, permission calls, and credentials now use UUID instead of username where appropriate. Fixes UIU-172.
 
+## 2.11.0 (IN PROGRESS)
+
+* Add and use new translation `ui-users.resultCount`. Allows us to exercise the use of placeholders. Fixes UIU-204.
+* Modify translation support to handle pluralisation of record-count. Fixes UIU-206.
+* Refactor `<Notes>` into a separate repository. See STUTILNOTE-2.
+* Check correct permission for ability to add/remove perms to a permission-set. Fixes UIU-57.
+
 ## [2.10.1](https://github.com/folio-org/ui-users/tree/v2.10.1) (2017-09-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.10.0...v2.10.1)
 
 * Add wait time after create-user request in 'new_user' test. UIU-205
-
 
 ## [2.10.0](https://github.com/folio-org/ui-users/tree/v2.10.0) (2017-09-01)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.9.0...v2.10.0)

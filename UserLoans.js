@@ -1,9 +1,9 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Row, Col } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import Button from '@folio/stripes-components/lib/Button';
+import { Accordion } from '@folio/stripes-components/lib/Accordion';
 
 class UserLoans extends React.Component {
   static propTypes = {
@@ -14,6 +14,9 @@ class UserLoans extends React.Component {
     }),
     onClickViewOpenLoans: PropTypes.func.isRequired,
     onClickViewClosedLoans: PropTypes.func.isRequired,
+    accordionId: PropTypes.string,
+    expanded: PropTypes.bool,
+    onToggle: PropTypes.func,
   };
 
   // "limit=1" on the openLoansCount and closedLoansCount fields is a hack
@@ -48,24 +51,25 @@ class UserLoans extends React.Component {
     const resources = this.props.resources;
     const openLoansCount = _.get(resources.openLoansCount, ['records', '0', 'totalRecords'], 0);
     const closedLoansCount = _.get(resources.closedLoansCount, ['records', '0', 'totalRecords'], 0);
+    const { expanded, onToggle, accordionId } = this.props;
 
     return (
-      <div>
-        <Row>
-          <Col xs={7} sm={6}>
-            <h3 className="marginTop0"><FormattedMessage id="ui-users.loans.title" /></h3>
-          </Col>
-          <Col xs={5} sm={6}>
-            <div style={{ float: 'right' }}>
-              <Button id="clickable-viewfullhistory" align="end" bottomMargin0 onClick={this.props.onClickViewOpenLoans}>View Loans</Button>
-            </div>
-          </Col>
-        </Row>
+      <Accordion
+        open={expanded}
+        id={accordionId}
+        onToggle={onToggle}
+        label={
+          <h2 className="marginTop0"><FormattedMessage id="ui-users.loans.title" /></h2>
+        }
+        displayWhenOpen={
+          <Button id="clickable-viewfullhistory" align="end" bottomMargin0 onClick={this.props.onClickViewOpenLoans}>View Loans</Button>
+        }
+      >
         <ul>
           <li><a id="clickable-viewcurrentloans" href="" onClick={this.props.onClickViewOpenLoans}>{ openLoansCount } <FormattedMessage id="ui-users.loans.openLoans" /></a></li>
           <li><a id="clickable-viewclosedloans" href="" onClick={this.props.onClickViewClosedLoans}>{ closedLoansCount } <FormattedMessage id="ui-users.loans.closedLoans" /></a></li>
         </ul>
-      </div>);
+      </Accordion>);
   }
 }
 
