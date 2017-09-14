@@ -65,12 +65,11 @@ class LoansHistory extends React.Component {
    * change handler for the options-menu prevents the event from bubbling
    * up to the event handler attached to the row.
    */
-  handleOptionsChange(loan, e) {
+  handleOptionsChange(e, metaData) {
     e.preventDefault();
     e.stopPropagation();
-    const action = e.target.dataset['action']
-    if (action && this[action]) {
-      this[action](loan);
+    if (metaData.action && this[metaData.action]) {
+      this[metaData.action](metaData.loan);
     }
   }
 
@@ -101,7 +100,6 @@ class LoansHistory extends React.Component {
   }
 
   renderActions(loan) {
-    const handleOptionsChange = _.partialRight(this.handleOptionsChange, loan, _);
     const tether = {
       attachment: 'bottom left',
       targetAttachment: 'top left',
@@ -113,15 +111,15 @@ class LoansHistory extends React.Component {
         tether={tether}
         id={`bg-nested-dropdown-${loan.id}`}
         pullRight onToggle={this.handleOptionsClick}
-        onSelect={e => handleOptionsChange(e)}
+        onSelect={this.handleOptionsChange}
       >
         <Button hollow data-role="toggle" aria-haspopup="true" >&#46;&#46;&#46;</Button>
         <DropdownMenu
           data-role="menu"
           aria-label="available permissions"
         >
-          <MenuItem>
-            <Button fullWidth buttonStyle="transparent slim" style={{ textAlign: 'left' }} type="button" data-action="renew">Renew</Button>
+          <MenuItem itemMeta={{ loan, action: 'renew' }}>
+            <Button fullWidth buttonStyle="transparent slim" style={{ textAlign: 'left' }} type="button">Renew</Button>
           </MenuItem>
         </DropdownMenu>
       </UncontrolledDropdown>
