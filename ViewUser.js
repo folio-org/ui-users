@@ -385,7 +385,7 @@ class ViewUser extends React.Component {
           {...this.props}
         />
         <IfPermission perm="perms.users.get">
-          <IfInterface name="permissions" version="4.0">
+          <IfInterface name="permissions" version="5.0">
             <this.connectedUserPermissions
               stripes={this.props.stripes}
               match={this.props.match}
