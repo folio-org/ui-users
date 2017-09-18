@@ -296,15 +296,14 @@ class Users extends React.Component {
     this.transitionToParams({ filters: Object.keys(filters).filter(key => filters[key]).join(',') });
   }
 
-  create = (user) => {
-    if (user.personal.addresses) {
+  create = (userdata) => {
+    if (userdata.personal.addresses) {
       const addressTypes = (this.props.resources.addressTypes || {}).records || [];
-      user.personal.addresses = toUserAddresses(user.personal.addresses, addressTypes); // eslint-disable-line no-param-reassign
+      userdata.personal.addresses = toUserAddresses(userdata.personal.addresses, addressTypes); // eslint-disable-line no-param-reassign
     }
-    // extract creds object from user object
-    const creds = Object.assign({}, user.creds, { username: user.username });
-    if (user.creds) delete user.creds; // eslint-disable-line no-param-reassign
-    user.id = uuid();
+    const creds = Object.assign({}, userdata.creds, { username: userdata.username });
+    const user = Object.assign({}, userdata, { id: uuid() });
+    if (user.creds) delete user.creds;
 
     this.postUser(user)
     .then(newUser => this.postCreds(newUser.id, creds))
@@ -315,8 +314,8 @@ class Users extends React.Component {
     });
   }
 
-  postUser = (user) => {
-    return fetch(`${this.okapi.url}/users`, {
+  postUser = user =>
+    fetch(`${this.okapi.url}/users`, {
       method: 'POST',
       headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token, 'Content-Type': 'application/json' }),
       body: JSON.stringify(user),
@@ -326,10 +325,7 @@ class Users extends React.Component {
       } else {
         return userPostResponse.json();
       }
-    }).then((userJson) => {
-      return userJson;
-    });
-  }
+    }).then(userJson => userJson);
 
   postCreds = (userId, creds) => {
     this.log('xhr', `POST credentials for new user '${userId}':`, creds);
