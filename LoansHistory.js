@@ -111,7 +111,7 @@ class LoansHistory extends React.Component {
         tether={tether}
         id={`bg-nested-dropdown-${loan.id}`}
         pullRight onToggle={this.handleOptionsClick}
-        onSelect={this.handleOptionsChange}
+        onSelectItem={this.handleOptionsChange}
       >
         <Button hollow data-role="toggle" aria-haspopup="true" >&#46;&#46;&#46;</Button>
         <DropdownMenu
