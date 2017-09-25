@@ -20,6 +20,10 @@ const propTypes = {
 };
 
 class UserPermissions extends React.Component {
+  // NOTE: 'indexField', used as a parameter in the userPermissions paths,
+  // modifies the API call so that the :{userid} parameter is actually
+  // interpreted as a user ID. By default, that path component is taken as
+  // the ID of the user/permission _object_ in /perms/users.
   static manifest = Object.freeze({
     availablePermissions: {
       type: 'okapi',
@@ -32,11 +36,14 @@ class UserPermissions extends React.Component {
       DELETE: {
         pk: 'permissionName',
         path: 'perms/users/:{userid}/permissions',
+        params: { indexField: 'userId' },
       },
       GET: {
-        path: 'perms/users/:{userid}/permissions?full=true',
+        path: 'perms/users/:{userid}/permissions',
+        params: { full: 'true', indexField: 'userId' },
       },
       path: 'perms/users/:{userid}/permissions',
+      params: { indexField: 'userId' },
     },
   });
 

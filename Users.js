@@ -20,6 +20,8 @@ import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction'
 import IfPermission from '@folio/stripes-components/lib/IfPermission';
 import { stripesShape } from '@folio/stripes-core/src/Stripes';
 import NotesPane from '@folio/util-notes/NotesPane';
+import { SubmissionError } from 'redux-form';
+import uuid from 'uuid';
 
 import UserForm from './UserForm';
 import ViewUser from './ViewUser';
@@ -294,27 +296,36 @@ class Users extends React.Component {
     this.transitionToParams({ filters: Object.keys(filters).filter(key => filters[key]).join(',') });
   }
 
-  create = (user) => {
-    if (user.personal.addresses) {
+  create = (userdata) => {
+    if (userdata.personal.addresses) {
       const addressTypes = (this.props.resources.addressTypes || {}).records || [];
-      user.personal.addresses = toUserAddresses(user.personal.addresses, addressTypes); // eslint-disable-line no-param-reassign
+      userdata.personal.addresses = toUserAddresses(userdata.personal.addresses, addressTypes); // eslint-disable-line no-param-reassign
     }
+    const creds = Object.assign({}, userdata.creds, { username: userdata.username });
+    const user = Object.assign({}, userdata, { id: uuid() });
+    if (user.creds) delete user.creds;
 
-    // extract creds object from user object
-    const creds = Object.assign({}, user.creds, { username: user.username });
-    if (user.creds) delete user.creds; // eslint-disable-line no-param-reassign
-    // POST credentials, permission-user, permissions;
-    this.props.mutator.users.POST(user)
-    .then((newUser) => {
-      this.log('xhr', 'created new user', newUser);
-      this.postCreds(newUser.id, creds);
-    })
-    .then(() => this.onClickCloseNewUser())
-    .catch(() => {
-      // TODO: rethrow appropriate SubmissionError
-      // http://redux-form.com/7.0.3/docs/api/SubmissionError.md/
+    this.postUser(user)
+    .then(newUser => this.postCreds(newUser.id, creds))
+    .then(userId => this.postPerms(userId))
+    .then((userId) => {
+      this.onClickCloseNewUser();
+      this.onSelectRow(null, { id: userId });
     });
   }
+
+  postUser = user =>
+    fetch(`${this.okapi.url}/users`, {
+      method: 'POST',
+      headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token, 'Content-Type': 'application/json' }),
+      body: JSON.stringify(user),
+    }).then((userPostResponse) => {
+      if (userPostResponse.status >= 400) {
+        throw new SubmissionError('Creating new user failed');
+      } else {
+        return userPostResponse.json();
+      }
+    }).then(userJson => userJson);
 
   postCreds = (userId, creds) => {
     this.log('xhr', `POST credentials for new user '${userId}':`, creds);
@@ -323,26 +334,27 @@ class Users extends React.Component {
       method: 'POST',
       headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token, 'Content-Type': 'application/json' }),
       body: JSON.stringify(localCreds),
-    }).then((response) => {
-      if (response.status >= 400) {
-        this.log('xhr', 'Users. POST of creds failed.');
+    }).then((credsPostResponse) => {
+      if (credsPostResponse.status >= 400) {
+        throw new SubmissionError('Creating credentials for new user failed');
       } else {
-        this.postPerms(userId, []); // create empty permissions user
+        return userId;
       }
     });
   }
 
-  postPerms = (userId, perms) => {
-    this.log('xhr', `POST permissions for new user '${userId}':`, perms);
-    fetch(`${this.okapi.url}/perms/users`, {
+  postPerms = (userId) => {
+    const permissions = [];
+    this.log('xhr', `POST permissions for new user '${userId}':`, permissions);
+    return fetch(`${this.okapi.url}/perms/users`, {
       method: 'POST',
       headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token, 'Content-Type': 'application/json' }),
-      body: JSON.stringify({ userId, permissions: perms }),
+      body: JSON.stringify({ userId, permissions }),
     }).then((response) => {
       if (response.status >= 400) {
-        this.log('xhr', 'Users. POST of users permissions failed.');
+        throw new SubmissionError('Creating empty permissions for new user failed');
       } else {
-        // nothing to do
+        return userId;
       }
     });
   }
