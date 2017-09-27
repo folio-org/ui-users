@@ -151,7 +151,7 @@ class LoansHistory extends React.Component {
 
     const loansFormatter = {
       title: loan => loanTitleFormatter(loan, _.get(loan, ['item', 'title'], '')),
-      barcode: loan => `${_.get(loan, ['item', 'barcode'], '')}`,
+      barcode: loan => loanTitleFormatter(loan, _.get(loan, ['item', 'barcode'], '')),
       itemStatus: loan => `${_.get(loan, ['item', 'status', 'name'], '')}`,
       loanDate: loan => formatDate(loan.loanDate, this.props.stripes.locale),
       dueDate: loan => (loan.dueDate ? formatDateTime(loan.dueDate, this.props.stripes.locale) : ''),
