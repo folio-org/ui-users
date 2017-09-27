@@ -11,6 +11,8 @@
 * Refactor `<Notes>` into a separate repository. See STUTILNOTE-2.
 * Check correct permission for ability to add/remove perms to a permission-set. Fixes UIU-57.
 * Fix actions menu on loans page. Fixes UIU-212.
+* Link title to item from loans. Fixes UIU-234.
+* Link barcode to item from loans. Fixes UIU-213.
 
 ## [2.10.1](https://github.com/folio-org/ui-users/tree/v2.10.1) (2017-09-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.10.0...v2.10.1)
