@@ -191,6 +191,8 @@ class LoansHistory extends React.Component {
             columnOverflow={{ ' ': true }}
             contentData={loans}
             onRowClick={this.props.onClickViewLoanActionsHistory}
+            autosize
+            virtualize
           />
         </Pane>
       </Paneset>);
