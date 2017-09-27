@@ -410,6 +410,7 @@ class ViewUser extends React.Component {
           <this.connectedLoansHistory
             userid={user.id}
             stripes={this.props.stripes}
+            history={this.props.history}
             onCancel={this.onClickCloseLoansHistory}
             onClickViewOpenLoans={this.onClickViewOpenLoans}
             onClickViewClosedLoans={this.onClickViewClosedLoans}

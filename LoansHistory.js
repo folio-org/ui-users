@@ -18,6 +18,7 @@ class LoansHistory extends React.Component {
     stripes: PropTypes.shape({
       locale: PropTypes.string.isRequired,
     }).isRequired,
+    history: PropTypes.object.isRequired,
     resources: PropTypes.shape({
       loansHistory: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
@@ -96,6 +97,11 @@ class LoansHistory extends React.Component {
     e.stopPropagation();
   }
 
+  goToItem(e, itemId) {
+    this.props.history.push(`/items/view/${itemId}`);
+    e.preventDefault();
+  }
+
   renderActions(loan) {
     return (
       <DropdownButton
@@ -136,31 +142,15 @@ class LoansHistory extends React.Component {
       </Row>
     );
 
-    /*
-     * loanTitleFormatter isn't currently in use, but apparently there's a use
-     * case for having the cell content link to a different location than the
-     * cell background. On a scale from 1 to WTF, I give this a 10, but I digress.
-     * Note that both e.preventDefault() and e.stopPropagation() are required to
-     * achieve this behavior.
-     *
-    const loanTitleFormatter = loan => (
+    const loanTitleFormatter = (loan, label) => (
       <a
-        onClick={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          this.props.doSomethingWithThisClick(e, loan);
-        }}
-      >{_.get(loan, ['item', 'title'], '')}</a>
+        href={`/items/view/${loan.itemId}`}
+        onClick={e => this.goToItem(e, loan.itemId)}
+      >{label}</a>
     );
 
     const loansFormatter = {
-      title: loanTitleFormatter,
-      ...
-    };
-    */
-
-    const loansFormatter = {
-      title: loan => `${_.get(loan, ['item', 'title'], '')}`,
+      title: loan => loanTitleFormatter(loan, _.get(loan, ['item', 'title'], '')),
       barcode: loan => `${_.get(loan, ['item', 'barcode'], '')}`,
       itemStatus: loan => `${_.get(loan, ['item', 'status', 'name'], '')}`,
       loanDate: loan => formatDate(loan.loanDate, this.props.stripes.locale),
