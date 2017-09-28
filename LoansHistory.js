@@ -163,6 +163,16 @@ class LoansHistory extends React.Component {
       },
     };
 
+    let visibleColumns = ['title', 'itemStatus', 'barcode', 'loanDate', 'dueDate', 'returnDate', 'renewals', ' '];
+
+    if (this.props.openLoans) {
+      visibleColumns = _.filter(visibleColumns, c => c !== 'returnDate');
+    }
+
+    console.log('this.props.openLoans', this.props.openLoans);
+
+
+
     return (
       <Paneset isRoot>
         <Pane
@@ -176,7 +186,7 @@ class LoansHistory extends React.Component {
             id="list-loanshistory"
             fullWidth
             formatter={loansFormatter}
-            visibleColumns={['title', 'itemStatus', 'barcode', 'loanDate', 'dueDate', 'returnDate', 'renewals', ' ']}
+            visibleColumns={visibleColumns}
             columnMapping={loanHistoryMap}
             columnOverflow={{ ' ': true }}
             contentData={loans}
