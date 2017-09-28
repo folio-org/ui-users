@@ -169,10 +169,6 @@ class LoansHistory extends React.Component {
       visibleColumns = _.filter(visibleColumns, c => c !== 'returnDate');
     }
 
-    console.log('this.props.openLoans', this.props.openLoans);
-
-
-
     return (
       <Paneset isRoot>
         <Pane
