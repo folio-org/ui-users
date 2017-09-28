@@ -408,7 +408,8 @@ class ViewUser extends React.Component {
         </Layer>
         <Layer isOpen={this.state.viewLoansHistoryMode} label="Loans">
           <this.connectedLoansHistory
-            userid={user.id}
+            user={user}
+            patronGroup={patronGroup}
             stripes={this.props.stripes}
             history={this.props.history}
             onCancel={this.onClickCloseLoansHistory}
