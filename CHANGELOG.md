@@ -13,6 +13,8 @@
 * Fix actions menu on loans page. Fixes UIU-212.
 * Link title to item from loans. Fixes UIU-234.
 * Link barcode to item from loans. Fixes UIU-213.
+* Remove Return Date Column from Open Loans Tab. Fixes UIU-225.
+* Add Borrower Name to Loans. Fixes UIU-215.
 
 ## [2.10.1](https://github.com/folio-org/ui-users/tree/v2.10.1) (2017-09-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.10.0...v2.10.1)

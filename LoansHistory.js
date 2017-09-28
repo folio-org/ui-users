@@ -127,11 +127,12 @@ class LoansHistory extends React.Component {
 
     const paneHeader = (
       <Row style={{ width: '100%' }}>
-        <Col xs={1}><PaneMenu><button
-          onClick={this.props.onCancel}
-          title="Close pane"
-          aria-label="Close Loans">
-          <Icon icon="closeX" /></button></PaneMenu>
+        <Col xs={1}>
+          <PaneMenu>
+            <button onClick={this.props.onCancel} title="Close pane" aria-label="Close Loans">
+              <Icon icon="closeX" />
+            </button>
+          </PaneMenu>
         </Col>
         <Col xs={1}>
           <PaneMenu>
