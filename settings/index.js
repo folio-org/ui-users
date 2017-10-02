@@ -17,14 +17,14 @@ const pages = [
     route: 'groups',
     label: 'Patron groups',
     component: PatronGroupsSettings,
-    perm: 'settings.usergroups.all',
+    perm: 'ui-users.settings.usergroups',
   },
 
   {
     route: 'addresstypes',
     label: 'Address Types',
     component: AddressTypesSettings,
-    perm: 'settings.addresstypes.all',
+    perm: 'ui-users.settings.addresstypes',
   },
 ];
 
