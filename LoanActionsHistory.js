@@ -7,6 +7,8 @@ import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
+import fetch from 'isomorphic-fetch';
+
 import { formatDateTime, getFullName } from './util';
 import loanActionMap from './data/loanActionMap';
 
@@ -14,7 +16,6 @@ class LoanActionsHistory extends React.Component {
   static propTypes = {
     stripes: PropTypes.object.isRequired,
     resources: PropTypes.shape({
-      loanActions: PropTypes.object,
       loanActionsWithUser: PropTypes.object,
       userIds: PropTypes.object,
     }).isRequired,
@@ -34,46 +35,55 @@ class LoanActionsHistory extends React.Component {
   static manifest = Object.freeze({
     userIds: {},
     loanActionsWithUser: {},
-    users: {
-      type: 'okapi',
-      records: 'users',
-      path: 'users?query=(%{userIds.query})',
-    },
-    loanActions: {
-      type: 'okapi',
-      records: 'loans',
-      GET: {
-        path: 'loan-storage/loan-history?query=(id=!{loan.id})',
-      },
-    },
   });
 
-  // TODO: refactor after join is supported in stripes-connect
-  componentWillReceiveProps(nextProps) {
-    const { loan, resources: { loanActions, userIds, users, loanActionsWithUser } } = nextProps;
-
-    if (!loanActions.records.length ||
-      loanActions.records[0].id !== loan.id) return;
-
-    if (!userIds.query || userIds.loan.id !== loan.id) {
-      const query = loanActions.records
-        .map(r => `id=${r.metaData.createdByUserId}`).join(' or ');
-      this.props.mutator.userIds.replace({ query, loan });
-    }
-
-    if (!users.records.length) return;
-
-    if (!loanActionsWithUser.records || loanActionsWithUser.loan.id !== loan.id) {
-      this.joinLoanActionsWithUser(loanActions.records, users.records, loan);
-    }
+  constructor(props) {
+    super(props);
+    const stripes = props.stripes;
+    this.okapiUrl = stripes.okapi.url;
+    this.httpOptions = {
+      headers: {
+        'X-Okapi-Tenant': stripes.okapi.tenant,
+        'X-Okapi-Token': stripes.store.getState().okapi.token,
+        'Content-Type': 'application/json',
+      },
+    };
   }
 
-  joinLoanActionsWithUser(loanActions, users, loan) {
+  componentWillMount() {
+    this.fetchLoanHistory()
+      .then(loans => this.findUsers(loans))
+      .then(this.joinLoanActionsWithUsers.bind(this));
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  handleResponse(resp, message) {
+    if (resp.status >= 400) {
+      throw new Error(message);
+    }
+    return resp.json();
+  }
+
+  fetchLoanHistory() {
+    const loan = this.props.loan;
+    return fetch(`${this.okapiUrl}/loan-storage/loan-history?query=(id=${loan.id})`, this.httpOptions)
+      .then(resp => this.handleResponse(resp, 'Loan history not found'))
+      .then(json => json.loans);
+  }
+
+  findUsers(loans) {
+    const query = loans.map(l => `id=${l.metaData.createdByUserId}`).join(' or ');
+    return fetch(`${this.okapiUrl}/users?query=(${query})`, this.httpOptions)
+      .then(resp => this.handleResponse(resp, 'Users not found'))
+      .then(json => ({ users: json.users, loans }));
+  }
+
+  joinLoanActionsWithUsers({ users, loans }) {
     const userMap = users.reduce((memo, user) =>
       Object.assign(memo, { [user.id]: user }), {});
-    const records = loanActions.map(la =>
+    const records = loans.map(la =>
       Object.assign({}, la, { user: userMap[la.metaData.createdByUserId] }));
-    this.props.mutator.loanActionsWithUser.replace({ loan, records });
+    this.props.mutator.loanActionsWithUser.replace({ records });
   }
 
   render() {
