@@ -10,7 +10,7 @@ import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import TabButton from '@folio/stripes-components/lib/TabButton';
 import loanHistoryMap from './data/loanHistoryMap';
-import { formatDate, formatDateTime } from './util';
+import { formatDate, formatDateTime, getFullName } from './util';
 
 class LoansHistory extends React.Component {
 
@@ -37,6 +37,8 @@ class LoansHistory extends React.Component {
     onClickViewLoanActionsHistory: PropTypes.func.isRequired,
     onClickViewOpenLoans: PropTypes.func.isRequired,
     onClickViewClosedLoans: PropTypes.func.isRequired,
+    user: PropTypes.object.isRequired,
+    patronGroup: PropTypes.object.isRequired,
   };
 
   static manifest = Object.freeze({
@@ -44,7 +46,7 @@ class LoansHistory extends React.Component {
     loansHistory: {
       type: 'okapi',
       records: 'loans',
-      path: 'circulation/loans?query=(userId=!{userid}) sortby id&limit=100',
+      path: 'circulation/loans?query=(userId=!{user.id}) sortby id&limit=100',
       PUT: {
         path: 'circulation/loans/%{loanId}',
       },
@@ -117,26 +119,35 @@ class LoansHistory extends React.Component {
   }
 
   render() {
-    const loansHistory = _.get(this.props.resources, ['loansHistory', 'records']);
-    const loanStatus = this.props.openLoans ? 'Open' : 'Closed';
+    const { user, patronGroup, resources, openLoans, stripes } = this.props;
+    const loansHistory = _.get(resources, ['loansHistory', 'records']);
+    const loanStatus = openLoans ? 'Open' : 'Closed';
     const loans = _.filter(loansHistory, loan => loanStatus === _.get(loan, ['status', 'name']));
     if (!loans) return <div />;
 
     const paneHeader = (
       <Row style={{ width: '100%' }}>
-        <Col xs={1}><PaneMenu><button
-          onClick={this.props.onCancel}
-          title="Close pane"
-          aria-label="Close Loans"
-        >
-          <Icon icon="closeX" /></button></PaneMenu>
-        </Col>
-        <Col xs={2}><PaneMenu><TabButton title="Loans" aria-label="Loans">Loans</TabButton></PaneMenu>
-        </Col>
-        <Col xs={9}>
+        <Col xs={1}>
           <PaneMenu>
-            <TabButton title="Open Loans" aria-label="Open Loans" onClick={this.props.onClickViewOpenLoans} selected={this.props.openLoans}>Open Loans</TabButton>
-            <TabButton title="Closed Loans" aria-label="Closed Loans" onClick={this.props.onClickViewClosedLoans} selected={!this.props.openLoans}>Closed Loans</TabButton>
+            <button onClick={this.props.onCancel} title="Close pane" aria-label="Close Loans">
+              <Icon icon="closeX" />
+            </button>
+          </PaneMenu>
+        </Col>
+        <Col xs={1}>
+          <PaneMenu>
+            <TabButton title="Loans" aria-label="Loans">Loans</TabButton>
+          </PaneMenu>
+        </Col>
+        <Col xs={3}>
+          <TabButton title="Loans" aria-label="User Name and Patron Group">
+            {`Borrower: ${getFullName(user)} (${_.upperFirst(patronGroup.group)})`}
+          </TabButton>
+        </Col>
+        <Col xs={7}>
+          <PaneMenu>
+            <TabButton title="Open Loans" aria-label="Open Loans" onClick={this.props.onClickViewOpenLoans} selected={openLoans}>Open Loans</TabButton>
+            <TabButton title="Closed Loans" aria-label="Closed Loans" onClick={this.props.onClickViewClosedLoans} selected={!openLoans}>Closed Loans</TabButton>
           </PaneMenu>
         </Col>
       </Row>
@@ -153,10 +164,10 @@ class LoansHistory extends React.Component {
       title: loan => loanTitleFormatter(loan, _.get(loan, ['item', 'title'], '')),
       barcode: loan => loanTitleFormatter(loan, _.get(loan, ['item', 'barcode'], '')),
       itemStatus: loan => `${_.get(loan, ['item', 'status', 'name'], '')}`,
-      loanDate: loan => formatDate(loan.loanDate, this.props.stripes.locale),
-      dueDate: loan => (loan.dueDate ? formatDateTime(loan.dueDate, this.props.stripes.locale) : ''),
+      loanDate: loan => formatDate(loan.loanDate, stripes.locale),
+      dueDate: loan => (loan.dueDate ? formatDateTime(loan.dueDate, stripes.locale) : ''),
       renewals: loan => loan.renewalCount || 0,
-      returnDate: loan => (loan.returnDate ? formatDateTime(loan.returnDate, this.props.stripes.locale) : ''),
+      returnDate: loan => (loan.returnDate ? formatDateTime(loan.returnDate, stripes.locale) : ''),
       ' ': (loan) => {
         const status = _.get(loan, ['status', 'name'], '');
         return (status === 'Closed') ? (<div />) : this.renderActions(loan);
@@ -165,7 +176,7 @@ class LoansHistory extends React.Component {
 
     let visibleColumns = ['title', 'itemStatus', 'barcode', 'loanDate', 'dueDate', 'returnDate', 'renewals', ' '];
 
-    if (this.props.openLoans) {
+    if (openLoans) {
       visibleColumns = _.filter(visibleColumns, c => c !== 'returnDate');
     }
 
