@@ -425,7 +425,6 @@ class ViewUser extends React.Component {
             loan={this.state.selectedLoan}
             loanid={this.state.selectedLoan.id}
             stripes={this.props.stripes}
-            timestamp={new Date()}
             onCancel={this.onClickCloseLoanActionsHistory}
           />
         </Layer>
