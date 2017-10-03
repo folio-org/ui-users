@@ -1,40 +1,31 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { DropdownButton, MenuItem, Row, Col } from 'react-bootstrap';
-import dateFormat from 'dateformat';
+import { Row, Col } from 'react-bootstrap';
 import Icon from '@folio/stripes-components/lib/Icon';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import Pane from '@folio/stripes-components/lib/Pane';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
-import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import TabButton from '@folio/stripes-components/lib/TabButton';
-import loanHistoryMap from './data/loanHistoryMap';
-import { formatDate, formatDateTime, getFullName } from './util';
+
+import { getFullName } from './util';
+import OpenLoans from './lib/OpenLoans';
+import ClosedLoans from './lib/ClosedLoans';
 
 class LoansHistory extends React.Component {
 
   static propTypes = {
     stripes: PropTypes.shape({
       locale: PropTypes.string.isRequired,
+      connect: PropTypes.func.isRequired,
     }).isRequired,
-    history: PropTypes.object.isRequired,
     resources: PropTypes.shape({
       loansHistory: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }),
-    mutator: PropTypes.shape({
-      loanId: PropTypes.shape({
-        replace: PropTypes.func,
-      }),
-      loansHistory: PropTypes.shape({
-        PUT: PropTypes.func.isRequired,
-      }),
-    }).isRequired,
     onCancel: PropTypes.func.isRequired,
     openLoans: PropTypes.bool,
-    onClickViewLoanActionsHistory: PropTypes.func.isRequired,
     onClickViewOpenLoans: PropTypes.func.isRequired,
     onClickViewClosedLoans: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired,
@@ -42,84 +33,21 @@ class LoansHistory extends React.Component {
   };
 
   static manifest = Object.freeze({
-    loanId: {},
     loansHistory: {
       type: 'okapi',
       records: 'loans',
       path: 'circulation/loans?query=(userId=!{user.id}) sortby id&limit=100',
-      PUT: {
-        path: 'circulation/loans/%{loanId}',
-      },
     },
   });
 
   constructor(props) {
     super(props);
-
-    this.handleOptionsChange = this.handleOptionsChange.bind(this);
-    this.handleOptionsClick = this.handleOptionsClick.bind(this);
-  }
-
-  /**
-   * change handler for the options-menu prevents the event from bubbling
-   * up to the event handler attached to the row.
-   */
-  handleOptionsChange(key, e) {
-    e.preventDefault();
-    e.stopPropagation();
-
-    if (key.action && this[key.action]) {
-      this[key.action](key.loan);
-    }
-  }
-
-  renew(loan) {
-    const loanDate = new Date();
-    const dueDate = new Date();
-    dueDate.setDate(loanDate.getDate() + 30);
-
-    Object.assign(loan, {
-      renewalCount: (loan.renewalCount || 0) + 1,
-      loanDate: dateFormat(loanDate, "yyyy-mm-dd'T'HH:MM:ss'Z'"),
-      dueDate: dateFormat(dueDate, "yyyy-mm-dd'T'HH:MM:ss'Z'"),
-      action: 'renewed',
-    });
-
-    this.props.mutator.loanId.replace(loan.id);
-    this.props.mutator.loansHistory.PUT(_.omit(loan, ['item', 'rowIndex']));
-  }
-
-  /**
-   * click handler for the options-menu prevents the event from bubbling
-   * up to the event handler attached to the row.
-   */
-   // eslint-disable-next-line class-methods-use-this
-  handleOptionsClick(e) {
-    e.preventDefault();
-    e.stopPropagation();
-  }
-
-  goToItem(e, itemId) {
-    this.props.history.push(`/items/view/${itemId}`);
-    e.preventDefault();
-  }
-
-  renderActions(loan) {
-    return (
-      <DropdownButton
-        title="•••"
-        id={`bg-nested-dropdown-${loan.id}`}
-        noCaret
-        pullRight onClick={this.handleOptionsClick}
-        onSelect={this.handleOptionsChange}
-      >
-        <MenuItem eventKey={{ loan, action: 'renew' }}>Renew</MenuItem>
-      </DropdownButton>
-    );
+    this.connectedOpenLoans = props.stripes.connect(OpenLoans);
+    this.connectedClosedLoans = props.stripes.connect(ClosedLoans);
   }
 
   render() {
-    const { user, patronGroup, resources, openLoans, stripes } = this.props;
+    const { user, patronGroup, resources, openLoans } = this.props;
     const loansHistory = _.get(resources, ['loansHistory', 'records']);
     const loanStatus = openLoans ? 'Open' : 'Closed';
     const loans = _.filter(loansHistory, loan => loanStatus === _.get(loan, ['status', 'name']));
@@ -153,33 +81,6 @@ class LoansHistory extends React.Component {
       </Row>
     );
 
-    const loanTitleFormatter = (loan, label) => (
-      <a
-        href={`/items/view/${loan.itemId}`}
-        onClick={e => this.goToItem(e, loan.itemId)}
-      >{label}</a>
-    );
-
-    const loansFormatter = {
-      title: loan => loanTitleFormatter(loan, _.get(loan, ['item', 'title'], '')),
-      barcode: loan => loanTitleFormatter(loan, _.get(loan, ['item', 'barcode'], '')),
-      itemStatus: loan => `${_.get(loan, ['item', 'status', 'name'], '')}`,
-      loanDate: loan => formatDate(loan.loanDate, stripes.locale),
-      dueDate: loan => (loan.dueDate ? formatDateTime(loan.dueDate, stripes.locale) : ''),
-      renewals: loan => loan.renewalCount || 0,
-      returnDate: loan => (loan.returnDate ? formatDateTime(loan.returnDate, stripes.locale) : ''),
-      ' ': (loan) => {
-        const status = _.get(loan, ['status', 'name'], '');
-        return (status === 'Closed') ? (<div />) : this.renderActions(loan);
-      },
-    };
-
-    let visibleColumns = ['title', 'itemStatus', 'barcode', 'loanDate', 'dueDate', 'returnDate', 'renewals', ' '];
-
-    if (openLoans) {
-      visibleColumns = _.filter(visibleColumns, c => c !== 'returnDate');
-    }
-
     return (
       <Paneset isRoot>
         <Pane
@@ -189,18 +90,10 @@ class LoansHistory extends React.Component {
           onClose={this.props.onCancel}
           header={paneHeader}
         >
-          <MultiColumnList
-            id="list-loanshistory"
-            fullWidth
-            formatter={loansFormatter}
-            visibleColumns={visibleColumns}
-            columnMapping={loanHistoryMap}
-            columnOverflow={{ ' ': true }}
-            contentData={loans}
-            onRowClick={this.props.onClickViewLoanActionsHistory}
-            autosize
-            virtualize
-          />
+          {openLoans
+            ? (<this.connectedOpenLoans loans={loans} {...this.props} />)
+            : (<this.connectedClosedLoans loans={loans} {...this.props} />)
+          }
         </Pane>
       </Paneset>);
   }
