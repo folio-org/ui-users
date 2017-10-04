@@ -17,6 +17,7 @@
 * Add Borrower Name to Loans. Fixes UIU-215.
 * Support Bulk Renew on Loans. Fixes UIU-214.
 * Display Number of Loans. Fixes UIU-218.
+* Display Count When Loans Section is Collapsed. Fixes UIU-233.
 
 ## [2.10.1](https://github.com/folio-org/ui-users/tree/v2.10.1) (2017-09-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.10.0...v2.10.1)
