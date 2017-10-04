@@ -87,7 +87,7 @@ module.exports.test = function(uiTestCtx) {
       })
       it('should find patron group ID for "' + gidlabel + '"', done => {
         nightmare
-        .type('.headerSearchInput---1z5qG', userid)
+        .type('#input-user-search', userid)
         .wait('div[title="' + userid + '"]')
         .click('div[title="' + userid + '"]')
         .wait('#clickable-edituser')
@@ -113,14 +113,13 @@ module.exports.test = function(uiTestCtx) {
       it('should fail at deleting "' + gidlabel + '" group', done => {
         nightmare
         .wait(wait)
-        .xclick('//span[.="Settings"]')
+        .click(config.select.settings)
         .wait(wait)
         .click('a[href="/settings/users"]')
         .wait('a[href="/settings/users/groups"]')
         .wait(wait)
         .click('a[href="/settings/users/groups"]')
-        .wait('.paneset---3HNbw > .paneset---3HNbw button')
-        .wait(wait)
+	.wait(wait)
         .xclick(deletePath)
         .wait(wait)
         .evaluate(function(gidlabel) {
@@ -141,9 +140,9 @@ module.exports.test = function(uiTestCtx) {
       it('should find ID for "Staff" group', done => {
         nightmare
         .click('#clickable-users-module')
-        .wait('.headerSearchInput---1z5qG')
+        .wait('#input-user-search')
         .click('button[class^="headerSearchClearButton"]')
-        .type('.headerSearchInput---1z5qG', userid)
+        .type('#input-user-search', userid)
         .wait('div[title="' + userid + '"]')
         .click('div[title="' + userid + '"]')
         .wait('#clickable-edituser')
