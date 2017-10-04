@@ -1,3 +1,5 @@
+
+
 module.exports.test = function(uiTestCtx) {
 
   describe('Module test: users:patron_group', function () {
@@ -85,9 +87,9 @@ module.exports.test = function(uiTestCtx) {
         })
         .catch(done)
       })
-      it('should find patron group ID for "' + gidlabel + '"', done => {
+      it('should find patron group ID "'+ gid + '" for "' + gidlabel + '"', done => {
         nightmare
-        .type('.headerSearchInput---1z5qG', userid)
+        .type('#input-user-search', userid)
         .wait('div[title="' + userid + '"]')
         .click('div[title="' + userid + '"]')
         .wait('#clickable-edituser')
@@ -119,7 +121,6 @@ module.exports.test = function(uiTestCtx) {
         .wait('a[href="/settings/users/groups"]')
         .wait(wait)
         .click('a[href="/settings/users/groups"]')
-        .wait('.paneset---3HNbw > .paneset---3HNbw button')
         .wait(wait)
         .xclick(deletePath)
         .wait(wait)
@@ -141,9 +142,9 @@ module.exports.test = function(uiTestCtx) {
       it('should find ID for "Staff" group', done => {
         nightmare
         .click('#clickable-users-module')
-        .wait('.headerSearchInput---1z5qG')
+        .wait('#input-user-search')
         .click('button[class^="headerSearchClearButton"]')
-        .type('.headerSearchInput---1z5qG', userid)
+        .type('#input-user-search', userid)
         .wait('div[title="' + userid + '"]')
         .click('div[title="' + userid + '"]')
         .wait('#clickable-edituser')
