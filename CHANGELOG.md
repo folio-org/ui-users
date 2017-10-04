@@ -13,11 +13,13 @@
 * Fix actions menu on loans page. Fixes UIU-212.
 * Link title to item from loans. Fixes UIU-234.
 * Link barcode to item from loans. Fixes UIU-213.
-* Remove Return Date Column from Open Loans Tab. Fixes UIU-225.
-* Add Borrower Name to Loans. Fixes UIU-215.
-* Support Bulk Renew on Loans. Fixes UIU-214.
-* Display Number of Loans. Fixes UIU-218.
-* Display Count When Loans Section is Collapsed. Fixes UIU-233.
+* Remove return date column from open loans tab. Fixes UIU-225.
+* Add borrower name to loans. Fixes UIU-215.
+* Support bulk renew on loans. Fixes UIU-214.
+* Display number of loans. Fixes UIU-218.
+* Display count when loans section is collapsed. Fixes UIU-233.
+* Display count when proxy section is collapsed. Fixes UIU-233.
+* Rename "Proxy Permissions" section to "Proxy". Fixes UIU-236.
 
 ## [2.10.1](https://github.com/folio-org/ui-users/tree/v2.10.1) (2017-09-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.10.0...v2.10.1)
