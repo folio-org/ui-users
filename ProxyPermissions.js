@@ -5,6 +5,7 @@ import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import Pluggable from '@folio/stripes-components/lib/Pluggable';
 import { Accordion } from '@folio/stripes-components/lib/Accordion';
 
+import Badge from './lib/Badge';
 import { getFullName, getRowURL, getAnchoredRowFormatter } from './util';
 
 const propTypes = {
@@ -110,8 +111,11 @@ class ProxyPermissions extends React.Component {
         open={expanded}
         id={accordionId}
         onToggle={onToggle}
+        displayWhenClosed={
+          <Badge>{proxies.length + sponsors.length}</Badge>
+        }
         label={
-          <h2>Proxy Permissions</h2>
+          <h2>Proxy</h2>
         }
       >
         <Row>
