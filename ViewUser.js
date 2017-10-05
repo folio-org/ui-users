@@ -11,7 +11,7 @@ import Icon from '@folio/stripes-components/lib/Icon';
 import Layer from '@folio/stripes-components/lib/Layer';
 import IfPermission from '@folio/stripes-components/lib/IfPermission';
 import IfInterface from '@folio/stripes-components/lib/IfInterface';
-import { Accordion } from '@folio/stripes-components/lib/Accordion';
+import { Accordion, ExpandAllButton } from '@folio/stripes-components/lib/Accordion';
 
 import UserForm from './UserForm';
 import UserPermissions from './UserPermissions';
@@ -105,6 +105,7 @@ class ViewUser extends React.Component {
     this.transitionToParams = transitionToParams.bind(this);
 
     this.handleSectionToggle = this.handleSectionToggle.bind(this);
+    this.handleExpandAll = this.handleExpandAll.bind(this);
   }
 
   // EditUser Handlers
@@ -225,6 +226,14 @@ class ViewUser extends React.Component {
     });
   }
 
+  handleExpandAll(obj) {
+    this.setState((curState) => {
+      const newState = _.cloneDeep(curState);
+      newState.sections = obj;
+      return newState;
+    });
+  }
+
   render() {
     const { resources, location } = this.props;
     const query = location.search ? queryString.parse(location.search) : {};
@@ -253,6 +262,7 @@ class ViewUser extends React.Component {
 
     return (
       <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
+        <Row end="xs"><Col xs><ExpandAllButton accordionStatus={this.state.sections} onToggle={this.handleExpandAll} /></Col></Row>
         <Accordion
           open={this.state.sections.infoSection}
           id="infoSection"
