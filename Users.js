@@ -196,8 +196,6 @@ class Users extends React.Component {
     },
   });
 
-  // http://localhost:9130/users?limit=30&query=active=("true" or "false") and patronGroup=("0b2b2fb1-e31a-497f-a42d-f1a0992740b4" or "2850a2cd-5094-4b7b-8ca7-af1d1e220d96" or "4a39001a-3e00-43d8-acf9-fa50ccea4be4" or "1d6f1e56-47c9-4f2c-adba-1384712da629") sortby personal.lastName personal.firstName
-
   constructor(props) {
     super(props);
 
@@ -335,9 +333,9 @@ class Users extends React.Component {
   }, 350);
 
   updateFilters = (filters) => { // provided for onChangeFilter
-    const currentQuery = Object.assign({}, this.props.resources.query);
-    currentQuery.filters = Object.keys(filters).filter(key => filters[key]).join(',');
-    this.props.mutator.query.replace(currentQuery);
+    const queryCopy = Object.assign({}, this.props.resources.query);
+    queryCopy.filters = Object.keys(filters).filter(key => filters[key]).join(',');
+    this.props.mutator.query.replace(queryCopy);
   }
 
   create = (userdata) => {
