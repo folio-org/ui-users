@@ -3,6 +3,7 @@
 ## IN PROGRESS
 
 * Path URLs, permission calls, and credentials now use UUID instead of username where appropriate. Fixes UIU-172.
+* Expand/Collapse All button integrated for accordions on the user detail page. Fulfills STCOM-71.
 
 ## 2.11.0 (IN PROGRESS)
 
