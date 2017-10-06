@@ -21,6 +21,7 @@
 * Display count when loans section is collapsed. Fixes UIU-233.
 * Display count when proxy section is collapsed. Fixes UIU-233.
 * Rename "Proxy Permissions" section to "Proxy". Fixes UIU-236.
+* Adjust loan page layout Fixes UIU-251.
 
 ## [2.10.1](https://github.com/folio-org/ui-users/tree/v2.10.1) (2017-09-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.10.0...v2.10.1)
