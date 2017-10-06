@@ -127,7 +127,6 @@ class Users extends React.Component {
       GET: {
         params: {
           query: (...args) => {
-
             const resourceData = args[2];
             const sortMap = {
               Active: 'active',
@@ -166,8 +165,6 @@ class Users extends React.Component {
         
               cql += ` sortby ${sortIndexes.join(' ')}`;
             }
-
-            console.log(cql);
             return cql;
           },
         },
@@ -441,7 +438,6 @@ class Users extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     const { resources, stripes, location } = this.props;
     const users = (resources.users || {}).records || [];
     const patronGroups = (resources.patronGroups || {}).records || [];
