@@ -23,6 +23,7 @@ import contactTypes from './data/contactTypes';
 import UserAddresses from './lib/UserAddresses';
 import { toListAddresses, toUserAddresses } from './converters/address';
 import removeQueryParam from './removeQueryParam';
+import { getFullName } from './util';
 
 class ViewUser extends React.Component {
 
@@ -267,7 +268,7 @@ class ViewUser extends React.Component {
           open={this.state.sections.infoSection}
           id="infoSection"
           onToggle={this.handleSectionToggle}
-          label={<h2>{_.get(user, ['personal', 'lastName'], '')}, {_.get(user, ['personal', 'firstName'], '')} {_.get(user, ['personal', 'middleName'], '')}</h2>}
+          label={<h2>{getFullName(user)}</h2>}
         >
           <Row>
             <Col xs={7} >

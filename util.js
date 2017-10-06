@@ -19,9 +19,11 @@ export function futureDate(dateStr, locale, days) {
 }
 
 export function getFullName(user) {
-  return `${_.get(user, ['personal', 'lastName'], '')},
-    ${_.get(user, ['personal', 'firstName'], '')}
-    ${_.get(user, ['personal', 'middleName'], '')}`;
+  const lastName = _.get(user, ['personal', 'lastName'], '');
+  const firstName = _.get(user, ['personal', 'firstName'], '');
+  const middleName = _.get(user, ['personal', 'middleName'], '');
+
+  return `${lastName}${firstName ? ', ' : ' '}${firstName} ${middleName}`;
 }
 
 export function getRowURL(user) {

@@ -29,6 +29,7 @@ import ViewUser from './ViewUser';
 import removeQueryParam from './removeQueryParam';
 import contactTypes from './data/contactTypes';
 import { toUserAddresses } from './converters/address';
+import { getFullName } from './util';
 import packageInfo from './package';
 
 const INITIAL_RESULT_COUNT = 30;
@@ -423,7 +424,7 @@ class Users extends React.Component {
 
     const resultsFormatter = {
       Active: user => user.active,
-      Name: user => `${_.get(user, ['personal', 'lastName'], '')}, ${_.get(user, ['personal', 'firstName'], '')}`,
+      Name: user => getFullName(user),
       Barcode: user => user.barcode,
       'Patron Group': (user) => {
         const pg = patronGroups.filter(g => g.id === user.patronGroup)[0];
