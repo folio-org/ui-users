@@ -325,7 +325,6 @@ class Users extends React.Component {
 
   performSearch = _.debounce((query) => {
     this.log('action', `searched for '${query}'`);
-    // this.transitionToParams({ query });
     this.props.mutator.query.update({search: query});
   }, 350);
 
