@@ -12,7 +12,7 @@ import Button from '@folio/stripes-components/lib/Button';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import FilterPaneSearch from '@folio/stripes-components/lib/FilterPaneSearch';
 import Layer from '@folio/stripes-components/lib/Layer';
-import FilterGroups, { initialFilterState, onChangeFilter as commonChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
+import FilterGroups, { initialFilterState, onChangeFilter as commonChangeFilter, filters2cql } from '@folio/stripes-components/lib/FilterGroups';
 import SRStatus from '@folio/stripes-components/lib/SRStatus';
 
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
@@ -111,6 +111,13 @@ class Users extends React.Component {
 
   static manifest = Object.freeze({
     userCount: { initialValue: INITIAL_RESULT_COUNT },
+    query: {
+      initialValue: {
+        search: "",
+        filters: "active.Active",
+        sort: "Name"
+      },
+    },
     users: {
       type: 'okapi',
       records: 'users',
@@ -119,21 +126,51 @@ class Users extends React.Component {
       path: 'users',
       GET: {
         params: {
-          query: makeQueryFunction(
-            'username=*',
-            'username="$QUERY*" or personal.firstName="$QUERY*" or personal.lastName="$QUERY*" or personal.email="$QUERY*" or barcode="$QUERY*" or id="$QUERY*" or externalSystemId="$QUERY*"',
-            {
+          query: (...args) => {
+
+            const resourceData = args[2];
+            const sortMap = {
               Active: 'active',
               Name: 'personal.lastName personal.firstName',
               'Patron Group': 'patronGroup.group',
               Username: 'username',
               Barcode: 'barcode',
               Email: 'personal.email',
-            },
-            filterConfig,
-          ),
+            }
+
+            let cql = `(username="${resourceData.query.search}*" or personal.firstName="${resourceData.query.search}*" or personal.lastName="${resourceData.query.search}*" or personal.email="${resourceData.query.search}*" or barcode="${resourceData.query.search}*" or id="${resourceData.query.search}*" or externalSystemId="${resourceData.query.search}*")`;
+
+            const filterCql = filters2cql(filterConfig, resourceData.query.filters);
+            if (filterCql) {
+              if (cql) {
+                cql = `(${cql}) and ${filterCql}`;
+              } else {
+                cql = filterCql;
+              }
+            }
+
+            let { sort } = resourceData.query;
+            if (sort) {
+              const sortIndexes = sort.split(',').map((sort1) => {
+                let reverse = false;
+                if (sort1.startsWith('-')) {
+                  sort1 = sort1.substr(1);
+                  reverse = true;
+                }
+                let sortIndex = sortMap[sort1] || sort1;
+                if (reverse) {
+                  sortIndex = sortIndex.replace(' ', '/sort.descending ') + '/sort.descending';
+                }
+                return sortIndex;
+              });
+        
+              cql += ` sortby ${sortIndexes.join(' ')}`;
+            }
+
+            console.log(cql);
+            return cql;
+          },
         },
-        staticFallback: { params: {} },
       },
     },
     patronGroups: {
@@ -158,6 +195,8 @@ class Users extends React.Component {
       },
     },
   });
+
+  // http://localhost:9130/users?limit=30&query=active=("true" or "false") and patronGroup=("0b2b2fb1-e31a-497f-a42d-f1a0992740b4" or "2850a2cd-5094-4b7b-8ca7-af1d1e220d96" or "4a39001a-3e00-43d8-acf9-fa50ccea4be4" or "1d6f1e56-47c9-4f2c-adba-1384712da629") sortby personal.lastName personal.firstName
 
   constructor(props) {
     super(props);
@@ -228,7 +267,7 @@ class Users extends React.Component {
       filters: { 'active.Active': true },
     });
     this.log('action', `cleared search: navigating to ${path}`);
-    this.props.history.push(path);
+    this.props.mutator.query.update({search: ""});
   }
 
   onSort = (e, meta) => {
@@ -245,7 +284,9 @@ class Users extends React.Component {
     const sortOrder = orders.slice(0, 2).join(',');
     this.log('action', `sorted by ${sortOrder}`);
     this.setState({ sortOrder });
-    this.transitionToParams({ sort: sortOrder });
+    const queryCopy = Object.assign({}, this.props.resources.query);
+    queryCopy.sort = sortOrder;
+    this.props.mutator.query.replace(queryCopy);
   }
 
   onSelectRow = this.props.onSelectRow ? this.props.onSelectRow : (e, meta) => {
@@ -289,11 +330,14 @@ class Users extends React.Component {
 
   performSearch = _.debounce((query) => {
     this.log('action', `searched for '${query}'`);
-    this.transitionToParams({ query });
+    // this.transitionToParams({ query });
+    this.props.mutator.query.update({search: query});
   }, 350);
 
   updateFilters = (filters) => { // provided for onChangeFilter
-    this.transitionToParams({ filters: Object.keys(filters).filter(key => filters[key]).join(',') });
+    const currentQuery = Object.assign({}, this.props.resources.query);
+    currentQuery.filters = Object.keys(filters).filter(key => filters[key]).join(',');
+    this.props.mutator.query.replace(currentQuery);
   }
 
   create = (userdata) => {
@@ -399,6 +443,7 @@ class Users extends React.Component {
   }
 
   render() {
+    console.log(this.props);
     const { resources, stripes, location } = this.props;
     const users = (resources.users || {}).records || [];
     const patronGroups = (resources.patronGroups || {}).records || [];
