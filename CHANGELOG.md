@@ -1,5 +1,5 @@
 # Change history for ui-users
- 
+
 ## IN PROGRESS
 
 * Path URLs, permission calls, and credentials now use UUID instead of username where appropriate. Fixes UIU-172.
@@ -10,6 +10,14 @@
 * Modify translation support to handle pluralisation of record-count. Fixes UIU-206.
 * Refactor `<Notes>` into a separate repository. See STUTILNOTE-2.
 * Check correct permission for ability to add/remove perms to a permission-set. Fixes UIU-57.
+* Fix actions menu on loans page. Fixes UIU-212.
+* Link title to item from loans. Fixes UIU-234.
+* Link barcode to item from loans. Fixes UIU-213.
+* Remove Return Date Column from Open Loans Tab. Fixes UIU-225.
+* Add Borrower Name to Loans. Fixes UIU-215.
+* Support Bulk Renew on Loans. Fixes UIU-214.
+* Display Number of Loans. Fixes UIU-218.
+* Display Count When Loans Section is Collapsed. Fixes UIU-233.
 
 ## [2.10.1](https://github.com/folio-org/ui-users/tree/v2.10.1) (2017-09-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.10.0...v2.10.1)

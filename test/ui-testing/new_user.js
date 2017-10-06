@@ -113,7 +113,7 @@ module.exports.test = function(uitestctx) {
         .wait('#input-user-search')
         .type('#input-user-search',user.id)
         .wait(555)
-        .click('.row---23rwN')
+        .click('div[title="' + user.id + '"]')
         .wait('#clickable-edituser')
         .click('#clickable-edituser')
         .wait('#adduser_mobilePhone')

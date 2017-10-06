@@ -62,9 +62,7 @@ function asyncValidate(values, dispatch, props, blurredField) {
     return new Promise((resolve, reject) => {
       // TODO: Should use stripes-connect (dispatching an action and update state)
       checkUniqueUserID(values.username).then((response) => {
-        if (response.status >= 400) {
-          console.log('Error fetching user');
-        } else {
+        if (response.status < 400) {
           response.json().then((json) => {
             if (json.totalRecords > 0)
               reject({ username: 'This username has already been taken' });

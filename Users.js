@@ -19,7 +19,7 @@ import transitionToParams from '@folio/stripes-components/util/transitionToParam
 import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
 import IfPermission from '@folio/stripes-components/lib/IfPermission';
 import { stripesShape } from '@folio/stripes-core/src/Stripes';
-import NotesPane from '@folio/util-notes/NotesPane';
+import Notes from '@folio/util-notes/lib/Notes';
 import { SubmissionError } from 'redux-form';
 import uuid from 'uuid';
 
@@ -183,7 +183,7 @@ class Users extends React.Component {
     this.commonChangeFilter = commonChangeFilter.bind(this);
     this.transitionToParams = transitionToParams.bind(this);
     this.connectedViewUser = props.stripes.connect(ViewUser);
-    this.connectedNotes = props.stripes.connect(NotesPane);
+    this.connectedNotes = props.stripes.connect(Notes);
 
     const logger = props.stripes.logger;
     this.log = logger.log.bind(logger);
@@ -521,7 +521,7 @@ class Users extends React.Component {
               stripes={stripes}
               okapi={this.okapi}
               onToggle={this.toggleNotes}
-              link="users"
+              link={`users/${props.match.params.id}`}
               notesResource={this.props.resources.notes}
               usersResource={this.props.resources.users}
               {...props}

@@ -5,6 +5,8 @@ import { FormattedMessage } from 'react-intl';
 import Button from '@folio/stripes-components/lib/Button';
 import { Accordion } from '@folio/stripes-components/lib/Accordion';
 
+import Badge from './lib/Badge';
+
 class UserLoans extends React.Component {
   static propTypes = {
     resources: PropTypes.shape({
@@ -60,6 +62,9 @@ class UserLoans extends React.Component {
         onToggle={onToggle}
         label={
           <h2 className="marginTop0"><FormattedMessage id="ui-users.loans.title" /></h2>
+        }
+        displayWhenClosed={
+          <Badge>{openLoansCount}</Badge>
         }
         displayWhenOpen={
           <Button id="clickable-viewfullhistory" align="end" bottomMargin0 onClick={this.props.onClickViewOpenLoans}>View Loans</Button>
