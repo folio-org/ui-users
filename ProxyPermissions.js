@@ -32,7 +32,7 @@ const propTypes = {
   onToggle: PropTypes.func,
   accordionId: PropTypes.string.isRequired,
   // if `editable` is true, component will be in 'edit' mode. (read-only by default)
-  editable: PropTypes.bool, 
+  editable: PropTypes.bool,
 };
 
 class ProxyPermissions extends React.Component {
@@ -132,7 +132,7 @@ class ProxyPermissions extends React.Component {
             />
           </Col>
         </Row>
-        { this.props.editable && 
+        { this.props.editable &&
         <Row className="marginTopHalf">
           <Col xs={12}>
             <Pluggable
@@ -163,7 +163,7 @@ class ProxyPermissions extends React.Component {
             />
           </Col>
         </Row>
-        { this.props.editable && 
+        { this.props.editable &&
         <Row className="marginTopHalf">
           <Col xs={12}>
             <Pluggable

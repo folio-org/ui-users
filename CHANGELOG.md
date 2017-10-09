@@ -1,10 +1,5 @@
 # Change history for ui-users
 
-## IN PROGRESS
-
-* Path URLs, permission calls, and credentials now use UUID instead of username where appropriate. Fixes UIU-172.
-* Expand/Collapse All button integrated for accordions on the user detail page. Fulfills STCOM-71.
-
 ## 2.11.0 (IN PROGRESS)
 
 * Add and use new translation `ui-users.resultCount`. Allows us to exercise the use of placeholders. Fixes UIU-204.
@@ -22,6 +17,11 @@
 * Display count when proxy section is collapsed. Fixes UIU-233.
 * Rename "Proxy Permissions" section to "Proxy". Fixes UIU-236.
 * Adjust loan page layout Fixes UIU-251.
+* Path URLs, permission calls, and credentials now use UUID instead of username where appropriate. Fixes UIU-172.
+* Expand/Collapse All button integrated for accordions on the user detail page. Fulfills STCOM-71.
+* Change name of "User Status" filter to "Status". Fixes UIU-210.
+* Change "Active" column in user list to "Status", and change values from tick-or-nothing to "Active" and "Inactive". Fixes UIU-211.
+* Permissions menu sorted by displayName (but still be permissionName when `config.showPerms` is true). Fixes UIU-250.
 
 ## [2.10.1](https://github.com/folio-org/ui-users/tree/v2.10.1) (2017-09-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.10.0...v2.10.1)
