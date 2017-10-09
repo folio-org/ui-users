@@ -4,7 +4,6 @@ import { Row, Col } from 'react-bootstrap';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import Pluggable from '@folio/stripes-components/lib/Pluggable';
 import { Accordion } from '@folio/stripes-components/lib/Accordion';
-
 import Badge from './lib/Badge';
 import { getFullName, getRowURL, getAnchoredRowFormatter } from './util';
 
@@ -32,6 +31,8 @@ const propTypes = {
   expanded: PropTypes.bool,
   onToggle: PropTypes.func,
   accordionId: PropTypes.string.isRequired,
+  // if `editable` is true, component will be in 'edit' mode. (read-only by default)
+  editable: PropTypes.bool, 
 };
 
 class ProxyPermissions extends React.Component {
@@ -131,6 +132,7 @@ class ProxyPermissions extends React.Component {
             />
           </Col>
         </Row>
+        { this.props.editable && 
         <Row className="marginTopHalf">
           <Col xs={12}>
             <Pluggable
@@ -146,6 +148,7 @@ class ProxyPermissions extends React.Component {
             />
           </Col>
         </Row>
+        }
         <hr />
         <Row>
           <Col xs={12}>
@@ -160,6 +163,7 @@ class ProxyPermissions extends React.Component {
             />
           </Col>
         </Row>
+        { this.props.editable && 
         <Row className="marginTopHalf">
           <Col xs={12}>
             <Pluggable
@@ -175,6 +179,7 @@ class ProxyPermissions extends React.Component {
             />
           </Col>
         </Row>
+        }
       </Accordion>);
   }
 }

@@ -393,6 +393,7 @@ class ViewUser extends React.Component {
           expanded={this.state.sections.proxySection}
           onToggle={this.handleSectionToggle}
           accordionId="proxySection"
+          editable
           {...this.props}
         />
         <IfPermission perm="perms.users.get">
