@@ -124,7 +124,7 @@ class Users extends React.Component {
             'username=*',
             'username="$QUERY*" or personal.firstName="$QUERY*" or personal.lastName="$QUERY*" or personal.email="$QUERY*" or barcode="$QUERY*" or id="$QUERY*" or externalSystemId="$QUERY*"',
             {
-              Active: 'active',
+              Status: 'active',
               Name: 'personal.lastName personal.firstName',
               'Patron Group': 'patronGroup.group',
               Username: 'username',
@@ -423,7 +423,7 @@ class Users extends React.Component {
     );
 
     const resultsFormatter = {
-      Active: user => user.active,
+      Status: user => user.active ? 'Active' : 'Inactive',
       Name: user => getFullName(user),
       Barcode: user => user.barcode,
       'Patron Group': (user) => {
@@ -488,7 +488,7 @@ class Users extends React.Component {
             onRowClick={this.onSelectRow}
             onHeaderClick={this.onSort}
             onNeedMoreData={this.onNeedMore}
-            visibleColumns={['Active', 'Name', 'Barcode', 'Patron Group', 'Username', 'Email']}
+            visibleColumns={['Status', 'Name', 'Barcode', 'Patron Group', 'Username', 'Email']}
             sortOrder={this.state.sortOrder.replace(/^-/, '').replace(/,.*/, '')}
             sortDirection={this.state.sortOrder.startsWith('-') ? 'descending' : 'ascending'}
             isEmptyMessage={`No results found${maybeTerm}. Please check your ${maybeSpelling}filters.`}
