@@ -37,7 +37,7 @@ const RESULT_COUNT_INCREMENT = 30;
 
 const filterConfig = [
   {
-    label: 'User status',
+    label: 'Status',
     name: 'active',
     cql: 'active',
     values: [
