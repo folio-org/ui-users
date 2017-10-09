@@ -21,6 +21,7 @@
 * Expand/Collapse All button integrated for accordions on the user detail page. Fulfills STCOM-71.
 * Change name of "User Status" filter to "Status". Fixes UIU-210.
 * Change "Active" column in user list to "Status", and change values from tick-or-nothing to "Active" and "Inactive". Fixes UIU-211.
+* Permissions menu sorted by displayName (but still be permissionName when `config.showPerms` is true). Fixes UIU-250.
 
 ## [2.10.1](https://github.com/folio-org/ui-users/tree/v2.10.1) (2017-09-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.10.0...v2.10.1)
