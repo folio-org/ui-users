@@ -404,6 +404,7 @@ class ViewUser extends React.Component {
               expanded={this.state.sections.permissionsSection}
               onToggle={this.handleSectionToggle}
               accordionId="permissionsSection"
+              editable
               {...this.props}
             />
           </IfInterface>
