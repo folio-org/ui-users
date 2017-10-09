@@ -423,7 +423,7 @@ class Users extends React.Component {
     );
 
     const resultsFormatter = {
-      Status: user => user.active ? 'Active' : 'Inactive',
+      Status: user => (user.active ? 'Active' : 'Inactive'),
       Name: user => getFullName(user),
       Barcode: user => user.barcode,
       'Patron Group': (user) => {
