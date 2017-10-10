@@ -202,7 +202,6 @@
     "@folio/stripes-form": "^0.8.0",
     "@folio/util-notes": "^0.2.0",
     "classnames": "^2.2.5",
-    "dateformat": "^2.0.0",
     "hashcode": "^1.0.3",
     "isomorphic-fetch": "^2.2.1",
     "uuid": "^3.0.1",
