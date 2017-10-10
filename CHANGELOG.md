@@ -24,6 +24,7 @@
 * Permissions menu sorted by displayName (but still be permissionName when `config.showPerms` is true). Fixes UIU-250.
 * Fix renew date. Fixes UIU-252.
 * `editable` prop added to `<RenderPermissions>` component to facilitate UIU-244.
+* When `config.showPerms` is true, show the True Names of users' permissions as well as available permissions. Fixes UIU-262.
 
 ## [2.10.1](https://github.com/folio-org/ui-users/tree/v2.10.1) (2017-09-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.10.0...v2.10.1)
