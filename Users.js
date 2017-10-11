@@ -29,6 +29,7 @@ import ViewUser from './ViewUser';
 import removeQueryParam from './removeQueryParam';
 import contactTypes from './data/contactTypes';
 import { toUserAddresses } from './converters/address';
+import { getFullName } from './util';
 import packageInfo from './package';
 
 const INITIAL_RESULT_COUNT = 30;
@@ -36,7 +37,7 @@ const RESULT_COUNT_INCREMENT = 30;
 
 const filterConfig = [
   {
-    label: 'User status',
+    label: 'Status',
     name: 'active',
     cql: 'active',
     values: [
@@ -123,7 +124,7 @@ class Users extends React.Component {
             'username=*',
             'username="$QUERY*" or personal.firstName="$QUERY*" or personal.lastName="$QUERY*" or personal.email="$QUERY*" or barcode="$QUERY*" or id="$QUERY*" or externalSystemId="$QUERY*"',
             {
-              Active: 'active',
+              Status: 'active',
               Name: 'personal.lastName personal.firstName',
               'Patron Group': 'patronGroup.group',
               Username: 'username',
@@ -422,8 +423,8 @@ class Users extends React.Component {
     );
 
     const resultsFormatter = {
-      Active: user => user.active,
-      Name: user => `${_.get(user, ['personal', 'lastName'], '')}, ${_.get(user, ['personal', 'firstName'], '')}`,
+      Status: user => (user.active ? 'Active' : 'Inactive'),
+      Name: user => getFullName(user),
       Barcode: user => user.barcode,
       'Patron Group': (user) => {
         const pg = patronGroups.filter(g => g.id === user.patronGroup)[0];
@@ -487,7 +488,7 @@ class Users extends React.Component {
             onRowClick={this.onSelectRow}
             onHeaderClick={this.onSort}
             onNeedMoreData={this.onNeedMore}
-            visibleColumns={['Active', 'Name', 'Barcode', 'Patron Group', 'Username', 'Email']}
+            visibleColumns={['Status', 'Name', 'Barcode', 'Patron Group', 'Username', 'Email']}
             sortOrder={this.state.sortOrder.replace(/^-/, '').replace(/,.*/, '')}
             sortDirection={this.state.sortOrder.startsWith('-') ? 'descending' : 'ascending'}
             isEmptyMessage={`No results found${maybeTerm}. Please check your ${maybeSpelling}filters.`}

@@ -1,9 +1,5 @@
 # Change history for ui-users
 
-## IN PROGRESS
-
-* Path URLs, permission calls, and credentials now use UUID instead of username where appropriate. Fixes UIU-172.
-
 ## 2.11.0 (IN PROGRESS)
 
 * Add and use new translation `ui-users.resultCount`. Allows us to exercise the use of placeholders. Fixes UIU-204.
@@ -13,11 +9,22 @@
 * Fix actions menu on loans page. Fixes UIU-212.
 * Link title to item from loans. Fixes UIU-234.
 * Link barcode to item from loans. Fixes UIU-213.
-* Remove Return Date Column from Open Loans Tab. Fixes UIU-225.
-* Add Borrower Name to Loans. Fixes UIU-215.
-* Support Bulk Renew on Loans. Fixes UIU-214.
-* Display Number of Loans. Fixes UIU-218.
-* Display Count When Loans Section is Collapsed. Fixes UIU-233.
+* Remove return date column from open loans tab. Fixes UIU-225.
+* Add borrower name to loans. Fixes UIU-215.
+* Support bulk renew on loans. Fixes UIU-214.
+* Display number of loans. Fixes UIU-218.
+* Display count when loans section is collapsed. Fixes UIU-233.
+* Display count when proxy section is collapsed. Fixes UIU-233.
+* Rename "Proxy Permissions" section to "Proxy". Fixes UIU-236.
+* Adjust loan page layout Fixes UIU-251.
+* Path URLs, permission calls, and credentials now use UUID instead of username where appropriate. Fixes UIU-172.
+* Expand/Collapse All button integrated for accordions on the user detail page. Fulfills STCOM-71.
+* Change name of "User Status" filter to "Status". Fixes UIU-210.
+* Change "Active" column in user list to "Status", and change values from tick-or-nothing to "Active" and "Inactive". Fixes UIU-211.
+* Permissions menu sorted by displayName (but still be permissionName when `config.showPerms` is true). Fixes UIU-250.
+* Fix renew date. Fixes UIU-252.
+* `editable` prop added to `<RenderPermissions>` component to facilitate UIU-244.
+* When `config.showPerms` is true, show the True Names of users' permissions as well as available permissions. Fixes UIU-262.
 
 ## [2.10.1](https://github.com/folio-org/ui-users/tree/v2.10.1) (2017-09-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.10.0...v2.10.1)

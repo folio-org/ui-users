@@ -11,7 +11,7 @@ import Icon from '@folio/stripes-components/lib/Icon';
 import Layer from '@folio/stripes-components/lib/Layer';
 import IfPermission from '@folio/stripes-components/lib/IfPermission';
 import IfInterface from '@folio/stripes-components/lib/IfInterface';
-import { Accordion } from '@folio/stripes-components/lib/Accordion';
+import { Accordion, ExpandAllButton } from '@folio/stripes-components/lib/Accordion';
 
 import UserForm from './UserForm';
 import UserPermissions from './UserPermissions';
@@ -23,6 +23,7 @@ import contactTypes from './data/contactTypes';
 import UserAddresses from './lib/UserAddresses';
 import { toListAddresses, toUserAddresses } from './converters/address';
 import removeQueryParam from './removeQueryParam';
+import { getFullName } from './util';
 
 class ViewUser extends React.Component {
 
@@ -105,6 +106,7 @@ class ViewUser extends React.Component {
     this.transitionToParams = transitionToParams.bind(this);
 
     this.handleSectionToggle = this.handleSectionToggle.bind(this);
+    this.handleExpandAll = this.handleExpandAll.bind(this);
   }
 
   // EditUser Handlers
@@ -225,6 +227,14 @@ class ViewUser extends React.Component {
     });
   }
 
+  handleExpandAll(obj) {
+    this.setState((curState) => {
+      const newState = _.cloneDeep(curState);
+      newState.sections = obj;
+      return newState;
+    });
+  }
+
   render() {
     const { resources, location } = this.props;
     const query = location.search ? queryString.parse(location.search) : {};
@@ -253,11 +263,12 @@ class ViewUser extends React.Component {
 
     return (
       <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
+        <Row end="xs"><Col xs><ExpandAllButton accordionStatus={this.state.sections} onToggle={this.handleExpandAll} /></Col></Row>
         <Accordion
           open={this.state.sections.infoSection}
           id="infoSection"
           onToggle={this.handleSectionToggle}
-          label={<h2>{_.get(user, ['personal', 'lastName'], '')}, {_.get(user, ['personal', 'firstName'], '')} {_.get(user, ['personal', 'middleName'], '')}</h2>}
+          label={<h2>{getFullName(user)}</h2>}
         >
           <Row>
             <Col xs={7} >
@@ -382,6 +393,7 @@ class ViewUser extends React.Component {
           expanded={this.state.sections.proxySection}
           onToggle={this.handleSectionToggle}
           accordionId="proxySection"
+          editable
           {...this.props}
         />
         <IfPermission perm="perms.users.get">
@@ -392,6 +404,7 @@ class ViewUser extends React.Component {
               expanded={this.state.sections.permissionsSection}
               onToggle={this.handleSectionToggle}
               accordionId="permissionsSection"
+              editable
               {...this.props}
             />
           </IfInterface>

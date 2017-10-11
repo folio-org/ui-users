@@ -125,6 +125,7 @@ class PermissionSetDetails extends React.Component {
             permToDelete="perms.permissions.item.put"
             permToModify="perms.permissions.item.put"
             stripes={this.props.stripes}
+            editable
             {...this.props}
           />
 
