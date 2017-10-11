@@ -136,7 +136,21 @@ module.exports.test = function(uitestctx) {
           } 
         }, user.id + "x")
         .wait(parseInt(process.env.FOLIO_UI_DEBUG) ? parseInt(config.debug_sleep) : 555) // debugging
-        .end()
+        .then(result => { done() })
+        .catch(done)
+      })
+      flogout()
+      it('Should login as ' + user.id + 'x/' + user.password, done => {
+        nightmare
+        .wait('#input-username')
+	.wait(222)
+        .insert('#input-username', user.id + 'x')
+        .insert('#input-password', user.password)
+	.click('#clickable-login')
+	.wait('#clickable-logout')
+	.click('#clickable-logout')
+        .wait(parseInt(process.env.FOLIO_UI_DEBUG) ? parseInt(config.debug_sleep) : 555) // debugging
+	.end()
         .then(result => { done() })
         .catch(done)
       })
