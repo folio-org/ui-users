@@ -1,3 +1,7 @@
+.root{
+  padding: 0 5px;
+}
+
 .PermissionList{
   max-height: 200px;
   overflow: auto;
