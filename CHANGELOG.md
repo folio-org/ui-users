@@ -21,7 +21,7 @@
 * Expand/Collapse All button integrated for accordions on the user detail page. Fulfills STCOM-71.
 * Change name of "User Status" filter to "Status". Fixes UIU-210.
 * Change "Active" column in user list to "Status", and change values from tick-or-nothing to "Active" and "Inactive". Fixes UIU-211.
-* Permissions menu sorted by displayName (but still be permissionName when `config.showPerms` is true). Fixes UIU-250.
+* Permissions menu sorted by displayName (but still be permissionName when `config.showPerms` is true). Applies lists to both of existing permissions, and of those available to add. Fixes UIU-250.
 * Fix renew date. Fixes UIU-252.
 * `editable` prop added to `<RenderPermissions>` component to facilitate UIU-244.
 * When `config.showPerms` is true, show the True Names of users' permissions as well as available permissions. Fixes UIU-262.
