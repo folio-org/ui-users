@@ -28,6 +28,7 @@
 * Use `<ControlledVocab>` from stripes-smart-components instead of `<AuthorityList>` from stripes-components. See STSMACOM-6. Requires stripes-smart-components v1.0.1. Fixes UIU-267, UIU-270.
 * Reinstate ability to add permissions to a permission-set. Fixes UIU-269.
 * Use `<Badge>` from stripes-components. Fixes UIU-268.
+* Apply `noOverflow` prop to results pane. Fixes STCOM-40.
 
 ## [2.10.1](https://github.com/folio-org/ui-users/tree/v2.10.1) (2017-09-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.10.0...v2.10.1)

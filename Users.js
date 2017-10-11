@@ -478,6 +478,7 @@ class Users extends React.Component {
             </div>
           }
           lastMenu={!this.props.disableUserCreation ? newUserButton : null}
+          noOverflow
         >
           <MultiColumnList
             id="list-users"
