@@ -25,7 +25,7 @@
 * Fix renew date. Fixes UIU-252.
 * `editable` prop added to `<RenderPermissions>` component to facilitate UIU-244.
 * When `config.showPerms` is true, show the True Names of users' permissions as well as available permissions. Fixes UIU-262.
-* Use `<ControlledVocab>` from stripes-smart-components instead of `<AuthorityList>` from stripes-components. See STSMACOM-6. Requires util-notes v0.3.0. Fixes UIU-267.
+* Use `<ControlledVocab>` from stripes-smart-components instead of `<AuthorityList>` from stripes-components. See STSMACOM-6. Requires stripes-smart-components v1.0.1. Fixes UIU-267, UIU-270.
 * Reinstate ability to add permissions to a permission-set. Fixes UIU-269.
 * Use `<Badge>` from stripes-components. Fixes UIU-268.
 
