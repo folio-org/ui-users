@@ -3,9 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import Button from '@folio/stripes-components/lib/Button';
+import Badge from '@folio/stripes-components/lib/Badge';
 import { Accordion } from '@folio/stripes-components/lib/Accordion';
-
-import Badge from './lib/Badge';
 
 class UserLoans extends React.Component {
   static propTypes = {

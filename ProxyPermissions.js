@@ -4,7 +4,7 @@ import { Row, Col } from 'react-bootstrap';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import Pluggable from '@folio/stripes-components/lib/Pluggable';
 import { Accordion } from '@folio/stripes-components/lib/Accordion';
-import Badge from './lib/Badge';
+import Badge from '@folio/stripes-components/lib/Badge';
 import { getFullName, getRowURL, getAnchoredRowFormatter } from './util';
 
 const propTypes = {
