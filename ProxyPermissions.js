@@ -24,8 +24,8 @@ const propTypes = {
     curUser: PropTypes.shape({
       replace: PropTypes.func,
     }),
-    user: React.PropTypes.shape({
-      PUT: React.PropTypes.func.isRequired,
+    user: PropTypes.shape({
+      PUT: PropTypes.func.isRequired,
     }),
   }).isRequired,
   expanded: PropTypes.bool,
