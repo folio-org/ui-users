@@ -43,9 +43,9 @@ class ViewUser extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }),
-    mutator: React.PropTypes.shape({
-      selUser: React.PropTypes.shape({
-        PUT: React.PropTypes.func.isRequired,
+    mutator: PropTypes.shape({
+      selUser: PropTypes.shape({
+        PUT: PropTypes.func.isRequired,
       }),
     }),
     match: PropTypes.shape({
