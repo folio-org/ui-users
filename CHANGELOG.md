@@ -30,6 +30,7 @@
 * Use `<Badge>` from stripes-components. Fixes UIU-268.
 * Use PropTypes, not React.PropTypes. Refs FOLIO-427.
 * Apply `noOverflow` prop to results pane. Fixes STCOM-40.
+* Sort Loans by Column Header. Fixes UIU-217.
 
 ## [2.10.1](https://github.com/folio-org/ui-users/tree/v2.10.1) (2017-09-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.10.0...v2.10.1)
