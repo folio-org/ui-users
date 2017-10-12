@@ -4,7 +4,7 @@ import { Row, Col } from 'react-bootstrap';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import Pluggable from '@folio/stripes-components/lib/Pluggable';
 import { Accordion } from '@folio/stripes-components/lib/Accordion';
-import Badge from './lib/Badge';
+import Badge from '@folio/stripes-components/lib/Badge';
 import { getFullName, getRowURL, getAnchoredRowFormatter } from './util';
 
 const propTypes = {
@@ -24,8 +24,8 @@ const propTypes = {
     curUser: PropTypes.shape({
       replace: PropTypes.func,
     }),
-    user: React.PropTypes.shape({
-      PUT: React.PropTypes.func.isRequired,
+    user: PropTypes.shape({
+      PUT: PropTypes.func.isRequired,
     }),
   }).isRequired,
   expanded: PropTypes.bool,
