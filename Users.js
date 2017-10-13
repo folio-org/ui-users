@@ -19,7 +19,7 @@ import transitionToParams from '@folio/stripes-components/util/transitionToParam
 import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
 import IfPermission from '@folio/stripes-components/lib/IfPermission';
 import { stripesShape } from '@folio/stripes-core/src/Stripes';
-import Notes from '@folio/util-notes/lib/Notes';
+import Notes from '@folio/stripes-smart-components/lib/Notes';
 import { SubmissionError } from 'redux-form';
 import uuid from 'uuid';
 
