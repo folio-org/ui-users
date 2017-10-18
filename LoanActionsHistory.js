@@ -30,6 +30,7 @@ class LoanActionsHistory extends React.Component {
     loan: PropTypes.object,
     user: PropTypes.object,
     onCancel: PropTypes.func.isRequired,
+    onClickUser: PropTypes.func.isRequired,
   };
 
   static manifest = Object.freeze({
@@ -141,7 +142,7 @@ class LoanActionsHistory extends React.Component {
           </Row>
           <Row>
             <Col xs={4} >
-              <this.connectedProxy id={loan.proxyUserId} />
+              <this.connectedProxy id={loan.proxyUserId} onClick={this.props.onClickUser} />
             </Col>
             <Col xs={2} >
               <KeyValue label="Renewal Count" value={_.get(loan, ['renewalCount'], '-')} />
