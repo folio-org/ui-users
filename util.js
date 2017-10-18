@@ -27,7 +27,7 @@ export function getFullName(user) {
 }
 
 export function getRowURL(user) {
-  return `/users/view/${user.id}/${user.username}`;
+  return `/users/view/${user.id}`;
 }
 
 export function getAnchoredRowFormatter(row) {
