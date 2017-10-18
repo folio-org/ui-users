@@ -9,6 +9,7 @@ import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import { formatDateTime, getFullName } from './util';
 import loanActionMap from './data/loanActionMap';
+import LoanActionsHistoryProxy from './LoanActionsHistoryProxy';
 
 class LoanActionsHistory extends React.Component {
   static propTypes = {
@@ -29,6 +30,7 @@ class LoanActionsHistory extends React.Component {
     loan: PropTypes.object,
     user: PropTypes.object,
     onCancel: PropTypes.func.isRequired,
+    onClickUser: PropTypes.func.isRequired,
   };
 
   static manifest = Object.freeze({
@@ -47,6 +49,11 @@ class LoanActionsHistory extends React.Component {
       },
     },
   });
+
+  constructor(props) {
+    super(props);
+    this.connectedProxy = props.stripes.connect(LoanActionsHistoryProxy);
+  }
 
   // TODO: refactor after join is supported in stripes-connect
   componentWillReceiveProps(nextProps) {
@@ -135,7 +142,7 @@ class LoanActionsHistory extends React.Component {
           </Row>
           <Row>
             <Col xs={4} >
-              <KeyValue label="Proxy Borrower" value="TODO" />
+              <this.connectedProxy id={loan.proxyUserId} onClick={this.props.onClickUser} />
             </Col>
             <Col xs={2} >
               <KeyValue label="Renewal Count" value={_.get(loan, ['renewalCount'], '-')} />

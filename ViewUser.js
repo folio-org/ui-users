@@ -439,6 +439,8 @@ class ViewUser extends React.Component {
             loanid={this.state.selectedLoan.id}
             stripes={this.props.stripes}
             onCancel={this.onClickCloseLoanActionsHistory}
+            // when navigating away to another user, clear all loan-related state
+            onClickUser={() => { this.onClickCloseLoanActionsHistory(); this.onClickCloseLoansHistory(); }}
           />
         </Layer>
       </Pane>
