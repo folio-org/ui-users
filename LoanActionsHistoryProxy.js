@@ -7,7 +7,7 @@ import { getFullName } from './util';
 class LoanActionsHistoryProxy extends React.Component {
   static propTypes = {
     id: PropTypes.string,
-    onClick: PropTypes.function.isRequired,
+    onClick: PropTypes.func.isRequired,
     resources: PropTypes.shape({
       proxy: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
