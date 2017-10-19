@@ -1,21 +1,11 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import Route from 'react-router-dom/Route';
 import queryString from 'query-string';
 import fetch from 'isomorphic-fetch';
 
-import Pane from '@folio/stripes-components/lib/Pane';
-import Paneset from '@folio/stripes-components/lib/Paneset';
-import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
-import Button from '@folio/stripes-components/lib/Button';
-import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
-import Layer from '@folio/stripes-components/lib/Layer';
-import SRStatus from '@folio/stripes-components/lib/SRStatus';
-
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
 import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
-import IfPermission from '@folio/stripes-components/lib/IfPermission';
 import { stripesShape } from '@folio/stripes-core/src/Stripes';
 import Notes from '@folio/stripes-smart-components/lib/Notes';
 import { SubmissionError } from 'redux-form';
