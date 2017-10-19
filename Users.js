@@ -10,9 +10,7 @@ import Paneset from '@folio/stripes-components/lib/Paneset';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import Button from '@folio/stripes-components/lib/Button';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
-import FilterPaneSearch from '@folio/stripes-components/lib/FilterPaneSearch';
 import Layer from '@folio/stripes-components/lib/Layer';
-import FilterGroups, { initialFilterState, onChangeFilter as commonChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
 import SRStatus from '@folio/stripes-components/lib/SRStatus';
 
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
@@ -22,6 +20,8 @@ import { stripesShape } from '@folio/stripes-core/src/Stripes';
 import Notes from '@folio/stripes-smart-components/lib/Notes';
 import { SubmissionError } from 'redux-form';
 import uuid from 'uuid';
+
+import SearchAndSort from'./lib/SearchAndSort';
 
 import UserForm from './UserForm';
 import ViewUser from './ViewUser';
@@ -163,25 +163,9 @@ class Users extends React.Component {
   constructor(props) {
     super(props);
 
-    const query = props.location.search ? queryString.parse(props.location.search) : {};
-
-    let initiallySelected = {};
-    if (/users\/view/.test(this.props.location.pathname)) {
-      const id = /view\/(.*)$/.exec(this.props.location.pathname)[1];
-      initiallySelected = { id };
-    }
-
-    this.state = {
-      filters: initialFilterState(filterConfig, query.filters),
-      selectedItem: initiallySelected,
-      searchTerm: query.query || '',
-      sortOrder: query.sort || '',
-      showNotesPane: false,
-    };
-
+    this.state = {};
     this.okapi = props.okapi;
 
-    this.commonChangeFilter = commonChangeFilter.bind(this);
     this.transitionToParams = transitionToParams.bind(this);
     this.connectedViewUser = props.stripes.connect(ViewUser);
     this.connectedNotes = props.stripes.connect(Notes);
@@ -268,11 +252,6 @@ class Users extends React.Component {
     removeQueryParam('layer', this.props.location, this.props.history);
   }
 
-  onChangeFilter = (e) => {
-    this.props.mutator.userCount.replace(INITIAL_RESULT_COUNT);
-    this.commonChangeFilter(e);
-  }
-
   onChangeSearch = (e) => {
     const query = e.target.value;
     this.props.mutator.userCount.replace(INITIAL_RESULT_COUNT);
@@ -292,10 +271,6 @@ class Users extends React.Component {
     this.log('action', `searched for '${query}'`);
     this.transitionToParams({ query });
   }, 350);
-
-  updateFilters = (filters) => { // provided for onChangeFilter
-    this.transitionToParams({ filters: Object.keys(filters).filter(key => filters[key]).join(',') });
-  }
 
   create = (userdata) => {
     if (userdata.personal.addresses) {
@@ -400,138 +375,14 @@ class Users extends React.Component {
   }
 
   render() {
-    const { resources, stripes, location } = this.props;
-    const users = (resources.users || {}).records || [];
-    const patronGroups = (resources.patronGroups || {}).records || [];
-    const addressTypes = (resources.addressTypes || {}).records || [];
-    const resource = resources.users;
-    const query = location.search ? queryString.parse(location.search) : {};
-
-    /* searchHeader is a 'custom pane header' */
-    const searchHeader = <FilterPaneSearch searchFieldId="input-user-search" onChange={this.onChangeSearch} onClear={this.onClearSearch} resultsList={this.resultsList} value={this.state.searchTerm} placeholder={stripes.intl.formatMessage({ id: 'ui-users.search' })} />;
-
-    const newUserButton = (
-      <IfPermission perm="users.item.post">
-        <IfPermission perm="login.item.post">
-          <IfPermission perm="perms.users.item.post">
-            <PaneMenu>
-              <Button id="clickable-newuser" title="Add New User" onClick={this.onClickAddNewUser} buttonStyle="primary paneHeaderNewButton">+ New</Button>
-            </PaneMenu>
-          </IfPermission>
-        </IfPermission>
-      </IfPermission>
-    );
-
-    const resultsFormatter = {
-      Status: user => (user.active ? 'Active' : 'Inactive'),
-      Name: user => getFullName(user),
-      Barcode: user => user.barcode,
-      'Patron Group': (user) => {
-        const pg = patronGroups.filter(g => g.id === user.patronGroup)[0];
-        return pg ? pg.group : '?';
-      },
-      Username: user => user.username,
-      Email: user => _.get(user, ['personal', 'email']),
-    };
-
-    const detailsPane = (
-      stripes.hasPerm('users.item.get') ?
-        (<Route
-          path={`${this.props.match.path}/view/:userid`}
-          render={props => <this.connectedViewUser stripes={stripes} okapi={this.okapi} paneWidth="44%" onClose={this.collapseDetails} addressTypes={addressTypes} notesToggle={this.toggleNotes} {...props} />}
-        />) :
-        (<div
-          style={{
-            position: 'absolute',
-            right: '1rem',
-            bottom: '1rem',
-            width: '34%',
-            zIndex: '9999',
-            padding: '1rem',
-            backgroundColor: '#fff',
-          }}
-        >
-          <h2>Permission Error</h2>
-          <p>Sorry - your user permissions do not allow access to this page.</p>
-        </div>));
-
-    const maybeTerm = this.state.searchTerm ? ` for "${this.state.searchTerm}"` : '';
-    const maybeSpelling = this.state.searchTerm ? 'spelling and ' : '';
-    const count = resource && resource.hasLoaded ? resource.other.totalRecords : '';
-    return (
-      <Paneset>
-        <SRStatus ref={(ref) => { this.SRStatus = ref; }} />
-        {/* Filter Pane */}
-        <Pane id="pane-filter" defaultWidth="16%" header={searchHeader}>
-          <FilterGroups config={filterConfig} filters={this.state.filters} onChangeFilter={this.onChangeFilter} />
-        </Pane>
-        {/* Results Pane */}
-        <Pane
-          id="pane-results"
-          defaultWidth="fill"
-          paneTitle={
-            <div style={{ textAlign: 'center' }}>
-              <strong>Users</strong>
-              <div>
-                <em>{stripes.intl.formatMessage({ id: 'ui-users.resultCount' }, { count })}</em>
-              </div>
-            </div>
-          }
-          lastMenu={!this.props.disableUserCreation ? newUserButton : null}
-          noOverflow
-        >
-          <MultiColumnList
-            id="list-users"
-            contentData={users}
-            selectedRow={this.state.selectedItem}
-            rowMetadata={['id', 'username']}
-            formatter={resultsFormatter}
-            onRowClick={this.onSelectRow}
-            onHeaderClick={this.onSort}
-            onNeedMoreData={this.onNeedMore}
-            visibleColumns={['Status', 'Name', 'Barcode', 'Patron Group', 'Username', 'Email']}
-            sortOrder={this.state.sortOrder.replace(/^-/, '').replace(/,.*/, '')}
-            sortDirection={this.state.sortOrder.startsWith('-') ? 'descending' : 'ascending'}
-            isEmptyMessage={`No results found${maybeTerm}. Please check your ${maybeSpelling}filters.`}
-            columnMapping={{ Username: 'username' }}
-            loading={resource ? resource.isPending : false}
-            autosize
-            virtualize
-            ariaLabel={'User search results'}
-            rowFormatter={this.anchoredRowFormatter}
-            containerRef={(ref) => { this.resultsList = ref; }}
-          />
-        </Pane>
-
-        {detailsPane}
-        <Layer isOpen={query.layer ? query.layer === 'create' : false} label="Add New User Dialog">
-          <UserForm
-            id="userform-adduser"
-            initialValues={{ active: true, personal: { preferredContactTypeId: '002' } }}
-            addressTypes={addressTypes}
-            onSubmit={(record) => { this.create(record); }}
-            onCancel={this.onClickCloseNewUser}
-            okapi={this.okapi}
-            optionLists={{ patronGroups, contactTypes }}
-          />
-        </Layer>
-        {
-          this.state.showNotesPane &&
-          <Route
-            path={`${this.props.match.path}/view/:id`}
-            render={props => <this.connectedNotes
-              stripes={stripes}
-              okapi={this.okapi}
-              onToggle={this.toggleNotes}
-              link={`users/${props.match.params.id}`}
-              notesResource={this.props.resources.notes}
-              usersResource={this.props.resources.users}
-              {...props}
-            />}
-          />
-          }
-      </Paneset>
-    );
+    const urlQuery = queryString.parse(this.props.location.search || '');
+    return (<SearchAndSort
+      stripes={this.props.stripes}
+      parentResources={this.props.resources}
+      urlQuery={urlQuery}
+      path={this.props.location.pathname}
+      filterConfig={filterConfig}
+    />);
   }
 }
 
