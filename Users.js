@@ -13,11 +13,7 @@ import uuid from 'uuid';
 
 import SearchAndSort from'./lib/SearchAndSort';
 
-import UserForm from './UserForm';
-import ViewUser from './ViewUser';
-
 import removeQueryParam from './removeQueryParam';
-import contactTypes from './data/contactTypes';
 import { toUserAddresses } from './converters/address';
 import { getFullName } from './util';
 import packageInfo from './package';
@@ -157,7 +153,6 @@ class Users extends React.Component {
     this.okapi = props.okapi;
 
     this.transitionToParams = transitionToParams.bind(this);
-    this.connectedViewUser = props.stripes.connect(ViewUser);
     this.connectedNotes = props.stripes.connect(Notes);
 
     const logger = props.stripes.logger;
