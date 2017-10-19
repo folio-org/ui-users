@@ -15,7 +15,6 @@ import SearchAndSort from'./lib/SearchAndSort';
 
 import removeQueryParam from './removeQueryParam';
 import { toUserAddresses } from './converters/address';
-import { getFullName } from './util';
 import packageInfo from './package';
 
 const INITIAL_RESULT_COUNT = 30;
@@ -133,17 +132,6 @@ class Users extends React.Component {
       path: 'addresstypes',
       records: 'addressTypes',
     },
-    notes: {
-      type: 'okapi',
-      path: 'notes',
-      records: 'notes',
-      clear: false,
-      GET: {
-        params: {
-          query: 'link=:{id}',
-        },
-      },
-    },
   });
 
   constructor(props) {
@@ -154,6 +142,7 @@ class Users extends React.Component {
 
     this.transitionToParams = transitionToParams.bind(this);
     this.connectedNotes = props.stripes.connect(Notes);
+    this.connectedSearchAndSort = props.stripes.connect(SearchAndSort);
 
     const logger = props.stripes.logger;
     this.log = logger.log.bind(logger);
@@ -161,24 +150,8 @@ class Users extends React.Component {
     this.anchoredRowFormatter = this.anchoredRowFormatter.bind(this);
 
     this.resultsList = null;
-    this.SRStatus = null;
 
     this.toggleNotes = this.toggleNotes.bind(this);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const resource = this.props.resources.users;
-    if (resource) {
-      const sm = nextProps.resources.users.successfulMutations;
-      if (sm.length > resource.successfulMutations.length)
-        this.onSelectRow(undefined, { id: sm[0].record.id, username: sm[0].record.username });
-    }
-
-    if (resource && resource.isPending && !nextProps.resources.users.isPending) {
-      this.log('event', 'new search-result');
-      const resultAmount = nextProps.resources.users.other.totalRecords;
-      this.SRStatus.sendMessage(`Search returned ${resultAmount} result${resultAmount !== 1 ? 's' : ''}`);
-    }
   }
 
   componentWillUpdate() {
@@ -361,7 +334,7 @@ class Users extends React.Component {
 
   render() {
     const urlQuery = queryString.parse(this.props.location.search || '');
-    return (<SearchAndSort
+    return (<this.connectedSearchAndSort
       stripes={this.props.stripes}
       parentResources={this.props.resources}
       urlQuery={urlQuery}
