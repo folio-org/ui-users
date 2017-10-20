@@ -157,18 +157,6 @@ class Users extends React.Component {
     }
   }
 
-  onClearSearch = () => {
-    const path = (_.get(packageInfo, ['stripes', 'home']) ||
-                  _.get(packageInfo, ['stripes', 'route']));
-    this.setState({
-      searchTerm: '',
-      sortOrder: 'Name',
-      filters: { 'active.Active': true },
-    });
-    this.log('action', `cleared search: navigating to ${path}`);
-    this.props.history.push(path);
-  }
-
   onSelectRow = this.props.onSelectRow ? this.props.onSelectRow : (e, meta) => {
     const userId = meta.id;
     this.log('action', `clicked ${userId}, selected user =`, meta);
@@ -188,13 +176,6 @@ class Users extends React.Component {
     removeQueryParam('layer', this.props.location, this.props.history);
   }
 
-  onChangeSearch = (e) => {
-    const query = e.target.value;
-    this.props.mutator.userCount.replace(INITIAL_RESULT_COUNT);
-    this.setState({ searchTerm: query });
-    this.performSearch(query);
-  }
-
   onNeedMore = () => {
     this.props.mutator.userCount.replace(this.props.resources.userCount + RESULT_COUNT_INCREMENT);
   }
@@ -202,11 +183,6 @@ class Users extends React.Component {
   getRowURL(rowData) {
     return `/users/view/${rowData.id}${this.props.location.search}`;
   }
-
-  performSearch = _.debounce((query) => {
-    this.log('action', `searched for '${query}'`);
-    this.transitionToParams({ query });
-  }, 350);
 
   create = (userdata) => {
     if (userdata.personal.addresses) {
