@@ -63,7 +63,6 @@ class Users extends React.Component {
           }),
         ),
       }),
-      userCount: PropTypes.number,
       notes: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
@@ -79,9 +78,6 @@ class Users extends React.Component {
       path: PropTypes.string.isRequired,
     }).isRequired,
     mutator: PropTypes.shape({
-      userCount: PropTypes.shape({
-        replace: PropTypes.func,
-      }),
       users: PropTypes.shape({
         POST: PropTypes.func,
       }),
@@ -96,7 +92,6 @@ class Users extends React.Component {
   };
 
   static manifest = Object.freeze({
-    userCount: { initialValue: INITIAL_RESULT_COUNT },
     users: {
       type: 'okapi',
       records: 'users',
