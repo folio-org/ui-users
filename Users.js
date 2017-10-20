@@ -17,9 +17,6 @@ import removeQueryParam from './removeQueryParam';
 import { toUserAddresses } from './converters/address';
 import packageInfo from './package';
 
-const INITIAL_RESULT_COUNT = 30;
-const RESULT_COUNT_INCREMENT = 30;
-
 const filterConfig = [
   {
     label: 'Status',
@@ -96,7 +93,7 @@ class Users extends React.Component {
       type: 'okapi',
       records: 'users',
       recordsRequired: '%{userCount}',
-      perRequest: RESULT_COUNT_INCREMENT,
+      perRequest: 30,
       path: 'users',
       GET: {
         params: {
@@ -174,10 +171,6 @@ class Users extends React.Component {
     if (e) e.preventDefault();
     this.log('action', 'clicked "close new user"');
     removeQueryParam('layer', this.props.location, this.props.history);
-  }
-
-  onNeedMore = () => {
-    this.props.mutator.userCount.replace(this.props.resources.userCount + RESULT_COUNT_INCREMENT);
   }
 
   getRowURL(rowData) {
