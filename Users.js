@@ -400,8 +400,9 @@ class Users extends React.Component {
   }
 
   render() {
-    const { resources, stripes, location } = this.props;
-    const users = (resources.users || {}).records || [];
+    const { resources, data, stripes, location } = this.props;
+    // const users = (resources.users || {}).records || [];
+    const users = data.users || [];
     const patronGroups = (resources.patronGroups || {}).records || [];
     const addressTypes = (resources.addressTypes || {}).records || [];
     const resource = resources.users;
