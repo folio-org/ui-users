@@ -288,12 +288,16 @@ class Users extends React.Component {
 
   render() {
     const urlQuery = queryString.parse(this.props.location.search || '');
+    const initialPath = (_.get(packageInfo, ['stripes', 'home']) ||
+                         _.get(packageInfo, ['stripes', 'route']));
+
     return (<this.connectedSearchAndSort
       stripes={this.props.stripes}
       parentResources={this.props.resources}
       urlQuery={urlQuery}
       path={this.props.location.pathname}
       filterConfig={filterConfig}
+      initialPath={initialPath}
     />);
   }
 }
