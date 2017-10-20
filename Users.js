@@ -174,23 +174,6 @@ class Users extends React.Component {
     this.props.history.push(path);
   }
 
-  onSort = (e, meta) => {
-    const newOrder = meta.alias;
-    const oldOrder = this.state.sortOrder || '';
-
-    const orders = oldOrder ? oldOrder.split(',') : [];
-    if (orders[0] && newOrder === orders[0].replace(/^-/, '')) {
-      orders[0] = `-${orders[0]}`.replace(/^--/, '');
-    } else {
-      orders.unshift(newOrder);
-    }
-
-    const sortOrder = orders.slice(0, 2).join(',');
-    this.log('action', `sorted by ${sortOrder}`);
-    this.setState({ sortOrder });
-    this.transitionToParams({ sort: sortOrder });
-  }
-
   onSelectRow = this.props.onSelectRow ? this.props.onSelectRow : (e, meta) => {
     const userId = meta.id;
     this.log('action', `clicked ${userId}, selected user =`, meta);
