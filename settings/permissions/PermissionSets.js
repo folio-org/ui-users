@@ -1,18 +1,16 @@
+import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-
-import _ from 'lodash';
-
-import Paneset from '@folio/stripes-components/lib/Paneset';
-import Pane from '@folio/stripes-components/lib/Pane';
-import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
-import Icon from '@folio/stripes-components/lib/Icon';
-import NavList from '@folio/stripes-components/lib/NavList';
-import NavListSection from '@folio/stripes-components/lib/NavListSection';
+import EntrySelector from '@folio/stripes-components/lib/EntrySelector';
 import IfPermission from '@folio/stripes-components/lib/IfPermission';
 import Callout from '@folio/stripes-components/lib/Callout';
+import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
+import Button from '@folio/stripes-components/lib/Button';
+import Layer from '@folio/stripes-components/lib/Layer';
+import queryString from 'query-string';
 
 import PermissionSetDetails from './PermissionSetDetails';
+import PermissionSetForm from './PermissionSetForm';
 
 class PermissionSets extends React.Component {
   static propTypes = {
@@ -53,102 +51,106 @@ class PermissionSets extends React.Component {
   constructor(props) {
     super(props);
 
-    // 'Manager' just for example...
+    this.onAdd = this.onAdd.bind(this);
+    this.onEdit = this.onEdit.bind(this);
+    this.onSave = this.onSave.bind(this);
+    this.onRemove = this.onRemove.bind(this);
+    this.onCancel = this.onCancel.bind(this);
 
-    this.state = {
-      selectedSet: null,
-    };
+    const path = props.location.pathname;
+    const selectedId = (/loan-policies\//.test(path))
+      ? /permissions\/(.*)$/.exec(path)[1]
+      : null;
 
-    this.navList = null;
-
-    this.onSelectSet = this.onSelectSet.bind(this);
-    this.createNewPermissionSet = this.createNewPermissionSet.bind(this);
-    this.clearSelection = this.clearSelection.bind(this);
+    this.state = { selectedId };
     this.permissionSetsCallout = null;
   }
 
-  componentDidUpdate(prevProps) {
-    const permSets = (this.props.resources.permissionSets || {}).records || [];
-    const prevPermSets = (prevProps.resources.permissionSets || {}).records || [];
-
-    const permSetsDiffs = _.differenceBy(permSets, prevPermSets, 'id');
-    const newPermSet = permSetsDiffs[0];
-
-    if (newPermSet && !newPermSet.pendingCreate) {
-      // At this point in the lifecycle the CID is still on the object, and
-      // this messes up the saveing of the Permission Set. It should not be needed any longer
-      // and will be removed.
-      delete newPermSet._cid; // eslint-disable-line no-underscore-dangle
-
-      // Jeremy has investigated that and confirmed that it is harmless.
-      // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({
-        selectedSet: newPermSet,
-      });
-    }
+  onAdd() {
+    this.showLayer('add');
   }
 
-  onSelectSet(e) {
+  onEdit(permSet) {
+    this.setState({ selectedId: permSet.id });
+    this.showLayer('edit');
+  }
+
+  onRemove(permSet) {
+    return this.props.mutator.permissionSets.DELETE(permSet).then(() =>{
+      this.hideLayer();
+    });
+  }
+
+  onCancel(e) {
     e.preventDefault();
-    const permissionSets = (this.props.resources.permissionSets || {}).records || [];
-    const permissionId = e.target.dataset.id;
-
-    _.forEach(permissionSets, (set) => {
-      if (set.id === permissionId) {
-        this.setSelectedSet(set);
-      }
-    });
+    this.hideLayer();
   }
 
-  setSelectedSet(set) {
-    this.setState({
-      selectedSet: set,
-    });
+  onSave(permSet) {
+    const action = (permSet.id) ? 'PUT' : 'POST';
+    return this.props.mutator.permissionSets[action](permSet)
+      .then(() => this.hideLayer());
   }
 
-  clearSelection() {
-    this.setSelectedSet(null);
+  showLayer(name) {
+    this.props.history.push(`${this.props.location.pathname}?layer=${name}`);
   }
 
-  createNewPermissionSet() {
-    this.props.mutator.permissionSets.POST({
-      mutable: true,
-    });
+  hideLayer() {
+    this.props.history.push(`${this.props.location.pathname}`);
   }
 
   render() {
-    const permissionSets = (this.props.resources.permissionSets || {}).records || [];
+    const { resources, location, stripes } = this.props;
+    const permissionSets = (resources.permissionSets || {}).records || [];
+    const permissions = _.sortBy(permissionSets, ['name']);
+    const container = document.getElementById('ModuleContainer');
+    const query = location.search ? queryString.parse(location.search) : {};
+    const selectedItem = (query.layer === 'edit')
+      ? _.find(permissionSets, p => p.id === this.state.selectedId) : {};
 
-    const RenderedPermissionSets = permissionSets.length ? permissionSets.map(
-      set => <a data-id={set.id} key={set.id} href={`#${set.permissionName}`} onClick={this.onSelectSet}>{set.displayName ? set.displayName : 'Untitled Permission Set'}</a>,
-    ) : [];
+    if (!container) return (<div />);
 
-    const PermissionsSetsLastMenu = (
+    const addMenu = (
       <IfPermission perm="perms.permissions.item.post">
         {/* In practice, there is point letting someone create a set if they can't set its name */}
         <IfPermission perm="perms.permissions.item.put">
           <PaneMenu>
-            <button title="Add Permission Set" onClick={this.createNewPermissionSet}>
-              <Icon icon="plus-sign" />
-            </button>
+            <Button title="Add Permission Set" onClick={this.onAdd} buttonStyle="primary paneHeaderNewButton">
+              + New
+            </Button>
           </PaneMenu>
         </IfPermission>
       </IfPermission>
     );
 
     return (
-      <Paneset nested>
-        <Pane defaultWidth="25%" lastMenu={PermissionsSetsLastMenu} paneTitle={this.props.label}>
-          <NavList>
-            <NavListSection activeLink={this.state.selectedSet ? `#${this.state.selectedSet.id}` : ''}>
-              {RenderedPermissionSets}
-            </NavListSection>
-          </NavList>
-        </Pane>
-        {this.state.newSet && <PermissionSetDetails parentMutator={this.props.mutator} clearSelection={this.clearSelection} stripes={this.props.stripes} selectedSet={{}} initialValues={{}} />}
-        {this.state.selectedSet && !this.state.newSet && <PermissionSetDetails callout={this.permissionSetsCallout} parentMutator={this.props.mutator} clearSelection={this.clearSelection} stripes={this.props.stripes} initialValues={this.state.selectedSet} selectedSet={this.state.selectedSet} />}
-        <Callout ref={(ref) => { this.permissionSetsCallout = ref; }} />
-      </Paneset>
+      <EntrySelector
+        {...this.props}
+        onAdd={this.onAdd}
+        onEdit={this.onEdit}
+        detailComponent={PermissionSetDetails}
+        contentData={permissions}
+        parentMutator={this.props.mutator}
+        paneTitle="Permission Sets"
+        detailPaneTitle="Permission Set Details"
+        nameKey="displayName"
+        paneWidth="70%"
+        addMenu={addMenu}
+      >
+        <Layer isOpen={!!(query.layer)} label="Edit Permission Set" container={container}>
+          <PermissionSetForm
+            initialValues={selectedItem}
+            stripes={stripes}
+            callout={this.permissionSetsCallout}
+            onSave={this.onSave}
+            onCancel={this.onCancel}
+            onRemove={this.onRemove}
+          />
+          <Callout ref={(ref) => { this.permissionSetsCallout = ref; }} />
+        </Layer>
+
+      </EntrySelector>
     );
   }
 }
