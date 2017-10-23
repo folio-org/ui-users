@@ -10,6 +10,8 @@ import Icon from '@folio/stripes-components/lib/Icon';
 import NavList from '@folio/stripes-components/lib/NavList';
 import NavListSection from '@folio/stripes-components/lib/NavListSection';
 import IfPermission from '@folio/stripes-components/lib/IfPermission';
+import Callout from '@folio/stripes-components/lib/Callout';
+
 import PermissionSetDetails from './PermissionSetDetails';
 
 class PermissionSets extends React.Component {
@@ -62,6 +64,7 @@ class PermissionSets extends React.Component {
     this.onSelectSet = this.onSelectSet.bind(this);
     this.createNewPermissionSet = this.createNewPermissionSet.bind(this);
     this.clearSelection = this.clearSelection.bind(this);
+    this.permissionSetsCallout = null;
   }
 
   componentDidUpdate(prevProps) {
@@ -143,7 +146,8 @@ class PermissionSets extends React.Component {
           </NavList>
         </Pane>
         {this.state.newSet && <PermissionSetDetails parentMutator={this.props.mutator} clearSelection={this.clearSelection} stripes={this.props.stripes} selectedSet={{}} initialValues={{}} />}
-        {this.state.selectedSet && !this.state.newSet && <PermissionSetDetails parentMutator={this.props.mutator} clearSelection={this.clearSelection} stripes={this.props.stripes} initialValues={this.state.selectedSet} selectedSet={this.state.selectedSet} />}
+        {this.state.selectedSet && !this.state.newSet && <PermissionSetDetails callout={this.permissionSetsCallout} parentMutator={this.props.mutator} clearSelection={this.clearSelection} stripes={this.props.stripes} initialValues={this.state.selectedSet} selectedSet={this.state.selectedSet} />}
+        <Callout ref={(ref) => { this.permissionSetsCallout = ref; }} />
       </Paneset>
     );
   }

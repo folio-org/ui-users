@@ -5,6 +5,7 @@ import Textfield from '@folio/stripes-components/lib/TextField';
 import TextArea from '@folio/stripes-components/lib/TextArea';
 import Button from '@folio/stripes-components/lib/Button';
 import IfPermission from '@folio/stripes-components/lib/IfPermission';
+import ConfirmationModal from '@folio/stripes-components/lib/structures/ConfirmationModal';
 
 import { Field, reduxForm } from 'redux-form';
 
@@ -17,6 +18,7 @@ class PermissionSetDetails extends React.Component {
       hasPerm: PropTypes.func.isRequired,
       connect: PropTypes.func.isRequired,
     }).isRequired,
+    callout: PropTypes.object,
     clearSelection: PropTypes.func.isRequired,
     selectedSet: PropTypes.object.isRequired,
     parentMutator: PropTypes.shape({
@@ -75,6 +77,7 @@ class PermissionSetDetails extends React.Component {
   confirmDeleteSet(confirmation) {
     if (confirmation) {
       this.props.parentMutator.permissionSets.DELETE(this.state.selectedSet).then(() => {
+        this.props.callout.sendCallout({ message: (<span>The permission set <strong>{this.state.selectedSet.displayName || 'Untitled Permission Set' }</strong> was successfully <strong>deleted</strong></span>) });
         this.props.clearSelection();
       });
     } else {
@@ -102,7 +105,6 @@ class PermissionSetDetails extends React.Component {
     return (
       <Pane paneTitle={`${this.state.selectedSet.displayName || 'Untitled'}`} defaultWidth="fill" fluidContentWidth>
         <form>
-
           <section>
             <h2 style={{ marginTop: '0' }}>About</h2>
             <Field label="Title" name="displayName" id="displayName" component={Textfield} required fullWidth rounded validate={this.validateSet} onBlur={this.saveSet} disabled={disabled} />
@@ -112,10 +114,15 @@ class PermissionSetDetails extends React.Component {
           <IfPermission perm="perms.permissions.item.delete">
             <Button title="Delete Permission Set" onClick={this.beginDelete} disabled={this.state.confirmDelete}> Delete Set </Button>
           </IfPermission>
-          {this.state.confirmDelete && <div>
-            <Button title="Confirm Delete Permission Set" onClick={() => { this.confirmDeleteSet(true); }}>Confirm</Button>
-            <Button title="Cancel Delete Permission Set" onClick={() => { this.confirmDeleteSet(false); }}>Cancel</Button>
-          </div>}
+
+          <ConfirmationModal
+            open={this.state.confirmDelete}
+            heading="Delete Permission Set?"
+            message={(<span><strong>{this.state.selectedSet.displayName || 'Untitled Permission Set'}</strong> will be <strong>removed</strong> from permission sets.</span>)}
+            onConfirm={() => { this.confirmDeleteSet(true); }}
+            onCancel={() => { this.confirmDeleteSet(false); }}
+            confirmLabel="Delete"
+          />
 
           <this.containedPermissions
             addPermission={this.addPermission}
