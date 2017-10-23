@@ -112,7 +112,7 @@ module.exports.test = function(uiTestCtx) {
       })
       it('should fail at deleting "' + gid + '" group', done => {
         nightmare
-        .wait(wait)
+        .wait(2222)
         .click(config.select.settings)
         .wait(wait)
         .click('a[href="/settings/users"]')
