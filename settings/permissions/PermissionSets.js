@@ -147,7 +147,7 @@ class PermissionSets extends React.Component {
         </Pane>
         {this.state.newSet && <PermissionSetDetails parentMutator={this.props.mutator} clearSelection={this.clearSelection} stripes={this.props.stripes} selectedSet={{}} initialValues={{}} />}
         {this.state.selectedSet && !this.state.newSet && <PermissionSetDetails callout={this.permissionSetsCallout} parentMutator={this.props.mutator} clearSelection={this.clearSelection} stripes={this.props.stripes} initialValues={this.state.selectedSet} selectedSet={this.state.selectedSet} />}
-        <Callout ref={(ref) => {this.permissionSetsCallout = ref;}} />
+        <Callout ref={(ref) => { this.permissionSetsCallout = ref; }} />
       </Paneset>
     );
   }

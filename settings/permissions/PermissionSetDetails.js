@@ -77,7 +77,7 @@ class PermissionSetDetails extends React.Component {
   confirmDeleteSet(confirmation) {
     if (confirmation) {
       this.props.parentMutator.permissionSets.DELETE(this.state.selectedSet).then(() => {
-        this.props.callout.sendCallout({ message: (<span>The permission set <strong>{this.state.selectedSet.displayName || 'Untitled Permission Set'}</strong> was successfully <strong>deleted</strong></span>)})
+        this.props.callout.sendCallout({ message: (<span>The permission set <strong>{this.state.selectedSet.displayName || 'Untitled Permission Set' }</strong> was successfully <strong>deleted</strong></span>) });
         this.props.clearSelection();
       });
     } else {
@@ -104,9 +104,7 @@ class PermissionSetDetails extends React.Component {
 
     return (
       <Pane paneTitle={`${this.state.selectedSet.displayName || 'Untitled'}`} defaultWidth="fill" fluidContentWidth>
-        
         <form>
-
           <section>
             <h2 style={{ marginTop: '0' }}>About</h2>
             <Field label="Title" name="displayName" id="displayName" component={Textfield} required fullWidth rounded validate={this.validateSet} onBlur={this.saveSet} disabled={disabled} />
@@ -116,8 +114,8 @@ class PermissionSetDetails extends React.Component {
           <IfPermission perm="perms.permissions.item.delete">
             <Button title="Delete Permission Set" onClick={this.beginDelete} disabled={this.state.confirmDelete}> Delete Set </Button>
           </IfPermission>
-          
-          <ConfirmationModal 
+
+          <ConfirmationModal
             open={this.state.confirmDelete}
             heading="Delete Permission Set?"
             message={(<span><strong>{this.state.selectedSet.displayName || 'Untitled Permission Set'}</strong> will be <strong>removed</strong> from permission sets.</span>)}
