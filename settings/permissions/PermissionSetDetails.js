@@ -1,18 +1,26 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import Pane from '@folio/stripes-components/lib/Pane';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 
+import ContainedPermissions from './ContainedPermissions';
+
 class PermissionSetDetails extends React.Component {
   static propTypes = {
+    stripes: PropTypes.shape({
+      connect: PropTypes.func.isRequired,
+    }).isRequired,
     initialValues: PropTypes.object,
   };
 
+  constructor(props) {
+    super();
+    this.containedPermissions = props.stripes.connect(ContainedPermissions);
+  }
+
   render() {
-    const { stripes, initialValues } = this.props;
-    const selectedSet = initialValues;
+    const selectedSet = this.props.initialValues;
 
     return (
       <div>
@@ -25,7 +33,7 @@ class PermissionSetDetails extends React.Component {
           <br />
           <Row>
             <Col xs={12}>
-              <KeyValue label="Policy Name" value={_.get(selectedSet, ['displayName'], '')} />
+              <KeyValue label="Policy Name" value={_.get(selectedSet, ['displayName'], 'Untitled Permission Set')} />
             </Col>
           </Row>
           <br />
@@ -35,19 +43,18 @@ class PermissionSetDetails extends React.Component {
             </Col>
           </Row>
         </section>
-        { /*
-            <this.containedPermissions
-              addPermission={this.addPermission}
-              removePermission={this.removePermission}
-              selectedSet={this.state.selectedSet}
-              permToRead="perms.permissions.get"
-              permToDelete="perms.permissions.item.put"
-              permToModify="perms.permissions.item.put"
-              stripes={this.props.stripes}
-              editable
-              {...this.props}
-            /> */
-        }
+
+        <this.containedPermissions
+          addPermission={() => {}}
+          removePermission={() => {}}
+          selectedSet={selectedSet}
+          permToRead="perms.permissions.get"
+          permToDelete="perms.permissions.item.put"
+          permToModify="perms.permissions.item.put"
+          stripes={this.props.stripes}
+          editable={false}
+          {...this.props}
+        />
       </div>
     );
   }

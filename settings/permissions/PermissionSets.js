@@ -15,6 +15,10 @@ import PermissionSetForm from './PermissionSetForm';
 class PermissionSets extends React.Component {
   static propTypes = {
     label: PropTypes.string.isRequired,
+    location: PropTypes.object.isRequired,
+    history: PropTypes.shape({
+      push: PropTypes.func.isRequired,
+    }).isRequired,
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func.isRequired,
     }).isRequired,
@@ -58,12 +62,12 @@ class PermissionSets extends React.Component {
     this.onCancel = this.onCancel.bind(this);
 
     const path = props.location.pathname;
-    const selectedId = (/loan-policies\//.test(path))
-      ? /permissions\/(.*)$/.exec(path)[1]
+    const selectedId = (/perms\//.test(path))
+      ? /perms\/(.*)$/.exec(path)[1]
       : null;
 
     this.state = { selectedId };
-    this.permissionSetsCallout = null;
+    this.callout = null;
   }
 
   onAdd() {
@@ -75,8 +79,15 @@ class PermissionSets extends React.Component {
     this.showLayer('edit');
   }
 
+  onSave(permSet) {
+    const action = (permSet.id) ? 'PUT' : 'POST';
+    return this.props.mutator.permissionSets[action](permSet)
+      .then(() => this.hideLayer());
+  }
+
   onRemove(permSet) {
-    return this.props.mutator.permissionSets.DELETE(permSet).then(() =>{
+    return this.props.mutator.permissionSets.DELETE(permSet).then(() => {
+      this.showCalloutMessage(permSet.displayName);
       this.hideLayer();
     });
   }
@@ -86,10 +97,15 @@ class PermissionSets extends React.Component {
     this.hideLayer();
   }
 
-  onSave(permSet) {
-    const action = (permSet.id) ? 'PUT' : 'POST';
-    return this.props.mutator.permissionSets[action](permSet)
-      .then(() => this.hideLayer());
+  showCalloutMessage(name) {
+    const message = (
+      <span>
+        The permission set <strong>{name || 'Untitled Permission Set' }</strong>
+        was successfully <strong>deleted</strong>
+      </span>
+    );
+
+    this.callout.sendCallout({ message });
   }
 
   showLayer(name) {
@@ -103,12 +119,11 @@ class PermissionSets extends React.Component {
   render() {
     const { resources, location, stripes } = this.props;
     const permissionSets = (resources.permissionSets || {}).records || [];
-    const permissions = _.sortBy(permissionSets, ['name']);
-    const container = document.getElementById('ModuleContainer');
     const query = location.search ? queryString.parse(location.search) : {};
     const selectedItem = (query.layer === 'edit')
       ? _.find(permissionSets, p => p.id === this.state.selectedId) : {};
 
+    const container = document.getElementById('ModuleContainer');
     if (!container) return (<div />);
 
     const addMenu = (
@@ -130,9 +145,9 @@ class PermissionSets extends React.Component {
         onAdd={this.onAdd}
         onEdit={this.onEdit}
         detailComponent={PermissionSetDetails}
-        contentData={permissions}
+        contentData={permissionSets}
         parentMutator={this.props.mutator}
-        paneTitle="Permission Sets"
+        paneTitle={this.props.label}
         detailPaneTitle="Permission Set Details"
         nameKey="displayName"
         paneWidth="70%"
@@ -142,14 +157,13 @@ class PermissionSets extends React.Component {
           <PermissionSetForm
             initialValues={selectedItem}
             stripes={stripes}
-            callout={this.permissionSetsCallout}
             onSave={this.onSave}
             onCancel={this.onCancel}
             onRemove={this.onRemove}
           />
-          <Callout ref={(ref) => { this.permissionSetsCallout = ref; }} />
-        </Layer>
 
+        </Layer>
+        <Callout ref={ref => (this.callout = ref)} />
       </EntrySelector>
     );
   }

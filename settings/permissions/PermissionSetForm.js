@@ -11,7 +11,7 @@ import ConfirmationModal from '@folio/stripes-components/lib/structures/Confirma
 import stripesForm from '@folio/stripes-form';
 import { Field } from 'redux-form';
 
-import containedPermissions from './ContainedPermissions';
+import ContainedPermissions from './ContainedPermissions';
 
 class PermissionSetForm extends React.Component {
 
@@ -20,9 +20,7 @@ class PermissionSetForm extends React.Component {
       hasPerm: PropTypes.func.isRequired,
       connect: PropTypes.func.isRequired,
     }).isRequired,
-    callout: PropTypes.object,
     initialValues: PropTypes.object,
-    change: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     onSave: PropTypes.func,
     onCancel: PropTypes.func,
@@ -40,19 +38,34 @@ class PermissionSetForm extends React.Component {
     this.addPermission = this.addPermission.bind(this);
     this.removePermission = this.removePermission.bind(this);
 
-    this.containedPermissions = props.stripes.connect(containedPermissions);
-    const selectedSet = Object.assign({ subPermissions: [] }, props.initialValues);
-    this.state = { selectedSet, confirmDelete: false };
+    this.containedPermissions = props.stripes.connect(ContainedPermissions);
   }
 
-  saveSet(formData) {
-    const set = this.state.selectedSet;
-    const selectedSet = Object.assign({}, set, formData, {
+  componentWillMount() {
+    this.setPermSet(this.props.initialValues);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.initialValues !== this.props.initialValues) {
+      this.setPermSet(nextProps.initialValues);
+    }
+  }
+
+  setPermSet(permSet) {
+    this.setState({
+      confirmDelete: false,
+      selectedSet: Object.assign({ subPermissions: [] }, permSet),
+    });
+  }
+
+  saveSet(data) {
+    const selectedSet = this.state.selectedSet;
+    const permSet = Object.assign({}, selectedSet, data, {
       mutable: true,
-      subPermissions: (set.subPermissions || []).map(p => p.permissionName),
+      subPermissions: (selectedSet.subPermissions || []).map(p => p.permissionName),
     });
 
-    this.props.onSave(selectedSet);
+    this.props.onSave(permSet);
   }
 
   beginDelete() {
@@ -63,12 +76,8 @@ class PermissionSetForm extends React.Component {
 
   confirmDeleteSet(confirmation) {
     const { selectedSet } = this.state;
-
     if (confirmation) {
-      this.props.onRemove(selectedSet).then(() => {
-        this.props.callout.sendCallout({ message: (<span>The permission set <strong>{selectedSet.displayName || 'Untitled Permission Set' }</strong> was successfully <strong>deleted</strong></span>) });
-        this.setState({ confirmDelete: false });
-      });
+      this.props.onRemove(selectedSet);
     } else {
       this.setState({ confirmDelete: false });
     }
@@ -116,8 +125,9 @@ class PermissionSetForm extends React.Component {
 
   render() {
     const { stripes, handleSubmit } = this.props;
+    const { selectedSet, confirmDelete } = this.state;
     const disabled = !stripes.hasPerm('perms.permissions.item.put');
-    const paneTitle = this.state.selectedSet.id ? 'Edit Permission Set' : 'New Permission Set';
+    const paneTitle = selectedSet.id ? 'Edit Permission Set' : 'New Permission Set';
 
     return (
       <form id="form-policy" onSubmit={handleSubmit(this.saveSet)}>
@@ -129,16 +139,16 @@ class PermissionSetForm extends React.Component {
               <Field label="Description" name="description" id="permissionset_description" component={TextArea} fullWidth rounded disabled={disabled} />
             </section>
 
-            {this.state.selectedSet.id &&
+            {selectedSet.id &&
               <IfPermission perm="perms.permissions.item.delete">
-                <Button title="Delete Permission Set" onClick={this.beginDelete} disabled={this.state.confirmDelete}> Delete Set </Button>
+                <Button title="Delete Permission Set" onClick={this.beginDelete} disabled={confirmDelete}> Delete Set </Button>
               </IfPermission>
             }
 
             <ConfirmationModal
-              open={this.state.confirmDelete}
+              open={confirmDelete}
               heading="Delete Permission Set?"
-              message={(<span><strong>{this.state.selectedSet.displayName || 'Untitled Permission Set'}</strong> will be <strong>removed</strong> from permission sets.</span>)}
+              message={(<span><strong>{selectedSet.displayName || 'Untitled Permission Set'}</strong> will be <strong>removed</strong> from permission sets.</span>)}
               onConfirm={() => { this.confirmDeleteSet(true); }}
               onCancel={() => { this.confirmDeleteSet(false); }}
               confirmLabel="Delete"
@@ -147,7 +157,7 @@ class PermissionSetForm extends React.Component {
             <this.containedPermissions
               addPermission={this.addPermission}
               removePermission={this.removePermission}
-              selectedSet={this.state.selectedSet}
+              selectedSet={selectedSet}
               permToRead="perms.permissions.get"
               permToDelete="perms.permissions.item.put"
               permToModify="perms.permissions.item.put"
