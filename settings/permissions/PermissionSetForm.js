@@ -135,7 +135,7 @@ class PermissionSetForm extends React.Component {
           <Pane defaultWidth="100%" firstMenu={this.addFirstMenu()} lastMenu={this.saveLastMenu()} paneTitle={paneTitle}>
             <section>
               <h2 style={{ marginTop: '0' }}>About</h2>
-              <Field label="Title" name="displayName" id="displayName" component={Textfield} required fullWidth rounded disabled={disabled} />
+              <Field label="Title" name="displayName" id="displayName" component={Textfield} autoFocus required fullWidth rounded disabled={disabled} />
               <Field label="Description" name="description" id="permissionset_description" component={TextArea} fullWidth rounded disabled={disabled} />
             </section>
 
