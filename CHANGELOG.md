@@ -32,8 +32,9 @@
 * Apply `noOverflow` prop to results pane. Fixes STCOM-40.
 * Sort Loans by Column Header. Fixes UIU-217.
 * User permissions, permission-set sub-permissions and available permissions are now all sorted case-insensitively. Fixes UIU-273.
-* Show loan's proxy borrower. Part of UIU-177. 
+* Show loan's proxy borrower. Part of UIU-177.
 * Integrate confirmation modal for deletion of permission sets. Fulfills STCOM-66.
+* Refactor permission sets. Fulfills UIU-231, UIU-276, and UIU-165.
 
 ## [2.10.1](https://github.com/folio-org/ui-users/tree/v2.10.1) (2017-09-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.10.0...v2.10.1)
