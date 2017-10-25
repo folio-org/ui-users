@@ -243,13 +243,6 @@ class Users extends React.Component {
     });
   }
 
-  collapseDetails = () => {
-    this.setState({
-      selectedItem: {},
-    });
-    this.props.history.push(`${this.props.match.path}${this.props.location.search}`);
-  }
-
   toggleNotes() {
     this.setState((curState) => {
       const show = !curState.showNotesPane;
