@@ -164,13 +164,6 @@ class Users extends React.Component {
     }
   }
 
-  onSelectRow = this.props.onSelectRow ? this.props.onSelectRow : (e, meta) => {
-    const userId = meta.id;
-    this.log('action', `clicked ${userId}, selected user =`, meta);
-    this.setState({ selectedItem: meta });
-    this.props.history.push(`/users/view/${userId}${this.props.location.search}`);
-  }
-
   onClickAddNewUser = (e) => {
     if (e) e.preventDefault();
     this.log('action', 'clicked "add new user"');
@@ -290,16 +283,18 @@ class Users extends React.Component {
   }
 
   render() {
-    const urlQuery = queryString.parse(this.props.location.search || '');
+    const props = this.props;
+    const urlQuery = queryString.parse(props.location.search || '');
     const initialPath = (_.get(packageInfo, ['stripes', 'home']) ||
                          _.get(packageInfo, ['stripes', 'route']));
 
     return (<this.connectedSearchAndSort
-      stripes={this.props.stripes}
-      parentResources={this.props.resources}
-      parentMutator={this.props.mutator}
+      stripes={props.stripes}
+      onSelectRow={props.onSelectRow}
+      parentResources={props.resources}
+      parentMutator={props.mutator}
       urlQuery={urlQuery}
-      path={this.props.location.pathname}
+      path={props.location.pathname}
       filterConfig={filterConfig}
       initialPath={initialPath}
     />);
