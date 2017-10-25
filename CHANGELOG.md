@@ -16,12 +16,12 @@
 * Display count when loans section is collapsed. Fixes UIU-233.
 * Display count when proxy section is collapsed. Fixes UIU-233.
 * Rename "Proxy Permissions" section to "Proxy". Fixes UIU-236.
-* Adjust loan page layout Fixes UIU-251.
+* Adjust loan page layout. Fixes UIU-251.
 * Path URLs, permission calls, and credentials now use UUID instead of username where appropriate. Fixes UIU-172.
 * Expand/Collapse All button integrated for accordions on the user detail page. Fulfills STCOM-71.
 * Change name of "User Status" filter to "Status". Fixes UIU-210.
 * Change "Active" column in user list to "Status", and change values from tick-or-nothing to "Active" and "Inactive". Fixes UIU-211.
-* Permissions menu sorted by displayName (but still be permissionName when `config.showPerms` is true). Applies lists to both of existing permissions, and of those available to add. Fixes UIU-250.
+* Permissions menu sorted by displayName (but still by permissionName when `config.showPerms` is true). Applies lists to both of existing permissions, and of those available to add. Fixes UIU-250.
 * Fix renew date. Fixes UIU-252.
 * `editable` prop added to `<RenderPermissions>` component to facilitate UIU-244.
 * When `config.showPerms` is true, show the True Names of users' permissions as well as available permissions. Fixes UIU-262.
@@ -32,7 +32,9 @@
 * Apply `noOverflow` prop to results pane. Fixes STCOM-40.
 * Sort Loans by Column Header. Fixes UIU-217.
 * User permissions, permission-set sub-permissions and available permissions are now all sorted case-insensitively. Fixes UIU-273.
-* Show loan's proxy borrower. Part of UIU-177. 
+* Show loan's proxy borrower. Part of UIU-177.
+* Integrate confirmation modal for deletion of permission sets. Fulfills STCOM-66.
+* Refactor permission sets. Fulfills UIU-231, UIU-276, and UIU-165.
 
 ## [2.10.1](https://github.com/folio-org/ui-users/tree/v2.10.1) (2017-09-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.10.0...v2.10.1)

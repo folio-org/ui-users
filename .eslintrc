@@ -6,6 +6,9 @@
       webpack: {}
     }
   },
+  env: {
+    browser: true
+  },
   "rules": {
     "react/jsx-filename-extension":"off",
     "import/extensions": [ 1, "never" ],
