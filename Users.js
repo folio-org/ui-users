@@ -17,6 +17,11 @@ import removeQueryParam from './removeQueryParam';
 import { toUserAddresses } from './converters/address';
 import packageInfo from './package';
 
+
+// XXX Keep in sync with the value from <SearchAndSort>. Later, we will find a better way to share the value
+const INITIAL_RESULT_COUNT = 30;
+
+
 const filterConfig = [
   {
     label: 'Status',
@@ -60,6 +65,7 @@ class Users extends React.Component {
           }),
         ),
       }),
+      userCount: PropTypes.number,
       notes: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
@@ -75,6 +81,9 @@ class Users extends React.Component {
       path: PropTypes.string.isRequired,
     }).isRequired,
     mutator: PropTypes.shape({
+      userCount: PropTypes.shape({
+        replace: PropTypes.func,
+      }),
       users: PropTypes.shape({
         POST: PropTypes.func,
       }),
@@ -89,6 +98,7 @@ class Users extends React.Component {
   };
 
   static manifest = Object.freeze({
+    userCount: { initialValue: INITIAL_RESULT_COUNT },
     users: {
       type: 'okapi',
       records: 'users',
@@ -287,6 +297,7 @@ class Users extends React.Component {
     return (<this.connectedSearchAndSort
       stripes={this.props.stripes}
       parentResources={this.props.resources}
+      parentMutator={this.props.mutator}
       urlQuery={urlQuery}
       path={this.props.location.pathname}
       filterConfig={filterConfig}
