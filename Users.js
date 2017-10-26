@@ -9,11 +9,9 @@ import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction'
 import { stripesShape } from '@folio/stripes-core/src/Stripes';
 import Notes from '@folio/stripes-smart-components/lib/Notes';
 import { SubmissionError } from 'redux-form';
-import uuid from 'uuid';
 
 import SearchAndSort from'./lib/SearchAndSort';
 
-import removeQueryParam from './removeQueryParam';
 import { toUserAddresses } from './converters/address';
 import packageInfo from './package';
 
@@ -164,83 +162,8 @@ class Users extends React.Component {
     }
   }
 
-  onClickAddNewUser = (e) => {
-    if (e) e.preventDefault();
-    this.log('action', 'clicked "add new user"');
-    this.transitionToParams({ layer: 'create' });
-  }
-
-  onClickCloseNewUser = (e) => {
-    if (e) e.preventDefault();
-    this.log('action', 'clicked "close new user"');
-    removeQueryParam('layer', this.props.location, this.props.history);
-  }
-
   getRowURL(rowData) {
     return `/users/view/${rowData.id}${this.props.location.search}`;
-  }
-
-  create = (userdata) => {
-    if (userdata.personal.addresses) {
-      const addressTypes = (this.props.resources.addressTypes || {}).records || [];
-      userdata.personal.addresses = toUserAddresses(userdata.personal.addresses, addressTypes); // eslint-disable-line no-param-reassign
-    }
-    const creds = Object.assign({}, userdata.creds, { username: userdata.username });
-    const user = Object.assign({}, userdata, { id: uuid() });
-    if (user.creds) delete user.creds;
-
-    this.postUser(user)
-    .then(newUser => this.postCreds(newUser.id, creds))
-    .then(userId => this.postPerms(userId))
-    .then((userId) => {
-      this.onClickCloseNewUser();
-      this.onSelectRow(null, { id: userId });
-    });
-  }
-
-  postUser = user =>
-    fetch(`${this.okapi.url}/users`, {
-      method: 'POST',
-      headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token, 'Content-Type': 'application/json' }),
-      body: JSON.stringify(user),
-    }).then((userPostResponse) => {
-      if (userPostResponse.status >= 400) {
-        throw new SubmissionError('Creating new user failed');
-      } else {
-        return userPostResponse.json();
-      }
-    }).then(userJson => userJson);
-
-  postCreds = (userId, creds) => {
-    this.log('xhr', `POST credentials for new user '${userId}':`, creds);
-    const localCreds = Object.assign({}, creds, creds.password ? {} : { password: '' }, { userId });
-    return fetch(`${this.okapi.url}/authn/credentials`, {
-      method: 'POST',
-      headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token, 'Content-Type': 'application/json' }),
-      body: JSON.stringify(localCreds),
-    }).then((credsPostResponse) => {
-      if (credsPostResponse.status >= 400) {
-        throw new SubmissionError('Creating credentials for new user failed');
-      } else {
-        return userId;
-      }
-    });
-  }
-
-  postPerms = (userId) => {
-    const permissions = [];
-    this.log('xhr', `POST permissions for new user '${userId}':`, permissions);
-    return fetch(`${this.okapi.url}/perms/users`, {
-      method: 'POST',
-      headers: Object.assign({}, { 'X-Okapi-Tenant': this.okapi.tenant, 'X-Okapi-Token': this.okapi.token, 'Content-Type': 'application/json' }),
-      body: JSON.stringify({ userId, permissions }),
-    }).then((response) => {
-      if (response.status >= 400) {
-        throw new SubmissionError('Creating empty permissions for new user failed');
-      } else {
-        return userId;
-      }
-    });
   }
 
   toggleNotes() {
@@ -283,6 +206,7 @@ class Users extends React.Component {
 
     return (<this.connectedSearchAndSort
       stripes={props.stripes}
+      okapi={props.okapi}
       onSelectRow={props.onSelectRow}
       parentResources={props.resources}
       parentMutator={props.mutator}
