@@ -43,7 +43,7 @@ export function toListAddresses(addresses, addressTypes) {
   if (!addresses || !addresses.length) return addresses;
 
   const addressTypesById = getAddressTypesById(addressTypes);
-  return addresses.map(addr =>
+  return _.sortBy(addresses, a => -a.primaryAddress).map(addr =>
     toListAddress(addr, addressTypesById[addr.addressTypeId]));
 }
 
