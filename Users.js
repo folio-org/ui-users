@@ -40,13 +40,8 @@ class Users extends React.Component {
       pathname: PropTypes.string.isRequired,
       search: PropTypes.string,
     }).isRequired,
-    mutator: PropTypes.shape({
-    }).isRequired,
-    okapi: PropTypes.shape({
-      url: PropTypes.string.isRequired,
-      tenant: PropTypes.string.isRequired,
-      token: PropTypes.string.isRequired,
-    }).isRequired,
+    mutator: PropTypes.shape({}).isRequired,
+    okapi: PropTypes.shape({}).isRequired,
     onSelectRow: PropTypes.func,
   };
 
@@ -91,23 +86,12 @@ class Users extends React.Component {
 
   constructor(props) {
     super(props);
-
-    this.state = {};
-    this.okapi = props.okapi;
-
     this.connectedSearchAndSort = props.stripes.connect(SearchAndSort);
-
-    const logger = props.stripes.logger;
-    this.log = logger.log.bind(logger);
-
     this.anchoredRowFormatter = this.anchoredRowFormatter.bind(this);
-
-    this.resultsList = null;
   }
 
   componentWillUpdate() {
     const pg = (this.props.resources.patronGroups || {}).records || [];
-
     if (pg && pg.length) {
       filterConfig[1].values = pg.map(rec => ({ name: rec.group, cql: rec.id }));
     }
@@ -148,7 +132,7 @@ class Users extends React.Component {
 
     return (<this.connectedSearchAndSort
       stripes={props.stripes}
-      okapi={props.okapi}
+      okapi={this.props.okapi}
       initialPath={initialPath}
       filterConfig={filterConfig}
       initialResultCount={INITIAL_RESULT_COUNT}
