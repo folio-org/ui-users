@@ -154,8 +154,8 @@ class Users extends React.Component {
       initialResultCount={INITIAL_RESULT_COUNT}
       resultCountIncrement={RESULT_COUNT_INCREMENT}
       parentResources={props.resources}
-      parentMutator={props.mutator}
-      onSelectRow={props.onSelectRow}
+      parentMutator={this.props.mutator}
+      onSelectRow={this.props.onSelectRow}
       path={props.location.pathname}
       urlQuery={urlQuery}
     />);
