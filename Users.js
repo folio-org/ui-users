@@ -194,13 +194,13 @@ class Users extends React.Component {
     return (<this.connectedSearchAndSort
       stripes={props.stripes}
       okapi={props.okapi}
-      onSelectRow={props.onSelectRow}
+      initialPath={initialPath}
+      filterConfig={filterConfig}
       parentResources={props.resources}
       parentMutator={props.mutator}
-      urlQuery={urlQuery}
+      onSelectRow={props.onSelectRow}
       path={props.location.pathname}
-      filterConfig={filterConfig}
-      initialPath={initialPath}
+      urlQuery={urlQuery}
     />);
   }
 }
