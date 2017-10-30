@@ -2,15 +2,9 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
-import fetch from 'isomorphic-fetch';
-
-import transitionToParams from '@folio/stripes-components/util/transitionToParams';
 import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
 import { stripesShape } from '@folio/stripes-core/src/Stripes';
-import { SubmissionError } from 'redux-form';
-
 import SearchAndSort from'./lib/SearchAndSort';
-
 import { toUserAddresses } from './converters/address';
 import packageInfo from './package';
 
@@ -139,7 +133,6 @@ class Users extends React.Component {
     this.state = {};
     this.okapi = props.okapi;
 
-    this.transitionToParams = transitionToParams.bind(this);
     this.connectedSearchAndSort = props.stripes.connect(SearchAndSort);
 
     const logger = props.stripes.logger;
