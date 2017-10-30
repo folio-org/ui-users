@@ -25,6 +25,7 @@ function toListAddress(addr, addrType) {
 }
 
 function toUserAddress(addr, addrType) {
+  // console.log('toUserAddress for', addr, '-- countriesByName[addr.country] =', countriesByName[addr.country]);
   const countryId = (addr.country) ? countriesByName[addr.country].alpha2 : '';
   const addressTypeId = _.get(addrType, ['id'], '');
   return {
