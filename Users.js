@@ -150,8 +150,6 @@ class Users extends React.Component {
     this.anchoredRowFormatter = this.anchoredRowFormatter.bind(this);
 
     this.resultsList = null;
-
-    this.toggleNotes = this.toggleNotes.bind(this);
   }
 
   componentWillUpdate() {
@@ -164,15 +162,6 @@ class Users extends React.Component {
 
   getRowURL(rowData) {
     return `/users/view/${rowData.id}${this.props.location.search}`;
-  }
-
-  toggleNotes() {
-    this.setState((curState) => {
-      const show = !curState.showNotesPane;
-      return {
-        showNotesPane: show,
-      };
-    });
   }
 
   // custom row formatter to wrap rows in anchor tags.
