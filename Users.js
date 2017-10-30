@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import queryString from 'query-string';
 import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
 import { stripesShape } from '@folio/stripes-core/src/Stripes';
-import SearchAndSort from'./lib/SearchAndSort';
+import SearchAndSort from './lib/SearchAndSort';
 import packageInfo from './package';
 
 const INITIAL_RESULT_COUNT = 30;
@@ -35,43 +35,12 @@ class Users extends React.Component {
       patronGroups: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
-      users: PropTypes.shape({
-        hasLoaded: PropTypes.bool.isRequired,
-        other: PropTypes.shape({
-          totalRecords: PropTypes.number.isRequired,
-        }),
-        isPending: PropTypes.bool.isPending,
-        successfulMutations: PropTypes.arrayOf(
-          PropTypes.shape({
-            record: PropTypes.shape({
-              id: PropTypes.string.isRequired,
-              username: PropTypes.string.isRequired,
-            }).isRequired,
-          }),
-        ),
-      }),
-      userCount: PropTypes.number,
-      notes: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
-      }),
-    }).isRequired,
-    history: PropTypes.shape({
-      push: PropTypes.func.isRequired,
     }).isRequired,
     location: PropTypes.shape({
       pathname: PropTypes.string.isRequired,
       search: PropTypes.string,
     }).isRequired,
-    match: PropTypes.shape({
-      path: PropTypes.string.isRequired,
-    }).isRequired,
     mutator: PropTypes.shape({
-      userCount: PropTypes.shape({
-        replace: PropTypes.func,
-      }),
-      users: PropTypes.shape({
-        POST: PropTypes.func,
-      }),
     }).isRequired,
     okapi: PropTypes.shape({
       url: PropTypes.string.isRequired,
@@ -79,7 +48,6 @@ class Users extends React.Component {
       token: PropTypes.string.isRequired,
     }).isRequired,
     onSelectRow: PropTypes.func,
-    disableUserCreation: PropTypes.bool,
   };
 
   static manifest = Object.freeze({
