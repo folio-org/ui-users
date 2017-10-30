@@ -5,13 +5,10 @@ import queryString from 'query-string';
 import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
 import { stripesShape } from '@folio/stripes-core/src/Stripes';
 import SearchAndSort from'./lib/SearchAndSort';
-import { toUserAddresses } from './converters/address';
 import packageInfo from './package';
 
-
-// XXX Keep in sync with the value from <SearchAndSort>. Later, we will find a better way to share the value
 const INITIAL_RESULT_COUNT = 30;
-
+const RESULT_COUNT_INCREMENT = 30;
 
 const filterConfig = [
   {
@@ -189,6 +186,8 @@ class Users extends React.Component {
       okapi={props.okapi}
       initialPath={initialPath}
       filterConfig={filterConfig}
+      initialResultCount={INITIAL_RESULT_COUNT}
+      resultCountIncrement={RESULT_COUNT_INCREMENT}
       parentResources={props.resources}
       parentMutator={props.mutator}
       onSelectRow={props.onSelectRow}
