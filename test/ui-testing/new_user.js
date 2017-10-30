@@ -87,7 +87,7 @@ module.exports.test = function(uitestctx) {
         .type('#adduser_enrollmentdate','2017-01-01')
         .type('#adduser_expirationdate','2020-01-01')
         .type('#adduser_barcode',user.barcode)
-        .xclick('//button[contains(.,"ddress")]')
+        .xclick('id("form-user")//button[contains(.,"New")]')
         .wait(555)
         .click('input[id^="PrimaryAddress"]')
         .type('input[name=country]',user.address.country)
