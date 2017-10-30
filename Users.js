@@ -7,7 +7,6 @@ import fetch from 'isomorphic-fetch';
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
 import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
 import { stripesShape } from '@folio/stripes-core/src/Stripes';
-import Notes from '@folio/stripes-smart-components/lib/Notes';
 import { SubmissionError } from 'redux-form';
 
 import SearchAndSort from'./lib/SearchAndSort';
@@ -141,7 +140,6 @@ class Users extends React.Component {
     this.okapi = props.okapi;
 
     this.transitionToParams = transitionToParams.bind(this);
-    this.connectedNotes = props.stripes.connect(Notes);
     this.connectedSearchAndSort = props.stripes.connect(SearchAndSort);
 
     const logger = props.stripes.logger;
