@@ -35,9 +35,6 @@ class Users extends React.Component {
       patronGroups: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
-      addressTypes: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
-      }),
       users: PropTypes.shape({
         hasLoaded: PropTypes.bool.isRequired,
         other: PropTypes.shape({
