@@ -80,8 +80,8 @@ module.exports.test = function(uiTestCtx) {
         })
         .then(function(result) {
           userid = result
-          console.log('        (found user ID ' + userid + ")")
           done()
+          console.log('        (found user ID ' + userid + ")")
         })
         .catch(done)
       })
@@ -96,8 +96,8 @@ module.exports.test = function(uiTestCtx) {
         .xtract('id("adduser_group")/option[contains(.,"' + gid + '" )]/@value')
         .then(function(result) {
           communityid = result
-          console.log('        (found patron group ID ' + communityid + ")")
           done()
+          console.log('        (found patron group ID ' + communityid + ")")
         })
         .catch(done)
       })
@@ -112,18 +112,27 @@ module.exports.test = function(uiTestCtx) {
       })
       it('should fail at deleting "' + gid + '" group', done => {
         nightmare
-        .wait(2222)
+        .wait(wait)
         .click(config.select.settings)
         .wait(wait)
         .click('a[href="/settings/users"]')
         .wait('a[href="/settings/users/groups"]')
-        .wait(wait)
         .click('a[href="/settings/users/groups"]')
-	.wait(wait)
+	.wait(function(dp) {
+	  var dnode = document.evaluate(dp, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)
+	  try {
+	    var dtest = dnode.singleNodeValue.innerHTML
+	    return true
+	  }
+	  catch (e) {
+	    console.log(e)
+	    return false
+	  }
+	},deletePath)
         .xclick(deletePath)
         .click('a[href="/settings/users/addresstypes"]')
         .wait(wait)
-	.xclick('//button[starts-with(.,"Discard")]')
+	.xclick('//button[starts-with(.,"Discard")] | //body')
         .wait(wait)
         .click('a[href="/settings/users/groups"]')
         .wait(wait)
@@ -153,8 +162,8 @@ module.exports.test = function(uiTestCtx) {
         .xtract('id("adduser_group")/option[contains(.,"Staff")]/@value')
         .then(function(result) {
           staffid = result
-          console.log('        (found "Staff" group ID ' + staffid +")")
           done()
+          console.log('        (found "Staff" group ID ' + staffid +")")
         })
         .catch(done)
       })
@@ -174,7 +183,17 @@ module.exports.test = function(uiTestCtx) {
         .xclick('id("ModuleContainer")//a[.="Users"]')
         .wait(wait)
         .xclick('id("ModuleContainer")//a[.="Patron groups"]')
-        .wait(wait)
+	.wait(function(dp) {
+	  var dnode = document.evaluate(dp, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)
+	  try {
+	    var dtest = dnode.singleNodeValue.innerHTML
+	    return true
+	  }
+	  catch (e) {
+	    console.log(e)
+	    return false
+	  }
+	},deletePath)
         .xclick(deletePath)
         .wait(parseInt(process.env.FOLIO_UI_DEBUG) ? parseInt(config.debug_sleep) : 555) // debugging
         .then(result => { done() })
