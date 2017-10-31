@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import queryString from 'query-string';
 import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
 import { stripesShape } from '@folio/stripes-core/src/Stripes';
+import ViewUser from './ViewUser';
 import SearchAndSort from './lib/SearchAndSort';
 import packageInfo from './package';
 
@@ -109,6 +110,7 @@ class Users extends React.Component {
       filterConfig={filterConfig}
       initialResultCount={INITIAL_RESULT_COUNT}
       resultCountIncrement={RESULT_COUNT_INCREMENT}
+      viewUserComponent={ViewUser}
       parentResources={props.resources}
       parentMutator={this.props.mutator}
       onSelectRow={this.props.onSelectRow}
