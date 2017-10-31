@@ -87,7 +87,6 @@ class Users extends React.Component {
   constructor(props) {
     super(props);
     this.connectedSearchAndSort = props.stripes.connect(SearchAndSort);
-    this.anchoredRowFormatter = this.anchoredRowFormatter.bind(this);
   }
 
   componentWillUpdate() {
@@ -95,33 +94,6 @@ class Users extends React.Component {
     if (pg && pg.length) {
       filterConfig[1].values = pg.map(rec => ({ name: rec.group, cql: rec.id }));
     }
-  }
-
-  getRowURL(rowData) {
-    return `/users/view/${rowData.id}${this.props.location.search}`;
-  }
-
-  // custom row formatter to wrap rows in anchor tags.
-  anchoredRowFormatter(
-    { rowIndex,
-      rowClass,
-      rowData,
-      cells,
-      rowProps,
-      labelStrings,
-    },
-  ) {
-    return (
-      <a
-        href={this.getRowURL(rowData)} key={`row-${rowIndex}`}
-        aria-label={labelStrings && labelStrings.join('...')}
-        role="listitem"
-        className={rowClass}
-        {...rowProps}
-      >
-        {cells}
-      </a>
-    );
   }
 
   render() {
@@ -140,7 +112,7 @@ class Users extends React.Component {
       parentResources={props.resources}
       parentMutator={this.props.mutator}
       onSelectRow={this.props.onSelectRow}
-      path={props.location.pathname}
+      path={this.props.location.pathname}
       urlQuery={urlQuery}
     />);
   }
