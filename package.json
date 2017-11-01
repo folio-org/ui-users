@@ -15,8 +15,9 @@
     "type": "app",
     "displayName": "Users",
     "route": "/users",
-    "home": "/users?filters=active.Active&sort=Name",
+    "home": "/users",
     "hasSettings": true,
+    "queryResource": "query",
     "actionNames": [
       "stripesHome",
       "usersSortByName"
