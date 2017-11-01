@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import Pluggable from '@folio/stripes-components/lib/Pluggable';
 import { Accordion } from '@folio/stripes-components/lib/Accordion';
-
+import Badge from '@folio/stripes-components/lib/Badge';
 import { getFullName, getRowURL, getAnchoredRowFormatter } from './util';
 
 const propTypes = {
@@ -24,13 +24,15 @@ const propTypes = {
     curUser: PropTypes.shape({
       replace: PropTypes.func,
     }),
-    user: React.PropTypes.shape({
-      PUT: React.PropTypes.func.isRequired,
+    user: PropTypes.shape({
+      PUT: PropTypes.func.isRequired,
     }),
   }).isRequired,
   expanded: PropTypes.bool,
   onToggle: PropTypes.func,
   accordionId: PropTypes.string.isRequired,
+  // if `editable` is true, component will be in 'edit' mode. (read-only by default)
+  editable: PropTypes.bool,
 };
 
 class ProxyPermissions extends React.Component {
@@ -110,8 +112,11 @@ class ProxyPermissions extends React.Component {
         open={expanded}
         id={accordionId}
         onToggle={onToggle}
+        displayWhenClosed={
+          <Badge>{proxies.length + sponsors.length}</Badge>
+        }
         label={
-          <h2>Proxy Permissions</h2>
+          <h2>Proxy</h2>
         }
       >
         <Row>
@@ -127,6 +132,7 @@ class ProxyPermissions extends React.Component {
             />
           </Col>
         </Row>
+        { this.props.editable &&
         <Row className="marginTopHalf">
           <Col xs={12}>
             <Pluggable
@@ -142,6 +148,7 @@ class ProxyPermissions extends React.Component {
             />
           </Col>
         </Row>
+        }
         <hr />
         <Row>
           <Col xs={12}>
@@ -156,6 +163,7 @@ class ProxyPermissions extends React.Component {
             />
           </Col>
         </Row>
+        { this.props.editable &&
         <Row className="marginTopHalf">
           <Col xs={12}>
             <Pluggable
@@ -171,6 +179,7 @@ class ProxyPermissions extends React.Component {
             />
           </Col>
         </Row>
+        }
       </Accordion>);
   }
 }

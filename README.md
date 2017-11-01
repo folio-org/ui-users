@@ -21,6 +21,16 @@ The other parts that are needed are the Okapi gateway, various server-side modul
 
 (At some point, this process will be dramatically streamlined; but at present, this software is primarily for developers to work on, rather than for users to use.)
 
+## Testing
+
+If you are doing development from git checkouts, you can use `npm test` or `yarn test` to run a regression-test suite, provided that:
+
+1. You have `ui-testing` checked out next to `ui-users`.
+2. Your `ui-users` checkout is `yarn link`ed into `ui-testing`.
+3. You are running a Stripes server on localhost:3000.
+
+(Most developers' environments meet these requirements.)
+
 ## Additional information
 
 Other [modules](http://dev.folio.org/source-code/#client-side).

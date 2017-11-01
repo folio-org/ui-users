@@ -87,7 +87,7 @@ module.exports.test = function(uitestctx) {
         .type('#adduser_enrollmentdate','2017-01-01')
         .type('#adduser_expirationdate','2020-01-01')
         .type('#adduser_barcode',user.barcode)
-        .xclick('//button[contains(.,"ddress")]')
+        .xclick('id("form-user")//button[contains(.,"New")]')
         .wait(555)
         .click('input[id^="PrimaryAddress"]')
         .type('input[name=country]',user.address.country)
@@ -106,7 +106,7 @@ module.exports.test = function(uitestctx) {
       flogin(user.id,user.password)
       flogout()
       flogin(config.username, config.password)
-      it('should edit user: ' + user.id, done => {
+      it('should change username for ' + user.id, done => {
         nightmare
         .wait('#clickable-users-module')
         .click('#clickable-users-module')
@@ -116,26 +116,41 @@ module.exports.test = function(uitestctx) {
         .click('div[title="' + user.id + '"]')
         .wait('#clickable-edituser')
         .click('#clickable-edituser')
-        .wait('#adduser_mobilePhone')
+        .wait('#adduser_username')
         .wait(555)
-        .type('#adduser_mobilePhone',null)
-        .type('#adduser_mobilePhone',phone)
+	.click('#adduser_username')
+        .type('#adduser_username',null)
+	.wait(555)
+        .insert('#adduser_username',user.id + "x")
         .select('#adduser_group', pgroup)
-        .select('#adduser_preferredcontact', '002')
-        .wait(5555)
+        .wait(555)
         .click('#clickable-updateuser')
         .wait(555)
-        .wait(function(pn) {
-          var xp = document.evaluate( '//div[.="' + pn + '"]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)
+        .wait(function(uid) {
+          var xp = document.evaluate( '//div[.="' + uid + '"]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)
           try { 
             var val = xp.singleNodeValue.innerHTML
             return true
           } catch(e) {
             return false
           } 
-        }, phone)
+        }, user.id + "x")
         .wait(parseInt(process.env.FOLIO_UI_DEBUG) ? parseInt(config.debug_sleep) : 555) // debugging
-        .end()
+        .then(result => { done() })
+        .catch(done)
+      })
+      flogout()
+      it('Should login as ' + user.id + 'x/' + user.password, done => {
+        nightmare
+        .wait('#input-username')
+	.wait(222)
+        .insert('#input-username', user.id + 'x')
+        .insert('#input-password', user.password)
+	.click('#clickable-login')
+	.wait('#clickable-logout')
+	.click('#clickable-logout')
+        .wait(parseInt(process.env.FOLIO_UI_DEBUG) ? parseInt(config.debug_sleep) : 555) // debugging
+	.end()
         .then(result => { done() })
         .catch(done)
       })

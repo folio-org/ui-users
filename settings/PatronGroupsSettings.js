@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import AuthorityList from '@folio/stripes-components/lib/AuthorityList';
+import ControlledVocab from '@folio/stripes-smart-components/lib/ControlledVocab';
 
 class PatronGroupsSettings extends React.Component {
   static propTypes = {
@@ -11,12 +11,12 @@ class PatronGroupsSettings extends React.Component {
 
   constructor(props) {
     super(props);
-    this.connectedAuthorityList = props.stripes.connect(AuthorityList);
+    this.connectedControlledVocab = props.stripes.connect(ControlledVocab);
   }
 
   render() {
     return (
-      <this.connectedAuthorityList
+      <this.connectedControlledVocab
         {...this.props}
         baseUrl="groups"
         records="usergroups"

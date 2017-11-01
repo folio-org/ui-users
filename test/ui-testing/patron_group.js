@@ -10,19 +10,19 @@ module.exports.test = function(uiTestCtx) {
     let communityid = null;
     let staffid = null;
     let alert = null;
-    const wait = 1000;
+    const wait = 222;
 
     describe("Login > Add new patron group > Assign to user > Try to delete patron group > Unassign from user > Try to delete again > Logout\n", () => {
 
-      const gid = 'alumni'
+      const gid = 'alumni_' + Math.floor(Math.random()*10000)
       const gidlabel = 'Alumni'
-      const deletePath = '//div[.="' + gidlabel + '"]//following-sibling::div//button[contains(.,"Delete")]'
+      const deletePath = '//div[.="' + gid + '"]//following-sibling::div//button[contains(.,"Delete")]'
 
       flogin = function(un, pw) {
         it('should login as ' + un + '/' + pw, done => {
           nightmare
           .on('page', function(type="alert", message) {
-             alert = message;
+             alert = message
           })
           .goto(config.url)
           .wait(Number(config.login_wait))
@@ -85,7 +85,7 @@ module.exports.test = function(uiTestCtx) {
         })
         .catch(done)
       })
-      it('should find patron group ID for "' + gidlabel + '"', done => {
+      it('should find patron group ID for "' + gid + '"', done => {
         nightmare
         .type('#input-user-search', userid)
         .wait('div[title="' + userid + '"]')
@@ -101,7 +101,7 @@ module.exports.test = function(uiTestCtx) {
         })
         .catch(done)
       })
-      it('should edit user record using "' + gidlabel + '" group', done => {
+      it('should edit user record using "' + gid + '" group', done => {
         nightmare
         .select('#adduser_group', communityid)
         .type('#adduser_preferredcontact','e')
@@ -110,9 +110,9 @@ module.exports.test = function(uiTestCtx) {
         .then(result => { done() })
         .catch(done)
       })
-      it('should fail at deleting "' + gidlabel + '" group', done => {
+      it('should fail at deleting "' + gid + '" group', done => {
         nightmare
-        .wait(wait)
+        .wait(2222)
         .click(config.select.settings)
         .wait(wait)
         .click('a[href="/settings/users"]')
@@ -121,16 +121,18 @@ module.exports.test = function(uiTestCtx) {
         .click('a[href="/settings/users/groups"]')
 	.wait(wait)
         .xclick(deletePath)
+        .click('a[href="/settings/users/addresstypes"]')
         .wait(wait)
-        .evaluate(function(gidlabel) {
-          var cnode = document.evaluate('//div[.="' + gidlabel + '"]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)
-          if (!cnode) {
-            throw new Error(gidlabel + ' patron group NOT found after clicking "Delete" button!')
+	.xclick('//button[starts-with(.,"Discard")]')
+        .wait(wait)
+        .click('a[href="/settings/users/groups"]')
+        .wait(wait)
+        .evaluate(function(gid) {
+          var cnode = document.evaluate('//div[.="' + gid + '"]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)
+          if (!cnode.singleNodeValue) {
+            throw new Error(gid + ' patron group NOT found after clicking "Delete" button!')
           }
-        }, gidlabel)
-        /*.evaluate(function(msg) {
-          if (!msg.match(/ERROR/)) { throw new Error("No error alert detected!") }
-        }, alert) */
+        }, gid)
         .wait(parseInt(process.env.FOLIO_UI_DEBUG) ? parseInt(config.debug_sleep) : 555) // debugging
         .then(function(result) { 
           done()
@@ -164,7 +166,7 @@ module.exports.test = function(uiTestCtx) {
         .then(result => { done() })
         .catch(done)
       })
-      it('should delete "' + gidlabel + '" patron group', done => {
+      it('should delete "' + gid + '" patron group', done => {
         nightmare
         .wait(wait)
         .xclick('//span[.="Settings"]')
@@ -178,14 +180,14 @@ module.exports.test = function(uiTestCtx) {
         .then(result => { done() })
         .catch(done)
       }) 
-      it('should confirm that "' + gidlabel + '" patron group has been deleted', done => {
+      it('should confirm that "' + gid + '" patron group has been deleted', done => {
         nightmare
-        .evaluate(function(communityid) {
-          var cnode = document.querySelector('li[data-id="' + communityid + '"]')
-          if (cnode) {
-            throw new Error(gidlabel + ' patron group found after clicking "Delete" button!')
+        .evaluate(function(gid) {
+          var cnode = document.evaluate('//div[.="' + gid + '"]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)
+          if (cnode.singleNodeValue) {
+            throw new Error(gid + ' patron group found after clicking "Delete" button!')
           }
-        }, communityid)
+        }, gid)
         .wait(parseInt(process.env.FOLIO_UI_DEBUG) ? parseInt(config.debug_sleep) : 555) // debugging
         .then(result => { done() })
         .catch(done)

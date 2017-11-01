@@ -167,7 +167,7 @@
         "loans.title": "Loans",
         "loans.openLoans": "open loans",
         "loans.closedLoans": "closed loans",
-        "resultCount": "{count, number} {count, plural, one {Result} other {Results}} Found"
+        "resultCount": "{count, number} {count, plural, one {Search Result} other {Search Results}}"
       },
       "de": {
         "search": "Suche",
@@ -180,6 +180,7 @@
   },
   "scripts": {
     "lint": "eslint *.js lib settings || true",
+    "test": "(cd ../ui-testing; yarn test-module -- -o --run=users --host=localhost)",
     "prepublishOnly": "node ../stripes-core/util/package2md.js package.json > ModuleDescriptor.json"
   },
   "devDependencies": {
@@ -198,11 +199,10 @@
     "eslint-plugin-react": "^6.4.1"
   },
   "dependencies": {
-    "@folio/stripes-components": "^1.7.0",
+    "@folio/stripes-components": "^1.8.0",
     "@folio/stripes-form": "^0.8.0",
-    "@folio/util-notes": "^0.2.0",
+    "@folio/stripes-smart-components": "^1.0.1",
     "classnames": "^2.2.5",
-    "dateformat": "^2.0.0",
     "hashcode": "^1.0.3",
     "isomorphic-fetch": "^2.2.1",
     "uuid": "^3.0.1",
@@ -213,6 +213,7 @@
     "react-bootstrap": "^0.31.1",
     "react-bootstrap-typeahead": "^1.4.0",
     "react-intl": "^2.3.0",
+    "react-router": "^4.2.0",
     "react-router-dom": "^4.0.0",
     "redux-form": "^7.0.3"
   },
