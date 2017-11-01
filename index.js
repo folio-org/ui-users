@@ -17,6 +17,7 @@ const client = new ApolloClient({
 const UserQuery = gql`
   query UserQuery ($q: String) {
     users(cql: $q) {
+      id
       username
       active
       barcode
