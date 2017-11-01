@@ -63,11 +63,11 @@ class Users extends React.Component {
   };
 
   static manifest = Object.freeze({
-    userCount: { initialValue: INITIAL_RESULT_COUNT },
+    resultCount: { initialValue: INITIAL_RESULT_COUNT },
     users: {
       type: 'okapi',
       records: 'users',
-      recordsRequired: '%{userCount}',
+      recordsRequired: '%{resultCount}',
       perRequest: 30,
       path: 'users',
       GET: {
