@@ -202,6 +202,7 @@ class Users extends React.Component {
       onCreate={this.create}
       path={this.props.location.pathname}
       urlQuery={urlQuery}
+      disableRecordCreation={props.disableRecordCreation}
     />);
   }
 }
