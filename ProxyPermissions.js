@@ -97,7 +97,7 @@ class ProxyPermissions extends React.Component {
     const resources = this.props.resources;
     const sponsors = (resources.sponsors || {}).records || [];
     const proxies = (resources.proxies || {}).records || [];
-    const disableUserCreation = true;
+    const disableRecordCreation = true;
     const sponsorFormatter = {
       Sponsor: sp => getFullName(sp),
     };
@@ -144,7 +144,7 @@ class ProxyPermissions extends React.Component {
               searchButtonStyle="primary"
               selectUser={this.addSponsor}
               visibleColumns={['Name', 'Patron Group', 'Username', 'Barcode']}
-              disableUserCreation={disableUserCreation}
+              disableRecordCreation={disableRecordCreation}
             />
           </Col>
         </Row>
@@ -175,7 +175,7 @@ class ProxyPermissions extends React.Component {
               searchButtonStyle="primary"
               selectUser={this.addProxy}
               visibleColumns={['Name', 'Patron Group', 'Username', 'Barcode']}
-              disableUserCreation={disableUserCreation}
+              disableRecordCreation={disableRecordCreation}
             />
           </Col>
         </Row>
