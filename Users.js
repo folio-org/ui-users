@@ -58,7 +58,17 @@ class Users extends React.Component {
     history: PropTypes.shape({
       push: PropTypes.func.isRequired,
     }).isRequired,
-    mutator: PropTypes.shape({}).isRequired,
+    mutator: PropTypes.shape({
+      creds: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      perms: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      users: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+    }).isRequired,
     onSelectRow: PropTypes.func,
   };
 
@@ -88,6 +98,16 @@ class Users extends React.Component {
         },
         staticFallback: { params: {} },
       },
+    },
+    creds: {
+      type: 'okapi',
+      path: 'authn/credentials',
+      fetch: false,
+    },
+    perms: {
+      type: 'okapi',
+      path: 'perms/users',
+      fetch: false,
     },
     patronGroups: {
       type: 'okapi',
@@ -135,6 +155,21 @@ class Users extends React.Component {
     });
   }
 
+  postUser(user) {
+    return this.props.mutator.users.POST(user);
+  }
+
+  postCreds(userId, creds) {
+    const localCreds = Object.assign({}, creds, creds.password ? {} : { password: '' }, { userId });
+    return this.props.mutator.creds.POST(localCreds);
+  }
+
+  postPerms(userId) {
+    const permissions = [];
+    return this.props.mutator.perms.POST(permissions);
+  }
+
+  /*
   postUser = user =>
     fetch(`${this.props.okapi.url}/users`, {
       method: 'POST',
@@ -179,6 +214,7 @@ class Users extends React.Component {
       }
     });
   }
+  */
 
   render() {
     const props = this.props;
