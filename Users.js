@@ -193,8 +193,8 @@ class Users extends React.Component {
       filterConfig={filterConfig}
       initialResultCount={INITIAL_RESULT_COUNT}
       resultCountIncrement={RESULT_COUNT_INCREMENT}
-      viewUserComponent={ViewUser}
-      userFormComponent={UserForm}
+      viewRecordComponent={ViewUser}
+      editRecordComponent={UserForm}
       parentResources={props.resources}
       parentMutator={this.props.mutator}
       onSelectRow={this.props.onSelectRow}
