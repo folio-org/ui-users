@@ -187,6 +187,7 @@ class Users extends React.Component {
                          _.get(packageInfo, ['stripes', 'route']));
 
     return (<this.connectedSearchAndSort
+      translationBase="ui-users"
       stripes={props.stripes}
       okapi={this.props.okapi}
       initialPath={initialPath}
