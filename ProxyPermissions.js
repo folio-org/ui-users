@@ -11,14 +11,14 @@ const propTypes = {
   user: PropTypes.object,
   history: PropTypes.object,
   resources: PropTypes.shape({
-    sponorQuery: PropTypes.object,
+    sponsorQuery: PropTypes.object,
     sponsorUsers: PropTypes.object,
     sponsors: PropTypes.object,
     proxies: PropTypes.object,
   }).isRequired,
 
   mutator: PropTypes.shape({
-    sponorQuery: PropTypes.shape({
+    sponsorQuery: PropTypes.shape({
       replace: PropTypes.func,
     }),
     curUser: PropTypes.shape({
@@ -37,14 +37,14 @@ const propTypes = {
 
 class ProxyPermissions extends React.Component {
   static manifest = Object.freeze({
-    sponorQuery: {
+    sponsorQuery: {
       initialValue: {},
     },
     curUser: {},
     sponsors: {
       type: 'okapi',
       records: 'users',
-      path: 'users?query=(%{sponorQuery.ids})',
+      path: 'users?query=(%{sponsorQuery.ids})',
     },
     proxies: {
       type: 'okapi',
@@ -67,11 +67,11 @@ class ProxyPermissions extends React.Component {
 
   // TODO: refactor after join is supported in stripes-connect
   componentWillReceiveProps(nextProps) {
-    const { user, resources: { sponorQuery }, mutator } = nextProps;
+    const { user, resources: { sponsorQuery }, mutator } = nextProps;
     const ids = user.proxyFor.map(id => `id=${id}`).join(' or ') || 'id=noid';
 
-    if (sponorQuery.userId !== user.id || sponorQuery.ids !== ids) {
-      mutator.sponorQuery.replace({ ids, userId: user.id });
+    if (sponsorQuery.userId !== user.id || sponsorQuery.ids !== ids) {
+      mutator.sponsorQuery.replace({ ids, userId: user.id });
     }
   }
 
@@ -97,7 +97,7 @@ class ProxyPermissions extends React.Component {
     const resources = this.props.resources;
     const sponsors = (resources.sponsors || {}).records || [];
     const proxies = (resources.proxies || {}).records || [];
-    const disableUserCreation = true;
+    const disableRecordCreation = true;
     const sponsorFormatter = {
       Sponsor: sp => getFullName(sp),
     };
@@ -144,7 +144,7 @@ class ProxyPermissions extends React.Component {
               searchButtonStyle="primary"
               selectUser={this.addSponsor}
               visibleColumns={['Name', 'Patron Group', 'Username', 'Barcode']}
-              disableUserCreation={disableUserCreation}
+              disableRecordCreation={disableRecordCreation}
             />
           </Col>
         </Row>
@@ -175,7 +175,7 @@ class ProxyPermissions extends React.Component {
               searchButtonStyle="primary"
               selectUser={this.addProxy}
               visibleColumns={['Name', 'Patron Group', 'Username', 'Barcode']}
-              disableUserCreation={disableUserCreation}
+              disableRecordCreation={disableRecordCreation}
             />
           </Col>
         </Row>
