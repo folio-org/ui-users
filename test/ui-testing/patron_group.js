@@ -120,12 +120,10 @@ module.exports.test = function(uiTestCtx) {
         .click('a[href="/settings/users/groups"]')
 	.wait(function(dp) {
 	  var dnode = document.evaluate(dp, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)
-	  try {
-	    var dtest = dnode.singleNodeValue.innerHTML
+	  if (dnode.singleNodeValue) {
 	    return true
 	  }
-	  catch (e) {
-	    console.log(e)
+	  else {
 	    return false
 	  }
 	},deletePath)
@@ -185,12 +183,10 @@ module.exports.test = function(uiTestCtx) {
         .xclick('id("ModuleContainer")//a[.="Patron groups"]')
 	.wait(function(dp) {
 	  var dnode = document.evaluate(dp, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)
-	  try {
-	    var dtest = dnode.singleNodeValue.innerHTML
+	  if (dnode.singleNodeValue) {
 	    return true
 	  }
-	  catch (e) {
-	    console.log(e)
+	  else {
 	    return false
 	  }
 	},deletePath)
