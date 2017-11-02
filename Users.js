@@ -189,6 +189,7 @@ class Users extends React.Component {
 
     return (<this.connectedSearchAndSort
       moduleName="users"
+      moduleTitle="Users"
       stripes={props.stripes}
       okapi={this.props.okapi}
       initialPath={initialPath}
