@@ -207,6 +207,7 @@ class Users extends React.Component {
       urlQuery={urlQuery}
       disableRecordCreation={props.disableRecordCreation}
       resultsFormatter={resultsFormatter}
+      viewRecordPerms="users.item.get"
       newRecordPerms="users.item.post,login.item.post,perms.users.item.post"
     />);
   }
