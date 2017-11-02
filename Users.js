@@ -10,6 +10,7 @@ import UserForm from './UserForm';
 import removeQueryParam from './removeQueryParam';
 import SearchAndSort from './lib/SearchAndSort';
 import { toUserAddresses } from './converters/address';
+import { getFullName } from './util';
 import packageInfo from './package';
 
 const INITIAL_RESULT_COUNT = 30;
@@ -170,11 +171,26 @@ class Users extends React.Component {
   render() {
     const props = this.props;
     const urlQuery = queryString.parse(props.location.search || '');
+    const patronGroups = (props.resources.patronGroups || {}).records || [];
     const initialPath = (_.get(packageInfo, ['stripes', 'home']) ||
                          _.get(packageInfo, ['stripes', 'route']));
 
+    const resultsFormatter = {
+      Status: user => (user.active ? 'Active' : 'Inactive'),
+      Name: user => getFullName(user),
+      Barcode: user => user.barcode,
+      'Patron Group': (user) => {
+        const pg = patronGroups.filter(g => g.id === user.patronGroup)[0];
+        return pg ? pg.group : '?';
+      },
+      Username: user => user.username,
+      Email: user => _.get(user, ['personal', 'email']),
+    };
+
     return (<this.connectedSearchAndSort
-      translationBase="ui-users"
+      moduleName="users"
+      moduleTitle="Users"
+      objectName="user"
       stripes={props.stripes}
       okapi={this.props.okapi}
       initialPath={initialPath}
@@ -190,6 +206,9 @@ class Users extends React.Component {
       path={this.props.location.pathname}
       urlQuery={urlQuery}
       disableRecordCreation={props.disableRecordCreation}
+      resultsFormatter={resultsFormatter}
+      viewRecordPerms="users.item.get"
+      newRecordPerms="users.item.post,login.item.post,perms.users.item.post"
     />);
   }
 }
