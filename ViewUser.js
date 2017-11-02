@@ -2,6 +2,8 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
+import { graphql, gql } from 'react-apollo';
+
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
 import Pane from '@folio/stripes-components/lib/Pane';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
@@ -24,6 +26,12 @@ import UserAddresses from './lib/UserAddresses';
 import { toListAddresses, toUserAddresses } from './converters/address';
 import removeQueryParam from './removeQueryParam';
 import { getFullName } from './util';
+
+const updateUserQuery = gql`
+  mutation updateUser($id: ID!, $newName: String!) {
+    updateUser(id: $id, personal: { firstName: $newName }) { id }
+  }
+`;
 
 class ViewUser extends React.Component {
 
@@ -188,14 +196,15 @@ class ViewUser extends React.Component {
       user.personal.addresses = toUserAddresses(user.personal.addresses, this.props.addressTypes); // eslint-disable-line no-param-reassign
     }
 
-    // eslint-disable-next-line no-param-reassign
-    if (user.creds) delete user.creds; // not handled on edit (yet at least)
-    this.props.mutator.selUser.PUT(user).then(() => {
-      this.setState({
-        lastUpdate: new Date().toISOString(),
-      });
-      this.onClickCloseEditUser();
-    });
+    // // eslint-disable-next-line no-param-reassign
+    // if (user.creds) delete user.creds; // not handled on edit (yet at least)
+    // this.props.mutator.selUser.PUT(user).then(() => {
+    //   this.setState({
+    //     lastUpdate: new Date().toISOString(),
+    //   });
+    //   this.onClickCloseEditUser();
+    // });
+    this.props.updateUser(user.id, user.personal.firstName);
   }
 
   // This is a helper function for the "last updated" date element. Since the
@@ -447,4 +456,8 @@ class ViewUser extends React.Component {
   }
 }
 
-export default ViewUser;
+export default graphql(updateUserQuery, {
+  props: ({ mutate }) => ({
+    updateUser: (id, newName) => mutate({ variables: { id, newName } }),
+  }),
+})(ViewUser);
