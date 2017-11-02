@@ -1,8 +1,6 @@
 import _ from 'lodash';
-import fetch from 'isomorphic-fetch';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { SubmissionError } from 'redux-form';
 import queryString from 'query-string';
 import uuid from 'uuid';
 import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
@@ -58,7 +56,17 @@ class Users extends React.Component {
     history: PropTypes.shape({
       push: PropTypes.func.isRequired,
     }).isRequired,
-    mutator: PropTypes.shape({}).isRequired,
+    mutator: PropTypes.shape({
+      creds: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      perms: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      records: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+    }).isRequired,
     onSelectRow: PropTypes.func,
   };
 
@@ -88,6 +96,16 @@ class Users extends React.Component {
         },
         staticFallback: { params: {} },
       },
+    },
+    creds: {
+      type: 'okapi',
+      path: 'authn/credentials',
+      fetch: false,
+    },
+    perms: {
+      type: 'okapi',
+      path: 'perms/users',
+      fetch: false,
     },
     patronGroups: {
       type: 'okapi',
@@ -122,62 +140,31 @@ class Users extends React.Component {
       const addressTypes = (this.props.resources.addressTypes || {}).records || [];
       userdata.personal.addresses = toUserAddresses(userdata.personal.addresses, addressTypes); // eslint-disable-line no-param-reassign
     }
+
     const creds = Object.assign({}, userdata.creds, { username: userdata.username });
     const user = Object.assign({}, userdata, { id: uuid() });
     if (user.creds) delete user.creds;
 
     this.postUser(user)
     .then(newUser => this.postCreds(newUser.id, creds))
-    .then(userId => this.postPerms(userId))
-    .then((userId) => {
+    .then(newCreds => this.postPerms(newCreds.userId))
+    .then((perms) => {
       removeQueryParam('layer', this.props.location, this.props.history);
-      this.props.history.push(`/users/view/${userId}${this.props.location.search}`);
+      this.props.history.push(`/users/view/${perms.userId}${this.props.location.search}`);
     });
   }
 
-  postUser = user =>
-    fetch(`${this.props.okapi.url}/users`, {
-      method: 'POST',
-      headers: Object.assign({}, { 'X-Okapi-Tenant': this.props.okapi.tenant, 'X-Okapi-Token': this.props.okapi.token, 'Content-Type': 'application/json' }),
-      body: JSON.stringify(user),
-    }).then((userPostResponse) => {
-      if (userPostResponse.status >= 400) {
-        throw new SubmissionError('Creating new user failed');
-      } else {
-        return userPostResponse.json();
-      }
-    }).then(userJson => userJson);
+  postUser(user) {
+    return this.props.mutator.records.POST(user);
+  }
 
-  postCreds = (userId, creds) => {
-    this.log('xhr', `POST credentials for new user '${userId}':`, creds);
+  postCreds(userId, creds) {
     const localCreds = Object.assign({}, creds, creds.password ? {} : { password: '' }, { userId });
-    return fetch(`${this.props.okapi.url}/authn/credentials`, {
-      method: 'POST',
-      headers: Object.assign({}, { 'X-Okapi-Tenant': this.props.okapi.tenant, 'X-Okapi-Token': this.props.okapi.token, 'Content-Type': 'application/json' }),
-      body: JSON.stringify(localCreds),
-    }).then((credsPostResponse) => {
-      if (credsPostResponse.status >= 400) {
-        throw new SubmissionError('Creating credentials for new user failed');
-      } else {
-        return userId;
-      }
-    });
+    return this.props.mutator.creds.POST(localCreds);
   }
 
-  postPerms = (userId) => {
-    const permissions = [];
-    this.log('xhr', `POST permissions for new user '${userId}':`, permissions);
-    return fetch(`${this.props.okapi.url}/perms/users`, {
-      method: 'POST',
-      headers: Object.assign({}, { 'X-Okapi-Tenant': this.props.okapi.tenant, 'X-Okapi-Token': this.props.okapi.token, 'Content-Type': 'application/json' }),
-      body: JSON.stringify({ userId, permissions }),
-    }).then((response) => {
-      if (response.status >= 400) {
-        throw new SubmissionError('Creating empty permissions for new user failed');
-      } else {
-        return userId;
-      }
-    });
+  postPerms(userId) {
+    return this.props.mutator.perms.POST({ userId, permissions: [] });
   }
 
   render() {
