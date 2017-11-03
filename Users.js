@@ -191,7 +191,6 @@ class Users extends React.Component {
       moduleName="users"
       moduleTitle="Users"
       objectName="user"
-      stripes={props.stripes}
       okapi={this.props.okapi}
       initialPath={initialPath}
       filterConfig={filterConfig}
