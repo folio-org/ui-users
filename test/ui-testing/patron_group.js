@@ -112,7 +112,7 @@ module.exports.test = function(uiTestCtx) {
       })
       it('should fail at deleting "' + gid + '" group', done => {
         nightmare
-        .wait(wait)
+        .wait(1111)
         .click(config.select.settings)
         .wait(wait)
         .click('a[href="/settings/users"]')
@@ -130,7 +130,7 @@ module.exports.test = function(uiTestCtx) {
         .xclick(deletePath)
         .click('a[href="/settings/users/addresstypes"]')
         .wait(wait)
-	.xclick('//button[starts-with(.,"Discard")] | //body')
+	.xclick('//button[starts-with(.,"Discard")]')
         .wait(wait)
         .click('a[href="/settings/users/groups"]')
         .wait(wait)
@@ -175,7 +175,7 @@ module.exports.test = function(uiTestCtx) {
       })
       it('should delete "' + gid + '" patron group', done => {
         nightmare
-        .wait(wait)
+        .wait(1111)
         .xclick('//span[.="Settings"]')
         .wait(wait)
         .xclick('id("ModuleContainer")//a[.="Users"]')
@@ -197,6 +197,7 @@ module.exports.test = function(uiTestCtx) {
       }) 
       it('should confirm that "' + gid + '" patron group has been deleted', done => {
         nightmare
+	.wait(wait)
         .evaluate(function(gid) {
           var cnode = document.evaluate('//div[.="' + gid + '"]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)
           if (cnode.singleNodeValue) {
