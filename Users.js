@@ -125,7 +125,6 @@ class Users extends React.Component {
     const logger = props.stripes.logger;
     this.state = {};
     this.log = logger.log.bind(logger);
-    this.connectedSearchAndSort = props.stripes.connect(SearchAndSort);
   }
 
   componentWillUpdate() {
@@ -187,7 +186,7 @@ class Users extends React.Component {
       Email: user => _.get(user, ['personal', 'email']),
     };
 
-    return (<this.connectedSearchAndSort
+    return (<SearchAndSort
       moduleName="users"
       moduleTitle="Users"
       objectName="user"
