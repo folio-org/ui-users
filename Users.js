@@ -191,23 +191,23 @@ class Users extends React.Component {
       moduleName="users"
       moduleTitle="Users"
       objectName="user"
-      okapi={this.props.okapi}
       initialPath={initialPath}
       filterConfig={filterConfig}
       initialResultCount={INITIAL_RESULT_COUNT}
       resultCountIncrement={RESULT_COUNT_INCREMENT}
       viewRecordComponent={ViewUser}
       editRecordComponent={UserForm}
-      parentResources={props.resources}
-      parentMutator={this.props.mutator}
+      okapi={this.props.okapi}
+      urlQuery={urlQuery}
+      visibleColumns={['Status', 'Name', 'Barcode', 'Patron Group', 'Username', 'Email']}
+      resultsFormatter={resultsFormatter}
       onSelectRow={this.props.onSelectRow}
       onCreate={this.create}
-      urlQuery={urlQuery}
-      disableRecordCreation={props.disableRecordCreation}
-      resultsFormatter={resultsFormatter}
       viewRecordPerms="users.item.get"
       newRecordPerms="users.item.post,login.item.post,perms.users.item.post"
-      visibleColumns={['Status', 'Name', 'Barcode', 'Patron Group', 'Username', 'Email']}
+      disableRecordCreation={props.disableRecordCreation}
+      parentResources={props.resources}
+      parentMutator={this.props.mutator}
     />);
   }
 }
