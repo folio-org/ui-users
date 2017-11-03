@@ -209,7 +209,6 @@ class Users extends React.Component {
       resultsFormatter={resultsFormatter}
       viewRecordPerms="users.item.get"
       newRecordPerms="users.item.post,login.item.post,perms.users.item.post"
-      columnMapping={{ Username: 'username' }}
     />);
   }
 }
