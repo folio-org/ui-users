@@ -38,6 +38,7 @@
 * Change search label. Fixes UIU-140.
 * Sort addresses by primary field. Fixes UIU-296.
 * Refactor permission sets to use `<EntryManager>`. Fixes UIU-300.
+* Refactor async user validator. Fixes UIU-302.
 
 ## [2.10.1](https://github.com/folio-org/ui-users/tree/v2.10.1) (2017-09-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.10.0...v2.10.1)
