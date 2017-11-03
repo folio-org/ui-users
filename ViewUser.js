@@ -52,11 +52,11 @@ class ViewUser extends React.Component {
       path: PropTypes.string.isRequired,
     }).isRequired,
     onClose: PropTypes.func,
-    okapi: PropTypes.object,
     addressTypes: PropTypes.arrayOf(PropTypes.object),
     notesToggle: PropTypes.func,
     location: PropTypes.object,
     history: PropTypes.object,
+    uniqueUserValidator: PropTypes.object,
   };
 
   static manifest = Object.freeze({
@@ -95,7 +95,6 @@ class ViewUser extends React.Component {
     this.connectedLoanActionsHistory = props.stripes.connect(LoanActionsHistory);
     this.connectedUserPermissions = props.stripes.connect(UserPermissions);
     this.connectedProxyPermissions = props.stripes.connect(ProxyPermissions);
-
     this.dateLastUpdated = this.dateLastUpdated.bind(this);
     this.onClickCloseLoansHistory = this.onClickCloseLoansHistory.bind(this);
     this.onClickViewOpenLoans = this.onClickViewOpenLoans.bind(this);
@@ -415,7 +414,7 @@ class ViewUser extends React.Component {
             addressTypes={this.props.addressTypes}
             onSubmit={(record) => { this.update(record); }}
             onCancel={this.onClickCloseEditUser}
-            okapi={this.props.okapi}
+            uniqueUserValidator={this.props.uniqueUserValidator}
             optionLists={{ patronGroups, contactTypes }}
           />
         </Layer>

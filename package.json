@@ -204,7 +204,6 @@
     "@folio/stripes-smart-components": "^1.0.1",
     "classnames": "^2.2.5",
     "hashcode": "^1.0.3",
-    "isomorphic-fetch": "^2.2.1",
     "uuid": "^3.0.1",
     "lodash": "^4.17.4",
     "prop-types": "^15.5.10",

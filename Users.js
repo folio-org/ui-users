@@ -35,16 +35,14 @@ const filterConfig = [
 
 class Users extends React.Component {
   static propTypes = {
-    okapi: PropTypes.shape({
-      url: PropTypes.string.isRequired,
-      tenant: PropTypes.string.isRequired,
-      token: PropTypes.string.isRequired,
-    }).isRequired,
     resources: PropTypes.shape({
       patronGroups: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
       addressTypes: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      uniqueUserValidator: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }).isRequired,
@@ -63,6 +61,10 @@ class Users extends React.Component {
       }),
       records: PropTypes.shape({
         POST: PropTypes.func.isRequired,
+      }),
+      uniqueUserValidator: PropTypes.shape({
+        GET: PropTypes.func,
+        reset: PropTypes.func,
       }),
     }).isRequired,
     onSelectRow: PropTypes.func,
@@ -115,6 +117,13 @@ class Users extends React.Component {
       path: 'addresstypes',
       records: 'addressTypes',
     },
+    uniqueUserValidator: {
+      type: 'okapi',
+      records: 'users',
+      accumulate: 'true',
+      path: 'users',
+      fetch: false,
+    },
   });
 
   componentWillUpdate() {
@@ -131,30 +140,18 @@ class Users extends React.Component {
       userdata.personal.addresses = toUserAddresses(userdata.personal.addresses, addressTypes); // eslint-disable-line no-param-reassign
     }
 
-    const creds = Object.assign({}, userdata.creds, { username: userdata.username });
+    const { mutator } = this.props;
+    const creds = Object.assign({}, userdata.creds, { username: userdata.username }, userdata.creds.password ? {} : { password: '' });
     const user = Object.assign({}, userdata, { id: uuid() });
     if (user.creds) delete user.creds;
 
-    this.postUser(user)
-    .then(newUser => this.postCreds(newUser.id, creds))
-    .then(newCreds => this.postPerms(newCreds.userId))
-    .then((perms) => {
-      removeQueryParam('layer', this.props.location, this.props.history);
-      this.props.history.push(`/users/view/${perms.userId}${this.props.location.search}`);
-    });
-  }
-
-  postUser(user) {
-    return this.props.mutator.records.POST(user);
-  }
-
-  postCreds(userId, creds) {
-    const localCreds = Object.assign({}, creds, creds.password ? {} : { password: '' }, { userId });
-    return this.props.mutator.creds.POST(localCreds);
-  }
-
-  postPerms(userId) {
-    return this.props.mutator.perms.POST({ userId, permissions: [] });
+    mutator.records.POST(user)
+      .then(newUser => mutator.creds.POST(Object.assign(creds, { userId: newUser.id })))
+      .then(newCreds => mutator.perms.POST({ userId: newCreds.userId, permissions: [] }))
+      .then((perms) => {
+        removeQueryParam('layer', this.props.location, this.props.history);
+        this.props.history.push(`/users/view/${perms.userId}${this.props.location.search}`);
+      });
   }
 
   render() {
@@ -186,7 +183,6 @@ class Users extends React.Component {
       resultCountIncrement={RESULT_COUNT_INCREMENT}
       viewRecordComponent={ViewUser}
       editRecordComponent={UserForm}
-      okapi={this.props.okapi}
       urlQuery={urlQuery}
       visibleColumns={['Status', 'Name', 'Barcode', 'Patron Group', 'Username', 'Email']}
       resultsFormatter={resultsFormatter}

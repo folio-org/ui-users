@@ -12,7 +12,6 @@ import RadioButtonGroup from '@folio/stripes-components/lib/RadioButtonGroup';
 import RadioButton from '@folio/stripes-components/lib/RadioButton';
 import Datepicker from '@folio/stripes-components/lib/Datepicker';
 import AddressEditList from '@folio/stripes-components/lib/structures/AddressFieldGroup/AddressEdit/AddressEditList';
-import fetch from 'isomorphic-fetch';
 import { Field } from 'redux-form';
 import stripesForm from '@folio/stripes-form';
 import classNames from 'classnames';
@@ -21,11 +20,6 @@ import { countriesOptions } from './data/countries';
 import Autocomplete from './lib/Autocomplete';
 import { toAddressTypeOptions } from './converters/address_type';
 import css from './UserForm.css';
-
-const sys = require('stripes-loader'); // eslint-disable-line
-const okapiUrl = sys.okapi.url;
-const tenant = sys.okapi.tenant;
-let okapiToken = '';
 
 function validate(values) {
   const errors = {};
@@ -48,32 +42,21 @@ function validate(values) {
   return errors;
 }
 
-function checkUniqueUserID(username) {
-  return fetch(`${okapiUrl}/users?query=(username="${username}")`,
-    { headers: Object.assign({}, {
-      'X-Okapi-Tenant': tenant,
-      'X-Okapi-Token': okapiToken,
-      'Content-Type': 'application/json' }),
-    },
-  );
-}
-
 function asyncValidate(values, dispatch, props, blurredField) {
   if (blurredField === 'username' && values.username !== props.initialValues.username) {
     return new Promise((resolve, reject) => {
-      // TODO: Should use stripes-connect (dispatching an action and update state)
-      checkUniqueUserID(values.username).then((response) => {
-        if (response.status < 400) {
-          response.json().then((json) => {
-            if (json.totalRecords > 0)
-              reject({ username: 'This username has already been taken' });
-            else
-              resolve();
-          });
+      props.uniqueUserValidator.reset();
+      const query = `(username="${values.username}")`;
+      props.uniqueUserValidator.GET({ params: { query } }).then((users) => {
+        if (users.length > 0) {
+          reject({ username: 'This username has already been taken' });
+        } else {
+          resolve();
         }
       });
     });
   }
+
   return new Promise(resolve => resolve());
 }
 
@@ -83,12 +66,12 @@ class UserForm extends React.Component {
     onClose: PropTypes.func, // eslint-disable-line react/no-unused-prop-types
     newUser: PropTypes.bool, // eslint-disable-line react/no-unused-prop-types
     handleSubmit: PropTypes.func.isRequired,
+    uniqueUserValidator: PropTypes.object, // eslint-disable-line react/no-unused-prop-types
     reset: PropTypes.func,
     pristine: PropTypes.bool,
     submitting: PropTypes.bool,
     onCancel: PropTypes.func,
     initialValues: PropTypes.object,
-    okapi: PropTypes.object,
     optionLists: PropTypes.shape({
       userGroups: PropTypes.arrayOf(PropTypes.object),
       contactTypes: PropTypes.arrayOf(PropTypes.object),
@@ -98,7 +81,6 @@ class UserForm extends React.Component {
 
   constructor(props) {
     super(props);
-    okapiToken = props.okapi.token;
     this.state = { showPassword: false };
   }
 
