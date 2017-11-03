@@ -62,7 +62,7 @@ class ViewUser extends React.Component {
   static manifest = Object.freeze({
     selUser: {
       type: 'okapi',
-      path: 'users/:{userid}',
+      path: 'users/:{id}',
       clear: false,
     },
     patronGroups: {
@@ -170,10 +170,10 @@ class ViewUser extends React.Component {
   }
 
   getUser() {
-    const { resources, match: { params: { userid } } } = this.props;
+    const { resources, match: { params: { id } } } = this.props;
     const selUser = (resources.selUser || {}).records || [];
-    if (!selUser || selUser.length === 0 || !userid) return null;
-    return selUser.find(u => u.id === userid);
+    if (!selUser || selUser.length === 0 || !id) return null;
+    return selUser.find(u => u.id === id);
   }
 
    // eslint-disable-next-line class-methods-use-this

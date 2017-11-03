@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import queryString from 'query-string';
 import uuid from 'uuid';
 import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
-import { stripesShape } from '@folio/stripes-core/src/Stripes';
 import ViewUser from './ViewUser';
 import UserForm from './UserForm';
 import removeQueryParam from './removeQueryParam';
@@ -36,7 +35,6 @@ const filterConfig = [
 
 class Users extends React.Component {
   static propTypes = {
-    stripes: stripesShape.isRequired,
     okapi: PropTypes.shape({
       url: PropTypes.string.isRequired,
       tenant: PropTypes.string.isRequired,
@@ -51,7 +49,6 @@ class Users extends React.Component {
       }),
     }).isRequired,
     location: PropTypes.shape({
-      pathname: PropTypes.string.isRequired,
       search: PropTypes.string,
     }).isRequired,
     history: PropTypes.shape({
@@ -120,14 +117,6 @@ class Users extends React.Component {
     },
   });
 
-  constructor(props) {
-    super(props);
-    const logger = props.stripes.logger;
-    this.state = {};
-    this.log = logger.log.bind(logger);
-    this.connectedSearchAndSort = props.stripes.connect(SearchAndSort);
-  }
-
   componentWillUpdate() {
     const pg = (this.props.resources.patronGroups || {}).records || [];
     if (pg && pg.length) {
@@ -187,28 +176,27 @@ class Users extends React.Component {
       Email: user => _.get(user, ['personal', 'email']),
     };
 
-    return (<this.connectedSearchAndSort
+    return (<SearchAndSort
       moduleName="users"
       moduleTitle="Users"
       objectName="user"
-      stripes={props.stripes}
-      okapi={this.props.okapi}
       initialPath={initialPath}
       filterConfig={filterConfig}
       initialResultCount={INITIAL_RESULT_COUNT}
       resultCountIncrement={RESULT_COUNT_INCREMENT}
       viewRecordComponent={ViewUser}
       editRecordComponent={UserForm}
-      parentResources={props.resources}
-      parentMutator={this.props.mutator}
+      okapi={this.props.okapi}
+      urlQuery={urlQuery}
+      visibleColumns={['Status', 'Name', 'Barcode', 'Patron Group', 'Username', 'Email']}
+      resultsFormatter={resultsFormatter}
       onSelectRow={this.props.onSelectRow}
       onCreate={this.create}
-      path={this.props.location.pathname}
-      urlQuery={urlQuery}
-      disableRecordCreation={props.disableRecordCreation}
-      resultsFormatter={resultsFormatter}
       viewRecordPerms="users.item.get"
       newRecordPerms="users.item.post,login.item.post,perms.users.item.post"
+      disableRecordCreation={props.disableRecordCreation}
+      parentResources={props.resources}
+      parentMutator={this.props.mutator}
     />);
   }
 }
