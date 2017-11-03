@@ -51,7 +51,6 @@ class Users extends React.Component {
       }),
     }).isRequired,
     location: PropTypes.shape({
-      pathname: PropTypes.string.isRequired,
       search: PropTypes.string,
     }).isRequired,
     history: PropTypes.shape({
