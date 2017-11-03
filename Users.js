@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import queryString from 'query-string';
 import uuid from 'uuid';
 import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
-import { stripesShape } from '@folio/stripes-core/src/Stripes';
 import ViewUser from './ViewUser';
 import UserForm from './UserForm';
 import removeQueryParam from './removeQueryParam';
@@ -36,7 +35,6 @@ const filterConfig = [
 
 class Users extends React.Component {
   static propTypes = {
-    stripes: stripesShape.isRequired,
     okapi: PropTypes.shape({
       url: PropTypes.string.isRequired,
       tenant: PropTypes.string.isRequired,
@@ -118,13 +116,6 @@ class Users extends React.Component {
       records: 'addressTypes',
     },
   });
-
-  constructor(props) {
-    super(props);
-    const logger = props.stripes.logger;
-    this.state = {};
-    this.log = logger.log.bind(logger);
-  }
 
   componentWillUpdate() {
     const pg = (this.props.resources.patronGroups || {}).records || [];
