@@ -203,7 +203,6 @@ class Users extends React.Component {
       parentMutator={this.props.mutator}
       onSelectRow={this.props.onSelectRow}
       onCreate={this.create}
-      path={this.props.location.pathname}
       urlQuery={urlQuery}
       disableRecordCreation={props.disableRecordCreation}
       resultsFormatter={resultsFormatter}
