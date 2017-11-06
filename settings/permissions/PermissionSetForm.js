@@ -27,6 +27,7 @@ class PermissionSetForm extends React.Component {
     onRemove: PropTypes.func,
     pristine: PropTypes.bool,
     submitting: PropTypes.bool,
+    change: PropTypes.func,
   };
 
   constructor(props) {
@@ -84,17 +85,19 @@ class PermissionSetForm extends React.Component {
   }
 
   addPermission(perm) {
-    const set = this.state.selectedSet;
-    const subPermissions = set.subPermissions.concat([perm]);
-    const selectedSet = Object.assign({}, set, { subPermissions });
-    this.setState({ selectedSet, dirty: true });
+    const subPermissions = this.state.selectedSet.subPermissions.concat([perm]);
+    this.updatePermSet(subPermissions);
   }
 
   removePermission(perm) {
-    const set = this.state.selectedSet;
-    const subPermissions = set.subPermissions.filter(p => p !== perm);
-    const selectedSet = Object.assign({}, set, { subPermissions });
-    this.setState({ selectedSet, dirty: true });
+    const subPermissions = this.state.selectedSet.subPermissions.filter(p => p !== perm);
+    this.updatePermSet(subPermissions);
+  }
+
+  updatePermSet(subPermissions) {
+    const selectedSet = Object.assign({}, this.state.selectedSet, { subPermissions });
+    this.setState({ selectedSet });
+    this.props.change('permissionsDirty', true);
   }
 
   addFirstMenu() {
@@ -109,7 +112,6 @@ class PermissionSetForm extends React.Component {
 
   saveLastMenu() {
     const { pristine, submitting } = this.props;
-    const { dirty } = this.state;
 
     return (
       <PaneMenu>
@@ -117,7 +119,7 @@ class PermissionSetForm extends React.Component {
           id="clickable-save-permission-set"
           type="submit"
           title="Save and close"
-          disabled={!dirty && (pristine || submitting)}
+          disabled={(pristine || submitting)}
         >Save and close</Button>
       </PaneMenu>
     );
@@ -137,6 +139,7 @@ class PermissionSetForm extends React.Component {
               <h2 style={{ marginTop: '0' }}>About</h2>
               <Field label="Title" name="displayName" id="displayName" component={Textfield} autoFocus required fullWidth rounded disabled={disabled} />
               <Field label="Description" name="description" id="permissionset_description" component={TextArea} fullWidth rounded disabled={disabled} />
+              <Field name="permissionsDirty" component={Textfield} style={{ display: 'none' }} />
             </section>
 
             {selectedSet.id &&
