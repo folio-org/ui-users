@@ -42,6 +42,7 @@
 * All network communication is now done through stripes-connect, and `fetch` is unused. Fixes UIU-304.
 * Break out core search/sort functionality into re-usable `<SearchAndSort>` component. Fixes UIU-278.
 * Generalise <SearchAndSort> by moving all user-specific functionality out of it. Fixes UIU-299.
+* Rewire proxy selection with the new `proxiesfor` endpoint. Fixes UIU-292.
 
 ## [2.10.1](https://github.com/folio-org/ui-users/tree/v2.10.1) (2017-09-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.10.0...v2.10.1)

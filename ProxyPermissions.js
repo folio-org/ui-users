@@ -7,54 +7,69 @@ import { Accordion } from '@folio/stripes-components/lib/Accordion';
 import Badge from '@folio/stripes-components/lib/Badge';
 import { getFullName, getRowURL, getAnchoredRowFormatter } from './util';
 
-const propTypes = {
-  user: PropTypes.object,
-  history: PropTypes.object,
-  resources: PropTypes.shape({
-    sponsorQuery: PropTypes.object,
-    sponsorUsers: PropTypes.object,
-    sponsors: PropTypes.object,
-    proxies: PropTypes.object,
-  }).isRequired,
+export default class ProxyPermissions extends React.Component {
+  static propTypes = {
+    user: PropTypes.object,
+    history: PropTypes.object,
+    resources: PropTypes.shape({
+      sponsors: PropTypes.object,
+      proxies: PropTypes.object,
+    }).isRequired,
 
-  mutator: PropTypes.shape({
-    sponsorQuery: PropTypes.shape({
-      replace: PropTypes.func,
-    }),
-    curUser: PropTypes.shape({
-      replace: PropTypes.func,
-    }),
-    user: PropTypes.shape({
-      PUT: PropTypes.func.isRequired,
-    }),
-  }).isRequired,
-  expanded: PropTypes.bool,
-  onToggle: PropTypes.func,
-  accordionId: PropTypes.string.isRequired,
-  // if `editable` is true, component will be in 'edit' mode. (read-only by default)
-  editable: PropTypes.bool,
-};
+    mutator: PropTypes.shape({
+      proxiesFor: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+        GET: PropTypes.func.isRequired,
+        reset: PropTypes.func,
+      }),
+      sponsorsFor: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+        reset: PropTypes.func,
+      }),
+      proxies: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+        reset: PropTypes.func,
+      }),
+      sponsors: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+        reset: PropTypes.func,
+      }),
+    }).isRequired,
+    expanded: PropTypes.bool,
+    onToggle: PropTypes.func,
+    accordionId: PropTypes.string.isRequired,
+    // if `editable` is true, component will be in 'edit' mode. (read-only by default)
+    editable: PropTypes.bool,
+  };
 
-class ProxyPermissions extends React.Component {
   static manifest = Object.freeze({
-    sponsorQuery: {
-      initialValue: {},
-    },
-    curUser: {},
     sponsors: {
       type: 'okapi',
       records: 'users',
-      path: 'users?query=(%{sponsorQuery.ids})',
+      path: 'users',
+      accumulate: 'true',
+      fetch: false,
     },
     proxies: {
       type: 'okapi',
       records: 'users',
-      path: 'users?query=(proxyFor=!{user.id})',
+      path: 'users',
+      accumulate: 'true',
+      fetch: false,
     },
-    user: {
+    proxiesFor: {
       type: 'okapi',
-      path: 'users/%{curUser.id}',
-      clear: false,
+      records: 'proxiesFor',
+      path: 'proxiesfor',
+      accumulate: 'true',
+      fetch: false,
+    },
+    sponsorsFor: {
+      type: 'okapi',
+      records: 'proxiesFor',
+      path: 'proxiesfor',
+      accumulate: 'true',
+      fetch: false,
     },
   });
 
@@ -65,32 +80,65 @@ class ProxyPermissions extends React.Component {
     this.onSelectRow = this.onSelectRow.bind(this);
   }
 
-  // TODO: refactor after join is supported in stripes-connect
-  componentWillReceiveProps(nextProps) {
-    const { user, resources: { sponsorQuery }, mutator } = nextProps;
-    const ids = user.proxyFor.map(id => `id=${id}`).join(' or ') || 'id=noid';
-
-    if (sponsorQuery.userId !== user.id || sponsorQuery.ids !== ids) {
-      mutator.sponsorQuery.replace({ ids, userId: user.id });
-    }
+  componentDidMount() {
+    this.getProxies();
+    this.getSponsors();
   }
 
   onSelectRow(event, user) {
     this.props.history.push(getRowURL(user));
   }
 
+  getProxies() {
+    const { mutator, user } = this.props;
+    const query = `query=(userId=${user.id})`;
+
+    mutator.proxies.reset();
+    mutator.proxiesFor.reset();
+    mutator.proxiesFor.GET({ params: { query } })
+    .then((records) => {
+      if (!records.length) return;
+      const ids = records.map(pf => `id=${pf.proxyUserId}`).join(' or ');
+      mutator.proxies.GET({ params: { query: `query=(${ids})` } });
+    });
+  }
+
+  getSponsors() {
+    const { mutator, user } = this.props;
+    const query = `query=(proxyUserId=${user.id})`;
+
+    mutator.sponsors.reset();
+    mutator.sponsorsFor.reset();
+    mutator.sponsorsFor.GET({ params: { query } })
+    .then((records) => {
+      if (!records.length) return;
+      const ids = records.map(pf => `id=${pf.userId}`).join(' or ');
+      mutator.sponsors.GET({ params: { query: `query=(${ids})` } });
+    });
+  }
+
   addSponsor(selectedUser) {
     const { user, mutator } = this.props;
-    mutator.curUser.replace(user);
-    user.proxyFor.push(selectedUser.id);
-    mutator.user.PUT(user);
+    const data = {
+      userId: selectedUser.id,
+      proxyUserId: user.id,
+      meta: {},
+    };
+
+    mutator.sponsorsFor.POST(data)
+    .then(() => this.getSponsors());
   }
 
   addProxy(selectedUser) {
     const { user, mutator } = this.props;
-    mutator.curUser.replace(selectedUser);
-    selectedUser.proxyFor.push(user.id);
-    mutator.user.PUT(selectedUser);
+    const data = {
+      userId: user.id,
+      proxyUserId: selectedUser.id,
+      meta: {},
+    };
+
+    mutator.proxiesFor.POST(data)
+      .then(() => this.getProxies());
   }
 
   render() {
@@ -183,7 +231,3 @@ class ProxyPermissions extends React.Component {
       </Accordion>);
   }
 }
-
-ProxyPermissions.propTypes = propTypes;
-
-export default ProxyPermissions;
