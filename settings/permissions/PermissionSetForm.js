@@ -66,7 +66,7 @@ class PermissionSetForm extends React.Component {
       subPermissions: (selectedSet.subPermissions || []).map(p => p.permissionName),
     });
 
-    this.props.onSave(permSet);
+    this.props.onSave(_.omit(permSet, ['permissionsDirty']));
   }
 
   beginDelete() {
