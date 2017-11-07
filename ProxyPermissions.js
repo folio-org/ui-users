@@ -1,16 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
-import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
-import Pluggable from '@folio/stripes-components/lib/Pluggable';
 import { Accordion } from '@folio/stripes-components/lib/Accordion';
 import Badge from '@folio/stripes-components/lib/Badge';
-import { getFullName, getRowURL, getAnchoredRowFormatter } from './util';
+
+import Sponsors from './lib/Sponsors';
+import Proxies from './lib/Proxies';
 
 export default class ProxyPermissions extends React.Component {
   static propTypes = {
     user: PropTypes.object,
-    history: PropTypes.object,
     resources: PropTypes.shape({
       sponsors: PropTypes.object,
       proxies: PropTypes.object,
@@ -73,20 +71,9 @@ export default class ProxyPermissions extends React.Component {
     },
   });
 
-  constructor(props) {
-    super(props);
-    this.addSponsor = this.addSponsor.bind(this);
-    this.addProxy = this.addProxy.bind(this);
-    this.onSelectRow = this.onSelectRow.bind(this);
-  }
-
   componentDidMount() {
     this.getProxies();
     this.getSponsors();
-  }
-
-  onSelectRow(event, user) {
-    this.props.history.push(getRowURL(user));
   }
 
   getProxies() {
@@ -117,43 +104,11 @@ export default class ProxyPermissions extends React.Component {
     });
   }
 
-  addSponsor(selectedUser) {
-    const { user, mutator } = this.props;
-    const data = {
-      userId: selectedUser.id,
-      proxyUserId: user.id,
-      meta: {},
-    };
-
-    mutator.sponsorsFor.POST(data)
-    .then(() => this.getSponsors());
-  }
-
-  addProxy(selectedUser) {
-    const { user, mutator } = this.props;
-    const data = {
-      userId: user.id,
-      proxyUserId: selectedUser.id,
-      meta: {},
-    };
-
-    mutator.proxiesFor.POST(data)
-      .then(() => this.getProxies());
-  }
-
   render() {
     const resources = this.props.resources;
     const sponsors = (resources.sponsors || {}).records || [];
     const proxies = (resources.proxies || {}).records || [];
-    const disableRecordCreation = true;
-    const sponsorFormatter = {
-      Sponsor: sp => getFullName(sp),
-    };
-    const proxyFormatter = {
-      Proxy: pr => getFullName(pr),
-    };
-
-    const { onToggle, accordionId, expanded } = this.props;
+    const { onToggle, accordionId, expanded, editable } = this.props;
 
     return (
       <Accordion
@@ -167,67 +122,22 @@ export default class ProxyPermissions extends React.Component {
           <h2>Proxy</h2>
         }
       >
-        <Row>
-          <Col xs={12}>
-            <MultiColumnList
-              id="list-sponsors"
-              formatter={sponsorFormatter}
-              rowFormatter={getAnchoredRowFormatter}
-              visibleColumns={['Sponsor']}
-              contentData={sponsors}
-              isEmptyMessage="No sponsors found"
-              onRowClick={this.onSelectRow}
-            />
-          </Col>
-        </Row>
-        { this.props.editable &&
-        <Row className="marginTopHalf">
-          <Col xs={12}>
-            <Pluggable
-              aria-haspopup="true"
-              type="find-user"
-              {...this.props}
-              dataKey="sponsors"
-              searchLabel="&#43; Add Sponsor"
-              searchButtonStyle="primary"
-              selectUser={this.addSponsor}
-              visibleColumns={['Name', 'Patron Group', 'Username', 'Barcode']}
-              disableRecordCreation={disableRecordCreation}
-            />
-          </Col>
-        </Row>
-        }
+        <Sponsors
+          onAdd={() => this.getSponsors()}
+          sponsors={sponsors}
+          parentMutator={this.props.mutator}
+          editable={editable}
+          {...this.props}
+        />
         <hr />
-        <Row>
-          <Col xs={12}>
-            <MultiColumnList
-              id="list-proxies"
-              formatter={proxyFormatter}
-              rowFormatter={getAnchoredRowFormatter}
-              visibleColumns={['Proxy']}
-              contentData={proxies}
-              isEmptyMessage="No proxies found"
-              onRowClick={this.onSelectRow}
-            />
-          </Col>
-        </Row>
-        { this.props.editable &&
-        <Row className="marginTopHalf">
-          <Col xs={12}>
-            <Pluggable
-              aria-haspopup="true"
-              type="find-user"
-              {...this.props}
-              dataKey="proxies"
-              searchLabel="&#43; Add Proxy"
-              searchButtonStyle="primary"
-              selectUser={this.addProxy}
-              visibleColumns={['Name', 'Patron Group', 'Username', 'Barcode']}
-              disableRecordCreation={disableRecordCreation}
-            />
-          </Col>
-        </Row>
-        }
-      </Accordion>);
+        <Proxies
+          onAdd={() => this.getProxies()}
+          proxies={proxies}
+          parentMutator={this.props.mutator}
+          editable={editable}
+          {...this.props}
+        />
+      </Accordion>
+    );
   }
 }
