@@ -35,14 +35,14 @@ class UserPermissions extends React.Component {
       records: 'permissionNames',
       DELETE: {
         pk: 'permissionName',
-        path: 'perms/users/:{userid}/permissions',
+        path: 'perms/users/:{id}/permissions',
         params: { indexField: 'userId' },
       },
       GET: {
-        path: 'perms/users/:{userid}/permissions',
+        path: 'perms/users/:{id}/permissions',
         params: { full: 'true', indexField: 'userId' },
       },
-      path: 'perms/users/:{userid}/permissions',
+      path: 'perms/users/:{id}/permissions',
       params: { indexField: 'userId' },
     },
   });
