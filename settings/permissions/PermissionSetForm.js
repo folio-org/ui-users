@@ -48,7 +48,7 @@ class PermissionSetForm extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.initialValues !== this.props.initialValues) {
+    if (!_.isEqual(nextProps.initialValues, this.props.initialValues)) {
       this.setPermSet(nextProps.initialValues);
     }
   }
