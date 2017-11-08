@@ -50,7 +50,7 @@ class PermissionSets extends React.Component {
         entryList={_.sortBy((this.props.resources.entries || {}).records || [], ['displayName'])}
         detailComponent={PermissionSetDetails}
         paneTitle={this.props.label}
-        entryLabel="Permission Set"
+        entryLabel="permission set"
         entryFormComponent={PermissionSetForm}
         nameKey="displayName"
         permissions={{
