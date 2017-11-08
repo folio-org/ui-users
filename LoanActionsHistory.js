@@ -94,7 +94,7 @@ class LoanActionsHistory extends React.Component {
                                 loan.item.status.name),
       Operator: la => getFullName(la.user),
     };
-// loan.item.status.name.concat(' - ',loanActionMap[la.action])
+
     return (
       <Paneset isRoot>
         <Pane id="pane-loandetails" defaultWidth="100%" dismissible onClose={onCancel} paneTitle={'Loan Details'}>
