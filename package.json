@@ -220,5 +220,8 @@
     "@folio/stripes-connect": "^2.7.0",
     "@folio/stripes-core": "^2.7.0",
     "@folio/stripes-logger": "^0.0.2"
+  },
+  "optionalDependencies": {
+    "@folio/plugin-find-user": "^1.1.0"
   }
 }
