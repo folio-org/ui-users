@@ -89,9 +89,12 @@ class LoanActionsHistory extends React.Component {
       Action: la => loanActionMap[la.action],
       'Action Date': la => formatDateTime(la.loanDate, stripes.locale),
       'Due Date': la => (la.dueDate ? formatDateTime(la.dueDate, stripes.locale) : ''),
+      'Item Status': la => (new RegExp(['renewed','recalled','requested'].join("|")).test(la.action)?
+                                `${loan.item.status.name} - ${loanActionMap[la.action]}`:
+                                loan.item.status.name),
       Operator: la => getFullName(la.user),
     };
-
+// loan.item.status.name.concat(' - ',loanActionMap[la.action])
     return (
       <Paneset isRoot>
         <Pane id="pane-loandetails" defaultWidth="100%" dismissible onClose={onCancel} paneTitle={'Loan Details'}>
@@ -159,7 +162,7 @@ class LoanActionsHistory extends React.Component {
             <MultiColumnList
               id="list-loanactions"
               formatter={loanActionsFormatter}
-              visibleColumns={['Action Date', 'Action', 'Due Date', 'Operator']}
+              visibleColumns={['Action Date', 'Action', 'Due Date','Item Status','Operator']}
               columnMapping={loanActionMap}
               contentData={loanActionsWithUser.records}
             />
