@@ -1,4 +1,4 @@
 
 buildNPM {
   publishModDescriptor = 'yes'
-}  
+}
