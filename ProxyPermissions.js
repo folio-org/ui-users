@@ -4,7 +4,9 @@ import { Accordion } from '@folio/stripes-components/lib/Accordion';
 import Badge from '@folio/stripes-components/lib/Badge';
 
 import Sponsors from './lib/Sponsors';
-import Proxies from './lib/Proxies';
+
+import ProxyList from './lib/ProxyGroup/ProxyList';
+import ProxyEditList from './lib/ProxyGroup/ProxyEditList';
 
 export default class ProxyPermissions extends React.Component {
   static propTypes = {
@@ -72,35 +74,22 @@ export default class ProxyPermissions extends React.Component {
   });
 
   componentDidMount() {
-    this.getProxies();
-    this.getSponsors();
+    this.loadResource('sponsors', 'proxyUserId', 'userId');
+    this.loadResource('proxies', 'userId', 'proxyUserId');
   }
 
-  getProxies() {
+  loadResource(resourceName, queryId, recordId) {
     const { mutator, user } = this.props;
-    const query = `query=(userId=${user.id})`;
+    const resource = mutator[resourceName];
+    const resourceFor = mutator[`${resourceName}For`];
+    const query = `query=(${queryId}=${user.id})`;
 
-    mutator.proxies.reset();
-    mutator.proxiesFor.reset();
-    mutator.proxiesFor.GET({ params: { query } })
-    .then((records) => {
+    resourceFor.reset();
+    resourceFor.GET({ params: { query } }).then(records => {
       if (!records.length) return;
-      const ids = records.map(pf => `id=${pf.proxyUserId}`).join(' or ');
-      mutator.proxies.GET({ params: { query: `query=(${ids})` } });
-    });
-  }
-
-  getSponsors() {
-    const { mutator, user } = this.props;
-    const query = `query=(proxyUserId=${user.id})`;
-
-    mutator.sponsors.reset();
-    mutator.sponsorsFor.reset();
-    mutator.sponsorsFor.GET({ params: { query } })
-    .then((records) => {
-      if (!records.length) return;
-      const ids = records.map(pf => `id=${pf.userId}`).join(' or ');
-      mutator.sponsors.GET({ params: { query: `query=(${ids})` } });
+      const ids = records.map(pf => `id=${pf[recordId]}`).join(' or ');
+      resource.reset();
+      resource.GET({ params: { query: `query=(${ids})` } });
     });
   }
 
@@ -109,6 +98,8 @@ export default class ProxyPermissions extends React.Component {
     const sponsors = (resources.sponsors || {}).records || [];
     const proxies = (resources.proxies || {}).records || [];
     const { onToggle, accordionId, expanded, editable } = this.props;
+
+    const Proxies = (editable) ? ProxyEditList : ProxyList;
 
     return (
       <Accordion
@@ -126,7 +117,6 @@ export default class ProxyPermissions extends React.Component {
           onAdd={() => this.getSponsors()}
           sponsors={sponsors}
           parentMutator={this.props.mutator}
-          editable={editable}
           {...this.props}
         />
         <hr />
@@ -134,7 +124,6 @@ export default class ProxyPermissions extends React.Component {
           onAdd={() => this.getProxies()}
           proxies={proxies}
           parentMutator={this.props.mutator}
-          editable={editable}
           {...this.props}
         />
       </Accordion>

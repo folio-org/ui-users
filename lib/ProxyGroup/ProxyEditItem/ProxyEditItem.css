@@ -1,0 +1,26 @@
+.item {
+  border-color: #999;
+  border-width: 1px 1px 0 1px;
+  border-style: solid;
+  &:last-of-type {
+    border-bottom: 1px solid #999;
+    margin-bottom: 4px;
+  }
+}
+
+.content {
+	padding: 14px;
+  background-color: #F7F7F7;
+  width: 100%;
+}
+
+.legend {
+  display: block;
+  width: 100%;
+  font-size: 21px;
+  line-height: inherit;
+  color: #333;
+  border: 0;
+  margin-bottom: 6px;
+  padding-bottom: 2px;
+}
