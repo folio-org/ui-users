@@ -174,6 +174,7 @@ class Users extends React.Component {
       resultCountIncrement={RESULT_COUNT_INCREMENT}
       viewRecordComponent={ViewUser}
       editRecordComponent={UserForm}
+      newRecordInitialValues={{ active: true, personal: { preferredContactTypeId: '002' } }}
       visibleColumns={['Status', 'Name', 'Barcode', 'Patron Group', 'Username', 'Email']}
       resultsFormatter={resultsFormatter}
       onSelectRow={this.props.onSelectRow}
