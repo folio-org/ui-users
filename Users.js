@@ -132,7 +132,7 @@ class Users extends React.Component {
     }
   }
 
-  // XXX something bad is happening here that prevents exceptions in this function from being received
+  // XXX something prevents exceptions in this function from being received: see STRIPES-483
   create = (userdata) => {
     if (userdata.personal.addresses) {
       const addressTypes = (this.props.resources.addressTypes || {}).records || [];
