@@ -45,9 +45,9 @@ function validate(values) {
 function asyncValidate(values, dispatch, props, blurredField) {
   if (blurredField === 'username' && values.username !== props.initialValues.username) {
     return new Promise((resolve, reject) => {
-      props.uniqueUserValidator.reset();
+      props.uniquenessValidator.reset();
       const query = `(username="${values.username}")`;
-      props.uniqueUserValidator.GET({ params: { query } }).then((users) => {
+      props.uniquenessValidator.GET({ params: { query } }).then((users) => {
         if (users.length > 0) {
           reject({ username: 'This username has already been taken' });
         } else {
@@ -66,7 +66,7 @@ class UserForm extends React.Component {
     onClose: PropTypes.func, // eslint-disable-line react/no-unused-prop-types
     newUser: PropTypes.bool, // eslint-disable-line react/no-unused-prop-types
     handleSubmit: PropTypes.func.isRequired,
-    uniqueUserValidator: PropTypes.object, // eslint-disable-line react/no-unused-prop-types
+    uniquenessValidator: PropTypes.object, // eslint-disable-line react/no-unused-prop-types
     reset: PropTypes.func,
     pristine: PropTypes.bool,
     submitting: PropTypes.bool,

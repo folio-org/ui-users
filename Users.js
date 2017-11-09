@@ -41,7 +41,7 @@ class Users extends React.Component {
       addressTypes: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
-      uniqueUserValidator: PropTypes.shape({
+      uniquenessValidator: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }).isRequired,
@@ -61,7 +61,7 @@ class Users extends React.Component {
       records: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }),
-      uniqueUserValidator: PropTypes.shape({
+      uniquenessValidator: PropTypes.shape({
         GET: PropTypes.func,
         reset: PropTypes.func,
       }),
@@ -116,7 +116,7 @@ class Users extends React.Component {
       path: 'addresstypes',
       records: 'addressTypes',
     },
-    uniqueUserValidator: {
+    uniquenessValidator: {
       type: 'okapi',
       records: 'users',
       accumulate: 'true',

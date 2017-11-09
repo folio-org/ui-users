@@ -56,7 +56,7 @@ class ViewUser extends React.Component {
     notesToggle: PropTypes.func,
     location: PropTypes.object,
     history: PropTypes.object,
-    uniqueUserValidator: PropTypes.object,
+    uniquenessValidator: PropTypes.object,
   };
 
   static manifest = Object.freeze({
@@ -414,7 +414,7 @@ class ViewUser extends React.Component {
             addressTypes={this.props.addressTypes}
             onSubmit={(record) => { this.update(record); }}
             onCancel={this.onClickCloseEditUser}
-            uniqueUserValidator={this.props.uniqueUserValidator}
+            uniquenessValidator={this.props.uniquenessValidator}
             optionLists={{ patronGroups, contactTypes }}
           />
         </Layer>
