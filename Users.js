@@ -41,9 +41,6 @@ class Users extends React.Component {
       addressTypes: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
-      uniquenessValidator: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
-      }),
     }).isRequired,
     location: PropTypes.shape({
       search: PropTypes.string,
@@ -60,10 +57,6 @@ class Users extends React.Component {
       }),
       records: PropTypes.shape({
         POST: PropTypes.func.isRequired,
-      }),
-      uniquenessValidator: PropTypes.shape({
-        GET: PropTypes.func,
-        reset: PropTypes.func,
       }),
     }).isRequired,
     onSelectRow: PropTypes.func,
