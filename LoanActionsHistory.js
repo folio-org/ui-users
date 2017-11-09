@@ -7,7 +7,7 @@ import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
-import { formatDateTime, getFullName } from './util';
+import { formatDateTime, getFullName, getItemStatusFormatter } from './util';
 import loanActionMap from './data/loanActionMap';
 import LoanActionsHistoryProxy from './LoanActionsHistoryProxy';
 
@@ -89,9 +89,7 @@ class LoanActionsHistory extends React.Component {
       Action: la => loanActionMap[la.action],
       'Action Date': la => formatDateTime(la.loanDate, stripes.locale),
       'Due Date': la => (la.dueDate ? formatDateTime(la.dueDate, stripes.locale) : ''),
-      'Item Status': la => (new RegExp(['renewed','recalled','requested'].join("|")).test(la.action)?
-                                `${loan.item.status.name} - ${loanActionMap[la.action]}`:
-                                loan.item.status.name),
+      'Item Status': la => getItemStatusFormatter({'action':la.action,'item':loan.item}),
       Operator: la => getFullName(la.user),
     };
 
