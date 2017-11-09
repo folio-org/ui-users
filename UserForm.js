@@ -19,6 +19,7 @@ import classNames from 'classnames';
 import { countriesOptions } from './data/countries';
 import Autocomplete from './lib/Autocomplete';
 import { toAddressTypeOptions } from './converters/address_type';
+import contactTypes from './data/contactTypes';
 import css from './UserForm.css';
 
 function validate(values) {
@@ -85,7 +86,6 @@ class UserForm extends React.Component {
     initialValues: PropTypes.object,
     optionLists: PropTypes.shape({
       userGroups: PropTypes.arrayOf(PropTypes.object),
-      contactTypes: PropTypes.arrayOf(PropTypes.object),
     }),
   };
 
@@ -119,7 +119,7 @@ class UserForm extends React.Component {
     const editUserLastMenu = <PaneMenu><Button id="clickable-updateuser" type="submit" title="Update User" disabled={pristine || submitting} onClick={handleSubmit}>Update User</Button></PaneMenu>;
     const patronGroupOptions = (optionLists.patronGroups || []).map(g => ({
       label: `${g.group} (${g.desc})`, value: g.id, selected: initialValues.patronGroup === g.id }));
-    const contactTypeOptions = (optionLists.contactTypes || []).map(g => ({
+    const contactTypeOptions = (contactTypes || []).map(g => ({
       label: g.desc, value: g.id, selected: initialValues.preferredContactTypeId === g.id }));
 
     const addressFields = {

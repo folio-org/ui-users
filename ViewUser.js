@@ -422,7 +422,7 @@ class ViewUser extends React.Component {
             onCancel={this.onClickCloseEditUser}
             parentResources={this.props.parentResources}
             parentMutator={this.props.parentMutator}
-            optionLists={{ patronGroups, contactTypes }}
+            optionLists={{ patronGroups }}
           />
         </Layer>
         <Layer isOpen={this.state.viewLoansHistoryMode} label="Loans">
