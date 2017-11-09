@@ -41,9 +41,6 @@ class Users extends React.Component {
       addressTypes: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
-      uniqueUserValidator: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
-      }),
     }).isRequired,
     location: PropTypes.shape({
       search: PropTypes.string,
@@ -60,10 +57,6 @@ class Users extends React.Component {
       }),
       records: PropTypes.shape({
         POST: PropTypes.func.isRequired,
-      }),
-      uniqueUserValidator: PropTypes.shape({
-        GET: PropTypes.func,
-        reset: PropTypes.func,
       }),
     }).isRequired,
     onSelectRow: PropTypes.func,
@@ -116,7 +109,7 @@ class Users extends React.Component {
       path: 'addresstypes',
       records: 'addressTypes',
     },
-    uniqueUserValidator: {
+    uniquenessValidator: {
       type: 'okapi',
       records: 'users',
       accumulate: 'true',
@@ -132,7 +125,7 @@ class Users extends React.Component {
     }
   }
 
-  // XXX something bad is happening here that prevents exceptions in this function from being received
+  // XXX something prevents exceptions in this function from being received: see STRIPES-483
   create = (userdata) => {
     if (userdata.personal.addresses) {
       const addressTypes = (this.props.resources.addressTypes || {}).records || [];
@@ -181,10 +174,12 @@ class Users extends React.Component {
       resultCountIncrement={RESULT_COUNT_INCREMENT}
       viewRecordComponent={ViewUser}
       editRecordComponent={UserForm}
+      newRecordInitialValues={{ active: true, personal: { preferredContactTypeId: '002' } }}
       visibleColumns={['Status', 'Name', 'Barcode', 'Patron Group', 'Username', 'Email']}
       resultsFormatter={resultsFormatter}
       onSelectRow={this.props.onSelectRow}
       onCreate={this.create}
+      finishedResourceName="perms"
       viewRecordPerms="users.item.get"
       newRecordPerms="users.item.post,login.item.post,perms.users.item.post"
       disableRecordCreation={props.disableRecordCreation}

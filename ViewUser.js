@@ -52,11 +52,15 @@ class ViewUser extends React.Component {
       path: PropTypes.string.isRequired,
     }).isRequired,
     onClose: PropTypes.func,
-    addressTypes: PropTypes.arrayOf(PropTypes.object),
     notesToggle: PropTypes.func,
     location: PropTypes.object,
     history: PropTypes.object,
-    uniqueUserValidator: PropTypes.object,
+    parentResources: PropTypes.shape({
+      addressTypes: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+    }),
+    parentMutator: PropTypes.shape({}),
   };
 
   static manifest = Object.freeze({
@@ -88,6 +92,9 @@ class ViewUser extends React.Component {
         permissionsSection: true,
       },
     };
+
+    this.addressTypes = (this.props.parentResources.addressTypes || {}).records || [];
+
     this.onClickEditUser = this.onClickEditUser.bind(this);
     this.onClickCloseEditUser = this.onClickCloseEditUser.bind(this);
     this.connectedUserLoans = props.stripes.connect(UserLoans);
@@ -184,7 +191,7 @@ class ViewUser extends React.Component {
 
   update(user) {
     if (user.personal.addresses) {
-      user.personal.addresses = toUserAddresses(user.personal.addresses, this.props.addressTypes); // eslint-disable-line no-param-reassign
+      user.personal.addresses = toUserAddresses(user.personal.addresses, this.addressTypes); // eslint-disable-line no-param-reassign
     }
 
     // eslint-disable-next-line no-param-reassign
@@ -257,7 +264,7 @@ class ViewUser extends React.Component {
     const patronGroupId = _.get(user, ['patronGroup'], '');
     const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
     const preferredContact = contactTypes.find(g => g.id === _.get(user, ['personal', 'preferredContactTypeId'], '')) || { type: '' };
-    const addresses = toListAddresses(_.get(user, ['personal', 'addresses'], []), this.props.addressTypes);
+    const addresses = toListAddresses(_.get(user, ['personal', 'addresses'], []), this.addressTypes);
     const userFormData = this.getUserFormData(user, addresses);
 
     return (
@@ -366,7 +373,7 @@ class ViewUser extends React.Component {
         </Accordion>
         <UserAddresses
           onUpdate={this.onAddressesUpdate}
-          addressTypes={this.props.addressTypes}
+          addressTypes={this.addressTypes}
           addresses={addresses}
           expanded={this.state.sections.addressSection}
           onToggle={this.handleSectionToggle}
@@ -411,11 +418,11 @@ class ViewUser extends React.Component {
         <Layer isOpen={query.layer ? query.layer === 'edit' : false} label="Edit User Dialog">
           <UserForm
             initialValues={userFormData}
-            addressTypes={this.props.addressTypes}
             onSubmit={(record) => { this.update(record); }}
             onCancel={this.onClickCloseEditUser}
-            uniqueUserValidator={this.props.uniqueUserValidator}
-            optionLists={{ patronGroups, contactTypes }}
+            parentResources={this.props.parentResources}
+            parentMutator={this.props.parentMutator}
+            optionLists={{ patronGroups }}
           />
         </Layer>
         <Layer isOpen={this.state.viewLoansHistoryMode} label="Loans">

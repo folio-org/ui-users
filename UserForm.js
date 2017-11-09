@@ -19,6 +19,7 @@ import classNames from 'classnames';
 import { countriesOptions } from './data/countries';
 import Autocomplete from './lib/Autocomplete';
 import { toAddressTypeOptions } from './converters/address_type';
+import contactTypes from './data/contactTypes';
 import css from './UserForm.css';
 
 function validate(values) {
@@ -45,9 +46,10 @@ function validate(values) {
 function asyncValidate(values, dispatch, props, blurredField) {
   if (blurredField === 'username' && values.username !== props.initialValues.username) {
     return new Promise((resolve, reject) => {
-      props.uniqueUserValidator.reset();
+      const uv = props.parentMutator.uniquenessValidator;
       const query = `(username="${values.username}")`;
-      props.uniqueUserValidator.GET({ params: { query } }).then((users) => {
+      uv.reset();
+      uv.GET({ params: { query } }).then((users) => {
         if (users.length > 0) {
           reject({ username: 'This username has already been taken' });
         } else {
@@ -66,17 +68,25 @@ class UserForm extends React.Component {
     onClose: PropTypes.func, // eslint-disable-line react/no-unused-prop-types
     newUser: PropTypes.bool, // eslint-disable-line react/no-unused-prop-types
     handleSubmit: PropTypes.func.isRequired,
-    uniqueUserValidator: PropTypes.object, // eslint-disable-line react/no-unused-prop-types
+    parentResources: PropTypes.shape({
+      addressTypes: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      patronGroups: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+    }),
+    parentMutator: PropTypes.shape({ // eslint-disable-line react/no-unused-prop-types
+      uniquenessValidator: PropTypes.shape({
+        reset: PropTypes.func.isRequired,
+        GET: PropTypes.func.isRequired,
+      }).isRequired,
+    }),
     reset: PropTypes.func,
     pristine: PropTypes.bool,
     submitting: PropTypes.bool,
     onCancel: PropTypes.func,
     initialValues: PropTypes.object,
-    optionLists: PropTypes.shape({
-      userGroups: PropTypes.arrayOf(PropTypes.object),
-      contactTypes: PropTypes.arrayOf(PropTypes.object),
-    }),
-    addressTypes: PropTypes.arrayOf(PropTypes.object),
   };
 
   constructor(props) {
@@ -98,17 +108,18 @@ class UserForm extends React.Component {
       submitting,
       onCancel,
       initialValues,
-      optionLists,
-      addressTypes,
     } = this.props;
+
+    const addressTypes = (this.props.parentResources.addressTypes || {}).records || [];
+    const patronGroups = (this.props.parentResources.patronGroups || {}).records || [];
 
     /* Menues for Add User workflow */
     const addUserFirstMenu = <PaneMenu><button id="clickable-closenewuserdialog" onClick={onCancel} title="close" aria-label="Close New User Dialog"><span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span></button></PaneMenu>;
     const addUserLastMenu = <PaneMenu><Button id="clickable-createnewuser" type="submit" title="Create New User" disabled={pristine || submitting} onClick={handleSubmit}>Create User</Button></PaneMenu>;
     const editUserLastMenu = <PaneMenu><Button id="clickable-updateuser" type="submit" title="Update User" disabled={pristine || submitting} onClick={handleSubmit}>Update User</Button></PaneMenu>;
-    const patronGroupOptions = (optionLists.patronGroups || []).map(g => ({
+    const patronGroupOptions = (patronGroups || []).map(g => ({
       label: `${g.group} (${g.desc})`, value: g.id, selected: initialValues.patronGroup === g.id }));
-    const contactTypeOptions = (optionLists.contactTypes || []).map(g => ({
+    const contactTypeOptions = (contactTypes || []).map(g => ({
       label: g.desc, value: g.id, selected: initialValues.preferredContactTypeId === g.id }));
 
     const addressFields = {
