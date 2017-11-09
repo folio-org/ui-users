@@ -67,6 +67,11 @@ class UserForm extends React.Component {
     onClose: PropTypes.func, // eslint-disable-line react/no-unused-prop-types
     newUser: PropTypes.bool, // eslint-disable-line react/no-unused-prop-types
     handleSubmit: PropTypes.func.isRequired,
+    parentResources: PropTypes.shape({
+      addressTypes: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+    }),
     parentMutator: PropTypes.shape({ // eslint-disable-line react/no-unused-prop-types
       uniquenessValidator: PropTypes.shape({
         reset: PropTypes.func.isRequired,
@@ -82,7 +87,6 @@ class UserForm extends React.Component {
       userGroups: PropTypes.arrayOf(PropTypes.object),
       contactTypes: PropTypes.arrayOf(PropTypes.object),
     }),
-    addressTypes: PropTypes.arrayOf(PropTypes.object),
   };
 
   constructor(props) {
@@ -105,8 +109,9 @@ class UserForm extends React.Component {
       onCancel,
       initialValues,
       optionLists,
-      addressTypes,
     } = this.props;
+
+    const addressTypes = (this.props.parentResources.addressTypes || {}).records || [];
 
     /* Menues for Add User workflow */
     const addUserFirstMenu = <PaneMenu><button id="clickable-closenewuserdialog" onClick={onCancel} title="close" aria-label="Close New User Dialog"><span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span></button></PaneMenu>;
