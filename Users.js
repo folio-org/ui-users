@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import queryString from 'query-string';
 import uuid from 'uuid';
 import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
 import ViewUser from './ViewUser';
@@ -156,7 +155,6 @@ class Users extends React.Component {
 
   render() {
     const props = this.props;
-    const urlQuery = queryString.parse(props.location.search || '');
     const patronGroups = (props.resources.patronGroups || {}).records || [];
     const initialPath = (_.get(packageInfo, ['stripes', 'home']) ||
                          _.get(packageInfo, ['stripes', 'route']));
@@ -183,7 +181,6 @@ class Users extends React.Component {
       resultCountIncrement={RESULT_COUNT_INCREMENT}
       viewRecordComponent={ViewUser}
       editRecordComponent={UserForm}
-      urlQuery={urlQuery}
       visibleColumns={['Status', 'Name', 'Barcode', 'Patron Group', 'Username', 'Email']}
       resultsFormatter={resultsFormatter}
       onSelectRow={this.props.onSelectRow}
