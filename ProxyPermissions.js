@@ -18,17 +18,9 @@ const ProxyPermissions = ({ onToggle, accordionId, expanded, proxies, sponsors }
       <h2>Proxy</h2>
     }
   >
-    <Sponsors
-      sponsors={sponsors}
-      parentMutator={this.props.mutator}
-      {...this.props}
-    />
+    <Sponsors sponsors={sponsors} />
     <hr />
-    <ProxyList
-      proxies={proxies}
-      parentMutator={this.props.mutator}
-      {...this.props}
-    />
+    <ProxyList proxies={proxies} />
   </Accordion>
 ));
 
