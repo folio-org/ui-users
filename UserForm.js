@@ -206,7 +206,8 @@ class UserForm extends React.Component {
                 <Field label="External System ID" name="externalSystemId" id="adduser_externalsystemid" component={TextField} fullWidth />
 
                 <AddressEditList name="personal.addresses" fieldComponents={addressFields} canDelete />
-                <ProxyEditList name="proxies" {...this.props} />
+                {initialValues.id && <ProxyEditList name="proxies" {...this.props} />}
+
               </Col>
             </Row>
           </Pane>

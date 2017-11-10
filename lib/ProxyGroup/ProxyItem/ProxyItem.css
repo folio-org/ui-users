@@ -1,5 +1,5 @@
 .item {
-  padding: 10px;
+  padding: 5px 10px 5px 10px;
   border-bottom: 1px solid #ccc;
   &:last-of-type {
     border-bottom: 0px solid #ccc;

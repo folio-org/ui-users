@@ -52,6 +52,7 @@ class ViewUser extends React.Component {
       proxiesFor: PropTypes.shape({
         POST: PropTypes.func.isRequired,
         GET: PropTypes.func.isRequired,
+        DELETE: PropTypes.func.isRequired,
         reset: PropTypes.func,
       }),
       sponsorsFor: PropTypes.shape({
@@ -69,6 +70,9 @@ class ViewUser extends React.Component {
     }),
     match: PropTypes.shape({
       path: PropTypes.string.isRequired,
+      params: PropTypes.shape({
+        id: PropTypes.string,
+      }),
     }).isRequired,
     onClose: PropTypes.func,
     notesToggle: PropTypes.func,
@@ -161,46 +165,19 @@ class ViewUser extends React.Component {
     this.handleExpandAll = this.handleExpandAll.bind(this);
   }
 
-  loadResource(resourceName, queryId, recordId) {
-    const userId = this.props.match.params.id;
-    const { mutator } = this.props;
-    const resource = mutator[resourceName];
-    const resourceFor = mutator[`${resourceName}For`];
-    const query = `query=(${queryId}=${userId})`;
-
-    resourceFor.reset();
-    resourceFor.GET({ params: { query } }).then(records => {
-      if (!records.length) return;
-      const ids = records.map(pf => `id=${pf[recordId]}`).join(' or ');
-      resource.reset();
-      resource.GET({ params: { query: `query=(${ids})` } });
-    });
-  }
-
-  loadSponsors() {
-    this.loadResource('sponsors', 'proxyUserId', 'userId');
-  }
-
-  loadProxies() {
-    this.loadResource('proxies', 'userId', 'proxyUserId');
-  }
-
-  addProxy(proxy) {
-    const { user, mutator } = this.props;
-
-    const data = {
-      userId: user.id,
-      proxyUserId: proxy.id,
-      meta: {},
-    };
-
-    mutator.sponsorsFor.POST(data).then(() => this.loadSponsors());
-  }
-
   componentDidMount() {
     this.loadSponsors();
     this.loadProxies();
   }
+
+  componentWillReceiveProps(nextProps) {
+    const { match: { params: { id } } } = nextProps;
+    if (id !== this.props.match.params.id) {
+      this.loadSponsors();
+      this.loadProxies();
+    }
+  }
+
   // EditUser Handlers
   onClickEditUser(e) {
     if (e) e.preventDefault();
@@ -268,16 +245,53 @@ class ViewUser extends React.Component {
     return selUser.find(u => u.id === id);
   }
 
-  getUserFormData(user, addresses) {
-    const { resources } = this.props;
+  // eslint-disable-next-line class-methods-use-this
+  getUserFormData(user, addresses, sponsors, proxies) {
     const userForData = user ? _.cloneDeep(user) : user;
-    const sponsors = (resources.sponsors || {}).records || [];
-    const proxies = (resources.proxies || {}).records || [];
-
     userForData.personal.addresses = addresses;
     Object.assign(userForData, { sponsors, proxies });
 
     return userForData;
+  }
+
+  // join proxiesFor with proxies
+  getProxies() {
+    const { resources } = this.props;
+    const proxies = (resources.proxies || {}).records || [];
+    const proxiesFor = (resources.proxiesFor || {}).records || [];
+    if (!proxies.length) return proxies;
+    const pMap = proxies.reduce((memo, proxy) =>
+      Object.assign(memo, { [proxy.id]: proxy }), {});
+    return proxiesFor.map(p => ({ ...p, user: pMap[p.proxyUserId] }));
+  }
+
+  // join sponsorsFor with sponsors
+  getSponsors() {
+    const { resources } = this.props;
+    const sponsors = (resources.sponsors || {}).records || [];
+    const sponsorsFor = (resources.sponsorsFor || {}).records || [];
+    if (!sponsors.length) return sponsors;
+    const sMap = sponsors.reduce((memo, sponsor) =>
+      Object.assign(memo, { [sponsor.id]: sponsor }), {});
+    return sponsorsFor.map(p => ({ ...p, user: sMap[p.userId] }));
+  }
+
+  updateProxies(proxies) {
+    const { mutator: { proxiesFor } } = this.props;
+    const prevProxies = this.getProxies();
+    const user = this.getUser();
+
+    const edited = proxies.filter(proxy => !!(proxy.id));
+    const removed = _.differenceBy(prevProxies, edited, 'id');
+    const added = proxies.filter(proxy => !proxy.id);
+
+    const editPromises = edited.map(proxy => (proxiesFor.PUT(_.omit(proxy, 'user'))));
+    const removedPromises = removed.map(proxy => (proxiesFor.DELETE(_.omit(proxy, 'user'))));
+    const addedPromises = added.map(proxy =>
+      (proxiesFor.POST({ meta: proxy.meta, proxyUserId: proxy.user.id, userId: user.id })));
+
+    return Promise.all([...addedPromises, ...editPromises, ...removedPromises])
+      .then(() => this.loadProxies());
   }
 
   update(user) {
@@ -287,11 +301,47 @@ class ViewUser extends React.Component {
 
     // eslint-disable-next-line no-param-reassign
     if (user.creds) delete user.creds; // not handled on edit (yet at least)
+
+    if (user.proxies) {
+      this.updateProxies(user.proxies);
+      // eslint-disable-next-line no-param-reassign
+      delete user.proxies;
+    }
+
+    if (user.sponsors) {
+      // eslint-disable-next-line no-param-reassign
+      delete user.sponsors;
+    }
+
     this.props.mutator.selUser.PUT(user).then(() => {
       this.setState({
         lastUpdate: new Date().toISOString(),
       });
       this.onClickCloseEditUser();
+    });
+  }
+
+  loadSponsors() {
+    this.loadResource('sponsors', 'proxyUserId', 'userId');
+  }
+
+  loadProxies() {
+    this.loadResource('proxies', 'userId', 'proxyUserId');
+  }
+
+  loadResource(resourceName, queryId, recordId) {
+    const userId = this.props.match.params.id;
+    const { mutator } = this.props;
+    const resource = mutator[resourceName];
+    const resourceFor = mutator[`${resourceName}For`];
+    const query = `query=(${queryId}=${userId})`;
+
+    resourceFor.reset();
+    resource.reset();
+    resourceFor.GET({ params: { query } }).then((recordsFor) => {
+      if (!recordsFor.length) return;
+      const ids = recordsFor.map(pf => `id=${pf[recordId]}`).join(' or ');
+      resource.GET({ params: { query: `query=(${ids})` } });
     });
   }
 
@@ -337,8 +387,8 @@ class ViewUser extends React.Component {
     const query = location.search ? queryString.parse(location.search) : {};
     const user = this.getUser();
     const patronGroups = (resources.patronGroups || {}).records || [];
-    const sponsors = (resources.sponsors || {}).records || [];
-    const proxies = (resources.proxies || {}).records || [];
+    const sponsors = this.getSponsors();
+    const proxies = this.getProxies();
 
     const detailMenu = (<PaneMenu>
       <button id="clickable-show-notes" style={{ visibility: !user ? 'hidden' : 'visible' }} onClick={this.props.notesToggle} title="Show Notes"><Icon icon="comment" />Notes</button>
@@ -358,7 +408,7 @@ class ViewUser extends React.Component {
     const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
     const preferredContact = contactTypes.find(g => g.id === _.get(user, ['personal', 'preferredContactTypeId'], '')) || { type: '' };
     const addresses = toListAddresses(_.get(user, ['personal', 'addresses'], []), this.addressTypes);
-    const userFormData = this.getUserFormData(user, addresses);
+    const userFormData = this.getUserFormData(user, addresses, sponsors, proxies);
 
     return (
       <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
