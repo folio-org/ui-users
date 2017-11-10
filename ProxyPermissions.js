@@ -74,7 +74,15 @@ export default class ProxyPermissions extends React.Component {
   });
 
   componentDidMount() {
+    this.loadSponsors();
+    this.loadProxies();
+  }
+
+  loadSponsors() {
     this.loadResource('sponsors', 'proxyUserId', 'userId');
+  }
+
+  loadProxies() {
     this.loadResource('proxies', 'userId', 'proxyUserId');
   }
 
@@ -91,6 +99,17 @@ export default class ProxyPermissions extends React.Component {
       resource.reset();
       resource.GET({ params: { query: `query=(${ids})` } });
     });
+  }
+
+  addProxy(proxy) {
+    const { user, mutator } = this.props;
+    const data = {
+      userId: user.id,
+      proxyUserId: proxy.id,
+      meta: {},
+    };
+
+    mutator.sponsorsFor.POST(data).then(() => this.loadSponsors());
   }
 
   render() {
@@ -121,7 +140,7 @@ export default class ProxyPermissions extends React.Component {
         />
         <hr />
         <Proxies
-          onAdd={() => this.getProxies()}
+          onAdd={proxy => this.addProxy(proxy)}
           proxies={proxies}
           parentMutator={this.props.mutator}
           {...this.props}
