@@ -19,7 +19,6 @@ const pages = [
     component: PatronGroupsSettings,
     perm: 'ui-users.settings.usergroups',
   },
-
   {
     route: 'addresstypes',
     label: 'Address Types',
