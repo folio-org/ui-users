@@ -256,24 +256,26 @@ class ViewUser extends React.Component {
 
   // join proxiesFor with proxies
   getProxies() {
-    const { resources } = this.props;
-    const proxies = (resources.proxies || {}).records || [];
-    const proxiesFor = (resources.proxiesFor || {}).records || [];
-    if (!proxies.length) return proxies;
-    const pMap = proxies.reduce((memo, proxy) =>
-      Object.assign(memo, { [proxy.id]: proxy }), {});
-    return proxiesFor.map(p => ({ ...p, user: pMap[p.proxyUserId] }));
+    return this.getJoinedResource('proxies', 'proxyUserId');
   }
 
   // join sponsorsFor with sponsors
   getSponsors() {
+    return this.getJoinedResource('sponsors', 'userId');
+  }
+
+  // used to join records
+  getJoinedResource(resourceName, idKey) {
     const { resources } = this.props;
-    const sponsors = (resources.sponsors || {}).records || [];
-    const sponsorsFor = (resources.sponsorsFor || {}).records || [];
-    if (!sponsors.length) return sponsors;
-    const sMap = sponsors.reduce((memo, sponsor) =>
-      Object.assign(memo, { [sponsor.id]: sponsor }), {});
-    return sponsorsFor.map(p => ({ ...p, user: sMap[p.userId] }));
+    const resourceForName = `${resourceName}For`;
+    const records = (resources[resourceName] || {}).records || [];
+    const recordsFor = (resources[resourceForName] || {}).records || [];
+
+    if (!records.length) return records;
+
+    const rMap = records.reduce((memo, record) =>
+      Object.assign(memo, { [record.id]: record }), {});
+    return recordsFor.map(r => ({ ...r, user: rMap[r[idKey]] }));
   }
 
   updateProxies(proxies) {
@@ -286,11 +288,11 @@ class ViewUser extends React.Component {
     const added = proxies.filter(proxy => !proxy.id);
 
     const editPromises = edited.map(proxy => (proxiesFor.PUT(_.omit(proxy, 'user'))));
-    const removedPromises = removed.map(proxy => (proxiesFor.DELETE(_.omit(proxy, 'user'))));
-    const addedPromises = added.map(proxy =>
+    const removePromises = removed.map(proxy => (proxiesFor.DELETE(_.omit(proxy, 'user'))));
+    const addPromises = added.map(proxy =>
       (proxiesFor.POST({ meta: proxy.meta, proxyUserId: proxy.user.id, userId: user.id })));
 
-    return Promise.all([...addedPromises, ...editPromises, ...removedPromises])
+    return Promise.all([...addPromises, ...editPromises, ...removePromises])
       .then(() => this.loadProxies());
   }
 
@@ -329,6 +331,7 @@ class ViewUser extends React.Component {
     this.loadResource('proxies', 'userId', 'proxyUserId');
   }
 
+  // used for loading sponsors and proxies
   loadResource(resourceName, queryId, recordId) {
     const userId = this.props.match.params.id;
     const { mutator } = this.props;
