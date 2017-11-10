@@ -125,13 +125,16 @@ class Users extends React.Component {
     }
   }
 
-  // XXX something prevents exceptions in this function from being received: see STRIPES-483
-  create = (userdata) => {
+  massageNewRecord = (userdata) => {
     if (userdata.personal.addresses) {
       const addressTypes = (this.props.resources.addressTypes || {}).records || [];
-      userdata.personal.addresses = toUserAddresses(userdata.personal.addresses, addressTypes); // eslint-disable-line no-param-reassign
+      // eslint-disable-next-line no-param-reassign
+      userdata.personal.addresses = toUserAddresses(userdata.personal.addresses, addressTypes);
     }
+  }
 
+  // XXX something prevents exceptions in this function from being received: see STRIPES-483
+  create = (userdata) => {
     const { mutator } = this.props;
     const creds = Object.assign({}, userdata.creds, { username: userdata.username }, userdata.creds.password ? {} : { password: '' });
     const user = Object.assign({}, userdata, { id: uuid() });
@@ -179,6 +182,7 @@ class Users extends React.Component {
       resultsFormatter={resultsFormatter}
       onSelectRow={this.props.onSelectRow}
       onCreate={this.create}
+      massageNewRecord={this.massageNewRecord}
       finishedResourceName="perms"
       viewRecordPerms="users.item.get"
       newRecordPerms="users.item.post,login.item.post,perms.users.item.post"
