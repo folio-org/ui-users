@@ -9,18 +9,7 @@
 }
 
 .content {
-	padding: 14px;
+  padding: 14px;
   background-color: #F7F7F7;
   width: 100%;
-}
-
-.legend {
-  display: block;
-  width: 100%;
-  font-size: 21px;
-  line-height: inherit;
-  color: #333;
-  border: 0;
-  margin-bottom: 6px;
-  padding-bottom: 2px;
 }
