@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { Accordion } from '@folio/stripes-components/lib/Accordion';
 import Badge from '@folio/stripes-components/lib/Badge';
 
-import Sponsors from './lib/Sponsors';
-import ProxyList from './lib/ProxyGroup/ProxyList';
+import ProxyViewList from './lib/ProxyGroup/ProxyViewList';
+import ProxyItem from './lib/ProxyGroup/ProxyItem';
 
 const ProxyPermissions = ({ onToggle, accordionId, expanded, proxies, sponsors }) => ((
   <Accordion
@@ -18,9 +18,8 @@ const ProxyPermissions = ({ onToggle, accordionId, expanded, proxies, sponsors }
       <h2>Proxy</h2>
     }
   >
-    <Sponsors sponsors={sponsors} />
-    <hr />
-    <ProxyList proxies={proxies} />
+    <ProxyViewList records={sponsors} label="Sponsors" name="sponsors" itemComponent={ProxyItem} />
+    <ProxyViewList records={proxies} label="Proxy" name="proxies" itemComponent={ProxyItem} />
   </Accordion>
 ));
 

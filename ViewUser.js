@@ -213,6 +213,7 @@ class ViewUser extends React.Component {
     }
 
     if (user.sponsors) {
+      this.props.updateSponsors(user.sponsors);
       // eslint-disable-next-line no-param-reassign
       delete user.sponsors;
     }
