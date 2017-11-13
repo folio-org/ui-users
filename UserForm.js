@@ -20,6 +20,10 @@ import { countriesOptions } from './data/countries';
 import Autocomplete from './lib/Autocomplete';
 import { toAddressTypeOptions } from './converters/address_type';
 import contactTypes from './data/contactTypes';
+
+import ProxyEditList from './lib/ProxyGroup/ProxyEditList';
+import ProxyEditItem from './lib/ProxyGroup/ProxyEditItem';
+
 import css from './UserForm.css';
 
 function validate(values) {
@@ -203,6 +207,13 @@ class UserForm extends React.Component {
                 <Field label="External System ID" name="externalSystemId" id="adduser_externalsystemid" component={TextField} fullWidth />
 
                 <AddressEditList name="personal.addresses" fieldComponents={addressFields} canDelete />
+                {initialValues.id &&
+                  <div>
+                    <ProxyEditList itemComponent={ProxyEditItem} label="Sponsors" name="sponsors" {...this.props} />
+                    <br />
+                    <ProxyEditList itemComponent={ProxyEditItem} label="Proxy" name="proxies" {...this.props} />
+                  </div>
+                }
               </Col>
             </Row>
           </Pane>
@@ -218,4 +229,5 @@ export default stripesForm({
   asyncValidate,
   asyncBlurFields: ['username'],
   navigationCheck: true,
+  enableReinitialize: true,
 })(UserForm);
