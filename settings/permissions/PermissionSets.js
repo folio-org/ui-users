@@ -1,9 +1,9 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
+import EntryManager from '@folio/stripes-smart-components/lib/EntryManager';
 import PermissionSetDetails from './PermissionSetDetails';
 import PermissionSetForm from './PermissionSetForm';
-import EntryManager from '@folio/stripes-smart-components/lib/EntryManager';		
 
 class PermissionSets extends React.Component {
   static propTypes = {
