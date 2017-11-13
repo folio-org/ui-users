@@ -24,6 +24,7 @@ import UserAddresses from './lib/UserAddresses';
 import { toListAddresses, toUserAddresses } from './converters/address';
 import removeQueryParam from './removeQueryParam';
 import { getFullName } from './util';
+import withProxy from './withProxy';
 
 class ViewUser extends React.Component {
 
@@ -42,30 +43,10 @@ class ViewUser extends React.Component {
       patronGroups: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
-      sponsors: PropTypes.object,
-      proxies: PropTypes.object,
     }),
     mutator: PropTypes.shape({
       selUser: PropTypes.shape({
         PUT: PropTypes.func.isRequired,
-      }),
-      proxiesFor: PropTypes.shape({
-        POST: PropTypes.func.isRequired,
-        GET: PropTypes.func.isRequired,
-        DELETE: PropTypes.func.isRequired,
-        reset: PropTypes.func,
-      }),
-      sponsorsFor: PropTypes.shape({
-        GET: PropTypes.func.isRequired,
-        reset: PropTypes.func,
-      }),
-      proxies: PropTypes.shape({
-        GET: PropTypes.func.isRequired,
-        reset: PropTypes.func,
-      }),
-      sponsors: PropTypes.shape({
-        GET: PropTypes.func.isRequired,
-        reset: PropTypes.func,
       }),
     }),
     match: PropTypes.shape({
@@ -84,6 +65,10 @@ class ViewUser extends React.Component {
       }),
     }),
     parentMutator: PropTypes.shape({}),
+    updateProxies: PropTypes.func,
+    updateSponsors: PropTypes.func,
+    getSponsors: PropTypes.func,
+    getProxies: PropTypes.func,
   };
 
   static manifest = Object.freeze({
@@ -96,34 +81,6 @@ class ViewUser extends React.Component {
       type: 'okapi',
       path: 'groups',
       records: 'usergroups',
-    },
-    sponsors: {
-      type: 'okapi',
-      records: 'users',
-      path: 'users',
-      accumulate: 'true',
-      fetch: false,
-    },
-    proxies: {
-      type: 'okapi',
-      records: 'users',
-      path: 'users',
-      accumulate: 'true',
-      fetch: false,
-    },
-    proxiesFor: {
-      type: 'okapi',
-      records: 'proxiesFor',
-      path: 'proxiesfor',
-      accumulate: 'true',
-      fetch: false,
-    },
-    sponsorsFor: {
-      type: 'okapi',
-      records: 'proxiesFor',
-      path: 'proxiesfor',
-      accumulate: 'true',
-      fetch: false,
     },
   });
 
@@ -163,19 +120,6 @@ class ViewUser extends React.Component {
 
     this.handleSectionToggle = this.handleSectionToggle.bind(this);
     this.handleExpandAll = this.handleExpandAll.bind(this);
-  }
-
-  componentDidMount() {
-    this.loadSponsors();
-    this.loadProxies();
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { match: { params: { id } } } = nextProps;
-    if (id !== this.props.match.params.id) {
-      this.loadSponsors();
-      this.loadProxies();
-    }
   }
 
   // EditUser Handlers
@@ -254,48 +198,6 @@ class ViewUser extends React.Component {
     return userForData;
   }
 
-  // join proxiesFor with proxies
-  getProxies() {
-    return this.getJoinedResource('proxies', 'proxyUserId');
-  }
-
-  // join sponsorsFor with sponsors
-  getSponsors() {
-    return this.getJoinedResource('sponsors', 'userId');
-  }
-
-  // used to join records
-  getJoinedResource(resourceName, idKey) {
-    const { resources } = this.props;
-    const resourceForName = `${resourceName}For`;
-    const records = (resources[resourceName] || {}).records || [];
-    const recordsFor = (resources[resourceForName] || {}).records || [];
-
-    if (!records.length) return records;
-
-    const rMap = records.reduce((memo, record) =>
-      Object.assign(memo, { [record.id]: record }), {});
-    return recordsFor.map(r => ({ ...r, user: rMap[r[idKey]] }));
-  }
-
-  updateProxies(proxies) {
-    const { mutator: { proxiesFor } } = this.props;
-    const prevProxies = this.getProxies();
-    const user = this.getUser();
-
-    const edited = proxies.filter(proxy => !!(proxy.id));
-    const removed = _.differenceBy(prevProxies, edited, 'id');
-    const added = proxies.filter(proxy => !proxy.id);
-
-    const editPromises = edited.map(proxy => (proxiesFor.PUT(_.omit(proxy, 'user'))));
-    const removePromises = removed.map(proxy => (proxiesFor.DELETE(_.omit(proxy, 'user'))));
-    const addPromises = added.map(proxy =>
-      (proxiesFor.POST({ meta: proxy.meta, proxyUserId: proxy.user.id, userId: user.id })));
-
-    return Promise.all([...addPromises, ...editPromises, ...removePromises])
-      .then(() => this.loadProxies());
-  }
-
   update(user) {
     if (user.personal.addresses) {
       user.personal.addresses = toUserAddresses(user.personal.addresses, this.addressTypes); // eslint-disable-line no-param-reassign
@@ -305,7 +207,7 @@ class ViewUser extends React.Component {
     if (user.creds) delete user.creds; // not handled on edit (yet at least)
 
     if (user.proxies) {
-      this.updateProxies(user.proxies);
+      this.props.updateProxies(user.proxies);
       // eslint-disable-next-line no-param-reassign
       delete user.proxies;
     }
@@ -320,31 +222,6 @@ class ViewUser extends React.Component {
         lastUpdate: new Date().toISOString(),
       });
       this.onClickCloseEditUser();
-    });
-  }
-
-  loadSponsors() {
-    this.loadResource('sponsors', 'proxyUserId', 'userId');
-  }
-
-  loadProxies() {
-    this.loadResource('proxies', 'userId', 'proxyUserId');
-  }
-
-  // used for loading sponsors and proxies
-  loadResource(resourceName, queryId, recordId) {
-    const userId = this.props.match.params.id;
-    const { mutator } = this.props;
-    const resource = mutator[resourceName];
-    const resourceFor = mutator[`${resourceName}For`];
-    const query = `query=(${queryId}=${userId})`;
-
-    resourceFor.reset();
-    resource.reset();
-    resourceFor.GET({ params: { query } }).then((recordsFor) => {
-      if (!recordsFor.length) return;
-      const ids = recordsFor.map(pf => `id=${pf[recordId]}`).join(' or ');
-      resource.GET({ params: { query: `query=(${ids})` } });
     });
   }
 
@@ -390,8 +267,8 @@ class ViewUser extends React.Component {
     const query = location.search ? queryString.parse(location.search) : {};
     const user = this.getUser();
     const patronGroups = (resources.patronGroups || {}).records || [];
-    const sponsors = this.getSponsors();
-    const proxies = this.getProxies();
+    const sponsors = this.props.getSponsors();
+    const proxies = this.props.getProxies();
 
     const detailMenu = (<PaneMenu>
       <button id="clickable-show-notes" style={{ visibility: !user ? 'hidden' : 'visible' }} onClick={this.props.notesToggle} title="Show Notes"><Icon icon="comment" />Notes</button>
@@ -601,4 +478,4 @@ class ViewUser extends React.Component {
   }
 }
 
-export default ViewUser;
+export default withProxy(ViewUser);
