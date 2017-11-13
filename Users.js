@@ -1,13 +1,9 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import queryString from 'query-string';
 import { filters2cql } from '@folio/stripes-components/lib/FilterGroups';
-// eslint-disable-next-line import/no-unresolved
-import { stripesShape } from '@folio/stripes-core/src/Stripes';
 
 import uuid from 'uuid';
-import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
 import ViewUser from './ViewUser';
 import UserForm from './UserForm';
 import removeQueryParam from './removeQueryParam';
@@ -68,6 +64,13 @@ class Users extends React.Component {
   };
 
   static manifest = Object.freeze({
+    query: {
+      initialValue: {
+        search: '',
+        filters: 'active.Active',
+        sort: 'Name',
+      },
+    },
     resultCount: { initialValue: INITIAL_RESULT_COUNT },
     records: {
       type: 'okapi',
@@ -197,12 +200,6 @@ class Users extends React.Component {
     const initialPath = (_.get(packageInfo, ['stripes', 'home']) ||
                          _.get(packageInfo, ['stripes', 'route']));
 
-<<<<<<< HEAD
-
-    return (<this.connectedSearchAndSort
-      stripes={props.stripes}
-      okapi={this.props.okapi}
-=======
     const resultsFormatter = {
       Status: user => (user.active ? 'Active' : 'Inactive'),
       Name: user => getFullName(user),
@@ -219,14 +216,10 @@ class Users extends React.Component {
       moduleName="users"
       moduleTitle="Users"
       objectName="user"
->>>>>>> 34c995b76ad99e2376fea1a19a4f5d1f063e78d6
       initialPath={initialPath}
       filterConfig={filterConfig}
       initialResultCount={INITIAL_RESULT_COUNT}
       resultCountIncrement={RESULT_COUNT_INCREMENT}
-<<<<<<< HEAD
-      parentResources={this.props.resources}
-=======
       viewRecordComponent={ViewUser}
       editRecordComponent={UserForm}
       newRecordInitialValues={{ active: true, personal: { preferredContactTypeId: '002' } }}
@@ -240,7 +233,6 @@ class Users extends React.Component {
       newRecordPerms="users.item.post,login.item.post,perms.users.item.post"
       disableRecordCreation={props.disableRecordCreation}
       parentResources={props.resources}
->>>>>>> 34c995b76ad99e2376fea1a19a4f5d1f063e78d6
       parentMutator={this.props.mutator}
     />);
   }

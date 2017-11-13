@@ -1,14 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import EntrySelector from '@folio/stripes-components/lib/EntrySelector';
-import IfPermission from '@folio/stripes-components/lib/IfPermission';
-// eslint-disable-next-line import/no-unresolved
-import Callout from '@folio/stripes-components/lib/Callout';
-import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
-import Button from '@folio/stripes-components/lib/Button';
-import Layer from '@folio/stripes-components/lib/Layer';
-import queryString from 'query-string';
 
 import PermissionSetDetails from './PermissionSetDetails';
 import PermissionSetForm from './PermissionSetForm';
