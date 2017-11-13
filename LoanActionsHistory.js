@@ -7,7 +7,7 @@ import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
-import { formatDateTime, getFullName } from './util';
+import { formatDateTime, getFullName, getItemStatusFormatter } from './util';
 import loanActionMap from './data/loanActionMap';
 import LoanActionsHistoryProxy from './LoanActionsHistoryProxy';
 
@@ -89,6 +89,7 @@ class LoanActionsHistory extends React.Component {
       Action: la => loanActionMap[la.action],
       'Action Date': la => formatDateTime(la.loanDate, stripes.locale),
       'Due Date': la => (la.dueDate ? formatDateTime(la.dueDate, stripes.locale) : ''),
+      'Item Status': la => getItemStatusFormatter({ action: la.action, item: loan.item }),
       Operator: la => getFullName(la.user),
     };
 
@@ -159,7 +160,7 @@ class LoanActionsHistory extends React.Component {
             <MultiColumnList
               id="list-loanactions"
               formatter={loanActionsFormatter}
-              visibleColumns={['Action Date', 'Action', 'Due Date', 'Operator']}
+              visibleColumns={['Action Date', 'Action', 'Due Date', 'Item Status', 'Operator']}
               columnMapping={loanActionMap}
               contentData={loanActionsWithUser.records}
             />

@@ -168,7 +168,7 @@
         "loans.title": "Loans",
         "loans.openLoans": "open loans",
         "loans.closedLoans": "closed loans",
-        "resultCount": "{count, number} {count, plural, one {Search Result} other {Search Results}}"
+        "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}"
       },
       "de": {
         "search": "Suche",
@@ -205,7 +205,6 @@
     "@folio/stripes-smart-components": "^1.0.1",
     "classnames": "^2.2.5",
     "hashcode": "^1.0.3",
-    "isomorphic-fetch": "^2.2.1",
     "uuid": "^3.0.1",
     "lodash": "^4.17.4",
     "prop-types": "^15.5.10",
@@ -222,5 +221,8 @@
     "@folio/stripes-connect": "^2.7.0",
     "@folio/stripes-core": "^2.7.0",
     "@folio/stripes-logger": "^0.0.2"
+  },
+  "optionalDependencies": {
+    "@folio/plugin-find-user": "^1.1.0"
   }
 }

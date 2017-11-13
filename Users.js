@@ -6,7 +6,14 @@ import { filters2cql } from '@folio/stripes-components/lib/FilterGroups';
 // eslint-disable-next-line import/no-unresolved
 import { stripesShape } from '@folio/stripes-core/src/Stripes';
 
+import uuid from 'uuid';
+import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
+import ViewUser from './ViewUser';
+import UserForm from './UserForm';
+import removeQueryParam from './removeQueryParam';
 import SearchAndSort from './lib/SearchAndSort';
+import { toUserAddresses } from './converters/address';
+import { getFullName } from './util';
 import packageInfo from './package';
 
 const INITIAL_RESULT_COUNT = 30;
@@ -32,34 +39,40 @@ const filterConfig = [
 
 class Users extends React.Component {
   static propTypes = {
-    stripes: stripesShape.isRequired,
     resources: PropTypes.shape({
       patronGroups: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
+      addressTypes: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
     }).isRequired,
     location: PropTypes.shape({
-      pathname: PropTypes.string.isRequired,
       search: PropTypes.string,
     }).isRequired,
-    mutator: PropTypes.shape({}).isRequired,
-    okapi: PropTypes.shape({}).isRequired,
+    history: PropTypes.shape({
+      push: PropTypes.func.isRequired,
+    }).isRequired,
+    mutator: PropTypes.shape({
+      creds: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      perms: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      records: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+    }).isRequired,
     onSelectRow: PropTypes.func,
   };
 
   static manifest = Object.freeze({
-    query: {
-      initialValue: {
-        search: '',
-        filters: 'active.Active',
-        sort: 'Name',
-      },
-    },
-    userCount: { initialValue: INITIAL_RESULT_COUNT },
-    users: {
+    resultCount: { initialValue: INITIAL_RESULT_COUNT },
+    records: {
       type: 'okapi',
       records: 'users',
-      recordsRequired: '%{userCount}',
+      recordsRequired: '%{resultCount}',
       perRequest: 30,
       path: 'users',
       GET: {
@@ -118,6 +131,16 @@ class Users extends React.Component {
         staticFallback: { params: {} },
       },
     },
+    creds: {
+      type: 'okapi',
+      path: 'authn/credentials',
+      fetch: false,
+    },
+    perms: {
+      type: 'okapi',
+      path: 'perms/users',
+      fetch: false,
+    },
     patronGroups: {
       type: 'okapi',
       path: 'groups',
@@ -128,12 +151,14 @@ class Users extends React.Component {
       path: 'addresstypes',
       records: 'addressTypes',
     },
+    uniquenessValidator: {
+      type: 'okapi',
+      records: 'users',
+      accumulate: 'true',
+      path: 'users',
+      fetch: false,
+    },
   });
-
-  constructor(props) {
-    super(props);
-    this.connectedSearchAndSort = props.stripes.connect(SearchAndSort);
-  }
 
   componentWillUpdate() {
     const pg = (this.props.resources.patronGroups || {}).records || [];
@@ -142,25 +167,81 @@ class Users extends React.Component {
     }
   }
 
+  massageNewRecord = (userdata) => {
+    if (userdata.personal.addresses) {
+      const addressTypes = (this.props.resources.addressTypes || {}).records || [];
+      // eslint-disable-next-line no-param-reassign
+      userdata.personal.addresses = toUserAddresses(userdata.personal.addresses, addressTypes);
+    }
+  }
+
+  // XXX something prevents exceptions in this function from being received: see STRIPES-483
+  create = (userdata) => {
+    const { mutator } = this.props;
+    const creds = Object.assign({}, userdata.creds, { username: userdata.username }, userdata.creds.password ? {} : { password: '' });
+    const user = Object.assign({}, userdata, { id: uuid() });
+    if (user.creds) delete user.creds;
+
+    mutator.records.POST(user)
+      .then(newUser => mutator.creds.POST(Object.assign(creds, { userId: newUser.id })))
+      .then(newCreds => mutator.perms.POST({ userId: newCreds.userId, permissions: [] }))
+      .then((perms) => {
+        removeQueryParam('layer', this.props.location, this.props.history);
+        this.props.history.push(`/users/view/${perms.userId}${this.props.location.search}`);
+      });
+  }
+
   render() {
     const props = this.props;
-    const urlQuery = queryString.parse(props.location.search || '');
+    const patronGroups = (props.resources.patronGroups || {}).records || [];
     const initialPath = (_.get(packageInfo, ['stripes', 'home']) ||
                          _.get(packageInfo, ['stripes', 'route']));
 
+<<<<<<< HEAD
 
     return (<this.connectedSearchAndSort
       stripes={props.stripes}
       okapi={this.props.okapi}
+=======
+    const resultsFormatter = {
+      Status: user => (user.active ? 'Active' : 'Inactive'),
+      Name: user => getFullName(user),
+      Barcode: user => user.barcode,
+      'Patron Group': (user) => {
+        const pg = patronGroups.filter(g => g.id === user.patronGroup)[0];
+        return pg ? pg.group : '?';
+      },
+      Username: user => user.username,
+      Email: user => _.get(user, ['personal', 'email']),
+    };
+
+    return (<SearchAndSort
+      moduleName="users"
+      moduleTitle="Users"
+      objectName="user"
+>>>>>>> 34c995b76ad99e2376fea1a19a4f5d1f063e78d6
       initialPath={initialPath}
       filterConfig={filterConfig}
       initialResultCount={INITIAL_RESULT_COUNT}
       resultCountIncrement={RESULT_COUNT_INCREMENT}
+<<<<<<< HEAD
       parentResources={this.props.resources}
-      parentMutator={this.props.mutator}
+=======
+      viewRecordComponent={ViewUser}
+      editRecordComponent={UserForm}
+      newRecordInitialValues={{ active: true, personal: { preferredContactTypeId: '002' } }}
+      visibleColumns={['Status', 'Name', 'Barcode', 'Patron Group', 'Username', 'Email']}
+      resultsFormatter={resultsFormatter}
       onSelectRow={this.props.onSelectRow}
-      path={this.props.location.pathname}
-      urlQuery={urlQuery}
+      onCreate={this.create}
+      massageNewRecord={this.massageNewRecord}
+      finishedResourceName="perms"
+      viewRecordPerms="users.item.get"
+      newRecordPerms="users.item.post,login.item.post,perms.users.item.post"
+      disableRecordCreation={props.disableRecordCreation}
+      parentResources={props.resources}
+>>>>>>> 34c995b76ad99e2376fea1a19a4f5d1f063e78d6
+      parentMutator={this.props.mutator}
     />);
   }
 }

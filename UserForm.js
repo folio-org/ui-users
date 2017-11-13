@@ -12,7 +12,6 @@ import RadioButtonGroup from '@folio/stripes-components/lib/RadioButtonGroup';
 import RadioButton from '@folio/stripes-components/lib/RadioButton';
 import Datepicker from '@folio/stripes-components/lib/Datepicker';
 import AddressEditList from '@folio/stripes-components/lib/structures/AddressFieldGroup/AddressEdit/AddressEditList';
-import fetch from 'isomorphic-fetch';
 import { Field } from 'redux-form';
 import stripesForm from '@folio/stripes-form';
 import classNames from 'classnames';
@@ -20,12 +19,12 @@ import classNames from 'classnames';
 import { countriesOptions } from './data/countries';
 import Autocomplete from './lib/Autocomplete';
 import { toAddressTypeOptions } from './converters/address_type';
-import css from './UserForm.css';
+import contactTypes from './data/contactTypes';
 
-const sys = require('stripes-loader'); // eslint-disable-line
-const okapiUrl = sys.okapi.url;
-const tenant = sys.okapi.tenant;
-let okapiToken = '';
+import ProxyEditList from './lib/ProxyGroup/ProxyEditList';
+import ProxyEditItem from './lib/ProxyGroup/ProxyEditItem';
+
+import css from './UserForm.css';
 
 function validate(values) {
   const errors = {};
@@ -48,32 +47,22 @@ function validate(values) {
   return errors;
 }
 
-function checkUniqueUserID(username) {
-  return fetch(`${okapiUrl}/users?query=(username="${username}")`,
-    { headers: Object.assign({}, {
-      'X-Okapi-Tenant': tenant,
-      'X-Okapi-Token': okapiToken,
-      'Content-Type': 'application/json' }),
-    },
-  );
-}
-
 function asyncValidate(values, dispatch, props, blurredField) {
   if (blurredField === 'username' && values.username !== props.initialValues.username) {
     return new Promise((resolve, reject) => {
-      // TODO: Should use stripes-connect (dispatching an action and update state)
-      checkUniqueUserID(values.username).then((response) => {
-        if (response.status < 400) {
-          response.json().then((json) => {
-            if (json.totalRecords > 0)
-              reject({ username: 'This username has already been taken' });
-            else
-              resolve();
-          });
+      const uv = props.parentMutator.uniquenessValidator;
+      const query = `(username="${values.username}")`;
+      uv.reset();
+      uv.GET({ params: { query } }).then((users) => {
+        if (users.length > 0) {
+          reject({ username: 'This username has already been taken' });
+        } else {
+          resolve();
         }
       });
     });
   }
+
   return new Promise(resolve => resolve());
 }
 
@@ -83,22 +72,29 @@ class UserForm extends React.Component {
     onClose: PropTypes.func, // eslint-disable-line react/no-unused-prop-types
     newUser: PropTypes.bool, // eslint-disable-line react/no-unused-prop-types
     handleSubmit: PropTypes.func.isRequired,
+    parentResources: PropTypes.shape({
+      addressTypes: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      patronGroups: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+    }),
+    parentMutator: PropTypes.shape({ // eslint-disable-line react/no-unused-prop-types
+      uniquenessValidator: PropTypes.shape({
+        reset: PropTypes.func.isRequired,
+        GET: PropTypes.func.isRequired,
+      }).isRequired,
+    }),
     reset: PropTypes.func,
     pristine: PropTypes.bool,
     submitting: PropTypes.bool,
     onCancel: PropTypes.func,
     initialValues: PropTypes.object,
-    okapi: PropTypes.object,
-    optionLists: PropTypes.shape({
-      userGroups: PropTypes.arrayOf(PropTypes.object),
-      contactTypes: PropTypes.arrayOf(PropTypes.object),
-    }),
-    addressTypes: PropTypes.arrayOf(PropTypes.object),
   };
 
   constructor(props) {
     super(props);
-    okapiToken = props.okapi.token;
     this.state = { showPassword: false };
   }
 
@@ -116,17 +112,18 @@ class UserForm extends React.Component {
       submitting,
       onCancel,
       initialValues,
-      optionLists,
-      addressTypes,
     } = this.props;
+
+    const addressTypes = (this.props.parentResources.addressTypes || {}).records || [];
+    const patronGroups = (this.props.parentResources.patronGroups || {}).records || [];
 
     /* Menues for Add User workflow */
     const addUserFirstMenu = <PaneMenu><button id="clickable-closenewuserdialog" onClick={onCancel} title="close" aria-label="Close New User Dialog"><span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span></button></PaneMenu>;
     const addUserLastMenu = <PaneMenu><Button id="clickable-createnewuser" type="submit" title="Create New User" disabled={pristine || submitting} onClick={handleSubmit}>Create User</Button></PaneMenu>;
     const editUserLastMenu = <PaneMenu><Button id="clickable-updateuser" type="submit" title="Update User" disabled={pristine || submitting} onClick={handleSubmit}>Update User</Button></PaneMenu>;
-    const patronGroupOptions = (optionLists.patronGroups || []).map(g => ({
+    const patronGroupOptions = (patronGroups || []).map(g => ({
       label: `${g.group} (${g.desc})`, value: g.id, selected: initialValues.patronGroup === g.id }));
-    const contactTypeOptions = (optionLists.contactTypes || []).map(g => ({
+    const contactTypeOptions = (contactTypes || []).map(g => ({
       label: g.desc, value: g.id, selected: initialValues.preferredContactTypeId === g.id }));
 
     const addressFields = {
@@ -210,6 +207,13 @@ class UserForm extends React.Component {
                 <Field label="External System ID" name="externalSystemId" id="adduser_externalsystemid" component={TextField} fullWidth />
 
                 <AddressEditList name="personal.addresses" fieldComponents={addressFields} canDelete />
+                {initialValues.id &&
+                  <div>
+                    <ProxyEditList itemComponent={ProxyEditItem} label="Sponsors" name="sponsors" {...this.props} />
+                    <br />
+                    <ProxyEditList itemComponent={ProxyEditItem} label="Proxy" name="proxies" {...this.props} />
+                  </div>
+                }
               </Col>
             </Row>
           </Pane>
@@ -225,4 +229,5 @@ export default stripesForm({
   asyncValidate,
   asyncBlurFields: ['username'],
   navigationCheck: true,
+  enableReinitialize: true,
 })(UserForm);
