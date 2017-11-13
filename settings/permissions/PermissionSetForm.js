@@ -7,6 +7,7 @@ import Button from '@folio/stripes-components/lib/Button';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import IfPermission from '@folio/stripes-components/lib/IfPermission';
+// eslint-disable-next-line import/no-unresolved
 import ConfirmationModal from '@folio/stripes-components/lib/structures/ConfirmationModal';
 import stripesForm from '@folio/stripes-form';
 import { Field } from 'redux-form';

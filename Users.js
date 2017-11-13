@@ -2,12 +2,12 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
-import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
+import { filters2cql } from '@folio/stripes-components/lib/FilterGroups';
+// eslint-disable-next-line import/no-unresolved
 import { stripesShape } from '@folio/stripes-core/src/Stripes';
+
 import SearchAndSort from './lib/SearchAndSort';
 import packageInfo from './package';
-
-import FilterGroups, { filters2cql } from '@folio/stripes-components/lib/FilterGroups';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
@@ -50,10 +50,10 @@ class Users extends React.Component {
   static manifest = Object.freeze({
     query: {
       initialValue: {
-        search: "",
-        filters: "active.Active",
-        sort: "Name",
-      }
+        search: '',
+        filters: 'active.Active',
+        sort: 'Name',
+      },
     },
     userCount: { initialValue: INITIAL_RESULT_COUNT },
     users: {
@@ -65,13 +65,13 @@ class Users extends React.Component {
       GET: {
         params: {
           query: (...args) => {
-            /* 
+            /*
               This code is not DRY as it is copied from makeQueryFunction in stripes-components.
               This is necessary, as makeQueryFunction only referneces query paramaters as a data source.
               STRIPES-480 is intended to correct this and allow this query function to be replace with a call
               to makeQueryFunction.
-              https://issues.folio.org/browse/STRIPES-480  
-            */ 
+              https://issues.folio.org/browse/STRIPES-480
+            */
             const resourceData = args[2];
             const sortMap = {
               Active: 'active',
@@ -80,7 +80,7 @@ class Users extends React.Component {
               Username: 'username',
               Barcode: 'barcode',
               Email: 'personal.email',
-            }
+            };
 
             let cql = `(username="${resourceData.query.search}*" or personal.firstName="${resourceData.query.search}*" or personal.lastName="${resourceData.query.search}*" or personal.email="${resourceData.query.search}*" or barcode="${resourceData.query.search}*" or id="${resourceData.query.search}*" or externalSystemId="${resourceData.query.search}*")`;
 
@@ -93,24 +93,25 @@ class Users extends React.Component {
               }
             }
 
-            let { sort } = resourceData.query;
+            const { sort } = resourceData.query;
             if (sort) {
               const sortIndexes = sort.split(',').map((sort1) => {
                 let reverse = false;
                 if (sort1.startsWith('-')) {
+                  // eslint-disable-next-line no-param-reassign
                   sort1 = sort1.substr(1);
                   reverse = true;
                 }
                 let sortIndex = sortMap[sort1] || sort1;
                 if (reverse) {
-                  sortIndex = sortIndex.replace(' ', '/sort.descending ') + '/sort.descending';
+                  sortIndex = `${sortIndex.replace(' ', '/sort.descending ')}/sort.descending`;
                 }
                 return sortIndex;
               });
-        
+
               cql += ` sortby ${sortIndexes.join(' ')}`;
             }
-            
+
             return cql;
           },
         },
@@ -129,20 +130,6 @@ class Users extends React.Component {
     },
   });
 
-  // makeQueryFunction(
-  //   'username=*',
-  //   'username="$QUERY*" or personal.firstName="$QUERY*" or personal.lastName="$QUERY*" or personal.email="$QUERY*" or barcode="$QUERY*" or id="$QUERY*" or externalSystemId="$QUERY*"',
-  //   {
-  //     Status: 'active',
-  //     Name: 'personal.lastName personal.firstName',
-  //     'Patron Group': 'patronGroup.group',
-  //     Username: 'username',
-  //     Barcode: 'barcode',
-  //     Email: 'personal.email',
-  //   },
-  //   filterConfig,
-  // )
-
   constructor(props) {
     super(props);
     this.connectedSearchAndSort = props.stripes.connect(SearchAndSort);
@@ -160,8 +147,8 @@ class Users extends React.Component {
     const urlQuery = queryString.parse(props.location.search || '');
     const initialPath = (_.get(packageInfo, ['stripes', 'home']) ||
                          _.get(packageInfo, ['stripes', 'route']));
-    
-                         
+
+
     return (<this.connectedSearchAndSort
       stripes={props.stripes}
       okapi={this.props.okapi}
