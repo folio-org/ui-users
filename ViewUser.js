@@ -24,6 +24,7 @@ import UserAddresses from './lib/UserAddresses';
 import { toListAddresses, toUserAddresses } from './converters/address';
 import removeQueryParam from './removeQueryParam';
 import { getFullName } from './util';
+import withProxy from './withProxy';
 
 class ViewUser extends React.Component {
 
@@ -50,6 +51,9 @@ class ViewUser extends React.Component {
     }),
     match: PropTypes.shape({
       path: PropTypes.string.isRequired,
+      params: PropTypes.shape({
+        id: PropTypes.string,
+      }),
     }).isRequired,
     onClose: PropTypes.func,
     notesToggle: PropTypes.func,
@@ -61,6 +65,10 @@ class ViewUser extends React.Component {
       }),
     }),
     parentMutator: PropTypes.shape({}),
+    updateProxies: PropTypes.func,
+    updateSponsors: PropTypes.func,
+    getSponsors: PropTypes.func,
+    getProxies: PropTypes.func,
   };
 
   static manifest = Object.freeze({
@@ -101,7 +109,6 @@ class ViewUser extends React.Component {
     this.connectedLoansHistory = props.stripes.connect(LoansHistory);
     this.connectedLoanActionsHistory = props.stripes.connect(LoanActionsHistory);
     this.connectedUserPermissions = props.stripes.connect(UserPermissions);
-    this.connectedProxyPermissions = props.stripes.connect(ProxyPermissions);
     this.dateLastUpdated = this.dateLastUpdated.bind(this);
     this.onClickCloseLoansHistory = this.onClickCloseLoansHistory.bind(this);
     this.onClickViewOpenLoans = this.onClickViewOpenLoans.bind(this);
@@ -182,10 +189,12 @@ class ViewUser extends React.Component {
     return selUser.find(u => u.id === id);
   }
 
-   // eslint-disable-next-line class-methods-use-this
-  getUserFormData(user, addresses) {
+  // eslint-disable-next-line class-methods-use-this
+  getUserFormData(user, addresses, sponsors, proxies) {
     const userForData = user ? _.cloneDeep(user) : user;
     userForData.personal.addresses = addresses;
+    Object.assign(userForData, { sponsors, proxies });
+
     return userForData;
   }
 
@@ -196,6 +205,19 @@ class ViewUser extends React.Component {
 
     // eslint-disable-next-line no-param-reassign
     if (user.creds) delete user.creds; // not handled on edit (yet at least)
+
+    if (user.proxies) {
+      this.props.updateProxies(user.proxies);
+      // eslint-disable-next-line no-param-reassign
+      delete user.proxies;
+    }
+
+    if (user.sponsors) {
+      this.props.updateSponsors(user.sponsors);
+      // eslint-disable-next-line no-param-reassign
+      delete user.sponsors;
+    }
+
     this.props.mutator.selUser.PUT(user).then(() => {
       this.setState({
         lastUpdate: new Date().toISOString(),
@@ -242,10 +264,12 @@ class ViewUser extends React.Component {
   }
 
   render() {
-    const { resources, location } = this.props;
+    const { resources, location, stripes } = this.props;
     const query = location.search ? queryString.parse(location.search) : {};
     const user = this.getUser();
     const patronGroups = (resources.patronGroups || {}).records || [];
+    const sponsors = this.props.getSponsors();
+    const proxies = this.props.getProxies();
 
     const detailMenu = (<PaneMenu>
       <button id="clickable-show-notes" style={{ visibility: !user ? 'hidden' : 'visible' }} onClick={this.props.notesToggle} title="Show Notes"><Icon icon="comment" />Notes</button>
@@ -265,7 +289,7 @@ class ViewUser extends React.Component {
     const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
     const preferredContact = contactTypes.find(g => g.id === _.get(user, ['personal', 'preferredContactTypeId'], '')) || { type: '' };
     const addresses = toListAddresses(_.get(user, ['personal', 'addresses'], []), this.addressTypes);
-    const userFormData = this.getUserFormData(user, addresses);
+    const userFormData = this.getUserFormData(user, addresses, sponsors, proxies);
 
     return (
       <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
@@ -316,7 +340,7 @@ class ViewUser extends React.Component {
               <br />
               <Row>
                 <Col xs={12}>
-                  <KeyValue label="Date of birth" value={(_.get(user, ['personal', 'dateOfBirth'], '')) ? new Date(Date.parse(_.get(user, ['personal', 'dateOfBirth'], ''))).toLocaleDateString(this.props.stripes.locale) : ''} />
+                  <KeyValue label="Date of birth" value={(_.get(user, ['personal', 'dateOfBirth'], '')) ? new Date(Date.parse(_.get(user, ['personal', 'dateOfBirth'], ''))).toLocaleDateString(stripes.locale) : ''} />
                 </Col>
               </Row>
             </Col>
@@ -329,17 +353,17 @@ class ViewUser extends React.Component {
               <br />
               <Row>
                 <Col xs={12}>
-                  <KeyValue label="Date enrolled" value={(_.get(user, ['enrollmentDate'], '')) ? new Date(Date.parse(_.get(user, ['enrollmentDate'], ''))).toLocaleDateString(this.props.stripes.locale) : ''} />
+                  <KeyValue label="Date enrolled" value={(_.get(user, ['enrollmentDate'], '')) ? new Date(Date.parse(_.get(user, ['enrollmentDate'], ''))).toLocaleDateString(stripes.locale) : ''} />
                 </Col>
               </Row>
               <Row>
                 <Col xs={12}>
-                  <KeyValue label="Expiration date" value={(_.get(user, ['expirationDate'], '')) ? new Date(Date.parse(_.get(user, ['expirationDate'], ''))).toLocaleDateString(this.props.stripes.locale) : ''} />
+                  <KeyValue label="Expiration date" value={(_.get(user, ['expirationDate'], '')) ? new Date(Date.parse(_.get(user, ['expirationDate'], ''))).toLocaleDateString(stripes.locale) : ''} />
                 </Col>
               </Row>
               <Row>
                 <Col xs={12}>
-                  <KeyValue label="Open date" value={(_.get(user, ['createdDate'], '')) ? new Date(Date.parse(_.get(user, ['createdDate'], ''))).toLocaleString(this.props.stripes.locale) : ''} />
+                  <KeyValue label="Open date" value={(_.get(user, ['createdDate'], '')) ? new Date(Date.parse(_.get(user, ['createdDate'], ''))).toLocaleString(stripes.locale) : ''} />
                 </Col>
               </Row>
               <Row>
@@ -392,20 +416,19 @@ class ViewUser extends React.Component {
             />
           </IfInterface>
         </IfPermission>
-        <this.connectedProxyPermissions
-          user={user}
-          stripes={this.props.stripes}
+        <ProxyPermissions
           match={this.props.match}
           expanded={this.state.sections.proxySection}
           onToggle={this.handleSectionToggle}
           accordionId="proxySection"
-          editable
+          proxies={proxies}
+          sponsors={sponsors}
           {...this.props}
         />
         <IfPermission perm="perms.users.get">
           <IfInterface name="permissions" version="5.0">
             <this.connectedUserPermissions
-              stripes={this.props.stripes}
+              stripes={stripes}
               match={this.props.match}
               expanded={this.state.sections.permissionsSection}
               onToggle={this.handleSectionToggle}
@@ -417,6 +440,7 @@ class ViewUser extends React.Component {
         </IfPermission>
         <Layer isOpen={query.layer ? query.layer === 'edit' : false} label="Edit User Dialog">
           <UserForm
+            stripes={stripes}
             initialValues={userFormData}
             onSubmit={(record) => { this.update(record); }}
             onCancel={this.onClickCloseEditUser}
@@ -429,7 +453,7 @@ class ViewUser extends React.Component {
           <this.connectedLoansHistory
             user={user}
             patronGroup={patronGroup}
-            stripes={this.props.stripes}
+            stripes={stripes}
             history={this.props.history}
             onCancel={this.onClickCloseLoansHistory}
             onClickViewOpenLoans={this.onClickViewOpenLoans}
@@ -443,7 +467,7 @@ class ViewUser extends React.Component {
             user={user}
             loan={this.state.selectedLoan}
             loanid={this.state.selectedLoan.id}
-            stripes={this.props.stripes}
+            stripes={stripes}
             onCancel={this.onClickCloseLoanActionsHistory}
             // when navigating away to another user, clear all loan-related state
             onClickUser={() => { this.onClickCloseLoanActionsHistory(); this.onClickCloseLoansHistory(); }}
@@ -455,4 +479,4 @@ class ViewUser extends React.Component {
   }
 }
 
-export default ViewUser;
+export default withProxy(ViewUser);

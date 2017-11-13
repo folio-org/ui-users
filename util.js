@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
+import loanActionMap from './data/loanActionMap';
 
 export function formatDate(dateStr, locale) {
   if (!dateStr) return dateStr;
@@ -42,4 +43,12 @@ export function getAnchoredRowFormatter(row) {
       {row.cells}
     </a>
   );
+}
+export function isSubstringsInString(listSubStrings, testString){
+  return new RegExp(listSubStrings.join("|")).test(testString);
+}
+export function getItemStatusFormatter(loan){
+  return isSubstringsInString(['renewed','recalled','requested'],loan.action)?
+    `${_.get(loan, ['item', 'status', 'name'], '')} - ${loanActionMap[loan.action]}`:
+    `${_.get(loan, ['item', 'status', 'name'], '')}`
 }
