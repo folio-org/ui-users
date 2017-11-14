@@ -44,6 +44,7 @@
 * Generalise `<SearchAndSort>` by moving all user-specific functionality out of it. Fixes UIU-299.
 * Rewire proxy selection with the new `proxiesfor` endpoint. Fixes UIU-292.
 * Add `optionalDependencies` on find-user plugin. Fixes UIU-313.
+* Add User Proxy Version 2. Fixes UIU-181, UIU-199, UIU-240 and UIU-271.
 
 ## [2.10.1](https://github.com/folio-org/ui-users/tree/v2.10.1) (2017-09-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.10.0...v2.10.1)
