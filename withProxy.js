@@ -79,24 +79,26 @@ const withProxy = WrappedComponent =>
     }
 
     componentDidMount() {
-      this.loadSponsors();
-      this.loadProxies();
+      const userId = this.props.match.params.id;
+      this.loadSponsors(userId);
+      this.loadProxies(userId);
     }
 
     componentWillReceiveProps(nextProps) {
       const { match: { params: { id } } } = nextProps;
+
       if (id !== this.props.match.params.id) {
-        this.loadSponsors();
-        this.loadProxies();
+        this.loadSponsors(id);
+        this.loadProxies(id);
       }
     }
 
-    loadSponsors() {
-      this.loadResource('sponsors', 'proxyUserId', 'userId');
+    loadSponsors(userId) {
+      this.loadResource('sponsors', userId);
     }
 
-    loadProxies() {
-      this.loadResource('proxies', 'userId', 'proxyUserId');
+    loadProxies(userId) {
+      this.loadResource('proxies', userId);
     }
 
     // join proxiesFor with proxies
@@ -109,24 +111,23 @@ const withProxy = WrappedComponent =>
       return this.getRecords('sponsors', 'userId');
     }
 
-    // used for loading sponsors and proxies
-    loadResource(resourceName, queryId, recordId) {
-      const userId = this.props.match.params.id;
+    loadResource(resourceName, userId) {
+      const [queryKey, recordKey] = (resourceName === 'sponsors')
+        ? ['proxyUserId', 'userId'] : ['userId', 'proxyUserId'];
       const { mutator } = this.props;
       const resource = mutator[resourceName];
       const resourceFor = mutator[`${resourceName}For`];
-      const query = `query=(${queryId}=${userId})`;
+      const query = `query=(${queryKey}=${userId})`;
 
       resourceFor.reset();
       resource.reset();
       resourceFor.GET({ params: { query } }).then((recordsFor) => {
         if (!recordsFor.length) return;
-        const ids = recordsFor.map(pf => `id=${pf[recordId]}`).join(' or ');
+        const ids = recordsFor.map(pf => `id=${pf[recordKey]}`).join(' or ');
         resource.GET({ params: { query: `query=(${ids})` } });
       });
     }
 
-    // use to join proxyFor and proxies records
     getRecords(resourceName, idKey) {
       const { resources } = this.props;
       const resourceForName = `${resourceName}For`;
@@ -161,15 +162,19 @@ const withProxy = WrappedComponent =>
     }
 
     updateProxies(proxies) {
+      const userId = this.props.match.params.id;
       const curProxies = this.getProxies();
+
       this.update('proxies', proxies, curProxies)
-        .then(() => this.loadProxies());
+        .then(() => this.loadProxies(userId));
     }
 
     updateSponsors(sponsors) {
+      const userId = this.props.match.params.id;
       const curSponsors = this.getSponsors();
+
       this.update('sponsors', sponsors, curSponsors)
-        .then(() => this.loadSponsors());
+        .then(() => this.loadSponsors(userId));
     }
 
     render() {
