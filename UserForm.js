@@ -5,11 +5,10 @@ import Pane from '@folio/stripes-components/lib/Pane';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import Button from '@folio/stripes-components/lib/Button';
 import stripesForm from '@folio/stripes-form';
+import { ExpandAllButton } from '@folio/stripes-components/lib/Accordion';
+import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 
-import UserInfo from './lib/EditSections/UserInfo';
-import ExtendedInfo from './lib/EditSections/ExtendedInfo';
-import ContactInfo from './lib/EditSections/ContactInfo';
-import ProxySection from './lib/EditSections/ProxySection';
+import { UserInfoSection, ExtendedInfoSection, ContactInfoSection, ProxySection } from './lib/EditSections';
 
 import css from './UserForm.css';
 
@@ -69,6 +68,21 @@ class UserForm extends React.Component {
     initialValues: PropTypes.object,
   };
 
+  constructor() {
+    super();
+
+    this.state = {
+      sections: {
+        userInfo: true,
+        extendedInfo: true,
+        contactInfo: true,
+        proxy: true,
+      },
+    };
+
+    this.handleExpandAll = this.handleExpandAll.bind(this);
+  }
+
   getAddFirstMenu() {
     const { onCancel } = this.props;
 
@@ -91,7 +105,10 @@ class UserForm extends React.Component {
           type="submit"
           title="Create New User"
           disabled={pristine || submitting}
-          onClick={handleSubmit}>Create User</Button>
+          onClick={handleSubmit}
+        >
+          Create User
+        </Button>
       </PaneMenu>
     );
   }
@@ -106,13 +123,22 @@ class UserForm extends React.Component {
           type="submit"
           title="Update User"
           disabled={pristine || submitting}
-          onClick={handleSubmit}>Update User</Button>
+          onClick={handleSubmit}
+        >
+          Update User
+        </Button>
       </PaneMenu>
     );
   }
 
+  handleExpandAll(sections) {
+    this.setState({ sections });
+  }
+
   render() {
     const { initialValues } = this.props;
+    const { sections } = this.state;
+
     const firstMenu = this.getAddFirstMenu();
     const lastMenu = initialValues.id ? this.getEditLastMenu() : this.getAddLastMenu();
     const paneTitle = initialValues.id ? 'Edit User' : 'New User';
@@ -121,10 +147,15 @@ class UserForm extends React.Component {
       <form className={css.UserFormRoot} id="form-user">
         <Paneset isRoot>
           <Pane defaultWidth="100%" firstMenu={firstMenu} lastMenu={lastMenu} paneTitle={paneTitle}>
-            <UserInfo expanded={true} accordionId="userInfo" {...this.props} />
-            <ExtendedInfo expanded={true} accordionId="extendedInfo" {...this.props} />
-            <ContactInfo expanded={true} accordionId="contactInfo" {...this.props} />
-            <ProxySection expanded={true} accordionId="proxyInfo" {...this.props} />
+            <Row end="xs">
+              <Col xs>
+                <ExpandAllButton accordionStatus={sections} onToggle={this.handleExpandAll} />
+              </Col>
+            </Row>
+            <UserInfoSection expanded={sections.userInfo} accordionId="userInfo" {...this.props} />
+            <ExtendedInfoSection expanded={sections.extendedInfo} accordionId="extendedInfo" {...this.props} />
+            <ContactInfoSection expanded={sections.contactInfo} accordionId="contactInfo" {...this.props} />
+            {initialValues.id && <ProxySection expanded={sections.proxy} accordionId="proxy" {...this.props} /> }
           </Pane>
         </Paneset>
       </form>
