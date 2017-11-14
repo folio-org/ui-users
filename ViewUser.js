@@ -101,8 +101,6 @@ class ViewUser extends React.Component {
       },
     };
 
-    this.addressTypes = (this.props.parentResources.addressTypes || {}).records || [];
-
     this.onClickEditUser = this.onClickEditUser.bind(this);
     this.onClickCloseEditUser = this.onClickCloseEditUser.bind(this);
     this.connectedUserLoans = props.stripes.connect(UserLoans);
@@ -120,6 +118,10 @@ class ViewUser extends React.Component {
 
     this.handleSectionToggle = this.handleSectionToggle.bind(this);
     this.handleExpandAll = this.handleExpandAll.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.addressTypes = (nextProps.parentResources.addressTypes || {}).records || [];
   }
 
   // EditUser Handlers

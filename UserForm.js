@@ -3,26 +3,12 @@ import PropTypes from 'prop-types';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import Pane from '@folio/stripes-components/lib/Pane';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
-import { Glyphicon } from 'react-bootstrap';
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import Button from '@folio/stripes-components/lib/Button';
-import TextField from '@folio/stripes-components/lib/TextField';
-import Select from '@folio/stripes-components/lib/Select';
-import RadioButtonGroup from '@folio/stripes-components/lib/RadioButtonGroup';
-import RadioButton from '@folio/stripes-components/lib/RadioButton';
-import Datepicker from '@folio/stripes-components/lib/Datepicker';
-import AddressEditList from '@folio/stripes-components/lib/structures/AddressFieldGroup/AddressEdit/AddressEditList';
-import { Field } from 'redux-form';
 import stripesForm from '@folio/stripes-form';
-import classNames from 'classnames';
+import { ExpandAllButton } from '@folio/stripes-components/lib/Accordion';
+import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 
-import { countriesOptions } from './data/countries';
-import Autocomplete from './lib/Autocomplete';
-import { toAddressTypeOptions } from './converters/address_type';
-import contactTypes from './data/contactTypes';
-
-import ProxyEditList from './lib/ProxyGroup/ProxyEditList';
-import ProxyEditItem from './lib/ProxyGroup/ProxyEditItem';
+import { UserInfoSection, ExtendedInfoSection, ContactInfoSection, ProxySection } from './lib/EditSections';
 
 import css from './UserForm.css';
 
@@ -69,153 +55,107 @@ function asyncValidate(values, dispatch, props, blurredField) {
 class UserForm extends React.Component {
 
   static propTypes = {
-    onClose: PropTypes.func, // eslint-disable-line react/no-unused-prop-types
-    newUser: PropTypes.bool, // eslint-disable-line react/no-unused-prop-types
     handleSubmit: PropTypes.func.isRequired,
-    parentResources: PropTypes.shape({
-      addressTypes: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
-      }),
-      patronGroups: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
-      }),
-    }),
     parentMutator: PropTypes.shape({ // eslint-disable-line react/no-unused-prop-types
       uniquenessValidator: PropTypes.shape({
         reset: PropTypes.func.isRequired,
         GET: PropTypes.func.isRequired,
       }).isRequired,
     }),
-    reset: PropTypes.func,
     pristine: PropTypes.bool,
     submitting: PropTypes.bool,
     onCancel: PropTypes.func,
     initialValues: PropTypes.object,
   };
 
-  constructor(props) {
-    super(props);
-    this.state = { showPassword: false };
+  constructor() {
+    super();
+
+    this.state = {
+      sections: {
+        userInfo: true,
+        extendedInfo: true,
+        contactInfo: true,
+        proxy: true,
+      },
+    };
+
+    this.handleExpandAll = this.handleExpandAll.bind(this);
   }
 
-  togglePassword() {
-    this.setState({
-      showPassword: !this.state.showPassword,
-    });
+  getAddFirstMenu() {
+    const { onCancel } = this.props;
+
+    return (
+      <PaneMenu>
+        <button id="clickable-closenewuserdialog" onClick={onCancel} title="close" aria-label="Close New User Dialog">
+          <span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span>
+        </button>
+      </PaneMenu>
+    );
+  }
+
+  getAddLastMenu() {
+    const { pristine, submitting, handleSubmit } = this.props;
+
+    return (
+      <PaneMenu>
+        <Button
+          id="clickable-createnewuser"
+          type="submit"
+          title="Create New User"
+          disabled={pristine || submitting}
+          onClick={handleSubmit}
+        >
+          Create User
+        </Button>
+      </PaneMenu>
+    );
+  }
+
+  getEditLastMenu() {
+    const { pristine, submitting, handleSubmit } = this.props;
+
+    return (
+      <PaneMenu>
+        <Button
+          id="clickable-updateuser"
+          type="submit"
+          title="Update User"
+          disabled={pristine || submitting}
+          onClick={handleSubmit}
+        >
+          Update User
+        </Button>
+      </PaneMenu>
+    );
+  }
+
+  handleExpandAll(sections) {
+    this.setState({ sections });
   }
 
   render() {
-    const {
-      handleSubmit,
-      reset,  // eslint-disable-line no-unused-vars
-      pristine,
-      submitting,
-      onCancel,
-      initialValues,
-    } = this.props;
+    const { initialValues } = this.props;
+    const { sections } = this.state;
 
-    const addressTypes = (this.props.parentResources.addressTypes || {}).records || [];
-    const patronGroups = (this.props.parentResources.patronGroups || {}).records || [];
-
-    /* Menues for Add User workflow */
-    const addUserFirstMenu = <PaneMenu><button id="clickable-closenewuserdialog" onClick={onCancel} title="close" aria-label="Close New User Dialog"><span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span></button></PaneMenu>;
-    const addUserLastMenu = <PaneMenu><Button id="clickable-createnewuser" type="submit" title="Create New User" disabled={pristine || submitting} onClick={handleSubmit}>Create User</Button></PaneMenu>;
-    const editUserLastMenu = <PaneMenu><Button id="clickable-updateuser" type="submit" title="Update User" disabled={pristine || submitting} onClick={handleSubmit}>Update User</Button></PaneMenu>;
-    const patronGroupOptions = (patronGroups || []).map(g => ({
-      label: `${g.group} (${g.desc})`, value: g.id, selected: initialValues.patronGroup === g.id }));
-    const contactTypeOptions = (contactTypes || []).map(g => ({
-      label: g.desc, value: g.id, selected: initialValues.preferredContactTypeId === g.id }));
-
-    const addressFields = {
-      country: { component: Autocomplete, props: { dataOptions: countriesOptions } },
-      addressType: { component: Select, props: { dataOptions: toAddressTypeOptions(addressTypes), fullWidth: true, placeholder: 'Select address type' } },
-    };
+    const firstMenu = this.getAddFirstMenu();
+    const lastMenu = initialValues.id ? this.getEditLastMenu() : this.getAddLastMenu();
+    const paneTitle = initialValues.id ? 'Edit User' : 'New User';
 
     return (
       <form className={css.UserFormRoot} id="form-user">
         <Paneset isRoot>
-          <Pane defaultWidth="100%" firstMenu={addUserFirstMenu} lastMenu={initialValues.username ? editUserLastMenu : addUserLastMenu} paneTitle={initialValues.username ? 'Edit User' : 'New User'}>
-            <Row>
-              <Col sm={5} smOffset={1}>
-                <h2>User Record</h2>
-                <Field label="Username *" name="username" id="adduser_username" component={TextField} required fullWidth />
-                {!initialValues.id &&
-                  <div className="input-group">
-                    <Field label="Password" name="creds.password" id="pw" autoComplete="new-password" type={this.state.showPassword ? 'text' : 'password'} component={TextField} required fullWidth />
-                    <span className={classNames('input-group-btn', css.togglePw)}>
-                      <Button buttonStyle="secondary hollow" id="toggle_pw_btn" onClick={() => this.togglePassword()}>
-                        {this.state.showPassword ? <Glyphicon glyph="eye-open" /> : <Glyphicon glyph="eye-close" />}
-                      </Button>
-                    </span>
-                  </div>
-                }
-                <Field label="Status *" name="active" component={RadioButtonGroup}>
-                  <RadioButton label="Active" id="useractiveYesRB" value="true" inline />
-                  <RadioButton label="Inactive" id="useractiveNoRB" value="false" inline />
-                </Field>
-                <fieldset>
-                  <legend>Personal Info</legend>
-                  <Field label="First Name" name="personal.firstName" id="adduser_firstname" component={TextField} required fullWidth />
-                  <Field label="Middle Name" name="personal.middleName" id="adduser_middlename" component={TextField} fullWidth />
-                  <Field label="Last Name *" name="personal.lastName" id="adduser_lastname" component={TextField} fullWidth />
-                  <Field label="Email" name="personal.email" id="adduser_email" component={TextField} required fullWidth />
-                  <Field label="Phone" name="personal.phone" id="adduser_phone" component={TextField} fullWidth />
-                  <Field label="Mobile Phone" name="personal.mobilePhone" id="adduser_mobilePhone" component={TextField} fullWidth />
-                  <Field label="Preferred Contact *" name="personal.preferredContactTypeId" id="adduser_preferredcontact" component={Select} dataOptions={[{ label: 'Select contact type', value: '' }, ...contactTypeOptions]} fullWidth />
-                </fieldset>
-                <Field
-                  component={Datepicker}
-                  label="Date of Birth"
-                  dateFormat="YYYY-MM-DD"
-                  name="personal.dateOfBirth"
-                  id="adduser_dateofbirth"
-                  backendDateStandard="YYYY-MM-DD"
-                />
-                {/* <Field
-                  label="Type"
-                  name="type"
-                  id="adduser_type"
-                  component={Select}
-                  fullWidth
-                  dataOptions={[{ label: 'Select user type', value: '' },
-                                { label: 'Patron', value: 'Patron', selected: 'selected' }]}
-                /> */}
-                <Field
-                  label="Patron Group *"
-                  name="patronGroup"
-                  id="adduser_group"
-                  component={Select}
-                  fullWidth
-                  dataOptions={[{ label: 'Select patron group', value: '' }, ...patronGroupOptions]}
-                />
-                <Field
-                  component={Datepicker}
-                  label="Date Enrolled"
-                  dateFormat="YYYY-MM-DD"
-                  name="enrollmentDate"
-                  id="adduser_enrollmentdate"
-                />
-                <Field
-                  component={Datepicker}
-                  label="Expiration Date"
-                  dateFormat="YYYY-MM-DD"
-                  name="expirationDate"
-                  id="adduser_expirationdate"
-                />
-                <Field label="Barcode" name="barcode" id="adduser_barcode" component={TextField} fullWidth />
-                <Field label="FOLIO Record Number" name="id" id="adduser_id" readOnly component={TextField} fullWidth />
-                <Field label="External System ID" name="externalSystemId" id="adduser_externalsystemid" component={TextField} fullWidth />
-
-                <AddressEditList name="personal.addresses" fieldComponents={addressFields} canDelete />
-                {initialValues.id &&
-                  <div>
-                    <ProxyEditList itemComponent={ProxyEditItem} label="Sponsors" name="sponsors" {...this.props} />
-                    <br />
-                    <ProxyEditList itemComponent={ProxyEditItem} label="Proxy" name="proxies" {...this.props} />
-                  </div>
-                }
+          <Pane defaultWidth="100%" firstMenu={firstMenu} lastMenu={lastMenu} paneTitle={paneTitle}>
+            <Row end="xs">
+              <Col xs>
+                <ExpandAllButton accordionStatus={sections} onToggle={this.handleExpandAll} />
               </Col>
             </Row>
+            <UserInfoSection expanded={sections.userInfo} accordionId="userInfo" {...this.props} />
+            <ExtendedInfoSection expanded={sections.extendedInfo} accordionId="extendedInfo" {...this.props} />
+            <ContactInfoSection expanded={sections.contactInfo} accordionId="contactInfo" {...this.props} />
+            {initialValues.id && <ProxySection expanded={sections.proxy} accordionId="proxy" {...this.props} /> }
           </Pane>
         </Paneset>
       </form>
