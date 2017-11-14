@@ -15,7 +15,7 @@
     "type": "app",
     "displayName": "Users",
     "route": "/users",
-    "home": "/users",
+    "home": "/users?filters=active.Active&sort=Name",
     "hasSettings": true,
     "queryResource": "query",
     "actionNames": [
