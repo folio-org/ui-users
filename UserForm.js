@@ -5,6 +5,7 @@ import Paneset from '@folio/stripes-components/lib/Paneset';
 import Pane from '@folio/stripes-components/lib/Pane';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import Button from '@folio/stripes-components/lib/Button';
+import Icon from '@folio/stripes-components/lib/Icon';
 import stripesForm from '@folio/stripes-form';
 import { ExpandAllButton } from '@folio/stripes-components/lib/Accordion';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
@@ -16,6 +17,8 @@ import {
   ProxySection,
   UserPermsSection,
 } from './lib/EditSections';
+import { getFullName } from './util';
+
 
 import css from './UserForm.css';
 
@@ -141,11 +144,12 @@ class UserForm extends React.Component {
     const { initialValues, stripes } = this.props;
     const { sections } = this.state;
     const firstMenu = this.getAddFirstMenu();
-    const paneTitle = initialValues.id ? 'Edit User' : 'New User';
+
+    const paneTitle = initialValues.id ? <span><Icon icon="edit" iconRootClass={css.UserFormEditIcon} />Edit: <Icon icon="profile" iconRootClass={css.UserFormEditIcon} />{getFullName(initialValues)}</span> : 'Create User';
     const lastMenu = initialValues.id ?
       this.getLastMenu('clickable-updateuser', 'Update User') :
       this.getLastMenu('clickable-createnewuser', 'Create User');
-
+    
     return (
       <form className={css.UserFormRoot} id="form-user">
         <Paneset isRoot>

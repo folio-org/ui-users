@@ -1,8 +1,9 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { filters2cql } from '@folio/stripes-components/lib/FilterGroups';
+
 import uuid from 'uuid';
-import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
 import ViewUser from './ViewUser';
 import UserForm from './UserForm';
 import removeQueryParam from './removeQueryParam';
@@ -63,6 +64,13 @@ class Users extends React.Component {
   };
 
   static manifest = Object.freeze({
+    query: {
+      initialValue: {
+        search: '',
+        filters: 'active.Active',
+        sort: 'Name',
+      },
+    },
     resultCount: { initialValue: INITIAL_RESULT_COUNT },
     records: {
       type: 'okapi',
@@ -72,19 +80,56 @@ class Users extends React.Component {
       path: 'users',
       GET: {
         params: {
-          query: makeQueryFunction(
-            'username=*',
-            'username="$QUERY*" or personal.firstName="$QUERY*" or personal.lastName="$QUERY*" or personal.email="$QUERY*" or barcode="$QUERY*" or id="$QUERY*" or externalSystemId="$QUERY*"',
-            {
-              Status: 'active',
+          query: (...args) => {
+            /*
+              This code is not DRY as it is copied from makeQueryFunction in stripes-components.
+              This is necessary, as makeQueryFunction only referneces query paramaters as a data source.
+              STRIPES-480 is intended to correct this and allow this query function to be replace with a call
+              to makeQueryFunction.
+              https://issues.folio.org/browse/STRIPES-480
+            */
+            const resourceData = args[2];
+            const sortMap = {
+              Active: 'active',
               Name: 'personal.lastName personal.firstName',
               'Patron Group': 'patronGroup.group',
               Username: 'username',
               Barcode: 'barcode',
               Email: 'personal.email',
-            },
-            filterConfig,
-          ),
+            };
+
+            let cql = `(username="${resourceData.query.search}*" or personal.firstName="${resourceData.query.search}*" or personal.lastName="${resourceData.query.search}*" or personal.email="${resourceData.query.search}*" or barcode="${resourceData.query.search}*" or id="${resourceData.query.search}*" or externalSystemId="${resourceData.query.search}*")`;
+
+            const filterCql = filters2cql(filterConfig, resourceData.query.filters);
+            if (filterCql) {
+              if (cql) {
+                cql = `(${cql}) and ${filterCql}`;
+              } else {
+                cql = filterCql;
+              }
+            }
+
+            const { sort } = resourceData.query;
+            if (sort) {
+              const sortIndexes = sort.split(',').map((sort1) => {
+                let reverse = false;
+                if (sort1.startsWith('-')) {
+                  // eslint-disable-next-line no-param-reassign
+                  sort1 = sort1.substr(1);
+                  reverse = true;
+                }
+                let sortIndex = sortMap[sort1] || sort1;
+                if (reverse) {
+                  sortIndex = `${sortIndex.replace(' ', '/sort.descending ')}/sort.descending`;
+                }
+                return sortIndex;
+              });
+
+              cql += ` sortby ${sortIndexes.join(' ')}`;
+            }
+
+            return cql;
+          },
         },
         staticFallback: { params: {} },
       },
