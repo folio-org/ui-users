@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import Paneset from '@folio/stripes-components/lib/Paneset';
@@ -8,7 +9,13 @@ import stripesForm from '@folio/stripes-form';
 import { ExpandAllButton } from '@folio/stripes-components/lib/Accordion';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 
-import { UserInfoSection, ExtendedInfoSection, ContactInfoSection, ProxySection } from './lib/EditSections';
+import {
+  UserInfoSection,
+  ExtendedInfoSection,
+  ContactInfoSection,
+  ProxySection,
+  UserPermsSection,
+} from './lib/EditSections';
 
 import css from './UserForm.css';
 
@@ -55,6 +62,9 @@ function asyncValidate(values, dispatch, props, blurredField) {
 class UserForm extends React.Component {
 
   static propTypes = {
+    stripes: PropTypes.shape({
+      connect: PropTypes.func,
+    }),
     handleSubmit: PropTypes.func.isRequired,
     parentMutator: PropTypes.shape({ // eslint-disable-line react/no-unused-prop-types
       uniquenessValidator: PropTypes.shape({
@@ -68,7 +78,7 @@ class UserForm extends React.Component {
     initialValues: PropTypes.object,
   };
 
-  constructor() {
+  constructor(props) {
     super();
 
     this.state = {
@@ -76,10 +86,13 @@ class UserForm extends React.Component {
         extendedInfo: true,
         contactInfo: true,
         proxy: true,
+        permissions: true,
       },
     };
 
     this.handleExpandAll = this.handleExpandAll.bind(this);
+    this.handleSectionToggle = this.handleSectionToggle.bind(this);
+    this.userPermsSection = props.stripes.connect(UserPermsSection);
   }
 
   getAddFirstMenu() {
@@ -94,37 +107,19 @@ class UserForm extends React.Component {
     );
   }
 
-  getAddLastMenu() {
+  getLastMenu(id, label) {
     const { pristine, submitting, handleSubmit } = this.props;
 
     return (
       <PaneMenu>
         <Button
-          id="clickable-createnewuser"
+          id={id}
           type="submit"
-          title="Create New User"
+          title={label}
           disabled={pristine || submitting}
           onClick={handleSubmit}
         >
-          Create User
-        </Button>
-      </PaneMenu>
-    );
-  }
-
-  getEditLastMenu() {
-    const { pristine, submitting, handleSubmit } = this.props;
-
-    return (
-      <PaneMenu>
-        <Button
-          id="clickable-updateuser"
-          type="submit"
-          title="Update User"
-          disabled={pristine || submitting}
-          onClick={handleSubmit}
-        >
-          Update User
+          {label}
         </Button>
       </PaneMenu>
     );
@@ -134,13 +129,22 @@ class UserForm extends React.Component {
     this.setState({ sections });
   }
 
-  render() {
-    const { initialValues } = this.props;
-    const { sections } = this.state;
+  handleSectionToggle({ id }) {
+    this.setState((curState) => {
+      const newState = _.cloneDeep(curState);
+      newState.sections[id] = !newState.sections[id];
+      return newState;
+    });
+  }
 
+  render() {
+    const { initialValues, stripes } = this.props;
+    const { sections } = this.state;
     const firstMenu = this.getAddFirstMenu();
-    const lastMenu = initialValues.id ? this.getEditLastMenu() : this.getAddLastMenu();
     const paneTitle = initialValues.id ? 'Edit User' : 'New User';
+    const lastMenu = initialValues.id ?
+      this.getLastMenu('clickable-updateuser', 'Update User') :
+      this.getLastMenu('clickable-createnewuser', 'Create User');
 
     return (
       <form className={css.UserFormRoot} id="form-user">
@@ -152,9 +156,14 @@ class UserForm extends React.Component {
               </Col>
             </Row>
             <UserInfoSection {...this.props} />
-            <ExtendedInfoSection expanded={sections.extendedInfo} accordionId="extendedInfo" {...this.props} />
-            <ContactInfoSection expanded={sections.contactInfo} accordionId="contactInfo" {...this.props} />
-            {initialValues.id && <ProxySection expanded={sections.proxy} accordionId="proxy" {...this.props} /> }
+            <ExtendedInfoSection accordionId="extendedInfo" expanded={sections.extendedInfo} onToggle={this.handleSectionToggle} {...this.props} />
+            <ContactInfoSection accordionId="contactInfo" expanded={sections.contactInfo} onToggle={this.handleSectionToggle} {...this.props} />
+            {initialValues.id &&
+              <div>
+                <ProxySection accordionId="proxy" expanded={sections.proxy} onToggle={this.handleSectionToggle} {...this.props} />
+                <this.userPermsSection accordionId="permissions" expanded={sections.permissions} stripes={stripes} onToggle={this.handleSectionToggle} {...this.props} />
+              </div>
+            }
           </Pane>
         </Paneset>
       </form>

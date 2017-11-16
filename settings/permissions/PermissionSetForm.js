@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import Pane from '@folio/stripes-components/lib/Pane';
@@ -28,7 +27,6 @@ class PermissionSetForm extends React.Component {
     onRemove: PropTypes.func,
     pristine: PropTypes.bool,
     submitting: PropTypes.bool,
-    change: PropTypes.func,
   };
 
   constructor(props) {
@@ -37,37 +35,18 @@ class PermissionSetForm extends React.Component {
     this.saveSet = this.saveSet.bind(this);
     this.beginDelete = this.beginDelete.bind(this);
     this.confirmDeleteSet = this.confirmDeleteSet.bind(this);
-    this.addPermission = this.addPermission.bind(this);
-    this.removePermission = this.removePermission.bind(this);
-
     this.containedPermissions = props.stripes.connect(ContainedPermissions);
-  }
 
-  componentWillMount() {
-    this.setPermSet(this.props.initialValues);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (!_.isEqual(nextProps.initialValues, this.props.initialValues)) {
-      this.setPermSet(nextProps.initialValues);
-    }
-  }
-
-  setPermSet(permSet) {
-    this.setState({
-      confirmDelete: false,
-      selectedSet: Object.assign({ subPermissions: [] }, permSet),
-    });
+    this.state = { confirmDelete: false };
   }
 
   saveSet(data) {
-    const selectedSet = this.state.selectedSet;
-    const permSet = Object.assign({}, selectedSet, data, {
+    const permSet = Object.assign({}, data, {
       mutable: true,
-      subPermissions: (selectedSet.subPermissions || []).map(p => p.permissionName),
+      subPermissions: (data.subPermissions || []).map(p => p.permissionName),
     });
 
-    this.props.onSave(_.omit(permSet, ['permissionsDirty']));
+    this.props.onSave(permSet);
   }
 
   beginDelete() {
@@ -83,22 +62,6 @@ class PermissionSetForm extends React.Component {
     } else {
       this.setState({ confirmDelete: false });
     }
-  }
-
-  addPermission(perm) {
-    const subPermissions = this.state.selectedSet.subPermissions.concat([perm]);
-    this.updatePermSet(subPermissions);
-  }
-
-  removePermission(perm) {
-    const subPermissions = this.state.selectedSet.subPermissions.filter(p => p !== perm);
-    this.updatePermSet(subPermissions);
-  }
-
-  updatePermSet(subPermissions) {
-    const selectedSet = Object.assign({}, this.state.selectedSet, { subPermissions });
-    this.setState({ selectedSet });
-    this.props.change('permissionsDirty', true);
   }
 
   addFirstMenu() {
@@ -127,8 +90,10 @@ class PermissionSetForm extends React.Component {
   }
 
   render() {
-    const { stripes, handleSubmit } = this.props;
-    const { selectedSet, confirmDelete } = this.state;
+    const { stripes, handleSubmit, initialValues } = this.props;
+    const selectedSet = initialValues || {};
+
+    const { confirmDelete } = this.state;
     const disabled = !stripes.hasPerm('perms.permissions.item.put');
     const paneTitle = selectedSet.id ? 'Edit Permission Set' : 'New Permission Set';
 
@@ -159,14 +124,9 @@ class PermissionSetForm extends React.Component {
             />
 
             <this.containedPermissions
-              addPermission={this.addPermission}
-              removePermission={this.removePermission}
-              selectedSet={selectedSet}
               permToRead="perms.permissions.get"
               permToDelete="perms.permissions.item.put"
               permToModify="perms.permissions.item.put"
-              stripes={this.props.stripes}
-              editable
               {...this.props}
             />
           </Pane>

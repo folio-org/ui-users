@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 
-import ContainedPermissions from './ContainedPermissions';
+import RenderPermissions from '../../lib/RenderPermissions';
 
 class PermissionSetDetails extends React.Component {
   static propTypes = {
@@ -16,7 +16,7 @@ class PermissionSetDetails extends React.Component {
 
   constructor(props) {
     super();
-    this.containedPermissions = props.stripes.connect(ContainedPermissions);
+    this.renderPermissions = props.stripes.connect(RenderPermissions);
   }
 
   render() {
@@ -44,15 +44,13 @@ class PermissionSetDetails extends React.Component {
           </Row>
         </section>
 
-        <this.containedPermissions
-          addPermission={() => {}}
-          removePermission={() => {}}
-          selectedSet={selectedSet}
+        <this.renderPermissions
+          heading="Contains"
+          listedPermissions={selectedSet.subPermissions}
           permToRead="perms.permissions.get"
           permToDelete="perms.permissions.item.put"
           permToModify="perms.permissions.item.put"
           stripes={this.props.stripes}
-          editable={false}
           {...this.props}
         />
       </div>

@@ -40,6 +40,9 @@ class ViewUser extends React.Component {
     paneWidth: PropTypes.string.isRequired,
     resources: PropTypes.shape({
       user: PropTypes.arrayOf(PropTypes.object),
+      permissions: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
       patronGroups: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
@@ -47,6 +50,10 @@ class ViewUser extends React.Component {
     mutator: PropTypes.shape({
       selUser: PropTypes.shape({
         PUT: PropTypes.func.isRequired,
+      }),
+      permissions: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+        DELETE: PropTypes.func.isRequired,
       }),
     }),
     match: PropTypes.shape({
@@ -82,6 +89,21 @@ class ViewUser extends React.Component {
       path: 'groups',
       records: 'usergroups',
     },
+    permissions: {
+      type: 'okapi',
+      records: 'permissionNames',
+      DELETE: {
+        pk: 'permissionName',
+        path: 'perms/users/:{id}/permissions',
+        params: { indexField: 'userId' },
+      },
+      GET: {
+        path: 'perms/users/:{id}/permissions',
+        params: { full: 'true', indexField: 'userId' },
+      },
+      path: 'perms/users/:{id}/permissions',
+      params: { indexField: 'userId' },
+    },
   });
 
   constructor(props) {
@@ -106,7 +128,6 @@ class ViewUser extends React.Component {
     this.connectedUserLoans = props.stripes.connect(UserLoans);
     this.connectedLoansHistory = props.stripes.connect(LoansHistory);
     this.connectedLoanActionsHistory = props.stripes.connect(LoanActionsHistory);
-    this.connectedUserPermissions = props.stripes.connect(UserPermissions);
     this.dateLastUpdated = this.dateLastUpdated.bind(this);
     this.onClickCloseLoansHistory = this.onClickCloseLoansHistory.bind(this);
     this.onClickViewOpenLoans = this.onClickViewOpenLoans.bind(this);
@@ -192,10 +213,10 @@ class ViewUser extends React.Component {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  getUserFormData(user, addresses, sponsors, proxies) {
+  getUserFormData(user, addresses, sponsors, proxies, permissions) {
     const userForData = user ? _.cloneDeep(user) : user;
     userForData.personal.addresses = addresses;
-    Object.assign(userForData, { sponsors, proxies });
+    Object.assign(userForData, { sponsors, proxies, permissions });
 
     return userForData;
   }
@@ -205,27 +226,29 @@ class ViewUser extends React.Component {
       user.personal.addresses = toUserAddresses(user.personal.addresses, this.addressTypes); // eslint-disable-line no-param-reassign
     }
 
-    // eslint-disable-next-line no-param-reassign
-    if (user.creds) delete user.creds; // not handled on edit (yet at least)
+    const { proxies, sponsors, permissions } = user;
 
-    if (user.proxies) {
-      this.props.updateProxies(user.proxies);
-      // eslint-disable-next-line no-param-reassign
-      delete user.proxies;
-    }
+    if (proxies) this.props.updateProxies(proxies);
+    if (sponsors) this.props.updateSponsors(sponsors);
+    if (permissions) this.updatePermissions(permissions);
 
-    if (user.sponsors) {
-      this.props.updateSponsors(user.sponsors);
-      // eslint-disable-next-line no-param-reassign
-      delete user.sponsors;
-    }
+    const data = _.omit(user, ['creds', 'proxies', 'sponsors', 'permissions']);
 
-    this.props.mutator.selUser.PUT(user).then(() => {
+    this.props.mutator.selUser.PUT(data).then(() => {
       this.setState({
         lastUpdate: new Date().toISOString(),
       });
       this.onClickCloseEditUser();
     });
+  }
+
+  updatePermissions(perms) {
+    const mutator = this.props.mutator.permissions;
+    const prevPerms = (this.props.resources.permissions || {}).records || [];
+    const removedPerms = _.differenceBy(prevPerms, perms, 'id');
+    const addedPerms = _.differenceBy(perms, prevPerms, 'id');
+    addedPerms.forEach(perm => (mutator.POST(perm)));
+    removedPerms.forEach(perm => (mutator.DELETE(perm)));
   }
 
   // This is a helper function for the "last updated" date element. Since the
@@ -270,6 +293,7 @@ class ViewUser extends React.Component {
     const query = location.search ? queryString.parse(location.search) : {};
     const user = this.getUser();
     const patronGroups = (resources.patronGroups || {}).records || [];
+    const permissions = (resources.permissions || {}).records || [];
     const sponsors = this.props.getSponsors();
     const proxies = this.props.getProxies();
 
@@ -291,7 +315,7 @@ class ViewUser extends React.Component {
     const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
     const preferredContact = contactTypes.find(g => g.id === _.get(user, ['personal', 'preferredContactTypeId'], '')) || { type: '' };
     const addresses = toListAddresses(_.get(user, ['personal', 'addresses'], []), this.addressTypes);
-    const userFormData = this.getUserFormData(user, addresses, sponsors, proxies);
+    const userFormData = this.getUserFormData(user, addresses, sponsors, proxies, permissions);
 
     return (
       <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
@@ -429,13 +453,12 @@ class ViewUser extends React.Component {
         />
         <IfPermission perm="perms.users.get">
           <IfInterface name="permissions" version="5.0">
-            <this.connectedUserPermissions
+            <UserPermissions
               stripes={stripes}
-              match={this.props.match}
               expanded={this.state.sections.permissionsSection}
               onToggle={this.handleSectionToggle}
+              userPermissions={permissions}
               accordionId="permissionsSection"
-              editable
               {...this.props}
             />
           </IfInterface>
@@ -448,7 +471,6 @@ class ViewUser extends React.Component {
             onCancel={this.onClickCloseEditUser}
             parentResources={this.props.parentResources}
             parentMutator={this.props.parentMutator}
-            optionLists={{ patronGroups }}
           />
         </Layer>
         <Layer isOpen={this.state.viewLoansHistoryMode} label="Loans">

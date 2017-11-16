@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import RenderPermissions from '../../lib/RenderPermissions';
+import EditablePermissions from '../../lib/EditablePermissions';
 
 class ContainedPermissions extends React.Component {
   static propTypes = {
@@ -10,9 +10,6 @@ class ContainedPermissions extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }).isRequired,
-    addPermission: PropTypes.func.isRequired,
-    removePermission: PropTypes.func.isRequired,
-    selectedSet: PropTypes.object.isRequired,
   };
 
   static manifest = Object.freeze({
@@ -24,13 +21,11 @@ class ContainedPermissions extends React.Component {
   });
 
   render() {
-    return (<RenderPermissions
+    return (<EditablePermissions
       {...this.props}
       heading="Contains"
-      addPermission={this.props.addPermission}
-      removePermission={this.props.removePermission}
+      name="subPermissions"
       availablePermissions={_.get(this.props.resources, ['availablePermissions', 'records'])}
-      listedPermissions={this.props.selectedSet.subPermissions}
     />);
   }
 }
