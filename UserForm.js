@@ -96,7 +96,7 @@ class UserForm extends React.Component {
     this.handleExpandAll = this.handleExpandAll.bind(this);
     this.handleSectionToggle = this.handleSectionToggle.bind(this);
 
-    if  (initialValues.id) {
+    if (initialValues.id) {
       this.userPermsSection = props.stripes.connect(UserPermsSection);
     }
   }
