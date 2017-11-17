@@ -90,6 +90,10 @@ class ViewUser extends React.Component {
       path: 'groups',
       records: 'usergroups',
     },
+    // NOTE: 'indexField', used as a parameter in the userPermissions paths,
+    // modifies the API call so that the :{userid} parameter is actually
+    // interpreted as a user ID. By default, that path component is taken as
+    // the ID of the user/permission _object_ in /perms/users.
     permissions: {
       type: 'okapi',
       records: 'permissionNames',

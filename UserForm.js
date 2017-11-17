@@ -95,7 +95,10 @@ class UserForm extends React.Component {
 
     this.handleExpandAll = this.handleExpandAll.bind(this);
     this.handleSectionToggle = this.handleSectionToggle.bind(this);
-    this.userPermsSection = props.stripes.connect(UserPermsSection);
+
+    if  (initialValues.id) {
+      this.userPermsSection = props.stripes.connect(UserPermsSection);
+    }
   }
 
   getAddFirstMenu() {
@@ -149,7 +152,7 @@ class UserForm extends React.Component {
     const lastMenu = initialValues.id ?
       this.getLastMenu('clickable-updateuser', 'Update User') :
       this.getLastMenu('clickable-createnewuser', 'Create User');
-    
+
     return (
       <form className={css.UserFormRoot} id="form-user">
         <Paneset isRoot>
