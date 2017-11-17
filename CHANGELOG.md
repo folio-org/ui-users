@@ -47,6 +47,8 @@
 * Add User Proxy Version 2. Fixes UIU-181, UIU-199, UIU-240 and UIU-271.
 * Refine user form. Fixes UIU-282.
 * Refine user form header. Fixes UIU-283.
+* Add permission assignment to user edit. Fixes UIU-241.
+* Make permissions section read only on the user record preview pane. Fixes UIU-244.
 
 ## [2.10.1](https://github.com/folio-org/ui-users/tree/v2.10.1) (2017-09-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.10.0...v2.10.1)
