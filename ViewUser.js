@@ -23,7 +23,7 @@ import contactTypes from './data/contactTypes';
 import UserAddresses from './lib/UserAddresses';
 import { toListAddresses, toUserAddresses } from './converters/address';
 import removeQueryParam from './removeQueryParam';
-import { getFullName } from './util';
+import { getFullName, eachPromise } from './util';
 import withProxy from './withProxy';
 import css from './UserForm.css';
 
@@ -252,8 +252,8 @@ class ViewUser extends React.Component {
     const prevPerms = (this.props.resources.permissions || {}).records || [];
     const removedPerms = _.differenceBy(prevPerms, perms, 'id');
     const addedPerms = _.differenceBy(perms, prevPerms, 'id');
-    addedPerms.forEach(perm => (mutator.POST(perm)));
-    removedPerms.forEach(perm => (mutator.DELETE(perm)));
+    eachPromise(addedPerms, mutator.POST);
+    eachPromise(removedPerms, mutator.DELETE);
   }
 
   // This is a helper function for the "last updated" date element. Since the

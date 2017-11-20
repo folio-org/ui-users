@@ -52,3 +52,8 @@ export function getItemStatusFormatter(loan) {
     `${_.get(loan, ['item', 'status', 'name'], '')} - ${loanActionMap[loan.action]}` :
     `${_.get(loan, ['item', 'status', 'name'], '')}`;
 }
+
+export function eachPromise(arr, fn) {
+  if (!Array.isArray(arr)) return Promise.reject(new Error('Array not found'));
+  return arr.reduce((prev, cur) => (prev.then(() => fn(cur))), Promise.resolve());
+}
