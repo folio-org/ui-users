@@ -189,8 +189,7 @@ class Users extends React.Component {
       .then(newUser => mutator.creds.POST(Object.assign(creds, { userId: newUser.id })))
       .then(newCreds => mutator.perms.POST({ userId: newCreds.userId, permissions: [] }))
       .then((perms) => {
-        removeQueryParam('layer', this.props.location, this.props.history);
-        this.props.history.push(`/users/view/${perms.userId}${this.props.location.search}`);
+        mutator.query.update({ _path: `/users/view/${perms.userId}`, layer: null });
       });
   }
 
