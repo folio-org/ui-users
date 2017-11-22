@@ -14,7 +14,7 @@
 * Support bulk renew on loans. Fixes UIU-214.
 * Display number of loans. Fixes UIU-218.
 * Display count when loans section is collapsed. Fixes UIU-233.
-* Display count when proxy section is collapsed. Fixes UIU-233.
+* Display count when proxy section is collapsed. Fixes UIU-233 XXX really the same as the other UIU-233?
 * Rename "Proxy Permissions" section to "Proxy". Fixes UIU-236.
 * Adjust loan page layout. Fixes UIU-251.
 * Path URLs, permission calls, and credentials now use UUID instead of username where appropriate. Fixes UIU-172.
@@ -51,6 +51,18 @@
 * Add permission assignment to user edit. Fixes UIU-241.
 * Make permissions section read only on the user record preview pane. Fixes UIU-244.
 * Switch to URL-transition via setting values in the anointed resource. See STRIPES-452.
+* Create test for changing a user's username. Fixes UIU-207.
+* Fix race-condition where newly created user can be displayed before its perms exist, yielding an error. Fixes UIU-227.
+* Make address component read-only on the user record preview pane. Fixes UIU-242.
+* Make infinite-scroll work with <SearchAndSort>. Fixes UIU-284.
+* Handle full-record view in <SearchAndSort>. Fixes UIU-287.
+* Fix "Dismiss full record" button in <SearchAndSort>. Fixes UIU-288.
+* Make editing work in <SearchAndSort>. Fixes UIU-290.
+* Get user proxy/sponsor working under <SearchAndSort>. Fixes UIU-293.
+* Get notes working under <SearchAndSort>. Fixes UIU-294.
+* Get addresses working under <SearchAndSort>. Fixes UIU-297.
+* Rework the create user-with-creds-and-perms operation to use stripes-connect mutators. Fixes UIU-301.
+* Investigate problem setting password of newly created users. Fixes UIU-319.
 
 ## [2.10.1](https://github.com/folio-org/ui-users/tree/v2.10.1) (2017-09-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.10.0...v2.10.1)
