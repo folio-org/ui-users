@@ -53,6 +53,7 @@ class Users extends React.Component {
         POST: PropTypes.func.isRequired,
       }),
     }).isRequired,
+    disableRecordCreation: PropTypes.bool,
     onSelectRow: PropTypes.func,
   };
 
