@@ -53,8 +53,8 @@ class Users extends React.Component {
         POST: PropTypes.func.isRequired,
       }),
     }).isRequired,
-    disableRecordCreation: PropTypes.bool,
     onSelectRow: PropTypes.func,
+    disableRecordCreation: PropTypes.bool,
   };
 
   static manifest = Object.freeze({
@@ -189,6 +189,7 @@ class Users extends React.Component {
 
   render() {
     const props = this.props;
+    const { onSelectRow, disableRecordCreation } = this.props;
     const patronGroups = (props.resources.patronGroups || {}).records || [];
     const initialPath = (_.get(packageInfo, ['stripes', 'home']) ||
                          _.get(packageInfo, ['stripes', 'route']));
@@ -219,13 +220,13 @@ class Users extends React.Component {
       newRecordInitialValues={{ active: true, personal: { preferredContactTypeId: '002' } }}
       visibleColumns={['Status', 'Name', 'Barcode', 'Patron Group', 'Username', 'Email']}
       resultsFormatter={resultsFormatter}
-      onSelectRow={this.props.onSelectRow} // explicit use of this.props to satisfy ESLint
+      onSelectRow={onSelectRow}
       onCreate={this.create}
       massageNewRecord={this.massageNewRecord}
       finishedResourceName="perms"
       viewRecordPerms="users.item.get"
       newRecordPerms="users.item.post,login.item.post,perms.users.item.post"
-      disableRecordCreation={props.disableRecordCreation}
+      disableRecordCreation={disableRecordCreation}
       parentResources={props.resources}
       parentMutator={props.mutator}
     />);
