@@ -22,7 +22,6 @@ import LoanActionsHistory from './LoanActionsHistory';
 import contactTypes from './data/contactTypes';
 import UserAddresses from './lib/UserAddresses';
 import { toListAddresses, toUserAddresses } from './converters/address';
-import removeQueryParam from './removeQueryParam';
 import { getFullName, eachPromise } from './util';
 import withProxy from './withProxy';
 import css from './UserForm.css';
@@ -64,6 +63,7 @@ class ViewUser extends React.Component {
       }),
     }).isRequired,
     onClose: PropTypes.func,
+    onCloseEdit: PropTypes.func,
     notesToggle: PropTypes.func,
     location: PropTypes.object,
     history: PropTypes.object,
@@ -129,7 +129,6 @@ class ViewUser extends React.Component {
     };
 
     this.onClickEditUser = this.onClickEditUser.bind(this);
-    this.onClickCloseEditUser = this.onClickCloseEditUser.bind(this);
     this.connectedUserLoans = props.stripes.connect(UserLoans);
     this.connectedLoansHistory = props.stripes.connect(LoansHistory);
     this.connectedLoanActionsHistory = props.stripes.connect(LoanActionsHistory);
@@ -155,12 +154,6 @@ class ViewUser extends React.Component {
     if (e) e.preventDefault();
     this.props.stripes.logger.log('action', 'clicked "edit user"');
     this.transitionToParams({ layer: 'edit' });
-  }
-
-  onClickCloseEditUser(e) {
-    if (e) e.preventDefault();
-    this.props.stripes.logger.log('action', 'clicked "close edit user"');
-    removeQueryParam('layer', this.props.location, this.props.history);
   }
 
   onClickViewOpenLoans(e) {
@@ -243,7 +236,7 @@ class ViewUser extends React.Component {
       this.setState({
         lastUpdate: new Date().toISOString(),
       });
-      this.onClickCloseEditUser();
+      this.props.onCloseEdit();
     });
   }
 
@@ -473,7 +466,7 @@ class ViewUser extends React.Component {
             stripes={stripes}
             initialValues={userFormData}
             onSubmit={(record) => { this.update(record); }}
-            onCancel={this.onClickCloseEditUser}
+            onCancel={this.props.onCloseEdit}
             parentResources={this.props.parentResources}
             parentMutator={this.props.parentMutator}
           />
