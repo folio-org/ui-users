@@ -213,8 +213,8 @@ class Users extends React.Component {
     };
 
     return (<SearchAndSort
-      moduleName="users"
-      moduleTitle="Users"
+      moduleName={packageInfo.name.replace(/.*\//, '')}
+      moduleTitle={packageInfo.stripes.displayName}
       objectName="user"
       baseRoute={packageInfo.stripes.route}
       initialPath={initialPath}
