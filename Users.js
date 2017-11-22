@@ -6,7 +6,6 @@ import { filters2cql } from '@folio/stripes-components/lib/FilterGroups';
 import uuid from 'uuid';
 import ViewUser from './ViewUser';
 import UserForm from './UserForm';
-import removeQueryParam from './removeQueryParam';
 import SearchAndSort from './lib/SearchAndSort';
 import { toUserAddresses } from './converters/address';
 import { getFullName } from './util';
@@ -42,12 +41,6 @@ class Users extends React.Component {
       addressTypes: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
-    }).isRequired,
-    location: PropTypes.shape({
-      search: PropTypes.string,
-    }).isRequired,
-    history: PropTypes.shape({
-      push: PropTypes.func.isRequired,
     }).isRequired,
     mutator: PropTypes.shape({
       creds: PropTypes.shape({
