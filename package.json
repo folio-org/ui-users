@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "2.10.1",
+  "version": "2.11.0",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -206,9 +206,9 @@
     "eslint-plugin-react": "^6.4.1"
   },
   "dependencies": {
-    "@folio/stripes-components": "^1.8.0",
-    "@folio/stripes-form": "^0.8.0",
-    "@folio/stripes-smart-components": "^1.0.1",
+    "@folio/stripes-components": "^1.9.0",
+    "@folio/stripes-form": "^0.8.1",
+    "@folio/stripes-smart-components": "^1.1.0",
     "classnames": "^2.2.5",
     "hashcode": "^1.0.3",
     "lodash": "^4.17.4",
@@ -225,8 +225,8 @@
     "uuid": "^3.0.1"
   },
   "peerDependencies": {
-    "@folio/stripes-connect": "^2.7.0",
-    "@folio/stripes-core": "^2.7.0",
+    "@folio/stripes-connect": "^3.0.0-pre.1",
+    "@folio/stripes-core": "^2.8.0",
     "@folio/stripes-logger": "^0.0.2"
   },
   "optionalDependencies": {
