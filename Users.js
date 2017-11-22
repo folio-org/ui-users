@@ -226,7 +226,7 @@ class Users extends React.Component {
       newRecordInitialValues={{ active: true, personal: { preferredContactTypeId: '002' } }}
       visibleColumns={['Status', 'Name', 'Barcode', 'Patron Group', 'Username', 'Email']}
       resultsFormatter={resultsFormatter}
-      onSelectRow={this.props.onSelectRow}
+      onSelectRow={props.onSelectRow}
       onCreate={this.create}
       massageNewRecord={this.massageNewRecord}
       finishedResourceName="perms"
@@ -234,7 +234,7 @@ class Users extends React.Component {
       newRecordPerms="users.item.post,login.item.post,perms.users.item.post"
       disableRecordCreation={props.disableRecordCreation}
       parentResources={props.resources}
-      parentMutator={this.props.mutator}
+      parentMutator={props.mutator}
     />);
   }
 }
