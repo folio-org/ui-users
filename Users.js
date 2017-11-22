@@ -218,7 +218,7 @@ class Users extends React.Component {
       newRecordInitialValues={{ active: true, personal: { preferredContactTypeId: '002' } }}
       visibleColumns={['Status', 'Name', 'Barcode', 'Patron Group', 'Username', 'Email']}
       resultsFormatter={resultsFormatter}
-      onSelectRow={props.onSelectRow}
+      onSelectRow={this.props.onSelectRow} // explicit use of this.props to satisfy ESLint
       onCreate={this.create}
       massageNewRecord={this.massageNewRecord}
       finishedResourceName="perms"
