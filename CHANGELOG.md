@@ -57,11 +57,11 @@
   * Where possible, move functionality from View and Edit components into generic `<SearchAndSort>`. Fixes UIU-303.
 
 * Other refactoring
-  * Rework the create user-with-creds-and-perms operation to use stripes-connect mutators. Fixes UIU-301.
-  * All network communication is now done through stripes-connect, and `fetch` is unused. Fixes UIU-304.
+  * Rework the create user-with-creds-and-perms operation to use `stripes-connect` mutators. Fixes UIU-301.
+  * All network communication is now done through `stripes-connect`, and `fetch` is unused. Fixes UIU-304.
   * Refactor `<Notes>` into a separate `stripes-smart-components` repository. See STUTILNOTE-2.
-  * Use `<ControlledVocab>` from stripes-smart-components instead of `<AuthorityList>` from stripes-components. See STSMACOM-6. Requires stripes-smart-components v1.0.1. Fixes UIU-267, UIU-270.
-  * Use `<Badge>` from stripes-components. Fixes UIU-268.
+  * Use `<ControlledVocab>` from `stripes-smart-components` instead of `<AuthorityList>` from `stripes-components`. See STSMACOM-6. Requires `stripes-smart-components` v1.0.1. Fixes UIU-267, UIU-270.
+  * Use `<Badge>` from `stripes-components`. Fixes UIU-268.
   * Use PropTypes, not React.PropTypes. Refs FOLIO-427.
   * Refactor permission sets. Fulfills UIU-231, UIU-276, and UIU-165.
   * Refactor permission sets to use `<EntryManager>`. Fixes UIU-300.
@@ -76,6 +76,13 @@
   * Create test for changing a user's username. Fixes UIU-207.
   * Add `optionalDependencies` on find-user plugin. Fixes UIU-313.
   * Investigate problem setting password of newly created users. Fixes UIU-319.
+
+* Update dependences on Stripes modules:
+  * `stripes-components` from 1.8.0 to 1.9.0.
+  * `stripes-form` from 0.8.0 to 0.8.1.
+  * `stripes-smart-components` from 1.0.1 to 1.1.0
+  * `stripes-connect` from 2.7.0 to 3.0.0-pre.1
+  * `stripes-core` from 2.7.0 to 2.8.0,
 
 ## [2.10.1](https://github.com/folio-org/ui-users/tree/v2.10.1) (2017-09-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.10.0...v2.10.1)
