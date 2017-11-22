@@ -42,6 +42,7 @@
 * All network communication is now done through stripes-connect, and `fetch` is unused. Fixes UIU-304.
 * Break out core search/sort functionality into re-usable `<SearchAndSort>` component. Fixes UIU-278.
 * Generalise `<SearchAndSort>` by moving all user-specific functionality out of it. Fixes UIU-299.
+* Where possible, move functionality from View and Edit components into generic `<SearchAndSort>``. Fixes UIU-303.
 * Rewire proxy selection with the new `proxiesfor` endpoint. Fixes UIU-292.
 * Add `optionalDependencies` on find-user plugin. Fixes UIU-313.
 * Add User Proxy Version 2. Fixes UIU-181, UIU-199, UIU-240 and UIU-271.
