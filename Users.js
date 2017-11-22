@@ -6,7 +6,6 @@ import { filters2cql } from '@folio/stripes-components/lib/FilterGroups';
 import uuid from 'uuid';
 import ViewUser from './ViewUser';
 import UserForm from './UserForm';
-import removeQueryParam from './removeQueryParam';
 import SearchAndSort from './lib/SearchAndSort';
 import { toUserAddresses } from './converters/address';
 import { getFullName } from './util';
@@ -43,12 +42,6 @@ class Users extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }).isRequired,
-    location: PropTypes.shape({
-      search: PropTypes.string,
-    }).isRequired,
-    history: PropTypes.shape({
-      push: PropTypes.func.isRequired,
-    }).isRequired,
     mutator: PropTypes.shape({
       creds: PropTypes.shape({
         POST: PropTypes.func.isRequired,
@@ -61,6 +54,7 @@ class Users extends React.Component {
       }),
     }).isRequired,
     onSelectRow: PropTypes.func,
+    disableRecordCreation: PropTypes.bool,
   };
 
   static manifest = Object.freeze({
@@ -189,13 +183,13 @@ class Users extends React.Component {
       .then(newUser => mutator.creds.POST(Object.assign(creds, { userId: newUser.id })))
       .then(newCreds => mutator.perms.POST({ userId: newCreds.userId, permissions: [] }))
       .then((perms) => {
-        removeQueryParam('layer', this.props.location, this.props.history);
-        this.props.history.push(`/users/view/${perms.userId}${this.props.location.search}`);
+        mutator.query.update({ _path: `/users/view/${perms.userId}`, layer: null });
       });
   }
 
   render() {
     const props = this.props;
+    const { onSelectRow, disableRecordCreation } = this.props;
     const patronGroups = (props.resources.patronGroups || {}).records || [];
     const initialPath = (_.get(packageInfo, ['stripes', 'home']) ||
                          _.get(packageInfo, ['stripes', 'route']));
@@ -213,9 +207,10 @@ class Users extends React.Component {
     };
 
     return (<SearchAndSort
-      moduleName="users"
-      moduleTitle="Users"
+      moduleName={packageInfo.name.replace(/.*\//, '')}
+      moduleTitle={packageInfo.stripes.displayName}
       objectName="user"
+      baseRoute={packageInfo.stripes.route}
       initialPath={initialPath}
       filterConfig={filterConfig}
       initialResultCount={INITIAL_RESULT_COUNT}
@@ -225,15 +220,15 @@ class Users extends React.Component {
       newRecordInitialValues={{ active: true, personal: { preferredContactTypeId: '002' } }}
       visibleColumns={['Status', 'Name', 'Barcode', 'Patron Group', 'Username', 'Email']}
       resultsFormatter={resultsFormatter}
-      onSelectRow={this.props.onSelectRow}
+      onSelectRow={onSelectRow}
       onCreate={this.create}
       massageNewRecord={this.massageNewRecord}
       finishedResourceName="perms"
       viewRecordPerms="users.item.get"
       newRecordPerms="users.item.post,login.item.post,perms.users.item.post"
-      disableRecordCreation={props.disableRecordCreation}
+      disableRecordCreation={disableRecordCreation}
       parentResources={props.resources}
-      parentMutator={this.props.mutator}
+      parentMutator={props.mutator}
     />);
   }
 }
