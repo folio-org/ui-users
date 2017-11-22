@@ -50,6 +50,7 @@
 * Refine user form header. Fixes UIU-283.
 * Add permission assignment to user edit. Fixes UIU-241.
 * Make permissions section read only on the user record preview pane. Fixes UIU-244.
+* Switch to URL-transition via setting values in the anointed resource. See STRIPES-452.
 
 ## [2.10.1](https://github.com/folio-org/ui-users/tree/v2.10.1) (2017-09-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.10.0...v2.10.1)
