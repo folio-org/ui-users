@@ -14,7 +14,7 @@
 * Support bulk renew on loans. Fixes UIU-214.
 * Display number of loans. Fixes UIU-218.
 * Display count when loans section is collapsed. Fixes UIU-233.
-* Display count when proxy section is collapsed. Fixes UIU-233 XXX really the same as the other UIU-233?
+* Display count when proxy section is collapsed. Fixes UIU-232.
 * Rename "Proxy Permissions" section to "Proxy". Fixes UIU-236.
 * Adjust loan page layout. Fixes UIU-251.
 * Path URLs, permission calls, and credentials now use UUID instead of username where appropriate. Fixes UIU-172.
