@@ -63,6 +63,7 @@ class ViewUser extends React.Component {
       }),
     }).isRequired,
     onClose: PropTypes.func,
+    onEdit: PropTypes.func,
     onCloseEdit: PropTypes.func,
     notesToggle: PropTypes.func,
     location: PropTypes.object,
@@ -128,7 +129,6 @@ class ViewUser extends React.Component {
       },
     };
 
-    this.onClickEditUser = this.onClickEditUser.bind(this);
     this.connectedUserLoans = props.stripes.connect(UserLoans);
     this.connectedLoansHistory = props.stripes.connect(LoansHistory);
     this.connectedLoanActionsHistory = props.stripes.connect(LoanActionsHistory);
@@ -150,12 +150,6 @@ class ViewUser extends React.Component {
   }
 
   // EditUser Handlers
-  onClickEditUser(e) {
-    if (e) e.preventDefault();
-    this.props.stripes.logger.log('action', 'clicked "edit user"');
-    this.transitionToParams({ layer: 'edit' });
-  }
-
   onClickViewOpenLoans(e) {
     if (e) e.preventDefault();
     this.setState({
@@ -298,7 +292,7 @@ class ViewUser extends React.Component {
     const detailMenu = (<PaneMenu>
       <button id="clickable-show-notes" style={{ visibility: !user ? 'hidden' : 'visible' }} onClick={this.props.notesToggle} title="Show Notes"><Icon icon="comment" />Notes</button>
       <IfPermission perm="users.item.put">
-        <button id="clickable-edituser" style={{ visibility: !user ? 'hidden' : 'visible' }} onClick={this.onClickEditUser} title="Edit User"><Icon icon="edit" />Edit</button>
+        <button id="clickable-edituser" style={{ visibility: !user ? 'hidden' : 'visible' }} onClick={this.props.onEdit} title="Edit User"><Icon icon="edit" />Edit</button>
       </IfPermission>
     </PaneMenu>);
 
