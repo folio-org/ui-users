@@ -216,6 +216,7 @@ class Users extends React.Component {
       moduleName="users"
       moduleTitle="Users"
       objectName="user"
+      baseRoute={packageInfo.stripes.route}
       initialPath={initialPath}
       filterConfig={filterConfig}
       initialResultCount={INITIAL_RESULT_COUNT}
