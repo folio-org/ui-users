@@ -201,6 +201,8 @@ class ViewUser extends React.Component {
     const { resources, match: { params: { id } } } = this.props;
     const selUser = (resources.selUser || {}).records || [];
     if (!selUser || selUser.length === 0 || !id) return null;
+    // Logging below shows this DOES sometimes find the wrong record. But why?
+    // console.log(`getUser: found ${selUser.length} users, id '${selUser[0].id}' ${selUser[0].id === id ? '==' : '!='} '${id}'`);
     return selUser.find(u => u.id === id);
   }
 
