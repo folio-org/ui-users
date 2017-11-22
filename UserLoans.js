@@ -2,7 +2,6 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import Button from '@folio/stripes-components/lib/Button';
 import Badge from '@folio/stripes-components/lib/Badge';
 import { Accordion } from '@folio/stripes-components/lib/Accordion';
 
@@ -64,9 +63,6 @@ class UserLoans extends React.Component {
         }
         displayWhenClosed={
           <Badge>{openLoansCount}</Badge>
-        }
-        displayWhenOpen={
-          <Button id="clickable-viewfullhistory" align="end" bottomMargin0 onClick={this.props.onClickViewOpenLoans}>View Loans</Button>
         }
       >
         <ul>
