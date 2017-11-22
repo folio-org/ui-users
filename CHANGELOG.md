@@ -2,67 +2,80 @@
 
 ## 2.11.0 (IN PROGRESS)
 
-* Add and use new translation `ui-users.resultCount`. Allows us to exercise the use of placeholders. Fixes UIU-204.
-* Modify translation support to handle pluralisation of record-count. Fixes UIU-206.
-* Refactor `<Notes>` into a separate repository. See STUTILNOTE-2.
-* Check correct permission for ability to add/remove perms to a permission-set. Fixes UIU-57.
-* Fix actions menu on loans page. Fixes UIU-212.
-* Link title to item from loans. Fixes UIU-234.
-* Link barcode to item from loans. Fixes UIU-213.
-* Remove return date column from open loans tab. Fixes UIU-225.
-* Add borrower name to loans. Fixes UIU-215.
-* Support bulk renew on loans. Fixes UIU-214.
-* Display number of loans. Fixes UIU-218.
-* Display count when loans section is collapsed. Fixes UIU-233.
-* Display count when proxy section is collapsed. Fixes UIU-232.
-* Rename "Proxy Permissions" section to "Proxy". Fixes UIU-236.
-* Adjust loan page layout. Fixes UIU-251.
-* Path URLs, permission calls, and credentials now use UUID instead of username where appropriate. Fixes UIU-172.
-* Expand/Collapse All button integrated for accordions on the user detail page. Fulfills STCOM-71.
-* Change name of "User Status" filter to "Status". Fixes UIU-210.
-* Change "Active" column in user list to "Status", and change values from tick-or-nothing to "Active" and "Inactive". Fixes UIU-211.
-* Permissions menu sorted by displayName (but still by permissionName when `config.showPerms` is true). Applies lists to both of existing permissions, and of those available to add. Fixes UIU-250.
-* Fix renew date. Fixes UIU-252.
-* `editable` prop added to `<RenderPermissions>` component to facilitate UIU-244.
-* When `config.showPerms` is true, show the True Names of users' permissions as well as available permissions. Fixes UIU-262.
-* Use `<ControlledVocab>` from stripes-smart-components instead of `<AuthorityList>` from stripes-components. See STSMACOM-6. Requires stripes-smart-components v1.0.1. Fixes UIU-267, UIU-270.
-* Reinstate ability to add permissions to a permission-set. Fixes UIU-269.
-* Use `<Badge>` from stripes-components. Fixes UIU-268.
-* Use PropTypes, not React.PropTypes. Refs FOLIO-427.
-* Apply `noOverflow` prop to results pane. Fixes STCOM-40.
-* Sort Loans by Column Header. Fixes UIU-217.
-* User permissions, permission-set sub-permissions and available permissions are now all sorted case-insensitively. Fixes UIU-273.
-* Show loan's proxy borrower. Part of UIU-177.
-* Integrate confirmation modal for deletion of permission sets. Fulfills STCOM-66.
-* Refactor permission sets. Fulfills UIU-231, UIU-276, and UIU-165.
-* Change search label. Fixes UIU-140.
-* Sort addresses by primary field. Fixes UIU-296.
-* Refactor permission sets to use `<EntryManager>`. Fixes UIU-300.
-* Refactor async user validator. Fixes UIU-302.
-* All network communication is now done through stripes-connect, and `fetch` is unused. Fixes UIU-304.
-* Break out core search/sort functionality into re-usable `<SearchAndSort>` component. Fixes UIU-278.
-* Generalise `<SearchAndSort>` by moving all user-specific functionality out of it. Fixes UIU-299.
-* Where possible, move functionality from View and Edit components into generic `<SearchAndSort>``. Fixes UIU-303.
-* Rewire proxy selection with the new `proxiesfor` endpoint. Fixes UIU-292.
-* Add `optionalDependencies` on find-user plugin. Fixes UIU-313.
-* Add User Proxy Version 2. Fixes UIU-181, UIU-199, UIU-240 and UIU-271.
-* Refine user form. Fixes UIU-282.
-* Refine user form header. Fixes UIU-283.
-* Add permission assignment to user edit. Fixes UIU-241.
-* Make permissions section read only on the user record preview pane. Fixes UIU-244.
-* Switch to URL-transition via setting values in the anointed resource. See STRIPES-452.
-* Create test for changing a user's username. Fixes UIU-207.
-* Fix race-condition where newly created user can be displayed before its perms exist, yielding an error. Fixes UIU-227.
-* Make address component read-only on the user record preview pane. Fixes UIU-242.
-* Make infinite-scroll work with <SearchAndSort>. Fixes UIU-284.
-* Handle full-record view in <SearchAndSort>. Fixes UIU-287.
-* Fix "Dismiss full record" button in <SearchAndSort>. Fixes UIU-288.
-* Make editing work in <SearchAndSort>. Fixes UIU-290.
-* Get user proxy/sponsor working under <SearchAndSort>. Fixes UIU-293.
-* Get notes working under <SearchAndSort>. Fixes UIU-294.
-* Get addresses working under <SearchAndSort>. Fixes UIU-297.
-* Rework the create user-with-creds-and-perms operation to use stripes-connect mutators. Fixes UIU-301.
-* Investigate problem setting password of newly created users. Fixes UIU-319.
+* UI improvements:
+  * Link title to item from loans. Fixes UIU-234.
+  * Link barcode to item from loans. Fixes UIU-213.
+  * Remove return date column from open loans tab. Fixes UIU-225.
+  * Add borrower name to loans. Fixes UIU-215.
+  * Support bulk renew on loans. Fixes UIU-214.
+  * Display number of loans. Fixes UIU-218.
+  * Display count when loans section is collapsed. Fixes UIU-233.
+  * Display count when proxy section is collapsed. Fixes UIU-232.
+  * Rename "Proxy Permissions" section to "Proxy". Fixes UIU-236.
+  * Adjust loan page layout. Fixes UIU-251.
+  * Expand/Collapse All button integrated for accordions on the user detail page. Fulfills STCOM-71.
+  * Change name of "User Status" filter to "Status". Fixes UIU-210.
+  * Change "Active" column in user list to "Status", and change values from tick-or-nothing to "Active" and "Inactive". Fixes UIU-211.
+  * Renewals now update the renew date. Fixes UIU-252.
+  * `editable` prop added to `<RenderPermissions>` component: permissions section is now read only on the user record preview pane. Fixes UIU-244.
+  * Sort Loans by Column Header. Fixes UIU-217.
+  * Show loan's proxy borrower. Part of UIU-177.
+  * Integrate confirmation modal for deletion of permission sets. Fulfills STCOM-66.
+  * Change search label. Fixes UIU-140.
+  * Sort addresses by primary field. Fixes UIU-296.
+  * Add User Proxy Version 2. Fixes UIU-181, UIU-199, UIU-240 and UIU-271.
+  * Refine user form. Fixes UIU-282.
+  * Refine user form header. Fixes UIU-283.
+  * Add permission assignment to user edit. Fixes UIU-241.
+  * Make address component read-only on the user record preview pane. Fixes UIU-242.
+
+* Bugfixes
+  * When `config.showPerms` is true, show the True Names of users' permissions as well as available permissions. Fixes UIU-262.
+  * Permissions menu sorted by displayName (but still by permissionName when `config.showPerms` is true). Applies lists to both of existing permissions, and of those available to add. Fixes UIU-250.
+  * User permissions, permission-set sub-permissions and available permissions are now all sorted case-insensitively. Fixes UIU-273.
+  * Check correct permission for ability to add/remove perms to a permission-set. Fixes UIU-57.
+  * Reinstate ability to add permissions to a permission-set. Fixes UIU-269.
+  * Fix race-condition where newly created user can be displayed before its perms exist, yielding an error. Fixes UIU-227.
+  * Wrap title on loans page so Actions link is displayed. Fixes UIU-212.
+  * Apply `noOverflow` prop to results pane. Fixes the irritating flicker of STCOM-40.
+
+* Use of newly available WSAPIs:
+  * Path URLs, permission calls, and credentials now use UUID instead of username where appropriate. Fixes UIU-172.
+  * Rewire proxy selection with the new `proxiesfor` endpoint. Fixes UIU-292.
+
+* Re-usable `<SearchAndSort>` component:
+  * Break out core search/sort functionality into re-usable component. Fixes UIU-278.
+  * Make various specific parts of funcationality work with `<SearchAndSort>`:
+    * Infinite scroll. Fixes UIU-284.
+    * Full-record view. Fixes UIU-287.
+    * Fix "Dismiss full record" button. Fixes UIU-288.
+    * Editing. Fixes UIU-290.
+    * User proxy/sponsor. Fixes UIU-293.
+    * Notes. Fixes UIU-294.
+    * Addresses. Fixes UIU-297.
+  * Generalise `<SearchAndSort>` by moving all user-specific functionality out of it. Fixes UIU-299.
+  * Where possible, move functionality from View and Edit components into generic `<SearchAndSort>`. Fixes UIU-303.
+
+* Other refactoring
+  * Rework the create user-with-creds-and-perms operation to use stripes-connect mutators. Fixes UIU-301.
+  * All network communication is now done through stripes-connect, and `fetch` is unused. Fixes UIU-304.
+  * Refactor `<Notes>` into a separate `stripes-smart-components` repository. See STUTILNOTE-2.
+  * Use `<ControlledVocab>` from stripes-smart-components instead of `<AuthorityList>` from stripes-components. See STSMACOM-6. Requires stripes-smart-components v1.0.1. Fixes UIU-267, UIU-270.
+  * Use `<Badge>` from stripes-components. Fixes UIU-268.
+  * Use PropTypes, not React.PropTypes. Refs FOLIO-427.
+  * Refactor permission sets. Fulfills UIU-231, UIU-276, and UIU-165.
+  * Refactor permission sets to use `<EntryManager>`. Fixes UIU-300.
+  * Refactor async user validator. Fixes UIU-302.
+  * Switch to URL-transition via setting values in the anointed resource. See STRIPES-452.
+
+* Translation
+  * Add and use new translation `ui-users.resultCount`. Allows us to exercise the use of placeholders. Fixes UIU-204.
+  * Modify translation support to handle pluralisation of record-count. Fixes UIU-206.
+
+* Miscellaneous
+  * Create test for changing a user's username. Fixes UIU-207.
+  * Add `optionalDependencies` on find-user plugin. Fixes UIU-313.
+  * Investigate problem setting password of newly created users. Fixes UIU-319.
 
 ## [2.10.1](https://github.com/folio-org/ui-users/tree/v2.10.1) (2017-09-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.10.0...v2.10.1)
