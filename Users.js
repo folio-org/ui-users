@@ -2,11 +2,11 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { filters2cql } from '@folio/stripes-components/lib/FilterGroups';
+import SearchAndSort from '@folio/stripes-smart-components/lib/SearchAndSort';
 
 import uuid from 'uuid';
 import ViewUser from './ViewUser';
 import UserForm from './UserForm';
-import SearchAndSort from './lib/SearchAndSort';
 import { toUserAddresses } from './converters/address';
 import { getFullName } from './util';
 import packageInfo from './package';
