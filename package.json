@@ -208,7 +208,7 @@
   "dependencies": {
     "@folio/stripes-components": "^1.9.0",
     "@folio/stripes-form": "^0.8.1",
-    "@folio/stripes-smart-components": "^1.1.0",
+    "@folio/stripes-smart-components": "^1.2.0",
     "classnames": "^2.2.5",
     "hashcode": "^1.0.3",
     "lodash": "^4.17.4",
