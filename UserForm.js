@@ -19,7 +19,6 @@ import {
 } from './lib/EditSections';
 import { getFullName } from './util';
 
-
 import css from './UserForm.css';
 
 function validate(values) {
@@ -86,10 +85,10 @@ class UserForm extends React.Component {
 
     this.state = {
       sections: {
-        extendedInfo: true,
-        contactInfo: true,
-        proxy: true,
-        permissions: true,
+        extendedInfoSection: true,
+        contactInfoSection: true,
+        proxySection: false,
+        userPermsSection: false,
       },
     };
 
@@ -143,8 +142,21 @@ class UserForm extends React.Component {
     });
   }
 
+  renderSections(...sections) {
+    return sections.map((Section) => {
+      const sectionName = _.camelCase(Section.name);
+      return (<Section
+        key={sectionName}
+        accordionId={sectionName}
+        expanded={this.state.sections[sectionName]}
+        onToggle={this.handleSectionToggle}
+        {...this.props}
+      />);
+    });
+  }
+
   render() {
-    const { initialValues, stripes } = this.props;
+    const { initialValues } = this.props;
     const { sections } = this.state;
     const firstMenu = this.getAddFirstMenu();
 
@@ -163,12 +175,10 @@ class UserForm extends React.Component {
               </Col>
             </Row>
             <UserInfoSection {...this.props} />
-            <ExtendedInfoSection accordionId="extendedInfo" expanded={sections.extendedInfo} onToggle={this.handleSectionToggle} {...this.props} />
-            <ContactInfoSection accordionId="contactInfo" expanded={sections.contactInfo} onToggle={this.handleSectionToggle} {...this.props} />
+            {this.renderSections(ExtendedInfoSection, ContactInfoSection)}
             {initialValues.id &&
               <div>
-                <ProxySection accordionId="proxy" expanded={sections.proxy} onToggle={this.handleSectionToggle} {...this.props} />
-                <this.userPermsSection accordionId="permissions" expanded={sections.permissions} stripes={stripes} onToggle={this.handleSectionToggle} {...this.props} />
+                {this.renderSections(ProxySection, this.userPermsSection)}
               </div>
             }
           </Pane>
