@@ -1,6 +1,8 @@
 # Change history for ui-users
 
-## 2.12.0 IN PROGRESS
+## 2.12.0 (IN PROGRESS)
+
+* Remove `<SearchAndSort>` component, which is now in `stripes-smart-components`. Fixes UIU-323, see also STSMACOM-21.
 * Remove user-profile's "View Loans" button. Fixes UIU-317.
 
 ## [2.11.0](https://github.com/folio-org/ui-users/tree/v2.11.0) (2017-11-22)

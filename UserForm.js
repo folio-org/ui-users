@@ -19,7 +19,6 @@ import {
 } from './lib/EditSections';
 import { getFullName } from './util';
 
-
 import css from './UserForm.css';
 
 function validate(values) {
@@ -88,8 +87,8 @@ class UserForm extends React.Component {
       sections: {
         extendedInfo: true,
         contactInfo: true,
-        proxy: true,
-        permissions: true,
+        proxy: false,
+        permissions: false,
       },
     };
 
@@ -144,10 +143,9 @@ class UserForm extends React.Component {
   }
 
   render() {
-    const { initialValues, stripes } = this.props;
+    const { initialValues } = this.props;
     const { sections } = this.state;
     const firstMenu = this.getAddFirstMenu();
-
     const paneTitle = initialValues.id ? <span><Icon icon="edit" iconRootClass={css.UserFormEditIcon} />Edit: <Icon icon="profile" iconRootClass={css.UserFormEditIcon} />{getFullName(initialValues)}</span> : 'Create User';
     const lastMenu = initialValues.id ?
       this.getLastMenu('clickable-updateuser', 'Update User') :
@@ -168,7 +166,7 @@ class UserForm extends React.Component {
             {initialValues.id &&
               <div>
                 <ProxySection accordionId="proxy" expanded={sections.proxy} onToggle={this.handleSectionToggle} {...this.props} />
-                <this.userPermsSection accordionId="permissions" expanded={sections.permissions} stripes={stripes} onToggle={this.handleSectionToggle} {...this.props} />
+                <this.userPermsSection accordionId="permissions" expanded={sections.permissions} onToggle={this.handleSectionToggle} {...this.props} />
               </div>
             }
           </Pane>
