@@ -145,7 +145,8 @@ class UserForm extends React.Component {
   renderSections(...sections) {
     return sections.map((Section) => {
       const sectionName = _.camelCase(Section.name);
-      return (<Section
+      const Component = Section.component || Section;
+      return (<Component
         key={sectionName}
         accordionId={sectionName}
         expanded={this.state.sections[sectionName]}
@@ -159,10 +160,8 @@ class UserForm extends React.Component {
     const { initialValues } = this.props;
     const { sections } = this.state;
     const firstMenu = this.getAddFirstMenu();
-    const editMode = initialValues.id ? true : false;
-
-    const paneTitle = editMode ? <span><Icon icon="edit" iconRootClass={css.UserFormEditIcon} />Edit: <Icon icon="profile" iconRootClass={css.UserFormEditIcon} />{getFullName(initialValues)}</span> : 'Create User';
-    const lastMenu = editMode ?
+    const paneTitle = initialValues.id ? <span><Icon icon="edit" iconRootClass={css.UserFormEditIcon} />Edit: <Icon icon="profile" iconRootClass={css.UserFormEditIcon} />{getFullName(initialValues)}</span> : 'Create User';
+    const lastMenu = initialValues.id ?
       this.getLastMenu('clickable-updateuser', 'Update User') :
       this.getLastMenu('clickable-createnewuser', 'Create User');
 
@@ -177,7 +176,7 @@ class UserForm extends React.Component {
             </Row>
             <UserInfoSection {...this.props} />
             {this.renderSections(ExtendedInfoSection, ContactInfoSection)}
-            {editMode && this.renderSections(ProxySection, this.userPermsSection)}
+            {initialValues.id && this.renderSections(ProxySection, { name: 'userPermsSection', component: this.userPermsSection })}
           </Pane>
         </Paneset>
       </form>
