@@ -19,7 +19,6 @@ import {
 } from './lib/EditSections';
 import { getFullName } from './util';
 
-
 import css from './UserForm.css';
 
 function validate(values) {
@@ -86,10 +85,10 @@ class UserForm extends React.Component {
 
     this.state = {
       sections: {
-        extendedInfo: true,
-        contactInfo: true,
-        proxy: true,
-        permissions: true,
+        extendedInfoSection: true,
+        contactInfoSection: true,
+        proxySection: false,
+        userPermsSection: false,
       },
     };
 
@@ -143,11 +142,24 @@ class UserForm extends React.Component {
     });
   }
 
+  renderSections(...sections) {
+    return sections.map((Section) => {
+      const sectionName = _.camelCase(Section.name);
+      const Component = Section.component || Section;
+      return (<Component
+        key={sectionName}
+        accordionId={sectionName}
+        expanded={this.state.sections[sectionName]}
+        onToggle={this.handleSectionToggle}
+        {...this.props}
+      />);
+    });
+  }
+
   render() {
-    const { initialValues, stripes } = this.props;
+    const { initialValues } = this.props;
     const { sections } = this.state;
     const firstMenu = this.getAddFirstMenu();
-
     const paneTitle = initialValues.id ? <span><Icon icon="edit" iconRootClass={css.UserFormEditIcon} />Edit: <Icon icon="profile" iconRootClass={css.UserFormEditIcon} />{getFullName(initialValues)}</span> : 'Create User';
     const lastMenu = initialValues.id ?
       this.getLastMenu('clickable-updateuser', 'Update User') :
@@ -163,14 +175,8 @@ class UserForm extends React.Component {
               </Col>
             </Row>
             <UserInfoSection {...this.props} />
-            <ExtendedInfoSection accordionId="extendedInfo" expanded={sections.extendedInfo} onToggle={this.handleSectionToggle} {...this.props} />
-            <ContactInfoSection accordionId="contactInfo" expanded={sections.contactInfo} onToggle={this.handleSectionToggle} {...this.props} />
-            {initialValues.id &&
-              <div>
-                <ProxySection accordionId="proxy" expanded={sections.proxy} onToggle={this.handleSectionToggle} {...this.props} />
-                <this.userPermsSection accordionId="permissions" expanded={sections.permissions} stripes={stripes} onToggle={this.handleSectionToggle} {...this.props} />
-              </div>
-            }
+            {this.renderSections(ExtendedInfoSection, ContactInfoSection)}
+            {initialValues.id && this.renderSections(ProxySection, { name: 'userPermsSection', component: this.userPermsSection })}
           </Pane>
         </Paneset>
       </form>
