@@ -85,10 +85,10 @@ class UserForm extends React.Component {
 
     this.state = {
       sections: {
-        extendedInfoSection: true,
-        contactInfoSection: true,
-        proxySection: false,
-        userPermsSection: false,
+        extendedInfo: true,
+        contactInfo: true,
+        proxy: false,
+        permissions: false,
       },
     };
 
@@ -142,20 +142,6 @@ class UserForm extends React.Component {
     });
   }
 
-  renderSections(...sections) {
-    return sections.map((Section) => {
-      const sectionName = _.camelCase(Section.name);
-      const Component = Section.component || Section;
-      return (<Component
-        key={sectionName}
-        accordionId={sectionName}
-        expanded={this.state.sections[sectionName]}
-        onToggle={this.handleSectionToggle}
-        {...this.props}
-      />);
-    });
-  }
-
   render() {
     const { initialValues } = this.props;
     const { sections } = this.state;
@@ -175,8 +161,14 @@ class UserForm extends React.Component {
               </Col>
             </Row>
             <UserInfoSection {...this.props} />
-            {this.renderSections(ExtendedInfoSection, ContactInfoSection)}
-            {initialValues.id && this.renderSections(ProxySection, { name: 'userPermsSection', component: this.userPermsSection })}
+            <ExtendedInfoSection accordionId="extendedInfo" expanded={sections.extendedInfo} onToggle={this.handleSectionToggle} {...this.props} />
+            <ContactInfoSection accordionId="contactInfo" expanded={sections.contactInfo} onToggle={this.handleSectionToggle} {...this.props} />
+            {initialValues.id &&
+              <div>
+                <ProxySection accordionId="proxy" expanded={sections.proxy} onToggle={this.handleSectionToggle} {...this.props} />
+                <this.userPermsSection accordionId="permissions" expanded={sections.permissions} onToggle={this.handleSectionToggle} {...this.props} />
+              </div>
+            }
           </Pane>
         </Paneset>
       </form>
