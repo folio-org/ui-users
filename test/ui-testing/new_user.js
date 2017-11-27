@@ -78,7 +78,7 @@ module.exports.test = function(uitestctx) {
         nightmare
         .insert('#adduser_username',user.id)
         .insert('#pw',user.password)
-        .click('#useractiveYesRB')
+	.select('#useractive','true')
         .insert('#adduser_firstname',user.firstname)
         .insert('#adduser_lastname',user.lastname)
         .insert('#adduser_email', user.email)
