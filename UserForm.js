@@ -159,9 +159,10 @@ class UserForm extends React.Component {
     const { initialValues } = this.props;
     const { sections } = this.state;
     const firstMenu = this.getAddFirstMenu();
+    const editMode = initialValues.id ? true : false;
 
-    const paneTitle = initialValues.id ? <span><Icon icon="edit" iconRootClass={css.UserFormEditIcon} />Edit: <Icon icon="profile" iconRootClass={css.UserFormEditIcon} />{getFullName(initialValues)}</span> : 'Create User';
-    const lastMenu = initialValues.id ?
+    const paneTitle = editMode ? <span><Icon icon="edit" iconRootClass={css.UserFormEditIcon} />Edit: <Icon icon="profile" iconRootClass={css.UserFormEditIcon} />{getFullName(initialValues)}</span> : 'Create User';
+    const lastMenu = editMode ?
       this.getLastMenu('clickable-updateuser', 'Update User') :
       this.getLastMenu('clickable-createnewuser', 'Create User');
 
@@ -176,11 +177,7 @@ class UserForm extends React.Component {
             </Row>
             <UserInfoSection {...this.props} />
             {this.renderSections(ExtendedInfoSection, ContactInfoSection)}
-            {initialValues.id &&
-              <div>
-                {this.renderSections(ProxySection, this.userPermsSection)}
-              </div>
-            }
+            {editMode && this.renderSections(ProxySection, this.userPermsSection)}
           </Pane>
         </Paneset>
       </form>
