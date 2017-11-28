@@ -113,7 +113,9 @@
         "permissionName": "ui-users.editpermsets",
         "displayName": "Settings (Users): Can create, edit and remove permission sets [LEGACY]",
         "description": "",
-        "subPermissions": [ "ui-users.settings.permsets" ],
+        "subPermissions": [
+          "ui-users.settings.permsets"
+        ],
         "visible": true
       },
       {
@@ -132,7 +134,9 @@
       {
         "permissionName": "settings.usergroups.all",
         "displayName": "Settings (Users): Can create, edit and remove patron groups [LEGACY]",
-        "subPermissions": [ "ui-users.settings.usergroups" ]
+        "subPermissions": [
+          "ui-users.settings.usergroups"
+        ]
       },
       {
         "permissionName": "ui-users.settings.addresstypes",
@@ -150,7 +154,9 @@
       {
         "permissionName": "settings.addresstypes.all",
         "displayName": "Settings (Users): Can create, edit and remove address types [LEGACY]",
-        "subPermissions": [ "ui-users.settings.addresstypes" ]
+        "subPermissions": [
+          "ui-users.settings.addresstypes"
+        ]
       },
       {
         "permissionName": "settings.users.enabled",
@@ -202,22 +208,25 @@
     "@folio/stripes-form": "^0.8.0",
     "@folio/stripes-smart-components": "^1.0.1",
     "classnames": "^2.2.5",
+    "graphql-tag": "^2.5.0",
     "hashcode": "^1.0.3",
     "isomorphic-fetch": "^2.2.1",
-    "uuid": "^3.0.1",
     "lodash": "^4.17.4",
     "prop-types": "^15.5.10",
     "query-string": "^5.0.0",
     "react": "^15.4.2",
+    "react-apollo": "^2.0.1",
     "react-bootstrap": "^0.31.1",
     "react-bootstrap-typeahead": "^1.4.0",
     "react-intl": "^2.3.0",
     "react-router-dom": "^4.0.0",
-    "redux-form": "^7.0.3"
+    "redux-form": "^7.0.3",
+    "uuid": "^3.0.1"
   },
   "peerDependencies": {
     "@folio/stripes-connect": "^2.7.0",
     "@folio/stripes-core": "^2.7.0",
-    "@folio/stripes-logger": "^0.0.2"
+    "@folio/stripes-logger": "^0.0.2",
+    "react-flexbox-grid": "^2.0.0"
   }
 }
