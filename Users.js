@@ -60,7 +60,7 @@ class Users extends React.Component {
   static manifest = Object.freeze({
     query: {
       initialValue: {
-        search: '',
+        query: '',
         filters: 'active.Active',
         sort: 'Name',
       },
@@ -92,7 +92,7 @@ class Users extends React.Component {
               Email: 'personal.email',
             };
 
-            let cql = `(username="${resourceData.query.search}*" or personal.firstName="${resourceData.query.search}*" or personal.lastName="${resourceData.query.search}*" or personal.email="${resourceData.query.search}*" or barcode="${resourceData.query.search}*" or id="${resourceData.query.search}*" or externalSystemId="${resourceData.query.search}*")`;
+            let cql = `(username="${resourceData.query.query}*" or personal.firstName="${resourceData.query.query}*" or personal.lastName="${resourceData.query.query}*" or personal.email="${resourceData.query.query}*" or barcode="${resourceData.query.query}*" or id="${resourceData.query.query}*" or externalSystemId="${resourceData.query.query}*")`;
 
             const filterCql = filters2cql(filterConfig, resourceData.query.filters);
             if (filterCql) {
