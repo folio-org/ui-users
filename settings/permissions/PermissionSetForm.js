@@ -9,6 +9,7 @@ import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import IfPermission from '@folio/stripes-components/lib/IfPermission';
 // eslint-disable-next-line import/no-unresolved
 import ConfirmationModal from '@folio/stripes-components/lib/structures/ConfirmationModal';
+import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import stripesForm from '@folio/stripes-form';
 import { Field } from 'redux-form';
 
@@ -57,7 +58,7 @@ class PermissionSetForm extends React.Component {
   }
 
   confirmDeleteSet(confirmation) {
-    const { selectedSet } = this.state;
+    const selectedSet = this.props.initialValues;
     if (confirmation) {
       this.props.onRemove(selectedSet);
     } else {
@@ -102,19 +103,21 @@ class PermissionSetForm extends React.Component {
       <form id="form-policy" onSubmit={handleSubmit(this.saveSet)}>
         <Paneset isRoot>
           <Pane defaultWidth="100%" firstMenu={this.addFirstMenu()} lastMenu={this.saveLastMenu()} paneTitle={paneTitle}>
-            <section>
-              <h2 style={{ marginTop: '0' }}>About</h2>
-              <Field label="Title" name="displayName" id="displayName" component={Textfield} autoFocus required fullWidth rounded disabled={disabled} />
-              <Field label="Description" name="description" id="permissionset_description" component={TextArea} fullWidth rounded disabled={disabled} />
-              <Field name="permissionsDirty" component={Textfield} style={{ display: 'none' }} />
-            </section>
+            <Row>
+              <Col xs={8}>
+                <section>
+                  <h2 style={{ marginTop: '0' }}>About</h2>
+                  <Field label="Title" name="displayName" id="displayName" component={Textfield} autoFocus required fullWidth rounded disabled={disabled} />
+                  <Field label="Description" name="description" id="permissionset_description" component={TextArea} fullWidth rounded disabled={disabled} />
+                </section>
 
-            {selectedSet.id &&
-              <IfPermission perm="perms.permissions.item.delete">
-                <Button title="Delete Permission Set" onClick={this.beginDelete} disabled={confirmDelete}> Delete Set </Button>
-              </IfPermission>
-            }
-
+                {selectedSet.id &&
+                  <IfPermission perm="perms.permissions.item.delete">
+                    <Button title="Delete Permission Set" onClick={this.beginDelete} disabled={confirmDelete}> Delete Set </Button>
+                  </IfPermission>
+                }
+              </Col>
+            </Row>
             <ConfirmationModal
               open={confirmDelete}
               heading="Delete Permission Set?"
