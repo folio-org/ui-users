@@ -5,25 +5,30 @@ import queryString from 'query-string';
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
 import Pane from '@folio/stripes-components/lib/Pane';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
-import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import Icon from '@folio/stripes-components/lib/Icon';
 import Layer from '@folio/stripes-components/lib/Layer';
 import IfPermission from '@folio/stripes-components/lib/IfPermission';
 import IfInterface from '@folio/stripes-components/lib/IfInterface';
-import { Accordion, ExpandAllButton } from '@folio/stripes-components/lib/Accordion';
+import { ExpandAllButton } from '@folio/stripes-components/lib/Accordion';
 
 import UserForm from './UserForm';
-import UserPermissions from './UserPermissions';
-import ProxyPermissions from './ProxyPermissions';
-import UserLoans from './UserLoans';
 import LoansHistory from './LoansHistory';
 import LoanActionsHistory from './LoanActionsHistory';
-import contactTypes from './data/contactTypes';
-import UserAddresses from './lib/UserAddresses';
+
 import { toListAddresses, toUserAddresses } from './converters/address';
 import { getFullName, eachPromise } from './util';
 import withProxy from './withProxy';
+
+import {
+  UserInfo,
+  ExtendedInfo,
+  ContactInfo,
+  ProxyPermissions,
+  UserPermissions,
+  UserLoans,
+} from './lib/ViewSections';
+
 import css from './UserForm.css';
 
 class ViewUser extends React.Component {
@@ -121,11 +126,11 @@ class ViewUser extends React.Component {
       selectedLoan: {},
       lastUpdate: null,
       sections: {
-        infoSection: true,
-        addressSection: true,
-        loansSection: true,
-        proxySection: true,
-        permissionsSection: true,
+        extendedInfoSection: false,
+        contactInfoSection: false,
+        proxySection: false,
+        loansSection: false,
+        permissionsSection: false,
       },
     };
 
@@ -304,125 +309,20 @@ class ViewUser extends React.Component {
       </Pane>
     );
 
-    const userStatus = (_.get(user, ['active'], '') ? 'active' : 'inactive');
     const patronGroupId = _.get(user, ['patronGroup'], '');
     const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
-    const preferredContact = contactTypes.find(g => g.id === _.get(user, ['personal', 'preferredContactTypeId'], '')) || { type: '' };
     const addresses = toListAddresses(_.get(user, ['personal', 'addresses'], []), this.addressTypes);
     const userFormData = this.getUserFormData(user, addresses, sponsors, proxies, permissions);
 
     return (
       <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle={<span><Icon icon="profile" iconRootClass={css.UserFormEditIcon} /> {getFullName(user)}</span>} lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
         <Row end="xs"><Col xs><ExpandAllButton accordionStatus={this.state.sections} onToggle={this.handleExpandAll} /></Col></Row>
-        <Accordion
-          open={this.state.sections.infoSection}
-          id="infoSection"
-          onToggle={this.handleSectionToggle}
-          label={<h2>{getFullName(user)}</h2>}
-        >
-          <Row>
-            <Col xs={7} >
-              <Row>
-                <Col xs={12}>
-                  <KeyValue label="Username" value={_.get(user, ['username'], '')} />
-                </Col>
-              </Row>
-              <br />
-              <Row>
-                <Col xs={12}>
-                  <KeyValue label="Status" value={userStatus} />
-                </Col>
-              </Row>
-              <br />
-              <Row>
-                <Col xs={12}>
-                  <KeyValue label="Email" value={_.get(user, ['personal', 'email'], '')} />
-                </Col>
-              </Row>
-              <br />
-              <Row>
-                <Col xs={12}>
-                  <KeyValue label="Phone" value={_.get(user, ['personal', 'phone'], '')} />
-                </Col>
-              </Row>
-              <br />
-              <Row>
-                <Col xs={12}>
-                  <KeyValue label="Mobile phone" value={_.get(user, ['personal', 'mobilePhone'], '')} />
-                </Col>
-              </Row>
-              <br />
-              <Row>
-                <Col xs={12}>
-                  <KeyValue label="Preferred contact" value={preferredContact.desc} />
-                </Col>
-              </Row>
-              <br />
-              <Row>
-                <Col xs={12}>
-                  <KeyValue label="Date of birth" value={(_.get(user, ['personal', 'dateOfBirth'], '')) ? new Date(Date.parse(_.get(user, ['personal', 'dateOfBirth'], ''))).toLocaleDateString(stripes.locale) : ''} />
-                </Col>
-              </Row>
-            </Col>
-            <Col xs={5} >
-              <Row>
-                <Col xs={12}>
-                  <img className="floatEnd" src="http://placehold.it/175x175" role="presentation" />
-                </Col>
-              </Row>
-              <br />
-              <Row>
-                <Col xs={12}>
-                  <KeyValue label="Date enrolled" value={(_.get(user, ['enrollmentDate'], '')) ? new Date(Date.parse(_.get(user, ['enrollmentDate'], ''))).toLocaleDateString(stripes.locale) : ''} />
-                </Col>
-              </Row>
-              <Row>
-                <Col xs={12}>
-                  <KeyValue label="Expiration date" value={(_.get(user, ['expirationDate'], '')) ? new Date(Date.parse(_.get(user, ['expirationDate'], ''))).toLocaleDateString(stripes.locale) : ''} />
-                </Col>
-              </Row>
-              <Row>
-                <Col xs={12}>
-                  <KeyValue label="Open date" value={(_.get(user, ['createdDate'], '')) ? new Date(Date.parse(_.get(user, ['createdDate'], ''))).toLocaleString(stripes.locale) : ''} />
-                </Col>
-              </Row>
-              <Row>
-                <Col xs={12}>
-                  <KeyValue label="Record last updated" value={this.dateLastUpdated(user)} />
-                </Col>
-              </Row>
-              <Row>
-                <Col xs={12}>
-                  <KeyValue label="Bar code" value={_.get(user, ['barcode'], '')} />
-                </Col>
-              </Row>
-              <Row>
-                <Col xs={12}>
-                  <KeyValue label="FOLIO record number" value={_.get(user, ['id'], '')} />
-                </Col>
-              </Row>
-              <Row>
-                <Col xs={12}>
-                  <KeyValue label="External System ID" value={_.get(user, ['externalSystemId'], '')} />
-                </Col>
-              </Row>
-              <br />
-              <Row>
-                <Col xs={12}>
-                  <KeyValue label="Patron group" value={patronGroup.group} />
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-        </Accordion>
-        <UserAddresses
-          onUpdate={this.onAddressesUpdate}
-          addressTypes={this.addressTypes}
-          addresses={addresses}
-          expanded={this.state.sections.addressSection}
-          onToggle={this.handleSectionToggle}
-          accordionId="addressSection"
-        />
+
+        <UserInfo stripes={stripes} user={user} patronGroup={patronGroup} />
+        <ExtendedInfo accordionId="extendedInfoSection" stripes={stripes} user={user} expanded={this.state.sections.extendedInfoSection} onToggle={this.handleSectionToggle} />
+        <ContactInfo accordionId="contactInfoSection" stripes={stripes} user={user} addresses={addresses} addressTypes={this.addressTypes} expanded={this.state.sections.contactInfoSection} onToggle={this.handleSectionToggle} />
+        <ProxyPermissions accordionId="proxySection" onToggle={this.handleSectionToggle} proxies={proxies} sponsors={sponsors} expanded={this.state.sections.proxySection} {...this.props} />
+
         <IfPermission perm="circulation.loans.collection.get">
           <IfInterface name="circulation" version="2.1">
             <this.connectedUserLoans
@@ -436,15 +336,7 @@ class ViewUser extends React.Component {
             />
           </IfInterface>
         </IfPermission>
-        <ProxyPermissions
-          match={this.props.match}
-          expanded={this.state.sections.proxySection}
-          onToggle={this.handleSectionToggle}
-          accordionId="proxySection"
-          proxies={proxies}
-          sponsors={sponsors}
-          {...this.props}
-        />
+
         <IfPermission perm="perms.users.get">
           <IfInterface name="permissions" version="5.0">
             <UserPermissions
@@ -457,6 +349,7 @@ class ViewUser extends React.Component {
             />
           </IfInterface>
         </IfPermission>
+
         <Layer isOpen={query.layer ? query.layer === 'edit' : false} label="Edit User Dialog">
           <UserForm
             stripes={stripes}
@@ -492,7 +385,6 @@ class ViewUser extends React.Component {
           />
         </Layer>
       </Pane>
-
     );
   }
 }
