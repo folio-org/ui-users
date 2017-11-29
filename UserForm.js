@@ -11,11 +11,11 @@ import { ExpandAllButton } from '@folio/stripes-components/lib/Accordion';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 
 import {
-  UserInfoSection,
-  ExtendedInfoSection,
-  ContactInfoSection,
-  ProxySection,
-  UserPermsSection,
+  EditUserInfo,
+  EditExtendedInfo,
+  EditContactInfo,
+  EditProxy,
+  EditUserPerms,
 } from './lib/EditSections';
 import { getFullName } from './util';
 
@@ -96,7 +96,7 @@ class UserForm extends React.Component {
     this.handleSectionToggle = this.handleSectionToggle.bind(this);
 
     if (props.initialValues.id) {
-      this.userPermsSection = props.stripes.connect(UserPermsSection);
+      this.editUserPerms = props.stripes.connect(EditUserPerms);
     }
   }
 
@@ -160,13 +160,13 @@ class UserForm extends React.Component {
                 <ExpandAllButton accordionStatus={sections} onToggle={this.handleExpandAll} />
               </Col>
             </Row>
-            <UserInfoSection {...this.props} />
-            <ExtendedInfoSection accordionId="extendedInfo" expanded={sections.extendedInfo} onToggle={this.handleSectionToggle} {...this.props} />
-            <ContactInfoSection accordionId="contactInfo" expanded={sections.contactInfo} onToggle={this.handleSectionToggle} {...this.props} />
+            <EditUserInfo {...this.props} />
+            <EditExtendedInfo accordionId="extendedInfo" expanded={sections.extendedInfo} onToggle={this.handleSectionToggle} {...this.props} />
+            <EditContactInfo accordionId="contactInfo" expanded={sections.contactInfo} onToggle={this.handleSectionToggle} {...this.props} />
             {initialValues.id &&
               <div>
-                <ProxySection accordionId="proxy" expanded={sections.proxy} onToggle={this.handleSectionToggle} {...this.props} />
-                <this.userPermsSection accordionId="permissions" expanded={sections.permissions} onToggle={this.handleSectionToggle} {...this.props} />
+                <EditProxy accordionId="proxy" expanded={sections.proxy} onToggle={this.handleSectionToggle} {...this.props} />
+                <this.editUserPerms accordionId="permissions" expanded={sections.permissions} onToggle={this.handleSectionToggle} {...this.props} />
               </div>
             }
           </Pane>

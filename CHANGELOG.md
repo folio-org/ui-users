@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## 2.13.0 (IN PROGRESS)
+
+* Refine User View. Fixes UIU-324.
+
 ## [2.12.0](https://github.com/folio-org/ui-users/tree/v2.12.0) (2017-11-28)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.11.0...v2.12.0)
 
