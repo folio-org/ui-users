@@ -11,6 +11,7 @@
 * Remove user-profile's "View Loans" button. Fixes UIU-317.
 * Remove row-click handling on "Open Loans" page. Fixes UIU-316.
 * Use the URL query parameter `query` rather than `search`. Depends on `stripes-smart-components` v.1.3.0. Fixes UIU-333.
+* Set open loans table to be non-interactive. Refs STCOM-139, UIU-316.
 
 ## [2.11.0](https://github.com/folio-org/ui-users/tree/v2.11.0) (2017-11-22)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.10.1...v2.11.0)
