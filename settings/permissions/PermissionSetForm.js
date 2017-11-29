@@ -58,7 +58,7 @@ class PermissionSetForm extends React.Component {
   }
 
   confirmDeleteSet(confirmation) {
-    const selectedSet= this.props.initialValues;
+    const selectedSet = this.props.initialValues;
     if (confirmation) {
       this.props.onRemove(selectedSet);
     } else {
