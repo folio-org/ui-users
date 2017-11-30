@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { cloneDeep } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
@@ -126,6 +126,7 @@ class ViewUser extends React.Component {
       selectedLoan: {},
       lastUpdate: null,
       sections: {
+        userInformationSection: true,
         extendedInfoSection: false,
         contactInfoSection: false,
         proxySection: false,
@@ -213,7 +214,7 @@ class ViewUser extends React.Component {
 
   // eslint-disable-next-line class-methods-use-this
   getUserFormData(user, addresses, sponsors, proxies, permissions) {
-    const userForData = user ? _.cloneDeep(user) : user;
+    const userForData = user ? cloneDeep(user) : user;
     userForData.personal.addresses = addresses;
     Object.assign(userForData, { sponsors, proxies, permissions });
 
@@ -273,7 +274,7 @@ class ViewUser extends React.Component {
 
   handleSectionToggle({ id }) {
     this.setState((curState) => {
-      const newState = _.cloneDeep(curState);
+      const newState = cloneDeep(curState);
       newState.sections[id] = !newState.sections[id];
       return newState;
     });
@@ -281,7 +282,7 @@ class ViewUser extends React.Component {
 
   handleExpandAll(obj) {
     this.setState((curState) => {
-      const newState = _.cloneDeep(curState);
+      const newState = cloneDeep(curState);
       newState.sections = obj;
       return newState;
     });
@@ -318,7 +319,7 @@ class ViewUser extends React.Component {
       <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle={<span><Icon icon="profile" iconRootClass={css.UserFormEditIcon} /> {getFullName(user)}</span>} lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
         <Row end="xs"><Col xs><ExpandAllButton accordionStatus={this.state.sections} onToggle={this.handleExpandAll} /></Col></Row>
 
-        <UserInfo stripes={stripes} user={user} patronGroup={patronGroup} />
+        <UserInfo stripes={stripes} user={user} patronGroup={patronGroup} accordionId="userInformationSection" expanded={this.state.sections.userInformationSection} onToggle={this.handleSectionToggle}  />
         <ExtendedInfo accordionId="extendedInfoSection" stripes={stripes} user={user} expanded={this.state.sections.extendedInfoSection} onToggle={this.handleSectionToggle} />
         <ContactInfo accordionId="contactInfoSection" stripes={stripes} user={user} addresses={addresses} addressTypes={this.addressTypes} expanded={this.state.sections.contactInfoSection} onToggle={this.handleSectionToggle} />
         <ProxyPermissions accordionId="proxySection" onToggle={this.handleSectionToggle} proxies={proxies} sponsors={sponsors} expanded={this.state.sections.proxySection} {...this.props} />
