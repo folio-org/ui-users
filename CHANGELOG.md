@@ -6,6 +6,7 @@
 * Display permission count when section is collapsed on user form. Fixes UIU-331.
 * Display permission count when section is collapsed on user details. Fixes UIU-332.
 * Display proxy count when section is collapsed on user form. Fixes UIU-330.
+* Add setting for show/hide profile picture. Fixes UIU-327.
 
 ## [2.12.0](https://github.com/folio-org/ui-users/tree/v2.12.0) (2017-11-28)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.11.0...v2.12.0)
