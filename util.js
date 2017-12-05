@@ -12,13 +12,6 @@ export function formatDateTime(dateStr, intl) {
   return `${intl.formatDate(dateStr)} ${intl.formatTime(dateStr)}`;
 }
 
-export function futureDate(dateStr, locale, days) {
-  if (!dateStr) return dateStr;
-  const date = new Date(Date.parse(dateStr));
-  date.setDate(date.getDate() + days);
-  return date.toLocaleDateString(locale);
-}
-
 export function getFullName(user) {
   const lastName = _.get(user, ['personal', 'lastName'], '');
   const firstName = _.get(user, ['personal', 'firstName'], '');
