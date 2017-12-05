@@ -9,7 +9,9 @@ export function formatDate(dateStr, locale) {
 
 export function formatDateTime(dateStr, locale) {
   if (!dateStr) return dateStr;
-  return new Date(Date.parse(dateStr)).toLocaleString(locale);
+  return new Date(Date.parse(dateStr))
+    .toLocaleString(locale, { hour: '2-digit', minute: '2-digit' })
+    .toLowerCase();
 }
 
 export function futureDate(dateStr, locale, days) {
