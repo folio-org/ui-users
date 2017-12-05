@@ -1,4 +1,4 @@
-import { cloneDeep } from 'lodash';
+import { cloneDeep, get, omit, differenceBy } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
@@ -28,8 +28,6 @@ import {
   UserPermissions,
   UserLoans,
 } from './lib/ViewSections';
-
-import css from './UserForm.css';
 
 class ViewUser extends React.Component {
 
@@ -232,7 +230,7 @@ class ViewUser extends React.Component {
     if (sponsors) this.props.updateSponsors(sponsors);
     if (permissions) this.updatePermissions(permissions);
 
-    const data = _.omit(user, ['creds', 'proxies', 'sponsors', 'permissions']);
+    const data = omit(user, ['creds', 'proxies', 'sponsors', 'permissions']);
 
     this.props.mutator.selUser.PUT(data).then(() => {
       this.setState({
@@ -245,8 +243,8 @@ class ViewUser extends React.Component {
   updatePermissions(perms) {
     const mutator = this.props.mutator.permissions;
     const prevPerms = (this.props.resources.permissions || {}).records || [];
-    const removedPerms = _.differenceBy(prevPerms, perms, 'id');
-    const addedPerms = _.differenceBy(perms, prevPerms, 'id');
+    const removedPerms = differenceBy(prevPerms, perms, 'id');
+    const addedPerms = differenceBy(perms, prevPerms, 'id');
     eachPromise(addedPerms, mutator.POST);
     eachPromise(removedPerms, mutator.DELETE);
   }
@@ -257,7 +255,7 @@ class ViewUser extends React.Component {
   // value. If so, this returns a locally stored update date until the data
   // is refreshed.
   dateLastUpdated(user) {
-    const updatedDateRec = _.get(user, ['updatedDate'], '');
+    const updatedDateRec = get(user, ['updatedDate'], '');
     const updatedDateLocal = this.state.lastUpdate;
 
     if (!updatedDateRec) { return ''; }
@@ -310,16 +308,16 @@ class ViewUser extends React.Component {
       </Pane>
     );
 
-    const patronGroupId = _.get(user, ['patronGroup'], '');
+    const patronGroupId = get(user, ['patronGroup'], '');
     const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
-    const addresses = toListAddresses(_.get(user, ['personal', 'addresses'], []), this.addressTypes);
+    const addresses = toListAddresses(get(user, ['personal', 'addresses'], []), this.addressTypes);
     const userFormData = this.getUserFormData(user, addresses, sponsors, proxies, permissions);
 
     return (
       <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle={getFullName(user)} lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
         <Row end="xs"><Col xs><ExpandAllButton accordionStatus={this.state.sections} onToggle={this.handleExpandAll} /></Col></Row>
 
-        <UserInfo stripes={stripes} user={user} patronGroup={patronGroup} accordionId="userInformationSection" expanded={this.state.sections.userInformationSection} onToggle={this.handleSectionToggle}  />
+        <UserInfo stripes={stripes} user={user} patronGroup={patronGroup} accordionId="userInformationSection" expanded={this.state.sections.userInformationSection} onToggle={this.handleSectionToggle} />
         <ExtendedInfo accordionId="extendedInfoSection" stripes={stripes} user={user} expanded={this.state.sections.extendedInfoSection} onToggle={this.handleSectionToggle} />
         <ContactInfo accordionId="contactInfoSection" stripes={stripes} user={user} addresses={addresses} addressTypes={this.addressTypes} expanded={this.state.sections.contactInfoSection} onToggle={this.handleSectionToggle} />
         <ProxyPermissions accordionId="proxySection" onToggle={this.handleSectionToggle} proxies={proxies} sponsors={sponsors} expanded={this.state.sections.proxySection} {...this.props} />
