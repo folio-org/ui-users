@@ -8,6 +8,7 @@
 * Display proxy count when section is collapsed on user form. Fixes UIU-330.
 * Add setting for show/hide profile picture. Fixes UIU-327.
 * Seconds should not display in due date time. Fixes UIU-328.
+* Display user loan count (regression). Fixes UIU-308.
 
 ## [2.12.0](https://github.com/folio-org/ui-users/tree/v2.12.0) (2017-11-28)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.11.0...v2.12.0)
