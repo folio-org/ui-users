@@ -10,7 +10,7 @@ export function formatDate(dateStr, locale) {
 export function formatDateTime(dateStr, locale) {
   if (!dateStr) return dateStr;
   return new Date(Date.parse(dateStr))
-    .toLocaleString(locale, { hour: '2-digit', minute:'2-digit' })
+    .toLocaleString(locale, { hour: '2-digit', minute: '2-digit' })
     .toLowerCase();
 }
 
