@@ -2,16 +2,14 @@ import _ from 'lodash';
 import React from 'react';
 import loanActionMap from './data/loanActionMap';
 
-export function formatDate(dateStr, locale) {
+export function formatDate(dateStr, intl) {
   if (!dateStr) return dateStr;
-  return new Date(Date.parse(dateStr)).toLocaleDateString(locale);
+  return intl.formatDate(dateStr);
 }
 
-export function formatDateTime(dateStr, locale) {
+export function formatDateTime(dateStr, intl) {
   if (!dateStr) return dateStr;
-  return new Date(Date.parse(dateStr))
-    .toLocaleString(locale, { hour: '2-digit', minute: '2-digit' })
-    .toLowerCase();
+  return `${intl.formatDate(dateStr)} ${intl.formatTime(dateStr)}`;
 }
 
 export function futureDate(dateStr, locale, days) {
