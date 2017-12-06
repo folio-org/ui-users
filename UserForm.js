@@ -146,10 +146,10 @@ class UserForm extends React.Component {
     const { initialValues } = this.props;
     const { sections } = this.state;
     const firstMenu = this.getAddFirstMenu();
-    const paneTitle = initialValues.id ? <span><Icon icon="edit" iconRootClass={css.UserFormEditIcon} />Edit: <Icon icon="profile" iconRootClass={css.UserFormEditIcon} />{getFullName(initialValues)}</span> : 'Create User';
+    const paneTitle = initialValues.id ? <span><Icon icon="edit" iconRootClass={css.UserFormEditIcon} />Edit: <Icon icon="profile" iconRootClass={css.UserFormEditIcon} />{getFullName(initialValues)}</span> : 'Create user';
     const lastMenu = initialValues.id ?
-      this.getLastMenu('clickable-updateuser', 'Update User') :
-      this.getLastMenu('clickable-createnewuser', 'Create User');
+      this.getLastMenu('clickable-updateuser', 'Update user') :
+      this.getLastMenu('clickable-createnewuser', 'Create user');
 
     return (
       <form className={css.UserFormRoot} id="form-user">
