@@ -16,7 +16,7 @@ module.exports.test = function(uiTestCtx) {
 
       const gid = 'alumni_' + Math.floor(Math.random()*10000)
       const gidlabel = 'Alumni'
-      const deletePath = '//div[.="' + gid + '"]//following-sibling::div//button[contains(.,"Delete")]'
+      const deletePath = '//div[.="' + gid + '"]//following-sibling::div[last()]//button[contains(.,"Delete")]'
 
       flogin = function(un, pw) {
         it('should login as ' + un + '/' + pw, done => {
@@ -74,9 +74,9 @@ module.exports.test = function(uiTestCtx) {
       it('should find a user to edit', done => {
         nightmare
         .click('#clickable-users-module')
-        .wait('#list-users a:nth-of-type(11) > div:nth-of-type(5)')
+        .wait('#list-users div[role="listitem"]:nth-of-type(11) > a > div:nth-of-type(5)')
         .evaluate(function() {
-          return document.querySelector('#list-users a:nth-of-type(11) > div:nth-of-type(5)').title
+          return document.querySelector('#list-users div[role="listitem"]:nth-of-type(11) > a > div:nth-of-type(5)').title
         })
         .then(function(result) {
           userid = result
@@ -127,6 +127,7 @@ module.exports.test = function(uiTestCtx) {
 	    return false
 	  }
 	},deletePath)
+	.wait(222)
         .xclick(deletePath)
         .click('a[href="/settings/users/addresstypes"]')
         .wait(wait)
