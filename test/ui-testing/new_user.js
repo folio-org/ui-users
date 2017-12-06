@@ -16,11 +16,7 @@ module.exports.test = function(uitestctx) {
       flogin = function(un, pw) {
         it('should login as ' + un + '/' + pw, done => {
           nightmare
-          .on('page', function(type="alert", message) {
-            throw new Error(message)
-           })
-          .goto(config.url)
-          .wait(Number(config.login_wait))
+          .wait(config.select.username)
           .insert(config.select.username, un)
           .insert(config.select.password, pw)
           .click('#clickable-login')
@@ -51,7 +47,20 @@ module.exports.test = function(uitestctx) {
           .catch(done)
         })
       }
+
+      it('should load login page', done => {
+        nightmare
+        .on('page', function(type="alert", message) {
+          throw new Error(message)
+         })
+        .goto(config.url)
+        .wait(Number(config.login_wait))
+        .then(result => { done() })
+        .catch(done)
+      })
+
       flogin(config.username, config.password)
+
       it('should open app and find version tag', done => {
         nightmare
          .use(openApp(nightmare, config, done, 'users', testVersion ))
@@ -111,8 +120,8 @@ module.exports.test = function(uitestctx) {
         .wait('#clickable-users-module')
         .click('#clickable-users-module')
         .wait('#input-user-search')
-        .type('#input-user-search',user.id)
-        .wait(555)
+        .insert('#input-user-search',user.id)
+        .wait('div[title="' + user.id + '"]')
         .click('div[title="' + user.id + '"]')
         .wait('#clickable-edituser')
         .click('#clickable-edituser')
