@@ -157,7 +157,6 @@ const withProxy = WrappedComponent =>
         const data = (resourceName === 'proxies') ?
           { proxyUserId: rec.user.id, userId, meta } :
           { proxyUserId: userId, userId: rec.user.id, meta: rec.meta };
-        console.log('create proxy', data);
         return proxiesFor.POST(data);
       });
 
