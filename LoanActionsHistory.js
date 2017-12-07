@@ -84,11 +84,11 @@ class LoanActionsHistory extends React.Component {
   }
 
   render() {
-    const { onCancel, loan, user, stripes, resources: { loanActionsWithUser } } = this.props;
+    const { onCancel, loan, user, resources: { loanActionsWithUser } } = this.props;
     const loanActionsFormatter = {
       Action: la => loanActionMap[la.action],
-      'Action Date': la => formatDateTime(la.loanDate, stripes.locale),
-      'Due Date': la => (la.dueDate ? formatDateTime(la.dueDate, stripes.locale) : ''),
+      'Action Date': la => formatDateTime(la.loanDate),
+      'Due Date': la => formatDateTime(la.dueDate),
       'Item Status': la => getItemStatusFormatter({ action: la.action, item: loan.item }),
       Operator: la => getFullName(la.user),
     };
@@ -121,7 +121,7 @@ class LoanActionsHistory extends React.Component {
               <KeyValue label="Call Number" value="TODO" />
             </Col>
             <Col xs={2} >
-              <KeyValue label="Due Date" value={formatDateTime(loan.dueDate, stripes.locale) || '-'} />
+              <KeyValue label="Due Date" value={formatDateTime(loan.dueDate) || '-'} />
             </Col>
             <Col xs={2} >
               <KeyValue label="Claimed Returned" value="TODO" />
@@ -135,7 +135,7 @@ class LoanActionsHistory extends React.Component {
               <KeyValue label="Loan Policy" value="TODO" />
             </Col>
             <Col xs={2} >
-              <KeyValue label="Loan Date" value={formatDateTime(loan.loanDate, stripes.locale) || '-'} />
+              <KeyValue label="Loan Date" value={formatDateTime(loan.loanDate) || '-'} />
             </Col>
             <Col xs={2} >
               <KeyValue label="Lost" value="TODO" />
@@ -149,7 +149,7 @@ class LoanActionsHistory extends React.Component {
               <KeyValue label="Renewal Count" value={_.get(loan, ['renewalCount'], '-')} />
             </Col>
             <Col xs={2} >
-              <KeyValue label="Return Date" value={formatDateTime(loan.returnDate, stripes.locale) || '-'} />
+              <KeyValue label="Return Date" value={formatDateTime(loan.returnDate) || '-'} />
             </Col>
             <Col xs={2} >
               <KeyValue label="Fine" value="TODO" />
