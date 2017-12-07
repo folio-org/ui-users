@@ -1,15 +1,17 @@
 import _ from 'lodash';
 import React from 'react';
+import { FormattedDate, FormattedTime } from 'react-intl';
+
 import loanActionMap from './data/loanActionMap';
 
-export function formatDate(dateStr, intl) {
+export function formatDate(dateStr) {
   if (!dateStr) return dateStr;
-  return intl.formatDate(dateStr);
+  return (<FormattedDate value={dateStr} />);
 }
 
-export function formatDateTime(dateStr, intl) {
+export function formatDateTime(dateStr) {
   if (!dateStr) return dateStr;
-  return `${intl.formatDate(dateStr)} ${intl.formatTime(dateStr)}`;
+  return (<span><FormattedDate value={dateStr} /> <FormattedTime value={dateStr} /></span>);
 }
 
 export function getFullName(user) {
