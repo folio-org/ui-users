@@ -2,8 +2,6 @@ import _ from 'lodash';
 import React from 'react';
 import { FormattedDate, FormattedTime } from 'react-intl';
 
-import loanActionMap from './data/loanActionMap';
-
 export function formatDate(dateStr) {
   if (!dateStr) return dateStr;
   return (<FormattedDate value={dateStr} />);
@@ -39,13 +37,9 @@ export function getAnchoredRowFormatter(row) {
     </a>
   );
 }
+
 export function isSubstringsInString(listSubStrings, testString) {
   return new RegExp(listSubStrings.join('|')).test(testString);
-}
-export function getItemStatusFormatter(loan) {
-  return isSubstringsInString(['renewed', 'recalled', 'requested'], loan.action) ?
-    `${_.get(loan, ['item', 'status', 'name'], '')} - ${loanActionMap[loan.action]}` :
-    `${_.get(loan, ['item', 'status', 'name'], '')}`;
 }
 
 export function eachPromise(arr, fn) {
