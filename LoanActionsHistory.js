@@ -71,7 +71,6 @@ class LoanActionsHistory extends React.Component {
     if (!users.records.length) return;
 
     if (!loanActionsWithUser.records || loanActionsWithUser.loan.id !== loan.id) {
-      console.log(loanActions);
       this.joinLoanActionsWithUser(loanActions.records, users.records, loan);
     }
   }
