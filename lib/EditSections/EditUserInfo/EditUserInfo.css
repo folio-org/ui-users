@@ -1,5 +1,5 @@
 .root {
-  padding: 0 1.2em;
+  padding: 0;
 }
 
 .label {
@@ -8,7 +8,7 @@
   color: #999;
   font-weight: 600;
   justify-content: flex-start;
-  padding: 0px 0px 10px 5px;
+  padding: 0px 0px 10px 22px;
   & h2 {
     font-size: 1.7rem;
   }
