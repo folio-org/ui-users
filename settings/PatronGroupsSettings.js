@@ -1,7 +1,10 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import ControlledVocab from '@folio/stripes-smart-components/lib/ControlledVocab';
+
+import Paneset from '@folio/stripes-components/lib/Paneset';
+import Pane from '@folio/stripes-components/lib/Pane';
+import EditableList from '@folio/stripes-components/lib/structures/EditableList';
 
 import { RenderPatronGroupLastUpdated, RenderPatronGroupNumberOfUsers } from '../lib/RenderPatronGroup';
 
@@ -26,6 +29,14 @@ class PatronGroupsSettings extends React.Component {
       }),
     }).isRequired,
     mutator: PropTypes.shape({
+      activeRecord: PropTypes.shape({
+        update: PropTypes.func,
+      }),
+      groups: PropTypes.shape({
+        POST: PropTypes.func,
+        PUT: PropTypes.func,
+        DELETE: PropTypes.func,
+      }),
       usersLastUpdating: PropTypes.shape({
         update: PropTypes.func,
       }),
@@ -48,15 +59,25 @@ class PatronGroupsSettings extends React.Component {
       type: 'okapi',
       records: 'usergroups',
       path: 'groups',
+      PUT: {
+        path: 'groups/%{activeRecord.id}',
+      },
+      DELETE: {
+        path: 'groups/%{activeRecord.id}',
+      },
     },
+    activeRecord: {},
     usersLastUpdating: {},
   });
 
   constructor(props) {
     super(props);
-    this.connectedControlledVocab = props.stripes.connect(ControlledVocab);
     this.connectedPatronGroupLastUpdated = props.stripes.connect(RenderPatronGroupLastUpdated);
     this.connectedPatronGroupNumberOfUsers = props.stripes.connect(RenderPatronGroupNumberOfUsers);
+
+    this.onCreateType = this.onCreateType.bind(this);
+    this.onUpdateType = this.onUpdateType.bind(this);
+    this.onDeleteType = this.onDeleteType.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -79,7 +100,8 @@ class PatronGroupsSettings extends React.Component {
   }
 
   propsReadyToFetchUsers(nextProps) {
-    return nextProps.resources.groups.hasLoaded && this.props.resources.usersLastUpdating.query === undefined;
+    const hasQuery = _.get(this.props, 'resources.usersLastUpdating.query', false);
+    return nextProps.resources.groups.hasLoaded && !hasQuery;
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -94,29 +116,73 @@ class PatronGroupsSettings extends React.Component {
     return query;
   }
 
+  onCreateType(type) {
+    console.log('ui-items - settings - onCreateType called', type);
+    this.props.mutator.groups.POST(type);
+  }
+
+  onUpdateType(type) {
+    console.log('ui-items - settings - onUpdateType called', type);
+    this.props.mutator.activeRecord.update({ id: type.id });
+    // TODO: remove when back end PUT requests ignore read only properties
+    // https://issues.folio.org/browse/RMB-92
+    delete type.metadata;
+    this.props.mutator.groups.PUT(type);
+  }
+
+  onDeleteType(typeId) {
+    const type = this.props.resources.groups.records.find(t => t.id === typeId);
+    console.log('ui-items - settings - onDeleteType called', type);
+    this.props.mutator.activeRecord.update({ id: type.id });
+    // TODO: remove when back end PUT requests ignore read only properties
+    // https://issues.folio.org/browse/RMB-92
+    delete type.metadata;
+    this.props.mutator.groups.DELETE(type);
+  }
+
   render() {
+
+    if (!this.props.resources.groups) return <div />;
+
+    const suppressor = {
+      // If a suppressor returns true, the control for that action will not appear
+      delete: () => true,
+      edit: () => false,
+    };
+
     return (
-      <this.connectedControlledVocab
-        {...this.props}
-        baseUrl="groups"
-        records="usergroups"
-        label="Patron Groups"
-        visibleFields={['group', 'desc']}
-        itemTemplate={{ group: 'string', id: 'string', desc: 'string' }}
-        nameKey="group"
-        additionalFields={{
-          lastUpdated: {
-            component: this.connectedPatronGroupLastUpdated,
-            gloss: 'Last Updated',
-            inheritedProps: this.props,
-          },
-          numberOfUsers: {
-            component: this.connectedPatronGroupNumberOfUsers,
-            gloss: '# of Users',
-            inheritedProps: this.props,
-          },
-        }}
-      />
+      <Paneset>
+      <Pane defaultWidth="fill" fluidContentWidth paneTitle={this.props.label}>
+        <EditableList
+          {...this.props}
+          // TODO: not sure why we need this OR if there are no groups
+          // Seems to load this once before the groups data from the manifest
+          // is pulled in. This still causes a JS warning, but not an error
+          contentData={this.props.resources.groups.records || []}
+          createButtonLabel="+ Add new"
+          visibleFields={['group', 'desc']}
+          itemTemplate={{ group: 'string', id: 'string', desc: 'string' }}
+          actionSuppression={suppressor}
+          onCreate={this.onCreateType}
+          onUpdate={this.onUpdateType}
+          onDelete={this.onDeleteType}
+          isEmptyMessage="There are no patron groups"
+          nameKey="group"
+          additionalFields={{
+            lastUpdated: {
+              component: this.connectedPatronGroupLastUpdated,
+              gloss: 'Last Updated',
+              inheritedProps: this.props,
+            },
+            numberOfUsers: {
+              component: this.connectedPatronGroupNumberOfUsers,
+              gloss: '# of Users',
+              inheritedProps: this.props,
+            },
+          }}
+        />
+      </Pane>
+    </Paneset>
     );
   }
 }
