@@ -32,6 +32,10 @@ function validate(values) {
     errors.username = 'Please fill this in to continue';
   }
 
+  if (!values.creds || !values.creds.password) {
+    errors.creds = { password: 'Please fill this in to continue' };
+  }
+
   if (!values.patronGroup) {
     errors.patronGroup = 'Please select a patron group';
   }
