@@ -88,6 +88,32 @@ class PatronGroupsSettings extends React.Component {
     }
   }
 
+  onCreateType(type) {
+    console.log('ui-items - settings - onCreateType called', type);
+    this.props.mutator.groups.POST(type);
+  }
+
+  onUpdateType(type) {
+    console.log('ui-items - settings - onUpdateType called', type);
+    this.props.mutator.activeRecord.update({ id: type.id });
+    // TODO: remove when back end PUT requests ignore read only properties
+    // https://issues.folio.org/browse/RMB-92
+    // eslint-disable-next-line no-param-reassign
+    delete type.metadata;
+    this.props.mutator.groups.PUT(type);
+  }
+
+  onDeleteType(typeId) {
+    const type = this.props.resources.groups.records.find(t => t.id === typeId);
+    console.log('ui-items - settings - onDeleteType called', type);
+    this.props.mutator.activeRecord.update({ id: type.id });
+    // TODO: remove when back end PUT requests ignore read only properties
+    // https://issues.folio.org/browse/RMB-92
+    // eslint-disable-next-line no-param-reassign
+    delete type.metadata;
+    this.props.mutator.groups.DELETE(type);
+  }
+
   // eslint-disable-next-line class-methods-use-this
   getLastUpdaterIds(groups) {
     const ids = [];
@@ -116,32 +142,7 @@ class PatronGroupsSettings extends React.Component {
     return query;
   }
 
-  onCreateType(type) {
-    console.log('ui-items - settings - onCreateType called', type);
-    this.props.mutator.groups.POST(type);
-  }
-
-  onUpdateType(type) {
-    console.log('ui-items - settings - onUpdateType called', type);
-    this.props.mutator.activeRecord.update({ id: type.id });
-    // TODO: remove when back end PUT requests ignore read only properties
-    // https://issues.folio.org/browse/RMB-92
-    delete type.metadata;
-    this.props.mutator.groups.PUT(type);
-  }
-
-  onDeleteType(typeId) {
-    const type = this.props.resources.groups.records.find(t => t.id === typeId);
-    console.log('ui-items - settings - onDeleteType called', type);
-    this.props.mutator.activeRecord.update({ id: type.id });
-    // TODO: remove when back end PUT requests ignore read only properties
-    // https://issues.folio.org/browse/RMB-92
-    delete type.metadata;
-    this.props.mutator.groups.DELETE(type);
-  }
-
   render() {
-
     if (!this.props.resources.groups) return <div />;
 
     const suppressor = {
@@ -152,37 +153,37 @@ class PatronGroupsSettings extends React.Component {
 
     return (
       <Paneset>
-      <Pane defaultWidth="fill" fluidContentWidth paneTitle={this.props.label}>
-        <EditableList
-          {...this.props}
-          // TODO: not sure why we need this OR if there are no groups
-          // Seems to load this once before the groups data from the manifest
-          // is pulled in. This still causes a JS warning, but not an error
-          contentData={this.props.resources.groups.records || []}
-          createButtonLabel="+ Add new"
-          visibleFields={['group', 'desc']}
-          itemTemplate={{ group: 'string', id: 'string', desc: 'string' }}
-          actionSuppression={suppressor}
-          onCreate={this.onCreateType}
-          onUpdate={this.onUpdateType}
-          onDelete={this.onDeleteType}
-          isEmptyMessage="There are no patron groups"
-          nameKey="group"
-          additionalFields={{
-            lastUpdated: {
-              component: this.connectedPatronGroupLastUpdated,
-              gloss: 'Last Updated',
-              inheritedProps: this.props,
-            },
-            numberOfUsers: {
-              component: this.connectedPatronGroupNumberOfUsers,
-              gloss: '# of Users',
-              inheritedProps: this.props,
-            },
-          }}
-        />
-      </Pane>
-    </Paneset>
+        <Pane defaultWidth="fill" fluidContentWidth paneTitle="Patron Groups">
+          <EditableList
+            {...this.props}
+            // TODO: not sure why we need this OR if there are no groups
+            // Seems to load this once before the groups data from the manifest
+            // is pulled in. This still causes a JS warning, but not an error
+            contentData={this.props.resources.groups.records || []}
+            createButtonLabel="+ Add new"
+            visibleFields={['group', 'desc']}
+            itemTemplate={{ group: 'string', id: 'string', desc: 'string' }}
+            actionSuppression={suppressor}
+            onCreate={this.onCreateType}
+            onUpdate={this.onUpdateType}
+            onDelete={this.onDeleteType}
+            isEmptyMessage="There are no patron groups"
+            nameKey="group"
+            additionalFields={{
+              lastUpdated: {
+                component: this.connectedPatronGroupLastUpdated,
+                gloss: 'Last Updated',
+                inheritedProps: this.props,
+              },
+              numberOfUsers: {
+                component: this.connectedPatronGroupNumberOfUsers,
+                gloss: '# of Users',
+                inheritedProps: this.props,
+              },
+            }}
+          />
+        </Pane>
+      </Paneset>
     );
   }
 }
