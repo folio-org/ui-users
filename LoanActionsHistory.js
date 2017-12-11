@@ -89,7 +89,7 @@ class LoanActionsHistory extends React.Component {
       Action: la => loanActionMap[la.action],
       'Action Date': la => formatDateTime(la.loanDate),
       'Due Date': la => formatDateTime(la.dueDate),
-      'Item Status': la => `${_.get(loan, ['item', 'status', 'name'], '')}`,
+      'Item Status': la => la.itemStatus,
       Operator: la => getFullName(la.user),
     };
 
