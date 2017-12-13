@@ -1,17 +1,16 @@
 .root {
-  padding: 0 1.2em;
+  padding: 0;
 }
 
 .label {
   display: flex;
   flex-grow: 2;
   color: #999;
-  font-weight: bold;
+  font-weight: 600;
   justify-content: flex-start;
-  padding: 0 22px;
+  padding: 0px 0px 10px 22px;
   & h2 {
-    margin: none;
-    font-size: 1.8rem;
+    font-size: 1.7rem;
   }
 }
 

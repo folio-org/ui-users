@@ -9,8 +9,10 @@
 * Add setting for show/hide profile picture. Fixes UIU-327.
 * Seconds should not display in due date time. Fixes UIU-328.
 * Display user loan count (regression). Fixes UIU-308.
-* Use sentence-case, not title case. Refs UIU-283. 
+* Use sentence-case, not title case. Refs UIU-283.
 * Use react-intl `<FormattedDate>` and `<FormattedTime>` for date/time formatting. Fixes UIU-342.
+* Add loaders to loan counters. Fixes UIU-343.
+* Make password required. Fixes UIU-344.
 
 ## [2.12.0](https://github.com/folio-org/ui-users/tree/v2.12.0) (2017-11-28)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.11.0...v2.12.0)
