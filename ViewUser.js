@@ -304,7 +304,8 @@ class ViewUser extends React.Component {
     const settings = (resources.settings || {}).records || [];
     const sponsors = this.props.getSponsors();
     const proxies = this.props.getProxies();
-
+console.warn('user', user);
+console.warn('props', this.props);
     const detailMenu = (<PaneMenu>
       <IconButton
         icon="comment"
