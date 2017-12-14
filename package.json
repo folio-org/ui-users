@@ -166,6 +166,27 @@
           "settings.enabled"
         ],
         "visible": true
+      },
+      {
+        "permissionName": "ui-users.viewproxies",
+        "displayName": "Users: Can view proxies assigned to users",
+        "subPermissions": [
+          "ui-users.view",
+          "proxiesfor.collection.get"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.editproxies",
+        "displayName": "Users: Can create, edit and removed proxies",
+        "description": "",
+        "subPermissions": [
+          "proxiesfor.item.get",
+          "proxiesfor.item.post",
+          "proxiesfor.item.put",
+          "proxiesfor.item.delete"
+        ],
+        "visible": true
       }
     ],
     "translations": {
