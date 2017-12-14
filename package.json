@@ -134,7 +134,7 @@
       },
       {
         "permissionName": "settings.usergroups.all",
-        "displayName": "Settings (Users): Can create, edit and remove patron groups [LEGACY!!]",
+        "displayName": "Settings (Users): Can create, edit and remove patron groups [LEGACY]",
         "subPermissions": [
           "ui-users.settings.usergroups"
         ]
