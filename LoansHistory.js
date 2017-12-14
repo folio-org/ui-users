@@ -7,6 +7,7 @@ import Paneset from '@folio/stripes-components/lib/Paneset';
 import Pane from '@folio/stripes-components/lib/Pane';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import TabButton from '@folio/stripes-components/lib/TabButton';
+import IconButton from '@folio/stripes-components/lib/IconButton';
 
 import { getFullName } from './util';
 import OpenLoans from './lib/OpenLoans';
@@ -57,9 +58,12 @@ class LoansHistory extends React.Component {
       <Row style={{ width: '100%' }}>
         <Col xs={1}>
           <PaneMenu>
-            <button onClick={this.props.onCancel} title="Close pane" aria-label="Close Loans">
-              <Icon icon="closeX" />
-            </button>
+            <IconButton
+              icon="closeX"
+              onClick={this.props.onCancel}
+              title="Close pane"
+              ariaLabel="Close Loans"
+            />
           </PaneMenu>
         </Col>
         <Col xs={1}>
