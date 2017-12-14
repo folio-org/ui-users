@@ -134,7 +134,7 @@
       },
       {
         "permissionName": "settings.usergroups.all",
-        "displayName": "Settings (Users): Can create, edit and remove patron groups [LEGACY]",
+        "displayName": "Settings (Users): Can create, edit and remove patron groups [LEGACY!!]",
         "subPermissions": [
           "ui-users.settings.usergroups"
         ]
@@ -164,6 +164,27 @@
         "displayName": "Settings (Users): display list of settings pages",
         "subPermissions": [
           "settings.enabled"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.viewproxies",
+        "displayName": "Users: Can view proxies assigned to users",
+        "subPermissions": [
+          "ui-users.view",
+          "proxiesfor.collection.get"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.editproxies",
+        "displayName": "Users: Can create, edit and removed proxies",
+        "description": "",
+        "subPermissions": [
+          "proxiesfor.item.get",
+          "proxiesfor.item.post",
+          "proxiesfor.item.put",
+          "proxiesfor.item.delete"
         ],
         "visible": true
       }
