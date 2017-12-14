@@ -84,6 +84,7 @@ class LoansHistory extends React.Component {
     return (
       <Paneset isRoot>
         <Pane
+          padContent={false}
           id="pane-loanshistory"
           defaultWidth="100%"
           dismissible
