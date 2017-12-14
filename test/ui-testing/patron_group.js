@@ -152,7 +152,8 @@ module.exports.test = function(uiTestCtx) {
         .click('#clickable-users-module')
         .wait('#input-user-search')
         .click('button[class^="headerSearchClearButton"]')
-        .type('#input-user-search', userid)
+        .insert('#input-user-search', userid)
+	.wait(parseInt(process.env.FOLIO_UI_DEBUG) ? parseInt(config.debug_sleep) : 555) // debugging
         .wait('div[title="' + userid + '"]')
         .click('div[title="' + userid + '"]')
         .wait('#clickable-edituser')
