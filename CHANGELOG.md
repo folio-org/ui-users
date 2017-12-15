@@ -15,6 +15,7 @@
 * Make password required. Fixes UIU-344.
 * Setup permissions for proxies. Fixes UIU-349.
 * Refine last updated metadata display. Fixes UIU-325.
+* Make Folio number read only. Fixes UIU-348.
 
 ## [2.12.0](https://github.com/folio-org/ui-users/tree/v2.12.0) (2017-11-28)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.11.0...v2.12.0)

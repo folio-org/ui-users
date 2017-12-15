@@ -2,3 +2,12 @@
   padding-left: 5px;
   margin-top: 15px;
 }
+
+.label {
+  display: block;
+  font-size: 0.8em;
+  font-weight: bold;
+  margin-bottom: 4px;
+  text-transform: Uppercase;
+  color: #333;
+}
