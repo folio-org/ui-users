@@ -7,6 +7,9 @@ import PropTypes from 'prop-types';
 const withProxy = WrappedComponent =>
   class WithProxyComponent extends React.Component {
     static propTypes = {
+      stripes: PropTypes.shape({
+        hasPerm: PropTypes.func.isRequired,
+      }),
       resources: PropTypes.shape({
         sponsors: PropTypes.object,
         proxies: PropTypes.object,
@@ -80,6 +83,10 @@ const withProxy = WrappedComponent =>
     }
 
     componentDidMount() {
+      if (!this.props.stripes.hasPerm('proxiesfor.collection.get')) {
+        return;
+      }
+
       const userId = this.props.match.params.id;
       this.loadSponsors(userId);
       this.loadProxies(userId);

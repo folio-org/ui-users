@@ -166,6 +166,27 @@
           "settings.enabled"
         ],
         "visible": true
+      },
+      {
+        "permissionName": "ui-users.viewproxies",
+        "displayName": "Users: Can view proxies assigned to users",
+        "subPermissions": [
+          "ui-users.view",
+          "proxiesfor.collection.get"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.editproxies",
+        "displayName": "Users: Can create, edit and removed proxies",
+        "description": "",
+        "subPermissions": [
+          "proxiesfor.item.get",
+          "proxiesfor.item.post",
+          "proxiesfor.item.put",
+          "proxiesfor.item.delete"
+        ],
+        "visible": true
       }
     ],
     "translations": {
@@ -206,9 +227,9 @@
     "eslint-plugin-react": "^6.4.1"
   },
   "dependencies": {
-    "@folio/stripes-components": "^1.9.0",
+    "@folio/stripes-components": "^2.0.0",
     "@folio/stripes-form": "^0.8.1",
-    "@folio/stripes-smart-components": "^1.3.0",
+    "@folio/stripes-smart-components": "^1.4.0",
     "classnames": "^2.2.5",
     "hashcode": "^1.0.3",
     "lodash": "^4.17.4",
