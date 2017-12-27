@@ -75,10 +75,10 @@ class LoanActionsHistory extends React.Component {
     if (!users.records.length) return;
 
     if (!loanActionsWithUser.records || loanActionsWithUser.loan.id !== loan.id
-        || this.state.loanActionCount !== loanActions.other.totalRecords) {
-        this.joinLoanActionsWithUser(loanActions.records, users.records, loan);
-        this.setState({ loanActionCount: loanActions.other.totalRecords });
-      }
+      || this.state.loanActionCount !== loanActions.other.totalRecords) {
+      this.joinLoanActionsWithUser(loanActions.records, users.records, loan);
+      this.setState({ loanActionCount: loanActions.other.totalRecords });
+    }
   }
 
   joinLoanActionsWithUser(loanActions, users, loan) {
