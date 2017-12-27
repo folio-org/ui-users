@@ -31,7 +31,6 @@ class LoanActionsHistory extends React.Component {
     user: PropTypes.object,
     onCancel: PropTypes.func.isRequired,
     onClickUser: PropTypes.func.isRequired,
-    loanActionCount: PropTypes.object,
   };
 
   static manifest = Object.freeze({
@@ -45,19 +44,18 @@ class LoanActionsHistory extends React.Component {
     loanActions: {
       type: 'okapi',
       records: 'loans',
-      resourceShouldRefresh:true,
-      //resourceShouldRefresh:function(){return true},
+      resourceShouldRefresh: true,
       GET: {
         path: 'loan-storage/loan-history?query=(id=!{loan.id})',
       },
     },
   });
-
+  // resourceShouldRefresh:function() { return true },
   constructor(props) {
     super(props);
     this.connectedProxy = props.stripes.connect(LoanActionsHistoryProxy);
     this.state = {
-      loanActionCount:0,
+      loanActionCount: 0,
     };
   }
 
@@ -79,11 +77,11 @@ class LoanActionsHistory extends React.Component {
     if (!loanActionsWithUser.records || loanActionsWithUser.loan.id !== loan.id) {
       this.joinLoanActionsWithUser(loanActions.records, users.records, loan);
       this.setState({loanActionCount:loanActions.other.totalRecords});
-    }else{
-      if (this.state.loanActionCount !== loanActions.other.totalRecords){
+    } else {
+      if (this.state.loanActionCount !== loanActions.other.totalRecords) {
         this.joinLoanActionsWithUser(loanActions.records, users.records, loan);
-        this.setState({loanActionCount:loanActions.other.totalRecords});
-      }else{return;}
+        this.setState( { loanActionCount:loanActions.other.totalRecords } );
+      } else { return; }
     }
   }
 
