@@ -32,7 +32,7 @@ module.exports.test = function(uiTestCtx) {
           .wait('#clickable-logout')
           .then(result => { done() })
           .catch(done)
-        }) 
+        })
       }
       flogout = function() {
         it('should logout', done => {
@@ -118,20 +118,20 @@ module.exports.test = function(uiTestCtx) {
         .click('a[href="/settings/users"]')
         .wait('a[href="/settings/users/groups"]')
         .click('a[href="/settings/users/groups"]')
-	.wait(function(dp) {
-	  var dnode = document.evaluate(dp, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)
-	  if (dnode.singleNodeValue) {
-	    return true
-	  }
-	  else {
-	    return false
-	  }
-	},deletePath)
-	.wait(222)
+        .wait(function(dp) {
+          var dnode = document.evaluate(dp, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)
+          if (dnode.singleNodeValue) {
+            return true
+          }
+          else {
+            return false
+          }
+        },deletePath)
+        .wait(222)
         .xclick(deletePath)
         .click('a[href="/settings/users/addresstypes"]')
         .wait(wait)
-	.xclick('//button[starts-with(.,"Discard")]')
+        .xclick('//button[starts-with(.,"Discard")]')
         .wait(wait)
         .click('a[href="/settings/users/groups"]')
         .wait(wait)
@@ -142,7 +142,7 @@ module.exports.test = function(uiTestCtx) {
           }
         }, gid)
         .wait(parseInt(process.env.FOLIO_UI_DEBUG) ? parseInt(config.debug_sleep) : 555) // debugging
-        .then(function(result) { 
+        .then(function(result) {
           done()
          })
         .catch(done)
@@ -153,7 +153,7 @@ module.exports.test = function(uiTestCtx) {
         .wait('#input-user-search')
         .click('button[class*="headerSearchClearButton"]')
         .insert('#input-user-search', userid)
-	.wait(parseInt(process.env.FOLIO_UI_DEBUG) ? parseInt(config.debug_sleep) : 555) // debugging
+        .wait(parseInt(process.env.FOLIO_UI_DEBUG) ? parseInt(config.debug_sleep) : 555) // debugging
         .wait('div[title="' + userid + '"]')
         .click('div[title="' + userid + '"]')
         .wait('#clickable-edituser')
@@ -183,23 +183,23 @@ module.exports.test = function(uiTestCtx) {
         .xclick('id("ModuleContainer")//a[.="Users"]')
         .wait(wait)
         .xclick('id("ModuleContainer")//a[.="Patron groups"]')
-	.wait(function(dp) {
-	  var dnode = document.evaluate(dp, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)
-	  if (dnode.singleNodeValue) {
-	    return true
-	  }
-	  else {
-	    return false
-	  }
-	},deletePath)
+        .wait(function(dp) {
+          var dnode = document.evaluate(dp, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)
+          if (dnode.singleNodeValue) {
+            return true
+          }
+          else {
+            return false
+          }
+        },deletePath)
         .xclick(deletePath)
         .wait(parseInt(process.env.FOLIO_UI_DEBUG) ? parseInt(config.debug_sleep) : 555) // debugging
         .then(result => { done() })
         .catch(done)
-      }) 
+      })
       it('should confirm that "' + gid + '" patron group has been deleted', done => {
         nightmare
-	.wait(wait)
+        .wait(wait)
         .evaluate(function(gid) {
           var cnode = document.evaluate('//div[.="' + gid + '"]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)
           if (cnode.singleNodeValue) {
@@ -209,7 +209,7 @@ module.exports.test = function(uiTestCtx) {
         .wait(parseInt(process.env.FOLIO_UI_DEBUG) ? parseInt(config.debug_sleep) : 555) // debugging
         .then(result => { done() })
         .catch(done)
-      }) 
+      })
       flogout();
     })
   })

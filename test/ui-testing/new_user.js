@@ -10,7 +10,7 @@ module.exports.test = function(uitestctx) {
     const user = namegen();
 
     describe('Login > Create new user > Logout > Login as new user > Logout > Login > Edit new user and confirm changes', () => {
-      
+
       var phone = user.address.phone
 
       flogin = function(un, pw) {
@@ -35,7 +35,7 @@ module.exports.test = function(uitestctx) {
           .wait(555)
           .then(result => { done() })
           .catch(done)
-        }) 
+        })
       }
       flogout = function(end) {
         it('should logout', done => {
@@ -87,7 +87,7 @@ module.exports.test = function(uitestctx) {
         nightmare
         .insert('#adduser_username',user.id)
         .insert('#pw',user.password)
-	.select('#useractive','true')
+        .select('#useractive','true')
         .insert('#adduser_firstname',user.firstname)
         .insert('#adduser_lastname',user.lastname)
         .insert('#adduser_email', user.email)
@@ -127,9 +127,9 @@ module.exports.test = function(uitestctx) {
         .click('#clickable-edituser')
         .wait('#adduser_username')
         .wait(555)
-	.click('#adduser_username')
+        .click('#adduser_username')
         .type('#adduser_username',null)
-	.wait(555)
+        .wait(555)
         .insert('#adduser_username',user.id + "x")
         .select('#adduser_group', pgroup)
         .wait(555)
@@ -137,12 +137,12 @@ module.exports.test = function(uitestctx) {
         .wait(555)
         .wait(function(uid) {
           var xp = document.evaluate( '//div[.="' + uid + '"]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)
-          try { 
+          try {
             var val = xp.singleNodeValue.innerHTML
             return true
           } catch(e) {
             return false
-          } 
+          }
         }, user.id + "x")
         .wait(parseInt(process.env.FOLIO_UI_DEBUG) ? parseInt(config.debug_sleep) : 555) // debugging
         .then(result => { done() })
@@ -152,14 +152,14 @@ module.exports.test = function(uitestctx) {
       it('Should login as ' + user.id + 'x/' + user.password, done => {
         nightmare
         .wait('#input-username')
-	.wait(222)
+        .wait(222)
         .insert('#input-username', user.id + 'x')
         .insert('#input-password', user.password)
-	.click('#clickable-login')
-	.wait('#clickable-logout')
-	.click('#clickable-logout')
+        .click('#clickable-login')
+        .wait('#clickable-logout')
+        .click('#clickable-logout')
         .wait(parseInt(process.env.FOLIO_UI_DEBUG) ? parseInt(config.debug_sleep) : 555) // debugging
-	.end()
+        .end()
         .then(result => { done() })
         .catch(done)
       })
