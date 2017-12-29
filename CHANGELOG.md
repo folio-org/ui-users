@@ -15,7 +15,7 @@
 * Make password required. Fixes UIU-344.
 * Setup permissions for proxies. Fixes UIU-349.
 * Refine last updated metadata display. Fixes UIU-325.
-* Make Folio number read only. Fixes UIU-348.
+* Make FOLIO number read only. Fixes UIU-348.
 
 ## [2.12.0](https://github.com/folio-org/ui-users/tree/v2.12.0) (2017-11-28)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.11.0...v2.12.0)
@@ -72,7 +72,7 @@
 
 * Re-usable `<SearchAndSort>` component:
   * Break out core search/sort functionality into re-usable component. Fixes UIU-278.
-  * Make various specific parts of funcationality work with `<SearchAndSort>`:
+  * Make various specific parts of functionality work with `<SearchAndSort>`:
     * Infinite scroll. Fixes UIU-284.
     * Full-record view. Fixes UIU-287.
     * Fix "Dismiss full record" button. Fixes UIU-288.
@@ -325,5 +325,5 @@ Previous versions of ui-users are not compatible with version 9.0.0 of mod-users
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v0.0.2...v1.0.0)
 
 * First version to have a documented change-log.
-* Handles `id` field, rather then `_id`, as unique key of patron groups. Enables this module to interoperate with new versions of mod-users (since commit 022b8b8c) but of course makes it unable to run against older versions.
+* Handles `id` field, rather than `_id`, as unique key of patron groups. Enables this module to interoperate with new versions of mod-users (since commit 022b8b8c) but of course makes it unable to run against older versions.
 * Updates the permissions checked, to match what is used by folio-backend-auth v0.8.3.
