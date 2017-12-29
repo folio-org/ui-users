@@ -10,7 +10,7 @@ module.exports.test = function(uitestctx) {
     const user = namegen();
 
     describe('Login > Create new user > Logout > Login as new user > Logout > Login > Edit new user and confirm changes', () => {
-      
+
       var phone = user.address.phone
 
       flogin = function(un, pw) {
@@ -35,7 +35,7 @@ module.exports.test = function(uitestctx) {
           .wait(555)
           .then(result => { done() })
           .catch(done)
-        }) 
+        })
       }
       flogout = function(end) {
         it('should logout', done => {
@@ -137,12 +137,12 @@ module.exports.test = function(uitestctx) {
         .wait(555)
         .wait(function(uid) {
           var xp = document.evaluate( '//div[.="' + uid + '"]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)
-          try { 
+          try {
             var val = xp.singleNodeValue.innerHTML
             return true
           } catch(e) {
             return false
-          } 
+          }
         }, user.id + "x")
         .wait(parseInt(process.env.FOLIO_UI_DEBUG) ? parseInt(config.debug_sleep) : 555) // debugging
         .then(result => { done() })

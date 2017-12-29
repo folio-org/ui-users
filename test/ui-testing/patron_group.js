@@ -32,7 +32,7 @@ module.exports.test = function(uiTestCtx) {
           .wait('#clickable-logout')
           .then(result => { done() })
           .catch(done)
-        }) 
+        })
       }
       flogout = function() {
         it('should logout', done => {
@@ -142,7 +142,7 @@ module.exports.test = function(uiTestCtx) {
           }
         }, gid)
         .wait(parseInt(process.env.FOLIO_UI_DEBUG) ? parseInt(config.debug_sleep) : 555) // debugging
-        .then(function(result) { 
+        .then(function(result) {
           done()
          })
         .catch(done)
@@ -196,7 +196,7 @@ module.exports.test = function(uiTestCtx) {
         .wait(parseInt(process.env.FOLIO_UI_DEBUG) ? parseInt(config.debug_sleep) : 555) // debugging
         .then(result => { done() })
         .catch(done)
-      }) 
+      })
       it('should confirm that "' + gid + '" patron group has been deleted', done => {
         nightmare
         .wait(wait)
@@ -209,7 +209,7 @@ module.exports.test = function(uiTestCtx) {
         .wait(parseInt(process.env.FOLIO_UI_DEBUG) ? parseInt(config.debug_sleep) : 555) // debugging
         .then(result => { done() })
         .catch(done)
-      }) 
+      })
       flogout();
     })
   })
