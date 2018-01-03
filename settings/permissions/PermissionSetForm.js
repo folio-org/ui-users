@@ -107,13 +107,13 @@ class PermissionSetForm extends React.Component {
               <Col xs={8}>
                 <section>
                   <h2 style={{ marginTop: '0' }}>About</h2>
-                  <Field label="Title" name="displayName" id="displayName" component={Textfield} autoFocus required fullWidth rounded disabled={disabled} />
-                  <Field label="Description" name="description" id="permissionset_description" component={TextArea} fullWidth rounded disabled={disabled} />
+                  <Field label="Title" name="displayName" id="input-permission-title" component={Textfield} autoFocus required fullWidth rounded disabled={disabled} />
+                  <Field label="Description" name="description" id="input-permission-description" component={TextArea} fullWidth rounded disabled={disabled} />
                 </section>
 
                 {selectedSet.id &&
                   <IfPermission perm="perms.permissions.item.delete">
-                    <Button title="Delete Permission Set" onClick={this.beginDelete} disabled={confirmDelete}> Delete Set </Button>
+                    <Button title="Delete Permission Set" id="clickable-delete-set" onClick={this.beginDelete} disabled={confirmDelete}> Delete Set </Button>
                   </IfPermission>
                 }
               </Col>
