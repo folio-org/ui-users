@@ -12,9 +12,13 @@ module.exports.test = function(uiTestCtx) {
       
       let displayName = 'Circulation employee'
       let description = 'Contains permissions to execute basic circ functions.'
+      let uuid = null
 
       before( done => {
         login(nightmare, config, done);  // logs in with the default admin credentials
+      })
+      after( done => {
+        logout(nightmare, config, done);  
       })
 
       it('should open app and find version tag', done => {
@@ -32,18 +36,18 @@ module.exports.test = function(uiTestCtx) {
         .click('a[href="/settings/users/perms"]')
 	.wait('button[title^="Add "]')
 	.click('button[title^="Add "]')
-	.wait('#displayName')
-	.insert('#displayName', displayName)
-	.insert('#permissionset_description', description)
-	.click('#AddPermissionDropdown')
+	.wait('#input-permission-title')
+	.insert('#input-permission-title', displayName)
+	.insert('#input-permission-description', description)
+	.click('#clickable-add-permission')
 	.wait(555)
 	.xclick('//button[contains(.,"Check in")]')
 	.wait(555)
-	.click('#AddPermissionDropdown')
+	.click('#clickable-add-permission')
 	.wait(555)
 	.xclick('//button[contains(.,"Check out")]')
 	.wait(555)
-	.click('button[title^="Save"]')
+	.click('#clickable-save-permission-set')
         .wait(parseInt(process.env.FOLIO_UI_DEBUG) ? parseInt(config.debug_sleep) : 555) // debugging
         .then(result => { done() })
         .catch(done)
@@ -57,20 +61,42 @@ module.exports.test = function(uiTestCtx) {
         .click('a[href="/settings/users/perms"]')
 	.wait(555)
 	.xclick('//a[.="' + displayName + '"]')
-	.wait('button[title="Edit"]')
+	.wait('#clickable-edit-item')
         .wait(parseInt(process.env.FOLIO_UI_DEBUG) ? parseInt(config.debug_sleep) : 555) // debugging
         .then(result => { done() })
         .catch(done)
       })
       it('should delete new permission set', done => {
         nightmare
-	.click('button[title="Edit"]')
-	.wait('button[title^="Delete"]')
-	.click('button[title^="Delete"]')
-	.wait('#Delete Permission Set?')
-	.click('#Delete Permission Set? button:nth-of-type(2)')
+	.click('#clickable-edit-item')
+	.wait('#clickable-delete-set')
+	.click('#clickable-delete-set')
+	.wait(333)
+	.click('div[role="dialog"] button:nth-of-type(2)')
         .wait(parseInt(process.env.FOLIO_UI_DEBUG) ? parseInt(config.debug_sleep) : 555) // debugging
-	.end()
+	.url()
+        .then(result => { 
+	  done()
+	  uuid = result
+	  uuid = uuid.replace(/^.+\//,"")
+	  console.log('          ID of deleted permission set: ' + uuid)
+	})
+        .catch(done)
+      })
+      it('should confirm deletion', done => {
+        nightmare
+	.wait(222)
+	.click('a[href^="/settings/users/groups"]')
+	.wait(222)
+        .click('a[href="/settings/users/perms"]')
+	.wait(222)
+	.evaluate(function(uuid) {
+	   var element = document.querySelector('a[href*="' + uuid + '"]')
+	   if (element) {
+	     throw new Error('Failed at deleting ' + uuid)
+	   }
+	}, uuid)
+        .wait(parseInt(process.env.FOLIO_UI_DEBUG) ? parseInt(config.debug_sleep) : 555) // debugging
         .then(result => { done() })
         .catch(done)
       })
