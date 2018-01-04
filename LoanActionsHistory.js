@@ -44,15 +44,19 @@ class LoanActionsHistory extends React.Component {
     loanActions: {
       type: 'okapi',
       records: 'loans',
+      resourceShouldRefresh: true,
       GET: {
         path: 'loan-storage/loan-history?query=(id=!{loan.id})',
       },
     },
   });
-
+  // resourceShouldRefresh:function() { return true },
   constructor(props) {
     super(props);
     this.connectedProxy = props.stripes.connect(LoanActionsHistoryProxy);
+    this.state = {
+      loanActionCount: 0,
+    };
   }
 
   // TODO: refactor after join is supported in stripes-connect
@@ -70,8 +74,10 @@ class LoanActionsHistory extends React.Component {
 
     if (!users.records.length) return;
 
-    if (!loanActionsWithUser.records || loanActionsWithUser.loan.id !== loan.id) {
+    if (!loanActionsWithUser.records || loanActionsWithUser.loan.id !== loan.id
+      || this.state.loanActionCount !== loanActions.other.totalRecords) {
       this.joinLoanActionsWithUser(loanActions.records, users.records, loan);
+      this.setState({ loanActionCount: loanActions.other.totalRecords });
     }
   }
 
