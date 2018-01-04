@@ -181,6 +181,7 @@
         "displayName": "Users: Can create, edit and removed proxies",
         "description": "",
         "subPermissions": [
+          "ui-users.viewproxies",
           "proxiesfor.item.get",
           "proxiesfor.item.post",
           "proxiesfor.item.put",
