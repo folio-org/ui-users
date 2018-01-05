@@ -160,7 +160,8 @@ class Users extends React.Component {
   componentWillUpdate() {
     const pg = (this.props.resources.patronGroups || {}).records || [];
     if (pg && pg.length) {
-      filterConfig[1].values = pg.map(rec => ({ name: rec.group, cql: rec.id }));
+      const pgFilterConfig = filterConfig.find(group => group.name === 'pg');
+      pgFilterConfig.values = pg.map(rec => ({ name: rec.group, cql: rec.id }));
     }
   }
 
@@ -213,6 +214,7 @@ class Users extends React.Component {
       baseRoute={packageInfo.stripes.route}
       initialPath={initialPath}
       filterConfig={filterConfig}
+      initialFilters={this.constructor.manifest.query.initialValue.filters}
       initialResultCount={INITIAL_RESULT_COUNT}
       resultCountIncrement={RESULT_COUNT_INCREMENT}
       viewRecordComponent={ViewUser}
