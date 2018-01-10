@@ -1,7 +1,7 @@
 /* global it describe Nightmare */
-/* eslint func-names: ["error", "never"] */
-module.exports.test = function (uitestctx) {
-  describe('Module test: users:new_user', function () {
+// /* eslint func-names: ["error", "never"] */ //
+module.exports.test = function meh(uitestctx) {
+  describe('Module test: users:new_user', function bar() {
     const { config, helpers: { namegen, openApp }, meta: { testVersion } } = uitestctx;
 
     this.timeout(Number(config.test_timeout));
@@ -11,7 +11,7 @@ module.exports.test = function (uitestctx) {
     const user = namegen();
 
     describe('Login > Create new user > Logout > Login as new user > Logout > Login > Edit new user and confirm changes', () => {
-      const flogin = function (un, pw) {
+      const flogin = function buh(un, pw) {
         it(`should login as ${un}/${pw}`, (done) => {
           nightmare
           .wait(config.select.username)
@@ -31,17 +31,17 @@ module.exports.test = function (uitestctx) {
             return rvalue;
           })
           .wait(555)
-          .then((result) => { done(); })
+          .then(() => { done(); })
           .catch(done);
         });
       };
-      const flogout = function () {
+      const flogout = function sma() {
         it('should logout', (done) => {
           nightmare
           .click('#clickable-logout')
           .wait('#clickable-login')
           .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
-          .then((result) => { done(); })
+          .then(() => { done(); })
           .catch(done);
         });
       };
@@ -53,7 +53,7 @@ module.exports.test = function (uitestctx) {
         })
         .goto(config.url)
         .wait(Number(config.login_wait))
-        .then((result) => { done(); })
+        .then(() => { done(); })
         .catch(done);
       });
 
@@ -104,7 +104,7 @@ module.exports.test = function (uitestctx) {
         .click('#clickable-createnewuser')
         .wait('#clickable-newuser')
         .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_slee, 10) : 3000) // debugging
-        .then((result) => { done(); })
+        .then(() => { done(); })
         .catch(done);
       });
       flogout();
@@ -140,7 +140,7 @@ module.exports.test = function (uitestctx) {
           return rvalue;
         }, `${user.id}x`)
         .wait(parseInt(process.env.FOLIO_UI_DEBU, 10) ? parseInt(config.debug_slee, 10) : 555) // debugging
-        .then((result) => { done(); })
+        .then(() => { done(); })
         .catch(done);
       });
       flogout();
@@ -155,7 +155,7 @@ module.exports.test = function (uitestctx) {
         .click('#clickable-logout')
         .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
         .end()
-        .then((result) => { done(); })
+        .then(() => { done(); })
         .catch(done);
       });
     });
