@@ -93,6 +93,10 @@ const withProxy = WrappedComponent =>
     }
 
     componentWillReceiveProps(nextProps) {
+      if (!this.props.stripes.hasPerm('proxiesfor.collection.get')) {
+        return;
+      }
+
       const { match: { params: { id } } } = nextProps;
 
       if (id !== this.props.match.params.id) {
