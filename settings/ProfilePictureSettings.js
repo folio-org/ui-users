@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
-import Pane from '@folio/stripes-components/lib/Pane';
-import Checkbox from '@folio/stripes-components/lib/Checkbox';
+import Callout from '@folio/stripes-components/lib/Callout';
+import ProfilePictureForm from './ProfilePictureForm';
 
 class ProfilePictureSettings extends React.Component {
   static propTypes = {
@@ -16,6 +15,7 @@ class ProfilePictureSettings extends React.Component {
         PUT: PropTypes.func,
       }),
     }).isRequired,
+    label: PropTypes.string,
   };
 
   static manifest = Object.freeze({
@@ -35,46 +35,47 @@ class ProfilePictureSettings extends React.Component {
 
   constructor(props) {
     super(props);
-    this.onChange = this.onChange.bind(this);
+    this.onSave = this.onSave.bind(this);
   }
 
-  onChange(e) {
+  onSave(data) {
     const setting = this.props.resources.settings.records[0];
+    const value = data.profilePictures;
+    let promise;
 
     if (setting) {
       if (setting.metadata) delete setting.metadata;
       this.props.mutator.recordId.replace(setting.id);
-      setting.value = e.target.checked;
-      this.props.mutator.settings.PUT(setting);
+      setting.value = value;
+      promise = this.props.mutator.settings.PUT(setting);
     } else {
-      this.props.mutator.settings.POST(
+      promise = this.props.mutator.settings.POST(
         {
           module: 'USERS',
           configName: 'profile_pictures',
-          value: e.target.checked,
+          value,
         },
       );
     }
+
+    promise.then(() => {
+      this.callout.sendCallout({ message: 'Setting was successfully updated.' });
+    });
   }
 
   render() {
     const settings = (this.props.resources.settings || {}).records || [];
-    const checked = !(settings.length === 0 || settings[0].value === 'false');
+    const profilePictures = settings.length && settings[0].value === 'true';
 
     return (
-      <Pane defaultWidth="fill" fluidContentWidth paneTitle="Profile Pictures">
-        <Row>
-          <Col xs={12}>
-            <Checkbox
-              id="profilePictures"
-              label="Display profile pictures"
-              value={checked}
-              checked={checked}
-              onChange={this.onChange}
-            />
-          </Col>
-        </Row>
-      </Pane>
+      <div style={{ width: '100%' }}>
+        <ProfilePictureForm
+          onSubmit={this.onSave}
+          initialValues={{ profilePictures }}
+          label={this.props.label}
+        />
+        <Callout ref={ref => (this.callout = ref)} />
+      </div>
     );
   }
 
