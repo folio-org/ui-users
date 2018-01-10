@@ -102,7 +102,7 @@ module.exports.test = function meh(uitestctx) {
         .select('select[name*="addressType"]', 'Home')
         .click('#clickable-createnewuser')
         .wait('#clickable-newuser')
-        .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_slee, 10) : 3000) // debugging
+        .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 3000) // debugging
         .then(() => { done(); })
         .catch(done);
       });
@@ -138,7 +138,7 @@ module.exports.test = function meh(uitestctx) {
           }
           return rvalue;
         }, `${user.id}x`)
-        .wait(parseInt(process.env.FOLIO_UI_DEBU, 10) ? parseInt(config.debug_slee, 10) : 555) // debugging
+        .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
         .then(() => { done(); })
         .catch(done);
       });
