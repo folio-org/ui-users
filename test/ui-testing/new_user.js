@@ -1,5 +1,4 @@
 /* global it describe Nightmare */
-// /* eslint func-names: ["error", "never"] */ //
 module.exports.test = function meh(uitestctx) {
   describe('Module test: users:new_user', function bar() {
     const { config, helpers: { namegen, openApp }, meta: { testVersion } } = uitestctx;
