@@ -39,6 +39,7 @@ class LoanActionsHistory extends React.Component {
     users: {
       type: 'okapi',
       records: 'users',
+      resourceShouldRefresh: true,
       path: 'users?query=(%{userIds.query})',
     },
     loanActions: {
@@ -65,10 +66,9 @@ class LoanActionsHistory extends React.Component {
 
     if (!loanActions.records.length ||
       loanActions.records[0].id !== loan.id) return;
-
     if (!userIds.query || userIds.loan.id !== loan.id) {
       const query = loanActions.records
-        .map(r => `id=${r.metaData.createdByUserId}`).join(' or ');
+        .map(r => `id=${r.metaData.updatedByUserId}`).join(' or ');
       this.props.mutator.userIds.replace({ query, loan });
     }
 
@@ -85,7 +85,7 @@ class LoanActionsHistory extends React.Component {
     const userMap = users.reduce((memo, user) =>
       Object.assign(memo, { [user.id]: user }), {});
     const records = loanActions.map(la =>
-      Object.assign({}, la, { user: userMap[la.metaData.createdByUserId] }));
+      Object.assign({}, la, { user: userMap[la.metaData.updatedByUserId] }));
     this.props.mutator.loanActionsWithUser.replace({ loan, records });
   }
 
