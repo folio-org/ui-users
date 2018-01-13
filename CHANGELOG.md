@@ -20,6 +20,7 @@
 * Hide proxy section if user lacks sufficient permission to see it. Fixes UIU-363.
 * Add Save button to user settings. Fixes UIU-354.
 * Disable deletion of in-use patron groups. Fixes UIU-364.
+* Remove Phone and Mobile phone as 'preferred contact' options. Fixes UIU-261.
 
 ## [2.12.0](https://github.com/folio-org/ui-users/tree/v2.12.0) (2017-11-28)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.11.0...v2.12.0)
