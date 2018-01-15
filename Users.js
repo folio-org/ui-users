@@ -140,12 +140,12 @@ class Users extends React.Component {
     },
     patronGroups: {
       type: 'okapi',
-      path: 'groups',
+      path: 'groups?query=cql.allRecords=1 sortby group',
       records: 'usergroups',
     },
     addressTypes: {
       type: 'okapi',
-      path: 'addresstypes',
+      path: 'addresstypes?query=cql.allRecords=1 sortby desc',
       records: 'addressTypes',
     },
     uniquenessValidator: {
