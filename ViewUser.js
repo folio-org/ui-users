@@ -20,6 +20,7 @@ import LoanActionsHistory from './LoanActionsHistory';
 import { toListAddresses, toUserAddresses } from './converters/address';
 import { getFullName, eachPromise } from './util';
 import withProxy from './withProxy';
+import removeQueryParam from './removeQueryParam';
 
 import {
   UserInfo,
@@ -127,8 +128,6 @@ class ViewUser extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      viewLoansHistoryMode: false,
-      viewOpenLoansMode: false,
       viewLoanActionsHistoryMode: false,
       selectedLoan: {},
       lastUpdate: null,
@@ -165,26 +164,17 @@ class ViewUser extends React.Component {
   // EditUser Handlers
   onClickViewOpenLoans(e) {
     if (e) e.preventDefault();
-    this.setState({
-      viewLoansHistoryMode: true,
-      viewOpenLoansMode: true,
-    });
+    transitionToParams.bind(this)({ layer: 'open-loans' });
   }
 
   onClickViewClosedLoans(e) {
     if (e) e.preventDefault();
-    this.setState({
-      viewLoansHistoryMode: true,
-      viewOpenLoansMode: false,
-    });
+    transitionToParams.bind(this)({ layer: 'closed-loans' });
   }
 
   onClickCloseLoansHistory(e) {
     if (e) e.preventDefault();
-    this.setState({
-      viewLoansHistoryMode: false,
-      viewOpenLoansMode: false,
-    });
+    removeQueryParam('layer', this.props.location, this.props.history);
   }
 
   onClickViewLoanActionsHistory(e, selectedLoan) {
@@ -382,7 +372,7 @@ class ViewUser extends React.Component {
             parentMutator={this.props.parentMutator}
           />
         </Layer>
-        <Layer isOpen={this.state.viewLoansHistoryMode} label="Loans">
+        <Layer isOpen={query.layer ? query.layer === 'open-loans' || query.layer === 'closed-loans' : false} label="Loans">
           <this.connectedLoansHistory
             user={user}
             patronGroup={patronGroup}
@@ -392,7 +382,7 @@ class ViewUser extends React.Component {
             onClickViewOpenLoans={this.onClickViewOpenLoans}
             onClickViewClosedLoans={this.onClickViewClosedLoans}
             onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
-            openLoans={this.state.viewOpenLoansMode}
+            openLoans={query.layer === 'open-loans'}
           />
         </Layer>
         <Layer isOpen={this.state.viewLoanActionsHistoryMode} label="Loans Actions History">
