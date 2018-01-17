@@ -25,6 +25,7 @@ class AddressTypesSettings extends React.Component {
         columnMapping={{ addressType: 'Address Type', desc: 'Description' }}
         itemTemplate={{ addressType: 'string', id: 'string', desc: 'string' }}
         nameKey="addressType"
+        addButtonId="clickable-add-addressType"
       />
     );
   }

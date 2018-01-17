@@ -72,8 +72,6 @@ class PatronGroupsSettings extends React.Component {
 
   constructor(props) {
     super(props);
-    this.connectedPatronGroupLastUpdated = props.stripes.connect(RenderPatronGroupLastUpdated);
-    this.connectedPatronGroupNumberOfUsers = props.stripes.connect(RenderPatronGroupNumberOfUsers);
 
     this.onCreateType = this.onCreateType.bind(this);
     this.onUpdateType = this.onUpdateType.bind(this);
@@ -196,6 +194,7 @@ class PatronGroupsSettings extends React.Component {
             nameKey="group"
             formatter={formatter}
             itemTemplate={{}}
+            addButtonId="clickable-add-patronGroup"
           />
         </Pane>
       </Paneset>

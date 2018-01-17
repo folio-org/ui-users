@@ -9,12 +9,12 @@ module.exports.test = function foo(uiTestCtx) {
     let userid = null;
     let communityid = null;
     let staffid = null;
-    const wait = 222;
+    const wait = 333;
 
     describe('Login > Add new patron group > Assign to user > Try to delete patron group > Unassign from user > Try to delete again > Logout\n', () => {
       const gid = `alumni_${Math.floor(Math.random() * 10000)}`;
       const gidlabel = 'Alumni';
-      const deletePath = `//div[.="${gid}"]//following-sibling::div[last()]//button[contains(.,"Delete")]`;
+      const deletePath = `//div[.="${gid}"]//following-sibling::div[last()]//button[contains(@id, "delete")]`;
 
       const flogin = function minc(un, pw) {
         it(`should login as ${un}/${pw}`, (done) => {
@@ -59,11 +59,12 @@ module.exports.test = function foo(uiTestCtx) {
         .wait(wait)
         .click('a[href="/settings/users/groups"]')
         .wait(wait)
-        .xclick('//button[contains(.,"Add new")]')
-        .wait(wait)
+        .click('#clickable-add-patronGroup')
+        .wait(1000)
         .type('input[name="items[0].group"]', gid)
         .type('input[name="items[0].desc"]', gidlabel)
-        .xclick('//li//button[.="Save"]')
+        .wait(1000)
+        .click('#clickable-save-patrongroups-0')
         .wait(wait)
         .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
         .then(() => { done(); })
@@ -99,42 +100,47 @@ module.exports.test = function foo(uiTestCtx) {
       });
       it(`should edit user record using "${gid}" group`, (done) => {
         nightmare
+        .wait(1000)
         .select('#adduser_group', communityid)
+        .type('#adduser_externalsystemid', false)
+        .type('#adduser_externalsystemid', 'testId')
         .type('#adduser_preferredcontact', 'e')
+        .wait(1000)
         .click('#clickable-updateuser')
+        .wait(() => {
+          if (!document.getElementById('clickable-updateuser')) {
+            return true;
+          }
+          return false;
+        })
         .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
         .then(() => { done(); })
         .catch(done);
       });
-      it(`should fail at deleting "${gid}" group`, (done) => {
+      it(`should fail at deleting "${gid}" group (Delete button should not be present)`, (done) => {
         nightmare
-        .wait(1111)
-        .click(config.select.settings)
+        .wait(1200)
+        .click('#clickable-settings')
         .wait(wait)
         .click('a[href="/settings/users"]')
         .wait('a[href="/settings/users/groups"]')
         .click('a[href="/settings/users/groups"]')
-        .wait((dp) => {
-          const dnode = document.evaluate(dp, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
-          if (dnode.singleNodeValue) {
+        .wait((egid) => {
+          const gnode = document.evaluate(`//div[@id="editList-patrongroups"]//div[.="${egid}"]`, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+          if (gnode.singleNodeValue) {
+            console.log('        Patron Group found in list');
             return true;
           }
           return false;
-        }, deletePath)
-        .wait(222)
-        .xclick(deletePath)
-        .click('a[href="/settings/users/addresstypes"]')
-        .wait(wait)
-        .xclick('//button[starts-with(.,"Discard")]')
-        .wait(wait)
-        .click('a[href="/settings/users/groups"]')
-        .wait(wait)
-        .evaluate((egid) => {
-          const cnode = document.evaluate(`//div[.="${egid}"]`, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
-          if (!cnode.singleNodeValue) {
-            throw new Error(`${egid} patron group NOT found after clicking "Delete" button!`);
-          }
         }, gid)
+        .evaluate((dp) => {
+          const dnode = document.evaluate(dp, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+          if (dnode.singleNodeValue) {
+            console.log('Delete button found in list (should not be present for groups where the user count > 0.)');
+            throw new Error('Delete button found on patron group');
+          }
+          return true;
+        }, deletePath)
         .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
         .then(() => {
           done();
@@ -164,7 +170,16 @@ module.exports.test = function foo(uiTestCtx) {
       it('should change patron group to "Staff" in user record', (done) => {
         nightmare
         .select('#adduser_group', staffid)
+        .type('#adduser_externalsystemid', false)
+        .type('#adduser_externalsystemid', 'testId')
+        .wait(1000)
         .click('#clickable-updateuser')
+        .wait(() => {
+          if (!document.getElementById('clickable-updateuser')) {
+            return true;
+          }
+          return false;
+        })
         .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
         .then(() => { done(); })
         .catch(done);
@@ -172,7 +187,8 @@ module.exports.test = function foo(uiTestCtx) {
       it(`should delete "${gid}" patron group`, (done) => {
         nightmare
         .wait(1111)
-        .xclick('//span[.="Settings"]')
+        .click(config.select.settings)
+        .wait('a[href="/settings/users"]')
         .wait(wait)
         .xclick('id("ModuleContainer")//a[.="Users"]')
         .wait(wait)
