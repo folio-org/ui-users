@@ -145,9 +145,17 @@ class PatronGroupsSettings extends React.Component {
   render() {
     if (!this.props.resources.groups) return <div />;
 
+    // If a suppressor returns true, the control for that action will not appear
     const suppressor = {
-      // If a suppressor returns true, the control for that action will not appear
-      delete: () => true,
+      delete: (item) => {
+        const usersPerGroup = (this.props.resources.usersPerGroup || {}).other || {};
+        let suppressDelete = [];
+        if (_.has(usersPerGroup, ['resultInfo', 'facets'])) {
+          const groupCounts = _.get(usersPerGroup, ['resultInfo', 'facets', 0, 'facetValues'], []);
+          suppressDelete = _.map(groupCounts, 'value');
+        }
+        return !!(_.includes(suppressDelete, item.id));
+      },
       edit: () => false,
     };
 

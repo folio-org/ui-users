@@ -19,6 +19,12 @@
 * Use consistent language for "no `<attribute>` found" messages. Fixes UX-115.
 * Hide proxy section if user lacks sufficient permission to see it. Fixes UIU-363.
 * Add Save button to user settings. Fixes UIU-354.
+* Disable deletion of in-use patron groups. Fixes UIU-364.
+* Remove Phone and Mobile phone as 'preferred contact' options. Fixes UIU-261.
+* Sort dropdown menus on user-edit screen. Fixes UIU-365, UIU-366.
+* Favor `<Link to...>` over `<a href...>`. Refs STRIPES-482. 
+* Unique URLs for open-, closed-loans pages. Toward UIU-143, UIU-230.
+* `<Link>` instead of `<Button onclick...>` for Loans. Toward UIU-143, UIU-230.
 
 ## [2.12.0](https://github.com/folio-org/ui-users/tree/v2.12.0) (2017-11-28)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.11.0...v2.12.0)
