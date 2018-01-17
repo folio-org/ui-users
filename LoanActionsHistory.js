@@ -11,6 +11,9 @@ import { formatDateTime, getFullName } from './util';
 import loanActionMap from './data/loanActionMap';
 import LoanActionsHistoryProxy from './LoanActionsHistoryProxy';
 
+/**
+ * Detail view of a user's loan.
+ */
 class LoanActionsHistory extends React.Component {
   static propTypes = {
     stripes: PropTypes.object.isRequired,

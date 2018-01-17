@@ -128,7 +128,7 @@ class ViewUser extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      viewLoanActionsHistoryMode: false,
+      viewOpenLoansMode: false,
       selectedLoan: {},
       lastUpdate: null,
       sections: {
@@ -161,15 +161,21 @@ class ViewUser extends React.Component {
     this.addressTypes = (nextProps.parentResources.addressTypes || {}).records || [];
   }
 
-  // EditUser Handlers
   onClickViewOpenLoans(e) {
     if (e) e.preventDefault();
     transitionToParams.bind(this)({ layer: 'open-loans' });
+
+    this.setState({
+      viewOpenLoansMode: true,
+    });
   }
 
   onClickViewClosedLoans(e) {
     if (e) e.preventDefault();
     transitionToParams.bind(this)({ layer: 'closed-loans' });
+    this.setState({
+      viewOpenLoansMode: false,
+    });
   }
 
   onClickCloseLoansHistory(e) {
@@ -179,16 +185,18 @@ class ViewUser extends React.Component {
 
   onClickViewLoanActionsHistory(e, selectedLoan) {
     if (e) e.preventDefault();
+    transitionToParams.bind(this)({ layer: 'loan', loan: selectedLoan.id });
+
     this.setState({
-      viewLoanActionsHistoryMode: true,
       selectedLoan,
     });
   }
 
   onClickCloseLoanActionsHistory(e) {
     if (e) e.preventDefault();
+    const layer = this.state.viewOpenLoansMode ? 'open-loans' : 'closed-loans';
+    transitionToParams.bind(this)({ layer, loan: null });
     this.setState({
-      viewLoanActionsHistoryMode: false,
       selectedLoan: {},
     });
   }
@@ -385,7 +393,7 @@ class ViewUser extends React.Component {
             openLoans={query.layer === 'open-loans'}
           />
         </Layer>
-        <Layer isOpen={this.state.viewLoanActionsHistoryMode} label="Loans Actions History">
+        <Layer isOpen={query.layer ? query.layer === 'loan' : false} label="Loan Actions History">
           <this.connectedLoanActionsHistory
             user={user}
             loan={this.state.selectedLoan}
