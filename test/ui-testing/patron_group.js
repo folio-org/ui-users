@@ -117,7 +117,7 @@ module.exports.test = function foo(uiTestCtx) {
         .then(() => { done(); })
         .catch(done);
       });
-      it(`should fail at deleting "${gid}" group (Delete button should not be present)`, (done) => {
+      it(`should not find a "Delete" button for "${gid}" group`, (done) => {
         nightmare
         .wait(1200)
         .click('#clickable-settings')
@@ -125,21 +125,18 @@ module.exports.test = function foo(uiTestCtx) {
         .click('a[href="/settings/users"]')
         .wait('a[href="/settings/users/groups"]')
         .click('a[href="/settings/users/groups"]')
-        .wait((egid) => {
-          const gnode = document.evaluate(`//div[@id="editList-patrongroups"]//div[.="${egid}"]`, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
-          if (gnode.singleNodeValue) {
-            console.log('        Patron Group found in list');
+        .wait((pgid) => {
+          const dnode = document.evaluate(`//div[.="${pgid}"]`, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+          if (dnode.singleNodeValue) {
             return true;
           }
           return false;
         }, gid)
         .evaluate((dp) => {
-          const dnode = document.evaluate(dp, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
-          if (dnode.singleNodeValue) {
-            console.log('Delete button found in list (should not be present for groups where the user count > 0.)');
-            throw new Error('Delete button found on patron group');
+          const cnode = document.evaluate(dp, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+          if (cnode.singleNodeValue) {
+            throw new Error('Delete button found when patron group is in use!');
           }
-          return true;
         }, deletePath)
         .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
         .then(() => {
