@@ -12,6 +12,12 @@ import { getFullName } from './util';
 import OpenLoans from './lib/OpenLoans';
 import ClosedLoans from './lib/ClosedLoans';
 
+/**
+ * List a user's open or closed loans.
+ *
+ * Table-view of a user's loans, including links to the loan details and
+ * the loan's item-record.
+ */
 class LoansHistory extends React.Component {
 
   static propTypes = {
