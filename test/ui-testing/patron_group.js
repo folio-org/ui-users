@@ -106,7 +106,7 @@ module.exports.test = function foo(uiTestCtx) {
         .then(() => { done(); })
         .catch(done);
       });
-      it(`should fail at deleting "${gid}" group`, (done) => {
+      it(`should not find a "Delete" button for "${gid}" group`, (done) => {
         nightmare
         .wait(1111)
         .click(config.select.settings)
@@ -114,27 +114,19 @@ module.exports.test = function foo(uiTestCtx) {
         .click('a[href="/settings/users"]')
         .wait('a[href="/settings/users/groups"]')
         .click('a[href="/settings/users/groups"]')
-        .wait((dp) => {
-          const dnode = document.evaluate(dp, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+        .wait((pgid) => {
+          const dnode = document.evaluate(`//div[.="${pgid}"]`, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
           if (dnode.singleNodeValue) {
             return true;
           }
           return false;
-        }, deletePath)
-        .wait(222)
-        .xclick(deletePath)
-        .click('a[href="/settings/users/addresstypes"]')
-        .wait(wait)
-        .xclick('//button[starts-with(.,"Discard")]')
-        .wait(wait)
-        .click('a[href="/settings/users/groups"]')
-        .wait(wait)
-        .evaluate((egid) => {
-          const cnode = document.evaluate(`//div[.="${egid}"]`, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
-          if (!cnode.singleNodeValue) {
-            throw new Error(`${egid} patron group NOT found after clicking "Delete" button!`);
-          }
         }, gid)
+        .evaluate((dp) => {
+          const cnode = document.evaluate(dp, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+          if (cnode.singleNodeValue) {
+            throw new Error('Delete button found when patron group is in use!');
+          }
+        }, deletePath)
         .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
         .then(() => {
           done();
