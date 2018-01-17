@@ -160,17 +160,19 @@ class PatronGroupsSettings extends React.Component {
     };
 
     const formatter = {
-      lastUpdated: (item) => { return (<RenderPatronGroupLastUpdated 
-          item={item} 
-          groups={this.props.resources ? this.props.resources.groups : null}
-          users={this.props.resources ? this.props.resources.users : null}
-          gloss="Last Updated"
-      />);},
-      numberOfUsers: (item) => <RenderPatronGroupNumberOfUsers 
-          item={item} 
-          usersPerGroup={this.props.resources ? this.props.resources.usersPerGroup : null}
-          gloss="# of Users"
-        />,
+      lastUpdated: item => (<RenderPatronGroupLastUpdated
+        item={item}
+        groups={this.props.resources ? this.props.resources.groups : null}
+        users={this.props.resources ? this.props.resources.users : null}
+        gloss="Last Updated"
+      />
+      ),
+      numberOfUsers: item => (<RenderPatronGroupNumberOfUsers
+        item={item}
+        usersPerGroup={this.props.resources ? this.props.resources.usersPerGroup : null}
+        gloss="# of Users"
+      />
+      ),
     };
 
     return (
@@ -184,8 +186,8 @@ class PatronGroupsSettings extends React.Component {
             contentData={this.props.resources.groups.records || []}
             createButtonLabel="+ Add new"
             visibleFields={['group', 'desc', 'lastUpdated', 'numberOfUsers']}
-            columnMapping={{'desc': 'Description', 'lastUpdated': 'Last Updated', 'numberOfUsers': '# of Users'}}
-            readOnlyFields={[`lastUpdated`, `numberOfUsers`]}
+            columnMapping={{ desc: 'Description', lastUpdated: 'Last Updated', numberOfUsers: '# of Users' }}
+            readOnlyFields={['lastUpdated', 'numberOfUsers']}
             actionSuppression={suppressor}
             onCreate={this.onCreateType}
             onUpdate={this.onUpdateType}

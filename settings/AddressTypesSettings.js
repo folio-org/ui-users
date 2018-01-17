@@ -22,7 +22,7 @@ class AddressTypesSettings extends React.Component {
         records="addressTypes"
         label="Address Types"
         visibleFields={['addressType', 'desc']}
-        columnMapping={{'addressType': 'Type', 'desc': 'Description'}}
+        columnMapping={{ addressType: 'Address Type', desc: 'Description' }}
         itemTemplate={{ addressType: 'string', id: 'string', desc: 'string' }}
         nameKey="addressType"
       />
