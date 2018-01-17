@@ -5,7 +5,7 @@ import Paneset from '@folio/stripes-components/lib/Paneset';
 import Pane from '@folio/stripes-components/lib/Pane';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import Button from '@folio/stripes-components/lib/Button';
-import Icon from '@folio/stripes-components/lib/Icon';
+import IconButton from '@folio/stripes-components/lib/IconButton';
 import stripesForm from '@folio/stripes-form';
 import { ExpandAllButton } from '@folio/stripes-components/lib/Accordion';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
@@ -109,9 +109,13 @@ class UserForm extends React.Component {
 
     return (
       <PaneMenu>
-        <button id="clickable-closenewuserdialog" onClick={onCancel} title="close" aria-label="Close New User Dialog">
-          <span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span>
-        </button>
+        <IconButton
+          id="clickable-closenewuserdialog"
+          onClick={onCancel}
+          title="close"
+          ariaLabel="Close New User Dialog"
+          icon="closeX"
+        />
       </PaneMenu>
     );
   }
@@ -127,6 +131,8 @@ class UserForm extends React.Component {
           title={label}
           disabled={pristine || submitting}
           onClick={handleSubmit}
+          buttonStyle="primary paneHeaderNewButton"
+          marginBottom0
         >
           {label}
         </Button>
@@ -150,7 +156,7 @@ class UserForm extends React.Component {
     const { initialValues } = this.props;
     const { sections } = this.state;
     const firstMenu = this.getAddFirstMenu();
-    const paneTitle = initialValues.id ? <span><Icon icon="edit" iconRootClass={css.UserFormEditIcon} />Edit: <Icon icon="profile" iconRootClass={css.UserFormEditIcon} />{getFullName(initialValues)}</span> : 'Create user';
+    const paneTitle = initialValues.id ? `Edit: ${getFullName(initialValues)}` : 'Create user';
     const lastMenu = initialValues.id ?
       this.getLastMenu('clickable-updateuser', 'Update user') :
       this.getLastMenu('clickable-createnewuser', 'Create user');
