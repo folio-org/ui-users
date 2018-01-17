@@ -89,6 +89,7 @@ class UserForm extends React.Component {
 
     this.state = {
       sections: {
+        editUserInfo: true,
         extendedInfo: true,
         contactInfo: true,
         proxy: false,
@@ -170,7 +171,7 @@ class UserForm extends React.Component {
                 <ExpandAllButton accordionStatus={sections} onToggle={this.handleExpandAll} />
               </Col>
             </Row>
-            <EditUserInfo {...this.props} />
+            <EditUserInfo accordionId="editUserInfo" expanded={sections.editUserInfo} onToggle={this.handleSectionToggle} {...this.props} />
             <EditExtendedInfo accordionId="extendedInfo" expanded={sections.extendedInfo} onToggle={this.handleSectionToggle} {...this.props} />
             <EditContactInfo accordionId="contactInfo" expanded={sections.contactInfo} onToggle={this.handleSectionToggle} {...this.props} />
             {initialValues.id &&
