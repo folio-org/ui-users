@@ -296,12 +296,6 @@ class ViewUser extends React.Component {
     const proxies = this.props.getProxies();
 
     const detailMenu = (<PaneMenu>
-      <IconButton
-        icon="comment"
-        id="clickable-show-notes"
-        style={{ visibility: !user ? 'hidden' : 'visible' }}
-        onClick={this.props.notesToggle} title="Show Notes"
-      />
       <IfPermission perm="users.item.put">
         <IconButton
           icon="edit"
@@ -311,6 +305,12 @@ class ViewUser extends React.Component {
           title="Edit User"
         />
       </IfPermission>
+      <IconButton
+        icon="comment"
+        id="clickable-show-notes"
+        style={{ visibility: !user ? 'hidden' : 'visible' }}
+        onClick={this.props.notesToggle} title="Show Notes"
+      />
     </PaneMenu>);
 
     if (!user) return (
