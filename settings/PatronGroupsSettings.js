@@ -11,7 +11,10 @@ import { RenderPatronGroupLastUpdated, RenderPatronGroupNumberOfUsers } from '..
 class PatronGroupsSettings extends React.Component {
 
   static propTypes = {
-    stripes: PropTypes.shape({
+    // The stripes prop will probably get used eventually, so
+    // it's probably best to leave it there.
+    // eslint-disable-next-line
+    stripes: PropTypes.shape({  
       connect: PropTypes.func.isRequired,
     }).isRequired,
     resources: PropTypes.shape({
