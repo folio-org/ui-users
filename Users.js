@@ -54,6 +54,8 @@ class Users extends React.Component {
       }),
     }).isRequired,
     onSelectRow: PropTypes.func,
+    onComponentWillUnmount: PropTypes.func,
+    visibleColumns: PropTypes.array,
     disableRecordCreation: PropTypes.bool,
   };
 
@@ -220,7 +222,7 @@ class Users extends React.Component {
       viewRecordComponent={ViewUser}
       editRecordComponent={UserForm}
       newRecordInitialValues={{ active: true, personal: { preferredContactTypeId: '002' } }}
-      visibleColumns={this.props.visibleColumns?this.props.visibleColumns:['Status', 'Name', 'Barcode', 'Patron Group', 'Username', 'Email']}
+      visibleColumns={this.props.visibleColumns ? this.props.visibleColumns : ['Status', 'Name', 'Barcode', 'Patron Group', 'Username', 'Email']}
       resultsFormatter={resultsFormatter}
       onSelectRow={onSelectRow}
       onCreate={this.create}
