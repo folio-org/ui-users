@@ -59,7 +59,7 @@ module.exports.test = function foo(uiTestCtx) {
         .wait(wait)
         .click('a[href="/settings/users/groups"]')
         .wait(wait)
-        .click('#clickable-add-patronGroup')
+        .click('#clickable-add-patrongroups')
         .wait(1000)
         .type('input[name="items[0].group"]', gid)
         .type('input[name="items[0].desc"]', gidlabel)

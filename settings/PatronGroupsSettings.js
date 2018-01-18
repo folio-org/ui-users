@@ -197,7 +197,7 @@ class PatronGroupsSettings extends React.Component {
             nameKey="group"
             formatter={formatter}
             itemTemplate={{}}
-            addButtonId="clickable-add-patronGroup"
+            id="patrongroups"
           />
         </Pane>
       </Paneset>
