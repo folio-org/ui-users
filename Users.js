@@ -54,6 +54,8 @@ class Users extends React.Component {
       }),
     }).isRequired,
     onSelectRow: PropTypes.func,
+    onComponentWillUnmount: PropTypes.func,
+    visibleColumns: PropTypes.array,
     disableRecordCreation: PropTypes.bool,
   };
 
@@ -190,7 +192,7 @@ class Users extends React.Component {
 
   render() {
     const props = this.props;
-    const { onSelectRow, disableRecordCreation } = this.props;
+    const { onSelectRow, disableRecordCreation, onComponentWillUnmount } = this.props;
     const patronGroups = (props.resources.patronGroups || {}).records || [];
     const initialPath = (_.get(packageInfo, ['stripes', 'home']) ||
                          _.get(packageInfo, ['stripes', 'route']));
@@ -220,10 +222,11 @@ class Users extends React.Component {
       viewRecordComponent={ViewUser}
       editRecordComponent={UserForm}
       newRecordInitialValues={{ active: true, personal: { preferredContactTypeId: '002' } }}
-      visibleColumns={['Status', 'Name', 'Barcode', 'Patron Group', 'Username', 'Email']}
+      visibleColumns={this.props.visibleColumns ? this.props.visibleColumns : ['Status', 'Name', 'Barcode', 'Patron Group', 'Username', 'Email']}
       resultsFormatter={resultsFormatter}
       onSelectRow={onSelectRow}
       onCreate={this.create}
+      onComponentWillUnmount={onComponentWillUnmount}
       massageNewRecord={this.massageNewRecord}
       finishedResourceName="perms"
       viewRecordPerms="users.item.get"
