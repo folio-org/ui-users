@@ -55,7 +55,7 @@ class Users extends React.Component {
     }).isRequired,
     onSelectRow: PropTypes.func,
     onComponentWillUnmount: PropTypes.func,
-    visibleColumns: PropTypes.array,
+    visibleColumns: PropTypes.arrayOf(PropTypes.string),
     disableRecordCreation: PropTypes.bool,
   };
 
