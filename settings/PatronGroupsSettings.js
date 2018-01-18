@@ -11,7 +11,10 @@ import { RenderPatronGroupLastUpdated, RenderPatronGroupNumberOfUsers } from '..
 class PatronGroupsSettings extends React.Component {
 
   static propTypes = {
-    stripes: PropTypes.shape({
+    // The stripes prop will probably get used eventually, so
+    // it's probably best to leave it there.
+    // eslint-disable-next-line
+    stripes: PropTypes.shape({  
       connect: PropTypes.func.isRequired,
     }).isRequired,
     resources: PropTypes.shape({
@@ -72,8 +75,6 @@ class PatronGroupsSettings extends React.Component {
 
   constructor(props) {
     super(props);
-    this.connectedPatronGroupLastUpdated = props.stripes.connect(RenderPatronGroupLastUpdated);
-    this.connectedPatronGroupNumberOfUsers = props.stripes.connect(RenderPatronGroupNumberOfUsers);
 
     this.onCreateType = this.onCreateType.bind(this);
     this.onUpdateType = this.onUpdateType.bind(this);
@@ -159,6 +160,22 @@ class PatronGroupsSettings extends React.Component {
       edit: () => false,
     };
 
+    const formatter = {
+      lastUpdated: item => (<RenderPatronGroupLastUpdated
+        item={item}
+        groups={this.props.resources ? this.props.resources.groups : null}
+        users={this.props.resources ? this.props.resources.users : null}
+        gloss="Last Updated"
+      />
+      ),
+      numberOfUsers: item => (<RenderPatronGroupNumberOfUsers
+        item={item}
+        usersPerGroup={this.props.resources ? this.props.resources.usersPerGroup : null}
+        gloss="# of Users"
+      />
+      ),
+    };
+
     return (
       <Paneset>
         <Pane defaultWidth="fill" fluidContentWidth paneTitle="Patron Groups">
@@ -169,26 +186,18 @@ class PatronGroupsSettings extends React.Component {
             // is pulled in. This still causes a JS warning, but not an error
             contentData={this.props.resources.groups.records || []}
             createButtonLabel="+ Add new"
-            visibleFields={['group', 'desc']}
-            itemTemplate={{ group: 'string', id: 'string', desc: 'string' }}
+            visibleFields={['group', 'desc', 'lastUpdated', 'numberOfUsers']}
+            columnMapping={{ desc: 'Description', lastUpdated: 'Last Updated', numberOfUsers: '# of Users' }}
+            readOnlyFields={['lastUpdated', 'numberOfUsers']}
             actionSuppression={suppressor}
             onCreate={this.onCreateType}
             onUpdate={this.onUpdateType}
             onDelete={this.onDeleteType}
             isEmptyMessage="There are no patron groups"
             nameKey="group"
-            additionalFields={{
-              lastUpdated: {
-                component: this.connectedPatronGroupLastUpdated,
-                gloss: 'Last Updated',
-                inheritedProps: this.props,
-              },
-              numberOfUsers: {
-                component: this.connectedPatronGroupNumberOfUsers,
-                gloss: '# of Users',
-                inheritedProps: this.props,
-              },
-            }}
+            formatter={formatter}
+            itemTemplate={{}}
+            id="patrongroups"
           />
         </Pane>
       </Paneset>
