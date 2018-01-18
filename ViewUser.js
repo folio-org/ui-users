@@ -12,6 +12,7 @@ import IfPermission from '@folio/stripes-components/lib/IfPermission';
 import IfInterface from '@folio/stripes-components/lib/IfInterface';
 import { ExpandAllButton } from '@folio/stripes-components/lib/Accordion';
 import IconButton from '@folio/stripes-components/lib/IconButton';
+import removeQueryParam from '@folio/stripes-components/util/removeQueryParam';
 
 import UserForm from './UserForm';
 import LoansHistory from './LoansHistory';
@@ -20,8 +21,6 @@ import LoanActionsHistory from './LoanActionsHistory';
 import { toListAddresses, toUserAddresses } from './converters/address';
 import { getFullName, eachPromise } from './util';
 import withProxy from './withProxy';
-
-import removeQueryParam from '@folio/stripes-components/util/removeQueryParam';
 
 import {
   UserInfo,
