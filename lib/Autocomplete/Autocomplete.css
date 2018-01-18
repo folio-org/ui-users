@@ -1,32 +1,31 @@
 .root {
-  position: relative;
   width: 100%;
+  margin-top: 6px;
 }
 
 .label {
   display: block;
-  font-size: .8em;
-  font-weight: bold;
-  margin-bottom: 4px;
-  text-transform: Uppercase;
+  margin-bottom: 6px;
+  color: #000;
 }
 
 .autocomplete input {
-  border-radius: 0px;
-  height: 28px;
-  min-height: 28px;
+  height: 24px;
+  min-height: 24px;
   margin-bottom: 8px;
   padding: 4px;
   border: 1px solid #acacac;
   font-size: 14px;
   color: #333;
   width: 100%;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.03);
 }
 
 .autocomplete button {
   float: none;
   position: absolute;
-  top: 2px;
+  top: 0px;
   right: 5px;
   z-index: 100;
   opacity: 1;
@@ -51,8 +50,8 @@
   display: none;
   float: left;
   min-width: 160px;
-  padding: 5px 0;
-  margin: 2px 0 0;
+  padding: 4px 8px;
+  margin-bottom: 12px;
   font-size: 14px;
   text-align: left;
   list-style: none;
