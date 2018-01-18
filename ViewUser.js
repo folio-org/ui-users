@@ -336,7 +336,7 @@ class ViewUser extends React.Component {
       <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle={getFullName(user)} lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
         <Row end="xs"><Col xs><ExpandAllButton accordionStatus={this.state.sections} onToggle={this.handleExpandAll} /></Col></Row>
 
-        <UserInfo stripes={stripes} user={user} patronGroup={patronGroup} accordionId="userInformationSection" expanded={this.state.sections.userInformationSection} onToggle={this.handleSectionToggle} settings={settings} />
+        <UserInfo stripes={stripes} user={user} patronGroup={patronGroup} settings={settings} />
         <ExtendedInfo accordionId="extendedInfoSection" stripes={stripes} user={user} expanded={this.state.sections.extendedInfoSection} onToggle={this.handleSectionToggle} />
         <ContactInfo accordionId="contactInfoSection" stripes={stripes} user={user} addresses={addresses} addressTypes={this.addressTypes} expanded={this.state.sections.contactInfoSection} onToggle={this.handleSectionToggle} />
         <IfPermission perm="proxiesfor.collection.get">
