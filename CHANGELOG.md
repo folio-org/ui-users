@@ -28,6 +28,7 @@
 * Unique URLs for loan-details pages. Fixes UIU-145.
 * First section of user detail information is no longer collapsible. Fixes UIU-359.
 * Lint the converters in the ui-users source. Fixes UIU-371.
+* Lint the data-provider files in the ui-users source. Fixes UIU-372.
 
 ## [2.12.0](https://github.com/folio-org/ui-users/tree/v2.12.0) (2017-11-28)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.11.0...v2.12.0)
