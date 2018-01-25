@@ -148,7 +148,7 @@ module.exports.test = function foo(uiTestCtx) {
         nightmare
         .click('#clickable-users-module')
         .wait('#input-user-search')
-        .click('button[class*="headerSearchClearButton"]')
+        .click('#input-user-search ~ div button')
         .insert('#input-user-search', userid)
         .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
         .wait(`div[title="${userid}"]`)
