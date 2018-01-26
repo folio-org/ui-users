@@ -15,7 +15,7 @@ const LocaleForm = (props) => {
     label,
   } = props;
 
-  const lastMenu = (<Button type="submit" disabled={(pristine || submitting)}>Save</Button>);
+  const lastMenu = (<Button type="submit" buttonStyle="primary paneHeaderNewButton" disabled={(pristine || submitting)} marginBottom0>Save</Button>);
 
   return (
     <form id="locale-form" onSubmit={handleSubmit}>
