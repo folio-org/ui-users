@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Paneset from '@folio/stripes-components/lib/Paneset';
+import ConfirmationModal from '@folio/stripes-components/lib/structures/ConfirmationModal';
 import Pane from '@folio/stripes-components/lib/Pane';
 import EditableList from '@folio/stripes-components/lib/structures/EditableList';
 
@@ -14,7 +15,7 @@ class PatronGroupsSettings extends React.Component {
     // The stripes prop will probably get used eventually, so
     // it's probably best to leave it there.
     // eslint-disable-next-line
-    stripes: PropTypes.shape({  
+    stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
     }).isRequired,
     resources: PropTypes.shape({
@@ -75,10 +76,15 @@ class PatronGroupsSettings extends React.Component {
 
   constructor(props) {
     super(props);
-
+    this.state = {
+      confirming: false,
+      type: {},
+    };
     this.onCreateType = this.onCreateType.bind(this);
     this.onUpdateType = this.onUpdateType.bind(this);
     this.onDeleteType = this.onDeleteType.bind(this);
+    this.showConfirm = this.showConfirm.bind(this);
+    this.hideConfirm = this.hideConfirm.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -91,7 +97,7 @@ class PatronGroupsSettings extends React.Component {
 
   onCreateType(type) {
     console.log('ui-items - settings - onCreateType called', type);
-    this.props.mutator.groups.POST(type);
+    return this.props.mutator.groups.POST(type);
   }
 
   onUpdateType(type) {
@@ -101,18 +107,21 @@ class PatronGroupsSettings extends React.Component {
     // https://issues.folio.org/browse/RMB-92
     // eslint-disable-next-line no-param-reassign
     delete type.metadata;
-    this.props.mutator.groups.PUT(type);
+    return this.props.mutator.groups.PUT(type);
   }
 
-  onDeleteType(typeId) {
-    const type = this.props.resources.groups.records.find(t => t.id === typeId);
-    console.log('ui-items - settings - onDeleteType called', type);
+  onDeleteType() {
+    console.log('ui-items - settings - onDeleteType called');
+    const type = this.state.type;
     this.props.mutator.activeRecord.update({ id: type.id });
     // TODO: remove when back end PUT requests ignore read only properties
     // https://issues.folio.org/browse/RMB-92
     // eslint-disable-next-line no-param-reassign
-    delete type.metadata;
-    this.props.mutator.groups.DELETE(type);
+    delete this.state.type.metadata;
+    return this.props.mutator.groups.DELETE(type)
+      .then(() => this.deletePatronResolve())
+      .catch(() => this.deletePatronReject())
+      .finally(() => this.hideConfirm());
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -124,6 +133,27 @@ class PatronGroupsSettings extends React.Component {
       }
     }
     return ids;
+  }
+
+  hideConfirm() {
+    this.setState({
+      confirming: false,
+      type: {},
+    });
+  }
+
+  showConfirm(typeId) {
+    const type = this.props.resources.groups.records.find(t => t.id === typeId);
+    this.setState({
+      confirming: true,
+      type,
+    });
+
+    this.deletePatronPromise = new Promise((resolve, reject) => {
+      this.deletePatronResolve = resolve;
+      this.deletePatronReject = reject;
+    });
+    return this.deletePatronPromise;
   }
 
   propsReadyToFetchUsers(nextProps) {
@@ -176,6 +206,10 @@ class PatronGroupsSettings extends React.Component {
       ),
     };
 
+    const modalHeading = 'Delete patron group?';
+    const modalMessage = <span>The patron group <strong>{this.state.type.group}</strong> will be <strong>deleted</strong></span>;
+    const confirmLabel = 'Delete';
+
     return (
       <Paneset>
         <Pane defaultWidth="fill" fluidContentWidth paneTitle="Patron Groups">
@@ -192,12 +226,20 @@ class PatronGroupsSettings extends React.Component {
             actionSuppression={suppressor}
             onCreate={this.onCreateType}
             onUpdate={this.onUpdateType}
-            onDelete={this.onDeleteType}
+            onDelete={this.showConfirm}
             isEmptyMessage="There are no patron groups"
             nameKey="group"
             formatter={formatter}
             itemTemplate={{}}
             id="patrongroups"
+          />
+          <ConfirmationModal
+            open={this.state.confirming}
+            heading={modalHeading}
+            message={modalMessage}
+            onConfirm={this.onDeleteType}
+            onCancel={this.hideConfirm}
+            confirmLabel={confirmLabel}
           />
         </Pane>
       </Paneset>
