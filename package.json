@@ -208,7 +208,7 @@
     }
   },
   "scripts": {
-    "lint": "eslint *.js lib settings test",
+    "lint": "eslint .",
     "test": "(cd ../ui-testing; yarn test-module -- -o --run=users --host=localhost)",
     "prepublishOnly": "node ../stripes-core/util/package2md.js package.json > ModuleDescriptor.json"
   },
@@ -229,7 +229,7 @@
   },
   "dependencies": {
     "@folio/stripes-components": "^2.0.0",
-    "@folio/stripes-form": "^0.8.1",
+    "@folio/stripes-form": "^0.8.2",
     "@folio/stripes-smart-components": "^1.4.0",
     "classnames": "^2.2.5",
     "hashcode": "^1.0.3",

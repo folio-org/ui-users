@@ -27,6 +27,9 @@
 * `<Link>` instead of `<Button onclick...>` for Loans. Toward UIU-143, UIU-230.
 * Unique URLs for loan-details pages. Fixes UIU-145.
 * First section of user detail information is no longer collapsible. Fixes UIU-359.
+* Lint the converters in the ui-users source. Fixes UIU-371.
+* Lint the data-provider files in the ui-users source. Fixes UIU-372.
+* Add createdBy and updatedBy to metadata. Fixes UIU-325.
 * Consistent formatting for "No proxies/No sponsors" messages. Fixes UX-115.
 
 ## [2.12.0](https://github.com/folio-org/ui-users/tree/v2.12.0) (2017-11-28)

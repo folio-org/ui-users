@@ -12,6 +12,7 @@ import IfPermission from '@folio/stripes-components/lib/IfPermission';
 import IfInterface from '@folio/stripes-components/lib/IfInterface';
 import { ExpandAllButton } from '@folio/stripes-components/lib/Accordion';
 import IconButton from '@folio/stripes-components/lib/IconButton';
+import removeQueryParam from '@folio/stripes-components/util/removeQueryParam';
 
 import UserForm from './UserForm';
 import LoansHistory from './LoansHistory';
@@ -20,7 +21,6 @@ import LoanActionsHistory from './LoanActionsHistory';
 import { toListAddresses, toUserAddresses } from './converters/address';
 import { getFullName, eachPromise } from './util';
 import withProxy from './withProxy';
-import removeQueryParam from './removeQueryParam';
 
 import {
   UserInfo,
@@ -72,6 +72,7 @@ class ViewUser extends React.Component {
     }).isRequired,
     onClose: PropTypes.func,
     onEdit: PropTypes.func,
+    editLink: PropTypes.string,
     onCloseEdit: PropTypes.func,
     notesToggle: PropTypes.func,
     location: PropTypes.object,
@@ -144,6 +145,7 @@ class ViewUser extends React.Component {
     this.connectedUserLoans = props.stripes.connect(UserLoans);
     this.connectedLoansHistory = props.stripes.connect(LoansHistory);
     this.connectedLoanActionsHistory = props.stripes.connect(LoanActionsHistory);
+    this.connectedUserInfo = props.stripes.connect(UserInfo);
     this.dateLastUpdated = this.dateLastUpdated.bind(this);
     this.onClickCloseLoansHistory = this.onClickCloseLoansHistory.bind(this);
     this.onClickViewOpenLoans = this.onClickViewOpenLoans.bind(this);
@@ -152,7 +154,7 @@ class ViewUser extends React.Component {
     this.onClickCloseLoanActionsHistory = this.onClickCloseLoanActionsHistory.bind(this);
     this.onAddressesUpdate = this.onAddressesUpdate.bind(this);
     this.transitionToParams = transitionToParams.bind(this);
-
+    this.removeQueryParam = removeQueryParam.bind(this);
     this.handleSectionToggle = this.handleSectionToggle.bind(this);
     this.handleExpandAll = this.handleExpandAll.bind(this);
   }
@@ -163,7 +165,7 @@ class ViewUser extends React.Component {
 
   onClickViewOpenLoans(e) {
     if (e) e.preventDefault();
-    transitionToParams.bind(this)({ layer: 'open-loans' });
+    this.transitionToParams({ layer: 'open-loans' });
 
     this.setState({
       viewOpenLoansMode: true,
@@ -172,7 +174,7 @@ class ViewUser extends React.Component {
 
   onClickViewClosedLoans(e) {
     if (e) e.preventDefault();
-    transitionToParams.bind(this)({ layer: 'closed-loans' });
+    this.transitionToParams({ layer: 'closed-loans' });
     this.setState({
       viewOpenLoansMode: false,
     });
@@ -180,12 +182,12 @@ class ViewUser extends React.Component {
 
   onClickCloseLoansHistory(e) {
     if (e) e.preventDefault();
-    removeQueryParam('layer', this.props.location, this.props.history);
+    this.removeQueryParam('layer');
   }
 
   onClickViewLoanActionsHistory(e, selectedLoan) {
     if (e) e.preventDefault();
-    transitionToParams.bind(this)({ layer: 'loan', loan: selectedLoan.id });
+    this.transitionToParams({ layer: 'loan', loan: selectedLoan.id });
 
     this.setState({
       selectedLoan,
@@ -195,7 +197,7 @@ class ViewUser extends React.Component {
   onClickCloseLoanActionsHistory(e) {
     if (e) e.preventDefault();
     const layer = this.state.viewOpenLoansMode ? 'open-loans' : 'closed-loans';
-    transitionToParams.bind(this)({ layer, loan: null });
+    this.transitionToParams({ layer, loan: null });
     this.setState({
       selectedLoan: {},
     });
@@ -304,21 +306,22 @@ class ViewUser extends React.Component {
     const proxies = this.props.getProxies();
 
     const detailMenu = (<PaneMenu>
-      <IfPermission perm="users.item.put">
-        <IconButton
-          icon="edit"
-          id="clickable-edituser"
-          style={{ visibility: !user ? 'hidden' : 'visible' }}
-          onClick={this.props.onEdit}
-          title="Edit User"
-        />
-      </IfPermission>
       <IconButton
         icon="comment"
         id="clickable-show-notes"
         style={{ visibility: !user ? 'hidden' : 'visible' }}
         onClick={this.props.notesToggle} title="Show Notes"
       />
+      <IfPermission perm="users.item.put">
+        <IconButton
+          icon="edit"
+          id="clickable-edituser"
+          style={{ visibility: !user ? 'hidden' : 'visible' }}
+          onClick={this.props.onEdit}
+          href={this.props.editLink}
+          title="Edit User"
+        />
+      </IfPermission>
     </PaneMenu>);
 
     if (!user) return (
@@ -336,7 +339,7 @@ class ViewUser extends React.Component {
       <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle={getFullName(user)} lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
         <Row end="xs"><Col xs><ExpandAllButton accordionStatus={this.state.sections} onToggle={this.handleExpandAll} /></Col></Row>
 
-        <UserInfo stripes={stripes} user={user} patronGroup={patronGroup} settings={settings} />
+        <this.connectedUserInfo user={user} patronGroup={patronGroup} settings={settings} stripes={stripes} />
         <ExtendedInfo accordionId="extendedInfoSection" stripes={stripes} user={user} expanded={this.state.sections.extendedInfoSection} onToggle={this.handleSectionToggle} />
         <ContactInfo accordionId="contactInfoSection" stripes={stripes} user={user} addresses={addresses} addressTypes={this.addressTypes} expanded={this.state.sections.contactInfoSection} onToggle={this.handleSectionToggle} />
         <IfPermission perm="proxiesfor.collection.get">
