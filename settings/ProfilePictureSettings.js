@@ -40,7 +40,6 @@ class ProfilePictureSettings extends React.Component {
               id="profile_pictures"
               name="profile_pictures"
               label="Display profile pictures"
-
             />
           </Col>
         </Row>
