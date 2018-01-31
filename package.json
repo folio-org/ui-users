@@ -189,23 +189,7 @@
         ],
         "visible": true
       }
-    ],
-    "translations": {
-      "en": {
-        "search": "Search",
-        "loans.title": "Loans",
-        "loans.openLoans": "open loans",
-        "loans.closedLoans": "closed loans",
-        "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}"
-      },
-      "de": {
-        "search": "Suche",
-        "loans.title": "Ausleihen",
-        "loans.openLoans": "Offene Ausleihen",
-        "loans.closedLoans": "Abgeschlossene Ausleihen",
-        "resultCount": "Gefunden {count, number} {count, plural, one {Aufzeichnung} other {Aufzeichnungen}}"
-      }
-    }
+    ]
   },
   "scripts": {
     "lint": "eslint .",
