@@ -236,7 +236,6 @@
     "lodash": "^4.17.4",
     "prop-types": "^15.5.10",
     "query-string": "^5.0.0",
-    "react": "^15.4.2",
     "react-bootstrap": "^0.31.1",
     "react-bootstrap-typeahead": "^1.4.0",
     "react-flexbox-grid": "^2.0.0",
@@ -249,7 +248,8 @@
   "peerDependencies": {
     "@folio/stripes-connect": "^3.0.0",
     "@folio/stripes-core": "^2.8.0",
-    "@folio/stripes-logger": "^0.0.2"
+    "@folio/stripes-logger": "^0.0.2",
+    "react": "*"
   },
   "optionalDependencies": {
     "@folio/plugin-find-user": "^1.1.0"
