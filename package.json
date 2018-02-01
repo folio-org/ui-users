@@ -232,7 +232,7 @@
   },
   "peerDependencies": {
     "@folio/stripes-connect": "^3.0.0",
-    "@folio/stripes-core": "^2.8.0",
+    "@folio/stripes-core": "^2.9.0",
     "@folio/stripes-logger": "^0.0.2"
   },
   "optionalDependencies": {
