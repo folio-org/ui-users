@@ -132,7 +132,7 @@ module.exports.test = function foo(uiTestCtx) {
           }
           return false;
         }, gid)
-	.wait(222)
+        .wait(222)
         .evaluate((dp) => {
           const cnode = document.querySelector(dp);
           if (cnode !== null) {
@@ -148,8 +148,8 @@ module.exports.test = function foo(uiTestCtx) {
       it('should find ID for "Staff" group', (done) => {
         nightmare
         .click('#clickable-users-module')
-	.wait(`input[id*="${gid}"]`)
-	.click(`input[id*="${gid}"]`)
+        .wait(`input[id*="${gid}"]`)
+        .click(`input[id*="${gid}"]`)
         .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
         .wait(`div[title="${userid}"]`)
         .click(`div[title="${userid}"]`)
