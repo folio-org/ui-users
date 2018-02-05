@@ -1,3 +1,5 @@
+@import "@folio/stripes-components/lib/variables.css";
+
 .label {
   color: #444;
   margin-bottom: 5px;
@@ -5,4 +7,8 @@
 
 .list {
   margin-bottom: 10px;
+}
+
+.isEmptyMessage {
+  color: var(--subLabelColor);
 }

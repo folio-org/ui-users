@@ -33,6 +33,7 @@
 * Consistent formatting for "No proxies/No sponsors" messages. Fixes UX-115.
 * Refactor settings to use ConfigManager. Fixes UIU-376.
 * Make SearchAndSort's show-single-row optional and on by default. Refs UIREQ-60, UICHKOUT-54, UIU-373, STSMACOM-52.
+* Additional "No proxies/No sponsors" formatting. Refs UX-115.
 
 ## [2.12.0](https://github.com/folio-org/ui-users/tree/v2.12.0) (2017-11-28)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.11.0...v2.12.0)
