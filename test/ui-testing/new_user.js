@@ -94,7 +94,7 @@ module.exports.test = function meh(uitestctx) {
         .xclick('id("form-user")//button[contains(.,"New")]')
         .wait(555)
         .click('input[id^="PrimaryAddress"]')
-        .insert('input[name=country]', user.address.country)
+        .insert('input[name="Country"]', user.address.country)
         .insert('input[name*="addressLine1"]', user.address.address)
         .insert('input[name*="city"]', user.address.city)
         .insert('input[name*="stateRegion"]', user.address.state)

@@ -4,5 +4,5 @@ export default {
   renewed: 'Renewed',
   Operator: 'Source',
   holdrequested: 'Hold requested',
-  recallrequested:'Recall requested'
+  recallrequested: 'Recall requested',
 };

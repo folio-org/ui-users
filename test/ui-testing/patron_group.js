@@ -14,7 +14,7 @@ module.exports.test = function foo(uiTestCtx) {
     describe('Login > Add new patron group > Assign to user > Try to delete patron group > Unassign from user > Try to delete again > Logout\n', () => {
       const gid = `alumni_${Math.floor(Math.random() * 10000)}`;
       const gidlabel = 'Alumni';
-      const deletePath = `//div[.="${gid}"]//following-sibling::div[last()]//button[contains(@id, "delete")]`;
+      const deletePath = `div[title="${gid}"] ~ div:last-of-type button[id*="delete"]`;
 
       const flogin = function minc(un, pw) {
         it(`should login as ${un}/${pw}`, (done) => {
@@ -132,9 +132,10 @@ module.exports.test = function foo(uiTestCtx) {
           }
           return false;
         }, gid)
+        .wait(222)
         .evaluate((dp) => {
-          const cnode = document.evaluate(dp, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
-          if (cnode.singleNodeValue) {
+          const cnode = document.querySelector(dp);
+          if (cnode !== null) {
             throw new Error('Delete button found when patron group is in use!');
           }
         }, deletePath)
@@ -147,9 +148,8 @@ module.exports.test = function foo(uiTestCtx) {
       it('should find ID for "Staff" group', (done) => {
         nightmare
         .click('#clickable-users-module')
-        .wait('#input-user-search')
-        .click('button[class*="headerSearchClearButton"]')
-        .insert('#input-user-search', userid)
+        .wait(`input[id*="${gid}"]`)
+        .click(`input[id*="${gid}"]`)
         .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
         .wait(`div[title="${userid}"]`)
         .click(`div[title="${userid}"]`)
@@ -191,13 +191,13 @@ module.exports.test = function foo(uiTestCtx) {
         .wait(wait)
         .xclick('id("ModuleContainer")//a[.="Patron groups"]')
         .wait((dp) => {
-          const dnode = document.evaluate(dp, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
-          if (dnode.singleNodeValue) {
+          const dnode = document.querySelector(dp);
+          if (dnode !== null) {
             return true;
           }
           return false;
         }, deletePath)
-        .xclick(deletePath)
+        .click(deletePath)
         .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
         .then(() => { done(); })
         .catch(done);

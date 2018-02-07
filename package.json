@@ -189,26 +189,10 @@
         ],
         "visible": true
       }
-    ],
-    "translations": {
-      "en": {
-        "search": "Search",
-        "loans.title": "Loans",
-        "loans.openLoans": "open loans",
-        "loans.closedLoans": "closed loans",
-        "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}"
-      },
-      "de": {
-        "search": "Suche",
-        "loans.title": "Ausleihen",
-        "loans.openLoans": "Offene Ausleihen",
-        "loans.closedLoans": "Abgeschlossene Ausleihen",
-        "resultCount": "Gefunden {count, number} {count, plural, one {Aufzeichnung} other {Aufzeichnungen}}"
-      }
-    }
+    ]
   },
   "scripts": {
-    "lint": "eslint *.js lib settings test",
+    "lint": "eslint .",
     "test": "(cd ../ui-testing; yarn test-module -- -o --run=users --host=localhost)",
     "prepublishOnly": "node ../stripes-core/util/package2md.js package.json > ModuleDescriptor.json"
   },
@@ -236,7 +220,6 @@
     "lodash": "^4.17.4",
     "prop-types": "^15.5.10",
     "query-string": "^5.0.0",
-    "react": "^15.4.2",
     "react-bootstrap": "^0.31.1",
     "react-bootstrap-typeahead": "^1.4.0",
     "react-flexbox-grid": "^2.0.0",
@@ -248,8 +231,9 @@
   },
   "peerDependencies": {
     "@folio/stripes-connect": "^3.0.0",
-    "@folio/stripes-core": "^2.8.0",
-    "@folio/stripes-logger": "^0.0.2"
+    "@folio/stripes-core": "^2.9.0",
+    "@folio/stripes-logger": "^0.0.2",
+    "react": "*"
   },
   "optionalDependencies": {
     "@folio/plugin-find-user": "^1.1.0"

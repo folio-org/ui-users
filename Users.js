@@ -57,7 +57,12 @@ class Users extends React.Component {
     onComponentWillUnmount: PropTypes.func,
     visibleColumns: PropTypes.arrayOf(PropTypes.string),
     disableRecordCreation: PropTypes.bool,
+    showSingleResult: PropTypes.bool,
   };
+
+  static defaultProps = {
+    showSingleResult: true,
+  }
 
   static manifest = Object.freeze({
     query: {
@@ -234,6 +239,7 @@ class Users extends React.Component {
       disableRecordCreation={disableRecordCreation}
       parentResources={props.resources}
       parentMutator={props.mutator}
+      showSingleResult={props.showSingleResult}
     />);
   }
 }

@@ -1,0 +1,7 @@
+{
+  "search": "Suche",
+  "loans.title": "Ausleihen",
+  "loans.openLoans": "Offene Ausleihen",
+  "loans.closedLoans": "Abgeschlossene Ausleihen",
+  "resultCount": "Gefunden {count, number} {count, plural, one {Aufzeichnung} other {Aufzeichnungen}}"
+}

@@ -1,7 +1,7 @@
 import _ from 'lodash';
+import { hashCode } from 'hashcode';
 import { countriesByCode, countriesByName } from '../data/countries';
 import { getAddressTypesByName, getAddressTypesById } from './address_type';
-import { hashCode } from 'hashcode';
 
 function toListAddress(addr, addrType) {
   if (addr.id) return { ...addr };
