@@ -199,6 +199,8 @@ module.exports.test = function foo(uiTestCtx) {
         }, deletePath)
         .click(deletePath)
         .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
+        .click('#clickable-deletepatrongroup-confirmation-confirm')
+        .wait(wait)
         .then(() => { done(); })
         .catch(done);
       });
