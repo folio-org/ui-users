@@ -104,7 +104,7 @@ class LoanActionsHistory extends React.Component {
 
     return (
       <Paneset isRoot>
-        <Pane id="pane-loandetails" defaultWidth="100%" dismissible onClose={onCancel} paneTitle={'Loan Details'}>
+        <Pane id="pane-loandetails" defaultWidth="100%" dismissible onClose={onCancel} paneTitle="Loan Details">
           <Row>
             <Col xs={4} >
               <KeyValue label="Title" value={_.get(loan, ['item', 'title'], '')} />
