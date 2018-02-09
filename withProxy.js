@@ -71,8 +71,8 @@ const withProxy = WrappedComponent =>
           accumulate: 'true',
           fetch: false,
         },
-      },
-    ));
+      }),
+    );
 
     constructor(props) {
       super(props);

@@ -27,7 +27,8 @@ export function getRowURL(user) {
 export function getAnchoredRowFormatter(row) {
   return (
     <a
-      href={getRowURL(row.rowData)} key={`row-${row.rowIndex}`}
+      href={getRowURL(row.rowData)}
+      key={`row-${row.rowIndex}`}
       aria-label={row.labelStrings && row.labelStrings.join('...')}
       role="listitem"
       className={`${row.rowClass}`}

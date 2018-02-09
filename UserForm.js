@@ -66,7 +66,6 @@ function asyncValidate(values, dispatch, props, blurredField) {
 }
 
 class UserForm extends React.Component {
-
   static propTypes = {
     stripes: PropTypes.shape({
       connect: PropTypes.func,
