@@ -30,7 +30,7 @@ export function getAnchoredRowFormatter(row) {
       href={getRowURL(row.rowData)}
       key={`row-${row.rowIndex}`}
       aria-label={row.labelStrings && row.labelStrings.join('...')}
-      role="listitem"
+      role="menuitem"
       className={`${row.rowClass}`}
       {...row.rowProps}
     >
