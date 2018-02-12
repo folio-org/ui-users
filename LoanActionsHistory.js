@@ -110,7 +110,7 @@ class LoanActionsHistory extends React.Component {
               <KeyValue label="Title" value={_.get(loan, ['item', 'title'], '')} />
             </Col>
             <Col xs={2} >
-              <KeyValue label="Barcode" value={<Link to={`/items/view/${_.get(loan, ['itemId'], '')}?query=${_.get(loan, ['item', 'barcode'], '')}`}>{_.get(loan, ['item', 'barcode'], '')}</Link>} />
+              <KeyValue label="Barcode" value={<Link to={`/inventory/view/${_.get(loan, ['item', 'instanceId'], '')}/${_.get(loan, ['item', 'holdingsRecordId'], '')}/${_.get(loan, ['itemId'], '')}`}>{_.get(loan, ['item', 'barcode'], '')}</Link>} />
             </Col>
             <Col xs={2} >
               <KeyValue label="Item Status" value={_.get(loan, ['item', 'status', 'name'], '-')} />
