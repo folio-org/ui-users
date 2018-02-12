@@ -1,10 +1,7 @@
 /* global it describe Nightmare */
-module.exports.test = function foo(uiTestCtx) {
-
+module.exports.test = function foo(uiTestCtx){
   describe('Module test: users:patron_group', function meh() {
-
     const { config, helpers: { openApp }, meta: { testVersion } } = uiTestCtx;
-
     const nightmare = new Nightmare(config.nightmare);
 
     this.timeout(Number(config.test_timeout));
