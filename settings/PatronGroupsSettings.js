@@ -6,6 +6,7 @@ import Paneset from '@folio/stripes-components/lib/Paneset';
 import ConfirmationModal from '@folio/stripes-components/lib/structures/ConfirmationModal';
 import Pane from '@folio/stripes-components/lib/Pane';
 import EditableList from '@folio/stripes-components/lib/structures/EditableList';
+import Callout from '@folio/stripes-components/lib/Callout';
 
 import { RenderPatronGroupLastUpdated, RenderPatronGroupNumberOfUsers } from '../lib/RenderPatronGroup';
 
@@ -84,6 +85,7 @@ class PatronGroupsSettings extends React.Component {
     this.onDeleteType = this.onDeleteType.bind(this);
     this.showConfirm = this.showConfirm.bind(this);
     this.hideConfirm = this.hideConfirm.bind(this);
+    this.callout = null;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -109,6 +111,16 @@ class PatronGroupsSettings extends React.Component {
     return this.props.mutator.groups.PUT(type);
   }
 
+  showCalloutMessage(name) {
+    const message = (
+      <span>
+        The patron group <strong>{name.group}</strong> was successfully <strong>deleted</strong>.
+      </span>
+    );
+    this.callout.sendCallout({ message });
+  }
+
+
   onDeleteType() {
     console.log('ui-items - settings - onDeleteType called');
     const type = this.state.type;
@@ -119,6 +131,7 @@ class PatronGroupsSettings extends React.Component {
     delete this.state.type.metadata;
     return this.props.mutator.groups.DELETE(type)
       .then(() => this.deletePatronResolve())
+      .then(() => this.showCalloutMessage(type))
       .catch(() => this.deletePatronReject())
       .finally(() => this.hideConfirm());
   }
@@ -240,6 +253,7 @@ class PatronGroupsSettings extends React.Component {
             onCancel={this.hideConfirm}
             confirmLabel={confirmLabel}
           />
+          <Callout ref={(ref) => { this.callout = ref; }} />
         </Pane>
       </Paneset>
     );
