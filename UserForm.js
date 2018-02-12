@@ -54,7 +54,7 @@ function asyncValidate(values, dispatch, props, blurredField) {
       uv.reset();
       uv.GET({ params: { query } }).then((users) => {
         if (users.length > 0) {
-          reject({ username: 'This username has already been taken' });
+          reject(new Error('something bad happened'));
         } else {
           resolve();
         }

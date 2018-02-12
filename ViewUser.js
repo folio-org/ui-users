@@ -304,25 +304,28 @@ class ViewUser extends React.Component {
     const sponsors = this.props.getSponsors();
     const proxies = this.props.getProxies();
 
-    const detailMenu = (<PaneMenu>
-      <IconButton
-        icon="comment"
-        id="clickable-show-notes"
-        style={{ visibility: !user ? 'hidden' : 'visible' }}
-        onClick={this.props.notesToggle}
-        title="Show Notes"
-      />
-      <IfPermission perm="users.item.put">
+    const detailMenu =
+    (
+      <PaneMenu>
         <IconButton
-          icon="edit"
-          id="clickable-edituser"
+          icon="comment"
+          id="clickable-show-notes"
           style={{ visibility: !user ? 'hidden' : 'visible' }}
-          onClick={this.props.onEdit}
-          href={this.props.editLink}
-          title="Edit User"
+          onClick={this.props.notesToggle}
+          title="Show Notes"
         />
-      </IfPermission>
-    </PaneMenu>);
+        <IfPermission perm="users.item.put">
+          <IconButton
+            icon="edit"
+            id="clickable-edituser"
+            style={{ visibility: !user ? 'hidden' : 'visible' }}
+            onClick={this.props.onEdit}
+            href={this.props.editLink}
+            title="Edit User"
+          />
+        </IfPermission>
+      </PaneMenu>
+    );
 
     if (!user) {
       return (

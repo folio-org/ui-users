@@ -1,5 +1,5 @@
 /* global it describe Nightmare */
-module.exports.test = function foo(uiTestCtx){
+module.exports.test = function foo(uiTestCtx) {
   describe('Module test: users:patron_group', function meh() {
     const { config, helpers: { openApp }, meta: { testVersion } } = uiTestCtx;
     const nightmare = new Nightmare(config.nightmare);
@@ -182,26 +182,26 @@ module.exports.test = function foo(uiTestCtx){
       });
       it(`should delete "${gid}" patron group`, (done) => {
         nightmare
-        .wait(1111)
-        .click(config.select.settings)
-        .wait('a[href="/settings/users"]')
-        .wait(wait)
-        .xclick('id("ModuleContainer")//a[.="Users"]')
-        .wait(wait)
-        .xclick('id("ModuleContainer")//a[.="Patron groups"]')
-        .wait((dp) => {
-          const dnode = document.querySelector(dp);
-          if (dnode !== null) {
-            return true;
-          }
-          return false;
-        }, deletePath)
-        .click(deletePath)
-        .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
-        .click('#clickable-deletepatrongroup-confirmation-confirm')
-        .wait(wait)
-        .then(() => { done(); })
-        .catch(done);
+          .wait(1111)
+          .click(config.select.settings)
+          .wait('a[href="/settings/users"]')
+          .wait(wait)
+          .xclick('id("ModuleContainer")//a[.="Users"]')
+          .wait(wait)
+          .xclick('id("ModuleContainer")//a[.="Patron groups"]')
+          .wait((dp) => {
+            const dnode = document.querySelector(dp);
+            if (dnode !== null) {
+              return true;
+            }
+            return false;
+          }, deletePath)
+          .click(deletePath)
+          .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
+          .click('#clickable-deletepatrongroup-confirmation-confirm')
+          .wait(wait)
+          .then(() => { done(); })
+          .catch(done);
       });
       it(`should confirm that "${gid}" patron group has been deleted`, (done) => {
         nightmare
