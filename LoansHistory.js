@@ -19,7 +19,6 @@ import ClosedLoans from './lib/ClosedLoans';
  * the loan's item-record.
  */
 class LoansHistory extends React.Component {
-
   static propTypes = {
     stripes: PropTypes.shape({
       locale: PropTypes.string.isRequired,

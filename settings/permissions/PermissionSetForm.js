@@ -16,7 +16,6 @@ import { Field } from 'redux-form';
 import ContainedPermissions from './ContainedPermissions';
 
 class PermissionSetForm extends React.Component {
-
   static propTypes = {
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func.isRequired,
@@ -86,7 +85,8 @@ class PermissionSetForm extends React.Component {
           type="submit"
           title="Save and close"
           disabled={(pristine || submitting)}
-        >Save and close</Button>
+        >Save and close
+        </Button>
       </PaneMenu>
     );
   }

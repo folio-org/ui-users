@@ -10,7 +10,6 @@ import EditableList from '@folio/stripes-components/lib/structures/EditableList'
 import { RenderPatronGroupLastUpdated, RenderPatronGroupNumberOfUsers } from '../lib/RenderPatronGroup';
 
 class PatronGroupsSettings extends React.Component {
-
   static propTypes = {
     // The stripes prop will probably get used eventually, so
     // it's probably best to leave it there.

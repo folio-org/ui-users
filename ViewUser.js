@@ -32,7 +32,6 @@ import {
 } from './lib/ViewSections';
 
 class ViewUser extends React.Component {
-
   static propTypes = {
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func.isRequired,
@@ -310,7 +309,8 @@ class ViewUser extends React.Component {
         icon="comment"
         id="clickable-show-notes"
         style={{ visibility: !user ? 'hidden' : 'visible' }}
-        onClick={this.props.notesToggle} title="Show Notes"
+        onClick={this.props.notesToggle}
+        title="Show Notes"
       />
       <IfPermission perm="users.item.put">
         <IconButton
@@ -324,11 +324,13 @@ class ViewUser extends React.Component {
       </IfPermission>
     </PaneMenu>);
 
-    if (!user) return (
-      <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
-        <div style={{ paddingTop: '1rem' }}><Icon icon="spinner-ellipsis" width="100px" /></div>
-      </Pane>
-    );
+    if (!user) {
+      return (
+        <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
+          <div style={{ paddingTop: '1rem' }}><Icon icon="spinner-ellipsis" width="100px" /></div>
+        </Pane>
+      );
+    }
 
     const patronGroupId = get(user, ['patronGroup'], '');
     const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
