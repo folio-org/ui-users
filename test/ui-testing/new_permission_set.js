@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* global it describe Nightmare before after */
 module.exports.test = function foo(uiTestCtx) {
   describe('Module test: users:new_permission_set', function bar() {

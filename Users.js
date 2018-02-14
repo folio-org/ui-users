@@ -57,7 +57,7 @@ class Users extends React.Component {
     onComponentWillUnmount: PropTypes.func,
     visibleColumns: PropTypes.arrayOf(PropTypes.string),
     disableRecordCreation: PropTypes.bool,
-    showSingleResult: PropTypes.bool,
+    showSingleResult: PropTypes.bool, // eslint-disable-line react/no-unused-prop-types
   };
 
   static defaultProps = {

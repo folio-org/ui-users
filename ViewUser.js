@@ -304,25 +304,27 @@ class ViewUser extends React.Component {
     const sponsors = this.props.getSponsors();
     const proxies = this.props.getProxies();
 
-    const detailMenu = (<PaneMenu>
-      <IconButton
-        icon="comment"
-        id="clickable-show-notes"
-        style={{ visibility: !user ? 'hidden' : 'visible' }}
-        onClick={this.props.notesToggle}
-        title="Show Notes"
-      />
-      <IfPermission perm="users.item.put">
+    const detailMenu = (
+      <PaneMenu>
         <IconButton
-          icon="edit"
-          id="clickable-edituser"
+          icon="comment"
+          id="clickable-show-notes"
           style={{ visibility: !user ? 'hidden' : 'visible' }}
-          onClick={this.props.onEdit}
-          href={this.props.editLink}
-          title="Edit User"
+          onClick={this.props.notesToggle}
+          title="Show Notes"
         />
-      </IfPermission>
-    </PaneMenu>);
+        <IfPermission perm="users.item.put">
+          <IconButton
+            icon="edit"
+            id="clickable-edituser"
+            style={{ visibility: !user ? 'hidden' : 'visible' }}
+            onClick={this.props.onEdit}
+            href={this.props.editLink}
+            title="Edit User"
+          />
+        </IfPermission>
+      </PaneMenu>
+    );
 
     if (!user) {
       return (
@@ -345,7 +347,15 @@ class ViewUser extends React.Component {
         <ExtendedInfo accordionId="extendedInfoSection" stripes={stripes} user={user} expanded={this.state.sections.extendedInfoSection} onToggle={this.handleSectionToggle} />
         <ContactInfo accordionId="contactInfoSection" stripes={stripes} user={user} addresses={addresses} addressTypes={this.addressTypes} expanded={this.state.sections.contactInfoSection} onToggle={this.handleSectionToggle} />
         <IfPermission perm="proxiesfor.collection.get">
-          <ProxyPermissions accordionId="proxySection" onToggle={this.handleSectionToggle} proxies={proxies} sponsors={sponsors} expanded={this.state.sections.proxySection} {...this.props} />
+          <ProxyPermissions
+            user={user}
+            accordionId="proxySection"
+            onToggle={this.handleSectionToggle}
+            proxies={proxies}
+            sponsors={sponsors}
+            expanded={this.state.sections.proxySection}
+            {...this.props}
+          />
         </IfPermission>
 
         <IfPermission perm="circulation.loans.collection.get">
