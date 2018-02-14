@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* global it describe Nightmare */
 module.exports.test = function foo(uiTestCtx) {
   describe('Module test: users:patron_group', function meh() {

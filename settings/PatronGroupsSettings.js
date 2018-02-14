@@ -102,7 +102,6 @@ class PatronGroupsSettings extends React.Component {
   }
 
   onUpdateType(type) {
-    console.log('ui-items - settings - onUpdateType called', type);
     this.props.mutator.activeRecord.update({ id: type.id });
     // TODO: remove when back end PUT requests ignore read only properties
     // https://issues.folio.org/browse/RMB-92
@@ -119,7 +118,6 @@ class PatronGroupsSettings extends React.Component {
     );
     this.callout.sendCallout({ message });
   }
-
 
   onDeleteType() {
     console.log('ui-items - settings - onDeleteType called');

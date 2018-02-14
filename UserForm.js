@@ -9,6 +9,7 @@ import IconButton from '@folio/stripes-components/lib/IconButton';
 import stripesForm from '@folio/stripes-form';
 import { ExpandAllButton } from '@folio/stripes-components/lib/Accordion';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
+import { SubmissionError } from 'redux-form';
 
 import {
   EditUserInfo,

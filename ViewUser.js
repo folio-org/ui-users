@@ -348,7 +348,15 @@ class ViewUser extends React.Component {
         <ExtendedInfo accordionId="extendedInfoSection" stripes={stripes} user={user} expanded={this.state.sections.extendedInfoSection} onToggle={this.handleSectionToggle} />
         <ContactInfo accordionId="contactInfoSection" stripes={stripes} user={user} addresses={addresses} addressTypes={this.addressTypes} expanded={this.state.sections.contactInfoSection} onToggle={this.handleSectionToggle} />
         <IfPermission perm="proxiesfor.collection.get">
-          <ProxyPermissions accordionId="proxySection" onToggle={this.handleSectionToggle} proxies={proxies} sponsors={sponsors} expanded={this.state.sections.proxySection} {...this.props} />
+          <ProxyPermissions
+            user={user}
+            accordionId="proxySection"
+            onToggle={this.handleSectionToggle}
+            proxies={proxies}
+            sponsors={sponsors}
+            expanded={this.state.sections.proxySection}
+            {...this.props}
+          />
         </IfPermission>
 
         <IfPermission perm="circulation.loans.collection.get">
