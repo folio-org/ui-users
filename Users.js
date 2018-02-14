@@ -197,7 +197,7 @@ class Users extends React.Component {
 
   render() {
     const props = this.props;
-    const { onSelectRow, disableRecordCreation, onComponentWillUnmount } = this.props;
+    const { onSelectRow, disableRecordCreation, onComponentWillUnmount, showSingleResult } = this.props;
     const patronGroups = (props.resources.patronGroups || {}).records || [];
     const initialPath = (_.get(packageInfo, ['stripes', 'home']) ||
                          _.get(packageInfo, ['stripes', 'route']));
@@ -239,7 +239,7 @@ class Users extends React.Component {
       disableRecordCreation={disableRecordCreation}
       parentResources={props.resources}
       parentMutator={props.mutator}
-      showSingleResult={props.showSingleResult}
+      showSingleResult={showSingleResult}
     />);
   }
 }
