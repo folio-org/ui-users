@@ -35,6 +35,7 @@
 * Make SearchAndSort's show-single-row optional and on by default. Refs UIREQ-60, UICHKOUT-54, UIU-373, STSMACOM-52.
 * Additional "No proxies/No sponsors" formatting. Refs UX-115.
 * Rewire loan links from items to inventory. Fixes UIU-368.
+* Relabel elements in user details Proxy section. Fixes UIU-370.
 
 ## [2.12.0](https://github.com/folio-org/ui-users/tree/v2.12.0) (2017-11-28)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.11.0...v2.12.0)
