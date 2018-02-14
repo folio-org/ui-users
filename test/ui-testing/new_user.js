@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* global it describe Nightmare */
 module.exports.test = function meh(uitestctx) {
   describe('Module test: users:new_user', function bar() {

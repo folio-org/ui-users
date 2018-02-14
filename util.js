@@ -24,21 +24,6 @@ export function getRowURL(user) {
   return `/users/view/${user.id}`;
 }
 
-export function getAnchoredRowFormatter(row) {
-  return (
-    <a
-      href={getRowURL(row.rowData)}
-      key={`row-${row.rowIndex}`}
-      aria-label={row.labelStrings && row.labelStrings.join('...')}
-      role="listitem"
-      className={`${row.rowClass}`}
-      {...row.rowProps}
-    >
-      {row.cells}
-    </a>
-  );
-}
-
 export function isSubstringsInString(listSubStrings, testString) {
   return new RegExp(listSubStrings.join('|')).test(testString);
 }

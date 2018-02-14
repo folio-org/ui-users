@@ -13,7 +13,7 @@ class PatronGroupsSettings extends React.Component {
     // The stripes prop will probably get used eventually, so
     // it's probably best to leave it there.
     // eslint-disable-next-line
-    stripes: PropTypes.shape({  
+    stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
     }).isRequired,
     resources: PropTypes.shape({
@@ -89,12 +89,10 @@ class PatronGroupsSettings extends React.Component {
   }
 
   onCreateType(type) {
-    console.log('ui-items - settings - onCreateType called', type);
     this.props.mutator.groups.POST(type);
   }
 
   onUpdateType(type) {
-    console.log('ui-items - settings - onUpdateType called', type);
     this.props.mutator.activeRecord.update({ id: type.id });
     // TODO: remove when back end PUT requests ignore read only properties
     // https://issues.folio.org/browse/RMB-92
@@ -105,7 +103,6 @@ class PatronGroupsSettings extends React.Component {
 
   onDeleteType(typeId) {
     const type = this.props.resources.groups.records.find(t => t.id === typeId);
-    console.log('ui-items - settings - onDeleteType called', type);
     this.props.mutator.activeRecord.update({ id: type.id });
     // TODO: remove when back end PUT requests ignore read only properties
     // https://issues.folio.org/browse/RMB-92

@@ -9,6 +9,7 @@ import IconButton from '@folio/stripes-components/lib/IconButton';
 import stripesForm from '@folio/stripes-form';
 import { ExpandAllButton } from '@folio/stripes-components/lib/Accordion';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
+import { SubmissionError } from 'redux-form';
 
 import {
   EditUserInfo,
@@ -54,7 +55,8 @@ function asyncValidate(values, dispatch, props, blurredField) {
       uv.reset();
       uv.GET({ params: { query } }).then((users) => {
         if (users.length > 0) {
-          reject({ username: 'This username has already been taken' });
+          const error = new SubmissionError({ username: 'This username has already been taken' });
+          reject(error);
         } else {
           resolve();
         }
