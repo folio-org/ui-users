@@ -48,7 +48,7 @@ module.exports.test = function meh(uitestctx) {
 
       it('should load login page', (done) => {
         nightmare
-          .on('page', (type = 'alert', message) => {
+          .on('page', (type, message) => {
             throw new Error(message);
           })
           .goto(config.url)
