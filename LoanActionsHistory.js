@@ -2,14 +2,18 @@ import _ from 'lodash';
 import React from 'react';
 import Link from 'react-router-dom/Link';
 import PropTypes from 'prop-types';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import { formatDateTime, getFullName } from './util';
 import loanActionMap from './data/loanActionMap';
+import LoanActionsHistoryProxy from './LoanActionsHistoryProxy';
 
+/**
+ * Detail view of a user's loan.
+ */
 class LoanActionsHistory extends React.Component {
   static propTypes = {
     stripes: PropTypes.object.isRequired,
@@ -29,6 +33,7 @@ class LoanActionsHistory extends React.Component {
     loan: PropTypes.object,
     user: PropTypes.object,
     onCancel: PropTypes.func.isRequired,
+    onClickUser: PropTypes.func.isRequired,
   };
 
   static manifest = Object.freeze({
@@ -37,16 +42,26 @@ class LoanActionsHistory extends React.Component {
     users: {
       type: 'okapi',
       records: 'users',
+      resourceShouldRefresh: true,
       path: 'users?query=(%{userIds.query})',
     },
     loanActions: {
       type: 'okapi',
       records: 'loans',
+      resourceShouldRefresh: true,
       GET: {
         path: 'loan-storage/loan-history?query=(id=!{loan.id})',
       },
     },
   });
+  // resourceShouldRefresh:function() { return true },
+  constructor(props) {
+    super(props);
+    this.connectedProxy = props.stripes.connect(LoanActionsHistoryProxy);
+    this.state = {
+      loanActionCount: 0,
+    };
+  }
 
   // TODO: refactor after join is supported in stripes-connect
   componentWillReceiveProps(nextProps) {
@@ -54,17 +69,18 @@ class LoanActionsHistory extends React.Component {
 
     if (!loanActions.records.length ||
       loanActions.records[0].id !== loan.id) return;
-
     if (!userIds.query || userIds.loan.id !== loan.id) {
       const query = loanActions.records
-        .map(r => `id=${r.metaData.createdByUserId}`).join(' or ');
+        .map(r => `id=${r.metaData.updatedByUserId}`).join(' or ');
       this.props.mutator.userIds.replace({ query, loan });
     }
 
     if (!users.records.length) return;
 
-    if (!loanActionsWithUser.records || loanActionsWithUser.loan.id !== loan.id) {
+    if (!loanActionsWithUser.records || loanActionsWithUser.loan.id !== loan.id
+      || this.state.loanActionCount !== loanActions.other.totalRecords) {
       this.joinLoanActionsWithUser(loanActions.records, users.records, loan);
+      this.setState({ loanActionCount: loanActions.other.totalRecords });
     }
   }
 
@@ -72,28 +88,29 @@ class LoanActionsHistory extends React.Component {
     const userMap = users.reduce((memo, user) =>
       Object.assign(memo, { [user.id]: user }), {});
     const records = loanActions.map(la =>
-      Object.assign({}, la, { user: userMap[la.metaData.createdByUserId] }));
+      Object.assign({}, la, { user: userMap[la.metaData.updatedByUserId] }));
     this.props.mutator.loanActionsWithUser.replace({ loan, records });
   }
 
   render() {
-    const { onCancel, loan, user, stripes, resources: { loanActionsWithUser } } = this.props;
+    const { onCancel, loan, user, resources: { loanActionsWithUser } } = this.props;
     const loanActionsFormatter = {
       Action: la => loanActionMap[la.action],
-      'Action Date': la => formatDateTime(la.loanDate, stripes.locale),
-      'Due Date': la => (la.dueDate ? formatDateTime(la.dueDate, stripes.locale) : ''),
+      'Action Date': la => formatDateTime(la.loanDate),
+      'Due Date': la => formatDateTime(la.dueDate),
+      'Item Status': la => la.itemStatus,
       Operator: la => getFullName(la.user),
     };
 
     return (
       <Paneset isRoot>
-        <Pane id="pane-loandetails" defaultWidth="100%" dismissible onClose={onCancel} paneTitle={'Loan Details'}>
+        <Pane id="pane-loandetails" defaultWidth="100%" dismissible onClose={onCancel} paneTitle="Loan Details">
           <Row>
             <Col xs={4} >
               <KeyValue label="Title" value={_.get(loan, ['item', 'title'], '')} />
             </Col>
             <Col xs={2} >
-              <KeyValue label="Barcode" value={<Link to={`/items/view/${_.get(loan, ['itemId'], '')}?query=${_.get(loan, ['item', 'barcode'], '')}`}>{_.get(loan, ['item', 'barcode'], '')}</Link>} />
+              <KeyValue label="Barcode" value={<Link to={`/inventory/view/${_.get(loan, ['item', 'instanceId'], '')}/${_.get(loan, ['item', 'holdingsRecordId'], '')}/${_.get(loan, ['itemId'], '')}`}>{_.get(loan, ['item', 'barcode'], '')}</Link>} />
             </Col>
             <Col xs={2} >
               <KeyValue label="Item Status" value={_.get(loan, ['item', 'status', 'name'], '-')} />
@@ -113,7 +130,7 @@ class LoanActionsHistory extends React.Component {
               <KeyValue label="Call Number" value="TODO" />
             </Col>
             <Col xs={2} >
-              <KeyValue label="Due Date" value={formatDateTime(loan.dueDate, stripes.locale) || '-'} />
+              <KeyValue label="Due Date" value={formatDateTime(loan.dueDate) || '-'} />
             </Col>
             <Col xs={2} >
               <KeyValue label="Claimed Returned" value="TODO" />
@@ -127,7 +144,7 @@ class LoanActionsHistory extends React.Component {
               <KeyValue label="Loan Policy" value="TODO" />
             </Col>
             <Col xs={2} >
-              <KeyValue label="Loan Date" value={formatDateTime(loan.loanDate, stripes.locale) || '-'} />
+              <KeyValue label="Loan Date" value={formatDateTime(loan.loanDate) || '-'} />
             </Col>
             <Col xs={2} >
               <KeyValue label="Lost" value="TODO" />
@@ -135,13 +152,13 @@ class LoanActionsHistory extends React.Component {
           </Row>
           <Row>
             <Col xs={4} >
-              <KeyValue label="Proxy Borrower" value="TODO" />
+              <this.connectedProxy id={loan.proxyUserId} onClick={this.props.onClickUser} />
             </Col>
             <Col xs={2} >
               <KeyValue label="Renewal Count" value={_.get(loan, ['renewalCount'], '-')} />
             </Col>
             <Col xs={2} >
-              <KeyValue label="Return Date" value={formatDateTime(loan.returnDate, stripes.locale) || '-'} />
+              <KeyValue label="Return Date" value={formatDateTime(loan.returnDate) || '-'} />
             </Col>
             <Col xs={2} >
               <KeyValue label="Fine" value="TODO" />
@@ -152,7 +169,7 @@ class LoanActionsHistory extends React.Component {
             <MultiColumnList
               id="list-loanactions"
               formatter={loanActionsFormatter}
-              visibleColumns={['Action Date', 'Action', 'Due Date', 'Operator']}
+              visibleColumns={['Action Date', 'Action', 'Due Date', 'Item Status', 'Operator']}
               columnMapping={loanActionMap}
               contentData={loanActionsWithUser.records}
             />

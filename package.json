@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "2.10.1",
+  "version": "2.12.0",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -17,6 +17,7 @@
     "route": "/users",
     "home": "/users?filters=active.Active&sort=Name",
     "hasSettings": true,
+    "queryResource": "query",
     "actionNames": [
       "stripesHome",
       "usersSortByName"
@@ -165,27 +166,34 @@
           "settings.enabled"
         ],
         "visible": true
-      }
-    ],
-    "translations": {
-      "en": {
-        "search": "Search",
-        "loans.title": "Loans",
-        "loans.openLoans": "open loans",
-        "loans.closedLoans": "closed loans",
-        "resultCount": "{count, number} {count, plural, one {Result} other {Results}} Found"
       },
-      "de": {
-        "search": "Suche",
-        "loans.title": "Ausleihen",
-        "loans.openLoans": "Offene Ausleihen",
-        "loans.closedLoans": "Abgeschlossene Ausleihen",
-        "resultCount": "Gefunden {count, number} {count, plural, one {Aufzeichnung} other {Aufzeichnungen}}"
+      {
+        "permissionName": "ui-users.viewproxies",
+        "displayName": "Users: Can view proxies assigned to users",
+        "subPermissions": [
+          "ui-users.view",
+          "proxiesfor.collection.get"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.editproxies",
+        "displayName": "Users: Can create, edit and removed proxies",
+        "description": "",
+        "subPermissions": [
+          "ui-users.viewproxies",
+          "proxiesfor.item.get",
+          "proxiesfor.item.post",
+          "proxiesfor.item.put",
+          "proxiesfor.item.delete"
+        ],
+        "visible": true
       }
-    }
+    ]
   },
   "scripts": {
-    "lint": "eslint *.js lib settings || true",
+    "lint": "eslint .",
+    "test": "(cd ../ui-testing; yarn test-module -- -o --run=users --host=localhost)",
     "prepublishOnly": "node ../stripes-core/util/package2md.js package.json > ModuleDescriptor.json"
   },
   "devDependencies": {
@@ -195,18 +203,13 @@
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0",
     "babel-register": "^6.18.0",
-    "eslint": "^3.8.0",
-    "eslint-config-airbnb": "^13.0.0",
-    "eslint-import-resolver-webpack": "^0.8.1",
-    "eslint-plugin-babel": "^3.3.0",
-    "eslint-plugin-import": "^2.0.1",
-    "eslint-plugin-jsx-a11y": "^2.2.3",
-    "eslint-plugin-react": "^6.4.1"
+    "eslint": "^4.8.0",
+    "@folio/eslint-config-stripes": "^1.1.0"
   },
   "dependencies": {
-    "@folio/stripes-components": "^1.8.0",
-    "@folio/stripes-form": "^0.8.0",
-    "@folio/stripes-smart-components": "^1.0.1",
+    "@folio/stripes-components": "^2.0.0",
+    "@folio/stripes-form": "^0.8.2",
+    "@folio/stripes-smart-components": "^1.4.0",
     "classnames": "^2.2.5",
     "graphql-tag": "^2.5.0",
     "hashcode": "^1.0.3",
@@ -218,15 +221,20 @@
     "react-apollo": "^2.0.1",
     "react-bootstrap": "^0.31.1",
     "react-bootstrap-typeahead": "^1.4.0",
+    "react-flexbox-grid": "^2.0.0",
     "react-intl": "^2.3.0",
+    "react-router": "^4.2.0",
     "react-router-dom": "^4.0.0",
     "redux-form": "^7.0.3",
     "uuid": "^3.0.1"
   },
   "peerDependencies": {
-    "@folio/stripes-connect": "^2.7.0",
-    "@folio/stripes-core": "^2.7.0",
+    "@folio/stripes-connect": "^3.0.0",
+    "@folio/stripes-core": "^2.9.0",
     "@folio/stripes-logger": "^0.0.2",
-    "react-flexbox-grid": "^2.0.0"
+    "react": "*"
+  },
+  "optionalDependencies": {
+    "@folio/plugin-find-user": "^1.1.0"
   }
 }

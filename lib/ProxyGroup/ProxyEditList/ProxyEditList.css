@@ -1,0 +1,13 @@
+@import "@folio/stripes-components/lib/variables.css";
+
+.label {
+  margin-top: 10px;
+  color: #333;
+  font-size: 21px;
+  font-weight: normal;
+  margin-bottom: 5px;
+}
+
+.isEmptyMessage {
+  color: var(--subLabelColor);
+}

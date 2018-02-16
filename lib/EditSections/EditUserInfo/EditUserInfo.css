@@ -1,0 +1,22 @@
+.root {
+  padding: 0;
+}
+
+.label {
+  display: flex;
+  flex-grow: 2;
+  color: #999;
+  font-weight: 600;
+  justify-content: flex-start;
+  padding: 0px 0px 10px 22px;
+  & h2 {
+    font-size: 1.7rem;
+  }
+}
+
+.separator {
+  width: 100%;
+  border-bottom: 1px solid #cecece;
+  margin: auto;
+  margin-bottom: 14px;
+}

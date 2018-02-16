@@ -3,4 +3,6 @@ export default {
   checkedin: 'Checked in',
   renewed: 'Renewed',
   Operator: 'Source',
+  holdrequested: 'Hold requested',
+  recallrequested: 'Recall requested',
 };

@@ -2,18 +2,23 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
-import Icon from '@folio/stripes-components/lib/Icon';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import Pane from '@folio/stripes-components/lib/Pane';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import TabButton from '@folio/stripes-components/lib/TabButton';
+import IconButton from '@folio/stripes-components/lib/IconButton';
 
 import { getFullName } from './util';
 import OpenLoans from './lib/OpenLoans';
 import ClosedLoans from './lib/ClosedLoans';
 
+/**
+ * List a user's open or closed loans.
+ *
+ * Table-view of a user's loans, including links to the loan details and
+ * the loan's item-record.
+ */
 class LoansHistory extends React.Component {
-
   static propTypes = {
     stripes: PropTypes.shape({
       locale: PropTypes.string.isRequired,
@@ -57,9 +62,12 @@ class LoansHistory extends React.Component {
       <Row style={{ width: '100%' }}>
         <Col xs={1}>
           <PaneMenu>
-            <button onClick={this.props.onCancel} title="Close pane" aria-label="Close Loans">
-              <Icon icon="closeX" />
-            </button>
+            <IconButton
+              icon="closeX"
+              onClick={this.props.onCancel}
+              title="Close pane"
+              ariaLabel="Close Loans"
+            />
           </PaneMenu>
         </Col>
         <Col xs={1}>
@@ -84,6 +92,7 @@ class LoansHistory extends React.Component {
     return (
       <Paneset isRoot>
         <Pane
+          padContent={false}
           id="pane-loanshistory"
           defaultWidth="100%"
           dismissible

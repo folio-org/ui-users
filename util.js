@@ -1,21 +1,15 @@
 import _ from 'lodash';
 import React from 'react';
+import { FormattedDate, FormattedTime } from 'react-intl';
 
-export function formatDate(dateStr, locale) {
+export function formatDate(dateStr) {
   if (!dateStr) return dateStr;
-  return new Date(Date.parse(dateStr)).toLocaleDateString(locale);
+  return (<FormattedDate value={dateStr} />);
 }
 
-export function formatDateTime(dateStr, locale) {
+export function formatDateTime(dateStr) {
   if (!dateStr) return dateStr;
-  return new Date(Date.parse(dateStr)).toLocaleString(locale);
-}
-
-export function futureDate(dateStr, locale, days) {
-  if (!dateStr) return dateStr;
-  const date = new Date(Date.parse(dateStr));
-  date.setDate(date.getDate() + days);
-  return date.toLocaleDateString(locale);
+  return (<span><FormattedDate value={dateStr} /> <FormattedTime value={dateStr} /></span>);
 }
 
 export function getFullName(user) {
@@ -27,19 +21,14 @@ export function getFullName(user) {
 }
 
 export function getRowURL(user) {
-  return `/users/view/${user.id}/${user.username}`;
+  return `/users/view/${user.id}`;
 }
 
-export function getAnchoredRowFormatter(row) {
-  return (
-    <a
-      href={getRowURL(row.rowData)} key={`row-${row.rowIndex}`}
-      aria-label={row.labelStrings && row.labelStrings.join('...')}
-      role="listitem"
-      className={`${row.rowClass}`}
-      {...row.rowProps}
-    >
-      {row.cells}
-    </a>
-  );
+export function isSubstringsInString(listSubStrings, testString) {
+  return new RegExp(listSubStrings.join('|')).test(testString);
+}
+
+export function eachPromise(arr, fn) {
+  if (!Array.isArray(arr)) return Promise.reject(new Error('Array not found'));
+  return arr.reduce((prev, cur) => (prev.then(() => fn(cur))), Promise.resolve());
 }

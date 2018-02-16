@@ -1,6 +1,6 @@
 # ui-users
 
-Copyright (C) 2017 The Open Library Foundation
+Copyright (C) 2016-2018 The Open Library Foundation
 
 This software is distributed under the terms of the Apache License,
 Version 2.0. See the file "[LICENSE](LICENSE)" for more information.
@@ -20,6 +20,16 @@ The "ui-users" module is already enabled by that default configuration.
 The other parts that are needed are the Okapi gateway, various server-side modules (including mod-users), and sample data. Ways to achieve that are described in [Running a complete FOLIO system](https://github.com/folio-org/ui-okapi-console/blob/master/doc/running-a-complete-system.md).
 
 (At some point, this process will be dramatically streamlined; but at present, this software is primarily for developers to work on, rather than for users to use.)
+
+## Testing
+
+If you are doing development from git checkouts, you can use `npm test` or `yarn test` to run a regression-test suite, provided that:
+
+1. You have `ui-testing` checked out next to `ui-users`.
+2. Your `ui-users` checkout is `yarn link`ed into `ui-testing`.
+3. You are running a Stripes server on localhost:3000.
+
+(Most developers' environments meet these requirements.)
 
 ## Additional information
 

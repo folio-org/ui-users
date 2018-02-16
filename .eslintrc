@@ -1,21 +1,4 @@
 {
-  parser: "babel-eslint",
-  "extends": "airbnb",
-  settings: {
-    'import/resolver': {
-      webpack: {}
-    }
-  },
-  "rules": {
-    "react/jsx-filename-extension":"off",
-    "import/extensions": [ 1, "never" ],
-    "no-console": "off",
-    "react/forbid-prop-types": [ 1, { 'forbid' : [ 'any', 'array' ] } ],
-    "no-unused-vars": [ 1, { argsIgnorePattern: "^_" } ],
-    "max-len": "off",
-    "no-restricted-syntax": ["error", "LabeledStatement", "WithStatement"],
-    "curly": "off",
-    "no-nested-ternary": "off",
-    "no-plusplus": "off"
-  }
+  "parser": "babel-eslint",
+  "extends": "@folio/eslint-config-stripes"
 }

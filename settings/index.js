@@ -5,6 +5,7 @@ import Settings from '@folio/stripes-components/lib/Settings';
 import PermissionSets from './permissions/PermissionSets';
 import PatronGroupsSettings from './PatronGroupsSettings';
 import AddressTypesSettings from './AddressTypesSettings';
+import ProfilePictureSettings from './ProfilePictureSettings';
 
 const pages = [
   {
@@ -19,13 +20,18 @@ const pages = [
     component: PatronGroupsSettings,
     perm: 'ui-users.settings.usergroups',
   },
-
   {
     route: 'addresstypes',
     label: 'Address Types',
     component: AddressTypesSettings,
     perm: 'ui-users.settings.addresstypes',
   },
+  {
+    route: 'profilepictures',
+    label: 'Profile pictures',
+    component: ProfilePictureSettings,
+  },
+
 ];
 
 export default props => <Settings {...props} pages={_.sortBy(pages, ['label'])} paneTitle="Users" />;
