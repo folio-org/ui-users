@@ -9,7 +9,7 @@ module.exports.test = function foo(uiTestCtx) {
     let userid = null;
     let communityid = null;
     let staffid = null;
-    const wait = 333;
+    const wait = 1111;
 
     describe('Login > Add new patron group > Assign to user > Try to delete patron group > Unassign from user > Try to delete again > Logout\n', () => {
       const gid = `alumni_${Math.floor(Math.random() * 10000)}`;
