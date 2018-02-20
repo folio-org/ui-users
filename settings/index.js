@@ -35,7 +35,7 @@ const pages = [
     perm: 'ui-users.settings.owners',
   },
   {
-	 route: 'feefinestable',
+    route: 'feefinestable',
     label: 'Fees/Fines Table',
     component: FeefinesTypesSettings,
     perm: 'ui-users.settings.owners',
