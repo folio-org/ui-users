@@ -8,6 +8,8 @@ module.exports.test = function foo(uiTestCtx) {
     this.timeout(Number(config.test_timeout));
 
     describe('Login > Find user > Add proxy > Confirm proxy > Logout\n', () => {
+
+      let userBarcodes = [];
       before((done) => {
         login(nightmare, config, done); // logs in with the default admin credentials
       });
@@ -21,19 +23,70 @@ module.exports.test = function foo(uiTestCtx) {
           .then(result => result)
           .catch(done);
       });
-      it('should find a user id', (done) => {
+
+      it('should get active user barcodes', (done) => {
         nightmare
           .click('#clickable-users-module')
-          .wait('#list-users div[role="listitem"]:nth-child(8) > a')
-          .click('#list-users div[role="listitem"]:nth-child(8) > a')
+          .wait('#list-users div[role="listitem"]:nth-child(9)')
+	  .evaluate(() => {
+	    let ubc = [];
+	    const list = document.querySelectorAll('#list-users div[role="listitem"]');
+	    list.forEach((node) => {
+	     let status = node.querySelector('a div:nth-child(1)').innerText;
+	     let barcode = node.querySelector('a div:nth-child(3)').innerText;
+	     if (barcode && status.match(/Active/)) {
+	       ubc.push(barcode);
+	     }
+	    });
+	    return ubc;
+	  })
+	  .then(result => {
+	    done();
+	    userBarcodes = result;
+	  })
+	  .catch(done);
+      });
+
+      it('should add a proxy for', (done) => {
+        nightmare
+	  .insert('#input-user-search', userBarcodes[0])
           .wait('#clickable-edituser')
           .click('#clickable-edituser')
-          .wait('#proxy h2')
-          .click('#proxy h2')
-          .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
+          .wait('#proxy > div > div > button')
+          .click('#proxy > div > div > button')
+	  .wait('#proxy > div > div > div > div:nth-child(1) button')
+	  .click('#proxy > div > div > div > div:nth-child(1) button')
+	  .wait('div[aria-label="Select User"] #input-user-search')
+	  .insert('div[aria-label="Select User"] #input-user-search', userBarcodes[1])
+	  .wait(2222)
+          .wait('div[aria-label="Select User"] #list-users div[role="listitem"] > a')
+          .click('div[aria-label="Select User"] #list-users div[role="listitem"] > a')
+	  .wait('#clickable-updateuser')
+	  .click('#clickable-updateuser')
+	  .wait(2222)
           .then(() => { done(); })
           .catch(done);
-      });
+      }); 
+
+      it('should delete a sponsor of', (done) => {
+        nightmare
+	  .wait('#clickable-input-user-search-clear-field')
+	  .click('#clickable-input-user-search-clear-field')
+	  .wait(999)
+	  .insert('#input-user-search', userBarcodes[1])
+	  .wait(`#list-users div[role="listitem"] > a > div[title="${userBarcodes[1]}"]`)
+	  .wait(222)
+          .click('#clickable-edituser')
+          .wait('#proxy > div > div > button')
+          .click('#proxy > div > div > button')
+	  .wait('#proxy > div > div > div > div:nth-child(2) button')
+	  .click('#proxy > div > div > div > div:nth-child(2) button')
+	  // .wait('#clickable-updateuser')
+	  // .click('#clickable-updateuser')
+	  .wait(555)
+          .then(() => { done(); })
+          .catch(done);
+      }); 
     });
   });
 };
