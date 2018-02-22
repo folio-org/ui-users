@@ -70,9 +70,11 @@ module.exports.test = function foo(uiTestCtx) {
 
       it('should delete a sponsor of', (done) => {
         nightmare
-	  .wait('#clickable-input-user-search-clear-field')
-	  .click('#clickable-input-user-search-clear-field')
-	  .wait(999)
+	  //.wait('#input-user-search')
+	  .wait(4444)
+	  .evaluate(() => {
+	    document.querySelector('#input-user-search').value = '';
+	  })
 	  .insert('#input-user-search', userBarcodes[1])
 	  .wait(`#list-users div[role="listitem"] > a > div[title="${userBarcodes[1]}"]`)
 	  .wait(222)
