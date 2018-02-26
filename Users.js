@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { filters2cql } from '@folio/stripes-components/lib/FilterGroups';
 
 import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
 
@@ -85,7 +84,7 @@ class Users extends React.Component {
       GET: {
         params: {
           query: makeQueryFunction(
-            'username=*', 
+            'username=*',
             '(username="%{query.query}*" or personal.firstName="%{query.query}*" or personal.lastName="%{query.query}*" or personal.email="%{query.query}*" or barcode="%{query.query}*" or id="%{query.query}*" or externalSystemId="%{query.query}*")',
             {
               Active: 'active',
@@ -94,9 +93,9 @@ class Users extends React.Component {
               Username: 'username',
               Barcode: 'barcode',
               Email: 'personal.email',
-            }, 
-            filterConfig, 
-            false
+            },
+            filterConfig,
+            false,
           ),
         },
         staticFallback: { params: {} },
