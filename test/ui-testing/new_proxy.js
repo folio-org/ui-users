@@ -7,7 +7,7 @@ module.exports.test = function foo(uiTestCtx) {
 
     this.timeout(Number(config.test_timeout));
 
-    describe('Login > Find user > Add proxy > Confirm proxy > Logout\n', () => {
+    describe('Login > Find user two users > Add proxy to user 1 > Delete sponsor in user 2 > Logout\n', () => {
 
       let userIds = [];
       before((done) => {
@@ -53,18 +53,17 @@ module.exports.test = function foo(uiTestCtx) {
 	  .insert('#input-user-search', userIds[0].barcode)
           .wait('#clickable-edituser')
           .click('#clickable-edituser')
-          .wait('#proxy > div > div > button')
-          .click('#proxy > div > div > button')
-	  .wait('#proxy > div > div > div > div:nth-child(1) button')
-	  .click('#proxy > div > div > div > div:nth-child(1) button')
+          .wait('#proxy button[title^="expand"]')
+          .click('#proxy button[title^="expand"]')
+	  .wait('#proxy button[title^="Find"]')
+	  .click('#proxy button[title^="Find"]')
 	  .wait('div[aria-label="Select User"] #input-user-search')
 	  .insert('div[aria-label="Select User"] #input-user-search', userIds[1].barcode)
-	  .wait(2222)
-          .wait('div[aria-label="Select User"] #list-users div[role="listitem"] > a')
-          .click('div[aria-label="Select User"] #list-users div[role="listitem"] > a')
+	  .wait(222)
+          .wait(`div[aria-label="Select User"] #list-users div[role="listitem"] > a > div[title="${userIds[1].barcode}"]`)
+          .click(`div[aria-label="Select User"] #list-users div[role="listitem"] > a > div[title="${userIds[1].barcode}"]`)
 	  .wait('#clickable-updateuser')
 	  .click('#clickable-updateuser')
-	  .wait(2222)
           .then(() => { done(); })
           .catch(done);
       }); 
@@ -76,21 +75,21 @@ module.exports.test = function foo(uiTestCtx) {
 	  .evaluate(() => {
 	    document.querySelector('#input-user-search').value = '';
 	  })
-	  .insert('#input-user-search', userIds[1].barcode)
+	  .wait(222)
+	  .type('#input-user-search', userIds[1].barcode)
 	  .wait(`#list-users div[role="listitem"] > a > div[title="${userIds[1].barcode}"]`)
+	  .click(`#list-users div[role="listitem"] > a > div[title="${userIds[1].barcode}"]`)
 	  .wait(222)
           .click('#clickable-edituser')
-          .wait('#proxy > div > div > button')
-          .click('#proxy > div > div > button')
-	  .wait(`a[href*="${userIds[0].uuid}"]`)
-	  .xclick(`//a[contains(@href, "${userIds[0].uuid}")]/../../../..//button`)
+          .wait('#proxy button[title^="expand"]')
+          .click('#proxy button[title^="expand"]')
+	  .wait(`#proxy a[href*="${userIds[0].uuid}"]`)
+	  .xclick(`id("proxy")//a[contains(@href, "${userIds[0].uuid}")]/../../../..//button`)
 	  .wait('#clickable-deleteproxy-confirmation-confirm')
 	  .click('#clickable-deleteproxy-confirmation-confirm')
-	  .wait(1111)
+	  .wait('#clickable-updateuser')
 	  .click('#clickable-updateuser')
-	  // .wait('#clickable-updateuser')
-	  // .click('#clickable-updateuser')
-	  .wait(5555)
+	  .wait(1111)
           .then(() => { done(); })
           .catch(done);
       }); 
