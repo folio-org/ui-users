@@ -223,7 +223,7 @@
     "prop-types": "^15.5.10",
     "query-string": "^5.0.0",
     "react-bootstrap": "^0.31.1",
-    "react-bootstrap-typeahead": "^1.4.0",
+    "react-bootstrap-typeahead": "^2.4.0",
     "react-flexbox-grid": "^2.0.0",
     "react-intl": "^2.3.0",
     "react-router": "^4.2.0",
