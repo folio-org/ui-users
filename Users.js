@@ -95,7 +95,7 @@ class Users extends React.Component {
               Email: 'personal.email',
             },
             filterConfig,
-            false,
+            true,
           ),
         },
         staticFallback: { params: {} },
