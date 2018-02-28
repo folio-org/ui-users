@@ -34,6 +34,10 @@ const filterConfig = [
   },
 ];
 
+const columnMapping = {
+  Status: 'active',
+};
+
 class Users extends React.Component {
   static propTypes = {
     resources: PropTypes.shape({
@@ -206,6 +210,7 @@ class Users extends React.Component {
       parentResources={props.resources}
       parentMutator={props.mutator}
       showSingleResult={showSingleResult}
+      columnMapping={columnMapping}
     />);
   }
 }
