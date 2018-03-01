@@ -50,7 +50,7 @@ class LoanActionsHistory extends React.Component {
       records: 'loans',
       resourceShouldRefresh: true,
       GET: {
-        path: 'loan-storage/loan-history?query=(id=!{loan.id})',
+        path: 'loan-storage/loan-history?query=(id==!{loan.id})',
       },
     },
   });
@@ -71,7 +71,7 @@ class LoanActionsHistory extends React.Component {
       loanActions.records[0].id !== loan.id) return;
     if (!userIds.query || userIds.loan.id !== loan.id) {
       const query = loanActions.records
-        .map(r => `id=${r.metaData.updatedByUserId}`).join(' or ');
+        .map(r => `id==${r.metaData.updatedByUserId}`).join(' or ');
       this.props.mutator.userIds.replace({ query, loan });
     }
 
