@@ -176,7 +176,7 @@ class PatronGroupsSettings extends React.Component {
       if (query.length > 0) {
         query += ' or ';
       }
-      query += `id=${id}`;
+      query += `id==${id}`;
     }
     return query;
   }
