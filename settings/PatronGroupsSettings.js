@@ -97,7 +97,6 @@ class PatronGroupsSettings extends React.Component {
   }
 
   onCreateType(type) {
-    console.log('ui-items - settings - onCreateType called', type);
     return this.props.mutator.groups.POST(type);
   }
 
@@ -120,7 +119,6 @@ class PatronGroupsSettings extends React.Component {
   }
 
   onDeleteType() {
-    console.log('ui-items - settings - onDeleteType called');
     const type = this.state.type;
     this.props.mutator.activeRecord.update({ id: type.id });
     // TODO: remove when back end PUT requests ignore read only properties
@@ -178,7 +176,7 @@ class PatronGroupsSettings extends React.Component {
       if (query.length > 0) {
         query += ' or ';
       }
-      query += `id=${id}`;
+      query += `id==${id}`;
     }
     return query;
   }
