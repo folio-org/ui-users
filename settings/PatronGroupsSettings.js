@@ -10,6 +10,24 @@ import Callout from '@folio/stripes-components/lib/Callout';
 
 import { RenderPatronGroupLastUpdated, RenderPatronGroupNumberOfUsers } from '../lib/RenderPatronGroup';
 
+function validate(values) {
+  const errors = [];
+  if (Array.isArray(values.items)) {
+    const itemArrayErrors = [];
+    values.items.forEach((item, itemIndex) => {
+      const itemErrors = {};
+      if (!item.group) {
+        itemErrors.group = 'Please fill this in to continue';
+        itemArrayErrors[itemIndex] = itemErrors;
+      }
+    });
+    if (itemArrayErrors.length) {
+      errors.items = itemArrayErrors;
+    }
+  }
+  return errors;
+}
+
 class PatronGroupsSettings extends React.Component {
   static propTypes = {
     // The stripes prop will probably get used eventually, so
@@ -181,24 +199,6 @@ class PatronGroupsSettings extends React.Component {
     return query;
   }
 
-  validate(values) {
-    const errors = [];
-    if (Array.isArray(values.items)) {
-      const itemArrayErrors = [];
-      values.items.forEach((item, itemIndex) => {
-        const itemErrors = {};
-        if (!item.group) {
-          itemErrors.group = 'Please fill this in to continue';
-          itemArrayErrors[itemIndex] = itemErrors;
-        }
-      });
-      if (itemArrayErrors.length) {
-        errors.items = itemArrayErrors;
-      }
-    }
-    return errors;
-  }
-
   render() {
     if (!this.props.resources.groups) return <div />;
 
@@ -258,7 +258,7 @@ class PatronGroupsSettings extends React.Component {
             formatter={formatter}
             itemTemplate={{}}
             id="patrongroups"
-            validate={this.validate}
+            validate={validate}
           />
           <ConfirmationModal
             open={this.state.confirming}
