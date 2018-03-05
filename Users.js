@@ -71,13 +71,7 @@ class Users extends React.Component {
   }
 
   static manifest = Object.freeze({
-    query: {
-      initialValue: {
-        query: '',
-        filters: 'active.Active',
-        sort: 'Name',
-      },
-    },
+    query: { initialValue: {} },
     resultCount: { initialValue: INITIAL_RESULT_COUNT },
     records: {
       type: 'okapi',
@@ -99,7 +93,7 @@ class Users extends React.Component {
               Email: 'personal.email',
             },
             filterConfig,
-            true,
+            2,
           ),
         },
         staticFallback: { params: {} },
@@ -191,7 +185,7 @@ class Users extends React.Component {
       baseRoute={packageInfo.stripes.route}
       initialPath={initialPath}
       filterConfig={filterConfig}
-      initialFilters={this.constructor.manifest.query.initialValue.filters}
+      initialFilters={''}
       initialResultCount={INITIAL_RESULT_COUNT}
       resultCountIncrement={RESULT_COUNT_INCREMENT}
       viewRecordComponent={ViewUser}
