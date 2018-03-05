@@ -42,7 +42,8 @@ function validate(values) {
   }
 
   if (!values.personal || !values.personal.preferredContactTypeId) {
-    errors.personal = { preferredContactTypeId: 'Please select a preferred form of contact' };
+    if (errors.personal) errors.personal.preferredContactTypeId = 'Please select a preferred form of contact';
+    else errors.personal = { preferredContactTypeId: 'Please select a preferred form of contact' };
   }
   return errors;
 }
@@ -63,8 +64,22 @@ function asyncValidate(values, dispatch, props, blurredField) {
       });
     });
   }
-
   return new Promise(resolve => resolve());
+}
+
+function onSubmitFail(errors) {
+  let fieldNameWithError;
+
+  if (errors.personal && errors.personal.lastName) {
+    fieldNameWithError = 'personal.lastName';
+  } else if (errors.username) {
+    fieldNameWithError = 'username';
+  } else if (errors.patronGroup) {
+    fieldNameWithError = 'patronGroup';
+  } else if (errors.personal && errors.personal.preferredContactTypeId) {
+    fieldNameWithError = 'personal.preferredContactTypeId';
+  }
+  document.getElementsByName(fieldNameWithError)[0].scrollIntoView({ top: 0, behavior: 'smooth' });
 }
 
 class UserForm extends React.Component {
@@ -192,6 +207,7 @@ export default stripesForm({
   form: 'userForm',
   validate,
   asyncValidate,
+  onSubmitFail,
   asyncBlurFields: ['username'],
   navigationCheck: true,
   enableReinitialize: true,
