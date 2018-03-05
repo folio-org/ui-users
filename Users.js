@@ -185,7 +185,7 @@ class Users extends React.Component {
       baseRoute={packageInfo.stripes.route}
       initialPath={initialPath}
       filterConfig={filterConfig}
-      initialFilters=''
+      initialFilters=""
       initialResultCount={INITIAL_RESULT_COUNT}
       resultCountIncrement={RESULT_COUNT_INCREMENT}
       viewRecordComponent={ViewUser}
