@@ -129,13 +129,13 @@ const withProxy = WrappedComponent =>
       const { mutator } = this.props;
       const resource = mutator[resourceName];
       const resourceFor = mutator[`${resourceName}For`];
-      const query = `query=(${queryKey}=${userId})`;
+      const query = `query=(${queryKey}==${userId})`;
 
       resourceFor.reset();
       resource.reset();
       resourceFor.GET({ params: { query } }).then((recordsFor) => {
         if (!recordsFor.length) return;
-        const ids = recordsFor.map(pf => `id=${pf[recordKey]}`).join(' or ');
+        const ids = recordsFor.map(pf => `id==${pf[recordKey]}`).join(' or ');
         resource.GET({ params: { query: `query=(${ids})` } });
       });
     }
