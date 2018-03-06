@@ -40,6 +40,7 @@
 * Get rolling renewal period from loan policy. Fixes UIU-415.
 * Add renew button to loan details. Fixes UIU-395.
 * Make perm set title required. Fixes UIU-412.
+* Pass packageInfo to SearchAndSort; it's simpler. Refs STSMACOM-64. Available after v2.12.1.
 
 ## [2.12.0](https://github.com/folio-org/ui-users/tree/v2.12.0) (2017-11-28)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.11.0...v2.12.0)

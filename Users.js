@@ -163,8 +163,6 @@ class Users extends React.Component {
     const props = this.props;
     const { onSelectRow, disableRecordCreation, onComponentWillUnmount, showSingleResult } = this.props;
     const patronGroups = (props.resources.patronGroups || {}).records || [];
-    const initialPath = (_.get(packageInfo, ['stripes', 'home']) ||
-                         _.get(packageInfo, ['stripes', 'route']));
 
     const resultsFormatter = {
       Status: user => (user.active ? 'Active' : 'Inactive'),
@@ -179,13 +177,9 @@ class Users extends React.Component {
     };
 
     return (<SearchAndSort
-      moduleName={packageInfo.name.replace(/.*\//, '')}
-      moduleTitle={packageInfo.stripes.displayName}
+      packageInfo={packageInfo}
       objectName="user"
-      baseRoute={packageInfo.stripes.route}
-      initialPath={initialPath}
       filterConfig={filterConfig}
-      initialFilters=""
       initialResultCount={INITIAL_RESULT_COUNT}
       resultCountIncrement={RESULT_COUNT_INCREMENT}
       viewRecordComponent={ViewUser}
