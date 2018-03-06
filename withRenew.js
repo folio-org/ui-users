@@ -113,18 +113,18 @@ const withRenew = WrappedComponent =>
           return Promise.reject(error);
         }
 
-        const scheduleDue = moment(schedule.due).startOf('day');
-        const loanDue = moment(loan.dueDate).startOf('day');
-
-        if (!scheduleDue.diff(loanDue, 'days')) {
-          const error = {
-            message: 'Renewal at this time would not change the due date',
-          };
-
-          return Promise.reject(error);
-        }
-
         loanPolicy.fixedDueDateSchedule.schedule = schedule;
+      }
+
+      const newDueDate = calculateDueDate(loan);
+      const currentDueDate = moment(loan.dueDate).startOf('day');
+
+      if (!currentDueDate.diff(newDueDate, 'days')) {
+        const error = {
+          message: 'Renewal at this time would not change the due date',
+        };
+
+        return Promise.reject(error);
       }
 
       return loan;
