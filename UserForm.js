@@ -22,7 +22,7 @@ import { getFullName } from './util';
 
 import css from './UserForm.css';
 
-function validate(values) {
+function validate(values, props) {
   const errors = {};
 
   if (!values.personal || !values.personal.lastName) {
@@ -33,7 +33,7 @@ function validate(values) {
     errors.username = 'Please fill this in to continue';
   }
 
-  if (!values.creds || !values.creds.password) {
+  if (!props.initialValues.id && (!values.creds || !values.creds.password)) {
     errors.creds = { password: 'Please fill this in to continue' };
   }
 
@@ -65,21 +65,6 @@ function asyncValidate(values, dispatch, props, blurredField) {
     });
   }
   return new Promise(resolve => resolve());
-}
-
-function onSubmitFail(errors) {
-  let fieldNameWithError;
-
-  if (errors.personal && errors.personal.lastName) {
-    fieldNameWithError = 'personal.lastName';
-  } else if (errors.username) {
-    fieldNameWithError = 'username';
-  } else if (errors.patronGroup) {
-    fieldNameWithError = 'patronGroup';
-  } else if (errors.personal && errors.personal.preferredContactTypeId) {
-    fieldNameWithError = 'personal.preferredContactTypeId';
-  }
-  document.getElementsByName(fieldNameWithError)[0].scrollIntoView({ top: 0, behavior: 'smooth' });
 }
 
 class UserForm extends React.Component {
@@ -169,6 +154,7 @@ class UserForm extends React.Component {
     });
   }
 
+
   render() {
     const { initialValues } = this.props;
     const { sections } = this.state;
@@ -207,7 +193,6 @@ export default stripesForm({
   form: 'userForm',
   validate,
   asyncValidate,
-  onSubmitFail,
   asyncBlurFields: ['username'],
   navigationCheck: true,
   enableReinitialize: true,
