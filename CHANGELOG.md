@@ -37,6 +37,7 @@
 * Rewire loan links from items to inventory. Fixes UIU-368.
 * Relabel elements in user details Proxy section. Fixes UIU-370.
 * Get fixed renewal period from loan policy. Fixes UIU-405.
+* Get rolling renewal period from loan policy. Fixes UIU-415.
 
 ## [2.12.0](https://github.com/folio-org/ui-users/tree/v2.12.0) (2017-11-28)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.11.0...v2.12.0)
