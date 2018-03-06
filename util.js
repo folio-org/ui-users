@@ -3,7 +3,11 @@ import React from 'react';
 import { FormattedDate, FormattedTime } from 'react-intl';
 import moment from 'moment'; // eslint-disable-line import/no-extraneous-dependencies
 
-import { loanProfileTypesMap } from './constants';
+import {
+  loanProfileTypesMap,
+  intervalPeriodsMap,
+  intervalIdsMap,
+} from './constants';
 
 export function formatDate(dateStr) {
   if (!dateStr) return dateStr;
@@ -47,14 +51,26 @@ export function isRollingProfileType(loanProfile) {
     loanProfile.profileId === 'ROLLING');
 }
 
+export function isFixedProfileType(loanProfile) {
+  return (loanProfile.profileId === loanProfileTypesMap.FIXED ||
+    loanProfile.profileId === 'FIXED');
+}
+
 export function calculateDueDate(loan) {
   const loanPolicy = loan.loanPolicy;
   const loanProfile = loanPolicy.loansPolicy || {};
+  const period = loanProfile.period || {};
 
-  // rolling type
-  if (isRollingProfileType(loanProfile) && loanPolicy.loanable) {
-    if (loanPolicy.fixedDueDateSchedule) {
+  if (loanPolicy.loanable && loanPolicy.renewable) {
+    // UIU-405 get fixed renewal period from loan policy
+    if (isFixedProfileType(loanProfile) && loanPolicy.fixedDueDateSchedule) {
       return loanPolicy.fixedDueDateSchedule.schedule.due;
+    }
+
+    // UIU-415 get rolling renewal period from loan policy
+    if (isRollingProfileType(loanProfile) && !loanPolicy.renewalsPolicy.differentPeriod) {
+      const interval = intervalPeriodsMap[period.intervalId] || intervalIdsMap[period.intervalId];
+      return moment().add(period.duration, interval);
     }
   }
 
