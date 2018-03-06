@@ -128,7 +128,7 @@ const withRenew = WrappedComponent =>
 
       if (!currentDueDate.diff(newDueDate, 'days')) {
         const error = {
-          message: 'Renewal at this time would not change the due date',
+          message: 'Renewal at this time would not change the due date.',
         };
 
         return Promise.reject(error);
