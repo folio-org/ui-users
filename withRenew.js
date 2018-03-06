@@ -3,6 +3,7 @@ import moment from 'moment'; // eslint-disable-line import/no-extraneous-depende
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import ErrorModal from './lib/ErrorModal';
 import { getFixedDueDateSchedule, calculateDueDate } from './util';
 
 // HOC used to manage renew
@@ -65,13 +66,19 @@ const withRenew = WrappedComponent =>
     constructor(props) {
       super(props);
       this.renew = this.renew.bind(this);
+      this.hideModal = this.hideModal.bind(this);
+      this.state = { error: null };
     }
 
     renew(data) {
       return this.fetchLoanPolicy(data)
         .then(loan => this.fetchFixedDueDateSchedules(loan))
         .then(loan => this.validateFixedDueSchedule(loan))
-        .then(loan => this.execRenew(loan));
+        .then(loan => this.execRenew(loan))
+        .catch((error) => {
+          this.setState({ error });
+          throw error;
+        });
     }
 
     fetchLoanPolicy(loan) {
@@ -144,8 +151,26 @@ const withRenew = WrappedComponent =>
       return this.props.mutator.loansHistory.PUT(loanData);
     }
 
+    hideModal() {
+      this.setState({ error: null });
+    }
+
     render() {
-      return (<WrappedComponent renew={this.renew} {...this.props} />);
+      const { error } = this.state;
+
+      return (
+        <div>
+          <WrappedComponent renew={this.renew} {...this.props} />
+          {error &&
+            <ErrorModal
+              open={!!(error)}
+              onClose={this.hideModal}
+              message={error.message}
+              label="Item not renewed"
+            />
+          }
+        </div>
+      );
     }
   };
 
