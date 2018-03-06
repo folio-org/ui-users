@@ -38,6 +38,7 @@
 * Relabel elements in user details Proxy section. Fixes UIU-370.
 * Get fixed renewal period from loan policy. Fixes UIU-405.
 * Get rolling renewal period from loan policy. Fixes UIU-415.
+* Add placeholder text to explain what's wrong when there id no "find-user" plugin. Fixes UIU-421.
 
 ## [2.12.0](https://github.com/folio-org/ui-users/tree/v2.12.0) (2017-11-28)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.11.0...v2.12.0)
