@@ -51,19 +51,24 @@ export function isRollingProfileType(loanProfile) {
     loanProfile.profileId === 'ROLLING');
 }
 
+export function isFixedProfileType(loanProfile) {
+  return (loanProfile.profileId === loanProfileTypesMap.FIXED ||
+    loanProfile.profileId === 'FIXED');
+}
+
 export function calculateDueDate(loan) {
   const loanPolicy = loan.loanPolicy;
   const loanProfile = loanPolicy.loansPolicy || {};
   const period = loanProfile.period || {};
 
-  // UIU-405 get fixed renewal period from loan policy
-  if (isRollingProfileType(loanProfile) && loanPolicy.loanable) {
-    if (loanPolicy.fixedDueDateSchedule) {
+  if (loanPolicy.loanable && loanPolicy.renewable) {
+    // UIU-405 get fixed renewal period from loan policy
+    if (isFixedProfileType(loanProfile) && loanPolicy.fixedDueDateSchedule) {
       return loanPolicy.fixedDueDateSchedule.schedule.due;
     }
 
     // UIU-415 get rolling renewal period from loan policy
-    if (loanPolicy.renewable && !loanPolicy.renewalsPolicy.differentPeriod) {
+    if (isRollingProfileType(loanProfile) && !loanPolicy.renewalsPolicy.differentPeriod) {
       const interval = intervalPeriodsMap[period.intervalId] || intervalIdsMap[period.intervalId];
       return moment().add(period.duration, interval);
     }
