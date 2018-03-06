@@ -24,9 +24,10 @@ import css from './UserForm.css';
 
 function validate(values) {
   const errors = {};
+  errors.personal = {};
 
   if (!values.personal || !values.personal.lastName) {
-    errors.personal = { lastName: 'Please fill this in to continue' };
+    errors.personal.lastName = 'Please fill this in to continue';
   }
 
   if (!values.username) {
@@ -42,8 +43,17 @@ function validate(values) {
   }
 
   if (!values.personal || !values.personal.preferredContactTypeId) {
-    errors.personal = { preferredContactTypeId: 'Please select a preferred form of contact' };
+    errors.personal.preferredContactTypeId = 'Please select a preferred form of contact';
   }
+
+  if (values.personal && values.personal.addresses) {
+    errors.personal.addresses = [];
+    values.personal.addresses.forEach((addr) => {
+      const err = (!addr.addressType) ? { addressType: 'Address type is required' } : {};
+      errors.personal.addresses.push(err);
+    });
+  }
+
   return errors;
 }
 
