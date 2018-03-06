@@ -22,7 +22,7 @@ import { getFullName } from './util';
 
 import css from './UserForm.css';
 
-function validate(values) {
+function validate(values, props) {
   const errors = {};
   errors.personal = {};
 
@@ -34,7 +34,7 @@ function validate(values) {
     errors.username = 'Please fill this in to continue';
   }
 
-  if (!values.creds || !values.creds.password) {
+  if (!props.initialValues.id && (!values.creds || !values.creds.password)) {
     errors.creds = { password: 'Please fill this in to continue' };
   }
 
@@ -43,7 +43,8 @@ function validate(values) {
   }
 
   if (!values.personal || !values.personal.preferredContactTypeId) {
-    errors.personal.preferredContactTypeId = 'Please select a preferred form of contact';
+    if (errors.personal) errors.personal.preferredContactTypeId = 'Please select a preferred form of contact';
+    else errors.personal = { preferredContactTypeId: 'Please select a preferred form of contact' };
   }
 
   if (values.personal && values.personal.addresses) {
@@ -73,7 +74,6 @@ function asyncValidate(values, dispatch, props, blurredField) {
       });
     });
   }
-
   return new Promise(resolve => resolve());
 }
 
@@ -163,6 +163,7 @@ class UserForm extends React.Component {
       return newState;
     });
   }
+
 
   render() {
     const { initialValues } = this.props;
