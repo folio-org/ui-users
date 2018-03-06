@@ -94,7 +94,6 @@ class PermissionSetForm extends React.Component {
   render() {
     const { stripes, handleSubmit, initialValues } = this.props;
     const selectedSet = initialValues || {};
-
     const { confirmDelete } = this.state;
     const disabled = !stripes.hasPerm('perms.permissions.item.put');
     const paneTitle = selectedSet.id ? 'Edit Permission Set' : 'New Permission Set';

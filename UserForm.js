@@ -24,9 +24,10 @@ import css from './UserForm.css';
 
 function validate(values, props) {
   const errors = {};
+  errors.personal = {};
 
   if (!values.personal || !values.personal.lastName) {
-    errors.personal = { lastName: 'Please fill this in to continue' };
+    errors.personal.lastName = 'Please fill this in to continue';
   }
 
   if (!values.username) {
@@ -45,6 +46,15 @@ function validate(values, props) {
     if (errors.personal) errors.personal.preferredContactTypeId = 'Please select a preferred form of contact';
     else errors.personal = { preferredContactTypeId: 'Please select a preferred form of contact' };
   }
+
+  if (values.personal && values.personal.addresses) {
+    errors.personal.addresses = [];
+    values.personal.addresses.forEach((addr) => {
+      const err = (!addr.addressType) ? { addressType: 'Address type is required' } : {};
+      errors.personal.addresses.push(err);
+    });
+  }
+
   return errors;
 }
 
@@ -52,7 +62,7 @@ function asyncValidate(values, dispatch, props, blurredField) {
   if (blurredField === 'username' && values.username !== props.initialValues.username) {
     return new Promise((resolve, reject) => {
       const uv = props.parentMutator.uniquenessValidator;
-      const query = `(username="${values.username}")`;
+      const query = `(username=="${values.username}")`;
       uv.reset();
       uv.GET({ params: { query } }).then((users) => {
         if (users.length > 0) {

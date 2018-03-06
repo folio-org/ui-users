@@ -15,7 +15,7 @@
     "type": "app",
     "displayName": "Users",
     "route": "/users",
-    "home": "/users?filters=active.Active&sort=Name",
+    "home": "/users?sort=Name",
     "hasSettings": true,
     "queryResource": "query",
     "actionNames": [
@@ -214,7 +214,7 @@
     "@folio/eslint-config-stripes": "^1.1.0"
   },
   "dependencies": {
-    "@folio/stripes-components": "^2.0.0",
+    "@folio/stripes-components": "^2.0.2",
     "@folio/stripes-form": "^0.8.2",
     "@folio/stripes-smart-components": "^1.4.0",
     "classnames": "^2.2.5",

@@ -7,9 +7,13 @@ import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
+import Button from '@folio/stripes-components/lib/Button';
+import Callout from '@folio/stripes-components/lib/Callout';
+
 import { formatDateTime, getFullName } from './util';
 import loanActionMap from './data/loanActionMap';
 import LoanActionsHistoryProxy from './LoanActionsHistoryProxy';
+import withRenew from './withRenew';
 
 /**
  * Detail view of a user's loan.
@@ -34,6 +38,7 @@ class LoanActionsHistory extends React.Component {
     user: PropTypes.object,
     onCancel: PropTypes.func.isRequired,
     onClickUser: PropTypes.func.isRequired,
+    renew: PropTypes.func,
   };
 
   static manifest = Object.freeze({
@@ -50,7 +55,7 @@ class LoanActionsHistory extends React.Component {
       records: 'loans',
       resourceShouldRefresh: true,
       GET: {
-        path: 'loan-storage/loan-history?query=(id=!{loan.id})',
+        path: 'loan-storage/loan-history?query=(id==!{loan.id})',
       },
     },
   });
@@ -58,6 +63,8 @@ class LoanActionsHistory extends React.Component {
   constructor(props) {
     super(props);
     this.connectedProxy = props.stripes.connect(LoanActionsHistoryProxy);
+    this.renew = this.renew.bind(this);
+
     this.state = {
       loanActionCount: 0,
     };
@@ -71,7 +78,7 @@ class LoanActionsHistory extends React.Component {
       loanActions.records[0].id !== loan.id) return;
     if (!userIds.query || userIds.loan.id !== loan.id) {
       const query = loanActions.records
-        .map(r => `id=${r.metaData.updatedByUserId}`).join(' or ');
+        .map(r => `id==${r.metaData.updatedByUserId}`).join(' or ');
       this.props.mutator.userIds.replace({ query, loan });
     }
 
@@ -92,6 +99,20 @@ class LoanActionsHistory extends React.Component {
     this.props.mutator.loanActionsWithUser.replace({ loan, records });
   }
 
+  renew() {
+    this.props.renew(this.props.loan).then(() => this.showCallout());
+  }
+
+  showCallout() {
+    const message = (
+      <span>
+        The loan for <strong>{this.props.loan.item.title}</strong> was successfully <strong>renewed</strong>.
+      </span>
+    );
+
+    this.callout.sendCallout({ message });
+  }
+
   render() {
     const { onCancel, loan, user, resources: { loanActionsWithUser } } = this.props;
     const loanActionsFormatter = {
@@ -105,6 +126,11 @@ class LoanActionsHistory extends React.Component {
     return (
       <Paneset isRoot>
         <Pane id="pane-loandetails" defaultWidth="100%" dismissible onClose={onCancel} paneTitle="Loan Details">
+          <Row>
+            <Col>
+              <Button buttonStyle="primary" onClick={this.renew}>Renew</Button>
+            </Col>
+          </Row>
           <Row>
             <Col xs={4} >
               <KeyValue label="Title" value={_.get(loan, ['item', 'title'], '')} />
@@ -174,10 +200,11 @@ class LoanActionsHistory extends React.Component {
               contentData={loanActionsWithUser.records}
             />
           }
+          <Callout ref={(ref) => { this.callout = ref; }} />
         </Pane>
       </Paneset>
     );
   }
 }
 
-export default LoanActionsHistory;
+export default withRenew(LoanActionsHistory);

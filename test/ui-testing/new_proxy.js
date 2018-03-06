@@ -72,11 +72,13 @@ module.exports.test = function foo(uiTestCtx) {
 
       it('should delete a sponsor of user 2', (done) => {
         nightmare
-          .wait(4444)
+          /* .wait(4444)
           .evaluate(() => {
             document.querySelector('#input-user-search').value = '';
-          })
-          .wait(222)
+          }) */
+          .wait('#users-module-display > div > section:nth-child(2) > div > button')
+          .click('#users-module-display > div > section:nth-child(2) > div > button')
+          .wait(2222)
           .type('#input-user-search', userIds[1].barcode)
           .wait(`#list-users div[role="listitem"] > a > div[title="${userIds[1].barcode}"]`)
           .click(`#list-users div[role="listitem"] > a > div[title="${userIds[1].barcode}"]`)
