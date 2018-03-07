@@ -92,7 +92,9 @@ class PatronGroupsSettings extends React.Component {
     if (this.propsReadyToFetchUsers(nextProps)) {
       const ids = this.getLastUpdaterIds(nextProps.resources.groups.records);
       const query = this.craftQueryForLastUpdaters(ids);
-      this.props.mutator.usersLastUpdating.update({ query });
+      if (query) {
+        this.props.mutator.usersLastUpdating.update({ query });
+      }
     }
   }
 
