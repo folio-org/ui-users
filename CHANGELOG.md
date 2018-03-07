@@ -43,6 +43,8 @@
 * Fix address validation. Fixes UIU-414.
 * Add placeholder text to explain what's wrong when there is no "find-user" plugin. Fixes UIU-421.
 * Pass packageInfo to SearchAndSort; it's simpler. Refs STSMACOM-64. Available after v2.12.1.
+* Upgrade stripes-components dependency to v2.0.3. Fixes UIU-423.
+* Modal users-in-users app can now search again, thanks to the STCOM-226 fix. Fixes UIU-426.
 
 ## [2.12.0](https://github.com/folio-org/ui-users/tree/v2.12.0) (2017-11-28)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.11.0...v2.12.0)
