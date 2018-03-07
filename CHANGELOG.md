@@ -42,6 +42,7 @@
 * Make perm set title required. Fixes UIU-412.
 * Fix address validation. Fixes UIU-414.
 * Add placeholder text to explain what's wrong when there is no "find-user" plugin. Fixes UIU-421.
+* Pass packageInfo to SearchAndSort; it's simpler. Refs STSMACOM-64. Available after v2.12.1.
 
 ## [2.12.0](https://github.com/folio-org/ui-users/tree/v2.12.0) (2017-11-28)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.11.0...v2.12.0)
