@@ -70,9 +70,11 @@ module.exports.test = function foo(uiTestCtx) {
           .then(() => { done(); })
           .catch(done);
       });
-      it('should find a user to edit', (done) => {
+      it('should find an active user to edit', (done) => {
         nightmare
           .click('#clickable-users-module')
+          .wait(1000)
+          .click('#clickable-filter-active-Active')
           .wait('#list-users div[role="listitem"]:nth-of-type(11) > a > div:nth-of-type(5)')
           .evaluate(() => document.querySelector('#list-users div[role="listitem"]:nth-of-type(11) > a > div:nth-of-type(5)').title)
           .then((result) => {
