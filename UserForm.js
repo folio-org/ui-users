@@ -206,4 +206,5 @@ export default stripesForm({
   asyncBlurFields: ['username'],
   navigationCheck: true,
   enableReinitialize: true,
+  scrollToError: true,
 })(UserForm);
