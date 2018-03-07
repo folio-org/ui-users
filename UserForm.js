@@ -169,7 +169,7 @@ class UserForm extends React.Component {
     const { initialValues } = this.props;
     const { sections } = this.state;
     const firstMenu = this.getAddFirstMenu();
-    const paneTitle = initialValues.id ? `Edit: ${getFullName(initialValues)}` : 'Create user';
+    const paneTitle = initialValues.id ? getFullName(initialValues) : 'Create user';
     const lastMenu = initialValues.id ?
       this.getLastMenu('clickable-updateuser', 'Update user') :
       this.getLastMenu('clickable-createnewuser', 'Create user');
@@ -177,7 +177,7 @@ class UserForm extends React.Component {
     return (
       <form className={css.UserFormRoot} id="form-user">
         <Paneset isRoot>
-          <Pane defaultWidth="100%" firstMenu={firstMenu} lastMenu={lastMenu} paneTitle={paneTitle}>
+          <Pane defaultWidth="100%" firstMenu={firstMenu} lastMenu={lastMenu} paneTitle={paneTitle} appIcon="users">
             <Row end="xs">
               <Col xs>
                 <ExpandAllButton accordionStatus={sections} onToggle={this.handleExpandAll} />
