@@ -26,6 +26,8 @@ module.exports.test = function foo(uiTestCtx) {
       it('should get active user barcodes', (done) => {
         nightmare
           .click('#clickable-users-module')
+          .wait(1000)
+          .click('#clickable-filter-active-Active')
           .wait('#list-users div[role="listitem"]:nth-child(9)')
           .evaluate(() => {
             const ubc = [];
