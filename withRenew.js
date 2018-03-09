@@ -122,7 +122,7 @@ const withRenew = WrappedComponent =>
       const newDueDate = calculateDueDate(loan).startOf('day');
       const currentDueDate = moment(loan.dueDate).startOf('day');
 
-      if (newDueDate.isBefore(currentDueDate)) {
+      if (newDueDate.isSameOrBefore(currentDueDate)) {
         return this.throwError('Renewal at this time would not change the due date.');
       }
 

@@ -7,6 +7,7 @@ import {
   loanProfileTypesMap,
   intervalPeriodsMap,
   intervalIdsMap,
+  renewFromMap,
 } from './constants';
 
 export function formatDate(dateStr) {
@@ -59,9 +60,10 @@ export function isFixedProfileType(loanProfile) {
 export function calculateDueDate(loan) {
   const loanPolicy = loan.loanPolicy;
   const loanProfile = loanPolicy.loansPolicy || {};
+  const renewalsPolicy = loanPolicy.renewalsPolicy || {};
   const period = loanProfile.period || {};
 
-  if (loanPolicy.loanable && loanPolicy.renewable && !loanPolicy.renewalsPolicy.differentPeriod) {
+  if (loanPolicy.loanable && loanPolicy.renewable && !renewalsPolicy.differentPeriod) {
     // UIU-405 get fixed renewal period from loan policy
     if (isFixedProfileType(loanProfile) && loanPolicy.fixedDueDateSchedule) {
       return moment(loanPolicy.fixedDueDateSchedule.schedule.due);
@@ -70,7 +72,8 @@ export function calculateDueDate(loan) {
     // UIU-415 get rolling renewal period from loan policy
     if (isRollingProfileType(loanProfile)) {
       const interval = intervalPeriodsMap[period.intervalId] || intervalIdsMap[period.intervalId];
-      return moment().add(period.duration, interval);
+      const dueDate = (renewalsPolicy.renewFromId === renewFromMap.SYSTEM_DATE) ? moment() : moment(loan.dueDate);
+      return dueDate.add(period.duration, interval);
     }
   }
 
