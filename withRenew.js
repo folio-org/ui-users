@@ -73,7 +73,7 @@ const withRenew = WrappedComponent =>
     renew(data) {
       return this.fetchLoanPolicy(data)
         .then(loan => this.fetchFixedDueDateSchedules(loan))
-        .then(loan => this.validateFixedDueSchedule(loan))
+        .then(loan => this.validateRenew(loan))
         .then(loan => this.execRenew(loan))
         .catch((error) => {
           this.setState({ error });
@@ -105,43 +105,41 @@ const withRenew = WrappedComponent =>
     }
 
     // eslint-disable-next-line class-methods-use-this
-    validateFixedDueSchedule(loan) {
+    validateRenew(loan) {
       const { loanPolicy } = loan;
       if (loanPolicy && loanPolicy.fixedDueDateSchedule) {
         const schedule = getFixedDueDateSchedule(loanPolicy.fixedDueDateSchedule.schedules);
 
         if (!schedule) {
-          const error = {
-            message: ` Item can't be renewed as the renewal date falls outside
-              of the date ranges in the loan policy.
-              Please review ${loan.loanPolicy.name} before retrying renewal.`,
-          };
-
-          return Promise.reject(error);
+          return this.throwError(` Item can't be renewed as the renewal date falls outside
+            of the date ranges in the loan policy.
+            Please review ${loan.loanPolicy.name} before retrying renewal.`);
         }
 
         loanPolicy.fixedDueDateSchedule.schedule = schedule;
       }
 
-      const newDueDate = calculateDueDate(loan);
+      const newDueDate = calculateDueDate(loan).startOf('day');
       const currentDueDate = moment(loan.dueDate).startOf('day');
 
-      if (!currentDueDate.diff(newDueDate, 'days')) {
-        const error = {
-          message: 'Renewal at this time would not change the due date.',
-        };
-
-        return Promise.reject(error);
+      if (newDueDate.isBefore(currentDueDate)) {
+        return this.throwError('Renewal at this time would not change the due date.');
       }
 
       return loan;
+    }
+
+    // eslint-disable-next-line class-methods-use-this
+    throwError(message) {
+      const error = { message };
+      return Promise.reject(error);
     }
 
     execRenew(loan) {
       Object.assign(loan, {
         renewalCount: (loan.renewalCount || 0) + 1,
         loanDate: moment(loan.loanDate).format(),
-        dueDate: calculateDueDate(loan),
+        dueDate: calculateDueDate(loan).format(),
         action: 'renewed',
       });
 
