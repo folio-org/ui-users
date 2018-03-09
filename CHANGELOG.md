@@ -48,6 +48,7 @@
 * Prevent renewal if new calculated due date is less than or equal to current due date. Fixes UIU-429.
 * Handle renew from current due date. Fixes UIU-428.
 * Add borrower name and patron group to loan details. Fixes UIU-406.
+* Bump stripes-components dependency to v2.0.5. Makes filters work in nested apps. Fixes UIU-430.
 
 ## [2.12.0](https://github.com/folio-org/ui-users/tree/v2.12.0) (2017-11-28)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.11.0...v2.12.0)
