@@ -194,15 +194,15 @@ class PatronGroupsSettings extends React.Component {
           const groupCounts = _.get(usersPerGroup, ['resultInfo', 'facets', 0, 'facetValues'], []);
           disableDelete = _.map(groupCounts, 'value');
         }
-        if (!!(_.includes(disableDelete, item.id))) {
+        if (_.includes(disableDelete, item.id)) {
           return {
-            disabled: !!(_.includes(disableDelete, item.id)),
-            title: 'Patron group cannot be deleted when used by one or more users'
+            disabled: _.includes(disableDelete, item.id),
+            title: 'Patron group cannot be deleted when used by one or more users',
           };
         }
 
         return {};
-      }
+      },
     };
 
     const formatter = {
