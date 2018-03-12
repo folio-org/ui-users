@@ -6,6 +6,9 @@ import PermissionSets from './permissions/PermissionSets';
 import PatronGroupsSettings from './PatronGroupsSettings';
 import AddressTypesSettings from './AddressTypesSettings';
 import ProfilePictureSettings from './ProfilePictureSettings';
+import OwnersTypesSettings from './OwnersTypesSettings';
+import FeefinesTypesSettings from './FeefinesTypesSettings';
+
 
 const pages = [
   {
@@ -31,7 +34,18 @@ const pages = [
     label: 'Profile pictures',
     component: ProfilePictureSettings,
   },
-
+  {
+    route: 'owners',
+    label: 'Fee/Fine Owners',
+    component: OwnersTypesSettings,
+    perm: 'ui-users.settings.owners',
+  },
+  {
+    route: 'feefinestable',
+    label: 'Fee/Fine Table',
+    component: FeefinesTypesSettings,
+    perm: 'ui-users.settings.owners',
+  },
 ];
 
 export default props => <Settings {...props} pages={_.sortBy(pages, ['label'])} paneTitle="Users" />;
