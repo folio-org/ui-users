@@ -47,12 +47,12 @@ export function getFixedDueDateSchedule(schedules) {
     today.isBetween(moment(s.from).startOf('day'), moment(s.to).endOf('day')));
 }
 
-export function isRollingProfileType(loanProfile) {
+export function isLoanProfileRolling(loanProfile) {
   return (loanProfile.profileId === loanProfileTypesMap.ROLLING ||
     loanProfile.profileId === 'ROLLING');
 }
 
-export function isFixedProfileType(loanProfile) {
+export function isLoanProfileFixed(loanProfile) {
   return (loanProfile.profileId === loanProfileTypesMap.FIXED ||
     loanProfile.profileId === 'FIXED');
 }
@@ -63,14 +63,18 @@ export function calculateDueDate(loan) {
   const renewalsPolicy = loanPolicy.renewalsPolicy || {};
   const period = loanProfile.period || {};
 
-  if (loanPolicy.loanable && loanPolicy.renewable && !renewalsPolicy.differentPeriod) {
-    // UIU-405 get fixed renewal period from loan policy
-    if (isFixedProfileType(loanProfile) && loanPolicy.fixedDueDateSchedule) {
-      return moment(loanPolicy.fixedDueDateSchedule.schedule.due);
+  if (loanPolicy.loanable && loanPolicy.renewable) {
+    if (isLoanProfileFixed(loanProfile)) {
+      // UIU-433 get alternate fixed renewal period from loan policy
+      if (renewalsPolicy.differentPeriod && loanPolicy.alternateFixedDueDateSchedule) {
+        return moment(loanPolicy.alternateFixedDueDateSchedule.schedule.due);
+      } else if (loanPolicy.fixedDueDateSchedule) { // UIU-405 get fixed renewal period from loan policy
+        return moment(loanPolicy.fixedDueDateSchedule.schedule.due);
+      }
     }
 
     // UIU-415 get rolling renewal period from loan policy
-    if (isRollingProfileType(loanProfile)) {
+    if (isLoanProfileRolling(loanProfile)) {
       const interval = intervalPeriodsMap[period.intervalId] || intervalIdsMap[period.intervalId];
       const dueDate = (renewalsPolicy.renewFromId === renewFromMap.SYSTEM_DATE) ? moment() : moment(loan.dueDate);
       return dueDate.add(period.duration, interval);

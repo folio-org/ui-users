@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { omit, get } from 'lodash';
 import moment from 'moment'; // eslint-disable-line import/no-extraneous-dependencies
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -72,7 +72,8 @@ const withRenew = WrappedComponent =>
 
     renew(data) {
       return this.fetchLoanPolicy(data)
-        .then(loan => this.fetchFixedDueDateSchedules(loan))
+        .then(loan => this.getFixedDueDateSchedule(loan))
+        .then(loan => this.getAlternateFixedDueDateSchedule(loan))
         .then(loan => this.validateRenew(loan))
         .then(loan => this.execRenew(loan))
         .catch((error) => {
@@ -91,34 +92,63 @@ const withRenew = WrappedComponent =>
       });
     }
 
-    fetchFixedDueDateSchedules(loan) {
-      if (!loan || !loan.loanPolicy || !loan.loanPolicy.loansPolicy.fixedDueDateSchedule) {
-        return loan;
-      }
+    getFixedDueDateSchedule(loan) {
+      const scheduleId = get(loan, 'loanPolicy.loansPolicy.fixedDueDateSchedule', '');
+      if (!scheduleId) return loan;
 
-      const query = `(id=="${loan.loanPolicy.loansPolicy.fixedDueDateSchedule}")`;
-      this.props.mutator.fixedDueDateSchedules.reset();
-      return this.props.mutator.fixedDueDateSchedules.GET({ params: { query } }).then((fixedDueDateSchedules) => {
-        loan.loanPolicy.fixedDueDateSchedule = fixedDueDateSchedules[0];
+      return this.fetchFixedDueDateSchedule(loan, scheduleId).then((schedule) => {
+        loan.loanPolicy.fixedDueDateSchedule = schedule;
         return loan;
       });
+    }
+
+    getAlternateFixedDueDateSchedule(loan) {
+      const scheduleId = get(loan, 'loanPolicy.renewalsPolicy.alternateFixedDueDateScheduleId', '');
+      if (!scheduleId) return loan;
+
+      return this.fetchFixedDueDateSchedule(loan, scheduleId).then((schedule) => {
+        loan.loanPolicy.alternateFixedDueDateSchedule = schedule;
+        return loan;
+      });
+    }
+
+    fetchFixedDueDateSchedule(loan, scheduleId) {
+      const query = `(id=="${scheduleId}")`;
+      this.props.mutator.fixedDueDateSchedules.reset();
+      return this.props.mutator.fixedDueDateSchedules.GET({ params: { query } })
+        .then(fixedDueDateSchedules => fixedDueDateSchedules[0]);
     }
 
     // eslint-disable-next-line class-methods-use-this
     validateRenew(loan) {
       const { loanPolicy } = loan;
-      if (loanPolicy && loanPolicy.fixedDueDateSchedule) {
-        const schedule = getFixedDueDateSchedule(loanPolicy.fixedDueDateSchedule.schedules);
+      const { fixedDueDateSchedule, alternateFixedDueDateSchedule } = loanPolicy;
+      const schedule = this.validateSchedule(loanPolicy, alternateFixedDueDateSchedule);
 
-        if (!schedule) {
-          return this.throwError(` Item can't be renewed as the renewal date falls outside
-            of the date ranges in the loan policy.
-            Please review ${loan.loanPolicy.name} before retrying renewal.`);
-        }
-
-        loanPolicy.fixedDueDateSchedule.schedule = schedule;
+      if (!schedule) {
+        this.validateSchedule(loanPolicy, fixedDueDateSchedule);
       }
 
+      this.validateDueDate(loan);
+      return loan;
+    }
+
+    validateSchedule(loanPolicy, dueDateSchedule) {
+      if (!dueDateSchedule) return dueDateSchedule;
+
+      const schedule = getFixedDueDateSchedule(dueDateSchedule.schedules);
+
+      if (!schedule) {
+        return this.throwError(` Item can't be renewed as the renewal date falls outside
+          of the date ranges in the loan policy.
+          Please review ${loanPolicy.name} before retrying renewal.`);
+      }
+
+      dueDateSchedule.schedule = schedule;
+      return dueDateSchedule;
+    }
+
+    validateDueDate(loan) {
       const newDueDate = calculateDueDate(loan).startOf('day');
       const currentDueDate = moment(loan.dueDate).startOf('day');
 
@@ -132,7 +162,7 @@ const withRenew = WrappedComponent =>
     // eslint-disable-next-line class-methods-use-this
     throwError(message) {
       const error = { message };
-      return Promise.reject(error);
+      throw error;
     }
 
     execRenew(loan) {
@@ -143,7 +173,7 @@ const withRenew = WrappedComponent =>
         action: 'renewed',
       });
 
-      const loanData = _.omit(loan, ['item', 'rowIndex', 'loanPolicy']);
+      const loanData = omit(loan, ['item', 'rowIndex', 'loanPolicy']);
 
       this.props.mutator.loanId.replace(loan.id);
       return this.props.mutator.loansHistory.PUT(loanData);
