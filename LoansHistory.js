@@ -24,26 +24,14 @@ class LoansHistory extends React.Component {
       locale: PropTypes.string.isRequired,
       connect: PropTypes.func.isRequired,
     }).isRequired,
-    resources: PropTypes.shape({
-      loansHistory: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
-      }),
-    }),
     onCancel: PropTypes.func.isRequired,
     openLoans: PropTypes.bool,
     onClickViewOpenLoans: PropTypes.func.isRequired,
     onClickViewClosedLoans: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired,
     patronGroup: PropTypes.object.isRequired,
+    loansHistory: PropTypes.arrayOf(PropTypes.object).isRequired,
   };
-
-  static manifest = Object.freeze({
-    loansHistory: {
-      type: 'okapi',
-      records: 'loans',
-      path: 'circulation/loans?query=(userId==!{user.id}) sortby id&limit=100',
-    },
-  });
 
   constructor(props) {
     super(props);
@@ -52,8 +40,7 @@ class LoansHistory extends React.Component {
   }
 
   render() {
-    const { user, patronGroup, resources, openLoans } = this.props;
-    const loansHistory = _.get(resources, ['loansHistory', 'records']);
+    const { user, patronGroup, openLoans, loansHistory } = this.props;
     const loanStatus = openLoans ? 'Open' : 'Closed';
     const loans = _.filter(loansHistory, loan => loanStatus === _.get(loan, ['status', 'name']));
     if (!loans) return <div />;
