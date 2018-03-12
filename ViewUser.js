@@ -341,10 +341,10 @@ class ViewUser extends React.Component {
     const userFormData = this.getUserFormData(user, addresses, sponsors, proxies, permissions);
 
     return (
-      <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle={getFullName(user)} lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
+      <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle={getFullName(user)} lastMenu={detailMenu} dismissible onClose={this.props.onClose} appIcon={{ app: 'users' }}>
         <Row end="xs"><Col xs><ExpandAllButton accordionStatus={this.state.sections} onToggle={this.handleExpandAll} /></Col></Row>
 
-        <this.connectedUserInfo user={user} patronGroup={patronGroup} settings={settings} stripes={stripes} />
+        <this.connectedUserInfo accordionId="userInformationSection" user={user} patronGroup={patronGroup} settings={settings} stripes={stripes} expanded={this.state.sections.userInformationSection} onToggle={this.handleSectionToggle} />
         <ExtendedInfo accordionId="extendedInfoSection" stripes={stripes} user={user} expanded={this.state.sections.extendedInfoSection} onToggle={this.handleSectionToggle} />
         <ContactInfo accordionId="contactInfoSection" stripes={stripes} user={user} addresses={addresses} addressTypes={this.addressTypes} expanded={this.state.sections.contactInfoSection} onToggle={this.handleSectionToggle} />
         <IfPermission perm="proxiesfor.collection.get">
@@ -414,6 +414,7 @@ class ViewUser extends React.Component {
             user={user}
             loan={this.state.selectedLoan}
             loanid={this.state.selectedLoan.id}
+            patronGroup={patronGroup}
             stripes={stripes}
             onCancel={this.onClickCloseLoanActionsHistory}
             // when navigating away to another user, clear all loan-related state

@@ -9,6 +9,9 @@ import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import Button from '@folio/stripes-components/lib/Button';
 import Callout from '@folio/stripes-components/lib/Callout';
+import IconButton from '@folio/stripes-components/lib/IconButton';
+import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
+import TabButton from '@folio/stripes-components/lib/TabButton';
 
 import { formatDateTime, getFullName } from './util';
 import loanActionMap from './data/loanActionMap';
@@ -36,6 +39,7 @@ class LoanActionsHistory extends React.Component {
     }).isRequired,
     loan: PropTypes.object,
     user: PropTypes.object,
+    patronGroup: PropTypes.object,
     onCancel: PropTypes.func.isRequired,
     onClickUser: PropTypes.func.isRequired,
     renew: PropTypes.func,
@@ -114,7 +118,7 @@ class LoanActionsHistory extends React.Component {
   }
 
   render() {
-    const { onCancel, loan, user, resources: { loanActionsWithUser } } = this.props;
+    const { onCancel, loan, user, patronGroup, resources: { loanActionsWithUser } } = this.props;
     const loanActionsFormatter = {
       Action: la => loanActionMap[la.action],
       'Action Date': la => formatDateTime(la.loanDate),
@@ -123,9 +127,34 @@ class LoanActionsHistory extends React.Component {
       Operator: la => getFullName(la.user),
     };
 
+    const paneHeader = (
+      <Row style={{ width: '100%' }}>
+        <Col xs={1}>
+          <PaneMenu>
+            <IconButton
+              icon="closeX"
+              onClick={onCancel}
+              title="Close Loan Details"
+              ariaLabel="Close Loan Details"
+            />
+          </PaneMenu>
+        </Col>
+        <Col xs={2}>
+          <PaneMenu>
+            <TabButton title="Loans" aria-label="Loans">Loan Details</TabButton>
+          </PaneMenu>
+        </Col>
+        <Col xs={9}>
+          <TabButton title="Loans" aria-label="User Name and Patron Group">
+            {`Borrower: ${getFullName(user)} (${_.upperFirst(patronGroup.group)})`}
+          </TabButton>
+        </Col>
+      </Row>
+    );
+
     return (
       <Paneset isRoot>
-        <Pane id="pane-loandetails" defaultWidth="100%" dismissible onClose={onCancel} paneTitle="Loan Details">
+        <Pane id="pane-loandetails" defaultWidth="100%" dismissible onClose={onCancel} header={paneHeader}>
           <Row>
             <Col>
               <Button buttonStyle="primary" onClick={this.renew}>Renew</Button>

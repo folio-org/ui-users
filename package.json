@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "2.12.1",
+  "version": "2.12.2",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -214,9 +214,9 @@
     "@folio/eslint-config-stripes": "^1.1.0"
   },
   "dependencies": {
-    "@folio/stripes-components": "^2.0.4",
+    "@folio/stripes-components": "^2.0.5",
     "@folio/stripes-form": "^0.8.2",
-    "@folio/stripes-smart-components": "^1.4.3",
+    "@folio/stripes-smart-components": "^1.4.5",
     "classnames": "^2.2.5",
     "hashcode": "^1.0.3",
     "lodash": "^4.17.4",

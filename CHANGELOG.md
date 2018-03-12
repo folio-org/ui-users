@@ -45,6 +45,11 @@
 * Pass packageInfo to SearchAndSort; it's simpler. Refs STSMACOM-64. Available after v2.12.1.
 * Upgrade stripes-components dependency to v2.0.3. Fixes UIU-423.
 * Modal users-in-users app can now search again, thanks to the STCOM-226 fix. Fixes UIU-426.
+* Prevent renewal if new calculated due date is less than or equal to current due date. Fixes UIU-429.
+* Handle renew from current due date. Fixes UIU-428.
+* Add borrower name and patron group to loan details. Fixes UIU-406.
+* Bump stripes-components dependency to v2.0.5. Makes filters work in nested apps. Fixes UIU-430.
+* Pass `props.browseOnly` through to `<SearchAndSort>` to optionally disable user creation and editing. Refs UIPFU-6. Available from v2.12.2.
 
 ## [2.12.0](https://github.com/folio-org/ui-users/tree/v2.12.0) (2017-11-28)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.11.0...v2.12.0)
