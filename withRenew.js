@@ -4,7 +4,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import ErrorModal from './lib/ErrorModal';
-import { getFixedDueDateSchedule, calculateDueDate } from './loanUtils';
+import { getFixedDueDateSchedule, calculateDueDate, isLoanProfileFixed } from './loanUtils';
 
 // HOC used to manage renew
 const withRenew = WrappedComponent =>
@@ -121,15 +121,24 @@ const withRenew = WrappedComponent =>
 
     validateRenew(loan) {
       const { loanPolicy } = loan;
+      const loansPolicy = loanPolicy.loansPolicy || {};
+
+      if (isLoanProfileFixed(loansPolicy)) {
+        this.validateSchedules(loanPolicy);
+      }
+
+      this.validateDueDate(loan);
+
+      return loan;
+    }
+
+    validateSchedules(loanPolicy) {
       const { fixedDueDateSchedule, alternateFixedDueDateSchedule } = loanPolicy;
       const schedule = this.validateSchedule(loanPolicy, alternateFixedDueDateSchedule);
 
       if (!schedule) {
         this.validateSchedule(loanPolicy, fixedDueDateSchedule);
       }
-
-      this.validateDueDate(loan);
-      return loan;
     }
 
     validateSchedule(loanPolicy, dueDateSchedule) {
