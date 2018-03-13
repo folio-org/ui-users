@@ -4,7 +4,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import ErrorModal from './lib/ErrorModal';
-import { getFixedDueDateSchedule, calculateDueDate } from './util';
+import { getFixedDueDateSchedule, calculateDueDate } from './loanUtils';
 
 // HOC used to manage renew
 const withRenew = WrappedComponent =>
@@ -72,8 +72,8 @@ const withRenew = WrappedComponent =>
 
     renew(data) {
       return this.fetchLoanPolicy(data)
-        .then(loan => this.getFixedDueDateSchedule(loan))
-        .then(loan => this.getAlternateFixedDueDateSchedule(loan))
+        .then(loan => this.fetchFixedDueDateSchedule(loan))
+        .then(loan => this.fetchAlternateFixedDueDateSchedule(loan))
         .then(loan => this.validateRenew(loan))
         .then(loan => this.execRenew(loan))
         .catch((error) => {
@@ -92,34 +92,33 @@ const withRenew = WrappedComponent =>
       });
     }
 
-    getFixedDueDateSchedule(loan) {
+    fetchFixedDueDateSchedule(loan) {
       const scheduleId = get(loan, 'loanPolicy.loansPolicy.fixedDueDateSchedule', '');
       if (!scheduleId) return loan;
 
-      return this.fetchFixedDueDateSchedule(loan, scheduleId).then((schedule) => {
+      return this.fetchSchedule(loan, scheduleId).then((schedule) => {
         loan.loanPolicy.fixedDueDateSchedule = schedule;
         return loan;
       });
     }
 
-    getAlternateFixedDueDateSchedule(loan) {
+    fetchAlternateFixedDueDateSchedule(loan) {
       const scheduleId = get(loan, 'loanPolicy.renewalsPolicy.alternateFixedDueDateScheduleId', '');
       if (!scheduleId) return loan;
 
-      return this.fetchFixedDueDateSchedule(loan, scheduleId).then((schedule) => {
+      return this.fetchSchedule(loan, scheduleId).then((schedule) => {
         loan.loanPolicy.alternateFixedDueDateSchedule = schedule;
         return loan;
       });
     }
 
-    fetchFixedDueDateSchedule(loan, scheduleId) {
+    fetchSchedule(loan, scheduleId) {
       const query = `(id=="${scheduleId}")`;
       this.props.mutator.fixedDueDateSchedules.reset();
       return this.props.mutator.fixedDueDateSchedules.GET({ params: { query } })
         .then(fixedDueDateSchedules => fixedDueDateSchedules[0]);
     }
 
-    // eslint-disable-next-line class-methods-use-this
     validateRenew(loan) {
       const { loanPolicy } = loan;
       const { fixedDueDateSchedule, alternateFixedDueDateSchedule } = loanPolicy;
