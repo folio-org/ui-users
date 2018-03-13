@@ -52,6 +52,7 @@
 * Pass `props.browseOnly` through to `<SearchAndSort>` to optionally disable user creation and editing. Refs UIPFU-6. Available from v2.12.2.
 * Get alternate fixed renewal period from loan policy. Fixes UIU-433.
 * Get alternate rolling renewal period from loan policy. Fixes UIU-434 and UIU-435.
+* Remove <Autocomplete> - Use new default `country` field control for address fields. Fixes UIU-298.
 
 ## [2.12.0](https://github.com/folio-org/ui-users/tree/v2.12.0) (2017-11-28)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.11.0...v2.12.0)
