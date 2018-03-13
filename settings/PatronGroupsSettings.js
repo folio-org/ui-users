@@ -63,6 +63,7 @@ class PatronGroupsSettings extends React.Component {
         update: PropTypes.func,
       }),
     }).isRequired,
+    location: PropTypes.object.isRequired,
   };
 
   static manifest = Object.freeze({
@@ -226,15 +227,15 @@ class PatronGroupsSettings extends React.Component {
     const formatter = {
       lastUpdated: item => (<RenderPatronGroupLastUpdated
         item={item}
-        groups={this.props.resources ? this.props.resources.groups : null}
-        users={this.props.resources ? this.props.resources.users : null}
         gloss="Last Updated"
+        users={this.props.resources ? this.props.resources.users : null}
+        groups={this.props.resources ? this.props.resources.groups : null}
       />
       ),
       numberOfUsers: item => (<RenderPatronGroupNumberOfUsers
         item={item}
-        usersPerGroup={this.props.resources ? this.props.resources.usersPerGroup : null}
         gloss="# of Users"
+        usersPerGroup={this.props.resources ? this.props.resources.usersPerGroup : null}
       />
       ),
     };
