@@ -106,7 +106,7 @@ const validate = (type, props) => {
 
     if (isNaN(item.taxVat) && item.taxVat) { errors.items[i].taxVat = 'Tax/Vat must be a number'; }
 
-    if (parseFloat(item.taxVat) < 0 ) { errors.items[i].taxVat = `Default tax/Vat is negative${parseFloat(item.taxVat)}`};
+    if (parseFloat(item.taxVat) < 0) { errors.items[i].taxVat = 'Default tax/Vat is negative must be positive'; }
 
     if (props.shared.indexOf(item.feeFineType) > -1) { errors.items[i].feeFineType = 'The Fee/Fine Type alredy exist'; }
 
