@@ -1,0 +1,11 @@
+.editIcon {
+
+}
+
+.iconRoot {
+  display: flex;
+}
+
+.iconLabel {
+  line-height: 22px;
+}
