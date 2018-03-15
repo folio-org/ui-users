@@ -103,7 +103,7 @@ class ViewUser extends React.Component {
     // modifies the API call so that the :{userid} parameter is actually
     // interpreted as a user ID. By default, that path component is taken as
     // the ID of the user/permission _object_ in /perms/users.
-    // Algo
+    // Algo y
     permissions: {
       type: 'okapi',
       records: 'permissionNames',
