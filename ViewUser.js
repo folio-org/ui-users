@@ -320,7 +320,6 @@ class ViewUser extends React.Component {
     const loans = (resources.loansHistory || {}).records || [];
     const sponsors = this.props.getSponsors();
     const proxies = this.props.getProxies();
-
     const detailMenu =
     (
       <PaneMenu>
@@ -375,7 +374,7 @@ class ViewUser extends React.Component {
       <this.connectedLoanActionsHistory
         user={user}
         loan={this.state.selectedLoan}
-        loanid={this.state.selectedLoan.id}
+        loanid={query.loan}
         patronGroup={patronGroup}
         stripes={stripes}
         onCancel={this.onClickCloseLoanActionsHistory}
