@@ -60,6 +60,7 @@ class ViewUser extends React.Component {
         POST: PropTypes.func.isRequired,
         DELETE: PropTypes.func.isRequired,
       }),
+      query: PropTypes.object.isRequired,
     }),
     match: PropTypes.shape({
       path: PropTypes.string.isRequired,
@@ -162,7 +163,6 @@ class ViewUser extends React.Component {
   onClickViewOpenLoans(e) {
     if (e) e.preventDefault();
     this.props.mutator.query.update({ layer: 'open-loans' });
-
     this.setState({
       viewOpenLoansMode: true,
     });
