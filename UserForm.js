@@ -22,18 +22,19 @@ import { getFullName } from './util';
 
 import css from './UserForm.css';
 
-function validate(values) {
+function validate(values, props) {
   const errors = {};
+  errors.personal = {};
 
   if (!values.personal || !values.personal.lastName) {
-    errors.personal = { lastName: 'Please fill this in to continue' };
+    errors.personal.lastName = 'Please fill this in to continue';
   }
 
   if (!values.username) {
     errors.username = 'Please fill this in to continue';
   }
 
-  if (!values.creds || !values.creds.password) {
+  if (!props.initialValues.id && (!values.creds || !values.creds.password)) {
     errors.creds = { password: 'Please fill this in to continue' };
   }
 
@@ -42,8 +43,18 @@ function validate(values) {
   }
 
   if (!values.personal || !values.personal.preferredContactTypeId) {
-    errors.personal = { preferredContactTypeId: 'Please select a preferred form of contact' };
+    if (errors.personal) errors.personal.preferredContactTypeId = 'Please select a preferred form of contact';
+    else errors.personal = { preferredContactTypeId: 'Please select a preferred form of contact' };
   }
+
+  if (values.personal && values.personal.addresses) {
+    errors.personal.addresses = [];
+    values.personal.addresses.forEach((addr) => {
+      const err = (!addr.addressType) ? { addressType: 'Address type is required' } : {};
+      errors.personal.addresses.push(err);
+    });
+  }
+
   return errors;
 }
 
@@ -51,7 +62,7 @@ function asyncValidate(values, dispatch, props, blurredField) {
   if (blurredField === 'username' && values.username !== props.initialValues.username) {
     return new Promise((resolve, reject) => {
       const uv = props.parentMutator.uniquenessValidator;
-      const query = `(username="${values.username}")`;
+      const query = `(username=="${values.username}")`;
       uv.reset();
       uv.GET({ params: { query } }).then((users) => {
         if (users.length > 0) {
@@ -63,7 +74,6 @@ function asyncValidate(values, dispatch, props, blurredField) {
       });
     });
   }
-
   return new Promise(resolve => resolve());
 }
 
@@ -154,11 +164,12 @@ class UserForm extends React.Component {
     });
   }
 
+
   render() {
     const { initialValues } = this.props;
     const { sections } = this.state;
     const firstMenu = this.getAddFirstMenu();
-    const paneTitle = initialValues.id ? `Edit: ${getFullName(initialValues)}` : 'Create user';
+    const paneTitle = initialValues.id ? getFullName(initialValues) : 'Create user';
     const lastMenu = initialValues.id ?
       this.getLastMenu('clickable-updateuser', 'Update user') :
       this.getLastMenu('clickable-createnewuser', 'Create user');
@@ -166,7 +177,7 @@ class UserForm extends React.Component {
     return (
       <form className={css.UserFormRoot} id="form-user">
         <Paneset isRoot>
-          <Pane defaultWidth="100%" firstMenu={firstMenu} lastMenu={lastMenu} paneTitle={paneTitle}>
+          <Pane defaultWidth="100%" firstMenu={firstMenu} lastMenu={lastMenu} paneTitle={paneTitle} appIcon={{ app: 'users' }}>
             <Row end="xs">
               <Col xs>
                 <ExpandAllButton accordionStatus={sections} onToggle={this.handleExpandAll} />
@@ -195,4 +206,5 @@ export default stripesForm({
   asyncBlurFields: ['username'],
   navigationCheck: true,
   enableReinitialize: true,
+  scrollToError: true,
 })(UserForm);

@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "2.12.0",
+  "version": "2.12.2",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -15,13 +15,20 @@
     "type": "app",
     "displayName": "Users",
     "route": "/users",
-    "home": "/users?filters=active.Active&sort=Name",
+    "home": "/users?sort=Name",
     "hasSettings": true,
     "queryResource": "query",
     "actionNames": [
       "stripesHome",
       "usersSortByName"
     ],
+    "icons": [
+     {
+       "name": "app",
+       "alt": "Create, view and manage users",
+       "title": "Users"
+     }
+   ],
     "okapiInterfaces": {
       "users": "14.0",
       "circulation": "2.1",
@@ -207,16 +214,16 @@
     "@folio/eslint-config-stripes": "^1.1.0"
   },
   "dependencies": {
-    "@folio/stripes-components": "^2.0.0",
+    "@folio/stripes-components": "^2.0.7",
     "@folio/stripes-form": "^0.8.2",
-    "@folio/stripes-smart-components": "^1.4.0",
+    "@folio/stripes-smart-components": "^1.4.5",
     "classnames": "^2.2.5",
     "hashcode": "^1.0.3",
     "lodash": "^4.17.4",
     "prop-types": "^15.5.10",
     "query-string": "^5.0.0",
     "react-bootstrap": "^0.31.1",
-    "react-bootstrap-typeahead": "^1.4.0",
+    "react-bootstrap-typeahead": "^2.4.0",
     "react-flexbox-grid": "^2.0.0",
     "react-intl": "^2.3.0",
     "react-router": "^4.2.0",
@@ -225,7 +232,7 @@
     "uuid": "^3.0.1"
   },
   "peerDependencies": {
-    "@folio/stripes-connect": "^3.0.0",
+    "@folio/stripes-connect": "^3.1.1",
     "@folio/stripes-core": "^2.9.0",
     "@folio/stripes-logger": "^0.0.2",
     "react": "*"

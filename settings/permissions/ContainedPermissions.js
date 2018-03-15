@@ -16,14 +16,14 @@ class ContainedPermissions extends React.Component {
     availablePermissions: {
       type: 'okapi',
       records: 'permissions',
-      path: 'perms/permissions?length=1000&query=(mutable=false)',
+      path: 'perms/permissions?length=1000&query=(mutable==false)',
     },
   });
 
   render() {
     return (<EditablePermissions
       {...this.props}
-      heading="Contains"
+      heading="Assigned Permissions"
       name="subPermissions"
       availablePermissions={_.get(this.props.resources, ['availablePermissions', 'records'])}
     />);

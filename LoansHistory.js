@@ -41,7 +41,7 @@ class LoansHistory extends React.Component {
     loansHistory: {
       type: 'okapi',
       records: 'loans',
-      path: 'circulation/loans?query=(userId=!{user.id}) sortby id&limit=100',
+      path: 'circulation/loans?query=(userId==!{user.id}) sortby id&limit=100',
     },
   });
 

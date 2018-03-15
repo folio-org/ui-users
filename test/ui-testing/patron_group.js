@@ -70,9 +70,11 @@ module.exports.test = function foo(uiTestCtx) {
           .then(() => { done(); })
           .catch(done);
       });
-      it('should find a user to edit', (done) => {
+      it('should find an active user to edit', (done) => {
         nightmare
           .click('#clickable-users-module')
+          .wait(1000)
+          .click('#clickable-filter-active-Active')
           .wait('#list-users div[role="listitem"]:nth-of-type(11) > a > div:nth-of-type(5)')
           .evaluate(() => document.querySelector('#list-users div[role="listitem"]:nth-of-type(11) > a > div:nth-of-type(5)').title)
           .then((result) => {
@@ -117,7 +119,7 @@ module.exports.test = function foo(uiTestCtx) {
           .then(() => { done(); })
           .catch(done);
       });
-      it(`should not find a "Delete" button for "${gid}" group`, (done) => {
+      it(`should not find an enabled "Delete" button for "${gid}" group`, (done) => {
         nightmare
           .wait(1200)
           .click('#clickable-settings')
@@ -135,8 +137,8 @@ module.exports.test = function foo(uiTestCtx) {
           .wait(222)
           .evaluate((dp) => {
             const cnode = document.querySelector(dp);
-            if (cnode !== null) {
-              throw new Error('Delete button found when patron group is in use!');
+            if (cnode.disabled !== true) {
+              throw new Error('Delete button found and not disabled when patron group is in use!');
             }
           }, deletePath)
           .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
