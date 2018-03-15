@@ -2,7 +2,6 @@ import { cloneDeep, get, omit, differenceBy, find } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
-import transitionToParams from '@folio/stripes-components/util/transitionToParams';
 import Pane from '@folio/stripes-components/lib/Pane';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
@@ -12,7 +11,6 @@ import IfPermission from '@folio/stripes-components/lib/IfPermission';
 import IfInterface from '@folio/stripes-components/lib/IfInterface';
 import { ExpandAllButton } from '@folio/stripes-components/lib/Accordion';
 import IconButton from '@folio/stripes-components/lib/IconButton';
-import removeQueryParam from '@folio/stripes-components/util/removeQueryParam';
 
 import UserForm from './UserForm';
 import LoansHistory from './LoansHistory';
@@ -65,6 +63,7 @@ class ViewUser extends React.Component {
         POST: PropTypes.func.isRequired,
         DELETE: PropTypes.func.isRequired,
       }),
+      query: PropTypes.object.isRequired,
     }),
     match: PropTypes.shape({
       path: PropTypes.string.isRequired,
@@ -92,6 +91,7 @@ class ViewUser extends React.Component {
   };
 
   static manifest = Object.freeze({
+    query: {},
     selUser: {
       type: 'okapi',
       path: 'users/:{id}',
@@ -160,8 +160,6 @@ class ViewUser extends React.Component {
     this.onClickViewLoanActionsHistory = this.onClickViewLoanActionsHistory.bind(this);
     this.onClickCloseLoanActionsHistory = this.onClickCloseLoanActionsHistory.bind(this);
     this.onAddressesUpdate = this.onAddressesUpdate.bind(this);
-    this.transitionToParams = transitionToParams.bind(this);
-    this.removeQueryParam = removeQueryParam.bind(this);
     this.handleSectionToggle = this.handleSectionToggle.bind(this);
     this.handleExpandAll = this.handleExpandAll.bind(this);
 
@@ -184,8 +182,7 @@ class ViewUser extends React.Component {
 
   onClickViewOpenLoans(e) {
     if (e) e.preventDefault();
-    this.transitionToParams({ layer: 'open-loans' });
-
+    this.props.mutator.query.update({ layer: 'open-loans' });
     this.setState({
       viewOpenLoansMode: true,
     });
@@ -193,7 +190,7 @@ class ViewUser extends React.Component {
 
   onClickViewClosedLoans(e) {
     if (e) e.preventDefault();
-    this.transitionToParams({ layer: 'closed-loans' });
+    this.props.mutator.query.update({ layer: 'closed-loans' });
     this.setState({
       viewOpenLoansMode: false,
     });
@@ -201,13 +198,12 @@ class ViewUser extends React.Component {
 
   onClickCloseLoansHistory(e) {
     if (e) e.preventDefault();
-    this.removeQueryParam('layer');
+    this.props.mutator.query.update({ layer: null });
   }
 
   onClickViewLoanActionsHistory(e, selectedLoan) {
     if (e) e.preventDefault();
-    this.transitionToParams({ layer: 'loan', loan: selectedLoan.id });
-
+    this.props.mutator.query.update({ layer: 'loan', loan: selectedLoan.id });
     this.setState({
       selectedLoan,
     });
@@ -216,7 +212,7 @@ class ViewUser extends React.Component {
   onClickCloseLoanActionsHistory(e) {
     if (e) e.preventDefault();
     const layer = this.state.viewOpenLoansMode ? 'open-loans' : 'closed-loans';
-    this.transitionToParams({ layer, loan: null });
+    this.props.mutator.query.update({ layer, loan: null });
     this.setState({
       selectedLoan: {},
     });

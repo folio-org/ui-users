@@ -63,6 +63,7 @@ class PatronGroupsSettings extends React.Component {
         update: PropTypes.func,
       }),
     }).isRequired,
+    location: PropTypes.object.isRequired,
   };
 
   static manifest = Object.freeze({
@@ -204,32 +205,37 @@ class PatronGroupsSettings extends React.Component {
   render() {
     if (!this.props.resources.groups) return <div />;
 
-    // If a suppressor returns true, the control for that action will not appear
-    const suppressor = {
+    const actionProps = {
       delete: (item) => {
         const usersPerGroup = (this.props.resources.usersPerGroup || {}).other || {};
-        let suppressDelete = [];
+        let disableDelete = [];
         if (_.has(usersPerGroup, ['resultInfo', 'facets'])) {
           const groupCounts = _.get(usersPerGroup, ['resultInfo', 'facets', 0, 'facetValues'], []);
-          suppressDelete = _.map(groupCounts, 'value');
+          disableDelete = _.map(groupCounts, 'value');
         }
-        return !!(_.includes(suppressDelete, item.id));
+        if (_.includes(disableDelete, item.id)) {
+          return {
+            disabled: _.includes(disableDelete, item.id),
+            title: 'Patron group cannot be deleted when used by one or more users',
+          };
+        }
+
+        return {};
       },
-      edit: () => false,
     };
 
     const formatter = {
       lastUpdated: item => (<RenderPatronGroupLastUpdated
         item={item}
-        groups={this.props.resources ? this.props.resources.groups : null}
-        users={this.props.resources ? this.props.resources.users : null}
         gloss="Last Updated"
+        users={this.props.resources ? this.props.resources.users : null}
+        groups={this.props.resources ? this.props.resources.groups : null}
       />
       ),
       numberOfUsers: item => (<RenderPatronGroupNumberOfUsers
         item={item}
-        usersPerGroup={this.props.resources ? this.props.resources.usersPerGroup : null}
         gloss="# of Users"
+        usersPerGroup={this.props.resources ? this.props.resources.usersPerGroup : null}
       />
       ),
     };
@@ -251,7 +257,7 @@ class PatronGroupsSettings extends React.Component {
             visibleFields={['group', 'desc', 'lastUpdated', 'numberOfUsers']}
             columnMapping={{ desc: 'Description', lastUpdated: 'Last Updated', numberOfUsers: '# of Users' }}
             readOnlyFields={['lastUpdated', 'numberOfUsers']}
-            actionSuppression={suppressor}
+            actionProps={actionProps}
             onCreate={this.onCreateType}
             onUpdate={this.onUpdateType}
             onDelete={this.showConfirm}

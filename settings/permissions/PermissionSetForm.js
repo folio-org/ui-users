@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import Pane from '@folio/stripes-components/lib/Pane';
@@ -7,13 +8,17 @@ import Button from '@folio/stripes-components/lib/Button';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import IfPermission from '@folio/stripes-components/lib/IfPermission';
+import Icon from '@folio/stripes-components/lib/Icon';
 // eslint-disable-next-line import/no-unresolved
 import ConfirmationModal from '@folio/stripes-components/lib/structures/ConfirmationModal';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
+import { Accordion, ExpandAllButton } from '@folio/stripes-components/lib/Accordion';
+
 import stripesForm from '@folio/stripes-form';
 import { Field } from 'redux-form';
 
 import ContainedPermissions from './ContainedPermissions';
+import css from './PermissionSetForm.css';
 
 class PermissionSetForm extends React.Component {
   static propTypes = {
@@ -36,9 +41,17 @@ class PermissionSetForm extends React.Component {
     this.saveSet = this.saveSet.bind(this);
     this.beginDelete = this.beginDelete.bind(this);
     this.confirmDeleteSet = this.confirmDeleteSet.bind(this);
+    this.handleExpandAll = this.handleExpandAll.bind(this);
+    this.handleSectionToggle = this.handleSectionToggle.bind(this);
     this.containedPermissions = props.stripes.connect(ContainedPermissions);
 
-    this.state = { confirmDelete: false };
+    this.state = {
+      confirmDelete: false,
+      sections: {
+        generalSection: true,
+        permSection: true,
+      },
+    };
   }
 
   saveSet(data) {
@@ -76,47 +89,97 @@ class PermissionSetForm extends React.Component {
   }
 
   saveLastMenu() {
-    const { pristine, submitting } = this.props;
+    const { pristine, submitting, initialValues } = this.props;
+    const { confirmDelete } = this.state;
 
     return (
       <PaneMenu>
+        {initialValues && initialValues.id &&
+          <IfPermission perm="perms.permissions.item.delete">
+            <Button
+              id="clickable-delete-set"
+              title="Delete"
+              buttonStyle="warning"
+              onClick={this.beginDelete}
+              disabled={confirmDelete}
+            >Delete
+            </Button>
+          </IfPermission>
+        }
         <Button
           id="clickable-save-permission-set"
           type="submit"
-          title="Save and close"
+          title="Save & close"
           disabled={(pristine || submitting)}
-        >Save and close
+        >Save & close
         </Button>
       </PaneMenu>
+    );
+  }
+
+  handleSectionToggle({ id }) {
+    this.setState((curState) => {
+      const newState = cloneDeep(curState);
+      newState.sections[id] = !newState.sections[id];
+      return newState;
+    });
+  }
+
+  handleExpandAll(sections) {
+    this.setState((curState) => {
+      const newState = cloneDeep(curState);
+      newState.sections = sections;
+      return newState;
+    });
+  }
+
+  renderPaneTitle() {
+    const { initialValues } = this.props;
+    const selectedSet = initialValues || {};
+    const label = selectedSet.id ? `Edit: ${selectedSet.displayName}` : 'New permission set';
+    return (
+      <div className={css.iconRoot}>
+        <Icon
+          icon="edit"
+          title="Edit Permission"
+          size="medium"
+          iconRootClass={css.editIcon}
+        />
+        <div className={css.iconLabel}>{label}</div>
+      </div>
     );
   }
 
   render() {
     const { stripes, handleSubmit, initialValues } = this.props;
     const selectedSet = initialValues || {};
-    const { confirmDelete } = this.state;
+    const { confirmDelete, sections } = this.state;
     const disabled = !stripes.hasPerm('perms.permissions.item.put');
-    const paneTitle = selectedSet.id ? 'Edit Permission Set' : 'New Permission Set';
 
     return (
-      <form id="form-policy" onSubmit={handleSubmit(this.saveSet)}>
+      <form id="form-permission-set" onSubmit={handleSubmit(this.saveSet)}>
         <Paneset isRoot>
-          <Pane defaultWidth="100%" firstMenu={this.addFirstMenu()} lastMenu={this.saveLastMenu()} paneTitle={paneTitle}>
-            <Row>
-              <Col xs={8}>
-                <section>
-                  <h2 style={{ marginTop: '0' }}>About</h2>
-                  <Field label="Title" name="displayName" id="input-permission-title" component={Textfield} autoFocus required fullWidth rounded disabled={disabled} />
-                  <Field label="Description" name="description" id="input-permission-description" component={TextArea} fullWidth rounded disabled={disabled} />
-                </section>
-
-                {selectedSet.id &&
-                  <IfPermission perm="perms.permissions.item.delete">
-                    <Button title="Delete Permission Set" id="clickable-delete-set" onClick={this.beginDelete} disabled={confirmDelete}> Delete Set </Button>
-                  </IfPermission>
-                }
+          <Pane defaultWidth="100%" firstMenu={this.addFirstMenu()} lastMenu={this.saveLastMenu()} paneTitle={this.renderPaneTitle()}>
+            <Row end="xs">
+              <Col xs>
+                <ExpandAllButton accordionStatus={sections} onToggle={this.handleExpandAll} />
               </Col>
             </Row>
+            <Accordion
+              open={sections.generalSection}
+              id="generalSection"
+              onToggle={this.handleSectionToggle}
+              label="General Information"
+            >
+              <Row>
+                <Col xs={8}>
+                  <section>
+                    <Field label="Permission set name *" name="displayName" id="input-permission-title" component={Textfield} autoFocus required fullWidth rounded disabled={disabled} />
+                    <Field label="Description" name="description" id="input-permission-description" component={TextArea} fullWidth rounded disabled={disabled} />
+                  </section>
+                </Col>
+              </Row>
+            </Accordion>
             <ConfirmationModal
               open={confirmDelete}
               heading="Delete Permission Set?"
@@ -127,6 +190,9 @@ class PermissionSetForm extends React.Component {
             />
 
             <this.containedPermissions
+              expanded={sections.permSection}
+              onToggle={this.handleSectionToggle}
+              accordionId="permSection"
               permToRead="perms.permissions.get"
               permToDelete="perms.permissions.item.put"
               permToModify="perms.permissions.item.put"
