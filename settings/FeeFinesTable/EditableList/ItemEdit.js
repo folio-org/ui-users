@@ -21,6 +21,14 @@ const ItemEdit = ({ rowIndex, error, field, visibleFields, readOnlyFields, width
       );
     }
     if (readOnlyFields.indexOf(name) === -1) {
+      let newName = 'Sin valor';
+      if(name === 'feeFineType'){
+        newName = 'type';
+      }else if(name === 'defaultAmount'){
+        newName = 'amount';
+      }else if(name === 'taxVat'){
+        newName = 'percent';
+      }
       return (
         <div key={`${field}-${name}-${rowIndex}`} style={{ flex: `0 0 ${widths[name]}`, width: `${widths[name]}`, padding: '6px' }}>
           <Field
@@ -28,7 +36,7 @@ const ItemEdit = ({ rowIndex, error, field, visibleFields, readOnlyFields, width
             component={TextField}
             fullWidth
             marginBottom0
-            placeholder={name}
+            placeholder={newName}
           />
         </div>
       );
