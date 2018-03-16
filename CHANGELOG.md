@@ -50,6 +50,11 @@
 * Add borrower name and patron group to loan details. Fixes UIU-406.
 * Bump stripes-components dependency to v2.0.5. Makes filters work in nested apps. Fixes UIU-430.
 * Pass `props.browseOnly` through to `<SearchAndSort>` to optionally disable user creation and editing. Refs UIPFU-6. Available from v2.12.2.
+* Get alternate fixed renewal period from loan policy. Fixes UIU-433.
+* Get alternate rolling renewal period from loan policy. Fixes UIU-434 and UIU-435.
+* Remove <Autocomplete> - Use new default `country` field control for address fields. Fixes UIU-298.
+* Change Default display to not return a list of all users. Fixes UIU-399.
+* Update new permission set detail record. Fixes UIU-410 and UIU-404.
 
 ## [2.12.0](https://github.com/folio-org/ui-users/tree/v2.12.0) (2017-11-28)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.11.0...v2.12.0)
