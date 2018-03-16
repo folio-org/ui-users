@@ -18,6 +18,7 @@ import LoanActionsHistory from './LoanActionsHistory';
 
 import Charge from './lib/ChargeFeeFine';
 import AccountsHistory from './AccountsHistory';
+import AccountActionsHistory from './AccountActionsHistory';
 
 import { toListAddresses, toUserAddresses } from './converters/address';
 import { getFullName, eachPromise } from './util';
@@ -136,6 +137,7 @@ class ViewUser extends React.Component {
       viewOpenLoansMode: false,
       viewAccountsMode: 'empty',
       selectedLoan: {},
+      selectedAccount: {},
       lastUpdate: null,
       sections: {
         userInformationSection: true,
@@ -165,11 +167,14 @@ class ViewUser extends React.Component {
     this.connectedUserAccounts = props.stripes.connect(UserAccounts);
     this.connectedCharge = props.stripes.connect(Charge);
     this.connectedAccountsHistory = props.stripes.connect(AccountsHistory);
+    this.connectedAccountActionsHistory = props.stripes.connect(AccountActionsHistory);
     this.onClickViewOpenAccounts = this.onClickViewOpenAccounts.bind(this);
     this.onClickViewClosedAccounts = this.onClickViewClosedAccounts.bind(this);
     this.onClickCloseAccountsHistory = this.onClickCloseAccountsHistory.bind(this);
     this.onClickCloseChargeFeeFine = this.onClickCloseChargeFeeFine.bind(this);
     this.onClickViewChargeFeeFine = this.onClickViewChargeFeeFine.bind(this);
+    this.onClickViewAccountActionsHistory = this.onClickViewAccountActionsHistory.bind(this);
+    this.onClickCloseAccountActionsHistory = this.onClickCloseAccountActionsHistory.bind(this);
     // Terminan los cambios
   }
 
@@ -245,6 +250,27 @@ class ViewUser extends React.Component {
   }
 
   onClickCloseChargeFeeFine(e) {
+    if (e) e.preventDefault();
+    const mode = this.state.viewAccountsMode;
+    this.props.mutator.query.update({ layer: null });
+    if (mode === 'open') {
+      this.props.mutator.query.update({ layer: 'open-accounts' });
+    } else if (mode === 'closed') {
+      this.props.mutator.query.update({ layer: 'closed-accounts' });
+    } else if (mode === 'all') {
+      this.props.mutator.query.update({ layer: 'all-accounts' });
+    }
+  }
+
+  onClickViewAccountActionsHistory(e, selectedAccount) {
+    if (e) e.preventDefault();
+    this.props.mutator.query.update({ layer: 'account', account: selectedAccount.id });
+    this.setState({
+      selectedAccount,
+    });
+  }
+
+  onClickCloseAccountActionsHistory(e) {
     if (e) e.preventDefault();
     const mode = this.state.viewAccountsMode;
     this.props.mutator.query.update({ layer: null });
@@ -500,7 +526,8 @@ class ViewUser extends React.Component {
             onClickViewOpenAccounts={this.onClickViewOpenAccounts}
             onClickViewClosedAccounts={this.onClickViewClosedAccounts}
             onClickViewAllAccounts={() => { console.log('all'); }}
-            onClickViewAccountsActionsHistory={() => { console.log('accounts history'); }}
+            onClickViewAccountActionsHistory={this.onClickViewAccountActionsHistory}
+            onClickCloseAccountActionsHistory={this.onClickCloseAccountActionsHistory}
             openAccounts={this.viewAccountsMode === 'open'}
             allAccounts={this.viewAccountsMode === 'all'}
           />
@@ -511,6 +538,17 @@ class ViewUser extends React.Component {
             loan={{ item: {} }}
             onClickCloseChargeFeeFine={this.onClickCloseChargeFeeFine}
             {...this.props}
+          />
+        </Layer>
+        <Layer isOpen={query.layer ? query.layer === 'account' : false} label="Account Actions History">
+          <this.connectedAccountActionsHistory
+            user={user}
+            account={this.state.selectedAccount}
+            accountid={this.state.selectedAccount.id}
+            stripes={stripes}
+            onCancel={this.onClickCloseAccountActionsHistory}
+            // when navigating away to another user, clear all loan-related state
+            onClickUser={() => { this.onClickCloseAccountActionsHistory(); this.onClickCloseAccountsHistory(); }}
           />
         </Layer>
       </Pane>
