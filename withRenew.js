@@ -176,8 +176,8 @@ const withRenew = WrappedComponent =>
     execRenew(loan) {
       Object.assign(loan, {
         renewalCount: (loan.renewalCount || 0) + 1,
-        loanDate: moment(loan.loanDate).format(),
-        dueDate: calculateDueDate(loan).format(),
+        loanDate: moment(loan.loanDate).utc().format(),
+        dueDate: calculateDueDate(loan).utc().format(),
         action: 'renewed',
       });
 
