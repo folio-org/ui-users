@@ -314,7 +314,8 @@ class AccountsHistory extends React.Component {
                     this.props.history.push(`/users/view/${this.props.user.id}`);
                     this.props.onCancel();
                   }}
-                >{getFullName(user)}</a> ({_.upperFirst(patronGroup.group)})
+                >{getFullName(user)}
+                </a> ({_.upperFirst(patronGroup.group)})
                 {((filtersApplied !== -1) && (this.state.showFilters === false))
                   ? <img alt="" src="https://png.icons8.com/color/40/f39c12/filled-filter.png" />
                   : ''

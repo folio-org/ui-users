@@ -90,7 +90,7 @@ class AccountActionsHistory extends React.Component {
 
     return (
       <Paneset isRoot>
-        <Pane id="pane-loandetails" defaultWidth="100%" dismissible onClose={onCancel} paneTitle={'Patron: '}>
+        <Pane id="pane-loandetails" defaultWidth="100%" dismissible onClose={onCancel} paneTitle="Patron: ">
           <Row>
             <Col xs={12}>
               <UncontrolledDropdown onSelectItem={this.handleOptionsChange}>

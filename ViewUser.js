@@ -2,7 +2,6 @@ import { cloneDeep, get, omit, differenceBy } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
-import transitionToParams from '@folio/stripes-components/util/transitionToParams';
 import Pane from '@folio/stripes-components/lib/Pane';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
@@ -12,7 +11,6 @@ import IfPermission from '@folio/stripes-components/lib/IfPermission';
 import IfInterface from '@folio/stripes-components/lib/IfInterface';
 import { ExpandAllButton } from '@folio/stripes-components/lib/Accordion';
 import IconButton from '@folio/stripes-components/lib/IconButton';
-import removeQueryParam from '@folio/stripes-components/util/removeQueryParam';
 
 import UserForm from './UserForm';
 import LoansHistory from './LoansHistory';
@@ -138,7 +136,6 @@ class ViewUser extends React.Component {
       viewOpenLoansMode: false,
       viewAccountsMode: 'empty',
       selectedLoan: {},
-      selectedAccount: {},
       lastUpdate: null,
       sections: {
         userInformationSection: true,
@@ -223,12 +220,12 @@ class ViewUser extends React.Component {
     this.props.mutator.query.update({ layer: 'open-accounts' });
     this.setState({
       viewAccountsMode: 'open',
-    }); 
+    });
   }
 
   onClickViewClosedAccounts(e) {
     if (e) e.preventDefault();
-    this.props.mutator.query.update({ layer: 'closed-accounts'});
+    this.props.mutator.query.update({ layer: 'closed-accounts' });
     this.setState({
       viewAccountsMode: 'closed',
     });
@@ -236,12 +233,12 @@ class ViewUser extends React.Component {
 
   onClickViewChargeFeeFine(e) {
     if (e) e.preventDefault();
-    this.props.mutator.query.update({ layer: 'charge'});
+    this.props.mutator.query.update({ layer: 'charge' });
   }
 
   onClickCloseAccountsHistory(e) {
     if (e) e.preventDefault();
-    this.props.mutator.query.update({ layer: null});
+    this.props.mutator.query.update({ layer: null });
     this.setState({
       viewAccountsMode: 'empty',
     });
@@ -250,7 +247,7 @@ class ViewUser extends React.Component {
   onClickCloseChargeFeeFine(e) {
     if (e) e.preventDefault();
     const mode = this.state.viewAccountsMode;
-    this.props.mutator.query.update({ layer: null});
+    this.props.mutator.query.update({ layer: null });
     if (mode === 'open') {
       this.props.mutator.query.update({ layer: 'open-accounts' });
     } else if (mode === 'closed') {
@@ -416,7 +413,6 @@ class ViewUser extends React.Component {
             {...this.props}
           />
         </IfPermission>
-        
         <IfPermission perm="accounts.collection.get">
           <this.connectedUserAccounts
             onClickViewOpenAccounts={this.onClickViewOpenAccounts}

@@ -23,11 +23,12 @@ const makeQueryFunction = (findAll, queryTemplate, sortMap, filterConfig) => (qu
   if (sort) {
     const sortIndexes = sort.split(',').map((sort1) => {
       let reverse = false;
+      let ind = sort1;
       if (sort1.startsWith('-')) {
-        sort1 = sort1.substr(1);
+        ind = sort1.substr(1);
         reverse = true;
       }
-      let sortIndex = sortMap[sort1] || sort1;
+      let sortIndex = sortMap[ind] || sort1;
       if (reverse) {
         sortIndex = `${sortIndex.replace(' ', '/sort.descending ')}/sort.descending`;
       }

@@ -100,11 +100,11 @@ const validate = (type, props) => {
   };
   items.forEach((item, i) => {
     errors.items.push({});
-    if (isNaN(item.defaultAmount)) { errors.items[i].defaultAmount = 'Default amount must be a number '; }
+    if (Number.isNaN(item.defaultAmount)) { errors.items[i].defaultAmount = 'Default amount must be a number '; }
 
     if (parseFloat(item.defaultAmount) < 0) { errors.items[i].defaultAmount = `Default amount is negative${parseFloat(item.defaultAmount)}`; }
 
-    if (isNaN(item.taxVat) && item.taxVat) { errors.items[i].taxVat = 'Tax/Vat must be a number'; }
+    if (Number.isNaN(item.taxVat) && item.taxVat) { errors.items[i].taxVat = 'Tax/Vat must be a number'; }
 
     if (parseFloat(item.taxVat) < 0) { errors.items[i].taxVat = 'Default tax/Vat is negative must be positive'; }
 
