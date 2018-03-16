@@ -58,6 +58,7 @@
 * Deprecate `transitionToParams` in favor of `this.props.mutator.query.update`. Fixes UIU-418.
 * Use correct time offset on open loans view. Fixes UIU-440.
 * Fixed username validation in UserForm (IU-422)
+* Move item details link to the options menu. Refs UIU-407.
 
 ## [2.12.0](https://github.com/folio-org/ui-users/tree/v2.12.0) (2017-11-28)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.11.0...v2.12.0)
