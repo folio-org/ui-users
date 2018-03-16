@@ -2,6 +2,7 @@ import { cloneDeep, get, omit, differenceBy } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
+import transitionToParams from '@folio/stripes-components/util/transitionToParams';
 import Pane from '@folio/stripes-components/lib/Pane';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
@@ -11,10 +12,14 @@ import IfPermission from '@folio/stripes-components/lib/IfPermission';
 import IfInterface from '@folio/stripes-components/lib/IfInterface';
 import { ExpandAllButton } from '@folio/stripes-components/lib/Accordion';
 import IconButton from '@folio/stripes-components/lib/IconButton';
+import removeQueryParam from '@folio/stripes-components/util/removeQueryParam';
 
 import UserForm from './UserForm';
 import LoansHistory from './LoansHistory';
 import LoanActionsHistory from './LoanActionsHistory';
+
+import Charge from './lib/ChargeFeeFine';
+import AccountsHistory from './AccountsHistory';
 
 import { toListAddresses, toUserAddresses } from './converters/address';
 import { getFullName, eachPromise } from './util';
@@ -27,6 +32,7 @@ import {
   ProxyPermissions,
   UserPermissions,
   UserLoans,
+  UserAccounts,
 } from './lib/ViewSections';
 
 class ViewUser extends React.Component {
@@ -130,7 +136,9 @@ class ViewUser extends React.Component {
     super(props);
     this.state = {
       viewOpenLoansMode: false,
+      viewAccountsMode: 'empty',
       selectedLoan: {},
+      selectedAccount: {},
       lastUpdate: null,
       sections: {
         userInformationSection: true,
@@ -155,6 +163,17 @@ class ViewUser extends React.Component {
     this.onAddressesUpdate = this.onAddressesUpdate.bind(this);
     this.handleSectionToggle = this.handleSectionToggle.bind(this);
     this.handleExpandAll = this.handleExpandAll.bind(this);
+
+    // Empiezan los cambios
+    this.connectedUserAccounts = props.stripes.connect(UserAccounts);
+    this.connectedCharge = props.stripes.connect(Charge);
+    this.connectedAccountsHistory = props.stripes.connect(AccountsHistory);
+    this.onClickViewOpenAccounts = this.onClickViewOpenAccounts.bind(this);
+    this.onClickViewClosedAccounts = this.onClickViewClosedAccounts.bind(this);
+    this.onClickCloseAccountsHistory = this.onClickCloseAccountsHistory.bind(this);
+    this.onClickCloseChargeFeeFine = this.onClickCloseChargeFeeFine.bind(this);
+    this.onClickViewChargeFeeFine = this.onClickViewChargeFeeFine.bind(this);
+    // Terminan los cambios
   }
 
   componentWillReceiveProps(nextProps) {
@@ -197,6 +216,48 @@ class ViewUser extends React.Component {
     this.setState({
       selectedLoan: {},
     });
+  }
+
+  onClickViewOpenAccounts(e) {
+    if (e) e.preventDefault();
+    this.props.mutator.query.update({ layer: 'open-accounts' });
+    this.setState({
+      viewAccountsMode: 'open',
+    }); 
+  }
+
+  onClickViewClosedAccounts(e) {
+    if (e) e.preventDefault();
+    this.props.mutator.query.update({ layer: 'closed-accounts'});
+    this.setState({
+      viewAccountsMode: 'closed',
+    });
+  }
+
+  onClickViewChargeFeeFine(e) {
+    if (e) e.preventDefault();
+    this.props.mutator.query.update({ layer: 'charge'});
+  }
+
+  onClickCloseAccountsHistory(e) {
+    if (e) e.preventDefault();
+    this.props.mutator.query.update({ layer: null});
+    this.setState({
+      viewAccountsMode: 'empty',
+    });
+  }
+
+  onClickCloseChargeFeeFine(e) {
+    if (e) e.preventDefault();
+    const mode = this.state.viewAccountsMode;
+    this.props.mutator.query.update({ layer: null});
+    if (mode === 'open') {
+      this.props.mutator.query.update({ layer: 'open-accounts' });
+    } else if (mode === 'closed') {
+      this.props.mutator.query.update({ layer: 'closed-accounts' });
+    } else if (mode === 'all') {
+      this.props.mutator.query.update({ layer: 'all-accounts' });
+    }
   }
 
   onAddressesUpdate(addresses) {
@@ -355,6 +416,18 @@ class ViewUser extends React.Component {
             {...this.props}
           />
         </IfPermission>
+        
+        <IfPermission perm="accounts.collection.get">
+          <this.connectedUserAccounts
+            onClickViewOpenAccounts={this.onClickViewOpenAccounts}
+            onClickViewClosedAccounts={this.onClickViewClosedAccounts}
+            onClickViewChargeFeeFine={this.onClickViewChargeFeeFine}
+            expanded={this.state.sections.accountsSection}
+            onToggle={this.handleSectionToggle}
+            accordionId="accountsSection"
+            {...this.props}
+          />
+        </IfPermission>
 
         <IfPermission perm="circulation.loans.collection.get">
           <IfInterface name="circulation" version="2.1">
@@ -416,6 +489,32 @@ class ViewUser extends React.Component {
             onCancel={this.onClickCloseLoanActionsHistory}
             // when navigating away to another user, clear all loan-related state
             onClickUser={() => { this.onClickCloseLoanActionsHistory(); this.onClickCloseLoansHistory(); }}
+          />
+        </Layer>
+        <Layer isOpen={query.layer ? query.layer === 'open-accounts' || query.layer === 'closed-accounts' || query.layer === 'all-accounts' : false} label="Fees/Fines">
+          <this.connectedAccountsHistory
+            user={user}
+            patronGroup={patronGroup}
+            stripes={stripes}
+            history={this.props.history}
+            location={this.props.location}
+            onCancel={this.onClickCloseAccountsHistory}
+            onClickViewChargeFeeFine={this.onClickViewChargeFeeFine}
+            onClickCloseChargeFeeFine={this.onClickCloseChargeFeeFine}
+            onClickViewOpenAccounts={this.onClickViewOpenAccounts}
+            onClickViewClosedAccounts={this.onClickViewClosedAccounts}
+            onClickViewAllAccounts={() => { console.log('all'); }}
+            onClickViewAccountsActionsHistory={() => { console.log('accounts history'); }}
+            openAccounts={this.viewAccountsMode === 'open'}
+            allAccounts={this.viewAccountsMode === 'all'}
+          />
+        </Layer>
+        <Layer isOpen={query.layer ? query.layer === 'charge' : false} label="Charge Fee/Fine">
+          <this.connectedCharge
+            user={user}
+            loan={{ item: {} }}
+            onClickCloseChargeFeeFine={this.onClickCloseChargeFeeFine}
+            {...this.props}
           />
         </Layer>
       </Pane>
