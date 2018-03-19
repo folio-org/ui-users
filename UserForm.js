@@ -109,6 +109,7 @@ class UserForm extends React.Component {
 
     this.handleExpandAll = this.handleExpandAll.bind(this);
     this.handleSectionToggle = this.handleSectionToggle.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
 
     if (props.initialValues.id) {
       this.editUserPerms = props.stripes.connect(EditUserPerms);
@@ -131,8 +132,15 @@ class UserForm extends React.Component {
     );
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  handleKeyDown(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+    }
+  }
+
   getLastMenu(id, label) {
-    const { pristine, submitting, handleSubmit } = this.props;
+    const { pristine, submitting } = this.props;
 
     return (
       <PaneMenu>
@@ -141,7 +149,6 @@ class UserForm extends React.Component {
           type="submit"
           title={label}
           disabled={pristine || submitting}
-          onClick={handleSubmit}
           buttonStyle="primary paneHeaderNewButton"
           marginBottom0
         >
@@ -163,9 +170,8 @@ class UserForm extends React.Component {
     });
   }
 
-
   render() {
-    const { initialValues } = this.props;
+    const { initialValues, handleSubmit } = this.props;
     const { sections } = this.state;
     const firstMenu = this.getAddFirstMenu();
     const paneTitle = initialValues.id ? getFullName(initialValues) : 'Create user';
@@ -174,7 +180,8 @@ class UserForm extends React.Component {
       this.getLastMenu('clickable-createnewuser', 'Create user');
 
     return (
-      <form className={css.UserFormRoot} id="form-user">
+      // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
+      <form className={css.UserFormRoot} id="form-user" onSubmit={handleSubmit} onKeyDown={this.handleKeyDown}>
         <Paneset isRoot>
           <Pane defaultWidth="100%" firstMenu={firstMenu} lastMenu={lastMenu} paneTitle={paneTitle} appIcon={{ app: 'users' }}>
             <Row end="xs">
