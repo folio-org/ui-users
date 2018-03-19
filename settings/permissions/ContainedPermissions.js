@@ -23,7 +23,7 @@ class ContainedPermissions extends React.Component {
   render() {
     return (<EditablePermissions
       {...this.props}
-      heading="Assigned Permissions"
+      heading="Assigned permissions"
       name="subPermissions"
       availablePermissions={_.get(this.props.resources, ['availablePermissions', 'records'])}
     />);

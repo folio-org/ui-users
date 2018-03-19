@@ -91,10 +91,12 @@ class PermissionSetForm extends React.Component {
   saveLastMenu() {
     const { pristine, submitting, initialValues } = this.props;
     const { confirmDelete } = this.state;
+    const edit = initialValues && initialValues.id;
+    const saveLabel = edit ? 'Save & close' : 'Create permission set';
 
     return (
       <PaneMenu>
-        {initialValues && initialValues.id &&
+        {edit &&
           <IfPermission perm="perms.permissions.item.delete">
             <Button
               id="clickable-delete-set"
@@ -111,7 +113,7 @@ class PermissionSetForm extends React.Component {
           type="submit"
           title="Save & close"
           disabled={(pristine || submitting)}
-        >Save & close
+        >{saveLabel}
         </Button>
       </PaneMenu>
     );
@@ -141,7 +143,7 @@ class PermissionSetForm extends React.Component {
       <div className={css.iconRoot}>
         <Icon
           icon="edit"
-          title="Edit Permission"
+          title="Edit permission"
           size="medium"
           iconRootClass={css.editIcon}
         />
@@ -169,7 +171,7 @@ class PermissionSetForm extends React.Component {
               open={sections.generalSection}
               id="generalSection"
               onToggle={this.handleSectionToggle}
-              label="General Information"
+              label="General information"
             >
               <Row>
                 <Col xs={8}>
@@ -182,7 +184,7 @@ class PermissionSetForm extends React.Component {
             </Accordion>
             <ConfirmationModal
               open={confirmDelete}
-              heading="Delete Permission Set?"
+              heading="Delete permission set?"
               message={(<span><strong>{selectedSet.displayName || 'Untitled Permission Set'}</strong> will be <strong>removed</strong> from permission sets.</span>)}
               onConfirm={() => { this.confirmDeleteSet(true); }}
               onCancel={() => { this.confirmDeleteSet(false); }}
