@@ -8,7 +8,8 @@ import Button from '@folio/stripes-components/lib/Button';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import IfPermission from '@folio/stripes-components/lib/IfPermission';
-import Icon from '@folio/stripes-components/lib/Icon';
+import IconButton from '@folio/stripes-components/lib/IconButton';
+
 // eslint-disable-next-line import/no-unresolved
 import ConfirmationModal from '@folio/stripes-components/lib/structures/ConfirmationModal';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
@@ -139,11 +140,10 @@ class PermissionSetForm extends React.Component {
     const label = selectedSet.id ? `Edit: ${selectedSet.displayName}` : 'New permission set';
     return (
       <div className={css.iconRoot}>
-        <Icon
+        <IconButton
           icon="edit"
           title="Edit Permission"
           size="medium"
-          iconRootClass={css.editIcon}
         />
         <div className={css.iconLabel}>{label}</div>
       </div>
