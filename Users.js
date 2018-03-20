@@ -76,7 +76,7 @@ class Users extends React.Component {
   }
 
   static manifest = Object.freeze({
-    initializedFilterConfig: false,
+    initializedFilterConfig: { initialValue: false },
     query: { initialValue: {} },
     resultCount: { initialValue: INITIAL_RESULT_COUNT },
     records: {
