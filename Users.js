@@ -52,6 +52,9 @@ class Users extends React.Component {
       creds: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }),
+      initializedFilterConfig: PropTypes.shape({
+        replace: PropTypes.func.isRequired,
+      }),
       perms: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }),
@@ -135,7 +138,7 @@ class Users extends React.Component {
     const pg = (this.props.resources.patronGroups || {}).records || [];
     if (pg && pg.length) {
       const pgFilterConfig = filterConfig.find(group => group.name === 'pg');
-      let oldValuesLength = pgFilterConfig.values.length
+      const oldValuesLength = pgFilterConfig.values.length;
       pgFilterConfig.values = pg.map(rec => ({ name: rec.group, cql: rec.id }));
       if (oldValuesLength === 0) {
         this.props.mutator.initializedFilterConfig.replace(true); // triggers refresh of users
