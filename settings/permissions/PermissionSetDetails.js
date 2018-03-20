@@ -1,4 +1,4 @@
-import { cloneDeep, _ } from 'lodash';
+import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
@@ -30,7 +30,7 @@ class PermissionSetDetails extends React.Component {
 
   handleExpandAll(sections) {
     this.setState((curState) => {
-      const newState = cloneDeep(curState);
+      const newState = _.cloneDeep(curState);
       newState.sections = sections;
       return newState;
     });
@@ -38,7 +38,7 @@ class PermissionSetDetails extends React.Component {
 
   handleSectionToggle({ id }) {
     this.setState((curState) => {
-      const newState = cloneDeep(curState);
+      const newState = _.cloneDeep(curState);
       newState.sections[id] = !newState.sections[id];
       return newState;
     });
