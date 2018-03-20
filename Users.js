@@ -71,6 +71,7 @@ class Users extends React.Component {
   }
 
   static manifest = Object.freeze({
+    initializedFilterConfig: false,
     query: { initialValue: {} },
     resultCount: { initialValue: INITIAL_RESULT_COUNT },
     records: {
@@ -132,7 +133,11 @@ class Users extends React.Component {
     const pg = (this.props.resources.patronGroups || {}).records || [];
     if (pg && pg.length) {
       const pgFilterConfig = filterConfig.find(group => group.name === 'pg');
+      let oldValuesLength = pgFilterConfig.values.length
       pgFilterConfig.values = pg.map(rec => ({ name: rec.group, cql: rec.id }));
+      if (oldValuesLength === 0) {
+        this.props.mutator.initializedFilterConfig.replace(true); // triggers refresh of users
+      }
     }
   }
 
@@ -160,9 +165,8 @@ class Users extends React.Component {
   }
 
   render() {
-    const props = this.props;
     const { onSelectRow, disableRecordCreation, onComponentWillUnmount, showSingleResult } = this.props;
-    const patronGroups = (props.resources.patronGroups || {}).records || [];
+    const patronGroups = (this.props.resources.patronGroups || {}).records || [];
 
     const resultsFormatter = {
       Status: user => (user.active ? 'Active' : 'Inactive'),
@@ -195,8 +199,8 @@ class Users extends React.Component {
       viewRecordPerms="users.item.get"
       newRecordPerms="users.item.post,login.item.post,perms.users.item.post"
       disableRecordCreation={disableRecordCreation}
-      parentResources={props.resources}
-      parentMutator={props.mutator}
+      parentResources={this.props.resources}
+      parentMutator={this.props.mutator}
       showSingleResult={showSingleResult}
       columnMapping={columnMapping}
     />);
