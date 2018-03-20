@@ -9,7 +9,6 @@ import IconButton from '@folio/stripes-components/lib/IconButton';
 import stripesForm from '@folio/stripes-form';
 import { ExpandAllButton } from '@folio/stripes-components/lib/Accordion';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
-import { SubmissionError } from 'redux-form';
 
 import {
   EditUserInfo,
@@ -64,9 +63,9 @@ function asyncValidate(values, dispatch, props, blurredField) {
       const uv = props.parentMutator.uniquenessValidator;
       const query = `(username=="${values.username}")`;
       uv.reset();
-      uv.GET({ params: { query } }).then((users) => {
+      return uv.GET({ params: { query } }).then((users) => {
         if (users.length > 0) {
-          const error = new SubmissionError({ username: 'This username has already been taken' });
+          const error = { username: 'This username has already been taken' };
           reject(error);
         } else {
           resolve();
@@ -110,6 +109,7 @@ class UserForm extends React.Component {
 
     this.handleExpandAll = this.handleExpandAll.bind(this);
     this.handleSectionToggle = this.handleSectionToggle.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
 
     if (props.initialValues.id) {
       this.editUserPerms = props.stripes.connect(EditUserPerms);
@@ -132,8 +132,15 @@ class UserForm extends React.Component {
     );
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  handleKeyDown(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+    }
+  }
+
   getLastMenu(id, label) {
-    const { pristine, submitting, handleSubmit } = this.props;
+    const { pristine, submitting } = this.props;
 
     return (
       <PaneMenu>
@@ -142,7 +149,6 @@ class UserForm extends React.Component {
           type="submit"
           title={label}
           disabled={pristine || submitting}
-          onClick={handleSubmit}
           buttonStyle="primary paneHeaderNewButton"
           marginBottom0
         >
@@ -164,20 +170,20 @@ class UserForm extends React.Component {
     });
   }
 
-
   render() {
-    const { initialValues } = this.props;
+    const { initialValues, handleSubmit } = this.props;
     const { sections } = this.state;
     const firstMenu = this.getAddFirstMenu();
-    const paneTitle = initialValues.id ? `Edit: ${getFullName(initialValues)}` : 'Create user';
+    const paneTitle = initialValues.id ? getFullName(initialValues) : 'Create user';
     const lastMenu = initialValues.id ?
       this.getLastMenu('clickable-updateuser', 'Update user') :
       this.getLastMenu('clickable-createnewuser', 'Create user');
 
     return (
-      <form className={css.UserFormRoot} id="form-user">
+      // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
+      <form className={css.UserFormRoot} id="form-user" onSubmit={handleSubmit} onKeyDown={this.handleKeyDown}>
         <Paneset isRoot>
-          <Pane defaultWidth="100%" firstMenu={firstMenu} lastMenu={lastMenu} paneTitle={paneTitle}>
+          <Pane defaultWidth="100%" firstMenu={firstMenu} lastMenu={lastMenu} paneTitle={paneTitle} appIcon={{ app: 'users' }}>
             <Row end="xs">
               <Col xs>
                 <ExpandAllButton accordionStatus={sections} onToggle={this.handleExpandAll} />

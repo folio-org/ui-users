@@ -45,6 +45,21 @@
 * Pass packageInfo to SearchAndSort; it's simpler. Refs STSMACOM-64. Available after v2.12.1.
 * Upgrade stripes-components dependency to v2.0.3. Fixes UIU-423.
 * Modal users-in-users app can now search again, thanks to the STCOM-226 fix. Fixes UIU-426.
+* Prevent renewal if new calculated due date is less than or equal to current due date. Fixes UIU-429.
+* Handle renew from current due date. Fixes UIU-428.
+* Add borrower name and patron group to loan details. Fixes UIU-406.
+* Bump stripes-components dependency to v2.0.5. Makes filters work in nested apps. Fixes UIU-430.
+* Pass `props.browseOnly` through to `<SearchAndSort>` to optionally disable user creation and editing. Refs UIPFU-6. Available from v2.12.2.
+* Get alternate fixed renewal period from loan policy. Fixes UIU-433.
+* Get alternate rolling renewal period from loan policy. Fixes UIU-434 and UIU-435.
+* Remove <Autocomplete> - Use new default `country` field control for address fields. Fixes UIU-298.
+* Change Default display to not return a list of all users. Fixes UIU-399.
+* Update new permission set detail record. Fixes UIU-410 and UIU-404.
+* Deprecate `transitionToParams` in favor of `this.props.mutator.query.update`. Fixes UIU-418.
+* Use correct time offset on open loans view. Fixes UIU-440.
+* Fixed username validation in UserForm (IU-422)
+* Move item details link to the options menu. Refs UIU-407.
+* Enter key should not submit the user edit form. Fixes UIU-394.
 
 ## [2.12.0](https://github.com/folio-org/ui-users/tree/v2.12.0) (2017-11-28)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.11.0...v2.12.0)

@@ -64,10 +64,12 @@ class Users extends React.Component {
     visibleColumns: PropTypes.arrayOf(PropTypes.string),
     disableRecordCreation: PropTypes.bool,
     showSingleResult: PropTypes.bool, // eslint-disable-line react/no-unused-prop-types
+    browseOnly: PropTypes.bool,
   };
 
   static defaultProps = {
     showSingleResult: true,
+    browseOnly: false,
   }
 
   static manifest = Object.freeze({
@@ -165,7 +167,7 @@ class Users extends React.Component {
   }
 
   render() {
-    const { onSelectRow, disableRecordCreation, onComponentWillUnmount, showSingleResult } = this.props;
+    const { onSelectRow, disableRecordCreation, onComponentWillUnmount, showSingleResult, browseOnly } = this.props;
     const patronGroups = (this.props.resources.patronGroups || {}).records || [];
 
     const resultsFormatter = {
@@ -203,6 +205,7 @@ class Users extends React.Component {
       parentMutator={this.props.mutator}
       showSingleResult={showSingleResult}
       columnMapping={columnMapping}
+      browseOnly={browseOnly}
     />);
   }
 }
