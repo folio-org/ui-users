@@ -278,6 +278,13 @@
   "loans.items.renewed.subHeading": "The loans for the following <strong>{count, number}</strong> {count, plural, one {instance was} other {instances were}} successfully <strong>renewed</strong>",
   "loans.items.renewed.label": "Successful renewals",
 
+  "permissions.empty": "No permissions found",
+  "permissions.removePermission": "Remove permission",
+  "permissions.addPermission": "Add permission",
+  "permissions.availablePermissions": "available permissions",
+  "search": "Search",
+
+
   "itemDetails": "Item Details",
   "loanDetails": "Loan Details",
   "renew": "Renew",
