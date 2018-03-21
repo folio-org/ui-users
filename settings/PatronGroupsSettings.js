@@ -1,12 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-
-import Paneset from '@folio/stripes-components/lib/Paneset';
-import ConfirmationModal from '@folio/stripes-components/lib/structures/ConfirmationModal';
-import Pane from '@folio/stripes-components/lib/Pane';
-import EditableList from '@folio/stripes-components/lib/structures/EditableList';
-import Callout from '@folio/stripes-components/lib/Callout';
+import ControlledVocab from '@folio/stripes-smart-components/lib/ControlledVocab';
 
 import { RenderPatronGroupLastUpdated, RenderPatronGroupNumberOfUsers } from '../lib/RenderPatronGroup';
 
@@ -95,16 +90,8 @@ class PatronGroupsSettings extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      confirming: false,
-      type: {},
-    };
-    this.onCreateType = this.onCreateType.bind(this);
-    this.onUpdateType = this.onUpdateType.bind(this);
-    this.onDeleteType = this.onDeleteType.bind(this);
-    this.showConfirm = this.showConfirm.bind(this);
-    this.hideConfirm = this.hideConfirm.bind(this);
-    this.callout = null;
+
+    this.connectedControlledVocab = props.stripes.connect(ControlledVocab);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -117,42 +104,6 @@ class PatronGroupsSettings extends React.Component {
     }
   }
 
-  onCreateType(type) {
-    return this.props.mutator.groups.POST(type);
-  }
-
-  onUpdateType(type) {
-    this.props.mutator.activeRecord.update({ id: type.id });
-    // TODO: remove when back end PUT requests ignore read only properties
-    // https://issues.folio.org/browse/RMB-92
-    // eslint-disable-next-line no-param-reassign
-    delete type.metadata;
-    return this.props.mutator.groups.PUT(type);
-  }
-
-  showCalloutMessage(name) {
-    const message = (
-      <span>
-        The patron group <strong>{name.group}</strong> was successfully <strong>deleted</strong>.
-      </span>
-    );
-    this.callout.sendCallout({ message });
-  }
-
-  onDeleteType() {
-    const type = this.state.type;
-    this.props.mutator.activeRecord.update({ id: type.id });
-    // TODO: remove when back end PUT requests ignore read only properties
-    // https://issues.folio.org/browse/RMB-92
-    // eslint-disable-next-line no-param-reassign
-    delete this.state.type.metadata;
-    return this.props.mutator.groups.DELETE(type)
-      .then(() => this.deletePatronResolve())
-      .then(() => this.showCalloutMessage(type))
-      .catch(() => this.deletePatronReject())
-      .finally(() => this.hideConfirm());
-  }
-
   // eslint-disable-next-line class-methods-use-this
   getLastUpdaterIds(groups) {
     const ids = [];
@@ -162,27 +113,6 @@ class PatronGroupsSettings extends React.Component {
       }
     }
     return ids;
-  }
-
-  hideConfirm() {
-    this.setState({
-      confirming: false,
-      type: {},
-    });
-  }
-
-  showConfirm(typeId) {
-    const type = this.props.resources.groups.records.find(t => t.id === typeId);
-    this.setState({
-      confirming: true,
-      type,
-    });
-
-    this.deletePatronPromise = new Promise((resolve, reject) => {
-      this.deletePatronResolve = resolve;
-      this.deletePatronReject = reject;
-    });
-    return this.deletePatronPromise;
   }
 
   propsReadyToFetchUsers(nextProps) {
@@ -203,8 +133,6 @@ class PatronGroupsSettings extends React.Component {
   }
 
   render() {
-    if (!this.props.resources.groups) return <div />;
-
     const actionProps = {
       delete: (item) => {
         const usersPerGroup = (this.props.resources.usersPerGroup || {}).other || {};
@@ -225,14 +153,7 @@ class PatronGroupsSettings extends React.Component {
     };
 
     const formatter = {
-      lastUpdated: item => (<RenderPatronGroupLastUpdated
-        item={item}
-        gloss="Last Updated"
-        users={this.props.resources ? this.props.resources.users : null}
-        groups={this.props.resources ? this.props.resources.groups : null}
-      />
-      ),
-      numberOfUsers: item => (<RenderPatronGroupNumberOfUsers
+      numberOfObjects: item => (<RenderPatronGroupNumberOfUsers
         item={item}
         gloss="# of Users"
         usersPerGroup={this.props.resources ? this.props.resources.usersPerGroup : null}
@@ -240,45 +161,22 @@ class PatronGroupsSettings extends React.Component {
       ),
     };
 
-    const modalHeading = 'Delete patron group?';
-    const modalMessage = <span>The patron group <strong>{this.state.type.group}</strong> will be <strong>deleted</strong></span>;
-    const confirmLabel = 'Delete';
-
     return (
-      <Paneset>
-        <Pane defaultWidth="fill" fluidContentWidth paneTitle="Patron Groups">
-          <EditableList
-            {...this.props}
-            // TODO: not sure why we need this OR if there are no groups
-            // Seems to load this once before the groups data from the manifest
-            // is pulled in. This still causes a JS warning, but not an error
-            contentData={this.props.resources.groups.records || []}
-            createButtonLabel="+ Add new"
-            visibleFields={['group', 'desc', 'lastUpdated', 'numberOfUsers']}
-            columnMapping={{ desc: 'Description', lastUpdated: 'Last Updated', numberOfUsers: '# of Users' }}
-            readOnlyFields={['lastUpdated', 'numberOfUsers']}
-            actionProps={actionProps}
-            onCreate={this.onCreateType}
-            onUpdate={this.onUpdateType}
-            onDelete={this.showConfirm}
-            isEmptyMessage="There are no patron groups"
-            nameKey="group"
-            formatter={formatter}
-            itemTemplate={{}}
-            id="patrongroups"
-            validate={validate}
-          />
-          <ConfirmationModal
-            open={this.state.confirming}
-            heading={modalHeading}
-            message={modalMessage}
-            onConfirm={this.onDeleteType}
-            onCancel={this.hideConfirm}
-            confirmLabel={confirmLabel}
-          />
-          <Callout ref={(ref) => { this.callout = ref; }} />
-        </Pane>
-      </Paneset>
+      <this.connectedControlledVocab
+        {...this.props}
+        baseUrl="groups"
+        records="usergroups"
+        label="Patron Groups"
+        labelSingular="Group"
+        objectLabel="Users"
+        visibleFields={['group', 'desc']}
+        columnMapping={{ desc: 'Description' }}
+        actionProps={actionProps}
+        formatter={formatter}
+        nameKey="group"
+        id="patrongroups"
+        validate={validate}
+      />
     );
   }
 }
