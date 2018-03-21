@@ -93,8 +93,8 @@ class LoansHistory extends React.Component {
         >
           { this.getSegmentedControls() }
           {openLoans
-            ? (<this.connectedOpenLoans controls={this.getSegmentedControls()} loans={loans} {...this.props} />)
-            : (<this.connectedClosedLoans controls={this.getSegmentedControls()} loans={loans} {...this.props} />)
+            ? (<this.connectedOpenLoans loans={loans} {...this.props} />)
+            : (<this.connectedClosedLoans loans={loans} {...this.props} />)
           }
         </Pane>
       </Paneset>);

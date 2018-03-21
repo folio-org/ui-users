@@ -9,9 +9,6 @@ import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import Button from '@folio/stripes-components/lib/Button';
 import Callout from '@folio/stripes-components/lib/Callout';
-import IconButton from '@folio/stripes-components/lib/IconButton';
-import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
-import TabButton from '@folio/stripes-components/lib/TabButton';
 
 import { formatDateTime, getFullName } from './util';
 import loanActionMap from './data/loanActionMap';
