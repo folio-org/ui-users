@@ -62,7 +62,11 @@ class PatronGroupsSettings extends React.Component {
         baseUrl="groups"
         records="usergroups"
         label="Patron Groups"
+<<<<<<< HEAD
         labelSingular="Patron Group"
+=======
+        labelSingular="Group"
+>>>>>>> 9c970b2037817784bb08820a786655d5843c0c3b
         objectLabel="Users"
         visibleFields={['group', 'desc']}
         columnMapping={{ group: 'Patron Group', desc: 'Description' }}
