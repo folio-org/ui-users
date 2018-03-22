@@ -119,34 +119,6 @@ module.exports.test = function foo(uiTestCtx) {
           .then(() => { done(); })
           .catch(done);
       });
-      it(`should not find an enabled "Delete" button for "${gid}" group`, (done) => {
-        nightmare
-          .wait(1200)
-          .click('#clickable-settings')
-          .wait(wait)
-          .click('a[href="/settings/users"]')
-          .wait('a[href="/settings/users/groups"]')
-          .click('a[href="/settings/users/groups"]')
-          .wait((pgid) => {
-            const dnode = document.evaluate(`//div[.="${pgid}"]`, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
-            if (dnode.singleNodeValue) {
-              return true;
-            }
-            return false;
-          }, gid)
-          .wait(222)
-          .evaluate((dp) => {
-            const cnode = document.querySelector(dp);
-            if (cnode.disabled !== true) {
-              throw new Error('Delete button found and not disabled when patron group is in use!');
-            }
-          }, deletePath)
-          .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
-          .then(() => {
-            done();
-          })
-          .catch(done);
-      });
       it('should find ID for "Staff" group', (done) => {
         nightmare
           .click('#clickable-users-module')
