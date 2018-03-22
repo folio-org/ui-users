@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import ControlledVocab from '@folio/stripes-smart-components/lib/ControlledVocab';
@@ -47,25 +46,6 @@ class PatronGroupsSettings extends React.Component {
   }
 
   render() {
-    const actionProps = {
-      delete: (item) => {
-        const usersPerGroup = (this.props.resources.usersPerGroup || {}).other || {};
-        let disableDelete = [];
-        if (_.has(usersPerGroup, ['resultInfo', 'facets'])) {
-          const groupCounts = _.get(usersPerGroup, ['resultInfo', 'facets', 0, 'facetValues'], []);
-          disableDelete = _.map(groupCounts, 'value');
-        }
-        if (_.includes(disableDelete, item.id)) {
-          return {
-            disabled: _.includes(disableDelete, item.id),
-            title: 'Patron group cannot be deleted when used by one or more users',
-          };
-        }
-
-        return {};
-      },
-    };
-
     const formatter = {
       numberOfObjects: item => (<RenderPatronGroupNumberOfUsers
         item={item}
@@ -76,6 +56,9 @@ class PatronGroupsSettings extends React.Component {
     return (
       <this.connectedControlledVocab
         {...this.props}
+        // We have to unset the dataKey to prevent the props.resources in
+        // <ControlledVocab> from being overwritten by the props.resources here.
+        dataKey={undefined}
         baseUrl="groups"
         records="usergroups"
         label="Patron Groups"
@@ -83,7 +66,6 @@ class PatronGroupsSettings extends React.Component {
         objectLabel="Users"
         visibleFields={['group', 'desc']}
         columnMapping={{ group: 'Patron Group', desc: 'Description' }}
-        actionProps={actionProps}
         formatter={formatter}
         nameKey="group"
         id="patrongroups"
