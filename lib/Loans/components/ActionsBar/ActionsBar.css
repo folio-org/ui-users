@@ -1,0 +1,19 @@
+/**
+ * Actions Bar
+ */
+
+.actionsBarEnd,
+.actionsBar {
+  display: flex;
+}
+
+.actionsBar {
+  padding: 15px 15px 0;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.actionsBarEnd {
+  justify-content: flex-end;
+  margin-left: auto;
+}
