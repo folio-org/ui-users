@@ -11,6 +11,7 @@ class PermissionSetDetails extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
+      intl: PropTypes.object.isRequired,
     }).isRequired,
     initialValues: PropTypes.object,
   };
@@ -58,13 +59,13 @@ class PermissionSetDetails extends React.Component {
           open={sections.generalInformation}
           id="generalInformation"
           onToggle={this.handleSectionToggle}
-          label="General information"
+          label={this.props.stripes.intl.formatMessage({ id: 'ui-users.permissions.generalInformation' })}
         >
           <Row>
             <Col xs={12}>
               <section>
-                <KeyValue label="Permission set name" value={_.get(selectedSet, ['displayName'], 'Untitled Permission Set')} />
-                <KeyValue label="Description" value={_.get(selectedSet, ['description'], '-')} />
+                <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.permissions.permissionSetName' })} value={_.get(selectedSet, ['displayName'], this.props.stripes.intl.formatMessage({ id: 'ui-users.permissions.untitledPermissionSet' }))} />
+                <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.description' })} value={_.get(selectedSet, ['description'], '-')} />
               </section>
             </Col>
           </Row>
@@ -74,7 +75,7 @@ class PermissionSetDetails extends React.Component {
           expanded={sections.assignedPermissions}
           onToggle={this.handleSectionToggle}
           accordionId="assignedPermissions"
-          heading="Assigned permissions"
+          heading={this.props.stripes.intl.formatMessage({ id: 'ui-users.permissions.assignedPermissions' })}
           listedPermissions={selectedSet.subPermissions}
           permToRead="perms.permissions.get"
           permToDelete="perms.permissions.item.put"

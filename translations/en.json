@@ -272,10 +272,12 @@
   "loans.columns.returnDate": "Return date",
   "loans.columns.renewals": "Renewals",
 
-  "loans.item.renewed.callout": "The loan for {title} was successfully <strong>renewed</strong>.",
+  "loans.item.renewed.calloutVerb": "renewed",
+  "loans.item.renewed.callout": "The loan for {title} was successfully {verb}.",
+
   "loans.items.renewed.callout": "Renewed {strongCount} {count, plural, one {loan} other {loans}}",
   "loans.items.renewed.callout.details": "view details",
-  "loans.items.renewed.subHeading": "The loans for the following <strong>{count, number}</strong> {count, plural, one {instance was} other {instances were}} successfully <strong>renewed</strong>",
+  "loans.items.renewed.subHeading": "The loans for the following {strongCount, number} {count, plural, one {instance was} other {instances were}} successfully {verb}",
   "loans.items.renewed.label": "Successful renewals",
 
   "permissions.empty": "No permissions found",
@@ -286,13 +288,25 @@
   "permissions.isProxyFor": "{name} is proxy for",
   "permissions.isSponsorOf": "{name} is sponsor of",
   "permissions.proxySponsor": "Proxy/Sponsor",
+  "permissions.assignedPermissions": "Assigned permissions",
+  "permissions.policyName": "Policy name",
+  "permissions.policyDescription": "Policy description",
+  "permissions.untitledPermissionSet": "Untitled permission set",
+  "permissions.closePermissionSetDialog": "Close permission set dialog",
+  "permissions.createPermissionSet": "Create permission set",
+  "permissions.newPermissionSet": "New permission set",
+  "permissions.editPermission": "Edit permission",
+  "permissions.generalInformation": "General Information",
+  "permissions.permissionSetName": "Permission set name",
+  "permissions.deletePermissionSet": "Delete permission set?",
+  "permissions.deletePermissionSetMessage": "{name} will be removed from permission sets.",
 
   "extended.extendedInformation": "Extended information",
   "extended.dateEnrolled": "Date enrolled",
   "extended.externalSystemId": "External system ID",
   "extended.birthDate": "Birth date",
   "extended.folioNumber": "Folio number",
-  "extended.folioPassword": "Folio password *",
+  "extended.folioPassword": "Folio password",
 
   "contact.contactInformation": "Contact Information",
   "contact.email": "Email",
@@ -301,6 +315,10 @@
   "contact.preferredContact": "Preferred contact",
   "contact.selectContactType": "Select contact type",
   "contact.selectAddressType": "Select address type",
+  "contact.addressTypes": "Address Types",
+  "contact.addressType": "Address Type",
+
+  "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}",
 
   "information.userInformation": "User information",
   "information.lastName": "Last name",
@@ -308,16 +326,30 @@
   "information.middleName": "Middle name",
   "information.barcode": "Barcode",
   "information.patronGroup": "Patron group",
+  "information.patronGroups": "Patron groups",
   "information.status": "Status",
   "information.expirationDate": "Expiration date",
   "information.username": "Username",
   "information.selectPatronGroup": "Select patron group",
+  "information.patronGroup.removed.verb": "deleted",
+  "information.patronGroup.removed": "The patron group {group} was successfully {verb}.",
+  "information.patronGroup.remove.deny": "Patron group cannot be deleted when used by one or more users",
+  "information.patronGroup.group": "Group",
+  "information.patronGroup.users": "Users",
+  "information.patronGroup.numberOfUsers": "# of users",
+  "information.patronGroups.emptyList": "There are no patron groups",
+  "information.profile.label": "Display profile pictures",
 
   "proxy.relationshipCreated": "Relationship Created",
   "proxy.relationshipStatus": "Relationship Status",
   "proxy.requestForSponsor": "Proxy can request for sponsor",
   "proxy.notificationsTo": "Notifications sent to",
   "proxy.accrueTo": "Fees/fines accrue to",
+
+  "errors.missingRequiredField": "Please fill this in to continue",
+
+  "errors.noMatch.oops": "Uh-oh!",
+  "errors.noMatch.how": "How did you get to {location}?",
 
   "hide": "Hide",
   "show": "Show",
@@ -329,8 +361,13 @@
   "no": "No",
   "expirationDate": "Expiration date",
   "by": "by",
-
+  "delete": "Delete",
+  "saveAndClose": "Save & close",
+  "edit": "Edit",
   "okay": "Okay",
+  "description": "Description",
+  "lastUpdated": "Last updated",
+  "addNew": "+ Add new",
 
 
 
