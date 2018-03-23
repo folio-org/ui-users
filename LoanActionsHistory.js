@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import Link from 'react-router-dom/Link';
 import PropTypes from 'prop-types';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
@@ -106,27 +107,31 @@ class LoanActionsHistory extends React.Component {
 
   showCallout() {
     const message = (
-      <span>
-        The loan for <strong>{this.props.loan.item.title}</strong> was successfully <strong>renewed</strong>.
-      </span>
+      <FormattedMessage
+        id="loans.item.renewed.callout"
+        values={{
+          title: <strong>{this.props.loan.item.title}</strong>,
+          verb: <strong>{this.props.stripes.intl.formatMessage({ id: 'loans.item.renewed.callout.verb' })}</strong>,
+        }}
+      />
     );
 
     this.callout.sendCallout({ message });
   }
 
   render() {
-    const { onCancel, loan, user, patronGroup, resources: { loanActionsWithUser } } = this.props;
+    const { onCancel, loan, user, patronGroup, resources: { loanActionsWithUser }, stripes: { intl } } = this.props;
     const loanActionsFormatter = {
-      Action: la => loanActionMap[la.action],
-      'Action Date': la => formatDateTime(la.loanDate),
-      'Due Date': la => formatDateTime(la.dueDate),
-      'Item Status': la => la.itemStatus,
-      Operator: la => getFullName(la.user),
+      action: la => intl.formatMessage({ id: loanActionMap[la.action] }),
+      actionDate: la => formatDateTime(la.loanDate),
+      dueDate: la => formatDateTime(la.dueDate),
+      itemStatus: la => la.itemStatus,
+      operator: la => getFullName(la.user),
     };
 
     return (
       <Paneset isRoot>
-        <Pane id="pane-loandetails" defaultWidth="100%" dismissible onClose={onCancel} paneTitle={`Borrower: ${getFullName(user)} (${_.upperFirst(patronGroup.group)})`}>
+        <Pane id="pane-loandetails" defaultWidth="100%" dismissible onClose={onCancel} paneTitle={`${this.props.stripes.intl.formatMessage({ id: 'ui-users.loans.details.borrower' })}: ${getFullName(user)} (${_.upperFirst(patronGroup.group)})`}>
           <Row>
             <Col>
               <Button buttonStyle="primary" onClick={this.renew}>Renew</Button>
@@ -134,47 +139,47 @@ class LoanActionsHistory extends React.Component {
           </Row>
           <Row>
             <Col xs={4} >
-              <KeyValue label="Title" value={_.get(loan, ['item', 'title'], '')} />
+              <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.columns.title' })} value={_.get(loan, ['item', 'title'], '')} />
             </Col>
             <Col xs={2} >
-              <KeyValue label="Barcode" value={<Link to={`/inventory/view/${_.get(loan, ['item', 'instanceId'], '')}/${_.get(loan, ['item', 'holdingsRecordId'], '')}/${_.get(loan, ['itemId'], '')}`}>{_.get(loan, ['item', 'barcode'], '')}</Link>} />
+              <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.columns.barcode' })} value={<Link to={`/inventory/view/${_.get(loan, ['item', 'instanceId'], '')}/${_.get(loan, ['item', 'holdingsRecordId'], '')}/${_.get(loan, ['itemId'], '')}`}>{_.get(loan, ['item', 'barcode'], '')}</Link>} />
             </Col>
             <Col xs={2} >
-              <KeyValue label="Item Status" value={_.get(loan, ['item', 'status', 'name'], '-')} />
+              <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.columns.itemStatus' })} value={_.get(loan, ['item', 'status', 'name'], '-')} />
             </Col>
             <Col xs={2} >
-              <KeyValue label="Location" value={_.get(loan, ['item', 'location', 'name'], '-')} />
+              <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.details.location' })} value={_.get(loan, ['item', 'location', 'name'], '-')} />
             </Col>
             <Col xs={2} >
-              <KeyValue label="Request Queue" value="TODO" />
+              <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.details.requestQueue' })} value="TODO" />
             </Col>
           </Row>
           <Row>
             <Col xs={4} >
-              <KeyValue label="Authors" value="TODO" />
+              <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.details.authors' })} value="TODO" />
             </Col>
             <Col xs={2} >
-              <KeyValue label="Call Number" value="TODO" />
+              <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.details.callNumber' })} value="TODO" />
             </Col>
             <Col xs={2} >
-              <KeyValue label="Due Date" value={formatDateTime(loan.dueDate) || '-'} />
+              <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.columns.dueDate' })} value={formatDateTime(loan.dueDate) || '-'} />
             </Col>
             <Col xs={2} >
-              <KeyValue label="Claimed Returned" value="TODO" />
+              <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.details.claimedReturned' })} value="TODO" />
             </Col>
           </Row>
           <Row>
             <Col xs={4} >
-              <KeyValue label="Borrower" value={getFullName(user)} />
+              <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.details.borrower' })} value={getFullName(user)} />
             </Col>
             <Col xs={2} >
-              <KeyValue label="Loan Policy" value="TODO" />
+              <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.details.loanPolicy' })} value="TODO" />
             </Col>
             <Col xs={2} >
-              <KeyValue label="Loan Date" value={formatDateTime(loan.loanDate) || '-'} />
+              <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.columns.loanDate' })} value={formatDateTime(loan.loanDate) || '-'} />
             </Col>
             <Col xs={2} >
-              <KeyValue label="Lost" value="TODO" />
+              <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.details.lost' })} value="TODO" />
             </Col>
           </Row>
           <Row>
@@ -182,13 +187,13 @@ class LoanActionsHistory extends React.Component {
               <this.connectedProxy id={loan.proxyUserId} onClick={this.props.onClickUser} />
             </Col>
             <Col xs={2} >
-              <KeyValue label="Renewal Count" value={_.get(loan, ['renewalCount'], '-')} />
+              <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.details.renewalCount' })} value={_.get(loan, ['renewalCount'], '-')} />
             </Col>
             <Col xs={2} >
-              <KeyValue label="Return Date" value={formatDateTime(loan.returnDate) || '-'} />
+              <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.columns.returnDate' })} value={formatDateTime(loan.returnDate) || '-'} />
             </Col>
             <Col xs={2} >
-              <KeyValue label="Fine" value="TODO" />
+              <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.details.fine' })} value="TODO" />
             </Col>
           </Row>
           <br />
@@ -196,8 +201,14 @@ class LoanActionsHistory extends React.Component {
             <MultiColumnList
               id="list-loanactions"
               formatter={loanActionsFormatter}
-              visibleColumns={['Action Date', 'Action', 'Due Date', 'Item Status', 'Operator']}
-              columnMapping={loanActionMap}
+              visibleColumns={['action', 'actionDate', 'dueDate', 'itemStatus', 'operator']}
+              columnMapping={{
+                action: intl.formatMessage({ id: 'ui-users.loans.columns.action' }),
+                actionDate: intl.formatMessage({ id: 'ui-users.loans.columns.actionDate' }),
+                dueDate: intl.formatMessage({ id: 'ui-users.loans.columns.dueDate' }),
+                itemStatus: intl.formatMessage({ id: 'ui-users.loans.columns.itemStatus' }),
+                operator: intl.formatMessage({ id: 'ui-users.loans.columns.operator' }),
+              }}
               contentData={loanActionsWithUser.records}
             />
           }
@@ -207,5 +218,5 @@ class LoanActionsHistory extends React.Component {
     );
   }
 }
-
+// visibleColumns={['Action Date', 'Action', 'Due Date', 'Item Status', 'Operator']}
 export default withRenew(LoanActionsHistory);

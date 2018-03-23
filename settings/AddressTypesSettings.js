@@ -23,7 +23,7 @@ class AddressTypesSettings extends React.Component {
         records="addressTypes"
         label={this.props.stripes.intl.formatMessage({ id: 'ui-users.contact.addressTypes' })}
         labelSingular={this.props.stripes.intl.formatMessage({ id: 'ui-users.contact.addressType' })}
-        objectLabel="Addresses"
+        objectLabel={this.props.stripes.intl.formatMessage({ id: 'ui-users.contact.addresses' })}
         visibleFields={['addressType', 'desc']}
         columnMapping={{
           addressType: this.props.stripes.intl.formatMessage({ id: 'ui-users.contact.addressType' }),

@@ -271,14 +271,35 @@
   "loans.columns.dueDate": "Due date",
   "loans.columns.returnDate": "Return date",
   "loans.columns.renewals": "Renewals",
+  "loans.columns.actionDate": "Action Date",
+  "loans.columns.action": "Action",
+  "loans.columns.operator": "Operator",
 
-  "loans.item.renewed.calloutVerb": "renewed",
+  "loans.item.renewed.callout.verb": "renewed",
   "loans.item.renewed.callout": "The loan for {title} was successfully {verb}.",
 
   "loans.items.renewed.callout": "Renewed {strongCount} {count, plural, one {loan} other {loans}}",
   "loans.items.renewed.callout.details": "view details",
   "loans.items.renewed.subHeading": "The loans for the following {strongCount, number} {count, plural, one {instance was} other {instances were}} successfully {verb}",
   "loans.items.renewed.label": "Successful renewals",
+
+  "loans.details.close": "Close loan details",
+  "loans.details.usernameAndPatrongGroup": "User name and patrong group",
+  "loans.details.location": "Location",
+  "loans.details.requestQueue": "Request queue",
+  "loans.details.authors": "Authors",
+  "loans.details.callNumber": "Call number",
+  "loans.details.claimedReturned": "Claimed returned",
+  "loans.details.loanPolicy": "Loan policy",
+  "loans.details.lost": "Lost",
+  "loans.details.borrower": "Borrower",
+  "loans.details.renewalCount": "Renewal count",
+  "loans.details.fine": "Fine",
+  "loans.details.proxyBorrower": "Proxy borrower",
+
+  "loans.loans": "Loans",
+  "loans.loanDetails": "Loan details",
+
 
   "permissions.empty": "No permissions found",
   "permissions.removePermission": "Remove permission",
@@ -317,6 +338,7 @@
   "contact.selectAddressType": "Select address type",
   "contact.addressTypes": "Address Types",
   "contact.addressType": "Address Type",
+  "contact.addresses": "Addresses",
 
   "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}",
 

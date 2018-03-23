@@ -13,6 +13,9 @@ class LoanActionsHistoryProxy extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }),
+    stripes: PropTypes.shape({
+      intl: PropTypes.object.isRequired,
+    }).isRequired,
   }
 
   static manifest = Object.freeze({
@@ -33,10 +36,10 @@ class LoanActionsHistoryProxy extends React.Component {
 
   render() {
     if (this.props.id) {
-      return <KeyValue label="Proxy Borrower" value={this.getUserFullName()} />;
+      return <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.loans.details.proxyBorrower' })} value={this.getUserFullName()} />;
     }
 
-    return <KeyValue label="Proxy Borrower" value="-" />;
+    return <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.loans.details.proxyBorrower' })} value="-" />;
   }
 }
 
