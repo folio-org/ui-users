@@ -1,8 +1,5 @@
 {
   "search": "Search",
-  "loans.title": "Loans",
-  "loans.openLoans": "open loans",
-  "loans.closedLoans": "closed loans",
   "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}",
 
   "data.contactTypes.email": "Email",
@@ -264,6 +261,13 @@
   "data.loanActionMap.holdRequested": "Hold requested",
   "data.loanActionMap.recallRequested": "Recall requested",
 
+  "loans.title": "Loans",
+  "loans.openLoans": "open loans",
+  "loans.closedLoans": "closed loans",
+  "loans.openLoansTitle": "Open loans",
+  "loans.closedLoansTitle": "Closed loans",
+  "loans.loanDetails": "Loan details",
+
   "loans.columns.title": "Title",
   "loans.columns.itemStatus": "Item status",
   "loans.columns.barcode": "Barcode",
@@ -282,9 +286,11 @@
   "loans.items.renewed.callout.details": "view details",
   "loans.items.renewed.subHeading": "The loans for the following {strongCount, number} {count, plural, one {instance was} other {instances were}} successfully {verb}",
   "loans.items.renewed.label": "Successful renewals",
+  "loans.items.closeLoans": "Close loans",
+  "loans.items.userNameAndPatronGroup": "User name and patron group",
 
   "loans.details.close": "Close loan details",
-  "loans.details.usernameAndPatrongGroup": "User name and patrong group",
+  "loans.details.usernameAndPatronGroup": "User name and patron group",
   "loans.details.location": "Location",
   "loans.details.requestQueue": "Request queue",
   "loans.details.authors": "Authors",
@@ -296,10 +302,6 @@
   "loans.details.renewalCount": "Renewal count",
   "loans.details.fine": "Fine",
   "loans.details.proxyBorrower": "Proxy borrower",
-
-  "loans.loans": "Loans",
-  "loans.loanDetails": "Loan details",
-
 
   "permissions.empty": "No permissions found",
   "permissions.removePermission": "Remove permission",
