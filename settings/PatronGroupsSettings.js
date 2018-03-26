@@ -4,24 +4,6 @@ import ControlledVocab from '@folio/stripes-smart-components/lib/ControlledVocab
 
 import { RenderPatronGroupNumberOfUsers } from '../lib/RenderPatronGroup';
 
-function validate(values) {
-  const errors = [];
-  if (Array.isArray(values.items)) {
-    const itemArrayErrors = [];
-    values.items.forEach((item, itemIndex) => {
-      const itemErrors = {};
-      if (!item.group) {
-        itemErrors.group = 'Please fill this in to continue';
-        itemArrayErrors[itemIndex] = itemErrors;
-      }
-    });
-    if (itemArrayErrors.length) {
-      errors.items = itemArrayErrors;
-    }
-  }
-  return errors;
-}
-
 class PatronGroupsSettings extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
@@ -69,7 +51,6 @@ class PatronGroupsSettings extends React.Component {
         formatter={formatter}
         nameKey="group"
         id="patrongroups"
-        validate={validate}
       />
     );
   }
