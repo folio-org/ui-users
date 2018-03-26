@@ -262,6 +262,8 @@
   "data.loanActionMap.recallRequested": "Recall requested",
 
   "loans.title": "Loans",
+  "loans.open": "Open",
+  "loans.closed": "Closed",
   "loans.openLoans": "open loans",
   "loans.closedLoans": "closed loans",
   "loans.openLoansTitle": "Open loans",

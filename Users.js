@@ -34,10 +34,6 @@ const filterConfig = [
   },
 ];
 
-const columnMapping = {
-  Status: 'active',
-};
-
 class Users extends React.Component {
   static propTypes = {
     resources: PropTypes.shape({
@@ -170,19 +166,19 @@ class Users extends React.Component {
   }
 
   render() {
-    const { onSelectRow, disableRecordCreation, onComponentWillUnmount, showSingleResult, browseOnly } = this.props;
+    const { onSelectRow, disableRecordCreation, onComponentWillUnmount, showSingleResult, browseOnly, stripes: { intl } } = this.props;
     const patronGroups = (this.props.resources.patronGroups || {}).records || [];
 
     const resultsFormatter = {
-      Status: user => (user.active ? 'Active' : 'Inactive'),
-      Name: user => getFullName(user),
-      Barcode: user => user.barcode,
-      'Patron Group': (user) => {
+      status: user => (user.active ? intl.formatMessage({ id: 'ui-users.active' }) : intl.formatMessage({ id: 'ui-users.inactive' })),
+      name: user => getFullName(user),
+      barcode: user => user.barcode,
+      patronGroup: (user) => {
         const pg = patronGroups.filter(g => g.id === user.patronGroup)[0];
         return pg ? pg.group : '?';
       },
-      Username: user => user.username,
-      Email: user => _.get(user, ['personal', 'email']),
+      username: user => user.username,
+      email: user => _.get(user, ['personal', 'email']),
     };
 
     return (<SearchAndSort
@@ -194,7 +190,7 @@ class Users extends React.Component {
       viewRecordComponent={ViewUser}
       editRecordComponent={UserForm}
       newRecordInitialValues={{ active: true, personal: { preferredContactTypeId: '002' } }}
-      visibleColumns={this.props.visibleColumns ? this.props.visibleColumns : ['Status', 'Name', 'Barcode', 'Patron Group', 'Username', 'Email']}
+      visibleColumns={this.props.visibleColumns ? this.props.visibleColumns : ['status', 'name', 'barcode', 'patronGroup', 'username', 'email']}
       resultsFormatter={resultsFormatter}
       onSelectRow={onSelectRow}
       onCreate={this.create}
@@ -207,7 +203,14 @@ class Users extends React.Component {
       parentResources={this.props.resources}
       parentMutator={this.props.mutator}
       showSingleResult={showSingleResult}
-      columnMapping={columnMapping}
+      columnMapping={{
+        status: intl.formatMessage({ id: 'ui-users.crud.active' }),
+        name: intl.formatMessage({ id: 'ui-users.crud.name' }),
+        barcode: intl.formatMessage({ id: 'ui-users.information.barcode' }),
+        patronGroup: intl.formatMessage({ id: 'ui-users.information.patronGroup' }),
+        username: intl.formatMessage({ id: 'ui-users.information.username' }),
+        email: intl.formatMessage({ id: 'ui-users.contact.email' }),
+      }}
       browseOnly={browseOnly}
     />);
   }

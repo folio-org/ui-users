@@ -134,7 +134,7 @@ class LoanActionsHistory extends React.Component {
         <Pane id="pane-loandetails" defaultWidth="100%" dismissible onClose={onCancel} paneTitle={`${this.props.stripes.intl.formatMessage({ id: 'ui-users.loans.details.borrower' })}: ${getFullName(user)} (${_.upperFirst(patronGroup.group)})`}>
           <Row>
             <Col>
-              <Button buttonStyle="primary" onClick={this.renew}>Renew</Button>
+              <Button buttonStyle="primary" onClick={this.renew}>{this.props.stripes.intl.formatMessage({ id: 'ui-users.renew' })}</Button>
             </Col>
           </Row>
           <Row>
