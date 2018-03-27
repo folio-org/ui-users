@@ -9,6 +9,7 @@ import Paneset from '@folio/stripes-components/lib/Paneset';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import IfPermission from '@folio/stripes-components/lib/IfPermission';
 import IconButton from '@folio/stripes-components/lib/IconButton';
+import Icon from '@folio/stripes-components/lib/Icon';
 
 // eslint-disable-next-line import/no-unresolved
 import ConfirmationModal from '@folio/stripes-components/lib/structures/ConfirmationModal';
@@ -82,9 +83,13 @@ class PermissionSetForm extends React.Component {
   addFirstMenu() {
     return (
       <PaneMenu>
-        <button id="clickable-close-permission-set" onClick={this.props.onCancel} title="close" aria-label="Close Permission Set Dialog">
-          <span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span>
-        </button>
+        <IconButton
+          icon="closeX"
+          id="clickable-close-permission-set"
+          onClick={this.props.onCancel}
+          title="close"
+          aria-label="Close Permission Set Dialog"
+        />
       </PaneMenu>
     );
   }
@@ -102,9 +107,10 @@ class PermissionSetForm extends React.Component {
             <Button
               id="clickable-delete-set"
               title="Delete"
-              buttonStyle="warning"
+              buttonStyle="danger"
               onClick={this.beginDelete}
               disabled={confirmDelete}
+              marginBottom0
             >Delete
             </Button>
           </IfPermission>
@@ -114,6 +120,8 @@ class PermissionSetForm extends React.Component {
           type="submit"
           title="Save & close"
           disabled={(pristine || submitting)}
+          marginBottom0
+          buttonStyle="default paneHeaderNewButton"
         >{saveLabel}
         </Button>
       </PaneMenu>
@@ -139,17 +147,12 @@ class PermissionSetForm extends React.Component {
   renderPaneTitle() {
     const { initialValues } = this.props;
     const selectedSet = initialValues || {};
-    const label = selectedSet.id ? `Edit: ${selectedSet.displayName}` : 'New permission set';
-    return (
-      <div className={css.iconRoot}>
-        <IconButton
-          icon="edit"
-          title="Edit permission"
-          size="medium"
-        />
-        <div className={css.iconLabel}>{label}</div>
-      </div>
-    );
+
+    if (selectedSet.id) {
+      return (<div><Icon size="small" icon="edit" /><span>{selectedSet.displayName}</span></div>);
+    }
+
+    return 'New permission set';
   }
 
   render() {
