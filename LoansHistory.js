@@ -76,7 +76,7 @@ class LoansHistory extends React.Component {
   render() {
     const { user, patronGroup, resources, openLoans, stripes: { intl } } = this.props;
     const loansHistory = _.get(resources, ['loansHistory', 'records']);
-    const loanStatus = openLoans ? {intl.formatMessage({ id: 'ui-users.loans.open' })} : {intl.formatMessage({ id: 'ui-users.loans.closed' })};
+    const loanStatus = openLoans ? intl.formatMessage({ id: 'ui-users.loans.open' }) : intl.formatMessage({ id: 'ui-users.loans.closed' });
     const loans = _.filter(loansHistory, loan => loanStatus === _.get(loan, ['status', 'name']));
     if (!loans) return <div />;
 
