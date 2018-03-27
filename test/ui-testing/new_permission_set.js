@@ -70,21 +70,21 @@ module.exports.test = function foo(uiTestCtx) {
           .click('#clickable-edit-item')
           .wait('#clickable-delete-set')
           .click('#clickable-delete-set')
-          .wait(333)
-          .click('div[role="dialog"] button:nth-of-type(2)')
+          .wait('#clickable-deletepermissionset-confirmation-confirm')
+          .click('#clickable-deletepermissionset-confirmation-confirm')
           .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
           .url()
           .then((result) => {
             done();
             uuid = result;
-            uuid = uuid.replace(/^.+\//, '');
+            uuid = uuid.replace(/^.+\/([^?]+).*/, '$1');
             console.log(`          ID of deleted permission set: ${uuid}`);
           })
           .catch(done);
       });
       it('should confirm deletion', (done) => {
         nightmare
-          .wait(222)
+          .wait(555)
           .click('a[href^="/settings/users/groups"]')
           .wait(222)
           .click('a[href="/settings/users/perms"]')
