@@ -20,7 +20,6 @@ import stripesForm from '@folio/stripes-form';
 import { Field } from 'redux-form';
 
 import ContainedPermissions from './ContainedPermissions';
-import css from './PermissionSetForm.css';
 
 class PermissionSetForm extends React.Component {
   static propTypes = {
