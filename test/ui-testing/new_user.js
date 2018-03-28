@@ -9,6 +9,8 @@ module.exports.test = function meh(uitestctx) {
 
     let pgroup = null;
     const user = namegen();
+    // user.id = 'hellox';
+    user.password = user.id;
 
     describe('Login > Create new user > Logout > Login as new user > Logout > Login > Edit new user and confirm changes', () => {
       const flogin = function buh(un, pw) {
@@ -22,7 +24,7 @@ module.exports.test = function meh(uitestctx) {
             .wait(() => {
               let rvalue = false;
               const success = document.querySelector('#clickable-logout');
-              const fail = document.querySelector('span[class^="loginError"]');
+              const fail = document.querySelector('div[class^="formMessage"]');
               if (fail) {
                 throw new Error(fail.textContent);
               } else if (success) {
@@ -69,9 +71,9 @@ module.exports.test = function meh(uitestctx) {
           .wait('#clickable-users-module')
           .click('#clickable-users-module')
           .wait('#clickable-newuser')
-          .wait(555)
+          .wait(5555)
           .click('#clickable-newuser')
-          .wait('#adduser_group > option:nth-of-type(3)')
+          .wait('#adduser_group > option:nth-of-type(4)')
           .evaluate(() => document.querySelector('#adduser_group > option:nth-of-type(3)').value)
           .then((result) => {
             pgroup = result;
@@ -81,23 +83,32 @@ module.exports.test = function meh(uitestctx) {
       });
       it(`should create a user: ${user.id}/${user.password}`, (done) => {
         nightmare
-          .insert('#adduser_username', user.id)
-          .insert('#pw', user.password)
-          .select('#useractive', 'true')
-          .insert('#adduser_firstname', user.firstname)
           .insert('#adduser_lastname', user.lastname)
-          .insert('#adduser_email', user.email)
-          .insert('#adduser_dateofbirth', '1980-05-04')
-          .select('#adduser_group', pgroup)
-          .insert('#adduser_enrollmentdate', '2017-01-01')
-          .insert('#adduser_expirationdate', '2020-01-01')
+          .wait(222)
+          .insert('#adduser_firstname', user.firstname)
+          .wait(222)
           .insert('#adduser_barcode', user.barcode)
+          .wait(222)
+          .select('#adduser_group', pgroup)
+          .wait(222)
+          .select('#useractive', 'true')
+          .wait(222)
+          .insert('#adduser_username', user.id)
+          .wait(1111)
+          .insert('#pw', user.password)
+          .wait(1111)
+          .insert('#adduser_email', user.email)
+          .wait(222)
+          .insert('#adduser_dateofbirth', '05/04/1980')
+          .wait(222)
+          .insert('#adduser_enrollmentdate', '01/01/2017')
+          .insert('#adduser_expirationdate', '01/01/2022')
           .xclick('id("form-user")//button[contains(.,"New")]')
-          .wait(555)
+          .wait('input[id^="PrimaryAddress"]')
           .click('input[id^="PrimaryAddress"]')
-          .click('button[name*="country"]')
-          .wait(55)
-          .xclick(`//li[contains(@id, '${user.address.country}')]`)
+          // .click('button[name="personal.addresses[0].country"]')
+          // .wait(`li[id*="${user.address.country}"]`)
+          // .click(`li[id*="${user.address.country}"]`)
           .insert('input[name*="addressLine1"]', user.address.address)
           .insert('input[name*="city"]', user.address.city)
           .insert('input[name*="stateRegion"]', user.address.state)
@@ -105,8 +116,9 @@ module.exports.test = function meh(uitestctx) {
           .select('select[name*="addressType"]', 'Home')
           .click('#clickable-createnewuser')
           .wait('#clickable-newuser')
-          .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 3000) // debugging
-          .then(() => { done(); })
+          .goto(config.url)
+          .wait('#clickable-logout')
+          .then(done)
           .catch(done);
       });
       flogout();
