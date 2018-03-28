@@ -2,6 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import Link from 'react-router-dom/Link';
 import PropTypes from 'prop-types';
+import Popover from '@folio/stripes-components/lib/Popover';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
@@ -11,9 +12,7 @@ import Button from '@folio/stripes-components/lib/Button';
 import Callout from '@folio/stripes-components/lib/Callout';
 import IconButton from '@folio/stripes-components/lib/IconButton';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
-import TabButton from '@folio/stripes-components/lib/TabButton';
-
-import { formatDateTime, getFullName } from './util';
+import { getFullName } from './util';
 import loanActionMap from './data/loanActionMap';
 import LoanActionsHistoryProxy from './LoanActionsHistoryProxy';
 import withRenew from './withRenew';
@@ -39,7 +38,6 @@ class LoanActionsHistory extends React.Component {
     }).isRequired,
     loan: PropTypes.object,
     user: PropTypes.object,
-    patronGroup: PropTypes.object,
     onCancel: PropTypes.func.isRequired,
     onClickUser: PropTypes.func.isRequired,
     renew: PropTypes.func,
@@ -68,7 +66,10 @@ class LoanActionsHistory extends React.Component {
     super(props);
     this.connectedProxy = props.stripes.connect(LoanActionsHistoryProxy);
     this.renew = this.renew.bind(this);
-
+    this.getContributorslist = this.getContributorslist.bind(this);
+    this.showContributors = this.showContributors.bind(this);
+    this.formatDateTime = this.props.stripes.formatDateTime;
+    this.showTitle = this.showTitle.bind(this);
     this.state = {
       loanActionCount: 0,
     };
@@ -107,6 +108,44 @@ class LoanActionsHistory extends React.Component {
     this.props.renew(this.props.loan).then(() => this.showCallout());
   }
 
+  getContributorslist(loan) {
+    this.loan = loan;
+    const contributors = _.get(this.loan, ['item', 'contributors']);
+    const contributorsList = [];
+    if (typeof contributors !== 'undefined') {
+      Object.keys(contributors).forEach(contributor => contributorsList.push(`${contributors[contributor].name}, `));
+    } else {
+      contributorsList.push('-');
+    }
+    return contributorsList;
+  }
+
+  showContributors(list, listTodisplay, contributorsLength) {
+    this.list = list;
+    return (contributorsLength >= 77) ?
+      (
+        <Popover>
+          <div data-role="target"><KeyValue label="Contributors" value={listTodisplay} /></div>
+          <div data-role="popover">
+            {
+              this.list.map(contributor => <p key={contributor}>{contributor}</p>)
+            }
+          </div>
+        </Popover>
+      ) :
+        <KeyValue label="Contributors" value={listTodisplay} />;
+  }
+
+  showTitle(loan) {
+    this.loan = loan;
+    const title = `${_.get(this.loan, ['item', 'title'], '')}`;
+    if (title) {
+      const titleTodisplay = (title.length >= 77) ? `${title.substring(0, 77)}...` : title;
+      return <KeyValue label="Title" value={<Link to={`/inventory/view/${_.get(this.loan, ['item', 'instanceId'], '')}`}>{titleTodisplay}({_.get(this.loan, ['item', 'materialType', 'name'])})</Link>} />;
+    }
+    return '-';
+  }
+
   showCallout() {
     const message = (
       <span>
@@ -118,18 +157,18 @@ class LoanActionsHistory extends React.Component {
   }
 
   render() {
-    const { onCancel, loan, user, patronGroup, resources: { loanActionsWithUser } } = this.props;
+    const { onCancel, loan, user, resources: { loanActionsWithUser } } = this.props;
     const loanActionsFormatter = {
       Action: la => loanActionMap[la.action],
-      'Action Date': la => formatDateTime(la.loanDate),
-      'Due Date': la => formatDateTime(la.dueDate),
+      'Action Date': la => this.formatDateTime(la.loanDate),
+      'Due Date': la => this.formatDateTime(la.dueDate),
       'Item Status': la => la.itemStatus,
       Operator: la => getFullName(la.user),
     };
 
     const paneHeader = (
       <Row style={{ width: '100%' }}>
-        <Col xs={1}>
+        <Col xs={3}>
           <PaneMenu>
             <IconButton
               icon="closeX"
@@ -137,20 +176,17 @@ class LoanActionsHistory extends React.Component {
               title="Close Loan Details"
               ariaLabel="Close Loan Details"
             />
+            <h3>Loan Details</h3>
           </PaneMenu>
-        </Col>
-        <Col xs={2}>
-          <PaneMenu>
-            <TabButton title="Loans" aria-label="Loans">Loan Details</TabButton>
-          </PaneMenu>
-        </Col>
-        <Col xs={9}>
-          <TabButton title="Loans" aria-label="User Name and Patron Group">
-            {`Borrower: ${getFullName(user)} (${_.upperFirst(patronGroup.group)})`}
-          </TabButton>
         </Col>
       </Row>
     );
+
+    const contributorsList = this.getContributorslist(loan);
+    const contributorsListString = contributorsList.join(' ');
+    const contributorsLength = contributorsListString.length;
+    // Number of characters to trucate the string = 77
+    const listTodisplay = (contributorsList === '-') ? '-' : (contributorsListString.length >= 77) ? `${contributorsListString.substring(0, 77)}...` : `${contributorsListString.substring(0, contributorsListString.length - 2)}`;
 
     return (
       <Paneset isRoot>
@@ -161,62 +197,63 @@ class LoanActionsHistory extends React.Component {
             </Col>
           </Row>
           <Row>
-            <Col xs={4} >
-              <KeyValue label="Title" value={_.get(loan, ['item', 'title'], '')} />
+            <Col xs={2}>
+              <KeyValue label="Borrower" value={`${getFullName(user)}`} />
+            </Col>
+            <Col xs={2} >
+              <this.connectedProxy id={loan.proxyUserId} onClick={this.props.onClickUser} />
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={2}>
+              {this.showTitle(loan)}
+            </Col>
+            <Col xs={2}>
+              {this.showContributors(contributorsList, listTodisplay, contributorsLength)}
             </Col>
             <Col xs={2} >
               <KeyValue label="Barcode" value={<Link to={`/inventory/view/${_.get(loan, ['item', 'instanceId'], '')}/${_.get(loan, ['item', 'holdingsRecordId'], '')}/${_.get(loan, ['itemId'], '')}`}>{_.get(loan, ['item', 'barcode'], '')}</Link>} />
             </Col>
             <Col xs={2} >
-              <KeyValue label="Item Status" value={_.get(loan, ['item', 'status', 'name'], '-')} />
+              <KeyValue label="Call number" value={_.get(loan, ['item', 'callNumber'], '-')} />
             </Col>
             <Col xs={2} >
               <KeyValue label="Location" value={_.get(loan, ['item', 'location', 'name'], '-')} />
             </Col>
-            <Col xs={2} >
-              <KeyValue label="Request Queue" value="TODO" />
-            </Col>
+
           </Row>
           <Row>
-            <Col xs={4} >
-              <KeyValue label="Authors" value="TODO" />
+            <Col xs={2} >
+              <KeyValue label="Item Status" value={_.get(loan, ['item', 'status', 'name'], '-')} />
             </Col>
             <Col xs={2} >
-              <KeyValue label="Call Number" value="TODO" />
+              <KeyValue label="Due Date" value={this.formatDateTime(loan.dueDate) || '-'} />
             </Col>
             <Col xs={2} >
-              <KeyValue label="Due Date" value={formatDateTime(loan.dueDate) || '-'} />
-            </Col>
-            <Col xs={2} >
-              <KeyValue label="Claimed Returned" value="TODO" />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={4} >
-              <KeyValue label="Borrower" value={getFullName(user)} />
-            </Col>
-            <Col xs={2} >
-              <KeyValue label="Loan Policy" value="TODO" />
-            </Col>
-            <Col xs={2} >
-              <KeyValue label="Loan Date" value={formatDateTime(loan.loanDate) || '-'} />
-            </Col>
-            <Col xs={2} >
-              <KeyValue label="Lost" value="TODO" />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={4} >
-              <this.connectedProxy id={loan.proxyUserId} onClick={this.props.onClickUser} />
+              <KeyValue label="Return Date" value={this.formatDateTime(loan.returnDate) || '-'} />
             </Col>
             <Col xs={2} >
               <KeyValue label="Renewal Count" value={_.get(loan, ['renewalCount'], '-')} />
             </Col>
             <Col xs={2} >
-              <KeyValue label="Return Date" value={formatDateTime(loan.returnDate) || '-'} />
+              <KeyValue label="Claim Returned" value="TODO" />
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={2} >
+              <KeyValue label="Loan Policy" value="TODO" />
             </Col>
             <Col xs={2} >
-              <KeyValue label="Fine" value="TODO" />
+              <KeyValue label="Loan Date" value={this.formatDateTime(loan.loanDate) || '-'} />
+            </Col>
+            <Col xs={2} >
+              <KeyValue label="Fee/fine" value="TODO" />
+            </Col>
+            <Col xs={2} >
+              <KeyValue label="Request Queue" value="TODO" />
+            </Col>
+            <Col xs={2} >
+              <KeyValue label="Lost" value="TODO" />
             </Col>
           </Row>
           <br />
