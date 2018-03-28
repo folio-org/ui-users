@@ -1,12 +1,11 @@
 import _ from 'lodash';
 import { hashCode } from 'hashcode';
-import { countriesByCode, countriesByName } from '../data/countries';
 import { getAddressTypesByName, getAddressTypesById } from './address_type';
 
 function toListAddress(addr, addrType) {
   if (addr.id) return { ...addr };
 
-  const country = (addr.countryId) ? countriesByCode[addr.countryId].country : '';
+  const country = (addr.countryId) ? addr.countryId : '';
   const addressType = _.get(addrType, ['addressType'], '');
   const id = hashCode().value(addr).toString();
 
@@ -26,7 +25,7 @@ function toListAddress(addr, addrType) {
 
 function toUserAddress(addr, addrType) {
   // console.log('toUserAddress for', addr, '-- countriesByName[addr.country] =', countriesByName[addr.country]);
-  const countryId = (addr.country) ? countriesByName[addr.country].alpha2 : '';
+  const countryId = (addr.country) ? addr.country : '';
   const addressTypeId = _.get(addrType, ['id'], '');
   return {
     addressLine1: addr.addressLine1,

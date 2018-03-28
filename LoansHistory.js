@@ -21,6 +21,7 @@ class LoansHistory extends React.Component {
     stripes: PropTypes.shape({
       locale: PropTypes.string.isRequired,
       connect: PropTypes.func.isRequired,
+      intl: PropTypes.object.isRequired,
     }).isRequired,
     resources: PropTypes.shape({
       loansHistory: PropTypes.shape({
@@ -53,7 +54,7 @@ class LoansHistory extends React.Component {
    * Segmented Control to swtich between open and closed loans
    */
   getSegmentedControls = () => {
-    const { openLoans } = this.props;
+    const { openLoans, stripes: { intl } } = this.props;
     const activeId = openLoans ? 'loans-show-open' : 'loans-show-closed';
     const onChange = ({ id }) => {
       if (id === 'loans-show-open') {
@@ -66,17 +67,17 @@ class LoansHistory extends React.Component {
     return (
       <div className={css.segmentedControlWrap}>
         <SegmentedControl className={css.segmentedControl} activeId={activeId} onActivate={onChange}>
-          <Button marginBottom0 id="loans-show-open" title="Open Loans" aria-label="Open Loans">Open Loans</Button>
-          <Button marginBottom0 id="loans-show-closed" title="Closed Loans" aria-label="Closed Loans">Closed Loans</Button>
+          <Button marginBottom0 id="loans-show-open" title={intl.formatMessage({ id: 'ui-users.loans.openLoans' })} aria-label={intl.formatMessage({ id: 'ui-users.loans.openLoans' })}>{intl.formatMessage({ id: 'ui-users.loans.openLoans' })}</Button>
+          <Button marginBottom0 id="loans-show-closed" title={intl.formatMessage({ id: 'ui-users.loans.closedLoans' })} aria-label={intl.formatMessage({ id: 'ui-users.loans.closedLoans' })}>{intl.formatMessage({ id: 'ui-users.loans.closedLoans' })}</Button>
         </SegmentedControl>
       </div>
     );
   }
 
   render() {
-    const { user, patronGroup, resources, openLoans } = this.props;
+    const { user, patronGroup, resources, openLoans, stripes: { intl } } = this.props;
     const loansHistory = _.get(resources, ['loansHistory', 'records']);
-    const loanStatus = openLoans ? 'Open' : 'Closed';
+    const loanStatus = openLoans ? intl.formatMessage({ id: 'ui-users.loans.open' }) : intl.formatMessage({ id: 'ui-users.loans.closed' });
     const loans = _.filter(loansHistory, loan => loanStatus === _.get(loan, ['status', 'name']));
     if (!loans) return <div />;
 
@@ -88,7 +89,7 @@ class LoansHistory extends React.Component {
           defaultWidth="100%"
           dismissible
           onClose={this.props.onCancel}
-          paneTitle={`Loans - ${getFullName(user)} (${_.upperFirst(patronGroup.group)})`}
+          paneTitle={`${intl.formatMessage({ id: 'ui-users.loans.title' })} - ${getFullName(user)} (${_.upperFirst(patronGroup.group)})`}
         >
           { this.getSegmentedControls() }
           {openLoans

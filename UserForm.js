@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import Pane from '@folio/stripes-components/lib/Pane';
@@ -26,30 +27,30 @@ function validate(values, props) {
   errors.personal = {};
 
   if (!values.personal || !values.personal.lastName) {
-    errors.personal.lastName = 'Please fill this in to continue';
+    errors.personal.lastName = <FormattedMessage id="ui-users.errors.missingRequiredField" />;
   }
 
   if (!values.username) {
-    errors.username = 'Please fill this in to continue';
+    errors.username = <FormattedMessage id="ui-users.errors.missingRequiredField" />;
   }
 
   if (!props.initialValues.id && (!values.creds || !values.creds.password)) {
-    errors.creds = { password: 'Please fill this in to continue' };
+    errors.creds = { password: <FormattedMessage id="ui-users.errors.missingRequiredField" /> };
   }
 
   if (!values.patronGroup) {
-    errors.patronGroup = 'Please select a patron group';
+    errors.patronGroup = <FormattedMessage id="ui-users.errors.missingRequiredPatronGroup" />;
   }
 
   if (!values.personal || !values.personal.preferredContactTypeId) {
-    if (errors.personal) errors.personal.preferredContactTypeId = 'Please select a preferred form of contact';
-    else errors.personal = { preferredContactTypeId: 'Please select a preferred form of contact' };
+    if (errors.personal) errors.personal.preferredContactTypeId = <FormattedMessage id="ui-users.errors.missingRequiredContactType" />;
+    else errors.personal = { preferredContactTypeId: <FormattedMessage id="ui-users.errors.missingRequiredContactType" /> };
   }
 
   if (values.personal && values.personal.addresses) {
     errors.personal.addresses = [];
     values.personal.addresses.forEach((addr) => {
-      const err = (!addr.addressType) ? { addressType: 'Address type is required' } : {};
+      const err = (!addr.addressType) ? { addressType: <FormattedMessage id="ui-users.errors.missingRequiredAddressType" /> } : {};
       errors.personal.addresses.push(err);
     });
   }
@@ -65,7 +66,7 @@ function asyncValidate(values, dispatch, props, blurredField) {
       uv.reset();
       return uv.GET({ params: { query } }).then((users) => {
         if (users.length > 0) {
-          const error = { username: 'This username has already been taken' };
+          const error = { username: <FormattedMessage id="ui-users.errors.usernameUnavailable" /> };
           reject(error);
         } else {
           resolve();
@@ -80,7 +81,8 @@ class UserForm extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
       connect: PropTypes.func,
-    }),
+      intl: PropTypes.object.isRequired,
+    }).isRequired,
     handleSubmit: PropTypes.func.isRequired,
     parentMutator: PropTypes.shape({ // eslint-disable-line react/no-unused-prop-types
       uniquenessValidator: PropTypes.shape({
@@ -124,8 +126,8 @@ class UserForm extends React.Component {
         <IconButton
           id="clickable-closenewuserdialog"
           onClick={onCancel}
-          title="close"
-          ariaLabel="Close New User Dialog"
+          title={this.props.stripes.intl.formatMessage({ id: 'ui-users.crud.closeNewUserDialog' })}
+          ariaLabel={this.props.stripes.intl.formatMessage({ id: 'ui-users.crud.closeNewUserDialog' })}
           icon="closeX"
         />
       </PaneMenu>
@@ -171,13 +173,13 @@ class UserForm extends React.Component {
   }
 
   render() {
-    const { initialValues, handleSubmit } = this.props;
+    const { initialValues, handleSubmit, stripes: { intl } } = this.props;
     const { sections } = this.state;
     const firstMenu = this.getAddFirstMenu();
-    const paneTitle = initialValues.id ? getFullName(initialValues) : 'Create user';
+    const paneTitle = initialValues.id ? getFullName(initialValues) : intl.formatMessage({ id: 'ui-users.crud.createUser' });
     const lastMenu = initialValues.id ?
-      this.getLastMenu('clickable-updateuser', 'Update user') :
-      this.getLastMenu('clickable-createnewuser', 'Create user');
+      this.getLastMenu('clickable-updateuser', intl.formatMessage({ id: 'ui-users.crud.updateUser' })) :
+      this.getLastMenu('clickable-createnewuser', intl.formatMessage({ id: 'ui-users.crud.createUser' }));
 
     return (
       // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
