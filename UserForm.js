@@ -81,6 +81,7 @@ class UserForm extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
       connect: PropTypes.func,
+      intl: PropTypes.object.isRequired,
     }).isRequired,
     handleSubmit: PropTypes.func.isRequired,
     parentMutator: PropTypes.shape({ // eslint-disable-line react/no-unused-prop-types

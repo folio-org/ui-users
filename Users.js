@@ -36,6 +36,9 @@ const filterConfig = [
 
 class Users extends React.Component {
   static propTypes = {
+    stripes: PropTypes.shape({
+      intl: PropTypes.object.isRequired,
+    }).isRequired,
     resources: PropTypes.shape({
       patronGroups: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),

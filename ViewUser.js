@@ -38,6 +38,7 @@ class ViewUser extends React.Component {
       logger: PropTypes.shape({
         log: PropTypes.func.isRequired,
       }).isRequired,
+      intl: PropTypes.object.isRequired,
     }).isRequired,
     paneWidth: PropTypes.string.isRequired,
     resources: PropTypes.shape({

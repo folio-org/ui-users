@@ -21,6 +21,7 @@ class LoansHistory extends React.Component {
     stripes: PropTypes.shape({
       locale: PropTypes.string.isRequired,
       connect: PropTypes.func.isRequired,
+      intl: PropTypes.object.isRequired,
     }).isRequired,
     resources: PropTypes.shape({
       loansHistory: PropTypes.shape({
@@ -53,7 +54,7 @@ class LoansHistory extends React.Component {
    * Segmented Control to swtich between open and closed loans
    */
   getSegmentedControls = () => {
-    const { openLoans } = this.props;
+    const { openLoans, stripes: { intl } } = this.props;
     const activeId = openLoans ? 'loans-show-open' : 'loans-show-closed';
     const onChange = ({ id }) => {
       if (id === 'loans-show-open') {
