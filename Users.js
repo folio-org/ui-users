@@ -207,8 +207,8 @@ class Users extends React.Component {
       parentMutator={this.props.mutator}
       showSingleResult={showSingleResult}
       columnMapping={{
-        status: intl.formatMessage({ id: 'ui-users.crud.active' }),
-        name: intl.formatMessage({ id: 'ui-users.crud.name' }),
+        status: intl.formatMessage({ id: 'ui-users.active' }),
+        name: intl.formatMessage({ id: 'ui-users.information.name' }),
         barcode: intl.formatMessage({ id: 'ui-users.information.barcode' }),
         patronGroup: intl.formatMessage({ id: 'ui-users.information.patronGroup' }),
         username: intl.formatMessage({ id: 'ui-users.information.username' }),

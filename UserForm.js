@@ -176,10 +176,10 @@ class UserForm extends React.Component {
     const { initialValues, handleSubmit, stripes: { intl } } = this.props;
     const { sections } = this.state;
     const firstMenu = this.getAddFirstMenu();
-    const paneTitle = initialValues.id ? getFullName(initialValues) : intl.formatMessage({ id: 'ui-user.crud.createUser' });
+    const paneTitle = initialValues.id ? getFullName(initialValues) : intl.formatMessage({ id: 'ui-users.crud.createUser' });
     const lastMenu = initialValues.id ?
-      this.getLastMenu('clickable-updateuser', intl.formatMessage({ id: 'ui-user.crud.updateUser' })) :
-      this.getLastMenu('clickable-createnewuser', intl.formatMessage({ id: 'ui-user.crud.createUser' }));
+      this.getLastMenu('clickable-updateuser', intl.formatMessage({ id: 'ui-users.crud.updateUser' })) :
+      this.getLastMenu('clickable-createnewuser', intl.formatMessage({ id: 'ui-users.crud.createUser' }));
 
     return (
       // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions

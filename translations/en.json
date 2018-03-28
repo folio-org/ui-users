@@ -347,6 +347,7 @@
   "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}",
 
   "information.userInformation": "User information",
+  "information.name": "Name",
   "information.lastName": "Last name",
   "information.firstName": "First name",
   "information.middleName": "Middle name",
@@ -371,6 +372,11 @@
   "proxy.requestForSponsor": "Proxy can request for sponsor",
   "proxy.notificationsTo": "Notifications sent to",
   "proxy.accrueTo": "Fees/fines accrue to",
+
+  "crud.closeNewUserDialog": "Close New User Dialog",
+  "crud.editUser": "Edit User",
+  "crud.updateUser": "Update User",
+  "crud.createUser": "Create User",
 
   "errors.missingRequiredField": "Please fill this in to continue",
 
