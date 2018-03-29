@@ -15,11 +15,17 @@ class PatronGroupsSettings extends React.Component {
     }).isRequired,
   };
 
+  // adding the desired-count parameter, :50, to this query is an egregious
+  // hack that willfully and knowingly abuses facets to contort them to
+  // handle a reporting situation they were simply not designed for.
+  // this may become inefficient with a large number of users; it will
+  // certainly be non-functional with a large number (> 50) of groups.
+  // FIXME details at https://issues.folio.org/projects/MODUSERS/issues/MODUSERS-57
   static manifest = Object.freeze({
     usersPerGroup: {
       type: 'okapi',
       records: 'users',
-      path: 'users?limit=0&facets=patronGroup',
+      path: 'users?limit=0&facets=patronGroup:50',
     },
   });
 
