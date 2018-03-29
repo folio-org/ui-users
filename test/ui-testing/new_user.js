@@ -83,6 +83,7 @@ module.exports.test = function meh(uitestctx) {
       });
       it(`should create a user: ${user.id}/${user.password}`, (done) => {
         nightmare
+          .wait(222)
           .insert('#adduser_lastname', user.lastname)
           .wait(222)
           .insert('#adduser_firstname', user.firstname)
@@ -94,9 +95,14 @@ module.exports.test = function meh(uitestctx) {
           .select('#useractive', 'true')
           .wait(222)
           .insert('#adduser_username', user.id)
-          .wait(1111)
-          .insert('#pw', user.password)
-          .wait(1111)
+          .wait(222)
+          .click('#toggle_pw_btn')
+          .wait('#icon-adduser_username-validation-success')
+          .wait(4444)
+          .click('#pw')
+          .wait(222)
+          .type('#pw', user.password)
+          .wait(222)
           .insert('#adduser_email', user.email)
           .wait(222)
           .insert('#adduser_dateofbirth', '05/04/1980')
@@ -114,6 +120,7 @@ module.exports.test = function meh(uitestctx) {
           .insert('input[name*="stateRegion"]', user.address.state)
           .insert('input[name*="zipCode"]', user.address.zip)
           .select('select[name*="addressType"]', 'Home')
+          .wait(4444)
           .click('#clickable-createnewuser')
           .wait('#clickable-newuser')
           .goto(config.url)
