@@ -39,13 +39,13 @@ module.exports.test = function foo(uiTestCtx) {
           .insert('#input-permission-title', displayName)
           .insert('#input-permission-description', description)
           .click('#clickable-add-permission')
-          .wait(555)
+          .wait('button[class^="itemControl"]')
           .xclick('//button[contains(.,"Check in")]')
-          .wait(555)
+          .wait('#clickable-add-permission')
           .click('#clickable-add-permission')
-          .wait(555)
+          .wait('button[class^="itemControl"]')
           .xclick('//button[contains(.,"Check out")]')
-          .wait(555)
+          .wait('#clickable-save-permission-set')
           .click('#clickable-save-permission-set')
           .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
           .then(() => { done(); })
@@ -84,9 +84,9 @@ module.exports.test = function foo(uiTestCtx) {
       });
       it('should confirm deletion', (done) => {
         nightmare
-          .wait(555)
+          .wait('a[href^="/settings/users/groups"]')
           .click('a[href^="/settings/users/groups"]')
-          .wait(222)
+          .wait('a[href="/settings/users/perms"]')
           .click('a[href="/settings/users/perms"]')
           .wait(222)
           .evaluate((euuid) => {
