@@ -326,7 +326,7 @@ class ViewUser extends React.Component {
 
     if (!user) {
       return (
-        <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle={this.props.stripes.intl.formatMessage({ id: 'ui-users.userDetails' })} lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
+        <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle={this.props.stripes.intl.formatMessage({ id: 'ui-users.information.userDetails' })} lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
           <div style={{ paddingTop: '1rem' }}><Icon icon="spinner-ellipsis" width="100px" /></div>
         </Pane>
       );
