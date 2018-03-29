@@ -8,6 +8,7 @@ class PatronGroupsSettings extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
+      intl: PropTypes.object.isRequired,
     }).isRequired,
     resources: PropTypes.shape({
       usersPerGroup: PropTypes.object,
@@ -43,11 +44,14 @@ class PatronGroupsSettings extends React.Component {
         dataKey={undefined}
         baseUrl="groups"
         records="usergroups"
-        label="Patron Groups"
-        labelSingular="Patron Group"
-        objectLabel="Users"
+        label={this.props.stripes.intl.formatMessage({ id: 'ui-users.information.patronGroups' })}
+        labelSingular={this.props.stripes.intl.formatMessage({ id: 'ui-users.information.patronGroup' })}
+        objectLabel={this.props.stripes.intl.formatMessage({ id: 'ui-users.information.patronGroup.users' })}
         visibleFields={['group', 'desc']}
-        columnMapping={{ group: 'Patron Group', desc: 'Description' }}
+        columnMapping={{
+          group: this.props.stripes.intl.formatMessage({ id: 'ui-users.information.patronGroup' }),
+          desc: this.props.stripes.intl.formatMessage({ id: 'ui-users.description' }),
+        }}
         formatter={formatter}
         nameKey="group"
         id="patrongroups"

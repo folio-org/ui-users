@@ -10,6 +10,9 @@ class ContainedPermissions extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }).isRequired,
+    stripes: PropTypes.shape({
+      intl: PropTypes.object.isRequired,
+    }),
   };
 
   static manifest = Object.freeze({
@@ -23,7 +26,7 @@ class ContainedPermissions extends React.Component {
   render() {
     return (<EditablePermissions
       {...this.props}
-      heading="Assigned permissions"
+      heading={this.props.stripes.intl.formatMessage({ id: 'ui-users.permissions.assignedPermissions' })}
       name="subPermissions"
       availablePermissions={_.get(this.props.resources, ['availablePermissions', 'records'])}
     />);

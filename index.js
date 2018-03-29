@@ -11,6 +11,7 @@ class UsersRouting extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
+      intl: PropTypes.object.isRequired,
     }).isRequired,
     location: PropTypes.object.isRequired,
     match: PropTypes.object.isRequired,
@@ -25,8 +26,8 @@ class UsersRouting extends React.Component {
   NoMatch() {
     return (
       <div>
-        <h2>Uh-oh!</h2>
-        <p>How did you get to <tt>{this.props.location.pathname}</tt>?</p>
+        <h2>{this.props.stripes.intl.formatMessage({ id: 'ui-users.errors.noMatch.oops' })}</h2>
+        <p>{this.props.stripes.intl.formatMessage({ id: 'ui-users.errors.noMatch.how' }, { location: <tt>{this.props.location.pathname}</tt> })}</p>
       </div>
     );
   }
