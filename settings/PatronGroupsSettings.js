@@ -19,7 +19,7 @@ class PatronGroupsSettings extends React.Component {
     usersPerGroup: {
       type: 'okapi',
       records: 'users',
-      path: 'users?limit=0&facets=patronGroup',
+      path: 'users?limit=0&facets=patronGroup:50',
     },
   });
 
