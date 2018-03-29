@@ -5,7 +5,7 @@ const newProxy = require('./new_proxy.js');
 
 module.exports.test = function meh(uitestctx) {
   patronGroup.test(uitestctx);
-  newUser.test(uitestctx);
+  // newUser.test(uitestctx);
   newPermissionSet.test(uitestctx);
   newProxy.test(uitestctx);
 };
