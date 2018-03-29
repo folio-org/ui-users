@@ -40,7 +40,6 @@ class LoanActionsHistory extends React.Component {
     }).isRequired,
     loan: PropTypes.object,
     user: PropTypes.object,
-    patronGroup: PropTypes.object,
     onCancel: PropTypes.func.isRequired,
     onClickUser: PropTypes.func.isRequired,
     renew: PropTypes.func,
@@ -164,7 +163,7 @@ class LoanActionsHistory extends React.Component {
   }
 
   render() {
-    const { onCancel, loan, user, patronGroup, resources: { loanActionsWithUser }, stripes: { intl } } = this.props;
+    const { onCancel, loan, user, resources: { loanActionsWithUser }, stripes: { intl } } = this.props;
     const loanActionsFormatter = {
       action: la => intl.formatMessage({ id: loanActionMap[la.action] }),
       actionDate: la => this.formatDateTime(la.loanDate),
@@ -208,7 +207,7 @@ class LoanActionsHistory extends React.Component {
               <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.details.borrower' })} value={`${getFullName(user)}`} />
             </Col>
             <Col xs={2} >
-              <this.connectedProxy id={loan.proxyUserId} onClick={this.props.onClickUser} {...this.props}/>
+              <this.connectedProxy id={loan.proxyUserId} onClick={this.props.onClickUser} {...this.props} />
             </Col>
           </Row>
           <Row>
