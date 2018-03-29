@@ -347,6 +347,7 @@
   "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}",
 
   "information.userInformation": "User information",
+  "information.userDetails": "User details",
   "information.name": "Name",
   "information.lastName": "Last name",
   "information.firstName": "First name",
