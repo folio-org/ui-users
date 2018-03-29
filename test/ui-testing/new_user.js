@@ -20,19 +20,19 @@ module.exports.test = function meh(uitestctx) {
             .insert(config.select.username, un)
             .insert(config.select.password, pw)
             .click('#clickable-login')
-            .wait(555)
-            .wait(() => {
+            .wait('#clickable-logout')
+            /* .wait(() => {
               let rvalue = false;
               const success = document.querySelector('#clickable-logout');
               const fail = document.querySelector('div[class^="formMessage"]');
               if (fail) {
-                throw new Error(fail.textContent);
+                rvalue = false;
               } else if (success) {
                 rvalue = true;
               }
               return rvalue;
             })
-            .wait(555)
+            .wait(555) */
             .then(() => { done(); })
             .catch(done);
         });
