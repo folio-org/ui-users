@@ -278,6 +278,7 @@
   "loans.columns.returnDate": "Return date",
   "loans.columns.renewals": "Renewals",
   "loans.columns.actionDate": "Action Date",
+  "loans.columns.contributors": "Contributors",
   "loans.columns.action": "Action",
   "loans.columns.operator": "Operator",
 
