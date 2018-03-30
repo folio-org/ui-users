@@ -30,6 +30,9 @@ class PermissionSets extends React.Component {
         DELETE: PropTypes.func,
       }),
     }).isRequired,
+    stripes: PropTypes.shape({
+      intl: PropTypes.object.isRequired,
+    }),
   };
 
   static manifest = Object.freeze({

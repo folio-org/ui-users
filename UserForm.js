@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import Pane from '@folio/stripes-components/lib/Pane';
@@ -9,7 +10,6 @@ import IconButton from '@folio/stripes-components/lib/IconButton';
 import stripesForm from '@folio/stripes-form';
 import { ExpandAllButton } from '@folio/stripes-components/lib/Accordion';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
-import { SubmissionError } from 'redux-form';
 
 import {
   EditUserInfo,
@@ -27,30 +27,30 @@ function validate(values, props) {
   errors.personal = {};
 
   if (!values.personal || !values.personal.lastName) {
-    errors.personal.lastName = 'Please fill this in to continue';
+    errors.personal.lastName = <FormattedMessage id="ui-users.errors.missingRequiredField" />;
   }
 
   if (!values.username) {
-    errors.username = 'Please fill this in to continue';
+    errors.username = <FormattedMessage id="ui-users.errors.missingRequiredField" />;
   }
 
   if (!props.initialValues.id && (!values.creds || !values.creds.password)) {
-    errors.creds = { password: 'Please fill this in to continue' };
+    errors.creds = { password: <FormattedMessage id="ui-users.errors.missingRequiredField" /> };
   }
 
   if (!values.patronGroup) {
-    errors.patronGroup = 'Please select a patron group';
+    errors.patronGroup = <FormattedMessage id="ui-users.errors.missingRequiredPatronGroup" />;
   }
 
   if (!values.personal || !values.personal.preferredContactTypeId) {
-    if (errors.personal) errors.personal.preferredContactTypeId = 'Please select a preferred form of contact';
-    else errors.personal = { preferredContactTypeId: 'Please select a preferred form of contact' };
+    if (errors.personal) errors.personal.preferredContactTypeId = <FormattedMessage id="ui-users.errors.missingRequiredContactType" />;
+    else errors.personal = { preferredContactTypeId: <FormattedMessage id="ui-users.errors.missingRequiredContactType" /> };
   }
 
   if (values.personal && values.personal.addresses) {
     errors.personal.addresses = [];
     values.personal.addresses.forEach((addr) => {
-      const err = (!addr.addressType) ? { addressType: 'Address type is required' } : {};
+      const err = (!addr.addressType) ? { addressType: <FormattedMessage id="ui-users.errors.missingRequiredAddressType" /> } : {};
       errors.personal.addresses.push(err);
     });
   }
@@ -64,9 +64,9 @@ function asyncValidate(values, dispatch, props, blurredField) {
       const uv = props.parentMutator.uniquenessValidator;
       const query = `(username=="${values.username}")`;
       uv.reset();
-      uv.GET({ params: { query } }).then((users) => {
+      return uv.GET({ params: { query } }).then((users) => {
         if (users.length > 0) {
-          const error = new SubmissionError({ username: 'This username has already been taken' });
+          const error = { username: <FormattedMessage id="ui-users.errors.usernameUnavailable" /> };
           reject(error);
         } else {
           resolve();
@@ -81,7 +81,8 @@ class UserForm extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
       connect: PropTypes.func,
-    }),
+      intl: PropTypes.object.isRequired,
+    }).isRequired,
     handleSubmit: PropTypes.func.isRequired,
     parentMutator: PropTypes.shape({ // eslint-disable-line react/no-unused-prop-types
       uniquenessValidator: PropTypes.shape({
@@ -110,6 +111,7 @@ class UserForm extends React.Component {
 
     this.handleExpandAll = this.handleExpandAll.bind(this);
     this.handleSectionToggle = this.handleSectionToggle.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
 
     if (props.initialValues.id) {
       this.editUserPerms = props.stripes.connect(EditUserPerms);
@@ -124,16 +126,23 @@ class UserForm extends React.Component {
         <IconButton
           id="clickable-closenewuserdialog"
           onClick={onCancel}
-          title="close"
-          ariaLabel="Close New User Dialog"
+          title={this.props.stripes.intl.formatMessage({ id: 'ui-users.crud.closeNewUserDialog' })}
+          ariaLabel={this.props.stripes.intl.formatMessage({ id: 'ui-users.crud.closeNewUserDialog' })}
           icon="closeX"
         />
       </PaneMenu>
     );
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  handleKeyDown(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+    }
+  }
+
   getLastMenu(id, label) {
-    const { pristine, submitting, handleSubmit } = this.props;
+    const { pristine, submitting } = this.props;
 
     return (
       <PaneMenu>
@@ -142,7 +151,6 @@ class UserForm extends React.Component {
           type="submit"
           title={label}
           disabled={pristine || submitting}
-          onClick={handleSubmit}
           buttonStyle="primary paneHeaderNewButton"
           marginBottom0
         >
@@ -164,18 +172,18 @@ class UserForm extends React.Component {
     });
   }
 
-
   render() {
-    const { initialValues } = this.props;
+    const { initialValues, handleSubmit, stripes: { intl } } = this.props;
     const { sections } = this.state;
     const firstMenu = this.getAddFirstMenu();
-    const paneTitle = initialValues.id ? getFullName(initialValues) : 'Create user';
+    const paneTitle = initialValues.id ? getFullName(initialValues) : intl.formatMessage({ id: 'ui-users.crud.createUser' });
     const lastMenu = initialValues.id ?
-      this.getLastMenu('clickable-updateuser', 'Update user') :
-      this.getLastMenu('clickable-createnewuser', 'Create user');
+      this.getLastMenu('clickable-updateuser', intl.formatMessage({ id: 'ui-users.crud.updateUser' })) :
+      this.getLastMenu('clickable-createnewuser', intl.formatMessage({ id: 'ui-users.crud.createUser' }));
 
     return (
-      <form className={css.UserFormRoot} id="form-user">
+      // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
+      <form className={css.UserFormRoot} id="form-user" onSubmit={handleSubmit} onKeyDown={this.handleKeyDown}>
         <Paneset isRoot>
           <Pane defaultWidth="100%" firstMenu={firstMenu} lastMenu={lastMenu} paneTitle={paneTitle} appIcon={{ app: 'users' }}>
             <Row end="xs">
@@ -206,5 +214,4 @@ export default stripesForm({
   asyncBlurFields: ['username'],
   navigationCheck: true,
   enableReinitialize: true,
-  scrollToError: true,
 })(UserForm);

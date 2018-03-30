@@ -38,6 +38,7 @@ class ViewUser extends React.Component {
       logger: PropTypes.shape({
         log: PropTypes.func.isRequired,
       }).isRequired,
+      intl: PropTypes.object.isRequired,
     }).isRequired,
     paneWidth: PropTypes.string.isRequired,
     resources: PropTypes.shape({
@@ -337,7 +338,7 @@ class ViewUser extends React.Component {
             style={{ visibility: !user ? 'hidden' : 'visible' }}
             onClick={this.props.onEdit}
             href={this.props.editLink}
-            title="Edit User"
+            title={this.props.stripes.intl.formatMessage({ id: 'ui-users.crud.editUser' })}
           />
         </IfPermission>
       </PaneMenu>
@@ -345,7 +346,7 @@ class ViewUser extends React.Component {
 
     if (!user) {
       return (
-        <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
+        <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle={this.props.stripes.intl.formatMessage({ id: 'ui-users.information.userDetails' })} lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
           <div style={{ paddingTop: '1rem' }}><Icon icon="spinner-ellipsis" width="100px" /></div>
         </Pane>
       );

@@ -1,5 +1,6 @@
 import { cloneDeep } from 'lodash';
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import Pane from '@folio/stripes-components/lib/Pane';
 import Textfield from '@folio/stripes-components/lib/TextField';
@@ -8,7 +9,8 @@ import Button from '@folio/stripes-components/lib/Button';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import IfPermission from '@folio/stripes-components/lib/IfPermission';
-import Icon from '@folio/stripes-components/lib/Icon';
+import IconButton from '@folio/stripes-components/lib/IconButton';
+
 // eslint-disable-next-line import/no-unresolved
 import ConfirmationModal from '@folio/stripes-components/lib/structures/ConfirmationModal';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
@@ -25,6 +27,7 @@ class PermissionSetForm extends React.Component {
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func.isRequired,
       connect: PropTypes.func.isRequired,
+      intl: PropTypes.object.isRequired,
     }).isRequired,
     initialValues: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,
@@ -81,7 +84,7 @@ class PermissionSetForm extends React.Component {
   addFirstMenu() {
     return (
       <PaneMenu>
-        <button id="clickable-close-permission-set" onClick={this.props.onCancel} title="close" aria-label="Close Permission Set Dialog">
+        <button id="clickable-close-permission-set" onClick={this.props.onCancel} title="close" aria-label={this.props.stripes.intl.formatMessage({ id: 'ui-users.permissions.closePermissionSetDialog' })}>
           <span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span>
         </button>
       </PaneMenu>
@@ -89,29 +92,31 @@ class PermissionSetForm extends React.Component {
   }
 
   saveLastMenu() {
-    const { pristine, submitting, initialValues } = this.props;
+    const { pristine, submitting, initialValues, stripes: { intl } } = this.props;
     const { confirmDelete } = this.state;
+    const edit = initialValues && initialValues.id;
+    const saveLabel = edit ? intl.formatMessage({ id: 'ui-users.saveAndClose' }) : intl.formatMessage({ id: 'ui-users.createPermissionSet' });
 
     return (
       <PaneMenu>
-        {initialValues && initialValues.id &&
+        {edit &&
           <IfPermission perm="perms.permissions.item.delete">
             <Button
               id="clickable-delete-set"
-              title="Delete"
+              title={intl.formatMessage({ id: 'ui-users.delete' })}
               buttonStyle="warning"
               onClick={this.beginDelete}
               disabled={confirmDelete}
-            >Delete
+            >{intl.formatMessage({ id: 'ui-users.delete' })}
             </Button>
           </IfPermission>
         }
         <Button
           id="clickable-save-permission-set"
           type="submit"
-          title="Save & close"
+          title={intl.formatMessage({ id: 'ui-users.saveAndClose' })}
           disabled={(pristine || submitting)}
-        >Save & close
+        >{saveLabel}
         </Button>
       </PaneMenu>
     );
@@ -134,16 +139,15 @@ class PermissionSetForm extends React.Component {
   }
 
   renderPaneTitle() {
-    const { initialValues } = this.props;
+    const { initialValues, stripes: { intl } } = this.props;
     const selectedSet = initialValues || {};
-    const label = selectedSet.id ? `Edit: ${selectedSet.displayName}` : 'New permission set';
+    const label = selectedSet.id ? `${intl.formatMessage({ id: 'ui-users.edit' })}: ${selectedSet.displayName}` : intl.formatMessage({ id: 'ui-users.permissions.newPermissionSet' });
     return (
       <div className={css.iconRoot}>
-        <Icon
+        <IconButton
           icon="edit"
-          title="Edit Permission"
+          title={intl.formatMessage({ id: 'ui-users.permissions.editPermission' })}
           size="medium"
-          iconRootClass={css.editIcon}
         />
         <div className={css.iconLabel}>{label}</div>
       </div>
@@ -151,10 +155,13 @@ class PermissionSetForm extends React.Component {
   }
 
   render() {
-    const { stripes, handleSubmit, initialValues } = this.props;
+    const { stripes, handleSubmit, initialValues, stripes: { intl } } = this.props;
     const selectedSet = initialValues || {};
     const { confirmDelete, sections } = this.state;
     const disabled = !stripes.hasPerm('perms.permissions.item.put');
+
+    const selectedName = selectedSet.displayName || intl.formatMessage({ id: 'ui-users.permissions.untitledPermissionSet' });
+    const confirmationMessage = <FormattedMessage id="ui-users.permissions.deletePermissionSetMessage" values={{ name: <strong>{selectedName}</strong> }} />;
 
     return (
       <form id="form-permission-set" onSubmit={handleSubmit(this.saveSet)}>
@@ -169,24 +176,24 @@ class PermissionSetForm extends React.Component {
               open={sections.generalSection}
               id="generalSection"
               onToggle={this.handleSectionToggle}
-              label="General Information"
+              label={intl.formatMessage({ id: 'ui-users.permissions.generalInformation' })}
             >
               <Row>
                 <Col xs={8}>
                   <section>
-                    <Field label="Permission set name *" name="displayName" id="input-permission-title" component={Textfield} autoFocus required fullWidth rounded disabled={disabled} />
-                    <Field label="Description" name="description" id="input-permission-description" component={TextArea} fullWidth rounded disabled={disabled} />
+                    <Field label={`${intl.formatMessage({ id: 'ui-users.permissions.permissionSetName' })} *`} name="displayName" id="input-permission-title" component={Textfield} autoFocus required fullWidth rounded disabled={disabled} />
+                    <Field label={intl.formatMessage({ id: 'ui-users.description' })} name="description" id="input-permission-description" component={TextArea} fullWidth rounded disabled={disabled} />
                   </section>
                 </Col>
               </Row>
             </Accordion>
             <ConfirmationModal
               open={confirmDelete}
-              heading="Delete Permission Set?"
-              message={(<span><strong>{selectedSet.displayName || 'Untitled Permission Set'}</strong> will be <strong>removed</strong> from permission sets.</span>)}
+              heading={intl.formatMessage({ id: 'ui-users.permissions.deletePermissionSet' })}
+              message={confirmationMessage}
               onConfirm={() => { this.confirmDeleteSet(true); }}
               onCancel={() => { this.confirmDeleteSet(false); }}
-              confirmLabel="Delete"
+              confirmLabel={intl.formatMessage({ id: 'ui-users.delete' })}
             />
 
             <this.containedPermissions

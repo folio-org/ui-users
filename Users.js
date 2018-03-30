@@ -34,12 +34,11 @@ const filterConfig = [
   },
 ];
 
-const columnMapping = {
-  Status: 'active',
-};
-
 class Users extends React.Component {
   static propTypes = {
+    stripes: PropTypes.shape({
+      intl: PropTypes.object.isRequired,
+    }).isRequired,
     resources: PropTypes.shape({
       patronGroups: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
@@ -51,6 +50,9 @@ class Users extends React.Component {
     mutator: PropTypes.shape({
       creds: PropTypes.shape({
         POST: PropTypes.func.isRequired,
+      }),
+      initializedFilterConfig: PropTypes.shape({
+        replace: PropTypes.func.isRequired,
       }),
       perms: PropTypes.shape({
         POST: PropTypes.func.isRequired,
@@ -73,6 +75,7 @@ class Users extends React.Component {
   }
 
   static manifest = Object.freeze({
+    initializedFilterConfig: { initialValue: false },
     query: { initialValue: {} },
     resultCount: { initialValue: INITIAL_RESULT_COUNT },
     records: {
@@ -87,12 +90,12 @@ class Users extends React.Component {
             'username=*',
             '(username="%{query.query}*" or personal.firstName="%{query.query}*" or personal.lastName="%{query.query}*" or personal.email="%{query.query}*" or barcode="%{query.query}*" or id="%{query.query}*" or externalSystemId="%{query.query}*")',
             {
-              Active: 'active',
-              Name: 'personal.lastName personal.firstName',
+              'Active': 'active',
+              'Name': 'personal.lastName personal.firstName',
               'Patron Group': 'patronGroup.group',
-              Username: 'username',
-              Barcode: 'barcode',
-              Email: 'personal.email',
+              'Username': 'username',
+              'Barcode': 'barcode',
+              'Email': 'personal.email',
             },
             filterConfig,
             2,
@@ -134,7 +137,11 @@ class Users extends React.Component {
     const pg = (this.props.resources.patronGroups || {}).records || [];
     if (pg && pg.length) {
       const pgFilterConfig = filterConfig.find(group => group.name === 'pg');
+      const oldValuesLength = pgFilterConfig.values.length;
       pgFilterConfig.values = pg.map(rec => ({ name: rec.group, cql: rec.id }));
+      if (oldValuesLength === 0) {
+        this.props.mutator.initializedFilterConfig.replace(true); // triggers refresh of users
+      }
     }
   }
 
@@ -162,20 +169,19 @@ class Users extends React.Component {
   }
 
   render() {
-    const props = this.props;
-    const { onSelectRow, disableRecordCreation, onComponentWillUnmount, showSingleResult, browseOnly } = this.props;
-    const patronGroups = (props.resources.patronGroups || {}).records || [];
+    const { onSelectRow, disableRecordCreation, onComponentWillUnmount, showSingleResult, browseOnly, stripes: { intl } } = this.props;
+    const patronGroups = (this.props.resources.patronGroups || {}).records || [];
 
     const resultsFormatter = {
-      Status: user => (user.active ? 'Active' : 'Inactive'),
-      Name: user => getFullName(user),
-      Barcode: user => user.barcode,
-      'Patron Group': (user) => {
+      status: user => (user.active ? intl.formatMessage({ id: 'ui-users.active' }) : intl.formatMessage({ id: 'ui-users.inactive' })),
+      name: user => getFullName(user),
+      barcode: user => user.barcode,
+      patronGroup: (user) => {
         const pg = patronGroups.filter(g => g.id === user.patronGroup)[0];
         return pg ? pg.group : '?';
       },
-      Username: user => user.username,
-      Email: user => _.get(user, ['personal', 'email']),
+      username: user => user.username,
+      email: user => _.get(user, ['personal', 'email']),
     };
 
     return (<SearchAndSort
@@ -187,7 +193,7 @@ class Users extends React.Component {
       viewRecordComponent={ViewUser}
       editRecordComponent={UserForm}
       newRecordInitialValues={{ active: true, personal: { preferredContactTypeId: '002' } }}
-      visibleColumns={this.props.visibleColumns ? this.props.visibleColumns : ['Status', 'Name', 'Barcode', 'Patron Group', 'Username', 'Email']}
+      visibleColumns={this.props.visibleColumns ? this.props.visibleColumns : ['status', 'name', 'barcode', 'patronGroup', 'username', 'email']}
       resultsFormatter={resultsFormatter}
       onSelectRow={onSelectRow}
       onCreate={this.create}
@@ -197,10 +203,17 @@ class Users extends React.Component {
       viewRecordPerms="users.item.get"
       newRecordPerms="users.item.post,login.item.post,perms.users.item.post"
       disableRecordCreation={disableRecordCreation}
-      parentResources={props.resources}
-      parentMutator={props.mutator}
+      parentResources={this.props.resources}
+      parentMutator={this.props.mutator}
       showSingleResult={showSingleResult}
-      columnMapping={columnMapping}
+      columnMapping={{
+        status: intl.formatMessage({ id: 'ui-users.active' }),
+        name: intl.formatMessage({ id: 'ui-users.information.name' }),
+        barcode: intl.formatMessage({ id: 'ui-users.information.barcode' }),
+        patronGroup: intl.formatMessage({ id: 'ui-users.information.patronGroup' }),
+        username: intl.formatMessage({ id: 'ui-users.information.username' }),
+        email: intl.formatMessage({ id: 'ui-users.contact.email' }),
+      }}
       browseOnly={browseOnly}
     />);
   }
