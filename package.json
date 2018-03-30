@@ -214,7 +214,7 @@
     "@folio/eslint-config-stripes": "^1.1.0"
   },
   "dependencies": {
-    "@folio/stripes-components": "^2.0.7",
+    "@folio/stripes-components": "^2.0.8",
     "@folio/stripes-form": "^0.8.2",
     "@folio/stripes-smart-components": "^1.4.7",
     "classnames": "^2.2.5",
