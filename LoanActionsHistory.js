@@ -39,6 +39,7 @@ class LoanActionsHistory extends React.Component {
       }),
     }).isRequired,
     loan: PropTypes.object,
+    loanid: PropTypes.string,
     user: PropTypes.object,
     onCancel: PropTypes.func.isRequired,
     onClickUser: PropTypes.func.isRequired,
@@ -59,7 +60,7 @@ class LoanActionsHistory extends React.Component {
       records: 'loans',
       resourceShouldRefresh: true,
       GET: {
-        path: 'loan-storage/loan-history?query=(id==!{loan.id})',
+        path: 'loan-storage/loan-history?query=(id==!{loanid})',
       },
     },
   });
