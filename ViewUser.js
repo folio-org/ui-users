@@ -163,7 +163,6 @@ class ViewUser extends React.Component {
     this.onAddressesUpdate = this.onAddressesUpdate.bind(this);
     this.handleSectionToggle = this.handleSectionToggle.bind(this);
     this.handleExpandAll = this.handleExpandAll.bind(this);
-
   }
 
   componentWillReceiveProps(nextProps) {
@@ -172,8 +171,8 @@ class ViewUser extends React.Component {
     const query = this.props.location.search ? queryString.parse(this.props.location.search) : {};
     if (query.loan) {
       const loansHistory = (nextProps.resources.loansHistory || {}).records || [];
-      if (loansHistory.length ) {
-        const selectedLoan = _.find(loansHistory, { id: query.loan });
+      if (loansHistory.length) {
+        const selectedLoan = find(loansHistory, { id: query.loan });
         if (selectedLoan) {
           this.setState({ selectedLoan });
         }
