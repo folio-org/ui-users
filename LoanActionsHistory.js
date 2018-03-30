@@ -169,7 +169,7 @@ class LoanActionsHistory extends React.Component {
       actionDate: la => this.formatDateTime(la.loanDate),
       dueDate: la => this.formatDateTime(la.dueDate),
       itemStatus: la => la.itemStatus,
-      operator: la => getFullName(la.user),
+      operator: la => <Link to={`/users/view/${la.user.id}`}>{getFullName(la.user)}</Link>,
     };
 
     const paneHeader = (
