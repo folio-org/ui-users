@@ -10,20 +10,23 @@ class ContainedPermissions extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }).isRequired,
+    stripes: PropTypes.shape({
+      intl: PropTypes.object.isRequired,
+    }),
   };
 
   static manifest = Object.freeze({
     availablePermissions: {
       type: 'okapi',
       records: 'permissions',
-      path: 'perms/permissions?length=1000&query=(mutable=false)',
+      path: 'perms/permissions?length=1000&query=(mutable==false)',
     },
   });
 
   render() {
     return (<EditablePermissions
       {...this.props}
-      heading="Contains"
+      heading={this.props.stripes.intl.formatMessage({ id: 'ui-users.permissions.assignedPermissions' })}
       name="subPermissions"
       availablePermissions={_.get(this.props.resources, ['availablePermissions', 'records'])}
     />);

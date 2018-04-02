@@ -1,7 +1,9 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { filters2cql } from '@folio/stripes-components/lib/FilterGroups';
+
+import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
+
 import SearchAndSort from '@folio/stripes-smart-components/lib/SearchAndSort';
 
 import uuid from 'uuid';
@@ -34,6 +36,9 @@ const filterConfig = [
 
 class Users extends React.Component {
   static propTypes = {
+    stripes: PropTypes.shape({
+      intl: PropTypes.object.isRequired,
+    }).isRequired,
     resources: PropTypes.shape({
       patronGroups: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
@@ -46,6 +51,9 @@ class Users extends React.Component {
       creds: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }),
+      initializedFilterConfig: PropTypes.shape({
+        replace: PropTypes.func.isRequired,
+      }),
       perms: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }),
@@ -57,21 +65,18 @@ class Users extends React.Component {
     onComponentWillUnmount: PropTypes.func,
     visibleColumns: PropTypes.arrayOf(PropTypes.string),
     disableRecordCreation: PropTypes.bool,
-    showSingleResult: PropTypes.bool,
+    showSingleResult: PropTypes.bool, // eslint-disable-line react/no-unused-prop-types
+    browseOnly: PropTypes.bool,
   };
 
   static defaultProps = {
     showSingleResult: true,
+    browseOnly: false,
   }
 
   static manifest = Object.freeze({
-    query: {
-      initialValue: {
-        query: '',
-        filters: 'active.Active',
-        sort: 'Name',
-      },
-    },
+    initializedFilterConfig: { initialValue: false },
+    query: { initialValue: {} },
     resultCount: { initialValue: INITIAL_RESULT_COUNT },
     records: {
       type: 'okapi',
@@ -81,56 +86,20 @@ class Users extends React.Component {
       path: 'users',
       GET: {
         params: {
-          query: (...args) => {
-            /*
-              This code is not DRY as it is copied from makeQueryFunction in stripes-components.
-              This is necessary, as makeQueryFunction only referneces query paramaters as a data source.
-              STRIPES-480 is intended to correct this and allow this query function to be replace with a call
-              to makeQueryFunction.
-              https://issues.folio.org/browse/STRIPES-480
-            */
-            const resourceData = args[2];
-            const sortMap = {
-              Active: 'active',
-              Name: 'personal.lastName personal.firstName',
+          query: makeQueryFunction(
+            'username=*',
+            '(username="%{query.query}*" or personal.firstName="%{query.query}*" or personal.lastName="%{query.query}*" or personal.email="%{query.query}*" or barcode="%{query.query}*" or id="%{query.query}*" or externalSystemId="%{query.query}*")',
+            {
+              'Active': 'active',
+              'Name': 'personal.lastName personal.firstName',
               'Patron Group': 'patronGroup.group',
-              Username: 'username',
-              Barcode: 'barcode',
-              Email: 'personal.email',
-            };
-
-            let cql = `(username="${resourceData.query.query}*" or personal.firstName="${resourceData.query.query}*" or personal.lastName="${resourceData.query.query}*" or personal.email="${resourceData.query.query}*" or barcode="${resourceData.query.query}*" or id="${resourceData.query.query}*" or externalSystemId="${resourceData.query.query}*")`;
-
-            const filterCql = filters2cql(filterConfig, resourceData.query.filters);
-            if (filterCql) {
-              if (cql) {
-                cql = `(${cql}) and ${filterCql}`;
-              } else {
-                cql = filterCql;
-              }
-            }
-
-            const { sort } = resourceData.query;
-            if (sort) {
-              const sortIndexes = sort.split(',').map((sort1) => {
-                let reverse = false;
-                if (sort1.startsWith('-')) {
-                  // eslint-disable-next-line no-param-reassign
-                  sort1 = sort1.substr(1);
-                  reverse = true;
-                }
-                let sortIndex = sortMap[sort1] || sort1;
-                if (reverse) {
-                  sortIndex = `${sortIndex.replace(' ', '/sort.descending ')}/sort.descending`;
-                }
-                return sortIndex;
-              });
-
-              cql += ` sortby ${sortIndexes.join(' ')}`;
-            }
-
-            return cql;
-          },
+              'Username': 'username',
+              'Barcode': 'barcode',
+              'Email': 'personal.email',
+            },
+            filterConfig,
+            2,
+          ),
         },
         staticFallback: { params: {} },
       },
@@ -168,7 +137,11 @@ class Users extends React.Component {
     const pg = (this.props.resources.patronGroups || {}).records || [];
     if (pg && pg.length) {
       const pgFilterConfig = filterConfig.find(group => group.name === 'pg');
+      const oldValuesLength = pgFilterConfig.values.length;
       pgFilterConfig.values = pg.map(rec => ({ name: rec.group, cql: rec.id }));
+      if (oldValuesLength === 0) {
+        this.props.mutator.initializedFilterConfig.replace(true); // triggers refresh of users
+      }
     }
   }
 
@@ -196,38 +169,31 @@ class Users extends React.Component {
   }
 
   render() {
-    const props = this.props;
-    const { onSelectRow, disableRecordCreation, onComponentWillUnmount } = this.props;
-    const patronGroups = (props.resources.patronGroups || {}).records || [];
-    const initialPath = (_.get(packageInfo, ['stripes', 'home']) ||
-                         _.get(packageInfo, ['stripes', 'route']));
+    const { onSelectRow, disableRecordCreation, onComponentWillUnmount, showSingleResult, browseOnly, stripes: { intl } } = this.props;
+    const patronGroups = (this.props.resources.patronGroups || {}).records || [];
 
     const resultsFormatter = {
-      Status: user => (user.active ? 'Active' : 'Inactive'),
-      Name: user => getFullName(user),
-      Barcode: user => user.barcode,
-      'Patron Group': (user) => {
+      status: user => (user.active ? intl.formatMessage({ id: 'ui-users.active' }) : intl.formatMessage({ id: 'ui-users.inactive' })),
+      name: user => getFullName(user),
+      barcode: user => user.barcode,
+      patronGroup: (user) => {
         const pg = patronGroups.filter(g => g.id === user.patronGroup)[0];
         return pg ? pg.group : '?';
       },
-      Username: user => user.username,
-      Email: user => _.get(user, ['personal', 'email']),
+      username: user => user.username,
+      email: user => _.get(user, ['personal', 'email']),
     };
 
     return (<SearchAndSort
-      moduleName={packageInfo.name.replace(/.*\//, '')}
-      moduleTitle={packageInfo.stripes.displayName}
+      packageInfo={packageInfo}
       objectName="user"
-      baseRoute={packageInfo.stripes.route}
-      initialPath={initialPath}
       filterConfig={filterConfig}
-      initialFilters={this.constructor.manifest.query.initialValue.filters}
       initialResultCount={INITIAL_RESULT_COUNT}
       resultCountIncrement={RESULT_COUNT_INCREMENT}
       viewRecordComponent={ViewUser}
       editRecordComponent={UserForm}
       newRecordInitialValues={{ active: true, personal: { preferredContactTypeId: '002' } }}
-      visibleColumns={this.props.visibleColumns ? this.props.visibleColumns : ['Status', 'Name', 'Barcode', 'Patron Group', 'Username', 'Email']}
+      visibleColumns={this.props.visibleColumns ? this.props.visibleColumns : ['status', 'name', 'barcode', 'patronGroup', 'username', 'email']}
       resultsFormatter={resultsFormatter}
       onSelectRow={onSelectRow}
       onCreate={this.create}
@@ -237,9 +203,18 @@ class Users extends React.Component {
       viewRecordPerms="users.item.get"
       newRecordPerms="users.item.post,login.item.post,perms.users.item.post"
       disableRecordCreation={disableRecordCreation}
-      parentResources={props.resources}
-      parentMutator={props.mutator}
-      showSingleResult={props.showSingleResult}
+      parentResources={this.props.resources}
+      parentMutator={this.props.mutator}
+      showSingleResult={showSingleResult}
+      columnMapping={{
+        status: intl.formatMessage({ id: 'ui-users.active' }),
+        name: intl.formatMessage({ id: 'ui-users.information.name' }),
+        barcode: intl.formatMessage({ id: 'ui-users.information.barcode' }),
+        patronGroup: intl.formatMessage({ id: 'ui-users.information.patronGroup' }),
+        username: intl.formatMessage({ id: 'ui-users.information.username' }),
+        email: intl.formatMessage({ id: 'ui-users.contact.email' }),
+      }}
+      browseOnly={browseOnly}
     />);
   }
 }

@@ -6,6 +6,7 @@ class AddressTypesSettings extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
+      intl: PropTypes.object.isRequired,
     }).isRequired,
   };
 
@@ -20,10 +21,14 @@ class AddressTypesSettings extends React.Component {
         {...this.props}
         baseUrl="addresstypes"
         records="addressTypes"
-        label="Address Types"
+        label={this.props.stripes.intl.formatMessage({ id: 'ui-users.contact.addressTypes' })}
+        labelSingular={this.props.stripes.intl.formatMessage({ id: 'ui-users.contact.addressType' })}
+        objectLabel={this.props.stripes.intl.formatMessage({ id: 'ui-users.contact.addresses' })}
         visibleFields={['addressType', 'desc']}
-        columnMapping={{ addressType: 'Address Type', desc: 'Description' }}
-        itemTemplate={{ addressType: 'string', id: 'string', desc: 'string' }}
+        columnMapping={{
+          addressType: this.props.stripes.intl.formatMessage({ id: 'ui-users.contact.addressType' }),
+          desc: this.props.stripes.intl.formatMessage({ id: 'ui-users.description' }),
+        }}
         nameKey="addressType"
         id="addresstypes"
       />

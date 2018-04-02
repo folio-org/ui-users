@@ -11,6 +11,7 @@ class ProfilePictureSettings extends React.Component {
     label: PropTypes.string,
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
+      intl: PropTypes.object.isRequired,
     }).isRequired,
   };
 
@@ -39,7 +40,7 @@ class ProfilePictureSettings extends React.Component {
               component={Checkbox}
               id="profile_pictures"
               name="profile_pictures"
-              label="Display profile pictures"
+              label={this.props.stripes.intl.formatMessage({ id: 'ui-users.information.profile.label' })}
             />
           </Col>
         </Row>

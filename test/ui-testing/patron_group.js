@@ -1,15 +1,15 @@
+/* eslint-disable no-console */
 /* global it describe Nightmare */
 module.exports.test = function foo(uiTestCtx) {
   describe('Module test: users:patron_group', function meh() {
     const { config, helpers: { openApp }, meta: { testVersion } } = uiTestCtx;
-
     const nightmare = new Nightmare(config.nightmare);
 
     this.timeout(Number(config.test_timeout));
     let userid = null;
     let communityid = null;
     let staffid = null;
-    const wait = 333;
+    const wait = 1111;
 
     describe('Login > Add new patron group > Assign to user > Try to delete patron group > Unassign from user > Try to delete again > Logout\n', () => {
       const gid = `alumni_${Math.floor(Math.random() * 10000)}`;
@@ -70,9 +70,11 @@ module.exports.test = function foo(uiTestCtx) {
           .then(() => { done(); })
           .catch(done);
       });
-      it('should find a user to edit', (done) => {
+      it('should find an active user to edit', (done) => {
         nightmare
           .click('#clickable-users-module')
+          .wait(1000)
+          .click('#clickable-filter-active-Active')
           .wait('#list-users div[role="listitem"]:nth-of-type(11) > a > div:nth-of-type(5)')
           .evaluate(() => document.querySelector('#list-users div[role="listitem"]:nth-of-type(11) > a > div:nth-of-type(5)').title)
           .then((result) => {
@@ -115,34 +117,6 @@ module.exports.test = function foo(uiTestCtx) {
           })
           .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
           .then(() => { done(); })
-          .catch(done);
-      });
-      it(`should not find a "Delete" button for "${gid}" group`, (done) => {
-        nightmare
-          .wait(1200)
-          .click('#clickable-settings')
-          .wait(wait)
-          .click('a[href="/settings/users"]')
-          .wait('a[href="/settings/users/groups"]')
-          .click('a[href="/settings/users/groups"]')
-          .wait((pgid) => {
-            const dnode = document.evaluate(`//div[.="${pgid}"]`, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
-            if (dnode.singleNodeValue) {
-              return true;
-            }
-            return false;
-          }, gid)
-          .wait(222)
-          .evaluate((dp) => {
-            const cnode = document.querySelector(dp);
-            if (cnode !== null) {
-              throw new Error('Delete button found when patron group is in use!');
-            }
-          }, deletePath)
-          .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
-          .then(() => {
-            done();
-          })
           .catch(done);
       });
       it('should find ID for "Staff" group', (done) => {
@@ -199,6 +173,8 @@ module.exports.test = function foo(uiTestCtx) {
           }, deletePath)
           .click(deletePath)
           .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
+          .click('#clickable-deletepatrongroup-confirmation-confirm')
+          .wait(wait)
           .then(() => { done(); })
           .catch(done);
       });

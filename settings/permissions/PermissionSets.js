@@ -5,6 +5,16 @@ import EntryManager from '@folio/stripes-smart-components/lib/EntryManager';
 import PermissionSetDetails from './PermissionSetDetails';
 import PermissionSetForm from './PermissionSetForm';
 
+function validate(values) {
+  const errors = {};
+
+  if (!values.displayName) {
+    errors.displayName = 'Please fill this in to continue';
+  }
+
+  return errors;
+}
+
 class PermissionSets extends React.Component {
   static propTypes = {
     label: PropTypes.string.isRequired,
@@ -20,6 +30,9 @@ class PermissionSets extends React.Component {
         DELETE: PropTypes.func,
       }),
     }).isRequired,
+    stripes: PropTypes.shape({
+      intl: PropTypes.object.isRequired,
+    }),
   };
 
   static manifest = Object.freeze({
@@ -36,7 +49,7 @@ class PermissionSets extends React.Component {
         path: 'perms/permissions',
       },
       GET: {
-        path: 'perms/permissions?length=1000&query=(mutable=true)&expandSubs=true',
+        path: 'perms/permissions?length=1000&query=(mutable==true)&expandSubs=true',
       },
       path: 'perms/permissions',
     },
@@ -52,6 +65,7 @@ class PermissionSets extends React.Component {
         paneTitle={this.props.label}
         entryLabel="permission set"
         entryFormComponent={PermissionSetForm}
+        validate={validate}
         nameKey="displayName"
         permissions={{
           put: 'perms.permissions.item.post',

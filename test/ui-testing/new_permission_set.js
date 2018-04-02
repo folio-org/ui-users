@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* global it describe Nightmare before after */
 module.exports.test = function foo(uiTestCtx) {
   describe('Module test: users:new_permission_set', function bar() {
@@ -38,13 +39,13 @@ module.exports.test = function foo(uiTestCtx) {
           .insert('#input-permission-title', displayName)
           .insert('#input-permission-description', description)
           .click('#clickable-add-permission')
-          .wait(555)
+          .wait('button[class^="itemControl"]')
           .xclick('//button[contains(.,"Check in")]')
-          .wait(555)
+          .wait('#clickable-add-permission')
           .click('#clickable-add-permission')
-          .wait(555)
+          .wait('button[class^="itemControl"]')
           .xclick('//button[contains(.,"Check out")]')
-          .wait(555)
+          .wait('#clickable-save-permission-set')
           .click('#clickable-save-permission-set')
           .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
           .then(() => { done(); })
@@ -69,23 +70,23 @@ module.exports.test = function foo(uiTestCtx) {
           .click('#clickable-edit-item')
           .wait('#clickable-delete-set')
           .click('#clickable-delete-set')
-          .wait(333)
-          .click('div[role="dialog"] button:nth-of-type(2)')
+          .wait('#clickable-deletepermissionset-confirmation-confirm')
+          .click('#clickable-deletepermissionset-confirmation-confirm')
           .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
           .url()
           .then((result) => {
             done();
             uuid = result;
-            uuid = uuid.replace(/^.+\//, '');
+            uuid = uuid.replace(/^.+\/([^?]+).*/, '$1');
             console.log(`          ID of deleted permission set: ${uuid}`);
           })
           .catch(done);
       });
       it('should confirm deletion', (done) => {
         nightmare
-          .wait(222)
+          .wait('a[href^="/settings/users/groups"]')
           .click('a[href^="/settings/users/groups"]')
-          .wait(222)
+          .wait('a[href="/settings/users/perms"]')
           .click('a[href="/settings/users/perms"]')
           .wait(222)
           .evaluate((euuid) => {
