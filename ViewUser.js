@@ -1,4 +1,4 @@
-import { cloneDeep, get, omit, differenceBy } from 'lodash';
+import { cloneDeep, get, omit, differenceBy, find } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
@@ -38,6 +38,7 @@ class ViewUser extends React.Component {
       logger: PropTypes.shape({
         log: PropTypes.func.isRequired,
       }).isRequired,
+      intl: PropTypes.object.isRequired,
     }).isRequired,
     paneWidth: PropTypes.string.isRequired,
     resources: PropTypes.shape({
@@ -49,6 +50,9 @@ class ViewUser extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }),
       settings: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      loansHistory: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }),
@@ -93,6 +97,11 @@ class ViewUser extends React.Component {
       type: 'okapi',
       path: 'users/:{id}',
       clear: false,
+    },
+    loansHistory: {
+      type: 'okapi',
+      records: 'loans',
+      path: 'circulation/loans?query=(userId=:{id}) sortby id&limit=100',
     },
     patronGroups: {
       type: 'okapi',
@@ -158,6 +167,17 @@ class ViewUser extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     this.addressTypes = (nextProps.parentResources.addressTypes || {}).records || [];
+
+    const query = this.props.location.search ? queryString.parse(this.props.location.search) : {};
+    if (query.loan) {
+      const loansHistory = (nextProps.resources.loansHistory || {}).records || [];
+      if (loansHistory.length) {
+        const selectedLoan = find(loansHistory, { id: query.loan });
+        if (selectedLoan) {
+          this.setState({ selectedLoan });
+        }
+      }
+    }
   }
 
   onClickViewOpenLoans(e) {
@@ -297,9 +317,9 @@ class ViewUser extends React.Component {
     const patronGroups = (resources.patronGroups || {}).records || [];
     const permissions = (resources.permissions || {}).records || [];
     const settings = (resources.settings || {}).records || [];
+    const loans = (resources.loansHistory || {}).records || [];
     const sponsors = this.props.getSponsors();
     const proxies = this.props.getProxies();
-
     const detailMenu =
     (
       <PaneMenu>
@@ -317,7 +337,7 @@ class ViewUser extends React.Component {
             style={{ visibility: !user ? 'hidden' : 'visible' }}
             onClick={this.props.onEdit}
             href={this.props.editLink}
-            title="Edit User"
+            title={this.props.stripes.intl.formatMessage({ id: 'ui-users.crud.editUser' })}
           />
         </IfPermission>
       </PaneMenu>
@@ -325,7 +345,7 @@ class ViewUser extends React.Component {
 
     if (!user) {
       return (
-        <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle="User Details" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
+        <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle={this.props.stripes.intl.formatMessage({ id: 'ui-users.information.userDetails' })} lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
           <div style={{ paddingTop: '1rem' }}><Icon icon="spinner-ellipsis" width="100px" /></div>
         </Pane>
       );
@@ -335,6 +355,32 @@ class ViewUser extends React.Component {
     const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
     const addresses = toListAddresses(get(user, ['personal', 'addresses'], []), this.addressTypes);
     const userFormData = this.getUserFormData(user, addresses, sponsors, proxies, permissions);
+
+
+    const loansHistory = (<this.connectedLoansHistory
+      user={user}
+      loansHistory={loans}
+      patronGroup={patronGroup}
+      stripes={stripes}
+      history={this.props.history}
+      onCancel={this.onClickCloseLoansHistory}
+      onClickViewOpenLoans={this.onClickViewOpenLoans}
+      onClickViewClosedLoans={this.onClickViewClosedLoans}
+      onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
+      openLoans={query.layer === 'open-loans'}
+    />);
+
+    const loanDetails = (
+      <this.connectedLoanActionsHistory
+        user={user}
+        loan={this.state.selectedLoan}
+        loanid={query.loan}
+        patronGroup={patronGroup}
+        stripes={stripes}
+        onCancel={this.onClickCloseLoanActionsHistory}
+        // when navigating away to another user, clear all loan-related state
+        onClickUser={() => { this.onClickCloseLoanActionsHistory(); this.onClickCloseLoansHistory(); }}
+      />);
 
     return (
       <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle={getFullName(user)} lastMenu={detailMenu} dismissible onClose={this.props.onClose} appIcon={{ app: 'users' }}>
@@ -393,29 +439,10 @@ class ViewUser extends React.Component {
           />
         </Layer>
         <Layer isOpen={query.layer ? query.layer === 'open-loans' || query.layer === 'closed-loans' : false} label="Loans">
-          <this.connectedLoansHistory
-            user={user}
-            patronGroup={patronGroup}
-            stripes={stripes}
-            history={this.props.history}
-            onCancel={this.onClickCloseLoansHistory}
-            onClickViewOpenLoans={this.onClickViewOpenLoans}
-            onClickViewClosedLoans={this.onClickViewClosedLoans}
-            onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
-            openLoans={query.layer === 'open-loans'}
-          />
+          {loansHistory}
         </Layer>
         <Layer isOpen={query.layer ? query.layer === 'loan' : false} label="Loan Actions History">
-          <this.connectedLoanActionsHistory
-            user={user}
-            loan={this.state.selectedLoan}
-            loanid={this.state.selectedLoan.id}
-            patronGroup={patronGroup}
-            stripes={stripes}
-            onCancel={this.onClickCloseLoanActionsHistory}
-            // when navigating away to another user, clear all loan-related state
-            onClickUser={() => { this.onClickCloseLoanActionsHistory(); this.onClickCloseLoansHistory(); }}
-          />
+          {loanDetails}
         </Layer>
       </Pane>
     );

@@ -1,7 +1,7 @@
 export const loanProfileTypesMap = {
-  FIXED: '1',
-  ROLLING: '2',
-  INDEFINITE: '3',
+  FIXED: 'Fixed',
+  ROLLING: 'Rolling',
+  INDEFINITE: 'Indefinite',
 };
 
 export const intervalPeriodsMap = {
@@ -13,11 +13,11 @@ export const intervalPeriodsMap = {
 };
 
 export const intervalIdsMap = {
-  1: 'minutes',
-  2: 'hours',
-  3: 'days',
-  4: 'weeks',
-  5: 'months',
+  'Minutes': 'minutes',
+  'Hours': 'hours',
+  'Days': 'days',
+  'Weeks': 'weeks',
+  'Months': 'months',
 };
 
 export const renewFromMap = {
