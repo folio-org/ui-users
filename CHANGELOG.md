@@ -61,9 +61,10 @@
 * Move item details link to the options menu. Refs UIU-407.
 * Enter key should not submit the user edit form. Fixes UIU-394.
 * Upated loans views to match requirements of LIBAPP-233.
-* Externalized All The Strings. Refs UIU-416. 
+* Externalized All The Strings. Refs UIU-416.
 * Ugly hack: ask for more facet rows than we likely need. Refs MODUSERS-57.
 * Bug fix: translate table-headers fixes proxy lookup. Fixes UIU-452.
+* Match periodId and profileId values with the values on the server. Refs UICIRC-53.
 
 ## [2.12.0](https://github.com/folio-org/ui-users/tree/v2.12.0) (2017-11-28)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.11.0...v2.12.0)
