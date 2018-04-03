@@ -95,7 +95,7 @@ class PermissionSetForm extends React.Component {
     const { pristine, submitting, initialValues, stripes: { intl } } = this.props;
     const { confirmDelete } = this.state;
     const edit = initialValues && initialValues.id;
-    const saveLabel = edit ? intl.formatMessage({ id: 'ui-users.saveAndClose' }) : intl.formatMessage({ id: 'ui-users.createPermissionSet' });
+    const saveLabel = edit ? intl.formatMessage({ id: 'ui-users.saveAndClose' }) : intl.formatMessage({ id: 'ui-users.permissions.createPermissionSet' });
 
     return (
       <PaneMenu>
