@@ -1,7 +1,7 @@
 export const loanProfileTypesMap = {
-  FIXED: '1',
-  ROLLING: '2',
-  INDEFINITE: '3',
+  FIXED: 'Fixed',
+  ROLLING: 'Rolling',
+  INDEFINITE: 'Indefinite',
 };
 
 export const intervalPeriodsMap = {
