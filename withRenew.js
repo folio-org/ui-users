@@ -72,6 +72,7 @@ const withRenew = WrappedComponent =>
 
     renew(data) {
       return this.fetchLoanPolicy(data)
+        .then(loan => this.shoudRenew(loan))
         .then(loan => this.fetchFixedDueDateSchedule(loan))
         .then(loan => this.fetchAlternateFixedDueDateSchedule(loan))
         .then(loan => this.validateRenew(loan))
@@ -90,6 +91,14 @@ const withRenew = WrappedComponent =>
         loan.loanPolicy = loanPolicy;
         return loan;
       });
+    }
+
+    shoudRenew(loan) {
+      const allowedRenewals = get(loan, 'loanPolicy.renewalsPolicy.numberAllowed', '');
+      if (allowedRenewals !== '') {
+        if (loan.renewalCount >= allowedRenewals) this.throwError('Item cannot be renewed as it has reached its maximum number of renewals');
+      }
+      return loan;
     }
 
     fetchFixedDueDateSchedule(loan) {
