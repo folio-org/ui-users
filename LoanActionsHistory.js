@@ -35,6 +35,9 @@ class LoanActionsHistory extends React.Component {
       userIds: PropTypes.shape({
         replace: PropTypes.func,
       }),
+      timestamp: PropTypes.shape({
+        replace: PropTypes.func,
+      }),
     }).isRequired,
     loan: PropTypes.object,
     patronGroup: PropTypes.object,
