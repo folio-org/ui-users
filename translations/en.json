@@ -283,12 +283,14 @@
   "loans.columns.operator": "Operator",
 
   "loans.item.renewed.callout.verb": "renewed",
+  "loans.item.nonRenewed.callout.verb": "not renewed",
   "loans.item.renewed.callout": "The loan for {title} was successfully {verb}.",
-
   "loans.items.renewed.callout": "Renewed {strongCount} {count, plural, one {loan} other {loans}}",
   "loans.items.renewed.callout.details": "view details",
-  "loans.items.renewed.subHeading": "The loans for the following {strongCount, number} {count, plural, one {instance was} other {instances were}} successfully {verb}",
+  "loans.items.renewed.subHeading": "The loans for the following {strongCount} {count, plural, one {instance was} other {instances were}} successfully {verb}",
+  "loans.items.nonRenewed.subHeading": "The loans for the following {strongCount} {count, plural, one {instance was} other {instances were}} {verb}",
   "loans.items.renewed.label": "Successful renewals",
+  "loans.items.nonRenewed.label": "Failed renewals",
   "loans.items.closeLoans": "Close loans",
   "loans.items.userNameAndPatronGroup": "User name and patron group",
 
