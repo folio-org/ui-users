@@ -26,12 +26,16 @@ class LoanActionsHistory extends React.Component {
       loanActions: PropTypes.object,
       loanActionsWithUser: PropTypes.object,
       userIds: PropTypes.object,
+      timestamp: PropTypes.object,
     }).isRequired,
     mutator: PropTypes.shape({
       loanActionsWithUser: PropTypes.shape({
         replace: PropTypes.func,
       }),
       userIds: PropTypes.shape({
+        replace: PropTypes.func,
+      }),
+      timestamp: PropTypes.shape({
         replace: PropTypes.func,
       }),
     }).isRequired,
@@ -47,6 +51,8 @@ class LoanActionsHistory extends React.Component {
   static manifest = Object.freeze({
     userIds: {},
     loanActionsWithUser: {},
+    // this is another hack used to refresh loanActions after renew is executed
+    timestamp: { initialValue: { time: Date.now() } },
     users: {
       type: 'okapi',
       records: 'users',
@@ -58,11 +64,11 @@ class LoanActionsHistory extends React.Component {
       records: 'loans',
       resourceShouldRefresh: true,
       GET: {
-        path: 'loan-storage/loan-history?query=(id==!{loanid})',
+        path: 'loan-storage/loan-history?query=(id==!{loanid})&timestamp=%{timestamp.time}',
       },
     },
   });
-  // resourceShouldRefresh:function() { return true },
+
   constructor(props) {
     super(props);
     this.connectedProxy = props.stripes.connect(LoanActionsHistoryProxy);
@@ -106,7 +112,10 @@ class LoanActionsHistory extends React.Component {
   }
 
   renew() {
-    this.props.renew(this.props.loan).then(() => this.showCallout());
+    this.props.renew(this.props.loan).then(() => {
+      this.showCallout();
+      this.props.mutator.timestamp.replace({ time: Date.now() });
+    });
   }
 
   getContributorslist(loan) {
