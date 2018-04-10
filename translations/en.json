@@ -278,6 +278,7 @@
   "loans.columns.returnDate": "Return date",
   "loans.columns.renewals": "Renewals",
   "loans.columns.actionDate": "Action Date",
+  "loans.columns.contributors": "Contributors",
   "loans.columns.action": "Action",
   "loans.columns.operator": "Operator",
 
@@ -347,6 +348,7 @@
   "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}",
 
   "information.userInformation": "User information",
+  "information.userDetails": "User details",
   "information.name": "Name",
   "information.lastName": "Last name",
   "information.firstName": "First name",
@@ -379,9 +381,12 @@
   "crud.createUser": "Create User",
 
   "errors.missingRequiredField": "Please fill this in to continue",
+  "errors.missingRequiredPatronGroup": "Please select a patron group",
 
   "errors.noMatch.oops": "Uh-oh!",
   "errors.noMatch.how": "How did you get to {location}?",
+
+  "errors.missingRequiredAddressType": "Please select address type",
 
   "hide": "Hide",
   "show": "Show",

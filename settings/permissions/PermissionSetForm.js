@@ -85,9 +85,9 @@ class PermissionSetForm extends React.Component {
     return (
       <PaneMenu>
         <IconButton
-          icon="closeX"
           id="clickable-close-permission-set"
           onClick={this.props.onCancel}
+          icon="closeX"
           title="close"
           aria-label={this.props.stripes.intl.formatMessage({ id: 'ui-users.permissions.closePermissionSetDialog' })}
         />
@@ -99,7 +99,7 @@ class PermissionSetForm extends React.Component {
     const { pristine, submitting, initialValues, stripes: { intl } } = this.props;
     const { confirmDelete } = this.state;
     const edit = initialValues && initialValues.id;
-    const saveLabel = edit ? intl.formatMessage({ id: 'ui-users.saveAndClose' }) : intl.formatMessage({ id: 'ui-users.createPermissionSet' });
+    const saveLabel = edit ? intl.formatMessage({ id: 'ui-users.saveAndClose' }) : intl.formatMessage({ id: 'ui-users.permissions.createPermissionSet' });
 
     return (
       <PaneMenu>
@@ -120,9 +120,9 @@ class PermissionSetForm extends React.Component {
           id="clickable-save-permission-set"
           type="submit"
           title={intl.formatMessage({ id: 'ui-users.saveAndClose' })}
-          disabled={(pristine || submitting)}
+          buttonStyle="primary paneHeaderNewButton"
           marginBottom0
-          buttonStyle="default paneHeaderNewButton"
+          disabled={(pristine || submitting)}
         >{saveLabel}
         </Button>
       </PaneMenu>
