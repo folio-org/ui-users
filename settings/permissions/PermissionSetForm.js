@@ -109,6 +109,7 @@ class PermissionSetForm extends React.Component {
               id="clickable-delete-set"
               title={intl.formatMessage({ id: 'ui-users.delete' })}
               buttonStyle="warning"
+              marginBottom0
               onClick={this.beginDelete}
               disabled={confirmDelete}
             >{intl.formatMessage({ id: 'ui-users.delete' })}
