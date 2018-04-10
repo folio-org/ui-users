@@ -84,9 +84,13 @@ class PermissionSetForm extends React.Component {
   addFirstMenu() {
     return (
       <PaneMenu>
-        <button id="clickable-close-permission-set" onClick={this.props.onCancel} title="close" aria-label={this.props.stripes.intl.formatMessage({ id: 'ui-users.permissions.closePermissionSetDialog' })}>
-          <span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span>
-        </button>
+        <IconButton
+          id="clickable-close-permission-set"
+          onClick={this.props.onCancel}
+          icon="closeX"
+          title="close"
+          aria-label={this.props.stripes.intl.formatMessage({ id: 'ui-users.permissions.closePermissionSetDialog' })}
+        />
       </PaneMenu>
     );
   }
@@ -95,7 +99,7 @@ class PermissionSetForm extends React.Component {
     const { pristine, submitting, initialValues, stripes: { intl } } = this.props;
     const { confirmDelete } = this.state;
     const edit = initialValues && initialValues.id;
-    const saveLabel = edit ? intl.formatMessage({ id: 'ui-users.saveAndClose' }) : intl.formatMessage({ id: 'ui-users.createPermissionSet' });
+    const saveLabel = edit ? intl.formatMessage({ id: 'ui-users.saveAndClose' }) : intl.formatMessage({ id: 'ui-users.permissions.createPermissionSet' });
 
     return (
       <PaneMenu>
@@ -105,6 +109,7 @@ class PermissionSetForm extends React.Component {
               id="clickable-delete-set"
               title={intl.formatMessage({ id: 'ui-users.delete' })}
               buttonStyle="warning"
+              marginBottom0
               onClick={this.beginDelete}
               disabled={confirmDelete}
             >{intl.formatMessage({ id: 'ui-users.delete' })}
@@ -115,6 +120,8 @@ class PermissionSetForm extends React.Component {
           id="clickable-save-permission-set"
           type="submit"
           title={intl.formatMessage({ id: 'ui-users.saveAndClose' })}
+          buttonStyle="primary paneHeaderNewButton"
+          marginBottom0
           disabled={(pristine || submitting)}
         >{saveLabel}
         </Button>

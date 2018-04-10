@@ -13,13 +13,11 @@ export function getFixedDueDateSchedule(schedules) {
 }
 
 export function isLoanProfileRolling(loanProfile) {
-  return (loanProfile.profileId === loanProfileTypesMap.ROLLING ||
-    loanProfile.profileId === 'ROLLING');
+  return (loanProfile.profileId === loanProfileTypesMap.ROLLING);
 }
 
 export function isLoanProfileFixed(loanProfile) {
-  return (loanProfile.profileId === loanProfileTypesMap.FIXED ||
-    loanProfile.profileId === 'FIXED');
+  return (loanProfile.profileId === loanProfileTypesMap.FIXED);
 }
 
 export function getInterval(period) {

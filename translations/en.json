@@ -381,9 +381,12 @@
   "crud.createUser": "Create User",
 
   "errors.missingRequiredField": "Please fill this in to continue",
+  "errors.missingRequiredPatronGroup": "Please select a patron group",
 
   "errors.noMatch.oops": "Uh-oh!",
   "errors.noMatch.how": "How did you get to {location}?",
+
+  "errors.missingRequiredAddressType": "Please select address type",
 
   "hide": "Hide",
   "show": "Show",
