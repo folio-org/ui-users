@@ -70,6 +70,7 @@ module.exports.test = function meh(uitestctx) {
         nightmare
           .wait('#clickable-users-module')
           .click('#clickable-users-module')
+          .wait('#clickable-filter-active-Active')
           .click('#clickable-filter-active-Active')
           .wait('#list-users div[role="listitem"] > a')
           .click('#clickable-newuser')
