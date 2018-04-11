@@ -70,8 +70,8 @@ module.exports.test = function meh(uitestctx) {
         nightmare
           .wait('#clickable-users-module')
           .click('#clickable-users-module')
-          .wait('#clickable-newuser')
-          .wait(5555)
+          .click('#clickable-filter-active-Active')
+          .wait('#list-users div[role="listitem"] > a')
           .click('#clickable-newuser')
           .wait('#adduser_group > option:nth-of-type(4)')
           .evaluate(() => document.querySelector('#adduser_group > option:nth-of-type(3)').value)
@@ -98,10 +98,10 @@ module.exports.test = function meh(uitestctx) {
           .wait(222)
           .click('#toggle_pw_btn')
           .wait('#icon-adduser_username-validation-success')
-          .wait(4444)
+          .wait(222)
           .click('#pw')
           .wait(222)
-          .type('#pw', user.password)
+          .insert('#pw', user.password)
           .wait(222)
           .insert('#adduser_email', user.email)
           .wait(222)
@@ -120,11 +120,17 @@ module.exports.test = function meh(uitestctx) {
           .insert('input[name*="stateRegion"]', user.address.state)
           .insert('input[name*="zipCode"]', user.address.zip)
           .select('select[name*="addressType"]', 'Home')
-          .wait(4444)
+          // .wait(222)
           .click('#clickable-createnewuser')
-          .wait('#clickable-newuser')
-          .goto(config.url)
-          .wait('#clickable-logout')
+          .wait('#userInformationSection')
+          /* .wait((uid) => {
+            const us = document.querySelector('#userInformationSection');
+            let bool = false;
+            if (us.textContent.match(uid)) {
+              bool = true;
+            }
+            return bool;
+          }, user.id) */
           .then(done)
           .catch(done);
       });
