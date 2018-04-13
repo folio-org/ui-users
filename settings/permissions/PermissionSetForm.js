@@ -10,6 +10,7 @@ import Paneset from '@folio/stripes-components/lib/Paneset';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import IfPermission from '@folio/stripes-components/lib/IfPermission';
 import IconButton from '@folio/stripes-components/lib/IconButton';
+import Icon from '@folio/stripes-components/lib/Icon';
 
 // eslint-disable-next-line import/no-unresolved
 import ConfirmationModal from '@folio/stripes-components/lib/structures/ConfirmationModal';
@@ -20,7 +21,6 @@ import stripesForm from '@folio/stripes-form';
 import { Field } from 'redux-form';
 
 import ContainedPermissions from './ContainedPermissions';
-import css from './PermissionSetForm.css';
 
 class PermissionSetForm extends React.Component {
   static propTypes = {
@@ -108,10 +108,10 @@ class PermissionSetForm extends React.Component {
             <Button
               id="clickable-delete-set"
               title={intl.formatMessage({ id: 'ui-users.delete' })}
-              buttonStyle="warning"
-              marginBottom0
+              buttonStyle="danger"
               onClick={this.beginDelete}
               disabled={confirmDelete}
+              marginBottom0
             >{intl.formatMessage({ id: 'ui-users.delete' })}
             </Button>
           </IfPermission>
@@ -148,17 +148,12 @@ class PermissionSetForm extends React.Component {
   renderPaneTitle() {
     const { initialValues, stripes: { intl } } = this.props;
     const selectedSet = initialValues || {};
-    const label = selectedSet.id ? `${intl.formatMessage({ id: 'ui-users.edit' })}: ${selectedSet.displayName}` : intl.formatMessage({ id: 'ui-users.permissions.newPermissionSet' });
-    return (
-      <div className={css.iconRoot}>
-        <IconButton
-          icon="edit"
-          title={intl.formatMessage({ id: 'ui-users.permissions.editPermission' })}
-          size="medium"
-        />
-        <div className={css.iconLabel}>{label}</div>
-      </div>
-    );
+
+    if (selectedSet.id) {
+      return (<div><Icon size="small" icon="edit" /><span>{`${intl.formatMessage({ id: 'ui-users.edit' })}: ${selectedSet.displayName}`}</span></div>);
+    }
+
+    return intl.formatMessage({ id: 'ui-users.permissions.newPermissionSet' });
   }
 
   render() {
