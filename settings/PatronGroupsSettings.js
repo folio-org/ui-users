@@ -48,7 +48,7 @@ class PatronGroupsSettings extends React.Component {
         // We have to unset the dataKey to prevent the props.resources in
         // <ControlledVocab> from being overwritten by the props.resources here.
         dataKey={undefined}
-        baseUrl="groups"
+        baseUrl="groups?limit=50"
         records="usergroups"
         label={this.props.stripes.intl.formatMessage({ id: 'ui-users.information.patronGroups' })}
         labelSingular={this.props.stripes.intl.formatMessage({ id: 'ui-users.information.patronGroup' })}
