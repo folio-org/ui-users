@@ -345,8 +345,6 @@
   "contact.addressType": "Address Type",
   "contact.addresses": "Addresses",
 
-  "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}",
-
   "information.userInformation": "User information",
   "information.userDetails": "User details",
   "information.name": "Name",
