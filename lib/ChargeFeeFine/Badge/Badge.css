@@ -1,0 +1,11 @@
+@import './variables.css';
+
+.root {
+  background-color: var(--bgHover);
+  border-radius: 6px;
+  padding: 10px 30px;
+  font-weight: bold;
+  font-size: 1rem;
+  line-height: 1.5; 
+
+}

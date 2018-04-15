@@ -23,12 +23,12 @@
       "usersSortByName"
     ],
     "icons": [
-     {
-       "name": "app",
-       "alt": "Create, view and manage users",
-       "title": "Users"
-     }
-   ],
+      {
+        "name": "app",
+        "alt": "Create, view and manage users",
+        "title": "Users"
+      }
+    ],
     "okapiInterfaces": {
       "users": "14.0",
       "circulation": "2.1",
@@ -204,14 +204,15 @@
     "prepublishOnly": "node ../stripes-core/util/package2md.js package.json > ModuleDescriptor.json"
   },
   "devDependencies": {
+    "@folio/eslint-config-stripes": "^1.1.0",
     "babel-core": "^6.17.0",
     "babel-eslint": "^7.0.0",
     "babel-preset-es2015": "^6.18.0",
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0",
     "babel-register": "^6.18.0",
-    "eslint": "^4.8.0",
-    "@folio/eslint-config-stripes": "^1.1.0"
+    "eslint": "^4.18.2",
+    "eslint-config-stripes": "^1.0.0"
   },
   "dependencies": {
     "@folio/stripes-components": "^2.0.8",

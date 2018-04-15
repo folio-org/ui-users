@@ -1,0 +1,8 @@
+@import '@folio/stripes-components/lib/variables.css';
+
+.badge{
+  border-radius: 999px;I
+  background-color: var(--bgHover);
+  color: var(--labelColor);
+  padding: 6px;
+}
