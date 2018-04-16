@@ -241,7 +241,6 @@
   "data.countries.ARE": "United Arab Emirates",
   "data.countries.GBR": "United Kingdom",
   "data.countries.USA": "United States",
-  "data.countries.UMI": "US Minor Outlying Islands",
   "data.countries.URY": "Uruguay",
   "data.countries.UZB": "Uzbekistan",
   "data.countries.VUT": "Vanuatu",
@@ -266,8 +265,6 @@
   "loans.closed": "Closed",
   "loans.openLoans": "open loans",
   "loans.closedLoans": "closed loans",
-  "loans.openLoansTitle": "Open loans",
-  "loans.closedLoansTitle": "Closed loans",
   "loans.loanDetails": "Loan details",
 
   "loans.columns.title": "Title",
@@ -282,21 +279,15 @@
   "loans.columns.action": "Action",
   "loans.columns.operator": "Operator",
 
-  "loans.item.renewed.callout.verb": "renewed",
-  "loans.item.renewed.callout": "The loan for {title} was successfully {verb}.",
+  "loans.item.renewed.callout": "The loan for <string>{title}</strong> was successfully <strong>renewed</strong>.",
 
-  "loans.items.renewed.callout": "Renewed {strongCount} {count, plural, one {loan} other {loans}}",
+  "loans.items.renewed.subheading": "{count} loans successfully renewed",
+  "loans.items.renewed.callout": "Renewed <string>{count}</string> {count, plural, one {loan} other {loans}}",
   "loans.items.renewed.callout.details": "view details",
-  "loans.items.renewed.subHeading": "The loans for the following {strongCount, number} {count, plural, one {instance was} other {instances were}} successfully {verb}",
   "loans.items.renewed.label": "Successful renewals",
-  "loans.items.closeLoans": "Close loans",
-  "loans.items.userNameAndPatronGroup": "User name and patron group",
 
-  "loans.details.close": "Close loan details",
-  "loans.details.usernameAndPatronGroup": "User name and patron group",
   "loans.details.location": "Location",
   "loans.details.requestQueue": "Request queue",
-  "loans.details.authors": "Authors",
   "loans.details.callNumber": "Call number",
   "loans.details.claimedReturned": "Claimed returned",
   "loans.details.loanPolicy": "Loan policy",
@@ -315,13 +306,10 @@
   "permissions.isSponsorOf": "{name} is sponsor of",
   "permissions.proxySponsor": "Proxy/Sponsor",
   "permissions.assignedPermissions": "Assigned permissions",
-  "permissions.policyName": "Policy name",
-  "permissions.policyDescription": "Policy description",
   "permissions.untitledPermissionSet": "Untitled permission set",
   "permissions.closePermissionSetDialog": "Close permission set dialog",
   "permissions.createPermissionSet": "Create permission set",
   "permissions.newPermissionSet": "New permission set",
-  "permissions.editPermission": "Edit permission",
   "permissions.generalInformation": "General Information",
   "permissions.permissionSetName": "Permission set name",
   "permissions.deletePermissionSet": "Delete permission set?",
@@ -345,8 +333,6 @@
   "contact.addressType": "Address Type",
   "contact.addresses": "Addresses",
 
-  "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}",
-
   "information.userInformation": "User information",
   "information.userDetails": "User details",
   "information.name": "Name",
@@ -360,13 +346,7 @@
   "information.expirationDate": "Expiration date",
   "information.username": "Username",
   "information.selectPatronGroup": "Select patron group",
-  "information.patronGroup.removed.verb": "deleted",
-  "information.patronGroup.removed": "The patron group {group} was successfully {verb}.",
-  "information.patronGroup.remove.deny": "Patron group cannot be deleted when used by one or more users",
-  "information.patronGroup.group": "Group",
   "information.patronGroup.users": "Users",
-  "information.patronGroup.numberOfUsers": "# of users",
-  "information.patronGroups.emptyList": "There are no patron groups",
   "information.profile.label": "Display profile pictures",
 
   "proxy.relationshipCreated": "Relationship Created",
@@ -382,11 +362,13 @@
 
   "errors.missingRequiredField": "Please fill this in to continue",
   "errors.missingRequiredPatronGroup": "Please select a patron group",
+  "errors.missingRequiredContactType": "Please select contact type",
+  "errors.missingRequiredAddressType": "Please select address type",
 
   "errors.noMatch.oops": "Uh-oh!",
   "errors.noMatch.how": "How did you get to {location}?",
 
-  "errors.missingRequiredAddressType": "Please select address type",
+  "errors.usernameUnavailable": "This username does not exist",
 
   "hide": "Hide",
   "show": "Show",
@@ -403,13 +385,8 @@
   "edit": "Edit",
   "okay": "Okay",
   "description": "Description",
-  "lastUpdated": "Last updated",
-  "addNew": "+ Add new",
-
-
 
   "itemDetails": "Item Details",
-  "loanDetails": "Loan Details",
   "renew": "Renew",
   "renew.toolTip": "Multiple loans can be processed at the same time. Please select loans first."
 
