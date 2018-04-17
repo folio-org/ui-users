@@ -66,6 +66,7 @@
 * Bug fix: translate table-headers fixes proxy lookup. Fixes UIU-452.
 * Match periodId and profileId values with the values on the server. Refs UICIRC-53.
 * Update loan actions table after renew. Fixes UIU-457.
+* Include active users in every search. Fixes UIU-400.
 
 ## [2.12.0](https://github.com/folio-org/ui-users/tree/v2.12.0) (2017-11-28)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.11.0...v2.12.0)
