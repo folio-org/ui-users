@@ -215,7 +215,7 @@
   },
   "dependencies": {
     "@folio/react-intl-safe-html": "^1.0.10005",
-    "@folio/stripes-components": "^2.0.8",
+    "@folio/stripes-components": "^2.0.10",
     "@folio/stripes-form": "^0.8.2",
     "@folio/stripes-smart-components": "^1.4.11",
     "classnames": "^2.2.5",
