@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ControlledVocab from '@folio/stripes-smart-components/lib/ControlledVocab';
 
-import { RenderPatronGroupNumberOfUsers } from '../lib/RenderPatronGroup';
+import PatronGroupNumberOfUsers from '../lib/PatronGroupNumberOfUsers';
 
 class PatronGroupsSettings extends React.Component {
   static propTypes = {
@@ -36,7 +36,7 @@ class PatronGroupsSettings extends React.Component {
 
   render() {
     const formatter = {
-      numberOfObjects: item => (<RenderPatronGroupNumberOfUsers
+      numberOfObjects: item => (<PatronGroupNumberOfUsers
         item={item}
         usersPerGroup={this.props.resources ? this.props.resources.usersPerGroup : null}
       />),
