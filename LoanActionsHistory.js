@@ -116,13 +116,6 @@ class LoanActionsHistory extends React.Component {
     this.props.mutator.loanActionsWithUser.replace({ loan, records });
   }
 
-  // renew() {
-  //   this.props.renew(this.props.loan).then(() => {
-  //     this.showCallout();
-  //     this.props.mutator.timestamp.replace({ time: Date.now() });
-  //   });
-  // }
-
   showNonRenewedLoansModal() {
     this.setState({ nonRenewedLoansModalOpen: true });
   }
