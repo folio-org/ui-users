@@ -10,6 +10,7 @@ import Paneset from '@folio/stripes-components/lib/Paneset';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import IfPermission from '@folio/stripes-components/lib/IfPermission';
 import IconButton from '@folio/stripes-components/lib/IconButton';
+import Icon from '@folio/stripes-components/lib/Icon';
 
 // eslint-disable-next-line import/no-unresolved
 import ConfirmationModal from '@folio/stripes-components/lib/structures/ConfirmationModal';
@@ -20,7 +21,6 @@ import stripesForm from '@folio/stripes-form';
 import { Field } from 'redux-form';
 
 import ContainedPermissions from './ContainedPermissions';
-import css from './PermissionSetForm.css';
 
 class PermissionSetForm extends React.Component {
   static propTypes = {
@@ -84,9 +84,13 @@ class PermissionSetForm extends React.Component {
   addFirstMenu() {
     return (
       <PaneMenu>
-        <button id="clickable-close-permission-set" onClick={this.props.onCancel} title="close" aria-label={this.props.stripes.intl.formatMessage({ id: 'ui-users.permissions.closePermissionSetDialog' })}>
-          <span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span>
-        </button>
+        <IconButton
+          id="clickable-close-permission-set"
+          onClick={this.props.onCancel}
+          icon="closeX"
+          title="close"
+          aria-label={this.props.stripes.intl.formatMessage({ id: 'ui-users.permissions.closePermissionSetDialog' })}
+        />
       </PaneMenu>
     );
   }
@@ -95,7 +99,7 @@ class PermissionSetForm extends React.Component {
     const { pristine, submitting, initialValues, stripes: { intl } } = this.props;
     const { confirmDelete } = this.state;
     const edit = initialValues && initialValues.id;
-    const saveLabel = edit ? intl.formatMessage({ id: 'ui-users.saveAndClose' }) : intl.formatMessage({ id: 'ui-users.createPermissionSet' });
+    const saveLabel = edit ? intl.formatMessage({ id: 'ui-users.saveAndClose' }) : intl.formatMessage({ id: 'ui-users.permissions.createPermissionSet' });
 
     return (
       <PaneMenu>
@@ -104,9 +108,10 @@ class PermissionSetForm extends React.Component {
             <Button
               id="clickable-delete-set"
               title={intl.formatMessage({ id: 'ui-users.delete' })}
-              buttonStyle="warning"
+              buttonStyle="danger"
               onClick={this.beginDelete}
               disabled={confirmDelete}
+              marginBottom0
             >{intl.formatMessage({ id: 'ui-users.delete' })}
             </Button>
           </IfPermission>
@@ -115,6 +120,8 @@ class PermissionSetForm extends React.Component {
           id="clickable-save-permission-set"
           type="submit"
           title={intl.formatMessage({ id: 'ui-users.saveAndClose' })}
+          buttonStyle="primary paneHeaderNewButton"
+          marginBottom0
           disabled={(pristine || submitting)}
         >{saveLabel}
         </Button>
@@ -141,17 +148,12 @@ class PermissionSetForm extends React.Component {
   renderPaneTitle() {
     const { initialValues, stripes: { intl } } = this.props;
     const selectedSet = initialValues || {};
-    const label = selectedSet.id ? `${intl.formatMessage({ id: 'ui-users.edit' })}: ${selectedSet.displayName}` : intl.formatMessage({ id: 'ui-users.permissions.newPermissionSet' });
-    return (
-      <div className={css.iconRoot}>
-        <IconButton
-          icon="edit"
-          title={intl.formatMessage({ id: 'ui-users.permissions.editPermission' })}
-          size="medium"
-        />
-        <div className={css.iconLabel}>{label}</div>
-      </div>
-    );
+
+    if (selectedSet.id) {
+      return (<div><Icon size="small" icon="edit" /><span>{`${intl.formatMessage({ id: 'ui-users.edit' })}: ${selectedSet.displayName}`}</span></div>);
+    }
+
+    return intl.formatMessage({ id: 'ui-users.permissions.newPermissionSet' });
   }
 
   render() {

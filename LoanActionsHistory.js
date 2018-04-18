@@ -9,11 +9,8 @@ import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
-import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
-import IconButton from '@folio/stripes-components/lib/IconButton';
 import Button from '@folio/stripes-components/lib/Button';
 import Callout from '@folio/stripes-components/lib/Callout';
-
 import { getFullName } from './util';
 import loanActionMap from './data/loanActionMap';
 import LoanActionsHistoryProxy from './LoanActionsHistoryProxy';
@@ -29,6 +26,7 @@ class LoanActionsHistory extends React.Component {
       loanActions: PropTypes.object,
       loanActionsWithUser: PropTypes.object,
       userIds: PropTypes.object,
+      timestamp: PropTypes.object,
     }).isRequired,
     mutator: PropTypes.shape({
       loanActionsWithUser: PropTypes.shape({
@@ -37,8 +35,12 @@ class LoanActionsHistory extends React.Component {
       userIds: PropTypes.shape({
         replace: PropTypes.func,
       }),
+      timestamp: PropTypes.shape({
+        replace: PropTypes.func,
+      }),
     }).isRequired,
     loan: PropTypes.object,
+    patronGroup: PropTypes.object,
     loanid: PropTypes.string,
     user: PropTypes.object,
     onCancel: PropTypes.func.isRequired,
@@ -49,6 +51,8 @@ class LoanActionsHistory extends React.Component {
   static manifest = Object.freeze({
     userIds: {},
     loanActionsWithUser: {},
+    // this is another hack used to refresh loanActions after renew is executed
+    timestamp: { initialValue: { time: Date.now() } },
     users: {
       type: 'okapi',
       records: 'users',
@@ -60,11 +64,11 @@ class LoanActionsHistory extends React.Component {
       records: 'loans',
       resourceShouldRefresh: true,
       GET: {
-        path: 'loan-storage/loan-history?query=(id==!{loanid})',
+        path: 'loan-storage/loan-history?query=(id==!{loanid})&timestamp=%{timestamp.time}',
       },
     },
   });
-  // resourceShouldRefresh:function() { return true },
+
   constructor(props) {
     super(props);
     this.connectedProxy = props.stripes.connect(LoanActionsHistoryProxy);
@@ -108,7 +112,10 @@ class LoanActionsHistory extends React.Component {
   }
 
   renew() {
-    this.props.renew(this.props.loan).then(() => this.showCallout());
+    this.props.renew(this.props.loan).then(() => {
+      this.showCallout();
+      this.props.mutator.timestamp.replace({ time: Date.now() });
+    });
   }
 
   getContributorslist(loan) {
@@ -164,7 +171,7 @@ class LoanActionsHistory extends React.Component {
   }
 
   render() {
-    const { onCancel, loan, user, resources: { loanActionsWithUser }, stripes: { intl } } = this.props;
+    const { onCancel, loan, patronGroup, user, resources: { loanActionsWithUser }, stripes: { intl } } = this.props;
     const loanActionsFormatter = {
       action: la => intl.formatMessage({ id: loanActionMap[la.action] }),
       actionDate: la => this.formatDateTime(la.loanDate),
@@ -172,22 +179,6 @@ class LoanActionsHistory extends React.Component {
       itemStatus: la => la.itemStatus,
       operator: la => <Link to={`/users/view/${la.user.id}`}>{getFullName(la.user)}</Link>,
     };
-
-    const paneHeader = (
-      <Row style={{ width: '100%' }}>
-        <Col xs={3}>
-          <PaneMenu>
-            <IconButton
-              icon="closeX"
-              onClick={onCancel}
-              title="Close Loan Details"
-              ariaLabel="Close Loan Details"
-            />
-            <h3>Loan Details</h3>
-          </PaneMenu>
-        </Col>
-      </Row>
-    );
 
     const contributorsList = this.getContributorslist(loan);
     const contributorsListString = contributorsList.join(' ');
@@ -197,7 +188,7 @@ class LoanActionsHistory extends React.Component {
 
     return (
       <Paneset isRoot>
-        <Pane id="pane-loandetails" defaultWidth="100%" dismissible onClose={onCancel} header={paneHeader}>
+        <Pane id="pane-loandetails" defaultWidth="100%" dismissible onClose={onCancel} paneTitle={`${intl.formatMessage({ id: 'ui-users.loans.loanDetails' })} - ${getFullName(user)} (${_.upperFirst(patronGroup.group)})`} >
           <Row>
             <Col>
               <Button buttonStyle="primary" onClick={this.renew}>{this.props.stripes.intl.formatMessage({ id: 'ui-users.renew' })}</Button>
@@ -236,7 +227,7 @@ class LoanActionsHistory extends React.Component {
               <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.columns.dueDate' })} value={this.formatDateTime(loan.dueDate) || '-'} />
             </Col>
             <Col xs={2} >
-              <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.columns.returnDate' })} value={this.formatDateTime(loan.returnDate) || '-'} />
+              <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.columns.returnDate' })} value={this.formatDateTime(loan.systemReturnDate) || '-'} />
             </Col>
             <Col xs={2} >
               <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.details.renewalCount' })} value={_.get(loan, ['renewalCount'], '-')} />
