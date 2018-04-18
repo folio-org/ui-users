@@ -234,7 +234,6 @@ const countries = [
   { country: 'ui-users.data.countries.ARE', alpha2: 'AE', alpha3: 'ARE', numeric: '784' },
   { country: 'ui-users.data.countries.GBR', alpha2: 'GB', alpha3: 'GBR', numeric: '826' },
   { country: 'ui-users.data.countries.USA', alpha2: 'US', alpha3: 'USA', numeric: '840' },
-  { country: 'ui-users.data.countries.UMI', alpha2: 'UM', alpha3: 'UMI', numeric: '581' },
   { country: 'ui-users.data.countries.URY', alpha2: 'UY', alpha3: 'URY', numeric: '858' },
   { country: 'ui-users.data.countries.UZB', alpha2: 'UZ', alpha3: 'UZB', numeric: '860' },
   { country: 'ui-users.data.countries.VUT', alpha2: 'VU', alpha3: 'VUT', numeric: '548' },
