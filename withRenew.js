@@ -72,12 +72,13 @@ const withRenew = WrappedComponent =>
 
     renew(data) {
       return this.fetchLoanPolicy(data)
+        .then(loan => this.checkRenewLimit(loan))
         .then(loan => this.fetchFixedDueDateSchedule(loan))
         .then(loan => this.fetchAlternateFixedDueDateSchedule(loan))
         .then(loan => this.validateRenew(loan))
         .then(loan => this.execRenew(loan))
         .catch((error) => {
-          this.setState({ error });
+          if (error.message !== 'NotRenewed') this.setState({ error });
           throw error;
         });
     }
@@ -90,6 +91,14 @@ const withRenew = WrappedComponent =>
         loan.loanPolicy = loanPolicy;
         return loan;
       });
+    }
+
+    checkRenewLimit(loan) {
+      const allowedRenewals = get(loan, 'loanPolicy.renewalsPolicy.numberAllowed', '');
+      if (allowedRenewals !== '') {
+        if (loan.renewalCount >= allowedRenewals) this.throwError('NotRenewed');
+      }
+      return loan;
     }
 
     fetchFixedDueDateSchedule(loan) {
