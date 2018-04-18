@@ -280,7 +280,7 @@
   "loans.columns.operator": "Operator",
   "loans.item.renewed.callout.verb": "renewed",
   "loans.item.nonRenewed.callout.verb": "not renewed",
-  "loans.item.renewed.callout": "The loan for {title} was successfully {verb}.",
+  "loans.item.renewed.callout": "The loan for <strong>{title}</strong> was successfully <strong>renewed</strong>.",
   "loans.items.renewed.callout": "Renewed {strongCount} {count, plural, one {loan} other {loans}}",
   "loans.items.renewed.callout.details": "view details",
   "loans.items.renewed.subHeading": "The loans for the following {strongCount} {count, plural, one {instance was} other {instances were}} successfully {verb}",

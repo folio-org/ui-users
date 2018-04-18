@@ -5,12 +5,14 @@ import Link from 'react-router-dom/Link';
 import PropTypes from 'prop-types';
 import Popover from '@folio/stripes-components/lib/Popover';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
+import Modal from '@folio/stripes-components/lib/Modal';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import Button from '@folio/stripes-components/lib/Button';
 import Callout from '@folio/stripes-components/lib/Callout';
+import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import { getFullName } from './util';
 import loanActionMap from './data/loanActionMap';
 import LoanActionsHistoryProxy from './LoanActionsHistoryProxy';
@@ -76,9 +78,12 @@ class LoanActionsHistory extends React.Component {
     this.getContributorslist = this.getContributorslist.bind(this);
     this.showContributors = this.showContributors.bind(this);
     this.formatDateTime = this.props.stripes.formatDateTime;
+    this.hideNonRenewedLoansModal = this.hideNonRenewedLoansModal.bind(this);
     this.showTitle = this.showTitle.bind(this);
     this.state = {
       loanActionCount: 0,
+      nonRenewedLoanItems: [],
+      nonRenewedLoansModalOpen: false
     };
   }
 
@@ -111,11 +116,37 @@ class LoanActionsHistory extends React.Component {
     this.props.mutator.loanActionsWithUser.replace({ loan, records });
   }
 
+  // renew() {
+  //   this.props.renew(this.props.loan).then(() => {
+  //     this.showCallout();
+  //     this.props.mutator.timestamp.replace({ time: Date.now() });
+  //   });
+  // }
+
+  showNonRenewedLoansModal() {
+    this.setState({ nonRenewedLoansModalOpen: true });
+  }
+
+  hideNonRenewedLoansModal() {
+    this.setState({ nonRenewedLoansModalOpen: false });
+  }
+
+  openNonRenewedLoansModal(nonRenewedLoanItems) {
+    this.setState({ nonRenewedLoanItems });
+    this.showNonRenewedLoansModal();
+  }
+
   renew() {
-    this.props.renew(this.props.loan).then(() => {
-      this.showCallout();
-      this.props.mutator.timestamp.replace({ time: Date.now() });
-    });
+    const loanToRenew = this.props.loan;
+    const promise = this.props.renew(loanToRenew);
+    const singleRenewalFailure = [];
+    promise
+      .then(() => this.showCallout())
+      .catch(() => {
+        singleRenewalFailure.push(loanToRenew);
+        this.openNonRenewedLoansModal(singleRenewalFailure);
+      });
+    return promise;
   }
 
   getContributorslist(loan) {
@@ -158,13 +189,12 @@ class LoanActionsHistory extends React.Component {
 
   showCallout() {
     const message = (
-      <FormattedMessage
-        id="loans.item.renewed.callout"
-        values={{
-          title: <strong>{this.props.loan.item.title}</strong>,
-          verb: <strong>{this.props.stripes.intl.formatMessage({ id: 'loans.item.renewed.callout.verb' })}</strong>,
-        }}
-      />
+      <span>
+        <SafeHTMLMessage
+          id="ui-users.loans.item.renewed.callout"
+          values={{ title: this.props.loan.item.title }}
+        />
+      </span>
     );
 
     this.callout.sendCallout({ message });
@@ -172,6 +202,7 @@ class LoanActionsHistory extends React.Component {
 
   render() {
     const { onCancel, loan, patronGroup, user, resources: { loanActionsWithUser }, stripes: { intl } } = this.props;
+    const { nonRenewedLoanItems } = this.state;
     const loanActionsFormatter = {
       action: la => intl.formatMessage({ id: loanActionMap[la.action] }),
       actionDate: la => this.formatDateTime(la.loanDate),
@@ -185,6 +216,19 @@ class LoanActionsHistory extends React.Component {
     const contributorsLength = contributorsListString.length;
     // Number of characters to trucate the string = 77
     const listTodisplay = (contributorsList === '-') ? '-' : (contributorsListString.length >= 77) ? `${contributorsListString.substring(0, 77)}...` : `${contributorsListString.substring(0, contributorsListString.length - 2)}`;
+    const nonRenewedLabel = this.props.stripes.intl.formatMessage({ id: 'ui-users.loans.items.nonRenewed.label' });
+    const failedRenewalsSubHeading = (
+      <p>
+        <FormattedMessage
+          id="ui-users.loans.items.nonRenewed.subHeading"
+          values={{
+            strongCount: <strong>{nonRenewedLoanItems.length}</strong>,
+            count: nonRenewedLoanItems.length,
+            verb: <strong>{this.props.stripes.intl.formatMessage({ id: 'ui-users.loans.item.nonRenewed.callout.verb' })}</strong>,
+          }}
+        />
+      </p>
+    );
 
     return (
       <Paneset isRoot>
@@ -269,6 +313,15 @@ class LoanActionsHistory extends React.Component {
               contentData={loanActionsWithUser.records}
             />
           }
+          <Modal dismissible closeOnBackgroundClick onClose={this.hideNonRenewedLoansModal} open={this.state.nonRenewedLoansModalOpen} label={nonRenewedLabel}>
+            {failedRenewalsSubHeading}
+            {
+                nonRenewedLoanItems.map((loanItem, index) => (
+                  <li key={index}>
+                    <span>{loanItem.item.title}</span>
+                  </li>))
+            }
+          </Modal>
           <Callout ref={(ref) => { this.callout = ref; }} />
         </Pane>
       </Paneset>
