@@ -371,6 +371,7 @@
   "errors.noMatch.oops": "Uh-oh!",
   "errors.noMatch.how": "How did you get to {location}?",
 
+  "errors.userExpired": "User has expired",
   "errors.usernameUnavailable": "This username does not exist",
 
   "hide": "Hide",
