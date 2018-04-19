@@ -277,7 +277,7 @@
   "loans.columns.actionDate": "Action Date",
   "loans.columns.contributors": "Contributors",
   "loans.columns.action": "Action",
-  "loans.columns.operator": "Operator",
+  "loans.columns.source": "Source",
   "loans.item.renewed.callout.verb": "renewed",
   "loans.item.nonRenewed.callout.verb": "not renewed",
   "loans.item.renewed.callout": "The loan for <strong>{title}</strong> was successfully <strong>renewed</strong>.",
