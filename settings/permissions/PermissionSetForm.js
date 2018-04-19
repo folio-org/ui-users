@@ -1,4 +1,4 @@
-import { cloneDeep } from 'lodash';
+import { cloneDeep, omit } from 'lodash';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
@@ -58,7 +58,8 @@ class PermissionSetForm extends React.Component {
   }
 
   saveSet(data) {
-    const permSet = Object.assign({}, data, {
+    const filtered = omit(data, ['childOf', 'grantedTo', 'dummy']);
+    const permSet = Object.assign({}, filtered, {
       mutable: true,
       subPermissions: (data.subPermissions || []).map(p => p.permissionName),
     });
