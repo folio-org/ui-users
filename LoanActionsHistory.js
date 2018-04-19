@@ -147,7 +147,7 @@ class LoanActionsHistory extends React.Component {
     const contributors = _.get(this.loan, ['item', 'contributors']);
     const contributorsList = [];
     if (typeof contributors !== 'undefined') {
-      Object.keys(contributors).forEach(contributor => contributorsList.push(`${contributors[contributor].name}, `));
+      Object.keys(contributors).forEach(contributor => contributorsList.push(`${contributors[contributor].name}; `));
     } else {
       contributorsList.push('-');
     }
@@ -201,7 +201,7 @@ class LoanActionsHistory extends React.Component {
       actionDate: la => this.formatDateTime(la.loanDate),
       dueDate: la => this.formatDateTime(la.dueDate),
       itemStatus: la => la.itemStatus,
-      operator: la => <Link to={`/users/view/${la.user.id}`}>{getFullName(la.user)}</Link>,
+      Source: la => <Link to={`/users/view/${la.user.id}`}>{getFullName(la.user)}</Link>,
     };
 
     const contributorsList = this.getContributorslist(loan);
@@ -295,13 +295,13 @@ class LoanActionsHistory extends React.Component {
             <MultiColumnList
               id="list-loanactions"
               formatter={loanActionsFormatter}
-              visibleColumns={['action', 'actionDate', 'dueDate', 'itemStatus', 'operator']}
+              visibleColumns={['actionDate', 'action', 'dueDate', 'itemStatus', 'Source']}
               columnMapping={{
                 action: intl.formatMessage({ id: 'ui-users.loans.columns.action' }),
                 actionDate: intl.formatMessage({ id: 'ui-users.loans.columns.actionDate' }),
                 dueDate: intl.formatMessage({ id: 'ui-users.loans.columns.dueDate' }),
                 itemStatus: intl.formatMessage({ id: 'ui-users.loans.columns.itemStatus' }),
-                operator: intl.formatMessage({ id: 'ui-users.loans.columns.operator' }),
+                Source: intl.formatMessage({ id: 'ui-users.loans.columns.source' }),
               }}
               contentData={loanActionsWithUser.records}
             />
