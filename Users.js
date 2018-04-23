@@ -156,16 +156,27 @@ class Users extends React.Component {
   // XXX something prevents exceptions in this function from being received: see STRIPES-483
   create = (userdata) => {
     const { mutator } = this.props;
-    const creds = Object.assign({}, userdata.creds, { username: userdata.username }, userdata.creds.password ? {} : { password: '' });
-    const user = Object.assign({}, userdata, { id: uuid() });
-    if (user.creds) delete user.creds;
+    if (userdata.username) {
+      const creds = Object.assign({}, userdata.creds, { username: userdata.username }, userdata.creds.password ? {} : { password: '' });
+      const user = Object.assign({}, userdata, { id: uuid() });
+      if (user.creds) delete user.creds;
 
-    mutator.records.POST(user)
-      .then(newUser => mutator.creds.POST(Object.assign(creds, { userId: newUser.id })))
-      .then(newCreds => mutator.perms.POST({ userId: newCreds.userId, permissions: [] }))
-      .then((perms) => {
-        mutator.query.update({ _path: `/users/view/${perms.userId}`, layer: null });
-      });
+      mutator.records.POST(user)
+        .then(newUser => mutator.creds.POST(Object.assign(creds, { userId: newUser.id })))
+        .then(newCreds => mutator.perms.POST({ userId: newCreds.userId, permissions: [] }))
+        .then((perms) => {
+          mutator.query.update({ _path: `/users/view/${perms.userId}`, layer: null });
+        });
+    } else {
+      const user = Object.assign({}, userdata, { id: uuid() });
+      if (user.creds) delete user.creds;
+
+      mutator.records.POST(user)
+        .then((newUser) => mutator.perms.POST({ userId: newUser.id, permissions: [] }))
+        .then((perms) => {
+          mutator.query.update({ _path: `/users/view/${perms.userId}`, layer: null });
+        });
+    }
   }
 
   render() {

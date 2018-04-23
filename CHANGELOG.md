@@ -68,6 +68,7 @@
 * Update loan actions table after renew. Fixes UIU-457.
 * Fix problem where creating a new user would display a blank page. Fixes UIU-443.
 * Fix manually editing permission sets. Fixes UIU-472.
+* Make username and password optional, though mutually dependent. Fixes UIU-389.
 
 ## [2.12.0](https://github.com/folio-org/ui-users/tree/v2.12.0) (2017-11-28)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.11.0...v2.12.0)
