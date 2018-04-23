@@ -95,7 +95,7 @@ class LoanActionsHistory extends React.Component {
       loanActions.records[0].id !== loan.id) return;
     if (!userIds.query || userIds.loan.id !== loan.id) {
       const query = loanActions.records.map(r => {
-        r.metadata = r.metadata || r.metaData; 
+        r.metadata = r.metadata || r.metaData;
         return `id==${r.metadata.updatedByUserId}`;
       }).join(' or ');
       this.props.mutator.userIds.replace({ query, loan });
@@ -114,10 +114,10 @@ class LoanActionsHistory extends React.Component {
     const userMap = users.reduce((memo, user) => {
       user.metadata = user.metadata || user.metaData;
       return Object.assign(memo, { [user.id]: user });
-    }, {})
+    }, {});
     const records = loanActions.map(la => {
       la.metadata = la.metadata || la.metaData;
-      return Object.assign({}, la, { user: userMap[la.metadata.updatedByUserId] })
+      return Object.assign({}, la, { user: userMap[la.metadata.updatedByUserId] });
     });
     this.props.mutator.loanActionsWithUser.replace({ loan, records });
   }
