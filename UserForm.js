@@ -30,12 +30,12 @@ function validate(values, props) {
     errors.personal.lastName = <FormattedMessage id="ui-users.errors.missingRequiredField" />;
   }
 
-  if (!values.username) {
-    errors.username = <FormattedMessage id="ui-users.errors.missingRequiredField" />;
+  if (!values.username && values.creds && values.creds.password) {
+    errors.username = <FormattedMessage id="ui-users.errors.missingRequiredUsername" />;
   }
 
-  if (!props.initialValues.id && (!values.creds || !values.creds.password)) {
-    errors.creds = { password: <FormattedMessage id="ui-users.errors.missingRequiredField" /> };
+  if (!props.initialValues.id && (!values.creds || !values.creds.password) && values.username) {
+    errors.creds = { password: <FormattedMessage id="ui-users.errors.missingRequiredPassword" /> };
   }
 
   if (!values.patronGroup) {

@@ -364,6 +364,8 @@
   "crud.createUser": "Create User",
 
   "errors.missingRequiredField": "Please fill this in to continue",
+  "errors.missingRequiredUsername": "Please provide a username when a password is given",
+  "errors.missingRequiredPassword": "Please provide a password when a username is given",
   "errors.missingRequiredPatronGroup": "Please select a patron group",
   "errors.missingRequiredContactType": "Please select contact type",
   "errors.missingRequiredAddressType": "Please select address type",
