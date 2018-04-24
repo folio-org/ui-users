@@ -267,13 +267,13 @@
   "loans.closedLoans": "closed loans",
   "loans.loanDetails": "Loan details",
 
-  "loans.columns.title": "Title",
+  "loans.columns.title": "Item title",
   "loans.columns.itemStatus": "Item status",
   "loans.columns.barcode": "Barcode",
   "loans.columns.loanDate": "Loan date",
   "loans.columns.dueDate": "Due date",
   "loans.columns.returnDate": "Return date",
-  "loans.columns.renewals": "Renewals",
+  "loans.columns.renewals": "Renewal count",
   "loans.columns.actionDate": "Action Date",
   "loans.columns.contributors": "Contributors",
   "loans.columns.action": "Action",
@@ -298,6 +298,7 @@
   "loans.details.borrower": "Borrower",
   "loans.details.renewalCount": "Renewal count",
   "loans.details.fine": "Fine",
+  "loans.details.feeFine": "Fee/fine",
   "loans.details.proxyBorrower": "Proxy borrower",
 
   "permissions.empty": "No permissions found",
