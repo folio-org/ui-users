@@ -159,7 +159,7 @@ class LoanActionsHistory extends React.Component {
     return (contributorsLength >= 77) ?
       (
         <Popover>
-          <div data-role="target"><KeyValue label="Contributors" value={listTodisplay} /></div>
+          <div data-role="target" style={{ cursor: 'pointer' }}><KeyValue label="Contributors" value={listTodisplay} /></div>
           <div data-role="popover">
             {
               this.list.map(contributor => <p key={contributor}>{contributor}</p>)
