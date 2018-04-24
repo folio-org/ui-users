@@ -361,6 +361,8 @@
   "crud.createUser": "Benutzer anlegen",
 
   "errors.missingRequiredField": "Bitte füllen Sie dieses Pflichtfeld aus",
+  "errors.missingRequiredUsername": "Bitte geben Sie ein Benutzername ein, wenn ein Passwort vergeben wird",
+  "errors.missingRequiredPassword": "Bitte geben Sie ein Passwort ein, wenn ein Benutzername vergeben wird",
   "errors.missingRequiredPatronGroup": "Bitte auswählen, Benutzergruppe ist erforderlich",
   "errors.missingRequiredContactType": "Bitte auswählen, Kontakttyp ist erforderlich",
   "errors.missingRequiredAddressType": "Bitte auswählen, Adresstyp ist erforderlich",
