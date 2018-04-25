@@ -18,13 +18,13 @@ import { formatDateTime, getFullName } from './util';
 
 const sortMap = {
   'Action Date': action => action.dateAction,
-  Action: action => action.typeAction,
-  Amount: action => action.amountAction,
-  Balance: action => action.balance,
+  'Action': action => action.typeAction,
+  'Amount': action => action.amountAction,
+  'Balance': action => action.balance,
   'Transaction number': action => action.transactionNumber,
   'Created at': action => action.createdAt,
-  Source: action => action.source,
-  Comments: action => action.comments,
+  'Source': action => action.source,
+  'Comments': action => action.comments,
 };
 
 
@@ -130,13 +130,13 @@ class AccountActionsHistory extends React.Component {
     const accountActionsFormatter = {
       // Action: aa => loanActionMap[la.action],
       'Action Date': action => formatDateTime(action.dateAction, stripes.locale),
-      Action: action => action.typeAction,
-      Amount: action => action.amountAction || '-',
-      Balance: action => action.balance || '-',
+      'Action': action => action.typeAction,
+      'Amount': action => action.amountAction || '-',
+      'Balance': action => action.balance || '-',
       'Transaction number': action => action.transactionNumber,
       'Created at': action => action.createdAt,
-      Source: action => action.source,
-      Comments: action => action.comments,
+      'Source': action => action.source,
+      'Comments': action => action.comments,
     };
 
     const actions = _.get(this.props.resources, ['accountActions', 'records'], []);
@@ -220,7 +220,7 @@ class AccountActionsHistory extends React.Component {
             onHeaderClick={this.onSort}
             sortOrder={sortOrder[0]}
             sortDirection={`${sortDirection[0]}ending`}
-            columnWidths={{ Action: 100, Amount: 100, Balance: 100, 'Transaction number': 100, 'Created at': 100, Source: 200, Comments: 700 }}
+            columnWidths={{ 'Action': 100, 'Amount': 100, 'Balance': 100, 'Transaction number': 100, 'Created at': 100, 'Source': 200, 'Comments': 700 }}
           />
 
           <this.connectedActions

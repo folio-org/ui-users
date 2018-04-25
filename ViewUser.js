@@ -275,13 +275,13 @@ class ViewUser extends React.Component {
     if (e) e.preventDefault();
     this.props.mutator.query.update({ layer: null, f: null, q: null });
   }
-  
+
   onClickViewAccountActionsHistory(e, selectedAccount) {
     if (e) e.preventDefault();
     const query = this.props.location.search ? queryString.parse(this.props.location.search) : {};
     this.setState({
       prevLayer: query.layer,
-    }); 
+    });
     this.props.mutator.query.update({ layer: 'account', account: selectedAccount.id });
     this.setState({
       selectedAccount,
@@ -497,7 +497,7 @@ class ViewUser extends React.Component {
             accordionId="accountsSection"
             addRecord={this.state.addRecord}
             {...this.props}
-          />  
+          />
         </IfPermission>
 
 

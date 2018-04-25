@@ -77,6 +77,7 @@ class AccountsHistory extends React.Component {
     }),
     history: PropTypes.object,
     location: PropTypes.object,
+    addRecord: PropTypes.boolean,
   };
 
   static manifest = Object.freeze({
@@ -147,21 +148,19 @@ class AccountsHistory extends React.Component {
     filterConfig[1].values = [];
     filterConfig[2].values = [];
     filterConfig[3].values = [];
-    this.props.mutator.activeRecord.update({ records: 30});
+    this.props.mutator.activeRecord.update({ records: 30 });
     this.props.mutator.user.update({ id: this.props.user.id });
   }
 
   componentWillReceiveProps(nextProps) {
-    if(this.addRecord !== nextProps.addRecord) {
+    if (this.addRecord !== nextProps.addRecord) {
       if (!this.addRecord) this.props.mutator.activeRecord.update({ records: 31 });
       else this.props.mutator.activeRecord.update({ records: 30 });
       this.addRecord = nextProps.addRecord;
     }
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    console.log(nextState);
-    console.log(this.state);
+  shouldComponentUpdate(nextProps) {
     let accounts = _.get(nextProps.resources, ['feefineshistory', 'records'], []);
     const query = nextProps.location.search ? queryString.parse(nextProps.location.search) : {};
     if (query.layer === 'open-accounts') {
@@ -224,11 +223,11 @@ class AccountsHistory extends React.Component {
     this.props.parentMutator.query.update({ q: e.target.value });
   }
 
-  onClearSearch(e) {
+  onClearSearch() {
     this.props.parentMutator.query.update({ q: '' });
   }
 
-  onClearFilters(e) {
+  onClearFilters() {
     this.props.parentMutator.query.update({ f: '' });
   }
 
