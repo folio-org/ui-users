@@ -402,7 +402,7 @@ class ViewUser extends React.Component {
         </IfPermission>
 
         <IfPermission perm="circulation.loans.collection.get">
-          <IfInterface name="circulation" version="2.1">
+          <IfInterface name="circulation" version="3.0">
             <this.connectedUserLoans
               onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
               onClickViewOpenLoans={this.onClickViewOpenLoans}
