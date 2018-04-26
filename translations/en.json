@@ -276,6 +276,7 @@
   "loans.columns.renewals": "Renewal count",
   "loans.columns.actionDate": "Action Date",
   "loans.columns.contributors": "Contributors",
+  "loans.columns.checkinLocation": "Check-in location",
   "loans.columns.action": "Action",
   "loans.columns.source": "Source",
   "loans.item.renewed.callout.verb": "renewed",
@@ -297,7 +298,7 @@
   "loans.details.lost": "Lost",
   "loans.details.borrower": "Borrower",
   "loans.details.renewalCount": "Renewal count",
-  "loans.details.fine": "Fine",
+  "loans.details.fine": "Fine incurred",
   "loans.details.feeFine": "Fee/fine",
   "loans.details.proxyBorrower": "Proxy borrower",
 
