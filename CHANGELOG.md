@@ -68,6 +68,11 @@
 * Update loan actions table after renew. Fixes UIU-457.
 * Fix problem where creating a new user would display a blank page. Fixes UIU-443.
 * Fix manually editing permission sets. Fixes UIU-472.
+* Make username and password optional, though mutually dependent. Fixes UIU-389.
+* Handle metadata field case insensitively. Fixes UIU-471.
+* Bah. One case to rule them all. Handles UIU-471 in concert with CIRCSTORE-43.
+* `<IfInterface>` test should match dependency version in `package.json`. Refs UIU-471.
+* Restore patron-group sort. Fixes UIU-481.
 * Include active users in every search. Fixes UIU-400.
 
 ## [2.12.0](https://github.com/folio-org/ui-users/tree/v2.12.0) (2017-11-28)

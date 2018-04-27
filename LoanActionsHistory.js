@@ -94,8 +94,9 @@ class LoanActionsHistory extends React.Component {
     if (!loanActions.records.length ||
       loanActions.records[0].id !== loan.id) return;
     if (!userIds.query || userIds.loan.id !== loan.id) {
-      const query = loanActions.records
-        .map(r => `id==${r.metaData.updatedByUserId}`).join(' or ');
+      const query = loanActions.records.map(r => {
+        return `id==${r.metadata.updatedByUserId}`;
+      }).join(' or ');
       this.props.mutator.userIds.replace({ query, loan });
     }
 
@@ -109,10 +110,12 @@ class LoanActionsHistory extends React.Component {
   }
 
   joinLoanActionsWithUser(loanActions, users, loan) {
-    const userMap = users.reduce((memo, user) =>
-      Object.assign(memo, { [user.id]: user }), {});
-    const records = loanActions.map(la =>
-      Object.assign({}, la, { user: userMap[la.metaData.updatedByUserId] }));
+    const userMap = users.reduce((memo, user) => {
+      return Object.assign(memo, { [user.id]: user });
+    }, {});
+    const records = loanActions.map(la => {
+      return Object.assign({}, la, { user: userMap[la.metadata.updatedByUserId] });
+    });
     this.props.mutator.loanActionsWithUser.replace({ loan, records });
   }
 
@@ -159,7 +162,7 @@ class LoanActionsHistory extends React.Component {
     return (contributorsLength >= 77) ?
       (
         <Popover>
-          <div data-role="target"><KeyValue label="Contributors" value={listTodisplay} /></div>
+          <div data-role="target" style={{ cursor: 'pointer' }}><KeyValue label="Contributors" value={listTodisplay} /></div>
           <div data-role="popover">
             {
               this.list.map(contributor => <p key={contributor}>{contributor}</p>)

@@ -267,13 +267,13 @@
   "loans.closedLoans": "closed loans",
   "loans.loanDetails": "Loan details",
 
-  "loans.columns.title": "Title",
+  "loans.columns.title": "Item title",
   "loans.columns.itemStatus": "Item status",
   "loans.columns.barcode": "Barcode",
   "loans.columns.loanDate": "Loan date",
   "loans.columns.dueDate": "Due date",
   "loans.columns.returnDate": "Return date",
-  "loans.columns.renewals": "Renewals",
+  "loans.columns.renewals": "Renewal count",
   "loans.columns.actionDate": "Action Date",
   "loans.columns.contributors": "Contributors",
   "loans.columns.action": "Action",
@@ -298,6 +298,7 @@
   "loans.details.borrower": "Borrower",
   "loans.details.renewalCount": "Renewal count",
   "loans.details.fine": "Fine",
+  "loans.details.feeFine": "Fee/fine",
   "loans.details.proxyBorrower": "Proxy borrower",
 
   "permissions.empty": "No permissions found",
@@ -364,6 +365,8 @@
   "crud.createUser": "Create User",
 
   "errors.missingRequiredField": "Please fill this in to continue",
+  "errors.missingRequiredUsername": "Please provide a username when a password is given",
+  "errors.missingRequiredPassword": "Please provide a password when a username is given",
   "errors.missingRequiredPatronGroup": "Please select a patron group",
   "errors.missingRequiredContactType": "Please select contact type",
   "errors.missingRequiredAddressType": "Please select address type",
@@ -371,6 +374,7 @@
   "errors.noMatch.oops": "Uh-oh!",
   "errors.noMatch.how": "How did you get to {location}?",
 
+  "errors.userExpired": "User has expired",
   "errors.usernameUnavailable": "This username does not exist",
 
   "hide": "Hide",
