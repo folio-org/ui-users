@@ -8,9 +8,6 @@ import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import Button from '@folio/stripes-components/lib/Button';
-import DropdownMenu from '@folio/stripes-components/lib/DropdownMenu';
-import { UncontrolledDropdown } from '@folio/stripes-components/lib/Dropdown';
-import MenuItem from '@folio/stripes-components/lib/MenuItem';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 
 import { Actions } from './lib/Accounts/Actions';
@@ -65,6 +62,7 @@ class AccountActionsHistory extends React.Component {
       actions: {
         pay: false,
         cancellation: false,
+        waiveModal: false,
         comment: false,
       },
       checkedAccounts: {},
@@ -93,6 +91,14 @@ class AccountActionsHistory extends React.Component {
     this.setState({
       actions,
     });
+  }
+
+  waive = () => {
+    this.onChangeActions({ waiveModal: true });
+  }
+
+  pay = () => {
+    this.onChangeActions({ pay: true });
   }
 
   error() {
@@ -153,18 +159,8 @@ class AccountActionsHistory extends React.Component {
         >
           <Row>
             <Col xs={12}>
-              <UncontrolledDropdown onSelectItem={this.handleOptionsChange}>
-                <Button buttonStyle="primary"data-role="toggle">Pay<img style={{ marginLeft: '10px' }} alt="" src="https://png.icons8.com/ios/12/ffffff/sort-down-filled.png" /></Button>
-                <DropdownMenu data-role="menu" overrideStyle={{ padding: '6px 0' }}>
-                  <MenuItem>
-                    <Button buttonStyle="dropdownItem">Quick Paydown</Button>
-                  </MenuItem>
-                  <MenuItem>
-                    <Button buttonStyle="dropdownItem">Regular Payment</Button>
-                  </MenuItem>
-                </DropdownMenu>
-              </UncontrolledDropdown>
-              <Button buttonStyle="primary">Waive</Button>
+              <Button buttonStyle="primary" onClick={this.pay}>Pay</Button>
+              <Button buttonStyle="primary" onClick={this.waive}>Waive</Button>
               <Button buttonStyle="primary">Refund</Button>
               <Button buttonStyle="primary">Transfer</Button>
               <Button buttonStyle="primary" onClick={this.error}>Error</Button>
