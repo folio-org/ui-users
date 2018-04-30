@@ -294,7 +294,7 @@
   "loans.details.lost": "Verloren",
   "loans.details.borrower": "Ausleiher",
   "loans.details.renewalCount": "Verlängerungen",
-  "loans.details.fine": "Gebühr",
+  "loans.details.fine": "Gebühr entstanden",
   "loans.details.proxyBorrower": "Bevollmächtigter des Ausleihers",
 
   "permissions.empty": "Keine Berechtigungen gefunden",
