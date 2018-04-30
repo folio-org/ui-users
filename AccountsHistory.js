@@ -5,7 +5,6 @@ import queryString from 'query-string';
 import Button from '@folio/stripes-components/lib/Button';
 import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
-import { onChangeFilter as commonChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import SegmentedControl from '@folio/stripes-components/lib/SegmentedControl';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
@@ -13,9 +12,9 @@ import IconButton from '@folio/stripes-components/lib/IconButton';
 import { Menu, Filters } from './lib/Accounts/lib/AccountsHistory';
 
 import { Actions } from './lib/Accounts/Actions';
+import accountQueryFunction from './lib/Accounts/lib/accountQueryFunction';
 
-import makeQueryFunction from './queryFunction';
-import { initialFilterState, count, getFullName } from './lib/Accounts/util';
+import { count, getFullName, filterState, handleFilterChange, handleFilterClear } from './lib/Accounts/util';
 import {
   OpenAccounts,
   AllAccounts,
@@ -77,10 +76,11 @@ class AccountsHistory extends React.Component {
     }),
     history: PropTypes.object,
     location: PropTypes.object,
-    addRecord: PropTypes.boolean,
+    addRecord: PropTypes.bool,
   };
 
   static manifest = Object.freeze({
+    query: { initialValue: {} },
     feefineshistory: {
       type: 'okapi',
       records: 'feefinehistory',
@@ -89,9 +89,9 @@ class AccountsHistory extends React.Component {
       perRequest: 30,
       GET: {
         params: {
-          query: makeQueryFunction(
-            'cql.allRecords=1',
-            'feeFineType="$QUERY*" or barcode="$QUERY*" or itemType="$QUERY" or item="$QUERY*" or feeFineOwner="$QUERY*" or paymentStatus="$QUERY"',
+          query: accountQueryFunction(
+            'feeFineType=*',
+            'feeFineType="%{query.q}*" or barcode="%{query.q}*" or itemType="%{query.q}" or item="%{query.q}*" or feeFineOwner="%{query.q}*" or paymentStatus="%{query.q}"',
             { userId: 'userId' },
             filterConfig,
           ),
@@ -106,10 +106,7 @@ class AccountsHistory extends React.Component {
   constructor(props) {
     super(props);
 
-    const query = props.location.search ? queryString.parse(props.location.search) : {};
-
     this.state = {
-      filters: initialFilterState(filterConfig, query.f),
       showFilters: false,
       selected: 0,
       actions: {
@@ -124,14 +121,10 @@ class AccountsHistory extends React.Component {
       },
     };
 
-    this.onChangeFilter = commonChangeFilter.bind(this);
-    this.onChangeSearch = this.onChangeSearch.bind(this);
-    this.onClearSearch = this.onClearSearch.bind(this);
     this.handleActivate = this.handleActivate.bind(this);
     this.handleOptionsChange = this.handleOptionsChange.bind(this);
     this.onChangeActions = this.onChangeActions.bind(this);
     this.onChangeSelected = this.onChangeSelected.bind(this);
-    this.onClearFilters = this.onClearFilters.bind(this);
     this.connectedOpenAccounts = props.stripes.connect(OpenAccounts);
     this.connectedClosedAccounts = props.stripes.connect(ClosedAccounts);
     this.connectedAllAccounts = props.stripes.connect(AllAccounts);
@@ -140,6 +133,14 @@ class AccountsHistory extends React.Component {
     this.handleRecords = this.handleRecords.bind(this);
     this.accounts = [];
     this.addRecord = false;
+    this.editRecord = 0;
+
+    this.transitionToParams = values => this.props.parentMutator.query.update(values);
+    this.handleFilterChange = handleFilterChange.bind(this);
+    this.handleFilterClear = handleFilterClear.bind(this);
+
+    const initialQuery = queryString.parse(props.location.search) || {};
+    this.initialFilters = initialQuery.f;
   }
 
   componentWillMount() {
@@ -157,6 +158,11 @@ class AccountsHistory extends React.Component {
       if (!this.addRecord) this.props.mutator.activeRecord.update({ records: 31 });
       else this.props.mutator.activeRecord.update({ records: 30 });
       this.addRecord = nextProps.addRecord;
+    }
+    if (this.editRecord !== 0) {
+      if (this.editRecord === 1) this.props.mutator.activeRecord.update({ records: 31 });
+      else this.props.mutator.activeRecord.update({ records: 30 });
+      this.editRecord = 0;
     }
   }
 
@@ -183,9 +189,15 @@ class AccountsHistory extends React.Component {
     return true;
   }
 
+  queryParam = name => {
+    const query = queryString.parse(this.props.location.search) || {};
+    return _.get(query, name);
+  }
+
   onChangeActions(actions, a) {
+    const newActions = { ...this.state.actions, ...actions };
     this.setState({
-      actions,
+      actions: newActions,
     });
     if (a) {
       this.accounts = a;
@@ -206,6 +218,10 @@ class AccountsHistory extends React.Component {
     });
   }
 
+  handleEdit = (val) => {
+    this.editRecord = val;
+  }
+
   handleOptionsChange(key, e) {
     e.preventDefault();
     e.stopPropagation();
@@ -219,26 +235,26 @@ class AccountsHistory extends React.Component {
     this.addRecord = true;
   }
 
-  onChangeSearch(e) {
-    this.props.parentMutator.query.update({ q: e.target.value });
+  onChangeSearch = (e) => {
+    const query = e.target.value;
+    // this.setState({ locallyChangedSearchTerm: query });
+    this.transitionToParams({ q: query });
   }
 
-  onClearSearch() {
-    this.props.parentMutator.query.update({ q: '' });
+  onClearSearch = () => {
+    // this.setState({ locallyChangedSearchTerm: undefined });
+    this.transitionToParams({ q: '' });
   }
 
-  onClearFilters() {
-    this.props.parentMutator.query.update({ f: '' });
+  onClearSearchAndFilters = () => {
+    // this.setState({ locallyChangedSearchTerm: undefined });
+    this.transitionToParams({ f: this.initialFilters || '', query: '', qindex: '' });
   }
 
   onChangeSelected(value) {
     this.setState({
       selected: value,
     });
-  }
-
-  updateFilters(filters) {
-    this.props.parentMutator.query.update({ f: Object.keys(filters).filter(key => filters[key]).join(',') });
   }
 
   toggleFilterPane = () => {
@@ -256,6 +272,7 @@ class AccountsHistory extends React.Component {
     let badgeCount = accounts.length;
     if (query.layer === 'open-accounts') badgeCount = open.length;
     else if (query.layer === 'closed-accounts') badgeCount = closed.length;
+    const filters = filterState(this.queryParam('f'));
 
     const firstMenu = (
       <PaneMenu>
@@ -310,17 +327,17 @@ class AccountsHistory extends React.Component {
               toggle={this.toggleFilterPane}
               showFilters={this.state.showFilters}
               onChangeSearch={this.onChangeSearch}
-              onClearFilters={this.onClearFilters}
+              onClearFilters={this.handleFilterClear}
               onClearSearch={this.onClearSearch}
               filterConfig={filterConfig}
-              filters={this.state.filters}
-              onChangeFilter={this.onChangeFilter}
+              filters={filters}
+              onChangeFilter={this.handleFilterChange}
             />
             <Pane defaultWidth="fill" header={header}>
               <Menu
                 user={user}
                 showFilters={this.state.showFilters}
-                filters={this.state.filters}
+                filters={filters}
                 balance={balance}
                 selected={selected}
                 actions={this.state.actions}
@@ -337,7 +354,6 @@ class AccountsHistory extends React.Component {
                     accounts={open}
                     onChangeSelected={this.onChangeSelected}
                     onChangeActions={this.onChangeActions}
-                    showConfirm={this.showConfirm}
                   />) : ''
                 }
                 {(query.layer === 'closed-accounts') ?
@@ -362,6 +378,7 @@ class AccountsHistory extends React.Component {
                 onChangeActions={this.onChangeActions}
                 user={user}
                 accounts={this.accounts}
+                handleEdit={this.handleEdit}
               />
             </Pane>
           </Paneset>
