@@ -72,6 +72,7 @@
 * Handle metadata field case insensitively. Fixes UIU-471.
 * Bah. One case to rule them all. Handles UIU-471 in concert with CIRCSTORE-43.
 * `<IfInterface>` test should match dependency version in `package.json`. Refs UIU-471.
+* Restore patron-group sort. Fixes UIU-481.
 
 ## [2.12.0](https://github.com/folio-org/ui-users/tree/v2.12.0) (2017-11-28)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.11.0...v2.12.0)
