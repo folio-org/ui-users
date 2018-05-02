@@ -294,6 +294,7 @@
   "loans.items.userNameAndPatronGroup": "User name and patron group",
   "loans.details.location": "Location",
   "loans.details.requestQueue": "Request queue",
+  "loans.details.requests": "Requests",
   "loans.details.callNumber": "Call number",
   "loans.details.claimedReturned": "Claimed returned",
   "loans.details.loanPolicy": "Loan policy",
