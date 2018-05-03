@@ -184,8 +184,8 @@ class PermissionSetForm extends React.Component {
               <Row>
                 <Col xs={8}>
                   <section>
-                    <Field label={`${intl.formatMessage({ id: 'ui-users.permissions.permissionSetName' })} *`} name="displayName" id="input-permission-title" component={Textfield} autoFocus required fullWidth rounded disabled={disabled} />
-                    <Field label={intl.formatMessage({ id: 'ui-users.description' })} name="description" id="input-permission-description" component={TextArea} fullWidth rounded disabled={disabled} />
+                    <Field label={`${intl.formatMessage({ id: 'ui-users.permissions.permissionSetName' })} *`} name="displayName" id="input-permission-title" component={Textfield} autoFocus required fullWidth disabled={disabled} />
+                    <Field label={intl.formatMessage({ id: 'ui-users.description' })} name="description" id="input-permission-description" component={TextArea} fullWidth disabled={disabled} />
                   </section>
                 </Col>
               </Row>
