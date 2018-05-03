@@ -290,7 +290,7 @@ class ViewUser extends React.Component {
 
   onClickCloseAccountActionsHistory(e) {
     if (e) e.preventDefault();
-    this.props.mutator.query.update({ layer: 'all-accounts' });
+    //    this.props.mutator.query.update({ layer: 'all-accounts' });
     const layer = this.state.prevLayer;
     this.props.mutator.query.update({ layer, account: null });
     this.setState({
