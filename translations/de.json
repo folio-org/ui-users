@@ -1,6 +1,6 @@
 {
   "search": "Suche",
-  "resultCount": "Gefunden {count, number} {count, plural, one {Aufzeichnung} other {Aufzeichnungen}}",
+  "resultCount": "{count, number} {count, plural, one {Datensatz} other {Datensätze}} gefunden",
 
   "data.contactTypes.email": "E-Mail",
   "data.contactTypes.mail": "Post (Primäre Adresse)",
@@ -279,10 +279,10 @@
   "loans.columns.action": "Aktion",
   "loans.columns.operator": "Bearbeiter",
 
-  "loans.item.renewed.callout": "Der Titel <string>{title}</strong> wurde erfolgreich <strong>verlängert</strong>.",
+  "loans.item.renewed.callout": "Der Titel <strong>{title}</strong> wurde erfolgreich <strong>verlängert</strong>.",
 
-  "loans.items.renewed.subheading": "{count} Medium erfolgreich verlängert",
-  "loans.items.renewed.callout": "<string>{count}</string> {count, plural, one {Medium} other {Medien}} verlängert",
+  "loans.items.renewed.subheading": "{count} {count, plural, one {Medium wurde} other {Medien wurden}} erfolgreich verlängert",
+  "loans.items.renewed.callout": "<strong>{count}</strong> {count, plural, one {Medium} other {Medien}} verlängert",
   "loans.items.renewed.callout.details": "Details ansehen",
   "loans.items.renewed.label": "Erfolgreiche Verlängerungen",
 
