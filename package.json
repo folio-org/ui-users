@@ -220,6 +220,7 @@
     "@folio/stripes-form": "^0.8.2",
     "@folio/stripes-smart-components": "^1.4.11",
     "classnames": "^2.2.5",
+    "dateformat": "^3.0.3",
     "hashcode": "^1.0.3",
     "lodash": "^4.17.4",
     "prop-types": "^15.5.10",
