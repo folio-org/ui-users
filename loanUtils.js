@@ -48,7 +48,7 @@ export function calculateFixedRenewal(loan) {
 
   // UIU-433 get alternate fixed renewal period from loan policy
   if (renewalsPolicy.differentPeriod && loanPolicy.alternateFixedDueDateSchedule) {
-    return moment(loanPolicy.alternateFixedDueDateSchedule.schedule.due);
+    return moment(loanPolicy.alternateFixedDueDateSchedule.schedules[0].due);
   } else if (loanPolicy.fixedDueDateSchedule) { // UIU-405 get fixed renewal period from loan policy
     return moment(loanPolicy.fixedDueDateSchedule.schedule.due);
   }
