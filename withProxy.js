@@ -74,6 +74,14 @@ const withProxy = WrappedComponent =>
       }),
     );
 
+    static getDerivedStateFromProps() {
+      if (!this.props.stripes.hasPerm('proxiesfor.collection.get')) {
+        return null;
+      }
+
+      return null;
+    }
+
     constructor(props) {
       super(props);
       this.getProxies = this.getProxies.bind(this);
@@ -92,12 +100,8 @@ const withProxy = WrappedComponent =>
       this.loadProxies(userId);
     }
 
-    componentWillReceiveProps(nextProps) {
-      if (!this.props.stripes.hasPerm('proxiesfor.collection.get')) {
-        return;
-      }
-
-      const { match: { params: { id } } } = nextProps;
+    componentDidUpdate(prevProps) {
+      const { match: { params: { id } } } = prevProps;
 
       if (id !== this.props.match.params.id) {
         this.loadSponsors(id);

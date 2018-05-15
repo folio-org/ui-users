@@ -71,6 +71,30 @@ class LoanActionsHistory extends React.Component {
     },
   });
 
+  // TODO: refactor after join is supported in stripes-connect
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const { loan, resources: { loanActions, userIds, users, loanActionsWithUser } } = nextProps;
+
+    if (!loanActions.records.length ||
+      loanActions.records[0].id !== loan.id) return null;
+    if (!userIds.query || userIds.loan.id !== loan.id) {
+      const query = loanActions.records.map(r => {
+        return `id==${r.metadata.updatedByUserId}`;
+      }).join(' or ');
+      this.props.mutator.userIds.replace({ query, loan });
+    }
+
+    if (!users.records.length) return null;
+
+    if (!loanActionsWithUser.records || loanActionsWithUser.loan.id !== loan.id
+      || prevState.loanActionCount !== loanActions.other.totalRecords) {
+      this.joinLoanActionsWithUser(loanActions.records, users.records, loan);
+      return ({ loanActionCount: loanActions.other.totalRecords });
+    }
+
+    return null;
+  }
+
   constructor(props) {
     super(props);
     this.connectedProxy = props.stripes.connect(LoanActionsHistoryProxy);
@@ -85,28 +109,6 @@ class LoanActionsHistory extends React.Component {
       nonRenewedLoanItems: [],
       nonRenewedLoansModalOpen: false
     };
-  }
-
-  // TODO: refactor after join is supported in stripes-connect
-  componentWillReceiveProps(nextProps) {
-    const { loan, resources: { loanActions, userIds, users, loanActionsWithUser } } = nextProps;
-
-    if (!loanActions.records.length ||
-      loanActions.records[0].id !== loan.id) return;
-    if (!userIds.query || userIds.loan.id !== loan.id) {
-      const query = loanActions.records.map(r => {
-        return `id==${r.metadata.updatedByUserId}`;
-      }).join(' or ');
-      this.props.mutator.userIds.replace({ query, loan });
-    }
-
-    if (!users.records.length) return;
-
-    if (!loanActionsWithUser.records || loanActionsWithUser.loan.id !== loan.id
-      || this.state.loanActionCount !== loanActions.other.totalRecords) {
-      this.joinLoanActionsWithUser(loanActions.records, users.records, loan);
-      this.setState({ loanActionCount: loanActions.other.totalRecords });
-    }
   }
 
   joinLoanActionsWithUser(loanActions, users, loan) {

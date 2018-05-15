@@ -174,10 +174,11 @@ class ViewUser extends React.Component {
       if (loansHistory.length) {
         const selectedLoan = find(loansHistory, { id: query.loan });
         if (selectedLoan) {
-          this.setState({ selectedLoan });
+          return ({ selectedLoan });
         }
       }
     }
+    return null;
   }
 
   onClickViewOpenLoans(e) {
