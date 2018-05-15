@@ -134,6 +134,22 @@ class ViewUser extends React.Component {
     },
   });
 
+  static getDerivedStateFromProps(nextProps) {
+    this.addressTypes = (nextProps.parentResources.addressTypes || {}).records || [];
+
+    const query = this.props.location.search ? queryString.parse(this.props.location.search) : {};
+    if (query.loan) {
+      const loansHistory = (nextProps.resources.loansHistory || {}).records || [];
+      if (loansHistory.length) {
+        const selectedLoan = find(loansHistory, { id: query.loan });
+        if (selectedLoan) {
+          return ({ selectedLoan });
+        }
+      }
+    }
+    return null;
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -163,22 +179,6 @@ class ViewUser extends React.Component {
     this.onAddressesUpdate = this.onAddressesUpdate.bind(this);
     this.handleSectionToggle = this.handleSectionToggle.bind(this);
     this.handleExpandAll = this.handleExpandAll.bind(this);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.addressTypes = (nextProps.parentResources.addressTypes || {}).records || [];
-
-    const query = this.props.location.search ? queryString.parse(this.props.location.search) : {};
-    if (query.loan) {
-      const loansHistory = (nextProps.resources.loansHistory || {}).records || [];
-      if (loansHistory.length) {
-        const selectedLoan = find(loansHistory, { id: query.loan });
-        if (selectedLoan) {
-          return ({ selectedLoan });
-        }
-      }
-    }
-    return null;
   }
 
   onClickViewOpenLoans(e) {
