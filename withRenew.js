@@ -67,6 +67,7 @@ const withRenew = WrappedComponent =>
       super(props);
       this.renew = this.renew.bind(this);
       this.hideModal = this.hideModal.bind(this);
+      this.getMessage = this.getMessage.bind(this);
       this.state = {
         errorMsg: [],
         bulkRenewal: false
@@ -205,7 +206,7 @@ const withRenew = WrappedComponent =>
       this.setState({ errorMsg: [] });
     }
 
-    render() {
+    getMessage() {
       const { errorMsg } = this.state;
       const errorsLength = errorMsg.length;
       let msg = '';
@@ -221,7 +222,12 @@ const withRenew = WrappedComponent =>
           }
         });
       }
+      return msg;
+    }
 
+    render() {
+      const { errorMsg } = this.state;
+      const msg = this.getMessage();
       const popupMessage = `Loan cannot be renewed because: ${msg}`;
       return (
         <div>
