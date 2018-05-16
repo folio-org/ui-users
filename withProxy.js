@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { differenceWith } from 'lodash';
 import moment from 'moment'; // eslint-disable-line import/no-extraneous-dependencies
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -150,7 +150,7 @@ const withProxy = WrappedComponent =>
 
       const rMap = records.reduce((memo, record) =>
         Object.assign(memo, { [record.id]: record }), {});
-      return recordsFor.map(r => ({ proxy: r, user: rMap[r[idKey]] }));
+      return recordsFor.map(proxy => ({ proxy: r, user: rMap[r[idKey]] }));
     }
 
     update(resourceName, records, curRecords) {
@@ -158,7 +158,7 @@ const withProxy = WrappedComponent =>
       const userId = params.id;
 
       const edited = records.filter(rec => !!(rec.proxy.id));
-      const removed = _.differenceWith(curRecords, edited, (r1, r2) => (r1.proxy.id === r2.proxy.id));
+      const removed = differenceWith(curRecords, edited, (r1, r2) => (r1.proxy.id === r2.proxy.id));
       const added = records.filter(rec => !rec.proxy.id);
 
       const editPromises = edited.map(rec => (proxiesFor.PUT(rec.proxy)));
