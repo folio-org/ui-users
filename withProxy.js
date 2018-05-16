@@ -150,7 +150,7 @@ const withProxy = WrappedComponent =>
 
       const rMap = records.reduce((memo, record) =>
         Object.assign(memo, { [record.id]: record }), {});
-      return recordsFor.map(proxy => ({ proxy: r, user: rMap[r[idKey]] }));
+      return recordsFor.map(r => ({ proxy: r, user: rMap[r[idKey]] }));
     }
 
     update(resourceName, records, curRecords) {
