@@ -150,24 +150,25 @@ const withProxy = WrappedComponent =>
 
       const rMap = records.reduce((memo, record) =>
         Object.assign(memo, { [record.id]: record }), {});
-      return recordsFor.map(r => ({ ...r, user: rMap[r[idKey]] }));
+      return recordsFor.map(r => ({ proxy: r, user: rMap[r[idKey]] }));
     }
 
     update(resourceName, records, curRecords) {
       const { match: { params }, mutator: { proxiesFor } } = this.props;
       const userId = params.id;
 
-      const edited = records.filter(rec => !!(rec.id));
-      const removed = _.differenceBy(curRecords, edited, 'id');
-      const added = records.filter(rec => !rec.id);
+      const edited = records.filter(rec => !!(rec.proxy.id));
+      const removed = _.differenceWith(curRecords, edited, (r1, r2) => (r1.proxy.id === r2.proxy.id));
+      const added = records.filter(rec => !rec.proxy.id);
 
-      const editPromises = edited.map(rec => (proxiesFor.PUT(_.omit(rec, 'user'))));
-      const removePromises = removed.map(rec => (proxiesFor.DELETE(_.omit(rec, 'user'))));
+      const editPromises = edited.map(rec => (proxiesFor.PUT(rec.proxy)));
+      const removePromises = removed.map(rec => (proxiesFor.DELETE(rec.proxy)));
       const addPromises = added.map((rec) => {
-        const meta = Object.assign(rec.meta, { createdDate: moment().format() });
+        const proxy = Object.assign({}, rec.proxy, { meta: { createdDate: moment().format() } });
         const data = (resourceName === 'proxies') ?
-          { proxyUserId: rec.user.id, userId, meta } :
-          { proxyUserId: userId, userId: rec.user.id, meta: rec.meta };
+          { ...proxy, proxyUserId: rec.user.id, userId } :
+          { ...proxy, proxyUserId: userId, userId: rec.user.id };
+
         return proxiesFor.POST(data);
       });
 
