@@ -99,7 +99,7 @@ const withRenew = WrappedComponent =>
     checkRenewLimit(loan) {
       const allowedRenewals = get(loan, 'loanPolicy.renewalsPolicy.numberAllowed', '');
       if (allowedRenewals !== '') {
-        if (loan.renewalCount >= allowedRenewals) {
+        if (loan.renewalCount === undefined || loan.renewalCount >= allowedRenewals) {
           const error = 'loan has reached its maximum number of renewals';
           if (!this.state.bulkRenewal) this.setState({ errorMsg: [...this.state.errorMsg, error] });
         }
