@@ -179,6 +179,7 @@ const withRenew = WrappedComponent =>
         const error = 'renewal at this time would not change the due date';
         if (!this.state.bulkRenewal) this.setState({ errorMsg: [...this.state.errorMsg, error] });
       }
+
       return loan;
     }
 
