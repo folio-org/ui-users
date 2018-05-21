@@ -362,9 +362,6 @@
   "proxy.requestForSponsor": "Proxy can request for sponsor",
   "proxy.notificationsTo": "Notifications sent to",
   "proxy.accrueTo": "Fees/fines accrue to",
-  "proxy.errors.relationshipExpired": "Proxy relationship has expired",
-  "proxy.errors.proxyExpired": "Proxy user record expired",
-  "proxy.errors.sponsorExpired": "Sponsor user record expired",
 
   "crud.closeNewUserDialog": "Close New User Dialog",
   "crud.editUser": "Edit User",
@@ -383,6 +380,10 @@
 
   "errors.userExpired": "User has expired",
   "errors.usernameUnavailable": "This username does not exist",
+
+  "errors.proxyrelationship.expired": "Proxy relationship has expired",
+  "errors.proxies.expired": "Proxy user record expired",
+  "errors.sponsors.expired": "Sponsor user record expired",
 
   "hide": "Hide",
   "show": "Show",
