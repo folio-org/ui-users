@@ -381,6 +381,10 @@
   "errors.userExpired": "User has expired",
   "errors.usernameUnavailable": "This username does not exist",
 
+  "errors.proxyrelationship.expired": "Proxy relationship has expired",
+  "errors.proxies.expired": "Proxy user record expired",
+  "errors.sponsors.expired": "Sponsor user record expired",
+
   "hide": "Hide",
   "show": "Show",
   "active": "Active",
