@@ -25,9 +25,13 @@ module.exports.test = function foo(uiTestCtx) {
 
       it('should get active user barcodes', (done) => {
         nightmare
+          .wait('#clickable-users-module')
           .click('#clickable-users-module')
           .wait(1000)
-          .click('#clickable-filter-active-Active')
+          .wait('#input-user-search')
+          .wait(1000)
+          .type('#input-user-search', '0')
+          .wait(1000)
           .wait('#list-users div[role="listitem"]:nth-child(9)')
           .evaluate(() => {
             const ubc = [];
@@ -54,11 +58,15 @@ module.exports.test = function foo(uiTestCtx) {
 
       it('should add a proxy for user 1', (done) => {
         nightmare
+          .wait('#input-user-search')
+          .type('#input-user-search', '0')
+          .wait('#clickable-reset-all')
+          .click("#clickable-reset-all")
           .insert('#input-user-search', userIds[0].barcode)
           .wait('#clickable-edituser')
           .click('#clickable-edituser')
-          .wait('#proxy button[title^="expand"]')
-          .click('#proxy button[title^="expand"]')
+          .wait('#accordion-toggle-button-proxy')
+          .click('#accordion-toggle-button-proxy')
           .wait('#proxy button[title^="Find"]')
           .click('#proxy button[title^="Find"]')
           .wait('div[aria-label="Select User"] #input-user-search')
@@ -81,13 +89,17 @@ module.exports.test = function foo(uiTestCtx) {
           .wait('#users-module-display > div > section:nth-child(2) > div > button')
           .click('#users-module-display > div > section:nth-child(2) > div > button')
           .wait(2222)
+          .wait('#input-user-search')
+          .type('#input-user-search', '0')
+          .wait('#clickable-reset-all')
+          .click('#clickable-reset-all')
           .type('#input-user-search', userIds[1].barcode)
           .wait(`#list-users div[role="listitem"] > a > div[title="${userIds[1].barcode}"]`)
           .click(`#list-users div[role="listitem"] > a > div[title="${userIds[1].barcode}"]`)
           .wait(222)
           .click('#clickable-edituser')
-          .wait('#proxy button[title^="expand"]')
-          .click('#proxy button[title^="expand"]')
+          .wait('#accordion-toggle-button-proxy')
+          .click('#accordion-toggle-button-proxy')
           .wait(`#proxy a[href*="${userIds[0].uuid}"]`)
           .xclick(`id("proxy")//a[contains(@href, "${userIds[0].uuid}")]/../../../..//button`)
           .wait('#clickable-deleteproxy-confirmation-confirm')

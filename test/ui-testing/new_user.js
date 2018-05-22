@@ -70,8 +70,11 @@ module.exports.test = function meh(uitestctx) {
         nightmare
           .wait('#clickable-users-module')
           .click('#clickable-users-module')
-          .wait('#clickable-filter-active-Active')
-          .click('#clickable-filter-active-Active')
+          .wait(3000)
+          .wait('#input-user-search')
+          .wait(1000)
+          .type('#input-user-search', '0')
+          .wait(1000)
           .wait('#list-users div[role="listitem"] > a')
           .click('#clickable-newuser')
           .wait('#adduser_group > option:nth-of-type(4)')
