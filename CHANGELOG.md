@@ -73,6 +73,8 @@
 * Bah. One case to rule them all. Handles UIU-471 in concert with CIRCSTORE-43.
 * `<IfInterface>` test should match dependency version in `package.json`. Refs UIU-471.
 * Restore patron-group sort. Fixes UIU-481.
+* "Use new proxyFor schema instead of meta. Fixes UIU-495.
+* Validate proxy relationship status. Fixes UIU-200 and UIU-201.
 * Include active users in every search. Fixes UIU-400.
 
 ## [2.12.0](https://github.com/folio-org/ui-users/tree/v2.12.0) (2017-11-28)

@@ -140,7 +140,6 @@ class LoanActionsHistory extends React.Component {
       .then(() => this.showCallout())
       .catch(() => {
         singleRenewalFailure.push(loanToRenew);
-        this.openNonRenewedLoansModal(singleRenewalFailure);
       });
     return promise;
   }

@@ -1,6 +1,8 @@
 {
   "search": "Search",
   "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}",
+  "closedLoansCount": "{count, number} {count, plural, one {closed loan} other {closed loans}}",
+
 
   "data.contactTypes.email": "Email",
   "data.contactTypes.mail": "Mail (Primary Address)",
@@ -276,6 +278,7 @@
   "loans.columns.renewals": "Renewal count",
   "loans.columns.actionDate": "Action Date",
   "loans.columns.contributors": "Contributors",
+  "loans.columns.checkinLocation": "Check-in location",
   "loans.columns.action": "Action",
   "loans.columns.source": "Source",
   "loans.item.renewed.callout.verb": "renewed",
@@ -291,13 +294,14 @@
   "loans.items.userNameAndPatronGroup": "User name and patron group",
   "loans.details.location": "Location",
   "loans.details.requestQueue": "Request queue",
+  "loans.details.requests": "Requests",
   "loans.details.callNumber": "Call number",
   "loans.details.claimedReturned": "Claimed returned",
   "loans.details.loanPolicy": "Loan policy",
   "loans.details.lost": "Lost",
   "loans.details.borrower": "Borrower",
   "loans.details.renewalCount": "Renewal count",
-  "loans.details.fine": "Fine",
+  "loans.details.fine": "Fine incurred",
   "loans.details.feeFine": "Fee/fine",
   "loans.details.proxyBorrower": "Proxy borrower",
 
@@ -376,6 +380,10 @@
 
   "errors.userExpired": "User has expired",
   "errors.usernameUnavailable": "This username does not exist",
+
+  "errors.proxyrelationship.expired": "Proxy relationship has expired",
+  "errors.proxies.expired": "Proxy user record expired",
+  "errors.sponsors.expired": "Sponsor user record expired",
 
   "hide": "Hide",
   "show": "Show",

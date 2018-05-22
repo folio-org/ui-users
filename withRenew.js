@@ -67,18 +67,21 @@ const withRenew = WrappedComponent =>
       super(props);
       this.renew = this.renew.bind(this);
       this.hideModal = this.hideModal.bind(this);
-      this.state = { error: null };
+      this.getMessage = this.getMessage.bind(this);
+      this.state = {
+        errorMsg: [],
+        bulkRenewal: false
+      };
     }
 
-    renew(data) {
+    renew(data, bulkRenewal) {
+      this.setState({ bulkRenewal });
       return this.fetchLoanPolicy(data)
-        .then(loan => this.checkRenewLimit(loan))
         .then(loan => this.fetchFixedDueDateSchedule(loan))
         .then(loan => this.fetchAlternateFixedDueDateSchedule(loan))
         .then(loan => this.validateRenew(loan))
         .then(loan => this.execRenew(loan))
         .catch((error) => {
-          if (error.message !== 'NotRenewed') this.setState({ error });
           throw error;
         });
     }
@@ -96,7 +99,10 @@ const withRenew = WrappedComponent =>
     checkRenewLimit(loan) {
       const allowedRenewals = get(loan, 'loanPolicy.renewalsPolicy.numberAllowed', '');
       if (allowedRenewals !== '') {
-        if (loan.renewalCount >= allowedRenewals) this.throwError('NotRenewed');
+        if (loan.renewalCount >= allowedRenewals) {
+          const error = 'loan has reached its maximum number of renewals';
+          if (!this.state.bulkRenewal) this.setState({ errorMsg: [...this.state.errorMsg, error] });
+        }
       }
       return loan;
     }
@@ -131,13 +137,15 @@ const withRenew = WrappedComponent =>
     validateRenew(loan) {
       const { loanPolicy } = loan;
       const loansPolicy = loanPolicy.loansPolicy || {};
-
       if (isLoanProfileFixed(loansPolicy)) {
         this.validateSchedules(loanPolicy);
       }
-
       this.validateDueDate(loan);
+      this.checkRenewLimit(loan);
 
+      if (this.state.errorMsg.length > 0) {
+        this.throwError(this.state.errorMsg);
+      }
       return loan;
     }
 
@@ -156,11 +164,9 @@ const withRenew = WrappedComponent =>
       const schedule = getFixedDueDateSchedule(dueDateSchedule.schedules);
 
       if (!schedule) {
-        return this.throwError(` Item can't be renewed as the renewal date falls outside
-          of the date ranges in the loan policy.
-          Please review ${loanPolicy.name} before retrying renewal.`);
+        const error = (' renewal date falls outside of the date ranges in the loan policy');
+        if (!this.state.bulkRenewal) this.setState({ errorMsg: [...this.state.errorMsg, error] });
       }
-
       dueDateSchedule.schedule = schedule;
       return dueDateSchedule;
     }
@@ -170,7 +176,8 @@ const withRenew = WrappedComponent =>
       const currentDueDate = moment(loan.dueDate).startOf('day');
 
       if (newDueDate.isSameOrBefore(currentDueDate)) {
-        return this.throwError('Renewal at this time would not change the due date.');
+        const error = 'renewal at this time would not change the due date';
+        if (!this.state.bulkRenewal) this.setState({ errorMsg: [...this.state.errorMsg, error] });
       }
 
       return loan;
@@ -197,21 +204,41 @@ const withRenew = WrappedComponent =>
     }
 
     hideModal() {
-      this.setState({ error: null });
+      this.setState({ errorMsg: [] });
+    }
+
+    getMessage() {
+      const { errorMsg } = this.state;
+      const errorsLength = errorMsg.length;
+      let msg = '';
+      if (errorsLength > 0) {
+        errorMsg.forEach((error, index) => {
+          if (errorsLength === 1) {
+            msg = `${msg}${error} `;
+          } else if (errorsLength > 1 && index === errorsLength - 2) {
+            msg = `${msg}${error} and `;
+          } else {
+            // formatting the message to be displayed on the modal popup
+            msg = (index === errorsLength - 1) ? `${msg}${error}. ` : `${msg}${error}, `;
+          }
+        });
+      }
+      return msg;
     }
 
     render() {
-      const { error } = this.state;
-
+      const { errorMsg } = this.state;
+      const msg = this.getMessage();
+      const popupMessage = `Loan cannot be renewed because: ${msg}`;
       return (
         <div>
           <WrappedComponent renew={this.renew} {...this.props} />
-          {error &&
+          {errorMsg &&
             <ErrorModal
-              open={!!(error)}
+              open={errorMsg.length > 0 && !this.state.bulkRenewal}
               onClose={this.hideModal}
-              message={error.message}
-              label="Item not renewed"
+              message={popupMessage}
+              label="Loan not renewed"
             />
           }
         </div>
