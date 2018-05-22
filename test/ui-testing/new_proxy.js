@@ -61,7 +61,7 @@ module.exports.test = function foo(uiTestCtx) {
           .wait('#input-user-search')
           .type('#input-user-search', '0')
           .wait('#clickable-reset-all')
-          .click("#clickable-reset-all")
+          .click('#clickable-reset-all')
           .insert('#input-user-search', userIds[0].barcode)
           .wait('#clickable-edituser')
           .click('#clickable-edituser')
