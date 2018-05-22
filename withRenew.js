@@ -108,7 +108,7 @@ const withRenew = WrappedComponent =>
     }
 
     fetchFixedDueDateSchedule(loan) {
-      const scheduleId = get(loan, 'loanPolicy.loansPolicy.fixedDueDateSchedule', '');
+      const scheduleId = get(loan, 'loanPolicy.loansPolicy.fixedDueDateScheduleId', '');
       if (!scheduleId) return loan;
 
       return this.fetchSchedule(loan, scheduleId).then((schedule) => {
@@ -140,6 +140,7 @@ const withRenew = WrappedComponent =>
       if (isLoanProfileFixed(loansPolicy)) {
         this.validateSchedules(loanPolicy);
       }
+
       this.validateDueDate(loan);
       this.checkRenewLimit(loan);
 
