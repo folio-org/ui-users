@@ -34,6 +34,11 @@ const withRenew = WrappedComponent =>
           PUT: PropTypes.func.isRequired,
         }),
       }),
+      stripes: PropTypes.shape({
+        intl: PropTypes.shape({
+          formatMessage: PropTypes.func.isRequired,
+        }).isRequired,
+      }).isRequired,
     };
 
     static manifest = Object.freeze(
@@ -239,7 +244,7 @@ const withRenew = WrappedComponent =>
               open={errorMsg.length > 0 && !this.state.bulkRenewal}
               onClose={this.hideModal}
               message={popupMessage}
-              label="Loan not renewed"
+              label={this.props.stripes.intl.formatMessage({ id: 'ui-users.loanNotRenewed' })}
             />
           }
         </div>
