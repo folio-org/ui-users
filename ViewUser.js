@@ -320,6 +320,7 @@ class ViewUser extends React.Component {
     const loans = (resources.loansHistory || {}).records || [];
     const sponsors = this.props.getSponsors();
     const proxies = this.props.getProxies();
+    const formatMsg = stripes.intl.formatMessage;
     const detailMenu =
     (
       <PaneMenu>
@@ -328,7 +329,7 @@ class ViewUser extends React.Component {
           id="clickable-show-notes"
           style={{ visibility: !user ? 'hidden' : 'visible' }}
           onClick={this.props.notesToggle}
-          title="Show Notes"
+          aria-label={formatMsg({ id: 'ui-users.showNotes' })}
         />
         <IfPermission perm="users.item.put">
           <IconButton
@@ -337,7 +338,7 @@ class ViewUser extends React.Component {
             style={{ visibility: !user ? 'hidden' : 'visible' }}
             onClick={this.props.onEdit}
             href={this.props.editLink}
-            title={this.props.stripes.intl.formatMessage({ id: 'ui-users.crud.editUser' })}
+            aria-label={formatMsg({ id: 'ui-users.crud.editUser' })}
           />
         </IfPermission>
       </PaneMenu>
@@ -345,7 +346,7 @@ class ViewUser extends React.Component {
 
     if (!user) {
       return (
-        <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle={this.props.stripes.intl.formatMessage({ id: 'ui-users.information.userDetails' })} lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
+        <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle={formatMsg({ id: 'ui-users.information.userDetails' })} lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
           <div style={{ paddingTop: '1rem' }}><Icon icon="spinner-ellipsis" width="100px" /></div>
         </Pane>
       );
@@ -428,7 +429,7 @@ class ViewUser extends React.Component {
           </IfInterface>
         </IfPermission>
 
-        <Layer isOpen={query.layer ? query.layer === 'edit' : false} label="Edit User Dialog">
+        <Layer isOpen={query.layer ? query.layer === 'edit' : false} contentLabel={formatMsg({ id: 'ui-users.editUserDialog' })}>
           <UserForm
             stripes={stripes}
             initialValues={userFormData}
@@ -438,10 +439,10 @@ class ViewUser extends React.Component {
             parentMutator={this.props.parentMutator}
           />
         </Layer>
-        <Layer isOpen={query.layer ? query.layer === 'open-loans' || query.layer === 'closed-loans' : false} label="Loans">
+        <Layer isOpen={query.layer ? query.layer === 'open-loans' || query.layer === 'closed-loans' : false} contentLabel={formatMsg({ id: 'ui-users.loans.title' })}>
           {loansHistory}
         </Layer>
-        <Layer isOpen={query.layer ? query.layer === 'loan' : false} label="Loan Actions History">
+        <Layer isOpen={query.layer ? query.layer === 'loan' : false} contentLabel={formatMsg({ id: 'ui-users.loanActionsHistory' })}>
           {loanDetails}
         </Layer>
       </Pane>

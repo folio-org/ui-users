@@ -322,6 +322,11 @@
   "permissions.permissionSetName": "Permission set name",
   "permissions.deletePermissionSet": "Delete permission set?",
   "permissions.deletePermissionSetMessage": "{name} will be removed from permission sets.",
+  "permissionSet": "permission set",
+  "noItemFound": "No {item} found",
+  "deleteSponsorPrompt": "Delete Sponsor?",
+  "deleteProxyPrompt": "Delete Proxy?",
+  "proxyWillBeDeleted": "The proxy relationship of <strong>{name1}</strong> to <strong>{name2}</strong> will be deleted.",
 
   "extended.extendedInformation": "Extended information",
   "extended.dateEnrolled": "Date enrolled",
@@ -381,6 +386,13 @@
   "errors.userExpired": "User has expired",
   "errors.usernameUnavailable": "This username does not exist",
 
+  "errors.proxyrelationship.expired": "Proxy relationship has expired",
+  "errors.proxies.expired": "Proxy user record expired",
+  "errors.sponsors.expired": "Sponsor user record expired",
+
+  "showNotes": "Show Notes",
+  "editUserDialog": "Edit User Dialog",
+  "loanActionsHistory": "Loan Actions History",
   "hide": "Hide",
   "show": "Show",
   "active": "Active",
@@ -394,13 +406,11 @@
   "delete": "Delete",
   "saveAndClose": "Save & close",
   "edit": "Edit",
-  "okay": "Okay",
+  "okay": "OK",
   "description": "Description",
 
   "itemDetails": "Item Details",
   "renew": "Renew",
-  "renew.toolTip": "Multiple loans can be processed at the same time. Please select loans first."
-
-
-
+  "renew.toolTip": "Multiple loans can be processed at the same time. Please select loans first.",
+  "loanNotRenewed": "Loan not renewed"
 }

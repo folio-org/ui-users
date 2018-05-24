@@ -1,5 +1,4 @@
 import { differenceWith } from 'lodash';
-import moment from 'moment'; // eslint-disable-line import/no-extraneous-dependencies
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -164,10 +163,9 @@ const withProxy = WrappedComponent =>
       const editPromises = edited.map(rec => (proxiesFor.PUT(rec.proxy)));
       const removePromises = removed.map(rec => (proxiesFor.DELETE(rec.proxy)));
       const addPromises = added.map((rec) => {
-        const proxy = Object.assign({}, rec.proxy, { meta: { createdDate: moment().format() } });
         const data = (resourceName === 'proxies') ?
-          { ...proxy, proxyUserId: rec.user.id, userId } :
-          { ...proxy, proxyUserId: userId, userId: rec.user.id };
+          { ...rec.proxy, proxyUserId: rec.user.id, userId } :
+          { ...rec.proxy, proxyUserId: userId, userId: rec.user.id };
 
         return proxiesFor.POST(data);
       });

@@ -89,7 +89,6 @@ class PermissionSetForm extends React.Component {
           id="clickable-close-permission-set"
           onClick={this.props.onCancel}
           icon="closeX"
-          title="close"
           aria-label={this.props.stripes.intl.formatMessage({ id: 'ui-users.permissions.closePermissionSetDialog' })}
         />
       </PaneMenu>

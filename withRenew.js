@@ -34,6 +34,11 @@ const withRenew = WrappedComponent =>
           PUT: PropTypes.func.isRequired,
         }),
       }),
+      stripes: PropTypes.shape({
+        intl: PropTypes.shape({
+          formatMessage: PropTypes.func.isRequired,
+        }).isRequired,
+      }).isRequired,
     };
 
     static manifest = Object.freeze(
@@ -108,7 +113,7 @@ const withRenew = WrappedComponent =>
     }
 
     fetchFixedDueDateSchedule(loan) {
-      const scheduleId = get(loan, 'loanPolicy.loansPolicy.fixedDueDateSchedule', '');
+      const scheduleId = get(loan, 'loanPolicy.loansPolicy.fixedDueDateScheduleId', '');
       if (!scheduleId) return loan;
 
       return this.fetchSchedule(loan, scheduleId).then((schedule) => {
@@ -140,6 +145,7 @@ const withRenew = WrappedComponent =>
       if (isLoanProfileFixed(loansPolicy)) {
         this.validateSchedules(loanPolicy);
       }
+
       this.validateDueDate(loan);
       this.checkRenewLimit(loan);
 
@@ -179,6 +185,7 @@ const withRenew = WrappedComponent =>
         const error = 'renewal at this time would not change the due date';
         if (!this.state.bulkRenewal) this.setState({ errorMsg: [...this.state.errorMsg, error] });
       }
+
       return loan;
     }
 
@@ -237,7 +244,7 @@ const withRenew = WrappedComponent =>
               open={errorMsg.length > 0 && !this.state.bulkRenewal}
               onClose={this.hideModal}
               message={popupMessage}
-              label="Loan not renewed"
+              label={this.props.stripes.intl.formatMessage({ id: 'ui-users.loanNotRenewed' })}
             />
           }
         </div>
