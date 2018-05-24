@@ -1,5 +1,4 @@
 import { differenceWith } from 'lodash';
-import moment from 'moment'; // eslint-disable-line import/no-extraneous-dependencies
 import React from 'react';
 import PropTypes from 'prop-types';
 
