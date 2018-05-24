@@ -8,8 +8,7 @@ import {
 
 export function getFixedDueDateSchedule(schedules) {
   const today = moment(new Date());
-  return schedules.find(s =>
-    today.isBetween(moment(s.from).startOf('day'), moment(s.to).endOf('day')));
+  return schedules.find(s => today.isBetween(moment(s.from).startOf('day'), moment(s.to).endOf('day')));
 }
 
 export function isLoanProfileRolling(loanProfile) {
@@ -50,7 +49,7 @@ export function calculateFixedRenewal(loan) {
   if (renewalsPolicy.differentPeriod && loanPolicy.alternateFixedDueDateSchedule) {
     return moment(loanPolicy.alternateFixedDueDateSchedule.schedules[0].due);
   } else if (loanPolicy.fixedDueDateSchedule) { // UIU-405 get fixed renewal period from loan policy
-    return moment(loanPolicy.fixedDueDateSchedule.schedule.due);
+    return moment(loanPolicy.fixedDueDateSchedule.schedules[0].due);
   }
 
   return moment(loan.dueDate);
