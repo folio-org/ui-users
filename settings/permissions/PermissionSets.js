@@ -63,7 +63,7 @@ class PermissionSets extends React.Component {
         entryList={_.sortBy((this.props.resources.entries || {}).records || [], ['displayName'])}
         detailComponent={PermissionSetDetails}
         paneTitle={this.props.label}
-        entryLabel="permission set"
+        entryLabel={this.props.stripes.intl.formatMessage({ id: 'ui-users.permissionSet' })}
         entryFormComponent={PermissionSetForm}
         validate={validate}
         nameKey="displayName"
