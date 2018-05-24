@@ -164,7 +164,6 @@ const withProxy = WrappedComponent =>
       const editPromises = edited.map(rec => (proxiesFor.PUT(rec.proxy)));
       const removePromises = removed.map(rec => (proxiesFor.DELETE(rec.proxy)));
       const addPromises = added.map((rec) => {
-       //const proxy = Object.assign({}, rec.proxy, { meta: { createdDate: moment().format() } });
         const data = (resourceName === 'proxies') ?
           { ...rec.proxy, proxyUserId: rec.user.id, userId } :
           { ...rec.proxy, proxyUserId: userId, userId: rec.user.id };
