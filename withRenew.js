@@ -103,9 +103,10 @@ const withRenew = WrappedComponent =>
 
     checkRenewLimit(loan) {
       const allowedRenewals = get(loan, 'loanPolicy.renewalsPolicy.numberAllowed', '');
+      const error = 'loan has reached its maximum number of renewals';
+      loan.renewalCount = (loan.renewalCount || 0);
       if (allowedRenewals !== '') {
         if (loan.renewalCount >= allowedRenewals) {
-          const error = 'loan has reached its maximum number of renewals';
           if (!this.state.bulkRenewal) this.setState({ errorMsg: [...this.state.errorMsg, error] });
         }
       }
@@ -168,9 +169,8 @@ const withRenew = WrappedComponent =>
       if (!dueDateSchedule) return dueDateSchedule;
 
       const schedule = getFixedDueDateSchedule(dueDateSchedule.schedules);
-
       if (!schedule) {
-        const error = (' renewal date falls outside of the date ranges in the loan policy');
+        const error = ('renewal date falls outside of the date ranges in the loan policy');
         if (!this.state.bulkRenewal) this.setState({ errorMsg: [...this.state.errorMsg, error] });
       }
       dueDateSchedule.schedule = schedule;
@@ -241,6 +241,7 @@ const withRenew = WrappedComponent =>
           <WrappedComponent renew={this.renew} {...this.props} />
           {errorMsg &&
             <ErrorModal
+              id="renewal-failure-modal"
               open={errorMsg.length > 0 && !this.state.bulkRenewal}
               onClose={this.hideModal}
               message={popupMessage}
