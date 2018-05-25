@@ -58,6 +58,7 @@ module.exports.test = function foo(uiTestCtx) {
 
       it('should add a proxy for user 1', (done) => {
         nightmare
+          .wait(1000)
           .wait('#input-user-search')
           .type('#input-user-search', '0')
           .wait('#clickable-reset-all')
@@ -76,7 +77,9 @@ module.exports.test = function foo(uiTestCtx) {
           .click(`div[aria-label="Select User"] #list-users div[role="listitem"] > a > div[title="${userIds[1].barcode}"]`)
           .wait('#clickable-updateuser')
           .click('#clickable-updateuser')
-          .then(() => { done(); })
+          .wait(1000)
+          .then(() => {
+            done(); })
           .catch(done);
       });
 
