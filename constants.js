@@ -21,8 +21,8 @@ export const intervalIdsMap = {
 };
 
 export const renewFromMap = {
-  CURRENT_DUE_DATE: '1',
-  SYSTEM_DATE: '2',
+  CURRENT_DUE_DATE: 'CURRENT_DUE_DATE',
+  SYSTEM_DATE: 'SYSTEM_DATE',
 };
 
 export default {};
