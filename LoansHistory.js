@@ -55,8 +55,8 @@ class LoansHistory extends React.Component {
     return (
       <div className={css.segmentedControlWrap}>
         <SegmentedControl className={css.segmentedControl} activeId={activeId} onActivate={onChange}>
-          <Button marginBottom0 id="loans-show-open" title={intl.formatMessage({ id: 'ui-users.loans.openLoans' })} aria-label={intl.formatMessage({ id: 'ui-users.loans.openLoans' })}>{intl.formatMessage({ id: 'ui-users.loans.openLoans' })}</Button>
-          <Button marginBottom0 id="loans-show-closed" title={intl.formatMessage({ id: 'ui-users.loans.closedLoans' })} aria-label={intl.formatMessage({ id: 'ui-users.loans.closedLoans' })}>{intl.formatMessage({ id: 'ui-users.loans.closedLoans' })}</Button>
+          <Button marginBottom0 id="loans-show-open" aria-label={intl.formatMessage({ id: 'ui-users.loans.openLoans' })}>{intl.formatMessage({ id: 'ui-users.loans.openLoans' })}</Button>
+          <Button marginBottom0 id="loans-show-closed" aria-label={intl.formatMessage({ id: 'ui-users.loans.closedLoans' })}>{intl.formatMessage({ id: 'ui-users.loans.closedLoans' })}</Button>
         </SegmentedControl>
       </div>
     );
