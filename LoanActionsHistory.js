@@ -18,7 +18,7 @@ import { getFullName } from './util';
 import loanActionMap from './data/loanActionMap';
 import LoanActionsHistoryProxy from './LoanActionsHistoryProxy';
 import withRenew from './withRenew';
-/* eslint-disable react/no-deprecated */
+
 /**
  * Detail view of a user's loan.
  */
