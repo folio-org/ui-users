@@ -3,6 +3,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import Link from 'react-router-dom/Link';
 import PropTypes from 'prop-types';
+import ChangeDueDateDialog from '@folio/stripes-smart-components/lib/ChangeDueDateDialog';
 import Popover from '@folio/stripes-components/lib/Popover';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import Modal from '@folio/stripes-components/lib/Modal';
@@ -74,16 +75,21 @@ class LoanActionsHistory extends React.Component {
   constructor(props) {
     super(props);
     this.connectedProxy = props.stripes.connect(LoanActionsHistoryProxy);
+    this.connectedChangeDueDateDialog = props.stripes.connect(ChangeDueDateDialog);
     this.renew = this.renew.bind(this);
     this.getContributorslist = this.getContributorslist.bind(this);
     this.showContributors = this.showContributors.bind(this);
     this.formatDateTime = this.props.stripes.formatDateTime;
     this.hideNonRenewedLoansModal = this.hideNonRenewedLoansModal.bind(this);
     this.showTitle = this.showTitle.bind(this);
+    this.showChangeDueDateDialog = this.showChangeDueDateDialog.bind(this);
+    this.hideChangeDueDateDialog = this.hideChangeDueDateDialog.bind(this);
+
     this.state = {
       loanActionCount: 0,
       nonRenewedLoanItems: [],
-      nonRenewedLoansModalOpen: false
+      nonRenewedLoansModalOpen: false,
+      changeDueDateDialogOpen: false,
     };
   }
 
@@ -144,6 +150,18 @@ class LoanActionsHistory extends React.Component {
     return promise;
   }
 
+  showChangeDueDateDialog() {
+    this.setState({
+      changeDueDateDialogOpen: true,
+    });
+  }
+
+  hideChangeDueDateDialog() {
+    this.setState({
+      changeDueDateDialogOpen: false,
+    });
+  }
+
   getContributorslist(loan) {
     this.loan = loan;
     const contributors = _.get(this.loan, ['item', 'contributors']);
@@ -195,6 +213,18 @@ class LoanActionsHistory extends React.Component {
     this.callout.sendCallout({ message });
   }
 
+  renderChangeDueDateDialog() {
+    return (
+      <this.connectedChangeDueDateDialog
+        stripes={this.props.stripes}
+        loanIds={[{ id: this.props.loan.id }]}
+        onClose={this.hideChangeDueDateDialog}
+        open={this.state.changeDueDateDialogOpen}
+        user={this.props.user}
+      />
+    );
+  }
+
   render() {
     const { onCancel, loan, patronGroup, user, resources: { loanActionsWithUser }, stripes: { intl } } = this.props;
     const { nonRenewedLoanItems } = this.state;
@@ -231,6 +261,9 @@ class LoanActionsHistory extends React.Component {
           <Row>
             <Col>
               <Button buttonStyle="primary" onClick={this.renew}>{this.props.stripes.intl.formatMessage({ id: 'ui-users.renew' })}</Button>
+            </Col>
+            <Col>
+              <Button buttonStyle="primary" onClick={this.showChangeDueDateDialog}>{this.props.stripes.intl.formatMessage({ id: 'stripes-smart-components.cddd.changeDueDate' })}</Button>
             </Col>
           </Row>
           <Row>
@@ -317,6 +350,7 @@ class LoanActionsHistory extends React.Component {
                   </li>))
             }
           </Modal>
+          { this.renderChangeDueDateDialog() }
           <Callout ref={(ref) => { this.callout = ref; }} />
         </Pane>
       </Paneset>

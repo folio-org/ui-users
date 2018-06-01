@@ -261,6 +261,7 @@
   "data.loanActionMap.source": "Source",
   "data.loanActionMap.holdRequested": "Hold requested",
   "data.loanActionMap.recallRequested": "Recall requested",
+  "data.loanActionMap.dueDateChanged": "Due date changed",
 
   "loans.title": "Loans",
   "loans.open": "Open",
@@ -413,6 +414,6 @@
 
   "itemDetails": "Item Details",
   "renew": "Renew",
-  "renew.toolTip": "Multiple loans can be processed at the same time. Please select loans first.",
+  "bulkActions.tooltip": "Multiple loans can be processed at the same time. Please select loans first.",
   "loanNotRenewed": "Loan not renewed"
 }

@@ -75,6 +75,7 @@
 * Restore patron-group sort. Fixes UIU-481.
 * "Use new proxyFor schema instead of meta. Fixes UIU-495.
 * Validate proxy relationship status. Fixes UIU-200 and UIU-201.
+* Added ability to change due date of loans in loan listings and individual views. Fixes UIU-497.
 * update paths for relocated components. Refs STCOM-277.
 
 ## [2.12.0](https://github.com/folio-org/ui-users/tree/v2.12.0) (2017-11-28)

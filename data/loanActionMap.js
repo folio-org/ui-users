@@ -5,4 +5,5 @@ export default {
   Operator: 'ui-users.data.loanActionMap.source',
   holdrequested: 'ui-users.data.loanActionMap.holdRequested',
   recallrequested: 'ui-users.data.loanActionMap.recallRequested',
+  dueDateChanged: 'ui-users.data.loanActionMap.dueDateChanged',
 };
