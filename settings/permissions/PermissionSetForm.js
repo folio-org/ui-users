@@ -13,7 +13,7 @@ import IconButton from '@folio/stripes-components/lib/IconButton';
 import Icon from '@folio/stripes-components/lib/Icon';
 
 // eslint-disable-next-line import/no-unresolved
-import ConfirmationModal from '@folio/stripes-components/lib/structures/ConfirmationModal';
+import ConfirmationModal from '@folio/stripes-components/lib/ConfirmationModal';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import { Accordion, ExpandAllButton } from '@folio/stripes-components/lib/Accordion';
 
