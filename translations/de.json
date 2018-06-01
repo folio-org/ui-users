@@ -265,6 +265,8 @@
   "loans.closed": "Abgeschlossen",
   "loans.openLoans": "Aktuelle Ausleihen",
   "loans.closedLoans": "Ausleihhistorie",
+  "loans.numOpenLoans": "{count, number} aktuelle {count, plural, one {Ausleihe} other {Ausleihen}}",
+  "loans.numClosedLoans": "{count, number} {count, plural, one {Ausleihe} other {Ausleihen}} in der Ausleihhistorie",
   "loans.loanDetails": "Ausleihdetails",
 
   "loans.columns.title": "Titel",

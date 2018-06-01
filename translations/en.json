@@ -266,8 +266,10 @@
   "loans.title": "Loans",
   "loans.open": "Open",
   "loans.closed": "Closed",
-  "loans.openLoans": "open loans",
-  "loans.closedLoans": "closed loans",
+  "loans.openLoans": "Open loans",
+  "loans.closedLoans": "Closed loans",
+  "loans.numOpenLoans": "{count, number} {count, plural, one {open loan} other {open loans}}",
+  "loans.numClosedLoans": "{count, number} {count, plural, one {closed loan} other {closed loans}}",
   "loans.loanDetails": "Loan details",
 
   "loans.columns.title": "Item title",
