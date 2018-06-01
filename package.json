@@ -30,7 +30,7 @@
       }
     ],
     "okapiInterfaces": {
-      "users": "14.0",
+      "users": "15.0",
       "circulation": "3.0",
       "permissions": "5.0",
       "loan-storage": "4.0",
