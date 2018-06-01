@@ -75,6 +75,7 @@ class LoanActionsHistory extends React.Component {
   constructor(props) {
     super(props);
     this.connectedProxy = props.stripes.connect(LoanActionsHistoryProxy);
+    this.connectedChangeDueDateDialog = props.stripes.connect(ChangeDueDateDialog);
     this.renew = this.renew.bind(this);
     this.getContributorslist = this.getContributorslist.bind(this);
     this.showContributors = this.showContributors.bind(this);
@@ -214,9 +215,9 @@ class LoanActionsHistory extends React.Component {
 
   renderChangeDueDateDialog() {
     return (
-      <ChangeDueDateDialog
+      <this.connectedChangeDueDateDialog
         stripes={this.props.stripes}
-        loans={[this.props.loan]}
+        loanIds={[{ id: this.props.loan.id }]}
         onClose={this.hideChangeDueDateDialog}
         open={this.state.changeDueDateDialogOpen}
         user={this.props.user}
