@@ -30,7 +30,7 @@
       }
     ],
     "okapiInterfaces": {
-      "users": "14.0",
+      "users": "15.0",
       "circulation": "3.0",
       "permissions": "5.0",
       "loan-storage": "4.0",
@@ -217,7 +217,7 @@
     "@folio/react-intl-safe-html": "^1.0.10005",
     "@folio/stripes-components": "^2.0.8",
     "@folio/stripes-form": "^0.8.2",
-    "@folio/stripes-smart-components": "^1.4.11",
+    "@folio/stripes-smart-components": "^1.4.15",
     "classnames": "^2.2.5",
     "hashcode": "^1.0.3",
     "lodash": "^4.17.4",
