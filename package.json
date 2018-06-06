@@ -407,7 +407,7 @@
     "prepublishOnly": "node ../stripes-core/util/package2md.js package.json > ModuleDescriptor.json"
   },
   "devDependencies": {
-    "@folio/eslint-config-stripes": "^1.1.0",
+    "@folio/eslint-config-stripes": "^2.0.0",
     "@folio/stripes-cli": "^1.2.0",
     "@folio/stripes-connect": "^3.1.1",
     "@folio/stripes-core": "^2.9.0",
