@@ -139,13 +139,13 @@ class LoanActionsHistory extends React.Component {
   }
 
   renew() {
-    const loanToRenew = this.props.loan;
-    const promise = this.props.renew(loanToRenew);
+    const { loan, user } = this.props;
+    const promise = this.props.renew(loan, user);
     const singleRenewalFailure = [];
     promise
       .then(() => this.showCallout())
       .catch(() => {
-        singleRenewalFailure.push(loanToRenew);
+        singleRenewalFailure.push(loan);
       });
     return promise;
   }
