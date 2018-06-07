@@ -55,11 +55,12 @@ const withRenew = WrappedComponent =>
       return this.props.mutator.renew.POST(params).catch(resp => {
         const contentType = resp.headers.get('Content-Type');
         if (contentType && contentType.startsWith('application/json')) {
-          return resp.json().then(error => this.handleErrors(error));
+          resp.json().then(error => this.handleErrors(error));
         } else {
           // eslint-disable-next-line no-alert
-          return resp.text().then(error => alert(error));
+          resp.text().then(error => alert(error));
         }
+        throw new Error(resp);
       });
     }
 
