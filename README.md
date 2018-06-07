@@ -9,7 +9,7 @@ Version 2.0. See the file "[LICENSE](LICENSE)" for more information.
 
 The Users UI Module, or `ui-users`, is a Stripes UI module used for searching, sorting, filtering, viewing, editing and creating users. (A "Stripes UI module" is an NPM module that adheres to certain conventions that allow it to function within the [Stripes UI framework](https://github.com/folio-org/stripes-core/blob/master/README.md) that is part of FOLIO.)
 
-The Users UI module is important because it is the first user-facing module to have undergone development. FOLIO has several [server-side modules](http://dev.folio.org/source-code/#server-side) that run under Okapi (mod-auth, mod-configuration, mod-metadata, mod-files, etc.), but mod-users is the only one that has a corresponding UI component. Accordingly, the Users UI module serves as a testbed for new Stripes functionality and a place to shake down those parts of the UI design that will be shared between all FOLIO applications.
+The Users UI module is important because it is the first user-facing module to have undergone development. FOLIO has several [server-side modules](https://dev.folio.org/source-code/#server-side) that run under Okapi (mod-auth, mod-configuration, mod-metadata, mod-files, etc.), but mod-users is the only one that has a corresponding UI component. Accordingly, the Users UI module serves as a testbed for new Stripes functionality and a place to shake down those parts of the UI design that will be shared between all FOLIO applications.
 
 ## Installation
 
@@ -33,9 +33,9 @@ If you are doing development from git checkouts, you can use `npm test` or `yarn
 
 ## Additional information
 
-Other [modules](http://dev.folio.org/source-code/#client-side).
+Other [modules](https://dev.folio.org/source-code/#client-side).
 
 See project [UIU](https://issues.folio.org/browse/UIU)
-at the [FOLIO issue tracker](http://dev.folio.org/community/guide-issues).
+at the [FOLIO issue tracker](https://dev.folio.org/guidelines/issue-tracker).
 
-Other FOLIO Developer documentation is at [dev.folio.org](http://dev.folio.org/)
+Other FOLIO Developer documentation is at [dev.folio.org](https://dev.folio.org/)
