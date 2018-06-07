@@ -87,7 +87,7 @@ class Users extends React.Component {
       GET: {
         params: {
           query: makeQueryFunction(
-            'username=*',
+            'cql.allRecords=1',
             '(username="%{query.query}*" or personal.firstName="%{query.query}*" or personal.lastName="%{query.query}*" or personal.email="%{query.query}*" or barcode="%{query.query}*" or id="%{query.query}*" or externalSystemId="%{query.query}*")',
             {
               'Active': 'active',
