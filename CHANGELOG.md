@@ -60,7 +60,7 @@
 * Fixed username validation in UserForm (IU-422)
 * Move item details link to the options menu. Refs UIU-407.
 * Enter key should not submit the user edit form. Fixes UIU-394.
-* Upated loans views to match requirements of LIBAPP-233.
+* Updated loans views to match requirements of LIBAPP-233.
 * Externalized All The Strings. Refs UIU-416.
 * Ugly hack: ask for more facet rows than we likely need. Refs MODUSERS-57.
 * Bug fix: translate table-headers fixes proxy lookup. Fixes UIU-452.
@@ -73,10 +73,10 @@
 * Bah. One case to rule them all. Handles UIU-471 in concert with CIRCSTORE-43.
 * `<IfInterface>` test should match dependency version in `package.json`. Refs UIU-471.
 * Restore patron-group sort. Fixes UIU-481.
-* "Use new proxyFor schema instead of meta. Fixes UIU-495.
+* Use new proxyFor schema instead of meta. Fixes UIU-495.
 * Validate proxy relationship status. Fixes UIU-200 and UIU-201.
 * Added ability to change due date of loans in loan listings and individual views. Fixes UIU-497.
-* update paths for relocated components. Refs STCOM-277.
+* Update paths for relocated components. Refs STCOM-277.
 
 ## [2.12.0](https://github.com/folio-org/ui-users/tree/v2.12.0) (2017-11-28)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.11.0...v2.12.0)
