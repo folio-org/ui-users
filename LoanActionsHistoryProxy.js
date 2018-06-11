@@ -5,6 +5,13 @@ import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import { getFullName } from './util';
 
 class LoanActionsHistoryProxy extends React.Component {
+  static manifest = Object.freeze({
+    proxy: {
+      type: 'okapi',
+      path: 'users/!{id}',
+    },
+  });
+
   static propTypes = {
     id: PropTypes.string,
     onClick: PropTypes.func.isRequired,
@@ -17,13 +24,6 @@ class LoanActionsHistoryProxy extends React.Component {
       intl: PropTypes.object.isRequired,
     }).isRequired,
   }
-
-  static manifest = Object.freeze({
-    proxy: {
-      type: 'okapi',
-      path: 'users/!{id}',
-    },
-  });
 
   getUserFullName() {
     const proxy = (this.props.resources.proxy || {}).records || [];

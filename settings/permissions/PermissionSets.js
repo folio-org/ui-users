@@ -16,25 +16,6 @@ function validate(values) {
 }
 
 class PermissionSets extends React.Component {
-  static propTypes = {
-    label: PropTypes.string.isRequired,
-    resources: PropTypes.shape({
-      entries: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
-      }),
-    }).isRequired,
-    mutator: PropTypes.shape({
-      permissionSets: PropTypes.shape({
-        POST: PropTypes.func,
-        PUT: PropTypes.func,
-        DELETE: PropTypes.func,
-      }),
-    }).isRequired,
-    stripes: PropTypes.shape({
-      intl: PropTypes.object.isRequired,
-    }),
-  };
-
   static manifest = Object.freeze({
     entries: {
       type: 'okapi',
@@ -54,6 +35,25 @@ class PermissionSets extends React.Component {
       path: 'perms/permissions',
     },
   });
+
+  static propTypes = {
+    label: PropTypes.string.isRequired,
+    resources: PropTypes.shape({
+      entries: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+    }).isRequired,
+    mutator: PropTypes.shape({
+      permissionSets: PropTypes.shape({
+        POST: PropTypes.func,
+        PUT: PropTypes.func,
+        DELETE: PropTypes.func,
+      }),
+    }).isRequired,
+    stripes: PropTypes.shape({
+      intl: PropTypes.object.isRequired,
+    }),
+  };
 
   render() {
     return (

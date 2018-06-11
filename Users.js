@@ -35,45 +35,6 @@ const filterConfig = [
 ];
 
 class Users extends React.Component {
-  static propTypes = {
-    stripes: PropTypes.shape({
-      intl: PropTypes.object.isRequired,
-    }).isRequired,
-    resources: PropTypes.shape({
-      patronGroups: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
-      }),
-      addressTypes: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
-      }),
-    }).isRequired,
-    mutator: PropTypes.shape({
-      creds: PropTypes.shape({
-        POST: PropTypes.func.isRequired,
-      }),
-      initializedFilterConfig: PropTypes.shape({
-        replace: PropTypes.func.isRequired,
-      }),
-      perms: PropTypes.shape({
-        POST: PropTypes.func.isRequired,
-      }),
-      records: PropTypes.shape({
-        POST: PropTypes.func.isRequired,
-      }),
-    }).isRequired,
-    onSelectRow: PropTypes.func,
-    onComponentWillUnmount: PropTypes.func,
-    visibleColumns: PropTypes.arrayOf(PropTypes.string),
-    disableRecordCreation: PropTypes.bool,
-    showSingleResult: PropTypes.bool, // eslint-disable-line react/no-unused-prop-types
-    browseOnly: PropTypes.bool,
-  };
-
-  static defaultProps = {
-    showSingleResult: true,
-    browseOnly: false,
-  }
-
   static manifest = Object.freeze({
     initializedFilterConfig: { initialValue: false },
     query: { initialValue: {} },
@@ -133,6 +94,45 @@ class Users extends React.Component {
     },
   });
 
+  static propTypes = {
+    stripes: PropTypes.shape({
+      intl: PropTypes.object.isRequired,
+    }).isRequired,
+    resources: PropTypes.shape({
+      patronGroups: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      addressTypes: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+    }).isRequired,
+    mutator: PropTypes.shape({
+      creds: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      initializedFilterConfig: PropTypes.shape({
+        replace: PropTypes.func.isRequired,
+      }),
+      perms: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      records: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+    }).isRequired,
+    onSelectRow: PropTypes.func,
+    onComponentWillUnmount: PropTypes.func,
+    visibleColumns: PropTypes.arrayOf(PropTypes.string),
+    disableRecordCreation: PropTypes.bool,
+    showSingleResult: PropTypes.bool, // eslint-disable-line react/no-unused-prop-types
+    browseOnly: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    showSingleResult: true,
+    browseOnly: false,
+  }
+
   componentWillUpdate() {
     const pg = (this.props.resources.patronGroups || {}).records || [];
     if (pg && pg.length) {
@@ -142,14 +142,6 @@ class Users extends React.Component {
       if (oldValuesLength === 0) {
         this.props.mutator.initializedFilterConfig.replace(true); // triggers refresh of users
       }
-    }
-  }
-
-  massageNewRecord = (userdata) => {
-    if (userdata.personal.addresses) {
-      const addressTypes = (this.props.resources.addressTypes || {}).records || [];
-      // eslint-disable-next-line no-param-reassign
-      userdata.personal.addresses = toUserAddresses(userdata.personal.addresses, addressTypes);
     }
   }
 
@@ -176,6 +168,14 @@ class Users extends React.Component {
         .then((perms) => {
           mutator.query.update({ _path: `/users/view/${perms.userId}`, layer: null });
         });
+    }
+  }
+
+  massageNewRecord = (userdata) => {
+    if (userdata.personal.addresses) {
+      const addressTypes = (this.props.resources.addressTypes || {}).records || [];
+      // eslint-disable-next-line no-param-reassign
+      userdata.personal.addresses = toUserAddresses(userdata.personal.addresses, addressTypes);
     }
   }
 

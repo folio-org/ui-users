@@ -79,6 +79,7 @@
 * Update paths for relocated components. Refs STCOM-277.
 * Use `cql.allIndexes=1` when no query is supplied, instead of a wildcard. Fixes UIU-541.
 * Use new renew-by-barcode API for renew. Fixes UIU-538.
+* Removed "Accrue-fees-to" functionality for proxy/sponsors
 
 ## [2.12.0](https://github.com/folio-org/ui-users/tree/v2.12.0) (2017-11-28)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.11.0...v2.12.0)

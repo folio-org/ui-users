@@ -134,13 +134,6 @@ class UserForm extends React.Component {
     );
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  handleKeyDown(e) {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-    }
-  }
-
   getLastMenu(id, label) {
     const { pristine, submitting } = this.props;
 
@@ -162,6 +155,13 @@ class UserForm extends React.Component {
 
   handleExpandAll(sections) {
     this.setState({ sections });
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  handleKeyDown(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+    }
   }
 
   handleSectionToggle({ id }) {

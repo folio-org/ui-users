@@ -30,6 +30,49 @@ import {
 } from './lib/ViewSections';
 
 class ViewUser extends React.Component {
+  static manifest = Object.freeze({
+    query: {},
+    selUser: {
+      type: 'okapi',
+      path: 'users/:{id}',
+      clear: false,
+    },
+    loansHistory: {
+      type: 'okapi',
+      records: 'loans',
+      path: 'circulation/loans?query=(userId=:{id}) sortby id&limit=100',
+    },
+    patronGroups: {
+      type: 'okapi',
+      path: 'groups',
+      records: 'usergroups',
+    },
+    // NOTE: 'indexField', used as a parameter in the userPermissions paths,
+    // modifies the API call so that the :{userid} parameter is actually
+    // interpreted as a user ID. By default, that path component is taken as
+    // the ID of the user/permission _object_ in /perms/users.
+    permissions: {
+      type: 'okapi',
+      records: 'permissionNames',
+      DELETE: {
+        pk: 'permissionName',
+        path: 'perms/users/:{id}/permissions',
+        params: { indexField: 'userId' },
+      },
+      GET: {
+        path: 'perms/users/:{id}/permissions',
+        params: { full: 'true', indexField: 'userId' },
+      },
+      path: 'perms/users/:{id}/permissions',
+      params: { indexField: 'userId' },
+    },
+    settings: {
+      type: 'okapi',
+      records: 'configs',
+      path: 'configurations/entries?query=(module==USERS and configName==profile_pictures)',
+    },
+  });
+
   static propTypes = {
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func.isRequired,
@@ -91,49 +134,6 @@ class ViewUser extends React.Component {
     getProxies: PropTypes.func,
   };
 
-  static manifest = Object.freeze({
-    query: {},
-    selUser: {
-      type: 'okapi',
-      path: 'users/:{id}',
-      clear: false,
-    },
-    loansHistory: {
-      type: 'okapi',
-      records: 'loans',
-      path: 'circulation/loans?query=(userId=:{id}) sortby id&limit=100',
-    },
-    patronGroups: {
-      type: 'okapi',
-      path: 'groups',
-      records: 'usergroups',
-    },
-    // NOTE: 'indexField', used as a parameter in the userPermissions paths,
-    // modifies the API call so that the :{userid} parameter is actually
-    // interpreted as a user ID. By default, that path component is taken as
-    // the ID of the user/permission _object_ in /perms/users.
-    permissions: {
-      type: 'okapi',
-      records: 'permissionNames',
-      DELETE: {
-        pk: 'permissionName',
-        path: 'perms/users/:{id}/permissions',
-        params: { indexField: 'userId' },
-      },
-      GET: {
-        path: 'perms/users/:{id}/permissions',
-        params: { full: 'true', indexField: 'userId' },
-      },
-      path: 'perms/users/:{id}/permissions',
-      params: { indexField: 'userId' },
-    },
-    settings: {
-      type: 'okapi',
-      records: 'configs',
-      path: 'configurations/entries?query=(module==USERS and configName==profile_pictures)',
-    },
-  });
-
   constructor(props) {
     super(props);
     this.state = {
@@ -180,33 +180,11 @@ class ViewUser extends React.Component {
     }
   }
 
-  onClickViewOpenLoans(e) {
-    if (e) e.preventDefault();
-    this.props.mutator.query.update({ layer: 'open-loans' });
-    this.setState({
-      viewOpenLoansMode: true,
-    });
-  }
-
-  onClickViewClosedLoans(e) {
-    if (e) e.preventDefault();
-    this.props.mutator.query.update({ layer: 'closed-loans' });
-    this.setState({
-      viewOpenLoansMode: false,
-    });
-  }
-
-  onClickCloseLoansHistory(e) {
-    if (e) e.preventDefault();
-    this.props.mutator.query.update({ layer: null });
-  }
-
-  onClickViewLoanActionsHistory(e, selectedLoan) {
-    if (e) e.preventDefault();
-    this.props.mutator.query.update({ layer: 'loan', loan: selectedLoan.id });
-    this.setState({
-      selectedLoan,
-    });
+  onAddressesUpdate(addresses) {
+    const user = this.getUser();
+    if (!user) return;
+    user.personal.addresses = addresses;
+    this.update(user);
   }
 
   onClickCloseLoanActionsHistory(e) {
@@ -218,11 +196,33 @@ class ViewUser extends React.Component {
     });
   }
 
-  onAddressesUpdate(addresses) {
-    const user = this.getUser();
-    if (!user) return;
-    user.personal.addresses = addresses;
-    this.update(user);
+  onClickCloseLoansHistory(e) {
+    if (e) e.preventDefault();
+    this.props.mutator.query.update({ layer: null });
+  }
+
+  onClickViewClosedLoans(e) {
+    if (e) e.preventDefault();
+    this.props.mutator.query.update({ layer: 'closed-loans' });
+    this.setState({
+      viewOpenLoansMode: false,
+    });
+  }
+
+  onClickViewLoanActionsHistory(e, selectedLoan) {
+    if (e) e.preventDefault();
+    this.props.mutator.query.update({ layer: 'loan', loan: selectedLoan.id });
+    this.setState({
+      selectedLoan,
+    });
+  }
+
+  onClickViewOpenLoans(e) {
+    if (e) e.preventDefault();
+    this.props.mutator.query.update({ layer: 'open-loans' });
+    this.setState({
+      viewOpenLoansMode: true,
+    });
   }
 
   getUser() {
@@ -241,6 +241,43 @@ class ViewUser extends React.Component {
     Object.assign(userForData, { sponsors, proxies, permissions });
 
     return userForData;
+  }
+
+  // This is a helper function for the "last updated" date element. Since the
+  // date/time is actually set on the server when the record is updated, the
+  // lastUpdated element of the record on the client side might contain a stale
+  // value. If so, this returns a locally stored update date until the data
+  // is refreshed.
+  dateLastUpdated(user) {
+    const updatedDateRec = get(user, ['updatedDate'], '');
+    const updatedDateLocal = this.state.lastUpdate;
+
+    if (!updatedDateRec) { return ''; }
+
+    let dateToShow;
+    if (updatedDateLocal && updatedDateLocal > updatedDateRec) {
+      dateToShow = updatedDateLocal;
+    } else {
+      dateToShow = updatedDateRec;
+    }
+
+    return new Date(dateToShow).toLocaleString(this.props.stripes.locale);
+  }
+
+  handleExpandAll(obj) {
+    this.setState((curState) => {
+      const newState = cloneDeep(curState);
+      newState.sections = obj;
+      return newState;
+    });
+  }
+
+  handleSectionToggle({ id }) {
+    this.setState((curState) => {
+      const newState = cloneDeep(curState);
+      newState.sections[id] = !newState.sections[id];
+      return newState;
+    });
   }
 
   update(user) {
@@ -271,43 +308,6 @@ class ViewUser extends React.Component {
     const addedPerms = differenceBy(perms, prevPerms, 'id');
     eachPromise(addedPerms, mutator.POST);
     eachPromise(removedPerms, mutator.DELETE);
-  }
-
-  // This is a helper function for the "last updated" date element. Since the
-  // date/time is actually set on the server when the record is updated, the
-  // lastUpdated element of the record on the client side might contain a stale
-  // value. If so, this returns a locally stored update date until the data
-  // is refreshed.
-  dateLastUpdated(user) {
-    const updatedDateRec = get(user, ['updatedDate'], '');
-    const updatedDateLocal = this.state.lastUpdate;
-
-    if (!updatedDateRec) { return ''; }
-
-    let dateToShow;
-    if (updatedDateLocal && updatedDateLocal > updatedDateRec) {
-      dateToShow = updatedDateLocal;
-    } else {
-      dateToShow = updatedDateRec;
-    }
-
-    return new Date(dateToShow).toLocaleString(this.props.stripes.locale);
-  }
-
-  handleSectionToggle({ id }) {
-    this.setState((curState) => {
-      const newState = cloneDeep(curState);
-      newState.sections[id] = !newState.sections[id];
-      return newState;
-    });
-  }
-
-  handleExpandAll(obj) {
-    this.setState((curState) => {
-      const newState = cloneDeep(curState);
-      newState.sections = obj;
-      return newState;
-    });
   }
 
   render() {
