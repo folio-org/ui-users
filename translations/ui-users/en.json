@@ -387,7 +387,7 @@
   "errors.noMatch.how": "How did you get to {location}?",
 
   "errors.userExpired": "User has expired",
-  "errors.usernameUnavailable": "This username does not exist",
+  "errors.usernameUnavailable": "This username already exists",
 
   "errors.proxyrelationship.expired": "Proxy relationship has expired",
   "errors.proxies.expired": "Proxy user record expired",
