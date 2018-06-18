@@ -5,6 +5,39 @@ import PropTypes from 'prop-types';
 // HOC used to manage proxies and sponsors
 const withProxy = WrappedComponent =>
   class WithProxyComponent extends React.Component {
+    static manifest = Object.freeze(
+      Object.assign({}, WrappedComponent.manifest, {
+        sponsors: {
+          type: 'okapi',
+          records: 'users',
+          path: 'users',
+          accumulate: 'true',
+          fetch: false,
+        },
+        proxies: {
+          type: 'okapi',
+          records: 'users',
+          path: 'users',
+          accumulate: 'true',
+          fetch: false,
+        },
+        proxiesFor: {
+          type: 'okapi',
+          records: 'proxiesFor',
+          path: 'proxiesfor',
+          accumulate: 'true',
+          fetch: false,
+        },
+        sponsorsFor: {
+          type: 'okapi',
+          records: 'proxiesFor',
+          path: 'proxiesfor',
+          accumulate: 'true',
+          fetch: false,
+        },
+      }),
+    );
+
     static propTypes = {
       stripes: PropTypes.shape({
         hasPerm: PropTypes.func.isRequired,
@@ -40,45 +73,26 @@ const withProxy = WrappedComponent =>
       }),
     };
 
-    static manifest = Object.freeze(
-      Object.assign({}, WrappedComponent.manifest, {
-        sponsors: {
-          type: 'okapi',
-          records: 'users',
-          path: 'users',
-          accumulate: 'true',
-          fetch: false,
-        },
-        proxies: {
-          type: 'okapi',
-          records: 'users',
-          path: 'users',
-          accumulate: 'true',
-          fetch: false,
-        },
-        proxiesFor: {
-          type: 'okapi',
-          records: 'proxiesFor',
-          path: 'proxiesfor',
-          accumulate: 'true',
-          fetch: false,
-        },
-        sponsorsFor: {
-          type: 'okapi',
-          records: 'proxiesFor',
-          path: 'proxiesfor',
-          accumulate: 'true',
-          fetch: false,
-        },
-      }),
-    );
-
     constructor(props) {
       super(props);
       this.getProxies = this.getProxies.bind(this);
       this.getSponsors = this.getSponsors.bind(this);
       this.updateProxies = this.updateProxies.bind(this);
       this.updateSponsors = this.updateSponsors.bind(this);
+    }
+
+    static getDerivedStateFromProps(nextProps) {
+      if (!nextProps.stripes.hasPerm('proxiesfor.collection.get')) {
+        return null;
+      }
+
+      const { match: { params: { id } } } = nextProps;
+
+      if (id) {
+        return { userId: id };
+      }
+
+      return null;
     }
 
     componentDidMount() {
@@ -91,16 +105,12 @@ const withProxy = WrappedComponent =>
       this.loadProxies(userId);
     }
 
-    componentWillReceiveProps(nextProps) {
-      if (!this.props.stripes.hasPerm('proxiesfor.collection.get')) {
-        return;
-      }
+    componentDidUpdate(prevProps, prevState) {
+      const { userId } = this.state;
 
-      const { match: { params: { id } } } = nextProps;
-
-      if (id !== this.props.match.params.id) {
-        this.loadSponsors(id);
-        this.loadProxies(id);
+      if (userId !== prevState.userId) {
+        this.loadSponsors(userId);
+        this.loadProxies(userId);
       }
     }
 
