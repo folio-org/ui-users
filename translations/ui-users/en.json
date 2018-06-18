@@ -261,12 +261,15 @@
   "data.loanActionMap.source": "Source",
   "data.loanActionMap.holdRequested": "Hold requested",
   "data.loanActionMap.recallRequested": "Recall requested",
+  "data.loanActionMap.dueDateChanged": "Due date changed",
 
   "loans.title": "Loans",
   "loans.open": "Open",
   "loans.closed": "Closed",
-  "loans.openLoans": "open loans",
-  "loans.closedLoans": "closed loans",
+  "loans.openLoans": "Open loans",
+  "loans.closedLoans": "Closed loans",
+  "loans.numOpenLoans": "{count, number} {count, plural, one {open loan} other {open loans}}",
+  "loans.numClosedLoans": "{count, number} {count, plural, one {closed loan} other {closed loans}}",
   "loans.loanDetails": "Loan details",
 
   "loans.columns.title": "Item title",
@@ -384,7 +387,7 @@
   "errors.noMatch.how": "How did you get to {location}?",
 
   "errors.userExpired": "User has expired",
-  "errors.usernameUnavailable": "This username does not exist",
+  "errors.usernameUnavailable": "This username already exists",
 
   "errors.proxyrelationship.expired": "Proxy relationship has expired",
   "errors.proxies.expired": "Proxy user record expired",
@@ -411,6 +414,6 @@
 
   "itemDetails": "Item Details",
   "renew": "Renew",
-  "renew.toolTip": "Multiple loans can be processed at the same time. Please select loans first.",
+  "bulkActions.tooltip": "Multiple loans can be processed at the same time. Please select loans first.",
   "loanNotRenewed": "Loan not renewed"
 }

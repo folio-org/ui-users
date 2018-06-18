@@ -13,7 +13,7 @@ import IconButton from '@folio/stripes-components/lib/IconButton';
 import Icon from '@folio/stripes-components/lib/Icon';
 
 // eslint-disable-next-line import/no-unresolved
-import ConfirmationModal from '@folio/stripes-components/lib/structures/ConfirmationModal';
+import ConfirmationModal from '@folio/stripes-components/lib/ConfirmationModal';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import { Accordion, ExpandAllButton } from '@folio/stripes-components/lib/Accordion';
 
@@ -57,14 +57,17 @@ class PermissionSetForm extends React.Component {
     };
   }
 
-  saveSet(data) {
-    const filtered = omit(data, ['childOf', 'grantedTo', 'dummy']);
-    const permSet = Object.assign({}, filtered, {
-      mutable: true,
-      subPermissions: (data.subPermissions || []).map(p => p.permissionName),
-    });
-
-    this.props.onSave(permSet);
+  addFirstMenu() {
+    return (
+      <PaneMenu>
+        <IconButton
+          id="clickable-close-permission-set"
+          onClick={this.props.onCancel}
+          icon="closeX"
+          aria-label={this.props.stripes.intl.formatMessage({ id: 'ui-users.permissions.closePermissionSetDialog' })}
+        />
+      </PaneMenu>
+    );
   }
 
   beginDelete() {
@@ -82,17 +85,20 @@ class PermissionSetForm extends React.Component {
     }
   }
 
-  addFirstMenu() {
-    return (
-      <PaneMenu>
-        <IconButton
-          id="clickable-close-permission-set"
-          onClick={this.props.onCancel}
-          icon="closeX"
-          aria-label={this.props.stripes.intl.formatMessage({ id: 'ui-users.permissions.closePermissionSetDialog' })}
-        />
-      </PaneMenu>
-    );
+  handleExpandAll(sections) {
+    this.setState((curState) => {
+      const newState = cloneDeep(curState);
+      newState.sections = sections;
+      return newState;
+    });
+  }
+
+  handleSectionToggle({ id }) {
+    this.setState((curState) => {
+      const newState = cloneDeep(curState);
+      newState.sections[id] = !newState.sections[id];
+      return newState;
+    });
   }
 
   saveLastMenu() {
@@ -129,20 +135,14 @@ class PermissionSetForm extends React.Component {
     );
   }
 
-  handleSectionToggle({ id }) {
-    this.setState((curState) => {
-      const newState = cloneDeep(curState);
-      newState.sections[id] = !newState.sections[id];
-      return newState;
+  saveSet(data) {
+    const filtered = omit(data, ['childOf', 'grantedTo', 'dummy']);
+    const permSet = Object.assign({}, filtered, {
+      mutable: true,
+      subPermissions: (data.subPermissions || []).map(p => p.permissionName),
     });
-  }
 
-  handleExpandAll(sections) {
-    this.setState((curState) => {
-      const newState = cloneDeep(curState);
-      newState.sections = sections;
-      return newState;
-    });
+    this.props.onSave(permSet);
   }
 
   renderPaneTitle() {

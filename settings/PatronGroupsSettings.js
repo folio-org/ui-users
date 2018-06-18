@@ -5,16 +5,6 @@ import ControlledVocab from '@folio/stripes-smart-components/lib/ControlledVocab
 import PatronGroupNumberOfUsers from '../lib/PatronGroupNumberOfUsers';
 
 class PatronGroupsSettings extends React.Component {
-  static propTypes = {
-    stripes: PropTypes.shape({
-      connect: PropTypes.func.isRequired,
-      intl: PropTypes.object.isRequired,
-    }).isRequired,
-    resources: PropTypes.shape({
-      usersPerGroup: PropTypes.object,
-    }).isRequired,
-  };
-
   // adding the desired-count parameter, :50, to this query is an egregious
   // hack that willfully and knowingly abuses facets to contort them to
   // handle a reporting situation they were simply not designed for.
@@ -28,6 +18,16 @@ class PatronGroupsSettings extends React.Component {
       path: 'users?limit=0&facets=patronGroup:50',
     },
   });
+
+  static propTypes = {
+    stripes: PropTypes.shape({
+      connect: PropTypes.func.isRequired,
+      intl: PropTypes.object.isRequired,
+    }).isRequired,
+    resources: PropTypes.shape({
+      usersPerGroup: PropTypes.object,
+    }).isRequired,
+  };
 
   constructor(props) {
     super(props);

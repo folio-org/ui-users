@@ -3,6 +3,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import Link from 'react-router-dom/Link';
 import PropTypes from 'prop-types';
+import ChangeDueDateDialog from '@folio/stripes-smart-components/lib/ChangeDueDateDialog';
 import Popover from '@folio/stripes-components/lib/Popover';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import Modal from '@folio/stripes-components/lib/Modal';
@@ -22,6 +23,27 @@ import withRenew from './withRenew';
  * Detail view of a user's loan.
  */
 class LoanActionsHistory extends React.Component {
+  static manifest = Object.freeze({
+    userIds: {},
+    loanActionsWithUser: {},
+    // this is another hack used to refresh loanActions after renew is executed
+    timestamp: { initialValue: { time: Date.now() } },
+    users: {
+      type: 'okapi',
+      records: 'users',
+      resourceShouldRefresh: true,
+      path: 'users?query=(%{userIds.query})',
+    },
+    loanActions: {
+      type: 'okapi',
+      records: 'loans',
+      resourceShouldRefresh: true,
+      GET: {
+        path: 'loan-storage/loan-history?query=(id==!{loanid})&timestamp=%{timestamp.time}',
+      },
+    },
+  });
+
   static propTypes = {
     stripes: PropTypes.object.isRequired,
     resources: PropTypes.shape({
@@ -50,40 +72,24 @@ class LoanActionsHistory extends React.Component {
     renew: PropTypes.func,
   };
 
-  static manifest = Object.freeze({
-    userIds: {},
-    loanActionsWithUser: {},
-    // this is another hack used to refresh loanActions after renew is executed
-    timestamp: { initialValue: { time: Date.now() } },
-    users: {
-      type: 'okapi',
-      records: 'users',
-      resourceShouldRefresh: true,
-      path: 'users?query=(%{userIds.query})',
-    },
-    loanActions: {
-      type: 'okapi',
-      records: 'loans',
-      resourceShouldRefresh: true,
-      GET: {
-        path: 'loan-storage/loan-history?query=(id==!{loanid})&timestamp=%{timestamp.time}',
-      },
-    },
-  });
-
   constructor(props) {
     super(props);
     this.connectedProxy = props.stripes.connect(LoanActionsHistoryProxy);
+    this.connectedChangeDueDateDialog = props.stripes.connect(ChangeDueDateDialog);
     this.renew = this.renew.bind(this);
     this.getContributorslist = this.getContributorslist.bind(this);
     this.showContributors = this.showContributors.bind(this);
     this.formatDateTime = this.props.stripes.formatDateTime;
     this.hideNonRenewedLoansModal = this.hideNonRenewedLoansModal.bind(this);
     this.showTitle = this.showTitle.bind(this);
+    this.showChangeDueDateDialog = this.showChangeDueDateDialog.bind(this);
+    this.hideChangeDueDateDialog = this.hideChangeDueDateDialog.bind(this);
+
     this.state = {
       loanActionCount: 0,
       nonRenewedLoanItems: [],
-      nonRenewedLoansModalOpen: false
+      nonRenewedLoansModalOpen: false,
+      changeDueDateDialogOpen: false,
     };
   }
 
@@ -109,41 +115,6 @@ class LoanActionsHistory extends React.Component {
     }
   }
 
-  joinLoanActionsWithUser(loanActions, users, loan) {
-    const userMap = users.reduce((memo, user) => {
-      return Object.assign(memo, { [user.id]: user });
-    }, {});
-    const records = loanActions.map(la => {
-      return Object.assign({}, la, { user: userMap[la.metadata.updatedByUserId] });
-    });
-    this.props.mutator.loanActionsWithUser.replace({ loan, records });
-  }
-
-  showNonRenewedLoansModal() {
-    this.setState({ nonRenewedLoansModalOpen: true });
-  }
-
-  hideNonRenewedLoansModal() {
-    this.setState({ nonRenewedLoansModalOpen: false });
-  }
-
-  openNonRenewedLoansModal(nonRenewedLoanItems) {
-    this.setState({ nonRenewedLoanItems });
-    this.showNonRenewedLoansModal();
-  }
-
-  renew() {
-    const loanToRenew = this.props.loan;
-    const promise = this.props.renew(loanToRenew);
-    const singleRenewalFailure = [];
-    promise
-      .then(() => this.showCallout())
-      .catch(() => {
-        singleRenewalFailure.push(loanToRenew);
-      });
-    return promise;
-  }
-
   getContributorslist(loan) {
     this.loan = loan;
     const contributors = _.get(this.loan, ['item', 'contributors']);
@@ -154,6 +125,62 @@ class LoanActionsHistory extends React.Component {
       contributorsList.push('-');
     }
     return contributorsList;
+  }
+
+  hideChangeDueDateDialog() {
+    this.setState({
+      changeDueDateDialogOpen: false,
+    });
+  }
+
+  hideNonRenewedLoansModal() {
+    this.setState({ nonRenewedLoansModalOpen: false });
+  }
+
+  joinLoanActionsWithUser(loanActions, users, loan) {
+    const userMap = users.reduce((memo, user) => {
+      return Object.assign(memo, { [user.id]: user });
+    }, {});
+    const records = loanActions.map(la => {
+      return Object.assign({}, la, { user: userMap[la.metadata.updatedByUserId] });
+    });
+    this.props.mutator.loanActionsWithUser.replace({ loan, records });
+  }
+
+  openNonRenewedLoansModal(nonRenewedLoanItems) {
+    this.setState({ nonRenewedLoanItems });
+    this.showNonRenewedLoansModal();
+  }
+
+  renew() {
+    const { loan, user } = this.props;
+    const promise = this.props.renew(loan, user);
+    const singleRenewalFailure = [];
+    promise
+      .then(() => this.showCallout())
+      .catch(() => {
+        singleRenewalFailure.push(loan);
+      });
+    return promise;
+  }
+
+  showCallout() {
+    const message = (
+      <span>
+        <SafeHTMLMessage
+          id="ui-users.loans.item.renewed.callout"
+          values={{ title: this.props.loan.item.title }}
+        />
+      </span>
+    );
+
+    this.callout.sendCallout({ message });
+  }
+
+  showChangeDueDateDialog() {
+    this.setState({
+      changeDueDateDialogOpen: true,
+    });
   }
 
   showContributors(list, listTodisplay, contributorsLength) {
@@ -172,6 +199,10 @@ class LoanActionsHistory extends React.Component {
         <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.loans.columns.contributors' })} value={listTodisplay} />;
   }
 
+  showNonRenewedLoansModal() {
+    this.setState({ nonRenewedLoansModalOpen: true });
+  }
+
   showTitle(loan) {
     this.loan = loan;
     const title = `${_.get(this.loan, ['item', 'title'], '')}`;
@@ -182,17 +213,16 @@ class LoanActionsHistory extends React.Component {
     return '-';
   }
 
-  showCallout() {
-    const message = (
-      <span>
-        <SafeHTMLMessage
-          id="ui-users.loans.item.renewed.callout"
-          values={{ title: this.props.loan.item.title }}
-        />
-      </span>
+  renderChangeDueDateDialog() {
+    return (
+      <this.connectedChangeDueDateDialog
+        stripes={this.props.stripes}
+        loanIds={[{ id: this.props.loan.id }]}
+        onClose={this.hideChangeDueDateDialog}
+        open={this.state.changeDueDateDialogOpen}
+        user={this.props.user}
+      />
     );
-
-    this.callout.sendCallout({ message });
   }
 
   render() {
@@ -231,6 +261,9 @@ class LoanActionsHistory extends React.Component {
           <Row>
             <Col>
               <Button buttonStyle="primary" onClick={this.renew}>{this.props.stripes.intl.formatMessage({ id: 'ui-users.renew' })}</Button>
+            </Col>
+            <Col>
+              <Button buttonStyle="primary" onClick={this.showChangeDueDateDialog}>{this.props.stripes.intl.formatMessage({ id: 'stripes-smart-components.cddd.changeDueDate' })}</Button>
             </Col>
           </Row>
           <Row>
@@ -317,6 +350,7 @@ class LoanActionsHistory extends React.Component {
                   </li>))
             }
           </Modal>
+          { this.renderChangeDueDateDialog() }
           <Callout ref={(ref) => { this.callout = ref; }} />
         </Pane>
       </Paneset>
