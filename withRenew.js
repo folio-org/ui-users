@@ -45,44 +45,49 @@ const withRenew = WrappedComponent =>
     }
 
     renew(loan, patron, bulkRenewal) {
+      this.setState({ bulkRenewal });
       const params = {
         itemBarcode: loan.item.barcode,
         userBarcode: patron.barcode,
       };
 
-      this.setState({ bulkRenewal });
-
-      return this.props.mutator.renew.POST(params).catch(resp => {
-        const contentType = resp.headers.get('Content-Type');
-        if (contentType && contentType.startsWith('application/json')) {
-          resp.json().then(error => this.handleErrors(error));
-        } else {
-          // eslint-disable-next-line no-alert
-          resp.text().then(error => alert(error));
-        }
-        throw new Error(resp);
+      return new Promise((resolve, reject) => {
+        this.props.mutator.renew.POST(params).then(resolve).catch(resp => {
+          const contentType = resp.headers.get('Content-Type');
+          if (contentType && contentType.startsWith('application/json')) {
+            resp.json().then((error) => {
+              const errors = this.handleErrors(error);
+              reject(this.getMessage(errors));
+            });
+          } else {
+            resp.text().then((error) => {
+              reject(error);
+              alert(error); // eslint-disable-line no-alert
+            });
+          }
+        });
       });
     }
 
     handleErrors(error) {
       const errors = (error.errors || []).map(err => err.message);
       this.setState({ errors });
+      return errors;
     }
-
 
     hideModal() {
       this.setState({ errors: [] });
     }
 
-    getMessage() {
-      const { errors } = this.state;
+    // eslint-disable-next-line class-methods-use-this
+    getMessage(errors) {
       if (!errors.length) return '';
       return errors.reduce((msg, error) => ((msg) ? `${msg}, ${error}` : error), '');
     }
 
     render() {
       const { errors } = this.state;
-      const msg = this.getMessage();
+      const msg = this.getMessage(errors);
       const popupMessage = `Loan cannot be renewed because: ${msg}.`;
 
       return (
