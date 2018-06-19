@@ -94,24 +94,39 @@ class LoanActionsHistory extends React.Component {
   }
 
   // TODO: refactor after join is supported in stripes-connect
-  componentWillReceiveProps(nextProps) {
+  static getDerivedStateFromProps(nextProps, nextState) {
     const { loan, resources: { loanActions, userIds, users, loanActionsWithUser } } = nextProps;
 
-    if (!loanActions.records.length ||
-      loanActions.records[0].id !== loan.id) return;
+    if (!loanActions
+      || !loanActions.records.length
+      || loanActions.records[0].id !== loan.id) {
+      return null;
+    }
+
     if (!userIds.query || userIds.loan.id !== loan.id) {
       const query = loanActions.records.map(r => {
         return `id==${r.metadata.updatedByUserId}`;
       }).join(' or ');
-      this.props.mutator.userIds.replace({ query, loan });
+      nextProps.mutator.userIds.replace({ query, loan });
     }
 
-    if (!users.records.length) return;
+    if (!users.records.length) return null;
 
     if (!loanActionsWithUser.records || loanActionsWithUser.loan.id !== loan.id
-      || this.state.loanActionCount !== loanActions.other.totalRecords) {
+      || nextState.loanActionCount !== loanActions.other.totalRecords) {
+      return {
+        loanActionCount: loanActions.other.totalRecords
+      };
+    }
+
+    return null;
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { loan, resources: { loanActions, users } } = this.props;
+
+    if (this.state.loanActionCount && this.state.loanActionCount !== prevState.loanActionCount) {
       this.joinLoanActionsWithUser(loanActions.records, users.records, loan);
-      this.setState({ loanActionCount: loanActions.other.totalRecords });
     }
   }
 

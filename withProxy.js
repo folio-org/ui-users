@@ -95,17 +95,11 @@ const withProxy = WrappedComponent =>
       return null;
     }
 
-    componentDidMount() {
+    componentDidUpdate(prevProps, prevState) {
       if (!this.props.stripes.hasPerm('proxiesfor.collection.get')) {
         return;
       }
 
-      const userId = this.props.match.params.id;
-      this.loadSponsors(userId);
-      this.loadProxies(userId);
-    }
-
-    componentDidUpdate(prevProps, prevState) {
       const { userId } = this.state;
 
       if (userId !== prevState.userId) {
