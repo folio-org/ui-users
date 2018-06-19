@@ -165,19 +165,20 @@ class ViewUser extends React.Component {
     this.handleExpandAll = this.handleExpandAll.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.addressTypes = (nextProps.parentResources.addressTypes || {}).records || [];
+  static getDerivedStateFromProps(nextProps) {
+    const query = nextProps.location.search ? queryString.parse(nextProps.search) : {};
 
-    const query = this.props.location.search ? queryString.parse(this.props.location.search) : {};
     if (query.loan) {
       const loansHistory = (nextProps.resources.loansHistory || {}).records || [];
       if (loansHistory.length) {
         const selectedLoan = find(loansHistory, { id: query.loan });
         if (selectedLoan) {
-          this.setState({ selectedLoan });
+          return { selectedLoan };
         }
       }
     }
+
+    return null;
   }
 
   onAddressesUpdate(addresses) {
@@ -281,8 +282,10 @@ class ViewUser extends React.Component {
   }
 
   update(user) {
+    const addressTypes = (this.props.parentResources.addressTypes || {}).records || [];
+
     if (user.personal.addresses) {
-      user.personal.addresses = toUserAddresses(user.personal.addresses, this.addressTypes); // eslint-disable-line no-param-reassign
+      user.personal.addresses = toUserAddresses(user.personal.addresses, addressTypes); // eslint-disable-line no-param-reassign
     }
 
     const { proxies, sponsors, permissions } = user;
@@ -311,7 +314,8 @@ class ViewUser extends React.Component {
   }
 
   render() {
-    const { resources, location, stripes } = this.props;
+    const { resources, location, stripes, parentResources } = this.props;
+    const addressTypes = (parentResources.addressTypes || {}).records || [];
     const query = location.search ? queryString.parse(location.search) : {};
     const user = this.getUser();
     const patronGroups = (resources.patronGroups || {}).records || [];
@@ -354,7 +358,7 @@ class ViewUser extends React.Component {
 
     const patronGroupId = get(user, ['patronGroup'], '');
     const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
-    const addresses = toListAddresses(get(user, ['personal', 'addresses'], []), this.addressTypes);
+    const addresses = toListAddresses(get(user, ['personal', 'addresses'], []), addressTypes);
     const userFormData = this.getUserFormData(user, addresses, sponsors, proxies, permissions);
 
 
