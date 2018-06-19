@@ -79,10 +79,10 @@ const withRenew = WrappedComponent =>
       this.setState({ errors: [] });
     }
 
+    // eslint-disable-next-line class-methods-use-this
     getMessage(errors) {
-      this.errors = errors;
-      if (!this.errors.length) return '';
-      return this.errors.reduce((msg, error) => ((msg) ? `${msg}, ${error}` : error), '');
+      if (!errors.length) return '';
+      return errors.reduce((msg, error) => ((msg) ? `${msg}, ${error}` : error), '');
     }
 
     render() {
