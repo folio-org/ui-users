@@ -6,19 +6,6 @@ import ErrorModal from './lib/ErrorModal';
 // HOC used to manage renew
 const withRenew = WrappedComponent =>
   class WithRenewComponent extends React.Component {
-    static propTypes = {
-      mutator: PropTypes.shape({
-        renew: PropTypes.shape({
-          POST: PropTypes.func.isRequired,
-        }),
-      }),
-      stripes: PropTypes.shape({
-        intl: PropTypes.shape({
-          formatMessage: PropTypes.func.isRequired,
-        }).isRequired,
-      }).isRequired,
-    };
-
     static manifest = Object.freeze(
       Object.assign({}, WrappedComponent.manifest, {
         renew: {
@@ -32,6 +19,19 @@ const withRenew = WrappedComponent =>
         }
       }),
     );
+
+    static propTypes = {
+      mutator: PropTypes.shape({
+        renew: PropTypes.shape({
+          POST: PropTypes.func.isRequired,
+        }),
+      }),
+      stripes: PropTypes.shape({
+        intl: PropTypes.shape({
+          formatMessage: PropTypes.func.isRequired,
+        }).isRequired,
+      }).isRequired,
+    };
 
     constructor(props) {
       super(props);
