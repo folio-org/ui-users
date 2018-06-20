@@ -70,7 +70,7 @@ const withRenew = WrappedComponent =>
     }
 
     handleErrors(error) {
-      const errors = (error.errors || []).map(err => err.message);
+      const { errors } = error;
       this.setState({ errors });
       return errors;
     }
@@ -79,16 +79,36 @@ const withRenew = WrappedComponent =>
       this.setState({ errors: [] });
     }
 
+    getPolicyName(errors) {
+      for (const err of errors) {
+        for (const param of err.parameters) {
+          if (param.key === 'loanPolicyName') {
+            return param.value;
+          }
+        }
+      }
+
+      return '';
+    }
+
     // eslint-disable-next-line class-methods-use-this
     getMessage(errors) {
-      if (!errors.length) return '';
-      return errors.reduce((msg, error) => ((msg) ? `${msg}, ${error}` : error), '');
+      if (!errors || !errors.length) return '';
+
+      const policyName = this.getPolicyName(errors);
+      let message = errors.reduce((msg, err) => ((msg) ? `${msg}, ${err.message}` : err.message), '');
+      message = `Loan cannot be renewed because: ${message}.`;
+
+      if (policyName) {
+        message = `${message} Please review ${policyName} before retrying renewal.`;
+      }
+
+      return message;
     }
 
     render() {
       const { errors } = this.state;
-      const msg = this.getMessage(errors);
-      const popupMessage = `Loan cannot be renewed because: ${msg}.`;
+      const message = this.getMessage(errors);
 
       return (
         <div>
@@ -98,7 +118,7 @@ const withRenew = WrappedComponent =>
               id="renewal-failure-modal"
               open={errors.length > 0 && !this.state.bulkRenewal}
               onClose={this.hideModal}
-              message={popupMessage}
+              message={message}
               label={this.props.stripes.intl.formatMessage({ id: 'ui-users.loanNotRenewed' })}
             />
           }
