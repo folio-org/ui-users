@@ -6,8 +6,14 @@ import PermissionSets from './permissions/PermissionSets';
 import PatronGroupsSettings from './PatronGroupsSettings';
 import AddressTypesSettings from './AddressTypesSettings';
 import ProfilePictureSettings from './ProfilePictureSettings';
+import OwnerSettings from './OwnerSettings';
+import FeeFineSettings from './FeeFineSettings';
+import WaiveSettings from './WaiveSettings';
+import PaymentSettings from './PaymentSettings';
+import CommentRequiredSettings from './CommentRequiredSettings';
+import RefundReasonsSettings from './RefundReasonsSettings';
 
-const pages = [
+const general = [
   {
     route: 'perms',
     label: 'Permission sets',
@@ -31,7 +37,57 @@ const pages = [
     label: 'Profile pictures',
     component: ProfilePictureSettings,
   },
-
 ];
 
-export default props => <Settings {...props} pages={_.sortBy(pages, ['label'])} paneTitle="Users" />;
+const feefines = [
+  {
+    route: 'owners',
+    label: 'Owners',
+    component: OwnerSettings,
+    perm: 'ui-users.settings.owners',
+  },
+  {
+    route: 'feefinestable',
+    label: 'Manual charges',
+    component: FeeFineSettings,
+    perm: 'ui-users.settings.owners',
+  },
+  {
+    route: 'waivereasons',
+    label: 'Waive reasons',
+    component: WaiveSettings,
+    perm: 'ui-users.settings.owners',
+  },
+  {
+    route: 'payments',
+    label: 'Payment methods',
+    component: PaymentSettings,
+    perm: 'ui-users.settings.owners',
+  },
+  {
+    route: 'refunds',
+    label: 'Refund reasons',
+    component: RefundReasonsSettings,
+    perm: 'ui-users.settings.owners',
+  },
+  {
+    route: 'comments',
+    label: 'Comment required',
+    perm: 'ui-users.settings.owners',
+    component: CommentRequiredSettings,
+  },
+];
+
+const sections = [
+  {
+    label: 'General',
+    pages: _.sortBy(general, ['label']),
+  },
+  {
+    label: 'Fee/fine',
+    pages: _.sortBy(feefines, ['label']),
+  },
+];
+
+export default props => <Settings {...props} sections={sections} paneTitle="Users" />;
+

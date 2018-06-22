@@ -79,6 +79,7 @@ const withProxy = WrappedComponent =>
       this.getSponsors = this.getSponsors.bind(this);
       this.updateProxies = this.updateProxies.bind(this);
       this.updateSponsors = this.updateSponsors.bind(this);
+      this.state = {};
     }
 
     static getDerivedStateFromProps(nextProps) {
