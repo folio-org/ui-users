@@ -6,19 +6,6 @@ import ErrorModal from './lib/ErrorModal';
 // HOC used to manage renew
 const withRenew = WrappedComponent =>
   class WithRenewComponent extends React.Component {
-    static propTypes = {
-      mutator: PropTypes.shape({
-        renew: PropTypes.shape({
-          POST: PropTypes.func.isRequired,
-        }),
-      }),
-      stripes: PropTypes.shape({
-        intl: PropTypes.shape({
-          formatMessage: PropTypes.func.isRequired,
-        }).isRequired,
-      }).isRequired,
-    };
-
     static manifest = Object.freeze(
       Object.assign({}, WrappedComponent.manifest, {
         renew: {
@@ -33,6 +20,19 @@ const withRenew = WrappedComponent =>
       }),
     );
 
+    static propTypes = {
+      mutator: PropTypes.shape({
+        renew: PropTypes.shape({
+          POST: PropTypes.func.isRequired,
+        }),
+      }),
+      stripes: PropTypes.shape({
+        intl: PropTypes.shape({
+          formatMessage: PropTypes.func.isRequired,
+        }).isRequired,
+      }).isRequired,
+    };
+
     constructor(props) {
       super(props);
       this.renew = this.renew.bind(this);
@@ -45,45 +45,70 @@ const withRenew = WrappedComponent =>
     }
 
     renew(loan, patron, bulkRenewal) {
+      this.setState({ bulkRenewal });
       const params = {
         itemBarcode: loan.item.barcode,
         userBarcode: patron.barcode,
       };
 
-      this.setState({ bulkRenewal });
-
-      return this.props.mutator.renew.POST(params).catch(resp => {
-        const contentType = resp.headers.get('Content-Type');
-        if (contentType && contentType.startsWith('application/json')) {
-          resp.json().then(error => this.handleErrors(error));
-        } else {
-          // eslint-disable-next-line no-alert
-          resp.text().then(error => alert(error));
-        }
-        throw new Error(resp);
+      return new Promise((resolve, reject) => {
+        this.props.mutator.renew.POST(params).then(resolve).catch(resp => {
+          const contentType = resp.headers.get('Content-Type');
+          if (contentType && contentType.startsWith('application/json')) {
+            resp.json().then((error) => {
+              const errors = this.handleErrors(error);
+              reject(this.getMessage(errors));
+            });
+          } else {
+            resp.text().then((error) => {
+              reject(error);
+              alert(error); // eslint-disable-line no-alert
+            });
+          }
+        });
       });
     }
 
     handleErrors(error) {
-      const errors = (error.errors || []).map(err => err.message);
+      const { errors } = error;
       this.setState({ errors });
+      return errors;
     }
-
 
     hideModal() {
       this.setState({ errors: [] });
     }
 
-    getMessage() {
-      const { errors } = this.state;
-      if (!errors.length) return '';
-      return errors.reduce((msg, error) => ((msg) ? `${msg}, ${error}` : error), '');
+    getPolicyName(errors) {
+      for (const err of errors) {
+        for (const param of err.parameters) {
+          if (param.key === 'loanPolicyName') {
+            return param.value;
+          }
+        }
+      }
+
+      return '';
+    }
+
+    // eslint-disable-next-line class-methods-use-this
+    getMessage(errors) {
+      if (!errors || !errors.length) return '';
+
+      const policyName = this.getPolicyName(errors);
+      let message = errors.reduce((msg, err) => ((msg) ? `${msg}, ${err.message}` : err.message), '');
+      message = `Loan cannot be renewed because: ${message}.`;
+
+      if (policyName) {
+        message = `${message} Please review ${policyName} before retrying renewal.`;
+      }
+
+      return message;
     }
 
     render() {
       const { errors } = this.state;
-      const msg = this.getMessage();
-      const popupMessage = `Loan cannot be renewed because: ${msg}.`;
+      const message = this.getMessage(errors);
 
       return (
         <div>
@@ -93,7 +118,7 @@ const withRenew = WrappedComponent =>
               id="renewal-failure-modal"
               open={errors.length > 0 && !this.state.bulkRenewal}
               onClose={this.hideModal}
-              message={popupMessage}
+              message={message}
               label={this.props.stripes.intl.formatMessage({ id: 'ui-users.loanNotRenewed' })}
             />
           }
