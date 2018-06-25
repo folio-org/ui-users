@@ -133,7 +133,7 @@ class Users extends React.Component {
     browseOnly: false,
   }
 
-  componentWillUpdate() {
+  componentDidUpdate() {
     const pg = (this.props.resources.patronGroups || {}).records || [];
     if (pg && pg.length) {
       const pgFilterConfig = filterConfig.find(group => group.name === 'pg');

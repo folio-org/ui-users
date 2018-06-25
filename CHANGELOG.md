@@ -80,6 +80,8 @@
 * Use `cql.allIndexes=1` when no query is supplied, instead of a wildcard. Fixes UIU-541.
 * Use new renew-by-barcode API for renew. Fixes UIU-538.
 * Removed "Accrue-fees-to" functionality for proxy/sponsors
+* Adjust renew error messages. Fixes UIU-552.
+* Lower-case search terms AND permission names when searching. Refs UIORG-76.
 * Include active users in every search. Fixes UIU-400.
 
 ## [2.12.0](https://github.com/folio-org/ui-users/tree/v2.12.0) (2017-11-28)
