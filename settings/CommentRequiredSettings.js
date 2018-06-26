@@ -42,10 +42,6 @@ class CommentRequiredSettings extends React.Component {
     settings.waived = values.waived;
     settings.transferredManually = values.transferredManually;
     settings.refunded = values.refunded;
-    settings.paymentId = '0';
-    settings.waiveId = '0';
-    settings.refundId = '0';
-    settings.transferId = '0';
 
     if (!settings.id) {
       this.props.mutator.commentRequired.POST(settings)
