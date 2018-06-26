@@ -2,12 +2,16 @@
   "search": "Search",
   "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}",
   "closedLoansCount": "{count, number} {count, plural, one {closed loan} other {closed loans}}",
-
-
+  "brd.renewConfirmation": "Renew Confirmation",
+  "brd.header.renewalStatus": "Renewal status",
+  "brd.header.title": "Title",
+  "brd.failedRenewal": "Item not renewed",
+  "brd.successfulRenewal": "Item successfully renewed",
+  "brd.itemNotRenewed": "<strong>{count}</strong> {count, plural, one {item} other {items}} <b>not</b> renewed. ",
+  "brd.itemSuccessfullyRenewed": "<strong>{count}</strong> {count, plural, one {item} other {items}} <b>successfully</b> renewed",
   "data.contactTypes.email": "Email",
   "data.contactTypes.mail": "Mail (Primary Address)",
   "data.contactTypes.textMessage": "Text Message",
-
   "data.countries.AFG": "Afghanistan",
   "data.countries.ALA": "ALA Aland Islands",
   "data.countries.ALB": "Albania",
