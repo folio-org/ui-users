@@ -92,6 +92,7 @@ class ViewUser extends React.Component {
       permissions: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
+      query: PropTypes.object,
       patronGroups: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
@@ -223,6 +224,8 @@ class ViewUser extends React.Component {
 
   onClickViewLoanActionsHistory(e, selectedLoan) {
     if (e) e.preventDefault();
+    const q = {};
+    Object.keys(this.props.resources.query).forEach((k) => { q[k] = null; });
     this.props.mutator.query.update({ layer: 'loan', loan: selectedLoan.id });
     this.setState({
       selectedLoan,
@@ -231,6 +234,9 @@ class ViewUser extends React.Component {
 
   onClickViewOpenLoans(e) {
     if (e) e.preventDefault();
+
+    const q = {};
+    Object.keys(this.props.resources.query).forEach((k) => { q[k] = null; });
     this.props.mutator.query.update({ layer: 'open-loans' });
     this.setState({
       viewOpenLoansMode: true,
@@ -353,9 +359,9 @@ class ViewUser extends React.Component {
   }
 
   render() {
-    const { resources, location, stripes, parentResources } = this.props;
+    const { resources, stripes, parentResources } = this.props;
     const addressTypes = (parentResources.addressTypes || {}).records || [];
-    const query = location.search ? queryString.parse(location.search) : {};
+    const query = resources.query;
     const user = this.getUser();
     const patronGroups = (resources.patronGroups || {}).records || [];
     const permissions = (resources.permissions || {}).records || [];
