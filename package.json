@@ -1,7 +1,7 @@
 {
   "name": "@folio/users",
   "version": "2.12.2",
-  "description": "ui-users.meta.description",
+  "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
     "registry": "https://repository.folio.org/repository/npm-folio/"
