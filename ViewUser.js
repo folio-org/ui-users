@@ -16,7 +16,7 @@ import UserForm from './UserForm';
 import LoansHistory from './LoansHistory';
 import LoanActionsHistory from './LoanActionsHistory';
 
-import { ChargeFeeFine } from './lib/Accounts';
+import ChargeFeeFine from './lib/Accounts';
 
 import { toListAddresses, toUserAddresses } from './converters/address';
 import { getFullName, eachPromise } from './util';
