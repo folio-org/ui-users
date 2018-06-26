@@ -30,7 +30,7 @@ import {
   UserLoans,
 } from './lib/ViewSections';
 
-class ViewUser extends React.Component { // eslint-disable-line
+class ViewUser extends React.Component {
   static manifest = Object.freeze({
     query: {},
     selUser: {
