@@ -1,4 +1,6 @@
 {
+  "meta.title": "Benutzer",
+
   "search": "Suche",
   "resultCount": "{count, number} {count, plural, one {Datensatz} other {Datensätze}} gefunden",
 

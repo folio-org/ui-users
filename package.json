@@ -1,7 +1,7 @@
 {
   "name": "@folio/users",
   "version": "2.12.2",
-  "description": "User management",
+  "description": "ui-users.meta.description",
   "repository": "folio-org/ui-users",
   "publishConfig": {
     "registry": "https://repository.folio.org/repository/npm-folio/"
@@ -13,7 +13,7 @@
   "main": "index.js",
   "stripes": {
     "type": "app",
-    "displayName": "Users",
+    "displayName": "ui-users.meta.title",
     "route": "/users",
     "home": "/users?sort=Name",
     "hasSettings": true,
@@ -231,7 +231,7 @@
   },
   "peerDependencies": {
     "@folio/stripes-connect": "^3.1.1",
-    "@folio/stripes-core": "^2.9.0",
+    "@folio/stripes-core": "^2.10.2",
     "@folio/stripes-logger": "^0.0.2",
     "react": "*"
   },
