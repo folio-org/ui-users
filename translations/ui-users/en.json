@@ -459,6 +459,11 @@
   "payments.singular": "Payment method",
   "payments.columns.name": "Name*",
   "payments.columns.refund": "Refund method allowed",
+  
+  "refunds.label": "Fee/fine: Refund reasons",
+  "refunds.singular": "Refund reason",
+  "refunds.columns.nameReason": "Name*",
+  "refunds.columns.description": "Description",
 
   "waives.label": "Fee/fine: Waive reasons",
   "waives.singular": "Waive reason",
