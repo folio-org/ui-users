@@ -9,7 +9,7 @@ module.exports.test = function foo(uiTestCtx) {
     let userid = null;
     let communityid = null;
     let staffid = null;
-    const wait = 1111;
+    const wait = 4000;
 
     describe('Login > Add new patron group > Assign to user > Try to delete patron group > Unassign from user > Try to delete again > Logout\n', () => {
       const gid = `alumni_${Math.floor(Math.random() * 10000)}`;
@@ -52,18 +52,18 @@ module.exports.test = function foo(uiTestCtx) {
       it(`should create a patron group for "${gidlabel}"`, (done) => {
         nightmare
           .click(config.select.settings)
-          .wait('a[href="/settings/users"]')
           .wait(wait)
+          .wait('a[href="/settings/users"]')
           .click('a[href="/settings/users"]')
+          .wait(wait)
           .wait('a[href="/settings/users/groups"]')
           .wait(wait)
           .click('a[href="/settings/users/groups"]')
-          .wait(wait)
           .click('#clickable-add-patrongroups')
-          .wait(1000)
+          .wait(wait)
           .type('input[name="items[0].group"]', gid)
           .type('input[name="items[0].desc"]', gidlabel)
-          .wait(1000)
+          .wait(wait)
           .click('#clickable-save-patrongroups-0')
           .wait(wait)
           .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
