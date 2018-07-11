@@ -17,6 +17,8 @@ import UserForm from './UserForm';
 import LoansHistory from './LoansHistory';
 import LoanActionsHistory from './LoanActionsHistory';
 
+import ChargeFeeFine from './lib/Accounts';
+
 import { toListAddresses, toUserAddresses } from './converters/address';
 import { getFullName, eachPromise } from './util';
 import withProxy from './withProxy';
@@ -28,6 +30,7 @@ import {
   ProxyPermissions,
   UserPermissions,
   UserLoans,
+  UserAccounts,
 } from './lib/ViewSections';
 
 class ViewUser extends React.Component {
@@ -148,11 +151,13 @@ class ViewUser extends React.Component {
         contactInfoSection: false,
         proxySection: false,
         loansSection: false,
+        accountsSection: false,
         permissionsSection: false,
       },
     };
 
     this.connectedUserLoans = props.stripes.connect(UserLoans);
+    this.connectedUserAccounts = props.stripes.connect(UserAccounts);
     this.connectedLoansHistory = props.stripes.connect(LoansHistory);
     this.connectedLoanActionsHistory = props.stripes.connect(LoanActionsHistory);
     this.connectedUserInfo = props.stripes.connect(UserInfo);
@@ -165,6 +170,11 @@ class ViewUser extends React.Component {
     this.onAddressesUpdate = this.onAddressesUpdate.bind(this);
     this.handleSectionToggle = this.handleSectionToggle.bind(this);
     this.handleExpandAll = this.handleExpandAll.bind(this);
+
+    this.connectedCharge = props.stripes.connect(ChargeFeeFine);
+    this.onCloseChargeFeeFine = this.onCloseChargeFeeFine.bind(this);
+    this.onClickViewChargeFeeFine = this.onClickViewChargeFeeFine.bind(this);
+    this.handleAddRecords = this.handleAddRecords.bind(this);
   }
 
   static getDerivedStateFromProps(nextProps) {
@@ -231,6 +241,34 @@ class ViewUser extends React.Component {
     this.props.mutator.query.update({ layer: 'open-loans' });
     this.setState({
       viewOpenLoansMode: true,
+    });
+  }
+
+  onClickViewChargeFeeFine(e, selectedLoan) {
+    if (e) e.preventDefault();
+    const query = this.props.location.search ? queryString.parse(this.props.location.search) : {};
+    this.setState({
+      prevLayer: query.layer,
+    });
+    this.props.mutator.query.update({ layer: 'charge' });
+    this.setState({
+      selectedLoan,
+    });
+  }
+
+  onCloseChargeFeeFine(e) {
+    if (e) e.preventDefault();
+    const layer = this.state.prevLayer;
+    this.props.mutator.query.update({ layer });
+    this.setState({
+      selectedLoan: {},
+    });
+  }
+
+  handleAddRecords() {
+    const addRecord = !this.state.addRecord;
+    this.setState({
+      addRecord,
     });
   }
 
@@ -415,6 +453,17 @@ class ViewUser extends React.Component {
           />
         </IfPermission>
 
+        <IfPermission perm="accounts.collection.get">
+          <this.connectedUserAccounts
+            onClickViewChargeFeeFine={this.onClickViewChargeFeeFine}
+            expanded={this.state.sections.accountsSection}
+            onToggle={this.handleSectionToggle}
+            accordionId="accountsSection"
+            addRecord={this.state.addRecord}
+            {...this.props}
+          />
+        </IfPermission>
+
         <IfPermission perm="circulation.loans.collection.get">
           <IfInterface name="circulation" version="3.0">
             <this.connectedUserLoans
@@ -452,6 +501,18 @@ class ViewUser extends React.Component {
             parentMutator={this.props.parentMutator}
           />
         </Layer>
+
+        <Layer isOpen={query.layer ? query.layer === 'charge' : false} label="Charge Fee/Fine">
+          <this.connectedCharge
+            stripes={stripes}
+            onCloseChargeFeeFine={this.onCloseChargeFeeFine}
+            user={user}
+            loan={{ item: {} }}
+            selectedLoan={this.state.selectedLoan}
+            handleAddRecords={this.handleAddRecords}
+          />
+        </Layer>
+
         <Layer isOpen={query.layer ? query.layer === 'open-loans' || query.layer === 'closed-loans' : false} contentLabel={formatMsg({ id: 'ui-users.loans.title' })}>
           {loansHistory}
         </Layer>
