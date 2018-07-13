@@ -5,7 +5,7 @@ node {
 
     def tenant = 'foo'
     def okapiUrl = 'bar'
-    def permissions = '"\\\\\\\"perms.all\\\\\\\",\\\\\\\"login.all\\\\\\\",\\\\\\\"users.all\\\\\\\""'
+    def permissions = '\\\"\\\\\\\"perms.all\\\\\\\",\\\\\\\"login.all\\\\\\\",\\\\\\\"users.all\\\\\\\""'
 
     echo "Permissions:  ${permissions}"
 
@@ -16,7 +16,7 @@ node {
      sh "echo admin_user: { username: ${tenant}_admin, password: admin, " +
         "hash: 52DCA1934B2B32BEA274900A496DF162EC172C1E, " +
         "salt: 483A7C864569B90C24A0A6151139FF0B95005B16, " +
-        "permissions: ${permissions}, " +
+        "permissions: $/${permissions}/$, " +
         "first_name: Admin, " +
         "last_name: ${tenant}, " +
         "email: admin@example.org } >> vars_pr.yml"
