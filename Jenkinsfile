@@ -6,7 +6,7 @@ node {
     def tenant = 'foo'
     def okapiUrl = 'bar'
     // THE escape sequence from HELL
-    def permissions = '\\\"\\\\\\\\\\\\\\\"perms.all\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\"login.all\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\"users.all\\\\\\\\\\\\\"\\\"'
+    def permissions = '\\\"\\\\\\\\\\\\\\\"perms.all\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\"login.all\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\"users.all\\\\\\\\\\\\\\\\"\\\"'
 
     echo "Permissions:  ${permissions}"
 
