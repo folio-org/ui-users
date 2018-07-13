@@ -5,7 +5,8 @@ node {
 
     def tenant = 'foo'
     def okapiUrl = 'bar'
-    def permissions = '\\\"\\\\\\\\\\\"perms.all\\\\\\\\\\\",\\\\\\\\\\\"login.all\\\\\\\\\\\",\\\\\\\"users.all\\\\\\\"\\\"'
+    // escape from HELL
+    def permissions = '\\\"\\\\\\\\\\\\\\\"perms.all\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\"login.all\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\"users.all\\\\\\\\\\\"\\\"'
 
     echo "Permissions:  ${permissions}"
 
