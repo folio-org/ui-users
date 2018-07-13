@@ -7,7 +7,7 @@ node {
     def okapiUrl = 'bar'
     def permissions = '"\\\"perms.all\\\",\\\"login.all\\\",\\\"users.all\\\""'
 
-    sh "permissions: ${permissions}"
+    echo "Permissions:  ${permissions}"
 
     /*
     * // set vars in include file 
