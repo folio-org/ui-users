@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "2.12.2",
+  "version": "2.12.3",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -215,7 +215,7 @@
   },
   "dependencies": {
     "@folio/react-intl-safe-html": "^1.0.10005",
-    "@folio/stripes-components": "^2.1.5",
+    "@folio/stripes-components": "^3.0.0",
     "@folio/stripes-form": "^0.8.2",
     "@folio/stripes-smart-components": "^1.4.19",
     "classnames": "^2.2.5",
