@@ -465,11 +465,19 @@
   "payments.singular": "Payment method",
   "payments.columns.name": "Name*",
   "payments.columns.refund": "Refund method allowed",
-  
+
   "refunds.label": "Fee/fine: Refund reasons",
   "refunds.singular": "Refund reason",
   "refunds.columns.nameReason": "Name*",
   "refunds.columns.description": "Description",
+
+  "sp.servicePoints": "Service points",
+  "sp.addServicePoints": "+ Add service points",
+  "sp.servicePointPreference": "Service point preference*",
+  "sp.selectServicePoint": "Select service point",
+  "sp.noServicePoints": "No service points found",
+  "sp.column.name": "Name",
+  "sp.column.library": "Library",
 
   "waives.label": "Fee/fine: Waive reasons",
   "waives.singular": "Waive reason",

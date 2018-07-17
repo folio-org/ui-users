@@ -17,6 +17,7 @@ import {
   EditContactInfo,
   EditProxy,
   EditUserPerms,
+  EditServicePoints,
 } from './lib/EditSections';
 import { getFullName } from './util';
 
@@ -106,6 +107,7 @@ class UserForm extends React.Component {
         contactInfo: true,
         proxy: false,
         permissions: false,
+        servicePoints: false,
       },
     };
 
@@ -198,6 +200,7 @@ class UserForm extends React.Component {
               <div>
                 <EditProxy accordionId="proxy" expanded={sections.proxy} onToggle={this.handleSectionToggle} {...this.props} />
                 <this.editUserPerms accordionId="permissions" expanded={sections.permissions} onToggle={this.handleSectionToggle} {...this.props} />
+                <EditServicePoints accordionId="servicePoints" expanded={sections.servicePoints} onToggle={this.handleSectionToggle} {...this.props} />
               </div>
             }
           </Pane>
