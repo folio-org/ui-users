@@ -3,7 +3,7 @@
 buildNPM {
   publishModDescriptor = 'yes'
   stripesPlatform = 'platform-core'
-  runRegression = 'no'
+  runRegression = 'none'
   runLint = 'yes'
   runTest = 'no'
 }
