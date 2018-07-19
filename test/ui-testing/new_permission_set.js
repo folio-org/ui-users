@@ -1,10 +1,10 @@
 /* eslint-disable no-console */
 /* global it describe Nightmare before after */
-module.exports.test = function foo(uiTestCtx) {
+module.exports.test = function foo(uiTestCtx, nightmare) {
   describe('Module test: users:new_permission_set', function bar() {
     const { config, helpers: { login, openApp, logout }, meta: { testVersion } } = uiTestCtx;
 
-    const nightmare = new Nightmare(config.nightmare);
+    
 
     this.timeout(Number(config.test_timeout));
 
