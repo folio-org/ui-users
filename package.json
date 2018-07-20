@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "2.12.2",
+  "version": "2.12.3",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -206,7 +206,7 @@
   "devDependencies": {
     "@folio/eslint-config-stripes": "^1.1.0",
     "babel-core": "^6.17.0",
-    "babel-eslint": "^7.0.0",
+    "babel-eslint": "^8.0.0",
     "babel-preset-es2015": "^6.18.0",
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0",
@@ -215,7 +215,7 @@
   },
   "dependencies": {
     "@folio/react-intl-safe-html": "^1.0.10005",
-    "@folio/stripes-components": "^2.1.5",
+    "@folio/stripes-components": "^3.0.0",
     "@folio/stripes-form": "^0.8.2",
     "@folio/stripes-smart-components": "^1.4.19",
     "classnames": "^2.2.5",
