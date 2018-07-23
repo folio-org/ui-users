@@ -277,10 +277,12 @@
   "loans.numOpenLoans": "{count, number} {count, plural, one {open loan} other {open loans}}",
   "loans.numClosedLoans": "{count, number} {count, plural, one {closed loan} other {closed loans}}",
   "loans.loanDetails": "Loan details",
+  "loans.newFeeFine": "New fee/fine",
 
   "loans.columns.title": "Item title",
   "loans.columns.itemStatus": "Item status",
   "loans.columns.barcode": "Barcode",
+  "loans.columns.feefine": "Fee/Fine",
   "loans.columns.loanDate": "Loan date",
   "loans.columns.dueDate": "Due date",
   "loans.columns.returnDate": "Return date",
