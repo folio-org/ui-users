@@ -195,6 +195,45 @@
           "proxiesfor.item.delete"
         ],
         "visible": true
+      },
+      {
+        "permissionName": "ui-users.feesfines",
+        "displayName": "Users: Can manage fees and fines",
+        "description": "All permissions necessary for managing fees and fines",
+        "subPermissions": [
+          "module.feefines.enabled",
+          "module.accounts.enabled",
+          "module.owners.enabled",
+          "module.feefineactions.enabled",
+          "module.payments.enabled",
+          "module.waives.enabled",
+          "module.refunds.enabled",
+          "module.transfers.enabled",
+          "module.comments.enabled",
+          "module.transfertypes.enabled",
+          "feesfines.all",
+          "settings.feefines.all",
+          "ui-users.settings.feefines",
+          "settings.owners.all",
+          "ui-users.settings.owners",
+          "settings.accounts.all",
+          "ui-users.settings.accounts",
+          "settings.feefineactions.all",
+          "ui-users.settings.feefineactions",
+          "settings.payments.all",
+          "ui-users.settings.payments",
+          "settings.waives.all",
+          "ui-users.settings.waives",
+          "settings.refunds.all",
+          "ui-users.settings.refunds",
+          "settings.transfers.all",
+          "ui-users.settings.transfers",
+          "settings.comments.all",
+          "ui-users.settings.comments",
+          "settings.transfertypes.all",
+          "ui-users.settings.transfertypes"
+        ],
+        "visible": true
       }
     ]
   },
@@ -206,12 +245,13 @@
   "devDependencies": {
     "@folio/eslint-config-stripes": "^1.1.0",
     "babel-core": "^6.17.0",
-    "babel-eslint": "^8.0.0",
+    "babel-eslint": "^8.2.6",
     "babel-preset-es2015": "^6.18.0",
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0",
     "babel-register": "^6.18.0",
-    "eslint": "^4.8.0"
+    "eslint": "^4.8.0",
+    "eslint-config-stripes": "^1.0.0"
   },
   "dependencies": {
     "@folio/react-intl-safe-html": "^1.0.10005",
