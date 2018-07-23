@@ -34,7 +34,8 @@
       "circulation": "3.0",
       "permissions": "5.0",
       "loan-storage": "4.0",
-      "login": "4.0"
+      "login": "4.0",
+      "feesfines": "14.0"
     },
     "permissionSets": [
       {
