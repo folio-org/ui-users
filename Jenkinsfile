@@ -5,4 +5,5 @@ buildNPM {
   runRegression = 'none'
   runLint = 'yes'
   runTest = 'no'
+
 }
