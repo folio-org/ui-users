@@ -66,7 +66,7 @@ class AccountActionsHistory extends React.Component {
       },
       checkedAccounts: {},
       sortOrder: ['Action Date'],
-      sortDirection: ['asc', 'asc'],
+      sortDirection: ['desc', 'asc'],
       message: {},
       source: '',
       id: '',
