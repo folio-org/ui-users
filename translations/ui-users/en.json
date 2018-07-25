@@ -506,16 +506,28 @@
   "charge.item.button": "Select item",
   "charge.item.barcode": "Barcode",
   "charge.item.instance": "Instance",
-  "charge.item.status": "Item itatus",
+  "charge.item.status": "Item Status",
   "charge.item.callNumber": "Call number",
   "charge.item.location": "Location",
      
-  "details.columns.comments": "comments UNAM",
+  "details.columns.comments": "comments",
   "details.columns.date": "Action Date",
   "details.columns.action": "Action",
   "details.columns.amount": "Amount",
   "details.columns.balance": "Balance",
   "details.columns.number": "Transaction Number",
   "details.columns.created": "Created At",
-  "details.columns.source": "Source"
+  "details.columns.source": "Source",
+
+  "accounts.open.columns.title":"Item",
+  "accounts.open.columns.amount":"Charged",
+  "accounts.open.columns.remaining":"Remaining",
+  "accounts.open.columns.barcode":"Barcode",
+  "accounts.open.columns.created":"date created",
+  "accounts.open.columns.updated":"date updated",
+  "accounts.open.columns.type":"fee/fine type",
+  "accounts.open.columns.owner":"fee/fine owner",
+  "accounts.open.columns.number":"call number",
+  "accounts.open.columns.status":"payment status"
+
 }

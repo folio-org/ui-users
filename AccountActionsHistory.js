@@ -13,18 +13,6 @@ import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import { Actions } from './lib/Accounts/Actions';
 import { formatDateTime, getFullName } from './util';
 
-const sortMap = {
-  'Action Date': action => action.dateAction,
-  'Action': action => action.typeAction,
-  'Amount': action => action.amountAction,
-  'Balance': action => action.balance,
-  'Transaction number': action => action.transactionNumber,
-  'Created at': action => action.createdAt,
-  'Source': action => action.source,
-  'Comments': action => action.comments,
-};
-
-
 class AccountActionsHistory extends React.Component {
   static manifest = Object.freeze({
     accountActions: {
@@ -57,6 +45,26 @@ class AccountActionsHistory extends React.Component {
   constructor(props) {
     super(props);
 
+    this.onSort = this.onSort.bind(this);
+    this.onChangeActions = this.onChangeActions.bind(this);
+    this.connectedActions = props.stripes.connect(Actions);
+    this.error = this.error.bind(this);
+    this.comment = this.comment.bind(this);
+    this.accounts = [this.props.account];
+
+    const { stripes } = props;
+
+    this.sortMap = {
+      [stripes.intl.formatMessage({ id: 'ui-users.details.columns.date' })]: action => action.dateAction,
+      [stripes.intl.formatMessage({ id: 'ui-users.details.columns.action' })]: action => action.typeAction,
+      [stripes.intl.formatMessage({ id: 'ui-users.details.columns.amount' })]: action => action.amountAction,
+      [stripes.intl.formatMessage({ id: 'ui-users.details.columns.balance' })]: action => action.balance,
+      [stripes.intl.formatMessage({ id: 'ui-users.details.columns.number' })]: action => action.transactionNumber,
+      [stripes.intl.formatMessage({ id: 'ui-users.details.columns.created' })]: action => action.createdAt,
+      [stripes.intl.formatMessage({ id: 'ui-users.details.columns.source' })]: action => action.source,
+      [stripes.intl.formatMessage({ id: 'ui-users.details.columns.comments' })]: action => action.comments,
+    };
+
     this.state = {
       actions: {
         pay: false,
@@ -65,19 +73,21 @@ class AccountActionsHistory extends React.Component {
         comment: false,
       },
       checkedAccounts: {},
-      sortOrder: ['Action Date'],
+      sortOrder: [
+        stripes.intl.formatMessage({ id: 'ui-users.details.columns.date' }),
+        stripes.intl.formatMessage({ id: 'ui-users.details.columns.action' }),
+        stripes.intl.formatMessage({ id: 'ui-users.details.columns.amount' }),
+        stripes.intl.formatMessage({ id: 'ui-users.details.columns.balance' }),
+        stripes.intl.formatMessage({ id: 'ui-users.details.columns.number' }),
+        stripes.intl.formatMessage({ id: 'ui-users.details.columns.created' }),
+        stripes.intl.formatMessage({ id: 'ui-users.details.columns.source' }),
+        stripes.intl.formatMessage({ id: 'ui-users.details.columns.comments' }),
+      ],
       sortDirection: ['desc', 'asc'],
       message: {},
       source: '',
       id: '',
     };
-
-    this.onSort = this.onSort.bind(this);
-    this.onChangeActions = this.onChangeActions.bind(this);
-    this.connectedActions = props.stripes.connect(Actions);
-    this.error = this.error.bind(this);
-    this.comment = this.comment.bind(this);
-    this.accounts = [this.props.account];
   }
 
   componentDidMount() {
@@ -109,7 +119,7 @@ class AccountActionsHistory extends React.Component {
   }
 
   onSort(e, meta) {
-    if (!sortMap[meta.alias]) return;
+    if (!this.sortMap[meta.alias]) return;
 
     let { sortOrder, sortDirection } = this.state;
 
@@ -130,7 +140,7 @@ class AccountActionsHistory extends React.Component {
     const user = this.props.user;
 
     const columnMapping = {
-      Comments: (<span>Comments<Button style={{ float: 'right', marginLeft: '50px' }} onClick={this.comment}>+ New</Button></span>),
+      Comments: (<span>{this.props.stripes.intl.formatMessage({ id: 'ui-users.details.columns.comments' })}<Button style={{ float: 'right', marginLeft: '50px' }} onClick={this.comment}>+ New</Button></span>),
     };
 
     const accountActionsFormatter = {
@@ -146,7 +156,7 @@ class AccountActionsHistory extends React.Component {
     };
 
     const actions = _.get(this.props.resources, ['accountActions', 'records'], []);
-    const actionsSort = _.orderBy(actions, [sortMap[sortOrder[0]], sortMap[sortOrder[1]]], sortDirection);
+    const actionsSort = _.orderBy(actions, [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
 
     return (
       <Paneset isRoot>

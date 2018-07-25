@@ -11,13 +11,13 @@ import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import SegmentedControl from '@folio/stripes-components/lib/SegmentedControl';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import IconButton from '@folio/stripes-components/lib/IconButton';
-import { filterState } from '@folio/stripes-components/lib/FilterGroups';
 import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
+import { filterState } from '@folio/stripes-components/lib/FilterGroups';
+
 import { getFullName } from './util';
-
 import { Actions } from './lib/Accounts/Actions';
-
 import { count, handleFilterChange, handleFilterClear } from './lib/Accounts/accountFunctions';
+
 import {
   Menu,
   Filters,
