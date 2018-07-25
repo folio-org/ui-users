@@ -12,6 +12,7 @@ import SegmentedControl from '@folio/stripes-components/lib/SegmentedControl';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import IconButton from '@folio/stripes-components/lib/IconButton';
 import { filterState } from '@folio/stripes-components/lib/FilterGroups';
+import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
 import { getFullName } from './util';
 
 import { Actions } from './lib/Accounts/Actions';
@@ -53,8 +54,8 @@ const filterConfig = [
 let render = true;
 let tab = false;
 
-const query = (findAll, queryTemplate, sortMap, filterConfig, failOnCondition, nsParams) => {
-  const getCql = makeQueryFunction(findAll, queryTemplate, sortMap, filterConfig, failOnCondition, nsParams);
+const queryFunction = (findAll, queryTemplate, sortMap, fConfig, failOnCondition, nsParams) => {
+  const getCql = makeQueryFunction(findAll, queryTemplate, sortMap, fConfig, failOnCondition, nsParams);
   return (queryParams, pathComponents, resourceValues, logger) => {
     let cql = getCql(queryParams, pathComponents, resourceValues, logger);
     const { user } = resourceValues;
@@ -74,7 +75,7 @@ class AccountsHistory extends React.Component {
       perRequest: 30,
       GET: {
         params: {
-          query: query(
+          query: queryFunction(
             'feeFineType=*',
             'feeFineType="%{query.query}*" or barcode="%{query.query}*" or materialType="%{query.query}" or title="%{query.query}*    " or feeFineOwner="%{query.query}*" or paymentStatus.name="%{query.query}"',
             { userId: 'userId' },
@@ -165,23 +166,25 @@ class AccountsHistory extends React.Component {
 
   componentDidMount() {
     render = true;
-    filterConfig[0].values = [];
-    filterConfig[1].values = [];
-    filterConfig[2].values = [];
-    filterConfig[3].values = [];
+    filterConfig[0].values = [{}];
+    filterConfig[1].values = [{}];
+    filterConfig[2].values = [{}];
+    filterConfig[3].values = [{}];
     this.props.mutator.activeRecord.update({ records: 30 });
     this.props.mutator.user.update({ id: this.props.user.id });
   }
 
   shouldComponentUpdate(nextProps, nextState) {
     let accounts = _.get(nextProps.resources, ['feefineshistory', 'records'], []);
+    const history = _.get(this.props.resources, ['feefineshistory', 'records'], []);
+    const nextHistory = _.get(nextProps.resources, ['feefineshistory', 'records'], []);
     const query = nextProps.location.search ? queryString.parse(nextProps.location.search) : {};
     if (query.layer === 'open-accounts') {
       accounts = accounts.filter(a => a.status.name === 'Open') || [];// a.status.name
     } else if (query.layer === 'closed-accounts') {
       accounts = accounts.filter(a => a.status.name === 'Closed') || [];// a.status.name
     }
-    if ((render && accounts.length !== 0) || tab) {
+    if ((render && accounts.length !== 0 && history !== nextHistory) || tab) {
       const feeFineTypes = count(accounts.map(a => (a.feeFineType)));
       const feeFineOwners = count(accounts.map(a => (a.feeFineOwner)));
       const paymentStatus = count(accounts.map(a => (a.paymentStatus.name)));// a.paymentStatus.name
@@ -193,8 +196,6 @@ class AccountsHistory extends React.Component {
       render = false;
       tab = false;
     }
-    const history = _.get(this.props.resources, ['feefineshistory', 'records'], []);
-    const nextHistory = _.get(nextProps.resources, ['feefineshistory', 'records'], []);
     const props = this.props;
     return history !== nextHistory ||
       props.location !== nextProps.location ||

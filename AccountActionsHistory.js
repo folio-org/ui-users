@@ -85,7 +85,7 @@ class AccountActionsHistory extends React.Component {
         stripes.intl.formatMessage({ id: 'ui-users.details.columns.source' }),
         stripes.intl.formatMessage({ id: 'ui-users.details.columns.comments' }),
       ],
-      sortDirection: ['asc', 'asc'],
+      sortDirection: ['desc', 'asc'],
       message: {},
       source: '',
       id: '',
