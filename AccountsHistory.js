@@ -15,7 +15,7 @@ import { filterState } from '@folio/stripes-components/lib/FilterGroups';
 import { getFullName } from './util';
 
 import { Actions } from './lib/Accounts/Actions';
-import accountQueryFunction from './lib/Accounts/accountQueryFunction';
+import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
 
 import { count, handleFilterChange, handleFilterClear } from './lib/Accounts/accountFunctions';
 import {
@@ -53,6 +53,16 @@ const filterConfig = [
 let render = true;
 let tab = false;
 
+const query = (findAll, queryTemplate, sortMap, filterConfig, failOnCondition, nsParams) => {
+  const getCql = makeQueryFunction(findAll, queryTemplate, sortMap, filterConfig, failOnCondition, nsParams);
+  return (queryParams, pathComponents, resourceValues, logger) => {
+    let cql = getCql(queryParams, pathComponents, resourceValues, logger);
+    const { user } = resourceValues;
+    if (cql === undefined) { cql = `userId=${user.id}`; } else { cql = `(${cql}) and (userId=${user.id})`; }
+    return cql;
+  };
+};
+
 class AccountsHistory extends React.Component {
   static manifest = Object.freeze({
     query: { initialValue: {} },
@@ -64,11 +74,13 @@ class AccountsHistory extends React.Component {
       perRequest: 30,
       GET: {
         params: {
-          query: accountQueryFunction(
+          query: query(
             'feeFineType=*',
-            'feeFineType="%{query.q}*" or barcode="%{query.q}*" or materialType="%{query.q}" or title="%{query.q}*    " or feeFineOwner="%{query.q}*" or paymentStatus.name="%{query.q}"',
+            'feeFineType="%{query.query}*" or barcode="%{query.query}*" or materialType="%{query.query}" or title="%{query.query}*    " or feeFineOwner="%{query.query}*" or paymentStatus.name="%{query.query}"',
             { userId: 'userId' },
             filterConfig,
+            0,
+            { query: 'q', filters: 'f' },
           ),
         },
         staticFallback: { params: {} },
@@ -343,7 +355,7 @@ class AccountsHistory extends React.Component {
         <Col xs={4}>
           <Row>
             <Col>
-              <b>{`Fees/Fines-${getFullName(user)}(${_.upperFirst(patronGroup.group)})`}</b>
+              <b>{`Fees/Fines - ${getFullName(user)} (${_.upperFirst(patronGroup.group)})`}</b>
             </Col>
           </Row>
           <Row>
