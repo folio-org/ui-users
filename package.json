@@ -54,7 +54,8 @@
           "users.collection.get",
           "users.item.get",
           "usergroups.collection.get",
-          "login.item.get"
+          "login.item.get",
+          "configuration.entries.collection.get"
         ],
         "visible": true
       },
