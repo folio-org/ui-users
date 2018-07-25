@@ -26,9 +26,7 @@ class AccountActionsHistory extends React.Component {
   });
 
   static propTypes = {
-    stripes: PropTypes.shape({
-      intl: PropTypes.object.isRequired,
-    }),
+    stripes: PropTypes.object.isRequired,
     resources: PropTypes.shape({
       accountActions: PropTypes.object,
     }),

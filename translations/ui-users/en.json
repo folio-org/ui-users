@@ -510,7 +510,7 @@
   "charge.item.callNumber": "Call number",
   "charge.item.location": "Location",
      
-  "details.columns.comments": "comments UNAM",
+  "details.columns.comments": "comments",
   "details.columns.date": "Action Date",
   "details.columns.action": "Action",
   "details.columns.amount": "Amount",
