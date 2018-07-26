@@ -43,11 +43,6 @@ class ViewUser extends React.Component {
       path: 'users/:{id}',
       clear: false,
     },
-    loansHistory: {
-      type: 'okapi',
-      records: 'loans',
-      path: 'circulation/loans?query=(userId=:{id}) sortby id&limit=100',
-    },
     patronGroups: {
       type: 'okapi',
       path: 'groups',
@@ -100,9 +95,6 @@ class ViewUser extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }),
       settings: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
-      }),
-      loansHistory: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }),
@@ -419,7 +411,6 @@ class ViewUser extends React.Component {
     const patronGroups = (resources.patronGroups || {}).records || [];
     const permissions = (resources.permissions || {}).records || [];
     const settings = (resources.settings || {}).records || [];
-    const loans = (resources.loansHistory || {}).records || [];
     const sponsors = this.props.getSponsors();
     const proxies = this.props.getProxies();
     const formatMsg = stripes.intl.formatMessage;
@@ -462,7 +453,6 @@ class ViewUser extends React.Component {
 
     const loansHistory = (<this.connectedLoansHistory
       user={user}
-      loansHistory={loans}
       patronGroup={patronGroup}
       stripes={stripes}
       history={this.props.history}
@@ -596,9 +586,11 @@ class ViewUser extends React.Component {
           />
         </Layer>
 
-        <Layer isOpen={query.layer ? query.layer === 'open-loans' || query.layer === 'closed-loans' : false} contentLabel={formatMsg({ id: 'ui-users.loans.title' })}>
-          {loansHistory}
-        </Layer>
+        <IfPermission perm="circulation.loans.collection.get">
+          <Layer isOpen={query.layer ? query.layer === 'open-loans' || query.layer === 'closed-loans' : false} contentLabel={formatMsg({ id: 'ui-users.loans.title' })}>
+            {loansHistory}
+          </Layer>
+        </IfPermission>
         <Layer isOpen={query.layer ? query.layer === 'loan' : false} contentLabel={formatMsg({ id: 'ui-users.loanActionsHistory' })}>
           {loanDetails}
         </Layer>
