@@ -4,8 +4,8 @@ const newPermissionSet = require('./new_permission_set.js');
 const newProxy = require('./new_proxy.js');
 
 module.exports.test = function meh(uitestctx, nightmare) {
-  patronGroup.test(uitestctx);
-  newUser.test(uitestctx,nightmare);
-  newPermissionSet.test(uitestctx);
-  newProxy.test(uitestctx);
+  patronGroup.test(uitestctx, nightmare);
+  newUser.test(uitestctx, nightmare);
+  newPermissionSet.test(uitestctx, nightmare);
+  newProxy.test(uitestctx, nightmare);
 };
