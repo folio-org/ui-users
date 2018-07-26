@@ -198,6 +198,25 @@
         "visible": true
       },
       {
+        "permissionName": "ui-users.settings.transfertypes",
+        "displayName": "Settings (Users): Can create, edit and remove transfertypes",
+        "subPermissions": [
+          "transfertypes.collection.get",
+          "transfertypes.item.delete",
+          "transfertypes.item.get",
+          "transfertypes.item.post",
+          "transfertypes.item.put",
+          "settings.users.enabled"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "settings.transfertypes.all",
+        "displayName": "Settings (Users): Can create, edit and remove transfertypes [LEGACY]",
+        "subPermissions": [
+          "ui-users.settings.transfertypes"
+        ],
+        "visible": true
       }
     ]
   },
