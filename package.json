@@ -215,8 +215,7 @@
         "displayName": "Settings (Users): Can create, edit and remove comments [LEGACY]",
         "subPermissions": [
           "ui-users.settings.comments"
-        ],
-        "visible": true
+        ]
       },
       {
         "permissionName": "ui-users.settings.feefines",
@@ -236,8 +235,7 @@
         "displayName": "Settings (Users): Can create, edit and remove feefines [LEGACY]",
         "subPermissions": [
           "ui-users.settings.feefines"
-        ],
-        "visible": true
+        ]
       },
       {
         "permissionName": "ui-users.settings.owners",
@@ -257,8 +255,7 @@
         "displayName": "Settings (Users): Can create, edit and remove owners [LEGACY]",
         "subPermissions": [
           "ui-users.settings.owners"
-        ],
-        "visible": true
+        ]
       },
       {
         "permissionName": "ui-users.settings.payments",
@@ -278,8 +275,7 @@
         "displayName": "Settings (Users): Can create, edit and remove payments [LEGACY]",
         "subPermissions": [
           "ui-users.settings.payments"
-        ],
-        "visible": true
+        ]
       },
       {
         "permissionName": "ui-users.settings.refunds",
@@ -299,8 +295,7 @@
         "displayName": "Settings (Users): Can create, edit and remove refunds [LEGACY]",
         "subPermissions": [
           "ui-users.settings.refunds"
-        ],
-        "visible": true
+        ]
       },
       {
         "permissionName": "ui-users.settings.waives",
@@ -320,8 +315,7 @@
         "displayName": "Settings (Users): Can create, edit and remove waives [LEGACY]",
         "subPermissions": [
           "ui-users.settings.waives"
-        ],
-        "visible": true
+        ]
       },
       {
         "permissionName": "ui-users.settings.accounts",
@@ -341,8 +335,7 @@
         "displayName": "Settings (Users): Can create, edit and remove accounts [LEGACY]",
         "subPermissions": [
           "ui-users.settings.accounts"
-        ],
-        "visible": true
+        ]
       },
       {
         "permissionName": "ui-users.settings.feefineactions",
@@ -362,8 +355,7 @@
         "displayName": "Settings (Users): Can create, edit and remove feefineactions [LEGACY]",
         "subPermissions": [
           "ui-users.settings.feefineactions"
-        ],
-        "visible": true
+        ]
       },
       {
         "permissionName": "ui-users.settings.transfers",
@@ -383,8 +375,7 @@
         "displayName": "Settings (Users): Can create, edit and remove transfers [LEGACY]",
         "subPermissions": [
           "ui-users.settings.transfers"
-        ],
-        "visible": true
+        ]
       },
       {
         "permissionName": "ui-users.settings.transfertypes",
@@ -404,8 +395,7 @@
         "displayName": "Settings (Users): Can create, edit and remove transfertypes [LEGACY]",
         "subPermissions": [
           "ui-users.settings.transfertypes"
-        ],
-        "visible": true
+        ]
       }
     ]
   },
@@ -417,7 +407,7 @@
   "devDependencies": {
     "@folio/eslint-config-stripes": "^1.1.0",
     "babel-core": "^6.17.0",
-    "babel-eslint": "^8.0.0",
+    "babel-eslint": "^8.2.6",
     "babel-preset-es2015": "^6.18.0",
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0",

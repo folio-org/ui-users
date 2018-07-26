@@ -522,7 +522,7 @@
   "accounts.open.columns.title":"Item",
   "accounts.open.columns.amount":"Charged",
   "accounts.open.columns.remaining":"Remaining",
-  "accounts.open.columns.barcode":"Barcode",
+  "accounts.open.columns.barcode":"barcode",
   "accounts.open.columns.created":"date created",
   "accounts.open.columns.updated":"date updated",
   "accounts.open.columns.type":"fee/fine type",
