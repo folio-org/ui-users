@@ -277,10 +277,12 @@
   "loans.numOpenLoans": "{count, number} {count, plural, one {open loan} other {open loans}}",
   "loans.numClosedLoans": "{count, number} {count, plural, one {closed loan} other {closed loans}}",
   "loans.loanDetails": "Loan details",
+  "loans.newFeeFine": "New fee/fine",
 
   "loans.columns.title": "Item title",
   "loans.columns.itemStatus": "Item status",
   "loans.columns.barcode": "Barcode",
+  "loans.columns.feefine": "Fee/Fine",
   "loans.columns.loanDate": "Loan date",
   "loans.columns.dueDate": "Due date",
   "loans.columns.returnDate": "Return date",
@@ -429,7 +431,7 @@
   "accounts.all":"All",
   "accounts.numOpenAccounts": "{count, number} {count, plural, one {open fee/fine} other {open fees/fines}}",
   "accounts.numClosedAccounts": "{count, number} {count, plural, one {closed fee/fine} other {closed fees/fines}}",
-  "accounts.chargeManual": "Charge Fee/Fine",
+  "accounts.chargeManual": "Charge fee/fine",
 
   "feefines.title": "Fee/fine: Manual charges",
   "feefines.callout": "The Fee/Fine Type <strong>{feefine}</strong> was successfully <strong>deleted</strong>.",
@@ -500,19 +502,40 @@
   "charge.patron": "Patron",
   "charge.barcode": "Barcode: ",
   "charge.title": "New fee/fine",
-  "charge.pay": "Charge and pay",
+  "charge.pay": "Charge and pay now",
   "charge.onlyCharge": "Charge Only",
   "charge.comment": "Comments",
 
   "charge.errors.amount": "Amount is not a number",
   "charge.errors.taxVat": "Tax/Vat is not a number",
 
-  "charge.item.title": "Item Information",
+  "charge.item.title": "Item information",
   "charge.item.placeholder": "Enter barcode or title",
-  "charge.item.button": "Select Item",
+  "charge.item.button": "Select item",
   "charge.item.barcode": "Barcode",
   "charge.item.instance": "Instance",
   "charge.item.status": "Item Status",
-  "charge.item.callNumber": "Call Number",
-  "charge.item.location": "Location"
+  "charge.item.callNumber": "Call number",
+  "charge.item.location": "Location",
+     
+  "details.columns.comments": "comments",
+  "details.columns.date": "Action Date",
+  "details.columns.action": "Action",
+  "details.columns.amount": "Amount",
+  "details.columns.balance": "Balance",
+  "details.columns.number": "Transaction Number",
+  "details.columns.created": "Created At",
+  "details.columns.source": "Source",
+
+  "accounts.open.columns.title":"item",
+  "accounts.open.columns.amount":"charged",
+  "accounts.open.columns.remaining":"remaining",
+  "accounts.open.columns.barcode":"barcode",
+  "accounts.open.columns.created":"date created",
+  "accounts.open.columns.updated":"date updated",
+  "accounts.open.columns.type":"fee/fine type",
+  "accounts.open.columns.owner":"fee/fine owner",
+  "accounts.open.columns.number":"call number",
+  "accounts.open.columns.status":"payment status"
+
 }
