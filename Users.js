@@ -92,11 +92,6 @@ class Users extends React.Component {
       path: 'users',
       fetch: false,
     },
-    servicePoints: {
-      type: 'okapi',
-      records: 'servicepoints',
-      path: 'service-points',
-    },
   });
 
   static propTypes = {

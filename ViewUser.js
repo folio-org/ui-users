@@ -33,6 +33,7 @@ import {
   UserPermissions,
   UserLoans,
   UserAccounts,
+  UserServicePoints,
 } from './lib/ViewSections';
 
 class ViewUser extends React.Component {
@@ -148,6 +149,7 @@ class ViewUser extends React.Component {
         loansSection: false,
         accountsSection: false,
         permissionsSection: false,
+        servicePointsSection: false,
       },
     };
 
@@ -156,6 +158,7 @@ class ViewUser extends React.Component {
     this.connectedLoansHistory = props.stripes.connect(LoansHistory);
     this.connectedLoanActionsHistory = props.stripes.connect(LoanActionsHistory);
     this.connectedUserInfo = props.stripes.connect(UserInfo);
+    this.connectedUserServicePoints = props.stripes.connect(UserServicePoints);
     this.dateLastUpdated = this.dateLastUpdated.bind(this);
     this.onClickCloseLoansHistory = this.onClickCloseLoansHistory.bind(this);
     this.onClickViewOpenLoans = this.onClickViewOpenLoans.bind(this);
@@ -532,6 +535,18 @@ class ViewUser extends React.Component {
               onToggle={this.handleSectionToggle}
               userPermissions={permissions}
               accordionId="permissionsSection"
+              {...this.props}
+            />
+          </IfInterface>
+        </IfPermission>
+
+        <IfPermission perm="inventory-storage.service-points.collection.get,inventory-storage.service-points-users.collection.get">
+          <IfInterface name="service-points-users" version="1.0">
+            <this.connectedUserServicePoints
+              stripes={stripes}
+              expanded={this.state.sections.servicePointsSection}
+              onToggle={this.handleSectionToggle}
+              accordionId="servicePointsSection"
               {...this.props}
             />
           </IfInterface>
