@@ -401,12 +401,14 @@
     ]
   },
   "scripts": {
+    "start": "stripes serve",
     "lint": "eslint .",
     "test": "(cd ../ui-testing; yarn test-module -- -o --run=users --host=localhost)",
     "prepublishOnly": "node ../stripes-core/util/package2md.js package.json > ModuleDescriptor.json"
   },
   "devDependencies": {
     "@folio/eslint-config-stripes": "^1.1.0",
+    "@folio/stripes-cli": "^1.2.0",
     "babel-core": "^6.17.0",
     "babel-eslint": "^8.2.6",
     "babel-preset-es2015": "^6.18.0",
