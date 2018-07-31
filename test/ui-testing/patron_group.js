@@ -72,9 +72,13 @@ module.exports.test = function foo(uiTestCtx) {
       });
       it('should find an active user to edit', (done) => {
         nightmare
+          .wait('#clickable-users-module')
           .click('#clickable-users-module')
+          .wait(3000)
+          .wait('#input-user-search')
           .wait(1000)
-          .click('#clickable-filter-active-Active')
+          .type('#input-user-search', '0')
+          .wait(1000)
           .wait('#list-users div[role="listitem"]:nth-of-type(11) > a > div:nth-of-type(5)')
           .evaluate(() => document.querySelector('#list-users div[role="listitem"]:nth-of-type(11) > a > div:nth-of-type(5)').title)
           .then((result) => {
@@ -86,6 +90,10 @@ module.exports.test = function foo(uiTestCtx) {
       });
       it(`should find patron group ID for "${gid}"`, (done) => {
         nightmare
+          .wait('#input-user-search')
+          .type('#input-user-search', '0')
+          .wait('#clickable-reset-all')
+          .click('#clickable-reset-all')
           .type('#input-user-search', userid)
           .wait(`div[title="${userid}"]`)
           .click(`div[title="${userid}"]`)

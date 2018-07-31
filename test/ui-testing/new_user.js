@@ -70,8 +70,11 @@ module.exports.test = function meh(uitestctx) {
         nightmare
           .wait('#clickable-users-module')
           .click('#clickable-users-module')
-          .wait('#clickable-filter-active-Active')
-          .click('#clickable-filter-active-Active')
+          .wait(3000)
+          .wait('#input-user-search')
+          .wait(1000)
+          .type('#input-user-search', '0')
+          .wait(1000)
           .wait('#list-users div[role="listitem"] > a')
           .click('#clickable-newuser')
           .wait('#adduser_group > option:nth-of-type(4)')
@@ -98,7 +101,11 @@ module.exports.test = function meh(uitestctx) {
           .insert('#adduser_username', user.id)
           .wait(222)
           .click('#toggle_pw_btn')
-          .wait('#icon-adduser_username-validation-success')
+          // It would be super-cool if the async username-blur validation
+          // fired reliably in electron, but for some reason it doesn't,
+          // which means waiting for the validation-success sometimes means
+          // we wait forever. It _does_ fire reliably with a real browser.
+          // .wait('#icon-adduser_username-validation-success')
           .wait(222)
           .click('#pw')
           .wait(222)
