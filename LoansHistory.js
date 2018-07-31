@@ -17,6 +17,14 @@ import css from './LoansHistory.css';
  * the loan's item-record.
  */
 class LoansHistory extends React.Component {
+  static manifest = {
+    loansHistory: {
+      type: 'okapi',
+      records: 'loans',
+      path: 'circulation/loans?query=(userId=:{id}) sortby id&limit=100',
+    },
+  };
+
   static propTypes = {
     stripes: PropTypes.shape({
       locale: PropTypes.string.isRequired,
@@ -29,7 +37,11 @@ class LoansHistory extends React.Component {
     onClickViewClosedLoans: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired,
     patronGroup: PropTypes.object.isRequired,
-    loansHistory: PropTypes.arrayOf(PropTypes.object).isRequired,
+    resources: PropTypes.shape({
+      loansHistory: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+    })
   };
 
   constructor(props) {
@@ -63,9 +75,12 @@ class LoansHistory extends React.Component {
   }
 
   render() {
-    const { user, patronGroup, openLoans, loansHistory, stripes: { intl } } = this.props;
+    const { user, patronGroup, openLoans, resources, stripes: { intl } } = this.props;
     const loanStatus = openLoans ? 'Open' : 'Closed';
-    const loans = _.filter(loansHistory, loan => loanStatus === _.get(loan, ['status', 'name']));
+    const loans = _.filter(
+      _.get(resources, ['loansHistory', 'records'], []),
+      loan => loanStatus === _.get(loan, ['status', 'name'])
+    );
     if (!loans) return <div />;
 
     return (

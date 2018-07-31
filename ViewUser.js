@@ -2,6 +2,7 @@ import { cloneDeep, get, omit, differenceBy, find } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
+import TitleManager from '@folio/stripes-core/src/components/TitleManager';
 import Pane from '@folio/stripes-components/lib/Pane';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
@@ -11,10 +12,15 @@ import IfPermission from '@folio/stripes-components/lib/IfPermission';
 import IfInterface from '@folio/stripes-components/lib/IfInterface';
 import { ExpandAllButton } from '@folio/stripes-components/lib/Accordion';
 import IconButton from '@folio/stripes-components/lib/IconButton';
+import { withTags } from '@folio/stripes-smart-components/lib/Tags';
 
 import UserForm from './UserForm';
 import LoansHistory from './LoansHistory';
 import LoanActionsHistory from './LoanActionsHistory';
+
+import { ChargeFeeFine } from './lib/Accounts';
+import AccountsHistory from './AccountsHistory';
+import AccountActionsHistory from './AccountActionsHistory';
 
 import { toListAddresses, toUserAddresses } from './converters/address';
 import { getFullName, eachPromise } from './util';
@@ -27,6 +33,7 @@ import {
   ProxyPermissions,
   UserPermissions,
   UserLoans,
+  UserAccounts,
 } from './lib/ViewSections';
 
 class ViewUser extends React.Component {
@@ -36,11 +43,6 @@ class ViewUser extends React.Component {
       type: 'okapi',
       path: 'users/:{id}',
       clear: false,
-    },
-    loansHistory: {
-      type: 'okapi',
-      records: 'loans',
-      path: 'circulation/loans?query=(userId=:{id}) sortby id&limit=100',
     },
     patronGroups: {
       type: 'okapi',
@@ -96,9 +98,6 @@ class ViewUser extends React.Component {
       settings: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
-      loansHistory: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
-      }),
     }),
     mutator: PropTypes.shape({
       selUser: PropTypes.shape({
@@ -121,6 +120,7 @@ class ViewUser extends React.Component {
     editLink: PropTypes.string,
     onCloseEdit: PropTypes.func,
     notesToggle: PropTypes.func,
+    tagsToggle: PropTypes.func,
     location: PropTypes.object,
     history: PropTypes.object,
     parentResources: PropTypes.shape({
@@ -133,6 +133,7 @@ class ViewUser extends React.Component {
     updateSponsors: PropTypes.func,
     getSponsors: PropTypes.func,
     getProxies: PropTypes.func,
+    tagsEnabled: PropTypes.bool,
   };
 
   constructor(props) {
@@ -140,6 +141,7 @@ class ViewUser extends React.Component {
     this.state = {
       viewOpenLoansMode: false,
       selectedLoan: {},
+      selectedAccount: {},
       lastUpdate: null,
       sections: {
         userInformationSection: true,
@@ -147,11 +149,13 @@ class ViewUser extends React.Component {
         contactInfoSection: false,
         proxySection: false,
         loansSection: false,
+        accountsSection: false,
         permissionsSection: false,
       },
     };
 
     this.connectedUserLoans = props.stripes.connect(UserLoans);
+    this.connectedUserAccounts = props.stripes.connect(UserAccounts);
     this.connectedLoansHistory = props.stripes.connect(LoansHistory);
     this.connectedLoanActionsHistory = props.stripes.connect(LoanActionsHistory);
     this.connectedUserInfo = props.stripes.connect(UserInfo);
@@ -164,6 +168,19 @@ class ViewUser extends React.Component {
     this.onAddressesUpdate = this.onAddressesUpdate.bind(this);
     this.handleSectionToggle = this.handleSectionToggle.bind(this);
     this.handleExpandAll = this.handleExpandAll.bind(this);
+
+    this.connectedCharge = props.stripes.connect(ChargeFeeFine);
+    this.onCloseChargeFeeFine = this.onCloseChargeFeeFine.bind(this);
+    this.onClickViewChargeFeeFine = this.onClickViewChargeFeeFine.bind(this);
+    this.handleAddRecords = this.handleAddRecords.bind(this);
+    this.connectedAccountsHistory = props.stripes.connect(AccountsHistory);
+    this.connectedAccountActionsHistory = props.stripes.connect(AccountActionsHistory);
+    this.onClickViewOpenAccounts = this.onClickViewOpenAccounts.bind(this);
+    this.onClickViewClosedAccounts = this.onClickViewClosedAccounts.bind(this);
+    this.onClickViewAllAccounts = this.onClickViewAllAccounts.bind(this);
+    this.onClickCloseAccountsHistory = this.onClickCloseAccountsHistory.bind(this);
+    this.onClickViewAccountActionsHistory = this.onClickViewAccountActionsHistory.bind(this);
+    this.onClickCloseAccountActionsHistory = this.onClickCloseAccountActionsHistory.bind(this);
   }
 
   static getDerivedStateFromProps(nextProps) {
@@ -230,6 +247,75 @@ class ViewUser extends React.Component {
     this.props.mutator.query.update({ layer: 'open-loans' });
     this.setState({
       viewOpenLoansMode: true,
+    });
+  }
+
+  onClickViewOpenAccounts(e) {
+    if (e) e.preventDefault();
+    this.props.mutator.query.update({ layer: 'open-accounts' });
+  }
+
+  onClickViewClosedAccounts(e) {
+    if (e) e.preventDefault();
+    this.props.mutator.query.update({ layer: 'closed-accounts' });
+  }
+
+  onClickViewAllAccounts(e) {
+    if (e) e.preventDefault();
+    this.props.mutator.query.update({ layer: 'all-accounts' });
+  }
+
+  onClickCloseAccountsHistory(e) {
+    if (e) e.preventDefault();
+    this.props.mutator.query.update({ layer: null, f: null, q: null });
+  }
+
+  onClickViewAccountActionsHistory(e, selectedAccount) {
+    if (e) e.preventDefault();
+    const query = this.props.location.search ? queryString.parse(this.props.location.search) : {};
+    this.setState({
+      prevLayer: query.layer,
+    });
+    this.props.mutator.query.update({ layer: 'account', account: selectedAccount.id });
+    this.setState({
+      selectedAccount,
+    });
+  }
+
+  onClickCloseAccountActionsHistory(e) {
+    if (e) e.preventDefault();
+    const layer = this.state.prevLayer;
+    this.props.mutator.query.update({ layer, account: null });
+    this.setState({
+      selectedAccount: {},
+    });
+  }
+
+  onClickViewChargeFeeFine(e, selectedLoan) {
+    if (e) e.preventDefault();
+    const query = this.props.location.search ? queryString.parse(this.props.location.search) : {};
+    this.setState({
+      prevLayer: query.layer,
+    });
+    this.props.mutator.query.update({ layer: 'charge' });
+    this.setState({
+      selectedLoan,
+    });
+  }
+
+  onCloseChargeFeeFine(e) {
+    if (e) e.preventDefault();
+    const layer = this.state.prevLayer;
+    this.props.mutator.query.update({ layer });
+    this.setState({
+      selectedLoan: {},
+    });
+  }
+
+  handleAddRecords() {
+    const addRecord = !this.state.addRecord;
+    this.setState({
+      addRecord,
     });
   }
 
@@ -321,20 +407,29 @@ class ViewUser extends React.Component {
   }
 
   render() {
-    const { resources, stripes, parentResources } = this.props;
+    const { resources, stripes, parentResources, tagsEnabled } = this.props;
     const addressTypes = (parentResources.addressTypes || {}).records || [];
     const query = resources.query;
     const user = this.getUser();
     const patronGroups = (resources.patronGroups || {}).records || [];
     const permissions = (resources.permissions || {}).records || [];
     const settings = (resources.settings || {}).records || [];
-    const loans = (resources.loansHistory || {}).records || [];
     const sponsors = this.props.getSponsors();
     const proxies = this.props.getProxies();
     const formatMsg = stripes.intl.formatMessage;
     const detailMenu =
     (
       <PaneMenu>
+        {
+          tagsEnabled && <IconButton
+            icon="default"
+            title={formatMsg({ id: 'ui-users.showTags' })}
+            id="clickable-show-tags"
+            style={{ visibility: !user ? 'hidden' : 'visible' }}
+            onClick={this.props.tagsToggle}
+            aria-label={formatMsg({ id: 'ui-users.showTags' })}
+          />
+        }
         <IconButton
           icon="comment"
           id="clickable-show-notes"
@@ -371,7 +466,6 @@ class ViewUser extends React.Component {
 
     const loansHistory = (<this.connectedLoansHistory
       user={user}
-      loansHistory={loans}
       patronGroup={patronGroup}
       stripes={stripes}
       history={this.props.history}
@@ -379,6 +473,10 @@ class ViewUser extends React.Component {
       onClickViewOpenLoans={this.onClickViewOpenLoans}
       onClickViewClosedLoans={this.onClickViewClosedLoans}
       onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
+      onClickViewChargeFeeFine={this.onClickViewChargeFeeFine}
+      onClickViewOpenAccounts={this.onClickViewOpenAccounts}
+      onClickViewClosedAccounts={this.onClickViewClosedAccounts}
+      onClickViewAllAccounts={this.onClickViewAllAccounts}
       openLoans={query.layer === 'open-loans'}
     />);
 
@@ -396,6 +494,7 @@ class ViewUser extends React.Component {
 
     return (
       <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle={getFullName(user)} lastMenu={detailMenu} dismissible onClose={this.props.onClose} appIcon={{ app: 'users' }}>
+        <TitleManager record={getFullName(user)} />
         <Row end="xs"><Col xs><ExpandAllButton accordionStatus={this.state.sections} onToggle={this.handleExpandAll} /></Col></Row>
 
         <this.connectedUserInfo accordionId="userInformationSection" user={user} patronGroup={patronGroup} settings={settings} stripes={stripes} expanded={this.state.sections.userInformationSection} onToggle={this.handleSectionToggle} />
@@ -409,6 +508,17 @@ class ViewUser extends React.Component {
             proxies={proxies}
             sponsors={sponsors}
             expanded={this.state.sections.proxySection}
+            {...this.props}
+          />
+        </IfPermission>
+
+        <IfPermission perm="accounts.collection.get">
+          <this.connectedUserAccounts
+            onClickViewChargeFeeFine={this.onClickViewChargeFeeFine}
+            expanded={this.state.sections.accountsSection}
+            onToggle={this.handleSectionToggle}
+            accordionId="accountsSection"
+            addRecord={this.state.addRecord}
             {...this.props}
           />
         </IfPermission>
@@ -450,9 +560,50 @@ class ViewUser extends React.Component {
             parentMutator={this.props.parentMutator}
           />
         </Layer>
-        <Layer isOpen={query.layer ? query.layer === 'open-loans' || query.layer === 'closed-loans' : false} contentLabel={formatMsg({ id: 'ui-users.loans.title' })}>
-          {loansHistory}
+
+        <Layer isOpen={query.layer ? query.layer === 'open-accounts' || query.layer === 'closed-accounts' || query.layer === 'all-accounts' : false} label="Fees/Fines">
+          <this.connectedAccountsHistory
+            user={user}
+            parentMutator={this.props.mutator}
+            patronGroup={patronGroup}
+            stripes={stripes}
+            history={this.props.history}
+            addRecord={this.state.addRecord}
+            location={this.props.location}
+            onCancel={this.onClickCloseAccountsHistory}
+            onClickViewChargeFeeFine={this.onClickViewChargeFeeFine}
+            onClickViewAccountActionsHistory={this.onClickViewAccountActionsHistory}
+            onClickCloseAccountActionsHistory={this.onClickCloseAccountActionsHistory}
+          />
         </Layer>
+        <Layer isOpen={query.layer ? query.layer === 'charge' : false} label="Charge Fee/Fine">
+          <this.connectedCharge
+            stripes={stripes}
+            onCloseChargeFeeFine={this.onCloseChargeFeeFine}
+            user={user}
+            loan={{ item: {} }}
+            selectedLoan={this.state.selectedLoan}
+            handleAddRecords={this.handleAddRecords}
+          />
+        </Layer>
+        <Layer isOpen={query.layer ? query.layer === 'account' : false} label="Account Actions History">
+          <this.connectedAccountActionsHistory
+            user={user}
+            account={this.state.selectedAccount}
+            accountid={this.state.selectedAccount.id}
+            history={this.props.history}
+            stripes={stripes}
+            onCancel={this.onClickCloseAccountActionsHistory}
+            // when navigating away to another user, clear all loan-related state
+            onClickUser={() => { this.onClickCloseAccountActionsHistory(); this.onClickCloseAccountsHistory(); }}
+          />
+        </Layer>
+
+        <IfPermission perm="circulation.loans.collection.get">
+          <Layer isOpen={query.layer ? query.layer === 'open-loans' || query.layer === 'closed-loans' : false} contentLabel={formatMsg({ id: 'ui-users.loans.title' })}>
+            {loansHistory}
+          </Layer>
+        </IfPermission>
         <Layer isOpen={query.layer ? query.layer === 'loan' : false} contentLabel={formatMsg({ id: 'ui-users.loanActionsHistory' })}>
           {loanDetails}
         </Layer>
@@ -461,4 +612,4 @@ class ViewUser extends React.Component {
   }
 }
 
-export default withProxy(ViewUser);
+export default withTags(withProxy(ViewUser));

@@ -325,7 +325,7 @@ class LoanActionsHistory extends React.Component {
           </Row>
           <Row>
             <Col xs={2} >
-              <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.details.loanPolicy' })} value="TODO" />
+              <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.details.loanPolicy' })} value={<Link to={`/settings/circulation/loan-policies/${loan.loanPolicyId}`}>TODO</Link>} />
             </Col>
             <Col xs={2} >
               <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.columns.loanDate' })} value={this.formatDateTime(loan.loanDate) || '-'} />

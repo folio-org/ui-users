@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "2.12.2",
+  "version": "2.12.3",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -13,7 +13,7 @@
   "main": "index.js",
   "stripes": {
     "type": "app",
-    "displayName": "Users",
+    "displayName": "ui-users.meta.title",
     "route": "/users",
     "home": "/users?sort=Name",
     "hasSettings": true,
@@ -34,7 +34,8 @@
       "circulation": "3.0",
       "permissions": "5.0",
       "loan-storage": "4.0",
-      "login": "4.0"
+      "login": "4.0",
+      "feesfines": "14.0"
     },
     "permissionSets": [
       {
@@ -53,7 +54,8 @@
           "users.collection.get",
           "users.item.get",
           "usergroups.collection.get",
-          "login.item.get"
+          "login.item.get",
+          "configuration.entries.collection.get"
         ],
         "visible": true
       },
@@ -195,18 +197,220 @@
           "proxiesfor.item.delete"
         ],
         "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.comments",
+        "displayName": "Settings (Users): Can create, edit and remove comments",
+        "subPermissions": [
+          "comments.collection.get",
+          "comments.item.delete",
+          "comments.item.get",
+          "comments.item.post",
+          "comments.item.put",
+          "settings.users.enabled"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "settings.comments.all",
+        "displayName": "Settings (Users): Can create, edit and remove comments [LEGACY]",
+        "subPermissions": [
+          "ui-users.settings.comments"
+        ]
+      },
+      {
+        "permissionName": "ui-users.settings.feefines",
+        "displayName": "Settings (Users): Can create, edit and remove feefines",
+        "subPermissions": [
+          "feefines.collection.get",
+          "feefines.item.delete",
+          "feefines.item.get",
+          "feefines.item.post",
+          "feefines.item.put",
+          "settings.users.enabled"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "settings.feefines.all",
+        "displayName": "Settings (Users): Can create, edit and remove feefines [LEGACY]",
+        "subPermissions": [
+          "ui-users.settings.feefines"
+        ]
+      },
+      {
+        "permissionName": "ui-users.settings.owners",
+        "displayName": "Settings (Users): Can create, edit and remove owners",
+        "subPermissions": [
+          "owners.collection.get",
+          "owners.item.delete",
+          "owners.item.get",
+          "owners.item.post",
+          "owners.item.put",
+          "settings.users.enabled"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "settings.owners.all",
+        "displayName": "Settings (Users): Can create, edit and remove owners [LEGACY]",
+        "subPermissions": [
+          "ui-users.settings.owners"
+        ]
+      },
+      {
+        "permissionName": "ui-users.settings.payments",
+        "displayName": "Settings (Users): Can create, edit and remove payments",
+        "subPermissions": [
+          "payments.collection.get",
+          "payments.item.delete",
+          "payments.item.get",
+          "payments.item.post",
+          "payments.item.put",
+          "settings.users.enabled"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "settings.payments.all",
+        "displayName": "Settings (Users): Can create, edit and remove payments [LEGACY]",
+        "subPermissions": [
+          "ui-users.settings.payments"
+        ]
+      },
+      {
+        "permissionName": "ui-users.settings.refunds",
+        "displayName": "Settings (Users): Can create, edit and remove refunds",
+        "subPermissions": [
+          "refunds.collection.get",
+          "refunds.item.delete",
+          "refunds.item.get",
+          "refunds.item.post",
+          "refunds.item.put",
+          "settings.users.enabled"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "settings.refunds.all",
+        "displayName": "Settings (Users): Can create, edit and remove refunds [LEGACY]",
+        "subPermissions": [
+          "ui-users.settings.refunds"
+        ]
+      },
+      {
+        "permissionName": "ui-users.settings.waives",
+        "displayName": "Settings (Users): Can create, edit and remove waives",
+        "subPermissions": [
+          "waives.collection.get",
+          "waives.item.delete",
+          "waives.item.get",
+          "waives.item.post",
+          "waives.item.put",
+          "settings.users.enabled"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "settings.waives.all",
+        "displayName": "Settings (Users): Can create, edit and remove waives [LEGACY]",
+        "subPermissions": [
+          "ui-users.settings.waives"
+        ]
+      },
+      {
+        "permissionName": "ui-users.settings.accounts",
+        "displayName": "Settings (Users): Can create, edit and remove accounts",
+        "subPermissions": [
+          "accounts.collection.get",
+          "accounts.item.delete",
+          "accounts.item.get",
+          "accounts.item.post",
+          "accounts.item.put",
+          "settings.users.enabled"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "settings.accounts.all",
+        "displayName": "Settings (Users): Can create, edit and remove accounts [LEGACY]",
+        "subPermissions": [
+          "ui-users.settings.accounts"
+        ]
+      },
+      {
+        "permissionName": "ui-users.settings.feefineactions",
+        "displayName": "Settings (Users): Can create, edit and remove feefineactions",
+        "subPermissions": [
+          "feefineactions.collection.get",
+          "feefineactions.item.delete",
+          "feefineactions.item.get",
+          "feefineactions.item.post",
+          "feefineactions.item.put",
+          "settings.users.enabled"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "settings.feefineactions.all",
+        "displayName": "Settings (Users): Can create, edit and remove feefineactions [LEGACY]",
+        "subPermissions": [
+          "ui-users.settings.feefineactions"
+        ]
+      },
+      {
+        "permissionName": "ui-users.settings.transfers",
+        "displayName": "Settings (Users): Can create, edit and remove transfers",
+        "subPermissions": [
+          "transfers.collection.get",
+          "transfers.item.delete",
+          "transfers.item.get",
+          "transfers.item.post",
+          "transfers.item.put",
+          "settings.users.enabled"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "settings.transfers.all",
+        "displayName": "Settings (Users): Can create, edit and remove transfers [LEGACY]",
+        "subPermissions": [
+          "ui-users.settings.transfers"
+        ]
+      },
+      {
+        "permissionName": "ui-users.settings.transfertypes",
+        "displayName": "Settings (Users): Can create, edit and remove transfertypes",
+        "subPermissions": [
+          "transfertypes.collection.get",
+          "transfertypes.item.delete",
+          "transfertypes.item.get",
+          "transfertypes.item.post",
+          "transfertypes.item.put",
+          "settings.users.enabled"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "settings.transfertypes.all",
+        "displayName": "Settings (Users): Can create, edit and remove transfertypes [LEGACY]",
+        "subPermissions": [
+          "ui-users.settings.transfertypes"
+        ]
       }
     ]
   },
   "scripts": {
+    "start": "stripes serve",
     "lint": "eslint .",
     "test": "(cd ../ui-testing; yarn test-module -- -o --run=users --host=localhost)",
     "prepublishOnly": "node ../stripes-core/util/package2md.js package.json > ModuleDescriptor.json"
   },
   "devDependencies": {
     "@folio/eslint-config-stripes": "^1.1.0",
+    "@folio/stripes-cli": "^1.2.0",
     "babel-core": "^6.17.0",
-    "babel-eslint": "^7.0.0",
+    "babel-eslint": "^8.2.6",
     "babel-preset-es2015": "^6.18.0",
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0",
@@ -215,9 +419,9 @@
   },
   "dependencies": {
     "@folio/react-intl-safe-html": "^1.0.0",
-    "@folio/stripes-components": "^2.0.17",
+    "@folio/stripes-components": "^3.0.0",
     "@folio/stripes-form": "^0.8.2",
-    "@folio/stripes-smart-components": "^1.4.15",
+    "@folio/stripes-smart-components": "^1.4.23",
     "classnames": "^2.2.5",
     "hashcode": "^1.0.3",
     "lodash": "^4.17.4",
@@ -231,7 +435,7 @@
   },
   "peerDependencies": {
     "@folio/stripes-connect": "^3.1.1",
-    "@folio/stripes-core": "^2.9.0",
+    "@folio/stripes-core": "^2.10.2",
     "@folio/stripes-logger": "^0.0.2",
     "react": "*"
   },

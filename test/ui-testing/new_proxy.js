@@ -85,30 +85,30 @@ module.exports.test = function foo(uiTestCtx) {
 
       it('should delete a sponsor of user 2', (done) => {
         nightmare
-          /* .wait(4444)
-          .evaluate(() => {
-            document.querySelector('#input-user-search').value = '';
-          }) */
-          .wait('#users-module-display > div > section:nth-child(2) > div > button')
-          .click('#users-module-display > div > section:nth-child(2) > div > button')
           .wait(2222)
-          .wait('#input-user-search')
-          .type('#input-user-search', '0')
+          // put some junk in the search field to get the reset button
+          // so we can click it and be sure the field is clear before
+          // entering new data.
+          .type('#input-user-search', 'asdf')
           .wait('#clickable-reset-all')
           .click('#clickable-reset-all')
+          .wait(222)
           .type('#input-user-search', userIds[1].barcode)
           .wait(`#list-users div[role="listitem"] > a > div[title="${userIds[1].barcode}"]`)
+          .wait(222)
           .click(`#list-users div[role="listitem"] > a > div[title="${userIds[1].barcode}"]`)
           .wait(222)
+          .wait('#accordion-toggle-button-proxySection')
+          .wait('#clickable-edituser')
           .click('#clickable-edituser')
           .wait('#accordion-toggle-button-proxy')
           .click('#accordion-toggle-button-proxy')
           .wait(`#proxy a[href*="${userIds[0].uuid}"]`)
           .xclick(`id("proxy")//a[contains(@href, "${userIds[0].uuid}")]/../../../..//button`)
           .wait(2111)
-          .wait('#clickable-deleteproxy-confirmation-confirm')
+          .wait('#clickable-deleteproxies-confirmation-confirm')
           .wait(2111)
-          .click('#clickable-deleteproxy-confirmation-confirm')
+          .click('#clickable-deleteproxies-confirmation-confirm')
           .wait('#clickable-updateuser')
           .click('#clickable-updateuser')
           .wait(1111)

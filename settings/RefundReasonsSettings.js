@@ -20,14 +20,15 @@ class RefundReasonsSettings extends React.Component {
         {...this.props}
         baseUrl="refunds"
         records="refunds"
-        label="Fee/fine: Refund reasons"
-        labelSingular="Refund reason"
+        label={this.props.stripes.intl.formatMessage({ id: 'ui-users.refunds.label' })}
+        labelSingular={this.props.stripes.intl.formatMessage({ id: 'ui-users.refunds.singular' })}
         objectLabel=""
-        visibleFields={['nameReason']}
+        visibleFields={['nameReason', 'description']}
         columnMapping={{
-          'nameReason': 'Reason*',
+          nameReason: this.props.stripes.intl.formatMessage({ id: 'ui-users.refunds.columns.nameReason' }),
+          description: this.props.stripes.intl.formatMessage({ id: 'ui-users.refunds.columns.description' }),
         }}
-        nameKey="refundReasons"
+        nameKey="refund"
         hiddenFields={['numberOfObjects']}
         id="refunds"
       />

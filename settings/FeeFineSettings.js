@@ -9,7 +9,7 @@ class FeefineSettings extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
-      intl: PropTypes.object.isREquired,
+      intl: PropTypes.object.isRequired,
     }).isRequired,
   };
 
