@@ -68,12 +68,97 @@ class ViewUser extends React.Component {
       path: 'perms/users/:{id}/permissions',
       params: { indexField: 'userId' },
     },
+    servicePoints: {
+      type: 'okapi',
+      path: 'service-points',
+      records: 'servicepoints',
+      accumulate: true,
+      fetch: false,
+    },
+    servicePointUserId: '',
+    servicePointsUsers: {
+      type: 'okapi',
+      path: 'service-points-users?query=(userId==:{id})',
+      records: 'servicePointsUsers',
+      accumulate: true,
+      fetch: false,
+      POST: {
+        path: 'service-points-users',
+      },
+      PUT: {
+        path: 'service-points-users/%{servicePointUserId}',
+      },
+    },
     settings: {
       type: 'okapi',
       records: 'configs',
       path: 'configurations/entries?query=(module==USERS and configName==profile_pictures)',
     },
   });
+
+  static getLoanStateFromProps(nextProps) {
+    const query = nextProps.location.search ? queryString.parse(nextProps.location.search) : {};
+
+    if (query.loan) {
+      const loansHistory = (nextProps.resources.loansHistory || {}).records || [];
+      if (loansHistory.length) {
+        const selectedLoan = find(loansHistory, { id: query.loan });
+
+        if (selectedLoan) {
+          return { selectedLoan };
+        }
+      }
+    }
+
+    return {};
+  }
+
+  static getServicePointStateFromProps(nextProps, state) {
+    // Save the id of the record in the service-points-users table for later use when mutating it.
+    const servicePointUserId = get(nextProps.resources.servicePointsUsers, ['records', 0, 'id'], '');
+    const localServicePointUserId = nextProps.resources.servicePointUserId;
+    if (servicePointUserId !== localServicePointUserId) {
+      nextProps.mutator.servicePointUserId.replace(servicePointUserId);
+    }
+
+    // Check if new user service points have been received and the list of all service points has also been received.
+    const userServicePointsIds = get(nextProps.resources.servicePointsUsers, ['records', 0, 'servicePointsIds'], []);
+    const servicePoints = get(nextProps.resources.servicePoints, ['records'], []);
+    if ((userServicePointsIds.length !== state.userServicePoints.length) && servicePoints.length) {
+      const userServicePoints = servicePoints
+        .filter(sp => userServicePointsIds.includes(sp.id))
+        .sort(((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true })));
+
+      const userDefaultServicePointId = get(nextProps.resources.servicePointsUsers, ['records', 0, 'defaultServicePointId']);
+
+      return {
+        userServicePoints,
+        userPreferredServicePoint: userServicePoints.find(sp => sp.id === userDefaultServicePointId),
+      };
+    }
+
+    return {};
+  }
+
+  static getUserIdStateFromProps(nextProps, state) {
+    if (state.userId !== nextProps.match.params.id) {
+      // Fetch the records for what service points are associated with this user. We can't
+      // automatically fetch them since we have `fetch: false` turned on to avoid fetching
+      // if the logged-in user doesn't have permissions to fetch the record.
+      if (nextProps.stripes.hasPerm('inventory-storage.service-points.collection.get,inventory-storage.service-points-users.collection.get')) {
+        nextProps.mutator.servicePointsUsers.reset();
+        nextProps.mutator.servicePointsUsers.GET();
+        nextProps.mutator.servicePoints.reset();
+        nextProps.mutator.servicePoints.GET();
+      }
+
+      return {
+        userId: nextProps.match.params.id
+      };
+    }
+
+    return {};
+  }
 
   static propTypes = {
     stripes: PropTypes.shape({
@@ -95,6 +180,12 @@ class ViewUser extends React.Component {
       patronGroups: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
+      servicePoints: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      servicePointsUsers: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
       settings: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
@@ -108,6 +199,19 @@ class ViewUser extends React.Component {
         DELETE: PropTypes.func.isRequired,
       }),
       query: PropTypes.object.isRequired,
+      servicePoints: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+        reset: PropTypes.func.isRequired,
+      }),
+      servicePointUserId: PropTypes.shape({
+        replace: PropTypes.func.isRequired,
+      }),
+      servicePointsUsers: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+        reset: PropTypes.func.isRequired,
+        POST: PropTypes.func.isRequired,
+        PUT: PropTypes.func.isRequired,
+      }),
     }),
     match: PropTypes.shape({
       path: PropTypes.string.isRequired,
@@ -151,6 +255,9 @@ class ViewUser extends React.Component {
         permissionsSection: false,
         servicePointsSection: false,
       },
+      userServicePoints: [],
+      userPreferredServicePoint: undefined,
+      userId: '', // eslint-disable-line react/no-unused-state
     };
 
     this.connectedUserLoans = props.stripes.connect(UserLoans);
@@ -183,19 +290,14 @@ class ViewUser extends React.Component {
     this.onClickCloseAccountActionsHistory = this.onClickCloseAccountActionsHistory.bind(this);
   }
 
-  static getDerivedStateFromProps(nextProps) {
-    const query = nextProps.location.search ? queryString.parse(nextProps.location.search) : {};
+  static getDerivedStateFromProps(nextProps, state) {
+    const newState = {
+      ...ViewUser.getLoanStateFromProps(nextProps, state),
+      ...ViewUser.getServicePointStateFromProps(nextProps, state),
+      ...ViewUser.getUserIdStateFromProps(nextProps, state),
+    };
 
-    if (query.loan) {
-      const loansHistory = (nextProps.resources.loansHistory || {}).records || [];
-      if (loansHistory.length) {
-        const selectedLoan = find(loansHistory, { id: query.loan });
-
-        if (selectedLoan) {
-          return { selectedLoan };
-        }
-      }
-    }
+    if (Object.keys(newState).length) return newState;
 
     return null;
   }
@@ -328,13 +430,18 @@ class ViewUser extends React.Component {
     return selUser.find(u => u.id === id);
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  getUserFormData(user, addresses, sponsors, proxies, permissions) {
-    const userForData = user ? cloneDeep(user) : user;
-    userForData.personal.addresses = addresses;
-    Object.assign(userForData, { sponsors, proxies, permissions });
+  getUserFormData(user, addresses, sponsors, proxies, permissions, servicePoints, preferredServicePoint) {
+    const userFormData = user ? cloneDeep(user) : user;
+    userFormData.personal.addresses = addresses;
+    Object.assign(userFormData, {
+      sponsors,
+      proxies,
+      permissions,
+      servicePoints,
+      preferredServicePoint,
+    });
 
-    return userForData;
+    return userFormData;
   }
 
   // This is a helper function for the "last updated" date element. Since the
@@ -381,13 +488,14 @@ class ViewUser extends React.Component {
       user.personal.addresses = toUserAddresses(user.personal.addresses, addressTypes); // eslint-disable-line no-param-reassign
     }
 
-    const { proxies, sponsors, permissions } = user;
+    const { proxies, sponsors, permissions, servicePoints, preferredServicePoint } = user;
 
     if (proxies) this.props.updateProxies(proxies);
     if (sponsors) this.props.updateSponsors(sponsors);
     if (permissions) this.updatePermissions(permissions);
+    if (servicePoints) this.updateServicePoints(servicePoints, preferredServicePoint);
 
-    const data = omit(user, ['creds', 'proxies', 'sponsors', 'permissions']);
+    const data = omit(user, ['creds', 'proxies', 'sponsors', 'permissions', 'servicePoints', 'preferredServicePoint']);
 
     this.props.mutator.selUser.PUT(data).then(() => {
       this.setState({
@@ -406,8 +514,29 @@ class ViewUser extends React.Component {
     eachPromise(removedPerms, mutator.DELETE);
   }
 
+  updateServicePoints(servicePoints, preferredServicePoint) {
+    let mutator;
+    let record = get(this.props.resources.servicePointsUsers, ['records', 0]);
+    if (record) {
+      mutator = this.props.mutator.servicePointsUsers.PUT;
+    } else {
+      mutator = this.props.mutator.servicePointsUsers.POST;
+      record = { userId: this.props.match.params.id };
+    }
+
+    record.servicePointsIds = servicePoints.map(sp => sp.id);
+    record.defaultServicePointId = preferredServicePoint;
+
+    mutator(record).then(() => {
+      this.props.mutator.servicePointsUsers.reset();
+      this.props.mutator.servicePointsUsers.GET();
+    });
+  }
+
   render() {
     const { resources, stripes, parentResources } = this.props;
+    const { userServicePoints, userPreferredServicePoint } = this.state;
+
     const addressTypes = (parentResources.addressTypes || {}).records || [];
     const query = resources.query;
     const user = this.getUser();
@@ -451,7 +580,7 @@ class ViewUser extends React.Component {
     const patronGroupId = get(user, ['patronGroup'], '');
     const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
     const addresses = toListAddresses(get(user, ['personal', 'addresses'], []), addressTypes);
-    const userFormData = this.getUserFormData(user, addresses, sponsors, proxies, permissions);
+    const userFormData = this.getUserFormData(user, addresses, sponsors, proxies, permissions, userServicePoints, userPreferredServicePoint);
 
 
     const loansHistory = (<this.connectedLoansHistory
@@ -547,6 +676,8 @@ class ViewUser extends React.Component {
               expanded={this.state.sections.servicePointsSection}
               onToggle={this.handleSectionToggle}
               accordionId="servicePointsSection"
+              userServicePoints={this.state.userServicePoints}
+              userPreferredServicePoint={this.state.userPreferredServicePoint}
               {...this.props}
             />
           </IfInterface>

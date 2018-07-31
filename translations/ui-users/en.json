@@ -390,6 +390,7 @@
   "errors.missingRequiredPatronGroup": "Please select a patron group",
   "errors.missingRequiredContactType": "Please select contact type",
   "errors.missingRequiredAddressType": "Please select address type",
+  "errors.missingRequiredPreferredServicePoint": "Please fill this in to continue",
 
   "errors.noMatch.oops": "Uh-oh!",
   "errors.noMatch.how": "How did you get to {location}?",
@@ -474,10 +475,12 @@
   "refunds.columns.description": "Description",
 
   "sp.servicePoints": "Service points",
+  "sp.availableServicePoints": "Available service points",
   "sp.addServicePoints": "+ Add service points",
   "sp.servicePointPreference": "Service point preference*",
   "sp.selectServicePoint": "Select service point",
   "sp.noServicePoints": "No service points found",
+  "sp.removeServicePoint": "Remove service point",
   "sp.column.name": "Name",
   "sp.column.library": "Library",
 
@@ -517,7 +520,7 @@
   "charge.item.status": "Item Status",
   "charge.item.callNumber": "Call number",
   "charge.item.location": "Location",
-     
+
   "details.columns.comments": "comments",
   "details.columns.date": "Action Date",
   "details.columns.action": "Action",
