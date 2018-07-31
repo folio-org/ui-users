@@ -419,7 +419,7 @@
   "edit": "Edit",
   "okay": "OK",
   "description": "Description",
-
+  "showTags": "Show Tags",
   "itemDetails": "Item Details",
   "renew": "Renew",
   "bulkActions.tooltip": "Multiple loans can be processed at the same time. Please select loans first.",
@@ -467,7 +467,7 @@
   "payments.singular": "Payment method",
   "payments.columns.name": "Name*",
   "payments.columns.refund": "Refund method allowed",
-  
+
   "refunds.label": "Fee/fine: Refund reasons",
   "refunds.singular": "Refund reason",
   "refunds.columns.nameReason": "Name*",
