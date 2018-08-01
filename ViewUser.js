@@ -12,6 +12,7 @@ import IfPermission from '@folio/stripes-components/lib/IfPermission';
 import IfInterface from '@folio/stripes-components/lib/IfInterface';
 import { ExpandAllButton } from '@folio/stripes-components/lib/Accordion';
 import IconButton from '@folio/stripes-components/lib/IconButton';
+import { withTags } from '@folio/stripes-smart-components/lib/Tags';
 
 import UserForm from './UserForm';
 import LoansHistory from './LoansHistory';
@@ -204,6 +205,7 @@ class ViewUser extends React.Component {
     editLink: PropTypes.string,
     onCloseEdit: PropTypes.func,
     notesToggle: PropTypes.func,
+    tagsToggle: PropTypes.func,
     location: PropTypes.object,
     history: PropTypes.object,
     parentResources: PropTypes.shape({
@@ -216,6 +218,7 @@ class ViewUser extends React.Component {
     updateSponsors: PropTypes.func,
     getSponsors: PropTypes.func,
     getProxies: PropTypes.func,
+    tagsEnabled: PropTypes.bool,
   };
 
   constructor(props) {
@@ -536,7 +539,7 @@ class ViewUser extends React.Component {
   }
 
   render() {
-    const { resources, stripes, parentResources } = this.props;
+    const { resources, stripes, parentResources, tagsEnabled } = this.props;
     const { userServicePoints, userPreferredServicePoint } = this.state;
 
     const addressTypes = (parentResources.addressTypes || {}).records || [];
@@ -551,6 +554,16 @@ class ViewUser extends React.Component {
     const detailMenu =
     (
       <PaneMenu>
+        {
+          tagsEnabled && <IconButton
+            icon="default"
+            title={formatMsg({ id: 'ui-users.showTags' })}
+            id="clickable-show-tags"
+            style={{ visibility: !user ? 'hidden' : 'visible' }}
+            onClick={this.props.tagsToggle}
+            aria-label={formatMsg({ id: 'ui-users.showTags' })}
+          />
+        }
         <IconButton
           icon="comment"
           id="clickable-show-notes"
@@ -747,4 +760,4 @@ class ViewUser extends React.Component {
   }
 }
 
-export default withProxy(ViewUser);
+export default withTags(withProxy(ViewUser));
