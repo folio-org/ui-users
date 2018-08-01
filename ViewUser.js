@@ -125,35 +125,15 @@ class ViewUser extends React.Component {
     const userServicePointsIds = get(nextProps.resources.servicePointsUsers, ['records', 0, 'servicePointsIds'], []);
     const servicePoints = get(nextProps.resources.servicePoints, ['records'], []);
     if ((userServicePointsIds.length !== state.userServicePoints.length) && servicePoints.length) {
-      const userServicePoints = servicePoints
-        .filter(sp => userServicePointsIds.includes(sp.id))
+      const userServicePoints = userServicePointsIds
+        .map(usp => servicePoints.find(sp => sp.id === usp))
         .sort(((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true })));
 
-      const userDefaultServicePointId = get(nextProps.resources.servicePointsUsers, ['records', 0, 'defaultServicePointId']);
+      const userPreferredServicePoint = get(nextProps.resources.servicePointsUsers, ['records', 0, 'defaultServicePointId'], '-');
 
       return {
         userServicePoints,
-        userPreferredServicePoint: userServicePoints.find(sp => sp.id === userDefaultServicePointId),
-      };
-    }
-
-    return {};
-  }
-
-  static getUserIdStateFromProps(nextProps, state) {
-    if (state.userId !== nextProps.match.params.id) {
-      // Fetch the records for what service points are associated with this user. We can't
-      // automatically fetch them since we have `fetch: false` turned on to avoid fetching
-      // if the logged-in user doesn't have permissions to fetch the record.
-      if (nextProps.stripes.hasPerm('inventory-storage.service-points.collection.get,inventory-storage.service-points-users.collection.get')) {
-        nextProps.mutator.servicePointsUsers.reset();
-        nextProps.mutator.servicePointsUsers.GET();
-        nextProps.mutator.servicePoints.reset();
-        nextProps.mutator.servicePoints.GET();
-      }
-
-      return {
-        userId: nextProps.match.params.id
+        userPreferredServicePoint,
       };
     }
 
@@ -257,7 +237,6 @@ class ViewUser extends React.Component {
       },
       userServicePoints: [],
       userPreferredServicePoint: undefined,
-      userId: '', // eslint-disable-line react/no-unused-state
     };
 
     this.connectedUserLoans = props.stripes.connect(UserLoans);
@@ -294,12 +273,35 @@ class ViewUser extends React.Component {
     const newState = {
       ...ViewUser.getLoanStateFromProps(nextProps, state),
       ...ViewUser.getServicePointStateFromProps(nextProps, state),
-      ...ViewUser.getUserIdStateFromProps(nextProps, state),
     };
 
     if (Object.keys(newState).length) return newState;
 
     return null;
+  }
+
+  componentDidMount() {
+    this.fetchServicePointsResources();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.match.params.id !== this.props.match.params.id) {
+      this.fetchServicePointsResources();
+    }
+
+    return {};
+  }
+
+  fetchServicePointsResources() {
+    // Fetch the records for what service points are associated with this user. We can't
+    // automatically fetch them since we have `fetch: false` turned on to avoid fetching
+    // if the logged-in user doesn't have permissions to fetch the record.
+    if (this.props.stripes.hasPerm('inventory-storage.service-points.collection.get,inventory-storage.service-points-users.collection.get')) {
+      this.props.mutator.servicePointsUsers.reset();
+      this.props.mutator.servicePointsUsers.GET();
+      this.props.mutator.servicePoints.reset();
+      this.props.mutator.servicePoints.GET();
+    }
   }
 
   onAddressesUpdate(addresses) {
@@ -525,7 +527,7 @@ class ViewUser extends React.Component {
     }
 
     record.servicePointsIds = servicePoints.map(sp => sp.id);
-    record.defaultServicePointId = preferredServicePoint;
+    record.defaultServicePointId = preferredServicePoint === '-' ? null : preferredServicePoint;
 
     mutator(record).then(() => {
       this.props.mutator.servicePointsUsers.reset();

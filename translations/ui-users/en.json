@@ -483,6 +483,7 @@
   "sp.removeServicePoint": "Remove service point",
   "sp.column.name": "Name",
   "sp.column.library": "Library",
+  "sp.preferredSPNone": "None",
 
   "waives.label": "Fee/fine: Waive reasons",
   "waives.singular": "Waive reason",

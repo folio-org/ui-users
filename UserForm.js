@@ -56,7 +56,7 @@ function validate(values, props) {
     });
   }
 
-  if (values.servicePoints && !values.preferredServicePoint) {
+  if (values.servicePoints && values.preferredServicePoint === undefined) {
     errors.preferredServicePoint = <FormattedMessage id="ui-users.errors.missingRequiredPreferredServicePoint" />;
   }
 
