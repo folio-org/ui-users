@@ -316,6 +316,8 @@
   "loans.details.feeFine": "Fee/fine",
   "loans.details.proxyBorrower": "Proxy borrower",
 
+  "permissions.noSponsorsFound": "No sponsors found",
+  "permissions.noProxiesFound": "No proxies found",
   "permissions.empty": "No permissions found",
   "permissions.removePermission": "Remove permission",
   "permissions.addPermission": "Add permission",

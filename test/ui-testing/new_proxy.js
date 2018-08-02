@@ -79,7 +79,8 @@ module.exports.test = function foo(uiTestCtx) {
           .click('#clickable-updateuser')
           .wait(1000)
           .then(() => {
-            done(); })
+            done();
+          })
           .catch(done);
       });
 
