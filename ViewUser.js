@@ -247,7 +247,6 @@ class ViewUser extends React.Component {
     this.connectedLoansHistory = props.stripes.connect(LoansHistory);
     this.connectedLoanActionsHistory = props.stripes.connect(LoanActionsHistory);
     this.connectedUserInfo = props.stripes.connect(UserInfo);
-    this.connectedUserServicePoints = props.stripes.connect(UserServicePoints);
     this.dateLastUpdated = this.dateLastUpdated.bind(this);
     this.onClickCloseLoansHistory = this.onClickCloseLoansHistory.bind(this);
     this.onClickViewOpenLoans = this.onClickViewOpenLoans.bind(this);
@@ -686,7 +685,7 @@ class ViewUser extends React.Component {
 
         <IfPermission perm="inventory-storage.service-points.collection.get,inventory-storage.service-points-users.collection.get">
           <IfInterface name="service-points-users" version="1.0">
-            <this.connectedUserServicePoints
+            <UserServicePoints
               stripes={stripes}
               expanded={this.state.sections.servicePointsSection}
               onToggle={this.handleSectionToggle}
@@ -704,7 +703,10 @@ class ViewUser extends React.Component {
             initialValues={userFormData}
             onSubmit={(record) => { this.update(record); }}
             onCancel={this.props.onCloseEdit}
-            parentResources={this.props.parentResources}
+            parentResources={{
+              ...this.props.resources,
+              ...this.props.parentResources,
+            }}
             parentMutator={this.props.parentMutator}
           />
         </Layer>

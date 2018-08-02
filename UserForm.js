@@ -95,6 +95,7 @@ class UserForm extends React.Component {
         GET: PropTypes.func.isRequired,
       }).isRequired,
     }),
+    parentResources: PropTypes.object,
     pristine: PropTypes.bool,
     submitting: PropTypes.bool,
     onCancel: PropTypes.func,
@@ -121,7 +122,6 @@ class UserForm extends React.Component {
 
     if (props.initialValues.id) {
       this.connectedEditUserPerms = props.stripes.connect(EditUserPerms);
-      this.connectedEditServicePoints = props.stripes.connect(EditServicePoints);
     }
   }
 
@@ -205,7 +205,7 @@ class UserForm extends React.Component {
               <div>
                 <EditProxy accordionId="proxy" expanded={sections.proxy} onToggle={this.handleSectionToggle} {...this.props} />
                 <this.connectedEditUserPerms accordionId="permissions" expanded={sections.permissions} onToggle={this.handleSectionToggle} {...this.props} />
-                <this.connectedEditServicePoints accordionId="servicePoints" expanded={sections.servicePoints} onToggle={this.handleSectionToggle} {...this.props} />
+                <EditServicePoints accordionId="servicePoints" expanded={sections.servicePoints} onToggle={this.handleSectionToggle} {...this.props} />
               </div>
             }
           </Pane>
