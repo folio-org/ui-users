@@ -25,6 +25,7 @@ import AccountActionsHistory from './AccountActionsHistory';
 import { toListAddresses, toUserAddresses } from './converters/address';
 import { getFullName, eachPromise } from './util';
 import withProxy from './withProxy';
+import withServicePoints from './withServicePoints';
 
 import {
   UserInfo,
@@ -69,27 +70,6 @@ class ViewUser extends React.Component {
       path: 'perms/users/:{id}/permissions',
       params: { indexField: 'userId' },
     },
-    servicePoints: {
-      type: 'okapi',
-      path: 'service-points',
-      records: 'servicepoints',
-      accumulate: true,
-      fetch: false,
-    },
-    servicePointUserId: '',
-    servicePointsUsers: {
-      type: 'okapi',
-      path: 'service-points-users?query=(userId==:{id})',
-      records: 'servicePointsUsers',
-      accumulate: true,
-      fetch: false,
-      POST: {
-        path: 'service-points-users',
-      },
-      PUT: {
-        path: 'service-points-users/%{servicePointUserId}',
-      },
-    },
     settings: {
       type: 'okapi',
       records: 'configs',
@@ -109,33 +89,6 @@ class ViewUser extends React.Component {
           return { selectedLoan };
         }
       }
-    }
-
-    return {};
-  }
-
-  static getServicePointStateFromProps(nextProps, state) {
-    // Save the id of the record in the service-points-users table for later use when mutating it.
-    const servicePointUserId = get(nextProps.resources.servicePointsUsers, ['records', 0, 'id'], '');
-    const localServicePointUserId = nextProps.resources.servicePointUserId;
-    if (servicePointUserId !== localServicePointUserId) {
-      nextProps.mutator.servicePointUserId.replace(servicePointUserId);
-    }
-
-    // Check if new user service points have been received and the list of all service points has also been received.
-    const userServicePointsIds = get(nextProps.resources.servicePointsUsers, ['records', 0, 'servicePointsIds'], []);
-    const servicePoints = get(nextProps.resources.servicePoints, ['records'], []);
-    if ((userServicePointsIds.length !== state.userServicePoints.length) && servicePoints.length) {
-      const userServicePoints = userServicePointsIds
-        .map(usp => servicePoints.find(sp => sp.id === usp))
-        .sort(((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true })));
-
-      const userPreferredServicePoint = get(nextProps.resources.servicePointsUsers, ['records', 0, 'defaultServicePointId'], '-');
-
-      return {
-        userServicePoints,
-        userPreferredServicePoint,
-      };
     }
 
     return {};
@@ -161,12 +114,6 @@ class ViewUser extends React.Component {
       patronGroups: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
-      servicePoints: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
-      }),
-      servicePointsUsers: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
-      }),
       settings: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
@@ -180,19 +127,6 @@ class ViewUser extends React.Component {
         DELETE: PropTypes.func.isRequired,
       }),
       query: PropTypes.object.isRequired,
-      servicePoints: PropTypes.shape({
-        GET: PropTypes.func.isRequired,
-        reset: PropTypes.func.isRequired,
-      }),
-      servicePointUserId: PropTypes.shape({
-        replace: PropTypes.func.isRequired,
-      }),
-      servicePointsUsers: PropTypes.shape({
-        GET: PropTypes.func.isRequired,
-        reset: PropTypes.func.isRequired,
-        POST: PropTypes.func.isRequired,
-        PUT: PropTypes.func.isRequired,
-      }),
     }),
     match: PropTypes.shape({
       path: PropTypes.string.isRequired,
@@ -215,9 +149,12 @@ class ViewUser extends React.Component {
     }),
     parentMutator: PropTypes.shape({}),
     updateProxies: PropTypes.func,
+    updateServicePoints: PropTypes.func,
     updateSponsors: PropTypes.func,
     getSponsors: PropTypes.func,
     getProxies: PropTypes.func,
+    getServicePoints: PropTypes.func,
+    getPreferredServicePoint: PropTypes.func,
     tagsEnabled: PropTypes.bool,
   };
 
@@ -238,8 +175,6 @@ class ViewUser extends React.Component {
         permissionsSection: false,
         servicePointsSection: false,
       },
-      userServicePoints: [],
-      userPreferredServicePoint: undefined,
     };
 
     this.connectedUserLoans = props.stripes.connect(UserLoans);
@@ -271,39 +206,21 @@ class ViewUser extends React.Component {
     this.onClickCloseAccountActionsHistory = this.onClickCloseAccountActionsHistory.bind(this);
   }
 
-  static getDerivedStateFromProps(nextProps, state) {
-    const newState = {
-      ...ViewUser.getLoanStateFromProps(nextProps, state),
-      ...ViewUser.getServicePointStateFromProps(nextProps, state),
-    };
+  static getDerivedStateFromProps(nextProps) {
+    const query = nextProps.location.search ? queryString.parse(nextProps.location.search) : {};
 
-    if (Object.keys(newState).length) return newState;
+    if (query.loan) {
+      const loansHistory = (nextProps.resources.loansHistory || {}).records || [];
+      if (loansHistory.length) {
+        const selectedLoan = find(loansHistory, { id: query.loan });
+
+        if (selectedLoan) {
+          return { selectedLoan };
+        }
+      }
+    }
 
     return null;
-  }
-
-  componentDidMount() {
-    this.fetchServicePointsResources();
-  }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.match.params.id !== this.props.match.params.id) {
-      this.fetchServicePointsResources();
-    }
-
-    return {};
-  }
-
-  fetchServicePointsResources() {
-    // Fetch the records for what service points are associated with this user. We can't
-    // automatically fetch them since we have `fetch: false` turned on to avoid fetching
-    // if the logged-in user doesn't have permissions to fetch the record.
-    if (this.props.stripes.hasPerm('inventory-storage.service-points.collection.get,inventory-storage.service-points-users.collection.get')) {
-      this.props.mutator.servicePointsUsers.reset();
-      this.props.mutator.servicePointsUsers.GET();
-      this.props.mutator.servicePoints.reset();
-      this.props.mutator.servicePoints.GET();
-    }
   }
 
   onAddressesUpdate(addresses) {
@@ -497,7 +414,7 @@ class ViewUser extends React.Component {
     if (proxies) this.props.updateProxies(proxies);
     if (sponsors) this.props.updateSponsors(sponsors);
     if (permissions) this.updatePermissions(permissions);
-    if (servicePoints) this.updateServicePoints(servicePoints, preferredServicePoint);
+    if (servicePoints) this.props.updateServicePoints(servicePoints, preferredServicePoint);
 
     const data = omit(user, ['creds', 'proxies', 'sponsors', 'permissions', 'servicePoints', 'preferredServicePoint']);
 
@@ -518,28 +435,8 @@ class ViewUser extends React.Component {
     eachPromise(removedPerms, mutator.DELETE);
   }
 
-  updateServicePoints(servicePoints, preferredServicePoint) {
-    let mutator;
-    let record = get(this.props.resources.servicePointsUsers, ['records', 0]);
-    if (record) {
-      mutator = this.props.mutator.servicePointsUsers.PUT;
-    } else {
-      mutator = this.props.mutator.servicePointsUsers.POST;
-      record = { userId: this.props.match.params.id };
-    }
-
-    record.servicePointsIds = servicePoints.map(sp => sp.id);
-    record.defaultServicePointId = preferredServicePoint === '-' ? null : preferredServicePoint;
-
-    mutator(record).then(() => {
-      this.props.mutator.servicePointsUsers.reset();
-      this.props.mutator.servicePointsUsers.GET();
-    });
-  }
-
   render() {
     const { resources, stripes, parentResources, tagsEnabled } = this.props;
-    const { userServicePoints, userPreferredServicePoint } = this.state;
 
     const addressTypes = (parentResources.addressTypes || {}).records || [];
     const query = resources.query;
@@ -549,6 +446,8 @@ class ViewUser extends React.Component {
     const settings = (resources.settings || {}).records || [];
     const sponsors = this.props.getSponsors();
     const proxies = this.props.getProxies();
+    const servicePoints = this.props.getServicePoints();
+    const preferredServicePoint = this.props.getPreferredServicePoint();
     const formatMsg = stripes.intl.formatMessage;
     const detailMenu =
     (
@@ -594,8 +493,7 @@ class ViewUser extends React.Component {
     const patronGroupId = get(user, ['patronGroup'], '');
     const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
     const addresses = toListAddresses(get(user, ['personal', 'addresses'], []), addressTypes);
-    const userFormData = this.getUserFormData(user, addresses, sponsors, proxies, permissions, userServicePoints, userPreferredServicePoint);
-
+    const userFormData = this.getUserFormData(user, addresses, sponsors, proxies, permissions, servicePoints, preferredServicePoint);
 
     const loansHistory = (<this.connectedLoansHistory
       user={user}
@@ -690,8 +588,8 @@ class ViewUser extends React.Component {
               expanded={this.state.sections.servicePointsSection}
               onToggle={this.handleSectionToggle}
               accordionId="servicePointsSection"
-              userServicePoints={this.state.userServicePoints}
-              userPreferredServicePoint={this.state.userPreferredServicePoint}
+              servicePoints={servicePoints}
+              preferredServicePoint={preferredServicePoint}
               {...this.props}
             />
           </IfInterface>
@@ -762,4 +660,4 @@ class ViewUser extends React.Component {
   }
 }
 
-export default withTags(withProxy(ViewUser));
+export default withServicePoints(withTags(withProxy(ViewUser)));
