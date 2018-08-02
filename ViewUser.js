@@ -77,23 +77,6 @@ class ViewUser extends React.Component {
     },
   });
 
-  static getLoanStateFromProps(nextProps) {
-    const query = nextProps.location.search ? queryString.parse(nextProps.location.search) : {};
-
-    if (query.loan) {
-      const loansHistory = (nextProps.resources.loansHistory || {}).records || [];
-      if (loansHistory.length) {
-        const selectedLoan = find(loansHistory, { id: query.loan });
-
-        if (selectedLoan) {
-          return { selectedLoan };
-        }
-      }
-    }
-
-    return {};
-  }
-
   static propTypes = {
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func.isRequired,
