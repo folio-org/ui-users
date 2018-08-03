@@ -82,6 +82,9 @@
 * Removed "Accrue-fees-to" functionality for proxy/sponsors
 * Adjust renew error messages. Fixes UIU-552.
 * Lower-case search terms AND permission names when searching. Refs UIORG-76.
+* Provide an id prop to `<ConfirmationModal>` to avoid it autogenerating one for us. Refs STCOM-317.
+* Configure tags helper app in users. Part of STSMACOM-113.
+* Include active users in every search. Fixes UIU-400.
 
 ## [2.12.0](https://github.com/folio-org/ui-users/tree/v2.12.0) (2017-11-28)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.11.0...v2.12.0)

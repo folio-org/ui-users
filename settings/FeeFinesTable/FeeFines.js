@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
 import ConfirmationModal from '@folio/stripes-components/lib/ConfirmationModal';
+import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import Callout from '@folio/stripes-components/lib/Callout';
 
 import EditableList from '@folio/stripes-components/lib/EditableList';
@@ -158,8 +158,14 @@ class FeeFines extends React.Component {
 
   showCalloutMessage(name) {
     const message = (
-      <span><FormattedMessage id="ui-users.feefines.callout" feefine={name.feeFineType} /></span>
+      <span>
+        <SafeHTMLMessage
+          id="ui-users.feefines.callout"
+          values={{ feefine: name.feeFineType }}
+        />
+      </span>
     );
+
     this.callout.sendCallout({ message });
   }
 
@@ -276,7 +282,7 @@ class FeeFines extends React.Component {
         <ConfirmationModal
           open={this.state.confirming}
           heading={this.props.stripes.intl.formatMessage({ id: 'ui-users.feefines.modalHeader' })}
-          message={<FormattedMessage id="ui-users.feefines.modalMessage" feefine={this.state.type.feeFineType} />}
+          message={<SafeHTMLMessage id="ui-users.feefines.modalMessage" values={{ feefine: this.state.type.feeFineType }} />}
           onConfirm={this.onDeleteType}
           onCancel={this.hideConfirm}
           confirmLabel="Delete"

@@ -190,6 +190,7 @@ class PermissionSetForm extends React.Component {
               </Row>
             </Accordion>
             <ConfirmationModal
+              id="deletepermissionset-confirmation"
               open={confirmDelete}
               heading={intl.formatMessage({ id: 'ui-users.permissions.deletePermissionSet' })}
               message={confirmationMessage}

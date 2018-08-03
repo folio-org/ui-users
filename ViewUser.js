@@ -2,7 +2,7 @@ import { cloneDeep, get, omit, differenceBy, find } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
-import TitleManager from '@folio/stripes-core/src/components/TitleManager';
+import TitleManager from '@folio/stripes-core/src/components/TitleManager'; // eslint-disable-line import/no-unresolved
 import Pane from '@folio/stripes-components/lib/Pane';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
@@ -12,16 +12,20 @@ import IfPermission from '@folio/stripes-components/lib/IfPermission';
 import IfInterface from '@folio/stripes-components/lib/IfInterface';
 import { ExpandAllButton } from '@folio/stripes-components/lib/Accordion';
 import IconButton from '@folio/stripes-components/lib/IconButton';
+import { withTags } from '@folio/stripes-smart-components/lib/Tags';
 
 import UserForm from './UserForm';
 import LoansHistory from './LoansHistory';
 import LoanActionsHistory from './LoanActionsHistory';
 
-import ChargeFeeFine from './lib/Accounts';
+import { ChargeFeeFine } from './lib/Accounts';
+import AccountsHistory from './AccountsHistory';
+import AccountActionsHistory from './AccountActionsHistory';
 
 import { toListAddresses, toUserAddresses } from './converters/address';
 import { getFullName, eachPromise } from './util';
 import withProxy from './withProxy';
+import withServicePoints from './withServicePoints';
 
 import {
   UserInfo,
@@ -31,6 +35,7 @@ import {
   UserPermissions,
   UserLoans,
   UserAccounts,
+  UserServicePoints,
 } from './lib/ViewSections';
 
 class ViewUser extends React.Component {
@@ -40,11 +45,6 @@ class ViewUser extends React.Component {
       type: 'okapi',
       path: 'users/:{id}',
       clear: false,
-    },
-    loansHistory: {
-      type: 'okapi',
-      records: 'loans',
-      path: 'circulation/loans?query=(userId=:{id}) sortby id&limit=100',
     },
     patronGroups: {
       type: 'okapi',
@@ -100,9 +100,6 @@ class ViewUser extends React.Component {
       settings: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
-      loansHistory: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
-      }),
     }),
     mutator: PropTypes.shape({
       selUser: PropTypes.shape({
@@ -125,6 +122,7 @@ class ViewUser extends React.Component {
     editLink: PropTypes.string,
     onCloseEdit: PropTypes.func,
     notesToggle: PropTypes.func,
+    tagsToggle: PropTypes.func,
     location: PropTypes.object,
     history: PropTypes.object,
     parentResources: PropTypes.shape({
@@ -134,9 +132,13 @@ class ViewUser extends React.Component {
     }),
     parentMutator: PropTypes.shape({}),
     updateProxies: PropTypes.func,
+    updateServicePoints: PropTypes.func,
     updateSponsors: PropTypes.func,
     getSponsors: PropTypes.func,
     getProxies: PropTypes.func,
+    getServicePoints: PropTypes.func,
+    getPreferredServicePoint: PropTypes.func,
+    tagsEnabled: PropTypes.bool,
   };
 
   constructor(props) {
@@ -144,6 +146,7 @@ class ViewUser extends React.Component {
     this.state = {
       viewOpenLoansMode: false,
       selectedLoan: {},
+      selectedAccount: {},
       lastUpdate: null,
       sections: {
         userInformationSection: true,
@@ -153,6 +156,7 @@ class ViewUser extends React.Component {
         loansSection: false,
         accountsSection: false,
         permissionsSection: false,
+        servicePointsSection: false,
       },
     };
 
@@ -175,6 +179,14 @@ class ViewUser extends React.Component {
     this.onCloseChargeFeeFine = this.onCloseChargeFeeFine.bind(this);
     this.onClickViewChargeFeeFine = this.onClickViewChargeFeeFine.bind(this);
     this.handleAddRecords = this.handleAddRecords.bind(this);
+    this.connectedAccountsHistory = props.stripes.connect(AccountsHistory);
+    this.connectedAccountActionsHistory = props.stripes.connect(AccountActionsHistory);
+    this.onClickViewOpenAccounts = this.onClickViewOpenAccounts.bind(this);
+    this.onClickViewClosedAccounts = this.onClickViewClosedAccounts.bind(this);
+    this.onClickViewAllAccounts = this.onClickViewAllAccounts.bind(this);
+    this.onClickCloseAccountsHistory = this.onClickCloseAccountsHistory.bind(this);
+    this.onClickViewAccountActionsHistory = this.onClickViewAccountActionsHistory.bind(this);
+    this.onClickCloseAccountActionsHistory = this.onClickCloseAccountActionsHistory.bind(this);
   }
 
   static getDerivedStateFromProps(nextProps) {
@@ -244,6 +256,47 @@ class ViewUser extends React.Component {
     });
   }
 
+  onClickViewOpenAccounts(e) {
+    if (e) e.preventDefault();
+    this.props.mutator.query.update({ layer: 'open-accounts' });
+  }
+
+  onClickViewClosedAccounts(e) {
+    if (e) e.preventDefault();
+    this.props.mutator.query.update({ layer: 'closed-accounts' });
+  }
+
+  onClickViewAllAccounts(e) {
+    if (e) e.preventDefault();
+    this.props.mutator.query.update({ layer: 'all-accounts' });
+  }
+
+  onClickCloseAccountsHistory(e) {
+    if (e) e.preventDefault();
+    this.props.mutator.query.update({ layer: null, f: null, q: null });
+  }
+
+  onClickViewAccountActionsHistory(e, selectedAccount) {
+    if (e) e.preventDefault();
+    const query = this.props.location.search ? queryString.parse(this.props.location.search) : {};
+    this.setState({
+      prevLayer: query.layer,
+    });
+    this.props.mutator.query.update({ layer: 'account', account: selectedAccount.id });
+    this.setState({
+      selectedAccount,
+    });
+  }
+
+  onClickCloseAccountActionsHistory(e) {
+    if (e) e.preventDefault();
+    const layer = this.state.prevLayer;
+    this.props.mutator.query.update({ layer, account: null });
+    this.setState({
+      selectedAccount: {},
+    });
+  }
+
   onClickViewChargeFeeFine(e, selectedLoan) {
     if (e) e.preventDefault();
     const query = this.props.location.search ? queryString.parse(this.props.location.search) : {};
@@ -281,13 +334,18 @@ class ViewUser extends React.Component {
     return selUser.find(u => u.id === id);
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  getUserFormData(user, addresses, sponsors, proxies, permissions) {
-    const userForData = user ? cloneDeep(user) : user;
-    userForData.personal.addresses = addresses;
-    Object.assign(userForData, { sponsors, proxies, permissions });
+  getUserFormData(user, addresses, sponsors, proxies, permissions, servicePoints, preferredServicePoint) {
+    const userFormData = user ? cloneDeep(user) : user;
+    userFormData.personal.addresses = addresses;
+    Object.assign(userFormData, {
+      sponsors,
+      proxies,
+      permissions,
+      servicePoints,
+      preferredServicePoint,
+    });
 
-    return userForData;
+    return userFormData;
   }
 
   // This is a helper function for the "last updated" date element. Since the
@@ -334,13 +392,14 @@ class ViewUser extends React.Component {
       user.personal.addresses = toUserAddresses(user.personal.addresses, addressTypes); // eslint-disable-line no-param-reassign
     }
 
-    const { proxies, sponsors, permissions } = user;
+    const { proxies, sponsors, permissions, servicePoints, preferredServicePoint } = user;
 
     if (proxies) this.props.updateProxies(proxies);
     if (sponsors) this.props.updateSponsors(sponsors);
     if (permissions) this.updatePermissions(permissions);
+    if (servicePoints) this.props.updateServicePoints(servicePoints, preferredServicePoint);
 
-    const data = omit(user, ['creds', 'proxies', 'sponsors', 'permissions']);
+    const data = omit(user, ['creds', 'proxies', 'sponsors', 'permissions', 'servicePoints', 'preferredServicePoint']);
 
     this.props.mutator.selUser.PUT(data).then(() => {
       this.setState({
@@ -360,20 +419,32 @@ class ViewUser extends React.Component {
   }
 
   render() {
-    const { resources, stripes, parentResources } = this.props;
+    const { resources, stripes, parentResources, tagsEnabled } = this.props;
+
     const addressTypes = (parentResources.addressTypes || {}).records || [];
     const query = resources.query;
     const user = this.getUser();
     const patronGroups = (resources.patronGroups || {}).records || [];
     const permissions = (resources.permissions || {}).records || [];
     const settings = (resources.settings || {}).records || [];
-    const loans = (resources.loansHistory || {}).records || [];
     const sponsors = this.props.getSponsors();
     const proxies = this.props.getProxies();
+    const servicePoints = this.props.getServicePoints();
+    const preferredServicePoint = this.props.getPreferredServicePoint();
     const formatMsg = stripes.intl.formatMessage;
     const detailMenu =
     (
       <PaneMenu>
+        {
+          tagsEnabled && <IconButton
+            icon="default"
+            title={formatMsg({ id: 'ui-users.showTags' })}
+            id="clickable-show-tags"
+            style={{ visibility: !user ? 'hidden' : 'visible' }}
+            onClick={this.props.tagsToggle}
+            aria-label={formatMsg({ id: 'ui-users.showTags' })}
+          />
+        }
         <IconButton
           icon="comment"
           id="clickable-show-notes"
@@ -405,12 +476,10 @@ class ViewUser extends React.Component {
     const patronGroupId = get(user, ['patronGroup'], '');
     const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
     const addresses = toListAddresses(get(user, ['personal', 'addresses'], []), addressTypes);
-    const userFormData = this.getUserFormData(user, addresses, sponsors, proxies, permissions);
-
+    const userFormData = this.getUserFormData(user, addresses, sponsors, proxies, permissions, servicePoints, preferredServicePoint);
 
     const loansHistory = (<this.connectedLoansHistory
       user={user}
-      loansHistory={loans}
       patronGroup={patronGroup}
       stripes={stripes}
       history={this.props.history}
@@ -418,6 +487,10 @@ class ViewUser extends React.Component {
       onClickViewOpenLoans={this.onClickViewOpenLoans}
       onClickViewClosedLoans={this.onClickViewClosedLoans}
       onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
+      onClickViewChargeFeeFine={this.onClickViewChargeFeeFine}
+      onClickViewOpenAccounts={this.onClickViewOpenAccounts}
+      onClickViewClosedAccounts={this.onClickViewClosedAccounts}
+      onClickViewAllAccounts={this.onClickViewAllAccounts}
       openLoans={query.layer === 'open-loans'}
     />);
 
@@ -491,17 +564,49 @@ class ViewUser extends React.Component {
           </IfInterface>
         </IfPermission>
 
+        <IfPermission perm="inventory-storage.service-points.collection.get,inventory-storage.service-points-users.collection.get">
+          <IfInterface name="service-points-users" version="1.0">
+            <UserServicePoints
+              stripes={stripes}
+              expanded={this.state.sections.servicePointsSection}
+              onToggle={this.handleSectionToggle}
+              accordionId="servicePointsSection"
+              servicePoints={servicePoints}
+              preferredServicePoint={preferredServicePoint}
+              {...this.props}
+            />
+          </IfInterface>
+        </IfPermission>
+
         <Layer isOpen={query.layer ? query.layer === 'edit' : false} contentLabel={formatMsg({ id: 'ui-users.editUserDialog' })}>
           <UserForm
             stripes={stripes}
             initialValues={userFormData}
             onSubmit={(record) => { this.update(record); }}
             onCancel={this.props.onCloseEdit}
-            parentResources={this.props.parentResources}
+            parentResources={{
+              ...this.props.resources,
+              ...this.props.parentResources,
+            }}
             parentMutator={this.props.parentMutator}
           />
         </Layer>
 
+        <Layer isOpen={query.layer ? query.layer === 'open-accounts' || query.layer === 'closed-accounts' || query.layer === 'all-accounts' : false} label="Fees/Fines">
+          <this.connectedAccountsHistory
+            user={user}
+            parentMutator={this.props.mutator}
+            patronGroup={patronGroup}
+            stripes={stripes}
+            history={this.props.history}
+            addRecord={this.state.addRecord}
+            location={this.props.location}
+            onCancel={this.onClickCloseAccountsHistory}
+            onClickViewChargeFeeFine={this.onClickViewChargeFeeFine}
+            onClickViewAccountActionsHistory={this.onClickViewAccountActionsHistory}
+            onClickCloseAccountActionsHistory={this.onClickCloseAccountActionsHistory}
+          />
+        </Layer>
         <Layer isOpen={query.layer ? query.layer === 'charge' : false} label="Charge Fee/Fine">
           <this.connectedCharge
             stripes={stripes}
@@ -512,10 +617,24 @@ class ViewUser extends React.Component {
             handleAddRecords={this.handleAddRecords}
           />
         </Layer>
-
-        <Layer isOpen={query.layer ? query.layer === 'open-loans' || query.layer === 'closed-loans' : false} contentLabel={formatMsg({ id: 'ui-users.loans.title' })}>
-          {loansHistory}
+        <Layer isOpen={query.layer ? query.layer === 'account' : false} label="Account Actions History">
+          <this.connectedAccountActionsHistory
+            user={user}
+            account={this.state.selectedAccount}
+            accountid={this.state.selectedAccount.id}
+            history={this.props.history}
+            stripes={stripes}
+            onCancel={this.onClickCloseAccountActionsHistory}
+            // when navigating away to another user, clear all loan-related state
+            onClickUser={() => { this.onClickCloseAccountActionsHistory(); this.onClickCloseAccountsHistory(); }}
+          />
         </Layer>
+
+        <IfPermission perm="circulation.loans.collection.get">
+          <Layer isOpen={query.layer ? query.layer === 'open-loans' || query.layer === 'closed-loans' : false} contentLabel={formatMsg({ id: 'ui-users.loans.title' })}>
+            {loansHistory}
+          </Layer>
+        </IfPermission>
         <Layer isOpen={query.layer ? query.layer === 'loan' : false} contentLabel={formatMsg({ id: 'ui-users.loanActionsHistory' })}>
           {loanDetails}
         </Layer>
@@ -524,4 +643,4 @@ class ViewUser extends React.Component {
   }
 }
 
-export default withProxy(ViewUser);
+export default withServicePoints(withTags(withProxy(ViewUser)));
