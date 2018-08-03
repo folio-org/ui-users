@@ -402,6 +402,7 @@
   },
   "scripts": {
     "start": "stripes serve",
+    "build": "stripes build",
     "lint": "eslint .",
     "test": "echo 'No unit tests implemented'",
     "test-int": "stripes test nightmare",
