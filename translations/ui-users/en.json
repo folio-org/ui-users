@@ -478,8 +478,8 @@
 
   "sp.servicePoints": "Service points",
   "sp.availableServicePoints": "Available service points",
-  "sp.addServicePoints": "+ Add service points",
-  "sp.servicePointPreference": "Service point preference*",
+  "sp.addServicePoints": "Add service points",
+  "sp.servicePointPreference": "Service point preference",
   "sp.selectServicePoint": "Select service point",
   "sp.noServicePoints": "No service points found",
   "sp.removeServicePoint": "Remove service point",
