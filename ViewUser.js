@@ -437,7 +437,7 @@ class ViewUser extends React.Component {
       <PaneMenu>
         {
           tagsEnabled && <IconButton
-            icon="default"
+            icon="tag"
             title={formatMsg({ id: 'ui-users.showTags' })}
             id="clickable-show-tags"
             style={{ visibility: !user ? 'hidden' : 'visible' }}
