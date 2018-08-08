@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-/* global it describe Nightmare */
+/* global it describe Nightmare before after */
 module.exports.test = function foo(uiTestCtx) {
   describe('Module test: users:new_service_point', function meh() {
     const { config, helpers: { login, openApp, logout }, meta: { testVersion } } = uiTestCtx;
@@ -40,18 +40,17 @@ module.exports.test = function foo(uiTestCtx) {
           .wait(wait)
           .click('#clickable-save-service-point')
           .wait(wait)
-          .evaluate((spName) => {
+          .evaluate((name) => {
             const items = document.querySelectorAll('a > div');
-            let spId;
-            let prevSpId;
+            const result = {};
             items.forEach((node, index) => {
-              if (node.innerText === spName) {
-                spId = node.parentElement.href.split("/").pop();
-                prevSpId = items[index -1].parentElement.href.split("/").pop();
+              if (node.innerText === name) {
+                result.spId = node.parentElement.href.split('/').pop();
+                result.prevSpId = items[index - 1].parentElement.href.split('/').pop();
                 node.click();
               }
             });
-            return { spId, prevSpId };
+            return result;
           }, spName)
           .then((result) => {
             spId = result.spId;
@@ -156,10 +155,10 @@ module.exports.test = function foo(uiTestCtx) {
           .wait(wait)
           .click('a[href="/settings/organization/servicePoints"]')
           .wait(wait)
-          .evaluate((spName) => {
+          .evaluate((name) => {
             const items = document.querySelectorAll('a > div');
             items.forEach((servicePointEl) => {
-              if (servicePointEl.innerText === spName) {
+              if (servicePointEl.innerText === name) {
                 servicePointEl.click();
               }
             });
