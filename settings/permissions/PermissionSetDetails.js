@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import { Accordion, ExpandAllButton } from '@folio/stripes-components/lib/Accordion';
+import ViewMetaData from '@folio/stripes-smart-components/lib/ViewMetaData';
 
 import RenderPermissions from '../../lib/RenderPermissions';
 
@@ -27,6 +28,8 @@ class PermissionSetDetails extends React.Component {
         assignedPermissions: true,
       },
     };
+
+    this.cViewMetaData = props.stripes.connect(ViewMetaData);
   }
 
   handleExpandAll(sections) {
@@ -61,6 +64,13 @@ class PermissionSetDetails extends React.Component {
           onToggle={this.handleSectionToggle}
           label={this.props.stripes.intl.formatMessage({ id: 'ui-users.permissions.generalInformation' })}
         >
+          {selectedSet.metadata && selectedSet.metadata.createdDate &&
+            <Row>
+              <Col xs={12}>
+                <this.cViewMetaData metadata={selectedSet.metadata} />
+              </Col>
+            </Row>
+          }
           <Row>
             <Col xs={12}>
               <section>
