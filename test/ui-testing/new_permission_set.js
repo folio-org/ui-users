@@ -36,6 +36,7 @@ module.exports.test = function foo(uiTestCtx) {
           .wait('button[title^="Add "]')
           .click('button[title^="Add "]')
           .wait('#input-permission-title')
+          .wait(5000) // FIXME: waiting for all the /perms endpoints to return
           .insert('#input-permission-title', displayName)
           .insert('#input-permission-description', description)
           .click('#clickable-add-permission')
