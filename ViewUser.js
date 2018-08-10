@@ -49,6 +49,10 @@ class ViewUser extends React.Component {
     patronGroups: {
       type: 'okapi',
       path: 'groups',
+      params: {
+        query: 'cql.allRecords=1 sortby group',
+        limit: '40',
+      },
       records: 'usergroups',
     },
     // NOTE: 'indexField', used as a parameter in the userPermissions paths,
