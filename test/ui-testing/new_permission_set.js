@@ -87,7 +87,7 @@ module.exports.test = function foo(uiTestCtx) {
           .click('a[href^="/settings/users/groups"]')
           .wait('a[href="/settings/users/perms"]')
           .click('a[href="/settings/users/perms"]')
-          .wait(222)
+          .waitUntilNetworkIdle(1000)
           .evaluate((euuid) => {
             const element = document.querySelector(`a[href*="${euuid}"]`);
             if (element) {
