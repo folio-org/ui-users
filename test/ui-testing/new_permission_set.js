@@ -87,12 +87,13 @@ module.exports.test = function foo(uiTestCtx) {
           .click('a[href^="/settings/users/groups"]')
           .wait('a[href="/settings/users/perms"]')
           .click('a[href="/settings/users/perms"]')
-          .wait(222)
-          .evaluate((euuid) => {
+          .wait((euuid) => {
             const element = document.querySelector(`a[href*="${euuid}"]`);
             if (element) {
-              throw new Error(`Failed at deleting ${euuid}`);
+              return false;
             }
+
+            return true;
           }, uuid)
           .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
           .then(() => { done(); })
