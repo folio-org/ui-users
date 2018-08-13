@@ -22,7 +22,7 @@ const filterConfig = [
     name: 'active',
     cql: 'active',
     values: [
-      { name: 'Show inactive users', cql: 'false' },
+      { name: 'Include inactive users', cql: 'false' },
       { name: 'Show active users', cql: 'true', hidden: true },
     ],
   },
