@@ -316,6 +316,8 @@
   "loans.details.feeFine": "Fee/fine",
   "loans.details.proxyBorrower": "Proxy borrower",
 
+  "permissions.noSponsorsFound": "No sponsors found",
+  "permissions.noProxiesFound": "No proxies found",
   "permissions.empty": "No permissions found",
   "permissions.removePermission": "Remove permission",
   "permissions.addPermission": "Add permission",
@@ -390,6 +392,7 @@
   "errors.missingRequiredPatronGroup": "Please select a patron group",
   "errors.missingRequiredContactType": "Please select contact type",
   "errors.missingRequiredAddressType": "Please select address type",
+  "errors.missingRequiredPreferredServicePoint": "Please fill this in to continue",
 
   "errors.noMatch.oops": "Uh-oh!",
   "errors.noMatch.how": "How did you get to {location}?",
@@ -420,7 +423,7 @@
   "okay": "OK",
   "description": "Description",
   "duplicated": "{field} alredy exist",
-
+  "showTags": "Show Tags",
   "itemDetails": "Item Details",
   "renew": "Renew",
   "bulkActions.tooltip": "Multiple loans can be processed at the same time. Please select loans first.",
@@ -469,11 +472,22 @@
   "payments.singular": "Payment method",
   "payments.columns.name": "Name*",
   "payments.columns.refund": "Refund method allowed",
-  
+
   "refunds.label": "Fee/fine: Refund reasons",
   "refunds.singular": "Refund reason",
   "refunds.columns.nameReason": "Name*",
   "refunds.columns.description": "Description",
+
+  "sp.servicePoints": "Service points",
+  "sp.availableServicePoints": "Available service points",
+  "sp.addServicePoints": "Add service points",
+  "sp.servicePointPreference": "Service point preference",
+  "sp.selectServicePoint": "Select service point",
+  "sp.noServicePoints": "No service points found",
+  "sp.removeServicePoint": "Remove service point",
+  "sp.column.name": "Name",
+  "sp.column.library": "Library",
+  "sp.preferredSPNone": "None",
 
   "waives.label": "Fee/fine: Waive reasons",
   "waives.singular": "Waive reason",
@@ -511,7 +525,7 @@
   "charge.item.status": "Item Status",
   "charge.item.callNumber": "Call number",
   "charge.item.location": "Location",
-     
+
   "details.columns.comments": "comments",
   "details.columns.date": "Action Date",
   "details.columns.action": "Action",

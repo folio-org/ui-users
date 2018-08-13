@@ -22,8 +22,8 @@ const filterConfig = [
     name: 'active',
     cql: 'active',
     values: [
-      { name: 'Active', cql: 'true' },
-      { name: 'Inactive', cql: 'false' },
+      { name: 'Include inactive users', cql: 'false' },
+      { name: 'Show active users', cql: 'true', hidden: true },
     ],
   },
   {
@@ -77,7 +77,11 @@ class Users extends React.Component {
     },
     patronGroups: {
       type: 'okapi',
-      path: 'groups?query=cql.allRecords=1 sortby group',
+      path: 'groups',
+      params: {
+        query: 'cql.allRecords=1 sortby group',
+        limit: '40',
+      },
       records: 'usergroups',
     },
     addressTypes: {

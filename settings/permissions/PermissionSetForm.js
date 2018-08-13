@@ -11,6 +11,7 @@ import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import IfPermission from '@folio/stripes-components/lib/IfPermission';
 import IconButton from '@folio/stripes-components/lib/IconButton';
 import Icon from '@folio/stripes-components/lib/Icon';
+import ViewMetaData from '@folio/stripes-smart-components/lib/ViewMetaData';
 
 // eslint-disable-next-line import/no-unresolved
 import ConfirmationModal from '@folio/stripes-components/lib/ConfirmationModal';
@@ -47,7 +48,7 @@ class PermissionSetForm extends React.Component {
     this.handleExpandAll = this.handleExpandAll.bind(this);
     this.handleSectionToggle = this.handleSectionToggle.bind(this);
     this.containedPermissions = props.stripes.connect(ContainedPermissions);
-
+    this.cViewMetaData = props.stripes.connect(ViewMetaData);
     this.state = {
       confirmDelete: false,
       sections: {
@@ -180,6 +181,13 @@ class PermissionSetForm extends React.Component {
               onToggle={this.handleSectionToggle}
               label={intl.formatMessage({ id: 'ui-users.permissions.generalInformation' })}
             >
+              {selectedSet.metadata && selectedSet.metadata.createdDate &&
+                <Row>
+                  <Col xs={12}>
+                    <this.cViewMetaData metadata={selectedSet.metadata} />
+                  </Col>
+                </Row>
+              }
               <Row>
                 <Col xs={8}>
                   <section>
@@ -190,6 +198,7 @@ class PermissionSetForm extends React.Component {
               </Row>
             </Accordion>
             <ConfirmationModal
+              id="deletepermissionset-confirmation"
               open={confirmDelete}
               heading={intl.formatMessage({ id: 'ui-users.permissions.deletePermissionSet' })}
               message={confirmationMessage}

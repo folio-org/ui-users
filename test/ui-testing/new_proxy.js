@@ -25,9 +25,13 @@ module.exports.test = function foo(uiTestCtx) {
 
       it('should get active user barcodes', (done) => {
         nightmare
+          .wait('#clickable-users-module')
           .click('#clickable-users-module')
           .wait(1000)
-          .click('#clickable-filter-active-Active')
+          .wait('#input-user-search')
+          .wait(1000)
+          .type('#input-user-search', '0')
+          .wait(1000)
           .wait('#list-users div[role="listitem"]:nth-child(9)')
           .evaluate(() => {
             const ubc = [];
@@ -54,6 +58,11 @@ module.exports.test = function foo(uiTestCtx) {
 
       it('should add a proxy for user 1', (done) => {
         nightmare
+          .wait(1000)
+          .wait('#input-user-search')
+          .type('#input-user-search', '0')
+          .wait('#clickable-reset-all')
+          .click('#clickable-reset-all')
           .insert('#input-user-search', userIds[0].barcode)
           .wait('#clickable-edituser')
           .click('#clickable-edituser')
@@ -68,32 +77,39 @@ module.exports.test = function foo(uiTestCtx) {
           .click(`div[aria-label="Select User"] #list-users div[role="listitem"] > a > div[title="${userIds[1].barcode}"]`)
           .wait('#clickable-updateuser')
           .click('#clickable-updateuser')
-          .then(() => { done(); })
+          .wait(1000)
+          .then(() => {
+            done();
+          })
           .catch(done);
       });
 
       it('should delete a sponsor of user 2', (done) => {
         nightmare
-          /* .wait(4444)
-          .evaluate(() => {
-            document.querySelector('#input-user-search').value = '';
-          }) */
-          .wait('#users-module-display > div > section:nth-child(2) > div > button')
-          .click('#users-module-display > div > section:nth-child(2) > div > button')
           .wait(2222)
+          // put some junk in the search field to get the reset button
+          // so we can click it and be sure the field is clear before
+          // entering new data.
+          .type('#input-user-search', 'asdf')
+          .wait('#clickable-reset-all')
+          .click('#clickable-reset-all')
+          .wait(222)
           .type('#input-user-search', userIds[1].barcode)
           .wait(`#list-users div[role="listitem"] > a > div[title="${userIds[1].barcode}"]`)
+          .wait(222)
           .click(`#list-users div[role="listitem"] > a > div[title="${userIds[1].barcode}"]`)
           .wait(222)
+          .wait('#accordion-toggle-button-proxySection')
+          .wait('#clickable-edituser')
           .click('#clickable-edituser')
           .wait('#accordion-toggle-button-proxy')
           .click('#accordion-toggle-button-proxy')
           .wait(`#proxy a[href*="${userIds[0].uuid}"]`)
           .xclick(`id("proxy")//a[contains(@href, "${userIds[0].uuid}")]/../../../..//button`)
           .wait(2111)
-          .wait('#clickable-deleteproxy-confirmation-confirm')
+          .wait('#clickable-deleteproxies-confirmation-confirm')
           .wait(2111)
-          .click('#clickable-deleteproxy-confirmation-confirm')
+          .click('#clickable-deleteproxies-confirmation-confirm')
           .wait('#clickable-updateuser')
           .click('#clickable-updateuser')
           .wait(1111)
