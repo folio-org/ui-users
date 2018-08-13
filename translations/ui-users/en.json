@@ -419,6 +419,7 @@
   "edit": "Edit",
   "okay": "OK",
   "description": "Description",
+  "duplicated": "{field} alredy exist",
 
   "itemDetails": "Item Details",
   "renew": "Renew",
@@ -448,7 +449,8 @@
   "feefines.errors.amountPositive": "Default Amount must be positive",
   "feefines.errors.taxVatNumeric": "Tax/Vat must be numeric",
   "feefines.errors.taxVat": "Tax/Vat must be a number less than 100",
-  "feefines.errors.exist": "The Fee/Fine Type alredy exist",
+  "feefines.errors.exist": "Fee/fine type exists",
+  "feefines.errors.existShared": "Fee/fine type exists for owner {owner}",
 
   "feefines.modal.error": "Select one to continue",
   "feefines.modal.yes": "Yes",
@@ -479,12 +481,12 @@
   "waives.columns.desc": "Description",
 
   "comment.title": "Fee/fine: Comment required",
-  "comment.message": "Setting was successfully updated.",
+  "comment.message": "Comment required settings were successfully updated.",
   "comment.save": "Save",
-  "comment.paid": "Require comment when fee/fine fully/partialy paid",
-  "comment.waived": "Require comment when fee/fine fully/partialy waived",
-  "comment.transferred": "Require comment when fee/fine fully/partialy transferred",
-  "comment.refunded": "Require comment when fee/fine fully/partialy refunded",
+  "comment.paid": "Require comment when fee/fine fully/partially paid",
+  "comment.waived": "Require comment when fee/fine fully/partially waived",
+  "comment.transferred": "Require comment when fee/fine fully/partially transferred",
+  "comment.refunded": "Require comment when fee/fine fully/partially refunded",
 
   "charge.owner.label": "Fee/fine owner*",
   "charge.feefine.label": "Fee/fine type*",
