@@ -72,12 +72,13 @@ module.exports.test = function foo(uiTestCtx) {
           .click('#clickable-delete-set')
           .wait('#clickable-deletepermissionset-confirmation-confirm')
           .click('#clickable-deletepermissionset-confirmation-confirm')
+          .waitUntilNetworkIdle(500)
           .url()
           .then((result) => {
             done();
             uuid = result;
             uuid = uuid.replace(/^.+\/([^?]+).*/, '$1');
-            // console.log(`          ID of deleted permission set: ${uuid}`);
+            console.log(`          ID of deleted permission set: ${uuid}`);
           })
           .catch(done);
       });
