@@ -77,7 +77,11 @@ class Users extends React.Component {
     },
     patronGroups: {
       type: 'okapi',
-      path: 'groups?query=cql.allRecords=1 sortby group',
+      path: 'groups',
+      params: {
+        query: 'cql.allRecords=1 sortby group',
+        limit: '40',
+      },
       records: 'usergroups',
     },
     addressTypes: {
