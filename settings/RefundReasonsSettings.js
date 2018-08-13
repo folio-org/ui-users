@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import ControlledVocab from '@folio/stripes-smart-components/lib/ControlledVocab';
 
 class RefundReasonsSettings extends React.Component {
@@ -15,9 +16,24 @@ class RefundReasonsSettings extends React.Component {
     this.connectedControlledVocab = props.stripes.connect(ControlledVocab);
   }
   render() {
+    const validate = (item, index, items) => {
+      const error = {};
+      for (let i = 0; i < items.length; i++) {
+        const obj = items[i];
+        if ((index !== i) && ((obj.nameReason || '').localeCompare(item.nameReason, 'sv', { sensitivity: 'base' }) === 0)) {
+          error.nameReason = <SafeHTMLMessage
+            id="ui-users.duplicated"
+            values={{ field: this.props.stripes.intl.formatMessage({ id: 'ui-users.refunds.singular' }) }}
+          />;
+        }
+      }
+      return error;
+    };
+
     return (
       <this.connectedControlledVocab
         {...this.props}
+        validate={validate}
         baseUrl="refunds"
         records="refunds"
         label={this.props.stripes.intl.formatMessage({ id: 'ui-users.refunds.label' })}
