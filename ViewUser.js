@@ -49,6 +49,10 @@ class ViewUser extends React.Component {
     patronGroups: {
       type: 'okapi',
       path: 'groups',
+      params: {
+        query: 'cql.allRecords=1 sortby group',
+        limit: '40',
+      },
       records: 'usergroups',
     },
     // NOTE: 'indexField', used as a parameter in the userPermissions paths,
@@ -437,7 +441,7 @@ class ViewUser extends React.Component {
       <PaneMenu>
         {
           tagsEnabled && <IconButton
-            icon="default"
+            icon="tag"
             title={formatMsg({ id: 'ui-users.showTags' })}
             id="clickable-show-tags"
             style={{ visibility: !user ? 'hidden' : 'visible' }}
