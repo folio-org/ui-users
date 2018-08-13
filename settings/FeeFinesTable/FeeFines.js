@@ -9,21 +9,39 @@ import EditableList from '@folio/stripes-components/lib/EditableList';
 import Owners from './Owners';
 import CopyModal from './CopyModal';
 
+function includes(arr, str, input, out) {
+  for (let i = 0; i < arr.length; i++) {
+    const obj = arr[i];
+    if (obj[input].localeCompare(str, 'sv', { sensitivity: 'base' }) === 0) {
+      return obj[out];
+    }
+  }
+  return undefined;
+}
+
 function validate(type, props) {
-  const feefines = props.contentData.map(f => f.feeFineType);
   const items = type.items || [];
+  const owners = _.get(props.resources, ['owners', 'records'], []);
+  const ownerId = _.get(props.resources, ['activeRecord', 'ownerId'], '');
   const errors = { items: [] };
   items.forEach((item, i) => {
+    const allfeefines = _.get(props.resources, ['allfeefines', 'records'], []);
     errors.items.push({});
     if (Number.isNaN(item.defaultAmount) && item.defaultAmount) { errors.items[i].defaultAmount = props.stripes.intl.formatMessage({ id: 'ui-users.feefines.errors.amountNumeric' }); }
     if (parseFloat(item.defaultAmount) < 0) { errors.items[i].defaultAmount = props.stripes.intl.formatMessage({ id: 'ui-users.feefines.errors.amountPositive' }); }
-    if (Number.isNaN(item.taxVat) && item.taxVat) { errors.items[i].taxVat = props.stripes.intl.formatMessage({ id: 'ui-users.feefines.errors.taxVatNumeric' }); }
-    if (parseFloat(item.taxVat) < 0 || parseFloat(item.taxVat) > 100) { errors.items[i].taxVat = props.stripes.intl.formatMessage({ id: 'ui-users.feefines.errors.taxVat' }); }
-    if (!item.id) {
-      if (props.shared.includes(item.feeFineType) || feefines.includes(item.feeFineType)) {
-        errors.items[i].feeFineType = props.stripes.intl.formatMessage({ id: 'ui-users.feefines.errors.exist' });
-      }
+
+    const exist = includes(allfeefines.filter(f => f.id !== item.id), item.feeFineType, 'feeFineType', 'ownerId') || '';
+    const owner = includes(owners, exist, 'id', 'owner');
+    const shared = owners.find(o => o.owner === 'Shared').id || '';
+    if (exist === ownerId) {
+      errors.items[i].feeFineType = props.stripes.intl.formatMessage({ id: 'ui-users.feefines.errors.exist' });
+    } else if (owner !== undefined && (ownerId === shared || owner === 'Shared')) {
+      errors.items[i].feeFineType = <SafeHTMLMessage
+        id="ui-users.feefines.errors.existShared"
+        values={{ owner }}
+      />;
     }
+
     if (!item.feeFineType) { errors.items[i].feeFineType = props.stripes.intl.formatMessage({ id: 'ui-users.errors.missingRequiredField' }); }
   });
   return errors;
@@ -234,7 +252,6 @@ class FeeFines extends React.Component {
 
     const formatter = {
       defaultAmount: i => ((i.defaultAmount) ? parseFloat(i.defaultAmount).toFixed(2) : '-'),
-      taxVat: i => ((i.taxVat) ? parseFloat(i.taxVat).toFixed(2) : '-'),
     };
 
     const actionProps = {
@@ -263,11 +280,10 @@ class FeeFines extends React.Component {
           label={this.props.stripes.intl.formatMessage({ id: 'ui-users.feefines.title' })}
           createButtonLabel={this.props.stripes.intl.formatMessage({ id: 'stripes-core.button.new' })}
           contentData={this.props.resources.feefines.records || []}
-          visibleFields={['feeFineType', 'defaultAmount', 'taxVat']}
+          visibleFields={['feeFineType', 'defaultAmount']}
           columnMapping={{
             feeFineType: this.props.stripes.intl.formatMessage({ id: 'ui-users.feefines.columns.type' }),
-            defaultAmount: this.props.stripes.intl.formatMessage({ id: 'ui-users.feefines.columns.amount' }),
-            taxVat: this.props.stripes.intl.formatMessage({ id: 'ui-users.feefines.columns.taxVat' })
+            defaultAmount: this.props.stripes.intl.formatMessage({ id: 'ui-users.feefines.columns.amount' })
           }}
           itemTemplate={{}}
           onUpdate={this.onUpdateType}
