@@ -86,6 +86,7 @@
 * Configure tags helper app in users. Part of STSMACOM-113.
 * Include active users in every search. Fixes UIU-400.
 * Fetch up to 40 patron groups for filters on the main page, and for editing users. Fixes UIU-600.
+* Add metadata to user form. Fixes UIU-524.
 
 ## [2.12.0](https://github.com/folio-org/ui-users/tree/v2.12.0) (2017-11-28)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.11.0...v2.12.0)
