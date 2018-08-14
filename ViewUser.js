@@ -543,15 +543,17 @@ class ViewUser extends React.Component {
 
         <IfPermission perm="circulation.loans.collection.get">
           <IfInterface name="circulation" version="3.0">
-            <this.connectedUserLoans
-              onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
-              onClickViewOpenLoans={this.onClickViewOpenLoans}
-              onClickViewClosedLoans={this.onClickViewClosedLoans}
-              expanded={this.state.sections.loansSection}
-              onToggle={this.handleSectionToggle}
-              accordionId="loansSection"
-              {...this.props}
-            />
+            <IfInterface name="loan-policy-storage" version="1.0">
+              <this.connectedUserLoans
+                onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
+                onClickViewOpenLoans={this.onClickViewOpenLoans}
+                onClickViewClosedLoans={this.onClickViewClosedLoans}
+                expanded={this.state.sections.loansSection}
+                onToggle={this.handleSectionToggle}
+                accordionId="loansSection"
+                {...this.props}
+              />
+            </IfInterface>
           </IfInterface>
         </IfPermission>
 
