@@ -17,13 +17,17 @@ import css from './LoansHistory.css';
  * the loan's item-record.
  */
 class LoansHistory extends React.Component {
-  static manifest = {
+  static manifest = Object.freeze({
     loansHistory: {
       type: 'okapi',
+      path: 'circulation/loans',
       records: 'loans',
-      path: 'circulation/loans?query=(userId=:{id}) sortby id&limit=100',
+      params: {
+        query: '(userId=!{user.id}) sortby id',
+        limit: '100',
+      },
     },
-  };
+  });
 
   static propTypes = {
     stripes: PropTypes.shape({
