@@ -484,6 +484,7 @@
   "sp.servicePointPreference": "Service point preference",
   "sp.selectServicePoint": "Select service point",
   "sp.noServicePoints": "No service points found",
+  "sp.servicePointsFound": "{count} results found",
   "sp.removeServicePoint": "Remove service point",
   "sp.column.name": "Name",
   "sp.column.library": "Library",

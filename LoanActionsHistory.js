@@ -245,7 +245,7 @@ class LoanActionsHistory extends React.Component {
     const { nonRenewedLoanItems } = this.state;
     const loanActionsFormatter = {
       action: la => intl.formatMessage({ id: loanActionMap[la.action] }),
-      actionDate: la => this.formatDateTime(la.loanDate),
+      actionDate: la => this.formatDateTime(_.get(la, ['metadata', 'updatedDate'], '-')),
       dueDate: la => this.formatDateTime(la.dueDate),
       itemStatus: la => la.itemStatus,
       Source: la => <Link to={`/users/view/${la.user.id}`}>{getFullName(la.user)}</Link>,
