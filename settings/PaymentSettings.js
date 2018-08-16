@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Select from '@folio/stripes-components/lib/Select';
 import { Field } from 'redux-form';
 import ControlledVocab from '@folio/stripes-smart-components/lib/ControlledVocab';
+import { validate } from '../util';
 
 class PaymentSettings extends React.Component {
   static propTypes = {
@@ -18,6 +19,8 @@ class PaymentSettings extends React.Component {
   }
 
   render() {
+    const label = this.props.stripes.intl.formatMessage({ id: 'ui-users.payments.singular' });
+
     const fieldComponents = {
       'allowedRefundMethod': ({ fieldProps }) => (
         <Field
@@ -40,6 +43,7 @@ class PaymentSettings extends React.Component {
     return (
       <this.connectedControlledVocab
         {...this.props}
+        validate={(item, index, items) => validate(item, index, items, 'nameMethod', label)}
         fieldComponents={fieldComponents}
         formatter={formatter}
         baseUrl="payments"
