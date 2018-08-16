@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Select from '@folio/stripes-components/lib/Select';
 import { Field } from 'redux-form';
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import ControlledVocab from '@folio/stripes-smart-components/lib/ControlledVocab';
+import { validate } from '../util';
 
 class PaymentSettings extends React.Component {
   static propTypes = {
@@ -19,19 +19,7 @@ class PaymentSettings extends React.Component {
   }
 
   render() {
-    const validate = (item, index, items) => {
-      const error = {};
-      for (let i = 0; i < items.length; i++) {
-        const obj = items[i];
-        if ((index !== i) && ((obj.nameMethod || '').localeCompare(item.nameMethod, 'sv', { sensitivity: 'base' }) === 0)) {
-          error.nameMethod = <SafeHTMLMessage
-            id="ui-users.duplicated"
-            values={{ field: this.props.stripes.intl.formatMessage({ id: 'ui-users.payments.singular' }) }}
-          />;
-        }
-      }
-      return error;
-    };
+    const label = this.props.stripes.intl.formatMessage({ id: 'ui-users.payments.singular' });
 
     const fieldComponents = {
       'allowedRefundMethod': ({ fieldProps }) => (
@@ -55,7 +43,7 @@ class PaymentSettings extends React.Component {
     return (
       <this.connectedControlledVocab
         {...this.props}
-        validate={validate}
+        validate={(item, index, items) => validate(item, index, items, 'nameMethod', label)}
         fieldComponents={fieldComponents}
         formatter={formatter}
         baseUrl="payments"
