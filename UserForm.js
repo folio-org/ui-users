@@ -17,6 +17,7 @@ import {
   EditContactInfo,
   EditProxy,
   EditUserPerms,
+  EditServicePoints,
 } from './lib/EditSections';
 import { getFullName } from './util';
 
@@ -55,6 +56,10 @@ function validate(values, props) {
     });
   }
 
+  if (values.servicePoints && values.preferredServicePoint === undefined) {
+    errors.preferredServicePoint = <FormattedMessage id="ui-users.errors.missingRequiredPreferredServicePoint" />;
+  }
+
   return errors;
 }
 
@@ -90,6 +95,7 @@ class UserForm extends React.Component {
         GET: PropTypes.func.isRequired,
       }).isRequired,
     }),
+    parentResources: PropTypes.object,
     pristine: PropTypes.bool,
     submitting: PropTypes.bool,
     onCancel: PropTypes.func,
@@ -106,6 +112,7 @@ class UserForm extends React.Component {
         contactInfo: true,
         proxy: false,
         permissions: false,
+        servicePoints: false,
       },
     };
 
@@ -114,7 +121,7 @@ class UserForm extends React.Component {
     this.handleKeyDown = this.handleKeyDown.bind(this);
 
     if (props.initialValues.id) {
-      this.editUserPerms = props.stripes.connect(EditUserPerms);
+      this.connectedEditUserPerms = props.stripes.connect(EditUserPerms);
     }
   }
 
@@ -197,7 +204,8 @@ class UserForm extends React.Component {
             {initialValues.id &&
               <div>
                 <EditProxy accordionId="proxy" expanded={sections.proxy} onToggle={this.handleSectionToggle} {...this.props} />
-                <this.editUserPerms accordionId="permissions" expanded={sections.permissions} onToggle={this.handleSectionToggle} {...this.props} />
+                <this.connectedEditUserPerms accordionId="permissions" expanded={sections.permissions} onToggle={this.handleSectionToggle} {...this.props} />
+                <EditServicePoints accordionId="servicePoints" expanded={sections.servicePoints} onToggle={this.handleSectionToggle} {...this.props} />
               </div>
             }
           </Pane>

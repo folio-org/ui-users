@@ -49,7 +49,7 @@ class CopyForm extends React.Component {
   render() {
     const options = [];
     this.props.owners.forEach((o) => {
-      if (o.desc !== 'Shared') options.push({ label: o.desc, value: o.id });
+      if (o.owner !== 'Shared') options.push({ label: o.owner, value: o.id });
     });
     return (
       <form>

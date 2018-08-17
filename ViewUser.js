@@ -2,7 +2,7 @@ import { cloneDeep, get, omit, differenceBy, find } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
-import TitleManager from '@folio/stripes-core/src/components/TitleManager';
+import TitleManager from '@folio/stripes-core/src/components/TitleManager'; // eslint-disable-line import/no-unresolved
 import Pane from '@folio/stripes-components/lib/Pane';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
@@ -25,6 +25,7 @@ import AccountActionsHistory from './AccountActionsHistory';
 import { toListAddresses, toUserAddresses } from './converters/address';
 import { getFullName, eachPromise } from './util';
 import withProxy from './withProxy';
+import withServicePoints from './withServicePoints';
 
 import {
   UserInfo,
@@ -34,6 +35,7 @@ import {
   UserPermissions,
   UserLoans,
   UserAccounts,
+  UserServicePoints,
 } from './lib/ViewSections';
 
 class ViewUser extends React.Component {
@@ -44,9 +46,19 @@ class ViewUser extends React.Component {
       path: 'users/:{id}',
       clear: false,
     },
+    loansHistory: {
+      type: 'okapi',
+      records: 'loans',
+      path: 'circulation/loans?query=(userId=:{id}) sortby id&limit=100',
+      permissionsRequired: 'circulation.loans.collection.get',
+    },
     patronGroups: {
       type: 'okapi',
       path: 'groups',
+      params: {
+        query: 'cql.allRecords=1 sortby group',
+        limit: '40',
+      },
       records: 'usergroups',
     },
     // NOTE: 'indexField', used as a parameter in the userPermissions paths,
@@ -99,6 +111,9 @@ class ViewUser extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }),
+    loansHistory: PropTypes.shape({
+      records: PropTypes.arrayOf(PropTypes.object),
+    }),
     mutator: PropTypes.shape({
       selUser: PropTypes.shape({
         PUT: PropTypes.func.isRequired,
@@ -130,9 +145,12 @@ class ViewUser extends React.Component {
     }),
     parentMutator: PropTypes.shape({}),
     updateProxies: PropTypes.func,
+    updateServicePoints: PropTypes.func,
     updateSponsors: PropTypes.func,
     getSponsors: PropTypes.func,
     getProxies: PropTypes.func,
+    getServicePoints: PropTypes.func,
+    getPreferredServicePoint: PropTypes.func,
     tagsEnabled: PropTypes.bool,
   };
 
@@ -151,6 +169,7 @@ class ViewUser extends React.Component {
         loansSection: false,
         accountsSection: false,
         permissionsSection: false,
+        servicePointsSection: false,
       },
     };
 
@@ -328,13 +347,18 @@ class ViewUser extends React.Component {
     return selUser.find(u => u.id === id);
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  getUserFormData(user, addresses, sponsors, proxies, permissions) {
-    const userForData = user ? cloneDeep(user) : user;
-    userForData.personal.addresses = addresses;
-    Object.assign(userForData, { sponsors, proxies, permissions });
+  getUserFormData(user, addresses, sponsors, proxies, permissions, servicePoints, preferredServicePoint) {
+    const userFormData = user ? cloneDeep(user) : user;
+    userFormData.personal.addresses = addresses;
+    Object.assign(userFormData, {
+      sponsors,
+      proxies,
+      permissions,
+      servicePoints,
+      preferredServicePoint,
+    });
 
-    return userForData;
+    return userFormData;
   }
 
   // This is a helper function for the "last updated" date element. Since the
@@ -381,13 +405,14 @@ class ViewUser extends React.Component {
       user.personal.addresses = toUserAddresses(user.personal.addresses, addressTypes); // eslint-disable-line no-param-reassign
     }
 
-    const { proxies, sponsors, permissions } = user;
+    const { proxies, sponsors, permissions, servicePoints, preferredServicePoint } = user;
 
     if (proxies) this.props.updateProxies(proxies);
     if (sponsors) this.props.updateSponsors(sponsors);
     if (permissions) this.updatePermissions(permissions);
+    if (servicePoints) this.props.updateServicePoints(servicePoints, preferredServicePoint);
 
-    const data = omit(user, ['creds', 'proxies', 'sponsors', 'permissions']);
+    const data = omit(user, ['creds', 'proxies', 'sponsors', 'permissions', 'servicePoints', 'preferredServicePoint']);
 
     this.props.mutator.selUser.PUT(data).then(() => {
       this.setState({
@@ -408,21 +433,25 @@ class ViewUser extends React.Component {
 
   render() {
     const { resources, stripes, parentResources, tagsEnabled } = this.props;
+
     const addressTypes = (parentResources.addressTypes || {}).records || [];
     const query = resources.query;
     const user = this.getUser();
     const patronGroups = (resources.patronGroups || {}).records || [];
     const permissions = (resources.permissions || {}).records || [];
     const settings = (resources.settings || {}).records || [];
+    const loans = (resources.loansHistory || {}).records || [];
     const sponsors = this.props.getSponsors();
     const proxies = this.props.getProxies();
+    const servicePoints = this.props.getServicePoints();
+    const preferredServicePoint = this.props.getPreferredServicePoint();
     const formatMsg = stripes.intl.formatMessage;
     const detailMenu =
     (
       <PaneMenu>
         {
           tagsEnabled && <IconButton
-            icon="default"
+            icon="tag"
             title={formatMsg({ id: 'ui-users.showTags' })}
             id="clickable-show-tags"
             style={{ visibility: !user ? 'hidden' : 'visible' }}
@@ -461,11 +490,11 @@ class ViewUser extends React.Component {
     const patronGroupId = get(user, ['patronGroup'], '');
     const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
     const addresses = toListAddresses(get(user, ['personal', 'addresses'], []), addressTypes);
-    const userFormData = this.getUserFormData(user, addresses, sponsors, proxies, permissions);
-
+    const userFormData = this.getUserFormData(user, addresses, sponsors, proxies, permissions, servicePoints, preferredServicePoint);
 
     const loansHistory = (<this.connectedLoansHistory
       user={user}
+      loansHistory={loans}
       patronGroup={patronGroup}
       stripes={stripes}
       history={this.props.history}
@@ -525,15 +554,17 @@ class ViewUser extends React.Component {
 
         <IfPermission perm="circulation.loans.collection.get">
           <IfInterface name="circulation" version="3.0">
-            <this.connectedUserLoans
-              onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
-              onClickViewOpenLoans={this.onClickViewOpenLoans}
-              onClickViewClosedLoans={this.onClickViewClosedLoans}
-              expanded={this.state.sections.loansSection}
-              onToggle={this.handleSectionToggle}
-              accordionId="loansSection"
-              {...this.props}
-            />
+            <IfInterface name="loan-policy-storage" version="1.0">
+              <this.connectedUserLoans
+                onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
+                onClickViewOpenLoans={this.onClickViewOpenLoans}
+                onClickViewClosedLoans={this.onClickViewClosedLoans}
+                expanded={this.state.sections.loansSection}
+                onToggle={this.handleSectionToggle}
+                accordionId="loansSection"
+                {...this.props}
+              />
+            </IfInterface>
           </IfInterface>
         </IfPermission>
 
@@ -550,13 +581,30 @@ class ViewUser extends React.Component {
           </IfInterface>
         </IfPermission>
 
+        <IfPermission perm="inventory-storage.service-points.collection.get,inventory-storage.service-points-users.collection.get">
+          <IfInterface name="service-points-users" version="1.0">
+            <UserServicePoints
+              stripes={stripes}
+              expanded={this.state.sections.servicePointsSection}
+              onToggle={this.handleSectionToggle}
+              accordionId="servicePointsSection"
+              servicePoints={servicePoints}
+              preferredServicePoint={preferredServicePoint}
+              {...this.props}
+            />
+          </IfInterface>
+        </IfPermission>
+
         <Layer isOpen={query.layer ? query.layer === 'edit' : false} contentLabel={formatMsg({ id: 'ui-users.editUserDialog' })}>
           <UserForm
             stripes={stripes}
             initialValues={userFormData}
             onSubmit={(record) => { this.update(record); }}
             onCancel={this.props.onCloseEdit}
-            parentResources={this.props.parentResources}
+            parentResources={{
+              ...this.props.resources,
+              ...this.props.parentResources,
+            }}
             parentMutator={this.props.parentMutator}
           />
         </Layer>
@@ -612,4 +660,4 @@ class ViewUser extends React.Component {
   }
 }
 
-export default withTags(withProxy(ViewUser));
+export default withServicePoints(withTags(withProxy(ViewUser)));
