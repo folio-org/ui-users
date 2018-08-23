@@ -5,7 +5,6 @@
 .actionsBarEnd,
 .actionsBar {
   display: flex;
-  flex-grow: 1;
 }
 
 .actionsBar {
