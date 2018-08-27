@@ -87,6 +87,7 @@
 * Include active users in every search. Fixes UIU-400.
 * Fetch up to 40 patron groups for filters on the main page, and for editing users. Fixes UIU-600.
 * Add metadata to user form. Fixes UIU-524.
+* Shrink surface of test data deps. Fixes UIU-604.
 * Relocate integration tests to platform-core. Refs UIU-605.
 
 ## [2.12.0](https://github.com/folio-org/ui-users/tree/v2.12.0) (2017-11-28)

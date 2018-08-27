@@ -32,7 +32,8 @@ function validate(type, props) {
 
     const exist = includes(allfeefines.filter(f => f.id !== item.id), item.feeFineType, 'feeFineType', 'ownerId') || '';
     const owner = includes(owners, exist, 'id', 'owner');
-    const shared = owners.find(o => o.owner === 'Shared').id || '';
+    const sharedOwner = owners.find(o => o.owner === 'Shared');
+    const shared = sharedOwner ? sharedOwner.id : '';
     if (exist === ownerId) {
       errors.items[i].feeFineType = props.stripes.intl.formatMessage({ id: 'ui-users.feefines.errors.exist' });
     } else if (owner !== undefined && (ownerId === shared || owner === 'Shared')) {
