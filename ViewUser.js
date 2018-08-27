@@ -157,7 +157,7 @@ class ViewUser extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      viewOpenLoansMode: false,
+      viewOpenLoansMode: true,
       selectedLoan: {},
       selectedAccount: {},
       lastUpdate: null,
