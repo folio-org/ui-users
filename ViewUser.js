@@ -46,6 +46,12 @@ class ViewUser extends React.Component {
       path: 'users/:{id}',
       clear: false,
     },
+    loansHistory: {
+      type: 'okapi',
+      records: 'loans',
+      path: 'circulation/loans?query=(userId=:{id}) sortby id&limit=100',
+      permissionsRequired: 'circulation.loans.collection.get',
+    },
     patronGroups: {
       type: 'okapi',
       path: 'groups',
@@ -105,6 +111,9 @@ class ViewUser extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }),
+    loansHistory: PropTypes.shape({
+      records: PropTypes.arrayOf(PropTypes.object),
+    }),
     mutator: PropTypes.shape({
       selUser: PropTypes.shape({
         PUT: PropTypes.func.isRequired,
@@ -148,7 +157,7 @@ class ViewUser extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      viewOpenLoansMode: false,
+      viewOpenLoansMode: true,
       selectedLoan: {},
       selectedAccount: {},
       lastUpdate: null,
@@ -431,6 +440,7 @@ class ViewUser extends React.Component {
     const patronGroups = (resources.patronGroups || {}).records || [];
     const permissions = (resources.permissions || {}).records || [];
     const settings = (resources.settings || {}).records || [];
+    const loans = (resources.loansHistory || {}).records || [];
     const sponsors = this.props.getSponsors();
     const proxies = this.props.getProxies();
     const servicePoints = this.props.getServicePoints();
@@ -484,6 +494,7 @@ class ViewUser extends React.Component {
 
     const loansHistory = (<this.connectedLoansHistory
       user={user}
+      loansHistory={loans}
       patronGroup={patronGroup}
       stripes={stripes}
       history={this.props.history}

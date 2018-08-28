@@ -27,12 +27,9 @@ module.exports.test = function foo(uiTestCtx) {
         nightmare
           .wait('#clickable-users-module')
           .click('#clickable-users-module')
-          .wait(1000)
-          .wait('#input-user-search')
-          .wait(1000)
-          .type('#input-user-search', '0')
-          .wait(1000)
-          .wait('#list-users div[role="listitem"]:nth-child(9)')
+          .wait('#clickable-filter-pg-faculty')
+          .click('#clickable-filter-pg-faculty')
+          .wait('#list-users div[role="listitem"]:nth-child(2)')
           .evaluate(() => {
             const ubc = [];
             const list = document.querySelectorAll('#list-users div[role="listitem"]');
