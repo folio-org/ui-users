@@ -3,8 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
+
 import SearchAndSort from '@folio/stripes-smart-components/lib/SearchAndSort';
-import exportToCsv from '@folio/stripes-util/lib/exportCsv';
 
 import uuid from 'uuid';
 import ViewUser from './ViewUser';
@@ -22,7 +22,7 @@ const filterConfig = [
     name: 'active',
     cql: 'active',
     values: [
-      { name: 'Show inactive users', cql: 'false' },
+      { name: 'Include inactive users', cql: 'false' },
       { name: 'Show active users', cql: 'true', hidden: true },
     ],
   },
@@ -198,20 +198,8 @@ class Users extends React.Component {
       username: user => user.username,
       email: user => _.get(user, ['personal', 'email']),
     };
-    const actionMenuItems = [
-      {
-        label: 'Export to CSV',
-        onClick: (() => {
-          this.props.mutator.resultCount.replace(this.props.resources.records.other.totalRecords);
-          console.debug(this.props.resources.records.records.length)
-          exportToCsv(this.props.resources.records.records, ['id']);
-        }).bind(this),
-        id: "exportToCsvPaneHeaderBtn",
-      },
-    ];
 
     return (<SearchAndSort
-      actionMenuItems={actionMenuItems}
       packageInfo={packageInfo}
       objectName="user"
       filterConfig={filterConfig}
