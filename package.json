@@ -89,7 +89,7 @@
       {
         "permissionName": "ui-users.viewperms",
         "displayName": "Users: Can view permissions assigned to users",
-        "description": "Includes all of view",
+        "description": "Also includes basic permissions to view users",
         "subPermissions": [
           "ui-users.view",
           "perms.users.get"
@@ -105,6 +105,17 @@
           "perms.users.item.put",
           "perms.users.item.post",
           "perms.users.item.delete"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.viewuserservicepoints",
+        "displayName": "Users: Can view service points assigned to users",
+        "description": "Also includes basic permissions to view users",
+        "subPermissions": [
+          "ui-users.view",
+          "inventory-storage.service-points.collection.get",
+          "inventory-storage.service-points-users.collection.get"
         ],
         "visible": true
       },
