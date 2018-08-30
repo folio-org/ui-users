@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ControlledVocab from '@folio/stripes-smart-components/lib/ControlledVocab';
+import { validate } from '../util';
 
 class WaiveSettings extends React.Component {
   static propTypes = {
@@ -15,9 +16,12 @@ class WaiveSettings extends React.Component {
     this.connectedControlledVocab = props.stripes.connect(ControlledVocab);
   }
   render() {
+    const label = this.props.stripes.intl.formatMessage({ id: 'ui-users.waives.singular' });
+
     return (
       <this.connectedControlledVocab
         {...this.props}
+        validate={(item, index, items) => validate(item, index, items, 'nameReason', label)}
         baseUrl="waives"
         records="waives"
         label={this.props.stripes.intl.formatMessage({ id: 'ui-users.waives.label' })}
