@@ -92,7 +92,8 @@
         "description": "Also includes basic permissions to view users",
         "subPermissions": [
           "ui-users.view",
-          "perms.users.get"
+          "perms.users.get",
+          "perms.permissions.get"
         ],
         "visible": true
       },
