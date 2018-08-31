@@ -139,7 +139,7 @@ const withServicePoints = WrappedComponent =>
       }
 
       record.servicePointsIds = servicePoints.map(sp => sp.id);
-      record.defaultServicePointId = preferredServicePoint === '-' ? null : preferredServicePoint;
+      record.defaultServicePointId = (!servicePoints.length || preferredServicePoint === '-') ? null : preferredServicePoint;
 
       mutator(record).then(() => {
         this.props.mutator.servicePointsUsers.reset();
