@@ -92,7 +92,8 @@
         "description": "Also includes basic permissions to view users",
         "subPermissions": [
           "ui-users.view",
-          "perms.users.get"
+          "perms.users.get",
+          "perms.permissions.get"
         ],
         "visible": true
       },
@@ -101,6 +102,7 @@
         "displayName": "Users: Can assign and unassign permissions to users",
         "description": "",
         "subPermissions": [
+          "ui-users.edit",
           "ui-users.viewperms",
           "perms.users.item.put",
           "perms.users.item.post",
@@ -116,6 +118,18 @@
           "ui-users.view",
           "inventory-storage.service-points.collection.get",
           "inventory-storage.service-points-users.collection.get"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.edituserservicepoints",
+        "displayName": "Users: Can assign and unassign service points to users",
+        "description": "",
+        "subPermissions": [
+          "ui-users.edit",
+          "ui-users.viewuserservicepoints",
+          "inventory-storage.service-points-users.item.post",
+          "inventory-storage.service-points-users.item.put"
         ],
         "visible": true
       },
@@ -203,6 +217,7 @@
         "displayName": "Users: Can create, edit and remove proxies",
         "description": "",
         "subPermissions": [
+          "ui-users.edit",
           "ui-users.viewproxies",
           "proxiesfor.item.get",
           "proxiesfor.item.post",
