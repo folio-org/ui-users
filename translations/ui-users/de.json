@@ -510,7 +510,7 @@
     "accounts.open.columns.owner": "fee/fine owner",
     "accounts.open.columns.number": "call number",
     "accounts.open.columns.status": "payment status",
-    "meta.title": "Users",
+    "meta.title": "Nutzer",
     "search": "Search",
     "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}",
     "showNotes": "Show Notes",
