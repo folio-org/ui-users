@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "2.12.3",
+  "version": "2.12.4",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -89,10 +89,11 @@
       {
         "permissionName": "ui-users.viewperms",
         "displayName": "Users: Can view permissions assigned to users",
-        "description": "Includes all of view",
+        "description": "Also includes basic permissions to view users",
         "subPermissions": [
           "ui-users.view",
-          "perms.users.get"
+          "perms.users.get",
+          "perms.permissions.get"
         ],
         "visible": true
       },
@@ -101,10 +102,34 @@
         "displayName": "Users: Can assign and unassign permissions to users",
         "description": "",
         "subPermissions": [
+          "ui-users.edit",
           "ui-users.viewperms",
           "perms.users.item.put",
           "perms.users.item.post",
           "perms.users.item.delete"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.viewuserservicepoints",
+        "displayName": "Users: Can view service points assigned to users",
+        "description": "Also includes basic permissions to view users",
+        "subPermissions": [
+          "ui-users.view",
+          "inventory-storage.service-points.collection.get",
+          "inventory-storage.service-points-users.collection.get"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.edituserservicepoints",
+        "displayName": "Users: Can assign and unassign service points to users",
+        "description": "",
+        "subPermissions": [
+          "ui-users.edit",
+          "ui-users.viewuserservicepoints",
+          "inventory-storage.service-points-users.item.post",
+          "inventory-storage.service-points-users.item.put"
         ],
         "visible": true
       },
@@ -192,6 +217,7 @@
         "displayName": "Users: Can create, edit and remove proxies",
         "description": "",
         "subPermissions": [
+          "ui-users.edit",
           "ui-users.viewproxies",
           "proxiesfor.item.get",
           "proxiesfor.item.post",
@@ -421,7 +447,7 @@
   },
   "dependencies": {
     "@folio/react-intl-safe-html": "^1.0.0",
-    "@folio/stripes-components": "^3.0.0",
+    "@folio/stripes-components": "^3.0.8",
     "@folio/stripes-form": "^0.8.2",
     "@folio/stripes-smart-components": "^1.4.23",
     "classnames": "^2.2.5",

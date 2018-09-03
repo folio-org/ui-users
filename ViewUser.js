@@ -407,10 +407,18 @@ class ViewUser extends React.Component {
 
     const { proxies, sponsors, permissions, servicePoints, preferredServicePoint } = user;
 
-    if (proxies) this.props.updateProxies(proxies);
-    if (sponsors) this.props.updateSponsors(sponsors);
-    if (permissions) this.updatePermissions(permissions);
-    if (servicePoints) this.props.updateServicePoints(servicePoints, preferredServicePoint);
+    if (this.props.stripes.hasPerm('proxiesfor.item.put,proxiesfor.item.post')) {
+      if (proxies) this.props.updateProxies(proxies);
+      if (sponsors) this.props.updateSponsors(sponsors);
+    }
+
+    if (permissions) {
+      this.updatePermissions(permissions);
+    }
+
+    if (servicePoints && this.props.stripes.hasPerm('inventory-storage.service-points-users.item.post,inventory-storage.service-points-users.item.put')) {
+      this.props.updateServicePoints(servicePoints, preferredServicePoint);
+    }
 
     const data = omit(user, ['creds', 'proxies', 'sponsors', 'permissions', 'servicePoints', 'preferredServicePoint']);
 
