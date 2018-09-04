@@ -9,7 +9,7 @@
 * Add setting for show/hide profile picture. Fixes UIU-327.
 * Seconds should not display in due date time. Fixes UIU-328.
 * Display user loan count (regression). Fixes UIU-308.
-* Use sentence-case, not title case. Refs UIU-283.
+* Use sentence-case in pane and menu titles, not title case. Refs UIU-283.
 * Use react-intl `<FormattedDate>` and `<FormattedTime>` for date/time formatting. Fixes UIU-342.
 * Add loaders to loan counters. Fixes UIU-343.
 * Make password required. Fixes UIU-344.
@@ -36,7 +36,7 @@
 * Additional "No proxies/No sponsors" formatting. Refs UX-115.
 * Rewire loan links from items to inventory. Fixes UIU-368.
 * Relabel elements in user details Proxy section. Fixes UIU-370.
-* Get fixed renewal period from loan policy. Fixes UIU-405.
+* Get fixed renewal period from loan policy. Fixes UIU-405, but XXX this issue does not exist.
 * Get rolling renewal period from loan policy. Fixes UIU-415.
 * Add renew button to loan details. Fixes UIU-395.
 * Make perm set title required. Fixes UIU-412.
@@ -57,7 +57,7 @@
 * Update new permission set detail record. Fixes UIU-410 and UIU-404.
 * Deprecate `transitionToParams` in favor of `this.props.mutator.query.update`. Fixes UIU-418.
 * Use correct time offset on open loans view. Fixes UIU-440.
-* Fixed username validation in UserForm (IU-422)
+* Fixed username validation in UserForm (UIU-422)
 * Move item details link to the options menu. Refs UIU-407.
 * Enter key should not submit the user edit form. Fixes UIU-394.
 * Updated loans views to match requirements of LIBAPP-233.
@@ -69,8 +69,7 @@
 * Fix problem where creating a new user would display a blank page. Fixes UIU-443.
 * Fix manually editing permission sets. Fixes UIU-472.
 * Make username and password optional, though mutually dependent. Fixes UIU-389.
-* Handle metadata field case insensitively. Fixes UIU-471.
-* Bah. One case to rule them all. Handles UIU-471 in concert with CIRCSTORE-43.
+* Handle metadata field case insensitively. Fixes UIU-471 in concert with CIRCSTORE-43.
 * `<IfInterface>` test should match dependency version in `package.json`. Refs UIU-471.
 * Restore patron-group sort. Fixes UIU-481.
 * Use new proxyFor schema instead of meta. Fixes UIU-495.
@@ -79,7 +78,7 @@
 * Update paths for relocated components. Refs STCOM-277.
 * Use `cql.allIndexes=1` when no query is supplied, instead of a wildcard. Fixes UIU-541.
 * Use new renew-by-barcode API for renew. Fixes UIU-538.
-* Removed "Accrue-fees-to" functionality for proxy/sponsors
+* Removed "Accrue-fees-to" functionality for proxy/sponsors.
 * Adjust renew error messages. Fixes UIU-552.
 * Lower-case search terms AND permission names when searching. Refs UIORG-76.
 * Provide an id prop to `<ConfirmationModal>` to avoid it autogenerating one for us. Refs STCOM-317.
