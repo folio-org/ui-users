@@ -21,15 +21,42 @@ The other parts that are needed are the Okapi gateway, various server-side modul
 
 (At some point, this process will be dramatically streamlined; but at present, this software is primarily for developers to work on, rather than for users to use.)
 
-## Testing
+## Build and serve
 
-If you are doing development from git checkouts, you can use `npm test` or `yarn test` to run a regression-test suite, provided that:
+To build and serve `ui-users` in isolation for development purposes, run the "start" package script.
+```
+$ yarn start
+```
 
-1. You have `ui-testing` checked out next to `ui-users`.
-2. Your `ui-users` checkout is `yarn link`ed into `ui-testing`.
-3. You are running a Stripes server on localhost:3000.
+The default configuration assumes an Okapi instance is running on http://localhost:9130 with tenant "diku".  The options `--okapi` and `--tenant` can be provided to match your environment.
+```
+$ yarn start --okapi http://localhost:9130 --tenant diku
+```
 
-(Most developers' environments meet these requirements.)
+See the [serve](https://github.com/folio-org/stripes-cli/blob/master/doc/commands.md#serve-command) command reference in `stripes-cli` for a list of available options.  Note: Stripes-cli options can be persisted in [configuration file](https://github.com/folio-org/stripes-cli/blob/master/doc/user-guide.md#configuration) for convenience.
+
+
+## Tests
+
+Integration tests require a running Okapi.  The default configuration expects Okapi running on http://localhost:9130 with tenant "diku".  To build and run integration tests for `ui-users` with these defaults, run the `test-int` script.
+```
+$ yarn test-int
+```
+
+To view tests while they are run, provide the `--show` option.
+```
+$ yarn test-int --show
+```
+
+To skip the build step and run integration tests against a build that is already running, provide the URL.
+```
+$ yarn test-int --url http://folio-testing.aws.indexdata.com/
+```
+
+As a convenience, `--local` can be used in place of `--url http://localhost:3000` for running tests a development server that has already been started.
+```
+$ yarn test-int --local
+```
 
 ## Additional information
 
