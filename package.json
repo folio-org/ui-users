@@ -407,7 +407,7 @@
     "build": "stripes build",
     "lint": "eslint .",
     "test": "echo 'No unit tests implemented'",
-    "test-int": "stripes test nightmare",
+    "test-int": "stripes test nightmare"
   },
   "devDependencies": {
     "@folio/eslint-config-stripes": "^2.0.3",
