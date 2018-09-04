@@ -1,6 +1,7 @@
 # Change history for ui-users
 
-## 2.13.0 (IN PROGRESS)
+## [2.13.0](https://github.com/folio-org/ui-users/tree/v2.13.0) (2018-09-04)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.12.0...v2.13.0)
 
 * Refine user details view. Fixes UIU-324.
 * Display permission count when section is collapsed on user form. Fixes UIU-331.
@@ -9,19 +10,17 @@
 * Add setting for show/hide profile picture. Fixes UIU-327.
 * Seconds should not display in due date time. Fixes UIU-328.
 * Display user loan count (regression). Fixes UIU-308.
-* Use sentence-case, not title case. Refs UIU-283.
 * Use react-intl `<FormattedDate>` and `<FormattedTime>` for date/time formatting. Fixes UIU-342.
 * Add loaders to loan counters. Fixes UIU-343.
 * Make password required. Fixes UIU-344.
 * Setup permissions for proxies. Fixes UIU-349.
-* Refine last updated metadata display. Fixes UIU-325.
 * Make FOLIO number read only. Fixes UIU-348.
 * Use consistent language for "no `<attribute>` found" messages. Fixes UX-115.
 * Hide proxy section if user lacks sufficient permission to see it. Fixes UIU-363.
 * Add Save button to user settings. Fixes UIU-354.
 * Disable deletion of in-use patron groups. Fixes UIU-364.
 * Remove Phone and Mobile phone as 'preferred contact' options. Fixes UIU-261.
-* Sort dropdown menus on user-edit screen. Fixes UIU-365, UIU-366.
+* Sort dropdown menus on user-edit screen. Fixes UIU-366.
 * Favor `<Link to...>` over `<a href...>`. Refs STRIPES-482.
 * Unique URLs for open-, closed-loans pages. Toward UIU-143, UIU-230.
 * `<Link>` instead of `<Button onclick...>` for Loans. Toward UIU-143, UIU-230.
@@ -36,7 +35,7 @@
 * Additional "No proxies/No sponsors" formatting. Refs UX-115.
 * Rewire loan links from items to inventory. Fixes UIU-368.
 * Relabel elements in user details Proxy section. Fixes UIU-370.
-* Get fixed renewal period from loan policy. Fixes UIU-405.
+* Get fixed renewal period from loan policy. Fixes UIU-405, but XXX this issue does not exist.
 * Get rolling renewal period from loan policy. Fixes UIU-415.
 * Add renew button to loan details. Fixes UIU-395.
 * Make perm set title required. Fixes UIU-412.
@@ -53,11 +52,11 @@
 * Get alternate fixed renewal period from loan policy. Fixes UIU-433.
 * Get alternate rolling renewal period from loan policy. Fixes UIU-434 and UIU-435.
 * Remove `<Autocomplete>` - Use new default `country` field control for address fields. Fixes UIU-298.
-* Change Default display to not return a list of all users. Fixes UIU-399.
+* Change default display to not return a list of all users. Fixes UIU-399.
 * Update new permission set detail record. Fixes UIU-410 and UIU-404.
 * Deprecate `transitionToParams` in favor of `this.props.mutator.query.update`. Fixes UIU-418.
 * Use correct time offset on open loans view. Fixes UIU-440.
-* Fixed username validation in UserForm (IU-422)
+* Fixed username validation in UserForm (UIU-422)
 * Move item details link to the options menu. Refs UIU-407.
 * Enter key should not submit the user edit form. Fixes UIU-394.
 * Updated loans views to match requirements of LIBAPP-233.
@@ -69,8 +68,7 @@
 * Fix problem where creating a new user would display a blank page. Fixes UIU-443.
 * Fix manually editing permission sets. Fixes UIU-472.
 * Make username and password optional, though mutually dependent. Fixes UIU-389.
-* Handle metadata field case insensitively. Fixes UIU-471.
-* Bah. One case to rule them all. Handles UIU-471 in concert with CIRCSTORE-43.
+* Handle metadata field case insensitively. Fixes UIU-471 in concert with CIRCSTORE-43.
 * `<IfInterface>` test should match dependency version in `package.json`. Refs UIU-471.
 * Restore patron-group sort. Fixes UIU-481.
 * Use new proxyFor schema instead of meta. Fixes UIU-495.
@@ -79,7 +77,7 @@
 * Update paths for relocated components. Refs STCOM-277.
 * Use `cql.allIndexes=1` when no query is supplied, instead of a wildcard. Fixes UIU-541.
 * Use new renew-by-barcode API for renew. Fixes UIU-538.
-* Removed "Accrue-fees-to" functionality for proxy/sponsors
+* Removed "Accrue-fees-to" functionality for proxy/sponsors. (There doesn't seem to be a Jira for this.)
 * Adjust renew error messages. Fixes UIU-552.
 * Lower-case search terms AND permission names when searching. Refs UIORG-76.
 * Provide an id prop to `<ConfirmationModal>` to avoid it autogenerating one for us. Refs STCOM-317.
@@ -89,6 +87,17 @@
 * Add metadata to user form. Fixes UIU-524.
 * Shrink surface of test data deps. Fixes UIU-604.
 * Relocate integration tests to platform-core. Refs UIU-605.
+* Wire and translate Users app into German. Fixes UIU-202.
+* Properly update open and closed loan counts as items are checked in and out. Fixes UIU-315.
+* Fix problem with Settings > Users > Patron Groups. Fixes UIU-338.
+* Sort patron-groups alphabetically in Edit pane. Fixes UIU-365.
+* Fix problems with searching in User Search and Select Popup for proxy. Fixes UIU-378.
+* Massage code to satisfy an erroneous ESLint error in `showSingleResult`. Fixes UIU-379.
+* Add all data for loan details. Fixes UIU-409.
+* Use CQL's `==` operator for exact matches. Fixes UIU-411.
+* Resolve a problem where a change to filter support broke searching. Fixes UIU-470.
+* Add sort-indicator in header of Closed Loans. Fixes UIU-493.
+* Relocate language files. Fixes UIU-502.
 
 ## [2.12.0](https://github.com/folio-org/ui-users/tree/v2.12.0) (2017-11-28)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.11.0...v2.12.0)
