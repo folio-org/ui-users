@@ -9,19 +9,17 @@
 * Add setting for show/hide profile picture. Fixes UIU-327.
 * Seconds should not display in due date time. Fixes UIU-328.
 * Display user loan count (regression). Fixes UIU-308.
-* Use sentence-case in pane and menu titles, not title case. Refs UIU-283.
 * Use react-intl `<FormattedDate>` and `<FormattedTime>` for date/time formatting. Fixes UIU-342.
 * Add loaders to loan counters. Fixes UIU-343.
 * Make password required. Fixes UIU-344.
 * Setup permissions for proxies. Fixes UIU-349.
-* Refine last updated metadata display. Fixes UIU-325.
 * Make FOLIO number read only. Fixes UIU-348.
 * Use consistent language for "no `<attribute>` found" messages. Fixes UX-115.
 * Hide proxy section if user lacks sufficient permission to see it. Fixes UIU-363.
 * Add Save button to user settings. Fixes UIU-354.
 * Disable deletion of in-use patron groups. Fixes UIU-364.
 * Remove Phone and Mobile phone as 'preferred contact' options. Fixes UIU-261.
-* Sort dropdown menus on user-edit screen. Fixes UIU-365, UIU-366.
+* Sort dropdown menus on user-edit screen. Fixes UIU-366.
 * Favor `<Link to...>` over `<a href...>`. Refs STRIPES-482.
 * Unique URLs for open-, closed-loans pages. Toward UIU-143, UIU-230.
 * `<Link>` instead of `<Button onclick...>` for Loans. Toward UIU-143, UIU-230.
@@ -53,7 +51,7 @@
 * Get alternate fixed renewal period from loan policy. Fixes UIU-433.
 * Get alternate rolling renewal period from loan policy. Fixes UIU-434 and UIU-435.
 * Remove `<Autocomplete>` - Use new default `country` field control for address fields. Fixes UIU-298.
-* Change Default display to not return a list of all users. Fixes UIU-399.
+* Change default display to not return a list of all users. Fixes UIU-399.
 * Update new permission set detail record. Fixes UIU-410 and UIU-404.
 * Deprecate `transitionToParams` in favor of `this.props.mutator.query.update`. Fixes UIU-418.
 * Use correct time offset on open loans view. Fixes UIU-440.
@@ -78,7 +76,7 @@
 * Update paths for relocated components. Refs STCOM-277.
 * Use `cql.allIndexes=1` when no query is supplied, instead of a wildcard. Fixes UIU-541.
 * Use new renew-by-barcode API for renew. Fixes UIU-538.
-* Removed "Accrue-fees-to" functionality for proxy/sponsors.
+* Removed "Accrue-fees-to" functionality for proxy/sponsors. (There doesn't seem to be a Jira for this.)
 * Adjust renew error messages. Fixes UIU-552.
 * Lower-case search terms AND permission names when searching. Refs UIORG-76.
 * Provide an id prop to `<ConfirmationModal>` to avoid it autogenerating one for us. Refs STCOM-317.
@@ -94,7 +92,6 @@
 * Sort patron-groups alphabetically in Edit pane. Fixes UIU-365.
 * Fix problems with searching in User Search and Select Popup for proxy. Fixes UIU-378.
 * Massage code to satisfy an erroneous ESLint error in `showSingleResult`. Fixes UIU-379.
-* Change default display to not return a list of all users. Fixes UIU-399.
 * Add all data for loan details. Fixes UIU-409.
 * Use CQL's `==` operator for exact matches. Fixes UIU-411.
 * Resolve a problem where a change to filter support broke searching. Fixes UIU-470.
