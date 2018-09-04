@@ -88,6 +88,18 @@
 * Add metadata to user form. Fixes UIU-524.
 * Shrink surface of test data deps. Fixes UIU-604.
 * Relocate integration tests to platform-core. Refs UIU-605.
+* Wire and translate Users app into German. Fixes UIU-202.
+* Properly update open and closed loan counts as items are checked in and out. Fixes UIU-315.
+* Fix problem with Settings > Users > Patron Groups. Fixes UIU-338.
+* Sort patron-groups alphabetically in Edit pane. Fixes UIU-365.
+* Fix problems with searching in User Search and Select Popup for proxy. Fixes UIU-378.
+* Massage code to satisfy an erroneous ESLint error in `showSingleResult`. Fixes UIU-379.
+* Change default display to not return a list of all users. Fixes UIU-399.
+* Add all data for loan details. Fixes UIU-409.
+* Use CQL's `==` operator for exact matches. Fixes UIU-411.
+* Resolve a problem where a change to filter support broke searching. Fixes UIU-470.
+* Add sort-indicator in header of Closed Loans. Fixes UIU-493.
+* Relocate language files. Fixes UIU-502.
 
 ## [2.12.0](https://github.com/folio-org/ui-users/tree/v2.12.0) (2017-11-28)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.11.0...v2.12.0)
