@@ -430,8 +430,10 @@
   },
   "scripts": {
     "start": "stripes serve",
+    "build": "stripes build",
     "lint": "eslint .",
-    "test": "(cd ../ui-testing; yarn test-module -- -o --run=users --host=localhost)",
+    "test": "echo 'No unit tests implemented'",
+    "test-int": "stripes test nightmare",
     "prepublishOnly": "node ../stripes-core/util/package2md.js package.json > ModuleDescriptor.json"
   },
   "devDependencies": {
