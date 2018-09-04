@@ -1,6 +1,7 @@
 # Change history for ui-users
 
-## 2.13.0 (IN PROGRESS)
+## [2.13.0](https://github.com/folio-org/ui-users/tree/v2.13.0) (2018-09-04)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.12.0...v2.13.0)
 
 * Refine user details view. Fixes UIU-324.
 * Display permission count when section is collapsed on user form. Fixes UIU-331.
