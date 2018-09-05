@@ -446,12 +446,9 @@
 
   "feefines.columns.type": "Fee/Fine Type*",
   "feefines.columns.amount": "Default Amount",
-  "feefines.columns.taxVat": "Tax/Vat %",
 
   "feefines.errors.amountNumeric": "Default Amount must be numeric",
   "feefines.errors.amountPositive": "Default Amount must be positive",
-  "feefines.errors.taxVatNumeric": "Tax/Vat must be numeric",
-  "feefines.errors.taxVat": "Tax/Vat must be a number less than 100",
   "feefines.errors.exist": "Fee/fine type exists",
   "feefines.errors.existShared": "Fee/fine type exists for owner {owner}",
 
@@ -506,7 +503,6 @@
   "charge.owner.label": "Fee/fine owner*",
   "charge.feefine.label": "Fee/fine type*",
   "charge.amount.label": "Fee/fine amount*",
-  "charge.taxVat.label": "Tax/Vat:",
   "charge.total": "Total:",
   "charge.patron": "Patron",
   "charge.barcode": "Barcode: ",
@@ -516,11 +512,10 @@
   "charge.comment": "Comments",
 
   "charge.errors.amount": "Amount is not a number",
-  "charge.errors.taxVat": "Tax/Vat is not a number",
 
   "charge.item.title": "Item information",
-  "charge.item.placeholder": "Enter barcode or title",
-  "charge.item.button": "Select item",
+  "charge.item.placeholder": "Scan or enter item barcode",
+  "charge.item.button": "Enter",
   "charge.item.barcode": "Barcode",
   "charge.item.instance": "Instance",
   "charge.item.status": "Item Status",
