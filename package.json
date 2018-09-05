@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "2.12.4",
+  "version": "2.13.0",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -430,9 +430,10 @@
   },
   "scripts": {
     "start": "stripes serve",
+    "build": "stripes build",
     "lint": "eslint .",
-    "test": "(cd ../ui-testing; yarn test-module -- -o --run=users --host=localhost)",
-    "prepublishOnly": "node ../stripes-core/util/package2md.js package.json > ModuleDescriptor.json"
+    "test": "echo 'No unit tests implemented'",
+    "test-int": "stripes test nightmare"
   },
   "devDependencies": {
     "@folio/eslint-config-stripes": "^2.0.3",
