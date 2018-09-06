@@ -98,6 +98,10 @@
 * Resolve a problem where a change to filter support broke searching. Fixes UIU-470.
 * Add sort-indicator in header of Closed Loans. Fixes UIU-493.
 * Relocate language files. Fixes UIU-502.
+* Fix duplicity message for settings. Fixes UIU-193, UIU-198, UIU-504, UIU-505, UIU-543.
+* Remove Tax/Vat column for Manual Fees/Fines Table. Fixes UIU-577.
+* Ensure the availability of data to Charge manual Fee/Fine. Fixes UIU-219.
+* Add functions for link to fee/fine history and fee/fine details. Fixes UIU-238 and UIU-239.
 
 ## [2.12.0](https://github.com/folio-org/ui-users/tree/v2.12.0) (2017-11-28)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.11.0...v2.12.0)
