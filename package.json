@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "2.13.0",
+  "version": "2.14.1",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -32,7 +32,7 @@
     "okapiInterfaces": {
       "users": "15.0",
       "configuration": "2.0",
-      "circulation": "3.0",
+      "circulation": "4.0",
       "permissions": "5.0",
       "loan-policy-storage": "1.0",
       "loan-storage": "4.0",
