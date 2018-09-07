@@ -8,7 +8,6 @@
 * Add functions for link to fee/fine history and fee/fine details. Fixes UIU-238 and UIU-239.
 * Bump circulation interface to v.4.0. Part of UIU-627.
 
-
 ## [2.13.0](https://github.com/folio-org/ui-users/tree/v2.13.0) (2018-09-04)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.12.0...v2.13.0)
 
