@@ -448,9 +448,7 @@
   },
   "dependencies": {
     "@folio/react-intl-safe-html": "^1.0.0",
-    "@folio/stripes-components": "^3.0.8",
-    "@folio/stripes-form": "^0.8.2",
-    "@folio/stripes-smart-components": "^1.4.23",
+    "@folio/stripes": "^0.1.0",
     "classnames": "^2.2.5",
     "hashcode": "^1.0.3",
     "lodash": "^4.17.4",
@@ -463,9 +461,12 @@
     "uuid": "^3.0.1"
   },
   "peerDependencies": {
-    "@folio/stripes-connect": "^3.1.1",
-    "@folio/stripes-core": "^2.10.2",
-    "@folio/stripes-logger": "^0.0.2",
+    "@folio/stripes-connect": "*",
+    "@folio/stripes-components": "*",
+    "@folio/stripes-core": "*",
+    "@folio/stripes-form": "*",
+    "@folio/stripes-logger": "*",
+    "@folio/stripes-smart-components": "*",
     "react": "*"
   },
   "optionalDependencies": {
