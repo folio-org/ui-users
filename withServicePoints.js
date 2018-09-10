@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { get } from 'lodash';
 import { setServicePoints, setCurServicePoint } from '@folio/stripes-core/src/loginServices';
-import ServicePoints from '@folio/servicepoints';
+import HandlerManager from '@folio/stripes-core/src/components/HandlerManager';
+import events from '@folio/stripes-core/src/events';
 
 const withServicePoints = WrappedComponent =>
   class WithServicePointsComponent extends React.Component {
@@ -164,7 +165,7 @@ const withServicePoints = WrappedComponent =>
         setCurServicePoint(store, sp);
       } else {
         this.setState({
-          displayServicePointSelectionModal: true,
+          showChangeServicePointHandler: true,
         });
       }
     }
@@ -178,10 +179,11 @@ const withServicePoints = WrappedComponent =>
             updateServicePoints={this.updateServicePoints}
             {...this.props}
           />
-          { this.state.displayServicePointSelectionModal ?
-            <ServicePoints
+          { this.state.showChangeServicePointHandler ?
+            <HandlerManager
+              props={{ onClose: () => this.setState({ showChangeServicePointHandler: false }) }}
+              event={events.CHANGE_SERVICE_POINT}
               stripes={this.props.stripes}
-              onClose={() => this.setState({ displayServicePointSelectionModal: false })}
             /> : null
           }
         </React.Fragment>
