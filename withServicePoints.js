@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { get } from 'lodash';
+import { setServicePoints, setCurServicePoint } from '@folio/stripes-core/src/loginServices';
+import HandlerManager from '@folio/stripes-core/src/components/HandlerManager';
+import events from '@folio/stripes-core/src/events';
 
 const withServicePoints = WrappedComponent =>
   class WithServicePointsComponent extends React.Component {
@@ -144,17 +147,47 @@ const withServicePoints = WrappedComponent =>
       mutator(record).then(() => {
         this.props.mutator.servicePointsUsers.reset();
         this.props.mutator.servicePointsUsers.GET();
+
+        // Check if we finished editing the currently-logged-in user.
+        if (this.props.match.params.id === this.props.stripes.user.user.id) {
+          this.setCurrentServicePoint(servicePoints, record.defaultServicePointId);
+        }
       });
     }
 
+    setCurrentServicePoint(servicePoints, defaultServicePointId) {
+      const { stripes: { store } } = this.props;
+
+      setServicePoints(store, servicePoints);
+
+      if (defaultServicePointId) {
+        const sp = servicePoints.find(r => r.id === defaultServicePointId);
+        setCurServicePoint(store, sp);
+      } else {
+        this.setState({
+          showChangeServicePointHandler: true,
+        });
+      }
+    }
 
     render() {
-      return (<WrappedComponent
-        getServicePoints={this.getServicePoints}
-        getPreferredServicePoint={this.getPreferredServicePoint}
-        updateServicePoints={this.updateServicePoints}
-        {...this.props}
-      />);
+      return (
+        <React.Fragment>
+          <WrappedComponent
+            getServicePoints={this.getServicePoints}
+            getPreferredServicePoint={this.getPreferredServicePoint}
+            updateServicePoints={this.updateServicePoints}
+            {...this.props}
+          />
+          { this.state.showChangeServicePointHandler ?
+            <HandlerManager
+              props={{ onClose: () => this.setState({ showChangeServicePointHandler: false }) }}
+              event={events.CHANGE_SERVICE_POINT}
+              stripes={this.props.stripes}
+            /> : null
+          }
+        </React.Fragment>
+      );
     }
   };
 

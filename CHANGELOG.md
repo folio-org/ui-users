@@ -8,6 +8,7 @@
 * Add functions for link to fee/fine history and fee/fine details. Fixes UIU-238 and UIU-239.
 * Support either `circulation` interface version 3.0 or 4.0. Part of UIU-627.
 * Support either `loan-storage` interface version 4.0 or 5.0. Part of UIU-627.
+* Automatically use default service point when a user is editing themselves. Fixes UIU-551.
 * Optimize the search for Manual Fees/Fines Table. Fix UIU-198.
 * Modify charge Manual Fee/Fine. Refs UIU-219, UIU-607.
 * Implement functionality for Loan details and fix Display fees/fines history. Refs UIU-238.
