@@ -1,5 +1,14 @@
 # Change history for ui-users
 
+## 2.14.0 (IN PROGRESS)
+
+* Fix duplicity message for settings. Fixes UIU-193, UIU-198, UIU-504, UIU-505, UIU-543.
+* Remove Tax/Vat column for Manual Fees/Fines Table. Fixes UIU-577.
+* Ensure the availability of data to Charge manual Fee/Fine. Fixes UIU-219.
+* Add functions for link to fee/fine history and fee/fine details. Fixes UIU-238 and UIU-239.
+* Support either `circulation` interface version 3.0 or 4.0. Part of UIU-627.
+* Support either `loan-storage` interface version 4.0 or 5.0. Part of UIU-627.
+
 ## [2.13.0](https://github.com/folio-org/ui-users/tree/v2.13.0) (2018-09-04)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.12.0...v2.13.0)
 
@@ -98,10 +107,6 @@
 * Resolve a problem where a change to filter support broke searching. Fixes UIU-470.
 * Add sort-indicator in header of Closed Loans. Fixes UIU-493.
 * Relocate language files. Fixes UIU-502.
-* Fix duplicity message for settings. Fixes UIU-193, UIU-198, UIU-504, UIU-505, UIU-543.
-* Remove Tax/Vat column for Manual Fees/Fines Table. Fixes UIU-577.
-* Ensure the availability of data to Charge manual Fee/Fine. Fixes UIU-219.
-* Add functions for link to fee/fine history and fee/fine details. Fixes UIU-238 and UIU-239.
 
 ## [2.12.0](https://github.com/folio-org/ui-users/tree/v2.12.0) (2017-11-28)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.11.0...v2.12.0)
