@@ -528,6 +528,10 @@ class ViewUser extends React.Component {
         onCancel={this.onClickCloseLoanActionsHistory}
         // when navigating away to another user, clear all loan-related state
         onClickUser={() => { this.onClickCloseLoanActionsHistory(); this.onClickCloseLoansHistory(); }}
+        onClickViewOpenAccounts={this.onClickViewOpenAccounts}
+        onClickViewAccountActionsHistory={this.onClickViewAccountActionsHistory}
+        onClickViewClosedAccounts={this.onClickViewClosedAccounts}
+        onClickViewAllAccounts={this.onClickViewAllAccounts}
       />);
 
     return (
@@ -620,10 +624,12 @@ class ViewUser extends React.Component {
 
         <Layer isOpen={query.layer ? query.layer === 'open-accounts' || query.layer === 'closed-accounts' || query.layer === 'all-accounts' : false} label="Fees/Fines">
           <this.connectedAccountsHistory
+            loans={loans}
+            onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
             user={user}
             parentMutator={this.props.mutator}
             patronGroup={patronGroup}
-            stripes={stripes}
+            stripes={this.props.stripes}
             history={this.props.history}
             addRecord={this.state.addRecord}
             location={this.props.location}
@@ -646,9 +652,11 @@ class ViewUser extends React.Component {
         <Layer isOpen={query.layer ? query.layer === 'account' : false} label="Account Actions History">
           <this.connectedAccountActionsHistory
             user={user}
+            patronGroup={patronGroup}
             account={this.state.selectedAccount}
             accountid={this.state.selectedAccount.id}
             history={this.props.history}
+            onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
             stripes={stripes}
             onCancel={this.onClickCloseAccountActionsHistory}
             // when navigating away to another user, clear all loan-related state
