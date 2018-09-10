@@ -8,6 +8,7 @@
 * Add functions for link to fee/fine history and fee/fine details. Fixes UIU-238 and UIU-239.
 * Support either `circulation` interface version 3.0 or 4.0. Part of UIU-627.
 * Support either `loan-storage` interface version 4.0 or 5.0. Part of UIU-627.
+* Automatically use default service point when a user is editing themselves. Fixes UIU-551.
 
 ## [2.13.0](https://github.com/folio-org/ui-users/tree/v2.13.0) (2018-09-04)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.12.0...v2.13.0)

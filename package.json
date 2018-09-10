@@ -464,7 +464,7 @@
   },
   "peerDependencies": {
     "@folio/stripes-connect": "^3.1.1",
-    "@folio/stripes-core": "^2.10.2",
+    "@folio/stripes-core": "^2.11.1",
     "@folio/stripes-logger": "^0.0.2",
     "react": "*"
   },
