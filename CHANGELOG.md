@@ -9,6 +9,13 @@
 * Support either `circulation` interface version 3.0 or 4.0. Part of UIU-627.
 * Support either `loan-storage` interface version 4.0 or 5.0. Part of UIU-627.
 * Automatically use default service point when a user is editing themselves. Fixes UIU-551.
+* Optimize the search for Manual Fees/Fines Table. Fix UIU-198.
+* Modify charge Manual Fee/Fine. Refs UIU-219, UIU-607.
+* Implement functionality for Loan details and fix Display fees/fines history. Refs UIU-238.
+* Implement bulk action modal and fix Display Fee/Fine Details. Refs UIU-239.
+* Fix Cancel Fee/Fine. Fix UIU-450.
+* Fix Pay Fee/Fine. Fix UIU-454.
+* Fix Waive Fee/Fine. Fix UIU-455.
 
 ## [2.13.0](https://github.com/folio-org/ui-users/tree/v2.13.0) (2018-09-04)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.12.0...v2.13.0)
