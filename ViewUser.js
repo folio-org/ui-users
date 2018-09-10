@@ -269,24 +269,24 @@ class ViewUser extends React.Component {
     });
   }
 
-  onClickViewOpenAccounts(e) {
+  onClickViewOpenAccounts(e, selectedLoan = {}) {
     if (e) e.preventDefault();
-    this.props.mutator.query.update({ layer: 'open-accounts' });
+    this.props.mutator.query.update({ layer: 'open-accounts', loan: selectedLoan.id });
   }
 
-  onClickViewClosedAccounts(e) {
+  onClickViewClosedAccounts(e, selectedLoan = {}) {
     if (e) e.preventDefault();
-    this.props.mutator.query.update({ layer: 'closed-accounts' });
+    this.props.mutator.query.update({ layer: 'closed-accounts', loan: selectedLoan.id });
   }
 
-  onClickViewAllAccounts(e) {
+  onClickViewAllAccounts(e, selectedLoan = {}) {
     if (e) e.preventDefault();
-    this.props.mutator.query.update({ layer: 'all-accounts' });
+    this.props.mutator.query.update({ layer: 'all-accounts', loan: selectedLoan.id });
   }
 
   onClickCloseAccountsHistory(e) {
     if (e) e.preventDefault();
-    this.props.mutator.query.update({ layer: null, f: null, q: null });
+    this.props.mutator.query.update({ layer: null, f: null, q: null, loan: null });
   }
 
   onClickViewAccountActionsHistory(e, selectedAccount) {
@@ -512,6 +512,7 @@ class ViewUser extends React.Component {
       onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
       onClickViewChargeFeeFine={this.onClickViewChargeFeeFine}
       onClickViewOpenAccounts={this.onClickViewOpenAccounts}
+      onClickViewAccountActionsHistory={this.onClickViewAccountActionsHistory}
       onClickViewClosedAccounts={this.onClickViewClosedAccounts}
       onClickViewAllAccounts={this.onClickViewAllAccounts}
       openLoans={query.layer === 'open-loans'}
@@ -561,8 +562,11 @@ class ViewUser extends React.Component {
         </IfPermission>
 
         <IfPermission perm="circulation.loans.collection.get">
-          <IfInterface name="circulation" version="3.0">
-            <IfInterface name="loan-policy-storage" version="1.0">
+          <IfInterface name="loan-policy-storage" version="1.0">
+            { /* Check without version, so can support either of multiple versions.
+            Replace with specific check when facility for providing
+            multiple versions is available */ }
+            <IfInterface name="circulation">
               <this.connectedUserLoans
                 onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
                 onClickViewOpenLoans={this.onClickViewOpenLoans}
