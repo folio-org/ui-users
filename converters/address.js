@@ -43,14 +43,12 @@ export function toListAddresses(addresses, addressTypes) {
   if (!addresses || !addresses.length) return addresses;
 
   const addressTypesById = getAddressTypesById(addressTypes);
-  return _.sortBy(addresses, a => -a.primaryAddress).map(addr =>
-    toListAddress(addr, addressTypesById[addr.addressTypeId]));
+  return _.sortBy(addresses, a => -a.primaryAddress).map(addr => toListAddress(addr, addressTypesById[addr.addressTypeId]));
 }
 
 export function toUserAddresses(addresses, addressTypes) {
   if (!addresses || !addresses.length) return addresses;
 
   const addressTypesByName = getAddressTypesByName(addressTypes);
-  return addresses.map(addr =>
-    toUserAddress(addr, addressTypesByName[addr.addressType]));
+  return addresses.map(addr => toUserAddress(addr, addressTypesByName[addr.addressType]));
 }

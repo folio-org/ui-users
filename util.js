@@ -12,7 +12,11 @@ export function formatDate(dateStr) {
 export function formatDateTime(dateStr) {
   if (!dateStr) return dateStr;
   const localDateStr = moment(dateStr).local().format();
-  return (<span><FormattedDate value={dateStr} /> <FormattedTime value={localDateStr} /></span>);
+  return (<span>
+    <FormattedDate value={dateStr} />
+    {' '}
+    <FormattedTime value={localDateStr} />
+          </span>);
 }
 
 export function getFullName(user) {

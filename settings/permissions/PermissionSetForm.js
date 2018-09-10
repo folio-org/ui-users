@@ -119,7 +119,8 @@ class PermissionSetForm extends React.Component {
               onClick={this.beginDelete}
               disabled={confirmDelete}
               marginBottom0
-            >{intl.formatMessage({ id: 'ui-users.delete' })}
+            >
+              {intl.formatMessage({ id: 'ui-users.delete' })}
             </Button>
           </IfPermission>
         }
@@ -130,7 +131,8 @@ class PermissionSetForm extends React.Component {
           buttonStyle="primary paneHeaderNewButton"
           marginBottom0
           disabled={(pristine || submitting)}
-        >{saveLabel}
+        >
+          {saveLabel}
         </Button>
       </PaneMenu>
     );
@@ -151,7 +153,10 @@ class PermissionSetForm extends React.Component {
     const selectedSet = initialValues || {};
 
     if (selectedSet.id) {
-      return (<div><Icon size="small" icon="edit" /><span>{`${intl.formatMessage({ id: 'ui-users.edit' })}: ${selectedSet.displayName}`}</span></div>);
+      return (<div>
+        <Icon size="small" icon="edit" />
+        <span>{`${intl.formatMessage({ id: 'ui-users.edit' })}: ${selectedSet.displayName}`}</span>
+      </div>);
     }
 
     return intl.formatMessage({ id: 'ui-users.permissions.newPermissionSet' });

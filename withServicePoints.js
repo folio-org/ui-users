@@ -5,8 +5,7 @@ import { setServicePoints, setCurServicePoint } from '@folio/stripes-core/src/lo
 import HandlerManager from '@folio/stripes-core/src/components/HandlerManager';
 import events from '@folio/stripes-core/src/events';
 
-const withServicePoints = WrappedComponent =>
-  class WithServicePointsComponent extends React.Component {
+const withServicePoints = WrappedComponent => class WithServicePointsComponent extends React.Component {
     static manifest = {
       ...WrappedComponent.manifest,
       servicePoints: {
@@ -189,6 +188,6 @@ const withServicePoints = WrappedComponent =>
         </React.Fragment>
       );
     }
-  };
+};
 
 export default withServicePoints;

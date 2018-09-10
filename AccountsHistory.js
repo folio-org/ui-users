@@ -305,8 +305,7 @@ class AccountsHistory extends React.Component {
 
   renderCheckboxList(columnMapping) {
     const { visibleColumns } = this.state;
-    return visibleColumns.filter((o) =>
-      Object.keys(columnMapping).includes(o.title))
+    return visibleColumns.filter((o) => Object.keys(columnMapping).includes(o.title))
       .map((column, i) => {
         const name = columnMapping[column.title];
         return (
@@ -330,8 +329,7 @@ class AccountsHistory extends React.Component {
       return map;
     }, {});
 
-    const columnsToDisplay = this.possibleColumns.filter((e) =>
-      visibleColumnsMap[e] === undefined || visibleColumnsMap[e] === true);
+    const columnsToDisplay = this.possibleColumns.filter((e) => visibleColumnsMap[e] === undefined || visibleColumnsMap[e] === true);
     return columnsToDisplay;
   }
 
@@ -437,7 +435,11 @@ class AccountsHistory extends React.Component {
 
     const header1 = (
       <Row style={{ width: '80%' }}>
-        <Col xs={7}> {closeMenu} </Col>
+        <Col xs={7}>
+          {' '}
+          {closeMenu}
+          {' '}
+        </Col>
         <Col xs={4}>
           <Row>
             <Col>
@@ -446,7 +448,9 @@ class AccountsHistory extends React.Component {
           </Row>
           <Row>
             <Col>
-              Outstanding Balance {balance}
+              Outstanding Balance
+              {' '}
+              {balance}
             </Col>
           </Row>
         </Col>
