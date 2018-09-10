@@ -562,8 +562,11 @@ class ViewUser extends React.Component {
         </IfPermission>
 
         <IfPermission perm="circulation.loans.collection.get">
-          <IfInterface name="circulation" version="4.0">
-            <IfInterface name="loan-policy-storage" version="1.0">
+          <IfInterface name="loan-policy-storage" version="1.0">
+            { /* Check without version, so can support either of multiple versions.
+            Replace with specific check when facility for providing
+            multiple versions is available */ }
+            <IfInterface name="circulation">
               <this.connectedUserLoans
                 onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
                 onClickViewOpenLoans={this.onClickViewOpenLoans}
