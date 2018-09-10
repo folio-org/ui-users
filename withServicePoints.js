@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { get } from 'lodash';
+import { setServicePoints, setCurServicePoint } from '@folio/stripes-core/src/loginServices';
+import ServicePoints from '@folio/servicepoints';
 
 const withServicePoints = WrappedComponent =>
   class WithServicePointsComponent extends React.Component {
@@ -144,17 +146,46 @@ const withServicePoints = WrappedComponent =>
       mutator(record).then(() => {
         this.props.mutator.servicePointsUsers.reset();
         this.props.mutator.servicePointsUsers.GET();
+
+        // Check if we finished editing the currently-logged-in user.
+        if (this.props.match.params.id === this.props.stripes.user.user.id) {
+          this.setCurrentServicePoint(servicePoints, record.defaultServicePointId);
+        }
       });
     }
 
+    setCurrentServicePoint(servicePoints, defaultServicePointId) {
+      const { stripes: { store } } = this.props;
+
+      setServicePoints(store, servicePoints);
+
+      if (defaultServicePointId) {
+        const sp = servicePoints.find(r => r.id === defaultServicePointId);
+        setCurServicePoint(store, sp);
+      } else {
+        this.setState({
+          displayServicePointSelectionModal: true,
+        });
+      }
+    }
 
     render() {
-      return (<WrappedComponent
-        getServicePoints={this.getServicePoints}
-        getPreferredServicePoint={this.getPreferredServicePoint}
-        updateServicePoints={this.updateServicePoints}
-        {...this.props}
-      />);
+      return (
+        <React.Fragment>
+          <WrappedComponent
+            getServicePoints={this.getServicePoints}
+            getPreferredServicePoint={this.getPreferredServicePoint}
+            updateServicePoints={this.updateServicePoints}
+            {...this.props}
+          />
+          { this.state.displayServicePointSelectionModal ?
+            <ServicePoints
+              stripes={this.props.stripes}
+              onClose={() => this.setState({ displayServicePointSelectionModal: false })}
+            /> : null
+          }
+        </React.Fragment>
+      );
     }
   };
 

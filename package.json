@@ -450,6 +450,7 @@
     "@folio/stripes-components": "^3.0.8",
     "@folio/stripes-form": "^0.8.2",
     "@folio/stripes-smart-components": "^1.4.23",
+    "@folio/servicepoints": "^1.0.2",
     "classnames": "^2.2.5",
     "hashcode": "^1.0.3",
     "lodash": "^4.17.4",
@@ -463,7 +464,7 @@
   },
   "peerDependencies": {
     "@folio/stripes-connect": "^3.1.1",
-    "@folio/stripes-core": "^2.10.2",
+    "@folio/stripes-core": "^2.11.1",
     "@folio/stripes-logger": "^0.0.2",
     "react": "*"
   },
