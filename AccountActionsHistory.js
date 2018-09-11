@@ -88,7 +88,6 @@ class AccountActionsHistory extends React.Component {
         comment: false,
         regular: false,
       },
-      checkedAccounts: {},
       sortOrder: [
         stripes.intl.formatMessage({ id: 'ui-users.details.columns.date' }),
         stripes.intl.formatMessage({ id: 'ui-users.details.columns.action' }),
@@ -99,10 +98,7 @@ class AccountActionsHistory extends React.Component {
         stripes.intl.formatMessage({ id: 'ui-users.details.columns.source' }),
         stripes.intl.formatMessage({ id: 'ui-users.details.columns.comments' }),
       ],
-      sortDirection: ['desc', 'asc'],
-      message: {},
-      source: '',
-      id: '',
+      sortDirection: ['desc', 'asc']
     };
   }
 
@@ -157,7 +153,7 @@ class AccountActionsHistory extends React.Component {
       const direction = (sortDirection[0] === 'desc') ? 'asc' : 'desc';
       sortDirection = [direction, sortDirection[1]];
     }
-    this.setState({ ...this.state, sortOrder, sortDirection });
+    this.setState({ sortOrder, sortDirection });
   }
 
   render() {
@@ -169,10 +165,12 @@ class AccountActionsHistory extends React.Component {
     const patron = this.props.patronGroup;
 
     const columnMapping = {
-      Comments: (<span>
-        {this.props.stripes.intl.formatMessage({ id: 'ui-users.details.columns.comments' })}
-        <Button style={{ float: 'right', marginLeft: '50px' }} onClick={this.comment}>+ New</Button>
-      </span>),
+      Comments: (
+        <span>
+          {this.props.stripes.intl.formatMessage({ id: 'ui-users.details.columns.comments' })}
+          <Button style={{ float: 'right', marginLeft: '50px' }} onClick={this.comment}>+ New</Button>
+        </span>
+      ),
     };
 
     const accountActionsFormatter = {
@@ -237,7 +235,7 @@ class AccountActionsHistory extends React.Component {
                 <KeyValue
                   label="Loan details"
                   value={
-                    <button onClick={(e) => { this.props.onClickViewLoanActionsHistory(e, { id: loanId }); }}>
+                    <button type="button" onClick={(e) => { this.props.onClickViewLoanActionsHistory(e, { id: loanId }); }}>
                       {this.props.stripes.intl.formatMessage({ id: 'ui-users.details.field.loan' })}
                     </button>}
                 />

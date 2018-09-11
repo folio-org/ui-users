@@ -332,10 +332,9 @@ class ViewUser extends React.Component {
   }
 
   handleAddRecords() {
-    const addRecord = !this.state.addRecord;
-    this.setState({
-      addRecord,
-    });
+    this.setState(({ addRecord }) => ({
+      addRecord: !addRecord
+    }));
   }
 
   getUser() {

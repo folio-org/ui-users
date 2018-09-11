@@ -233,11 +233,11 @@ class AccountsHistory extends React.Component {
     return _.get(query, name);
   }
 
-  onChangeActions(actions, a) {
-    const newActions = { ...this.state.actions, ...actions };
-    this.setState({
-      actions: newActions,
-    });
+  onChangeActions(newActions, a) {
+    this.setState(({ actions }) => ({
+      actions: { ...actions, ...newActions }
+    }));
+
     if (a) {
       this.accounts = a;
     }
@@ -334,19 +334,21 @@ class AccountsHistory extends React.Component {
   }
 
   onDropdownClick() {
-    const state = this.state.toggleDropdownState !== true;
-    this.setState({ toggleDropdownState: state });
+    this.setState(({ toggleDropdownState }) => ({
+      toggleDropdownState: !toggleDropdownState
+    }));
   }
 
   toggleColumn(title) {
-    const columnList = this.state.visibleColumns.map(column => {
-      if (column.title === title) {
-        const status = column.status;
-        column.status = status !== true;
-      }
-      return column;
-    });
-    this.setState({ visibleColumns: columnList });
+    this.setState(({ visibleColumns }) => ({
+      visibleColumns: visibleColumns.map(column => {
+        if (column.title === title) {
+          const status = column.status;
+          column.status = status !== true;
+        }
+        return column;
+      })
+    }));
   }
 
   render() {
@@ -366,7 +368,7 @@ class AccountsHistory extends React.Component {
 
     const closeMenu = (
       <PaneMenu>
-        <button onClick={this.props.onCancel}>
+        <button onClick={this.props.onCancel} type="button">
           <Row>
             <Col><Icon icon="left-double-chevron" size="large" /></Col>
             <Col><span style={{ fontSize: 'x-large' }}>Back</span></Col>

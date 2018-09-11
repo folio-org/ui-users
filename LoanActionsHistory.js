@@ -261,12 +261,11 @@ class LoanActionsHistory extends React.Component {
       const titleTodisplay = (title.length >= 77) ? `${title.substring(0, 77)}...` : title;
       return <KeyValue
         label={this.props.stripes.intl.formatMessage({ id: 'ui-users.loans.columns.title' })}
-        value={<Link to={`/inventory/view/${_.get(this.loan, ['item', 'instanceId'], '')}`}>
-          {titleTodisplay}
-(
-          {_.get(this.loan, ['item', 'materialType', 'name'])}
-)
-               </Link>}
+        value={(
+          <Link to={`/inventory/view/${_.get(this.loan, ['item', 'instanceId'], '')}`}>
+            {`${titleTodisplay} (${_.get(this.loan, ['item', 'materialType', 'name'])})`}
+          </Link>
+        )}
       />;
     }
     return '-';
@@ -378,7 +377,7 @@ class LoanActionsHistory extends React.Component {
               <KeyValue
                 label={intl.formatMessage({ id: 'ui-users.loans.details.fine' })}
                 value={
-                  <button onClick={(e) => this.feefinedetails(e)}>{`${this.getFeeFine()}`}</button>
+                  <button onClick={(e) => this.feefinedetails(e)} type="button">{`${this.getFeeFine()}`}</button>
               }
               />
             </Col>

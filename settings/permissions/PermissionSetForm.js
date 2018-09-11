@@ -153,10 +153,12 @@ class PermissionSetForm extends React.Component {
     const selectedSet = initialValues || {};
 
     if (selectedSet.id) {
-      return (<div>
-        <Icon size="small" icon="edit" />
-        <span>{`${intl.formatMessage({ id: 'ui-users.edit' })}: ${selectedSet.displayName}`}</span>
-      </div>);
+      return (
+        <div>
+          <Icon size="small" icon="edit" />
+          <span>{`${intl.formatMessage({ id: 'ui-users.edit' })}: ${selectedSet.displayName}`}</span>
+        </div>
+      );
     }
 
     return intl.formatMessage({ id: 'ui-users.permissions.newPermissionSet' });
