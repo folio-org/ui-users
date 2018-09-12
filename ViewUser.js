@@ -445,6 +445,7 @@ class ViewUser extends React.Component {
     const addressTypes = (parentResources.addressTypes || {}).records || [];
     const query = resources.query;
     const user = this.getUser();
+    const tags = ((user && user.tags) || {}).tagList || [];
     const patronGroups = (resources.patronGroups || {}).records || [];
     const permissions = (resources.permissions || {}).records || [];
     const settings = (resources.settings || {}).records || [];
@@ -462,8 +463,9 @@ class ViewUser extends React.Component {
             icon="tag"
             title={formatMsg({ id: 'ui-users.showTags' })}
             id="clickable-show-tags"
-            style={{ visibility: !user ? 'hidden' : 'visible' }}
+
             onClick={this.props.tagsToggle}
+            badgeCount={tags.length}
             aria-label={formatMsg({ id: 'ui-users.showTags' })}
           />
         }

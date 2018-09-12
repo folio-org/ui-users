@@ -18,6 +18,7 @@
 * Fix Waive Fee/Fine. Fix UIU-455.
 * Add missing files. Fix UIU-219, UIU-238.
 * Anonymize closed loans on demand. Fixes UIU-463.
+* Add badge counter to tags icon. Part of STSMACOM-113.
 
 ## [2.13.0](https://github.com/folio-org/ui-users/tree/v2.13.0) (2018-09-04)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.12.0...v2.13.0)
