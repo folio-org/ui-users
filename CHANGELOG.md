@@ -1,6 +1,7 @@
 # Change history for ui-users
 
-## 2.14.0 (IN PROGRESS)
+## [2.14.0](https://github.com/folio-org/ui-users/tree/v2.14.0) (2018-09-04)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.13.0...v2.14.0)
 
 * Fix duplicity message for settings. Fixes UIU-193, UIU-198, UIU-504, UIU-505, UIU-543.
 * Remove Tax/Vat column for Manual Fees/Fines Table. Fixes UIU-577.
