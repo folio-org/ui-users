@@ -42,6 +42,11 @@ class LoanActionsHistory extends React.Component {
         path: 'loan-storage/loan-history?query=(id==!{loanid})&timestamp=%{timestamp.time}',
       },
     },
+    loanAccountsActions: {
+      type: 'okapi',
+      records: 'accounts',
+      path: 'accounts?query=loanId=!{loanid}&limit=50',
+    },
   });
 
   static propTypes = {
@@ -69,11 +74,16 @@ class LoanActionsHistory extends React.Component {
     user: PropTypes.object,
     onCancel: PropTypes.func.isRequired,
     onClickUser: PropTypes.func.isRequired,
+    onClickViewAllAccounts: PropTypes.func.isRequired,
+    onClickViewClosedAccounts: PropTypes.func.isRequired,
+    onClickViewOpenAccounts: PropTypes.func.isRequired,
+    onClickViewAccountActionsHistory: PropTypes.func.isRequired,
     renew: PropTypes.func,
   };
 
   constructor(props) {
     super(props);
+    this.nav = null;
     this.connectedProxy = props.stripes.connect(LoanActionsHistoryProxy);
     this.connectedChangeDueDateDialog = props.stripes.connect(ChangeDueDateDialog);
     this.renew = this.renew.bind(this);
@@ -179,6 +189,32 @@ class LoanActionsHistory extends React.Component {
     return promise;
   }
 
+  getFeeFine() {
+    const accounts = _.get(this.props.resources, ['loanAccountsActions', 'records'], []);
+    let remaining = 0;
+    accounts.forEach(a => {
+      remaining += parseFloat(a.remaining);
+    });
+    return (remaining === 0) ? '-' : remaining.toFixed(2);
+  }
+
+  feefinedetails = (e) => {
+    const loan = this.loan || {};
+    const accounts = _.get(this.props.resources, ['loanAccountsActions', 'records'], []);
+    if (accounts.length === 1) {
+      this.props.onClickViewAccountActionsHistory(e, { id: accounts[0].id });
+    } else if (accounts.length > 1) {
+      const open = accounts.filter(a => a.status.name === 'Open') || [];
+      if (open.length === accounts.length) {
+        this.props.onClickViewOpenAccounts(e, loan);
+      } else if (open.length === 0) {
+        this.props.onClickViewClosedAccounts(e, loan);
+      } else {
+        this.props.onClickViewAllAccounts(e, loan);
+      }
+    }
+  }
+
   showCallout() {
     const message = (
       <span>
@@ -227,7 +263,6 @@ class LoanActionsHistory extends React.Component {
     }
     return '-';
   }
-
   renderChangeDueDateDialog() {
     return (
       <this.connectedChangeDueDateDialog
@@ -331,7 +366,12 @@ class LoanActionsHistory extends React.Component {
               <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.columns.loanDate' })} value={this.formatDateTime(loan.loanDate) || '-'} />
             </Col>
             <Col xs={2} >
-              <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.details.fine' })} value="TODO" />
+              <KeyValue
+                label={intl.formatMessage({ id: 'ui-users.loans.details.fine' })}
+                value={
+                  <button onClick={(e) => this.feefinedetails(e)}>{`${this.getFeeFine()}`}</button>
+              }
+              />
             </Col>
             <Col xs={2} >
               <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.details.requestQueue' })} value="TODO" />

@@ -445,6 +445,7 @@ class ViewUser extends React.Component {
     const addressTypes = (parentResources.addressTypes || {}).records || [];
     const query = resources.query;
     const user = this.getUser();
+    const tags = ((user && user.tags) || {}).tagList || [];
     const patronGroups = (resources.patronGroups || {}).records || [];
     const permissions = (resources.permissions || {}).records || [];
     const settings = (resources.settings || {}).records || [];
@@ -462,8 +463,9 @@ class ViewUser extends React.Component {
             icon="tag"
             title={formatMsg({ id: 'ui-users.showTags' })}
             id="clickable-show-tags"
-            style={{ visibility: !user ? 'hidden' : 'visible' }}
+
             onClick={this.props.tagsToggle}
+            badgeCount={tags.length}
             aria-label={formatMsg({ id: 'ui-users.showTags' })}
           />
         }
@@ -528,6 +530,10 @@ class ViewUser extends React.Component {
         onCancel={this.onClickCloseLoanActionsHistory}
         // when navigating away to another user, clear all loan-related state
         onClickUser={() => { this.onClickCloseLoanActionsHistory(); this.onClickCloseLoansHistory(); }}
+        onClickViewOpenAccounts={this.onClickViewOpenAccounts}
+        onClickViewAccountActionsHistory={this.onClickViewAccountActionsHistory}
+        onClickViewClosedAccounts={this.onClickViewClosedAccounts}
+        onClickViewAllAccounts={this.onClickViewAllAccounts}
       />);
 
     return (
@@ -562,8 +568,11 @@ class ViewUser extends React.Component {
         </IfPermission>
 
         <IfPermission perm="circulation.loans.collection.get">
-          <IfInterface name="circulation" version="3.0">
-            <IfInterface name="loan-policy-storage" version="1.0">
+          <IfInterface name="loan-policy-storage" version="1.0">
+            { /* Check without version, so can support either of multiple versions.
+            Replace with specific check when facility for providing
+            multiple versions is available */ }
+            <IfInterface name="circulation">
               <this.connectedUserLoans
                 onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
                 onClickViewOpenLoans={this.onClickViewOpenLoans}
@@ -620,10 +629,12 @@ class ViewUser extends React.Component {
 
         <Layer isOpen={query.layer ? query.layer === 'open-accounts' || query.layer === 'closed-accounts' || query.layer === 'all-accounts' : false} label="Fees/Fines">
           <this.connectedAccountsHistory
+            loans={loans}
+            onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
             user={user}
             parentMutator={this.props.mutator}
             patronGroup={patronGroup}
-            stripes={stripes}
+            stripes={this.props.stripes}
             history={this.props.history}
             addRecord={this.state.addRecord}
             location={this.props.location}
@@ -646,9 +657,11 @@ class ViewUser extends React.Component {
         <Layer isOpen={query.layer ? query.layer === 'account' : false} label="Account Actions History">
           <this.connectedAccountActionsHistory
             user={user}
+            patronGroup={patronGroup}
             account={this.state.selectedAccount}
             accountid={this.state.selectedAccount.id}
             history={this.props.history}
+            onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
             stripes={stripes}
             onCancel={this.onClickCloseAccountActionsHistory}
             // when navigating away to another user, clear all loan-related state

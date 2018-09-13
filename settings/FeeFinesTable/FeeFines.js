@@ -10,13 +10,14 @@ import Owners from './Owners';
 import CopyModal from './CopyModal';
 
 function includes(arr, str, input, out) {
+  const items = [];
   for (let i = 0; i < arr.length; i++) {
     const obj = arr[i];
     if (obj[input].localeCompare(str, 'sv', { sensitivity: 'base' }) === 0) {
-      return obj[out];
+      items.push(obj[out]);
     }
   }
-  return undefined;
+  return items;
 }
 
 function validate(type, props) {
@@ -31,17 +32,23 @@ function validate(type, props) {
     if (parseFloat(item.defaultAmount) < 0) { errors.items[i].defaultAmount = props.stripes.intl.formatMessage({ id: 'ui-users.feefines.errors.amountPositive' }); }
 
     const exist = includes(allfeefines.filter(f => f.id !== item.id), item.feeFineType, 'feeFineType', 'ownerId') || '';
-    const owner = includes(owners, exist, 'id', 'owner');
-    const sharedOwner = owners.find(o => o.owner === 'Shared');
-    const shared = sharedOwner ? sharedOwner.id : '';
-    if (exist === ownerId) {
-      errors.items[i].feeFineType = props.stripes.intl.formatMessage({ id: 'ui-users.feefines.errors.exist' });
-    } else if (owner !== undefined && (ownerId === shared || owner === 'Shared')) {
-      errors.items[i].feeFineType = <SafeHTMLMessage
-        id="ui-users.feefines.errors.existShared"
-        values={{ owner }}
-      />;
+    const shared = owners.find(o => o.owner === 'Shared') || {};
+    if (exist.length > 0) {
+      if (exist.find(e => e === ownerId)) {
+        errors.items[i].feeFineType = props.stripes.intl.formatMessage({ id: 'ui-users.feefines.errors.exist' });
+      } else if (ownerId === shared.id) {
+        errors.items[i].feeFineType = <SafeHTMLMessage
+          id="ui-users.feefines.errors.existShared"
+          values={{ owner: (owners.find(o => o.id === exist[0]) || {}).owner }}
+        />;
+      } else if (exist.find(e => e === shared.id)) {
+        errors.items[i].feeFineType = <SafeHTMLMessage
+          id="ui-users.feefines.errors.existShared"
+          values={{ owner: 'Shared' }}
+        />;
+      }
     }
+
 
     if (!item.feeFineType) { errors.items[i].feeFineType = props.stripes.intl.formatMessage({ id: 'ui-users.errors.missingRequiredField' }); }
   });
@@ -60,6 +67,7 @@ class FeeFines extends React.Component {
       records: 'accounts',
       path: 'accounts?limit=0&facets=feeFineId',
     },
+
     feefines: {
       type: 'okapi',
       records: 'feefines',
