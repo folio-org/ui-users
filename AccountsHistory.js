@@ -11,11 +11,11 @@ import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import SegmentedControl from '@folio/stripes-components/lib/SegmentedControl';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import IconButton from '@folio/stripes-components/lib/IconButton';
-import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
 import { filterState } from '@folio/stripes-components/lib/FilterGroups';
 import { Dropdown } from '@folio/stripes-components/lib/Dropdown';
 import Checkbox from '@folio/stripes-components/lib/Checkbox';
 import DropdownMenu from '@folio/stripes-components/lib/DropdownMenu';
+import { makeQueryFunction } from '@folio/stripes-smart-components';
 
 import { getFullName } from './util';
 import { Actions } from './lib/Accounts/Actions';
