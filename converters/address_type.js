@@ -8,12 +8,10 @@ export function toAddressTypeOptions(addressTypes) {
 
 export function getAddressTypesById(addressTypes) {
   if (!addressTypes) return {};
-  return addressTypes.reduce((map, addrType) =>
-    (Object.assign(map, { [addrType.id]: addrType })), {});
+  return addressTypes.reduce((map, addrType) => (Object.assign(map, { [addrType.id]: addrType })), {});
 }
 
 export function getAddressTypesByName(addressTypes) {
   if (!addressTypes) return {};
-  return addressTypes.reduce((map, addrType) =>
-    (Object.assign(map, { [addrType.addressType]: addrType })), {});
+  return addressTypes.reduce((map, addrType) => (Object.assign(map, { [addrType.addressType]: addrType })), {});
 }

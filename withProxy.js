@@ -3,8 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 // HOC used to manage proxies and sponsors
-const withProxy = WrappedComponent =>
-  class WithProxyComponent extends React.Component {
+const withProxy = WrappedComponent => class WithProxyComponent extends React.Component {
     static manifest = Object.freeze(
       Object.assign({}, WrappedComponent.manifest, {
         sponsors: {
@@ -152,8 +151,7 @@ const withProxy = WrappedComponent =>
 
       if (!records.length) return records;
 
-      const rMap = records.reduce((memo, record) =>
-        Object.assign(memo, { [record.id]: record }), {});
+      const rMap = records.reduce((memo, record) => Object.assign(memo, { [record.id]: record }), {});
       return recordsFor.map(r => ({ proxy: r, user: rMap[r[idKey]] }));
     }
 
@@ -203,7 +201,7 @@ const withProxy = WrappedComponent =>
         {...this.props}
       />);
     }
-  };
+};
 
 
 export default withProxy;

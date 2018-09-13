@@ -90,4 +90,3 @@ const sections = [
 ];
 
 export default props => <Settings {...props} sections={sections} paneTitle="Users" />;
-

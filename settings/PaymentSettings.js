@@ -66,4 +66,3 @@ class PaymentSettings extends React.Component {
 }
 
 export default PaymentSettings;
-

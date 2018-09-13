@@ -19,9 +19,9 @@ const Setting = (props) => (
           name={props.name}
           component={Select}
           dataOptions={[
-          { value: true, label: props.stripes.intl.formatMessage({ id: 'ui-users.yes' }) },
-          { value: false, label: props.stripes.intl.formatMessage({ id: 'ui-users.no' }) }
-        ]}
+            { value: true, label: props.stripes.intl.formatMessage({ id: 'ui-users.yes' }) },
+            { value: false, label: props.stripes.intl.formatMessage({ id: 'ui-users.no' }) }
+          ]}
         />
       </Col>
     </Row>
