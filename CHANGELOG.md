@@ -1,7 +1,7 @@
 # Change history for ui-users
 
-## [2.14.0](https://github.com/folio-org/ui-users/tree/v2.14.0) (2018-09-04)
-[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.13.0...v2.14.0)
+## [2.15.0](https://github.com/folio-org/ui-users/tree/v2.15.0) (2018-09-13)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.13.0...v2.15.0)
 
 * Fix duplicity message for settings. Fixes UIU-193, UIU-198, UIU-504, UIU-505, UIU-543.
 * Remove Tax/Vat column for Manual Fees/Fines Table. Fixes UIU-577.
@@ -20,6 +20,12 @@
 * Add missing files. Fix UIU-219, UIU-238.
 * Anonymize closed loans on demand. Fixes UIU-463.
 * Add badge counter to tags icon. Part of STSMACOM-113.
+
+
+## 2.14.0
+
+(Does not exist due to [a numbering error with patch-level `folioci` releases](https://issues.folio.org/browse/UIU-626?focusedCommentId=36089&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-36089).)
+
 
 ## [2.13.0](https://github.com/folio-org/ui-users/tree/v2.13.0) (2018-09-04)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.12.0...v2.13.0)
