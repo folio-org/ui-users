@@ -2,7 +2,7 @@
 
 buildNPM {
   publishModDescriptor = 'yes'
-  runRegression = 'yes'
+  runRegression = 'no'
   runLint = 'yes'
   runTest = 'no'
 }
