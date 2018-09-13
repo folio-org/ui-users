@@ -15,6 +15,7 @@ class RefundReasonsSettings extends React.Component {
     super(props);
     this.connectedControlledVocab = props.stripes.connect(ControlledVocab);
   }
+
   render() {
     const label = this.props.stripes.intl.formatMessage({ id: 'ui-users.refunds.singular' });
 

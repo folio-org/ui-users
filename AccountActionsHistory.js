@@ -55,6 +55,7 @@ class AccountActionsHistory extends React.Component {
     onCancel: PropTypes.func.isRequired,
     onClickViewLoanActionsHistory: PropTypes.func.isRequired,
   };
+
   constructor(props) {
     super(props);
 

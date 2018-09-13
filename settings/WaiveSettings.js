@@ -15,6 +15,7 @@ class WaiveSettings extends React.Component {
     super(props);
     this.connectedControlledVocab = props.stripes.connect(ControlledVocab);
   }
+
   render() {
     const label = this.props.stripes.intl.formatMessage({ id: 'ui-users.waives.singular' });
 

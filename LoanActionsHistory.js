@@ -263,6 +263,7 @@ class LoanActionsHistory extends React.Component {
     }
     return '-';
   }
+
   renderChangeDueDateDialog() {
     return (
       <this.connectedChangeDueDateDialog
