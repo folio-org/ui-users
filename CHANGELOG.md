@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## 2.16.0 (IN PROGRESS)
+
+* Update to stripes-form 0.9.0. Refs STRIPES-555.
+
 ## [2.15.1](https://github.com/folio-org/ui-users/tree/v2.15.1) (2018-09-13)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.15.0...v2.15.1)
 
