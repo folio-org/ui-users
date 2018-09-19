@@ -233,11 +233,11 @@ class AccountsHistory extends React.Component {
     return _.get(query, name);
   }
 
-  onChangeActions(actions, a) {
-    const newActions = { ...this.state.actions, ...actions };
-    this.setState({
-      actions: newActions,
-    });
+  onChangeActions(newActions, a) {
+    this.setState(({ actions }) => ({
+      actions: { ...actions, ...newActions }
+    }));
+
     if (a) {
       this.accounts = a;
     }
@@ -305,8 +305,7 @@ class AccountsHistory extends React.Component {
 
   renderCheckboxList(columnMapping) {
     const { visibleColumns } = this.state;
-    return visibleColumns.filter((o) =>
-      Object.keys(columnMapping).includes(o.title))
+    return visibleColumns.filter((o) => Object.keys(columnMapping).includes(o.title))
       .map((column, i) => {
         const name = columnMapping[column.title];
         return (
@@ -330,25 +329,26 @@ class AccountsHistory extends React.Component {
       return map;
     }, {});
 
-    const columnsToDisplay = this.possibleColumns.filter((e) =>
-      visibleColumnsMap[e] === undefined || visibleColumnsMap[e] === true);
+    const columnsToDisplay = this.possibleColumns.filter((e) => visibleColumnsMap[e] === undefined || visibleColumnsMap[e] === true);
     return columnsToDisplay;
   }
 
   onDropdownClick() {
-    const state = this.state.toggleDropdownState !== true;
-    this.setState({ toggleDropdownState: state });
+    this.setState(({ toggleDropdownState }) => ({
+      toggleDropdownState: !toggleDropdownState
+    }));
   }
 
   toggleColumn(title) {
-    const columnList = this.state.visibleColumns.map(column => {
-      if (column.title === title) {
-        const status = column.status;
-        column.status = status !== true;
-      }
-      return column;
-    });
-    this.setState({ visibleColumns: columnList });
+    this.setState(({ visibleColumns }) => ({
+      visibleColumns: visibleColumns.map(column => {
+        if (column.title === title) {
+          const status = column.status;
+          column.status = status !== true;
+        }
+        return column;
+      })
+    }));
   }
 
   render() {
@@ -368,7 +368,7 @@ class AccountsHistory extends React.Component {
 
     const closeMenu = (
       <PaneMenu>
-        <button onClick={this.props.onCancel}>
+        <button onClick={this.props.onCancel} type="button">
           <Row>
             <Col><Icon icon="left-double-chevron" size="large" /></Col>
             <Col><span style={{ fontSize: 'x-large' }}>Back</span></Col>
@@ -437,7 +437,11 @@ class AccountsHistory extends React.Component {
 
     const header1 = (
       <Row style={{ width: '80%' }}>
-        <Col xs={7}> {closeMenu} </Col>
+        <Col xs={7}>
+          {' '}
+          {closeMenu}
+          {' '}
+        </Col>
         <Col xs={4}>
           <Row>
             <Col>
@@ -446,7 +450,9 @@ class AccountsHistory extends React.Component {
           </Row>
           <Row>
             <Col>
-              Outstanding Balance {balance}
+              Outstanding Balance
+              {' '}
+              {balance}
             </Col>
           </Row>
         </Col>

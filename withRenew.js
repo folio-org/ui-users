@@ -4,8 +4,7 @@ import PropTypes from 'prop-types';
 import ErrorModal from './lib/ErrorModal';
 
 // HOC used to manage renew
-const withRenew = WrappedComponent =>
-  class WithRenewComponent extends React.Component {
+const withRenew = WrappedComponent => class WithRenewComponent extends React.Component {
     static manifest = Object.freeze(
       Object.assign({}, WrappedComponent.manifest, {
         renew: {
@@ -125,7 +124,7 @@ const withRenew = WrappedComponent =>
         </div>
       );
     }
-  };
+};
 
 
 export default withRenew;

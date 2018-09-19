@@ -55,6 +55,7 @@ class AccountActionsHistory extends React.Component {
     onCancel: PropTypes.func.isRequired,
     onClickViewLoanActionsHistory: PropTypes.func.isRequired,
   };
+
   constructor(props) {
     super(props);
 
@@ -87,7 +88,6 @@ class AccountActionsHistory extends React.Component {
         comment: false,
         regular: false,
       },
-      checkedAccounts: {},
       sortOrder: [
         stripes.intl.formatMessage({ id: 'ui-users.details.columns.date' }),
         stripes.intl.formatMessage({ id: 'ui-users.details.columns.action' }),
@@ -98,10 +98,7 @@ class AccountActionsHistory extends React.Component {
         stripes.intl.formatMessage({ id: 'ui-users.details.columns.source' }),
         stripes.intl.formatMessage({ id: 'ui-users.details.columns.comments' }),
       ],
-      sortDirection: ['desc', 'asc'],
-      message: {},
-      source: '',
-      id: '',
+      sortDirection: ['desc', 'asc']
     };
   }
 
@@ -156,7 +153,7 @@ class AccountActionsHistory extends React.Component {
       const direction = (sortDirection[0] === 'desc') ? 'asc' : 'desc';
       sortDirection = [direction, sortDirection[1]];
     }
-    this.setState({ ...this.state, sortOrder, sortDirection });
+    this.setState({ sortOrder, sortDirection });
   }
 
   render() {
@@ -168,7 +165,12 @@ class AccountActionsHistory extends React.Component {
     const patron = this.props.patronGroup;
 
     const columnMapping = {
-      Comments: (<span>{this.props.stripes.intl.formatMessage({ id: 'ui-users.details.columns.comments' })}<Button style={{ float: 'right', marginLeft: '50px' }} onClick={this.comment}>+ New</Button></span>),
+      Comments: (
+        <span>
+          {this.props.stripes.intl.formatMessage({ id: 'ui-users.details.columns.comments' })}
+          <Button style={{ float: 'right', marginLeft: '50px' }} onClick={this.comment}>+ New</Button>
+        </span>
+      ),
     };
 
     const accountActionsFormatter = {
@@ -210,30 +212,30 @@ class AccountActionsHistory extends React.Component {
           </Row>
 
           <Row>
-            <Col xs={1.5} >
+            <Col xs={1.5}>
               <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.details.field.feetype' })} value={_.get(account, ['feeFineType'], '-')} />
             </Col>
-            <Col xs={1.5} >
+            <Col xs={1.5}>
               <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.details.field.owner' })} value={_.get(account, ['feeFineOwner'], '-')} />
             </Col>
-            <Col xs={1.5} >
+            <Col xs={1.5}>
               <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.details.field.billedate' })} value={_.get(account, ['metadata', 'createdDate']) ? formatDateTime(_.get(account, ['metadata', 'createdDate'])) : '-'} />
             </Col>
-            <Col xs={1.5} >
+            <Col xs={1.5}>
               <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.details.field.billedamount' })} value={amount} />
             </Col>
-            <Col xs={1.5} >
+            <Col xs={1.5}>
               <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.details.field.remainingamount' })} value={remaining} />
             </Col>
-            <Col xs={1.5} >
+            <Col xs={1.5}>
               <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.details.field.latest' })} value={_.get(account, ['paymentStatus', 'name'], '-')} />
             </Col>
-            <Col xs={1.5} >
+            <Col xs={1.5}>
               {(loanId !== 0) ?
                 <KeyValue
                   label="Loan details"
                   value={
-                    <button onClick={(e) => { this.props.onClickViewLoanActionsHistory(e, { id: loanId }); }}>
+                    <button type="button" onClick={(e) => { this.props.onClickViewLoanActionsHistory(e, { id: loanId }); }}>
                       {this.props.stripes.intl.formatMessage({ id: 'ui-users.details.field.loan' })}
                     </button>}
                 />
@@ -246,25 +248,25 @@ class AccountActionsHistory extends React.Component {
             </Col>
           </Row>
           <Row>
-            <Col xs={1.5} >
+            <Col xs={1.5}>
               <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.details.field.instance' })} value={_.get(account, ['title'], '-')} />
             </Col>
-            <Col xs={1.5} >
+            <Col xs={1.5}>
               <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.details.field.type' })} value={_.get(account, ['materialType'], '-')} />
             </Col>
-            <Col xs={1.5} >
+            <Col xs={1.5}>
               <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.details.field.barcode' })} value={<Link to={`/inventory/view/${_.get(account, ['itemId'], '')}?query=${_.get(account, ['itemId'], '')}`}>{_.get(account, ['barcode'], '-')}</Link>} />
             </Col>
-            <Col xs={1.5} >
+            <Col xs={1.5}>
               <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.details.field.callnumber' })} value={_.get(account, ['callNumber'], '-')} />
             </Col>
-            <Col xs={1.5} >
+            <Col xs={1.5}>
               <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.details.field.location' })} value={_.get(account, ['location'], '-')} />
             </Col>
-            <Col xs={1.5} >
+            <Col xs={1.5}>
               <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.details.field.duedate' })} value={formatDateTime(account.dueDate) || '-'} />
             </Col>
-            <Col xs={1.5} >
+            <Col xs={1.5}>
               <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.details.field.returnedate' })} value={formatDateTime(account.returnedDate) || '-'} />
             </Col>
           </Row>
@@ -297,4 +299,3 @@ class AccountActionsHistory extends React.Component {
 }
 
 export default AccountActionsHistory;
-
