@@ -452,7 +452,7 @@
     "@folio/react-intl-safe-html": "^1.0.0",
     "@folio/stripes-components": "^3.1.0",
     "@folio/stripes-form": "^1.0.0",
-    "@folio/stripes-smart-components": "^1.7.0",
+    "@folio/stripes-smart-components": "^1.8.0",
     "hashcode": "^1.0.3",
     "lodash": "^4.17.4",
     "moment": "^2.22.2",
