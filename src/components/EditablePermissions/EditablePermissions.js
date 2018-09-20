@@ -160,7 +160,8 @@ class EditablePermissions extends React.Component {
           onToggle={this.onToggleAddPermDD}
         >
           <Button align="end" bottomMargin0 data-role="toggle" aria-haspopup="true" id="clickable-add-permission">
-&#43;
+            &#43;
+            {' '}
             <FormattedMessage id="ui-users.permissions.addPermission" />
           </Button>
           <DropdownMenu
@@ -185,21 +186,8 @@ class EditablePermissions extends React.Component {
           <Badge>{size}</Badge>
         }
       >
-        <Row>
-          <Col xs={8}>
-            <Row>
-              <Col xs={12}>
-                {permsDropdownButton}
-              </Col>
-            </Row>
-            <br />
-            <Row>
-              <Col xs={12}>
-                <FieldArray name={this.props.name} component={this.renderList} />
-              </Col>
-            </Row>
-          </Col>
-        </Row>
+        <div>{permsDropdownButton}</div>
+        <FieldArray name={this.props.name} component={this.renderList} />
       </Accordion>
     );
   }

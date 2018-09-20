@@ -193,21 +193,53 @@ class UserForm extends React.Component {
       <form className={css.UserFormRoot} id="form-user" onSubmit={handleSubmit} onKeyDown={this.handleKeyDown}>
         <Paneset isRoot>
           <Pane defaultWidth="100%" firstMenu={firstMenu} lastMenu={lastMenu} paneTitle={paneTitle} appIcon={{ app: 'users' }}>
-            <Row end="xs">
-              <Col xs>
-                <ExpandAllButton accordionStatus={sections} onToggle={this.handleExpandAll} />
-              </Col>
-            </Row>
-            <EditUserInfo accordionId="editUserInfo" expanded={sections.editUserInfo} onToggle={this.handleSectionToggle} {...this.props} />
-            <EditExtendedInfo accordionId="extendedInfo" expanded={sections.extendedInfo} onToggle={this.handleSectionToggle} {...this.props} />
-            <EditContactInfo accordionId="contactInfo" expanded={sections.contactInfo} onToggle={this.handleSectionToggle} {...this.props} />
-            {initialValues.id &&
-              <div>
-                <EditProxy accordionId="proxy" expanded={sections.proxy} onToggle={this.handleSectionToggle} {...this.props} />
-                <this.connectedEditUserPerms accordionId="permissions" expanded={sections.permissions} onToggle={this.handleSectionToggle} {...this.props} />
-                <EditServicePoints accordionId="servicePoints" expanded={sections.servicePoints} onToggle={this.handleSectionToggle} {...this.props} />
-              </div>
-            }
+            <div className={css.UserFormContent}>
+              <Row end="xs">
+                <Col xs>
+                  <ExpandAllButton accordionStatus={sections} onToggle={this.handleExpandAll} />
+                </Col>
+              </Row>
+              <EditUserInfo
+                accordionId="editUserInfo"
+                expanded={sections.editUserInfo}
+                onToggle={this.handleSectionToggle}
+                {...this.props}
+              />
+              <EditExtendedInfo
+                accordionId="extendedInfo"
+                expanded={sections.extendedInfo}
+                onToggle={this.handleSectionToggle}
+                {...this.props}
+              />
+              <EditContactInfo
+                accordionId="contactInfo"
+                expanded={sections.contactInfo}
+                onToggle={this.handleSectionToggle}
+                {...this.props}
+              />
+              {initialValues.id &&
+                <div>
+                  <EditProxy
+                    accordionId="proxy"
+                    expanded={sections.proxy}
+                    onToggle={this.handleSectionToggle}
+                    {...this.props}
+                  />
+                  <this.connectedEditUserPerms
+                    accordionId="permissions"
+                    expanded={sections.permissions}
+                    onToggle={this.handleSectionToggle}
+                    {...this.props}
+                  />
+                  <EditServicePoints
+                    accordionId="servicePoints"
+                    expanded={sections.servicePoints}
+                    onToggle={this.handleSectionToggle}
+                    {...this.props}
+                  />
+                </div>
+              }
+            </div>
           </Pane>
         </Paneset>
       </form>
