@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## 2.15.3 (IN PROGRESS)
+
+* Avoid limit=0 in queries due to a RAML regression in 1.0 vs 0.8. Refs FOLIO-1517.
+
 ## [2.15.2](https://github.com/folio-org/ui-users/tree/v2.15.2) (2018-09-14)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.15.1...v2.15.2)
 

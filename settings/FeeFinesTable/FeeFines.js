@@ -60,12 +60,12 @@ class FeeFines extends React.Component {
     feefinesPerOwner: {
       type: 'okapi',
       records: 'feefines',
-      path: 'feefines?limit=0&facets=ownerId',
+      path: 'feefines?limit=1&facets=ownerId',
     },
     accountsPerFeeFine: {
       type: 'okapi',
       records: 'accounts',
-      path: 'accounts?limit=0&facets=feeFineId',
+      path: 'accounts?limit=1&facets=feeFineId',
     },
 
     feefines: {
