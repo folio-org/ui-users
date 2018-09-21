@@ -160,6 +160,7 @@ class ViewUser extends React.Component {
       viewOpenLoansMode: true,
       selectedLoan: {},
       selectedAccount: {},
+      addRecord: false,
       lastUpdate: null,
       sections: {
         userInformationSection: true,
@@ -332,9 +333,10 @@ class ViewUser extends React.Component {
   }
 
   handleAddRecords() {
-    this.setState(({ addRecord }) => ({
-      addRecord: !addRecord
-    }));
+    const add = this.state.addRecord;
+    this.setState({
+      addRecord: !add
+    });
   }
 
   getUser() {
@@ -629,6 +631,7 @@ class ViewUser extends React.Component {
         <Layer isOpen={query.layer ? query.layer === 'open-accounts' || query.layer === 'closed-accounts' || query.layer === 'all-accounts' : false} label="Fees/Fines">
           <this.connectedAccountsHistory
             loans={loans}
+            num={(this.state.addRecord ? 51 : 50)}
             onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
             user={user}
             parentMutator={this.props.mutator}
