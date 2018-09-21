@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { makeQueryFunction, SearchAndSort } from '@folio/stripes-smart-components';
+import AppIcon from '@folio/stripes-components/lib/AppIcon';
 
 import uuid from 'uuid';
 import ViewUser from './ViewUser';
@@ -186,7 +187,11 @@ class Users extends React.Component {
     const patronGroups = (this.props.resources.patronGroups || {}).records || [];
 
     const resultsFormatter = {
-      status: user => (user.active ? intl.formatMessage({ id: 'ui-users.active' }) : intl.formatMessage({ id: 'ui-users.inactive' })),
+      status: user => (
+        <AppIcon app="users" size="small">
+          {user.active ? intl.formatMessage({ id: 'ui-users.active' }) : intl.formatMessage({ id: 'ui-users.inactive' })}
+        </AppIcon>
+      ),
       name: user => getFullName(user),
       barcode: user => user.barcode,
       patronGroup: (user) => {
