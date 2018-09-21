@@ -165,7 +165,7 @@ class AccountsHistory extends React.Component {
 
     this.handleRecords = this.handleRecords.bind(this);
     this.accounts = [];
-    this.addRecord = false;
+    this.addRecord = 50;
     this.editRecord = 0;
 
     this.transitionToParams = values => this.props.parentMutator.query.update(values);
@@ -187,11 +187,16 @@ class AccountsHistory extends React.Component {
     this.props.mutator.user.update({ id: this.props.user.id });
   }
 
+
   shouldComponentUpdate(nextProps, nextState) {
     const filter = _.get(this.props.resources, ['filter', 'records'], []);
     const nextFilter = _.get(nextProps.resources, ['filter', 'records'], []);
     const accounts = _.get(this.props.resources, ['feefineshistory', 'records'], []);
     const nextAccounts = _.get(nextProps.resources, ['feefineshistory', 'records'], []);
+    if (this.addRecord !== nextProps.num) {
+      this.props.mutator.activeRecord.update({ records: nextProps.num });
+      this.addRecord = nextProps.num;
+    }
     return this.state !== nextState ||
       filter !== nextFilter ||
       accounts !== nextAccounts;
@@ -205,7 +210,6 @@ class AccountsHistory extends React.Component {
     } else if (query.layer === 'closed-accounts') {
       filterAccounts = filterAccounts.filter(a => a.status.name === 'Closed') || [];// a.status.name
     }
-
     const feeFineTypes = count(filterAccounts.map(a => (a.feeFineType)));
     const feeFineOwners = count(filterAccounts.map(a => (a.feeFineOwner)));
     const paymentStatus = count(filterAccounts.map(a => (a.paymentStatus.name)));
@@ -215,12 +219,6 @@ class AccountsHistory extends React.Component {
     filterConfig[2].values = feeFineTypes.map(f => ({ name: `${f.name}`, cql: f.name }));
     filterConfig[3].values = itemTypes.map(i => ({ name: `${i.name}`, cql: i.name }));
 
-
-    if (this.addRecord !== this.props.addRecord) {
-      if (!this.addRecord) prevProps.mutator.activeRecord.update({ records: 51 });
-      else prevProps.mutator.activeRecord.update({ records: 50 });
-      this.addRecord = this.props.addRecord;
-    }
     if (this.editRecord !== 0) {
       if (this.editRecord === 1) prevProps.mutator.activeRecord.update({ records: 51 });
       else prevProps.mutator.activeRecord.update({ records: 50 });
@@ -450,9 +448,9 @@ class AccountsHistory extends React.Component {
           </Row>
           <Row>
             <Col>
-              Outstanding Balance
+              Outstanding Balance:
               {' '}
-              {balance}
+              {(balance > 0 || balance === '') ? parseFloat(balance).toFixed(2) : '0.00'}
             </Col>
           </Row>
         </Col>
