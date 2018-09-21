@@ -508,7 +508,7 @@
   "charge.barcode": "Barcode: ",
   "charge.title": "New fee/fine",
   "charge.pay": "Charge and pay now",
-  "charge.onlyCharge": "Charge Only",
+  "charge.onlyCharge": "Charge only",
   "charge.comment": "Comments",
 
   "charge.errors.amount": "Amount is not a number",
@@ -562,10 +562,11 @@
   "accounts.pay.field.totalamount":"Total owed amount",
   "accounts.pay.field.selectedamount":"Selected amount",
   "accounts.pay.field.paymentamount":"Payment amount*",
-  "accounts.pay.field.remainingamount":"Remaining amount*",
+  "accounts.pay.field.remainingamount":"Remaining amount",
   "accounts.pay.field.paymentmethod":"Payment type*",
   "accounts.pay.field.trasactioninfo":"Transaction information",
   "accounts.pay.field.comment":"Additional information",
+  "accounts.pay.success": "The <strong>{feefine}</strong> fee/fine of <strong>{amount}</strong> has been successfully <strong>{action}</strong>",
 
   "accounts.waive.field.totalamount":"fees/fines for a total amount of",
   "accounts.waive.field.totalowed":"Total owed amount",
