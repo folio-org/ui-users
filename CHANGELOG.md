@@ -1,6 +1,7 @@
 # Change history for ui-users
 
-## 2.15.3 (IN PROGRESS)
+## [2.15.3](https://github.com/folio-org/ui-users/tree/v2.15.3) (2018-09-24)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.15.2...v2.15.3)
 
 * Fix charge Manual Fee/Fine,Display fees/fines history,Display Fee/Fine Details,Pay Fee/Fine. Fix UIU-635, UIU-645.
 
