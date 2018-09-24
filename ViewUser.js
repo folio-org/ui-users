@@ -2,17 +2,17 @@ import { cloneDeep, get, omit, differenceBy, find } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
-import TitleManager from '@folio/stripes-core/src/components/TitleManager'; // eslint-disable-line import/no-unresolved
-import Pane from '@folio/stripes-components/lib/Pane';
-import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
-import Icon from '@folio/stripes-components/lib/Icon';
-import Layer from '@folio/stripes-components/lib/Layer';
-import IfPermission from '@folio/stripes-components/lib/IfPermission';
-import IfInterface from '@folio/stripes-components/lib/IfInterface';
-import { ExpandAllButton } from '@folio/stripes-components/lib/Accordion';
-import IconButton from '@folio/stripes-components/lib/IconButton';
-import { withTags } from '@folio/stripes-smart-components/lib/Tags';
+import TitleManager from '@folio/stripes/core/src/components/TitleManager'; // eslint-disable-line import/no-unresolved
+import { Pane } from '@folio/stripes/components';
+import { PaneMenu } from '@folio/stripes/components';
+import { Row, Col } from '@folio/stripes/components';
+import { Icon } from '@folio/stripes/components';
+import { Layer } from '@folio/stripes/components';
+import { IfPermission } from '@folio/stripes/components';
+import { IfInterface } from '@folio/stripes/components';
+import { ExpandAllButton } from '@folio/stripes/components';
+import { IconButton } from '@folio/stripes/components';
+import { withTags } from '@folio/stripes/smart-components/lib/Tags';
 
 import UserForm from './UserForm';
 import LoansHistory from './LoansHistory';

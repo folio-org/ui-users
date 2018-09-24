@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import Select from '@folio/stripes-components/lib/Select';
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
+import { Select } from '@folio/stripes/components';
+import { Row, Col } from '@folio/stripes/components';
 
 const Owners = (props) => {
   const options = [];

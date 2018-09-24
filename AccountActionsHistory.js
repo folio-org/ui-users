@@ -3,12 +3,12 @@ import React from 'react';
 import Link from 'react-router-dom/Link';
 import PropTypes from 'prop-types';
 
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
-import KeyValue from '@folio/stripes-components/lib/KeyValue';
-import Pane from '@folio/stripes-components/lib/Pane';
-import Paneset from '@folio/stripes-components/lib/Paneset';
-import Button from '@folio/stripes-components/lib/Button';
-import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
+import { Row, Col } from '@folio/stripes/components';
+import { KeyValue } from '@folio/stripes/components';
+import { Pane } from '@folio/stripes/components';
+import { Paneset } from '@folio/stripes/components';
+import { Button } from '@folio/stripes/components';
+import { MultiColumnList } from '@folio/stripes/components';
 
 import { Actions } from './lib/Accounts/Actions';
 import { formatDateTime, getFullName } from './util';

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Link from 'react-router-dom/Link';
-import KeyValue from '@folio/stripes-components/lib/KeyValue';
+import { KeyValue } from '@folio/stripes/components';
 import { getFullName } from './util';
 
 class LoanActionsHistoryProxy extends React.Component {

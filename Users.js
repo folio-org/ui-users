@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { makeQueryFunction, SearchAndSort } from '@folio/stripes-smart-components';
+import { makeQueryFunction, SearchAndSort } from '@folio/stripes/smart-components';
 
 import uuid from 'uuid';
 import ViewUser from './ViewUser';

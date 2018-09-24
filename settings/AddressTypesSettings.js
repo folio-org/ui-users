@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ControlledVocab from '@folio/stripes-smart-components/lib/ControlledVocab';
+import { ControlledVocab } from '@folio/stripes/smart-components';
 
 class AddressTypesSettings extends React.Component {
   static propTypes = {
