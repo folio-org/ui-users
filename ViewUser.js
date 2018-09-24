@@ -47,8 +47,7 @@ class ViewUser extends React.Component {
       clear: false,
       shouldRefresh: (resource, action) => {
         const { path } = action.meta;
-        const options = resource.optionsTemplate;
-        return path.match(/link/) || (options.path || '').startsWith(path);
+        return path.match(/link/);
       },
     },
     loansHistory: {
