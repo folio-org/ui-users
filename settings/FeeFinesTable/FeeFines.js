@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { ConfirmationModal } from '@folio/stripes/components';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import { Callout } from '@folio/stripes/components';
-
 import { EditableList } from '@folio/stripes/components';
 import Owners from './Owners';
 import CopyModal from './CopyModal';

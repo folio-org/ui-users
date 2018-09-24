@@ -3,6 +3,7 @@
 ## 2.16.0 (IN PROGRESS)
 
 * Update `stripes-form` dependency to v1.0.0
+* Fix charge Manual Fee/Fine,Display fees/fines history,Display Fee/Fine Details,Pay Fee/Fine. Fix UIU-635, UIU-645.
 
 ## [2.15.1](https://github.com/folio-org/ui-users/tree/v2.15.1) (2018-09-13)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.15.0...v2.15.1)
