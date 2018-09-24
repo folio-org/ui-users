@@ -11,7 +11,7 @@ import { Row, Col } from '@folio/stripes/components';
 import { SegmentedControl } from '@folio/stripes/components';
 import { PaneMenu } from '@folio/stripes/components';
 import { IconButton } from '@folio/stripes/components';
-import { filterState } from '@folio/stripes/components';
+import { FilterGroups } from '@folio/stripes/components';
 import { Dropdown } from '@folio/stripes/components';
 import { Checkbox } from '@folio/stripes/components';
 import { DropdownMenu } from '@folio/stripes/components';
@@ -28,6 +28,8 @@ import {
   AllAccounts,
   ClosedAccounts,
 } from './lib/Accounts';
+
+const { filterState } = FilterGroups;
 
 const filterConfig = [
   {

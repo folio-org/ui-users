@@ -3,7 +3,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import { Pane } from '@folio/stripes/components';
-import { Textfield } from '@folio/stripes/components';
+import { TextField } from '@folio/stripes/components';
 import { TextArea } from '@folio/stripes/components';
 import { Button } from '@folio/stripes/components';
 import { Paneset } from '@folio/stripes/components';
@@ -198,7 +198,7 @@ class PermissionSetForm extends React.Component {
               <Row>
                 <Col xs={8}>
                   <section>
-                    <Field label={`${intl.formatMessage({ id: 'ui-users.permissions.permissionSetName' })} *`} name="displayName" id="input-permission-title" component={Textfield} autoFocus required fullWidth disabled={disabled} />
+                    <Field label={`${intl.formatMessage({ id: 'ui-users.permissions.permissionSetName' })} *`} name="displayName" id="input-permission-title" component={TextField} autoFocus required fullWidth disabled={disabled} />
                     <Field label={intl.formatMessage({ id: 'ui-users.description' })} name="description" id="input-permission-description" component={TextArea} fullWidth disabled={disabled} />
                   </section>
                 </Col>
