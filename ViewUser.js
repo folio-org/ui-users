@@ -48,8 +48,7 @@ class ViewUser extends React.Component {
       shouldRefresh: (resource, action) => {
         const { path } = action.meta;
         const options = resource.optionsTemplate;
-        const refresh = path.match(/link/) || (options.path || '').startsWith(path);
-        return refresh;
+        return path.match(/link/) || (options.path || '').startsWith(path);
       },
     },
     loansHistory: {
