@@ -45,9 +45,9 @@ class ViewUser extends React.Component {
       type: 'okapi',
       path: 'users/:{id}',
       clear: false,
-      shouldRefresh: (resource, action) => {
+      shouldRefresh: (resource, action, refresh) => {
         const { path } = action.meta;
-        return path.match(/link/);
+        return refresh || path.match(/link/);
       },
     },
     loansHistory: {
