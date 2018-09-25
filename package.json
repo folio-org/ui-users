@@ -463,5 +463,8 @@
   },
   "optionalDependencies": {
     "@folio/plugin-find-user": "^1.1.0"
+  },
+  "resolutions": {
+    "@folio/stripes-form": "1.0.0 || 1.0.100029"
   }
 }
