@@ -2,7 +2,7 @@ import { cloneDeep, get, omit, differenceBy, find } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
-import { TitleManager } from '@folio/stripes/core'; // eslint-disable-line import/no-unresolved
+import { TitleManager } from '@folio/stripes/core';
 import { Pane } from '@folio/stripes/components';
 import { PaneMenu } from '@folio/stripes/components';
 import { Row, Col } from '@folio/stripes/components';
