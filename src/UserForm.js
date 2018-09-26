@@ -18,7 +18,7 @@ import {
   EditProxy,
   EditUserPerms,
   EditServicePoints,
-} from './lib/EditSections';
+} from './components/EditSections';
 import { getFullName } from './util';
 
 import css from './UserForm.css';

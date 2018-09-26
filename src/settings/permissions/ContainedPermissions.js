@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import EditablePermissions from '../../lib/EditablePermissions';
+import EditablePermissions from '../../components/EditablePermissions';
 
 class ContainedPermissions extends React.Component {
   static manifest = Object.freeze({

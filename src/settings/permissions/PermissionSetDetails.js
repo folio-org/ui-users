@@ -6,7 +6,7 @@ import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import { Accordion, ExpandAllButton } from '@folio/stripes-components/lib/Accordion';
 import ViewMetaData from '@folio/stripes-smart-components/lib/ViewMetaData';
 
-import RenderPermissions from '../../lib/RenderPermissions';
+import RenderPermissions from '../../components/RenderPermissions';
 
 class PermissionSetDetails extends React.Component {
   static propTypes = {

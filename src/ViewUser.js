@@ -18,7 +18,7 @@ import UserForm from './UserForm';
 import LoansHistory from './LoansHistory';
 import LoanActionsHistory from './LoanActionsHistory';
 
-import { ChargeFeeFine } from './lib/Accounts';
+import { ChargeFeeFine } from './components/Accounts';
 import AccountsHistory from './AccountsHistory';
 import AccountActionsHistory from './AccountActionsHistory';
 
@@ -36,7 +36,7 @@ import {
   UserLoans,
   UserAccounts,
   UserServicePoints,
-} from './lib/ViewSections';
+} from './components/ViewSections';
 
 class ViewUser extends React.Component {
   static manifest = Object.freeze({
