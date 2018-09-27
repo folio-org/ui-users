@@ -18,8 +18,8 @@ import DropdownMenu from '@folio/stripes-components/lib/DropdownMenu';
 import { makeQueryFunction } from '@folio/stripes-smart-components';
 
 import { getFullName } from './util';
-import { Actions } from './lib/Accounts/Actions';
-import { count, handleFilterChange, handleFilterClear } from './lib/Accounts/accountFunctions';
+import { Actions } from './components/Accounts/Actions';
+import { count, handleFilterChange, handleFilterClear } from './components/Accounts/accountFunctions';
 
 import {
   Menu,
@@ -27,7 +27,7 @@ import {
   OpenAccounts,
   AllAccounts,
   ClosedAccounts,
-} from './lib/Accounts';
+} from './components/Accounts';
 
 const filterConfig = [
   {
