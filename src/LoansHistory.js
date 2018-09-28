@@ -7,7 +7,7 @@ import { Button } from '@folio/stripes/components';
 import { SegmentedControl } from '@folio/stripes/components';
 
 import { getFullName } from './util';
-import { OpenLoans, ClosedLoans } from './lib/Loans';
+import { OpenLoans, ClosedLoans } from './components/Loans';
 import css from './LoansHistory.css';
 
 /**

@@ -6,7 +6,7 @@ import { Row, Col } from '@folio/stripes/components';
 import { Accordion, ExpandAllButton } from '@folio/stripes/components';
 import { ViewMetaData } from '@folio/stripes/smart-components';
 
-import RenderPermissions from '../../lib/RenderPermissions';
+import RenderPermissions from '../../components/RenderPermissions';
 
 class PermissionSetDetails extends React.Component {
   static propTypes = {

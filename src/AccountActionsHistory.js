@@ -10,7 +10,7 @@ import { Paneset } from '@folio/stripes/components';
 import { Button } from '@folio/stripes/components';
 import { MultiColumnList } from '@folio/stripes/components';
 
-import { Actions } from './lib/Accounts/Actions';
+import { Actions } from './components/Accounts/Actions';
 import { formatDateTime, getFullName } from './util';
 
 class AccountActionsHistory extends React.Component {

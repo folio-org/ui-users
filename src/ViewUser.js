@@ -18,7 +18,7 @@ import UserForm from './UserForm';
 import LoansHistory from './LoansHistory';
 import LoanActionsHistory from './LoanActionsHistory';
 
-import { ChargeFeeFine } from './lib/Accounts';
+import { ChargeFeeFine } from './components/Accounts';
 import AccountsHistory from './AccountsHistory';
 import AccountActionsHistory from './AccountActionsHistory';
 
@@ -36,7 +36,7 @@ import {
   UserLoans,
   UserAccounts,
   UserServicePoints,
-} from './lib/ViewSections';
+} from './components/ViewSections';
 
 class ViewUser extends React.Component {
   static manifest = Object.freeze({
@@ -45,6 +45,10 @@ class ViewUser extends React.Component {
       type: 'okapi',
       path: 'users/:{id}',
       clear: false,
+      shouldRefresh: (resource, action, refresh) => {
+        const { path } = action.meta;
+        return refresh || path.match(/link/);
+      },
     },
     loansHistory: {
       type: 'okapi',
@@ -134,7 +138,6 @@ class ViewUser extends React.Component {
     onEdit: PropTypes.func,
     editLink: PropTypes.string,
     onCloseEdit: PropTypes.func,
-    notesToggle: PropTypes.func,
     tagsToggle: PropTypes.func,
     location: PropTypes.object,
     history: PropTypes.object,
@@ -470,13 +473,6 @@ class ViewUser extends React.Component {
             aria-label={formatMsg({ id: 'ui-users.showTags' })}
           />
         }
-        <IconButton
-          icon="comment"
-          id="clickable-show-notes"
-          style={{ visibility: !user ? 'hidden' : 'visible' }}
-          onClick={this.props.notesToggle}
-          aria-label={formatMsg({ id: 'ui-users.showNotes' })}
-        />
         <IfPermission perm="users.item.put">
           <IconButton
             icon="edit"

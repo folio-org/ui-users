@@ -10,7 +10,7 @@ import ViewUser from './ViewUser';
 import UserForm from './UserForm';
 import { toUserAddresses } from './converters/address';
 import { getFullName } from './util';
-import packageInfo from './package';
+import packageInfo from '../package';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;

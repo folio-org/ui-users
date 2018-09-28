@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ControlledVocab } from '@folio/stripes/smart-components';
 
-import PatronGroupNumberOfUsers from '../lib/PatronGroupNumberOfUsers';
+import PatronGroupNumberOfUsers from '../components/PatronGroupNumberOfUsers';
 
 class PatronGroupsSettings extends React.Component {
   // adding the desired-count parameter, :50, to this query is an egregious
