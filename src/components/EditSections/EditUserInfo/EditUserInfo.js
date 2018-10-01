@@ -55,68 +55,62 @@ class EditUserInfo extends React.Component {
         id={accordionId}
         onToggle={onToggle}
       >
+
+        <this.cViewMetaData metadata={initialValues.metadata} />
+
         <Row>
-          <Col xs={12}>
-            <this.cViewMetaData metadata={initialValues.metadata} />
+          <Col xs={12} md={3}>
+            <Field label={`${intl.formatMessage({ id: 'ui-users.information.lastName' })} *`} name="personal.lastName" id="adduser_lastname" component={TextField} required fullWidth />
+          </Col>
+          <Col xs={12} md={3}>
+            <Field label={intl.formatMessage({ id: 'ui-users.information.firstName' })} name="personal.firstName" id="adduser_firstname" component={TextField} fullWidth />
+          </Col>
+          <Col xs={12} md={3}>
+            <Field label={intl.formatMessage({ id: 'ui-users.information.middleName' })} name="personal.middleName" id="adduser_middlename" component={TextField} fullWidth />
+          </Col>
+          <Col xs={12} md={3}>
+            <Field label={intl.formatMessage({ id: 'ui-users.information.barcode' })} name="barcode" id="adduser_barcode" component={TextField} fullWidth />
           </Col>
         </Row>
-        <Row>
-          <Col xs={8}>
-            <Row>
-              <Col xs={3}>
-                <Field label={`${intl.formatMessage({ id: 'ui-users.information.lastName' })} *`} name="personal.lastName" id="adduser_lastname" component={TextField} required fullWidth />
-              </Col>
-              <Col xs={3}>
-                <Field label={intl.formatMessage({ id: 'ui-users.information.firstName' })} name="personal.firstName" id="adduser_firstname" component={TextField} fullWidth />
-              </Col>
-              <Col xs={3}>
-                <Field label={intl.formatMessage({ id: 'ui-users.information.middleName' })} name="personal.middleName" id="adduser_middlename" component={TextField} fullWidth />
-              </Col>
-              <Col xs={3}>
-                <Field label={intl.formatMessage({ id: 'ui-users.information.barcode' })} name="barcode" id="adduser_barcode" component={TextField} fullWidth />
-              </Col>
-            </Row>
 
-            <Row>
-              <Col xs={3}>
-                <Field
-                  label={`${intl.formatMessage({ id: 'ui-users.information.patronGroup' })} *`}
-                  name="patronGroup"
-                  id="adduser_group"
-                  component={Select}
-                  fullWidth
-                  dataOptions={[{ label: intl.formatMessage({ id: 'ui-users.information.selectPatronGroup' }), value: '' }, ...patronGroupOptions]}
-                />
-              </Col>
-              <Col xs={3}>
-                <Field
-                  label={`${intl.formatMessage({ id: 'ui-users.information.status' })} *`}
-                  name="active"
-                  id="useractive"
-                  component={Select}
-                  fullWidth
-                  dataOptions={statusOptions}
-                  disabled={isStatusFieldDisabled()}
-                />
-                {isUserExpired() && (
-                  <span style={{ 'color': '#900', 'position': 'relative', 'top': '-10px', 'fontSize': '0.9em' }}>
-                    {`${intl.formatMessage({ id: 'ui-users.errors.userExpired' })}`}
-                  </span>
-                )}
-              </Col>
-              <Col xs={3}>
-                <Field
-                  component={Datepicker}
-                  label={intl.formatMessage({ id: 'ui-users.expirationDate' })}
-                  dateFormat="YYYY-MM-DD"
-                  name="expirationDate"
-                  id="adduser_expirationdate"
-                />
-              </Col>
-              <Col xs={3}>
-                <Field label={`${intl.formatMessage({ id: 'ui-users.information.username' })}`} name="username" id="adduser_username" component={TextField} fullWidth validStylesEnabled />
-              </Col>
-            </Row>
+        <Row>
+          <Col xs={12} md={3}>
+            <Field
+              label={`${intl.formatMessage({ id: 'ui-users.information.patronGroup' })} *`}
+              name="patronGroup"
+              id="adduser_group"
+              component={Select}
+              fullWidth
+              dataOptions={[{ label: intl.formatMessage({ id: 'ui-users.information.selectPatronGroup' }), value: '' }, ...patronGroupOptions]}
+            />
+          </Col>
+          <Col xs={12} md={3}>
+            <Field
+              label={`${intl.formatMessage({ id: 'ui-users.information.status' })} *`}
+              name="active"
+              id="useractive"
+              component={Select}
+              fullWidth
+              dataOptions={statusOptions}
+              disabled={isStatusFieldDisabled()}
+            />
+            {isUserExpired() && (
+              <span style={{ 'color': '#900', 'position': 'relative', 'top': '-10px', 'fontSize': '0.9em' }}>
+                {`${intl.formatMessage({ id: 'ui-users.errors.userExpired' })}`}
+              </span>
+            )}
+          </Col>
+          <Col xs={12} md={3}>
+            <Field
+              component={Datepicker}
+              label={intl.formatMessage({ id: 'ui-users.expirationDate' })}
+              dateFormat="YYYY-MM-DD"
+              name="expirationDate"
+              id="adduser_expirationdate"
+            />
+          </Col>
+          <Col xs={12} md={3}>
+            <Field label={`${intl.formatMessage({ id: 'ui-users.information.username' })}`} name="username" id="adduser_username" component={TextField} fullWidth validStylesEnabled />
           </Col>
         </Row>
       </Accordion>

@@ -29,14 +29,10 @@ const EditProxy = (props) => {
           <Badge>{sponsors.length + proxies.length}</Badge>
         }
       >
-        <Row>
-          <Col xs={8}>
-            <ProxyEditList itemComponent={ProxyEditItem} label={isProxyFor} name="sponsors" {...props} />
-            <br />
-            <ProxyEditList itemComponent={ProxyEditItem} label={isSponsorOf} name="proxies" {...props} />
-            <br />
-          </Col>
-        </Row>
+        <ProxyEditList itemComponent={ProxyEditItem} label={isProxyFor} name="sponsors" {...props} />
+        <br />
+        <ProxyEditList itemComponent={ProxyEditItem} label={isSponsorOf} name="proxies" {...props} />
+        <br />
       </Accordion>
     </IfPermission>
   );
