@@ -174,14 +174,10 @@ class EditServicePoints extends React.Component {
             onToggle={this.props.onToggle}
             displayWhenClosed={<Badge>{(this.userServicePoints && this.userServicePoints.length) || 0}</Badge>}
           >
-            <Row>
-              <Col xs={8}>
-                { this.renderAddServicePointButton() }
-                { this.renderPreferredServicePointSelect() }
-                { this.renderServicePoints() }
-                { this.renderAddServicePointModal() }
-              </Col>
-            </Row>
+            <div>{ this.renderAddServicePointButton() }</div>
+            { this.renderPreferredServicePointSelect() }
+            { this.renderServicePoints() }
+            { this.renderAddServicePointModal() }
           </Accordion>
         </IfInterface>
       </IfPermission>
