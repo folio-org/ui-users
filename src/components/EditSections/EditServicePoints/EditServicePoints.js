@@ -13,6 +13,7 @@ import {
   List,
   IfPermission,
   IfInterface,
+  Headline
 } from '@folio/stripes/components';
 
 import AddServicePointModal from '../../AddServicePointModal';
@@ -170,7 +171,7 @@ class EditServicePoints extends React.Component {
       <IfPermission perm="inventory-storage.service-points-users.item.post,inventory-storage.service-points-users.item.put">
         <IfInterface name="service-points-users" version="1.0">
           <Accordion
-            label={this.props.stripes.intl.formatMessage({ id: 'ui-users.sp.servicePoints' })}
+            label={<Headline size="large" tag="h3">{this.props.stripes.intl.formatMessage({ id: 'ui-users.sp.servicePoints' })}</Headline>}
             open={this.props.expanded}
             id={this.props.accordionId}
             onToggle={this.props.onToggle}

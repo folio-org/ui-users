@@ -4,6 +4,7 @@ import {
   Accordion,
   Badge,
   IfPermission,
+  Headline
 } from '@folio/stripes/components';
 
 import ProxyEditList from '../../ProxyGroup/ProxyEditList';
@@ -25,7 +26,7 @@ const EditProxy = (props) => {
         open={expanded}
         id={accordionId}
         onToggle={onToggle}
-        label={proxySponsor}
+        label={<Headline size="large" tag="h3">{proxySponsor}</Headline>}
         displayWhenClosed={
           <Badge>{sponsors.length + proxies.length}</Badge>
         }

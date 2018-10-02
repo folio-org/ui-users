@@ -7,6 +7,7 @@ import {
   Row,
   Col,
   Accordion,
+  Headline
 } from '@folio/stripes/components';
 import { AddressEditList } from '@folio/stripes/smart-components';
 
@@ -32,7 +33,7 @@ const EditContactInfo = ({ expanded, onToggle, accordionId, parentResources, ini
       open={expanded}
       id={accordionId}
       onToggle={onToggle}
-      label={intl.formatMessage({ id: 'ui-users.contact.contactInformation' })}
+      label={<Headline size="large" tag="h3">{intl.formatMessage({ id: 'ui-users.contact.contactInformation' })}</Headline>}
     >
       <Row>
         <Col xs={12} md={3}>

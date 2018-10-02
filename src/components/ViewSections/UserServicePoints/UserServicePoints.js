@@ -4,7 +4,8 @@ import {
   Accordion,
   Badge,
   KeyValue,
-  List
+  List,
+  Headline
 } from '@folio/stripes/components';
 
 class UserServicePoints extends React.Component {
@@ -65,7 +66,7 @@ class UserServicePoints extends React.Component {
       <Accordion
         displayWhenClosed={<Badge>{this.props.servicePoints.length}</Badge>}
         id={this.props.accordionId}
-        label={this.props.stripes.intl.formatMessage({ id: 'ui-users.sp.servicePoints' })}
+        label={<Headline size="large" tag="h3">{this.props.stripes.intl.formatMessage({ id: 'ui-users.sp.servicePoints' })}</Headline>}
         onToggle={this.props.onToggle}
         open={this.props.expanded}
       >

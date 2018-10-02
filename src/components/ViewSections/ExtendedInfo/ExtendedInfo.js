@@ -5,6 +5,7 @@ import { FormattedDate, FormattedMessage } from 'react-intl';
 import {
   Accordion,
   Col,
+  Headline,
   KeyValue,
   Row
 } from '@folio/stripes/components';
@@ -12,7 +13,7 @@ import {
 const ExtendedInfo = ({ accordionId, expanded, onToggle, user }) => (
   <Accordion
     id={accordionId}
-    label={<FormattedMessage id="ui-users.extended.extendedInformation" />}
+    label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.extended.extendedInformation" /></Headline>}
     onToggle={onToggle}
     open={expanded}
   >

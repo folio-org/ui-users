@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {
   Badge,
   Accordion,
+  Headline
 } from '@folio/stripes/components';
 
 import ProxyViewList from '../../ProxyGroup/ProxyViewList';
@@ -25,7 +26,7 @@ const ProxyPermissions = (props) => {
       displayWhenClosed={
         <Badge>{proxies.length + sponsors.length}</Badge>
       }
-      label={proxySponsor}
+      label={<Headline size="large" tag="h3">{proxySponsor}</Headline>}
     >
       <ProxyViewList records={sponsors} stripes={stripes} label={isProxyFor} name="sponsors" itemComponent={ProxyItem} />
       <ProxyViewList records={proxies} stripes={stripes} label={isSponsorOf} name="proxies" itemComponent={ProxyItem} />

@@ -8,6 +8,7 @@ import {
   Accordion,
   KeyValue,
   Datepicker,
+  Headline
 } from '@folio/stripes/components';
 import { Field } from 'redux-form';
 
@@ -32,7 +33,7 @@ class EditExtendedInfo extends React.Component {
         open={expanded}
         id={accordionId}
         onToggle={onToggle}
-        label={this.props.stripes.intl.formatMessage({ id: 'ui-users.extended.extendedInformation' })}
+        label={<Headline size="large" tag="h3">{this.props.stripes.intl.formatMessage({ id: 'ui-users.extended.extendedInformation' })}</Headline>}
       >
         <Row>
           <Col xs={12} md={3}>

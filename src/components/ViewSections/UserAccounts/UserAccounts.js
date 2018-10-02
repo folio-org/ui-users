@@ -10,6 +10,7 @@ import {
   Accordion,
   Icon,
   List,
+  Headline
 } from '@folio/stripes/components';
 
 /**
@@ -121,7 +122,7 @@ class UserAccounts extends React.Component {
         open={expanded}
         id={accordionId}
         onToggle={onToggle}
-        label={<FormattedMessage id="ui-users.accounts.title" />}
+        label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.accounts.title" /></Headline>}
         displayWhenClosed={displayWhenClosed}
         displayWhenOpen={displayWhenOpen}
       >

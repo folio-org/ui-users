@@ -5,6 +5,7 @@ import {
   List,
   Accordion,
   Badge,
+  Headline
 } from '@folio/stripes/components';
 
 class RenderPermissions extends React.Component {
@@ -61,7 +62,7 @@ class RenderPermissions extends React.Component {
         open={expanded}
         id={accordionId}
         onToggle={onToggle}
-        label={this.props.heading}
+        label={<Headline size="large" tag="h3">{this.props.heading}</Headline>}
         displayWhenClosed={
           <Badge>{listedPermissions.length}</Badge>
         }

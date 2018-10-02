@@ -8,6 +8,7 @@ import {
   Col,
   Accordion,
   Datepicker,
+  Headline
 } from '@folio/stripes/components';
 import { ViewMetaData } from '@folio/stripes/smart-components';
 
@@ -53,7 +54,7 @@ class EditUserInfo extends React.Component {
 
     return (
       <Accordion
-        label={intl.formatMessage({ id: 'ui-users.information.userInformation' })}
+        label={<Headline size="large" tag="h3">{intl.formatMessage({ id: 'ui-users.information.userInformation' })}</Headline>}
         open={expanded}
         id={accordionId}
         onToggle={onToggle}
