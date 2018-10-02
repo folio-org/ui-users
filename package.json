@@ -437,7 +437,7 @@
   },
   "devDependencies": {
     "@folio/eslint-config-stripes": "^3.2.1",
-    "@folio/stripes": "folio-org/stripes#STRIPES-547-with-exports",
+    "@folio/stripes": "^1.0.0",
     "@folio/stripes-cli": "^1.5.0",
     "babel-eslint": "^9.0.0",
     "eslint": "^5.5.0",
@@ -459,7 +459,7 @@
     "uuid": "^3.0.1"
   },
   "peerDependencies": {
-    "@folio/stripes": "folio-org/stripes#STRIPES-547-with-exports",
+    "@folio/stripes": "^1.0.0",
     "react": "*"
   },
   "optionalDependencies": {
