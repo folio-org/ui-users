@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-
-import { Checkbox } from '@folio/stripes/components';
-import { Layout } from '@folio/stripes/components';
-import { Modal } from '@folio/stripes/components';
-import { ModalFooter } from '@folio/stripes/components';
-import { MultiColumnList } from '@folio/stripes/components';
+import {
+  MultiColumnList,
+  Checkbox,
+  Layout,
+  Modal,
+  ModalFooter,
+} from '@folio/stripes/components';
 
 class AddServicePointModal extends React.Component {
   static propTypes = {

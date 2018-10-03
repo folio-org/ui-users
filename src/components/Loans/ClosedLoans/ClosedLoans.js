@@ -1,15 +1,17 @@
 import _ from 'lodash';
 import React from 'react';
-import { Popover } from '@folio/stripes/components';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
-import { UncontrolledDropdown } from '@folio/stripes/components';
-import { DropdownMenu } from '@folio/stripes/components';
-import { Button } from '@folio/stripes/components';
-import { MultiColumnList } from '@folio/stripes/components';
-import { MenuItem } from '@folio/stripes/components';
-import { IconButton } from '@folio/stripes/components';
-import { ExportCsv } from '@folio/stripes/components';
+import {
+  Button,
+  MultiColumnList,
+  UncontrolledDropdown,
+  MenuItem,
+  DropdownMenu,
+  Popover,
+  IconButton,
+  ExportCsv,
+} from '@folio/stripes/components';
 import ActionsBar from '../components/ActionsBar';
 import Label from '../../Label';
 

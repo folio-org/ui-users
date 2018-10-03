@@ -4,15 +4,18 @@ import { FormattedMessage } from 'react-intl';
 import Link from 'react-router-dom/Link';
 import PropTypes from 'prop-types';
 import { ChangeDueDateDialog } from '@folio/stripes/smart-components';
-import { Popover } from '@folio/stripes/components';
-import { Row, Col } from '@folio/stripes/components';
-import { Modal } from '@folio/stripes/components';
-import { KeyValue } from '@folio/stripes/components';
-import { MultiColumnList } from '@folio/stripes/components';
-import { Pane } from '@folio/stripes/components';
-import { Paneset } from '@folio/stripes/components';
-import { Button } from '@folio/stripes/components';
-import { Callout } from '@folio/stripes/components';
+import {
+  Paneset,
+  Pane,
+  Modal,
+  Button,
+  Popover,
+  Callout,
+  MultiColumnList,
+  KeyValue,
+  Row,
+  Col,
+} from '@folio/stripes/components';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import { getFullName } from './util';
 import loanActionMap from './data/loanActionMap';

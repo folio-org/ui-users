@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-
-import { Button } from '@folio/stripes/components';
-import { Icon } from '@folio/stripes/components';
-import { Layout } from '@folio/stripes/components';
+import {
+  Icon,
+  Button,
+  Layout,
+} from '@folio/stripes/components';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 import BulkRenewedLoansList from './BulkRenewedLoansList';

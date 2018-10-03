@@ -3,12 +3,15 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Field, reduxForm } from 'redux-form';
 
-import { Row, Col } from '@folio/stripes/components';
-import { Button } from '@folio/stripes/components';
-import { Select } from '@folio/stripes/components';
-import { RadioButton } from '@folio/stripes/components';
-import { Modal } from '@folio/stripes/components';
-import { RadioButtonGroup } from '@folio/stripes/components';
+import {
+  Row,
+  Col,
+  Button,
+  Select,
+  RadioButton,
+  Modal,
+  RadioButtonGroup,
+} from '@folio/stripes/components';
 
 const validate = (type, props) => {
   const errors = {};

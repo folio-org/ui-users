@@ -3,18 +3,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import queryString from 'query-string';
-import { Button } from '@folio/stripes/components';
-import { Icon } from '@folio/stripes/components';
-import { Pane } from '@folio/stripes/components';
-import { Paneset } from '@folio/stripes/components';
-import { Row, Col } from '@folio/stripes/components';
-import { SegmentedControl } from '@folio/stripes/components';
-import { PaneMenu } from '@folio/stripes/components';
-import { IconButton } from '@folio/stripes/components';
-import { FilterGroups } from '@folio/stripes/components';
-import { Dropdown } from '@folio/stripes/components';
-import { Checkbox } from '@folio/stripes/components';
-import { DropdownMenu } from '@folio/stripes/components';
+import {
+  Paneset,
+  Pane,
+  PaneMenu,
+  IconButton,
+  Icon,
+  Button,
+  Dropdown,
+  DropdownMenu,
+  Row,
+  Col,
+  Checkbox,
+  SegmentedControl,
+  filterState,
+} from '@folio/stripes/components';
 import { makeQueryFunction } from '@folio/stripes/smart-components';
 
 import { getFullName } from './util';
@@ -28,8 +31,6 @@ import {
   AllAccounts,
   ClosedAccounts,
 } from './components/Accounts';
-
-const { filterState } = FilterGroups;
 
 const filterConfig = [
   {

@@ -3,10 +3,13 @@ import moment from 'moment'; // eslint-disable-line import/no-extraneous-depende
 import { defer, isEqual } from 'lodash';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { LayoutHeader } from '@folio/stripes/components';
-import { Row, Col } from '@folio/stripes/components';
-import { Select } from '@folio/stripes/components';
-import { Datepicker } from '@folio/stripes/components';
+import {
+  Row,
+  Col,
+  Datepicker,
+  LayoutHeader,
+  Select,
+} from '@folio/stripes/components';
 import { Field, stopSubmit, setSubmitFailed, getFormSubmitErrors, getFormValues } from 'redux-form';
 
 import { getFullName } from '../../../util';

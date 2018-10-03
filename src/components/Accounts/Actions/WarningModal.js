@@ -1,10 +1,14 @@
 import React from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
-import { Modal } from '@folio/stripes/components';
-import { MultiColumnList } from '@folio/stripes/components';
-import { Button } from '@folio/stripes/components';
-import { Row, Col } from '@folio/stripes/components';
+import {
+  Row,
+  Col,
+  Button,
+  Modal,
+  MultiColumnList,
+} from '@folio/stripes/components';
+
 
 class WarningModal extends React.Component {
   static propTypes = {

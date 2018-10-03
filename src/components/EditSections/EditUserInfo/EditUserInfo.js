@@ -1,11 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-import { Row, Col } from '@folio/stripes/components';
-import { Select } from '@folio/stripes/components';
-import { Datepicker } from '@folio/stripes/components';
-import { TextField } from '@folio/stripes/components';
-import { Accordion } from '@folio/stripes/components';
+import {
+  Select,
+  TextField,
+  Row,
+  Col,
+  Accordion,
+  Datepicker,
+} from '@folio/stripes/components';
 import { ViewMetaData } from '@folio/stripes/smart-components';
 
 class EditUserInfo extends React.Component {

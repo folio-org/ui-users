@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Pane } from '@folio/stripes/components';
-import { FilterGroups } from '@folio/stripes/components';
-import { SearchField } from '@folio/stripes/components';
+import {
+  Pane,
+  SearchField,
+  FilterGroups,
+} from '@folio/stripes/components';
 
 const Filters = (props) => {
   if (props.showFilters === false) return '';

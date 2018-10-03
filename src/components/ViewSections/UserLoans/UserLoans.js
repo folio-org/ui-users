@@ -4,10 +4,12 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import queryString from 'query-string';
-import { Badge } from '@folio/stripes/components';
-import { Accordion } from '@folio/stripes/components';
-import { Icon } from '@folio/stripes/components';
-import { List } from '@folio/stripes/components';
+import {
+  Badge,
+  Accordion,
+  List,
+  Icon,
+} from '@folio/stripes/components';
 
 /**
  * User-details "Loans" accordion pane.

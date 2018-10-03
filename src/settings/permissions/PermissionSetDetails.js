@@ -1,9 +1,13 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { KeyValue } from '@folio/stripes/components';
-import { Row, Col } from '@folio/stripes/components';
-import { Accordion, ExpandAllButton } from '@folio/stripes/components';
+import {
+  KeyValue,
+  Row,
+  Col,
+  Accordion,
+  ExpandAllButton,
+} from '@folio/stripes/components';
 import { ViewMetaData } from '@folio/stripes/smart-components';
 
 import RenderPermissions from '../../components/RenderPermissions';

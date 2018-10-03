@@ -2,21 +2,23 @@ import { cloneDeep, omit } from 'lodash';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
-import { Pane } from '@folio/stripes/components';
-import { TextField } from '@folio/stripes/components';
-import { TextArea } from '@folio/stripes/components';
-import { Button } from '@folio/stripes/components';
-import { Paneset } from '@folio/stripes/components';
-import { PaneMenu } from '@folio/stripes/components';
-import { IfPermission } from '@folio/stripes/components';
-import { IconButton } from '@folio/stripes/components';
-import { Icon } from '@folio/stripes/components';
+import {
+  Paneset,
+  Pane,
+  PaneMenu,
+  IconButton,
+  TextField,
+  TextArea,
+  Icon,
+  Button,
+  Accordion,
+  ExpandAllButton,
+  Row,
+  Col,
+  IfPermission,
+  ConfirmationModal,
+} from '@folio/stripes/components';
 import { ViewMetaData } from '@folio/stripes/smart-components';
-
-// eslint-disable-next-line import/no-unresolved
-import { ConfirmationModal } from '@folio/stripes/components';
-import { Row, Col } from '@folio/stripes/components';
-import { Accordion, ExpandAllButton } from '@folio/stripes/components';
 
 import stripesForm from '@folio/stripes/form';
 import { Field } from 'redux-form';

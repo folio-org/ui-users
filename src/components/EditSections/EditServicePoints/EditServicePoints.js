@@ -2,16 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { get, uniqBy } from 'lodash';
 import { Field, FieldArray } from 'redux-form';
-
-import { Accordion } from '@folio/stripes/components';
-import { Badge } from '@folio/stripes/components';
-import { Button } from '@folio/stripes/components';
-import { Icon } from '@folio/stripes/components';
-import { IfPermission } from '@folio/stripes/components';
-import { IfInterface } from '@folio/stripes/components';
-import { List } from '@folio/stripes/components';
-import { Row, Col } from '@folio/stripes/components';
-import { Select } from '@folio/stripes/components';
+import {
+  Icon,
+  Button,
+  Select,
+  Row,
+  Col,
+  Accordion,
+  Badge,
+  List,
+  IfPermission,
+  IfInterface,
+} from '@folio/stripes/components';
 
 import AddServicePointModal from '../../AddServicePointModal';
 

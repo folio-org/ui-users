@@ -1,9 +1,12 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Row, Col } from '@folio/stripes/components';
-import { Accordion } from '@folio/stripes/components';
-import { KeyValue } from '@folio/stripes/components';
+import {
+  Row,
+  Col,
+  Accordion,
+  KeyValue
+} from '@folio/stripes/components';
 
 import UserAddresses from '../../UserAddresses';
 import contactTypes from '../../../data/contactTypes';

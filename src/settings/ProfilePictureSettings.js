@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-import { Row, Col } from '@folio/stripes/components';
-import { Checkbox } from '@folio/stripes/components';
+import {
+  Row,
+  Col,
+  Checkbox,
+} from '@folio/stripes/components';
 import { Field } from 'redux-form';
 import { ConfigManager } from '@folio/stripes/smart-components';
 

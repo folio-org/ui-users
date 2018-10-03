@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Accordion } from '@folio/stripes/components';
-import { Row, Col } from '@folio/stripes/components';
-import { Badge } from '@folio/stripes/components';
-import { IfPermission } from '@folio/stripes/components';
+import {
+  Accordion,
+  Badge,
+  IfPermission,
+} from '@folio/stripes/components';
 
 import ProxyEditList from '../../ProxyGroup/ProxyEditList';
 import ProxyEditItem from '../../ProxyGroup/ProxyEditItem';

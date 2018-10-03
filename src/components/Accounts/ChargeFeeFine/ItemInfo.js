@@ -1,9 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { Button } from '@folio/stripes/components';
-import { TextField } from '@folio/stripes/components';
-import { Row, Col } from '@folio/stripes/components';
+import {
+  Button,
+  Row,
+  Col,
+  TextField,
+} from '@folio/stripes/components';
 import { Link } from 'react-router-dom';
 
 class ItemInfo extends React.Component {

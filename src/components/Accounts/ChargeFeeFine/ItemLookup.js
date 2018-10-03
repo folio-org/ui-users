@@ -1,9 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button } from '@folio/stripes/components';
-import { Modal } from '@folio/stripes/components';
-import { MultiColumnList } from '@folio/stripes/components';
-import { Row, Col } from '@folio/stripes/components';
+import {
+  Button,
+  Row,
+  Col,
+  Modal,
+  MultiColumnList,
+} from '@folio/stripes/components';
 
 class ItemLookup extends React.Component {
   static propTypes = {

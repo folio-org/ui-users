@@ -3,10 +3,13 @@ import PropTypes from 'prop-types';
 import { FieldArray } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
-import { Row, Col } from '@folio/stripes/components';
+import {
+  Row,
+  Col,
+  Layout,
+  ConfirmationModal,
+} from '@folio/stripes/components';
 import { Pluggable } from '@folio/stripes/core';
-import { Layout } from '@folio/stripes/components';
-import { ConfirmationModal } from '@folio/stripes/components';
 
 import { getFullName } from '../../../util';
 import css from './ProxyEditList.css';

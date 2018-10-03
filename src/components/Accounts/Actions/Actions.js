@@ -104,22 +104,22 @@ class Actions extends React.Component {
   showCalloutMessage(a) {
     const message = (
       <span>
-      The
+        The
         {' '}
         {a.feeFineType}
         {' '}
-fee/fine of
+        fee/fine of
         {' '}
         <strong>{parseFloat(a.amount).toFixed(2)}</strong>
         {' '}
-has been successfully
+        has been successfully
         {' '}
         <strong>{a.paymentStatus.name}</strong>
         {' '}
-for
+        for
         {' '}
         <strong>{getFullName(this.props.user)}</strong>
-.
+        .
       </span>
     );
     this.callout.sendCallout({ message });

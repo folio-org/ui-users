@@ -1,8 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { AddressList } from '@folio/stripes/smart-components';
-import { Select } from '@folio/stripes/components';
+import { AddressList, Select } from '@folio/stripes/smart-components';
 import { toAddressTypeOptions } from '../../converters/address_type';
 
 class UserAddresses extends React.Component {

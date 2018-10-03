@@ -3,16 +3,19 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
-import { Callout } from '@folio/stripes/components';
-import { MultiColumnList } from '@folio/stripes/components';
-import { Popover } from '@folio/stripes/components';
-import { Checkbox } from '@folio/stripes/components';
-import { Button } from '@folio/stripes/components';
-import { IconButton } from '@folio/stripes/components';
-import { UncontrolledDropdown, Dropdown } from '@folio/stripes/components';
-import { MenuItem } from '@folio/stripes/components';
-import { DropdownMenu } from '@folio/stripes/components';
-import { ExportCsv } from '@folio/stripes/components';
+import {
+  Button,
+  MultiColumnList,
+  Checkbox,
+  UncontrolledDropdown,
+  MenuItem,
+  Dropdown,
+  DropdownMenu,
+  Popover,
+  Callout,
+  IconButton,
+  ExportCsv,
+} from '@folio/stripes/components';
 import { ChangeDueDateDialog } from '@folio/stripes/smart-components';
 import BulkRenewalDialog from '../../BulkRenewalDialog';
 import Label from '../../Label';

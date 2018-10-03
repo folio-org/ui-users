@@ -1,14 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
-import { Modal } from '@folio/stripes/components';
 import { FormattedMessage } from 'react-intl';
-import { Button } from '@folio/stripes/components';
-import { Checkbox } from '@folio/stripes/components';
-import { TextArea } from '@folio/stripes/components';
-import { TextField } from '@folio/stripes/components';
-import { Select } from '@folio/stripes/components';
-import { Row, Col } from '@folio/stripes/components';
+import {
+  Row,
+  Col,
+  Button,
+  TextArea,
+  Modal,
+  TextField,
+  Checkbox,
+  Select,
+} from '@folio/stripes/components';
 
 const validate = (values, props) => {
   const accounts = props.accounts || [];

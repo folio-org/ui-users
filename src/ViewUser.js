@@ -3,15 +3,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
 import { TitleManager } from '@folio/stripes/core';
-import { Pane } from '@folio/stripes/components';
-import { PaneMenu } from '@folio/stripes/components';
-import { Row, Col } from '@folio/stripes/components';
-import { Icon } from '@folio/stripes/components';
-import { Layer } from '@folio/stripes/components';
-import { IfPermission } from '@folio/stripes/components';
-import { IfInterface } from '@folio/stripes/components';
-import { ExpandAllButton } from '@folio/stripes/components';
-import { IconButton } from '@folio/stripes/components';
+import {
+  Pane,
+  PaneMenu,
+  IconButton,
+  Icon,
+  ExpandAllButton,
+  Row,
+  Col,
+  IfPermission,
+  IfInterface,
+  Layer,
+} from '@folio/stripes/components';
 import { withTags } from '@folio/stripes/smart-components';
 
 import UserForm from './UserForm';
