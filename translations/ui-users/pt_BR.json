@@ -569,5 +569,6 @@
     "accounts.comment.field.comment": "Comentário",
     "accounts.comment.field.save": "Salvar",
     "accounts.comment.field.cancel": "Cancelar",
-    "anonymize": "Anonimizar todos os empréstimos"
+    "anonymize": "Anonimizar todos os empréstimos",
+    "accounts.pay.success": "A taxa/multa <strong>{feefine}</strong> de <strong>{amount}</strong> tem sido com sucesso <strong>{action}</strong>"
 }

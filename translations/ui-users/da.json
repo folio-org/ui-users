@@ -569,5 +569,6 @@
     "accounts.comment.field.comment": "Comment",
     "accounts.comment.field.save": "Save",
     "accounts.comment.field.cancel": "Cancel",
-    "anonymize": "Anonymize all loans"
+    "anonymize": "Anonymize all loans",
+    "accounts.pay.success": "The <strong>{feefine}</strong> fee/fine of <strong>{amount}</strong> has been successfully <strong>{action}</strong>"
 }

@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "2.15.2",
+  "version": "2.16.0",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -10,7 +10,7 @@
   "engines": {
     "node": ">=6.0.0"
   },
-  "main": "index.js",
+  "main": "src/index.js",
   "stripes": {
     "type": "app",
     "displayName": "ui-users.meta.title",

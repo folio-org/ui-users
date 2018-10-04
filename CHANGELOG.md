@@ -1,9 +1,14 @@
 # Change history for ui-users
 
-## 2.16.0 (IN PROGRESS)
+## [2.16.0](https://github.com/folio-org/ui-users/tree/v2.16.0) (2018-09-27)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.11.0...v2.16.0)
 
 * Update `stripes-form` dependency to v1.0.0
 * Fix charge Manual Fee/Fine,Display fees/fines history,Display Fee/Fine Details,Pay Fee/Fine. Fix UIU-635, UIU-645.
+* Update tags counter when tags are being added or removed. Fixes UIU-660.
+* Update closed loans counter after anonymization. Fixes UIU-647.
+* Move files into src directory
+* Remove notes helper app
 
 ## [2.15.1](https://github.com/folio-org/ui-users/tree/v2.15.1) (2018-09-13)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.15.0...v2.15.1)
