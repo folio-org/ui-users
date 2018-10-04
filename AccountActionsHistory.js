@@ -18,7 +18,7 @@ class AccountActionsHistory extends React.Component {
     account: {
       type: 'okapi',
       records: 'accounts',
-      path: 'accounts?query=id=%{activeRecord.accountId}&limit=1',
+      path: 'accounts?query=id=%{activeRecord.accountId}&limit=%{activeRecord.records}',
     },
     accountActions: {
       type: 'okapi',
@@ -64,6 +64,7 @@ class AccountActionsHistory extends React.Component {
     this.connectedActions = props.stripes.connect(Actions);
     this.error = this.error.bind(this);
     this.comment = this.comment.bind(this);
+    this.num = props.num;
 
     const { stripes } = props;
 
@@ -90,6 +91,7 @@ class AccountActionsHistory extends React.Component {
       },
       sortOrder: [
         stripes.intl.formatMessage({ id: 'ui-users.details.columns.date' }),
+        stripes.intl.formatMessage({ id: 'ui-users.details.columns.date' }),
         stripes.intl.formatMessage({ id: 'ui-users.details.columns.action' }),
         stripes.intl.formatMessage({ id: 'ui-users.details.columns.amount' }),
         stripes.intl.formatMessage({ id: 'ui-users.details.columns.balance' }),
@@ -98,7 +100,7 @@ class AccountActionsHistory extends React.Component {
         stripes.intl.formatMessage({ id: 'ui-users.details.columns.source' }),
         stripes.intl.formatMessage({ id: 'ui-users.details.columns.comments' }),
       ],
-      sortDirection: ['desc', 'asc']
+      sortDirection: ['desc', 'desc']
     };
   }
 
@@ -107,8 +109,16 @@ class AccountActionsHistory extends React.Component {
     const str = history.location.search || '';
     const n = str.indexOf('account=');
     const id = str.substring(n + 8, n + 44);
-    this.props.mutator.activeRecord.update({ accountId: id });
+    this.props.mutator.activeRecord.update({ accountId: id, records: this.num });
     this.getAccountActions();
+  }
+
+  shouldComponentUpdate(nextProps) {
+    if (this.num !== nextProps.num) {
+      this.props.mutator.activeRecord.update({ records: nextProps.num });
+      this.num = nextProps.num;
+    }
+    return true;
   }
 
   getAccountActions = () => {
@@ -179,7 +189,7 @@ class AccountActionsHistory extends React.Component {
       'Action': action => action.typeAction + (action.paymentMethod ? ('-' + action.paymentMethod) : ' '),
       'Amount': action => (action.amountAction > 0 ? parseFloat(action.amountAction).toFixed(2) : '-'),
       'Balance': action => (action.balance > 0 ? parseFloat(action.balance).toFixed(2) : '-'),
-      'Transaction information': action => action.transactionNumber || '-',
+      'Transaction Information': action => action.transactionNumber || '-',
       'Created at': action => action.createdAt,
       'Source': action => action.source,
       'Comments': action => action.comments,
@@ -199,7 +209,7 @@ class AccountActionsHistory extends React.Component {
           defaultWidth="100%"
           dismissible
           onClose={onCancel}
-          paneTitle={`Fees/Fines - ${getFullName(user)} (${_.upperFirst(patron.group)}) `}
+          paneTitle={`Fee/fine details - ${getFullName(user)} (${_.upperFirst(patron.group)}) `}
         >
           <Row>
             <Col xs={12}>
@@ -231,7 +241,7 @@ class AccountActionsHistory extends React.Component {
               <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.details.field.latest' })} value={_.get(account, ['paymentStatus', 'name'], '-')} />
             </Col>
             <Col xs={1.5}>
-              {(loanId !== 0) ?
+              {(loanId !== '0' && user.id === account.userId) ?
                 <KeyValue
                   label="Loan details"
                   value={
@@ -240,10 +250,7 @@ class AccountActionsHistory extends React.Component {
                     </button>}
                 />
                 :
-                <KeyValue
-                  label="Loan details"
-                  value={this.props.stripes.intl.formatMessage({ id: 'ui-users.details.field.loan' })}
-                />
+                '-'
               }
             </Col>
           </Row>
@@ -275,13 +282,13 @@ class AccountActionsHistory extends React.Component {
             id="list-accountactions"
             formatter={accountActionsFormatter}
             columnMapping={columnMapping}
-            visibleColumns={['Action Date', 'Action', 'Amount', 'Balance', 'Transaction information', 'Created at', 'Source', 'Comments']}
+            visibleColumns={['Action Date', 'Action', 'Amount', 'Balance', 'Transaction Information', 'Created at', 'Source', 'Comments']}
             contentData={(account.id === (actions[0] || {}).accountId) ? actionsSort : []}
             fullWidth
             onHeaderClick={this.onSort}
             sortOrder={sortOrder[0]}
             sortDirection={`${sortDirection[0]}ending`}
-            columnWidths={{ 'Action': 250, 'Amount': 100, 'Balance': 100, 'Transaction information': 200, 'Created at': 100, 'Source': 200, 'Comments': 700 }}
+            columnWidths={{ 'Action': 250, 'Amount': 100, 'Balance': 100, 'Transaction Information': 200, 'Created at': 100, 'Source': 200, 'Comments': 700 }}
           />
           <this.connectedActions
             actions={this.state.actions}
@@ -289,7 +296,10 @@ class AccountActionsHistory extends React.Component {
             user={this.props.user}
             balance={account.remaining || 0}
             accounts={[account]}
-            handleEdit={this.getAccountActions}
+            handleEdit={() => {
+              this.getAccountActions();
+              this.props.handleAddRecords();
+            }}
           />
 
         </Pane>

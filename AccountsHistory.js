@@ -67,6 +67,11 @@ class AccountsHistory extends React.Component {
   static manifest = Object.freeze({
     initializedFilterConfig: { initialValue: false },
     query: { initialValue: {} },
+    comments: {
+      type: 'okapi',
+      records: 'feefineactions',
+      path: 'feefineactions?query=(userId=%{user.id} and comments=*)&limit=%{activeRecord.comments}',
+    },
     filter: {
       type: 'okapi',
       records: 'accounts',
@@ -163,7 +168,6 @@ class AccountsHistory extends React.Component {
     this.connectedAllAccounts = props.stripes.connect(AllAccounts);
     this.connectedActions = props.stripes.connect(Actions);
 
-    this.handleRecords = this.handleRecords.bind(this);
     this.accounts = [];
     this.addRecord = 50;
     this.editRecord = 0;
@@ -183,23 +187,27 @@ class AccountsHistory extends React.Component {
   }
 
   componentDidMount() {
-    this.props.mutator.activeRecord.update({ records: 30 });
+    this.props.mutator.activeRecord.update({ records: 50, comments: 200 });
     this.props.mutator.user.update({ id: this.props.user.id });
   }
-
 
   shouldComponentUpdate(nextProps, nextState) {
     const filter = _.get(this.props.resources, ['filter', 'records'], []);
     const nextFilter = _.get(nextProps.resources, ['filter', 'records'], []);
     const accounts = _.get(this.props.resources, ['feefineshistory', 'records'], []);
     const nextAccounts = _.get(nextProps.resources, ['feefineshistory', 'records'], []);
+    const comments = _.get(this.props.resources, ['comments', 'records'], []);
+    const nextComments = _.get(nextProps.resources, ['comments', 'records'], []);
+
     if (this.addRecord !== nextProps.num) {
-      this.props.mutator.activeRecord.update({ records: nextProps.num });
+      this.props.mutator.activeRecord.update({ records: nextProps.num, comments: nextProps.num + 150 });
       this.addRecord = nextProps.num;
     }
+
     return this.state !== nextState ||
       filter !== nextFilter ||
-      accounts !== nextAccounts;
+      accounts !== nextAccounts ||
+      comments !== nextComments;
   }
 
   componentDidUpdate(prevProps) {
@@ -219,11 +227,11 @@ class AccountsHistory extends React.Component {
     filterConfig[2].values = feeFineTypes.map(f => ({ name: `${f.name}`, cql: f.name }));
     filterConfig[3].values = itemTypes.map(i => ({ name: `${i.name}`, cql: i.name }));
 
-    if (this.editRecord !== 0) {
+    /*if (this.editRecord !== 0) {
       if (this.editRecord === 1) prevProps.mutator.activeRecord.update({ records: 51 });
       else prevProps.mutator.activeRecord.update({ records: 50 });
       this.editRecord = 0;
-    }
+    }*/
   }
 
   queryParam = name => {
@@ -256,6 +264,7 @@ class AccountsHistory extends React.Component {
   }
 
   handleEdit = (val) => {
+    this.props.handleAddRecords();    
     this.editRecord = val;
   }
 
@@ -270,10 +279,6 @@ class AccountsHistory extends React.Component {
 
   payment() {
     this.onChangeActions({ regular: true }, this.accounts);
-  }
-
-  handleRecords() {
-    this.addRecord = true;
   }
 
   onChangeSearch = (e) => {
@@ -400,8 +405,10 @@ class AccountsHistory extends React.Component {
         <Dropdown
           open={this.state.toggleDropdownState}
           onToggle={this.onDropdownClick}
+          style={{ float: 'right', marginLeft: '20px' }}
+          group pullRight
         >
-          <Button data-role="toggle">Select columns</Button>
+          <Button data-role="toggle" bottomMargin2>Select columns</Button>
           <DropdownMenu data-role="menu">
             <ul>
               {this.renderCheckboxList(columnMapping)}
@@ -426,7 +433,7 @@ class AccountsHistory extends React.Component {
       </Row>
     );
 
-    const selected = this.state.selected || 0;
+    const selected = parseFloat(this.state.selected) || 0;
 
     let balance = 0;
     accounts.forEach((a) => {
@@ -448,9 +455,11 @@ class AccountsHistory extends React.Component {
           </Row>
           <Row>
             <Col>
+              <div style={{ margin: "5px 5px 5px 40px" }}>
               Outstanding Balance:
               {' '}
-              {(balance > 0 || balance === '') ? parseFloat(balance).toFixed(2) : '0.00'}
+              { (user.id === (accounts[0] || {}).userId) ? parseFloat(balance || 0).toFixed(2) : '0.00'}
+             </div>
             </Col>
           </Row>
         </Col>
@@ -483,7 +492,7 @@ class AccountsHistory extends React.Component {
                 user={user}
                 showFilters={this.state.showFilters}
                 filters={filters}
-                balance={balance}
+                balance={(user.id === (accounts[0] || {}).userId) ? balance : 0}
                 selected={selected}
                 actions={this.state.actions}
                 query={query}
