@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import IfPermission from '@folio/stripes-components/lib/IfPermission';
-import IfInterface from '@folio/stripes-components/lib/IfInterface';
+import { IfPermission, IfInterface } from '@folio/stripes/components';
 
 import EditablePermissions from '../../EditablePermissions';
 

@@ -1,11 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
-import Datepicker from '@folio/stripes-components/lib/Datepicker';
-import Button from '@folio/stripes-components/lib/Button';
-import { Accordion } from '@folio/stripes-components/lib/Accordion';
-import TextField from '@folio/stripes-components/lib/TextField';
-import KeyValue from '@folio/stripes-components/lib/KeyValue';
+import {
+  Button,
+  TextField,
+  Row,
+  Col,
+  Accordion,
+  KeyValue,
+  Datepicker,
+} from '@folio/stripes/components';
 import { Field } from 'redux-form';
 
 import css from './EditExtendedInfo.css';

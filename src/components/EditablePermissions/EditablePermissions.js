@@ -3,16 +3,16 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import { FieldArray } from 'redux-form';
-
-import { Dropdown } from '@folio/stripes-components/lib/Dropdown';
-import DropdownMenu from '@folio/stripes-components/lib/DropdownMenu';
-import Button from '@folio/stripes-components/lib/Button';
-import Icon from '@folio/stripes-components/lib/Icon';
-import List from '@folio/stripes-components/lib/List';
-import IfPermission from '@folio/stripes-components/lib/IfPermission';
-import { Accordion } from '@folio/stripes-components/lib/Accordion';
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
-import Badge from '@folio/stripes-components/lib/Badge';
+import {
+  Icon,
+  Button,
+  Dropdown,
+  DropdownMenu,
+  Accordion,
+  Badge,
+  List,
+  IfPermission,
+} from '@folio/stripes/components';
 
 import PermissionList from '../PermissionList';
 import css from './EditablePermissions.css';

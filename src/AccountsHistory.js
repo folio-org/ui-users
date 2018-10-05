@@ -3,19 +3,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import queryString from 'query-string';
-import Button from '@folio/stripes-components/lib/Button';
-import Icon from '@folio/stripes-components/lib/Icon';
-import Pane from '@folio/stripes-components/lib/Pane';
-import Paneset from '@folio/stripes-components/lib/Paneset';
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
-import SegmentedControl from '@folio/stripes-components/lib/SegmentedControl';
-import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
-import IconButton from '@folio/stripes-components/lib/IconButton';
-import { filterState } from '@folio/stripes-components/lib/FilterGroups';
-import { Dropdown } from '@folio/stripes-components/lib/Dropdown';
-import Checkbox from '@folio/stripes-components/lib/Checkbox';
-import DropdownMenu from '@folio/stripes-components/lib/DropdownMenu';
-import { makeQueryFunction } from '@folio/stripes-smart-components';
+import {
+  Paneset,
+  Pane,
+  PaneMenu,
+  IconButton,
+  Icon,
+  Button,
+  Dropdown,
+  DropdownMenu,
+  Row,
+  Col,
+  Checkbox,
+  SegmentedControl,
+  filterState,
+} from '@folio/stripes/components';
+import { makeQueryFunction } from '@folio/stripes/smart-components';
 
 import { getFullName } from './util';
 import { Actions } from './components/Accounts/Actions';

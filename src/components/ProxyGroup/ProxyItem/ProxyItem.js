@@ -2,9 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
-import KeyValue from '@folio/stripes-components/lib/KeyValue';
-import LayoutHeader from '@folio/stripes-components/lib/LayoutHeader';
+import { Row, Col, KeyValue, LayoutHeader } from '@folio/stripes/components';
 
 import { getFullName } from '../../../util';
 import css from './ProxyItem.css';

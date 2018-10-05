@@ -3,16 +3,19 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import Link from 'react-router-dom/Link';
 import PropTypes from 'prop-types';
-import ChangeDueDateDialog from '@folio/stripes-smart-components/lib/ChangeDueDateDialog';
-import Popover from '@folio/stripes-components/lib/Popover';
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
-import Modal from '@folio/stripes-components/lib/Modal';
-import KeyValue from '@folio/stripes-components/lib/KeyValue';
-import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
-import Pane from '@folio/stripes-components/lib/Pane';
-import Paneset from '@folio/stripes-components/lib/Paneset';
-import Button from '@folio/stripes-components/lib/Button';
-import Callout from '@folio/stripes-components/lib/Callout';
+import { ChangeDueDateDialog } from '@folio/stripes/smart-components';
+import {
+  Paneset,
+  Pane,
+  Modal,
+  Button,
+  Popover,
+  Callout,
+  MultiColumnList,
+  KeyValue,
+  Row,
+  Col,
+} from '@folio/stripes/components';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import { getFullName } from './util';
 import loanActionMap from './data/loanActionMap';

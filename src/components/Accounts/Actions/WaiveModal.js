@@ -1,14 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
-import Modal from '@folio/stripes-components/lib/Modal';
 import { FormattedMessage } from 'react-intl';
-import Button from '@folio/stripes-components/lib/Button';
-import Checkbox from '@folio/stripes-components/lib/Checkbox';
-import TextArea from '@folio/stripes-components/lib/TextArea';
-import TextField from '@folio/stripes-components/lib/TextField';
-import Select from '@folio/stripes-components/lib/Select';
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
+import {
+  Row,
+  Col,
+  Button,
+  TextArea,
+  Modal,
+  TextField,
+  Checkbox,
+  Select,
+} from '@folio/stripes/components';
 
 const validate = (values, props) => {
   const accounts = props.accounts || [];

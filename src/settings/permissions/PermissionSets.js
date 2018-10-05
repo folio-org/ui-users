@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import EntryManager from '@folio/stripes-smart-components/lib/EntryManager';
+import { EntryManager } from '@folio/stripes/smart-components';
 import PermissionSetDetails from './PermissionSetDetails';
 import PermissionSetForm from './PermissionSetForm';
 

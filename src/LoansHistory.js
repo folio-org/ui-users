@@ -1,10 +1,12 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import Paneset from '@folio/stripes-components/lib/Paneset';
-import Pane from '@folio/stripes-components/lib/Pane';
-import Button from '@folio/stripes-components/lib/Button';
-import SegmentedControl from '@folio/stripes-components/lib/SegmentedControl';
+import {
+  Paneset,
+  Pane,
+  Button,
+  SegmentedControl,
+} from '@folio/stripes/components';
 
 import { getFullName } from './util';
 import { OpenLoans, ClosedLoans } from './components/Loans';

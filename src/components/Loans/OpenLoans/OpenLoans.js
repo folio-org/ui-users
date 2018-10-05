@@ -3,17 +3,20 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
-import Callout from '@folio/stripes-components/lib/Callout';
-import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
-import Popover from '@folio/stripes-components/lib/Popover';
-import Checkbox from '@folio/stripes-components/lib/Checkbox';
-import Button from '@folio/stripes-components/lib/Button';
-import IconButton from '@folio/stripes-components/lib/IconButton';
-import { UncontrolledDropdown, Dropdown } from '@folio/stripes-components/lib/Dropdown';
-import MenuItem from '@folio/stripes-components/lib/MenuItem';
-import DropdownMenu from '@folio/stripes-components/lib/DropdownMenu';
-import ExportCsv from '@folio/stripes-components/lib/ExportCsv';
-import ChangeDueDateDialog from '@folio/stripes-smart-components/lib/ChangeDueDateDialog';
+import {
+  Button,
+  MultiColumnList,
+  Checkbox,
+  UncontrolledDropdown,
+  MenuItem,
+  Dropdown,
+  DropdownMenu,
+  Popover,
+  Callout,
+  IconButton,
+  ExportCsv,
+} from '@folio/stripes/components';
+import { ChangeDueDateDialog } from '@folio/stripes/smart-components';
 import BulkRenewalDialog from '../../BulkRenewalDialog';
 import Label from '../../Label';
 import css from './OpenLoans.css';

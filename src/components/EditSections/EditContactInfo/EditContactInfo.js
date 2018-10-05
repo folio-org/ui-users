@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
-import Select from '@folio/stripes-components/lib/Select';
-import { Accordion } from '@folio/stripes-components/lib/Accordion';
-import TextField from '@folio/stripes-components/lib/TextField';
-import AddressEditList from '@folio/stripes-smart-components/lib/AddressFieldGroup/AddressEdit/AddressEditList';
+import {
+  Select,
+  TextField,
+  Row,
+  Col,
+  Accordion,
+} from '@folio/stripes/components';
+import { AddressEditList } from '@folio/stripes/smart-components';
 
 import { toAddressTypeOptions } from '../../../converters/address_type';
 import contactTypes from '../../../data/contactTypes';

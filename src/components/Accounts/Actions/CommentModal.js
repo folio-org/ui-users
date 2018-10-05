@@ -1,10 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
-import Button from '@folio/stripes-components/lib/Button';
-import TextArea from '@folio/stripes-components/lib/TextArea';
-import Modal from '@folio/stripes-components/lib/Modal';
+import {
+  Row,
+  Col,
+  Button,
+  TextArea,
+  Modal,
+} from '@folio/stripes/components';
 import { FormattedMessage } from 'react-intl';
 
 const validate = (values) => {

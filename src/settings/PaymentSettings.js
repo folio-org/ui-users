@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Select from '@folio/stripes-components/lib/Select';
+import { Select } from '@folio/stripes/components';
 import { Field } from 'redux-form';
-import ControlledVocab from '@folio/stripes-smart-components/lib/ControlledVocab';
+import { ControlledVocab } from '@folio/stripes/smart-components';
 import { validate } from '../util';
 
 class PaymentSettings extends React.Component {

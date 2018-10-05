@@ -1,10 +1,14 @@
 import { get } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
-import KeyValue from '@folio/stripes-components/lib/KeyValue';
-import { Accordion } from '@folio/stripes-components/lib/Accordion';
-import ViewMetaData from '@folio/stripes-smart-components/lib/ViewMetaData';
+import {
+  Row,
+  Col,
+  KeyValue,
+  Accordion,
+} from '@folio/stripes/components';
+
+import { ViewMetaData } from '@folio/stripes/smart-components';
 
 class UserInfo extends React.Component {
   static propTypes = {

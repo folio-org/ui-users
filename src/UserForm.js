@@ -2,14 +2,17 @@ import _ from 'lodash';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
-import Paneset from '@folio/stripes-components/lib/Paneset';
-import Pane from '@folio/stripes-components/lib/Pane';
-import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
-import Button from '@folio/stripes-components/lib/Button';
-import IconButton from '@folio/stripes-components/lib/IconButton';
-import stripesForm from '@folio/stripes-form';
-import { ExpandAllButton } from '@folio/stripes-components/lib/Accordion';
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
+import {
+  Paneset,
+  Pane,
+  PaneMenu,
+  IconButton,
+  Button,
+  ExpandAllButton,
+  Row,
+  Col,
+} from '@folio/stripes/components';
+import stripesForm from '@folio/stripes/form';
 
 import {
   EditUserInfo,

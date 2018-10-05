@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Accordion } from '@folio/stripes-components/lib/Accordion';
-import Badge from '@folio/stripes-components/lib/Badge';
-import KeyValue from '@folio/stripes-components/lib/KeyValue';
-import List from '@folio/stripes-components/lib/List';
+import {
+  Accordion,
+  Badge,
+  KeyValue,
+  List
+} from '@folio/stripes/components';
 
 class UserServicePoints extends React.Component {
   static propTypes = {

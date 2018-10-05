@@ -1,10 +1,14 @@
 import React from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
-import Modal from '@folio/stripes-components/lib/Modal';
-import MultiCloumnList from '@folio/stripes-components/lib/MultiColumnList';
-import Button from '@folio/stripes-components/lib/Button';
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
+import {
+  Row,
+  Col,
+  Button,
+  Modal,
+  MultiColumnList,
+} from '@folio/stripes/components';
+
 
 class WarningModal extends React.Component {
   static propTypes = {
@@ -130,7 +134,7 @@ class WarningModal extends React.Component {
         </Row>
         <Row>
           <Col xs>
-            <MultiCloumnList
+            <MultiColumnList
               formatter={this.getAccountsFormatter()}
               columnMapping={columnMapping}
               columnWidths={{ ' ': 28 }}

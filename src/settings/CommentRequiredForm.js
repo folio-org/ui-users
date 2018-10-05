@@ -1,11 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from '@folio/stripes-components/lib/Button';
-import Pane from '@folio/stripes-components/lib/Pane';
-import stripesForm from '@folio/stripes-form';
+import {
+  Pane,
+  Button,
+  Row,
+  Col,
+  Select,
+} from '@folio/stripes/components';
+import stripesForm from '@folio/stripes/form';
 import { Field } from 'redux-form';
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
-import Select from '@folio/stripes-components/lib/Select';
 
 const Setting = (props) => (
   <div>

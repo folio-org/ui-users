@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Accordion } from '@folio/stripes-components/lib/Accordion';
-import Badge from '@folio/stripes-components/lib/Badge';
+import {
+  Badge,
+  Accordion,
+} from '@folio/stripes/components';
 
 import ProxyViewList from '../../ProxyGroup/ProxyViewList';
 import ProxyItem from '../../ProxyGroup/ProxyItem';

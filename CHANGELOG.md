@@ -1,4 +1,7 @@
 # Change history for ui-users
+## 2.17.0
+* Depend on `@folio/stripes`.
+* Update imports for components moved from `stripes-components` to `stripes-smart-components`.
 
 ## [2.16.0](https://github.com/folio-org/ui-users/tree/v2.16.0) (2018-09-27)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.11.0...v2.16.0)

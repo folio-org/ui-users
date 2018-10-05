@@ -1,9 +1,12 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
-import KeyValue from '@folio/stripes-components/lib/KeyValue';
-import { Accordion } from '@folio/stripes-components/lib/Accordion';
+import {
+  Row,
+  Col,
+  Accordion,
+  KeyValue
+} from '@folio/stripes/components';
 
 const ExtendedInfo = ({ expanded, onToggle, accordionId, user, stripes: { intl }, stripes }) => (
   <Accordion
