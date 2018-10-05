@@ -1,7 +1,4 @@
 {
   "parser": "babel-eslint",
-  "extends": "@folio/eslint-config-stripes",
-  "rules": {
-    "import/no-duplicates": "warn"
-  }
+  "extends": "@folio/eslint-config-stripes"
 }
