@@ -3,7 +3,6 @@
 module.exports.test = function foo(uiTestCtx, nightmare) {
   describe('Module test: users:new_permission_set', function bar() {
     const { config, helpers: { login, openApp, logout }, meta: { testVersion } } = uiTestCtx;
-    
     this.timeout(Number(config.test_timeout));
 
     describe('Login > Create new permission set > Confirm creation > Delete permission set > Confirm deletion > Logout\n', () => {
