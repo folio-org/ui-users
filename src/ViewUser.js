@@ -14,6 +14,7 @@ import {
   IfPermission,
   IfInterface,
   Layer,
+  Headline
 } from '@folio/stripes/components';
 import { withTags } from '@folio/stripes/smart-components';
 
@@ -539,6 +540,9 @@ class ViewUser extends React.Component {
     return (
       <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle={getFullName(user)} lastMenu={detailMenu} dismissible onClose={this.props.onClose} appIcon={{ app: 'users' }}>
         <TitleManager record={getFullName(user)} />
+
+        <Headline size="xx-large" tag="h2">{getFullName(user)}</Headline>
+
         <Row end="xs"><Col xs><ExpandAllButton accordionStatus={this.state.sections} onToggle={this.handleExpandAll} /></Col></Row>
 
         <this.connectedUserInfo accordionId="userInformationSection" user={user} patronGroup={patronGroup} settings={settings} stripes={stripes} expanded={this.state.sections.userInformationSection} onToggle={this.handleSectionToggle} />
