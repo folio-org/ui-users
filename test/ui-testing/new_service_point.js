@@ -1,9 +1,8 @@
 /* eslint-disable no-console */
 /* global it describe Nightmare before after */
-module.exports.test = function foo(uiTestCtx) {
+module.exports.test = function foo(uiTestCtx, nightmare) {
   describe('Module test: users:new_service_point', function meh() {
     const { config, helpers: { login, openApp, logout }, meta: { testVersion } } = uiTestCtx;
-    const nightmare = new Nightmare(config.nightmare);
     this.timeout(Number(config.test_timeout));
     const wait = 1111;
 

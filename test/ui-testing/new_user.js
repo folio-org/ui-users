@@ -6,7 +6,6 @@ module.exports.test = function meh(uitestctx, nightmare) {
 
     this.timeout(Number(config.test_timeout));
     
-
     let pgroup = null;
     const user = namegen();
     // user.id = 'hellox';
