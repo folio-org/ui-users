@@ -74,13 +74,10 @@ module.exports.test = function foo(uiTestCtx, nightmare) {
         nightmare
           .wait('#clickable-users-module')
           .click('#clickable-users-module')
-          .wait(3000)
-          .wait('#input-user-search')
-          .wait(1000)
-          .type('#input-user-search', '0')
-          .wait(1000)
-          .wait('#list-users div[role="listitem"]:nth-of-type(11) > a > div:nth-of-type(5)')
-          .evaluate(() => document.querySelector('#list-users div[role="listitem"]:nth-of-type(11) > a > div:nth-of-type(5)').title)
+          .wait('#clickable-filter-pg-faculty')
+          .click('#clickable-filter-pg-faculty')
+          .wait('#list-users div[role="listitem"]:nth-of-type(2) > a > div:nth-of-type(5)')
+          .evaluate(() => document.querySelector('#list-users div[role="listitem"]:nth-of-type(2) > a > div:nth-of-type(5)').title)
           .then((result) => {
             userid = result;
             done();

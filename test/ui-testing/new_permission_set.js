@@ -38,13 +38,14 @@ module.exports.test = function foo(uiTestCtx, nightmare) {
           .wait('#input-permission-title')
           .insert('#input-permission-title', displayName)
           .insert('#input-permission-description', description)
-          .click('#clickable-add-permission')
-          .wait('button[class^="itemControl"]')
-          .xclick('//button[contains(.,"Check in")]')
           .wait('#clickable-add-permission')
           .click('#clickable-add-permission')
           .wait('button[class^="itemControl"]')
-          .xclick('//button[contains(.,"Check out")]')
+          .xclick('//button[contains(.,"Users: Can create new user")]')
+          .wait('#clickable-add-permission')
+          .click('#clickable-add-permission')
+          .wait('button[class^="itemControl"]')
+          .xclick('//button[contains(.,"Users: Can view proxies")]')
           .wait('#clickable-save-permission-set')
           .click('#clickable-save-permission-set')
           .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
@@ -72,12 +73,13 @@ module.exports.test = function foo(uiTestCtx, nightmare) {
           .click('#clickable-delete-set')
           .wait('#clickable-deletepermissionset-confirmation-confirm')
           .click('#clickable-deletepermissionset-confirmation-confirm')
+          .waitUntilNetworkIdle(500)
           .url()
           .then((result) => {
             done();
             uuid = result;
             uuid = uuid.replace(/^.+\/([^?]+).*/, '$1');
-            // console.log(`          ID of deleted permission set: ${uuid}`);
+            console.log(`          ID of deleted permission set: ${uuid}`);
           })
           .catch(done);
       });
@@ -87,12 +89,13 @@ module.exports.test = function foo(uiTestCtx, nightmare) {
           .click('a[href^="/settings/users/groups"]')
           .wait('a[href="/settings/users/perms"]')
           .click('a[href="/settings/users/perms"]')
-          .wait(222)
-          .evaluate((euuid) => {
+          .wait((euuid) => {
             const element = document.querySelector(`a[href*="${euuid}"]`);
             if (element) {
-              throw new Error(`Failed at deleting ${euuid}`);
+              return false;
             }
+
+            return true;
           }, uuid)
           .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
           .then(() => { done(); })
