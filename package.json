@@ -425,6 +425,18 @@
         "subPermissions": [
           "ui-users.settings.transfertypes"
         ]
+      },
+      {
+        "permissionName": "ui-users.loans.renew",
+        "displayName": "Loans: Renew loans",
+        "description": "Also includes basic permissions to view users",
+        "subPermissions": [
+          "ui-users.view",
+          "circulation.loans.collection.get",
+          "circulation.loans.item.get",
+          "circulation.renew-by-id.post"
+        ],
+        "visible": true
       }
     ]
   },

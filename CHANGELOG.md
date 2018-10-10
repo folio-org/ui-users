@@ -1,4 +1,9 @@
 # Change history for ui-users
+
+## 2.18.0 (IN PROGRESS)
+
+* Create permission for renewing loans. Fixes UIU-625.
+
 ## [2.17.0](https://github.com/folio-org/ui-users/tree/v2.17.0) (2018-10-5)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.16.0...v2.17.0)
 
