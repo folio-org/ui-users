@@ -9,6 +9,7 @@ import {
   Accordion,
   List,
   Icon,
+  Headline
 } from '@folio/stripes/components';
 
 /**
@@ -82,7 +83,7 @@ class UserLoans extends React.Component {
         open={expanded}
         id={accordionId}
         onToggle={onToggle}
-        label={<FormattedMessage id="ui-users.loans.title" />}
+        label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.loans.title" /></Headline>}
         displayWhenClosed={displayWhenClosed}
       >
         {loansLoaded ?

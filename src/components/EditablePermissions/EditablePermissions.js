@@ -12,6 +12,7 @@ import {
   Badge,
   List,
   IfPermission,
+  Headline
 } from '@folio/stripes/components';
 
 import PermissionList from '../PermissionList';
@@ -181,7 +182,7 @@ class EditablePermissions extends React.Component {
         open={expanded}
         id={accordionId}
         onToggle={onToggle}
-        label={this.props.heading}
+        label={<Headline size="large" tag="h3">{this.props.heading}</Headline>}
         displayWhenClosed={
           <Badge>{size}</Badge>
         }

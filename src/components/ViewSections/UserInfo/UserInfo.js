@@ -6,6 +6,7 @@ import {
   Col,
   KeyValue,
   Accordion,
+  Headline
 } from '@folio/stripes/components';
 
 import { ViewMetaData } from '@folio/stripes/smart-components';
@@ -37,7 +38,7 @@ class UserInfo extends React.Component {
         open={expanded}
         id={accordionId}
         onToggle={onToggle}
-        label={intl.formatMessage({ id: 'ui-users.information.userInformation' })}
+        label={<Headline size="large" tag="h3">{intl.formatMessage({ id: 'ui-users.information.userInformation' })}</Headline>}
       >
         <Row>
           <Col xs={12}>
