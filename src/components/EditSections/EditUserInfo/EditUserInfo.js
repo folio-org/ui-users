@@ -113,9 +113,6 @@ class EditUserInfo extends React.Component {
               id="adduser_expirationdate"
             />
           </Col>
-          <Col xs={12} md={3}>
-            <Field label={`${intl.formatMessage({ id: 'ui-users.information.username' })}`} name="username" id="adduser_username" component={TextField} fullWidth validStylesEnabled />
-          </Col>
         </Row>
       </Accordion>
     );

@@ -71,9 +71,19 @@ class EditExtendedInfo extends React.Component {
             </KeyValue>
           </Col>
         </Row>
-        {!initialValues.id &&
-          <Row>
-            <Col xs={4}>
+        <Row>
+          <Col xs={12} md={3}>
+            <Field 
+              label={`${this.props.stripes.intl.formatMessage({ id: 'ui-users.information.username' })}`} 
+              name="username" 
+              id="adduser_username" 
+              component={TextField} 
+              fullWidth 
+              validStylesEnabled 
+            />
+          </Col>
+          {!initialValues.id &&
+            <Col xs={12} md={3}>
               <Field
                 component={TextField}
                 label={`${this.props.stripes.intl.formatMessage({ id: 'ui-users.extended.folioPassword' })} `}
@@ -84,15 +94,17 @@ class EditExtendedInfo extends React.Component {
                 fullWidth
               />
             </Col>
-            <Col xs={1}>
+          }
+          {!initialValues.id && 
+            <Col xs={12} md={1}>
               <div className={css.togglePw}>
                 <Button id="toggle_pw_btn" onClick={() => this.togglePassword()}>
                   {this.state.showPassword ? this.props.stripes.intl.formatMessage({ id: 'ui-users.hide' }) : this.props.stripes.intl.formatMessage({ id: 'ui-users.show' })}
                 </Button>
               </div>
             </Col>
+          }
           </Row>
-        }
         <br />
       </Accordion>
     );
