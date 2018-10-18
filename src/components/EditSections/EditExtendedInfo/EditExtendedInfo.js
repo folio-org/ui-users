@@ -14,7 +14,7 @@ import {
 
 import PasswordControl from './PasswordControl';
 
-const EditExtendedInfo = ({ expanded, onToggle, accordionId, initialValues, stripes: {intl} }) => (
+const EditExtendedInfo = ({ expanded, onToggle, accordionId, initialValues, stripes: { intl } }) => (
   <Accordion
     open={expanded}
     id={accordionId}
@@ -59,17 +59,17 @@ const EditExtendedInfo = ({ expanded, onToggle, accordionId, initialValues, stri
     </Row>
     <Row>
       <Col xs={12} md={3}>
-        <Field 
-          label={`${intl.formatMessage({ id: 'ui-users.information.username' })}`} 
-          name="username" 
-          id="adduser_username" 
-          component={TextField} 
-          fullWidth 
-          validStylesEnabled 
+        <Field
+          label={`${intl.formatMessage({ id: 'ui-users.information.username' })}`}
+          name="username"
+          id="adduser_username"
+          component={TextField}
+          fullWidth
+          validStylesEnabled
         />
       </Col>
       {!initialValues.id && <PasswordControl intl={intl} />}
-      </Row>
+    </Row>
     <br />
   </Accordion>
 );
