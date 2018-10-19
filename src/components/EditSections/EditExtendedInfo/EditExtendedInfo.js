@@ -13,6 +13,7 @@ import {
 } from '@folio/stripes/components';
 
 import PasswordControl from './PasswordControl';
+import ResetPasswordControl from './ResetPasswordControl';
 
 const EditExtendedInfo = ({ expanded, onToggle, accordionId, initialValues, stripes: { intl } }) => (
   <Accordion
@@ -68,7 +69,11 @@ const EditExtendedInfo = ({ expanded, onToggle, accordionId, initialValues, stri
           validStylesEnabled
         />
       </Col>
-      {!initialValues.id && <PasswordControl intl={intl} />}
+      {
+        initialValues.id
+          ? <ResetPasswordControl intl={intl} />
+          : <PasswordControl intl={intl} />
+      }
     </Row>
     <br />
   </Accordion>

@@ -347,6 +347,7 @@
   "extended.birthDate": "Birth date",
   "extended.folioNumber": "Folio number",
   "extended.folioPassword": "Folio password",
+  "extended.sendResetPassword": "Send reset password email",
 
   "contact.contactInformation": "Contact Information",
   "contact.email": "Email",
