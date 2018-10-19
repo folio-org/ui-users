@@ -72,9 +72,6 @@ class UserInfo extends React.Component {
               <Col xs={3}>
                 <KeyValue label={intl.formatMessage({ id: 'ui-users.information.expirationDate' })} value={stripes.formatDate(get(user, ['expirationDate'], ''))} />
               </Col>
-              <Col xs={3}>
-                <KeyValue label={intl.formatMessage({ id: 'ui-users.information.username' })} value={get(user, ['username'], '')} />
-              </Col>
             </Row>
           </Col>
 

@@ -28,14 +28,23 @@ const ExtendedInfo = ({ accordionId, expanded, onToggle, user }) => (
           {user.personal.dateOfBirth ? <FormattedDate value={user.personal.dateOfBirth} timeZone="UTC" /> : '-'}
         </KeyValue>
       </Col>
-      <Col xs={12}>
+    </Row>
+    <Row>
+      <Col xs={12} md={6}>
         <KeyValue label={<FormattedMessage id="ui-users.extended.folioNumber" />}>
           {get(user, ['id'], '-')}
         </KeyValue>
       </Col>
-      <Col xs={12}>
+      <Col xs={12} md={6}>
         <KeyValue label={<FormattedMessage id="ui-users.extended.externalSystemId" />}>
           {get(user, ['externalSystemId'], '-')}
+        </KeyValue>
+      </Col>
+    </Row>
+    <Row>
+      <Col xs={12}>
+        <KeyValue label={<FormattedMessage id="ui-users.information.username" />}>
+          {get(user, ['username'], '')}
         </KeyValue>
       </Col>
     </Row>
