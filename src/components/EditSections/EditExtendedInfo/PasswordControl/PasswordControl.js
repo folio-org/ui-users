@@ -37,7 +37,7 @@ class PasswordControl extends React.Component {
           />
         </Col>
         <Col xs={12} md={1} className={css.togglePw}>
-          <Button onClick={this.togglePassword}>
+          <Button onClick={this.togglePassword} id="clickable-toggle-password">
             {this.state.showPassword
               ? intl.formatMessage({ id: 'ui-users.hide' })
               : intl.formatMessage({ id: 'ui-users.show' })
