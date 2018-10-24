@@ -71,7 +71,13 @@ const EditExtendedInfo = ({ expanded, onToggle, accordionId, initialValues, stri
       </Col>
       {
         initialValues.id
-          ? <ResetPasswordControl intl={intl} />
+          ? (
+            <ResetPasswordControl
+              intl={intl}
+              email={initialValues.personal.email}
+              name={initialValues.personal.firstName}
+            />
+          )
           : <PasswordControl intl={intl} />
       }
     </Row>

@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import {
   Col,
   KeyValue,
-  Modal,
 } from '@folio/stripes/components';
+
+import ResetPasswordModal from './ResetPasswordModal';
 
 import css from './ResetPasswordControl.css';
 
@@ -22,7 +24,12 @@ class ResetPasswordControl extends React.Component {
   }
 
   render() {
-    const { intl } = this.props;
+    const {
+      intl,
+      email,
+      name,
+    } = this.props;
+
     const fieldLabel = intl.formatMessage({ id: 'ui-users.extended.folioPassword' });
     const contentText = intl.formatMessage({ id: 'ui-users.extended.sendResetPassword' });
 
@@ -37,15 +44,13 @@ class ResetPasswordControl extends React.Component {
             {contentText}
           </button>
         </KeyValue>
-        <Modal
-          dismissible
-          size="small"
-          open={this.state.showModal}
+        <ResetPasswordModal
+          isOpen={this.state.showModal}
           onClose={this.closeModal}
-          label="Reset password email sent"
-        >
-          {'Some template text'}
-        </Modal>
+          email={email}
+          name={name}
+          intl={intl}
+        />
       </Col>
     );
   }
@@ -53,6 +58,8 @@ class ResetPasswordControl extends React.Component {
 
 ResetPasswordControl.propTypes = {
   intl: PropTypes.object.isRequired,
+  email: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
 };
 
 export default ResetPasswordControl;
