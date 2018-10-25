@@ -571,7 +571,7 @@ class ViewUser extends React.Component {
           />
         </IfPermission>
 
-        <IfPermission perm="circulation.loans.collection.get">
+        <IfPermission perm="ui-users.loans.all">
           <IfInterface name="loan-policy-storage" version="1.0">
             { /* Check without version, so can support either of multiple versions.
             Replace with specific check when facility for providing
@@ -674,14 +674,15 @@ class ViewUser extends React.Component {
           />
         </Layer>
 
-        <IfPermission perm="circulation.loans.collection.get">
+        <IfPermission perm="ui-users.loans.all">
           <Layer isOpen={query.layer ? query.layer === 'open-loans' || query.layer === 'closed-loans' : false} contentLabel={formatMsg({ id: 'ui-users.loans.title' })}>
             {loansHistory}
           </Layer>
+
+          <Layer isOpen={query.layer ? query.layer === 'loan' : false} contentLabel={formatMsg({ id: 'ui-users.loanActionsHistory' })}>
+            {loanDetails}
+          </Layer>
         </IfPermission>
-        <Layer isOpen={query.layer ? query.layer === 'loan' : false} contentLabel={formatMsg({ id: 'ui-users.loanActionsHistory' })}>
-          {loanDetails}
-        </Layer>
       </Pane>
     );
   }
