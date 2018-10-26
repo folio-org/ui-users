@@ -36,6 +36,7 @@ class WaiveSettings extends React.Component {
         nameKey="waiveReasons"
         hiddenFields={['numberOfObjects']}
         id="waives"
+        sortby="nameReason"
       />
     );
   }

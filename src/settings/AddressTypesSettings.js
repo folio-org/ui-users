@@ -31,6 +31,7 @@ class AddressTypesSettings extends React.Component {
         }}
         nameKey="addressType"
         id="addresstypes"
+        sortby="addressType"
       />
     );
   }

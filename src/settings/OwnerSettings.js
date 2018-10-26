@@ -36,6 +36,7 @@ class OwnerSettings extends React.Component {
         }}
         nameKey="ownerType"
         id="ownerstypes"
+        sortby="owner"
       />
     );
   }
