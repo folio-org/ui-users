@@ -61,6 +61,7 @@ class PatronGroupsSettings extends React.Component {
         formatter={formatter}
         nameKey="group"
         id="patrongroups"
+        sortby="group"
       />
     );
   }
