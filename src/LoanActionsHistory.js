@@ -322,12 +322,10 @@ class LoanActionsHistory extends React.Component {
       <Paneset isRoot>
         <Pane id="pane-loandetails" defaultWidth="100%" dismissible onClose={onCancel} paneTitle={`${intl.formatMessage({ id: 'ui-users.loans.loanDetails' })} - ${getFullName(user)} (${_.upperFirst(patronGroup.group)})`}>
           <Row>
-            <Col>
+            <span>
               <Button disabled={buttonDisabled} buttonStyle="primary" onClick={this.renew}>{this.props.stripes.intl.formatMessage({ id: 'ui-users.renew' })}</Button>
-            </Col>
-            <Col>
               <Button disabled={buttonDisabled} buttonStyle="primary" onClick={this.showChangeDueDateDialog}>{this.props.stripes.intl.formatMessage({ id: 'stripes-smart-components.cddd.changeDueDate' })}</Button>
-            </Col>
+            </span>
           </Row>
           <Row>
             <Col xs={2}>
