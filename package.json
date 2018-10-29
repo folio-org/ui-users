@@ -425,7 +425,27 @@
         "subPermissions": [
           "ui-users.settings.transfertypes"
         ]
-      }
+      },
+      {
+        "permissionName": "ui-users.settings.manualblocks",
+        "displayName": "Settings (Users): Can create, edit and remove manualblocks",
+        "subPermissions": [
+          "manualblocks.collection.get",
+          "manualblocks.item.delete",
+          "manualblocks.item.get",
+          "manualblocks.item.post",
+          "manualblocks.item.put",
+          "settings.users.enabled"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "settings.manualblocks.all",
+        "displayName": "Settings (Users): Can create, edit and remove manualblocks [LEGACY]",
+        "subPermissions": [
+          "ui-users.settings.manualblocks"
+        ]
+       }
     ]
   },
   "scripts": {
