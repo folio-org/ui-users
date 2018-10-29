@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "2.17.1",
+  "version": "2.17.2",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -446,10 +446,17 @@
           "ui-users.view",
           "ui-users.loans.renew",
           "ui-users.settings.feefines",
+          "circulation.loans.item.put",
+          "circulation.renew-by-barcode.post",
+          "circulation.requests.collection.get",
+          "circulation-storage.loans-history.collection.get",
+          "circulation-storage.loans.collection.anonymize.user.post",
           "circulation-storage.loan-policies.collection.get",
           "circulation-storage.loan-policies.item.get",
-          "circulation.requests.collection.get",
-          "accounts.collection.get"
+          "accounts.collection.get",
+          "feefineactions.collection.get",
+          "owners.collection.get",
+          "payments.collection.get"
         ],
         "visible": true
       }
