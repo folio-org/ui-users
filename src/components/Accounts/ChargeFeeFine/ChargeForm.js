@@ -59,6 +59,7 @@ class ChargeForm extends React.Component {
     stripes: PropTypes.object,
     ownerId: PropTypes.string,
     owners: PropTypes.arrayOf(PropTypes.object),
+    ownerList: PropTypes.arrayOf(PropTypes.object),
     feefines: PropTypes.arrayOf(PropTypes.object),
     onClickCancel: PropTypes.func.isRequired,
     onChangeOwner: PropTypes.func.isRequired,
@@ -82,12 +83,49 @@ class ChargeForm extends React.Component {
 
   componentDidMount() {
     feefineamount = 0.00;
+    if (this.props.owners.length > 0) {
+      this.loadServicePoints();
+    }
+  }
+
+  loadServicePoints = () => {
+    const servicePoint = this.props.preferredServicePoint;
+    const servicePoints = this.props.servicePoints || [];
+    const owners = this.props.owners || [];
+    if (servicePoint && servicePoint !== '-') {
+      owners.forEach(o => {
+        if (o.servicePointOwner.find(s => s.value === servicePoint)) {
+          this.props.initialize({ ownerId: o.id });
+          this.props.onChangeOwner({ target: { value: o.id }});
+        }
+      });
+    } else {
+      if (servicePoints.length === 1) {
+        const sp = servicePoints[0].id;
+        owners.forEach(o => {
+          if (o.servicePointOwner.find(s => s.value === sp)) {
+            this.props.initialize({ ownerId: o.id });
+            this.props.onChangeOwner({ target: { value: o.id }});
+          }
+        });
+      } else if (servicePoints.length === 2) {
+        const sp1 = servicePoints[0].id;
+        const sp2 = servicePoints[1].id;
+        owners.forEach(o => {
+          if (o.servicePointOwner.find(s => s.value === sp1) && o.servicePointOwner.find(s => s.value === sp2)) {
+            this.props.initialize({ ownerId: o.id });
+            this.props.onChangeOwner({ target: { value: o.id }});
+          }
+        });
+      }
+    }
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.owners !== this.props.owners) {
       const shared = (this.props.owners.find(o => o.owner === 'Shared') || {}).id;
       this.props.onFindShared(shared);
+      this.loadServicePoints();
     }
   }
 
@@ -113,7 +151,7 @@ class ChargeForm extends React.Component {
     const feefineList = [];
     const owners = [];
 
-    this.props.owners.forEach((owner) => {
+    this.props.ownerList.forEach((owner) => {
       if (owner.owner !== 'Shared') owners.push({ label: owner.owner, value: owner.id });
     });
 

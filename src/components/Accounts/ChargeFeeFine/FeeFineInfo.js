@@ -38,7 +38,6 @@ class FeeFineInfo extends React.Component {
     this.amount = parseFloat(this.amount).toFixed(2);
     this.props.onChangeFeeFine(parseFloat(feefine.defaultAmount || 0).toFixed(2));
   }
-
   render() {
     return (
       <section>
@@ -58,6 +57,7 @@ class FeeFineInfo extends React.Component {
                       id="ownerId"
                       component={Select}
                       fullWidth
+                      disabled={this.props.isPending.owners}
                       dataOptions={this.props.owners}
                       onChange={this.props.onChangeOwner}
                       placeholder={this.props.stripes.intl.formatMessage({ id: 'ui-users.feefines.modal.placeholder' })}
