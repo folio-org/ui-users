@@ -55,17 +55,14 @@ class WaiveModal extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { waive: 0 };
+    this.state = {
+      waive: 0,
+      accounts: [],
+    };
     this.onChangeWaive = this.onChangeWaive.bind(this);
-    this.accounts = [];
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-      console.log(this.accounts);
-      console.log(nextProps.accounts);
-    if (this.accounts !== nextProps.accounts) {
-      this.accounts = nextProps.accounts;
-    }
     const accounts = nextProps.accounts || [];
     let selected = 0;
     if (JSON.stringify(this.props.accounts) !== JSON.stringify(nextProps.accounts)) {
@@ -120,18 +117,18 @@ class WaiveModal extends React.Component {
           </Row>
           <br />
           <Row>
-            <Col xs={4}>
+            <Col xs={4.5}>
               <Row>
-                <Col xs={8}><FormattedMessage id="ui-users.accounts.waive.field.totalowed" /></Col>
+                <Col xs={7}><FormattedMessage id="ui-users.accounts.waive.field.totalowed" /></Col>
                 <Col xs={4}>{parseFloat(totalamount).toFixed(2)}</Col>
               </Row>
               <Row>
-                <Col xs={8}><FormattedMessage id="ui-users.accounts.waive.field.selectedamount" /></Col>
+                <Col xs={7}><FormattedMessage id="ui-users.accounts.waive.field.selectedamount" /></Col>
                 <Col xs={4}>{parseFloat(selected).toFixed(2)}</Col>
               </Row>
               <Row>
-                <Col xs={8}><b><FormattedMessage id="ui-users.accounts.waive.field.waiveamount" /></b></Col>
-                <Col xs={4}>
+                <Col xs={7}><b><FormattedMessage id="ui-users.accounts.waive.field.waiveamount" /></b>:</Col>
+                <Col xs={4.5}>
                   <Field
                     name="waive"
                     component={TextField}
@@ -140,16 +137,17 @@ class WaiveModal extends React.Component {
                       this.props.dispatch(change('waive', 'waive', parseFloat(next).toFixed(2)));
                     }}
                     fullWidth
+                    autoFocus
                     required
                   />
                 </Col>
               </Row>
               <Row>
-                <Col xs={8}><FormattedMessage id="ui-users.accounts.waive.field.remainingamount" /></Col>
+                <Col xs={7}><FormattedMessage id="ui-users.accounts.waive.field.remainingamount" /></Col>
                 <Col xs={4}>{remaining}</Col>
               </Row>
             </Col>
-            <Col xs={8}>
+            <Col xs={7}>
               <Row><Col xs><FormattedMessage id="ui-users.accounts.waive.field.waivereason" /></Col></Row>
               <Row>
                 <Col xs>
