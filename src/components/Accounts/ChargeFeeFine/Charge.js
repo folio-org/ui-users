@@ -51,8 +51,12 @@ class Charge extends React.Component {
       type: 'okapi',
       records: 'comments',
       path: 'comments',
-     },  
-
+     },
+    allfeefines: {
+      type: 'okapi',
+      records: 'feefines',
+      path: 'feefines?limit=100',
+    },
     activeRecord: {},
   });
 
@@ -168,17 +172,17 @@ class Charge extends React.Component {
       .then(() => this.newAction({}, type.id, type.feeFineType, type.amount, c, type.remaining, 0, type.feeFineOwner));
   }
 
-  newAction = (action, id, typeAction, amount, comment, balance, transaction, createAt) => {
+  newAction = (action, id, typeAction, amount, comment, balance, transaction, createdAt) => {
     const newAction = {
       typeAction,
       source: `${this.props.okapi.currentUser.lastName}, ${this.props.okapi.currentUser.firstName}`,
-      createdAt: createAt,
+      createdAt: createdAt,
       accountId: id,
-      dateAction: moment().utc().format(),
+      dateAction: moment().add(1, 'seconds').format(),
       userId: this.props.user.id,
       amountAction: parseFloat(amount || 0).toFixed(2),
       balance: parseFloat(balance || 0).toFixed(2),
-      transactionNumber: transaction || 0,
+      transactionInformation: transaction || '-',
       comments: comment,
     };
     return this.props.mutator.feefineactions.POST(Object.assign(action, newAction));
@@ -221,7 +225,9 @@ class Charge extends React.Component {
   onChangeOwner(e) {
     const ownerId = e.target.value;
     if (_.get(this.props.resources, ['activeRecord', 'shared']) === undefined) {
-      this.props.mutator.activeRecord.update({ shared: '0' });
+      const owners = _.get(this.props.resources, ['owners', 'records'], []);
+      const shared = owners.find(o => o.owner === 'Shared').id || '0';
+      this.props.mutator.activeRecord.update({ shared });
     }
     this.props.mutator.activeRecord.update({ ownerId });
     this.setState({
@@ -250,7 +256,15 @@ class Charge extends React.Component {
 
   render() {
     const resources = this.props.resources;
+    const allfeefines = _.get(resources, ['allfeefines', 'records'], []);
     const owners = _.get(resources, ['owners', 'records'], []);
+    const list = [];
+    const shared = owners.find(o => o.owner === 'Shared'); // Crear variable Shared en translations
+    allfeefines.forEach(f => {
+      if (!list.find(o => o.id === f.ownerId)) {
+        list.push(owners.find(o => o.id === f.ownerId));
+      }
+    });
     const feefines = (this.state.ownerId !== '0') ? (resources.feefines || {}).records || [] : [];
     const payments = _.get(resources, ['payments', 'records'], []);
     const accounts = _.get(resources, ['accounts', 'records'], []);
@@ -277,7 +291,6 @@ class Charge extends React.Component {
     };
 
     const items = _.get(resources, ['items', 'records'], []);
-    
     return (
       <div>
         <ChargeForm
@@ -291,11 +304,12 @@ class Charge extends React.Component {
             } else {
               delete data.pay;
               this.onClickCharge(data)
-                .then(() => { console.log('Actualizando en submit - Charge'); return this.props.handleAddRecords(); })
+                .then(() => this.props.handleAddRecords())
                 .then(() => this.props.onCloseChargeFeeFine());
             }
           }}
           user={this.props.user}
+          ownerList={(shared) ? owners : list}
           owners={owners}
           isPending={isPending}
           ownerId={this.state.ownerId}
