@@ -24,7 +24,7 @@ class WaiveSettings extends React.Component {
         {...this.props}
         validate={(item, index, items) => validate(item, index, items, 'nameReason', label)}
         baseUrl="waives"
-        records="waives"
+        records="waiver"
         label={this.props.stripes.intl.formatMessage({ id: 'ui-users.waives.label' })}
         labelSingular={this.props.stripes.intl.formatMessage({ id: 'ui-users.waives.singular' })}
         objectLabel=""
