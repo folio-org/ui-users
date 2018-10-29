@@ -47,7 +47,7 @@ const Menu = (props) => {
             </Col>
             <Col style={{ marginLeft: '10px' }}>
               {((selected !== 0 && selected !== parseFloat(0).toFixed(2)) && outstanding > parseFloat(0).toFixed(2)) ?
-                `Selected: ${selected}`
+                `Selected: ${parseFloat(selected).toFixed(2)}`
                 : ''
               }
             </Col>
