@@ -13,7 +13,7 @@ const Setting = (props) => (
       <Col xs>{props.label}</Col>
     </Row>
     <Row>
-      <Col xs={1}>
+      <Col sm={1}>
         <Field
           id={props.name}
           name={props.name}
