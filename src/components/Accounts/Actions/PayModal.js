@@ -118,18 +118,18 @@ class PayModal extends React.Component {
           </Row>
           <br />
           <Row>
-            <Col xs={4}>
+            <Col xs={5}>
               <Row>
-                <Col xs={8}><FormattedMessage id="ui-users.accounts.pay.field.totalamount" /></Col>
+                <Col xs={7}><FormattedMessage id="ui-users.accounts.pay.field.totalamount" /></Col>
                 <Col xs={4}>{parseFloat(totalamount).toFixed(2)}</Col>
               </Row>
               <Row>
-                <Col xs={8}><FormattedMessage id="ui-users.accounts.pay.field.selectedamount" /></Col>
+                <Col xs={7}><FormattedMessage id="ui-users.accounts.pay.field.selectedamount" /></Col>
                 <Col xs={4}>{parseFloat(selected).toFixed(2)}</Col>
               </Row>
               <Row>
-                <Col xs={8}><b><FormattedMessage id="ui-users.accounts.pay.field.paymentamount" /></b></Col>
-                <Col xs={4}>
+                <Col xs={7}><b><FormattedMessage id="ui-users.accounts.pay.field.paymentamount" /></b>:</Col>
+                <Col xs={4.5}>
                   <Field
                     name="amount"
                     component={TextField}
@@ -144,11 +144,11 @@ class PayModal extends React.Component {
                 </Col>
               </Row>
               <Row>
-                <Col xs={8}><FormattedMessage id="ui-users.accounts.pay.field.remainingamount" /></Col>
+                <Col xs={7}><FormattedMessage id="ui-users.accounts.pay.field.remainingamount" /></Col>
                 <Col xs={4}>{remaining}</Col>
               </Row>
             </Col>
-            <Col xs={4}>
+            <Col xs={3}>
               <Row><Col xs><FormattedMessage id="ui-users.accounts.pay.field.paymentmethod" /></Col></Row>
               <Row>
                 <Col xs>
