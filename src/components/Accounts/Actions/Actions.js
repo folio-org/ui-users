@@ -38,7 +38,7 @@ class Actions extends React.Component {
     },
     waives: {
       type: 'okapi',
-      records: 'waives',
+      records: 'waiver',
       path: 'waives',
     },
     activeRecord: {},
@@ -171,7 +171,7 @@ for
       userId: this.props.user.id,
       amountAction: parseFloat(amount || 0).toFixed(2),
       balance: parseFloat(balance || 0).toFixed(2),
-      transactionNumber: transaction || 0,
+      transactionInformation: transaction || '-',
       comments: comment,
     };
     return this.props.mutator.feefineactions.POST(Object.assign(action, newAction));
