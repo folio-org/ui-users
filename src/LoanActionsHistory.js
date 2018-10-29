@@ -191,11 +191,11 @@ class LoanActionsHistory extends React.Component {
 
   getFeeFine() {
     const accounts = _.get(this.props.resources, ['loanAccountsActions', 'records'], []);
-    let remaining = 0;
+    let amount = 0;
     accounts.forEach(a => {
-      remaining += parseFloat(a.remaining);
+      amount += parseFloat(a.amount);
     });
-    return (remaining === 0) ? '-' : remaining.toFixed(2);
+    return (amount === 0) ? '-' : amount.toFixed(2);
   }
 
   feefinedetails = (e) => {
@@ -377,7 +377,7 @@ class LoanActionsHistory extends React.Component {
               <KeyValue
                 label={intl.formatMessage({ id: 'ui-users.loans.details.fine' })}
                 value={
-                  <button onClick={(e) => this.feefinedetails(e)} type="button">{`${this.getFeeFine()}`}</button>
+                  <button style={{color: "#2b75bb"}} onClick={(e) => this.feefinedetails(e)} type="button">{`${this.getFeeFine()}`}</button>
               }
               />
             </Col>
