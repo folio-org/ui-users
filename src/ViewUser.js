@@ -646,6 +646,8 @@ class ViewUser extends React.Component {
         </Layer>
         <Layer isOpen={query.layer ? query.layer === 'charge' : false} label="Charge Fee/Fine">
           <this.connectedCharge
+            servicePoints={servicePoints}
+            preferredServicePoint={preferredServicePoint}
             stripes={stripes}
             onCloseChargeFeeFine={this.onCloseChargeFeeFine}
             user={user}
