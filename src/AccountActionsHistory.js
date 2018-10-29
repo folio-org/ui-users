@@ -73,7 +73,7 @@ class AccountActionsHistory extends React.Component {
       [stripes.intl.formatMessage({ id: 'ui-users.details.columns.action' })]: action => action.typeAction,
       [stripes.intl.formatMessage({ id: 'ui-users.details.columns.amount' })]: action => action.amountAction,
       [stripes.intl.formatMessage({ id: 'ui-users.details.columns.balance' })]: action => action.balance,
-      [stripes.intl.formatMessage({ id: 'ui-users.details.columns.number' })]: action => action.transactionNumber,
+      [stripes.intl.formatMessage({ id: 'ui-users.details.columns.transactioninfo' })]: action => action.transactionInformation,
       [stripes.intl.formatMessage({ id: 'ui-users.details.columns.created' })]: action => action.createdAt,
       [stripes.intl.formatMessage({ id: 'ui-users.details.columns.source' })]: action => action.source,
       [stripes.intl.formatMessage({ id: 'ui-users.details.columns.comments' })]: action => action.comments,
@@ -189,7 +189,7 @@ class AccountActionsHistory extends React.Component {
       'Action': action => action.typeAction + (action.paymentMethod ? ('-' + action.paymentMethod) : ' '),
       'Amount': action => (action.amountAction > 0 ? parseFloat(action.amountAction).toFixed(2) : '-'),
       'Balance': action => (action.balance > 0 ? parseFloat(action.balance).toFixed(2) : '-'),
-      'Transaction Information': action => action.transactionNumber || '-',
+      'Transaction Information': action => action.transactionInformation || '-',
       'Created at': action => action.createdAt,
       'Source': action => action.source,
       'Comments': action => action.comments,
@@ -245,12 +245,12 @@ class AccountActionsHistory extends React.Component {
                 <KeyValue
                   label="Loan details"
                   value={
-                    <button type="button" onClick={(e) => { this.props.onClickViewLoanActionsHistory(e, { id: loanId }); }}>
+                    <button style={{color: "#2b75bb"}} type="button" onClick={(e) => { this.props.onClickViewLoanActionsHistory(e, { id: loanId }); }}>
                       {this.props.stripes.intl.formatMessage({ id: 'ui-users.details.field.loan' })}
                     </button>}
                 />
                 :
-                '-'
+                <KeyValue label="Loan details" value={'-'} />
               }
             </Col>
           </Row>
