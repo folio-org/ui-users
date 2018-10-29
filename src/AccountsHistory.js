@@ -21,6 +21,7 @@ import { getFullName } from './util';
 import { Actions } from './components/Accounts/Actions';
 import { count, handleFilterChange, handleFilterClear } from './components/Accounts/accountFunctions';
 
+
 import {
   Menu,
   Filters,
@@ -53,12 +54,16 @@ const filterConfig = [
   },
 ];
 
-const queryFunction = (findAll, queryTemplate, sortMap, fConfig, failOnCondition, nsParams) => {
+const args = [
+  { name: "user", value: "x", },
+];
+
+const queryFunction = (findAll, queryTemplate, sortMap, fConfig, failOnCondition, nsParams, a) => {
   const getCql = makeQueryFunction(findAll, queryTemplate, sortMap, fConfig, failOnCondition, nsParams);
   return (queryParams, pathComponents, resourceValues, logger) => {
     let cql = getCql(queryParams, pathComponents, resourceValues, logger);
-    const { user } = resourceValues;
-    if (cql === undefined) { cql = `userId=${user.id}`; } else { cql = `(${cql}) and (userId=${user.id})`; }
+    const userId = a[0].value;
+    if (cql === undefined) { cql = `userId=${userId}`; } else { cql = `(${cql}) and (userId=${userId})`; }
     return cql;
   };
 };
@@ -92,6 +97,7 @@ class AccountsHistory extends React.Component {
             filterConfig,
             0,
             { query: 'q', filters: 'f' },
+            args,
           ),
         },
         staticFallback: { params: {} },
@@ -133,7 +139,22 @@ class AccountsHistory extends React.Component {
 
   constructor(props) {
     super(props);
-    this.controllableColumns = ['date created', 'date updated', 'fee/fine type', 'billed', 'remaining', 'payment status', 'fee/fine owner', 'instance (item type)', 'barcode', 'call number', 'due date', 'returned date'];
+    const { stripes } = this.props;
+
+    this.controllableColumns = [
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.amount' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' }),
+    ];
 
     const visibleColumns = this.controllableColumns.map(columnName => ({
       title: columnName,
@@ -176,7 +197,22 @@ class AccountsHistory extends React.Component {
     this.handleFilterChange = handleFilterChange.bind(this);
     this.handleFilterClear = handleFilterClear.bind(this);
     this.filterState = filterState.bind(this);
-    this.possibleColumns = ['  ', 'date created', 'date updated', 'fee/fine type', 'billed', 'remaining', 'payment status', 'fee/fine owner', 'instance (item type)', 'barcode', 'call number', 'due date', 'returned date', ' '];
+    this.possibleColumns = [
+      '  ',
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.amount' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' }),
+      ' '
+    ];
     this.getVisibleColumns = this.getVisibleColumns.bind(this);
     this.renderCheckboxList = this.renderCheckboxList.bind(this);
     this.toggleColumn = this.toggleColumn.bind(this);
@@ -189,6 +225,7 @@ class AccountsHistory extends React.Component {
   componentDidMount() {
     this.props.mutator.activeRecord.update({ records: 50, comments: 200 });
     this.props.mutator.user.update({ id: this.props.user.id });
+    args[0].value = this.props.user.id;
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -197,7 +234,15 @@ class AccountsHistory extends React.Component {
     const accounts = _.get(this.props.resources, ['feefineshistory', 'records'], []);
     const nextAccounts = _.get(nextProps.resources, ['feefineshistory', 'records'], []);
     const comments = _.get(this.props.resources, ['comments', 'records'], []);
+    console.log("comments",comments);
     const nextComments = _.get(nextProps.resources, ['comments', 'records'], []);
+    if (JSON.stringify(accounts) !== JSON.stringify(nextAccounts)) {
+      let selected = 0;
+      this.state.selectedAccounts.forEach(a => {
+        selected += nextAccounts.find(ac => ac.id === a.id).remaining;
+      });
+      this.setState({ selected });
+    }
 
     if (this.addRecord !== nextProps.num) {
       this.props.mutator.activeRecord.update({ records: nextProps.num, comments: nextProps.num + 150 });
@@ -226,6 +271,7 @@ class AccountsHistory extends React.Component {
     filterConfig[1].values = paymentStatus.map(s => ({ name: `${s.name}`, cql: s.name }));
     filterConfig[2].values = feeFineTypes.map(f => ({ name: `${f.name}`, cql: f.name }));
     filterConfig[3].values = itemTypes.map(i => ({ name: `${i.name}`, cql: i.name }));
+
 
     /*if (this.editRecord !== 0) {
       if (this.editRecord === 1) prevProps.mutator.activeRecord.update({ records: 51 });
@@ -368,6 +414,7 @@ class AccountsHistory extends React.Component {
     if (query.layer === 'open-accounts') badgeCount = open.length;
     else if (query.layer === 'closed-accounts') badgeCount = closed.length;
     const filters = filterState(this.queryParam('f'));
+    const selectedAccounts = this.state.selectedAccounts.map(a => accounts.find(ac => ac.id === a.id) || {});
 
     const closeMenu = (
       <PaneMenu>
@@ -381,18 +428,18 @@ class AccountsHistory extends React.Component {
     );
 
     const columnMapping = {
-      'date created': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' }),
-      'date updated': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' }),
-      'fee/fine type': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' }),
-      'billed': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.amount' }),
-      'remaining': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' }),
-      'payment status': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' }),
-      'fee/fine owner': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' }),
-      'instance (item type)': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' }),
-      'barcode': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' }),
-      'call number': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' }),
-      'due date': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' }),
-      'returned date': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' }),
+      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' })]: stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' }),
+      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' })]: stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' }),
+      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' })]: stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' }),
+      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.amount' })]: stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.amount' }),
+      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' })]: stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' }),
+      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' })]: stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' }),
+      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' })]: stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' }),
+      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' })]: stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' }),
+      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' })]: stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' }),
+      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' })]: stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' }),
+      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' })]: stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' }),
+      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' })]: stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' }),
     };
 
     const firstMenu = (
@@ -537,7 +584,7 @@ class AccountsHistory extends React.Component {
                 user={user}
                 stripes={stripes}
                 accounts={this.accounts}
-                selectedAccounts={this.state.selectedAccounts}
+                selectedAccounts={selectedAccounts}
                 balance={balance}
                 handleEdit={this.handleEdit}
               />
