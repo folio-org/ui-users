@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ControlledVocab from '@folio/stripes-smart-components/lib/ControlledVocab';
+import { ControlledVocab } from '@folio/stripes/smart-components';
 import { validate } from '../util';
 
 class WaiveSettings extends React.Component {
@@ -36,6 +36,7 @@ class WaiveSettings extends React.Component {
         nameKey="waiveReasons"
         hiddenFields={['numberOfObjects']}
         id="waives"
+        sortby="nameReason"
       />
     );
   }

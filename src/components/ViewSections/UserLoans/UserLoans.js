@@ -4,10 +4,13 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import queryString from 'query-string';
-import Badge from '@folio/stripes-components/lib/Badge';
-import { Accordion } from '@folio/stripes-components/lib/Accordion';
-import Icon from '@folio/stripes-components/lib/Icon';
-import List from '@folio/stripes-components/lib/List';
+import {
+  Badge,
+  Accordion,
+  List,
+  Icon,
+  Headline
+} from '@folio/stripes/components';
 
 /**
  * User-details "Loans" accordion pane.
@@ -80,7 +83,7 @@ class UserLoans extends React.Component {
         open={expanded}
         id={accordionId}
         onToggle={onToggle}
-        label={<FormattedMessage id="ui-users.loans.title" />}
+        label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.loans.title" /></Headline>}
         displayWhenClosed={displayWhenClosed}
       >
         {loansLoaded ?

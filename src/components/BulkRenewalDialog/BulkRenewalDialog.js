@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Modal from '@folio/stripes-components/lib/Modal';
+import { Modal } from '@folio/stripes/components';
 
 import BulkRenewInfo from './BulkRenewInfo';
 

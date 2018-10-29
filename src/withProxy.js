@@ -95,16 +95,15 @@ const withProxy = WrappedComponent => class WithProxyComponent extends React.Com
       return null;
     }
 
+    componentDidMount() {
+      const { match: { params: { id } } } = this.props;
+      this.load(id);
+    }
+
     componentDidUpdate(prevProps, prevState) {
-      if (!this.props.stripes.hasPerm('proxiesfor.collection.get')) {
-        return;
-      }
-
       const { userId } = this.state;
-
-      if (userId !== prevState.userId) {
-        this.loadSponsors(userId);
-        this.loadProxies(userId);
+      if (userId && userId !== prevState.userId) {
+        this.load(userId);
       }
     }
 
@@ -114,6 +113,15 @@ const withProxy = WrappedComponent => class WithProxyComponent extends React.Com
 
     loadProxies(userId) {
       this.loadResource('proxies', userId);
+    }
+
+    load(userId) {
+      if (!this.props.stripes.hasPerm('proxiesfor.collection.get')) {
+        return;
+      }
+
+      this.loadSponsors(userId);
+      this.loadProxies(userId);
     }
 
     // join proxiesFor with proxies

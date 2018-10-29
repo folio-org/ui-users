@@ -1,8 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
-import Modal from '@folio/stripes-components/lib/Modal';
-import Button from '@folio/stripes-components/lib/Button';
+import { Modal, Button } from '@folio/stripes/components';
 
 const ErrorModal = props => (
   <Modal id={props.id} onClose={props.onClose} open={props.open} size="small" label={props.label} dismissible>

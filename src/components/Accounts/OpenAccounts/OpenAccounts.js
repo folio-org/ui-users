@@ -1,14 +1,16 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-
-import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
-import Button from '@folio/stripes-components/lib/Button';
-import { UncontrolledDropdown } from '@folio/stripes-components/lib/Dropdown';
-import MenuItem from '@folio/stripes-components/lib/MenuItem';
-import DropdownMenu from '@folio/stripes-components/lib/DropdownMenu';
-import Popover from '@folio/stripes-components/lib/Popover';
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
+import {
+  Button,
+  Row,
+  Col,
+  MultiColumnList,
+  UncontrolledDropdown,
+  MenuItem,
+  DropdownMenu,
+  Popover,
+} from '@folio/stripes/components';
 
 import { formatDate, formatDateTime } from '../../../util';
 

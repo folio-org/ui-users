@@ -1,9 +1,12 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import List from '@folio/stripes-components/lib/List';
-import { Accordion } from '@folio/stripes-components/lib/Accordion';
-import Badge from '@folio/stripes-components/lib/Badge';
+import {
+  List,
+  Accordion,
+  Badge,
+  Headline
+} from '@folio/stripes/components';
 
 class RenderPermissions extends React.Component {
   static propTypes = {
@@ -59,7 +62,7 @@ class RenderPermissions extends React.Component {
         open={expanded}
         id={accordionId}
         onToggle={onToggle}
-        label={this.props.heading}
+        label={<Headline size="large" tag="h3">{this.props.heading}</Headline>}
         displayWhenClosed={
           <Badge>{listedPermissions.length}</Badge>
         }

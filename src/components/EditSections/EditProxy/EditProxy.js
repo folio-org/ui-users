@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Accordion } from '@folio/stripes-components/lib/Accordion';
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
-import Badge from '@folio/stripes-components/lib/Badge';
-import IfPermission from '@folio/stripes-components/lib/IfPermission';
+import {
+  Accordion,
+  Badge,
+  IfPermission,
+  Headline
+} from '@folio/stripes/components';
 
 import ProxyEditList from '../../ProxyGroup/ProxyEditList';
 import ProxyEditItem from '../../ProxyGroup/ProxyEditItem';
@@ -24,7 +26,7 @@ const EditProxy = (props) => {
         open={expanded}
         id={accordionId}
         onToggle={onToggle}
-        label={proxySponsor}
+        label={<Headline size="large" tag="h3">{proxySponsor}</Headline>}
         displayWhenClosed={
           <Badge>{sponsors.length + proxies.length}</Badge>
         }

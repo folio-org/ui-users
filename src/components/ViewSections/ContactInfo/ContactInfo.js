@@ -1,9 +1,13 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
-import { Accordion } from '@folio/stripes-components/lib/Accordion';
-import KeyValue from '@folio/stripes-components/lib/KeyValue';
+import {
+  Row,
+  Col,
+  Accordion,
+  KeyValue,
+  Headline
+} from '@folio/stripes/components';
 
 import UserAddresses from '../../UserAddresses';
 import contactTypes from '../../../data/contactTypes';
@@ -16,7 +20,7 @@ const ContactInfo = ({ expanded, onToggle, accordionId, user, addressTypes, addr
       open={expanded}
       id={accordionId}
       onToggle={onToggle}
-      label={intl.formatMessage({ id: 'ui-users.contact.contactInformation' })}
+      label={<Headline size="large" tag="h3">{intl.formatMessage({ id: 'ui-users.contact.contactInformation' })}</Headline>}
     >
       <Row>
         <Col xs={3}>

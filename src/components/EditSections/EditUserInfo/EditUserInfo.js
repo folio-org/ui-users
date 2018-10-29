@@ -1,12 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
-import Select from '@folio/stripes-components/lib/Select';
-import Datepicker from '@folio/stripes-components/lib/Datepicker';
-import TextField from '@folio/stripes-components/lib/TextField';
-import { Accordion } from '@folio/stripes-components/lib/Accordion';
-import ViewMetaData from '@folio/stripes-smart-components/lib/ViewMetaData';
+import {
+  Select,
+  TextField,
+  Row,
+  Col,
+  Accordion,
+  Datepicker,
+  Headline
+} from '@folio/stripes/components';
+import { ViewMetaData } from '@folio/stripes/smart-components';
 
 class EditUserInfo extends React.Component {
   static propTypes = {
@@ -50,7 +54,7 @@ class EditUserInfo extends React.Component {
 
     return (
       <Accordion
-        label={intl.formatMessage({ id: 'ui-users.information.userInformation' })}
+        label={<Headline size="large" tag="h3">{intl.formatMessage({ id: 'ui-users.information.userInformation' })}</Headline>}
         open={expanded}
         id={accordionId}
         onToggle={onToggle}
@@ -108,9 +112,6 @@ class EditUserInfo extends React.Component {
               name="expirationDate"
               id="adduser_expirationdate"
             />
-          </Col>
-          <Col xs={12} md={3}>
-            <Field label={`${intl.formatMessage({ id: 'ui-users.information.username' })}`} name="username" id="adduser_username" component={TextField} fullWidth validStylesEnabled />
           </Col>
         </Row>
       </Accordion>

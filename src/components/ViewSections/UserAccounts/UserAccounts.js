@@ -4,11 +4,14 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import queryString from 'query-string';
 import { FormattedMessage } from 'react-intl';
-import Badge from '@folio/stripes-components/lib/Badge';
-import Button from '@folio/stripes-components/lib/Button';
-import { Accordion } from '@folio/stripes-components/lib/Accordion';
-import Icon from '@folio/stripes-components/lib/Icon';
-import List from '@folio/stripes-components/lib/List';
+import {
+  Badge,
+  Button,
+  Accordion,
+  Icon,
+  List,
+  Headline
+} from '@folio/stripes/components';
 
 /**
  * User-details "Accounts" accordian pane.
@@ -119,7 +122,7 @@ class UserAccounts extends React.Component {
         open={expanded}
         id={accordionId}
         onToggle={onToggle}
-        label={<FormattedMessage id="ui-users.accounts.title" />}
+        label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.accounts.title" /></Headline>}
         displayWhenClosed={displayWhenClosed}
         displayWhenOpen={displayWhenOpen}
       >

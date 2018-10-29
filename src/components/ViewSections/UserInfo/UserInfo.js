@@ -1,10 +1,15 @@
 import { get } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
-import KeyValue from '@folio/stripes-components/lib/KeyValue';
-import { Accordion } from '@folio/stripes-components/lib/Accordion';
-import ViewMetaData from '@folio/stripes-smart-components/lib/ViewMetaData';
+import {
+  Row,
+  Col,
+  KeyValue,
+  Accordion,
+  Headline
+} from '@folio/stripes/components';
+
+import { ViewMetaData } from '@folio/stripes/smart-components';
 
 class UserInfo extends React.Component {
   static propTypes = {
@@ -33,7 +38,7 @@ class UserInfo extends React.Component {
         open={expanded}
         id={accordionId}
         onToggle={onToggle}
-        label={intl.formatMessage({ id: 'ui-users.information.userInformation' })}
+        label={<Headline size="large" tag="h3">{intl.formatMessage({ id: 'ui-users.information.userInformation' })}</Headline>}
       >
         <Row>
           <Col xs={12}>
@@ -66,9 +71,6 @@ class UserInfo extends React.Component {
               </Col>
               <Col xs={3}>
                 <KeyValue label={intl.formatMessage({ id: 'ui-users.information.expirationDate' })} value={stripes.formatDate(get(user, ['expirationDate'], ''))} />
-              </Col>
-              <Col xs={3}>
-                <KeyValue label={intl.formatMessage({ id: 'ui-users.information.username' })} value={get(user, ['username'], '')} />
               </Col>
             </Row>
           </Col>

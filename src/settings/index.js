@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
-import { Settings } from '@folio/stripes-smart-components';
+import { Settings } from '@folio/stripes/smart-components';
 
 import PermissionSets from './permissions/PermissionSets';
 import PatronGroupsSettings from './PatronGroupsSettings';
