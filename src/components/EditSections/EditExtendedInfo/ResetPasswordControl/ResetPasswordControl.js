@@ -34,22 +34,25 @@ class ResetPasswordControl extends React.Component {
     const contentText = intl.formatMessage({ id: 'ui-users.extended.sendResetPassword' });
 
     return (
-      <Col xs={12} md={3}>
+      <Col
+        xs={12}
+        md={3}
+      >
         <KeyValue label={fieldLabel}>
           <button
             type="button"
-            onClick={this.openModal}
             className={css.resetPasswordButton}
+            onClick={this.openModal}
           >
             {contentText}
           </button>
         </KeyValue>
         <ResetPasswordModal
           isOpen={this.state.showModal}
-          onClose={this.closeModal}
           email={email}
           name={name}
           intl={intl}
+          onClose={this.closeModal}
         />
       </Col>
     );

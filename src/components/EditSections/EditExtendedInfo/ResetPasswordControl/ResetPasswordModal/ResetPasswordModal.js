@@ -50,7 +50,7 @@ class ResetPasswordModal extends React.Component {
 
     return (
       <Row className={css.copyControl}>
-        <Col xs={9} md={9}>
+        <Col xs={9}>
           <input
             className={css.textField}
             ref={this.copyInput}
@@ -59,8 +59,11 @@ class ResetPasswordModal extends React.Component {
             readOnly
           />
         </Col>
-        <Col xs={3} md={3}>
-          <Button buttonStyle="primary" onClick={this.handleClick}>
+        <Col xs={3}>
+          <Button
+            buttonStyle="primary"
+            onClick={this.handleClick}
+          >
             <strong>
               {intl.formatMessage({ id: 'ui-users.extended.resetPasswordModal.copyLink' })}
             </strong>
@@ -82,8 +85,8 @@ class ResetPasswordModal extends React.Component {
         dismissible
         size="small"
         open={isOpen}
-        onClose={onClose}
         label={intl.formatMessage({ id: 'ui-users.extended.resetPasswordModal.label' })}
+        onClose={onClose}
       >
         {this.buildTextContent()}
         {this.buildCopyLinkControl()}
@@ -97,7 +100,9 @@ ResetPasswordModal.propTypes = {
   onClose: PropTypes.func.isRequired,
   email: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  intl: PropTypes.object,
+  intl: PropTypes.shape({
+    formatMessage: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 export default ResetPasswordModal;
