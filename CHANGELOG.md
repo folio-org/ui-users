@@ -8,6 +8,16 @@
 * Restore element id for password-toggle to simplify testing. Refs UITEST-55.
 * Add permissions for renewing loans. Fixes UIU-686.
 * Specify a sort field to `<ControlledVocab>` for entries without a `name` field. Refs STSMACOM-139.
+* Fix minor "Pay Fee/Fine" bugs. Fix UIU-454
+* Fix minor "Waive Fee/Fine" bugs. Fix UIU-455.
+* Fix minor "Fees/Fines History" bugs. Fix UIU-238, UIU-641.
+* Fix change to Fees/Fines Details link to Loan Details. Fix UIU-643.
+* Fix "Fee/Fine History" page not refreshing. Fix UIU-645.
+* Fix Transaction Information field in Pay Fee/Fine modal. Fix UIU-646.
+* Fix Fine Incurred no longer displays after it is paid. Fix UIU-665.
+* Implement default Fee/Fine Owner for user. Ref UIU-610.
+* Implement associate Fee/Fine Owners to one or more Service Points. Ref UIU-611.
+* Implement permission for CRUD Manual Patron Block. Ref UIU-674.
 
 ## [2.17.0](https://github.com/folio-org/ui-users/tree/v2.17.0) (2018-10-5)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.16.0...v2.17.0)
