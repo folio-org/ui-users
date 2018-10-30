@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { get } from 'lodash';
-import { setServicePoints, setCurServicePoint } from '@folio/stripes-core/src/loginServices';
-import HandlerManager from '@folio/stripes-core/src/components/HandlerManager';
-import events from '@folio/stripes-core/src/events';
+import { setServicePoints, setCurServicePoint, HandlerManager, coreEvents as events } from '@folio/stripes/core';
 
 const withServicePoints = WrappedComponent => class WithServicePointsComponent extends React.Component {
     static manifest = {

@@ -3,7 +3,7 @@ import _ from 'lodash';
 import PropTypes from 'prop-types';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import moment from 'moment';
-import Callout from '@folio/stripes-components/lib/Callout';
+import { Callout } from '@folio/stripes/components';
 import CancellationModal from './CancellationModal';
 import PayModal from './PayModal';
 import WaiveModal from './WaiveModal';
@@ -104,22 +104,22 @@ class Actions extends React.Component {
   showCalloutMessage(a) {
     const message = (
       <span>
-      The
+        The
         {' '}
         {a.feeFineType}
         {' '}
-fee/fine of
+        fee/fine of
         {' '}
         <strong>{parseFloat(a.amount).toFixed(2)}</strong>
         {' '}
-has been successfully
+        has been successfully
         {' '}
         <strong>{a.paymentStatus.name}</strong>
         {' '}
-for
+        for
         {' '}
         <strong>{getFullName(this.props.user)}</strong>
-.
+        .
       </span>
     );
     this.callout.sendCallout({ message });

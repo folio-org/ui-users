@@ -2,23 +2,26 @@ import { cloneDeep, omit } from 'lodash';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
-import Pane from '@folio/stripes-components/lib/Pane';
-import Textfield from '@folio/stripes-components/lib/TextField';
-import TextArea from '@folio/stripes-components/lib/TextArea';
-import Button from '@folio/stripes-components/lib/Button';
-import Paneset from '@folio/stripes-components/lib/Paneset';
-import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
-import IfPermission from '@folio/stripes-components/lib/IfPermission';
-import IconButton from '@folio/stripes-components/lib/IconButton';
-import Icon from '@folio/stripes-components/lib/Icon';
-import ViewMetaData from '@folio/stripes-smart-components/lib/ViewMetaData';
+import {
+  Paneset,
+  Pane,
+  PaneMenu,
+  IconButton,
+  TextField,
+  TextArea,
+  Icon,
+  Button,
+  Accordion,
+  ExpandAllButton,
+  Row,
+  Col,
+  IfPermission,
+  ConfirmationModal,
+  Headline
+} from '@folio/stripes/components';
+import { ViewMetaData } from '@folio/stripes/smart-components';
 
-// eslint-disable-next-line import/no-unresolved
-import ConfirmationModal from '@folio/stripes-components/lib/ConfirmationModal';
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
-import { Accordion, ExpandAllButton } from '@folio/stripes-components/lib/Accordion';
-
-import stripesForm from '@folio/stripes-form';
+import stripesForm from '@folio/stripes/form';
 import { Field } from 'redux-form';
 
 import ContainedPermissions from './ContainedPermissions';
@@ -186,7 +189,7 @@ class PermissionSetForm extends React.Component {
               open={sections.generalSection}
               id="generalSection"
               onToggle={this.handleSectionToggle}
-              label={intl.formatMessage({ id: 'ui-users.permissions.generalInformation' })}
+              label={<Headline size="large" tag="h3">{intl.formatMessage({ id: 'ui-users.permissions.generalInformation' })}</Headline>}
             >
               {selectedSet.metadata && selectedSet.metadata.createdDate &&
                 <Row>
@@ -198,7 +201,7 @@ class PermissionSetForm extends React.Component {
               <Row>
                 <Col xs={8}>
                   <section>
-                    <Field label={`${intl.formatMessage({ id: 'ui-users.permissions.permissionSetName' })} *`} name="displayName" id="input-permission-title" component={Textfield} autoFocus required fullWidth disabled={disabled} />
+                    <Field label={`${intl.formatMessage({ id: 'ui-users.permissions.permissionSetName' })} *`} name="displayName" id="input-permission-title" component={TextField} autoFocus required fullWidth disabled={disabled} />
                     <Field label={intl.formatMessage({ id: 'ui-users.description' })} name="description" id="input-permission-description" component={TextArea} fullWidth disabled={disabled} />
                   </section>
                 </Col>

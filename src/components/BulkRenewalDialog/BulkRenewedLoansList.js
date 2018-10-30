@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { get } from 'lodash';
+import get from 'lodash/get';
+import {
+  Icon,
+  MultiColumnList,
+  Popover,
+} from '@folio/stripes/components';
 import { FormattedMessage } from 'react-intl';
-import Popover from '@folio/stripes-components/lib/Popover';
-import Icon from '@folio/stripes-components/lib/Icon';
-
-import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 
 const propTypes = {
   stripes: PropTypes.shape({

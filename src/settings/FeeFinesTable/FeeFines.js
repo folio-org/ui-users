@@ -1,11 +1,9 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import ConfirmationModal from '@folio/stripes-components/lib/ConfirmationModal';
+import { ConfirmationModal, Callout } from '@folio/stripes/components';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
-import Callout from '@folio/stripes-components/lib/Callout';
-import { EditableList } from '@folio/stripes-smart-components';
-
+import { EditableList } from '@folio/stripes/smart-components';
 import Owners from './Owners';
 import CopyModal from './CopyModal';
 

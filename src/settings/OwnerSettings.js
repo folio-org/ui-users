@@ -1,11 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Button, Callout, Col, ConfirmationModal, Modal, Pane, Paneset, Row, MultiSelection } from '@folio/stripes-components';
+import { 
+  Button, 
+  Callout, 
+  Col, 
+  ConfirmationModal, 
+  Modal, 
+  Pane, 
+  Paneset, 
+  Row, 
+  MultiSelection,
+} from '@folio/stripes-components';
 import { Field } from 'redux-form';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import EditableList from '@folio/stripes-smart-components/lib/EditableList';
-
 import { validate } from '../util';
 
 class OwnerSettings extends React.Component {

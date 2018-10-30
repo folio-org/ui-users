@@ -1,10 +1,15 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import KeyValue from '@folio/stripes-components/lib/KeyValue';
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
-import { Accordion, ExpandAllButton } from '@folio/stripes-components/lib/Accordion';
-import ViewMetaData from '@folio/stripes-smart-components/lib/ViewMetaData';
+import {
+  KeyValue,
+  Row,
+  Col,
+  Accordion,
+  ExpandAllButton,
+  Headline
+} from '@folio/stripes/components';
+import { ViewMetaData } from '@folio/stripes/smart-components';
 
 import RenderPermissions from '../../components/RenderPermissions';
 
@@ -62,7 +67,7 @@ class PermissionSetDetails extends React.Component {
           open={sections.generalInformation}
           id="generalInformation"
           onToggle={this.handleSectionToggle}
-          label={this.props.stripes.intl.formatMessage({ id: 'ui-users.permissions.generalInformation' })}
+          label={<Headline size="large" tag="h3">{this.props.stripes.intl.formatMessage({ id: 'ui-users.permissions.generalInformation' })}</Headline>}
         >
           {selectedSet.metadata && selectedSet.metadata.createdDate &&
             <Row>

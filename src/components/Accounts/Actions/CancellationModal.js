@@ -2,11 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
-import Modal from '@folio/stripes-components/lib/Modal';
-import Button from '@folio/stripes-components/lib/Button';
-import TextArea from '@folio/stripes-components/lib/TextArea';
-import Checkbox from '@folio/stripes-components/lib/Checkbox';
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
+import {
+  Modal,
+  Button,
+  TextArea,
+  Checkbox,
+  Row,
+  Col,
+} from '@folio/stripes/components';
 
 const validate = (values) => {
   const errors = {};

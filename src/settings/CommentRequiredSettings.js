@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import Callout from '@folio/stripes-components/lib/Callout';
+import { Callout } from '@folio/stripes/components';
 
 import CommentRequiredForm from './CommentRequiredForm';
 

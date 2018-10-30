@@ -1,9 +1,11 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import List from '@folio/stripes-components/lib/List';
-import TextField from '@folio/stripes-components/lib/TextField';
-import Icon from '@folio/stripes-components/lib/Icon';
+import {
+  Icon,
+  TextField,
+  List,
+} from '@folio/stripes/components';
 import css from './PermissionList.css';
 
 function PermissionList(props) {

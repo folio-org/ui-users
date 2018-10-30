@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
+import { Row, Col } from '@folio/stripes/components';
 import { Link } from 'react-router-dom';
 import { getFullName } from '../../../util';
 import css from './index.css';

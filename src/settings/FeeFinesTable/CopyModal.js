@@ -3,12 +3,15 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Field, reduxForm } from 'redux-form';
 
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
-import Button from '@folio/stripes-components/lib/Button';
-import Select from '@folio/stripes-components/lib/Select';
-import RadioButton from '@folio/stripes-components/lib/RadioButton';
-import Modal from '@folio/stripes-components/lib/Modal';
-import RadioButtonGroup from '@folio/stripes-components/lib/RadioButtonGroup';
+import {
+  Row,
+  Col,
+  Button,
+  Select,
+  RadioButton,
+  Modal,
+  RadioButtonGroup,
+} from '@folio/stripes/components';
 
 const validate = (type, props) => {
   const errors = {};

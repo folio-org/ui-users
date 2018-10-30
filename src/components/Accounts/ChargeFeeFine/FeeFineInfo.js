@@ -2,9 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
-import Select from '@folio/stripes-components/lib/Select';
-import TextField from '@folio/stripes-components/lib/TextField';
+import {
+  Row,
+  Col,
+  TextField,
+  Select,
+} from '@folio/stripes/components';
 
 class FeeFineInfo extends React.Component {
   static propTypes = {

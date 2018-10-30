@@ -1,15 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Paneset from '@folio/stripes-components/lib/Paneset';
+import {
+  Paneset,
+  Pane,
+  PaneMenu,
+  Icon,
+  TextArea,
+  Button,
+  Row,
+  Col,
+} from '@folio/stripes/components';
 import { FormattedMessage } from 'react-intl';
-import Pane from '@folio/stripes-components/lib/Pane';
-import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
-import Icon from '@folio/stripes-components/lib/Icon';
-import TextArea from '@folio/stripes-components/lib/TextArea';
-import Button from '@folio/stripes-components/lib/Button';
-import stripesForm from '@folio/stripes-form';
+import stripesForm from '@folio/stripes/form';
 import { Field } from 'redux-form';
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 
 import UserDetails from './UserDetails';
 import FeeFineInfo from './FeeFineInfo';

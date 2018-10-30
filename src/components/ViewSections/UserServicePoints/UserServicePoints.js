@@ -1,9 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Accordion } from '@folio/stripes-components/lib/Accordion';
-import Badge from '@folio/stripes-components/lib/Badge';
-import KeyValue from '@folio/stripes-components/lib/KeyValue';
-import List from '@folio/stripes-components/lib/List';
+import {
+  Accordion,
+  Badge,
+  KeyValue,
+  List,
+  Headline
+} from '@folio/stripes/components';
 
 class UserServicePoints extends React.Component {
   static propTypes = {
@@ -63,7 +66,7 @@ class UserServicePoints extends React.Component {
       <Accordion
         displayWhenClosed={<Badge>{this.props.servicePoints.length}</Badge>}
         id={this.props.accordionId}
-        label={this.props.stripes.intl.formatMessage({ id: 'ui-users.sp.servicePoints' })}
+        label={<Headline size="large" tag="h3">{this.props.stripes.intl.formatMessage({ id: 'ui-users.sp.servicePoints' })}</Headline>}
         onToggle={this.props.onToggle}
         open={this.props.expanded}
       >

@@ -2,17 +2,21 @@ import { cloneDeep, get, omit, differenceBy, find } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
-import TitleManager from '@folio/stripes-core/src/components/TitleManager'; // eslint-disable-line import/no-unresolved
-import Pane from '@folio/stripes-components/lib/Pane';
-import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
-import Icon from '@folio/stripes-components/lib/Icon';
-import Layer from '@folio/stripes-components/lib/Layer';
-import IfPermission from '@folio/stripes-components/lib/IfPermission';
-import IfInterface from '@folio/stripes-components/lib/IfInterface';
-import { ExpandAllButton } from '@folio/stripes-components/lib/Accordion';
-import IconButton from '@folio/stripes-components/lib/IconButton';
-import { withTags } from '@folio/stripes-smart-components/lib/Tags';
+import { TitleManager } from '@folio/stripes/core';
+import {
+  Pane,
+  PaneMenu,
+  IconButton,
+  Icon,
+  ExpandAllButton,
+  Row,
+  Col,
+  IfPermission,
+  IfInterface,
+  Layer,
+  Headline
+} from '@folio/stripes/components';
+import { withTags } from '@folio/stripes/smart-components';
 
 import UserForm from './UserForm';
 import LoansHistory from './LoansHistory';
@@ -537,10 +541,13 @@ class ViewUser extends React.Component {
     return (
       <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle={getFullName(user)} lastMenu={detailMenu} dismissible onClose={this.props.onClose} appIcon={{ app: 'users' }}>
         <TitleManager record={getFullName(user)} />
+
+        <Headline size="xx-large" tag="h2">{getFullName(user)}</Headline>
+
         <Row end="xs"><Col xs><ExpandAllButton accordionStatus={this.state.sections} onToggle={this.handleExpandAll} /></Col></Row>
 
         <this.connectedUserInfo accordionId="userInformationSection" user={user} patronGroup={patronGroup} settings={settings} stripes={stripes} expanded={this.state.sections.userInformationSection} onToggle={this.handleSectionToggle} />
-        <ExtendedInfo accordionId="extendedInfoSection" stripes={stripes} user={user} expanded={this.state.sections.extendedInfoSection} onToggle={this.handleSectionToggle} />
+        <ExtendedInfo accordionId="extendedInfoSection" user={user} expanded={this.state.sections.extendedInfoSection} onToggle={this.handleSectionToggle} />
         <ContactInfo accordionId="contactInfoSection" stripes={stripes} user={user} addresses={addresses} addressTypes={this.addressTypes} expanded={this.state.sections.contactInfoSection} onToggle={this.handleSectionToggle} />
         <IfPermission perm="proxiesfor.collection.get">
           <ProxyPermissions
@@ -565,7 +572,7 @@ class ViewUser extends React.Component {
           />
         </IfPermission>
 
-        <IfPermission perm="circulation.loans.collection.get">
+        <IfPermission perm="ui-users.loans.all">
           <IfInterface name="loan-policy-storage" version="1.0">
             { /* Check without version, so can support either of multiple versions.
             Replace with specific check when facility for providing
@@ -673,14 +680,15 @@ class ViewUser extends React.Component {
           />
         </Layer>
 
-        <IfPermission perm="circulation.loans.collection.get">
+        <IfPermission perm="ui-users.loans.all">
           <Layer isOpen={query.layer ? query.layer === 'open-loans' || query.layer === 'closed-loans' : false} contentLabel={formatMsg({ id: 'ui-users.loans.title' })}>
             {loansHistory}
           </Layer>
+
+          <Layer isOpen={query.layer ? query.layer === 'loan' : false} contentLabel={formatMsg({ id: 'ui-users.loanActionsHistory' })}>
+            {loanDetails}
+          </Layer>
         </IfPermission>
-        <Layer isOpen={query.layer ? query.layer === 'loan' : false} contentLabel={formatMsg({ id: 'ui-users.loanActionsHistory' })}>
-          {loanDetails}
-        </Layer>
       </Pane>
     );
   }

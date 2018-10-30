@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "2.16.0",
+  "version": "2.17.2",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -445,7 +445,41 @@
         "subPermissions": [
           "ui-users.settings.manualblocks"
         ]
-       }
+      },
+      { 
+        "permissionName": "ui-users.loans.renew",
+        "displayName": "Loans: Renew loans",
+        "description": "Also includes basic permissions to view users",
+        "subPermissions": [
+          "ui-users.view",
+          "circulation.loans.collection.get",
+          "circulation.loans.item.get",
+          "circulation.renew-by-id.post"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.loans.all",
+        "displayName": "Loans: All permissions",
+        "description": "Also includes requests, loan-policies and accounts permissions",
+        "subPermissions": [
+          "ui-users.view",
+          "ui-users.loans.renew",
+          "ui-users.settings.feefines",
+          "circulation.loans.item.put",
+          "circulation.renew-by-barcode.post",
+          "circulation.requests.collection.get",
+          "circulation-storage.loans-history.collection.get",
+          "circulation-storage.loans.collection.anonymize.user.post",
+          "circulation-storage.loan-policies.collection.get",
+          "circulation-storage.loan-policies.item.get",
+          "accounts.collection.get",
+          "feefineactions.collection.get",
+          "owners.collection.get",
+          "payments.collection.get"
+        ],
+        "visible": true
+      }
     ]
   },
   "scripts": {
@@ -457,10 +491,8 @@
   },
   "devDependencies": {
     "@folio/eslint-config-stripes": "^3.2.1",
-    "@folio/stripes-cli": "^1.2.0",
-    "@folio/stripes-connect": "^3.1.1",
-    "@folio/stripes-core": "^2.13.0",
-    "@folio/stripes-logger": "^0.0.2",
+    "@folio/stripes": "^1.0.0",
+    "@folio/stripes-cli": "^1.5.0",
     "babel-eslint": "^9.0.0",
     "eslint": "^5.5.0",
     "react": "^16.5.0",
@@ -470,9 +502,6 @@
   },
   "dependencies": {
     "@folio/react-intl-safe-html": "^1.0.0",
-    "@folio/stripes-components": "^3.1.0",
-    "@folio/stripes-form": "^1.0.0",
-    "@folio/stripes-smart-components": "^1.8.0",
     "hashcode": "^1.0.3",
     "lodash": "^4.17.4",
     "moment": "^2.22.2",
@@ -484,9 +513,7 @@
     "uuid": "^3.0.1"
   },
   "peerDependencies": {
-    "@folio/stripes-connect": "^3.1.1",
-    "@folio/stripes-core": "^2.13.0",
-    "@folio/stripes-logger": "^0.0.2",
+    "@folio/stripes": "^1.0.0",
     "react": "*"
   },
   "optionalDependencies": {

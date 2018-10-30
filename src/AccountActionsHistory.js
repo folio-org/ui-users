@@ -2,13 +2,15 @@ import _ from 'lodash';
 import React from 'react';
 import Link from 'react-router-dom/Link';
 import PropTypes from 'prop-types';
-
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
-import KeyValue from '@folio/stripes-components/lib/KeyValue';
-import Pane from '@folio/stripes-components/lib/Pane';
-import Paneset from '@folio/stripes-components/lib/Paneset';
-import Button from '@folio/stripes-components/lib/Button';
-import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
+import {
+  Paneset,
+  Pane,
+  Button,
+  Row,
+  Col,
+  KeyValue,
+  MultiColumnList,
+} from '@folio/stripes/components';
 
 import { Actions } from './components/Accounts/Actions';
 import { formatDateTime, getFullName } from './util';
