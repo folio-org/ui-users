@@ -14,6 +14,7 @@ import {
   IfPermission,
   IfInterface,
   Layer,
+  Headline
 } from '@folio/stripes/components';
 import { withTags } from '@folio/stripes/smart-components';
 
@@ -539,10 +540,13 @@ class ViewUser extends React.Component {
     return (
       <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle={getFullName(user)} lastMenu={detailMenu} dismissible onClose={this.props.onClose} appIcon={{ app: 'users' }}>
         <TitleManager record={getFullName(user)} />
+
+        <Headline size="xx-large" tag="h2">{getFullName(user)}</Headline>
+
         <Row end="xs"><Col xs><ExpandAllButton accordionStatus={this.state.sections} onToggle={this.handleExpandAll} /></Col></Row>
 
         <this.connectedUserInfo accordionId="userInformationSection" user={user} patronGroup={patronGroup} settings={settings} stripes={stripes} expanded={this.state.sections.userInformationSection} onToggle={this.handleSectionToggle} />
-        <ExtendedInfo accordionId="extendedInfoSection" stripes={stripes} user={user} expanded={this.state.sections.extendedInfoSection} onToggle={this.handleSectionToggle} />
+        <ExtendedInfo accordionId="extendedInfoSection" user={user} expanded={this.state.sections.extendedInfoSection} onToggle={this.handleSectionToggle} />
         <ContactInfo accordionId="contactInfoSection" stripes={stripes} user={user} addresses={addresses} addressTypes={this.addressTypes} expanded={this.state.sections.contactInfoSection} onToggle={this.handleSectionToggle} />
         <IfPermission perm="proxiesfor.collection.get">
           <ProxyPermissions
@@ -567,7 +571,7 @@ class ViewUser extends React.Component {
           />
         </IfPermission>
 
-        <IfPermission perm="circulation.loans.collection.get">
+        <IfPermission perm="ui-users.loans.all">
           <IfInterface name="loan-policy-storage" version="1.0">
             { /* Check without version, so can support either of multiple versions.
             Replace with specific check when facility for providing
@@ -670,14 +674,15 @@ class ViewUser extends React.Component {
           />
         </Layer>
 
-        <IfPermission perm="circulation.loans.collection.get">
+        <IfPermission perm="ui-users.loans.all">
           <Layer isOpen={query.layer ? query.layer === 'open-loans' || query.layer === 'closed-loans' : false} contentLabel={formatMsg({ id: 'ui-users.loans.title' })}>
             {loansHistory}
           </Layer>
+
+          <Layer isOpen={query.layer ? query.layer === 'loan' : false} contentLabel={formatMsg({ id: 'ui-users.loanActionsHistory' })}>
+            {loanDetails}
+          </Layer>
         </IfPermission>
-        <Layer isOpen={query.layer ? query.layer === 'loan' : false} contentLabel={formatMsg({ id: 'ui-users.loanActionsHistory' })}>
-          {loanDetails}
-        </Layer>
       </Pane>
     );
   }

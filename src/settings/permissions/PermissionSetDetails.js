@@ -7,6 +7,7 @@ import {
   Col,
   Accordion,
   ExpandAllButton,
+  Headline
 } from '@folio/stripes/components';
 import { ViewMetaData } from '@folio/stripes/smart-components';
 
@@ -66,7 +67,7 @@ class PermissionSetDetails extends React.Component {
           open={sections.generalInformation}
           id="generalInformation"
           onToggle={this.handleSectionToggle}
-          label={this.props.stripes.intl.formatMessage({ id: 'ui-users.permissions.generalInformation' })}
+          label={<Headline size="large" tag="h3">{this.props.stripes.intl.formatMessage({ id: 'ui-users.permissions.generalInformation' })}</Headline>}
         >
           {selectedSet.metadata && selectedSet.metadata.createdDate &&
             <Row>

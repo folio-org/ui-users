@@ -1,102 +1,78 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Field } from 'redux-form';
+
 import {
-  Button,
   TextField,
   Row,
   Col,
   Accordion,
   KeyValue,
   Datepicker,
+  Headline
 } from '@folio/stripes/components';
-import { Field } from 'redux-form';
 
-import css from './EditExtendedInfo.css';
+import PasswordControl from './PasswordControl';
 
-class EditExtendedInfo extends React.Component {
-  constructor() {
-    super();
-    this.state = { showPassword: false };
-  }
-
-  togglePassword() {
-    this.setState(({ showPassword }) => ({
-      showPassword: !showPassword
-    }));
-  }
-
-  render() {
-    const { expanded, onToggle, accordionId, initialValues } = this.props;
-    return (
-      <Accordion
-        open={expanded}
-        id={accordionId}
-        onToggle={onToggle}
-        label={this.props.stripes.intl.formatMessage({ id: 'ui-users.extended.extendedInformation' })}
-      >
-        <Row>
-          <Col xs={12} md={3}>
-            <Field
-              component={Datepicker}
-              label={this.props.stripes.intl.formatMessage({ id: 'ui-users.extended.dateEnrolled' })}
-              dateFormat="YYYY-MM-DD"
-              name="enrollmentDate"
-              id="adduser_enrollmentdate"
-            />
-          </Col>
-          <Col xs={12} md={3}>
-            <Field
-              label={this.props.stripes.intl.formatMessage({ id: 'ui-users.extended.externalSystemId' })}
-              name="externalSystemId"
-              id="adduser_externalsystemid"
-              component={TextField}
-              fullWidth
-            />
-          </Col>
-          <Col xs={12} md={3}>
-            <Field
-              component={Datepicker}
-              label={this.props.stripes.intl.formatMessage({ id: 'ui-users.extended.birthDate' })}
-              dateFormat="YYYY-MM-DD"
-              name="personal.dateOfBirth"
-              id="adduser_dateofbirth"
-              timeZone="UTC"
-              backendDateStandard="YYYY-MM-DD"
-            />
-          </Col>
-          <Col xs={12} md={3}>
-            <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.extended.folioNumber' })}>
-              {initialValues.id || '-'}
-            </KeyValue>
-          </Col>
-        </Row>
-        {!initialValues.id &&
-          <Row>
-            <Col xs={4}>
-              <Field
-                component={TextField}
-                label={`${this.props.stripes.intl.formatMessage({ id: 'ui-users.extended.folioPassword' })} `}
-                name="creds.password"
-                id="pw"
-                autoComplete="new-password"
-                type={this.state.showPassword ? 'text' : 'password'}
-                fullWidth
-              />
-            </Col>
-            <Col xs={1}>
-              <div className={css.togglePw}>
-                <Button id="toggle_pw_btn" onClick={() => this.togglePassword()}>
-                  {this.state.showPassword ? this.props.stripes.intl.formatMessage({ id: 'ui-users.hide' }) : this.props.stripes.intl.formatMessage({ id: 'ui-users.show' })}
-                </Button>
-              </div>
-            </Col>
-          </Row>
-        }
-        <br />
-      </Accordion>
-    );
-  }
-}
+const EditExtendedInfo = ({ expanded, onToggle, accordionId, initialValues, stripes: { intl } }) => (
+  <Accordion
+    open={expanded}
+    id={accordionId}
+    onToggle={onToggle}
+    label={<Headline size="large" tag="h3">{intl.formatMessage({ id: 'ui-users.extended.extendedInformation' })}</Headline>}
+  >
+    <Row>
+      <Col xs={12} md={3}>
+        <Field
+          component={Datepicker}
+          label={intl.formatMessage({ id: 'ui-users.extended.dateEnrolled' })}
+          dateFormat="YYYY-MM-DD"
+          name="enrollmentDate"
+          id="adduser_enrollmentdate"
+        />
+      </Col>
+      <Col xs={12} md={3}>
+        <Field
+          label={intl.formatMessage({ id: 'ui-users.extended.externalSystemId' })}
+          name="externalSystemId"
+          id="adduser_externalsystemid"
+          component={TextField}
+          fullWidth
+        />
+      </Col>
+      <Col xs={12} md={3}>
+        <Field
+          component={Datepicker}
+          label={intl.formatMessage({ id: 'ui-users.extended.birthDate' })}
+          dateFormat="YYYY-MM-DD"
+          name="personal.dateOfBirth"
+          id="adduser_dateofbirth"
+          timeZone="UTC"
+          backendDateStandard="YYYY-MM-DD"
+        />
+      </Col>
+      <Col xs={12} md={3}>
+        <KeyValue label={intl.formatMessage({ id: 'ui-users.extended.folioNumber' })}>
+          {initialValues.id || '-'}
+        </KeyValue>
+      </Col>
+    </Row>
+    <Row>
+      <Col xs={12} md={3}>
+        <Field
+          label={`${intl.formatMessage({ id: 'ui-users.information.username' })}`}
+          name="username"
+          id="adduser_username"
+          component={TextField}
+          fullWidth
+          validStylesEnabled
+        />
+      </Col>
+      {!initialValues.id && <PasswordControl intl={intl} />}
+    </Row>
+    <br />
+  </Accordion>
+);
 
 EditExtendedInfo.propTypes = {
   expanded: PropTypes.bool,

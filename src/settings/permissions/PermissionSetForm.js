@@ -17,6 +17,7 @@ import {
   Col,
   IfPermission,
   ConfirmationModal,
+  Headline
 } from '@folio/stripes/components';
 import { ViewMetaData } from '@folio/stripes/smart-components';
 
@@ -188,7 +189,7 @@ class PermissionSetForm extends React.Component {
               open={sections.generalSection}
               id="generalSection"
               onToggle={this.handleSectionToggle}
-              label={intl.formatMessage({ id: 'ui-users.permissions.generalInformation' })}
+              label={<Headline size="large" tag="h3">{intl.formatMessage({ id: 'ui-users.permissions.generalInformation' })}</Headline>}
             >
               {selectedSet.metadata && selectedSet.metadata.createdDate &&
                 <Row>

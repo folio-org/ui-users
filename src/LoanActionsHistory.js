@@ -300,6 +300,8 @@ class LoanActionsHistory extends React.Component {
     const contributorsList = this.getContributorslist(loan);
     const contributorsListString = contributorsList.join(' ');
     const contributorsLength = contributorsListString.length;
+    const loanStatus = _.get(loan, ['status', 'name'], '-');
+    const buttonDisabled = (loanStatus && loanStatus === 'Closed');
     // Number of characters to trucate the string = 77
     const listTodisplay = (contributorsList === '-') ? '-' : (contributorsListString.length >= 77) ? `${contributorsListString.substring(0, 77)}...` : `${contributorsListString.substring(0, contributorsListString.length - 2)}`;
     const nonRenewedLabel = this.props.stripes.intl.formatMessage({ id: 'ui-users.loans.items.nonRenewed.label' });
@@ -320,12 +322,10 @@ class LoanActionsHistory extends React.Component {
       <Paneset isRoot>
         <Pane id="pane-loandetails" defaultWidth="100%" dismissible onClose={onCancel} paneTitle={`${intl.formatMessage({ id: 'ui-users.loans.loanDetails' })} - ${getFullName(user)} (${_.upperFirst(patronGroup.group)})`}>
           <Row>
-            <Col>
-              <Button buttonStyle="primary" onClick={this.renew}>{this.props.stripes.intl.formatMessage({ id: 'ui-users.renew' })}</Button>
-            </Col>
-            <Col>
-              <Button buttonStyle="primary" onClick={this.showChangeDueDateDialog}>{this.props.stripes.intl.formatMessage({ id: 'stripes-smart-components.cddd.changeDueDate' })}</Button>
-            </Col>
+            <span>
+              <Button disabled={buttonDisabled} buttonStyle="primary" onClick={this.renew}>{this.props.stripes.intl.formatMessage({ id: 'ui-users.renew' })}</Button>
+              <Button disabled={buttonDisabled} buttonStyle="primary" onClick={this.showChangeDueDateDialog}>{this.props.stripes.intl.formatMessage({ id: 'stripes-smart-components.cddd.changeDueDate' })}</Button>
+            </span>
           </Row>
           <Row>
             <Col xs={2}>

@@ -60,6 +60,7 @@ class PaymentSettings extends React.Component {
         nameKey="paymentMethods"
         hiddenFields={['numberOfObjects']}
         id="payments"
+        sortby="nameMethod"
       />
     );
   }

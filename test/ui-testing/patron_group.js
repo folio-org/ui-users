@@ -89,6 +89,8 @@ module.exports.test = function foo(uiTestCtx, nightmare) {
           .wait('#clickable-reset-all')
           .click('#clickable-reset-all')
           .type('#input-user-search', userid)
+          .wait('button[type=submit]')
+          .click('button[type=submit]')
           .wait(`div[title="${userid}"]`)
           .click(`div[title="${userid}"]`)
           .wait('#clickable-edituser')

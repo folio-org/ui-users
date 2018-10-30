@@ -11,6 +11,7 @@ import {
   ExpandAllButton,
   Row,
   Col,
+  Headline
 } from '@folio/stripes/components';
 import stripesForm from '@folio/stripes/form';
 
@@ -197,6 +198,7 @@ class UserForm extends React.Component {
         <Paneset isRoot>
           <Pane defaultWidth="100%" firstMenu={firstMenu} lastMenu={lastMenu} paneTitle={paneTitle} appIcon={{ app: 'users' }}>
             <div className={css.UserFormContent}>
+              <Headline size="xx-large" tag="h2">{getFullName(initialValues)}</Headline>
               <Row end="xs">
                 <Col xs>
                   <ExpandAllButton accordionStatus={sections} onToggle={this.handleExpandAll} />

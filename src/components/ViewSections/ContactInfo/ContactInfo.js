@@ -5,7 +5,8 @@ import {
   Row,
   Col,
   Accordion,
-  KeyValue
+  KeyValue,
+  Headline
 } from '@folio/stripes/components';
 
 import UserAddresses from '../../UserAddresses';
@@ -19,7 +20,7 @@ const ContactInfo = ({ expanded, onToggle, accordionId, user, addressTypes, addr
       open={expanded}
       id={accordionId}
       onToggle={onToggle}
-      label={intl.formatMessage({ id: 'ui-users.contact.contactInformation' })}
+      label={<Headline size="large" tag="h3">{intl.formatMessage({ id: 'ui-users.contact.contactInformation' })}</Headline>}
     >
       <Row>
         <Col xs={3}>
