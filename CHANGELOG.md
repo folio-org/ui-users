@@ -8,6 +8,7 @@
 * Restore element id for password-toggle to simplify testing. Refs UITEST-55.
 * Add permissions for renewing loans. Fixes UIU-686.
 * Specify a sort field to `<ControlledVocab>` for entries without a `name` field. Refs STSMACOM-139.
+* Link to a user's requests. Fixes UIU-677.
 
 ## [2.17.0](https://github.com/folio-org/ui-users/tree/v2.17.0) (2018-10-5)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.16.0...v2.17.0)
