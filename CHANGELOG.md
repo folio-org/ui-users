@@ -22,6 +22,7 @@
 * Provide `totalCount` to loan MCLs.
 * Support circulation v5.0, requiring service-point information on loans. Refs UIU-717.
 * Format the `active` attribute as `Status` on the find-proxy modal. Fixes UIU-726.
+* Link to a user's requests. Fixes UIU-677.
 
 ## [2.17.0](https://github.com/folio-org/ui-users/tree/v2.17.0) (2018-10-5)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.16.0...v2.17.0)
