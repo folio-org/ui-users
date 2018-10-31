@@ -1,9 +1,9 @@
-@Library ('folio_jenkins_shared_libs') _
+@Library ('folio_jenkins_shared_libs@FOLIO-1596') _
 
 buildNPM {
   publishModDescriptor = 'yes'
-  runLint = 'yes'
-  runRegression = 'no'
+  runLint = true
+  runRegression = false
   runSonarqube = true
   runTest = 'no'
 }
