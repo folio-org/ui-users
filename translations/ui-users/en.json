@@ -316,6 +316,11 @@
   "loans.details.feeFine": "Fee/fine",
   "loans.details.proxyBorrower": "Proxy borrower",
 
+  "requests.title": "Requests",
+  "requests.createRequest": "Create request",
+  "requests.numOpenRequests": "{count, number} {count, plural, one {open request} other {open requests}}",
+  "requests.numClosedRequests": "{count, number} {count, plural, one {closed request} other {closed requests}}",
+
   "permissions.noSponsorsFound": "No sponsors found",
   "permissions.noProxiesFound": "No proxies found",
   "permissions.empty": "No permissions found",
