@@ -6,4 +6,5 @@ buildNPM {
   runRegression = false
   runSonarqube = false
   runTest = false
+  stripesPlatform = [ 'platform-core':'snapshot' ]
 }
