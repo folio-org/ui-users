@@ -155,7 +155,6 @@ class EditablePermissions extends React.Component {
       <IfPermission perm={this.props.permToModify}>
         <Dropdown
           id="section-add-permission"
-          style={{ float: 'right' }}
           pullRight
           open={this.state ? this.state.addPermissionOpen : false}
           onToggle={this.onToggleAddPermDD}
@@ -187,8 +186,8 @@ class EditablePermissions extends React.Component {
           <Badge>{size}</Badge>
         }
       >
-        <div>{permsDropdownButton}</div>
         <FieldArray name={this.props.name} component={this.renderList} />
+        <div>{permsDropdownButton}</div>
       </Accordion>
     );
   }
