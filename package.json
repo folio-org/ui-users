@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "2.17.2",
+  "version": "2.17.3",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -456,7 +456,9 @@
           "accounts.collection.get",
           "feefineactions.collection.get",
           "owners.collection.get",
-          "payments.collection.get"
+          "payments.collection.get",
+          "comments.collection.get",
+          "waives.collection.get"
         ],
         "visible": true
       }
