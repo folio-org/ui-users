@@ -1,6 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import { Field } from 'redux-form';
+import {
+  injectIntl,
+  intlShape,
+} from 'react-intl';
 
 import {
   TextField,
@@ -20,16 +25,10 @@ const EditExtendedInfo = (props) => {
     expanded,
     onToggle,
     accordionId,
-    initialValues: {
-      id,
-      personal: {
-        email,
-        firstName,
-      },
-    },
-    stripes: {
-      intl,
-    }
+    userId,
+    userFirstName,
+    userEmail,
+    intl,
   } = props;
 
   const AccordionHeader = (
@@ -92,7 +91,7 @@ const EditExtendedInfo = (props) => {
           md={3}
         >
           <KeyValue label={intl.formatMessage({ id: 'ui-users.extended.folioNumber' })}>
-            {id || '-'}
+            {userId || '-'}
           </KeyValue>
         </Col>
       </Row>
@@ -111,15 +110,14 @@ const EditExtendedInfo = (props) => {
           />
         </Col>
         {
-          id
+          userId
             ? (
               <ResetPasswordControl
-                intl={intl}
-                email={email}
-                name={firstName}
+                email={userEmail}
+                name={userFirstName}
               />
             )
-            : <PasswordControl intl={intl} />
+            : <PasswordControl />
         }
       </Row>
       <br />
@@ -131,16 +129,10 @@ EditExtendedInfo.propTypes = {
   expanded: PropTypes.bool.isRequired,
   onToggle: PropTypes.func.isRequired,
   accordionId: PropTypes.string.isRequired,
-  initialValues: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    personal: PropTypes.shape({
-      email: PropTypes.string.isRequired,
-      firstName: PropTypes.string.isRequired,
-    }).isRequired,
-  }),
-  stripes: PropTypes.shape({
-    intl: PropTypes.object.isRequired,
-  }).isRequired,
+  userId: PropTypes.string.isRequired,
+  userFirstName: PropTypes.string.isRequired,
+  userEmail: PropTypes.string.isRequired,
+  intl: intlShape.isRequired,
 };
 
-export default EditExtendedInfo;
+export default injectIntl(EditExtendedInfo);

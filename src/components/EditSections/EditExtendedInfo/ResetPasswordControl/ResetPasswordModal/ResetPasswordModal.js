@@ -1,6 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+
+import {
+  injectIntl,
+  intlShape,
+  FormattedMessage,
+} from 'react-intl';
 
 import {
   Row,
@@ -96,13 +101,11 @@ class ResetPasswordModal extends React.Component {
 }
 
 ResetPasswordModal.propTypes = {
+  intl: intlShape.isRequired,
   isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
   email: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  intl: PropTypes.shape({
-    formatMessage: PropTypes.func.isRequired,
-  }).isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 
-export default ResetPasswordModal;
+export default injectIntl(ResetPasswordModal);

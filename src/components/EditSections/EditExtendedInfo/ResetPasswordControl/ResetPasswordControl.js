@@ -2,6 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import {
+  injectIntl,
+  intlShape,
+} from 'react-intl';
+
+import {
   Col,
   KeyValue,
 } from '@folio/stripes/components';
@@ -60,9 +65,9 @@ class ResetPasswordControl extends React.Component {
 }
 
 ResetPasswordControl.propTypes = {
-  intl: PropTypes.object.isRequired,
+  intl: intlShape.isRequired,
   email: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
 };
 
-export default ResetPasswordControl;
+export default injectIntl(ResetPasswordControl);
