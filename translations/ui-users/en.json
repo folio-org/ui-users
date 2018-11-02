@@ -347,6 +347,11 @@
   "extended.birthDate": "Birth date",
   "extended.folioNumber": "Folio number",
   "extended.folioPassword": "Folio password",
+  "extended.sendResetPassword": "Send reset password email",
+  "extended.resetPasswordModal.label": "Reset password email sent",
+  "extended.resetPasswordModal.linkWasSent": "A reset password link was sent to:",
+  "extended.resetPasswordModal.linkInstructions": "If {name} is not receiving emails from FOLIO, the following link can be sent:",
+  "extended.resetPasswordModal.copyLink": "Copy link",
 
   "contact.contactInformation": "Contact Information",
   "contact.email": "Email",
