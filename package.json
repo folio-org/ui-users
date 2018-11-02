@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "2.17.3",
+  "version": "2.17.4",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -453,6 +453,7 @@
           "circulation-storage.loans.collection.anonymize.user.post",
           "circulation-storage.loan-policies.collection.get",
           "circulation-storage.loan-policies.item.get",
+          "circulation-storage.loans.item.get"
           "accounts.collection.get",
           "feefineactions.collection.get",
           "owners.collection.get",
