@@ -453,7 +453,7 @@
           "circulation-storage.loans.collection.anonymize.user.post",
           "circulation-storage.loan-policies.collection.get",
           "circulation-storage.loan-policies.item.get",
-          "circulation-storage.loans.item.get"
+          "circulation-storage.loans.item.get",
           "accounts.collection.get",
           "feefineactions.collection.get",
           "owners.collection.get",
