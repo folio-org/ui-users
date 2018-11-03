@@ -446,7 +446,7 @@
           "ui-users.settings.manualblocks"
         ]
       },
-      { 
+      {
         "permissionName": "ui-users.loans.renew",
         "displayName": "Loans: Renew loans",
         "description": "Also includes basic permissions to view users",
