@@ -228,7 +228,7 @@ class FeeFines extends React.Component {
 
   onChangeOwner(e) {
     const ownerId = e.target.value;
-    const query = `ownerId=${ownerId}`
+    const query = `ownerId=${ownerId}`;
     const owners = (this.props.resources.owners || {}).records || [];
     const shared = owners.find(o => o.owner === 'Shared') || {};
     this.props.mutator.nextfeefines.GET({ query }).then(records => {
@@ -260,7 +260,6 @@ class FeeFines extends React.Component {
     const data = (this.props.resources.allfeefines || {}).records || [];
     const owners = (this.props.resources.owners || {}).records || [];
     const allfeefines = _.get(this.props.resources, ['allfeefines', 'records'], []);
-    const count = _.get(this.props.resources, ['feefinesPerOwner', 'other', 'resultInfo', 'facets', 0, 'facetValues'], []);
     const shared = owners.find(o => o.owner === 'Shared') || {};
     const sharedFeeFines = data.filter(f => f.ownerId === shared.id).map(f => f.feeFineType);
     const list = [];
@@ -269,7 +268,6 @@ class FeeFines extends React.Component {
         list.push(owners.find(o => o.id === f.ownerId));
       }
     });
-    const ownerList = owners.filter(o => list.includes(o.id));
 
     const formatter = {
       defaultAmount: i => ((i.defaultAmount) ? parseFloat(i.defaultAmount).toFixed(2) : '-'),

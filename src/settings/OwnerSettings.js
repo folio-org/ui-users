@@ -1,20 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { FormattedMessage, injectIntl } from 'react-intl';
-import { 
-  Button, 
-  Callout, 
-  Col, 
-  ConfirmationModal, 
-  Modal, 
-  Pane, 
-  Paneset, 
-  Row, 
+import _ from 'lodash';
+import { injectIntl } from 'react-intl';
+import {
+  Callout,
+  ConfirmationModal,
+  Pane,
+  Paneset,
   MultiSelection,
-} from '@folio/stripes-components';
+} from '@folio/stripes/components';
 import { Field } from 'redux-form';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
-import EditableList from '@folio/stripes-smart-components/lib/EditableList';
+import { EditableList } from '@folio/stripes/smart-components';
 import { validate } from '../util';
 
 class OwnerSettings extends React.Component {
@@ -48,7 +44,6 @@ class OwnerSettings extends React.Component {
 
     this.state = {
       showConfirmDialog: false,
-      showItemInUseDialog: false,
       selectedItem: {},
       primaryField: 'owner',
     };
@@ -77,7 +72,6 @@ class OwnerSettings extends React.Component {
         this.deleteItemResolve();
       })
       .catch(() => {
-        this.setState({ showItemInUseDialog: true });
         this.deleteItemReject();
       })
       .finally(() => this.hideConfirmDialog());
@@ -97,7 +91,6 @@ class OwnerSettings extends React.Component {
 
   hideItemInUseDialog() {
     this.setState({
-      showItemInUseDialog: false,
       selectedItem: {},
     });
   }
@@ -134,7 +127,7 @@ class OwnerSettings extends React.Component {
     const { intl: { formatMessage } } = this.props;
     const { primaryField } = this.state;
     const servicePoints = _.get(this.props.resources, ['servicePoints', 'records', 0, 'servicepoints'], []);
-    const none = servicePoints.find(s => s.name === 'None') || {};
+    const none = servicePoints.find(s => s.name === 'Circ Desk 1') || {};
 
     if (Array.isArray(items)) {
       const errors = [];
@@ -158,7 +151,7 @@ class OwnerSettings extends React.Component {
 
 
         // Add the errors if we found any for this record.
-        if (itemErrors && Object.keys(itemErrors).length) {
+        if (Object.keys(itemErrors).length) {
           errors[index] = itemErrors;
         }
       });
@@ -169,6 +162,31 @@ class OwnerSettings extends React.Component {
     }
 
     return {};
+  }
+
+  warn = ({ items }) => {
+    const servicePoints = _.get(this.props.resources, ['servicePoints', 'records', 0, 'servicepoints'], []);
+    const none = servicePoints.find(s => s.name === 'None') || {};
+
+    const warnings = [];
+    if (Array.isArray(items)) {
+      items.forEach((item, index) => {
+        const itemWarning = {};
+
+        const asp = item.servicePointOwner || [];
+
+        asp.forEach(s => {
+          if (s.value === none.id) {
+            itemWarning.servicePointOwner = 'Warning: Overdue fines/lost item fees will not be collected without a service point';
+          }
+        });
+
+        if (itemWarning && Object.keys(itemWarning).length) {
+          warnings[index] = itemWarning;
+        }
+      });
+    }
+    return { items: warnings };
   }
 
   render() {
@@ -191,7 +209,7 @@ class OwnerSettings extends React.Component {
     const options = [];
     servicePoints.forEach(s => {
       if (!serviceOwners.includes(s.id) || s.name === 'None') {
-        options.push({ value: s.id, label: s.name});
+        options.push({ value: s.id, label: s.name });
       }
     });
 
@@ -219,7 +237,7 @@ class OwnerSettings extends React.Component {
         const items = asp.map(a => <li>{a.label}</li>);
         return <ul>{items}</ul>;
       }
-    }
+    };
 
     return (
       <Paneset>
@@ -231,8 +249,8 @@ class OwnerSettings extends React.Component {
             createButtonLabel={formatMessage({ id: 'stripes-core.button.new' })}
             visibleFields={['owner', 'desc', 'servicePointOwner']}
             columnMapping={{
-              owner: this.props.stripes.intl.formatMessage({ id: 'ui-users.owners.columns.owner' }),
-              desc: this.props.stripes.intl.formatMessage({ id: 'ui-users.owners.columns.desc' }),
+              'owner': this.props.stripes.intl.formatMessage({ id: 'ui-users.owners.columns.owner' }),
+              'desc': this.props.stripes.intl.formatMessage({ id: 'ui-users.owners.columns.desc' }),
               'servicePointOwner': this.props.stripes.intl.formatMessage({ id: 'ui-users.owners.columns.asp' })
             }}
             formatter={formatter}
@@ -244,6 +262,7 @@ class OwnerSettings extends React.Component {
                 { terms: 'label' })
             }
             validate={this.validate}
+            warn={this.warn}
           />
           <ConfirmationModal
             id={`delete${type.replace(/[^a-zA-Z0-9]/g, '').toLowerCase()}-confirmation`}
