@@ -8,6 +8,7 @@
 * Restore element id for password-toggle to simplify testing. Refs UITEST-55.
 * Add permissions for renewing loans. Fixes UIU-686.
 * Specify a sort field to `<ControlledVocab>` for entries without a `name` field. Refs STSMACOM-139.
+* Show `active` column in find-user popup. Refs STCOM-385.
 * Fix minor "Pay Fee/Fine" bugs. Fix UIU-454
 * Fix minor "Waive Fee/Fine" bugs. Fix UIU-455.
 * Fix minor "Fees/Fines History" bugs. Fix UIU-238, UIU-641.

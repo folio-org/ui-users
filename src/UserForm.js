@@ -214,7 +214,9 @@ class UserForm extends React.Component {
                 accordionId="extendedInfo"
                 expanded={sections.extendedInfo}
                 onToggle={this.handleSectionToggle}
-                {...this.props}
+                userId={initialValues.id}
+                userFirstName={initialValues.personal.firstName}
+                userEmail={initialValues.personal.email}
               />
               <EditContactInfo
                 accordionId="contactInfo"
