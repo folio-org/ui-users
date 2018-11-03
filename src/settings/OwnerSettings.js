@@ -181,7 +181,7 @@ class OwnerSettings extends React.Component {
           }
         });
 
-        if ( Object.keys(itemWarning).length) {
+        if (Object.keys(itemWarning).length) {
           warnings[index] = itemWarning;
         }
       });
