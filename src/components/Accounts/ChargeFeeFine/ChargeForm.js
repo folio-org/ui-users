@@ -91,6 +91,14 @@ class ChargeForm extends React.Component {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.owners !== this.props.owners) {
+      const shared = (this.props.owners.find(o => o.owner === 'Shared') || {}).id;
+      this.props.onFindShared(shared);
+      this.loadServicePoints();
+    }
+  }
+
   loadServicePoints = () => {
     const servicePoint = this.props.preferredServicePoint;
     const servicePoints = this.props.servicePoints || [];
@@ -99,36 +107,26 @@ class ChargeForm extends React.Component {
       owners.forEach(o => {
         if (o.servicePointOwner.find(s => s.value === servicePoint)) {
           this.props.initialize({ ownerId: o.id });
-          this.props.onChangeOwner({ target: { value: o.id }});
+          this.props.onChangeOwner({ target: { value: o.id } });
         }
       });
-    } else {
-      if (servicePoints.length === 1) {
-        const sp = servicePoints[0].id;
-        owners.forEach(o => {
-          if (o.servicePointOwner.find(s => s.value === sp)) {
-            this.props.initialize({ ownerId: o.id });
-            this.props.onChangeOwner({ target: { value: o.id }});
-          }
-        });
-      } else if (servicePoints.length === 2) {
-        const sp1 = servicePoints[0].id;
-        const sp2 = servicePoints[1].id;
-        owners.forEach(o => {
-          if (o.servicePointOwner.find(s => s.value === sp1) && o.servicePointOwner.find(s => s.value === sp2)) {
-            this.props.initialize({ ownerId: o.id });
-            this.props.onChangeOwner({ target: { value: o.id }});
-          }
-        });
-      }
-    }
-  }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.owners !== this.props.owners) {
-      const shared = (this.props.owners.find(o => o.owner === 'Shared') || {}).id;
-      this.props.onFindShared(shared);
-      this.loadServicePoints();
+    } else if (servicePoints.length === 1) {
+      const sp = servicePoints[0].id;
+      owners.forEach(o => {
+        if (o.servicePointOwner.find(s => s.value === sp)) {
+          this.props.initialize({ ownerId: o.id });
+          this.props.onChangeOwner({ target: { value: o.id } });
+        }
+      });
+    } else if (servicePoints.length === 2) {
+      const sp1 = servicePoints[0].id;
+      const sp2 = servicePoints[1].id;
+      owners.forEach(o => {
+        if (o.servicePointOwner.find(s => s.value === sp1) && o.servicePointOwner.find(s => s.value === sp2)) {
+          this.props.initialize({ ownerId: o.id });
+          this.props.onChangeOwner({ target: { value: o.id } });
+        }
+      });
     }
   }
 
@@ -181,18 +179,14 @@ class ChargeForm extends React.Component {
         <Button onClick={this.props.onClickCancel} style={mg} buttonStyle="secondary"><FormattedMessage id="ui-users.feefines.modal.cancel" /></Button>
         <Button
           disabled={this.props.pristine || this.props.submitting || this.props.invalid}
-          onClick={this.props.handleSubmit(data =>
-            this.props.onSubmit({ ...data, pay: true })
-          )}
+          onClick={this.props.handleSubmit(data => this.props.onSubmit({ ...data, pay: true }))}
           style={mg}
         >
           <FormattedMessage id="ui-users.charge.pay" />
         </Button>
         <Button
           disabled={this.props.pristine || this.props.submitting || this.props.invalid}
-          onClick={this.props.handleSubmit(data =>
-            this.props.onSubmit({ ...data, pay: false })
-          )}
+          onClick={this.props.handleSubmit(data => this.props.onSubmit({ ...data, pay: false }))}
           style={mg}
         >
           <FormattedMessage id="ui-users.charge.onlyCharge" />

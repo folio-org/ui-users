@@ -131,7 +131,36 @@ class OpenAccounts extends React.Component {
       const myComments = actions.map(a => a.comments);
       const n = myComments.length;
       return (
-        <Comment n={n} myComments={myComments} t={t}/>
+        <div>
+          <Row>
+            <Col>{t}</Col>
+            {(n > 0) ?
+              <Col style={{ marginLeft: '5px' }}>
+                <Popover key={myComments[n - 1]}>
+                  <div data-role="target">
+                    <img src="https://png.icons8.com/color/18/000000/note.png" alt="" />
+                  </div>
+                  <p data-role="popover">
+                    <b>
+                                        Comment
+                      {' '}
+                      {n}
+                      {' '}
+                                        of
+                      {' '}
+                      {n}
+                                        :
+                    </b>
+                    {' '}
+                    {myComments[n - 1]}
+                    {' '}
+                    <a href="/users/123" className="active">Go to details</a>
+                  </p>
+                </Popover>
+              </Col>
+              : ' '}
+          </Row>
+        </div>
       );
     }
 
@@ -156,14 +185,14 @@ class OpenAccounts extends React.Component {
         [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' })]: f => (f.metadata && f.metadata.createdDate !== f.metadata.updatedDate ? formatDate(f.metadata.updatedDate) : '-'),
         [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' })]: f => (f.feeFineType ? this.comments(f) : '-'),
         [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.amount' })]: f => (f.amount ? parseFloat(f.amount).toFixed(2) : '-'),
-       [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' })]: f => parseFloat(f.remaining).toFixed(2) || '0.00',
-       [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' })]: f => (f.paymentStatus || {}).name || '-',
-       [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' })]: f => (f.feeFineOwner ? f.feeFineOwner : '-'),
-       [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' })]: f => (f.title ? `${f.title} (${f.materialType})` : '-'),
-       [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' })]: f => (f.barcode ? f.barcode : '-'),
-       [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' })]: f => (f.callNumber ? f.callNumber : '-'),
-       [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' })]: f => (f.dueDate ? formatDateTime(f.dueDate) : '-'),
-       [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' })]: f => (f.returnedDate ? formatDateTime(f.returnedDate) : formatDateTime(this.getLoan(f).returnDate) || '-'),
+        [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' })]: f => parseFloat(f.remaining).toFixed(2) || '0.00',
+        [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' })]: f => (f.paymentStatus || {}).name || '-',
+        [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' })]: f => (f.feeFineOwner ? f.feeFineOwner : '-'),
+        [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' })]: f => (f.title ? `${f.title} (${f.materialType})` : '-'),
+        [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' })]: f => (f.barcode ? f.barcode : '-'),
+        [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' })]: f => (f.callNumber ? f.callNumber : '-'),
+        [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' })]: f => (f.dueDate ? formatDateTime(f.dueDate) : '-'),
+        [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' })]: f => (f.returnedDate ? formatDateTime(f.returnedDate) : formatDateTime(this.getLoan(f).returnDate) || '-'),
         ' ': f => this.renderActions(f),
       };
     }
@@ -290,10 +319,10 @@ class OpenAccounts extends React.Component {
               <Button buttonStyle="dropdownItem">Waive</Button>
             </MenuItem>
             <MenuItem>
-              <Button disabled={true} buttonStyle="dropdownItem">Refund</Button>
+              <Button disabled buttonStyle="dropdownItem">Refund</Button>
             </MenuItem>
             <MenuItem>
-              <Button disabled={true} buttonStyle="dropdownItem">Transfer</Button>
+              <Button disabled buttonStyle="dropdownItem">Transfer</Button>
             </MenuItem>
             <MenuItem itemMeta={{ a, action: 'cancel' }}>
               <Button buttonStyle="dropdownItem">Error</Button>
@@ -343,34 +372,6 @@ class OpenAccounts extends React.Component {
         </div>
       );
     }
-}
-
-class Comment extends React.Component {
-
-  render() {
-    const props = this.props;
-    return (
-        <div>
-          <Row>
-            <Col>{props.t}</Col>
-            {(props.n > 0) ?
-              <Col style={{ marginLeft: '5px' }}>
-                <Popover key={props.myComments[props.n - 1]}>
-                  <div data-role="target">
-                    <img src="https://png.icons8.com/color/18/000000/note.png" alt="" />
-                  </div>
-                  <p data-role="popover">
-                    <b>{`Comment ${props.n} of ${props.n}:  `}</b>
-                    {`${props.myComments[props.n - 1]}  `}
-                    <a href="/users/123" className="active">Go to details</a>
-                  </p>
-                </Popover>
-              </Col>
-              : ' '}
-          </Row>
-        </div>
-    );
-  }
 }
 
 export default OpenAccounts;

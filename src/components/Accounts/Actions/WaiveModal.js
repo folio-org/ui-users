@@ -53,6 +53,7 @@ class WaiveModal extends React.Component {
     submitting: PropTypes.bool,
     reset: PropTypes.func,
     commentRequired: PropTypes.bool,
+    dispatch: PropTypes.func,
   };
 
 
@@ -60,7 +61,6 @@ class WaiveModal extends React.Component {
     super(props);
     this.state = {
       waive: 0,
-      accounts: [],
     };
     this.onChangeWaive = this.onChangeWaive.bind(this);
   }
@@ -130,7 +130,10 @@ class WaiveModal extends React.Component {
                 <Col xs={4}>{parseFloat(selected).toFixed(2)}</Col>
               </Row>
               <Row>
-                <Col xs={7}><b><FormattedMessage id="ui-users.accounts.waive.field.waiveamount" /></b>:</Col>
+                <Col xs={7}>
+                  <b><FormattedMessage id="ui-users.accounts.waive.field.waiveamount" /></b>
+                  :
+                </Col>
                 <Col xs={4.5}>
                   <Field
                     name="waive"
@@ -167,7 +170,8 @@ class WaiveModal extends React.Component {
           <br />
           <br />
           <Row>
-            <Col xs><FormattedMessage id="ui-users.accounts.waive.field.comment" />
+            <Col xs>
+              <FormattedMessage id="ui-users.accounts.waive.field.comment" />
               {(this.props.commentRequired) ? '*' : ''}
             </Col>
           </Row>

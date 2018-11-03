@@ -58,7 +58,7 @@ const filterConfig = [
 ];
 
 const args = [
-  { name: "user", value: "x", },
+  { name: 'user', value: 'x' },
 ];
 
 const queryFunction = (findAll, queryTemplate, sortMap, fConfig, failOnCondition, nsParams, a) => {
@@ -83,6 +83,7 @@ class AccountsHistory extends React.Component {
     filter: {
       type: 'okapi',
       records: 'accounts',
+      recordsRequired: '%{activeRecord.records}',
       path: 'accounts?query=userId=%{user.id}&limit=100',
     },
     feefineshistory: {
@@ -106,7 +107,7 @@ class AccountsHistory extends React.Component {
         staticFallback: { params: {} },
       },
     },
-    activeRecord: {},
+    activeRecord: { records: 50 },
     user: {},
   });
 
@@ -237,7 +238,6 @@ class AccountsHistory extends React.Component {
     const accounts = _.get(this.props.resources, ['feefineshistory', 'records'], []);
     const nextAccounts = _.get(nextProps.resources, ['feefineshistory', 'records'], []);
     const comments = _.get(this.props.resources, ['comments', 'records'], []);
-    console.log("comments",comments);
     const nextComments = _.get(nextProps.resources, ['comments', 'records'], []);
     if (JSON.stringify(accounts) !== JSON.stringify(nextAccounts)) {
       let selected = 0;
@@ -255,10 +255,11 @@ class AccountsHistory extends React.Component {
     return this.state !== nextState ||
       filter !== nextFilter ||
       accounts !== nextAccounts ||
-      comments !== nextComments;
+      comments !== nextComments ||
+      this.props.resources.query !== nextProps.resources.query;
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate() {
     let filterAccounts = _.get(this.props.resources, ['filter', 'records'], []);
     const query = this.props.location.search ? queryString.parse(this.props.location.search) : {};
     if (query.layer === 'open-accounts') {
@@ -274,13 +275,6 @@ class AccountsHistory extends React.Component {
     filterConfig[1].values = paymentStatus.map(s => ({ name: `${s.name}`, cql: s.name }));
     filterConfig[2].values = feeFineTypes.map(f => ({ name: `${f.name}`, cql: f.name }));
     filterConfig[3].values = itemTypes.map(i => ({ name: `${i.name}`, cql: i.name }));
-
-
-    /*if (this.editRecord !== 0) {
-      if (this.editRecord === 1) prevProps.mutator.activeRecord.update({ records: 51 });
-      else prevProps.mutator.activeRecord.update({ records: 50 });
-      this.editRecord = 0;
-    }*/
   }
 
   queryParam = name => {
@@ -313,7 +307,7 @@ class AccountsHistory extends React.Component {
   }
 
   handleEdit = (val) => {
-    this.props.handleAddRecords();    
+    this.props.handleAddRecords();
     this.editRecord = val;
   }
 
@@ -456,7 +450,8 @@ class AccountsHistory extends React.Component {
           open={this.state.toggleDropdownState}
           onToggle={this.onDropdownClick}
           style={{ float: 'right', marginLeft: '20px' }}
-          group pullRight
+          group
+          pullRight
         >
           <Button data-role="toggle" bottomMargin2>Select columns</Button>
           <DropdownMenu data-role="menu">
@@ -505,11 +500,11 @@ class AccountsHistory extends React.Component {
           </Row>
           <Row>
             <Col>
-              <div style={{ margin: "5px 5px 5px 40px" }}>
+              <div style={{ margin: '5px 5px 5px 40px' }}>
               Outstanding Balance:
-              {' '}
-              { (user.id === (accounts[0] || {}).userId) ? parseFloat(balance || 0).toFixed(2) : '0.00'}
-             </div>
+                {' '}
+                { (user.id === (accounts[0] || {}).userId) ? parseFloat(balance || 0).toFixed(2) : '0.00'}
+              </div>
             </Col>
           </Row>
         </Col>

@@ -17,10 +17,10 @@ import { formatDateTime, getFullName } from './util';
 
 class AccountActionsHistory extends React.Component {
   static manifest = Object.freeze({
-    account: {
+    accountHistory: {
       type: 'okapi',
-      records: 'accounts',
-      path: 'accounts?query=id=%{activeRecord.accountId}&limit=%{activeRecord.records}',
+      resource: 'accounts',
+      path: 'accounts/%{activeRecord.accountId}',
     },
     accountActions: {
       type: 'okapi',
@@ -51,11 +51,13 @@ class AccountActionsHistory extends React.Component {
       }),
     }),
     account: PropTypes.object,
+    num: PropTypes.number.isRequired,
     user: PropTypes.object,
     history: PropTypes.object,
     patronGroup: PropTypes.object,
     onCancel: PropTypes.func.isRequired,
     onClickViewLoanActionsHistory: PropTypes.func.isRequired,
+    handleAddRecords: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -115,12 +117,21 @@ class AccountActionsHistory extends React.Component {
     this.getAccountActions();
   }
 
-  shouldComponentUpdate(nextProps) {
+  shouldComponentUpdate(nextProps, nextState) {
+    const props = this.props;
+    const nextAccounts = _.get(nextProps.resources, ['accountHistory', 'records', 0], {});
+    const accounts = _.get(props.resources, ['accountHistory', 'records', 0], {});
+    const nextActions = _.get(nextProps.resources, ['accountActions', 'records'], []);
+    const actions = _.get(props.resources, ['accountActions', 'records'], []);
+
     if (this.num !== nextProps.num) {
-      this.props.mutator.activeRecord.update({ records: nextProps.num });
+      props.mutator.activeRecord.update({ records: nextProps.num });
       this.num = nextProps.num;
     }
-    return true;
+    return nextAccounts !== accounts || nextActions !== actions ||
+      this.num !== nextProps.num || props.user !== nextProps.user ||
+      props.account !== nextProps.account ||
+      this.state !== nextState;
   }
 
   getAccountActions = () => {
@@ -171,7 +182,7 @@ class AccountActionsHistory extends React.Component {
   render() {
     const { sortOrder, sortDirection } = this.state;
     const { onCancel, stripes } = this.props;
-    const account = _.get(this.props.resources, ['account', 'records', 0]) || this.props.account;
+    const account = _.get(this.props.resources, ['accountHistory', 'records', 0]) || this.props.account;
 
     const user = this.props.user;
     const patron = this.props.patronGroup;
@@ -203,7 +214,6 @@ class AccountActionsHistory extends React.Component {
     const remaining = (account.remaining) ? parseFloat(account.remaining).toFixed(2) : '0.00';
     const loanId = account.loanId || '';
     const disabled = (_.get(account, ['status', 'name'], '') === 'Closed');
-
     return (
       <Paneset isRoot>
         <Pane
@@ -247,12 +257,12 @@ class AccountActionsHistory extends React.Component {
                 <KeyValue
                   label="Loan details"
                   value={
-                    <button style={{color: "#2b75bb"}} type="button" onClick={(e) => { this.props.onClickViewLoanActionsHistory(e, { id: loanId }); }}>
+                    <button style={{ color: '#2b75bb' }} type="button" onClick={(e) => { this.props.onClickViewLoanActionsHistory(e, { id: loanId }); }}>
                       {this.props.stripes.intl.formatMessage({ id: 'ui-users.details.field.loan' })}
                     </button>}
                 />
                 :
-                <KeyValue label="Loan details" value={'-'} />
+                <KeyValue label="Loan details" value="-" />
               }
             </Col>
           </Row>

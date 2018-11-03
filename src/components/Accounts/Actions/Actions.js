@@ -184,6 +184,7 @@ class Actions extends React.Component {
       paymentStatus: { name: paymentStatus },
       remaining: parseFloat(remaining || 0).toFixed(2),
     };
+
     return this.props.mutator.accounts.PUT(Object.assign(account, newAccount));
   }
 
@@ -212,7 +213,7 @@ class Actions extends React.Component {
     let payment = parseFloat(values.amount);
     selected.forEach(account => {
       if (payment > 0) {
-        const type =  account || {};
+        const type = account || {};
         delete type.rowIndex;
         if (payment < type.remaining) {
           this.pay(type, payment, values)
@@ -294,7 +295,7 @@ class Actions extends React.Component {
     const account = this.props.accounts[0] || '';
     const id = this.props.accounts[0].id || '';
     const createAt = this.props.accounts[0].feeFineOwner || '';
-    const balance = this.props.balance || '-';
+    const balance = this.props.balance || 0;
     this.props.mutator.activeRecord.update({ id });
     this.newAction({}, id, 'Comment', 0, values.comment, balance, 0, createAt);
     this.editAccount(account, account.paymentStatus.name, account.status.name, balance)

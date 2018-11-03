@@ -136,7 +136,7 @@ class ClosedAccounts extends React.Component {
           <Col>{t}</Col>
           {(n > 0) ?
             <Col style={{ marginLeft: '5px' }}>
-              <Popover>
+              <Popover key={myComments[n - 1]}>
                 <div data-role="target">
                   <img src="https://png.icons8.com/color/18/000000/note.png" alt="" />
                 </div>

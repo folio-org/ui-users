@@ -380,7 +380,7 @@ class LoanActionsHistory extends React.Component {
               <KeyValue
                 label={intl.formatMessage({ id: 'ui-users.loans.details.fine' })}
                 value={
-                  <button style={{color: "#2b75bb"}} onClick={(e) => this.feefinedetails(e)} type="button">{`${this.getFeeFine()}`}</button>
+                  <button style={{ color: '#2b75bb' }} onClick={(e) => this.feefinedetails(e)} type="button">{`${this.getFeeFine()}`}</button>
               }
               />
             </Col>

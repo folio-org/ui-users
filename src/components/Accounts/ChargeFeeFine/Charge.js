@@ -4,7 +4,7 @@ import uuid from 'uuid';
 import _ from 'lodash';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import moment from 'moment';
-import Callout from '@folio/stripes-components/lib/Callout';
+import { Callout } from '@folio/stripes/components';
 import ChargeForm from './ChargeForm';
 import ItemLookup from './ItemLookup';
 import PayModal from '../Actions/PayModal';
@@ -51,7 +51,7 @@ class Charge extends React.Component {
       type: 'okapi',
       records: 'comments',
       path: 'comments',
-     },
+    },
     allfeefines: {
       type: 'okapi',
       records: 'feefines',
@@ -96,7 +96,6 @@ class Charge extends React.Component {
       ownerId: '0',
       lookup: false,
       pay: false,
-      charge: false,
     };
     this.onClickCharge = this.onClickCharge.bind(this);
     this.onClickSelectItem = this.onClickSelectItem.bind(this);
@@ -135,9 +134,6 @@ class Charge extends React.Component {
   }
 
   onClickCharge(type) {
-    this.setState({
-      charge: true,
-      });
     const owners = _.get(this.props.resources, ['owners', 'records'], []);
     const feefines = _.get(this.props.resources, ['feefines', 'records'], []);
     const { selectedLoan } = this.props;
@@ -166,7 +162,7 @@ class Charge extends React.Component {
     type.userId = this.props.user.id;
     type.itemId = this.item.id || '0';
     const c = type.comments;
-    delete type.comments;    
+    delete type.comments;
     this.type = type;
     return this.props.mutator.accounts.POST(type)
       .then(() => this.newAction({}, type.id, type.feeFineType, type.amount, c, type.remaining, 0, type.feeFineOwner));
@@ -176,7 +172,7 @@ class Charge extends React.Component {
     const newAction = {
       typeAction,
       source: `${this.props.okapi.currentUser.lastName}, ${this.props.okapi.currentUser.firstName}`,
-      createdAt: createdAt,
+      createdAt,
       accountId: id,
       dateAction: moment().add(1, 'seconds').format(),
       userId: this.props.user.id,
@@ -250,7 +246,13 @@ class Charge extends React.Component {
   }
 
   showCalloutMessage(a) {
-    const message = <span>{`The ${a.feeFineType} fee/fine of `}<strong>{`${parseFloat(a.amount).toFixed(2)}`}</strong>{` has been successfully ${a.paymentStatus.name} for `}<strong>{`${getFullName(this.props.user)}`}</strong></span>
+    const message =
+      <span>
+        {`The ${a.feeFineType} fee/fine of `}
+        <strong>{`${parseFloat(a.amount).toFixed(2)}`}</strong>
+        {` has been successfully ${a.paymentStatus.name} for `}
+        <strong>{`${getFullName(this.props.user)}`}</strong>
+      </span>;
     this.callout.sendCallout({ message });
   }
 
@@ -296,7 +298,7 @@ class Charge extends React.Component {
         <ChargeForm
           onClickCancel={this.props.onCloseChargeFeeFine}
           onClickPay={this.onClickPay}
-          onSubmit={ (data) => {
+          onSubmit={(data) => {
             if (data.pay) {
               delete data.pay;
               this.type.remaining = data.amount;
@@ -345,7 +347,7 @@ class Charge extends React.Component {
                 this.type.paymentStatus.name = 'Paid Partially';
               }
               this.props.mutator.activeRecord.update({ id: this.type.id });
-              return this.props.mutator.accounts.PUT(this.type)
+              return this.props.mutator.accounts.PUT(this.type);
             })
               .then(() => this.newAction({ paymentMethod: values.method }, this.type.id,
                 this.type.paymentStatus.name, values.amount,
@@ -359,7 +361,7 @@ class Charge extends React.Component {
               .then(() => setTimeout(this.props.onCloseChargeFeeFine, 2000));
           }}
         />
-        <Callout ref={(ref) => { this.callout = ref; }} />      
+        <Callout ref={(ref) => { this.callout = ref; }} />
       </div>
     );
   }

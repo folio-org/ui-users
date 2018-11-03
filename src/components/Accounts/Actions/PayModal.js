@@ -52,6 +52,7 @@ class PayModal extends React.Component {
     invalid: PropTypes.bool,
     pristine: PropTypes.bool,
     reset: PropTypes.func,
+    dispatch: PropTypes.func,
     commentRequired: PropTypes.bool,
   };
 
@@ -131,14 +132,17 @@ class PayModal extends React.Component {
                 <Col xs={4}>{parseFloat(selected).toFixed(2)}</Col>
               </Row>
               <Row>
-                <Col xs={7}><b><FormattedMessage id="ui-users.accounts.pay.field.paymentamount" /></b>:</Col>
+                <Col xs={7}>
+                  <b><FormattedMessage id="ui-users.accounts.pay.field.paymentamount" /></b>
+                  :
+                </Col>
                 <Col xs={4.5}>
                   <Field
                     name="amount"
                     component={TextField}
                     onChange={this.onChangeAmount}
-                    onBlur={(e, value, next) => { 
-                      this.props.dispatch(change('payment', 'amount', parseFloat(next).toFixed(2))); 
+                    onBlur={(e, value, next) => {
+                      this.props.dispatch(change('payment', 'amount', parseFloat(next).toFixed(2)));
                     }}
                     fullWidth
                     autoFocus

@@ -41,6 +41,7 @@ class FeeFineInfo extends React.Component {
     this.amount = parseFloat(this.amount).toFixed(2);
     this.props.onChangeFeeFine(parseFloat(feefine.defaultAmount || 0).toFixed(2));
   }
+
   render() {
     return (
       <section>
