@@ -1,6 +1,11 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+
 import { Field } from 'redux-form';
+import {
+  injectIntl,
+  intlShape,
+} from 'react-intl';
+
 import {
   Button,
   TextField,
@@ -50,7 +55,7 @@ class PasswordControl extends React.Component {
 }
 
 PasswordControl.propTypes = {
-  intl: PropTypes.object.isRequired,
+  intl: intlShape.isRequired,
 };
 
-export default PasswordControl;
+export default injectIntl(PasswordControl);
