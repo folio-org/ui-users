@@ -118,7 +118,10 @@ export default class ProxyEditList extends React.Component {
         {items.length ?
           items :
           <p className={css.isEmptyMessage}>
-            <FormattedMessage id="ui-users.noItemFound" values={{ item: name }} />
+            <FormattedMessage
+              id="ui-users.noItemFound"
+              values={{ item: name }}
+            />
           </p>
         }
         <Row>
@@ -129,9 +132,10 @@ export default class ProxyEditList extends React.Component {
                 type="find-user"
                 {...this.props}
                 dataKey={name}
-                searchLabel={name === 'proxies' ?
-                  intl.formatMessage({ id: 'ui-users.sponsor.addSponsor' }) :
-                  intl.formatMessage({ id: 'ui-users.proxy.addProxy' })
+                searchLabel={
+                  name === 'proxies' ?
+                    <FormattedMessage id="ui-users.sponsor.addSponsor" /> :
+                    <FormattedMessage id="ui-users.proxy.addProxy" />
                 }
                 searchButtonStyle="default"
                 selectUser={user => this.onAdd(user)}
