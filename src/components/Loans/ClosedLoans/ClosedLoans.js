@@ -180,7 +180,7 @@ class ClosedLoans extends React.Component {
       },
       'renewals': loan => loan.renewalCount || 0,
       'loanDate': loan => this.formatDateTime(loan.loanDate),
-      'returnDate': loan => this.formatDateTime(loan.systemReturnDate),
+      'returnDate': loan => this.formatDateTime(loan.returnDate),
       ' ': loan => this.renderActions(loan),
     };
   }
