@@ -435,6 +435,7 @@
   "loanNotRenewed": "Loan not renewed",
 
   "accounts.title": "Fees/Fines",
+  "accounts.outstanding": "Outstanding Balance:",
   "accounts.open": "Open",
   "accounts.closed": "Closed",
   "accounts.all":"All",
@@ -515,6 +516,10 @@
   "charge.pay": "Charge and pay now",
   "charge.onlyCharge": "Charge only",
   "charge.comment": "Comments",
+  "charge.messageThe": "The ",
+  "charge.messageOf": " fee/fine Of ",
+  "charge.messageSuccessfully": " has been successfully ",
+  "charge.messageFor": " for ",
 
   "charge.errors.amount": "Amount is not a number",
 
@@ -551,6 +556,15 @@
   "details.field.duedate": "Due date",
   "details.field.returnedate": "Returned date",
 
+  "details.paneTitle.feeFineDetails": "Fee/fine details",
+  "details.label.loanDetails": "Loan details",
+
+  "accounts.button.new":" New",
+  "accounts.button.error":"Error",
+
+  "accounts.error.field":"Please fill this field in to continue",
+  "accounts.error.comment":"Enter a comment",
+
   "accounts.history.columns.title":"Instance (Item Type)",
   "accounts.history.columns.amount":"Billed",
   "accounts.history.columns.remaining":"Remaining",
@@ -566,14 +580,31 @@
 
   "accounts.history.possibleColumns.columns.created":"Date Created",
 
+  "accounts.history.button.select":"Select columns",
+  "accounts.history.button.pay":"Pay",
+  "accounts.history.button.waive":"Waive",
+  "accounts.history.button.refund":"Refund",
+  "accounts.history.button.transfer":"Transfer",
+  "accounts.history.button.loanDetails":" Loan details",
+
+  "accounts.history.comment":"Comment",
+  "accounts.history.of":"of",
+
+  "accounts.pay.error.amount":"Payment must be > 0",
+  "accounts.pay.error.exceeds":"Pay amount exceeds the selected amount",
+
   "accounts.pay.field.totalamount":"Total owed amount:",
   "accounts.pay.field.selectedamount":"Selected amount:",
   "accounts.pay.field.paymentamount":"Payment amount*",
   "accounts.pay.field.remainingamount":"Remaining amount:",
   "accounts.pay.field.paymentmethod":"Payment type*",
-  "accounts.pay.field.trasactioninfo":"Transaction information",
+  "accounts.pay.field.transactioninfo":"Transaction information",
   "accounts.pay.field.comment":"Additional information",
   "accounts.pay.success": "The <strong>{feefine}</strong> fee/fine of <strong>{amount}</strong> has been successfully <strong>{action}</strong>",
+  "accounts.pay.placeholder.additional":"Enter more information about the fee/fine payment",
+
+  "accounts.waive.error.amount":"Waive amount must be > 0",
+  "accounts.waive.error.exceeds":"Waive amount exceeds the selected amount",
 
   "accounts.waive.field.totalamount":"fees/fines for a total amount of",
   "accounts.waive.field.totalowed":"Total owed amount:",
@@ -584,6 +615,7 @@
   "accounts.waive.field.comment":"Additional information",
   "accounts.waive.field.cancel":"Cancel",
   "accounts.waive.field.waive":"Waive",
+  "accounts.waive.placeholder.additional":"Enter more information about the fee/fine waive",
 
   "accounts.cancellation.field.reason":"Reason for cancellation*",
   "accounts.cancellation.field.feefinewill":"fee/fine will be",

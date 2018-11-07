@@ -22,22 +22,23 @@ const validate = (values, props) => {
 
   const errors = {};
   if (!values.waive) {
-    errors.waive = 'Please fill this field in to continue';
+    errors.waive = props.stripes.intl.formatMessage({ id: 'ui-users.accounts.error.field' });
   }
   if (values.waive < 0) {
-    errors.waive = 'Waive amount must be > 0';
+    errors.waive = props.stripes.intl.formatMessage({ id: 'ui-users.accounts.waive.error.amount' });
   }
   if (!values.method) {
     errors.method = 'Select one';
   }
   if (props.commentRequired && !values.comment) {
-    errors.comment = 'Enter a comment';
+    errors.comment = props.stripes.intl.formatMessage({ id: 'ui-users.accounts.error.comment' });
   }
   if (values.waive > selected) {
-    errors.waive = 'Waive amount exceeds the selected amount';
+    errors.waive = props.stripes.intl.formatMessage({ id: 'ui-users.accounts.waive.error.exceeds' });
   }
   return errors;
 };
+
 
 class WaiveModal extends React.Component {
   static propTypes = {
@@ -54,6 +55,9 @@ class WaiveModal extends React.Component {
     reset: PropTypes.func,
     commentRequired: PropTypes.bool,
     dispatch: PropTypes.func,
+    stripes: PropTypes.shape({
+      intl: PropTypes.object.isRequired,
+    }),
   };
 
 
@@ -103,7 +107,7 @@ class WaiveModal extends React.Component {
     const { submitting, invalid, pristine } = this.props;
     const waiveAmount = this.state.waive === '' ? 0.00 : this.state.waive;
     const message = `${(this.state.waive < selected) ? 'Partially waive' : 'Waiving'} ${n} ${(n === 1) ? 'fee/fine' : 'fees/fines'}    for a total amount of ${parseFloat(waiveAmount).toFixed(2)}`;
-    const additional = 'Enter more information about the fee/fine waive';
+    const additional = this.props.stripes.intl.formatMessage({ id: 'ui-users.accounts.waive.placeholder.additional' });
     const comment = `${additional} ${(this.props.commentRequired) ? '(required)' : '(optional)'}`;
 
     return (

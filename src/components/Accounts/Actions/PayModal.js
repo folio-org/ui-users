@@ -22,19 +22,19 @@ const validate = (values, props) => {
 
   const errors = {};
   if (!values.amount) {
-    errors.amount = 'Please fill this field in to continue';
+    errors.amount = props.stripes.intl.formatMessage({ id: 'ui-users.accounts.error.field' });
   }
   if (values.amount < 0) {
-    errors.amount = 'Payment must be > 0';
+    errors.amount = props.stripes.intl.formatMessage({ id: 'ui-users.accounts.pay.error.amount' });
   }
   if (!values.method) {
     errors.method = 'Select one';
   }
   if (props.commentRequired && !values.comment) {
-    errors.comment = 'Enter a comment';
+    errors.comment = props.stripes.intl.formatMessage({ id: 'ui-users.accounts.error.comment' });
   }
   if (values.amount > selected) {
-    errors.amount = 'Pay amount exceeds the selected amount';
+    errors.amount = props.stripes.intl.formatMessage({ id: 'ui-users.accounts.error.exceeds' });
   }
   return errors;
 };
@@ -54,6 +54,9 @@ class PayModal extends React.Component {
     reset: PropTypes.func,
     dispatch: PropTypes.func,
     commentRequired: PropTypes.bool,
+    stripes: PropTypes.shape({
+      intl: PropTypes.object.isRequired,
+    }),
   };
 
   constructor(props) {
@@ -105,7 +108,7 @@ class PayModal extends React.Component {
     const { submitting, invalid, pristine } = this.props;
     const paymentAmount = this.state.amount === '' ? 0.00 : this.state.amount;
     const message = `${(this.state.amount < selected) ? 'Partially paying' : 'Paying'} ${n} ${(n === 1) ? 'fee/fine' : 'fees/fines'} for a total amount of ${parseFloat(paymentAmount).toFixed(2)}`;
-    const additional = 'Enter more information about the fee/fine payment';
+    const additional = this.props.stripes.intl.formatMessage({ id: 'ui-users.accounts.pay.placeholder.additional' });
     const comment = `${additional} ${(this.props.commentRequired) ? '(required)' : '(optional)'}`;
 
     return (
@@ -169,7 +172,7 @@ class PayModal extends React.Component {
               </Row>
             </Col>
             <Col xs={4}>
-              <Row><Col xs><FormattedMessage id="ui-users.accounts.pay.field.trasactioninfo" /></Col></Row>
+              <Row><Col xs><FormattedMessage id="ui-users.accounts.pay.field.transactioninfo" /></Col></Row>
               <Row>
                 <Col xs>
                   <Field

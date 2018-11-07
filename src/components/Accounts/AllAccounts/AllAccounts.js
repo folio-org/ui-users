@@ -140,11 +140,11 @@ class AllAccounts extends React.Component {
                 </div>
                 <p data-role="popover">
                   <b>
-                    Comment
+                    {this.props.stripes.intl.formatMessage({ id: 'ui-users.accounts.history.comment' })}
                     {' '}
                     {n}
                     {' '}
-                    of
+                    {this.props.stripes.intl.formatMessage({ id: 'ui-users.accounts.history.of' })}
                     {' '}
                     {n}
                     :
@@ -290,6 +290,20 @@ class AllAccounts extends React.Component {
     this.props.onClickViewLoanActionsHistory(e, { id: a.loanId });
   }
 
+  pay(a, e) {
+    if (e) e.preventDefault();
+    this.props.onChangeActions({
+      pay: true,
+    }, [a]);
+  }
+
+  cancel(a, e) {
+    if (e) e.preventDefault();
+    this.props.onChangeActions({
+      cancellation: true,
+    }, [a]);
+  }
+
   waive(a, e) {
     if (e) e.preventDefault();
     this.props.onChangeActions({
@@ -312,24 +326,24 @@ class AllAccounts extends React.Component {
       >
         <Button data-role="toggle" buttonStyle="hover dropdownActive"><strong>•••</strong></Button>
         <DropdownMenu data-role="menu" overrideStyle={{ padding: '6px 0' }}>
-          <MenuItem>
-            <Button disabled={elipsis.pay} buttonStyle="dropdownItem">Pay</Button>
+          <MenuItem itemMeta={{ a, action: 'pay' }}>
+            <Button disabled={elipsis.pay} buttonStyle="dropdownItem">{this.props.stripes.intl.formatMessage({ id: 'ui-users.accounts.history.button.pay' })}</Button>
           </MenuItem>
           <MenuItem itemMeta={{ a, action: 'waive' }}>
-            <Button disabled={elipsis.waive} buttonStyle="dropdownItem">Waive</Button>
+            <Button disabled={elipsis.waive} buttonStyle="dropdownItem">{this.props.stripes.intl.formatMessage({ id: 'ui-users.accounts.history.button.waive' })}</Button>
           </MenuItem>
           <MenuItem>
-            <Button disabled buttonStyle="dropdownItem">Refund</Button>
+            <Button disabled buttonStyle="dropdownItem">{this.props.stripes.intl.formatMessage({ id: 'ui-users.accounts.history.button.refund' })}</Button>
           </MenuItem>
           <MenuItem>
-            <Button disabled buttonStyle="dropdownItem">Transfer</Button>
+            <Button disabled buttonStyle="dropdownItem">{this.props.stripes.intl.formatMessage({ id: 'ui-users.accounts.history.button.transfer' })}</Button>
           </MenuItem>
-          <MenuItem>
-            <Button disabled={elipsis.error} buttonStyle="dropdownItem">Error</Button>
+          <MenuItem itemMeta={{ a, action: 'cancel' }}>
+            <Button disabled={elipsis.error} buttonStyle="dropdownItem">{this.props.stripes.intl.formatMessage({ id: 'ui-users.accounts.button.error' })}</Button>
           </MenuItem>
           <hr />
           <MenuItem itemMeta={{ a, action: 'loanDetails' }}>
-            <Button disabled={elipsis.loan} buttonStyle="dropdownItem">Loan details</Button>
+            <Button disabled={elipsis.loan} buttonStyle="dropdownItem">{this.props.stripes.intl.formatMessage({ id: 'ui-users.accounts.history.button.loanDetails' })}</Button>
           </MenuItem>
         </DropdownMenu>
       </UncontrolledDropdown>
@@ -357,6 +371,7 @@ class AllAccounts extends React.Component {
             [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' })] : 110,
             [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' })]: 200,
             [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' })]: 110,
+            [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' })]: 120,
             [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' })]: 110,
             [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' })]: 110
           }}

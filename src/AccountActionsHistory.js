@@ -12,6 +12,7 @@ import {
   MultiColumnList,
 } from '@folio/stripes/components';
 
+import { FormattedMessage } from 'react-intl';
 import { Actions } from './components/Accounts/Actions';
 import { formatDateTime, getFullName } from './util';
 
@@ -34,9 +35,8 @@ class AccountActionsHistory extends React.Component {
   });
 
   static propTypes = {
-    stripes: PropTypes.object.isRequired,
+    stripes: PropTypes.object,
     resources: PropTypes.shape({
-      intl: PropTypes.object.isRequired,
       accountActions: PropTypes.object,
     }),
     mutator: PropTypes.shape({
@@ -94,7 +94,6 @@ class AccountActionsHistory extends React.Component {
         regular: false,
       },
       sortOrder: [
-        stripes.intl.formatMessage({ id: 'ui-users.details.columns.date' }),
         stripes.intl.formatMessage({ id: 'ui-users.details.columns.date' }),
         stripes.intl.formatMessage({ id: 'ui-users.details.columns.action' }),
         stripes.intl.formatMessage({ id: 'ui-users.details.columns.amount' }),
@@ -191,7 +190,10 @@ class AccountActionsHistory extends React.Component {
       Comments: (
         <span>
           {this.props.stripes.intl.formatMessage({ id: 'ui-users.details.columns.comments' })}
-          <Button style={{ float: 'right', marginLeft: '50px' }} onClick={this.comment}>+ New</Button>
+          <Button style={{ float: 'right', marginLeft: '50px' }} onClick={this.comment}>
++
+            <FormattedMessage id="ui-users.accounts.button.new" />
+          </Button>
         </span>
       ),
     };
@@ -221,15 +223,15 @@ class AccountActionsHistory extends React.Component {
           defaultWidth="100%"
           dismissible
           onClose={onCancel}
-          paneTitle={`Fee/fine details - ${getFullName(user)} (${_.upperFirst(patron.group)}) `}
+          paneTitle={`${this.props.stripes.intl.formatMessage({ id: 'ui-users.details.paneTitle.feeFineDetails' })} - ${getFullName(user)} (${_.upperFirst(patron.group)}) `}
         >
           <Row>
             <Col xs={12}>
-              <Button disabled={disabled} buttonStyle="primary" onClick={this.pay}>Pay</Button>
-              <Button disabled={disabled} buttonStyle="primary" onClick={this.waive}>Waive</Button>
-              <Button disabled buttonStyle="primary">Refund</Button>
-              <Button disabled buttonStyle="primary">Transfer</Button>
-              <Button disabled={disabled} buttonStyle="primary" onClick={this.error}>Error</Button>
+              <Button disabled={disabled} buttonStyle="primary" onClick={this.pay}><FormattedMessage id="ui-users.accounts.history.button.pay" /></Button>
+              <Button disabled={disabled} buttonStyle="primary" onClick={this.waive}><FormattedMessage id="ui-users.accounts.history.button.waive" /></Button>
+              <Button disabled buttonStyle="primary"><FormattedMessage id="ui-users.accounts.history.button.refund" /></Button>
+              <Button disabled buttonStyle="primary"><FormattedMessage id="ui-users.accounts.history.button.transfer" /></Button>
+              <Button disabled={disabled} buttonStyle="primary" onClick={this.error}><FormattedMessage id="ui-users.accounts.button.error" /></Button>
             </Col>
           </Row>
 
@@ -255,14 +257,14 @@ class AccountActionsHistory extends React.Component {
             <Col xs={1.5}>
               {(loanId !== '0' && user.id === account.userId) ?
                 <KeyValue
-                  label="Loan details"
+                  label={this.props.stripes.intl.formatMessage({ id: 'ui-users.details.label.loanDetails' })}
                   value={
                     <button style={{ color: '#2b75bb' }} type="button" onClick={(e) => { this.props.onClickViewLoanActionsHistory(e, { id: loanId }); }}>
                       {this.props.stripes.intl.formatMessage({ id: 'ui-users.details.field.loan' })}
                     </button>}
                 />
                 :
-                <KeyValue label="Loan details" value="-" />
+                <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.details.label.loanDetails' })} value="-" />
               }
             </Col>
           </Row>
@@ -294,7 +296,16 @@ class AccountActionsHistory extends React.Component {
             id="list-accountactions"
             formatter={accountActionsFormatter}
             columnMapping={columnMapping}
-            visibleColumns={['Action Date', 'Action', 'Amount', 'Balance', 'Transaction Information', 'Created at', 'Source', 'Comments']}
+            visibleColumns={[
+              stripes.intl.formatMessage({ id: 'ui-users.details.columns.date' }),
+              stripes.intl.formatMessage({ id: 'ui-users.details.columns.action' }),
+              stripes.intl.formatMessage({ id: 'ui-users.details.columns.amount' }),
+              stripes.intl.formatMessage({ id: 'ui-users.details.columns.balance' }),
+              stripes.intl.formatMessage({ id: 'ui-users.details.columns.transactioninfo' }),
+              stripes.intl.formatMessage({ id: 'ui-users.details.columns.created' }),
+              stripes.intl.formatMessage({ id: 'ui-users.details.columns.source' }),
+              stripes.intl.formatMessage({ id: 'ui-users.details.columns.comments' }),
+            ]}
             contentData={(account.id === (actions[0] || {}).accountId) ? actionsSort : []}
             fullWidth
             onHeaderClick={this.onSort}
@@ -306,6 +317,7 @@ class AccountActionsHistory extends React.Component {
             actions={this.state.actions}
             onChangeActions={this.onChangeActions}
             user={this.props.user}
+            stripes={this.props.stripes}
             balance={account.remaining || 0}
             accounts={[account]}
             handleEdit={() => {

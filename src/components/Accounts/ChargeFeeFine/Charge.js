@@ -5,6 +5,7 @@ import _ from 'lodash';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import moment from 'moment';
 import { Callout } from '@folio/stripes/components';
+import { FormattedMessage } from 'react-intl';
 import ChargeForm from './ChargeForm';
 import ItemLookup from './ItemLookup';
 import PayModal from '../Actions/PayModal';
@@ -41,6 +42,12 @@ class Charge extends React.Component {
       PUT: {
         path: 'accounts/%{activeRecord.id}'
       },
+    },
+    account: {
+      type: 'okapi',
+      resource: 'accounts',
+      accumulate: 'true',
+      path: 'accounts',
     },
     payments: {
       type: 'okapi',
@@ -82,7 +89,9 @@ class Charge extends React.Component {
         update: PropTypes.func,
       }),
     }).isRequired,
-    stripes: PropTypes.object,
+    stripes: PropTypes.shape({
+      intl: PropTypes.object.isRequired,
+    }),
     onCloseChargeFeeFine: PropTypes.func.isRequired,
     handleAddRecords: PropTypes.func,
     okapi: PropTypes.object,
@@ -169,19 +178,24 @@ class Charge extends React.Component {
   }
 
   newAction = (action, id, typeAction, amount, comment, balance, transaction, createdAt) => {
-    const newAction = {
-      typeAction,
-      source: `${this.props.okapi.currentUser.lastName}, ${this.props.okapi.currentUser.firstName}`,
-      createdAt,
-      accountId: id,
-      dateAction: moment().add(1, 'seconds').format(),
-      userId: this.props.user.id,
-      amountAction: parseFloat(amount || 0).toFixed(2),
-      balance: parseFloat(balance || 0).toFixed(2),
-      transactionInformation: transaction || '-',
-      comments: comment,
-    };
-    return this.props.mutator.feefineactions.POST(Object.assign(action, newAction));
+    const path = `accounts/${this.type.id}`;
+    return this.props.mutator.account.GET({ path }).then(record => {
+      const dateAction = _.get(record, ['metadata', 'updatedDate'], moment().format());
+
+      const newAction = {
+        typeAction,
+        source: `${this.props.okapi.currentUser.lastName}, ${this.props.okapi.currentUser.firstName}`,
+        createdAt,
+        accountId: id,
+        dateAction,
+        userId: this.props.user.id,
+        amountAction: parseFloat(amount || 0).toFixed(2),
+        balance: parseFloat(balance || 0).toFixed(2),
+        transactionInformation: transaction || '-',
+        comments: comment,
+      };
+      this.props.mutator.feefineactions.POST(Object.assign(action, newAction));
+    });
   }
 
 
@@ -248,9 +262,13 @@ class Charge extends React.Component {
   showCalloutMessage(a) {
     const message =
       <span>
-        {`The ${a.feeFineType} fee/fine of `}
+        <FormattedMessage id="ui-users.charge.messageThe" />
+        {a.feeFineType}
+        <FormattedMessage id="ui-users.charge.messageOf" />
         <strong>{`${parseFloat(a.amount).toFixed(2)}`}</strong>
-        {` has been successfully ${a.paymentStatus.name} for `}
+        <FormattedMessage id="ui-users.charge.messageSuccessfully" />
+        {a.paymentStatus.name}
+        <FormattedMessage id="ui-users.charge.messageFor" />
         <strong>{`${getFullName(this.props.user)}`}</strong>
       </span>;
     this.callout.sendCallout({ message });
@@ -337,6 +355,7 @@ class Charge extends React.Component {
           accounts={[this.type]}
           balance={this.type.amount}
           payments={payments}
+          stripes={this.props.stripes}
           onSubmit={(values) => {
             this.onClickCharge(this.type).then(() => {
               this.type.remaining = parseFloat(this.type.amount - values.amount).toFixed(2);

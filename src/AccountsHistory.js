@@ -78,7 +78,7 @@ class AccountsHistory extends React.Component {
     comments: {
       type: 'okapi',
       records: 'feefineactions',
-      path: 'feefineactions?query=(userId=%{user.id} and comments=*)&limit=%{activeRecord.comments}',
+      path: 'feefineactions?query=(userId=%{activeRecord.userId} and comments=*)&limit=%{activeRecord.comments}',
     },
     filter: {
       type: 'okapi',
@@ -227,8 +227,7 @@ class AccountsHistory extends React.Component {
   }
 
   componentDidMount() {
-    this.props.mutator.activeRecord.update({ records: 50, comments: 200 });
-    this.props.mutator.user.update({ id: this.props.user.id });
+    this.props.mutator.activeRecord.update({ records: 50, comments: 200, userId: this.props.user.id });
     args[0].value = this.props.user.id;
   }
 
@@ -453,7 +452,7 @@ class AccountsHistory extends React.Component {
           group
           pullRight
         >
-          <Button data-role="toggle" bottomMargin2>Select columns</Button>
+          <Button data-role="toggle" bottomMargin2><FormattedMessage id="ui-users.accounts.history.button.select" /></Button>
           <DropdownMenu data-role="menu">
             <ul>
               {this.renderCheckboxList(columnMapping)}
@@ -532,7 +531,7 @@ class AccountsHistory extends React.Component {
               filters={filters}
               onChangeFilter={(e) => { this.handleFilterChange(e, 'f'); }}
             />
-            <Pane defaultWidth="fill" header={header}>
+            <Pane defaultWidth="fill" heigth="80%" header={header}>
               <Menu
                 user={user}
                 showFilters={this.state.showFilters}

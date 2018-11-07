@@ -167,7 +167,7 @@ class Actions extends React.Component {
       source: `${this.props.okapi.currentUser.lastName}, ${this.props.okapi.currentUser.firstName}`,
       createdAt: createAt,
       accountId: id,
-      dateAction: moment().utc().format(),
+      dateAction: moment().format(),
       userId: this.props.user.id,
       amountAction: parseFloat(amount || 0).toFixed(2),
       balance: parseFloat(balance || 0).toFixed(2),
@@ -178,7 +178,7 @@ class Actions extends React.Component {
   }
 
   editAccount = (account, paymentStatus, status, remaining) => {
-    account.metadata.updatedDate = moment().utc().format();
+    account.metadata.updatedDate = moment().format();
     const newAccount = {
       status: { name: status },
       paymentStatus: { name: paymentStatus },
@@ -319,6 +319,7 @@ class Actions extends React.Component {
           open={warning}
           accounts={accounts}
           onChangeAccounts={this.onChangeAccounts}
+          stripes={this.props.stripes}
           onClose={this.onCloseWarning}
           label={(this.props.actions.regular) ? 'Pay fees/fines' : 'Waive fees/fines'}
         />
@@ -335,6 +336,7 @@ class Actions extends React.Component {
           commentRequired={settings.paid}
           onClose={this.onClosePay}
           account={[this.type]}
+          stripes={this.props.stripes}
           balance={this.props.balance}
           accounts={(this.props.actions.pay) ? this.props.accounts : accounts}
           payments={payments}
@@ -350,6 +352,7 @@ class Actions extends React.Component {
           open={this.props.actions.waiveModal || (this.props.actions.waiveMany && !warning)}
           commentRequired={settings.waived}
           onClose={this.onCloseWaive}
+          stripes={this.props.stripes}
           accounts={(this.props.actions.waiveModal) ? this.props.accounts : accounts}
           balance={this.props.balance}
           waives={waives}
@@ -360,6 +363,7 @@ class Actions extends React.Component {
         />
         <CommentModal
           open={this.props.actions.comment}
+          stripes={this.props.stripes}
           onClose={this.onCloseComment}
           onSubmit={(values) => { this.onClickComment(values); }}
         />
