@@ -20,7 +20,7 @@ const Setting = ({
       <Col xs>{label}</Col>
     </Row>
     <Row>
-      <Col xs={1}>
+      <Col sm={1}>
         <Field
           id={name}
           name={name}

@@ -142,7 +142,7 @@ export default class ProxyEditList extends React.Component {
                 searchLabel={<FormattedMessage id="stripes-components.addNew" />}
                 searchButtonStyle="default"
                 selectUser={user => this.onAdd(user)}
-                visibleColumns={['name', 'patronGroup', 'username', 'barcode']}
+                visibleColumns={['active', 'name', 'patronGroup', 'username', 'barcode']}
                 columnMapping={columnMapping}
                 disableRecordCreation={disableRecordCreation}
               >

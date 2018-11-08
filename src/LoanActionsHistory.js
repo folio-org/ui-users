@@ -196,11 +196,11 @@ class LoanActionsHistory extends React.Component {
 
   getFeeFine() {
     const accounts = _.get(this.props.resources, ['loanAccountsActions', 'records'], []);
-    let remaining = 0;
+    let amount = 0;
     accounts.forEach(a => {
-      remaining += parseFloat(a.remaining);
+      amount += parseFloat(a.amount);
     });
-    return (remaining === 0) ? '-' : remaining.toFixed(2);
+    return (amount === 0) ? '-' : amount.toFixed(2);
   }
 
   feefinedetails = (e) => {
@@ -421,7 +421,7 @@ class LoanActionsHistory extends React.Component {
             <Col xs={2}>
               <KeyValue
                 label={<FormattedMessage id="ui-users.loans.columns.returnDate" />}
-                value={<FormattedTime value={loan.systemReturnDate} day="numeric" month="numeric" year="numeric" /> || '-'}
+                value={<FormattedTime value={loan.returnDate} day="numeric" month="numeric" year="numeric" /> || '-'}
               />
             </Col>
             <Col xs={2}>
@@ -453,7 +453,15 @@ class LoanActionsHistory extends React.Component {
             <Col xs={2}>
               <KeyValue
                 label={<FormattedMessage id="ui-users.loans.details.fine" />}
-                value={<button onClick={(e) => this.feefinedetails(e)} type="button">{`${this.getFeeFine()}`}</button>}
+                value={(
+                  <button
+                    style={{ color: '#2b75bb' }}
+                    onClick={(e) => this.feefinedetails(e)}
+                    type="button"
+                  >
+                    {`${this.getFeeFine()}`}
+                  </button>                
+                )}
               />
             </Col>
             <Col xs={2}>
@@ -477,7 +485,7 @@ class LoanActionsHistory extends React.Component {
               visibleColumns={['actionDate', 'action', 'dueDate', 'itemStatus', 'Source']}
               columnMapping={{
                 action: <FormattedMessage id="ui-users.loans.columns.action" />,
-                actionDate: <FormattedMessage id="ui-users.loans.columns.actionDate'" />,
+                actionDate: <FormattedMessage id="ui-users.loans.columns.actionDate" />,
                 dueDate: <FormattedMessage id="ui-users.loans.columns.dueDate" />,
                 itemStatus: <FormattedMessage id="ui-users.loans.columns.itemStatus" />,
                 Source: <FormattedMessage id="ui-users.loans.columns.source" />,
