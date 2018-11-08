@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 import { ControlledVocab } from '@folio/stripes/smart-components';
 
 class AddressTypesSettings extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
-      intl: PropTypes.object.isRequired,
     }).isRequired,
   };
 
@@ -16,18 +16,19 @@ class AddressTypesSettings extends React.Component {
   }
 
   render() {
+    const { stripes } = this.props;
     return (
       <this.connectedControlledVocab
-        {...this.props}
+        stripes={stripes}
         baseUrl="addresstypes"
         records="addressTypes"
-        label={this.props.stripes.intl.formatMessage({ id: 'ui-users.contact.addressTypes' })}
-        labelSingular={this.props.stripes.intl.formatMessage({ id: 'ui-users.contact.addressType' })}
-        objectLabel={this.props.stripes.intl.formatMessage({ id: 'ui-users.contact.addresses' })}
+        label={<FormattedMessage id="ui-users.contact.addressTypes" />}
+        labelSingular={<FormattedMessage id="ui-users.contact.addressType" />}
+        objectLabel={<FormattedMessage id="ui-users.contact.addresses" />}
         visibleFields={['addressType', 'desc']}
         columnMapping={{
-          addressType: this.props.stripes.intl.formatMessage({ id: 'ui-users.contact.addressType' }),
-          desc: this.props.stripes.intl.formatMessage({ id: 'ui-users.description' }),
+          addressType: <FormattedMessage id="ui-users.contact.addressType" />,
+          desc: <FormattedMessage id="ui-users.description" />,
         }}
         nameKey="addressType"
         id="addresstypes"

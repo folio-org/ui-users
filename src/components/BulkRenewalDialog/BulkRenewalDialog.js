@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 import { Modal } from '@folio/stripes/components';
 
 import BulkRenewInfo from './BulkRenewInfo';
@@ -8,9 +9,6 @@ class BulkRenewalDialog extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
       connect: PropTypes.func,
-      intl: PropTypes.shape({
-        formatMessage: PropTypes.func,
-      }),
     }),
     onClose: PropTypes.func,
     open: PropTypes.bool,
@@ -26,9 +24,9 @@ class BulkRenewalDialog extends React.Component {
   }
 
   render() {
-    const { formatMessage } = this.props.stripes.intl;
     const BodyComponent = BulkRenewInfo;
-    const modalLabel = formatMessage({ id: 'ui-users.brd.renewConfirmation' });
+    const modalLabel = <FormattedMessage id="ui-users.brd.renewConfirmation" />;
+
     return (
       <Modal
         size="large"

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 import { Select } from '@folio/stripes/components';
 import { Field } from 'redux-form';
 import { ControlledVocab } from '@folio/stripes/smart-components';
@@ -9,7 +10,6 @@ class PaymentSettings extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
-      intl: PropTypes.object.isRequired,
     }).isRequired,
   };
 
@@ -19,7 +19,7 @@ class PaymentSettings extends React.Component {
   }
 
   render() {
-    const label = this.props.stripes.intl.formatMessage({ id: 'ui-users.payments.singular' });
+    const label = <FormattedMessage id="ui-users.payments.singular" />;
 
     const fieldComponents = {
       'allowedRefundMethod': ({ fieldProps }) => (
@@ -28,8 +28,8 @@ class PaymentSettings extends React.Component {
           component={Select}
           marginBottom0
           dataOptions={[
-            { label: this.props.stripes.intl.formatMessage({ id: 'ui-users.feefines.modal.yes' }), value: true },
-            { label: this.props.stripes.intl.formatMessage({ id: 'ui-users.feefines.modal.no' }), value: false },
+            { label: <FormattedMessage id="ui-users.feefines.modal.yes" value="true" /> },
+            { label: <FormattedMessage id="ui-users.feefines.modal.no" value="false" /> },
           ]}
         />
       )
@@ -37,8 +37,8 @@ class PaymentSettings extends React.Component {
 
     const formatter = {
       'allowedRefundMethod': (payment) => ((payment.allowedRefundMethod)
-        ? this.props.stripes.intl.formatMessage({ id: 'ui-users.feefines.modal.yes' })
-        : this.props.stripes.intl.formatMessage({ id: 'ui-users.feefines.modal.no' })),
+        ? <FormattedMessage id="ui-users.feefines.modal.yes" />
+        : <FormattedMessage id="ui-users.feefines.modal.no" />),
     };
     return (
       <this.connectedControlledVocab
@@ -49,13 +49,13 @@ class PaymentSettings extends React.Component {
         baseUrl="payments"
         itemTemplate={{ allowedRefundMethod: true }}
         records="payments"
-        label={this.props.stripes.intl.formatMessage({ id: 'ui-users.payments.label' })}
-        labelSingular={this.props.stripes.intl.formatMessage({ id: 'ui-users.payments.singular' })}
+        label={<FormattedMessage id="ui-users.payments.label" />}
+        labelSingular={label}
         objectLabel=""
         visibleFields={['nameMethod', 'allowedRefundMethod']}
         columnMapping={{
-          'nameMethod': this.props.stripes.intl.formatMessage({ id: 'ui-users.payments.columns.name' }),
-          'allowedRefundMethod': this.props.stripes.intl.formatMessage({ id: 'ui-users.payments.columns.refund' }),
+          'nameMethod': <FormattedMessage id="ui-users.payments.columns.name" />,
+          'allowedRefundMethod': <FormattedMessage id="ui-users.payments.columns.refund" />,
         }}
         nameKey="paymentMethods"
         hiddenFields={['numberOfObjects']}

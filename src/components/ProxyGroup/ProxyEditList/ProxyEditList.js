@@ -58,12 +58,25 @@ export default class ProxyEditList extends React.Component {
   }
 
   renderConfirmModal() {
-    const { confirmDelete, curRecord } = this.state;
-    const { initialValues, name } = this.props;
-    const formatMsg = this.props.stripes.intl.formatMessage;
-    const heading = (name === 'sponsors') ? formatMsg({ id: 'ui-users.deleteSponsorPrompt' }) : formatMsg({ id: 'ui-users.deleteProxyPrompt' });
-    const sponsorsMsg = <SafeHTMLMessage id="ui-users.proxyWillBeDeleted" values={{ name1: getFullName(initialValues), name2: getFullName(curRecord.user) }} />;
-    const proxyMsg = <SafeHTMLMessage id="ui-users.proxyWillBeDeleted" values={{ name1: getFullName(curRecord.user), name2: getFullName(initialValues) }} />;
+    const {
+      confirmDelete,
+      curRecord,
+    } = this.state;
+    const {
+      initialValues,
+      name,
+    } = this.props;
+    const heading = (name === 'sponsors') ?
+      <FormattedMessage id="ui-users.deleteSponsorPrompt" /> :
+      <FormattedMessage id="ui-users.deleteProxyPrompt" />;
+    const sponsorsMsg = <SafeHTMLMessage
+      id="ui-users.proxyWillBeDeleted"
+      values={{ name1: getFullName(initialValues), name2: getFullName(curRecord.user) }}
+    />;
+    const proxyMsg = <SafeHTMLMessage
+      id="ui-users.proxyWillBeDeleted"
+      values={{ name1: getFullName(curRecord.user), name2: getFullName(initialValues) }}
+    />;
     const message = (name === 'sponsors') ? sponsorsMsg : proxyMsg;
 
     return (
@@ -74,7 +87,7 @@ export default class ProxyEditList extends React.Component {
         message={message}
         onConfirm={() => this.confirmDelete(true)}
         onCancel={() => this.confirmDelete(false)}
-        confirmLabel={formatMsg({ id: 'ui-users.delete' })}
+        confirmLabel={<FormattedMessage id="ui-users.delete" />}
       />
     );
   }
@@ -83,7 +96,13 @@ export default class ProxyEditList extends React.Component {
     this.fields = fields;
 
     const disableRecordCreation = true;
-    const { itemComponent, label, name, stripes: { intl }, stripes } = this.props;
+    const {
+      itemComponent,
+      label,
+      name,
+      stripes,
+      change,
+    } = this.props;
     const ComponentToRender = itemComponent;
 
     const items = fields.map((fieldName, index) => (
@@ -94,18 +113,17 @@ export default class ProxyEditList extends React.Component {
         namespace={name}
         name={fieldName}
         onDelete={record => this.beginDelete(index, record)}
-        intl={intl}
         stripes={stripes}
-        change={this.props.change}
+        change={change}
       />
     ));
 
     // map column-IDs to table-header-values
     const columnMapping = {
-      name: intl.formatMessage({ id: 'ui-users.information.name' }),
-      patronGroup: intl.formatMessage({ id: 'ui-users.information.patronGroup' }),
-      username: intl.formatMessage({ id: 'ui-users.information.username' }),
-      barcode: intl.formatMessage({ id: 'ui-users.information.barcode' }),
+      name: <FormattedMessage id="ui-users.information.name" />,
+      patronGroup: <FormattedMessage id="ui-users.information.patronGroup" />,
+      username: <FormattedMessage id="ui-users.information.username" />,
+      barcode: <FormattedMessage id="ui-users.information.barcode" />,
     };
 
     return (
@@ -121,7 +139,7 @@ export default class ProxyEditList extends React.Component {
                 type="find-user"
                 {...this.props}
                 dataKey={name}
-                searchLabel={intl.formatMessage({ id: 'stripes-components.addNew' })}
+                searchLabel={<FormattedMessage id="stripes-components.addNew" />}
                 searchButtonStyle="default"
                 selectUser={user => this.onAdd(user)}
                 visibleColumns={['name', 'patronGroup', 'username', 'barcode']}

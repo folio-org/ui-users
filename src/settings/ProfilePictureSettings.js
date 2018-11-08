@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 import {
   Row,
   Col,
@@ -13,7 +14,6 @@ class ProfilePictureSettings extends React.Component {
     label: PropTypes.string,
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
-      intl: PropTypes.object.isRequired,
     }).isRequired,
   };
 
@@ -29,10 +29,11 @@ class ProfilePictureSettings extends React.Component {
   }
 
   render() {
+    const { label } = this.props;
     return (
       <this.configManager
         getInitialValues={this.getInitialValues}
-        label={this.props.label}
+        label={label}
         moduleName="USERS"
         configName="profile_pictures"
       >
@@ -42,7 +43,7 @@ class ProfilePictureSettings extends React.Component {
               component={Checkbox}
               id="profile_pictures"
               name="profile_pictures"
-              label={this.props.stripes.intl.formatMessage({ id: 'ui-users.information.profile.label' })}
+              label={<FormattedMessage id="ui-users.information.profile.label" />}
             />
           </Col>
         </Row>

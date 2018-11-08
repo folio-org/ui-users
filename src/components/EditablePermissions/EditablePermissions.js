@@ -32,7 +32,6 @@ class EditablePermissions extends React.Component {
         showPerms: PropTypes.bool,
         listInvisiblePerms: PropTypes.bool,
       }).isRequired,
-      intl: PropTypes.object.isRequired,
     }).isRequired,
     accordionId: PropTypes.string,
     expanded: PropTypes.bool,
@@ -94,7 +93,7 @@ class EditablePermissions extends React.Component {
   }
 
   renderItem(item, index, showPerms) {
-    const title = this.props.stripes.intl.formatMessage({ id: 'ui-users.permissions.removePermission' });
+    const title = <FormattedMessage id="ui-users.permissions.removePermission" />;
     return (
       <li key={item.permissionName}>
         {
@@ -128,7 +127,7 @@ class EditablePermissions extends React.Component {
       <List
         items={fields}
         itemFormatter={listFormatter}
-        isEmptyMessage={this.props.stripes.intl.formatMessage({ id: 'ui-users.permissions.empty' })}
+        isEmptyMessage={<FormattedMessage id="ui-users.permissions.empty" />}
       />
     );
   }
@@ -168,7 +167,7 @@ class EditablePermissions extends React.Component {
           <DropdownMenu
             data-role="menu"
             width="40em"
-            aria-label={this.props.stripes.intl.formatMessage({ id: 'ui-users.permissions.availablePermissions' })}
+            aria-label={<FormattedMessage id="ui-users.permissions.availablePermissions" />}
             onToggle={this.onToggleAddPermDD}
           >
             {permissionsDD}

@@ -1,16 +1,20 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage, FormattedTime } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { Row, Col, KeyValue, LayoutHeader } from '@folio/stripes/components';
 
 import { getFullName } from '../../../util';
 import css from './ProxyItem.css';
 
-const ProxyItem = ({ record, stripes }) => {
-  function msg(msgId) {
-    return stripes.intl.formatMessage({ id: msgId });
-  }
+const ProxyItem = ({ record }) => {
+  const creationDateTime = <FormattedTime
+    value={record.proxy.metadata.createdDate}
+    day="numeric"
+    month="numeric"
+    year="numeric"
+  />;
   const link = (
     <div>
       <Link to={`/users/view/${record.user.id}`}>{getFullName(record.user)}</Link>
@@ -18,15 +22,16 @@ const ProxyItem = ({ record, stripes }) => {
       <span className={css.creationLabel}>
         (Relationship created:
         {' '}
-        {stripes.formatDateTime(record.proxy.metadata.createdDate)}
+        {creationDateTime }
         )
       </span>
       )}
     </div>
   );
 
-  const expirationDate = (record.proxy && record.proxy.expirationDate) ? stripes.formatDateTime(record.proxy.expirationDate) : '-';
-
+  const expirationDate = (record.proxy && record.proxy.expirationDate) ?
+    creationDateTime :
+    '-';
   return (
     <div className={css.item}>
       <LayoutHeader level={3} title={link} noActions />
@@ -35,14 +40,20 @@ const ProxyItem = ({ record, stripes }) => {
           <Col xs={4}>
             <Row>
               <Col xs={12}>
-                <KeyValue label={msg('ui-users.proxy.relationshipStatus')} value={_.get(record, ['proxy', 'status'], '-')} />
+                <KeyValue
+                  label={<FormattedMessage id="ui-users.proxy.relationshipStatus" />}
+                  value={_.get(record, ['proxy', 'status'], '-')}
+                />
               </Col>
             </Row>
           </Col>
           <Col xs={4}>
             <Row>
               <Col xs={12}>
-                <KeyValue label={msg('ui-users.expirationDate')} value={expirationDate} />
+                <KeyValue
+                  label={<FormattedMessage id="ui-users.expirationDate" />}
+                  value={expirationDate}
+                />
               </Col>
             </Row>
           </Col>
@@ -51,14 +62,20 @@ const ProxyItem = ({ record, stripes }) => {
           <Col xs={4}>
             <Row>
               <Col xs={12}>
-                <KeyValue label={msg('ui-users.proxy.requestForSponsor')} value={_.get(record, ['proxy', 'requestForSponsor'], '-')} />
+                <KeyValue
+                  label={<FormattedMessage id="ui-users.proxy.requestForSponsor" />}
+                  value={_.get(record, ['proxy', 'requestForSponsor'], '-')}
+                />
               </Col>
             </Row>
           </Col>
           <Col xs={4}>
             <Row>
               <Col xs={12}>
-                <KeyValue label={msg('ui-users.proxy.notificationsTo')} value={_.get(record, ['proxy', 'notificationsTo'], '-')} />
+                <KeyValue
+                  label={<FormattedMessage id="ui-users.proxy.notificationsTo" />}
+                  value={_.get(record, ['proxy', 'notificationsTo'], '-')}
+                />
               </Col>
             </Row>
           </Col>
@@ -67,7 +84,10 @@ const ProxyItem = ({ record, stripes }) => {
           <Col xs={4}>
             <Row>
               <Col xs={12}>
-                <KeyValue label={msg('ui-users.proxy.accrueTo')} value={_.get(record, ['proxy', 'accrueTo'], '-')} />
+                <KeyValue
+                  label={<FormattedMessage id="ui-users.proxy.accrueTo" />}
+                  value={_.get(record, ['proxy', 'accrueTo'], '-')}
+                />
               </Col>
             </Row>
           </Col>
@@ -80,7 +100,6 @@ const ProxyItem = ({ record, stripes }) => {
 
 ProxyItem.propTypes = {
   record: PropTypes.object,
-  stripes: PropTypes.object,
 };
 
 export default ProxyItem;

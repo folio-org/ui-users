@@ -13,7 +13,11 @@ import {
   Popover,
 } from '@folio/stripes/components';
 
-import { formatDate, formatDateTime } from '../../../util';
+import {
+  FormattedMessage,
+  FormattedTime,
+  FormattedDate,
+} from 'react-intl';
 
 class ClosedAccounts extends React.Component {
   static manifest = Object.freeze({
@@ -26,9 +30,6 @@ class ClosedAccounts extends React.Component {
   });
 
   static propTypes = {
-    stripes: PropTypes.shape({
-      intl: PropTypes.object.isRequired,
-    }),
     accounts: PropTypes.arrayOf(PropTypes.object),
     resources: PropTypes.shape({
       comments: PropTypes.shape({
@@ -56,40 +57,37 @@ class ClosedAccounts extends React.Component {
     this.onRowClick = this.onRowClick.bind(this);
     this.getLoan = this.getLoan.bind(this);
 
-    const { stripes } = props;
-
     this.sortMap = {
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' })]: f => (f.metadata || {}).createdDate,
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' })]: f => (f.metadata || {}).updatedDate,
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' })]: f => f.feeFineType,
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.amount' })]: f => f.amount,
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' })]: f => f.remaining,
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' })]: f => (f.paymentStatus || {}).name,
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' })]: f => f.feeFineOwner,
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' })]: f => f.title,
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' })]: f => f.barcode,
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' })]: f => f.callNumber,
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' })]: f => f.dueDate,
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' })]: f => f.returnedDate,
-
+      [<FormattedMessage id="ui-users.accounts.history.columns.created" />]: f => (f.metadata || {}).createdDate,
+      [<FormattedMessage id="ui-users.accounts.history.columns.updated" />]: f => (f.metadata || {}).updatedDate,
+      [<FormattedMessage id="ui-users.accounts.history.columns.type" />]: f => f.feeFineType,
+      [<FormattedMessage id="ui-users.accounts.history.columns.amount" />]: f => f.amount,
+      [<FormattedMessage id="ui-users.accounts.history.columns.remaining" />]: f => f.remaining,
+      [<FormattedMessage id="ui-users.accounts.history.columns.status" />]: f => (f.paymentStatus || {}).name,
+      [<FormattedMessage id="ui-users.accounts.history.columns.owner" />]: f => f.feeFineOwner,
+      [<FormattedMessage id="ui-users.accounts.history.columns.title" />]: f => f.title,
+      [<FormattedMessage id="ui-users.accounts.history.columns.barcode" />]: f => f.barcode,
+      [<FormattedMessage id="ui-users.accounts.history.columns.number" />]: f => f.callNumber,
+      [<FormattedMessage id="ui-users.accounts.history.columns.due" />]: f => f.dueDate,
+      [<FormattedMessage id="ui-users.accounts.history.columns.returned" />]: f => f.returnedDate,
     };
 
     this.state = {
       checkedAccounts: {},
       allChecked: false,
       sortOrder: [
-        stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' }),
-        stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' }),
-        stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' }),
-        stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.amount' }),
-        stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' }),
-        stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' }),
-        stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' }),
-        stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' }),
-        stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' }),
-        stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' }),
-        stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' }),
-        stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' }),
+        <FormattedMessage id="ui-users.accounts.history.columns.created" />,
+        <FormattedMessage id="ui-users.accounts.history.columns.updated" />,
+        <FormattedMessage id="ui-users.accounts.history.columns.type" />,
+        <FormattedMessage id="ui-users.accounts.history.columns.amount" />,
+        <FormattedMessage id="ui-users.accounts.history.columns.remaining" />,
+        <FormattedMessage id="ui-users.accounts.history.columns.status" />,
+        <FormattedMessage id="ui-users.accounts.history.columns.owner" />,
+        <FormattedMessage id="ui-users.accounts.history.columns.title" />,
+        <FormattedMessage id="ui-users.accounts.history.columns.barcode" />,
+        <FormattedMessage id="ui-users.accounts.history.columns.number" />,
+        <FormattedMessage id="ui-users.accounts.history.columns.due" />,
+        <FormattedMessage id="ui-users.accounts.history.columns.returned" />,
       ],
       sortDirection: ['asc', 'asc'],
     };
@@ -175,6 +173,15 @@ of
     return loan;
   }
 
+  formatDateTime(dateTimeStr) {
+    return <FormattedTime
+      value={dateTimeStr}
+      day="numeric"
+      month="numeric"
+      year="numeric"
+    />;
+  }
+
   getAccountsFormatter() {
     const checkedAccounts = this.state.checkedAccounts;
 
@@ -186,8 +193,8 @@ of
           type="checkbox"
         />
       ),
-      'date created': f => (f.metadata ? formatDate(f.metadata.createdDate) : '-'),
-      'date updated': f => (f.metadata && f.metadata.createdDate !== f.metadata.updatedDate ? formatDate(f.metadata.updatedDate) : '-'),
+      'date created': f => (f.metadata ? <FormattedDate value={f.metadata.createdDate} /> : '-'),
+      'date updated': f => (f.metadata && f.metadata.createdDate !== f.metadata.updatedDate ? <FormattedDate value={f.metadata.updatedDate} /> : '-'),
       'fee/fine type': f => (f.feeFineType ? this.comments(f) : '-'),
       'billed': f => (f.amount ? parseFloat(f.amount).toFixed(2) : '-'),
       'remaining': f => parseFloat(f.remaining).toFixed(2) || '0.00',
@@ -196,8 +203,8 @@ of
       'instance (item type)': f => (f.title ? `${f.title}(${f.materialType})` : '-'),
       'barcode': f => (f.barcode ? f.barcode : '-'),
       'call number': f => (f.callNumber ? f.callNumber : '-'),
-      'due date': f => (f.dueDate ? formatDateTime(f.dueDate) : '-'),
-      'returned date': f => (f.returnedDate ? formatDateTime(f.returnedDate) : formatDateTime(this.getLoan(f).returnDate) || '-'),
+      'due date': f => (f.dueDate ? this.formatDateTime(f.dueDate) : '-'),
+      'returned date': f => (f.returnedDate ? this.formatDateTime(f.returnedDate) : this.formatDateTime(this.getLoan(f).returnDate) || '-'),
       ' ': f => this.renderActions(f),
     };
   }

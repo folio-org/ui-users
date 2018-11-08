@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import {
   Icon,
@@ -25,7 +26,7 @@ function PermissionList(props) {
     </li>
   );
 
-  const search = stripes.intl.formatMessage({ id: 'ui-users.search' });
+  const search = <FormattedMessage id="ui-users.search" />;
 
   return (
     <div className={css.root}>

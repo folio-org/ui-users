@@ -20,22 +20,22 @@ import ItemInfo from './ItemInfo';
 
 let feefineamount = 0;
 
-function validate(type, props) {
+function validate(type) {
   const errors = [];
   if (!type.feeFineId) {
-    errors.feeFineId = props.stripes.intl.formatMessage({ id: 'ui-users.feefines.modal.error' });
+    errors.feeFineId = <FormattedMessage id="ui-users.feefines.modal.error" />;
   }
   if (!type.ownerId) {
-    errors.ownerId = props.stripes.intl.formatMessage({ id: 'ui-users.feefines.modal.error' });
+    errors.ownerId = <FormattedMessage id="ui-users.feefines.modal.error" />;
   }
   if (type.amount < 0) {
     errors.amount = 'Amount must be > 0';
   }
   if (!type.amount && !feefineamount) {
-    errors.amount = props.stripes.intl.formatMessage({ id: 'ui-users.errors.missingRequiredField' });
+    errors.amount = <FormattedMessage id="ui-users.errors.missingRequiredField" />;
   }
   if (Number.isNaN(Number(type.amount)) && type.amount) {
-    errors.amount = props.stripes.intl.formatMessage({ id: 'ui-users.charge.errors.amount' });
+    errors.amount = <FormattedMessage id="ui-users.charge.errors.amount" />;
   }
   return errors;
 }

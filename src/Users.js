@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 
 import { makeQueryFunction, SearchAndSort } from '@folio/stripes/smart-components';
 import { AppIcon } from '@folio/stripes/components';
@@ -98,9 +99,6 @@ class Users extends React.Component {
   });
 
   static propTypes = {
-    stripes: PropTypes.shape({
-      intl: PropTypes.object.isRequired,
-    }).isRequired,
     resources: PropTypes.shape({
       patronGroups: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
@@ -183,13 +181,19 @@ class Users extends React.Component {
   }
 
   render() {
-    const { onSelectRow, disableRecordCreation, onComponentWillUnmount, showSingleResult, browseOnly, stripes: { intl } } = this.props;
+    const {
+      onSelectRow,
+      disableRecordCreation,
+      onComponentWillUnmount,
+      showSingleResult,
+      browseOnly,
+    } = this.props;
     const patronGroups = (this.props.resources.patronGroups || {}).records || [];
 
     const resultsFormatter = {
       status: user => (
         <AppIcon app="users" size="small">
-          {user.active ? intl.formatMessage({ id: 'ui-users.active' }) : intl.formatMessage({ id: 'ui-users.inactive' })}
+          {user.active ? <FormattedMessage id="ui-users.active" /> : <FormattedMessage id="ui-users.inactive" />}
         </AppIcon>
       ),
       name: user => getFullName(user),
@@ -225,12 +229,12 @@ class Users extends React.Component {
       parentMutator={this.props.mutator}
       showSingleResult={showSingleResult}
       columnMapping={{
-        status: intl.formatMessage({ id: 'ui-users.active' }),
-        name: intl.formatMessage({ id: 'ui-users.information.name' }),
-        barcode: intl.formatMessage({ id: 'ui-users.information.barcode' }),
-        patronGroup: intl.formatMessage({ id: 'ui-users.information.patronGroup' }),
-        username: intl.formatMessage({ id: 'ui-users.information.username' }),
-        email: intl.formatMessage({ id: 'ui-users.contact.email' }),
+        status: <FormattedMessage id="ui-users.active" />,
+        name: <FormattedMessage id="ui-users.information.name" />,
+        barcode: <FormattedMessage id="ui-users.information.barcode" />,
+        patronGroup: <FormattedMessage id="ui-users.information.patronGroup" />,
+        username: <FormattedMessage id="ui-users.information.username" />,
+        email: <FormattedMessage id="ui-users.contact.email" />,
       }}
       browseOnly={browseOnly}
     />);

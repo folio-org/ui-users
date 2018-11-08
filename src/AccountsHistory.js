@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
-import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+import PropTypes from 'prop-types';
 import queryString from 'query-string';
 import {
   Paneset,
@@ -101,7 +101,6 @@ class AccountsHistory extends React.Component {
 
   static propTypes = {
     stripes: PropTypes.shape({
-      intl: PropTypes.object.isRequired,
       connect: PropTypes.func.isRequired,
     }),
     resources: PropTypes.shape({
@@ -131,7 +130,20 @@ class AccountsHistory extends React.Component {
 
   constructor(props) {
     super(props);
-    this.controllableColumns = ['date created', 'date updated', 'fee/fine type', 'billed', 'remaining', 'payment status', 'fee/fine owner', 'instance (item type)', 'barcode', 'call number', 'due date', 'returned date'];
+    this.controllableColumns = [
+      'date created',
+      'date updated',
+      'fee/fine type',
+      'billed',
+      'remaining',
+      'payment status',
+      'fee/fine owner',
+      'instance (item type)',
+      'barcode',
+      'call number',
+      'due date',
+      'returned date'
+    ];
 
     const visibleColumns = this.controllableColumns.map(columnName => ({
       title: columnName,
@@ -175,7 +187,22 @@ class AccountsHistory extends React.Component {
     this.handleFilterChange = handleFilterChange.bind(this);
     this.handleFilterClear = handleFilterClear.bind(this);
     this.filterState = filterState.bind(this);
-    this.possibleColumns = ['  ', 'date created', 'date updated', 'fee/fine type', 'billed', 'remaining', 'payment status', 'fee/fine owner', 'instance (item type)', 'barcode', 'call number', 'due date', 'returned date', ' '];
+    this.possibleColumns = [
+      '  ',
+      'date created',
+      'date updated',
+      'fee/fine type',
+      'billed',
+      'remaining',
+      'payment status',
+      'fee/fine owner',
+      'instance (item type)',
+      'barcode',
+      'call number',
+      'due date',
+      'returned date',
+      ' '
+    ];
     this.getVisibleColumns = this.getVisibleColumns.bind(this);
     this.renderCheckboxList = this.renderCheckboxList.bind(this);
     this.toggleColumn = this.toggleColumn.bind(this);
@@ -353,7 +380,11 @@ class AccountsHistory extends React.Component {
   }
 
   render() {
-    const { user, patronGroup, resources, stripes } = this.props;
+    const {
+      user,
+      patronGroup,
+      resources,
+    } = this.props;
     const query = this.props.location.search ? queryString.parse(this.props.location.search) : {};
 
     let accounts = _.get(resources, ['feefineshistory', 'records'], []);
@@ -379,18 +410,18 @@ class AccountsHistory extends React.Component {
     );
 
     const columnMapping = {
-      'date created': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' }),
-      'date updated': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' }),
-      'fee/fine type': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' }),
-      'billed': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.amount' }),
-      'remaining': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' }),
-      'payment status': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' }),
-      'fee/fine owner': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' }),
-      'instance (item type)': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' }),
-      'barcode': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' }),
-      'call number': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' }),
-      'due date': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' }),
-      'returned date': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' }),
+      'date created': <FormattedMessage id="ui-users.accounts.history.columns.created" />,
+      'date updated': <FormattedMessage id="ui-users.accounts.history.columns.updated" />,
+      'fee/fine type': <FormattedMessage id="ui-users.accounts.history.columns.type" />,
+      'billed': <FormattedMessage id="ui-users.accounts.history.columns.amount" />,
+      'remaining': <FormattedMessage id="ui-users.accounts.history.columns.remaining" />,
+      'payment status': <FormattedMessage id="ui-users.accounts.history.columns.status" />,
+      'fee/fine owner': <FormattedMessage id="ui-users.accounts.history.columns.owner" />,
+      'instance (item type)': <FormattedMessage id="ui-users.accounts.history.columns.title" />,
+      'barcode': <FormattedMessage id="ui-users.accounts.history.columns.barcode" />,
+      'call number': <FormattedMessage id="ui-users.accounts.history.columns.number" />,
+      'due date': <FormattedMessage id="ui-users.accounts.history.columns.due" />,
+      'returned date': <FormattedMessage id="ui-users.accounts.history.columns.returned" />,
     };
 
     const firstMenu = (
@@ -421,9 +452,15 @@ class AccountsHistory extends React.Component {
         </Col>
         <Col xsOffset={3} xs={5}>
           <SegmentedControl activeId={query.layer} onActivate={this.handleActivate}>
-            <Button id="open-accounts"><FormattedMessage id="ui-users.accounts.open" /></Button>
-            <Button id="closed-accounts"><FormattedMessage id="ui-users.accounts.closed" /></Button>
-            <Button id="all-accounts"><FormattedMessage id="ui-users.accounts.all" /></Button>
+            <Button id="open-accounts">
+              <FormattedMessage id="ui-users.accounts.open" />
+            </Button>
+            <Button id="closed-accounts">
+              <FormattedMessage id="ui-users.accounts.closed" />
+            </Button>
+            <Button id="all-accounts">
+              <FormattedMessage id="ui-users.accounts.all" />
+            </Button>
           </SegmentedControl>
         </Col>
       </Row>
@@ -529,7 +566,6 @@ class AccountsHistory extends React.Component {
                 actions={this.state.actions}
                 onChangeActions={this.onChangeActions}
                 user={user}
-                stripes={stripes}
                 accounts={this.accounts}
                 selectedAccounts={this.state.selectedAccounts}
                 balance={balance}

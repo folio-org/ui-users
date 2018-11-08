@@ -11,9 +11,6 @@ import { Link } from 'react-router-dom';
 
 class ItemInfo extends React.Component {
   static propTypes = {
-    stripes: PropTypes.shape({
-      intl: PropTypes.object,
-    }),
     onClickSelectItem: PropTypes.func,
     item: PropTypes.object,
     editable: PropTypes.bool,
@@ -50,7 +47,10 @@ class ItemInfo extends React.Component {
         <h4 className="marginTopHalf"><FormattedMessage id="ui-users.charge.item.title" /></h4>
         <Row>
           <Col xs={6} sm={5} md={4} lg={3}>
-            <TextField placeholder={this.props.stripes.intl.formatMessage({ id: 'ui-users.charge.item.placeholder' })} onChange={this.onChangeSelectItem} />
+            <TextField
+              placeholder={<FormattedMessage id="ui-users.charge.item.placeholder" />}
+              onChange={this.onChangeSelectItem}
+            />
           </Col>
           <Col xs={2}>
             <Button buttonStyle="primary" onClick={this.onClickSelectItem} disabled={!this.props.editable}><FormattedMessage id="ui-users.charge.item.button" /></Button>

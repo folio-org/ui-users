@@ -1,6 +1,10 @@
 import _ from 'lodash';
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  FormattedTime,
+} from 'react-intl';
+import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import Link from 'react-router-dom/Link';
 import PropTypes from 'prop-types';
 import { ChangeDueDateDialog } from '@folio/stripes/smart-components';
@@ -16,7 +20,6 @@ import {
   Row,
   Col,
 } from '@folio/stripes/components';
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import { getFullName } from './util';
 import loanActionMap from './data/loanActionMap';
 import LoanActionsHistoryProxy from './LoanActionsHistoryProxy';
@@ -92,7 +95,6 @@ class LoanActionsHistory extends React.Component {
     this.renew = this.renew.bind(this);
     this.getContributorslist = this.getContributorslist.bind(this);
     this.showContributors = this.showContributors.bind(this);
-    this.formatDateTime = this.props.stripes.formatDateTime;
     this.hideNonRenewedLoansModal = this.hideNonRenewedLoansModal.bind(this);
     this.showTitle = this.showTitle.bind(this);
     this.showChangeDueDateDialog = this.showChangeDueDateDialog.bind(this);
@@ -242,7 +244,12 @@ class LoanActionsHistory extends React.Component {
     return (contributorsLength >= 77) ?
       (
         <Popover>
-          <div data-role="target" style={{ cursor: 'pointer' }}><KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.loans.columns.contributors' })} value={listTodisplay} /></div>
+          <div data-role="target" style={{ cursor: 'pointer' }}>
+            <KeyValue
+              label={<FormattedMessage id="ui-users.loans.columns.contributors" />}
+              value={listTodisplay}
+            />
+          </div>
           <div data-role="popover">
             {
               this.list.map(contributor => <p key={contributor}>{contributor}</p>)
@@ -250,7 +257,10 @@ class LoanActionsHistory extends React.Component {
           </div>
         </Popover>
       ) :
-        <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.loans.columns.contributors' })} value={listTodisplay} />;
+        <KeyValue
+          label={<FormattedMessage id="ui-users.loans.columns.contributors" />}
+          value={listTodisplay}
+        />;
   }
 
   showNonRenewedLoansModal() {
@@ -263,7 +273,7 @@ class LoanActionsHistory extends React.Component {
     if (title) {
       const titleTodisplay = (title.length >= 77) ? `${title.substring(0, 77)}...` : title;
       return <KeyValue
-        label={this.props.stripes.intl.formatMessage({ id: 'ui-users.loans.columns.title' })}
+        label={<FormattedMessage id="ui-users.loans.columns.title" />}
         value={(
           <Link to={`/inventory/view/${_.get(this.loan, ['item', 'instanceId'], '')}`}>
             {`${titleTodisplay} (${_.get(this.loan, ['item', 'materialType', 'name'])})`}
@@ -287,12 +297,21 @@ class LoanActionsHistory extends React.Component {
   }
 
   render() {
-    const { onCancel, loan, patronGroup, user, resources: { loanActionsWithUser }, stripes: { intl } } = this.props;
+    const {
+      onCancel,
+      onClickUser,
+      loan,
+      patronGroup,
+      user,
+      resources: {
+        loanActionsWithUser
+      },
+    } = this.props;
     const { nonRenewedLoanItems } = this.state;
     const loanActionsFormatter = {
-      action: la => intl.formatMessage({ id: loanActionMap[la.action] }),
-      actionDate: la => this.formatDateTime(_.get(la, ['metadata', 'updatedDate'], '-')),
-      dueDate: la => this.formatDateTime(la.dueDate),
+      action: la => <FormattedMessage id={loanActionMap[la.action]} />,
+      actionDate: la => <FormattedTime value={_.get(la, ['metadata', 'updatedDate'], '-')} day="numeric" month="numeric" year="numeric" />,
+      dueDate: la => <FormattedTime value={la.dueDate} day="numeric" month="numeric" year="numeric" />,
       itemStatus: la => la.itemStatus,
       Source: la => <Link to={`/users/view/${la.user.id}`}>{getFullName(la.user)}</Link>,
     };
@@ -304,7 +323,7 @@ class LoanActionsHistory extends React.Component {
     const buttonDisabled = (loanStatus && loanStatus === 'Closed');
     // Number of characters to trucate the string = 77
     const listTodisplay = (contributorsList === '-') ? '-' : (contributorsListString.length >= 77) ? `${contributorsListString.substring(0, 77)}...` : `${contributorsListString.substring(0, contributorsListString.length - 2)}`;
-    const nonRenewedLabel = this.props.stripes.intl.formatMessage({ id: 'ui-users.loans.items.nonRenewed.label' });
+    const nonRenewedLabel = <FormattedMessage id="ui-users.loans.items.nonRenewed.label" />;
     const failedRenewalsSubHeading = (
       <p>
         <FormattedMessage
@@ -312,7 +331,7 @@ class LoanActionsHistory extends React.Component {
           values={{
             strongCount: <strong>{nonRenewedLoanItems.length}</strong>,
             count: nonRenewedLoanItems.length,
-            verb: <strong>{this.props.stripes.intl.formatMessage({ id: 'ui-users.loans.item.nonRenewed.callout.verb' })}</strong>,
+            verb: <strong>{<FormattedMessage id="ui-users.loans.item.nonRenewed.callout.verb" />}</strong>,
           }}
         />
       </p>
@@ -320,19 +339,44 @@ class LoanActionsHistory extends React.Component {
 
     return (
       <Paneset isRoot>
-        <Pane id="pane-loandetails" defaultWidth="100%" dismissible onClose={onCancel} paneTitle={`${intl.formatMessage({ id: 'ui-users.loans.loanDetails' })} - ${getFullName(user)} (${_.upperFirst(patronGroup.group)})`}>
+        <Pane
+          id="pane-loandetails"
+          defaultWidth="100%"
+          dismissible
+          onClose={onCancel}
+          paneTitle={`${<FormattedMessage id="ui-users.loans.loanDetails" />} - ${getFullName(user)} (${_.upperFirst(patronGroup.group)})`}
+        >
           <Row>
             <span>
-              <Button disabled={buttonDisabled} buttonStyle="primary" onClick={this.renew}>{this.props.stripes.intl.formatMessage({ id: 'ui-users.renew' })}</Button>
-              <Button disabled={buttonDisabled} buttonStyle="primary" onClick={this.showChangeDueDateDialog}>{this.props.stripes.intl.formatMessage({ id: 'stripes-smart-components.cddd.changeDueDate' })}</Button>
+              <Button
+                disabled={buttonDisabled}
+                buttonStyle="primary"
+                onClick={this.renew}
+              >
+                <FormattedMessage id="ui-users.renew" />
+              </Button>
+              <Button
+                disabled={buttonDisabled}
+                buttonStyle="primary"
+                onClick={this.showChangeDueDateDialog}
+              >
+                <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />
+              </Button>
             </span>
           </Row>
           <Row>
             <Col xs={2}>
-              <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.details.borrower' })} value={`${getFullName(user)}`} />
+              <KeyValue
+                label={<FormattedMessage id="ui-users.loans.details.borrower" />}
+                value={`${getFullName(user)}`}
+              />
             </Col>
             <Col xs={2}>
-              <this.connectedProxy id={loan.proxyUserId} onClick={this.props.onClickUser} {...this.props} />
+              <this.connectedProxy
+                id={loan.proxyUserId}
+                onClick={onClickUser}
+                {...this.props}
+              />
             </Col>
           </Row>
           <Row>
@@ -343,52 +387,86 @@ class LoanActionsHistory extends React.Component {
               {this.showContributors(contributorsList, listTodisplay, contributorsLength)}
             </Col>
             <Col xs={2}>
-              <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.columns.barcode' })} value={<Link to={`/inventory/view/${_.get(loan, ['item', 'instanceId'], '')}/${_.get(loan, ['item', 'holdingsRecordId'], '')}/${_.get(loan, ['itemId'], '')}`}>{_.get(loan, ['item', 'barcode'], '')}</Link>} />
-            </Col>
-            <Col xs={2}>
-              <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.details.callNumber' })} value={_.get(loan, ['item', 'callNumber'], '-')} />
-            </Col>
-            <Col xs={2}>
-              <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.details.location' })} value={_.get(loan, ['item', 'location', 'name'], '-')} />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={2}>
-              <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.columns.itemStatus' })} value={_.get(loan, ['item', 'status', 'name'], '-')} />
-            </Col>
-            <Col xs={2}>
-              <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.columns.dueDate' })} value={this.formatDateTime(loan.dueDate) || '-'} />
-            </Col>
-            <Col xs={2}>
-              <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.columns.returnDate' })} value={this.formatDateTime(loan.systemReturnDate) || '-'} />
-            </Col>
-            <Col xs={2}>
-              <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.details.renewalCount' })} value={_.get(loan, ['renewalCount'], '-')} />
-            </Col>
-            <Col xs={2}>
-              <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.details.claimedReturned' })} value="TODO" />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={2}>
-              <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.details.loanPolicy' })} value={<Link to={`/settings/circulation/loan-policies/${loan.loanPolicyId}`}>TODO</Link>} />
-            </Col>
-            <Col xs={2}>
-              <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.columns.loanDate' })} value={this.formatDateTime(loan.loanDate) || '-'} />
-            </Col>
-            <Col xs={2}>
               <KeyValue
-                label={intl.formatMessage({ id: 'ui-users.loans.details.fine' })}
-                value={
-                  <button onClick={(e) => this.feefinedetails(e)} type="button">{`${this.getFeeFine()}`}</button>
-              }
+                label={<FormattedMessage id="ui-users.loans.columns.barcode" />}
+                value={<Link to={`/inventory/view/${_.get(loan, ['item', 'instanceId'], '')}/${_.get(loan, ['item', 'holdingsRecordId'], '')}/${_.get(loan, ['itemId'], '')}`}>{_.get(loan, ['item', 'barcode'], '')}</Link>}
               />
             </Col>
             <Col xs={2}>
-              <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.details.requestQueue' })} value="TODO" />
+              <KeyValue
+                label={<FormattedMessage id="ui-users.loans.details.callNumber" />}
+                value={_.get(loan, ['item', 'callNumber'], '-')}
+              />
             </Col>
             <Col xs={2}>
-              <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.details.lost' })} value="TODO" />
+              <KeyValue
+                label={<FormattedMessage id="ui-users.loans.details.location" />}
+                value={_.get(loan, ['item', 'location', 'name'], '-')}
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={2}>
+              <KeyValue
+                label={<FormattedMessage id="ui-users.loans.columns.itemStatus" />}
+                value={_.get(loan, ['item', 'status', 'name'], '-')}
+              />
+            </Col>
+            <Col xs={2}>
+              <KeyValue
+                label={<FormattedMessage id="ui-users.loans.columns.dueDate" />}
+                value={<FormattedTime value={loan.dueDate} day="numeric" month="numeric" year="numeric" /> || '-'}
+              />
+            </Col>
+            <Col xs={2}>
+              <KeyValue
+                label={<FormattedMessage id="ui-users.loans.columns.returnDate" />}
+                value={<FormattedTime value={loan.systemReturnDate} day="numeric" month="numeric" year="numeric" /> || '-'}
+              />
+            </Col>
+            <Col xs={2}>
+              <KeyValue
+                label={<FormattedMessage id="ui-users.loans.details.renewalCount" />}
+                value={_.get(loan, ['renewalCount'], '-')}
+              />
+            </Col>
+            <Col xs={2}>
+              <KeyValue
+                label={<FormattedMessage id="ui-users.loans.details.claimedReturned" />}
+                value="TODO"
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={2}>
+              <KeyValue
+                label={<FormattedMessage id="ui-users.loans.details.loanPolicy" />}
+                value={<Link to={`/settings/circulation/loan-policies/${loan.loanPolicyId}`}>TODO</Link>}
+              />
+            </Col>
+            <Col xs={2}>
+              <KeyValue
+                label={<FormattedMessage id="ui-users.loans.columns.loanDate" />}
+                value={<FormattedTime value={loan.loanDate} day="numeric" month="numeric" year="numeric" /> || '-'}
+              />
+            </Col>
+            <Col xs={2}>
+              <KeyValue
+                label={<FormattedMessage id="ui-users.loans.details.fine" />}
+                value={<button onClick={(e) => this.feefinedetails(e)} type="button">{`${this.getFeeFine()}`}</button>}
+              />
+            </Col>
+            <Col xs={2}>
+              <KeyValue
+                label={<FormattedMessage id="ui-users.loans.details.requestQueue" />}
+                value="TODO"
+              />
+            </Col>
+            <Col xs={2}>
+              <KeyValue
+                label={<FormattedMessage id="ui-users.loans.details.lost" />}
+                value="TODO"
+              />
             </Col>
           </Row>
           <br />
@@ -398,11 +476,11 @@ class LoanActionsHistory extends React.Component {
               formatter={loanActionsFormatter}
               visibleColumns={['actionDate', 'action', 'dueDate', 'itemStatus', 'Source']}
               columnMapping={{
-                action: intl.formatMessage({ id: 'ui-users.loans.columns.action' }),
-                actionDate: intl.formatMessage({ id: 'ui-users.loans.columns.actionDate' }),
-                dueDate: intl.formatMessage({ id: 'ui-users.loans.columns.dueDate' }),
-                itemStatus: intl.formatMessage({ id: 'ui-users.loans.columns.itemStatus' }),
-                Source: intl.formatMessage({ id: 'ui-users.loans.columns.source' }),
+                action: <FormattedMessage id="ui-users.loans.columns.action" />,
+                actionDate: <FormattedMessage id="ui-users.loans.columns.actionDate'" />,
+                dueDate: <FormattedMessage id="ui-users.loans.columns.dueDate" />,
+                itemStatus: <FormattedMessage id="ui-users.loans.columns.itemStatus" />,
+                Source: <FormattedMessage id="ui-users.loans.columns.source" />,
               }}
               contentData={loanActionsWithUser.records}
             />

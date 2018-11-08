@@ -1,4 +1,5 @@
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import { get, uniqBy } from 'lodash';
 import { Field, FieldArray } from 'redux-form';
@@ -31,9 +32,7 @@ class EditServicePoints extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }).isRequired,
     }).isRequired,
-    stripes: PropTypes.shape({
-      intl: PropTypes.object.isRequired,
-    }).isRequired,
+    stripes: PropTypes.object.isRequired,
   };
 
   constructor(props) {
@@ -61,7 +60,7 @@ class EditServicePoints extends React.Component {
 
   renderServicePoint = (_, index) => {
     const sp = this.userServicePoints.get(index);
-    const title = this.props.stripes.intl.formatMessage({ id: 'ui-users.sp.removeServicePoint' });
+    const title = <FormattedMessage id="ui-users.sp.removeServicePoint" />;
 
     return (
       <li key={sp.id}>
@@ -95,7 +94,7 @@ class EditServicePoints extends React.Component {
       <List
         items={this.userServicePoints}
         itemFormatter={this.renderServicePoint}
-        isEmptyMessage={this.props.stripes.intl.formatMessage({ id: 'ui-users.sp.noServicePoints' })}
+        isEmptyMessage={<FormattedMessage id="ui-users.sp.noServicePoints" />}
       />
     );
   }
@@ -104,8 +103,11 @@ class EditServicePoints extends React.Component {
     return (
       <Row end="xs">
         <Col>
-          <Button id="add-service-point-btn" onClick={() => this.setState({ addingServicePoint: true })}>
-            {`+ ${this.props.stripes.intl.formatMessage({ id: 'ui-users.sp.addServicePoints' })}`}
+          <Button
+            id="add-service-point-btn"
+            onClick={() => this.setState({ addingServicePoint: true })}
+          >
+            {`+ ${<FormattedMessage id="ui-users.sp.addServicePoints" />}`}
           </Button>
         </Col>
       </Row>
@@ -113,13 +115,15 @@ class EditServicePoints extends React.Component {
   }
 
   renderPreferredServicePointSelect() {
-    const { formatMessage } = this.props.stripes.intl;
     const { userServicePoints } = this.state;
 
     if (userServicePoints.length === 0) return null;
 
     const dataOptions = [
-      { label: formatMessage({ id: 'ui-users.sp.preferredSPNone' }), value: '-' },
+      {
+        label: <FormattedMessage id="ui-users.sp.preferredSPNone" />,
+        value: '-',
+      },
       ...userServicePoints.map(sp => ({ label: sp.name, value: sp.id })),
     ];
 
@@ -127,11 +131,11 @@ class EditServicePoints extends React.Component {
       <Row>
         <Col xs={12} md={6}>
           <Field
-            label={`${formatMessage({ id: 'ui-users.sp.servicePointPreference' })}*`}
+            label={`${<FormattedMessage id="uui-users.sp.servicePointPreference" />}*`}
             name="preferredServicePoint"
             id="servicePointPreference"
             component={Select}
-            placeholder={formatMessage({ id: 'ui-users.sp.selectServicePoint' })}
+            placeholder={<FormattedMessage id="ui-users.sp.selectServicePoint" />}
             dataOptions={dataOptions}
           />
         </Col>
@@ -171,7 +175,7 @@ class EditServicePoints extends React.Component {
       <IfPermission perm="inventory-storage.service-points-users.item.post,inventory-storage.service-points-users.item.put">
         <IfInterface name="service-points-users" version="1.0">
           <Accordion
-            label={<Headline size="large" tag="h3">{this.props.stripes.intl.formatMessage({ id: 'ui-users.sp.servicePoints' })}</Headline>}
+            label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.sp.servicePoints" /></Headline>}
             open={this.props.expanded}
             id={this.props.accordionId}
             onToggle={this.props.onToggle}

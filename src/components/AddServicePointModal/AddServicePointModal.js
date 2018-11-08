@@ -14,11 +14,6 @@ class AddServicePointModal extends React.Component {
     onSave: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
-    stripes: PropTypes.shape({
-      intl: PropTypes.shape({
-        formatMessage: PropTypes.func.isRequired,
-      }).isRequired,
-    }).isRequired,
     servicePoints: PropTypes.arrayOf(PropTypes.object),
   }
 
@@ -68,17 +63,15 @@ class AddServicePointModal extends React.Component {
   }
 
   renderModalFooter() {
-    const { formatMessage } = this.props.stripes.intl;
-
     return (
       <ModalFooter
         primaryButton={{
           id: 'save-service-point-btn',
-          label: formatMessage({ id: 'ui-users.saveAndClose' }),
+          label: <FormattedMessage id="ui-users.saveAndClose" />,
           onClick: this.onSaveAndClose,
         }}
         secondaryButton={{
-          label: formatMessage({ id: 'stripes-core.button.cancel' }),
+          label: <FormattedMessage id="stripes-core.button.cancel" />,
           onClick: this.onCancel,
         }}
       />
@@ -86,15 +79,13 @@ class AddServicePointModal extends React.Component {
   }
 
   render() {
-    const { formatMessage } = this.props.stripes.intl;
-
     return (
       <Modal
         footer={this.renderModalFooter()}
         open={this.props.open}
         onClose={this.props.onClose}
         dismissible
-        label={formatMessage({ id: 'ui-users.sp.addServicePoints' })}
+        label={<FormattedMessage id="ui-users.sp.addServicePoints" />}
       >
         <Layout className="textCentered">
           <FormattedMessage
@@ -114,7 +105,7 @@ class AddServicePointModal extends React.Component {
                 onChange={this.onToggleBulkSelection}
               />
             ),
-            name: formatMessage({ id: 'ui-users.sp.column.name' }),
+            name: <FormattedMessage id="ui-users.sp.column.name" />,
           }}
           columnWidths={{ selected: 35 }}
           formatter={{

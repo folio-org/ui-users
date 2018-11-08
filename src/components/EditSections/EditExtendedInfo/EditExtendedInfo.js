@@ -1,4 +1,5 @@
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 
@@ -14,18 +15,18 @@ import {
 
 import PasswordControl from './PasswordControl';
 
-const EditExtendedInfo = ({ expanded, onToggle, accordionId, initialValues, stripes: { intl } }) => (
+const EditExtendedInfo = ({ expanded, onToggle, accordionId, initialValues }) => (
   <Accordion
     open={expanded}
     id={accordionId}
     onToggle={onToggle}
-    label={<Headline size="large" tag="h3">{intl.formatMessage({ id: 'ui-users.extended.extendedInformation' })}</Headline>}
+    label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.extended.extendedInformation" /></Headline>}
   >
     <Row>
       <Col xs={12} md={3}>
         <Field
           component={Datepicker}
-          label={intl.formatMessage({ id: 'ui-users.extended.dateEnrolled' })}
+          label={<FormattedMessage id="ui-users.extended.dateEnrolled" />}
           dateFormat="YYYY-MM-DD"
           name="enrollmentDate"
           id="adduser_enrollmentdate"
@@ -33,7 +34,7 @@ const EditExtendedInfo = ({ expanded, onToggle, accordionId, initialValues, stri
       </Col>
       <Col xs={12} md={3}>
         <Field
-          label={intl.formatMessage({ id: 'ui-users.extended.externalSystemId' })}
+          label={<FormattedMessage id="ui-users.extended.externalSystemId" />}
           name="externalSystemId"
           id="adduser_externalsystemid"
           component={TextField}
@@ -43,7 +44,7 @@ const EditExtendedInfo = ({ expanded, onToggle, accordionId, initialValues, stri
       <Col xs={12} md={3}>
         <Field
           component={Datepicker}
-          label={intl.formatMessage({ id: 'ui-users.extended.birthDate' })}
+          label={<FormattedMessage id="ui-users.extended.birthDate" />}
           dateFormat="YYYY-MM-DD"
           name="personal.dateOfBirth"
           id="adduser_dateofbirth"
@@ -52,7 +53,7 @@ const EditExtendedInfo = ({ expanded, onToggle, accordionId, initialValues, stri
         />
       </Col>
       <Col xs={12} md={3}>
-        <KeyValue label={intl.formatMessage({ id: 'ui-users.extended.folioNumber' })}>
+        <KeyValue label={<FormattedMessage id="ui-users.extended.folioNumber" />}>
           {initialValues.id || '-'}
         </KeyValue>
       </Col>
@@ -60,7 +61,7 @@ const EditExtendedInfo = ({ expanded, onToggle, accordionId, initialValues, stri
     <Row>
       <Col xs={12} md={3}>
         <Field
-          label={`${intl.formatMessage({ id: 'ui-users.information.username' })}`}
+          label={<FormattedMessage id="ui-users.information.username" />}
           name="username"
           id="adduser_username"
           component={TextField}
@@ -68,7 +69,7 @@ const EditExtendedInfo = ({ expanded, onToggle, accordionId, initialValues, stri
           validStylesEnabled
         />
       </Col>
-      {!initialValues.id && <PasswordControl intl={intl} />}
+      {!initialValues.id && <PasswordControl />}
     </Row>
     <br />
   </Accordion>
@@ -79,9 +80,6 @@ EditExtendedInfo.propTypes = {
   onToggle: PropTypes.func,
   accordionId: PropTypes.string.isRequired,
   initialValues: PropTypes.object,
-  stripes: PropTypes.shape({
-    intl: PropTypes.object.isRequired,
-  }).isRequired,
 };
 
 export default EditExtendedInfo;

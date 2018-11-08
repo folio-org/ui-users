@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 import { ControlledVocab } from '@folio/stripes/smart-components';
 
 import PatronGroupNumberOfUsers from '../components/PatronGroupNumberOfUsers';
@@ -22,7 +23,6 @@ class PatronGroupsSettings extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
-      intl: PropTypes.object.isRequired,
     }).isRequired,
     resources: PropTypes.shape({
       usersPerGroup: PropTypes.object,
@@ -35,12 +35,14 @@ class PatronGroupsSettings extends React.Component {
   }
 
   render() {
+    const { resources } = this.props;
     const formatter = {
       numberOfObjects: item => (<PatronGroupNumberOfUsers
         item={item}
-        usersPerGroup={this.props.resources ? this.props.resources.usersPerGroup : null}
+        usersPerGroup={resources ? resources.usersPerGroup : null}
       />),
     };
+    const label = <FormattedMessage id="ui-users.information.patronGroups" />;
 
     return (
       <this.connectedControlledVocab
@@ -50,13 +52,13 @@ class PatronGroupsSettings extends React.Component {
         dataKey={undefined}
         baseUrl="groups"
         records="usergroups"
-        label={this.props.stripes.intl.formatMessage({ id: 'ui-users.information.patronGroups' })}
-        labelSingular={this.props.stripes.intl.formatMessage({ id: 'ui-users.information.patronGroup' })}
-        objectLabel={this.props.stripes.intl.formatMessage({ id: 'ui-users.information.patronGroup.users' })}
+        label={label}
+        labelSingular={label}
+        objectLabel={<FormattedMessage id="ui-users.information.patronGroup.users" />}
         visibleFields={['group', 'desc']}
         columnMapping={{
-          group: this.props.stripes.intl.formatMessage({ id: 'ui-users.information.patronGroup' }),
-          desc: this.props.stripes.intl.formatMessage({ id: 'ui-users.description' }),
+          group: <FormattedMessage id="ui-users.information.patronGroup" />,
+          desc: <FormattedMessage id="ui-users.description" />,
         }}
         formatter={formatter}
         nameKey="group"

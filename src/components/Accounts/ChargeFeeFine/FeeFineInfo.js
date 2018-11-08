@@ -11,9 +11,6 @@ import {
 
 class FeeFineInfo extends React.Component {
   static propTypes = {
-    stripes: PropTypes.shape({
-      intl: PropTypes.object,
-    }),
     feefineList: PropTypes.arrayOf(PropTypes.object),
     onChangeOwner: PropTypes.func,
     owners: PropTypes.arrayOf(PropTypes.object),
@@ -63,7 +60,7 @@ class FeeFineInfo extends React.Component {
                       fullWidth
                       dataOptions={this.props.owners}
                       onChange={this.props.onChangeOwner}
-                      placeholder={this.props.stripes.intl.formatMessage({ id: 'ui-users.feefines.modal.placeholder' })}
+                      placeholder={<FormattedMessage id="ui-users.feefines.modal.placeholder" />}
                     />
                     {(this.props.isPending.owners) ? 'Loading...' : ''}
                   </Col>
@@ -83,7 +80,7 @@ class FeeFineInfo extends React.Component {
                       fullWidth
                       disabled={this.props.isPending.feefines}
                       dataOptions={this.props.feefineList}
-                      placeholder={this.props.stripes.intl.formatMessage({ id: 'ui-users.feefines.modal.placeholder' })}
+                      placeholder={<FormattedMessage id="ui-users.feefines.modal.placeholder" />}
                       onChange={this.onChangeFeeFine}
                     />
                     {(this.props.isPending.feefines) ? 'Loading...' : ''}
