@@ -7,6 +7,7 @@ import {
   Col,
 } from '@folio/stripes/components';
 import { Link } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
 import { getFullName } from '../../util';
 
 const Menu = (props) => {
@@ -43,23 +44,27 @@ const Menu = (props) => {
           </Row>
           <Row>
             <Col>
-Outstanding Balance:
+              <FormattedMessage id="ui-users.accounts.outstanding" />
+              {' '}
               {outstanding}
             </Col>
             <Col style={{ marginLeft: '10px' }}>
               {((selected !== 0 && selected !== parseFloat(0).toFixed(2)) && outstanding > parseFloat(0).toFixed(2)) ?
-                `Selected: ${selected}`
+                `Selected: ${parseFloat(selected).toFixed(2)}`
                 : ''
               }
             </Col>
           </Row>
         </Col>
         <Col xs={6}>
-          <Button disabled style={rightButton} buttonStyle="primary">Transfer</Button>
-          <Button disabled style={rightButton} buttonStyle="primary">Refund</Button>
-          <Button disabled={!actions.waive} style={rightButton} buttonStyle="primary" onClick={() => { props.onChangeActions({ waiveMany: true }); }}>Waive</Button>
-          <Button disabled={!actions.regularpayment} style={rightButton} buttonStyle="primary" onClick={() => { props.onChangeActions({ regular: true }); }}>Pay</Button>
-          <Button style={rightButton} onClick={e => props.onClickViewChargeFeeFine(e, {})}>+ New</Button>
+          <Button disabled style={rightButton} buttonStyle="primary"><FormattedMessage id="ui-users.accounts.history.button.transfer" /></Button>
+          <Button disabled style={rightButton} buttonStyle="primary"><FormattedMessage id="ui-users.accounts.history.button.refund" /></Button>
+          <Button disabled={!actions.waive} style={rightButton} buttonStyle="primary" onClick={() => { props.onChangeActions({ waiveMany: true }); }}><FormattedMessage id="ui-users.accounts.history.button.waive" /></Button>
+          <Button disabled={!actions.regularpayment} style={rightButton} buttonStyle="primary" onClick={() => { props.onChangeActions({ regular: true }); }}><FormattedMessage id="ui-users.accounts.history.button.pay" /></Button>
+          <Button style={rightButton} onClick={e => props.onClickViewChargeFeeFine(e, {})}>
++
+            <FormattedMessage id="ui-users.accounts.button.new" />
+          </Button>
         </Col>
       </Row>
     </div>

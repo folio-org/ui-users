@@ -38,7 +38,7 @@ class Actions extends React.Component {
     },
     waives: {
       type: 'okapi',
-      records: 'waives',
+      records: 'waiver',
       path: 'waives',
     },
     activeRecord: {},
@@ -167,29 +167,30 @@ class Actions extends React.Component {
       source: `${this.props.okapi.currentUser.lastName}, ${this.props.okapi.currentUser.firstName}`,
       createdAt: createAt,
       accountId: id,
-      dateAction: moment().utc().format(),
+      dateAction: moment().format(),
       userId: this.props.user.id,
       amountAction: parseFloat(amount || 0).toFixed(2),
       balance: parseFloat(balance || 0).toFixed(2),
-      transactionNumber: transaction || 0,
-      comments: comment || '',
+      transactionInformation: transaction || '-',
+      comments: comment,
     };
     return this.props.mutator.feefineactions.POST(Object.assign(action, newAction));
   }
 
   editAccount = (account, paymentStatus, status, remaining) => {
-    account.metadata.updatedDate = moment().utc().format();
+    account.metadata.updatedDate = moment().format();
     const newAccount = {
       status: { name: status },
       paymentStatus: { name: paymentStatus },
       remaining: parseFloat(remaining || 0).toFixed(2),
     };
+
     return this.props.mutator.accounts.PUT(Object.assign(account, newAccount));
   }
 
   onClickCancellation(values) {
-    const accounts = (this.props.resources.accounts || {}).records || [];
-    const type = accounts.find(a => a.id === this.props.accounts[0].id) || {};
+    const type = this.props.accounts[0] || {};
+    delete type.rowIndex;
     this.props.mutator.activeRecord.update({ id: type.id });
     this.newAction({}, type.id, 'Cancelled as Error', type.amount, values.comment, 0, 0, type.feeFineOwner);
     this.editAccount(type, 'Cancelled as Error', 'Closed', 0.00)
@@ -199,8 +200,8 @@ class Actions extends React.Component {
   }
 
   onClickPay(values) {
-    const accounts = (this.props.resources.accounts || {}).records || [];
-    const type = accounts.find(a => a.id === this.props.accounts[0].id) || {};
+    const type = this.props.accounts[0] || {};
+    delete type.rowIndex;
     this.pay(type, values.amount, values)
       .then(() => this.props.handleEdit(1))
       .then(() => this.showCalloutMessage(type))
@@ -208,12 +209,12 @@ class Actions extends React.Component {
   }
 
   onPayMany = (values) => {
-    const accounts = (this.props.resources.accounts || {}).records || [];
     const selected = _.orderBy(this.props.selectedAccounts, ['remaining'], ['asc']);
     let payment = parseFloat(values.amount);
     selected.forEach(account => {
       if (payment > 0) {
-        const type = accounts.find(a => a.id === account.id) || {};
+        const type = account || {};
+        delete type.rowIndex;
         if (payment < type.remaining) {
           this.pay(type, payment, values)
             .then(() => this.props.handleEdit(1))
@@ -245,8 +246,8 @@ class Actions extends React.Component {
   }
 
   onClickWaive(values) {
-    const accounts = (this.props.resources.accounts || {}).records || [];
-    const type = accounts.find(a => a.id === this.props.accounts[0].id) || {};
+    const type = this.props.accounts[0] || {};
+    delete type.rowIndex;
     this.waive(type, values.waive, values)
       .then(() => this.props.handleEdit(1))
       .then(() => this.showCalloutMessage(type))
@@ -254,12 +255,12 @@ class Actions extends React.Component {
   }
 
   onWaiveMany = (values) => {
-    const accounts = (this.props.resources.accounts || {}).records || [];
     const selected = _.orderBy(this.props.selectedAccounts, ['remaining'], ['asc']);
     let waive = parseFloat(values.waive);
     selected.forEach(account => {
       if (waive > 0) {
-        const type = accounts.find(a => a.id === account.id) || {};
+        const type = account || {};
+        delete type.rowIndex;
         if (waive < type.remaining) {
           this.waive(type, waive, values)
             .then(() => this.props.handleEdit(1))
@@ -294,7 +295,7 @@ class Actions extends React.Component {
     const account = this.props.accounts[0] || '';
     const id = this.props.accounts[0].id || '';
     const createAt = this.props.accounts[0].feeFineOwner || '';
-    const balance = this.props.balance || '-';
+    const balance = this.props.balance || 0;
     this.props.mutator.activeRecord.update({ id });
     this.newAction({}, id, 'Comment', 0, values.comment, balance, 0, createAt);
     this.editAccount(account, account.paymentStatus.name, account.status.name, balance)
@@ -311,13 +312,14 @@ class Actions extends React.Component {
     const waives = _.get(this.props.resources, ['waives', 'records'], []);
     const settings = _.get(this.props.resources, ['commentRequired', 'records', 0], {});
     const accounts = this.state.accounts || [];
-    const warning = accounts.filter(a => a.status.name === 'Closed').length && (this.props.actions.regular || this.props.actions.waiveMany);
+    const warning = accounts.filter(a => a.status.name === 'Closed').length !== 0 && (this.props.actions.regular || this.props.actions.waiveMany);
     return (
       <div>
         <WarningModal
           open={warning}
           accounts={accounts}
           onChangeAccounts={this.onChangeAccounts}
+          stripes={this.props.stripes}
           onClose={this.onCloseWarning}
           label={(this.props.actions.regular) ? 'Pay fees/fines' : 'Waive fees/fines'}
         />
@@ -334,6 +336,7 @@ class Actions extends React.Component {
           commentRequired={settings.paid}
           onClose={this.onClosePay}
           account={[this.type]}
+          stripes={this.props.stripes}
           balance={this.props.balance}
           accounts={(this.props.actions.pay) ? this.props.accounts : accounts}
           payments={payments}
@@ -349,6 +352,7 @@ class Actions extends React.Component {
           open={this.props.actions.waiveModal || (this.props.actions.waiveMany && !warning)}
           commentRequired={settings.waived}
           onClose={this.onCloseWaive}
+          stripes={this.props.stripes}
           accounts={(this.props.actions.waiveModal) ? this.props.accounts : accounts}
           balance={this.props.balance}
           waives={waives}
@@ -359,6 +363,7 @@ class Actions extends React.Component {
         />
         <CommentModal
           open={this.props.actions.comment}
+          stripes={this.props.stripes}
           onClose={this.onCloseComment}
           onSubmit={(values) => { this.onClickComment(values); }}
         />

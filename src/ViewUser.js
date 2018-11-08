@@ -208,6 +208,7 @@ class ViewUser extends React.Component {
     this.onClickCloseAccountsHistory = this.onClickCloseAccountsHistory.bind(this);
     this.onClickViewAccountActionsHistory = this.onClickViewAccountActionsHistory.bind(this);
     this.onClickCloseAccountActionsHistory = this.onClickCloseAccountActionsHistory.bind(this);
+    this.showCallout = null;
   }
 
   static getDerivedStateFromProps(nextProps) {
@@ -642,6 +643,7 @@ class ViewUser extends React.Component {
             stripes={this.props.stripes}
             history={this.props.history}
             addRecord={this.state.addRecord}
+            handleAddRecords={this.handleAddRecords}
             location={this.props.location}
             onCancel={this.onClickCloseAccountsHistory}
             onClickViewChargeFeeFine={this.onClickViewChargeFeeFine}
@@ -651,6 +653,8 @@ class ViewUser extends React.Component {
         </Layer>
         <Layer isOpen={query.layer ? query.layer === 'charge' : false} label="Charge Fee/Fine">
           <this.connectedCharge
+            servicePoints={servicePoints}
+            preferredServicePoint={preferredServicePoint}
             stripes={stripes}
             onCloseChargeFeeFine={this.onCloseChargeFeeFine}
             user={user}
@@ -667,6 +671,8 @@ class ViewUser extends React.Component {
             accountid={this.state.selectedAccount.id}
             history={this.props.history}
             onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
+            num={(this.state.addRecord ? 2 : 1)}
+            handleAddRecords={this.handleAddRecords}
             stripes={stripes}
             onCancel={this.onClickCloseAccountActionsHistory}
             // when navigating away to another user, clear all loan-related state

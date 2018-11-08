@@ -24,6 +24,7 @@ import { getFullName } from './util';
 import { Actions } from './components/Accounts/Actions';
 import { count, handleFilterChange, handleFilterClear } from './components/Accounts/accountFunctions';
 
+
 import {
   Menu,
   Filters,
@@ -56,12 +57,16 @@ const filterConfig = [
   },
 ];
 
-const queryFunction = (findAll, queryTemplate, sortMap, fConfig, failOnCondition, nsParams) => {
+const args = [
+  { name: 'user', value: 'x' },
+];
+
+const queryFunction = (findAll, queryTemplate, sortMap, fConfig, failOnCondition, nsParams, a) => {
   const getCql = makeQueryFunction(findAll, queryTemplate, sortMap, fConfig, failOnCondition, nsParams);
   return (queryParams, pathComponents, resourceValues, logger) => {
     let cql = getCql(queryParams, pathComponents, resourceValues, logger);
-    const { user } = resourceValues;
-    if (cql === undefined) { cql = `userId=${user.id}`; } else { cql = `(${cql}) and (userId=${user.id})`; }
+    const userId = a[0].value;
+    if (cql === undefined) { cql = `userId=${userId}`; } else { cql = `(${cql}) and (userId=${userId})`; }
     return cql;
   };
 };
@@ -70,9 +75,15 @@ class AccountsHistory extends React.Component {
   static manifest = Object.freeze({
     initializedFilterConfig: { initialValue: false },
     query: { initialValue: {} },
+    comments: {
+      type: 'okapi',
+      records: 'feefineactions',
+      path: 'feefineactions?query=(userId=%{activeRecord.userId} and comments=*)&limit=%{activeRecord.comments}',
+    },
     filter: {
       type: 'okapi',
       records: 'accounts',
+      recordsRequired: '%{activeRecord.records}',
       path: 'accounts?query=userId=%{user.id}&limit=100',
     },
     feefineshistory: {
@@ -90,12 +101,13 @@ class AccountsHistory extends React.Component {
             filterConfig,
             0,
             { query: 'q', filters: 'f' },
+            args,
           ),
         },
         staticFallback: { params: {} },
       },
     },
-    activeRecord: {},
+    activeRecord: { records: 50 },
     user: {},
   });
 
@@ -131,7 +143,22 @@ class AccountsHistory extends React.Component {
 
   constructor(props) {
     super(props);
-    this.controllableColumns = ['date created', 'date updated', 'fee/fine type', 'billed', 'remaining', 'payment status', 'fee/fine owner', 'instance (item type)', 'barcode', 'call number', 'due date', 'returned date'];
+    const { stripes } = this.props;
+
+    this.controllableColumns = [
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.amount' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' }),
+    ];
 
     const visibleColumns = this.controllableColumns.map(columnName => ({
       title: columnName,
@@ -166,7 +193,6 @@ class AccountsHistory extends React.Component {
     this.connectedAllAccounts = props.stripes.connect(AllAccounts);
     this.connectedActions = props.stripes.connect(Actions);
 
-    this.handleRecords = this.handleRecords.bind(this);
     this.accounts = [];
     this.addRecord = 50;
     this.editRecord = 0;
@@ -175,7 +201,22 @@ class AccountsHistory extends React.Component {
     this.handleFilterChange = handleFilterChange.bind(this);
     this.handleFilterClear = handleFilterClear.bind(this);
     this.filterState = filterState.bind(this);
-    this.possibleColumns = ['  ', 'date created', 'date updated', 'fee/fine type', 'billed', 'remaining', 'payment status', 'fee/fine owner', 'instance (item type)', 'barcode', 'call number', 'due date', 'returned date', ' '];
+    this.possibleColumns = [
+      '  ',
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.amount' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' }),
+      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' }),
+      ' '
+    ];
     this.getVisibleColumns = this.getVisibleColumns.bind(this);
     this.renderCheckboxList = this.renderCheckboxList.bind(this);
     this.toggleColumn = this.toggleColumn.bind(this);
@@ -186,26 +227,38 @@ class AccountsHistory extends React.Component {
   }
 
   componentDidMount() {
-    this.props.mutator.activeRecord.update({ records: 30 });
-    this.props.mutator.user.update({ id: this.props.user.id });
+    this.props.mutator.activeRecord.update({ records: 50, comments: 200, userId: this.props.user.id });
+    args[0].value = this.props.user.id;
   }
-
 
   shouldComponentUpdate(nextProps, nextState) {
     const filter = _.get(this.props.resources, ['filter', 'records'], []);
     const nextFilter = _.get(nextProps.resources, ['filter', 'records'], []);
     const accounts = _.get(this.props.resources, ['feefineshistory', 'records'], []);
     const nextAccounts = _.get(nextProps.resources, ['feefineshistory', 'records'], []);
+    const comments = _.get(this.props.resources, ['comments', 'records'], []);
+    const nextComments = _.get(nextProps.resources, ['comments', 'records'], []);
+    if (JSON.stringify(accounts) !== JSON.stringify(nextAccounts)) {
+      let selected = 0;
+      this.state.selectedAccounts.forEach(a => {
+        selected += nextAccounts.find(ac => ac.id === a.id).remaining;
+      });
+      this.setState({ selected });
+    }
+
     if (this.addRecord !== nextProps.num) {
-      this.props.mutator.activeRecord.update({ records: nextProps.num });
+      this.props.mutator.activeRecord.update({ records: nextProps.num, comments: nextProps.num + 150 });
       this.addRecord = nextProps.num;
     }
+
     return this.state !== nextState ||
       filter !== nextFilter ||
-      accounts !== nextAccounts;
+      accounts !== nextAccounts ||
+      comments !== nextComments ||
+      this.props.resources.query !== nextProps.resources.query;
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate() {
     let filterAccounts = _.get(this.props.resources, ['filter', 'records'], []);
     const query = this.props.location.search ? queryString.parse(this.props.location.search) : {};
     if (query.layer === 'open-accounts') {
@@ -221,12 +274,6 @@ class AccountsHistory extends React.Component {
     filterConfig[1].values = paymentStatus.map(s => ({ name: `${s.name}`, cql: s.name }));
     filterConfig[2].values = feeFineTypes.map(f => ({ name: `${f.name}`, cql: f.name }));
     filterConfig[3].values = itemTypes.map(i => ({ name: `${i.name}`, cql: i.name }));
-
-    if (this.editRecord !== 0) {
-      if (this.editRecord === 1) prevProps.mutator.activeRecord.update({ records: 51 });
-      else prevProps.mutator.activeRecord.update({ records: 50 });
-      this.editRecord = 0;
-    }
   }
 
   queryParam = name => {
@@ -259,6 +306,7 @@ class AccountsHistory extends React.Component {
   }
 
   handleEdit = (val) => {
+    this.props.handleAddRecords();
     this.editRecord = val;
   }
 
@@ -273,10 +321,6 @@ class AccountsHistory extends React.Component {
 
   payment() {
     this.onChangeActions({ regular: true }, this.accounts);
-  }
-
-  handleRecords() {
-    this.addRecord = true;
   }
 
   onChangeSearch = (e) => {
@@ -366,6 +410,7 @@ class AccountsHistory extends React.Component {
     if (query.layer === 'open-accounts') badgeCount = open.length;
     else if (query.layer === 'closed-accounts') badgeCount = closed.length;
     const filters = filterState(this.queryParam('f'));
+    const selectedAccounts = this.state.selectedAccounts.map(a => accounts.find(ac => ac.id === a.id) || {});
 
     const closeMenu = (
       <PaneMenu>
@@ -379,18 +424,18 @@ class AccountsHistory extends React.Component {
     );
 
     const columnMapping = {
-      'date created': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' }),
-      'date updated': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' }),
-      'fee/fine type': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' }),
-      'billed': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.amount' }),
-      'remaining': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' }),
-      'payment status': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' }),
-      'fee/fine owner': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' }),
-      'instance (item type)': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' }),
-      'barcode': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' }),
-      'call number': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' }),
-      'due date': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' }),
-      'returned date': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' }),
+      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' })]: stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' }),
+      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' })]: stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' }),
+      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' })]: stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' }),
+      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.amount' })]: stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.amount' }),
+      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' })]: stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' }),
+      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' })]: stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' }),
+      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' })]: stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' }),
+      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' })]: stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' }),
+      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' })]: stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' }),
+      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' })]: stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' }),
+      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' })]: stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' }),
+      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' })]: stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' }),
     };
 
     const firstMenu = (
@@ -403,8 +448,11 @@ class AccountsHistory extends React.Component {
         <Dropdown
           open={this.state.toggleDropdownState}
           onToggle={this.onDropdownClick}
+          style={{ float: 'right', marginLeft: '20px' }}
+          group
+          pullRight
         >
-          <Button data-role="toggle">Select columns</Button>
+          <Button data-role="toggle" bottomMargin2><FormattedMessage id="ui-users.accounts.history.button.select" /></Button>
           <DropdownMenu data-role="menu">
             <ul>
               {this.renderCheckboxList(columnMapping)}
@@ -429,7 +477,7 @@ class AccountsHistory extends React.Component {
       </Row>
     );
 
-    const selected = this.state.selected || 0;
+    const selected = parseFloat(this.state.selected) || 0;
 
     let balance = 0;
     accounts.forEach((a) => {
@@ -451,9 +499,11 @@ class AccountsHistory extends React.Component {
           </Row>
           <Row>
             <Col>
+              <div style={{ margin: '5px 5px 5px 40px' }}>
               Outstanding Balance:
-              {' '}
-              {(balance > 0 || balance === '') ? parseFloat(balance).toFixed(2) : '0.00'}
+                {' '}
+                { (user.id === (accounts[0] || {}).userId) ? parseFloat(balance || 0).toFixed(2) : '0.00'}
+              </div>
             </Col>
           </Row>
         </Col>
@@ -481,12 +531,12 @@ class AccountsHistory extends React.Component {
               filters={filters}
               onChangeFilter={(e) => { this.handleFilterChange(e, 'f'); }}
             />
-            <Pane defaultWidth="fill" header={header}>
+            <Pane defaultWidth="fill" heigth="80%" header={header}>
               <Menu
                 user={user}
                 showFilters={this.state.showFilters}
                 filters={filters}
-                balance={balance}
+                balance={(user.id === (accounts[0] || {}).userId) ? balance : 0}
                 selected={selected}
                 actions={this.state.actions}
                 query={query}
@@ -531,7 +581,7 @@ class AccountsHistory extends React.Component {
                 user={user}
                 stripes={stripes}
                 accounts={this.accounts}
-                selectedAccounts={this.state.selectedAccounts}
+                selectedAccounts={selectedAccounts}
                 balance={balance}
                 handleEdit={this.handleEdit}
               />

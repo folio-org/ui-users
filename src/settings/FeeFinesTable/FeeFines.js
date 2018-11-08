@@ -58,12 +58,12 @@ class FeeFines extends React.Component {
     feefinesPerOwner: {
       type: 'okapi',
       records: 'feefines',
-      path: 'feefines?limit=0&facets=ownerId',
+      path: 'feefines',
     },
     accountsPerFeeFine: {
       type: 'okapi',
       records: 'accounts',
-      path: 'accounts?limit=0&facets=feeFineId',
+      path: 'accounts',
     },
 
     feefines: {
@@ -84,6 +84,12 @@ class FeeFines extends React.Component {
       type: 'okapi',
       records: 'owners',
       path: 'owners?limit=100',
+    },
+    nextfeefines: {
+      type: 'okapi',
+      records: 'feefines',
+      path: 'feefines',
+      accumulate: 'true',
     },
     allfeefines: {
       type: 'okapi',
@@ -222,14 +228,16 @@ class FeeFines extends React.Component {
 
   onChangeOwner(e) {
     const ownerId = e.target.value;
+    const query = `ownerId=${ownerId}`;
     const owners = (this.props.resources.owners || {}).records || [];
-    const count = _.get(this.props.resources, ['feefinesPerOwner', 'other', 'resultInfo', 'facets', 0, 'facetValues'], []);
     const shared = owners.find(o => o.owner === 'Shared') || {};
-    const ownerList = count.filter(c => c.value !== shared.id).map(c => c.value);
+    this.props.mutator.nextfeefines.GET({ query }).then(records => {
+      const nextFeeFines = records.filter(f => f.ownerId === ownerId) || [];
+      if (nextFeeFines.length === 0 && ownerId !== shared.id) {
+        this.setState({ openModal: true });
+      }
+    });
     this.props.mutator.activeRecord.update({ ownerId });
-    if (ownerId !== shared.id && !ownerList.includes(ownerId) && ownerList.length) {
-      this.setState({ openModal: true });
-    }
   }
 
   onCopyFeeFines(type) {
@@ -251,11 +259,15 @@ class FeeFines extends React.Component {
 
     const data = (this.props.resources.allfeefines || {}).records || [];
     const owners = (this.props.resources.owners || {}).records || [];
-    const count = _.get(this.props.resources, ['feefinesPerOwner', 'other', 'resultInfo', 'facets', 0, 'facetValues'], []);
+    const allfeefines = _.get(this.props.resources, ['allfeefines', 'records'], []);
     const shared = owners.find(o => o.owner === 'Shared') || {};
     const sharedFeeFines = data.filter(f => f.ownerId === shared.id).map(f => f.feeFineType);
-    const list = count.map(c => ((c.value !== shared.id) ? c.value : ''));
-    const ownerList = owners.filter(o => list.includes(o.id));
+    const list = [];
+    allfeefines.forEach(f => {
+      if (!list.find(l => l.id === f.ownerId) && f.ownerId !== shared.id) {
+        list.push(owners.find(o => o.id === f.ownerId));
+      }
+    });
 
     const formatter = {
       defaultAmount: i => ((i.defaultAmount) ? parseFloat(i.defaultAmount).toFixed(2) : '-'),
@@ -316,7 +328,7 @@ class FeeFines extends React.Component {
           openModal={this.state.openModal}
           onCloseModal={this.onCloseModal}
           onCopyFeeFines={this.onCopyFeeFines}
-          ownerList={ownerList}
+          ownerList={list}
         />
       </div>
     );

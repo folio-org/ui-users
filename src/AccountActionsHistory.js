@@ -12,15 +12,16 @@ import {
   MultiColumnList,
 } from '@folio/stripes/components';
 
+import { FormattedMessage } from 'react-intl';
 import { Actions } from './components/Accounts/Actions';
 import { formatDateTime, getFullName } from './util';
 
 class AccountActionsHistory extends React.Component {
   static manifest = Object.freeze({
-    account: {
+    accountHistory: {
       type: 'okapi',
-      records: 'accounts',
-      path: 'accounts?query=id=%{activeRecord.accountId}&limit=1',
+      resource: 'accounts',
+      path: 'accounts/%{activeRecord.accountId}',
     },
     accountActions: {
       type: 'okapi',
@@ -34,9 +35,8 @@ class AccountActionsHistory extends React.Component {
   });
 
   static propTypes = {
-    stripes: PropTypes.object.isRequired,
+    stripes: PropTypes.object,
     resources: PropTypes.shape({
-      intl: PropTypes.object.isRequired,
       accountActions: PropTypes.object,
     }),
     mutator: PropTypes.shape({
@@ -51,11 +51,13 @@ class AccountActionsHistory extends React.Component {
       }),
     }),
     account: PropTypes.object,
+    num: PropTypes.number.isRequired,
     user: PropTypes.object,
     history: PropTypes.object,
     patronGroup: PropTypes.object,
     onCancel: PropTypes.func.isRequired,
     onClickViewLoanActionsHistory: PropTypes.func.isRequired,
+    handleAddRecords: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -66,6 +68,7 @@ class AccountActionsHistory extends React.Component {
     this.connectedActions = props.stripes.connect(Actions);
     this.error = this.error.bind(this);
     this.comment = this.comment.bind(this);
+    this.num = props.num;
 
     const { stripes } = props;
 
@@ -74,7 +77,7 @@ class AccountActionsHistory extends React.Component {
       [stripes.intl.formatMessage({ id: 'ui-users.details.columns.action' })]: action => action.typeAction,
       [stripes.intl.formatMessage({ id: 'ui-users.details.columns.amount' })]: action => action.amountAction,
       [stripes.intl.formatMessage({ id: 'ui-users.details.columns.balance' })]: action => action.balance,
-      [stripes.intl.formatMessage({ id: 'ui-users.details.columns.number' })]: action => action.transactionNumber,
+      [stripes.intl.formatMessage({ id: 'ui-users.details.columns.transactioninfo' })]: action => action.transactionInformation,
       [stripes.intl.formatMessage({ id: 'ui-users.details.columns.created' })]: action => action.createdAt,
       [stripes.intl.formatMessage({ id: 'ui-users.details.columns.source' })]: action => action.source,
       [stripes.intl.formatMessage({ id: 'ui-users.details.columns.comments' })]: action => action.comments,
@@ -100,7 +103,7 @@ class AccountActionsHistory extends React.Component {
         stripes.intl.formatMessage({ id: 'ui-users.details.columns.source' }),
         stripes.intl.formatMessage({ id: 'ui-users.details.columns.comments' }),
       ],
-      sortDirection: ['desc', 'asc']
+      sortDirection: ['desc', 'desc']
     };
   }
 
@@ -109,8 +112,25 @@ class AccountActionsHistory extends React.Component {
     const str = history.location.search || '';
     const n = str.indexOf('account=');
     const id = str.substring(n + 8, n + 44);
-    this.props.mutator.activeRecord.update({ accountId: id });
+    this.props.mutator.activeRecord.update({ accountId: id, records: this.num });
     this.getAccountActions();
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    const props = this.props;
+    const nextAccounts = _.get(nextProps.resources, ['accountHistory', 'records', 0], {});
+    const accounts = _.get(props.resources, ['accountHistory', 'records', 0], {});
+    const nextActions = _.get(nextProps.resources, ['accountActions', 'records'], []);
+    const actions = _.get(props.resources, ['accountActions', 'records'], []);
+
+    if (this.num !== nextProps.num) {
+      props.mutator.activeRecord.update({ records: nextProps.num });
+      this.num = nextProps.num;
+    }
+    return nextAccounts !== accounts || nextActions !== actions ||
+      this.num !== nextProps.num || props.user !== nextProps.user ||
+      props.account !== nextProps.account ||
+      this.state !== nextState;
   }
 
   getAccountActions = () => {
@@ -161,7 +181,7 @@ class AccountActionsHistory extends React.Component {
   render() {
     const { sortOrder, sortDirection } = this.state;
     const { onCancel, stripes } = this.props;
-    const account = _.get(this.props.resources, ['account', 'records', 0]) || this.props.account;
+    const account = _.get(this.props.resources, ['accountHistory', 'records', 0]) || this.props.account;
 
     const user = this.props.user;
     const patron = this.props.patronGroup;
@@ -170,7 +190,10 @@ class AccountActionsHistory extends React.Component {
       Comments: (
         <span>
           {this.props.stripes.intl.formatMessage({ id: 'ui-users.details.columns.comments' })}
-          <Button style={{ float: 'right', marginLeft: '50px' }} onClick={this.comment}>+ New</Button>
+          <Button style={{ float: 'right', marginLeft: '50px' }} onClick={this.comment}>
++
+            <FormattedMessage id="ui-users.accounts.button.new" />
+          </Button>
         </span>
       ),
     };
@@ -181,7 +204,7 @@ class AccountActionsHistory extends React.Component {
       'Action': action => action.typeAction + (action.paymentMethod ? ('-' + action.paymentMethod) : ' '),
       'Amount': action => (action.amountAction > 0 ? parseFloat(action.amountAction).toFixed(2) : '-'),
       'Balance': action => (action.balance > 0 ? parseFloat(action.balance).toFixed(2) : '-'),
-      'Transaction information': action => action.transactionNumber || '-',
+      'Transaction Information': action => action.transactionInformation || '-',
       'Created at': action => action.createdAt,
       'Source': action => action.source,
       'Comments': action => action.comments,
@@ -193,7 +216,6 @@ class AccountActionsHistory extends React.Component {
     const remaining = (account.remaining) ? parseFloat(account.remaining).toFixed(2) : '0.00';
     const loanId = account.loanId || '';
     const disabled = (_.get(account, ['status', 'name'], '') === 'Closed');
-
     return (
       <Paneset isRoot>
         <Pane
@@ -201,15 +223,15 @@ class AccountActionsHistory extends React.Component {
           defaultWidth="100%"
           dismissible
           onClose={onCancel}
-          paneTitle={`Fees/Fines - ${getFullName(user)} (${_.upperFirst(patron.group)}) `}
+          paneTitle={`${this.props.stripes.intl.formatMessage({ id: 'ui-users.details.paneTitle.feeFineDetails' })} - ${getFullName(user)} (${_.upperFirst(patron.group)}) `}
         >
           <Row>
             <Col xs={12}>
-              <Button disabled={disabled} buttonStyle="primary" onClick={this.pay}>Pay</Button>
-              <Button disabled={disabled} buttonStyle="primary" onClick={this.waive}>Waive</Button>
-              <Button disabled buttonStyle="primary">Refund</Button>
-              <Button disabled buttonStyle="primary">Transfer</Button>
-              <Button disabled={disabled} buttonStyle="primary" onClick={this.error}>Error</Button>
+              <Button disabled={disabled} buttonStyle="primary" onClick={this.pay}><FormattedMessage id="ui-users.accounts.history.button.pay" /></Button>
+              <Button disabled={disabled} buttonStyle="primary" onClick={this.waive}><FormattedMessage id="ui-users.accounts.history.button.waive" /></Button>
+              <Button disabled buttonStyle="primary"><FormattedMessage id="ui-users.accounts.history.button.refund" /></Button>
+              <Button disabled buttonStyle="primary"><FormattedMessage id="ui-users.accounts.history.button.transfer" /></Button>
+              <Button disabled={disabled} buttonStyle="primary" onClick={this.error}><FormattedMessage id="ui-users.accounts.button.error" /></Button>
             </Col>
           </Row>
 
@@ -233,19 +255,16 @@ class AccountActionsHistory extends React.Component {
               <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.details.field.latest' })} value={_.get(account, ['paymentStatus', 'name'], '-')} />
             </Col>
             <Col xs={1.5}>
-              {(loanId !== 0) ?
+              {(loanId !== '0' && user.id === account.userId) ?
                 <KeyValue
-                  label="Loan details"
+                  label={this.props.stripes.intl.formatMessage({ id: 'ui-users.details.label.loanDetails' })}
                   value={
-                    <button type="button" onClick={(e) => { this.props.onClickViewLoanActionsHistory(e, { id: loanId }); }}>
+                    <button style={{ color: '#2b75bb' }} type="button" onClick={(e) => { this.props.onClickViewLoanActionsHistory(e, { id: loanId }); }}>
                       {this.props.stripes.intl.formatMessage({ id: 'ui-users.details.field.loan' })}
                     </button>}
                 />
                 :
-                <KeyValue
-                  label="Loan details"
-                  value={this.props.stripes.intl.formatMessage({ id: 'ui-users.details.field.loan' })}
-                />
+                <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.details.label.loanDetails' })} value="-" />
               }
             </Col>
           </Row>
@@ -277,21 +296,34 @@ class AccountActionsHistory extends React.Component {
             id="list-accountactions"
             formatter={accountActionsFormatter}
             columnMapping={columnMapping}
-            visibleColumns={['Action Date', 'Action', 'Amount', 'Balance', 'Transaction information', 'Created at', 'Source', 'Comments']}
+            visibleColumns={[
+              stripes.intl.formatMessage({ id: 'ui-users.details.columns.date' }),
+              stripes.intl.formatMessage({ id: 'ui-users.details.columns.action' }),
+              stripes.intl.formatMessage({ id: 'ui-users.details.columns.amount' }),
+              stripes.intl.formatMessage({ id: 'ui-users.details.columns.balance' }),
+              stripes.intl.formatMessage({ id: 'ui-users.details.columns.transactioninfo' }),
+              stripes.intl.formatMessage({ id: 'ui-users.details.columns.created' }),
+              stripes.intl.formatMessage({ id: 'ui-users.details.columns.source' }),
+              stripes.intl.formatMessage({ id: 'ui-users.details.columns.comments' }),
+            ]}
             contentData={(account.id === (actions[0] || {}).accountId) ? actionsSort : []}
             fullWidth
             onHeaderClick={this.onSort}
             sortOrder={sortOrder[0]}
             sortDirection={`${sortDirection[0]}ending`}
-            columnWidths={{ 'Action': 250, 'Amount': 100, 'Balance': 100, 'Transaction information': 200, 'Created at': 100, 'Source': 200, 'Comments': 700 }}
+            columnWidths={{ 'Action': 250, 'Amount': 100, 'Balance': 100, 'Transaction Information': 200, 'Created at': 100, 'Source': 200, 'Comments': 700 }}
           />
           <this.connectedActions
             actions={this.state.actions}
             onChangeActions={this.onChangeActions}
             user={this.props.user}
+            stripes={this.props.stripes}
             balance={account.remaining || 0}
             accounts={[account]}
-            handleEdit={this.getAccountActions}
+            handleEdit={() => {
+              this.getAccountActions();
+              this.props.handleAddRecords();
+            }}
           />
 
         </Pane>
