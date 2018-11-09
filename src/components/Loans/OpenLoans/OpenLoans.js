@@ -228,7 +228,7 @@ class OpenLoans extends React.Component {
     const accountsLoan = accounts.filter(a => a.loanId === loan.id) || [];
     let remaining = 0;
     accountsLoan.forEach(a => {
-      remaining += parseFloat(a.remaining);
+      remaining += parseFloat(a.amount);
     });
     return (remaining === 0) ? '-' : remaining.toFixed(2);
   }
@@ -746,7 +746,7 @@ class OpenLoans extends React.Component {
           id="list-loanshistory"
           fullWidth
           formatter={this.getLoansFormatter()}
-          columnWidths={{ '  ': 28, 'title': 150, 'itemStatus': 100, 'dueDate': 140, 'requests': 90, 'barcode': 130, 'Fee/Fine': 70, 'Call number': 120, 'Contributors': 160, 'renewals': 70, 'loanPolicy': 100, 'location': 100, 'loanDate': 100, ' ': 50 }}
+          columnWidths={{ '  ': 35, 'title': 150, 'itemStatus': 100, 'dueDate': 140, 'requests': 90, 'barcode': 130, 'Fee/Fine': 100, 'Call number': 120, 'Contributors': 160, 'renewals': 70, 'loanPolicy': 100, 'location': 100, 'loanDate': 100, ' ': 50 }}
           visibleColumns={visibleColumns}
           columnMapping={columnMapping}
           columnOverflow={{ ' ': true }}

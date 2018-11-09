@@ -21,10 +21,10 @@ class WaiveSettings extends React.Component {
 
     return (
       <this.connectedControlledVocab
-        {...this.props}
+        stripes={this.props.stripes}
         validate={(item, index, items) => validate(item, index, items, 'nameReason', label)}
         baseUrl="waives"
-        records="waives"
+        records="waiver"
         label={this.props.stripes.intl.formatMessage({ id: 'ui-users.waives.label' })}
         labelSingular={this.props.stripes.intl.formatMessage({ id: 'ui-users.waives.singular' })}
         objectLabel=""

@@ -61,6 +61,7 @@ class FeeFineInfo extends React.Component {
                       id="ownerId"
                       component={Select}
                       fullWidth
+                      disabled={this.props.isPending.owners}
                       dataOptions={this.props.owners}
                       onChange={this.props.onChangeOwner}
                       placeholder={this.props.stripes.intl.formatMessage({ id: 'ui-users.feefines.modal.placeholder' })}

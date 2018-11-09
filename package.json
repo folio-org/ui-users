@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "2.17.2",
+  "version": "2.17.4",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -428,6 +428,26 @@
         ]
       },
       {
+        "permissionName": "ui-users.settings.manualblocks",
+        "displayName": "Settings (Users): Can create, edit and remove manualblocks",
+        "subPermissions": [
+          "manualblocks.collection.get",
+          "manualblocks.item.delete",
+          "manualblocks.item.get",
+          "manualblocks.item.post",
+          "manualblocks.item.put",
+          "settings.users.enabled"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "settings.manualblocks.all",
+        "displayName": "Settings (Users): Can create, edit and remove manualblocks [LEGACY]",
+        "subPermissions": [
+          "ui-users.settings.manualblocks"
+        ]
+      },
+      {
         "permissionName": "ui-users.loans.renew",
         "displayName": "Loans: Renew loans",
         "description": "Also includes basic permissions to view users",
@@ -454,10 +474,13 @@
           "circulation-storage.loans.collection.anonymize.user.post",
           "circulation-storage.loan-policies.collection.get",
           "circulation-storage.loan-policies.item.get",
+          "circulation-storage.loans.item.get",
           "accounts.collection.get",
           "feefineactions.collection.get",
           "owners.collection.get",
-          "payments.collection.get"
+          "payments.collection.get",
+          "comments.collection.get",
+          "waives.collection.get"
         ],
         "visible": true
       }
@@ -488,6 +511,7 @@
     "moment": "^2.22.2",
     "prop-types": "^15.5.10",
     "query-string": "^5.0.0",
+    "react-hot-loader": "^4.3.12",
     "react-intl": "^2.5.0",
     "react-router-dom": "^4.0.0",
     "redux-form": "^7.0.3",

@@ -133,7 +133,7 @@ class ClosedLoans extends React.Component {
     const accountsLoan = accounts.filter(a => a.loanId === loan.id) || [];
     let remaining = 0;
     accountsLoan.forEach(a => {
-      remaining += parseFloat(a.remaining);
+      remaining += parseFloat(a.amount);
     });
     return (remaining === 0) ? '-' : remaining.toFixed(2);
   }
@@ -180,7 +180,7 @@ class ClosedLoans extends React.Component {
       },
       'renewals': loan => loan.renewalCount || 0,
       'loanDate': loan => this.formatDateTime(loan.loanDate),
-      'returnDate': loan => this.formatDateTime(loan.systemReturnDate),
+      'returnDate': loan => this.formatDateTime(loan.returnDate),
       ' ': loan => this.renderActions(loan),
     };
   }

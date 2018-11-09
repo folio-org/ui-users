@@ -42,7 +42,7 @@ class PaymentSettings extends React.Component {
     };
     return (
       <this.connectedControlledVocab
-        {...this.props}
+        stripes={this.props.stripes}
         validate={(item, index, items) => validate(item, index, items, 'nameMethod', label)}
         fieldComponents={fieldComponents}
         formatter={formatter}

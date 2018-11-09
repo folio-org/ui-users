@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, change } from 'redux-form';
 import {
   Row,
   Col,
@@ -22,19 +22,19 @@ const validate = (values, props) => {
 
   const errors = {};
   if (!values.amount) {
-    errors.amount = 'Please fill this field in to continue';
+    errors.amount = props.stripes.intl.formatMessage({ id: 'ui-users.accounts.error.field' });
   }
   if (values.amount < 0) {
-    errors.amount = 'Payment must be > 0';
+    errors.amount = props.stripes.intl.formatMessage({ id: 'ui-users.accounts.pay.error.amount' });
   }
   if (!values.method) {
     errors.method = 'Select one';
   }
   if (props.commentRequired && !values.comment) {
-    errors.comment = 'Enter a comment';
+    errors.comment = props.stripes.intl.formatMessage({ id: 'ui-users.accounts.error.comment' });
   }
   if (values.amount > selected) {
-    errors.amount = 'Pay amount exceeds the selected amount';
+    errors.amount = props.stripes.intl.formatMessage({ id: 'ui-users.accounts.error.exceeds' });
   }
   return errors;
 };
@@ -52,7 +52,11 @@ class PayModal extends React.Component {
     invalid: PropTypes.bool,
     pristine: PropTypes.bool,
     reset: PropTypes.func,
+    dispatch: PropTypes.func,
     commentRequired: PropTypes.bool,
+    stripes: PropTypes.shape({
+      intl: PropTypes.object.isRequired,
+    }),
   };
 
   constructor(props) {
@@ -104,8 +108,8 @@ class PayModal extends React.Component {
     const { submitting, invalid, pristine } = this.props;
     const paymentAmount = this.state.amount === '' ? 0.00 : this.state.amount;
     const message = `${(this.state.amount < selected) ? 'Partially paying' : 'Paying'} ${n} ${(n === 1) ? 'fee/fine' : 'fees/fines'} for a total amount of ${parseFloat(paymentAmount).toFixed(2)}`;
-    const cadena = 'Enter more information about the fee/fine payment';
-    const comment = `${cadena} ${(this.props.commentRequired) ? '(required)' : '(optional)'}`;
+    const additional = this.props.stripes.intl.formatMessage({ id: 'ui-users.accounts.pay.placeholder.additional' });
+    const comment = `${additional} ${(this.props.commentRequired) ? '(required)' : '(optional)'}`;
 
     return (
       <Modal
@@ -121,22 +125,28 @@ class PayModal extends React.Component {
           </Row>
           <br />
           <Row>
-            <Col xs={4}>
+            <Col xs={5}>
               <Row>
-                <Col xs={8}><FormattedMessage id="ui-users.accounts.pay.field.totalamount" /></Col>
+                <Col xs={7}><FormattedMessage id="ui-users.accounts.pay.field.totalamount" /></Col>
                 <Col xs={4}>{parseFloat(totalamount).toFixed(2)}</Col>
               </Row>
               <Row>
-                <Col xs={8}><FormattedMessage id="ui-users.accounts.pay.field.selectedamount" /></Col>
+                <Col xs={7}><FormattedMessage id="ui-users.accounts.pay.field.selectedamount" /></Col>
                 <Col xs={4}>{parseFloat(selected).toFixed(2)}</Col>
               </Row>
               <Row>
-                <Col xs={8}><b><FormattedMessage id="ui-users.accounts.pay.field.paymentamount" /></b></Col>
-                <Col xs={4}>
+                <Col xs={7}>
+                  <b><FormattedMessage id="ui-users.accounts.pay.field.paymentamount" /></b>
+                  :
+                </Col>
+                <Col xs={4.5}>
                   <Field
                     name="amount"
                     component={TextField}
                     onChange={this.onChangeAmount}
+                    onBlur={(e, value, next) => {
+                      this.props.dispatch(change('payment', 'amount', parseFloat(next).toFixed(2)));
+                    }}
                     fullWidth
                     autoFocus
                     required
@@ -144,11 +154,11 @@ class PayModal extends React.Component {
                 </Col>
               </Row>
               <Row>
-                <Col xs={8}><FormattedMessage id="ui-users.accounts.pay.field.remainingamount" /></Col>
+                <Col xs={7}><FormattedMessage id="ui-users.accounts.pay.field.remainingamount" /></Col>
                 <Col xs={4}>{remaining}</Col>
               </Row>
             </Col>
-            <Col xs={4}>
+            <Col xs={3}>
               <Row><Col xs><FormattedMessage id="ui-users.accounts.pay.field.paymentmethod" /></Col></Row>
               <Row>
                 <Col xs>
@@ -162,7 +172,7 @@ class PayModal extends React.Component {
               </Row>
             </Col>
             <Col xs={4}>
-              <Row><Col xs><FormattedMessage id="ui-users.accounts.pay.field.trasactioninfo" /></Col></Row>
+              <Row><Col xs><FormattedMessage id="ui-users.accounts.pay.field.transactioninfo" /></Col></Row>
               <Row>
                 <Col xs>
                   <Field

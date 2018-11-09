@@ -1,10 +1,8 @@
 /* eslint-disable no-console */
 /* global it describe Nightmare */
-module.exports.test = function foo(uiTestCtx) {
+module.exports.test = function foo(uiTestCtx, nightmare) {
   describe('Module test: users:patron_group', function meh() {
     const { config, helpers: { openApp }, meta: { testVersion } } = uiTestCtx;
-    const nightmare = new Nightmare(config.nightmare);
-
     this.timeout(Number(config.test_timeout));
     let userid = null;
     let communityid = null;
@@ -38,7 +36,6 @@ module.exports.test = function foo(uiTestCtx) {
             .click('#clickable-logout')
             .wait(config.select.username)
             .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 0) // debugging
-            .end()
             .then(() => { done(); })
             .catch(done);
         });
