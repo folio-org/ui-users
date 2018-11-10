@@ -308,6 +308,7 @@ class ClosedLoans extends React.Component {
           sortOrder={sortOrder[0]}
           sortDirection={`${sortDirection[0]}ending`}
           onRowClick={this.props.onClickViewLoanActionsHistory}
+          totalCount={loans.length}
         />
       </div>
     );
