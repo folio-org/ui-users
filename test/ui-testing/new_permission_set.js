@@ -30,8 +30,8 @@ module.exports.test = function foo(uiTestCtx, nightmare) {
           .click('a[href="/settings/users"]')
           .wait('a[href="/settings/users/perms"]')
           .click('a[href="/settings/users/perms"]')
-          .wait('button[title^="Add "]')
-          .click('button[title^="Add "]')
+          .wait('#clickable-create-permissionset')
+          .click('#clickable-create-permissionset')
           .wait('#input-permission-title')
           .insert('#input-permission-title', displayName)
           .insert('#input-permission-description', description)
@@ -39,14 +39,18 @@ module.exports.test = function foo(uiTestCtx, nightmare) {
           .click('#clickable-add-permission')
           .wait('button[class^="itemControl"]')
           .xclick('//button[contains(.,"Users: Can create new user")]')
-          .wait('#clickable-add-permission')
-          .click('#clickable-add-permission')
-          .wait('button[class^="itemControl"]')
-          .xclick('//button[contains(.,"Users: Can view proxies")]')
-          .wait('#clickable-save-permission-set')
-          .click('#clickable-save-permission-set')
-          .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
-          .then(() => { done(); })
+          .then(() => {
+            nightmare
+              .wait('#clickable-add-permission')
+              .click('#clickable-add-permission')
+              .wait('button[class^="itemControl"]')
+              .xclick('//button[contains(.,"Users: Can view proxies")]')
+              .wait('#clickable-save-permission-set')
+              .click('#clickable-save-permission-set')
+              .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
+              .then(done)
+              .catch(done);
+          })
           .catch(done);
       });
       it('should confirm creation of new permission set', (done) => {
@@ -56,11 +60,24 @@ module.exports.test = function foo(uiTestCtx, nightmare) {
           .click('a[href="/settings/users"]')
           .wait('a[href="/settings/users/perms"]')
           .click('a[href="/settings/users/perms"]')
-          .wait(555)
-          .xclick(`//a[.="${displayName}"]`)
-          .wait('#clickable-edit-item')
-          .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
-          .then(() => { done(); })
+          .wait('div.hasEntries')
+          .evaluate((name) => {
+            const node = Array.from(
+              document.querySelectorAll('div.hasEntries nav a div')
+            ).find(e => e.textContent === name);
+            if (node) {
+              node.parentElement.click();
+            } else {
+              throw new Error(`Could not find the permission set ${name}`);
+            }
+          }, displayName)
+          .then(() => {
+            nightmare
+              .wait('#clickable-edit-item')
+              .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
+              .then(done)
+              .catch(done);
+          })
           .catch(done);
       });
       it('should delete new permission set', (done) => {
