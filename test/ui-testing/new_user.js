@@ -151,8 +151,17 @@ module.exports.test = function meh(uitestctx, nightmare) {
           .insert('#input-user-search', user.id)
           .wait('button[type=submit]')
           .click('button[type=submit]')
-          .wait(`div[title="${user.id}"]`)
-          .click(`div[title="${user.id}"]`)
+          .wait('#list-users[data-total-count="1"]')
+          .evaluate((uid) => {
+            const node = Array.from(
+              document.querySelectorAll('#list-users div[role="listitem"] > a > div[role="gridcell"]')
+            ).find(e => e.textContent === uid);
+            if (node) {
+              node.parentElement.click();
+            } else {
+              throw new Error(`Could not find the user ${uid} to edit`);
+            }
+          }, user.id)
           .wait('#clickable-edituser')
           .click('#clickable-edituser')
           .wait('#adduser_username')
