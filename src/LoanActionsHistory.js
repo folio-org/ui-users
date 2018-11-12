@@ -149,7 +149,7 @@ class LoanActionsHistory extends React.Component {
     return null;
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.getOpenRequestsCount();
   }
 
@@ -159,7 +159,7 @@ class LoanActionsHistory extends React.Component {
     if (this.state.loanActionCount && this.state.loanActionCount !== prevState.loanActionCount) {
       this.joinLoanActionsWithUser(loanActions.records, users.records, loan);
     }
-    if(this.props.loan.itemId !== prevProps.loan.itemId) this.getOpenRequestsCount();
+    if (this.props.loan.itemId !== prevProps.loan.itemId) this.getOpenRequestsCount();
   }
 
   getContributorslist(loan) {
@@ -212,12 +212,10 @@ class LoanActionsHistory extends React.Component {
   }
 
   getOpenRequestsCount() {
-
     const q = `itemId==${this.props.loan.itemId}`;
     const query = `(${q}) and status==("Open - Awaiting pickup" or "Open - Not yet filled") sortby requestDate desc`;
     this.props.mutator.requests.reset();
     this.props.mutator.requests.GET({ params: { query } }).then((requestRecords) => {
-      console.log(requestRecords,'requestRecords');
       const requestCountObject = requestRecords.reduce((map, record) => {
         map[record.itemId] = map[record.itemId] ? ++map[record.itemId] : 1;
         return map;
