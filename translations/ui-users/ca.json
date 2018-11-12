@@ -604,5 +604,7 @@
     "accounts.pay.placeholder.additional": "Enter more information about the fee/fine payment",
     "accounts.waive.error.amount": "Waive amount must be > 0",
     "accounts.waive.error.exceeds": "Waive amount exceeds the selected amount",
-    "accounts.waive.placeholder.additional": "Enter more information about the fee/fine waive"
+    "accounts.waive.placeholder.additional": "Enter more information about the fee/fine waive",
+    "proxy.addProxy": "Add proxy",
+    "sponsor.addSponsor": "Add sponsor"
 }
