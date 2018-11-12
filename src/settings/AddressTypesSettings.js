@@ -1,6 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
 import { ControlledVocab } from '@folio/stripes/smart-components';
 
 class AddressTypesSettings extends React.Component {
@@ -8,6 +12,7 @@ class AddressTypesSettings extends React.Component {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
     }).isRequired,
+    intl: intlShape.isRequired,
   };
 
   constructor(props) {
@@ -16,14 +21,18 @@ class AddressTypesSettings extends React.Component {
   }
 
   render() {
-    const { stripes } = this.props;
+    const {
+      stripes,
+      intl,
+    } = this.props;
+
     return (
       <this.connectedControlledVocab
         stripes={stripes}
         baseUrl="addresstypes"
         records="addressTypes"
-        label={<FormattedMessage id="ui-users.contact.addressTypes" />}
-        labelSingular={<FormattedMessage id="ui-users.contact.addressType" />}
+        label={intl.formatMessage({ id: 'ui-users.contact.addressTypes' })}
+        labelSingular={intl.formatMessage({ id: 'ui-users.contact.addressType' })}
         objectLabel={<FormattedMessage id="ui-users.contact.addresses" />}
         visibleFields={['addressType', 'desc']}
         columnMapping={{
@@ -38,4 +47,4 @@ class AddressTypesSettings extends React.Component {
   }
 }
 
-export default AddressTypesSettings;
+export default injectIntl(AddressTypesSettings);

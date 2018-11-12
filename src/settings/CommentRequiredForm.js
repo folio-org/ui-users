@@ -25,11 +25,14 @@ const Setting = ({
           id={name}
           name={name}
           component={Select}
-          dataOptions={[
-            { value: true, label: <FormattedMessage id="ui-users.yes" /> },
-            { value: false, label: <FormattedMessage id="ui-users.no" /> },
-          ]}
-        />
+        >
+          <FormattedMessage id="ui-users.yes">
+            {(message) => <option value="true">{message}</option>}
+          </FormattedMessage>
+          <FormattedMessage id="ui-users.no">
+            {(message) => <option value="false">{message}</option>}
+          </FormattedMessage>
+        </Field>
       </Col>
     </Row>
   </div>

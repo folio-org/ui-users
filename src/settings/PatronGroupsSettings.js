@@ -1,6 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
 import { ControlledVocab } from '@folio/stripes/smart-components';
 
 import PatronGroupNumberOfUsers from '../components/PatronGroupNumberOfUsers';
@@ -27,6 +31,7 @@ class PatronGroupsSettings extends React.Component {
     resources: PropTypes.shape({
       usersPerGroup: PropTypes.object,
     }).isRequired,
+    intl: intlShape.isRequired,
   };
 
   constructor(props) {
@@ -35,14 +40,17 @@ class PatronGroupsSettings extends React.Component {
   }
 
   render() {
-    const { resources } = this.props;
+    const {
+      resources,
+      intl,
+    } = this.props;
     const formatter = {
       numberOfObjects: item => (<PatronGroupNumberOfUsers
         item={item}
         usersPerGroup={resources ? resources.usersPerGroup : null}
       />),
     };
-    const label = <FormattedMessage id="ui-users.information.patronGroups" />;
+    const label = intl.formatMessage({ id: 'ui-users.information.patronGroups' });
 
     return (
       <this.connectedControlledVocab
@@ -69,4 +77,4 @@ class PatronGroupsSettings extends React.Component {
   }
 }
 
-export default PatronGroupsSettings;
+export default injectIntl(PatronGroupsSettings);

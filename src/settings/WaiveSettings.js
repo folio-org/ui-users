@@ -1,6 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
 import { ControlledVocab } from '@folio/stripes/smart-components';
 import { validate } from '../util';
 
@@ -9,6 +13,7 @@ class WaiveSettings extends React.Component {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
     }).isRequired,
+    intl: intlShape.isRequired,
   };
 
   constructor(props) {
@@ -17,15 +22,20 @@ class WaiveSettings extends React.Component {
   }
 
   render() {
-    const label = <FormattedMessage id="uui-users.waives.singular" />;
+    const {
+      stripes,
+      intl,
+    } = this.props;
+
+    const label = intl.formatMessage({ id: 'ui-users.waives.singular' });
 
     return (
       <this.connectedControlledVocab
-        stripes={this.props.stripes}
+        stripes={stripes}
         validate={(item, index, items) => validate(item, index, items, 'nameReason', label)}
         baseUrl="waives"
         records="waives"
-        label={<FormattedMessage id="ui-users.waives.label" />}
+        label={intl.formatMessage({ id: 'ui-users.waives.label' })}
         labelSingular={label}
         objectLabel=""
         visibleFields={['nameReason', 'description']}
@@ -42,4 +52,4 @@ class WaiveSettings extends React.Component {
   }
 }
 
-export default WaiveSettings;
+export default injectIntl(WaiveSettings);

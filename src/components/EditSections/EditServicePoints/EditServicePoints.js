@@ -131,7 +131,11 @@ class EditServicePoints extends React.Component {
       <Row>
         <Col xs={12} md={6}>
           <Field
-            label={`${<FormattedMessage id="uui-users.sp.servicePointPreference" />}*`}
+            label={(
+              <FormattedMessage id="ui-users.sp.servicePointPreference">
+                {(msg) => msg + ' *'}
+              </FormattedMessage>
+            )}
             name="preferredServicePoint"
             id="servicePointPreference"
             component={Select}

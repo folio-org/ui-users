@@ -1,6 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
 import { ControlledVocab } from '@folio/stripes/smart-components';
 import { validate } from '../util';
 
@@ -9,6 +13,7 @@ class RefundReasonsSettings extends React.Component {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
     }).isRequired,
+    intl: intlShape.isRequired,
   };
 
   constructor(props) {
@@ -17,7 +22,8 @@ class RefundReasonsSettings extends React.Component {
   }
 
   render() {
-    const label = <FormattedMessage id="ui-users.refunds.singular" />;
+    const { intl } = this.props;
+    const label = intl.formatMessage({ id: 'ui-users.refunds.singular' });
 
     return (
       <this.connectedControlledVocab
@@ -25,7 +31,7 @@ class RefundReasonsSettings extends React.Component {
         validate={(item, index, items) => validate(item, index, items, 'nameReason', label)}
         baseUrl="refunds"
         records="refunds"
-        label={<FormattedMessage id="ui-users.refunds.label" />}
+        label={intl.formatMessage({ id: 'ui-users.refunds.label' })}
         labelSingular={label}
         objectLabel=""
         visibleFields={['nameReason', 'description']}
@@ -42,4 +48,4 @@ class RefundReasonsSettings extends React.Component {
   }
 }
 
-export default RefundReasonsSettings;
+export default injectIntl(RefundReasonsSettings);

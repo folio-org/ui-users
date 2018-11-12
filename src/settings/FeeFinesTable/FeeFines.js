@@ -2,7 +2,11 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ConfirmationModal, Callout } from '@folio/stripes/components';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import { EditableList } from '@folio/stripes/smart-components';
 import Owners from './Owners';
@@ -137,6 +141,7 @@ class FeeFines extends React.Component {
     }).isRequired,
     nameKey: PropTypes.string,
     okapi: PropTypes.object,
+    intl: intlShape.isRequired,
   };
 
   constructor(props) {
@@ -299,7 +304,7 @@ class FeeFines extends React.Component {
         <Owners dataOptions={owners} onChange={this.onChangeOwner} />
         <EditableList
           {...this.props}
-          label={<FormattedMessage id="ui-users.feefines.title" />}
+          label={this.props.intl.formatMessage({ id: 'ui-users.feefines.title' })}
           createButtonLabel={<FormattedMessage id="stripes-core.button.new" />}
           contentData={this.props.resources.feefines.records || []}
           visibleFields={['feeFineType', 'defaultAmount']}
@@ -338,4 +343,4 @@ class FeeFines extends React.Component {
   }
 }
 
-export default FeeFines;
+export default injectIntl(FeeFines);

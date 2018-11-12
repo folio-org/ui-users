@@ -15,8 +15,6 @@ import {
   KeyValue,
   MultiColumnList,
 } from '@folio/stripes/components';
-
-import { FormattedMessage } from 'react-intl';
 import { Actions } from './components/Accounts/Actions';
 import { getFullName } from './util';
 
@@ -199,7 +197,9 @@ class AccountActionsHistory extends React.Component {
           <FormattedMessage id="ui-users.details.columns.comments" />
           <Button
             style={{ float: 'right', marginLeft: '50px' }}
-            onClick={this.comment}>+
+            onClick={this.comment}
+          >
+            +
             <FormattedMessage id="ui-users.accounts.button.new" />
           </Button>
         </span>
@@ -224,7 +224,7 @@ class AccountActionsHistory extends React.Component {
     const remaining = (account.remaining) ? parseFloat(account.remaining).toFixed(2) : '0.00';
     const loanId = account.loanId || '';
     const disabled = (_.get(account, ['status', 'name'], '') === 'Closed');
-    const feeFineDetails = <FormattedMessage id="ui-users.details.paneTitle.feeFineDetails" />;
+
     return (
       <Paneset isRoot>
         <Pane
@@ -232,7 +232,11 @@ class AccountActionsHistory extends React.Component {
           defaultWidth="100%"
           dismissible
           onClose={onCancel}
-          paneTitle={`${feeFineDetails} - ${getFullName(user)} (${_.upperFirst(patron.group)}) `}
+          paneTitle={(
+            <FormattedMessage id="ui-users.details.paneTitle.feeFineDetails">
+              {(msg) => `${msg} - ${getFullName(user)} (${_.upperFirst(patron.group)}) `}
+            </FormattedMessage>
+          )}
         >
           <Row>
             <Col xs={12}>
@@ -323,7 +327,7 @@ class AccountActionsHistory extends React.Component {
             <Col xs={1.5}>
               <KeyValue
                 label={<FormattedMessage id="ui-users.details.field.barcode" />}
-                value={<Link to={`/inventory/view/${_.get(account, ['itemId'], '')}?query=${_.get(account, ['itemId'], '')}`}>{_.get(account, ['barcode'], '-')}</Link>} 
+                value={<Link to={`/inventory/view/${_.get(account, ['itemId'], '')}?query=${_.get(account, ['itemId'], '')}`}>{_.get(account, ['barcode'], '-')}</Link>}
               />
             </Col>
             <Col xs={1.5}>

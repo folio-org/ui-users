@@ -1,7 +1,10 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import {
+  injectIntl,
+  intlShape,
+} from 'react-intl';
 import { EntryManager } from '@folio/stripes/smart-components';
 import PermissionSetDetails from './PermissionSetDetails';
 import PermissionSetForm from './PermissionSetForm';
@@ -51,6 +54,7 @@ class PermissionSets extends React.Component {
         DELETE: PropTypes.func,
       }),
     }).isRequired,
+    intl: intlShape.isRequired,
   };
 
   render() {
@@ -58,6 +62,7 @@ class PermissionSets extends React.Component {
       mutator,
       resources: { entries },
       label,
+      intl,
     } = this.props;
 
     return (
@@ -67,7 +72,7 @@ class PermissionSets extends React.Component {
         entryList={_.sortBy((entries || {}).records || [], ['displayName'])}
         detailComponent={PermissionSetDetails}
         paneTitle={label}
-        entryLabel={<FormattedMessage id="ui-users.permissionSet" />}
+        entryLabel={intl.formatMessage({ id: 'ui-users.permissionSet' })}
         entryFormComponent={PermissionSetForm}
         validate={validate}
         nameKey="displayName"
@@ -81,4 +86,4 @@ class PermissionSets extends React.Component {
   }
 }
 
-export default PermissionSets;
+export default injectIntl(PermissionSets);

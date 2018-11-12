@@ -437,7 +437,7 @@ class AccountsHistory extends React.Component {
       [<FormattedMessage id="ui-users.accounts.history.columns.barcode" />]: <FormattedMessage id="ui-users.accounts.history.columns.barcode" />,
       [<FormattedMessage id="ui-users.accounts.history.columns.number" />]: <FormattedMessage id="ui-users.accounts.history.columns.number" />,
       [<FormattedMessage id="ui-users.accounts.history.columns.due" />]: <FormattedMessage id="ui-users.accounts.history.columns.due" />,
-      [<FormattedMessage id="ui-users.accounts.history.columns.returned" />]: <FormattedMessage id="ui-users.accounts.history.columns.returned" />,      
+      [<FormattedMessage id="ui-users.accounts.history.columns.returned" />]: <FormattedMessage id="ui-users.accounts.history.columns.returned" />,
     };
 
     const firstMenu = (

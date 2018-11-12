@@ -80,7 +80,11 @@ const EditContactInfo = ({
         </Col>
         <Col xs={12} md={3}>
           <Field
-            label={`${<FormattedMessage id="ui-users.contact.preferredContact" />} *`}
+            label={(
+              <FormattedMessage id="ui-users.contact.preferredContact">
+                {(msg) => msg + ' *'}
+              </FormattedMessage>
+            )}
             name="personal.preferredContactTypeId"
             id="adduser_preferredcontact"
             component={Select}

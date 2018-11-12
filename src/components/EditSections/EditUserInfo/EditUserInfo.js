@@ -77,7 +77,11 @@ class EditUserInfo extends React.Component {
         <Row>
           <Col xs={12} md={3}>
             <Field
-              label={`${<FormattedMessage id="ui-users.information.lastName" />} *`}
+              label={(
+                <FormattedMessage id="ui-users.information.lastName">
+                  {(msg) => msg + ' *'}
+                </FormattedMessage>
+              )}
               name="personal.lastName"
               id="adduser_lastname"
               component={TextField}
@@ -117,7 +121,11 @@ class EditUserInfo extends React.Component {
         <Row>
           <Col xs={12} md={3}>
             <Field
-              label={`${<FormattedMessage id="ui-users.information.patronGroup" />} *`}
+              label={(
+                <FormattedMessage id="ui-users.information.patronGroup">
+                  {(msg) => msg + ' *'}
+                </FormattedMessage>
+              )}
               name="patronGroup"
               id="adduser_group"
               component={Select}
@@ -133,7 +141,11 @@ class EditUserInfo extends React.Component {
           </Col>
           <Col xs={12} md={3}>
             <Field
-              label={`${<FormattedMessage id="ui-users.information.status" />} *`}
+              label={(
+                <FormattedMessage id="ui-users.information.status">
+                  {(msg) => msg + ' *'}
+                </FormattedMessage>
+              )}
               name="active"
               id="useractive"
               component={Select}

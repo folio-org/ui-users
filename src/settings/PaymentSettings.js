@@ -1,6 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
 import { Select } from '@folio/stripes/components';
 import { Field } from 'redux-form';
 import { ControlledVocab } from '@folio/stripes/smart-components';
@@ -11,6 +15,7 @@ class PaymentSettings extends React.Component {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
     }).isRequired,
+    intl: intlShape.isRequired,
   };
 
   constructor(props) {
@@ -19,7 +24,12 @@ class PaymentSettings extends React.Component {
   }
 
   render() {
-    const label = <FormattedMessage id="ui-users.payments.singular" />;
+    const {
+      intl,
+      stripes,
+    } = this.props;
+
+    const label = intl.formatMessage({ id: 'ui-users.payments.singular' });
 
     const fieldComponents = {
       'allowedRefundMethod': ({ fieldProps }) => (
@@ -27,11 +37,14 @@ class PaymentSettings extends React.Component {
           {...fieldProps} // spread fieldProps to apply 'name' and 'aria-label' props.
           component={Select}
           marginBottom0
-          dataOptions={[
-            { label: <FormattedMessage id="ui-users.feefines.modal.yes" value="true" /> },
-            { label: <FormattedMessage id="ui-users.feefines.modal.no" value="false" /> },
-          ]}
-        />
+        >
+          <FormattedMessage id="ui-users.feefines.modal.yes">
+            {(message) => <option value="true">{message}</option>}
+          </FormattedMessage>
+          <FormattedMessage id="ui-users.feefines.modal.no">
+            {(message) => <option value="false">{message}</option>}
+          </FormattedMessage>
+        </Field>
       )
     };
 
@@ -42,14 +55,14 @@ class PaymentSettings extends React.Component {
     };
     return (
       <this.connectedControlledVocab
-        stripes={this.props.stripes}
+        stripes={stripes}
         validate={(item, index, items) => validate(item, index, items, 'nameMethod', label)}
         fieldComponents={fieldComponents}
         formatter={formatter}
         baseUrl="payments"
         itemTemplate={{ allowedRefundMethod: true }}
         records="payments"
-        label={<FormattedMessage id="ui-users.payments.label" />}
+        label={intl.formatMessage({ id: 'ui-users.payments.label' })}
         labelSingular={label}
         objectLabel=""
         visibleFields={['nameMethod', 'allowedRefundMethod']}
@@ -66,4 +79,4 @@ class PaymentSettings extends React.Component {
   }
 }
 
-export default PaymentSettings;
+export default injectIntl(PaymentSettings);

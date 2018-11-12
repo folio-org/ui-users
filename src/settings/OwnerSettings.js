@@ -1,6 +1,10 @@
 import React from 'react';
 import _ from 'lodash';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  intlShape,
+  injectIntl,
+} from 'react-intl';
 import {
   Callout,
   ConfirmationModal,
@@ -38,6 +42,10 @@ class OwnerSettings extends React.Component {
     },
     activeRecord: {},
   });
+
+  static propTypes = {
+    intl: intlShape.isRequired,
+  };
 
   constructor(props) {
     super(props);
@@ -189,9 +197,8 @@ class OwnerSettings extends React.Component {
 
   render() {
     if (!this.props.resources.owners) return <div />;
-
+    const { intl } = this.props;
     const rows = this.props.resources.owners.records || [];
-    const type = <FormattedMessage id="ui-users.owners.singular" />;
     const term = this.state.selectedItem[this.state.primaryField];
     const servicePoints = _.get(this.props.resources, ['servicePoints', 'records', 0, 'servicepoints'], []);
     const serviceOwners = [];
@@ -224,7 +231,10 @@ class OwnerSettings extends React.Component {
     const modalMessage = (
       <SafeHTMLMessage
         id="stripes-smart-components.cv.termWillBeDeleted"
-        values={{ type, term }}
+        values={{
+          type: intl.formatMessage({ id: 'ui-users.owners.singular' }),
+          term,
+        }}
       />
     );
 
@@ -235,7 +245,6 @@ class OwnerSettings extends React.Component {
         return <ul>{items}</ul>;
       }
     };
-
     return (
       <Paneset>
         <Pane defaultWidth="fill" fluidContentWidth paneTitle={this.props.label}>
@@ -259,9 +268,18 @@ class OwnerSettings extends React.Component {
             warn={this.warn}
           />
           <ConfirmationModal
-            id={`delete${type.replace(/[^a-zA-Z0-9]/g, '').toLowerCase()}-confirmation`}
+            id={(
+              <FormattedMessage id="ui-users.owners.singular">
+                {(msg) => `delete${msg.replace(/[^a-zA-Z0-9]/g, '').toLowerCase()}-confirmation`}
+              </FormattedMessage>
+            )}
             open={this.state.showConfirmDialog}
-            heading={<FormattedMessage id="stripes-core.button.deleteEntry" values={{ entry: type }} />}
+            heading={(
+              <FormattedMessage
+                id="stripes-core.button.deleteEntry"
+                values={{ entry: intl.formatMessage({ id: 'ui-users.owners.singular' }) }}
+              />
+            )}
             message={modalMessage}
             onConfirm={this.onDeleteItem}
             onCancel={this.hideConfirmDialog}
@@ -274,4 +292,4 @@ class OwnerSettings extends React.Component {
   }
 }
 
-export default OwnerSettings;
+export default injectIntl(OwnerSettings);
