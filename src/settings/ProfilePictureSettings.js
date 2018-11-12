@@ -41,6 +41,7 @@ class ProfilePictureSettings extends React.Component {
           <Col xs={12}>
             <Field
               component={Checkbox}
+              type="checkbox"
               id="profile_pictures"
               name="profile_pictures"
               label={<FormattedMessage id="ui-users.information.profile.label" />}

@@ -781,6 +781,7 @@ class OpenLoans extends React.Component {
           sortOrder={sortOrder[0]}
           sortDirection={`${sortDirection[0]}ending`}
           contentData={loans}
+          totalCount={loans.length}
         />
         { this.renderBulkRenewalDialog() }
         { this.renderChangeDueDateDialog() }

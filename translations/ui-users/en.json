@@ -379,12 +379,14 @@
   "information.selectPatronGroup": "Select patron group",
   "information.patronGroup.users": "Users",
   "information.profile.label": "Display profile pictures",
-
+  "proxy.addProxy": "Add proxy",
   "proxy.relationshipCreated": "Relationship Created",
   "proxy.relationshipStatus": "Relationship Status",
   "proxy.requestForSponsor": "Proxy can request for sponsor",
   "proxy.notificationsTo": "Notifications sent to",
   "proxy.accrueTo": "Fees/fines accrue to",
+
+  "sponsor.addSponsor": "Add sponsor",
 
   "crud.closeNewUserDialog": "Close New User Dialog",
   "crud.editUser": "Edit User",

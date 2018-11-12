@@ -3,6 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import Route from 'react-router-dom/Route';
 import Switch from 'react-router-dom/Switch';
+import { hot } from 'react-hot-loader';
 import Users from './Users';
 import Settings from './settings';
 
@@ -59,4 +60,4 @@ class UsersRouting extends React.Component {
   }
 }
 
-export default UsersRouting;
+export default hot(module)(UsersRouting);

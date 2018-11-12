@@ -19,6 +19,8 @@
 * Implement default Fee/Fine Owner for user. Ref UIU-610.
 * Implement associate Fee/Fine Owners to one or more Service Points. Ref UIU-611.
 * Implement permission for CRUD Manual Patron Block. Ref UIU-674.
+* Provide `totalCount` to loan MCLs.
+* Support circulation v5.0, requiring service-point information on loans. Refs UIU-717.
 
 ## [2.17.0](https://github.com/folio-org/ui-users/tree/v2.17.0) (2018-10-5)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.16.0...v2.17.0)

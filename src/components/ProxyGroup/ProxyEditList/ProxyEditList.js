@@ -132,14 +132,29 @@ export default class ProxyEditList extends React.Component {
           <Col xs>
             <h3 className={css.label}>{label}</h3>
           </Col>
+        </Row>
+        {items.length ?
+          items :
+          <p className={css.isEmptyMessage}>
+            <FormattedMessage
+              id="ui-users.noItemFound"
+              values={{ item: name }}
+            />
+          </p>
+        }
+        <Row>
           <Col xs={4}>
-            <Layout className="right">
+            <Layout>
               <Pluggable
                 aria-haspopup="true"
                 type="find-user"
                 {...this.props}
                 dataKey={name}
-                searchLabel={<FormattedMessage id="stripes-components.addNew" />}
+                searchLabel={
+                  name === 'proxies' ?
+                    <FormattedMessage id="ui-users.sponsor.addSponsor" /> :
+                    <FormattedMessage id="ui-users.proxy.addProxy" />
+                }
                 searchButtonStyle="default"
                 selectUser={user => this.onAdd(user)}
                 visibleColumns={['active', 'name', 'patronGroup', 'username', 'barcode']}
@@ -151,7 +166,6 @@ export default class ProxyEditList extends React.Component {
             </Layout>
           </Col>
         </Row>
-        {items.length ? items : <p className={css.isEmptyMessage}><FormattedMessage id="ui-users.noItemFound" values={{ item: name }} /></p>}
       </div>
     );
   }
