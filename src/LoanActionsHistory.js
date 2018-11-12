@@ -37,6 +37,14 @@ class LoanActionsHistory extends React.Component {
       resourceShouldRefresh: true,
       path: 'users?query=(%{userIds.query})',
     },
+    requests: {
+      type: 'okapi',
+      path: 'circulation/requests',
+      resourceShouldRefresh: true,
+      records: 'requests',
+      accumulate: 'true',
+      fetch: false,
+    },
     loanActions: {
       type: 'okapi',
       records: 'loans',
@@ -63,6 +71,10 @@ class LoanActionsHistory extends React.Component {
     mutator: PropTypes.shape({
       loanActionsWithUser: PropTypes.shape({
         replace: PropTypes.func,
+      }),
+      requests: PropTypes.shape({
+        GET: PropTypes.func,
+        reset: PropTypes.func,
       }),
       userIds: PropTypes.shape({
         replace: PropTypes.func,
@@ -97,12 +109,14 @@ class LoanActionsHistory extends React.Component {
     this.showTitle = this.showTitle.bind(this);
     this.showChangeDueDateDialog = this.showChangeDueDateDialog.bind(this);
     this.hideChangeDueDateDialog = this.hideChangeDueDateDialog.bind(this);
+    this.getOpenRequestsCount = this.getOpenRequestsCount.bind(this);
 
     this.state = {
       loanActionCount: 0,
       nonRenewedLoanItems: [],
       nonRenewedLoansModalOpen: false,
       changeDueDateDialogOpen: false,
+      requestsCount: {},
     };
   }
 
@@ -135,12 +149,17 @@ class LoanActionsHistory extends React.Component {
     return null;
   }
 
+  componentDidMount() {
+    this.getOpenRequestsCount();
+  }
+
   componentDidUpdate(prevProps, prevState) {
     const { loan, resources: { loanActions, users } } = this.props;
 
     if (this.state.loanActionCount && this.state.loanActionCount !== prevState.loanActionCount) {
       this.joinLoanActionsWithUser(loanActions.records, users.records, loan);
     }
+    if (this.props.loan.itemId !== prevProps.loan.itemId) this.getOpenRequestsCount();
   }
 
   getContributorslist(loan) {
@@ -190,6 +209,19 @@ class LoanActionsHistory extends React.Component {
         singleRenewalFailure.push(loan);
       });
     return promise;
+  }
+
+  getOpenRequestsCount() {
+    const q = `itemId==${this.props.loan.itemId}`;
+    const query = `(${q}) and status==("Open - Awaiting pickup" or "Open - Not yet filled") sortby requestDate desc`;
+    this.props.mutator.requests.reset();
+    this.props.mutator.requests.GET({ params: { query } }).then((requestRecords) => {
+      const requestCountObject = requestRecords.reduce((map, record) => {
+        map[record.itemId] = map[record.itemId] ? ++map[record.itemId] : 1;
+        return map;
+      }, {});
+      this.setState({ requestsCount: requestCountObject });
+    });
   }
 
   getFeeFine() {
@@ -297,6 +329,8 @@ class LoanActionsHistory extends React.Component {
       Source: la => <Link to={`/users/view/${la.user.id}`}>{getFullName(la.user)}</Link>,
     };
 
+    const requestCount = this.state.requestsCount[this.props.loan.itemId];
+    const requestQueueValue = requestCount ? <Link to={`/requests?filters=requestStatus.open%20-%20not%20yet%20filled%2CrequestStatus.open%20-%20awaiting%20pickup&query=${this.props.loan.item.barcode}&sort=Request%20Date`}>{requestCount}</Link> : 0;
     const contributorsList = this.getContributorslist(loan);
     const contributorsListString = contributorsList.join(' ');
     const contributorsLength = contributorsListString.length;
@@ -385,7 +419,7 @@ class LoanActionsHistory extends React.Component {
               />
             </Col>
             <Col xs={2}>
-              <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.details.requestQueue' })} value="TODO" />
+              <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.details.requestQueue' })} value={requestQueueValue} />
             </Col>
             <Col xs={2}>
               <KeyValue label={intl.formatMessage({ id: 'ui-users.loans.details.lost' })} value="TODO" />
