@@ -1,7 +1,11 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
 import { AddressList } from '@folio/stripes/smart-components';
 import { Select } from '@folio/stripes/components';
 import { toAddressTypeOptions } from '../../converters/address_type';
@@ -13,6 +17,7 @@ class UserAddresses extends React.Component {
     onUpdate: PropTypes.func,
     expanded: PropTypes.bool,
     editable: PropTypes.bool,
+    intl: intlShape.isRequired,
   };
 
   constructor(props) {
@@ -60,6 +65,7 @@ class UserAddresses extends React.Component {
       addressTypes,
       expanded,
       editable,
+      intl,
     } = this.props;
 
     if (!addresses) return (<div />);
@@ -70,7 +76,7 @@ class UserAddresses extends React.Component {
         props: {
           dataOptions: toAddressTypeOptions(addressTypes),
           fullWidth: true,
-          placeholder: <FormattedMessage id="ui-users.contact.selectAddressType" />,
+          placeholder: intl.formatMessage({ id: 'ui-users.contact.selectAddressType' }),
         },
       },
     };
@@ -89,4 +95,4 @@ class UserAddresses extends React.Component {
   }
 }
 
-export default UserAddresses;
+export default injectIntl(UserAddresses);

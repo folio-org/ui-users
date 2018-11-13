@@ -1,6 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
 import { Field, reduxForm, change } from 'redux-form';
 import {
   Row,
@@ -54,6 +58,7 @@ class PayModal extends React.Component {
     reset: PropTypes.func,
     dispatch: PropTypes.func,
     commentRequired: PropTypes.bool,
+    intl: intlShape.isRequired,
   };
 
   constructor(props) {
@@ -102,11 +107,17 @@ class PayModal extends React.Component {
     parseFloat(selected).toFixed(2);
     const remaining = parseFloat(totalamount - this.state.amount).toFixed(2);
     const payments = this.props.payments.map(p => ({ id: p.id, label: p.nameMethod }));
-    const { submitting, invalid, pristine } = this.props;
+    const {
+      submitting,
+      invalid,
+      pristine,
+      intl,
+    } = this.props;
     const paymentAmount = this.state.amount === '' ? 0.00 : this.state.amount;
     const message = `${(this.state.amount < selected) ? 'Partially paying' : 'Paying'} ${n} ${(n === 1) ? 'fee/fine' : 'fees/fines'} for a total amount of ${parseFloat(paymentAmount).toFixed(2)}`;
-    const additional = <FormattedMessage id="ui-users.accounts.pay.placeholder.additional" />;
-    const comment = `${additional} ${(this.props.commentRequired) ? '(required)' : '(optional)'}`;
+    const comment = (this.props.commentRequired)
+      ? intl.formatMessage({ id: 'ui-users.accounts.pay.placeholder.additional.required' })
+      : intl.formatMessage({ id: 'ui-users.accounts.pay.placeholder.additional.optional' });
 
     return (
       <Modal
@@ -226,4 +237,4 @@ export default reduxForm({
   form: 'payment',
   fields: [],
   validate,
-})(PayModal);
+})(injectIntl(PayModal));

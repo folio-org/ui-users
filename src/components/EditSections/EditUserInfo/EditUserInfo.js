@@ -40,18 +40,11 @@ class EditUserInfo extends React.Component {
       accordionId,
     } = this.props;
     const patronGroups = (parentResources.patronGroups || {}).records || [];
-    const patronGroupOptions = (patronGroups || []).map(g => ({ label: g.group.concat(g.desc ? ` (${g.desc})` : ''), value: g.id, selected: initialValues.patronGroup === g.id }));
-    const statusOptions = [
-      {
-        label: <FormattedMessage id="ui-users.active" />,
-        value: true,
-      },
-      {
-        label: <FormattedMessage id="ui-users.inactive" />,
-        value: false,
-      },
-    ].map(s => ({ ...s, selected: (initialValues.active === s.value || s.value === true) }));
-
+    const patronGroupOptions = (patronGroups).map(g => (
+      <FormattedMessage key={g.id} id={g.group.concat(g.desc ? ` (${g.desc})` : '')}>
+        {(message) => <option value={g.id}>{message}</option>}
+      </FormattedMessage>
+    ));
     const isUserExpired = () => {
       const expirationDate = new Date(initialValues.expirationDate);
       const now = Date.now();
@@ -130,14 +123,13 @@ class EditUserInfo extends React.Component {
               id="adduser_group"
               component={Select}
               fullWidth
-              dataOptions={[
-                {
-                  label: <FormattedMessage id="ui-users.information.selectPatronGroup" />,
-                  value: ''
-                },
-                ...patronGroupOptions,
-              ]}
-            />
+              defaultValue={initialValues.patronGroup}
+            >
+              <FormattedMessage id="ui-users.information.selectPatronGroup">
+                {(message) => <option value="">{message}</option>}
+              </FormattedMessage>
+              {patronGroupOptions}
+            </Field>
           </Col>
           <Col xs={12} md={3}>
             <Field
@@ -150,9 +142,16 @@ class EditUserInfo extends React.Component {
               id="useractive"
               component={Select}
               fullWidth
-              dataOptions={statusOptions}
               disabled={isStatusFieldDisabled()}
-            />
+              defaultValue={initialValues.active}
+            >
+              <FormattedMessage id="ui-users.active">
+                {(message) => <option value="true">{message}</option>}
+              </FormattedMessage>
+              <FormattedMessage id="ui-users.inactive">
+                {(message) => <option value="false">{message}</option>}
+              </FormattedMessage>
+            </Field>
             {isUserExpired() && (
               <span style={{ 'color': '#900', 'position': 'relative', 'top': '-10px', 'fontSize': '0.9em' }}>
                 <FormattedMessage id="ui-users.errors.userExpired" />

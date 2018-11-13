@@ -1,5 +1,9 @@
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import {
@@ -21,15 +25,16 @@ const EditContactInfo = ({
   accordionId,
   parentResources,
   initialValues,
+  intl,
 }) => {
   const addressTypes = (parentResources.addressTypes || {}).records || [];
   const contactTypeOptions = (contactTypes || []).map(g => {
     const selected = initialValues.preferredContactTypeId === g.id;
-    return {
-      label: <FormattedMessage id={g.desc} />,
-      value: g.id,
-      selected,
-    };
+    return (
+      <FormattedMessage key={g.id} id={g.desc}>
+        {(message) => <option selected={selected} value={g.id}>{message}</option>}
+      </FormattedMessage>
+    );
   });
   const addressFields = {
     addressType: {
@@ -37,7 +42,7 @@ const EditContactInfo = ({
       props: {
         dataOptions: toAddressTypeOptions(addressTypes),
         fullWidth: true,
-        placeholder: <FormattedMessage id="ui-users.contact.selectAddressType" />,
+        placeholder: intl.formatMessage({ id: 'ui-users.contact.selectAddressType' }),
       },
     },
   };
@@ -88,9 +93,13 @@ const EditContactInfo = ({
             name="personal.preferredContactTypeId"
             id="adduser_preferredcontact"
             component={Select}
-            dataOptions={[{ label: <FormattedMessage id="ui-users.contact.selectContactType" />, value: '' }, ...contactTypeOptions]}
             fullWidth
-          />
+          >
+            <FormattedMessage id="ui-users.contact.selectContactType">
+              {(message) => <option value="">{message}</option>}
+            </FormattedMessage>
+            {contactTypeOptions}
+          </Field>
         </Col>
       </Row>
       <br />
@@ -105,6 +114,7 @@ EditContactInfo.propTypes = {
   accordionId: PropTypes.string.isRequired,
   parentResources: PropTypes.object,
   initialValues: PropTypes.object,
+  intl: intlShape.isRequired,
 };
 
-export default EditContactInfo;
+export default injectIntl(EditContactInfo);

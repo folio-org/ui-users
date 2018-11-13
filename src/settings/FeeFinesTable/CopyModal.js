@@ -1,6 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
 import { Field, reduxForm } from 'redux-form';
 
 import {
@@ -31,6 +35,7 @@ class CopyForm extends React.Component {
     owners: PropTypes.arrayOf(PropTypes.object),
     onClose: PropTypes.func,
     handleSubmit: PropTypes.func.isRequired,
+    intl: intlShape.isRequired,
   };
 
   constructor(props) {
@@ -85,7 +90,7 @@ class CopyForm extends React.Component {
               name="ownerId"
               component={Select}
               dataOptions={options}
-              placeholder={<FormattedMessage id="ui-users.feefines.modal.placeholder" />}
+              placeholder={this.props.intl.formatMessage({ id: 'ui-users.feefines.modal.placeholder' })}
             />
           </Col>
         </Row>
@@ -104,7 +109,7 @@ const CopyFeeFines = reduxForm({
   form: 'copy-fee-fines',
   validate,
   fields: [],
-})(CopyForm);
+})(injectIntl(CopyForm));
 
 const CopyModal = props => (
   <Modal

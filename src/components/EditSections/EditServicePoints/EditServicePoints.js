@@ -1,5 +1,9 @@
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
 import PropTypes from 'prop-types';
 import { get, uniqBy } from 'lodash';
 import { Field, FieldArray } from 'redux-form';
@@ -33,6 +37,7 @@ class EditServicePoints extends React.Component {
       }).isRequired,
     }).isRequired,
     stripes: PropTypes.object.isRequired,
+    intl: intlShape.isRequired,
   };
 
   constructor(props) {
@@ -107,7 +112,9 @@ class EditServicePoints extends React.Component {
             id="add-service-point-btn"
             onClick={() => this.setState({ addingServicePoint: true })}
           >
-            {`+ ${<FormattedMessage id="ui-users.sp.addServicePoints" />}`}
+            <FormattedMessage id="ui-users.sp.addServicePoints">
+              {(message) => `+ ${message}`}
+            </FormattedMessage>
           </Button>
         </Col>
       </Row>
@@ -121,7 +128,7 @@ class EditServicePoints extends React.Component {
 
     const dataOptions = [
       {
-        label: <FormattedMessage id="ui-users.sp.preferredSPNone" />,
+        label: this.props.intl.formatMessage({ id: 'ui-users.sp.preferredSPNone' }),
         value: '-',
       },
       ...userServicePoints.map(sp => ({ label: sp.name, value: sp.id })),
@@ -139,7 +146,7 @@ class EditServicePoints extends React.Component {
             name="preferredServicePoint"
             id="servicePointPreference"
             component={Select}
-            placeholder={<FormattedMessage id="ui-users.sp.selectServicePoint" />}
+            placeholder={this.props.intl.formatMessage({ id: 'ui-users.sp.selectServicePoint' })}
             dataOptions={dataOptions}
           />
         </Col>
@@ -196,4 +203,4 @@ class EditServicePoints extends React.Component {
   }
 }
 
-export default EditServicePoints;
+export default injectIntl(EditServicePoints);

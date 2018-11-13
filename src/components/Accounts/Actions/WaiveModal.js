@@ -1,7 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm, change } from 'redux-form';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
 import {
   Row,
   Col,
@@ -55,6 +59,7 @@ class WaiveModal extends React.Component {
     reset: PropTypes.func,
     commentRequired: PropTypes.bool,
     dispatch: PropTypes.func,
+    intl: intlShape.isRequired,
   };
 
   constructor(props) {
@@ -90,9 +95,18 @@ class WaiveModal extends React.Component {
   }
 
   render() {
-    const accounts = this.props.accounts || [];
+    const {
+      accounts = [],
+      balance: totalamount,
+      submitting,
+      invalid,
+      pristine,
+      commentRequired,
+      intl,
+    } = this.props;
+
     const n = accounts.length || 0;
-    const totalamount = this.props.balance;
+
     let selected = parseFloat(0);
     accounts.forEach(a => {
       selected += parseFloat(a.remaining);
@@ -100,11 +114,11 @@ class WaiveModal extends React.Component {
     selected = parseFloat(selected).toFixed(2);
     const remaining = parseFloat(totalamount - this.state.waive).toFixed(2);
     const waives = this.props.waives.map(p => ({ id: p.id, label: p.nameReason }));
-    const { submitting, invalid, pristine } = this.props;
     const waiveAmount = this.state.waive === '' ? 0.00 : this.state.waive;
     const message = `${(this.state.waive < selected) ? 'Partially waive' : 'Waiving'} ${n} ${(n === 1) ? 'fee/fine' : 'fees/fines'}    for a total amount of ${parseFloat(waiveAmount).toFixed(2)}`;
-    const additional = <FormattedMessage id="ui-users.accounts.waive.placeholder.additional" />;
-    const comment = `${additional} ${(this.props.commentRequired) ? '(required)' : '(optional)'}`;
+    const comment = commentRequired
+      ? intl.formatMessage({ id: 'ui-users.accounts.waive.placeholder.additional.required' })
+      : intl.formatMessage({ id: 'ui-users.accounts.waive.placeholder.additional.optional' });
 
     return (
       <Modal
