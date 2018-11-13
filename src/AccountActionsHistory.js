@@ -71,7 +71,7 @@ class AccountActionsHistory extends React.Component {
     this.onChangeActions = this.onChangeActions.bind(this);
     this.connectedActions = connect(Actions);
     this.error = this.error.bind(this);
-    this.comment = this.comment.bind(this);    
+    this.comment = this.comment.bind(this);
     this.num = props.num;
     this.sortMap = {
       [<FormattedMessage id="ui-users.details.columns.date" />]: action => action.dateAction,

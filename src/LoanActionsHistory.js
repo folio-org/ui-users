@@ -494,7 +494,7 @@ class LoanActionsHistory extends React.Component {
                     type="button"
                   >
                     {`${this.getFeeFine()}`}
-                  </button>                
+                  </button>
                 )}
               />
             </Col>

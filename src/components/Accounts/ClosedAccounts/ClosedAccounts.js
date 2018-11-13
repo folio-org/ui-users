@@ -164,7 +164,7 @@ class ClosedAccounts extends React.Component {
 
   getLoan(f) {
     const loan = this.props.loans.find(l => l.id === f.loanId) || {};
-    
+
     return loan;
   }
 
@@ -315,7 +315,7 @@ class ClosedAccounts extends React.Component {
           </MenuItem>
           <MenuItem>
             <Button disabled buttonStyle="dropdownItem">
-            <FormattedMessage id="ui-users.accounts.history.button.refund" />
+              <FormattedMessage id="ui-users.accounts.history.button.refund" />
             </Button>
           </MenuItem>
           <MenuItem>

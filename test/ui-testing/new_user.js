@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-/* global it describe Nightmare */
+/* global it describe */
 module.exports.test = function meh(uitestctx, nightmare) {
   describe('Module test: users:new_user', function bar() {
     const { config, helpers: { namegen, openApp }, meta: { testVersion } } = uitestctx;

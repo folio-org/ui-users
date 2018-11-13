@@ -181,7 +181,7 @@ class OpenAccounts extends React.Component {
     }
 
     getAccountsFormatter() {
-      const checkedAccounts = this.state.checkedAccounts;      
+      const checkedAccounts = this.state.checkedAccounts;
 
       return {
         '  ': f => (
@@ -324,38 +324,38 @@ class OpenAccounts extends React.Component {
             <strong>•••</strong>
           </Button>
           <DropdownMenu data-role="menu" overrideStyle={{ padding: '6px 0' }}>
-          <MenuItem itemMeta={{ a, action: 'pay' }}>
-            <Button disabled={elipsis.pay} buttonStyle="dropdownItem">
-              <FormattedMessage id="ui-users.accounts.history.button.pay" />
-            </Button>
-          </MenuItem>
-          <MenuItem itemMeta={{ a, action: 'waive' }}>
-            <Button disabled={elipsis.waive} buttonStyle="dropdownItem">
-              <FormattedMessage id="ui-users.accounts.history.button.waive" />
-            </Button>
-          </MenuItem>
-          <MenuItem>
-            <Button disabled buttonStyle="dropdownItem">
-              <FormattedMessage id="ui-users.accounts.history.button.refund" />
-            </Button>
-          </MenuItem>
-          <MenuItem>
-            <Button disabled buttonStyle="dropdownItem">
-              <FormattedMessage id="ui-users.accounts.history.button.transfer" />
-            </Button>
-          </MenuItem>
-          <MenuItem itemMeta={{ a, action: 'cancel' }}>
-            <Button disabled={elipsis.error} buttonStyle="dropdownItem">
-              <FormattedMessage id="ui-users.accounts.button.error" />
-            </Button>
-          </MenuItem>
-          <hr />
-          <MenuItem itemMeta={{ a, action: 'loanDetails' }}>
-            <Button disabled={elipsis.loan} buttonStyle="dropdownItem">
-              <FormattedMessage id="ui-users.accounts.history.button.loanDetails" />
-            </Button>
-          </MenuItem>
-        </DropdownMenu>
+            <MenuItem itemMeta={{ a, action: 'pay' }}>
+              <Button buttonStyle="dropdownItem">
+                <FormattedMessage id="ui-users.accounts.history.button.pay" />
+              </Button>
+            </MenuItem>
+            <MenuItem itemMeta={{ a, action: 'waive' }}>
+              <Button buttonStyle="dropdownItem">
+                <FormattedMessage id="ui-users.accounts.history.button.waive" />
+              </Button>
+            </MenuItem>
+            <MenuItem>
+              <Button disabled buttonStyle="dropdownItem">
+                <FormattedMessage id="ui-users.accounts.history.button.refund" />
+              </Button>
+            </MenuItem>
+            <MenuItem>
+              <Button disabled buttonStyle="dropdownItem">
+                <FormattedMessage id="ui-users.accounts.history.button.transfer" />
+              </Button>
+            </MenuItem>
+            <MenuItem itemMeta={{ a, action: 'cancel' }}>
+              <Button buttonStyle="dropdownItem">
+                <FormattedMessage id="ui-users.accounts.button.error" />
+              </Button>
+            </MenuItem>
+            <hr />
+            <MenuItem itemMeta={{ a, action: 'loanDetails' }}>
+              <Button disabled={disabled} buttonStyle="dropdownItem">
+                <FormattedMessage id="ui-users.accounts.history.button.loanDetails" />
+              </Button>
+            </MenuItem>
+          </DropdownMenu>
         </UncontrolledDropdown>
       );
     }

@@ -62,6 +62,7 @@ class WaiveModal extends React.Component {
     intl: intlShape.isRequired,
   };
 
+
   constructor(props) {
     super(props);
     this.state = {
@@ -95,18 +96,9 @@ class WaiveModal extends React.Component {
   }
 
   render() {
-    const {
-      accounts = [],
-      balance: totalamount,
-      submitting,
-      invalid,
-      pristine,
-      commentRequired,
-      intl,
-    } = this.props;
-
+    const accounts = this.props.accounts || [];
     const n = accounts.length || 0;
-
+    const totalamount = this.props.balance;
     let selected = parseFloat(0);
     accounts.forEach(a => {
       selected += parseFloat(a.remaining);
@@ -114,12 +106,12 @@ class WaiveModal extends React.Component {
     selected = parseFloat(selected).toFixed(2);
     const remaining = parseFloat(totalamount - this.state.waive).toFixed(2);
     const waives = this.props.waives.map(p => ({ id: p.id, label: p.nameReason }));
+    const { submitting, invalid, pristine } = this.props;
     const waiveAmount = this.state.waive === '' ? 0.00 : this.state.waive;
     const message = `${(this.state.waive < selected) ? 'Partially waive' : 'Waiving'} ${n} ${(n === 1) ? 'fee/fine' : 'fees/fines'}    for a total amount of ${parseFloat(waiveAmount).toFixed(2)}`;
-    const comment = commentRequired
-      ? intl.formatMessage({ id: 'ui-users.accounts.waive.placeholder.additional.required' })
-      : intl.formatMessage({ id: 'ui-users.accounts.waive.placeholder.additional.optional' });
-
+    const comment = (this.props.commentRequired)
+      ? this.props.intl.formatMessage({ id: 'ui-users.accounts.waive.placeholder.additional.required' })
+      : this.props.intl.formatMessage({ id: 'ui-users.accounts.waive.placeholder.additional.optional' });
     return (
       <Modal
         open={this.props.open}
@@ -225,4 +217,4 @@ export default reduxForm({
   form: 'waive',
   fields: [],
   validate,
-})(WaiveModal);
+})(injectIntl(WaiveModal));

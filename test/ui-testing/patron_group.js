@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-/* global it describe Nightmare */
+/* global it describe */
 module.exports.test = function foo(uiTestCtx, nightmare) {
   describe('Module test: users:patron_group', function meh() {
     const { config, helpers: { openApp }, meta: { testVersion } } = uiTestCtx;
@@ -12,7 +12,7 @@ module.exports.test = function foo(uiTestCtx, nightmare) {
     describe('Login > Add new patron group > Assign to user > Try to delete patron group > Unassign from user > Try to delete again > Logout\n', () => {
       const gid = `alumni_${Math.floor(Math.random() * 10000)}`;
       const gidlabel = 'Alumni';
-      const deletePath = `div[title="${gid}"] ~ div:last-of-type button[id*="delete"]`;
+      // const deletePath = `div[title="${gid}"] ~ div:last-of-type button[id*="delete"]`;
 
       const flogin = function minc(un, pw) {
         it(`should login as ${un}/${pw}`, (done) => {

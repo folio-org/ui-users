@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-/* global it describe Nightmare before after */
+/* global it describe before after */
 module.exports.test = function foo(uiTestCtx, nightmare) {
   describe('Module test: users:new_permission_set', function bar() {
     const { config, helpers: { login, openApp, logoutWithoutEnd }, meta: { testVersion } } = uiTestCtx;
