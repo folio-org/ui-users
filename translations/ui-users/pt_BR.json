@@ -604,5 +604,7 @@
     "accounts.pay.placeholder.additional": "Introduzir mais informações sobre o pagamento de taxa/multa",
     "accounts.waive.error.amount": "O valor da renúncia deve ser maior que 0",
     "accounts.waive.error.exceeds": "Quantia de renúncia excede a quantia selecionada",
-    "accounts.waive.placeholder.additional": "Introduzir mais informações sobre a renúncia de taxa/multa"
+    "accounts.waive.placeholder.additional": "Introduzir mais informações sobre a renúncia de taxa/multa",
+    "proxy.addProxy": "Adicionar proxy",
+    "sponsor.addSponsor": "Adicionar patrocinador"
 }
