@@ -255,15 +255,20 @@ class OwnerSettings extends React.Component {
             createButtonLabel={<FormattedMessage id="stripes-core.button.new" />}
             visibleFields={['owner', 'desc', 'servicePointOwner']}
             columnMapping={{
-              'owner': <FormattedMessage id="ui-users.owners.columns.owner" />,
-              'desc': <FormattedMessage id="ui-users.owners.columns.desc" />,
-              'servicePointOwner': <FormattedMessage id="ui-users.owners.columns.asp" />,
+              'owner': intl.formatMessage({ id: 'ui-users.owners.columns.owner' }),
+              'desc': intl.formatMessage({ id: 'ui-users.owners.columns.desc' }),
+              'servicePointOwner': intl.formatMessage({ id: 'ui-users.owners.columns.asp' }),
             }}
             formatter={formatter}
             onUpdate={this.onUpdateItem}
             onCreate={this.onCreateItem}
             onDelete={this.showConfirmDialog}
-            isEmptyMessage={<FormattedMessage id="stripes-smart-components.cv.noExistingTerms" values={{ terms: 'label' }} />}
+            isEmptyMessage={(
+              <FormattedMessage
+                id="stripes-smart-components.cv.noExistingTerms"
+                values={{ terms: 'label' }}
+              />
+            )}
             validate={this.validate}
             warn={this.warn}
           />

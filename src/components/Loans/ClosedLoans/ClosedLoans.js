@@ -3,6 +3,8 @@ import React from 'react';
 import {
   FormattedMessage,
   FormattedTime,
+  injectIntl,
+  intlShape,
 } from 'react-intl';
 import PropTypes from 'prop-types';
 import {
@@ -57,6 +59,7 @@ class ClosedLoans extends React.Component {
     onClickViewOpenAccounts: PropTypes.func.isRequired,
     onClickViewClosedAccounts: PropTypes.func.isRequired,
     onClickViewAllAccounts: PropTypes.func.isRequired,
+    intl: intlShape.isRequired,
   };
 
   constructor(props) {
@@ -201,7 +204,6 @@ class ClosedLoans extends React.Component {
     };
   }
 
-
   handleOptionsChange(itemMeta, e) {
     e.preventDefault();
     e.stopPropagation();
@@ -274,33 +276,42 @@ class ClosedLoans extends React.Component {
   }
 
   render() {
-    const { sortOrder, sortDirection } = this.state;
+    const {
+      sortOrder,
+      sortDirection
+    } = this.state;
+
+    const {
+      intl,
+      onClickViewLoanActionsHistory,
+      loans,
+    } = this.props;
     const visibleColumns = ['title', 'dueDate', 'barcode', 'Fee/Fine', 'Call Number', 'Contributors', 'renewals', 'loanDate', 'returnDate', ' '];
     const columnMapping = {
-      'title': <FormattedMessage id="ui-users.loans.columns.title" />,
-      'barcode': <FormattedMessage id="ui-users.loans.columns.barcode" />,
-      'Fee/Fine': <FormattedMessage id="ui-users.loans.columns.feefine" />,
-      'loanDate': <FormattedMessage id="ui-users.loans.columns.loanDate" />,
-      'dueDate': <FormattedMessage id="ui-users.loans.columns.dueDate" />,
-      'returnDate': <FormattedMessage id="ui-users.loans.columns.returnDate" />,
-      'renewals': <FormattedMessage id="ui-users.loans.columns.renewals" />,
-      'Call Number': <FormattedMessage id="ui-users.loans.details.callNumber" />,
-      'Contributors': <FormattedMessage id="ui-users.loans.columns.contributors" />,
+      'title': intl.formatMessage({ id: 'ui-users.loans.columns.title' }),
+      'barcode': intl.formatMessage({ id: 'ui-users.loans.columns.barcode' }),
+      'Fee/Fine': intl.formatMessage({ id: 'ui-users.loans.columns.feefine' }),
+      'loanDate': intl.formatMessage({ id: 'ui-users.loans.columns.loanDate' }),
+      'dueDate': intl.formatMessage({ id: 'ui-users.loans.columns.dueDate' }),
+      'returnDate': intl.formatMessage({ id: 'ui-users.loans.columns.returnDate' }),
+      'renewals': intl.formatMessage({ id: 'ui-users.loans.columns.renewals' }),
+      'Call Number': intl.formatMessage({ id: 'ui-users.loans.details.callNumber' }),
+      'Contributors': intl.formatMessage({ id: 'ui-users.loans.columns.contributors' }),
     };
 
     const anonymizeString = <FormattedMessage id="ui-users.anonymize" />;
-    const loans = _.orderBy(this.props.loans,
+    const loansSorted = _.orderBy(loans,
       [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
 
     return (
       <div>
         <ActionsBar
-          show={this.props.loans.length > 0}
+          show={loans.length > 0}
           contentStart={
             <Label>
               <FormattedMessage
                 id="ui-users.closedLoansCount"
-                values={{ count: this.props.loans.length }}
+                values={{ count: loans.length }}
               />
             </Label>}
           contentEnd={
@@ -313,7 +324,7 @@ class ClosedLoans extends React.Component {
               >
                 {anonymizeString}
               </Button>
-              <ExportCsv data={this.props.loans} excludeKeys={['id', 'userId', 'itemId']} />
+              <ExportCsv data={loans} excludeKeys={['id', 'userId', 'itemId']} />
             </div>
           }
         />
@@ -326,15 +337,15 @@ class ClosedLoans extends React.Component {
           columnMapping={columnMapping}
           onHeaderClick={this.onSort}
           columnOverflow={{ ' ': true }}
-          contentData={loans}
+          contentData={loansSorted}
           sortOrder={sortOrder[0]}
           sortDirection={`${sortDirection[0]}ending`}
-          onRowClick={this.props.onClickViewLoanActionsHistory}
-          totalCount={loans.length}
+          onRowClick={onClickViewLoanActionsHistory}
+          totalCount={loansSorted.length}
         />
       </div>
     );
   }
 }
 
-export default ClosedLoans;
+export default injectIntl(ClosedLoans);

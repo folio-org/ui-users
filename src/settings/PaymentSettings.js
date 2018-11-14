@@ -67,8 +67,8 @@ class PaymentSettings extends React.Component {
         objectLabel=""
         visibleFields={['nameMethod', 'allowedRefundMethod']}
         columnMapping={{
-          'nameMethod': <FormattedMessage id="ui-users.payments.columns.name" />,
-          'allowedRefundMethod': <FormattedMessage id="ui-users.payments.columns.refund" />,
+          'nameMethod': intl.formatMessage({ id: 'ui-users.payments.columns.name' }),
+          'allowedRefundMethod': intl.formatMessage({ id: 'ui-users.payments.columns.refund' }),
         }}
         nameKey="paymentMethods"
         hiddenFields={['numberOfObjects']}

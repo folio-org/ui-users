@@ -3,6 +3,8 @@ import React from 'react';
 import {
   FormattedMessage,
   FormattedTime,
+  injectIntl,
+  intlShape,
 } from 'react-intl';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import Link from 'react-router-dom/Link';
@@ -97,6 +99,7 @@ class LoanActionsHistory extends React.Component {
     onClickViewOpenAccounts: PropTypes.func.isRequired,
     onClickViewAccountActionsHistory: PropTypes.func.isRequired,
     renew: PropTypes.func,
+    intl: intlShape.isRequired,
   };
 
   constructor(props) {
@@ -338,6 +341,7 @@ class LoanActionsHistory extends React.Component {
       resources: {
         loanActionsWithUser
       },
+      intl,
     } = this.props;
     const { nonRenewedLoanItems } = this.state;
     const loanActionsFormatter = {
@@ -493,7 +497,7 @@ class LoanActionsHistory extends React.Component {
                     onClick={(e) => this.feefinedetails(e)}
                     type="button"
                   >
-                    {`${this.getFeeFine()}`}
+                    {this.getFeeFine()}
                   </button>
                 )}
               />
@@ -518,11 +522,11 @@ class LoanActionsHistory extends React.Component {
               formatter={loanActionsFormatter}
               visibleColumns={['actionDate', 'action', 'dueDate', 'itemStatus', 'Source']}
               columnMapping={{
-                action: <FormattedMessage id="ui-users.loans.columns.action" />,
-                actionDate: <FormattedMessage id="ui-users.loans.columns.actionDate" />,
-                dueDate: <FormattedMessage id="ui-users.loans.columns.dueDate" />,
-                itemStatus: <FormattedMessage id="ui-users.loans.columns.itemStatus" />,
-                Source: <FormattedMessage id="ui-users.loans.columns.source" />,
+                action: intl.formatMessage({ id: 'ui-users.loans.columns.action' }),
+                actionDate: intl.formatMessage({ id: 'ui-users.loans.columns.actionDate' }),
+                dueDate: intl.formatMessage({ id: 'ui-users.loans.columns.dueDate' }),
+                itemStatus: intl.formatMessage({ id: 'ui-users.loans.columns.itemStatus' }),
+                Source: intl.formatMessage({ id: 'ui-users.loans.columns.source' }),
               }}
               contentData={loanActionsWithUser.records}
             />
@@ -544,4 +548,4 @@ class LoanActionsHistory extends React.Component {
   }
 }
 
-export default withRenew(LoanActionsHistory);
+export default withRenew(injectIntl(LoanActionsHistory));

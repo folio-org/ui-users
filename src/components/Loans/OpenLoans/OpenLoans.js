@@ -4,6 +4,8 @@ import {
   FormattedMessage,
   FormattedTime,
   FormattedDate,
+  injectIntl,
+  intlShape,
 } from 'react-intl';
 import PropTypes from 'prop-types';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
@@ -84,6 +86,7 @@ class OpenLoans extends React.Component {
       id: PropTypes.string.isRequired,
     }).isRequired,
     onClickViewChargeFeeFine: PropTypes.func.isRequired,
+    intl: intlShape.isRequired,
   };
 
   constructor(props) {
@@ -741,33 +744,36 @@ class OpenLoans extends React.Component {
   render() {
     const { sortOrder, sortDirection, allChecked, loanPolicies } = this.state;
     const visibleColumns = this.getVisibleColumns();
-
+    const {
+      intl,
+      loans,
+    } = this.props;
     if (_.isEmpty(loanPolicies)) {
       return <div />;
     }
 
     const columnMapping = {
       '  ': (<input type="checkbox" checked={allChecked} name="check-all" onChange={this.toggleAll} />),
-      'title': <FormattedMessage id="ui-users.loans.columns.title" />,
-      'itemStatus': <FormattedMessage id="ui-users.loans.columns.itemStatus" />,
-      'barcode': <FormattedMessage id="ui-users.loans.columns.barcode" />,
-      'Fee/Fine': <FormattedMessage id="ui-users.loans.columns.feefine" />,
-      'loanDate': <FormattedMessage id="ui-users.loans.columns.loanDate" />,
-      'requests': <FormattedMessage id="ui-users.loans.details.requests" />,
-      'Call number': <FormattedMessage id="ui-users.loans.details.callNumber" />,
-      'loanPolicy': <FormattedMessage id="ui-users.loans.details.loanPolicy" />,
-      'Contributors': <FormattedMessage id="ui-users.loans.columns.contributors" />,
-      'dueDate': <FormattedMessage id="ui-users.loans.columns.dueDate" />,
-      'renewals': <FormattedMessage id="ui-users.loans.columns.renewals" />,
-      'location': <FormattedMessage id="ui-users.loans.details.location" />,
+      'title': intl.formatMessage({ id: 'ui-users.loans.columns.title' }),
+      'itemStatus': intl.formatMessage({ id: 'ui-users.loans.columns.itemStatus' }),
+      'barcode': intl.formatMessage({ id: 'ui-users.loans.columns.barcode' }),
+      'Fee/Fine': intl.formatMessage({ id: 'ui-users.loans.columns.feefine' }),
+      'loanDate': intl.formatMessage({ id: 'ui-users.loans.columns.loanDate' }),
+      'requests': intl.formatMessage({ id: 'ui-users.loans.details.requests' }),
+      'Call number': intl.formatMessage({ id: 'ui-users.loans.details.callNumber' }),
+      'loanPolicy': intl.formatMessage({ id: 'ui-users.loans.details.loanPolicy' }),
+      'Contributors': intl.formatMessage({ id: 'ui-users.loans.columns.contributors' }),
+      'dueDate': intl.formatMessage({ id: 'ui-users.loans.columns.dueDate' }),
+      'renewals': intl.formatMessage({ id: 'ui-users.loans.columns.renewals' }),
+      'location': intl.formatMessage({ id: 'ui-users.loans.details.location' }),
     };
 
-    const loans = _.orderBy(this.props.loans,
+    const loansSorted = _.orderBy(loans,
       [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
 
     return (
       <div className={css.root}>
-        {this.props.loans.length > 0 && this.renderSubHeader(columnMapping)}
+        {loans.length > 0 && this.renderSubHeader(columnMapping)}
         <MultiColumnList
           id="list-loanshistory"
           fullWidth
@@ -780,8 +786,8 @@ class OpenLoans extends React.Component {
           onRowClick={this.onRowClick}
           sortOrder={sortOrder[0]}
           sortDirection={`${sortDirection[0]}ending`}
-          contentData={loans}
-          totalCount={loans.length}
+          contentData={loansSorted}
+          totalCount={loansSorted.length}
         />
         { this.renderBulkRenewalDialog() }
         { this.renderChangeDueDateDialog() }
@@ -791,4 +797,4 @@ class OpenLoans extends React.Component {
   }
 }
 
-export default withRenew(OpenLoans);
+export default withRenew(injectIntl(OpenLoans));

@@ -1,7 +1,11 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
 
 import { makeQueryFunction, SearchAndSort } from '@folio/stripes/smart-components';
 import { AppIcon } from '@folio/stripes/components';
@@ -127,6 +131,7 @@ class Users extends React.Component {
     disableRecordCreation: PropTypes.bool,
     showSingleResult: PropTypes.bool, // eslint-disable-line react/no-unused-prop-types
     browseOnly: PropTypes.bool,
+    intl: intlShape.isRequired,
   };
 
   static defaultProps = {
@@ -187,6 +192,7 @@ class Users extends React.Component {
       onComponentWillUnmount,
       showSingleResult,
       browseOnly,
+      intl,
     } = this.props;
     const patronGroups = (this.props.resources.patronGroups || {}).records || [];
 
@@ -229,16 +235,16 @@ class Users extends React.Component {
       parentMutator={this.props.mutator}
       showSingleResult={showSingleResult}
       columnMapping={{
-        status: <FormattedMessage id="ui-users.active" />,
-        name: <FormattedMessage id="ui-users.information.name" />,
-        barcode: <FormattedMessage id="ui-users.information.barcode" />,
-        patronGroup: <FormattedMessage id="ui-users.information.patronGroup" />,
-        username: <FormattedMessage id="ui-users.information.username" />,
-        email: <FormattedMessage id="ui-users.contact.email" />,
+        status: intl.formatMessage({ id: 'ui-users.active' }),
+        name: intl.formatMessage({ id: 'ui-users.information.name' }),
+        barcode: intl.formatMessage({ id: 'ui-users.information.barcode' }),
+        patronGroup: intl.formatMessage({ id: 'ui-users.information.patronGroup' }),
+        username: intl.formatMessage({ id: 'ui-users.information.username' }),
+        email: intl.formatMessage({ id: 'ui-users.contact.email' }),
       }}
       browseOnly={browseOnly}
     />);
   }
 }
 
-export default Users;
+export default injectIntl(Users);

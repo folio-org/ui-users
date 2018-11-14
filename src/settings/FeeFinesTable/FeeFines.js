@@ -264,10 +264,16 @@ class FeeFines extends React.Component {
   }
 
   render() {
-    if (!this.props.resources.feefines) return <div />;
-    const data = (this.props.resources.allfeefines || {}).records || [];
-    const owners = (this.props.resources.owners || {}).records || [];
-    const allfeefines = _.get(this.props.resources, ['allfeefines', 'records'], []);
+    const {
+      intl,
+      resources,
+      nameKey,
+    } = this.props;
+
+    if (!resources.feefines) return <div />;
+    const data = (resources.allfeefines || {}).records || [];
+    const owners = (resources.owners || {}).records || [];
+    const allfeefines = _.get(resources, ['allfeefines', 'records'], []);
     const shared = owners.find(o => o.owner === 'Shared') || {};
     const sharedFeeFines = data.filter(f => f.ownerId === shared.id).map(f => f.feeFineType);
     const list = [];
@@ -283,7 +289,7 @@ class FeeFines extends React.Component {
 
     const actionProps = {
       delete: (item) => {
-        const accounts = (this.props.resources.accountsPerFeeFine || {}).other || {};
+        const accounts = (resources.accountsPerFeeFine || {}).other || {};
         let disableDelete = [];
         if (_.has(accounts, ['resultInfo', 'facets'])) {
           const facetCount = _.get(accounts, ['resultInfo', 'facets', 0, 'facetValues'], []);
@@ -295,6 +301,7 @@ class FeeFines extends React.Component {
             title: <FormattedMessage id="ui-users.feefines.disabledItem" />,
           };
         }
+
         return {};
       },
     };
@@ -304,19 +311,19 @@ class FeeFines extends React.Component {
         <Owners dataOptions={owners} onChange={this.onChangeOwner} />
         <EditableList
           {...this.props}
-          label={this.props.intl.formatMessage({ id: 'ui-users.feefines.title' })}
+          label={intl.formatMessage({ id: 'ui-users.feefines.title' })}
           createButtonLabel={<FormattedMessage id="stripes-core.button.new" />}
-          contentData={this.props.resources.feefines.records || []}
+          contentData={resources.feefines.records || []}
           visibleFields={['feeFineType', 'defaultAmount']}
           columnMapping={{
-            feeFineType: <FormattedMessage id="ui-users.feefines.columns.type" />,
-            defaultAmount: <FormattedMessage id="ui-users.feefines.columns.amount" />,
+            feeFineType: intl.formatMessage({ id: 'ui-users.feefines.columns.type' }),
+            defaultAmount: intl.formatMessage({ id: 'ui-users.feefines.columns.amount' }),
           }}
           itemTemplate={{}}
           onUpdate={this.onUpdateType}
           onDelete={this.showConfirm}
           onCreate={this.onCreateType}
-          nameKey={this.props.nameKey}
+          nameKey={nameKey}
           formatter={formatter}
           shared={sharedFeeFines}
           validate={validate}

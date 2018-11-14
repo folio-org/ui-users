@@ -50,7 +50,6 @@ class PatronGroupsSettings extends React.Component {
         usersPerGroup={resources ? resources.usersPerGroup : null}
       />),
     };
-    const label = intl.formatMessage({ id: 'ui-users.information.patronGroups' });
 
     return (
       <this.connectedControlledVocab
@@ -60,13 +59,13 @@ class PatronGroupsSettings extends React.Component {
         dataKey={undefined}
         baseUrl="groups"
         records="usergroups"
-        label={label}
-        labelSingular={label}
+        label={intl.formatMessage({ id: 'ui-users.information.patronGroups' })}
+        labelSingular={intl.formatMessage({ id: 'ui-users.information.patronGroups' })}
         objectLabel={<FormattedMessage id="ui-users.information.patronGroup.users" />}
         visibleFields={['group', 'desc']}
         columnMapping={{
-          group: <FormattedMessage id="ui-users.information.patronGroup" />,
-          desc: <FormattedMessage id="ui-users.description" />,
+          group: intl.formatMessage({ id: 'ui-users.information.patronGroup' }),
+          desc: intl.formatMessage({ id: 'ui-users.description' }),
         }}
         formatter={formatter}
         nameKey="group"

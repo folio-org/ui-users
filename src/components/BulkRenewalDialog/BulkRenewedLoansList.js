@@ -9,6 +9,8 @@ import {
 import {
   FormattedMessage,
   FormattedTime,
+  injectIntl,
+  intlShape,
 } from 'react-intl';
 
 const propTypes = {
@@ -18,6 +20,7 @@ const propTypes = {
   height: PropTypes.number,
   loanPolicies: PropTypes.object,
   errorMessages: PropTypes.object,
+  intl: intlShape.isRequired,
 };
 
 const defaultProps = {
@@ -32,6 +35,7 @@ const BulkRenewedLoansList = (props) => {
     errorMessages,
     requestCounts,
     loanPolicies,
+    intl,
   } = props;
   const iconAlignStyle = { display: 'flex', alignItems: 'center' };
   const pointerStyle = { cursor: 'pointer' };
@@ -55,14 +59,14 @@ const BulkRenewedLoansList = (props) => {
       contentData={[...failedRenewals, ...successRenewals]}
       visibleColumns={visibleColumns}
       columnMapping={{
-        renewalStatus: <FormattedMessage id="ui-users.brd.header.renewalStatus" />,
-        title: <FormattedMessage id="ui-users.brd.header.title" />,
-        itemStatus: <FormattedMessage id="ui-users.loans.columns.itemStatus" />,
-        currentDueDate: <FormattedMessage id="ui-users.loans.columns.dueDate" />,
-        requestQueue: <FormattedMessage id="ui-users.loans.details.requests" />,
-        barcode: <FormattedMessage id="ui-users.information.barcode" />,
-        callNumber: <FormattedMessage id="ui-users.loans.details.callNumber" />,
-        loanPolicy: <FormattedMessage id="ui-users.loans.details.loanPolicy" />,
+        renewalStatus: intl.formatMessage({ id: 'ui-users.brd.header.renewalStatus' }),
+        title: intl.formatMessage({ id: 'ui-users.brd.header.title' }),
+        itemStatus: intl.formatMessage({ id: 'ui-users.loans.columns.itemStatus' }),
+        currentDueDate: intl.formatMessage({ id: 'ui-users.loans.columns.dueDate' }),
+        requestQueue: intl.formatMessage({ id: 'ui-users.loans.details.requests' }),
+        barcode: intl.formatMessage({ id: 'ui-users.information.barcode' }),
+        callNumber: intl.formatMessage({ id: 'ui-users.loans.details.callNumber' }),
+        loanPolicy: intl.formatMessage({ id: 'ui-users.loans.details.loanPolicy' }),
       }}
       formatter={{
         renewalStatus: loan => {
@@ -104,4 +108,4 @@ const BulkRenewedLoansList = (props) => {
 BulkRenewedLoansList.defaultProps = defaultProps;
 BulkRenewedLoansList.propTypes = propTypes;
 
-export default BulkRenewedLoansList;
+export default injectIntl(BulkRenewedLoansList);

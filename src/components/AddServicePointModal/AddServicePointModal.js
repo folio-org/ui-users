@@ -1,6 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
 import {
   MultiColumnList,
   Checkbox,
@@ -15,6 +19,7 @@ class AddServicePointModal extends React.Component {
     onClose: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
     servicePoints: PropTypes.arrayOf(PropTypes.object),
+    intl: intlShape.isRequired,
   }
 
   state = {
@@ -79,23 +84,31 @@ class AddServicePointModal extends React.Component {
   }
 
   render() {
+    const {
+      open,
+      onClose,
+      intl,
+      servicePoints,
+
+    } = this.props;
+
     return (
       <Modal
         footer={this.renderModalFooter()}
-        open={this.props.open}
-        onClose={this.props.onClose}
+        open={open}
+        onClose={onClose}
         dismissible
         label={<FormattedMessage id="ui-users.sp.addServicePoints" />}
       >
         <Layout className="textCentered">
           <FormattedMessage
             id="ui-users.sp.servicePointsFound"
-            values={{ count: this.props.servicePoints.length }}
+            values={{ count: servicePoints.length }}
           />
         </Layout>
         <MultiColumnList
           interactive={false}
-          contentData={this.props.servicePoints}
+          contentData={servicePoints}
           visibleColumns={['selected', 'name']}
           columnMapping={{
             selected: (
@@ -105,7 +118,7 @@ class AddServicePointModal extends React.Component {
                 onChange={this.onToggleBulkSelection}
               />
             ),
-            name: <FormattedMessage id="ui-users.sp.column.name" />,
+            name: intl.formatMessage({ id: 'ui-users.sp.column.name' }),
           }}
           columnWidths={{ selected: 35 }}
           formatter={{
@@ -121,4 +134,4 @@ class AddServicePointModal extends React.Component {
   }
 }
 
-export default AddServicePointModal;
+export default injectIntl(AddServicePointModal);

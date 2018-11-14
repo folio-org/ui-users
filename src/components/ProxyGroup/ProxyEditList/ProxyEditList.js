@@ -1,7 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FieldArray } from 'redux-form';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import {
   Row,
@@ -14,7 +18,7 @@ import { Pluggable } from '@folio/stripes/core';
 import { getFullName } from '../../../util';
 import css from './ProxyEditList.css';
 
-export default class ProxyEditList extends React.Component {
+class ProxyEditList extends React.Component {
   static propTypes = {
     stripes: PropTypes.object.isRequired,
     name: PropTypes.string.isRequired,
@@ -22,6 +26,7 @@ export default class ProxyEditList extends React.Component {
     itemComponent: PropTypes.func.isRequired,
     initialValues: PropTypes.object,
     change: PropTypes.func.isRequired,
+    intl: intlShape.isRequired,
   };
 
   constructor(props) {
@@ -102,6 +107,7 @@ export default class ProxyEditList extends React.Component {
       name,
       stripes,
       change,
+      intl,
     } = this.props;
     const ComponentToRender = itemComponent;
 
@@ -120,10 +126,10 @@ export default class ProxyEditList extends React.Component {
 
     // map column-IDs to table-header-values
     const columnMapping = {
-      name: <FormattedMessage id="ui-users.information.name" />,
-      patronGroup: <FormattedMessage id="ui-users.information.patronGroup" />,
-      username: <FormattedMessage id="ui-users.information.username" />,
-      barcode: <FormattedMessage id="ui-users.information.barcode" />,
+      name: intl.formatMessage({ id: 'ui-users.information.name' }),
+      patronGroup: intl.formatMessage({ id: 'ui-users.information.patronGroup' }),
+      username: intl.formatMessage({ id: 'ui-users.information.username' }),
+      barcode: intl.formatMessage({ id: 'ui-users.information.barcode' }),
     };
 
     return (
@@ -179,3 +185,5 @@ export default class ProxyEditList extends React.Component {
     );
   }
 }
+
+export default injectIntl(ProxyEditList);

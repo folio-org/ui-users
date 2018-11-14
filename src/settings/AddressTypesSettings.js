@@ -36,8 +36,8 @@ class AddressTypesSettings extends React.Component {
         objectLabel={<FormattedMessage id="ui-users.contact.addresses" />}
         visibleFields={['addressType', 'desc']}
         columnMapping={{
-          addressType: <FormattedMessage id="ui-users.contact.addressType" />,
-          desc: <FormattedMessage id="ui-users.description" />,
+          addressType: intl.formatMessage({ id: 'ui-users.contact.addressType' }),
+          desc: intl.formatMessage({ id: 'ui-users.description' }),
         }}
         nameKey="addressType"
         id="addresstypes"

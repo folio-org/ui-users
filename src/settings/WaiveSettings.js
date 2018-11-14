@@ -40,8 +40,8 @@ class WaiveSettings extends React.Component {
         objectLabel=""
         visibleFields={['nameReason', 'description']}
         columnMapping={{
-          'nameReason': <FormattedMessage id="ui-users.waives.columns.reason" />,
-          'description': <FormattedMessage id="ui-users.waives.columns.desc" />,
+          'nameReason': intl.formatMessage({ id: 'ui-users.waives.columns.reason' }),
+          'description': intl.formatMessage({ id: 'ui-users.waives.columns.desc' }),
         }}
         nameKey="waiveReasons"
         hiddenFields={['numberOfObjects']}

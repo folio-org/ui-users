@@ -36,8 +36,8 @@ class RefundReasonsSettings extends React.Component {
         objectLabel=""
         visibleFields={['nameReason', 'description']}
         columnMapping={{
-          nameReason: <FormattedMessage id="ui-users.refunds.columns.nameReason" />,
-          description: <FormattedMessage id="ui-users.refunds.columns.description" />,
+          nameReason: intl.formatMessage({ id: 'ui-users.refunds.columns.nameReason' }),
+          description: intl.formatMessage({ id: 'ui-users.refunds.columns.description' }),
         }}
         nameKey="refund"
         hiddenFields={['numberOfObjects']}
