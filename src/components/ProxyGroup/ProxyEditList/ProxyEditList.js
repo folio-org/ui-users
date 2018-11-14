@@ -139,7 +139,7 @@ export default class ProxyEditList extends React.Component {
                 }
                 searchButtonStyle="default"
                 selectUser={user => this.onAdd(user)}
-                visibleColumns={['active', 'name', 'patronGroup', 'username', 'barcode']}
+                visibleColumns={['status', 'name', 'patronGroup', 'username', 'barcode']}
                 columnMapping={columnMapping}
                 disableRecordCreation={disableRecordCreation}
               >
