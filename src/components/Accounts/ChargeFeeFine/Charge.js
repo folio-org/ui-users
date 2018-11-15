@@ -279,7 +279,7 @@ class Charge extends React.Component {
     const list = [];
     const shared = owners.find(o => o.owner === 'Shared'); // Crear variable Shared en translations
     allfeefines.forEach(f => {
-      if (!list.find(o => o.id === f.ownerId)) {
+      if (list.length && !list.find(o => o.id === f.ownerId)) {
         list.push(owners.find(o => o.id === f.ownerId));
       }
     });

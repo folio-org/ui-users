@@ -454,7 +454,7 @@ class AccountsHistory extends React.Component {
           group
           pullRight
         >
-          <Button data-role="toggle" bottomMargin0><FormattedMessage id="ui-users.accounts.history.button.select" /></Button>
+          <Button data-role="toggle" bottomMargin2><FormattedMessage id="ui-users.accounts.history.button.select" /></Button>
           <DropdownMenu data-role="menu">
             <ul>
               {this.renderCheckboxList(columnMapping)}
