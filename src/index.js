@@ -6,7 +6,7 @@ import { hot } from 'react-hot-loader';
 import Users from './Users';
 import Settings from './settings';
 import { CommandList } from './components/Commander';
-import commands from './keyboardCommands';
+import commands from './commands';
 
 class UsersRouting extends React.Component {
   static actionNames = ['stripesHome', 'usersSortByName'];
