@@ -190,7 +190,7 @@ class UserForm extends React.Component {
   }
 
   getLastMenu(id, label) {
-    const { pristine } = this.props;
+    const { pristine, submitting } = this.props;
 
     return (
       <PaneMenu>
@@ -198,7 +198,7 @@ class UserForm extends React.Component {
           id={id}
           type="submit"
           title={label}
-          disabled={pristine || this.state.submitting}
+          disabled={pristine || submitting}
           buttonStyle="primary paneHeaderNewButton"
           marginBottom0
         >
