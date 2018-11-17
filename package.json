@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "2.17.4",
+  "version": "2.17.5",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -518,6 +518,7 @@
   },
   "peerDependencies": {
     "@folio/stripes": "^1.0.0",
+    "@folio/stripes-react-hotkeys": "^1.1.0",
     "react": "*"
   },
   "optionalDependencies": {
