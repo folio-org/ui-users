@@ -6,7 +6,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { HotKeys } from '@folio/stripes-react-hotkeys';
+import { HotKeys } from '@folio/stripes/components';
 
 class HasCommand extends React.Component {
   static propTypes = {

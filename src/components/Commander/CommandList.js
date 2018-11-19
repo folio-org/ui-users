@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { HotKeys } from '@folio/stripes-react-hotkeys';
+import { HotKeys } from '@folio/stripes/components';
 import { isRestricted } from './RestrictedShortcuts';
 
 class CommandList extends Component {
