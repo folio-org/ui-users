@@ -1,5 +1,5 @@
 # Keyboard Commands
-With this system of components, module-wide key combinations can be specified in one place - at the top of a module and applied through a `<CommandList>` instance. Further within the component tree, `<HasCommand>` is used to apply handlers to the key combinations to suit the requirements and fulfill workflows for the module. These special components function as wrappers for `stripes-react-hotkeys`, allowing for additional capabilities in discoverability to be built into the system. 
+With this system of components, module-wide key combinations can be specified in one place - at the top of a module and applied through a `<CommandList>` instance. Further within the component tree, `<HasCommand>` is used to apply handlers to the key combinations to suit the requirements and fulfill workflows for the module. These special components function as wrappers for core hotkey components, allowing for additional capabilities in discoverability to be built into the system. 
 ## CommandList
 This is a top-level component that stores default shortcut configurations. This configuration is re-usable and can be used to set up interfaces for customizeable shortcuts.
 ### CommandList Props 
@@ -26,12 +26,12 @@ property | type | description
 ## Cross-platform keys
 The `shortcut` property of command objects can account for the platform-specific modifiers via the `mod` substring. This will use the `command` key on MacOS and the `ctrl` key on other OS's.
 ## Example
+### Step 1: base configuration.
 Default commands can be kept in an exterior file for tidiness and re-use of the configuration.
-This example configures four top-level commands and their corresponding shortcuts. These command names and their corresponding keys will be passed down for use within the body of the module.
+This example configures four top-level commands and their corresponding shortcuts. These command names and their corresponding keys will be passed down for use within the body of the module. If you specify any *handler* keys here, the shortcuts will be active *anywhere in your module* after step 2.
 ```
 // keyboardCommands.js
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
 
 const commands = [
   {
@@ -54,7 +54,8 @@ const commands = [
 
 export default commands;
 ```
-Next, in the module's index (or other top-level code) we use the command configuration. If any `handlers` were supplied at top level, the corresponding shortcuts will be active *anywhere within your module*.
+### Step 2: apply configuration at the top of the module.
+Next, in the module's index (or other top-level code) we use the command configuration by setting up an instance of `<CommandList>`.
 ```
 // index.js
 
@@ -64,6 +65,7 @@ Next, in the module's index (or other top-level code) we use the command configu
 {/* top level module things... routes, etc... */}
 </CommandList>
 ```
+### Step 3: apply the shortcuts within the module.
 Next, the main UI of the app - the "search view"...
 ```
 // searchView.js - view containing the search listing with the ability to create a new record.
@@ -96,7 +98,8 @@ constructor(props){
     </div>
 </HasCommand>
 ```
-Workflows within your module may call for different shortcuts to be active at different times. The declaritive nature of `<HasCommand>` makes this possible. That conditional render in the previous portion - say we want an 'edit' shortcut key to start working there, but we want to allow for keyboard focus to be anywhere within the module. (In other words, as long as a detail view is open, we can shift to an edit mode.) Here's how.
+### Bonus Step: 'advanced' control
+Workflows within your module may call for different shortcuts to be active at different times. The declaritive nature of `<HasCommand>` makes this possible. That conditional render in the previous step - say we want an 'edit' shortcut key to start working there, but we want to allow for keyboard focus to be anywhere within the module. (In other words, as long as a detail view is open, we can use keyboard shortcuts to shift to an edit mode.) Here's how.
 ```
 // Details.js
 this.detailKeyCommands = [
