@@ -195,7 +195,7 @@ class ChargeForm extends React.Component {
 
     return (
       <Paneset>
-        <Pane defaultWidth="100%" paneTittle="" firstMenu={firstMenu} lastMenu={lastMenu}>
+        <Pane defaultWidth="100%" paneTitle="" firstMenu={firstMenu} lastMenu={lastMenu}>
           <UserDetails user={user} />
           <br />
           <form>
