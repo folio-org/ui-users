@@ -73,6 +73,11 @@ class ClosedLoans extends React.Component {
     this.handleOptionsChange = this.handleOptionsChange.bind(this);
     this.getFeeFine = this.getFeeFine.bind(this);
     this.anonymizeLoans = this.anonymizeLoans.bind(this);
+    this.buildRecords = this.buildRecords.bind(this);
+
+    this.headers = ['action', 'dueDate', 'loanDate', 'returnDate', 'systemReturnDate', 'item.barcode', 'item.callNumber', 'item.contributors',
+      'item.holdingsRecordId', 'item.instanceId', 'item.status.name', 'item.title', 'item.materialType.name',
+      'item.location.name', 'metaData.createdByUserId', 'metadata.updatedDate', 'metadata.updatedByUserId', 'loanPolicyId'];
 
     this.sortMap = {
       [stripes.intl.formatMessage({ id: 'ui-users.loans.columns.title' })]: loan => _.get(loan, ['item', 'title']),
@@ -147,6 +152,21 @@ class ClosedLoans extends React.Component {
       contributorsList.push('-');
     }
     return contributorsList;
+  }
+
+  buildRecords(recordsLoaded) {
+    recordsLoaded.forEach(record => {
+      if (_.isArray(record.item.contributors)) {
+        const contributorNamesMap = [];
+        if (record.item.contributors.length > 0) {
+          record.item.contributors.forEach(item => {
+            contributorNamesMap.push(item.name);
+          });
+        }
+        record.item.contributors = contributorNamesMap.join('; ');
+      }
+    });
+    return recordsLoaded;
   }
 
   getLoansFormatter() {
@@ -276,6 +296,10 @@ class ClosedLoans extends React.Component {
     const loans = _.orderBy(this.props.loans,
       [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
 
+    const columnHeaders = this.headers;
+    const recordsToCSV = this.buildRecords(this.props.loans);
+    const onlyFields = { columnHeaders, module: 'ui-users' };
+
     return (
       <div>
         <ActionsBar
@@ -291,7 +315,7 @@ class ClosedLoans extends React.Component {
               >
                 {anonymizeString}
               </Button>
-              <ExportCsv data={this.props.loans} excludeKeys={['id', 'userId', 'itemId']} />
+              <ExportCsv data={recordsToCSV} options={{ onlyFields }} intl={this.props.stripes.intl} />
             </div>
           }
         />

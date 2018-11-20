@@ -109,11 +109,16 @@ class OpenLoans extends React.Component {
     this.fetchLoanPolicyNames = this.fetchLoanPolicyNames.bind(this);
     this.callout = null;
     this.getFeeFine = this.getFeeFine.bind(this);
+    this.buildRecords = this.buildRecords.bind(this);
 
     const { stripes } = props;
 
     this.connectedChangeDueDateDialog = stripes.connect(ChangeDueDateDialog);
     this.connectedBulkRenewalDialog = stripes.connect(BulkRenewalDialog);
+
+    this.headers = ['action', 'dueDate', 'loanDate', 'item.barcode', 'item.callNumber', 'item.contributors',
+      'item.holdingsRecordId', 'item.instanceId', 'item.status.name', 'item.title', 'item.materialType.name',
+      'item.location.name', 'metaData.createdByUserId', 'metadata.updatedDate', 'metadata.updatedByUserId', 'loanPolicyId'];
 
     // List of all possible columns that can be displayed
     this.possibleColumns = ['  ', 'title', 'itemStatus', 'dueDate', 'requests', 'barcode', 'Fee/Fine', 'Call number',
@@ -231,6 +236,21 @@ class OpenLoans extends React.Component {
       remaining += parseFloat(a.amount);
     });
     return (remaining === 0) ? '-' : remaining.toFixed(2);
+  }
+
+  buildRecords(recordsLoaded) {
+    recordsLoaded.forEach(record => {
+      if (_.isArray(record.item.contributors)) {
+        const contributorNamesMap = [];
+        if (record.item.contributors.length > 0) {
+          record.item.contributors.forEach(item => {
+            contributorNamesMap.push(item.name);
+          });
+        }
+        record.item.contributors = contributorNamesMap.join('; ');
+      }
+    });
+    return recordsLoaded;
   }
 
   getContributorslist(loan) {
@@ -667,7 +687,9 @@ class OpenLoans extends React.Component {
     const bulkActionsTooltip = formatMessage({ id: 'ui-users.bulkActions.tooltip' });
     const renewString = formatMessage({ id: 'ui-users.renew' });
     const changeDueDateString = formatMessage({ id: 'stripes-smart-components.cddd.changeDueDate' });
-
+    const columnHeaders = this.headers;
+    const recordsToCSV = this.buildRecords(this.props.loans);
+    const onlyFields = { columnHeaders, module: 'ui-users' };
     return (
       <ActionsBar
         contentStart={
@@ -705,7 +727,7 @@ class OpenLoans extends React.Component {
             >
               {changeDueDateString}
             </Button>
-            <ExportCsv data={this.props.loans} excludeKeys={['id', 'userId', 'itemId']} />
+            <ExportCsv data={recordsToCSV} options={{ onlyFields }} intl={this.props.stripes.intl} />
           </span>
         }
       />
