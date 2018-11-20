@@ -74,6 +74,14 @@ class ClosedLoans extends React.Component {
     this.getFeeFine = this.getFeeFine.bind(this);
     this.anonymizeLoans = this.anonymizeLoans.bind(this);
 
+    // Map to pass into exportCsv
+    this.columnHeadersMap = this.headers.map(item => {
+      return {
+        label: stripes.intl.formatMessage({ id: `ui-users.${item}` }),
+        value: item
+      };
+    });
+
     this.sortMap = {
       [stripes.intl.formatMessage({ id: 'ui-users.loans.columns.title' })]: loan => _.get(loan, ['item', 'title']),
       [stripes.intl.formatMessage({ id: 'ui-users.loans.columns.barcode' })]: loan => _.get(loan, ['item', 'barcode']),
@@ -276,6 +284,10 @@ class ClosedLoans extends React.Component {
     const loans = _.orderBy(this.props.loans,
       [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
 
+    const columnHeadersMap = this.columnHeadersMap;
+    const recordsToCSV = this.buildRecords(this.props.loans);
+    const onlyFields = { columnHeadersMap };
+
     return (
       <div>
         <ActionsBar
@@ -291,7 +303,7 @@ class ClosedLoans extends React.Component {
               >
                 {anonymizeString}
               </Button>
-              <ExportCsv data={this.props.loans} excludeKeys={['id', 'userId', 'itemId']} />
+              <ExportCsv data={recordsToCSV} options={{ onlyFields }} />
             </div>
           }
         />

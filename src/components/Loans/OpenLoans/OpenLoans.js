@@ -114,7 +114,17 @@ class OpenLoans extends React.Component {
 
     this.connectedChangeDueDateDialog = stripes.connect(ChangeDueDateDialog);
     this.connectedBulkRenewalDialog = stripes.connect(BulkRenewalDialog);
+    this.headers = ['action', 'dueDate', 'loanDate', 'item.barcode', 'item.callNumber', 'item.contributors',
+      'item.holdingsRecordId', 'item.instanceId', 'item.status.name', 'item.title', 'item.materialType.name',
+      'item.location.name', 'metaData.createdByUserId', 'metadata.updatedDate', 'metadata.updatedByUserId', 'loanPolicyId'];
 
+    // Map to pass into exportCsv
+    this.columnHeadersMap = this.headers.map(item => {
+      return {
+        label: stripes.intl.formatMessage({ id: `ui-users.${item}` }),
+        value: item
+      };
+    });
     // List of all possible columns that can be displayed
     this.possibleColumns = ['  ', 'title', 'itemStatus', 'dueDate', 'requests', 'barcode', 'Fee/Fine', 'Call number',
       'Contributors', 'renewals', 'loanPolicy', 'location', 'loanDate', ' '];
@@ -668,6 +678,9 @@ class OpenLoans extends React.Component {
     const renewString = formatMessage({ id: 'ui-users.renew' });
     const changeDueDateString = formatMessage({ id: 'stripes-smart-components.cddd.changeDueDate' });
 
+    const columnHeadersMap = this.columnHeadersMap;
+    const recordsToCSV = this.buildRecords(this.props.loans);
+    const onlyFields = { columnHeadersMap };
     return (
       <ActionsBar
         contentStart={
@@ -705,7 +718,7 @@ class OpenLoans extends React.Component {
             >
               {changeDueDateString}
             </Button>
-            <ExportCsv data={this.props.loans} excludeKeys={['id', 'userId', 'itemId']} />
+            <ExportCsv data={recordsToCSV} options={{ onlyFields }} />
           </span>
         }
       />
