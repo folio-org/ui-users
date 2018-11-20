@@ -74,6 +74,10 @@ class ClosedLoans extends React.Component {
     this.getFeeFine = this.getFeeFine.bind(this);
     this.anonymizeLoans = this.anonymizeLoans.bind(this);
 
+    this.headers = ['action', 'dueDate', 'loanDate', 'returnDate', 'systemReturnDate', 'item.barcode', 'item.callNumber', 'item.contributors',
+      'item.holdingsRecordId', 'item.instanceId', 'item.status.name', 'item.title', 'item.materialType.name',
+      'item.location.name', 'metaData.createdByUserId', 'metadata.updatedDate', 'metadata.updatedByUserId', 'loanPolicyId'];
+
     // Map to pass into exportCsv
     this.columnHeadersMap = this.headers.map(item => {
       return {
