@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { cloneDeep, get, omit, differenceBy, find } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -430,6 +431,9 @@ class ViewUser extends React.Component {
     }
 
     const data = omit(user, ['creds', 'proxies', 'sponsors', 'permissions', 'servicePoints', 'preferredServicePoint']);
+    const today = moment().endOf('day');
+
+    data.active = (moment(user.expirationDate).endOf('day').isSameOrAfter(today));
 
     this.props.mutator.selUser.PUT(data).then(() => {
       this.setState({
