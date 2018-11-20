@@ -50,7 +50,7 @@ class LoanActionsHistory extends React.Component {
       records: 'loans',
       resourceShouldRefresh: true,
       GET: {
-        path: 'loan-storage/loan-history?query=(id==!{loanid})&timestamp=%{timestamp.time}',
+        path: 'loan-storage/loan-history?query=(id==!{loanid})&timestamp=%{timestamp.time}&limit=100',
       },
     },
     loanPolicies: {
@@ -208,12 +208,21 @@ class LoanActionsHistory extends React.Component {
     const { loan, user } = this.props;
     const promise = this.props.renew(loan, user);
     const singleRenewalFailure = [];
+
     promise
-      .then(() => this.showCallout())
-      .catch(() => {
-        singleRenewalFailure.push(loan);
-      });
+      .then(() => this.onRenew())
+      .catch(() => singleRenewalFailure.push(loan));
+
     return promise;
+  }
+
+  onRenew() {
+    this.showCallout();
+    this.refreshLoanActions();
+  }
+
+  refreshLoanActions() {
+    this.props.mutator.timestamp.replace({ time: Date.now() });
   }
 
   getOpenRequestsCount() {
