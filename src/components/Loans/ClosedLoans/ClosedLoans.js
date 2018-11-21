@@ -73,6 +73,11 @@ class ClosedLoans extends React.Component {
     this.handleOptionsChange = this.handleOptionsChange.bind(this);
     this.getFeeFine = this.getFeeFine.bind(this);
     this.anonymizeLoans = this.anonymizeLoans.bind(this);
+    this.buildRecords = this.buildRecords.bind(this);
+
+    this.headers = ['action', 'dueDate', 'loanDate', 'returnDate', 'systemReturnDate', 'item.barcode', 'item.callNumber', 'item.contributors',
+      'item.holdingsRecordId', 'item.instanceId', 'item.status.name', 'item.title', 'item.materialType.name',
+      'item.location.name', 'metaData.createdByUserId', 'metadata.updatedDate', 'metadata.updatedByUserId', 'loanPolicyId'];
 
     this.headers = ['action', 'dueDate', 'loanDate', 'returnDate', 'systemReturnDate', 'item.barcode', 'item.callNumber', 'item.contributors',
       'item.holdingsRecordId', 'item.instanceId', 'item.status.name', 'item.title', 'item.materialType.name',
@@ -159,6 +164,21 @@ class ClosedLoans extends React.Component {
       contributorsList.push('-');
     }
     return contributorsList;
+  }
+
+  buildRecords(recordsLoaded) {
+    recordsLoaded.forEach(record => {
+      if (_.isArray(record.item.contributors)) {
+        const contributorNamesMap = [];
+        if (record.item.contributors.length > 0) {
+          record.item.contributors.forEach(item => {
+            contributorNamesMap.push(item.name);
+          });
+        }
+        record.item.contributors = contributorNamesMap.join('; ');
+      }
+    });
+    return recordsLoaded;
   }
 
   getLoansFormatter() {
@@ -287,10 +307,10 @@ class ClosedLoans extends React.Component {
     const anonymizeString = this.props.stripes.intl.formatMessage({ id: 'ui-users.anonymize' });
     const loans = _.orderBy(this.props.loans,
       [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
-
     const columnHeadersMap = this.columnHeadersMap;
-    const recordsToCSV = this.buildRecords(this.props.loans);
-    const onlyFields = { columnHeadersMap };
+    const clonedLoans = JSON.parse(JSON.stringify(this.props.loans)); // Do not mutate the actual resource
+    const recordsToCSV = this.buildRecords(clonedLoans);
+    const onlyFields = columnHeadersMap;
 
     return (
       <div>
@@ -307,7 +327,7 @@ class ClosedLoans extends React.Component {
               >
                 {anonymizeString}
               </Button>
-              <ExportCsv data={recordsToCSV} options={{ onlyFields }} />
+              <ExportCsv data={recordsToCSV} onlyFields={onlyFields} />
             </div>
           }
         />
