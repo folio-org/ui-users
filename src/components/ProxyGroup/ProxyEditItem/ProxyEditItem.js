@@ -7,6 +7,7 @@ import moment from 'moment'; // eslint-disable-line import/no-extraneous-depende
 import {
   defer,
   isEqual,
+  get
 } from 'lodash';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
@@ -174,20 +175,22 @@ class ProxyEditItem extends React.Component {
     //   selected: record.proxy && record.proxy.accrueTo === val
     // }));
     const proxyLinkMsg = <FormattedMessage id="ui-users.proxy.relationshipCreated" />;
-    const proxyCreationdate = <FormattedTime
-      value={record.proxy.metadata.createdDate}
+    const proxyCreatedDate = <FormattedTime
+      value={get(record, 'proxy.metadata.createdDate', null)}
       day="numeric"
       month="numeric"
       year="numeric"
     />;
     const proxyLink = (
       <div>
-        <Link to={`/users/view/${record.user.id}`}>
-          {getFullName(record.user)}
-        </Link>
-        {record.proxy && record.proxy.metadata && record.proxy.metadata.createdDate && (
+        <Link to={`/users/view/${record.user.id}`}>{getFullName(record.user)}</Link>
+        {proxyCreatedDate && (
           <span className={css.creationLabel}>
-            {`(${proxyLinkMsg}: ${proxyCreationdate})`}
+            (
+              {proxyLinkMsg}
+              {' '}
+              {proxyCreatedDate}
+            )
           </span>
         )}
       </div>

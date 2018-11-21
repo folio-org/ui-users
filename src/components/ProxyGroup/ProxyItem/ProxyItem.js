@@ -15,14 +15,16 @@ const ProxyItem = ({ record }) => {
     month="numeric"
     year="numeric"
   />;
+  const relationshipCreatedMsg = <FormattedMessage id="ui-users.proxy.relationshipCreated" />
   const link = (
     <div>
       <Link to={`/users/view/${record.user.id}`}>{getFullName(record.user)}</Link>
       {record.proxy && record.proxy.metadata && record.proxy.metadata.createdDate && (
       <span className={css.creationLabel}>
-        (Relationship created:
-        {' '}
-        {creationDateTime }
+        (
+          {relationshipCreatedMsg}
+          {' '}
+          {creationDateTime}
         )
       </span>
       )}

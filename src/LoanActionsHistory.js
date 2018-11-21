@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { get, upperFirst } from 'lodash';
 import React from 'react';
 import {
   FormattedMessage,
@@ -55,8 +55,13 @@ class LoanActionsHistory extends React.Component {
       records: 'loans',
       resourceShouldRefresh: true,
       GET: {
-        path: 'loan-storage/loan-history?query=(id==!{loanid})&timestamp=%{timestamp.time}',
+        path: 'loan-storage/loan-history?query=(id==!{loanid})&timestamp=%{timestamp.time}&limit=100',
       },
+    },
+    loanPolicies: {
+      type: 'okapi',
+      records: 'loanPolicies',
+      path: 'loan-policy-storage/loan-policies?query=(id==!{loan.loanPolicyId})',
     },
     loanAccountsActions: {
       type: 'okapi',
@@ -169,7 +174,7 @@ class LoanActionsHistory extends React.Component {
 
   getContributorslist(loan) {
     this.loan = loan;
-    const contributors = _.get(this.loan, ['item', 'contributors']);
+    const contributors = get(this.loan, ['item', 'contributors']);
     const contributorsList = [];
     if (typeof contributors !== 'undefined') {
       Object.keys(contributors).forEach(contributor => contributorsList.push(`${contributors[contributor].name}; `));
@@ -208,12 +213,21 @@ class LoanActionsHistory extends React.Component {
     const { loan, user } = this.props;
     const promise = this.props.renew(loan, user);
     const singleRenewalFailure = [];
+
     promise
-      .then(() => this.showCallout())
-      .catch(() => {
-        singleRenewalFailure.push(loan);
-      });
+      .then(() => this.onRenew())
+      .catch(() => singleRenewalFailure.push(loan));
+
     return promise;
+  }
+
+  onRenew() {
+    this.showCallout();
+    this.refreshLoanActions();
+  }
+
+  refreshLoanActions() {
+    this.props.mutator.timestamp.replace({ time: Date.now() });
   }
 
   getOpenRequestsCount() {
@@ -230,7 +244,7 @@ class LoanActionsHistory extends React.Component {
   }
 
   getFeeFine() {
-    const accounts = _.get(this.props.resources, ['loanAccountsActions', 'records'], []);
+    const accounts = get(this.props.resources, ['loanAccountsActions', 'records'], []);
     let amount = 0;
     accounts.forEach(a => {
       amount += parseFloat(a.amount);
@@ -240,7 +254,7 @@ class LoanActionsHistory extends React.Component {
 
   feefinedetails = (e) => {
     const loan = this.loan || {};
-    const accounts = _.get(this.props.resources, ['loanAccountsActions', 'records'], []);
+    const accounts = get(this.props.resources, ['loanAccountsActions', 'records'], []);
     if (accounts.length === 1) {
       this.props.onClickViewAccountActionsHistory(e, { id: accounts[0].id });
     } else if (accounts.length > 1) {
@@ -304,14 +318,14 @@ class LoanActionsHistory extends React.Component {
 
   showTitle(loan) {
     this.loan = loan;
-    const title = `${_.get(this.loan, ['item', 'title'], '')}`;
+    const title = `${get(this.loan, ['item', 'title'], '')}`;
     if (title) {
       const titleTodisplay = (title.length >= 77) ? `${title.substring(0, 77)}...` : title;
       return <KeyValue
         label={<FormattedMessage id="ui-users.loans.columns.title" />}
         value={(
-          <Link to={`/inventory/view/${_.get(this.loan, ['item', 'instanceId'], '')}`}>
-            {`${titleTodisplay} (${_.get(this.loan, ['item', 'materialType', 'name'])})`}
+          <Link to={`/inventory/view/${get(this.loan, ['item', 'instanceId'], '')}`}>
+            {`${titleTodisplay} (${get(this.loan, ['item', 'materialType', 'name'])})`}
           </Link>
         )}
       />;
@@ -339,25 +353,27 @@ class LoanActionsHistory extends React.Component {
       patronGroup,
       user,
       resources: {
-        loanActionsWithUser
+        loanActionsWithUser,
+        loanPolicies,
       },
       intl,
     } = this.props;
     const { nonRenewedLoanItems } = this.state;
     const loanActionsFormatter = {
       action: la => <FormattedMessage id={loanActionMap[la.action]} />,
-      actionDate: la => <FormattedTime value={_.get(la, ['metadata', 'updatedDate'], '-')} day="numeric" month="numeric" year="numeric" />,
+      actionDate: la => <FormattedTime value={get(la, ['metadata', 'updatedDate'], '-')} day="numeric" month="numeric" year="numeric" />,
       dueDate: la => <FormattedTime value={la.dueDate} day="numeric" month="numeric" year="numeric" />,
       itemStatus: la => la.itemStatus,
       Source: la => <Link to={`/users/view/${la.user.id}`}>{getFullName(la.user)}</Link>,
     };
 
+    const loanPolicyName = get(loanPolicies, 'records[0].name', '-');
     const requestCount = this.state.requestsCount[this.props.loan.itemId];
     const requestQueueValue = requestCount ? <Link to={`/requests?filters=requestStatus.open%20-%20not%20yet%20filled%2CrequestStatus.open%20-%20awaiting%20pickup&query=${this.props.loan.item.barcode}&sort=Request%20Date`}>{requestCount}</Link> : 0;
     const contributorsList = this.getContributorslist(loan);
     const contributorsListString = contributorsList.join(' ');
     const contributorsLength = contributorsListString.length;
-    const loanStatus = _.get(loan, ['status', 'name'], '-');
+    const loanStatus = get(loan, ['status', 'name'], '-');
     const buttonDisabled = (loanStatus && loanStatus === 'Closed');
     // Number of characters to trucate the string = 77
     const listTodisplay = (contributorsList === '-') ? '-' : (contributorsListString.length >= 77) ? `${contributorsListString.substring(0, 77)}...` : `${contributorsListString.substring(0, contributorsListString.length - 2)}`;
@@ -382,7 +398,11 @@ class LoanActionsHistory extends React.Component {
           defaultWidth="100%"
           dismissible
           onClose={onCancel}
-          paneTitle={`${<FormattedMessage id="ui-users.loans.loanDetails" />} - ${getFullName(user)} (${_.upperFirst(patronGroup.group)})`}
+          paneTitle={(
+            <FormattedMessage id="ui-users.loans.loanDetails">
+              {(loanDetails) => `${loanDetails} - ${getFullName(user)} (${upperFirst(patronGroup.group)})`}
+            </FormattedMessage>
+          )}
         >
           <Row>
             <span>
@@ -427,19 +447,19 @@ class LoanActionsHistory extends React.Component {
             <Col xs={2}>
               <KeyValue
                 label={<FormattedMessage id="ui-users.loans.columns.barcode" />}
-                value={<Link to={`/inventory/view/${_.get(loan, ['item', 'instanceId'], '')}/${_.get(loan, ['item', 'holdingsRecordId'], '')}/${_.get(loan, ['itemId'], '')}`}>{_.get(loan, ['item', 'barcode'], '')}</Link>}
+                value={<Link to={`/inventory/view/${get(loan, ['item', 'instanceId'], '')}/${get(loan, ['item', 'holdingsRecordId'], '')}/${get(loan, ['itemId'], '')}`}>{get(loan, ['item', 'barcode'], '')}</Link>}
               />
             </Col>
             <Col xs={2}>
               <KeyValue
                 label={<FormattedMessage id="ui-users.loans.details.callNumber" />}
-                value={_.get(loan, ['item', 'callNumber'], '-')}
+                value={get(loan, ['item', 'callNumber'], '-')}
               />
             </Col>
             <Col xs={2}>
               <KeyValue
                 label={<FormattedMessage id="ui-users.loans.details.location" />}
-                value={_.get(loan, ['item', 'location', 'name'], '-')}
+                value={get(loan, ['item', 'location', 'name'], '-')}
               />
             </Col>
           </Row>
@@ -447,7 +467,7 @@ class LoanActionsHistory extends React.Component {
             <Col xs={2}>
               <KeyValue
                 label={<FormattedMessage id="ui-users.loans.columns.itemStatus" />}
-                value={_.get(loan, ['item', 'status', 'name'], '-')}
+                value={get(loan, ['item', 'status', 'name'], '-')}
               />
             </Col>
             <Col xs={2}>
@@ -465,7 +485,7 @@ class LoanActionsHistory extends React.Component {
             <Col xs={2}>
               <KeyValue
                 label={<FormattedMessage id="ui-users.loans.details.renewalCount" />}
-                value={_.get(loan, ['renewalCount'], '-')}
+                value={get(loan, ['renewalCount'], '-')}
               />
             </Col>
             <Col xs={2}>
@@ -479,7 +499,7 @@ class LoanActionsHistory extends React.Component {
             <Col xs={2}>
               <KeyValue
                 label={<FormattedMessage id="ui-users.loans.details.loanPolicy" />}
-                value={<Link to={`/settings/circulation/loan-policies/${loan.loanPolicyId}`}>TODO</Link>}
+                value={<Link to={`/settings/circulation/loan-policies/${loan.loanPolicyId}`}>{loanPolicyName}</Link>}
               />
             </Col>
             <Col xs={2}>

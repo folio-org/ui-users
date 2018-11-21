@@ -202,8 +202,8 @@ module.exports.test = function foo(uiTestCtx, nightmare) {
           }, gid)
           .then(() => {
             nightmare
-              .wait('#clickable-deletepatrongroup-confirmation-confirm')
-              .click('#clickable-deletepatrongroup-confirmation-confirm')
+              .wait('#clickable-delete-controlled-vocab-entry-confirmation-confirm')
+              .click('#clickable-delete-controlled-vocab-entry-confirmation-confirm')
               .then(done)
               .catch(done);
           })
