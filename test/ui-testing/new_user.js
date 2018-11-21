@@ -113,18 +113,6 @@ module.exports.test = function meh(uitestctx, nightmare) {
           .insert('#adduser_enrollmentdate', '01/01/2017')
           .wait('#adduser_expirationdate')
           .insert('#adduser_expirationdate', '01/01/2022')
-          .xclick('id("form-user")//button[contains(.,"New")]')
-          .wait('input[id^="PrimaryAddress"]')
-          .click('input[id^="PrimaryAddress"]')
-          // .click('button[name="personal.addresses[0].country"]')
-          // .wait(`li[id*="${user.address.country}"]`)
-          // .click(`li[id*="${user.address.country}"]`)
-          .insert('input[name*="addressLine1"]', user.address.address)
-          .insert('input[name*="city"]', user.address.city)
-          .insert('input[name*="stateRegion"]', user.address.state)
-          .insert('input[name*="zipCode"]', user.address.zip)
-          .select('select[name*="addressType"]', 'Home')
-          // .wait(222)
           .wait('#clickable-createnewuser')
           .click('#clickable-createnewuser')
           .wait('#userInformationSection')
@@ -136,6 +124,7 @@ module.exports.test = function meh(uitestctx, nightmare) {
             }
             return bool;
           }, user.id) */
+          .wait(25000)
           .then(done)
           .catch(done);
       });
@@ -151,8 +140,17 @@ module.exports.test = function meh(uitestctx, nightmare) {
           .insert('#input-user-search', user.id)
           .wait('button[type=submit]')
           .click('button[type=submit]')
-          .wait(`div[title="${user.id}"]`)
-          .click(`div[title="${user.id}"]`)
+          .wait('#list-users[data-total-count="1"]')
+          .evaluate((uid) => {
+            const node = Array.from(
+              document.querySelectorAll('#list-users div[role="listitem"] > a > div[role="gridcell"]')
+            ).find(e => e.textContent === uid);
+            if (node) {
+              node.parentElement.click();
+            } else {
+              throw new Error(`Could not find the user ${uid} to edit`);
+            }
+          }, user.id)
           .wait('#clickable-edituser')
           .click('#clickable-edituser')
           .wait('#adduser_username')

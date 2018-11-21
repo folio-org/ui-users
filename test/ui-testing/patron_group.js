@@ -50,17 +50,18 @@ module.exports.test = function foo(uiTestCtx, nightmare) {
         nightmare
           .click(config.select.settings)
           .wait('a[href="/settings/users"]')
-          .wait(wait)
           .click('a[href="/settings/users"]')
           .wait('a[href="/settings/users/groups"]')
-          .wait(wait)
           .click('a[href="/settings/users/groups"]')
           .wait(wait)
+          .wait('#editList-patrongroups')
+          .wait('#clickable-add-patrongroups')
           .click('#clickable-add-patrongroups')
           .wait(1000)
           .type('input[name="items[0].group"]', gid)
           .type('input[name="items[0].desc"]', gidlabel)
           .wait(1000)
+          .wait('#clickable-save-patrongroups-0')
           .click('#clickable-save-patrongroups-0')
           .wait(wait)
           .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
@@ -74,7 +75,7 @@ module.exports.test = function foo(uiTestCtx, nightmare) {
           .wait('#clickable-filter-pg-faculty')
           .click('#clickable-filter-pg-faculty')
           .wait('#list-users div[role="listitem"]:nth-of-type(2) > a > div:nth-of-type(5)')
-          .evaluate(() => document.querySelector('#list-users div[role="listitem"]:nth-of-type(2) > a > div:nth-of-type(5)').title)
+          .evaluate(() => document.querySelector('#list-users div[role="listitem"]:nth-of-type(2) > a > div:nth-of-type(5)').textContent)
           .then((result) => {
             userid = result;
             done();
@@ -91,16 +92,29 @@ module.exports.test = function foo(uiTestCtx, nightmare) {
           .type('#input-user-search', userid)
           .wait('button[type=submit]')
           .click('button[type=submit]')
-          .wait(`div[title="${userid}"]`)
-          .click(`div[title="${userid}"]`)
-          .wait('#clickable-edituser')
-          .click('#clickable-edituser')
-          .wait('#adduser_group')
-          .xtract(`id("adduser_group")/option[contains(.,"${gid}" )]/@value`)
-          .then((result) => {
-            communityid = result;
-            done();
-            console.log(`        (found patron group ID ${communityid})`);
+          .wait('#list-users[data-total-count="1"]')
+          .evaluate((uid) => {
+            const node = Array.from(
+              document.querySelectorAll('#list-users div[role="listitem"] > a > div[role="gridcell"]')
+            ).find(e => e.textContent === uid);
+            if (node) {
+              node.parentElement.click();
+            } else {
+              throw new Error(`Could not find the user ${uid} to edit`);
+            }
+          }, userid)
+          .then(() => {
+            nightmare
+              .wait('#clickable-edituser')
+              .click('#clickable-edituser')
+              .wait('#adduser_group')
+              .xtract(`id("adduser_group")/option[contains(.,"${gid}" )]/@value`)
+              .then((result) => {
+                done();
+                communityid = result;
+                console.log(`        (found patron group ID ${communityid})`);
+              })
+              .catch(done);
           })
           .catch(done);
       });
@@ -128,17 +142,29 @@ module.exports.test = function foo(uiTestCtx, nightmare) {
           .click('#clickable-users-module')
           .wait(`input[id*="${gid}"]`)
           .click(`input[id*="${gid}"]`)
-          .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
-          .wait(`div[title="${userid}"]`)
-          .click(`div[title="${userid}"]`)
-          .wait('#clickable-edituser')
-          .click('#clickable-edituser')
-          .wait('#adduser_group')
-          .xtract('id("adduser_group")/option[contains(.,"Staff")]/@value')
-          .then((result) => {
-            staffid = result;
-            done();
-            console.log(`        (found "Staff" group ID ${staffid})`);
+          .wait('#list-users[data-total-count="1"]')
+          .evaluate((uid) => {
+            const node = Array.from(
+              document.querySelectorAll('#list-users div[role="listitem"] > a > div[role="gridcell"]')
+            ).find(e => e.textContent === uid);
+            if (node) {
+              node.parentElement.click();
+            } else {
+              throw new Error(`Could not find the user ${uid} to edit`);
+            }
+          }, userid)
+          .then(() => {
+            nightmare
+              .wait('#clickable-edituser')
+              .click('#clickable-edituser')
+              .wait('#adduser_group')
+              .xtract('id("adduser_group")/option[contains(.,"Staff")]/@value')
+              .then((result) => {
+                staffid = result;
+                done();
+                console.log(`        (found "Staff" group ID ${staffid})`);
+              })
+              .catch(done);
           })
           .catch(done);
       });
@@ -164,22 +190,23 @@ module.exports.test = function foo(uiTestCtx, nightmare) {
           .wait(1111)
           .click(config.select.settings)
           .wait('a[href="/settings/users"]')
-          .wait(wait)
-          .xclick('id("ModuleContainer")//a[.="Users"]')
-          .wait(wait)
-          .xclick('id("ModuleContainer")//a[.="Patron groups"]')
-          .wait((dp) => {
-            const dnode = document.querySelector(dp);
-            if (dnode !== null) {
-              return true;
-            }
-            return false;
-          }, deletePath)
-          .click(deletePath)
-          .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
-          .click('#clickable-deletepatrongroup-confirmation-confirm')
-          .wait(wait)
-          .then(() => { done(); })
+          .click('a[href="/settings/users"]')
+          .wait('a[href="/settings/users/groups"]')
+          .click('a[href="/settings/users/groups"]')
+          .evaluate((groupId) => {
+            Array.from(
+              document.querySelectorAll('#editList-patrongroups div[role="gridcell"]')
+            )
+              .find(e => e.textContent === `${groupId}`)
+              .parentElement.querySelector('button[icon="trashBin"]').click();
+          }, gid)
+          .then(() => {
+            nightmare
+              .wait('#clickable-delete-controlled-vocab-entry-confirmation-confirm')
+              .click('#clickable-delete-controlled-vocab-entry-confirmation-confirm')
+              .then(done)
+              .catch(done);
+          })
           .catch(done);
       });
       it(`should confirm that "${gid}" patron group has been deleted`, (done) => {
@@ -191,8 +218,7 @@ module.exports.test = function foo(uiTestCtx, nightmare) {
               throw new Error(`${egid} patron group found after clicking "Delete" button!`);
             }
           }, gid)
-          .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
-          .then(() => { done(); })
+          .then(done)
           .catch(done);
       });
       flogout();
