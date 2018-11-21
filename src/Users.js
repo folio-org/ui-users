@@ -36,7 +36,7 @@ const filterConfig = [
 class Users extends React.Component {
   static manifest = Object.freeze({
     initializedFilterConfig: { initialValue: false },
-    query: { initialValue: {} },
+    query: { initialValue: { sort: 'Name' } },
     resultCount: { initialValue: INITIAL_RESULT_COUNT },
     records: {
       type: 'okapi',
