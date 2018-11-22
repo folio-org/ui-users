@@ -365,7 +365,7 @@ class OpenAccounts extends React.Component {
       const props = this.props;
       const fees = _.orderBy(props.accounts, [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
       const columnMapping = {
-        '  ': (<input type="checkbox" checked={allChecked} name="check-all" onChange={this.toggleAll} />),        
+        '  ': (<input type="checkbox" checked={allChecked} name="check-all" onChange={this.toggleAll} />),
       };
 
       return (
