@@ -16,9 +16,10 @@ const ProxyItem = ({ record, stripes }) => {
       <Link to={`/users/view/${record.user.id}`}>{getFullName(record.user)}</Link>
       {record.proxy && record.proxy.metadata && record.proxy.metadata.createdDate && (
       <span className={css.creationLabel}>
-        (Relationship created:
-        {' '}
-        {stripes.formatDateTime(record.proxy.metadata.createdDate)}
+        (
+          {msg('ui-users.proxy.relationshipCreated')}
+          {' '}
+          {stripes.formatDateTime(record.proxy.metadata.createdDate)}
         )
       </span>
       )}
