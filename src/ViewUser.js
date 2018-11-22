@@ -39,6 +39,7 @@ import {
   ProxyPermissions,
   UserPermissions,
   UserLoans,
+  UserRequests,
   UserAccounts,
   UserServicePoints,
 } from './components/ViewSections';
@@ -176,6 +177,7 @@ class ViewUser extends React.Component {
         contactInfoSection: false,
         proxySection: false,
         loansSection: false,
+        requestsSection: false,
         accountsSection: false,
         permissionsSection: false,
         servicePointsSection: false,
@@ -183,6 +185,7 @@ class ViewUser extends React.Component {
     };
 
     this.connectedUserLoans = props.stripes.connect(UserLoans);
+    this.connectedUserRequests = props.stripes.connect(UserRequests);
     this.connectedUserAccounts = props.stripes.connect(UserAccounts);
     this.connectedLoansHistory = props.stripes.connect(LoansHistory);
     this.connectedLoanActionsHistory = props.stripes.connect(LoanActionsHistory);
@@ -594,6 +597,16 @@ class ViewUser extends React.Component {
             </IfInterface>
           </IfInterface>
         </IfPermission>
+
+        <IfInterface name="request-storage" version="2.2">
+          <this.connectedUserRequests
+            expanded={this.state.sections.requestsSection}
+            onToggle={this.handleSectionToggle}
+            accordionId="requestsSection"
+            user={user}
+            {...this.props}
+          />
+        </IfInterface>
 
         <IfPermission perm="perms.users.get">
           <IfInterface name="permissions" version="5.0">
