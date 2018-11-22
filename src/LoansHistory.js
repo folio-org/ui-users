@@ -90,11 +90,17 @@ class LoansHistory extends React.Component {
           defaultWidth="100%"
           dismissible
           onClose={this.props.onCancel}
-          paneTitle={`${<FormattedMessage id="ui-users.loans.title" />} - ${getFullName(user)} (${_.upperFirst(patronGroup.group)})`}
+          paneTitle={(
+            <FormattedMessage id="ui-users.loans.title">
+              {(title) => `${title} - ${getFullName(user)} (${_.upperFirst(patronGroup.group)})`}
+            </FormattedMessage>
+          )}
         >
           { this.getSegmentedControls() }
-          {openLoans ? (<this.connectedOpenLoans loans={loans} {...this.props} />)
-            : (<this.connectedClosedLoans loans={loans} {...this.props} />)
+          {
+            openLoans
+              ? <this.connectedOpenLoans loans={loans} {...this.props} />
+              : <this.connectedClosedLoans loans={loans} {...this.props} />
           }
         </Pane>
       </Paneset>);
