@@ -3,6 +3,8 @@ import React from 'react';
 import {
   FormattedMessage,
   FormattedTime,
+  intlShape,
+  injectIntl,
 } from 'react-intl';
 import Link from 'react-router-dom/Link';
 import PropTypes from 'prop-types';
@@ -60,6 +62,7 @@ class AccountActionsHistory extends React.Component {
     onCancel: PropTypes.func.isRequired,
     onClickViewLoanActionsHistory: PropTypes.func.isRequired,
     handleAddRecords: PropTypes.func.isRequired,
+    intl: intlShape.isRequired,
   };
 
   constructor(props) {
@@ -74,14 +77,14 @@ class AccountActionsHistory extends React.Component {
     this.comment = this.comment.bind(this);
     this.num = props.num;
     this.sortMap = {
-      [<FormattedMessage id="ui-users.details.columns.date" />]: action => action.dateAction,
-      [<FormattedMessage id="ui-users.details.columns.action" />]: action => action.typeAction,
-      [<FormattedMessage id="ui-users.details.columns.amount" />]: action => action.amountAction,
-      [<FormattedMessage id="ui-users.details.columns.balance" />]: action => action.balance,
-      [<FormattedMessage id="ui-users.details.columns.transactioninfo" />]: action => action.transactionInformation,
-      [<FormattedMessage id="ui-users.details.columns.created" />]: action => action.createdAt,
-      [<FormattedMessage id="ui-users.details.columns.source" />]: action => action.source,
-      [<FormattedMessage id="ui-users.details.columns.comments" />]: action => action.comments,
+      date: action => action.dateAction,
+      action: action => action.typeAction,
+      amount: action => action.amountAction,
+      balance: action => action.balance,
+      transactioninfo: action => action.transactionInformation,
+      created: action => action.createdAt,
+      source: action => action.source,
+      comments: action => action.comments,
     };
 
     this.state = {
@@ -95,14 +98,14 @@ class AccountActionsHistory extends React.Component {
         regular: false,
       },
       sortOrder: [
-        <FormattedMessage id="ui-users.details.columns.date" />,
-        <FormattedMessage id="ui-users.details.columns.action" />,
-        <FormattedMessage id="ui-users.details.columns.amount" />,
-        <FormattedMessage id="ui-users.details.columns.balance" />,
-        <FormattedMessage id="ui-users.details.columns.transactioninfo" />,
-        <FormattedMessage id="ui-users.details.columns.created" />,
-        <FormattedMessage id="ui-users.details.columns.source" />,
-        <FormattedMessage id="ui-users.details.columns.comments" />,
+        'date',
+        'action',
+        'amount',
+        'balance',
+        'transactioninfo',
+        'created',
+        'source',
+        'comments',
       ],
       sortDirection: ['desc', 'desc']
     };
@@ -185,14 +188,24 @@ class AccountActionsHistory extends React.Component {
       sortDirection,
     } = this.state;
 
-    const { onCancel } = this.props;
+    const {
+      onCancel,
+      intl,
+    } = this.props;
     const account = _.get(this.props.resources, ['accountHistory', 'records', 0]) || this.props.account;
 
     const user = this.props.user;
     const patron = this.props.patronGroup;
 
     const columnMapping = {
-      Comments: (
+      date: intl.formatMessage({ id: 'ui-users.details.columns.date' }),
+      action: intl.formatMessage({ id: 'ui-users.details.columns.action' }),
+      amount: intl.formatMessage({ id: 'ui-users.details.columns.amount' }),
+      balance: intl.formatMessage({ id: 'ui-users.details.columns.balance' }),
+      transactioninfo: intl.formatMessage({ id: 'ui-users.details.columns.transactioninfo' }),
+      created: intl.formatMessage({ id: 'ui-users.details.columns.created' }),
+      source: intl.formatMessage({ id: 'ui-users.details.columns.source' }),
+      comments: (
         <span>
           <FormattedMessage id="ui-users.details.columns.comments" />
           <Button
@@ -208,14 +221,14 @@ class AccountActionsHistory extends React.Component {
 
     const accountActionsFormatter = {
       // Action: aa => loanActionMap[la.action],
-      'Action Date': action => <FormattedTime value={action.dateAction} day="numeric" month="numeric" year="numeric" />,
-      'Action': action => action.typeAction + (action.paymentMethod ? ('-' + action.paymentMethod) : ' '),
-      'Amount': action => (action.amountAction > 0 ? parseFloat(action.amountAction).toFixed(2) : '-'),
-      'Balance': action => (action.balance > 0 ? parseFloat(action.balance).toFixed(2) : '-'),
-      'Transaction Information': action => action.transactionInformation || '-',
-      'Created at': action => action.createdAt,
-      'Source': action => action.source,
-      'Comments': action => action.comments,
+      date: action => <FormattedTime value={action.dateAction} day="numeric" month="numeric" year="numeric" />,
+      action: action => action.typeAction + (action.paymentMethod ? ('-' + action.paymentMethod) : ' '),
+      amount: action => (action.amountAction > 0 ? parseFloat(action.amountAction).toFixed(2) : '-'),
+      balance: action => (action.balance > 0 ? parseFloat(action.balance).toFixed(2) : '-'),
+      transactioninfo: action => action.transactionInformation || '-',
+      created: action => action.createdAt,
+      source: action => action.source,
+      comments: action => action.comments,
     };
 
     const actions = this.state.data || [];
@@ -361,21 +374,21 @@ class AccountActionsHistory extends React.Component {
             formatter={accountActionsFormatter}
             columnMapping={columnMapping}
             visibleColumns={[
-              <FormattedMessage id="ui-users.details.columns.date" />,
-              <FormattedMessage id="ui-users.details.columns.action" />,
-              <FormattedMessage id="ui-users.details.columns.amount" />,
-              <FormattedMessage id="ui-users.details.columns.balance" />,
-              <FormattedMessage id="ui-users.details.columns.transactioninfo" />,
-              <FormattedMessage id="ui-users.details.columns.created" />,
-              <FormattedMessage id="ui-users.details.columns.source" />,
-              <FormattedMessage id="ui-users.details.columns.comments" />,
+              'date',
+              'action',
+              'amount',
+              'balance',
+              'transactioninfo',
+              'created',
+              'source',
+              'comments',
             ]}
             contentData={(account.id === (actions[0] || {}).accountId) ? actionsSort : []}
             fullWidth
             onHeaderClick={this.onSort}
             sortOrder={sortOrder[0]}
             sortDirection={`${sortDirection[0]}ending`}
-            columnWidths={{ 'Action': 250, 'Amount': 100, 'Balance': 100, 'Transaction Information': 200, 'Created at': 100, 'Source': 200, 'Comments': 700 }}
+            columnWidths={{ 'action': 250, 'amount': 100, 'balance': 100, 'transactioninfo': 200, 'created': 100, 'source': 200, 'comments': 700 }}
           />
           <this.connectedActions
             actions={this.state.actions}
@@ -396,4 +409,4 @@ class AccountActionsHistory extends React.Component {
   }
 }
 
-export default AccountActionsHistory;
+export default injectIntl(AccountActionsHistory);

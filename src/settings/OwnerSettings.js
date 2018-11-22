@@ -122,7 +122,7 @@ class OwnerSettings extends React.Component {
       <SafeHTMLMessage
         id="stripes-smart-components.cv.termDeleted"
         values={{
-          type: <FormattedMessage id="ui-users.owners.singular" />,
+          type: this.props.intl.formatMessage({ id: 'ui-users.owners.singular' }),
           term: item[this.state.primaryField],
         }}
       />

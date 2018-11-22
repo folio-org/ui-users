@@ -49,36 +49,36 @@ class ClosedAccounts extends React.Component {
     this.getLoan = this.getLoan.bind(this);
 
     this.sortMap = {
-      [<FormattedMessage id="ui-users.accounts.history.columns.created" />]: f => (f.metadata || {}).createdDate,
-      [<FormattedMessage id="ui-users.accounts.history.columns.updated" />]: f => (f.metadata || {}).updatedDate,
-      [<FormattedMessage id="ui-users.accounts.history.columns.type" />]: f => f.feeFineType,
-      [<FormattedMessage id="ui-users.accounts.history.columns.amount" />]: f => f.amount,
-      [<FormattedMessage id="ui-users.accounts.history.columns.remaining" />]: f => f.remaining,
-      [<FormattedMessage id="ui-users.accounts.history.columns.status" />]: f => (f.paymentStatus || {}).name,
-      [<FormattedMessage id="ui-users.accounts.history.columns.owner" />]: f => f.feeFineOwner,
-      [<FormattedMessage id="ui-users.accounts.history.columns.title" />]: f => f.title,
-      [<FormattedMessage id="ui-users.accounts.history.columns.barcode" />]: f => f.barcode,
-      [<FormattedMessage id="ui-users.accounts.history.columns.number" />]: f => f.callNumber,
-      [<FormattedMessage id="ui-users.accounts.history.columns.due" />]: f => f.dueDate,
-      [<FormattedMessage id="ui-users.accounts.history.columns.returned" />]: f => f.returnedDate,
+      created: f => (f.metadata || {}).createdDate,
+      updated: f => (f.metadata || {}).updatedDate,
+      type: f => f.feeFineType,
+      amount: f => f.amount,
+      remaining: f => f.remaining,
+      status: f => (f.paymentStatus || {}).name,
+      owner: f => f.feeFineOwner,
+      title: f => f.title,
+      barcode: f => f.barcode,
+      number: f => f.callNumber,
+      due: f => f.dueDate,
+      returned: f => f.returnedDate,
     };
 
     this.state = {
       checkedAccounts: {},
       allChecked: false,
       sortOrder: [
-        <FormattedMessage id="ui-users.accounts.history.columns.created" />,
-        <FormattedMessage id="ui-users.accounts.history.columns.updated" />,
-        <FormattedMessage id="ui-users.accounts.history.columns.type" />,
-        <FormattedMessage id="ui-users.accounts.history.columns.amount" />,
-        <FormattedMessage id="ui-users.accounts.history.columns.remaining" />,
-        <FormattedMessage id="ui-users.accounts.history.columns.status" />,
-        <FormattedMessage id="ui-users.accounts.history.columns.owner" />,
-        <FormattedMessage id="ui-users.accounts.history.columns.title" />,
-        <FormattedMessage id="ui-users.accounts.history.columns.barcode" />,
-        <FormattedMessage id="ui-users.accounts.history.columns.number" />,
-        <FormattedMessage id="ui-users.accounts.history.columns.due" />,
-        <FormattedMessage id="ui-users.accounts.history.columns.returned" />,
+        'created',
+        'updated',
+        'type',
+        'amount',
+        'remaining',
+        'status',
+        'owner',
+        'title',
+        'barcode',
+        'number',
+        'due',
+        'returned',
       ],
       sortDirection: ['desc', 'desc'],
     };
@@ -188,18 +188,18 @@ class ClosedAccounts extends React.Component {
           type="checkbox"
         />
       ),
-      [<FormattedMessage id="ui-users.accounts.history.columns.created" />]: f => (f.metadata ? <FormattedDate value={f.metadata.createdDate} /> : '-'),
-      [<FormattedMessage id="ui-users.accounts.history.columns.updated" />]: f => (f.metadata && f.metadata.createdDate !== f.metadata.updatedDate ? <FormattedDate value={f.metadata.updatedDate} /> : '-'),
-      [<FormattedMessage id="ui-users.accounts.history.columns.type" />]: f => (f.feeFineType ? this.comments(f) : '-'),
-      [<FormattedMessage id="ui-users.accounts.history.columns.amount" />]: f => (f.amount ? parseFloat(f.amount).toFixed(2) : '-'),
-      [<FormattedMessage id="ui-users.accounts.history.columns.remaining" />]: f => parseFloat(f.remaining).toFixed(2) || '0.00',
-      [<FormattedMessage id="ui-users.accounts.history.columns.status" />]: f => (f.paymentStatus || {}).name || '-',
-      [<FormattedMessage id="ui-users.accounts.history.columns.owner" />]: f => (f.feeFineOwner ? f.feeFineOwner : '-'),
-      [<FormattedMessage id="ui-users.accounts.history.columns.title" />]: f => (f.title ? `${f.title} (${f.materialType})` : '-'),
-      [<FormattedMessage id="ui-users.accounts.history.columns.barcode" />]: f => (f.barcode ? f.barcode : '-'),
-      [<FormattedMessage id="ui-users.accounts.history.columns.number" />]: f => (f.callNumber ? f.callNumber : '-'),
-      [<FormattedMessage id="ui-users.accounts.history.columns.due" />]: f => (f.dueDate ? this.formatDateTime(f.dueDate) : '-'),
-      [<FormattedMessage id="ui-users.accounts.history.columns.returned" />]: f => (f.returnedDate ? this.formatDateTime(f.returnedDate) : this.formatDateTime(this.getLoan(f).returnDate) || '-'),
+      'created': f => (f.metadata ? <FormattedDate value={f.metadata.createdDate} /> : '-'),
+      'updated': f => (f.metadata && f.metadata.createdDate !== f.metadata.updatedDate ? <FormattedDate value={f.metadata.updatedDate} /> : '-'),
+      'type': f => (f.feeFineType ? this.comments(f) : '-'),
+      'amount': f => (f.amount ? parseFloat(f.amount).toFixed(2) : '-'),
+      'remaining': f => parseFloat(f.remaining).toFixed(2) || '0.00',
+      'status': f => (f.paymentStatus || {}).name || '-',
+      'owner': f => (f.feeFineOwner ? f.feeFineOwner : '-'),
+      'title': f => (f.title ? `${f.title} (${f.materialType})` : '-'),
+      'barcode': f => (f.barcode ? f.barcode : '-'),
+      'number': f => (f.callNumber ? f.callNumber : '-'),
+      'due': f => (f.dueDate ? this.formatDateTime(f.dueDate) : '-'),
+      'returned': f => (f.returnedDate ? this.formatDateTime(f.returnedDate) : this.formatDateTime(this.getLoan(f).returnDate) || '-'),
       ' ': f => this.renderActions(f),
     };
   }
@@ -356,12 +356,12 @@ class ClosedAccounts extends React.Component {
           columnMapping={columnMapping}
           columnWidths={{
             '  ': 28,
-            [<FormattedMessage id="ui-users.accounts.history.columns.created" />] : 110,
-            [<FormattedMessage id="ui-users.accounts.history.columns.type" />]: 200,
-            [<FormattedMessage id="ui-users.accounts.history.columns.updated" />]: 110,
-            [<FormattedMessage id="ui-users.accounts.history.columns.barcode" />]: 120,
-            [<FormattedMessage id="ui-users.accounts.history.columns.due" />]: 110,
-            [<FormattedMessage id="ui-users.accounts.history.columns.returned" />]: 110
+            'created': 110,
+            'type': 200,
+            'updated': 110,
+            'barcode': 120,
+            'due': 110,
+            'returned': 110
           }}
           visibleColumns={this.props.visibleColumns}
           fullWidth

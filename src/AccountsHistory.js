@@ -1,6 +1,10 @@
 import _ from 'lodash';
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  intlShape,
+  injectIntl,
+} from 'react-intl';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
 import {
@@ -138,24 +142,25 @@ class AccountsHistory extends React.Component {
     history: PropTypes.object,
     location: PropTypes.object,
     addRecord: PropTypes.bool,
+    intl: intlShape.isRequired,
   };
 
   constructor(props) {
     super(props);
 
     this.controllableColumns = [
-      <FormattedMessage id="ui-users.accounts.history.columns.created" />,
-      <FormattedMessage id="ui-users.accounts.history.columns.updated" />,
-      <FormattedMessage id="ui-users.accounts.history.columns.type" />,
-      <FormattedMessage id="ui-users.accounts.history.columns.amount" />,
-      <FormattedMessage id="ui-users.accounts.history.columns.remaining" />,
-      <FormattedMessage id="ui-users.accounts.history.columns.status" />,
-      <FormattedMessage id="ui-users.accounts.history.columns.owner" />,
-      <FormattedMessage id="ui-users.accounts.history.columns.title" />,
-      <FormattedMessage id="ui-users.accounts.history.columns.barcode" />,
-      <FormattedMessage id="ui-users.accounts.history.columns.number" />,
-      <FormattedMessage id="ui-users.accounts.history.columns.due" />,
-      <FormattedMessage id="ui-users.accounts.history.columns.returned" />,
+      'created',
+      'updated',
+      'type',
+      'amount',
+      'remaining',
+      'status',
+      'owner',
+      'title',
+      'barcode',
+      'number',
+      'due',
+      'returned',
     ];
 
     const visibleColumns = this.controllableColumns.map(columnName => ({
@@ -201,18 +206,18 @@ class AccountsHistory extends React.Component {
     this.filterState = filterState.bind(this);
     this.possibleColumns = [
       '  ',
-      <FormattedMessage id="ui-users.accounts.history.columns.created" />,
-      <FormattedMessage id="ui-users.accounts.history.columns.updated" />,
-      <FormattedMessage id="ui-users.accounts.history.columns.type" />,
-      <FormattedMessage id="ui-users.accounts.history.columns.amount" />,
-      <FormattedMessage id="ui-users.accounts.history.columns.remaining" />,
-      <FormattedMessage id="ui-users.accounts.history.columns.status" />,
-      <FormattedMessage id="ui-users.accounts.history.columns.owner" />,
-      <FormattedMessage id="ui-users.accounts.history.columns.title" />,
-      <FormattedMessage id="ui-users.accounts.history.columns.barcode" />,
-      <FormattedMessage id="ui-users.accounts.history.columns.number" />,
-      <FormattedMessage id="ui-users.accounts.history.columns.due" />,
-      <FormattedMessage id="ui-users.accounts.history.columns.returned" />,
+      'created',
+      'updated',
+      'type',
+      'amount',
+      'remaining',
+      'status',
+      'owner',
+      'title',
+      'barcode',
+      'number',
+      'due',
+      'returned',
       ' '
     ];
     this.getVisibleColumns = this.getVisibleColumns.bind(this);
@@ -399,6 +404,7 @@ class AccountsHistory extends React.Component {
       user,
       patronGroup,
       resources,
+      intl,
     } = this.props;
     const query = this.props.location.search ? queryString.parse(this.props.location.search) : {};
 
@@ -426,18 +432,18 @@ class AccountsHistory extends React.Component {
     );
 
     const columnMapping = {
-      [<FormattedMessage id="ui-users.accounts.history.columns.created" />]: <FormattedMessage id="ui-users.accounts.history.columns.created" />,
-      [<FormattedMessage id="ui-users.accounts.history.columns.updated" />]: <FormattedMessage id="ui-users.accounts.history.columns.updated" />,
-      [<FormattedMessage id="ui-users.accounts.history.columns.type" />]: <FormattedMessage id="ui-users.accounts.history.columns.type" />,
-      [<FormattedMessage id="ui-users.accounts.history.columns.amount" />]: <FormattedMessage id="ui-users.accounts.history.columns.amount" />,
-      [<FormattedMessage id="ui-users.accounts.history.columns.remaining" />]: <FormattedMessage id="ui-users.accounts.history.columns.remaining" />,
-      [<FormattedMessage id="ui-users.accounts.history.columns.status" />]: <FormattedMessage id="ui-users.accounts.history.columns.status" />,
-      [<FormattedMessage id="ui-users.accounts.history.columns.owner" />]: <FormattedMessage id="ui-users.accounts.history.columns.owner" />,
-      [<FormattedMessage id="ui-users.accounts.history.columns.title" />]: <FormattedMessage id="ui-users.accounts.history.columns.title" />,
-      [<FormattedMessage id="ui-users.accounts.history.columns.barcode" />]: <FormattedMessage id="ui-users.accounts.history.columns.barcode" />,
-      [<FormattedMessage id="ui-users.accounts.history.columns.number" />]: <FormattedMessage id="ui-users.accounts.history.columns.number" />,
-      [<FormattedMessage id="ui-users.accounts.history.columns.due" />]: <FormattedMessage id="ui-users.accounts.history.columns.due" />,
-      [<FormattedMessage id="ui-users.accounts.history.columns.returned" />]: <FormattedMessage id="ui-users.accounts.history.columns.returned" />,
+      created: intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' }),
+      updated: intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' }),
+      type: intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' }),
+      amount: intl.formatMessage({ id: 'ui-users.accounts.history.columns.amount' }),
+      remaining: intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' }),
+      status: intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' }),
+      owner: intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' }),
+      title: intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' }),
+      barcode: intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' }),
+      number: intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' }),
+      due: intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' }),
+      returned: intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' }),
     };
 
     const firstMenu = (
@@ -600,4 +606,4 @@ class AccountsHistory extends React.Component {
   }
 }
 
-export default AccountsHistory;
+export default injectIntl(AccountsHistory);

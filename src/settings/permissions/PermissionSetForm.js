@@ -164,7 +164,11 @@ class PermissionSetForm extends React.Component {
       return (
         <div>
           <Icon size="small" icon="edit" />
-          <span>{`${<FormattedMessage id="ui-users.edit" />}: ${selectedSet.displayName}`}</span>
+          <span>
+            <FormattedMessage id="ui-users.edit">
+              {(editLabel) => `${editLabel}: ${selectedSet.displayName}`}
+            </FormattedMessage>
+          </span>
         </div>
       );
     }

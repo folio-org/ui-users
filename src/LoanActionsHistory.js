@@ -364,7 +364,7 @@ class LoanActionsHistory extends React.Component {
       actionDate: la => <FormattedTime value={get(la, ['metadata', 'updatedDate'], '-')} day="numeric" month="numeric" year="numeric" />,
       dueDate: la => <FormattedTime value={la.dueDate} day="numeric" month="numeric" year="numeric" />,
       itemStatus: la => la.itemStatus,
-      Source: la => <Link to={`/users/view/${la.user.id}`}>{getFullName(la.user)}</Link>,
+      source: la => <Link to={`/users/view/${la.user.id}`}>{getFullName(la.user)}</Link>,
     };
 
     const loanPolicyName = get(loanPolicies, 'records[0].name', '-');
@@ -540,13 +540,13 @@ class LoanActionsHistory extends React.Component {
             <MultiColumnList
               id="list-loanactions"
               formatter={loanActionsFormatter}
-              visibleColumns={['actionDate', 'action', 'dueDate', 'itemStatus', 'Source']}
+              visibleColumns={['actionDate', 'action', 'dueDate', 'itemStatus', 'source']}
               columnMapping={{
                 action: intl.formatMessage({ id: 'ui-users.loans.columns.action' }),
                 actionDate: intl.formatMessage({ id: 'ui-users.loans.columns.actionDate' }),
                 dueDate: intl.formatMessage({ id: 'ui-users.loans.columns.dueDate' }),
                 itemStatus: intl.formatMessage({ id: 'ui-users.loans.columns.itemStatus' }),
-                Source: intl.formatMessage({ id: 'ui-users.loans.columns.source' }),
+                source: intl.formatMessage({ id: 'ui-users.loans.columns.source' }),
               }}
               contentData={loanActionsWithUser.records}
             />
