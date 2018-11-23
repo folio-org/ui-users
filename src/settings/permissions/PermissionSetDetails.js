@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 import {
   KeyValue,
   Row,
@@ -17,7 +18,6 @@ class PermissionSetDetails extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
-      intl: PropTypes.object.isRequired,
     }).isRequired,
     initialValues: PropTypes.object,
   };
@@ -54,7 +54,7 @@ class PermissionSetDetails extends React.Component {
   }
 
   render() {
-    const selectedSet = this.props.initialValues;
+    const { initialValues: selectedSet } = this.props;
     const { sections } = this.state;
     return (
       <div>
@@ -67,7 +67,7 @@ class PermissionSetDetails extends React.Component {
           open={sections.generalInformation}
           id="generalInformation"
           onToggle={this.handleSectionToggle}
-          label={<Headline size="large" tag="h3">{this.props.stripes.intl.formatMessage({ id: 'ui-users.permissions.generalInformation' })}</Headline>}
+          label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.permissions.generalInformation" /></Headline>}
         >
           {selectedSet.metadata && selectedSet.metadata.createdDate &&
             <Row>
@@ -79,8 +79,14 @@ class PermissionSetDetails extends React.Component {
           <Row>
             <Col xs={12}>
               <section>
-                <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.permissions.permissionSetName' })} value={_.get(selectedSet, ['displayName'], this.props.stripes.intl.formatMessage({ id: 'ui-users.permissions.untitledPermissionSet' }))} />
-                <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.description' })} value={_.get(selectedSet, ['description'], '-')} />
+                <KeyValue
+                  label={<FormattedMessage id="ui-users.permissions.permissionSetName" />}
+                  value={_.get(selectedSet, ['displayName'], <FormattedMessage id="ui-users.permissions.untitledPermissionSet" />)}
+                />
+                <KeyValue
+                  label={<FormattedMessage id="ui-users.description" />}
+                  value={_.get(selectedSet, ['description'], '-')}
+                />
               </section>
             </Col>
           </Row>
@@ -90,12 +96,11 @@ class PermissionSetDetails extends React.Component {
           expanded={sections.assignedPermissions}
           onToggle={this.handleSectionToggle}
           accordionId="assignedPermissions"
-          heading={this.props.stripes.intl.formatMessage({ id: 'ui-users.permissions.assignedPermissions' })}
+          heading={<FormattedMessage id="ui-users.permissions.assignedPermissions" />}
           listedPermissions={selectedSet.subPermissions}
           permToRead="perms.permissions.get"
           permToDelete="perms.permissions.item.put"
           permToModify="perms.permissions.item.put"
-          stripes={this.props.stripes}
           {...this.props}
         />
       </div>

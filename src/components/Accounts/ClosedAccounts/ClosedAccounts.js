@@ -13,13 +13,14 @@ import {
   Popover,
 } from '@folio/stripes/components';
 
-import { formatDate, formatDateTime } from '../../../util';
+import {
+  FormattedMessage,
+  FormattedTime,
+  FormattedDate,
+} from 'react-intl';
 
 class ClosedAccounts extends React.Component {
   static propTypes = {
-    stripes: PropTypes.shape({
-      intl: PropTypes.object.isRequired,
-    }),
     accounts: PropTypes.arrayOf(PropTypes.object),
     resources: PropTypes.shape({
       comments: PropTypes.shape({
@@ -47,40 +48,37 @@ class ClosedAccounts extends React.Component {
     this.onRowClick = this.onRowClick.bind(this);
     this.getLoan = this.getLoan.bind(this);
 
-    const { stripes } = props;
-
     this.sortMap = {
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' })]: f => (f.metadata || {}).createdDate,
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' })]: f => (f.metadata || {}).updatedDate,
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' })]: f => f.feeFineType,
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.amount' })]: f => f.amount,
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' })]: f => f.remaining,
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' })]: f => (f.paymentStatus || {}).name,
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' })]: f => f.feeFineOwner,
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' })]: f => f.title,
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' })]: f => f.barcode,
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' })]: f => f.callNumber,
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' })]: f => f.dueDate,
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' })]: f => f.returnedDate,
-
+      created: f => (f.metadata || {}).createdDate,
+      updated: f => (f.metadata || {}).updatedDate,
+      type: f => f.feeFineType,
+      amount: f => f.amount,
+      remaining: f => f.remaining,
+      status: f => (f.paymentStatus || {}).name,
+      owner: f => f.feeFineOwner,
+      title: f => f.title,
+      barcode: f => f.barcode,
+      number: f => f.callNumber,
+      due: f => f.dueDate,
+      returned: f => f.returnedDate,
     };
 
     this.state = {
       checkedAccounts: {},
       allChecked: false,
       sortOrder: [
-        stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' }),
-        stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' }),
-        stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' }),
-        stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.amount' }),
-        stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' }),
-        stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' }),
-        stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' }),
-        stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' }),
-        stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' }),
-        stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' }),
-        stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' }),
-        stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' }),
+        'created',
+        'updated',
+        'type',
+        'amount',
+        'remaining',
+        'status',
+        'owner',
+        'title',
+        'barcode',
+        'number',
+        'due',
+        'returned',
       ],
       sortDirection: ['desc', 'desc'],
     };
@@ -142,11 +140,11 @@ class ClosedAccounts extends React.Component {
                 </div>
                 <p data-role="popover">
                   <b>
-                    {this.props.stripes.intl.formatMessage({ id: 'ui-users.accounts.history.comment' })}
+                    <FormattedMessage id="ui-users.accounts.history.comment" />
                     {' '}
                     {n}
                     {' '}
-                    {this.props.stripes.intl.formatMessage({ id: 'ui-users.accounts.history.of' })}
+                    <FormattedMessage id="ui-users.accounts.history.of" />
                     {' '}
                     {n}
                    :
@@ -166,12 +164,21 @@ class ClosedAccounts extends React.Component {
 
   getLoan(f) {
     const loan = this.props.loans.find(l => l.id === f.loanId) || {};
+
     return loan;
+  }
+
+  formatDateTime(dateTimeStr) {
+    return <FormattedTime
+      value={dateTimeStr}
+      day="numeric"
+      month="numeric"
+      year="numeric"
+    />;
   }
 
   getAccountsFormatter() {
     const checkedAccounts = this.state.checkedAccounts;
-    const { stripes } = this.props;
 
     return {
       '  ': f => (
@@ -181,18 +188,18 @@ class ClosedAccounts extends React.Component {
           type="checkbox"
         />
       ),
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' })]: f => (f.metadata ? formatDate(f.metadata.createdDate) : '-'),
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' })]: f => (f.metadata && f.metadata.createdDate !== f.metadata.updatedDate ? formatDate(f.metadata.updatedDate) : '-'),
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' })]: f => (f.feeFineType ? this.comments(f) : '-'),
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.amount' })]: f => (f.amount ? parseFloat(f.amount).toFixed(2) : '-'),
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' })]: f => parseFloat(f.remaining).toFixed(2) || '0.00',
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' })]: f => (f.paymentStatus || {}).name || '-',
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' })]: f => (f.feeFineOwner ? f.feeFineOwner : '-'),
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' })]: f => (f.title ? `${f.title} (${f.materialType})` : '-'),
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' })]: f => (f.barcode ? f.barcode : '-'),
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' })]: f => (f.callNumber ? f.callNumber : '-'),
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' })]: f => (f.dueDate ? formatDateTime(f.dueDate) : '-'),
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' })]: f => (f.returnedDate ? formatDateTime(f.returnedDate) : formatDateTime(this.getLoan(f).returnDate) || '-'),
+      'created': f => (f.metadata ? <FormattedDate value={f.metadata.createdDate} /> : '-'),
+      'updated': f => (f.metadata && f.metadata.createdDate !== f.metadata.updatedDate ? <FormattedDate value={f.metadata.updatedDate} /> : '-'),
+      'type': f => (f.feeFineType ? this.comments(f) : '-'),
+      'amount': f => (f.amount ? parseFloat(f.amount).toFixed(2) : '-'),
+      'remaining': f => parseFloat(f.remaining).toFixed(2) || '0.00',
+      'status': f => (f.paymentStatus || {}).name || '-',
+      'owner': f => (f.feeFineOwner ? f.feeFineOwner : '-'),
+      'title': f => (f.title ? `${f.title} (${f.materialType})` : '-'),
+      'barcode': f => (f.barcode ? f.barcode : '-'),
+      'number': f => (f.callNumber ? f.callNumber : '-'),
+      'due': f => (f.dueDate ? this.formatDateTime(f.dueDate) : '-'),
+      'returned': f => (f.returnedDate ? this.formatDateTime(f.returnedDate) : this.formatDateTime(this.getLoan(f).returnDate) || '-'),
       ' ': f => this.renderActions(f),
     };
   }
@@ -292,26 +299,40 @@ class ClosedAccounts extends React.Component {
       <UncontrolledDropdown
         onSelectItem={this.handleOptionsChange}
       >
-        <Button data-role="toggle" buttonStyle="hover dropdownActive"><strong>•••</strong></Button>
+        <Button data-role="toggle" buttonStyle="hover dropdownActive">
+          <strong>•••</strong>
+        </Button>
         <DropdownMenu data-role="menu" overrideStyle={{ padding: '6px 0' }}>
           <MenuItem itemMeta={{ a, action: 'pay' }}>
-            <Button disabled buttonStyle="dropdownItem">{this.props.stripes.intl.formatMessage({ id: 'ui-users.accounts.history.button.pay' })}</Button>
+            <Button disabled buttonStyle="dropdownItem">
+              <FormattedMessage id="ui-users.accounts.history.button.pay" />
+            </Button>
           </MenuItem>
           <MenuItem itemMeta={{ a, action: 'waive' }}>
-            <Button disabled buttonStyle="dropdownItem">{this.props.stripes.intl.formatMessage({ id: 'ui-users.accounts.history.button.waive' })}</Button>
+            <Button disabled buttonStyle="dropdownItem">
+              <FormattedMessage id="ui-users.accounts.history.button.waive" />
+            </Button>
           </MenuItem>
           <MenuItem>
-            <Button disabled buttonStyle="dropdownItem">{this.props.stripes.intl.formatMessage({ id: 'ui-users.accounts.history.button.refund' })}</Button>
+            <Button disabled buttonStyle="dropdownItem">
+              <FormattedMessage id="ui-users.accounts.history.button.refund" />
+            </Button>
           </MenuItem>
           <MenuItem>
-            <Button disabled buttonStyle="dropdownItem">{this.props.stripes.intl.formatMessage({ id: 'ui-users.accounts.history.button.transfer' })}</Button>
+            <Button disabled buttonStyle="dropdownItem">
+              <FormattedMessage id="ui-users.accounts.history.button.transfer" />
+            </Button>
           </MenuItem>
           <MenuItem itemMeta={{ a, action: 'cancel' }}>
-            <Button disabled buttonStyle="dropdownItem">{this.props.stripes.intl.formatMessage({ id: 'ui-users.accounts.button.error' })}</Button>
+            <Button disabled buttonStyle="dropdownItem">
+              <FormattedMessage id="ui-users.accounts.button.error" />
+            </Button>
           </MenuItem>
           <hr />
           <MenuItem itemMeta={{ a, action: 'loanDetails' }}>
-            <Button disabled={disabled} buttonStyle="dropdownItem">{this.props.stripes.intl.formatMessage({ id: 'ui-users.accounts.history.button.loanDetails' })}</Button>
+            <Button disabled={disabled} buttonStyle="dropdownItem">
+              <FormattedMessage id="ui-users.accounts.history.button.loanDetails" />
+            </Button>
           </MenuItem>
         </DropdownMenu>
       </UncontrolledDropdown>
@@ -321,7 +342,6 @@ class ClosedAccounts extends React.Component {
   render() {
     const { sortOrder, sortDirection, allChecked } = this.state;
     const props = this.props;
-    const { stripes } = props;
 
     const fees = _.orderBy(props.accounts, [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
     const columnMapping = {
@@ -336,12 +356,12 @@ class ClosedAccounts extends React.Component {
           columnMapping={columnMapping}
           columnWidths={{
             '  ': 28,
-            [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' })] : 110,
-            [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' })]: 200,
-            [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' })]: 110,
-            [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' })]: 120,
-            [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' })]: 110,
-            [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' })]: 110
+            'created': 110,
+            'type': 200,
+            'updated': 110,
+            'barcode': 120,
+            'due': 110,
+            'returned': 110
           }}
           visibleColumns={this.props.visibleColumns}
           fullWidth

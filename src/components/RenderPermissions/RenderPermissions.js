@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import {
   List,
@@ -19,7 +20,6 @@ class RenderPermissions extends React.Component {
         showPerms: PropTypes.bool,
         listInvisiblePerms: PropTypes.bool,
       }).isRequired,
-      intl: PropTypes.object.isRequired,
     }).isRequired,
     accordionId: PropTypes.string,
     expanded: PropTypes.bool,
@@ -27,7 +27,11 @@ class RenderPermissions extends React.Component {
   };
 
   renderList() {
-    const showPerms = _.get(this.props.stripes, ['config', 'showPerms']);
+    const {
+      stripes,
+      listedPermissions,
+    } = this.props;
+    const showPerms = _.get(stripes, ['config', 'showPerms']);
     const listFormatter = item => ((
       <li key={item.permissionName}>
         {
@@ -37,12 +41,11 @@ class RenderPermissions extends React.Component {
         }
       </li>
     ));
-
-    const noPermissionsFound = this.props.stripes.intl.formatMessage({ id: 'ui-users.permissions.empty' });
+    const noPermissionsFound = <FormattedMessage id="ui-users.permissions.empty" />;
 
     return (
       <List
-        items={(this.props.listedPermissions || []).sort((a, b) => {
+        items={(listedPermissions || []).sort((a, b) => {
           const key = showPerms ? 'permissionName' : 'displayName';
           return (a[key].toLowerCase() < b[key].toLowerCase() ? -1 : 1);
         })}
@@ -53,16 +56,24 @@ class RenderPermissions extends React.Component {
   }
 
   render() {
-    const { accordionId, expanded, onToggle, listedPermissions } = this.props;
+    const {
+      accordionId,
+      expanded,
+      onToggle,
+      listedPermissions,
+      stripes,
+      permToRead,
+      heading,
+    } = this.props;
 
-    if (!this.props.stripes.hasPerm(this.props.permToRead)) { return null; }
+    if (!stripes.hasPerm(permToRead)) { return null; }
 
     return (
       <Accordion
         open={expanded}
         id={accordionId}
         onToggle={onToggle}
-        label={<Headline size="large" tag="h3">{this.props.heading}</Headline>}
+        label={<Headline size="large" tag="h3">{heading}</Headline>}
         displayWhenClosed={
           <Badge>{listedPermissions.length}</Badge>
         }

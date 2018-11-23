@@ -1,5 +1,9 @@
 import _ from 'lodash';
 import React from 'react';
+import {
+  injectIntl,
+  intlShape,
+} from 'react-intl';
 import PropTypes from 'prop-types';
 import {
   Icon,
@@ -9,7 +13,12 @@ import {
 import css from './PermissionList.css';
 
 function PermissionList(props) {
-  const { stripes, onChangeSearch, onClickItem } = props;
+  const {
+    stripes,
+    onChangeSearch,
+    onClickItem,
+    intl,
+  } = props;
   const handleSearchChange = e => onChangeSearch(e);
   const handleItemClick = item => onClickItem(item);
 
@@ -25,13 +34,11 @@ function PermissionList(props) {
     </li>
   );
 
-  const search = stripes.intl.formatMessage({ id: 'ui-users.search' });
-
   return (
     <div className={css.root}>
       <TextField
         noBorder
-        placeholder={search}
+        placeholder={intl.formatMessage({ id: 'ui-users.search' })}
         startControl={<Icon icon="search" />}
         onChange={handleSearchChange}
       />
@@ -56,6 +63,7 @@ PermissionList.propTypes = {
       showPerms: PropTypes.bool,
     }),
   }).isRequired,
+  intl: intlShape.isRequired,
 };
 
-export default PermissionList;
+export default injectIntl(PermissionList);

@@ -1,6 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
 import { Field } from 'redux-form';
 import {
   Row,
@@ -11,15 +15,13 @@ import {
 
 class FeeFineInfo extends React.Component {
   static propTypes = {
-    stripes: PropTypes.shape({
-      intl: PropTypes.object,
-    }),
     feefineList: PropTypes.arrayOf(PropTypes.object),
     onChangeOwner: PropTypes.func,
     owners: PropTypes.arrayOf(PropTypes.object),
     onChangeFeeFine: PropTypes.func,
     feefines: PropTypes.arrayOf(PropTypes.object),
     isPending: PropTypes.object,
+    intl: intlShape.isRequired,
   };
 
   constructor(props) {
@@ -43,6 +45,8 @@ class FeeFineInfo extends React.Component {
   }
 
   render() {
+    const { intl } = this.props;
+
     return (
       <section>
         <Row>
@@ -64,7 +68,7 @@ class FeeFineInfo extends React.Component {
                       disabled={this.props.isPending.owners}
                       dataOptions={this.props.owners}
                       onChange={this.props.onChangeOwner}
-                      placeholder={this.props.stripes.intl.formatMessage({ id: 'ui-users.feefines.modal.placeholder' })}
+                      placeholder={intl.formatMessage({ id: 'ui-users.feefines.modal.placeholder' })}
                     />
                     {(this.props.isPending.owners) ? 'Loading...' : ''}
                   </Col>
@@ -84,7 +88,7 @@ class FeeFineInfo extends React.Component {
                       fullWidth
                       disabled={this.props.isPending.feefines}
                       dataOptions={this.props.feefineList}
-                      placeholder={this.props.stripes.intl.formatMessage({ id: 'ui-users.feefines.modal.placeholder' })}
+                      placeholder={intl.formatMessage({ id: 'ui-users.feefines.modal.placeholder' })}
                       onChange={this.onChangeFeeFine}
                     />
                     {(this.props.isPending.feefines) ? 'Loading...' : ''}
@@ -117,4 +121,4 @@ class FeeFineInfo extends React.Component {
   }
 }
 
-export default FeeFineInfo;
+export default injectIntl(FeeFineInfo);

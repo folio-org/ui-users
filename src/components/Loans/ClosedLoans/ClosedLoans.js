@@ -1,6 +1,11 @@
 import _ from 'lodash';
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  FormattedTime,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
 import PropTypes from 'prop-types';
 import {
   Button,
@@ -38,11 +43,6 @@ class ClosedLoans extends React.Component {
   static propTypes = {
     onClickViewLoanActionsHistory: PropTypes.func.isRequired,
     loans: PropTypes.arrayOf(PropTypes.object).isRequired,
-    stripes: PropTypes.shape({
-      intl: PropTypes.object.isRequired,
-      formatDate: PropTypes.func.isRequired,
-      formatDateTime: PropTypes.func.isRequired,
-    }).isRequired,
     mutator: PropTypes.shape({
       query: PropTypes.object.isRequired,
       activeRecord: PropTypes.object,
@@ -59,14 +59,12 @@ class ClosedLoans extends React.Component {
     onClickViewOpenAccounts: PropTypes.func.isRequired,
     onClickViewClosedAccounts: PropTypes.func.isRequired,
     onClickViewAllAccounts: PropTypes.func.isRequired,
+    intl: intlShape.isRequired,
   };
 
   constructor(props) {
     super(props);
 
-    const { stripes } = this.props;
-    this.formatDate = stripes.formatDate;
-    this.formatDateTime = stripes.formatDateTime;
     this.onSort = this.onSort.bind(this);
     this.getLoansFormatter = this.getLoansFormatter.bind(this);
     this.getContributorslist = this.getContributorslist.bind(this);
@@ -75,38 +73,38 @@ class ClosedLoans extends React.Component {
     this.anonymizeLoans = this.anonymizeLoans.bind(this);
 
     this.sortMap = {
-      [stripes.intl.formatMessage({ id: 'ui-users.loans.columns.title' })]: loan => _.get(loan, ['item', 'title']),
-      [stripes.intl.formatMessage({ id: 'ui-users.loans.columns.barcode' })]: loan => _.get(loan, ['item', 'barcode']),
-      [stripes.intl.formatMessage({ id: 'ui-users.loans.columns.feefine' })]: loan => this.getFeeFine(loan),
-      [stripes.intl.formatMessage({ id: 'ui-users.loans.columns.itemStatus' })]: loan => _.get(loan, ['item', 'status', 'name'], ''),
-      [stripes.intl.formatMessage({ id: 'ui-users.loans.columns.loanDate' })]: loan => loan.loanDate,
-      [stripes.intl.formatMessage({ id: 'ui-users.loans.details.callNumber' })]: loan => _.get(loan, ['item', 'callNumber']),
-      [stripes.intl.formatMessage({ id: 'ui-users.loans.columns.contributors' })]: loan => {
+      [<FormattedMessage id="ui-users.loans.columns.title" />]: loan => _.get(loan, ['item', 'title']),
+      [<FormattedMessage id="ui-users.loans.columns.barcode" />]: loan => _.get(loan, ['item', 'barcode']),
+      [<FormattedMessage id="ui-users.loans.columns.feefine" />]: loan => this.getFeeFine(loan),
+      [<FormattedMessage id="ui-users.loans.columns.itemStatus" />]: loan => _.get(loan, ['item', 'status', 'name'], ''),
+      [<FormattedMessage id="ui-users.loans.columns.loanDate" />]: loan => loan.loanDate,
+      [<FormattedMessage id="ui-users.loans.details.callNumber" />]: loan => _.get(loan, ['item', 'callNumber']),
+      [<FormattedMessage id="ui-users.loans.columns.contributors" />]: loan => {
         const contributorsList = this.getContributorslist(loan);
         const contributorsListString = contributorsList.join(' ');
         return contributorsListString;
       },
-      [stripes.intl.formatMessage({ id: 'ui-users.loans.columns.dueDate' })]: loan => loan.dueDate,
-      [stripes.intl.formatMessage({ id: 'ui-users.loans.columns.renewals' })]: loan => loan.renewalCount,
-      [stripes.intl.formatMessage({ id: 'ui-users.loans.details.requestQueue' })]: () => {},
-      [stripes.intl.formatMessage({ id: 'ui-users.loans.details.loanPolicy' })]: loan => this.state.loanPolicies[loan.loanPolicyId],
-      [stripes.intl.formatMessage({ id: 'ui-users.loans.columns.returnDate' })]: loan => loan.systemReturnDate,
+      [<FormattedMessage id="ui-users.loans.columns.dueDate" />]: loan => loan.dueDate,
+      [<FormattedMessage id="ui-users.loans.columns.renewals" />]: loan => loan.renewalCount,
+      [<FormattedMessage id="ui-users.loans.details.requestQueue" />]: () => {},
+      [<FormattedMessage id="ui-users.loans.details.loanPolicy" />]: loan => this.state.loanPolicies[loan.loanPolicyId],
+      [<FormattedMessage id="ui-users.loans.columns.returnDate" />]: loan => loan.systemReturnDate,
     };
 
     this.state = {
       sortOrder: [
-        stripes.intl.formatMessage({ id: 'ui-users.loans.columns.title' }),
-        stripes.intl.formatMessage({ id: 'ui-users.loans.columns.itemStatus' }),
-        stripes.intl.formatMessage({ id: 'ui-users.loans.columns.dueDate' }),
-        stripes.intl.formatMessage({ id: 'ui-users.loans.details.requestQueue' }),
-        stripes.intl.formatMessage({ id: 'ui-users.loans.columns.barcode' }),
-        stripes.intl.formatMessage({ id: 'ui-users.loans.columns.feefine' }),
-        stripes.intl.formatMessage({ id: 'ui-users.loans.details.callNumber' }),
-        stripes.intl.formatMessage({ id: 'ui-users.loans.columns.contributors' }),
-        stripes.intl.formatMessage({ id: 'ui-users.loans.columns.renewals' }),
-        stripes.intl.formatMessage({ id: 'ui-users.loans.details.loanPolicy' }),
-        stripes.intl.formatMessage({ id: 'ui-users.loans.columns.loanDate' }),
-        stripes.intl.formatMessage({ id: 'ui-users.loans.columns.returnDate' }),
+        <FormattedMessage id="ui-users.loans.columns.title" />,
+        <FormattedMessage id="ui-users.loans.columns.itemStatus" />,
+        <FormattedMessage id="ui-users.loans.columns.dueDate" />,
+        <FormattedMessage id="ui-users.loans.details.requestQueue" />,
+        <FormattedMessage id="ui-users.loans.columns.barcode" />,
+        <FormattedMessage id="ui-users.loans.columns.feefine" />,
+        <FormattedMessage id="ui-users.loans.details.callNumber" />,
+        <FormattedMessage id="ui-users.loans.columns.contributors" />,
+        <FormattedMessage id="i-users.loans.columns.renewals" />,
+        <FormattedMessage id="ui-users.loans.details.loanPolicy" />,
+        <FormattedMessage id="ui-users.loans.columns.loanDate" />,
+        <FormattedMessage id="ui-users.loans.columns.returnDate" />,
       ],
       sortDirection: ['asc', 'asc'],
     };
@@ -152,7 +150,14 @@ class ClosedLoans extends React.Component {
   getLoansFormatter() {
     return {
       'title': loan => _.get(loan, ['item', 'title'], ''),
-      'dueDate': loan => this.formatDateTime(loan.dueDate),
+      'dueDate': loan => {
+        return <FormattedTime
+          value={loan.dueDate}
+          day="numeric"
+          month="numeric"
+          year="numeric"
+        />;
+      },
       'barcode': loan => _.get(loan, ['item', 'barcode'], ''),
       'Fee/Fine': loan => this.getFeeFine(loan),
       'Call Number': loan => _.get(loan, ['item', 'callNumber'], '-'),
@@ -179,12 +184,25 @@ class ClosedLoans extends React.Component {
           );
       },
       'renewals': loan => loan.renewalCount || 0,
-      'loanDate': loan => this.formatDateTime(loan.loanDate),
-      'returnDate': loan => this.formatDateTime(loan.returnDate),
+      'loanDate': loan => {
+        return <FormattedTime
+          value={loan.loanDate}
+          day="numeric"
+          month="numeric"
+          year="numeric"
+        />;
+      },
+      'returnDate': loan => {
+        return <FormattedTime
+          value={loan.returnDate}
+          day="numeric"
+          month="numeric"
+          year="numeric"
+        />;
+      },
       ' ': loan => this.renderActions(loan),
     };
   }
-
 
   handleOptionsChange(itemMeta, e) {
     e.preventDefault();
@@ -258,29 +276,44 @@ class ClosedLoans extends React.Component {
   }
 
   render() {
-    const { sortOrder, sortDirection } = this.state;
+    const {
+      sortOrder,
+      sortDirection
+    } = this.state;
+
+    const {
+      intl,
+      onClickViewLoanActionsHistory,
+      loans,
+    } = this.props;
     const visibleColumns = ['title', 'dueDate', 'barcode', 'Fee/Fine', 'Call Number', 'Contributors', 'renewals', 'loanDate', 'returnDate', ' '];
     const columnMapping = {
-      'title': this.props.stripes.intl.formatMessage({ id: 'ui-users.loans.columns.title' }),
-      'barcode': this.props.stripes.intl.formatMessage({ id: 'ui-users.loans.columns.barcode' }),
-      'Fee/Fine': this.props.stripes.intl.formatMessage({ id: 'ui-users.loans.columns.feefine' }),
-      'loanDate': this.props.stripes.intl.formatMessage({ id: 'ui-users.loans.columns.loanDate' }),
-      'dueDate': this.props.stripes.intl.formatMessage({ id: 'ui-users.loans.columns.dueDate' }),
-      'returnDate': this.props.stripes.intl.formatMessage({ id: 'ui-users.loans.columns.returnDate' }),
-      'renewals': this.props.stripes.intl.formatMessage({ id: 'ui-users.loans.columns.renewals' }),
-      'Call Number': this.props.stripes.intl.formatMessage({ id: 'ui-users.loans.details.callNumber' }),
-      'Contributors': this.props.stripes.intl.formatMessage({ id: 'ui-users.loans.columns.contributors' }),
+      'title': intl.formatMessage({ id: 'ui-users.loans.columns.title' }),
+      'barcode': intl.formatMessage({ id: 'ui-users.loans.columns.barcode' }),
+      'Fee/Fine': intl.formatMessage({ id: 'ui-users.loans.columns.feefine' }),
+      'loanDate': intl.formatMessage({ id: 'ui-users.loans.columns.loanDate' }),
+      'dueDate': intl.formatMessage({ id: 'ui-users.loans.columns.dueDate' }),
+      'returnDate': intl.formatMessage({ id: 'ui-users.loans.columns.returnDate' }),
+      'renewals': intl.formatMessage({ id: 'ui-users.loans.columns.renewals' }),
+      'Call Number': intl.formatMessage({ id: 'ui-users.loans.details.callNumber' }),
+      'Contributors': intl.formatMessage({ id: 'ui-users.loans.columns.contributors' }),
     };
 
-    const anonymizeString = this.props.stripes.intl.formatMessage({ id: 'ui-users.anonymize' });
-    const loans = _.orderBy(this.props.loans,
+    const anonymizeString = <FormattedMessage id="ui-users.anonymize" />;
+    const loansSorted = _.orderBy(loans,
       [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
 
     return (
       <div>
         <ActionsBar
-          show={this.props.loans.length > 0}
-          contentStart={<Label>{this.props.stripes.intl.formatMessage({ id: 'ui-users.closedLoansCount' }, { count: this.props.loans.length })}</Label>}
+          show={loans.length > 0}
+          contentStart={
+            <Label>
+              <FormattedMessage
+                id="ui-users.closedLoansCount"
+                values={{ count: loans.length }}
+              />
+            </Label>}
           contentEnd={
             <div>
               <Button
@@ -291,7 +324,7 @@ class ClosedLoans extends React.Component {
               >
                 {anonymizeString}
               </Button>
-              <ExportCsv data={this.props.loans} excludeKeys={['id', 'userId', 'itemId']} />
+              <ExportCsv data={loans} excludeKeys={['id', 'userId', 'itemId']} />
             </div>
           }
         />
@@ -304,15 +337,15 @@ class ClosedLoans extends React.Component {
           columnMapping={columnMapping}
           onHeaderClick={this.onSort}
           columnOverflow={{ ' ': true }}
-          contentData={loans}
+          contentData={loansSorted}
           sortOrder={sortOrder[0]}
           sortDirection={`${sortDirection[0]}ending`}
-          onRowClick={this.props.onClickViewLoanActionsHistory}
-          totalCount={loans.length}
+          onRowClick={onClickViewLoanActionsHistory}
+          totalCount={loansSorted.length}
         />
       </div>
     );
   }
 }
 
-export default ClosedLoans;
+export default injectIntl(ClosedLoans);

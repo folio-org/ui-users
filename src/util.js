@@ -1,25 +1,6 @@
 import _ from 'lodash';
-import moment from 'moment'; // eslint-disable-line import/no-extraneous-dependencies
 import React from 'react';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
-import { FormattedDate, FormattedTime } from 'react-intl';
-
-export function formatDate(dateStr) {
-  if (!dateStr) return dateStr;
-  return (<FormattedDate value={dateStr} />);
-}
-
-export function formatDateTime(dateStr) {
-  if (!dateStr) return dateStr;
-  const localDateStr = moment(dateStr).local().format();
-  return (
-    <span>
-      <FormattedDate value={dateStr} />
-      {' '}
-      <FormattedTime value={localDateStr} />
-    </span>
-  );
-}
 
 export function getFullName(user) {
   const lastName = _.get(user, ['personal', 'lastName'], '');

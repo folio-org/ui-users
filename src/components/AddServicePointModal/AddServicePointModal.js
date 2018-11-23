@@ -1,6 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
 import {
   MultiColumnList,
   Checkbox,
@@ -14,12 +18,8 @@ class AddServicePointModal extends React.Component {
     onSave: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
-    stripes: PropTypes.shape({
-      intl: PropTypes.shape({
-        formatMessage: PropTypes.func.isRequired,
-      }).isRequired,
-    }).isRequired,
     servicePoints: PropTypes.arrayOf(PropTypes.object),
+    intl: intlShape.isRequired,
   }
 
   state = {
@@ -68,17 +68,15 @@ class AddServicePointModal extends React.Component {
   }
 
   renderModalFooter() {
-    const { formatMessage } = this.props.stripes.intl;
-
     return (
       <ModalFooter
         primaryButton={{
           id: 'save-service-point-btn',
-          label: formatMessage({ id: 'ui-users.saveAndClose' }),
+          label: <FormattedMessage id="ui-users.saveAndClose" />,
           onClick: this.onSaveAndClose,
         }}
         secondaryButton={{
-          label: formatMessage({ id: 'stripes-core.button.cancel' }),
+          label: <FormattedMessage id="stripes-core.button.cancel" />,
           onClick: this.onCancel,
         }}
       />
@@ -86,25 +84,31 @@ class AddServicePointModal extends React.Component {
   }
 
   render() {
-    const { formatMessage } = this.props.stripes.intl;
+    const {
+      open,
+      onClose,
+      intl,
+      servicePoints,
+
+    } = this.props;
 
     return (
       <Modal
         footer={this.renderModalFooter()}
-        open={this.props.open}
-        onClose={this.props.onClose}
+        open={open}
+        onClose={onClose}
         dismissible
-        label={formatMessage({ id: 'ui-users.sp.addServicePoints' })}
+        label={<FormattedMessage id="ui-users.sp.addServicePoints" />}
       >
         <Layout className="textCentered">
           <FormattedMessage
             id="ui-users.sp.servicePointsFound"
-            values={{ count: this.props.servicePoints.length }}
+            values={{ count: servicePoints.length }}
           />
         </Layout>
         <MultiColumnList
           interactive={false}
-          contentData={this.props.servicePoints}
+          contentData={servicePoints}
           visibleColumns={['selected', 'name']}
           columnMapping={{
             selected: (
@@ -114,7 +118,7 @@ class AddServicePointModal extends React.Component {
                 onChange={this.onToggleBulkSelection}
               />
             ),
-            name: formatMessage({ id: 'ui-users.sp.column.name' }),
+            name: intl.formatMessage({ id: 'ui-users.sp.column.name' }),
           }}
           columnWidths={{ selected: 35 }}
           formatter={{
@@ -130,4 +134,4 @@ class AddServicePointModal extends React.Component {
   }
 }
 
-export default AddServicePointModal;
+export default injectIntl(AddServicePointModal);

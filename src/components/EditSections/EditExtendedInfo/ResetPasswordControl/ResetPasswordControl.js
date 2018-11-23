@@ -1,10 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-import {
-  injectIntl,
-  intlShape,
-} from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import {
   Col,
@@ -30,13 +26,12 @@ class ResetPasswordControl extends React.Component {
 
   render() {
     const {
-      intl,
       email,
       name,
     } = this.props;
 
-    const fieldLabel = intl.formatMessage({ id: 'ui-users.extended.folioPassword' });
-    const contentText = intl.formatMessage({ id: 'ui-users.extended.sendResetPassword' });
+    const fieldLabel = <FormattedMessage id="ui-users.extended.folioPassword" />;
+    const contentText = <FormattedMessage id="ui-users.extended.sendResetPassword" />;
 
     return (
       <Col
@@ -56,7 +51,6 @@ class ResetPasswordControl extends React.Component {
           isOpen={this.state.showModal}
           email={email}
           name={name}
-          intl={intl}
           onClose={this.closeModal}
         />
       </Col>
@@ -65,9 +59,8 @@ class ResetPasswordControl extends React.Component {
 }
 
 ResetPasswordControl.propTypes = {
-  intl: intlShape.isRequired,
   email: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
 };
 
-export default injectIntl(ResetPasswordControl);
+export default ResetPasswordControl;
