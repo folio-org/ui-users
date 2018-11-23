@@ -16,6 +16,7 @@ class BulkRenewInfo extends React.Component {
     onCancel: PropTypes.func,
     successRenewals: PropTypes.arrayOf(PropTypes.object),
     failedRenewals: PropTypes.arrayOf(PropTypes.object),
+    onOverride: PropTypes.func,
     loanPolicies: PropTypes.object,
     requestCounts: PropTypes.object,
     errorMessages: PropTypes.object,
@@ -68,6 +69,9 @@ class BulkRenewInfo extends React.Component {
         <Layout className="textRight">
           <Button buttonStyle="primary" onClick={this.props.onCancel}>
             <FormattedMessage id="stripes-core.button.close" />
+          </Button>
+          <Button buttonStyle="primary" onClick={this.props.onOverride}>
+            <FormattedMessage id="stripes-core.button.onOverride" />
           </Button>
         </Layout>
       </div>

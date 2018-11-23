@@ -13,6 +13,7 @@ class BulkRenewalDialog extends React.Component {
       }),
     }),
     onClose: PropTypes.func,
+    onOverride: PropTypes.func,
     open: PropTypes.bool,
   }
 
@@ -36,6 +37,7 @@ class BulkRenewalDialog extends React.Component {
         closeOnBackgroundClick
         enforceFocus={false} // Needed to allow Calendar in Datepicker to get focus
         onClose={this.props.onClose}
+        onOverride={this.props.onOverride}
         open={this.props.open}
         label={modalLabel}
       >
