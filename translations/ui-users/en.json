@@ -451,6 +451,7 @@
   "accounts.chargeManual": "Charge fee/fine",
 
   "feefines.title": "Fee/fine: Manual charges",
+  "feefines.singular": "Fee/Fine Type",
   "feefines.callout": "The Fee/Fine Type <strong>{feefine}</strong> was successfully <strong>deleted</strong>.",
   "feefines.disabledItem": "Fee/fine Type cannot be deleted when used by one or more user accounts",
   "feefines.modalHeader": "Delete Fee/Fine Type?",
@@ -635,6 +636,38 @@
 
   "accounts.comment.field.comment":"Comment",
   "accounts.comment.field.save":"Save",
-  "accounts.comment.field.cancel":"Cancel"
+  "accounts.comment.field.cancel":"Cancel",
+
+  "blocks.columns.type":"Type",
+  "blocks.columns.desc":"Display description",
+  "blocks.columns.blocked":"Blocked actions",
+  "blocks.buttons.add":"+Add Block",
+  "blocks.label":"Patron Blocks",
+
+  "blocks.form.label.information":"Block information",
+  "blocks.form.label.display":"Display Description*",
+  "blocks.form.label.staff":"Staff only information",
+  "blocks.form.label.message":"Message to Patron",
+  "blocks.form.label.date":"Expiration date",
+  "blocks.form.label.block":"Block actions*",
+  "blocks.form.label.borrowing":"Borrowing",
+  "blocks.form.label.renewals":"Renewals",
+  "blocks.form.label.request":"Request",
+
+  "blocks.form.placeholder.desc":"Enter a short description (required)",
+  "blocks.form.placeholder.information":"Enter addition information (optional)",
+  "blocks.form.placeholder.message":"Enter a message to the patron (optional)",
+
+  "blocks.form.validate.desc":"Description is required",
+  "blocks.form.validate.any":"Select any option",
+  "blocks.form.validate.date":"Expiration date is required",
+  "blocks.form.validate.future":"Expiration date must be in the future",
+
+  "blocks.form.button.delete":"Delete",
+  "blocks.form.button.save":"Save & Close",
+  "blocks.form.button.create":"Create block",
+
+  "blocks.layer.heading":"Delete patron block?",
+  "blocks.layer.confirmLabel":"Delete"
 
 }
