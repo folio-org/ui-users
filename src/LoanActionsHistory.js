@@ -290,14 +290,16 @@ class LoanActionsHistory extends React.Component {
 
   showContributors(list, listTodisplay, contributorsLength) {
     this.list = list;
+    const contributorsList = <KeyValue
+      label={<FormattedMessage id="ui-users.loans.columns.contributors" />}
+      value={listTodisplay}
+    />;
+
     return (contributorsLength >= 77) ?
       (
         <Popover>
           <div data-role="target" style={{ cursor: 'pointer' }}>
-            <KeyValue
-              label={<FormattedMessage id="ui-users.loans.columns.contributors" />}
-              value={listTodisplay}
-            />
+            {contributorsList}
           </div>
           <div data-role="popover">
             {
@@ -305,11 +307,7 @@ class LoanActionsHistory extends React.Component {
             }
           </div>
         </Popover>
-      ) :
-        <KeyValue
-          label={<FormattedMessage id="ui-users.loans.columns.contributors" />}
-          value={listTodisplay}
-        />;
+      ) : contributorsList;
   }
 
   showNonRenewedLoansModal() {
@@ -426,7 +424,7 @@ class LoanActionsHistory extends React.Component {
             <Col xs={2}>
               <KeyValue
                 label={<FormattedMessage id="ui-users.loans.details.borrower" />}
-                value={`${getFullName(user)}`}
+                value={getFullName(user)}
               />
             </Col>
             <Col xs={2}>

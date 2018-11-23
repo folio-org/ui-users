@@ -386,7 +386,7 @@ class AllAccounts extends React.Component {
           columnMapping={columnMapping}
           columnWidths={{
             '  ': 28,
-            'created' : 110,
+            'created': 110,
             'type': 200,
             'updated': 110,
             'barcode': 120,
