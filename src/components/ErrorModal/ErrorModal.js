@@ -4,9 +4,11 @@ import PropTypes from 'prop-types';
 import { Modal, Button } from '@folio/stripes/components';
 
 const ErrorModal = props => (
-  <Modal id={props.id} onClose={props.onClose} open={props.open} size="small" label={props.label} dismissible>
+  <Modal size="small" dismissible {...props}>
     <p>{props.message}</p>
-    <Button onClick={props.onClose}><FormattedMessage id="ui-users.okay" /></Button>
+    <Button onClick={props.onClose}>
+      <FormattedMessage id="ui-users.okay" />
+    </Button>
   </Modal>
 );
 

@@ -1,6 +1,11 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
+import {
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
 import { AddressList } from '@folio/stripes/smart-components';
 import { Select } from '@folio/stripes/components';
 import { toAddressTypeOptions } from '../../converters/address_type';
@@ -12,7 +17,7 @@ class UserAddresses extends React.Component {
     onUpdate: PropTypes.func,
     expanded: PropTypes.bool,
     editable: PropTypes.bool,
-    intl: PropTypes.object.isRequired,
+    intl: intlShape.isRequired,
   };
 
   constructor(props) {
@@ -55,7 +60,13 @@ class UserAddresses extends React.Component {
   }
 
   render() {
-    const { addresses, addressTypes, intl } = this.props;
+    const {
+      addresses,
+      addressTypes,
+      expanded,
+      editable,
+      intl,
+    } = this.props;
 
     if (!addresses) return (<div />);
 
@@ -71,17 +82,17 @@ class UserAddresses extends React.Component {
     };
 
     return (<AddressList
-      label={intl.formatMessage({ id: 'ui-users.contact.addresses' })}
+      label={<FormattedMessage id="ui-users.contact.addresses" />}
       onUpdate={this.onUpdate}
       onCreate={this.onUpdate}
       onDelete={this.onDelete}
       fieldComponents={addressFields}
-      addresses={this.props.addresses}
-      expanded={this.props.expanded}
-      canEdit={this.props.editable}
-      canDelete={this.props.editable}
+      addresses={addresses}
+      expanded={expanded}
+      canEdit={editable}
+      canDelete={editable}
     />);
   }
 }
 
-export default UserAddresses;
+export default injectIntl(UserAddresses);

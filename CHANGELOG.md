@@ -26,6 +26,8 @@
 * Refresh action details after renew. Fixes UIU-714.
 * Set expired user status to inactive. Fixes UIU-729.
 * Fix relationship created message. Fixes UIU-730.
+* Add sort by name to initial query resource. Fixes UIU-733.
+* Link to a user's requests. Fixes UIU-677.
 
 ## [2.17.0](https://github.com/folio-org/ui-users/tree/v2.17.0) (2018-10-5)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.16.0...v2.17.0)

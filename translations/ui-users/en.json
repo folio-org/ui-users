@@ -336,6 +336,11 @@
   "loans.details.feeFine": "Fee/fine",
   "loans.details.proxyBorrower": "Proxy borrower",
 
+  "requests.title": "Requests",
+  "requests.createRequest": "Create request",
+  "requests.numOpenRequests": "{count, number} {count, plural, one {open request} other {open requests}}",
+  "requests.numClosedRequests": "{count, number} {count, plural, one {closed request} other {closed requests}}",
+
   "permissions.noSponsorsFound": "No sponsors found",
   "permissions.noProxiesFound": "No proxies found",
   "permissions.empty": "No permissions found",
@@ -623,7 +628,8 @@
   "accounts.pay.field.transactioninfo":"Transaction information",
   "accounts.pay.field.comment":"Additional information",
   "accounts.pay.success": "The <strong>{feefine}</strong> fee/fine of <strong>{amount}</strong> has been successfully <strong>{action}</strong>",
-  "accounts.pay.placeholder.additional":"Enter more information about the fee/fine payment",
+  "accounts.pay.placeholder.additional.required":"Enter more information about the fee/fine payment (required)",
+  "accounts.pay.placeholder.additional.optional":"Enter more information about the fee/fine payment (optional)",
 
   "accounts.waive.error.amount":"Waive amount must be > 0",
   "accounts.waive.error.exceeds":"Waive amount exceeds the selected amount",
@@ -637,7 +643,8 @@
   "accounts.waive.field.comment":"Additional information",
   "accounts.waive.field.cancel":"Cancel",
   "accounts.waive.field.waive":"Waive",
-  "accounts.waive.placeholder.additional":"Enter more information about the fee/fine waive",
+  "accounts.waive.placeholder.additional.required":"Enter more information about the fee/fine waive (required)",
+  "accounts.waive.placeholder.additional.optional":"Enter more information about the fee/fine waive (optional)",
 
   "accounts.cancellation.field.reason":"Reason for cancellation*",
   "accounts.cancellation.field.feefinewill":"fee/fine will be",

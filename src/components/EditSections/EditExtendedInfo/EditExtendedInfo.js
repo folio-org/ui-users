@@ -1,12 +1,7 @@
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
-
 import { Field } from 'redux-form';
-import {
-  injectIntl,
-  intlShape,
-} from 'react-intl';
-
 import {
   TextField,
   Row,
@@ -28,7 +23,6 @@ const EditExtendedInfo = (props) => {
     userId,
     userFirstName,
     userEmail,
-    intl,
   } = props;
 
   const AccordionHeader = (
@@ -36,7 +30,7 @@ const EditExtendedInfo = (props) => {
       size="large"
       tag="h3"
     >
-      {intl.formatMessage({ id: 'ui-users.extended.extendedInformation' })}
+      {<FormattedMessage id="ui-users.extended.extendedInformation" />}
     </Headline>
   );
 
@@ -54,7 +48,7 @@ const EditExtendedInfo = (props) => {
         >
           <Field
             component={Datepicker}
-            label={intl.formatMessage({ id: 'ui-users.extended.dateEnrolled' })}
+            label={<FormattedMessage id="ui-users.extended.dateEnrolled" />}
             dateFormat="YYYY-MM-DD"
             name="enrollmentDate"
             id="adduser_enrollmentdate"
@@ -65,7 +59,7 @@ const EditExtendedInfo = (props) => {
           md={3}
         >
           <Field
-            label={intl.formatMessage({ id: 'ui-users.extended.externalSystemId' })}
+            label={<FormattedMessage id="ui-users.extended.externalSystemId" />}
             name="externalSystemId"
             id="adduser_externalsystemid"
             component={TextField}
@@ -78,7 +72,7 @@ const EditExtendedInfo = (props) => {
         >
           <Field
             component={Datepicker}
-            label={intl.formatMessage({ id: 'ui-users.extended.birthDate' })}
+            label={<FormattedMessage id="ui-users.extended.birthDate" />}
             dateFormat="YYYY-MM-DD"
             name="personal.dateOfBirth"
             id="adduser_dateofbirth"
@@ -90,7 +84,7 @@ const EditExtendedInfo = (props) => {
           xs={12}
           md={3}
         >
-          <KeyValue label={intl.formatMessage({ id: 'ui-users.extended.folioNumber' })}>
+          <KeyValue label={<FormattedMessage id="ui-users.extended.folioNumber" />}>
             {userId || '-'}
           </KeyValue>
         </Col>
@@ -101,7 +95,7 @@ const EditExtendedInfo = (props) => {
           md={3}
         >
           <Field
-            label={`${intl.formatMessage({ id: 'ui-users.information.username' })}`}
+            label={<FormattedMessage id="ui-users.information.username" />}
             name="username"
             id="adduser_username"
             component={TextField}
@@ -132,7 +126,6 @@ EditExtendedInfo.propTypes = {
   userId: PropTypes.string.isRequired,
   userFirstName: PropTypes.string.isRequired,
   userEmail: PropTypes.string.isRequired,
-  intl: intlShape.isRequired,
 };
 
-export default injectIntl(EditExtendedInfo);
+export default EditExtendedInfo;

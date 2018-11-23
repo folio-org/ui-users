@@ -1,6 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
 import { Field, reduxForm } from 'redux-form';
 
 import {
@@ -13,25 +17,25 @@ import {
   RadioButtonGroup,
 } from '@folio/stripes/components';
 
-const validate = (type, props) => {
+const validate = (type) => {
   const errors = {};
+
   if (!type.ownerId && type.option === 'true') {
-    errors.ownerId = props.stripes.intl.formatMessage({ id: 'ui-users.feefines.modal.error' });
+    errors.ownerId = <FormattedMessage id="ui-users.feefines.modal.error" />;
   }
   if (!type.option) {
     type.option = 'true';
   }
+
   return errors;
 };
 
 class CopyForm extends React.Component {
   static propTypes = {
-    stripes: PropTypes.shape({
-      intl: PropTypes.object,
-    }),
     owners: PropTypes.arrayOf(PropTypes.object),
     onClose: PropTypes.func,
     handleSubmit: PropTypes.func.isRequired,
+    intl: intlShape.isRequired,
   };
 
   constructor(props) {
@@ -44,6 +48,7 @@ class CopyForm extends React.Component {
 
   handleOption(e) {
     const value = (e.target.value === 'true');
+
     this.setState({
       option: value,
     });
@@ -51,9 +56,11 @@ class CopyForm extends React.Component {
 
   render() {
     const options = [];
+
     this.props.owners.forEach((o) => {
       if (o.owner !== 'Shared') options.push({ label: o.owner, value: o.id });
     });
+
     return (
       <form>
         <Row>
@@ -63,14 +70,14 @@ class CopyForm extends React.Component {
               component={RadioButtonGroup}
             >
               <RadioButton
-                label={this.props.stripes.intl.formatMessage({ id: 'ui-users.feefines.modal.yes' })}
+                label={<FormattedMessage id="ui-users.feefines.modal.yes" />}
                 id="yes"
                 value="true"
                 checked={this.state.option}
                 onChange={this.handleOption}
               />
               <RadioButton
-                label={this.props.stripes.intl.formatMessage({ id: 'ui-users.feefines.modal.no' })}
+                label={<FormattedMessage id="ui-users.feefines.modal.no" />}
                 id="no"
                 value="false"
                 checked={!this.state.option}
@@ -83,12 +90,16 @@ class CopyForm extends React.Component {
               name="ownerId"
               component={Select}
               dataOptions={options}
-              placeholder={this.props.stripes.intl.formatMessage({ id: 'ui-users.feefines.modal.placeholder' })}
+              placeholder={this.props.intl.formatMessage({ id: 'ui-users.feefines.modal.placeholder' })}
             />
           </Col>
         </Row>
-        <Button onClick={this.props.handleSubmit}><FormattedMessage id="ui-users.feefines.modal.submit" /></Button>
-        <Button onClick={this.props.onClose}><FormattedMessage id="ui-users.feefines.modal.cancel" /></Button>
+        <Button onClick={this.props.handleSubmit}>
+          <FormattedMessage id="ui-users.feefines.modal.submit" />
+        </Button>
+        <Button onClick={this.props.onClose}>
+          <FormattedMessage id="ui-users.feefines.modal.cancel" />
+        </Button>
       </form>
     );
   }
@@ -98,12 +109,12 @@ const CopyFeeFines = reduxForm({
   form: 'copy-fee-fines',
   validate,
   fields: [],
-})(CopyForm);
+})(injectIntl(CopyForm));
 
 const CopyModal = props => (
   <Modal
     open={props.openModal}
-    label={props.stripes.intl.formatMessage({ id: 'ui-users.feefines.modal.title' })}
+    label={<FormattedMessage id="ui-users.feefines.modal.title" />}
     size="small"
     onClose={props.onCloseModal}
   >
@@ -117,9 +128,6 @@ const CopyModal = props => (
 );
 
 CopyModal.propTypes = {
-  stripes: PropTypes.shape({
-    intl: PropTypes.object,
-  }),
   ownerList: PropTypes.arrayOf(PropTypes.object),
   onCloseModal: PropTypes.func,
   openModal: PropTypes.bool,
