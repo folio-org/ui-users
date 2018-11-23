@@ -80,7 +80,7 @@ class ClosedLoans extends React.Component {
     // Map to pass into exportCsv
     this.columnHeadersMap = this.headers.map(item => {
       return {
-        label: stripes.intl.formatMessage({ id: `ui-users.${item}` }),
+        label: this.props.intl.formatMessage({ id: `ui-users.${item}` }),
         value: item
       };
     });

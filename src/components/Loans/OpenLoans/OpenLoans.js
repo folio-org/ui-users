@@ -126,7 +126,7 @@ class OpenLoans extends React.Component {
     // Map to pass into exportCsv
     this.columnHeadersMap = this.headers.map(item => {
       return {
-        label: stripes.intl.formatMessage({ id: `ui-users.${item}` }),
+        label: this.props.intl.formatMessage({ id: `ui-users.${item}` }),
         value: item
       };
     });
@@ -711,9 +711,9 @@ class OpenLoans extends React.Component {
 
   renderSubHeader(columnMapping) {
     const noSelectedLoans = _.size(this.state.checkedLoans) === 0;
-    const bulkActionsTooltip = formatMessage({ id: 'ui-users.bulkActions.tooltip' });
-    const renewString = formatMessage({ id: 'ui-users.renew' });
-    const changeDueDateString = formatMessage({ id: 'stripes-smart-components.cddd.changeDueDate' });
+    const bulkActionsTooltip = <FormattedMessage id="ui-users.bulkActions.tooltip" />;
+    const renewString = <FormattedMessage id="ui-users.renew" />;
+    const changeDueDateString = <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />;
     const columnHeadersMap = this.columnHeadersMap;
     const clonedLoans = JSON.parse(JSON.stringify(this.props.loans)); // Do not mutate the actual resource
     const recordsToCSV = this.buildRecords(clonedLoans);
