@@ -1,0 +1,251 @@
+import _ from 'lodash';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { AccordionSet, Accordion } from '@folio/stripes-components/lib/Accordion';
+import { ExpandAllButton } from '@folio/stripes-components/lib/Accordion';
+import Pane from '@folio/stripes-components/lib/Pane';
+import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
+import { getFullName, eachPromise } from '../../util';
+import TitleManager from '@folio/stripes-core/src/components/TitleManager';
+import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
+import Button from '@folio/stripes-components/lib/Button';
+import IconButton from '@folio/stripes-components/lib/IconButton';
+import { Field } from 'redux-form';
+import stripesForm from '@folio/stripes-form';
+import TextArea from '@folio/stripes-components/lib/TextArea';
+import Checkbox from '@folio/stripes-components/lib/Checkbox';
+import Datepicker from '@folio/stripes-components/lib/Datepicker';
+import ViewMetaData from '@folio/stripes-smart-components/lib/ViewMetaData';
+import moment from 'moment';
+import UserDetails from '../Accounts/ChargeFeeFine/UserDetails';
+
+const validate = (item) => {
+  const errors = {};
+  if (!item.desc) {
+    errors.desc = 'Description is required';
+  }
+  if (!item.borrowing && !item.renewals && !item.requests) {
+    errors.borrowing = 'Select any option';
+    errors.renewals = 'Select any option';
+    errors.requests = 'Select any option';
+  }
+  if (!item.expirationDate) {
+    errors.expirationDate = 'Expiration date is required';
+  }
+  if (moment(moment(item.expirationDate).format()).isBefore(moment().format())) {
+    errors.expirationDate = 'Expiration date must be in the future';
+  }
+  console.log(item);
+  return errors;
+}
+
+class PatronBlockForm extends React.Component {
+
+  static propTypes = {
+    onCloseBlock: PropTypes.func,
+    user: PropTypes.object,
+    getUser: PropTypes.func,
+    onCloseEdit: PropTypes.func,
+    pristine: PropTypes.bool,
+    submitting: PropTypes.bool,
+    invalid: PropTypes.bool,
+    handleSubmit: PropTypes.func.isRequired,
+  };
+
+  constructor(props) {
+    super(props);
+
+    this.handleExpandAll = this.handleExpandAll.bind(this);
+    this.handleSectionToggle = this.handleSectionToggle.bind(this);
+
+    this.connectedViewMetaData = props.stripes.connect(ViewMetaData);
+
+    this.state = {
+      sections: {
+        blockInformationSection: true,
+        blockActionsSection: true,
+      },
+    };
+  }
+
+  componentDidMount() {
+    this.props.initialize({
+      borrowing: true,
+      renewals: true,
+      requests: true
+    });
+
+    if (this.props.selectedItem.id) {
+      this.props.initialize(this.props.selectedItem);
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (JSON.stringify(prevProps.selectedItem) !== JSON.stringify(this.props.selectedItem)) {
+      console.log(prevProps.selectedItem, this.props.selectedItem);
+      this.props.initialize(this.props.selectedItem);      
+    }
+  }
+   
+  handleSectionToggle({ id }) {
+    this.setState((curState) => {
+      const newState = _.cloneDeep(curState);
+      newState.sections[id] = !newState.sections[id];
+      console.log(newState.sections[id]);
+      return newState;
+    });
+  }
+ 
+  handleExpandAll(obj) {
+    this.setState((curState) => {
+      const newState = _.cloneDeep(curState);
+      newState.sections = obj;
+      return newState;
+    });
+  }
+
+  renderFirstMenu = () => (
+    <PaneMenu>
+      <IconButton
+        id="close-patron-block"
+        onClick={this.props.onClose}
+        title="Close"
+        icon="closeX"
+      />
+    </PaneMenu>
+  );
+
+  renderLastMenu = () => {
+    const { pristine, submitting, invalid, query } = this.props;
+
+    const submit = 
+      <Button buttonStyle="primary" onClick={this.props.handleSubmit} disabled={pristine || submitting || invalid}>
+        {(query.layer === 'edit-block') ? 'Save & Close' : 'Create block'}
+      </Button>;
+    const del = (query.layer === 'edit-block') ? <Button buttonStyle="danger" onClick={this.props.onDeleteItem}>Delete</Button>: '';
+
+    return (
+      <PaneMenu>
+       {del}{submit}
+      </PaneMenu>
+    );
+  }
+
+  render() {
+    const user = this.props.user || {};
+    const title = this.props.query.layer === 'edit-block' ? getFullName(user) : "New Block"; 
+
+    return(
+      <Pane defaultWidth="20%" firstMenu={this.renderFirstMenu()} paneTitle={title} lastMenu={this.renderLastMenu()}>
+        <TitleManager record={user.username} />
+        <UserDetails user={user} />
+        <Row end="xs">
+          <Col xs>
+            <ExpandAllButton accordionStatus={this.state.sections} onToggle={this.handleExpandAll} />
+          </Col>
+        </Row>
+        <Row>
+          <Col xs>
+            <Accordion 
+              label="Block information" 
+              id="blockInformationSection"
+              onToggle={this.handleSectionToggle}
+              open={this.state.sections.blockInformationSection}
+            >
+              {(this.props.selectedItem.metadata) ? <Row>
+                  <Col xs={12} sm={10} md={7} lg={5}>
+                    <this.connectedViewMetaData metadata={this.props.selectedItem.metadata}/>
+                  </Col>
+                </Row> : ''
+              }
+              <form> 
+                <Row>
+                  <Col xs={12} sm={10} md={7} lg={5}>
+                    <Field
+                      name="desc"
+                      label="Display Description"
+                      component={TextArea}
+                      placeholder={"Enter a short description (required)"}
+                      fullWidth
+                    />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col xs={12} sm={10} md={7} lg={5}>
+                    <Field
+                      name="staffInformation"
+                      label="Staff only information"
+                      component={TextArea}
+                      placeholder={"Enter addition information (optional)"}
+                      fullWidth
+                    />  
+                  </Col>
+                </Row>
+                <Row>
+                  <Col xs={12} sm={10} md={7} lg={5}>
+                    <Field
+                      label="Message to Patron"
+                      name="patronMessage"
+                      component={TextArea}
+                      placeholder={"Enter a message to the patron (optional)"}
+                      fullWidth
+                    />  
+                  </Col>
+                </Row>
+                <Row>
+                  <Col xs={12} sm={10} md={7} lg={5}>
+                    <Field
+                      component={Datepicker}  
+                      dateFormat="YYYY/MM/DD"
+                      name="expirationDate"
+                      label="Experation date"
+                      backendDateStandard="YYYY/MM/DD"
+                      useFocus={true}
+                    />    
+                  </Col>
+                </Row>
+                <Row>
+                  <Col xs={12} sm={10} md={7} lg={5}>
+                    <Field 
+                      name="borrowing"
+                      id="borrowing"
+                      label="Borrowing"
+                      component={Checkbox}
+                    />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col xs={12} sm={10} md={7} lg={5}>
+                    <Field
+                      name="renewals"
+                      id="renewals"
+                      label="Renewals"
+                      component={Checkbox}
+                    /> 
+                  </Col>
+                </Row>
+                <Row>
+                  <Col xs={12} sm={10} md={7} lg={5}>
+                    <Field
+                      name="requests"
+                      id="requests"
+                      label="Request"
+                      component={Checkbox}
+                    />
+                  </Col>
+                </Row>
+              </form>
+            </Accordion>
+          </Col>
+        </Row>
+      </Pane>
+    );
+  }
+}
+
+export default stripesForm({ 
+  form: 'patron-block-form',
+  validate,
+  fields: [],
+})(PatronBlockForm);
+
