@@ -1,6 +1,11 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
+import {
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
 
 import { makeQueryFunction, SearchAndSort } from '@folio/stripes/smart-components';
 import { AppIcon } from '@folio/stripes/components';
@@ -36,7 +41,7 @@ const filterConfig = [
 class Users extends React.Component {
   static manifest = Object.freeze({
     initializedFilterConfig: { initialValue: false },
-    query: { initialValue: {} },
+    query: { initialValue: { sort: 'Name' } },
     resultCount: { initialValue: INITIAL_RESULT_COUNT },
     records: {
       type: 'okapi',
@@ -98,9 +103,6 @@ class Users extends React.Component {
   });
 
   static propTypes = {
-    stripes: PropTypes.shape({
-      intl: PropTypes.object.isRequired,
-    }).isRequired,
     resources: PropTypes.shape({
       patronGroups: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
@@ -129,6 +131,7 @@ class Users extends React.Component {
     disableRecordCreation: PropTypes.bool,
     showSingleResult: PropTypes.bool, // eslint-disable-line react/no-unused-prop-types
     browseOnly: PropTypes.bool,
+    intl: intlShape.isRequired,
   };
 
   static defaultProps = {
@@ -183,13 +186,20 @@ class Users extends React.Component {
   }
 
   render() {
-    const { onSelectRow, disableRecordCreation, onComponentWillUnmount, showSingleResult, browseOnly, stripes: { intl } } = this.props;
+    const {
+      onSelectRow,
+      disableRecordCreation,
+      onComponentWillUnmount,
+      showSingleResult,
+      browseOnly,
+      intl,
+    } = this.props;
     const patronGroups = (this.props.resources.patronGroups || {}).records || [];
 
     const resultsFormatter = {
       status: user => (
         <AppIcon app="users" size="small">
-          {user.active ? intl.formatMessage({ id: 'ui-users.active' }) : intl.formatMessage({ id: 'ui-users.inactive' })}
+          {user.active ? <FormattedMessage id="ui-users.active" /> : <FormattedMessage id="ui-users.inactive" />}
         </AppIcon>
       ),
       name: user => getFullName(user),
@@ -237,4 +247,4 @@ class Users extends React.Component {
   }
 }
 
-export default Users;
+export default injectIntl(Users);

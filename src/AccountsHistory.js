@@ -1,7 +1,11 @@
 import _ from 'lodash';
 import React from 'react';
+import {
+  FormattedMessage,
+  intlShape,
+  injectIntl,
+} from 'react-intl';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
 import queryString from 'query-string';
 import {
   Paneset,
@@ -113,7 +117,6 @@ class AccountsHistory extends React.Component {
 
   static propTypes = {
     stripes: PropTypes.shape({
-      intl: PropTypes.object.isRequired,
       connect: PropTypes.func.isRequired,
     }),
     resources: PropTypes.shape({
@@ -139,25 +142,25 @@ class AccountsHistory extends React.Component {
     history: PropTypes.object,
     location: PropTypes.object,
     addRecord: PropTypes.bool,
+    intl: intlShape.isRequired,
   };
 
   constructor(props) {
     super(props);
-    const { stripes } = this.props;
 
     this.controllableColumns = [
-      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' }),
-      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' }),
-      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' }),
-      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.amount' }),
-      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' }),
-      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' }),
-      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' }),
-      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' }),
-      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' }),
-      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' }),
-      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' }),
-      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' }),
+      'created',
+      'updated',
+      'type',
+      'amount',
+      'remaining',
+      'status',
+      'owner',
+      'title',
+      'barcode',
+      'number',
+      'due',
+      'returned',
     ];
 
     const visibleColumns = this.controllableColumns.map(columnName => ({
@@ -203,18 +206,18 @@ class AccountsHistory extends React.Component {
     this.filterState = filterState.bind(this);
     this.possibleColumns = [
       '  ',
-      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' }),
-      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' }),
-      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' }),
-      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.amount' }),
-      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' }),
-      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' }),
-      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' }),
-      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' }),
-      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' }),
-      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' }),
-      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' }),
-      stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' }),
+      'created',
+      'updated',
+      'type',
+      'amount',
+      'remaining',
+      'status',
+      'owner',
+      'title',
+      'barcode',
+      'number',
+      'due',
+      'returned',
       ' '
     ];
     this.getVisibleColumns = this.getVisibleColumns.bind(this);
@@ -397,7 +400,12 @@ class AccountsHistory extends React.Component {
   }
 
   render() {
-    const { user, patronGroup, resources, stripes } = this.props;
+    const {
+      user,
+      patronGroup,
+      resources,
+      intl,
+    } = this.props;
     const query = this.props.location.search ? queryString.parse(this.props.location.search) : {};
 
     let accounts = _.get(resources, ['feefineshistory', 'records'], []);
@@ -424,18 +432,18 @@ class AccountsHistory extends React.Component {
     );
 
     const columnMapping = {
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' })]: stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' }),
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' })]: stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' }),
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' })]: stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' }),
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.amount' })]: stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.amount' }),
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' })]: stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' }),
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' })]: stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' }),
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' })]: stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' }),
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' })]: stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' }),
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' })]: stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' }),
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' })]: stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' }),
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' })]: stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' }),
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' })]: stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' }),
+      created: intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' }),
+      updated: intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' }),
+      type: intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' }),
+      amount: intl.formatMessage({ id: 'ui-users.accounts.history.columns.amount' }),
+      remaining: intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' }),
+      status: intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' }),
+      owner: intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' }),
+      title: intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' }),
+      barcode: intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' }),
+      number: intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' }),
+      due: intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' }),
+      returned: intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' }),
     };
 
     const firstMenu = (
@@ -469,9 +477,15 @@ class AccountsHistory extends React.Component {
         </Col>
         <Col xsOffset={3} xs={5}>
           <SegmentedControl activeId={query.layer} onActivate={this.handleActivate}>
-            <Button id="open-accounts"><FormattedMessage id="ui-users.accounts.open" /></Button>
-            <Button id="closed-accounts"><FormattedMessage id="ui-users.accounts.closed" /></Button>
-            <Button id="all-accounts"><FormattedMessage id="ui-users.accounts.all" /></Button>
+            <Button id="open-accounts">
+              <FormattedMessage id="ui-users.accounts.open" />
+            </Button>
+            <Button id="closed-accounts">
+              <FormattedMessage id="ui-users.accounts.closed" />
+            </Button>
+            <Button id="all-accounts">
+              <FormattedMessage id="ui-users.accounts.all" />
+            </Button>
           </SegmentedControl>
         </Col>
       </Row>
@@ -579,7 +593,6 @@ class AccountsHistory extends React.Component {
                 actions={this.state.actions}
                 onChangeActions={this.onChangeActions}
                 user={user}
-                stripes={stripes}
                 accounts={this.accounts}
                 selectedAccounts={selectedAccounts}
                 balance={balance}
@@ -593,4 +606,4 @@ class AccountsHistory extends React.Component {
   }
 }
 
-export default AccountsHistory;
+export default injectIntl(AccountsHistory);

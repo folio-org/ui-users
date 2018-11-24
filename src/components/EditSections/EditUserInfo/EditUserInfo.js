@@ -1,4 +1,5 @@
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import {
@@ -15,7 +16,6 @@ import { ViewMetaData } from '@folio/stripes/smart-components';
 class EditUserInfo extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
-      intl: PropTypes.object.isRequired,
       connect: PropTypes.func.isRequired,
     }).isRequired,
     parentResources: PropTypes.object,
@@ -32,14 +32,19 @@ class EditUserInfo extends React.Component {
   }
 
   render() {
-    const { parentResources, initialValues, expanded, onToggle, accordionId, stripes: { intl } } = this.props;
+    const {
+      parentResources,
+      initialValues,
+      expanded,
+      onToggle,
+      accordionId,
+    } = this.props;
     const patronGroups = (parentResources.patronGroups || {}).records || [];
-    const patronGroupOptions = (patronGroups || []).map(g => ({ label: g.group.concat(g.desc ? ` (${g.desc})` : ''), value: g.id, selected: initialValues.patronGroup === g.id }));
-    const statusOptions = [
-      { label: intl.formatMessage({ id: 'ui-users.active' }), value: true },
-      { label: intl.formatMessage({ id: 'ui-users.inactive' }), value: false },
-    ].map(s => ({ ...s, selected: (initialValues.active === s.value || s.value === true) }));
-
+    const patronGroupOptions = (patronGroups).map(g => (
+      <FormattedMessage key={g.id} id={g.group.concat(g.desc ? ` (${g.desc})` : '')}>
+        {(message) => <option value={g.id}>{message}</option>}
+      </FormattedMessage>
+    ));
     const isUserExpired = () => {
       const expirationDate = new Date(initialValues.expirationDate);
       const now = Date.now();
@@ -54,7 +59,7 @@ class EditUserInfo extends React.Component {
 
     return (
       <Accordion
-        label={<Headline size="large" tag="h3">{intl.formatMessage({ id: 'ui-users.information.userInformation' })}</Headline>}
+        label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.information.userInformation" /></Headline>}
         open={expanded}
         id={accordionId}
         onToggle={onToggle}
@@ -64,50 +69,99 @@ class EditUserInfo extends React.Component {
 
         <Row>
           <Col xs={12} md={3}>
-            <Field label={`${intl.formatMessage({ id: 'ui-users.information.lastName' })} *`} name="personal.lastName" id="adduser_lastname" component={TextField} required fullWidth />
+            <Field
+              label={(
+                <FormattedMessage id="ui-users.information.lastName">
+                  {(msg) => msg + ' *'}
+                </FormattedMessage>
+              )}
+              name="personal.lastName"
+              id="adduser_lastname"
+              component={TextField}
+              required
+              fullWidth
+            />
           </Col>
           <Col xs={12} md={3}>
-            <Field label={intl.formatMessage({ id: 'ui-users.information.firstName' })} name="personal.firstName" id="adduser_firstname" component={TextField} fullWidth />
+            <Field
+              label={<FormattedMessage id="ui-users.information.firstName" />}
+              name="personal.firstName"
+              id="adduser_firstname"
+              component={TextField}
+              fullWidth
+            />
           </Col>
           <Col xs={12} md={3}>
-            <Field label={intl.formatMessage({ id: 'ui-users.information.middleName' })} name="personal.middleName" id="adduser_middlename" component={TextField} fullWidth />
+            <Field
+              label={<FormattedMessage id="ui-users.information.middleName" />}
+              name="personal.middleName"
+              id="adduser_middlename"
+              component={TextField}
+              fullWidth
+            />
           </Col>
           <Col xs={12} md={3}>
-            <Field label={intl.formatMessage({ id: 'ui-users.information.barcode' })} name="barcode" id="adduser_barcode" component={TextField} fullWidth />
+            <Field
+              label={<FormattedMessage id="ui-users.information.barcode" />}
+              name="barcode"
+              id="adduser_barcode"
+              component={TextField}
+              fullWidth
+            />
           </Col>
         </Row>
 
         <Row>
           <Col xs={12} md={3}>
             <Field
-              label={`${intl.formatMessage({ id: 'ui-users.information.patronGroup' })} *`}
+              label={(
+                <FormattedMessage id="ui-users.information.patronGroup">
+                  {(msg) => msg + ' *'}
+                </FormattedMessage>
+              )}
               name="patronGroup"
               id="adduser_group"
               component={Select}
               fullWidth
-              dataOptions={[{ label: intl.formatMessage({ id: 'ui-users.information.selectPatronGroup' }), value: '' }, ...patronGroupOptions]}
-            />
+              defaultValue={initialValues.patronGroup}
+            >
+              <FormattedMessage id="ui-users.information.selectPatronGroup">
+                {(message) => <option value="">{message}</option>}
+              </FormattedMessage>
+              {patronGroupOptions}
+            </Field>
           </Col>
           <Col xs={12} md={3}>
             <Field
-              label={`${intl.formatMessage({ id: 'ui-users.information.status' })} *`}
+              label={(
+                <FormattedMessage id="ui-users.information.status">
+                  {(msg) => msg + ' *'}
+                </FormattedMessage>
+              )}
               name="active"
               id="useractive"
               component={Select}
               fullWidth
-              dataOptions={statusOptions}
               disabled={isStatusFieldDisabled()}
-            />
+              defaultValue={initialValues.active}
+            >
+              <FormattedMessage id="ui-users.active">
+                {(message) => <option value="true">{message}</option>}
+              </FormattedMessage>
+              <FormattedMessage id="ui-users.inactive">
+                {(message) => <option value="false">{message}</option>}
+              </FormattedMessage>
+            </Field>
             {isUserExpired() && (
               <span style={{ 'color': '#900', 'position': 'relative', 'top': '-10px', 'fontSize': '0.9em' }}>
-                {`${intl.formatMessage({ id: 'ui-users.errors.userExpired' })}`}
+                <FormattedMessage id="ui-users.errors.userExpired" />
               </span>
             )}
           </Col>
           <Col xs={12} md={3}>
             <Field
               component={Datepicker}
-              label={intl.formatMessage({ id: 'ui-users.expirationDate' })}
+              label={<FormattedMessage id="ui-users.expirationDate" />}
               dateFormat="YYYY-MM-DD"
               name="expirationDate"
               id="adduser_expirationdate"

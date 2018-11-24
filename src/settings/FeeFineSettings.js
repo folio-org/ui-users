@@ -1,6 +1,10 @@
 import _ from 'lodash';
 import React from 'react';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import PropTypes from 'prop-types';
+import { 
+  injectIntl, 
+  FormattedMessage 
+} from 'react-intl';
 import {
   Button,
   Callout,
@@ -15,7 +19,10 @@ import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import { EditableList } from '@folio/stripes/smart-components';
 import { validate } from '../util';
 
-import { Owners, CopyModal } from './FeeFinesTable';
+import { 
+  Owners, 
+  CopyModal 
+} from './FeeFinesTable';
 
 class FeefineSettings extends React.Component {
   static manifest = Object.freeze({
@@ -259,18 +266,21 @@ class FeefineSettings extends React.Component {
 
     return (
       <Paneset>
-        <Pane defaultWidth="fill" fluidContentWidth paneTitle={this.props.stripes.intl.formatMessage({ id: 'ui-users.feefines.title' })}>
+        <Pane 
+          defaultWidth="fill" 
+          fluidContentWidth 
+          paneTitle={<FormattedMessage id="ui-users.feefines.title" />}
           <Owners dataOptions={owners} onChange={this.onChangeOwner} />
           <EditableList
             {...this.props}
-            label={this.props.stripes.intl.formatMessage({ id: 'ui-users.feefines.title' })}
+            label={<FormattedMessage id= "ui-users.feefines.title" />}
             validate={this.validate}
             contentData={rows}
-            createButtonLabel={formatMessage({ id: 'stripes-core.button.new' })}
+            createButtonLabel={formatMessage({ id:'stripes-core.button.new' })}
             visibleFields={['feeFineType', 'defaultAmount']}
             columnMapping={{
-              feeFineType: this.props.stripes.intl.formatMessage({ id: 'ui-users.feefines.columns.type' }),
-              defaultAmount: this.props.stripes.intl.formatMessage({ id: 'ui-users.feefines.columns.amount' })
+              feeFineType: intl.formatMessage({ id: 'ui-users.feefines.columns.type' }),
+              defaultAmount: intl.formatMessage({ id: 'ui-users.feefines.columns.amount' })
             }}
             onUpdate={this.onUpdateItem}
             onCreate={this.onCreateItem}

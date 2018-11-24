@@ -20,22 +20,22 @@ import ItemInfo from './ItemInfo';
 
 let feefineamount = 0;
 
-function validate(type, props) {
+function validate(type) {
   const errors = [];
   if (!type.feeFineId) {
-    errors.feeFineId = props.stripes.intl.formatMessage({ id: 'ui-users.feefines.modal.error' });
+    errors.feeFineId = <FormattedMessage id="ui-users.feefines.modal.error" />;
   }
   if (!type.ownerId) {
-    errors.ownerId = props.stripes.intl.formatMessage({ id: 'ui-users.feefines.modal.error' });
+    errors.ownerId = <FormattedMessage id="ui-users.feefines.modal.error" />;
   }
   if (type.amount < 0) {
     errors.amount = 'Amount must be > 0';
   }
   if (!type.amount && !feefineamount) {
-    errors.amount = props.stripes.intl.formatMessage({ id: 'ui-users.errors.missingRequiredField' });
+    errors.amount = <FormattedMessage id="ui-users.errors.missingRequiredField" />;
   }
   if (Number.isNaN(Number(type.amount)) && type.amount) {
-    errors.amount = props.stripes.intl.formatMessage({ id: 'ui-users.charge.errors.amount' });
+    errors.amount = <FormattedMessage id="ui-users.charge.errors.amount" />;
   }
   return errors;
 }
@@ -105,7 +105,7 @@ class ChargeForm extends React.Component {
     const owners = this.props.owners || [];
     if (servicePoint && servicePoint !== '-') {
       owners.forEach(o => {
-        if (o.servicePointOwner.find(s => s.value === servicePoint)) {
+        if (o.servicePointOwner && o.servicePointOwner.find(s => s.value === servicePoint)) {
           this.props.initialize({ ownerId: o.id });
           this.props.onChangeOwner({ target: { value: o.id } });
         }
@@ -113,7 +113,7 @@ class ChargeForm extends React.Component {
     } else if (servicePoints.length === 1) {
       const sp = servicePoints[0].id;
       owners.forEach(o => {
-        if (o.servicePointOwner.find(s => s.value === sp)) {
+        if (o.servicePointOwner && o.servicePointOwner.find(s => s.value === sp)) {
           this.props.initialize({ ownerId: o.id });
           this.props.onChangeOwner({ target: { value: o.id } });
         }
@@ -122,7 +122,7 @@ class ChargeForm extends React.Component {
       const sp1 = servicePoints[0].id;
       const sp2 = servicePoints[1].id;
       owners.forEach(o => {
-        if (o.servicePointOwner.find(s => s.value === sp1) && o.servicePointOwner.find(s => s.value === sp2)) {
+        if (o.servicePointOwner && o.servicePointOwner.find(s => s.value === sp1) && o.servicePointOwner.find(s => s.value === sp2)) {
           this.props.initialize({ ownerId: o.id });
           this.props.onChangeOwner({ target: { value: o.id } });
         }

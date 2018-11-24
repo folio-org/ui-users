@@ -1,7 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm, change } from 'redux-form';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
 import {
   Row,
   Col,
@@ -22,19 +26,19 @@ const validate = (values, props) => {
 
   const errors = {};
   if (!values.waive) {
-    errors.waive = props.stripes.intl.formatMessage({ id: 'ui-users.accounts.error.field' });
+    errors.waive = <FormattedMessage id="ui-users.accounts.error.field" />;
   }
   if (values.waive < 0) {
-    errors.waive = props.stripes.intl.formatMessage({ id: 'ui-users.accounts.waive.error.amount' });
+    errors.waive = <FormattedMessage id="ui-users.accounts.waive.error.amount" />;
   }
   if (!values.method) {
     errors.method = 'Select one';
   }
   if (props.commentRequired && !values.comment) {
-    errors.comment = props.stripes.intl.formatMessage({ id: 'ui-users.accounts.error.comment' });
+    errors.comment = <FormattedMessage id="ui-users.accounts.error.comment" />;
   }
   if (values.waive > selected) {
-    errors.waive = props.stripes.intl.formatMessage({ id: 'ui-users.accounts.waive.error.exceeds' });
+    errors.waive = <FormattedMessage id="ui-users.accounts.waive.error.exceeds" />;
   }
   return errors;
 };
@@ -55,9 +59,7 @@ class WaiveModal extends React.Component {
     reset: PropTypes.func,
     commentRequired: PropTypes.bool,
     dispatch: PropTypes.func,
-    stripes: PropTypes.shape({
-      intl: PropTypes.object.isRequired,
-    }),
+    intl: intlShape.isRequired,
   };
 
 
@@ -107,9 +109,9 @@ class WaiveModal extends React.Component {
     const { submitting, invalid, pristine } = this.props;
     const waiveAmount = this.state.waive === '' ? 0.00 : this.state.waive;
     const message = `${(this.state.waive < selected) ? 'Partially waive' : 'Waiving'} ${n} ${(n === 1) ? 'fee/fine' : 'fees/fines'}    for a total amount of ${parseFloat(waiveAmount).toFixed(2)}`;
-    const additional = this.props.stripes.intl.formatMessage({ id: 'ui-users.accounts.waive.placeholder.additional' });
-    const comment = `${additional} ${(this.props.commentRequired) ? '(required)' : '(optional)'}`;
-
+    const comment = (this.props.commentRequired)
+      ? this.props.intl.formatMessage({ id: 'ui-users.accounts.waive.placeholder.additional.required' })
+      : this.props.intl.formatMessage({ id: 'ui-users.accounts.waive.placeholder.additional.optional' });
     return (
       <Modal
         open={this.props.open}
@@ -215,4 +217,4 @@ export default reduxForm({
   form: 'waive',
   fields: [],
   validate,
-})(WaiveModal);
+})(injectIntl(WaiveModal));
