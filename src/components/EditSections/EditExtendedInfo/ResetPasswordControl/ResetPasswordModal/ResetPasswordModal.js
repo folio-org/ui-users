@@ -13,6 +13,14 @@ import {
 import css from './ResetPasswordModal.css';
 
 class ResetPasswordModal extends React.Component {
+  static propTypes = {
+    isOpen: PropTypes.bool.isRequired,
+    email: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    link: PropTypes.string.isRequired,
+    onClose: PropTypes.func.isRequired,
+  };
+
   constructor(props) {
     super(props);
 
@@ -45,6 +53,8 @@ class ResetPasswordModal extends React.Component {
   }
 
   buildCopyLinkControl = () => {
+    const { link } = this.props;
+
     return (
       <Row className={css.copyControl}>
         <Col xs={9}>
@@ -52,7 +62,7 @@ class ResetPasswordModal extends React.Component {
             className={css.textField}
             ref={this.copyInput}
             type="text"
-            value="This text will be copied to the clipboard"
+            value={link}
             readOnly
           />
         </Col>
@@ -90,12 +100,5 @@ class ResetPasswordModal extends React.Component {
     );
   }
 }
-
-ResetPasswordModal.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  email: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  onClose: PropTypes.func.isRequired,
-};
 
 export default ResetPasswordModal;
