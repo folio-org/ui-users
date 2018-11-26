@@ -41,6 +41,7 @@ class ClosedLoans extends React.Component {
   });
 
   static propTypes = {
+    buildRecords: PropTypes.func,
     onClickViewLoanActionsHistory: PropTypes.func.isRequired,
     loans: PropTypes.arrayOf(PropTypes.object).isRequired,
     mutator: PropTypes.shape({
@@ -71,8 +72,6 @@ class ClosedLoans extends React.Component {
     this.handleOptionsChange = this.handleOptionsChange.bind(this);
     this.getFeeFine = this.getFeeFine.bind(this);
     this.anonymizeLoans = this.anonymizeLoans.bind(this);
-    this.buildRecords = this.buildRecords.bind(this);
-
     this.headers = ['action', 'dueDate', 'loanDate', 'returnDate', 'systemReturnDate', 'item.barcode', 'item.callNumber', 'item.contributors',
       'item.holdingsRecordId', 'item.instanceId', 'item.status.name', 'item.title', 'item.materialType.name',
       'item.location.name', 'metaData.createdByUserId', 'metadata.updatedDate', 'metadata.updatedByUserId', 'loanPolicyId'];
@@ -158,21 +157,6 @@ class ClosedLoans extends React.Component {
       contributorsList.push('-');
     }
     return contributorsList;
-  }
-
-  buildRecords(recordsLoaded) {
-    recordsLoaded.forEach(record => {
-      if (_.isArray(record.item.contributors)) {
-        const contributorNamesMap = [];
-        if (record.item.contributors.length > 0) {
-          record.item.contributors.forEach(item => {
-            contributorNamesMap.push(item.name);
-          });
-        }
-        record.item.contributors = contributorNamesMap.join('; ');
-      }
-    });
-    return recordsLoaded;
   }
 
   getLoansFormatter() {
@@ -330,11 +314,8 @@ class ClosedLoans extends React.Component {
     const anonymizeString = <FormattedMessage id="ui-users.anonymize" />;
     const loansSorted = _.orderBy(loans,
       [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
-    const columnHeadersMap = this.columnHeadersMap;
     const clonedLoans = JSON.parse(JSON.stringify(this.props.loans)); // Do not mutate the actual resource
-    const recordsToCSV = this.buildRecords(clonedLoans);
-    const onlyFields = columnHeadersMap;
-
+    const recordsToCSV = this.props.buildRecords(clonedLoans);
     return (
       <div>
         <ActionsBar
@@ -356,7 +337,7 @@ class ClosedLoans extends React.Component {
               >
                 {anonymizeString}
               </Button>
-              <ExportCsv data={recordsToCSV} onlyFields={onlyFields} />
+              <ExportCsv data={recordsToCSV} onlyFields={this.columnHeadersMap} />
             </div>
           }
         />

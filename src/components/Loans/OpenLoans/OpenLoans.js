@@ -57,6 +57,7 @@ class OpenLoans extends React.Component {
   });
 
   static propTypes = {
+    buildRecords: PropTypes.func,
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired
     }).isRequired,
@@ -112,8 +113,6 @@ class OpenLoans extends React.Component {
     this.fetchLoanPolicyNames = this.fetchLoanPolicyNames.bind(this);
     this.callout = null;
     this.getFeeFine = this.getFeeFine.bind(this);
-    this.buildRecords = this.buildRecords.bind(this);
-
     const { stripes } = props;
 
     this.connectedChangeDueDateDialog = stripes.connect(ChangeDueDateDialog);
@@ -247,21 +246,6 @@ class OpenLoans extends React.Component {
       remaining += parseFloat(a.amount);
     });
     return (remaining === 0) ? '-' : remaining.toFixed(2);
-  }
-
-  buildRecords(recordsLoaded) {
-    recordsLoaded.forEach(record => {
-      if (_.isArray(record.item.contributors)) {
-        const contributorNamesMap = [];
-        if (record.item.contributors.length > 0) {
-          record.item.contributors.forEach(item => {
-            contributorNamesMap.push(item.name);
-          });
-        }
-        record.item.contributors = contributorNamesMap.join('; ');
-      }
-    });
-    return recordsLoaded;
   }
 
   getContributorslist(loan) {
@@ -714,11 +698,8 @@ class OpenLoans extends React.Component {
     const bulkActionsTooltip = <FormattedMessage id="ui-users.bulkActions.tooltip" />;
     const renewString = <FormattedMessage id="ui-users.renew" />;
     const changeDueDateString = <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />;
-    const columnHeadersMap = this.columnHeadersMap;
     const clonedLoans = JSON.parse(JSON.stringify(this.props.loans)); // Do not mutate the actual resource
-    const recordsToCSV = this.buildRecords(clonedLoans);
-    const onlyFields = columnHeadersMap;
-
+    const recordsToCSV = this.props.buildRecords(clonedLoans);
     return (
       <ActionsBar
         contentStart={
@@ -766,7 +747,7 @@ class OpenLoans extends React.Component {
             >
               {changeDueDateString}
             </Button>
-            <ExportCsv data={recordsToCSV} onlyFields={onlyFields} />
+            <ExportCsv data={recordsToCSV} onlyFields={this.columnHeadersMap} />
           </span>
         }
       />

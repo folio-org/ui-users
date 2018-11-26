@@ -287,8 +287,6 @@
   "metadata.updatedDate": "Updated date",
   "metadata.updatedByUserId": "updatedByUserId",
   "loanPolicyId": "Loan policy Id",
-
-
   "loans.title": "Loans",
   "loans.open": "Open",
   "loans.closed": "Closed",

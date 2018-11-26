@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { cloneDeep, get, omit, differenceBy, find } from 'lodash';
+import { cloneDeep, get, omit, differenceBy, find, isArray } from 'lodash';
 import React from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
@@ -196,6 +196,7 @@ class ViewUser extends React.Component {
     this.onClickViewOpenLoans = this.onClickViewOpenLoans.bind(this);
     this.onClickViewClosedLoans = this.onClickViewClosedLoans.bind(this);
     this.onClickViewLoanActionsHistory = this.onClickViewLoanActionsHistory.bind(this);
+    this.buildRecords = this.buildRecords.bind(this);
     this.onClickCloseLoanActionsHistory = this.onClickCloseLoanActionsHistory.bind(this);
     this.onAddressesUpdate = this.onAddressesUpdate.bind(this);
     this.handleSectionToggle = this.handleSectionToggle.bind(this);
@@ -260,6 +261,21 @@ class ViewUser extends React.Component {
     this.setState({
       viewOpenLoansMode: false,
     });
+  }
+
+  buildRecords(recordsLoaded) {
+    recordsLoaded.forEach(record => {
+      if (isArray(record.item.contributors)) {
+        const contributorNamesMap = [];
+        if (record.item.contributors.length > 0) {
+          record.item.contributors.forEach(item => {
+            contributorNamesMap.push(item.name);
+          });
+        }
+        record.item.contributors = contributorNamesMap.join('; ');
+      }
+    });
+    return recordsLoaded;
   }
 
   onClickViewLoanActionsHistory(e, selectedLoan) {
@@ -523,6 +539,7 @@ class ViewUser extends React.Component {
     const userFormData = this.getUserFormData(user, addresses, sponsors, proxies, permissions, servicePoints, preferredServicePoint);
 
     const loansHistory = (<this.connectedLoansHistory
+      buildRecords={this.buildRecords}
       user={user}
       loansHistory={loans}
       patronGroup={patronGroup}
