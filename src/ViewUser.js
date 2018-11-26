@@ -642,15 +642,17 @@ class ViewUser extends React.Component {
           </IfInterface>
         </IfPermission>
 
-        <IfInterface name="request-storage" version="2.2">
-          <this.connectedUserRequests
-            expanded={this.state.sections.requestsSection}
-            onToggle={this.handleSectionToggle}
-            accordionId="requestsSection"
-            user={user}
-            {...this.props}
-          />
-        </IfInterface>
+        <IfPermission perm="ui-users.requests.all">
+          <IfInterface name="request-storage" version="2.2">
+            <this.connectedUserRequests
+              expanded={this.state.sections.requestsSection}
+              onToggle={this.handleSectionToggle}
+              accordionId="requestsSection"
+              user={user}
+              {...this.props}
+            />
+          </IfInterface>
+        </IfPermission>
 
         <IfPermission perm="perms.users.get">
           <IfInterface name="permissions" version="5.0">
