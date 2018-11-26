@@ -6,6 +6,8 @@ import Switch from 'react-router-dom/Switch';
 import { hot } from 'react-hot-loader';
 import Users from './Users';
 import Settings from './settings';
+import { CommandList } from './components/Commander';
+import commands from './commands';
 
 class UsersRouting extends React.Component {
   static actionNames = ['stripesHome', 'usersSortByName'];
@@ -49,13 +51,15 @@ class UsersRouting extends React.Component {
     }
 
     return (
-      <Switch>
-        <Route
-          path={`${this.props.match.path}`}
-          render={() => <this.connectedApp {...this.props} />}
-        />
-        <Route component={() => { this.NoMatch(); }} />
-      </Switch>
+      <CommandList commands={commands}>
+        <Switch>
+          <Route
+            path={`${this.props.match.path}`}
+            render={() => <this.connectedApp {...this.props} />}
+          />
+          <Route component={() => { this.NoMatch(); }} />
+        </Switch>
+      </CommandList>
     );
   }
 }

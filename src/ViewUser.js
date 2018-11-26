@@ -17,7 +17,9 @@ import {
   IfPermission,
   IfInterface,
   Layer,
-  Headline
+  Headline,
+  AccordionSet,
+  expandAllFunction,
 } from '@folio/stripes/components';
 import { withTags } from '@folio/stripes/smart-components';
 
@@ -34,6 +36,7 @@ import { getFullName, eachPromise } from './util';
 import withProxy from './withProxy';
 import withServicePoints from './withServicePoints';
 
+import { HasCommand } from './components/Commander';
 import {
   UserInfo,
   ExtendedInfo,
@@ -200,6 +203,9 @@ class ViewUser extends React.Component {
     this.onAddressesUpdate = this.onAddressesUpdate.bind(this);
     this.handleSectionToggle = this.handleSectionToggle.bind(this);
     this.handleExpandAll = this.handleExpandAll.bind(this);
+    this.collapseAllSections = this.collapseAllSections.bind(this);
+    this.expandAllSections = this.expandAllSections.bind(this);
+    this.toggleAllSections = this.toggleAllSections.bind(this);
 
     this.connectedCharge = props.stripes.connect(ChargeFeeFine);
     this.onCloseChargeFeeFine = this.onCloseChargeFeeFine.bind(this);
@@ -214,6 +220,24 @@ class ViewUser extends React.Component {
     this.onClickViewAccountActionsHistory = this.onClickViewAccountActionsHistory.bind(this);
     this.onClickCloseAccountActionsHistory = this.onClickCloseAccountActionsHistory.bind(this);
     this.showCallout = null;
+
+    this.editButton = React.createRef();
+
+    this.keyboardCommands = [{
+      name: 'edit',
+      handler: this.goToEdit,
+    },
+    {
+      name: 'collapseAllSections',
+      handler: this.collapseAllSections,
+      shortcut: 'mod+]'
+    },
+    {
+      name: 'expandAllSections',
+      handler: this.expandAllSections,
+      shortcut: 'mod+['
+    },
+    ];
   }
 
   static getDerivedStateFromProps(nextProps) {
@@ -412,6 +436,25 @@ class ViewUser extends React.Component {
     });
   }
 
+  toggleAllSections(expand) {
+    this.setState((curState) => {
+      const newSections = expandAllFunction(curState.sections, expand);
+      return {
+        sections: newSections
+      };
+    });
+  }
+
+  expandAllSections(e) {
+    e.preventDefault();
+    this.toggleAllSections(true);
+  }
+
+  collapseAllSections(e) {
+    e.preventDefault();
+    this.toggleAllSections(false);
+  }
+
   update(user) {
     const addressTypes = (this.props.parentResources.addressTypes || {}).records || [];
 
@@ -456,6 +499,21 @@ class ViewUser extends React.Component {
     eachPromise(removedPerms, mutator.DELETE);
   }
 
+  goToEdit = () => {
+    this.props.onEdit();
+  }
+
+  checkScope = () => {
+    return document.getElementById('ModuleContainer').contains(document.activeElement);
+  }
+
+  // focus management when edit layer closes (refocus edit button)
+  afterCloseEdit = () => {
+    if (this.editButton.current) {
+      this.editButton.current.focus();
+    }
+  }
+
   render() {
     const {
       resources,
@@ -477,30 +535,31 @@ class ViewUser extends React.Component {
     const servicePoints = this.props.getServicePoints();
     const preferredServicePoint = this.props.getPreferredServicePoint();
     const detailMenu =
-    (
-      <PaneMenu>
-        {
-          tagsEnabled && <IconButton
-            icon="tag"
-            title={<FormattedMessage id="ui-users.showTags" />}
-            id="clickable-show-tags"
-            onClick={this.props.tagsToggle}
-            badgeCount={tags.length}
-            aria-label={<FormattedMessage id="ui-users.showTags" />}
-          />
-        }
-        <IfPermission perm="users.item.put">
-          <IconButton
-            icon="edit"
-            id="clickable-edituser"
-            style={{ visibility: !user ? 'hidden' : 'visible' }}
-            onClick={this.props.onEdit}
-            href={this.props.editLink}
-            aria-label={<FormattedMessage id="ui-users.crud.editUser" />}
-          />
-        </IfPermission>
-      </PaneMenu>
-    );
+      (
+        <PaneMenu>
+          {
+            tagsEnabled && <IconButton
+              icon="tag"
+              title={<FormattedMessage id="ui-users.showTags" />}
+              id="clickable-show-tags"
+              onClick={this.props.tagsToggle}
+              badgeCount={tags.length}
+              aria-label={<FormattedMessage id="ui-users.showTags" />}
+            />
+          }
+          <IfPermission perm="users.item.put">
+            <IconButton
+              icon="edit"
+              id="clickable-edituser"
+              style={{ visibility: !user ? 'hidden' : 'visible' }}
+              onClick={this.props.onEdit}
+              href={this.props.editLink}
+              ref={this.editButton}
+              aria-label={<FormattedMessage id="ui-users.crud.editUser" />}
+            />
+          </IfPermission>
+        </PaneMenu>
+      );
 
     if (!user) {
       return (
@@ -557,210 +616,218 @@ class ViewUser extends React.Component {
       />);
 
     return (
-      <Pane
-        id="pane-userdetails"
-        defaultWidth={this.props.paneWidth}
-        paneTitle={getFullName(user)}
-        lastMenu={detailMenu}
-        dismissible
-        onClose={this.props.onClose}
-        appIcon={{ app: 'users' }}
+      <HasCommand
+        commands={this.keyboardCommands}
+        display={['new', 'edit', 'search']}
+        isWithinScope={this.checkScope}
+        scope={document.body}
       >
-        <TitleManager record={getFullName(user)} />
+        <Pane
+          id="pane-userdetails"
+          defaultWidth={this.props.paneWidth}
+          paneTitle={getFullName(user)}
+          lastMenu={detailMenu}
+          dismissible
+          onClose={this.props.onClose}
+          appIcon={{ app: 'users' }}
+        >
+          <TitleManager record={getFullName(user)} />
 
-        <Headline size="xx-large" tag="h2">{getFullName(user)}</Headline>
+          <Headline size="xx-large" tag="h2">{getFullName(user)}</Headline>
 
-        <Row end="xs">
-          <Col xs>
-            <ExpandAllButton accordionStatus={this.state.sections} onToggle={this.handleExpandAll} />
-          </Col>
-        </Row>
+          <Row end="xs">
+            <Col xs>
+              <ExpandAllButton accordionStatus={this.state.sections} onToggle={this.handleExpandAll} />
+            </Col>
+          </Row>
+          <AccordionSet>
+            <this.connectedUserInfo
+              accordionId="userInformationSection"
+              user={user}
+              patronGroup={patronGroup}
+              settings={settings}
+              stripes={stripes}
+              expanded={this.state.sections.userInformationSection}
+              onToggle={this.handleSectionToggle}
+            />
+            <ExtendedInfo
+              accordionId="extendedInfoSection"
+              user={user}
+              expanded={this.state.sections.extendedInfoSection}
+              onToggle={this.handleSectionToggle}
+            />
+            <ContactInfo
+              accordionId="contactInfoSection"
+              stripes={stripes}
+              user={user}
+              addresses={addresses}
+              addressTypes={this.addressTypes}
+              expanded={this.state.sections.contactInfoSection}
+              onToggle={this.handleSectionToggle}
+            />
+            <IfPermission perm="proxiesfor.collection.get">
+              <ProxyPermissions
+                user={user}
+                accordionId="proxySection"
+                onToggle={this.handleSectionToggle}
+                proxies={proxies}
+                sponsors={sponsors}
+                expanded={this.state.sections.proxySection}
+                {...this.props}
+              />
+            </IfPermission>
 
-        <this.connectedUserInfo
-          accordionId="userInformationSection"
-          user={user}
-          patronGroup={patronGroup}
-          settings={settings}
-          stripes={stripes}
-          expanded={this.state.sections.userInformationSection}
-          onToggle={this.handleSectionToggle}
-        />
-        <ExtendedInfo
-          accordionId="extendedInfoSection"
-          user={user}
-          expanded={this.state.sections.extendedInfoSection}
-          onToggle={this.handleSectionToggle}
-        />
-        <ContactInfo
-          accordionId="contactInfoSection"
-          stripes={stripes}
-          user={user}
-          addresses={addresses}
-          addressTypes={this.addressTypes}
-          expanded={this.state.sections.contactInfoSection}
-          onToggle={this.handleSectionToggle}
-        />
-        <IfPermission perm="proxiesfor.collection.get">
-          <ProxyPermissions
-            user={user}
-            accordionId="proxySection"
-            onToggle={this.handleSectionToggle}
-            proxies={proxies}
-            sponsors={sponsors}
-            expanded={this.state.sections.proxySection}
-            {...this.props}
-          />
-        </IfPermission>
+            <IfPermission perm="accounts.collection.get">
+              <this.connectedUserAccounts
+                onClickViewChargeFeeFine={this.onClickViewChargeFeeFine}
+                expanded={this.state.sections.accountsSection}
+                onToggle={this.handleSectionToggle}
+                accordionId="accountsSection"
+                addRecord={this.state.addRecord}
+                {...this.props}
+              />
+            </IfPermission>
 
-        <IfPermission perm="accounts.collection.get">
-          <this.connectedUserAccounts
-            onClickViewChargeFeeFine={this.onClickViewChargeFeeFine}
-            expanded={this.state.sections.accountsSection}
-            onToggle={this.handleSectionToggle}
-            accordionId="accountsSection"
-            addRecord={this.state.addRecord}
-            {...this.props}
-          />
-        </IfPermission>
-
-        <IfPermission perm="ui-users.loans.all">
-          <IfInterface name="loan-policy-storage" version="1.0">
-            { /* Check without version, so can support either of multiple versions.
+            <IfPermission perm="ui-users.loans.all">
+              <IfInterface name="loan-policy-storage" version="1.0">
+                { /* Check without version, so can support either of multiple versions.
             Replace with specific check when facility for providing
             multiple versions is available */ }
-            <IfInterface name="circulation">
-              <this.connectedUserLoans
-                onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
-                onClickViewOpenLoans={this.onClickViewOpenLoans}
-                onClickViewClosedLoans={this.onClickViewClosedLoans}
-                expanded={this.state.sections.loansSection}
+                <IfInterface name="circulation">
+                  <this.connectedUserLoans
+                    onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
+                    onClickViewOpenLoans={this.onClickViewOpenLoans}
+                    onClickViewClosedLoans={this.onClickViewClosedLoans}
+                    expanded={this.state.sections.loansSection}
+                    onToggle={this.handleSectionToggle}
+                    accordionId="loansSection"
+                    {...this.props}
+                  />
+                </IfInterface>
+              </IfInterface>
+            </IfPermission>
+
+            <IfInterface name="request-storage" version="2.2">
+              <this.connectedUserRequests
+                expanded={this.state.sections.requestsSection}
                 onToggle={this.handleSectionToggle}
-                accordionId="loansSection"
+                accordionId="requestsSection"
+                user={user}
                 {...this.props}
               />
             </IfInterface>
-          </IfInterface>
-        </IfPermission>
 
-        <IfInterface name="request-storage" version="2.2">
-          <this.connectedUserRequests
-            expanded={this.state.sections.requestsSection}
-            onToggle={this.handleSectionToggle}
-            accordionId="requestsSection"
-            user={user}
-            {...this.props}
-          />
-        </IfInterface>
+            <IfPermission perm="perms.users.get">
+              <IfInterface name="permissions" version="5.0">
+                <UserPermissions
+                  expanded={this.state.sections.permissionsSection}
+                  onToggle={this.handleSectionToggle}
+                  userPermissions={permissions}
+                  accordionId="permissionsSection"
+                  {...this.props}
+                />
+              </IfInterface>
+            </IfPermission>
 
-        <IfPermission perm="perms.users.get">
-          <IfInterface name="permissions" version="5.0">
-            <UserPermissions
-              expanded={this.state.sections.permissionsSection}
-              onToggle={this.handleSectionToggle}
-              userPermissions={permissions}
-              accordionId="permissionsSection"
-              {...this.props}
+            <IfPermission perm="inventory-storage.service-points.collection.get,inventory-storage.service-points-users.collection.get">
+              <IfInterface name="service-points-users" version="1.0">
+                <UserServicePoints
+                  expanded={this.state.sections.servicePointsSection}
+                  onToggle={this.handleSectionToggle}
+                  accordionId="servicePointsSection"
+                  servicePoints={servicePoints}
+                  preferredServicePoint={preferredServicePoint}
+                  {...this.props}
+                />
+              </IfInterface>
+            </IfPermission>
+          </AccordionSet>
+          <Layer
+            isOpen={query.layer ? query.layer === 'edit' : false}
+            contentLabel={<FormattedMessage id="ui-users.editUserDialog" />}
+            afterClose={this.afterCloseEdit}
+          >
+            <UserForm
+              stripes={stripes}
+              initialValues={userFormData}
+              onSubmit={(record) => { this.update(record); }}
+              onCancel={this.props.onCloseEdit}
+              parentResources={{
+                ...this.props.resources,
+                ...this.props.parentResources,
+              }}
+              parentMutator={this.props.parentMutator}
             />
-          </IfInterface>
-        </IfPermission>
+          </Layer>
 
-        <IfPermission perm="inventory-storage.service-points.collection.get,inventory-storage.service-points-users.collection.get">
-          <IfInterface name="service-points-users" version="1.0">
-            <UserServicePoints
-              expanded={this.state.sections.servicePointsSection}
-              onToggle={this.handleSectionToggle}
-              accordionId="servicePointsSection"
+          <Layer
+            isOpen={query.layer ? query.layer === 'open-accounts' || query.layer === 'closed-accounts' || query.layer === 'all-accounts' : false}
+            label={<FormattedMessage id="ui-users.accounts.title" />}
+          >
+            <this.connectedAccountsHistory
+              loans={loans}
+              num={(this.state.addRecord ? 51 : 50)}
+              onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
+              user={user}
+              parentMutator={this.props.mutator}
+              patronGroup={patronGroup}
+              stripes={stripes}
+              history={this.props.history}
+              addRecord={this.state.addRecord}
+              handleAddRecords={this.handleAddRecords}
+              location={this.props.location}
+              onCancel={this.onClickCloseAccountsHistory}
+              onClickViewChargeFeeFine={this.onClickViewChargeFeeFine}
+              onClickViewAccountActionsHistory={this.onClickViewAccountActionsHistory}
+              onClickCloseAccountActionsHistory={this.onClickCloseAccountActionsHistory}
+            />
+          </Layer>
+          <Layer isOpen={query.layer ? query.layer === 'charge' : false} label="Charge Fee/Fine">
+            <this.connectedCharge
               servicePoints={servicePoints}
               preferredServicePoint={preferredServicePoint}
-              {...this.props}
+              stripes={stripes}
+              onCloseChargeFeeFine={this.onCloseChargeFeeFine}
+              user={user}
+              loan={{ item: {} }}
+              selectedLoan={this.state.selectedLoan}
+              handleAddRecords={this.handleAddRecords}
             />
-          </IfInterface>
-        </IfPermission>
-
-        <Layer
-          isOpen={query.layer ? query.layer === 'edit' : false}
-          contentLabel={<FormattedMessage id="ui-users.editUserDialog" />}
-        >
-          <UserForm
-            stripes={stripes}
-            initialValues={userFormData}
-            onSubmit={(record) => { this.update(record); }}
-            onCancel={this.props.onCloseEdit}
-            parentResources={{
-              ...this.props.resources,
-              ...this.props.parentResources,
-            }}
-            parentMutator={this.props.parentMutator}
-          />
-        </Layer>
-
-        <Layer
-          isOpen={query.layer ? query.layer === 'open-accounts' || query.layer === 'closed-accounts' || query.layer === 'all-accounts' : false}
-          label={<FormattedMessage id="ui-users.accounts.title" />}
-        >
-          <this.connectedAccountsHistory
-            loans={loans}
-            num={(this.state.addRecord ? 51 : 50)}
-            onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
-            user={user}
-            parentMutator={this.props.mutator}
-            patronGroup={patronGroup}
-            stripes={stripes}
-            history={this.props.history}
-            addRecord={this.state.addRecord}
-            handleAddRecords={this.handleAddRecords}
-            location={this.props.location}
-            onCancel={this.onClickCloseAccountsHistory}
-            onClickViewChargeFeeFine={this.onClickViewChargeFeeFine}
-            onClickViewAccountActionsHistory={this.onClickViewAccountActionsHistory}
-            onClickCloseAccountActionsHistory={this.onClickCloseAccountActionsHistory}
-          />
-        </Layer>
-        <Layer isOpen={query.layer ? query.layer === 'charge' : false} label="Charge Fee/Fine">
-          <this.connectedCharge
-            servicePoints={servicePoints}
-            preferredServicePoint={preferredServicePoint}
-            stripes={stripes}
-            onCloseChargeFeeFine={this.onCloseChargeFeeFine}
-            user={user}
-            loan={{ item: {} }}
-            selectedLoan={this.state.selectedLoan}
-            handleAddRecords={this.handleAddRecords}
-          />
-        </Layer>
-        <Layer isOpen={query.layer ? query.layer === 'account' : false} label="Account Actions History">
-          <this.connectedAccountActionsHistory
-            user={user}
-            patronGroup={patronGroup}
-            account={this.state.selectedAccount}
-            accountid={this.state.selectedAccount.id}
-            history={this.props.history}
-            onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
-            num={(this.state.addRecord ? 2 : 1)}
-            handleAddRecords={this.handleAddRecords}
-            stripes={stripes}
-            onCancel={this.onClickCloseAccountActionsHistory}
-            // when navigating away to another user, clear all loan-related state
-            onClickUser={() => { this.onClickCloseAccountActionsHistory(); this.onClickCloseAccountsHistory(); }}
-          />
-        </Layer>
-
-        <IfPermission perm="ui-users.loans.all">
-          <Layer
-            isOpen={query.layer ? query.layer === 'open-loans' || query.layer === 'closed-loans' : false}
-            contentLabel={<FormattedMessage id="ui-users.loans.title" />}
-          >
-            {loansHistory}
+          </Layer>
+          <Layer isOpen={query.layer ? query.layer === 'account' : false} label="Account Actions History">
+            <this.connectedAccountActionsHistory
+              user={user}
+              patronGroup={patronGroup}
+              account={this.state.selectedAccount}
+              accountid={this.state.selectedAccount.id}
+              history={this.props.history}
+              onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
+              num={(this.state.addRecord ? 2 : 1)}
+              handleAddRecords={this.handleAddRecords}
+              stripes={stripes}
+              onCancel={this.onClickCloseAccountActionsHistory}
+              // when navigating away to another user, clear all loan-related state
+              onClickUser={() => { this.onClickCloseAccountActionsHistory(); this.onClickCloseAccountsHistory(); }}
+            />
           </Layer>
 
-          <Layer
-            isOpen={query.layer ? query.layer === 'loan' : false}
-            contentLabel={<FormattedMessage id="ui-users.loanActionsHistory" />}
-          >
-            {loanDetails}
-          </Layer>
-        </IfPermission>
-      </Pane>
+          <IfPermission perm="ui-users.loans.all">
+            <Layer
+              isOpen={query.layer ? query.layer === 'open-loans' || query.layer === 'closed-loans' : false}
+              contentLabel={<FormattedMessage id="ui-users.loans.title" />}
+            >
+              {loansHistory}
+            </Layer>
+
+            <Layer
+              isOpen={query.layer ? query.layer === 'loan' : false}
+              contentLabel={<FormattedMessage id="ui-users.loanActionsHistory" />}
+            >
+              {loanDetails}
+            </Layer>
+          </IfPermission>
+        </Pane>
+      </HasCommand>
     );
   }
 }
