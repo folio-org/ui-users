@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 import {
   Badge,
   Accordion,
@@ -11,12 +12,20 @@ import ProxyItem from '../../ProxyGroup/ProxyItem';
 import { getFullName } from '../../../util';
 
 const ProxyPermissions = (props) => {
-  const { onToggle, accordionId, expanded, proxies, sponsors, user, stripes } = props;
+  const {
+    onToggle,
+    accordionId,
+    expanded,
+    proxies,
+    sponsors,
+    user,
+    stripes,
+  } = props;
   const fullName = getFullName(user);
 
-  const isProxyFor = props.stripes.intl.formatMessage({ id: 'ui-users.permissions.isProxyFor' }, { name: fullName });
-  const isSponsorOf = props.stripes.intl.formatMessage({ id: 'ui-users.permissions.isSponsorOf' }, { name: fullName });
-  const proxySponsor = props.stripes.intl.formatMessage({ id: 'ui-users.permissions.proxySponsor' });
+  const isProxyFor = <FormattedMessage id="ui-users.permissions.isProxyFor" values={{ name: fullName }} />;
+  const isSponsorOf = <FormattedMessage id="ui-users.permissions.isSponsorOf" values={{ name: fullName }} />;
+  const proxySponsor = <FormattedMessage id="ui-users.permissions.proxySponsor" />;
 
   return (
     <Accordion
@@ -28,8 +37,20 @@ const ProxyPermissions = (props) => {
       }
       label={<Headline size="large" tag="h3">{proxySponsor}</Headline>}
     >
-      <ProxyViewList records={sponsors} stripes={stripes} label={isProxyFor} name="sponsors" itemComponent={ProxyItem} />
-      <ProxyViewList records={proxies} stripes={stripes} label={isSponsorOf} name="proxies" itemComponent={ProxyItem} />
+      <ProxyViewList
+        records={sponsors}
+        stripes={stripes}
+        label={isProxyFor}
+        name="sponsors"
+        itemComponent={ProxyItem}
+      />
+      <ProxyViewList
+        records={proxies}
+        stripes={stripes}
+        label={isSponsorOf}
+        name="proxies"
+        itemComponent={ProxyItem}
+      />
     </Accordion>
   );
 };

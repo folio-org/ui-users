@@ -1,7 +1,10 @@
 import get from 'lodash/get';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedDate, FormattedMessage } from 'react-intl';
+import {
+  FormattedDate,
+  FormattedMessage,
+} from 'react-intl';
 import {
   Accordion,
   Col,

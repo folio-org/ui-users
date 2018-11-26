@@ -1,7 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FieldArray } from 'redux-form';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import {
   Row,
@@ -14,7 +18,7 @@ import { Pluggable } from '@folio/stripes/core';
 import { getFullName } from '../../../util';
 import css from './ProxyEditList.css';
 
-export default class ProxyEditList extends React.Component {
+class ProxyEditList extends React.Component {
   static propTypes = {
     stripes: PropTypes.object.isRequired,
     name: PropTypes.string.isRequired,
@@ -22,6 +26,7 @@ export default class ProxyEditList extends React.Component {
     itemComponent: PropTypes.func.isRequired,
     initialValues: PropTypes.object,
     change: PropTypes.func.isRequired,
+    intl: intlShape.isRequired,
   };
 
   constructor(props) {
@@ -58,12 +63,25 @@ export default class ProxyEditList extends React.Component {
   }
 
   renderConfirmModal() {
-    const { confirmDelete, curRecord } = this.state;
-    const { initialValues, name } = this.props;
-    const formatMsg = this.props.stripes.intl.formatMessage;
-    const heading = (name === 'sponsors') ? formatMsg({ id: 'ui-users.deleteSponsorPrompt' }) : formatMsg({ id: 'ui-users.deleteProxyPrompt' });
-    const sponsorsMsg = <SafeHTMLMessage id="ui-users.proxyWillBeDeleted" values={{ name1: getFullName(initialValues), name2: getFullName(curRecord.user) }} />;
-    const proxyMsg = <SafeHTMLMessage id="ui-users.proxyWillBeDeleted" values={{ name1: getFullName(curRecord.user), name2: getFullName(initialValues) }} />;
+    const {
+      confirmDelete,
+      curRecord,
+    } = this.state;
+    const {
+      initialValues,
+      name,
+    } = this.props;
+    const heading = (name === 'sponsors') ?
+      <FormattedMessage id="ui-users.deleteSponsorPrompt" /> :
+      <FormattedMessage id="ui-users.deleteProxyPrompt" />;
+    const sponsorsMsg = <SafeHTMLMessage
+      id="ui-users.proxyWillBeDeleted"
+      values={{ name1: getFullName(initialValues), name2: getFullName(curRecord.user) }}
+    />;
+    const proxyMsg = <SafeHTMLMessage
+      id="ui-users.proxyWillBeDeleted"
+      values={{ name1: getFullName(curRecord.user), name2: getFullName(initialValues) }}
+    />;
     const message = (name === 'sponsors') ? sponsorsMsg : proxyMsg;
 
     return (
@@ -74,7 +92,7 @@ export default class ProxyEditList extends React.Component {
         message={message}
         onConfirm={() => this.confirmDelete(true)}
         onCancel={() => this.confirmDelete(false)}
-        confirmLabel={formatMsg({ id: 'ui-users.delete' })}
+        confirmLabel={<FormattedMessage id="ui-users.delete" />}
       />
     );
   }
@@ -83,7 +101,14 @@ export default class ProxyEditList extends React.Component {
     this.fields = fields;
 
     const disableRecordCreation = true;
-    const { itemComponent, label, name, stripes: { intl }, stripes } = this.props;
+    const {
+      itemComponent,
+      label,
+      name,
+      stripes,
+      change,
+      intl,
+    } = this.props;
     const ComponentToRender = itemComponent;
 
     const items = fields.map((fieldName, index) => (
@@ -94,9 +119,8 @@ export default class ProxyEditList extends React.Component {
         namespace={name}
         name={fieldName}
         onDelete={record => this.beginDelete(index, record)}
-        intl={intl}
         stripes={stripes}
-        change={this.props.change}
+        change={change}
       />
     ));
 
@@ -139,7 +163,7 @@ export default class ProxyEditList extends React.Component {
                 }
                 searchButtonStyle="default"
                 selectUser={user => this.onAdd(user)}
-                visibleColumns={['active', 'name', 'patronGroup', 'username', 'barcode']}
+                visibleColumns={['status', 'name', 'patronGroup', 'username', 'barcode']}
                 columnMapping={columnMapping}
                 disableRecordCreation={disableRecordCreation}
               >
@@ -161,3 +185,5 @@ export default class ProxyEditList extends React.Component {
     );
   }
 }
+
+export default injectIntl(ProxyEditList);

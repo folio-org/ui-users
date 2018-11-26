@@ -1,6 +1,9 @@
+import moment from 'moment';
 import { cloneDeep, get, omit, differenceBy, find } from 'lodash';
 import React from 'react';
+import { compose } from 'redux';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 import queryString from 'query-string';
 import { TitleManager } from '@folio/stripes/core';
 import {
@@ -9,18 +12,16 @@ import {
   IconButton,
   Icon,
   ExpandAllButton,
-  expandAllFunction,
   Row,
   Col,
   IfPermission,
   IfInterface,
   Layer,
   Headline,
-  AccordionSet
+  AccordionSet,
+  expandAllFunction,
 } from '@folio/stripes/components';
 import { withTags } from '@folio/stripes/smart-components';
-
-import { HasCommand } from './components/Commander';
 
 import UserForm from './UserForm';
 import LoansHistory from './LoansHistory';
@@ -35,6 +36,7 @@ import { getFullName, eachPromise } from './util';
 import withProxy from './withProxy';
 import withServicePoints from './withServicePoints';
 
+import { HasCommand } from './components/Commander';
 import {
   UserInfo,
   ExtendedInfo,
@@ -42,6 +44,7 @@ import {
   ProxyPermissions,
   UserPermissions,
   UserLoans,
+  UserRequests,
   UserAccounts,
   UserServicePoints,
 } from './components/ViewSections';
@@ -107,7 +110,6 @@ class ViewUser extends React.Component {
       logger: PropTypes.shape({
         log: PropTypes.func.isRequired,
       }).isRequired,
-      intl: PropTypes.object.isRequired,
     }).isRequired,
     paneWidth: PropTypes.string.isRequired,
     resources: PropTypes.shape({
@@ -179,6 +181,7 @@ class ViewUser extends React.Component {
         contactInfoSection: false,
         proxySection: false,
         loansSection: false,
+        requestsSection: false,
         accountsSection: false,
         permissionsSection: false,
         servicePointsSection: false,
@@ -186,6 +189,7 @@ class ViewUser extends React.Component {
     };
 
     this.connectedUserLoans = props.stripes.connect(UserLoans);
+    this.connectedUserRequests = props.stripes.connect(UserRequests);
     this.connectedUserAccounts = props.stripes.connect(UserAccounts);
     this.connectedLoansHistory = props.stripes.connect(LoansHistory);
     this.connectedLoanActionsHistory = props.stripes.connect(LoanActionsHistory);
@@ -224,12 +228,12 @@ class ViewUser extends React.Component {
       handler: this.goToEdit,
     },
     {
-      name:'collapseAllSections',
+      name: 'collapseAllSections',
       handler: this.collapseAllSections,
       shortcut: 'mod+]'
     },
     {
-      name:'expandAllSections',
+      name: 'expandAllSections',
       handler: this.expandAllSections,
       shortcut: 'mod+['
     },
@@ -451,13 +455,6 @@ class ViewUser extends React.Component {
     this.toggleAllSections(false);
   }
 
-  // focus management when edit layer closes (refocus edit button)
-  afterCloseEdit = () => {
-    if (this.editButton.current) {
-      this.editButton.current.focus();
-    }
-  }
-
   update(user) {
     const addressTypes = (this.props.parentResources.addressTypes || {}).records || [];
 
@@ -481,6 +478,9 @@ class ViewUser extends React.Component {
     }
 
     const data = omit(user, ['creds', 'proxies', 'sponsors', 'permissions', 'servicePoints', 'preferredServicePoint']);
+    const today = moment().endOf('day');
+
+    data.active = (moment(user.expirationDate).endOf('day').isSameOrAfter(today));
 
     this.props.mutator.selUser.PUT(data).then(() => {
       this.setState({
@@ -507,8 +507,20 @@ class ViewUser extends React.Component {
     return document.getElementById('ModuleContainer').contains(document.activeElement);
   }
 
+  // focus management when edit layer closes (refocus edit button)
+  afterCloseEdit = () => {
+    if (this.editButton.current) {
+      this.editButton.current.focus();
+    }
+  }
+
   render() {
-    const { resources, stripes, parentResources, tagsEnabled } = this.props;
+    const {
+      resources,
+      stripes,
+      parentResources,
+      tagsEnabled,
+    } = this.props;
 
     const addressTypes = (parentResources.addressTypes || {}).records || [];
     const query = resources.query;
@@ -522,30 +534,28 @@ class ViewUser extends React.Component {
     const proxies = this.props.getProxies();
     const servicePoints = this.props.getServicePoints();
     const preferredServicePoint = this.props.getPreferredServicePoint();
-    const formatMsg = stripes.intl.formatMessage;
     const detailMenu =
       (
         <PaneMenu>
           {
             tagsEnabled && <IconButton
               icon="tag"
-              title={formatMsg({ id: 'ui-users.showTags' })}
+              title={<FormattedMessage id="ui-users.showTags" />}
               id="clickable-show-tags"
-
               onClick={this.props.tagsToggle}
               badgeCount={tags.length}
-              aria-label={formatMsg({ id: 'ui-users.showTags' })}
+              aria-label={<FormattedMessage id="ui-users.showTags" />}
             />
           }
           <IfPermission perm="users.item.put">
             <IconButton
               icon="edit"
               id="clickable-edituser"
-              ref={this.editButton}
               style={{ visibility: !user ? 'hidden' : 'visible' }}
               onClick={this.props.onEdit}
               href={this.props.editLink}
-              aria-label={formatMsg({ id: 'ui-users.crud.editUser' })}
+              ref={this.editButton}
+              aria-label={<FormattedMessage id="ui-users.crud.editUser" />}
             />
           </IfPermission>
         </PaneMenu>
@@ -553,7 +563,14 @@ class ViewUser extends React.Component {
 
     if (!user) {
       return (
-        <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle={formatMsg({ id: 'ui-users.information.userDetails' })} lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
+        <Pane
+          id="pane-userdetails"
+          defaultWidth={this.props.paneWidth}
+          paneTitle={<FormattedMessage id="ui-users.information.userDetails" />}
+          lastMenu={detailMenu}
+          dismissible
+          onClose={this.props.onClose}
+        >
           <div style={{ paddingTop: '1rem' }}><Icon icon="spinner-ellipsis" width="100px" /></div>
         </Pane>
       );
@@ -605,16 +622,49 @@ class ViewUser extends React.Component {
         isWithinScope={this.checkScope}
         scope={document.body}
       >
-        <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle={getFullName(user)} lastMenu={detailMenu} dismissible onClose={this.props.onClose} appIcon={{ app: 'users' }}>
+        <Pane
+          id="pane-userdetails"
+          defaultWidth={this.props.paneWidth}
+          paneTitle={getFullName(user)}
+          lastMenu={detailMenu}
+          dismissible
+          onClose={this.props.onClose}
+          appIcon={{ app: 'users' }}
+        >
           <TitleManager record={getFullName(user)} />
 
           <Headline size="xx-large" tag="h2">{getFullName(user)}</Headline>
 
-          <Row end="xs"><Col xs><ExpandAllButton accordionStatus={this.state.sections} onToggle={this.handleExpandAll} /></Col></Row>
+          <Row end="xs">
+            <Col xs>
+              <ExpandAllButton accordionStatus={this.state.sections} onToggle={this.handleExpandAll} />
+            </Col>
+          </Row>
           <AccordionSet>
-            <this.connectedUserInfo accordionId="userInformationSection" user={user} patronGroup={patronGroup} settings={settings} stripes={stripes} expanded={this.state.sections.userInformationSection} onToggle={this.handleSectionToggle} />
-            <ExtendedInfo accordionId="extendedInfoSection" user={user} expanded={this.state.sections.extendedInfoSection} onToggle={this.handleSectionToggle} />
-            <ContactInfo accordionId="contactInfoSection" stripes={stripes} user={user} addresses={addresses} addressTypes={this.addressTypes} expanded={this.state.sections.contactInfoSection} onToggle={this.handleSectionToggle} />
+            <this.connectedUserInfo
+              accordionId="userInformationSection"
+              user={user}
+              patronGroup={patronGroup}
+              settings={settings}
+              stripes={stripes}
+              expanded={this.state.sections.userInformationSection}
+              onToggle={this.handleSectionToggle}
+            />
+            <ExtendedInfo
+              accordionId="extendedInfoSection"
+              user={user}
+              expanded={this.state.sections.extendedInfoSection}
+              onToggle={this.handleSectionToggle}
+            />
+            <ContactInfo
+              accordionId="contactInfoSection"
+              stripes={stripes}
+              user={user}
+              addresses={addresses}
+              addressTypes={this.addressTypes}
+              expanded={this.state.sections.contactInfoSection}
+              onToggle={this.handleSectionToggle}
+            />
             <IfPermission perm="proxiesfor.collection.get">
               <ProxyPermissions
                 user={user}
@@ -641,8 +691,8 @@ class ViewUser extends React.Component {
             <IfPermission perm="ui-users.loans.all">
               <IfInterface name="loan-policy-storage" version="1.0">
                 { /* Check without version, so can support either of multiple versions.
-              Replace with specific check when facility for providing
-              multiple versions is available */ }
+            Replace with specific check when facility for providing
+            multiple versions is available */ }
                 <IfInterface name="circulation">
                   <this.connectedUserLoans
                     onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
@@ -657,10 +707,19 @@ class ViewUser extends React.Component {
               </IfInterface>
             </IfPermission>
 
+            <IfInterface name="request-storage" version="2.2">
+              <this.connectedUserRequests
+                expanded={this.state.sections.requestsSection}
+                onToggle={this.handleSectionToggle}
+                accordionId="requestsSection"
+                user={user}
+                {...this.props}
+              />
+            </IfInterface>
+
             <IfPermission perm="perms.users.get">
               <IfInterface name="permissions" version="5.0">
                 <UserPermissions
-                  stripes={stripes}
                   expanded={this.state.sections.permissionsSection}
                   onToggle={this.handleSectionToggle}
                   userPermissions={permissions}
@@ -673,7 +732,6 @@ class ViewUser extends React.Component {
             <IfPermission perm="inventory-storage.service-points.collection.get,inventory-storage.service-points-users.collection.get">
               <IfInterface name="service-points-users" version="1.0">
                 <UserServicePoints
-                  stripes={stripes}
                   expanded={this.state.sections.servicePointsSection}
                   onToggle={this.handleSectionToggle}
                   accordionId="servicePointsSection"
@@ -686,8 +744,7 @@ class ViewUser extends React.Component {
           </AccordionSet>
           <Layer
             isOpen={query.layer ? query.layer === 'edit' : false}
-            contentLabel={formatMsg({ id: 'ui-users.editUserDialog' })}
-            afterClose={this.afterCloseEdit}
+            contentLabel={<FormattedMessage id="ui-users.editUserDialog" />}
           >
             <UserForm
               stripes={stripes}
@@ -702,7 +759,10 @@ class ViewUser extends React.Component {
             />
           </Layer>
 
-          <Layer isOpen={query.layer ? query.layer === 'open-accounts' || query.layer === 'closed-accounts' || query.layer === 'all-accounts' : false} label="Fees/Fines">
+          <Layer
+            isOpen={query.layer ? query.layer === 'open-accounts' || query.layer === 'closed-accounts' || query.layer === 'all-accounts' : false}
+            label={<FormattedMessage id="ui-users.accounts.title" />}
+          >
             <this.connectedAccountsHistory
               loans={loans}
               num={(this.state.addRecord ? 51 : 50)}
@@ -710,7 +770,7 @@ class ViewUser extends React.Component {
               user={user}
               parentMutator={this.props.mutator}
               patronGroup={patronGroup}
-              stripes={this.props.stripes}
+              stripes={stripes}
               history={this.props.history}
               addRecord={this.state.addRecord}
               handleAddRecords={this.handleAddRecords}
@@ -751,11 +811,17 @@ class ViewUser extends React.Component {
           </Layer>
 
           <IfPermission perm="ui-users.loans.all">
-            <Layer isOpen={query.layer ? query.layer === 'open-loans' || query.layer === 'closed-loans' : false} contentLabel={formatMsg({ id: 'ui-users.loans.title' })}>
+            <Layer
+              isOpen={query.layer ? query.layer === 'open-loans' || query.layer === 'closed-loans' : false}
+              contentLabel={<FormattedMessage id="ui-users.loans.title" />}
+            >
               {loansHistory}
             </Layer>
 
-            <Layer isOpen={query.layer ? query.layer === 'loan' : false} contentLabel={formatMsg({ id: 'ui-users.loanActionsHistory' })}>
+            <Layer
+              isOpen={query.layer ? query.layer === 'loan' : false}
+              contentLabel={<FormattedMessage id="ui-users.loanActionsHistory" />}
+            >
               {loanDetails}
             </Layer>
           </IfPermission>
@@ -765,4 +831,8 @@ class ViewUser extends React.Component {
   }
 }
 
-export default withServicePoints(withTags(withProxy(ViewUser)));
+export default compose(
+  withServicePoints,
+  withTags,
+  withProxy,
+)(ViewUser);

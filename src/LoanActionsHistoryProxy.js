@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 import Link from 'react-router-dom/Link';
 import { KeyValue } from '@folio/stripes/components';
 import { getFullName } from './util';
@@ -20,9 +21,6 @@ class LoanActionsHistoryProxy extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }),
-    stripes: PropTypes.shape({
-      intl: PropTypes.object.isRequired,
-    }).isRequired,
   }
 
   getUserFullName() {
@@ -36,10 +34,16 @@ class LoanActionsHistoryProxy extends React.Component {
 
   render() {
     if (this.props.id) {
-      return <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.loans.details.proxyBorrower' })} value={this.getUserFullName()} />;
+      return <KeyValue
+        label={<FormattedMessage id="ui-users.loans.details.proxyBorrower" />}
+        value={this.getUserFullName()}
+      />;
     }
 
-    return <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.loans.details.proxyBorrower' })} value="-" />;
+    return <KeyValue
+      label={<FormattedMessage id="ui-users.loans.details.proxyBorrower" />}
+      value="-"
+    />;
   }
 }
 

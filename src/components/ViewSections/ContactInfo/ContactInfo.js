@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 import {
   Row,
   Col,
@@ -12,7 +13,14 @@ import {
 import UserAddresses from '../../UserAddresses';
 import contactTypes from '../../../data/contactTypes';
 
-const ContactInfo = ({ expanded, onToggle, accordionId, user, addressTypes, addresses, stripes: { intl } }) => {
+const ContactInfo = ({
+  expanded,
+  onToggle,
+  accordionId,
+  user,
+  addressTypes,
+  addresses,
+}) => {
   const preferredContact = contactTypes.find(g => g.id === _.get(user, ['personal', 'preferredContactTypeId'], '')) || { type: '' };
 
   return (
@@ -20,26 +28,41 @@ const ContactInfo = ({ expanded, onToggle, accordionId, user, addressTypes, addr
       open={expanded}
       id={accordionId}
       onToggle={onToggle}
-      label={<Headline size="large" tag="h3">{intl.formatMessage({ id: 'ui-users.contact.contactInformation' })}</Headline>}
+      label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.contact.contactInformation" /></Headline>}
     >
       <Row>
         <Col xs={3}>
-          <KeyValue label={intl.formatMessage({ id: 'ui-users.contact.email' })} value={_.get(user, ['personal', 'email'], '')} />
+          <KeyValue
+            label={<FormattedMessage id="ui-users.contact.email" />}
+            value={_.get(user, ['personal', 'email'], '')}
+          />
         </Col>
         <Col xs={3}>
-          <KeyValue label={intl.formatMessage({ id: 'ui-users.contact.phone' })} value={_.get(user, ['personal', 'phone'], '')} />
+          <KeyValue
+            label={<FormattedMessage id="ui-users.contact.phone" />}
+            value={_.get(user, ['personal', 'phone'], '')}
+          />
         </Col>
         <Col xs={3}>
-          <KeyValue label={intl.formatMessage({ id: 'ui-users.contact.mobilePhone' })} value={_.get(user, ['personal', 'mobilePhone'], '')} />
+          <KeyValue
+            label={<FormattedMessage id="ui-users.contact.mobilePhone" />}
+            value={_.get(user, ['personal', 'mobilePhone'], '')}
+          />
         </Col>
         <Col xs={3}>
-          <KeyValue label={intl.formatMessage({ id: 'ui-users.contact.preferredContact' })} value={preferredContact.desc ? intl.formatMessage({ id: preferredContact.desc }) : ''} />
+          <KeyValue
+            label={<FormattedMessage id="ui-users.contact.preferredContact" />}
+            value={preferredContact.desc ? <FormattedMessage id={preferredContact.desc} /> : ''}
+          />
         </Col>
       </Row>
       <br />
       <Row>
         <Col xs={12}>
-          <UserAddresses addressTypes={addressTypes} addresses={addresses} intl={intl} />
+          <UserAddresses
+            addressTypes={addressTypes}
+            addresses={addresses}
+          />
         </Col>
       </Row>
       <br />
@@ -48,9 +71,6 @@ const ContactInfo = ({ expanded, onToggle, accordionId, user, addressTypes, addr
 };
 
 ContactInfo.propTypes = {
-  stripes: PropTypes.shape({
-    intl: PropTypes.object.isRequired,
-  }).isRequired,
   expanded: PropTypes.bool,
   onToggle: PropTypes.func,
   accordionId: PropTypes.string.isRequired,

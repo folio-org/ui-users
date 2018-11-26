@@ -2,6 +2,10 @@ import { get } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
+  FormattedMessage,
+  FormattedDate
+} from 'react-intl';
+import {
   Row,
   Col,
   KeyValue,
@@ -29,7 +33,14 @@ class UserInfo extends React.Component {
   }
 
   render() {
-    const { user, patronGroup, settings, expanded, accordionId, onToggle, stripes: { intl }, stripes } = this.props;
+    const {
+      user,
+      patronGroup,
+      settings,
+      expanded,
+      accordionId,
+      onToggle,
+    } = this.props;
     const userStatus = (get(user, ['active'], '') ? 'active' : 'inactive');
     const hasProfilePicture = (settings.length && settings[0].value === 'true');
 
@@ -38,7 +49,13 @@ class UserInfo extends React.Component {
         open={expanded}
         id={accordionId}
         onToggle={onToggle}
-        label={<Headline size="large" tag="h3">{intl.formatMessage({ id: 'ui-users.information.userInformation' })}</Headline>}
+        label={(
+          <Headline
+            size="large"
+            tag="h3"
+          >
+            {<FormattedMessage id="ui-users.information.userInformation" />}
+          </Headline>)}
       >
         <Row>
           <Col xs={12}>
@@ -49,28 +66,49 @@ class UserInfo extends React.Component {
           <Col xs={hasProfilePicture ? 9 : 12}>
             <Row>
               <Col xs={3}>
-                <KeyValue label={intl.formatMessage({ id: 'ui-users.information.lastName' })} value={get(user, ['personal', 'lastName'], '')} />
+                <KeyValue
+                  label={<FormattedMessage id="ui-users.information.lastName" />}
+                  value={get(user, ['personal', 'lastName'], '')}
+                />
               </Col>
               <Col xs={3}>
-                <KeyValue label={intl.formatMessage({ id: 'ui-users.information.firstName' })} value={get(user, ['personal', 'firstName'], '')} />
+                <KeyValue
+                  label={<FormattedMessage id="ui-users.information.firstName" />}
+                  value={get(user, ['personal', 'firstName'], '')}
+                />
               </Col>
               <Col xs={3}>
-                <KeyValue label={intl.formatMessage({ id: 'ui-users.information.middleName' })} value={get(user, ['personal', 'middleName'], '')} />
+                <KeyValue
+                  label={<FormattedMessage id="ui-users.information.middleName" />}
+                  value={get(user, ['personal', 'middleName'], '')}
+                />
               </Col>
               <Col xs={3}>
-                <KeyValue label={intl.formatMessage({ id: 'ui-users.information.barcode' })} value={get(user, ['barcode'], '')} />
+                <KeyValue
+                  label={<FormattedMessage id="ui-users.information.barcode" />}
+                  value={get(user, ['barcode'], '')}
+                />
               </Col>
             </Row>
 
             <Row>
               <Col xs={3}>
-                <KeyValue label={intl.formatMessage({ id: 'ui-users.information.patronGroup' })} value={patronGroup.group} />
+                <KeyValue
+                  label={<FormattedMessage id="ui-users.information.patronGroup" />}
+                  value={patronGroup.group}
+                />
               </Col>
               <Col xs={3}>
-                <KeyValue label={intl.formatMessage({ id: 'ui-users.information.status' })} value={userStatus} />
+                <KeyValue
+                  label={<FormattedMessage id="ui-users.information.status" />}
+                  value={userStatus}
+                />
               </Col>
               <Col xs={3}>
-                <KeyValue label={intl.formatMessage({ id: 'ui-users.information.expirationDate' })} value={stripes.formatDate(get(user, ['expirationDate'], ''))} />
+                <KeyValue
+                  label={<FormattedMessage id="ui-users.information.expirationDate" />}
+                  value={<FormattedDate value={get(user, ['expirationDate'], '')} />}
+                />
               </Col>
             </Row>
           </Col>

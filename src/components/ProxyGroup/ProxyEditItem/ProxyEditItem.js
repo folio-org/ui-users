@@ -1,6 +1,14 @@
 import React from 'react';
+import {
+  FormattedMessage,
+  FormattedTime,
+} from 'react-intl';
 import moment from 'moment'; // eslint-disable-line import/no-extraneous-dependencies
-import { defer, isEqual } from 'lodash';
+import {
+  defer,
+  isEqual,
+  get
+} from 'lodash';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import {
@@ -10,14 +18,19 @@ import {
   LayoutHeader,
   Select,
 } from '@folio/stripes/components';
-import { Field, stopSubmit, setSubmitFailed, getFormSubmitErrors, getFormValues } from 'redux-form';
+import {
+  Field,
+  stopSubmit,
+  setSubmitFailed,
+  getFormSubmitErrors,
+  getFormValues,
+} from 'redux-form';
 
 import { getFullName } from '../../../util';
 import css from './ProxyEditItem.css';
 
 class ProxyEditItem extends React.Component {
   static propTypes = {
-    intl: PropTypes.object.isRequired,
     index: PropTypes.number,
     record: PropTypes.object,
     namespace: PropTypes.string, // sponsors or proxies
@@ -57,7 +70,14 @@ class ProxyEditItem extends React.Component {
   }
 
   dispatchError(message) {
-    const { name, namespace, index, stripes: { store } } = this.props;
+    const {
+      name,
+      namespace,
+      index,
+      stripes: {
+        store,
+      },
+    } = this.props;
     const fieldName = `${name}.proxy.status`;
     const errors = getFormSubmitErrors('userForm')(store.getState());
     errors[namespace] = errors[namespace] || new Array(index + 1);
@@ -68,18 +88,20 @@ class ProxyEditItem extends React.Component {
   }
 
   toggleStatus(isActive) {
-    const { name, change } = this.props;
+    const {
+      name,
+      change,
+    } = this.props;
     const status = (isActive) ? 'Active' : 'Inactive';
     change(`${name}.proxy.status`, status);
     this.setState({ statusDisabled: !isActive });
   }
 
-  translate(message) {
-    return this.props.intl.formatMessage({ id: `ui-users.${message}` });
-  }
-
   validateStatus() {
-    const { namespace, index } = this.props;
+    const {
+      namespace,
+      index,
+    } = this.props;
     const formValues = this.state.formValues;
     const proxyRel = formValues[namespace][index] || {};
     const today = moment().endOf('day');
@@ -87,18 +109,18 @@ class ProxyEditItem extends React.Component {
 
     // proxy user expired
     if (moment(proxyRel.user.expirationDate).endOf('day').isSameOrBefore(today)) {
-      error = this.translate(`errors.${namespace}.expired`);
+      error = <FormattedMessage id={`ui-users.errors.${namespace}.expired`} />;
     }
 
     // user expired
     if (moment(formValues.expirationDate).endOf('day').isSameOrBefore(today)) {
-      error = this.translate(`errors.${namespace}.expired`);
+      error = <FormattedMessage id={`ui-users.errors.${namespace}.expired`} />;
     }
 
     // proxy relationship expired
     if (proxyRel.proxy.expirationDate &&
       moment(proxyRel.proxy.expirationDate).endOf('day').isSameOrBefore(today)) {
-      error = this.translate('errors.proxyrelationship.expired');
+      error = <FormattedMessage id="ui-users.errors.proxyrelationship.expired" />;
     }
 
     if (error) {
@@ -110,11 +132,24 @@ class ProxyEditItem extends React.Component {
   }
 
   render() {
-    const { name, record, onDelete, stripes, intl } = this.props;
+    const {
+      name,
+      record,
+      onDelete,
+    } = this.props;
 
-    const relationStatusValues = [this.translate('active'), this.translate('inactive')];
-    const proxySponsorValues = [this.translate('sponsor'), this.translate('proxy')];
-    const yesNoValues = [this.translate('yes'), this.translate('no')];
+    const relationStatusValues = [
+      <FormattedMessage id="ui-users.active" />,
+      <FormattedMessage id="ui-users.inactive" />,
+    ];
+    const proxySponsorValues = [
+      <FormattedMessage id="ui-users.sponsor" />,
+      <FormattedMessage id="ui-users.proxy" />,
+    ];
+    const yesNoValues = [
+      <FormattedMessage id="ui-users.yes" />,
+      <FormattedMessage id="ui-users.no" />,
+    ];
 
     const relationStatusOptions = relationStatusValues.map(val => ({
       label: val,
@@ -139,13 +174,23 @@ class ProxyEditItem extends React.Component {
     //   value: val,
     //   selected: record.proxy && record.proxy.accrueTo === val
     // }));
-
+    const proxyLinkMsg = <FormattedMessage id="ui-users.proxy.relationshipCreated" />;
+    const proxyCreatedDate = <FormattedTime
+      value={get(record, 'proxy.metadata.createdDate', null)}
+      day="numeric"
+      month="numeric"
+      year="numeric"
+    />;
     const proxyLink = (
       <div>
         <Link to={`/users/view/${record.user.id}`}>{getFullName(record.user)}</Link>
-        {record.proxy && record.proxy.metadata && record.proxy.metadata.createdDate && (
+        {proxyCreatedDate && (
           <span className={css.creationLabel}>
-            {`(${intl.formatMessage({ id: 'ui-users.proxy.relationshipCreated' })}: ${stripes.formatDateTime(record.proxy.metadata.createdDate)})`}
+            (
+              {proxyLinkMsg}
+              {' '}
+              {proxyCreatedDate}
+            )
           </span>
         )}
       </div>
@@ -161,7 +206,7 @@ class ProxyEditItem extends React.Component {
                 <Col xs={12}>
                   <Field
                     disabled={this.state.statusDisabled}
-                    label={this.translate('proxy.relationshipStatus')}
+                    label={<FormattedMessage id="ui-users.proxy.relationshipStatus" />}
                     name={`${name}.proxy.status`}
                     component={Select}
                     dataOptions={[{ label: 'Select status', value: '' }, ...relationStatusOptions]}
@@ -175,7 +220,7 @@ class ProxyEditItem extends React.Component {
                 <Col xs={12}>
                   <Field
                     component={Datepicker}
-                    label={this.translate('expirationDate')}
+                    label={<FormattedMessage id="ui-users.expirationDate" />}
                     dateFormat="YYYY-MM-DD"
                     name={`${name}.proxy.expirationDate`}
                     backendDateStandard="YYYY-MM-DD"
@@ -189,14 +234,26 @@ class ProxyEditItem extends React.Component {
             <Col xs={4}>
               <Row>
                 <Col xs={12}>
-                  <Field label={this.translate('proxy.requestForSponsor')} name={`${name}.proxy.requestForSponsor`} component={Select} dataOptions={[...requestForSponsorOptions]} fullWidth />
+                  <Field
+                    label={<FormattedMessage id="ui-users.proxy.requestForSponsor" />}
+                    name={`${name}.proxy.requestForSponsor`}
+                    component={Select}
+                    dataOptions={[...requestForSponsorOptions]}
+                    fullWidth
+                  />
                 </Col>
               </Row>
             </Col>
             <Col xs={4}>
               <Row>
                 <Col xs={12}>
-                  <Field label={this.translate('proxy.notificationsTo')} name={`${name}.proxy.notificationsTo`} component={Select} dataOptions={[...notificationsToOptions]} fullWidth />
+                  <Field
+                    label={<FormattedMessage id="ui-users.proxy.notificationsTo" />}
+                    name={`${name}.proxy.notificationsTo`}
+                    component={Select}
+                    dataOptions={[...notificationsToOptions]}
+                    fullWidth
+                  />
                 </Col>
               </Row>
             </Col>
@@ -205,7 +262,13 @@ class ProxyEditItem extends React.Component {
             <Col xs={4}>
               <Row>
                 <Col xs={12}>
-                  <Field label={this.translate('proxy.accrueTo')} name={`${name}.proxy.accrueTo`} component={Select} dataOptions={[...accrueToOptions]} fullWidth />
+                  <Field
+                    label={<FormattedMessage id="ui-users.proxy.accrueTo" />}
+                    name={`${name}.proxy.accrueTo`}
+                    component={Select}
+                    dataOptions={[...accrueToOptions]}
+                    fullWidth
+                  />
                 </Col>
               </Row>
             </Col>

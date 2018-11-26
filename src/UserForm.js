@@ -95,7 +95,6 @@ class UserForm extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
       connect: PropTypes.func,
-      intl: PropTypes.object.isRequired,
     }).isRequired,
     handleSubmit: PropTypes.func.isRequired,
     parentMutator: PropTypes.shape({ // eslint-disable-line react/no-unused-prop-types
@@ -173,16 +172,15 @@ class UserForm extends React.Component {
   }
 
   getAddFirstMenu() {
-    const { onCancel } = this.props;
-
+    const label = <FormattedMessage id="ui-users.crud.closeNewUserDialog" />;
     return (
       <PaneMenu>
         <IconButton
           id="clickable-closenewuserdialog"
-          onClick={onCancel}
+          onClick={this.props.onCancel}
           ref={this.closeButton}
-          title={this.props.stripes.intl.formatMessage({ id: 'ui-users.crud.closeNewUserDialog' })}
-          ariaLabel={this.props.stripes.intl.formatMessage({ id: 'ui-users.crud.closeNewUserDialog' })}
+          title={label}
+          ariaLabel={label}
           icon="closeX"
         />
       </PaneMenu>
@@ -256,13 +254,17 @@ class UserForm extends React.Component {
   }
 
   render() {
-    const { initialValues, stripes: { intl } } = this.props;
+    const {
+      initialValues,
+    } = this.props;
     const { sections } = this.state;
     const firstMenu = this.getAddFirstMenu();
-    const paneTitle = initialValues.id ? getFullName(initialValues) : intl.formatMessage({ id: 'ui-users.crud.createUser' });
-    const lastMenu = initialValues.id ?
-      this.getLastMenu('clickable-updateuser', intl.formatMessage({ id: 'ui-users.crud.updateUser' })) :
-      this.getLastMenu('clickable-createnewuser', intl.formatMessage({ id: 'ui-users.crud.createUser' }));
+    const paneTitle = initialValues.id
+      ? getFullName(initialValues)
+      : <FormattedMessage id="ui-users.crud.createUser" />;
+    const lastMenu = initialValues.id
+      ? this.getLastMenu('clickable-updateuser', <FormattedMessage id="ui-users.crud.updateUser" />)
+      : this.getLastMenu('clickable-createnewuser', <FormattedMessage id="ui-users.crud.createUser" />);
 
     return (
       <HasCommand commands={this.keyboardCommands}>

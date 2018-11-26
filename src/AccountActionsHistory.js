@@ -1,5 +1,11 @@
 import _ from 'lodash';
 import React from 'react';
+import {
+  FormattedMessage,
+  FormattedTime,
+  intlShape,
+  injectIntl,
+} from 'react-intl';
 import Link from 'react-router-dom/Link';
 import PropTypes from 'prop-types';
 import {
@@ -11,10 +17,8 @@ import {
   KeyValue,
   MultiColumnList,
 } from '@folio/stripes/components';
-
-import { FormattedMessage } from 'react-intl';
 import { Actions } from './components/Accounts/Actions';
-import { formatDateTime, getFullName } from './util';
+import { getFullName } from './util';
 
 class AccountActionsHistory extends React.Component {
   static manifest = Object.freeze({
@@ -58,29 +62,29 @@ class AccountActionsHistory extends React.Component {
     onCancel: PropTypes.func.isRequired,
     onClickViewLoanActionsHistory: PropTypes.func.isRequired,
     handleAddRecords: PropTypes.func.isRequired,
+    intl: intlShape.isRequired,
   };
 
   constructor(props) {
     super(props);
-
+    const {
+      stripes : { connect },
+    } = props;
     this.onSort = this.onSort.bind(this);
     this.onChangeActions = this.onChangeActions.bind(this);
-    this.connectedActions = props.stripes.connect(Actions);
+    this.connectedActions = connect(Actions);
     this.error = this.error.bind(this);
     this.comment = this.comment.bind(this);
     this.num = props.num;
-
-    const { stripes } = props;
-
     this.sortMap = {
-      [stripes.intl.formatMessage({ id: 'ui-users.details.columns.date' })]: action => action.dateAction,
-      [stripes.intl.formatMessage({ id: 'ui-users.details.columns.action' })]: action => action.typeAction,
-      [stripes.intl.formatMessage({ id: 'ui-users.details.columns.amount' })]: action => action.amountAction,
-      [stripes.intl.formatMessage({ id: 'ui-users.details.columns.balance' })]: action => action.balance,
-      [stripes.intl.formatMessage({ id: 'ui-users.details.columns.transactioninfo' })]: action => action.transactionInformation,
-      [stripes.intl.formatMessage({ id: 'ui-users.details.columns.created' })]: action => action.createdAt,
-      [stripes.intl.formatMessage({ id: 'ui-users.details.columns.source' })]: action => action.source,
-      [stripes.intl.formatMessage({ id: 'ui-users.details.columns.comments' })]: action => action.comments,
+      date: action => action.dateAction,
+      action: action => action.typeAction,
+      amount: action => action.amountAction,
+      balance: action => action.balance,
+      transactioninfo: action => action.transactionInformation,
+      created: action => action.createdAt,
+      source: action => action.source,
+      comments: action => action.comments,
     };
 
     this.state = {
@@ -94,14 +98,14 @@ class AccountActionsHistory extends React.Component {
         regular: false,
       },
       sortOrder: [
-        stripes.intl.formatMessage({ id: 'ui-users.details.columns.date' }),
-        stripes.intl.formatMessage({ id: 'ui-users.details.columns.action' }),
-        stripes.intl.formatMessage({ id: 'ui-users.details.columns.amount' }),
-        stripes.intl.formatMessage({ id: 'ui-users.details.columns.balance' }),
-        stripes.intl.formatMessage({ id: 'ui-users.details.columns.number' }),
-        stripes.intl.formatMessage({ id: 'ui-users.details.columns.created' }),
-        stripes.intl.formatMessage({ id: 'ui-users.details.columns.source' }),
-        stripes.intl.formatMessage({ id: 'ui-users.details.columns.comments' }),
+        'date',
+        'action',
+        'amount',
+        'balance',
+        'transactioninfo',
+        'created',
+        'source',
+        'comments',
       ],
       sortDirection: ['desc', 'desc']
     };
@@ -179,19 +183,36 @@ class AccountActionsHistory extends React.Component {
   }
 
   render() {
-    const { sortOrder, sortDirection } = this.state;
-    const { onCancel, stripes } = this.props;
+    const {
+      sortOrder,
+      sortDirection,
+    } = this.state;
+
+    const {
+      onCancel,
+      intl,
+    } = this.props;
     const account = _.get(this.props.resources, ['accountHistory', 'records', 0]) || this.props.account;
 
     const user = this.props.user;
     const patron = this.props.patronGroup;
 
     const columnMapping = {
-      Comments: (
+      date: intl.formatMessage({ id: 'ui-users.details.columns.date' }),
+      action: intl.formatMessage({ id: 'ui-users.details.columns.action' }),
+      amount: intl.formatMessage({ id: 'ui-users.details.columns.amount' }),
+      balance: intl.formatMessage({ id: 'ui-users.details.columns.balance' }),
+      transactioninfo: intl.formatMessage({ id: 'ui-users.details.columns.transactioninfo' }),
+      created: intl.formatMessage({ id: 'ui-users.details.columns.created' }),
+      source: intl.formatMessage({ id: 'ui-users.details.columns.source' }),
+      comments: (
         <span>
-          {this.props.stripes.intl.formatMessage({ id: 'ui-users.details.columns.comments' })}
-          <Button style={{ float: 'right', marginLeft: '50px' }} onClick={this.comment}>
-+
+          <FormattedMessage id="ui-users.details.columns.comments" />
+          <Button
+            style={{ float: 'right', marginLeft: '50px' }}
+            onClick={this.comment}
+          >
+            +
             <FormattedMessage id="ui-users.accounts.button.new" />
           </Button>
         </span>
@@ -200,14 +221,14 @@ class AccountActionsHistory extends React.Component {
 
     const accountActionsFormatter = {
       // Action: aa => loanActionMap[la.action],
-      'Action Date': action => formatDateTime(action.dateAction, stripes.locale),
-      'Action': action => action.typeAction + (action.paymentMethod ? ('-' + action.paymentMethod) : ' '),
-      'Amount': action => (action.amountAction > 0 ? parseFloat(action.amountAction).toFixed(2) : '-'),
-      'Balance': action => (action.balance > 0 ? parseFloat(action.balance).toFixed(2) : '-'),
-      'Transaction Information': action => action.transactionInformation || '-',
-      'Created at': action => action.createdAt,
-      'Source': action => action.source,
-      'Comments': action => action.comments,
+      date: action => <FormattedTime value={action.dateAction} day="numeric" month="numeric" year="numeric" />,
+      action: action => action.typeAction + (action.paymentMethod ? ('-' + action.paymentMethod) : ' '),
+      amount: action => (action.amountAction > 0 ? parseFloat(action.amountAction).toFixed(2) : '-'),
+      balance: action => (action.balance > 0 ? parseFloat(action.balance).toFixed(2) : '-'),
+      transactioninfo: action => action.transactionInformation || '-',
+      created: action => action.createdAt,
+      source: action => action.source,
+      comments: action => action.comments,
     };
 
     const actions = this.state.data || [];
@@ -216,6 +237,7 @@ class AccountActionsHistory extends React.Component {
     const remaining = (account.remaining) ? parseFloat(account.remaining).toFixed(2) : '0.00';
     const loanId = account.loanId || '';
     const disabled = (_.get(account, ['status', 'name'], '') === 'Closed');
+
     return (
       <Paneset isRoot>
         <Pane
@@ -223,7 +245,11 @@ class AccountActionsHistory extends React.Component {
           defaultWidth="100%"
           dismissible
           onClose={onCancel}
-          paneTitle={`${this.props.stripes.intl.formatMessage({ id: 'ui-users.details.paneTitle.feeFineDetails' })} - ${getFullName(user)} (${_.upperFirst(patron.group)}) `}
+          paneTitle={(
+            <FormattedMessage id="ui-users.details.paneTitle.feeFineDetails">
+              {(msg) => `${msg} - ${getFullName(user)} (${_.upperFirst(patron.group)}) `}
+            </FormattedMessage>
+          )}
         >
           <Row>
             <Col xs={12}>
@@ -237,58 +263,109 @@ class AccountActionsHistory extends React.Component {
 
           <Row>
             <Col xs={1.5}>
-              <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.details.field.feetype' })} value={_.get(account, ['feeFineType'], '-')} />
+              <KeyValue
+                label={<FormattedMessage id="ui-users.details.field.feetype" />}
+                value={_.get(account, ['feeFineType'], '-')}
+              />
             </Col>
             <Col xs={1.5}>
-              <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.details.field.owner' })} value={_.get(account, ['feeFineOwner'], '-')} />
+              <KeyValue
+                label={<FormattedMessage id="ui-users.details.field.owner" />}
+                value={_.get(account, ['feeFineOwner'], '-')}
+              />
             </Col>
             <Col xs={1.5}>
-              <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.details.field.billedate' })} value={_.get(account, ['metadata', 'createdDate']) ? formatDateTime(_.get(account, ['metadata', 'createdDate'])) : '-'} />
+              <KeyValue
+                label={<FormattedMessage id="ui-users.details.field.billedate" />}
+                value={(
+                  _.get(account, ['metadata', 'createdDate'])
+                    ? <FormattedTime
+                      value={_.get(account, ['metadata', 'createdDate'])}
+                      day="numeric"
+                      month="numeric"
+                      year="numeric"
+                    />
+                    : '-'
+                )}
+              />
             </Col>
             <Col xs={1.5}>
-              <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.details.field.billedamount' })} value={amount} />
+              <KeyValue
+                label={<FormattedMessage id="ui-users.details.field.billedamount" />}
+                value={amount}
+              />
             </Col>
             <Col xs={1.5}>
-              <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.details.field.remainingamount' })} value={remaining} />
+              <KeyValue
+                label={<FormattedMessage id="ui-users.details.field.remainingamount" />}
+                value={remaining}
+              />
             </Col>
             <Col xs={1.5}>
-              <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.details.field.latest' })} value={_.get(account, ['paymentStatus', 'name'], '-')} />
+              <KeyValue
+                label={<FormattedMessage id="ui-users.details.field.latest" />}
+                value={_.get(account, ['paymentStatus', 'name'], '-')}
+              />
             </Col>
             <Col xs={1.5}>
               {(loanId !== '0' && user.id === account.userId) ?
                 <KeyValue
-                  label={this.props.stripes.intl.formatMessage({ id: 'ui-users.details.label.loanDetails' })}
-                  value={
+                  label={<FormattedMessage id="ui-users.details.label.loanDetails" />}
+                  value={(
                     <button style={{ color: '#2b75bb' }} type="button" onClick={(e) => { this.props.onClickViewLoanActionsHistory(e, { id: loanId }); }}>
-                      {this.props.stripes.intl.formatMessage({ id: 'ui-users.details.field.loan' })}
-                    </button>}
+                      <FormattedMessage id="ui-users.details.field.loan" />
+                    </button>)}
                 />
                 :
-                <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.details.label.loanDetails' })} value="-" />
+                <KeyValue
+                  label={<FormattedMessage id="ui-users.details.label.loanDetails" />}
+                  value="-"
+                />
               }
             </Col>
           </Row>
           <Row>
             <Col xs={1.5}>
-              <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.details.field.instance' })} value={_.get(account, ['title'], '-')} />
+              <KeyValue
+                label={<FormattedMessage id="ui-users.details.field.instance" />}
+                value={_.get(account, ['title'], '-')}
+              />
             </Col>
             <Col xs={1.5}>
-              <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.details.field.type' })} value={_.get(account, ['materialType'], '-')} />
+              <KeyValue
+                label={<FormattedMessage id="ui-users.details.field.type" />}
+                value={_.get(account, ['materialType'], '-')}
+              />
             </Col>
             <Col xs={1.5}>
-              <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.details.field.barcode' })} value={<Link to={`/inventory/view/${_.get(account, ['itemId'], '')}?query=${_.get(account, ['itemId'], '')}`}>{_.get(account, ['barcode'], '-')}</Link>} />
+              <KeyValue
+                label={<FormattedMessage id="ui-users.details.field.barcode" />}
+                value={<Link to={`/inventory/view/${_.get(account, ['itemId'], '')}?query=${_.get(account, ['itemId'], '')}`}>{_.get(account, ['barcode'], '-')}</Link>}
+              />
             </Col>
             <Col xs={1.5}>
-              <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.details.field.callnumber' })} value={_.get(account, ['callNumber'], '-')} />
+              <KeyValue
+                label={<FormattedMessage id="ui-users.details.field.callnumber" />}
+                value={_.get(account, ['callNumber'], '-')}
+              />
             </Col>
             <Col xs={1.5}>
-              <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.details.field.location' })} value={_.get(account, ['location'], '-')} />
+              <KeyValue
+                label={<FormattedMessage id="ui-users.details.field.location" />}
+                value={_.get(account, ['location'], '-')}
+              />
             </Col>
             <Col xs={1.5}>
-              <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.details.field.duedate' })} value={formatDateTime(account.dueDate) || '-'} />
+              <KeyValue
+                label={<FormattedMessage id="ui-users.details.field.duedate" />}
+                value={<FormattedTime value={account.dueDate} day="numeric" month="numeric" year="numeric" /> || '-'}
+              />
             </Col>
             <Col xs={1.5}>
-              <KeyValue label={this.props.stripes.intl.formatMessage({ id: 'ui-users.details.field.returnedate' })} value={formatDateTime(account.returnedDate) || '-'} />
+              <KeyValue
+                label={<FormattedMessage id="ui-users.details.field.returnedate" />}
+                value={<FormattedTime value={account.returnedDate} day="numeric" month="numeric" year="numeric" /> || '-'}
+              />
             </Col>
           </Row>
           <br />
@@ -297,21 +374,21 @@ class AccountActionsHistory extends React.Component {
             formatter={accountActionsFormatter}
             columnMapping={columnMapping}
             visibleColumns={[
-              stripes.intl.formatMessage({ id: 'ui-users.details.columns.date' }),
-              stripes.intl.formatMessage({ id: 'ui-users.details.columns.action' }),
-              stripes.intl.formatMessage({ id: 'ui-users.details.columns.amount' }),
-              stripes.intl.formatMessage({ id: 'ui-users.details.columns.balance' }),
-              stripes.intl.formatMessage({ id: 'ui-users.details.columns.transactioninfo' }),
-              stripes.intl.formatMessage({ id: 'ui-users.details.columns.created' }),
-              stripes.intl.formatMessage({ id: 'ui-users.details.columns.source' }),
-              stripes.intl.formatMessage({ id: 'ui-users.details.columns.comments' }),
+              'date',
+              'action',
+              'amount',
+              'balance',
+              'transactioninfo',
+              'created',
+              'source',
+              'comments',
             ]}
             contentData={(account.id === (actions[0] || {}).accountId) ? actionsSort : []}
             fullWidth
             onHeaderClick={this.onSort}
             sortOrder={sortOrder[0]}
             sortDirection={`${sortDirection[0]}ending`}
-            columnWidths={{ 'Action': 250, 'Amount': 100, 'Balance': 100, 'Transaction Information': 200, 'Created at': 100, 'Source': 200, 'Comments': 700 }}
+            columnWidths={{ 'action': 250, 'amount': 100, 'balance': 100, 'transactioninfo': 200, 'created': 100, 'source': 200, 'comments': 700 }}
           />
           <this.connectedActions
             actions={this.state.actions}
@@ -332,4 +409,4 @@ class AccountActionsHistory extends React.Component {
   }
 }
 
-export default AccountActionsHistory;
+export default injectIntl(AccountActionsHistory);
