@@ -745,6 +745,7 @@ class ViewUser extends React.Component {
           <Layer
             isOpen={query.layer ? query.layer === 'edit' : false}
             contentLabel={<FormattedMessage id="ui-users.editUserDialog" />}
+            afterClose={this.afterCloseEdit}
           >
             <UserForm
               stripes={stripes}
