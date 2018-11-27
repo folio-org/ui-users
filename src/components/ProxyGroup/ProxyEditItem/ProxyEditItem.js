@@ -175,8 +175,9 @@ class ProxyEditItem extends React.Component {
     //   selected: record.proxy && record.proxy.accrueTo === val
     // }));
     const proxyLinkMsg = <FormattedMessage id="ui-users.proxy.relationshipCreated" />;
+    const proxyCreatedValue = get(record, 'proxy.metadata.createdDate', null);
     const proxyCreatedDate = <FormattedTime
-      value={get(record, 'proxy.metadata.createdDate', null)}
+      value={proxyCreatedValue}
       day="numeric"
       month="numeric"
       year="numeric"
@@ -184,7 +185,7 @@ class ProxyEditItem extends React.Component {
     const proxyLink = (
       <div>
         <Link to={`/users/view/${record.user.id}`}>{getFullName(record.user)}</Link>
-        {proxyCreatedDate && (
+        {proxyCreatedValue && (
           <span className={css.creationLabel}>
             (
               {proxyLinkMsg}
