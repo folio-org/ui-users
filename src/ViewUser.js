@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { cloneDeep, get, omit, differenceBy, find } from 'lodash';
+import { cloneDeep, get, omit, differenceBy, find, isArray } from 'lodash';
 import React from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
@@ -199,6 +199,7 @@ class ViewUser extends React.Component {
     this.onClickViewOpenLoans = this.onClickViewOpenLoans.bind(this);
     this.onClickViewClosedLoans = this.onClickViewClosedLoans.bind(this);
     this.onClickViewLoanActionsHistory = this.onClickViewLoanActionsHistory.bind(this);
+    this.buildRecords = this.buildRecords.bind(this);
     this.onClickCloseLoanActionsHistory = this.onClickCloseLoanActionsHistory.bind(this);
     this.onAddressesUpdate = this.onAddressesUpdate.bind(this);
     this.handleSectionToggle = this.handleSectionToggle.bind(this);
@@ -283,6 +284,26 @@ class ViewUser extends React.Component {
     this.props.mutator.query.update({ layer: 'closed-loans' });
     this.setState({
       viewOpenLoansMode: false,
+    });
+  }
+
+  buildRecords(records) {
+    return records.map((record) => {
+      const {
+        item,
+        item: { contributors },
+      } = record;
+
+      return isArray(contributors) ?
+        {
+          ...record,
+          item: {
+            ...item,
+            contributors: contributors
+              .map((currentContributor) => currentContributor.name)
+              .join('; ')
+          }
+        } : record;
     });
   }
 
@@ -582,6 +603,7 @@ class ViewUser extends React.Component {
     const userFormData = this.getUserFormData(user, addresses, sponsors, proxies, permissions, servicePoints, preferredServicePoint);
 
     const loansHistory = (<this.connectedLoansHistory
+      buildRecords={this.buildRecords}
       user={user}
       loansHistory={loans}
       patronGroup={patronGroup}
