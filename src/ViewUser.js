@@ -263,19 +263,24 @@ class ViewUser extends React.Component {
     });
   }
 
-  buildRecords(recordsLoaded) {
-    recordsLoaded.forEach(record => {
-      if (isArray(record.item.contributors)) {
-        const contributorNamesMap = [];
-        if (record.item.contributors.length > 0) {
-          record.item.contributors.forEach(item => {
-            contributorNamesMap.push(item.name);
-          });
-        }
-        record.item.contributors = contributorNamesMap.join('; ');
-      }
+  buildRecords(records) {
+    return records.map((record) => {
+      const {
+        item,
+        item: { contributors },
+      } = record;
+
+      return isArray(contributors) ?
+        {
+          ...record,
+          item: {
+            ...item,
+            contributors: contributors
+              .map((currentContributor) => currentContributor.name)
+              .join('; ')
+          }
+        } : record;
     });
-    return recordsLoaded;
   }
 
   onClickViewLoanActionsHistory(e, selectedLoan) {

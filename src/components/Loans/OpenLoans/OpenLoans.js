@@ -694,12 +694,13 @@ class OpenLoans extends React.Component {
   }
 
   renderSubHeader(columnMapping) {
+    const { loans, buildRecords } = this.props;
     const noSelectedLoans = _.size(this.state.checkedLoans) === 0;
     const bulkActionsTooltip = <FormattedMessage id="ui-users.bulkActions.tooltip" />;
     const renewString = <FormattedMessage id="ui-users.renew" />;
     const changeDueDateString = <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />;
-    const clonedLoans = JSON.parse(JSON.stringify(this.props.loans)); // Do not mutate the actual resource
-    const recordsToCSV = this.props.buildRecords(clonedLoans);
+    const clonedLoans = _.cloneDeep(loans);
+    const recordsToCSV = buildRecords(clonedLoans);
     return (
       <ActionsBar
         contentStart={
@@ -747,7 +748,10 @@ class OpenLoans extends React.Component {
             >
               {changeDueDateString}
             </Button>
-            <ExportCsv data={recordsToCSV} onlyFields={this.columnHeadersMap} />
+            <ExportCsv
+              data={recordsToCSV}
+              onlyFields={this.columnHeadersMap}
+            />
           </span>
         }
       />

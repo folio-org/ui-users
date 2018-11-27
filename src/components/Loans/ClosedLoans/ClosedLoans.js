@@ -297,6 +297,7 @@ class ClosedLoans extends React.Component {
       intl,
       onClickViewLoanActionsHistory,
       loans,
+      buildRecords
     } = this.props;
     const visibleColumns = ['title', 'dueDate', 'barcode', 'Fee/Fine', 'Call Number', 'Contributors', 'renewals', 'loanDate', 'returnDate', ' '];
     const columnMapping = {
@@ -314,8 +315,8 @@ class ClosedLoans extends React.Component {
     const anonymizeString = <FormattedMessage id="ui-users.anonymize" />;
     const loansSorted = _.orderBy(loans,
       [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
-    const clonedLoans = JSON.parse(JSON.stringify(this.props.loans)); // Do not mutate the actual resource
-    const recordsToCSV = this.props.buildRecords(clonedLoans);
+    const clonedLoans = _.cloneDeep(loans);
+    const recordsToCSV = buildRecords(clonedLoans);
     return (
       <div>
         <ActionsBar
@@ -337,7 +338,10 @@ class ClosedLoans extends React.Component {
               >
                 {anonymizeString}
               </Button>
-              <ExportCsv data={recordsToCSV} onlyFields={this.columnHeadersMap} />
+              <ExportCsv
+                data={recordsToCSV}
+                onlyFields={this.columnHeadersMap}
+              />
             </div>
           }
         />
