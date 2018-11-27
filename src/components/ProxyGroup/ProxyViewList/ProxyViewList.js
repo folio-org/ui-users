@@ -25,7 +25,7 @@ ProxyViewList.propTypes = {
   records: PropTypes.arrayOf(PropTypes.object),
   itemComponent: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.node.isRequired,
   stripes: PropTypes.object.isRequired,
 };
 

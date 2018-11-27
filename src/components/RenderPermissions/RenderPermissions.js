@@ -11,7 +11,7 @@ import {
 
 class RenderPermissions extends React.Component {
   static propTypes = {
-    heading: PropTypes.string.isRequired,
+    heading: PropTypes.node.isRequired,
     permToRead: PropTypes.string.isRequired,
     listedPermissions: PropTypes.arrayOf(PropTypes.object),
     stripes: PropTypes.shape({
