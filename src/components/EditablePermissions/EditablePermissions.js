@@ -15,9 +15,9 @@ import {
   Accordion,
   Badge,
   List,
-  IfPermission,
   Headline
 } from '@folio/stripes/components';
+import { IfPermission } from '@folio/stripes/core';
 
 import PermissionList from '../PermissionList';
 import css from './EditablePermissions.css';

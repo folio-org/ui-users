@@ -15,10 +15,10 @@ import {
   ExpandAllButton,
   Row,
   Col,
-  IfPermission,
   ConfirmationModal,
   Headline
 } from '@folio/stripes/components';
+import { IfPermission } from '@folio/stripes/core';
 import { ViewMetaData } from '@folio/stripes/smart-components';
 
 import stripesForm from '@folio/stripes/form';

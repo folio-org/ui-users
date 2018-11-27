@@ -1,7 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { IfPermission, IfInterface } from '@folio/stripes/components';
+import {
+  IfInterface,
+  IfPermission,
+} from '@folio/stripes/core';
 
 import EditablePermissions from '../../EditablePermissions';
 
