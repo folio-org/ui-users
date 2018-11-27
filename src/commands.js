@@ -21,6 +21,16 @@ const commands = [
     name: 'edit',
     label: (<FormattedMessage id="ui-users.edit" />),
     shortcut: 'mod+alt+e',
+  },
+  {
+    name: 'expandAllSections',
+    label: (<FormattedMessage id="ui-users.edit" />),
+    shortcut: 'mod+alt+b'
+  },
+  {
+    name: 'collapseAllSections',
+    label: (<FormattedMessage id="ui-users.edit" />),
+    shortcut: 'mod+alt+g'
   }
 ];
 

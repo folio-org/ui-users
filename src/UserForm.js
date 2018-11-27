@@ -152,12 +152,10 @@ class UserForm extends React.Component {
       {
         name: 'expandAllSections',
         handler: this.expandAllSections,
-        shortcut: 'mod+alt+b'
       },
       {
         name: 'collapseAllSections',
         handler: this.collapseAllSections,
-        shortcut: 'mod+alt+g'
       }
     ];
 
