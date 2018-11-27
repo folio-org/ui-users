@@ -231,12 +231,12 @@ class ViewUser extends React.Component {
     {
       name: 'collapseAllSections',
       handler: this.collapseAllSections,
-      shortcut: 'mod+]'
+      shortcut: 'mod+alt+g'
     },
     {
       name: 'expandAllSections',
       handler: this.expandAllSections,
-      shortcut: 'mod+['
+      shortcut: 'mod+alt+b'
     },
     ];
   }
