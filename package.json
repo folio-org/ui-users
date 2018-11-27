@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "2.17.4",
+  "version": "2.17.5",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -467,9 +467,9 @@
           "ui-users.view",
           "ui-users.loans.renew",
           "ui-users.settings.feefines",
+          "ui-users.requests.all",
           "circulation.loans.item.put",
           "circulation.renew-by-barcode.post",
-          "circulation.requests.collection.get",
           "circulation-storage.loans-history.collection.get",
           "circulation-storage.loans.collection.anonymize.user.post",
           "circulation-storage.loan-policies.collection.get",
@@ -481,6 +481,44 @@
           "payments.collection.get",
           "comments.collection.get",
           "waives.collection.get"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.requests.all",
+        "displayName": "Users: View requests",
+        "description": "Also includes basic permissions to view users and loans",
+        "subPermissions": [
+          "ui-users.view",
+          "ui-users.settings.feefines",
+          "circulation.loans.collection.get",
+          "circulation.requests.collection.get",
+          "circulation.requests.item.get",
+          "circulation-storage.cancellation-reasons.collection.get",
+          "circulation-storage.loans.collection.get",
+          "circulation-storage.loans.item.get",
+          "circulation-storage.requests.collection.get",
+          "circulation-storage.requests.collection.delete",
+          "circulation-storage.requests.item.get",
+          "circulation-storage.requests.item.delete",
+          "proxiesfor.collection.get",
+          "addresstypes.collection.get",
+          "usergroups.collection.get",
+          "configuration.entries.collection.get",
+          "inventory.items.collection.get",
+          "inventory.items.item.get",
+          "inventory.instances.item.get",
+          "inventory.instances.collection.get",
+          "inventory-storage.items.collection.get",
+          "inventory-storage.items.item.get",
+          "inventory-storage.holdings.collection.get",
+          "inventory-storage.holdings.item.get",
+          "inventory-storage.instances.item.get",
+          "inventory-storage.instances.collection.get",
+          "inventory-storage.service-points.collection.get",
+          "inventory-storage.service-points.item.get",
+          "inventory-storage.service-points-users.collection.get",
+          "inventory-storage.service-points-users.item.get"
         ],
         "visible": true
       }
