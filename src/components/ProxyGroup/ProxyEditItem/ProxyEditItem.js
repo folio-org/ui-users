@@ -2,8 +2,6 @@ import React from 'react';
 import {
   FormattedMessage,
   FormattedTime,
-  injectIntl,
-  intlShape
 } from 'react-intl';
 import moment from 'moment'; // eslint-disable-line import/no-extraneous-dependencies
 import {
@@ -34,7 +32,6 @@ import css from './ProxyEditItem.css';
 class ProxyEditItem extends React.Component {
   static propTypes = {
     index: PropTypes.number,
-    intl: intlShape,
     record: PropTypes.object,
     namespace: PropTypes.string, // sponsors or proxies
     name: PropTypes.string,
@@ -134,33 +131,26 @@ class ProxyEditItem extends React.Component {
     return this.toggleStatus(true);
   }
 
+  optionsFor = (list) => {
+    return list.map(option => (
+      <FormattedMessage id={`ui-users.${option}`}>
+        {(optionTranslated) => <option value={option}>{optionTranslated}</option>}
+      </FormattedMessage>
+    ));
+  }
+
   render() {
     const {
       name,
       record,
       onDelete,
-      intl: { formatMessage }
     } = this.props;
 
-    const relationStatusOptions = ['active', 'inactive'].map(option => ({
-      label: formatMessage({ id: `ui-users.${option}` }),
-      value: option,
-      selected: record.proxy && record.proxy.status === option,
-    }));
+    const relationStatusOptions = this.optionsFor(['active', 'inactive']);
+    const requestForSponsorOptions = this.optionsFor(['yes', 'no']);
+    const notificationsToOptions = this.optionsFor(['proxy', 'sponsor']);
 
-    const requestForSponsorOptions = ['yes', 'no'].map(option => ({
-      label: formatMessage({ id: `ui-users.${option}` }),
-      value: option,
-      selected: record.proxy && record.proxy.requestForSponsor === option,
-    }));
-
-    const notificationsToOptions = ['proxy', 'sponsor'].map(option => ({
-      label: formatMessage({ id: `ui-users.${option}` }),
-      value: option,
-      selected: record.proxy && record.proxy.notificationsTo === option,
-    }));
-
-    // const accrueToOptions = proxySponsorValues.map(option => ({
+    // const accrueToOptions = this.optionsFor(['proxy', 'sponsor']);
     //   label: formatMessage({ id: `ui-users.${option}` }),
     //   value: option,
     //   selected: record.proxy && record.proxy.accrueTo === option
@@ -200,9 +190,10 @@ class ProxyEditItem extends React.Component {
                     label={<FormattedMessage id="ui-users.proxy.relationshipStatus" />}
                     name={`${name}.proxy.status`}
                     component={Select}
-                    dataOptions={[{ label: 'Select status', value: '' }, ...relationStatusOptions]}
                     fullWidth
-                  />
+                  >
+                    {relationStatusOptions}
+                  </Field>
                 </Col>
               </Row>
             </Col>
@@ -229,9 +220,10 @@ class ProxyEditItem extends React.Component {
                     label={<FormattedMessage id="ui-users.proxy.requestForSponsor" />}
                     name={`${name}.proxy.requestForSponsor`}
                     component={Select}
-                    dataOptions={[...requestForSponsorOptions]}
                     fullWidth
-                  />
+                  >
+                    {requestForSponsorOptions}
+                  </Field>
                 </Col>
               </Row>
             </Col>
@@ -242,9 +234,10 @@ class ProxyEditItem extends React.Component {
                     label={<FormattedMessage id="ui-users.proxy.notificationsTo" />}
                     name={`${name}.proxy.notificationsTo`}
                     component={Select}
-                    dataOptions={[...notificationsToOptions]}
                     fullWidth
-                  />
+                  >
+                    {notificationsToOptions}
+                  </Field>
                 </Col>
               </Row>
             </Col>
@@ -271,4 +264,4 @@ class ProxyEditItem extends React.Component {
   }
 }
 
-export default injectIntl(ProxyEditItem);
+export default ProxyEditItem;
