@@ -131,7 +131,6 @@ class UserForm extends React.Component {
     this.expandAllSections = this.expandAllSections.bind(this);
 
     this.ignoreEnterKey = this.ignoreEnterKey.bind(this);
-    this.executeSave = this.executeSave.bind(this);
     this.closeButton = React.createRef();
 
     this.keyboardCommands = [
@@ -256,6 +255,7 @@ class UserForm extends React.Component {
   render() {
     const {
       initialValues,
+      handleSubmit,
     } = this.props;
     const { sections } = this.state;
     const firstMenu = this.getAddFirstMenu();
@@ -268,7 +268,7 @@ class UserForm extends React.Component {
 
     return (
       <HasCommand commands={this.keyboardCommands}>
-        <form className={css.UserFormRoot} id="form-user" onSubmit={this.executeSave}>
+        <form className={css.UserFormRoot} id="form-user" onSubmit={handleSubmit}>
           <Paneset isRoot>
             <Pane defaultWidth="100%" firstMenu={firstMenu} lastMenu={lastMenu} paneTitle={paneTitle} appIcon={{ app: 'users' }}>
               <div className={css.UserFormContent}>
