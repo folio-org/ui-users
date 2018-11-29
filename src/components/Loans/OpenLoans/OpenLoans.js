@@ -343,13 +343,19 @@ class OpenLoans extends React.Component {
   }
 
   getOpenRequestsCount() {
+    const { stripes, mutator } = this.props;
+
+    if (!stripes.hasPerm('ui-users.requests.all')) {
+      return;
+    }
+
     const q = this.state.loans.map(loan => {
       return `itemId==${loan.itemId}`;
     }).join(' or ');
 
     const query = `(${q}) and status==("Open - Awaiting pickup" or "Open - Not yet filled") sortby requestDate desc`;
-    this.props.mutator.requests.reset();
-    this.props.mutator.requests.GET({ params: { query } }).then((requestRecords) => {
+    mutator.requests.reset();
+    mutator.requests.GET({ params: { query } }).then((requestRecords) => {
       const requestCountObject = requestRecords.reduce((map, record) => {
         map[record.itemId] = map[record.itemId] ? ++map[record.itemId] : 1;
         return map;
