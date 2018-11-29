@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { cloneDeep, get, omit, differenceBy, find } from 'lodash';
+import { cloneDeep, get, omit, differenceBy, find, isArray } from 'lodash';
 import React from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
@@ -199,6 +199,7 @@ class ViewUser extends React.Component {
     this.onClickViewOpenLoans = this.onClickViewOpenLoans.bind(this);
     this.onClickViewClosedLoans = this.onClickViewClosedLoans.bind(this);
     this.onClickViewLoanActionsHistory = this.onClickViewLoanActionsHistory.bind(this);
+    this.buildRecords = this.buildRecords.bind(this);
     this.onClickCloseLoanActionsHistory = this.onClickCloseLoanActionsHistory.bind(this);
     this.onAddressesUpdate = this.onAddressesUpdate.bind(this);
     this.handleSectionToggle = this.handleSectionToggle.bind(this);
@@ -283,6 +284,26 @@ class ViewUser extends React.Component {
     this.props.mutator.query.update({ layer: 'closed-loans' });
     this.setState({
       viewOpenLoansMode: false,
+    });
+  }
+
+  buildRecords(records) {
+    return records.map((record) => {
+      const {
+        item,
+        item: { contributors },
+      } = record;
+
+      return isArray(contributors) ?
+        {
+          ...record,
+          item: {
+            ...item,
+            contributors: contributors
+              .map((currentContributor) => currentContributor.name)
+              .join('; ')
+          }
+        } : record;
     });
   }
 
@@ -538,25 +559,33 @@ class ViewUser extends React.Component {
       (
         <PaneMenu>
           {
-            tagsEnabled && <IconButton
-              icon="tag"
-              title={<FormattedMessage id="ui-users.showTags" />}
-              id="clickable-show-tags"
-              onClick={this.props.tagsToggle}
-              badgeCount={tags.length}
-              aria-label={<FormattedMessage id="ui-users.showTags" />}
-            />
+            tagsEnabled &&
+            <FormattedMessage id="ui-users.showTags">
+              { ariaLabel => (
+                <IconButton
+                  icon="tag"
+                  id="clickable-show-tags"
+                  onClick={this.props.tagsToggle}
+                  badgeCount={tags.length}
+                  ariaLabel={ariaLabel}
+                />
+              )}
+            </FormattedMessage>
           }
           <IfPermission perm="users.item.put">
-            <IconButton
-              icon="edit"
-              id="clickable-edituser"
-              style={{ visibility: !user ? 'hidden' : 'visible' }}
-              onClick={this.props.onEdit}
-              href={this.props.editLink}
-              ref={this.editButton}
-              aria-label={<FormattedMessage id="ui-users.crud.editUser" />}
-            />
+            <FormattedMessage id="ui-users.crud.editUser">
+              { ariaLabel => (
+                <IconButton
+                  icon="edit"
+                  id="clickable-edituser"
+                  style={{ visibility: !user ? 'hidden' : 'visible' }}
+                  onClick={this.props.onEdit}
+                  href={this.props.editLink}
+                  ref={this.editButton}
+                  ariaLabel={ariaLabel}
+                />
+              )}
+            </FormattedMessage>
           </IfPermission>
         </PaneMenu>
       );
@@ -582,6 +611,7 @@ class ViewUser extends React.Component {
     const userFormData = this.getUserFormData(user, addresses, sponsors, proxies, permissions, servicePoints, preferredServicePoint);
 
     const loansHistory = (<this.connectedLoansHistory
+      buildRecords={this.buildRecords}
       user={user}
       loansHistory={loans}
       patronGroup={patronGroup}
@@ -744,24 +774,27 @@ class ViewUser extends React.Component {
               </IfInterface>
             </IfPermission>
           </AccordionSet>
-          <Layer
-            isOpen={query.layer ? query.layer === 'edit' : false}
-            contentLabel={<FormattedMessage id="ui-users.editUserDialog" />}
-            afterClose={this.afterCloseEdit}
-          >
-            <UserForm
-              stripes={stripes}
-              initialValues={userFormData}
-              onSubmit={(record) => { this.update(record); }}
-              onCancel={this.props.onCloseEdit}
-              parentResources={{
-                ...this.props.resources,
-                ...this.props.parentResources,
-              }}
-              parentMutator={this.props.parentMutator}
-            />
-          </Layer>
-
+          <FormattedMessage id="ui-users.editUserDialog">
+            { contentLabel => (
+              <Layer
+                isOpen={query.layer ? query.layer === 'edit' : false}
+                contentLabel={contentLabel}
+                afterClose={this.afterCloseEdit}
+              >
+                <UserForm
+                  stripes={stripes}
+                  initialValues={userFormData}
+                  onSubmit={(record) => { this.update(record); }}
+                  onCancel={this.props.onCloseEdit}
+                  parentResources={{
+                    ...this.props.resources,
+                    ...this.props.parentResources,
+                  }}
+                  parentMutator={this.props.parentMutator}
+                />
+              </Layer>
+            )}
+          </FormattedMessage>
           <Layer
             isOpen={query.layer ? query.layer === 'open-accounts' || query.layer === 'closed-accounts' || query.layer === 'all-accounts' : false}
             label={<FormattedMessage id="ui-users.accounts.title" />}
@@ -814,19 +847,27 @@ class ViewUser extends React.Component {
           </Layer>
 
           <IfPermission perm="ui-users.loans.all">
-            <Layer
-              isOpen={query.layer ? query.layer === 'open-loans' || query.layer === 'closed-loans' : false}
-              contentLabel={<FormattedMessage id="ui-users.loans.title" />}
-            >
-              {loansHistory}
-            </Layer>
+            <FormattedMessage id="ui-users.loans.title">
+              { contentLabel => (
+                <Layer
+                  isOpen={query.layer ? query.layer === 'open-loans' || query.layer === 'closed-loans' : false}
+                  contentLabel={contentLabel}
+                >
+                  {loansHistory}
+                </Layer>
+              )}
+            </FormattedMessage>
 
-            <Layer
-              isOpen={query.layer ? query.layer === 'loan' : false}
-              contentLabel={<FormattedMessage id="ui-users.loanActionsHistory" />}
-            >
-              {loanDetails}
-            </Layer>
+            <FormattedMessage id="ui-users.loanActionsHistory">
+              { contentLabel => (
+                <Layer
+                  isOpen={query.layer ? query.layer === 'loan' : false}
+                  contentLabel={contentLabel}
+                >
+                  {loanDetails}
+                </Layer>
+              )}
+            </FormattedMessage>
           </IfPermission>
         </Pane>
       </HasCommand>

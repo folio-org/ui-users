@@ -63,12 +63,16 @@ class PermissionSetForm extends React.Component {
   addFirstMenu() {
     return (
       <PaneMenu>
-        <IconButton
-          id="clickable-close-permission-set"
-          onClick={this.props.onCancel}
-          icon="closeX"
-          aria-label={<FormattedMessage id="ui-users.permissions.closePermissionSetDialog" />}
-        />
+        <FormattedMessage id="ui-users.permissions.closePermissionSetDialog">
+          { ariaLabel => (
+            <IconButton
+              id="clickable-close-permission-set"
+              onClick={this.props.onCancel}
+              icon="closeX"
+              ariaLabel={ariaLabel}
+            />
+          )}
+        </FormattedMessage>
       </PaneMenu>
     );
   }

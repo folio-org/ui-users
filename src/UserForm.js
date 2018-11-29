@@ -131,7 +131,6 @@ class UserForm extends React.Component {
     this.expandAllSections = this.expandAllSections.bind(this);
 
     this.ignoreEnterKey = this.ignoreEnterKey.bind(this);
-    this.executeSave = this.executeSave.bind(this);
     this.closeButton = React.createRef();
 
     this.keyboardCommands = [
@@ -172,17 +171,19 @@ class UserForm extends React.Component {
   }
 
   getAddFirstMenu() {
-    const label = <FormattedMessage id="ui-users.crud.closeNewUserDialog" />;
     return (
       <PaneMenu>
-        <IconButton
-          id="clickable-closenewuserdialog"
-          onClick={this.props.onCancel}
-          ref={this.closeButton}
-          title={label}
-          ariaLabel={label}
-          icon="closeX"
-        />
+        <FormattedMessage id="ui-users.crud.closeNewUserDialog">
+          { ariaLabel => (
+            <IconButton
+              id="clickable-closenewuserdialog"
+              onClick={this.props.onCancel}
+              ref={this.closeButton}
+              ariaLabel={ariaLabel}
+              icon="closeX"
+            />
+          )}
+        </FormattedMessage>
       </PaneMenu>
     );
   }
@@ -195,7 +196,6 @@ class UserForm extends React.Component {
         <Button
           id={id}
           type="submit"
-          title={label}
           disabled={pristine || submitting}
           buttonStyle="primary paneHeaderNewButton"
           marginBottom0
@@ -256,6 +256,7 @@ class UserForm extends React.Component {
   render() {
     const {
       initialValues,
+      handleSubmit,
     } = this.props;
     const { sections } = this.state;
     const firstMenu = this.getAddFirstMenu();
@@ -268,7 +269,7 @@ class UserForm extends React.Component {
 
     return (
       <HasCommand commands={this.keyboardCommands}>
-        <form className={css.UserFormRoot} id="form-user" onSubmit={this.executeSave}>
+        <form className={css.UserFormRoot} id="form-user" onSubmit={handleSubmit}>
           <Paneset isRoot>
             <Pane defaultWidth="100%" firstMenu={firstMenu} lastMenu={lastMenu} paneTitle={paneTitle} appIcon={{ app: 'users' }}>
               <div className={css.UserFormContent}>

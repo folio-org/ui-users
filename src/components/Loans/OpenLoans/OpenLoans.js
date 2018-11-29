@@ -57,6 +57,7 @@ class OpenLoans extends React.Component {
   });
 
   static propTypes = {
+    buildRecords: PropTypes.func,
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired
     }).isRequired,
@@ -112,11 +113,22 @@ class OpenLoans extends React.Component {
     this.fetchLoanPolicyNames = this.fetchLoanPolicyNames.bind(this);
     this.callout = null;
     this.getFeeFine = this.getFeeFine.bind(this);
-
     const { stripes } = props;
 
     this.connectedChangeDueDateDialog = stripes.connect(ChangeDueDateDialog);
     this.connectedBulkRenewalDialog = stripes.connect(BulkRenewalDialog);
+
+    this.headers = ['action', 'dueDate', 'loanDate', 'item.barcode', 'item.callNumber', 'item.contributors',
+      'item.holdingsRecordId', 'item.instanceId', 'item.status.name', 'item.title', 'item.materialType.name',
+      'item.location.name', 'metaData.createdByUserId', 'metadata.updatedDate', 'metadata.updatedByUserId', 'loanPolicyId'];
+
+    // Map to pass into exportCsv
+    this.columnHeadersMap = this.headers.map(item => {
+      return {
+        label: this.props.intl.formatMessage({ id: `ui-users.${item}` }),
+        value: item
+      };
+    });
 
     // List of all possible columns that can be displayed
     this.possibleColumns = ['  ', 'title', 'itemStatus', 'dueDate', 'requests', 'barcode', 'Fee/Fine', 'Call number',
@@ -682,11 +694,13 @@ class OpenLoans extends React.Component {
   }
 
   renderSubHeader(columnMapping) {
+    const { loans, buildRecords } = this.props;
     const noSelectedLoans = _.size(this.state.checkedLoans) === 0;
     const bulkActionsTooltip = <FormattedMessage id="ui-users.bulkActions.tooltip" />;
     const renewString = <FormattedMessage id="ui-users.renew" />;
     const changeDueDateString = <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />;
-
+    const clonedLoans = _.cloneDeep(loans);
+    const recordsToCSV = buildRecords(clonedLoans);
     return (
       <ActionsBar
         contentStart={
@@ -734,7 +748,10 @@ class OpenLoans extends React.Component {
             >
               {changeDueDateString}
             </Button>
-            <ExportCsv data={this.props.loans} excludeKeys={['id', 'userId', 'itemId']} />
+            <ExportCsv
+              data={recordsToCSV}
+              onlyFields={this.columnHeadersMap}
+            />
           </span>
         }
       />
