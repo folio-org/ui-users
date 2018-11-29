@@ -74,7 +74,7 @@ const BulkRenewedLoansList = (props) => {
             return (errorMessages) ? (
               <Popover position="bottom" alignment="start">
                 <span style={{ ...iconAlignStyle, ...pointerStyle }} data-role="target">
-                  <Icon size="medium" icon="validation-error" status="warn" />
+                  <Icon size="medium" icon="exclamation-circle" status="warn" />
                   <FormattedMessage id="ui-users.brd.failedRenewal" />
                 </span>
                 <p data-role="popover" style={popoverStyle}>{errorMessages[loan.id]}</p>
@@ -83,7 +83,7 @@ const BulkRenewedLoansList = (props) => {
           } else {
             return (
               <span style={iconAlignStyle}>
-                <Icon size="medium" icon="validation-check" status="success" />
+                <Icon size="medium" icon="check-circle" status="success" />
                 <FormattedMessage id="ui-users.brd.successfulRenewal" />
               </span>
             );
