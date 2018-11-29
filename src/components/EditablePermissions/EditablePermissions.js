@@ -24,7 +24,7 @@ import css from './EditablePermissions.css';
 
 class EditablePermissions extends React.Component {
   static propTypes = {
-    heading: PropTypes.string.isRequired,
+    heading: PropTypes.node.isRequired,
     permToRead: PropTypes.string.isRequired,
     permToDelete: PropTypes.string.isRequired,
     permToModify: PropTypes.string.isRequired,
