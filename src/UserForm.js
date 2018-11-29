@@ -171,17 +171,19 @@ class UserForm extends React.Component {
   }
 
   getAddFirstMenu() {
-    const label = <FormattedMessage id="ui-users.crud.closeNewUserDialog" />;
     return (
       <PaneMenu>
-        <IconButton
-          id="clickable-closenewuserdialog"
-          onClick={this.props.onCancel}
-          ref={this.closeButton}
-          title={label}
-          ariaLabel={label}
-          icon="closeX"
-        />
+        <FormattedMessage id="ui-users.crud.closeNewUserDialog">
+          { ariaLabel => (
+            <IconButton
+              id="clickable-closenewuserdialog"
+              onClick={this.props.onCancel}
+              ref={this.closeButton}
+              ariaLabel={ariaLabel}
+              icon="closeX"
+            />
+          )}
+        </FormattedMessage>
       </PaneMenu>
     );
   }
@@ -194,7 +196,6 @@ class UserForm extends React.Component {
         <Button
           id={id}
           type="submit"
-          title={label}
           disabled={pristine || submitting}
           buttonStyle="primary paneHeaderNewButton"
           marginBottom0

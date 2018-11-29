@@ -25,8 +25,6 @@ const EditProxy = (props) => {
   } = initialValues;
   const fullName = getFullName(initialValues);
 
-  const isProxyFor = <FormattedMessage id="ui-users.permissions.isProxyFor" values={{ name: fullName }} />;
-  const isSponsorOf = <FormattedMessage id="ui-users.permissions.isSponsorOf" values={{ name: fullName }} />;
   const proxySponsor = <FormattedMessage id="ui-users.permissions.proxySponsor" />;
 
   return (
@@ -40,9 +38,17 @@ const EditProxy = (props) => {
           <Badge>{sponsors.length + proxies.length}</Badge>
         }
       >
-        <ProxyEditList itemComponent={ProxyEditItem} label={isProxyFor} name="sponsors" {...props} />
+        <FormattedMessage id="ui-users.permissions.isProxyFor" values={{ name: fullName }}>
+          { label => (
+            <ProxyEditList itemComponent={ProxyEditItem} label={label} name="sponsors" {...props} />
+          )}
+        </FormattedMessage>
         <br />
-        <ProxyEditList itemComponent={ProxyEditItem} label={isSponsorOf} name="proxies" {...props} />
+        <FormattedMessage id="ui-users.permissions.isSponsorOf" values={{ name: fullName }}>
+          { label => (
+            <ProxyEditList itemComponent={ProxyEditItem} label={label} name="proxies" {...props} />
+          )}
+        </FormattedMessage>
         <br />
       </Accordion>
     </IfPermission>
