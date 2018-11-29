@@ -528,7 +528,7 @@
     "start": "stripes serve",
     "build": "stripes build",
     "lint": "eslint .",
-    "test": "echo 'No unit tests implemented'",
+    "test": "stripes test karma",
     "test-int": "stripes test nightmare"
   },
   "devDependencies": {
