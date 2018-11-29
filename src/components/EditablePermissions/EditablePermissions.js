@@ -138,7 +138,7 @@ class EditablePermissions extends React.Component {
   }
 
   render() {
-    const { accordionId, expanded, onToggle, initialValues } = this.props;
+    const { accordionId, expanded, onToggle, initialValues, intl: { formatMessage } } = this.props;
 
     const permissions = (initialValues || {}).subPermissions || [];
 
@@ -169,7 +169,7 @@ class EditablePermissions extends React.Component {
           <DropdownMenu
             data-role="menu"
             width="40em"
-            aria-label={this.props.intl.formatMessage({ id: 'ui-users.permissions.availablePermissions' })}
+            aria-label={formatMessage({ id: 'ui-users.permissions.availablePermissions' })}
             onToggle={this.onToggleAddPermDD}
           >
             {permissionsDD}

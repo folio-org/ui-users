@@ -567,7 +567,7 @@ class ViewUser extends React.Component {
                   id="clickable-show-tags"
                   onClick={this.props.tagsToggle}
                   badgeCount={tags.length}
-                  aria-label={ariaLabel}
+                  ariaLabel={ariaLabel}
                 />
               )}
             </FormattedMessage>
@@ -582,7 +582,7 @@ class ViewUser extends React.Component {
                   onClick={this.props.onEdit}
                   href={this.props.editLink}
                   ref={this.editButton}
-                  aria-label={ariaLabel}
+                  ariaLabel={ariaLabel}
                 />
               )}
             </FormattedMessage>
