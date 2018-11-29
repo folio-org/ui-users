@@ -72,6 +72,7 @@ class EditablePermissions extends React.Component {
     const isOpen = this.state.addPermissionOpen;
     this.setState({
       addPermissionOpen: !isOpen,
+      searchTerm: ''
     });
   }
 
