@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "2.17.5",
+  "version": "2.17.7",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -467,7 +467,6 @@
           "ui-users.view",
           "ui-users.loans.renew",
           "ui-users.settings.feefines",
-          "ui-users.requests.all",
           "circulation.loans.item.put",
           "circulation.renew-by-barcode.post",
           "circulation-storage.loans-history.collection.get",
@@ -533,7 +532,7 @@
   },
   "devDependencies": {
     "@folio/eslint-config-stripes": "^3.2.1",
-    "@folio/stripes": "^1.0.0",
+    "@folio/stripes": "^1.1.0",
     "@folio/stripes-cli": "^1.5.0",
     "babel-eslint": "^9.0.0",
     "eslint": "^5.5.0",
