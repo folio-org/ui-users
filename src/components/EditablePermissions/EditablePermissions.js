@@ -1,6 +1,10 @@
 import _ from 'lodash';
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  injectIntl,
+  intlShape
+} from 'react-intl';
 import PropTypes from 'prop-types';
 import { FieldArray } from 'redux-form';
 import {
@@ -26,6 +30,7 @@ class EditablePermissions extends React.Component {
     permToModify: PropTypes.string.isRequired,
     availablePermissions: PropTypes.arrayOf(PropTypes.object),
     initialValues: PropTypes.object,
+    intl: intlShape,
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func.isRequired,
       config: PropTypes.shape({
@@ -164,7 +169,7 @@ class EditablePermissions extends React.Component {
           <DropdownMenu
             data-role="menu"
             width="40em"
-            aria-label={<FormattedMessage id="ui-users.permissions.availablePermissions" />}
+            aria-label={this.props.intl.formatMessage({ id: 'ui-users.permissions.availablePermissions' })}
             onToggle={this.onToggleAddPermDD}
           >
             {permissionsDD}
@@ -190,4 +195,4 @@ class EditablePermissions extends React.Component {
   }
 }
 
-export default EditablePermissions;
+export default injectIntl(EditablePermissions);
