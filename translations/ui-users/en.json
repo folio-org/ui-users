@@ -2,8 +2,8 @@
   "meta.title": "Users",
 
   "search": "Search",
-  "expandAll": "Expand All",
-  "collapseAll": "Collapse All",
+  "expandAll": "Expand all",
+  "collapseAll": "Collapse all",
   "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}",
   "closedLoansCount": "{count, number} {count, plural, one {closed loan} other {closed loans}}",
   "brd.renewConfirmation": "Renew Confirmation",
