@@ -116,7 +116,7 @@ class EditablePermissions extends React.Component {
             aria-label={`${title}: ${item.permissionName}`}
             title={title}
           >
-            <Icon icon="hollowX" iconClassName={css.removePermissionIcon} iconRootClass={css.removePermissionButton} />
+            <Icon icon="times-circle" iconClassName={css.removePermissionIcon} iconRootClass={css.removePermissionButton} />
           </Button>
         </IfPermission>
       </li>
