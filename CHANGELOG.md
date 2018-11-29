@@ -30,6 +30,7 @@
 * Link to a user's requests. Fixes UIU-677.
 * Bring back handleSubmit when using submit button. Fixes UIU-743.
 * Fix permission menu after reopening. Fixes UIU-739.
+* Apply internationalization to all hardcoded strings for Settings. Fixes UIU-691.
 
 ## [2.17.0](https://github.com/folio-org/ui-users/tree/v2.17.0) (2018-10-5)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.16.0...v2.17.0)

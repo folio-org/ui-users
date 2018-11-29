@@ -308,7 +308,10 @@ class FeeFines extends React.Component {
 
     return (
       <div>
-        <Owners dataOptions={owners} onChange={this.onChangeOwner} />
+        <Owners
+          dataOptions={owners}
+          onChange={this.onChangeOwner}
+        />
         <EditableList
           {...this.props}
           label={intl.formatMessage({ id: 'ui-users.feefines.title' })}
@@ -332,7 +335,12 @@ class FeeFines extends React.Component {
         <ConfirmationModal
           open={this.state.confirming}
           heading={<FormattedMessage id="ui-users.feefines.modalHeader" />}
-          message={<SafeHTMLMessage id="ui-users.feefines.modalMessage" values={{ feefine: this.state.type.feeFineType }} />}
+          message={
+            <SafeHTMLMessage
+              id="ui-users.feefines.modalMessage"
+              values={{ feefine: this.state.type.feeFineType }}
+            />
+          }
           onConfirm={this.onDeleteType}
           onCancel={this.hideConfirm}
           confirmLabel="Delete"

@@ -2,6 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+
 import {
   KeyValue,
   Row,
@@ -56,18 +57,27 @@ class PermissionSetDetails extends React.Component {
   render() {
     const { initialValues: selectedSet } = this.props;
     const { sections } = this.state;
+    const untitledPermissionSetMessage = <FormattedMessage id="ui-users.permissions.untitledPermissionSet" />;
+
     return (
       <div>
         <Row end="xs">
           <Col xs>
-            <ExpandAllButton accordionStatus={sections} onToggle={this.handleExpandAll} />
+            <ExpandAllButton
+              accordionStatus={sections}
+              onToggle={this.handleExpandAll}
+            />
           </Col>
         </Row>
         <Accordion
           open={sections.generalInformation}
           id="generalInformation"
           onToggle={this.handleSectionToggle}
-          label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.permissions.generalInformation" /></Headline>}
+          label={
+            <Headline size="large" tag="h3">
+              <FormattedMessage id="ui-users.permissions.generalInformation" />
+            </Headline>
+          }
         >
           {selectedSet.metadata && selectedSet.metadata.createdDate &&
             <Row>
@@ -81,7 +91,7 @@ class PermissionSetDetails extends React.Component {
               <section>
                 <KeyValue
                   label={<FormattedMessage id="ui-users.permissions.permissionSetName" />}
-                  value={_.get(selectedSet, ['displayName'], <FormattedMessage id="ui-users.permissions.untitledPermissionSet" />)}
+                  value={_.get(selectedSet, ['displayName'], untitledPermissionSetMessage)}
                 />
                 <KeyValue
                   label={<FormattedMessage id="ui-users.description" />}

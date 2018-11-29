@@ -398,7 +398,8 @@ class ViewUser extends React.Component {
   getUser() {
     const { resources, match: { params: { id } } } = this.props;
     const selUser = (resources.selUser || {}).records || [];
-    if (!selUser || selUser.length === 0 || !id) return null;
+
+    if (selUser.length === 0 || !id) return null;
     // Logging below shows this DOES sometimes find the wrong record. But why?
     // console.log(`getUser: found ${selUser.length} users, id '${selUser[0].id}' ${selUser[0].id === id ? '==' : '!='} '${id}'`);
     return selUser.find(u => u.id === id);
@@ -608,24 +609,25 @@ class ViewUser extends React.Component {
     const addresses = toListAddresses(get(user, ['personal', 'addresses'], []), addressTypes);
     const userFormData = this.getUserFormData(user, addresses, sponsors, proxies, permissions, servicePoints, preferredServicePoint);
 
-    const loansHistory = (<this.connectedLoansHistory
-      buildRecords={this.buildRecords}
-      user={user}
-      loansHistory={loans}
-      patronGroup={patronGroup}
-      stripes={stripes}
-      history={this.props.history}
-      onCancel={this.onClickCloseLoansHistory}
-      onClickViewOpenLoans={this.onClickViewOpenLoans}
-      onClickViewClosedLoans={this.onClickViewClosedLoans}
-      onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
-      onClickViewChargeFeeFine={this.onClickViewChargeFeeFine}
-      onClickViewOpenAccounts={this.onClickViewOpenAccounts}
-      onClickViewAccountActionsHistory={this.onClickViewAccountActionsHistory}
-      onClickViewClosedAccounts={this.onClickViewClosedAccounts}
-      onClickViewAllAccounts={this.onClickViewAllAccounts}
-      openLoans={query.layer === 'open-loans'}
-    />);
+    const loansHistory = (
+      <this.connectedLoansHistory
+        buildRecords={this.buildRecords}
+        user={user}
+        loansHistory={loans}
+        patronGroup={patronGroup}
+        stripes={stripes}
+        history={this.props.history}
+        onCancel={this.onClickCloseLoansHistory}
+        onClickViewOpenLoans={this.onClickViewOpenLoans}
+        onClickViewClosedLoans={this.onClickViewClosedLoans}
+        onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
+        onClickViewChargeFeeFine={this.onClickViewChargeFeeFine}
+        onClickViewOpenAccounts={this.onClickViewOpenAccounts}
+        onClickViewAccountActionsHistory={this.onClickViewAccountActionsHistory}
+        onClickViewClosedAccounts={this.onClickViewClosedAccounts}
+        onClickViewAllAccounts={this.onClickViewAllAccounts}
+        openLoans={query.layer === 'open-loans'}
+      />);
 
     const loanDetails = (
       <this.connectedLoanActionsHistory
@@ -815,7 +817,10 @@ class ViewUser extends React.Component {
               onClickCloseAccountActionsHistory={this.onClickCloseAccountActionsHistory}
             />
           </Layer>
-          <Layer isOpen={query.layer ? query.layer === 'charge' : false} label="Charge Fee/Fine">
+          <Layer
+            isOpen={query.layer ? query.layer === 'charge' : false}
+            label={<FormattedMessage id="ui-users.chargeFeefine" />}
+          >
             <this.connectedCharge
               servicePoints={servicePoints}
               preferredServicePoint={preferredServicePoint}
@@ -827,7 +832,10 @@ class ViewUser extends React.Component {
               handleAddRecords={this.handleAddRecords}
             />
           </Layer>
-          <Layer isOpen={query.layer ? query.layer === 'account' : false} label="Account Actions History">
+          <Layer
+            isOpen={query.layer ? query.layer === 'account' : false}
+            label={<FormattedMessage id="ui-users.accountActionHistory" />}
+          >
             <this.connectedAccountActionsHistory
               user={user}
               patronGroup={patronGroup}

@@ -26,10 +26,11 @@ class UsersRouting extends React.Component {
     this.connectedApp = props.stripes.connect(Users);
   }
 
-  NoMatch() {
+  noMatch() {
     const {
       location: { pathname },
     } = this.props;
+
     return (
       <div>
         <h2>
@@ -54,10 +55,10 @@ class UsersRouting extends React.Component {
       <CommandList commands={commands}>
         <Switch>
           <Route
-            path={`${this.props.match.path}`}
+            path={this.props.match.path}
             render={() => <this.connectedApp {...this.props} />}
           />
-          <Route component={() => { this.NoMatch(); }} />
+          <Route render={this.noMatch} />
         </Switch>
       </CommandList>
     );

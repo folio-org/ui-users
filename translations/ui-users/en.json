@@ -299,6 +299,20 @@
   "loans.loanDetails": "Loan details",
   "loans.newFeeFine": "New fee/fine",
 
+  "settings.label": "Users",
+  "settings.general": "General",
+  "settings.feefine": "Fee/fine",
+  "settings.permissionSet": "Permission sets",
+  "settings.patronGroups": "Patron groups",
+  "settings.addressTypes": "Address Types",
+  "settings.profilePictures": "Profile pictures",
+  "settings.owners": "Owners",
+  "settings.manualCharges": "Manual charges",
+  "settings.waiveReasons": "Waive reasons",
+  "settings.paymentMethods": "Payment methods",
+  "settings.refundReasons": "Refund reasons",
+  "settings.commentRequired": "Comment required",
+
   "loans.columns.title": "Item title",
   "loans.columns.itemStatus": "Item status",
   "loans.columns.barcode": "Barcode",
@@ -341,6 +355,7 @@
   "requests.numOpenRequests": "{count, number} {count, plural, one {open request} other {open requests}}",
   "requests.numClosedRequests": "{count, number} {count, plural, one {closed request} other {closed requests}}",
 
+  "permissions.emptyField": "Please fill this in to continue",
   "permissions.noSponsorsFound": "No sponsors found",
   "permissions.noProxiesFound": "No proxies found",
   "permissions.empty": "No permissions found",
@@ -436,6 +451,9 @@
   "errors.proxies.expired": "Proxy user record expired",
   "errors.sponsors.expired": "Sponsor user record expired",
 
+  "error.reviewBeforeRenewal": "{message} Please review {policyName} before retrying renewal.",
+  "error.loanNotRenewedReason": "Loan cannot be renewed because: {message}.",
+
   "editUserDialog": "Edit User Dialog",
   "loanActionsHistory": "Loan Actions History",
   "hide": "Hide",
@@ -460,8 +478,13 @@
   "anonymize": "Anonymize all loans",
   "bulkActions.tooltip": "Multiple loans can be processed at the same time. Please select loans first.",
   "loanNotRenewed": "Loan not renewed",
+  "chargeFeefine": "Charge Fee/Fine",
+  "accountActionHistory": "Account Actions History",
+  "status": "Status",
 
   "accounts.title": "Fees/Fines",
+  "accounts.outstandingBalance": "Outstanding Balance: ",
+  "accounts.header": "Fee/fine details - {userName} ({patronGroup})",
   "accounts.outstanding": "Outstanding Balance:",
   "accounts.open": "Open",
   "accounts.closed": "Closed",
@@ -495,6 +518,8 @@
 
   "owners.label": "Fee/fine: Owners",
   "owners.singular": "Fee/fine Owner",
+  "owners.error": "Error",
+  "owners.warning": "Warning: Overdue fines/lost item fees will not be collected without a service point",
   "owners.columns.owner": "Owner*",
   "owners.columns.desc": "Description",
   "owners.columns.asp": "Associated service points",

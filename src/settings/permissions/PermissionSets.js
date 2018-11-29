@@ -4,8 +4,11 @@ import PropTypes from 'prop-types';
 import {
   injectIntl,
   intlShape,
+  FormattedMessage,
 } from 'react-intl';
+
 import { EntryManager } from '@folio/stripes/smart-components';
+
 import PermissionSetDetails from './PermissionSetDetails';
 import PermissionSetForm from './PermissionSetForm';
 
@@ -13,7 +16,7 @@ function validate(values) {
   const errors = {};
 
   if (!values.displayName) {
-    errors.displayName = 'Please fill this in to continue';
+    errors.displayName = <FormattedMessage id="ui-users.permissions.emptyField" />;
   }
 
   return errors;

@@ -1,0 +1,16 @@
+@import "@folio/stripes-components/lib/variables";
+
+.commentsWrapper { 
+  display: flex; 
+  align-items: center;
+}
+
+.buttonView {
+  color: var(--primary);
+}
+
+.buttonAddComment {
+  float: right;
+  margin-left: 50px;
+  margin-bottom: 0;
+}

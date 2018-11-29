@@ -151,7 +151,7 @@ class OwnerSettings extends React.Component {
         const asp = item.servicePointOwner || [];
         asp.forEach(s => {
           if (s.value === none.id && asp.length > 1) {
-            itemErrors.servicePointOwner = 'Error';
+            itemErrors.servicePointOwner = <FormattedMessage id="ui-users.owners.error" />;
           }
         });
 
@@ -183,7 +183,7 @@ class OwnerSettings extends React.Component {
 
         asp.forEach(s => {
           if (s.value === none.id) {
-            itemWarning.servicePointOwner = 'Warning: Overdue fines/lost item fees will not be collected without a service point';
+            itemWarning.servicePointOwner = <FormattedMessage id="ui-users.owners.warning" />;
           }
         });
 
