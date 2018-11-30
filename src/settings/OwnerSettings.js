@@ -259,7 +259,8 @@ class OwnerSettings extends React.Component {
           defaultWidth="fill"
           fluidContentWidth
           height="100%"
-          paneTitle={formatMessage({ id: 'ui-users.owners.label' })}>
+          paneTitle={formatMessage({ id: 'ui-users.owners.label' })}
+        >
           <EditableList
             {...this.props}
             label={formatMessage({ id: 'ui-users.owners.label' })}

@@ -119,15 +119,15 @@ class PatronBlock extends React.Component {
 
   render() {
     const props = this.props;
-    const { 
-      expanded, 
-      onToggle, 
-      accordionId, 
-      intl : { formatMessage } 
+    const {
+      expanded,
+      onToggle,
+      accordionId,
+      intl : { formatMessage }
     } = props;
-    const { 
-      sortOrder, 
-      sortDirection 
+    const {
+      sortOrder,
+      sortDirection
     } = this.state;
     const manualBlocks = _.get(this.props.resources, ['userPatronBlocks', 'records'], []);
     const contentData = _.orderBy(manualBlocks, [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);

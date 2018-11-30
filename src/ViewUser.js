@@ -703,7 +703,7 @@ class ViewUser extends React.Component {
           <Row>
             <Col xs={10}>
               {(hasPatronBlocks === 1 && totalPatronBlocks > 0) ?
-              <TextField fullWidth readOnly value="Patron has blocks in place" error=" " /> : ''}
+                <TextField fullWidth readOnly value="Patron has blocks in place" error=" " /> : ''}
             </Col>
             <Col xs={2}>
               <ExpandAllButton accordionStatus={this.state.sections} onToggle={this.handleExpandAll} />

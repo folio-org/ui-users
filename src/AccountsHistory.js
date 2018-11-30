@@ -419,17 +419,6 @@ class AccountsHistory extends React.Component {
     const filters = filterState(this.queryParam('f'));
     const selectedAccounts = this.state.selectedAccounts.map(a => accounts.find(ac => ac.id === a.id) || {});
 
-    const closeMenu = (
-      <PaneMenu>
-        <button onClick={this.props.onCancel} type="button">
-          <Row>
-            <Col><Icon icon="chevron-double-left" size="large" /></Col>
-            <Col><span style={{ fontSize: 'x-large' }}>Back</span></Col>
-          </Row>
-        </button>
-      </PaneMenu>
-    );
-
     const columnMapping = {
       'metadata.createdDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' }),
       'metadata.updatedDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' }),
