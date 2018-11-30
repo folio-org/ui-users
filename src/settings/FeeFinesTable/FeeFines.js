@@ -44,15 +44,19 @@ function validate(type, props) {
       if (exist.find(e => e === ownerId)) {
         errors.items[i].feeFineType = <FormattedMessage id="ui-users.feefines.errors.exist" />;
       } else if (ownerId === shared.id) {
-        errors.items[i].feeFineType = <SafeHTMLMessage
-          id="ui-users.feefines.errors.existShared"
-          values={{ owner: (owners.find(o => o.id === exist[0]) || {}).owner }}
-        />;
+        errors.items[i].feeFineType = (
+          <FormattedMessage
+            id="ui-users.feefines.errors.existShared"
+            values={{ owner: (owners.find(o => o.id === exist[0]) || {}).owner }}
+          />
+        );
       } else if (exist.find(e => e === shared.id)) {
-        errors.items[i].feeFineType = <SafeHTMLMessage
-          id="ui-users.feefines.errors.existShared"
-          values={{ owner: 'Shared' }}
-        />;
+        errors.items[i].feeFineType = (
+          <FormattedMessage
+            id="ui-users.feefines.errors.existShared"
+            values={{ owner: 'Shared' }}
+          />
+        );
       }
     }
 

@@ -803,8 +803,8 @@ class ViewUser extends React.Component {
           </FormattedMessage>
           <Layer
             isOpen={
-              this.isLayerOpen('open-accounts') || 
-              this.isLayerOpen('closed-accounts') || 
+              this.isLayerOpen('open-accounts') ||
+              this.isLayerOpen('closed-accounts') ||
               this.isLayerOpen('all-accounts')
             }
             label={<FormattedMessage id="ui-users.accounts.title" />}
