@@ -32,15 +32,14 @@ import withRenew from './withRenew';
  */
 class LoanActionsHistory extends React.Component {
   static manifest = Object.freeze({
-    userIds: {},
     loanActionsWithUser: {},
-    // this is another hack used to refresh loanActions after renew is executed
-    timestamp: { initialValue: { time: Date.now() } },
     users: {
       type: 'okapi',
       records: 'users',
       resourceShouldRefresh: true,
-      path: 'users?query=(%{userIds.query})',
+      path: 'users',
+      accumulate: 'true',
+      fetch: false,
     },
     requests: {
       type: 'okapi',
@@ -52,11 +51,11 @@ class LoanActionsHistory extends React.Component {
     },
     loanActions: {
       type: 'okapi',
+      path: 'loan-storage/loan-history',
       records: 'loans',
       resourceShouldRefresh: true,
-      GET: {
-        path: 'loan-storage/loan-history?query=(id==!{loanid})&timestamp=%{timestamp.time}&limit=100',
-      },
+      accumulate: 'true',
+      fetch: false,
     },
     loanPolicies: {
       type: 'okapi',
@@ -75,8 +74,6 @@ class LoanActionsHistory extends React.Component {
     resources: PropTypes.shape({
       loanActions: PropTypes.object,
       loanActionsWithUser: PropTypes.object,
-      userIds: PropTypes.object,
-      timestamp: PropTypes.object,
     }).isRequired,
     mutator: PropTypes.shape({
       loanActionsWithUser: PropTypes.shape({
@@ -87,9 +84,6 @@ class LoanActionsHistory extends React.Component {
         reset: PropTypes.func,
       }),
       userIds: PropTypes.shape({
-        replace: PropTypes.func,
-      }),
-      timestamp: PropTypes.shape({
         replace: PropTypes.func,
       }),
     }).isRequired,
@@ -122,7 +116,6 @@ class LoanActionsHistory extends React.Component {
     this.getOpenRequestsCount = this.getOpenRequestsCount.bind(this);
 
     this.state = {
-      loanActionCount: 0,
       nonRenewedLoanItems: [],
       nonRenewedLoansModalOpen: false,
       changeDueDateDialogOpen: false,
@@ -130,46 +123,15 @@ class LoanActionsHistory extends React.Component {
     };
   }
 
-  // TODO: refactor after join is supported in stripes-connect
-  static getDerivedStateFromProps(nextProps, nextState) {
-    const { loan, resources: { loanActions, userIds, users, loanActionsWithUser } } = nextProps;
-
-    if (!loanActions
-      || !loanActions.records.length
-      || loanActions.records[0].id !== loan.id) {
-      return null;
-    }
-
-    if (!userIds.query || userIds.loan.id !== loan.id) {
-      const query = loanActions.records.map(r => {
-        return `id==${r.metadata.updatedByUserId}`;
-      }).join(' or ');
-      nextProps.mutator.userIds.replace({ query, loan });
-    }
-
-    if (!users.records.length) return null;
-
-    if (!loanActionsWithUser.records || loanActionsWithUser.loan.id !== loan.id
-      || nextState.loanActionCount !== loanActions.other.totalRecords) {
-      return {
-        loanActionCount: loanActions.other.totalRecords
-      };
-    }
-
-    return null;
-  }
-
   componentDidMount() {
     this.getOpenRequestsCount();
+    this.getLoanActions();
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    const { loan, resources: { loanActions, users } } = this.props;
-
-    if (this.state.loanActionCount && this.state.loanActionCount !== prevState.loanActionCount) {
-      this.joinLoanActionsWithUser(loanActions.records, users.records, loan);
+  componentDidUpdate(prevProps) {
+    if (this.props.loan.itemId !== prevProps.loan.itemId) {
+      this.getOpenRequestsCount();
     }
-    if (this.props.loan.itemId !== prevProps.loan.itemId) this.getOpenRequestsCount();
   }
 
   getContributorslist(loan) {
@@ -194,14 +156,15 @@ class LoanActionsHistory extends React.Component {
     this.setState({ nonRenewedLoansModalOpen: false });
   }
 
-  joinLoanActionsWithUser(loanActions, users, loan) {
+  joinLoanActionsWithUser(loanActions, users) {
     const userMap = users.reduce((memo, user) => {
       return Object.assign(memo, { [user.id]: user });
     }, {});
     const records = loanActions.map(la => {
       return Object.assign({}, la, { user: userMap[la.metadata.updatedByUserId] });
     });
-    this.props.mutator.loanActionsWithUser.replace({ loan, records });
+
+    this.props.mutator.loanActionsWithUser.replace({ records });
   }
 
   openNonRenewedLoansModal(nonRenewedLoanItems) {
@@ -223,11 +186,27 @@ class LoanActionsHistory extends React.Component {
 
   onRenew() {
     this.showCallout();
-    this.refreshLoanActions();
+    this.getLoanActions();
   }
 
-  refreshLoanActions() {
-    this.props.mutator.timestamp.replace({ time: Date.now() });
+  getUsers(loanActions) {
+    const { mutator } = this.props;
+    const query = loanActions
+      .map(r => `id==${r.metadata.updatedByUserId}`)
+      .join(' or ');
+
+    mutator.users.reset();
+    mutator.users.GET({ params: { query } })
+      .then(users => this.joinLoanActionsWithUser(loanActions, users));
+  }
+
+  getLoanActions() {
+    const { loanid, mutator } = this.props;
+    const query = `id==${loanid}`;
+    const limit = 100;
+    mutator.loanActions.reset();
+    mutator.loanActions.GET({ params: { query, limit } })
+      .then(loanActions => this.getUsers(loanActions));
   }
 
   getOpenRequestsCount() {
@@ -480,13 +459,13 @@ class LoanActionsHistory extends React.Component {
             <Col xs={2}>
               <KeyValue
                 label={<FormattedMessage id="ui-users.loans.columns.dueDate" />}
-                value={<FormattedTime value={loan.dueDate} day="numeric" month="numeric" year="numeric" /> || '-'}
+                value={loan.dueDate ? (<FormattedTime value={loan.dueDate} day="numeric" month="numeric" year="numeric" />) : '-'}
               />
             </Col>
             <Col xs={2}>
               <KeyValue
                 label={<FormattedMessage id="ui-users.loans.columns.returnDate" />}
-                value={<FormattedTime value={loan.returnDate} day="numeric" month="numeric" year="numeric" /> || '-'}
+                value={loan.returnDate ? (<FormattedTime value={loan.returnDate} day="numeric" month="numeric" year="numeric" />) : '-'}
               />
             </Col>
             <Col xs={2}>
