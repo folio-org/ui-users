@@ -186,7 +186,7 @@ class ViewUser extends React.Component {
         extendedInfoSection: false,
         contactInfoSection: false,
         proxySection: false,
-        patronBlocksSection: true,
+        patronBlocksSection: false,
         loansSection: false,
         requestsSection: false,
         accountsSection: false,
@@ -632,7 +632,6 @@ class ViewUser extends React.Component {
           onToggle={this.handleSectionToggle}
           onClickViewPatronBlock={this.onClickViewPatronBlock}
           addRecord={this.state.addRecord}
-          initialValues={userFormData}
           {...this.props}
         />
         <ExtendedInfo
