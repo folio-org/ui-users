@@ -364,7 +364,7 @@ class AccountActionsHistory extends React.Component {
             <Col xs={1.5}>
               <KeyValue
                 label={<FormattedMessage id="ui-users.details.field.returnedate" />}
-                value={<FormattedTime value={account.returnedDate} day="numeric" month="numeric" year="numeric" /> || '-'}
+                value={account.returnedDate ? <FormattedTime value={account.returnedDate} day="numeric" month="numeric" year="numeric" /> : '-'}
               />
             </Col>
           </Row>
