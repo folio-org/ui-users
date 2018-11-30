@@ -151,12 +151,10 @@ class UserForm extends React.Component {
       {
         name: 'expandAllSections',
         handler: this.expandAllSections,
-        shortcut: 'mod+['
       },
       {
         name: 'collapseAllSections',
         handler: this.collapseAllSections,
-        shortcut: 'mod+]'
       }
     ];
 
@@ -180,7 +178,7 @@ class UserForm extends React.Component {
               onClick={this.props.onCancel}
               ref={this.closeButton}
               ariaLabel={ariaLabel}
-              icon="closeX"
+              icon="times"
             />
           )}
         </FormattedMessage>

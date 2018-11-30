@@ -24,7 +24,7 @@ import css from './EditablePermissions.css';
 
 class EditablePermissions extends React.Component {
   static propTypes = {
-    heading: PropTypes.string.isRequired,
+    heading: PropTypes.node.isRequired,
     permToRead: PropTypes.string.isRequired,
     permToDelete: PropTypes.string.isRequired,
     permToModify: PropTypes.string.isRequired,
@@ -72,6 +72,7 @@ class EditablePermissions extends React.Component {
     const isOpen = this.state.addPermissionOpen;
     this.setState({
       addPermissionOpen: !isOpen,
+      searchTerm: ''
     });
   }
 
@@ -116,7 +117,7 @@ class EditablePermissions extends React.Component {
             aria-label={`${title}: ${item.permissionName}`}
             title={title}
           >
-            <Icon icon="hollowX" iconClassName={css.removePermissionIcon} iconRootClass={css.removePermissionButton} />
+            <Icon icon="times-circle" iconClassName={css.removePermissionIcon} iconRootClass={css.removePermissionButton} />
           </Button>
         </IfPermission>
       </li>

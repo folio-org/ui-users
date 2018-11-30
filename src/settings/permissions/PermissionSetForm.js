@@ -68,7 +68,7 @@ class PermissionSetForm extends React.Component {
             <IconButton
               id="clickable-close-permission-set"
               onClick={this.props.onCancel}
-              icon="closeX"
+              icon="times"
               ariaLabel={ariaLabel}
             />
           )}

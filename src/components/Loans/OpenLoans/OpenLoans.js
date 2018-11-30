@@ -21,6 +21,7 @@ import {
   Callout,
   IconButton,
   ExportCsv,
+  IfPermission,
 } from '@folio/stripes/components';
 import { ChangeDueDateDialog } from '@folio/stripes/smart-components';
 import BulkRenewalDialog from '../../BulkRenewalDialog';
@@ -343,13 +344,19 @@ class OpenLoans extends React.Component {
   }
 
   getOpenRequestsCount() {
+    const { stripes, mutator } = this.props;
+
+    if (!stripes.hasPerm('ui-users.requests.all')) {
+      return;
+    }
+
     const q = this.state.loans.map(loan => {
       return `itemId==${loan.itemId}`;
     }).join(' or ');
 
     const query = `(${q}) and status==("Open - Awaiting pickup" or "Open - Not yet filled") sortby requestDate desc`;
-    this.props.mutator.requests.reset();
-    this.props.mutator.requests.GET({ params: { query } }).then((requestRecords) => {
+    mutator.requests.reset();
+    mutator.requests.GET({ params: { query } }).then((requestRecords) => {
       const requestCountObject = requestRecords.reduce((map, record) => {
         map[record.itemId] = map[record.itemId] ? ++map[record.itemId] : 1;
         return map;
@@ -614,9 +621,11 @@ class OpenLoans extends React.Component {
       >
         <IconButton data-role="toggle" icon="ellipsis" size="small" iconSize="medium" />
         <DropdownMenu data-role="menu" overrideStyle={{ padding: '7px 3px' }}>
-          <MenuItem itemMeta={{ loan, action: 'itemDetails' }}>
-            <Button buttonStyle="dropdownItem" href={`/inventory/view/${loan.item.instanceId}/${loan.item.holdingsRecordId}/${loan.itemId}`}><FormattedMessage id="ui-users.itemDetails" /></Button>
-          </MenuItem>
+          <IfPermission perm="inventory.items.item.get">
+            <MenuItem itemMeta={{ loan, action: 'itemDetails' }}>
+              <Button buttonStyle="dropdownItem" href={`/inventory/view/${loan.item.instanceId}/${loan.item.holdingsRecordId}/${loan.itemId}`}><FormattedMessage id="ui-users.itemDetails" /></Button>
+            </MenuItem>
+          </IfPermission>
           <MenuItem itemMeta={{ loan, action: 'renew' }}>
             <Button buttonStyle="dropdownItem"><FormattedMessage id="ui-users.renew" /></Button>
           </MenuItem>
