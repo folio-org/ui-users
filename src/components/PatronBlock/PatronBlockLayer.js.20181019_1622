@@ -1,0 +1,147 @@
+import _ from 'lodash'
+import React from 'react';
+import PropTypes from 'prop-types';
+import PatronBlockForm from './PatronBlockForm'; 
+import moment from 'moment';
+import { ConfirmationModal } from '@folio/stripes/components';
+
+class PatronBlockLayer extends React.Component {
+  static manifest = Object.freeze({
+    patronBlocks: {
+      type: 'okapi',
+      records: 'manualblocks',
+      path:'manualblocks',
+      GET: {
+        path: 'manualblocks?query=id=%{activeRecord.id}',
+      },
+      PUT: {
+        path: 'manualblocks/%{activeRecord.id}',
+      },
+      DELETE: {
+        path: 'manualblocks/%{activeRecord.id}',
+      }
+    },
+    activeRecord: {}, 
+  }); 
+
+  static propTypes = {
+    mutator: PropTypes.shape({
+      patronBlocks: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+        PUT: PropTypes.func.isRequired,
+        DELETE: PropTypes.func.isRequired
+      }),
+      activeRecord: PropTypes.object,
+    }).isRequired,
+    onCancel: PropTypes.func,
+    user: PropTypes.object,
+    query: PropTypes.object,
+  };
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      showConfirmDialog: false,
+    };
+
+    this.onCreateItem = this.onCreateItem.bind(this);
+    this.onDeleteItem = this.onDeleteItem.bind(this);
+    this.onUpdateItem = this.onUpdateItem.bind(this);
+    this.showConfirm = this.showConfirm.bind(this);
+    this.hideConfirm = this.hideConfirm.bind(this);
+  }
+
+  componentDidMount() {
+    const { query, selectedPatronBlock } = this.props;
+
+    if (query.block && !selectedPatronBlock.id) {
+      this.props.mutator.activeRecord.update({ id: query.block });
+    } else {
+      this.props.mutator.activeRecord.update({ id: 'x' });
+    }
+  }
+
+  onCreateItem(item) {
+    item.type = 'Manual';
+    item.userId = (this.props.user || {}).id;
+    item.expirationDate = moment(item.expirationDate).format();
+
+    return this.props.mutator.patronBlocks.POST(item).then(() => {
+      this.props.onCancel();
+    });
+  }
+
+  onDeleteItem() {
+    const { query } = this.props;
+    const selectedItem = (query.block && !this.props.selectedPatronBlock.id) ?
+      _.get(this.props.resources, ['patronBlocks', 'records', 0], {})
+      : this.props.selectedPatronBlock;
+
+    this.props.mutator.activeRecord.update({ id: selectedItem.id });
+    return this.props.mutator.patronBlocks.DELETE({ id: selectedItem.id })
+      .then(() => { this.deleteItemResolve(); })
+      .catch(() => { this.deleteItemReject(); })
+      .finally(() => { 
+        this.hideConfirm();
+        this.props.onCancel();
+      });
+  }
+
+  onUpdateItem(item) {
+    item.expirationDate = moment(item.expirationDate).format();
+    this.props.mutator.activeRecord.update({ id: item.id});
+    return this.props.mutator.patronBlocks.PUT(item).then(() => {
+      this.props.onCancel();
+    });
+  }
+
+  showConfirm() {
+    this.setState({
+      showConfirmDialog: true,
+    })
+
+    return new Promise((resolve, reject) => {
+      this.deleteItemResolve = resolve;
+      this.deleteItemReject = reject;
+    });
+  }
+
+  hideConfirm() {
+    this.setState({
+      showConfirmDialog: false,
+    });
+  }
+
+  render() {
+    const { query } = this.props;
+
+    const selectedItem = (query.block && !this.props.selectedPatronBlock.id) ?
+      _.get(this.props.resources, ['patronBlocks', 'records', 0], {})
+      : this.props.selectedPatronBlock;
+
+    return(
+      <div>
+        <PatronBlockForm
+          stripes={this.props.stripes}
+          onClose={this.props.onCancel}
+          onDeleteItem={this.showConfirm}
+          query={query}
+          selectedItem={selectedItem}
+          user={this.props.user}
+          onSubmit={(item) => {(query.layer === 'add-block') ? this.onCreateItem(item) : this.onUpdateItem(item) }}
+        />
+        <ConfirmationModal
+          open={this.state.showConfirmDialog}
+          onConfirm={this.onDeleteItem}
+          onCancel={this.hideConfirm}
+          confirmLabel="Delete"
+          heading="Delete patron block?"
+          message={`${selectedItem.desc} will be removed`}
+        />
+      </div>
+    );
+  }  
+}
+
+export default PatronBlockLayer;

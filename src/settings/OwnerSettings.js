@@ -10,6 +10,10 @@ import {
   ConfirmationModal,
   Pane,
   Paneset,
+  Modal,
+  Row,
+  Button,
+  Col,
   MultiSelection,
 } from '@folio/stripes/components';
 import { Field } from 'redux-form';
@@ -32,7 +36,7 @@ class OwnerSettings extends React.Component {
         path: 'owners/%{activeRecord.id}',
       },
       GET: {
-        path: 'owners?query=cql.allRecords=1 &limit=500'
+        path: 'owners?query=cql.allRecords=1 sortby owner&limit=500'
       }
     },
     servicePoints: {
@@ -52,6 +56,7 @@ class OwnerSettings extends React.Component {
 
     this.state = {
       showConfirmDialog: false,
+      showItemInUseDialog: false,
       selectedItem: {},
       primaryField: 'owner',
     };
@@ -80,6 +85,7 @@ class OwnerSettings extends React.Component {
         this.deleteItemResolve();
       })
       .catch(() => {
+        this.setState({ showItemInUseDialog: true });
         this.deleteItemReject();
       })
       .finally(() => this.hideConfirmDialog());
@@ -99,6 +105,7 @@ class OwnerSettings extends React.Component {
 
   hideItemInUseDialog() {
     this.setState({
+      showItemInUseDialog: false,
       selectedItem: {},
     });
   }
@@ -134,7 +141,7 @@ class OwnerSettings extends React.Component {
   validate({ items }) {
     const { primaryField } = this.state;
     const servicePoints = _.get(this.props.resources, ['servicePoints', 'records', 0, 'servicepoints'], []);
-    const none = servicePoints.find(s => s.name === 'Circ Desk 1') || {};
+    const none = servicePoints.find(s => s.name === 'None') || {};
 
     if (Array.isArray(items)) {
       const errors = [];
@@ -247,9 +254,12 @@ class OwnerSettings extends React.Component {
     };
     return (
       <Paneset>
-        <Pane defaultWidth="fill" fluidContentWidth paneTitle={this.props.label}>
+        <Pane defaultWidth="fill" fluidContentWidth height="100%" paneTitle={this.props.stripes.intl.formatMessage({ id: 'ui-users.owners.label' })}>
           <EditableList
             {...this.props}
+            label={this.props.stripes.intl.formatMessage({ id: 'ui-users.owners.label' })}
+            height="600"
+            virtualize
             fieldComponents={fieldComponents}
             contentData={rows}
             createButtonLabel={<FormattedMessage id="stripes-core.button.new" />}
@@ -290,6 +300,24 @@ class OwnerSettings extends React.Component {
             onCancel={this.hideConfirmDialog}
             confirmLabel={<FormattedMessage id="stripes-core.button.delete" />}
           />
+          <Modal
+            open={this.state.showItemInUseDialog}
+            label={<FormattedMessage id="stripes-smart-components.cv.cannotDeleteTermHeader" values={{ type }} />}
+            size="small"
+          >
+            <Row>
+              <Col xs>
+                <FormattedMessage id="stripes-smart-components.cv.cannotDeleteTermMessage" values={{ type }} />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs>
+                <Button buttonStyle="primary" onClick={this.hideItemInUseDialog}>
+                  <FormattedMessage id="stripes-core.label.okay" />
+                </Button>
+              </Col>
+            </Row>
+          </Modal>
           <Callout ref={(ref) => { this.callout = ref; }} />
         </Pane>
       </Paneset>

@@ -661,6 +661,9 @@
   "blocks.columns.type":"Type",
   "blocks.columns.desc":"Display description",
   "blocks.columns.blocked":"Blocked actions",
+  "blocks.columns.borrowing":"Borrowing",
+  "blocks.columns.requests":"Requests",
+  "blocks.columns.renewals":"Renewals",
   "blocks.buttons.add":"+Add Block",
   "blocks.label":"Patron Blocks",
 
