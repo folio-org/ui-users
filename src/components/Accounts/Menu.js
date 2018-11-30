@@ -5,6 +5,7 @@ import {
   Button,
   Row,
   Col,
+  PaneHeader,
 } from '@folio/stripes/components';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
@@ -21,53 +22,49 @@ const Menu = (props) => {
     type = 'All';
   }
 
-  const rightButton = {
-    marginRight: '10px',
-    float: 'right',
-  };
-
-  return (
+  const firstMenu = (
     <div>
       <Row>
-        <Col xs={6}>
-          <Row>
-            <Col>
-              <b>{`${type} fees/fines for `}</b>
-              <Link to={`/users/view/${user.id}`}>
-                {`${getFullName(user)} (${_.upperFirst(props.patronGroup.group)})`}
-              </Link>
-              {(Object.values(filters).length !== 0 && !showFilters)
-                ? <img alt="" src="https://png.icons8.com/color/40/f39c12/filled-filter.png" />
-                : ''
+        <Col>
+          <b>{`${type} fees/fines for `}</b>
+          <Link to={`/users/view/${user.id}`}>
+            {`${getFullName(user)} (${_.upperFirst(props.patronGroup.group)})`}
+          </Link>
+          {(Object.values(filters).length !== 0 && !showFilters)
+            ? <img alt="" src="https://png.icons8.com/color/40/f39c12/filled-filter.png" />
+            : ''
               }
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <FormattedMessage id="ui-users.accounts.outstanding" />
-              {' '}
-              {outstanding}
-            </Col>
-            <Col style={{ marginLeft: '10px' }}>
-              {((selected !== 0 && selected !== parseFloat(0).toFixed(2)) && outstanding > parseFloat(0).toFixed(2)) ?
-                `Selected: ${parseFloat(selected).toFixed(2)}`
-                : ''
-              }
-            </Col>
-          </Row>
-        </Col>
-        <Col xs={6}>
-          <Button disabled style={rightButton} buttonStyle="primary"><FormattedMessage id="ui-users.accounts.history.button.transfer" /></Button>
-          <Button disabled style={rightButton} buttonStyle="primary"><FormattedMessage id="ui-users.accounts.history.button.refund" /></Button>
-          <Button disabled={!actions.waive} style={rightButton} buttonStyle="primary" onClick={() => { props.onChangeActions({ waiveMany: true }); }}><FormattedMessage id="ui-users.accounts.history.button.waive" /></Button>
-          <Button disabled={!actions.regularpayment} style={rightButton} buttonStyle="primary" onClick={() => { props.onChangeActions({ regular: true }); }}><FormattedMessage id="ui-users.accounts.history.button.pay" /></Button>
-          <Button style={rightButton} onClick={e => props.onClickViewChargeFeeFine(e, {})}>
-+
-            <FormattedMessage id="ui-users.accounts.button.new" />
-          </Button>
         </Col>
       </Row>
-    </div>
+      <Row>
+        <Col>
+          <FormattedMessage id="ui-users.accounts.outstanding" />
+          {' '}
+          {outstanding}
+        </Col>
+        <Col style={{ marginLeft: '10px' }}>
+          {((selected !== 0 && selected !== parseFloat(0).toFixed(2)) && outstanding > parseFloat(0).toFixed(2)) ?
+            `Selected: ${parseFloat(selected).toFixed(2)}`
+            : ''
+              }
+        </Col>
+      </Row>
+    </div>);
+
+  const lastMenu = (
+    <div>
+      <Button onClick={e => props.onClickViewChargeFeeFine(e, {})}>
++
+        <FormattedMessage id="ui-users.accounts.button.new" />
+      </Button>
+      <Button disabled={!actions.regularpayment} buttonStyle="primary" onClick={() => { props.onChangeActions({ regular: true }); }}><FormattedMessage id="ui-users.accounts.history.button.pay" /></Button>
+      <Button disabled={!actions.waive} buttonStyle="primary" onClick={() => { props.onChangeActions({ waiveMany: true }); }}><FormattedMessage id="ui-users.accounts.history.button.waive" /></Button>
+      <Button disabled buttonStyle="primary"><FormattedMessage id="ui-users.accounts.history.button.refund" /></Button>
+      <Button disabled buttonStyle="primary"><FormattedMessage id="ui-users.accounts.history.button.transfer" /></Button>
+    </div>);
+
+  return (
+    <PaneHeader firstMenu={firstMenu} lastMenu={lastMenu} />
   );
 };
 
