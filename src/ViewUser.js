@@ -534,6 +534,12 @@ class ViewUser extends React.Component {
     }
   }
 
+  isLayerOpen = value => {
+    const { layer } = this.props.resources.query;
+
+    return layer === value;
+  };
+
   render() {
     const {
       resources,
@@ -560,7 +566,7 @@ class ViewUser extends React.Component {
           {
             tagsEnabled &&
             <FormattedMessage id="ui-users.showTags">
-              { ariaLabel => (
+              {ariaLabel => (
                 <IconButton
                   icon="tag"
                   id="clickable-show-tags"
@@ -573,7 +579,7 @@ class ViewUser extends React.Component {
           }
           <IfPermission perm="users.item.put">
             <FormattedMessage id="ui-users.crud.editUser">
-              { ariaLabel => (
+              {ariaLabel => (
                 <IconButton
                   icon="edit"
                   id="clickable-edituser"
@@ -775,9 +781,9 @@ class ViewUser extends React.Component {
             </IfPermission>
           </AccordionSet>
           <FormattedMessage id="ui-users.editUserDialog">
-            { contentLabel => (
+            {contentLabel => (
               <Layer
-                isOpen={query.layer ? query.layer === 'edit' : false}
+                isOpen={this.isLayerOpen('edit')}
                 contentLabel={contentLabel}
                 afterClose={this.afterCloseEdit}
               >
@@ -796,7 +802,11 @@ class ViewUser extends React.Component {
             )}
           </FormattedMessage>
           <Layer
-            isOpen={query.layer ? query.layer === 'open-accounts' || query.layer === 'closed-accounts' || query.layer === 'all-accounts' : false}
+            isOpen={
+              this.isLayerOpen('open-accounts') || 
+              this.isLayerOpen('closed-accounts') || 
+              this.isLayerOpen('all-accounts')
+            }
             label={<FormattedMessage id="ui-users.accounts.title" />}
           >
             <this.connectedAccountsHistory
@@ -818,7 +828,7 @@ class ViewUser extends React.Component {
             />
           </Layer>
           <Layer
-            isOpen={query.layer ? query.layer === 'charge' : false}
+            isOpen={this.isLayerOpen('charge')}
             label={<FormattedMessage id="ui-users.chargeFeefine" />}
           >
             <this.connectedCharge
@@ -833,7 +843,7 @@ class ViewUser extends React.Component {
             />
           </Layer>
           <Layer
-            isOpen={query.layer ? query.layer === 'account' : false}
+            isOpen={this.isLayerOpen('account')}
             label={<FormattedMessage id="ui-users.accountActionHistory" />}
           >
             <this.connectedAccountActionsHistory
@@ -854,9 +864,9 @@ class ViewUser extends React.Component {
 
           <IfPermission perm="ui-users.loans.all">
             <FormattedMessage id="ui-users.loans.title">
-              { contentLabel => (
+              {contentLabel => (
                 <Layer
-                  isOpen={query.layer ? query.layer === 'open-loans' || query.layer === 'closed-loans' : false}
+                  isOpen={this.isLayerOpen('open-loans') || this.isLayerOpen('closed-loans')}
                   contentLabel={contentLabel}
                 >
                   {loansHistory}
@@ -865,9 +875,9 @@ class ViewUser extends React.Component {
             </FormattedMessage>
 
             <FormattedMessage id="ui-users.loanActionsHistory">
-              { contentLabel => (
+              {contentLabel => (
                 <Layer
-                  isOpen={query.layer ? query.layer === 'loan' : false}
+                  isOpen={this.isLayerOpen('loan')}
                   contentLabel={contentLabel}
                 >
                   {loanDetails}

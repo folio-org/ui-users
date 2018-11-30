@@ -5,11 +5,11 @@
   align-items: center;
 }
 
-.buttonView {
+.btnView {
   color: var(--primary);
 }
 
-.buttonAddComment {
+.addCommentBtn {
   float: right;
   margin-left: 50px;
   margin-bottom: 0;

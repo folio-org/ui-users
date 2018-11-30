@@ -47,7 +47,12 @@ class UsersRouting extends React.Component {
   }
 
   render() {
-    if (this.props.showSettings) {
+    const {
+      showSettings,
+      match: { path },
+    } = this.props;
+
+    if (showSettings) {
       return <Settings {...this.props} />;
     }
 
@@ -55,7 +60,7 @@ class UsersRouting extends React.Component {
       <CommandList commands={commands}>
         <Switch>
           <Route
-            path={this.props.match.path}
+            path={path}
             render={() => <this.connectedApp {...this.props} />}
           />
           <Route render={this.noMatch} />

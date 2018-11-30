@@ -221,6 +221,7 @@ class Users extends React.Component {
       onComponentWillUnmount,
       showSingleResult,
       browseOnly,
+      intl,
     } = this.props;
 
     const patronGroups = (this.props.resources.patronGroups || {}).records || [];

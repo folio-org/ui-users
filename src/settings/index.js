@@ -49,35 +49,37 @@ class UsersSettings extends Component {
   }
 
   getGeneral() {
+    const { formatMessage } = this.props.intl;
+
     return [
       {
         route: 'perms',
-        label: <FormattedMessage id="ui-users.settings.permissionSet" />,
+        label: formatMessage({ id: 'ui-users.settings.permissionSet' }),
         component: PermissionSets,
         perm: 'ui-users.editpermsets',
       },
       {
         route: 'groups',
-        label: <FormattedMessage id="ui-users.settings.patronGroups" />,
+        label: formatMessage({ id: 'ui-users.settings.patronGroups' }),
         component: PatronGroupsSettings,
         perm: 'ui-users.settings.usergroups',
       },
       {
         route: 'addresstypes',
-        label: <FormattedMessage id="ui-users.settings.addressTypes" />,
+        label: formatMessage({ id: 'ui-users.settings.addressTypes' }),
         component: AddressTypesSettings,
         perm: 'ui-users.settings.addresstypes',
       },
       {
         route: 'profilepictures',
-        label: <FormattedMessage id="ui-users.settings.profilePictures" />,
+        label: formatMessage({ id: 'ui-users.settings.profilePictures' }),
         component: ProfilePictureSettings,
       },
     ];
   }
 
   getFeefines() {
-    const { intl: { formatMessage } } = this.props;
+    const { formatMessage } = this.props.intl;
 
     return [
       {
@@ -88,33 +90,33 @@ class UsersSettings extends Component {
       },
       {
         route: 'feefinestable',
-        label: <FormattedMessage id="ui-users.settings.manualCharges" />,
+        label: formatMessage({ id: 'ui-users.settings.manualCharges' }),
         component: FeeFineSettings,
         perm: 'ui-users.settings.feefines',
       },
       {
         route: 'waivereasons',
-        label: <FormattedMessage id="ui-users.settings.waiveReasons" />,
+        label: formatMessage({ id: 'ui-users.settings.waiveReasons' }),
         component: WaiveSettings,
         perm: 'ui-users.settings.waives',
       },
       {
         route: 'payments',
-        label: <FormattedMessage id="ui-users.settings.paymentMethods" />,
+        label: formatMessage({ id: 'ui-users.settings.paymentMethods' }),
         component: PaymentSettings,
         perm: 'ui-users.settings.payments',
       },
       {
         route: 'refunds',
-        label: <FormattedMessage id="ui-users.settings.refundReasons" />,
+        label: formatMessage({ id: 'ui-users.settings.refundReasons' }),
         component: RefundReasonsSettings,
         perm: 'ui-users.settings.refunds',
       },
       {
         route: 'comments',
-        label: <FormattedMessage id="ui-users.settings.commentRequired" />,
-        perm: 'ui-users.settings.comments',
+        label: formatMessage({ id: 'ui-users.settings.commentRequired' }),
         component: CommentRequiredSettings,
+        perm: 'ui-users.settings.comments',
       },
     ];
   }

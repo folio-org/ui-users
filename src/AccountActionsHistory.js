@@ -23,13 +23,13 @@ import { getFullName } from './util';
 import css from './AccountsHistory.css';
 
 const columnWidths = {
-  'action': 250,
-  'amount': 100,
-  'balance': 100,
-  'transactioninfo': 200,
-  'created': 100,
-  'source': 200,
-  'comments': 700
+  action: 250,
+  amount: 100,
+  balance: 100,
+  transactioninfo: 200,
+  created: 100,
+  source: 200,
+  comments: 700
 };
 
 const columns = [
@@ -120,7 +120,7 @@ class AccountActionsHistory extends React.Component {
         regular: false,
       },
       sortOrder: [...columns],
-      sortDirection: ['desc', 'desc']
+      sortDirection: ['desc', 'desc'],
     };
   }
 
@@ -202,13 +202,16 @@ class AccountActionsHistory extends React.Component {
     } = this.state;
 
     const {
+      handleAddRecords,
       onCancel,
+      onClickViewLoanActionsHistory,
+      patronGroup: patron,
+      resources,
+      stripes,
+      user,
     } = this.props;
 
-    const account = _.get(this.props.resources, ['accountHistory', 'records', 0]) || this.props.account;
-
-    const user = this.props.user;
-    const patron = this.props.patronGroup;
+    const account = _.get(resources, ['accountHistory', 'records', 0]) || this.props.account;
 
     const columnMapping = {
       date: <FormattedMessage id="ui-users.details.columns.date" />,
@@ -222,7 +225,7 @@ class AccountActionsHistory extends React.Component {
         <span className={css.commentsWrapper}>
           <FormattedMessage id="ui-users.details.columns.comments" />
           <Button
-            buttonClass={css.buttonAddComment}
+            buttonClass={css.addCommentBtn}
             onClick={this.comment}
           >
             <FormattedMessage id="ui-users.accounts.button.new" />
@@ -249,6 +252,7 @@ class AccountActionsHistory extends React.Component {
     const remaining = (account.remaining) ? parseFloat(account.remaining).toFixed(2) : '0.00';
     const loanId = account.loanId || '';
     const disabled = (_.get(account, ['status', 'name'], '') === 'Closed');
+    const isAccountId = actions[0] && actions[0].accountId === account.id;
 
     return (
       <Paneset isRoot>
@@ -353,10 +357,10 @@ class AccountActionsHistory extends React.Component {
                   label={<FormattedMessage id="ui-users.details.label.loanDetails" />}
                   value={(
                     <button
-                      buttonClass={css.buttonView}
+                      buttonClass={css.btnView}
                       type="button"
                       onClick={(e) => {
-                        this.props.onClickViewLoanActionsHistory(e, { id: loanId });
+                        onClickViewLoanActionsHistory(e, { id: loanId });
                       }}
                     >
                       <FormattedMessage id="ui-users.details.field.loan" />
@@ -441,23 +445,23 @@ class AccountActionsHistory extends React.Component {
             formatter={accountActionsFormatter}
             columnMapping={columnMapping}
             visibleColumns={columns}
-            contentData={(account.id === (actions[0] || {}).accountId) ? actionsSort : []}
+            contentData={isAccountId ? actionsSort : []}
             fullWidth
-            onHeaderClick={this.onSort}
             sortOrder={sortOrder[0]}
             sortDirection={`${sortDirection[0]}ending`}
             columnWidths={columnWidths}
+            onHeaderClick={this.onSort}
           />
           <this.connectedActions
             actions={this.state.actions}
             onChangeActions={this.onChangeActions}
-            user={this.props.user}
-            stripes={this.props.stripes}
+            user={user}
+            stripes={stripes}
             balance={account.remaining || 0}
             accounts={[account]}
             handleEdit={() => {
               this.getAccountActions();
-              this.props.handleAddRecords();
+              handleAddRecords();
             }}
           />
 

@@ -534,7 +534,10 @@ class AccountsHistory extends React.Component {
               <b>
                 <FormattedMessage
                   id="ui-users.accounts.header"
-                  values={{ userName: getFullName(user), patronGroup: _.upperFirst(patronGroup.group) }}
+                  values={{
+                    userName: getFullName(user),
+                    patronGroup: _.upperFirst(patronGroup.group),
+                  }}
                 />
               </b>
             </Col>

@@ -73,11 +73,14 @@ class PermissionSetDetails extends React.Component {
           open={sections.generalInformation}
           id="generalInformation"
           onToggle={this.handleSectionToggle}
-          label={
-            <Headline size="large" tag="h3">
+          label={(
+            <Headline
+              size="large"
+              tag="h3"
+            >
               <FormattedMessage id="ui-users.permissions.generalInformation" />
             </Headline>
-          }
+          )}
         >
           {selectedSet.metadata && selectedSet.metadata.createdDate &&
             <Row>
