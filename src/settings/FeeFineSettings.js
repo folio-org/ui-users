@@ -1,9 +1,8 @@
 import _ from 'lodash';
 import React from 'react';
-import PropTypes from 'prop-types';
-import { 
-  injectIntl, 
-  FormattedMessage 
+import {
+  injectIntl,
+  FormattedMessage
 } from 'react-intl';
 import {
   Button,
@@ -19,9 +18,9 @@ import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import { EditableList } from '@folio/stripes/smart-components';
 import { validate } from '../util';
 
-import { 
-  Owners, 
-  CopyModal 
+import {
+  Owners,
+  CopyModal
 } from './FeeFinesTable';
 
 class FeefineSettings extends React.Component {
@@ -41,10 +40,11 @@ class FeefineSettings extends React.Component {
         path: 'feefines?query=cql.allRecords=1 sortby feeFineType&limit=500',
       },
     },
-    ownerList: {
+    owners: {
       type: 'okapi',
       records: 'owners',
-      path: 'owners',
+      path: 'owners?query=cql.allRecords=1 sortby owner&limit=500',
+      accumulate: 'true',
     },
     activeRecord: {},
   });
@@ -58,6 +58,7 @@ class FeefineSettings extends React.Component {
       showItemInUseDialog: false,
       selectedItem: {},
       ownerId: '',
+      owners: [],
     };
 
     this.onCreateItem = this.onCreateItem.bind(this);
@@ -73,21 +74,13 @@ class FeefineSettings extends React.Component {
   }
 
   componentDidMount() {
-    const owners = _.get(this.props.resources, ['ownerList', 'records'], []);
-    const shared = owners.find(o => o.owner === 'Shared');
-    const ownerId = (shared) ? shared.id : ((owners.length > 0) ? owners[0].id : '');
-    this.setState({ ownerId });
-  }
-
-  componentDidUpdate(prevProps) {
-    const prevOwners = _.get(prevProps.resources, ['ownerList', 'records'], []);
-    const owners = _.get(this.props.resources, ['ownerList', 'records'], []);
-    if (JSON.stringify(prevOwners) !== JSON.stringify(owners) && owners.length) {
-      const shared = owners.find(o => o.owner === 'Shared');
+    this.props.mutator.owners.GET().then(records => {
+      this.setState({ owners: records });
+      const shared = records.find(o => o.owner === 'Shared');
       this.shared = shared;
-      const ownerId = (shared) ? shared.id : owners[0].id;
+      const ownerId = (shared) ? shared.id : ((records.length > 0) ? records[0].id : '');
       this.setState({ ownerId });
-    }
+    });
   }
 
   onChangeOwner(e) {
@@ -139,11 +132,12 @@ class FeefineSettings extends React.Component {
   }
 
   showDeletionSuccessCallout = (item) => {
+    const { intl: { formatMessage } } = this.props;
     const message = (
       <SafeHTMLMessage
         id="stripes-smart-components.cv.termDeleted"
         values={{
-          type: this.props.stripes.intl.formatMessage({ id: 'ui-users.feefines.singular' }),
+          type: formatMessage({ id: 'ui-users.feefines.singular' }),
           term: item.feeFineType,
         }}
       />
@@ -199,19 +193,24 @@ class FeefineSettings extends React.Component {
   }
 
   validate({ items }) {
+    const { intl: { formatMessage } } = this.props;
     if (Array.isArray(items)) {
       const errors = [];
       const feefines = _.get(this.props.resources, ['feefines', 'records'], []);
-      const owners = _.get(this.props.resources, ['ownerList', 'records'], []);
+      //      const owners = _.get(this.props.resources, ['owners', 'records'], []);
+      const { owners } = this.state;
       const myFeeFines = feefines.filter(f => f.ownerId !== this.state.ownerId) || [];
 
       items.forEach((item, index) => {
         const itemErrors = validate(item, index, items, 'feeFineType', 'Fee fine');
-        if (Number.isNaN(item.defaultAmount) && item.defaultAmount !== null) {
-          itemErrors.defaultAmount = this.props.stripes.intl.formatMessage({ id: 'ui-users.feefines.errors.amountNumeric' });
+        if (Number.isNaN(Number(item.defaultAmount)) && item.defaultAmount) {
+          itemErrors.defaultAmount = formatMessage({ id: 'ui-users.feefines.errors.amountNumeric' });
         }
         if (parseFloat(item.defaultAmount) < 0) {
-          itemErrors.defaultAmount = this.props.stripes.intl.formatMessage({ id: 'ui-users.feefines.errors.amountPositive' });
+          itemErrors.defaultAmount = formatMessage({ id: 'ui-users.feefines.errors.amountPositive' });
+        }
+        if (!item.feeFineType) {
+          itemErrors.feeFineType = formatMessage({ id: 'stripes-core.label.missingRequiredField' });
         }
         if (this.state.ownerId === (this.shared || {}).id) {
           const includes = this.includes(item, index, myFeeFines, 'feeFineType', 'ownerId');
@@ -246,9 +245,10 @@ class FeefineSettings extends React.Component {
     const { intl: { formatMessage } } = this.props;
     const items = _.get(this.props.resources, ['feefines', 'records'], []);
     const rows = items.filter(i => i.ownerId === this.state.ownerId);
-    const type = this.props.stripes.intl.formatMessage({ id: 'ui-users.feefines.singular' });
+    const type = formatMessage({ id: 'ui-users.feefines.singular' });
     const term = this.state.selectedItem.feeFineType;
-    const owners = _.get(this.props.resources, ['ownerList', 'records'], []);
+    //    const owners = _.get(this.props.resources, ['owners', 'records'], []);
+    const { owners } = this.state;
     const filterOwners = [];
     items.forEach(i => {
       const owner = owners.find(o => o.id === i.ownerId) || {};
@@ -266,21 +266,22 @@ class FeefineSettings extends React.Component {
 
     return (
       <Paneset>
-        <Pane 
-          defaultWidth="fill" 
-          fluidContentWidth 
+        <Pane
+          defaultWidth="fill"
+          fluidContentWidth
           paneTitle={<FormattedMessage id="ui-users.feefines.title" />}
+        >
           <Owners dataOptions={owners} onChange={this.onChangeOwner} />
           <EditableList
             {...this.props}
-            label={<FormattedMessage id= "ui-users.feefines.title" />}
+            label={formatMessage({ id: 'ui-users.feefines.title' })}
             validate={this.validate}
             contentData={rows}
             createButtonLabel={formatMessage({ id:'stripes-core.button.new' })}
             visibleFields={['feeFineType', 'defaultAmount']}
             columnMapping={{
-              feeFineType: intl.formatMessage({ id: 'ui-users.feefines.columns.type' }),
-              defaultAmount: intl.formatMessage({ id: 'ui-users.feefines.columns.amount' })
+              feeFineType: formatMessage({ id: 'ui-users.feefines.columns.type' }),
+              defaultAmount: formatMessage({ id: 'ui-users.feefines.columns.amount' })
             }}
             onUpdate={this.onUpdateItem}
             onCreate={this.onCreateItem}

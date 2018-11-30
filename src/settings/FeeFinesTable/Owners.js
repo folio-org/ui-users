@@ -22,7 +22,7 @@ const Owners = (props) => {
           </span>
         </Col>
         <Col>
-          <Select style={{ marginLeft: '20px' }} onChange={props.onChange}>
+          <Select style={{ marginLeft: '20px', width: 120 }} onChange={props.onChange}>
             {options}
           </Select>
         </Col>
