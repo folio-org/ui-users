@@ -5,11 +5,14 @@
   "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}",
   "closedLoansCount": "{count, number} {count, plural, one {closed loan} other {closed loans}}",
   "brd.renewConfirmation": "Renew Confirmation",
+  "brd.overrideAndRenew": "Override & renew",
   "brd.header.renewalStatus": "Renewal status",
+  "brd.header.newDueDate": "New due date",
   "brd.header.title": "Title",
   "brd.failedRenewal": "Item not renewed",
   "brd.successfulRenewal": "Item successfully renewed",
   "brd.itemNotRenewed": "<strong>{count}</strong> {count, plural, one {item} other {items}} <b>not</b> renewed. ",
+  "brd.itemsSelected": "<strong>{count}</strong> {count, plural, one {item} other {items}} <b>selected</b>. ",
   "brd.itemSuccessfullyRenewed": "<strong>{count}</strong> {count, plural, one {item} other {items}} <b>successfully</b> renewed",
   "data.contactTypes.email": "Email",
   "data.contactTypes.mail": "Mail (Primary Address)",
@@ -628,6 +631,15 @@
 
   "accounts.comment.field.comment":"Comment",
   "accounts.comment.field.save":"Save",
-  "accounts.comment.field.cancel":"Cancel"
+  "accounts.comment.field.cancel":"Cancel",
 
+  "cddd.dateRequired": "Date*",
+  "cddd.timeRequired": "Time*",
+
+  "additionalInfo.label": "Additional information*",
+  "additionalInfo.placeholder": "Enter more information about the override (required)",
+
+  "button.override": "Override",
+
+  "override.emptyNewDueDate": "Select due date above"
 }

@@ -334,7 +334,8 @@ class OpenLoansWithStaticData extends React.Component {
             <FormattedDate value={loan.dueDate} />
 ,
             <FormattedTime value={loan.dueDate} />
-          </div>),
+          </div>
+        ),
         sorter: loan => loan.dueDate,
       },
       'renewals': {

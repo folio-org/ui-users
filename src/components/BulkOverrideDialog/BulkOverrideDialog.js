@@ -3,23 +3,23 @@ import PropTypes from 'prop-types';
 
 import { Modal } from '@folio/stripes/components';
 
-import BulkRenewInfo from './BulkRenewInfo';
+import BulkOverrideInfo from './BulkOverrideInfo';
 
-class BulkRenewalDialog extends React.Component {
+class BulkOverrideDialog extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
-      connect: PropTypes.func,
+      connect: PropTypes.func.isRequired,
       intl: PropTypes.shape({
-        formatMessage: PropTypes.func,
-      }),
-    }),
-    onClose: PropTypes.func,
-    open: PropTypes.bool,
+        formatMessage: PropTypes.func.isRequired,
+      }).isRequired,
+    }).isRequired,
+    onClose: PropTypes.func.isRequired,
+    open: PropTypes.bool.isRequired,
   };
 
   render() {
     const { formatMessage } = this.props.stripes.intl;
-    const modalLabel = formatMessage({ id: 'ui-users.brd.renewConfirmation' });
+    const modalLabel = formatMessage({ id: 'ui-users.brd.overrideAndRenew' });
 
     return (
       <Modal
@@ -31,7 +31,7 @@ class BulkRenewalDialog extends React.Component {
         open={this.props.open}
         label={modalLabel}
       >
-        <BulkRenewInfo
+        <BulkOverrideInfo
           {...this.props}
           onCancel={this.props.onClose}
         />
@@ -40,4 +40,4 @@ class BulkRenewalDialog extends React.Component {
   }
 }
 
-export default BulkRenewalDialog;
+export default BulkOverrideDialog;
