@@ -442,7 +442,7 @@
   "loanNotRenewed": "Loan not renewed",
 
   "accounts.title": "Fees/Fines",
-  "accounts.outstanding": "Outstanding Balance:",
+  "accounts.outstanding": "Outstanding Balance",
   "accounts.open": "Open",
   "accounts.closed": "Closed",
   "accounts.all":"All",
