@@ -231,10 +231,16 @@ class LoanActionsHistory extends React.Component {
   }
 
   getOpenRequestsCount() {
-    const q = `itemId==${this.props.loan.itemId}`;
+    const { loan, stripes, mutator } = this.props;
+
+    if (!stripes.hasPerm('ui-users.requests.all')) {
+      return;
+    }
+
+    const q = `itemId==${loan.itemId}`;
     const query = `(${q}) and status==("Open - Awaiting pickup" or "Open - Not yet filled") sortby requestDate desc`;
-    this.props.mutator.requests.reset();
-    this.props.mutator.requests.GET({ params: { query } }).then((requestRecords) => {
+    mutator.requests.reset();
+    mutator.requests.GET({ params: { query } }).then((requestRecords) => {
       const requestCountObject = requestRecords.reduce((map, record) => {
         map[record.itemId] = map[record.itemId] ? ++map[record.itemId] : 1;
         return map;
@@ -354,6 +360,7 @@ class LoanActionsHistory extends React.Component {
         loanActionsWithUser,
         loanPolicies,
       },
+      stripes,
       intl,
     } = this.props;
     const { nonRenewedLoanItems } = this.state;
@@ -366,8 +373,10 @@ class LoanActionsHistory extends React.Component {
     };
 
     const loanPolicyName = get(loanPolicies, 'records[0].name', '-');
-    const requestCount = this.state.requestsCount[this.props.loan.itemId];
-    const requestQueueValue = requestCount ? <Link to={`/requests?filters=requestStatus.open%20-%20not%20yet%20filled%2CrequestStatus.open%20-%20awaiting%20pickup&query=${this.props.loan.item.barcode}&sort=Request%20Date`}>{requestCount}</Link> : 0;
+    const requestCount = this.state.requestsCount[this.props.loan.itemId] || 0;
+    const requestQueueValue = (requestCount && stripes.hasPerm('ui-users.requests.all'))
+      ? (<Link to={`/requests?filters=requestStatus.open%20-%20not%20yet%20filled%2CrequestStatus.open%20-%20awaiting%20pickup&query=${loan.item.barcode}&sort=Request%20Date`}>{requestCount}</Link>)
+      : requestCount;
     const contributorsList = this.getContributorslist(loan);
     const contributorsListString = contributorsList.join(' ');
     const contributorsLength = contributorsListString.length;

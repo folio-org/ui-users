@@ -16,6 +16,7 @@ import {
   Popover,
   IconButton,
   ExportCsv,
+  IfPermission,
 } from '@folio/stripes/components';
 import ActionsBar from '../components/ActionsBar';
 import Label from '../../Label';
@@ -41,6 +42,7 @@ class ClosedLoans extends React.Component {
   });
 
   static propTypes = {
+    buildRecords: PropTypes.func,
     onClickViewLoanActionsHistory: PropTypes.func.isRequired,
     loans: PropTypes.arrayOf(PropTypes.object).isRequired,
     mutator: PropTypes.shape({
@@ -71,6 +73,17 @@ class ClosedLoans extends React.Component {
     this.handleOptionsChange = this.handleOptionsChange.bind(this);
     this.getFeeFine = this.getFeeFine.bind(this);
     this.anonymizeLoans = this.anonymizeLoans.bind(this);
+    this.headers = ['action', 'dueDate', 'loanDate', 'returnDate', 'systemReturnDate', 'item.barcode', 'item.callNumber', 'item.contributors',
+      'item.holdingsRecordId', 'item.instanceId', 'item.status.name', 'item.title', 'item.materialType.name',
+      'item.location.name', 'metaData.createdByUserId', 'metadata.updatedDate', 'metadata.updatedByUserId', 'loanPolicyId'];
+
+    // Map to pass into exportCsv
+    this.columnHeadersMap = this.headers.map(item => {
+      return {
+        label: this.props.intl.formatMessage({ id: `ui-users.${item}` }),
+        value: item
+      };
+    });
 
     this.sortMap = {
       [<FormattedMessage id="ui-users.loans.columns.title" />]: loan => _.get(loan, ['item', 'title']),
@@ -261,9 +274,11 @@ class ClosedLoans extends React.Component {
       >
         <IconButton data-role="toggle" icon="ellipsis" size="small" iconSize="medium" />
         <DropdownMenu data-role="menu" overrideStyle={{ padding: '7px 3px' }}>
-          <MenuItem itemMeta={{ loan, action: 'itemDetails' }}>
-            <Button buttonStyle="dropdownItem" href={`/inventory/view/${loan.item.instanceId}/${loan.item.holdingsRecordId}/${loan.itemId}`}><FormattedMessage id="ui-users.itemDetails" /></Button>
-          </MenuItem>
+          <IfPermission perm="inventory.items.item.get">
+            <MenuItem itemMeta={{ loan, action: 'itemDetails' }}>
+              <Button buttonStyle="dropdownItem" href={`/inventory/view/${loan.item.instanceId}/${loan.item.holdingsRecordId}/${loan.itemId}`}><FormattedMessage id="ui-users.itemDetails" /></Button>
+            </MenuItem>
+          </IfPermission>
           <MenuItem itemMeta={{ loan, action: 'feefine' }}>
             <Button buttonStyle="dropdownItem"><FormattedMessage id="ui-users.loans.newFeeFine" /></Button>
           </MenuItem>
@@ -285,6 +300,7 @@ class ClosedLoans extends React.Component {
       intl,
       onClickViewLoanActionsHistory,
       loans,
+      buildRecords
     } = this.props;
     const visibleColumns = ['title', 'dueDate', 'barcode', 'Fee/Fine', 'Call Number', 'Contributors', 'renewals', 'loanDate', 'returnDate', ' '];
     const columnMapping = {
@@ -302,7 +318,8 @@ class ClosedLoans extends React.Component {
     const anonymizeString = <FormattedMessage id="ui-users.anonymize" />;
     const loansSorted = _.orderBy(loans,
       [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
-
+    const clonedLoans = _.cloneDeep(loans);
+    const recordsToCSV = buildRecords(clonedLoans);
     return (
       <div>
         <ActionsBar
@@ -324,7 +341,10 @@ class ClosedLoans extends React.Component {
               >
                 {anonymizeString}
               </Button>
-              <ExportCsv data={loans} excludeKeys={['id', 'userId', 'itemId']} />
+              <ExportCsv
+                data={recordsToCSV}
+                onlyFields={this.columnHeadersMap}
+              />
             </div>
           }
         />

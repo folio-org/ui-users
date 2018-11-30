@@ -131,6 +131,14 @@ class ProxyEditItem extends React.Component {
     return this.toggleStatus(true);
   }
 
+  optionsFor = (list) => {
+    return list.map(option => (
+      <FormattedMessage id={`ui-users.${option}`}>
+        {(optionTranslated) => <option value={option}>{optionTranslated}</option>}
+      </FormattedMessage>
+    ));
+  }
+
   render() {
     const {
       name,
@@ -138,45 +146,19 @@ class ProxyEditItem extends React.Component {
       onDelete,
     } = this.props;
 
-    const relationStatusValues = [
-      <FormattedMessage id="ui-users.active" />,
-      <FormattedMessage id="ui-users.inactive" />,
-    ];
-    const proxySponsorValues = [
-      <FormattedMessage id="ui-users.sponsor" />,
-      <FormattedMessage id="ui-users.proxy" />,
-    ];
-    const yesNoValues = [
-      <FormattedMessage id="ui-users.yes" />,
-      <FormattedMessage id="ui-users.no" />,
-    ];
+    const relationStatusOptions = this.optionsFor(['active', 'inactive']);
+    const requestForSponsorOptions = this.optionsFor(['yes', 'no']);
+    const notificationsToOptions = this.optionsFor(['proxy', 'sponsor']);
 
-    const relationStatusOptions = relationStatusValues.map(val => ({
-      label: val,
-      value: val,
-      selected: record.proxy && record.proxy.status === val
-    }));
-
-    const requestForSponsorOptions = yesNoValues.map(val => ({
-      label: val,
-      value: val,
-      selected: record.proxy && record.proxy.requestForSponsor === val
-    }));
-
-    const notificationsToOptions = proxySponsorValues.map(val => ({
-      label: val,
-      value: val,
-      selected: record.proxy && record.proxy.notificationsTo === val
-    }));
-
-    // const accrueToOptions = proxySponsorValues.map(val => ({
-    //   label: val,
-    //   value: val,
-    //   selected: record.proxy && record.proxy.accrueTo === val
+    // const accrueToOptions = this.optionsFor(['proxy', 'sponsor']);
+    //   label: formatMessage({ id: `ui-users.${option}` }),
+    //   value: option,
+    //   selected: record.proxy && record.proxy.accrueTo === option
     // }));
     const proxyLinkMsg = <FormattedMessage id="ui-users.proxy.relationshipCreated" />;
+    const proxyCreatedValue = get(record, 'proxy.metadata.createdDate', null);
     const proxyCreatedDate = <FormattedTime
-      value={get(record, 'proxy.metadata.createdDate', null)}
+      value={proxyCreatedValue}
       day="numeric"
       month="numeric"
       year="numeric"
@@ -184,7 +166,7 @@ class ProxyEditItem extends React.Component {
     const proxyLink = (
       <div>
         <Link to={`/users/view/${record.user.id}`}>{getFullName(record.user)}</Link>
-        {proxyCreatedDate && (
+        {proxyCreatedValue && (
           <span className={css.creationLabel}>
             (
               {proxyLinkMsg}
@@ -209,9 +191,10 @@ class ProxyEditItem extends React.Component {
                     label={<FormattedMessage id="ui-users.proxy.relationshipStatus" />}
                     name={`${name}.proxy.status`}
                     component={Select}
-                    dataOptions={[{ label: 'Select status', value: '' }, ...relationStatusOptions]}
                     fullWidth
-                  />
+                  >
+                    {relationStatusOptions}
+                  </Field>
                 </Col>
               </Row>
             </Col>
@@ -238,9 +221,10 @@ class ProxyEditItem extends React.Component {
                     label={<FormattedMessage id="ui-users.proxy.requestForSponsor" />}
                     name={`${name}.proxy.requestForSponsor`}
                     component={Select}
-                    dataOptions={[...requestForSponsorOptions]}
                     fullWidth
-                  />
+                  >
+                    {requestForSponsorOptions}
+                  </Field>
                 </Col>
               </Row>
             </Col>
@@ -251,9 +235,10 @@ class ProxyEditItem extends React.Component {
                     label={<FormattedMessage id="ui-users.proxy.notificationsTo" />}
                     name={`${name}.proxy.notificationsTo`}
                     component={Select}
-                    dataOptions={[...notificationsToOptions]}
                     fullWidth
-                  />
+                  >
+                    {notificationsToOptions}
+                  </Field>
                 </Col>
               </Row>
             </Col>

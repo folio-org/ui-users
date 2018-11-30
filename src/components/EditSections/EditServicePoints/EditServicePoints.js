@@ -79,7 +79,7 @@ class EditServicePoints extends React.Component {
           aria-label={`${title}: ${sp.name}`}
           title={title}
         >
-          <Icon icon="hollowX" />
+          <Icon icon="times-circle" />
         </Button>
       </li>
     );

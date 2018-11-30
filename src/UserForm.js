@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
@@ -9,9 +9,11 @@ import {
   IconButton,
   Button,
   ExpandAllButton,
+  expandAllFunction,
   Row,
   Col,
-  Headline
+  Headline,
+  AccordionSet
 } from '@folio/stripes/components';
 import stripesForm from '@folio/stripes/form';
 
@@ -23,6 +25,9 @@ import {
   EditUserPerms,
   EditServicePoints,
 } from './components/EditSections';
+
+import { HasCommand } from './components/Commander';
+
 import { getFullName } from './util';
 
 import css from './UserForm.css';
@@ -121,24 +126,62 @@ class UserForm extends React.Component {
 
     this.handleExpandAll = this.handleExpandAll.bind(this);
     this.handleSectionToggle = this.handleSectionToggle.bind(this);
-    this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.toggleAllSections = this.toggleAllSections.bind(this);
+    this.collapseAllSections = this.collapseAllSections.bind(this);
+    this.expandAllSections = this.expandAllSections.bind(this);
+
+    this.ignoreEnterKey = this.ignoreEnterKey.bind(this);
+    this.closeButton = React.createRef();
+
+    this.keyboardCommands = [
+      {
+        name: 'save',
+        handler: this.handleSaveKeyCommand
+      },
+      {
+        name: 'ignoreEnter',
+        handler: this.ignoreEnterKey,
+        shortcut: 'enter'
+      },
+      {
+        name: 'cancel',
+        handler: props.onCancel,
+        shortcut: 'esc'
+      },
+      {
+        name: 'expandAllSections',
+        handler: this.expandAllSections,
+      },
+      {
+        name: 'collapseAllSections',
+        handler: this.collapseAllSections,
+      }
+    ];
 
     if (props.initialValues.id) {
       this.connectedEditUserPerms = props.stripes.connect(EditUserPerms);
     }
   }
 
+  componentDidMount() {
+    // focus first interactive thing so that shortcuts will work immediately.
+    this.closeButton.current.focus();
+  }
+
   getAddFirstMenu() {
-    const label = <FormattedMessage id="ui-users.crud.closeNewUserDialog" />;
     return (
       <PaneMenu>
-        <IconButton
-          id="clickable-closenewuserdialog"
-          onClick={this.props.onCancel}
-          title={label}
-          ariaLabel={label}
-          icon="closeX"
-        />
+        <FormattedMessage id="ui-users.crud.closeNewUserDialog">
+          { ariaLabel => (
+            <IconButton
+              id="clickable-closenewuserdialog"
+              onClick={this.props.onCancel}
+              ref={this.closeButton}
+              ariaLabel={ariaLabel}
+              icon="times"
+            />
+          )}
+        </FormattedMessage>
       </PaneMenu>
     );
   }
@@ -151,7 +194,6 @@ class UserForm extends React.Component {
         <Button
           id={id}
           type="submit"
-          title={label}
           disabled={pristine || submitting}
           buttonStyle="primary paneHeaderNewButton"
           marginBottom0
@@ -167,18 +209,46 @@ class UserForm extends React.Component {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  handleKeyDown(e) {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-    }
+  ignoreEnterKey = (e) => {
+    e.preventDefault();
   }
 
   handleSectionToggle({ id }) {
     this.setState((curState) => {
-      const newState = _.cloneDeep(curState);
+      const newState = cloneDeep(curState);
       newState.sections[id] = !newState.sections[id];
       return newState;
     });
+  }
+
+  toggleAllSections(expand) {
+    this.setState((curState) => {
+      const newSections = expandAllFunction(curState.sections, expand);
+      return {
+        sections: newSections
+      };
+    });
+  }
+
+  expandAllSections(e) {
+    e.preventDefault();
+    this.toggleAllSections(true);
+  }
+
+  collapseAllSections(e) {
+    e.preventDefault();
+    this.toggleAllSections(false);
+  }
+
+  handleSaveKeyCommand = (e) => {
+    e.preventDefault();
+    this.executeSave();
+  }
+
+  executeSave() {
+    const { handleSubmit, onSubmit } = this.props;
+    const submitter = handleSubmit(onSubmit);
+    submitter();
   }
 
   render() {
@@ -196,63 +266,66 @@ class UserForm extends React.Component {
       : this.getLastMenu('clickable-createnewuser', <FormattedMessage id="ui-users.crud.createUser" />);
 
     return (
-      // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
-      <form className={css.UserFormRoot} id="form-user" onSubmit={handleSubmit} onKeyDown={this.handleKeyDown}>
-        <Paneset isRoot>
-          <Pane defaultWidth="100%" firstMenu={firstMenu} lastMenu={lastMenu} paneTitle={paneTitle} appIcon={{ app: 'users' }}>
-            <div className={css.UserFormContent}>
-              <Headline size="xx-large" tag="h2">{getFullName(initialValues)}</Headline>
-              <Row end="xs">
-                <Col xs>
-                  <ExpandAllButton accordionStatus={sections} onToggle={this.handleExpandAll} />
-                </Col>
-              </Row>
-              <EditUserInfo
-                accordionId="editUserInfo"
-                expanded={sections.editUserInfo}
-                onToggle={this.handleSectionToggle}
-                {...this.props}
-              />
-              <EditExtendedInfo
-                accordionId="extendedInfo"
-                expanded={sections.extendedInfo}
-                onToggle={this.handleSectionToggle}
-                userId={initialValues.id}
-                userFirstName={initialValues.personal.firstName}
-                userEmail={initialValues.personal.email}
-              />
-              <EditContactInfo
-                accordionId="contactInfo"
-                expanded={sections.contactInfo}
-                onToggle={this.handleSectionToggle}
-                {...this.props}
-              />
-              {initialValues.id &&
-                <div>
-                  <EditProxy
-                    accordionId="proxy"
-                    expanded={sections.proxy}
+      <HasCommand commands={this.keyboardCommands}>
+        <form className={css.UserFormRoot} id="form-user" onSubmit={handleSubmit}>
+          <Paneset isRoot>
+            <Pane defaultWidth="100%" firstMenu={firstMenu} lastMenu={lastMenu} paneTitle={paneTitle} appIcon={{ app: 'users' }}>
+              <div className={css.UserFormContent}>
+                <Headline size="xx-large" tag="h2">{getFullName(initialValues)}</Headline>
+                <Row end="xs">
+                  <Col xs>
+                    <ExpandAllButton accordionStatus={sections} onToggle={this.handleExpandAll} />
+                  </Col>
+                </Row>
+                <AccordionSet>
+                  <EditUserInfo
+                    accordionId="editUserInfo"
+                    expanded={sections.editUserInfo}
                     onToggle={this.handleSectionToggle}
                     {...this.props}
                   />
-                  <this.connectedEditUserPerms
-                    accordionId="permissions"
-                    expanded={sections.permissions}
+                  <EditExtendedInfo
+                    accordionId="extendedInfo"
+                    expanded={sections.extendedInfo}
+                    onToggle={this.handleSectionToggle}
+                    userId={initialValues.id}
+                    userFirstName={initialValues.personal.firstName}
+                    userEmail={initialValues.personal.email}
+                  />
+                  <EditContactInfo
+                    accordionId="contactInfo"
+                    expanded={sections.contactInfo}
                     onToggle={this.handleSectionToggle}
                     {...this.props}
                   />
-                  <EditServicePoints
-                    accordionId="servicePoints"
-                    expanded={sections.servicePoints}
-                    onToggle={this.handleSectionToggle}
-                    {...this.props}
-                  />
-                </div>
-              }
-            </div>
-          </Pane>
-        </Paneset>
-      </form>
+                  {initialValues.id &&
+                    <div>
+                      <EditProxy
+                        accordionId="proxy"
+                        expanded={sections.proxy}
+                        onToggle={this.handleSectionToggle}
+                        {...this.props}
+                      />
+                      <this.connectedEditUserPerms
+                        accordionId="permissions"
+                        expanded={sections.permissions}
+                        onToggle={this.handleSectionToggle}
+                        {...this.props}
+                      />
+                      <EditServicePoints
+                        accordionId="servicePoints"
+                        expanded={sections.servicePoints}
+                        onToggle={this.handleSectionToggle}
+                        {...this.props}
+                      />
+                    </div>
+                  }
+                </AccordionSet>
+              </div>
+            </Pane>
+          </Paneset>
+        </form>
+      </HasCommand>
     );
   }
 }

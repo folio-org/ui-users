@@ -16,6 +16,7 @@ import UserForm from './UserForm';
 import { toUserAddresses } from './converters/address';
 import { getFullName } from './util';
 import packageInfo from '../package';
+import { HasCommand } from './components/Commander';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
@@ -139,6 +140,20 @@ class Users extends React.Component {
     browseOnly: false,
   }
 
+  constructor(props) {
+    super(props);
+    this.keyboardCommands = [
+      {
+        name: 'new',
+        handler: this.goToNew
+      },
+      {
+        name: 'search',
+        handler: this.goToSearch
+      }
+    ];
+  }
+
   componentDidUpdate() {
     const pg = (this.props.resources.patronGroups || {}).records || [];
     if (pg && pg.length) {
@@ -185,6 +200,20 @@ class Users extends React.Component {
     }
   }
 
+  goToNew = () => {
+    const { mutator } = this.props;
+    mutator.query.update({ layer: 'create' });
+  }
+
+  goToSearch = () => {
+    const { mutator } = this.props;
+    mutator.query.update({ layer: null });
+    const searchField = document.getElementById('input-user-search');
+    if (searchField) {
+      searchField.focus();
+    }
+  }
+
   render() {
     const {
       onSelectRow,
@@ -212,38 +241,41 @@ class Users extends React.Component {
       email: user => _.get(user, ['personal', 'email']),
     };
 
-    return (<SearchAndSort
-      packageInfo={packageInfo}
-      objectName="user"
-      filterConfig={filterConfig}
-      initialResultCount={INITIAL_RESULT_COUNT}
-      resultCountIncrement={RESULT_COUNT_INCREMENT}
-      viewRecordComponent={ViewUser}
-      editRecordComponent={UserForm}
-      newRecordInitialValues={{ active: true, personal: { preferredContactTypeId: '002' } }}
-      visibleColumns={this.props.visibleColumns ? this.props.visibleColumns : ['status', 'name', 'barcode', 'patronGroup', 'username', 'email']}
-      resultsFormatter={resultsFormatter}
-      onSelectRow={onSelectRow}
-      onCreate={this.create}
-      onComponentWillUnmount={onComponentWillUnmount}
-      massageNewRecord={this.massageNewRecord}
-      finishedResourceName="perms"
-      viewRecordPerms="users.item.get"
-      newRecordPerms="users.item.post,login.item.post,perms.users.item.post"
-      disableRecordCreation={disableRecordCreation}
-      parentResources={this.props.resources}
-      parentMutator={this.props.mutator}
-      showSingleResult={showSingleResult}
-      columnMapping={{
-        status: intl.formatMessage({ id: 'ui-users.active' }),
-        name: intl.formatMessage({ id: 'ui-users.information.name' }),
-        barcode: intl.formatMessage({ id: 'ui-users.information.barcode' }),
-        patronGroup: intl.formatMessage({ id: 'ui-users.information.patronGroup' }),
-        username: intl.formatMessage({ id: 'ui-users.information.username' }),
-        email: intl.formatMessage({ id: 'ui-users.contact.email' }),
-      }}
-      browseOnly={browseOnly}
-    />);
+    return (
+      <HasCommand commands={this.keyboardCommands}>
+        <SearchAndSort
+          packageInfo={packageInfo}
+          objectName="user"
+          filterConfig={filterConfig}
+          initialResultCount={INITIAL_RESULT_COUNT}
+          resultCountIncrement={RESULT_COUNT_INCREMENT}
+          viewRecordComponent={ViewUser}
+          editRecordComponent={UserForm}
+          newRecordInitialValues={{ active: true, personal: { preferredContactTypeId: '002' } }}
+          visibleColumns={this.props.visibleColumns ? this.props.visibleColumns : ['status', 'name', 'barcode', 'patronGroup', 'username', 'email']}
+          resultsFormatter={resultsFormatter}
+          onSelectRow={onSelectRow}
+          onCreate={this.create}
+          onComponentWillUnmount={onComponentWillUnmount}
+          massageNewRecord={this.massageNewRecord}
+          finishedResourceName="perms"
+          viewRecordPerms="users.item.get"
+          newRecordPerms="users.item.post,login.item.post,perms.users.item.post"
+          disableRecordCreation={disableRecordCreation}
+          parentResources={this.props.resources}
+          parentMutator={this.props.mutator}
+          showSingleResult={showSingleResult}
+          columnMapping={{
+            status: intl.formatMessage({ id: 'ui-users.active' }),
+            name: intl.formatMessage({ id: 'ui-users.information.name' }),
+            barcode: intl.formatMessage({ id: 'ui-users.information.barcode' }),
+            patronGroup: intl.formatMessage({ id: 'ui-users.information.patronGroup' }),
+            username: intl.formatMessage({ id: 'ui-users.information.username' }),
+            email: intl.formatMessage({ id: 'ui-users.contact.email' }),
+          }}
+          browseOnly={browseOnly}
+        />
+      </HasCommand>);
   }
 }
 

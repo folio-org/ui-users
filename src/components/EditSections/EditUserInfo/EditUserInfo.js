@@ -41,9 +41,7 @@ class EditUserInfo extends React.Component {
     } = this.props;
     const patronGroups = (parentResources.patronGroups || {}).records || [];
     const patronGroupOptions = (patronGroups).map(g => (
-      <FormattedMessage key={g.id} id={g.group.concat(g.desc ? ` (${g.desc})` : '')}>
-        {(message) => <option value={g.id}>{message}</option>}
-      </FormattedMessage>
+      <option key={g.id} value={g.id}>{g.group.concat(g.desc ? ` (${g.desc})` : '')}</option>
     ));
     const isUserExpired = () => {
       const expirationDate = new Date(initialValues.expirationDate);
