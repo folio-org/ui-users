@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
+import { injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { ConfirmationModal } from '@folio/stripes/components';
@@ -36,6 +37,7 @@ class PatronBlockLayer extends React.Component {
     stripes: PropTypes.shape({
       intl: PropTypes.object,
     }),
+    intl: PropTypes.object,
     resources: PropTypes.object,
     selectedPatronBlock: PropTypes.object,
     onCancel: PropTypes.func,
@@ -129,21 +131,23 @@ class PatronBlockLayer extends React.Component {
   }
 
   render() {
-    const { query } = this.props;
+    const { query, intl: { formatMessage } } = this.props;
 
     const selectedItem = (query.block && !this.props.selectedPatronBlock.id) ?
       _.get(this.props.resources, ['patronBlocks', 'records', 0], {})
       : this.props.selectedPatronBlock;
+
     const message =
       <span>
         <strong>{selectedItem.desc}</strong>
         {' '}
-patron block will be removed
+        patron block will be removed
       </span>;
 
     return (
       <div>
         <PatronBlockForm
+          intl={this.props.intl}
           stripes={this.props.stripes}
           onClose={this.props.onCancel}
           onDeleteItem={this.showConfirm}
@@ -157,8 +161,8 @@ patron block will be removed
           open={this.state.showConfirmDialog}
           onConfirm={this.onDeleteItem}
           onCancel={this.hideConfirm}
-          confirmLabel={this.props.stripes.intl.formatMessage({ id: 'ui-users.blocks.layer.confirmLabel' })}
-          heading={this.props.stripes.intl.formatMessage({ id: 'ui-users.blocks.layer.heading' })}
+          confirmLabel={formatMessage({ id: 'ui-users.blocks.layer.confirmLabel' })}
+          heading={formatMessage({ id: 'ui-users.blocks.layer.heading' })}
           message={message}
         />
       </div>
@@ -166,4 +170,4 @@ patron block will be removed
   }
 }
 
-export default PatronBlockLayer;
+export default injectIntl(PatronBlockLayer);

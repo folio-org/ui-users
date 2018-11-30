@@ -204,7 +204,8 @@ class OwnerSettings extends React.Component {
 
   render() {
     if (!this.props.resources.owners) return <div />;
-    const { intl } = this.props;
+    const { intl: { formatMessage } } = this.props;
+    const type = formatMessage({ id: 'ui-users.owners.singular' });
     const rows = this.props.resources.owners.records || [];
     const term = this.state.selectedItem[this.state.primaryField];
     const servicePoints = _.get(this.props.resources, ['servicePoints', 'records', 0, 'servicepoints'], []);
@@ -239,7 +240,7 @@ class OwnerSettings extends React.Component {
       <SafeHTMLMessage
         id="stripes-smart-components.cv.termWillBeDeleted"
         values={{
-          type: intl.formatMessage({ id: 'ui-users.owners.singular' }),
+          type: formatMessage({ id: 'ui-users.owners.singular' }),
           term,
         }}
       />
@@ -254,10 +255,14 @@ class OwnerSettings extends React.Component {
     };
     return (
       <Paneset>
-        <Pane defaultWidth="fill" fluidContentWidth height="100%" paneTitle={this.props.stripes.intl.formatMessage({ id: 'ui-users.owners.label' })}>
+        <Pane
+          defaultWidth="fill"
+          fluidContentWidth
+          height="100%"
+          paneTitle={formatMessage({ id: 'ui-users.owners.label' })}>
           <EditableList
             {...this.props}
-            label={this.props.stripes.intl.formatMessage({ id: 'ui-users.owners.label' })}
+            label={formatMessage({ id: 'ui-users.owners.label' })}
             height="600"
             virtualize
             fieldComponents={fieldComponents}
@@ -265,9 +270,9 @@ class OwnerSettings extends React.Component {
             createButtonLabel={<FormattedMessage id="stripes-core.button.new" />}
             visibleFields={['owner', 'desc', 'servicePointOwner']}
             columnMapping={{
-              'owner': intl.formatMessage({ id: 'ui-users.owners.columns.owner' }),
-              'desc': intl.formatMessage({ id: 'ui-users.owners.columns.desc' }),
-              'servicePointOwner': intl.formatMessage({ id: 'ui-users.owners.columns.asp' }),
+              'owner': formatMessage({ id: 'ui-users.owners.columns.owner' }),
+              'desc': formatMessage({ id: 'ui-users.owners.columns.desc' }),
+              'servicePointOwner': formatMessage({ id: 'ui-users.owners.columns.asp' }),
             }}
             formatter={formatter}
             onUpdate={this.onUpdateItem}
@@ -292,7 +297,7 @@ class OwnerSettings extends React.Component {
             heading={(
               <FormattedMessage
                 id="stripes-core.button.deleteEntry"
-                values={{ entry: intl.formatMessage({ id: 'ui-users.owners.singular' }) }}
+                values={{ entry: formatMessage({ id: 'ui-users.owners.singular' }) }}
               />
             )}
             message={modalMessage}

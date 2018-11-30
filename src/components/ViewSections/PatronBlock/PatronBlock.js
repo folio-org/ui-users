@@ -2,6 +2,11 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
+import {
   Row,
   Col,
   Accordion,
@@ -27,12 +32,9 @@ class PatronBlock extends React.Component {
 
   static propTypes = {
     resources: PropTypes.shape({
-      manualblocks: PropTypes.shape({
+      userPatronBlocks: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
-    }),
-    stripes: PropTypes.shape({
-      intl: PropTypes.object.isRequired,
     }),
     mutator: PropTypes.shape({
       userPatronBlocks: PropTypes.shape({
@@ -43,6 +45,7 @@ class PatronBlock extends React.Component {
       }),
     }),
     onClickViewPatronBlock: PropTypes.func,
+    intl: intlShape.isRequired,
   };
 
   constructor(props) {
@@ -50,20 +53,20 @@ class PatronBlock extends React.Component {
 
     this.onSort = this.onSort.bind(this);
     this.onRowClick = this.onRowClick.bind(this);
-
-    const { stripes } = props;
+    const { intl: { formatMessage } } = props;
 
     this.sortMap = {
-      [stripes.intl.formatMessage({ id: 'ui-users.blocks.columns.type' })]: f => f.type,
-      [stripes.intl.formatMessage({ id: 'ui-users.blocks.columns.desc' })]: f => f.desc,
-      [stripes.intl.formatMessage({ id: 'ui-users.blocks.columns.blocked' })]: f => f.renewals,
+      [formatMessage({ id: 'ui-users.blocks.columns.type' })]: f => f.type,
+      [formatMessage({ id: 'ui-users.blocks.columns.desc' })]: f => f.desc,
+      [formatMessage({ id: 'ui-users.blocks.columns.blocked' })]: f => f.renewals,
     };
+
 
     this.state = {
       sortOrder: [
-        stripes.intl.formatMessage({ id: 'ui-users.blocks.columns.type' }),
-        stripes.intl.formatMessage({ id: 'ui-users.blocks.columns.desc' }),
-        stripes.intl.formatMessage({ id: 'ui-users.blocks.columns.blocked' }),
+        formatMessage({ id: 'ui-users.blocks.colums.type' }),
+        formatMessage({ id: 'ui-users.blocks.colums.desc' }),
+        formatMessage({ id: 'ui-users.blocks.colums.blocked' }),
       ],
       sortDirection: ['desc', 'asc'],
     };
@@ -103,62 +106,75 @@ class PatronBlock extends React.Component {
     }
   }
 
+
   getPatronFormatter() {
-    const { stripes } = this.props;
+    const { intl: { formatMessage } } = this.props;
+
     return {
-      [stripes.intl.formatMessage({ id: 'ui-users.blocks.columns.type' })]: f => f.type,
-      [stripes.intl.formatMessage({ id: 'ui-users.blocks.columns.desc' })]: f => f.desc,
-      [stripes.intl.formatMessage({ id: 'ui-users.blocks.columns.blocked' })]: f => `${f.borrowing ? [stripes.intl.formatMessage({ id: 'ui-users.blocks.columns.borrowing' })] : ''}${f.renewals && f.borrowing ? ', ' : ''}${f.renewals ? [stripes.intl.formatMessage({ id: 'ui-users.blocks.columns.renewals' })] : ''}${(f.requests && f.renewals) || (f.borrowing && f.requests) ? ', ' : ''}${f.requests ? [stripes.intl.formatMessage({ id: 'ui-users.blocks.columns.requests' })] : ''}`,
+      'Type': f => f.type,
+      'Display description': f => f.desc,
+      'Blocked actions': f => `${f.borrowing ? [formatMessage({ id: 'ui-users.blocks.columns.borrowing' })] : ''}${f.renewals && f.borrowing ? ', ' : ''}${f.renewals ? [formatMessage({ id: 'ui-users.blocks.columns.renewals' })] : ''}${(f.requests && f.renewals) || (f.borrowing && f.requests) ? ', ' : ''}${f.requests ? [formatMessage({ id: 'ui-users.blocks.columns.requests' })] : ''}`,
     };
   }
 
   render() {
     const props = this.props;
-    const { expanded, onToggle, accordionId, stripes } = props;
-    const { sortOrder, sortDirection } = this.state;
-    const visibleColumns = [
-      stripes.intl.formatMessage({ id: 'ui-users.blocks.columns.type' }),
-      stripes.intl.formatMessage({ id: 'ui-users.blocks.columns.desc' }),
-      stripes.intl.formatMessage({ id: 'ui-users.blocks.columns.blocked' }),
-    ];
+    const { 
+      expanded, 
+      onToggle, 
+      accordionId, 
+      intl : { formatMessage } 
+    } = props;
+    const { 
+      sortOrder, 
+      sortDirection 
+    } = this.state;
     const manualBlocks = _.get(this.props.resources, ['userPatronBlocks', 'records'], []);
     const contentData = _.orderBy(manualBlocks, [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
-    const displayWhenOpen =
-      <Button onClick={e => { props.onClickViewPatronBlock(e, 'add'); }}>{this.props.stripes.intl.formatMessage({ id: 'ui-users.blocks.buttons.add' })}</Button>;
+    const visibleColumns = [
+      'Type',
+      'Display description',
+      'Blocked actions',
+    ];
 
-    const items = (manualBlocks.length === 0) ? '' :
-    <MultiColumnList
-      contentData={contentData}
-      formatter={this.getPatronFormatter()}
-      visibleColumns={visibleColumns}
-      onHeaderClick={this.onSort}
-      sortOrder={sortOrder[0]}
-      sortDirection={`${sortDirection[0]}ending`}
-      onRowClick={this.onRowClick}
-      columnWidths={{
-        [stripes.intl.formatMessage({ id: 'ui-users.blocks.columns.type' })]: 100,
-        [stripes.intl.formatMessage({ id: 'ui-users.blocks.columns.desc' })]: 350,
-        [stripes.intl.formatMessage({ id: 'ui-users.blocks.columns.blocked' })]: 250
-      }}
-    />;
+    const displayWhenOpen =
+      <Button onClick={e => { props.onClickViewPatronBlock(e, 'add'); }}>
+        {formatMessage({ id: 'ui-users.blocks.buttons.add' })}
+      </Button>;
+    const items =
+      <MultiColumnList
+        contentData={contentData}
+        formatter={this.getPatronFormatter()}
+        visibleColumns={visibleColumns}
+        onHeaderClick={this.onSort}
+        sortOrder={sortOrder[0]}
+        sortDirection={`${sortDirection[0]}ending`}
+        onRowClick={this.onRowClick}
+        columnWidths={{
+          'Type': 100,
+          'Display description': 350,
+          'Blocked actions': 250
+        }}
+      />;
     const title =
       <Row>
-        <Col><Headline style={{ 'marginLeft': '8px' }} size="large" tag="h3">{this.props.stripes.intl.formatMessage({ id: 'ui-users.blocks.label' })}</Headline></Col>
+        <Col><Headline style={{ 'marginLeft': '8px' }} size="large" tag="h3"><FormattedMessage id="ui-users.blocks.label" /></Headline></Col>
         <Col>{(props.hasPatronBlocks) ? <Icon size="medium" icon="validation-error" status="error" /> : ''}</Col>
       </Row>;
 
     return (
       <Accordion
-        open={expanded}
+        open={manualBlocks.length > 0 ? true : expanded}
         id={accordionId}
         onToggle={onToggle}
         label={title}
         displayWhenOpen={displayWhenOpen}
       >
-        {items}
+        <Row><Col xs>{items}</Col></Row>
       </Accordion>
+
     );
   }
 }
 
-export default PatronBlock;
+export default injectIntl(PatronBlock);
