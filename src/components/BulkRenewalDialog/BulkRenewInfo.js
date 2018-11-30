@@ -34,7 +34,7 @@ class BulkRenewInfo extends React.Component {
           { failedRenewals.length > 0 ?
             <Layout className="flex">
 
-              <Icon size="medium" icon="validation-error" status="warn" />
+              <Icon size="medium" icon="exclamation-circle" status="warn" />
               <SafeHTMLMessage
                 id="ui-users.brd.itemNotRenewed"
                 values={{
@@ -46,7 +46,7 @@ class BulkRenewInfo extends React.Component {
             }
           { successRenewals.length > 0 ?
             <Layout className="flex">
-              <Icon size="medium" icon="validation-check" status="success" />
+              <Icon size="medium" icon="check-circle" status="success" />
               <SafeHTMLMessage
                 id="ui-users.brd.itemSuccessfullyRenewed"
                 values={{

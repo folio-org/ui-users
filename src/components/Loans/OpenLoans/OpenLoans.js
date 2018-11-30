@@ -21,6 +21,7 @@ import {
   Callout,
   IconButton,
   ExportCsv,
+  IfPermission,
 } from '@folio/stripes/components';
 import { ChangeDueDateDialog } from '@folio/stripes/smart-components';
 import BulkRenewalDialog from '../../BulkRenewalDialog';
@@ -57,6 +58,7 @@ class OpenLoans extends React.Component {
   });
 
   static propTypes = {
+    buildRecords: PropTypes.func,
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired
     }).isRequired,
@@ -112,11 +114,22 @@ class OpenLoans extends React.Component {
     this.fetchLoanPolicyNames = this.fetchLoanPolicyNames.bind(this);
     this.callout = null;
     this.getFeeFine = this.getFeeFine.bind(this);
-
     const { stripes } = props;
 
     this.connectedChangeDueDateDialog = stripes.connect(ChangeDueDateDialog);
     this.connectedBulkRenewalDialog = stripes.connect(BulkRenewalDialog);
+
+    this.headers = ['action', 'dueDate', 'loanDate', 'item.barcode', 'item.callNumber', 'item.contributors',
+      'item.holdingsRecordId', 'item.instanceId', 'item.status.name', 'item.title', 'item.materialType.name',
+      'item.location.name', 'metaData.createdByUserId', 'metadata.updatedDate', 'metadata.updatedByUserId', 'loanPolicyId'];
+
+    // Map to pass into exportCsv
+    this.columnHeadersMap = this.headers.map(item => {
+      return {
+        label: this.props.intl.formatMessage({ id: `ui-users.${item}` }),
+        value: item
+      };
+    });
 
     // List of all possible columns that can be displayed
     this.possibleColumns = ['  ', 'title', 'itemStatus', 'dueDate', 'requests', 'barcode', 'Fee/Fine', 'Call number',
@@ -331,13 +344,19 @@ class OpenLoans extends React.Component {
   }
 
   getOpenRequestsCount() {
+    const { stripes, mutator } = this.props;
+
+    if (!stripes.hasPerm('ui-users.requests.all')) {
+      return;
+    }
+
     const q = this.state.loans.map(loan => {
       return `itemId==${loan.itemId}`;
     }).join(' or ');
 
     const query = `(${q}) and status==("Open - Awaiting pickup" or "Open - Not yet filled") sortby requestDate desc`;
-    this.props.mutator.requests.reset();
-    this.props.mutator.requests.GET({ params: { query } }).then((requestRecords) => {
+    mutator.requests.reset();
+    mutator.requests.GET({ params: { query } }).then((requestRecords) => {
       const requestCountObject = requestRecords.reduce((map, record) => {
         map[record.itemId] = map[record.itemId] ? ++map[record.itemId] : 1;
         return map;
@@ -602,9 +621,11 @@ class OpenLoans extends React.Component {
       >
         <IconButton data-role="toggle" icon="ellipsis" size="small" iconSize="medium" />
         <DropdownMenu data-role="menu" overrideStyle={{ padding: '7px 3px' }}>
-          <MenuItem itemMeta={{ loan, action: 'itemDetails' }}>
-            <Button buttonStyle="dropdownItem" href={`/inventory/view/${loan.item.instanceId}/${loan.item.holdingsRecordId}/${loan.itemId}`}><FormattedMessage id="ui-users.itemDetails" /></Button>
-          </MenuItem>
+          <IfPermission perm="inventory.items.item.get">
+            <MenuItem itemMeta={{ loan, action: 'itemDetails' }}>
+              <Button buttonStyle="dropdownItem" href={`/inventory/view/${loan.item.instanceId}/${loan.item.holdingsRecordId}/${loan.itemId}`}><FormattedMessage id="ui-users.itemDetails" /></Button>
+            </MenuItem>
+          </IfPermission>
           <MenuItem itemMeta={{ loan, action: 'renew' }}>
             <Button buttonStyle="dropdownItem"><FormattedMessage id="ui-users.renew" /></Button>
           </MenuItem>
@@ -682,11 +703,13 @@ class OpenLoans extends React.Component {
   }
 
   renderSubHeader(columnMapping) {
+    const { loans, buildRecords } = this.props;
     const noSelectedLoans = _.size(this.state.checkedLoans) === 0;
     const bulkActionsTooltip = <FormattedMessage id="ui-users.bulkActions.tooltip" />;
     const renewString = <FormattedMessage id="ui-users.renew" />;
     const changeDueDateString = <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />;
-
+    const clonedLoans = _.cloneDeep(loans);
+    const recordsToCSV = buildRecords(clonedLoans);
     return (
       <ActionsBar
         contentStart={
@@ -734,7 +757,10 @@ class OpenLoans extends React.Component {
             >
               {changeDueDateString}
             </Button>
-            <ExportCsv data={this.props.loans} excludeKeys={['id', 'userId', 'itemId']} />
+            <ExportCsv
+              data={recordsToCSV}
+              onlyFields={this.columnHeadersMap}
+            />
           </span>
         }
       />
