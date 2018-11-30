@@ -11,8 +11,8 @@ import {
   Paneset,
   Pane,
   PaneMenu,
+  PaneHeader,
   IconButton,
-  Icon,
   Button,
   Dropdown,
   DropdownMenu,
@@ -27,7 +27,6 @@ import { makeQueryFunction } from '@folio/stripes/smart-components';
 import { getFullName } from './util';
 import { Actions } from './components/Accounts/Actions';
 import { count, handleFilterChange, handleFilterClear } from './components/Accounts/accountFunctions';
-
 
 import {
   Menu,
@@ -149,18 +148,18 @@ class AccountsHistory extends React.Component {
     super(props);
 
     this.controllableColumns = [
-      'created',
-      'updated',
-      'type',
+      'metadata.createdDate',
+      'metadata.updatedDate',
+      'feeFineType',
       'amount',
       'remaining',
-      'status',
-      'owner',
+      'paymentStatus.name',
+      'feeFineOwner',
       'title',
       'barcode',
-      'number',
-      'due',
-      'returned',
+      'callNumber',
+      'dueDate',
+      'returnedDate',
     ];
 
     const visibleColumns = this.controllableColumns.map(columnName => ({
@@ -206,18 +205,18 @@ class AccountsHistory extends React.Component {
     this.filterState = filterState.bind(this);
     this.possibleColumns = [
       '  ',
-      'created',
-      'updated',
-      'type',
+      'metadata.createdDate',
+      'metadata.updatedDate',
+      'feeFineType',
       'amount',
       'remaining',
-      'status',
-      'owner',
+      'paymentStatus.name',
+      'feeFineOwner',
       'title',
       'barcode',
-      'number',
-      'due',
-      'returned',
+      'callNumber',
+      'dueDate',
+      'returnedDate',
       ' '
     ];
     this.getVisibleColumns = this.getVisibleColumns.bind(this);
@@ -420,30 +419,19 @@ class AccountsHistory extends React.Component {
     const filters = filterState(this.queryParam('f'));
     const selectedAccounts = this.state.selectedAccounts.map(a => accounts.find(ac => ac.id === a.id) || {});
 
-    const closeMenu = (
-      <PaneMenu>
-        <button onClick={this.props.onCancel} type="button">
-          <Row>
-            <Col><Icon icon="left-double-chevron" size="large" /></Col>
-            <Col><span style={{ fontSize: 'x-large' }}>Back</span></Col>
-          </Row>
-        </button>
-      </PaneMenu>
-    );
-
     const columnMapping = {
-      created: intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' }),
-      updated: intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' }),
-      type: intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' }),
-      amount: intl.formatMessage({ id: 'ui-users.accounts.history.columns.amount' }),
-      remaining: intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' }),
-      status: intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' }),
-      owner: intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' }),
-      title: intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' }),
-      barcode: intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' }),
-      number: intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' }),
-      due: intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' }),
-      returned: intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' }),
+      'metadata.createdDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' }),
+      'metadata.updatedDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' }),
+      'feeFineType': intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' }),
+      'amount': intl.formatMessage({ id: 'ui-users.accounts.history.columns.amount' }),
+      'remaining': intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' }),
+      'paymentStatus.name': intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' }),
+      'feeFineOwner': intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' }),
+      'title': intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' }),
+      'barcode': intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' }),
+      'callNumber': intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' }),
+      'dueDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' }),
+      'returnedDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' }),
     };
 
     const firstMenu = (
@@ -498,31 +486,7 @@ class AccountsHistory extends React.Component {
       balance += a.remaining;
     });
 
-    const header1 = (
-      <Row style={{ width: '80%' }}>
-        <Col xs={7}>
-          {' '}
-          {closeMenu}
-          {' '}
-        </Col>
-        <Col xs={4}>
-          <Row>
-            <Col>
-              <b>{`Fees/Fines - ${getFullName(user)} (${_.upperFirst(patronGroup.group)})`}</b>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <div style={{ margin: '5px 5px 5px 40px' }}>
-              Outstanding Balance:
-                {' '}
-                { (user.id === (accounts[0] || {}).userId) ? parseFloat(balance || 0).toFixed(2) : '0.00'}
-              </div>
-            </Col>
-          </Row>
-        </Col>
-      </Row>
-    );
+    const outstanding = (user.id === (accounts[0] || {}).userId) ? parseFloat(balance || 0).toFixed(2) : '0.00';
 
     const visibleColumns = this.getVisibleColumns();
 
@@ -530,7 +494,18 @@ class AccountsHistory extends React.Component {
       <Paneset>
         <Pane
           defaultWidth="100%"
-          header={header1}
+          dismissible
+          onClose={this.props.onCancel}
+          paneTitle={(
+            <FormattedMessage id="ui-users.accounts.title">
+              {(title) => `${title} - ${getFullName(user)} (${_.upperFirst(patronGroup.group)})`}
+            </FormattedMessage>
+          )}
+          paneSub={(
+            <FormattedMessage id="ui-users.accounts.outstanding">
+              {(title) => `${title}: ${outstanding}`}
+            </FormattedMessage>
+          )}
         >
           <Paneset>
             <Filters
@@ -545,7 +520,8 @@ class AccountsHistory extends React.Component {
               filters={filters}
               onChangeFilter={(e) => { this.handleFilterChange(e, 'f'); }}
             />
-            <Pane defaultWidth="fill" heigth="80%" header={header}>
+            <div style={{ width: '100%' }}>
+              <PaneHeader header={header} />
               <Menu
                 user={user}
                 showFilters={this.state.showFilters}
@@ -559,7 +535,6 @@ class AccountsHistory extends React.Component {
                 handleOptionsChange={this.handleOptionsChange}
                 onClickViewChargeFeeFine={this.props.onClickViewChargeFeeFine}
               />
-
               <Row>
                 {(query.layer === 'open-accounts') ?
                   (<this.connectedOpenAccounts
@@ -598,7 +573,7 @@ class AccountsHistory extends React.Component {
                 balance={balance}
                 handleEdit={this.handleEdit}
               />
-            </Pane>
+            </div>
           </Paneset>
         </Pane>
       </Paneset>
