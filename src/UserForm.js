@@ -255,6 +255,9 @@ class UserForm extends React.Component {
     const {
       initialValues,
       handleSubmit,
+      stripes: {
+        connect,
+      },
     } = this.props;
     const { sections } = this.state;
     const firstMenu = this.getAddFirstMenu();
@@ -291,6 +294,7 @@ class UserForm extends React.Component {
                     userId={initialValues.id}
                     userFirstName={initialValues.personal.firstName}
                     userEmail={initialValues.personal.email}
+                    stripesConnect={connect}
                   />
                   <EditContactInfo
                     accordionId="contactInfo"
