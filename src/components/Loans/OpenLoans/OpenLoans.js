@@ -393,13 +393,19 @@ class OpenLoans extends React.Component {
   }
 
   getVisibleColumns() {
+    const { stripes } = this.props;
     const { visibleColumns } = this.state;
     const visibleColumnsMap = visibleColumns.reduce((map, e) => {
       map[e.title] = e.status;
       return map;
     }, {});
 
-    const columnsToDisplay = this.possibleColumns.filter((e) => visibleColumnsMap[e] === undefined || visibleColumnsMap[e] === true);
+    let columnsToDisplay = this.possibleColumns.filter((e) => visibleColumnsMap[e] === undefined || visibleColumnsMap[e] === true);
+
+    if (!stripes.hasPerm('ui-users.requests.all')) {
+      columnsToDisplay = columnsToDisplay.filter(col => col !== 'requests');
+    }
+
     return columnsToDisplay;
   }
 
