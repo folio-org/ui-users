@@ -21,8 +21,8 @@ import {
   KeyValue,
   Row,
   Col,
-  IfPermission,
 } from '@folio/stripes/components';
+import { IfPermission } from '@folio/stripes/core';
 import { getFullName } from './util';
 import loanActionMap from './data/loanActionMap';
 import LoanActionsHistoryProxy from './LoanActionsHistoryProxy';

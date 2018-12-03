@@ -21,9 +21,9 @@ import {
   Callout,
   IconButton,
   ExportCsv,
-  IfPermission,
 } from '@folio/stripes/components';
 import { ChangeDueDateDialog } from '@folio/stripes/smart-components';
+import { IfPermission } from '@folio/stripes/core';
 import BulkRenewalDialog from '../../BulkRenewalDialog';
 import Label from '../../Label';
 import css from './OpenLoans.css';
