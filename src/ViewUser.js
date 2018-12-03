@@ -539,10 +539,12 @@ class ViewUser extends React.Component {
       stripes,
       parentResources,
       tagsEnabled,
+      location
     } = this.props;
 
     const addressTypes = (parentResources.addressTypes || {}).records || [];
-    const query = resources.query;
+    const query = queryString.parse(location.search || '');
+
     const user = this.getUser();
     const tags = ((user && user.tags) || {}).tagList || [];
     const patronGroups = (resources.patronGroups || {}).records || [];
