@@ -102,6 +102,7 @@ class ClosedLoans extends React.Component {
       [<FormattedMessage id="ui-users.loans.details.requestQueue" />]: () => {},
       [<FormattedMessage id="ui-users.loans.details.loanPolicy" />]: loan => this.state.loanPolicies[loan.loanPolicyId],
       [<FormattedMessage id="ui-users.loans.columns.returnDate" />]: loan => loan.systemReturnDate,
+      [<FormattedMessage id="ui-users.loans.details.checkinServicePoint" />]: loan => _.get(loan, ['checkinServicePoint', 'name'], '-'),
     };
 
     this.state = {
@@ -118,6 +119,7 @@ class ClosedLoans extends React.Component {
         <FormattedMessage id="ui-users.loans.details.loanPolicy" />,
         <FormattedMessage id="ui-users.loans.columns.loanDate" />,
         <FormattedMessage id="ui-users.loans.columns.returnDate" />,
+        <FormattedMessage id="ui-users.loans.details.checkinServicePoint" />,
       ],
       sortDirection: ['asc', 'asc'],
     };
@@ -213,6 +215,7 @@ class ClosedLoans extends React.Component {
           year="numeric"
         />;
       },
+      'checkinServicePoint': loan => _.get(loan, ['checkinServicePoint', 'name'], '-'),
       ' ': loan => this.renderActions(loan),
     };
   }
@@ -302,7 +305,7 @@ class ClosedLoans extends React.Component {
       loans,
       buildRecords
     } = this.props;
-    const visibleColumns = ['title', 'dueDate', 'barcode', 'Fee/Fine', 'Call Number', 'Contributors', 'renewals', 'loanDate', 'returnDate', ' '];
+    const visibleColumns = ['title', 'dueDate', 'barcode', 'Fee/Fine', 'Call Number', 'Contributors', 'renewals', 'loanDate', 'returnDate', 'checkinServicePoint', ' '];
     const columnMapping = {
       'title': intl.formatMessage({ id: 'ui-users.loans.columns.title' }),
       'barcode': intl.formatMessage({ id: 'ui-users.loans.columns.barcode' }),
@@ -313,6 +316,7 @@ class ClosedLoans extends React.Component {
       'renewals': intl.formatMessage({ id: 'ui-users.loans.columns.renewals' }),
       'Call Number': intl.formatMessage({ id: 'ui-users.loans.details.callNumber' }),
       'Contributors': intl.formatMessage({ id: 'ui-users.loans.columns.contributors' }),
+      'checkinServicePoint': intl.formatMessage({ id: 'ui-users.loans.details.checkinServicePoint' }),
     };
 
     const anonymizeString = <FormattedMessage id="ui-users.anonymize" />;
@@ -352,7 +356,7 @@ class ClosedLoans extends React.Component {
           id="list-loanshistory"
           fullWidth
           formatter={this.getLoansFormatter()}
-          columnWidths={{ 'title': 200, 'dueDate': 150, 'barcode': 140, 'Fee/Fine': 100, 'Call Number': 110, 'Contributors': 170, 'renewals': 90, 'loanDate': 150, 'returnDate': 150, ' ': 35 }}
+          columnWidths={{ 'title': 200, 'dueDate': 150, 'barcode': 140, 'Fee/Fine': 100, 'Call Number': 110, 'Contributors': 170, 'renewals': 90, 'loanDate': 150, 'returnDate': 150, 'checkinServicePoint': 200, ' ': 35 }}
           visibleColumns={visibleColumns}
           columnMapping={columnMapping}
           onHeaderClick={this.onSort}
