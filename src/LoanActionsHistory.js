@@ -22,6 +22,7 @@ import {
   Row,
   Col,
 } from '@folio/stripes/components';
+import { IfPermission } from '@folio/stripes/core';
 import { getFullName } from './util';
 import loanActionMap from './data/loanActionMap';
 import LoanActionsHistoryProxy from './LoanActionsHistoryProxy';
@@ -508,12 +509,14 @@ class LoanActionsHistory extends React.Component {
                 )}
               />
             </Col>
-            <Col xs={2}>
-              <KeyValue
-                label={<FormattedMessage id="ui-users.loans.details.requestQueue" />}
-                value={requestQueueValue}
-              />
-            </Col>
+            <IfPermission perm="ui-users.requests.all">
+              <Col xs={2}>
+                <KeyValue
+                  label={<FormattedMessage id="ui-users.loans.details.requestQueue" />}
+                  value={requestQueueValue}
+                />
+              </Col>
+            </IfPermission>
             <Col xs={2}>
               <KeyValue
                 label={<FormattedMessage id="ui-users.loans.details.lost" />}
