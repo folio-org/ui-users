@@ -480,6 +480,12 @@ class LoanActionsHistory extends React.Component {
                 value="TODO"
               />
             </Col>
+            <Col xs={2}>
+              <KeyValue
+                label={<FormattedMessage id="ui-users.loans.details.checkinServicePoint" />}
+                value={get(loan, ['checkinServicePoint', 'name'], '-')}
+              />
+            </Col>
           </Row>
           <Row>
             <Col xs={2}>

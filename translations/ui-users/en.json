@@ -335,6 +335,7 @@
   "loans.details.fine": "Fine incurred",
   "loans.details.feeFine": "Fee/fine",
   "loans.details.proxyBorrower": "Proxy borrower",
+  "loans.details.checkinServicePoint": "Check in service point",
 
   "requests.title": "Requests",
   "requests.createRequest": "Create request",
