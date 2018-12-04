@@ -1,7 +1,4 @@
-import {
-  _,
-  isEqual,
-} from 'lodash';
+import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -79,7 +76,7 @@ class PatronBlock extends React.Component {
     const prevBlocks = _.get(prevProps.resources, ['userPatronBlocks', 'records'], []);
     const patronBlocks = _.get(this.props.resources, ['userPatronBlocks', 'records'], []);
 
-    if (isEqual(prevBlocks) !== isEqual(patronBlocks)) {
+    if (!_.isEqual(prevBlocks, patronBlocks)) {
       const expirated = patronBlocks.filter(p => moment(moment(p.expirationDate).format()).isBefore(moment().format())) || [];
       expirated.forEach(block => {
         this.props.mutator.activeRecord.update({ id: block.id });
