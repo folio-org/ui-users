@@ -114,7 +114,7 @@ class OpenLoans extends React.Component {
     this.fetchLoanPolicyNames = this.fetchLoanPolicyNames.bind(this);
     this.callout = null;
     this.getFeeFine = this.getFeeFine.bind(this);
-    const { stripes } = props;
+    const { stripes, intl } = props;
 
     this.connectedChangeDueDateDialog = stripes.connect(ChangeDueDateDialog);
     this.connectedBulkRenewalDialog = stripes.connect(BulkRenewalDialog);
@@ -126,7 +126,7 @@ class OpenLoans extends React.Component {
     // Map to pass into exportCsv
     this.columnHeadersMap = this.headers.map(item => {
       return {
-        label: this.props.intl.formatMessage({ id: `ui-users.${item}` }),
+        label: intl.formatMessage({ id: `ui-users.${item}` }),
         value: item
       };
     });
@@ -144,24 +144,38 @@ class OpenLoans extends React.Component {
       status: true,
     }));
 
+    this.columnMapping = {
+      'title': intl.formatMessage({ id: 'ui-users.loans.columns.title' }),
+      'itemStatus': intl.formatMessage({ id: 'ui-users.loans.columns.itemStatus' }),
+      'barcode': intl.formatMessage({ id: 'ui-users.loans.columns.barcode' }),
+      'Fee/Fine': intl.formatMessage({ id: 'ui-users.loans.columns.feefine' }),
+      'loanDate': intl.formatMessage({ id: 'ui-users.loans.columns.loanDate' }),
+      'requests': intl.formatMessage({ id: 'ui-users.loans.details.requests' }),
+      'Call number': intl.formatMessage({ id: 'ui-users.loans.details.callNumber' }),
+      'loanPolicy': intl.formatMessage({ id: 'ui-users.loans.details.loanPolicy' }),
+      'Contributors': intl.formatMessage({ id: 'ui-users.loans.columns.contributors' }),
+      'dueDate': intl.formatMessage({ id: 'ui-users.loans.columns.dueDate' }),
+      'renewals': intl.formatMessage({ id: 'ui-users.loans.columns.renewals' }),
+      'location': intl.formatMessage({ id: 'ui-users.loans.details.location' }),
+    };
 
     this.sortMap = {
-      [<FormattedMessage id="ui-users.loans.columns.title" />]: loan => _.get(loan, ['item', 'title']),
-      [<FormattedMessage id="ui-users.loans.columns.barcode" />]: loan => _.get(loan, ['item', 'barcode']),
-      [<FormattedMessage id="ui-users.loans.columns.feefine" />]: loan => this.getFeeFine(loan),
-      [<FormattedMessage id="ui-users.loans.columns.itemStatus" />]: loan => _.get(loan, ['item', 'status', 'name'], ''),
-      [<FormattedMessage id="ui-users.loans.columns.loanDate" />]: loan => loan.loanDate,
-      [<FormattedMessage id="ui-users.loans.details.callNumber" />]: loan => _.get(loan, ['item', 'callNumber']),
-      [<FormattedMessage id="ui-users.loans.columns.contributors" />]: loan => {
+      [this.columnMapping['title']]: loan => _.get(loan, ['item', 'title']),
+      [this.columnMapping['barcode']]: loan => _.get(loan, ['item', 'barcode']),
+      [this.columnMapping['Fee/Fine']]: loan => this.getFeeFine(loan),
+      [this.columnMapping['itemStatus']]: loan => _.get(loan, ['item', 'status', 'name'], ''),
+      [this.columnMapping['loanDate']]: loan => loan.loanDate,
+      [this.columnMapping['Call number']]: loan => _.get(loan, ['item', 'callNumber']),
+      [this.columnMapping['Contributors']]: loan => {
         const contributorsList = this.getContributorslist(loan);
         const contributorsListString = contributorsList.join(' ');
         return contributorsListString;
       },
-      [<FormattedMessage id="ui-users.loans.columns.dueDate" />]: loan => loan.dueDate,
-      [<FormattedMessage id="ui-users.loans.columns.renewals" />]: loan => loan.renewalCount,
-      [<FormattedMessage id="ui-users.loans.details.requests" />]: (loan) => this.state.requestCounts[loan.itemId] || 0,
-      [<FormattedMessage id="ui-users.loans.details.loanPolicy" />]: loan => this.state.loanPolicies[loan.loanPolicyId],
-      [<FormattedMessage id="ui-users.loans.details.location" />]: loan => _.get(loan, ['item', 'location', 'name'], ''),
+      [this.columnMapping['dueDate']]: loan => loan.dueDate,
+      [this.columnMapping['renewals']]: loan => loan.renewalCount,
+      [this.columnMapping['requests']]: (loan) => this.state.requestCounts[loan.itemId] || 0,
+      [this.columnMapping['loanPolicy']]: loan => this.state.loanPolicies[loan.loanPolicyId],
+      [this.columnMapping['location']]: loan => _.get(loan, ['item', 'location', 'name'], ''),
     };
 
     this.state = {
@@ -171,18 +185,18 @@ class OpenLoans extends React.Component {
       requestCounts: {},
       toggleDropdownState: false,
       sortOrder: [
-        <FormattedMessage id="ui-users.loans.columns.title" />,
-        <FormattedMessage id="ui-users.loans.columns.itemStatus" />,
-        <FormattedMessage id="ui-users.loans.columns.dueDate" />,
-        <FormattedMessage id="ui-users.loans.details.requests" />,
-        <FormattedMessage id="ui-users.loans.columns.barcode" />,
-        <FormattedMessage id="ui-users.loans.columns.feefine" />,
-        <FormattedMessage id="ui-users.loans.details.callNumber" />,
-        <FormattedMessage id="ui-users.loans.columns.contributors" />,
-        <FormattedMessage id="ui-users.loans.columns.renewals" />,
-        <FormattedMessage id="ui-users.loans.details.loanPolicy" />,
-        <FormattedMessage id="ui-users.loans.details.location" />,
-        <FormattedMessage id="ui-users.loans.columns.loanDate" />,
+        this.columnMapping['title'],
+        this.columnMapping['itemStatus'],
+        this.columnMapping['dueDate'],
+        this.columnMapping['requests'],
+        this.columnMapping['barcode'],
+        this.columnMapping['Fee/Fine'],
+        this.columnMapping['Call number'],
+        this.columnMapping['Contributors'],
+        this.columnMapping['renewals'],
+        this.columnMapping['loanPolicy'],
+        this.columnMapping['location'],
+        this.columnMapping['loanDate'],
       ],
       sortDirection: ['asc', 'asc'],
       activeLoan: undefined,
@@ -784,22 +798,8 @@ class OpenLoans extends React.Component {
       return <div />;
     }
 
-    const columnMapping = {
-      '  ': (<input type="checkbox" checked={allChecked} name="check-all" onChange={this.toggleAll} />),
-      'title': intl.formatMessage({ id: 'ui-users.loans.columns.title' }),
-      'itemStatus': intl.formatMessage({ id: 'ui-users.loans.columns.itemStatus' }),
-      'barcode': intl.formatMessage({ id: 'ui-users.loans.columns.barcode' }),
-      'Fee/Fine': intl.formatMessage({ id: 'ui-users.loans.columns.feefine' }),
-      'loanDate': intl.formatMessage({ id: 'ui-users.loans.columns.loanDate' }),
-      'requests': intl.formatMessage({ id: 'ui-users.loans.details.requests' }),
-      'Call number': intl.formatMessage({ id: 'ui-users.loans.details.callNumber' }),
-      'loanPolicy': intl.formatMessage({ id: 'ui-users.loans.details.loanPolicy' }),
-      'Contributors': intl.formatMessage({ id: 'ui-users.loans.columns.contributors' }),
-      'dueDate': intl.formatMessage({ id: 'ui-users.loans.columns.dueDate' }),
-      'renewals': intl.formatMessage({ id: 'ui-users.loans.columns.renewals' }),
-      'location': intl.formatMessage({ id: 'ui-users.loans.details.location' }),
-    };
-
+    const checkboxMap = { '  ': (<input type="checkbox" checked={allChecked} name="check-all" onChange={this.toggleAll} />) };
+    const columnMapping = {...this.columnMapping, ...checkboxMap}
     const loansSorted = _.orderBy(loans,
       [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
 
