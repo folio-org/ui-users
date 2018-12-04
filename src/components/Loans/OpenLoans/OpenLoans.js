@@ -160,22 +160,22 @@ class OpenLoans extends React.Component {
     };
 
     this.sortMap = {
-      [this.columnMapping['title']]: loan => _.get(loan, ['item', 'title']),
-      [this.columnMapping['barcode']]: loan => _.get(loan, ['item', 'barcode']),
+      [this.columnMapping.title]: loan => _.get(loan, ['item', 'title']),
+      [this.columnMapping.barcode]: loan => _.get(loan, ['item', 'barcode']),
       [this.columnMapping['Fee/Fine']]: loan => this.getFeeFine(loan),
-      [this.columnMapping['itemStatus']]: loan => _.get(loan, ['item', 'status', 'name'], ''),
-      [this.columnMapping['loanDate']]: loan => loan.loanDate,
+      [this.columnMapping.itemStatus]: loan => _.get(loan, ['item', 'status', 'name'], ''),
+      [this.columnMapping.loanDate]: loan => loan.loanDate,
       [this.columnMapping['Call number']]: loan => _.get(loan, ['item', 'callNumber']),
-      [this.columnMapping['Contributors']]: loan => {
+      [this.columnMapping.Contributors]: loan => {
         const contributorsList = this.getContributorslist(loan);
         const contributorsListString = contributorsList.join(' ');
         return contributorsListString;
       },
-      [this.columnMapping['dueDate']]: loan => loan.dueDate,
-      [this.columnMapping['renewals']]: loan => loan.renewalCount,
-      [this.columnMapping['requests']]: (loan) => this.state.requestCounts[loan.itemId] || 0,
-      [this.columnMapping['loanPolicy']]: loan => this.state.loanPolicies[loan.loanPolicyId],
-      [this.columnMapping['location']]: loan => _.get(loan, ['item', 'location', 'name'], ''),
+      [this.columnMapping.dueDate]: loan => loan.dueDate,
+      [this.columnMapping.renewals]: loan => loan.renewalCount,
+      [this.columnMapping.requests]: (loan) => this.state.requestCounts[loan.itemId] || 0,
+      [this.columnMapping.loanPolicy]: loan => this.state.loanPolicies[loan.loanPolicyId],
+      [this.columnMapping.location]: loan => _.get(loan, ['item', 'location', 'name'], ''),
     };
 
     this.state = {
@@ -185,18 +185,18 @@ class OpenLoans extends React.Component {
       requestCounts: {},
       toggleDropdownState: false,
       sortOrder: [
-        this.columnMapping['title'],
-        this.columnMapping['itemStatus'],
-        this.columnMapping['dueDate'],
-        this.columnMapping['requests'],
-        this.columnMapping['barcode'],
+        this.columnMapping.title,
+        this.columnMapping.itemStatus,
+        this.columnMapping.dueDate,
+        this.columnMapping.requests,
+        this.columnMapping.barcode,
         this.columnMapping['Fee/Fine'],
         this.columnMapping['Call number'],
-        this.columnMapping['Contributors'],
-        this.columnMapping['renewals'],
-        this.columnMapping['loanPolicy'],
-        this.columnMapping['location'],
-        this.columnMapping['loanDate'],
+        this.columnMapping.Contributors,
+        this.columnMapping.renewals,
+        this.columnMapping.loanPolicy,
+        this.columnMapping.location,
+        this.columnMapping.loanDate,
       ],
       sortDirection: ['asc', 'asc'],
       activeLoan: undefined,
@@ -791,7 +791,6 @@ class OpenLoans extends React.Component {
     const { sortOrder, sortDirection, allChecked, loanPolicies } = this.state;
     const visibleColumns = this.getVisibleColumns();
     const {
-      intl,
       loans,
     } = this.props;
     if (_.isEmpty(loanPolicies)) {
@@ -799,7 +798,7 @@ class OpenLoans extends React.Component {
     }
 
     const checkboxMap = { '  ': (<input type="checkbox" checked={allChecked} name="check-all" onChange={this.toggleAll} />) };
-    const columnMapping = {...this.columnMapping, ...checkboxMap}
+    const columnMapping = { ...this.columnMapping, ...checkboxMap };
     const loansSorted = _.orderBy(loans,
       [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
 

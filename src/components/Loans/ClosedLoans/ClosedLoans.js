@@ -100,34 +100,34 @@ class ClosedLoans extends React.Component {
     };
 
     this.sortMap = {
-      [this.columnMapping['title']]: loan => _.get(loan, ['item', 'title']),
-      [this.columnMapping['barcode']]: loan => _.get(loan, ['item', 'barcode']),
+      [this.columnMapping.title]: loan => _.get(loan, ['item', 'title']),
+      [this.columnMapping.barcode]: loan => _.get(loan, ['item', 'barcode']),
       [this.columnMapping['Fee/Fine']]: loan => this.getFeeFine(loan),
-      [this.columnMapping['loanDate']]: loan => loan.loanDate,
-      [this.columnMapping['dueDate']]: loan => loan.dueDate,
+      [this.columnMapping.loanDate]: loan => loan.loanDate,
+      [this.columnMapping.dueDate]: loan => loan.dueDate,
       [this.columnMapping['Call Number']]: loan => _.get(loan, ['item', 'callNumber']),
-      [this.columnMapping['Contributors']]: loan => {
+      [this.columnMapping.Contributors]: loan => {
         const contributorsList = this.getContributorslist(loan);
         const contributorsListString = contributorsList.join(' ');
         return contributorsListString;
       },
-      [this.columnMapping['renewals']]: loan => loan.renewalCount,
-      [this.columnMapping['returnDate']]: loan => loan.systemReturnDate,
-      [this.columnMapping['checkinServicePoint']]: loan => _.get(loan, ['checkinServicePoint', 'name'], '-'),
+      [this.columnMapping.renewals]: loan => loan.renewalCount,
+      [this.columnMapping.returnDate]: loan => loan.systemReturnDate,
+      [this.columnMapping.checkinServicePoint]: loan => _.get(loan, ['checkinServicePoint', 'name'], '-'),
     };
 
     this.state = {
       sortOrder: [
-        this.columnMapping['title'],
-        this.columnMapping['barcode'],
+        this.columnMapping.title,
+        this.columnMapping.barcode,
         this.columnMapping['Fee/Fine'],
-        this.columnMapping['loanDate'],
-        this.columnMapping['dueDate'],
+        this.columnMapping.loanDate,
+        this.columnMapping.dueDate,
         this.columnMapping['Call Number'],
-        this.columnMapping['Contributors'],
-        this.columnMapping['renewals'],
-        this.columnMapping['renewals'],
-        this.columnMapping['checkinServicePoint'],
+        this.columnMapping.Contributors,
+        this.columnMapping.renewals,
+        this.columnMapping.renewals,
+        this.columnMapping.checkinServicePoint,
       ],
       sortDirection: ['asc', 'asc'],
     };
@@ -308,7 +308,6 @@ class ClosedLoans extends React.Component {
     } = this.state;
 
     const {
-      intl,
       onClickViewLoanActionsHistory,
       loans,
       buildRecords
