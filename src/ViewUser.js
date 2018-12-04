@@ -16,6 +16,7 @@ import {
   Col,
   IfPermission,
   IfInterface,
+  TextField,
   Layer,
   Headline,
   AccordionSet,
@@ -30,6 +31,7 @@ import LoanActionsHistory from './LoanActionsHistory';
 import { ChargeFeeFine } from './components/Accounts';
 import AccountsHistory from './AccountsHistory';
 import AccountActionsHistory from './AccountActionsHistory';
+import PatronBlockLayer from './components/PatronBlock';
 
 import { toListAddresses, toUserAddresses } from './converters/address';
 import { getFullName, eachPromise } from './util';
@@ -42,6 +44,7 @@ import {
   ExtendedInfo,
   ContactInfo,
   ProxyPermissions,
+  PatronBlock,
   UserPermissions,
   UserLoans,
   UserRequests,
@@ -60,6 +63,11 @@ class ViewUser extends React.Component {
         const { path } = action.meta;
         return refresh || path.match(/link/);
       },
+    },
+    hasPatronBlocks: {
+      type: 'okapi',
+      records: 'manualblocks',
+      path: 'manualblocks?query=(userId=:{id})&limit=1',
     },
     loansHistory: {
       type: 'okapi',
@@ -173,6 +181,7 @@ class ViewUser extends React.Component {
       viewOpenLoansMode: true,
       selectedLoan: {},
       selectedAccount: {},
+      selectedPatronBlock: {},
       addRecord: false,
       lastUpdate: null,
       sections: {
@@ -180,6 +189,7 @@ class ViewUser extends React.Component {
         extendedInfoSection: false,
         contactInfoSection: false,
         proxySection: false,
+        patronBlocksSection: false,
         loansSection: false,
         requestsSection: false,
         accountsSection: false,
@@ -191,6 +201,7 @@ class ViewUser extends React.Component {
     this.connectedUserLoans = props.stripes.connect(UserLoans);
     this.connectedUserRequests = props.stripes.connect(UserRequests);
     this.connectedUserAccounts = props.stripes.connect(UserAccounts);
+    this.connectedPatronBlock = props.stripes.connect(PatronBlock);
     this.connectedLoansHistory = props.stripes.connect(LoansHistory);
     this.connectedLoanActionsHistory = props.stripes.connect(LoanActionsHistory);
     this.connectedUserInfo = props.stripes.connect(UserInfo);
@@ -220,6 +231,9 @@ class ViewUser extends React.Component {
     this.onClickCloseAccountsHistory = this.onClickCloseAccountsHistory.bind(this);
     this.onClickViewAccountActionsHistory = this.onClickViewAccountActionsHistory.bind(this);
     this.onClickCloseAccountActionsHistory = this.onClickCloseAccountActionsHistory.bind(this);
+    this.connectedPatronBlockLayer = props.stripes.connect(PatronBlockLayer);
+    this.onClickViewPatronBlock = this.onClickViewPatronBlock.bind(this);
+    this.onClickClosePatronBlock = this.onClickClosePatronBlock.bind(this);
     this.showCallout = null;
 
     this.editButton = React.createRef();
@@ -385,6 +399,27 @@ class ViewUser extends React.Component {
     this.props.mutator.query.update({ layer });
     this.setState({
       selectedLoan: {},
+    });
+  }
+
+  onClickViewPatronBlock(e, mode, selectedPatronBlock) {
+    if (e) e.preventDefault();
+    const layer = (mode === 'add') ? 'add-block' : 'edit-block';
+    if (mode === 'add') {
+      this.props.mutator.query.update({ layer });
+    } else {
+      this.setState({
+        selectedPatronBlock,
+      });
+      this.props.mutator.query.update({ layer, block: selectedPatronBlock.id });
+    }
+  }
+
+  onClickClosePatronBlock(e) {
+    if (e) e.preventDefault();
+    this.props.mutator.query.update({ layer: null, block: null });
+    this.setState({
+      selectedPatronBlock: {},
     });
   }
 
@@ -612,6 +647,8 @@ class ViewUser extends React.Component {
       );
     }
 
+    const hasPatronBlocks = (get(resources, ['hasPatronBlocks', 'isPending'], true)) ? -1 : 1;
+    const totalPatronBlocks = get(resources, ['hasPatronBlocks', 'other', 'totalRecords'], 0);
     const patronGroupId = get(user, ['patronGroup'], '');
     const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
     const addresses = toListAddresses(get(user, ['personal', 'addresses'], []), addressTypes);
@@ -673,8 +710,12 @@ class ViewUser extends React.Component {
 
           <Headline size="xx-large" tag="h2">{getFullName(user)}</Headline>
 
-          <Row end="xs">
-            <Col xs>
+          <Row>
+            <Col xs={10}>
+              {(hasPatronBlocks === 1 && totalPatronBlocks > 0) ?
+                <TextField fullWidth readOnly value="Patron has blocks in place" error=" " /> : ''}
+            </Col>
+            <Col xs={2}>
               <ExpandAllButton accordionStatus={this.state.sections} onToggle={this.handleExpandAll} />
             </Col>
           </Row>
@@ -687,6 +728,16 @@ class ViewUser extends React.Component {
               stripes={stripes}
               expanded={this.state.sections.userInformationSection}
               onToggle={this.handleSectionToggle}
+            />
+            <this.connectedPatronBlock
+              accordionId="patronBlocksSection"
+              hasPatronBlocks={(hasPatronBlocks === 1 && totalPatronBlocks > 0)}
+              expanded={this.state.sections.patronBlocksSection}
+              onToggle={this.handleSectionToggle}
+              onClickViewPatronBlock={this.onClickViewPatronBlock}
+              addRecord={this.state.addRecord}
+              initialValues={userFormData}
+              {...this.props}
             />
             <ExtendedInfo
               accordionId="extendedInfoSection"
@@ -803,6 +854,16 @@ class ViewUser extends React.Component {
               </Layer>
             )}
           </FormattedMessage>
+          <Layer isOpen={query.layer ? query.layer === 'add-block' || query.layer === 'edit-block' : false} label={query.layer === 'add-block' ? 'Add Block' : 'Edit Block'}>
+            <this.connectedPatronBlockLayer
+              {...this.props}
+              query={query}
+              user={user}
+              selectedPatronBlock={this.state.selectedPatronBlock}
+              handleAddRecords={this.handleAddRecords}
+              onCancel={this.onClickClosePatronBlock}
+            />
+          </Layer>
           <Layer
             isOpen={
               this.isLayerOpen('open-accounts') ||

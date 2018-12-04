@@ -13,7 +13,6 @@ import {
   Pane,
   PaneMenu,
   IconButton,
-  Icon,
   Button,
   Dropdown,
   DropdownMenu,
@@ -76,34 +75,34 @@ const queryFunction = (findAll, queryTemplate, sortMap, fConfig, failOnCondition
 };
 
 const controllableColumns = [
-  'created',
-  'updated',
-  'type',
+  'metadata.createdDate',
+  'metadata.updatedDate',
+  'feeFineType',
   'amount',
   'remaining',
-  'status',
-  'owner',
+  'paymentStatus.name',
+  'feeFineOwner',
   'title',
   'barcode',
-  'number',
-  'due',
-  'returned',
+  'callNumber',
+  'dueDate',
+  'returnedDate',
 ];
 
 const possibleColumns = [
   '  ',
-  'created',
-  'updated',
-  'type',
+  'metadata.createdDate',
+  'metadata.updatedDate',
+  'feeFineType',
   'amount',
   'remaining',
-  'status',
-  'owner',
+  'paymentStatus.name',
+  'feeFineOwner',
   'title',
   'barcode',
-  'number',
-  'due',
-  'returned',
+  'callNumber',
+  'dueDate',
+  'returnedDate',
   ' ',
 ];
 
@@ -432,12 +431,6 @@ class AccountsHistory extends React.Component {
         >
           <Row>
             <Col>
-              <Icon
-                icon="chevron-double-left"
-                size="large"
-              />
-            </Col>
-            <Col>
               <span style={{ fontSize: 'x-large' }}>
                 <FormattedMessage id="ui-users.accounts.cancellation.field.back" />
               </span>
@@ -448,18 +441,18 @@ class AccountsHistory extends React.Component {
     );
 
     const columnMapping = {
-      created: intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' }),
-      updated: intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' }),
-      type: intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' }),
-      amount: intl.formatMessage({ id: 'ui-users.accounts.history.columns.amount' }),
-      remaining: intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' }),
-      status: intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' }),
-      owner: intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' }),
-      title: intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' }),
-      barcode: intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' }),
-      number: intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' }),
-      due: intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' }),
-      returned: intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' }),
+      'metadata.createdDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' }),
+      'metadata.updatedDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' }),
+      'feeFineType': intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' }),
+      'amount': intl.formatMessage({ id: 'ui-users.accounts.history.columns.amount' }),
+      'remaining': intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' }),
+      'paymentStatus.name': intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' }),
+      'feeFineOwner': intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' }),
+      'title': intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' }),
+      'barcode': intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' }),
+      'callNumber': intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' }),
+      'dueDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' }),
+      'returnedDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' }),
     };
 
     const firstMenu = (

@@ -48,7 +48,7 @@ const Owners = (props) => {
         </Col>
         <Col>
           <Select
-            style={{ marginLeft: '20px' }}
+            style={{ marginLeft: '20px', width: 120 }}
             onChange={props.onChange}
           >
             {options}

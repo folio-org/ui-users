@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Callout } from '@folio/stripes/components';
-import { FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 import CommentRequiredForm from './CommentRequiredForm';
 
@@ -64,10 +64,10 @@ class CommentRequiredSettings extends React.Component {
   render() {
     const settings = _.get(this.props.resources, ['commentRequired', 'records', 0], {});
     const initialValues = {
-      paid: (settings.paid ? 'true' : 'false'),
-      waived: (settings.waived ? 'true' : 'false'),
-      refunded: (settings.refunded ? 'true' : 'false'),
-      transferredManually: (settings.transferredManually ? 'true' : 'false'),
+      paid: (settings.paid && settings.paid !== 'false' ? 'true' : 'false'),
+      waived: (settings.waived && settings.waived !== 'false' ? 'true' : 'false'),
+      refunded: (settings.refunded && settings.refunded !== 'false' ? 'true' : 'false'),
+      transferredManually: (settings.transferredManually && settings.transferredManually !== 'false' ? 'true' : 'false'),
     };
 
     return (
@@ -82,4 +82,4 @@ class CommentRequiredSettings extends React.Component {
     );
   }
 }
-export default CommentRequiredSettings;
+export default injectIntl(CommentRequiredSettings);
