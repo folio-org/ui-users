@@ -12,7 +12,6 @@ import {
   Paneset,
   Pane,
   PaneMenu,
-  PaneHeader,
   IconButton,
   Button,
   Dropdown,
@@ -432,12 +431,6 @@ class AccountsHistory extends React.Component {
         >
           <Row>
             <Col>
-              <Icon
-                icon="chevron-double-left"
-                size="large"
-              />
-            </Col>
-            <Col>
               <span style={{ fontSize: 'x-large' }}>
                 <FormattedMessage id="ui-users.accounts.cancellation.field.back" />
               </span>
@@ -448,18 +441,18 @@ class AccountsHistory extends React.Component {
     );
 
     const columnMapping = {
-      metadata.createdDate: intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' }),
-      metadata.updatedDate: intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' }),
-      feeFineType: intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' }),
-      amount: intl.formatMessage({ id: 'ui-users.accounts.history.columns.amount' }),
-      remaining: intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' }),
-      paymentStatus.name: intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' }),
-      feeFineOwner: intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' }),
-      title: intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' }),
-      barcode: intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' }),
-      callNumber: intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' }),
-      dueDate: intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' }),
-      returnedDate: intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' }),
+      'metadata.createdDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' }),
+      'metadata.updatedDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' }),
+      'feeFineType': intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' }),
+      'amount': intl.formatMessage({ id: 'ui-users.accounts.history.columns.amount' }),
+      'remaining': intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' }),
+      'paymentStatus.name': intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' }),
+      'feeFineOwner': intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' }),
+      'title': intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' }),
+      'barcode': intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' }),
+      'callNumber': intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' }),
+      'dueDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' }),
+      'returnedDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' }),
     };
 
     const firstMenu = (
@@ -631,7 +624,7 @@ class AccountsHistory extends React.Component {
                 balance={balance}
                 handleEdit={this.handleEdit}
               />
-            </div>
+            </Pane>
           </Paneset>
         </Pane>
       </Paneset>
