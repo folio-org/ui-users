@@ -57,7 +57,6 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
           } else {
             resp.text().then((error) => {
               reject(error);
-              alert(error); // eslint-disable-line no-alert
             });
           }
         });
@@ -92,10 +91,20 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
 
       const policyName = this.getPolicyName(errors);
       let message = errors.reduce((msg, err) => ((msg) ? `${msg}, ${err.message}` : err.message), '');
-      message = `Loan cannot be renewed because: ${message}.`;
+      message = (
+        <FormattedMessage
+          id="ui-users.loanNotRenewedReason"
+          values={{ message }}
+        />
+      );
 
       if (policyName) {
-        message = `${message} Please review ${policyName} before retrying renewal.`;
+        message = (
+          <FormattedMessage
+            id="ui-users.reviewBeforeRenewal"
+            values={{ message, policyName }}
+          />
+        );
       }
 
       return message;
@@ -107,7 +116,10 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
 
       return (
         <div>
-          <WrappedComponent renew={this.renew} {...this.props} />
+          <WrappedComponent
+            renew={this.renew}
+            {...this.props}
+          />
           {errors &&
             <ErrorModal
               id="renewal-failure-modal"

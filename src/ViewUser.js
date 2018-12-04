@@ -398,7 +398,8 @@ class ViewUser extends React.Component {
   getUser() {
     const { resources, match: { params: { id } } } = this.props;
     const selUser = (resources.selUser || {}).records || [];
-    if (!selUser || selUser.length === 0 || !id) return null;
+
+    if (selUser.length === 0 || !id) return null;
     // Logging below shows this DOES sometimes find the wrong record. But why?
     // console.log(`getUser: found ${selUser.length} users, id '${selUser[0].id}' ${selUser[0].id === id ? '==' : '!='} '${id}'`);
     return selUser.find(u => u.id === id);
@@ -533,6 +534,12 @@ class ViewUser extends React.Component {
     }
   }
 
+  isLayerOpen = value => {
+    const { layer } = this.props.resources.query;
+
+    return layer === value;
+  };
+
   render() {
     const {
       resources,
@@ -561,7 +568,7 @@ class ViewUser extends React.Component {
           {
             tagsEnabled &&
             <FormattedMessage id="ui-users.showTags">
-              { ariaLabel => (
+              {ariaLabel => (
                 <IconButton
                   icon="tag"
                   id="clickable-show-tags"
@@ -574,7 +581,7 @@ class ViewUser extends React.Component {
           }
           <IfPermission perm="users.item.put">
             <FormattedMessage id="ui-users.crud.editUser">
-              { ariaLabel => (
+              {ariaLabel => (
                 <IconButton
                   icon="edit"
                   id="clickable-edituser"
@@ -610,24 +617,25 @@ class ViewUser extends React.Component {
     const addresses = toListAddresses(get(user, ['personal', 'addresses'], []), addressTypes);
     const userFormData = this.getUserFormData(user, addresses, sponsors, proxies, permissions, servicePoints, preferredServicePoint);
 
-    const loansHistory = (<this.connectedLoansHistory
-      buildRecords={this.buildRecords}
-      user={user}
-      loansHistory={loans}
-      patronGroup={patronGroup}
-      stripes={stripes}
-      history={this.props.history}
-      onCancel={this.onClickCloseLoansHistory}
-      onClickViewOpenLoans={this.onClickViewOpenLoans}
-      onClickViewClosedLoans={this.onClickViewClosedLoans}
-      onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
-      onClickViewChargeFeeFine={this.onClickViewChargeFeeFine}
-      onClickViewOpenAccounts={this.onClickViewOpenAccounts}
-      onClickViewAccountActionsHistory={this.onClickViewAccountActionsHistory}
-      onClickViewClosedAccounts={this.onClickViewClosedAccounts}
-      onClickViewAllAccounts={this.onClickViewAllAccounts}
-      openLoans={query.layer === 'open-loans'}
-    />);
+    const loansHistory = (
+      <this.connectedLoansHistory
+        buildRecords={this.buildRecords}
+        user={user}
+        loansHistory={loans}
+        patronGroup={patronGroup}
+        stripes={stripes}
+        history={this.props.history}
+        onCancel={this.onClickCloseLoansHistory}
+        onClickViewOpenLoans={this.onClickViewOpenLoans}
+        onClickViewClosedLoans={this.onClickViewClosedLoans}
+        onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
+        onClickViewChargeFeeFine={this.onClickViewChargeFeeFine}
+        onClickViewOpenAccounts={this.onClickViewOpenAccounts}
+        onClickViewAccountActionsHistory={this.onClickViewAccountActionsHistory}
+        onClickViewClosedAccounts={this.onClickViewClosedAccounts}
+        onClickViewAllAccounts={this.onClickViewAllAccounts}
+        openLoans={query.layer === 'open-loans'}
+      />);
 
     const loanDetails = (
       <this.connectedLoanActionsHistory
@@ -775,9 +783,9 @@ class ViewUser extends React.Component {
             </IfPermission>
           </AccordionSet>
           <FormattedMessage id="ui-users.editUserDialog">
-            { contentLabel => (
+            {contentLabel => (
               <Layer
-                isOpen={query.layer ? query.layer === 'edit' : false}
+                isOpen={this.isLayerOpen('edit')}
                 contentLabel={contentLabel}
                 afterClose={this.afterCloseEdit}
               >
@@ -796,7 +804,11 @@ class ViewUser extends React.Component {
             )}
           </FormattedMessage>
           <Layer
-            isOpen={query.layer ? query.layer === 'open-accounts' || query.layer === 'closed-accounts' || query.layer === 'all-accounts' : false}
+            isOpen={
+              this.isLayerOpen('open-accounts') ||
+              this.isLayerOpen('closed-accounts') ||
+              this.isLayerOpen('all-accounts')
+            }
             label={<FormattedMessage id="ui-users.accounts.title" />}
           >
             <this.connectedAccountsHistory
@@ -817,7 +829,10 @@ class ViewUser extends React.Component {
               onClickCloseAccountActionsHistory={this.onClickCloseAccountActionsHistory}
             />
           </Layer>
-          <Layer isOpen={query.layer ? query.layer === 'charge' : false} label="Charge Fee/Fine">
+          <Layer
+            isOpen={this.isLayerOpen('charge')}
+            label={<FormattedMessage id="ui-users.chargeFeefine" />}
+          >
             <this.connectedCharge
               servicePoints={servicePoints}
               preferredServicePoint={preferredServicePoint}
@@ -829,7 +844,10 @@ class ViewUser extends React.Component {
               handleAddRecords={this.handleAddRecords}
             />
           </Layer>
-          <Layer isOpen={query.layer ? query.layer === 'account' : false} label="Account Actions History">
+          <Layer
+            isOpen={this.isLayerOpen('account')}
+            label={<FormattedMessage id="ui-users.accountActionHistory" />}
+          >
             <this.connectedAccountActionsHistory
               user={user}
               patronGroup={patronGroup}
@@ -848,9 +866,9 @@ class ViewUser extends React.Component {
 
           <IfPermission perm="ui-users.loans.all">
             <FormattedMessage id="ui-users.loans.title">
-              { contentLabel => (
+              {contentLabel => (
                 <Layer
-                  isOpen={query.layer ? query.layer === 'open-loans' || query.layer === 'closed-loans' : false}
+                  isOpen={this.isLayerOpen('open-loans') || this.isLayerOpen('closed-loans')}
                   contentLabel={contentLabel}
                 >
                   {loansHistory}
@@ -859,9 +877,9 @@ class ViewUser extends React.Component {
             </FormattedMessage>
 
             <FormattedMessage id="ui-users.loanActionsHistory">
-              { contentLabel => (
+              {contentLabel => (
                 <Layer
-                  isOpen={query.layer ? query.layer === 'loan' : false}
+                  isOpen={this.isLayerOpen('loan')}
                   contentLabel={contentLabel}
                 >
                   {loanDetails}

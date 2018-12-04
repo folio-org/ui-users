@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
+import { FormattedMessage } from 'react-intl';
 
 export function getFullName(user) {
   const lastName = _.get(user, ['personal', 'lastName'], '');
@@ -28,10 +28,12 @@ export function validate(item, index, items, field, label) {
   for (let i = 0; i < items.length; i++) {
     const obj = items[i];
     if ((index !== i) && ((obj[field] || '').localeCompare(item[field], 'sv', { sensitivity: 'base' }) === 0)) {
-      error[field] = <SafeHTMLMessage
-        id="ui-users.duplicated"
-        values={{ field: label }}
-      />;
+      error[field] = (
+        <FormattedMessage
+          id="ui-users.duplicated"
+          values={{ field: label }}
+        />
+      );
     }
   }
   return error;

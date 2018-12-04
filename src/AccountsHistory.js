@@ -7,6 +7,7 @@ import {
 } from 'react-intl';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
+
 import {
   Paneset,
   Pane,
@@ -28,7 +29,6 @@ import { getFullName } from './util';
 import { Actions } from './components/Accounts/Actions';
 import { count, handleFilterChange, handleFilterClear } from './components/Accounts/accountFunctions';
 
-
 import {
   Menu,
   Filters,
@@ -39,22 +39,22 @@ import {
 
 const filterConfig = [
   {
-    label: 'Fee/Fine Owner',
+    label: <FormattedMessage id="ui-users.feefines.ownerLabel" />,
     name: 'owner',
     cql: 'feeFineOwner',
     values: [],
   }, {
-    label: 'Payment Status',
+    label: <FormattedMessage id="ui-users.accounts.history.columns.status" />,
     name: 'status',
     cql: 'paymentStatus.name',
     values: [],
   }, {
-    label: 'Fee/Fine Type',
+    label: <FormattedMessage id="ui-users.details.field.feetype" />,
     name: 'type',
     cql: 'feeFineType',
     values: [],
   }, {
-    label: 'Item Type',
+    label: <FormattedMessage id="ui-users.details.field.type" />,
     name: 'material',
     cql: 'materialType',
     values: [],
@@ -74,6 +74,38 @@ const queryFunction = (findAll, queryTemplate, sortMap, fConfig, failOnCondition
     return cql;
   };
 };
+
+const controllableColumns = [
+  'created',
+  'updated',
+  'type',
+  'amount',
+  'remaining',
+  'status',
+  'owner',
+  'title',
+  'barcode',
+  'number',
+  'due',
+  'returned',
+];
+
+const possibleColumns = [
+  '  ',
+  'created',
+  'updated',
+  'type',
+  'amount',
+  'remaining',
+  'status',
+  'owner',
+  'title',
+  'barcode',
+  'number',
+  'due',
+  'returned',
+  ' ',
+];
 
 class AccountsHistory extends React.Component {
   static manifest = Object.freeze({
@@ -148,22 +180,7 @@ class AccountsHistory extends React.Component {
   constructor(props) {
     super(props);
 
-    this.controllableColumns = [
-      'created',
-      'updated',
-      'type',
-      'amount',
-      'remaining',
-      'status',
-      'owner',
-      'title',
-      'barcode',
-      'number',
-      'due',
-      'returned',
-    ];
-
-    const visibleColumns = this.controllableColumns.map(columnName => ({
+    const visibleColumns = controllableColumns.map(columnName => ({
       title: columnName,
       status: true,
     }));
@@ -204,22 +221,6 @@ class AccountsHistory extends React.Component {
     this.handleFilterChange = handleFilterChange.bind(this);
     this.handleFilterClear = handleFilterClear.bind(this);
     this.filterState = filterState.bind(this);
-    this.possibleColumns = [
-      '  ',
-      'created',
-      'updated',
-      'type',
-      'amount',
-      'remaining',
-      'status',
-      'owner',
-      'title',
-      'barcode',
-      'number',
-      'due',
-      'returned',
-      ' '
-    ];
     this.getVisibleColumns = this.getVisibleColumns.bind(this);
     this.renderCheckboxList = this.renderCheckboxList.bind(this);
     this.toggleColumn = this.toggleColumn.bind(this);
@@ -377,7 +378,7 @@ class AccountsHistory extends React.Component {
       return map;
     }, {});
 
-    const columnsToDisplay = this.possibleColumns.filter((e) => visibleColumnsMap[e] === undefined || visibleColumnsMap[e] === true);
+    const columnsToDisplay = possibleColumns.filter((e) => visibleColumnsMap[e] === undefined || visibleColumnsMap[e] === true);
     return columnsToDisplay;
   }
 
@@ -401,12 +402,15 @@ class AccountsHistory extends React.Component {
 
   render() {
     const {
+      onCancel,
+      location,
       user,
       patronGroup,
       resources,
       intl,
     } = this.props;
-    const query = this.props.location.search ? queryString.parse(this.props.location.search) : {};
+
+    const query = location.search ? queryString.parse(location.search) : {};
 
     let accounts = _.get(resources, ['feefineshistory', 'records'], []);
     if (query.loan) {
@@ -422,10 +426,22 @@ class AccountsHistory extends React.Component {
 
     const closeMenu = (
       <PaneMenu>
-        <button onClick={this.props.onCancel} type="button">
+        <button
+          onClick={onCancel}
+          type="button"
+        >
           <Row>
-            <Col><Icon icon="chevron-double-left" size="large" /></Col>
-            <Col><span style={{ fontSize: 'x-large' }}>Back</span></Col>
+            <Col>
+              <Icon
+                icon="chevron-double-left"
+                size="large"
+              />
+            </Col>
+            <Col>
+              <span style={{ fontSize: 'x-large' }}>
+                <FormattedMessage id="ui-users.accounts.cancellation.field.back" />
+              </span>
+            </Col>
           </Row>
         </button>
       </PaneMenu>
@@ -460,7 +476,12 @@ class AccountsHistory extends React.Component {
           group
           pullRight
         >
-          <Button data-role="toggle" bottomMargin2><FormattedMessage id="ui-users.accounts.history.button.select" /></Button>
+          <Button
+            data-role="toggle"
+            bottomMargin2
+          >
+            <FormattedMessage id="ui-users.accounts.history.button.select" />
+          </Button>
           <DropdownMenu data-role="menu">
             <ul>
               {this.renderCheckboxList(columnMapping)}
@@ -498,25 +519,34 @@ class AccountsHistory extends React.Component {
       balance += a.remaining;
     });
 
+    const outstandingBalance = (user.id === (accounts[0] || {}).userId)
+      ? parseFloat(balance || 0).toFixed(2)
+      : '0.00';
+
     const header1 = (
       <Row style={{ width: '80%' }}>
         <Col xs={7}>
-          {' '}
           {closeMenu}
-          {' '}
         </Col>
         <Col xs={4}>
           <Row>
             <Col>
-              <b>{`Fees/Fines - ${getFullName(user)} (${_.upperFirst(patronGroup.group)})`}</b>
+              <b>
+                <FormattedMessage
+                  id="ui-users.accounts.header"
+                  values={{
+                    userName: getFullName(user),
+                    patronGroup: _.upperFirst(patronGroup.group),
+                  }}
+                />
+              </b>
             </Col>
           </Row>
           <Row>
             <Col>
               <div style={{ margin: '5px 5px 5px 40px' }}>
-              Outstanding Balance:
-                {' '}
-                { (user.id === (accounts[0] || {}).userId) ? parseFloat(balance || 0).toFixed(2) : '0.00'}
+                <FormattedMessage id="ui-users.accounts.outstandingBalance" />
+                {outstandingBalance}
               </div>
             </Col>
           </Row>
@@ -530,7 +560,7 @@ class AccountsHistory extends React.Component {
       <Paneset>
         <Pane
           defaultWidth="100%"
-          header={header1}
+          subheader={header1}
         >
           <Paneset>
             <Filters
@@ -545,7 +575,11 @@ class AccountsHistory extends React.Component {
               filters={filters}
               onChangeFilter={(e) => { this.handleFilterChange(e, 'f'); }}
             />
-            <Pane defaultWidth="fill" heigth="80%" header={header}>
+            <Pane
+              defaultWidth="fill"
+              heigth="80%"
+              subheader={header}
+            >
               <Menu
                 user={user}
                 showFilters={this.state.showFilters}
@@ -559,7 +593,6 @@ class AccountsHistory extends React.Component {
                 handleOptionsChange={this.handleOptionsChange}
                 onClickViewChargeFeeFine={this.props.onClickViewChargeFeeFine}
               />
-
               <Row>
                 {(query.layer === 'open-accounts') ?
                   (<this.connectedOpenAccounts

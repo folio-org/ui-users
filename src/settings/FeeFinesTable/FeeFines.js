@@ -44,15 +44,19 @@ function validate(type, props) {
       if (exist.find(e => e === ownerId)) {
         errors.items[i].feeFineType = <FormattedMessage id="ui-users.feefines.errors.exist" />;
       } else if (ownerId === shared.id) {
-        errors.items[i].feeFineType = <SafeHTMLMessage
-          id="ui-users.feefines.errors.existShared"
-          values={{ owner: (owners.find(o => o.id === exist[0]) || {}).owner }}
-        />;
+        errors.items[i].feeFineType = (
+          <FormattedMessage
+            id="ui-users.feefines.errors.existShared"
+            values={{ owner: (owners.find(o => o.id === exist[0]) || {}).owner }}
+          />
+        );
       } else if (exist.find(e => e === shared.id)) {
-        errors.items[i].feeFineType = <SafeHTMLMessage
-          id="ui-users.feefines.errors.existShared"
-          values={{ owner: 'Shared' }}
-        />;
+        errors.items[i].feeFineType = (
+          <FormattedMessage
+            id="ui-users.feefines.errors.existShared"
+            values={{ owner: 'Shared' }}
+          />
+        );
       }
     }
 
@@ -308,7 +312,10 @@ class FeeFines extends React.Component {
 
     return (
       <div>
-        <Owners dataOptions={owners} onChange={this.onChangeOwner} />
+        <Owners
+          dataOptions={owners}
+          onChange={this.onChangeOwner}
+        />
         <EditableList
           {...this.props}
           label={intl.formatMessage({ id: 'ui-users.feefines.title' })}
@@ -332,7 +339,12 @@ class FeeFines extends React.Component {
         <ConfirmationModal
           open={this.state.confirming}
           heading={<FormattedMessage id="ui-users.feefines.modalHeader" />}
-          message={<SafeHTMLMessage id="ui-users.feefines.modalMessage" values={{ feefine: this.state.type.feeFineType }} />}
+          message={
+            <SafeHTMLMessage
+              id="ui-users.feefines.modalMessage"
+              values={{ feefine: this.state.type.feeFineType }}
+            />
+          }
           onConfirm={this.onDeleteType}
           onCancel={this.hideConfirm}
           confirmLabel="Delete"
