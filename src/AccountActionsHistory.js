@@ -430,12 +430,12 @@ class AccountActionsHistory extends React.Component {
                 label={<FormattedMessage id="ui-users.details.field.returnedate" />}
                 value={
                   account.returnedDate ?
-                  <FormattedTime
-                    value={account.returnedDate}
-                    day="numeric"
-                    month="numeric"
-                    year="numeric"
-                  /> : '-'
+                    <FormattedTime
+                      value={account.returnedDate}
+                      day="numeric"
+                      month="numeric"
+                      year="numeric"
+                    /> : '-'
                 }
               />
             </Col>
