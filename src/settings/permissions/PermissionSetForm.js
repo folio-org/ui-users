@@ -192,27 +192,47 @@ class PermissionSetForm extends React.Component {
     const disabled = !stripes.hasPerm('perms.permissions.item.put');
 
     const selectedName = selectedSet.displayName ||
-    <FormattedMessage id="ui-users.permissions.untitledPermissionSet" />;
+      <FormattedMessage id="ui-users.permissions.untitledPermissionSet" />;
 
     const confirmationMessage = <FormattedMessage
       id="ui-users.permissions.deletePermissionSetMessage"
       values={{ name: <strong>{selectedName}</strong> }}
     />;
 
+    const accordionLabel = (
+      <Headline
+        size="large"
+        tag="h3"
+      >
+        <FormattedMessage id="ui-users.permissions.generalInformation" />
+      </Headline>
+    );
+
     return (
-      <form id="form-permission-set" onSubmit={handleSubmit(this.saveSet)}>
+      <form
+        id="form-permission-set"
+        onSubmit={handleSubmit(this.saveSet)}
+      >
         <Paneset isRoot>
-          <Pane defaultWidth="100%" firstMenu={this.addFirstMenu()} lastMenu={this.saveLastMenu()} paneTitle={this.renderPaneTitle()}>
+          <Pane
+            defaultWidth="100%"
+            firstMenu={this.addFirstMenu()}
+            lastMenu={this.saveLastMenu()}
+            paneTitle={this.renderPaneTitle()}
+          >
             <Row end="xs">
               <Col xs>
-                <ExpandAllButton accordionStatus={sections} onToggle={this.handleExpandAll} />
+                <ExpandAllButton
+                  accordionStatus={sections}
+                  onToggle={this.handleExpandAll}
+                />
               </Col>
             </Row>
             <Accordion
               open={sections.generalSection}
               id="generalSection"
               onToggle={this.handleSectionToggle}
-              label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.permissions.generalInformation" /></Headline>}
+              label={accordionLabel}
             >
               {selectedSet.metadata && selectedSet.metadata.createdDate &&
                 <Row>

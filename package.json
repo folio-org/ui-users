@@ -38,7 +38,8 @@
       "loan-storage": "4.0 5.0",
       "login": "4.0",
       "feesfines": "15.0",
-      "request-storage": "2.2"
+      "request-storage": "2.2",
+      "users-bl": "3.2"
     },
     "permissionSets": [
       {

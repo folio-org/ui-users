@@ -1,15 +1,40 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { Row, Col, Select } from '@folio/stripes/components';
+
+import {
+  Row,
+  Col,
+  Select,
+} from '@folio/stripes/components';
 
 const Owners = (props) => {
   const options = [];
   const shared = props.dataOptions.find(d => d.owner === 'Shared') || {};
-  if (shared.id) options.push(<option value={shared.id} key="0">{shared.owner}</option>);
+
+  if (shared.id) {
+    options.push(
+      <option
+        value={shared.id}
+        key="0"
+      >
+        {shared.owner}
+      </option>
+    );
+  }
+
   if (props.dataOptions) {
     props.dataOptions.forEach((option) => {
-      if (option.id !== shared.id)options.push(<option value={option.id} key={option.id}>{option.owner}</option>);
+      if (option.id !== shared.id) {
+        options.push(
+          <option
+            value={option.id}
+            key={option.id}
+          >
+            {option.owner}
+          </option>
+        );
+      }
     });
   }
 
@@ -22,7 +47,10 @@ const Owners = (props) => {
           </span>
         </Col>
         <Col>
-          <Select style={{ marginLeft: '20px', width: 120 }} onChange={props.onChange}>
+          <Select
+            style={{ marginLeft: '20px', width: 120 }}
+            onChange={props.onChange}
+          >
             {options}
           </Select>
         </Col>

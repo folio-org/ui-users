@@ -30,6 +30,7 @@
 * Link to a user's requests. Fixes UIU-677.
 * Bring back handleSubmit when using submit button. Fixes UIU-743.
 * Fix permission menu after reopening. Fixes UIU-739.
+* Apply internationalization to all hardcoded strings for Settings. Fixes UIU-691.
 * Optimize code for Manual Fees/Fines Table. Fix UIU-198.
 * Modify associated service points for . Ref UIU-611.
 * Create permission "Settings (Users): Can create, edit and remove fee/fine settings". Ref UIU-584.

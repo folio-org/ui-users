@@ -1,7 +1,8 @@
-import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
+
 import {
   TextField,
   Row,
@@ -15,117 +16,131 @@ import {
 import PasswordControl from './PasswordControl';
 import ResetPasswordControl from './ResetPasswordControl';
 
-const EditExtendedInfo = (props) => {
-  const {
-    expanded,
-    onToggle,
-    accordionId,
-    userId,
-    userFirstName,
-    userEmail,
-  } = props;
+class EditExtendedInfo extends Component {
+  static propTypes = {
+    expanded: PropTypes.bool.isRequired,
+    onToggle: PropTypes.func.isRequired,
+    accordionId: PropTypes.string.isRequired,
+    userId: PropTypes.string.isRequired,
+    userFirstName: PropTypes.string.isRequired,
+    userEmail: PropTypes.string.isRequired,
+    stripesConnect: PropTypes.func.isRequired,
+  };
 
-  const AccordionHeader = (
-    <Headline
-      size="large"
-      tag="h3"
-    >
-      {<FormattedMessage id="ui-users.extended.extendedInformation" />}
-    </Headline>
-  );
+  constructor(props) {
+    super(props);
 
-  return (
-    <Accordion
-      open={expanded}
-      id={accordionId}
-      onToggle={onToggle}
-      label={AccordionHeader}
-    >
-      <Row>
-        <Col
-          xs={12}
-          md={3}
-        >
-          <Field
-            component={Datepicker}
-            label={<FormattedMessage id="ui-users.extended.dateEnrolled" />}
-            dateFormat="YYYY-MM-DD"
-            name="enrollmentDate"
-            id="adduser_enrollmentdate"
-          />
-        </Col>
-        <Col
-          xs={12}
-          md={3}
-        >
-          <Field
-            label={<FormattedMessage id="ui-users.extended.externalSystemId" />}
-            name="externalSystemId"
-            id="adduser_externalsystemid"
-            component={TextField}
-            fullWidth
-          />
-        </Col>
-        <Col
-          xs={12}
-          md={3}
-        >
-          <Field
-            component={Datepicker}
-            label={<FormattedMessage id="ui-users.extended.birthDate" />}
-            dateFormat="YYYY-MM-DD"
-            name="personal.dateOfBirth"
-            id="adduser_dateofbirth"
-            timeZone="UTC"
-            backendDateStandard="YYYY-MM-DD"
-          />
-        </Col>
-        <Col
-          xs={12}
-          md={3}
-        >
-          <KeyValue label={<FormattedMessage id="ui-users.extended.folioNumber" />}>
-            {userId || '-'}
-          </KeyValue>
-        </Col>
-      </Row>
-      <Row>
-        <Col
-          xs={12}
-          md={3}
-        >
-          <Field
-            label={<FormattedMessage id="ui-users.information.username" />}
-            name="username"
-            id="adduser_username"
-            component={TextField}
-            fullWidth
-            validStylesEnabled
-          />
-        </Col>
-        {
-          userId
-            ? (
-              <ResetPasswordControl
-                email={userEmail}
-                name={userFirstName}
-              />
-            )
-            : <PasswordControl />
-        }
-      </Row>
-      <br />
-    </Accordion>
-  );
-};
+    this.connectedResetPasswordControl = props.stripesConnect(ResetPasswordControl);
+  }
 
-EditExtendedInfo.propTypes = {
-  expanded: PropTypes.bool.isRequired,
-  onToggle: PropTypes.func.isRequired,
-  accordionId: PropTypes.string.isRequired,
-  userId: PropTypes.string.isRequired,
-  userFirstName: PropTypes.string.isRequired,
-  userEmail: PropTypes.string.isRequired,
-};
+  buildAccordionHeader = () => {
+    return (
+      <Headline
+        size="large"
+        tag="h3"
+      >
+        {<FormattedMessage id="ui-users.extended.extendedInformation" />}
+      </Headline>
+    );
+  }
+
+  render() {
+    const {
+      expanded,
+      onToggle,
+      accordionId,
+      userId,
+      userFirstName,
+      userEmail,
+    } = this.props;
+
+    const accordionHeader = this.buildAccordionHeader();
+
+    return (
+      <Accordion
+        open={expanded}
+        id={accordionId}
+        label={accordionHeader}
+        onToggle={onToggle}
+      >
+        <Row>
+          <Col
+            xs={12}
+            md={3}
+          >
+            <Field
+              component={Datepicker}
+              label={<FormattedMessage id="ui-users.extended.dateEnrolled" />}
+              dateFormat="YYYY-MM-DD"
+              name="enrollmentDate"
+              id="adduser_enrollmentdate"
+            />
+          </Col>
+          <Col
+            xs={12}
+            md={3}
+          >
+            <Field
+              label={<FormattedMessage id="ui-users.extended.externalSystemId" />}
+              name="externalSystemId"
+              id="adduser_externalsystemid"
+              component={TextField}
+              fullWidth
+            />
+          </Col>
+          <Col
+            xs={12}
+            md={3}
+          >
+            <Field
+              component={Datepicker}
+              label={<FormattedMessage id="ui-users.extended.birthDate" />}
+              dateFormat="YYYY-MM-DD"
+              name="personal.dateOfBirth"
+              id="adduser_dateofbirth"
+              timeZone="UTC"
+              backendDateStandard="YYYY-MM-DD"
+            />
+          </Col>
+          <Col
+            xs={12}
+            md={3}
+          >
+            <KeyValue label={<FormattedMessage id="ui-users.extended.folioNumber" />}>
+              {userId || '-'}
+            </KeyValue>
+          </Col>
+        </Row>
+        <Row>
+          <Col
+            xs={12}
+            md={3}
+          >
+            <Field
+              label={<FormattedMessage id="ui-users.information.username" />}
+              name="username"
+              id="adduser_username"
+              component={TextField}
+              fullWidth
+              validStylesEnabled
+            />
+          </Col>
+          {
+            userId
+              ? (
+                <this.connectedResetPasswordControl
+                  userId={userId}
+                  email={userEmail}
+                  name={userFirstName}
+                />
+              )
+              : <PasswordControl />
+          }
+        </Row>
+        <br />
+      </Accordion>
+    );
+  }
+}
 
 export default EditExtendedInfo;

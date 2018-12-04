@@ -1,5 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
+import { Field } from 'redux-form';
+
 import {
   Pane,
   Button,
@@ -7,9 +10,7 @@ import {
   Col,
   Select,
 } from '@folio/stripes/components';
-import { FormattedMessage } from 'react-intl';
 import stripesForm from '@folio/stripes/form';
-import { Field } from 'redux-form';
 
 const Setting = ({
   name,
@@ -49,6 +50,7 @@ class CommentRequiredForm extends React.Component {
       submitting,
       handleSubmit,
     } = this.props;
+
     const lastMenu = (
       <Button
         type="submit"
@@ -62,7 +64,10 @@ class CommentRequiredForm extends React.Component {
     );
 
     return (
-      <form id="require-comment" onSubmit={handleSubmit}>
+      <form
+        id="require-comment"
+        onSubmit={handleSubmit}
+      >
         <Pane
           defaultWidth="fill"
           paneTitle={<FormattedMessage id="ui-users.comment.title" />}
