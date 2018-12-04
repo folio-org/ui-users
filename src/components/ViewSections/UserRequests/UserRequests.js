@@ -81,7 +81,15 @@ class UserRequests extends React.Component {
 
     const requestsLoaded = openRequestsCount >= 0 && closedRequestsCount >= 0;
     const displayWhenClosed = requestsLoaded ? (<Badge>{openRequestsCount}</Badge>) : (<Icon icon="spinner-ellipsis" width="10px" />);
-    const displayWhenOpen = (<Button to="/requests?layer=create"><FormattedMessage id="ui-users.requests.createRequest" /></Button>);
+    const displayWhenOpen = (
+      <Button to={`/requests/?${queryString.stringify({
+        layer: 'create',
+        userBarcode: barcode,
+      })}`}
+      >
+        <FormattedMessage id="ui-users.requests.createRequest" />
+      </Button>
+    );
 
     return (
       <Accordion
