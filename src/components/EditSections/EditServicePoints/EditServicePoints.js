@@ -16,10 +16,13 @@ import {
   Accordion,
   Badge,
   List,
-  IfPermission,
-  IfInterface,
   Headline
 } from '@folio/stripes/components';
+
+import {
+  IfInterface,
+  IfPermission,
+} from '@folio/stripes/core';
 
 import AddServicePointModal from '../../AddServicePointModal';
 
