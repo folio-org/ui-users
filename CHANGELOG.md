@@ -40,6 +40,7 @@
 * Create permission "Patron blocks: All permissions". Ref UIU-728.
 * Hide metadata accordion for new records. Fixes UIU-700.
 * Provide `renderToOverlay` to `<MultiSelection>` to avoid clipping. Fixes STSMACOM-149.
+* Request queue link should include only open requests. Fixes UIU-716.
 
 ## [2.17.0](https://github.com/folio-org/ui-users/tree/v2.17.0) (2018-10-5)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.16.0...v2.17.0)
