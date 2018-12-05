@@ -1,6 +1,11 @@
 import React from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
+import {
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import moment from 'moment';
 import { Callout } from '@folio/stripes/components';
@@ -70,6 +75,7 @@ class Actions extends React.Component {
     stripes: PropTypes.object,
     handleEdit: PropTypes.func,
     user: PropTypes.object,
+    intl: intlShape.isRequired
   };
 
   constructor(props) {
@@ -101,26 +107,21 @@ class Actions extends React.Component {
       this.state !== nextState;
   }
 
-  showCalloutMessage(a) {
+  showCalloutMessage({ feeFineType, amount, paymentStatus }) {
+    const { user } = this.props;
+    const formattedAmount = parseFloat(amount).toFixed(2);
+    const fullName = getFullName(user);
+
     const message = (
-      <span>
-        The
-        {' '}
-        {a.feeFineType}
-        {' '}
-        fee/fine of
-        {' '}
-        <strong>{parseFloat(a.amount).toFixed(2)}</strong>
-        {' '}
-        has been successfully
-        {' '}
-        <strong>{a.paymentStatus.name}</strong>
-        {' '}
-        for
-        {' '}
-        <strong>{getFullName(this.props.user)}</strong>
-        .
-      </span>
+      <FormattedMessage
+        id="ui-users.accounts.actions.calloutMessage"
+        values={{
+          amount: <strong>{formattedAmount}</strong>,
+          paymentStatus: <strong>{paymentStatus.name}</strong>,
+          name: <strong>{fullName}</strong>,
+          feeFineType,
+        }}
+      />
     );
     this.callout.sendCallout({ message });
   }
@@ -308,6 +309,7 @@ class Actions extends React.Component {
   }
 
   render() {
+    const { formatMessage } = this.props.intl;
     const payments = _.get(this.props.resources, ['payments', 'records'], []);
     const waives = _.get(this.props.resources, ['waives', 'records'], []);
     const settings = _.get(this.props.resources, ['commentRequired', 'records', 0], {});
@@ -321,7 +323,10 @@ class Actions extends React.Component {
           onChangeAccounts={this.onChangeAccounts}
           stripes={this.props.stripes}
           onClose={this.onCloseWarning}
-          label={(this.props.actions.regular) ? 'Pay fees/fines' : 'Waive fees/fines'}
+          label={this.props.actions.regular
+            ? formatMessage({ id: 'ui-users.accounts.actions.payFeeFine' })
+            : formatMessage({ id: 'ui-users.accounts.actions.waiveFeeFine' })
+          }
         />
         <CancellationModal
           open={this.props.actions.cancellation}
@@ -373,4 +378,4 @@ class Actions extends React.Component {
   }
 }
 
-export default Actions;
+export default injectIntl(Actions);

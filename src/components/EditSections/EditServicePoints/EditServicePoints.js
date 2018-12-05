@@ -68,22 +68,24 @@ class EditServicePoints extends React.Component {
 
   renderServicePoint = (_, index) => {
     const sp = this.userServicePoints.get(index);
-    const title = <FormattedMessage id="ui-users.sp.removeServicePoint" />;
 
     return (
       <li key={sp.id}>
         {sp.name}
-        <Button
-          buttonStyle="fieldControl"
-          align="end"
-          type="button"
-          id={`clickable-remove-service-point-${sp.id}`}
-          onClick={() => this.onRemoveServicePoint(index)}
-          aria-label={`${title}: ${sp.name}`}
-          title={title}
-        >
-          <Icon icon="times-circle" />
-        </Button>
+        <FormattedMessage id="ui-users.sp.removeServicePoint">
+          {aria => (
+            <Button
+              buttonStyle="fieldControl"
+              align="end"
+              type="button"
+              id={`clickable-remove-service-point-${sp.id}`}
+              onClick={() => this.onRemoveServicePoint(index)}
+              aria-label={`${aria}: ${sp.name}`}
+            >
+              <Icon icon="times-circle" />
+            </Button>
+          )}
+        </FormattedMessage>
       </li>
     );
   }
@@ -140,18 +142,22 @@ class EditServicePoints extends React.Component {
     return (
       <Row>
         <Col xs={12} md={6}>
-          <Field
-            label={(
-              <FormattedMessage id="ui-users.sp.servicePointPreference">
-                {(msg) => msg + ' *'}
-              </FormattedMessage>
+          <FormattedMessage id="ui-users.sp.selectServicePoint">
+            {placeholder => (
+              <Field
+                label={(
+                  <FormattedMessage id="ui-users.sp.servicePointPreference">
+                    {(msg) => msg + ' *'}
+                  </FormattedMessage>
+                )}
+                name="preferredServicePoint"
+                id="servicePointPreference"
+                component={Select}
+                placeholder={placeholder}
+                dataOptions={dataOptions}
+              />
             )}
-            name="preferredServicePoint"
-            id="servicePointPreference"
-            component={Select}
-            placeholder={this.props.intl.formatMessage({ id: 'ui-users.sp.selectServicePoint' })}
-            dataOptions={dataOptions}
-          />
+          </FormattedMessage>
         </Col>
       </Row>
     );
@@ -195,10 +201,10 @@ class EditServicePoints extends React.Component {
             onToggle={this.props.onToggle}
             displayWhenClosed={<Badge>{(this.userServicePoints && this.userServicePoints.length) || 0}</Badge>}
           >
-            <div>{ this.renderAddServicePointButton() }</div>
-            { this.renderPreferredServicePointSelect() }
-            { this.renderServicePoints() }
-            { this.renderAddServicePointModal() }
+            <div>{this.renderAddServicePointButton()}</div>
+            {this.renderPreferredServicePointSelect()}
+            {this.renderServicePoints()}
+            {this.renderAddServicePointModal()}
           </Accordion>
         </IfInterface>
       </IfPermission>

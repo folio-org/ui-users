@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 import {
   Button,
   Row,
@@ -30,13 +31,28 @@ class ItemLookup extends React.Component {
     });
   }
 
+  onConfirm() {
+    const {
+      onChangeItem,
+      onClose,
+    } = this.props;
+
+    const { selectedRow } = this.state;
+
+    onChangeItem(selectedRow);
+    onClose();
+  }
+
   render() {
-    const items = this.props.items || [];
+    const {
+      onClose,
+      items = [],
+    } = this.props;
 
     return (
       <Modal
         open={this.props.open}
-        label="Item Lookup"
+        label={<FormattedMessage id="ui-users.charge.itemLookup.modalLabel" />}
         onClose={this.props.onClose}
         size="medium"
         dismissible
@@ -52,8 +68,17 @@ class ItemLookup extends React.Component {
         </Row>
         <Row>
           <Col xs>
-            <Button onClick={(e) => { this.props.onChangeItem(this.state.selectedRow); this.props.onClose(e); }} disabled={!this.state.selectedRow.id}>Confirm</Button>
-            <Button onClick={(e) => this.props.onClose(e)}>Cancel</Button>
+            <Button
+              onClick={this.onConfirm}
+              disabled={!this.state.selectedRow.id}
+            >
+              <FormattedMessage id="ui-users.charge.itemLookup.confirm" />
+            </Button>
+            <Button
+              onClick={onClose}
+            >
+              <FormattedMessage id="ui-users.charge.itemLookup.cancel" />
+            </Button>
           </Col>
         </Row>
       </Modal>

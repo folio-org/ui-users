@@ -14,7 +14,7 @@ import { getFullName } from '../../util';
 const Menu = (props) => {
   const { user, showFilters, filters, balance, selected, actions, query } = props;
   const outstanding = parseFloat(balance).toFixed(2);
-
+  const showSelected = (selected !== 0 && selected !== parseFloat(0).toFixed(2)) && outstanding > parseFloat(0).toFixed(2);
   let type = 'Open';
   if (query.layer === 'closed-accounts') {
     type = 'Closed';
@@ -33,20 +33,27 @@ const Menu = (props) => {
           {(Object.values(filters).length !== 0 && !showFilters)
             ? <img alt="" src="https://png.icons8.com/color/40/f39c12/filled-filter.png" />
             : ''
-              }
+          }
         </Col>
       </Row>
       <Row>
         <Col>
-          <FormattedMessage id="ui-users.accounts.outstanding" />
-          {' '}
-          {outstanding}
+          <FormattedMessage
+            id="ui-users.accounts.outstanding"
+            values={{
+              amount: outstanding
+            }}
+          />
         </Col>
         <Col style={{ marginLeft: '10px' }}>
-          {((selected !== 0 && selected !== parseFloat(0).toFixed(2)) && outstanding > parseFloat(0).toFixed(2)) ?
-            `Selected: ${parseFloat(selected).toFixed(2)}`
-            : ''
-              }
+          {showSelected &&
+            <FormattedMessage
+              id="ui-users.accounts.selected"
+              values={{
+                amount: parseFloat(selected).toFixed(2)
+              }}
+            />
+          }
         </Col>
       </Row>
     </div>);
@@ -54,7 +61,6 @@ const Menu = (props) => {
   const lastMenu = (
     <div>
       <Button onClick={e => props.onClickViewChargeFeeFine(e, {})}>
-+
         <FormattedMessage id="ui-users.accounts.button.new" />
       </Button>
       <Button disabled={!actions.regularpayment} buttonStyle="primary" onClick={() => { props.onChangeActions({ regular: true }); }}><FormattedMessage id="ui-users.accounts.history.button.pay" /></Button>

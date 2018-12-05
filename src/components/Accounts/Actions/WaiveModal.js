@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Field, reduxForm, change } from 'redux-form';
+import { FormattedMessage } from 'react-intl';
+
 import {
-  FormattedMessage,
-  injectIntl,
-  intlShape,
-} from 'react-intl';
+  Field,
+  reduxForm,
+  change,
+} from 'redux-form';
+
 import {
   Row,
   Col,
@@ -59,7 +61,6 @@ class WaiveModal extends React.Component {
     reset: PropTypes.func,
     commentRequired: PropTypes.bool,
     dispatch: PropTypes.func,
-    intl: intlShape.isRequired,
   };
 
 
@@ -84,38 +85,96 @@ class WaiveModal extends React.Component {
       });
       this.props.initialize({ waive: parseFloat(selected).toFixed(2), notify: true });
     }
-    return (this.props.accounts !== nextProps.accounts
-     || this.state !== nextState ||
-     this.props.open !== nextProps.open ||
-     this.props.pristine !== nextProps.pristine ||
-     this.props.invalid !== nextProps.invalid);
+    return (
+      this.props.accounts !== nextProps.accounts
+      || this.state !== nextState
+      || this.props.open !== nextProps.open
+      || this.props.pristine !== nextProps.pristine
+      || this.props.invalid !== nextProps.invalid
+    );
   }
 
   onChangeWaive(e) {
-    this.setState({ waive: e.target.value });
+    if (e.target.value === '') {
+      this.setState({ waive: 0.00 });
+    } else {
+      this.setState({ waive: parseFloat(e.target.value) });
+    }
   }
 
+  calculateSelectedAmount() {
+    const { accounts } = this.props;
+    const result = accounts.reduce((selected, { remaining }) => {
+      return selected + parseFloat(remaining);
+    }, 0);
+    return result;
+  }
+
+  renderFormMessage() {
+    const {
+      accounts = []
+    } = this.props;
+
+    const selected = this.calculateSelectedAmount();
+    const waiveAmount = this.state.waive === ''
+      ? 0.00
+      : this.state.waive;
+
+    const waiveType = this.state.waive < selected
+      ? <FormattedMessage id="ui-users.accounts.waive.summary.partiallyWaive" />
+      : <FormattedMessage id="ui-users.accounts.waive.summary.waiving" />;
+
+    const feeFineForm = accounts.length === 1
+      ? <FormattedMessage id="ui-users.accounts.feeFine" />
+      : <FormattedMessage id="ui-users.accounts.feesFines" />;
+
+    return (
+      <FormattedMessage
+        id="ui-users.accounts.waive.summary"
+        values={{
+          feesFinesAmount: accounts.length,
+          waiveAmount: parseFloat(waiveAmount).toFixed(2),
+          waiveType,
+          feeFineForm
+        }}
+      />
+    );
+  }
+
+  onCancel = () => {
+    this.props.onClose();
+    this.props.reset();
+  };
+
+  onSubmit = () => {
+    this.props.handleSubmit();
+    this.props.reset();
+  };
+
   render() {
-    const accounts = this.props.accounts || [];
-    const n = accounts.length || 0;
-    const totalamount = this.props.balance;
-    let selected = parseFloat(0);
-    accounts.forEach(a => {
-      selected += parseFloat(a.remaining);
-    });
-    selected = parseFloat(selected).toFixed(2);
-    const remaining = parseFloat(totalamount - this.state.waive).toFixed(2);
-    const waives = this.props.waives.map(p => ({ id: p.id, label: p.nameReason }));
-    const { submitting, invalid, pristine } = this.props;
-    const waiveAmount = this.state.waive === '' ? 0.00 : this.state.waive;
-    const message = `${(this.state.waive < selected) ? 'Partially waive' : 'Waiving'} ${n} ${(n === 1) ? 'fee/fine' : 'fees/fines'}    for a total amount of ${parseFloat(waiveAmount).toFixed(2)}`;
-    const comment = (this.props.commentRequired)
-      ? this.props.intl.formatMessage({ id: 'ui-users.accounts.waive.placeholder.additional.required' })
-      : this.props.intl.formatMessage({ id: 'ui-users.accounts.waive.placeholder.additional.optional' });
+    const {
+      commentRequired,
+      waives,
+      submitting,
+      invalid,
+      pristine,
+      balance: totalAmount
+    } = this.props;
+
+    const selected = this.calculateSelectedAmount();
+    const remaining = totalAmount - this.state.waive;
+    const reasonSelectOptions = waives.map(p => ({ id: p.id, label: p.nameReason }));
+    const message = this.renderFormMessage();
+    const placeholderTranslationId = commentRequired
+      ? 'ui-users.accounts.waive.placeholder.additional.required'
+      : 'ui-users.accounts.waive.placeholder.additional.optional';
+
+    const submitButtonDisabled = pristine || submitting || invalid;
+
     return (
       <Modal
         open={this.props.open}
-        label="Waive Fee/Fine"
+        label={<FormattedMessage id="ui-users.accounts.waive.modalLabel" />}
         onClose={this.props.onClose}
         size="medium"
         dismissible
@@ -129,11 +188,11 @@ class WaiveModal extends React.Component {
             <Col xs={4.5}>
               <Row>
                 <Col xs={7}><FormattedMessage id="ui-users.accounts.waive.field.totalowed" /></Col>
-                <Col xs={4}>{parseFloat(totalamount).toFixed(2)}</Col>
+                <Col xs={4}>{parseFloat(totalAmount).toFixed(2)}</Col>
               </Row>
               <Row>
                 <Col xs={7}><FormattedMessage id="ui-users.accounts.waive.field.selectedamount" /></Col>
-                <Col xs={4}>{parseFloat(selected).toFixed(2)}</Col>
+                <Col xs={4}>{selected.toFixed(2)}</Col>
               </Row>
               <Row>
                 <Col xs={7}>
@@ -155,20 +214,30 @@ class WaiveModal extends React.Component {
                 </Col>
               </Row>
               <Row>
-                <Col xs={7}><FormattedMessage id="ui-users.accounts.waive.field.remainingamount" /></Col>
-                <Col xs={4}>{remaining}</Col>
+                <Col xs={7}>
+                  <FormattedMessage id="ui-users.accounts.waive.field.remainingamount" />
+                </Col>
+                <Col xs={4}>{remaining.toFixed(2)}</Col>
               </Row>
             </Col>
             <Col xs={7}>
-              <Row><Col xs><FormattedMessage id="ui-users.accounts.waive.field.waivereason" /></Col></Row>
               <Row>
                 <Col xs>
-                  <Field
-                    name="method"
-                    component={Select}
-                    dataOptions={waives}
-                    placeholder="Select reason"
-                  />
+                  <FormattedMessage id="ui-users.accounts.waive.field.waivereason" />
+                </Col>
+              </Row>
+              <Row>
+                <Col xs>
+                  <FormattedMessage id="ui-users.accounts.waive.placeholder.selectReason">
+                    {placeholder => (
+                      <Field
+                        name="method"
+                        component={Select}
+                        dataOptions={reasonSelectOptions}
+                        placeholder={placeholder}
+                      />
+                    )}
+                  </FormattedMessage>
                 </Col>
               </Row>
             </Col>
@@ -184,11 +253,15 @@ class WaiveModal extends React.Component {
           <br />
           <Row>
             <Col xs>
-              <Field
-                name="comment"
-                component={TextArea}
-                placeholder={comment}
-              />
+              <FormattedMessage id={placeholderTranslationId}>
+                {placeholder => (
+                  <Field
+                    name="comment"
+                    component={TextArea}
+                    placeholder={placeholder}
+                  />
+                )}
+              </FormattedMessage>
             </Col>
           </Row>
           <Row>
@@ -198,13 +271,23 @@ class WaiveModal extends React.Component {
                 component={Checkbox}
                 inline
               />
-              {' Notify patron'}
+              <FormattedMessage id="ui-users.accounts.waive.field.notifyPatron" />
             </Col>
           </Row>
           <Row>
             <Col xs>
-              <Button onClick={() => { this.props.onClose(); this.props.reset(); }}><FormattedMessage id="ui-users.accounts.waive.field.cancel" /></Button>
-              <Button buttonStyle="primary" onClick={() => { this.props.handleSubmit(); this.props.reset(); }} disabled={pristine || submitting || invalid}><FormattedMessage id="ui-users.accounts.waive.field.waive" /></Button>
+              <Button
+                onClick={this.onCancel}
+              >
+                <FormattedMessage id="ui-users.accounts.waive.field.cancel" />
+              </Button>
+              <Button
+                buttonStyle="primary"
+                onClick={this.onSubmit}
+                disabled={submitButtonDisabled}
+              >
+                <FormattedMessage id="ui-users.accounts.waive.field.waive" />
+              </Button>
             </Col>
           </Row>
         </form>
@@ -217,4 +300,4 @@ export default reduxForm({
   form: 'waive',
   fields: [],
   validate,
-})(injectIntl(WaiveModal));
+})(WaiveModal);

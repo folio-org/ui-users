@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 import {
-  FormattedMessage,
-  injectIntl,
-  intlShape,
-} from 'react-intl';
-import { Field, reduxForm, change } from 'redux-form';
+  Field,
+  reduxForm,
+  change,
+} from 'redux-form';
+
 import {
   Row,
   Col,
@@ -58,7 +59,6 @@ class PayModal extends React.Component {
     reset: PropTypes.func,
     dispatch: PropTypes.func,
     commentRequired: PropTypes.bool,
-    intl: intlShape.isRequired,
   };
 
   constructor(props) {
@@ -68,6 +68,8 @@ class PayModal extends React.Component {
     };
 
     this.onChangeAmount = this.onChangeAmount.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+    this.onClose = this.onClose.bind(this);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -96,47 +98,98 @@ class PayModal extends React.Component {
     });
   }
 
+  onClose() {
+    this.props.onClose();
+    this.props.reset();
+  }
+
+  onSubmit() {
+    this.props.handleSubmit();
+    this.props.onClose();
+    this.props.reset();
+  }
+
+  calculateSelectedAmount() {
+    const { accounts } = this.props;
+    const result = accounts.reduce((selected, { remaining }) => {
+      return selected + parseFloat(remaining);
+    }, 0);
+    return result;
+  }
+
+  renderFormMessage() {
+    const {
+      accounts = [],
+    } = this.props;
+
+    const { amount } = this.state;
+
+    const selected = this.calculateSelectedAmount();
+    const payAmount = amount === ''
+      ? 0.00
+      : amount;
+
+    const payType = amount < selected
+      ? <FormattedMessage id="ui-users.accounts.pay.summary.partiallyPay" />
+      : <FormattedMessage id="ui-users.accounts.pay.summary.paying" />;
+
+    const feeFineForm = accounts.length === 1
+      ? <FormattedMessage id="ui-users.accounts.feeFine" />
+      : <FormattedMessage id="ui-users.accounts.feesFines" />;
+
+    return (
+      <FormattedMessage
+        id="ui-users.accounts.pay.summary"
+        values={{
+          feesFinesAmount: accounts.length,
+          payAmount: parseFloat(payAmount).toFixed(2),
+          payType,
+          feeFineForm
+        }}
+      />
+    );
+  }
+
   render() {
-    const accounts = this.props.accounts || [];
-    const n = accounts.length || 0;
-    const totalamount = this.props.balance;
-    let selected = parseFloat(0);
-    accounts.forEach(a => {
-      selected += parseFloat(a.remaining);
-    });
-    parseFloat(selected).toFixed(2);
-    const remaining = parseFloat(totalamount - this.state.amount).toFixed(2);
-    const payments = this.props.payments.map(p => ({ id: p.id, label: p.nameMethod }));
     const {
       submitting,
       invalid,
       pristine,
-      intl,
+      onClose,
+      open,
+      commentRequired,
+      balance: totalAmount
     } = this.props;
-    const paymentAmount = this.state.amount === '' ? 0.00 : this.state.amount;
-    const message = `${(this.state.amount < selected) ? 'Partially paying' : 'Paying'} ${n} ${(n === 1) ? 'fee/fine' : 'fees/fines'} for a total amount of ${parseFloat(paymentAmount).toFixed(2)}`;
-    const comment = (this.props.commentRequired)
-      ? intl.formatMessage({ id: 'ui-users.accounts.pay.placeholder.additional.required' })
-      : intl.formatMessage({ id: 'ui-users.accounts.pay.placeholder.additional.optional' });
 
+    const { amount } = this.state;
+
+    const selected = this.calculateSelectedAmount();
+    const remaining = parseFloat(totalAmount - amount).toFixed(2);
+    const payments = this.props.payments.map(p => ({ id: p.id, label: p.nameMethod }));
+
+    const placeholderTranslationId = commentRequired
+      ? 'ui-users.accounts.pay.placeholder.additional.required'
+      : 'ui-users.accounts.pay.placeholder.additional.optional';
+
+    const submitButtonDisabled = pristine || submitting || invalid;
     return (
       <Modal
-        open={this.props.open}
-        label="Pay Fee/Fine"
-        onClose={this.props.onClose}
+        open={open}
+        label={<FormattedMessage id="ui-users.accounts.pay.payFeeFine" />}
+        onClose={onClose}
         size="medium"
         dismissible
       >
         <form>
           <Row>
-            <Col xs>{message}</Col>
+            <Col xs>{this.renderFormMessage()}</Col>
           </Row>
           <br />
           <Row>
             <Col xs={5}>
               <Row>
                 <Col xs={7}><FormattedMessage id="ui-users.accounts.pay.field.totalamount" /></Col>
-                <Col xs={4}>{parseFloat(totalamount).toFixed(2)}</Col>
+                <Col xs={4}>{parseFloat(totalAmount).toFixed(2)}</Col>
               </Row>
               <Row>
                 <Col xs={7}><FormattedMessage id="ui-users.accounts.pay.field.selectedamount" /></Col>
@@ -203,11 +256,15 @@ class PayModal extends React.Component {
           <br />
           <Row>
             <Col xs>
-              <Field
-                name="comment"
-                component={TextArea}
-                placeholder={comment}
-              />
+              <FormattedMessage id={placeholderTranslationId}>
+                {placeholder => (
+                  <Field
+                    name="comment"
+                    component={TextArea}
+                    placeholder={placeholder}
+                  />
+                )}
+              </FormattedMessage>
             </Col>
           </Row>
           <Row>
@@ -217,14 +274,22 @@ class PayModal extends React.Component {
                 component={Checkbox}
                 inline
               />
-              {' Notify patron'}
+              <FormattedMessage id="ui-users.accounts.pay.notifyPatron" />
             </Col>
           </Row>
           <br />
           <Row>
             <Col xs>
-              <Button onClick={() => { this.props.onClose(); this.props.reset(); }}>Cancel</Button>
-              <Button buttonStyle="primary" onClick={() => { this.props.handleSubmit(); this.props.onClose(); this.props.reset(); }} disabled={pristine || submitting || invalid}>Pay</Button>
+              <Button onClick={this.onClose}>
+                <FormattedMessage id="ui-users.accounts.pay.cancel" />
+              </Button>
+              <Button
+                buttonStyle="primary"
+                onClick={this.onSubmit}
+                disabled={submitButtonDisabled}
+              >
+                <FormattedMessage id="ui-users.accounts.pay.pay" />
+              </Button>
             </Col>
           </Row>
         </form>
@@ -237,4 +302,4 @@ export default reduxForm({
   form: 'payment',
   fields: [],
   validate,
-})(injectIntl(PayModal));
+})(PayModal);

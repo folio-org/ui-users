@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Field, reduxForm } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
+import { Field, reduxForm } from 'redux-form';
+import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import {
   Modal,
   Button,
@@ -33,11 +34,14 @@ class CancellationModal extends React.Component {
 
   constructor(props) {
     super(props);
+
     this.state = {
       notify: true,
     };
     this.handleNotify = this.handleNotify.bind(this);
     this.reset = this.reset.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.onClose = this.onClose.bind(this);
   }
 
   reset() {
@@ -54,16 +58,35 @@ class CancellationModal extends React.Component {
     });
   }
 
+  handleSubmit() {
+    this.props.handleSubmit();
+    this.reset();
+  }
+
+  onClose() {
+    this.props.onClose();
+    this.reset();
+  }
+
   render() {
-    const { account, pristine, submitting, invalid } = this.props;
-    const charged = account.amount || '0.00';
-    const feeFineType = account.feeFineType || 'fee/fine type';
+    const {
+      account: {
+        amount = '0.00',
+        feeFineType = 'fee/fine type'
+      },
+      pristine,
+      submitting,
+      invalid,
+      open,
+    } = this.props;
+
+    const submitButtonDisabled = pristine || submitting || invalid;
 
     return (
       <Modal
-        label="Confirm fee/fine cancellation"
-        open={this.props.open}
-        onClose={() => { this.props.onClose(); this.reset(); }}
+        label={<FormattedMessage id="ui-users.accounts.cancellation.field.confirmcancelled" />}
+        open={open}
+        onClose={this.onClose}
         size="small"
         dismissible
       >
@@ -71,28 +94,34 @@ class CancellationModal extends React.Component {
           <Row>
             <Col xs>
               <span>
-                <b>{parseFloat(charged).toFixed(2)}</b>
-                {' '}
-                {feeFineType}
-                {' '}
-                <FormattedMessage id="ui-users.accounts.cancellation.field.feefinewill" />
-                {' '}
-                <b><FormattedMessage id="ui-users.accounts.cancellation.field.cancelled" /></b>
+                <SafeHTMLMessage
+                  id="ui-users.accounts.cancellation.feeFinewillBeCancelled"
+                  values={{
+                    amount: parseFloat(amount).toFixed(2),
+                    feeFineType
+                  }}
+                />
               </span>
             </Col>
           </Row>
           <br />
           <Row>
-            <Col xs><FormattedMessage id="ui-users.accounts.cancellation.field.reason" /></Col>
+            <Col xs>
+              <FormattedMessage id="ui-users.accounts.cancellation.field.reason" />
+            </Col>
           </Row>
           <br />
           <Row>
             <Col xs>
-              <Field
-                name="comment"
-                component={TextArea}
-                placeholder="Enter information about the cancellation (required)"
-              />
+              <FormattedMessage id="ui-users.accounts.cancellation.field.cancellationInfo">
+                {placeholder => (
+                  <Field
+                    name="comment"
+                    component={TextArea}
+                    placeholder={placeholder}
+                  />
+                )}
+              </FormattedMessage>
             </Col>
           </Row>
           <Row>
@@ -104,14 +133,32 @@ class CancellationModal extends React.Component {
                 checked={this.state.notify}
                 inline
               />
-              {' Notify patron'}
+              <FormattedMessage id="ui-users.accounts.cancellation.field.notifyPatron" />
             </Col>
           </Row>
           <br />
           <Row>
             <Col xs>
-              <Button style={{ float: 'right', marginRight: '10px' }} buttonStyle="primary" onClick={() => { this.props.handleSubmit(); this.reset(); }} disabled={pristine || submitting || invalid}><FormattedMessage id="ui-users.accounts.cancellation.field.confirm" /></Button>
-              <Button style={{ float: 'right', marginRight: '10px' }} onClick={(e) => { this.props.onClose(e); this.reset(); }}><FormattedMessage id="ui-users.accounts.cancellation.field.back" /></Button>
+              <Button
+                style={{
+                  float: 'right',
+                  marginRight: '10px'
+                }}
+                buttonStyle="primary"
+                onClick={this.handleSubmit}
+                disabled={submitButtonDisabled}
+              >
+                <FormattedMessage id="ui-users.accounts.cancellation.field.confirm" />
+              </Button>
+              <Button
+                style={{
+                  float: 'right',
+                  marginRight: '10px'
+                }}
+                onClick={this.onClose}
+              >
+                <FormattedMessage id="ui-users.accounts.cancellation.field.back" />
+              </Button>
             </Col>
           </Row>
         </form>
