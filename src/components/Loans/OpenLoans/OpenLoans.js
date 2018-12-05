@@ -576,9 +576,13 @@ class OpenLoans extends React.Component {
     if (e) e.preventDefault();
     const q = {};
     Object.keys(this.props.resources.query).forEach((k) => { q[k] = null; });
-    const barcode = _.get(loan, ['item', 'barcode']);
+
+    q.query = _.get(loan, ['item', 'barcode']);
+    q.filters = 'requestStatus.open - not yet filled,requestStatus.open - awaiting pickup';
+    q.sort = 'Request Date';
+
     this.props.mutator.query.update({
-      _path: `/requests?&query=${barcode}&sort=Request%20Date`,
+      _path: '/requests',
       ...q,
     });
   }
@@ -650,7 +654,7 @@ class OpenLoans extends React.Component {
           { requestQueue &&
             (
             <MenuItem itemMeta={{ loan, action: 'showRequestQueue' }}>
-              <Button buttonStyle="dropdownItem" href={`/requests?&query=${_.get(loan, ['item', 'barcode'])}&sort=Request%20Date`}><FormattedMessage id="ui-users.loans.details.requestQueue" /></Button>
+              <Button buttonStyle="dropdownItem" href={`/requests?&query=${_.get(loan, ['item', 'barcode'])}&filters=requestStatus.open%20-%20not%20yet%20filled%2CrequestStatus.open%20-%20awaiting%20pickup&sort=Request%20Date`}><FormattedMessage id="ui-users.loans.details.requestQueue" /></Button>
             </MenuItem>
             )
           }
