@@ -15,6 +15,7 @@ import stripesForm from '@folio/stripes/form';
 const Setting = ({
   name,
   label,
+  intl,
 }) => (
   <div>
     <Row>
@@ -26,14 +27,11 @@ const Setting = ({
           id={name}
           name={name}
           component={Select}
-        >
-          <FormattedMessage id="ui-users.yes">
-            {(message) => <option value="true">{message}</option>}
-          </FormattedMessage>
-          <FormattedMessage id="ui-users.no">
-            {(message) => <option value="false">{message}</option>}
-          </FormattedMessage>
-        </Field>
+          dataOptions={[
+            { value: true, label: intl.formatMessage({ id: 'ui-users.yes' }) },
+            { value: false, label: intl.formatMessage({ id: 'ui-users.no' }) }
+          ]}
+        />
       </Col>
     </Row>
   </div>
@@ -42,6 +40,7 @@ const Setting = ({
 Setting.propTypes = {
   label: PropTypes.string,
   name: PropTypes.string,
+  intl: PropTypes.object,
 };
 
 class CommentRequiredForm extends React.Component {

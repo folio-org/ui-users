@@ -15,6 +15,7 @@ import {
 
 import {
   FormattedMessage,
+  intlShape,
   FormattedTime,
   FormattedDate,
 } from 'react-intl';
@@ -36,6 +37,7 @@ class ClosedAccounts extends React.Component {
     loans: PropTypes.arrayOf(PropTypes.object),
     onClickViewLoanActionsHistory: PropTypes.func.isRequired,
     visibleColumns: PropTypes.arrayOf(PropTypes.string),
+    intl: intlShape.isRequired,
   };
 
   constructor(props) {
@@ -49,36 +51,26 @@ class ClosedAccounts extends React.Component {
     this.getLoan = this.getLoan.bind(this);
 
     this.sortMap = {
-      created: f => (f.metadata || {}).createdDate,
-      updated: f => (f.metadata || {}).updatedDate,
-      type: f => f.feeFineType,
-      amount: f => f.amount,
-      remaining: f => f.remaining,
-      status: f => (f.paymentStatus || {}).name,
-      owner: f => f.feeFineOwner,
-      title: f => f.title,
-      barcode: f => f.barcode,
-      number: f => f.callNumber,
-      due: f => f.dueDate,
-      returned: f => f.returnedDate,
+      'metadata.createdDate': f => (f.metadata || {}).createdDate,
+      'metadata.updatedDate': f => (f.metadata || {}).updatedDate,
+      'feeFineType': f => f.feeFineType,
+      'amount':  f => f.amount,
+      'remaining': f => f.remaining,
+      'paymentStatus.name': f => (f.paymentStatus || {}).name,
+      'feeFineOwner': f => f.feeFineOwner,
+      'title': f => f.title,
+      'barcode': f => f.barcode,
+      'number': f => f.callNumber,
+      'dueDate': f => f.dueDate,
+      'returnedDate': f => f.returnedDate,
     };
 
     this.state = {
       checkedAccounts: {},
       allChecked: false,
       sortOrder: [
-        'created',
-        'updated',
-        'type',
-        'amount',
-        'remaining',
-        'status',
-        'owner',
-        'title',
-        'barcode',
-        'number',
-        'due',
-        'returned',
+        'metadata.createdDate',
+        'metadata.createdDate',
       ],
       sortDirection: ['desc', 'desc'],
     };
@@ -107,12 +99,12 @@ class ClosedAccounts extends React.Component {
   }
 
   onSort(e, meta) {
-    if (!this.sortMap[meta.alias]) return;
+    if (!this.sortMap[meta.name]) return;
 
     let { sortOrder, sortDirection } = this.state;
 
-    if (sortOrder[0] !== meta.alias) {
-      sortOrder = [meta.alias, sortOrder[1]];
+    if (sortOrder[0] !== meta.name) {
+      sortOrder = [meta.name, sortOrder[1]];
       sortDirection = ['asc', sortDirection[1]];
     } else {
       const direction = (sortDirection[0] === 'desc') ? 'asc' : 'desc';
@@ -188,18 +180,18 @@ class ClosedAccounts extends React.Component {
           type="checkbox"
         />
       ),
-      'created': f => (f.metadata ? <FormattedDate value={f.metadata.createdDate} /> : '-'),
-      'updated': f => (f.metadata && f.metadata.createdDate !== f.metadata.updatedDate ? <FormattedDate value={f.metadata.updatedDate} /> : '-'),
-      'type': f => (f.feeFineType ? this.comments(f) : '-'),
+      'metadata.createdDate': f => (f.metadata ? <FormattedDate value={f.metadata.createdDate} /> : '-'),
+      'metadata.updatedDate': f => (f.metadata && f.metadata.createdDate !== f.metadata.updatedDate ? <FormattedDate value={f.metadata.updatedDate} /> : '-'),
+      'feeFineType': f => (f.feeFineType ? this.comments(f) : '-'),
       'amount': f => (f.amount ? parseFloat(f.amount).toFixed(2) : '-'),
       'remaining': f => parseFloat(f.remaining).toFixed(2) || '0.00',
-      'status': f => (f.paymentStatus || {}).name || '-',
-      'owner': f => (f.feeFineOwner ? f.feeFineOwner : '-'),
+      'paymentStatus.name': f => (f.paymentStatus || {}).name || '-',
+      'feeFineOwner': f => (f.feeFineOwner ? f.feeFineOwner : '-'),
       'title': f => (f.title ? `${f.title} (${f.materialType})` : '-'),
       'barcode': f => (f.barcode ? f.barcode : '-'),
       'number': f => (f.callNumber ? f.callNumber : '-'),
-      'due': f => (f.dueDate ? this.formatDateTime(f.dueDate) : '-'),
-      'returned': f => (f.returnedDate ? this.formatDateTime(f.returnedDate) : this.formatDateTime(this.getLoan(f).returnDate) || '-'),
+      'dueDate': f => (f.dueDate ? this.formatDateTime(f.dueDate) : '-'),
+      'returnedDate': f => (this.getLoan(f).returnDate ? this.formatDateTime(this.getLoan(f).returnDate) : '-'),
       ' ': f => this.renderActions(f),
     };
   }
@@ -344,8 +336,23 @@ class ClosedAccounts extends React.Component {
     const props = this.props;
 
     const fees = _.orderBy(props.accounts, [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
+
+    const { intl } = this.props;
+
     const columnMapping = {
       '  ': (<input type="checkbox" checked={allChecked} name="check-all" onChange={this.toggleAll} />),
+      'metadata.createdDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' }),
+      'metadata.updatedDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' }),
+      'feeFineType': intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' }),
+      'amount': intl.formatMessage({ id: 'ui-users.accounts.history.columns.amount' }),
+      'remaining': intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' }),
+      'paymentStatus.name': intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' }),
+      'feeFineOwner': intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' }),
+      'title': intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' }),
+      'barcode': intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' }),
+      'callNumber': intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' }),
+      'dueDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' }),
+      'returnedDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' }),
     };
 
     return (
@@ -356,12 +363,12 @@ class ClosedAccounts extends React.Component {
           columnMapping={columnMapping}
           columnWidths={{
             '  ': 28,
-            'created': 110,
-            'type': 200,
-            'updated': 110,
+            'metadata.createdDate': 110,
+            'feeFineType': 180,
+            'metadata.updatedDate': 110,
             'barcode': 120,
-            'due': 110,
-            'returned': 110
+            'dueDate': 110,
+            'returnedDate': 110
           }}
           visibleColumns={this.props.visibleColumns}
           fullWidth
