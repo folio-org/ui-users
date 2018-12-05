@@ -63,7 +63,7 @@ class EditUserInfo extends React.Component {
         onToggle={onToggle}
       >
 
-        <this.cViewMetaData metadata={initialValues.metadata} />
+        { initialValues.metadata && <this.cViewMetaData metadata={initialValues.metadata} /> }
 
         <Row>
           <Col xs={12} md={3}>

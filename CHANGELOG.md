@@ -38,6 +38,7 @@
 * Create permission "Fees/Fines: All Actions permissions". Ref UIU-673.
 * Implement CRUD Manual Patron Block. Ref UIU-674.
 * Create permission "Patron blocks: All permissions". Ref UIU-728.
+* Hide metadata accordion for new records. Fixes UIU-700.
 * Provide `renderToOverlay` to `<MultiSelection>` to avoid clipping. Fixes STSMACOM-149.
 
 ## [2.17.0](https://github.com/folio-org/ui-users/tree/v2.17.0) (2018-10-5)
