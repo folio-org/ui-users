@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-/* global it describe Nightmare before after */
+/* global it describe before after */
 module.exports.test = function foo(uiTestCtx, nightmare) {
   describe('Module test: users:new_permission_set', function bar() {
     const { config, helpers: { login, openApp, logoutWithoutEnd }, meta: { testVersion } } = uiTestCtx;
@@ -30,8 +30,8 @@ module.exports.test = function foo(uiTestCtx, nightmare) {
           .click('a[href="/settings/users"]')
           .wait('a[href="/settings/users/perms"]')
           .click('a[href="/settings/users/perms"]')
-          .wait('#clickable-create-permissionset')
-          .click('#clickable-create-permissionset')
+          .wait('#clickable-create-entry')
+          .click('#clickable-create-entry')
           .wait('#input-permission-title')
           .insert('#input-permission-title', displayName)
           .insert('#input-permission-description', description)

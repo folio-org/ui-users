@@ -1,11 +1,6 @@
 import React from 'react';
-
+import { FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
-import {
-  injectIntl,
-  intlShape,
-} from 'react-intl';
-
 import {
   Button,
   TextField,
@@ -26,14 +21,12 @@ class PasswordControl extends React.Component {
   }
 
   render() {
-    const { intl } = this.props;
-
     return (
       <React.Fragment>
         <Col xs={12} md={3}>
           <Field
             component={TextField}
-            label={`${intl.formatMessage({ id: 'ui-users.extended.folioPassword' })} `}
+            label={<FormattedMessage id="ui-users.extended.folioPassword" />}
             name="creds.password"
             id="pw"
             autoComplete="new-password"
@@ -44,8 +37,8 @@ class PasswordControl extends React.Component {
         <Col xs={12} md={1} className={css.togglePw}>
           <Button onClick={this.togglePassword} id="clickable-toggle-password">
             {this.state.showPassword
-              ? intl.formatMessage({ id: 'ui-users.hide' })
-              : intl.formatMessage({ id: 'ui-users.show' })
+              ? <FormattedMessage id="ui-users.hide" />
+              : <FormattedMessage id="ui-users.show" />
             }
           </Button>
         </Col>
@@ -54,8 +47,4 @@ class PasswordControl extends React.Component {
   }
 }
 
-PasswordControl.propTypes = {
-  intl: intlShape.isRequired,
-};
-
-export default injectIntl(PasswordControl);
+export default PasswordControl;

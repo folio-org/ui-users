@@ -89,9 +89,7 @@ class Charge extends React.Component {
         update: PropTypes.func,
       }),
     }).isRequired,
-    stripes: PropTypes.shape({
-      intl: PropTypes.object.isRequired,
-    }),
+    stripes: PropTypes.object.isRequired,
     onCloseChargeFeeFine: PropTypes.func.isRequired,
     handleAddRecords: PropTypes.func,
     okapi: PropTypes.object,
@@ -236,7 +234,7 @@ class Charge extends React.Component {
     const ownerId = e.target.value;
     if (_.get(this.props.resources, ['activeRecord', 'shared']) === undefined) {
       const owners = _.get(this.props.resources, ['owners', 'records'], []);
-      const shared = owners.find(o => o.owner === 'Shared').id || '0';
+      const shared = (owners.find(o => o.owner === 'Shared') || {}).id || '0';
       this.props.mutator.activeRecord.update({ shared });
     }
     this.props.mutator.activeRecord.update({ ownerId });
@@ -281,8 +279,8 @@ class Charge extends React.Component {
     const list = [];
     const shared = owners.find(o => o.owner === 'Shared'); // Crear variable Shared en translations
     allfeefines.forEach(f => {
-      if (!list.find(o => o.id === f.ownerId)) {
-        list.push(owners.find(o => o.id === f.ownerId));
+      if (!list.find(o => (o || {}).id === f.ownerId)) {
+        list.push(owners.find(o => (o || {}).id === f.ownerId));
       }
     });
     const feefines = (this.state.ownerId !== '0') ? (resources.feefines || {}).records || [] : [];

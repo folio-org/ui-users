@@ -1,11 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import {
-  injectIntl,
-  intlShape,
-  FormattedMessage,
-} from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import {
   Row,
@@ -17,6 +13,14 @@ import {
 import css from './ResetPasswordModal.css';
 
 class ResetPasswordModal extends React.Component {
+  static propTypes = {
+    isOpen: PropTypes.bool.isRequired,
+    email: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    link: PropTypes.string.isRequired,
+    onClose: PropTypes.func.isRequired,
+  };
+
   constructor(props) {
     super(props);
 
@@ -49,9 +53,7 @@ class ResetPasswordModal extends React.Component {
   }
 
   buildCopyLinkControl = () => {
-    const {
-      intl,
-    } = this.props;
+    const { link } = this.props;
 
     return (
       <Row className={css.copyControl}>
@@ -60,7 +62,7 @@ class ResetPasswordModal extends React.Component {
             className={css.textField}
             ref={this.copyInput}
             type="text"
-            value="This text will be copied to the clipboard"
+            value={link}
             readOnly
           />
         </Col>
@@ -70,7 +72,7 @@ class ResetPasswordModal extends React.Component {
             onClick={this.handleClick}
           >
             <strong>
-              {intl.formatMessage({ id: 'ui-users.extended.resetPasswordModal.copyLink' })}
+              <FormattedMessage id="ui-users.extended.resetPasswordModal.copyLink" />
             </strong>
           </Button>
         </Col>
@@ -82,7 +84,6 @@ class ResetPasswordModal extends React.Component {
     const {
       isOpen,
       onClose,
-      intl,
     } = this.props;
 
     return (
@@ -90,7 +91,7 @@ class ResetPasswordModal extends React.Component {
         dismissible
         size="small"
         open={isOpen}
-        label={intl.formatMessage({ id: 'ui-users.extended.resetPasswordModal.label' })}
+        label={<FormattedMessage id="ui-users.extended.resetPasswordModal.label" />}
         onClose={onClose}
       >
         {this.buildTextContent()}
@@ -100,12 +101,4 @@ class ResetPasswordModal extends React.Component {
   }
 }
 
-ResetPasswordModal.propTypes = {
-  intl: intlShape.isRequired,
-  isOpen: PropTypes.bool.isRequired,
-  email: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  onClose: PropTypes.func.isRequired,
-};
-
-export default injectIntl(ResetPasswordModal);
+export default ResetPasswordModal;

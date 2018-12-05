@@ -28,14 +28,24 @@ const defaultProps = {
 };
 
 const BulkRenewedLoansList = (props) => {
+  const { formatMessage } = props.stripes.intl;
   const {
     failedRenewals,
-    successRenewals
+    successRenewals,
+    height,
+    errorMessages,
+    requestCounts,
+    loanPolicies,
   } = props;
-
-  const iconAlignStyle = { display: 'flex', alignItems: 'center' };
+  const iconAlignStyle = {
+    display: 'flex',
+    alignItems: 'center'
+  };
   const pointerStyle = { cursor: 'pointer' };
-  const popoverStyle = { maxWidth: '300px', textAlign: 'justify' };
+  const popoverStyle = {
+    maxWidth: '300px',
+    textAlign: 'justify'
+  };
 
   const visibleColumns = [
     'renewalStatus',
@@ -51,7 +61,7 @@ const BulkRenewedLoansList = (props) => {
   return (
     <MultiColumnList
       interactive={false}
-      height={props.height}
+      height={height}
       contentData={[...failedRenewals, ...successRenewals]}
       visibleColumns={visibleColumns}
       columnMapping={{
@@ -67,19 +77,38 @@ const BulkRenewedLoansList = (props) => {
       formatter={{
         renewalStatus: loan => {
           if (failedRenewals.filter(loanObject => loanObject.id === loan.id).length > 0) {
-            return (props.errorMessages) ? (
-              <Popover position="bottom" alignment="start">
-                <span style={{ ...iconAlignStyle, ...pointerStyle }} data-role="target">
-                  <Icon size="medium" icon="validation-error" status="warn" />
+            return (errorMessages) ? (
+              <Popover
+                position="bottom"
+                alignment="start"
+              >
+                <span
+                  style={{ ...iconAlignStyle, ...pointerStyle }}
+                  data-role="target"
+                >
+                  <Icon
+                    size="medium"
+                    icon="exclamation-circle"
+                    status="warn"
+                  />
                   <FormattedMessage id="ui-users.brd.failedRenewal" />
                 </span>
-                <p data-role="popover" style={popoverStyle}>{props.errorMessages[loan.id]}</p>
+                <p
+                  data-role="popover"
+                  style={popoverStyle}
+                >
+                  {errorMessages[loan.id]}
+                </p>
               </Popover>
             ) : null;
           } else {
             return (
               <span style={iconAlignStyle}>
-                <Icon size="medium" icon="validation-check" status="success" />
+                <Icon
+                  size="medium"
+                  icon="check-circle"
+                  status="success"
+                />
                 <FormattedMessage id="ui-users.brd.successfulRenewal" />
               </span>
             );
@@ -87,18 +116,12 @@ const BulkRenewedLoansList = (props) => {
         },
         title: loan => get(loan, ['item', 'title']),
         itemStatus: loan => get(loan, ['item', 'status', 'name']),
-        currentDueDate: loan => (
-          <div>
-            <FormattedDate value={loan.dueDate} />
-            ,
-            <br />
-            <FormattedTime value={loan.dueDate} />
-          </div>
-        ),
         requestQueue: loan => props.requestCounts[loan.itemId] || 0,
+        currentDueDate: loan => <FormattedTime value={get(loan, ['dueDate'])} day="numeric" month="numeric" year="numeric" />,
+        requestQueue: loan => requestCounts[loan.itemId] || 0,
         barcode: loan => get(loan, ['item', 'barcode']),
         callNumber: loan => get(loan, ['item', 'callNumber']),
-        loanPolicy: loan => props.loanPolicies[loan.loanPolicyId],
+        loanPolicy: loan => loanPolicies[loan.loanPolicyId],
       }}
       columnWidths={{
         currentDueDate: 100,

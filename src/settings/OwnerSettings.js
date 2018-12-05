@@ -1,11 +1,19 @@
 import React from 'react';
 import _ from 'lodash';
-import { injectIntl } from 'react-intl';
+import {
+  FormattedMessage,
+  intlShape,
+  injectIntl,
+} from 'react-intl';
 import {
   Callout,
   ConfirmationModal,
   Pane,
   Paneset,
+  Modal,
+  Row,
+  Button,
+  Col,
   MultiSelection,
 } from '@folio/stripes/components';
 import { Field } from 'redux-form';
@@ -28,7 +36,7 @@ class OwnerSettings extends React.Component {
         path: 'owners/%{activeRecord.id}',
       },
       GET: {
-        path: 'owners?query=cql.allRecords=1 &limit=500'
+        path: 'owners?query=cql.allRecords=1 sortby owner&limit=500'
       }
     },
     servicePoints: {
@@ -39,11 +47,16 @@ class OwnerSettings extends React.Component {
     activeRecord: {},
   });
 
+  static propTypes = {
+    intl: intlShape.isRequired,
+  };
+
   constructor(props) {
     super(props);
 
     this.state = {
       showConfirmDialog: false,
+      showItemInUseDialog: false,
       selectedItem: {},
       primaryField: 'owner',
     };
@@ -72,6 +85,7 @@ class OwnerSettings extends React.Component {
         this.deleteItemResolve();
       })
       .catch(() => {
+        this.setState({ showItemInUseDialog: true });
         this.deleteItemReject();
       })
       .finally(() => this.hideConfirmDialog());
@@ -91,6 +105,7 @@ class OwnerSettings extends React.Component {
 
   hideItemInUseDialog() {
     this.setState({
+      showItemInUseDialog: false,
       selectedItem: {},
     });
   }
@@ -114,7 +129,7 @@ class OwnerSettings extends React.Component {
       <SafeHTMLMessage
         id="stripes-smart-components.cv.termDeleted"
         values={{
-          type: this.props.stripes.intl.formatMessage({ id: 'ui-users.owners.singular' }),
+          type: this.props.intl.formatMessage({ id: 'ui-users.owners.singular' }),
           term: item[this.state.primaryField],
         }}
       />
@@ -124,28 +139,26 @@ class OwnerSettings extends React.Component {
   }
 
   validate({ items }) {
-    const { intl: { formatMessage } } = this.props;
     const { primaryField } = this.state;
     const servicePoints = _.get(this.props.resources, ['servicePoints', 'records', 0, 'servicepoints'], []);
-    const none = servicePoints.find(s => s.name === 'Circ Desk 1') || {};
+    const none = servicePoints.find(s => s.name === 'None') || {};
 
     if (Array.isArray(items)) {
       const errors = [];
 
       items.forEach((item, index) => {
         // Start with getting a validation check from the parent component.
-        const itemErrors = validate(item, index, items, 'owner', this.props.stripes.intl.formatMessage({ id: 'ui-users.owners.singular' })) || {};
+        const itemErrors = validate(item, index, items, 'owner', <FormattedMessage id="ui-users.owners.singular" />) || {};
 
         // Check if the primary field has had data entered into it.
         if (!item[primaryField]) {
-          itemErrors[primaryField] =
-            formatMessage({ id: 'stripes-core.label.missingRequiredField' });
+          itemErrors[primaryField] = <FormattedMessage id="stripes-core.label.missingRequiredField" />;
         }
 
         const asp = item.servicePointOwner || [];
         asp.forEach(s => {
           if (s.value === none.id && asp.length > 1) {
-            itemErrors.servicePointOwner = 'Error';
+            itemErrors.servicePointOwner = <FormattedMessage id="ui-users.owners.error" />;
           }
         });
 
@@ -177,7 +190,7 @@ class OwnerSettings extends React.Component {
 
         asp.forEach(s => {
           if (s.value === none.id) {
-            itemWarning.servicePointOwner = 'Warning: Overdue fines/lost item fees will not be collected without a service point';
+            itemWarning.servicePointOwner = <FormattedMessage id="ui-users.owners.warning" />;
           }
         });
 
@@ -191,10 +204,9 @@ class OwnerSettings extends React.Component {
 
   render() {
     if (!this.props.resources.owners) return <div />;
-
     const { intl: { formatMessage } } = this.props;
+    const type = formatMessage({ id: 'ui-users.owners.singular' });
     const rows = this.props.resources.owners.records || [];
-    const type = this.props.stripes.intl.formatMessage({ id: 'ui-users.owners.singular' });
     const term = this.state.selectedItem[this.state.primaryField];
     const servicePoints = _.get(this.props.resources, ['servicePoints', 'records', 0, 'servicepoints'], []);
     const serviceOwners = [];
@@ -227,7 +239,10 @@ class OwnerSettings extends React.Component {
     const modalMessage = (
       <SafeHTMLMessage
         id="stripes-smart-components.cv.termWillBeDeleted"
-        values={{ type, term }}
+        values={{
+          type: formatMessage({ id: 'ui-users.owners.singular' }),
+          term,
+        }}
       />
     );
 
@@ -238,41 +253,77 @@ class OwnerSettings extends React.Component {
         return <ul>{items}</ul>;
       }
     };
-
     return (
       <Paneset>
-        <Pane defaultWidth="fill" fluidContentWidth paneTitle={this.props.label}>
+        <Pane
+          defaultWidth="fill"
+          fluidContentWidth
+          height="100%"
+          paneTitle={formatMessage({ id: 'ui-users.owners.label' })}
+        >
           <EditableList
             {...this.props}
+            label={formatMessage({ id: 'ui-users.owners.label' })}
+            height="600"
+            virtualize
             fieldComponents={fieldComponents}
             contentData={rows}
-            createButtonLabel={formatMessage({ id: 'stripes-core.button.new' })}
+            createButtonLabel={<FormattedMessage id="stripes-core.button.new" />}
             visibleFields={['owner', 'desc', 'servicePointOwner']}
             columnMapping={{
-              'owner': this.props.stripes.intl.formatMessage({ id: 'ui-users.owners.columns.owner' }),
-              'desc': this.props.stripes.intl.formatMessage({ id: 'ui-users.owners.columns.desc' }),
-              'servicePointOwner': this.props.stripes.intl.formatMessage({ id: 'ui-users.owners.columns.asp' })
+              'owner': formatMessage({ id: 'ui-users.owners.columns.owner' }),
+              'desc': formatMessage({ id: 'ui-users.owners.columns.desc' }),
+              'servicePointOwner': formatMessage({ id: 'ui-users.owners.columns.asp' }),
             }}
             formatter={formatter}
             onUpdate={this.onUpdateItem}
             onCreate={this.onCreateItem}
             onDelete={this.showConfirmDialog}
-            isEmptyMessage={
-              formatMessage({ id: 'stripes-smart-components.cv.noExistingTerms' },
-                { terms: 'label' })
-            }
+            isEmptyMessage={(
+              <FormattedMessage
+                id="stripes-smart-components.cv.noExistingTerms"
+                values={{ terms: 'label' }}
+              />
+            )}
             validate={this.validate}
             warn={this.warn}
           />
           <ConfirmationModal
-            id={`delete${type.replace(/[^a-zA-Z0-9]/g, '').toLowerCase()}-confirmation`}
+            id={(
+              <FormattedMessage id="ui-users.owners.singular">
+                {(msg) => `delete${msg.replace(/[^a-zA-Z0-9]/g, '').toLowerCase()}-confirmation`}
+              </FormattedMessage>
+            )}
             open={this.state.showConfirmDialog}
-            heading={formatMessage({ id: 'stripes-core.button.deleteEntry' }, { entry: type })}
+            heading={(
+              <FormattedMessage
+                id="stripes-core.button.deleteEntry"
+                values={{ entry: formatMessage({ id: 'ui-users.owners.singular' }) }}
+              />
+            )}
             message={modalMessage}
             onConfirm={this.onDeleteItem}
             onCancel={this.hideConfirmDialog}
-            confirmLabel={formatMessage({ id: 'stripes-core.button.delete' })}
+            confirmLabel={<FormattedMessage id="stripes-core.button.delete" />}
           />
+          <Modal
+            open={this.state.showItemInUseDialog}
+            label={<FormattedMessage id="stripes-smart-components.cv.cannotDeleteTermHeader" values={{ type }} />}
+            size="small"
+          >
+            <Row>
+              <Col xs>
+                <FormattedMessage id="stripes-smart-components.cv.cannotDeleteTermMessage" values={{ type }} />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs>
+                <Button buttonStyle="primary" onClick={this.hideItemInUseDialog}>
+                  <FormattedMessage id="stripes-core.label.okay" />
+                </Button>
+              </Col>
+            </Row>
+          </Modal>
           <Callout ref={(ref) => { this.callout = ref; }} />
         </Pane>
       </Paneset>

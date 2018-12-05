@@ -104,10 +104,9 @@ class BulkRenewInfo extends React.Component {
             {
               !isEmpty(failedRenewals) &&
               <Layout className="flex">
-
                 <Icon
                   size="medium"
-                  icon="validation-error"
+                  icon="exclamation-circle"
                   status="warn"
                 />
                 <SafeHTMLMessage
@@ -123,7 +122,7 @@ class BulkRenewInfo extends React.Component {
               <Layout className="flex">
                 <Icon
                   size="medium"
-                  icon="validation-check"
+                  icon="check-circle"
                   status="success"
                 />
                 <SafeHTMLMessage

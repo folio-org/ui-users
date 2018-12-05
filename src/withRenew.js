@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 
 import ErrorModal from './components/ErrorModal';
 
@@ -25,11 +26,6 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
           POST: PropTypes.func.isRequired,
         }),
       }),
-      stripes: PropTypes.shape({
-        intl: PropTypes.shape({
-          formatMessage: PropTypes.func.isRequired,
-        }).isRequired,
-      }).isRequired,
     };
 
     constructor(props) {
@@ -61,7 +57,6 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
           } else {
             resp.text().then((error) => {
               reject(error);
-              alert(error); // eslint-disable-line no-alert
             });
           }
         });
@@ -96,10 +91,20 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
 
       const policyName = this.getPolicyName(errors);
       let message = errors.reduce((msg, err) => ((msg) ? `${msg}, ${err.message}` : err.message), '');
-      message = `Loan cannot be renewed because: ${message}.`;
+      message = (
+        <FormattedMessage
+          id="ui-users.loanNotRenewedReason"
+          values={{ message }}
+        />
+      );
 
       if (policyName) {
-        message = `${message} Please review ${policyName} before retrying renewal.`;
+        message = (
+          <FormattedMessage
+            id="ui-users.reviewBeforeRenewal"
+            values={{ message, policyName }}
+          />
+        );
       }
 
       return message;
@@ -111,14 +116,17 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
 
       return (
         <div>
-          <WrappedComponent renew={this.renew} {...this.props} />
+          <WrappedComponent
+            renew={this.renew}
+            {...this.props}
+          />
           {errors &&
             <ErrorModal
               id="renewal-failure-modal"
               open={errors.length > 0 && !this.state.bulkRenewal}
               onClose={this.hideModal}
               message={message}
-              label={this.props.stripes.intl.formatMessage({ id: 'ui-users.loanNotRenewed' })}
+              label={<FormattedMessage id="ui-users.loanNotRenewed" />}
             />
           }
         </div>

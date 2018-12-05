@@ -1,5 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
+import { Field } from 'redux-form';
+
 import {
   Pane,
   Button,
@@ -8,22 +11,25 @@ import {
   Select,
 } from '@folio/stripes/components';
 import stripesForm from '@folio/stripes/form';
-import { Field } from 'redux-form';
 
-const Setting = (props) => (
+const Setting = ({
+  name,
+  label,
+  intl,
+}) => (
   <div>
     <Row>
-      <Col xs>{props.label}</Col>
+      <Col xs>{label}</Col>
     </Row>
     <Row>
       <Col sm={1}>
         <Field
-          id={props.name}
-          name={props.name}
+          id={name}
+          name={name}
           component={Select}
           dataOptions={[
-            { value: true, label: props.stripes.intl.formatMessage({ id: 'ui-users.yes' }) },
-            { value: false, label: props.stripes.intl.formatMessage({ id: 'ui-users.no' }) }
+            { value: true, label: intl.formatMessage({ id: 'ui-users.yes' }) },
+            { value: false, label: intl.formatMessage({ id: 'ui-users.no' }) }
           ]}
         />
       </Col>
@@ -32,33 +38,61 @@ const Setting = (props) => (
 );
 
 Setting.propTypes = {
-  stripes: PropTypes.object,
   label: PropTypes.string,
   name: PropTypes.string,
+  intl: PropTypes.object,
 };
 
 class CommentRequiredForm extends React.Component {
   render() {
-    const props = this.props;
+    const {
+      pristine,
+      submitting,
+      handleSubmit,
+    } = this.props;
+
     const lastMenu = (
       <Button
         type="submit"
         buttonStyle="primary"
         marginBottom0
-        disabled={(props.pristine || props.submitting)}
+        disabled={(pristine || submitting)}
         id="clickable-save-comment"
       >
-        Save
+        <FormattedMessage id="ui-users.comment.save" />
       </Button>
     );
 
     return (
-      <form id="require-comment" onSubmit={this.props.handleSubmit}>
-        <Pane defaultWidth="fill" paneTitle={this.props.stripes.intl.formatMessage({ id: 'ui-users.comment.title' })} lastMenu={lastMenu}>
-          <Setting {...this.props} name="paid" label={this.props.stripes.intl.formatMessage({ id: 'ui-users.comment.paid' })} />
-          <Setting {...this.props} name="waived" label={this.props.stripes.intl.formatMessage({ id: 'ui-users.comment.waived' })} />
-          <Setting {...this.props} name="refunded" label={this.props.stripes.intl.formatMessage({ id: 'ui-users.comment.refunded' })} />
-          <Setting {...this.props} name="transferredManually" label={this.props.stripes.intl.formatMessage({ id: 'ui-users.comment.transferred' })} />
+      <form
+        id="require-comment"
+        onSubmit={handleSubmit}
+      >
+        <Pane
+          defaultWidth="fill"
+          paneTitle={<FormattedMessage id="ui-users.comment.title" />}
+          lastMenu={lastMenu}
+        >
+          <Setting
+            {...this.props}
+            name="paid"
+            label={<FormattedMessage id="ui-users.comment.paid" />}
+          />
+          <Setting
+            {...this.props}
+            name="waived"
+            label={<FormattedMessage id="ui-users.comment.waived" />}
+          />
+          <Setting
+            {...this.props}
+            name="refunded"
+            label={<FormattedMessage id="ui-users.comment.refunded" />}
+          />
+          <Setting
+            {...this.props}
+            name="transferredManually"
+            label={<FormattedMessage id="ui-users.comment.transferred" />}
+          />
         </Pane>
       </form>
     );
@@ -66,7 +100,6 @@ class CommentRequiredForm extends React.Component {
 }
 
 CommentRequiredForm.propTypes = {
-  stripes: PropTypes.object,
   handleSubmit: PropTypes.func,
 };
 

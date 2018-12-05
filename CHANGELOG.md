@@ -20,6 +20,25 @@
 * Implement associate Fee/Fine Owners to one or more Service Points. Ref UIU-611.
 * Implement permission for CRUD Manual Patron Block. Ref UIU-674.
 * Provide `totalCount` to loan MCLs.
+* Support circulation v5.0, requiring service-point information on loans. Refs UIU-717.
+* Format the `active` attribute as `Status` on the find-proxy modal. Fixes UIU-726.
+* Add loan policy name to loan details view. Fixes UIU-715.
+* Refresh action details after renew. Fixes UIU-714.
+* Set expired user status to inactive. Fixes UIU-729.
+* Fix relationship created message. Fixes UIU-730.
+* Add sort by name to initial query resource. Fixes UIU-733.
+* Link to a user's requests. Fixes UIU-677.
+* Bring back handleSubmit when using submit button. Fixes UIU-743.
+* Fix permission menu after reopening. Fixes UIU-739.
+* Apply internationalization to all hardcoded strings for Settings. Fixes UIU-691.
+* Pass `userBarcode` to new requests. Fixes UIU-690. Refs UIREQ-146.
+* Optimize code for Manual Fees/Fines Table. Fix UIU-198.
+* Modify associated service points for . Ref UIU-611.
+* Create permission "Settings (Users): Can create, edit and remove fee/fine settings". Ref UIU-584.
+* Create permission "Fees/Fines: All Actions permissions". Ref UIU-673.
+* Implement CRUD Manual Patron Block. Ref UIU-674.
+* Create permission "Patron blocks: All permissions". Ref UIU-728.
+* Hide metadata accordion for new records. Fixes UIU-700.
 
 ## [2.17.0](https://github.com/folio-org/ui-users/tree/v2.17.0) (2018-10-5)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.16.0...v2.17.0)

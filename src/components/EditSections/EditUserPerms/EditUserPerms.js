@@ -1,13 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { IfPermission, IfInterface } from '@folio/stripes/components';
+import { FormattedMessage } from 'react-intl';
+import {
+  IfInterface,
+  IfPermission,
+} from '@folio/stripes/core';
 
 import EditablePermissions from '../../EditablePermissions';
 
 const propTypes = {
-  stripes: PropTypes.shape({
-    intl: PropTypes.object.isRequired,
-  }).isRequired,
+  stripes: PropTypes.object.isRequired,
   resources: PropTypes.shape({
     availablePermissions: PropTypes.shape({
       records: PropTypes.arrayOf(PropTypes.object),
@@ -35,7 +37,7 @@ class EditUserPerms extends React.Component {
         <IfInterface name="permissions" version="5.0">
           <EditablePermissions
             {...this.props}
-            heading={this.props.stripes.intl.formatMessage({ id: 'ui-users.permissions.userPermissions' })}
+            heading={<FormattedMessage id="ui-users.permissions.userPermissions" />}
             permToRead="perms.users.get"
             permToDelete="perms.users.item.delete"
             permToModify="perms.users.item.post"

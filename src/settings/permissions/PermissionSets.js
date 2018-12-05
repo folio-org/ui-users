@@ -1,7 +1,14 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
+import {
+  injectIntl,
+  intlShape,
+  FormattedMessage,
+} from 'react-intl';
+
 import { EntryManager } from '@folio/stripes/smart-components';
+
 import PermissionSetDetails from './PermissionSetDetails';
 import PermissionSetForm from './PermissionSetForm';
 
@@ -9,7 +16,7 @@ function validate(values) {
   const errors = {};
 
   if (!values.displayName) {
-    errors.displayName = 'Please fill this in to continue';
+    errors.displayName = <FormattedMessage id="ui-users.permissions.emptyField" />;
   }
 
   return errors;
@@ -50,20 +57,25 @@ class PermissionSets extends React.Component {
         DELETE: PropTypes.func,
       }),
     }).isRequired,
-    stripes: PropTypes.shape({
-      intl: PropTypes.object.isRequired,
-    }),
+    intl: intlShape.isRequired,
   };
 
   render() {
+    const {
+      mutator,
+      resources: { entries },
+      label,
+      intl,
+    } = this.props;
+
     return (
       <EntryManager
         {...this.props}
-        parentMutator={this.props.mutator}
-        entryList={_.sortBy((this.props.resources.entries || {}).records || [], ['displayName'])}
+        parentMutator={mutator}
+        entryList={_.sortBy((entries || {}).records || [], ['displayName'])}
         detailComponent={PermissionSetDetails}
-        paneTitle={this.props.label}
-        entryLabel={this.props.stripes.intl.formatMessage({ id: 'ui-users.permissionSet' })}
+        paneTitle={label}
+        entryLabel={intl.formatMessage({ id: 'ui-users.permissionSet' })}
         entryFormComponent={PermissionSetForm}
         validate={validate}
         nameKey="displayName"
@@ -77,4 +89,4 @@ class PermissionSets extends React.Component {
   }
 }
 
-export default PermissionSets;
+export default injectIntl(PermissionSets);
