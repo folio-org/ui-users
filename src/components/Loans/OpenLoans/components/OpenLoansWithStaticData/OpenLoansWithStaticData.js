@@ -1,30 +1,30 @@
 import React from 'react';
 import _ from 'lodash';
-import {
-  FormattedTime,
-  FormattedDate,
-} from 'react-intl';
 import PropTypes from 'prop-types';
+import {
+  injectIntl,
+  intlShape,
+} from 'react-intl';
 
 import { Callout } from '@folio/stripes/components';
 
-import ActionsDropdown from '../ActionsDropdown/index';
-import ContributorsView from '../ContributorsView/index';
-import OpenLoansSubHeader from '../OpenLoansSubHeader/OpenLoansSubHeader';
 import OpenLoans from '../../OpenLoans';
 import Modals from '../Modals/Modals';
+import OpenLoansSubHeader from '../OpenLoansSubHeader/OpenLoansSubHeader';
+import getListDataFormatter from '../../helpers/getListDataFormatter';
 
 // can be implemented as class, should be discussed
 class OpenLoansWithStaticData extends React.Component {
   static propTypes = {
-    allChecked:PropTypes.bool.isRequired,
-    toggleAll:PropTypes.func.isRequired,
-    toggleItem:PropTypes.func.isRequired,
-    isLoanChecked:PropTypes.func.isRequired,
-    requestRecords:PropTypes.arrayOf(PropTypes.object).isRequired,
-    resources:PropTypes.object.isRequired,
-    getLoanPolicie:PropTypes.func.isRequired,
-    handleOptionsChange:PropTypes.func.isRequired,
+    intl: intlShape.isRequired,
+    allChecked: PropTypes.bool.isRequired,
+    toggleAll: PropTypes.func.isRequired,
+    toggleItem: PropTypes.func.isRequired,
+    isLoanChecked: PropTypes.func.isRequired,
+    requestRecords: PropTypes.arrayOf(PropTypes.object).isRequired,
+    resources: PropTypes.object.isRequired,
+    getLoanPolicie: PropTypes.func.isRequired,
+    handleOptionsChange: PropTypes.func.isRequired,
     checkedLoans: PropTypes.object.isRequired,
     loans: PropTypes.arrayOf(PropTypes.object).isRequired,
     onClickViewLoanActionsHistory: PropTypes.func.isRequired,
@@ -57,7 +57,19 @@ class OpenLoansWithStaticData extends React.Component {
   constructor(props) {
     super(props);
 
-    this.tableData = this.getTableData();
+    this.tableData = getListDataFormatter(
+      props.intl.formatMessage,
+      props.toggleItem,
+      props.isLoanChecked,
+      props.requestRecords,
+      props.requestCounts,
+      props.resources,
+      props.getLoanPolicie,
+      props.handleOptionsChange,
+      this.getFeeFine,
+      this.getContributorslist,
+    );
+
     this.callout = null;
     this.sortMap = this.getSortMap();
     this.loanFormatter = this.getLoanFormatter();
@@ -155,9 +167,8 @@ class OpenLoansWithStaticData extends React.Component {
 
     if (typeof contributors !== 'undefined') {
       Object.keys(contributors).forEach(contributor => contributorsList.push(`${contributors[contributor].name}, `));
-    } else {
-      contributorsList.push('-');
     }
+
     return contributorsList;
   };
 
@@ -230,147 +241,6 @@ class OpenLoansWithStaticData extends React.Component {
       </React.Fragment>
     );
   }
-
-  getTableData() {
-    const {
-      stripes:{
-        intl:{
-          formatMessage
-        }
-      },
-      toggleItem,
-      isLoanChecked,
-      requestRecords,
-      requestCounts,
-      resources,
-      getLoanPolicie,
-      handleOptionsChange,
-    } = this.props;
-
-    return {
-      '  ' : {
-        key : '  ',
-        formatter: loan => (
-          <input
-            checked={isLoanChecked(loan.id)}
-            onClick={e => toggleItem(e, loan)}
-            onChange={e => toggleItem(e, loan)}
-            type="checkbox"
-          />
-        ),
-      },
-      'title': {
-        key: 'title',
-        view: formatMessage({ id: 'ui-users.loans.columns.title' }),
-        formatter:  loan => {
-          const title = _.get(loan, ['item', 'title'], '');
-          if (title) {
-            const titleToDisplay = (title.length >= 77) ? `${title.substring(0, 77)}...` : title;
-            return `${titleToDisplay} (${_.get(loan, ['item', 'materialType', 'name'])})`;
-          }
-          return '-';
-        },
-        sorter: loan => _.get(loan, ['item', 'title']),
-      },
-      'itemStatus': {
-        key: 'itemStatus',
-        view: formatMessage({ id: 'ui-users.loans.columns.itemStatus' }),
-        formatter:  loan => `${_.get(loan, ['item', 'status', 'name'], '')}`,
-        sorter: loan => _.get(loan, ['item', 'status', 'name'], ''),
-      },
-      'barcode': {
-        key: 'barcode',
-        view: formatMessage({ id: 'ui-users.loans.columns.barcode' }),
-        formatter: loan => _.get(loan, ['item', 'barcode'], ''),
-        sorter: loan => _.get(loan, ['item', 'barcode']),
-      },
-      'feefine': {
-        key:'Fee/Fine',
-        view: formatMessage({ id: 'ui-users.loans.columns.feefine' }),
-        formatter: loan => this.getFeeFine(loan, resources),
-        sorter: loan => this.getFeeFine(loan, resources),
-      },
-      'loanDate': {
-        key:'loanDate',
-        view: formatMessage({ id: 'ui-users.loans.columns.loanDate' }),
-        formatter: loan => (<FormattedDate value={loan.loanDate} />),
-        sorter: loan => loan.loanDate,
-      },
-      'requests': {
-        key:'requests',
-        view: formatMessage({ id: 'ui-users.loans.details.requests' }),
-        formatter: (loan) => requestCounts[loan.itemId] || 0,
-        sorter:  (loan) => requestCounts[loan.itemId] || 0,
-      },
-      'callNumber': {
-        key:'Call number',
-        view: formatMessage({ id: 'ui-users.loans.details.callNumber' }),
-        formatter:  loan => _.get(loan, ['item', 'callNumber'], '-'),
-        sorter: loan => _.get(loan, ['item', 'callNumber']),
-      },
-      'loanPolicy': {
-        key:'loanPolicy',
-        view: formatMessage({ id: 'ui-users.loans.details.loanPolicy' }),
-        formatter: (loan) => getLoanPolicie(loan.loanPolicyId),
-        sorter: loan => getLoanPolicie(loan.loanPolicyId),
-      },
-      'contributors': {
-        key:'Contributors',
-        view: formatMessage({ id: 'ui-users.loans.columns.contributors' }),
-        formatter: (loan) => {
-          // eslint-disable-next-line react/no-this-in-sfc
-          return (<ContributorsView contributorsList={this.getContributorslist(loan)} />);
-        },
-        sorter: loan => {
-          const contributorsList = this.getContributorslist(loan);
-          return contributorsList.join(' ');
-        },
-      },
-      'dueDate': {
-        key:'dueDate',
-        view: formatMessage({ id: 'ui-users.loans.columns.dueDate' }),
-        formatter: loan => (
-          <div>
-            <FormattedDate value={loan.dueDate} />
-,
-            <FormattedTime value={loan.dueDate} />
-          </div>
-        ),
-        sorter: loan => loan.dueDate,
-      },
-      'renewals': {
-        key:'renewals',
-        view: formatMessage({ id: 'ui-users.loans.columns.renewals' }),
-        formatter: loan => loan.renewalCount || 0,
-        sorter: loan => loan.renewalCount,
-      },
-      'location': {
-        key:'location',
-        view: formatMessage({ id: 'ui-users.loans.details.location' }),
-        formatter: loan => `${_.get(loan, ['item', 'location', 'name'], '')}`,
-        sorter: loan => _.get(loan, ['item', 'location', 'name'], ''),
-      },
-      ' ': {
-        key: ' ',
-        formatter: (loan) => {
-          let requestQueue = false;
-
-          if (requestRecords.length > 0) {
-            requestRecords.forEach(r => {
-              if (r.itemId === loan.itemId) requestQueue = true;
-            });
-          }
-          return (
-            <ActionsDropdown
-              loan={loan}
-              requestQueue={requestQueue}
-              handleOptionsChange={handleOptionsChange}
-            />
-          );
-        },
-      }
-    };
-  }
 }
 
-export default OpenLoansWithStaticData;
+export default injectIntl(OpenLoansWithStaticData);

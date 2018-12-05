@@ -17,13 +17,13 @@ import Label from '../../../../Label/Label';
 
 class OpenLoansSubHeader extends React.Component {
   static propTypes = {
-    loans: PropTypes.arrayOf(PropTypes.object).isRequired,
-    columnMapping: PropTypes.object.isRequired,
-    visibleColumns: PropTypes.arrayOf(PropTypes.object).isRequired,
     checkedLoans: PropTypes.object.isRequired,
+    columnMapping: PropTypes.object.isRequired,
+    toggleColumn: PropTypes.func.isRequired,
     renewSelected: PropTypes.func.isRequired,
     showChangeDueDateDialog: PropTypes.func.isRequired,
-    toggleColumn: PropTypes.func.isRequired,
+    loans: PropTypes.arrayOf(PropTypes.object).isRequired,
+    visibleColumns: PropTypes.arrayOf(PropTypes.object).isRequired,
   };
 
   constructor(props) {
@@ -36,9 +36,6 @@ class OpenLoansSubHeader extends React.Component {
     this.bulkActionsTooltip = <FormattedMessage id="ui-users.bulkActions.tooltip" />;
     this.renewString = <FormattedMessage id="ui-users.renew" />;
     this.changeDueDateString = <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />;
-    this.dropdownStyle = { float: 'right', marginLeft: '10px' };
-    this.spanStyle = { display: 'flex' };
-    this.excludeKeys = ['id', 'userId', 'itemId'];
   }
 
   renderCheckboxList(columnMapping) {
@@ -91,13 +88,16 @@ class OpenLoansSubHeader extends React.Component {
     return (
       <ActionsBar
         contentStart={
-          <span style={this.spanStyle}>
+          <span style={{ display: 'flex' }}>
             <Label>
               {resultCount}
             </Label>
             <Dropdown
               id="columnsDropdown"
-              style={this.dropdownStyle}
+              style={{
+                float: 'right',
+                marginLeft: '10px',
+              }}
               group
               pullRight
               onToggle={this.onDropdownClick}
@@ -128,7 +128,11 @@ class OpenLoansSubHeader extends React.Component {
               marginBottom0
               id="renew-all"
               disabled={noSelectedLoans}
-              title={noSelectedLoans ? this.bulkActionsTooltip : this.renewString}
+              title={
+                noSelectedLoans
+                  ? this.bulkActionsTooltip
+                  : this.renewString
+              }
               onClick={renewSelected}
             >
               {this.renewString}
@@ -137,14 +141,18 @@ class OpenLoansSubHeader extends React.Component {
               marginBottom0
               id="change-due-date-all"
               disabled={noSelectedLoans}
-              title={noSelectedLoans ? this.bulkActionsTooltip : this.changeDueDateString}
+              title={
+                noSelectedLoans
+                  ? this.bulkActionsTooltip
+                  : this.changeDueDateString
+              }
               onClick={showChangeDueDateDialog}
             >
               {this.changeDueDateString}
             </Button>
             <ExportCsv
               data={loans}
-              excludeKeys={this.excludeKeys}
+              excludeKeys={['id', 'userId', 'itemId']}
             />
           </span>
         }

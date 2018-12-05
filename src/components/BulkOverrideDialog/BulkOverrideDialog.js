@@ -1,25 +1,37 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 
 import { Modal } from '@folio/stripes/components';
+import { stripesShape } from '@folio/stripes/core';
 
 import BulkOverrideInfo from './BulkOverrideInfo';
 
 class BulkOverrideDialog extends React.Component {
   static propTypes = {
-    stripes: PropTypes.shape({
-      connect: PropTypes.func.isRequired,
-      intl: PropTypes.shape({
-        formatMessage: PropTypes.func.isRequired,
-      }).isRequired,
-    }).isRequired,
-    onClose: PropTypes.func.isRequired,
+    stripes: stripesShape.isRequired,
+    failedRenewals: PropTypes.arrayOf(
+      PropTypes.object
+    ).isRequired,
     open: PropTypes.bool.isRequired,
+    loanPolicies: PropTypes.object.isRequired,
+    requestCounts: PropTypes.object.isRequired,
+    errorMessages: PropTypes.object.isRequired,
+    onClose: PropTypes.func.isRequired,
   };
 
   render() {
-    const { formatMessage } = this.props.stripes.intl;
-    const modalLabel = formatMessage({ id: 'ui-users.brd.overrideAndRenew' });
+    const {
+      onClose,
+      open,
+      stripes,
+      failedRenewals,
+      loanPolicies,
+      requestCounts,
+      errorMessages,
+    } = this.props;
+
+    const modalLabel = <FormattedMessage id="ui-users.brd.overrideAndRenew" />;
 
     return (
       <Modal
@@ -27,13 +39,17 @@ class BulkOverrideDialog extends React.Component {
         dismissible
         closeOnBackgroundClick
         enforceFocus={false} // Needed to allow Calendar in Datepicker to get focus
-        onClose={this.props.onClose}
-        open={this.props.open}
         label={modalLabel}
+        open={open}
+        onClose={onClose}
       >
         <BulkOverrideInfo
-          {...this.props}
-          onCancel={this.props.onClose}
+          stripes={stripes}
+          failedRenewals={failedRenewals}
+          loanPolicies={loanPolicies}
+          requestCounts={requestCounts}
+          errorMessages={errorMessages}
+          onCancel={onClose}
         />
       </Modal>
     );

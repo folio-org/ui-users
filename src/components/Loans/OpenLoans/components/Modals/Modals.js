@@ -2,30 +2,26 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { ChangeDueDateDialog } from '@folio/stripes/smart-components';
+import { stripesShape } from '@folio/stripes/core';
 
-import BulkRenewalDialog from '../../../../BulkRenewalDialog/BulkRenewalDialog';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import BulkRenewalDialog from '@folio/users/src/components/BulkRenewalDialog';
 
 
 class Modals extends React.Component {
   static propTypes = {
+    stripes: stripesShape.isRequired,
     loans: PropTypes.arrayOf(PropTypes.object).isRequired,
-    stripes: PropTypes.shape({
-      intl: PropTypes.object.isRequired,
-      formatDate: PropTypes.func.isRequired,
-      formatDateTime: PropTypes.func.isRequired,
-    }),
-    user: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-    }).isRequired,
+    activeLoan: PropTypes.string,
+    user: PropTypes.object.isRequired,
     loanPolicies: PropTypes.object.isRequired,
     errorMsg: PropTypes.object.isRequired,
+    checkedLoans: PropTypes.object.isRequired,
     requestCounts: PropTypes.object.isRequired,
     renewSuccess: PropTypes.arrayOf(PropTypes.object).isRequired,
     renewFailure: PropTypes.arrayOf(PropTypes.object).isRequired,
     bulkRenewalDialogOpen: PropTypes.bool.isRequired,
     changeDueDateDialogOpen: PropTypes.bool.isRequired,
-    activeLoan: PropTypes.string,
-    checkedLoans: PropTypes.object.isRequired,
     hideChangeDueDateDialog: PropTypes.func.isRequired,
     hideBulkRenewalDialog: PropTypes.func.isRequired,
   };
@@ -76,15 +72,15 @@ class Modals extends React.Component {
           loanPolicies={loanPolicies}
           errorMessages={errorMsg}
           requestCounts={requestCounts}
-          onClose={hideBulkRenewalDialog}
           open={bulkRenewalDialogOpen}
+          onClose={hideBulkRenewalDialog}
         />
         <this.connectedChangeDueDateDialog
           stripes={stripes}
           loanIds={loanIds}
-          onClose={hideChangeDueDateDialog}
-          open={changeDueDateDialogOpen}
           user={user}
+          open={changeDueDateDialogOpen}
+          onClose={hideChangeDueDateDialog}
         />
       </React.Fragment>
     );

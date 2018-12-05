@@ -12,19 +12,20 @@ import {
   Layout,
 } from '@folio/stripes/components';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
+import { stripesShape } from '@folio/stripes/core';
 
 import bulkOverrideDialog from '../BulkOverrideDialog';
 import BulkRenewedLoansList from './BulkRenewedLoansList';
 
 class BulkRenewInfo extends React.Component {
   static propTypes = {
-    stripes: PropTypes.object,
-    onCancel: PropTypes.func,
-    successRenewals: PropTypes.arrayOf(PropTypes.object),
-    failedRenewals: PropTypes.arrayOf(PropTypes.object),
-    loanPolicies: PropTypes.object,
-    requestCounts: PropTypes.object,
-    errorMessages: PropTypes.object,
+    stripes: stripesShape.isRequired,
+    successRenewals: PropTypes.arrayOf(PropTypes.object).isRequired,
+    failedRenewals: PropTypes.arrayOf(PropTypes.object).isRequired,
+    loanPolicies: PropTypes.object.isRequired,
+    requestCounts: PropTypes.object.isRequired,
+    errorMessages: PropTypes.object.isRequired,
+    onCancel: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -61,7 +62,7 @@ class BulkRenewInfo extends React.Component {
     return Object.keys(errorMessages).reduce((rewritableLoans, loanCode) => {
       const errorMessage = errorMessages[loanCode];
 
-      if (this.isOverridePosible(errorMessage)) {
+      if (this.isOverridePossible(errorMessage)) {
         const rewritableLoan = find(failedRenewals, { 'id': loanCode });
         rewritableLoans.push(rewritableLoan);
       }
@@ -70,7 +71,7 @@ class BulkRenewInfo extends React.Component {
     }, []);
   }
 
-  isOverridePosible(errorMessage) {
+  isOverridePossible(errorMessage) {
     for (const rewritableMessage of this.rewritableMessages) {
       if (errorMessage.includes(rewritableMessage)) {
         return true;
@@ -90,6 +91,7 @@ class BulkRenewInfo extends React.Component {
       errorMessages,
       onCancel,
     } = this.props;
+
     const {
       overridableLoans,
       bulkOverrideDialogOpen,

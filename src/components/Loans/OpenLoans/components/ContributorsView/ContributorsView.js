@@ -1,7 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { isEmpty } from 'lodash';
 
 import { Popover } from '@folio/stripes/components';
+
+import getListPresentation from '../../helpers/getListPresentation';
 
 const propTypes = {
   contributorsList: PropTypes.arrayOf(PropTypes.string).isRequired
@@ -12,11 +15,9 @@ const ContributorsView = (props) => {
   // eslint-disable-next-line react/no-this-in-sfc
   const contributorsListString = contributorsList.join(' ');
   // Truncate if no of contributors > 2
-  const listTodisplay = (contributorsList === '-')
+  const listTodisplay = isEmpty(contributorsList)
     ? '-'
-    : (contributorsList.length > 2)
-      ? `${contributorsList[0]}, ${contributorsList[1]}...`
-      : `${contributorsListString.substring(0, contributorsListString.length - 2)}`;
+    : getListPresentation(contributorsList, contributorsListString);
 
   return (contributorsList.length > 2)
     ? (

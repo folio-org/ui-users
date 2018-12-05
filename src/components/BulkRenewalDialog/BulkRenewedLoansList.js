@@ -1,26 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import get from 'lodash/get';
+
+import {
+  FormattedMessage,
+  FormattedDate,
+  FormattedTime,
+} from 'react-intl';
+
 import {
   Icon,
   MultiColumnList,
   Popover,
 } from '@folio/stripes/components';
-import { FormattedMessage } from 'react-intl';
 
 const propTypes = {
-  stripes: PropTypes.shape({
-    formatDateTime: PropTypes.func.isRequired,
-    intl: PropTypes.shape({
-      formatMessage: PropTypes.func.isRequired,
-    }),
-  }),
-  failedRenewals: PropTypes.arrayOf(PropTypes.object),
-  successRenewals: PropTypes.arrayOf(PropTypes.object),
-  requestCounts: PropTypes.object,
   height: PropTypes.number,
-  loanPolicies: PropTypes.object,
-  errorMessages: PropTypes.object,
+  failedRenewals: PropTypes.arrayOf(PropTypes.object).isRequired,
+  successRenewals: PropTypes.arrayOf(PropTypes.object).isRequired,
+  requestCounts: PropTypes.object.isRequired,
+  loanPolicies: PropTypes.object.isRequired,
+  errorMessages: PropTypes.object.isRequired,
 };
 
 const defaultProps = {
@@ -28,8 +28,11 @@ const defaultProps = {
 };
 
 const BulkRenewedLoansList = (props) => {
-  const { formatMessage } = props.stripes.intl;
-  const { stripes, failedRenewals, successRenewals } = props;
+  const {
+    failedRenewals,
+    successRenewals
+  } = props;
+
   const iconAlignStyle = { display: 'flex', alignItems: 'center' };
   const pointerStyle = { cursor: 'pointer' };
   const popoverStyle = { maxWidth: '300px', textAlign: 'justify' };
@@ -52,14 +55,14 @@ const BulkRenewedLoansList = (props) => {
       contentData={[...failedRenewals, ...successRenewals]}
       visibleColumns={visibleColumns}
       columnMapping={{
-        renewalStatus: formatMessage({ id: 'ui-users.brd.header.renewalStatus' }),
-        title: formatMessage({ id: 'ui-users.brd.header.title' }),
-        itemStatus: formatMessage({ id: 'ui-users.loans.columns.itemStatus' }),
-        currentDueDate: formatMessage({ id: 'ui-users.loans.columns.dueDate' }),
-        requestQueue: formatMessage({ id: 'ui-users.loans.details.requests' }),
-        barcode: formatMessage({ id: 'ui-users.information.barcode' }),
-        callNumber: formatMessage({ id: 'ui-users.loans.details.callNumber' }),
-        loanPolicy: formatMessage({ id: 'ui-users.loans.details.loanPolicy' }),
+        'renewalStatus': <FormattedMessage id="ui-users.brd.header.renewalStatus" />,
+        'title': <FormattedMessage id="ui-users.brd.header.title" />,
+        'itemStatus': <FormattedMessage id="ui-users.loans.columns.itemStatus" />,
+        'currentDueDate': <FormattedMessage id="ui-users.loans.columns.dueDate" />,
+        'requestQueue': <FormattedMessage id="ui-users.loans.details.requests" />,
+        'barcode': <FormattedMessage id="ui-users.information.barcode" />,
+        'callNumber': <FormattedMessage id="ui-users.loans.details.callNumber" />,
+        'loanPolicy': <FormattedMessage id="ui-users.loans.details.loanPolicy" />,
       }}
       formatter={{
         renewalStatus: loan => {
@@ -84,7 +87,14 @@ const BulkRenewedLoansList = (props) => {
         },
         title: loan => get(loan, ['item', 'title']),
         itemStatus: loan => get(loan, ['item', 'status', 'name']),
-        currentDueDate: loan => stripes.formatDateTime(get(loan, ['dueDate'])),
+        currentDueDate: loan => (
+          <div>
+            <FormattedDate value={loan.dueDate} />
+            ,
+            <br />
+            <FormattedTime value={loan.dueDate} />
+          </div>
+        ),
         requestQueue: loan => props.requestCounts[loan.itemId] || 0,
         barcode: loan => get(loan, ['item', 'barcode']),
         callNumber: loan => get(loan, ['item', 'callNumber']),

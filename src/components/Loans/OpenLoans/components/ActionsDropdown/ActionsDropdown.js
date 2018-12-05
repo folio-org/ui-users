@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import { get } from 'lodash';
 import { FormattedMessage } from 'react-intl';
 
 import {
@@ -12,18 +12,11 @@ import {
 } from '@folio/stripes/components';
 
 class ActionsDropdown extends React.Component {
-
   static propTypes = {
     loan: PropTypes.object.isRequired,
     requestQueue: PropTypes.bool.isRequired,
     handleOptionsChange: PropTypes.func.isRequired,
   };
-
-  constructor(props) {
-    super(props);
-
-    this.overrideStyle = { padding: '7px 3px' };
-  }
 
   render() {
     const {
@@ -34,7 +27,7 @@ class ActionsDropdown extends React.Component {
 
     const itemDetailsLink = `/inventory/view/${loan.item.instanceId}/${loan.item.holdingsRecordId}/${loan.itemId}`;
     const loanPolicyLink = `/settings/circulation/loan-policies/${loan.loanPolicyId}`;
-    const requestQueueLink = `/requests?&query=${_.get(loan, ['item', 'barcode'])}&sort=Request%20Date`;
+    const requestQueueLink = `/requests?&query=${get(loan, ['item', 'barcode'])}&sort=Request%20Date`;
 
     return (
       <UncontrolledDropdown onSelectItem={handleOptionsChange}>
@@ -46,7 +39,7 @@ class ActionsDropdown extends React.Component {
         />
         <DropdownMenu
           data-role="menu"
-          overrideStyle={this.overrideStyle}
+          overrideStyle={{ padding: '7px 3px' }}
         >
           <MenuItem itemMeta={{
             loan,
@@ -57,9 +50,7 @@ class ActionsDropdown extends React.Component {
               buttonStyle="dropdownItem"
               href={itemDetailsLink}
             >
-              <FormattedMessage
-                id="ui-users.itemDetails"
-              />
+              <FormattedMessage id="ui-users.itemDetails" />
             </Button>
           </MenuItem>
           <MenuItem itemMeta={{
@@ -89,9 +80,7 @@ class ActionsDropdown extends React.Component {
               buttonStyle="dropdownItem"
               href={loanPolicyLink}
             >
-              <FormattedMessage
-                id="ui-users.loans.details.loanPolicy"
-              />
+              <FormattedMessage id="ui-users.loans.details.loanPolicy" />
             </Button>
           </MenuItem>
           <MenuItem itemMeta={{

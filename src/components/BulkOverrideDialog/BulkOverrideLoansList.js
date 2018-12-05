@@ -20,13 +20,6 @@ import getNewDueDate from './helpers/getNewDate';
 class BulkOverrideLoansList extends Component {
   static propTypes = {
     height: PropTypes.number,
-    stripes: PropTypes.shape({
-      formatDateTime: PropTypes.func.isRequired,
-      intl: PropTypes.shape({
-        formatMessage: PropTypes.func.isRequired,
-      }).isRequired,
-      store: PropTypes.object.isRequired,
-    }).isRequired,
     allChecked: PropTypes.bool.isRequired,
     loanPolicies: PropTypes.object.isRequired,
     errorMessages: PropTypes.object.isRequired,
@@ -46,14 +39,14 @@ class BulkOverrideLoansList extends Component {
     super(props);
 
     this.columnWidth = {
-      '  ': 35,
+      'isChecked': 35,
       'currentDueDate': 100,
       'newDueDate': 100,
       'callNumber': 120
     };
 
     this.visibleColumns = [
-      '  ',
+      'isChecked',
       'renewalStatus',
       'newDueDate',
       'title',
@@ -120,7 +113,7 @@ class BulkOverrideLoansList extends Component {
         contentData={failedRenewals}
         visibleColumns={this.visibleColumns}
         columnMapping={{
-          '  ': (
+          'isChecked': (
             <input
               type="checkbox"
               checked={allChecked}
@@ -140,7 +133,7 @@ class BulkOverrideLoansList extends Component {
           'loanPolicy': <FormattedMessage id="ui-users.loans.details.loanPolicy" />,
         }}
         formatter={{
-          '  ': loan => (
+          'isChecked': loan => (
             <input
               checked={isLoanChecked(loan.id)}
               onChange={e => toggleItem(e, loan)}
