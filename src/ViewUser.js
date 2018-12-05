@@ -5,7 +5,11 @@ import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import queryString from 'query-string';
-import { TitleManager } from '@folio/stripes/core';
+import {
+  IfInterface,
+  IfPermission,
+  TitleManager,
+} from '@folio/stripes/core';
 import {
   Pane,
   PaneMenu,
@@ -14,8 +18,6 @@ import {
   ExpandAllButton,
   Row,
   Col,
-  IfPermission,
-  IfInterface,
   Layer,
   Headline,
   AccordionSet,

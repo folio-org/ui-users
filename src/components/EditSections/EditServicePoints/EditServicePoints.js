@@ -8,6 +8,10 @@ import PropTypes from 'prop-types';
 import { get, uniqBy } from 'lodash';
 import { Field, FieldArray } from 'redux-form';
 import {
+  IfPermission,
+  IfInterface,
+} from '@folio/stripes/core';
+import {
   Icon,
   Button,
   Select,
@@ -16,8 +20,6 @@ import {
   Accordion,
   Badge,
   List,
-  IfPermission,
-  IfInterface,
   Headline
 } from '@folio/stripes/components';
 
