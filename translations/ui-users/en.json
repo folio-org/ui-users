@@ -299,6 +299,20 @@
   "loans.loanDetails": "Loan details",
   "loans.newFeeFine": "New fee/fine",
 
+  "settings.label": "Users",
+  "settings.general": "General",
+  "settings.feefine": "Fee/fine",
+  "settings.permissionSet": "Permission sets",
+  "settings.patronGroups": "Patron groups",
+  "settings.addressTypes": "Address Types",
+  "settings.profilePictures": "Profile pictures",
+  "settings.owners": "Owners",
+  "settings.manualCharges": "Manual charges",
+  "settings.waiveReasons": "Waive reasons",
+  "settings.paymentMethods": "Payment methods",
+  "settings.refundReasons": "Refund reasons",
+  "settings.commentRequired": "Comment required",
+
   "loans.columns.title": "Item title",
   "loans.columns.itemStatus": "Item status",
   "loans.columns.barcode": "Barcode",
@@ -335,12 +349,14 @@
   "loans.details.fine": "Fine incurred",
   "loans.details.feeFine": "Fee/fine",
   "loans.details.proxyBorrower": "Proxy borrower",
+  "loans.details.checkinServicePoint": "Check in service point",
 
   "requests.title": "Requests",
   "requests.createRequest": "Create request",
   "requests.numOpenRequests": "{count, number} {count, plural, one {open request} other {open requests}}",
   "requests.numClosedRequests": "{count, number} {count, plural, one {closed request} other {closed requests}}",
 
+  "permissions.emptyField": "Please fill this in to continue",
   "permissions.noSponsorsFound": "No sponsors found",
   "permissions.noProxiesFound": "No proxies found",
   "permissions.empty": "No permissions found",
@@ -436,6 +452,9 @@
   "errors.proxies.expired": "Proxy user record expired",
   "errors.sponsors.expired": "Sponsor user record expired",
 
+  "error.reviewBeforeRenewal": "{message} Please review {policyName} before retrying renewal.",
+  "error.loanNotRenewedReason": "Loan cannot be renewed because: {message}.",
+
   "editUserDialog": "Edit User Dialog",
   "loanActionsHistory": "Loan Actions History",
   "hide": "Hide",
@@ -460,8 +479,13 @@
   "anonymize": "Anonymize all loans",
   "bulkActions.tooltip": "Multiple loans can be processed at the same time. Please select loans first.",
   "loanNotRenewed": "Loan not renewed",
+  "chargeFeefine": "Charge Fee/Fine",
+  "accountActionHistory": "Account Actions History",
+  "status": "Status",
 
   "accounts.title": "Fees/Fines",
+  "accounts.outstandingBalance": "Outstanding Balance: ",
+  "accounts.header": "Fee/fine details - {userName} ({patronGroup})",
   "accounts.outstanding": "Outstanding Balance:",
   "accounts.open": "Open",
   "accounts.closed": "Closed",
@@ -471,6 +495,7 @@
   "accounts.chargeManual": "Charge fee/fine",
 
   "feefines.title": "Fee/fine: Manual charges",
+  "feefines.singular": "Fee/Fine Type",
   "feefines.callout": "The Fee/Fine Type <strong>{feefine}</strong> was successfully <strong>deleted</strong>.",
   "feefines.disabledItem": "Fee/fine Type cannot be deleted when used by one or more user accounts",
   "feefines.modalHeader": "Delete Fee/Fine Type?",
@@ -495,6 +520,8 @@
 
   "owners.label": "Fee/fine: Owners",
   "owners.singular": "Fee/fine Owner",
+  "owners.error": "Error",
+  "owners.warning": "Warning: Overdue fines/lost item fees will not be collected without a service point",
   "owners.columns.owner": "Owner*",
   "owners.columns.desc": "Description",
   "owners.columns.asp": "Associated service points",
@@ -655,6 +682,41 @@
 
   "accounts.comment.field.comment":"Comment",
   "accounts.comment.field.save":"Save",
-  "accounts.comment.field.cancel":"Cancel"
+  "accounts.comment.field.cancel":"Cancel",
+
+  "blocks.columns.type":"Type",
+  "blocks.columns.desc":"Display description",
+  "blocks.columns.blocked":"Blocked actions",
+  "blocks.columns.borrowing":"Borrowing",
+  "blocks.columns.requests":"Requests",
+  "blocks.columns.renewals":"Renewals",
+  "blocks.buttons.add":"+Add Block",
+  "blocks.label":"Patron Blocks",
+
+  "blocks.form.label.information":"Block information",
+  "blocks.form.label.display":"Display Description*",
+  "blocks.form.label.staff":"Staff only information",
+  "blocks.form.label.message":"Message to Patron",
+  "blocks.form.label.date":"Expiration date",
+  "blocks.form.label.block":"Block actions*",
+  "blocks.form.label.borrowing":"Borrowing",
+  "blocks.form.label.renewals":"Renewals",
+  "blocks.form.label.request":"Request",
+
+  "blocks.form.placeholder.desc":"Enter a short description (required)",
+  "blocks.form.placeholder.information":"Enter addition information (optional)",
+  "blocks.form.placeholder.message":"Enter a message to the patron (optional)",
+
+  "blocks.form.validate.desc":"Description is required",
+  "blocks.form.validate.any":"Select any option",
+  "blocks.form.validate.date":"Expiration date is required",
+  "blocks.form.validate.future":"Expiration date must be in the future",
+
+  "blocks.form.button.delete":"Delete",
+  "blocks.form.button.save":"Save & Close",
+  "blocks.form.button.create":"Create block",
+
+  "blocks.layer.heading":"Delete patron block?",
+  "blocks.layer.confirmLabel":"Delete"
 
 }

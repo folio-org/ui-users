@@ -87,6 +87,7 @@ class CopyForm extends React.Component {
           </Col>
           <Col>
             <Field
+              style={{ marginLeft: '10px', width: 120 }}
               name="ownerId"
               component={Select}
               dataOptions={options}

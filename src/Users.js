@@ -23,7 +23,7 @@ const RESULT_COUNT_INCREMENT = 30;
 
 const filterConfig = [
   {
-    label: 'Status',
+    label: <FormattedMessage id="ui-users.status" />,
     name: 'active',
     cql: 'active',
     values: [
@@ -32,7 +32,7 @@ const filterConfig = [
     ],
   },
   {
-    label: 'Patron group',
+    label: <FormattedMessage id="ui-users.information.patronGroup" />,
     name: 'pg',
     cql: 'patronGroup',
     values: [], // will be filled in by componentWillUpdate
@@ -156,7 +156,7 @@ class Users extends React.Component {
 
   componentDidUpdate() {
     const pg = (this.props.resources.patronGroups || {}).records || [];
-    if (pg && pg.length) {
+    if (pg.length) {
       const pgFilterConfig = filterConfig.find(group => group.name === 'pg');
       const oldValuesLength = pgFilterConfig.values.length;
       pgFilterConfig.values = pg.map(rec => ({ name: rec.group, cql: rec.id }));
@@ -223,6 +223,7 @@ class Users extends React.Component {
       browseOnly,
       intl,
     } = this.props;
+
     const patronGroups = (this.props.resources.patronGroups || {}).records || [];
 
     const resultsFormatter = {

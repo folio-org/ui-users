@@ -1,5 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
+import { Field } from 'redux-form';
+
 import {
   Pane,
   Button,
@@ -7,13 +10,12 @@ import {
   Col,
   Select,
 } from '@folio/stripes/components';
-import { FormattedMessage } from 'react-intl';
 import stripesForm from '@folio/stripes/form';
-import { Field } from 'redux-form';
 
 const Setting = ({
   name,
   label,
+  intl,
 }) => (
   <div>
     <Row>
@@ -25,14 +27,11 @@ const Setting = ({
           id={name}
           name={name}
           component={Select}
-        >
-          <FormattedMessage id="ui-users.yes">
-            {(message) => <option value="true">{message}</option>}
-          </FormattedMessage>
-          <FormattedMessage id="ui-users.no">
-            {(message) => <option value="false">{message}</option>}
-          </FormattedMessage>
-        </Field>
+          dataOptions={[
+            { value: true, label: intl.formatMessage({ id: 'ui-users.yes' }) },
+            { value: false, label: intl.formatMessage({ id: 'ui-users.no' }) }
+          ]}
+        />
       </Col>
     </Row>
   </div>
@@ -41,6 +40,7 @@ const Setting = ({
 Setting.propTypes = {
   label: PropTypes.string,
   name: PropTypes.string,
+  intl: PropTypes.object,
 };
 
 class CommentRequiredForm extends React.Component {
@@ -50,6 +50,7 @@ class CommentRequiredForm extends React.Component {
       submitting,
       handleSubmit,
     } = this.props;
+
     const lastMenu = (
       <Button
         type="submit"
@@ -63,7 +64,10 @@ class CommentRequiredForm extends React.Component {
     );
 
     return (
-      <form id="require-comment" onSubmit={handleSubmit}>
+      <form
+        id="require-comment"
+        onSubmit={handleSubmit}
+      >
         <Pane
           defaultWidth="fill"
           paneTitle={<FormattedMessage id="ui-users.comment.title" />}
