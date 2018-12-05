@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import {
   Accordion,
   Badge,
-  IfPermission,
   Headline
 } from '@folio/stripes/components';
+import { IfPermission } from '@folio/stripes/core';
 
 import ProxyEditList from '../../ProxyGroup/ProxyEditList';
 import ProxyEditItem from '../../ProxyGroup/ProxyEditItem';
