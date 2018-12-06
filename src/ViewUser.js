@@ -695,7 +695,9 @@ class ViewUser extends React.Component {
 
     if (this.isLayerOpen('add-block') || this.isLayerOpen('edit-block')) {
       return (
-        <Layer label={query.layer === 'add-block' ? 'Add Block' : 'Edit Block'}>
+        <Layer label={query.layer === 'add-block'
+          ? <FormattedMessage id="ui-users.blocks.layer.add" />
+          : <FormattedMessage id="ui-users.blocks.layer.edit" />}>
           <this.connectedPatronBlockLayer
             {...this.props}
             query={query}

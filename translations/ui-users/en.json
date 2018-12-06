@@ -717,6 +717,8 @@
   "blocks.form.button.create":"Create block",
 
   "blocks.layer.heading":"Delete patron block?",
-  "blocks.layer.confirmLabel":"Delete"
+  "blocks.layer.confirmLabel":"Delete",
+  "blocks.layer.add":"Add Block",
+  "blocks.layer.edit":"Edit Block"
 
 }
