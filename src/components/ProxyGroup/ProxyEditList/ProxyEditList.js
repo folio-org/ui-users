@@ -15,6 +15,7 @@ import {
 } from '@folio/stripes/components';
 import { Pluggable } from '@folio/stripes/core';
 
+import ErrorModal from '../../ErrorModal';
 import { getFullName } from '../../../util';
 import css from './ProxyEditList.css';
 
@@ -32,10 +33,32 @@ class ProxyEditList extends React.Component {
   constructor(props) {
     super(props);
     this.renderList = this.renderList.bind(this);
+    this.hideModal = this.hideModal.bind(this);
     this.state = { confirmDelete: false };
   }
 
+  validate(user) {
+    const { initialValues, name } = this.props;
+    const { id } = initialValues;
+
+    if (id !== user.id) return true;
+
+    const error = {
+      label: <FormattedMessage id={`ui-users.errors.${name}.invalidUserLabel`} />,
+      message: <FormattedMessage
+        id={`ui-users.errors.${name}.invalidUserMessage`}
+        values={{ name: getFullName(initialValues) }}
+      />,
+    };
+
+    this.setState({ error });
+
+    return false;
+  }
+
   onAdd(user) {
+    if (!this.validate(user)) return;
+
     const proxy = {
       accrueTo: 'Sponsor',
       notificationsTo: 'Sponsor',
@@ -95,6 +118,10 @@ class ProxyEditList extends React.Component {
         confirmLabel={<FormattedMessage id="ui-users.delete" />}
       />
     );
+  }
+
+  hideModal() {
+    this.setState({ error: null });
   }
 
   renderList({ fields }) {
@@ -177,10 +204,21 @@ class ProxyEditList extends React.Component {
   }
 
   render() {
+    const { error, confirmDelete } = this.state;
+
     return (
       <div>
+        {error &&
+          <ErrorModal
+            id="proxy-error-modal"
+            open={!!error}
+            onClose={this.hideModal}
+            message={error.message}
+            label={error.label}
+          />
+        }
         <FieldArray name={this.props.name} component={this.renderList} />
-        {this.state.confirmDelete && this.renderConfirmModal()}
+        {confirmDelete && this.renderConfirmModal()}
       </div>
     );
   }
