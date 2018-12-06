@@ -11,6 +11,7 @@ import queryString from 'query-string';
 import {
   Paneset,
   Pane,
+  PaneHeader,
   PaneMenu,
   IconButton,
   Button,
@@ -401,7 +402,6 @@ class AccountsHistory extends React.Component {
 
   render() {
     const {
-      onCancel,
       location,
       user,
       patronGroup,
@@ -422,23 +422,6 @@ class AccountsHistory extends React.Component {
     else if (query.layer === 'closed-accounts') badgeCount = closed.length;
     const filters = filterState(this.queryParam('f'));
     const selectedAccounts = this.state.selectedAccounts.map(a => accounts.find(ac => ac.id === a.id) || {});
-
-    const closeMenu = (
-      <PaneMenu>
-        <button
-          onClick={onCancel}
-          type="button"
-        >
-          <Row>
-            <Col>
-              <span style={{ fontSize: 'x-large' }}>
-                <FormattedMessage id="ui-users.accounts.cancellation.field.back" />
-              </span>
-            </Col>
-          </Row>
-        </button>
-      </PaneMenu>
-    );
 
     const columnMapping = {
       'metadata.createdDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' }),
@@ -516,44 +499,24 @@ class AccountsHistory extends React.Component {
       ? parseFloat(balance || 0).toFixed(2)
       : '0.00';
 
-    const header1 = (
-      <Row style={{ width: '80%' }}>
-        <Col xs={7}>
-          {closeMenu}
-        </Col>
-        <Col xs={4}>
-          <Row>
-            <Col>
-              <b>
-                <FormattedMessage
-                  id="ui-users.accounts.header"
-                  values={{
-                    userName: getFullName(user),
-                    patronGroup: _.upperFirst(patronGroup.group),
-                  }}
-                />
-              </b>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <div style={{ margin: '5px 5px 5px 40px' }}>
-                <FormattedMessage id="ui-users.accounts.outstandingBalance" />
-                {outstandingBalance}
-              </div>
-            </Col>
-          </Row>
-        </Col>
-      </Row>
-    );
-
     const visibleColumns = this.getVisibleColumns();
 
     return (
       <Paneset>
         <Pane
           defaultWidth="100%"
-          subheader={header1}
+          dismissible
+          onClose={this.props.onCancel}
+          paneTitle={(
+            <FormattedMessage id="ui-users.accounts.title">
+              {(title) => `${title} - ${getFullName(user)} (${_.upperFirst(patronGroup.group)})`}
+            </FormattedMessage>
+          )}
+          paneSub={(
+            <FormattedMessage id="ui-users.accounts.outstandingBalance">
+              {(title) => `${title} ${outstandingBalance}`}
+            </FormattedMessage>
+          )}
         >
           <Paneset>
             <Filters
@@ -568,11 +531,8 @@ class AccountsHistory extends React.Component {
               filters={filters}
               onChangeFilter={(e) => { this.handleFilterChange(e, 'f'); }}
             />
-            <Pane
-              defaultWidth="fill"
-              heigth="80%"
-              subheader={header}
-            >
+            <div style={{ width: '100%' }}>
+              <PaneHeader header={header} />
               <Menu
                 user={user}
                 showFilters={this.state.showFilters}
@@ -624,7 +584,7 @@ class AccountsHistory extends React.Component {
                 balance={balance}
                 handleEdit={this.handleEdit}
               />
-            </Pane>
+            </div>
           </Paneset>
         </Pane>
       </Paneset>

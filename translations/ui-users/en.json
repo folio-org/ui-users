@@ -485,7 +485,7 @@
 
   "accounts.title": "Fees/Fines",
   "accounts.outstandingBalance": "Outstanding Balance: ",
-  "accounts.header": "Fee/fine details - {userName} ({patronGroup})",
+  "accounts.header": "Fees/Fines - {userName} ({patronGroup})",
   "accounts.outstanding": "Outstanding Balance:",
   "accounts.open": "Open",
   "accounts.closed": "Closed",
