@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { FieldArray } from 'redux-form';
 import {
@@ -120,6 +120,20 @@ class ProxyEditList extends React.Component {
     );
   }
 
+  renderErrorModal() {
+    const { error } = this.state;
+
+    return (
+      <ErrorModal
+        id="proxy-error-modal"
+        open={!!error}
+        onClose={this.hideModal}
+        message={error.message}
+        label={error.label}
+      />
+    );
+  }
+
   hideModal() {
     this.setState({ error: null });
   }
@@ -207,19 +221,11 @@ class ProxyEditList extends React.Component {
     const { error, confirmDelete } = this.state;
 
     return (
-      <div>
-        {error &&
-          <ErrorModal
-            id="proxy-error-modal"
-            open={!!error}
-            onClose={this.hideModal}
-            message={error.message}
-            label={error.label}
-          />
-        }
+      <Fragment>
         <FieldArray name={this.props.name} component={this.renderList} />
         {confirmDelete && this.renderConfirmModal()}
-      </div>
+        {error && this.renderErrorModal()}
+      </Fragment>
     );
   }
 }
