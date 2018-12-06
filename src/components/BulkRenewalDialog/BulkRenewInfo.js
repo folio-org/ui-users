@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import {
   isEmpty,
   find,
+  get,
 } from 'lodash';
 
 import {
@@ -73,7 +74,8 @@ class BulkRenewInfo extends React.Component {
 
   isOverridePossible(errorMessage) {
     for (const rewritableMessage of this.rewritableMessages) {
-      if (errorMessage.includes(rewritableMessage)) {
+      const stringErrorMessage = get(errorMessage, 'props.values.message.props.values.message', '');
+      if (stringErrorMessage.includes(rewritableMessage)) {
         return true;
       }
     }

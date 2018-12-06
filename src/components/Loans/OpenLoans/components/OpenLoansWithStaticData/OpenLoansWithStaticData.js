@@ -52,6 +52,7 @@ class OpenLoansWithStaticData extends React.Component {
     hideChangeDueDateDialog: PropTypes.func.isRequired,
     hideBulkRenewalDialog: PropTypes.func.isRequired,
     calloutRef: PropTypes.func.isRequired,
+    buildRecords: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -195,6 +196,7 @@ class OpenLoansWithStaticData extends React.Component {
       showChangeDueDateDialog,
       toggleColumn,
       calloutRef,
+      buildRecords,
     } = this.props;
 
     this.columnMapping = this.getColumnMapping();
@@ -210,6 +212,7 @@ class OpenLoansWithStaticData extends React.Component {
           renewSelected={renewSelected}
           toggleColumn={toggleColumn}
           showChangeDueDateDialog={showChangeDueDateDialog}
+          buildRecords={buildRecords}
         />}
         <OpenLoans
           loans={loans}

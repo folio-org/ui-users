@@ -1,8 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
+import {
+  size,
+  cloneDeep,
+} from 'lodash';
 
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
 
 import {
   Button,
@@ -17,13 +24,15 @@ import Label from '../../../../Label/Label';
 
 class OpenLoansSubHeader extends React.Component {
   static propTypes = {
+    intl: intlShape.isRequired,
     checkedLoans: PropTypes.object.isRequired,
     columnMapping: PropTypes.object.isRequired,
-    toggleColumn: PropTypes.func.isRequired,
-    renewSelected: PropTypes.func.isRequired,
     showChangeDueDateDialog: PropTypes.func.isRequired,
     loans: PropTypes.arrayOf(PropTypes.object).isRequired,
     visibleColumns: PropTypes.arrayOf(PropTypes.object).isRequired,
+    toggleColumn: PropTypes.func.isRequired,
+    renewSelected: PropTypes.func.isRequired,
+    buildRecords: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -36,6 +45,18 @@ class OpenLoansSubHeader extends React.Component {
     this.bulkActionsTooltip = <FormattedMessage id="ui-users.bulkActions.tooltip" />;
     this.renewString = <FormattedMessage id="ui-users.renew" />;
     this.changeDueDateString = <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />;
+
+    this.headers = ['action', 'dueDate', 'loanDate', 'item.barcode', 'item.callNumber', 'item.contributors',
+      'item.holdingsRecordId', 'item.instanceId', 'item.status.name', 'item.title', 'item.materialType.name',
+      'item.location.name', 'metaData.createdByUserId', 'metadata.updatedDate', 'metadata.updatedByUserId', 'loanPolicyId'];
+
+    // Map to pass into exportCsv
+    this.columnHeadersMap = this.headers.map(item => {
+      return {
+        label: props.intl.formatMessage({ id: `ui-users.${item}` }),
+        value: item
+      };
+    });
   }
 
   renderCheckboxList(columnMapping) {
@@ -76,14 +97,17 @@ class OpenLoansSubHeader extends React.Component {
       showChangeDueDateDialog,
       checkedLoans,
       columnMapping,
+      buildRecords,
     } = this.props;
 
     const {
       toggleDropdownState,
     } = this.state;
 
-    const noSelectedLoans = _.size(checkedLoans) === 0;
+    const noSelectedLoans = size(checkedLoans) === 0;
     const resultCount = <FormattedMessage id="ui-users.resultCount" values={{ count: loans.length }} />;
+    const clonedLoans = cloneDeep(loans);
+    const recordsToCSV = buildRecords(clonedLoans);
 
     return (
       <ActionsBar
@@ -151,8 +175,8 @@ class OpenLoansSubHeader extends React.Component {
               {this.changeDueDateString}
             </Button>
             <ExportCsv
-              data={loans}
-              excludeKeys={['id', 'userId', 'itemId']}
+              data={recordsToCSV}
+              onlyFields={this.columnHeadersMap}
             />
           </span>
         }
@@ -161,4 +185,4 @@ class OpenLoansSubHeader extends React.Component {
   }
 }
 
-export default OpenLoansSubHeader;
+export default injectIntl(OpenLoansSubHeader);

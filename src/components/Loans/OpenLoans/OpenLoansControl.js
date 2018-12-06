@@ -69,6 +69,7 @@ class OpenLoansControl extends React.Component {
       id: PropTypes.string.isRequired,
     }).isRequired,
     onClickViewChargeFeeFine: PropTypes.func.isRequired,
+    buildRecords: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -255,6 +256,21 @@ class OpenLoansControl extends React.Component {
     this.setState({ checkedLoans: {}, allChecked: false });
   };
 
+  showRequestQueue(loan, e) {
+    if (e) e.preventDefault();
+    const q = {};
+    Object.keys(this.props.resources.query).forEach((k) => { q[k] = null; });
+
+    q.query = _.get(loan, ['item', 'barcode']);
+    q.filters = 'requestStatus.open - not yet filled,requestStatus.open - awaiting pickup';
+    q.sort = 'Request Date';
+
+    this.props.mutator.query.update({
+      _path: '/requests',
+      ...q,
+    });
+  }
+
   renew(loan, bulkRenewal) {
     const { user, renew } = this.props;
     const promise = renew(loan, user, bulkRenewal);
@@ -390,10 +406,12 @@ class OpenLoansControl extends React.Component {
       stripes,
       onClickViewLoanActionsHistory,
       user,
+      buildRecords,
     } = this.props;
 
     return (
       <TableModel
+        buildRecords={buildRecords}
         visibleColumns={visibleColumns}
         checkedLoans={checkedLoans}
         loanPolicies={loanPolicies}

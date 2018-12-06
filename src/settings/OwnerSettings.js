@@ -232,6 +232,7 @@ class OwnerSettings extends React.Component {
           component={MultiSelection}
           onChange={this.onChangeSelection}
           dataOptions={options}
+          renderToOverlay
         />
       )
     };

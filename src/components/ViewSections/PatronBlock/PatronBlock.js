@@ -64,9 +64,9 @@ class PatronBlock extends React.Component {
 
     this.state = {
       sortOrder: [
-        formatMessage({ id: 'ui-users.blocks.colums.type' }),
-        formatMessage({ id: 'ui-users.blocks.colums.desc' }),
-        formatMessage({ id: 'ui-users.blocks.colums.blocked' }),
+        formatMessage({ id: 'ui-users.blocks.columns.type' }),
+        formatMessage({ id: 'ui-users.blocks.columns.desc' }),
+        formatMessage({ id: 'ui-users.blocks.columns.blocked' }),
       ],
       sortDirection: ['desc', 'asc'],
     };

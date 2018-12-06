@@ -6,7 +6,6 @@ import {
 } from 'lodash';
 import {
   FormattedTime,
-  FormattedDate,
   FormattedMessage,
 } from 'react-intl';
 
@@ -83,9 +82,12 @@ class BulkOverrideLoansList extends Component {
 
       return (
         <div>
-          <FormattedDate value={newDueDate} />
-          ,
-          <FormattedTime value={newDueDate} />
+          <FormattedTime
+            value={newDueDate}
+            day="numeric"
+            month="numeric"
+            year="numeric"
+          />
         </div>
       );
     } else {
@@ -146,7 +148,7 @@ class BulkOverrideLoansList extends Component {
                 <div>
                   <Icon
                     size="medium"
-                    icon="validation-error"
+                    icon="exclamation-circle"
                     status="warn"
                   />
                   <FormattedMessage id="ui-users.brd.failedRenewal" />
@@ -161,12 +163,12 @@ class BulkOverrideLoansList extends Component {
           'title': loan => get(loan, ['item', 'title']),
           'itemStatus': loan => get(loan, ['item', 'status', 'name']),
           'currentDueDate': loan => (
-            <div>
-              <FormattedDate value={loan.dueDate} />
-              ,
-              <br />
-              <FormattedTime value={loan.dueDate} />
-            </div>
+            <FormattedTime
+              value={get(loan, ['dueDate'])}
+              day="numeric"
+              month="numeric"
+              year="numeric"
+            />
           ),
           'requestQueue': loan => requestCounts[loan.itemId] || 0,
           'barcode': loan => get(loan, ['item', 'barcode']),

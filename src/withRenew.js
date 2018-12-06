@@ -93,7 +93,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
       let message = errors.reduce((msg, err) => ((msg) ? `${msg}, ${err.message}` : err.message), '');
       message = (
         <FormattedMessage
-          id="ui-users.loanNotRenewedReason"
+          id="ui-users.error.loanNotRenewedReason"
           values={{ message }}
         />
       );
@@ -101,7 +101,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
       if (policyName) {
         message = (
           <FormattedMessage
-            id="ui-users.reviewBeforeRenewal"
+            id="ui-users.error.reviewBeforeRenewal"
             values={{ message, policyName }}
           />
         );
@@ -126,7 +126,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
               open={errors.length > 0 && !this.state.bulkRenewal}
               onClose={this.hideModal}
               message={message}
-              label={<FormattedMessage id="ui-users.loanNotRenewed" />}
+              label={<FormattedMessage id="ui-users.error.loanNotRenewed" />}
             />
           }
         </div>

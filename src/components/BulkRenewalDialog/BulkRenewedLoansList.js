@@ -4,7 +4,6 @@ import get from 'lodash/get';
 
 import {
   FormattedMessage,
-  FormattedDate,
   FormattedTime,
 } from 'react-intl';
 
@@ -28,7 +27,6 @@ const defaultProps = {
 };
 
 const BulkRenewedLoansList = (props) => {
-  const { formatMessage } = props.stripes.intl;
   const {
     failedRenewals,
     successRenewals,
@@ -116,8 +114,14 @@ const BulkRenewedLoansList = (props) => {
         },
         title: loan => get(loan, ['item', 'title']),
         itemStatus: loan => get(loan, ['item', 'status', 'name']),
-        requestQueue: loan => props.requestCounts[loan.itemId] || 0,
-        currentDueDate: loan => <FormattedTime value={get(loan, ['dueDate'])} day="numeric" month="numeric" year="numeric" />,
+        currentDueDate: loan => (
+          <FormattedTime
+            value={get(loan, ['dueDate'])}
+            day="numeric"
+            month="numeric"
+            year="numeric"
+          />
+        ),
         requestQueue: loan => requestCounts[loan.itemId] || 0,
         barcode: loan => get(loan, ['item', 'barcode']),
         callNumber: loan => get(loan, ['item', 'callNumber']),
