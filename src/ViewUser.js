@@ -690,7 +690,116 @@ class ViewUser extends React.Component {
         onClickViewAccountActionsHistory={this.onClickViewAccountActionsHistory}
         onClickViewClosedAccounts={this.onClickViewClosedAccounts}
         onClickViewAllAccounts={this.onClickViewAllAccounts}
-      />);
+      />
+    );
+
+    if (this.isLayerOpen('add-block') || this.isLayerOpen('edit-block')) {
+      return (
+        <Layer label={query.layer === 'add-block' ? 'Add Block' : 'Edit Block'}>
+          <this.connectedPatronBlockLayer
+            {...this.props}
+            query={query}
+            user={user}
+            selectedPatronBlock={this.state.selectedPatronBlock}
+            handleAddRecords={this.handleAddRecords}
+            onCancel={this.onClickClosePatronBlock}
+          />
+        </Layer>
+      );
+    }
+
+    if (this.isLayerOpen('open-accounts') || this.isLayerOpen('closed-accounts') || this.isLayerOpen('all-accounts')) {
+      return (
+        <Layer isOpen label={<FormattedMessage id="ui-users.accounts.title" />}>
+          <this.connectedAccountsHistory
+            loans={loans}
+            num={(this.state.addRecord ? 51 : 50)}
+            onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
+            user={user}
+            parentMutator={this.props.mutator}
+            patronGroup={patronGroup}
+            stripes={stripes}
+            history={this.props.history}
+            addRecord={this.state.addRecord}
+            handleAddRecords={this.handleAddRecords}
+            location={this.props.location}
+            onCancel={this.onClickCloseAccountsHistory}
+            onClickViewChargeFeeFine={this.onClickViewChargeFeeFine}
+            onClickViewAccountActionsHistory={this.onClickViewAccountActionsHistory}
+            onClickCloseAccountActionsHistory={this.onClickCloseAccountActionsHistory}
+          />
+        </Layer>
+      );
+    }
+
+    if (this.isLayerOpen('charge')) {
+      return (
+        <Layer isOpen label={<FormattedMessage id="ui-users.chargeFeefine" />}>
+          <this.connectedCharge
+            servicePoints={servicePoints}
+            preferredServicePoint={preferredServicePoint}
+            stripes={stripes}
+            onCloseChargeFeeFine={this.onCloseChargeFeeFine}
+            user={user}
+            loan={{ item: {} }}
+            selectedLoan={this.state.selectedLoan}
+            handleAddRecords={this.handleAddRecords}
+          />
+        </Layer>
+      );
+    }
+
+    if (this.isLayerOpen('account')) {
+      return (
+        <Layer
+          isOpen={this.isLayerOpen('account')}
+          label={<FormattedMessage id="ui-users.accountActionHistory" />}
+        >
+          <this.connectedAccountActionsHistory
+            user={user}
+            patronGroup={patronGroup}
+            account={this.state.selectedAccount}
+            accountid={this.state.selectedAccount.id}
+            history={this.props.history}
+            onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
+            num={(this.state.addRecord ? 2 : 1)}
+            handleAddRecords={this.handleAddRecords}
+            stripes={stripes}
+            onCancel={this.onClickCloseAccountActionsHistory}
+              // when navigating away to another user, clear all loan-related state
+            onClickUser={() => { this.onClickCloseAccountActionsHistory(); this.onClickCloseAccountsHistory(); }}
+          />
+        </Layer>
+      );
+    }
+
+    if (this.isLayerOpen('open-loans') || this.isLayerOpen('closed-loans')) {
+      return (
+        <IfPermission perm="ui-users.loans.all">
+          <FormattedMessage id="ui-users.loans.title">
+            {contentLabel => (
+              <Layer
+                isOpen
+                contentLabel={contentLabel}
+              >
+                {loansHistory}
+              </Layer>
+            )}
+          </FormattedMessage>
+
+          <FormattedMessage id="ui-users.loanActionsHistory">
+            {contentLabel => (
+              <Layer
+                isOpen={this.isLayerOpen('loan')}
+                contentLabel={contentLabel}
+              >
+                {loanDetails}
+              </Layer>
+            )}
+          </FormattedMessage>
+        </IfPermission>
+      );
+    }
 
     return (
       <HasCommand
@@ -856,100 +965,6 @@ class ViewUser extends React.Component {
               </Layer>
             )}
           </FormattedMessage>
-          <Layer isOpen={query.layer ? query.layer === 'add-block' || query.layer === 'edit-block' : false} label={query.layer === 'add-block' ? 'Add Block' : 'Edit Block'}>
-            <this.connectedPatronBlockLayer
-              {...this.props}
-              query={query}
-              user={user}
-              selectedPatronBlock={this.state.selectedPatronBlock}
-              handleAddRecords={this.handleAddRecords}
-              onCancel={this.onClickClosePatronBlock}
-            />
-          </Layer>
-          <Layer
-            isOpen={
-              this.isLayerOpen('open-accounts') ||
-              this.isLayerOpen('closed-accounts') ||
-              this.isLayerOpen('all-accounts')
-            }
-            label={<FormattedMessage id="ui-users.accounts.title" />}
-          >
-            <this.connectedAccountsHistory
-              loans={loans}
-              num={(this.state.addRecord ? 51 : 50)}
-              onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
-              user={user}
-              parentMutator={this.props.mutator}
-              patronGroup={patronGroup}
-              stripes={stripes}
-              history={this.props.history}
-              addRecord={this.state.addRecord}
-              handleAddRecords={this.handleAddRecords}
-              location={this.props.location}
-              onCancel={this.onClickCloseAccountsHistory}
-              onClickViewChargeFeeFine={this.onClickViewChargeFeeFine}
-              onClickViewAccountActionsHistory={this.onClickViewAccountActionsHistory}
-              onClickCloseAccountActionsHistory={this.onClickCloseAccountActionsHistory}
-            />
-          </Layer>
-          <Layer
-            isOpen={this.isLayerOpen('charge')}
-            label={<FormattedMessage id="ui-users.chargeFeefine" />}
-          >
-            <this.connectedCharge
-              servicePoints={servicePoints}
-              preferredServicePoint={preferredServicePoint}
-              stripes={stripes}
-              onCloseChargeFeeFine={this.onCloseChargeFeeFine}
-              user={user}
-              loan={{ item: {} }}
-              selectedLoan={this.state.selectedLoan}
-              handleAddRecords={this.handleAddRecords}
-            />
-          </Layer>
-          <Layer
-            isOpen={this.isLayerOpen('account')}
-            label={<FormattedMessage id="ui-users.accountActionHistory" />}
-          >
-            <this.connectedAccountActionsHistory
-              user={user}
-              patronGroup={patronGroup}
-              account={this.state.selectedAccount}
-              accountid={this.state.selectedAccount.id}
-              history={this.props.history}
-              onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
-              num={(this.state.addRecord ? 2 : 1)}
-              handleAddRecords={this.handleAddRecords}
-              stripes={stripes}
-              onCancel={this.onClickCloseAccountActionsHistory}
-              // when navigating away to another user, clear all loan-related state
-              onClickUser={() => { this.onClickCloseAccountActionsHistory(); this.onClickCloseAccountsHistory(); }}
-            />
-          </Layer>
-
-          <IfPermission perm="ui-users.loans.all">
-            <FormattedMessage id="ui-users.loans.title">
-              {contentLabel => (
-                <Layer
-                  isOpen={this.isLayerOpen('open-loans') || this.isLayerOpen('closed-loans')}
-                  contentLabel={contentLabel}
-                >
-                  {loansHistory}
-                </Layer>
-              )}
-            </FormattedMessage>
-
-            <FormattedMessage id="ui-users.loanActionsHistory">
-              {contentLabel => (
-                <Layer
-                  isOpen={this.isLayerOpen('loan')}
-                  contentLabel={contentLabel}
-                >
-                  {loanDetails}
-                </Layer>
-              )}
-            </FormattedMessage>
-          </IfPermission>
         </Pane>
       </HasCommand>
     );
