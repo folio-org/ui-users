@@ -1,11 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import {
-  FormattedMessage,
-  injectIntl,
-  intlShape,
-} from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import {
   size,
   omit,
@@ -30,7 +26,6 @@ import BulkOverrideLoansList from './BulkOverrideLoansList';
 
 class BulkOverrideInfo extends React.Component {
   static propTypes = {
-    intl: intlShape.isRequired,
     stripes: stripesShape.isRequired,
     failedRenewals: PropTypes.arrayOf(
       PropTypes.object
@@ -55,6 +50,7 @@ class BulkOverrideInfo extends React.Component {
       date: '',
       time: '',
     };
+    this.INVALIDE_DATE_MESSAGE = 'Invalid date';
     this.loanPoliciesRecords = get(props.stripes.store.getState(), 'folio_users_loan_policies.records');
     this.connectedLoanList = props.stripes.connect(BulkOverrideLoansList);
   }
@@ -74,12 +70,16 @@ class BulkOverrideInfo extends React.Component {
   toggleItem = (e, loan) => {
     e.stopPropagation();
 
+    const { failedRenewals } = this.props;
+    const { checkedLoans: loans } = this.state;
     const id = loan.id;
-    const loans = this.state.checkedLoans;
     const checkedLoans = (loans[id])
       ? omit(loans, id)
-      : { ...loans, [id]: loan };
-    const allChecked = size(checkedLoans) === this.props.failedRenewals.length;
+      : {
+        ...loans,
+        [id]: loan
+      };
+    const allChecked = size(checkedLoans) === failedRenewals.length;
 
     this.setState({
       checkedLoans,
@@ -94,7 +94,7 @@ class BulkOverrideInfo extends React.Component {
   };
 
   handleDateTimeChanged = (datetime) => {
-    if (datetime !== 'Invalid date') {
+    if (datetime !== this.INVALIDE_DATE_MESSAGE) {
       this.setState({ datetime });
     }
   };
@@ -129,7 +129,6 @@ class BulkOverrideInfo extends React.Component {
       requestCounts,
       errorMessages,
       onCancel,
-      intl: { formatMessage },
     } = this.props;
 
     const {
@@ -178,12 +177,16 @@ class BulkOverrideInfo extends React.Component {
         />
         <Row>
           <Col sm={5}>
-            <TextArea
-              label={<FormattedMessage id="ui-users.additionalInfo.label" />}
-              placeholder={formatMessage({ id: 'ui-users.additionalInfo.placeholder' })}
-              required
-              onChange={this.handleAdditionalInfoChange}
-            />
+            <FormattedMessage id="ui-users.additionalInfo.placeholder">
+              {placeholder => (
+                <TextArea
+                  label={<FormattedMessage id="ui-users.additionalInfo.label" />}
+                  placeholder={placeholder}
+                  required
+                  onChange={this.handleAdditionalInfoChange}
+                />
+              )}
+            </FormattedMessage>
           </Col>
         </Row>
         <Layout className="textRight">
@@ -205,4 +208,4 @@ class BulkOverrideInfo extends React.Component {
   }
 }
 
-export default injectIntl(BulkOverrideInfo);
+export default BulkOverrideInfo;

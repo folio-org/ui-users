@@ -7,7 +7,6 @@ import { stripesShape } from '@folio/stripes/core';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import BulkRenewalDialog from '@folio/users/src/components/BulkRenewalDialog';
 
-
 class Modals extends React.Component {
   static propTypes = {
     stripes: stripesShape.isRequired,
@@ -56,12 +55,10 @@ class Modals extends React.Component {
       hideBulkRenewalDialog,
     } = this.props;
 
-    let loanIds;
-    if (activeLoan) { // Only changing one due date.
-      loanIds = loans.filter(loan => activeLoan === loan.id);
-    } else { // Bulk-changing due dates.
-      loanIds = loans.filter(loan => checkedLoans[loan.id]);
-    }
+    const loanIds = activeLoan
+      ? loans.filter(loan => activeLoan === loan.id) // Only changing one due date.
+      : loans.filter(loan => checkedLoans[loan.id]); // Bulk-changing due dates.
+
 
     return (
       <React.Fragment>

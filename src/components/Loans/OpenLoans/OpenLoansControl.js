@@ -131,21 +131,27 @@ class OpenLoansControl extends React.Component {
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const { loans } = nextProps;
+
     if (prevState.loans.length < nextProps.loans.length) {
       return { loans };
     }
+
     return null;
   }
 
   componentDidMount() {
-    if (this.state.loans.length > 0) {
+    const { loans } = this.state;
+
+    if (loans.length > 0) {
       this.fetchLoanPolicyNames();
       this.getOpenRequestsCount();
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.loans.length > prevState.loans.length) {
+    const { loans } = this.state;
+
+    if (loans.length > prevState.loans.length) {
       this.fetchLoanPolicyNames();
       this.getOpenRequestsCount();
     }
@@ -153,8 +159,8 @@ class OpenLoansControl extends React.Component {
 
   toggleAll = (e) => {
     const { loans } = this.props;
-    const checkedLoans = (e.target.checked)
-      ? loans.reduce((memo, loan) => (Object.assign(memo, { [loan.id]: loan })), {})
+    const checkedLoans = e.target.checked
+      ? loans.reduce((memo, loan) => Object.assign(memo, { [loan.id]: loan }), {})
       : {};
 
     this.setState(({ allChecked }) => ({
@@ -177,13 +183,15 @@ class OpenLoansControl extends React.Component {
 
   toggleItem = (e, loan) => {
     e.stopPropagation();
+    const { checkedLoans: loans } = this.state;
+    const { loans: existingLoans } = this.props;
 
     const id = loan.id;
-    const loans = this.state.checkedLoans;
     const checkedLoans = (loans[id])
       ? _.omit(loans, id)
       : { ...loans, [id]: loan };
-    const allChecked = _.size(checkedLoans) === this.props.loans.length;
+    const allChecked = _.size(checkedLoans) === existingLoans;
+
     this.setState({ checkedLoans, allChecked });
   };
 
@@ -191,29 +199,52 @@ class OpenLoansControl extends React.Component {
     const q = this.state.loans.map(loan => {
       return `itemId==${loan.itemId}`;
     }).join(' or ');
+    const {
+      mutator: {
+        loanPolicies: {
+          reset,
+          GET,
+        },
+      },
+    } = this.props;
 
     const query = `(${q}) and status==("Open - Awaiting pickup" or "Open - Not yet filled") sortby requestDate desc`;
-    this.props.mutator.requests.reset();
-    this.props.mutator.requests.GET({ params: { query } }).then((requestRecords) => {
-      const requestCountObject = requestRecords.reduce((map, record) => {
-        map[record.itemId] = map[record.itemId] ? ++map[record.itemId] : 1;
-        return map;
-      }, {});
-      this.setState({ requestCounts: requestCountObject });
-    });
+    reset();
+    GET({ params: { query } })
+      .then((requestRecords) => {
+        const requestCountObject = requestRecords.reduce((map, record) => {
+          map[record.itemId] = map[record.itemId]
+            ? ++map[record.itemId]
+            : 1;
+
+          return map;
+        }, {});
+        this.setState({ requestCounts: requestCountObject });
+      });
   }
 
   fetchLoanPolicyNames() {
     const query = this.state.loans.map(loan => `id==${loan.loanPolicyId}`).join(' or ');
+    const {
+      mutator: {
+        loanPolicies: {
+          reset,
+          GET,
+        },
+      },
+    } = this.props;
 
-    this.props.mutator.loanPolicies.reset();
-    this.props.mutator.loanPolicies.GET({ params: { query } }).then((loanPolicies) => {
-      const loanPolicyObject = loanPolicies.reduce((map, loanPolicy) => {
-        map[loanPolicy.id] = loanPolicy.name;
-        return map;
-      }, {});
-      this.setState({ loanPolicies: loanPolicyObject });
-    });
+    reset();
+    GET({ params: { query } })
+      .then((loanPolicies) => {
+        const loanPolicyObject = loanPolicies.reduce((map, loanPolicy) => {
+          map[loanPolicy.id] = loanPolicy.name;
+
+          return map;
+        }, {});
+
+        this.setState({ loanPolicies: loanPolicyObject });
+      });
   }
 
   toggleColumn = (e) => {
@@ -258,30 +289,41 @@ class OpenLoansControl extends React.Component {
 
   showRequestQueue(loan, e) {
     if (e) e.preventDefault();
+
     const q = {};
-    Object.keys(this.props.resources.query).forEach((k) => { q[k] = null; });
+    const {
+      resources: {
+        query,
+      },
+      mutator: {
+        query: {
+          update,
+        },
+      },
+    } = this.props;
+
+    Object.keys(query).forEach((k) => { q[k] = null; });
 
     q.query = _.get(loan, ['item', 'barcode']);
     q.filters = 'requestStatus.open - not yet filled,requestStatus.open - awaiting pickup';
     q.sort = 'Request Date';
 
-    this.props.mutator.query.update({
+    update({
       _path: '/requests',
       ...q,
     });
   }
 
   renew(loan, bulkRenewal) {
-    const { user, renew } = this.props;
+    const {
+      user,
+      renew,
+    } = this.props;
     const promise = renew(loan, user, bulkRenewal);
 
     if (bulkRenewal) return promise;
-    const singleRenewalFailure = [];
     promise
-      .then(() => this.showSingleRenewCallout(loan))
-      .catch(() => {
-        singleRenewalFailure.push(loan);
-      });
+      .then(() => this.showSingleRenewCallout(loan));
     return promise;
   }
 
@@ -301,7 +343,7 @@ class OpenLoansControl extends React.Component {
   hideChangeDueDateDialog = () => {
     this.setState({
       changeDueDateDialogOpen: false,
-      activeLoan: undefined,
+      activeLoan: null,
     });
   };
 
@@ -325,7 +367,10 @@ class OpenLoansControl extends React.Component {
     e.preventDefault();
     e.stopPropagation();
 
-    const { loan, action } = itemMeta;
+    const {
+      loan,
+      action,
+    } = itemMeta;
 
     if (action && this[action]) {
       this[action](loan);
@@ -335,13 +380,31 @@ class OpenLoansControl extends React.Component {
   itemDetails(loan, e) {
     if (e) e.preventDefault();
 
+    const {
+      resources: {
+        query,
+      },
+      mutator: {
+        query: {
+          update,
+        },
+      },
+    } = this.props;
+    const {
+      item:{
+        instanceId,
+        holdingsRecordId,
+      },
+      itemId,
+    } = loan;
+
     // none of the query params relevent to finding a user
     // are relevent to finding instances so we purge them all.
     const q = {};
-    Object.keys(this.props.resources.query).forEach((k) => { q[k] = null; });
+    Object.keys(query).forEach((k) => { q[k] = null; });
 
-    this.props.mutator.query.update({
-      _path: `/inventory/view/${loan.item.instanceId}/${loan.item.holdingsRecordId}/${loan.itemId}`,
+    update({
+      _path: `/inventory/view/${instanceId}/${holdingsRecordId}/${itemId}`,
       ...q,
     });
   }
@@ -355,17 +418,31 @@ class OpenLoansControl extends React.Component {
 
   showLoanPolicy = (loan, e) => {
     if (e) e.preventDefault();
-    const q = {};
-    Object.keys(this.props.resources.query).forEach((k) => { q[k] = null; });
 
-    this.props.mutator.query.update({
+    const {
+      resources: {
+        query,
+      },
+      mutator: {
+        query: {
+          update,
+        },
+      },
+    } = this.props;
+    const q = {};
+
+    Object.keys(query).forEach((k) => { q[k] = null; });
+
+    update({
       _path: `/settings/circulation/loan-policies/${loan.loanPolicyId}`,
       ...q,
     });
   };
 
   feefine = (loan, e) => {
-    this.props.onClickViewChargeFeeFine(e, loan);
+    const { onClickViewChargeFeeFine } = this.props;
+
+    onClickViewChargeFeeFine(e, loan);
   };
 
   feefinedetails = (loan, e) => {

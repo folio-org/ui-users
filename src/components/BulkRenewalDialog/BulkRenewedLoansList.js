@@ -60,17 +60,20 @@ const BulkRenewedLoansList = (props) => {
     <MultiColumnList
       interactive={false}
       height={height}
-      contentData={[...failedRenewals, ...successRenewals]}
+      contentData={[
+        ...failedRenewals,
+        ...successRenewals,
+      ]}
       visibleColumns={visibleColumns}
       columnMapping={{
-        'renewalStatus': <FormattedMessage id="ui-users.brd.header.renewalStatus" />,
-        'title': <FormattedMessage id="ui-users.brd.header.title" />,
-        'itemStatus': <FormattedMessage id="ui-users.loans.columns.itemStatus" />,
-        'currentDueDate': <FormattedMessage id="ui-users.loans.columns.dueDate" />,
-        'requestQueue': <FormattedMessage id="ui-users.loans.details.requests" />,
-        'barcode': <FormattedMessage id="ui-users.information.barcode" />,
-        'callNumber': <FormattedMessage id="ui-users.loans.details.callNumber" />,
-        'loanPolicy': <FormattedMessage id="ui-users.loans.details.loanPolicy" />,
+        renewalStatus: <FormattedMessage id="ui-users.brd.header.renewalStatus" />,
+        title: <FormattedMessage id="ui-users.brd.header.title" />,
+        itemStatus: <FormattedMessage id="ui-users.loans.columns.itemStatus" />,
+        currentDueDate: <FormattedMessage id="ui-users.loans.columns.dueDate" />,
+        requestQueue: <FormattedMessage id="ui-users.loans.details.requests" />,
+        barcode: <FormattedMessage id="ui-users.information.barcode" />,
+        callNumber: <FormattedMessage id="ui-users.loans.details.callNumber" />,
+        loanPolicy: <FormattedMessage id="ui-users.loans.details.loanPolicy" />,
       }}
       formatter={{
         renewalStatus: loan => {
@@ -81,7 +84,10 @@ const BulkRenewedLoansList = (props) => {
                 alignment="start"
               >
                 <span
-                  style={{ ...iconAlignStyle, ...pointerStyle }}
+                  style={{
+                    ...iconAlignStyle,
+                    ...pointerStyle,
+                  }}
                   data-role="target"
                 >
                   <Icon

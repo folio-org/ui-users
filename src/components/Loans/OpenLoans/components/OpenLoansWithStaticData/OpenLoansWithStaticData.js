@@ -94,7 +94,11 @@ class OpenLoansWithStaticData extends React.Component {
 
   getSortMap = () => {
     return this.sortOrderKeys.reduce((sortMap, key) => {
-      const { view, sorter } = this.tableData[key];
+      const {
+        view,
+        sorter,
+      } = this.tableData[key];
+
       sortMap[view] = sorter;
 
       return sortMap;

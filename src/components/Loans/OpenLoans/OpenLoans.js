@@ -22,7 +22,10 @@ class OpenLoans extends React.Component {
     super(props);
 
     this.state = {
-      sortDirection: ['asc', 'asc'],
+      sortDirection: [
+        'asc',
+        'asc',
+      ],
       sortOrder: props.sortOrder,
     };
 
@@ -112,8 +115,14 @@ class OpenLoans extends React.Component {
     } = this.props;
 
 
-    const loansSorted = _.orderBy(loans,
-      [sortMap[sortOrder[0]], sortMap[sortOrder[1]]], sortDirection);
+    const loansSorted = _.orderBy(
+      loans,
+      [
+        sortMap[sortOrder[0]],
+        sortMap[sortOrder[1]],
+      ],
+      sortDirection,
+    );
 
     return (
       <div className={css.root}>

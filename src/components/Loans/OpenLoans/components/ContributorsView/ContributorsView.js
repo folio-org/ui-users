@@ -12,7 +12,6 @@ const propTypes = {
 
 const ContributorsView = (props) => {
   const { contributorsList } = props;
-  // eslint-disable-next-line react/no-this-in-sfc
   const contributorsListString = contributorsList.join(' ');
   // Truncate if no of contributors > 2
   const listTodisplay = isEmpty(contributorsList)

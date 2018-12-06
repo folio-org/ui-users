@@ -7,6 +7,8 @@ import {
 import {
   FormattedTime,
   FormattedMessage,
+  injectIntl,
+  intlShape,
 } from 'react-intl';
 
 import {
@@ -14,10 +16,11 @@ import {
   MultiColumnList,
 } from '@folio/stripes/components';
 
-import getNewDueDate from './helpers/getNewDate';
+import getNewDueDate from './helpers/getNewDueDate';
 
 class BulkOverrideLoansList extends Component {
   static propTypes = {
+    intl: intlShape.isRequired,
     height: PropTypes.number,
     allChecked: PropTypes.bool.isRequired,
     loanPolicies: PropTypes.object.isRequired,
@@ -106,6 +109,9 @@ class BulkOverrideLoansList extends Component {
       requestCounts,
       loanPolicies,
       allChecked,
+      intl: {
+        formatMessage
+      },
     } = this.props;
 
     return (
@@ -115,7 +121,7 @@ class BulkOverrideLoansList extends Component {
         contentData={failedRenewals}
         visibleColumns={this.visibleColumns}
         columnMapping={{
-          'isChecked': (
+          isChecked: (
             <input
               type="checkbox"
               checked={allChecked}
@@ -123,27 +129,28 @@ class BulkOverrideLoansList extends Component {
               onChange={toggleAll}
             />
           ),
-          'renewalStatus': <FormattedMessage id="ui-users.brd.header.renewalStatus" />,
-          'newDueDate': <FormattedMessage id="ui-users.brd.header.newDueDate" />,
-          'title': <FormattedMessage id="ui-users.brd.header.title" />,
-          'itemStatus': <FormattedMessage id="ui-users.loans.columns.itemStatus" />,
-          'currentDueDate': <FormattedMessage id="ui-users.loans.columns.dueDate" />,
-          'requestQueue': <FormattedMessage id="ui-users.loans.details.requests" />,
-          'barcode': <FormattedMessage id="ui-users.information.barcode" />,
-          'callNumber': <FormattedMessage id="ui-users.loans.details.callNumber" />,
-          'renewals': <FormattedMessage id="ui-users.loans.columns.renewals" />,
-          'loanPolicy': <FormattedMessage id="ui-users.loans.details.loanPolicy" />,
+          renewalStatus: formatMessage({ id: 'ui-users.brd.header.renewalStatus' }),
+          newDueDate:  formatMessage({ id: 'ui-users.brd.header.newDueDate' }),
+          title:  formatMessage({ id: 'ui-users.brd.header.title' }),
+          itemStatus:  formatMessage({ id: 'ui-users.loans.columns.itemStatus' }),
+          currentDueDate:  formatMessage({ id: 'ui-users.loans.columns.dueDate' }),
+          requestQueue:  formatMessage({ id: 'ui-users.loans.details.requests' }),
+          barcode:  formatMessage({ id: 'ui-users.information.barcode' }),
+          callNumber:  formatMessage({ id: 'ui-users.loans.details.callNumber' }),
+          renewals:  formatMessage({ id: 'ui-users.loans.columns.renewals' }),
+          loanPolicy:  formatMessage({ id: 'ui-users.loans.details.loanPolicy' }),
         }}
         formatter={{
-          'isChecked': loan => (
+          isChecked: loan => (
             <input
               checked={isLoanChecked(loan.id)}
               onChange={e => toggleItem(e, loan)}
               type="checkbox"
             />
           ),
-          'renewalStatus': loan => {
-            return (errorMessages) ? (
+          renewalStatus: loan => {
+            return (
+              errorMessages &&
               <div>
                 <div>
                   <Icon
@@ -157,12 +164,12 @@ class BulkOverrideLoansList extends Component {
                   {errorMessages[loan.id]}
                 </div>
               </div>
-            ) : null;
+            );
           },
-          'newDueDate': this.newDueDateFormatter,
-          'title': loan => get(loan, ['item', 'title']),
-          'itemStatus': loan => get(loan, ['item', 'status', 'name']),
-          'currentDueDate': loan => (
+          newDueDate: this.newDueDateFormatter,
+          title: loan => get(loan, ['item', 'title']),
+          itemStatus: loan => get(loan, ['item', 'status', 'name']),
+          currentDueDate: loan => (
             <FormattedTime
               value={get(loan, ['dueDate'])}
               day="numeric"
@@ -170,11 +177,11 @@ class BulkOverrideLoansList extends Component {
               year="numeric"
             />
           ),
-          'requestQueue': loan => requestCounts[loan.itemId] || 0,
-          'barcode': loan => get(loan, ['item', 'barcode']),
-          'callNumber': loan => get(loan, ['item', 'callNumber']),
-          'renewals': loan => get(loan, 'renewalCount', 0),
-          'loanPolicy': loan => loanPolicies[loan.loanPolicyId],
+          requestQueue: loan => requestCounts[loan.itemId] || 0,
+          barcode: loan => get(loan, ['item', 'barcode']),
+          callNumber: loan => get(loan, ['item', 'callNumber'], '-'),
+          renewals: loan => get(loan, 'renewalCount', 0),
+          loanPolicy: loan => loanPolicies[loan.loanPolicyId],
         }}
         columnWidths={this.columnWidth}
       />
@@ -182,4 +189,4 @@ class BulkOverrideLoansList extends Component {
   }
 }
 
-export default BulkOverrideLoansList;
+export default injectIntl(BulkOverrideLoansList);

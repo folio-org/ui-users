@@ -46,9 +46,24 @@ class OpenLoansSubHeader extends React.Component {
     this.renewString = <FormattedMessage id="ui-users.renew" />;
     this.changeDueDateString = <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />;
 
-    this.headers = ['action', 'dueDate', 'loanDate', 'item.barcode', 'item.callNumber', 'item.contributors',
-      'item.holdingsRecordId', 'item.instanceId', 'item.status.name', 'item.title', 'item.materialType.name',
-      'item.location.name', 'metaData.createdByUserId', 'metadata.updatedDate', 'metadata.updatedByUserId', 'loanPolicyId'];
+    this.headers = [
+      'action',
+      'dueDate',
+      'loanDate',
+      'item.barcode',
+      'item.callNumber',
+      'item.contributors',
+      'item.holdingsRecordId',
+      'item.instanceId',
+      'item.status.name',
+      'item.title',
+      'item.materialType.name',
+      'item.location.name',
+      'metaData.createdByUserId',
+      'metadata.updatedDate',
+      'metadata.updatedByUserId',
+      'loanPolicyId',
+    ];
 
     // Map to pass into exportCsv
     this.columnHeadersMap = this.headers.map(item => {
@@ -133,7 +148,7 @@ class OpenLoansSubHeader extends React.Component {
                 bottomMargin0
                 aria-haspopup="true"
               >
-              Select Columns
+                <FormattedMessage id="ui-users.selectColumns" />
               </Button>
               <DropdownMenu
                 data-role="menu"

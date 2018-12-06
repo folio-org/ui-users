@@ -485,6 +485,7 @@
   "chargeFeefine": "Charge Fee/Fine",
   "accountActionHistory": "Account Actions History",
   "status": "Status",
+  "selectColumns": "Select Columns",
 
   "accounts.title": "Fees/Fines",
   "accounts.outstandingBalance": "Outstanding Balance: ",

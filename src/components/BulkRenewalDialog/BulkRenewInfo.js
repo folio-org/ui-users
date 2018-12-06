@@ -75,6 +75,7 @@ class BulkRenewInfo extends React.Component {
   isOverridePossible(errorMessage) {
     for (const rewritableMessage of this.rewritableMessages) {
       const stringErrorMessage = get(errorMessage, 'props.values.message.props.values.message', '');
+
       if (stringErrorMessage.includes(rewritableMessage)) {
         return true;
       }
