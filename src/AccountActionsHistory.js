@@ -416,12 +416,14 @@ class AccountActionsHistory extends React.Component {
               <KeyValue
                 label={<FormattedMessage id="ui-users.details.field.duedate" />}
                 value={
-                  <FormattedTime
-                    value={account.dueDate}
-                    day="numeric"
-                    month="numeric"
-                    year="numeric"
-                  /> || '-'
+                  account.dueDate
+                    ? <FormattedTime
+                      value={account.dueDate}
+                      day="numeric"
+                      month="numeric"
+                      year="numeric"
+                    />
+                    : '-'
                 }
               />
             </Col>
@@ -429,13 +431,14 @@ class AccountActionsHistory extends React.Component {
               <KeyValue
                 label={<FormattedMessage id="ui-users.details.field.returnedate" />}
                 value={
-                  account.returnedDate ?
-                    <FormattedTime
+                  account.returnedDate
+                    ? <FormattedTime
                       value={account.returnedDate}
                       day="numeric"
                       month="numeric"
                       year="numeric"
-                    /> : '-'
+                    />
+                    : '-'
                 }
               />
             </Col>
