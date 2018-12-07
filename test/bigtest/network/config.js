@@ -1,5 +1,5 @@
 // eslint-disable-next-line jsx-a11y/label-has-associated-control
-import CQLParser, { CQLBoolean } from './cql';
+import CQLParser from './cql';
 
 // typical mirage config export
 // http://www.ember-cli-mirage.com/docs/v0.4.x/configuration/
@@ -20,19 +20,19 @@ export default function config() {
     return new Response(201, {
       'X-Okapi-Token': `myOkapiToken:${Date.now()}`
     }, {
-        user: {
-          id: 'test',
-          username: 'testuser',
-          personal: {
-            lastName: 'User',
-            firstName: 'Test',
-            email: 'user@folio.org',
-          }
-        },
-        permissions: {
-          permissions: []
+      user: {
+        id: 'test',
+        username: 'testuser',
+        personal: {
+          lastName: 'User',
+          firstName: 'Test',
+          email: 'user@folio.org',
         }
-      });
+      },
+      permissions: {
+        permissions: []
+      }
+    });
   });
   this.get('/groups', {
     'usergroups': [{

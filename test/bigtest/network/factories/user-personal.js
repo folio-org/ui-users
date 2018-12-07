@@ -1,4 +1,4 @@
-import { Factory, faker, trait } from '@bigtest/mirage';
+import { Factory, faker } from '@bigtest/mirage';
 
 export default Factory.extend({
   lastName: () => faker.name.lastName(),
@@ -10,7 +10,7 @@ export default Factory.extend({
   preferredContactTypeId: () => '003',
   afterCreate(userPersonal, server) {
     const addresses = server.createList('addresse', 1);
-    userPersonal.update('addresses', addresses);
+    userPersonal.update('addresses', addresses.map());
     userPersonal.save();
   }
 });

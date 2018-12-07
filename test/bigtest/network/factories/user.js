@@ -1,4 +1,4 @@
-import { Factory, faker, trait } from '@bigtest/mirage';
+import { Factory, faker } from '@bigtest/mirage';
 
 export default Factory.extend({
   id: (i) => 'userId' + i,
@@ -17,7 +17,7 @@ export default Factory.extend({
   enrollmentDate: () => '2015-12-14T00:00:00.000+0000',
   expirationDate: () => '2020-04-07T00:00:00.000+0000',
   createdDate: () => '2018-11-20T11:42:53.385+0000',
-  updatedDate: () => '2018-11-20T20:00:47.409+0000',  
+  updatedDate: () => '2018-11-20T20:00:47.409+0000',
   afterCreate(user, server) {
     server.create('service-points-user', {
       'userId': user.id,
