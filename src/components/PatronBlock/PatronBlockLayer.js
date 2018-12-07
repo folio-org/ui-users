@@ -1,6 +1,9 @@
 import _ from 'lodash';
 import React from 'react';
-import { injectIntl } from 'react-intl';
+import {
+  intlShape,
+  injectIntl
+} from 'react-intl';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { ConfirmationModal } from '@folio/stripes/components';
@@ -34,16 +37,14 @@ class PatronBlockLayer extends React.Component {
       }),
       activeRecord: PropTypes.object,
     }).isRequired,
-    stripes: PropTypes.shape({
-      intl: PropTypes.object,
-    }),
-    intl: PropTypes.object,
     resources: PropTypes.object,
     selectedPatronBlock: PropTypes.object,
     onCancel: PropTypes.func,
     user: PropTypes.object,
     query: PropTypes.object,
     initialValues: PropTypes.object,
+    intl: intlShape.isRequired,
+    stripes: PropTypes.object,
   };
 
   constructor(props) {
@@ -131,8 +132,10 @@ class PatronBlockLayer extends React.Component {
   }
 
   render() {
-    const { query, intl: { formatMessage } } = this.props;
-
+    const {
+      query,
+      intl,
+    } = this.props;
     const selectedItem = (query.block && !this.props.selectedPatronBlock.id) ?
       _.get(this.props.resources, ['patronBlocks', 'records', 0], {})
       : this.props.selectedPatronBlock;
@@ -141,9 +144,8 @@ class PatronBlockLayer extends React.Component {
       <span>
         <strong>{selectedItem.desc}</strong>
         {' '}
-        patron block will be removed
+        {intl.formatMessage({ id: 'ui-users.blocks.message' })}
       </span>;
-
     return (
       <div>
         <PatronBlockForm
@@ -161,8 +163,8 @@ class PatronBlockLayer extends React.Component {
           open={this.state.showConfirmDialog}
           onConfirm={this.onDeleteItem}
           onCancel={this.hideConfirm}
-          confirmLabel={formatMessage({ id: 'ui-users.blocks.layer.confirmLabel' })}
-          heading={formatMessage({ id: 'ui-users.blocks.layer.heading' })}
+          confirmLabel={intl.formatMessage({ id: 'ui-users.blocks.layer.confirmLabel' })}
+          heading={intl.formatMessage({ id: 'ui-users.blocks.layer.heading' })}
           message={message}
         />
       </div>

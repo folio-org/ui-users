@@ -488,7 +488,7 @@
 
   "accounts.title": "Fees/Fines",
   "accounts.outstandingBalance": "Outstanding Balance: ",
-  "accounts.header": "Fee/fine details - {userName} ({patronGroup})",
+  "accounts.header": "Fees/Fines - {userName} ({patronGroup})",
   "accounts.outstanding": "Outstanding Balance:",
   "accounts.open": "Open",
   "accounts.closed": "Closed",
@@ -693,7 +693,7 @@
   "blocks.columns.borrowing":"Borrowing",
   "blocks.columns.requests":"Requests",
   "blocks.columns.renewals":"Renewals",
-  "blocks.buttons.add":"+Add Block",
+  "blocks.buttons.add":"+ Add Block",
   "blocks.label":"Patron Blocks",
 
   "blocks.form.label.information":"Block information",
@@ -720,6 +720,12 @@
   "blocks.form.button.create":"Create block",
 
   "blocks.layer.heading":"Delete patron block?",
-  "blocks.layer.confirmLabel":"Delete"
+  "blocks.layer.confirmLabel":"Delete",
+  "blocks.layer.add":"Add Block",
+  "blocks.layer.edit":"Edit Block",
+
+  "blocks.message":"patron block will be removed",
+
+  "blocks.textField.place":"Patron has blocks in place"
 
 }
