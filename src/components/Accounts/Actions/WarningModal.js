@@ -14,7 +14,10 @@ import {
   MultiColumnList,
 } from '@folio/stripes/components';
 
-import _ from 'lodash';
+import {
+  omit,
+  size,
+} from 'lodash';
 
 class WarningModal extends React.Component {
   static propTypes = {
@@ -73,9 +76,9 @@ class WarningModal extends React.Component {
     const id = a.id;
     const accounts = this.state.checkedAccounts;
     const checkedAccounts = (accounts[id])
-      ? _.omit(accounts, id)
+      ? omit(accounts, id)
       : { ...accounts, [id]: a };
-    const allChecked = _.size(checkedAccounts) === this.props.accounts.length;
+    const allChecked = size(checkedAccounts) === this.props.accounts.length;
     this.setState({ checkedAccounts, allChecked });
   }
 

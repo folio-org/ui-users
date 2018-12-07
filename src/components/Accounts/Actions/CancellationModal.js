@@ -1,7 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { Field, reduxForm } from 'redux-form';
+import {
+  Field,
+  reduxForm,
+} from 'redux-form';
+
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import {
   Modal,
@@ -38,32 +42,29 @@ class CancellationModal extends React.Component {
     this.state = {
       notify: true,
     };
-    this.handleNotify = this.handleNotify.bind(this);
-    this.reset = this.reset.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.onClose = this.onClose.bind(this);
   }
 
-  reset() {
+  reset = () => {
     this.props.reset();
     this.setState({
       notify: true,
     });
   }
 
-  handleNotify() {
+  handleNotify = () => {
     const { notify } = this.state;
+
     this.setState({
       notify: !notify,
     });
   }
 
-  handleSubmit() {
+  handleSubmit = () => {
     this.props.handleSubmit();
     this.reset();
   }
 
-  onClose() {
+  onClose = () => {
     this.props.onClose();
     this.reset();
   }

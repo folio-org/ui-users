@@ -14,7 +14,9 @@ import { getFullName } from '../../util';
 const Menu = (props) => {
   const { user, showFilters, filters, balance, selected, actions, query } = props;
   const outstanding = parseFloat(balance).toFixed(2);
-  const showSelected = (selected !== 0 && selected !== parseFloat(0).toFixed(2)) && outstanding > parseFloat(0).toFixed(2);
+  const showSelected = (selected !== 0 && selected !== parseFloat(0).toFixed(2))
+    && outstanding > parseFloat(0).toFixed(2);
+
   let type = 'Open';
   if (query.layer === 'closed-accounts') {
     type = 'Closed';

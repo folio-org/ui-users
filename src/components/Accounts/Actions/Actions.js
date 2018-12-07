@@ -75,7 +75,7 @@ class Actions extends React.Component {
     stripes: PropTypes.object,
     handleEdit: PropTypes.func,
     user: PropTypes.object,
-    intl: intlShape.isRequired
+    intl: intlShape.isRequired,
   };
 
   constructor(props) {

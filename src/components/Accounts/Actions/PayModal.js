@@ -63,13 +63,10 @@ class PayModal extends React.Component {
 
   constructor(props) {
     super(props);
+
     this.state = {
       amount: 0,
     };
-
-    this.onChangeAmount = this.onChangeAmount.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
-    this.onClose = this.onClose.bind(this);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -92,29 +89,39 @@ class PayModal extends React.Component {
       this.props.invalid !== nextProps.invalid);
   }
 
-  onChangeAmount(e) {
+  onChangeAmount = (e) => {
     this.setState({
       amount: e.target.value,
     });
   }
 
-  onClose() {
-    this.props.onClose();
-    this.props.reset();
+  onClose = () => {
+    const {
+      onClose,
+      reset,
+    } = this.props;
+
+    onClose();
+    reset();
   }
 
-  onSubmit() {
-    this.props.handleSubmit();
-    this.props.onClose();
-    this.props.reset();
+  onSubmit = () => {
+    const {
+      handleSubmit,
+      onClose,
+      reset,
+    } = this.props;
+
+    handleSubmit();
+    onClose();
+    reset();
   }
 
   calculateSelectedAmount() {
     const { accounts } = this.props;
-    const result = accounts.reduce((selected, { remaining }) => {
+    return accounts.reduce((selected, { remaining }) => {
       return selected + parseFloat(remaining);
     }, 0);
-    return result;
   }
 
   renderFormMessage() {
@@ -144,7 +151,7 @@ class PayModal extends React.Component {
           feesFinesAmount: accounts.length,
           payAmount: parseFloat(payAmount).toFixed(2),
           payType,
-          feeFineForm
+          feeFineForm,
         }}
       />
     );
@@ -158,7 +165,7 @@ class PayModal extends React.Component {
       onClose,
       open,
       commentRequired,
-      balance: totalAmount
+      balance: totalAmount,
     } = this.props;
 
     const { amount } = this.state;

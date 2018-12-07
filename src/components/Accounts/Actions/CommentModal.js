@@ -35,13 +35,23 @@ class CommentModal extends React.Component {
   };
 
   onSubmit = () => {
-    this.props.handleSubmit();
-    this.props.reset();
+    const {
+      handleSubmit,
+      reset,
+    } = this.props;
+
+    handleSubmit();
+    reset();
   }
 
   handleClose = () => {
-    this.props.onClose();
-    this.props.reset();
+    const {
+      onClose,
+      reset,
+    } = this.props;
+
+    onClose();
+    reset();
   }
 
   render() {

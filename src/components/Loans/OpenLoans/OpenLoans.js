@@ -577,7 +577,6 @@ class OpenLoans extends React.Component {
         />
         <Button buttonStyle="link marginBottom0" onClick={() => this.showRenewedLoansModal()}>
           <strong>
--
             <FormattedMessage id="ui-users.loans.items.renewed.callout.details" />
           </strong>
         </Button>

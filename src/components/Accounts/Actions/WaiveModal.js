@@ -19,6 +19,8 @@ import {
   Select,
 } from '@folio/stripes/components';
 
+import { isEqual } from 'lodash';
+
 const validate = (values, props) => {
   const accounts = props.accounts || [];
   let selected = 0;
@@ -73,24 +75,32 @@ class WaiveModal extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    const accounts = nextProps.accounts || [];
-    let selected = 0;
-    if (JSON.stringify(this.props.accounts) !== JSON.stringify(nextProps.accounts)) {
-      selected = 0;
-      accounts.forEach(a => {
-        selected += a.remaining;
-      });
+    const {
+      accounts,
+      open,
+      pristine,
+      invalid,
+      initialize,
+    } = this.props;
+
+    if (!isEqual(accounts, nextProps.accounts)) {
+      const selected = this.calculateSelectedAmount(nextProps.accounts);
+
       this.setState({
         waive: selected,
       });
-      this.props.initialize({ waive: parseFloat(selected).toFixed(2), notify: true });
+
+      initialize({
+        waive: parseFloat(selected).toFixed(2),
+        notify: true,
+      });
     }
     return (
-      this.props.accounts !== nextProps.accounts
+      accounts !== nextProps.accounts
       || this.state !== nextState
-      || this.props.open !== nextProps.open
-      || this.props.pristine !== nextProps.pristine
-      || this.props.invalid !== nextProps.invalid
+      || open !== nextProps.open
+      || pristine !== nextProps.pristine
+      || invalid !== nextProps.invalid
     );
   }
 
@@ -102,20 +112,18 @@ class WaiveModal extends React.Component {
     }
   }
 
-  calculateSelectedAmount() {
-    const { accounts } = this.props;
-    const result = accounts.reduce((selected, { remaining }) => {
+  calculateSelectedAmount(accounts) {
+    return accounts.reduce((selected, { remaining }) => {
       return selected + parseFloat(remaining);
     }, 0);
-    return result;
   }
 
   renderFormMessage() {
     const {
-      accounts = []
+      accounts = [],
     } = this.props;
 
-    const selected = this.calculateSelectedAmount();
+    const selected = this.calculateSelectedAmount(accounts);
     const waiveAmount = this.state.waive === ''
       ? 0.00
       : this.state.waive;
@@ -135,33 +143,44 @@ class WaiveModal extends React.Component {
           feesFinesAmount: accounts.length,
           waiveAmount: parseFloat(waiveAmount).toFixed(2),
           waiveType,
-          feeFineForm
+          feeFineForm,
         }}
       />
     );
   }
 
   onCancel = () => {
-    this.props.onClose();
-    this.props.reset();
+    const {
+      onClose,
+      reset,
+    } = this.props;
+
+    onClose();
+    reset();
   };
 
   onSubmit = () => {
-    this.props.handleSubmit();
-    this.props.reset();
+    const {
+      handleSubmit,
+      reset,
+    } = this.props;
+
+    handleSubmit();
+    reset();
   };
 
   render() {
     const {
+      accounts,
       commentRequired,
       waives,
       submitting,
       invalid,
       pristine,
-      balance: totalAmount
+      balance: totalAmount,
     } = this.props;
 
-    const selected = this.calculateSelectedAmount();
+    const selected = this.calculateSelectedAmount(accounts);
     const remaining = totalAmount - this.state.waive;
     const reasonSelectOptions = waives.map(p => ({ id: p.id, label: p.nameReason }));
     const message = this.renderFormMessage();
