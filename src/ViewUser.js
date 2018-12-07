@@ -22,7 +22,6 @@ import {
   Headline,
   AccordionSet,
   expandAllFunction,
-  TextField,
 } from '@folio/stripes/components';
 import { withTags } from '@folio/stripes/smart-components';
 
@@ -33,8 +32,7 @@ import LoanActionsHistory from './LoanActionsHistory';
 import { ChargeFeeFine } from './components/Accounts';
 import AccountsHistory from './AccountsHistory';
 import AccountActionsHistory from './AccountActionsHistory';
-import PatronBlockLayer from './components/PatronBlock';
-
+import { PatronBlockLayer, PatronBlockMessage } from './components/PatronBlock';
 import { toListAddresses, toUserAddresses } from './converters/address';
 import { getFullName, eachPromise } from './util';
 import withProxy from './withProxy';
@@ -588,7 +586,6 @@ class ViewUser extends React.Component {
 
     const addressTypes = (parentResources.addressTypes || {}).records || [];
     const query = queryString.parse(location.search || '');
-
     const user = this.getUser();
     const tags = ((user && user.tags) || {}).tagList || [];
     const patronGroups = (resources.patronGroups || {}).records || [];
@@ -695,83 +692,97 @@ class ViewUser extends React.Component {
 
     if (this.isLayerOpen('add-block') || this.isLayerOpen('edit-block')) {
       return (
-        <Layer label={query.layer === 'add-block'
-          ? <FormattedMessage id="ui-users.blocks.layer.add" />
-          : <FormattedMessage id="ui-users.blocks.layer.edit" />}>
-          <this.connectedPatronBlockLayer
-            {...this.props}
-            query={query}
-            user={user}
-            selectedPatronBlock={this.state.selectedPatronBlock}
-            handleAddRecords={this.handleAddRecords}
-            onCancel={this.onClickClosePatronBlock}
-          />
-        </Layer>
+        <FormattedMessage id={query.layer === 'add-block' ? 'ui-users.blocks.layer.add' : 'ui-users.blocks.layer.edit'}>
+          {contentLabel => (
+            <Layer isOpen contentLabel={contentLabel}>
+              <this.connectedPatronBlockLayer
+                {...this.props}
+                query={query}
+                user={user}
+                selectedPatronBlock={this.state.selectedPatronBlock}
+                handleAddRecords={this.handleAddRecords}
+                onCancel={this.onClickClosePatronBlock}
+              />
+            </Layer>
+          )}
+        </FormattedMessage>
       );
     }
 
     if (this.isLayerOpen('open-accounts') || this.isLayerOpen('closed-accounts') || this.isLayerOpen('all-accounts')) {
       return (
-        <Layer isOpen label={<FormattedMessage id="ui-users.accounts.title" />}>
-          <this.connectedAccountsHistory
-            loans={loans}
-            num={(this.state.addRecord ? 51 : 50)}
-            onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
-            user={user}
-            parentMutator={this.props.mutator}
-            patronGroup={patronGroup}
-            stripes={stripes}
-            history={this.props.history}
-            addRecord={this.state.addRecord}
-            handleAddRecords={this.handleAddRecords}
-            location={this.props.location}
-            onCancel={this.onClickCloseAccountsHistory}
-            onClickViewChargeFeeFine={this.onClickViewChargeFeeFine}
-            onClickViewAccountActionsHistory={this.onClickViewAccountActionsHistory}
-            onClickCloseAccountActionsHistory={this.onClickCloseAccountActionsHistory}
-          />
-        </Layer>
+        <FormattedMessage id="ui-users.accounts.title">
+          {contentLabel => (
+            <Layer isOpen contentLabel={contentLabel}>
+              <this.connectedAccountsHistory
+                loans={loans}
+                num={(this.state.addRecord ? 51 : 50)}
+                onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
+                user={user}
+                parentMutator={this.props.mutator}
+                patronGroup={patronGroup}
+                stripes={stripes}
+                history={this.props.history}
+                addRecord={this.state.addRecord}
+                handleAddRecords={this.handleAddRecords}
+                location={this.props.location}
+                onCancel={this.onClickCloseAccountsHistory}
+                onClickViewChargeFeeFine={this.onClickViewChargeFeeFine}
+                onClickViewAccountActionsHistory={this.onClickViewAccountActionsHistory}
+                onClickCloseAccountActionsHistory={this.onClickCloseAccountActionsHistory}
+              />
+            </Layer>
+          )}
+        </FormattedMessage>
       );
     }
 
     if (this.isLayerOpen('charge')) {
       return (
-        <Layer isOpen label={<FormattedMessage id="ui-users.chargeFeefine" />}>
-          <this.connectedCharge
-            servicePoints={servicePoints}
-            preferredServicePoint={preferredServicePoint}
-            stripes={stripes}
-            onCloseChargeFeeFine={this.onCloseChargeFeeFine}
-            user={user}
-            loan={{ item: {} }}
-            selectedLoan={this.state.selectedLoan}
-            handleAddRecords={this.handleAddRecords}
-          />
-        </Layer>
+        <FormattedMessage id="ui-users.chargeFeefine">
+          {contentLabel => (
+            <Layer isOpen contentLabel={contentLabel}>
+              <this.connectedCharge
+                servicePoints={servicePoints}
+                preferredServicePoint={preferredServicePoint}
+                stripes={stripes}
+                onCloseChargeFeeFine={this.onCloseChargeFeeFine}
+                user={user}
+                loan={{ item: {} }}
+                selectedLoan={this.state.selectedLoan}
+                handleAddRecords={this.handleAddRecords}
+              />
+            </Layer>
+          )}
+        </FormattedMessage>
       );
     }
 
     if (this.isLayerOpen('account')) {
       return (
-        <Layer
-          isOpen={this.isLayerOpen('account')}
-          label={<FormattedMessage id="ui-users.accountActionHistory" />}
-        >
-          <this.connectedAccountActionsHistory
-            user={user}
-            patronGroup={patronGroup}
-            account={this.state.selectedAccount}
-            accountid={this.state.selectedAccount.id}
-            history={this.props.history}
-            onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
-            num={(this.state.addRecord ? 2 : 1)}
-            handleAddRecords={this.handleAddRecords}
-            stripes={stripes}
-            onCancel={this.onClickCloseAccountActionsHistory}
-              // when navigating away to another user, clear all loan-related state
-            onClickUser={() => { this.onClickCloseAccountActionsHistory(); this.onClickCloseAccountsHistory(); }}
-          />
-        </Layer>
+        <FormattedMessage id="ui-users.accountActionHistory">
+          {contentLabel => (
+            <Layer
+              isOpen={this.isLayerOpen('account')}
+              contentLabel={contentLabel}
+            >
+              <this.connectedAccountActionsHistory
+                user={user}
+                patronGroup={patronGroup}
+                account={this.state.selectedAccount}
+                accountid={this.state.selectedAccount.id}
+                history={this.props.history}
+                onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
+                num={(this.state.addRecord ? 2 : 1)}
+                handleAddRecords={this.handleAddRecords}
+                stripes={stripes}
+                onCancel={this.onClickCloseAccountActionsHistory}
+                  // when navigating away to another user, clear all loan-related state
+                onClickUser={() => { this.onClickCloseAccountActionsHistory(); this.onClickCloseAccountsHistory(); }}
+              />
+            </Layer>
+          )}
+        </FormattedMessage>
       );
     }
 
@@ -788,7 +799,12 @@ class ViewUser extends React.Component {
               </Layer>
             )}
           </FormattedMessage>
-
+        </IfPermission>
+      );
+    }
+    if (this.isLayerOpen('loan')) {
+      return (
+        <IfPermission perm="ui-users.loans.all">
           <FormattedMessage id="ui-users.loanActionsHistory">
             {contentLabel => (
               <Layer
@@ -825,8 +841,9 @@ class ViewUser extends React.Component {
 
           <Row>
             <Col xs={10}>
-              {(hasPatronBlocks === 1 && totalPatronBlocks > 0) ?
-                <TextField fullWidth readOnly value="Patron has blocks in place" error=" " /> : ''}
+              {(hasPatronBlocks === 1 && totalPatronBlocks > 0)
+                ? <PatronBlockMessage />
+                : ''}
             </Col>
             <Col xs={2}>
               <ExpandAllButton accordionStatus={this.state.sections} onToggle={this.handleExpandAll} />
