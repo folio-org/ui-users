@@ -96,8 +96,6 @@ export default function config() {
   });
   this.get('/users');
   this.get('/users/:id', (schema, request) => {
-    // eslint-disable-next-line no-debugger
-    debugger;
     return schema.users.find(request.params.id).attrs;
   });
   this.get('/proxiesfor', {
