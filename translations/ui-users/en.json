@@ -451,7 +451,10 @@
   "errors.proxyrelationship.expired": "Proxy relationship has expired",
   "errors.proxies.expired": "Proxy user record expired",
   "errors.sponsors.expired": "Sponsor user record expired",
-
+  "errors.proxies.invalidUserLabel": "Invalid Proxy",
+  "errors.sponsors.invalidUserLabel": "Invalid Sponsor",
+  "errors.proxies.invalidUserMessage": "You can't add <strong>{name}</strong> as an own proxy.",
+  "errors.sponsors.invalidUserMessage": "You can't add <strong>{name}</strong> as an own sponsor.",
   "error.reviewBeforeRenewal": "{message} Please review {policyName} before retrying renewal.",
   "error.loanNotRenewedReason": "Loan cannot be renewed because: {message}.",
 
