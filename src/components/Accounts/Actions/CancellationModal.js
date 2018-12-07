@@ -16,6 +16,8 @@ import {
   Col,
 } from '@folio/stripes/components';
 
+import css from './modal.css';
+
 const validate = (values) => {
   const errors = {};
   if (!values.comment) {
@@ -70,10 +72,12 @@ class CancellationModal extends React.Component {
   }
 
   render() {
+    const defaultAmount = '0.00';
+    const defaultFeeFineType = 'fee/fine type';
     const {
       account: {
-        amount = '0.00',
-        feeFineType = 'fee/fine type'
+        amount = defaultAmount,
+        feeFineType = defaultFeeFineType,
       },
       pristine,
       submitting,
@@ -141,22 +145,16 @@ class CancellationModal extends React.Component {
           <Row>
             <Col xs>
               <Button
-                style={{
-                  float: 'right',
-                  marginRight: '10px'
-                }}
                 buttonStyle="primary"
                 onClick={this.handleSubmit}
                 disabled={submitButtonDisabled}
+                buttonClass={css.rightAlignedButton}
               >
                 <FormattedMessage id="ui-users.accounts.cancellation.field.confirm" />
               </Button>
               <Button
-                style={{
-                  float: 'right',
-                  marginRight: '10px'
-                }}
                 onClick={this.onClose}
+                buttonClass={css.rightAlignedButton}
               >
                 <FormattedMessage id="ui-users.accounts.cancellation.field.back" />
               </Button>

@@ -15,6 +15,8 @@ import {
   Modal,
 } from '@folio/stripes/components';
 
+import css from './modal.css';
+
 const validate = (values) => {
   const errors = {};
   if (!values.comment) {
@@ -96,22 +98,16 @@ class CommentModal extends React.Component {
           <Row>
             <Col xs>
               <Button
-                style={{
-                  float: 'right',
-                  marginRight: '10px'
-                }}
                 buttonStyle="primary"
                 onClick={this.onSubmit}
                 disabled={submitButtonDisabled}
+                buttonClass={css.rightAlignedButton}
               >
                 <FormattedMessage id="ui-users.accounts.comment.field.save" />
               </Button>
               <Button
-                style={{
-                  float: 'right',
-                  marginRight: '10px'
-                }}
                 onClick={this.handleClose}
+                buttonClass={css.rightAlignedButton}
               >
                 <FormattedMessage id="ui-users.accounts.comment.field.cancel" />
               </Button>
