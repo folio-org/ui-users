@@ -10,7 +10,7 @@ export default Factory.extend({
   preferredContactTypeId: () => '003',
   afterCreate(userPersonal, server) {
     const addresses = server.createList('addresse', 1);
-    userPersonal.update('addresses', addresses.map());
+    userPersonal.update('addresses', addresses);
     userPersonal.save();
   }
 });
