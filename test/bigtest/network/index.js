@@ -20,9 +20,9 @@ const modules = req.keys().reduce((acc, modulePath) => {
     return Object.assign(acc, {
       baseConfig: req(modulePath).default
     });
-  } else {
-    return acc;
   }
+
+  return acc;
 }, {});
 
 export default modules;

@@ -29,6 +29,7 @@ export default Factory.extend({
       lastName: 'test',
       firstName: 'test'
     });
+    
     user.update('personal', personal.toJSON());
     user.save();
   }

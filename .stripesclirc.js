@@ -5,12 +5,13 @@ const environment = process.env.NODE_ENV;
 function mirage(config, enabled = false) {
   if (enabled) {
     console.info('Using Mirage Server'); // eslint-disable-line no-console
+    
     return Object.assign({}, config, {
       entry: ['./test/bigtest/network/boot'].concat(config.entry)
     });
-  } else {
-    return config;
-  }
+  } 
+
+  return config;
 }
 
 const servePlugin = {
@@ -25,10 +26,12 @@ const servePlugin = {
   // Stripes CLI hook into "webpackOverrides"
   beforeBuild: (options) => {
     const mirageOption = options.mirage === true ? 'default' : options.mirage;
+    
     return (config) => {
       config.plugins.push(new webpack.EnvironmentPlugin({
         MIRAGE_SCENARIO: mirageOption || 'default'
       }));
+      
       return mirage(config, mirageOption);
     };
   },

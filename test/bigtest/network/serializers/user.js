@@ -7,6 +7,7 @@ export default ApplicationSerializer.extend({
 
   serialize(...args) {
     const json = ApplicationSerializer.prototype.serialize.apply(this, args);
+
     if (isArray(json.users)) {
       return assign({}, json, {
         totalRecords: json.users.length,
@@ -16,9 +17,8 @@ export default ApplicationSerializer.extend({
           diagnostics: []
         }
       });
-    } else {
-      return json.users;
     }
-  }
 
+    return json.users;
+  }
 });

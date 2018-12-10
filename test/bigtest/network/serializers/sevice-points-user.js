@@ -7,13 +7,14 @@ export default ApplicationSerializer.extend({
 
   serialize(...args) {
     const json = ApplicationSerializer.prototype.serialize.apply(this, args);
+
     if (isArray(json.servicePointsUsers)) {
       return assign({}, json, {
         totalRecords: json.servicePointsUsers.length,
       });
-    } else {
-      return json.servicePointsUsers;
     }
+
+    return json.servicePointsUsers;
   }
 
 });
