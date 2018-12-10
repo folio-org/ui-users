@@ -695,6 +695,10 @@
   "blocks.columns.renewals":"Renewals",
   "blocks.buttons.add":"+ Add Block",
   "blocks.label":"Patron Blocks",
+  "blocks.reason": "Reason for block:",
+  "blocks.modal.header": "Patron blocked from renewing",
+  "blocks.detailsButton": "Block details",
+  "blocks.closeButton": "Close",
 
   "blocks.form.label.information":"Block information",
   "blocks.form.label.display":"Display Description*",
