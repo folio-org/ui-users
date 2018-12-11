@@ -718,7 +718,7 @@ class ViewUser extends React.Component {
                   loansHistory={loans}
                   patronGroup={patronGroup}
                   stripes={stripes}
-                  history={this.props.history}
+                  history={history}
                   onCancel={this.onClickCloseLoansHistory}
                   onClickViewOpenLoans={this.onClickViewOpenLoans}
                   onClickViewClosedLoans={this.onClickViewClosedLoans}
