@@ -260,6 +260,7 @@ class PatronBlockForm extends React.Component {
                       name="expirationDate"
                       label={<FormattedMessage id="ui-users.blocks.form.label.date" />}
                       backendDateStandard="YYYY/MM/DD"
+                      timeZone="UTC"
                       useFocus
                     />
                   </Col>

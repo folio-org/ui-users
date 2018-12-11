@@ -454,10 +454,12 @@
   "errors.proxyrelationship.expired": "Proxy relationship has expired",
   "errors.proxies.expired": "Proxy user record expired",
   "errors.sponsors.expired": "Sponsor user record expired",
-
-  "error.reviewBeforeRenewal": "{message} Please review {policyName} before retrying renewal.",
-  "error.loanNotRenewedReason": "Loan cannot be renewed because: {message}.",
-
+  "errors.proxies.invalidUserLabel": "Invalid Proxy",
+  "errors.sponsors.invalidUserLabel": "Invalid Sponsor",
+  "errors.proxies.invalidUserMessage": "You can't add <strong>{name}</strong> as an own proxy.",
+  "errors.sponsors.invalidUserMessage": "You can't add <strong>{name}</strong> as an own sponsor.",
+  "errors.reviewBeforeRenewal": "{message} Please review {policyName} before retrying renewal.",
+  "errors.loanNotRenewedReason": "Loan cannot be renewed because: {message}.",
   "editUserDialog": "Edit User Dialog",
   "loanActionsHistory": "Loan Actions History",
   "hide": "Hide",
@@ -489,7 +491,7 @@
 
   "accounts.title": "Fees/Fines",
   "accounts.outstandingBalance": "Outstanding Balance: ",
-  "accounts.header": "Fee/fine details - {userName} ({patronGroup})",
+  "accounts.header": "Fees/Fines - {userName} ({patronGroup})",
   "accounts.outstanding": "Outstanding Balance:",
   "accounts.open": "Open",
   "accounts.closed": "Closed",
@@ -697,7 +699,7 @@
   "blocks.columns.borrowing":"Borrowing",
   "blocks.columns.requests":"Requests",
   "blocks.columns.renewals":"Renewals",
-  "blocks.buttons.add":"+Add Block",
+  "blocks.buttons.add":"+ Add Block",
   "blocks.label":"Patron Blocks",
 
   "blocks.form.label.information":"Block information",
@@ -725,11 +727,15 @@
 
   "blocks.layer.heading":"Delete patron block?",
   "blocks.layer.confirmLabel":"Delete",
+  "blocks.layer.add":"Add Block",
+  "blocks.layer.edit":"Edit Block",
+
+  "blocks.message":"patron block will be removed",
+  "blocks.textField.place":"Patron has blocks in place",
 
   "additionalInfo.label": "Additional information*",
   "additionalInfo.placeholder": "Enter more information about the override (required)",
 
   "button.override": "Override",
-
   "override.emptyNewDueDate": "Select due date above"
 }

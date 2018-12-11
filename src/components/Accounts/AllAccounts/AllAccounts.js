@@ -187,7 +187,7 @@ class AllAccounts extends React.Component {
       'barcode': f => (f.barcode ? f.barcode : '-'),
       'callNumber': f => (f.callNumber ? f.callNumber : '-'),
       'dueDate': f => (f.dueDate ? this.formatDateTime(f.dueDate) : '-'),
-      'returnedDate': f => (f.returnedDate ? this.formatDateTime(f.returnedDate) : this.formatDateTime(this.getLoan(f).returnDate) || '-'),
+      'returnedDate': f => (this.getLoan(f).returnDate ? this.formatDateTime(this.getLoan(f).returnDate) : '-'),
       ' ': f => this.renderActions(f),
     };
   }
