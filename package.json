@@ -537,7 +537,7 @@
     "@bigtest/react": "^0.1.2",
     "@folio/eslint-config-stripes": "^3.2.1",
     "@folio/stripes": "^1.1.0",
-    "@folio/stripes-cli": "^1.5.0",
+    "@folio/stripes-cli": "^1.6.0",
     "@folio/stripes-core": "^2.16.1000442",
     "babel-eslint": "^9.0.0",
     "babel-polyfill": "^6.26.0",
