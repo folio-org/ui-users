@@ -37,7 +37,7 @@ import { toListAddresses, toUserAddresses } from './converters/address';
 import { getFullName, eachPromise } from './util';
 import withProxy from './withProxy';
 import withServicePoints from './withServicePoints';
-import withCommand from './withCommand';
+import { HasCommand } from './components/Commander';
 
 import {
   UserInfo,
@@ -237,6 +237,21 @@ class ViewUser extends React.Component {
     this.showCallout = null;
 
     this.editButton = React.createRef();
+
+    this.keyboardCommands = [
+      {
+        name: 'edit',
+        handler: this.goToEdit,
+      },
+      {
+        name: 'collapseAllSections',
+        handler: this.collapseAllSections,
+      },
+      {
+        name: 'expandAllSections',
+        handler:  this.expandAllSections,
+      },
+    ];
   }
 
   static getDerivedStateFromProps(nextProps) {
@@ -416,6 +431,10 @@ class ViewUser extends React.Component {
     });
   }
 
+  checkScope = () => {
+    return document.getElementById('ModuleContainer').contains(document.activeElement);
+  }
+
   getUser() {
     const { resources, match: { params: { id } } } = this.props;
     const selUser = (resources.selUser || {}).records || [];
@@ -557,124 +576,40 @@ class ViewUser extends React.Component {
 
   isLayerOpen = value => {
     const { layer } = this.props.resources.query;
-
     return layer === value;
   };
 
-  render() {
+  getPatronGroup(user) {
+    const { resources } = this.props;
+    const patronGroups = (resources.patronGroups || {}).records || [];
+    const patronGroupId = get(user, ['patronGroup'], '');
+    return patronGroups.find(g => g.id === patronGroupId) || { group: '' };
+  }
+
+  renderLayer(user) {
     const {
       resources,
       stripes,
       parentResources,
-      tagsEnabled,
-      location
+      parentMutator,
+      mutator,
+      location,
+      history,
+      onCloseEdit,
     } = this.props;
 
-    const addressTypes = (parentResources.addressTypes || {}).records || [];
     const query = queryString.parse(location.search || '');
-    const user = this.getUser();
-    const tags = ((user && user.tags) || {}).tagList || [];
-    const patronGroups = (resources.patronGroups || {}).records || [];
     const permissions = (resources.permissions || {}).records || [];
-    const settings = (resources.settings || {}).records || [];
     const loans = (resources.loansHistory || {}).records || [];
     const sponsors = this.props.getSponsors();
     const proxies = this.props.getProxies();
     const servicePoints = this.props.getServicePoints();
     const preferredServicePoint = this.props.getPreferredServicePoint();
-    const detailMenu =
-      (
-        <PaneMenu>
-          {
-            tagsEnabled &&
-            <FormattedMessage id="ui-users.showTags">
-              {ariaLabel => (
-                <IconButton
-                  icon="tag"
-                  id="clickable-show-tags"
-                  onClick={this.props.tagsToggle}
-                  badgeCount={tags.length}
-                  ariaLabel={ariaLabel}
-                />
-              )}
-            </FormattedMessage>
-          }
-          <IfPermission perm="users.item.put">
-            <FormattedMessage id="ui-users.crud.editUser">
-              {ariaLabel => (
-                <IconButton
-                  icon="edit"
-                  id="clickable-edituser"
-                  style={{ visibility: !user ? 'hidden' : 'visible' }}
-                  onClick={this.props.onEdit}
-                  href={this.props.editLink}
-                  ref={this.editButton}
-                  ariaLabel={ariaLabel}
-                />
-              )}
-            </FormattedMessage>
-          </IfPermission>
-        </PaneMenu>
-      );
-
-    if (!user) {
-      return (
-        <Pane
-          id="pane-userdetails"
-          defaultWidth={this.props.paneWidth}
-          paneTitle={<FormattedMessage id="ui-users.information.userDetails" />}
-          lastMenu={detailMenu}
-          dismissible
-          onClose={this.props.onClose}
-        >
-          <div style={{ paddingTop: '1rem' }}><Icon icon="spinner-ellipsis" width="100px" /></div>
-        </Pane>
-      );
-    }
-
-    const hasPatronBlocks = (get(resources, ['hasPatronBlocks', 'isPending'], true)) ? -1 : 1;
-    const totalPatronBlocks = get(resources, ['hasPatronBlocks', 'other', 'totalRecords'], 0);
-    const patronGroupId = get(user, ['patronGroup'], '');
-    const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
+    const addressTypes = (parentResources.addressTypes || {}).records || [];
     const addresses = toListAddresses(get(user, ['personal', 'addresses'], []), addressTypes);
+
+    const patronGroup = this.getPatronGroup(user);
     const userFormData = this.getUserFormData(user, addresses, sponsors, proxies, permissions, servicePoints, preferredServicePoint);
-
-    const loansHistory = (
-      <this.connectedLoansHistory
-        buildRecords={this.buildRecords}
-        user={user}
-        loansHistory={loans}
-        patronGroup={patronGroup}
-        stripes={stripes}
-        history={this.props.history}
-        onCancel={this.onClickCloseLoansHistory}
-        onClickViewOpenLoans={this.onClickViewOpenLoans}
-        onClickViewClosedLoans={this.onClickViewClosedLoans}
-        onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
-        onClickViewChargeFeeFine={this.onClickViewChargeFeeFine}
-        onClickViewOpenAccounts={this.onClickViewOpenAccounts}
-        onClickViewAccountActionsHistory={this.onClickViewAccountActionsHistory}
-        onClickViewClosedAccounts={this.onClickViewClosedAccounts}
-        onClickViewAllAccounts={this.onClickViewAllAccounts}
-        openLoans={query.layer === 'open-loans'}
-      />);
-
-    const loanDetails = (
-      <this.connectedLoanActionsHistory
-        user={user}
-        loan={this.state.selectedLoan}
-        loanid={query.loan}
-        patronGroup={patronGroup}
-        stripes={stripes}
-        onCancel={this.onClickCloseLoanActionsHistory}
-        // when navigating away to another user, clear all loan-related state
-        onClickUser={() => { this.onClickCloseLoanActionsHistory(); this.onClickCloseLoansHistory(); }}
-        onClickViewOpenAccounts={this.onClickViewOpenAccounts}
-        onClickViewAccountActionsHistory={this.onClickViewAccountActionsHistory}
-        onClickViewClosedAccounts={this.onClickViewClosedAccounts}
-        onClickViewAllAccounts={this.onClickViewAllAccounts}
-      />
-    );
 
     if (this.isLayerOpen('add-block') || this.isLayerOpen('edit-block')) {
       return (
@@ -705,13 +640,13 @@ class ViewUser extends React.Component {
                 num={(this.state.addRecord ? 51 : 50)}
                 onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
                 user={user}
-                parentMutator={this.props.mutator}
+                parentMutator={mutator}
                 patronGroup={patronGroup}
                 stripes={stripes}
-                history={this.props.history}
+                history={history}
                 addRecord={this.state.addRecord}
                 handleAddRecords={this.handleAddRecords}
-                location={this.props.location}
+                location={location}
                 onCancel={this.onClickCloseAccountsHistory}
                 onClickViewChargeFeeFine={this.onClickViewChargeFeeFine}
                 onClickViewAccountActionsHistory={this.onClickViewAccountActionsHistory}
@@ -757,7 +692,7 @@ class ViewUser extends React.Component {
                 patronGroup={patronGroup}
                 account={this.state.selectedAccount}
                 accountid={this.state.selectedAccount.id}
-                history={this.props.history}
+                history={history}
                 onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
                 num={(this.state.addRecord ? 2 : 1)}
                 handleAddRecords={this.handleAddRecords}
@@ -781,7 +716,24 @@ class ViewUser extends React.Component {
                 isOpen
                 contentLabel={contentLabel}
               >
-                {loansHistory}
+                <this.connectedLoansHistory
+                  buildRecords={this.buildRecords}
+                  user={user}
+                  loansHistory={loans}
+                  patronGroup={patronGroup}
+                  stripes={stripes}
+                  history={this.props.history}
+                  onCancel={this.onClickCloseLoansHistory}
+                  onClickViewOpenLoans={this.onClickViewOpenLoans}
+                  onClickViewClosedLoans={this.onClickViewClosedLoans}
+                  onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
+                  onClickViewChargeFeeFine={this.onClickViewChargeFeeFine}
+                  onClickViewOpenAccounts={this.onClickViewOpenAccounts}
+                  onClickViewAccountActionsHistory={this.onClickViewAccountActionsHistory}
+                  onClickViewClosedAccounts={this.onClickViewClosedAccounts}
+                  onClickViewAllAccounts={this.onClickViewAllAccounts}
+                  openLoans={query.layer === 'open-loans'}
+                />
               </Layer>
             )}
           </FormattedMessage>
@@ -798,7 +750,20 @@ class ViewUser extends React.Component {
                 isOpen={this.isLayerOpen('loan')}
                 contentLabel={contentLabel}
               >
-                {loanDetails}
+                <this.connectedLoanActionsHistory
+                  user={user}
+                  loan={this.state.selectedLoan}
+                  loanid={query.loan}
+                  patronGroup={patronGroup}
+                  stripes={stripes}
+                  onCancel={this.onClickCloseLoanActionsHistory}
+                  // when navigating away to another user, clear all loan-related state
+                  onClickUser={() => { this.onClickCloseLoanActionsHistory(); this.onClickCloseLoansHistory(); }}
+                  onClickViewOpenAccounts={this.onClickViewOpenAccounts}
+                  onClickViewAccountActionsHistory={this.onClickViewAccountActionsHistory}
+                  onClickViewClosedAccounts={this.onClickViewClosedAccounts}
+                  onClickViewAllAccounts={this.onClickViewAllAccounts}
+                />
               </Layer>
             )}
           </FormattedMessage>
@@ -818,13 +783,13 @@ class ViewUser extends React.Component {
               <UserForm
                 stripes={stripes}
                 initialValues={userFormData}
-                onSubmit={(record) => { this.update(record); }}
-                onCancel={this.props.onCloseEdit}
+                onSubmit={record => this.update(record)}
+                onCancel={onCloseEdit}
                 parentResources={{
-                  ...this.props.resources,
-                  ...this.props.parentResources,
+                  ...resources,
+                  ...parentResources,
                 }}
-                parentMutator={this.props.parentMutator}
+                parentMutator={parentMutator}
               />
             </Layer>
           )}
@@ -832,21 +797,108 @@ class ViewUser extends React.Component {
       );
     }
 
+    return null;
+  }
+
+  renderDetailMenu(user) {
+    const {
+      tagsEnabled,
+      tagsToggle,
+      onEdit,
+      editLink
+    } = this.props;
+
+    const tags = ((user && user.tags) || {}).tagList || [];
+
+    return (
+      <PaneMenu>
+        {
+          tagsEnabled &&
+          <FormattedMessage id="ui-users.showTags">
+            {ariaLabel => (
+              <IconButton
+                icon="tag"
+                id="clickable-show-tags"
+                onClick={tagsToggle}
+                badgeCount={tags.length}
+                ariaLabel={ariaLabel}
+              />
+            )}
+          </FormattedMessage>
+        }
+        <IfPermission perm="users.item.put">
+          <FormattedMessage id="ui-users.crud.editUser">
+            {ariaLabel => (
+              <IconButton
+                icon="edit"
+                id="clickable-edituser"
+                style={{ visibility: !user ? 'hidden' : 'visible' }}
+                onClick={onEdit}
+                href={editLink}
+                ref={this.editButton}
+                ariaLabel={ariaLabel}
+              />
+            )}
+          </FormattedMessage>
+        </IfPermission>
+      </PaneMenu>
+    );
+  }
+
+  renderSpinner() {
+    const { paneWidth, onClose } = this.props;
+    const detailMenu = this.renderDetailMenu();
+
+    return (
+      <Pane
+        id="pane-userdetails"
+        defaultWidth={paneWidth}
+        paneTitle={<FormattedMessage id="ui-users.information.userDetails" />}
+        lastMenu={detailMenu}
+        dismissible
+        onClose={onClose}
+      >
+        <div style={{ paddingTop: '1rem' }}>
+          <Icon icon="spinner-ellipsis" width="100px" />
+        </div>
+      </Pane>
+    );
+  }
+
+  renderUser(user) {
+    const {
+      resources,
+      stripes,
+      parentResources,
+      onClose,
+      paneWidth,
+    } = this.props;
+
+    const addressTypes = (parentResources.addressTypes || {}).records || [];
+    const addresses = toListAddresses(get(user, ['personal', 'addresses'], []), addressTypes);
+    const permissions = (resources.permissions || {}).records || [];
+    const settings = (resources.settings || {}).records || [];
+    const sponsors = this.props.getSponsors();
+    const proxies = this.props.getProxies();
+    const servicePoints = this.props.getServicePoints();
+    const preferredServicePoint = this.props.getPreferredServicePoint();
+    const hasPatronBlocks = (get(resources, ['hasPatronBlocks', 'isPending'], true)) ? -1 : 1;
+    const totalPatronBlocks = get(resources, ['hasPatronBlocks', 'other', 'totalRecords'], 0);
+    const patronGroup = this.patronGroup(user);
+    const detailMenu = this.renderDetailMenu(user);
     return (
       <Pane
         data-test-instance-details
         id="pane-userdetails"
-        defaultWidth={this.props.paneWidth}
+        defaultWidth={paneWidth}
         paneTitle={<span data-test-header-title>{getFullName(user)}</span>}
         lastMenu={detailMenu}
         dismissible
-        onClose={this.props.onClose}
+        onClose={onClose}
         appIcon={{ app: 'users' }}
       >
         <TitleManager record={getFullName(user)} />
-
         <Headline size="xx-large" tag="h2">{getFullName(user)}</Headline>
-
         <Row>
           <Col xs={10}>
             {(hasPatronBlocks === 1 && totalPatronBlocks > 0)
@@ -874,7 +926,6 @@ class ViewUser extends React.Component {
             onToggle={this.handleSectionToggle}
             onClickViewPatronBlock={this.onClickViewPatronBlock}
             addRecord={this.state.addRecord}
-            initialValues={userFormData}
             {...this.props}
           />
           <ExtendedInfo
@@ -888,7 +939,7 @@ class ViewUser extends React.Component {
             stripes={stripes}
             user={user}
             addresses={addresses}
-            addressTypes={this.addressTypes}
+            addressTypes={addressTypes}
             expanded={this.state.sections.contactInfoSection}
             onToggle={this.handleSectionToggle}
           />
@@ -974,10 +1025,28 @@ class ViewUser extends React.Component {
       </Pane>
     );
   }
+
+  render() {
+    const user = this.getUser();
+
+    if (!user) {
+      return this.renderSpinner();
+    }
+
+    return (
+      <HasCommand
+        commands={this.keyboardCommands}
+        display={['new', 'edit', 'search']}
+        isWithinScope={this.checkScope}
+        scope={document.body}
+      >
+        {this.renderLayer(user) || this.renderUser(user)}
+      </HasCommand>
+    );
+  }
 }
 
 export default compose(
-  withCommand,
   withServicePoints,
   withTags,
   withProxy,
