@@ -1,6 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import moment from 'moment';
 import { Callout } from '@folio/stripes/components';
@@ -101,26 +102,21 @@ class Actions extends React.Component {
       this.state !== nextState;
   }
 
-  showCalloutMessage(a) {
+  showCalloutMessage({ feeFineType, amount, paymentStatus }) {
+    const { user } = this.props;
+    const formattedAmount = parseFloat(amount).toFixed(2);
+    const fullName = getFullName(user);
+
     const message = (
-      <span>
-        The
-        {' '}
-        {a.feeFineType}
-        {' '}
-        fee/fine of
-        {' '}
-        <strong>{parseFloat(a.amount).toFixed(2)}</strong>
-        {' '}
-        has been successfully
-        {' '}
-        <strong>{a.paymentStatus.name}</strong>
-        {' '}
-        for
-        {' '}
-        <strong>{getFullName(this.props.user)}</strong>
-        .
-      </span>
+      <FormattedMessage
+        id="ui-users.accounts.actions.calloutMessage"
+        values={{
+          amount: <strong>{formattedAmount}</strong>,
+          paymentStatus: <strong>{paymentStatus.name}</strong>,
+          name: <strong>{fullName}</strong>,
+          feeFineType,
+        }}
+      />
     );
     this.callout.sendCallout({ message });
   }
@@ -308,21 +304,35 @@ class Actions extends React.Component {
   }
 
   render() {
-    const payments = _.get(this.props.resources, ['payments', 'records'], []);
-    const waives = _.get(this.props.resources, ['waives', 'records'], []);
-    const settings = _.get(this.props.resources, ['commentRequired', 'records', 0], {});
+    const {
+      actions,
+      stripes,
+      resources,
+    } = this.props;
+
+    const payments = _.get(resources, ['payments', 'records'], []);
+    const waives = _.get(resources, ['waives', 'records'], []);
+    const settings = _.get(resources, ['commentRequired', 'records', 0], {});
     const accounts = this.state.accounts || [];
-    const warning = accounts.filter(a => a.status.name === 'Closed').length !== 0 && (this.props.actions.regular || this.props.actions.waiveMany);
+    const warning = accounts.filter(a => a.status.name === 'Closed').length !== 0 && (actions.regular || actions.waiveMany);
+    const warningModalLabelId = actions.regular
+      ? 'ui-users.accounts.actions.payFeeFine'
+      : 'ui-users.accounts.actions.waiveFeeFine';
+
     return (
       <div>
-        <WarningModal
-          open={warning}
-          accounts={accounts}
-          onChangeAccounts={this.onChangeAccounts}
-          stripes={this.props.stripes}
-          onClose={this.onCloseWarning}
-          label={(this.props.actions.regular) ? 'Pay fees/fines' : 'Waive fees/fines'}
-        />
+        <FormattedMessage id={warningModalLabelId}>
+          {label => (
+            <WarningModal
+              open={warning}
+              accounts={accounts}
+              onChangeAccounts={this.onChangeAccounts}
+              stripes={stripes}
+              onClose={this.onCloseWarning}
+              label={label}
+            />
+          )}
+        </FormattedMessage>
         <CancellationModal
           open={this.props.actions.cancellation}
           onClose={this.onCloseCancellation}
