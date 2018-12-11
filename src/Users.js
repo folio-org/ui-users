@@ -243,40 +243,42 @@ class Users extends React.Component {
     };
 
     return (
-      <HasCommand commands={this.keyboardCommands}>
-        <SearchAndSort
-          packageInfo={packageInfo}
-          objectName="user"
-          filterConfig={filterConfig}
-          initialResultCount={INITIAL_RESULT_COUNT}
-          resultCountIncrement={RESULT_COUNT_INCREMENT}
-          viewRecordComponent={ViewUser}
-          editRecordComponent={UserForm}
-          newRecordInitialValues={{ active: true, personal: { preferredContactTypeId: '002' } }}
-          visibleColumns={this.props.visibleColumns ? this.props.visibleColumns : ['status', 'name', 'barcode', 'patronGroup', 'username', 'email']}
-          resultsFormatter={resultsFormatter}
-          onSelectRow={onSelectRow}
-          onCreate={this.create}
-          onComponentWillUnmount={onComponentWillUnmount}
-          massageNewRecord={this.massageNewRecord}
-          finishedResourceName="perms"
-          viewRecordPerms="users.item.get"
-          newRecordPerms="users.item.post,login.item.post,perms.users.item.post"
-          disableRecordCreation={disableRecordCreation}
-          parentResources={this.props.resources}
-          parentMutator={this.props.mutator}
-          showSingleResult={showSingleResult}
-          columnMapping={{
-            status: intl.formatMessage({ id: 'ui-users.active' }),
-            name: intl.formatMessage({ id: 'ui-users.information.name' }),
-            barcode: intl.formatMessage({ id: 'ui-users.information.barcode' }),
-            patronGroup: intl.formatMessage({ id: 'ui-users.information.patronGroup' }),
-            username: intl.formatMessage({ id: 'ui-users.information.username' }),
-            email: intl.formatMessage({ id: 'ui-users.contact.email' }),
-          }}
-          browseOnly={browseOnly}
-        />
-      </HasCommand>);
+      <div data-test-user-instances>
+        <HasCommand commands={this.keyboardCommands}>
+          <SearchAndSort
+            packageInfo={packageInfo}
+            objectName="user"
+            filterConfig={filterConfig}
+            initialResultCount={INITIAL_RESULT_COUNT}
+            resultCountIncrement={RESULT_COUNT_INCREMENT}
+            viewRecordComponent={ViewUser}
+            editRecordComponent={UserForm}
+            newRecordInitialValues={{ active: true, personal: { preferredContactTypeId: '002' } }}
+            visibleColumns={this.props.visibleColumns ? this.props.visibleColumns : ['status', 'name', 'barcode', 'patronGroup', 'username', 'email']}
+            resultsFormatter={resultsFormatter}
+            onSelectRow={onSelectRow}
+            onCreate={this.create}
+            onComponentWillUnmount={onComponentWillUnmount}
+            massageNewRecord={this.massageNewRecord}
+            finishedResourceName="perms"
+            viewRecordPerms="users.item.get"
+            newRecordPerms="users.item.post,login.item.post,perms.users.item.post"
+            disableRecordCreation={disableRecordCreation}
+            parentResources={this.props.resources}
+            parentMutator={this.props.mutator}
+            showSingleResult={showSingleResult}
+            columnMapping={{
+              status: intl.formatMessage({ id: 'ui-users.active' }),
+              name: intl.formatMessage({ id: 'ui-users.information.name' }),
+              barcode: intl.formatMessage({ id: 'ui-users.information.barcode' }),
+              patronGroup: intl.formatMessage({ id: 'ui-users.information.patronGroup' }),
+              username: intl.formatMessage({ id: 'ui-users.information.username' }),
+              email: intl.formatMessage({ id: 'ui-users.contact.email' }),
+            }}
+            browseOnly={browseOnly}
+          />
+        </HasCommand>
+      </div>);
   }
 }
 

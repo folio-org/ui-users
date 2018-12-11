@@ -827,9 +827,10 @@ class ViewUser extends React.Component {
         scope={document.body}
       >
         <Pane
+          data-test-instance-details
           id="pane-userdetails"
           defaultWidth={this.props.paneWidth}
-          paneTitle={getFullName(user)}
+          paneTitle={<span data-test-header-title>{getFullName(user)}</span>}
           lastMenu={detailMenu}
           dismissible
           onClose={this.props.onClose}
