@@ -884,7 +884,7 @@ class ViewUser extends React.Component {
     const preferredServicePoint = this.props.getPreferredServicePoint();
     const hasPatronBlocks = (get(resources, ['hasPatronBlocks', 'isPending'], true)) ? -1 : 1;
     const totalPatronBlocks = get(resources, ['hasPatronBlocks', 'other', 'totalRecords'], 0);
-    const patronGroup = this.patronGroup(user);
+    const patronGroup = this.getPatronGroup(user);
     const detailMenu = this.renderDetailMenu(user);
     return (
       <Pane
