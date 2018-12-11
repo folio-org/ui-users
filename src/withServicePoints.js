@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { get } from 'lodash';
 import { setServicePoints, setCurServicePoint, HandlerManager, coreEvents as events } from '@folio/stripes/core';
@@ -169,7 +169,7 @@ const withServicePoints = WrappedComponent => class WithServicePointsComponent e
 
     render() {
       return (
-        <React.Fragment>
+        <Fragment>
           <WrappedComponent
             getServicePoints={this.getServicePoints}
             getPreferredServicePoint={this.getPreferredServicePoint}
@@ -183,7 +183,7 @@ const withServicePoints = WrappedComponent => class WithServicePointsComponent e
               stripes={this.props.stripes}
             /> : null
           }
-        </React.Fragment>
+        </Fragment>
       );
     }
 };
