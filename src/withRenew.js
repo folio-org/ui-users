@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
@@ -115,7 +115,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
       const message = this.getMessage(errors);
 
       return (
-        <div>
+        <Fragment>
           <WrappedComponent
             renew={this.renew}
             {...this.props}
@@ -129,7 +129,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
               label={<FormattedMessage id="ui-users.loanNotRenewed" />}
             />
           }
-        </div>
+        </Fragment>
       );
     }
 };
