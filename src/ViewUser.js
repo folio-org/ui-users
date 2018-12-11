@@ -563,10 +563,6 @@ class ViewUser extends React.Component {
     this.props.onEdit();
   }
 
-  checkScope = () => {
-    return document.getElementById('ModuleContainer').contains(document.activeElement);
-  }
-
   // focus management when edit layer closes (refocus edit button)
   afterCloseEdit = () => {
     if (this.editButton.current) {
