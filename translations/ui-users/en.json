@@ -394,10 +394,16 @@
   "extended.folioNumber": "Folio number",
   "extended.folioPassword": "Folio password",
   "extended.sendResetPassword": "Send reset password email",
+  "extended.sendCreatePassword": "Send create password email",
+  "extended.copyLink": "Copy link",
+
   "extended.resetPasswordModal.label": "Reset password email sent",
   "extended.resetPasswordModal.linkWasSent": "A reset password link was sent to:",
   "extended.resetPasswordModal.linkInstructions": "If {name} is not receiving emails from FOLIO, the following link can be sent:",
-  "extended.resetPasswordModal.copyLink": "Copy link",
+
+  "extended.createPasswordModal.label": "Create password email confirmation",
+  "extended.createPasswordModal.linkWasSent": "A create password link was sent to:",
+  "extended.createPasswordModal.linkInstructions": "The following link can be sent if the email was now received",
 
   "contact.contactInformation": "Contact Information",
   "contact.email": "Email",

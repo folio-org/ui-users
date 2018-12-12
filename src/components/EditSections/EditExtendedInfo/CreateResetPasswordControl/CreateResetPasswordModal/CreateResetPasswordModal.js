@@ -10,21 +10,27 @@ import {
   Button,
 } from '@folio/stripes/components';
 
-import css from './ResetPasswordModal.css';
+import css from './CreateResetPasswordModal.css';
 
-class ResetPasswordModal extends React.Component {
+class CreateResetPasswordModal extends React.Component {
   static propTypes = {
     isOpen: PropTypes.bool.isRequired,
     email: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     link: PropTypes.string.isRequired,
     onClose: PropTypes.func.isRequired,
+    isLocalPasswordSet: PropTypes.bool.isRequired,
   };
 
   constructor(props) {
     super(props);
 
     this.copyInput = React.createRef();
+    const { isLocalPasswordSet } = props;
+
+    this.modalType = isLocalPasswordSet
+      ? 'createPasswordModal'
+      : 'resetPasswordModal';
   }
 
   buildTextContent = () => {
@@ -35,22 +41,22 @@ class ResetPasswordModal extends React.Component {
 
     return (
       <React.Fragment>
-        <FormattedMessage id="ui-users.extended.resetPasswordModal.linkWasSent" />
+        <FormattedMessage id={`ui-users.extended.${this.modalType}.linkWasSent`} />
         <p className={css.email}>
           {email}
         </p>
         <FormattedMessage
-          id="ui-users.extended.resetPasswordModal.linkInstructions"
+          id={`ui-users.extended.${this.modalType}.linkInstructions`}
           values={{ name }}
         />
       </React.Fragment>
     );
-  }
+  };
 
   handleClick = () => {
     this.copyInput.current.select();
     document.execCommand('copy');
-  }
+  };
 
   buildCopyLinkControl = () => {
     const { link } = this.props;
@@ -72,13 +78,13 @@ class ResetPasswordModal extends React.Component {
             onClick={this.handleClick}
           >
             <strong>
-              <FormattedMessage id="ui-users.extended.resetPasswordModal.copyLink" />
+              <FormattedMessage id="ui-users.extended.copyLink" />
             </strong>
           </Button>
         </Col>
       </Row>
     );
-  }
+  };
 
   render() {
     const {
@@ -91,7 +97,7 @@ class ResetPasswordModal extends React.Component {
         dismissible
         size="small"
         open={isOpen}
-        label={<FormattedMessage id="ui-users.extended.resetPasswordModal.label" />}
+        label={<FormattedMessage id={`ui-users.extended.${this.modalType}.label`} />}
         onClose={onClose}
       >
         {this.buildTextContent()}
@@ -101,4 +107,4 @@ class ResetPasswordModal extends React.Component {
   }
 }
 
-export default ResetPasswordModal;
+export default CreateResetPasswordModal;
