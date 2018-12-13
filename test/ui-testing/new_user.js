@@ -151,28 +151,32 @@ module.exports.test = function meh(uitestctx, nightmare) {
               throw new Error(`Could not find the user ${uid} to edit`);
             }
           }, user.id)
-          .wait('#clickable-edituser')
-          .click('#clickable-edituser')
-          .wait('#adduser_username')
-          .wait(555)
-          .click('#adduser_username')
-          .type('#adduser_username', null)
-          .wait(555)
-          .insert('#adduser_username', `${user.id}x`)
-          .select('#adduser_group', pgroup)
-          .wait(555)
-          .click('#clickable-updateuser')
-          .wait(555)
-          .wait((uid) => {
-            let rvalue = false;
-            const xp = document.evaluate(`//div[.="${uid}"]`, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
-            if (xp.singleNodeValue !== null) {
-              rvalue = true;
-            }
-            return rvalue;
-          }, `${user.id}x`)
-          .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
-          .then(() => { done(); })
+          .then(() => {
+            nightmare
+              .wait('#clickable-edituser')
+              .click('#clickable-edituser')
+              .wait('#adduser_username')
+              .wait(555)
+              .click('#adduser_username')
+              .type('#adduser_username', null)
+              .wait(555)
+              .insert('#adduser_username', `${user.id}x`)
+              .select('#adduser_group', pgroup)
+              .wait(555)
+              .click('#clickable-updateuser')
+              .wait(555)
+              .wait((uid) => {
+                let rvalue = false;
+                const xp = document.evaluate(`//div[.="${uid}"]`, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+                if (xp.singleNodeValue !== null) {
+                  rvalue = true;
+                }
+                return rvalue;
+              }, `${user.id}x`)
+              .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
+              .then(() => { done(); })
+              .catch(done);
+          })
           .catch(done);
       });
       flogout();
