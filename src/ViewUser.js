@@ -68,6 +68,7 @@ class ViewUser extends React.Component {
       type: 'okapi',
       records: 'manualblocks',
       path: 'manualblocks?query=(userId=:{id})&limit=1',
+      permissionsRequired: 'manualblocks.collection.get',
     },
     loansHistory: {
       type: 'okapi',
