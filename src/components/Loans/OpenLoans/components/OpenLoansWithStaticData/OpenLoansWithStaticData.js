@@ -1,5 +1,8 @@
 import React from 'react';
-import _ from 'lodash';
+import {
+  get,
+  isEmpty,
+} from 'lodash';
 import PropTypes from 'prop-types';
 import {
   injectIntl,
@@ -35,6 +38,7 @@ class OpenLoansWithStaticData extends React.Component {
     toggleColumn: PropTypes.func.isRequired,
     stripes: PropTypes.shape({
       intl: PropTypes.object.isRequired,
+      hasPerm: PropTypes.func.isRequired,
       formatDate: PropTypes.func.isRequired,
       formatDateTime: PropTypes.func.isRequired,
     }),
@@ -155,7 +159,7 @@ class OpenLoansWithStaticData extends React.Component {
   };
 
   getFeeFine = (loan, resources) => {
-    const accounts = _.get(resources, ['loanAccount', 'records'], []);
+    const accounts = get(resources, ['loanAccount', 'records'], []);
     const accountsLoan = accounts.filter(a => a.loanId === loan.id) || [];
     let remaining = 0;
 
@@ -167,7 +171,7 @@ class OpenLoansWithStaticData extends React.Component {
   };
 
   getContributorslist = (loan) => {
-    const contributors = _.get(loan, ['item', 'contributors']);
+    const contributors = get(loan, ['item', 'contributors']);
     const contributorsList = [];
 
     if (typeof contributors !== 'undefined') {
@@ -207,7 +211,7 @@ class OpenLoansWithStaticData extends React.Component {
 
     return (
       <React.Fragment>
-        {!_.isEmpty(loans) &&
+        {!isEmpty(loans) &&
         <OpenLoansSubHeader
           loans={loans}
           columnMapping={this.columnMapping}
@@ -219,6 +223,7 @@ class OpenLoansWithStaticData extends React.Component {
           buildRecords={buildRecords}
         />}
         <OpenLoans
+          stripes={stripes}
           loans={loans}
           visibleColumns={visibleColumns}
           sortMap={this.sortMap}

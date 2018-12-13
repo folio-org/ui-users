@@ -3,11 +3,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { MultiColumnList } from '@folio/stripes/components';
+import { stripesShape } from '@folio/stripes/core';
 
 import css from './OpenLoans.css';
 
 class OpenLoans extends React.Component {
   static propTypes = {
+    stripes: stripesShape.isRequired,
     loans: PropTypes.arrayOf(PropTypes.object).isRequired,
     sortMap: PropTypes.object.isRequired,
     loanFormatter: PropTypes.object.isRequired,
@@ -85,21 +87,29 @@ class OpenLoans extends React.Component {
     }
   };
 
-  getVisibleColumns() {
+  getVisibleColumns = () => {
     const {
       visibleColumns,
       possibleColumns,
+      stripes,
     } = this.props;
 
     const visibleColumnsMap = visibleColumns.reduce((map, e) => {
       map[e.title] = e.status;
+
       return map;
     }, {});
 
-    return possibleColumns.filter((e) => {
+    let columnsToDisplay = possibleColumns.filter((e) => {
       return (visibleColumnsMap[e] === undefined || visibleColumnsMap[e] === true);
     });
-  }
+
+    if (!stripes.hasPerm('ui-users.requests.all')) {
+      columnsToDisplay = columnsToDisplay.filter(col => col !== 'requests');
+    }
+
+    return columnsToDisplay;
+  };
 
   render() {
     const {

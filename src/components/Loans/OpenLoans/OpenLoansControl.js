@@ -38,6 +38,7 @@ class OpenLoansControl extends React.Component {
       intl: PropTypes.object.isRequired,
       formatDate: PropTypes.func.isRequired,
       formatDateTime: PropTypes.func.isRequired,
+      hasPerm: PropTypes.func.isRequired,
     }),
     onClickViewLoanActionsHistory: PropTypes.func.isRequired,
     onClickViewAccountActionsHistory: PropTypes.func.isRequired,
@@ -260,7 +261,8 @@ class OpenLoansControl extends React.Component {
   };
 
   renewSelected = () => {
-    const selectedLoans = Object.values(this.state.checkedLoans);
+    const { checkedLoans } = this.state;
+    const selectedLoans = Object.values(checkedLoans);
     const renewSuccess = [];
     const renewFailure = [];
     const bulkRenewal = (selectedLoans.length > 1);
@@ -280,14 +282,18 @@ class OpenLoansControl extends React.Component {
     Promise.all(renewedLoans.map(p => p.catch(e => e)))
       .then(() => {
         if (bulkRenewal) {
-          this.setState({ renewSuccess, renewFailure, bulkRenewalDialogOpen: true });
+          this.setState({
+            renewSuccess,
+            renewFailure,
+            bulkRenewalDialogOpen: true
+          });
         }
       });
 
     this.setState({ checkedLoans: {}, allChecked: false });
   };
 
-  showRequestQueue(loan, e) {
+  showRequestQueue = (loan, e) => {
     if (e) e.preventDefault();
 
     const q = {};
@@ -312,7 +318,7 @@ class OpenLoansControl extends React.Component {
       _path: '/requests',
       ...q,
     });
-  }
+  };
 
   renew(loan, bulkRenewal) {
     const {

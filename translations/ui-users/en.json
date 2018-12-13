@@ -1,6 +1,7 @@
 {
   "meta.title": "Users",
 
+  "loading": "Loading...",
   "search": "Search",
   "expandAll": "Expand all",
   "collapseAll": "Collapse all",
@@ -491,11 +492,12 @@
 
   "accounts.title": "Fees/Fines",
   "accounts.outstandingBalance": "Outstanding Balance: ",
-  "accounts.header": "Fees/Fines - {userName} ({patronGroup})",
-  "accounts.outstanding": "Outstanding Balance:",
+  "accounts.header": "Fee/fine details - {userName} ({patronGroup})",
+  "accounts.outstanding": "Outstanding Balance: {amount}",
   "accounts.open": "Open",
   "accounts.closed": "Closed",
   "accounts.all":"All",
+  "accounts.selected": "Selected: {amount}",
   "accounts.numOpenAccounts": "{count, number} {count, plural, one {open fee/fine} other {open fees/fines}}",
   "accounts.numClosedAccounts": "{count, number} {count, plural, one {closed fee/fine} other {closed fees/fines}}",
   "accounts.chargeManual": "Charge fee/fine",
@@ -592,6 +594,10 @@
   "charge.item.callNumber": "Call number",
   "charge.item.location": "Location",
 
+  "charge.itemLookup.modalLabel": "Item Lookup",
+  "charge.itemLookup.confirm": "Confirm",
+  "charge.itemLookup.cancel": "Cancel",
+
   "details.columns.comments": "Comments",
   "details.columns.date": "Action Date",
   "details.columns.action": "Action",
@@ -650,9 +656,13 @@
   "accounts.history.comment":"Comment",
   "accounts.history.of":"of",
 
+  "accounts.feeFine": "fee/fine",
+  "accounts.feesFines": "fees/fines",
+
   "accounts.pay.error.amount":"Payment must be > 0",
   "accounts.pay.error.exceeds":"Pay amount exceeds the selected amount",
 
+  "accounts.pay.payFeeFine": "Pay Fee/Fine",
   "accounts.pay.field.totalamount":"Total owed amount:",
   "accounts.pay.field.selectedamount":"Selected amount:",
   "accounts.pay.field.paymentamount":"Payment amount*",
@@ -663,10 +673,17 @@
   "accounts.pay.success": "The <strong>{feefine}</strong> fee/fine of <strong>{amount}</strong> has been successfully <strong>{action}</strong>",
   "accounts.pay.placeholder.additional.required":"Enter more information about the fee/fine payment (required)",
   "accounts.pay.placeholder.additional.optional":"Enter more information about the fee/fine payment (optional)",
+  "accounts.pay.notifyPatron": "Notify patron",
+  "accounts.pay.pay": "Pay",
+  "accounts.pay.cancel": "Cancel",
+  "accounts.pay.summary.partiallyPay": "Partially paying",
+  "accounts.pay.summary.paying": "Paying",
+  "accounts.pay.summary": "{payType} {feesFinesAmount} {feeFineForm} for a total amount of {payAmount}",
 
   "accounts.waive.error.amount":"Waive amount must be > 0",
   "accounts.waive.error.exceeds":"Waive amount exceeds the selected amount",
 
+  "accounts.waive.modalLabel": "Waive Fee/Fine",
   "accounts.waive.field.totalamount":"fees/fines for a total amount of",
   "accounts.waive.field.totalowed":"Total owed amount:",
   "accounts.waive.field.selectedamount":"Selected amount:",
@@ -676,15 +693,26 @@
   "accounts.waive.field.comment":"Additional information",
   "accounts.waive.field.cancel":"Cancel",
   "accounts.waive.field.waive":"Waive",
+  "accounts.waive.field.notifyPatron": "Notify patron",
   "accounts.waive.placeholder.additional.required":"Enter more information about the fee/fine waive (required)",
   "accounts.waive.placeholder.additional.optional":"Enter more information about the fee/fine waive (optional)",
+  "accounts.waive.placeholder.selectReason": "Select reason",
+  "accounts.waive.summary.partiallyWaive": "Partially waive",
+  "accounts.waive.summary.waiving": "Waiving",
+  "accounts.waive.summary.totalAmount": "for a total amount of {waiveAmount}",
+  "accounts.waive.summary": "{waiveType} {feesFinesAmount} {feeFineForm} for a total amount of {waiveAmount}",
+
 
   "accounts.cancellation.field.reason":"Reason for cancellation*",
+  "accounts.cancellation.field.cancellationInfo": "Enter information about the cancellation (required)",
   "accounts.cancellation.field.feefinewill":"fee/fine will be",
   "accounts.cancellation.field.cancelled":"cancelled",
-  "accounts.cancellation.field.confirmcancelled":"Confirm fee/fine cancellation",
+  "accounts.cancellation.field.confirmcancelled": "Confirm fee/fine cancellation",
   "accounts.cancellation.field.confirm":"Confirm",
-  "accounts.cancellation.field.back":"Back",
+  "accounts.cancellation.field.back": "Back",
+  "accounts.cancellation.field.notifyPatron": "Notify patron",
+  "accounts.cancellation.field.feefineType": "fee/fine type",
+  "accounts.cancellation.feeFinewillBeCancelled": "<b>{amount}</b> {feeFineType} fee/fine will be <b>cancelled</b>",
 
   "accounts.comment.field.comment":"Comment",
   "accounts.comment.field.save":"Save",
@@ -737,5 +765,21 @@
   "additionalInfo.placeholder": "Enter more information about the override (required)",
 
   "button.override": "Override",
-  "override.emptyNewDueDate": "Select due date above"
+  "override.emptyNewDueDate": "Select due date above",
+
+  "accounts.comment.field.feeFineComment": "Fee/fine comment",
+  "accounts.comment.field.enterComment": "Enter a comment",
+
+  "accounts.actions.calloutMessage": "The {feeFineType} fee/fine of {amount} has been successfully {paymentStatus} for {name}.",
+  "accounts.actions.payFeeFine": "Pay fees/fines",
+  "accounts.actions.waiveFeeFine": "Waive fees/fines",
+
+  "accounts.actions.warning.summary": "{selectedItemsAmount} items selected. {closedItemsAmount} items cannot be {action} because they are alredy closed",
+  "accounts.actions.warning.alertDetails": "Alert details",
+  "accounts.actions.warning.feeFineType": "Fee/Fine type",
+  "accounts.actions.warning.remaining": "Remainig",
+  "accounts.actions.warning.paymentStatus": "Payment Status",
+  "accounts.actions.warning.item": "Item",
+  "accounts.actions.warning.payAction": "paid",
+  "accounts.actions.warning.waiveAction": "waived"
 }
