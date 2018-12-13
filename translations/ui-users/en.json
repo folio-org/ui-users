@@ -477,7 +477,7 @@
   "description": "Description",
   "duplicated": "{field} already exists",
   "showTags": "Show Tags",
-  "itemDetails": "Item Details",
+  "itemDetails": "Item details",
   "renew": "Renew",
   "anonymize": "Anonymize all loans",
   "bulkActions.tooltip": "Multiple loans can be processed at the same time. Please select loans first.",
@@ -654,7 +654,7 @@
 
   "accounts.feeFine": "fee/fine",
   "accounts.feesFines": "fees/fines",
-  
+
   "accounts.pay.error.amount":"Payment must be > 0",
   "accounts.pay.error.exceeds":"Pay amount exceeds the selected amount",
 
@@ -708,7 +708,7 @@
   "accounts.cancellation.field.back": "Back",
   "accounts.cancellation.field.notifyPatron": "Notify patron",
   "accounts.cancellation.field.feefineType": "fee/fine type",
-  "accounts.cancellation.feeFinewillBeCancelled": "<b>{amount}</b> {feeFineType} fee/fine will be <b>cancelled</b>", 
+  "accounts.cancellation.feeFinewillBeCancelled": "<b>{amount}</b> {feeFineType} fee/fine will be <b>cancelled</b>",
 
   "accounts.comment.field.comment":"Comment",
   "accounts.comment.field.save":"Save",

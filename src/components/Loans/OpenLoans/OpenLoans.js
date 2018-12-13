@@ -60,7 +60,8 @@ class OpenLoans extends React.Component {
   static propTypes = {
     buildRecords: PropTypes.func,
     stripes: PropTypes.shape({
-      connect: PropTypes.func.isRequired
+      connect: PropTypes.func.isRequired,
+      hasPerm: PropTypes.func.isRequired,
     }).isRequired,
     onClickViewLoanActionsHistory: PropTypes.func.isRequired,
     onClickViewAccountActionsHistory: PropTypes.func.isRequired,
@@ -664,10 +665,15 @@ class OpenLoans extends React.Component {
           <MenuItem itemMeta={{ loan, action: 'feefinedetails' }}>
             <Button buttonStyle="dropdownItem">Fee/fine details</Button>
           </MenuItem>
-          { requestQueue &&
+          { requestQueue && this.props.stripes.hasPerm('ui-requests.all') &&
             (
             <MenuItem itemMeta={{ loan, action: 'showRequestQueue' }}>
-              <Button buttonStyle="dropdownItem" href={`/requests?&query=${_.get(loan, ['item', 'barcode'])}&filters=requestStatus.open%20-%20not%20yet%20filled%2CrequestStatus.open%20-%20awaiting%20pickup&sort=Request%20Date`}><FormattedMessage id="ui-users.loans.details.requestQueue" /></Button>
+              <Button
+                buttonStyle="dropdownItem"
+                href={`/requests?&query=${_.get(loan, ['item', 'barcode'])}&filters=requestStatus.open%20-%20not%20yet%20filled%2CrequestStatus.open%20-%20awaiting%20pickup&sort=Request%20Date`}
+              >
+                <FormattedMessage id="ui-users.loans.details.requestQueue" />
+              </Button>
             </MenuItem>
             )
           }

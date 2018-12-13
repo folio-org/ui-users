@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "2.17.8",
+  "version": "2.17.9",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -601,6 +601,7 @@
           "addresstypes.collection.get",
           "usergroups.collection.get",
           "configuration.entries.collection.get",
+          "manualblocks.collection.get",
           "inventory.items.collection.get",
           "inventory.items.item.get",
           "inventory.instances.item.get",
