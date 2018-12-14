@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
-/* global it describe before after Nightmare */
-module.exports.test = function meh(uitestctx, nightmareX) {
+/* global it describe after Nightmare */
+module.exports.test = function meh(uitestctx) {
   describe('Module test: users:new_user', function bar() {
     const { config, helpers: { namegen, openApp, logout }, meta: { testVersion } } = uitestctx;
     const nightmare = new Nightmare(config.nightmare);

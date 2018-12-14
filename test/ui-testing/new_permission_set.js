@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
-/* global it describe before after */
-module.exports.test = function foo(uiTestCtx, nightmareX) {
+/* global it describe before after Nightmare */
+module.exports.test = function foo(uiTestCtx) {
   describe('Module test: users:new_permission_set', function bar() {
     const { config, helpers: { login, openApp, logout }, meta: { testVersion } } = uiTestCtx;
     const nightmare = new Nightmare(config.nightmare);
@@ -14,6 +14,7 @@ module.exports.test = function foo(uiTestCtx, nightmareX) {
       before((done) => {
         login(nightmare, config, done); // logs in with the default admin credentials
       });
+
       after((done) => {
         logout(nightmare, config, done);
       });
