@@ -1,51 +1,36 @@
 /* eslint-disable no-console */
-/* global it describe */
-module.exports.test = function foo(uiTestCtx, nightmare) {
+/* global it describe before after Nightmare */
+module.exports.test = function foo(uiTestCtx, nightmareX) {
   describe('Module test: users:patron_group', function meh() {
-    const { config, helpers: { openApp }, meta: { testVersion } } = uiTestCtx;
+    const { config, helpers: { openApp, login, logout }, meta: { testVersion } } = uiTestCtx;
+    const nightmare = new Nightmare(config.nightmare);
+
     this.timeout(Number(config.test_timeout));
     let userBarcode = null;
     let communityid = null;
     let staffid = null;
     const wait = 1111;
 
+
+    before((done) => {
+      login(nightmare, config, done); // logs in with the default admin credentials
+    });
+
+    after((done) => {
+      logout(nightmare, config, done);
+    });
+
     describe('Login > Add new patron group > Assign to user > Try to delete patron group > Unassign from user > Try to delete again > Logout\n', () => {
       const gid = `alumni_${Math.floor(Math.random() * 10000)}`;
       const gidlabel = 'Alumni';
       // const deletePath = `div[title="${gid}"] ~ div:last-of-type button[id*="delete"]`;
 
-      const flogin = function minc(un, pw) {
-        it(`should login as ${un}/${pw}`, (done) => {
-          nightmare
-          /* .on('page', (type = 'alert', message) => {
-            throw new Error(message);
-          }) */
-            .goto(config.url)
-            .wait(Number(config.login_wait))
-            .insert(config.select.username, un)
-            .insert(config.select.password, pw)
-            .click('#clickable-login')
-            .wait('#clickable-logout')
-            .then(() => { done(); })
-            .catch(done);
-        });
-      };
-      const flogout = function buh() {
-        it('should logout', (done) => {
-          nightmare
-            .click('#clickable-logout')
-            .wait(config.select.username)
-            .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 0) // debugging
-            .then(() => { done(); })
-            .catch(done);
-        });
-      };
-      flogin(config.username, config.password);
       it('should open app and find version tag', (done) => {
         nightmare
           .use(openApp(nightmare, config, done, 'users', testVersion))
           .then(result => result);
       });
+
       it(`should create a patron group for "${gidlabel}"`, (done) => {
         nightmare
           .click(config.select.settings)
@@ -68,6 +53,7 @@ module.exports.test = function foo(uiTestCtx, nightmare) {
           .then(() => { done(); })
           .catch(done);
       });
+
       it('should find an active user to edit', (done) => {
         nightmare
           .wait('#clickable-users-module')
@@ -215,16 +201,17 @@ module.exports.test = function foo(uiTestCtx, nightmare) {
       it(`should confirm that "${gid}" patron group has been deleted`, (done) => {
         nightmare
           .wait(wait)
-          .evaluate((egid) => {
-            const cnode = document.evaluate(`//div[.="${egid}"]`, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
-            if (cnode.singleNodeValue) {
-              throw new Error(`${egid} patron group found after clicking "Delete" button!`);
-            }
+          .wait((egid) => {
+            const index = Array.from(
+              document.querySelectorAll('#editList-patrongroups div[role="row"] div[role="gridcell"]:first-of-type')
+            ).findIndex(e => {
+              return e.textContent === egid;
+            });
+            return !(index >= 0);
           }, gid)
           .then(done)
           .catch(done);
       });
-      flogout();
     });
   });
 };

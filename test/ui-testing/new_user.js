@@ -1,13 +1,22 @@
 /* eslint-disable no-console */
-/* global it describe */
-module.exports.test = function meh(uitestctx, nightmare) {
+/* global it describe before after Nightmare */
+module.exports.test = function meh(uitestctx, nightmareX) {
   describe('Module test: users:new_user', function bar() {
-    const { config, helpers: { namegen, openApp }, meta: { testVersion } } = uitestctx;
+    const { config, helpers: { namegen, openApp, logout }, meta: { testVersion } } = uitestctx;
+    const nightmare = new Nightmare(config.nightmare);
     this.timeout(Number(config.test_timeout));
     let pgroup = null;
     const user = namegen();
     // user.id = 'hellox';
     user.password = user.id;
+
+    // before((done) => {
+    //   login(nightmare, config, done); // logs in with the default admin credentials
+    // });
+    after((done) => {
+      logout(nightmare, config, done);
+    });
+
 
     describe('Login > Create new user > Logout > Login as new user > Logout > Login > Edit new user and confirm changes', () => {
       const flogin = function buh(un, pw) {
@@ -37,6 +46,7 @@ module.exports.test = function meh(uitestctx, nightmare) {
       const flogout = function sma() {
         it('should logout', (done) => {
           nightmare
+            .wait('#clickable-logout')
             .click('#clickable-logout')
             .wait('#clickable-login')
             .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
@@ -63,6 +73,7 @@ module.exports.test = function meh(uitestctx, nightmare) {
           .use(openApp(nightmare, config, done, 'users', testVersion))
           .then(result => result);
       });
+
       it('should extract a patron group value', (done) => {
         nightmare
           .wait('#clickable-users-module')
@@ -76,11 +87,12 @@ module.exports.test = function meh(uitestctx, nightmare) {
           .wait('#adduser_group > option:nth-of-type(4)')
           .evaluate(() => document.querySelector('#adduser_group > option:nth-of-type(3)').value)
           .then((result) => {
-            pgroup = result;
             done();
+            pgroup = result;
           })
           .catch(done);
       });
+
       it(`should create a user: ${user.id}/${user.password}`, (done) => {
         nightmare
           .wait('#adduser_lastname')
@@ -116,22 +128,26 @@ module.exports.test = function meh(uitestctx, nightmare) {
           .wait('#clickable-createnewuser')
           .click('#clickable-createnewuser')
           .wait('#userInformationSection')
-          /* .wait((uid) => {
-            const us = document.querySelector('#userInformationSection');
+          .wait((uid) => {
+            const us = document.querySelector('#extendedInfoSection');
             let bool = false;
             if (us.textContent.match(uid)) {
               bool = true;
             }
             return bool;
-          }, user.id) */
-          .wait(25000)
+          }, user.id)
           .then(done)
           .catch(done);
       });
+
       flogout();
+
       flogin(user.id, user.password);
+
       flogout();
+
       flogin(config.username, config.password);
+
       it(`should change username for ${user.id}`, (done) => {
         nightmare
           .wait('#clickable-users-module')
@@ -179,7 +195,9 @@ module.exports.test = function meh(uitestctx, nightmare) {
           })
           .catch(done);
       });
+
       flogout();
+
       it(`Should login as ${user.id}x/${user.password}`, (done) => {
         nightmare
           .wait('#input-username')
@@ -188,9 +206,7 @@ module.exports.test = function meh(uitestctx, nightmare) {
           .insert('#input-password', user.password)
           .click('#clickable-login')
           .wait('#clickable-logout')
-          .click('#clickable-logout')
-          .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
-          .then(() => { done(); })
+          .then(done)
           .catch(done);
       });
     });

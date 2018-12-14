@@ -1,8 +1,9 @@
 /* eslint-disable no-console */
-/* global it describe before after */
-module.exports.test = function foo(uiTestCtx, nightmare) {
+/* global it describe before after Nightmare */
+module.exports.test = function foo(uiTestCtx, nightmareX) {
   describe('Module test: users:new_service_point', function meh() {
-    const { config, helpers: { login, openApp, logoutWithoutEnd }, meta: { testVersion } } = uiTestCtx;
+    const { config, helpers: { login, openApp, logout }, meta: { testVersion } } = uiTestCtx;
+    const nightmare = new Nightmare(config.nightmare);
     this.timeout(Number(config.test_timeout));
     const wait = 1111;
 
@@ -13,7 +14,7 @@ module.exports.test = function foo(uiTestCtx, nightmare) {
       const spName = `service_point_${Math.floor(Math.random() * 10000)}`;
 
       before(done => login(nightmare, config, done));
-      after(done => logoutWithoutEnd(nightmare, config, done));
+      after(done => logout(nightmare, config, done));
 
       it('should open app and find version tag', (done) => {
         nightmare
