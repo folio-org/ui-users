@@ -1,8 +1,9 @@
 /* eslint-disable no-console */
-/* global it describe before after */
-module.exports.test = function foo(uiTestCtx, nightmare) {
+/* global it describe before after Nightmare */
+module.exports.test = function foo(uiTestCtx) {
   describe('Module test: users:new_permission_set', function bar() {
-    const { config, helpers: { login, openApp, logoutWithoutEnd }, meta: { testVersion } } = uiTestCtx;
+    const { config, helpers: { login, openApp, logout }, meta: { testVersion } } = uiTestCtx;
+    const nightmare = new Nightmare(config.nightmare);
     this.timeout(Number(config.test_timeout));
 
     describe('Login > Create new permission set > Confirm creation > Delete permission set > Confirm deletion > Logout\n', () => {
@@ -13,8 +14,9 @@ module.exports.test = function foo(uiTestCtx, nightmare) {
       before((done) => {
         login(nightmare, config, done); // logs in with the default admin credentials
       });
+
       after((done) => {
-        logoutWithoutEnd(nightmare, config, done);
+        logout(nightmare, config, done);
       });
 
       it('should open app and find version tag', (done) => {
