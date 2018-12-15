@@ -1,4 +1,5 @@
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import {
@@ -129,7 +130,7 @@ class WarningModal extends React.Component {
       >
         <Row>
           <Col xs>
-            {`${accounts.length} items selected. ${closed.length} items cannot be ${this.props.label === 'Pay fees/fines' ? 'paid' : 'waived'} because they are alredy closed`}
+            <FormattedMessage id="ui-users.accounts.warning.itemSelected" values={{ total: accounts.length, items: closed.length, action: (this.props.label === 'Pay fees/fines') ? 'paid' : 'waived' }} />
           </Col>
         </Row>
         <Row>
@@ -148,8 +149,8 @@ class WarningModal extends React.Component {
         </Row>
         <Row>
           <Col xs>
-            <Button onClick={this.props.onClose}>Cancel</Button>
-            <Button disabled={checkedClosed.length > 0 || values.length === 0} buttonStyle="primary" onClick={this.onClickContinue}>Continue</Button>
+            <Button onClick={this.props.onClose}><FormattedMessage id="ui-users.feefines.modal.cancel" /></Button>
+            <Button disabled={checkedClosed.length > 0 || values.length === 0} buttonStyle="primary" onClick={this.onClickContinue}><FormattedMessage id="ui-users.feefines.modal.submit" /></Button>
           </Col>
         </Row>
       </Modal>
