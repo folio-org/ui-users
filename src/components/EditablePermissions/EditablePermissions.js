@@ -99,7 +99,6 @@ class EditablePermissions extends React.Component {
   }
 
   renderItem(item, index, showPerms) {
-    const title = <FormattedMessage id="ui-users.permissions.removePermission" />;
     return (
       <li key={item.permissionName}>
         {
@@ -108,17 +107,24 @@ class EditablePermissions extends React.Component {
             (item.displayName || item.permissionName))
         }
         <IfPermission perm={this.props.permToDelete}>
-          <Button
-            buttonStyle="fieldControl"
-            align="end"
-            type="button"
-            id="clickable-remove-permission"
-            onClick={() => this.removePermission(index)}
-            aria-label={`${title}: ${item.permissionName}`}
-            title={title}
-          >
-            <Icon icon="times-circle" iconClassName={css.removePermissionIcon} iconRootClass={css.removePermissionButton} />
-          </Button>
+          <FormattedMessage id="ui-users.permissions.removePermission">
+            {aria => (
+              <Button
+                buttonStyle="fieldControl"
+                align="end"
+                type="button"
+                id="clickable-remove-permission"
+                onClick={() => this.removePermission(index)}
+                aria-label={`${aria}: ${item.permissionName}`}
+              >
+                <Icon
+                  icon="times-circle"
+                  iconClassName={css.removePermissionIcon}
+                  iconRootClass={css.removePermissionButton}
+                />
+              </Button>
+            )}
+          </FormattedMessage>
         </IfPermission>
       </li>
     );

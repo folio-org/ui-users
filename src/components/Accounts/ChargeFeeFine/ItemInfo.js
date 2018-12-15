@@ -1,24 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  FormattedMessage,
-  injectIntl,
-  intlShape,
-} from 'react-intl';
+import { Link } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
 import {
   Button,
   Row,
   Col,
   TextField,
 } from '@folio/stripes/components';
-import { Link } from 'react-router-dom';
 
 class ItemInfo extends React.Component {
   static propTypes = {
     onClickSelectItem: PropTypes.func,
     item: PropTypes.object,
     editable: PropTypes.bool,
-    intl: intlShape.isRequired,
   };
 
   constructor(props) {
@@ -40,16 +35,13 @@ class ItemInfo extends React.Component {
 
   render() {
     const {
-      item: {
-        location,
-        callNumber,
-        itemStatus,
-        instance,
-        barcode,
-        id,
-      },
-      intl,
-    } = this.props;
+      location,
+      callNumber,
+      itemStatus,
+      instance,
+      barcode,
+      id,
+    } = this.props.item;
 
     return (
       <div>
@@ -58,10 +50,14 @@ class ItemInfo extends React.Component {
         </h4>
         <Row>
           <Col xs={6} sm={5} md={4} lg={3}>
-            <TextField
-              placeholder={intl.formatMessage({ id: 'ui-users.charge.item.placeholder' })}
-              onChange={this.onChangeSelectItem}
-            />
+            <FormattedMessage id="ui-users.charge.item.placeholder">
+              {placeholder => (
+                <TextField
+                  placeholder={placeholder}
+                  onChange={this.onChangeSelectItem}
+                />
+              )}
+            </FormattedMessage>
           </Col>
           <Col xs={2}>
             <Button
@@ -118,4 +114,4 @@ class ItemInfo extends React.Component {
   }
 }
 
-export default injectIntl(ItemInfo);
+export default ItemInfo;

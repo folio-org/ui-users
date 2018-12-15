@@ -43,6 +43,7 @@
 * Request queue link should include only open requests. Fixes UIU-716.
 * Prohibit adding user as a proxy or sponsor for themselves. Fixes UIU-734.
 * Fix minor errors of fee/fine history and details. Fixes UI-238, UIU-239.
+* Hide request buttons and disable request links when user doesn't have permissions. Fixes UIU-757.
 
 ## [2.17.0](https://github.com/folio-org/ui-users/tree/v2.17.0) (2018-10-5)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.16.0...v2.17.0)
