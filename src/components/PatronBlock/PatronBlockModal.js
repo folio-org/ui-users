@@ -46,10 +46,10 @@ const PatronBlockModal = ({ open, onClose, patronBlocks, viewUserPath }) => {
 };
 
 PatronBlockModal.propTypes = {
-  open: PropTypes.func,
+  open: PropTypes.bool,
   onClose: PropTypes.func,
-  patronBlocks: PropTypes.func,
-  viewUserPath: PropTypes.func,
+  patronBlocks: PropTypes.arrayOf(PropTypes.object),
+  viewUserPath: PropTypes.string,
 };
 
 export default PatronBlockModal;
