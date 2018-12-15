@@ -75,7 +75,6 @@ class PatronBlock extends React.Component {
   componentDidUpdate(prevProps) {
     const prevBlocks = _.get(prevProps.resources, ['userPatronBlocks', 'records'], []);
     const patronBlocks = _.get(this.props.resources, ['userPatronBlocks', 'records'], []);
-
     if (!_.isEqual(prevBlocks, patronBlocks)) {
       const expirated = patronBlocks.filter(p => moment(moment(p.expirationDate).format()).isBefore(moment().format())) || [];
       expirated.forEach(block => {
@@ -123,14 +122,14 @@ class PatronBlock extends React.Component {
       expanded,
       onToggle,
       accordionId,
+      patronBlocks,
       intl : { formatMessage }
     } = props;
     const {
       sortOrder,
       sortDirection
     } = this.state;
-    const manualBlocks = _.get(this.props.resources, ['userPatronBlocks', 'records'], []);
-    const contentData = _.orderBy(manualBlocks, [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
+    const contentData = _.orderBy(patronBlocks, [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
     const visibleColumns = [
       'Type',
       'Display description',
@@ -159,12 +158,11 @@ class PatronBlock extends React.Component {
     const title =
       <Row>
         <Col><Headline style={{ 'marginLeft': '8px' }} size="large" tag="h3"><FormattedMessage id="ui-users.blocks.label" /></Headline></Col>
-        <Col>{(props.hasPatronBlocks) ? <Icon size="medium" icon="validation-error" status="error" /> : ''}</Col>
+        <Col>{(props.hasPatronBlocks) ? <Icon size="medium" icon="exclamation-circle" status="error" /> : ''}</Col>
       </Row>;
-
     return (
       <Accordion
-        open={manualBlocks.length > 0 ? true : expanded}
+        open={patronBlocks.length > 0 ? true : expanded}
         id={accordionId}
         onToggle={onToggle}
         label={title}

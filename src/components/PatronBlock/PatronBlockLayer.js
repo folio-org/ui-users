@@ -16,7 +16,7 @@ class PatronBlockLayer extends React.Component {
       records: 'manualblocks',
       path:'manualblocks',
       GET: {
-        path: 'manualblocks?query=id=%{activeRecord.id}',
+        path: 'manualblocks?query=userId=%{activeRecord.id}',
       },
       PUT: {
         path: 'manualblocks/%{activeRecord.id}',
@@ -74,11 +74,12 @@ class PatronBlockLayer extends React.Component {
   onCreateItem(item) {
     item.type = 'Manual';
     item.userId = (this.props.user || {}).id;
-    item.expirationDate = moment(item.expirationDate).format();
-
+    if (item.expirationDate) {
+      item.expirationDate = moment(item.expirationDate).format();
+    }
     return this.props.mutator.patronBlocks.POST(item).then(() => {
-      this.props.onCancel();
-    });
+      this.props.mutator.activeRecord.update({ id: item.userId });
+    }).then(() => { this.props.onCancel(); });
   }
 
   onDeleteItem() {
@@ -98,7 +99,10 @@ class PatronBlockLayer extends React.Component {
   }
 
   onUpdateItem(item) {
-    item.expirationDate = moment(item.expirationDate).format();
+    if (item.expirationDate) {
+      item.expirationDate = moment(item.expirationDate).format();
+    }
+    delete item.metadata;
     this.props.mutator.activeRecord.update({ id: item.id });
     return this.props.mutator.patronBlocks.PUT(item).then(() => {
       this.props.onCancel();
@@ -140,12 +144,13 @@ class PatronBlockLayer extends React.Component {
       _.get(this.props.resources, ['patronBlocks', 'records', 0], {})
       : this.props.selectedPatronBlock;
 
-    const message =
+    const message = !_.isEmpty(selectedItem) ?
       <span>
         <strong>{selectedItem.desc}</strong>
         {' '}
         {intl.formatMessage({ id: 'ui-users.blocks.message' })}
-      </span>;
+      </span> : 'Hola mundo';
+
     return (
       <div>
         <PatronBlockForm

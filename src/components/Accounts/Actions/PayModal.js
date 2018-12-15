@@ -44,6 +44,14 @@ const validate = (values, props) => {
   return errors;
 };
 
+const asyncValidate = (values, dispatch, props, blurredField) => {
+  if (blurredField === 'amount') {
+    const amount = parseFloat(values.amount || 0).toFixed(2);
+    dispatch(change('payment', 'amount', amount));
+  }
+  return new Promise(resolve => resolve());
+};
+
 class PayModal extends React.Component {
   static propTypes = {
     onClose: PropTypes.func,
@@ -57,7 +65,6 @@ class PayModal extends React.Component {
     invalid: PropTypes.bool,
     pristine: PropTypes.bool,
     reset: PropTypes.func,
-    dispatch: PropTypes.func,
     commentRequired: PropTypes.bool,
   };
 
@@ -66,6 +73,7 @@ class PayModal extends React.Component {
 
     this.state = {
       amount: 0,
+      notify: true,
     };
   }
 
@@ -79,7 +87,7 @@ class PayModal extends React.Component {
       this.setState({
         amount: parseFloat(selected).toFixed(2),
       });
-      this.props.initialize({ amount: selected, notify: true });
+      this.props.initialize({ amount: parseFloat(selected).toFixed(2), notify: true });
     }
 
     return (this.props.accounts !== nextProps.accounts
@@ -93,6 +101,12 @@ class PayModal extends React.Component {
     this.setState({
       amount: e.target.value,
     });
+  }
+
+  onToggleNotify = () => {
+    this.setState(prevState => ({
+      notify: !prevState.notify,
+    }));
   }
 
   onClose = () => {
@@ -212,9 +226,6 @@ class PayModal extends React.Component {
                     name="amount"
                     component={TextField}
                     onChange={this.onChangeAmount}
-                    onBlur={(e, value, next) => {
-                      this.props.dispatch(change('payment', 'amount', parseFloat(next).toFixed(2)));
-                    }}
                     fullWidth
                     autoFocus
                     required
@@ -279,6 +290,8 @@ class PayModal extends React.Component {
               <Field
                 name="notify"
                 component={Checkbox}
+                checked={this.state.notify}
+                onChange={this.onToggleNotify}
                 inline
               />
               <FormattedMessage id="ui-users.accounts.pay.notifyPatron" />
@@ -308,5 +321,7 @@ class PayModal extends React.Component {
 export default reduxForm({
   form: 'payment',
   fields: [],
+  asyncBlurFields: ['amount'],
+  asyncValidate,
   validate,
 })(PayModal);

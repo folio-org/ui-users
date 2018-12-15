@@ -24,6 +24,7 @@ import {
 } from '@folio/stripes/components';
 import { ChangeDueDateDialog } from '@folio/stripes/smart-components';
 import { IfPermission } from '@folio/stripes/core';
+import PatronBlockModal from '../../PatronBlock/PatronBlockModal';
 import BulkRenewalDialog from '../../BulkRenewalDialog';
 import Label from '../../Label';
 import css from './OpenLoans.css';
@@ -70,6 +71,8 @@ class OpenLoans extends React.Component {
     onClickViewAllAccounts: PropTypes.func.isRequired,
     loans: PropTypes.arrayOf(PropTypes.object).isRequired,
     renew: PropTypes.func,
+    patronBlocks: PropTypes.arrayOf(PropTypes.object),
+    patronGroup: PropTypes.object,
     mutator: PropTypes.shape({
       query: PropTypes.object.isRequired,
       activeRecord: PropTypes.object,
@@ -185,6 +188,8 @@ class OpenLoans extends React.Component {
       loanPolicies: {},
       requestCounts: {},
       toggleDropdownState: false,
+      patronBlockedModal: false,
+
       sortOrder: [
         this.columnMapping.title,
         this.columnMapping.itemStatus,
@@ -504,17 +509,23 @@ class OpenLoans extends React.Component {
   }
 
   renew(loan, bulkRenewal) {
-    const { user, renew } = this.props;
-    const promise = renew(loan, user, bulkRenewal);
+    const { user, renew, patronBlocks } = this.props;
+    const countRenews = patronBlocks.map(a => (a.renewals));
+    if (countRenews.length > 0) {
+      this.openPatronBlockedModal();
+    } else {
+      const promise = renew(loan, user, bulkRenewal);
 
-    if (bulkRenewal) return promise;
-    const singleRenewalFailure = [];
-    promise
-      .then(() => this.showSingleRenewCallout(loan))
-      .catch(() => {
-        singleRenewalFailure.push(loan);
-      });
-    return promise;
+      if (bulkRenewal) return promise;
+      const singleRenewalFailure = [];
+      promise
+        .then(() => this.showSingleRenewCallout(loan))
+        .catch(() => {
+          singleRenewalFailure.push(loan);
+        });
+      return promise;
+    }
+    return null;
   }
 
   renewSelected() {
@@ -732,13 +743,14 @@ class OpenLoans extends React.Component {
   }
 
   renderSubHeader(columnMapping) {
-    const { loans, buildRecords } = this.props;
+    const { loans, buildRecords, patronBlocks } = this.props;
     const noSelectedLoans = _.size(this.state.checkedLoans) === 0;
     const bulkActionsTooltip = <FormattedMessage id="ui-users.bulkActions.tooltip" />;
     const renewString = <FormattedMessage id="ui-users.renew" />;
     const changeDueDateString = <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />;
     const clonedLoans = _.cloneDeep(loans);
     const recordsToCSV = buildRecords(clonedLoans);
+    const countRenews = patronBlocks.map(a => (a.renewals));
     return (
       <ActionsBar
         contentStart={
@@ -773,7 +785,7 @@ class OpenLoans extends React.Component {
               id="renew-all"
               disabled={noSelectedLoans}
               title={noSelectedLoans ? bulkActionsTooltip : renewString}
-              onClick={this.renewSelected}
+              onClick={countRenews.length > 0 ? this.openPatronBlockedModal : this.renewSelected}
             >
               {renewString}
             </Button>
@@ -796,7 +808,20 @@ class OpenLoans extends React.Component {
     );
   }
 
+  openPatronBlockedModal = () => {
+    this.setState({
+      patronBlockedModal: true,
+    });
+  }
+
+  onClosePatronBlockedModal = () => {
+    this.setState({
+      patronBlockedModal: false,
+    });
+  }
+
   render() {
+    const { user, patronBlocks, patronGroup } = this.props;
     const { sortOrder, sortDirection, allChecked, loanPolicies } = this.state;
     const visibleColumns = this.getVisibleColumns();
     const {
@@ -832,6 +857,12 @@ class OpenLoans extends React.Component {
         { this.renderBulkRenewalDialog() }
         { this.renderChangeDueDateDialog() }
         <Callout ref={(ref) => { this.callout = ref; }} />
+        <PatronBlockModal
+          open={this.state.patronBlockedModal}
+          onClose={this.onClosePatronBlockedModal}
+          patronBlocks={patronBlocks}
+          viewUserPath={`/users/view/${(user || {}).id}?filters=pg.${patronGroup.group}&sort=Name`}
+        />
       </div>
     );
   }

@@ -44,6 +44,8 @@
 * Prohibit adding user as a proxy or sponsor for themselves. Fixes UIU-734.
 * Fix minor errors of fee/fine history and details. Fixes UI-238, UIU-239.
 * Hide request buttons and disable request links when user doesn't have permissions. Fixes UIU-757.
+* Resolve fixes of fees/fines. Fixes UIU-762,UIU-763,UIU-765,UIU-766,UIU-769.
+* Add feature enforce manual patron blocks. Ref UIU-675.
 
 ## [2.17.0](https://github.com/folio-org/ui-users/tree/v2.17.0) (2018-10-5)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.16.0...v2.17.0)

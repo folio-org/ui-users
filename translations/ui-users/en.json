@@ -626,6 +626,8 @@
 
   "accounts.error.field":"Please fill this field in to continue",
   "accounts.error.comment":"Enter a comment",
+  "accounts.error.message":"Enter an amount greater than 0",
+  "accounts.error.exceeds": "Pay amount exceeds the selected amount",
 
   "accounts.history.columns.title":"Instance (Item Type)",
   "accounts.history.columns.amount":"Billed",
@@ -699,6 +701,8 @@
   "accounts.waive.summary": "{waiveType} {feesFinesAmount} {feeFineForm} for a total amount of {waiveAmount}",
 
 
+  "accounts.warning.itemSelected":"{total, number} items selected. {items, number} {items, plural, one {item} other {items}} cannot be {action} because they are already closed.",
+
   "accounts.cancellation.field.reason":"Reason for cancellation*",
   "accounts.cancellation.field.cancellationInfo": "Enter information about the cancellation (required)",
   "accounts.cancellation.field.feefinewill":"fee/fine will be",
@@ -722,6 +726,10 @@
   "blocks.columns.renewals":"Renewals",
   "blocks.buttons.add":"+ Add Block",
   "blocks.label":"Patron Blocks",
+  "blocks.reason": "Reason for block:",
+  "blocks.modal.header": "Patron blocked from renewing",
+  "blocks.detailsButton": "Block details",
+  "blocks.closeButton": "Close",
 
   "blocks.form.label.information":"Block information",
   "blocks.form.label.display":"Display Description*",

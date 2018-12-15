@@ -12,7 +12,7 @@ import {
 } from '@folio/stripes/components';
 import { FormattedMessage } from 'react-intl';
 import stripesForm from '@folio/stripes/form';
-import { Field } from 'redux-form';
+import { Field, change } from 'redux-form';
 
 import UserDetails from './UserDetails';
 import FeeFineInfo from './FeeFineInfo';
@@ -28,8 +28,8 @@ function validate(type) {
   if (!type.ownerId) {
     errors.ownerId = <FormattedMessage id="ui-users.feefines.modal.error" />;
   }
-  if (type.amount < 0) {
-    errors.amount = 'Amount must be > 0';
+  if (Number(type.amount) <= 0) {
+    errors.amount = <FormattedMessage id="ui-users.accounts.error.message" />;
   }
   if (!type.amount && !feefineamount) {
     errors.amount = <FormattedMessage id="ui-users.errors.missingRequiredField" />;
@@ -42,12 +42,16 @@ function validate(type) {
 
 function onChange(values, dispatch, props, previousValues) {
   if (values.ownerId !== previousValues.ownerId) {
-    delete values.amount;
-    delete values.feeFineId;
+    dispatch(change('chargefeefine', 'amount', null));
+    dispatch(change('chargefeefine', 'feeFineId', null));
     feefineamount = 0;
   }
   if (values.feeFineId !== previousValues.feeFineId) {
-    values.amount = feefineamount;
+    if (values.feeFineId) {
+      dispatch(change('chargefeefine', 'amount', feefineamount));
+    } else {
+      dispatch(change('chargefeefine', 'amount', null));
+    }
   }
   if (!values.amount && previousValues.amount) {
     feefineamount = null;
@@ -153,7 +157,7 @@ class ChargeForm extends React.Component {
     const owners = [];
 
     this.props.ownerList.forEach((owner) => {
-      if (owner.owner !== 'Shared') owners.push({ label: owner.owner, value: owner.id });
+      if ((owner || {}).owner !== 'Shared') owners.push({ label: owner.owner, value: owner.id });
     });
 
     this.props.feefines.forEach((feefine) => {

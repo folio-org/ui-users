@@ -196,8 +196,8 @@ class WarningModal extends React.Component {
         </Row>
         <Row>
           <Col xs>
-            <Button onClick={this.props.onClose}>Cancel</Button>
-            <Button disabled={checkedClosed.length > 0 || values.length === 0} buttonStyle="primary" onClick={this.onClickContinue}>Continue</Button>
+            <Button onClick={this.props.onClose}><FormattedMessage id="ui-users.feefines.modal.cancel" /></Button>
+            <Button disabled={checkedClosed.length > 0 || values.length === 0} buttonStyle="primary" onClick={this.onClickContinue}><FormattedMessage id="ui-users.feefines.modal.submit" /></Button>
           </Col>
         </Row>
       </Modal>
