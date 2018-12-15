@@ -308,11 +308,12 @@ class Actions extends React.Component {
   }
 
   render() {
+    const { actions } = this.props;
     const payments = _.get(this.props.resources, ['payments', 'records'], []);
     const waives = _.get(this.props.resources, ['waives', 'records'], []);
     const settings = _.get(this.props.resources, ['commentRequired', 'records', 0], {});
     const accounts = this.state.accounts || [];
-    const warning = accounts.filter(a => a.status.name === 'Closed').length !== 0 && (this.props.actions.regular || this.props.actions.waiveMany);
+    const warning = accounts.filter(a => a.status.name === 'Closed').length !== 0 && (actions.regular || actions.waiveMany);
     return (
       <div>
         <WarningModal
@@ -321,10 +322,10 @@ class Actions extends React.Component {
           onChangeAccounts={this.onChangeAccounts}
           stripes={this.props.stripes}
           onClose={this.onCloseWarning}
-          label={(this.props.actions.regular) ? 'Pay fees/fines' : 'Waive fees/fines'}
+          label={(actions.regular) ? 'Pay fees/fines' : 'Waive fees/fines'}
         />
         <CancellationModal
-          open={this.props.actions.cancellation}
+          open={actions.cancellation}
           onClose={this.onCloseCancellation}
           user={this.props.user}
           stripes={this.props.stripes}
@@ -332,16 +333,16 @@ class Actions extends React.Component {
           onSubmit={(values) => { this.onClickCancellation(values); }}
         />
         <PayModal
-          open={this.props.actions.pay || (this.props.actions.regular && !warning)}
+          open={actions.pay || (actions.regular && !warning)}
           commentRequired={settings.paid}
           onClose={this.onClosePay}
           account={[this.type]}
           stripes={this.props.stripes}
           balance={this.props.balance}
-          accounts={(this.props.actions.pay) ? this.props.accounts : accounts}
+          accounts={(actions.pay) ? this.props.accounts : accounts}
           payments={payments}
           onSubmit={(values) => {
-            if (this.props.actions.pay) {
+            if (actions.pay) {
               this.onClickPay(values);
             } else {
               this.onPayMany(values);
@@ -349,20 +350,20 @@ class Actions extends React.Component {
           }}
         />
         <WaiveModal
-          open={this.props.actions.waiveModal || (this.props.actions.waiveMany && !warning)}
+          open={actions.waiveModal || (actions.waiveMany && !warning)}
           commentRequired={settings.waived}
           onClose={this.onCloseWaive}
           stripes={this.props.stripes}
-          accounts={(this.props.actions.waiveModal) ? this.props.accounts : accounts}
+          accounts={(actions.waiveModal) ? this.props.accounts : accounts}
           balance={this.props.balance}
           waives={waives}
           onSubmit={(values) => {
-            if (this.props.actions.waiveModal) this.onClickWaive(values);
+            if (actions.waiveModal) this.onClickWaive(values);
             else this.onWaiveMany(values);
           }}
         />
         <CommentModal
-          open={this.props.actions.comment}
+          open={actions.comment}
           stripes={this.props.stripes}
           onClose={this.onCloseComment}
           onSubmit={(values) => { this.onClickComment(values); }}
