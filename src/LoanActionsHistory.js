@@ -235,7 +235,15 @@ class LoanActionsHistory extends React.Component {
     accounts.forEach(a => {
       amount += parseFloat(a.amount);
     });
-    return (amount === 0) ? '-' : amount.toFixed(2);
+    return (amount === 0) ? '-' : (
+      <button
+        style={{ color: '#2b75bb' }}
+        onClick={(e) => this.feefinedetails(e)}
+        type="button"
+      >
+        {amount.toFixed(2)}
+      </button>
+    );
   }
 
   feefinedetails = (e) => {
@@ -504,15 +512,7 @@ class LoanActionsHistory extends React.Component {
             <Col xs={2}>
               <KeyValue
                 label={<FormattedMessage id="ui-users.loans.details.fine" />}
-                value={(
-                  <button
-                    style={{ color: '#2b75bb' }}
-                    onClick={(e) => this.feefinedetails(e)}
-                    type="button"
-                  >
-                    {this.getFeeFine()}
-                  </button>
-                )}
+                value={this.getFeeFine()}
               />
             </Col>
             <IfPermission perm="ui-users.requests.all">
