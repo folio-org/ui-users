@@ -611,6 +611,8 @@ class ViewUser extends React.Component {
 
     const patronGroup = this.getPatronGroup(user);
     const userFormData = this.getUserFormData(user, addresses, sponsors, proxies, permissions, servicePoints, preferredServicePoint);
+    const patronBlocks = get(resources, ['hasPatronBlocks', 'records'], []);
+
 
     if (this.isLayerOpen('add-block') || this.isLayerOpen('edit-block')) {
       return (
@@ -722,6 +724,7 @@ class ViewUser extends React.Component {
                   user={user}
                   loansHistory={loans}
                   patronGroup={patronGroup}
+                  patronBlocks={patronBlocks}
                   stripes={stripes}
                   history={history}
                   onCancel={this.onClickCloseLoansHistory}
