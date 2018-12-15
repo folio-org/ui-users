@@ -67,7 +67,7 @@ class ViewUser extends React.Component {
     hasPatronBlocks: {
       type: 'okapi',
       records: 'manualblocks',
-      path: 'manualblocks?query=(userId=:{id})&limit=1',
+      path: 'manualblocks?query=(userId=:{id})&limit=100',
     },
     loansHistory: {
       type: 'okapi',
@@ -406,6 +406,9 @@ class ViewUser extends React.Component {
     if (e) e.preventDefault();
     const layer = (mode === 'add') ? 'add-block' : 'edit-block';
     if (mode === 'add') {
+      this.setState({
+        selectedPatronBlock,
+      });
       this.props.mutator.query.update({ layer });
     } else {
       this.setState({
@@ -648,6 +651,7 @@ class ViewUser extends React.Component {
 
     const hasPatronBlocks = (get(resources, ['hasPatronBlocks', 'isPending'], true)) ? -1 : 1;
     const totalPatronBlocks = get(resources, ['hasPatronBlocks', 'other', 'totalRecords'], 0);
+    const patronBlocks = get(resources, ['hasPatronBlocks', 'records'], []);
     const patronGroupId = get(user, ['patronGroup'], '');
     const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
     const addresses = toListAddresses(get(user, ['personal', 'addresses'], []), addressTypes);
@@ -658,6 +662,7 @@ class ViewUser extends React.Component {
         buildRecords={this.buildRecords}
         user={user}
         loansHistory={loans}
+        patronBlocks={patronBlocks}
         patronGroup={patronGroup}
         stripes={stripes}
         history={this.props.history}
@@ -861,6 +866,7 @@ class ViewUser extends React.Component {
             />
             <this.connectedPatronBlock
               accordionId="patronBlocksSection"
+              patronBlocks={patronBlocks}
               hasPatronBlocks={(hasPatronBlocks === 1 && totalPatronBlocks > 0)}
               expanded={this.state.sections.patronBlocksSection}
               onToggle={this.handleSectionToggle}
