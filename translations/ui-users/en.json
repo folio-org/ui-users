@@ -474,6 +474,7 @@
   "saveAndClose": "Save & close",
   "edit": "Edit",
   "okay": "OK",
+  "cancel": "Cancel",
   "description": "Description",
   "duplicated": "{field} already exists",
   "showTags": "Show Tags",
