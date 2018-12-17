@@ -11,7 +11,7 @@ describe('Users', () => {
   const users = new UsersInteractor();
 
   beforeEach(async function () {
-    this.server.createList('user', 20);
+    this.server.createList('user', 3);
     this.visit('/users?filters=active.Include%20inactive%20users&sort=Name');
   });
 
@@ -20,7 +20,7 @@ describe('Users', () => {
   });
 
   it('renders each user instance', () => {
-    expect(users.instances().length).to.be.equal(20);
+    expect(users.instances().length).to.be.equal(3);
   });
 
   describe('clicking on the first user item', function () {

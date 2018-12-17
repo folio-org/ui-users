@@ -2,10 +2,12 @@ import cloneDeep from 'lodash/cloneDeep';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
+
 import {
   Paneset,
   Pane,
   PaneMenu,
+  Icon,
   IconButton,
   Button,
   ExpandAllButton,
@@ -172,7 +174,7 @@ class UserForm extends React.Component {
     return (
       <PaneMenu>
         <FormattedMessage id="ui-users.crud.closeNewUserDialog">
-          { ariaLabel => (
+          {ariaLabel => (
             <IconButton
               id="clickable-closenewuserdialog"
               onClick={this.props.onCancel}
@@ -187,7 +189,10 @@ class UserForm extends React.Component {
   }
 
   getLastMenu(id, label) {
-    const { pristine, submitting } = this.props;
+    const {
+      pristine,
+      submitting,
+    } = this.props;
 
     return (
       <PaneMenu>
@@ -217,6 +222,7 @@ class UserForm extends React.Component {
     this.setState((curState) => {
       const newState = cloneDeep(curState);
       newState.sections[id] = !newState.sections[id];
+
       return newState;
     });
   }
@@ -224,6 +230,7 @@ class UserForm extends React.Component {
   toggleAllSections(expand) {
     this.setState((curState) => {
       const newSections = expandAllFunction(curState.sections, expand);
+
       return {
         sections: newSections
       };
@@ -246,10 +253,35 @@ class UserForm extends React.Component {
   }
 
   executeSave() {
-    const { handleSubmit, onSubmit } = this.props;
+    const {
+      handleSubmit,
+      onSubmit,
+    } = this.props;
+
     const submitter = handleSubmit(onSubmit);
+
     submitter();
   }
+
+  getActionMenu = ({ onToggle }) => {
+    const { onCancel } = this.props;
+    const handleClick = () => {
+      onCancel();
+      onToggle();
+    };
+
+    return (
+      <Button
+        data-test-cancel-user-form-action
+        buttonStyle="dropdownItem"
+        onClick={handleClick}
+      >
+        <Icon icon="times-circle">
+          <FormattedMessage id="ui-users.cancel" />
+        </Icon>
+      </Button>
+    );
+  };
 
   render() {
     const {
@@ -259,25 +291,48 @@ class UserForm extends React.Component {
         connect,
       },
     } = this.props;
+
     const { sections } = this.state;
     const firstMenu = this.getAddFirstMenu();
     const paneTitle = initialValues.id
       ? getFullName(initialValues)
       : <FormattedMessage id="ui-users.crud.createUser" />;
+
     const lastMenu = initialValues.id
       ? this.getLastMenu('clickable-updateuser', <FormattedMessage id="ui-users.crud.updateUser" />)
       : this.getLastMenu('clickable-createnewuser', <FormattedMessage id="ui-users.crud.createUser" />);
 
     return (
       <HasCommand commands={this.keyboardCommands}>
-        <form className={css.UserFormRoot} id="form-user" onSubmit={handleSubmit}>
+        <form
+          data-test-form-page
+          className={css.UserFormRoot}
+          id="form-user"
+          onSubmit={handleSubmit}
+        >
           <Paneset isRoot>
-            <Pane defaultWidth="100%" firstMenu={firstMenu} lastMenu={lastMenu} paneTitle={paneTitle} appIcon={{ app: 'users' }}>
+            <Pane
+              defaultWidth="100%"
+              firstMenu={firstMenu}
+              lastMenu={lastMenu}
+              paneTitle={paneTitle}
+              appIcon={{ app: 'users' }}
+              actionMenu={this.getActionMenu}
+            >
               <div className={css.UserFormContent}>
-                <Headline size="xx-large" tag="h2">{getFullName(initialValues)}</Headline>
+                <Headline
+                  size="xx-large"
+                  tag="h2"
+                  data-test-header-title
+                >
+                  {getFullName(initialValues)}
+                </Headline>
                 <Row end="xs">
                   <Col xs>
-                    <ExpandAllButton accordionStatus={sections} onToggle={this.handleExpandAll} />
+                    <ExpandAllButton
+                      accordionStatus={sections}
+                      onToggle={this.handleExpandAll}
+                    />
                   </Col>
                 </Row>
                 <AccordionSet>
