@@ -45,10 +45,7 @@ class ProxyEditList extends React.Component {
 
     const error = {
       label: <FormattedMessage id={`ui-users.errors.${name}.invalidUserLabel`} />,
-      message: <SafeHTMLMessage
-        id={`ui-users.errors.${name}.invalidUserMessage`}
-        values={{ name: getFullName(initialValues) }}
-      />,
+      message: <FormattedMessage id={`ui-users.errors.${name}.invalidUserMessage`} />,
     };
 
     this.setState({ error });
