@@ -8,7 +8,8 @@ import {
   KeyValue,
 } from '@folio/stripes/components';
 
-import CreateResetPasswordModal from './CreateResetPasswordModal';
+import CreatePasswordModal from './Modals/CreatePasswordModal';
+import ResetPasswordModal from './Modals/ResetPasswordModal';
 
 import css from './CreateResetPasswordControl.css';
 
@@ -19,7 +20,6 @@ class CreateResetPasswordControl extends React.Component {
     userId: PropTypes.string.isRequired,
     resources: PropTypes.shape({
       isLocalPasswordSet: PropTypes.shape({
-        // ToDo: should be updated
         records: PropTypes.object,
       }).isRequired,
     }).isRequired,
@@ -31,17 +31,15 @@ class CreateResetPasswordControl extends React.Component {
   };
 
   static manifest = Object.freeze({
-    // ToDo: should be investigated: added new endpoint or flag to existing one
     resetPassword: {
       type: 'okapi',
       path: 'bl-users/password-reset/link',
       fetch: false,
       throwErrors: false,
     },
-    // ToDo: should be changed
     isLocalPasswordSet: {
       type: 'okapi',
-      path: 'perms/permissions?length=1000',
+      path: 'authn/credentials-existence?userId=!{userId}',
     },
   });
 
@@ -61,7 +59,7 @@ class CreateResetPasswordControl extends React.Component {
     });
   };
 
-  handleResetPasswordClick = () => {
+  handleLinkClick = () => {
     const {
       mutator: {
         resetPassword,
@@ -75,30 +73,41 @@ class CreateResetPasswordControl extends React.Component {
       .catch(this.closeModal);
   };
 
-  render() {
-    const {
-      email,
-      name,
-    } = this.props;
-
-    const isLocalPasswordSet = get(
-      this.props,
-      'resources.isLocalPasswordSet.records.isLocalPasswordSet',
-      true,
+  createPasswordModal = () => {
+    return (
+      <CreatePasswordModal
+        isOpen={this.state.showModal}
+        link={this.state.link}
+        email={this.props.email}
+        modalHeader={<FormattedMessage id="ui-users.extended.createPasswordModal.label" />}
+        onClose={this.closeModal}
+      />
     );
+  };
 
-    const {
-      link,
-      showModal,
-    } = this.state;
+  resetPasswordModal = () => {
+    return (
+      <ResetPasswordModal
+        isOpen={this.state.showModal}
+        link={this.state.link}
+        email={this.props.email}
+        name={this.props.name}
+        modalHeader={<FormattedMessage id="ui-users.extended.resetPasswordModal.label" />}
+        onClose={this.closeModal}
+      />
+    );
+  };
+
+  render() {
+    const pathToResponse = 'resources.isLocalPasswordSet.records.credentialsExist';
+    const isLocalPasswordSet = get(this.props, pathToResponse, true);
+
+    const linkTextKey = isLocalPasswordSet
+      ? 'ui-users.extended.sendResetPassword'
+      : 'ui-users.extended.sendCreatePassword';
 
     const fieldLabel = <FormattedMessage id="ui-users.extended.folioPassword" />;
-    const contentText = <FormattedMessage id={`ui-users.extended.${
-      isLocalPasswordSet
-        ? 'sendCreatePassword'
-        : 'sendResetPassword'
-    }`}
-    />;
+    const contentText = <FormattedMessage id={linkTextKey} />;
 
     return (
       <Col
@@ -109,19 +118,15 @@ class CreateResetPasswordControl extends React.Component {
           <button
             type="button"
             className={css.resetPasswordButton}
-            onClick={this.handleResetPasswordClick}
+            onClick={this.handleLinkClick}
           >
             {contentText}
           </button>
         </KeyValue>
-        <CreateResetPasswordModal
-          isLocalPasswordSet={isLocalPasswordSet}
-          isOpen={showModal}
-          email={email}
-          name={name}
-          link={link}
-          onClose={this.closeModal}
-        />
+        {isLocalPasswordSet
+          ? this.resetPasswordModal()
+          : this.createPasswordModal()
+        }
       </Col>
     );
   }
