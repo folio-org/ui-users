@@ -48,6 +48,7 @@ class OpenLoans extends React.Component {
       ' ': 50
     };
     this.columnOverflow = { ' ': true };
+    this.permissions = { allRequests: 'ui-users.requests.all' };
   }
 
   onSort = (e, meta) => {
@@ -57,7 +58,7 @@ class OpenLoans extends React.Component {
 
     let {
       sortOrder,
-      sortDirection
+      sortDirection,
     } = this.state;
 
     if (sortOrder[0] !== meta.alias) {
@@ -104,7 +105,7 @@ class OpenLoans extends React.Component {
       return (visibleColumnsMap[e] === undefined || visibleColumnsMap[e] === true);
     });
 
-    if (!stripes.hasPerm('ui-users.requests.all')) {
+    if (!stripes.hasPerm(this.permissions.allRequests)) {
       columnsToDisplay = columnsToDisplay.filter(col => col !== 'requests');
     }
 
@@ -123,7 +124,6 @@ class OpenLoans extends React.Component {
       loanFormatter,
       sortMap,
     } = this.props;
-
 
     const loansSorted = _.orderBy(
       loans,

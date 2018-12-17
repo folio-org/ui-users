@@ -38,9 +38,6 @@ const validate = (item) => {
     errors.renewals = <FormattedMessage id="ui-users.blocks.form.validate.any" />;
     errors.requests = <FormattedMessage id="ui-users.blocks.form.validate.any" />;
   }
-  if (!item.expirationDate) {
-    errors.expirationDate = <FormattedMessage id="ui-users.blocks.form.validate.date" />;
-  }
   if (moment(moment(item.expirationDate).format()).isBefore(moment().format())) {
     errors.expirationDate = <FormattedMessage id="ui-users.blocks.form.validate.future" />;
   }
@@ -137,7 +134,7 @@ class PatronBlockForm extends React.Component {
         id="close-patron-block"
         onClick={this.props.onClose}
         title="Close"
-        icon="closeX"
+        icon="times"
       />
     </PaneMenu>
   );
@@ -189,6 +186,8 @@ class PatronBlockForm extends React.Component {
       </div> : 'New Block';
     const userD = this.props.query.layer !== 'edit-block' ? <UserDetails user={user} /> : '';
 
+    const isSelectedItemMetadata = this.props.selectedItem || {};
+
     return (
       <Pane
         defaultWidth="20%"
@@ -211,7 +210,7 @@ class PatronBlockForm extends React.Component {
               onToggle={this.handleSectionToggle}
               open={this.state.sections.blockInformationSection}
             >
-              {(this.props.selectedItem.metadata) ?
+              { !_.isEmpty(isSelectedItemMetadata) ?
                 <Row>
                   <Col xs={12} sm={10} md={7} lg={5}>
                     <this.connectedViewMetaData metadata={this.props.selectedItem.metadata} />

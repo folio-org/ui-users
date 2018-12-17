@@ -1,11 +1,17 @@
-import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
+import {
+  isEmpty,
+  omit,
+  size,
+  get,
+} from 'lodash';
+
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
+import { stripesShape } from '@folio/stripes/core';
 
 import withRenew from '../../../withRenew';
 import TableModel from './components/OpenLoansWithStaticData';
-
 
 class OpenLoansControl extends React.Component {
   static manifest = Object.freeze({
@@ -34,19 +40,7 @@ class OpenLoansControl extends React.Component {
   });
 
   static propTypes = {
-    stripes: PropTypes.shape({
-      intl: PropTypes.object.isRequired,
-      formatDate: PropTypes.func.isRequired,
-      formatDateTime: PropTypes.func.isRequired,
-      hasPerm: PropTypes.func.isRequired,
-    }),
-    onClickViewLoanActionsHistory: PropTypes.func.isRequired,
-    onClickViewAccountActionsHistory: PropTypes.func.isRequired,
-    onClickViewOpenAccounts: PropTypes.func.isRequired,
-    onClickViewClosedAccounts: PropTypes.func.isRequired,
-    onClickViewAllAccounts: PropTypes.func.isRequired,
-    loans: PropTypes.arrayOf(PropTypes.object).isRequired,
-    renew: PropTypes.func,
+    stripes: stripesShape.isRequired,
     mutator: PropTypes.shape({
       query: PropTypes.object.isRequired,
       activeRecord: PropTypes.object,
@@ -69,8 +63,17 @@ class OpenLoansControl extends React.Component {
     user: PropTypes.shape({
       id: PropTypes.string.isRequired,
     }).isRequired,
-    onClickViewChargeFeeFine: PropTypes.func.isRequired,
+    patronGroup: PropTypes.object.isRequired,
+    loans: PropTypes.arrayOf(PropTypes.object).isRequired,
+    patronBlocks: PropTypes.arrayOf(PropTypes.object).isRequired,
+    renew: PropTypes.func.isRequired,
     buildRecords: PropTypes.func.isRequired,
+    onClickViewAllAccounts: PropTypes.func.isRequired,
+    onClickViewOpenAccounts: PropTypes.func.isRequired,
+    onClickViewChargeFeeFine: PropTypes.func.isRequired,
+    onClickViewClosedAccounts: PropTypes.func.isRequired,
+    onClickViewLoanActionsHistory: PropTypes.func.isRequired,
+    onClickViewAccountActionsHistory: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -123,11 +126,14 @@ class OpenLoansControl extends React.Component {
         title: columnName,
         status: true,
       })),
+      patronBlockedModal: false,
       changeDueDateDialogOpen:false,
       activeLoan: null,
     };
 
     props.mutator.activeRecord.update({ user: props.user.id });
+
+    this.permissions = { allRequests: 'ui-users.requests.all' };
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -189,18 +195,16 @@ class OpenLoansControl extends React.Component {
 
     const id = loan.id;
     const checkedLoans = (loans[id])
-      ? _.omit(loans, id)
+      ? omit(loans, id)
       : { ...loans, [id]: loan };
-    const allChecked = _.size(checkedLoans) === existingLoans;
+    const allChecked = size(checkedLoans) === existingLoans;
 
     this.setState({ checkedLoans, allChecked });
   };
 
   getOpenRequestsCount() {
-    const q = this.state.loans.map(loan => {
-      return `itemId==${loan.itemId}`;
-    }).join(' or ');
     const {
+      stripes,
       mutator: {
         loanPolicies: {
           reset,
@@ -209,7 +213,18 @@ class OpenLoansControl extends React.Component {
       },
     } = this.props;
 
+    const { loans } = this.state;
+
+    if (!stripes.hasPerm(this.permissions.allRequests)) {
+      return;
+    }
+
+    const q = loans.map(loan => {
+      return `itemId==${loan.itemId}`;
+    }).join(' or ');
+
     const query = `(${q}) and status==("Open - Awaiting pickup" or "Open - Not yet filled") sortby requestDate desc`;
+
     reset();
     GET({ params: { query } })
       .then((requestRecords) => {
@@ -268,7 +283,7 @@ class OpenLoansControl extends React.Component {
     const bulkRenewal = (selectedLoans.length > 1);
     const errorMsg = {};
     const renewedLoans = selectedLoans.map((loan) => {
-      return this.renew(loan, bulkRenewal)
+      return this.renew(loan)
         .then((renewedLoan) => renewSuccess.push(renewedLoan))
         .catch((error) => {
           renewFailure.push(loan);
@@ -281,12 +296,16 @@ class OpenLoansControl extends React.Component {
     // map(p => p.catch(e => e)) turns all rejections into resolved values for the promise.all to wait for everything to finish
     Promise.all(renewedLoans.map(p => p.catch(e => e)))
       .then(() => {
-        if (bulkRenewal) {
+        const isOneFailed = isEmpty(renewSuccess) && renewFailure.length === 1;
+
+        if (bulkRenewal || isOneFailed) {
           this.setState({
             renewSuccess,
             renewFailure,
             bulkRenewalDialogOpen: true
           });
+        } else {
+          this.showSingleRenewCallout(renewSuccess[0]);
         }
       });
 
@@ -310,7 +329,7 @@ class OpenLoansControl extends React.Component {
 
     Object.keys(query).forEach((k) => { q[k] = null; });
 
-    q.query = _.get(loan, ['item', 'barcode']);
+    q.query = get(loan, ['item', 'barcode']);
     q.filters = 'requestStatus.open - not yet filled,requestStatus.open - awaiting pickup';
     q.sort = 'Request Date';
 
@@ -320,17 +339,20 @@ class OpenLoansControl extends React.Component {
     });
   };
 
-  renew(loan, bulkRenewal) {
+  // eslint-disable-next-line consistent-return
+  renew(loan) {
     const {
       user,
       renew,
+      patronBlocks,
     } = this.props;
-    const promise = renew(loan, user, bulkRenewal);
+    const countRenews = patronBlocks.map(a => (a.renewals));
 
-    if (bulkRenewal) return promise;
-    promise
-      .then(() => this.showSingleRenewCallout(loan));
-    return promise;
+    if (isEmpty(countRenews)) {
+      return renew(loan, user, true);
+    }
+
+    this.openPatronBlockedModal();
   }
 
   showSingleRenewCallout(loan) {
@@ -362,6 +384,18 @@ class OpenLoansControl extends React.Component {
   showChangeDueDateDialog = () => {
     this.setState({
       changeDueDateDialogOpen: true,
+    });
+  };
+
+  onClosePatronBlockedModal = () => {
+    this.setState({
+      patronBlockedModal: false,
+    });
+  };
+
+  openPatronBlockedModal = () => {
+    this.setState({
+      patronBlockedModal: true,
     });
   };
 
@@ -452,18 +486,27 @@ class OpenLoansControl extends React.Component {
   };
 
   feefinedetails = (loan, e) => {
-    const accounts = _.get(this.props.resources, ['loanAccount', 'records'], []);
+    const {
+      resources,
+      onClickViewAllAccounts,
+      onClickViewOpenAccounts,
+      onClickViewClosedAccounts,
+      onClickViewAccountActionsHistory,
+    } = this.props;
+    const accounts = get(resources, ['loanAccount', 'records'], []);
     const accountsLoan = accounts.filter(a => a.loanId === loan.id) || [];
+
     if (accountsLoan.length === 1) {
-      this.props.onClickViewAccountActionsHistory(e, { id: accountsLoan[0].id });
+      onClickViewAccountActionsHistory(e, { id: accountsLoan[0].id });
     } else if (accountsLoan.length > 1) {
       const open = accountsLoan.filter(a => a.status.name === 'Open') || [];
+
       if (open.length === accountsLoan.length) {
-        this.props.onClickViewOpenAccounts(e, loan);
+        onClickViewOpenAccounts(e, loan);
       } else if (open.length === 0) {
-        this.props.onClickViewClosedAccounts(e, loan);
+        onClickViewClosedAccounts(e, loan);
       } else {
-        this.props.onClickViewAllAccounts(e, loan);
+        onClickViewAllAccounts(e, loan);
       }
     }
   };
@@ -482,6 +525,7 @@ class OpenLoansControl extends React.Component {
       changeDueDateDialogOpen,
       resources = {},
       allChecked,
+      patronBlockedModal,
     } = this.state;
 
     const {
@@ -490,10 +534,17 @@ class OpenLoansControl extends React.Component {
       onClickViewLoanActionsHistory,
       user,
       buildRecords,
+      patronGroup,
+      patronBlocks,
     } = this.props;
 
     return (
       <TableModel
+        patronBlockedModal={patronBlockedModal}
+        onClosePatronBlockedModal={this.onClosePatronBlockedModal}
+        openPatronBlockedModal={this.openPatronBlockedModal}
+        patronBlocks={patronBlocks}
+        patronGroup={patronGroup}
         buildRecords={buildRecords}
         visibleColumns={visibleColumns}
         checkedLoans={checkedLoans}

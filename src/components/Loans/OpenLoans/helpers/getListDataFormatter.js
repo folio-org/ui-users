@@ -17,6 +17,7 @@ export default function getListDataFormatter(
   resources,
   getLoanPolicie,
   handleOptionsChange,
+  stripes,
   getFeeFine,
   getContributorslist,
 ) {
@@ -136,6 +137,7 @@ export default function getListDataFormatter(
         }
         return (
           <ActionsDropdown
+            stripes={stripes}
             loan={loan}
             requestQueue={requestQueue}
             handleOptionsChange={handleOptionsChange}

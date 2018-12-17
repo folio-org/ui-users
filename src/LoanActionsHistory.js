@@ -235,7 +235,15 @@ class LoanActionsHistory extends React.Component {
     accounts.forEach(a => {
       amount += parseFloat(a.amount);
     });
-    return (amount === 0) ? '-' : amount.toFixed(2);
+    return (amount === 0) ? '-' : (
+      <button
+        style={{ color: '#2b75bb' }}
+        onClick={(e) => this.feefinedetails(e)}
+        type="button"
+      >
+        {amount.toFixed(2)}
+      </button>
+    );
   }
 
   feefinedetails = (e) => {
@@ -354,7 +362,7 @@ class LoanActionsHistory extends React.Component {
 
     const loanPolicyName = get(loanPolicies, 'records[0].name', '-');
     const requestCount = this.state.requestsCount[this.props.loan.itemId] || 0;
-    const requestQueueValue = (requestCount && stripes.hasPerm('ui-users.requests.all'))
+    const requestQueueValue = (requestCount && stripes.hasPerm('ui-users.requests.all,ui-requests.all'))
       ? (<Link to={`/requests?filters=requestStatus.open%20-%20not%20yet%20filled%2CrequestStatus.open%20-%20awaiting%20pickup&query=${loan.item.barcode}&sort=Request%20Date`}>{requestCount}</Link>)
       : requestCount;
     const contributorsList = this.getContributorslist(loan);
@@ -504,15 +512,7 @@ class LoanActionsHistory extends React.Component {
             <Col xs={2}>
               <KeyValue
                 label={<FormattedMessage id="ui-users.loans.details.fine" />}
-                value={(
-                  <button
-                    style={{ color: '#2b75bb' }}
-                    onClick={(e) => this.feefinedetails(e)}
-                    type="button"
-                  >
-                    {this.getFeeFine()}
-                  </button>
-                )}
+                value={this.getFeeFine()}
               />
             </Col>
             <IfPermission perm="ui-users.requests.all">

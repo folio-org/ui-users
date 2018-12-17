@@ -6,6 +6,8 @@ import { stripesShape } from '@folio/stripes/core';
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 import BulkRenewalDialog from '@folio/users/src/components/BulkRenewalDialog';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import PatronBlockModal from '@folio/users/src/components/PatronBlock/PatronBlockModal';
 
 class Modals extends React.Component {
   static propTypes = {
@@ -15,14 +17,18 @@ class Modals extends React.Component {
     user: PropTypes.object.isRequired,
     loanPolicies: PropTypes.object.isRequired,
     errorMsg: PropTypes.object.isRequired,
+    patronGroup: PropTypes.object.isRequired,
     checkedLoans: PropTypes.object.isRequired,
     requestCounts: PropTypes.object.isRequired,
+    patronBlockedModal: PropTypes.bool.isRequired,
+    bulkRenewalDialogOpen: PropTypes.bool.isRequired,
+    patronBlocks: PropTypes.arrayOf(PropTypes.object).isRequired,
     renewSuccess: PropTypes.arrayOf(PropTypes.object).isRequired,
     renewFailure: PropTypes.arrayOf(PropTypes.object).isRequired,
-    bulkRenewalDialogOpen: PropTypes.bool.isRequired,
-    changeDueDateDialogOpen: PropTypes.bool.isRequired,
-    hideChangeDueDateDialog: PropTypes.func.isRequired,
     hideBulkRenewalDialog: PropTypes.func.isRequired,
+    hideChangeDueDateDialog: PropTypes.func.isRequired,
+    changeDueDateDialogOpen: PropTypes.bool.isRequired,
+    onClosePatronBlockedModal: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -53,6 +59,10 @@ class Modals extends React.Component {
       checkedLoans,
       hideChangeDueDateDialog,
       hideBulkRenewalDialog,
+      patronBlocks,
+      patronBlockedModal,
+      onClosePatronBlockedModal,
+      patronGroup,
     } = this.props;
 
     const loanIds = activeLoan
@@ -78,6 +88,12 @@ class Modals extends React.Component {
           user={user}
           open={changeDueDateDialogOpen}
           onClose={hideChangeDueDateDialog}
+        />
+        <PatronBlockModal
+          open={patronBlockedModal}
+          onClose={onClosePatronBlockedModal}
+          patronBlocks={patronBlocks}
+          viewUserPath={`/users/view/${(user || {}).id}?filters=pg.${patronGroup.group}&sort=Name`}
         />
       </React.Fragment>
     );

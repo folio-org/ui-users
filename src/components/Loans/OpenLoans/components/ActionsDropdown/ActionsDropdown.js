@@ -10,9 +10,14 @@ import {
   DropdownMenu,
   IconButton,
 } from '@folio/stripes/components';
+import {
+  IfPermission,
+  stripesShape,
+} from '@folio/stripes/core';
 
 class ActionsDropdown extends React.Component {
   static propTypes = {
+    stripes: stripesShape.isRequired,
     loan: PropTypes.object.isRequired,
     requestQueue: PropTypes.bool.isRequired,
     handleOptionsChange: PropTypes.func.isRequired,
@@ -23,6 +28,7 @@ class ActionsDropdown extends React.Component {
       loan,
       requestQueue,
       handleOptionsChange,
+      stripes,
     } = this.props;
 
     const itemDetailsLink = `/inventory/view/${loan.item.instanceId}/${loan.item.holdingsRecordId}/${loan.itemId}`;
@@ -40,18 +46,20 @@ class ActionsDropdown extends React.Component {
           data-role="menu"
           overrideStyle={{ padding: '7px 3px' }}
         >
-          <MenuItem itemMeta={{
-            loan,
-            action: 'itemDetails',
-          }}
-          >
-            <Button
-              buttonStyle="dropdownItem"
-              href={itemDetailsLink}
+          <IfPermission perm="inventory.items.item.get">
+            <MenuItem itemMeta={{
+              loan,
+              action: 'itemDetails',
+            }}
             >
-              <FormattedMessage id="ui-users.itemDetails" />
-            </Button>
-          </MenuItem>
+              <Button
+                buttonStyle="dropdownItem"
+                href={itemDetailsLink}
+              >
+                <FormattedMessage id="ui-users.itemDetails" />
+              </Button>
+            </MenuItem>
+          </IfPermission>
           <MenuItem itemMeta={{
             loan,
             action: 'renew',
@@ -98,7 +106,7 @@ class ActionsDropdown extends React.Component {
           >
             <Button buttonStyle="dropdownItem">Fee/fine details</Button>
           </MenuItem>
-          { requestQueue &&
+          { requestQueue && stripes.hasPerm('ui-requests.all') &&
             <MenuItem itemMeta={{
               loan,
               action: 'showRequestQueue',

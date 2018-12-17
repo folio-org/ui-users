@@ -12,6 +12,9 @@ import {
   Headline,
   List
 } from '@folio/stripes/components';
+import {
+  IfPermission,
+} from '@folio/stripes/core';
 
 /**
  * User-details "Requests" accordion pane.
@@ -67,29 +70,54 @@ class UserRequests extends React.Component {
       }),
     }),
     user: PropTypes.object,
+    stripes: PropTypes.object,
   };
 
+  renderLinkItem = (item, index) => {
+    return (
+      <li key={index}>
+        <Link
+          id={item.id}
+          to={`/requests/?${queryString.stringify(item.query)}`}
+        >
+          <FormattedMessage id={item.formattedMessageId} values={{ count: item.count }} />
+        </Link>
+      </li>
+    );
+  }
+
+  renderItem = (item, index) => {
+    return (
+      <li key={index}>
+        <FormattedMessage id={item.formattedMessageId} values={{ count: item.count }} />
+      </li>
+    );
+  }
+
   render() {
-    const resources = this.props.resources;
-    const barcode = this.props.user.barcode;
+    const { stripes, expanded, onToggle, accordionId, user: { barcode }, resources } = this.props;
     const openRequestsTotal = _.get(resources.openRequestsCount, ['records', '0', 'totalRecords'], 0);
     const closedRequestsTotal = _.get(resources.closedRequestsCount, ['records', '0', 'totalRecords'], 0);
-    const { expanded, onToggle, accordionId } = this.props;
-
     const openRequestsCount = (_.get(resources.openRequestsCount, ['isPending'], true)) ? -1 : openRequestsTotal;
     const closedRequestsCount = (_.get(resources.closedRequestsCount, ['isPending'], true)) ? -1 : closedRequestsTotal;
 
     const requestsLoaded = openRequestsCount >= 0 && closedRequestsCount >= 0;
     const displayWhenClosed = requestsLoaded ? (<Badge>{openRequestsCount}</Badge>) : (<Icon icon="spinner-ellipsis" width="10px" />);
     const displayWhenOpen = (
-      <Button to={`/requests/?${queryString.stringify({
-        layer: 'create',
-        userBarcode: barcode,
-      })}`}
-      >
-        <FormattedMessage id="ui-users.requests.createRequest" />
-      </Button>
+      <IfPermission perm="ui-requests.all">
+        <Button to={`/requests/?${queryString.stringify({
+          layer: 'create',
+          userBarcode: barcode,
+        })}`}
+        >
+          <FormattedMessage id="ui-users.requests.createRequest" />
+        </Button>
+      </IfPermission>
     );
+
+    const itemFormatter = stripes.hasPerm('ui-requests.all') ?
+      this.renderLinkItem :
+      this.renderItem;
 
     return (
       <Accordion
@@ -103,15 +131,7 @@ class UserRequests extends React.Component {
         {requestsLoaded ?
           <List
             listStyle="bullets"
-            itemFormatter={(item, index) => (
-              <li key={index}>
-                <Link
-                  id={item.id}
-                  to={`/requests/?${queryString.stringify(item.query)}`}
-                >
-                  <FormattedMessage id={item.formattedMessageId} values={{ count: item.count }} />
-                </Link>
-              </li>)}
+            itemFormatter={itemFormatter}
             items={[
               {
                 id: 'clickable-viewopenrequests',

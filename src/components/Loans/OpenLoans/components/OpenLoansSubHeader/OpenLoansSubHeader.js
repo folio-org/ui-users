@@ -27,12 +27,14 @@ class OpenLoansSubHeader extends React.Component {
     intl: intlShape.isRequired,
     checkedLoans: PropTypes.object.isRequired,
     columnMapping: PropTypes.object.isRequired,
-    showChangeDueDateDialog: PropTypes.func.isRequired,
     loans: PropTypes.arrayOf(PropTypes.object).isRequired,
+    patronBlocks: PropTypes.arrayOf(PropTypes.object).isRequired,
     visibleColumns: PropTypes.arrayOf(PropTypes.object).isRequired,
     toggleColumn: PropTypes.func.isRequired,
-    renewSelected: PropTypes.func.isRequired,
     buildRecords: PropTypes.func.isRequired,
+    renewSelected: PropTypes.func.isRequired,
+    openPatronBlockedModal: PropTypes.func.isRequired,
+    showChangeDueDateDialog: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -113,6 +115,8 @@ class OpenLoansSubHeader extends React.Component {
       checkedLoans,
       columnMapping,
       buildRecords,
+      patronBlocks,
+      openPatronBlockedModal,
     } = this.props;
 
     const {
@@ -123,6 +127,7 @@ class OpenLoansSubHeader extends React.Component {
     const resultCount = <FormattedMessage id="ui-users.resultCount" values={{ count: loans.length }} />;
     const clonedLoans = cloneDeep(loans);
     const recordsToCSV = buildRecords(clonedLoans);
+    const countRenews = patronBlocks.map(a => (a.renewals));
 
     return (
       <ActionsBar
@@ -172,7 +177,10 @@ class OpenLoansSubHeader extends React.Component {
                   ? this.bulkActionsTooltip
                   : this.renewString
               }
-              onClick={renewSelected}
+              onClick={countRenews.length > 0
+                ? openPatronBlockedModal
+                : renewSelected
+              }
             >
               {this.renewString}
             </Button>

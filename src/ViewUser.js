@@ -67,7 +67,8 @@ class ViewUser extends React.Component {
     hasPatronBlocks: {
       type: 'okapi',
       records: 'manualblocks',
-      path: 'manualblocks?query=(userId=:{id})&limit=1',
+      path: 'manualblocks?query=(userId=:{id})&limit=100',
+      permissionsRequired: 'manualblocks.collection.get',
     },
     loansHistory: {
       type: 'okapi',
@@ -398,6 +399,7 @@ class ViewUser extends React.Component {
     if (e) e.preventDefault();
     const layer = this.state.prevLayer;
     this.props.mutator.query.update({ layer });
+
     this.setState({
       selectedLoan: {},
     });
@@ -407,6 +409,9 @@ class ViewUser extends React.Component {
     if (e) e.preventDefault();
     const layer = (mode === 'add') ? 'add-block' : 'edit-block';
     if (mode === 'add') {
+      this.setState({
+        selectedPatronBlock,
+      });
       this.props.mutator.query.update({ layer });
     } else {
       this.setState({
@@ -606,6 +611,8 @@ class ViewUser extends React.Component {
 
     const patronGroup = this.getPatronGroup(user);
     const userFormData = this.getUserFormData(user, addresses, sponsors, proxies, permissions, servicePoints, preferredServicePoint);
+    const patronBlocks = get(resources, ['hasPatronBlocks', 'records'], []);
+
 
     if (this.isLayerOpen('add-block') || this.isLayerOpen('edit-block')) {
       return (
@@ -717,6 +724,7 @@ class ViewUser extends React.Component {
                   user={user}
                   loansHistory={loans}
                   patronGroup={patronGroup}
+                  patronBlocks={patronBlocks}
                   stripes={stripes}
                   history={history}
                   onCancel={this.onClickCloseLoansHistory}
@@ -880,6 +888,7 @@ class ViewUser extends React.Component {
     const preferredServicePoint = this.props.getPreferredServicePoint();
     const hasPatronBlocks = (get(resources, ['hasPatronBlocks', 'isPending'], true)) ? -1 : 1;
     const totalPatronBlocks = get(resources, ['hasPatronBlocks', 'other', 'totalRecords'], 0);
+    const patronBlocks = get(resources, ['hasPatronBlocks', 'records'], []);
     const patronGroup = this.getPatronGroup(user);
     const detailMenu = this.renderDetailMenu(user);
     return (
@@ -918,6 +927,7 @@ class ViewUser extends React.Component {
           <this.connectedPatronBlock
             accordionId="patronBlocksSection"
             hasPatronBlocks={(hasPatronBlocks === 1 && totalPatronBlocks > 0)}
+            patronBlocks={patronBlocks}
             expanded={this.state.sections.patronBlocksSection}
             onToggle={this.handleSectionToggle}
             onClickViewPatronBlock={this.onClickViewPatronBlock}

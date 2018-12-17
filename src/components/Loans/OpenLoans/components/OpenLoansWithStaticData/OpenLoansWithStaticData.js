@@ -10,6 +10,7 @@ import {
 } from 'react-intl';
 
 import { Callout } from '@folio/stripes/components';
+import { stripesShape } from '@folio/stripes/core';
 
 import OpenLoans from '../../OpenLoans';
 import Modals from '../Modals/Modals';
@@ -20,43 +21,43 @@ import getListDataFormatter from '../../helpers/getListDataFormatter';
 class OpenLoansWithStaticData extends React.Component {
   static propTypes = {
     intl: intlShape.isRequired,
-    allChecked: PropTypes.bool.isRequired,
-    toggleAll: PropTypes.func.isRequired,
-    toggleItem: PropTypes.func.isRequired,
-    isLoanChecked: PropTypes.func.isRequired,
-    requestRecords: PropTypes.arrayOf(PropTypes.object).isRequired,
-    resources: PropTypes.object.isRequired,
-    getLoanPolicie: PropTypes.func.isRequired,
-    handleOptionsChange: PropTypes.func.isRequired,
-    checkedLoans: PropTypes.object.isRequired,
-    loans: PropTypes.arrayOf(PropTypes.object).isRequired,
-    onClickViewLoanActionsHistory: PropTypes.func.isRequired,
-    visibleColumns: PropTypes.arrayOf(PropTypes.object).isRequired,
-    possibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
-    renewSelected: PropTypes.func.isRequired,
-    showChangeDueDateDialog: PropTypes.func.isRequired,
-    toggleColumn: PropTypes.func.isRequired,
-    stripes: PropTypes.shape({
-      intl: PropTypes.object.isRequired,
-      hasPerm: PropTypes.func.isRequired,
-      formatDate: PropTypes.func.isRequired,
-      formatDateTime: PropTypes.func.isRequired,
-    }),
+    stripes: stripesShape.isRequired,
     user: PropTypes.shape({
       id: PropTypes.string.isRequired,
     }).isRequired,
-    loanPolicies: PropTypes.object.isRequired,
+    activeLoan: PropTypes.string,
+    loans: PropTypes.arrayOf(PropTypes.object).isRequired,
+    patronBlocks: PropTypes.arrayOf(PropTypes.object).isRequired,
+    requestRecords: PropTypes.arrayOf(PropTypes.object).isRequired,
+    visibleColumns: PropTypes.arrayOf(PropTypes.object).isRequired,
+    possibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
     errorMsg: PropTypes.object.isRequired,
+    resources: PropTypes.object.isRequired,
+    patronGroup: PropTypes.object.isRequired,
+    loanPolicies: PropTypes.object.isRequired,
+    checkedLoans: PropTypes.object.isRequired,
     requestCounts: PropTypes.object.isRequired,
     renewSuccess: PropTypes.arrayOf(PropTypes.object).isRequired,
     renewFailure: PropTypes.arrayOf(PropTypes.object).isRequired,
+    allChecked: PropTypes.bool.isRequired,
+    patronBlockedModal: PropTypes.bool.isRequired,
     bulkRenewalDialogOpen: PropTypes.bool.isRequired,
     changeDueDateDialogOpen: PropTypes.bool.isRequired,
-    activeLoan: PropTypes.string,
-    hideChangeDueDateDialog: PropTypes.func.isRequired,
-    hideBulkRenewalDialog: PropTypes.func.isRequired,
+    toggleAll: PropTypes.func.isRequired,
+    toggleItem: PropTypes.func.isRequired,
     calloutRef: PropTypes.func.isRequired,
     buildRecords: PropTypes.func.isRequired,
+    toggleColumn: PropTypes.func.isRequired,
+    renewSelected: PropTypes.func.isRequired,
+    isLoanChecked: PropTypes.func.isRequired,
+    getLoanPolicie: PropTypes.func.isRequired,
+    handleOptionsChange: PropTypes.func.isRequired,
+    hideBulkRenewalDialog: PropTypes.func.isRequired,
+    openPatronBlockedModal: PropTypes.func.isRequired,
+    showChangeDueDateDialog: PropTypes.func.isRequired,
+    hideChangeDueDateDialog: PropTypes.func.isRequired,
+    onClosePatronBlockedModal: PropTypes.func.isRequired,
+    onClickViewLoanActionsHistory: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -71,6 +72,7 @@ class OpenLoansWithStaticData extends React.Component {
       props.resources,
       props.getLoanPolicie,
       props.handleOptionsChange,
+      props.stripes,
       this.getFeeFine,
       this.getContributorslist,
     );
@@ -205,6 +207,11 @@ class OpenLoansWithStaticData extends React.Component {
       toggleColumn,
       calloutRef,
       buildRecords,
+      patronBlocks,
+      patronGroup,
+      patronBlockedModal,
+      onClosePatronBlockedModal,
+      openPatronBlockedModal,
     } = this.props;
 
     this.columnMapping = this.getColumnMapping();
@@ -214,6 +221,7 @@ class OpenLoansWithStaticData extends React.Component {
         {!isEmpty(loans) &&
         <OpenLoansSubHeader
           loans={loans}
+          patronBlocks={patronBlocks}
           columnMapping={this.columnMapping}
           checkedLoans={checkedLoans}
           visibleColumns={visibleColumns}
@@ -221,6 +229,7 @@ class OpenLoansWithStaticData extends React.Component {
           toggleColumn={toggleColumn}
           showChangeDueDateDialog={showChangeDueDateDialog}
           buildRecords={buildRecords}
+          openPatronBlockedModal={openPatronBlockedModal}
         />}
         <OpenLoans
           stripes={stripes}
@@ -234,6 +243,9 @@ class OpenLoansWithStaticData extends React.Component {
           possibleColumns={possibleColumns}
         />
         <Modals
+          patronBlocks={patronBlocks}
+          patronBlockedModal={patronBlockedModal}
+          patronGroup={patronGroup}
           stripes={stripes}
           loans={loans}
           user={user}
@@ -247,6 +259,7 @@ class OpenLoansWithStaticData extends React.Component {
           activeLoan={activeLoan}
           checkedLoans={checkedLoans}
           hideChangeDueDateDialog={hideChangeDueDateDialog}
+          onClosePatronBlockedModal={onClosePatronBlockedModal}
           hideBulkRenewalDialog={hideBulkRenewalDialog}
         />
         <Callout ref={calloutRef} />
