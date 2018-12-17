@@ -724,7 +724,7 @@
   "blocks.columns.borrowing":"Borrowing",
   "blocks.columns.requests":"Requests",
   "blocks.columns.renewals":"Renewals",
-  "blocks.buttons.add":"+ Add Block",
+  "blocks.buttons.add":"Add Block",
   "blocks.label":"Patron Blocks",
   "blocks.reason": "Reason for block:",
   "blocks.modal.header": "Patron blocked from renewing",

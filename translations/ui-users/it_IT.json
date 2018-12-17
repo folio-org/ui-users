@@ -666,7 +666,7 @@
     "blocks.columns.borrowing": "Prendere in prestito",
     "blocks.columns.requests": "Richieste",
     "blocks.columns.renewals": "Rinnovi",
-    "blocks.buttons.add": "+ Aggiungi blocco",
+    "blocks.buttons.add": "Aggiungi blocco",
     "blocks.label": "Blocchi dell'utente",
     "blocks.form.label.information": "Informazioni sul blocco",
     "blocks.form.label.display": "Descrizione da mostrare",
