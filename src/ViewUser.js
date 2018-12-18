@@ -959,16 +959,18 @@ class ViewUser extends React.Component {
             expanded={this.state.sections.userInformationSection}
             onToggle={this.handleSectionToggle}
           />
-          <this.connectedPatronBlock
-            accordionId="patronBlocksSection"
-            hasPatronBlocks={(hasPatronBlocks === 1 && totalPatronBlocks > 0)}
-            patronBlocks={patronBlocks}
-            expanded={this.state.sections.patronBlocksSection}
-            onToggle={this.handleSectionToggle}
-            onClickViewPatronBlock={this.onClickViewPatronBlock}
-            addRecord={this.state.addRecord}
-            {...this.props}
-          />
+          <IfPermission perm="manualblocks.collection.get">
+            <this.connectedPatronBlock
+              accordionId="patronBlocksSection"
+              hasPatronBlocks={(hasPatronBlocks === 1 && totalPatronBlocks > 0)}
+              patronBlocks={patronBlocks}
+              expanded={this.state.sections.patronBlocksSection}
+              onToggle={this.handleSectionToggle}
+              onClickViewPatronBlock={this.onClickViewPatronBlock}
+              addRecord={this.state.addRecord}
+              {...this.props}
+            />
+          </IfPermission>
           <ExtendedInfo
             accordionId="extendedInfoSection"
             user={user}
