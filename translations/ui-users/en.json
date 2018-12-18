@@ -8,11 +8,14 @@
   "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}",
   "closedLoansCount": "{count, number} {count, plural, one {closed loan} other {closed loans}}",
   "brd.renewConfirmation": "Renew Confirmation",
+  "brd.overrideAndRenew": "Override & renew",
   "brd.header.renewalStatus": "Renewal status",
+  "brd.header.newDueDate": "New due date",
   "brd.header.title": "Title",
   "brd.failedRenewal": "Item not renewed",
   "brd.successfulRenewal": "Item successfully renewed",
   "brd.itemNotRenewed": "<strong>{count}</strong> {count, plural, one {item} other {items}} <b>not</b> renewed. ",
+  "brd.itemsSelected": "<strong>{count}</strong> {count, plural, one {item} other {items}} <b>selected</b>. ",
   "brd.itemSuccessfullyRenewed": "<strong>{count}</strong> {count, plural, one {item} other {items}} <b>successfully</b> renewed",
   "data.contactTypes.email": "Email",
   "data.contactTypes.mail": "Mail (Primary Address)",
@@ -486,6 +489,7 @@
   "chargeFeefine": "Charge Fee/Fine",
   "accountActionHistory": "Account Actions History",
   "status": "Status",
+  "selectColumns": "Select Columns",
 
   "accounts.title": "Fees/Fines",
   "accounts.outstandingBalance": "Outstanding Balance: ",
@@ -719,6 +723,9 @@
   "accounts.comment.field.save":"Save",
   "accounts.comment.field.cancel":"Cancel",
 
+  "cddd.dateRequired": "Date*",
+  "cddd.timeRequired": "Time*",
+
   "blocks.columns.type":"Type",
   "blocks.columns.desc":"Display description",
   "blocks.columns.blocked":"Blocked actions",
@@ -761,8 +768,13 @@
   "blocks.layer.edit":"Edit Block",
 
   "blocks.message":"patron block will be removed",
-
   "blocks.textField.place":"Patron has blocks in place",
+
+  "additionalInfo.label": "Additional information*",
+  "additionalInfo.placeholder": "Enter more information about the override (required)",
+
+  "button.override": "Override",
+  "override.emptyNewDueDate": "Select due date above",
 
   "accounts.comment.field.feeFineComment": "Fee/fine comment",
   "accounts.comment.field.enterComment": "Enter a comment",

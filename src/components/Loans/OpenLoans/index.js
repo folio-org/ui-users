@@ -1,1 +1,1 @@
-export { default } from './OpenLoans';
+export { default } from './OpenLoansControl';
