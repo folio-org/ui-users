@@ -100,38 +100,34 @@ class ClosedLoans extends React.Component {
     };
 
     this.sortMap = {
-      title: loan => _.get(loan, ['item', 'title']),
-      barcode: loan => _.get(loan, ['item', 'barcode']),
-      feefine: loan => this.getFeeFine(loan),
-      itemStatus: loan => _.get(loan, ['item', 'status', 'name'], ''),
-      loanDate: loan => loan.loanDate,
-      callNumber: loan => _.get(loan, ['item', 'callNumber']),
-      contributors: loan => {
+      [this.columnMapping.title]: loan => _.get(loan, ['item', 'title']),
+      [this.columnMapping.barcode]: loan => _.get(loan, ['item', 'barcode']),
+      [this.columnMapping['Fee/Fine']]: loan => this.getFeeFine(loan),
+      [this.columnMapping.loanDate]: loan => loan.loanDate,
+      [this.columnMapping['Call Number']]: loan => _.get(loan, ['item', 'callNumber']),
+      [this.columnMapping.Contributors]: loan => {
         const contributorsList = this.getContributorslist(loan);
         const contributorsListString = contributorsList.join(' ');
         return contributorsListString;
       },
-      dueDate: loan => loan.dueDate,
-      renewals: loan => loan.renewalCount,
-      requestQueue: () => {},
-      loanPolicy: loan => this.state.loanPolicies[loan.loanPolicyId],
-      returnDate: loan => loan.systemReturnDate,
+      [this.columnMapping.dueDate]: loan => loan.dueDate,
+      [this.columnMapping.renewals]: loan => loan.renewalCount,
+      [this.columnMapping.returnDate]: loan => loan.systemReturnDate,
+      [this.columnMapping.checkinServicePoint]: loan => _.get(loan, ['checkinServicePoint', 'name'], '-'),
     };
 
     this.state = {
       sortOrder: [
-        'title',
-        'itemStatus',
-        'dueDate',
-        'requestQueue',
-        'barcode',
-        'feefine',
-        'callNumber',
-        'contributors',
-        'renewals',
-        'loanPolicy',
-        'loanDate',
-        'returnDate',
+        this.columnMapping.title,
+        this.columnMapping.barcode,
+        this.columnMapping['Fee/Fine'],
+        this.columnMapping.loanDate,
+        this.columnMapping.dueDate,
+        this.columnMapping['Call Number'],
+        this.columnMapping.Contributors,
+        this.columnMapping.renewals,
+        this.columnMapping.returnDate,
+        this.columnMapping.checkinServicePoint
       ],
       sortDirection: ['asc', 'asc'],
     };
