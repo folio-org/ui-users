@@ -35,6 +35,7 @@ class BulkRenewalDialog extends React.Component {
 
     return (
       <Modal
+        id="bulk-renewal-modal"
         size="large"
         dismissible
         closeOnBackgroundClick

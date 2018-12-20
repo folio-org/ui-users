@@ -10,7 +10,6 @@ import {
 import {
   Icon,
   MultiColumnList,
-  Popover,
 } from '@folio/stripes/components';
 
 const propTypes = {
@@ -38,11 +37,6 @@ const BulkRenewedLoansList = (props) => {
   const iconAlignStyle = {
     display: 'flex',
     alignItems: 'center'
-  };
-  const pointerStyle = { cursor: 'pointer' };
-  const popoverStyle = {
-    maxWidth: '300px',
-    textAlign: 'justify'
   };
 
   const visibleColumns = [
@@ -79,31 +73,19 @@ const BulkRenewedLoansList = (props) => {
         renewalStatus: loan => {
           if (failedRenewals.filter(loanObject => loanObject.id === loan.id).length > 0) {
             return (errorMessages) ? (
-              <Popover
-                position="bottom"
-                alignment="start"
-              >
-                <span
-                  style={{
-                    ...iconAlignStyle,
-                    ...pointerStyle,
-                  }}
-                  data-role="target"
-                >
+              <div>
+                <div>
                   <Icon
                     size="medium"
                     icon="exclamation-circle"
                     status="warn"
                   />
                   <FormattedMessage id="ui-users.brd.failedRenewal" />
-                </span>
-                <p
-                  data-role="popover"
-                  style={popoverStyle}
-                >
+                </div>
+                <div>
                   {errorMessages[loan.id]}
-                </p>
-              </Popover>
+                </div>
+              </div>
             ) : null;
           } else {
             return (
