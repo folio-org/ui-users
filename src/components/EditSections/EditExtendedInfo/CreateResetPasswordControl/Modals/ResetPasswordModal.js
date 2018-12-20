@@ -9,7 +9,10 @@ import {
 
 import withCopyModal from './WithCopyModal';
 
-const ResetPasswordModalBody = ({ email, name }) => {
+const ResetPasswordModalBody = ({
+  email,
+  name,
+}) => {
   return (
     <Fragment>
       <FormattedMessage id="ui-users.extended.resetPasswordModal.linkWasSent" />

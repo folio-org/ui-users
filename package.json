@@ -36,7 +36,7 @@
       "permissions": "5.0",
       "loan-policy-storage": "1.0",
       "loan-storage": "4.0 5.0",
-      "login": "4.0",
+      "login": "4.7",
       "feesfines": "15.0",
       "request-storage": "2.2",
       "users-bl": "3.2"

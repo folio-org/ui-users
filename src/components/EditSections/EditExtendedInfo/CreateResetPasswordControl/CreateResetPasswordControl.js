@@ -74,11 +74,18 @@ class CreateResetPasswordControl extends React.Component {
   };
 
   createPasswordModal = () => {
+    const {
+      showModal,
+      link,
+    } = this.state;
+
+    const { email } = this.props;
+
     return (
       <CreatePasswordModal
-        isOpen={this.state.showModal}
-        link={this.state.link}
-        email={this.props.email}
+        isOpen={showModal}
+        link={link}
+        email={email}
         modalHeader={<FormattedMessage id="ui-users.extended.createPasswordModal.label" />}
         onClose={this.closeModal}
       />
@@ -86,12 +93,22 @@ class CreateResetPasswordControl extends React.Component {
   };
 
   resetPasswordModal = () => {
+    const {
+      showModal,
+      link,
+    } = this.state;
+
+    const {
+      email,
+      name,
+    } = this.props;
+
     return (
       <ResetPasswordModal
-        isOpen={this.state.showModal}
-        link={this.state.link}
-        email={this.props.email}
-        name={this.props.name}
+        isOpen={showModal}
+        link={link}
+        email={email}
+        name={name}
         modalHeader={<FormattedMessage id="ui-users.extended.resetPasswordModal.label" />}
         onClose={this.closeModal}
       />
