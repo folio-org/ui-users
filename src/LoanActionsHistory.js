@@ -1,4 +1,4 @@
-import { get, upperFirst } from 'lodash';
+import { get, upperFirst, isEmpty } from 'lodash';
 import React from 'react';
 import {
   FormattedMessage,
@@ -42,6 +42,13 @@ class LoanActionsHistory extends React.Component {
       accumulate: 'true',
       fetch: false,
     },
+    loanPolicies: {
+      type: 'okapi',
+      records: 'loanPolicies',
+      path: 'loan-policy-storage/loan-policies',
+      accumulate: 'true',
+      fetch: false,
+    },
     requests: {
       type: 'okapi',
       path: 'circulation/requests',
@@ -57,11 +64,6 @@ class LoanActionsHistory extends React.Component {
       resourceShouldRefresh: true,
       accumulate: 'true',
       fetch: false,
-    },
-    loanPolicies: {
-      type: 'okapi',
-      records: 'loanPolicies',
-      path: 'loan-policy-storage/loan-policies?query=(id==!{loan.loanPolicyId})',
     },
     loanAccountsActions: {
       type: 'okapi',
@@ -79,6 +81,10 @@ class LoanActionsHistory extends React.Component {
     mutator: PropTypes.shape({
       loanActionsWithUser: PropTypes.shape({
         replace: PropTypes.func,
+      }),
+      loanPolicies: PropTypes.shape({
+        GET: PropTypes.func,
+        reset: PropTypes.func,
       }),
       requests: PropTypes.shape({
         GET: PropTypes.func,
@@ -115,23 +121,27 @@ class LoanActionsHistory extends React.Component {
     this.showChangeDueDateDialog = this.showChangeDueDateDialog.bind(this);
     this.hideChangeDueDateDialog = this.hideChangeDueDateDialog.bind(this);
     this.getOpenRequestsCount = this.getOpenRequestsCount.bind(this);
+    this.getLoanPolicyName = this.getLoanPolicyName.bind(this);
 
     this.state = {
       nonRenewedLoanItems: [],
       nonRenewedLoansModalOpen: false,
       changeDueDateDialogOpen: false,
       requestsCount: {},
+      loanPolicyName: '',
     };
   }
 
   componentDidMount() {
     this.getOpenRequestsCount();
+    this.getLoanPolicyName();
     this.getLoanActions();
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.loan.itemId !== prevProps.loan.itemId) {
       this.getOpenRequestsCount();
+      this.getLoanPolicyName();
     }
   }
 
@@ -226,6 +236,16 @@ class LoanActionsHistory extends React.Component {
         return map;
       }, {});
       this.setState({ requestsCount: requestCountObject });
+    });
+  }
+
+  getLoanPolicyName() {
+    const { loan, mutator } = this.props;
+    const query = `id==${loan.loanPolicyId}`;
+    mutator.loanPolicies.reset();
+    mutator.loanPolicies.GET({ params: { query } }).then((loanPolicy) => {
+      const loanPolicyName = !isEmpty(loanPolicy) ? loanPolicy[0].name : '-';
+      this.setState({ loanPolicyName });
     });
   }
 
@@ -346,11 +366,16 @@ class LoanActionsHistory extends React.Component {
       user,
       resources: {
         loanActionsWithUser,
-        loanPolicies,
       },
       stripes,
       intl,
     } = this.props;
+
+    const { loanPolicyName } = this.state;
+
+    if (!loanPolicyName) {
+      return <div />;
+    }
     const { nonRenewedLoanItems } = this.state;
     const loanActionsFormatter = {
       action: la => <FormattedMessage id={loanActionMap[la.action]} />,
@@ -360,7 +385,6 @@ class LoanActionsHistory extends React.Component {
       source: la => <Link to={`/users/view/${la.user.id}`}>{getFullName(la.user)}</Link>,
     };
 
-    const loanPolicyName = get(loanPolicies, 'records[0].name', '-');
     const requestCount = this.state.requestsCount[this.props.loan.itemId] || 0;
     const requestQueueValue = (requestCount && stripes.hasPerm('ui-users.requests.all,ui-requests.all'))
       ? (<Link to={`/requests?filters=requestStatus.open%20-%20not%20yet%20filled%2CrequestStatus.open%20-%20awaiting%20pickup&query=${loan.item.barcode}&sort=Request%20Date`}>{requestCount}</Link>)
