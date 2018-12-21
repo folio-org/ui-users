@@ -72,6 +72,8 @@ const BulkRenewedLoansList = (props) => {
       formatter={{
         renewalStatus: loan => {
           if (failedRenewals.filter(loanObject => loanObject.id === loan.id).length > 0) {
+            const errorMessage = get(errorMessages[loan.id], 'props.values.message.props.values.message', '');
+
             return (errorMessages) ? (
               <div>
                 <div>
@@ -83,7 +85,7 @@ const BulkRenewedLoansList = (props) => {
                   <FormattedMessage id="ui-users.brd.failedRenewal" />
                 </div>
                 <div>
-                  {errorMessages[loan.id]}
+                  {errorMessage}
                 </div>
               </div>
             ) : null;

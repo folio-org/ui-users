@@ -98,6 +98,10 @@ class BulkOverrideLoansList extends Component {
     }
   };
 
+  getShortErrorMessage = (errorMessage) => {
+    return get(errorMessage, 'props.values.message.props.values.message', '');
+  };
+
   render() {
     const {
       failedRenewals,
@@ -161,7 +165,7 @@ class BulkOverrideLoansList extends Component {
                   <FormattedMessage id="ui-users.brd.failedRenewal" />
                 </div>
                 <div>
-                  {errorMessages[loan.id]}
+                  {this.getShortErrorMessage(errorMessages[loan.id])}
                 </div>
               </div>
             );
