@@ -108,9 +108,11 @@ class BulkOverrideInfo extends React.Component {
   };
 
   checkLoanPolicies() {
-    const { loanPolicies } = this.props;
+    const { failedRenewals } = this.props;
 
-    for (const loanPolicyId of Object.keys(loanPolicies)) {
+    const loanPoliciesInUse = new Set(failedRenewals.map((loan) => loan.loanPolicyId));
+
+    for (const loanPolicyId of loanPoliciesInUse) {
       const { renewable } = find(this.loanPoliciesRecords, { id: loanPolicyId });
 
       if (!renewable) {
@@ -200,7 +202,7 @@ class BulkOverrideInfo extends React.Component {
             buttonStyle="primary"
             onClick={onCancel}
           >
-            <FormattedMessage id="stripes-core.button.close" />
+            <FormattedMessage id="ui-users.cancel" />
           </Button>
         </Layout>
       </div>

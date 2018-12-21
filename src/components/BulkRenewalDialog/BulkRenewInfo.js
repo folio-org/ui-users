@@ -35,6 +35,7 @@ class BulkRenewInfo extends React.Component {
     this.rewritableMessages = [
       'loan has reached its maximum number of renewals',
       'items with this loan policy cannot be renewed',
+      'date falls outside of the date ranges in the loan policy',
     ];
 
     this.connectedBulkOverrideDialog = props.stripes.connect(bulkOverrideDialog);
@@ -146,18 +147,18 @@ class BulkRenewInfo extends React.Component {
             errorMessages={errorMessages}
           />
           <Layout className="textRight">
-            <Button
-              buttonStyle="primary"
-              onClick={onCancel}
-            >
-              <FormattedMessage id="stripes-core.button.close" />
-            </Button>
             {
               !isEmpty(overridableLoans) &&
               <Button onClick={this.openBulkOverrideDialog}>
                 <FormattedMessage id="ui-users.button.override" />
               </Button>
             }
+            <Button
+              buttonStyle="primary"
+              onClick={onCancel}
+            >
+              <FormattedMessage id="stripes-core.button.close" />
+            </Button>
           </Layout>
         </div>
         {
