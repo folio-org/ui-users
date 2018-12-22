@@ -1,6 +1,7 @@
 # Change history for ui-users
 
-## 2.18.0 (IN PROGRESS)
+## [2.18.0](https://github.com/folio-org/ui-users/tree/v2.18.0) (2018-12-17)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.17.0...v2.18.0)
 
 * Create permission for renewing loans. Fixes UIU-625.
 * Adjust accordion headline sizes for correct a11y and visual hierarchy
@@ -46,6 +47,16 @@
 * Hide request buttons and disable request links when user doesn't have permissions. Fixes UIU-757.
 * Resolve fixes of fees/fines. Fixes UIU-762,UIU-763,UIU-765,UIU-766,UIU-769.
 * Add feature enforce manual patron blocks. Ref UIU-675.
+* Implement pane-header dropdown menu on detail records. Refs UIU-754.
+* Attempt to use a shared Nightmare instance to generage code-coverage data. Refs UIU-570, UIU-777.
+* Correctly initialize `<MultiSelection>` in the Settings > Users > Owners pane. Fixes UIU-752.
+* Correctly show unsaved-changes dialog when the edit pane is closed. Fixes UIU-749.
+* Hotkeys proof of concept. Refs STCOM-383, UIU-743, UIU-745.
+* Implement new internationalization patterns based on `<FormattedMessage>` instead of `injectIntl` and `formatMessage()`. Refs UIU-679, UIU-736, UIU-740.
+* Show "Reset password" modal from edit-users pane. Refs UIU-735, UIU-522.
+* Link to request queue from loan-details pane. Fixes UIU-722.
+* Add BigTest testing infrastructure. Refs UIU-678.
+* Show check in service point's location field in loan details. Refs UIU-485.
 
 ## [2.17.0](https://github.com/folio-org/ui-users/tree/v2.17.0) (2018-10-5)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.16.0...v2.17.0)

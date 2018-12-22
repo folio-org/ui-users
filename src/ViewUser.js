@@ -11,6 +11,7 @@ import {
   TitleManager,
 } from '@folio/stripes/core';
 import {
+  Button,
   Pane,
   PaneMenu,
   IconButton,
@@ -250,7 +251,7 @@ class ViewUser extends React.Component {
       },
       {
         name: 'expandAllSections',
-        handler:  this.expandAllSections,
+        handler: this.expandAllSections,
       },
     ];
   }
@@ -702,7 +703,7 @@ class ViewUser extends React.Component {
                 handleAddRecords={this.handleAddRecords}
                 stripes={stripes}
                 onCancel={this.onClickCloseAccountActionsHistory}
-                  // when navigating away to another user, clear all loan-related state
+                // when navigating away to another user, clear all loan-related state
                 onClickUser={() => { this.onClickCloseAccountActionsHistory(); this.onClickCloseAccountsHistory(); }}
               />
             </Layer>
@@ -870,6 +871,26 @@ class ViewUser extends React.Component {
     );
   }
 
+  getActionMenu = ({ onToggle }) => {
+    const { onEdit } = this.props;
+    const handleClick = () => {
+      onEdit();
+      onToggle();
+    };
+
+    return (
+      <Button
+        data-test-user-instance-edit-action
+        buttonStyle="dropdownItem"
+        onClick={handleClick}
+      >
+        <Icon icon="edit">
+          <FormattedMessage id="ui-users.edit" />
+        </Icon>
+      </Button>
+    );
+  }
+
   renderUser(user) {
     const {
       resources,
@@ -892,19 +913,30 @@ class ViewUser extends React.Component {
     const patronBlocks = get(resources, ['hasPatronBlocks', 'records'], []);
     const patronGroup = this.getPatronGroup(user);
     const detailMenu = this.renderDetailMenu(user);
+
     return (
       <Pane
         data-test-instance-details
         id="pane-userdetails"
         defaultWidth={paneWidth}
-        paneTitle={<span data-test-header-title>{getFullName(user)}</span>}
+        paneTitle={(
+          <span data-test-header-title>
+            {getFullName(user)}
+          </span>
+        )}
         lastMenu={detailMenu}
         dismissible
         onClose={onClose}
         appIcon={{ app: 'users' }}
+        actionMenu={this.getActionMenu}
       >
         <TitleManager record={getFullName(user)} />
-        <Headline size="xx-large" tag="h2">{getFullName(user)}</Headline>
+        <Headline
+          size="xx-large"
+          tag="h2"
+        >
+          {getFullName(user)}
+        </Headline>
         <Row>
           <Col xs={10}>
             {(hasPatronBlocks === 1 && totalPatronBlocks > 0)
@@ -912,7 +944,10 @@ class ViewUser extends React.Component {
               : ''}
           </Col>
           <Col xs={2}>
-            <ExpandAllButton accordionStatus={this.state.sections} onToggle={this.handleExpandAll} />
+            <ExpandAllButton
+              accordionStatus={this.state.sections}
+              onToggle={this.handleExpandAll}
+            />
           </Col>
         </Row>
         <AccordionSet>
@@ -925,16 +960,18 @@ class ViewUser extends React.Component {
             expanded={this.state.sections.userInformationSection}
             onToggle={this.handleSectionToggle}
           />
-          <this.connectedPatronBlock
-            accordionId="patronBlocksSection"
-            hasPatronBlocks={(hasPatronBlocks === 1 && totalPatronBlocks > 0)}
-            patronBlocks={patronBlocks}
-            expanded={this.state.sections.patronBlocksSection}
-            onToggle={this.handleSectionToggle}
-            onClickViewPatronBlock={this.onClickViewPatronBlock}
-            addRecord={this.state.addRecord}
-            {...this.props}
-          />
+          <IfPermission perm="manualblocks.collection.get">
+            <this.connectedPatronBlock
+              accordionId="patronBlocksSection"
+              hasPatronBlocks={(hasPatronBlocks === 1 && totalPatronBlocks > 0)}
+              patronBlocks={patronBlocks}
+              expanded={this.state.sections.patronBlocksSection}
+              onToggle={this.handleSectionToggle}
+              onClickViewPatronBlock={this.onClickViewPatronBlock}
+              addRecord={this.state.addRecord}
+              {...this.props}
+            />
+          </IfPermission>
           <ExtendedInfo
             accordionId="extendedInfoSection"
             user={user}

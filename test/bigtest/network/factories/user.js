@@ -18,6 +18,7 @@ export default Factory.extend({
   expirationDate: () => '2020-04-07T00:00:00.000+0000',
   createdDate: () => '2018-11-20T11:42:53.385+0000',
   updatedDate: () => '2018-11-20T20:00:47.409+0000',
+
   afterCreate(user, server) {
     server.create('service-points-user', {
       'userId': user.id,
@@ -26,10 +27,11 @@ export default Factory.extend({
     });
 
     const personal = server.create('user-personal', {
-      lastName: 'test',
-      firstName: 'test'
+      lastName: faker.name.lastName(),
+      firstName: faker.name.firstName(),
     });
 
+    user.update('username', `${personal.lastName}, ${personal.firstName}`);
     user.update('personal', personal.toJSON());
     user.save();
   }

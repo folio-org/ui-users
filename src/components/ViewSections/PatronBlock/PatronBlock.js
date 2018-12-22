@@ -126,7 +126,6 @@ class PatronBlock extends React.Component {
       onToggle,
       accordionId,
       patronBlocks,
-      intl : { formatMessage }
     } = props;
     const {
       sortOrder,
@@ -141,7 +140,9 @@ class PatronBlock extends React.Component {
     const buttonDisabled = this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
     const displayWhenOpen =
       <Button disabled={!buttonDisabled} onClick={e => { props.onClickViewPatronBlock(e, 'add'); }}>
-        {formatMessage({ id: 'ui-users.blocks.buttons.add' })}
+        <Icon icon="plus-sign">
+          <FormattedMessage id="ui-users.blocks.buttons.add" />
+        </Icon>
       </Button>;
     const items =
       <MultiColumnList

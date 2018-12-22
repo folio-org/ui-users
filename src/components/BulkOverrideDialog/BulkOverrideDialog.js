@@ -5,52 +5,50 @@ import { FormattedMessage } from 'react-intl';
 import { Modal } from '@folio/stripes/components';
 import { stripesShape } from '@folio/stripes/core';
 
-import BulkRenewInfo from './BulkRenewInfo';
+import BulkOverrideInfo from './BulkOverrideInfo';
 
-class BulkRenewalDialog extends React.Component {
+class BulkOverrideDialog extends React.Component {
   static propTypes = {
     stripes: stripesShape.isRequired,
-    onClose: PropTypes.func.isRequired,
+    failedRenewals: PropTypes.arrayOf(
+      PropTypes.object
+    ).isRequired,
     open: PropTypes.bool.isRequired,
-    successRenewals: PropTypes.arrayOf(PropTypes.object).isRequired,
-    failedRenewals: PropTypes.arrayOf(PropTypes.object).isRequired,
     loanPolicies: PropTypes.object.isRequired,
     requestCounts: PropTypes.object.isRequired,
     errorMessages: PropTypes.object.isRequired,
+    onClose: PropTypes.func.isRequired,
   };
 
   render() {
     const {
+      onClose,
+      open,
       stripes,
-      successRenewals,
       failedRenewals,
       loanPolicies,
       requestCounts,
       errorMessages,
-      onClose,
-      open,
     } = this.props;
 
-    const modalLabel = <FormattedMessage id="ui-users.brd.renewConfirmation" />;
+    const modalLabel = <FormattedMessage id="ui-users.brd.overrideAndRenew" />;
 
     return (
       <Modal
-        id="bulk-renewal-modal"
         size="large"
         dismissible
         closeOnBackgroundClick
         enforceFocus={false} // Needed to allow Calendar in Datepicker to get focus
-        open={open}
         label={modalLabel}
+        open={open}
         onClose={onClose}
       >
-        <BulkRenewInfo
+        <BulkOverrideInfo
           stripes={stripes}
-          errorMessages={errorMessages}
-          requestCounts={requestCounts}
-          loanPolicies={loanPolicies}
           failedRenewals={failedRenewals}
-          successRenewals={successRenewals}
+          loanPolicies={loanPolicies}
+          requestCounts={requestCounts}
+          errorMessages={errorMessages}
           onCancel={onClose}
         />
       </Modal>
@@ -58,4 +56,4 @@ class BulkRenewalDialog extends React.Component {
   }
 }
 
-export default BulkRenewalDialog;
+export default BulkOverrideDialog;

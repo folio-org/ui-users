@@ -29,7 +29,7 @@ const PatronBlockModal = ({ open, onClose, patronBlocks, viewUserPath }) => {
           {' '}
           <b>
             {' '}
-            {patronBlocks[0].desc || ''}
+            {patronBlocks[0] ? patronBlocks[0].desc : ''}
             {' '}
           </b>
         </Col>
