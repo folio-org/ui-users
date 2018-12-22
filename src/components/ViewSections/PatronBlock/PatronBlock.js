@@ -44,6 +44,9 @@ class PatronBlock extends React.Component {
         update: PropTypes.func,
       }),
     }),
+    stripes: PropTypes.shape({
+      hasPerm: PropTypes.func,
+    }),
     onClickViewPatronBlock: PropTypes.func,
     intl: intlShape.isRequired,
   };
@@ -135,9 +138,9 @@ class PatronBlock extends React.Component {
       'Display description',
       'Blocked actions',
     ];
-
+    const buttonDisabled = this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
     const displayWhenOpen =
-      <Button onClick={e => { props.onClickViewPatronBlock(e, 'add'); }}>
+      <Button disabled={!buttonDisabled} onClick={e => { props.onClickViewPatronBlock(e, 'add'); }}>
         {formatMessage({ id: 'ui-users.blocks.buttons.add' })}
       </Button>;
     const items =
@@ -168,7 +171,7 @@ class PatronBlock extends React.Component {
         label={title}
         displayWhenOpen={displayWhenOpen}
       >
-        <Row><Col xs>{items}</Col></Row>
+        <Row><Col xs>{buttonDisabled && items}</Col></Row>
       </Accordion>
 
     );
