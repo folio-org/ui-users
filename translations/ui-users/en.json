@@ -573,7 +573,7 @@
   "charge.title": "New fee/fine",
   "charge.pay": "Charge and pay now",
   "charge.onlyCharge": "Charge only",
-  "charge.comment": "Comments",
+  "charge.comment": "Additional information for staff",
   "charge.messageThe": "The ",
   "charge.messageOf": " fee/fine Of ",
   "charge.messageSuccessfully": " has been successfully ",
@@ -656,6 +656,9 @@
 
   "accounts.feeFine": "fee/fine",
   "accounts.feesFines": "fees/fines",
+
+  "accounts.confirmation.head": "Confirm fee/fine {action}",
+  "accounts.confirmation.message": "<b>{count}</b> {count, plural, one {fee/fine} other {fees/fines}} for <b>{amount}</b> will be <b>{action}</b>",
 
   "accounts.pay.error.amount":"Payment must be > 0",
   "accounts.pay.error.exceeds":"Pay amount exceeds the selected amount",
