@@ -302,6 +302,7 @@
   "loans.numClosedLoans": "{count, number} {count, plural, one {closed loan} other {closed loans}}",
   "loans.loanDetails": "Loan details",
   "loans.newFeeFine": "New fee/fine",
+  "loans.feeFineDetails": "Fee/fine details",
 
   "settings.label": "Users",
   "settings.general": "General",
@@ -658,6 +659,8 @@
 
   "accounts.history.comment":"Comment",
   "accounts.history.of":"of",
+  "accounts.history.filter": "Search & Filter",
+  "accounts.history.statusLabel": "{type} fees/fines for ",
 
   "accounts.feeFine": "fee/fine",
   "accounts.feesFines": "fees/fines",
@@ -786,12 +789,14 @@
   "accounts.actions.payFeeFine": "Pay fees/fines",
   "accounts.actions.waiveFeeFine": "Waive fees/fines",
 
-  "accounts.actions.warning.summary": "{selectedItemsAmount} items selected. {closedItemsAmount} items cannot be {action} because they are alredy closed",
+  "accounts.actions.warning.summary": "{selectedItemsAmount} items selected. {closedItemsAmount} items cannot be {action} because they are already closed",
   "accounts.actions.warning.alertDetails": "Alert details",
   "accounts.actions.warning.feeFineType": "Fee/Fine type",
   "accounts.actions.warning.remaining": "Remainig",
   "accounts.actions.warning.paymentStatus": "Payment Status",
   "accounts.actions.warning.item": "Item",
   "accounts.actions.warning.payAction": "paid",
-  "accounts.actions.warning.waiveAction": "waived"
+  "accounts.actions.warning.waiveAction": "waived",
+  "accounts.actions.warning.deselect": "Deselect to continue",
+  "accounts.actions.cancellation.success": "<b>{count}</b> {count, plural, one {fee/fine} other {fees/fines}} for <b>{amount}</b> has been successfully <b>{action}</b> for <b>{user}</b>"
 }
