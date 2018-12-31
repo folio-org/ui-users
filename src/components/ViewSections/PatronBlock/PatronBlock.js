@@ -19,36 +19,35 @@ import moment from 'moment';
 
 class PatronBlock extends React.Component {
   static manifest = Object.freeze({
-    userPatronBlocks: {
+    patronBlocks: {
       type: 'okapi',
       records: 'manualblocks',
-      path: 'manualblocks?query=userId=:{id}',
+      path: 'manualblocks',
       DELETE: {
-        path: 'manualblocks/%{activeRecord.id}'
+        path: 'manualblocks/%{activeRecord.blockId}',
       },
     },
     activeRecord: {},
   });
 
   static propTypes = {
-    resources: PropTypes.shape({
-      userPatronBlocks: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
-      }),
-    }),
-    mutator: PropTypes.shape({
-      userPatronBlocks: PropTypes.shape({
-        DELETE: PropTypes.func,
-      }),
-      activeRecord: PropTypes.shape({
-        update: PropTypes.func,
-      }),
-    }),
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func,
     }),
     onClickViewPatronBlock: PropTypes.func,
     intl: intlShape.isRequired,
+    onToggle: PropTypes.func,
+    expanded: PropTypes.bool,
+    accordionId: PropTypes.string,
+    patronBlocks: PropTypes.arrayOf(PropTypes.object),
+    mutator: PropTypes.shape({
+      activeRecord: PropTypes.shape({
+        update: PropTypes.func,
+      }),
+      patronBlocks: PropTypes.shape({
+        DELETE: PropTypes.func,
+      }),
+    }),
   };
 
   constructor(props) {
@@ -72,18 +71,35 @@ class PatronBlock extends React.Component {
         formatMessage({ id: 'ui-users.blocks.columns.blocked' }),
       ],
       sortDirection: ['desc', 'asc'],
+      submitting: false,
     };
   }
 
   componentDidUpdate(prevProps) {
-    const prevBlocks = _.get(prevProps.resources, ['userPatronBlocks', 'records'], []);
-    const patronBlocks = _.get(this.props.resources, ['userPatronBlocks', 'records'], []);
-    if (!_.isEqual(prevBlocks, patronBlocks)) {
-      const expirated = patronBlocks.filter(p => moment(moment(p.expirationDate).format()).isBefore(moment().format())) || [];
-      expirated.forEach(block => {
-        this.props.mutator.activeRecord.update({ id: block.id });
-        this.props.mutator.userPatronBlocks.DELETE({ id: block.id });
+    const { onToggle, expanded, accordionId, patronBlocks } = this.props;
+    const prevBlocks = prevProps.patronBlocks;
+    const { submitting } = this.state;
+    const prevExpirated = prevBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
+    const expirated = patronBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
+
+    if (prevExpirated.length > 0 && expirated.length === 0) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ submitting: false });
+    }
+
+    if (expirated.length > 0 && !submitting) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ submitting: true });
+      expirated.forEach(p => {
+        this.props.mutator.activeRecord.update({ blockId: p.id });
+        this.props.mutator.patronBlocks.DELETE({ id: p.id });
       });
+    }
+
+    if (!_.isEqual(patronBlocks, prevProps.patronBlocks)) {
+      if ((patronBlocks.length > 0 && !expanded) || (patronBlocks.length === 0 && expanded)) {
+        onToggle({ id: accordionId });
+      }
     }
   }
 
@@ -166,7 +182,7 @@ class PatronBlock extends React.Component {
       </Row>;
     return (
       <Accordion
-        open={patronBlocks.length > 0 ? true : expanded}
+        open={expanded}
         id={accordionId}
         onToggle={onToggle}
         label={title}
