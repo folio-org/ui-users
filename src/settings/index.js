@@ -86,37 +86,37 @@ class UsersSettings extends Component {
         route: 'owners',
         label: formatMessage({ id: 'ui-users.settings.owners' }),
         component: OwnerSettings,
-        perm: 'ui-users.settings.owners',
+        perm: 'ui-users.settings.feefine',
       },
       {
         route: 'feefinestable',
         label: formatMessage({ id: 'ui-users.settings.manualCharges' }),
         component: FeeFineSettings,
-        perm: 'ui-users.settings.feefines',
+        perm: 'ui-users.settings.feefine',
       },
       {
         route: 'waivereasons',
         label: formatMessage({ id: 'ui-users.settings.waiveReasons' }),
         component: WaiveSettings,
-        perm: 'ui-users.settings.waives',
+        perm: 'ui-users.settings.feefine',
       },
       {
         route: 'payments',
         label: formatMessage({ id: 'ui-users.settings.paymentMethods' }),
         component: PaymentSettings,
-        perm: 'ui-users.settings.payments',
+        perm: 'ui-users.settings.feefine',
       },
       {
         route: 'refunds',
         label: formatMessage({ id: 'ui-users.settings.refundReasons' }),
         component: RefundReasonsSettings,
-        perm: 'ui-users.settings.refunds',
+        perm: 'ui-users.settings.feefine',
       },
       {
         route: 'comments',
         label: formatMessage({ id: 'ui-users.settings.commentRequired' }),
         component: CommentRequiredSettings,
-        perm: 'ui-users.settings.comments',
+        perm: 'ui-users.settings.feefine',
       },
     ];
   }
