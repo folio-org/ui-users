@@ -760,6 +760,7 @@ class ViewUser extends React.Component {
                   user={user}
                   loan={this.state.selectedLoan}
                   loanid={query.loan}
+                  patronBlocks={patronBlocks}
                   patronGroup={patronGroup}
                   stripes={stripes}
                   onCancel={this.onClickCloseLoanActionsHistory}
