@@ -31,6 +31,9 @@ class OpenAccounts extends React.Component {
           update: PropTypes.func.isRequired,
         }),
       }).isRequired,
+      stripes: PropTypes.shape({
+        hasPerm: PropTypes.func,
+      }),
       onChangeActions: PropTypes.func.isRequired,
       onChangeSelected: PropTypes.func.isRequired,
       accounts: PropTypes.arrayOf(PropTypes.object),
@@ -306,6 +309,7 @@ class OpenAccounts extends React.Component {
     }
 
     renderActions(a) {
+      const buttonDisabled = !this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
       const disabled = (a.loanId === '0' || !a.loanId);
       return (
         <UncontrolledDropdown
@@ -314,14 +318,14 @@ class OpenAccounts extends React.Component {
           <Button data-role="toggle" buttonStyle="hover dropdownActive">
             <strong>•••</strong>
           </Button>
-          <DropdownMenu data-role="menu" overrideStyle={{ padding: '6px 0' }}>
+          <DropdownMenu data-role="menu" overrideStyle={{ padding: '7px 3px' }}>
             <MenuItem itemMeta={{ a, action: 'pay' }}>
-              <Button buttonStyle="dropdownItem">
+              <Button disabled={buttonDisabled} buttonStyle="dropdownItem">
                 <FormattedMessage id="ui-users.accounts.history.button.pay" />
               </Button>
             </MenuItem>
             <MenuItem itemMeta={{ a, action: 'waive' }}>
-              <Button buttonStyle="dropdownItem">
+              <Button disabled={buttonDisabled} buttonStyle="dropdownItem">
                 <FormattedMessage id="ui-users.accounts.history.button.waive" />
               </Button>
             </MenuItem>
@@ -336,7 +340,7 @@ class OpenAccounts extends React.Component {
               </Button>
             </MenuItem>
             <MenuItem itemMeta={{ a, action: 'cancel' }}>
-              <Button buttonStyle="dropdownItem">
+              <Button disabled={buttonDisabled} buttonStyle="dropdownItem">
                 <FormattedMessage id="ui-users.accounts.button.error" />
               </Button>
             </MenuItem>
@@ -375,29 +379,34 @@ class OpenAccounts extends React.Component {
       };
 
       return (
-        <div>
-          <MultiColumnList
-            id="list-accountshistory"
-            formatter={this.getAccountsFormatter()}
-            columnMapping={columnMapping}
-            columnWidths={{
-              '  ': 28,
-              'metadata.createdDate': 110,
-              'feeFineType': 180,
-              'metadata.updatedDate': 110,
-              'barcode': 120,
-              'dueDate': 110,
-              'returnedDate': 110
-            }}
-            visibleColumns={this.props.visibleColumns}
-            fullWidth
-            contentData={fees}
-            onHeaderClick={this.onSort}
-            sortOrder={sortOrder[0]}
-            sortDirection={`${sortDirection[0]}ending`}
-            onRowClick={this.onRowClick}
-          />
-        </div>
+        <MultiColumnList
+          id="list-accountshistory"
+          formatter={this.getAccountsFormatter()}
+          columnMapping={columnMapping}
+          columnWidths={{
+            '  ': 35,
+            'metadata.createdDate': 110,
+            'metadata.updatedDate': 110,
+            'feeFineType': 180,
+            'amount': 110,
+            'remaining': 110,
+            'paymentStatus.name': 110,
+            'feeFineOwner': 110,
+            'title': 250,
+            'barcode': 110,
+            'callNumber': 110,
+            'dueDate': 110,
+            'returnedDate': 110,
+            ' ': 50
+          }}
+          visibleColumns={this.props.visibleColumns}
+          fullWidth
+          contentData={fees}
+          onHeaderClick={this.onSort}
+          sortOrder={sortOrder[0]}
+          sortDirection={`${sortDirection[0]}ending`}
+          onRowClick={this.onRowClick}
+        />
       );
     }
 }
