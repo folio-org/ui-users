@@ -41,12 +41,19 @@ const validate = (values, props) => {
   if (props.commentRequired && !values.comment) {
     errors.comment = <FormattedMessage id="ui-users.accounts.error.comment" />;
   }
-  if (values.waive > selected) {
+  if (parseFloat(values.waive) > parseFloat(selected)) {
     errors.waive = <FormattedMessage id="ui-users.accounts.waive.error.exceeds" />;
   }
   return errors;
 };
 
+const asyncValidate = (values, dispatch, props, blurredField) => {
+  if (blurredField === 'waive') {
+    const waive = parseFloat(values.waive || 0).toFixed(2);
+    dispatch(change('waive', 'waive', waive));
+  }
+  return new Promise(resolve => resolve());
+};
 
 class WaiveModal extends React.Component {
   static propTypes = {
@@ -62,7 +69,6 @@ class WaiveModal extends React.Component {
     submitting: PropTypes.bool,
     reset: PropTypes.func,
     commentRequired: PropTypes.bool,
-    dispatch: PropTypes.func,
   };
 
 
@@ -72,6 +78,7 @@ class WaiveModal extends React.Component {
       waive: 0,
     };
     this.onChangeWaive = this.onChangeWaive.bind(this);
+    this.initialWaive = 0;
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -88,11 +95,13 @@ class WaiveModal extends React.Component {
 
       this.setState({
         waive: selected,
+        notify: true,
       });
+      this.initialWaive = selected;
 
       initialize({
         waive: parseFloat(selected).toFixed(2),
-        notify: true,
+        notify: 'true',
       });
     }
     return (
@@ -110,6 +119,12 @@ class WaiveModal extends React.Component {
     } else {
       this.setState({ waive: parseFloat(e.target.value) });
     }
+  }
+
+  onToggleNotify = () => {
+    this.setState(prevState => ({
+      notify: !prevState.notify,
+    }));
   }
 
   calculateSelectedAmount(accounts) {
@@ -131,17 +146,19 @@ class WaiveModal extends React.Component {
     const waiveType = this.state.waive < selected
       ? <FormattedMessage id="ui-users.accounts.waive.summary.partiallyWaive" />
       : <FormattedMessage id="ui-users.accounts.waive.summary.waiving" />;
-
     const feeFineForm = accounts.length === 1
       ? <FormattedMessage id="ui-users.accounts.feeFine" />
       : <FormattedMessage id="ui-users.accounts.feesFines" />;
+
+    const waive = <b>{parseFloat(waiveAmount).toFixed(2)}</b>;
+    const account = <b>{accounts.length}</b>;
 
     return (
       <FormattedMessage
         id="ui-users.accounts.waive.summary"
         values={{
-          feesFinesAmount: accounts.length,
-          waiveAmount: parseFloat(waiveAmount).toFixed(2),
+          feesFinesAmount: account,
+          waiveAmount: waive,
           waiveType,
           feeFineForm,
         }}
@@ -167,6 +184,9 @@ class WaiveModal extends React.Component {
 
     handleSubmit();
     reset();
+    this.setState({
+      waive: this.initialWaive,
+    });
   };
 
   render() {
@@ -189,7 +209,6 @@ class WaiveModal extends React.Component {
       : 'ui-users.accounts.waive.placeholder.additional.optional';
 
     const submitButtonDisabled = pristine || submitting || invalid;
-
     return (
       <Modal
         open={this.props.open}
@@ -205,35 +224,44 @@ class WaiveModal extends React.Component {
           <br />
           <Row>
             <Col xs={4.5}>
-              <Row>
-                <Col xs={7}><FormattedMessage id="ui-users.accounts.waive.field.totalowed" /></Col>
-                <Col xs={4}>{parseFloat(totalAmount).toFixed(2)}</Col>
+              <Row end="xs">
+                <Col xs={7} style={{ marginRight: '5px' }}>
+                  <FormattedMessage id="ui-users.accounts.waive.field.totalowed" />
+                </Col>
+                <Col xs={4} style={{ marginRight: '5px' }}>
+                  {parseFloat(totalAmount).toFixed(2)}
+                </Col>
               </Row>
-              <Row>
-                <Col xs={7}><FormattedMessage id="ui-users.accounts.waive.field.selectedamount" /></Col>
-                <Col xs={4}>{selected.toFixed(2)}</Col>
+              <Row end="xs">
+                <Col xs={7} style={{ marginRight: '5px' }}>
+                  <FormattedMessage id="ui-users.accounts.waive.field.selectedamount" />
+                </Col>
+                <Col xs={4} style={{ marginRight: '5px' }}>
+                  {selected.toFixed(2)}
+                </Col>
               </Row>
-              <Row>
-                <Col xs={7}>
+              <Row end="xs">
+                <Col xs={6} style={{ marginRight: '5px' }}>
                   <b><FormattedMessage id="ui-users.accounts.waive.field.waiveamount" /></b>
                   :
                 </Col>
-                <Col xs={4.5}>
-                  <Field
-                    name="waive"
-                    component={TextField}
-                    onChange={this.onChangeWaive}
-                    onBlur={(e, value, next) => {
-                      this.props.dispatch(change('waive', 'waive', parseFloat(next).toFixed(2)));
-                    }}
-                    fullWidth
-                    autoFocus
-                    required
-                  />
+                <Col xs={4} style={{ marginRight: '5px' }}>
+                  <div dir="rtl">
+                    <Field
+                      name="waive"
+                      component={TextField}
+                      hasClearIcon={false}
+                      onChange={this.onChangeWaive}
+                      fullWidth
+                      marginBottom0
+                      autoFocus
+                      required
+                    />
+                  </div>
                 </Col>
               </Row>
-              <Row>
-                <Col xs={7}>
+              <Row end="xs">
+                <Col xs={7} style={{ marginRight: '5px' }}>
                   <FormattedMessage id="ui-users.accounts.waive.field.remainingamount" />
                 </Col>
                 <Col xs={4}>{remaining.toFixed(2)}</Col>
@@ -241,12 +269,12 @@ class WaiveModal extends React.Component {
             </Col>
             <Col xs={7}>
               <Row>
-                <Col xs>
+                <Col xs style={{ marginRight: '5px' }}>
                   <FormattedMessage id="ui-users.accounts.waive.field.waivereason" />
                 </Col>
               </Row>
               <Row>
-                <Col xs>
+                <Col xs style={{ marginRight: '5px' }}>
                   <FormattedMessage id="ui-users.accounts.waive.placeholder.selectReason">
                     {placeholder => (
                       <Field
@@ -288,13 +316,15 @@ class WaiveModal extends React.Component {
               <Field
                 name="notify"
                 component={Checkbox}
+                checked={this.state.notify}
+                onChange={this.onToggleNotify}
                 inline
               />
               <FormattedMessage id="ui-users.accounts.waive.field.notifyPatron" />
             </Col>
           </Row>
-          <Row>
-            <Col xs>
+          <Row end="xs">
+            <Col>
               <Button
                 onClick={this.onCancel}
               >
@@ -318,5 +348,7 @@ class WaiveModal extends React.Component {
 export default reduxForm({
   form: 'waive',
   fields: [],
+  asyncBlurFields: ['waive'],
+  asyncValidate,
   validate,
 })(WaiveModal);
