@@ -20,6 +20,7 @@ export default function getListDataFormatter(
   stripes,
   getFeeFine,
   getContributorslist,
+  feeFineCount,
 ) {
   return {
     '  ' : {
@@ -135,11 +136,13 @@ export default function getListDataFormatter(
             if (r.itemId === loan.itemId) requestQueue = true;
           });
         }
+        const disableFeeFineDetails = (feeFineCount(loan) === 0);
         return (
           <ActionsDropdown
             stripes={stripes}
             loan={loan}
             requestQueue={requestQueue}
+            disableFeeFineDetails={disableFeeFineDetails}
             handleOptionsChange={handleOptionsChange}
           />
         );
