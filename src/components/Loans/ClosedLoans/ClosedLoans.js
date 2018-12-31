@@ -279,6 +279,9 @@ class ClosedLoans extends React.Component {
   }
 
   renderActions(loan) {
+    const accounts = _.get(this.props.resources, ['loanAccount', 'records'], []);
+    const accountsLoan = accounts.filter(a => a.loanId === loan.id) || [];
+
     return (
       <UncontrolledDropdown
         onSelectItem={this.handleOptionsChange}
@@ -294,7 +297,7 @@ class ClosedLoans extends React.Component {
             <Button buttonStyle="dropdownItem"><FormattedMessage id="ui-users.loans.newFeeFine" /></Button>
           </MenuItem>
           <MenuItem itemMeta={{ loan, action: 'feefinedetails' }}>
-            <Button buttonStyle="dropdownItem">Fee/fine details</Button>
+            <Button disabled={!(accountsLoan.length > 0)} buttonStyle="dropdownItem"><FormattedMessage id="ui-users.loans.feeFineDetails" /></Button>
           </MenuItem>
         </DropdownMenu>
       </UncontrolledDropdown>
