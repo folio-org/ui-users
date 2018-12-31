@@ -31,7 +31,7 @@ class ItemLookup extends React.Component {
     });
   }
 
-  onConfirm() {
+  onConfirm = () => {
     const {
       onChangeItem,
       onClose,
