@@ -23,6 +23,7 @@ import {
   Col,
 } from '@folio/stripes/components';
 import { IfPermission } from '@folio/stripes/core';
+import PatronBlockModal from './components/PatronBlock/PatronBlockModal';
 import { getFullName } from './util';
 import loanActionMap from './data/loanActionMap';
 import LoanActionsHistoryProxy from './LoanActionsHistoryProxy';
@@ -68,7 +69,9 @@ class LoanActionsHistory extends React.Component {
     loanAccountsActions: {
       type: 'okapi',
       records: 'accounts',
-      path: 'accounts?query=loanId=!{loanid}&limit=50',
+      path: 'accounts',
+      accumulate: 'true',
+      fetch: false,
     },
   });
 
@@ -122,6 +125,8 @@ class LoanActionsHistory extends React.Component {
     this.hideChangeDueDateDialog = this.hideChangeDueDateDialog.bind(this);
     this.getOpenRequestsCount = this.getOpenRequestsCount.bind(this);
     this.getLoanPolicyName = this.getLoanPolicyName.bind(this);
+    this.getFeeFine = this.getFeeFine.bind(this);
+    this.viewFeeFine = this.viewFeeFine.bind(this);
 
     this.state = {
       nonRenewedLoanItems: [],
@@ -129,6 +134,8 @@ class LoanActionsHistory extends React.Component {
       changeDueDateDialogOpen: false,
       requestsCount: {},
       loanPolicyName: '',
+      feesFines: {},
+      patronBlockedModal: false,
     };
   }
 
@@ -136,6 +143,7 @@ class LoanActionsHistory extends React.Component {
     this.getOpenRequestsCount();
     this.getLoanPolicyName();
     this.getLoanActions();
+    this.getFeeFine();
   }
 
   componentDidUpdate(prevProps) {
@@ -194,7 +202,11 @@ class LoanActionsHistory extends React.Component {
   }
 
   renew() {
-    const { loan, user } = this.props;
+    const { loan, user, patronBlocks } = this.props;
+    const countRenew = patronBlocks.filter(p => p.renewals);
+
+    if (!isEmpty(countRenew)) return this.setState({ patronBlockedModal: true });
+
     const promise = this.props.renew(loan, user);
     const singleRenewalFailure = [];
 
@@ -250,25 +262,31 @@ class LoanActionsHistory extends React.Component {
   }
 
   getFeeFine() {
-    const accounts = get(this.props.resources, ['loanAccountsActions', 'records'], []);
-    let amount = 0;
-    accounts.forEach(a => {
-      amount += parseFloat(a.amount);
+    const { mutator, loanid } = this.props;
+    const query = `loanId=${loanid}`;
+
+    mutator.loanAccountsActions.GET({ params: { query } }).then(records => {
+      const total = records.reduce((a, { amount }) => (a + parseFloat(amount)), 0);
+      this.setState({ feesFines: { total, accounts: records } });
     });
-    return (amount === 0) ? '-' : (
+  }
+
+  viewFeeFine() {
+    const { feesFines: { total } } = this.state;
+    return (total === 0) ? '-' : (
       <button
         style={{ color: '#2b75bb' }}
         onClick={(e) => this.feefinedetails(e)}
         type="button"
       >
-        {amount.toFixed(2)}
+        {parseFloat(total).toFixed(2)}
       </button>
     );
   }
 
   feefinedetails = (e) => {
+    const { feesFines: { accounts } } = this.state;
     const loan = this.loan || {};
-    const accounts = get(this.props.resources, ['loanAccountsActions', 'records'], []);
     if (accounts.length === 1) {
       this.props.onClickViewAccountActionsHistory(e, { id: accounts[0].id });
     } else if (accounts.length > 1) {
@@ -281,6 +299,10 @@ class LoanActionsHistory extends React.Component {
         this.props.onClickViewAllAccounts(e, loan);
       }
     }
+  }
+
+  onClosePatronBlockedModal = () => {
+    this.setState({ patronBlockedModal: false });
   }
 
   showCallout() {
@@ -363,6 +385,7 @@ class LoanActionsHistory extends React.Component {
       onClickUser,
       loan,
       patronGroup,
+      patronBlocks,
       user,
       resources: {
         loanActionsWithUser,
@@ -371,7 +394,10 @@ class LoanActionsHistory extends React.Component {
       intl,
     } = this.props;
 
-    const { loanPolicyName } = this.state;
+    const {
+      loanPolicyName,
+      patronBlockedModal,
+    } = this.state;
 
     if (!loanPolicyName) {
       return <div />;
@@ -537,7 +563,7 @@ class LoanActionsHistory extends React.Component {
             <Col xs={2}>
               <KeyValue
                 label={<FormattedMessage id="ui-users.loans.details.fine" />}
-                value={this.getFeeFine()}
+                value={this.viewFeeFine()}
               />
             </Col>
             <IfPermission perm="ui-users.requests.all">
@@ -580,6 +606,12 @@ class LoanActionsHistory extends React.Component {
                   </li>))
             }
           </Modal>
+          <PatronBlockModal
+            open={patronBlockedModal}
+            onClose={this.onClosePatronBlockedModal}
+            patronBlocks={patronBlocks}
+            viewUserPath={`/users/view/${(user || {}).id}?filters=pg.${patronGroup.group}&sort=Name`}
+          />
           { this.renderChangeDueDateDialog() }
           <Callout ref={(ref) => { this.callout = ref; }} />
         </Pane>
