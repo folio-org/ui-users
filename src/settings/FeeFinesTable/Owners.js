@@ -8,9 +8,9 @@ import {
   Select,
 } from '@folio/stripes/components';
 
-const Owners = (props) => {
+const Owners = ({ dataOptions, onChange }) => {
   const options = [];
-  const shared = props.dataOptions.find(d => d.owner === 'Shared') || {};
+  const shared = dataOptions.find(d => d.owner === 'Shared') || {};
 
   if (shared.id) {
     options.push(
@@ -23,8 +23,8 @@ const Owners = (props) => {
     );
   }
 
-  if (props.dataOptions) {
-    props.dataOptions.forEach((option) => {
+  if (dataOptions) {
+    dataOptions.forEach((option) => {
       if (option.id !== shared.id) {
         options.push(
           <option
@@ -41,15 +41,17 @@ const Owners = (props) => {
   return (
     <div>
       <Row>
-        <Col>
-          <span style={{ fontSize: 'large', fontWeight: '600', marginLeft: '8px' }}>
+        <Col xs>
+          <span style={{ fontSize: 'large', fontWeight: '600' }}>
             <FormattedMessage id="ui-users.feefines.ownerLabel" />
           </span>
         </Col>
-        <Col>
+      </Row>
+      <Row>
+        <Col xs>
           <Select
-            style={{ marginLeft: '20px', width: 120 }}
-            onChange={props.onChange}
+            style={{ width: 120 }}
+            onChange={onChange}
           >
             {options}
           </Select>
