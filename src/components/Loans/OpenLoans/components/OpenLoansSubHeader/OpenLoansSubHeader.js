@@ -127,7 +127,7 @@ class OpenLoansSubHeader extends React.Component {
     const resultCount = <FormattedMessage id="ui-users.resultCount" values={{ count: loans.length }} />;
     const clonedLoans = cloneDeep(loans);
     const recordsToCSV = buildRecords(clonedLoans);
-    const countRenews = patronBlocks.map(a => (a.renewals));
+    const countRenews = patronBlocks.filter(p => p.renewals === true);
 
     return (
       <ActionsBar
