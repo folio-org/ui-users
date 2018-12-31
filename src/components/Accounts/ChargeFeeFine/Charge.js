@@ -13,6 +13,11 @@ import { getFullName } from '../../../util';
 
 class Charge extends React.Component {
   static manifest = Object.freeze({
+    curUserServicePoint: {
+      type: 'okapi',
+      path: 'service-points-users?query=(userId==!{currentUser.id})',
+      records: 'servicePointsUsers',
+    },
     items: {
       type: 'okapi',
       records: 'items',
@@ -30,11 +35,6 @@ class Charge extends React.Component {
       records: 'feefineactions',
       path: 'feefineactions',
     },
-    owners: {
-      type: 'okapi',
-      records: 'owners',
-      path: 'owners?limit=100',
-    },
     accounts: {
       type: 'okapi',
       records: 'accounts',
@@ -48,6 +48,11 @@ class Charge extends React.Component {
       resource: 'accounts',
       accumulate: 'true',
       path: 'accounts',
+    },
+    owners: {
+      type: 'okapi',
+      records: 'owners',
+      path: 'owners?limit=100',
     },
     payments: {
       type: 'okapi',
@@ -280,13 +285,17 @@ class Charge extends React.Component {
     const shared = owners.find(o => o.owner === 'Shared'); // Crear variable Shared en translations
     allfeefines.forEach(f => {
       if (!list.find(o => (o || {}).id === f.ownerId)) {
-        list.push(owners.find(o => (o || {}).id === f.ownerId));
+        const owner = owners.find(o => (o || {}).id === f.ownerId);
+        if (owner !== undefined) { list.push(owner); }
       }
     });
     const feefines = (this.state.ownerId !== '0') ? (resources.feefines || {}).records || [] : [];
-    const payments = _.get(resources, ['payments', 'records'], []);
+    const payments = _.get(resources, ['payments', 'records'], []).filter(p => p.ownerId === this.state.ownerId);
     const accounts = _.get(resources, ['accounts', 'records'], []);
     const settings = _.get(this.props.resources, ['commentRequired', 'records', 0], {});
+
+    const defaultServicePointId = _.get(resources, ['curUserServicePoint', 'records', 0, 'defaultServicePointId'], '-');
+    const servicePointsIds = _.get(resources, ['curUserServicePoint', 'records', 0, 'servicePointsIds'], []);
 
     let selected = parseFloat(0);
     accounts.forEach(a => {
@@ -306,6 +315,7 @@ class Charge extends React.Component {
     const isPending = {
       owners: _.get(resources, ['owners', 'isPending'], false),
       feefines: _.get(resources, ['feefines', 'isPending'], false),
+      servicePoints: _.get(resources, ['curUserServicePoint', 'isPending'], true)
     };
 
     const items = _.get(resources, ['items', 'records'], []);
@@ -314,6 +324,8 @@ class Charge extends React.Component {
         <ChargeForm
           onClickCancel={this.props.onCloseChargeFeeFine}
           onClickPay={this.onClickPay}
+          defaultServicePointId={defaultServicePointId}
+          servicePointsIds={servicePointsIds}
           onSubmit={(data) => {
             if (data.pay) {
               delete data.pay;
