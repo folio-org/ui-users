@@ -56,6 +56,9 @@ class UserAccounts extends React.Component {
       openAccountsCount: PropTypes.object,
       closedAccountsCount: PropTypes.object,
     }),
+    stripes: PropTypes.shape({
+      hasPerm: PropTypes.func,
+    }),
     onClickViewChargeFeeFine: PropTypes.func.isRequired,
     accordionId: PropTypes.string,
     addRecord: PropTypes.bool,
@@ -116,7 +119,8 @@ class UserAccounts extends React.Component {
 
     const accountsLoaded = openAccountsCount >= 0 && closedAccountsCount >= 0;
     const displayWhenClosed = accountsLoaded ? (<Badge>{openAccountsCount}</Badge>) : (<Icon icon="spinner-ellipsis" width="10px" />);
-    const displayWhenOpen = (<Button onClick={e => this.props.onClickViewChargeFeeFine(e, {})}><FormattedMessage id="ui-users.accounts.chargeManual" /></Button>);
+    const buttonDisabled = !this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
+    const displayWhenOpen = (<Button disabled={buttonDisabled} onClick={e => this.props.onClickViewChargeFeeFine(e, {})}><FormattedMessage id="ui-users.accounts.chargeManual" /></Button>);
     return (
       <Accordion
         open={expanded}
