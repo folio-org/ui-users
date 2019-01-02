@@ -38,7 +38,7 @@ class WarningModal extends React.Component {
       sortDirection: ['desc', 'asc']
     };
     this.sortMap = {
-      'Alert details': a => ((a.status || {}).name === 'Closed' ? 'Deselect' : ''),
+      'Alert details': a => ((a.status || {}).name === 'Closed' ? <FormattedMessage id="ui-users.accounts.actions.warning.deselect" /> : ''),
       'Fee/Fine type': a => a.feeFineType,
       'Remainig': a => a.remaining,
       'Payment Status': a => (a.paymentStatus || {}).name,
@@ -106,7 +106,7 @@ class WarningModal extends React.Component {
           type="checkbox"
         />
       ),
-      'Alert details': a => (((a.status || {}).name === 'Closed') ? <span style={{ color: 'red' }}>Deselect to continue</span> : ''),
+      'Alert details': a => (((a.status || {}).name === 'Closed') ? <span style={{ color: 'red' }}><FormattedMessage id="ui-users.accounts.actions.warning.deselect" /></span> : ''),
       'Fee/Fine type': a => a.feeFineType || '',
       'Remaining': a => parseFloat(a.remaining).toFixed(2) || '0.00',
       'Payment Status': a => (a.paymentStatus || {}).name || '-',

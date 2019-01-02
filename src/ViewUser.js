@@ -386,24 +386,23 @@ class ViewUser extends React.Component {
 
   onClickViewChargeFeeFine(e, selectedLoan) {
     if (e) e.preventDefault();
-    const query = this.props.location.search ? queryString.parse(this.props.location.search) : {};
+    const { layer } = this.props.resources.query;
     this.setState({
-      prevLayer: query.layer,
-    });
-    this.props.mutator.query.update({ layer: 'charge' });
-    this.setState({
+      prevLayer: (layer !== 'charge') ? layer : null,
       selectedLoan,
     });
+    this.props.mutator.query.update({ layer: 'charge' });
   }
 
   onCloseChargeFeeFine(e) {
     if (e) e.preventDefault();
     const layer = this.state.prevLayer;
-    this.props.mutator.query.update({ layer });
 
     this.setState({
       selectedLoan: {},
     });
+
+    this.props.mutator.query.update({ layer: layer || null });
   }
 
   onClickViewPatronBlock(e, mode, selectedPatronBlock) {
@@ -597,6 +596,7 @@ class ViewUser extends React.Component {
       mutator,
       location,
       history,
+      okapi: { currentUser },
       onCloseEdit,
     } = this.props;
 
@@ -668,11 +668,12 @@ class ViewUser extends React.Component {
           {contentLabel => (
             <Layer isOpen contentLabel={contentLabel}>
               <this.connectedCharge
-                servicePoints={servicePoints}
-                preferredServicePoint={preferredServicePoint}
+                servicePoints={currentUser.servicePoints}
+                preferredServicePoint={currentUser.curServicePoint}
                 stripes={stripes}
                 onCloseChargeFeeFine={this.onCloseChargeFeeFine}
                 user={user}
+                currentUser={currentUser}
                 loan={{ item: {} }}
                 selectedLoan={this.state.selectedLoan}
                 handleAddRecords={this.handleAddRecords}
@@ -759,6 +760,7 @@ class ViewUser extends React.Component {
                   user={user}
                   loan={this.state.selectedLoan}
                   loanid={query.loan}
+                  patronBlocks={patronBlocks}
                   patronGroup={patronGroup}
                   stripes={stripes}
                   onCancel={this.onClickCloseLoanActionsHistory}

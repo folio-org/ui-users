@@ -294,7 +294,7 @@ class ClosedAccounts extends React.Component {
         <Button data-role="toggle" buttonStyle="hover dropdownActive">
           <strong>•••</strong>
         </Button>
-        <DropdownMenu data-role="menu" overrideStyle={{ padding: '6px 0' }}>
+        <DropdownMenu data-role="menu" overrideStyle={{ padding: '7px 3px' }}>
           <MenuItem itemMeta={{ a, action: 'pay' }}>
             <Button disabled buttonStyle="dropdownItem">
               <FormattedMessage id="ui-users.accounts.history.button.pay" />
@@ -356,29 +356,35 @@ class ClosedAccounts extends React.Component {
     };
 
     return (
-      <div>
-        <MultiColumnList
-          id="list-accountshistory"
-          formatter={this.getAccountsFormatter()}
-          columnMapping={columnMapping}
-          columnWidths={{
-            '  ': 28,
-            'metadata.createdDate': 110,
-            'feeFineType': 180,
-            'metadata.updatedDate': 110,
-            'barcode': 120,
-            'dueDate': 110,
-            'returnedDate': 110
-          }}
-          visibleColumns={this.props.visibleColumns}
-          fullWidth
-          contentData={fees}
-          onHeaderClick={this.onSort}
-          sortOrder={sortOrder[0]}
-          sortDirection={`${sortDirection[0]}ending`}
-          onRowClick={this.onRowClick}
-        />
-      </div>
+      <MultiColumnList
+        id="list-accountshistory"
+        formatter={this.getAccountsFormatter()}
+        columnMapping={columnMapping}
+        columnWidths={{
+          '  ': 35,
+          'metadata.createdDate': 110,
+          'metadata.updatedDate': 110,
+          'feeFineType': 180,
+          'amount': 110,
+          'remaining': 110,
+          'paymentStatus.name': 110,
+          'feeFineOwner': 110,
+          'title': 250,
+          'barcode': 110,
+          'callNumber': 110,
+          'dueDate': 110,
+          'returnedDate': 110,
+          ' ': 50
+        }}
+        visibleColumns={this.props.visibleColumns}
+        fullWidth
+        contentData={fees}
+        onHeaderClick={this.onSort}
+        columnOverflow={{ ' ': true }}
+        sortOrder={sortOrder[0]}
+        sortDirection={`${sortDirection[0]}ending`}
+        onRowClick={this.onRowClick}
+      />
     );
   }
 }

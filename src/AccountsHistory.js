@@ -24,6 +24,7 @@ import {
   filterState,
 } from '@folio/stripes/components';
 import { makeQueryFunction } from '@folio/stripes/smart-components';
+import css from './AccountsHistory.css';
 
 import { getFullName } from './util';
 import { Actions } from './components/Accounts/Actions';
@@ -208,6 +209,7 @@ class AccountsHistory extends React.Component {
     this.handleOptionsChange = this.handleOptionsChange.bind(this);
     this.onChangeActions = this.onChangeActions.bind(this);
     this.onChangeSelected = this.onChangeSelected.bind(this);
+    this.onChangeSelectedAccounts = this.onChangeSelectedAccounts.bind(this);
     this.connectedOpenAccounts = props.stripes.connect(OpenAccounts);
     this.connectedClosedAccounts = props.stripes.connect(ClosedAccounts);
     this.connectedAllAccounts = props.stripes.connect(AllAccounts);
@@ -301,8 +303,13 @@ class AccountsHistory extends React.Component {
       selected: 0,
       selectedAccounts: [],
       actions: {
+        cancellation: false,
+        pay: false,
+        regular: false,
         regularpayment: false,
         waive: false,
+        waiveModal: false,
+        waiveMany: false,
         refund: false,
         transfer: false,
       },
@@ -346,6 +353,10 @@ class AccountsHistory extends React.Component {
       selectedAccounts: accounts,
     });
     this.accounts = accounts;
+  }
+
+  onChangeSelectedAccounts(selectedAccounts) {
+    this.setState({ selectedAccounts });
   }
 
   toggleFilterPane = () => {
@@ -454,7 +465,7 @@ class AccountsHistory extends React.Component {
         >
           <Button
             data-role="toggle"
-            bottomMargin2
+            bottomMargin0
           >
             <FormattedMessage id="ui-users.accounts.history.button.select" />
           </Button>
@@ -469,18 +480,18 @@ class AccountsHistory extends React.Component {
 
     const header = (
       <Row style={{ width: '100%' }}>
-        <Col xs={1}>
+        <Col xs={2}>
           {firstMenu}
         </Col>
-        <Col xsOffset={3} xs={5}>
+        <Col xsOffset={2} xs={5}>
           <SegmentedControl activeId={query.layer} onActivate={this.handleActivate}>
-            <Button id="open-accounts">
+            <Button bottomMargin0 id="open-accounts">
               <FormattedMessage id="ui-users.accounts.open" />
             </Button>
-            <Button id="closed-accounts">
+            <Button bottomMargin0 id="closed-accounts">
               <FormattedMessage id="ui-users.accounts.closed" />
             </Button>
-            <Button id="all-accounts">
+            <Button bottomMargin0 id="all-accounts">
               <FormattedMessage id="ui-users.accounts.all" />
             </Button>
           </SegmentedControl>
@@ -501,11 +512,13 @@ class AccountsHistory extends React.Component {
 
     const visibleColumns = this.getVisibleColumns();
 
+
     return (
       <Paneset>
         <Pane
           defaultWidth="100%"
           dismissible
+          padContent={false}
           onClose={this.props.onCancel}
           paneTitle={(
             <FormattedMessage id="ui-users.accounts.title">
@@ -531,9 +544,10 @@ class AccountsHistory extends React.Component {
               filters={filters}
               onChangeFilter={(e) => { this.handleFilterChange(e, 'f'); }}
             />
-            <div style={{ width: '100%' }}>
+            <section className={css.pane}>
               <PaneHeader header={header} />
               <Menu
+                {...this.props}
                 user={user}
                 showFilters={this.state.showFilters}
                 filters={filters}
@@ -546,7 +560,7 @@ class AccountsHistory extends React.Component {
                 handleOptionsChange={this.handleOptionsChange}
                 onClickViewChargeFeeFine={this.props.onClickViewChargeFeeFine}
               />
-              <Row>
+              <div className={css.paneContent}>
                 {(query.layer === 'open-accounts') ?
                   (<this.connectedOpenAccounts
                     {...this.props}
@@ -570,21 +584,23 @@ class AccountsHistory extends React.Component {
                     {...this.props}
                     accounts={(user.id === (accounts[0] || {}).userId) ? accounts : []}
                     visibleColumns={visibleColumns}
+                    selectedAccounts={selectedAccounts}
                     onChangeSelected={this.onChangeSelected}
                     onChangeActions={this.onChangeActions}
                   />) : ''
                 }
-              </Row>
+              </div>
               <this.connectedActions
                 actions={this.state.actions}
                 onChangeActions={this.onChangeActions}
                 user={user}
                 accounts={this.accounts}
                 selectedAccounts={selectedAccounts}
+                onChangeSelectedAccounts={this.onChangeSelectedAccounts}
                 balance={balance}
                 handleEdit={this.handleEdit}
               />
-            </div>
+            </section>
           </Paneset>
         </Pane>
       </Paneset>

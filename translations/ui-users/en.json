@@ -8,11 +8,14 @@
   "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}",
   "closedLoansCount": "{count, number} {count, plural, one {closed loan} other {closed loans}}",
   "brd.renewConfirmation": "Renew Confirmation",
+  "brd.overrideAndRenew": "Override & renew",
   "brd.header.renewalStatus": "Renewal status",
+  "brd.header.newDueDate": "New due date",
   "brd.header.title": "Title",
   "brd.failedRenewal": "Item not renewed",
   "brd.successfulRenewal": "Item successfully renewed",
   "brd.itemNotRenewed": "<strong>{count}</strong> {count, plural, one {item} other {items}} <b>not</b> renewed. ",
+  "brd.itemsSelected": "<strong>{count}</strong> {count, plural, one {item} other {items}} <b>selected</b>. ",
   "brd.itemSuccessfullyRenewed": "<strong>{count}</strong> {count, plural, one {item} other {items}} <b>successfully</b> renewed",
   "data.contactTypes.email": "Email",
   "data.contactTypes.mail": "Mail (Primary Address)",
@@ -299,6 +302,7 @@
   "loans.numClosedLoans": "{count, number} {count, plural, one {closed loan} other {closed loans}}",
   "loans.loanDetails": "Loan details",
   "loans.newFeeFine": "New fee/fine",
+  "loans.feeFineDetails": "Fee/fine details",
 
   "settings.label": "Users",
   "settings.general": "General",
@@ -486,6 +490,7 @@
   "chargeFeefine": "Charge Fee/Fine",
   "accountActionHistory": "Account Actions History",
   "status": "Status",
+  "selectColumns": "Select Columns",
 
   "accounts.title": "Fees/Fines",
   "accounts.outstandingBalance": "Outstanding Balance: ",
@@ -574,7 +579,7 @@
   "charge.title": "New fee/fine",
   "charge.pay": "Charge and pay now",
   "charge.onlyCharge": "Charge only",
-  "charge.comment": "Comments",
+  "charge.comment": "Additional information for staff",
   "charge.messageThe": "The ",
   "charge.messageOf": " fee/fine Of ",
   "charge.messageSuccessfully": " has been successfully ",
@@ -654,9 +659,14 @@
 
   "accounts.history.comment":"Comment",
   "accounts.history.of":"of",
+  "accounts.history.filter": "Search & Filter",
+  "accounts.history.statusLabel": "{type} fees/fines for ",
 
   "accounts.feeFine": "fee/fine",
   "accounts.feesFines": "fees/fines",
+
+  "accounts.confirmation.head": "Confirm fee/fine {action}",
+  "accounts.confirmation.message": "<b>{count}</b> {count, plural, one {fee/fine} other {fees/fines}} for <b>{amount}</b> will be <b>{action}</b>",
 
   "accounts.pay.error.amount":"Payment must be > 0",
   "accounts.pay.error.exceeds":"Pay amount exceeds the selected amount",
@@ -719,13 +729,16 @@
   "accounts.comment.field.save":"Save",
   "accounts.comment.field.cancel":"Cancel",
 
+  "cddd.dateRequired": "Date*",
+  "cddd.timeRequired": "Time*",
+
   "blocks.columns.type":"Type",
   "blocks.columns.desc":"Display description",
   "blocks.columns.blocked":"Blocked actions",
   "blocks.columns.borrowing":"Borrowing",
   "blocks.columns.requests":"Requests",
   "blocks.columns.renewals":"Renewals",
-  "blocks.buttons.add":"+ Add Block",
+  "blocks.buttons.add":"Add Block",
   "blocks.label":"Patron Blocks",
   "blocks.reason": "Reason for block:",
   "blocks.modal.header": "Patron blocked from renewing",
@@ -761,8 +774,13 @@
   "blocks.layer.edit":"Edit Block",
 
   "blocks.message":"patron block will be removed",
-
   "blocks.textField.place":"Patron has blocks in place",
+
+  "additionalInfo.label": "Additional information*",
+  "additionalInfo.placeholder": "Enter more information about the override (required)",
+
+  "button.override": "Override",
+  "override.emptyNewDueDate": "Select due date above",
 
   "accounts.comment.field.feeFineComment": "Fee/fine comment",
   "accounts.comment.field.enterComment": "Enter a comment",
@@ -771,12 +789,14 @@
   "accounts.actions.payFeeFine": "Pay fees/fines",
   "accounts.actions.waiveFeeFine": "Waive fees/fines",
 
-  "accounts.actions.warning.summary": "{selectedItemsAmount} items selected. {closedItemsAmount} items cannot be {action} because they are alredy closed",
+  "accounts.actions.warning.summary": "{selectedItemsAmount} items selected. {closedItemsAmount} items cannot be {action} because they are already closed",
   "accounts.actions.warning.alertDetails": "Alert details",
   "accounts.actions.warning.feeFineType": "Fee/Fine type",
   "accounts.actions.warning.remaining": "Remainig",
   "accounts.actions.warning.paymentStatus": "Payment Status",
   "accounts.actions.warning.item": "Item",
   "accounts.actions.warning.payAction": "paid",
-  "accounts.actions.warning.waiveAction": "waived"
+  "accounts.actions.warning.waiveAction": "waived",
+  "accounts.actions.warning.deselect": "Deselect to continue",
+  "accounts.actions.cancellation.success": "<b>{count}</b> {count, plural, one {fee/fine} other {fees/fines}} for <b>{amount}</b> has been successfully <b>{action}</b> for <b>{user}</b>"
 }

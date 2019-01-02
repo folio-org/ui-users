@@ -18,6 +18,7 @@ import {
   MenuItem,
 } from '@folio/stripes/components';
 
+
 class AllAccounts extends React.Component {
   static propTypes = {
     resources: PropTypes.shape({
@@ -27,12 +28,16 @@ class AllAccounts extends React.Component {
     mutator: PropTypes.shape({
       activeRecord: PropTypes.object,
     }),
+    stripes: PropTypes.shape({
+      hasPerm: PropTypes.func,
+    }),
     onChangeSelected: PropTypes.func.isRequired,
     visibleColumns: PropTypes.arrayOf(PropTypes.string),
     loans: PropTypes.arrayOf(PropTypes.object),
     onClickViewAccountActionsHistory: PropTypes.func.isRequired,
     onClickViewLoanActionsHistory: PropTypes.func.isRequired,
     accounts: PropTypes.arrayOf(PropTypes.object),
+    selectedAccounts: PropTypes.arrayOf(PropTypes.object),
     onChangeActions: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
   };
@@ -63,7 +68,6 @@ class AllAccounts extends React.Component {
     };
 
     this.state = {
-      checkedAccounts: {},
       allChecked: false,
       sortOrder: [
         'metadata.createdDate',
@@ -84,6 +88,12 @@ class AllAccounts extends React.Component {
     const nextComments = _.get(nextProps.resources, ['comments', 'records'], []);
     const visibleColumns = this.props.visibleColumns;
     const nextVisibleColumns = nextProps.visibleColumns;
+    const selAccounts = this.props.selectedAccounts || [];
+    const nextSelAccounts = nextProps.selectedAccounts || [];
+    if (!_.isEqual(selAccounts, nextSelAccounts)) {
+      const allChecked = nextSelAccounts.length === this.props.accounts.length;
+      this.setState({ allChecked });
+    }
     return visibleColumns !== nextVisibleColumns || comments !== nextComments ||
       props.accounts !== nextProps.accounts ||
       this.state !== nextState;
@@ -166,12 +176,12 @@ class AllAccounts extends React.Component {
   }
 
   getAccountsFormatter() {
-    const checkedAccounts = this.state.checkedAccounts;
+    const accounts = this.props.selectedAccounts;
 
     return {
       '  ': f => (
         <input
-          checked={!!(checkedAccounts[f.id])}
+          checked={accounts.find(a => a.id === f.id)}
           onClick={e => this.toggleItem(e, f)}
           type="checkbox"
         />
@@ -195,12 +205,16 @@ class AllAccounts extends React.Component {
   toggleItem(e, account) {
     e.stopPropagation();
     const id = account.id;
-    const accounts = this.state.checkedAccounts;
-    const checkedAccounts = (accounts[id])
-      ? _.omit(accounts, id)
-      : { ...accounts, [id]: account };
+    const accounts = this.props.selectedAccounts || [];
+    const checked = {};
+    accounts.forEach(a => {
+      checked[a.id] = a;
+    });
+    const checkedAccounts = (checked[id])
+      ? _.omit(checked, id)
+      : { ...checked, [id]: account };
     const allChecked = _.size(checkedAccounts) === this.props.accounts.length;
-    this.setState({ checkedAccounts, allChecked });
+    this.setState({ allChecked });
 
     const values = Object.values(checkedAccounts) || [];
     let selected = 0;
@@ -268,7 +282,6 @@ class AllAccounts extends React.Component {
 
     this.setState(({ allChecked }) => ({
       allChecked: !allChecked,
-      checkedAccounts
     }));
   }
 
@@ -317,6 +330,8 @@ class AllAccounts extends React.Component {
       error: disabled,
       loan: (a.loanId === '0' || !a.loanId),
     };
+    const buttonDisabled = !this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
+
     return (
       <UncontrolledDropdown
         onSelectItem={this.handleOptionsChange}
@@ -324,14 +339,14 @@ class AllAccounts extends React.Component {
         <Button data-role="toggle" buttonStyle="hover dropdownActive">
           <strong>•••</strong>
         </Button>
-        <DropdownMenu data-role="menu" overrideStyle={{ padding: '6px 0' }}>
+        <DropdownMenu data-role="menu" overrideStyle={{ padding: '7px 3px' }}>
           <MenuItem itemMeta={{ a, action: 'pay' }}>
-            <Button disabled={elipsis.pay} buttonStyle="dropdownItem">
+            <Button disabled={!((elipsis.pay === false) && (buttonDisabled === false))} buttonStyle="dropdownItem">
               <FormattedMessage id="ui-users.accounts.history.button.pay" />
             </Button>
           </MenuItem>
           <MenuItem itemMeta={{ a, action: 'waive' }}>
-            <Button disabled={elipsis.waive} buttonStyle="dropdownItem">
+            <Button disabled={!((elipsis.waive === false) && (buttonDisabled === false))} buttonStyle="dropdownItem">
               <FormattedMessage id="ui-users.accounts.history.button.waive" />
             </Button>
           </MenuItem>
@@ -346,7 +361,7 @@ class AllAccounts extends React.Component {
             </Button>
           </MenuItem>
           <MenuItem itemMeta={{ a, action: 'cancel' }}>
-            <Button disabled={elipsis.error} buttonStyle="dropdownItem">
+            <Button disabled={!((elipsis.error === false) && (buttonDisabled === false))} buttonStyle="dropdownItem">
               <FormattedMessage id="ui-users.accounts.button.error" />
             </Button>
           </MenuItem>
@@ -385,29 +400,34 @@ class AllAccounts extends React.Component {
     };
 
     return (
-      <div>
-        <MultiColumnList
-          id="list-accountshistory"
-          formatter={this.getAccountsFormatter()}
-          columnMapping={columnMapping}
-          columnWidths={{
-            '  ': 28,
-            'metadata.createdDate': 110,
-            'feeFineType': 180,
-            'metadata.updatedDate': 110,
-            'barcode': 120,
-            'dueDate': 110,
-            'returnedDate': 110
-          }}
-          visibleColumns={this.props.visibleColumns}
-          fullWidth
-          contentData={fees}
-          onHeaderClick={this.onSort}
-          onRowClick={this.onRowClick}
-          sortOrder={sortOrder[0]}
-          sortDirection={`${sortDirection[0]}ending`}
-        />
-      </div>
+      <MultiColumnList
+        id="list-accountshistory"
+        formatter={this.getAccountsFormatter()}
+        columnMapping={columnMapping}
+        columnWidths={{
+          '  ': 35,
+          'metadata.createdDate': 110,
+          'metadata.updatedDate': 110,
+          'feeFineType': 180,
+          'amount': 110,
+          'remaining': 110,
+          'paymentStatus.name': 110,
+          'feeFineOwner': 110,
+          'title': 250,
+          'barcode': 110,
+          'callNumber': 110,
+          'dueDate': 110,
+          'returnedDate': 110,
+          ' ': 50
+        }}
+        visibleColumns={this.props.visibleColumns}
+        fullWidth
+        contentData={fees}
+        onHeaderClick={this.onSort}
+        onRowClick={this.onRowClick}
+        sortOrder={sortOrder[0]}
+        sortDirection={`${sortDirection[0]}ending`}
+      />
     );
   }
 }

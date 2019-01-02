@@ -2,9 +2,13 @@ import React from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+import SafeHTMLMessage from '@folio/react-intl-safe-html';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import moment from 'moment';
-import { Callout } from '@folio/stripes/components';
+import {
+  Callout,
+  ConfirmationModal
+} from '@folio/stripes/components';
 import CancellationModal from './CancellationModal';
 import PayModal from './PayModal';
 import WaiveModal from './WaiveModal';
@@ -66,6 +70,7 @@ class Actions extends React.Component {
     balance: PropTypes.number,
     accounts: PropTypes.arrayOf(PropTypes.object),
     selectedAccounts: PropTypes.arrayOf(PropTypes.object),
+    onChangeSelectedAccounts: PropTypes.func,
     actions: PropTypes.object,
     onChangeActions: PropTypes.func,
     stripes: PropTypes.object,
@@ -77,6 +82,9 @@ class Actions extends React.Component {
     super(props);
     this.state = {
       accounts: [],
+      showConfirmDialog: false,
+      values: {},
+      submitting: false,
     };
     this.onCloseCancellation = this.onCloseCancellation.bind(this);
     this.onClickCancellation = this.onClickCancellation.bind(this);
@@ -95,26 +103,27 @@ class Actions extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     const props = this.props;
-    if (props.selectedAccounts !== nextProps.selectedAccounts) this.setState({ accounts: nextProps.selectedAccounts });
+    const nextAccounts = nextProps.selectedAccounts || [];
+    if (props.selectedAccounts !== nextProps.selectedAccounts) this.setState({ accounts: nextAccounts });
     return props.accounts !== nextProps.accounts ||
       props.actions !== nextProps.actions ||
       props.selectedAccounts !== nextProps.selectedAccounts ||
       this.state !== nextState;
   }
 
-  showCalloutMessage({ feeFineType, amount, paymentStatus }) {
+  showCalloutMessage({ amount, paymentStatus }) {
     const { user } = this.props;
     const formattedAmount = parseFloat(amount).toFixed(2);
     const fullName = getFullName(user);
 
     const message = (
-      <FormattedMessage
-        id="ui-users.accounts.actions.calloutMessage"
+      <SafeHTMLMessage
+        id="ui-users.accounts.actions.cancellation.success"
         values={{
-          amount: <strong>{formattedAmount}</strong>,
-          paymentStatus: <strong>{paymentStatus.name}</strong>,
-          name: <strong>{fullName}</strong>,
-          feeFineType,
+          count: 1,
+          amount: formattedAmount,
+          action: (paymentStatus.name || '').toLowerCase(),
+          user: fullName
         }}
       />
     );
@@ -131,16 +140,18 @@ class Actions extends React.Component {
     this.props.onChangeActions({
       pay: false,
       regular: false,
+      submitting: false,
     });
-    this.setState({ accounts: this.props.selectedAccounts });
+    this.setState({ accounts: this.props.selectedAccounts || [] });
   }
 
   onCloseWaive() {
     this.props.onChangeActions({
       waiveModal: false,
       waiveMany: false,
+      submitting: false,
     });
-    this.setState({ accounts: this.props.selectedAccounts });
+    this.setState({ accounts: this.props.selectedAccounts || [] });
   }
 
   onCloseWarning = () => {
@@ -148,7 +159,7 @@ class Actions extends React.Component {
       regular: false,
       waiveMany: false,
     });
-    this.setState({ accounts: this.props.selectedAccounts });
+    this.setState({ accounts: this.props.selectedAccounts || [] });
   }
 
   onCloseComment() {
@@ -204,25 +215,35 @@ class Actions extends React.Component {
       .then(() => this.onClosePay());
   }
 
-  onPayMany = (values) => {
-    const selected = _.orderBy(this.props.selectedAccounts, ['remaining'], ['asc']);
-    let payment = parseFloat(values.amount);
-    selected.forEach(account => {
-      if (payment > 0) {
-        const type = account || {};
-        delete type.rowIndex;
-        if (payment < type.remaining) {
-          this.pay(type, payment, values)
-            .then(() => this.props.handleEdit(1))
-            .then(() => this.onClosePay());
-          payment = 0;
+  onPayMany = (values, items) => {
+    let amount = parseFloat(values.amount);
+    let offset = 0;
+    const promises = [];
+    const selected = _.orderBy(items, ['remaining'], ['asc']) || [];
+    let partialAmounts = this.partialAmount(amount, selected.length);
+    selected.forEach((item, index) => {
+      const promise = new Promise((resolve, reject) => {
+        if (partialAmounts[index - offset] >= item.remaining) {
+          offset++;
+          partialAmounts = this.partialAmount(amount - item.remaining, selected.length - offset);
+          amount -= item.remaining;
+          this.pay(item, item.remaining, values).then(() => {
+            this.showCalloutMessage(item);
+            resolve();
+          }).catch(reject);
         } else {
-          payment -= parseFloat(type.remaining);
-          this.pay(type, type.remaining, values)
-            .then(() => this.props.handleEdit(1))
-            .then(() => this.onClosePay());
+          this.pay(item, partialAmounts[index - offset], values).then(() => {
+            this.showCalloutMessage(item);
+            resolve();
+          }).catch(reject);
         }
-      }
+      });
+      promises.push(promise);
+    });
+
+    Promise.all(promises).then(() => {
+      this.props.handleEdit(1);
+      this.onClosePay();
     });
   }
 
@@ -250,25 +271,35 @@ class Actions extends React.Component {
       .then(() => this.onCloseWaive());
   }
 
-  onWaiveMany = (values) => {
-    const selected = _.orderBy(this.props.selectedAccounts, ['remaining'], ['asc']);
+  onWaiveMany = (values, items) => {
     let waive = parseFloat(values.waive);
-    selected.forEach(account => {
-      if (waive > 0) {
-        const type = account || {};
-        delete type.rowIndex;
-        if (waive < type.remaining) {
-          this.waive(type, waive, values)
-            .then(() => this.props.handleEdit(1))
-            .then(() => this.onCloseWaive());
-          waive = 0;
+    let offset = 0;
+    const promises = [];
+    const selected = _.orderBy(items, ['remaining'], ['asc']) || [];
+    let partialAmounts = this.partialAmount(waive, selected.length);
+    selected.forEach((item, index) => {
+      const promise = new Promise((resolve, reject) => {
+        if (partialAmounts[index - offset] >= item.remaining) {
+          offset++;
+          partialAmounts = this.partialAmount(waive - item.remaining, selected.length - offset);
+          waive -= item.remaining;
+          this.waive(item, item.remaining, values).then(() => {
+            this.showCalloutMessage(item);
+            resolve();
+          }).catch(reject);
         } else {
-          waive -= parseFloat(type.remaining);
-          this.waive(type, type.remaining, values)
-            .then(() => this.props.handleEdit(1))
-            .then(() => this.onCloseWaive());
+          this.waive(item, partialAmounts[index - offset], values).then(() => {
+            this.showCalloutMessage(item);
+            resolve();
+          }).catch(reject);
         }
-      }
+      });
+      promises.push(promise);
+    });
+
+    Promise.all(promises).then(() => {
+      this.props.handleEdit(1);
+      this.onCloseWaive();
     });
   }
 
@@ -300,20 +331,120 @@ class Actions extends React.Component {
   }
 
   onChangeAccounts = (accounts) => {
-    this.setState({ accounts });
+    this.props.onChangeSelectedAccounts(accounts);
+    this.setState({ accounts: accounts || [] });
+  }
+
+  partialAmount = (total, n) => {
+    const amount = total / n;
+    const amounts = Array(n);
+    const stringAmount = amount.toString();
+    const decimal = stringAmount.indexOf('.');
+    if (decimal === -1) { return amounts.fill(amount); }
+    const rounding = stringAmount.substring(0, decimal + 3);
+    amounts.fill(parseFloat(rounding));
+    let partialAmount = stringAmount.substring(decimal + 3);
+    partialAmount = '0.' + '0'.repeat(stringAmount.length - partialAmount.length - decimal - 1) + partialAmount;
+    partialAmount = parseFloat(partialAmount);
+    partialAmount = parseFloat(partialAmount * n).toFixed(2);
+    amounts[0] += parseFloat(partialAmount);
+    return amounts;
+  }
+
+  showConfirmDialog = (values) => {
+    this.setState({
+      showConfirmDialog: true,
+      values
+    });
+
+    return new Promise((resolve, reject) => {
+      this.actionResolve = resolve;
+      this.actionReject = reject;
+    });
+  }
+
+  hideConfirmDialog = () => {
+    this.setState({
+      showConfirmDialog: false,
+      values: {}
+    });
+  }
+
+  onConfirm = () => {
+    const { actions, selectedAccounts } = this.props;
+    const { values } = this.state;
+
+    if (actions.pay) {
+      this.onClickPay(values);
+    } else if (actions.regular) {
+      this.onPayMany(values, selectedAccounts);
+    } else if (actions.waiveModal) {
+      this.onClickWaive(values);
+    } else if (actions.waiveMany) {
+      this.onWaiveMany(values, selectedAccounts);
+    }
+    this.setState({ submitting: true });
+
+    this.hideConfirmDialog();
+  }
+
+  renderConfirmHeading = () => {
+    const { actions: { pay, regular } } = this.props;
+    return (
+      <FormattedMessage
+        id="ui-users.accounts.confirmation.head"
+        values={{ action: (pay || regular) ? 'payment' : 'waive' }}
+      />
+    );
+  }
+
+  renderConfirmMessage = () => {
+    const { actions: { pay, regular, waiveModal, waiveMany } } = this.props;
+    const { values } = this.state;
+    const amount = (pay || regular) ? values.amount : values.waive;
+    let paymentStatus = (pay || regular) ? ' paid' : ' waived';
+
+    if (pay || waiveModal) {
+      const account = this.props.accounts[0] || {};
+      const total = account.remaining || 0;
+      paymentStatus = ((amount < total) ? 'partially' : 'fully') + paymentStatus;
+      return (
+        <SafeHTMLMessage
+          id="ui-users.accounts.confirmation.message"
+          values={{ count: 1, amount, action: paymentStatus }}
+        />
+      );
+    } else if (regular || waiveMany) {
+      const accounts = this.props.selectedAccounts || [];
+      const total = accounts.reduce((selected, { remaining }) => {
+        return selected + parseFloat(remaining);
+      }, 0);
+      paymentStatus = ((amount < total) ? 'partially' : 'fully') + paymentStatus;
+      return (
+        <SafeHTMLMessage
+          id="ui-users.accounts.confirmation.message"
+          values={{ count: accounts.length, amount, action: paymentStatus }}
+        />
+      );
+    }
+    return '';
   }
 
   render() {
     const {
       actions,
       stripes,
-      resources,
+      resources
     } = this.props;
+    const {
+      accounts,
+      showConfirmDialog,
+      submitting
+    } = this.state;
 
     const payments = _.get(resources, ['payments', 'records'], []);
     const waives = _.get(resources, ['waives', 'records'], []);
     const settings = _.get(resources, ['commentRequired', 'records', 0], {});
-    const accounts = this.state.accounts || [];
     const warning = accounts.filter(a => a.status.name === 'Closed').length !== 0 && (actions.regular || actions.waiveMany);
     const warningModalLabelId = actions.regular
       ? 'ui-users.accounts.actions.payFeeFine'
@@ -324,7 +455,7 @@ class Actions extends React.Component {
         <FormattedMessage id={warningModalLabelId}>
           {label => (
             <WarningModal
-              open={warning}
+              open={warning && !submitting}
               accounts={accounts}
               onChangeAccounts={this.onChangeAccounts}
               stripes={stripes}
@@ -350,13 +481,7 @@ class Actions extends React.Component {
           balance={this.props.balance}
           accounts={(actions.pay) ? this.props.accounts : accounts}
           payments={payments}
-          onSubmit={(values) => {
-            if (actions.pay) {
-              this.onClickPay(values);
-            } else {
-              this.onPayMany(values);
-            }
-          }}
+          onSubmit={(values) => { this.showConfirmDialog(values); }}
         />
         <WaiveModal
           open={actions.waiveModal || (actions.waiveMany && !warning)}
@@ -366,16 +491,22 @@ class Actions extends React.Component {
           accounts={(actions.waiveModal) ? this.props.accounts : accounts}
           balance={this.props.balance}
           waives={waives}
-          onSubmit={(values) => {
-            if (actions.waiveModal) this.onClickWaive(values);
-            else this.onWaiveMany(values);
-          }}
+          onSubmit={(values) => { this.showConfirmDialog(values); }}
         />
         <CommentModal
           open={actions.comment}
           stripes={this.props.stripes}
           onClose={this.onCloseComment}
           onSubmit={(values) => { this.onClickComment(values); }}
+        />
+        <ConfirmationModal
+          open={showConfirmDialog}
+          heading={this.renderConfirmHeading()}
+          message={(showConfirmDialog) ? this.renderConfirmMessage() : ''}
+          onConfirm={this.onConfirm}
+          onCancel={this.hideConfirmDialog}
+          cancelLabel={<FormattedMessage id="ui-users.accounts.cancellation.field.back" />}
+          confirmLabel={<FormattedMessage id="ui-users.accounts.cancellation.field.confirm" />}
         />
         <Callout ref={(ref) => { this.callout = ref; }} />
       </div>

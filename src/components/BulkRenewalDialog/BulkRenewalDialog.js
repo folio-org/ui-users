@@ -1,45 +1,57 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+
 import { Modal } from '@folio/stripes/components';
+import { stripesShape } from '@folio/stripes/core';
 
 import BulkRenewInfo from './BulkRenewInfo';
 
 class BulkRenewalDialog extends React.Component {
   static propTypes = {
-    stripes: PropTypes.shape({
-      connect: PropTypes.func,
-    }),
-    onClose: PropTypes.func,
-    open: PropTypes.bool,
-  }
-
-  constructor(props) {
-    super(props);
-    this.handleCancel = this.handleCancel.bind(this);
-  }
-
-  handleCancel() {
-    this.props.onClose();
-  }
+    stripes: stripesShape.isRequired,
+    onClose: PropTypes.func.isRequired,
+    open: PropTypes.bool.isRequired,
+    successRenewals: PropTypes.arrayOf(PropTypes.object).isRequired,
+    failedRenewals: PropTypes.arrayOf(PropTypes.object).isRequired,
+    loanPolicies: PropTypes.object.isRequired,
+    requestCounts: PropTypes.object.isRequired,
+    errorMessages: PropTypes.object.isRequired,
+  };
 
   render() {
-    const BodyComponent = BulkRenewInfo;
+    const {
+      stripes,
+      successRenewals,
+      failedRenewals,
+      loanPolicies,
+      requestCounts,
+      errorMessages,
+      onClose,
+      open,
+    } = this.props;
+
     const modalLabel = <FormattedMessage id="ui-users.brd.renewConfirmation" />;
 
     return (
       <Modal
+        id="bulk-renewal-modal"
         size="large"
         dismissible
         closeOnBackgroundClick
         enforceFocus={false} // Needed to allow Calendar in Datepicker to get focus
-        onClose={this.props.onClose}
-        open={this.props.open}
+        open={open}
         label={modalLabel}
+        onClose={onClose}
       >
-        <BodyComponent
-          {...this.props}
-          onCancel={this.handleCancel}
+        <BulkRenewInfo
+          stripes={stripes}
+          errorMessages={errorMessages}
+          requestCounts={requestCounts}
+          loanPolicies={loanPolicies}
+          failedRenewals={failedRenewals}
+          successRenewals={successRenewals}
+          onCancel={onClose}
         />
       </Modal>
     );
