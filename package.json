@@ -618,6 +618,15 @@
           "inventory-storage.service-points-users.item.get"
         ],
         "visible": true
+      },
+      {
+        "permissionName": "ui-users.reset-password-link.send",
+        "displayName": "Users: Can send create/reset password link",
+        "subPermissions": [
+          "users-bl.password-reset-link.generate",
+          "login.credentials-existence.get"
+        ],
+        "visible": true
       }
     ]
   },
