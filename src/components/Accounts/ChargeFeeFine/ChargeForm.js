@@ -1,10 +1,10 @@
+import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Paneset,
   Pane,
   PaneMenu,
-  Icon,
   TextArea,
   Button,
   Row,
@@ -90,23 +90,38 @@ class ChargeForm extends React.Component {
 
   componentDidMount() {
     feefineamount = 0.00;
-    if (this.props.owners.length > 0) {
+    if (this.props.ownerList.length > 0) {
       this.loadServicePoints();
     }
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.owners !== this.props.owners) {
-      const shared = (this.props.owners.find(o => o.owner === 'Shared') || {}).id;
-      this.props.onFindShared(shared);
+    const {
+      owners,
+      ownerList,
+      isPending: { servicePoints },
+      onFindShared
+    } = this.props;
+    const {
+      owners: prevOwners,
+      ownerList: prevOwnerList,
+      isPending: { servicePoints: prevServicePoints }
+    } = prevProps;
+
+    if (prevOwners !== owners) {
+      const shared = (owners.find(o => o.owner === 'Shared') || {}).id;
+      onFindShared(shared);
+    }
+    if (!_.isEqual(prevOwnerList, ownerList)
+      || (!_.isEqual(servicePoints, prevServicePoints) && ownerList.length > 0)) {
       this.loadServicePoints();
     }
   }
 
   loadServicePoints = () => {
-    const servicePoint = this.props.preferredServicePoint;
-    const servicePoints = this.props.servicePoints || [];
-    const owners = this.props.owners || [];
+    const servicePoint = this.props.defaultServicePointId;
+    const servicePoints = this.props.servicePointsIds;
+    const owners = this.props.ownerList || [];
     if (servicePoint && servicePoint !== '-') {
       owners.forEach(o => {
         if (o.servicePointOwner && o.servicePointOwner.find(s => s.value === servicePoint)) {
@@ -115,7 +130,7 @@ class ChargeForm extends React.Component {
         }
       });
     } else if (servicePoints.length === 1) {
-      const sp = servicePoints[0].id;
+      const sp = servicePoints[0];
       owners.forEach(o => {
         if (o.servicePointOwner && o.servicePointOwner.find(s => s.value === sp)) {
           this.props.initialize({ ownerId: o.id });
@@ -123,8 +138,8 @@ class ChargeForm extends React.Component {
         }
       });
     } else if (servicePoints.length === 2) {
-      const sp1 = servicePoints[0].id;
-      const sp2 = servicePoints[1].id;
+      const sp1 = servicePoints[0];
+      const sp2 = servicePoints[1];
       owners.forEach(o => {
         if (o.servicePointOwner && o.servicePointOwner.find(s => s.value === sp1) && o.servicePointOwner.find(s => s.value === sp2)) {
           this.props.initialize({ ownerId: o.id });
@@ -156,8 +171,9 @@ class ChargeForm extends React.Component {
     const feefineList = [];
     const owners = [];
 
-    this.props.ownerList.forEach((owner) => {
-      if ((owner || {}).owner !== 'Shared') owners.push({ label: owner.owner, value: owner.id });
+    this.props.ownerList.forEach(own => {
+      const owner = own || {};
+      if (owner.owner !== 'Shared') owners.push({ label: owner.owner, value: owner.id });
     });
 
     this.props.feefines.forEach((feefine) => {
@@ -168,19 +184,10 @@ class ChargeForm extends React.Component {
     });
 
     const mg = { margin: '6px' };
-    const firstMenu = (
-      <PaneMenu>
-        <button onClick={this.props.onClickCancel} type="button">
-          <Row>
-            <Col><Icon icon="chevron-double-left" size="large" /></Col>
-            <Col><span style={{ fontSize: 'x-large' }}><FormattedMessage id="ui-users.charge.title" /></span></Col>
-          </Row>
-        </button>
-      </PaneMenu>
-    );
+
     const lastMenu = (
       <PaneMenu>
-        <Button onClick={this.props.onClickCancel} style={mg} buttonStyle="secondary"><FormattedMessage id="ui-users.feefines.modal.cancel" /></Button>
+        <Button onClick={this.props.onClickCancel} style={mg}><FormattedMessage id="ui-users.feefines.modal.cancel" /></Button>
         <Button
           disabled={this.props.pristine || this.props.submitting || this.props.invalid}
           onClick={this.props.handleSubmit(data => this.props.onSubmit({ ...data, pay: true }))}
@@ -199,7 +206,15 @@ class ChargeForm extends React.Component {
 
     return (
       <Paneset>
-        <Pane defaultWidth="100%" paneTitle="" firstMenu={firstMenu} lastMenu={lastMenu}>
+        <Pane
+          defaultWidth="100%"
+          dismissible
+          onClose={this.props.onClickCancel}
+          paneTitle={(
+            <FormattedMessage id="ui-users.charge.title" />
+          )}
+          lastMenu={lastMenu}
+        >
           <UserDetails user={user} />
           <br />
           <form>

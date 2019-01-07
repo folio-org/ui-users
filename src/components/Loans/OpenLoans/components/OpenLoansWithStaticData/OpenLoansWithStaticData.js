@@ -58,6 +58,7 @@ class OpenLoansWithStaticData extends React.Component {
     hideChangeDueDateDialog: PropTypes.func.isRequired,
     onClosePatronBlockedModal: PropTypes.func.isRequired,
     onClickViewLoanActionsHistory: PropTypes.func.isRequired,
+    feeFineCount: PropTypes.number,
   };
 
   constructor(props) {
@@ -75,6 +76,7 @@ class OpenLoansWithStaticData extends React.Component {
       props.stripes,
       this.getFeeFine,
       this.getContributorslist,
+      props.feeFineCount,
     );
 
     this.callout = null;
@@ -160,7 +162,8 @@ class OpenLoansWithStaticData extends React.Component {
     );
   };
 
-  getFeeFine = (loan, resources) => {
+  getFeeFine = (loan) => {
+    const { resources } = this.props;
     const accounts = get(resources, ['loanAccount', 'records'], []);
     const accountsLoan = accounts.filter(a => a.loanId === loan.id) || [];
     let remaining = 0;
@@ -215,7 +218,6 @@ class OpenLoansWithStaticData extends React.Component {
     } = this.props;
 
     this.columnMapping = this.getColumnMapping();
-
     return (
       <React.Fragment>
         {!isEmpty(loans) &&

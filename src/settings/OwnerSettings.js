@@ -233,6 +233,7 @@ class OwnerSettings extends React.Component {
           onChange={this.onChangeSelection}
           dataOptions={options}
           renderToOverlay
+          marginBottom0
         />
       )
     };

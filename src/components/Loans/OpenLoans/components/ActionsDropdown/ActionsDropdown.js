@@ -21,6 +21,7 @@ class ActionsDropdown extends React.Component {
     loan: PropTypes.object.isRequired,
     requestQueue: PropTypes.bool.isRequired,
     handleOptionsChange: PropTypes.func.isRequired,
+    disableFeeFineDetails: PropTypes.bool,
   };
 
   render() {
@@ -29,10 +30,12 @@ class ActionsDropdown extends React.Component {
       requestQueue,
       handleOptionsChange,
       stripes,
+      disableFeeFineDetails,
     } = this.props;
 
     const itemDetailsLink = `/inventory/view/${loan.item.instanceId}/${loan.item.holdingsRecordId}/${loan.itemId}`;
     const loanPolicyLink = `/settings/circulation/loan-policies/${loan.loanPolicyId}`;
+    const buttonDisabled = !this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
 
     return (
       <UncontrolledDropdown onSelectItem={handleOptionsChange}>
@@ -95,7 +98,7 @@ class ActionsDropdown extends React.Component {
             action: 'feefine',
           }}
           >
-            <Button buttonStyle="dropdownItem">
+            <Button buttonStyle="dropdownItem" disabled={buttonDisabled}>
               <FormattedMessage id="ui-users.loans.newFeeFine" />
             </Button>
           </MenuItem>
@@ -104,7 +107,9 @@ class ActionsDropdown extends React.Component {
             action: 'feefinedetails',
           }}
           >
-            <Button buttonStyle="dropdownItem">Fee/fine details</Button>
+            <Button buttonStyle="dropdownItem" disabled={disableFeeFineDetails}>
+              <FormattedMessage id="ui-users.loans.feeFineDetails" />
+            </Button>
           </MenuItem>
           { requestQueue && stripes.hasPerm('ui-requests.all') &&
             <MenuItem itemMeta={{

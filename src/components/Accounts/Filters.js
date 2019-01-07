@@ -5,12 +5,13 @@ import {
   SearchField,
   FilterGroups,
 } from '@folio/stripes/components';
+import { FormattedMessage } from 'react-intl';
 
 const Filters = (props) => {
   if (props.showFilters === false) return '';
   const value = props.query.q || '';
   return (
-    <Pane defaultWidth="16%" dismissible onClose={props.toggle} paneTitle="Search & Filter">
+    <Pane defaultWidth="16%" dismissible onClose={props.toggle} paneTitle={<FormattedMessage id="ui-users.accounts.history.filter" />}>
       <SearchField
         onChange={props.onChangeSearch}
         onClear={props.onClearSearch}

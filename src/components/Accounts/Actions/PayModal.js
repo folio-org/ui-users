@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
@@ -38,7 +39,7 @@ const validate = (values, props) => {
   if (props.commentRequired && !values.comment) {
     errors.comment = <FormattedMessage id="ui-users.accounts.error.comment" />;
   }
-  if (values.amount > selected) {
+  if (parseFloat(values.amount) > parseFloat(selected)) {
     errors.amount = <FormattedMessage id="ui-users.accounts.error.exceeds" />;
   }
   return errors;
@@ -75,10 +76,11 @@ class PayModal extends React.Component {
       amount: 0,
       notify: true,
     };
+    this.initialAmount = 0;
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (JSON.stringify(this.props.accounts) !== JSON.stringify(nextProps.accounts)) {
+    if (!_.isEqual(this.props.accounts, nextProps.accounts)) {
       const accounts = nextProps.accounts || [];
       let selected = parseFloat(0);
       accounts.forEach(a => {
@@ -87,6 +89,7 @@ class PayModal extends React.Component {
       this.setState({
         amount: parseFloat(selected).toFixed(2),
       });
+      this.initialAmount = parseFloat(selected).toFixed(2);
       this.props.initialize({ amount: parseFloat(selected).toFixed(2), notify: true });
     }
 
@@ -122,13 +125,12 @@ class PayModal extends React.Component {
   onSubmit = () => {
     const {
       handleSubmit,
-      onClose,
       reset,
     } = this.props;
 
     handleSubmit();
-    onClose();
     reset();
+    this.setState({ amount: this.initialAmount });
   }
 
   calculateSelectedAmount() {
@@ -158,12 +160,16 @@ class PayModal extends React.Component {
       ? <FormattedMessage id="ui-users.accounts.feeFine" />
       : <FormattedMessage id="ui-users.accounts.feesFines" />;
 
+    const pay = <b>{parseFloat(payAmount).toFixed(2)}</b>;
+    const account = <b>{accounts.length}</b>;
+
+
     return (
       <FormattedMessage
         id="ui-users.accounts.pay.summary"
         values={{
-          feesFinesAmount: accounts.length,
-          payAmount: parseFloat(payAmount).toFixed(2),
+          feesFinesAmount: account,
+          payAmount: pay,
           payType,
           feeFineForm,
         }}
@@ -178,6 +184,7 @@ class PayModal extends React.Component {
       pristine,
       onClose,
       open,
+      payments,
       commentRequired,
       balance: totalAmount,
     } = this.props;
@@ -186,7 +193,7 @@ class PayModal extends React.Component {
 
     const selected = this.calculateSelectedAmount();
     const remaining = parseFloat(totalAmount - amount).toFixed(2);
-    const payments = this.props.payments.map(p => ({ id: p.id, label: p.nameMethod }));
+    const dataOptions = _.uniqBy(payments.map(p => ({ id: p.id, label: p.nameMethod })), 'label');
 
     const placeholderTranslationId = commentRequired
       ? 'ui-users.accounts.pay.placeholder.additional.required'
@@ -207,34 +214,50 @@ class PayModal extends React.Component {
           </Row>
           <br />
           <Row>
-            <Col xs={5}>
-              <Row>
-                <Col xs={7}><FormattedMessage id="ui-users.accounts.pay.field.totalamount" /></Col>
-                <Col xs={4}>{parseFloat(totalAmount).toFixed(2)}</Col>
+            <Col xs={4.5}>
+              <Row end="xs">
+                <Col xs={7} style={{ marginRight: '5px' }}>
+                  <FormattedMessage id="ui-users.accounts.pay.field.totalamount" />
+                </Col>
+                <Col xs={4} style={{ marginRight: '5px' }}>
+                  {parseFloat(totalAmount).toFixed(2)}
+                </Col>
               </Row>
-              <Row>
-                <Col xs={7}><FormattedMessage id="ui-users.accounts.pay.field.selectedamount" /></Col>
-                <Col xs={4}>{parseFloat(selected).toFixed(2)}</Col>
+              <Row end="xs">
+                <Col xs={7} style={{ marginRight: '5px' }}>
+                  <FormattedMessage id="ui-users.accounts.pay.field.selectedamount" />
+                </Col>
+                <Col xs={4}>
+                  {parseFloat(selected).toFixed(2)}
+                </Col>
               </Row>
-              <Row>
-                <Col xs={7}>
+              <Row end="xs">
+                <Col xs={7} style={{ marginRight: '10px' }}>
                   <b><FormattedMessage id="ui-users.accounts.pay.field.paymentamount" /></b>
                   :
                 </Col>
-                <Col xs={4.5}>
-                  <Field
-                    name="amount"
-                    component={TextField}
-                    onChange={this.onChangeAmount}
-                    fullWidth
-                    autoFocus
-                    required
-                  />
+                <Col xs={4} style={{ marginRight: '5px' }}>
+                  <div dir="rtl">
+                    <Field
+                      name="amount"
+                      component={TextField}
+                      onChange={this.onChangeAmount}
+                      hasClearIcon={false}
+                      fullWidth
+                      marginBottom0
+                      autoFocus
+                      required
+                    />
+                  </div>
                 </Col>
               </Row>
-              <Row>
-                <Col xs={7}><FormattedMessage id="ui-users.accounts.pay.field.remainingamount" /></Col>
-                <Col xs={4}>{remaining}</Col>
+              <Row end="xs">
+                <Col xs={7}>
+                  <FormattedMessage id="ui-users.accounts.pay.field.remainingamount" />
+                </Col>
+                <Col xs={4}>
+                  {remaining}
+                </Col>
               </Row>
             </Col>
             <Col xs={3}>
@@ -244,7 +267,7 @@ class PayModal extends React.Component {
                   <Field
                     name="method"
                     component={Select}
-                    dataOptions={payments}
+                    dataOptions={dataOptions}
                     placeholder="Select type"
                   />
                 </Col>
@@ -298,7 +321,7 @@ class PayModal extends React.Component {
             </Col>
           </Row>
           <br />
-          <Row>
+          <Row end="xs">
             <Col xs>
               <Button onClick={this.onClose}>
                 <FormattedMessage id="ui-users.accounts.pay.cancel" />

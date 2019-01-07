@@ -57,6 +57,21 @@
 * Link to request queue from loan-details pane. Fixes UIU-722.
 * Add BigTest testing infrastructure. Refs UIU-678.
 * Show check in service point's location field in loan details. Refs UIU-485.
+* Implement specify payment methods for each Fee/Fine Owner. Ref UIU-612.
+* Implement confirmation modal for waive and pay. Ref UIU-697, UIU-698.
+* Add Success Toast for pay an waive modal. Fix UIU-770.
+* Add feature enforce manual patron blocks. Ref UIU-675. Fix UIU-784,UIU-789, UIU-790.
+* Modify styles on charge. Ref UIU-708,UIU-687.
+* Fix manual patron blocks. Ref UIU-674. Fix UIU-792.
+* Fix permissions. Refs UIU-584, UIU-673, Fixes UIU-787, UIU-788.
+* Fix Fees/Fines History scroll bar. Fix UIU-761.
+* Fix Multiple fee/fine waive and pay. Fixes UIU-767, UIU-781, UIU-766.
+* Fix minor errors for pay and waive. Fix UIU-769.
+* Fix associated service points. Fix UIU-771.
+* Fix Fees/Fines Details link. Ref UIU-643, Fixes UIU-667, UIU-665, UIU-720.
+* Fix order for fee fine details. Fixes UIU-475, UIU-476.
+* Fix consistency error with Cancel Fee/Fine modal. Ref UIU-707.
+* Fix consistency errors with Waive and pay Fee/Fine modal. Ref UIU-705, UIU-706.
 
 ## [2.17.0](https://github.com/folio-org/ui-users/tree/v2.17.0) (2018-10-5)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.16.0...v2.17.0)

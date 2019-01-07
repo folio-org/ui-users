@@ -119,8 +119,10 @@ class AccountActionsHistory extends React.Component {
         comment: false,
         regular: false,
       },
-      sortOrder: [...columns],
+      sortOrder: ['date', 'date'],
       sortDirection: ['desc', 'desc'],
+      remaining: 0,
+      paymentStatus: '',
     };
   }
 
@@ -152,8 +154,23 @@ class AccountActionsHistory extends React.Component {
 
   getAccountActions = () => {
     return this.props.mutator.accountActions.GET().then(records => {
+      const sortData = _.orderBy(records, ['dateAction'], ['desc']);
+      const balance = (sortData[0] || {}).balance;
+      let paymentStatus;
+      if (sortData.length === 1) {
+        paymentStatus = 'Outstanding';
+      } else {
+        for (let i = 0; i < sortData.length; i++) {
+          paymentStatus = (sortData[i] || {}).typeAction;
+          if (paymentStatus !== 'Comment') {
+            break;
+          }
+        }
+      }
       this.setState({
         data: records,
+        remaining: balance,
+        paymentStatus,
       });
     });
   }
@@ -181,12 +198,12 @@ class AccountActionsHistory extends React.Component {
   }
 
   onSort(e, meta) {
-    if (!this.sortMap[meta.alias]) return;
+    if (!this.sortMap[meta.name] || e.target.type === 'button') return;
 
     let { sortOrder, sortDirection } = this.state;
 
-    if (sortOrder[0] !== meta.alias) {
-      sortOrder = [meta.alias, sortOrder[1]];
+    if (sortOrder[0] !== meta.name) {
+      sortOrder = [meta.name, sortOrder[1]];
       sortDirection = ['asc', sortDirection[1]];
     } else {
       const direction = (sortDirection[0] === 'desc') ? 'asc' : 'desc';
@@ -249,10 +266,10 @@ class AccountActionsHistory extends React.Component {
     const actions = this.state.data || [];
     const actionsSort = _.orderBy(actions, [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
     const amount = (account.amount) ? parseFloat(account.amount).toFixed(2) : '-';
-    const remaining = (account.remaining) ? parseFloat(account.remaining).toFixed(2) : '0.00';
     const loanId = account.loanId || '';
     const disabled = (_.get(account, ['status', 'name'], '') === 'Closed');
     const isAccountId = actions[0] && actions[0].accountId === account.id;
+    const buttonDisabled = !this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
 
     return (
       <Paneset isRoot>
@@ -270,14 +287,14 @@ class AccountActionsHistory extends React.Component {
           <Row>
             <Col xs={12}>
               <Button
-                disabled={disabled}
+                disabled={!((disabled === false) && (buttonDisabled === false))}
                 buttonStyle="primary"
                 onClick={this.pay}
               >
                 <FormattedMessage id="ui-users.accounts.history.button.pay" />
               </Button>
               <Button
-                disabled={disabled}
+                disabled={!((disabled === false) && (buttonDisabled === false))}
                 buttonStyle="primary"
                 onClick={this.waive}
               >
@@ -296,7 +313,7 @@ class AccountActionsHistory extends React.Component {
                 <FormattedMessage id="ui-users.accounts.history.button.transfer" />
               </Button>
               <Button
-                disabled={disabled}
+                disabled={!((disabled === false) && (buttonDisabled === false))}
                 buttonStyle="primary"
                 onClick={this.error}
               >
@@ -342,13 +359,13 @@ class AccountActionsHistory extends React.Component {
             <Col xs={1.5}>
               <KeyValue
                 label={<FormattedMessage id="ui-users.details.field.remainingamount" />}
-                value={remaining}
+                value={parseFloat(this.state.remaining).toFixed(2)}
               />
             </Col>
             <Col xs={1.5}>
               <KeyValue
                 label={<FormattedMessage id="ui-users.details.field.latest" />}
-                value={_.get(account, ['paymentStatus', 'name'], '-')}
+                value={this.state.paymentStatus}
               />
             </Col>
             <Col xs={1.5}>
@@ -357,7 +374,7 @@ class AccountActionsHistory extends React.Component {
                   label={<FormattedMessage id="ui-users.details.label.loanDetails" />}
                   value={(
                     <button
-                      buttonClass={css.btnView}
+                      className={css.btnView}
                       type="button"
                       onClick={(e) => {
                         onClickViewLoanActionsHistory(e, { id: loanId });
@@ -392,11 +409,13 @@ class AccountActionsHistory extends React.Component {
               <KeyValue
                 label={<FormattedMessage id="ui-users.details.field.barcode" />}
                 value={
-                  <Link
-                    to={`/inventory/view/${_.get(account, ['itemId'], '')}?query=${_.get(account, ['itemId'], '')}`}
-                  >
-                    {_.get(account, ['barcode'], '-')}
-                  </Link>
+                  (_.get(account, ['barcode'])) ? (
+                    <Link
+                      to={`/inventory/view/${_.get(account, ['itemId'], '')}?query=${_.get(account, ['itemId'], '')}`}
+                    >
+                      {_.get(account, ['barcode'])}
+                    </Link>
+                  ) : '-'
                 }
               />
             </Col>

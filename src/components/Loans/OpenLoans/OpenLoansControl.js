@@ -346,7 +346,7 @@ class OpenLoansControl extends React.Component {
       renew,
       patronBlocks,
     } = this.props;
-    const countRenews = patronBlocks.map(a => (a.renewals));
+    const countRenews = patronBlocks.filter(a => a.renewals === true);
 
     if (isEmpty(countRenews)) {
       return renew(loan, user, true);
@@ -511,6 +511,13 @@ class OpenLoansControl extends React.Component {
     }
   };
 
+  feeFineCount = (loan) => {
+    const { resources } = this.props;
+    const accounts = get(resources, ['loanAccount', 'records'], []);
+    const accountsLoan = accounts.filter(a => a.loanId === loan.id) || [];
+    return accountsLoan.length;
+  };
+
   render() {
     const {
       visibleColumns,
@@ -523,7 +530,6 @@ class OpenLoansControl extends React.Component {
       bulkRenewalDialogOpen,
       activeLoan,
       changeDueDateDialogOpen,
-      resources = {},
       allChecked,
       patronBlockedModal,
     } = this.state;
@@ -536,8 +542,8 @@ class OpenLoansControl extends React.Component {
       buildRecords,
       patronGroup,
       patronBlocks,
+      resources,
     } = this.props;
-
     return (
       <TableModel
         patronBlockedModal={patronBlockedModal}
@@ -558,6 +564,7 @@ class OpenLoansControl extends React.Component {
         changeDueDateDialogOpen={changeDueDateDialogOpen}
         loans={loans}
         stripes={stripes}
+        feeFineCount={this.feeFineCount}
         onClickViewLoanActionsHistory={onClickViewLoanActionsHistory}
         user={user}
         toggleAll={this.toggleAll}
