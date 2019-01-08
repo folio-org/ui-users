@@ -208,7 +208,7 @@
     "data.countries.SOM": "Somalia",
     "data.countries.ZAF": "South Africa",
     "data.countries.SGS": "South Georgia and the South Sandwich Islands",
-    "data.countries.SSD": "South Sudan",
+    "data.countries.SSD": "Sudan del Sud",
     "data.countries.ESP": "Spain",
     "data.countries.LKA": "Sri Lanka",
     "data.countries.SDN": "Sudan",
@@ -754,5 +754,12 @@
     "additionalInfo.label": "Additional information*",
     "additionalInfo.placeholder": "Enter more information about the override (required)",
     "button.override": "Override",
-    "override.emptyNewDueDate": "Select due date above"
+    "override.emptyNewDueDate": "Select due date above",
+    "loans.feeFineDetails": "Fee/fine details",
+    "accounts.history.filter": "Search & Filter",
+    "accounts.history.statusLabel": "{type} fees/fines for ",
+    "accounts.confirmation.head": "Confirm fee/fine {action}",
+    "accounts.confirmation.message": "<b>{count}</b> {count, plural, one {fee/fine} other {fees/fines}} for <b>{amount}</b> will be <b>{action}</b>",
+    "accounts.actions.warning.deselect": "Deselect to continue",
+    "accounts.actions.cancellation.success": "<b>{count}</b> {count, plural, one {fee/fine} other {fees/fines}} for <b>{amount}</b> has been successfully <b>{action}</b> for <b>{user}</b>"
 }
