@@ -754,5 +754,12 @@
     "additionalInfo.label": "Informações adicionais*",
     "additionalInfo.placeholder": "Digite mais informações sobre a sobrescrição (obrigatório)",
     "button.override": "Sobrescrever",
-    "override.emptyNewDueDate": "Selecione a data de vencimento acima"
+    "override.emptyNewDueDate": "Selecione a data de vencimento acima",
+    "loans.feeFineDetails": "Detalhes da taxa/multa",
+    "accounts.history.filter": "Pesquisar & Filtrar",
+    "accounts.history.statusLabel": "{type} taxas/multas para ",
+    "accounts.confirmation.head": "Confirmar taxa/multa {action}",
+    "accounts.confirmation.message": "<b>{count}</b> {count, plural, one { taxa/multa } other { taxas/multas }} para <b>{amount}</b> será <b>{action}</b>",
+    "accounts.actions.warning.deselect": "Desmarque para continuar",
+    "accounts.actions.cancellation.success": "<b>{count}</b> {count, plural, one { taxa/multa } other { taxas/multas }} para <b>{amount}</b> foi com sucesso <b>{action}</b> para <b>{user}</b>"
 }
