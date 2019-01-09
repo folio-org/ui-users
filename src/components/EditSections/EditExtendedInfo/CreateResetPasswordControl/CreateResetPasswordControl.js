@@ -116,7 +116,7 @@ class CreateResetPasswordControl extends React.Component {
   };
 
   render() {
-    const pathToResponse = 'resources.isLocalPasswordSet.records.credentialsExist';
+    const pathToResponse = 'resources.isLocalPasswordSet.records[0].credentialsExist';
     const isLocalPasswordSet = get(this.props, pathToResponse, true);
 
     const linkTextKey = isLocalPasswordSet
