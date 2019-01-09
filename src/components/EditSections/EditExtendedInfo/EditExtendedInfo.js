@@ -14,23 +14,23 @@ import {
 } from '@folio/stripes/components';
 
 import PasswordControl from './PasswordControl';
-import ResetPasswordControl from './ResetPasswordControl';
+import CreateResetPasswordControl from './CreateResetPasswordControl';
 
 class EditExtendedInfo extends Component {
   static propTypes = {
     expanded: PropTypes.bool.isRequired,
-    onToggle: PropTypes.func.isRequired,
-    accordionId: PropTypes.string.isRequired,
     userId: PropTypes.string.isRequired,
-    userFirstName: PropTypes.string.isRequired,
     userEmail: PropTypes.string.isRequired,
+    accordionId: PropTypes.string.isRequired,
+    userFirstName: PropTypes.string.isRequired,
+    onToggle: PropTypes.func.isRequired,
     stripesConnect: PropTypes.func.isRequired,
   };
 
   constructor(props) {
     super(props);
 
-    this.connectedResetPasswordControl = props.stripesConnect(ResetPasswordControl);
+    this.connectedResetPasswordControl = props.stripesConnect(CreateResetPasswordControl);
   }
 
   buildAccordionHeader = () => {
@@ -42,7 +42,7 @@ class EditExtendedInfo extends Component {
         {<FormattedMessage id="ui-users.extended.extendedInformation" />}
       </Headline>
     );
-  }
+  };
 
   render() {
     const {
