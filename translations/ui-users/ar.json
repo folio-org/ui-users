@@ -761,5 +761,10 @@
     "accounts.confirmation.head": "Confirm fee/fine {action}",
     "accounts.confirmation.message": "<b>{count}</b> {count, plural, one {fee/fine} other {fees/fines}} for <b>{amount}</b> will be <b>{action}</b>",
     "accounts.actions.warning.deselect": "Deselect to continue",
-    "accounts.actions.cancellation.success": "<b>{count}</b> {count, plural, one {fee/fine} other {fees/fines}} for <b>{amount}</b> has been successfully <b>{action}</b> for <b>{user}</b>"
+    "accounts.actions.cancellation.success": "<b>{count}</b> {count, plural, one {fee/fine} other {fees/fines}} for <b>{amount}</b> has been successfully <b>{action}</b> for <b>{user}</b>",
+    "extended.sendCreatePassword": "Send create password email",
+    "extended.copyLink": "Copy link",
+    "extended.createPasswordModal.label": "Create password email confirmation",
+    "extended.createPasswordModal.linkWasSent": "A create password link was sent to:",
+    "extended.createPasswordModal.linkInstructions": "The following link can be sent if the email was now received"
 }

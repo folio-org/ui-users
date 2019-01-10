@@ -761,5 +761,10 @@
     "accounts.confirmation.head": "确认费用/罚款{action}",
     "accounts.confirmation.message": "<b> {count} </b> {count, plural, 一个 {fee/fine} 其它 {fees/fines}} <b> {amount} </b>将<b> {action} </b>",
     "accounts.actions.warning.deselect": "取消选择以继续",
-    "accounts.actions.cancellation.success": "<b> {count} </b> {count, plural, 一个 {fee/fine} 其它 {fees/fines}} <b> {amount} </b>已成功<b> {action} </b>代表<b> {user} </b>"
+    "accounts.actions.cancellation.success": "<b> {count} </b> {count, plural, 一个 {fee/fine} 其它 {fees/fines}} <b> {amount} </b>已成功<b> {action} </b>代表<b> {user} </b>",
+    "extended.sendCreatePassword": "发送创建密码电子邮件",
+    "extended.copyLink": "复制链接",
+    "extended.createPasswordModal.label": "创建密码邮件确认",
+    "extended.createPasswordModal.linkWasSent": "创建密码链接已发送到：",
+    "extended.createPasswordModal.linkInstructions": "如果现在收到电子邮件，则可以发送以下链接"
 }
