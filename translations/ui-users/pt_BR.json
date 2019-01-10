@@ -761,5 +761,10 @@
     "accounts.confirmation.head": "Confirmar taxa/multa {action}",
     "accounts.confirmation.message": "<b>{count}</b> {count, plural, one { taxa/multa } other { taxas/multas }} para <b>{amount}</b> será <b>{action}</b>",
     "accounts.actions.warning.deselect": "Desmarque para continuar",
-    "accounts.actions.cancellation.success": "<b>{count}</b> {count, plural, one { taxa/multa } other { taxas/multas }} para <b>{amount}</b> foi com sucesso <b>{action}</b> para <b>{user}</b>"
+    "accounts.actions.cancellation.success": "<b>{count}</b> {count, plural, one { taxa/multa } other { taxas/multas }} para <b>{amount}</b> foi com sucesso <b>{action}</b> para <b>{user}</b>",
+    "extended.sendCreatePassword": "Enviar email de criação de senha",
+    "extended.copyLink": "Copiar link",
+    "extended.createPasswordModal.label": "Criar uma confirmação de senha por email",
+    "extended.createPasswordModal.linkWasSent": "Um link para criar senha foi enviado para:",
+    "extended.createPasswordModal.linkInstructions": "O seguinte link pode ser enviado se o email for recebido agora"
 }
