@@ -65,25 +65,33 @@ class UserLoans extends React.Component {
   };
 
   render() {
-    const resources = this.props.resources;
+    const {
+      expanded,
+      onToggle,
+      accordionId,
+      resources,
+      location,
+      onClickViewOpenLoans,
+      onClickViewClosedLoans,
+    } = this.props;
+
     const openLoansTotal = _.get(resources.openLoansCount, ['records', '0', 'totalRecords'], 0);
     const closedLoansTotal = _.get(resources.closedLoansCount, ['records', '0', 'totalRecords'], 0);
-    const { expanded, onToggle, accordionId } = this.props;
-
     const openLoansCount = (_.get(resources.openLoansCount, ['isPending'], true)) ? -1 : openLoansTotal;
     const closedLoansCount = (_.get(resources.closedLoansCount, ['isPending'], true)) ? -1 : closedLoansTotal;
-
     const loansLoaded = openLoansCount >= 0 && closedLoansCount >= 0;
     const displayWhenClosed = loansLoaded ? (<Badge>{openLoansCount}</Badge>) : (<Icon icon="spinner-ellipsis" width="10px" />);
-
-    const query = this.props.location.search ? queryString.parse(this.props.location.search) : {};
+    const query = location.search ? queryString.parse(location.search) : {};
 
     return (
       <Accordion
         open={expanded}
         id={accordionId}
         onToggle={onToggle}
-        label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.loans.title" /></Headline>}
+        label={(
+          <Headline size="large" tag="h3">
+            <FormattedMessage id="ui-users.loans.title" />
+          </Headline>)}
         displayWhenClosed={displayWhenClosed}
       >
         {loansLoaded ?
@@ -93,7 +101,7 @@ class UserLoans extends React.Component {
               <li key={index}>
                 <Link
                   id={item.id}
-                  to={`${this.props.location.pathname}?${queryString.stringify({ ...query, layer: item.layer })}`}
+                  to={`${location.pathname}?${queryString.stringify({ ...query, layer: item.layer })}`}
                   onClick={item.onClick}
                 >
                   <FormattedMessage id={item.formattedMessageId} values={{ count: item.count }} />
@@ -102,14 +110,14 @@ class UserLoans extends React.Component {
             items={[
               {
                 id: 'clickable-viewcurrentloans',
-                onClick: this.props.onClickViewOpenLoans,
+                onClick: onClickViewOpenLoans,
                 count: openLoansCount,
                 formattedMessageId: 'ui-users.loans.numOpenLoans',
                 layer: 'open-loans',
               },
               {
                 id: 'clickable-viewclosedloans',
-                onClick: this.props.onClickViewClosedLoans,
+                onClick: onClickViewClosedLoans,
                 count: closedLoansCount,
                 formattedMessageId: 'ui-users.loans.numClosedLoans',
                 layer: 'closed-loans',

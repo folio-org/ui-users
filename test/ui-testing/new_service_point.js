@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-/* global it describe Nightmare before after */
+/* global it describe before after Nightmare */
 module.exports.test = function foo(uiTestCtx) {
   describe('Module test: users:new_service_point', function meh() {
     const { config, helpers: { login, openApp, logout }, meta: { testVersion } } = uiTestCtx;

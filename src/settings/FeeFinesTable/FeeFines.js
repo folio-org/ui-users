@@ -2,6 +2,11 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ConfirmationModal, Callout } from '@folio/stripes/components';
+import {
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import { EditableList } from '@folio/stripes/smart-components';
 import Owners from './Owners';
@@ -26,29 +31,39 @@ function validate(type, props) {
   items.forEach((item, i) => {
     const allfeefines = _.get(props.resources, ['allfeefines', 'records'], []);
     errors.items.push({});
-    if (Number.isNaN(item.defaultAmount) && item.defaultAmount) { errors.items[i].defaultAmount = props.stripes.intl.formatMessage({ id: 'ui-users.feefines.errors.amountNumeric' }); }
-    if (parseFloat(item.defaultAmount) < 0) { errors.items[i].defaultAmount = props.stripes.intl.formatMessage({ id: 'ui-users.feefines.errors.amountPositive' }); }
+    if (Number.isNaN(item.defaultAmount) && item.defaultAmount) {
+      errors.items[i].defaultAmount = <FormattedMessage id="ui-users.feefines.errors.amountNumeric" />;
+    }
+    if (parseFloat(item.defaultAmount) < 0) {
+      errors.items[i].defaultAmount = <FormattedMessage id="ui-users.feefines.errors.amountPositive" />;
+    }
 
     const exist = includes(allfeefines.filter(f => f.id !== item.id), item.feeFineType, 'feeFineType', 'ownerId') || '';
     const shared = owners.find(o => o.owner === 'Shared') || {};
     if (exist.length > 0) {
       if (exist.find(e => e === ownerId)) {
-        errors.items[i].feeFineType = props.stripes.intl.formatMessage({ id: 'ui-users.feefines.errors.exist' });
+        errors.items[i].feeFineType = <FormattedMessage id="ui-users.feefines.errors.exist" />;
       } else if (ownerId === shared.id) {
-        errors.items[i].feeFineType = <SafeHTMLMessage
-          id="ui-users.feefines.errors.existShared"
-          values={{ owner: (owners.find(o => o.id === exist[0]) || {}).owner }}
-        />;
+        errors.items[i].feeFineType = (
+          <FormattedMessage
+            id="ui-users.feefines.errors.existShared"
+            values={{ owner: (owners.find(o => o.id === exist[0]) || {}).owner }}
+          />
+        );
       } else if (exist.find(e => e === shared.id)) {
-        errors.items[i].feeFineType = <SafeHTMLMessage
-          id="ui-users.feefines.errors.existShared"
-          values={{ owner: 'Shared' }}
-        />;
+        errors.items[i].feeFineType = (
+          <FormattedMessage
+            id="ui-users.feefines.errors.existShared"
+            values={{ owner: 'Shared' }}
+          />
+        );
       }
     }
 
 
-    if (!item.feeFineType) { errors.items[i].feeFineType = props.stripes.intl.formatMessage({ id: 'ui-users.errors.missingRequiredField' }); }
+    if (!item.feeFineType) {
+      errors.items[i].feeFineType = <FormattedMessage id="ui-users.errors.missingRequiredField" />;
+    }
   });
   return errors;
 }
@@ -58,12 +73,12 @@ class FeeFines extends React.Component {
     feefinesPerOwner: {
       type: 'okapi',
       records: 'feefines',
-      path: 'feefines?limit=0&facets=ownerId',
+      path: 'feefines',
     },
     accountsPerFeeFine: {
       type: 'okapi',
       records: 'accounts',
-      path: 'accounts?limit=0&facets=feeFineId',
+      path: 'accounts',
     },
 
     feefines: {
@@ -84,6 +99,12 @@ class FeeFines extends React.Component {
       type: 'okapi',
       records: 'owners',
       path: 'owners?limit=100',
+    },
+    nextfeefines: {
+      type: 'okapi',
+      records: 'feefines',
+      path: 'feefines',
+      accumulate: 'true',
     },
     allfeefines: {
       type: 'okapi',
@@ -123,10 +144,8 @@ class FeeFines extends React.Component {
       }),
     }).isRequired,
     nameKey: PropTypes.string,
-    stripes: PropTypes.shape({
-      intl: PropTypes.object,
-    }),
     okapi: PropTypes.object,
+    intl: intlShape.isRequired,
   };
 
   constructor(props) {
@@ -222,14 +241,16 @@ class FeeFines extends React.Component {
 
   onChangeOwner(e) {
     const ownerId = e.target.value;
+    const query = `ownerId=${ownerId}`;
     const owners = (this.props.resources.owners || {}).records || [];
-    const count = _.get(this.props.resources, ['feefinesPerOwner', 'other', 'resultInfo', 'facets', 0, 'facetValues'], []);
     const shared = owners.find(o => o.owner === 'Shared') || {};
-    const ownerList = count.filter(c => c.value !== shared.id).map(c => c.value);
+    this.props.mutator.nextfeefines.GET({ query }).then(records => {
+      const nextFeeFines = records.filter(f => f.ownerId === ownerId) || [];
+      if (nextFeeFines.length === 0 && ownerId !== shared.id) {
+        this.setState({ openModal: true });
+      }
+    });
     this.props.mutator.activeRecord.update({ ownerId });
-    if (ownerId !== shared.id && !ownerList.includes(ownerId) && ownerList.length) {
-      this.setState({ openModal: true });
-    }
   }
 
   onCopyFeeFines(type) {
@@ -247,15 +268,24 @@ class FeeFines extends React.Component {
   }
 
   render() {
-    if (!this.props.resources.feefines) return <div />;
+    const {
+      intl,
+      resources,
+      nameKey,
+    } = this.props;
 
-    const data = (this.props.resources.allfeefines || {}).records || [];
-    const owners = (this.props.resources.owners || {}).records || [];
-    const count = _.get(this.props.resources, ['feefinesPerOwner', 'other', 'resultInfo', 'facets', 0, 'facetValues'], []);
+    if (!resources.feefines) return <div />;
+    const data = (resources.allfeefines || {}).records || [];
+    const owners = (resources.owners || {}).records || [];
+    const allfeefines = _.get(resources, ['allfeefines', 'records'], []);
     const shared = owners.find(o => o.owner === 'Shared') || {};
     const sharedFeeFines = data.filter(f => f.ownerId === shared.id).map(f => f.feeFineType);
-    const list = count.map(c => ((c.value !== shared.id) ? c.value : ''));
-    const ownerList = owners.filter(o => list.includes(o.id));
+    const list = [];
+    allfeefines.forEach(f => {
+      if (!list.find(l => l.id === f.ownerId) && f.ownerId !== shared.id) {
+        list.push(owners.find(o => o.id === f.ownerId));
+      }
+    });
 
     const formatter = {
       defaultAmount: i => ((i.defaultAmount) ? parseFloat(i.defaultAmount).toFixed(2) : '-'),
@@ -263,7 +293,7 @@ class FeeFines extends React.Component {
 
     const actionProps = {
       delete: (item) => {
-        const accounts = (this.props.resources.accountsPerFeeFine || {}).other || {};
+        const accounts = (resources.accountsPerFeeFine || {}).other || {};
         let disableDelete = [];
         if (_.has(accounts, ['resultInfo', 'facets'])) {
           const facetCount = _.get(accounts, ['resultInfo', 'facets', 0, 'facetValues'], []);
@@ -272,31 +302,35 @@ class FeeFines extends React.Component {
         if (_.includes(disableDelete, item.id)) {
           return {
             disabled: _.includes(disableDelete, item.id),
-            title: this.props.stripes.intl.formatMessage({ id: 'ui-users.feefines.disabledItem' }),
+            title: <FormattedMessage id="ui-users.feefines.disabledItem" />,
           };
         }
+
         return {};
       },
     };
 
     return (
       <div>
-        <Owners dataOptions={owners} onChange={this.onChangeOwner} />
+        <Owners
+          dataOptions={owners}
+          onChange={this.onChangeOwner}
+        />
         <EditableList
           {...this.props}
-          label={this.props.stripes.intl.formatMessage({ id: 'ui-users.feefines.title' })}
-          createButtonLabel={this.props.stripes.intl.formatMessage({ id: 'stripes-core.button.new' })}
-          contentData={this.props.resources.feefines.records || []}
+          label={intl.formatMessage({ id: 'ui-users.feefines.title' })}
+          createButtonLabel={<FormattedMessage id="stripes-core.button.new" />}
+          contentData={resources.feefines.records || []}
           visibleFields={['feeFineType', 'defaultAmount']}
           columnMapping={{
-            feeFineType: this.props.stripes.intl.formatMessage({ id: 'ui-users.feefines.columns.type' }),
-            defaultAmount: this.props.stripes.intl.formatMessage({ id: 'ui-users.feefines.columns.amount' })
+            feeFineType: intl.formatMessage({ id: 'ui-users.feefines.columns.type' }),
+            defaultAmount: intl.formatMessage({ id: 'ui-users.feefines.columns.amount' }),
           }}
           itemTemplate={{}}
           onUpdate={this.onUpdateType}
           onDelete={this.showConfirm}
           onCreate={this.onCreateType}
-          nameKey={this.props.nameKey}
+          nameKey={nameKey}
           formatter={formatter}
           shared={sharedFeeFines}
           validate={validate}
@@ -304,8 +338,13 @@ class FeeFines extends React.Component {
         />
         <ConfirmationModal
           open={this.state.confirming}
-          heading={this.props.stripes.intl.formatMessage({ id: 'ui-users.feefines.modalHeader' })}
-          message={<SafeHTMLMessage id="ui-users.feefines.modalMessage" values={{ feefine: this.state.type.feeFineType }} />}
+          heading={<FormattedMessage id="ui-users.feefines.modalHeader" />}
+          message={
+            <SafeHTMLMessage
+              id="ui-users.feefines.modalMessage"
+              values={{ feefine: this.state.type.feeFineType }}
+            />
+          }
           onConfirm={this.onDeleteType}
           onCancel={this.hideConfirm}
           confirmLabel="Delete"
@@ -316,11 +355,11 @@ class FeeFines extends React.Component {
           openModal={this.state.openModal}
           onCloseModal={this.onCloseModal}
           onCopyFeeFines={this.onCopyFeeFines}
-          ownerList={ownerList}
+          ownerList={list}
         />
       </div>
     );
   }
 }
 
-export default FeeFines;
+export default injectIntl(FeeFines);

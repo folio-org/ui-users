@@ -1,6 +1,10 @@
 import _ from 'lodash';
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  injectIntl,
+  intlShape
+} from 'react-intl';
 import PropTypes from 'prop-types';
 import { FieldArray } from 'redux-form';
 import {
@@ -11,28 +15,28 @@ import {
   Accordion,
   Badge,
   List,
-  IfPermission,
   Headline
 } from '@folio/stripes/components';
+import { IfPermission } from '@folio/stripes/core';
 
 import PermissionList from '../PermissionList';
 import css from './EditablePermissions.css';
 
 class EditablePermissions extends React.Component {
   static propTypes = {
-    heading: PropTypes.string.isRequired,
+    heading: PropTypes.node.isRequired,
     permToRead: PropTypes.string.isRequired,
     permToDelete: PropTypes.string.isRequired,
     permToModify: PropTypes.string.isRequired,
     availablePermissions: PropTypes.arrayOf(PropTypes.object),
     initialValues: PropTypes.object,
+    intl: intlShape,
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func.isRequired,
       config: PropTypes.shape({
         showPerms: PropTypes.bool,
         listInvisiblePerms: PropTypes.bool,
       }).isRequired,
-      intl: PropTypes.object.isRequired,
     }).isRequired,
     accordionId: PropTypes.string,
     expanded: PropTypes.bool,
@@ -68,6 +72,7 @@ class EditablePermissions extends React.Component {
     const isOpen = this.state.addPermissionOpen;
     this.setState({
       addPermissionOpen: !isOpen,
+      searchTerm: ''
     });
   }
 
@@ -94,7 +99,6 @@ class EditablePermissions extends React.Component {
   }
 
   renderItem(item, index, showPerms) {
-    const title = this.props.stripes.intl.formatMessage({ id: 'ui-users.permissions.removePermission' });
     return (
       <li key={item.permissionName}>
         {
@@ -103,17 +107,24 @@ class EditablePermissions extends React.Component {
             (item.displayName || item.permissionName))
         }
         <IfPermission perm={this.props.permToDelete}>
-          <Button
-            buttonStyle="fieldControl"
-            align="end"
-            type="button"
-            id="clickable-remove-permission"
-            onClick={() => this.removePermission(index)}
-            aria-label={`${title}: ${item.permissionName}`}
-            title={title}
-          >
-            <Icon icon="hollowX" iconClassName={css.removePermissionIcon} iconRootClass={css.removePermissionButton} />
-          </Button>
+          <FormattedMessage id="ui-users.permissions.removePermission">
+            {aria => (
+              <Button
+                buttonStyle="fieldControl"
+                align="end"
+                type="button"
+                id="clickable-remove-permission"
+                onClick={() => this.removePermission(index)}
+                aria-label={`${aria}: ${item.permissionName}`}
+              >
+                <Icon
+                  icon="times-circle"
+                  iconClassName={css.removePermissionIcon}
+                  iconRootClass={css.removePermissionButton}
+                />
+              </Button>
+            )}
+          </FormattedMessage>
         </IfPermission>
       </li>
     );
@@ -128,13 +139,13 @@ class EditablePermissions extends React.Component {
       <List
         items={fields}
         itemFormatter={listFormatter}
-        isEmptyMessage={this.props.stripes.intl.formatMessage({ id: 'ui-users.permissions.empty' })}
+        isEmptyMessage={<FormattedMessage id="ui-users.permissions.empty" />}
       />
     );
   }
 
   render() {
-    const { accordionId, expanded, onToggle, initialValues } = this.props;
+    const { accordionId, expanded, onToggle, initialValues, intl: { formatMessage } } = this.props;
 
     const permissions = (initialValues || {}).subPermissions || [];
 
@@ -155,20 +166,17 @@ class EditablePermissions extends React.Component {
       <IfPermission perm={this.props.permToModify}>
         <Dropdown
           id="section-add-permission"
-          style={{ float: 'right' }}
           pullRight
           open={this.state ? this.state.addPermissionOpen : false}
           onToggle={this.onToggleAddPermDD}
         >
           <Button align="end" bottomMargin0 data-role="toggle" aria-haspopup="true" id="clickable-add-permission">
-            &#43;
-            {' '}
             <FormattedMessage id="ui-users.permissions.addPermission" />
           </Button>
           <DropdownMenu
             data-role="menu"
             width="40em"
-            aria-label={this.props.stripes.intl.formatMessage({ id: 'ui-users.permissions.availablePermissions' })}
+            aria-label={formatMessage({ id: 'ui-users.permissions.availablePermissions' })}
             onToggle={this.onToggleAddPermDD}
           >
             {permissionsDD}
@@ -187,11 +195,11 @@ class EditablePermissions extends React.Component {
           <Badge>{size}</Badge>
         }
       >
-        <div>{permsDropdownButton}</div>
         <FieldArray name={this.props.name} component={this.renderList} />
+        <div>{permsDropdownButton}</div>
       </Accordion>
     );
   }
 }
 
-export default EditablePermissions;
+export default injectIntl(EditablePermissions);

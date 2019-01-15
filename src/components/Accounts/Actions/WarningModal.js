@@ -1,6 +1,11 @@
 import React from 'react';
-import _ from 'lodash';
 import PropTypes from 'prop-types';
+import {
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
+
 import {
   Row,
   Col,
@@ -9,6 +14,10 @@ import {
   MultiColumnList,
 } from '@folio/stripes/components';
 
+import {
+  omit,
+  size,
+} from 'lodash';
 
 class WarningModal extends React.Component {
   static propTypes = {
@@ -17,6 +26,7 @@ class WarningModal extends React.Component {
     open: PropTypes.bool,
     label: PropTypes.string,
     onClose: PropTypes.func.isRequired,
+    intl: intlShape.isRequired,
   };
 
   constructor(props) {
@@ -28,7 +38,7 @@ class WarningModal extends React.Component {
       sortDirection: ['desc', 'asc']
     };
     this.sortMap = {
-      'Alert details': a => ((a.status || {}).name === 'Closed' ? 'Deselect' : ''),
+      'Alert details': a => ((a.status || {}).name === 'Closed' ? <FormattedMessage id="ui-users.accounts.actions.warning.deselect" /> : ''),
       'Fee/Fine type': a => a.feeFineType,
       'Remainig': a => a.remaining,
       'Payment Status': a => (a.paymentStatus || {}).name,
@@ -66,9 +76,9 @@ class WarningModal extends React.Component {
     const id = a.id;
     const accounts = this.state.checkedAccounts;
     const checkedAccounts = (accounts[id])
-      ? _.omit(accounts, id)
+      ? omit(accounts, id)
       : { ...accounts, [id]: a };
-    const allChecked = _.size(checkedAccounts) === this.props.accounts.length;
+    const allChecked = size(checkedAccounts) === this.props.accounts.length;
     this.setState({ checkedAccounts, allChecked });
   }
 
@@ -96,7 +106,7 @@ class WarningModal extends React.Component {
           type="checkbox"
         />
       ),
-      'Alert details': a => (((a.status || {}).name === 'Closed') ? <span style={{ color: 'red' }}>Deselect to continue</span> : ''),
+      'Alert details': a => (((a.status || {}).name === 'Closed') ? <span style={{ color: 'red' }}><FormattedMessage id="ui-users.accounts.actions.warning.deselect" /></span> : ''),
       'Fee/Fine type': a => a.feeFineType || '',
       'Remaining': a => parseFloat(a.remaining).toFixed(2) || '0.00',
       'Payment Status': a => (a.paymentStatus || {}).name || '-',
@@ -110,13 +120,51 @@ class WarningModal extends React.Component {
     this.props.onChangeAccounts(values);
   }
 
+  renderWarningMessage() {
+    const {
+      label,
+      accounts = [],
+      intl: {
+        formatMessage,
+      },
+    } = this.props;
+
+    const selectedItemsAmount = accounts.length;
+    const closedItemsAmount = accounts.filter(a => a.status.name === 'Closed').length;
+    const action = label === formatMessage({ id: 'ui-users.accounts.actions.payFeeFine' })
+      ? <FormattedMessage id="ui-users.accounts.actions.warning.payAction" />
+      : <FormattedMessage id="ui-users.accounts.actions.warning.waiveAction" />;
+
+    return (
+      <FormattedMessage
+        id="ui-users.accounts.actions.warning.summary"
+        values={{
+          selectedItemsAmount,
+          closedItemsAmount,
+          action,
+        }}
+      />
+    );
+  }
+
   render() {
-    const { sortOrder, sortDirection, allChecked, checkedAccounts } = this.state;
+    const { formatMessage } = this.props.intl;
+    const {
+      sortOrder,
+      sortDirection,
+      allChecked,
+      checkedAccounts,
+    } = this.state;
+
     const columnMapping = {
-      ' ': (<input type="checkbox" checked={allChecked} name="check-all" onChange={this.toggleAll} />),
+      ' ': <input type="checkbox" checked={allChecked} name="check-all" onChange={this.toggleAll} />,
+      'Alert details': formatMessage({ id: 'ui-users.accounts.actions.warning.alertDetails' }),
+      'Fee/Fine type': formatMessage({ id: 'ui-users.accounts.actions.warning.feeFineType' }),
+      'Remaining': formatMessage({ id: 'ui-users.accounts.actions.warning.remaining' }),
+      'Payment Status': formatMessage({ id: 'ui-users.accounts.actions.warning.paymentStatus' }),
+      'Item': formatMessage({ id: 'ui-users.accounts.actions.warning.item' }),
     };
-    const accounts = _.orderBy(this.props.accounts, [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
-    const closed = accounts.filter(a => a.status.name === 'Closed') || [];
+
     const values = Object.values(checkedAccounts) || [];
     const checkedClosed = values.filter(a => a.status.name === 'Closed') || [];
     return (
@@ -129,7 +177,7 @@ class WarningModal extends React.Component {
       >
         <Row>
           <Col xs>
-            {`${accounts.length} items selected. ${closed.length} items cannot be ${this.props.label === 'Pay fees/fines' ? 'paid' : 'waived'} because they are alredy closed`}
+            {this.renderWarningMessage()}
           </Col>
         </Row>
         <Row>
@@ -148,8 +196,8 @@ class WarningModal extends React.Component {
         </Row>
         <Row>
           <Col xs>
-            <Button onClick={this.props.onClose}>Cancel</Button>
-            <Button disabled={checkedClosed.length > 0 || values.length === 0} buttonStyle="primary" onClick={this.onClickContinue}>Continue</Button>
+            <Button onClick={this.props.onClose}><FormattedMessage id="ui-users.feefines.modal.cancel" /></Button>
+            <Button disabled={checkedClosed.length > 0 || values.length === 0} buttonStyle="primary" onClick={this.onClickContinue}><FormattedMessage id="ui-users.feefines.modal.submit" /></Button>
           </Col>
         </Row>
       </Modal>
@@ -157,4 +205,4 @@ class WarningModal extends React.Component {
   }
 }
 
-export default WarningModal;
+export default injectIntl(WarningModal);

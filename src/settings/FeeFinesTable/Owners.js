@@ -1,28 +1,58 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { Row, Col, Select } from '@folio/stripes/components';
 
-const Owners = (props) => {
+import {
+  Row,
+  Col,
+  Select,
+} from '@folio/stripes/components';
+
+const Owners = ({ dataOptions, onChange }) => {
   const options = [];
-  const shared = props.dataOptions.find(d => d.owner === 'Shared') || {};
-  if (shared.id) options.push(<option value={shared.id} key="0">{shared.owner}</option>);
-  if (props.dataOptions) {
-    props.dataOptions.forEach((option) => {
-      if (option.id !== shared.id)options.push(<option value={option.id} key={option.id}>{option.owner}</option>);
+  const shared = dataOptions.find(d => d.owner === 'Shared') || {};
+
+  if (shared.id) {
+    options.push(
+      <option
+        value={shared.id}
+        key="0"
+      >
+        {shared.owner}
+      </option>
+    );
+  }
+
+  if (dataOptions) {
+    dataOptions.forEach((option) => {
+      if (option.id !== shared.id) {
+        options.push(
+          <option
+            value={option.id}
+            key={option.id}
+          >
+            {option.owner}
+          </option>
+        );
+      }
     });
   }
 
   return (
     <div>
       <Row>
-        <Col>
-          <span style={{ fontSize: 'large', fontWeight: '600', marginLeft: '8px' }}>
+        <Col xs>
+          <span style={{ fontSize: 'large', fontWeight: '600' }}>
             <FormattedMessage id="ui-users.feefines.ownerLabel" />
           </span>
         </Col>
-        <Col>
-          <Select style={{ marginLeft: '20px' }} onChange={props.onChange}>
+      </Row>
+      <Row>
+        <Col xs>
+          <Select
+            style={{ width: 120 }}
+            onChange={onChange}
+          >
             {options}
           </Select>
         </Col>

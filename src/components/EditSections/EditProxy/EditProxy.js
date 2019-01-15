@@ -1,24 +1,31 @@
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import {
   Accordion,
   Badge,
-  IfPermission,
   Headline
 } from '@folio/stripes/components';
+import { IfPermission } from '@folio/stripes/core';
 
 import ProxyEditList from '../../ProxyGroup/ProxyEditList';
 import ProxyEditItem from '../../ProxyGroup/ProxyEditItem';
 import { getFullName } from '../../../util';
 
 const EditProxy = (props) => {
-  const { expanded, onToggle, accordionId, initialValues } = props;
-  const { sponsors, proxies } = initialValues;
+  const {
+    expanded,
+    onToggle,
+    accordionId,
+    initialValues,
+  } = props;
+  const {
+    sponsors,
+    proxies,
+  } = initialValues;
   const fullName = getFullName(initialValues);
 
-  const isProxyFor = props.stripes.intl.formatMessage({ id: 'ui-users.permissions.isProxyFor' }, { name: fullName });
-  const isSponsorOf = props.stripes.intl.formatMessage({ id: 'ui-users.permissions.isSponsorOf' }, { name: fullName });
-  const proxySponsor = props.stripes.intl.formatMessage({ id: 'ui-users.permissions.proxySponsor' });
+  const proxySponsor = <FormattedMessage id="ui-users.permissions.proxySponsor" />;
 
   return (
     <IfPermission perm="ui-users.editproxies">
@@ -31,9 +38,17 @@ const EditProxy = (props) => {
           <Badge>{sponsors.length + proxies.length}</Badge>
         }
       >
-        <ProxyEditList itemComponent={ProxyEditItem} label={isProxyFor} name="sponsors" {...props} />
+        <FormattedMessage id="ui-users.permissions.isProxyFor" values={{ name: fullName }}>
+          { label => (
+            <ProxyEditList itemComponent={ProxyEditItem} label={label} name="sponsors" {...props} />
+          )}
+        </FormattedMessage>
         <br />
-        <ProxyEditList itemComponent={ProxyEditItem} label={isSponsorOf} name="proxies" {...props} />
+        <FormattedMessage id="ui-users.permissions.isSponsorOf" values={{ name: fullName }}>
+          { label => (
+            <ProxyEditList itemComponent={ProxyEditItem} label={label} name="proxies" {...props} />
+          )}
+        </FormattedMessage>
         <br />
       </Accordion>
     </IfPermission>
@@ -41,9 +56,7 @@ const EditProxy = (props) => {
 };
 
 EditProxy.propTypes = {
-  stripes: PropTypes.shape({
-    intl: PropTypes.object.isRequired,
-  }).isRequired,
+  stripes: PropTypes.object.isRequired,
   expanded: PropTypes.bool,
   onToggle: PropTypes.func,
   accordionId: PropTypes.string.isRequired,

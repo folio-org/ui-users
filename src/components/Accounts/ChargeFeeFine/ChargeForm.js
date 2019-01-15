@@ -1,10 +1,10 @@
+import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Paneset,
   Pane,
   PaneMenu,
-  Icon,
   TextArea,
   Button,
   Row,
@@ -12,7 +12,7 @@ import {
 } from '@folio/stripes/components';
 import { FormattedMessage } from 'react-intl';
 import stripesForm from '@folio/stripes/form';
-import { Field } from 'redux-form';
+import { Field, change } from 'redux-form';
 
 import UserDetails from './UserDetails';
 import FeeFineInfo from './FeeFineInfo';
@@ -20,34 +20,38 @@ import ItemInfo from './ItemInfo';
 
 let feefineamount = 0;
 
-function validate(type, props) {
+function validate(type) {
   const errors = [];
   if (!type.feeFineId) {
-    errors.feeFineId = props.stripes.intl.formatMessage({ id: 'ui-users.feefines.modal.error' });
+    errors.feeFineId = <FormattedMessage id="ui-users.feefines.modal.error" />;
   }
   if (!type.ownerId) {
-    errors.ownerId = props.stripes.intl.formatMessage({ id: 'ui-users.feefines.modal.error' });
+    errors.ownerId = <FormattedMessage id="ui-users.feefines.modal.error" />;
   }
-  if (type.amount < 0) {
-    errors.amount = 'Amount must be > 0';
+  if (Number(type.amount) <= 0) {
+    errors.amount = <FormattedMessage id="ui-users.accounts.error.message" />;
   }
   if (!type.amount && !feefineamount) {
-    errors.amount = props.stripes.intl.formatMessage({ id: 'ui-users.errors.missingRequiredField' });
+    errors.amount = <FormattedMessage id="ui-users.errors.missingRequiredField" />;
   }
   if (Number.isNaN(Number(type.amount)) && type.amount) {
-    errors.amount = props.stripes.intl.formatMessage({ id: 'ui-users.charge.errors.amount' });
+    errors.amount = <FormattedMessage id="ui-users.charge.errors.amount" />;
   }
   return errors;
 }
 
 function onChange(values, dispatch, props, previousValues) {
   if (values.ownerId !== previousValues.ownerId) {
-    delete values.amount;
-    delete values.feeFineId;
+    dispatch(change('chargefeefine', 'amount', null));
+    dispatch(change('chargefeefine', 'feeFineId', null));
     feefineamount = 0;
   }
   if (values.feeFineId !== previousValues.feeFineId) {
-    values.amount = feefineamount;
+    if (values.feeFineId) {
+      dispatch(change('chargefeefine', 'amount', feefineamount));
+    } else {
+      dispatch(change('chargefeefine', 'amount', null));
+    }
   }
   if (!values.amount && previousValues.amount) {
     feefineamount = null;
@@ -62,8 +66,8 @@ class ChargeForm extends React.Component {
     stripes: PropTypes.object,
     ownerId: PropTypes.string,
     owners: PropTypes.arrayOf(PropTypes.object),
+    ownerList: PropTypes.arrayOf(PropTypes.object),
     feefines: PropTypes.arrayOf(PropTypes.object),
-    onClickCharge: PropTypes.func.isRequired,
     onClickCancel: PropTypes.func.isRequired,
     onChangeOwner: PropTypes.func.isRequired,
     onClickPay: PropTypes.func.isRequired,
@@ -86,12 +90,62 @@ class ChargeForm extends React.Component {
 
   componentDidMount() {
     feefineamount = 0.00;
+    if (this.props.ownerList.length > 0) {
+      this.loadServicePoints();
+    }
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.owners !== this.props.owners) {
-      const shared = (this.props.owners.find(o => o.owner === 'Shared') || {}).id;
-      this.props.onFindShared(shared);
+    const {
+      owners,
+      ownerList,
+      isPending: { servicePoints },
+      onFindShared
+    } = this.props;
+    const {
+      owners: prevOwners,
+      ownerList: prevOwnerList,
+      isPending: { servicePoints: prevServicePoints }
+    } = prevProps;
+
+    if (prevOwners !== owners) {
+      const shared = (owners.find(o => o.owner === 'Shared') || {}).id;
+      onFindShared(shared);
+    }
+    if (!_.isEqual(prevOwnerList, ownerList)
+      || (!_.isEqual(servicePoints, prevServicePoints) && ownerList.length > 0)) {
+      this.loadServicePoints();
+    }
+  }
+
+  loadServicePoints = () => {
+    const servicePoint = this.props.defaultServicePointId;
+    const servicePoints = this.props.servicePointsIds;
+    const owners = this.props.ownerList || [];
+    if (servicePoint && servicePoint !== '-') {
+      owners.forEach(o => {
+        if (o.servicePointOwner && o.servicePointOwner.find(s => s.value === servicePoint)) {
+          this.props.initialize({ ownerId: o.id });
+          this.props.onChangeOwner({ target: { value: o.id } });
+        }
+      });
+    } else if (servicePoints.length === 1) {
+      const sp = servicePoints[0];
+      owners.forEach(o => {
+        if (o.servicePointOwner && o.servicePointOwner.find(s => s.value === sp)) {
+          this.props.initialize({ ownerId: o.id });
+          this.props.onChangeOwner({ target: { value: o.id } });
+        }
+      });
+    } else if (servicePoints.length === 2) {
+      const sp1 = servicePoints[0];
+      const sp2 = servicePoints[1];
+      owners.forEach(o => {
+        if (o.servicePointOwner && o.servicePointOwner.find(s => s.value === sp1) && o.servicePointOwner.find(s => s.value === sp2)) {
+          this.props.initialize({ ownerId: o.id });
+          this.props.onChangeOwner({ target: { value: o.id } });
+        }
+      });
     }
   }
 
@@ -117,7 +171,8 @@ class ChargeForm extends React.Component {
     const feefineList = [];
     const owners = [];
 
-    this.props.owners.forEach((owner) => {
+    this.props.ownerList.forEach(own => {
+      const owner = own || {};
       if (owner.owner !== 'Shared') owners.push({ label: owner.owner, value: owner.id });
     });
 
@@ -129,59 +184,20 @@ class ChargeForm extends React.Component {
     });
 
     const mg = { margin: '6px' };
-    const firstMenu = (
-      <PaneMenu>
-        <button onClick={this.props.onClickCancel} type="button">
-          <Row>
-            <Col><Icon icon="left-double-chevron" size="large" /></Col>
-            <Col><span style={{ fontSize: 'x-large' }}><FormattedMessage id="ui-users.charge.title" /></span></Col>
-          </Row>
-        </button>
-      </PaneMenu>
-    );
+
     const lastMenu = (
       <PaneMenu>
-        <Button onClick={this.props.onClickCancel} style={mg} buttonStyle="secondary"><FormattedMessage id="ui-users.feefines.modal.cancel" /></Button>
+        <Button onClick={this.props.onClickCancel} style={mg}><FormattedMessage id="ui-users.feefines.modal.cancel" /></Button>
         <Button
           disabled={this.props.pristine || this.props.submitting || this.props.invalid}
-          onClick={this.props.handleSubmit((data) => {
-            const type = {};
-            type.amount = data.amount;
-            type.feeFineId = data.feeFineId.substring(0, 36);
-            type.comments = data.comments;
-            type.ownerId = data.ownerId;
-            type.paymentStatus = {
-              name: 'Outstanding',
-            };
-            type.status = {
-              name: 'Open',
-            };
-            type.remaining = type.amount;
-            this.props.onClickCharge(type).then(() => this.props.onClickPay(type));
-          })}
+          onClick={this.props.handleSubmit(data => this.props.onSubmit({ ...data, pay: true }))}
           style={mg}
         >
           <FormattedMessage id="ui-users.charge.pay" />
         </Button>
         <Button
           disabled={this.props.pristine || this.props.submitting || this.props.invalid}
-          onClick={this.props.handleSubmit((data) => {
-            const type = {};
-            type.feeFineId = data.feeFineId.substring(0, 36);
-            type.amount = data.amount;
-            type.comments = data.comments;
-            type.ownerId = data.ownerId;
-            type.paymentStatus = {
-              name: 'Outstanding',
-            };
-            type.status = {
-              name: 'Open',
-            };
-            type.remaining = type.amount;
-            this.props.onClickCharge(type)
-              .then(() => this.props.handleAddRecords())
-              .then(() => this.props.onCloseChargeFeeFine());
-          })}
+          onClick={this.props.handleSubmit(data => this.props.onSubmit({ ...data, pay: false }))}
           style={mg}
         >
           <FormattedMessage id="ui-users.charge.onlyCharge" />
@@ -190,7 +206,15 @@ class ChargeForm extends React.Component {
 
     return (
       <Paneset>
-        <Pane defaultWidth="100%" paneTittle="" firstMenu={firstMenu} lastMenu={lastMenu}>
+        <Pane
+          defaultWidth="100%"
+          dismissible
+          onClose={this.props.onClickCancel}
+          paneTitle={(
+            <FormattedMessage id="ui-users.charge.title" />
+          )}
+          lastMenu={lastMenu}
+        >
           <UserDetails user={user} />
           <br />
           <form>

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 import { Headline } from '@folio/stripes/components';
 import css from './ProxyViewList.css';
 
@@ -8,8 +9,8 @@ const ProxyViewList = ({ records, name, label, itemComponent, stripes }) => {
   const items = records.map((record, index) => (
     <ComponentToRender key={`item-${index}`} record={record} stripes={stripes} />
   ));
-  const noSponsorsFound = stripes.intl.formatMessage({ id: 'ui-users.permissions.noSponsorsFound' });
-  const noProxiesFound = stripes.intl.formatMessage({ id: 'ui-users.permissions.noProxiesFound' });
+  const noSponsorsFound = <FormattedMessage id="ui-users.permissions.noSponsorsFound" />;
+  const noProxiesFound = <FormattedMessage id="ui-users.permissions.noProxiesFound" />;
   const noneFoundMsg = name === 'sponsors' ? noSponsorsFound : noProxiesFound;
 
   return (
@@ -24,7 +25,7 @@ ProxyViewList.propTypes = {
   records: PropTypes.arrayOf(PropTypes.object),
   itemComponent: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.node.isRequired,
   stripes: PropTypes.object.isRequired,
 };
 

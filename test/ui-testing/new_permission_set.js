@@ -1,11 +1,9 @@
 /* eslint-disable no-console */
-/* global it describe Nightmare before after */
+/* global it describe before after Nightmare */
 module.exports.test = function foo(uiTestCtx) {
   describe('Module test: users:new_permission_set', function bar() {
     const { config, helpers: { login, openApp, logout }, meta: { testVersion } } = uiTestCtx;
-
     const nightmare = new Nightmare(config.nightmare);
-
     this.timeout(Number(config.test_timeout));
 
     describe('Login > Create new permission set > Confirm creation > Delete permission set > Confirm deletion > Logout\n', () => {
@@ -16,6 +14,7 @@ module.exports.test = function foo(uiTestCtx) {
       before((done) => {
         login(nightmare, config, done); // logs in with the default admin credentials
       });
+
       after((done) => {
         logout(nightmare, config, done);
       });
@@ -33,8 +32,8 @@ module.exports.test = function foo(uiTestCtx) {
           .click('a[href="/settings/users"]')
           .wait('a[href="/settings/users/perms"]')
           .click('a[href="/settings/users/perms"]')
-          .wait('button[title^="Add "]')
-          .click('button[title^="Add "]')
+          .wait('#clickable-create-entry')
+          .click('#clickable-create-entry')
           .wait('#input-permission-title')
           .insert('#input-permission-title', displayName)
           .insert('#input-permission-description', description)
@@ -42,14 +41,18 @@ module.exports.test = function foo(uiTestCtx) {
           .click('#clickable-add-permission')
           .wait('button[class^="itemControl"]')
           .xclick('//button[contains(.,"Users: Can create new user")]')
-          .wait('#clickable-add-permission')
-          .click('#clickable-add-permission')
-          .wait('button[class^="itemControl"]')
-          .xclick('//button[contains(.,"Users: Can view proxies")]')
-          .wait('#clickable-save-permission-set')
-          .click('#clickable-save-permission-set')
-          .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
-          .then(() => { done(); })
+          .then(() => {
+            nightmare
+              .wait('#clickable-add-permission')
+              .click('#clickable-add-permission')
+              .wait('button[class^="itemControl"]')
+              .xclick('//button[contains(.,"Users: Can view proxies")]')
+              .wait('#clickable-save-permission-set')
+              .click('#clickable-save-permission-set')
+              .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
+              .then(done)
+              .catch(done);
+          })
           .catch(done);
       });
       it('should confirm creation of new permission set', (done) => {
@@ -59,11 +62,24 @@ module.exports.test = function foo(uiTestCtx) {
           .click('a[href="/settings/users"]')
           .wait('a[href="/settings/users/perms"]')
           .click('a[href="/settings/users/perms"]')
-          .wait(555)
-          .xclick(`//a[.="${displayName}"]`)
-          .wait('#clickable-edit-item')
-          .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
-          .then(() => { done(); })
+          .wait('div.hasEntries')
+          .evaluate((name) => {
+            const node = Array.from(
+              document.querySelectorAll('div.hasEntries nav a div')
+            ).find(e => e.textContent === name);
+            if (node) {
+              node.parentElement.click();
+            } else {
+              throw new Error(`Could not find the permission set ${name}`);
+            }
+          }, displayName)
+          .then(() => {
+            nightmare
+              .wait('#clickable-edit-item')
+              .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
+              .then(done)
+              .catch(done);
+          })
           .catch(done);
       });
       it('should delete new permission set', (done) => {

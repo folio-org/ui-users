@@ -11,9 +11,6 @@ import {
 
 class FeeFineInfo extends React.Component {
   static propTypes = {
-    stripes: PropTypes.shape({
-      intl: PropTypes.object,
-    }),
     feefineList: PropTypes.arrayOf(PropTypes.object),
     onChangeOwner: PropTypes.func,
     owners: PropTypes.arrayOf(PropTypes.object),
@@ -43,6 +40,8 @@ class FeeFineInfo extends React.Component {
   }
 
   render() {
+    const { isPending } = this.props;
+
     return (
       <section>
         <Row>
@@ -56,16 +55,21 @@ class FeeFineInfo extends React.Component {
                 </Row>
                 <Row>
                   <Col xs={12}>
-                    <Field
-                      name="ownerId"
-                      id="ownerId"
-                      component={Select}
-                      fullWidth
-                      dataOptions={this.props.owners}
-                      onChange={this.props.onChangeOwner}
-                      placeholder={this.props.stripes.intl.formatMessage({ id: 'ui-users.feefines.modal.placeholder' })}
-                    />
-                    {(this.props.isPending.owners) ? 'Loading...' : ''}
+                    <FormattedMessage id="ui-users.feefines.modal.placeholder">
+                      {placeholder => (
+                        <Field
+                          name="ownerId"
+                          id="ownerId"
+                          component={Select}
+                          fullWidth
+                          disabled={this.props.isPending.owners}
+                          dataOptions={this.props.owners}
+                          onChange={this.props.onChangeOwner}
+                          placeholder={placeholder}
+                        />
+                      )}
+                    </FormattedMessage>
+                    {isPending.owners && <FormattedMessage id="ui-users.loading" />}
                   </Col>
                 </Row>
               </Col>
@@ -77,16 +81,20 @@ class FeeFineInfo extends React.Component {
                 </Row>
                 <Row>
                   <Col xs={12}>
-                    <Field
-                      name="feeFineId"
-                      component={Select}
-                      fullWidth
-                      disabled={this.props.isPending.feefines}
-                      dataOptions={this.props.feefineList}
-                      placeholder={this.props.stripes.intl.formatMessage({ id: 'ui-users.feefines.modal.placeholder' })}
-                      onChange={this.onChangeFeeFine}
-                    />
-                    {(this.props.isPending.feefines) ? 'Loading...' : ''}
+                    <FormattedMessage id="ui-users.feefines.modal.placeholder">
+                      {placeholder => (
+                        <Field
+                          name="feeFineId"
+                          component={Select}
+                          fullWidth
+                          disabled={this.props.isPending.feefines}
+                          dataOptions={this.props.feefineList}
+                          placeholder={placeholder}
+                          onChange={this.onChangeFeeFine}
+                        />
+                      )}
+                    </FormattedMessage>
+                    {isPending.feefines && <FormattedMessage id="ui-users.loading" />}
                   </Col>
                 </Row>
               </Col>

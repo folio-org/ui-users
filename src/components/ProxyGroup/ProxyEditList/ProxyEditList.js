@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { FieldArray } from 'redux-form';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import {
   Row,
@@ -11,10 +15,11 @@ import {
 } from '@folio/stripes/components';
 import { Pluggable } from '@folio/stripes/core';
 
+import ErrorModal from '../../ErrorModal';
 import { getFullName } from '../../../util';
 import css from './ProxyEditList.css';
 
-export default class ProxyEditList extends React.Component {
+class ProxyEditList extends React.Component {
   static propTypes = {
     stripes: PropTypes.object.isRequired,
     name: PropTypes.string.isRequired,
@@ -22,15 +27,35 @@ export default class ProxyEditList extends React.Component {
     itemComponent: PropTypes.func.isRequired,
     initialValues: PropTypes.object,
     change: PropTypes.func.isRequired,
+    intl: intlShape.isRequired,
   };
 
   constructor(props) {
     super(props);
     this.renderList = this.renderList.bind(this);
+    this.hideModal = this.hideModal.bind(this);
     this.state = { confirmDelete: false };
   }
 
+  validate(user) {
+    const { initialValues, name } = this.props;
+    const { id } = initialValues;
+
+    if (id !== user.id) return true;
+
+    const error = {
+      label: <FormattedMessage id={`ui-users.errors.${name}.invalidUserLabel`} />,
+      message: <FormattedMessage id={`ui-users.errors.${name}.invalidUserMessage`} />,
+    };
+
+    this.setState({ error });
+
+    return false;
+  }
+
   onAdd(user) {
+    if (!this.validate(user)) return;
+
     const proxy = {
       accrueTo: 'Sponsor',
       notificationsTo: 'Sponsor',
@@ -58,12 +83,25 @@ export default class ProxyEditList extends React.Component {
   }
 
   renderConfirmModal() {
-    const { confirmDelete, curRecord } = this.state;
-    const { initialValues, name } = this.props;
-    const formatMsg = this.props.stripes.intl.formatMessage;
-    const heading = (name === 'sponsors') ? formatMsg({ id: 'ui-users.deleteSponsorPrompt' }) : formatMsg({ id: 'ui-users.deleteProxyPrompt' });
-    const sponsorsMsg = <SafeHTMLMessage id="ui-users.proxyWillBeDeleted" values={{ name1: getFullName(initialValues), name2: getFullName(curRecord.user) }} />;
-    const proxyMsg = <SafeHTMLMessage id="ui-users.proxyWillBeDeleted" values={{ name1: getFullName(curRecord.user), name2: getFullName(initialValues) }} />;
+    const {
+      confirmDelete,
+      curRecord,
+    } = this.state;
+    const {
+      initialValues,
+      name,
+    } = this.props;
+    const heading = (name === 'sponsors') ?
+      <FormattedMessage id="ui-users.deleteSponsorPrompt" /> :
+      <FormattedMessage id="ui-users.deleteProxyPrompt" />;
+    const sponsorsMsg = <SafeHTMLMessage
+      id="ui-users.proxyWillBeDeleted"
+      values={{ name1: getFullName(initialValues), name2: getFullName(curRecord.user) }}
+    />;
+    const proxyMsg = <SafeHTMLMessage
+      id="ui-users.proxyWillBeDeleted"
+      values={{ name1: getFullName(curRecord.user), name2: getFullName(initialValues) }}
+    />;
     const message = (name === 'sponsors') ? sponsorsMsg : proxyMsg;
 
     return (
@@ -74,16 +112,41 @@ export default class ProxyEditList extends React.Component {
         message={message}
         onConfirm={() => this.confirmDelete(true)}
         onCancel={() => this.confirmDelete(false)}
-        confirmLabel={formatMsg({ id: 'ui-users.delete' })}
+        confirmLabel={<FormattedMessage id="ui-users.delete" />}
       />
     );
+  }
+
+  renderErrorModal() {
+    const { error } = this.state;
+
+    return (
+      <ErrorModal
+        id="proxy-error-modal"
+        open={!!error}
+        onClose={this.hideModal}
+        message={error.message}
+        label={error.label}
+      />
+    );
+  }
+
+  hideModal() {
+    this.setState({ error: null });
   }
 
   renderList({ fields }) {
     this.fields = fields;
 
     const disableRecordCreation = true;
-    const { itemComponent, label, name, stripes: { intl }, stripes } = this.props;
+    const {
+      itemComponent,
+      label,
+      name,
+      stripes,
+      change,
+      intl,
+    } = this.props;
     const ComponentToRender = itemComponent;
 
     const items = fields.map((fieldName, index) => (
@@ -94,9 +157,8 @@ export default class ProxyEditList extends React.Component {
         namespace={name}
         name={fieldName}
         onDelete={record => this.beginDelete(index, record)}
-        intl={intl}
         stripes={stripes}
-        change={this.props.change}
+        change={change}
       />
     ));
 
@@ -114,17 +176,32 @@ export default class ProxyEditList extends React.Component {
           <Col xs>
             <h3 className={css.label}>{label}</h3>
           </Col>
+        </Row>
+        {items.length ?
+          items :
+          <p className={css.isEmptyMessage}>
+            <FormattedMessage
+              id="ui-users.noItemFound"
+              values={{ item: name }}
+            />
+          </p>
+        }
+        <Row>
           <Col xs={4}>
-            <Layout className="right">
+            <Layout>
               <Pluggable
                 aria-haspopup="true"
                 type="find-user"
                 {...this.props}
                 dataKey={name}
-                searchLabel={intl.formatMessage({ id: 'stripes-components.addNew' })}
+                searchLabel={
+                  name === 'proxies' ?
+                    <FormattedMessage id="ui-users.sponsor.addSponsor" /> :
+                    <FormattedMessage id="ui-users.proxy.addProxy" />
+                }
                 searchButtonStyle="default"
                 selectUser={user => this.onAdd(user)}
-                visibleColumns={['active', 'name', 'patronGroup', 'username', 'barcode']}
+                visibleColumns={['status', 'name', 'patronGroup', 'username', 'barcode']}
                 columnMapping={columnMapping}
                 disableRecordCreation={disableRecordCreation}
               >
@@ -133,17 +210,21 @@ export default class ProxyEditList extends React.Component {
             </Layout>
           </Col>
         </Row>
-        {items.length ? items : <p className={css.isEmptyMessage}><FormattedMessage id="ui-users.noItemFound" values={{ item: name }} /></p>}
       </div>
     );
   }
 
   render() {
+    const { error, confirmDelete } = this.state;
+
     return (
-      <div>
+      <Fragment>
         <FieldArray name={this.props.name} component={this.renderList} />
-        {this.state.confirmDelete && this.renderConfirmModal()}
-      </div>
+        {confirmDelete && this.renderConfirmModal()}
+        {error && this.renderErrorModal()}
+      </Fragment>
     );
   }
 }
+
+export default injectIntl(ProxyEditList);

@@ -2,6 +2,12 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
+  FormattedMessage,
+  intlShape,
+  FormattedTime,
+  FormattedDate,
+} from 'react-intl';
+import {
   Row,
   Col,
   Button,
@@ -12,22 +18,9 @@ import {
   MenuItem,
 } from '@folio/stripes/components';
 
-import { formatDate, formatDateTime } from '../../../util';
 
 class AllAccounts extends React.Component {
-  static manifest = Object.freeze({
-    comments: {
-      type: 'okapi',
-      records: 'feefineactions',
-      path: 'feefineactions?query=(userId=%{activeRecord.userId} and comments=*)&limit=200',
-    },
-    activeRecord: {},
-  });
-
   static propTypes = {
-    stripes: PropTypes.shape({
-      intl: PropTypes.object.isRequired,
-    }),
     resources: PropTypes.shape({
       comments: PropTypes.object,
     }),
@@ -35,13 +28,18 @@ class AllAccounts extends React.Component {
     mutator: PropTypes.shape({
       activeRecord: PropTypes.object,
     }),
+    stripes: PropTypes.shape({
+      hasPerm: PropTypes.func,
+    }),
     onChangeSelected: PropTypes.func.isRequired,
     visibleColumns: PropTypes.arrayOf(PropTypes.string),
     loans: PropTypes.arrayOf(PropTypes.object),
     onClickViewAccountActionsHistory: PropTypes.func.isRequired,
     onClickViewLoanActionsHistory: PropTypes.func.isRequired,
     accounts: PropTypes.arrayOf(PropTypes.object),
+    selectedAccounts: PropTypes.arrayOf(PropTypes.object),
     onChangeActions: PropTypes.func.isRequired,
+    intl: intlShape.isRequired,
   };
 
   constructor(props) {
@@ -54,42 +52,28 @@ class AllAccounts extends React.Component {
     this.onRowClick = this.onRowClick.bind(this);
     this.getLoan = this.getLoan.bind(this);
 
-    const { stripes } = props;
-
     this.sortMap = {
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' })]: f => (f.metadata || {}).createdDate,
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' })]: f => (f.metadata || {}).updatedDate,
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' })]: f => f.feeFineType,
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.amount' })]: f => f.amount,
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' })]: f => f.remaining,
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' })]: f => (f.paymentStatus || {}).name,
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' })]: f => f.feeFineOwner,
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' })]: f => f.title,
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' })]: f => f.barcode,
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' })]: f => f.callNumber,
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' })]: f => f.dueDate,
-      [stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' })]: f => f.returnedDate,
-
+      'metadata.createdDate': f => (f.metadata || {}).createdDate,
+      'metadata.updatedDate': f => (f.metadata || {}).updatedDate,
+      'feeFineType': f => f.feeFineType,
+      'amount': f => f.amount,
+      'remaining': f => f.remaining,
+      'paymentStatus.name': f => (f.paymentStatus || {}).name,
+      'feeFineOwner': f => f.feeFineOwner,
+      'title': f => f.title,
+      'barcode': f => f.barcode,
+      'callNumber': f => f.callNumber,
+      'dueDate': f => f.dueDate,
+      'returnedDate': f => f.returnedDate,
     };
 
     this.state = {
-      checkedAccounts: {},
       allChecked: false,
       sortOrder: [
-        stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' }),
-        stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' }),
-        stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' }),
-        stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.amount' }),
-        stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' }),
-        stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' }),
-        stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' }),
-        stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' }),
-        stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' }),
-        stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' }),
-        stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' }),
-        stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' }),
+        'metadata.createdDate',
+        'metadata.createdDate',
       ],
-      sortDirection: ['asc', 'asc'],
+      sortDirection: ['desc', 'desc'],
     };
   }
 
@@ -104,6 +88,12 @@ class AllAccounts extends React.Component {
     const nextComments = _.get(nextProps.resources, ['comments', 'records'], []);
     const visibleColumns = this.props.visibleColumns;
     const nextVisibleColumns = nextProps.visibleColumns;
+    const selAccounts = this.props.selectedAccounts || [];
+    const nextSelAccounts = nextProps.selectedAccounts || [];
+    if (!_.isEqual(selAccounts, nextSelAccounts)) {
+      const allChecked = nextSelAccounts.length === this.props.accounts.length;
+      this.setState({ allChecked });
+    }
     return visibleColumns !== nextVisibleColumns || comments !== nextComments ||
       props.accounts !== nextProps.accounts ||
       this.state !== nextState;
@@ -116,12 +106,12 @@ class AllAccounts extends React.Component {
   }
 
   onSort(e, meta) {
-    if (!this.sortMap[meta.alias]) return;
+    if (!this.sortMap[meta.name]) return;
 
     let { sortOrder, sortDirection } = this.state;
 
-    if (sortOrder[0] !== meta.alias) {
-      sortOrder = [meta.alias, sortOrder[1]];
+    if (sortOrder[0] !== meta.name) {
+      sortOrder = [meta.name, sortOrder[1]];
       sortDirection = ['asc', sortDirection[1]];
     } else {
       const direction = (sortDirection[0] === 'desc') ? 'asc' : 'desc';
@@ -149,11 +139,14 @@ class AllAccounts extends React.Component {
                 </div>
                 <p data-role="popover">
                   <b>
-Comment
+                    <FormattedMessage id="ui-users.accounts.history.comment" />
+                    {' '}
                     {n}
                     {' '}
-of
+                    <FormattedMessage id="ui-users.accounts.history.of" />
+                    {' '}
                     {n}
+                    :
                   </b>
                   {' '}
                   {myComments[n - 1]}
@@ -173,29 +166,38 @@ of
     return loan;
   }
 
+  formatDateTime(dateTimeStr) {
+    return <FormattedTime
+      value={dateTimeStr}
+      day="numeric"
+      month="numeric"
+      year="numeric"
+    />;
+  }
+
   getAccountsFormatter() {
-    const checkedAccounts = this.state.checkedAccounts;
+    const accounts = this.props.selectedAccounts;
 
     return {
       '  ': f => (
         <input
-          checked={!!(checkedAccounts[f.id])}
+          checked={accounts.find(a => a.id === f.id)}
           onClick={e => this.toggleItem(e, f)}
           type="checkbox"
         />
       ),
-      'date created': f => (f.metadata ? formatDate(f.metadata.createdDate) : '-'),
-      'date updated': f => (f.metadata && f.metadata.createdDate !== f.metadata.updatedDate ? formatDate(f.metadata.updatedDate) : '-'),
-      'fee/fine type': f => (f.feeFineType ? this.comments(f) : '-'),
-      'billed': f => (f.amount ? parseFloat(f.amount).toFixed(2) : '-'),
+      'metadata.createdDate': f => (f.metadata ? <FormattedDate value={f.metadata.createdDate} /> : '-'),
+      'metadata.updatedDate': f => (f.metadata && f.metadata.createdDate !== f.metadata.updatedDate ? <FormattedDate value={f.metadata.updatedDate} /> : '-'),
+      'feeFineType': f => (f.feeFineType ? this.comments(f) : '-'),
+      'amount': f => (f.amount ? parseFloat(f.amount).toFixed(2) : '-'),
       'remaining': f => parseFloat(f.remaining).toFixed(2) || '0.00',
-      'payment status': f => (f.paymentStatus || {}).name || '-',
-      'fee/fine owner': f => (f.feeFineOwner ? f.feeFineOwner : '-'),
-      'instance (item type)': f => (f.title ? `${f.title}(${f.materialType})` : '-'),
+      'paymentStatus.name': f => (f.paymentStatus || {}).name || '-',
+      'feeFineOwner': f => (f.feeFineOwner ? f.feeFineOwner : '-'),
+      'title': f => (f.title ? `${f.title} (${f.materialType})` : '-'),
       'barcode': f => (f.barcode ? f.barcode : '-'),
-      'call number': f => (f.callNumber ? f.callNumber : '-'),
-      'due date': f => (f.dueDate ? formatDateTime(f.dueDate) : '-'),
-      'returned date': f => (f.returnedDate ? formatDateTime(f.returnedDate) : formatDateTime(this.getLoan(f).returnDate) || '-'),
+      'callNumber': f => (f.callNumber ? f.callNumber : '-'),
+      'dueDate': f => (f.dueDate ? this.formatDateTime(f.dueDate) : '-'),
+      'returnedDate': f => (this.getLoan(f).returnDate ? this.formatDateTime(this.getLoan(f).returnDate) : '-'),
       ' ': f => this.renderActions(f),
     };
   }
@@ -203,12 +205,16 @@ of
   toggleItem(e, account) {
     e.stopPropagation();
     const id = account.id;
-    const accounts = this.state.checkedAccounts;
-    const checkedAccounts = (accounts[id])
-      ? _.omit(accounts, id)
-      : { ...accounts, [id]: account };
+    const accounts = this.props.selectedAccounts || [];
+    const checked = {};
+    accounts.forEach(a => {
+      checked[a.id] = a;
+    });
+    const checkedAccounts = (checked[id])
+      ? _.omit(checked, id)
+      : { ...checked, [id]: account };
     const allChecked = _.size(checkedAccounts) === this.props.accounts.length;
-    this.setState({ checkedAccounts, allChecked });
+    this.setState({ allChecked });
 
     const values = Object.values(checkedAccounts) || [];
     let selected = 0;
@@ -276,7 +282,6 @@ of
 
     this.setState(({ allChecked }) => ({
       allChecked: !allChecked,
-      checkedAccounts
     }));
   }
 
@@ -295,6 +300,20 @@ of
     this.props.onClickViewLoanActionsHistory(e, { id: a.loanId });
   }
 
+  pay(a, e) {
+    if (e) e.preventDefault();
+    this.props.onChangeActions({
+      pay: true,
+    }, [a]);
+  }
+
+  cancel(a, e) {
+    if (e) e.preventDefault();
+    this.props.onChangeActions({
+      cancellation: true,
+    }, [a]);
+  }
+
   waive(a, e) {
     if (e) e.preventDefault();
     this.props.onChangeActions({
@@ -311,33 +330,46 @@ of
       error: disabled,
       loan: (a.loanId === '0' || !a.loanId),
     };
+    const buttonDisabled = !this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
+
     return (
       <UncontrolledDropdown
         onSelectItem={this.handleOptionsChange}
       >
-        <Button data-role="toggle" buttonStyle="hover dropdownActive"><strong>•••</strong></Button>
-        <DropdownMenu data-role="menu" overrideStyle={{ padding: '6px 0' }}>
-          <MenuItem>
-            <Button disabled={elipsis.pay} buttonStyle="dropdownItem">Pay</Button>
+        <Button data-role="toggle" buttonStyle="hover dropdownActive">
+          <strong>•••</strong>
+        </Button>
+        <DropdownMenu data-role="menu" overrideStyle={{ padding: '7px 3px' }}>
+          <MenuItem itemMeta={{ a, action: 'pay' }}>
+            <Button disabled={!((elipsis.pay === false) && (buttonDisabled === false))} buttonStyle="dropdownItem">
+              <FormattedMessage id="ui-users.accounts.history.button.pay" />
+            </Button>
           </MenuItem>
           <MenuItem itemMeta={{ a, action: 'waive' }}>
-            <Button disabled={elipsis.waive} buttonStyle="dropdownItem">Waive</Button>
+            <Button disabled={!((elipsis.waive === false) && (buttonDisabled === false))} buttonStyle="dropdownItem">
+              <FormattedMessage id="ui-users.accounts.history.button.waive" />
+            </Button>
           </MenuItem>
           <MenuItem>
-            <Button disabled buttonStyle="dropdownItem">Refund</Button>
+            <Button disabled buttonStyle="dropdownItem">
+              <FormattedMessage id="ui-users.accounts.history.button.refund" />
+            </Button>
           </MenuItem>
           <MenuItem>
-            <Button disabled buttonStyle="dropdownItem">Transfer</Button>
+            <Button disabled buttonStyle="dropdownItem">
+              <FormattedMessage id="ui-users.accounts.history.button.transfer" />
+            </Button>
           </MenuItem>
-          <MenuItem>
-            <Button disabled={elipsis.error} buttonStyle="dropdownItem">Error</Button>
+          <MenuItem itemMeta={{ a, action: 'cancel' }}>
+            <Button disabled={!((elipsis.error === false) && (buttonDisabled === false))} buttonStyle="dropdownItem">
+              <FormattedMessage id="ui-users.accounts.button.error" />
+            </Button>
           </MenuItem>
           <hr />
-          <MenuItem>
-            <Button disabled buttonStyle="dropdownItem">Fee/fine details</Button>
-          </MenuItem>
           <MenuItem itemMeta={{ a, action: 'loanDetails' }}>
-            <Button disabled buttonStyle="dropdownItem">Loan details</Button>
+            <Button disabled={elipsis.loan} buttonStyle="dropdownItem">
+              <FormattedMessage id="ui-users.accounts.history.button.loanDetails" />
+            </Button>
           </MenuItem>
         </DropdownMenu>
       </UncontrolledDropdown>
@@ -347,27 +379,55 @@ of
   render() {
     const { sortOrder, sortDirection, allChecked } = this.state;
     const props = this.props;
+
     const fees = _.orderBy(props.accounts, [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
+    const { intl } = this.props;
+
     const columnMapping = {
       '  ': (<input type="checkbox" checked={allChecked} name="check-all" onChange={this.toggleAll} />),
+      'metadata.createdDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' }),
+      'metadata.updatedDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' }),
+      'feeFineType': intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' }),
+      'amount': intl.formatMessage({ id: 'ui-users.accounts.history.columns.amount' }),
+      'remaining': intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' }),
+      'paymentStatus.name': intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' }),
+      'feeFineOwner': intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' }),
+      'title': intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' }),
+      'barcode': intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' }),
+      'callNumber': intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' }),
+      'dueDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' }),
+      'returnedDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' }),
     };
 
     return (
-      <div>
-        <MultiColumnList
-          id="list-accountshistory"
-          formatter={this.getAccountsFormatter()}
-          columnMapping={columnMapping}
-          columnWidths={{ '  ': 28, 'date created': 110, 'fee/fine type': 200, 'date updated': 110, 'due date': 110, 'returned date': 110 }}
-          visibleColumns={this.props.visibleColumns}
-          fullWidth
-          contentData={fees}
-          onHeaderClick={this.onSort}
-          onRowClick={this.onRowClick}
-          sortOrder={sortOrder[0]}
-          sortDirection={`${sortDirection[0]}ending`}
-        />
-      </div>
+      <MultiColumnList
+        id="list-accountshistory"
+        formatter={this.getAccountsFormatter()}
+        columnMapping={columnMapping}
+        columnWidths={{
+          '  ': 35,
+          'metadata.createdDate': 110,
+          'metadata.updatedDate': 110,
+          'feeFineType': 180,
+          'amount': 110,
+          'remaining': 110,
+          'paymentStatus.name': 110,
+          'feeFineOwner': 110,
+          'title': 250,
+          'barcode': 110,
+          'callNumber': 110,
+          'dueDate': 110,
+          'returnedDate': 110,
+          ' ': 50
+        }}
+        visibleColumns={this.props.visibleColumns}
+        fullWidth
+        contentData={fees}
+        onHeaderClick={this.onSort}
+        onRowClick={this.onRowClick}
+        sortOrder={sortOrder[0]}
+        sortDirection={`${sortDirection[0]}ending`}
+      />
     );
   }
 }

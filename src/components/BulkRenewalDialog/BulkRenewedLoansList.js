@@ -1,26 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import get from 'lodash/get';
+
+import {
+  FormattedMessage,
+  FormattedTime,
+} from 'react-intl';
+
 import {
   Icon,
   MultiColumnList,
-  Popover,
 } from '@folio/stripes/components';
-import { FormattedMessage } from 'react-intl';
 
 const propTypes = {
-  stripes: PropTypes.shape({
-    formatDateTime: PropTypes.func.isRequired,
-    intl: PropTypes.shape({
-      formatMessage: PropTypes.func.isRequired,
-    }),
-  }),
-  failedRenewals: PropTypes.arrayOf(PropTypes.object),
-  successRenewals: PropTypes.arrayOf(PropTypes.object),
-  requestCounts: PropTypes.object,
   height: PropTypes.number,
-  loanPolicies: PropTypes.object,
-  errorMessages: PropTypes.object,
+  failedRenewals: PropTypes.arrayOf(PropTypes.object).isRequired,
+  successRenewals: PropTypes.arrayOf(PropTypes.object).isRequired,
+  requestCounts: PropTypes.object.isRequired,
+  loanPolicies: PropTypes.object.isRequired,
+  errorMessages: PropTypes.object.isRequired,
 };
 
 const defaultProps = {
@@ -28,11 +26,18 @@ const defaultProps = {
 };
 
 const BulkRenewedLoansList = (props) => {
-  const { formatMessage } = props.stripes.intl;
-  const { stripes, failedRenewals, successRenewals } = props;
-  const iconAlignStyle = { display: 'flex', alignItems: 'center' };
-  const pointerStyle = { cursor: 'pointer' };
-  const popoverStyle = { maxWidth: '300px', textAlign: 'justify' };
+  const {
+    failedRenewals,
+    successRenewals,
+    height,
+    errorMessages,
+    requestCounts,
+    loanPolicies,
+  } = props;
+  const iconAlignStyle = {
+    display: 'flex',
+    alignItems: 'center'
+  };
 
   const visibleColumns = [
     'renewalStatus',
@@ -48,35 +53,50 @@ const BulkRenewedLoansList = (props) => {
   return (
     <MultiColumnList
       interactive={false}
-      height={props.height}
-      contentData={[...failedRenewals, ...successRenewals]}
+      height={height}
+      contentData={[
+        ...failedRenewals,
+        ...successRenewals,
+      ]}
       visibleColumns={visibleColumns}
       columnMapping={{
-        renewalStatus: formatMessage({ id: 'ui-users.brd.header.renewalStatus' }),
-        title: formatMessage({ id: 'ui-users.brd.header.title' }),
-        itemStatus: formatMessage({ id: 'ui-users.loans.columns.itemStatus' }),
-        currentDueDate: formatMessage({ id: 'ui-users.loans.columns.dueDate' }),
-        requestQueue: formatMessage({ id: 'ui-users.loans.details.requests' }),
-        barcode: formatMessage({ id: 'ui-users.information.barcode' }),
-        callNumber: formatMessage({ id: 'ui-users.loans.details.callNumber' }),
-        loanPolicy: formatMessage({ id: 'ui-users.loans.details.loanPolicy' }),
+        renewalStatus: <FormattedMessage id="ui-users.brd.header.renewalStatus" />,
+        title: <FormattedMessage id="ui-users.brd.header.title" />,
+        itemStatus: <FormattedMessage id="ui-users.loans.columns.itemStatus" />,
+        currentDueDate: <FormattedMessage id="ui-users.loans.columns.dueDate" />,
+        requestQueue: <FormattedMessage id="ui-users.loans.details.requests" />,
+        barcode: <FormattedMessage id="ui-users.information.barcode" />,
+        callNumber: <FormattedMessage id="ui-users.loans.details.callNumber" />,
+        loanPolicy: <FormattedMessage id="ui-users.loans.details.loanPolicy" />,
       }}
       formatter={{
         renewalStatus: loan => {
           if (failedRenewals.filter(loanObject => loanObject.id === loan.id).length > 0) {
-            return (props.errorMessages) ? (
-              <Popover position="bottom" alignment="start">
-                <span style={{ ...iconAlignStyle, ...pointerStyle }} data-role="target">
-                  <Icon size="medium" icon="validation-error" status="warn" />
+            const errorMessage = get(errorMessages[loan.id], 'props.values.message.props.values.message', '');
+
+            return (errorMessages) ? (
+              <div>
+                <div>
+                  <Icon
+                    size="medium"
+                    icon="exclamation-circle"
+                    status="warn"
+                  />
                   <FormattedMessage id="ui-users.brd.failedRenewal" />
-                </span>
-                <p data-role="popover" style={popoverStyle}>{props.errorMessages[loan.id]}</p>
-              </Popover>
+                </div>
+                <div>
+                  {errorMessage}
+                </div>
+              </div>
             ) : null;
           } else {
             return (
               <span style={iconAlignStyle}>
-                <Icon size="medium" icon="validation-check" status="success" />
+                <Icon
+                  size="medium"
+                  icon="check-circle"
+                  status="success"
+                />
                 <FormattedMessage id="ui-users.brd.successfulRenewal" />
               </span>
             );
@@ -84,11 +104,18 @@ const BulkRenewedLoansList = (props) => {
         },
         title: loan => get(loan, ['item', 'title']),
         itemStatus: loan => get(loan, ['item', 'status', 'name']),
-        currentDueDate: loan => stripes.formatDateTime(get(loan, ['dueDate'])),
-        requestQueue: loan => props.requestCounts[loan.itemId] || 0,
+        currentDueDate: loan => (
+          <FormattedTime
+            value={get(loan, ['dueDate'])}
+            day="numeric"
+            month="numeric"
+            year="numeric"
+          />
+        ),
+        requestQueue: loan => requestCounts[loan.itemId] || 0,
         barcode: loan => get(loan, ['item', 'barcode']),
         callNumber: loan => get(loan, ['item', 'callNumber']),
-        loanPolicy: loan => props.loanPolicies[loan.loanPolicyId],
+        loanPolicy: loan => loanPolicies[loan.loanPolicyId],
       }}
       columnWidths={{
         currentDueDate: 100,

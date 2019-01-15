@@ -1,5 +1,11 @@
 import _ from 'lodash';
-import React from 'react';
+import React, { Component } from 'react';
+import {
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
+
 import { Settings } from '@folio/stripes/smart-components';
 
 import PermissionSets from './permissions/PermissionSets';
@@ -13,80 +19,107 @@ import PaymentSettings from './PaymentSettings';
 import CommentRequiredSettings from './CommentRequiredSettings';
 import RefundReasonsSettings from './RefundReasonsSettings';
 
-const general = [
-  {
-    route: 'perms',
-    label: 'Permission sets',
-    component: PermissionSets,
-    perm: 'ui-users.editpermsets',
-  },
-  {
-    route: 'groups',
-    label: 'Patron groups',
-    component: PatronGroupsSettings,
-    perm: 'ui-users.settings.usergroups',
-  },
-  {
-    route: 'addresstypes',
-    label: 'Address Types',
-    component: AddressTypesSettings,
-    perm: 'ui-users.settings.addresstypes',
-  },
-  {
-    route: 'profilepictures',
-    label: 'Profile pictures',
-    component: ProfilePictureSettings,
-  },
-];
+class UsersSettings extends Component {
+  static propTypes = {
+    intl: intlShape.isRequired,
+  };
 
-const feefines = [
-  {
-    route: 'owners',
-    label: 'Owners',
-    component: OwnerSettings,
-    perm: 'ui-users.settings.owners',
-  },
-  {
-    route: 'feefinestable',
-    label: 'Manual charges',
-    component: FeeFineSettings,
-    perm: 'ui-users.settings.feefines',
-  },
-  {
-    route: 'waivereasons',
-    label: 'Waive reasons',
-    component: WaiveSettings,
-    perm: 'ui-users.settings.waives',
-  },
-  {
-    route: 'payments',
-    label: 'Payment methods',
-    component: PaymentSettings,
-    perm: 'ui-users.settings.payments',
-  },
-  {
-    route: 'refunds',
-    label: 'Refund reasons',
-    component: RefundReasonsSettings,
-    perm: 'ui-users.settings.refunds',
-  },
-  {
-    route: 'comments',
-    label: 'Comment required',
-    perm: 'ui-users.settings.comments',
-    component: CommentRequiredSettings,
-  },
-];
+  // eslint-disable-next-line react/sort-comp
+  render() {
+    return (
+      <Settings
+        {...this.props}
+        sections={this.getSections()}
+        paneTitle={<FormattedMessage id="ui-users.settings.label" />}
+      />
+    );
+  }
 
-const sections = [
-  {
-    label: 'General',
-    pages: _.sortBy(general, ['label']),
-  },
-  {
-    label: 'Fee/fine',
-    pages: _.sortBy(feefines, ['label']),
-  },
-];
+  getSections() {
+    return [
+      {
+        label: <FormattedMessage id="ui-users.settings.general" />,
+        pages: _.sortBy(this.getGeneral(), ['label']),
+      },
+      {
+        label: <FormattedMessage id="ui-users.settings.feefine" />,
+        pages: _.sortBy(this.getFeefines(), ['label']),
+      },
+    ];
+  }
 
-export default props => <Settings {...props} sections={sections} paneTitle="Users" />;
+  getGeneral() {
+    const { formatMessage } = this.props.intl;
+
+    return [
+      {
+        route: 'perms',
+        label: formatMessage({ id: 'ui-users.settings.permissionSet' }),
+        component: PermissionSets,
+        perm: 'ui-users.editpermsets',
+      },
+      {
+        route: 'groups',
+        label: formatMessage({ id: 'ui-users.settings.patronGroups' }),
+        component: PatronGroupsSettings,
+        perm: 'ui-users.settings.usergroups',
+      },
+      {
+        route: 'addresstypes',
+        label: formatMessage({ id: 'ui-users.settings.addressTypes' }),
+        component: AddressTypesSettings,
+        perm: 'ui-users.settings.addresstypes',
+      },
+      {
+        route: 'profilepictures',
+        label: formatMessage({ id: 'ui-users.settings.profilePictures' }),
+        component: ProfilePictureSettings,
+      },
+    ];
+  }
+
+  getFeefines() {
+    const { formatMessage } = this.props.intl;
+
+    return [
+      {
+        route: 'owners',
+        label: formatMessage({ id: 'ui-users.settings.owners' }),
+        component: OwnerSettings,
+        perm: 'ui-users.settings.feefine',
+      },
+      {
+        route: 'feefinestable',
+        label: formatMessage({ id: 'ui-users.settings.manualCharges' }),
+        component: FeeFineSettings,
+        perm: 'ui-users.settings.feefine',
+      },
+      {
+        route: 'waivereasons',
+        label: formatMessage({ id: 'ui-users.settings.waiveReasons' }),
+        component: WaiveSettings,
+        perm: 'ui-users.settings.feefine',
+      },
+      {
+        route: 'payments',
+        label: formatMessage({ id: 'ui-users.settings.paymentMethods' }),
+        component: PaymentSettings,
+        perm: 'ui-users.settings.feefine',
+      },
+      {
+        route: 'refunds',
+        label: formatMessage({ id: 'ui-users.settings.refundReasons' }),
+        component: RefundReasonsSettings,
+        perm: 'ui-users.settings.feefine',
+      },
+      {
+        route: 'comments',
+        label: formatMessage({ id: 'ui-users.settings.commentRequired' }),
+        component: CommentRequiredSettings,
+        perm: 'ui-users.settings.feefine',
+      },
+    ];
+  }
+}
+
+export default injectIntl(UsersSettings);

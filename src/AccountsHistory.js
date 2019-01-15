@@ -1,14 +1,19 @@
 import _ from 'lodash';
 import React from 'react';
+import {
+  FormattedMessage,
+  intlShape,
+  injectIntl,
+} from 'react-intl';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
 import queryString from 'query-string';
+
 import {
   Paneset,
   Pane,
+  PaneHeader,
   PaneMenu,
   IconButton,
-  Icon,
   Button,
   Dropdown,
   DropdownMenu,
@@ -19,6 +24,7 @@ import {
   filterState,
 } from '@folio/stripes/components';
 import { makeQueryFunction } from '@folio/stripes/smart-components';
+import css from './AccountsHistory.css';
 
 import { getFullName } from './util';
 import { Actions } from './components/Accounts/Actions';
@@ -34,45 +40,87 @@ import {
 
 const filterConfig = [
   {
-    label: 'Fee/Fine Owner',
+    label: <FormattedMessage id="ui-users.feefines.ownerLabel" />,
     name: 'owner',
     cql: 'feeFineOwner',
     values: [],
   }, {
-    label: 'Payment Status',
+    label: <FormattedMessage id="ui-users.accounts.history.columns.status" />,
     name: 'status',
     cql: 'paymentStatus.name',
     values: [],
   }, {
-    label: 'Fee/Fine Type',
+    label: <FormattedMessage id="ui-users.details.field.feetype" />,
     name: 'type',
     cql: 'feeFineType',
     values: [],
   }, {
-    label: 'Item Type',
+    label: <FormattedMessage id="ui-users.details.field.type" />,
     name: 'material',
     cql: 'materialType',
     values: [],
   },
 ];
 
-const queryFunction = (findAll, queryTemplate, sortMap, fConfig, failOnCondition, nsParams) => {
+const args = [
+  { name: 'user', value: 'x' },
+];
+
+const queryFunction = (findAll, queryTemplate, sortMap, fConfig, failOnCondition, nsParams, a) => {
   const getCql = makeQueryFunction(findAll, queryTemplate, sortMap, fConfig, failOnCondition, nsParams);
   return (queryParams, pathComponents, resourceValues, logger) => {
     let cql = getCql(queryParams, pathComponents, resourceValues, logger);
-    const { user } = resourceValues;
-    if (cql === undefined) { cql = `userId=${user.id}`; } else { cql = `(${cql}) and (userId=${user.id})`; }
+    const userId = a[0].value;
+    if (cql === undefined) { cql = `userId=${userId}`; } else { cql = `(${cql}) and (userId=${userId})`; }
     return cql;
   };
 };
+
+const controllableColumns = [
+  'metadata.createdDate',
+  'metadata.updatedDate',
+  'feeFineType',
+  'amount',
+  'remaining',
+  'paymentStatus.name',
+  'feeFineOwner',
+  'title',
+  'barcode',
+  'callNumber',
+  'dueDate',
+  'returnedDate',
+];
+
+const possibleColumns = [
+  '  ',
+  'metadata.createdDate',
+  'metadata.updatedDate',
+  'feeFineType',
+  'amount',
+  'remaining',
+  'paymentStatus.name',
+  'feeFineOwner',
+  'title',
+  'barcode',
+  'callNumber',
+  'dueDate',
+  'returnedDate',
+  ' ',
+];
 
 class AccountsHistory extends React.Component {
   static manifest = Object.freeze({
     initializedFilterConfig: { initialValue: false },
     query: { initialValue: {} },
+    comments: {
+      type: 'okapi',
+      records: 'feefineactions',
+      path: 'feefineactions?query=(userId=%{activeRecord.userId} and comments=*)&limit=%{activeRecord.comments}',
+    },
     filter: {
       type: 'okapi',
       records: 'accounts',
+      recordsRequired: '%{activeRecord.records}',
       path: 'accounts?query=userId=%{user.id}&limit=100',
     },
     feefineshistory: {
@@ -90,18 +138,18 @@ class AccountsHistory extends React.Component {
             filterConfig,
             0,
             { query: 'q', filters: 'f' },
+            args,
           ),
         },
         staticFallback: { params: {} },
       },
     },
-    activeRecord: {},
+    activeRecord: { records: 50 },
     user: {},
   });
 
   static propTypes = {
     stripes: PropTypes.shape({
-      intl: PropTypes.object.isRequired,
       connect: PropTypes.func.isRequired,
     }),
     resources: PropTypes.shape({
@@ -127,13 +175,13 @@ class AccountsHistory extends React.Component {
     history: PropTypes.object,
     location: PropTypes.object,
     addRecord: PropTypes.bool,
+    intl: intlShape.isRequired,
   };
 
   constructor(props) {
     super(props);
-    this.controllableColumns = ['date created', 'date updated', 'fee/fine type', 'billed', 'remaining', 'payment status', 'fee/fine owner', 'instance (item type)', 'barcode', 'call number', 'due date', 'returned date'];
 
-    const visibleColumns = this.controllableColumns.map(columnName => ({
+    const visibleColumns = controllableColumns.map(columnName => ({
       title: columnName,
       status: true,
     }));
@@ -161,12 +209,12 @@ class AccountsHistory extends React.Component {
     this.handleOptionsChange = this.handleOptionsChange.bind(this);
     this.onChangeActions = this.onChangeActions.bind(this);
     this.onChangeSelected = this.onChangeSelected.bind(this);
+    this.onChangeSelectedAccounts = this.onChangeSelectedAccounts.bind(this);
     this.connectedOpenAccounts = props.stripes.connect(OpenAccounts);
     this.connectedClosedAccounts = props.stripes.connect(ClosedAccounts);
     this.connectedAllAccounts = props.stripes.connect(AllAccounts);
     this.connectedActions = props.stripes.connect(Actions);
 
-    this.handleRecords = this.handleRecords.bind(this);
     this.accounts = [];
     this.addRecord = 50;
     this.editRecord = 0;
@@ -175,7 +223,6 @@ class AccountsHistory extends React.Component {
     this.handleFilterChange = handleFilterChange.bind(this);
     this.handleFilterClear = handleFilterClear.bind(this);
     this.filterState = filterState.bind(this);
-    this.possibleColumns = ['  ', 'date created', 'date updated', 'fee/fine type', 'billed', 'remaining', 'payment status', 'fee/fine owner', 'instance (item type)', 'barcode', 'call number', 'due date', 'returned date', ' '];
     this.getVisibleColumns = this.getVisibleColumns.bind(this);
     this.renderCheckboxList = this.renderCheckboxList.bind(this);
     this.toggleColumn = this.toggleColumn.bind(this);
@@ -186,26 +233,38 @@ class AccountsHistory extends React.Component {
   }
 
   componentDidMount() {
-    this.props.mutator.activeRecord.update({ records: 30 });
-    this.props.mutator.user.update({ id: this.props.user.id });
+    this.props.mutator.activeRecord.update({ records: 50, comments: 200, userId: this.props.user.id });
+    args[0].value = this.props.user.id;
   }
-
 
   shouldComponentUpdate(nextProps, nextState) {
     const filter = _.get(this.props.resources, ['filter', 'records'], []);
     const nextFilter = _.get(nextProps.resources, ['filter', 'records'], []);
     const accounts = _.get(this.props.resources, ['feefineshistory', 'records'], []);
     const nextAccounts = _.get(nextProps.resources, ['feefineshistory', 'records'], []);
+    const comments = _.get(this.props.resources, ['comments', 'records'], []);
+    const nextComments = _.get(nextProps.resources, ['comments', 'records'], []);
+    if (JSON.stringify(accounts) !== JSON.stringify(nextAccounts)) {
+      let selected = 0;
+      this.state.selectedAccounts.forEach(a => {
+        selected += nextAccounts.find(ac => ac.id === a.id).remaining;
+      });
+      this.setState({ selected });
+    }
+
     if (this.addRecord !== nextProps.num) {
-      this.props.mutator.activeRecord.update({ records: nextProps.num });
+      this.props.mutator.activeRecord.update({ records: nextProps.num, comments: nextProps.num + 150 });
       this.addRecord = nextProps.num;
     }
+
     return this.state !== nextState ||
       filter !== nextFilter ||
-      accounts !== nextAccounts;
+      accounts !== nextAccounts ||
+      comments !== nextComments ||
+      this.props.resources.query !== nextProps.resources.query;
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate() {
     let filterAccounts = _.get(this.props.resources, ['filter', 'records'], []);
     const query = this.props.location.search ? queryString.parse(this.props.location.search) : {};
     if (query.layer === 'open-accounts') {
@@ -221,12 +280,6 @@ class AccountsHistory extends React.Component {
     filterConfig[1].values = paymentStatus.map(s => ({ name: `${s.name}`, cql: s.name }));
     filterConfig[2].values = feeFineTypes.map(f => ({ name: `${f.name}`, cql: f.name }));
     filterConfig[3].values = itemTypes.map(i => ({ name: `${i.name}`, cql: i.name }));
-
-    if (this.editRecord !== 0) {
-      if (this.editRecord === 1) prevProps.mutator.activeRecord.update({ records: 51 });
-      else prevProps.mutator.activeRecord.update({ records: 50 });
-      this.editRecord = 0;
-    }
   }
 
   queryParam = name => {
@@ -250,8 +303,13 @@ class AccountsHistory extends React.Component {
       selected: 0,
       selectedAccounts: [],
       actions: {
+        cancellation: false,
+        pay: false,
+        regular: false,
         regularpayment: false,
         waive: false,
+        waiveModal: false,
+        waiveMany: false,
         refund: false,
         transfer: false,
       },
@@ -259,6 +317,7 @@ class AccountsHistory extends React.Component {
   }
 
   handleEdit = (val) => {
+    this.props.handleAddRecords();
     this.editRecord = val;
   }
 
@@ -273,10 +332,6 @@ class AccountsHistory extends React.Component {
 
   payment() {
     this.onChangeActions({ regular: true }, this.accounts);
-  }
-
-  handleRecords() {
-    this.addRecord = true;
   }
 
   onChangeSearch = (e) => {
@@ -298,6 +353,10 @@ class AccountsHistory extends React.Component {
       selectedAccounts: accounts,
     });
     this.accounts = accounts;
+  }
+
+  onChangeSelectedAccounts(selectedAccounts) {
+    this.setState({ selectedAccounts });
   }
 
   toggleFilterPane = () => {
@@ -330,7 +389,7 @@ class AccountsHistory extends React.Component {
       return map;
     }, {});
 
-    const columnsToDisplay = this.possibleColumns.filter((e) => visibleColumnsMap[e] === undefined || visibleColumnsMap[e] === true);
+    const columnsToDisplay = possibleColumns.filter((e) => visibleColumnsMap[e] === undefined || visibleColumnsMap[e] === true);
     return columnsToDisplay;
   }
 
@@ -353,8 +412,15 @@ class AccountsHistory extends React.Component {
   }
 
   render() {
-    const { user, patronGroup, resources, stripes } = this.props;
-    const query = this.props.location.search ? queryString.parse(this.props.location.search) : {};
+    const {
+      location,
+      user,
+      patronGroup,
+      resources,
+      intl,
+    } = this.props;
+
+    const query = location.search ? queryString.parse(location.search) : {};
 
     let accounts = _.get(resources, ['feefineshistory', 'records'], []);
     if (query.loan) {
@@ -366,31 +432,21 @@ class AccountsHistory extends React.Component {
     if (query.layer === 'open-accounts') badgeCount = open.length;
     else if (query.layer === 'closed-accounts') badgeCount = closed.length;
     const filters = filterState(this.queryParam('f'));
-
-    const closeMenu = (
-      <PaneMenu>
-        <button onClick={this.props.onCancel} type="button">
-          <Row>
-            <Col><Icon icon="left-double-chevron" size="large" /></Col>
-            <Col><span style={{ fontSize: 'x-large' }}>Back</span></Col>
-          </Row>
-        </button>
-      </PaneMenu>
-    );
+    const selectedAccounts = this.state.selectedAccounts.map(a => accounts.find(ac => ac.id === a.id) || {});
 
     const columnMapping = {
-      'date created': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' }),
-      'date updated': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' }),
-      'fee/fine type': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' }),
-      'billed': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.amount' }),
-      'remaining': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' }),
-      'payment status': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' }),
-      'fee/fine owner': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' }),
-      'instance (item type)': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' }),
-      'barcode': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' }),
-      'call number': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' }),
-      'due date': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' }),
-      'returned date': stripes.intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' }),
+      'metadata.createdDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' }),
+      'metadata.updatedDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' }),
+      'feeFineType': intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' }),
+      'amount': intl.formatMessage({ id: 'ui-users.accounts.history.columns.amount' }),
+      'remaining': intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' }),
+      'paymentStatus.name': intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' }),
+      'feeFineOwner': intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' }),
+      'title': intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' }),
+      'barcode': intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' }),
+      'callNumber': intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' }),
+      'dueDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' }),
+      'returnedDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' }),
     };
 
     const firstMenu = (
@@ -403,8 +459,16 @@ class AccountsHistory extends React.Component {
         <Dropdown
           open={this.state.toggleDropdownState}
           onToggle={this.onDropdownClick}
+          style={{ float: 'right', marginLeft: '20px' }}
+          group
+          pullRight
         >
-          <Button data-role="toggle">Select columns</Button>
+          <Button
+            data-role="toggle"
+            bottomMargin0
+          >
+            <FormattedMessage id="ui-users.accounts.history.button.select" />
+          </Button>
           <DropdownMenu data-role="menu">
             <ul>
               {this.renderCheckboxList(columnMapping)}
@@ -416,57 +480,56 @@ class AccountsHistory extends React.Component {
 
     const header = (
       <Row style={{ width: '100%' }}>
-        <Col xs={1}>
+        <Col xs={2}>
           {firstMenu}
         </Col>
-        <Col xsOffset={3} xs={5}>
+        <Col xsOffset={2} xs={5}>
           <SegmentedControl activeId={query.layer} onActivate={this.handleActivate}>
-            <Button id="open-accounts"><FormattedMessage id="ui-users.accounts.open" /></Button>
-            <Button id="closed-accounts"><FormattedMessage id="ui-users.accounts.closed" /></Button>
-            <Button id="all-accounts"><FormattedMessage id="ui-users.accounts.all" /></Button>
+            <Button bottomMargin0 id="open-accounts">
+              <FormattedMessage id="ui-users.accounts.open" />
+            </Button>
+            <Button bottomMargin0 id="closed-accounts">
+              <FormattedMessage id="ui-users.accounts.closed" />
+            </Button>
+            <Button bottomMargin0 id="all-accounts">
+              <FormattedMessage id="ui-users.accounts.all" />
+            </Button>
           </SegmentedControl>
         </Col>
       </Row>
     );
 
-    const selected = this.state.selected || 0;
+    const selected = parseFloat(this.state.selected) || 0;
 
     let balance = 0;
     accounts.forEach((a) => {
       balance += a.remaining;
     });
 
-    const header1 = (
-      <Row style={{ width: '80%' }}>
-        <Col xs={7}>
-          {' '}
-          {closeMenu}
-          {' '}
-        </Col>
-        <Col xs={4}>
-          <Row>
-            <Col>
-              <b>{`Fees/Fines - ${getFullName(user)} (${_.upperFirst(patronGroup.group)})`}</b>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              Outstanding Balance:
-              {' '}
-              {(balance > 0 || balance === '') ? parseFloat(balance).toFixed(2) : '0.00'}
-            </Col>
-          </Row>
-        </Col>
-      </Row>
-    );
+    const outstandingBalance = (user.id === (accounts[0] || {}).userId)
+      ? parseFloat(balance || 0).toFixed(2)
+      : '0.00';
 
     const visibleColumns = this.getVisibleColumns();
+
 
     return (
       <Paneset>
         <Pane
           defaultWidth="100%"
-          header={header1}
+          dismissible
+          padContent={false}
+          onClose={this.props.onCancel}
+          paneTitle={(
+            <FormattedMessage id="ui-users.accounts.title">
+              {(title) => `${title} - ${getFullName(user)} (${_.upperFirst(patronGroup.group)})`}
+            </FormattedMessage>
+          )}
+          paneSub={(
+            <FormattedMessage id="ui-users.accounts.outstandingBalance">
+              {(title) => `${title} ${outstandingBalance}`}
+            </FormattedMessage>
+          )}
         >
           <Paneset>
             <Filters
@@ -481,12 +544,14 @@ class AccountsHistory extends React.Component {
               filters={filters}
               onChangeFilter={(e) => { this.handleFilterChange(e, 'f'); }}
             />
-            <Pane defaultWidth="fill" header={header}>
+            <section className={css.pane}>
+              <PaneHeader header={header} />
               <Menu
+                {...this.props}
                 user={user}
                 showFilters={this.state.showFilters}
                 filters={filters}
-                balance={balance}
+                balance={(user.id === (accounts[0] || {}).userId) ? balance : 0}
                 selected={selected}
                 actions={this.state.actions}
                 query={query}
@@ -495,8 +560,7 @@ class AccountsHistory extends React.Component {
                 handleOptionsChange={this.handleOptionsChange}
                 onClickViewChargeFeeFine={this.props.onClickViewChargeFeeFine}
               />
-
-              <Row>
+              <div className={css.paneContent}>
                 {(query.layer === 'open-accounts') ?
                   (<this.connectedOpenAccounts
                     {...this.props}
@@ -520,22 +584,23 @@ class AccountsHistory extends React.Component {
                     {...this.props}
                     accounts={(user.id === (accounts[0] || {}).userId) ? accounts : []}
                     visibleColumns={visibleColumns}
+                    selectedAccounts={selectedAccounts}
                     onChangeSelected={this.onChangeSelected}
                     onChangeActions={this.onChangeActions}
                   />) : ''
                 }
-              </Row>
+              </div>
               <this.connectedActions
                 actions={this.state.actions}
                 onChangeActions={this.onChangeActions}
                 user={user}
-                stripes={stripes}
                 accounts={this.accounts}
-                selectedAccounts={this.state.selectedAccounts}
+                selectedAccounts={selectedAccounts}
+                onChangeSelectedAccounts={this.onChangeSelectedAccounts}
                 balance={balance}
                 handleEdit={this.handleEdit}
               />
-            </Pane>
+            </section>
           </Paneset>
         </Pane>
       </Paneset>
@@ -543,4 +608,4 @@ class AccountsHistory extends React.Component {
   }
 }
 
-export default AccountsHistory;
+export default injectIntl(AccountsHistory);

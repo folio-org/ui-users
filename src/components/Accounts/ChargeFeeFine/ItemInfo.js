@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import {
   Button,
@@ -7,13 +8,9 @@ import {
   Col,
   TextField,
 } from '@folio/stripes/components';
-import { Link } from 'react-router-dom';
 
 class ItemInfo extends React.Component {
   static propTypes = {
-    stripes: PropTypes.shape({
-      intl: PropTypes.object,
-    }),
     onClickSelectItem: PropTypes.func,
     item: PropTypes.object,
     editable: PropTypes.bool,
@@ -37,23 +34,40 @@ class ItemInfo extends React.Component {
   }
 
   render() {
-    const item = this.props.item || {};
-    const location = item.location;
-    const callnumber = item.callNumber;
-    const status = item.itemStatus;
-    const instance = item.instance;
-    const barcode = item.barcode;
-    const id = item.id;
+    const {
+      location,
+      callNumber,
+      itemStatus,
+      instance,
+      barcode,
+      id,
+    } = this.props.item;
 
     return (
       <div>
-        <h4 className="marginTopHalf"><FormattedMessage id="ui-users.charge.item.title" /></h4>
+        <h4 className="marginTopHalf">
+          <FormattedMessage id="ui-users.charge.item.title" />
+        </h4>
         <Row>
           <Col xs={6} sm={5} md={4} lg={3}>
-            <TextField placeholder={this.props.stripes.intl.formatMessage({ id: 'ui-users.charge.item.placeholder' })} onChange={this.onChangeSelectItem} />
+            <FormattedMessage id="ui-users.charge.item.placeholder">
+              {placeholder => (
+                <TextField
+                  placeholder={placeholder}
+                  disabled={!this.props.editable}
+                  onChange={this.onChangeSelectItem}
+                />
+              )}
+            </FormattedMessage>
           </Col>
           <Col xs={2}>
-            <Button buttonStyle="primary" onClick={this.onClickSelectItem} disabled={!this.props.editable}><FormattedMessage id="ui-users.charge.item.button" /></Button>
+            <Button
+              buttonStyle="primary"
+              onClick={this.onClickSelectItem}
+              disabled={!this.props.editable}
+            >
+              <FormattedMessage id="ui-users.charge.item.button" />
+            </Button>
           </Col>
         </Row>
         <Row>
@@ -83,11 +97,11 @@ class ItemInfo extends React.Component {
             <Row>
               <Col xs={4}>
                 <Row><Col xs={12}><FormattedMessage id="ui-users.charge.item.status" /></Col></Row>
-                <Row><Col xs={12}><b>{status}</b></Col></Row>
+                <Row><Col xs={12}><b>{itemStatus}</b></Col></Row>
               </Col>
               <Col xs={4}>
                 <Row><Col xs={12}><FormattedMessage id="ui-users.charge.item.callNumber" /></Col></Row>
-                <Row><Col xs={12}><b>{callnumber}</b></Col></Row>
+                <Row><Col xs={12}><b>{callNumber}</b></Col></Row>
               </Col>
               <Col xs={4}>
                 <Row><Col xs={12}><FormattedMessage id="ui-users.charge.item.location" /></Col></Row>

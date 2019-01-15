@@ -1,9 +1,17 @@
-import { cloneDeep, get, omit, differenceBy, find } from 'lodash';
+import moment from 'moment';
+import { cloneDeep, get, omit, differenceBy, find, isArray } from 'lodash';
 import React from 'react';
+import { compose } from 'redux';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 import queryString from 'query-string';
-import { TitleManager } from '@folio/stripes/core';
 import {
+  IfInterface,
+  IfPermission,
+  TitleManager,
+} from '@folio/stripes/core';
+import {
+  Button,
   Pane,
   PaneMenu,
   IconButton,
@@ -11,10 +19,10 @@ import {
   ExpandAllButton,
   Row,
   Col,
-  IfPermission,
-  IfInterface,
   Layer,
-  Headline
+  Headline,
+  AccordionSet,
+  expandAllFunction,
 } from '@folio/stripes/components';
 import { withTags } from '@folio/stripes/smart-components';
 
@@ -25,19 +33,22 @@ import LoanActionsHistory from './LoanActionsHistory';
 import { ChargeFeeFine } from './components/Accounts';
 import AccountsHistory from './AccountsHistory';
 import AccountActionsHistory from './AccountActionsHistory';
-
+import { PatronBlockLayer, PatronBlockMessage } from './components/PatronBlock';
 import { toListAddresses, toUserAddresses } from './converters/address';
 import { getFullName, eachPromise } from './util';
 import withProxy from './withProxy';
 import withServicePoints from './withServicePoints';
+import { HasCommand } from './components/Commander';
 
 import {
   UserInfo,
   ExtendedInfo,
   ContactInfo,
   ProxyPermissions,
+  PatronBlock,
   UserPermissions,
   UserLoans,
+  UserRequests,
   UserAccounts,
   UserServicePoints,
 } from './components/ViewSections';
@@ -53,6 +64,12 @@ class ViewUser extends React.Component {
         const { path } = action.meta;
         return refresh || path.match(/link/);
       },
+    },
+    hasPatronBlocks: {
+      type: 'okapi',
+      records: 'manualblocks',
+      path: 'manualblocks?query=(userId=:{id})&limit=100',
+      permissionsRequired: 'manualblocks.collection.get',
     },
     loansHistory: {
       type: 'okapi',
@@ -103,7 +120,6 @@ class ViewUser extends React.Component {
       logger: PropTypes.shape({
         log: PropTypes.func.isRequired,
       }).isRequired,
-      intl: PropTypes.object.isRequired,
     }).isRequired,
     paneWidth: PropTypes.string.isRequired,
     resources: PropTypes.shape({
@@ -167,6 +183,7 @@ class ViewUser extends React.Component {
       viewOpenLoansMode: true,
       selectedLoan: {},
       selectedAccount: {},
+      selectedPatronBlock: {},
       addRecord: false,
       lastUpdate: null,
       sections: {
@@ -174,7 +191,9 @@ class ViewUser extends React.Component {
         extendedInfoSection: false,
         contactInfoSection: false,
         proxySection: false,
+        patronBlocksSection: false,
         loansSection: false,
+        requestsSection: false,
         accountsSection: false,
         permissionsSection: false,
         servicePointsSection: false,
@@ -182,7 +201,9 @@ class ViewUser extends React.Component {
     };
 
     this.connectedUserLoans = props.stripes.connect(UserLoans);
+    this.connectedUserRequests = props.stripes.connect(UserRequests);
     this.connectedUserAccounts = props.stripes.connect(UserAccounts);
+    this.connectedPatronBlock = props.stripes.connect(PatronBlock);
     this.connectedLoansHistory = props.stripes.connect(LoansHistory);
     this.connectedLoanActionsHistory = props.stripes.connect(LoanActionsHistory);
     this.connectedUserInfo = props.stripes.connect(UserInfo);
@@ -191,10 +212,14 @@ class ViewUser extends React.Component {
     this.onClickViewOpenLoans = this.onClickViewOpenLoans.bind(this);
     this.onClickViewClosedLoans = this.onClickViewClosedLoans.bind(this);
     this.onClickViewLoanActionsHistory = this.onClickViewLoanActionsHistory.bind(this);
+    this.buildRecords = this.buildRecords.bind(this);
     this.onClickCloseLoanActionsHistory = this.onClickCloseLoanActionsHistory.bind(this);
     this.onAddressesUpdate = this.onAddressesUpdate.bind(this);
     this.handleSectionToggle = this.handleSectionToggle.bind(this);
     this.handleExpandAll = this.handleExpandAll.bind(this);
+    this.collapseAllSections = this.collapseAllSections.bind(this);
+    this.expandAllSections = this.expandAllSections.bind(this);
+    this.toggleAllSections = this.toggleAllSections.bind(this);
 
     this.connectedCharge = props.stripes.connect(ChargeFeeFine);
     this.onCloseChargeFeeFine = this.onCloseChargeFeeFine.bind(this);
@@ -208,6 +233,27 @@ class ViewUser extends React.Component {
     this.onClickCloseAccountsHistory = this.onClickCloseAccountsHistory.bind(this);
     this.onClickViewAccountActionsHistory = this.onClickViewAccountActionsHistory.bind(this);
     this.onClickCloseAccountActionsHistory = this.onClickCloseAccountActionsHistory.bind(this);
+    this.connectedPatronBlockLayer = props.stripes.connect(PatronBlockLayer);
+    this.onClickViewPatronBlock = this.onClickViewPatronBlock.bind(this);
+    this.onClickClosePatronBlock = this.onClickClosePatronBlock.bind(this);
+    this.showCallout = null;
+
+    this.editButton = React.createRef();
+
+    this.keyboardCommands = [
+      {
+        name: 'edit',
+        handler: this.goToEdit,
+      },
+      {
+        name: 'collapseAllSections',
+        handler: this.collapseAllSections,
+      },
+      {
+        name: 'expandAllSections',
+        handler: this.expandAllSections,
+      },
+    ];
   }
 
   static getDerivedStateFromProps(nextProps) {
@@ -253,6 +299,26 @@ class ViewUser extends React.Component {
     this.props.mutator.query.update({ layer: 'closed-loans' });
     this.setState({
       viewOpenLoansMode: false,
+    });
+  }
+
+  buildRecords(records) {
+    return records.map((record) => {
+      const {
+        item,
+        item: { contributors },
+      } = record;
+
+      return isArray(contributors) ?
+        {
+          ...record,
+          item: {
+            ...item,
+            contributors: contributors
+              .map((currentContributor) => currentContributor.name)
+              .join('; ')
+          }
+        } : record;
     });
   }
 
@@ -320,22 +386,46 @@ class ViewUser extends React.Component {
 
   onClickViewChargeFeeFine(e, selectedLoan) {
     if (e) e.preventDefault();
-    const query = this.props.location.search ? queryString.parse(this.props.location.search) : {};
+    const { layer } = this.props.resources.query;
     this.setState({
-      prevLayer: query.layer,
-    });
-    this.props.mutator.query.update({ layer: 'charge' });
-    this.setState({
+      prevLayer: (layer !== 'charge') ? layer : null,
       selectedLoan,
     });
+    this.props.mutator.query.update({ layer: 'charge' });
   }
 
   onCloseChargeFeeFine(e) {
     if (e) e.preventDefault();
     const layer = this.state.prevLayer;
-    this.props.mutator.query.update({ layer });
+
     this.setState({
       selectedLoan: {},
+    });
+
+    this.props.mutator.query.update({ layer: layer || null });
+  }
+
+  onClickViewPatronBlock(e, mode, selectedPatronBlock) {
+    if (e) e.preventDefault();
+    const layer = (mode === 'add') ? 'add-block' : 'edit-block';
+    if (mode === 'add') {
+      this.setState({
+        selectedPatronBlock,
+      });
+      this.props.mutator.query.update({ layer });
+    } else {
+      this.setState({
+        selectedPatronBlock,
+      });
+      this.props.mutator.query.update({ layer, block: selectedPatronBlock.id });
+    }
+  }
+
+  onClickClosePatronBlock(e) {
+    if (e) e.preventDefault();
+    this.props.mutator.query.update({ layer: null, block: null });
+    this.setState({
+      selectedPatronBlock: {},
     });
   }
 
@@ -346,10 +436,15 @@ class ViewUser extends React.Component {
     });
   }
 
+  checkScope = () => {
+    return document.getElementById('ModuleContainer').contains(document.activeElement);
+  }
+
   getUser() {
     const { resources, match: { params: { id } } } = this.props;
     const selUser = (resources.selUser || {}).records || [];
-    if (!selUser || selUser.length === 0 || !id) return null;
+
+    if (selUser.length === 0 || !id) return null;
     // Logging below shows this DOES sometimes find the wrong record. But why?
     // console.log(`getUser: found ${selUser.length} users, id '${selUser[0].id}' ${selUser[0].id === id ? '==' : '!='} '${id}'`);
     return selUser.find(u => u.id === id);
@@ -406,6 +501,25 @@ class ViewUser extends React.Component {
     });
   }
 
+  toggleAllSections(expand) {
+    this.setState((curState) => {
+      const newSections = expandAllFunction(curState.sections, expand);
+      return {
+        sections: newSections
+      };
+    });
+  }
+
+  expandAllSections(e) {
+    e.preventDefault();
+    this.toggleAllSections(true);
+  }
+
+  collapseAllSections(e) {
+    e.preventDefault();
+    this.toggleAllSections(false);
+  }
+
   update(user) {
     const addressTypes = (this.props.parentResources.addressTypes || {}).records || [];
 
@@ -429,6 +543,9 @@ class ViewUser extends React.Component {
     }
 
     const data = omit(user, ['creds', 'proxies', 'sponsors', 'permissions', 'servicePoints', 'preferredServicePoint']);
+    const today = moment().endOf('day');
+
+    data.active = (moment(user.expirationDate).endOf('day').isSameOrAfter(today));
 
     this.props.mutator.selUser.PUT(data).then(() => {
       this.setState({
@@ -447,245 +564,535 @@ class ViewUser extends React.Component {
     eachPromise(removedPerms, mutator.DELETE);
   }
 
-  render() {
-    const { resources, stripes, parentResources, tagsEnabled } = this.props;
+  goToEdit = () => {
+    this.props.onEdit();
+  }
 
-    const addressTypes = (parentResources.addressTypes || {}).records || [];
-    const query = resources.query;
-    const user = this.getUser();
-    const tags = ((user && user.tags) || {}).tagList || [];
+  // focus management when edit layer closes (refocus edit button)
+  afterCloseEdit = () => {
+    if (this.editButton.current) {
+      this.editButton.current.focus();
+    }
+  }
+
+  isLayerOpen = value => {
+    const { layer } = this.props.resources.query;
+    return layer === value;
+  };
+
+  getPatronGroup(user) {
+    const { resources } = this.props;
     const patronGroups = (resources.patronGroups || {}).records || [];
+    const patronGroupId = get(user, ['patronGroup'], '');
+    return patronGroups.find(g => g.id === patronGroupId) || { group: '' };
+  }
+
+  renderLayer(user) {
+    const {
+      resources,
+      stripes,
+      parentResources,
+      parentMutator,
+      mutator,
+      location,
+      history,
+      okapi: { currentUser },
+      onCloseEdit,
+    } = this.props;
+
+    const query = queryString.parse(location.search || '');
     const permissions = (resources.permissions || {}).records || [];
-    const settings = (resources.settings || {}).records || [];
     const loans = (resources.loansHistory || {}).records || [];
     const sponsors = this.props.getSponsors();
     const proxies = this.props.getProxies();
     const servicePoints = this.props.getServicePoints();
     const preferredServicePoint = this.props.getPreferredServicePoint();
-    const formatMsg = stripes.intl.formatMessage;
-    const detailMenu =
-    (
-      <PaneMenu>
-        {
-          tagsEnabled && <IconButton
-            icon="tag"
-            title={formatMsg({ id: 'ui-users.showTags' })}
-            id="clickable-show-tags"
+    const addressTypes = (parentResources.addressTypes || {}).records || [];
+    const addresses = toListAddresses(get(user, ['personal', 'addresses'], []), addressTypes);
 
-            onClick={this.props.tagsToggle}
-            badgeCount={tags.length}
-            aria-label={formatMsg({ id: 'ui-users.showTags' })}
-          />
-        }
-        <IfPermission perm="users.item.put">
-          <IconButton
-            icon="edit"
-            id="clickable-edituser"
-            style={{ visibility: !user ? 'hidden' : 'visible' }}
-            onClick={this.props.onEdit}
-            href={this.props.editLink}
-            aria-label={formatMsg({ id: 'ui-users.crud.editUser' })}
-          />
-        </IfPermission>
-      </PaneMenu>
-    );
+    const patronGroup = this.getPatronGroup(user);
+    const userFormData = this.getUserFormData(user, addresses, sponsors, proxies, permissions, servicePoints, preferredServicePoint);
+    const patronBlocks = get(resources, ['hasPatronBlocks', 'records'], []);
 
-    if (!user) {
+
+    if (this.isLayerOpen('add-block') || this.isLayerOpen('edit-block')) {
       return (
-        <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle={formatMsg({ id: 'ui-users.information.userDetails' })} lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
-          <div style={{ paddingTop: '1rem' }}><Icon icon="spinner-ellipsis" width="100px" /></div>
-        </Pane>
+        <FormattedMessage id={query.layer === 'add-block' ? 'ui-users.blocks.layer.add' : 'ui-users.blocks.layer.edit'}>
+          {contentLabel => (
+            <Layer isOpen contentLabel={contentLabel}>
+              <this.connectedPatronBlockLayer
+                {...this.props}
+                query={query}
+                user={user}
+                selectedPatronBlock={this.state.selectedPatronBlock}
+                handleAddRecords={this.handleAddRecords}
+                onCancel={this.onClickClosePatronBlock}
+              />
+            </Layer>
+          )}
+        </FormattedMessage>
       );
     }
 
-    const patronGroupId = get(user, ['patronGroup'], '');
-    const patronGroup = patronGroups.find(g => g.id === patronGroupId) || { group: '' };
-    const addresses = toListAddresses(get(user, ['personal', 'addresses'], []), addressTypes);
-    const userFormData = this.getUserFormData(user, addresses, sponsors, proxies, permissions, servicePoints, preferredServicePoint);
+    if (this.isLayerOpen('open-accounts') || this.isLayerOpen('closed-accounts') || this.isLayerOpen('all-accounts')) {
+      return (
+        <FormattedMessage id="ui-users.accounts.title">
+          {contentLabel => (
+            <Layer isOpen contentLabel={contentLabel}>
+              <this.connectedAccountsHistory
+                loans={loans}
+                num={(this.state.addRecord ? 51 : 50)}
+                onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
+                user={user}
+                parentMutator={mutator}
+                patronGroup={patronGroup}
+                stripes={stripes}
+                history={history}
+                addRecord={this.state.addRecord}
+                handleAddRecords={this.handleAddRecords}
+                location={location}
+                onCancel={this.onClickCloseAccountsHistory}
+                onClickViewChargeFeeFine={this.onClickViewChargeFeeFine}
+                onClickViewAccountActionsHistory={this.onClickViewAccountActionsHistory}
+                onClickCloseAccountActionsHistory={this.onClickCloseAccountActionsHistory}
+              />
+            </Layer>
+          )}
+        </FormattedMessage>
+      );
+    }
 
-    const loansHistory = (<this.connectedLoansHistory
-      user={user}
-      loansHistory={loans}
-      patronGroup={patronGroup}
-      stripes={stripes}
-      history={this.props.history}
-      onCancel={this.onClickCloseLoansHistory}
-      onClickViewOpenLoans={this.onClickViewOpenLoans}
-      onClickViewClosedLoans={this.onClickViewClosedLoans}
-      onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
-      onClickViewChargeFeeFine={this.onClickViewChargeFeeFine}
-      onClickViewOpenAccounts={this.onClickViewOpenAccounts}
-      onClickViewAccountActionsHistory={this.onClickViewAccountActionsHistory}
-      onClickViewClosedAccounts={this.onClickViewClosedAccounts}
-      onClickViewAllAccounts={this.onClickViewAllAccounts}
-      openLoans={query.layer === 'open-loans'}
-    />);
+    if (this.isLayerOpen('charge')) {
+      return (
+        <FormattedMessage id="ui-users.chargeFeefine">
+          {contentLabel => (
+            <Layer isOpen contentLabel={contentLabel}>
+              <this.connectedCharge
+                servicePoints={currentUser.servicePoints}
+                preferredServicePoint={currentUser.curServicePoint}
+                stripes={stripes}
+                onCloseChargeFeeFine={this.onCloseChargeFeeFine}
+                user={user}
+                currentUser={currentUser}
+                loan={{ item: {} }}
+                selectedLoan={this.state.selectedLoan}
+                handleAddRecords={this.handleAddRecords}
+              />
+            </Layer>
+          )}
+        </FormattedMessage>
+      );
+    }
 
-    const loanDetails = (
-      <this.connectedLoanActionsHistory
-        user={user}
-        loan={this.state.selectedLoan}
-        loanid={query.loan}
-        patronGroup={patronGroup}
-        stripes={stripes}
-        onCancel={this.onClickCloseLoanActionsHistory}
-        // when navigating away to another user, clear all loan-related state
-        onClickUser={() => { this.onClickCloseLoanActionsHistory(); this.onClickCloseLoansHistory(); }}
-        onClickViewOpenAccounts={this.onClickViewOpenAccounts}
-        onClickViewAccountActionsHistory={this.onClickViewAccountActionsHistory}
-        onClickViewClosedAccounts={this.onClickViewClosedAccounts}
-        onClickViewAllAccounts={this.onClickViewAllAccounts}
-      />);
+    if (this.isLayerOpen('account')) {
+      return (
+        <FormattedMessage id="ui-users.accountActionHistory">
+          {contentLabel => (
+            <Layer
+              isOpen={this.isLayerOpen('account')}
+              contentLabel={contentLabel}
+            >
+              <this.connectedAccountActionsHistory
+                user={user}
+                patronGroup={patronGroup}
+                account={this.state.selectedAccount}
+                accountid={this.state.selectedAccount.id}
+                history={history}
+                onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
+                num={(this.state.addRecord ? 2 : 1)}
+                handleAddRecords={this.handleAddRecords}
+                stripes={stripes}
+                onCancel={this.onClickCloseAccountActionsHistory}
+                // when navigating away to another user, clear all loan-related state
+                onClickUser={() => { this.onClickCloseAccountActionsHistory(); this.onClickCloseAccountsHistory(); }}
+              />
+            </Layer>
+          )}
+        </FormattedMessage>
+      );
+    }
+
+    if (this.isLayerOpen('open-loans') || this.isLayerOpen('closed-loans')) {
+      return (
+        <IfPermission perm="ui-users.loans.all">
+          <FormattedMessage id="ui-users.loans.title">
+            {contentLabel => (
+              <Layer
+                isOpen
+                contentLabel={contentLabel}
+              >
+                <this.connectedLoansHistory
+                  buildRecords={this.buildRecords}
+                  user={user}
+                  loansHistory={loans}
+                  patronGroup={patronGroup}
+                  patronBlocks={patronBlocks}
+                  stripes={stripes}
+                  history={history}
+                  onCancel={this.onClickCloseLoansHistory}
+                  onClickViewOpenLoans={this.onClickViewOpenLoans}
+                  onClickViewClosedLoans={this.onClickViewClosedLoans}
+                  onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
+                  onClickViewChargeFeeFine={this.onClickViewChargeFeeFine}
+                  onClickViewOpenAccounts={this.onClickViewOpenAccounts}
+                  onClickViewAccountActionsHistory={this.onClickViewAccountActionsHistory}
+                  onClickViewClosedAccounts={this.onClickViewClosedAccounts}
+                  onClickViewAllAccounts={this.onClickViewAllAccounts}
+                  openLoans={query.layer === 'open-loans'}
+                />
+              </Layer>
+            )}
+          </FormattedMessage>
+        </IfPermission>
+      );
+    }
+
+    if (this.isLayerOpen('loan')) {
+      return (
+        <IfPermission perm="ui-users.loans.all">
+          <FormattedMessage id="ui-users.loanActionsHistory">
+            {contentLabel => (
+              <Layer
+                isOpen={this.isLayerOpen('loan')}
+                contentLabel={contentLabel}
+              >
+                <this.connectedLoanActionsHistory
+                  user={user}
+                  loan={this.state.selectedLoan}
+                  loanid={query.loan}
+                  patronBlocks={patronBlocks}
+                  patronGroup={patronGroup}
+                  stripes={stripes}
+                  onCancel={this.onClickCloseLoanActionsHistory}
+                  // when navigating away to another user, clear all loan-related state
+                  onClickUser={() => { this.onClickCloseLoanActionsHistory(); this.onClickCloseLoansHistory(); }}
+                  onClickViewOpenAccounts={this.onClickViewOpenAccounts}
+                  onClickViewAccountActionsHistory={this.onClickViewAccountActionsHistory}
+                  onClickViewClosedAccounts={this.onClickViewClosedAccounts}
+                  onClickViewAllAccounts={this.onClickViewAllAccounts}
+                />
+              </Layer>
+            )}
+          </FormattedMessage>
+        </IfPermission>
+      );
+    }
+
+    if (this.isLayerOpen('edit')) {
+      return (
+        <FormattedMessage id="ui-users.editUserDialog">
+          {contentLabel => (
+            <Layer
+              isOpen={this.isLayerOpen('edit')}
+              contentLabel={contentLabel}
+              afterClose={this.afterCloseEdit}
+            >
+              <UserForm
+                stripes={stripes}
+                initialValues={userFormData}
+                onSubmit={record => this.update(record)}
+                onCancel={onCloseEdit}
+                parentResources={{
+                  ...resources,
+                  ...parentResources,
+                }}
+                parentMutator={parentMutator}
+              />
+            </Layer>
+          )}
+        </FormattedMessage>
+      );
+    }
+
+    return null;
+  }
+
+  renderDetailMenu(user) {
+    const {
+      tagsEnabled,
+      tagsToggle,
+      onEdit,
+      editLink
+    } = this.props;
+
+    const tags = ((user && user.tags) || {}).tagList || [];
 
     return (
-      <Pane id="pane-userdetails" defaultWidth={this.props.paneWidth} paneTitle={getFullName(user)} lastMenu={detailMenu} dismissible onClose={this.props.onClose} appIcon={{ app: 'users' }}>
+      <PaneMenu>
+        {
+          tagsEnabled &&
+          <FormattedMessage id="ui-users.showTags">
+            {ariaLabel => (
+              <IconButton
+                icon="tag"
+                id="clickable-show-tags"
+                onClick={tagsToggle}
+                badgeCount={tags.length}
+                ariaLabel={ariaLabel}
+              />
+            )}
+          </FormattedMessage>
+        }
+        <IfPermission perm="users.item.put">
+          <FormattedMessage id="ui-users.crud.editUser">
+            {ariaLabel => (
+              <IconButton
+                icon="edit"
+                id="clickable-edituser"
+                style={{ visibility: !user ? 'hidden' : 'visible' }}
+                onClick={onEdit}
+                href={editLink}
+                ref={this.editButton}
+                ariaLabel={ariaLabel}
+              />
+            )}
+          </FormattedMessage>
+        </IfPermission>
+      </PaneMenu>
+    );
+  }
+
+  renderSpinner() {
+    const { paneWidth, onClose } = this.props;
+    const detailMenu = this.renderDetailMenu();
+
+    return (
+      <Pane
+        id="pane-userdetails"
+        defaultWidth={paneWidth}
+        paneTitle={<FormattedMessage id="ui-users.information.userDetails" />}
+        lastMenu={detailMenu}
+        dismissible
+        onClose={onClose}
+      >
+        <div style={{ paddingTop: '1rem' }}>
+          <Icon icon="spinner-ellipsis" width="100px" />
+        </div>
+      </Pane>
+    );
+  }
+
+  getActionMenu = ({ onToggle }) => {
+    const { onEdit } = this.props;
+    const handleClick = () => {
+      onEdit();
+      onToggle();
+    };
+
+    return (
+      <Button
+        data-test-user-instance-edit-action
+        buttonStyle="dropdownItem"
+        onClick={handleClick}
+      >
+        <Icon icon="edit">
+          <FormattedMessage id="ui-users.edit" />
+        </Icon>
+      </Button>
+    );
+  }
+
+  renderUser(user) {
+    const {
+      resources,
+      stripes,
+      parentResources,
+      onClose,
+      paneWidth,
+    } = this.props;
+
+    const addressTypes = (parentResources.addressTypes || {}).records || [];
+    const addresses = toListAddresses(get(user, ['personal', 'addresses'], []), addressTypes);
+    const permissions = (resources.permissions || {}).records || [];
+    const settings = (resources.settings || {}).records || [];
+    const sponsors = this.props.getSponsors();
+    const proxies = this.props.getProxies();
+    const servicePoints = this.props.getServicePoints();
+    const preferredServicePoint = this.props.getPreferredServicePoint();
+    const hasPatronBlocks = (get(resources, ['hasPatronBlocks', 'isPending'], true)) ? -1 : 1;
+    const totalPatronBlocks = get(resources, ['hasPatronBlocks', 'other', 'totalRecords'], 0);
+    const patronBlocks = get(resources, ['hasPatronBlocks', 'records'], []);
+    const patronGroup = this.getPatronGroup(user);
+    const detailMenu = this.renderDetailMenu(user);
+
+    return (
+      <Pane
+        data-test-instance-details
+        id="pane-userdetails"
+        defaultWidth={paneWidth}
+        paneTitle={(
+          <span data-test-header-title>
+            {getFullName(user)}
+          </span>
+        )}
+        lastMenu={detailMenu}
+        dismissible
+        onClose={onClose}
+        appIcon={{ app: 'users' }}
+        actionMenu={this.getActionMenu}
+      >
         <TitleManager record={getFullName(user)} />
-
-        <Headline size="xx-large" tag="h2">{getFullName(user)}</Headline>
-
-        <Row end="xs"><Col xs><ExpandAllButton accordionStatus={this.state.sections} onToggle={this.handleExpandAll} /></Col></Row>
-
-        <this.connectedUserInfo accordionId="userInformationSection" user={user} patronGroup={patronGroup} settings={settings} stripes={stripes} expanded={this.state.sections.userInformationSection} onToggle={this.handleSectionToggle} />
-        <ExtendedInfo accordionId="extendedInfoSection" user={user} expanded={this.state.sections.extendedInfoSection} onToggle={this.handleSectionToggle} />
-        <ContactInfo accordionId="contactInfoSection" stripes={stripes} user={user} addresses={addresses} addressTypes={this.addressTypes} expanded={this.state.sections.contactInfoSection} onToggle={this.handleSectionToggle} />
-        <IfPermission perm="proxiesfor.collection.get">
-          <ProxyPermissions
+        <Headline
+          size="xx-large"
+          tag="h2"
+        >
+          {getFullName(user)}
+        </Headline>
+        <Row>
+          <Col xs={10}>
+            {(hasPatronBlocks === 1 && totalPatronBlocks > 0)
+              ? <PatronBlockMessage />
+              : ''}
+          </Col>
+          <Col xs={2}>
+            <ExpandAllButton
+              accordionStatus={this.state.sections}
+              onToggle={this.handleExpandAll}
+            />
+          </Col>
+        </Row>
+        <AccordionSet>
+          <this.connectedUserInfo
+            accordionId="userInformationSection"
             user={user}
-            accordionId="proxySection"
+            patronGroup={patronGroup}
+            settings={settings}
+            stripes={stripes}
+            expanded={this.state.sections.userInformationSection}
             onToggle={this.handleSectionToggle}
-            proxies={proxies}
-            sponsors={sponsors}
-            expanded={this.state.sections.proxySection}
-            {...this.props}
           />
-        </IfPermission>
-
-        <IfPermission perm="accounts.collection.get">
-          <this.connectedUserAccounts
-            onClickViewChargeFeeFine={this.onClickViewChargeFeeFine}
-            expanded={this.state.sections.accountsSection}
+          <IfPermission perm="manualblocks.collection.get">
+            <this.connectedPatronBlock
+              accordionId="patronBlocksSection"
+              hasPatronBlocks={(hasPatronBlocks === 1 && totalPatronBlocks > 0)}
+              patronBlocks={patronBlocks}
+              expanded={this.state.sections.patronBlocksSection}
+              onToggle={this.handleSectionToggle}
+              onClickViewPatronBlock={this.onClickViewPatronBlock}
+              addRecord={this.state.addRecord}
+              {...this.props}
+            />
+          </IfPermission>
+          <ExtendedInfo
+            accordionId="extendedInfoSection"
+            user={user}
+            expanded={this.state.sections.extendedInfoSection}
             onToggle={this.handleSectionToggle}
-            accordionId="accountsSection"
-            addRecord={this.state.addRecord}
-            {...this.props}
           />
-        </IfPermission>
+          <ContactInfo
+            accordionId="contactInfoSection"
+            stripes={stripes}
+            user={user}
+            addresses={addresses}
+            addressTypes={addressTypes}
+            expanded={this.state.sections.contactInfoSection}
+            onToggle={this.handleSectionToggle}
+          />
+          <IfPermission perm="proxiesfor.collection.get">
+            <ProxyPermissions
+              user={user}
+              accordionId="proxySection"
+              onToggle={this.handleSectionToggle}
+              proxies={proxies}
+              sponsors={sponsors}
+              expanded={this.state.sections.proxySection}
+              {...this.props}
+            />
+          </IfPermission>
 
-        <IfPermission perm="ui-users.loans.all">
-          <IfInterface name="loan-policy-storage" version="1.0">
-            { /* Check without version, so can support either of multiple versions.
-            Replace with specific check when facility for providing
-            multiple versions is available */ }
-            <IfInterface name="circulation">
-              <this.connectedUserLoans
-                onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
-                onClickViewOpenLoans={this.onClickViewOpenLoans}
-                onClickViewClosedLoans={this.onClickViewClosedLoans}
-                expanded={this.state.sections.loansSection}
+          <IfPermission perm="accounts.collection.get">
+            <this.connectedUserAccounts
+              onClickViewChargeFeeFine={this.onClickViewChargeFeeFine}
+              expanded={this.state.sections.accountsSection}
+              onToggle={this.handleSectionToggle}
+              accordionId="accountsSection"
+              addRecord={this.state.addRecord}
+              {...this.props}
+            />
+          </IfPermission>
+
+          <IfPermission perm="ui-users.loans.all">
+            <IfInterface name="loan-policy-storage" version="1.0">
+              { /* Check without version, so can support either of multiple versions.
+          Replace with specific check when facility for providing
+          multiple versions is available */ }
+              <IfInterface name="circulation">
+                <this.connectedUserLoans
+                  onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
+                  onClickViewOpenLoans={this.onClickViewOpenLoans}
+                  onClickViewClosedLoans={this.onClickViewClosedLoans}
+                  expanded={this.state.sections.loansSection}
+                  onToggle={this.handleSectionToggle}
+                  accordionId="loansSection"
+                  {...this.props}
+                />
+              </IfInterface>
+            </IfInterface>
+          </IfPermission>
+
+          <IfPermission perm="ui-users.requests.all">
+            <IfInterface name="request-storage" version="2.2">
+              <this.connectedUserRequests
+                expanded={this.state.sections.requestsSection}
                 onToggle={this.handleSectionToggle}
-                accordionId="loansSection"
+                accordionId="requestsSection"
+                user={user}
                 {...this.props}
               />
             </IfInterface>
-          </IfInterface>
-        </IfPermission>
+          </IfPermission>
 
-        <IfPermission perm="perms.users.get">
-          <IfInterface name="permissions" version="5.0">
-            <UserPermissions
-              stripes={stripes}
-              expanded={this.state.sections.permissionsSection}
-              onToggle={this.handleSectionToggle}
-              userPermissions={permissions}
-              accordionId="permissionsSection"
-              {...this.props}
-            />
-          </IfInterface>
-        </IfPermission>
+          <IfPermission perm="perms.users.get">
+            <IfInterface name="permissions" version="5.0">
+              <UserPermissions
+                expanded={this.state.sections.permissionsSection}
+                onToggle={this.handleSectionToggle}
+                userPermissions={permissions}
+                accordionId="permissionsSection"
+                {...this.props}
+              />
+            </IfInterface>
+          </IfPermission>
 
-        <IfPermission perm="inventory-storage.service-points.collection.get,inventory-storage.service-points-users.collection.get">
-          <IfInterface name="service-points-users" version="1.0">
-            <UserServicePoints
-              stripes={stripes}
-              expanded={this.state.sections.servicePointsSection}
-              onToggle={this.handleSectionToggle}
-              accordionId="servicePointsSection"
-              servicePoints={servicePoints}
-              preferredServicePoint={preferredServicePoint}
-              {...this.props}
-            />
-          </IfInterface>
-        </IfPermission>
-
-        <Layer isOpen={query.layer ? query.layer === 'edit' : false} contentLabel={formatMsg({ id: 'ui-users.editUserDialog' })}>
-          <UserForm
-            stripes={stripes}
-            initialValues={userFormData}
-            onSubmit={(record) => { this.update(record); }}
-            onCancel={this.props.onCloseEdit}
-            parentResources={{
-              ...this.props.resources,
-              ...this.props.parentResources,
-            }}
-            parentMutator={this.props.parentMutator}
-          />
-        </Layer>
-
-        <Layer isOpen={query.layer ? query.layer === 'open-accounts' || query.layer === 'closed-accounts' || query.layer === 'all-accounts' : false} label="Fees/Fines">
-          <this.connectedAccountsHistory
-            loans={loans}
-            num={(this.state.addRecord ? 51 : 50)}
-            onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
-            user={user}
-            parentMutator={this.props.mutator}
-            patronGroup={patronGroup}
-            stripes={this.props.stripes}
-            history={this.props.history}
-            addRecord={this.state.addRecord}
-            location={this.props.location}
-            onCancel={this.onClickCloseAccountsHistory}
-            onClickViewChargeFeeFine={this.onClickViewChargeFeeFine}
-            onClickViewAccountActionsHistory={this.onClickViewAccountActionsHistory}
-            onClickCloseAccountActionsHistory={this.onClickCloseAccountActionsHistory}
-          />
-        </Layer>
-        <Layer isOpen={query.layer ? query.layer === 'charge' : false} label="Charge Fee/Fine">
-          <this.connectedCharge
-            stripes={stripes}
-            onCloseChargeFeeFine={this.onCloseChargeFeeFine}
-            user={user}
-            loan={{ item: {} }}
-            selectedLoan={this.state.selectedLoan}
-            handleAddRecords={this.handleAddRecords}
-          />
-        </Layer>
-        <Layer isOpen={query.layer ? query.layer === 'account' : false} label="Account Actions History">
-          <this.connectedAccountActionsHistory
-            user={user}
-            patronGroup={patronGroup}
-            account={this.state.selectedAccount}
-            accountid={this.state.selectedAccount.id}
-            history={this.props.history}
-            onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
-            stripes={stripes}
-            onCancel={this.onClickCloseAccountActionsHistory}
-            // when navigating away to another user, clear all loan-related state
-            onClickUser={() => { this.onClickCloseAccountActionsHistory(); this.onClickCloseAccountsHistory(); }}
-          />
-        </Layer>
-
-        <IfPermission perm="ui-users.loans.all">
-          <Layer isOpen={query.layer ? query.layer === 'open-loans' || query.layer === 'closed-loans' : false} contentLabel={formatMsg({ id: 'ui-users.loans.title' })}>
-            {loansHistory}
-          </Layer>
-
-          <Layer isOpen={query.layer ? query.layer === 'loan' : false} contentLabel={formatMsg({ id: 'ui-users.loanActionsHistory' })}>
-            {loanDetails}
-          </Layer>
-        </IfPermission>
+          <IfPermission perm="inventory-storage.service-points.collection.get,inventory-storage.service-points-users.collection.get">
+            <IfInterface name="service-points-users" version="1.0">
+              <UserServicePoints
+                expanded={this.state.sections.servicePointsSection}
+                onToggle={this.handleSectionToggle}
+                accordionId="servicePointsSection"
+                servicePoints={servicePoints}
+                preferredServicePoint={preferredServicePoint}
+                {...this.props}
+              />
+            </IfInterface>
+          </IfPermission>
+        </AccordionSet>
       </Pane>
+    );
+  }
+
+  render() {
+    const user = this.getUser();
+
+    if (!user) {
+      return this.renderSpinner();
+    }
+
+    return (
+      <HasCommand
+        commands={this.keyboardCommands}
+        display={['new', 'edit', 'search']}
+        isWithinScope={this.checkScope}
+        scope={document.body}
+      >
+        {this.renderLayer(user) || this.renderUser(user)}
+      </HasCommand>
     );
   }
 }
 
-export default withServicePoints(withTags(withProxy(ViewUser)));
+export default compose(
+  withServicePoints,
+  withTags,
+  withProxy,
+)(ViewUser);

@@ -4,12 +4,20 @@ import uuid from 'uuid';
 import _ from 'lodash';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import moment from 'moment';
+import { Callout } from '@folio/stripes/components';
+import { FormattedMessage } from 'react-intl';
 import ChargeForm from './ChargeForm';
 import ItemLookup from './ItemLookup';
 import PayModal from '../Actions/PayModal';
+import { getFullName } from '../../../util';
 
 class Charge extends React.Component {
   static manifest = Object.freeze({
+    curUserServicePoint: {
+      type: 'okapi',
+      path: 'service-points-users?query=(userId==!{currentUser.id})',
+      records: 'servicePointsUsers',
+    },
     items: {
       type: 'okapi',
       records: 'items',
@@ -27,11 +35,6 @@ class Charge extends React.Component {
       records: 'feefineactions',
       path: 'feefineactions',
     },
-    owners: {
-      type: 'okapi',
-      records: 'owners',
-      path: 'owners?limit=100',
-    },
     accounts: {
       type: 'okapi',
       records: 'accounts',
@@ -40,10 +43,31 @@ class Charge extends React.Component {
         path: 'accounts/%{activeRecord.id}'
       },
     },
+    account: {
+      type: 'okapi',
+      resource: 'accounts',
+      accumulate: 'true',
+      path: 'accounts',
+    },
+    owners: {
+      type: 'okapi',
+      records: 'owners',
+      path: 'owners?limit=100',
+    },
     payments: {
       type: 'okapi',
       records: 'payments',
       path: 'payments',
+    },
+    commentRequired: {
+      type: 'okapi',
+      records: 'comments',
+      path: 'comments',
+    },
+    allfeefines: {
+      type: 'okapi',
+      records: 'feefines',
+      path: 'feefines?limit=100',
     },
     activeRecord: {},
   });
@@ -70,7 +94,7 @@ class Charge extends React.Component {
         update: PropTypes.func,
       }),
     }).isRequired,
-    stripes: PropTypes.object,
+    stripes: PropTypes.object.isRequired,
     onCloseChargeFeeFine: PropTypes.func.isRequired,
     handleAddRecords: PropTypes.func,
     okapi: PropTypes.object,
@@ -96,6 +120,7 @@ class Charge extends React.Component {
     this.onClosePayModal = this.onClosePayModal.bind(this);
     this.onClickPay = this.onClickPay.bind(this);
     this.type = {};
+    this.callout = null;
   }
 
   shouldComponentUpdate(nextProps) {
@@ -126,8 +151,15 @@ class Charge extends React.Component {
     const { selectedLoan } = this.props;
     const item = (selectedLoan.id) ? selectedLoan.item : this.item;
 
-    type.feeFineType = feefines.find(f => f.id === type.feeFineId).feeFineType || '';
-    type.feeFineOwner = owners.find(o => o.id === type.ownerId).owner || '';
+    type.paymentStatus = {
+      name: 'Outstanding',
+    };
+    type.status = {
+      name: 'Open',
+    };
+    type.remaining = type.amount;
+    type.feeFineType = (feefines.find(f => f.id === type.feeFineId.substring(0, 36)) || {}).feeFineType || '';
+    type.feeFineOwner = (owners.find(o => o.id === type.ownerId) || {}).owner || '';
     type.title = item.title;
     type.barcode = item.barcode;
     type.callNumber = item.callNumber;
@@ -143,32 +175,43 @@ class Charge extends React.Component {
     type.itemId = this.item.id || '0';
     const c = type.comments;
     delete type.comments;
+    this.type = type;
     return this.props.mutator.accounts.POST(type)
       .then(() => this.newAction({}, type.id, type.feeFineType, type.amount, c, type.remaining, 0, type.feeFineOwner));
   }
 
-  newAction = (action, id, typeAction, amount, comment, balance, transaction, createAt) => {
-    const newAction = {
-      typeAction,
-      source: `${this.props.okapi.currentUser.lastName}, ${this.props.okapi.currentUser.firstName}`,
-      createdAt: createAt,
-      accountId: id,
-      dateAction: moment().utc().format(),
-      userId: this.props.user.id,
-      amountAction: parseFloat(amount || 0).toFixed(2),
-      balance: parseFloat(balance || 0).toFixed(2),
-      transactionNumber: transaction || 0,
-      comments: comment || '',
-    };
-    return this.props.mutator.feefineactions.POST(Object.assign(action, newAction));
+  newAction = (action, id, typeAction, amount, comment, balance, transaction, createdAt) => {
+    const path = `accounts/${this.type.id}`;
+    return this.props.mutator.account.GET({ path }).then(record => {
+      const dateAction = _.get(record, ['metadata', 'updatedDate'], moment().format());
+
+      const newAction = {
+        typeAction,
+        source: `${this.props.okapi.currentUser.lastName}, ${this.props.okapi.currentUser.firstName}`,
+        createdAt,
+        accountId: id,
+        dateAction,
+        userId: this.props.user.id,
+        amountAction: parseFloat(amount || 0).toFixed(2),
+        balance: parseFloat(balance || 0).toFixed(2),
+        transactionInformation: transaction || '-',
+        comments: comment,
+      };
+      this.props.mutator.feefineactions.POST(Object.assign(action, newAction));
+    });
   }
 
 
   onClickPay(type) {
+    this.type = type;
+    this.type.remaining = type.amount;
     this.setState({
       pay: true,
     });
-    this.type = type;
+    return new Promise((resolve, reject) => {
+      this.payResolve = resolve;
+      this.payReject = reject;
+    });
   }
 
   onSubmit(data) {
@@ -195,7 +238,9 @@ class Charge extends React.Component {
   onChangeOwner(e) {
     const ownerId = e.target.value;
     if (_.get(this.props.resources, ['activeRecord', 'shared']) === undefined) {
-      this.props.mutator.activeRecord.update({ shared: '0' });
+      const owners = _.get(this.props.resources, ['owners', 'records'], []);
+      const shared = (owners.find(o => o.owner === 'Shared') || {}).id || '0';
+      this.props.mutator.activeRecord.update({ shared });
     }
     this.props.mutator.activeRecord.update({ ownerId });
     this.setState({
@@ -217,12 +262,41 @@ class Charge extends React.Component {
     });
   }
 
+  showCalloutMessage(a) {
+    const message =
+      <span>
+        <FormattedMessage id="ui-users.charge.messageThe" />
+        {a.feeFineType}
+        <FormattedMessage id="ui-users.charge.messageOf" />
+        <strong>{`${parseFloat(a.amount).toFixed(2)}`}</strong>
+        <FormattedMessage id="ui-users.charge.messageSuccessfully" />
+        {a.paymentStatus.name}
+        <FormattedMessage id="ui-users.charge.messageFor" />
+        <strong>{`${getFullName(this.props.user)}`}</strong>
+      </span>;
+    this.callout.sendCallout({ message });
+  }
+
   render() {
     const resources = this.props.resources;
+    const allfeefines = _.get(resources, ['allfeefines', 'records'], []);
     const owners = _.get(resources, ['owners', 'records'], []);
+    const list = [];
+    const shared = owners.find(o => o.owner === 'Shared'); // Crear variable Shared en translations
+    allfeefines.forEach(f => {
+      if (!list.find(o => (o || {}).id === f.ownerId)) {
+        const owner = owners.find(o => (o || {}).id === f.ownerId);
+        if (owner !== undefined) { list.push(owner); }
+      }
+    });
     const feefines = (this.state.ownerId !== '0') ? (resources.feefines || {}).records || [] : [];
-    const payments = _.get(resources, ['payments', 'records'], []);
+    const payments = _.get(resources, ['payments', 'records'], []).filter(p => p.ownerId === this.state.ownerId);
     const accounts = _.get(resources, ['accounts', 'records'], []);
+    const settings = _.get(this.props.resources, ['commentRequired', 'records', 0], {});
+
+    const defaultServicePointId = _.get(resources, ['curUserServicePoint', 'records', 0, 'defaultServicePointId'], '-');
+    const servicePointsIds = _.get(resources, ['curUserServicePoint', 'records', 0, 'servicePointsIds'], []);
+
     let selected = parseFloat(0);
     accounts.forEach(a => {
       selected += parseFloat(a.remaining);
@@ -241,18 +315,31 @@ class Charge extends React.Component {
     const isPending = {
       owners: _.get(resources, ['owners', 'isPending'], false),
       feefines: _.get(resources, ['feefines', 'isPending'], false),
+      servicePoints: _.get(resources, ['curUserServicePoint', 'isPending'], true)
     };
 
     const items = _.get(resources, ['items', 'records'], []);
-
     return (
       <div>
         <ChargeForm
           onClickCancel={this.props.onCloseChargeFeeFine}
-          onClickCharge={this.onClickCharge}
           onClickPay={this.onClickPay}
-          onSubmit={data => this.onSubmit(data)}
+          defaultServicePointId={defaultServicePointId}
+          servicePointsIds={servicePointsIds}
+          onSubmit={(data) => {
+            if (data.pay) {
+              delete data.pay;
+              this.type.remaining = data.amount;
+              this.onClickPay(data);
+            } else {
+              delete data.pay;
+              this.onClickCharge(data)
+                .then(() => this.props.handleAddRecords())
+                .then(() => this.props.onCloseChargeFeeFine());
+            }
+          }}
           user={this.props.user}
+          ownerList={(shared) ? owners : list}
           owners={owners}
           isPending={isPending}
           ownerId={this.state.ownerId}
@@ -273,29 +360,37 @@ class Charge extends React.Component {
         />
         <PayModal
           open={this.state.pay}
-          commentRequired
+          commentRequired={settings.paid}
           onClose={this.onClosePayModal}
           accounts={[this.type]}
           balance={this.type.amount}
           payments={payments}
+          stripes={this.props.stripes}
           onSubmit={(values) => {
-            this.type.remaining = parseFloat(this.type.amount - values.amount).toFixed(2);
-            if (this.type.remaining === '0.00') {
-              this.type.paymentStatus.name = 'Paid Fully';
-              this.type.status.name = 'Closed';
-            } else {
-              this.type.paymentStatus.name = 'Paid Partially';
-            }
-            this.props.mutator.activeRecord.update({ id: this.type.id });
-            this.props.mutator.accounts.PUT(this.type)
-              .then(() => this.newAction({}, this.type.id,
+            this.onClickCharge(this.type).then(() => {
+              this.type.remaining = parseFloat(this.type.amount - values.amount).toFixed(2);
+              if (this.type.remaining === '0.00') {
+                this.type.paymentStatus.name = 'Paid Fully';
+                this.type.status.name = 'Closed';
+              } else {
+                this.type.paymentStatus.name = 'Paid Partially';
+              }
+              this.props.mutator.activeRecord.update({ id: this.type.id });
+              return this.props.mutator.accounts.PUT(this.type);
+            })
+              .then(() => this.newAction({ paymentMethod: values.method }, this.type.id,
                 this.type.paymentStatus.name, values.amount,
                 values.comment, this.type.remaining,
                 values.transaction, this.type.feeFineOwner))
+              .then(() => {
+                this.showCalloutMessage(this.type);
+                this.payResolve();
+              })
               .then(() => this.props.handleAddRecords())
-              .then(() => this.props.onCloseChargeFeeFine());
+              .then(() => setTimeout(this.props.onCloseChargeFeeFine, 2000));
           }}
         />
+        <Callout ref={(ref) => { this.callout = ref; }} />
       </div>
     );
   }

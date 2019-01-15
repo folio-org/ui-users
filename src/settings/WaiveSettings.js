@@ -1,5 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {
+  injectIntl,
+  intlShape,
+} from 'react-intl';
 import { ControlledVocab } from '@folio/stripes/smart-components';
 import { validate } from '../util';
 
@@ -7,8 +11,8 @@ class WaiveSettings extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
-      intl: PropTypes.object.isRequired,
     }).isRequired,
+    intl: intlShape.isRequired,
   };
 
   constructor(props) {
@@ -17,21 +21,26 @@ class WaiveSettings extends React.Component {
   }
 
   render() {
-    const label = this.props.stripes.intl.formatMessage({ id: 'ui-users.waives.singular' });
+    const {
+      stripes,
+      intl,
+    } = this.props;
+
+    const label = intl.formatMessage({ id: 'ui-users.waives.singular' });
 
     return (
       <this.connectedControlledVocab
-        {...this.props}
+        stripes={stripes}
         validate={(item, index, items) => validate(item, index, items, 'nameReason', label)}
         baseUrl="waives"
-        records="waives"
-        label={this.props.stripes.intl.formatMessage({ id: 'ui-users.waives.label' })}
-        labelSingular={this.props.stripes.intl.formatMessage({ id: 'ui-users.waives.singular' })}
+        records="waiver"
+        label={intl.formatMessage({ id: 'ui-users.waives.label' })}
+        labelSingular={label}
         objectLabel=""
         visibleFields={['nameReason', 'description']}
         columnMapping={{
-          'nameReason': this.props.stripes.intl.formatMessage({ id: 'ui-users.waives.columns.reason' }),
-          'description': this.props.stripes.intl.formatMessage({ id: 'ui-users.waives.columns.desc' }),
+          'nameReason': intl.formatMessage({ id: 'ui-users.waives.columns.reason' }),
+          'description': intl.formatMessage({ id: 'ui-users.waives.columns.desc' }),
         }}
         nameKey="waiveReasons"
         hiddenFields={['numberOfObjects']}
@@ -42,4 +51,4 @@ class WaiveSettings extends React.Component {
   }
 }
 
-export default WaiveSettings;
+export default injectIntl(WaiveSettings);

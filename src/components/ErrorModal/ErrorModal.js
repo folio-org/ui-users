@@ -1,14 +1,32 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
-import { Modal, Button } from '@folio/stripes/components';
+import {
+  Modal,
+  ModalFooter,
+} from '@folio/stripes/components';
 
-const ErrorModal = props => (
-  <Modal id={props.id} onClose={props.onClose} open={props.open} size="small" label={props.label} dismissible>
-    <p>{props.message}</p>
-    <Button onClick={props.onClose}><FormattedMessage id="ui-users.okay" /></Button>
-  </Modal>
-);
+const ErrorModal = (props) => {
+  const footer = (
+    <ModalFooter
+      primaryButton={{
+        'label': <FormattedMessage id="ui-users.okay" />,
+        'onClick': props.onClose,
+      }}
+    />
+  );
+
+  return (
+    <Modal
+      size="small"
+      footer={footer}
+      dismissible
+      {...props}
+    >
+      <p>{props.message}</p>
+    </Modal>
+  );
+};
 
 ErrorModal.propTypes = {
   open: PropTypes.bool,

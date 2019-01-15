@@ -1,6 +1,11 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
+import {
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
 
 import { makeQueryFunction, SearchAndSort } from '@folio/stripes/smart-components';
 import { AppIcon } from '@folio/stripes/components';
@@ -11,13 +16,14 @@ import UserForm from './UserForm';
 import { toUserAddresses } from './converters/address';
 import { getFullName } from './util';
 import packageInfo from '../package';
+import { HasCommand } from './components/Commander';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
 
 const filterConfig = [
   {
-    label: 'Status',
+    label: <FormattedMessage id="ui-users.status" />,
     name: 'active',
     cql: 'active',
     values: [
@@ -26,7 +32,7 @@ const filterConfig = [
     ],
   },
   {
-    label: 'Patron group',
+    label: <FormattedMessage id="ui-users.information.patronGroup" />,
     name: 'pg',
     cql: 'patronGroup',
     values: [], // will be filled in by componentWillUpdate
@@ -36,7 +42,7 @@ const filterConfig = [
 class Users extends React.Component {
   static manifest = Object.freeze({
     initializedFilterConfig: { initialValue: false },
-    query: { initialValue: {} },
+    query: { initialValue: { sort: 'Name' } },
     resultCount: { initialValue: INITIAL_RESULT_COUNT },
     records: {
       type: 'okapi',
@@ -98,9 +104,6 @@ class Users extends React.Component {
   });
 
   static propTypes = {
-    stripes: PropTypes.shape({
-      intl: PropTypes.object.isRequired,
-    }).isRequired,
     resources: PropTypes.shape({
       patronGroups: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
@@ -129,6 +132,7 @@ class Users extends React.Component {
     disableRecordCreation: PropTypes.bool,
     showSingleResult: PropTypes.bool, // eslint-disable-line react/no-unused-prop-types
     browseOnly: PropTypes.bool,
+    intl: intlShape.isRequired,
   };
 
   static defaultProps = {
@@ -136,9 +140,23 @@ class Users extends React.Component {
     browseOnly: false,
   }
 
+  constructor(props) {
+    super(props);
+    this.keyboardCommands = [
+      {
+        name: 'new',
+        handler: this.goToNew
+      },
+      {
+        name: 'search',
+        handler: this.goToSearch
+      }
+    ];
+  }
+
   componentDidUpdate() {
     const pg = (this.props.resources.patronGroups || {}).records || [];
-    if (pg && pg.length) {
+    if (pg.length) {
       const pgFilterConfig = filterConfig.find(group => group.name === 'pg');
       const oldValuesLength = pgFilterConfig.values.length;
       pgFilterConfig.values = pg.map(rec => ({ name: rec.group, cql: rec.id }));
@@ -182,14 +200,36 @@ class Users extends React.Component {
     }
   }
 
+  goToNew = () => {
+    const { mutator } = this.props;
+    mutator.query.update({ layer: 'create' });
+  }
+
+  goToSearch = () => {
+    const { mutator } = this.props;
+    mutator.query.update({ layer: null });
+    const searchField = document.getElementById('input-user-search');
+    if (searchField) {
+      searchField.focus();
+    }
+  }
+
   render() {
-    const { onSelectRow, disableRecordCreation, onComponentWillUnmount, showSingleResult, browseOnly, stripes: { intl } } = this.props;
+    const {
+      onSelectRow,
+      disableRecordCreation,
+      onComponentWillUnmount,
+      showSingleResult,
+      browseOnly,
+      intl,
+    } = this.props;
+
     const patronGroups = (this.props.resources.patronGroups || {}).records || [];
 
     const resultsFormatter = {
       status: user => (
         <AppIcon app="users" size="small">
-          {user.active ? intl.formatMessage({ id: 'ui-users.active' }) : intl.formatMessage({ id: 'ui-users.inactive' })}
+          {user.active ? <FormattedMessage id="ui-users.active" /> : <FormattedMessage id="ui-users.inactive" />}
         </AppIcon>
       ),
       name: user => getFullName(user),
@@ -202,39 +242,44 @@ class Users extends React.Component {
       email: user => _.get(user, ['personal', 'email']),
     };
 
-    return (<SearchAndSort
-      packageInfo={packageInfo}
-      objectName="user"
-      filterConfig={filterConfig}
-      initialResultCount={INITIAL_RESULT_COUNT}
-      resultCountIncrement={RESULT_COUNT_INCREMENT}
-      viewRecordComponent={ViewUser}
-      editRecordComponent={UserForm}
-      newRecordInitialValues={{ active: true, personal: { preferredContactTypeId: '002' } }}
-      visibleColumns={this.props.visibleColumns ? this.props.visibleColumns : ['status', 'name', 'barcode', 'patronGroup', 'username', 'email']}
-      resultsFormatter={resultsFormatter}
-      onSelectRow={onSelectRow}
-      onCreate={this.create}
-      onComponentWillUnmount={onComponentWillUnmount}
-      massageNewRecord={this.massageNewRecord}
-      finishedResourceName="perms"
-      viewRecordPerms="users.item.get"
-      newRecordPerms="users.item.post,login.item.post,perms.users.item.post"
-      disableRecordCreation={disableRecordCreation}
-      parentResources={this.props.resources}
-      parentMutator={this.props.mutator}
-      showSingleResult={showSingleResult}
-      columnMapping={{
-        status: intl.formatMessage({ id: 'ui-users.active' }),
-        name: intl.formatMessage({ id: 'ui-users.information.name' }),
-        barcode: intl.formatMessage({ id: 'ui-users.information.barcode' }),
-        patronGroup: intl.formatMessage({ id: 'ui-users.information.patronGroup' }),
-        username: intl.formatMessage({ id: 'ui-users.information.username' }),
-        email: intl.formatMessage({ id: 'ui-users.contact.email' }),
-      }}
-      browseOnly={browseOnly}
-    />);
+    return (
+      <div data-test-user-instances>
+        <HasCommand commands={this.keyboardCommands}>
+          <SearchAndSort
+            packageInfo={packageInfo}
+            objectName="user"
+            filterConfig={filterConfig}
+            initialResultCount={INITIAL_RESULT_COUNT}
+            resultCountIncrement={RESULT_COUNT_INCREMENT}
+            viewRecordComponent={ViewUser}
+            editRecordComponent={UserForm}
+            newRecordInitialValues={{ active: true, personal: { preferredContactTypeId: '002' } }}
+            visibleColumns={this.props.visibleColumns ? this.props.visibleColumns : ['status', 'name', 'barcode', 'patronGroup', 'username', 'email']}
+            resultsFormatter={resultsFormatter}
+            onSelectRow={onSelectRow}
+            onCreate={this.create}
+            onComponentWillUnmount={onComponentWillUnmount}
+            massageNewRecord={this.massageNewRecord}
+            finishedResourceName="perms"
+            viewRecordPerms="users.item.get"
+            newRecordPerms="users.item.post,login.item.post,perms.users.item.post"
+            disableRecordCreation={disableRecordCreation}
+            parentResources={this.props.resources}
+            parentMutator={this.props.mutator}
+            showSingleResult={showSingleResult}
+            columnMapping={{
+              status: intl.formatMessage({ id: 'ui-users.active' }),
+              name: intl.formatMessage({ id: 'ui-users.information.name' }),
+              barcode: intl.formatMessage({ id: 'ui-users.information.barcode' }),
+              patronGroup: intl.formatMessage({ id: 'ui-users.information.patronGroup' }),
+              username: intl.formatMessage({ id: 'ui-users.information.username' }),
+              email: intl.formatMessage({ id: 'ui-users.contact.email' }),
+            }}
+            browseOnly={browseOnly}
+          />
+        </HasCommand>
+      </div>);
   }
 }
 
-export default Users;
+export default injectIntl(Users);

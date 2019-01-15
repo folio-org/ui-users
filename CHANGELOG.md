@@ -1,6 +1,28 @@
 # Change history for ui-users
 
-## 2.18.0 (IN PROGRESS)
+
+## [2.19.0](https://github.com/folio-org/ui-users/tree/v2.19.0) (2019-01-07)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.18.0...v2.19.0)
+
+* Implement specify payment methods for each Fee/Fine Owner. Ref UIU-612.
+* Implement confirmation modal for waive and pay. Ref UIU-697, UIU-698.
+* Add Success Toast for pay an waive modal. Fix UIU-770.
+* Add feature enforce manual patron blocks. Ref UIU-675. Fix UIU-784,UIU-789, UIU-790.
+* Modify styles on charge. Ref UIU-708,UIU-687.
+* Fix manual patron blocks. Ref UIU-674. Fix UIU-792.
+* Fix permissions. Refs UIU-584, UIU-673, Fixes UIU-787, UIU-788.
+* Fix Fees/Fines History scroll bar. Fix UIU-761.
+* Fix Multiple fee/fine waive and pay. Fixes UIU-767, UIU-781, UIU-766.
+* Fix minor errors for pay and waive. Fix UIU-769.
+* Fix associated service points. Fix UIU-771.
+* Fix Fees/Fines Details link. Ref UIU-643, Fixes UIU-667, UIU-665, UIU-720.
+* Fix order for fee fine details. Fixes UIU-475, UIU-476.
+* Fix consistency error with Cancel Fee/Fine modal. Ref UIU-707.
+* Fix consistency errors with Waive and pay Fee/Fine modal. Ref UIU-705, UIU-706.
+
+
+## [2.18.0](https://github.com/folio-org/ui-users/tree/v2.18.0) (2018-12-17)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.17.0...v2.18.0)
 
 * Create permission for renewing loans. Fixes UIU-625.
 * Adjust accordion headline sizes for correct a11y and visual hierarchy
@@ -9,6 +31,53 @@
 * Add permissions for renewing loans. Fixes UIU-686.
 * Specify a sort field to `<ControlledVocab>` for entries without a `name` field. Refs STSMACOM-139.
 * Show `active` column in find-user popup. Refs STCOM-385.
+* Fix minor "Pay Fee/Fine" bugs. Fix UIU-454
+* Fix minor "Waive Fee/Fine" bugs. Fix UIU-455.
+* Fix minor "Fees/Fines History" bugs. Fix UIU-238, UIU-641.
+* Fix change to Fees/Fines Details link to Loan Details. Fix UIU-643.
+* Fix "Fee/Fine History" page not refreshing. Fix UIU-645.
+* Fix Transaction Information field in Pay Fee/Fine modal. Fix UIU-646.
+* Fix Fine Incurred no longer displays after it is paid. Fix UIU-665.
+* Implement default Fee/Fine Owner for user. Ref UIU-610.
+* Implement associate Fee/Fine Owners to one or more Service Points. Ref UIU-611.
+* Implement permission for CRUD Manual Patron Block. Ref UIU-674.
+* Provide `totalCount` to loan MCLs.
+* Support circulation v5.0, requiring service-point information on loans. Refs UIU-717.
+* Format the `active` attribute as `Status` on the find-proxy modal. Fixes UIU-726.
+* Add loan policy name to loan details view. Fixes UIU-715.
+* Refresh action details after renew. Fixes UIU-714.
+* Set expired user status to inactive. Fixes UIU-729.
+* Fix relationship created message. Fixes UIU-730.
+* Add sort by name to initial query resource. Fixes UIU-733.
+* Link to a user's requests. Fixes UIU-677.
+* Bring back handleSubmit when using submit button. Fixes UIU-743.
+* Fix permission menu after reopening. Fixes UIU-739.
+* Apply internationalization to all hardcoded strings for Settings. Fixes UIU-691.
+* Pass `userBarcode` to new requests. Fixes UIU-690. Refs UIREQ-146.
+* Optimize code for Manual Fees/Fines Table. Fix UIU-198.
+* Modify associated service points for . Ref UIU-611.
+* Create permission "Settings (Users): Can create, edit and remove fee/fine settings". Ref UIU-584.
+* Create permission "Fees/Fines: All Actions permissions". Ref UIU-673.
+* Implement CRUD Manual Patron Block. Ref UIU-674.
+* Create permission "Patron blocks: All permissions". Ref UIU-728.
+* Hide metadata accordion for new records. Fixes UIU-700.
+* Provide `renderToOverlay` to `<MultiSelection>` to avoid clipping. Fixes STSMACOM-149.
+* Request queue link should include only open requests. Fixes UIU-716.
+* Prohibit adding user as a proxy or sponsor for themselves. Fixes UIU-734.
+* Fix minor errors of fee/fine history and details. Fixes UI-238, UIU-239.
+* Hide request buttons and disable request links when user doesn't have permissions. Fixes UIU-757.
+* Resolve fixes of fees/fines. Fixes UIU-762,UIU-763,UIU-765,UIU-766,UIU-769.
+* Add feature enforce manual patron blocks. Ref UIU-675.
+* Implement pane-header dropdown menu on detail records. Refs UIU-754.
+* Attempt to use a shared Nightmare instance to generage code-coverage data. Refs UIU-570, UIU-777.
+* Correctly initialize `<MultiSelection>` in the Settings > Users > Owners pane. Fixes UIU-752.
+* Correctly show unsaved-changes dialog when the edit pane is closed. Fixes UIU-749.
+* Hotkeys proof of concept. Refs STCOM-383, UIU-743, UIU-745.
+* Implement new internationalization patterns based on `<FormattedMessage>` instead of `injectIntl` and `formatMessage()`. Refs UIU-679, UIU-736, UIU-740.
+* Show "Reset password" modal from edit-users pane. Refs UIU-735, UIU-522.
+* Link to request queue from loan-details pane. Fixes UIU-722.
+* Add BigTest testing infrastructure. Refs UIU-678.
+* Show check in service point's location field in loan details. Refs UIU-485.
 
 ## [2.17.0](https://github.com/folio-org/ui-users/tree/v2.17.0) (2018-10-5)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.16.0...v2.17.0)
