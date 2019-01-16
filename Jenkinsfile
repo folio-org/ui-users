@@ -5,7 +5,7 @@ buildNPM {
   runLint = true
   runRegression = false
   runSonarqube = true
-  runTest = true
+  runTest = false
   runTestOptions = '--karma.singleRun --karma.browsers ChromeDocker --karma.reporters mocha junit --coverage'
   stripesPlatform = [ repo:'platform-core', branch:'snapshot' ]
 }
