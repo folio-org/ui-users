@@ -1,8 +1,10 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
 import { Callout } from '@folio/stripes/components';
 import { injectIntl, FormattedMessage } from 'react-intl';
+import stripesConnect from '../connect';
 
 import CommentRequiredForm from './CommentRequiredForm';
 
@@ -82,4 +84,8 @@ class CommentRequiredSettings extends React.Component {
     );
   }
 }
-export default injectIntl(CommentRequiredSettings);
+
+export default compose(
+  injectIntl,
+  stripesConnect,
+)(CommentRequiredSettings);

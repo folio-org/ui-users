@@ -1,5 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
+import { compose } from 'redux';
 import {
   FormattedMessage,
   intlShape,
@@ -20,6 +21,7 @@ import { Field } from 'redux-form';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import { EditableList } from '@folio/stripes/smart-components';
 import { validate } from '../util';
+import stripesConnect from '../connect';
 
 class OwnerSettings extends React.Component {
   static manifest = Object.freeze({
@@ -333,4 +335,7 @@ class OwnerSettings extends React.Component {
   }
 }
 
-export default injectIntl(OwnerSettings);
+export default compose(
+  injectIntl,
+  stripesConnect,
+)(OwnerSettings);

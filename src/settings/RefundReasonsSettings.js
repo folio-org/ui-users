@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
 import {
   injectIntl,
   intlShape,
 } from 'react-intl';
+import { withStripes } from '@folio/stripes/core';
 import { ControlledVocab } from '@folio/stripes/smart-components';
 import { validate } from '../util';
 
@@ -47,4 +49,7 @@ class RefundReasonsSettings extends React.Component {
   }
 }
 
-export default injectIntl(RefundReasonsSettings);
+export default compose(
+  injectIntl,
+  withStripes,
+)(RefundReasonsSettings);

@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
+import { compose } from 'redux';
 import {
   injectIntl,
   FormattedMessage
@@ -17,6 +18,7 @@ import {
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import { EditableList } from '@folio/stripes/smart-components';
 import { validate } from '../util';
+import stripesConnect from '../connect';
 
 import {
   Owners,
@@ -332,4 +334,7 @@ class FeefineSettings extends React.Component {
   }
 }
 
-export default injectIntl(FeefineSettings);
+export default compose(
+  injectIntl,
+  stripesConnect,
+)(FeefineSettings);

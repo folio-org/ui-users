@@ -1,125 +1,88 @@
-import _ from 'lodash';
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
+import { IfPermission } from '@folio/stripes/core';
 import {
-  FormattedMessage,
-  injectIntl,
-  intlShape,
-} from 'react-intl';
+  Headline,
+  NavList,
+  NavListItem,
+  NavListSection,
+  Pane,
+  PaneBackLink,
+} from '@folio/stripes/components';
 
-import { Settings } from '@folio/stripes/smart-components';
-
-import PermissionSets from './permissions/PermissionSets';
-import PatronGroupsSettings from './PatronGroupsSettings';
-import AddressTypesSettings from './AddressTypesSettings';
-import ProfilePictureSettings from './ProfilePictureSettings';
-import OwnerSettings from './OwnerSettings';
-import FeeFineSettings from './FeeFineSettings';
-import WaiveSettings from './WaiveSettings';
-import PaymentSettings from './PaymentSettings';
-import CommentRequiredSettings from './CommentRequiredSettings';
-import RefundReasonsSettings from './RefundReasonsSettings';
-
-class UsersSettings extends Component {
+export default class UsersSettings extends Component {
   static propTypes = {
-    intl: intlShape.isRequired,
+    children: PropTypes.node,
   };
 
-  // eslint-disable-next-line react/sort-comp
   render() {
+    const { children } = this.props;
+
     return (
-      <Settings
-        {...this.props}
-        sections={this.getSections()}
-        paneTitle={<FormattedMessage id="ui-users.settings.label" />}
-      />
+      <Fragment>
+        <Pane
+          defaultWidth="20%"
+          paneTitle={
+            <Headline tag="h3" margin="none">
+              <FormattedMessage id="ui-users.settings.label" />
+            </Headline>
+          }
+          firstMenu={(
+            <PaneBackLink to="/settings" />
+          )}
+        >
+          <NavList>
+            <NavListSection
+              label={<FormattedMessage id="ui-users.settings.general" />}
+            >
+              <IfPermission perm="ui-users.settings.addresstypes">
+                <NavListItem to="/settings/users/addresstypes">
+                  <FormattedMessage id="ui-users.settings.addressTypes" />
+                </NavListItem>
+              </IfPermission>
+              <IfPermission perm="ui-users.settings.usergroups">
+                <NavListItem to="/settings/users/groups">
+                  <FormattedMessage id="ui-users.settings.patronGroups" />
+                </NavListItem>
+              </IfPermission>
+              <IfPermission perm="ui-users.editpermsets">
+                <NavListItem to="/settings/users/perms">
+                  <FormattedMessage id="ui-users.settings.permissionSet" />
+                </NavListItem>
+              </IfPermission>
+              <NavListItem to="/settings/users/profilepictures">
+                <FormattedMessage id="ui-users.settings.profilePictures" />
+              </NavListItem>
+            </NavListSection>
+            <NavListSection
+              label={<FormattedMessage id="ui-users.settings.feefine" />}
+            >
+              <IfPermission perm="ui-users.settings.feefine">
+                <NavListItem to="/settings/users/comments">
+                  <FormattedMessage id="ui-users.settings.commentRequired" />
+                </NavListItem>
+                <NavListItem to="/settings/users/feefinestable">
+                  <FormattedMessage id="ui-users.settings.manualCharges" />
+                </NavListItem>
+                <NavListItem to="/settings/users/owners">
+                  <FormattedMessage id="ui-users.settings.owners" />
+                </NavListItem>
+                <NavListItem to="/settings/users/payments">
+                  <FormattedMessage id="ui-users.settings.paymentMethods" />
+                </NavListItem>
+                <NavListItem to="/settings/users/refunds">
+                  <FormattedMessage id="ui-users.settings.refundReasons" />
+                </NavListItem>
+                <NavListItem to="/settings/users/waivereasons">
+                  <FormattedMessage id="ui-users.settings.waiveReasons" />
+                </NavListItem>
+              </IfPermission>
+            </NavListSection>
+          </NavList>
+        </Pane>
+        {children}
+      </Fragment>
     );
   }
-
-  getSections() {
-    return [
-      {
-        label: <FormattedMessage id="ui-users.settings.general" />,
-        pages: _.sortBy(this.getGeneral(), ['label']),
-      },
-      {
-        label: <FormattedMessage id="ui-users.settings.feefine" />,
-        pages: _.sortBy(this.getFeefines(), ['label']),
-      },
-    ];
-  }
-
-  getGeneral() {
-    const { formatMessage } = this.props.intl;
-
-    return [
-      {
-        route: 'perms',
-        label: formatMessage({ id: 'ui-users.settings.permissionSet' }),
-        component: PermissionSets,
-        perm: 'ui-users.editpermsets',
-      },
-      {
-        route: 'groups',
-        label: formatMessage({ id: 'ui-users.settings.patronGroups' }),
-        component: PatronGroupsSettings,
-        perm: 'ui-users.settings.usergroups',
-      },
-      {
-        route: 'addresstypes',
-        label: formatMessage({ id: 'ui-users.settings.addressTypes' }),
-        component: AddressTypesSettings,
-        perm: 'ui-users.settings.addresstypes',
-      },
-      {
-        route: 'profilepictures',
-        label: formatMessage({ id: 'ui-users.settings.profilePictures' }),
-        component: ProfilePictureSettings,
-      },
-    ];
-  }
-
-  getFeefines() {
-    const { formatMessage } = this.props.intl;
-
-    return [
-      {
-        route: 'owners',
-        label: formatMessage({ id: 'ui-users.settings.owners' }),
-        component: OwnerSettings,
-        perm: 'ui-users.settings.feefine',
-      },
-      {
-        route: 'feefinestable',
-        label: formatMessage({ id: 'ui-users.settings.manualCharges' }),
-        component: FeeFineSettings,
-        perm: 'ui-users.settings.feefine',
-      },
-      {
-        route: 'waivereasons',
-        label: formatMessage({ id: 'ui-users.settings.waiveReasons' }),
-        component: WaiveSettings,
-        perm: 'ui-users.settings.feefine',
-      },
-      {
-        route: 'payments',
-        label: formatMessage({ id: 'ui-users.settings.paymentMethods' }),
-        component: PaymentSettings,
-        perm: 'ui-users.settings.feefine',
-      },
-      {
-        route: 'refunds',
-        label: formatMessage({ id: 'ui-users.settings.refundReasons' }),
-        component: RefundReasonsSettings,
-        perm: 'ui-users.settings.feefine',
-      },
-      {
-        route: 'comments',
-        label: formatMessage({ id: 'ui-users.settings.commentRequired' }),
-        component: CommentRequiredSettings,
-        perm: 'ui-users.settings.feefine',
-      },
-    ];
-  }
 }
-
-export default injectIntl(UsersSettings);
