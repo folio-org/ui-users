@@ -666,7 +666,7 @@
     "blocks.columns.borrowing": "外借中",
     "blocks.columns.requests": "请求",
     "blocks.columns.renewals": "续借",
-    "blocks.buttons.add": "+添加阻止",
+    "blocks.buttons.add": "添加阻止",
     "blocks.label": "读者模块组",
     "blocks.form.label.information": "块信息",
     "blocks.form.label.display": "显示描述",
