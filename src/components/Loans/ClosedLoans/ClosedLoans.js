@@ -16,8 +16,12 @@ import {
   Popover,
   IconButton,
   ExportCsv,
-  IfPermission,
 } from '@folio/stripes/components';
+
+import {
+  IfPermission,
+} from '@folio/stripes/core';
+
 import ActionsBar from '../components/ActionsBar';
 import Label from '../../Label';
 
