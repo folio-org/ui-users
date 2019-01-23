@@ -15,6 +15,7 @@ class BulkRenewalDialog extends React.Component {
     successRenewals: PropTypes.arrayOf(PropTypes.object).isRequired,
     failedRenewals: PropTypes.arrayOf(PropTypes.object).isRequired,
     loanPolicies: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired,
     requestCounts: PropTypes.object.isRequired,
     errorMessages: PropTypes.object.isRequired,
   };
@@ -29,6 +30,7 @@ class BulkRenewalDialog extends React.Component {
       errorMessages,
       onClose,
       open,
+      user,
     } = this.props;
 
     const modalLabel = <FormattedMessage id="ui-users.brd.renewConfirmation" />;
@@ -45,6 +47,7 @@ class BulkRenewalDialog extends React.Component {
         onClose={onClose}
       >
         <BulkRenewInfo
+          user={user}
           stripes={stripes}
           errorMessages={errorMessages}
           requestCounts={requestCounts}

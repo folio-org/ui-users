@@ -14,21 +14,33 @@ class BulkOverrideDialog extends React.Component {
       PropTypes.object
     ).isRequired,
     open: PropTypes.bool.isRequired,
+    showDueDatePicker: PropTypes.bool.isRequired,
+    user: PropTypes.object.isRequired,
     loanPolicies: PropTypes.object.isRequired,
     requestCounts: PropTypes.object.isRequired,
     errorMessages: PropTypes.object.isRequired,
     onClose: PropTypes.func.isRequired,
+    onCloseRenewModal: PropTypes.func.isRequired,
   };
+
+  constructor(props) {
+    super(props);
+
+    this.connectedBulkOverrideInfo = props.stripes.connect(BulkOverrideInfo);
+  }
 
   render() {
     const {
-      onClose,
       open,
+      user,
       stripes,
-      failedRenewals,
       loanPolicies,
       requestCounts,
       errorMessages,
+      failedRenewals,
+      showDueDatePicker,
+      onClose,
+      onCloseRenewModal,
     } = this.props;
 
     const modalLabel = <FormattedMessage id="ui-users.brd.overrideAndRenew" />;
@@ -43,13 +55,16 @@ class BulkOverrideDialog extends React.Component {
         open={open}
         onClose={onClose}
       >
-        <BulkOverrideInfo
+        <this.connectedBulkOverrideInfo
+          user={user}
           stripes={stripes}
+          showDueDatePicker={showDueDatePicker}
           failedRenewals={failedRenewals}
           loanPolicies={loanPolicies}
           requestCounts={requestCounts}
           errorMessages={errorMessages}
           onCancel={onClose}
+          onCloseRenewModal={onCloseRenewModal}
         />
       </Modal>
     );

@@ -274,6 +274,7 @@
   "data.loanActionMap.holdRequested": "Hold requested",
   "data.loanActionMap.recallRequested": "Recall requested",
   "data.loanActionMap.dueDateChanged": "Due date changed",
+  "data.loanActionMap.renewedThroughOverride": "Renewed through override",
 
   "action": "Action",
   "dueDate": "Due date",
@@ -329,6 +330,7 @@
   "loans.columns.actionDate": "Action Date",
   "loans.columns.contributors": "Contributors",
   "loans.columns.checkinLocation": "Check-in location",
+  "loans.columns.comments": "Comments",
   "loans.columns.action": "Action",
   "loans.columns.source": "Source",
   "loans.item.renewed.callout.verb": "renewed",
@@ -786,6 +788,7 @@
   "additionalInfo.placeholder": "Enter more information about the override (required)",
 
   "button.override": "Override",
+  "override.autoNewDueDate": "Due date will be calculated automatically",
   "override.emptyNewDueDate": "Select due date above",
 
   "accounts.comment.field.feeFineComment": "Fee/fine comment",

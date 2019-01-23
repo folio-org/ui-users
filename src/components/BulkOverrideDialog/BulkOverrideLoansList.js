@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  get,
-  find,
-} from 'lodash';
+import { get } from 'lodash';
 import {
   FormattedTime,
   FormattedMessage,
@@ -15,8 +12,6 @@ import {
   Icon,
   MultiColumnList,
 } from '@folio/stripes/components';
-
-import getNewDueDate from './helpers/getNewDueDate';
 
 class BulkOverrideLoansList extends Component {
   static propTypes = {
@@ -30,7 +25,6 @@ class BulkOverrideLoansList extends Component {
     toggleItem: PropTypes.func.isRequired,
     isLoanChecked: PropTypes.func.isRequired,
     failedRenewals: PropTypes.arrayOf(PropTypes.object).isRequired,
-    loanPoliciesRecords: PropTypes.arrayOf(PropTypes.object).isRequired,
   };
 
   static defaultProps = {
@@ -62,41 +56,14 @@ class BulkOverrideLoansList extends Component {
     ];
   }
 
-  newDueDateFormatter = loan => {
-    const { loanPoliciesRecords } = this.props;
-    const {
-      loanPolicyId,
-      dueDate,
-    } = loan;
-
-    const loanPolicy = find(loanPoliciesRecords, { id: loanPolicyId });
-    const {
-      renewable,
-      loansPolicy: {
-        period: {
-          duration,
-          intervalId,
-        } = {}
-      }
-    } = loanPolicy;
-
-    if (renewable) {
-      const newDueDate = getNewDueDate(duration, intervalId, dueDate);
-
-      return (
-        <div>
-          <FormattedTime
-            value={newDueDate}
-            day="numeric"
-            month="numeric"
-            year="numeric"
-          />
-        </div>
-      );
-    } else {
-      return <FormattedMessage id="ui-users.override.emptyNewDueDate" />;
-    }
-  };
+  newDueDateFormatter = ({ autoNewDueDate }) => (
+    <FormattedMessage id={`ui-users.override.${
+      autoNewDueDate
+        ? 'autoNewDueDate'
+        : 'emptyNewDueDate'
+    }`}
+    />
+  );
 
   getShortErrorMessage = (errorMessage) => {
     return get(errorMessage, 'props.values.message.props.values.message', '');

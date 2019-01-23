@@ -299,11 +299,11 @@ class LoanActionsHistory extends React.Component {
         this.props.onClickViewAllAccounts(e, loan);
       }
     }
-  }
+  };
 
   onClosePatronBlockedModal = () => {
     this.setState({ patronBlockedModal: false });
-  }
+  };
 
   showCallout() {
     const message = (
@@ -410,6 +410,7 @@ class LoanActionsHistory extends React.Component {
       dueDate: la => <FormattedTime value={la.dueDate} day="numeric" month="numeric" year="numeric" />,
       itemStatus: la => la.itemStatus,
       source: la => <Link to={`/users/view/${la.user.id}`}>{getFullName(la.user)}</Link>,
+      comments: ({ actionComment }) => (actionComment || '-'),
     };
 
     const requestCount = this.state.requestsCount[this.props.loan.itemId] || 0;
@@ -586,13 +587,14 @@ class LoanActionsHistory extends React.Component {
             <MultiColumnList
               id="list-loanactions"
               formatter={loanActionsFormatter}
-              visibleColumns={['actionDate', 'action', 'dueDate', 'itemStatus', 'source']}
+              visibleColumns={['actionDate', 'action', 'dueDate', 'itemStatus', 'source', 'comments']}
               columnMapping={{
                 action: intl.formatMessage({ id: 'ui-users.loans.columns.action' }),
                 actionDate: intl.formatMessage({ id: 'ui-users.loans.columns.actionDate' }),
                 dueDate: intl.formatMessage({ id: 'ui-users.loans.columns.dueDate' }),
                 itemStatus: intl.formatMessage({ id: 'ui-users.loans.columns.itemStatus' }),
                 source: intl.formatMessage({ id: 'ui-users.loans.columns.source' }),
+                comments: intl.formatMessage({ id: 'ui-users.loans.columns.comments' }),
               }}
               contentData={loanActionsWithUser.records}
             />

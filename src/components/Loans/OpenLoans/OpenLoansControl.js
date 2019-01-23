@@ -12,6 +12,7 @@ import { stripesShape } from '@folio/stripes/core';
 
 import withRenew from '../../../withRenew';
 import TableModel from './components/OpenLoansWithStaticData';
+import isOverridePossible from './helpers/isOverridePossible';
 
 class OpenLoansControl extends React.Component {
   static manifest = Object.freeze({
@@ -287,7 +288,12 @@ class OpenLoansControl extends React.Component {
         .then((renewedLoan) => renewSuccess.push(renewedLoan))
         .catch((error) => {
           renewFailure.push(loan);
-          errorMsg[loan.id] = error;
+          const stringErrorMessage = get(error, 'props.values.message.props.values.message', '');
+
+          errorMsg[loan.id] = {
+            ...error,
+            ...isOverridePossible(stringErrorMessage),
+          };
         });
     });
 
@@ -346,6 +352,7 @@ class OpenLoansControl extends React.Component {
       renew,
       patronBlocks,
     } = this.props;
+
     const countRenews = patronBlocks.filter(a => a.renewals === true);
 
     if (isEmpty(countRenews)) {
