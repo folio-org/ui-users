@@ -93,6 +93,9 @@ class Charge extends React.Component {
       activeRecord: PropTypes.shape({
         update: PropTypes.func,
       }),
+      account: PropTypes.shape({
+        GET: PropTypes.func,
+      }),
     }).isRequired,
     stripes: PropTypes.object.isRequired,
     onCloseChargeFeeFine: PropTypes.func.isRequired,
@@ -100,6 +103,10 @@ class Charge extends React.Component {
     okapi: PropTypes.object,
     selectedLoan: PropTypes.object,
     user: PropTypes.object,
+    onSubmit: PropTypes.func,
+    initialize: PropTypes.func,
+    servicePointsIds: PropTypes.arrayOf(PropTypes.string),
+    defaultServicePointId: PropTypes.string,
   };
 
   constructor(props) {

@@ -101,6 +101,8 @@ class CommentRequiredForm extends React.Component {
 
 CommentRequiredForm.propTypes = {
   handleSubmit: PropTypes.func,
+  pristine: PropTypes.bool,
+  submitting: PropTypes.bool,
 };
 
 export default stripesForm({

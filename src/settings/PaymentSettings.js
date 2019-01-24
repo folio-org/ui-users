@@ -1,7 +1,9 @@
 import _ from 'lodash';
+import PropTypes from 'prop-types';
 import React from 'react';
 import {
   injectIntl,
+  intlShape,
   FormattedMessage,
   FormattedDate
 } from 'react-intl';
@@ -54,6 +56,14 @@ class PaymentSettings extends React.Component {
     },
     activeRecord: {},
   });
+
+  static propTypes = {
+    resources: PropTypes.object,
+    stripes: PropTypes.object,
+    mutator: PropTypes.object,
+    intl: intlShape.isRequired,
+    id: PropTypes.string,
+  };
 
   constructor(props) {
     super(props);
@@ -204,7 +214,6 @@ class PaymentSettings extends React.Component {
     const { intl: { formatMessage } } = this.props;
     if (Array.isArray(items)) {
       const errors = [];
-
       items.forEach((item, index) => {
         const itemErrors = validate(item, index, items, 'nameMethod', formatMessage({ id: 'ui-users.payments.singular' }));
         if (!item.nameMethod) {

@@ -156,6 +156,7 @@ class AccountsHistory extends React.Component {
       feefineshistory: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
+      query: PropTypes.object,
     }),
     okapi: PropTypes.object,
     user: PropTypes.object,
@@ -176,6 +177,8 @@ class AccountsHistory extends React.Component {
     location: PropTypes.object,
     addRecord: PropTypes.bool,
     intl: intlShape.isRequired,
+    num: PropTypes.number,
+    handleAddRecords: PropTypes.func,
   };
 
   constructor(props) {
