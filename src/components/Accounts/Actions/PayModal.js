@@ -125,11 +125,9 @@ class PayModal extends React.Component {
   onSubmit = () => {
     const {
       handleSubmit,
-      reset,
     } = this.props;
 
     handleSubmit();
-    reset();
     this.setState({ amount: this.initialAmount });
   }
 
