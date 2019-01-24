@@ -1,5 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
+import PropTypes from 'prop-types';
 import {
   FormattedMessage,
   intlShape,
@@ -48,6 +49,8 @@ class OwnerSettings extends React.Component {
   });
 
   static propTypes = {
+    mutator: PropTypes.object,
+    resources: PropTypes.object,
     intl: intlShape.isRequired,
   };
 

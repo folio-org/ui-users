@@ -108,6 +108,7 @@ class LoanActionsHistory extends React.Component {
     onClickViewOpenAccounts: PropTypes.func.isRequired,
     onClickViewAccountActionsHistory: PropTypes.func.isRequired,
     renew: PropTypes.func,
+    patronBlocks: PropTypes.arrayOf(PropTypes.object),
     intl: intlShape.isRequired,
   };
 

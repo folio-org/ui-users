@@ -134,9 +134,9 @@ class ViewUser extends React.Component {
       settings: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
-    }),
-    loansHistory: PropTypes.shape({
-      records: PropTypes.arrayOf(PropTypes.object),
+      loansHistory: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
     }),
     mutator: PropTypes.shape({
       selUser: PropTypes.shape({
@@ -175,6 +175,7 @@ class ViewUser extends React.Component {
     getServicePoints: PropTypes.func,
     getPreferredServicePoint: PropTypes.func,
     tagsEnabled: PropTypes.bool,
+    okapi: PropTypes.object,
   };
 
   constructor(props) {
@@ -675,6 +676,7 @@ class ViewUser extends React.Component {
                 user={user}
                 currentUser={currentUser}
                 loan={{ item: {} }}
+                parentResources={resources}
                 selectedLoan={this.state.selectedLoan}
                 handleAddRecords={this.handleAddRecords}
               />
@@ -964,6 +966,7 @@ class ViewUser extends React.Component {
           <IfPermission perm="manualblocks.collection.get">
             <this.connectedPatronBlock
               accordionId="patronBlocksSection"
+              user={user}
               hasPatronBlocks={(hasPatronBlocks === 1 && totalPatronBlocks > 0)}
               patronBlocks={patronBlocks}
               expanded={this.state.sections.patronBlocksSection}

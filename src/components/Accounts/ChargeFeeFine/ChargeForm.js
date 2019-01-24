@@ -79,6 +79,10 @@ class ChargeForm extends React.Component {
     invalid: PropTypes.bool,
     selectedLoan: PropTypes.object,
     isPending: PropTypes.object,
+    onSubmit: PropTypes.func,
+    initialize: PropTypes.func,
+    servicePointsIds: PropTypes.arrayOf(PropTypes.string),
+    defaultServicePointId: PropTypes.string,
   }
 
   constructor(props) {

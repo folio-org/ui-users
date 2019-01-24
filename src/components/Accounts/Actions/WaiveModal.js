@@ -179,11 +179,9 @@ class WaiveModal extends React.Component {
   onSubmit = () => {
     const {
       handleSubmit,
-      reset,
     } = this.props;
 
     handleSubmit();
-    reset();
     this.setState({
       waive: this.initialWaive,
     });
