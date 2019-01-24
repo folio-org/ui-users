@@ -148,10 +148,10 @@ class PatronBlockForm extends React.Component {
     } = this.props;
 
     const submit =
-      <Button buttonStyle="primary" onClick={this.props.handleSubmit} disabled={pristine || submitting || invalid}>
+      <Button marginBottom0 buttonStyle="primary" onClick={this.props.handleSubmit} disabled={pristine || submitting || invalid}>
         {(query.layer === 'edit-block') ? <FormattedMessage id="ui-users.blocks.form.button.save" /> : <FormattedMessage id="ui-users.blocks.form.button.create" />}
       </Button>;
-    const del = (query.layer === 'edit-block') ? <Button buttonStyle="danger" onClick={this.props.onDeleteItem}><FormattedMessage id="ui-users.blocks.form.button.delete" /></Button> : '';
+    const del = (query.layer === 'edit-block') ? <Button marginBottom0 buttonStyle="danger" onClick={this.props.onDeleteItem}><FormattedMessage id="ui-users.blocks.form.button.delete" /></Button> : '';
 
     return (
       <PaneMenu>
