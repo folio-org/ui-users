@@ -643,9 +643,9 @@
     "@bigtest/mocha": "^0.5.2",
     "@bigtest/react": "^0.1.2",
     "@folio/eslint-config-stripes": "^3.2.1",
-    "@folio/stripes": "^1.1.0",
+    "@folio/stripes": "^2.0.0",
     "@folio/stripes-cli": "^1.6.0",
-    "@folio/stripes-core": "^2.17.0",
+    "@folio/stripes-core": "^3.0.1",
     "babel-eslint": "^9.0.0",
     "babel-polyfill": "^6.26.0",
     "chai": "^4.2.0",
@@ -671,7 +671,7 @@
     "uuid": "^3.0.1"
   },
   "peerDependencies": {
-    "@folio/stripes": "^1.0.0",
+    "@folio/stripes": "^2.0.0",
     "react": "*"
   },
   "optionalDependencies": {
