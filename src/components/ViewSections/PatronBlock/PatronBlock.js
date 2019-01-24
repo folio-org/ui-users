@@ -23,6 +23,7 @@ class PatronBlock extends React.Component {
       type: 'okapi',
       records: 'manualblocks',
       path: 'manualblocks',
+      accumulate: 'true',
       DELETE: {
         path: 'manualblocks/%{activeRecord.blockId}',
       },
@@ -48,6 +49,7 @@ class PatronBlock extends React.Component {
         DELETE: PropTypes.func,
       }),
     }),
+    user: PropTypes.object,
   };
 
   constructor(props) {
@@ -75,8 +77,19 @@ class PatronBlock extends React.Component {
     };
   }
 
+  componentDidMount() {
+    const { mutator: { patronBlocks }, user, onToggle, expanded, accordionId } = this.props;
+    const query = `userId=${user.id}`;
+    patronBlocks.GET({ params: { query } }).then(records => {
+      const blocks = records.filter(p => moment(moment(p.expirationDate).format()).isSameOrAfter(moment().format()));
+      if ((blocks.length > 0 && !expanded) || (!blocks.length && expanded)) {
+        onToggle({ id: accordionId });
+      }
+    });
+  }
+
   componentDidUpdate(prevProps) {
-    const { onToggle, expanded, accordionId, patronBlocks } = this.props;
+    const { patronBlocks } = this.props;
     const prevBlocks = prevProps.patronBlocks;
     const { submitting } = this.state;
     const prevExpirated = prevBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
@@ -94,12 +107,6 @@ class PatronBlock extends React.Component {
         this.props.mutator.activeRecord.update({ blockId: p.id });
         this.props.mutator.patronBlocks.DELETE({ id: p.id });
       });
-    }
-
-    if (!_.isEqual(patronBlocks, prevProps.patronBlocks)) {
-      if ((patronBlocks.length > 0 && !expanded) || (patronBlocks.length === 0 && expanded)) {
-        onToggle({ id: accordionId });
-      }
     }
   }
 
@@ -147,7 +154,8 @@ class PatronBlock extends React.Component {
       sortOrder,
       sortDirection
     } = this.state;
-    const contentData = _.orderBy(patronBlocks, [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
+    let contentData = patronBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrAfter(moment().format()));
+    contentData = _.orderBy(contentData, [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
     const visibleColumns = [
       'Type',
       'Display description',
@@ -156,9 +164,7 @@ class PatronBlock extends React.Component {
     const buttonDisabled = this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
     const displayWhenOpen =
       <Button disabled={!buttonDisabled} onClick={e => { props.onClickViewPatronBlock(e, 'add'); }}>
-        <Icon icon="plus-sign">
-          <FormattedMessage id="ui-users.blocks.buttons.add" />
-        </Icon>
+        <FormattedMessage id="ui-users.blocks.buttons.add" />
       </Button>;
     const items =
       <MultiColumnList
