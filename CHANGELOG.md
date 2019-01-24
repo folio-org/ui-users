@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## 2.20.0 IN PROGRESS
+
+* Fix Pay and Waive Fee/Fine. Fix UIU-856.
+* Fix Patron Block accordion. Fix UIU-810.
 
 ## [2.19.0](https://github.com/folio-org/ui-users/tree/v2.19.0) (2019-01-07)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.18.0...v2.19.0)
