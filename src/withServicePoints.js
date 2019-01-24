@@ -1,7 +1,14 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { get } from 'lodash';
-import { setServicePoints, setCurServicePoint, HandlerManager, coreEvents as events } from '@folio/stripes/core';
+
+import {
+  stripesShape,
+  setServicePoints,
+  setCurServicePoint,
+  HandlerManager,
+  coreEvents as events,
+} from '@folio/stripes/core';
 
 const withServicePoints = WrappedComponent => class WithServicePointsComponent extends React.Component {
     static manifest = {
@@ -27,7 +34,7 @@ const withServicePoints = WrappedComponent => class WithServicePointsComponent e
           path: 'service-points-users/%{servicePointUserId}',
         },
       },
-    }
+    };
 
     static propTypes = {
       parentResources: PropTypes.object,
@@ -37,6 +44,9 @@ const withServicePoints = WrappedComponent => class WithServicePointsComponent e
         }),
         servicePointsUsers: PropTypes.shape({
           records: PropTypes.arrayOf(PropTypes.object),
+        }),
+        servicePointUserId: PropTypes.shape({
+          replace: PropTypes.func.isRequired,
         }),
       }),
       match: PropTypes.shape({
@@ -59,15 +69,13 @@ const withServicePoints = WrappedComponent => class WithServicePointsComponent e
           PUT: PropTypes.func.isRequired,
         }),
       }),
-      stripes: PropTypes.shape({
-        hasPerm: PropTypes.func.isRequired,
-      }).isRequired,
+      stripes: stripesShape.isRequired,
     };
 
     state = {
       userServicePoints: [],
       userPreferredServicePoint: undefined,
-    }
+    };
 
     static getDerivedStateFromProps(nextProps, state) {
       // Save the id of the record in the service-points-users table for later use when mutating it.
@@ -122,11 +130,11 @@ const withServicePoints = WrappedComponent => class WithServicePointsComponent e
 
     getServicePoints = () => {
       return this.state.userServicePoints;
-    }
+    };
 
     getPreferredServicePoint = () => {
       return this.state.userPreferredServicePoint;
-    }
+    };
 
     updateServicePoints = (servicePoints, preferredServicePoint) => {
       let mutator;
@@ -150,7 +158,7 @@ const withServicePoints = WrappedComponent => class WithServicePointsComponent e
           this.setCurrentServicePoint(servicePoints, record.defaultServicePointId);
         }
       });
-    }
+    };
 
     setCurrentServicePoint(servicePoints, defaultServicePointId) {
       const { stripes: { store } } = this.props;

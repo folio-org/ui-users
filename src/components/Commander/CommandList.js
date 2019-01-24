@@ -5,6 +5,10 @@ import { isRestricted } from './RestrictedShortcuts';
 
 class CommandList extends Component {
   static propTypes = {
+    children: PropTypes.oneOfType([
+      PropTypes.node,
+      PropTypes.arrayOf(PropTypes.node),
+    ]).isRequired,
     commands: PropTypes.arrayOf(
       PropTypes.shape({
         handler: PropTypes.func,

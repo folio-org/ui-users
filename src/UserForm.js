@@ -109,6 +109,7 @@ class UserForm extends React.Component {
     pristine: PropTypes.bool,
     submitting: PropTypes.bool,
     onCancel: PropTypes.func,
+    onSubmit: PropTypes.func,
     initialValues: PropTypes.object,
   };
 
@@ -216,7 +217,7 @@ class UserForm extends React.Component {
   // eslint-disable-next-line class-methods-use-this
   ignoreEnterKey = (e) => {
     e.preventDefault();
-  }
+  };
 
   handleSectionToggle({ id }) {
     this.setState((curState) => {
@@ -250,7 +251,7 @@ class UserForm extends React.Component {
   handleSaveKeyCommand = (e) => {
     e.preventDefault();
     this.executeSave();
-  }
+  };
 
   executeSave() {
     const {
