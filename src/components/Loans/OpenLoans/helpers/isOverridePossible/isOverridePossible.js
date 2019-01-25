@@ -1,19 +1,20 @@
 import overridePossibleMessages from './overridePossibleMessages';
 
 export default (errorMessage) => {
-  return overridePossibleMessages.reduce((data, { message, showDueDatePicker }) => {
+  const data = {
+    overridable: false,
+    autoNewDueDate: true,
+  };
+
+  overridePossibleMessages.forEach(({ message, showDueDatePicker }) => {
     if (errorMessage.includes(message)) {
       if (showDueDatePicker) {
         data.autoNewDueDate = false;
       }
 
-      // eslint-disable-next-line no-param-reassign
       data.overridable = true;
     }
-
-    return data;
-  }, {
-    overridable: false,
-    autoNewDueDate: true,
   });
+
+  return data;
 };
