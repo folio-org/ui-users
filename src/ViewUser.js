@@ -62,7 +62,7 @@ class ViewUser extends React.Component {
       clear: false,
       shouldRefresh: (resource, action, refresh) => {
         const { path } = action.meta;
-        return refresh || path.match(/link/);
+        return refresh || (path && path.match(/link/));
       },
     },
     hasPatronBlocks: {
@@ -439,7 +439,7 @@ class ViewUser extends React.Component {
 
   checkScope = () => {
     return document.getElementById('ModuleContainer').contains(document.activeElement);
-  }
+  };
 
   getUser() {
     const { resources, match: { params: { id } } } = this.props;
@@ -567,14 +567,14 @@ class ViewUser extends React.Component {
 
   goToEdit = () => {
     this.props.onEdit();
-  }
+  };
 
   // focus management when edit layer closes (refocus edit button)
   afterCloseEdit = () => {
     if (this.editButton.current) {
       this.editButton.current.focus();
     }
-  }
+  };
 
   isLayerOpen = value => {
     const { layer } = this.props.resources.query;
@@ -892,7 +892,7 @@ class ViewUser extends React.Component {
         </Icon>
       </Button>
     );
-  }
+  };
 
   renderUser(user) {
     const {

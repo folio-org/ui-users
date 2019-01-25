@@ -104,12 +104,18 @@ class UserForm extends React.Component {
         reset: PropTypes.func.isRequired,
         GET: PropTypes.func.isRequired,
       }).isRequired,
-    }),
-    parentResources: PropTypes.object,
+    }).isRequired,
+    parentResources: PropTypes.object.isRequired,
     pristine: PropTypes.bool,
     submitting: PropTypes.bool,
-    onCancel: PropTypes.func,
-    initialValues: PropTypes.object,
+    onCancel: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func.isRequired,
+    initialValues: PropTypes.object.isRequired,
+  };
+
+  static defaultProps = {
+    pristine: false,
+    submitting: false,
   };
 
   constructor(props) {
@@ -216,7 +222,7 @@ class UserForm extends React.Component {
   // eslint-disable-next-line class-methods-use-this
   ignoreEnterKey = (e) => {
     e.preventDefault();
-  }
+  };
 
   handleSectionToggle({ id }) {
     this.setState((curState) => {
@@ -250,7 +256,7 @@ class UserForm extends React.Component {
   handleSaveKeyCommand = (e) => {
     e.preventDefault();
     this.executeSave();
-  }
+  };
 
   executeSave() {
     const {

@@ -73,26 +73,27 @@ class Modals extends React.Component {
     return (
       <React.Fragment>
         <this.connectedBulkRenewalDialog
+          user={user}
           stripes={stripes}
-          successRenewals={renewSuccess}
-          failedRenewals={renewFailure}
-          loanPolicies={loanPolicies}
           errorMessages={errorMsg}
-          requestCounts={requestCounts}
+          loanPolicies={loanPolicies}
           open={bulkRenewalDialogOpen}
+          failedRenewals={renewFailure}
+          requestCounts={requestCounts}
+          successRenewals={renewSuccess}
           onClose={hideBulkRenewalDialog}
         />
         <this.connectedChangeDueDateDialog
+          user={user}
           stripes={stripes}
           loanIds={loanIds}
-          user={user}
           open={changeDueDateDialogOpen}
           onClose={hideChangeDueDateDialog}
         />
         <PatronBlockModal
           open={patronBlockedModal}
-          onClose={onClosePatronBlockedModal}
           patronBlocks={patronBlocks}
+          onClose={onClosePatronBlockedModal}
           viewUserPath={`/users/view/${(user || {}).id}?filters=pg.${patronGroup.group}&sort=Name`}
         />
       </React.Fragment>
