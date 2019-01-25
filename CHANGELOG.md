@@ -4,6 +4,7 @@
 
 * Fix Pay and Waive Fee/Fine. Fix UIU-856.
 * Fix Patron Block accordion. Fix UIU-810.
+* Upgrade to stripes v2.0.0.
 
 ## [2.19.0](https://github.com/folio-org/ui-users/tree/v2.19.0) (2019-01-07)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.18.0...v2.19.0)
