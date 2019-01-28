@@ -1,6 +1,6 @@
 export default [
   {
-    message: 'Loan is not renewable',
+    message: 'loan is not renewable',
     showDueDatePicker: true,
   },
   {
