@@ -44,10 +44,6 @@ class OpenLoansSubHeader extends React.Component {
       toggleDropdownState: false,
     };
 
-    this.bulkActionsTooltip = <FormattedMessage id="ui-users.bulkActions.tooltip" />;
-    this.renewString = <FormattedMessage id="ui-users.renew" />;
-    this.changeDueDateString = <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />;
-
     this.headers = [
       'action',
       'dueDate',
@@ -172,30 +168,20 @@ class OpenLoansSubHeader extends React.Component {
               marginBottom0
               id="renew-all"
               disabled={noSelectedLoans}
-              title={
-                noSelectedLoans
-                  ? this.bulkActionsTooltip
-                  : this.renewString
-              }
               onClick={countRenews.length > 0
                 ? openPatronBlockedModal
                 : renewSelected
               }
             >
-              {this.renewString}
+              <FormattedMessage id="ui-users.renew" />
             </Button>
             <Button
               marginBottom0
               id="change-due-date-all"
               disabled={noSelectedLoans}
-              title={
-                noSelectedLoans
-                  ? this.bulkActionsTooltip
-                  : this.changeDueDateString
-              }
               onClick={showChangeDueDateDialog}
             >
-              {this.changeDueDateString}
+              <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />
             </Button>
             <ExportCsv
               data={recordsToCSV}
