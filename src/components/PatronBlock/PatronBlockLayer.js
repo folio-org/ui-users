@@ -149,7 +149,7 @@ class PatronBlockLayer extends React.Component {
         <strong>{selectedItem.desc}</strong>
         {' '}
         {intl.formatMessage({ id: 'ui-users.blocks.message' })}
-      </span> : 'Hola mundo';
+      </span> : '';
 
     return (
       <div>
