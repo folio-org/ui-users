@@ -130,12 +130,16 @@ class PatronBlockForm extends React.Component {
 
   renderFirstMenu = () => (
     <PaneMenu>
-      <IconButton
-        id="close-patron-block"
-        onClick={this.props.onClose}
-        title="Close"
-        icon="times"
-      />
+      <FormattedMessage id="ui-users.blocks.form.button.close">
+        { ariaLabel => (
+          <IconButton
+            id="close-patron-block"
+            onClick={this.props.onClose}
+            ariaLabel={ariaLabel}
+            icon="times"
+          />
+        )}
+      </FormattedMessage>
     </PaneMenu>
   );
 

@@ -126,7 +126,6 @@ class PermissionSetForm extends React.Component {
           <IfPermission perm="perms.permissions.item.delete">
             <Button
               id="clickable-delete-set"
-              title={<FormattedMessage id="ui-users.delete" />}
               buttonStyle="danger"
               onClick={this.beginDelete}
               disabled={confirmDelete}
@@ -139,7 +138,6 @@ class PermissionSetForm extends React.Component {
         <Button
           id="clickable-save-permission-set"
           type="submit"
-          title={<FormattedMessage id="ui-users.saveAndClose" />}
           buttonStyle="primary paneHeaderNewButton"
           marginBottom0
           disabled={(pristine || submitting)}

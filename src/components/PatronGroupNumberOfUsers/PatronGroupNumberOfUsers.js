@@ -37,7 +37,7 @@ class RenderPatronGroupNumberOfUsers extends React.Component {
 
   render() {
     const value = this.getNumberOfPatrons();
-    return (<div title={value}>{value}</div>);
+    return (<div>{value}</div>);
   }
 }
 
