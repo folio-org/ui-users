@@ -20,6 +20,7 @@ import {
 
 import {
   IfPermission,
+  stripesShape,
 } from '@folio/stripes/core';
 
 import ActionsBar from '../components/ActionsBar';
@@ -46,6 +47,7 @@ class ClosedLoans extends React.Component {
   });
 
   static propTypes = {
+    stripes: stripesShape.isRequired,
     buildRecords: PropTypes.func,
     onClickViewLoanActionsHistory: PropTypes.func.isRequired,
     loans: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -285,6 +287,8 @@ class ClosedLoans extends React.Component {
   renderActions(loan) {
     const accounts = _.get(this.props.resources, ['loanAccount', 'records'], []);
     const accountsLoan = accounts.filter(a => a.loanId === loan.id) || [];
+    const { stripes } = this.props;
+    const buttonDisabled = !stripes.hasPerm('ui-users.feesfines.actions.all');
 
     return (
       <UncontrolledDropdown
@@ -298,7 +302,7 @@ class ClosedLoans extends React.Component {
             </MenuItem>
           </IfPermission>
           <MenuItem itemMeta={{ loan, action: 'feefine' }}>
-            <Button buttonStyle="dropdownItem"><FormattedMessage id="ui-users.loans.newFeeFine" /></Button>
+            <Button disabled={buttonDisabled} buttonStyle="dropdownItem"><FormattedMessage id="ui-users.loans.newFeeFine" /></Button>
           </MenuItem>
           <MenuItem itemMeta={{ loan, action: 'feefinedetails' }}>
             <Button disabled={!(accountsLoan.length > 0)} buttonStyle="dropdownItem"><FormattedMessage id="ui-users.loans.feeFineDetails" /></Button>
