@@ -224,8 +224,8 @@ class LoanActionsHistory extends React.Component {
   }
 
   getLoanActions() {
-    const { loanid, mutator } = this.props;
-    const query = `id==${loanid}`;
+    const { loanid, mutator, loan } = this.props;
+    const query = `id==${loanid || loan.id}`;
     const limit = 100;
     mutator.loanActions.reset();
     mutator.loanActions.GET({ params: { query, limit } })
@@ -262,8 +262,8 @@ class LoanActionsHistory extends React.Component {
   }
 
   getFeeFine() {
-    const { mutator, loanid } = this.props;
-    const query = `loanId=${loanid}`;
+    const { mutator, loan, loanid } = this.props;
+    const query = `loanId=${loanid || loan.id}`;
 
     mutator.loanAccountsActions.GET({ params: { query } }).then(records => {
       const total = records.reduce((a, { amount }) => (a + parseFloat(amount)), 0);
