@@ -15,7 +15,7 @@
     "type": "app",
     "displayName": "ui-users.meta.title",
     "route": "/users",
-    "home": "/users?sort=Name",
+    "home": "/users?sort=name",
     "hasSettings": true,
     "queryResource": "query",
     "actionNames": [

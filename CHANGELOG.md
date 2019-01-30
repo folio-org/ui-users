@@ -4,6 +4,7 @@
 
 * Support login v5, bl-users v4 in parallel with previous releases.
 * Add "all actions" permission from Closed Loans. Fix UIU-867.
+* Use static column labels, not their aliases, as keys to CQL sort table. Refs UIU-479, UIU-864, STSMACOM-93.
 
 ## [2.20.0](https://github.com/folio-org/ui-users/tree/v2.20.0) (2019-01-25)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.19.0...v2.20.0)
