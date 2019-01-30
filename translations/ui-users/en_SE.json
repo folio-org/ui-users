@@ -766,5 +766,9 @@
     "extended.copyLink": "Copy link",
     "extended.createPasswordModal.label": "Create password email confirmation",
     "extended.createPasswordModal.linkWasSent": "A create password link was sent to:",
-    "extended.createPasswordModal.linkInstructions": "The following link can be sent if the email was now received"
+    "extended.createPasswordModal.linkInstructions": "The following link can be sent if the email was now received",
+    "data.loanActionMap.renewedThroughOverride": "Renewed through override",
+    "loans.columns.comments": "Comments",
+    "override.autoNewDueDate": "Due date will be calculated automatically",
+    "blocks.form.button.close": "Close patron block dialog"
 }
