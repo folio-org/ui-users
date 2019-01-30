@@ -766,5 +766,9 @@
     "extended.copyLink": "复制链接",
     "extended.createPasswordModal.label": "创建密码邮件确认",
     "extended.createPasswordModal.linkWasSent": "创建密码链接已发送到：",
-    "extended.createPasswordModal.linkInstructions": "如果现在收到电子邮件，则可以发送以下链接"
+    "extended.createPasswordModal.linkInstructions": "如果现在收到电子邮件，则可以发送以下链接",
+    "data.loanActionMap.renewedThroughOverride": "通过覆盖续借",
+    "loans.columns.comments": "备注",
+    "override.autoNewDueDate": "到期日将自动计算",
+    "blocks.form.button.close": "关闭读者违规对话框"
 }
