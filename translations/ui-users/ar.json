@@ -419,7 +419,7 @@
     "feefines.callout": "تم <strong>حذف</strong> نوع الرسم/الغرامة <strong>feefine}</strong> بنجاح.",
     "feefines.disabledItem": "يمكن حذف نوع الغرامات/الرسوم أثناء استخدامه بواسطة أحد حسابات المستخدمين",
     "feefines.modalHeader": "حذف نوع الغرامات/الرسوم؟",
-    "feefines.modalMessage": "سيتم <strong>حذف</strong> نوع الغرامات/الرسوم <strong>{feefine}</strong> ",
+    "feefines.modalMessage": "سيتم <strong>حذف</strong> نوع الغرامات/الرسوم <strong>{feefine}</strong>",
     "feefines.ownerLabel": "مالك الرسم/الغرامة",
     "feefines.columns.type": "نوع الغرامة/الرسم*",
     "feefines.columns.amount": "المبلغ الافتراضي",
