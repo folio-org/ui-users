@@ -1017,7 +1017,7 @@ class ViewUser extends React.Component {
           </IfPermission>
 
           <IfPermission perm="ui-users.loans.all">
-            <IfInterface name="loan-policy-storage" version="1.0">
+            <IfInterface name="loan-policy-storage" version="2.0">
               { /* Check without version, so can support either of multiple versions.
           Replace with specific check when facility for providing
           multiple versions is available */ }

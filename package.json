@@ -34,7 +34,7 @@
       "configuration": "2.0",
       "circulation": "3.0 4.0 5.0",
       "permissions": "5.0",
-      "loan-policy-storage": "1.0",
+      "loan-policy-storage": "2.0",
       "loan-storage": "4.0 5.0",
       "login": "4.7 5.0",
       "feesfines": "15.0",
