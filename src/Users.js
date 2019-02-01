@@ -8,7 +8,7 @@ import {
 } from 'react-intl';
 
 import { makeQueryFunction, SearchAndSort } from '@folio/stripes/smart-components';
-import { AppIcon } from '@folio/stripes/components';
+import { AppIcon } from '@folio/stripes-core/src/components';
 
 import uuid from 'uuid';
 import ViewUser from './ViewUser';

@@ -185,4 +185,6 @@ export default function config() {
     owners: [],
     totalRecords: 0,
   });
+
+  this.get('/authn/credentials-existence', () => {});
 }
