@@ -295,7 +295,7 @@ class PaymentSettings extends React.Component {
             onCreate={this.onCreateItem}
             onDelete={this.showConfirmDialog}
             isEmptyMessage={
-              formatMessage({ id: 'stripes-smart-components.cv.noExistingTerms' },
+              formatMessage({ id: 'ui-users.payments.nodata' },
                 { terms: 'label' })
             }
           />

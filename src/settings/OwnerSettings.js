@@ -284,12 +284,11 @@ class OwnerSettings extends React.Component {
             onUpdate={this.onUpdateItem}
             onCreate={this.onCreateItem}
             onDelete={this.showConfirmDialog}
-            isEmptyMessage={(
-              <FormattedMessage
-                id="stripes-smart-components.cv.noExistingTerms"
-                values={{ terms: 'label' }}
-              />
-            )}
+            isEmptyMessage={
+              formatMessage({
+                id: 'ui-users.owners.nodata' },
+                { terms: 'label' })
+            }
             validate={this.validate}
             warn={this.warn}
           />
