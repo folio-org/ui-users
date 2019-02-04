@@ -577,7 +577,9 @@ class ViewUser extends React.Component {
   };
 
   isLayerOpen = value => {
-    const { layer } = this.props.resources.query;
+    const { location: { search } } = this.props;
+    const query = queryString.parse(search || '');
+    const { layer } = query;
     return layer === value;
   };
 

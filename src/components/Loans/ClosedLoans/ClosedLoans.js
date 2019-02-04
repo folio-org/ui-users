@@ -345,7 +345,6 @@ class ClosedLoans extends React.Component {
               <Button
                 marginBottom0
                 id="anonymize-all"
-                title={anonymizeString}
                 onClick={this.anonymizeLoans}
               >
                 {anonymizeString}
