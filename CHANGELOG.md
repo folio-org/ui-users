@@ -4,6 +4,7 @@
 
 * Support login v5, bl-users v4 in parallel with previous releases.
 * Add "all actions" permission from Closed Loans. Fix UIU-867.
+* Update integration tests to accommodate MCL aria changes. Fixes UIU-880.
 
 ## [2.20.0](https://github.com/folio-org/ui-users/tree/v2.20.0) (2019-01-25)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.19.0...v2.20.0)
