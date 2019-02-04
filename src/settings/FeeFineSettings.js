@@ -273,7 +273,6 @@ class FeefineSettings extends React.Component {
     //    const owners = _.get(this.props.resources, ['owners', 'records'], []);
     const { owners } = this.state;
     const filterOwners = this.getOwners();
-   
     const modalMessage = (
       <SafeHTMLMessage
         id="stripes-smart-components.cv.termWillBeDeleted"
