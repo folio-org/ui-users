@@ -285,8 +285,7 @@ class OwnerSettings extends React.Component {
             onCreate={this.onCreateItem}
             onDelete={this.showConfirmDialog}
             isEmptyMessage={
-              formatMessage({
-                id: 'ui-users.owners.nodata' },
+              formatMessage({ id: 'ui-users.owners.nodata' },
                 { terms: 'label' })
             }
             validate={this.validate}
@@ -317,7 +316,7 @@ class OwnerSettings extends React.Component {
           >
             <Row>
               <Col xs>
-                <FormattedMessage id="stripes-smart-components.cv.cannotDeleteTermMessage" values={{ type }} />
+                <FormattedMessage id="ui-users.owners.cannotDeleteOwner" values={{ type }} />
               </Col>
             </Row>
             <Row>
