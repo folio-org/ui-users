@@ -69,7 +69,7 @@ module.exports.test = function foo(uiTestCtx) {
           .wait(wait)
           .type('#input-user-search', '0')
           .wait(wait)
-          .wait('#list-users div[role="listitem"]:nth-child(9)')
+          .wait('#list-users div[role="row"][aria-rowindex="3"]')
           .evaluate(() => {
             const ubc = [];
             const list = document.querySelectorAll('#list-users div[role="listitem"]');
