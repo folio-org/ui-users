@@ -14,8 +14,9 @@ import {
   TextArea,
   Checkbox,
   Datepicker,
-  AppIcon
+  AppIcon,
 } from '@folio/stripes/components';
+
 import { TitleManager } from '@folio/stripes/core';
 import { Field } from 'redux-form';
 import stripesForm from '@folio/stripes/form';
