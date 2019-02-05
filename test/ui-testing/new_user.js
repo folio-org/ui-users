@@ -82,7 +82,7 @@ module.exports.test = function meh(uitestctx) {
           .type('#input-user-search', '0')
           .wait('button[type=submit]')
           .click('button[type=submit]')
-          .wait('#list-users div[role="listitem"] > a')
+          .wait('#list-users div[role="row"] > a')
           .click('#clickable-newuser')
           .wait('#adduser_group > option:nth-of-type(4)')
           .evaluate(() => document.querySelector('#adduser_group > option:nth-of-type(3)').value)
@@ -159,7 +159,7 @@ module.exports.test = function meh(uitestctx) {
           .wait('#list-users[data-total-count="1"]')
           .evaluate((uid) => {
             const node = Array.from(
-              document.querySelectorAll('#list-users div[role="listitem"] > a > div[role="gridcell"]')
+              document.querySelectorAll('#list-users div[role="row"] > a > div[role="gridcell"]')
             ).find(e => e.textContent === uid);
             if (node) {
               node.parentElement.click();
