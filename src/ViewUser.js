@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import queryString from 'query-string';
 import {
+  AppIcon,
   IfInterface,
   IfPermission,
   TitleManager,
@@ -924,15 +925,25 @@ class ViewUser extends React.Component {
         data-test-instance-details
         id="pane-userdetails"
         defaultWidth={paneWidth}
-        paneTitle={(
-          <span data-test-header-title>
-            {getFullName(user)}
-          </span>
-        )}
+        paneTitle={
+          <div
+            style={{ textAlign: 'center' }}
+            data-test-header-title
+          >
+            <AppIcon
+              iconAriaHidden
+              app="users"
+              appIconKey="users"
+              size="small"
+            />
+            <span style={{ margin: '0 4px' }}>
+              {getFullName(user)}
+            </span>
+          </div>
+        }
         lastMenu={detailMenu}
         dismissible
         onClose={onClose}
-        appIcon={{ app: 'users' }}
         actionMenu={this.getActionMenu}
       >
         <TitleManager record={getFullName(user)} />

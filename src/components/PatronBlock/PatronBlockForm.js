@@ -13,11 +13,12 @@ import {
   IconButton,
   TextArea,
   Checkbox,
-  Datepicker,
-  AppIcon,
+  Datepicker
 } from '@folio/stripes/components';
-
-import { TitleManager } from '@folio/stripes/core';
+import {
+  AppIcon,
+  TitleManager
+} from '@folio/stripes/core';
 import { Field } from 'redux-form';
 import stripesForm from '@folio/stripes/form';
 import { ViewMetaData } from '@folio/stripes/smart-components';
