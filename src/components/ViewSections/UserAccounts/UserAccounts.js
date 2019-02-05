@@ -117,7 +117,7 @@ class UserAccounts extends React.Component {
     const resources = this.props.resources;
     const openAccountsTotal = this.state.openAccounts || 0;
     const closedAccountsTotal = this.state.closedAccounts || 0;
-    const total = this.state.total || "0.00";
+    const total = this.state.total || '0.00';
     const { expanded, onToggle, accordionId } = this.props;
 
     const openAccountsCount = (_.get(resources.openAccountsCount, ['isPending'], true)) ? -1 : openAccountsTotal;
@@ -149,7 +149,7 @@ class UserAccounts extends React.Component {
                 >
                   <FormattedMessage id={item.formattedMessageId} values={{ count: item.count }} />
                 </Link>
-                {item.id==='clickable-viewcurrentaccounts' && <FormattedMessage id="ui-users.accounts.totalOpenAccounts" values={{ amount: total }} />}
+                {item.id === 'clickable-viewcurrentaccounts' && <FormattedMessage id="ui-users.accounts.totalOpenAccounts" values={{ amount: total }} />}
               </li>)}
             items={[
               {
