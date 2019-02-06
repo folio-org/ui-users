@@ -177,6 +177,7 @@ class PayModal extends React.Component {
 
   render() {
     const {
+      accounts,
       submitting,
       invalid,
       pristine,
@@ -190,8 +191,10 @@ class PayModal extends React.Component {
     const { amount } = this.state;
 
     const selected = this.calculateSelectedAmount();
+    const account = (accounts[0] || {});
     const remaining = parseFloat(totalAmount - amount).toFixed(2);
-    const dataOptions = _.uniqBy(payments.map(p => ({ id: p.id, label: p.nameMethod })), 'label');
+    let dataOptions = payments.filter(p => p.ownerId === account.ownerId);
+    dataOptions = _.uniqBy(dataOptions.map(p => ({ id: p.id, label: p.nameMethod })), 'label');
 
     const placeholderTranslationId = commentRequired
       ? 'ui-users.accounts.pay.placeholder.additional.required'
@@ -319,6 +322,24 @@ class PayModal extends React.Component {
             </Col>
           </Row>
           <br />
+          {this.state.notify &&
+            <div>
+              <Row>
+                <Col xs>
+                  <FormattedMessage id="ui-users.accounts.pay.field.infoPatron" />
+                </Col>
+              </Row>
+              <br />
+              <Row>
+                <Col xs>
+                  <Field
+                    name="patronInfo"
+                    component={TextArea}
+                  />
+                </Col>
+              </Row>
+            </div>
+          }
           <Row end="xs">
             <Col xs>
               <Button onClick={this.onClose}>
