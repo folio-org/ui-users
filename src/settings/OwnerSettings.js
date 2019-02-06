@@ -237,6 +237,7 @@ class OwnerSettings extends React.Component {
           dataOptions={options}
           renderToOverlay
           marginBottom0
+          onBlur={e => { e.preventDefault(); }}
         />
       )
     };

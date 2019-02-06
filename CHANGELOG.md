@@ -4,6 +4,8 @@
 
 * Support login v5, bl-users v4 in parallel with previous releases.
 * Add "all actions" permission from Closed Loans. Fix UIU-867.
+* Update integration tests to accommodate MCL aria changes. Fixes UIU-880.
+* Don't pass `appIcon` to `<Pane>`.
 * Add user information Fee/Fine section display fields. Fix UIU-688
 * Add new fields to payment modal. Fix UIU-803.
 * Fix delete Fee/Fine Owner message. Fix UIU-841.

@@ -60,8 +60,8 @@ module.exports.test = function foo(uiTestCtx) {
           .click('#clickable-users-module')
           .wait('#clickable-filter-pg-faculty')
           .click('#clickable-filter-pg-faculty')
-          .wait('#list-users div[role="listitem"]:nth-of-type(2) > a > div:nth-of-type(3)')
-          .evaluate(() => document.querySelector('#list-users div[role="listitem"]:nth-of-type(2) > a > div:nth-of-type(3)').textContent)
+          .wait('#list-users div[role="row"]:nth-of-type(2) > a > div:nth-of-type(3)')
+          .evaluate(() => document.querySelector('#list-users div[role="row"][aria-rowindex="2"] > a > div:nth-of-type(3)').textContent)
           .then((result) => {
             userBarcode = result;
             done();
@@ -82,7 +82,7 @@ module.exports.test = function foo(uiTestCtx) {
           .wait('#list-users[data-total-count="1"]')
           .evaluate((uid) => {
             const node = Array.from(
-              document.querySelectorAll('#list-users div[role="listitem"] > a > div[role="gridcell"]')
+              document.querySelectorAll('#list-users div[role="row"] > a > div[role="gridcell"]')
             ).find(e => e.textContent === uid);
             if (node) {
               node.parentElement.click();
