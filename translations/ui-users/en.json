@@ -509,6 +509,7 @@
   "accounts.all":"All",
   "accounts.selected": "Selected: {amount}",
   "accounts.numOpenAccounts": "{count, number} {count, plural, one {open fee/fine} other {open fees/fines}}",
+  "accounts.totalOpenAccounts": "(Total: {amount})",
   "accounts.numClosedAccounts": "{count, number} {count, plural, one {closed fee/fine} other {closed fees/fines}}",
   "accounts.chargeManual": "Charge fee/fine",
 
@@ -642,6 +643,7 @@
   "accounts.error.comment":"Enter a comment",
   "accounts.error.message":"Enter an amount greater than 0",
   "accounts.error.exceeds": "Pay amount exceeds the selected amount",
+  "accounts.error.select": "Select one",
 
   "accounts.history.columns.title":"Instance (Item Type)",
   "accounts.history.columns.amount":"Billed",
@@ -692,12 +694,18 @@
   "accounts.pay.success": "The <strong>{feefine}</strong> fee/fine of <strong>{amount}</strong> has been successfully <strong>{action}</strong>",
   "accounts.pay.placeholder.additional.required":"Enter more information about the fee/fine payment (required)",
   "accounts.pay.placeholder.additional.optional":"Enter more information about the fee/fine payment (optional)",
+  "accounts.pay.owner.placeholder": "Select desk",
+  "accounts.pay.method.placeholder": "Select type",
+  "accounts.pay.transaction.placeholder": "Enter check #, etc.",
   "accounts.pay.notifyPatron": "Notify patron",
   "accounts.pay.pay": "Pay",
   "accounts.pay.cancel": "Cancel",
   "accounts.pay.summary.partiallyPay": "Partially paying",
   "accounts.pay.summary.paying": "Paying",
   "accounts.pay.summary": "{payType} {feesFinesAmount} {feeFineForm} for a total amount of {payAmount}",
+  "accounts.pay.fully": "Paid Fully",
+  "accounts.pay.partially": "Paid Partially",
+  "accounts.pay.closed": "Closed",
 
   "accounts.waive.error.amount":"Waive amount must be > 0",
   "accounts.waive.error.exceeds":"Waive amount exceeds the selected amount",
@@ -810,5 +818,6 @@
   "accounts.actions.warning.payAction": "paid",
   "accounts.actions.warning.waiveAction": "waived",
   "accounts.actions.warning.deselect": "Deselect to continue",
-  "accounts.actions.cancellation.success": "<b>{count}</b> {count, plural, one {fee/fine} other {fees/fines}} for <b>{amount}</b> has been successfully <b>{action}</b> for <b>{user}</b>"
+  "accounts.actions.cancellation.success": "<b>{count}</b> {count, plural, one {fee/fine} other {fees/fines}} for <b>{amount}</b> has been successfully <b>{action}</b> for <b>{user}</b>",
+  "accounts.status.outstanding": "Outstanding"
 }
