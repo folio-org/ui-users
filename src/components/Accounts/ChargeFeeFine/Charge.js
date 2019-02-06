@@ -8,7 +8,11 @@ import {
   Callout,
   ConfirmationModal,
 } from '@folio/stripes/components';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import ChargeForm from './ChargeForm';
 import ItemLookup from './ItemLookup';
@@ -111,6 +115,7 @@ class Charge extends React.Component {
     initialize: PropTypes.func,
     servicePointsIds: PropTypes.arrayOf(PropTypes.string),
     defaultServicePointId: PropTypes.string,
+    intl: intlShape.isRequired,
   };
 
   constructor(props) {
@@ -160,15 +165,17 @@ class Charge extends React.Component {
   onClickCharge(type) {
     const owners = _.get(this.props.resources, ['owners', 'records'], []);
     const feefines = _.get(this.props.resources, ['feefines', 'records'], []);
-    const { selectedLoan } = this.props;
+    const { selectedLoan, intl: { formatMessage } } = this.props;
     const item = (selectedLoan.id) ? selectedLoan.item : this.item;
 
     type.paymentStatus = {
-      name: 'Outstanding',
+      name: formatMessage({ id: 'ui-users.accounts.status.outstanding' }),
     };
     type.status = {
-      name: 'Open',
+      name: formatMessage({ id: 'ui-users.accounts.open' }),
     };
+    delete type.notify;
+    delete type.patronInfo;
     type.remaining = type.amount;
     type.feeFineType = (feefines.find(f => f.id === type.feeFineId.substring(0, 36)) || {}).feeFineType || '';
     type.feeFineOwner = (owners.find(o => o.id === type.ownerId) || {}).owner || '';
@@ -310,13 +317,14 @@ class Charge extends React.Component {
 
   onConfirm = () => {
     const { values } = this.state;
+    const { intl: { formatMessage } } = this.props;
     this.onClickCharge(this.type).then(() => {
       this.type.remaining = parseFloat(this.type.amount - values.amount).toFixed(2);
       if (this.type.remaining === '0.00') {
-        this.type.paymentStatus.name = 'Paid Fully';
-        this.type.status.name = 'Closed';
+        this.type.paymentStatus.name = formatMessage({ id: 'ui-users.accounts.pay.fully' });
+        this.type.status.name = formatMessage({ id: 'ui-users.accounts.closed' });
       } else {
-        this.type.paymentStatus.name = 'Paid Partially';
+        this.type.paymentStatus.name = formatMessage({ id: 'ui-users.accounts.pay.partially' });
       }
       this.props.mutator.activeRecord.update({ id: this.type.id });
       return this.props.mutator.accounts.PUT(this.type);
@@ -336,10 +344,12 @@ class Charge extends React.Component {
   }
 
   renderConfirmMessage = () => {
+    const { intl: { formatMessage } } = this.props;
     const values = this.state.values || {};
     const type = this.type || {};
     const amount = parseFloat(values.amount || 0).toFixed(2);
-    const paymentStatus = (parseFloat(values.amount) !== parseFloat(type.amount)) ? 'paid partially' : 'paid fully';
+    const statusId = (parseFloat(values.amount) !== parseFloat(type.amount)) ? 'partially' : 'fully';
+    const paymentStatus = formatMessage({ id: `ui-users.accounts.pay.${statusId}` });
     return (
       <SafeHTMLMessage
         id="ui-users.accounts.confirmation.message"
@@ -454,4 +464,4 @@ class Charge extends React.Component {
   }
 }
 
-export default Charge;
+export default injectIntl(Charge);

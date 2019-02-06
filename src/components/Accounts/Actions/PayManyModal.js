@@ -34,7 +34,7 @@ const validate = (values, props) => {
     errors.amount = <FormattedMessage id="ui-users.accounts.pay.error.amount" />;
   }
   if (!values.method) {
-    errors.method = 'Select one';
+    errors.method = <FormattedMessage id="ui-users.accounts.error.select" />;
   }
   if (props.commentRequired && !values.comment) {
     errors.comment = <FormattedMessage id="ui-users.accounts.error.comment" />;
@@ -47,14 +47,14 @@ const validate = (values, props) => {
 
 const onChange = (values, dispatch, props, prevValues) => {
   if (values.ownerId !== prevValues.ownerId) {
-    dispatch(change('payment', 'method', null));
+    dispatch(change('payment-many', 'method', null));
   }
 };
 
 const asyncValidate = (values, dispatch, props, blurredField) => {
   if (blurredField === 'amount') {
     const amount = parseFloat(values.amount || 0).toFixed(2);
-    dispatch(change('payment', 'amount', amount));
+    dispatch(change('payment-many', 'amount', amount));
   }
   return new Promise(resolve => resolve());
 };
@@ -233,6 +233,7 @@ class PayModal extends React.Component {
               <Row end="xs">
                 <Col xs={7} style={{ marginRight: '5px' }}>
                   <FormattedMessage id="ui-users.accounts.pay.field.totalamount" />
+:
                 </Col>
                 <Col xs={4} style={{ marginRight: '5px' }}>
                   {parseFloat(totalAmount).toFixed(2)}
@@ -241,6 +242,7 @@ class PayModal extends React.Component {
               <Row end="xs">
                 <Col xs={7} style={{ marginRight: '5px' }}>
                   <FormattedMessage id="ui-users.accounts.pay.field.selectedamount" />
+:
                 </Col>
                 <Col xs={4}>
                   {parseFloat(selected).toFixed(2)}
@@ -248,8 +250,10 @@ class PayModal extends React.Component {
               </Row>
               <Row end="xs">
                 <Col xs={7} style={{ marginRight: '10px' }}>
-                  <b><FormattedMessage id="ui-users.accounts.pay.field.paymentamount" /></b>
-                  :
+                  <b>
+                    <FormattedMessage id="ui-users.accounts.pay.field.paymentamount" />
+:
+                  </b>
                 </Col>
                 <Col xs={4} style={{ marginRight: '5px' }}>
                   <div dir="rtl">
@@ -269,6 +273,7 @@ class PayModal extends React.Component {
               <Row end="xs">
                 <Col xs={7}>
                   <FormattedMessage id="ui-users.accounts.pay.field.remainingamount" />
+:
                 </Col>
                 <Col xs={4}>
                   {remaining}
@@ -279,13 +284,17 @@ class PayModal extends React.Component {
               <Row><Col xs><FormattedMessage id="ui-users.accounts.pay.field.ownerDesk" /></Col></Row>
               <Row>
                 <Col xs>
-                  <Field
-                    name="ownerId"
-                    component={Select}
-                    dataOptions={ownerOptions}
-                    placeholder="Select desk"
-                    onChange={this.onChangeOwner}
-                  />
+                  <FormattedMessage id="ui-users.accounts.pay.owner.placeholder">
+                    {placeholder => (
+                      <Field
+                        name="ownerId"
+                        component={Select}
+                        dataOptions={ownerOptions}
+                        placeholder={placeholder}
+                        onChange={this.onChangeOwner}
+                      />
+                    )}
+                  </FormattedMessage>
                 </Col>
               </Row>
             </Col>
@@ -293,12 +302,16 @@ class PayModal extends React.Component {
               <Row><Col xs><FormattedMessage id="ui-users.accounts.pay.field.paymentmethod" /></Col></Row>
               <Row>
                 <Col xs>
-                  <Field
-                    name="method"
-                    component={Select}
-                    dataOptions={dataOptions}
-                    placeholder="Select type"
-                  />
+                  <FormattedMessage id="ui-users.accounts.pay.method.placeholder">
+                    {placeholder => (
+                      <Field
+                        name="method"
+                        component={Select}
+                        dataOptions={dataOptions}
+                        placeholder={placeholder}
+                      />
+                    )}
+                  </FormattedMessage>
                 </Col>
               </Row>
             </Col>
@@ -309,11 +322,15 @@ class PayModal extends React.Component {
               <Row><Col xs><FormattedMessage id="ui-users.accounts.pay.field.transactioninfo" /></Col></Row>
               <Row>
                 <Col xs>
-                  <Field
-                    name="transaction"
-                    component={TextField}
-                    placeholder="Enter check #, etc."
-                  />
+                  <FormattedMessage id="ui-users.accounts.pay.transaction.placeholder">
+                    {placeholder => (
+                      <Field
+                        name="transaction"
+                        component={TextField}
+                        placeholder={placeholder}
+                      />
+                    )}
+                  </FormattedMessage>
                 </Col>
               </Row>
             </Col>
@@ -390,7 +407,7 @@ class PayModal extends React.Component {
 }
 
 export default reduxForm({
-  form: 'payment',
+  form: 'payment-many',
   fields: [],
   asyncBlurFields: ['amount'],
   asyncValidate,
