@@ -165,7 +165,7 @@ class UserAccounts extends React.Component {
                 layer: 'closed-accounts',
               },
               {
-                id: 'ckable-viewallaccounts',
+                id: 'clickable-viewallaccounts',
                 count: 0,
                 formattedMessageId: 'ui-users.accounts.viewAllAccounts',
                 layer: 'all-accounts',

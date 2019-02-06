@@ -97,7 +97,7 @@ class FeefineSettings extends React.Component {
     const nextFeeFines = _.get(this.props.resources, ['feefines', 'records'], [])
       .filter(f => f.ownerId === ownerId) || [];
     const filterOwners = this.getOwners();
-    if (!nextFeeFines.length && (ownerId !== (this.shared || {}).idi) && !!filterOwners.length) {
+    if (!nextFeeFines.length && (ownerId !== (this.shared || {}).id) && !!filterOwners.length) {
       this.setState({ showCopyDialog: true });
     }
   }
