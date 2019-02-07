@@ -1,12 +1,13 @@
 import {
   interactor,
   scoped,
-  collection
+  collection,
+  clickable
 } from '@bigtest/interactor';
 
 export default @interactor class UsersInteractor {
   static defaultScope = '[data-test-user-instances]';
-
-  instances = collection('[role=listitem] a');
+  clickInactiveUsersCheckbox = clickable('[name="active.Include inactive users"]');
+  instances = collection('[role=row] a');
   instance = scoped('[data-test-instance-details]');
 }

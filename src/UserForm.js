@@ -3,6 +3,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
+import { AppIcon } from '@folio/stripes/core';
 import {
   Paneset,
   Pane,
@@ -321,8 +322,21 @@ class UserForm extends React.Component {
               defaultWidth="100%"
               firstMenu={firstMenu}
               lastMenu={lastMenu}
-              paneTitle={paneTitle}
-              appIcon={{ app: 'users' }}
+              paneTitle={
+                <div
+                  style={{ textAlign: 'center' }}
+                  data-test-header-title
+                >
+                  <AppIcon
+                    app="users"
+                    appIconKey="users"
+                    size="small"
+                  />
+                  <span style={{ margin: '0 4px' }}>
+                    {paneTitle}
+                  </span>
+                </div>
+              }
               actionMenu={this.getActionMenu}
             >
               <div className={css.UserFormContent}>

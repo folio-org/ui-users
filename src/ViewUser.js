@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import queryString from 'query-string';
 import {
+  AppIcon,
   IfInterface,
   IfPermission,
   TitleManager,
@@ -577,7 +578,9 @@ class ViewUser extends React.Component {
   };
 
   isLayerOpen = value => {
-    const { layer } = this.props.resources.query;
+    const { location: { search } } = this.props;
+    const query = queryString.parse(search || '');
+    const { layer } = query;
     return layer === value;
   };
 
@@ -922,15 +925,25 @@ class ViewUser extends React.Component {
         data-test-instance-details
         id="pane-userdetails"
         defaultWidth={paneWidth}
-        paneTitle={(
-          <span data-test-header-title>
-            {getFullName(user)}
-          </span>
-        )}
+        paneTitle={
+          <div
+            style={{ textAlign: 'center' }}
+            data-test-header-title
+          >
+            <AppIcon
+              iconAriaHidden
+              app="users"
+              appIconKey="users"
+              size="small"
+            />
+            <span style={{ margin: '0 4px' }}>
+              {getFullName(user)}
+            </span>
+          </div>
+        }
         lastMenu={detailMenu}
         dismissible
         onClose={onClose}
-        appIcon={{ app: 'users' }}
         actionMenu={this.getActionMenu}
       >
         <TitleManager record={getFullName(user)} />
@@ -1015,7 +1028,7 @@ class ViewUser extends React.Component {
           </IfPermission>
 
           <IfPermission perm="ui-users.loans.all">
-            <IfInterface name="loan-policy-storage" version="1.0">
+            <IfInterface name="loan-policy-storage">
               { /* Check without version, so can support either of multiple versions.
           Replace with specific check when facility for providing
           multiple versions is available */ }

@@ -12,7 +12,9 @@ describe('Users', () => {
 
   beforeEach(async function () {
     this.server.createList('user', 3);
-    this.visit('/users?filters=active.Include%20inactive%20users&sort=Name');
+    this.visit('/users?sort=Name');
+
+    await users.clickInactiveUsersCheckbox();
   });
 
   it('shows the list of user items', () => {
