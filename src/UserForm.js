@@ -9,7 +9,7 @@ import {
   Pane,
   PaneMenu,
   Icon,
-  IconButton,
+  PaneHeaderIconButton,
   Button,
   ExpandAllButton,
   expandAllFunction,
@@ -182,7 +182,7 @@ class UserForm extends React.Component {
       <PaneMenu>
         <FormattedMessage id="ui-users.crud.closeNewUserDialog">
           {ariaLabel => (
-            <IconButton
+            <PaneHeaderIconButton
               id="clickable-closenewuserdialog"
               onClick={this.props.onCancel}
               ref={this.closeButton}
