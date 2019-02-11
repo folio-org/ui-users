@@ -42,7 +42,7 @@ const filterConfig = [
 class Users extends React.Component {
   static manifest = Object.freeze({
     initializedFilterConfig: { initialValue: false },
-    query: { initialValue: { sort: 'Name' } },
+    query: { initialValue: { sort: 'name' } },
     resultCount: { initialValue: INITIAL_RESULT_COUNT },
     records: {
       type: 'okapi',
@@ -56,12 +56,14 @@ class Users extends React.Component {
             'cql.allRecords=1',
             '(username="%{query.query}*" or personal.firstName="%{query.query}*" or personal.lastName="%{query.query}*" or personal.email="%{query.query}*" or barcode="%{query.query}*" or id="%{query.query}*" or externalSystemId="%{query.query}*")',
             {
-              'Active': 'active',
-              'Name': 'personal.lastName personal.firstName',
-              'Patron group': 'patronGroup.group',
-              'Username': 'username',
-              'Barcode': 'barcode',
-              'Email': 'personal.email',
+              // the keys in this object must match those passed to
+              // SearchAndSort's columnMapping prop
+              'active': 'active',
+              'name': 'personal.lastName personal.firstName',
+              'patronGroup': 'patronGroup.group',
+              'username': 'username',
+              'barcode': 'barcode',
+              'email': 'personal.email',
             },
             filterConfig,
             2,
