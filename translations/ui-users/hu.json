@@ -419,7 +419,7 @@
     "feefines.callout": "Díj/bírság típusa <strong>{feefine}</strong> sikeresen <strong>törölve</strong>.",
     "feefines.disabledItem": "Díj/bírság típusa nem törölhető, ha egy vagy több felhasználói fiók használja",
     "feefines.modalHeader": "Törli a díj/bírság típusát?",
-    "feefines.modalMessage": "Díj/bírság típusa <strong>{feefine}<strong> törölve lesz</strong>",
+    "feefines.modalMessage": "Díj/bírság típusa <strong>{feefine}</strong> <strong>törölve lesz</strong>",
     "feefines.ownerLabel": "Díj/bírság tulajdonosa",
     "feefines.columns.type": "Díj/bírság típusa",
     "feefines.columns.amount": "Alapértelmezett összeg",
