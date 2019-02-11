@@ -10,7 +10,7 @@ import {
   Col,
   PaneMenu,
   Button,
-  IconButton,
+  PaneHeaderIconButton,
   TextArea,
   Checkbox,
   Datepicker
@@ -134,7 +134,7 @@ class PatronBlockForm extends React.Component {
     <PaneMenu>
       <FormattedMessage id="ui-users.blocks.form.button.close">
         { ariaLabel => (
-          <IconButton
+          <PaneHeaderIconButton
             id="close-patron-block"
             onClick={this.props.onClose}
             ariaLabel={ariaLabel}
