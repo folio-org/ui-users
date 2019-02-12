@@ -4,15 +4,15 @@ export default [
     showDueDatePicker: true,
   },
   {
-    message: 'loan has reached its maximum number of renewals',
+    message: 'loan at maximum renewal number',
     showDueDatePicker: false,
   },
   {
-    message: 'renewal date falls outside of the date ranges in the limit schedule of rolling loan policy',
+    message: 'renewal date falls outside of date ranges in rolling loan policy',
     showDueDatePicker: false,
   },
   {
-    message: 'renewal date falls outside of the date ranges in the fixed schedule of fixed loan policy',
+    message: 'renewal date falls outside of date ranges in fixed loan policy',
     showDueDatePicker: true,
   },
 ];
