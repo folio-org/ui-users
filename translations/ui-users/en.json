@@ -12,7 +12,7 @@
   "brd.header.renewalStatus": "Renewal status",
   "brd.header.newDueDate": "New due date",
   "brd.header.title": "Title",
-  "brd.failedRenewal": "Item not renewed",
+  "brd.failedRenewal": "Item not renewed:",
   "brd.successfulRenewal": "Item successfully renewed",
   "brd.itemNotRenewed": "<strong>{count}</strong> {count, plural, one {item} other {items}} <b>not</b> renewed. ",
   "brd.itemsSelected": "<strong>{count}</strong> {count, plural, one {item} other {items}} <b>selected</b>. ",
