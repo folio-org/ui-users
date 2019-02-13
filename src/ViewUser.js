@@ -1047,7 +1047,7 @@ class ViewUser extends React.Component {
           </IfPermission>
 
           <IfPermission perm="ui-users.requests.all">
-            <IfInterface name="request-storage" version="2.2">
+            <IfInterface name="request-storage" version="2.5">
               <this.connectedUserRequests
                 expanded={this.state.sections.requestsSection}
                 onToggle={this.handleSectionToggle}
