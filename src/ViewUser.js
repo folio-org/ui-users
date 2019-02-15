@@ -924,22 +924,12 @@ class ViewUser extends React.Component {
       <Pane
         data-test-instance-details
         id="pane-userdetails"
+        appIcon={<AppIcon app="users" appIconKey="users" />}
         defaultWidth={paneWidth}
         paneTitle={
-          <div
-            style={{ textAlign: 'center' }}
-            data-test-header-title
-          >
-            <AppIcon
-              iconAriaHidden
-              app="users"
-              appIconKey="users"
-              size="small"
-            />
-            <span style={{ margin: '0 4px' }}>
-              {getFullName(user)}
-            </span>
-          </div>
+          <span data-test-header-title>
+            {getFullName(user)}
+          </span>
         }
         lastMenu={detailMenu}
         dismissible
@@ -1047,7 +1037,7 @@ class ViewUser extends React.Component {
           </IfPermission>
 
           <IfPermission perm="ui-users.requests.all">
-            <IfInterface name="request-storage" version="2.2">
+            <IfInterface name="request-storage" version="2.5">
               <this.connectedUserRequests
                 expanded={this.state.sections.requestsSection}
                 onToggle={this.handleSectionToggle}

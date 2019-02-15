@@ -183,13 +183,7 @@ class PatronBlockForm extends React.Component {
   render() {
     const user = this.props.user || {};
     const { intl } = this.props;
-    const title = this.props.query.layer === 'edit-block' ?
-      <div>
-        {' '}
-        <AppIcon app="users" size="small" />
-        {getFullName(user)}
-        {' '}
-      </div> : 'New Block';
+    const title = this.props.query.layer === 'edit-block' ? getFullName(user) : intl.formatMessage({ id: 'ui-users.blocks.layer.newBlockTitle' });
     const userD = this.props.query.layer !== 'edit-block' ? <UserDetails user={user} /> : '';
 
     const isSelectedItemMetadata = this.props.selectedItem || {};
@@ -198,8 +192,9 @@ class PatronBlockForm extends React.Component {
       <Pane
         defaultWidth="20%"
         firstMenu={this.renderFirstMenu()}
-        paneTitle={title}
         lastMenu={this.renderLastMenu()}
+        appIcon={<AppIcon app="users" size="small" />}
+        paneTitle={title}
       >
         <TitleManager />
         {userD}

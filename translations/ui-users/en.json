@@ -790,6 +790,7 @@
   "blocks.layer.heading":"Delete patron block?",
   "blocks.layer.confirmLabel":"Delete",
   "blocks.layer.add":"Add Block",
+  "blocks.layer.newBlockTitle":"New Block",
   "blocks.layer.edit":"Edit Block",
 
   "blocks.message":"patron block will be removed",

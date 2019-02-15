@@ -8,6 +8,7 @@
 * Don't pass `appIcon` to `<Pane>`.
 * Use static column labels, not their aliases, as keys to CQL sort table. Refs UIU-479, UIU-864, STSMACOM-93.
 * Provide unique ID for find-user plugin. Refs UIU-884.
+* Update circulation OKAPI interface to v6.0. Refs UICIRC-164.
 * Add user information Fee/Fine section display fields. Fix UIU-688
 * Add new fields to payment modal. Fix UIU-803.
 * Fix delete Fee/Fine Owner message. Fix UIU-841.
