@@ -44,7 +44,7 @@ class UserRequests extends React.Component {
       GET: {
         path: 'request-storage/requests',
         params: {
-          query: 'query=(requesterId==:{id}) and (status="Closed - Cancelled" or status="Closed - Filled")',
+          query: 'query=(requesterId==:{id}) and (status="Closed - Cancelled" or status="Closed - Filled" or status="Closed - Unfilled" or status="Closed - Pickup expired")',
           limit: '1',
         },
       },
@@ -143,7 +143,7 @@ class UserRequests extends React.Component {
                 id: 'clickable-viewclosedrequests',
                 count: closedRequestsCount,
                 formattedMessageId: 'ui-users.requests.numClosedRequests',
-                query: { query: barcode, filters: 'requestStatus.closed - cancelled,requestStatus.closed - filled' },
+                query: { query: barcode, filters: 'requestStatus.closed - cancelled,requestStatus.closed - filled,requestStatus.closed - unfilled,requestStatus.closed - pickup expired' },
               },
             ]}
           /> : <Icon icon="spinner-ellipsis" width="10px" />

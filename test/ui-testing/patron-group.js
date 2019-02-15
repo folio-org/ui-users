@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 /* global it describe before after Nightmare */
 module.exports.test = function foo(uiTestCtx) {
-  describe('Module test: users:patron_group', function meh() {
+  describe('Module test: users:patron-group', function meh() {
     const { config, helpers: { openApp, login, logout }, meta: { testVersion } } = uiTestCtx;
     const nightmare = new Nightmare(config.nightmare);
 
@@ -48,7 +48,9 @@ module.exports.test = function foo(uiTestCtx) {
           .wait(1000)
           .wait('#clickable-save-patrongroups-0')
           .click('#clickable-save-patrongroups-0')
-          .wait(wait)
+          .wait(() => {
+            return !(document.getElementById('clickable-save-patrongroups-0'));
+          })
           .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
           .then(() => { done(); })
           .catch(done);
@@ -125,7 +127,7 @@ module.exports.test = function foo(uiTestCtx) {
           .wait('#clickable-updateuser')
           .click('#clickable-updateuser')
           .wait(() => {
-            return (!document.getElementById('clickable-updateuser'));
+            return !(document.getElementById('clickable-updateuser'));
           })
           .then(done)
           .catch(done);
@@ -156,16 +158,15 @@ module.exports.test = function foo(uiTestCtx) {
 
       it('should change patron group to "Staff" in user record', (done) => {
         nightmare
+          .wait('#adduser_group')
           .select('#adduser_group', staffid)
+          .wait('#adduser_externalsystemid')
           .type('#adduser_externalsystemid', false)
           .type('#adduser_externalsystemid', 'testId')
-          .wait(1000)
+          .wait('#clickable-updateuser')
           .click('#clickable-updateuser')
           .wait(() => {
-            if (!document.getElementById('clickable-updateuser')) {
-              return true;
-            }
-            return false;
+            return !(document.getElementById('clickable-updateuser'));
           })
           .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
           .then(() => { done(); })
