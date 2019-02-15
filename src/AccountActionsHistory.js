@@ -229,6 +229,7 @@ class AccountActionsHistory extends React.Component {
     } = this.props;
 
     const account = _.get(resources, ['accountHistory', 'records', 0]) || this.props.account;
+    account.remaining = this.state.remaining;
 
     const columnMapping = {
       date: <FormattedMessage id="ui-users.details.columns.date" />,

@@ -34,7 +34,7 @@ const validate = (values, props) => {
     errors.amount = <FormattedMessage id="ui-users.accounts.pay.error.amount" />;
   }
   if (!values.method) {
-    errors.method = 'Select one';
+    errors.method = <FormattedMessage id="ui-users.accounts.error.select" />;
   }
   if (props.commentRequired && !values.comment) {
     errors.comment = <FormattedMessage id="ui-users.accounts.error.comment" />;
@@ -45,10 +45,16 @@ const validate = (values, props) => {
   return errors;
 };
 
+const onChange = (values, dispatch, props, prevValues) => {
+  if (values.ownerId !== prevValues.ownerId) {
+    dispatch(change('payment-many', 'method', null));
+  }
+};
+
 const asyncValidate = (values, dispatch, props, blurredField) => {
   if (blurredField === 'amount') {
     const amount = parseFloat(values.amount || 0).toFixed(2);
-    dispatch(change('payment', 'amount', amount));
+    dispatch(change('payment-many', 'amount', amount));
   }
   return new Promise(resolve => resolve());
 };
@@ -67,6 +73,7 @@ class PayModal extends React.Component {
     pristine: PropTypes.bool,
     reset: PropTypes.func,
     commentRequired: PropTypes.bool,
+    owners: PropTypes.arrayOf(PropTypes.object),
   };
 
   constructor(props) {
@@ -125,10 +132,18 @@ class PayModal extends React.Component {
   onSubmit = () => {
     const {
       handleSubmit,
+      reset,
     } = this.props;
 
     handleSubmit();
+    reset();
     this.setState({ amount: this.initialAmount });
+  }
+
+  onChangeOwner = (e) => {
+    this.setState({
+      ownerId: e.target.value,
+    });
   }
 
   calculateSelectedAmount() {
@@ -177,24 +192,23 @@ class PayModal extends React.Component {
 
   render() {
     const {
-      accounts,
       submitting,
       invalid,
       pristine,
       onClose,
       open,
+      owners,
       payments,
       commentRequired,
       balance: totalAmount,
     } = this.props;
 
-    const { amount } = this.state;
+    const { amount, ownerId } = this.state;
 
     const selected = this.calculateSelectedAmount();
-    const account = (accounts[0] || {});
     const remaining = parseFloat(totalAmount - amount).toFixed(2);
-    let dataOptions = payments.filter(p => p.ownerId === account.ownerId);
-    dataOptions = _.uniqBy(dataOptions.map(p => ({ id: p.id, label: p.nameMethod })), 'label');
+    const dataOptions = payments.filter(p => p.ownerId === ownerId).map(p => ({ id: p.id, label: p.nameMethod }));
+    const ownerOptions = owners.map(o => ({ value: o.id, label: o.owner }));
 
     const placeholderTranslationId = commentRequired
       ? 'ui-users.accounts.pay.placeholder.additional.required'
@@ -219,6 +233,7 @@ class PayModal extends React.Component {
               <Row end="xs">
                 <Col xs={7} style={{ marginRight: '5px' }}>
                   <FormattedMessage id="ui-users.accounts.pay.field.totalamount" />
+:
                 </Col>
                 <Col xs={4} style={{ marginRight: '5px' }}>
                   {parseFloat(totalAmount).toFixed(2)}
@@ -227,6 +242,7 @@ class PayModal extends React.Component {
               <Row end="xs">
                 <Col xs={7} style={{ marginRight: '5px' }}>
                   <FormattedMessage id="ui-users.accounts.pay.field.selectedamount" />
+:
                 </Col>
                 <Col xs={4}>
                   {parseFloat(selected).toFixed(2)}
@@ -234,8 +250,10 @@ class PayModal extends React.Component {
               </Row>
               <Row end="xs">
                 <Col xs={7} style={{ marginRight: '10px' }}>
-                  <b><FormattedMessage id="ui-users.accounts.pay.field.paymentamount" /></b>
-                  :
+                  <b>
+                    <FormattedMessage id="ui-users.accounts.pay.field.paymentamount" />
+:
+                  </b>
                 </Col>
                 <Col xs={4} style={{ marginRight: '5px' }}>
                   <div dir="rtl">
@@ -255,9 +273,28 @@ class PayModal extends React.Component {
               <Row end="xs">
                 <Col xs={7}>
                   <FormattedMessage id="ui-users.accounts.pay.field.remainingamount" />
+:
                 </Col>
                 <Col xs={4}>
                   {remaining}
+                </Col>
+              </Row>
+            </Col>
+            <Col xs={4}>
+              <Row><Col xs><FormattedMessage id="ui-users.accounts.pay.field.ownerDesk" /></Col></Row>
+              <Row>
+                <Col xs>
+                  <FormattedMessage id="ui-users.accounts.pay.owner.placeholder">
+                    {placeholder => (
+                      <Field
+                        name="ownerId"
+                        component={Select}
+                        dataOptions={ownerOptions}
+                        placeholder={placeholder}
+                        onChange={this.onChangeOwner}
+                      />
+                    )}
+                  </FormattedMessage>
                 </Col>
               </Row>
             </Col>
@@ -265,37 +302,45 @@ class PayModal extends React.Component {
               <Row><Col xs><FormattedMessage id="ui-users.accounts.pay.field.paymentmethod" /></Col></Row>
               <Row>
                 <Col xs>
-                  <Field
-                    name="method"
-                    component={Select}
-                    dataOptions={dataOptions}
-                    placeholder="Select type"
-                  />
-                </Col>
-              </Row>
-            </Col>
-            <Col xs={4}>
-              <Row><Col xs><FormattedMessage id="ui-users.accounts.pay.field.transactioninfo" /></Col></Row>
-              <Row>
-                <Col xs>
-                  <Field
-                    name="transaction"
-                    component={TextField}
-                    placeholder="Enter check #, etc."
-                  />
+                  <FormattedMessage id="ui-users.accounts.pay.method.placeholder">
+                    {placeholder => (
+                      <Field
+                        name="method"
+                        component={Select}
+                        dataOptions={dataOptions}
+                        placeholder={placeholder}
+                      />
+                    )}
+                  </FormattedMessage>
                 </Col>
               </Row>
             </Col>
           </Row>
           <br />
-          <br />
+          <Row>
+            <Col xs={4}>
+              <Row><Col xs><FormattedMessage id="ui-users.accounts.pay.field.transactioninfo" /></Col></Row>
+              <Row>
+                <Col xs>
+                  <FormattedMessage id="ui-users.accounts.pay.transaction.placeholder">
+                    {placeholder => (
+                      <Field
+                        name="transaction"
+                        component={TextField}
+                        placeholder={placeholder}
+                      />
+                    )}
+                  </FormattedMessage>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
           <Row>
             <Col xs>
               <FormattedMessage id="ui-users.accounts.pay.field.comment" />
               {(this.props.commentRequired) ? '*' : ''}
             </Col>
           </Row>
-          <br />
           <Row>
             <Col xs>
               <FormattedMessage id={placeholderTranslationId}>
@@ -327,9 +372,9 @@ class PayModal extends React.Component {
               <Row>
                 <Col xs>
                   <FormattedMessage id="ui-users.accounts.pay.field.infoPatron" />
+                  {(this.props.commentRequired) ? '*' : ''}
                 </Col>
               </Row>
-              <br />
               <Row>
                 <Col xs>
                   <Field
@@ -340,6 +385,7 @@ class PayModal extends React.Component {
               </Row>
             </div>
           }
+          <br />
           <Row end="xs">
             <Col xs>
               <Button onClick={this.onClose}>
@@ -361,9 +407,10 @@ class PayModal extends React.Component {
 }
 
 export default reduxForm({
-  form: 'payment',
+  form: 'payment-many',
   fields: [],
   asyncBlurFields: ['amount'],
   asyncValidate,
+  onChange,
   validate,
 })(PayModal);
