@@ -191,6 +191,7 @@ class ProxyEditList extends React.Component {
             <Layout>
               <Pluggable
                 aria-haspopup="true"
+                id={`clickable-plugin-find-${name === 'proxies' ? 'proxy' : 'sponsor'}`}
                 type="find-user"
                 {...this.props}
                 dataKey={name}

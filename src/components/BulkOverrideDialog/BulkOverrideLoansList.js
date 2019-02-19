@@ -129,7 +129,9 @@ class BulkOverrideLoansList extends Component {
                     icon="exclamation-circle"
                     status="warn"
                   />
-                  <FormattedMessage id="ui-users.brd.failedRenewal" />
+                  <FormattedMessage id="ui-users.brd.failedRenewal">
+                    {message => `${message}:`}
+                  </FormattedMessage>
                 </div>
                 <div>
                   {this.getShortErrorMessage(errorMessages[loan.id])}
