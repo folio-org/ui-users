@@ -548,7 +548,7 @@
     "accounts.pay.field.selectedamount": "Valor selecionado:",
     "accounts.pay.field.paymentamount": "Payment amount*",
     "accounts.pay.field.remainingamount": "Valor restante:",
-    "accounts.pay.field.paymentmethod": "Payment type*",
+    "accounts.pay.field.paymentmethod": "Payment method*",
     "accounts.pay.field.trasactioninfo": "Transaction information",
     "accounts.pay.field.comment": "Additional information",
     "accounts.waive.field.totalamount": "fees/fines for a total amount of",
@@ -770,5 +770,17 @@
     "data.loanActionMap.renewedThroughOverride": "Renovado através de substituição",
     "loans.columns.comments": "Comentários",
     "override.autoNewDueDate": "A data de vencimento será calculada automaticamente",
-    "blocks.form.button.close": "Fechar caixa de diálogo de utilizadores"
+    "blocks.form.button.close": "Fechar caixa de diálogo de utilizadores",
+    "blocks.layer.newBlockTitle": "New Block",
+    "accounts.totalOpenAccounts": "(Total: {amount})",
+    "accounts.error.select": "Select one",
+    "accounts.pay.field.ownerDesk": "Fee/fine owner desk*",
+    "accounts.pay.field.infoPatron": "Additional information for patron",
+    "accounts.pay.owner.placeholder": "Select desk",
+    "accounts.pay.method.placeholder": "Select type",
+    "accounts.pay.transaction.placeholder": "Enter check #, etc.",
+    "accounts.pay.fully": "Paid Fully",
+    "accounts.pay.partially": "Paid Partially",
+    "accounts.pay.closed": "Closed",
+    "accounts.status.outstanding": "Outstanding"
 }
