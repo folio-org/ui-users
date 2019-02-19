@@ -1,0 +1,6 @@
+.customCol {
+  & input {
+    text-align: right;
+    padding: 0px;
+  }
+}

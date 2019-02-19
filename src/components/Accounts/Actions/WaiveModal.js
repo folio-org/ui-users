@@ -20,6 +20,7 @@ import {
 } from '@folio/stripes/components';
 
 import { isEqual } from 'lodash';
+import css from './PayWaive.css';
 
 const validate = (values, props) => {
   const accounts = props.accounts || [];
@@ -221,30 +222,34 @@ class WaiveModal extends React.Component {
           </Row>
           <br />
           <Row>
-            <Col xs={4.5}>
+            <Col xs={5}>
               <Row end="xs">
-                <Col xs={7} style={{ marginRight: '5px' }}>
+                <Col xs={7}>
                   <FormattedMessage id="ui-users.accounts.waive.field.totalowed" />
+:
                 </Col>
-                <Col xs={4} style={{ marginRight: '5px' }}>
+                <Col xs={4}>
                   {parseFloat(totalAmount).toFixed(2)}
                 </Col>
               </Row>
               <Row end="xs">
-                <Col xs={7} style={{ marginRight: '5px' }}>
+                <Col xs={7}>
                   <FormattedMessage id="ui-users.accounts.waive.field.selectedamount" />
+:
                 </Col>
-                <Col xs={4} style={{ marginRight: '5px' }}>
+                <Col xs={4}>
                   {selected.toFixed(2)}
                 </Col>
               </Row>
               <Row end="xs">
-                <Col xs={6} style={{ marginRight: '5px' }}>
-                  <b><FormattedMessage id="ui-users.accounts.waive.field.waiveamount" /></b>
-                  :
+                <Col xs={6}>
+                  <b>
+                    <FormattedMessage id="ui-users.accounts.waive.field.waiveamount" />
+:
+                  </b>
                 </Col>
-                <Col xs={4} style={{ marginRight: '5px' }}>
-                  <div dir="rtl">
+                <Col xs={4} className={css.customCol}>
+                  <div>
                     <Field
                       name="waive"
                       component={TextField}
@@ -259,20 +264,21 @@ class WaiveModal extends React.Component {
                 </Col>
               </Row>
               <Row end="xs">
-                <Col xs={7} style={{ marginRight: '5px' }}>
+                <Col xs={7}>
                   <FormattedMessage id="ui-users.accounts.waive.field.remainingamount" />
+:
                 </Col>
                 <Col xs={4}>{remaining.toFixed(2)}</Col>
               </Row>
             </Col>
             <Col xs={7}>
               <Row>
-                <Col xs style={{ marginRight: '5px' }}>
+                <Col xs>
                   <FormattedMessage id="ui-users.accounts.waive.field.waivereason" />
                 </Col>
               </Row>
               <Row>
-                <Col xs style={{ marginRight: '5px' }}>
+                <Col xs>
                   <FormattedMessage id="ui-users.accounts.waive.placeholder.selectReason">
                     {placeholder => (
                       <Field
