@@ -9,13 +9,14 @@
 * Use static column labels, not their aliases, as keys to CQL sort table. Refs UIU-479, UIU-864, STSMACOM-93.
 * Provide unique ID for find-user plugin. Refs UIU-884.
 * Update circulation OKAPI interface to v6.0. Refs UICIRC-164.
-* Add user information Fee/Fine section display fields. Fix UIU-688
+* Add user information Fee/Fine section display fields. Fix UIU-688.
 * Add new fields to payment modal. Fix UIU-803.
 * Fix delete Fee/Fine Owner message. Fix UIU-841.
 * Fix payment confirmation. Fix UIU-842.
 * Fix Fee/Fine Owner box larger. Fix UIU-844.
 * Fix display consistent message. Fix UIU-846.
-* Fix prompted to copy Manual Charges. Fix UIU-858
+* Fix prompted to copy Manual Charges. Fix UIU-858.
+* Fix labels on Pay and Waive modals. Fix UIU-845.
 
 ## [2.20.0](https://github.com/folio-org/ui-users/tree/v2.20.0) (2019-01-25)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.19.0...v2.20.0)
