@@ -17,6 +17,7 @@
 * Fix display consistent message. Fix UIU-846.
 * Fix prompted to copy Manual Charges. Fix UIU-858.
 * Fix labels on Pay and Waive modals. Fix UIU-845.
+* Update circulation v7.0 and request-storage v3.0 OKAPI interfaces. Part of UIU-889.
 
 ## [2.20.0](https://github.com/folio-org/ui-users/tree/v2.20.0) (2019-01-25)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.19.0...v2.20.0)
