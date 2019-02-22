@@ -548,7 +548,7 @@
     "accounts.pay.field.selectedamount": "Selected amount:",
     "accounts.pay.field.paymentamount": "Payment amount*",
     "accounts.pay.field.remainingamount": "Remaining amount:",
-    "accounts.pay.field.paymentmethod": "Payment type*",
+    "accounts.pay.field.paymentmethod": "Payment type",
     "accounts.pay.field.trasactioninfo": "Transaction information",
     "accounts.pay.field.comment": "Additional information",
     "accounts.waive.field.totalamount": "fees/fines for a total amount of",
