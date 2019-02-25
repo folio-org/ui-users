@@ -771,7 +771,7 @@
     "loans.columns.comments": "Comments",
     "override.autoNewDueDate": "Due date will be calculated automatically",
     "blocks.form.button.close": "Close patron block dialog",
-    "blocks.layer.newBlockTitle": "New Block",
+    "blocks.layer.newBlockTitle": "New block",
     "accounts.totalOpenAccounts": "(Total: {amount})",
     "accounts.error.select": "Select one",
     "accounts.pay.field.ownerDesk": "Fee/fine owner desk*",
@@ -779,8 +779,8 @@
     "accounts.pay.owner.placeholder": "Select desk",
     "accounts.pay.method.placeholder": "Select type",
     "accounts.pay.transaction.placeholder": "Enter check #, etc.",
-    "accounts.pay.fully": "Paid Fully",
-    "accounts.pay.partially": "Paid Partially",
+    "accounts.pay.fully": "Paid fully",
+    "accounts.pay.partially": "Paid partially",
     "accounts.pay.closed": "Closed",
     "accounts.status.outstanding": "Outstanding"
 }
