@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
 import {
   injectIntl,
   intlShape,
 } from 'react-intl';
+import { withStripes } from '@folio/stripes/core';
 import { ControlledVocab } from '@folio/stripes/smart-components';
 import { validate } from '../util';
 
@@ -51,4 +53,7 @@ class WaiveSettings extends React.Component {
   }
 }
 
-export default injectIntl(WaiveSettings);
+export default compose(
+  injectIntl,
+  withStripes,
+)(WaiveSettings);

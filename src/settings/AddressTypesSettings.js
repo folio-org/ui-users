@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
 import {
   FormattedMessage,
   injectIntl,
   intlShape,
 } from 'react-intl';
+import { withStripes } from '@folio/stripes/core';
 import { ControlledVocab } from '@folio/stripes/smart-components';
 
 class AddressTypesSettings extends React.Component {
@@ -47,4 +49,7 @@ class AddressTypesSettings extends React.Component {
   }
 }
 
-export default injectIntl(AddressTypesSettings);
+export default compose(
+  injectIntl,
+  withStripes,
+)(AddressTypesSettings);

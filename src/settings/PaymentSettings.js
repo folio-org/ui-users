@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { compose } from 'redux';
 import {
   injectIntl,
   intlShape,
@@ -26,6 +27,7 @@ import {
   UserName
 } from '@folio/stripes/smart-components';
 import { validate } from '../util';
+import stripesConnect from '../connect';
 
 import {
   Owners,
@@ -333,4 +335,7 @@ class PaymentSettings extends React.Component {
   }
 }
 
-export default injectIntl(PaymentSettings);
+export default compose(
+  injectIntl,
+  stripesConnect,
+)(PaymentSettings);

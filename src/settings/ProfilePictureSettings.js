@@ -7,11 +7,11 @@ import {
   Checkbox,
 } from '@folio/stripes/components';
 import { Field } from 'redux-form';
+import { withStripes } from '@folio/stripes/core';
 import { ConfigManager } from '@folio/stripes/smart-components';
 
 class ProfilePictureSettings extends React.Component {
   static propTypes = {
-    label: PropTypes.string,
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
     }).isRequired,
@@ -29,11 +29,10 @@ class ProfilePictureSettings extends React.Component {
   }
 
   render() {
-    const { label } = this.props;
     return (
       <this.configManager
         getInitialValues={this.getInitialValues}
-        label={label}
+        label={<FormattedMessage id="ui-users.settings.profilePictures" />}
         moduleName="USERS"
         configName="profile_pictures"
       >
@@ -53,4 +52,4 @@ class ProfilePictureSettings extends React.Component {
   }
 }
 
-export default ProfilePictureSettings;
+export default withStripes(ProfilePictureSettings);

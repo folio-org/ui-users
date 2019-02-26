@@ -1,13 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
 import {
   FormattedMessage,
   injectIntl,
   intlShape,
 } from 'react-intl';
+import { withStripes } from '@folio/stripes/core';
 import { ControlledVocab } from '@folio/stripes/smart-components';
 
 import PatronGroupNumberOfUsers from '../components/PatronGroupNumberOfUsers';
+import stripesConnect from '../connect';
 
 class PatronGroupsSettings extends React.Component {
   // adding the desired-count parameter, :50, to this query is an egregious
@@ -76,4 +79,8 @@ class PatronGroupsSettings extends React.Component {
   }
 }
 
-export default injectIntl(PatronGroupsSettings);
+export default compose(
+  injectIntl,
+  stripesConnect,
+  withStripes,
+)(PatronGroupsSettings);
