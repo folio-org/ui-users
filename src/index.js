@@ -74,7 +74,7 @@ class UsersRouting extends React.Component {
               <Route path={`${path}/groups`} exact component={PatronGroupsSettings} />
             )}
             {stripes.hasPerm('ui-users.editpermsets') && (
-              <Route path={`${path}/perms`} exact component={PermissionSets} />
+              <Route path={`${path}/perms`} component={PermissionSets} />
             )}
             <Route path={`${path}/profilepictures`} exact component={ProfilePictureSettings} />
 
