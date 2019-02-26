@@ -27,8 +27,8 @@ const filterConfig = [
     name: 'active',
     cql: 'active',
     values: [
-      { name: 'Include inactive users', cql: 'false' },
-      { name: 'Show active users', cql: 'true', hidden: true },
+      { name: <FormattedMessage id="ui-users.filters.includeInactiveUsers" />, cql: 'false' },
+      { name: <FormattedMessage id="ui-users.filters.showActiveUsers" />, cql: 'true', hidden: true },
     ],
   },
   {

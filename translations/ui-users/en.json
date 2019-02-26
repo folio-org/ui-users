@@ -498,6 +498,8 @@
   "chargeFeefine": "Charge Fee/Fine",
   "accountActionHistory": "Account Actions History",
   "status": "Status",
+  "filters.includeInactiveUsers": "Include inactive users",
+  "filters.showActiveUsers": "Show active users",
   "selectColumns": "Select Columns",
 
   "accounts.title": "Fees/Fines",
