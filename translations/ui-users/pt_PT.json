@@ -782,5 +782,6 @@
     "accounts.pay.fully": "Paid Fully",
     "accounts.pay.partially": "Paid Partially",
     "accounts.pay.closed": "Closed",
-    "accounts.status.outstanding": "Outstanding"
+    "accounts.status.outstanding": "Outstanding",
+    "accounts.viewAllAccounts": "View all accounts"
 }
