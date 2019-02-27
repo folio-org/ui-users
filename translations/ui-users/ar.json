@@ -782,5 +782,6 @@
     "accounts.pay.fully": "مسدد بالكامل",
     "accounts.pay.partially": "مسدد جزئيًا",
     "accounts.pay.closed": "مغلق",
-    "accounts.status.outstanding": "المتبقي"
+    "accounts.status.outstanding": "المتبقي",
+    "accounts.viewAllAccounts": "عرض كل الحسابات"
 }

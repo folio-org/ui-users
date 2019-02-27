@@ -585,7 +585,7 @@
     "details.columns.transactioninfo": "Transaction Information",
     "details.paneTitle.feeFineDetails": "Fee/fine details",
     "details.label.loanDetails": "Loan details",
-    "accounts.button.new": " New",
+    "accounts.button.new": "New",
     "accounts.button.error": "Error",
     "accounts.error.field": "Please fill this field in to continue",
     "accounts.error.comment": "Enter a comment",
@@ -782,5 +782,6 @@
     "accounts.pay.fully": "Paid Fully",
     "accounts.pay.partially": "Paid Partially",
     "accounts.pay.closed": "Closed",
-    "accounts.status.outstanding": "Outstanding"
+    "accounts.status.outstanding": "Outstanding",
+    "accounts.viewAllAccounts": "View all accounts"
 }
