@@ -429,7 +429,7 @@
     "feefines.errors.taxVatNumeric": "Adó/ÁFA szám legyen",
     "feefines.errors.taxVat": "Adó/ÁFA értéke 100-nál kisebb legyen",
     "feefines.errors.exist": "Díj/bírság típusa létezik",
-    "feefines.errors.existShared": " Díj/bírság típusa létezik a {owner} tulajdonosnak",
+    "feefines.errors.existShared": "Díj/bírság típusa létezik a {owner} tulajdonosnak",
     "feefines.modal.error": "Válasszon egyet a folytatáshoz",
     "feefines.modal.yes": "Igen",
     "feefines.modal.no": "Nem",
@@ -782,5 +782,6 @@
     "accounts.pay.fully": "Paid Fully",
     "accounts.pay.partially": "Paid Partially",
     "accounts.pay.closed": "Closed",
-    "accounts.status.outstanding": "Outstanding"
+    "accounts.status.outstanding": "Outstanding",
+    "accounts.viewAllAccounts": "View all accounts"
 }
