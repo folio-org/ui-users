@@ -782,5 +782,6 @@
     "accounts.pay.fully": "全额支付",
     "accounts.pay.partially": "部分支付",
     "accounts.pay.closed": "关闭",
-    "accounts.status.outstanding": "未结"
+    "accounts.status.outstanding": "未结",
+    "accounts.viewAllAccounts": "View all accounts"
 }

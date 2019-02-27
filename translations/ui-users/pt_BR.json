@@ -782,5 +782,6 @@
     "accounts.pay.fully": "Pago totalmente",
     "accounts.pay.partially": "Pago parcialmente",
     "accounts.pay.closed": "Fechado",
-    "accounts.status.outstanding": "Pendente"
+    "accounts.status.outstanding": "Pendente",
+    "accounts.viewAllAccounts": "Ver todas as contas"
 }
