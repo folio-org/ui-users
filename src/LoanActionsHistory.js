@@ -15,7 +15,6 @@ import {
   Modal,
   Button,
   Popover,
-  Callout,
   MultiColumnList,
   KeyValue,
   Row,
@@ -569,7 +568,6 @@ class LoanActionsHistory extends React.Component {
             viewUserPath={`/users/view/${(user || {}).id}?filters=pg.${patronGroup.group}&sort=Name`}
           />
           { this.renderChangeDueDateDialog() }
-          <Callout ref={(ref) => { this.callout = ref; }} />
         </Pane>
       </Paneset>
     );

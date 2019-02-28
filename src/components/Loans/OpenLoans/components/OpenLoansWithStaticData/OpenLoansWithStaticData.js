@@ -9,7 +9,6 @@ import {
   intlShape,
 } from 'react-intl';
 
-import { Callout } from '@folio/stripes/components';
 import { stripesShape } from '@folio/stripes/core';
 
 import OpenLoans from '../../OpenLoans';
@@ -40,7 +39,6 @@ class OpenLoansWithStaticData extends React.Component {
     changeDueDateDialogOpen: PropTypes.bool.isRequired,
     toggleAll: PropTypes.func.isRequired,
     toggleItem: PropTypes.func.isRequired,
-    calloutRef: PropTypes.func.isRequired,
     buildRecords: PropTypes.func.isRequired,
     toggleColumn: PropTypes.func.isRequired,
     renewSelected: PropTypes.func.isRequired,
@@ -194,7 +192,6 @@ class OpenLoansWithStaticData extends React.Component {
       renewSelected,
       showChangeDueDateDialog,
       toggleColumn,
-      calloutRef,
       buildRecords,
       patronBlocks,
       patronGroup,
@@ -244,7 +241,6 @@ class OpenLoansWithStaticData extends React.Component {
           patronBlocks={patronBlocks}
           activeLoan={activeLoan}
         />
-        <Callout ref={calloutRef} />
       </React.Fragment>
     );
   }

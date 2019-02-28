@@ -395,7 +395,6 @@ class OpenLoansControl extends React.Component {
         renewSelected={this.renewSelected}
         showChangeDueDateDialog={this.showChangeDueDateDialog}
         toggleColumn={this.toggleColumn}
-        calloutRef={(ref) => { this.callout = ref; }}
         allChecked={allChecked}
       />
     );

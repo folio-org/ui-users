@@ -6,6 +6,7 @@ import {
   get,
 } from 'lodash';
 
+import { Callout } from '@folio/stripes/components';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import BulkRenewalDialog from './components/BulkRenewalDialog';
 import isOverridePossible from './components/Loans/OpenLoans/helpers/isOverridePossible/isOverridePossible';
@@ -145,7 +146,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
     // map(p => p.catch(e => e)) turns all rejections into resolved values for the promise.all to wait for everything to finish
     return Promise.all(renewedLoans.map(p => p.catch(e => e)))
       .then(() => {
-        if (!isEmpty(renewFailure)) {
+        if (!isEmpty(renewFailure) || renewSuccess.length > 1) {
           this.setState({
             renewSuccess,
             renewFailure,
@@ -157,7 +158,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
       });
   };
 
-  showSingleRenewCallout(loan) {
+  showSingleRenewCallout = (loan) => {
     const message = (
       <span>
         <SafeHTMLMessage
@@ -168,7 +169,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
     );
 
     this.callout.sendCallout({ message });
-  }
+  };
 
   handleErrors(error) {
     const { errors } = error;
@@ -299,6 +300,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
           renew={this.renew}
           requestCounts={requestCounts}
           loanPolicies={loanPolicies}
+          calloutRef={(ref) => { this.callout = ref; }}
           {...this.props}
         />
         <this.connectedBulkRenewalDialog
@@ -312,6 +314,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
           successRenewals={renewSuccess}
           onClose={this.hideBulkRenewalDialog}
         />
+        <Callout ref={(ref) => { this.callout = ref; }} />
       </Fragment>
     );
   }
