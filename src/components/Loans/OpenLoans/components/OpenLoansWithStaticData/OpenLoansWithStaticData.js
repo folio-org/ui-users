@@ -31,17 +31,12 @@ class OpenLoansWithStaticData extends React.Component {
     requestRecords: PropTypes.arrayOf(PropTypes.object).isRequired,
     visibleColumns: PropTypes.arrayOf(PropTypes.object).isRequired,
     possibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
-    errorMsg: PropTypes.object.isRequired,
     resources: PropTypes.object.isRequired,
     patronGroup: PropTypes.object.isRequired,
-    loanPolicies: PropTypes.object.isRequired,
     checkedLoans: PropTypes.object.isRequired,
     requestCounts: PropTypes.object.isRequired,
-    renewSuccess: PropTypes.arrayOf(PropTypes.object).isRequired,
-    renewFailure: PropTypes.arrayOf(PropTypes.object).isRequired,
     allChecked: PropTypes.bool.isRequired,
     patronBlockedModal: PropTypes.bool.isRequired,
-    bulkRenewalDialogOpen: PropTypes.bool.isRequired,
     changeDueDateDialogOpen: PropTypes.bool.isRequired,
     toggleAll: PropTypes.func.isRequired,
     toggleItem: PropTypes.func.isRequired,
@@ -52,7 +47,6 @@ class OpenLoansWithStaticData extends React.Component {
     isLoanChecked: PropTypes.func.isRequired,
     getLoanPolicie: PropTypes.func.isRequired,
     handleOptionsChange: PropTypes.func.isRequired,
-    hideBulkRenewalDialog: PropTypes.func.isRequired,
     openPatronBlockedModal: PropTypes.func.isRequired,
     showChangeDueDateDialog: PropTypes.func.isRequired,
     hideChangeDueDateDialog: PropTypes.func.isRequired,
@@ -190,13 +184,6 @@ class OpenLoansWithStaticData extends React.Component {
     const {
       visibleColumns,
       checkedLoans,
-      loanPolicies,
-      errorMsg,
-      requestCounts,
-      renewSuccess,
-      renewFailure,
-      bulkRenewalDialogOpen,
-      activeLoan,
       changeDueDateDialogOpen,
       loans,
       stripes,
@@ -204,7 +191,6 @@ class OpenLoansWithStaticData extends React.Component {
       user,
       possibleColumns,
       hideChangeDueDateDialog,
-      hideBulkRenewalDialog,
       renewSelected,
       showChangeDueDateDialog,
       toggleColumn,
@@ -215,6 +201,7 @@ class OpenLoansWithStaticData extends React.Component {
       patronBlockedModal,
       onClosePatronBlockedModal,
       openPatronBlockedModal,
+      activeLoan,
     } = this.props;
 
     this.columnMapping = this.getColumnMapping();
@@ -245,24 +232,17 @@ class OpenLoansWithStaticData extends React.Component {
           possibleColumns={possibleColumns}
         />
         <Modals
-          patronBlocks={patronBlocks}
-          patronBlockedModal={patronBlockedModal}
-          patronGroup={patronGroup}
-          stripes={stripes}
-          loans={loans}
           user={user}
-          loanPolicies={loanPolicies}
-          errorMsg={errorMsg}
-          requestCounts={requestCounts}
-          renewSuccess={renewSuccess}
-          renewFailure={renewFailure}
-          bulkRenewalDialogOpen={bulkRenewalDialogOpen}
-          changeDueDateDialogOpen={changeDueDateDialogOpen}
-          activeLoan={activeLoan}
+          loans={loans}
+          stripes={stripes}
+          patronGroup={patronGroup}
           checkedLoans={checkedLoans}
+          patronBlockedModal={patronBlockedModal}
+          changeDueDateDialogOpen={changeDueDateDialogOpen}
           hideChangeDueDateDialog={hideChangeDueDateDialog}
           onClosePatronBlockedModal={onClosePatronBlockedModal}
-          hideBulkRenewalDialog={hideBulkRenewalDialog}
+          patronBlocks={patronBlocks}
+          activeLoan={activeLoan}
         />
         <Callout ref={calloutRef} />
       </React.Fragment>
