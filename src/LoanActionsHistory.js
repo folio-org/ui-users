@@ -203,7 +203,7 @@ class LoanActionsHistory extends React.Component {
     if (!isEmpty(countRenew)) return this.setState({ patronBlockedModal: true });
 
     return renew([loan], user)
-      .then(this.getLoanActions());
+      .then(this.getLoanActions);
   }
 
   getUsers(loanActions) {

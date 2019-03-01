@@ -143,7 +143,6 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
 
     this.setState({ errorMsg });
 
-    // map(p => p.catch(e => e)) turns all rejections into resolved values for the promise.all to wait for everything to finish
     return Promise.all(renewedLoans.map(p => p.catch(e => e)))
       .then(() => {
         if (!isEmpty(renewFailure) || renewSuccess.length > 1) {
@@ -214,11 +213,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
     return message;
   };
 
-  hideBulkRenewalDialog = () => {
-    this.setState({
-      bulkRenewalDialogOpen: false,
-    });
-  };
+  hideBulkRenewalDialog = () => this.setState({ bulkRenewalDialogOpen: false });
 
   getOpenRequestsCount() {
     const {

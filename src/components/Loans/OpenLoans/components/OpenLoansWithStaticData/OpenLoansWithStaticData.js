@@ -232,14 +232,14 @@ class OpenLoansWithStaticData extends React.Component {
           user={user}
           loans={loans}
           stripes={stripes}
+          activeLoan={activeLoan}
           patronGroup={patronGroup}
+          patronBlocks={patronBlocks}
           checkedLoans={checkedLoans}
           patronBlockedModal={patronBlockedModal}
           changeDueDateDialogOpen={changeDueDateDialogOpen}
           hideChangeDueDateDialog={hideChangeDueDateDialog}
           onClosePatronBlockedModal={onClosePatronBlockedModal}
-          patronBlocks={patronBlocks}
-          activeLoan={activeLoan}
         />
       </React.Fragment>
     );
