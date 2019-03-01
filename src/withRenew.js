@@ -8,6 +8,7 @@ import {
 
 import { Callout } from '@folio/stripes/components';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
+
 import BulkRenewalDialog from './components/BulkRenewalDialog';
 import isOverridePossible from './components/Loans/OpenLoans/helpers/isOverridePossible/isOverridePossible';
 
@@ -42,6 +43,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
 
   constructor(props) {
     super(props);
+
     this.permissions = { allRequests: 'ui-users.requests.all' };
     this.connectedBulkRenewalDialog = props.stripes.connect(BulkRenewalDialog);
     this.state = {
@@ -107,9 +109,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
               });
           } else {
             resp.text()
-              .then(error => {
-                reject(error);
-              });
+              .then(reject);
           }
         });
     });
@@ -241,7 +241,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
       .then((requestRecords) => {
         const requestCountObject = requestRecords.reduce((map, record) => {
           map[record.itemId] = map[record.itemId]
-            ? ++map[record.itemId]
+            ? map[record.itemId] + 1
             : 1;
 
           return map;

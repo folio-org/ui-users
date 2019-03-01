@@ -141,6 +141,10 @@ class LoanActionsHistory extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
+    this.updateLoanActionsOnOverride(prevProps);
+  }
+
+  updateLoanActionsOnOverride(prevProps) {
     const {
       loan: {
         renewalCount
@@ -152,8 +156,9 @@ class LoanActionsHistory extends React.Component {
         renewalCount: prevRenewalCount
       }
     } = prevProps;
+    const isRenewalCountChanged = prevRenewalCount && renewalCount && renewalCount !== prevRenewalCount;
 
-    if (prevRenewalCount && renewalCount && renewalCount !== prevRenewalCount) {
+    if (isRenewalCountChanged) {
       this.getLoanActions();
     }
   }
