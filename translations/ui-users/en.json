@@ -512,6 +512,7 @@
   "accounts.totalOpenAccounts": "(Total: {amount})",
   "accounts.numClosedAccounts": "{count, number} {count, plural, one {closed fee/fine} other {closed fees/fines}}",
   "accounts.chargeManual": "Charge fee/fine",
+  "accounts.viewAllAccounts": "View all accounts",
 
   "feefines.title": "Fee/fine: Manual charges",
   "feefines.singular": "Fee/Fine Type",

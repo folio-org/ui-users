@@ -770,5 +770,18 @@
     "data.loanActionMap.renewedThroughOverride": "通过覆盖续借",
     "loans.columns.comments": "备注",
     "override.autoNewDueDate": "到期日将自动计算",
-    "blocks.form.button.close": "关闭读者违规对话框"
+    "blocks.form.button.close": "关闭读者违规对话框",
+    "blocks.layer.newBlockTitle": "新违规",
+    "accounts.totalOpenAccounts": "（总计： {amount} ）",
+    "accounts.error.select": "选择一个",
+    "accounts.pay.field.ownerDesk": "费用/罚款所有人服务台",
+    "accounts.pay.field.infoPatron": "读者附加信息",
+    "accounts.pay.owner.placeholder": "选择服务台",
+    "accounts.pay.method.placeholder": "选择类型",
+    "accounts.pay.transaction.placeholder": "输入支票编号等",
+    "accounts.pay.fully": "全额支付",
+    "accounts.pay.partially": "部分支付",
+    "accounts.pay.closed": "关闭",
+    "accounts.status.outstanding": "未结",
+    "accounts.viewAllAccounts": "View all accounts"
 }

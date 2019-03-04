@@ -548,7 +548,7 @@
     "accounts.pay.field.selectedamount": "Valor selecionado:",
     "accounts.pay.field.paymentamount": "Valor do pagamento*",
     "accounts.pay.field.remainingamount": "Valor restante:",
-    "accounts.pay.field.paymentmethod": "Tipo de pagamento*",
+    "accounts.pay.field.paymentmethod": "Método de pagamento*",
     "accounts.pay.field.trasactioninfo": "Informações da transação",
     "accounts.pay.field.comment": "Informações adicionais",
     "accounts.waive.field.totalamount": "taxas/multas, no valor total de",
@@ -770,5 +770,18 @@
     "data.loanActionMap.renewedThroughOverride": "Renovado por meio de substituição",
     "loans.columns.comments": "Comentários",
     "override.autoNewDueDate": "A data de vencimento será calculada automaticamente",
-    "blocks.form.button.close": "Fechar a caixa de diálogo de usuários"
+    "blocks.form.button.close": "Fechar a caixa de diálogo de usuários",
+    "blocks.layer.newBlockTitle": "Nova suspensão",
+    "accounts.totalOpenAccounts": "(Total: {amount})",
+    "accounts.error.select": "Selecione um",
+    "accounts.pay.field.ownerDesk": "Posto de trabalho do proprietário da taxa/multa*",
+    "accounts.pay.field.infoPatron": "Informações adicionais para o usuário",
+    "accounts.pay.owner.placeholder": "Selecione o posto de trabalho",
+    "accounts.pay.method.placeholder": "Selecione o tipo",
+    "accounts.pay.transaction.placeholder": "Digite verificar #, etc.",
+    "accounts.pay.fully": "Pago totalmente",
+    "accounts.pay.partially": "Pago parcialmente",
+    "accounts.pay.closed": "Fechado",
+    "accounts.status.outstanding": "Pendente",
+    "accounts.viewAllAccounts": "Ver todas as contas"
 }
