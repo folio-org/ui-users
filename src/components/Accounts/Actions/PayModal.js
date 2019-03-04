@@ -68,6 +68,8 @@ class PayModal extends React.Component {
     pristine: PropTypes.bool,
     reset: PropTypes.func,
     commentRequired: PropTypes.bool,
+    owners: PropTypes.arrayOf(PropTypes.object),
+    feefines: PropTypes.arrayOf(PropTypes.object),
   };
 
   constructor(props) {
@@ -75,7 +77,8 @@ class PayModal extends React.Component {
 
     this.state = {
       amount: 0,
-      notify: true,
+      showNotify: false,
+      notify: false,
     };
     this.initialAmount = 0;
   }
@@ -84,12 +87,20 @@ class PayModal extends React.Component {
     if (!_.isEqual(this.props.accounts, nextProps.accounts)) {
       const accounts = nextProps.accounts || [];
       let selected = parseFloat(0);
+      let showNotify = false;
       accounts.forEach(a => {
         selected += parseFloat(a.remaining);
+        const feefine = this.props.feefines.find(f => f.id === a.feeFineId.substring(0, 36)) || {};
+        const owner = this.props.owners.find(o => o.id === a.ownerId) || {};
+        if (feefine.actionNoticeId || owner.defaultActionNoticeId) {
+          showNotify = true;
+        }
       });
       this.setState({
         amount: parseFloat(selected).toFixed(2),
+        showNotify,
       });
+
       this.initialAmount = parseFloat(selected).toFixed(2);
       this.props.initialize({ amount: parseFloat(selected).toFixed(2), notify: true });
     }
@@ -315,20 +326,24 @@ class PayModal extends React.Component {
               </FormattedMessage>
             </Col>
           </Row>
-          <Row>
-            <Col xs>
-              <Field
-                name="notify"
-                component={Checkbox}
-                checked={this.state.notify}
-                onChange={this.onToggleNotify}
-                inline
-              />
-              <FormattedMessage id="ui-users.accounts.pay.notifyPatron" />
-            </Col>
-          </Row>
+          {this.state.showNotify &&
+            <div>
+              <Row>
+                <Col xs>
+                  <Field
+                    name="notify"
+                    component={Checkbox}
+                    checked={this.state.notify}
+                    onChange={this.onToggleNotify}
+                    inline
+                  />
+                  <FormattedMessage id="ui-users.accounts.pay.notifyPatron" />
+                </Col>
+              </Row>
+            </div>
+          }
           <br />
-          {this.state.notify &&
+          {(this.state.notify && this.state.showNotify) &&
             <div>
               <Row>
                 <Col xs>
