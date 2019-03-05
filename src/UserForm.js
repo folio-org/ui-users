@@ -320,24 +320,15 @@ class UserForm extends React.Component {
           <Paneset isRoot>
             <Pane
               defaultWidth="100%"
+              actionMenu={this.getActionMenu}
               firstMenu={firstMenu}
               lastMenu={lastMenu}
+              appIcon={<AppIcon app="users" appIconKey="users" />}
               paneTitle={
-                <div
-                  style={{ textAlign: 'center' }}
-                  data-test-header-title
-                >
-                  <AppIcon
-                    app="users"
-                    appIconKey="users"
-                    size="small"
-                  />
-                  <span style={{ margin: '0 4px' }}>
-                    {paneTitle}
-                  </span>
-                </div>
+                <span data-test-header-title>
+                  {paneTitle}
+                </span>
               }
-              actionMenu={this.getActionMenu}
             >
               <div className={css.UserFormContent}>
                 <Headline

@@ -48,9 +48,9 @@ const Owners = ({ dataOptions, onChange }) => {
         </Col>
       </Row>
       <Row>
-        <Col xs>
+        <Col xs={4}>
           <Select
-            style={{ width: 120 }}
+            style={{ width: 300 }}
             onChange={onChange}
           >
             {options}

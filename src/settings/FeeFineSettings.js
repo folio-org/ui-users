@@ -96,7 +96,8 @@ class FeefineSettings extends React.Component {
     this.setState({ ownerId });
     const nextFeeFines = _.get(this.props.resources, ['feefines', 'records'], [])
       .filter(f => f.ownerId === ownerId) || [];
-    if (!nextFeeFines.length && ownerId !== (this.shared || {}).id) {
+    const filterOwners = this.getOwners();
+    if (!nextFeeFines.length && (ownerId !== (this.shared || {}).id) && !!filterOwners.length) {
       this.setState({ showCopyDialog: true });
     }
   }
@@ -247,6 +248,20 @@ class FeefineSettings extends React.Component {
     return {};
   }
 
+  getOwners = () => {
+    const items = _.get(this.props.resources, ['feefines', 'records'], []);
+    const filterOwners = [];
+    const { owners } = this.state;
+
+    items.forEach(i => {
+      const owner = owners.find(o => o.id === i.ownerId) || {};
+      if (!filterOwners.some(o => o.id === owner.id)) {
+        filterOwners.push(owner);
+      }
+    });
+    return filterOwners;
+  }
+
   render() {
     if (!this.props.resources.feefines) return <div />;
 
@@ -257,14 +272,7 @@ class FeefineSettings extends React.Component {
     const term = this.state.selectedItem.feeFineType;
     //    const owners = _.get(this.props.resources, ['owners', 'records'], []);
     const { owners } = this.state;
-    const filterOwners = [];
-    items.forEach(i => {
-      const owner = owners.find(o => o.id === i.ownerId) || {};
-      if (!filterOwners.some(o => o.id === owner.id)) {
-        filterOwners.push(owner);
-      }
-    });
-
+    const filterOwners = this.getOwners();
     const modalMessage = (
       <SafeHTMLMessage
         id="stripes-smart-components.cv.termWillBeDeleted"
@@ -295,7 +303,7 @@ class FeefineSettings extends React.Component {
             onCreate={this.onCreateItem}
             onDelete={this.showConfirmDialog}
             isEmptyMessage={
-              formatMessage({ id: 'stripes-smart-components.cv.noExistingTerms' },
+              formatMessage({ id: 'ui-users.feefines.nodata' },
                 { terms: 'label' })
             }
           />

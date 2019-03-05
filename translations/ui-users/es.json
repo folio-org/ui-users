@@ -548,7 +548,7 @@
     "accounts.pay.field.selectedamount": "Selected amount:",
     "accounts.pay.field.paymentamount": "Payment amount*",
     "accounts.pay.field.remainingamount": "Remaining amount:",
-    "accounts.pay.field.paymentmethod": "Payment type*",
+    "accounts.pay.field.paymentmethod": "Payment method*",
     "accounts.pay.field.trasactioninfo": "Transaction information",
     "accounts.pay.field.comment": "Additional information",
     "accounts.waive.field.totalamount": "fees/fines for a total amount of",
@@ -770,5 +770,18 @@
     "data.loanActionMap.renewedThroughOverride": "Renewed through override",
     "loans.columns.comments": "Comments",
     "override.autoNewDueDate": "Due date will be calculated automatically",
-    "blocks.form.button.close": "Close patron block dialog"
+    "blocks.form.button.close": "Close patron block dialog",
+    "blocks.layer.newBlockTitle": "New Block",
+    "accounts.totalOpenAccounts": "(Total: {amount})",
+    "accounts.error.select": "Select one",
+    "accounts.pay.field.ownerDesk": "Fee/fine owner desk*",
+    "accounts.pay.field.infoPatron": "Additional information for patron",
+    "accounts.pay.owner.placeholder": "Select desk",
+    "accounts.pay.method.placeholder": "Select type",
+    "accounts.pay.transaction.placeholder": "Enter check #, etc.",
+    "accounts.pay.fully": "Paid Fully",
+    "accounts.pay.partially": "Paid Partially",
+    "accounts.pay.closed": "Closed",
+    "accounts.status.outstanding": "Outstanding",
+    "accounts.viewAllAccounts": "View all accounts"
 }

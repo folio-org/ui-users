@@ -11,6 +11,7 @@ import {
 } from '@folio/stripes/components';
 import CancellationModal from './CancellationModal';
 import PayModal from './PayModal';
+import PayManyModal from './PayManyModal';
 import WaiveModal from './WaiveModal';
 import CommentModal from './CommentModal';
 import WarningModal from './WarningModal';
@@ -45,6 +46,11 @@ class Actions extends React.Component {
       type: 'okapi',
       records: 'waiver',
       path: 'waives',
+    },
+    owners: {
+      type: 'okapi',
+      records: 'owners',
+      path: 'owners?query=cql.allRecords=1&limit=100',
     },
     activeRecord: {},
     user: {},
@@ -443,6 +449,7 @@ class Actions extends React.Component {
     } = this.state;
 
     const payments = _.get(resources, ['payments', 'records'], []);
+    const owners = _.get(resources, ['owners', 'records'], []);
     const waives = _.get(resources, ['waives', 'records'], []);
     const settings = _.get(resources, ['commentRequired', 'records', 0], {});
     const warning = accounts.filter(a => a.status.name === 'Closed').length !== 0 && (actions.regular || actions.waiveMany);
@@ -473,7 +480,7 @@ class Actions extends React.Component {
           onSubmit={(values) => { this.onClickCancellation(values); }}
         />
         <PayModal
-          open={actions.pay || (actions.regular && !warning)}
+          open={actions.pay || (actions.regular && accounts.length === 1)}
           commentRequired={settings.paid}
           onClose={this.onClosePay}
           account={[this.type]}
@@ -482,6 +489,18 @@ class Actions extends React.Component {
           accounts={(actions.pay) ? this.props.accounts : accounts}
           payments={payments}
           onSubmit={(values) => { this.showConfirmDialog(values); }}
+        />
+        <PayManyModal
+          open={actions.regular && !warning && accounts.length > 1}
+          commentRequired={settings.paid}
+          onClose={this.onClosePay}
+          account={[this.type]}
+          stripes={this.props.stripes}
+          balance={this.props.balance}
+          accounts={accounts}
+          payments={payments}
+          onSubmit={(values) => { this.showConfirmDialog(values); }}
+          owners={owners}
         />
         <WaiveModal
           open={actions.waiveModal || (actions.waiveMany && !warning)}

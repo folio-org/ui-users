@@ -4,8 +4,16 @@ import uuid from 'uuid';
 import _ from 'lodash';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import moment from 'moment';
-import { Callout } from '@folio/stripes/components';
-import { FormattedMessage } from 'react-intl';
+import {
+  Callout,
+  ConfirmationModal,
+} from '@folio/stripes/components';
+import {
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
+import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import ChargeForm from './ChargeForm';
 import ItemLookup from './ItemLookup';
 import PayModal from '../Actions/PayModal';
@@ -107,6 +115,7 @@ class Charge extends React.Component {
     initialize: PropTypes.func,
     servicePointsIds: PropTypes.arrayOf(PropTypes.string),
     defaultServicePointId: PropTypes.string,
+    intl: intlShape.isRequired,
   };
 
   constructor(props) {
@@ -115,6 +124,7 @@ class Charge extends React.Component {
       ownerId: '0',
       lookup: false,
       pay: false,
+      showConfirmDialog: false,
     };
     this.onClickCharge = this.onClickCharge.bind(this);
     this.onClickSelectItem = this.onClickSelectItem.bind(this);
@@ -155,15 +165,17 @@ class Charge extends React.Component {
   onClickCharge(type) {
     const owners = _.get(this.props.resources, ['owners', 'records'], []);
     const feefines = _.get(this.props.resources, ['feefines', 'records'], []);
-    const { selectedLoan } = this.props;
+    const { selectedLoan, intl: { formatMessage } } = this.props;
     const item = (selectedLoan.id) ? selectedLoan.item : this.item;
 
     type.paymentStatus = {
-      name: 'Outstanding',
+      name: formatMessage({ id: 'ui-users.accounts.status.outstanding' }),
     };
     type.status = {
-      name: 'Open',
+      name: formatMessage({ id: 'ui-users.accounts.open' }),
     };
+    delete type.notify;
+    delete type.patronInfo;
     type.remaining = type.amount;
     type.feeFineType = (feefines.find(f => f.id === type.feeFineId.substring(0, 36)) || {}).feeFineType || '';
     type.feeFineOwner = (owners.find(o => o.id === type.ownerId) || {}).owner || '';
@@ -284,6 +296,68 @@ class Charge extends React.Component {
     this.callout.sendCallout({ message });
   }
 
+  showConfirmDialog = (values) => {
+    this.setState({
+      showConfirmDialog: true,
+      values
+    });
+
+    return new Promise((resolve, reject) => {
+      this.actionResolve = resolve;
+      this.actionReject = reject;
+    });
+  }
+
+  hideConfirmDialog = () => {
+    this.setState({
+      showConfirmDialog: false,
+      values: {}
+    });
+  }
+
+  onConfirm = () => {
+    const { values } = this.state;
+    const { intl: { formatMessage } } = this.props;
+    this.onClickCharge(this.type).then(() => {
+      this.type.remaining = parseFloat(this.type.amount - values.amount).toFixed(2);
+      if (this.type.remaining === '0.00') {
+        this.type.paymentStatus.name = formatMessage({ id: 'ui-users.accounts.pay.fully' });
+        this.type.status.name = formatMessage({ id: 'ui-users.accounts.closed' });
+      } else {
+        this.type.paymentStatus.name = formatMessage({ id: 'ui-users.accounts.pay.partially' });
+      }
+      this.props.mutator.activeRecord.update({ id: this.type.id });
+      return this.props.mutator.accounts.PUT(this.type);
+    })
+      .then(() => this.newAction({ paymentMethod: values.method }, this.type.id,
+        this.type.paymentStatus.name, values.amount,
+        values.comment, this.type.remaining,
+        values.transaction, this.type.feeFineOwner))
+      .then(() => {
+        this.hideConfirmDialog();
+        this.onClosePayModal();
+        this.showCalloutMessage(this.type);
+        this.payResolve();
+      })
+      .then(() => this.props.handleAddRecords())
+      .then(() => setTimeout(this.props.onCloseChargeFeeFine, 2000));
+  }
+
+  renderConfirmMessage = () => {
+    const { intl: { formatMessage } } = this.props;
+    const values = this.state.values || {};
+    const type = this.type || {};
+    const amount = parseFloat(values.amount || 0).toFixed(2);
+    const statusId = (parseFloat(values.amount) !== parseFloat(type.amount)) ? 'partially' : 'fully';
+    const paymentStatus = formatMessage({ id: `ui-users.accounts.pay.${statusId}` });
+    return (
+      <SafeHTMLMessage
+        id="ui-users.accounts.confirmation.message"
+        values={{ count: 1, amount, action: paymentStatus }}
+      />
+    );
+  }
+
   render() {
     const resources = this.props.resources;
     const allfeefines = _.get(resources, ['allfeefines', 'records'], []);
@@ -373,34 +447,21 @@ class Charge extends React.Component {
           balance={this.type.amount}
           payments={payments}
           stripes={this.props.stripes}
-          onSubmit={(values) => {
-            this.onClickCharge(this.type).then(() => {
-              this.type.remaining = parseFloat(this.type.amount - values.amount).toFixed(2);
-              if (this.type.remaining === '0.00') {
-                this.type.paymentStatus.name = 'Paid Fully';
-                this.type.status.name = 'Closed';
-              } else {
-                this.type.paymentStatus.name = 'Paid Partially';
-              }
-              this.props.mutator.activeRecord.update({ id: this.type.id });
-              return this.props.mutator.accounts.PUT(this.type);
-            })
-              .then(() => this.newAction({ paymentMethod: values.method }, this.type.id,
-                this.type.paymentStatus.name, values.amount,
-                values.comment, this.type.remaining,
-                values.transaction, this.type.feeFineOwner))
-              .then(() => {
-                this.showCalloutMessage(this.type);
-                this.payResolve();
-              })
-              .then(() => this.props.handleAddRecords())
-              .then(() => setTimeout(this.props.onCloseChargeFeeFine, 2000));
-          }}
+          onSubmit={(values) => { this.showConfirmDialog(values); }}
         />
         <Callout ref={(ref) => { this.callout = ref; }} />
+        <ConfirmationModal
+          open={this.state.showConfirmDialog}
+          heading={<FormattedMessage id="ui-users.accounts.confirmation.head" values={{ action: 'payment' }} />}
+          message={this.renderConfirmMessage()}
+          onConfirm={this.onConfirm}
+          onCancel={this.hideConfirmDialog}
+          cancelLabel={<FormattedMessage id="ui-users.accounts.cancellation.field.back" />}
+          confirmLabel={<FormattedMessage id="ui-users.accounts.cancellation.field.confirm" />}
+        />
       </div>
     );
   }
 }
 
-export default Charge;
+export default injectIntl(Charge);

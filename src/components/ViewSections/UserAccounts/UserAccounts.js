@@ -32,7 +32,7 @@ class UserAccounts extends React.Component {
       type: 'okapi',
       accumulate: 'true',
       GET: {
-        path: 'accounts?query=(userId=:{id} and status.name<>Closed)&limit=1',
+        path: 'accounts?query=(userId=:{id} and status.name<>Closed)&limit=100',
       },
     },
     closedAccountsCount: {
@@ -81,6 +81,7 @@ class UserAccounts extends React.Component {
   componentDidMount() {
     this.props.mutator.openAccountsCount.GET().then(records => {
       this.setState({
+        total: this.getTotalOpenAccounts(records.accounts),
         openAccounts: records.totalRecords,
       });
     });
@@ -95,6 +96,7 @@ class UserAccounts extends React.Component {
     if (this.props.addRecord !== prevProps.addRecord) {
       this.props.mutator.openAccountsCount.GET().then(records => {
         this.setState({
+          total: this.getTotalOpenAccounts(records.accounts),
           openAccounts: records.totalRecords,
         });
       });
@@ -106,10 +108,16 @@ class UserAccounts extends React.Component {
     }
   }
 
+  getTotalOpenAccounts = (accounts) => {
+    const total = accounts.reduce((t, { remaining }) => (t + parseFloat(remaining)), 0);
+    return parseFloat(total).toFixed(2);
+  }
+
   render() {
     const resources = this.props.resources;
     const openAccountsTotal = this.state.openAccounts || 0;
     const closedAccountsTotal = this.state.closedAccounts || 0;
+    const total = this.state.total || '0.00';
     const { expanded, onToggle, accordionId } = this.props;
 
     const openAccountsCount = (_.get(resources.openAccountsCount, ['isPending'], true)) ? -1 : openAccountsTotal;
@@ -141,6 +149,7 @@ class UserAccounts extends React.Component {
                 >
                   <FormattedMessage id={item.formattedMessageId} values={{ count: item.count }} />
                 </Link>
+                {item.id === 'clickable-viewcurrentaccounts' && <FormattedMessage id="ui-users.accounts.totalOpenAccounts" values={{ amount: total }} />}
               </li>)}
             items={[
               {
@@ -154,6 +163,12 @@ class UserAccounts extends React.Component {
                 count: closedAccountsCount,
                 formattedMessageId: 'ui-users.accounts.numClosedAccounts',
                 layer: 'closed-accounts',
+              },
+              {
+                id: 'clickable-viewallaccounts',
+                count: 0,
+                formattedMessageId: 'ui-users.accounts.viewAllAccounts',
+                layer: 'all-accounts',
               },
             ]}
           /> : <Icon icon="spinner-ellipsis" width="10px" />

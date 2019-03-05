@@ -32,13 +32,13 @@
     "okapiInterfaces": {
       "users": "15.0",
       "configuration": "2.0",
-      "circulation": "3.0 4.0 5.0",
+      "circulation": "3.0 4.0 5.0 6.0 7.0",
       "permissions": "5.0",
       "loan-policy-storage": "1.0 2.0",
       "loan-storage": "4.0 5.0",
       "login": "4.7 5.0",
       "feesfines": "15.0",
-      "request-storage": "2.2",
+      "request-storage": "2.5 3.0",
       "users-bl": "3.2 4.0"
     },
     "permissionSets": [
