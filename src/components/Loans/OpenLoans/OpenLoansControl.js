@@ -1,18 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  isEmpty,
   omit,
   size,
   get,
 } from 'lodash';
 
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import { stripesShape } from '@folio/stripes/core';
 
 import withRenew from '../../../withRenew';
 import TableModel from './components/OpenLoansWithStaticData';
-import isOverridePossible from './helpers/isOverridePossible';
 
 class OpenLoansControl extends React.Component {
   static manifest = Object.freeze({
@@ -65,6 +62,8 @@ class OpenLoansControl extends React.Component {
       id: PropTypes.string.isRequired,
     }).isRequired,
     patronGroup: PropTypes.object.isRequired,
+    requestCounts: PropTypes.object.isRequired,
+    loanPolicies: PropTypes.object.isRequired,
     loans: PropTypes.arrayOf(PropTypes.object).isRequired,
     patronBlocks: PropTypes.arrayOf(PropTypes.object).isRequired,
     renew: PropTypes.func.isRequired,
@@ -114,14 +113,7 @@ class OpenLoansControl extends React.Component {
     ];
 
     this.state = {
-      loans: [],
-      renewFailure: [],
-      renewSuccess: [],
-      loanPolicies: {},
       checkedLoans: {},
-      requestCounts: {},
-      errorMsg: {},
-      bulkRenewalDialogOpen: false,
       allChecked: false,
       visibleColumns: this.controllableColumns.map(columnName => ({
         title: columnName,
@@ -137,34 +129,6 @@ class OpenLoansControl extends React.Component {
     this.permissions = { allRequests: 'ui-users.requests.all' };
   }
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    const { loans } = nextProps;
-
-    if (prevState.loans.length < nextProps.loans.length) {
-      return { loans };
-    }
-
-    return null;
-  }
-
-  componentDidMount() {
-    const { loans } = this.state;
-
-    if (loans.length > 0) {
-      this.fetchLoanPolicyNames();
-      this.getOpenRequestsCount();
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const { loans } = this.state;
-
-    if (loans.length > prevState.loans.length) {
-      this.fetchLoanPolicyNames();
-      this.getOpenRequestsCount();
-    }
-  }
-
   toggleAll = (e) => {
     const { loans } = this.props;
     const checkedLoans = e.target.checked
@@ -178,7 +142,7 @@ class OpenLoansControl extends React.Component {
   };
 
   getLoanPolicie = (policieId) => {
-    const { loanPolicies } = this.state;
+    const { loanPolicies } = this.props;
 
     return loanPolicies[policieId];
   };
@@ -203,67 +167,6 @@ class OpenLoansControl extends React.Component {
     this.setState({ checkedLoans, allChecked });
   };
 
-  getOpenRequestsCount() {
-    const {
-      stripes,
-      mutator: {
-        loanPolicies: {
-          reset,
-          GET,
-        },
-      },
-    } = this.props;
-
-    const { loans } = this.state;
-
-    if (!stripes.hasPerm(this.permissions.allRequests)) {
-      return;
-    }
-
-    const q = loans.map(loan => {
-      return `itemId==${loan.itemId}`;
-    }).join(' or ');
-
-    const query = `(${q}) and status==("Open - Awaiting pickup" or "Open - Not yet filled") sortby requestDate desc`;
-
-    reset();
-    GET({ params: { query } })
-      .then((requestRecords) => {
-        const requestCountObject = requestRecords.reduce((map, record) => {
-          map[record.itemId] = map[record.itemId]
-            ? ++map[record.itemId]
-            : 1;
-
-          return map;
-        }, {});
-        this.setState({ requestCounts: requestCountObject });
-      });
-  }
-
-  fetchLoanPolicyNames() {
-    const query = this.state.loans.map(loan => `id==${loan.loanPolicyId}`).join(' or ');
-    const {
-      mutator: {
-        loanPolicies: {
-          reset,
-          GET,
-        },
-      },
-    } = this.props;
-
-    reset();
-    GET({ params: { query } })
-      .then((loanPolicies) => {
-        const loanPolicyObject = loanPolicies.reduce((map, loanPolicy) => {
-          map[loanPolicy.id] = loanPolicy.name;
-
-          return map;
-        }, {});
-
-        this.setState({ loanPolicies: loanPolicyObject });
-      });
-  }
-
   toggleColumn = (e) => {
     this.setState(({ visibleColumns }) => ({
       visibleColumns: visibleColumns.map(column => {
@@ -278,113 +181,20 @@ class OpenLoansControl extends React.Component {
 
   renewSelected = () => {
     const { checkedLoans } = this.state;
+    const {
+      renew,
+      user,
+    } = this.props;
     const selectedLoans = Object.values(checkedLoans);
-    const renewSuccess = [];
-    const renewFailure = [];
-    const bulkRenewal = (selectedLoans.length > 1);
-    const errorMsg = {};
-    const renewedLoans = selectedLoans.map((loan) => {
-      return this.renew(loan)
-        .then((renewedLoan) => renewSuccess.push(renewedLoan))
-        .catch((error) => {
-          renewFailure.push(loan);
-          const stringErrorMessage = get(error, 'props.values.message.props.values.message', '');
 
-          errorMsg[loan.id] = {
-            ...error,
-            ...isOverridePossible(stringErrorMessage),
-          };
-        });
-    });
-
-    this.setState({ errorMsg });
-
-    // map(p => p.catch(e => e)) turns all rejections into resolved values for the promise.all to wait for everything to finish
-    Promise.all(renewedLoans.map(p => p.catch(e => e)))
-      .then(() => {
-        const isOneFailed = isEmpty(renewSuccess) && renewFailure.length === 1;
-
-        if (bulkRenewal || isOneFailed) {
-          this.setState({
-            renewSuccess,
-            renewFailure,
-            bulkRenewalDialogOpen: true
-          });
-        } else {
-          this.showSingleRenewCallout(renewSuccess[0]);
-        }
-      });
-
+    renew(selectedLoans, user);
     this.setState({ checkedLoans: {}, allChecked: false });
   };
-
-  showRequestQueue = (loan, e) => {
-    if (e) e.preventDefault();
-
-    const q = {};
-    const {
-      resources: {
-        query,
-      },
-      mutator: {
-        query: {
-          update,
-        },
-      },
-    } = this.props;
-
-    Object.keys(query).forEach((k) => { q[k] = null; });
-
-    q.query = get(loan, ['item', 'barcode']);
-    q.filters = 'requestStatus.open - not yet filled,requestStatus.open - awaiting pickup';
-    q.sort = 'Request Date';
-
-    update({
-      _path: '/requests',
-      ...q,
-    });
-  };
-
-  // eslint-disable-next-line consistent-return
-  renew(loan) {
-    const {
-      user,
-      renew,
-      patronBlocks,
-    } = this.props;
-
-    const countRenews = patronBlocks.filter(a => a.renewals === true);
-
-    if (isEmpty(countRenews)) {
-      return renew(loan, user, true);
-    }
-
-    this.openPatronBlockedModal();
-  }
-
-  showSingleRenewCallout(loan) {
-    const message = (
-      <span>
-        <SafeHTMLMessage
-          id="ui-users.loans.item.renewed.callout"
-          values={{ title: loan.item.title }}
-        />
-      </span>
-    );
-
-    this.callout.sendCallout({ message });
-  }
 
   hideChangeDueDateDialog = () => {
     this.setState({
       changeDueDateDialogOpen: false,
       activeLoan: null,
-    });
-  };
-
-  hideBulkRenewalDialog = () => {
-    this.setState({
-      bulkRenewalDialogOpen: false,
     });
   };
 
@@ -492,6 +302,15 @@ class OpenLoansControl extends React.Component {
     onClickViewChargeFeeFine(e, loan);
   };
 
+  renew = (loan) => {
+    const {
+      renew,
+      user,
+    } = this.props;
+
+    renew([loan], user);
+  };
+
   feefinedetails = (loan, e) => {
     const {
       resources,
@@ -529,12 +348,6 @@ class OpenLoansControl extends React.Component {
     const {
       visibleColumns,
       checkedLoans,
-      loanPolicies,
-      errorMsg,
-      requestCounts,
-      renewSuccess,
-      renewFailure,
-      bulkRenewalDialogOpen,
       activeLoan,
       changeDueDateDialogOpen,
       allChecked,
@@ -542,6 +355,7 @@ class OpenLoansControl extends React.Component {
     } = this.state;
 
     const {
+      requestCounts,
       loans,
       stripes,
       onClickViewLoanActionsHistory,
@@ -561,12 +375,7 @@ class OpenLoansControl extends React.Component {
         buildRecords={buildRecords}
         visibleColumns={visibleColumns}
         checkedLoans={checkedLoans}
-        loanPolicies={loanPolicies}
-        errorMsg={errorMsg}
         requestCounts={requestCounts}
-        renewSuccess={renewSuccess}
-        renewFailure={renewFailure}
-        bulkRenewalDialogOpen={bulkRenewalDialogOpen}
         activeLoan={activeLoan}
         changeDueDateDialogOpen={changeDueDateDialogOpen}
         loans={loans}
@@ -583,11 +392,9 @@ class OpenLoansControl extends React.Component {
         handleOptionsChange={this.handleOptionsChange}
         possibleColumns={this.possibleColumns}
         hideChangeDueDateDialog={this.hideChangeDueDateDialog}
-        hideBulkRenewalDialog={this.hideBulkRenewalDialog}
         renewSelected={this.renewSelected}
         showChangeDueDateDialog={this.showChangeDueDateDialog}
         toggleColumn={this.toggleColumn}
-        calloutRef={(ref) => { this.callout = ref; }}
         allChecked={allChecked}
       />
     );
