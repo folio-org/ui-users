@@ -15,14 +15,17 @@ import {
   Row,
   Col,
   Modal,
+  Select,
 } from '@folio/stripes/components';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
+import { Field } from 'redux-form';
 import { EditableList } from '@folio/stripes/smart-components';
 import { validate } from '../util';
 
 import {
   Owners,
-  CopyModal
+  CopyModal,
+  ChargeNotice
 } from './FeeFinesTable';
 
 class FeefineSettings extends React.Component {
@@ -47,6 +50,15 @@ class FeefineSettings extends React.Component {
       records: 'owners',
       path: 'owners?query=cql.allRecords=1 sortby owner&limit=500',
       accumulate: 'true',
+      PUT: {
+        path: 'owners/%{activeRecord.ownerId}',
+      }
+    },
+    templates: {
+      type: 'okapi',
+      records: 'templates',
+      path: 'templates?limit=50&query=cql.allRecords=1 AND category=""',
+      accumulate: 'true',
     },
     activeRecord: {},
   });
@@ -67,6 +79,7 @@ class FeefineSettings extends React.Component {
       selectedItem: {},
       ownerId: '',
       owners: [],
+      templates: [],
     };
 
     this.onCreateItem = this.onCreateItem.bind(this);
@@ -79,6 +92,7 @@ class FeefineSettings extends React.Component {
     this.validate = this.validate.bind(this);
     this.onChangeOwner = this.onChangeOwner.bind(this);
     this.onCopyFeeFines = this.onCopyFeeFines.bind(this);
+    this.onUpdateOwner = this.onUpdateOwner.bind(this);
   }
 
   componentDidMount() {
@@ -88,6 +102,9 @@ class FeefineSettings extends React.Component {
       this.shared = shared;
       const ownerId = (shared) ? shared.id : ((records.length > 0) ? records[0].id : '');
       this.setState({ ownerId });
+    });
+    this.props.mutator.templates.GET().then(records => {
+      this.setState({ templates: records });
     });
   }
 
@@ -262,6 +279,15 @@ class FeefineSettings extends React.Component {
     return filterOwners;
   }
 
+  onUpdateOwner(item) {
+    const { owners, ownerId } = this.state;
+    const owner = owners.find(o => o.id === ownerId) || {};
+    owner.defaultChargeNoticeId = item.defaultChargeNoticeId;
+    owner.defaultActionNoticeId = item.defaultActionNoticeId;
+    this.props.mutator.activeRecord.update({ ownerId });
+    return this.props.mutator.owners.PUT(owner);
+  }
+
   render() {
     if (!this.props.resources.feefines) return <div />;
 
@@ -271,7 +297,7 @@ class FeefineSettings extends React.Component {
     const type = formatMessage({ id: 'ui-users.feefines.singular' });
     const term = this.state.selectedItem.feeFineType;
     //    const owners = _.get(this.props.resources, ['owners', 'records'], []);
-    const { owners } = this.state;
+    const { owners, templates, ownerId } = this.state;
     const filterOwners = this.getOwners();
     const modalMessage = (
       <SafeHTMLMessage
@@ -279,6 +305,37 @@ class FeefineSettings extends React.Component {
         values={{ type, term }}
       />
     );
+    let templateCharge = templates.filter(t => t.category === 'FeeFineCharge') || [];
+    templateCharge = [{}, ...templateCharge.map((t) => ({ value: t.id, label: t.name }))];
+    let templateAction = templates.filter(t => t.category === 'FeeFineAction') || [];
+    templateAction = [{}, ...templateAction.map((t) => ({ value: t.id, label: t.name }))];
+
+    const fieldComponents = {
+      'chargeNoticeId': ({ fieldProps }) => (
+        <Field
+          {...fieldProps}
+          marginBottom0
+          component={Select}
+          dataOptions={templateCharge}
+        />
+      ),
+      'actionNoticeId': ({ fieldProps }) => (
+        <Field
+          {...fieldProps}
+          marginBottom0
+          component={Select}
+          dataOptions={templateAction}
+        />
+
+      ),
+    };
+
+    const formatter = {
+      'chargeNoticeId': (value) => (value.chargeNoticeId ? ((templates.find(t => t.id === value.chargeNoticeId) || {}).name) : '-'),
+      'actionNoticeId': (value) => (value.actionNoticeId ? ((templates.find(t => t.id === value.actionNoticeId) || {}).name) : '-'),
+    };
+
+    const owner = owners.find(o => o.id === ownerId) || {};
 
     return (
       <Paneset>
@@ -288,16 +345,21 @@ class FeefineSettings extends React.Component {
           paneTitle={<FormattedMessage id="ui-users.feefines.title" />}
         >
           <Owners dataOptions={owners} onChange={this.onChangeOwner} />
+          <ChargeNotice owner={owner} templates={templates} templateCharge={templateCharge} templateAction={templateAction} onSubmit={(values) => { this.onUpdateOwner(values); }} />
           <EditableList
             {...this.props}
+            formatter={formatter}
+            fieldComponents={fieldComponents}
             label={formatMessage({ id: 'ui-users.feefines.title' })}
             validate={this.validate}
             contentData={rows}
             createButtonLabel={formatMessage({ id:'stripes-core.button.new' })}
-            visibleFields={['feeFineType', 'defaultAmount']}
+            visibleFields={['feeFineType', 'defaultAmount', 'chargeNoticeId', 'actionNoticeId']}
             columnMapping={{
               feeFineType: formatMessage({ id: 'ui-users.feefines.columns.type' }),
-              defaultAmount: formatMessage({ id: 'ui-users.feefines.columns.amount' })
+              defaultAmount: formatMessage({ id: 'ui-users.feefines.columns.amount' }),
+              chargeNoticeId: formatMessage({ id: 'ui-users.feefines.columns.chargeNotice' }),
+              actionNoticeId: formatMessage({ id: 'ui-users.feefines.columns.actionNotice' }),
             }}
             onUpdate={this.onUpdateItem}
             onCreate={this.onCreateItem}

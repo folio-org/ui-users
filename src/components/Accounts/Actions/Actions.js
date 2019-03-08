@@ -52,6 +52,11 @@ class Actions extends React.Component {
       records: 'owners',
       path: 'owners?query=cql.allRecords=1&limit=100',
     },
+    feefineTypes: {
+      type: 'okapi',
+      records: 'feefines',
+      path: 'feefines?query=cql.allRecords=1&limit=100',
+    },
     activeRecord: {},
     user: {},
   });
@@ -450,6 +455,7 @@ class Actions extends React.Component {
 
     const payments = _.get(resources, ['payments', 'records'], []);
     const owners = _.get(resources, ['owners', 'records'], []);
+    const feefines = _.get(resources, ['feefineTypes', 'records'], []);
     const waives = _.get(resources, ['waives', 'records'], []);
     const settings = _.get(resources, ['commentRequired', 'records', 0], {});
     const warning = accounts.filter(a => a.status.name === 'Closed').length !== 0 && (actions.regular || actions.waiveMany);
@@ -489,6 +495,8 @@ class Actions extends React.Component {
           accounts={(actions.pay) ? this.props.accounts : accounts}
           payments={payments}
           onSubmit={(values) => { this.showConfirmDialog(values); }}
+          owners={owners}
+          feefines={feefines}
         />
         <PayManyModal
           open={actions.regular && !warning && accounts.length > 1}

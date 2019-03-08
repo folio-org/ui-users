@@ -36,7 +36,7 @@ class FeeFineInfo extends React.Component {
     const feefine = this.props.feefines.find(f => f.id === feeFineId) || {};
     this.amount = feefine.defaultAmount || 0;
     this.amount = parseFloat(this.amount).toFixed(2);
-    this.props.onChangeFeeFine(parseFloat(feefine.defaultAmount || 0).toFixed(2));
+    this.props.onChangeFeeFine(parseFloat(feefine.defaultAmount || 0).toFixed(2), feeFineId);
   }
 
   render() {

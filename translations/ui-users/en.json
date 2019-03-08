@@ -521,9 +521,13 @@
   "feefines.modalHeader": "Delete Fee/Fine Type?",
   "feefines.modalMessage": "The Fee/Fine Type <strong>{feefine}</strong> will be <strong>deleted</strong>",
   "feefines.ownerLabel": "Fee/Fine Owner",
+  "feefines.defaultChargeNotice": "Default Charge Notice",
+  "feefines.defaultActionNotice": "Default Action Notice",
 
   "feefines.columns.type": "Fee/Fine Type*",
   "feefines.columns.amount": "Default Amount",
+  "feefines.columns.chargeNotice": "Charge Notice",
+  "feefines.columns.actionNotice": "Action Notice",
 
   "feefines.errors.amountNumeric": "Default Amount must be numeric",
   "feefines.errors.amountPositive": "Default Amount must be positive",
@@ -537,6 +541,7 @@
   "feefines.modal.submit": "Continue",
   "feefines.modal.cancel": "Cancel",
   "feefines.modal.title": "Copy existing fee/fine owner table entries?",
+  "feefines.nodata": "There are no Fee/fine: Manual charges",
 
   "owners.label": "Fee/fine: Owners",
   "owners.singular": "Fee/fine Owner",
@@ -545,6 +550,7 @@
   "owners.columns.owner": "Owner*",
   "owners.columns.desc": "Description",
   "owners.columns.asp": "Associated service points",
+  "owners.nodata": "There are no Fee/fine: Owners",
 
   "payments.label": "Fee/fine: Payment methods",
   "payments.singular": "Payment method",

@@ -448,6 +448,8 @@ class Charge extends React.Component {
           payments={payments}
           stripes={this.props.stripes}
           onSubmit={(values) => { this.showConfirmDialog(values); }}
+          owners={owners}
+          feefines={feefines}
         />
         <Callout ref={(ref) => { this.callout = ref; }} />
         <ConfirmationModal
