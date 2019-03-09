@@ -236,7 +236,7 @@ class TransferAccountsSettings extends React.Component {
             validate={this.validate}
             visibleFields={['accountName', 'desc', 'lastUpdated']}
             columnMapping={{
-              accountName: formatMessage({ id: 'ui-users.transfers.columns.name' }),
+              accountName: formatMessage({ id: 'ui-users.transfers.columns.name' })+'*',
               desc: formatMessage({ id: 'ui-users.transfers.columns.desc' }),
               lastUpdated: formatMessage({ id: 'stripes-smart-components.cv.lastUpdated' })
             }}
