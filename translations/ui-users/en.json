@@ -830,7 +830,7 @@
   "accounts.actions.cancellation.success": "<b>{count}</b> {count, plural, one {fee/fine} other {fees/fines}} for <b>{amount}</b> has been successfully <b>{action}</b> for <b>{user}</b>",
   "accounts.status.outstanding": "Outstanding",
   "transfers.label":"Fee/fine: Transfer accounts",
-  "transfers.columns.name":"Name*",
+  "transfers.columns.name":"Name",
   "transfers.columns.desc":"Description",
   "transfers.modalHeader": "Delete transfer account",
   "transfers.singular": "Transfer account",
