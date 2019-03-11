@@ -318,6 +318,7 @@
   "settings.paymentMethods": "Payment methods",
   "settings.refundReasons": "Refund reasons",
   "settings.commentRequired": "Comment required",
+  "settings.transferAccounts": "Transfer accounts",
 
   "loans.columns.title": "Item title",
   "loans.columns.itemStatus": "Item status",
@@ -827,5 +828,11 @@
   "accounts.actions.warning.waiveAction": "waived",
   "accounts.actions.warning.deselect": "Deselect to continue",
   "accounts.actions.cancellation.success": "<b>{count}</b> {count, plural, one {fee/fine} other {fees/fines}} for <b>{amount}</b> has been successfully <b>{action}</b> for <b>{user}</b>",
-  "accounts.status.outstanding": "Outstanding"
+  "accounts.status.outstanding": "Outstanding",
+  "transfers.label":"Fee/fine: Transfer accounts",
+  "transfers.columns.name":"Name",
+  "transfers.columns.desc":"Description",
+  "transfers.modalHeader": "Delete transfer account",
+  "transfers.singular": "Transfer account",
+  "transfers.nodata": "There are no Fee/fine: Transfer accounts"
 }
