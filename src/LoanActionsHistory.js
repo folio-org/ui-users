@@ -373,7 +373,7 @@ class LoanActionsHistory extends React.Component {
 
     const requestCount = this.state.requestsCount[this.props.loan.itemId] || 0;
     const requestQueueValue = (requestCount && stripes.hasPerm('ui-users.requests.all,ui-requests.all'))
-      ? (<Link to={`/requests?filters=requestStatus.open%20-%20not%20yet%20filled%2CrequestStatus.open%20-%20awaiting%20pickup&query=${loan.item.barcode}&sort=Request%20Date`}>{requestCount}</Link>)
+      ? (<Link to={`/requests?filters=requestStatus.Open%20-%20Not%20yet%20filled%2CrequestStatus.Open%20-%20Awaiting%20pickup%2CrequestStatus.Open%20-%20In%20transit&query=${loan.item.barcode}&sort=Request%20Date`}>{requestCount}</Link>)
       : requestCount;
     const contributorsList = this.getContributorslist(loan);
     const contributorsListString = contributorsList.join(' ');

@@ -119,7 +119,7 @@ class ActionsDropdown extends React.Component {
             >
               <Button
                 buttonStyle="dropdownItem"
-                href={`/requests?&query=${get(loan, ['item', 'barcode'])}&filters=requestStatus.open%20-%20not%20yet%20filled%2CrequestStatus.open%20-%20awaiting%20pickup&sort=Request%20Date`}
+                href={`/requests?&query=${get(loan, ['item', 'barcode'])}&filters=requestStatus.Open%20-%20Not%20yet%20filled%2CrequestStatus.Open%20-%20Awaiting%20pickup%2CrequestStatus.Open%20-%20Awaiting%20pickup%2CrequestStatus.Open%20-%20In%20transit&sort=Request%20Date`}
               >
                 <FormattedMessage id="ui-users.loans.details.requestQueue" />
               </Button>
