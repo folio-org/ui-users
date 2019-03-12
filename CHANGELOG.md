@@ -22,6 +22,7 @@
 * Add feature "Notify patron of new manual fee/fine charge". Fix UIU-710.
 * Add feature "Notify patron of fee/fine payment received". Fix UIU-711.
 * Add feature "Charge notice and action notice options to manual fee/fine settings screen". Fix UIU-713.
+* Add CRUD Fee/Fine Transfer Accounts Settings. Ref UIU-544.
 * Support "Open - In transit" status. Fixes UIU-682.
 
 ## [2.20.0](https://github.com/folio-org/ui-users/tree/v2.20.0) (2019-01-25)
