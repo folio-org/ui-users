@@ -783,5 +783,18 @@
     "accounts.pay.partially": "Paid partially",
     "accounts.pay.closed": "Closed",
     "accounts.status.outstanding": "Outstanding",
-    "accounts.viewAllAccounts": "View all accounts"
+    "accounts.viewAllAccounts": "View all accounts",
+    "feefines.defaultChargeNotice": "Default charge notice",
+    "feefines.defaultActionNotice": "Default action notice",
+    "feefines.columns.chargeNotice": "Charge notice",
+    "feefines.columns.actionNotice": "Action notice",
+    "feefines.nodata": "There are no Fee/fine: Manual charges",
+    "owners.nodata": "There are no Fee/fine: Owners",
+    "settings.transferAccounts": "Transfer accounts",
+    "transfers.label": "Fee/fine: Transfer accounts",
+    "transfers.columns.name": "Name",
+    "transfers.columns.desc": "Description",
+    "transfers.modalHeader": "Delete transfer account",
+    "transfers.singular": "Transfer account",
+    "transfers.nodata": "There are no Fee/fine: Transfer accounts"
 }
