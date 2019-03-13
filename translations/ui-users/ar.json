@@ -790,11 +790,11 @@
     "feefines.columns.actionNotice": "إخطار الإجراء",
     "feefines.nodata": "لا توجد رسوم/غرامات: رسوم يدوية",
     "owners.nodata": "لا توجد رسوم/غرامات: المالكون",
-    "settings.transferAccounts": "Transfer accounts",
-    "transfers.label": "Fee/fine: Transfer accounts",
-    "transfers.columns.name": "Name",
-    "transfers.columns.desc": "Description",
-    "transfers.modalHeader": "Delete transfer account",
-    "transfers.singular": "Transfer account",
-    "transfers.nodata": "There are no Fee/fine: Transfer accounts"
+    "settings.transferAccounts": "حسابات التحويل",
+    "transfers.label": "الرسوم/الغرامات: حسابات التحويل",
+    "transfers.columns.name": "الاسم",
+    "transfers.columns.desc": "الوصف",
+    "transfers.modalHeader": "حذف حساب التحويل",
+    "transfers.singular": "حساب التحويل",
+    "transfers.nodata": "لا توجد رسوم/غرامات: حسابات التحويل"
 }
