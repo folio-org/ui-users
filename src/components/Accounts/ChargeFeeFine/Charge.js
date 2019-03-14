@@ -174,8 +174,6 @@ class Charge extends React.Component {
     type.status = {
       name: formatMessage({ id: 'ui-users.accounts.open' }),
     };
-    delete type.notify;
-    delete type.patronInfo;
     type.remaining = type.amount;
     type.feeFineType = (feefines.find(f => f.id === type.feeFineId.substring(0, 36)) || {}).feeFineType || '';
     type.feeFineOwner = (owners.find(o => o.id === type.ownerId) || {}).owner || '';
@@ -192,8 +190,18 @@ class Charge extends React.Component {
     type.loanId = this.props.selectedLoan.id || '0';
     type.userId = this.props.user.id;
     type.itemId = this.item.id || '0';
-    const c = type.comments;
+    let c = '';
+    const tagStaff = formatMessage({ id: 'ui-users.accounts.actions.tag.staff' });
+    const tagPatron = formatMessage({ id: 'ui-users.accounts.actions.tag.patron' });
+    if (type.comments) {
+      c = tagStaff + ': ' + type.comments;
+    }
+    if (type.patronInfo && type.notify) {
+      c = c + '\n' + tagPatron + ': ' + type.patronInfo;
+    }
     delete type.comments;
+    delete type.notify;
+    delete type.patronInfo;
     this.type = type;
     return this.props.mutator.accounts.POST(type)
       .then(() => this.newAction({}, type.id, type.feeFineType, type.amount, c, type.remaining, 0, type.feeFineOwner));
@@ -318,6 +326,15 @@ class Charge extends React.Component {
   onConfirm = () => {
     const { values } = this.state;
     const { intl: { formatMessage } } = this.props;
+    const tagStaff = formatMessage({ id: 'ui-users.accounts.actions.tag.staff' });
+    const tagPatron = formatMessage({ id: 'ui-users.accounts.actions.tag.patron' });
+    let comment = '';
+    if (values.comment) {
+      comment = tagStaff + ': ' + values.comment;
+    }
+    if (values.patronInfo && values.notify) {
+      comment = comment + '\n' + tagPatron + ': ' + values.patronInfo;
+    }
     this.onClickCharge(this.type).then(() => {
       this.type.remaining = parseFloat(this.type.amount - values.amount).toFixed(2);
       if (this.type.remaining === '0.00') {
@@ -331,7 +348,7 @@ class Charge extends React.Component {
     })
       .then(() => this.newAction({ paymentMethod: values.method }, this.type.id,
         this.type.paymentStatus.name, values.amount,
-        values.comment, this.type.remaining,
+        comment, this.type.remaining,
         values.transaction, this.type.feeFineOwner))
       .then(() => {
         this.hideConfirmDialog();
