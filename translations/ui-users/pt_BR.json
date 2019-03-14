@@ -783,5 +783,18 @@
     "accounts.pay.partially": "Pago parcialmente",
     "accounts.pay.closed": "Fechado",
     "accounts.status.outstanding": "Pendente",
-    "accounts.viewAllAccounts": "Ver todas as contas"
+    "accounts.viewAllAccounts": "Ver todas as contas",
+    "feefines.defaultChargeNotice": "Aviso de cobrança padrão",
+    "feefines.defaultActionNotice": "Aviso de ação padrão",
+    "feefines.columns.chargeNotice": "Aviso de carga",
+    "feefines.columns.actionNotice": "Aviso de ação",
+    "feefines.nodata": "Não há taxa/multa: Cobranças manuais",
+    "owners.nodata": "Não há taxa/multa: Proprietários",
+    "settings.transferAccounts": "Transferir saldo",
+    "transfers.label": "Taxa/multa: Transferir saldos",
+    "transfers.columns.name": "Nome",
+    "transfers.columns.desc": "Descrição",
+    "transfers.modalHeader": "Excluir conta de transferência",
+    "transfers.singular": "Transferir conta",
+    "transfers.nodata": "Não há taxa/multa: Transferir contas"
 }
