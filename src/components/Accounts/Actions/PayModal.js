@@ -35,7 +35,7 @@ const validate = (values, props) => {
     errors.amount = <FormattedMessage id="ui-users.accounts.pay.error.amount" />;
   }
   if (!values.method) {
-    errors.method = 'Select one';
+    errors.method = <FormattedMessage id="ui-users.accounts.error.select" />;
   }
   if (props.commentRequired && !values.comment) {
     errors.comment = <FormattedMessage id="ui-users.accounts.error.comment" />;
@@ -250,7 +250,7 @@ class PayModal extends React.Component {
                 <Col xs={7}>
                   <b>
                     <FormattedMessage id="ui-users.accounts.pay.field.paymentamount" />
-:
+*:
                   </b>
                 </Col>
                 <Col xs={4} className={css.customCol}>
@@ -279,15 +279,24 @@ class PayModal extends React.Component {
               </Row>
             </Col>
             <Col xs={3}>
-              <Row><Col xs><FormattedMessage id="ui-users.accounts.pay.field.paymentmethod" /></Col></Row>
               <Row>
                 <Col xs>
-                  <Field
-                    name="method"
-                    component={Select}
-                    dataOptions={dataOptions}
-                    placeholder="Select type"
-                  />
+                  <FormattedMessage id="ui-users.accounts.pay.field.paymentmethod" />
+*
+                </Col>
+              </Row>
+              <Row>
+                <Col xs>
+                  <FormattedMessage id="ui-users.accounts.pay.method.placeholder">
+                    {placeholder => (
+                      <Field
+                        name="method"
+                        component={Select}
+                        dataOptions={dataOptions}
+                        placeholder={placeholder}
+                      />
+                    )}
+                  </FormattedMessage>
                 </Col>
               </Row>
             </Col>
@@ -295,11 +304,15 @@ class PayModal extends React.Component {
               <Row><Col xs><FormattedMessage id="ui-users.accounts.pay.field.transactioninfo" /></Col></Row>
               <Row>
                 <Col xs>
-                  <Field
-                    name="transaction"
-                    component={TextField}
-                    placeholder="Enter check #, etc."
-                  />
+                  <FormattedMessage id="ui-users.accounts.pay.transaction.placeholder">
+                    {placeholder => (
+                      <Field
+                        name="transaction"
+                        component={TextField}
+                        placeholder={placeholder}
+                      />
+                    )}
+                  </FormattedMessage>
                 </Col>
               </Row>
             </Col>
