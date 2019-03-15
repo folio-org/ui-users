@@ -1,7 +1,11 @@
 import React from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import moment from 'moment';
@@ -87,6 +91,7 @@ class Actions extends React.Component {
     stripes: PropTypes.object,
     handleEdit: PropTypes.func,
     user: PropTypes.object,
+    intl: intlShape.isRequired,
   };
 
   constructor(props) {
@@ -207,11 +212,15 @@ class Actions extends React.Component {
   }
 
   onClickCancellation(values) {
+    const { intl: { formatMessage } } = this.props;
+    const canceled = formatMessage({ id: 'ui-users.accounts.cancelError' });
+    const tagStaff = formatMessage({ id: 'ui-users.accounts.actions.tag.staff' });
     const type = this.props.accounts[0] || {};
     delete type.rowIndex;
     this.props.mutator.activeRecord.update({ id: type.id });
-    this.newAction({}, type.id, 'Cancelled as Error', type.amount, values.comment, 0, 0, type.feeFineOwner);
-    this.editAccount(type, 'Cancelled as Error', 'Closed', 0.00)
+    const comment = tagStaff + ': ' + values.comment;
+    this.newAction({}, type.id, canceled, type.amount, comment, 0, 0, type.feeFineOwner);
+    this.editAccount(type, canceled, 'Closed', 0.00)
       .then(() => this.props.handleEdit(1))
       .then(() => this.showCalloutMessage(type))
       .then(() => this.onCloseCancellation());
@@ -259,18 +268,28 @@ class Actions extends React.Component {
   }
 
   pay = (type, payment, values) => {
+    const { intl: { formatMessage } } = this.props;
     this.props.mutator.activeRecord.update({ id: type.id });
-    let paymentStatus = 'Paid ';
+    let paymentStatus = _.capitalize(formatMessage({ id: 'ui-users.accounts.actions.warning.payAction' }));
+    const tagStaff = formatMessage({ id: 'ui-users.accounts.actions.tag.staff' });
+    const tagPatron = formatMessage({ id: 'ui-users.accounts.actions.tag.patron' });
     const action = { paymentMethod: values.method };
     if (payment < type.remaining) {
-      paymentStatus += 'Partially';
+      paymentStatus = `${paymentStatus} ${_.capitalize(formatMessage({ id: 'ui-users.accounts.status.partially' }))}`;
     } else {
-      paymentStatus += 'Fully';
+      paymentStatus = `${paymentStatus} ${_.capitalize(formatMessage({ id: 'ui-users.accounts.status.fully' }))}`;
       type.status.name = 'Closed';
     }
     const balance = type.remaining - parseFloat(payment);
+    let c = '';
+    if (values.comment) {
+      c = tagStaff + ': ' + values.comment;
+    }
+    if (values.patronInfo && values.notify) {
+      c = c + '\n' + tagPatron + ': ' + values.patronInfo;
+    }
     return this.editAccount(type, paymentStatus, type.status.name, balance)
-      .then(() => this.newAction(action, type.id, paymentStatus, payment, values.comment, balance, values.transaction, type.feeFineOwner));
+      .then(() => this.newAction(action, type.id, paymentStatus, payment, c, balance, values.transaction, type.feeFineOwner));
   }
 
   onClickWaive(values) {
@@ -315,27 +334,34 @@ class Actions extends React.Component {
   }
 
   waive = (type, waive, values) => {
+    const { intl: { formatMessage } } = this.props;
     this.props.mutator.activeRecord.update({ id: type.id });
-    let paymentStatus = 'Waived ';
+    let paymentStatus = _.capitalize(formatMessage({ id: 'ui-users.accounts.actions.warning.waiveAction' }));
+    const tagStaff = formatMessage({ id: 'ui-users.accounts.actions.tag.staff' });
     const action = { paymentMethod: values.method };
     if (waive < type.remaining) {
-      paymentStatus += 'Partially';
+      paymentStatus = `${paymentStatus} ${_.capitalize(formatMessage({ id: 'ui-users.accounts.status.partially' }))}`;
     } else {
-      paymentStatus += 'Fully';
+      paymentStatus = `${paymentStatus} ${_.capitalize(formatMessage({ id: 'ui-users.accounts.status.fully' }))}`;
       type.status.name = 'Closed';
     }
     const balance = type.remaining - parseFloat(waive);
+    const comment = values.comment ? (tagStaff + ': ' + values.comment) : '';
     return this.editAccount(type, paymentStatus, type.status.name, balance)
-      .then(() => this.newAction(action, type.id, paymentStatus, waive, values.comment, balance, 0, type.feeFineOwner));
+      .then(() => this.newAction(action, type.id, paymentStatus, waive, comment, balance, 0, type.feeFineOwner));
   }
 
   onClickComment(values) {
+    const { intl: { formatMessage } } = this.props;
+    const info = formatMessage({ id: 'ui-users.accounts.comment.staffInfo' });
     const account = this.props.accounts[0] || '';
     const id = this.props.accounts[0].id || '';
     const createAt = this.props.accounts[0].feeFineOwner || '';
     const balance = this.props.balance || 0;
+    const tagStaff = formatMessage({ id: 'ui-users.accounts.actions.tag.staff' });
+    const comment = tagStaff + ': ' + values.comment;
     this.props.mutator.activeRecord.update({ id });
-    this.newAction({}, id, 'Comment', 0, values.comment, balance, 0, createAt);
+    this.newAction({}, id, info, 0, comment, balance, 0, createAt);
     this.editAccount(account, account.paymentStatus.name, account.status.name, balance)
       .then(() => this.props.handleEdit(1))
       .then(() => this.onCloseComment());
@@ -400,25 +426,30 @@ class Actions extends React.Component {
   }
 
   renderConfirmHeading = () => {
-    const { actions: { pay, regular } } = this.props;
+    const { actions: { pay, regular }, intl: { formatMessage } } = this.props;
     return (
       <FormattedMessage
         id="ui-users.accounts.confirmation.head"
-        values={{ action: (pay || regular) ? 'payment' : 'waive' }}
+        values={{ action: (pay || regular)
+          ? formatMessage({ id: 'ui-users.accounts.actions.payment' })
+          : formatMessage({ id: 'ui-users.accounts.actions.waive' }) }}
       />
     );
   }
 
   renderConfirmMessage = () => {
-    const { actions: { pay, regular, waiveModal, waiveMany } } = this.props;
+    const { actions: { pay, regular, waiveModal, waiveMany }, intl: { formatMessage } } = this.props;
     const { values } = this.state;
     const amount = (pay || regular) ? values.amount : values.waive;
-    let paymentStatus = (pay || regular) ? ' paid' : ' waived';
-
+    let paymentStatus = (pay || regular)
+      ? formatMessage({ id: 'ui-users.accounts.actions.warning.payAction' })
+      : formatMessage({ id: 'ui-users.accounts.actions.warning.waiveAction' });
     if (pay || waiveModal) {
       const account = this.props.accounts[0] || {};
       const total = account.remaining || 0;
-      paymentStatus = ((amount < total) ? 'partially' : 'fully') + paymentStatus;
+      paymentStatus = `${((amount < total)
+        ? formatMessage({ id: 'ui-users.accounts.status.partially' })
+        : formatMessage({ id: 'ui-users.accounts.status.fully' }))} ${paymentStatus}`;
       return (
         <SafeHTMLMessage
           id="ui-users.accounts.confirmation.message"
@@ -430,7 +461,9 @@ class Actions extends React.Component {
       const total = accounts.reduce((selected, { remaining }) => {
         return selected + parseFloat(remaining);
       }, 0);
-      paymentStatus = ((amount < total) ? 'partially' : 'fully') + paymentStatus;
+      paymentStatus = `${((amount < total)
+        ? formatMessage({ id: 'ui-users.accounts.status.partially' })
+        : formatMessage({ id: 'ui-users.accounts.status.fully' }))} ${paymentStatus}`;
       return (
         <SafeHTMLMessage
           id="ui-users.accounts.confirmation.message"
@@ -541,4 +574,4 @@ class Actions extends React.Component {
   }
 }
 
-export default Actions;
+export default injectIntl(Actions);

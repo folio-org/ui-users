@@ -37,7 +37,7 @@ const validate = (values, props) => {
     errors.waive = <FormattedMessage id="ui-users.accounts.waive.error.amount" />;
   }
   if (!values.method) {
-    errors.method = 'Select one';
+    errors.method = <FormattedMessage id="ui-users.accounts.error.select" />;
   }
   if (props.commentRequired && !values.comment) {
     errors.comment = <FormattedMessage id="ui-users.accounts.error.comment" />;
@@ -245,7 +245,7 @@ class WaiveModal extends React.Component {
                 <Col xs={6}>
                   <b>
                     <FormattedMessage id="ui-users.accounts.waive.field.waiveamount" />
-:
+*:
                   </b>
                 </Col>
                 <Col xs={4} className={css.customCol}>
@@ -275,6 +275,7 @@ class WaiveModal extends React.Component {
               <Row>
                 <Col xs>
                   <FormattedMessage id="ui-users.accounts.waive.field.waivereason" />
+*
                 </Col>
               </Row>
               <Row>

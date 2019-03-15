@@ -82,7 +82,7 @@ class ChargeNotice extends React.Component {
             <FormattedMessage id="ui-users.feefines.defaultChargeNotice" />
           </Col>
           <Col xs={4}>
-            <FormattedMessage id="ui-users.feefines.defaultChargeNotice" />
+            <FormattedMessage id="ui-users.feefines.defaultActionNotice" />
           </Col>
         </Row>
         <Row>
