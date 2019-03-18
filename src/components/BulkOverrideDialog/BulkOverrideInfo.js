@@ -228,16 +228,16 @@ class BulkOverrideInfo extends React.Component {
         </Row>
         <Layout className="textRight">
           <Button
+            onClick={onCancel}
+          >
+            <FormattedMessage id="ui-users.cancel" />
+          </Button>
+          <Button
+            buttonStyle="primary"
             disabled={!canBeSubmitted}
             onClick={this.submitOverride}
           >
             <FormattedMessage id="ui-users.button.override" />
-          </Button>
-          <Button
-            buttonStyle="primary"
-            onClick={onCancel}
-          >
-            <FormattedMessage id="ui-users.cancel" />
           </Button>
         </Layout>
       </div>
