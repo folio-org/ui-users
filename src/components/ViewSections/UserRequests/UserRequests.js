@@ -34,7 +34,7 @@ class UserRequests extends React.Component {
       GET: {
         path: 'request-storage/requests',
         params: {
-          query: 'query=(requesterId==:{id}) and (status="Open - Not yet filled" or status="Open - Awaiting pickup")',
+          query: 'query=(requesterId==:{id}) and (status="Open")',
           limit: '1',
         },
       },
@@ -44,7 +44,7 @@ class UserRequests extends React.Component {
       GET: {
         path: 'request-storage/requests',
         params: {
-          query: 'query=(requesterId==:{id}) and (status="Closed - Cancelled" or status="Closed - Filled" or status="Closed - Unfilled" or status="Closed - Pickup expired")',
+          query: 'query=(requesterId==:{id}) and (status="Closed")',
           limit: '1',
         },
       },
@@ -137,13 +137,13 @@ class UserRequests extends React.Component {
                 id: 'clickable-viewopenrequests',
                 count: openRequestsCount,
                 formattedMessageId: 'ui-users.requests.numOpenRequests',
-                query: { query: barcode, filters: 'requestStatus.open - awaiting pickup,requestStatus.open - not yet filled' },
+                query: { query: barcode, filters: 'requestStatus.Open - Awaiting pickup,requestStatus.Open - Not yet filled,requestStatus.Open - In transit' },
               },
               {
                 id: 'clickable-viewclosedrequests',
                 count: closedRequestsCount,
                 formattedMessageId: 'ui-users.requests.numClosedRequests',
-                query: { query: barcode, filters: 'requestStatus.closed - cancelled,requestStatus.closed - filled,requestStatus.closed - unfilled,requestStatus.closed - pickup expired' },
+                query: { query: barcode, filters: 'requestStatus.Closed - Cancelled,requestStatus.Closed - Filled,requestStatus.Closed - Unfilled,requestStatus.Closed - Pickup expired' },
               },
             ]}
           /> : <Icon icon="spinner-ellipsis" width="10px" />

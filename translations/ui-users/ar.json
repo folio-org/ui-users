@@ -783,5 +783,18 @@
     "accounts.pay.partially": "مسدد جزئيًا",
     "accounts.pay.closed": "مغلق",
     "accounts.status.outstanding": "المتبقي",
-    "accounts.viewAllAccounts": "عرض كل الحسابات"
+    "accounts.viewAllAccounts": "عرض كل الحسابات",
+    "feefines.defaultChargeNotice": "إخطار الرسوم الافتراضي",
+    "feefines.defaultActionNotice": "إخطار الإجراء الافتراضي",
+    "feefines.columns.chargeNotice": "إخطار الرسوم",
+    "feefines.columns.actionNotice": "إخطار الإجراء",
+    "feefines.nodata": "لا توجد رسوم/غرامات: رسوم يدوية",
+    "owners.nodata": "لا توجد رسوم/غرامات: المالكون",
+    "settings.transferAccounts": "حسابات التحويل",
+    "transfers.label": "الرسوم/الغرامات: حسابات التحويل",
+    "transfers.columns.name": "الاسم",
+    "transfers.columns.desc": "الوصف",
+    "transfers.modalHeader": "حذف حساب التحويل",
+    "transfers.singular": "حساب التحويل",
+    "transfers.nodata": "لا توجد رسوم/غرامات: حسابات التحويل"
 }

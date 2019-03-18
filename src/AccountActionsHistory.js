@@ -23,12 +23,13 @@ import { getFullName } from './util';
 import css from './AccountsHistory.css';
 
 const columnWidths = {
-  action: 250,
+  date: 100,
+  action: 100,
   amount: 100,
   balance: 100,
   transactioninfo: 200,
   created: 100,
-  source: 200,
+  source: 150,
   comments: 700
 };
 
@@ -246,7 +247,7 @@ class AccountActionsHistory extends React.Component {
             buttonClass={css.addCommentBtn}
             onClick={this.comment}
           >
-            <FormattedMessage id="ui-users.accounts.button.new" />
+            <FormattedMessage id="ui-users.details.button.new" />
           </Button>
         </span>
       ),
@@ -261,7 +262,7 @@ class AccountActionsHistory extends React.Component {
       transactioninfo: action => action.transactionInformation || '-',
       created: action => action.createdAt,
       source: action => action.source,
-      comments: action => action.comments,
+      comments: action => (action.comments ? (<div>{ action.comments.split('\n').map(c => (<Row><Col>{c}</Col></Row>))}</div>) : ''),
     };
 
     const actions = this.state.data || [];

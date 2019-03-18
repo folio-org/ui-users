@@ -1,6 +1,7 @@
 # Change history for ui-users
 
-## 2.21.0 (IN PROGRESS)
+## [2.21.0](https://github.com/folio-org/ui-users/tree/v2.21.0) (2019-03-15)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.20.0...v2.21.0)
 
 * Support login v5, bl-users v4 in parallel with previous releases.
 * Add "all actions" permission from Closed Loans. Fix UIU-867.
@@ -19,6 +20,13 @@
 * Fix labels on Pay and Waive modals. Fix UIU-845.
 * Update circulation v7.0 and request-storage v3.0 OKAPI interfaces. Part of UIU-889.
 * Use packageInfo passed via props if present. Part of ERM-72.
+* Add feature "Notify patron of new manual fee/fine charge". Fix UIU-710.
+* Add feature "Notify patron of fee/fine payment received". Fix UIU-711.
+* Add feature "Charge notice and action notice options to manual fee/fine settings screen". Fix UIU-713.
+* Add CRUD Fee/Fine Transfer Accounts Settings. Ref UIU-544.
+* Support "Open - In transit" status. Fixes UIU-682.
+* Display "Additional Information for Patron" on Fee/Fine Details. Ref UIU-901.
+* Fix translate. Ref UIU-713, UIU-845.
 
 ## [2.20.0](https://github.com/folio-org/ui-users/tree/v2.20.0) (2019-01-25)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.19.0...v2.20.0)

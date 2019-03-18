@@ -9,6 +9,7 @@ import {
   Button,
   Row,
   Col,
+  Checkbox,
 } from '@folio/stripes/components';
 import { FormattedMessage } from 'react-intl';
 import stripesForm from '@folio/stripes/form';
@@ -90,6 +91,7 @@ class ChargeForm extends React.Component {
 
     this.onChangeFeeFine = this.onChangeFeeFine.bind(this);
     this.query = 0;
+    this.state = { showNotify: false, notify: false };
   }
 
   componentDidMount() {
@@ -154,8 +156,26 @@ class ChargeForm extends React.Component {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  onChangeFeeFine(amount) {
+  onChangeFeeFine(amount, id) {
     feefineamount = amount;
+    if (id) {
+      const { owners, feefines, ownerId } = this.props;
+      const feefine = feefines.find(f => f.id === id) || {};
+      const owner = owners.find(o => o.id === ownerId) || {};
+      if (feefine.chargeNoticeId) {
+        this.setState({ showNotify: true, notify: false });
+      } else if (owner.defaultChargeNoticeId) {
+        this.setState({ showNotify: true, notify: false });
+      } else {
+        this.setState({ showNotify: false, notify: false });
+      }
+    }
+  }
+
+  onToggleNotify = () => {
+    this.setState(prevState => ({
+      notify: !prevState.notify,
+    }));
   }
 
   render() {
@@ -226,7 +246,7 @@ class ChargeForm extends React.Component {
               stripes={this.props.stripes}
               owners={owners}
               isPending={this.props.isPending}
-              onChangeOwner={this.props.onChangeOwner}
+              onChangeOwner={(e) => { this.props.onChangeOwner(e); this.setState({ showNotify: false }); }}
               onChangeFeeFine={this.onChangeFeeFine}
               feefines={this.props.feefines}
               feefineList={feefineList}
@@ -245,6 +265,40 @@ class ChargeForm extends React.Component {
                 />
               </Col>
             </Row>
+            {this.state.showNotify &&
+              <div>
+                <Row>
+                  <Col xs>
+                    <Field
+                      name="notify"
+                      component={Checkbox}
+                      checked={this.state.notify}
+                      onChange={this.onToggleNotify}
+                      inline
+                    />
+                    <FormattedMessage id="ui-users.accounts.pay.notifyPatron" />
+                  </Col>
+                </Row>
+              </div>
+            }
+            <br />
+            {(this.state.notify && this.state.showNotify) &&
+              <div>
+                <Row>
+                  <Col xs>
+                    <FormattedMessage id="ui-users.accounts.pay.field.infoPatron" />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col xs>
+                    <Field
+                      name="patronInfo"
+                      component={TextArea}
+                    />
+                  </Col>
+                </Row>
+              </div>
+            }
           </form>
         </Pane>
       </Paneset>

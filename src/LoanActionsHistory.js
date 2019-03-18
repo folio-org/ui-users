@@ -6,7 +6,6 @@ import {
   injectIntl,
   intlShape,
 } from 'react-intl';
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import Link from 'react-router-dom/Link';
 import PropTypes from 'prop-types';
 import { ChangeDueDateDialog } from '@folio/stripes/smart-components';
@@ -16,7 +15,6 @@ import {
   Modal,
   Button,
   Popover,
-  Callout,
   MultiColumnList,
   KeyValue,
   Row,
@@ -124,8 +122,6 @@ class LoanActionsHistory extends React.Component {
     this.showTitle = this.showTitle.bind(this);
     this.showChangeDueDateDialog = this.showChangeDueDateDialog.bind(this);
     this.hideChangeDueDateDialog = this.hideChangeDueDateDialog.bind(this);
-    this.getOpenRequestsCount = this.getOpenRequestsCount.bind(this);
-    this.getLoanPolicyName = this.getLoanPolicyName.bind(this);
     this.getFeeFine = this.getFeeFine.bind(this);
     this.viewFeeFine = this.viewFeeFine.bind(this);
 
@@ -134,23 +130,36 @@ class LoanActionsHistory extends React.Component {
       nonRenewedLoansModalOpen: false,
       changeDueDateDialogOpen: false,
       requestsCount: {},
-      loanPolicyName: '',
       feesFines: {},
       patronBlockedModal: false,
     };
   }
 
   componentDidMount() {
-    this.getOpenRequestsCount();
-    this.getLoanPolicyName();
     this.getLoanActions();
     this.getFeeFine();
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.loan.itemId !== prevProps.loan.itemId) {
-      this.getOpenRequestsCount();
-      this.getLoanPolicyName();
+    this.updateLoanActionsOnOverride(prevProps);
+  }
+
+  updateLoanActionsOnOverride(prevProps) {
+    const {
+      loan: {
+        renewalCount
+      }
+    } = this.props;
+
+    const {
+      loan: {
+        renewalCount: prevRenewalCount
+      }
+    } = prevProps;
+    const isRenewalCountChanged = prevRenewalCount && renewalCount && renewalCount !== prevRenewalCount;
+
+    if (isRenewalCountChanged) {
+      this.getLoanActions();
     }
   }
 
@@ -187,30 +196,19 @@ class LoanActionsHistory extends React.Component {
     this.props.mutator.loanActionsWithUser.replace({ records });
   }
 
-  openNonRenewedLoansModal(nonRenewedLoanItems) {
-    this.setState({ nonRenewedLoanItems });
-    this.showNonRenewedLoansModal();
-  }
-
   renew() {
-    const { loan, user, patronBlocks } = this.props;
+    const {
+      loan,
+      user,
+      patronBlocks,
+      renew,
+    } = this.props;
     const countRenew = patronBlocks.filter(p => p.renewals);
 
     if (!isEmpty(countRenew)) return this.setState({ patronBlockedModal: true });
 
-    const promise = this.props.renew(loan, user);
-    const singleRenewalFailure = [];
-
-    promise
-      .then(() => this.onRenew())
-      .catch(() => singleRenewalFailure.push(loan));
-
-    return promise;
-  }
-
-  onRenew() {
-    this.showCallout();
-    this.getLoanActions();
+    return renew([loan], user)
+      .then(this.getLoanActions);
   }
 
   getUsers(loanActions) {
@@ -228,38 +226,10 @@ class LoanActionsHistory extends React.Component {
     const { loanid, mutator, loan } = this.props;
     const query = `id==${loanid || loan.id}`;
     const limit = 100;
+
     mutator.loanActions.reset();
     mutator.loanActions.GET({ params: { query, limit } })
       .then(loanActions => this.getUsers(loanActions));
-  }
-
-  getOpenRequestsCount() {
-    const { loan, stripes, mutator } = this.props;
-
-    if (!stripes.hasPerm('ui-users.requests.all')) {
-      return;
-    }
-
-    const q = `itemId==${loan.itemId}`;
-    const query = `(${q}) and status==("Open - Awaiting pickup" or "Open - Not yet filled") sortby requestDate desc`;
-    mutator.requests.reset();
-    mutator.requests.GET({ params: { query } }).then((requestRecords) => {
-      const requestCountObject = requestRecords.reduce((map, record) => {
-        map[record.itemId] = map[record.itemId] ? ++map[record.itemId] : 1;
-        return map;
-      }, {});
-      this.setState({ requestsCount: requestCountObject });
-    });
-  }
-
-  getLoanPolicyName() {
-    const { loan, mutator } = this.props;
-    const query = `id==${loan.loanPolicyId}`;
-    mutator.loanPolicies.reset();
-    mutator.loanPolicies.GET({ params: { query } }).then((loanPolicy) => {
-      const loanPolicyName = !isEmpty(loanPolicy) ? loanPolicy[0].name : '-';
-      this.setState({ loanPolicyName });
-    });
   }
 
   getFeeFine() {
@@ -306,19 +276,6 @@ class LoanActionsHistory extends React.Component {
     this.setState({ patronBlockedModal: false });
   };
 
-  showCallout() {
-    const message = (
-      <span>
-        <SafeHTMLMessage
-          id="ui-users.loans.item.renewed.callout"
-          values={{ title: this.props.loan.item.title }}
-        />
-      </span>
-    );
-
-    this.callout.sendCallout({ message });
-  }
-
   showChangeDueDateDialog() {
     this.setState({
       changeDueDateDialogOpen: true,
@@ -345,10 +302,6 @@ class LoanActionsHistory extends React.Component {
           </div>
         </Popover>
       ) : contributorsList;
-  }
-
-  showNonRenewedLoansModal() {
-    this.setState({ nonRenewedLoansModalOpen: true });
   }
 
   showTitle(loan) {
@@ -393,12 +346,16 @@ class LoanActionsHistory extends React.Component {
       },
       stripes,
       intl,
+      loanPolicies,
     } = this.props;
 
     const {
-      loanPolicyName,
       patronBlockedModal,
     } = this.state;
+
+    const loanPolicyName = isEmpty(loanPolicies)
+      ? '-'
+      : loanPolicies[loan.loanPolicyId];
 
     if (!loanPolicyName) {
       return <div />;
@@ -416,7 +373,7 @@ class LoanActionsHistory extends React.Component {
 
     const requestCount = this.state.requestsCount[this.props.loan.itemId] || 0;
     const requestQueueValue = (requestCount && stripes.hasPerm('ui-users.requests.all,ui-requests.all'))
-      ? (<Link to={`/requests?filters=requestStatus.open%20-%20not%20yet%20filled%2CrequestStatus.open%20-%20awaiting%20pickup&query=${loan.item.barcode}&sort=Request%20Date`}>{requestCount}</Link>)
+      ? (<Link to={`/requests?filters=requestStatus.Open%20-%20Not%20yet%20filled%2CrequestStatus.Open%20-%20Awaiting%20pickup%2CrequestStatus.Open%20-%20In%20transit&query=${loan.item.barcode}&sort=Request%20Date`}>{requestCount}</Link>)
       : requestCount;
     const contributorsList = this.getContributorslist(loan);
     const contributorsListString = contributorsList.join(' ');
@@ -616,7 +573,6 @@ class LoanActionsHistory extends React.Component {
             viewUserPath={`/users/view/${(user || {}).id}?filters=pg.${patronGroup.group}&sort=Name`}
           />
           { this.renderChangeDueDateDialog() }
-          <Callout ref={(ref) => { this.callout = ref; }} />
         </Pane>
       </Paneset>
     );
