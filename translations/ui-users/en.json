@@ -810,7 +810,7 @@
   "blocks.message":"patron block will be removed",
   "blocks.textField.place":"Patron has blocks in place",
 
-  "additionalInfo.label": "Additional information*",
+  "additionalInfo.label": "Additional information",
   "additionalInfo.placeholder": "Enter more information about the override (required)",
 
   "button.override": "Override",
