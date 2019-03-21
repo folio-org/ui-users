@@ -796,5 +796,16 @@
     "transfers.columns.desc": "Description",
     "transfers.modalHeader": "Delete transfer account",
     "transfers.singular": "Transfer account",
-    "transfers.nodata": "There are no Fee/fine: Transfer accounts"
+    "transfers.nodata": "There are no Fee/fine: Transfer accounts",
+    "payments.nodata": "There are no Fee/fine: Payment methods",
+    "details.button.new": "New staff info",
+    "accounts.cancelError": "Cancelled as Error",
+    "accounts.comment.staffInfo": "New staff info",
+    "blocks.additionalReasons": "View block details to see additional reasons for block...",
+    "accounts.status.partially": "partially",
+    "accounts.status.fully": "fully",
+    "accounts.actions.payment": "payment",
+    "accounts.actions.waive": "waive",
+    "accounts.actions.tag.staff": "STAFF",
+    "accounts.actions.tag.patron": "PATRON"
 }
