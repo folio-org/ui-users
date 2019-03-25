@@ -4,13 +4,11 @@ import PropTypes from 'prop-types';
 import Route from 'react-router-dom/Route';
 import Switch from 'react-router-dom/Switch';
 import { hot } from 'react-hot-loader';
-import packageInfo from '../package';
 import Users from './Users';
 import Settings from './settings';
 import { CommandList } from './components/Commander';
 import commands from './commands';
 import UsersContextMenu from './UsersContextMenu';
-import ShortcutModal from './ShortcutModal';
 
 class UsersRouting extends React.Component {
   static actionNames = ['stripesHome', 'usersSortByName'];
@@ -26,25 +24,7 @@ class UsersRouting extends React.Component {
 
   constructor(props) {
     super(props);
-
-    this.state = {
-      displayShortcutModal: false
-    };
-
     this.connectedApp = props.stripes.connect(Users);
-  }
-
-  openShortcutsModal = (menuToggle) => {
-    this.setState({
-      displayShortcutModal: true,
-    });
-    if (menuToggle) { menuToggle(); }
-  }
-
-  closeShortcutModal = () => {
-    this.setState({
-      displayShortcutModal: false,
-    });
   }
 
   noMatch() {
@@ -79,8 +59,7 @@ class UsersRouting extends React.Component {
 
     return (
       <CommandList commands={commands}>
-        <UsersContextMenu shortcutModalToggle={this.openShortcutsModal} />
-        <ShortcutModal open={this.state.displayShortcutModal} onClose={this.closeShortcutModal} commands={commands} />
+        <UsersContextMenu />
         <Switch>
           <Route
             path={path}
