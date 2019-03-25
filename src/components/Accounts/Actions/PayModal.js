@@ -35,7 +35,7 @@ const validate = (values, props) => {
     errors.amount = <FormattedMessage id="ui-users.accounts.pay.error.amount" />;
   }
   if (!values.method) {
-    errors.method = 'Select one';
+    errors.method = <FormattedMessage id="ui-users.accounts.error.select" />;
   }
   if (props.commentRequired && !values.comment) {
     errors.comment = <FormattedMessage id="ui-users.accounts.error.comment" />;
@@ -68,6 +68,8 @@ class PayModal extends React.Component {
     pristine: PropTypes.bool,
     reset: PropTypes.func,
     commentRequired: PropTypes.bool,
+    owners: PropTypes.arrayOf(PropTypes.object),
+    feefines: PropTypes.arrayOf(PropTypes.object),
   };
 
   constructor(props) {
@@ -75,7 +77,8 @@ class PayModal extends React.Component {
 
     this.state = {
       amount: 0,
-      notify: true,
+      showNotify: false,
+      notify: false,
     };
     this.initialAmount = 0;
   }
@@ -84,12 +87,20 @@ class PayModal extends React.Component {
     if (!_.isEqual(this.props.accounts, nextProps.accounts)) {
       const accounts = nextProps.accounts || [];
       let selected = parseFloat(0);
+      let showNotify = false;
       accounts.forEach(a => {
         selected += parseFloat(a.remaining);
+        const feefine = this.props.feefines.find(f => f.id === a.feeFineId.substring(0, 36)) || {};
+        const owner = this.props.owners.find(o => o.id === a.ownerId) || {};
+        if (feefine.actionNoticeId || owner.defaultActionNoticeId) {
+          showNotify = true;
+        }
       });
       this.setState({
         amount: parseFloat(selected).toFixed(2),
+        showNotify,
       });
+
       this.initialAmount = parseFloat(selected).toFixed(2);
       this.props.initialize({ amount: parseFloat(selected).toFixed(2), notify: true });
     }
@@ -239,7 +250,7 @@ class PayModal extends React.Component {
                 <Col xs={7}>
                   <b>
                     <FormattedMessage id="ui-users.accounts.pay.field.paymentamount" />
-:
+*:
                   </b>
                 </Col>
                 <Col xs={4} className={css.customCol}>
@@ -268,15 +279,24 @@ class PayModal extends React.Component {
               </Row>
             </Col>
             <Col xs={3}>
-              <Row><Col xs><FormattedMessage id="ui-users.accounts.pay.field.paymentmethod" /></Col></Row>
               <Row>
                 <Col xs>
-                  <Field
-                    name="method"
-                    component={Select}
-                    dataOptions={dataOptions}
-                    placeholder="Select type"
-                  />
+                  <FormattedMessage id="ui-users.accounts.pay.field.paymentmethod" />
+*
+                </Col>
+              </Row>
+              <Row>
+                <Col xs>
+                  <FormattedMessage id="ui-users.accounts.pay.method.placeholder">
+                    {placeholder => (
+                      <Field
+                        name="method"
+                        component={Select}
+                        dataOptions={dataOptions}
+                        placeholder={placeholder}
+                      />
+                    )}
+                  </FormattedMessage>
                 </Col>
               </Row>
             </Col>
@@ -284,11 +304,15 @@ class PayModal extends React.Component {
               <Row><Col xs><FormattedMessage id="ui-users.accounts.pay.field.transactioninfo" /></Col></Row>
               <Row>
                 <Col xs>
-                  <Field
-                    name="transaction"
-                    component={TextField}
-                    placeholder="Enter check #, etc."
-                  />
+                  <FormattedMessage id="ui-users.accounts.pay.transaction.placeholder">
+                    {placeholder => (
+                      <Field
+                        name="transaction"
+                        component={TextField}
+                        placeholder={placeholder}
+                      />
+                    )}
+                  </FormattedMessage>
                 </Col>
               </Row>
             </Col>
@@ -315,20 +339,24 @@ class PayModal extends React.Component {
               </FormattedMessage>
             </Col>
           </Row>
-          <Row>
-            <Col xs>
-              <Field
-                name="notify"
-                component={Checkbox}
-                checked={this.state.notify}
-                onChange={this.onToggleNotify}
-                inline
-              />
-              <FormattedMessage id="ui-users.accounts.pay.notifyPatron" />
-            </Col>
-          </Row>
+          {this.state.showNotify &&
+            <div>
+              <Row>
+                <Col xs>
+                  <Field
+                    name="notify"
+                    component={Checkbox}
+                    checked={this.state.notify}
+                    onChange={this.onToggleNotify}
+                    inline
+                  />
+                  <FormattedMessage id="ui-users.accounts.pay.notifyPatron" />
+                </Col>
+              </Row>
+            </div>
+          }
           <br />
-          {this.state.notify &&
+          {(this.state.notify && this.state.showNotify) &&
             <div>
               <Row>
                 <Col xs>

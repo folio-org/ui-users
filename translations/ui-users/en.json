@@ -318,6 +318,7 @@
   "settings.paymentMethods": "Payment methods",
   "settings.refundReasons": "Refund reasons",
   "settings.commentRequired": "Comment required",
+  "settings.transferAccounts": "Transfer accounts",
 
   "loans.columns.title": "Item title",
   "loans.columns.itemStatus": "Item status",
@@ -512,6 +513,7 @@
   "accounts.totalOpenAccounts": "(Total: {amount})",
   "accounts.numClosedAccounts": "{count, number} {count, plural, one {closed fee/fine} other {closed fees/fines}}",
   "accounts.chargeManual": "Charge fee/fine",
+  "accounts.viewAllAccounts": "View all accounts",
 
   "feefines.title": "Fee/fine: Manual charges",
   "feefines.singular": "Fee/Fine Type",
@@ -520,9 +522,13 @@
   "feefines.modalHeader": "Delete Fee/Fine Type?",
   "feefines.modalMessage": "The Fee/Fine Type <strong>{feefine}</strong> will be <strong>deleted</strong>",
   "feefines.ownerLabel": "Fee/Fine Owner",
+  "feefines.defaultChargeNotice": "Default Charge Notice",
+  "feefines.defaultActionNotice": "Default Action Notice",
 
   "feefines.columns.type": "Fee/Fine Type*",
   "feefines.columns.amount": "Default Amount",
+  "feefines.columns.chargeNotice": "Charge Notice",
+  "feefines.columns.actionNotice": "Action Notice",
 
   "feefines.errors.amountNumeric": "Default Amount must be numeric",
   "feefines.errors.amountPositive": "Default Amount must be positive",
@@ -536,6 +542,7 @@
   "feefines.modal.submit": "Continue",
   "feefines.modal.cancel": "Cancel",
   "feefines.modal.title": "Copy existing fee/fine owner table entries?",
+  "feefines.nodata": "There are no Fee/fine: Manual charges",
 
   "owners.label": "Fee/fine: Owners",
   "owners.singular": "Fee/fine Owner",
@@ -544,11 +551,13 @@
   "owners.columns.owner": "Owner*",
   "owners.columns.desc": "Description",
   "owners.columns.asp": "Associated service points",
+  "owners.nodata": "There are no Fee/fine: Owners",
 
   "payments.label": "Fee/fine: Payment methods",
   "payments.singular": "Payment method",
   "payments.columns.name": "Name*",
   "payments.columns.refund": "Refund method allowed",
+  "payments.nodata": "There are no Fee/fine: Payment methods",
 
   "refunds.label": "Fee/fine: Refund reasons",
   "refunds.singular": "Refund reason",
@@ -609,14 +618,15 @@
   "charge.itemLookup.confirm": "Confirm",
   "charge.itemLookup.cancel": "Cancel",
 
-  "details.columns.comments": "Comments",
-  "details.columns.date": "Action Date",
+  "details.columns.comments": "Additional information",
+  "details.columns.date": "Action date",
   "details.columns.action": "Action",
   "details.columns.amount": "Amount",
   "details.columns.balance": "Balance",
-  "details.columns.transactioninfo": "Transaction Information",
+  "details.columns.transactioninfo": "Transaction information",
   "details.columns.created": "Created at",
   "details.columns.source": "Source",
+  "details.button.new": "New staff info",
 
   "details.field.loan": "View",
   "details.field.feetype": "Fee/fine type",
@@ -682,12 +692,12 @@
   "accounts.pay.error.exceeds":"Pay amount exceeds the selected amount",
 
   "accounts.pay.payFeeFine": "Pay Fee/Fine",
-  "accounts.pay.field.totalamount":"Total owed amount:",
-  "accounts.pay.field.selectedamount":"Selected amount:",
-  "accounts.pay.field.paymentamount":"Payment amount*",
-  "accounts.pay.field.remainingamount":"Remaining amount:",
-  "accounts.pay.field.ownerDesk":"Fee/fine owner desk*",
-  "accounts.pay.field.paymentmethod":"Payment method*",
+  "accounts.pay.field.totalamount":"Total owed amount",
+  "accounts.pay.field.selectedamount":"Selected amount",
+  "accounts.pay.field.paymentamount":"Payment amount",
+  "accounts.pay.field.remainingamount":"Remaining amount",
+  "accounts.pay.field.ownerDesk":"Fee/fine owner desk",
+  "accounts.pay.field.paymentmethod":"Payment method",
   "accounts.pay.field.transactioninfo":"Transaction information",
   "accounts.pay.field.comment":"Additional information",
   "accounts.pay.field.infoPatron":"Additional information for patron",
@@ -712,11 +722,11 @@
 
   "accounts.waive.modalLabel": "Waive Fee/Fine",
   "accounts.waive.field.totalamount":"fees/fines for a total amount of",
-  "accounts.waive.field.totalowed":"Total owed amount:",
-  "accounts.waive.field.selectedamount":"Selected amount:",
-  "accounts.waive.field.waiveamount":"Waive amount*",
-  "accounts.waive.field.remainingamount":"Remaining amount:",
-  "accounts.waive.field.waivereason":"Waive reason*",
+  "accounts.waive.field.totalowed":"Total owed amount",
+  "accounts.waive.field.selectedamount":"Selected amount",
+  "accounts.waive.field.waiveamount":"Waive amount",
+  "accounts.waive.field.remainingamount":"Remaining amount",
+  "accounts.waive.field.waivereason":"Waive reason",
   "accounts.waive.field.comment":"Additional information",
   "accounts.waive.field.cancel":"Cancel",
   "accounts.waive.field.waive":"Waive",
@@ -732,6 +742,8 @@
 
   "accounts.warning.itemSelected":"{total, number} items selected. {items, number} {items, plural, one {item} other {items}} cannot be {action} because they are already closed.",
 
+  "accounts.cancelError":"Cancelled as Error",
+
   "accounts.cancellation.field.reason":"Reason for cancellation*",
   "accounts.cancellation.field.cancellationInfo": "Enter information about the cancellation (required)",
   "accounts.cancellation.field.feefinewill":"fee/fine will be",
@@ -746,6 +758,7 @@
   "accounts.comment.field.comment":"Comment",
   "accounts.comment.field.save":"Save",
   "accounts.comment.field.cancel":"Cancel",
+  "accounts.comment.staffInfo": "New staff info",
 
   "cddd.dateRequired": "Date*",
   "cddd.timeRequired": "Time*",
@@ -758,10 +771,11 @@
   "blocks.columns.renewals":"Renewals",
   "blocks.buttons.add":"Add Block",
   "blocks.label":"Patron Blocks",
-  "blocks.reason": "Reason for block:",
+  "blocks.reason": "Reason for block",
   "blocks.modal.header": "Patron blocked from renewing",
   "blocks.detailsButton": "Block details",
   "blocks.closeButton": "Close",
+  "blocks.additionalReasons": "View block details to see additional reasons for block...",
 
   "blocks.form.label.information":"Block information",
   "blocks.form.label.display":"Display Description*",
@@ -796,7 +810,7 @@
   "blocks.message":"patron block will be removed",
   "blocks.textField.place":"Patron has blocks in place",
 
-  "additionalInfo.label": "Additional information*",
+  "additionalInfo.label": "Additional information",
   "additionalInfo.placeholder": "Enter more information about the override (required)",
 
   "button.override": "Override",
@@ -820,5 +834,18 @@
   "accounts.actions.warning.waiveAction": "waived",
   "accounts.actions.warning.deselect": "Deselect to continue",
   "accounts.actions.cancellation.success": "<b>{count}</b> {count, plural, one {fee/fine} other {fees/fines}} for <b>{amount}</b> has been successfully <b>{action}</b> for <b>{user}</b>",
-  "accounts.status.outstanding": "Outstanding"
+  "accounts.status.outstanding": "Outstanding",
+  "accounts.status.partially": "partially",
+  "accounts.status.fully": "fully",
+  "accounts.actions.payment": "payment",
+  "accounts.actions.waive": "waive",
+  "accounts.actions.tag.staff": "STAFF",
+  "accounts.actions.tag.patron": "PATRON",
+
+  "transfers.label":"Fee/fine: Transfer accounts",
+  "transfers.columns.name":"Name",
+  "transfers.columns.desc":"Description",
+  "transfers.modalHeader": "Delete transfer account",
+  "transfers.singular": "Transfer account",
+  "transfers.nodata": "There are no Fee/fine: Transfer accounts"
 }

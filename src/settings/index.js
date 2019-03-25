@@ -18,6 +18,7 @@ import WaiveSettings from './WaiveSettings';
 import PaymentSettings from './PaymentSettings';
 import CommentRequiredSettings from './CommentRequiredSettings';
 import RefundReasonsSettings from './RefundReasonsSettings';
+import TransferAccountsSettings from './TransferAccountsSettings';
 
 class UsersSettings extends Component {
   static propTypes = {
@@ -117,6 +118,12 @@ class UsersSettings extends Component {
         label: formatMessage({ id: 'ui-users.settings.commentRequired' }),
         component: CommentRequiredSettings,
         perm: 'ui-users.settings.feefine',
+      },
+      {
+        route: 'transfers',
+        label: formatMessage({ id: 'ui-users.settings.transferAccounts' }),
+        component: TransferAccountsSettings,
+        perm: 'ui-users.settings.transfers',
       },
     ];
   }

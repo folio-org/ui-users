@@ -35,7 +35,7 @@ const filterConfig = [
     label: <FormattedMessage id="ui-users.information.patronGroup" />,
     name: 'pg',
     cql: 'patronGroup',
-    values: [], // will be filled in by componentWillUpdate
+    values: [], // will be filled in by componentDidUpdate
   },
 ];
 
@@ -135,6 +135,7 @@ class Users extends React.Component {
     showSingleResult: PropTypes.bool, // eslint-disable-line react/no-unused-prop-types
     browseOnly: PropTypes.bool,
     intl: intlShape.isRequired,
+    packageInfo: PropTypes.object,
   };
 
   static defaultProps = {
@@ -248,7 +249,7 @@ class Users extends React.Component {
       <div data-test-user-instances>
         <HasCommand commands={this.keyboardCommands}>
           <SearchAndSort
-            packageInfo={packageInfo}
+            packageInfo={this.props.packageInfo || packageInfo}
             objectName="user"
             filterConfig={filterConfig}
             initialResultCount={INITIAL_RESULT_COUNT}

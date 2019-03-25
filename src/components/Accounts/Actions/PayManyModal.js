@@ -253,7 +253,7 @@ class PayModal extends React.Component {
                 <Col xs={7}>
                   <b>
                     <FormattedMessage id="ui-users.accounts.pay.field.paymentamount" />
-:
+*:
                   </b>
                 </Col>
                 <Col xs={4} className={css.customCol}>
@@ -282,7 +282,12 @@ class PayModal extends React.Component {
               </Row>
             </Col>
             <Col xs={4}>
-              <Row><Col xs><FormattedMessage id="ui-users.accounts.pay.field.ownerDesk" /></Col></Row>
+              <Row>
+                <Col xs>
+                  <FormattedMessage id="ui-users.accounts.pay.field.ownerDesk" />
+*
+                </Col>
+              </Row>
               <Row>
                 <Col xs>
                   <FormattedMessage id="ui-users.accounts.pay.owner.placeholder">
@@ -300,7 +305,12 @@ class PayModal extends React.Component {
               </Row>
             </Col>
             <Col xs={3}>
-              <Row><Col xs><FormattedMessage id="ui-users.accounts.pay.field.paymentmethod" /></Col></Row>
+              <Row>
+                <Col xs>
+                  <FormattedMessage id="ui-users.accounts.pay.field.paymentmethod" />
+*
+                </Col>
+              </Row>
               <Row>
                 <Col xs>
                   <FormattedMessage id="ui-users.accounts.pay.method.placeholder">
