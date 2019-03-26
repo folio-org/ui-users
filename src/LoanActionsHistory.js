@@ -41,13 +41,6 @@ class LoanActionsHistory extends React.Component {
       accumulate: 'true',
       fetch: false,
     },
-    loanPolicies: {
-      type: 'okapi',
-      records: 'loanPolicies',
-      path: 'loan-policy-storage/loan-policies',
-      accumulate: 'true',
-      fetch: false,
-    },
     requests: {
       type: 'okapi',
       path: 'circulation/requests',
@@ -82,14 +75,6 @@ class LoanActionsHistory extends React.Component {
     mutator: PropTypes.shape({
       loanActionsWithUser: PropTypes.shape({
         replace: PropTypes.func,
-      }),
-      loanPolicies: PropTypes.shape({
-        GET: PropTypes.func,
-        reset: PropTypes.func,
-      }),
-      requests: PropTypes.shape({
-        GET: PropTypes.func,
-        reset: PropTypes.func,
       }),
       userIds: PropTypes.shape({
         replace: PropTypes.func,
@@ -129,7 +114,6 @@ class LoanActionsHistory extends React.Component {
       nonRenewedLoanItems: [],
       nonRenewedLoansModalOpen: false,
       changeDueDateDialogOpen: false,
-      requestsCount: {},
       feesFines: {},
       patronBlockedModal: false,
     };
@@ -222,15 +206,19 @@ class LoanActionsHistory extends React.Component {
       .then(users => this.joinLoanActionsWithUser(loanActions, users));
   }
 
-  getLoanActions() {
-    const { loanid, mutator, loan } = this.props;
+  getLoanActions = () => {
+    const {
+      loanid,
+      mutator,
+      loan,
+    } = this.props;
     const query = `id==${loanid || loan.id}`;
     const limit = 100;
 
     mutator.loanActions.reset();
     mutator.loanActions.GET({ params: { query, limit } })
       .then(loanActions => this.getUsers(loanActions));
-  }
+  };
 
   getFeeFine() {
     const { mutator, loan, loanid } = this.props;
@@ -347,6 +335,7 @@ class LoanActionsHistory extends React.Component {
       stripes,
       intl,
       loanPolicies,
+      requestCounts,
     } = this.props;
 
     const {
@@ -371,10 +360,10 @@ class LoanActionsHistory extends React.Component {
       comments: ({ actionComment }) => (actionComment || '-'),
     };
 
-    const requestCount = this.state.requestsCount[this.props.loan.itemId] || 0;
-    const requestQueueValue = (requestCount && stripes.hasPerm('ui-users.requests.all,ui-requests.all'))
-      ? (<Link to={`/requests?filters=requestStatus.Open%20-%20Not%20yet%20filled%2CrequestStatus.Open%20-%20Awaiting%20pickup%2CrequestStatus.Open%20-%20In%20transit&query=${loan.item.barcode}&sort=Request%20Date`}>{requestCount}</Link>)
-      : requestCount;
+    const itemRequestCount = requestCounts[this.props.loan.itemId] || 0;
+    const requestQueueValue = (itemRequestCount && stripes.hasPerm('ui-users.requests.all,ui-requests.all'))
+      ? (<Link to={`/requests?filters=requestStatus.Open%20-%20Not%20yet%20filled%2CrequestStatus.Open%20-%20Awaiting%20pickup%2CrequestStatus.Open%20-%20In%20transit&query=${loan.item.barcode}&sort=Request%20Date`}>{itemRequestCount}</Link>)
+      : itemRequestCount;
     const contributorsList = this.getContributorslist(loan);
     const contributorsListString = contributorsList.join(' ');
     const contributorsLength = contributorsListString.length;
