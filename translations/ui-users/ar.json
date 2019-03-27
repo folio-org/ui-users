@@ -807,5 +807,8 @@
     "accounts.actions.payment": "السداد",
     "accounts.actions.waive": "الإعفاء",
     "accounts.actions.tag.staff": "الموظفين",
-    "accounts.actions.tag.patron": "المستفيد"
+    "accounts.actions.tag.patron": "المستفيد",
+    "contextMenu.homePage": "الصفحة الرئيسية",
+    "contextMenu.settings": "الإعدادات",
+    "contextMenu.usageTips": "نصائح الاستخدام"
 }
