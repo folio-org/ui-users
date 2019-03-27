@@ -807,5 +807,8 @@
     "accounts.actions.payment": "payment",
     "accounts.actions.waive": "waive",
     "accounts.actions.tag.staff": "STAFF",
-    "accounts.actions.tag.patron": "PATRON"
+    "accounts.actions.tag.patron": "PATRON",
+    "contextMenu.homePage": "Home page",
+    "contextMenu.settings": "Settings",
+    "contextMenu.usageTips": "Usage tips"
 }
