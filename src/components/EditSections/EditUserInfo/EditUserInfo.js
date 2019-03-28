@@ -68,11 +68,7 @@ class EditUserInfo extends React.Component {
         <Row>
           <Col xs={12} md={3}>
             <Field
-              label={(
-                <FormattedMessage id="ui-users.information.lastName">
-                  {(msg) => msg + ' *'}
-                </FormattedMessage>
-              )}
+              label={<FormattedMessage id="ui-users.information.lastName" />}
               name="personal.lastName"
               id="adduser_lastname"
               component={TextField}

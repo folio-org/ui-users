@@ -8,6 +8,7 @@ import Users from './Users';
 import Settings from './settings';
 import { CommandList } from './components/Commander';
 import commands from './commands';
+import UsersContextMenu from './UsersContextMenu';
 
 class UsersRouting extends React.Component {
   static actionNames = ['stripesHome', 'usersSortByName'];
@@ -58,6 +59,7 @@ class UsersRouting extends React.Component {
 
     return (
       <CommandList commands={commands}>
+        <UsersContextMenu />
         <Switch>
           <Route
             path={path}

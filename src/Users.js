@@ -35,7 +35,7 @@ const filterConfig = [
     label: <FormattedMessage id="ui-users.information.patronGroup" />,
     name: 'pg',
     cql: 'patronGroup',
-    values: [], // will be filled in by componentWillUpdate
+    values: [], // will be filled in by componentDidUpdate
   },
 ];
 

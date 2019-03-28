@@ -515,6 +515,10 @@
   "accounts.chargeManual": "Charge fee/fine",
   "accounts.viewAllAccounts": "View all accounts",
 
+  "contextMenu.homePage": "Home page",
+  "contextMenu.settings": "Settings",
+  "contextMenu.usageTips": "Usage tips",
+  
   "feefines.title": "Fee/fine: Manual charges",
   "feefines.singular": "Fee/Fine Type",
   "feefines.callout": "The Fee/Fine Type <strong>{feefine}</strong> was successfully <strong>deleted</strong>.",
@@ -810,7 +814,7 @@
   "blocks.message":"patron block will be removed",
   "blocks.textField.place":"Patron has blocks in place",
 
-  "additionalInfo.label": "Additional information*",
+  "additionalInfo.label": "Additional information",
   "additionalInfo.placeholder": "Enter more information about the override (required)",
 
   "button.override": "Override",

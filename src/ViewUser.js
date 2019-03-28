@@ -94,6 +94,7 @@ class ViewUser extends React.Component {
     permissions: {
       type: 'okapi',
       records: 'permissionNames',
+      throwErrors: false,
       DELETE: {
         pk: 'permissionName',
         path: 'perms/users/:{id}/permissions',
