@@ -48,7 +48,7 @@ class Actions extends React.Component {
     },
     waives: {
       type: 'okapi',
-      records: 'waiver',
+      records: 'waivers',
       path: 'waives',
     },
     owners: {
