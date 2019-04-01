@@ -6,7 +6,7 @@ import LoanActionsHistory from '../interactors/loan-actions-history';
 
 import translations from '../../../translations/ui-users/en';
 
-describe.only('loans actions history', () => {
+describe('loans actions history', () => {
   setupApplication({ permissions: {
     'manualblocks.collection.get': true,
     'circulation.loans.collection.get': true,
