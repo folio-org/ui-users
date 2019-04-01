@@ -4,7 +4,7 @@ import { expect } from 'chai';
 import setupApplication from '../helpers/setup-application';
 import LoanActionsHistory from '../interactors/loan-actions-history';
 
-import translations from '../../../translations/ui-users/en.json';
+import translations from '../../../translations/ui-users/en';
 
 describe.only('loans actions history', () => {
   setupApplication({ permissions: {
@@ -37,6 +37,20 @@ describe.only('loans actions history', () => {
 
     it('should have proper label', () => {
       expect(LoanActionsHistory.requests.label.text).to.equal(translations['loans.details.requestQueue']);
+    });
+
+    describe('loan without loanPolicy', () => {
+      beforeEach(async function () {
+        const user = this.server.create('user');
+        const loan = this.server.create('loan', { status: { name: 'Open' } });
+
+        this.server.createList('request', requestsAmount, { itemId: loan.itemId });
+        this.visit(`/users/view/${user.id}?layer=loan&loan=${loan.id}&query=%20%20&sort=name`);
+      });
+
+      it('should not be presented', () => {
+        expect(LoanActionsHistory.requests.isPresent).to.be.false;
+      });
     });
   });
 });
