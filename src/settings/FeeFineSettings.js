@@ -331,6 +331,7 @@ class FeefineSettings extends React.Component {
     };
 
     const formatter = {
+      'defaultAmount': (value) => (value.defaultAmount ? parseFloat(value.defaultAmount).toFixed(2) : '-'),
       'chargeNoticeId': (value) => (value.chargeNoticeId ? ((templates.find(t => t.id === value.chargeNoticeId) || {}).name) : '-'),
       'actionNoticeId': (value) => (value.actionNoticeId ? ((templates.find(t => t.id === value.actionNoticeId) || {}).name) : '-'),
     };
