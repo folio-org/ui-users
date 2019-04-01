@@ -230,7 +230,7 @@ class Users extends React.Component {
     const patronGroups = (this.props.resources.patronGroups || {}).records || [];
 
     const resultsFormatter = {
-      status: user => (
+      active: user => (
         <AppIcon app="users" size="small">
           {user.active ? <FormattedMessage id="ui-users.active" /> : <FormattedMessage id="ui-users.inactive" />}
         </AppIcon>
@@ -257,7 +257,7 @@ class Users extends React.Component {
             viewRecordComponent={ViewUser}
             editRecordComponent={UserForm}
             newRecordInitialValues={{ active: true, personal: { preferredContactTypeId: '002' } }}
-            visibleColumns={this.props.visibleColumns ? this.props.visibleColumns : ['status', 'name', 'barcode', 'patronGroup', 'username', 'email']}
+            visibleColumns={this.props.visibleColumns ? this.props.visibleColumns : ['active', 'name', 'barcode', 'patronGroup', 'username', 'email']}
             resultsFormatter={resultsFormatter}
             onSelectRow={onSelectRow}
             onCreate={this.create}
@@ -271,7 +271,7 @@ class Users extends React.Component {
             parentMutator={this.props.mutator}
             showSingleResult={showSingleResult}
             columnMapping={{
-              status: intl.formatMessage({ id: 'ui-users.active' }),
+              active: intl.formatMessage({ id: 'ui-users.active' }),
               name: intl.formatMessage({ id: 'ui-users.information.name' }),
               barcode: intl.formatMessage({ id: 'ui-users.information.barcode' }),
               patronGroup: intl.formatMessage({ id: 'ui-users.information.patronGroup' }),
