@@ -49,12 +49,12 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
         POST: PropTypes.func.isRequired,
       }),
       loanPolicies: PropTypes.shape({
-        GET: PropTypes.func,
-        reset: PropTypes.func,
+        GET: PropTypes.func.isRequired,
+        reset: PropTypes.func.isRequired,
       }),
       requests: PropTypes.shape({
-        GET: PropTypes.func,
-        reset: PropTypes.func,
+        GET: PropTypes.func.isRequired,
+        reset: PropTypes.func.isRequired,
       }),
     }),
     loans: PropTypes.object,
