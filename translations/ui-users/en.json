@@ -600,7 +600,7 @@
   "charge.patron": "Patron",
   "charge.barcode": "Barcode: ",
   "charge.title": "New fee/fine",
-  "charge.pay": "Charge and pay now",
+  "charge.Pay": "Charge & pay now",
   "charge.onlyCharge": "Charge only",
   "charge.comment": "Additional information for staff",
   "charge.messageThe": "The ",
