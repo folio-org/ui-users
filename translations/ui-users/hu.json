@@ -810,5 +810,7 @@
     "accounts.actions.tag.patron": "PATRON",
     "contextMenu.homePage": "Home page",
     "contextMenu.settings": "Settings",
-    "contextMenu.usageTips": "Usage tips"
+    "contextMenu.usageTips": "Usage tips",
+    "owners.cannotDeleteOwner": "This Fee/fine Owner cannot be deleted, as it has one or more fees/fines associated with it",
+    "charge.Pay": "Charge & pay now"
 }
