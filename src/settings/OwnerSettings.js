@@ -20,6 +20,7 @@ import {
 import { Field } from 'redux-form';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import { EditableList } from '@folio/stripes/smart-components';
+import { stripesConnect } from '@folio/stripes/core';
 import { validate } from '../util';
 
 class OwnerSettings extends React.Component {
@@ -335,4 +336,4 @@ class OwnerSettings extends React.Component {
   }
 }
 
-export default injectIntl(OwnerSettings);
+export default injectIntl(stripesConnect(OwnerSettings));

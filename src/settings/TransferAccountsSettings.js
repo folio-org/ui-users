@@ -19,6 +19,7 @@ import {
   FormattedDate
 } from 'react-intl';
 import { Link } from 'react-router-dom';
+import { stripesConnect, withStripes } from '@folio/stripes/core';
 import { validate } from '../util';
 import { Owners } from './FeeFinesTable';
 
@@ -267,4 +268,4 @@ class TransferAccountsSettings extends React.Component {
   }
 }
 
-export default injectIntl(TransferAccountsSettings);
+export default injectIntl(withStripes(stripesConnect(TransferAccountsSettings)));
