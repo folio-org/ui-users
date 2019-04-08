@@ -6,6 +6,7 @@
 * Correct proxy-user query. Fixes UIU-952.
 * UX Consistency Fixes for New Fee/Fine (aka Charge Manual Fee/Fine). Ref. UIU-903.
 * Fix cannot delete Fee/Fine Owner message. Ref UIU-841.
+* Show explanation when renewal fails for any reason. Fixes UIU-971.
 
 ## [2.21.0](https://github.com/folio-org/ui-users/tree/v2.21.0) (2019-03-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.20.0...v2.21.0)
