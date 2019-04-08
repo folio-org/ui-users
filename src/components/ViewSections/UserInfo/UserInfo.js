@@ -107,7 +107,7 @@ class UserInfo extends React.Component {
               <Col xs={3}>
                 <KeyValue
                   label={<FormattedMessage id="ui-users.information.expirationDate" />}
-                  value={<FormattedDate value={get(user, ['expirationDate'], '')} />}
+                  value={user.expirationDate ? <FormattedDate value={user.expirationDate} /> : '-'}
                 />
               </Col>
             </Row>
