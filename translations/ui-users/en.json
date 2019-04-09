@@ -651,7 +651,7 @@
   "details.paneTitle.feeFineDetails": "Fee/fine details",
   "details.label.loanDetails": "Loan details",
 
-  "accounts.button.new":" New",
+  "accounts.button.new":" New fee/fine",
   "accounts.button.error":"Error",
 
   "accounts.error.field":"Please fill this field in to continue",
@@ -660,18 +660,18 @@
   "accounts.error.exceeds": "Pay amount exceeds the selected amount",
   "accounts.error.select": "Select one",
 
-  "accounts.history.columns.title":"Instance (Item Type)",
+  "accounts.history.columns.title":"Instance (Item type)",
   "accounts.history.columns.amount":"Billed",
   "accounts.history.columns.remaining":"Remaining",
   "accounts.history.columns.barcode":"Barcode",
-  "accounts.history.columns.created":"Date Created",
-  "accounts.history.columns.updated":"Date Updated",
-  "accounts.history.columns.type":"Fee/Fine Type",
-  "accounts.history.columns.owner":"Fee/Fine Owner",
-  "accounts.history.columns.number":"Call Number",
-  "accounts.history.columns.status":"Payment Status",
-  "accounts.history.columns.due":"Due Date",
-  "accounts.history.columns.returned":"Returned Date",
+  "accounts.history.columns.created":"Date created",
+  "accounts.history.columns.updated":"Date updated",
+  "accounts.history.columns.type":"Fee/fine type",
+  "accounts.history.columns.owner":"Fee/fine owner",
+  "accounts.history.columns.number":"Call number",
+  "accounts.history.columns.status":"Payment status",
+  "accounts.history.columns.due":"Due date",
+  "accounts.history.columns.returned":"Returned date",
 
   "accounts.history.possibleColumns.columns.created":"Date Created",
 
