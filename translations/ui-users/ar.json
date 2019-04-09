@@ -796,5 +796,16 @@
     "transfers.columns.desc": "الوصف",
     "transfers.modalHeader": "حذف حساب التحويل",
     "transfers.singular": "حساب التحويل",
-    "transfers.nodata": "لا توجد رسوم/غرامات: حسابات التحويل"
+    "transfers.nodata": "لا توجد رسوم/غرامات: حسابات التحويل",
+    "payments.nodata": "لا توجد رسوم/غرامات: طرق السداد",
+    "details.button.new": "معلومات موظف جديد",
+    "accounts.cancelError": "ملغى كخطأ",
+    "accounts.comment.staffInfo": "معلومات موظف جديد",
+    "blocks.additionalReasons": "عرض تفاصيل الحظر لمعرفة المزيد من أسباب الحظر...",
+    "accounts.status.partially": "جزئيًا",
+    "accounts.status.fully": "بالكامل",
+    "accounts.actions.payment": "السداد",
+    "accounts.actions.waive": "الإعفاء",
+    "accounts.actions.tag.staff": "الموظفين",
+    "accounts.actions.tag.patron": "المستفيد"
 }
