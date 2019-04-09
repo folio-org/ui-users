@@ -6,6 +6,7 @@
 * Correct proxy-user query. Fixes UIU-952.
 * UX Consistency Fixes for New Fee/Fine (aka Charge Manual Fee/Fine). Ref. UIU-903.
 * Fix cannot delete Fee/Fine Owner message. Ref UIU-841.
+* Show explanation when renewal fails for any reason. Fixes UIU-971.
 * UX Consistency Fixes for Fees/Fines History (aka Open/Closed/All Fees/Fines). Ref UIU-904.
 * Fix Decimal places not appearing on Manual Charges table. Fix UIU-843.
 * Fix FF History issue when attempting second all fees/fines pay/waive from within ALL tab. Fix UIU-813.
