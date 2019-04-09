@@ -3,6 +3,13 @@
 ## [2.21.0](https://github.com/folio-org/ui-users/tree/v2.21.0) (2019-03-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.20.0...v2.21.0)
 
+* Format renewal-override modal and buttons correctly. Refs UIU-906.
+* Correctly show view-item-details link in open-loans options menu. Refs UIU-871.
+* Include updated locale-specific translations related to UIU-713, UIU-845.
+
+## [2.21.0](https://github.com/folio-org/ui-users/tree/v2.21.0) (2019-03-15)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.20.0...v2.21.0)
+
 * Support login v5, bl-users v4 in parallel with previous releases.
 * Add "all actions" permission from Closed Loans. Fix UIU-867.
 * Update integration tests to accommodate MCL aria changes. Fixes UIU-880.
