@@ -16,7 +16,6 @@ import Modals from '../Modals/Modals';
 import OpenLoansSubHeader from '../OpenLoansSubHeader/OpenLoansSubHeader';
 import getListDataFormatter from '../../helpers/getListDataFormatter';
 
-// can be implemented as class, should be discussed
 class OpenLoansWithStaticData extends React.Component {
   static propTypes = {
     intl: intlShape.isRequired,
@@ -53,25 +52,35 @@ class OpenLoansWithStaticData extends React.Component {
     feeFineCount: PropTypes.number,
   };
 
-  constructor(props) {
-    super(props);
+  setFormatters() {
+    const {
+      intl: { formatMessage },
+      toggleItem,
+      isLoanChecked,
+      requestRecords,
+      requestCounts,
+      resources,
+      getLoanPolicie,
+      handleOptionsChange,
+      stripes,
+      feeFineCount,
+    } = this.props;
 
     this.tableData = getListDataFormatter(
-      props.intl.formatMessage,
-      props.toggleItem,
-      props.isLoanChecked,
-      props.requestRecords,
-      props.requestCounts,
-      props.resources,
-      props.getLoanPolicie,
-      props.handleOptionsChange,
-      props.stripes,
+      formatMessage,
+      toggleItem,
+      isLoanChecked,
+      requestRecords,
+      requestCounts,
+      resources,
+      getLoanPolicie,
+      handleOptionsChange,
+      stripes,
       this.getFeeFine,
       this.getContributorslist,
-      props.feeFineCount,
+      feeFineCount,
     );
 
-    this.callout = null;
     this.sortMap = this.getSortMap();
     this.loanFormatter = this.getLoanFormatter();
     this.sortOrder = this.getSortOrder();
@@ -201,7 +210,9 @@ class OpenLoansWithStaticData extends React.Component {
       activeLoan,
     } = this.props;
 
+    this.setFormatters();
     this.columnMapping = this.getColumnMapping();
+
     return (
       <React.Fragment>
         {!isEmpty(loans) &&

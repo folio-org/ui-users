@@ -74,7 +74,7 @@ export default function getListDataFormatter(
     'requests': {
       key:'requests',
       view: formatMessage({ id: 'ui-users.loans.details.requests' }),
-      formatter: loan => requestCounts[loan.itemId] || 0,
+      formatter: loan => (<div data-test-list-requests>{requestCounts[loan.itemId] || 0}</div>),
       sorter:  loan => requestCounts[loan.itemId] || 0,
     },
     'callNumber': {

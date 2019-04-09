@@ -24,7 +24,22 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
           path: 'circulation/renew-by-barcode',
         },
         throwErrors: false,
-      }
+      },
+      loanPolicies: {
+        type: 'okapi',
+        records: 'loanPolicies',
+        path: 'loan-policy-storage/loan-policies',
+        accumulate: 'true',
+        fetch: false,
+      },
+      requests: {
+        type: 'okapi',
+        path: 'circulation/requests',
+        resourceShouldRefresh: true,
+        records: 'requests',
+        accumulate: 'true',
+        fetch: false,
+      },
     }),
   );
 
@@ -32,6 +47,14 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
     mutator: PropTypes.shape({
       renew: PropTypes.shape({
         POST: PropTypes.func.isRequired,
+      }),
+      loanPolicies: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+        reset: PropTypes.func.isRequired,
+      }),
+      requests: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+        reset: PropTypes.func.isRequired,
       }),
     }),
     loans: PropTypes.object,
@@ -170,13 +193,13 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
     this.callout.sendCallout({ message });
   };
 
-  handleErrors(error) {
+  handleErrors = (error) => {
     const { errors } = error;
     this.setState({ errors });
     return errors;
-  }
+  };
 
-  getPolicyName(errors) {
+  getPolicyName = (errors) => {
     for (const err of errors) {
       for (const param of err.parameters) {
         if (param.key === 'loanPolicyName') {
@@ -186,7 +209,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
     }
 
     return '';
-  }
+  };
 
   // eslint-disable-next-line class-methods-use-this
   getMessage = (errors) => {
@@ -215,11 +238,11 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
 
   hideBulkRenewalDialog = () => this.setState({ bulkRenewalDialogOpen: false });
 
-  getOpenRequestsCount() {
+  getOpenRequestsCount = () => {
     const {
       stripes,
       mutator: {
-        loanPolicies: {
+        requests: {
           reset,
           GET,
         },
@@ -248,10 +271,10 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
         }, {});
         this.setState({ requestCounts: requestCountObject });
       });
-  }
+  };
 
 
-  fetchLoanPolicyNames() {
+  fetchLoanPolicyNames = () => {
     const query = this.state.loans.map(loan => `id==${loan.loanPolicyId}`).join(' or ');
     const {
       mutator: {
@@ -273,7 +296,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
 
         this.setState({ loanPolicies: loanPolicyObject });
       });
-  }
+  };
 
   render() {
     const {

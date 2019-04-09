@@ -133,7 +133,7 @@ class ProxyEditItem extends React.Component {
 
   optionsFor = (list) => {
     return list.map(option => (
-      <FormattedMessage id={`ui-users.${option}`}>
+      <FormattedMessage id={`ui-users.${option}`} key={option}>
         {(optionTranslated) => <option value={option}>{optionTranslated}</option>}
       </FormattedMessage>
     ));
@@ -157,12 +157,12 @@ class ProxyEditItem extends React.Component {
     // }));
     const proxyLinkMsg = <FormattedMessage id="ui-users.proxy.relationshipCreated" />;
     const proxyCreatedValue = get(record, 'proxy.metadata.createdDate', null);
-    const proxyCreatedDate = <FormattedTime
+    const proxyCreatedDate = proxyCreatedValue ? <FormattedTime
       value={proxyCreatedValue}
       day="numeric"
       month="numeric"
       year="numeric"
-    />;
+    /> : '-';
     const proxyLink = (
       <div>
         <Link to={`/users/view/${record.user.id}`}>{getFullName(record.user)}</Link>

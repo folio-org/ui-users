@@ -11,7 +11,6 @@ import {
   IconButton,
 } from '@folio/stripes/components';
 import {
-  IfPermission,
   stripesShape,
 } from '@folio/stripes/core';
 
@@ -49,7 +48,8 @@ class ActionsDropdown extends React.Component {
           data-role="menu"
           overrideStyle={{ padding: '7px 3px' }}
         >
-          <IfPermission perm="inventory.items.item.get">
+          {
+            stripes.hasPerm('inventory.items.item.get') &&
             <MenuItem itemMeta={{
               loan,
               action: 'itemDetails',
@@ -62,7 +62,7 @@ class ActionsDropdown extends React.Component {
                 <FormattedMessage id="ui-users.itemDetails" />
               </Button>
             </MenuItem>
-          </IfPermission>
+          }
           <MenuItem itemMeta={{
             loan,
             action: 'renew',
