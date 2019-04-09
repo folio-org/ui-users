@@ -515,6 +515,10 @@
   "accounts.chargeManual": "Charge fee/fine",
   "accounts.viewAllAccounts": "View all accounts",
 
+  "contextMenu.homePage": "Home page",
+  "contextMenu.settings": "Settings",
+  "contextMenu.usageTips": "Usage tips",
+  
   "feefines.title": "Fee/fine: Manual charges",
   "feefines.singular": "Fee/Fine Type",
   "feefines.callout": "The Fee/Fine Type <strong>{feefine}</strong> was successfully <strong>deleted</strong>.",
@@ -552,6 +556,7 @@
   "owners.columns.desc": "Description",
   "owners.columns.asp": "Associated service points",
   "owners.nodata": "There are no Fee/fine: Owners",
+  "owners.cannotDeleteOwner": "This Fee/fine Owner cannot be deleted, as it has one or more fees/fines associated with it",
 
   "payments.label": "Fee/fine: Payment methods",
   "payments.singular": "Payment method",
@@ -595,7 +600,7 @@
   "charge.patron": "Patron",
   "charge.barcode": "Barcode: ",
   "charge.title": "New fee/fine",
-  "charge.pay": "Charge and pay now",
+  "charge.Pay": "Charge & pay now",
   "charge.onlyCharge": "Charge only",
   "charge.comment": "Additional information for staff",
   "charge.messageThe": "The ",

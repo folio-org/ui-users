@@ -386,151 +386,155 @@ class LoanActionsHistory extends React.Component {
     );
 
     return (
-      <Paneset isRoot>
-        <Pane
-          id="pane-loandetails"
-          defaultWidth="100%"
-          dismissible
-          onClose={onCancel}
-          paneTitle={(
-            <FormattedMessage id="ui-users.loans.loanDetails">
-              {(loanDetails) => `${loanDetails} - ${getFullName(user)} (${upperFirst(patronGroup.group)})`}
-            </FormattedMessage>
+      <div data-test-loan-actions-history>
+        <Paneset isRoot>
+          <Pane
+            id="pane-loandetails"
+            defaultWidth="100%"
+            dismissible
+            onClose={onCancel}
+            paneTitle={(
+              <FormattedMessage id="ui-users.loans.loanDetails">
+                {(loanDetails) => `${loanDetails} - ${getFullName(user)} (${upperFirst(patronGroup.group)})`}
+              </FormattedMessage>
           )}
-        >
-          <Row>
-            <span>
-              <Button
-                disabled={buttonDisabled}
-                buttonStyle="primary"
-                onClick={this.renew}
-              >
-                <FormattedMessage id="ui-users.renew" />
-              </Button>
-              <Button
-                disabled={buttonDisabled}
-                buttonStyle="primary"
-                onClick={this.showChangeDueDateDialog}
-              >
-                <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />
-              </Button>
-            </span>
-          </Row>
-          <Row>
-            <Col xs={2}>
-              <KeyValue
-                label={<FormattedMessage id="ui-users.loans.details.borrower" />}
-                value={getFullName(user)}
-              />
-            </Col>
-            <Col xs={2}>
-              <this.connectedProxy
-                id={loan.proxyUserId}
-                onClick={onClickUser}
-                {...this.props}
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={2}>
-              {this.showTitle(loan)}
-            </Col>
-            <Col xs={2}>
-              {this.showContributors(contributorsList, listTodisplay, contributorsLength)}
-            </Col>
-            <Col xs={2}>
-              <KeyValue
-                label={<FormattedMessage id="ui-users.loans.columns.barcode" />}
-                value={<Link to={`/inventory/view/${get(loan, ['item', 'instanceId'], '')}/${get(loan, ['item', 'holdingsRecordId'], '')}/${get(loan, ['itemId'], '')}`}>{get(loan, ['item', 'barcode'], '')}</Link>}
-              />
-            </Col>
-            <Col xs={2}>
-              <KeyValue
-                label={<FormattedMessage id="ui-users.loans.details.callNumber" />}
-                value={get(loan, ['item', 'callNumber'], '-')}
-              />
-            </Col>
-            <Col xs={2}>
-              <KeyValue
-                label={<FormattedMessage id="ui-users.loans.details.location" />}
-                value={get(loan, ['item', 'location', 'name'], '-')}
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={2}>
-              <KeyValue
-                label={<FormattedMessage id="ui-users.loans.columns.itemStatus" />}
-                value={get(loan, ['item', 'status', 'name'], '-')}
-              />
-            </Col>
-            <Col xs={2}>
-              <KeyValue
-                label={<FormattedMessage id="ui-users.loans.columns.dueDate" />}
-                value={loan.dueDate ? (<FormattedTime value={loan.dueDate} day="numeric" month="numeric" year="numeric" />) : '-'}
-              />
-            </Col>
-            <Col xs={2}>
-              <KeyValue
-                label={<FormattedMessage id="ui-users.loans.columns.returnDate" />}
-                value={loan.returnDate ? (<FormattedTime value={loan.returnDate} day="numeric" month="numeric" year="numeric" />) : '-'}
-              />
-            </Col>
-            <Col xs={2}>
-              <KeyValue
-                label={<FormattedMessage id="ui-users.loans.details.renewalCount" />}
-                value={get(loan, ['renewalCount'], '-')}
-              />
-            </Col>
-            <Col xs={2}>
-              <KeyValue
-                label={<FormattedMessage id="ui-users.loans.details.claimedReturned" />}
-                value="TODO"
-              />
-            </Col>
-            <Col xs={2}>
-              <KeyValue
-                label={<FormattedMessage id="ui-users.loans.details.checkinServicePoint" />}
-                value={get(loan, ['checkinServicePoint', 'name'], '-')}
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={2}>
-              <KeyValue
-                label={<FormattedMessage id="ui-users.loans.details.loanPolicy" />}
-                value={<Link to={`/settings/circulation/loan-policies/${loan.loanPolicyId}`}>{loanPolicyName}</Link>}
-              />
-            </Col>
-            <Col xs={2}>
-              <KeyValue
-                label={<FormattedMessage id="ui-users.loans.columns.loanDate" />}
-                value={<FormattedTime value={loan.loanDate} day="numeric" month="numeric" year="numeric" /> || '-'}
-              />
-            </Col>
-            <Col xs={2}>
-              <KeyValue
-                label={<FormattedMessage id="ui-users.loans.details.fine" />}
-                value={this.viewFeeFine()}
-              />
-            </Col>
-            <IfPermission perm="ui-users.requests.all">
+          >
+            <Row>
+              <span>
+                <Button
+                  disabled={buttonDisabled}
+                  buttonStyle="primary"
+                  onClick={this.renew}
+                >
+                  <FormattedMessage id="ui-users.renew" />
+                </Button>
+                <Button
+                  disabled={buttonDisabled}
+                  buttonStyle="primary"
+                  onClick={this.showChangeDueDateDialog}
+                >
+                  <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />
+                </Button>
+              </span>
+            </Row>
+            <Row>
               <Col xs={2}>
                 <KeyValue
-                  label={<FormattedMessage id="ui-users.loans.details.requestQueue" />}
-                  value={requestQueueValue}
+                  label={<FormattedMessage id="ui-users.loans.details.borrower" />}
+                  value={getFullName(user)}
                 />
               </Col>
-            </IfPermission>
-            <Col xs={2}>
-              <KeyValue
-                label={<FormattedMessage id="ui-users.loans.details.lost" />}
-                value="TODO"
-              />
-            </Col>
-          </Row>
-          <br />
-          {loanActionsWithUser && loanActionsWithUser.records &&
+              <Col xs={2}>
+                <this.connectedProxy
+                  id={loan.proxyUserId}
+                  onClick={onClickUser}
+                  {...this.props}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={2}>
+                {this.showTitle(loan)}
+              </Col>
+              <Col xs={2}>
+                {this.showContributors(contributorsList, listTodisplay, contributorsLength)}
+              </Col>
+              <Col xs={2}>
+                <KeyValue
+                  label={<FormattedMessage id="ui-users.loans.columns.barcode" />}
+                  value={<Link to={`/inventory/view/${get(loan, ['item', 'instanceId'], '')}/${get(loan, ['item', 'holdingsRecordId'], '')}/${get(loan, ['itemId'], '')}`}>{get(loan, ['item', 'barcode'], '')}</Link>}
+                />
+              </Col>
+              <Col xs={2}>
+                <KeyValue
+                  label={<FormattedMessage id="ui-users.loans.details.callNumber" />}
+                  value={get(loan, ['item', 'callNumber'], '-')}
+                />
+              </Col>
+              <Col xs={2}>
+                <KeyValue
+                  label={<FormattedMessage id="ui-users.loans.details.location" />}
+                  value={get(loan, ['item', 'location', 'name'], '-')}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={2}>
+                <KeyValue
+                  label={<FormattedMessage id="ui-users.loans.columns.itemStatus" />}
+                  value={get(loan, ['item', 'status', 'name'], '-')}
+                />
+              </Col>
+              <Col xs={2}>
+                <KeyValue
+                  label={<FormattedMessage id="ui-users.loans.columns.dueDate" />}
+                  value={loan.dueDate ? (<FormattedTime value={loan.dueDate} day="numeric" month="numeric" year="numeric" />) : '-'}
+                />
+              </Col>
+              <Col xs={2}>
+                <KeyValue
+                  label={<FormattedMessage id="ui-users.loans.columns.returnDate" />}
+                  value={loan.returnDate ? (<FormattedTime value={loan.returnDate} day="numeric" month="numeric" year="numeric" />) : '-'}
+                />
+              </Col>
+              <Col xs={2}>
+                <KeyValue
+                  label={<FormattedMessage id="ui-users.loans.details.renewalCount" />}
+                  value={get(loan, ['renewalCount'], '-')}
+                />
+              </Col>
+              <Col xs={2}>
+                <KeyValue
+                  label={<FormattedMessage id="ui-users.loans.details.claimedReturned" />}
+                  value="TODO"
+                />
+              </Col>
+              <Col xs={2}>
+                <KeyValue
+                  label={<FormattedMessage id="ui-users.loans.details.checkinServicePoint" />}
+                  value={get(loan, ['checkinServicePoint', 'name'], '-')}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={2}>
+                <KeyValue
+                  label={<FormattedMessage id="ui-users.loans.details.loanPolicy" />}
+                  value={<Link to={`/settings/circulation/loan-policies/${loan.loanPolicyId}`}>{loanPolicyName}</Link>}
+                />
+              </Col>
+              <Col xs={2}>
+                <KeyValue
+                  label={<FormattedMessage id="ui-users.loans.columns.loanDate" />}
+                  value={<FormattedTime value={loan.loanDate} day="numeric" month="numeric" year="numeric" /> || '-'}
+                />
+              </Col>
+              <Col xs={2}>
+                <KeyValue
+                  label={<FormattedMessage id="ui-users.loans.details.fine" />}
+                  value={this.viewFeeFine()}
+                />
+              </Col>
+              <IfPermission perm="ui-users.requests.all">
+                <Col
+                  data-test-loan-actions-history-requests
+                  xs={2}
+                >
+                  <KeyValue
+                    label={<FormattedMessage id="ui-users.loans.details.requestQueue" />}
+                    value={requestQueueValue}
+                  />
+                </Col>
+              </IfPermission>
+              <Col xs={2}>
+                <KeyValue
+                  label={<FormattedMessage id="ui-users.loans.details.lost" />}
+                  value="TODO"
+                />
+              </Col>
+            </Row>
+            <br />
+            {loanActionsWithUser && loanActionsWithUser.records &&
             <MultiColumnList
               id="list-loanactions"
               formatter={loanActionsFormatter}
@@ -546,24 +550,25 @@ class LoanActionsHistory extends React.Component {
               contentData={loanActionsWithUser.records}
             />
           }
-          <Modal dismissible closeOnBackgroundClick onClose={this.hideNonRenewedLoansModal} open={this.state.nonRenewedLoansModalOpen} label={nonRenewedLabel}>
-            {failedRenewalsSubHeading}
-            {
+            <Modal dismissible closeOnBackgroundClick onClose={this.hideNonRenewedLoansModal} open={this.state.nonRenewedLoansModalOpen} label={nonRenewedLabel}>
+              {failedRenewalsSubHeading}
+              {
                 nonRenewedLoanItems.map((loanItem, index) => (
                   <li key={index}>
                     <span>{loanItem.item.title}</span>
                   </li>))
             }
-          </Modal>
-          <PatronBlockModal
-            open={patronBlockedModal}
-            onClose={this.onClosePatronBlockedModal}
-            patronBlocks={patronBlocks}
-            viewUserPath={`/users/view/${(user || {}).id}?filters=pg.${patronGroup.group}&sort=Name`}
-          />
-          { this.renderChangeDueDateDialog() }
-        </Pane>
-      </Paneset>
+            </Modal>
+            <PatronBlockModal
+              open={patronBlockedModal}
+              onClose={this.onClosePatronBlockedModal}
+              patronBlocks={patronBlocks}
+              viewUserPath={`/users/view/${(user || {}).id}?filters=pg.${patronGroup.group}&sort=Name`}
+            />
+            { this.renderChangeDueDateDialog() }
+          </Pane>
+        </Paneset>
+      </div>
     );
   }
 }

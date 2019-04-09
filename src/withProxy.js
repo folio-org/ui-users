@@ -147,7 +147,7 @@ const withProxy = WrappedComponent => class WithProxyComponent extends React.Com
       resourceFor.GET({ params: { query } }).then((recordsFor) => {
         if (!recordsFor.length) return;
         const ids = recordsFor.map(pf => `id==${pf[recordKey]}`).join(' or ');
-        resource.GET({ params: { query: `query=(${ids})` } });
+        resource.GET({ params: { query: `(${ids})` } });
       });
     }
 

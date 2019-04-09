@@ -366,37 +366,39 @@ class OpenLoansControl extends React.Component {
       resources,
     } = this.props;
     return (
-      <TableModel
-        patronBlockedModal={patronBlockedModal}
-        onClosePatronBlockedModal={this.onClosePatronBlockedModal}
-        openPatronBlockedModal={this.openPatronBlockedModal}
-        patronBlocks={patronBlocks}
-        patronGroup={patronGroup}
-        buildRecords={buildRecords}
-        visibleColumns={visibleColumns}
-        checkedLoans={checkedLoans}
-        requestCounts={requestCounts}
-        activeLoan={activeLoan}
-        changeDueDateDialogOpen={changeDueDateDialogOpen}
-        loans={loans}
-        stripes={stripes}
-        feeFineCount={this.feeFineCount}
-        onClickViewLoanActionsHistory={onClickViewLoanActionsHistory}
-        user={user}
-        toggleAll={this.toggleAll}
-        toggleItem={this.toggleItem}
-        isLoanChecked={this.isLoanChecked}
-        requestRecords={(resources.requests || {}).records || []}
-        resources={resources}
-        getLoanPolicie={this.getLoanPolicie}
-        handleOptionsChange={this.handleOptionsChange}
-        possibleColumns={this.possibleColumns}
-        hideChangeDueDateDialog={this.hideChangeDueDateDialog}
-        renewSelected={this.renewSelected}
-        showChangeDueDateDialog={this.showChangeDueDateDialog}
-        toggleColumn={this.toggleColumn}
-        allChecked={allChecked}
-      />
+      <div data-test-open-loans>
+        <TableModel
+          patronBlockedModal={patronBlockedModal}
+          onClosePatronBlockedModal={this.onClosePatronBlockedModal}
+          openPatronBlockedModal={this.openPatronBlockedModal}
+          patronBlocks={patronBlocks}
+          patronGroup={patronGroup}
+          buildRecords={buildRecords}
+          visibleColumns={visibleColumns}
+          checkedLoans={checkedLoans}
+          requestCounts={requestCounts}
+          activeLoan={activeLoan}
+          changeDueDateDialogOpen={changeDueDateDialogOpen}
+          loans={loans}
+          stripes={stripes}
+          feeFineCount={this.feeFineCount}
+          onClickViewLoanActionsHistory={onClickViewLoanActionsHistory}
+          user={user}
+          toggleAll={this.toggleAll}
+          toggleItem={this.toggleItem}
+          isLoanChecked={this.isLoanChecked}
+          requestRecords={(resources.requests || {}).records || []}
+          resources={resources}
+          getLoanPolicie={this.getLoanPolicie}
+          handleOptionsChange={this.handleOptionsChange}
+          possibleColumns={this.possibleColumns}
+          hideChangeDueDateDialog={this.hideChangeDueDateDialog}
+          renewSelected={this.renewSelected}
+          showChangeDueDateDialog={this.showChangeDueDateDialog}
+          toggleColumn={this.toggleColumn}
+          allChecked={allChecked}
+        />
+      </div>
     );
   }
 }

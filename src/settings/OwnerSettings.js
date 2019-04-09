@@ -318,6 +318,7 @@ class OwnerSettings extends React.Component {
             <Row>
               <Col xs>
                 <FormattedMessage id="ui-users.owners.cannotDeleteOwner" values={{ type }} />
+                {'.'}
               </Col>
             </Row>
             <Row>

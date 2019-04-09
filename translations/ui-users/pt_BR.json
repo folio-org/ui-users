@@ -807,5 +807,10 @@
     "accounts.actions.payment": "pagamento",
     "accounts.actions.waive": "renunciar",
     "accounts.actions.tag.staff": "EQUIPE",
-    "accounts.actions.tag.patron": "USUÁRIO"
+    "accounts.actions.tag.patron": "USUÁRIO",
+    "contextMenu.homePage": "Página inicial",
+    "contextMenu.settings": "Configurações",
+    "contextMenu.usageTips": "Dicas de uso",
+    "owners.cannotDeleteOwner": "Este proprietário não pode ser excluído, pois tem uma ou mais taxas/multas associadas a ele",
+    "charge.Pay": "Cobrar e pagar agora"
 }

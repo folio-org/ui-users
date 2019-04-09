@@ -7,7 +7,16 @@ export default function config() {
   // okapi endpoints
   this.get('/_/version', () => '0.0.0');
 
-  this.get('_/proxy/tenants/:id/modules', []);
+  this.get('_/proxy/tenants/:id/modules', [
+    {
+      id: 'mod-circulation-16.0.0-SNAPSHOT.253',
+      name: 'Circulation Module',
+      provides: [
+        { id: 'circulation', version: '7.4' },
+        { id: 'loan-policy-storage', version: '7.4' }
+      ]
+    }
+  ]);
 
   this.get('/saml/check', {
     ssoEnabled: false
@@ -113,14 +122,51 @@ export default function config() {
   });
   this.get('/service-points');
 
-  this.get('/circulation/loans', {
+  this.get('/circulation/loans', function ({ loans }) {
+    return this.serializerOrRegistry.serialize(loans.all());
+  });
+
+  this.get('loan-storage/loan-history', {
     loans: [],
     totalRecords: 0,
   });
-  this.get('/requests', {
-    requests: [],
-    totalRecords: 0,
+
+  this.get('/circulation/requests', function ({ requests }) {
+    return this.serializerOrRegistry.serialize(requests.all());
   });
+
+  this.get('/loan-policy-storage/loan-policies', {
+    'loanPolicies' : [{
+      'id' : 'test',
+      'name' : 'Example Loan Policy',
+      'description' : 'An example loan policy',
+      'loanable' : true,
+      'loansPolicy' : {
+        'profileId' : 'Rolling',
+        'period' : {
+          'duration' : 1,
+          'intervalId' : 'Months'
+        },
+        'closedLibraryDueDateManagementId' : 'KEEP_CURRENT_DATE',
+        'gracePeriod' : {
+          'duration' : 7,
+          'intervalId' : 'Days'
+        }
+      },
+      'renewable' : true,
+      'renewalsPolicy' : {
+        'unlimited' : true,
+        'renewFromId' : 'CURRENT_DUE_DATE',
+        'differentPeriod' : true,
+        'period' : {
+          'duration' : 30,
+          'intervalId' : 'Days'
+        }
+      }
+    }],
+    'totalRecords' : 1
+  });
+
   this.get('accounts', {
     accounts: [],
     totalRecords: 0,
