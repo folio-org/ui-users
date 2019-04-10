@@ -3,16 +3,32 @@ import {
   describe,
   it,
 } from '@bigtest/mocha';
+import { location } from '@bigtest/react';
 import { expect } from 'chai';
 
 import setupApplication from '../helpers/setup-application';
+import DummyComponent from '../helpers/DummyComponent';
 import OpenLoansInteractor from '../interactors/open-loans';
 
 describe('Open Loans', () => {
-  setupApplication({ permissions: {
-    'manualblocks.collection.get': true,
-    'circulation.loans.collection.get': true,
-  } });
+  const requestsPath = '/requests';
+
+  setupApplication({
+    permissions: {
+      'manualblocks.collection.get': true,
+      'circulation.loans.collection.get': true,
+    },
+    modules: [{
+      type: 'app',
+      name: '@folio/ui-requests',
+      displayName: 'requests',
+      route: requestsPath,
+      module: DummyComponent,
+    }],
+    translations: {
+      'requests': 'requests'
+    },
+  });
 
   const requestsAmount = 2;
 
@@ -53,6 +69,16 @@ describe('Open Loans', () => {
 
         it('icon button should be presented', () => {
           expect(OpenLoansInteractor.actionDropdownRequestQueue.isPresent).to.be.true;
+        });
+
+        describe('click request queue', () => {
+          beforeEach(async () => {
+            await OpenLoansInteractor.actionDropdownRequestQueue.click('button');
+          });
+
+          it('should be redirected to "requests"', function () {
+            expect(location().pathname).to.to.equal(requestsPath);
+          });
         });
       });
     });
