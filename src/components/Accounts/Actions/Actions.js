@@ -278,6 +278,7 @@ class Actions extends React.Component {
     const tagStaff = formatMessage({ id: 'ui-users.accounts.actions.tag.staff' });
     const tagPatron = formatMessage({ id: 'ui-users.accounts.actions.tag.patron' });
     const action = { paymentMethod: values.method };
+    const owners = _.get(this.props.resources, ['owners', 'records'], []);
     if (payment < type.remaining) {
       paymentStatus = `${paymentStatus} ${_.capitalize(formatMessage({ id: 'ui-users.accounts.status.partially' }))}`;
     } else {
@@ -292,8 +293,11 @@ class Actions extends React.Component {
     if (values.patronInfo && values.notify) {
       c = c + '\n' + tagPatron + ': ' + values.patronInfo;
     }
+    const createdAt = (owners.find(o => o.id === values.ownerId) || {}).owner;
+
+    console.log(type, values, createdAt);
     return this.editAccount(type, paymentStatus, type.status.name, balance)
-      .then(() => this.newAction(action, type.id, paymentStatus, payment, c, balance, values.transaction, type.feeFineOwner));
+      .then(() => this.newAction(action, type.id, paymentStatus, payment, c, balance, values.transaction, createdAt || type.feeFineOwner));
   }
 
   onClickWaive(values) {
