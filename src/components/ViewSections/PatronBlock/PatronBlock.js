@@ -126,7 +126,8 @@ class PatronBlock extends React.Component {
   }
 
   onRowClick(e, row) {
-    if ((e.target.type !== 'button') && (e.target.tagName !== 'IMG')) {
+    const permAbled = this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
+    if (permAbled === true && (e.target.type !== 'button') && (e.target.tagName !== 'IMG')) {
       this.props.onClickViewPatronBlock(e, 'edit', row);
     }
   }
@@ -194,7 +195,7 @@ class PatronBlock extends React.Component {
         label={title}
         displayWhenOpen={displayWhenOpen}
       >
-        <Row><Col xs>{buttonDisabled && items}</Col></Row>
+        <Row><Col xs>{items}</Col></Row>
       </Accordion>
 
     );
