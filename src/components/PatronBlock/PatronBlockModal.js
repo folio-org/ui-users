@@ -36,6 +36,7 @@ const PatronBlockModal = ({ open, onClose, patronBlocks, viewUserPath }) => {
       <Row>
         <Col xs>
           <FormattedMessage id="ui-users.blocks.reason" />
+          {':'}
         </Col>
       </Row>
       {renderBlocks}
