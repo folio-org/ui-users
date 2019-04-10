@@ -26,7 +26,7 @@ describe('Open Loans', () => {
 
   it('should be presented', () => {
     expect(OpenLoansInteractor.isPresent).to.be.true;
-  });
+  }).timeout(4000);
 
   describe('loan list', () => {
     it('should be presented', () => {
@@ -37,6 +37,22 @@ describe('Open Loans', () => {
       describe('requests', () => {
         it('loan should have requests', () => {
           expect(OpenLoansInteractor.requests(0).text).to.equal(requestsAmount.toString());
+        });
+      });
+    });
+
+    describe('action dropdown', () => {
+      it('icon button should be presented', () => {
+        expect(OpenLoansInteractor.actionDropdowns(0).isPresent).to.be.true;
+      });
+
+      describe('click', () => {
+        beforeEach(async () => {
+          await OpenLoansInteractor.actionDropdowns(0).click('button');
+        });
+
+        it('icon button should be presented', () => {
+          expect(OpenLoansInteractor.actionDropdownRequestQueue.isPresent).to.be.true;
         });
       });
     });

@@ -61,6 +61,7 @@ class OpenLoansControl extends React.Component {
     user: PropTypes.shape({
       id: PropTypes.string.isRequired,
     }).isRequired,
+    history: PropTypes.object.isRequired,
     patronGroup: PropTypes.object.isRequired,
     requestCounts: PropTypes.object.isRequired,
     loanPolicies: PropTypes.object.isRequired,
@@ -294,6 +295,16 @@ class OpenLoansControl extends React.Component {
       _path: `/settings/circulation/loan-policies/${loan.loanPolicyId}`,
       ...q,
     });
+  };
+
+  discoverRequests = (loan) => {
+    const { history } = this.props;
+
+    history.push(
+      `/requests?&query=${get(loan, ['item', 'barcode'])}&filters=requestStatus.Open%20-%20Not%` +
+      '20yet%20filled%2CrequestStatus.Open%20-%20Awaiting%20pickup%2CrequestStatus.Open%20-%20Awaitin' +
+      'g%20pickup%2CrequestStatus.Open%20-%20In%20transit&sort=Request%20Date'
+    );
   };
 
   feefine = (loan, e) => {
