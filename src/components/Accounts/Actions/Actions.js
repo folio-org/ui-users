@@ -155,19 +155,23 @@ class Actions extends React.Component {
   onClosePay() {
     this.props.onChangeActions({
       pay: false,
-      regular: false,
-      submitting: false,
+      regular: false
     });
-    this.setState({ accounts: this.props.selectedAccounts || [] });
+    this.setState({
+      accounts: this.props.selectedAccounts || [],
+      submitting: false
+    });
   }
 
   onCloseWaive() {
     this.props.onChangeActions({
       waiveModal: false,
       waiveMany: false,
-      submitting: false,
     });
-    this.setState({ accounts: this.props.selectedAccounts || [] });
+    this.setState({
+      accounts: this.props.selectedAccounts || [],
+      submitting: false
+    });
   }
 
   onCloseWarning = () => {
