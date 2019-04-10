@@ -30,6 +30,7 @@ const Menu = (props) => {
       <Row>
         <Col style={{ marginLeft: '20px' }}>
           <b><FormattedMessage id="ui-users.accounts.history.statusLabel" values={{ type }} /></b>
+          {' '}
           <Link to={`/users/view/${user.id}`}>
             {`${getFullName(user)} (${_.upperFirst(props.patronGroup.group)})`}
           </Link>

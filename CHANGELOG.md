@@ -10,6 +10,9 @@
 * UX Consistency Fixes for Fees/Fines History (aka Open/Closed/All Fees/Fines). Ref UIU-904.
 * Fix Decimal places not appearing on Manual Charges table. Fix UIU-843.
 * Fix FF History issue when attempting second all fees/fines pay/waive from within ALL tab. Fix UIU-813.
+* Fix display in Check-Out when the patron has more than one block. Fix UIU-804
+* Fix comment snippet missing from Fee/Fine History. Fix UIU-955.
+* Fix comment count wrong on Fee/Fine History. Fix UIU-957.
 
 ## [2.21.0](https://github.com/folio-org/ui-users/tree/v2.21.0) (2019-03-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.20.0...v2.21.0)
