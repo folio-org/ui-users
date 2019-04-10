@@ -295,7 +295,6 @@ class Actions extends React.Component {
     }
     const createdAt = (owners.find(o => o.id === values.ownerId) || {}).owner;
 
-    console.log(type, values, createdAt);
     return this.editAccount(type, paymentStatus, type.status.name, balance)
       .then(() => this.newAction(action, type.id, paymentStatus, payment, c, balance, values.transaction, createdAt || type.feeFineOwner));
   }
