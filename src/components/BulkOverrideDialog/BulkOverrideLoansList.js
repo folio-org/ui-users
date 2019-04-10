@@ -66,7 +66,7 @@ class BulkOverrideLoansList extends Component {
   );
 
   getShortErrorMessage = (errorMessage) => {
-    return get(errorMessage, 'props.values.message.props.values.message', '');
+    return get(errorMessage, 'props.values.message', '');
   };
 
   render() {

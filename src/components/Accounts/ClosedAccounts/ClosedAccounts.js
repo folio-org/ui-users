@@ -118,7 +118,7 @@ class ClosedAccounts extends React.Component {
     const t = f.feeFineType ? f.feeFineType : '';
     const comments = _.get(this.props.resources, ['comments', 'records'], []);
     const actions = _.orderBy(comments.filter(c => c.accountId === f.id), ['dateAction'], ['asc']);
-    const myComments = actions.filter(a => a.comments !== undefined).map(a => a.comments);
+    const myComments = actions.filter(a => a.comments).map(a => a.comments);
     const n = myComments.length;
     return (
       <div>

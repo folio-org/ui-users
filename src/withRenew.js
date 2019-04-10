@@ -155,8 +155,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
         .then((renewedLoan) => renewSuccess.push(renewedLoan))
         .catch((error) => {
           renewFailure.push(loan);
-          const stringErrorMessage = get(error, 'props.values.message.props.values.message', '');
-
+          const stringErrorMessage = get(error, 'props.values.message', '');
           errorMsg[loan.id] = {
             ...error,
             ...isOverridePossible(stringErrorMessage),
@@ -216,24 +215,19 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
     if (!errors || !errors.length) return '';
 
     const policyName = this.getPolicyName(errors);
-    let message = errors.reduce((msg, err) => ((msg) ? `${msg}, ${err.message}` : err.message), '');
-    message = (
+    const message = errors.reduce((msg, err) => ((msg) ? `${msg}, ${err.message}` : err.message), '');
+
+    return policyName ? (
+      <FormattedMessage
+        id="ui-users.errors.reviewBeforeRenewal"
+        values={{ message, policyName }}
+      />
+    ) : (
       <FormattedMessage
         id="ui-users.errors.loanNotRenewedReason"
         values={{ message }}
       />
     );
-
-    if (policyName) {
-      message = (
-        <FormattedMessage
-          id="ui-users.errors.reviewBeforeRenewal"
-          values={{ message, policyName }}
-        />
-      );
-    }
-
-    return message;
   };
 
   hideBulkRenewalDialog = () => this.setState({ bulkRenewalDialogOpen: false });
