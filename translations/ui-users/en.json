@@ -803,7 +803,7 @@
 
   "blocks.form.button.delete":"Delete",
   "blocks.form.button.save":"Save & Close",
-  "blocks.form.button.create":"Create block",
+  "blocks.form.button.create":"Save & close",
   "blocks.form.button.close": "Close patron block dialog",
 
   "blocks.layer.heading":"Delete patron block?",
