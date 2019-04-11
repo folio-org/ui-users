@@ -13,6 +13,10 @@
 * Fix display in Check-Out when the patron has more than one block. Fix UIU-804
 * Fix comment snippet missing from Fee/Fine History. Fix UIU-955.
 * Fix comment count wrong on Fee/Fine History. Fix UIU-957.
+* UX Consistency Fixes for Patron Blocks on Renewals pop-up. Ref UIU-947
+* Fix Fee/Fines Details "Created at". Fix UIU-927.
+* Fix "All actions" permission to see Patron Block details. Fix UIU-866.
+* Fix Patron block pop-up for Renewals. Fix UIU-959.
 
 ## [2.21.0](https://github.com/folio-org/ui-users/tree/v2.21.0) (2019-03-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.20.0...v2.21.0)
