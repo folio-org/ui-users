@@ -778,7 +778,7 @@
   "blocks.label":"Patron Blocks",
   "blocks.reason": "Reason for block",
   "blocks.modal.header": "Patron blocked from renewing",
-  "blocks.detailsButton": "Block details",
+  "blocks.detailsButton": "View block details",
   "blocks.closeButton": "Close",
   "blocks.additionalReasons": "View block details to see additional reasons for block...",
 
