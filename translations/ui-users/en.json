@@ -682,7 +682,7 @@
   "accounts.history.button.transfer":"Transfer",
   "accounts.history.button.loanDetails":" Loan details",
 
-  "accounts.history.comment":"Comment",
+  "accounts.history.comment":"Additional information",
   "accounts.history.of":"of",
   "accounts.history.filter": "Search & Filter",
   "accounts.history.statusLabel": "{type} fees/fines for ",
@@ -763,7 +763,7 @@
   "accounts.comment.field.comment":"Comment",
   "accounts.comment.field.save":"Save",
   "accounts.comment.field.cancel":"Cancel",
-  "accounts.comment.staffInfo": "New staff info",
+  "accounts.comment.staffInfo": "Staff info only",
 
   "cddd.dateRequired": "Date*",
   "cddd.timeRequired": "Time*",
