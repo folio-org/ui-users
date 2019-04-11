@@ -512,7 +512,7 @@
   "accounts.numOpenAccounts": "{count, number} {count, plural, one {open fee/fine} other {open fees/fines}}",
   "accounts.totalOpenAccounts": "(Total: {amount})",
   "accounts.numClosedAccounts": "{count, number} {count, plural, one {closed fee/fine} other {closed fees/fines}}",
-  "accounts.chargeManual": "Charge fee/fine",
+  "accounts.chargeManual": "Create fee/fine",
   "accounts.viewAllAccounts": "View all accounts",
 
   "contextMenu.homePage": "Home page",
@@ -774,7 +774,7 @@
   "blocks.columns.borrowing":"Borrowing",
   "blocks.columns.requests":"Requests",
   "blocks.columns.renewals":"Renewals",
-  "blocks.buttons.add":"Add Block",
+  "blocks.buttons.add":"Create block",
   "blocks.label":"Patron Blocks",
   "blocks.reason": "Reason for block",
   "blocks.modal.header": "Patron blocked from renewing",
@@ -813,7 +813,7 @@
   "blocks.layer.edit":"Edit Block",
 
   "blocks.message":"patron block will be removed",
-  "blocks.textField.place":"Patron has blocks in place",
+  "blocks.textField.place":"Patron has block(s) in place",
 
   "additionalInfo.label": "Additional information",
   "additionalInfo.placeholder": "Enter more information about the override (required)",
