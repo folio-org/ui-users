@@ -341,6 +341,7 @@ class FeefineSettings extends React.Component {
     return (
       <Paneset>
         <Pane
+          id="feefines"
           defaultWidth="fill"
           fluidContentWidth
           paneTitle={<FormattedMessage id="ui-users.feefines.title" />}
@@ -349,6 +350,7 @@ class FeefineSettings extends React.Component {
           <ChargeNotice owner={owner} templates={templates} templateCharge={templateCharge} templateAction={templateAction} onSubmit={(values) => { this.onUpdateOwner(values); }} />
           <EditableList
             {...this.props}
+            id="feefine-manual-charges"
             formatter={formatter}
             fieldComponents={fieldComponents}
             label={formatMessage({ id: 'ui-users.feefines.title' })}
