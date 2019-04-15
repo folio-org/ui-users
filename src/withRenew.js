@@ -24,7 +24,22 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
           path: 'circulation/renew-by-barcode',
         },
         throwErrors: false,
-      }
+      },
+      loanPolicies: {
+        type: 'okapi',
+        records: 'loanPolicies',
+        path: 'loan-policy-storage/loan-policies',
+        accumulate: 'true',
+        fetch: false,
+      },
+      requests: {
+        type: 'okapi',
+        path: 'circulation/requests',
+        resourceShouldRefresh: true,
+        records: 'requests',
+        accumulate: 'true',
+        fetch: false,
+      },
     }),
   );
 
@@ -32,6 +47,14 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
     mutator: PropTypes.shape({
       renew: PropTypes.shape({
         POST: PropTypes.func.isRequired,
+      }),
+      loanPolicies: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+        reset: PropTypes.func.isRequired,
+      }),
+      requests: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+        reset: PropTypes.func.isRequired,
       }),
     }),
     loans: PropTypes.object,
@@ -132,8 +155,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
         .then((renewedLoan) => renewSuccess.push(renewedLoan))
         .catch((error) => {
           renewFailure.push(loan);
-          const stringErrorMessage = get(error, 'props.values.message.props.values.message', '');
-
+          const stringErrorMessage = get(error, 'props.values.message', '');
           errorMsg[loan.id] = {
             ...error,
             ...isOverridePossible(stringErrorMessage),
@@ -170,13 +192,13 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
     this.callout.sendCallout({ message });
   };
 
-  handleErrors(error) {
+  handleErrors = (error) => {
     const { errors } = error;
     this.setState({ errors });
     return errors;
-  }
+  };
 
-  getPolicyName(errors) {
+  getPolicyName = (errors) => {
     for (const err of errors) {
       for (const param of err.parameters) {
         if (param.key === 'loanPolicyName') {
@@ -186,40 +208,35 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
     }
 
     return '';
-  }
+  };
 
   // eslint-disable-next-line class-methods-use-this
   getMessage = (errors) => {
     if (!errors || !errors.length) return '';
 
     const policyName = this.getPolicyName(errors);
-    let message = errors.reduce((msg, err) => ((msg) ? `${msg}, ${err.message}` : err.message), '');
-    message = (
+    const message = errors.reduce((msg, err) => ((msg) ? `${msg}, ${err.message}` : err.message), '');
+
+    return policyName ? (
+      <FormattedMessage
+        id="ui-users.errors.reviewBeforeRenewal"
+        values={{ message, policyName }}
+      />
+    ) : (
       <FormattedMessage
         id="ui-users.errors.loanNotRenewedReason"
         values={{ message }}
       />
     );
-
-    if (policyName) {
-      message = (
-        <FormattedMessage
-          id="ui-users.errors.reviewBeforeRenewal"
-          values={{ message, policyName }}
-        />
-      );
-    }
-
-    return message;
   };
 
   hideBulkRenewalDialog = () => this.setState({ bulkRenewalDialogOpen: false });
 
-  getOpenRequestsCount() {
+  getOpenRequestsCount = () => {
     const {
       stripes,
       mutator: {
-        loanPolicies: {
+        requests: {
           reset,
           GET,
         },
@@ -248,10 +265,10 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
         }, {});
         this.setState({ requestCounts: requestCountObject });
       });
-  }
+  };
 
 
-  fetchLoanPolicyNames() {
+  fetchLoanPolicyNames = () => {
     const query = this.state.loans.map(loan => `id==${loan.loanPolicyId}`).join(' or ');
     const {
       mutator: {
@@ -273,7 +290,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
 
         this.setState({ loanPolicies: loanPolicyObject });
       });
-  }
+  };
 
   render() {
     const {

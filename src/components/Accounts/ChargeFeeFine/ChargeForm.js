@@ -217,7 +217,7 @@ class ChargeForm extends React.Component {
           onClick={this.props.handleSubmit(data => this.props.onSubmit({ ...data, pay: true }))}
           style={mg}
         >
-          <FormattedMessage id="ui-users.charge.pay" />
+          <FormattedMessage id="ui-users.charge.Pay" />
         </Button>
         <Button
           disabled={this.props.pristine || this.props.submitting || this.props.invalid}

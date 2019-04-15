@@ -1,20 +1,28 @@
 import overridePossibleMessages from './overridePossibleMessages';
 
-export default (errorMessage) => {
-  const data = {
-    overridable: false,
-    autoNewDueDate: true,
-  };
+const data = {
+  overridable: false,
+  autoNewDueDate: true,
+};
 
-  overridePossibleMessages.forEach(({ message, showDueDatePicker }) => {
+const isOverridableMessage = (errorMessage) => {
+  for (const { message, showDueDatePicker } of overridePossibleMessages) {
     if (errorMessage.includes(message)) {
       if (showDueDatePicker) {
         data.autoNewDueDate = false;
       }
 
-      data.overridable = true;
+      return true;
     }
-  });
+  }
+
+  return false;
+};
+
+export default (text) => {
+  const errorMessages = text.split(',');
+
+  data.overridable = errorMessages.every((errorMessage) => isOverridableMessage(errorMessage));
 
   return data;
 };
