@@ -7,7 +7,7 @@ import {
 
 export default @interactor class UsersInteractor {
   static defaultScope = '[data-test-user-instances]';
-  clickInactiveUsersCheckbox = clickable('#clickable-filter-active-include-inactive-users');
+  clickInactiveUsersCheckbox = clickable('#clickable-filter-active-active');
   clickFacultyCheckbox = clickable('#clickable-filter-pg-faculty');
   clickGraduateCheckbox = clickable('#clickable-filter-pg-graduate');
   clickStaffCheckbox = clickable('#clickable-filter-pg-staff');
