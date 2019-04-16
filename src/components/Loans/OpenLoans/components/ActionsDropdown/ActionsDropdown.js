@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { get } from 'lodash';
 import { FormattedMessage } from 'react-intl';
 
 import {
@@ -114,15 +113,14 @@ class ActionsDropdown extends React.Component {
           { requestQueue && stripes.hasPerm('ui-requests.all') &&
             <MenuItem itemMeta={{
               loan,
-              action: 'showRequestQueue',
+              action: 'discoverRequests',
             }}
             >
-              <Button
-                buttonStyle="dropdownItem"
-                href={`/requests?&query=${get(loan, ['item', 'barcode'])}&filters=requestStatus.Open%20-%20Not%20yet%20filled%2CrequestStatus.Open%20-%20Awaiting%20pickup%2CrequestStatus.Open%20-%20Awaiting%20pickup%2CrequestStatus.Open%20-%20In%20transit&sort=Request%20Date`}
-              >
-                <FormattedMessage id="ui-users.loans.details.requestQueue" />
-              </Button>
+              <div data-test-dropdown-content-request-queue>
+                <Button buttonStyle="dropdownItem">
+                  <FormattedMessage id="ui-users.loans.details.requestQueue" />
+                </Button>
+              </div>
             </MenuItem>
           }
         </DropdownMenu>
