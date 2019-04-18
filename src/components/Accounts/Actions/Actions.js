@@ -155,19 +155,23 @@ class Actions extends React.Component {
   onClosePay() {
     this.props.onChangeActions({
       pay: false,
-      regular: false,
-      submitting: false,
+      regular: false
     });
-    this.setState({ accounts: this.props.selectedAccounts || [] });
+    this.setState({
+      accounts: this.props.selectedAccounts || [],
+      submitting: false
+    });
   }
 
   onCloseWaive() {
     this.props.onChangeActions({
       waiveModal: false,
       waiveMany: false,
-      submitting: false,
     });
-    this.setState({ accounts: this.props.selectedAccounts || [] });
+    this.setState({
+      accounts: this.props.selectedAccounts || [],
+      submitting: false
+    });
   }
 
   onCloseWarning = () => {
@@ -274,6 +278,7 @@ class Actions extends React.Component {
     const tagStaff = formatMessage({ id: 'ui-users.accounts.actions.tag.staff' });
     const tagPatron = formatMessage({ id: 'ui-users.accounts.actions.tag.patron' });
     const action = { paymentMethod: values.method };
+    const owners = _.get(this.props.resources, ['owners', 'records'], []);
     if (payment < type.remaining) {
       paymentStatus = `${paymentStatus} ${_.capitalize(formatMessage({ id: 'ui-users.accounts.status.partially' }))}`;
     } else {
@@ -288,8 +293,10 @@ class Actions extends React.Component {
     if (values.patronInfo && values.notify) {
       c = c + '\n' + tagPatron + ': ' + values.patronInfo;
     }
+    const createdAt = (owners.find(o => o.id === values.ownerId) || {}).owner;
+
     return this.editAccount(type, paymentStatus, type.status.name, balance)
-      .then(() => this.newAction(action, type.id, paymentStatus, payment, c, balance, values.transaction, type.feeFineOwner));
+      .then(() => this.newAction(action, type.id, paymentStatus, payment, c, balance, values.transaction, createdAt || type.feeFineOwner));
   }
 
   onClickWaive(values) {

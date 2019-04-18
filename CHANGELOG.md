@@ -6,6 +6,22 @@
 * Correct proxy-user query. Fixes UIU-952.
 * UX Consistency Fixes for New Fee/Fine (aka Charge Manual Fee/Fine). Ref. UIU-903.
 * Fix cannot delete Fee/Fine Owner message. Ref UIU-841.
+* Show explanation when renewal fails for any reason. Fixes UIU-971.
+* UX Consistency Fixes for Fees/Fines History (aka Open/Closed/All Fees/Fines). Ref UIU-904.
+* Fix Decimal places not appearing on Manual Charges table. Fix UIU-843.
+* Fix FF History issue when attempting second all fees/fines pay/waive from within ALL tab. Fix UIU-813.
+* Fix display in Check-Out when the patron has more than one block. Fix UIU-804
+* Fix comment snippet missing from Fee/Fine History. Fix UIU-955.
+* Fix comment count wrong on Fee/Fine History. Fix UIU-957.
+* UX Consistency Fixes for Patron Blocks on Renewals pop-up. Ref UIU-947
+* Fix Fee/Fines Details "Created at". Fix UIU-927.
+* Fix "All actions" permission to see Patron Block details. Fix UIU-866.
+* Fix Patron block pop-up for Renewals. Fix UIU-959.
+* UX Consistency Fixes for Patron Blocks: User Information changes. Ref UIU-902.
+* Fix FF Details/History. Fixes UIU-968, UIU-961.
+* Fix Pay and Waive FF fixes. Fix UIU-958.
+* Use strict matching for user-ids when retrieving blocks. Fixes UIU-956.
+* Send singular label in `labelSingular` prop. Fixes UIU-806.
 
 ## [2.21.0](https://github.com/folio-org/ui-users/tree/v2.21.0) (2019-03-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.20.0...v2.21.0)

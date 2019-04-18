@@ -61,7 +61,7 @@ class PatronGroupsSettings extends React.Component {
         baseUrl="groups"
         records="usergroups"
         label={intl.formatMessage({ id: 'ui-users.information.patronGroups' })}
-        labelSingular={intl.formatMessage({ id: 'ui-users.information.patronGroups' })}
+        labelSingular={intl.formatMessage({ id: 'ui-users.information.patronGroup' })}
         objectLabel={<FormattedMessage id="ui-users.information.patronGroup.users" />}
         visibleFields={['group', 'desc']}
         columnMapping={{

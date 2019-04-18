@@ -10,7 +10,6 @@ import Users from './Users';
 import Settings from './settings';
 import { CommandList } from './components/Commander';
 import commands from './commands';
-import UsersContextMenu from './UsersContextMenu';
 import PermissionSets from './settings/permissions/PermissionSets';
 import PatronGroupsSettings from './settings/PatronGroupsSettings';
 import AddressTypesSettings from './settings/AddressTypesSettings';
@@ -159,7 +158,6 @@ class UsersRouting extends React.Component {
 
     return (
       <CommandList commands={commands}>
-        <UsersContextMenu />
         <Switch>
           <Route path={path} component={Users} />
           <Route render={this.noMatch} />
