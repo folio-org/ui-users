@@ -147,7 +147,7 @@ class UserAccounts extends React.Component {
                   id={item.id}
                   to={`${this.props.location.pathname}?${queryString.stringify({ ...query, layer: item.layer })}`}
                 >
-                  <FormattedMessage id={item.formattedMessageId} values={{ count: item.count }} />
+                  <FormattedMessage id={item.formattedMessageId} values={{ count: item.count }} /> {' '}
                 </Link>
                 {item.id === 'clickable-viewcurrentaccounts' && <FormattedMessage id="ui-users.accounts.totalOpenAccounts" values={{ amount: total }} />}
               </li>)}
@@ -167,7 +167,7 @@ class UserAccounts extends React.Component {
               {
                 id: 'clickable-viewallaccounts',
                 count: 0,
-                formattedMessageId: 'ui-users.accounts.viewAllAccounts',
+                formattedMessageId: 'ui-users.accounts.viewAllFeesFines',
                 layer: 'all-accounts',
               },
             ]}
