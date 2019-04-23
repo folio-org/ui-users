@@ -513,7 +513,7 @@
   "accounts.totalOpenAccounts": "(Total: {amount})",
   "accounts.numClosedAccounts": "{count, number} {count, plural, one {closed fee/fine} other {closed fees/fines}}",
   "accounts.chargeManual": "Create fee/fine",
-  "accounts.viewAllAccounts": "View all accounts",
+  "accounts.viewAllFeesFines": "View all fees/fines",
 
   "contextMenu.homePage": "Home page",
   "contextMenu.settings": "Settings",
