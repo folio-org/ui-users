@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Callout } from '@folio/stripes/components';
 import { injectIntl, FormattedMessage } from 'react-intl';
+import { stripesConnect } from '@folio/stripes/core';
 
 import CommentRequiredForm from './CommentRequiredForm';
 
@@ -82,4 +83,4 @@ class CommentRequiredSettings extends React.Component {
     );
   }
 }
-export default injectIntl(CommentRequiredSettings);
+export default injectIntl(stripesConnect(CommentRequiredSettings));

@@ -8,7 +8,7 @@ import {
 } from 'react-intl';
 
 import { makeQueryFunction, SearchAndSort } from '@folio/stripes/smart-components';
-import { AppIcon } from '@folio/stripes/core';
+import { AppIcon, stripesConnect, withStripes } from '@folio/stripes/core';
 
 import uuid from 'uuid';
 import ViewUser from './ViewUser';
@@ -285,4 +285,4 @@ class Users extends React.Component {
   }
 }
 
-export default injectIntl(Users);
+export default injectIntl(withStripes(stripesConnect(Users)));
