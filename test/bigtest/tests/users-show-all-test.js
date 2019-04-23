@@ -5,16 +5,19 @@ import { expect } from 'chai';
 import setupApplication from '../helpers/setup-application';
 import UsersInteractor from '../interactors/users';
 
+const usersAmount = 8;
+
 describe('Users', () => {
   setupApplication();
 
   const users = new UsersInteractor();
 
   beforeEach(async function () {
-    this.server.createList('user', 3);
+    this.server.createList('user', usersAmount);
     this.visit('/users?sort=Name');
 
-    await users.clickInactiveUsersCheckbox();
+    await users.activeUserCheckbox.clickActive();
+    await users.activeUserCheckbox.clickInactive();
   });
 
   it('shows the list of user items', () => {
@@ -22,7 +25,7 @@ describe('Users', () => {
   });
 
   it('renders each user instance', () => {
-    expect(users.instances().length).to.be.equal(3);
+    expect(users.instances().length).to.be.equal(usersAmount);
   });
 
   describe('clicking on the first user item', function () {
