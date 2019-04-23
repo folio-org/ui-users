@@ -20,6 +20,7 @@ import {
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import { Field } from 'redux-form';
 import { EditableList } from '@folio/stripes/smart-components';
+import { stripesConnect } from '@folio/stripes/core';
 import { validate } from '../util';
 
 import {
@@ -413,4 +414,4 @@ class FeefineSettings extends React.Component {
   }
 }
 
-export default injectIntl(FeefineSettings);
+export default injectIntl(stripesConnect(FeefineSettings));

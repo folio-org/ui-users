@@ -6,6 +6,7 @@ import {
   intlShape,
 } from 'react-intl';
 import { ControlledVocab } from '@folio/stripes/smart-components';
+import { withStripes } from '@folio/stripes/core';
 
 class AddressTypesSettings extends React.Component {
   static propTypes = {
@@ -47,4 +48,4 @@ class AddressTypesSettings extends React.Component {
   }
 }
 
-export default injectIntl(AddressTypesSettings);
+export default injectIntl(withStripes(AddressTypesSettings));

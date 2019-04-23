@@ -275,6 +275,7 @@
   "data.loanActionMap.recallRequested": "Recall requested",
   "data.loanActionMap.dueDateChanged": "Due date changed",
   "data.loanActionMap.renewedThroughOverride": "Renewed through override",
+  "data.loanActionMap.checkedOutThroughOverride": "Checked out through override",
 
   "action": "Action",
   "dueDate": "Due date",
