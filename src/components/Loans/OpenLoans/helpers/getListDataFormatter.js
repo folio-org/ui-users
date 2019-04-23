@@ -138,13 +138,15 @@ export default function getListDataFormatter(
         }
         const disableFeeFineDetails = (feeFineCount(loan) === 0);
         return (
-          <ActionsDropdown
-            stripes={stripes}
-            loan={loan}
-            requestQueue={requestQueue}
-            disableFeeFineDetails={disableFeeFineDetails}
-            handleOptionsChange={handleOptionsChange}
-          />
+          <div data-test-actions-dropdown>
+            <ActionsDropdown
+              stripes={stripes}
+              loan={loan}
+              requestQueue={requestQueue}
+              disableFeeFineDetails={disableFeeFineDetails}
+              handleOptionsChange={handleOptionsChange}
+            />
+          </div>
         );
       },
     }

@@ -66,7 +66,7 @@ class Modals extends React.Component {
           open={patronBlockedModal}
           patronBlocks={patronBlocks}
           onClose={onClosePatronBlockedModal}
-          viewUserPath={`/users/view/${(user || {}).id}?filters=pg.${patronGroup.group}&sort=Name`}
+          viewUserPath={`/users/view/${(user || {}).id}?filters=pg.${patronGroup.group}&sort=name`}
         />
       </React.Fragment>
     );
