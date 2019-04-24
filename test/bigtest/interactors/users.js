@@ -5,9 +5,14 @@ import {
   clickable
 } from '@bigtest/interactor';
 
+@interactor class ActiveUserCheckbox {
+  clickActive = clickable('#clickable-filter-active-active');
+  clickInactive= clickable('#clickable-filter-active-inactive');
+}
+
 export default @interactor class UsersInteractor {
   static defaultScope = '[data-test-user-instances]';
-  clickInactiveUsersCheckbox = clickable('#clickable-filter-active-include-inactive-users');
+  activeUserCheckbox = new ActiveUserCheckbox();
   clickFacultyCheckbox = clickable('#clickable-filter-pg-faculty');
   clickGraduateCheckbox = clickable('#clickable-filter-pg-graduate');
   clickStaffCheckbox = clickable('#clickable-filter-pg-staff');

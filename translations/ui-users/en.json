@@ -275,6 +275,7 @@
   "data.loanActionMap.recallRequested": "Recall requested",
   "data.loanActionMap.dueDateChanged": "Due date changed",
   "data.loanActionMap.renewedThroughOverride": "Renewed through override",
+  "data.loanActionMap.checkedOutThroughOverride": "Checked out through override",
 
   "action": "Action",
   "dueDate": "Due date",
@@ -513,7 +514,7 @@
   "accounts.totalOpenAccounts": "(Total: {amount})",
   "accounts.numClosedAccounts": "{count, number} {count, plural, one {closed fee/fine} other {closed fees/fines}}",
   "accounts.chargeManual": "Create fee/fine",
-  "accounts.viewAllAccounts": "View all accounts",
+  "accounts.viewAllFeesFines": "View all fees/fines",
 
   "contextMenu.homePage": "Home page",
   "contextMenu.settings": "Settings",
@@ -803,7 +804,7 @@
 
   "blocks.form.button.delete":"Delete",
   "blocks.form.button.save":"Save & Close",
-  "blocks.form.button.create":"Create block",
+  "blocks.form.button.create":"Save & close",
   "blocks.form.button.close": "Close patron block dialog",
 
   "blocks.layer.heading":"Delete patron block?",

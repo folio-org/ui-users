@@ -22,6 +22,10 @@
 * Fix Pay and Waive FF fixes. Fix UIU-958.
 * Use strict matching for user-ids when retrieving blocks. Fixes UIU-956.
 * Send singular label in `labelSingular` prop. Fixes UIU-806.
+* Correctly set `sort` field. Refs UIU-869.
+* UX Consistency Fixes for Patron Blocks. Ref uiu-933.
+* Fix incorrect payment status. Fix UIU-931.
+* Fix spacing issue on User Information Fee/Fine section display. Fix UIU-946.
 
 ## [2.21.0](https://github.com/folio-org/ui-users/tree/v2.21.0) (2019-03-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.20.0...v2.21.0)

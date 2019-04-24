@@ -8,7 +8,7 @@ import {
 } from 'react-intl';
 
 import { makeQueryFunction, SearchAndSort } from '@folio/stripes/smart-components';
-import { AppIcon } from '@folio/stripes/core';
+import { AppIcon, stripesConnect, withStripes } from '@folio/stripes/core';
 
 import uuid from 'uuid';
 import ViewUser from './ViewUser';
@@ -27,8 +27,8 @@ const filterConfig = [
     name: 'active',
     cql: 'active',
     values: [
-      { name: 'Include inactive users', cql: 'false' },
-      { name: 'Show active users', cql: 'true', hidden: true },
+      { name: 'inactive', cql: 'false' },
+      { name: 'active', cql: 'true' },
     ],
   },
   {
@@ -271,7 +271,7 @@ class Users extends React.Component {
             parentMutator={this.props.mutator}
             showSingleResult={showSingleResult}
             columnMapping={{
-              active: intl.formatMessage({ id: 'ui-users.active' }),
+              active: intl.formatMessage({ id: 'ui-users.status' }),
               name: intl.formatMessage({ id: 'ui-users.information.name' }),
               barcode: intl.formatMessage({ id: 'ui-users.information.barcode' }),
               patronGroup: intl.formatMessage({ id: 'ui-users.information.patronGroup' }),
@@ -285,4 +285,4 @@ class Users extends React.Component {
   }
 }
 
-export default injectIntl(Users);
+export default injectIntl(withStripes(stripesConnect(Users)));

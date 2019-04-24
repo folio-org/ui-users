@@ -938,143 +938,150 @@ class ViewUser extends React.Component {
         onClose={onClose}
         actionMenu={this.getActionMenu}
       >
-        <TitleManager record={getFullName(user)} />
-        <Headline
-          size="xx-large"
-          tag="h2"
+        <HasCommand
+          commands={this.keyboardCommands}
+          display={['new', 'edit', 'search']}
+          isWithinScope={this.checkScope}
+          scope={document.body}
         >
-          {getFullName(user)}
-        </Headline>
-        <Row>
-          <Col xs={10}>
-            {(hasPatronBlocks === 1 && totalPatronBlocks > 0)
-              ? <PatronBlockMessage />
-              : ''}
-          </Col>
-          <Col xs={2}>
-            <ExpandAllButton
-              accordionStatus={this.state.sections}
-              onToggle={this.handleExpandAll}
-            />
-          </Col>
-        </Row>
-        <AccordionSet>
-          <this.connectedUserInfo
-            accordionId="userInformationSection"
-            user={user}
-            patronGroup={patronGroup}
-            settings={settings}
-            stripes={stripes}
-            expanded={this.state.sections.userInformationSection}
-            onToggle={this.handleSectionToggle}
-          />
-          <IfPermission perm="manualblocks.collection.get">
-            <this.connectedPatronBlock
-              accordionId="patronBlocksSection"
+          <TitleManager record={getFullName(user)} />
+          <Headline
+            size="xx-large"
+            tag="h2"
+          >
+            {getFullName(user)}
+          </Headline>
+          <Row>
+            <Col xs={10}>
+              {(hasPatronBlocks === 1 && totalPatronBlocks > 0)
+                ? <PatronBlockMessage />
+                : ''}
+            </Col>
+            <Col xs={2}>
+              <ExpandAllButton
+                accordionStatus={this.state.sections}
+                onToggle={this.handleExpandAll}
+              />
+            </Col>
+          </Row>
+          <AccordionSet>
+            <this.connectedUserInfo
+              accordionId="userInformationSection"
               user={user}
-              hasPatronBlocks={(hasPatronBlocks === 1 && totalPatronBlocks > 0)}
-              patronBlocks={patronBlocks}
-              expanded={this.state.sections.patronBlocksSection}
+              patronGroup={patronGroup}
+              settings={settings}
+              stripes={stripes}
+              expanded={this.state.sections.userInformationSection}
               onToggle={this.handleSectionToggle}
-              onClickViewPatronBlock={this.onClickViewPatronBlock}
-              addRecord={this.state.addRecord}
-              {...this.props}
             />
-          </IfPermission>
-          <ExtendedInfo
-            accordionId="extendedInfoSection"
-            user={user}
-            expanded={this.state.sections.extendedInfoSection}
-            onToggle={this.handleSectionToggle}
-          />
-          <ContactInfo
-            accordionId="contactInfoSection"
-            stripes={stripes}
-            user={user}
-            addresses={addresses}
-            addressTypes={addressTypes}
-            expanded={this.state.sections.contactInfoSection}
-            onToggle={this.handleSectionToggle}
-          />
-          <IfPermission perm="proxiesfor.collection.get">
-            <ProxyPermissions
+            <IfPermission perm="manualblocks.collection.get">
+              <this.connectedPatronBlock
+                accordionId="patronBlocksSection"
+                user={user}
+                hasPatronBlocks={(hasPatronBlocks === 1 && totalPatronBlocks > 0)}
+                patronBlocks={patronBlocks}
+                expanded={this.state.sections.patronBlocksSection}
+                onToggle={this.handleSectionToggle}
+                onClickViewPatronBlock={this.onClickViewPatronBlock}
+                addRecord={this.state.addRecord}
+                {...this.props}
+              />
+            </IfPermission>
+            <ExtendedInfo
+              accordionId="extendedInfoSection"
               user={user}
-              accordionId="proxySection"
+              expanded={this.state.sections.extendedInfoSection}
               onToggle={this.handleSectionToggle}
-              proxies={proxies}
-              sponsors={sponsors}
-              expanded={this.state.sections.proxySection}
-              {...this.props}
             />
-          </IfPermission>
-
-          <IfPermission perm="accounts.collection.get">
-            <this.connectedUserAccounts
-              onClickViewChargeFeeFine={this.onClickViewChargeFeeFine}
-              expanded={this.state.sections.accountsSection}
+            <ContactInfo
+              accordionId="contactInfoSection"
+              stripes={stripes}
+              user={user}
+              addresses={addresses}
+              addressTypes={addressTypes}
+              expanded={this.state.sections.contactInfoSection}
               onToggle={this.handleSectionToggle}
-              accordionId="accountsSection"
-              addRecord={this.state.addRecord}
-              {...this.props}
             />
-          </IfPermission>
+            <IfPermission perm="proxiesfor.collection.get">
+              <ProxyPermissions
+                user={user}
+                accordionId="proxySection"
+                onToggle={this.handleSectionToggle}
+                proxies={proxies}
+                sponsors={sponsors}
+                expanded={this.state.sections.proxySection}
+                {...this.props}
+              />
+            </IfPermission>
 
-          <IfPermission perm="ui-users.loans.all">
-            <IfInterface name="loan-policy-storage">
-              { /* Check without version, so can support either of multiple versions.
+            <IfPermission perm="accounts.collection.get">
+              <this.connectedUserAccounts
+                onClickViewChargeFeeFine={this.onClickViewChargeFeeFine}
+                expanded={this.state.sections.accountsSection}
+                onToggle={this.handleSectionToggle}
+                accordionId="accountsSection"
+                addRecord={this.state.addRecord}
+                {...this.props}
+              />
+            </IfPermission>
+
+            <IfPermission perm="ui-users.loans.all">
+              <IfInterface name="loan-policy-storage">
+                { /* Check without version, so can support either of multiple versions.
           Replace with specific check when facility for providing
           multiple versions is available */ }
-              <IfInterface name="circulation">
-                <this.connectedUserLoans
-                  onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
-                  onClickViewOpenLoans={this.onClickViewOpenLoans}
-                  onClickViewClosedLoans={this.onClickViewClosedLoans}
-                  expanded={this.state.sections.loansSection}
+                <IfInterface name="circulation">
+                  <this.connectedUserLoans
+                    onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
+                    onClickViewOpenLoans={this.onClickViewOpenLoans}
+                    onClickViewClosedLoans={this.onClickViewClosedLoans}
+                    expanded={this.state.sections.loansSection}
+                    onToggle={this.handleSectionToggle}
+                    accordionId="loansSection"
+                    {...this.props}
+                  />
+                </IfInterface>
+              </IfInterface>
+            </IfPermission>
+
+            <IfPermission perm="ui-users.requests.all">
+              <IfInterface name="request-storage" version="2.5 3.0">
+                <this.connectedUserRequests
+                  expanded={this.state.sections.requestsSection}
                   onToggle={this.handleSectionToggle}
-                  accordionId="loansSection"
+                  accordionId="requestsSection"
+                  user={user}
                   {...this.props}
                 />
               </IfInterface>
-            </IfInterface>
-          </IfPermission>
+            </IfPermission>
 
-          <IfPermission perm="ui-users.requests.all">
-            <IfInterface name="request-storage" version="2.5 3.0">
-              <this.connectedUserRequests
-                expanded={this.state.sections.requestsSection}
-                onToggle={this.handleSectionToggle}
-                accordionId="requestsSection"
-                user={user}
-                {...this.props}
-              />
-            </IfInterface>
-          </IfPermission>
+            <IfPermission perm="perms.users.get">
+              <IfInterface name="permissions" version="5.0">
+                <UserPermissions
+                  expanded={this.state.sections.permissionsSection}
+                  onToggle={this.handleSectionToggle}
+                  userPermissions={permissions}
+                  accordionId="permissionsSection"
+                  {...this.props}
+                />
+              </IfInterface>
+            </IfPermission>
 
-          <IfPermission perm="perms.users.get">
-            <IfInterface name="permissions" version="5.0">
-              <UserPermissions
-                expanded={this.state.sections.permissionsSection}
-                onToggle={this.handleSectionToggle}
-                userPermissions={permissions}
-                accordionId="permissionsSection"
-                {...this.props}
-              />
-            </IfInterface>
-          </IfPermission>
-
-          <IfPermission perm="inventory-storage.service-points.collection.get,inventory-storage.service-points-users.collection.get">
-            <IfInterface name="service-points-users" version="1.0">
-              <UserServicePoints
-                expanded={this.state.sections.servicePointsSection}
-                onToggle={this.handleSectionToggle}
-                accordionId="servicePointsSection"
-                servicePoints={servicePoints}
-                preferredServicePoint={preferredServicePoint}
-                {...this.props}
-              />
-            </IfInterface>
-          </IfPermission>
-        </AccordionSet>
+            <IfPermission perm="inventory-storage.service-points.collection.get,inventory-storage.service-points-users.collection.get">
+              <IfInterface name="service-points-users" version="1.0">
+                <UserServicePoints
+                  expanded={this.state.sections.servicePointsSection}
+                  onToggle={this.handleSectionToggle}
+                  accordionId="servicePointsSection"
+                  servicePoints={servicePoints}
+                  preferredServicePoint={preferredServicePoint}
+                  {...this.props}
+                />
+              </IfInterface>
+            </IfPermission>
+          </AccordionSet>
+        </HasCommand>
       </Pane>
     );
   }
@@ -1086,16 +1093,7 @@ class ViewUser extends React.Component {
       return this.renderSpinner();
     }
 
-    return (
-      <HasCommand
-        commands={this.keyboardCommands}
-        display={['new', 'edit', 'search']}
-        isWithinScope={this.checkScope}
-        scope={document.body}
-      >
-        {this.renderLayer(user) || this.renderUser(user)}
-      </HasCommand>
-    );
+    return this.renderLayer(user) || this.renderUser(user);
   }
 }
 
