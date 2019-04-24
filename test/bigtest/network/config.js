@@ -103,14 +103,41 @@ export default function config() {
     }],
     'totalRecords': 6
   });
-  this.get('/users');
+
+  this.get('/users', ({ users }, request) => {
+    if (request.queryParams.query) {
+      const cqlParser = new CQLParser();
+      const query = request.queryParams.query.split('sortby')[0];
+      const filterField = 'active';
+
+      cqlParser.parse(query);
+
+      const {
+        tree: {
+          term,
+          field,
+        }
+      } = cqlParser;
+
+      if (field === filterField) {
+        return users.where({
+          [filterField]: term === 'true'
+        });
+      }
+    }
+
+    return users.all();
+  });
+
   this.get('/users/:id', (schema, request) => {
     return schema.users.find(request.params.id).attrs;
   });
+
   this.get('/proxiesfor', {
     proxiesFor: [],
     totalRecords: 0,
   });
+
   this.get('/service-points-users', ({ servicePointsUsers }, request) => {
     const url = new URL(request.url);
     const cqlQuery = url.searchParams.get('query');
