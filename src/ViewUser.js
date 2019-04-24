@@ -453,20 +453,6 @@ class ViewUser extends React.Component {
     return selUser.find(u => u.id === id);
   }
 
-  getUserFormData(user, addresses, sponsors, proxies, permissions, servicePoints, preferredServicePoint) {
-    const userFormData = user ? cloneDeep(user) : user;
-    userFormData.personal.addresses = addresses;
-    Object.assign(userFormData, {
-      sponsors,
-      proxies,
-      permissions,
-      servicePoints,
-      preferredServicePoint,
-    });
-
-    return userFormData;
-  }
-
   // This is a helper function for the "last updated" date element. Since the
   // date/time is actually set on the server when the record is updated, the
   // lastUpdated element of the record on the client side might contain a stale
