@@ -683,7 +683,7 @@
     "blocks.form.validate.future": "Data de vencimento deve ser no futuro",
     "blocks.form.button.delete": "Excluir",
     "blocks.form.button.save": "Salvar e fechar",
-    "blocks.form.button.create": "Criar suspensão",
+    "blocks.form.button.create": "Salvar e fechar",
     "blocks.layer.heading": "Excluir suspensão do usuário?",
     "blocks.layer.confirmLabel": "Excluir",
     "errors.proxies.invalidUserLabel": "Autorizado inválido",
@@ -809,5 +809,7 @@
     "contextMenu.settings": "Configurações",
     "contextMenu.usageTips": "Dicas de uso",
     "owners.cannotDeleteOwner": "Este proprietário não pode ser excluído, pois tem uma ou mais taxas/multas associadas a ele",
-    "charge.Pay": "Cobrar e pagar agora"
+    "charge.Pay": "Cobrar e pagar agora",
+    "data.loanActionMap.checkedOutThroughOverride": "Emprestado por meio de substituição",
+    "accounts.viewAllFeesFines": "Ver todas as taxas/multas"
 }
