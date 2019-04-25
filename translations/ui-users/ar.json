@@ -809,5 +809,7 @@
     "contextMenu.settings": "الإعدادات",
     "contextMenu.usageTips": "نصائح الاستخدام",
     "owners.cannotDeleteOwner": "لا يمكن حذف مالك هذا الرسم/الغرامة، حيث أن لديه أكثر من رسم/غرامة مرتبطة به.",
-    "charge.Pay": "فرض المبلغ والدفع الآن"
+    "charge.Pay": "فرض المبلغ والدفع الآن",
+    "data.loanActionMap.checkedOutThroughOverride": "تمت الإعارة عبر التخطي",
+    "accounts.viewAllFeesFines": "عرض كل الرسوم/الغرامات"
 }

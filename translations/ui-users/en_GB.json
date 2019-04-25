@@ -683,7 +683,7 @@
     "blocks.form.validate.future": "Expiration date must be in the future",
     "blocks.form.button.delete": "Delete",
     "blocks.form.button.save": "Save & Close",
-    "blocks.form.button.create": "Create block",
+    "blocks.form.button.create": "Save & close",
     "blocks.layer.heading": "Delete patron block?",
     "blocks.layer.confirmLabel": "Delete",
     "errors.proxies.invalidUserLabel": "Invalid Proxy",
@@ -809,5 +809,7 @@
     "contextMenu.settings": "Settings",
     "contextMenu.usageTips": "Usage tips",
     "owners.cannotDeleteOwner": "This Fee/fine Owner cannot be deleted, as it has one or more fees/fines associated with it",
-    "charge.Pay": "Charge & pay now"
+    "charge.Pay": "Charge & pay now",
+    "data.loanActionMap.checkedOutThroughOverride": "Checked out through override",
+    "accounts.viewAllFeesFines": "View all fees/fines"
 }
