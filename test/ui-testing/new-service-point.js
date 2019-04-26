@@ -114,8 +114,8 @@ module.exports.test = function foo(uiTestCtx) {
           .wait('#servicePointPreference')
           .select('#servicePointPreference', spId)
           .wait(wait)
-          .wait('#clickable-updateuser')
-          .click('#clickable-updateuser')
+          .wait('#clickable-save')
+          .click('#clickable-save')
           .wait(wait)
           .then(done)
           .catch(done);
@@ -138,8 +138,8 @@ module.exports.test = function foo(uiTestCtx) {
           .wait('#servicePointPreference')
           .select('#servicePointPreference', prevSpId)
           .wait(wait)
-          .wait('#clickable-updateuser')
-          .click('#clickable-updateuser')
+          .wait('#clickable-save')
+          .click('#clickable-save')
           .wait(wait)
           .then(done)
           .catch(done);

@@ -446,7 +446,6 @@
 
   "crud.closeNewUserDialog": "Close New User Dialog",
   "crud.editUser": "Edit User",
-  "crud.updateUser": "Update User",
   "crud.createUser": "Create User",
 
   "errors.missingRequiredField": "Please fill this in to continue",
@@ -486,6 +485,7 @@
   "by": "by",
   "delete": "Delete",
   "saveAndClose": "Save & close",
+  "save": "Save",
   "edit": "Edit",
   "okay": "OK",
   "cancel": "Cancel",
@@ -519,7 +519,7 @@
   "contextMenu.homePage": "Home page",
   "contextMenu.settings": "Settings",
   "contextMenu.usageTips": "Usage tips",
-  
+
   "feefines.title": "Fee/fine: Manual charges",
   "feefines.singular": "Fee/Fine Type",
   "feefines.callout": "The Fee/Fine Type <strong>{feefine}</strong> was successfully <strong>deleted</strong>.",
