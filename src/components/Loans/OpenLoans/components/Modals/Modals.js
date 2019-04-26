@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { ChangeDueDateDialog } from '@folio/stripes/smart-components';
 import { stripesShape } from '@folio/stripes/core';
 
-// eslint-disable-next-line import/no-extraneous-dependencies
+// eslint-disable-next-line
 import PatronBlockModal from '@folio/users/src/components/PatronBlock/PatronBlockModal';
 
 class Modals extends React.Component {
