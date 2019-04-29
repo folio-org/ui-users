@@ -683,7 +683,7 @@
     "blocks.form.validate.future": "Expiration date must be in the future",
     "blocks.form.button.delete": "Delete",
     "blocks.form.button.save": "Save & Close",
-    "blocks.form.button.create": "Save & close",
+    "blocks.form.button.create": "Guardar y cerrar",
     "blocks.layer.heading": "Delete patron block?",
     "blocks.layer.confirmLabel": "Delete",
     "errors.proxies.invalidUserLabel": "Invalid Proxy",
