@@ -125,8 +125,8 @@ module.exports.test = function meh(uitestctx) {
           .insert('#adduser_enrollmentdate', '01/01/2017')
           .wait('#adduser_expirationdate')
           .insert('#adduser_expirationdate', '01/01/2022')
-          .wait('#clickable-createnewuser')
-          .click('#clickable-createnewuser')
+          .wait('#clickable-save')
+          .click('#clickable-save')
           .wait('#userInformationSection')
           .wait((uid) => {
             const us = document.querySelector('#extendedInfoSection');
@@ -179,7 +179,7 @@ module.exports.test = function meh(uitestctx) {
               .insert('#adduser_username', `${user.id}x`)
               .select('#adduser_group', pgroup)
               .wait(555)
-              .click('#clickable-updateuser')
+              .click('#clickable-save')
               .wait(555)
               .wait((uid) => {
                 let rvalue = false;

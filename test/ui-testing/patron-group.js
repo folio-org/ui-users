@@ -124,10 +124,10 @@ module.exports.test = function foo(uiTestCtx) {
           .type('#adduser_externalsystemid', false)
           .type('#adduser_externalsystemid', 'testId')
           .type('#adduser_preferredcontact', 'e')
-          .wait('#clickable-updateuser')
-          .click('#clickable-updateuser')
+          .wait('#clickable-save')
+          .click('#clickable-save')
           .wait(() => {
-            return !(document.getElementById('clickable-updateuser'));
+            return !(document.getElementById('clickable-save'));
           })
           .then(done)
           .catch(done);
@@ -163,10 +163,10 @@ module.exports.test = function foo(uiTestCtx) {
           .wait('#adduser_externalsystemid')
           .type('#adduser_externalsystemid', false)
           .type('#adduser_externalsystemid', 'testId')
-          .wait('#clickable-updateuser')
-          .click('#clickable-updateuser')
+          .wait('#clickable-save')
+          .click('#clickable-save')
           .wait(() => {
-            return !(document.getElementById('clickable-updateuser'));
+            return !(document.getElementById('clickable-save'));
           })
           .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
           .then(() => { done(); })
