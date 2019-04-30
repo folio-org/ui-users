@@ -17,14 +17,13 @@ const Setting = ({
   label,
   intl,
 }) => (
-  <div>
+  <div id={name}>
     <Row>
       <Col xs>{label}</Col>
     </Row>
     <Row>
       <Col sm={1}>
         <Field
-          id={name}
           name={name}
           component={Select}
           dataOptions={[
@@ -65,7 +64,7 @@ class CommentRequiredForm extends React.Component {
 
     return (
       <form
-        id="require-comment"
+        id="form-require-comment"
         onSubmit={handleSubmit}
       >
         <Pane
