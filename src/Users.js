@@ -18,6 +18,8 @@ import { getFullName } from './util';
 import packageInfo from '../package';
 import { HasCommand } from './components/Commander';
 
+import usersStyles from './Users.css';
+
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
 
@@ -231,8 +233,16 @@ class Users extends React.Component {
 
     const resultsFormatter = {
       active: user => (
-        <AppIcon app="users" size="small">
-          {user.active ? <FormattedMessage id="ui-users.active" /> : <FormattedMessage id="ui-users.inactive" />}
+        <AppIcon
+          app="users"
+          size="small"
+          className={user.active || usersStyles.inactiveAppIcon}
+        >
+          {
+            user.active
+              ? <FormattedMessage id="ui-users.active" />
+              : <FormattedMessage id="ui-users.inactive" />
+          }
         </AppIcon>
       ),
       name: user => getFullName(user),
