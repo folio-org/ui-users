@@ -240,7 +240,7 @@ class Users extends React.Component {
       id="export-overdue-loan-report"
       onClick={() => {
         onToggle();
-        this.overdueLoanReport.toCSV(get(this.props, 'resources.loans.records', []));
+        this.overdueLoanReport.toCSV(get(this.props.resources, 'loans.records', []));
       }}
     >
       <FormattedMessage id="stripes-components.exportToCsv" />
