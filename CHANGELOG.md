@@ -28,6 +28,7 @@
 * Fix spacing issue on User Information Fee/Fine section display. Fix UIU-946.
 * Add test to comments settings section.
 * Add user status indication.
+* Add overdue loans report. Part of UIU-983.
 
 ## [2.21.0](https://github.com/folio-org/ui-users/tree/v2.21.0) (2019-03-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.20.0...v2.21.0)

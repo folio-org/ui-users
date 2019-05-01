@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { get } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -6,7 +6,7 @@ import {
   injectIntl,
   intlShape,
 } from 'react-intl';
-
+import { Button } from '@folio/stripes/components';
 import { makeQueryFunction, SearchAndSort } from '@folio/stripes/smart-components';
 import { AppIcon, stripesConnect, withStripes } from '@folio/stripes/core';
 
@@ -17,6 +17,7 @@ import { toUserAddresses } from './converters/address';
 import { getFullName } from './util';
 import packageInfo from '../package';
 import { HasCommand } from './components/Commander';
+import OverdueLoanReport from './reports';
 
 import usersStyles from './Users.css';
 
@@ -105,6 +106,11 @@ class Users extends React.Component {
       path: 'users',
       fetch: false,
     },
+    loans: {
+      type: 'okapi',
+      records: 'loans',
+      path: 'circulation/loans?query=(status="Open")',
+    }
   });
 
   static propTypes = {
@@ -113,6 +119,9 @@ class Users extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }),
       addressTypes: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      loans: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }).isRequired,
@@ -157,6 +166,12 @@ class Users extends React.Component {
         handler: this.goToSearch
       }
     ];
+
+    const { formatMessage } = props.intl;
+
+    this.overdueLoanReport = new OverdueLoanReport({
+      formatMessage
+    });
   }
 
   componentDidUpdate() {
@@ -219,6 +234,19 @@ class Users extends React.Component {
     }
   }
 
+  getActionMenu = ({ onToggle }) => (
+    <Button
+      buttonStyle="dropdownItem"
+      id="export-overdue-loan-report"
+      onClick={() => {
+        onToggle();
+        this.overdueLoanReport.toCSV(get(this.props.resources, 'loans.records', []));
+      }}
+    >
+      <FormattedMessage id="stripes-components.exportToCsv" />
+    </Button>
+  );
+
   render() {
     const {
       onSelectRow,
@@ -252,7 +280,7 @@ class Users extends React.Component {
         return pg ? pg.group : '?';
       },
       username: user => user.username,
-      email: user => _.get(user, ['personal', 'email']),
+      email: user => get(user, 'personal.email'),
     };
 
     return (
@@ -260,6 +288,7 @@ class Users extends React.Component {
         <HasCommand commands={this.keyboardCommands}>
           <SearchAndSort
             packageInfo={this.props.packageInfo || packageInfo}
+            actionMenu={this.getActionMenu}
             objectName="user"
             filterConfig={filterConfig}
             initialResultCount={INITIAL_RESULT_COUNT}
