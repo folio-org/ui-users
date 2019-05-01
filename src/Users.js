@@ -243,7 +243,7 @@ class Users extends React.Component {
         this.overdueLoanReport.toCSV(get(this.props.resources, 'loans.records', []));
       }}
     >
-      <FormattedMessage id="stripes-components.exportToCsv" />
+      <FormattedMessage id="ui-users.reports.overdue.label" />
     </Button>
   );
 

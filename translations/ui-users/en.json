@@ -854,6 +854,7 @@
   "transfers.singular": "Transfer account",
   "transfers.nodata": "There are no Fee/fine: Transfer accounts",
 
+  "reports.overdue.label": "Overdue loans report (CSV)",
   "reports.overdue.dueDate": "Due date",
   "reports.overdue.loanDate": "Loan date",
   "reports.overdue.loanPolicyId": "Loan policy ID",

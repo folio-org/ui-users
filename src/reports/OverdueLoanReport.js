@@ -43,7 +43,6 @@ class OverdueLoanReport {
   toCSV(records) {
     const onlyFields = this.columnsMap;
     const parsedRecords = this.parse(records);
-    console.log(parsedRecords);
     exportCsv(parsedRecords, { onlyFields });
   }
 }
