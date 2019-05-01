@@ -811,5 +811,20 @@
     "owners.cannotDeleteOwner": "This Fee/fine Owner cannot be deleted, as it has one or more fees/fines associated with it",
     "charge.Pay": "Charge & pay now",
     "data.loanActionMap.checkedOutThroughOverride": "Checked out through override",
-    "accounts.viewAllFeesFines": "View all fees/fines"
+    "accounts.viewAllFeesFines": "View all fees/fines",
+    "save": "Guardar",
+    "reports.overdue.dueDate": "Due date",
+    "reports.overdue.loanDate": "Loan date",
+    "reports.overdue.loanPolicyId": "Loan policy ID",
+    "reports.overdue.item.title": "Item title",
+    "reports.overdue.item.materialType.name": "Material type",
+    "reports.overdue.item.status.name": "Item status",
+    "reports.overdue.item.barcode": "Barcode",
+    "reports.overdue.item.callNumber": "Call number",
+    "reports.overdue.item.contributors": "Contributors",
+    "reports.overdue.item.location.name": "Location",
+    "reports.overdue.item.instanceId": "Instance ID",
+    "reports.overdue.item.holdingsRecordId": "Holdings ID",
+    "reports.overdue.itemId": "Item ID",
+    "reports.overdue.label": "Overdue loans report (CSV)"
 }
