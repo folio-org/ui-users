@@ -811,5 +811,20 @@
     "owners.cannotDeleteOwner": "Este propietario de multa/sanción no se puede eliminar, ya que tiene una o más multas/sanciones asociadas",
     "charge.Pay": "Carga y paga ahora",
     "data.loanActionMap.checkedOutThroughOverride": "Prestado anulando la norma de préstamo",
-    "accounts.viewAllFeesFines": "Ver todas las multas/sanciones"
+    "accounts.viewAllFeesFines": "Ver todas las multas/sanciones",
+    "save": "Save",
+    "reports.overdue.dueDate": "Due date",
+    "reports.overdue.loanDate": "Loan date",
+    "reports.overdue.loanPolicyId": "Loan policy ID",
+    "reports.overdue.item.title": "Item title",
+    "reports.overdue.item.materialType.name": "Material type",
+    "reports.overdue.item.status.name": "Item status",
+    "reports.overdue.item.barcode": "Barcode",
+    "reports.overdue.item.callNumber": "Call number",
+    "reports.overdue.item.contributors": "Contributors",
+    "reports.overdue.item.location.name": "Location",
+    "reports.overdue.item.instanceId": "Instance ID",
+    "reports.overdue.item.holdingsRecordId": "Holdings ID",
+    "reports.overdue.itemId": "Item ID",
+    "reports.overdue.label": "Overdue loans report (CSV)"
 }
