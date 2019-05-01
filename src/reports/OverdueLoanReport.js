@@ -1,4 +1,4 @@
-import { cloneDeep, get } from 'lodash';
+import { get } from 'lodash';
 import { exportCsv } from '@folio/stripes/util';
 
 const columns = [
@@ -28,15 +28,22 @@ class OverdueLoanReport {
   }
 
   parse(records) {
-    return cloneDeep(records).map(r => {
-      r.item.contributors = get(r, 'item.contributors', []).map(c => c.name);
-      return r;
-    });
+    return records.map(r => ({
+      ...r,
+      item: {
+        ...r.item,
+        contributors: get(r, 'item.contributors', [])
+          .filter(c => c)
+          .map(c => c.name)
+          .join('; '),
+      },
+    }));
   }
 
   toCSV(records) {
     const onlyFields = this.columnsMap;
     const parsedRecords = this.parse(records);
+    console.log(parsedRecords);
     exportCsv(parsedRecords, { onlyFields });
   }
 }
