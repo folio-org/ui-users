@@ -17,6 +17,7 @@ describe('Test the number of rows', () => {
     await this.server.create('service-point', { name: 'None' });
     await this.visit('/settings/users/owners');
     await OwnerInteractor.whenLoaded();
+    await OwnerInteractor.whenVisibled();
   });
 
   it('renders proper amount of columns', () => {

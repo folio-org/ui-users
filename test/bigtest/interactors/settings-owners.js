@@ -29,7 +29,7 @@ const CellInteractor = interactor(class CellInteractor {
 });
 
 const RowInteractor = interactor(class RowInteractor {
-    cells = collection(`${rowSelector} > div`, CellInteractor);
+    cells = collection(cellSelector, CellInteractor);
     cellCount = count(cellSelector);
     click = clickable();
     fillOwnerName = new TextFieldInteractor(`div:nth-child(1) > ${textFieldSelector}`);
@@ -59,9 +59,13 @@ const RowInteractor = interactor(class RowInteractor {
     itemInUseModal = new ItemInUseModal('#hideItemInUseDialog');
     newOwnerButton = new ButtonInteractor(newOwnerSelector);
     isLoaded = isPresent(lastRow);
-    isView = isVisible(listContainerSelector);
+    isView = isVisible('#editList-settings-owners > div.mclScrollable---2PPjj > div > div');
     whenLoaded() {
       return this.when(() => this.isLoaded);
+    }
+
+    whenVisibled() {
+      return this.when(() => this.isView);
     }
 }
 
