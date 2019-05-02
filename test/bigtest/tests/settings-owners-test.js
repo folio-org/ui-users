@@ -20,7 +20,6 @@ describe('Test the number of rows', () => {
     await OwnerInteractor.whenLoaded();
   });
   it('first renders of proper amount of rows', () => {
-    console.log('Is visible', OwnerInteractor.list.rowCount);
     expect(OwnerInteractor.list.rowCount).to.equal(5);
   }).timeout(5000);
   it('renders proper amount of columns', () => {
