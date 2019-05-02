@@ -21,6 +21,7 @@ const textFieldSelector = '[class*=textField--]';
 const listContainerSelector = '#editList-settings-owners';
 const rowSelector = '[class*=editListRow--]';
 const cellSelector = '[class*=mclCell--]';
+const lastRow = '#editList-settings-owners > div.mclScrollable---2PPjj > div > div > div:nth-child(5)';
 
 const CellInteractor = interactor(class CellInteractor {
     content = text();
@@ -57,13 +58,11 @@ const RowInteractor = interactor(class RowInteractor {
     hideItemModal = isPresent('#hideItemInUseDialog');
     itemInUseModal = new ItemInUseModal('#hideItemInUseDialog');
     newOwnerButton = new ButtonInteractor(newOwnerSelector);
-    // isLoaded = isPresent(rowSelector);
-    isLoaded = isPresent(listContainerSelector);
+    isLoaded = isPresent(lastRow);
     isView = isVisible(listContainerSelector);
     whenLoaded() {
       return this.when(() => this.isLoaded);
     }
 }
-
 
 export default new OwnerInteractor();
