@@ -10,7 +10,7 @@ import OwnerInteractor from '../interactors/settings-owners';
 import MultiSelectionInteractor from '@folio/stripes-components/lib/MultiSelection/tests/interactor'; // eslint-disable-line
 
 describe('Test the number of rows', () => {
-  setupApplication({ scenarios: ['payments'] });
+  setupApplication({ scenarios: ['settings-feefine'] });
   const multiselection = new MultiSelectionInteractor('#owner-service-point');
 
   beforeEach(async function () {
