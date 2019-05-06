@@ -7,12 +7,16 @@ export default (server) => {
 
   server.create('owners', { owner: 'Shared', desc: 'Owner Shared' });
 
-  server.create('owners', { owner: 'Main Admin1', desc: 'Owner DGB' });
+  const owner1 = server.create('owners', { owner: 'Main Admin1', desc: 'Owner DGB' });
 
-  server.create('owners', { owner: 'Main Admin2', desc: 'Owner CCH' });
+  const otherOwner = server.create('owners', { owner: 'Main Admin2', desc: 'Owner CCH' });
 
   const ownerFeeFine = server.create('owners', { owner: 'Main Admin3', desc: 'Owner DGB' });
   server.createList('feefines', 4, { ownerId: ownerFeeFine.id });
+
+  server.createList('transfers', 2, { ownerId: owner1.id });
+
+  server.createList('transfers', 3, { ownerId: otherOwner.id });
 
   server.createList('service-point', 3);
 
@@ -77,4 +81,21 @@ export default (server) => {
 
     return model.attrs;
   });
+
+  server.get('/transfers', (schema) => {
+    return schema.transfers.all();
+  });
+
+  server.post('/transfers', (schema, request) => {
+    const body = JSON.parse(request.requestBody);
+    return schema.transfers.create(body);
+  });
+
+  server.put('/transfers/:id', ({ transfers }, request) => {
+    const matching = transfers.find(request.params.id);
+    const body = JSON.parse(request.requestBody);
+    return matching.update(body);
+  });
+
+  server.delete('/transfers/:id');
 };
