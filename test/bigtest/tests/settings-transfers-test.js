@@ -9,7 +9,7 @@ import {
 import TransferInteractor from '../interactors/settings-transfers';
 import setupApplication from '../helpers/setup-application';
 
-describe.only('Settings transfers', () => {
+describe('Settings transfers', () => {
   setupApplication({ scenarios: ['settings-feefine'] });
   beforeEach(async function () {
     this.visit('/settings/users/transfers');
