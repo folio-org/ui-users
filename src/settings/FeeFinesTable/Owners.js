@@ -8,11 +8,11 @@ import {
   Select,
 } from '@folio/stripes/components';
 
-const Owners = ({ dataOptions, onChange }) => {
+const Owners = ({ dataOptions, onChange, filterShared }) => {
   const options = [];
   const shared = dataOptions.find(d => d.owner === 'Shared') || {};
 
-  if (shared.id) {
+  if (shared.id && filterShared === false) {
     options.push(
       <option
         value={shared.id}
@@ -22,7 +22,6 @@ const Owners = ({ dataOptions, onChange }) => {
       </option>
     );
   }
-
   if (dataOptions) {
     dataOptions.forEach((option) => {
       if (option.id !== shared.id) {
@@ -50,6 +49,7 @@ const Owners = ({ dataOptions, onChange }) => {
       <Row>
         <Col xs={5}>
           <Select
+            id="select-owner"
             onChange={onChange}
           >
             {options}
@@ -63,6 +63,7 @@ const Owners = ({ dataOptions, onChange }) => {
 Owners.propTypes = {
   dataOptions: PropTypes.arrayOf(PropTypes.object).isRequired,
   onChange: PropTypes.func.isRequired,
+  filterShared: PropTypes.bool,
 };
 
 export default Owners;
