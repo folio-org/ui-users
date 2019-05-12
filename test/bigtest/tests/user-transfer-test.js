@@ -8,7 +8,7 @@ import {
 import TransferInteractor from '../interactors/user-transfer';
 import setupApplication from '../helpers/setup-application';
 
-describe.only('Test transfer', () => {
+describe('Test transfer', () => {
   setupApplication({ scenarios: ['transfers'] });
 
   beforeEach(async function () {
