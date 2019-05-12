@@ -745,6 +745,28 @@
   "accounts.waive.summary.totalAmount": "for a total amount of {waiveAmount}",
   "accounts.waive.summary": "{waiveType} {feesFinesAmount} {feeFineForm} for a total amount of {waiveAmount}",
 
+  "accounts.transfer.error.amount": "Transfer amount must be greater than zero",
+  "accounts.transfer.error.exceeds": "Transfer amount exceeds selected amount",
+
+  "accounts.transfer.modalLabel": "Transfer Fee/Fine",
+  "accounts.transfer.field.totalAmount":"fees/fines for a total amount of",
+  "accounts.transfer.field.totalOwed":"Total owed amount",
+  "accounts.transfer.field.selectedAmount":"Selected amount",
+  "accounts.transfer.field.transferAmount":"Transfer amount",
+  "accounts.transfer.field.remainingAmount":"Remaining amount",
+  "accounts.transfer.field.transferAccount":"Transfer Account",
+  "accounts.transfer.field.comment":"Additional information",
+  "accounts.transfer.field.cancel":"Cancel",
+  "accounts.transfer.field.transfer":"Transfer",
+  "accounts.transfer.field.notifyPatron": "Notify patron",
+  "accounts.transfer.placeholder.additional.required":"Enter more information about the fee/fine transfer (required)",
+  "accounts.transfer.placeholder.additional.optional":"Enter more information about the fee/fine transfer (optional)",
+  "accounts.transfer.placeholder.selectAccount": "Select account",
+  "accounts.transfer.summary.partiallyTransfer": "Partially transfer",
+  "accounts.transfer.summary.transferring": "Transferring",
+  "accounts.transfer.summary.totalAmount": "for a total amount of {transferAmount}",
+  "accounts.transfer.summary": "{transferType} {feesFinesAmount} {feeFineForm} for a total amount of {transferAmount}",
+
   "accounts.warning.itemSelected": "{total, number} items selected. {items, number} {items, plural, one {item} other {items}} cannot be {action} because they are already closed.",
 
   "accounts.cancelError": "Cancelled as Error",
@@ -828,6 +850,7 @@
   "accounts.actions.calloutMessage": "The {feeFineType} fee/fine of {amount} has been successfully {paymentStatus} for {name}.",
   "accounts.actions.payFeeFine": "Pay fees/fines",
   "accounts.actions.waiveFeeFine": "Waive fees/fines",
+  "accounts.actions.transferFeeFine": "Transfer fees/fines",
 
   "accounts.actions.warning.summary": "{selectedItemsAmount} items selected. {closedItemsAmount} items cannot be {action} because they are already closed",
   "accounts.actions.warning.alertDetails": "Alert details",
@@ -837,6 +860,7 @@
   "accounts.actions.warning.item": "Item",
   "accounts.actions.warning.payAction": "paid",
   "accounts.actions.warning.waiveAction": "waived",
+  "accounts.actions.warning.transferAction": "transferred",
   "accounts.actions.warning.deselect": "Deselect to continue",
   "accounts.actions.cancellation.success": "<b>{count}</b> {count, plural, one {fee/fine} other {fees/fines}} for <b>{amount}</b> has been successfully <b>{action}</b> for <b>{user}</b>",
   "accounts.status.outstanding": "Outstanding",
@@ -844,6 +868,7 @@
   "accounts.status.fully": "fully",
   "accounts.actions.payment": "payment",
   "accounts.actions.waive": "waive",
+  "accounts.actions.transfer": "transfer",
   "accounts.actions.tag.staff": "STAFF",
   "accounts.actions.tag.patron": "PATRON",
 
