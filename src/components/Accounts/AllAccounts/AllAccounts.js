@@ -146,7 +146,7 @@ class AllAccounts extends React.Component {
                     <FormattedMessage id="ui-users.accounts.history.of" />
                     {' '}
                     {n}
-                    :
+                    {':'}
                   </b>
                   {' '}
                   {myComments[n - 1]}
@@ -321,6 +321,13 @@ class AllAccounts extends React.Component {
     }, [a]);
   }
 
+  transfer(a, e) {
+    if (e) e.preventDefault();
+    this.props.onChangeActions({
+      transferModal: true,
+    }, [a]);
+  }
+
   renderActions(a) {
     const disabled = (a.status.name === 'Closed');
     const elipsis = {
@@ -355,8 +362,8 @@ class AllAccounts extends React.Component {
               <FormattedMessage id="ui-users.accounts.history.button.refund" />
             </Button>
           </MenuItem>
-          <MenuItem>
-            <Button disabled buttonStyle="dropdownItem">
+          <MenuItem itemMeta={{ a, action: 'transfer' }}>
+            <Button disabled={!((elipsis.transfer === false) && (buttonDisabled === false))} buttonStyle="dropdownItem">
               <FormattedMessage id="ui-users.accounts.history.button.transfer" />
             </Button>
           </MenuItem>
@@ -384,7 +391,7 @@ class AllAccounts extends React.Component {
     const { intl } = this.props;
 
     const columnMapping = {
-      '  ': (<input type="checkbox" checked={allChecked} name="check-all" onChange={this.toggleAll} />),
+      '  ': (<input id="checkbox" type="checkbox" checked={allChecked} name="check-all" onChange={this.toggleAll} />),
       'metadata.createdDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' }),
       'metadata.updatedDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' }),
       'feeFineType': intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' }),
@@ -401,7 +408,7 @@ class AllAccounts extends React.Component {
 
     return (
       <MultiColumnList
-        id="list-accountshistory"
+        id="list-accountshistory-all"
         formatter={this.getAccountsFormatter()}
         columnMapping={columnMapping}
         columnWidths={{

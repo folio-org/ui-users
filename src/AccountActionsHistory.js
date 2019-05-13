@@ -119,6 +119,7 @@ class AccountActionsHistory extends React.Component {
         waiveModal: false,
         comment: false,
         regular: false,
+        transferModal: false,
       },
       sortOrder: ['date', 'date'],
       sortDirection: ['desc', 'desc'],
@@ -198,8 +199,12 @@ class AccountActionsHistory extends React.Component {
     this.onChangeActions({ comment: true });
   }
 
+  transfer = () => {
+    this.onChangeActions({ transferModal: true });
+  }
+
   onSort(e, meta) {
-    if (!this.sortMap[meta.name] || e.target.type === 'button') return;
+    if (!this.sortMap[meta.name] || e.target.type === 'button' || e.target.id === 'button') return;
 
     let { sortOrder, sortDirection } = this.state;
 
@@ -244,10 +249,11 @@ class AccountActionsHistory extends React.Component {
         <span className={css.commentsWrapper}>
           <FormattedMessage id="ui-users.details.columns.comments" />
           <Button
+            id="accountActionHistory-add-comment"
             buttonClass={css.addCommentBtn}
             onClick={this.comment}
           >
-            <FormattedMessage id="ui-users.details.button.new" />
+            <span id="button"><FormattedMessage id="ui-users.details.button.new" /></span>
           </Button>
         </span>
       ),
@@ -262,7 +268,7 @@ class AccountActionsHistory extends React.Component {
       transactioninfo: action => action.transactionInformation || '-',
       created: action => action.createdAt,
       source: action => action.source,
-      comments: action => (action.comments ? (<div>{ action.comments.split('\n').map(c => (<Row><Col>{c}</Col></Row>))}</div>) : ''),
+      comments: action => (action.comments ? (<div>{action.comments.split('\n').map(c => (<Row><Col>{c}</Col></Row>))}</div>) : ''),
     };
 
     const actions = this.state.data || [];
@@ -276,7 +282,7 @@ class AccountActionsHistory extends React.Component {
     return (
       <Paneset isRoot>
         <Pane
-          id="pane-loandetails"
+          id="pane-account-action-history"
           defaultWidth="100%"
           dismissible
           onClose={onCancel}
@@ -289,6 +295,7 @@ class AccountActionsHistory extends React.Component {
           <Row>
             <Col xs={12}>
               <Button
+                id="payAccountActionsHistory"
                 disabled={!((disabled === false) && (buttonDisabled === false))}
                 buttonStyle="primary"
                 onClick={this.pay}
@@ -296,6 +303,7 @@ class AccountActionsHistory extends React.Component {
                 <FormattedMessage id="ui-users.accounts.history.button.pay" />
               </Button>
               <Button
+                id="waveAccountActionsHistory"
                 disabled={!((disabled === false) && (buttonDisabled === false))}
                 buttonStyle="primary"
                 onClick={this.waive}
@@ -303,18 +311,22 @@ class AccountActionsHistory extends React.Component {
                 <FormattedMessage id="ui-users.accounts.history.button.waive" />
               </Button>
               <Button
+                id="refundAccountActionsHistory"
                 disabled
                 buttonStyle="primary"
               >
                 <FormattedMessage id="ui-users.accounts.history.button.refund" />
               </Button>
               <Button
-                disabled
+                id="transferAccountActionsHistory"
+                disabled={!((disabled === false) && (buttonDisabled === false))}
                 buttonStyle="primary"
+                onClick={this.transfer}
               >
                 <FormattedMessage id="ui-users.accounts.history.button.transfer" />
               </Button>
               <Button
+                id="errorAccountActionsHistory"
                 disabled={!((disabled === false) && (buttonDisabled === false))}
                 buttonStyle="primary"
                 onClick={this.error}
