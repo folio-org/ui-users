@@ -9,7 +9,7 @@ import {
 } from '@folio/stripes/smart-components';
 
 import filterConfig from './filterConfig';
-import UserSearchView from '../views/UserSearch/UserSearchView';
+import { UserSearch } from '../components/views';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
@@ -150,7 +150,7 @@ class UserSearchContainer extends React.Component {
       users: get(resources, 'records.records', []),
     };
     return (
-      <UserSearchView
+      <UserSearch
         source={this.source}
         filterConfig={filterConfig}
         initialSearch="?sort=name"
@@ -161,7 +161,7 @@ class UserSearchContainer extends React.Component {
         match={match}
       >
         { children }
-      </UserSearchView>
+      </UserSearch>
     );
   }
 }

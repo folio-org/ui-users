@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import {
   IfInterface,
   IfPermission,
+  stripesConnect,
 } from '@folio/stripes/core';
 
 import EditablePermissions from '../../EditablePermissions';
@@ -52,4 +53,4 @@ class EditUserPerms extends React.Component {
 
 EditUserPerms.propTypes = propTypes;
 
-export default EditUserPerms;
+export default stripesConnect(EditUserPerms);

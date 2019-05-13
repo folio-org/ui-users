@@ -35,7 +35,7 @@ function getFullName(user) {
   return `${lastName}${firstName ? ', ' : ' '}${firstName} ${middleName}`;
 }
 
-class UserSearchView extends React.Component {
+class UserSearch extends React.Component {
   static propTypes = {
     children: PropTypes.node,
     contentRef: PropTypes.object,
@@ -304,4 +304,4 @@ class UserSearchView extends React.Component {
   }
 }
 
-export default UserSearchView;
+export default UserSearch;

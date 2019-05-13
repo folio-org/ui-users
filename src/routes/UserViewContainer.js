@@ -1,6 +1,6 @@
 import React from 'react';
 import UserRecordContainer from './UserRecordContainer';
-import UserView from '../views/UserRecord/UserView';
+import { UserView } from '../components/views';
 
 const UserViewContainer = (props) => (
   <UserRecordContainer {...props}>

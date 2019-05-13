@@ -15,32 +15,23 @@ import { ViewMetaData } from '@folio/stripes/smart-components';
 
 class EditUserInfo extends React.Component {
   static propTypes = {
-    stripes: PropTypes.shape({
-      connect: PropTypes.func.isRequired,
-    }).isRequired,
-    parentResources: PropTypes.object,
+    patronGroups: PropTypes.arrayOf(PropTypes.object),
     initialValues: PropTypes.object,
     expanded: PropTypes.bool,
     onToggle: PropTypes.func,
     accordionId: PropTypes.string.isRequired,
   };
 
-  constructor(props) {
-    super(props);
-
-    this.cViewMetaData = this.props.stripes.connect(ViewMetaData);
-  }
-
   render() {
     const {
-      parentResources,
+      patronGroups,
       initialValues,
       expanded,
       onToggle,
       accordionId,
     } = this.props;
-    const patronGroups = (parentResources.patronGroups || {}).records || [];
-    const patronGroupOptions = (patronGroups).map(g => (
+
+    const patronGroupOptions = patronGroups.map(g => (
       <option key={g.id} value={g.id}>{g.group.concat(g.desc ? ` (${g.desc})` : '')}</option>
     ));
     const isUserExpired = () => {
@@ -63,7 +54,7 @@ class EditUserInfo extends React.Component {
         onToggle={onToggle}
       >
 
-        { initialValues.metadata && <this.cViewMetaData metadata={initialValues.metadata} /> }
+        { initialValues.metadata && <ViewMetaData metadata={initialValues.metadata} /> }
 
         <Row>
           <Col xs={12} md={3}>

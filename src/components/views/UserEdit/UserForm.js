@@ -3,6 +3,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
+
 import { AppIcon } from '@folio/stripes/core';
 import {
   Paneset,
@@ -16,7 +17,7 @@ import {
   Row,
   Col,
   Headline,
-  AccordionSet
+  AccordionSet,
 } from '@folio/stripes/components';
 import stripesForm from '@folio/stripes/form';
 
@@ -27,11 +28,12 @@ import {
   EditProxy,
   EditUserPerms,
   EditServicePoints,
-} from './components/EditSections';
+} from '../../EditSections';
 
-import { HasCommand } from './components/Commander';
+import { HasCommand } from '../../Commander';
 
-import { getFullName } from './util';
+import { getFullName, getRecordObject } from '../../../util';
+import packageInfo from '../../../../package';
 
 import css from './UserForm.css';
 
@@ -96,17 +98,22 @@ function asyncValidate(values, dispatch, props, blurredField) {
 
 class UserForm extends React.Component {
   static propTypes = {
+    change: PropTypes.func,
     stripes: PropTypes.shape({
-      connect: PropTypes.func,
+      store: PropTypes.object,
     }).isRequired,
+    formData: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,
-    parentMutator: PropTypes.shape({ // eslint-disable-line react/no-unused-prop-types
+    match: PropTypes.object,
+    location: PropTypes.object,
+    history: PropTypes.object,
+    mutator: PropTypes.shape({ // eslint-disable-line react/no-unused-prop-types
       uniquenessValidator: PropTypes.shape({
         reset: PropTypes.func.isRequired,
         GET: PropTypes.func.isRequired,
       }).isRequired,
     }).isRequired,
-    parentResources: PropTypes.object.isRequired,
+    // resource: PropTypes.object.isRequired,
     pristine: PropTypes.bool,
     submitting: PropTypes.bool,
     onCancel: PropTypes.func.isRequired,
@@ -166,15 +173,19 @@ class UserForm extends React.Component {
         handler: this.collapseAllSections,
       }
     ];
-
-    if (props.initialValues.id) {
-      this.connectedEditUserPerms = props.stripes.connect(EditUserPerms);
-    }
   }
 
-  componentDidMount() {
-    // focus first interactive thing so that shortcuts will work immediately.
-    this.closeButton.current.focus();
+  handleCancel = () => {
+    const {
+      history,
+      match: { params },
+      location: { state: referrer }
+    } = this.props;
+    if (referrer !== 'home') {
+      history.goBack();
+    } else {
+      history.replace(packageInfo.stripes.home);
+    }
   }
 
   getAddFirstMenu() {
@@ -184,7 +195,7 @@ class UserForm extends React.Component {
           {ariaLabel => (
             <IconButton
               id="clickable-closenewuserdialog"
-              onClick={this.props.onCancel}
+              onClick={this.handleCancel}
               ref={this.closeButton}
               ariaLabel={ariaLabel}
               icon="times"
@@ -294,15 +305,16 @@ class UserForm extends React.Component {
     const {
       initialValues,
       handleSubmit,
-      stripes: {
-        connect,
-      },
+      formData,
+      stripes,
+      change, // from redux-form...
     } = this.props;
 
     const { sections } = this.state;
     const firstMenu = this.getAddFirstMenu();
+    const fullName = getFullName(initialValues);
     const paneTitle = initialValues.id
-      ? getFullName(initialValues)
+      ? fullName
       : <FormattedMessage id="ui-users.crud.createUser" />;
 
     const lastMenu = initialValues.id
@@ -317,7 +329,7 @@ class UserForm extends React.Component {
           id="form-user"
           onSubmit={handleSubmit}
         >
-          <Paneset isRoot>
+          <Paneset>
             <Pane
               defaultWidth="100%"
               actionMenu={this.getActionMenu}
@@ -336,7 +348,7 @@ class UserForm extends React.Component {
                   tag="h2"
                   data-test-header-title
                 >
-                  {getFullName(initialValues)}
+                  {fullName}
                 </Headline>
                 <Row end="xs">
                   <Col xs>
@@ -351,7 +363,8 @@ class UserForm extends React.Component {
                     accordionId="editUserInfo"
                     expanded={sections.editUserInfo}
                     onToggle={this.handleSectionToggle}
-                    {...this.props}
+                    initialValues={initialValues}
+                    patronGroups={formData.patronGroups}
                   />
                   <EditExtendedInfo
                     accordionId="extendedInfo"
@@ -360,13 +373,13 @@ class UserForm extends React.Component {
                     userId={initialValues.id}
                     userFirstName={initialValues.personal.firstName}
                     userEmail={initialValues.personal.email}
-                    stripesConnect={connect}
                   />
                   <EditContactInfo
                     accordionId="contactInfo"
                     expanded={sections.contactInfo}
                     onToggle={this.handleSectionToggle}
-                    {...this.props}
+                    addressTypes={formData.addressTypes}
+                    preferredContactTypeId={initialValues.preferredContactTypeId}
                   />
                   {initialValues.id &&
                     <div>
@@ -374,9 +387,13 @@ class UserForm extends React.Component {
                         accordionId="proxy"
                         expanded={sections.proxy}
                         onToggle={this.handleSectionToggle}
-                        {...this.props}
+                        sponsors={initialValues.sponsors}
+                        proxies={initialValues.proxies}
+                        fullName={fullName}
+                        stripes={stripes}
+                        change={change}
                       />
-                      <this.connectedEditUserPerms
+                      {/* <EditUserPerms
                         accordionId="permissions"
                         expanded={sections.permissions}
                         onToggle={this.handleSectionToggle}
@@ -387,7 +404,7 @@ class UserForm extends React.Component {
                         expanded={sections.servicePoints}
                         onToggle={this.handleSectionToggle}
                         {...this.props}
-                      />
+                      /> */}
                     </div>
                   }
                 </AccordionSet>

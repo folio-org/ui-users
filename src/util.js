@@ -38,3 +38,11 @@ export function validate(item, index, items, field, label) {
   }
   return error;
 }
+
+export function getRecordObject(resources, ...args) {
+  const res = {};
+  args.forEach((resource) => {
+    res[resource] = resources[resource].records;
+  });
+  return res;
+}

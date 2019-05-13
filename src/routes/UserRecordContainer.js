@@ -4,7 +4,7 @@ import { compose } from 'redux';
 import { stripesConnect } from '@folio/stripes/core';
 import { withTags } from '@folio/stripes/smart-components';
 
-import UserView from '../views/UserRecord/UserView';
+import { UserView } from '../components/views';
 
 import withProxy from '../withProxy';
 import withServicePoints from '../withServicePoints';
@@ -138,7 +138,7 @@ class UserRecordContainer extends React.Component {
   render() {
     const { children, ...rest } = this.props;
     if (typeof children === 'function') {
-      return children({ ...rest });
+      return children({ source: this.source, ...rest });
     }
     return (<UserView {...this.props} />);
   }

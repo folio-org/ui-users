@@ -2,12 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import get from 'lodash/get';
 import cloneDeep from 'lodash/cloneDeep';
-import { compose } from 'redux';
 import { FormattedMessage } from 'react-intl';
 import {
   AppIcon,
   IfPermission,
-  stripesConnect,
   TitleManager,
 } from '@folio/stripes/core';
 
@@ -37,11 +35,11 @@ import {
   UserRequests,
   UserAccounts,
   UserServicePoints,
-} from '../../components/ViewSections';
+} from '../ViewSections';
 
 import {
   PatronBlockMessage
-} from '../../components/PatronBlock';
+} from '../PatronBlock';
 import { toListAddresses, toUserAddresses } from '../../converters/address';
 import { getFullName, eachPromise } from '../../util';
 
@@ -231,7 +229,7 @@ class UserView extends React.Component {
   };
 
   getEditLink = () => {
-    return `/users/edit/${this.props.match.params.id}`;
+    return `/users/${this.props.match.params.id}/edit/`;
   }
 
   onClose = () => {

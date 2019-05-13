@@ -68,10 +68,10 @@ class UsersRouting extends React.Component {
             path={path}
             render={() => <this.connectedApp {...this.props} />}
           /> */}
+          <Route path={`${basePath}/:id/edit`} exact component={Routes.UserEditContainer} />
           <Route path={basePath} component={Routes.UserSearchContainer}>
             <Route path={`${basePath}/view/:id`} component={Routes.UserViewContainer} />
           </Route>
-          <Route path={`${basePath}/:id/edit`} component={Routes.UserEditContainer} />
           <Route render={this.noMatch} />
         </Switch>
       </CommandList>

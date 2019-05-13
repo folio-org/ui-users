@@ -1,11 +1,11 @@
 import React from 'react';
 import UserRecordContainer from './UserRecordContainer';
-import UserEdit from '../views/UserRecord/UserEdit';
+import { UserEdit } from '../components/views';
 
-const UserViewContainer = (props) => (
+const UserEditContainer = (props) => (
   <UserRecordContainer {...props}>
     { payload => <UserEdit {...payload} /> }
   </UserRecordContainer>
 );
 
-export default UserViewContainer;
+export default UserEditContainer;
