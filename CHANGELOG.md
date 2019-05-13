@@ -1,6 +1,7 @@
 # Change history for ui-users
 
-## 2.22.0 (IN PROGRESS)
+## [2.22.0](https://github.com/folio-org/ui-users/tree/v2.22.0) (2019-05-10)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.22.0...v2.22.0)
 
 * Suppress error on user-details pane when permissions record is missing. Fixes UIU-507.
 * Correct proxy-user query. Fixes UIU-952.
