@@ -17,6 +17,7 @@ import {
 import {
   omit,
   size,
+  orderBy,
 } from 'lodash';
 
 class WarningModal extends React.Component {
@@ -61,6 +62,7 @@ class WarningModal extends React.Component {
 
   toggleAll = (e) => {
     const accounts = this.props.accounts;
+
     const checkedAccounts = (e.target.checked)
       ? accounts.reduce((memo, a) => (Object.assign(memo, { [a.id]: a })), {})
       : {};
@@ -133,8 +135,9 @@ class WarningModal extends React.Component {
     const closedItemsAmount = accounts.filter(a => a.status.name === 'Closed').length;
     const action = label === formatMessage({ id: 'ui-users.accounts.actions.payFeeFine' })
       ? <FormattedMessage id="ui-users.accounts.actions.warning.payAction" />
-      : <FormattedMessage id="ui-users.accounts.actions.warning.waiveAction" />;
-
+      : (label === formatMessage({ id: 'ui-users.accounts.actions.waiveFeeFine' }))
+        ? <FormattedMessage id="ui-users.accounts.actions.warning.waiveAction" />
+        : <FormattedMessage id="ui-users.accounts.actions.warning.transferAction" />;
     return (
       <FormattedMessage
         id="ui-users.accounts.actions.warning.summary"
@@ -155,9 +158,9 @@ class WarningModal extends React.Component {
       allChecked,
       checkedAccounts,
     } = this.state;
-
+    const accountOrdered = orderBy(this.props.accounts, [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
     const columnMapping = {
-      ' ': <input type="checkbox" checked={allChecked} name="check-all" onChange={this.toggleAll} />,
+      ' ': <input id="warning-checkbox" type="checkbox" checked={allChecked} name="check-all" onChange={this.toggleAll} />,
       'Alert details': formatMessage({ id: 'ui-users.accounts.actions.warning.alertDetails' }),
       'Fee/Fine type': formatMessage({ id: 'ui-users.accounts.actions.warning.feeFineType' }),
       'Remaining': formatMessage({ id: 'ui-users.accounts.actions.warning.remaining' }),
@@ -169,6 +172,7 @@ class WarningModal extends React.Component {
     const checkedClosed = values.filter(a => a.status.name === 'Closed') || [];
     return (
       <Modal
+        id="warning-modal"
         open={this.props.open}
         label={this.props.label}
         onClose={this.props.onClose}
@@ -183,21 +187,22 @@ class WarningModal extends React.Component {
         <Row>
           <Col xs>
             <MultiColumnList
+              id="warning-mcl"
               formatter={this.getAccountsFormatter()}
               columnMapping={columnMapping}
-              columnWidths={{ ' ': 28 }}
+              columnWidths={{ ' ': 28, 'Alert details':160, 'Fee/Fine type':140, 'Remaining':80, 'Payment Status':140, 'Item':160 }}
               visibleColumns={[' ', 'Alert details', 'Fee/Fine type', 'Remaining', 'Payment Status', 'Item']}
               onHeaderClick={this.onSort}
               sortOrder={sortOrder[0]}
               sortDirection={`${sortDirection[0]}ending`}
-              contentData={this.props.accounts}
+              contentData={accountOrdered}
             />
           </Col>
         </Row>
         <Row end="xs">
           <Col xs>
-            <Button onClick={this.props.onClose}><FormattedMessage id="ui-users.feefines.modal.cancel" /></Button>
-            <Button disabled={checkedClosed.length > 0 || values.length === 0} buttonStyle="primary" onClick={this.onClickContinue}><FormattedMessage id="ui-users.feefines.modal.submit" /></Button>
+            <Button id="warningTransferCancel" onClick={this.props.onClose}><FormattedMessage id="ui-users.feefines.modal.cancel" /></Button>
+            <Button id="warningTransferContinue" disabled={checkedClosed.length > 0 || values.length === 0} buttonStyle="primary" onClick={this.onClickContinue}><FormattedMessage id="ui-users.feefines.modal.submit" /></Button>
           </Col>
         </Row>
       </Modal>

@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Callout } from '@folio/stripes/components';
 import { injectIntl, FormattedMessage } from 'react-intl';
+import { stripesConnect } from '@folio/stripes/core';
 
 import CommentRequiredForm from './CommentRequiredForm';
 
@@ -13,9 +14,7 @@ class CommentRequiredSettings extends React.Component {
       type: 'okapi',
       records: 'comments',
       path: 'comments',
-      POST: {
-        path: 'comments',
-      },
+      accumulate: 'true',
       PUT: {
         path: 'comments/%{recordId}',
       },
@@ -23,7 +22,6 @@ class CommentRequiredSettings extends React.Component {
   });
 
   static propTypes = {
-    resources: PropTypes.object,
     mutator: PropTypes.shape({
       recordId: PropTypes.shape({
         replace: PropTypes.func,
@@ -31,37 +29,61 @@ class CommentRequiredSettings extends React.Component {
       commentRequired: PropTypes.shape({
         POST: PropTypes.func,
         PUT: PropTypes.func,
+        GET: PropTypes.func,
+      }),
+    }),
+    resources: PropTypes.shape({
+      commentRequired: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
       }),
     }),
   };
 
+  componentDidMount() {
+    const {
+      mutator: { commentRequired }
+    } = this.props;
+
+    commentRequired.GET().then(records => {
+      const settings = {
+        paid: false,
+        waived: false,
+        transferredManually: false,
+        refunded: false
+      };
+      if (records.length === 0) {
+        commentRequired.POST(settings);
+      }
+    });
+  }
+
   onSave = (values) => {
     const {
-      resources,
       mutator: {
         commentRequired,
         recordId,
       }
     } = this.props;
-    const settings = _.get(resources, ['commentRequired', 'records', 0], {});
-    const commentMessage = <FormattedMessage id="ui-users.comment.message" />;
-    delete settings.metadata;
-    settings.paid = values.paid;
-    settings.waived = values.waived;
-    settings.transferredManually = values.transferredManually;
-    settings.refunded = values.refunded;
 
-    if (!settings.id) {
-      commentRequired.POST(settings)
-        .then(() => { this.callout.sendCallout({ message: commentMessage }); });
-    } else {
-      recordId.replace(settings.id);
-      commentRequired.PUT(settings)
-        .then(() => { this.callout.sendCallout({ message: commentMessage }); });
-    }
+    const commentMessage = <FormattedMessage id="ui-users.comment.message" />;
+    commentRequired.GET().then(records => {
+      const body = {
+        id: records[0].id,
+        ...values
+      };
+      recordId.replace(records[0].id);
+      return body;
+    }).then((b) => {
+      commentRequired.PUT(b);
+    }).then(() => {
+      this.callout.sendCallout({ message: commentMessage });
+    });
   }
 
   render() {
+    const hasLoadedComment = _.get(this.props.resources, ['commentRequired', 'hasLoaded'], false);
+    if (hasLoadedComment === false) return <div />;
+
     const settings = _.get(this.props.resources, ['commentRequired', 'records', 0], {});
     const initialValues = {
       paid: (settings.paid && settings.paid !== 'false' ? 'true' : 'false'),
@@ -82,4 +104,4 @@ class CommentRequiredSettings extends React.Component {
     );
   }
 }
-export default injectIntl(CommentRequiredSettings);
+export default injectIntl(stripesConnect(CommentRequiredSettings));

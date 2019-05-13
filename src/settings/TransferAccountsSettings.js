@@ -19,6 +19,7 @@ import {
   FormattedDate
 } from 'react-intl';
 import { Link } from 'react-router-dom';
+import { stripesConnect, withStripes } from '@folio/stripes/core';
 import { validate } from '../util';
 import { Owners } from './FeeFinesTable';
 
@@ -34,7 +35,7 @@ class TransferAccountsSettings extends React.Component {
     transferAccounts: {
       type: 'okapi',
       records: 'transfers',
-      path: 'transfers',
+      path: 'transfers?limit=100',
       PUT: {
         path: 'transfers/%{activeRecord.id}',
       },
@@ -62,7 +63,6 @@ class TransferAccountsSettings extends React.Component {
       }),
     }),
     resources: PropTypes.object,
-    id: PropTypes.string,
     intl: intlShape.isRequired,
   };
 
@@ -128,8 +128,6 @@ class TransferAccountsSettings extends React.Component {
       .then(() => {
         this.showDeleteSuccessCallout(selectedItem);
         this.deleteItemResolve();
-      }).catch(() => {
-        this.deleteItemReject();
       })
       .finally(() => { this.hideConfirmDialog(); });
   }
@@ -169,21 +167,14 @@ class TransferAccountsSettings extends React.Component {
   }
 
   renderLastUpdated = (metadata) => {
-    const { stripes } = this.props;
-
     if (!this.metadataCache[metadata.updatedByUserId]) {
-      if (stripes.hasPerm('ui-users.view')) {
-        this.metadataCache[metadata.updatedByUserId] = (
-          <Link to={`/users/view/${this.props.id}`}>
-            <this.connectedUserName stripes={this.props.stripes} id={metadata.updatedByUserId} />
-          </Link>
-        );
-      } else {
-        this.metadataCache[metadata.updatedByUserId] = (
+      this.metadataCache[metadata.updatedByUserId] = (
+        <Link to={`/users/view/${metadata.updatedByUserId}`}>
           <this.connectedUserName stripes={this.props.stripes} id={metadata.updatedByUserId} />
-        );
-      }
+        </Link>
+      );
     }
+
     return (
       <div>
         <FormattedMessage
@@ -225,12 +216,14 @@ class TransferAccountsSettings extends React.Component {
     return (
       <Paneset>
         <Pane
+          id="transfers"
           defaultWidth="fill"
           fluidContentWidth
           paneTitle={<FormattedMessage id="ui-users.transfers.label" />}
         >
           <Owners dataOptions={owners} onChange={this.onChangeOwner} />
           <EditableList
+            id="settings-transfers"
             contentData={row}
             formatter={formatter}
             validate={this.validate}
@@ -251,6 +244,7 @@ class TransferAccountsSettings extends React.Component {
             }
           />
           <ConfirmationModal
+            id="confirm-delete-transfer"
             heading={formatMessage({ id: 'ui-users.transfers.modalHeader' })}
             message={modalMessage}
             open={this.state.showConfirmDialog}
@@ -267,4 +261,4 @@ class TransferAccountsSettings extends React.Component {
   }
 }
 
-export default injectIntl(TransferAccountsSettings);
+export default injectIntl(withStripes(stripesConnect(TransferAccountsSettings)));

@@ -42,12 +42,14 @@ const Menu = (props) => {
       </Row>
       <Row>
         <Col style={{ marginLeft: '20px' }}>
-          <FormattedMessage
-            id="ui-users.accounts.outstanding"
-            values={{
-              amount: outstanding
-            }}
-          />
+          <div id="outstanding-balance">
+            <FormattedMessage
+              id="ui-users.accounts.outstanding"
+              values={{
+                amount: outstanding
+              }}
+            />
+          </div>
         </Col>
         <Col style={{ marginLeft: '10px' }}>
           {showSelected &&
@@ -63,14 +65,50 @@ const Menu = (props) => {
     </div>);
 
   const lastMenu = (
-    <div>
-      <Button marginBottom0 disabled={buttonDisabled} onClick={e => props.onClickViewChargeFeeFine(e, {})}>
+    <div id="actions">
+      <Button
+        id="open-closed-all-charge-button"
+        marginBottom0
+        disabled={buttonDisabled}
+        onClick={e => props.onClickViewChargeFeeFine(e, {})}
+      >
         <FormattedMessage id="ui-users.accounts.button.new" />
       </Button>
-      <Button marginBottom0 disabled={!((actions.regularpayment === true) && (buttonDisabled === false))} buttonStyle="primary" onClick={() => { props.onChangeActions({ regular: true }); }}><FormattedMessage id="ui-users.accounts.history.button.pay" /></Button>
-      <Button marginBottom0 disabled={!((actions.waive === true) && (buttonDisabled === false))} buttonStyle="primary" onClick={() => { props.onChangeActions({ waiveMany: true }); }}><FormattedMessage id="ui-users.accounts.history.button.waive" /></Button>
-      <Button marginBottom0 disabled buttonStyle="primary"><FormattedMessage id="ui-users.accounts.history.button.refund" /></Button>
-      <Button marginBottom0 disabled buttonStyle="primary"><FormattedMessage id="ui-users.accounts.history.button.transfer" /></Button>
+      <Button
+        id="open-closed-all-pay-button"
+        marginBottom0
+        disabled={!((actions.regularpayment === true) && (buttonDisabled === false))}
+        buttonStyle="primary"
+        onClick={() => { props.onChangeActions({ regular: true }); }}
+      >
+        <FormattedMessage id="ui-users.accounts.history.button.pay" />
+      </Button>
+      <Button
+        id="open-closed-all-wave-button"
+        marginBottom0
+        disabled={!((actions.waive === true) && (buttonDisabled === false))}
+        buttonStyle="primary"
+        onClick={() => { props.onChangeActions({ waiveMany: true }); }}
+      >
+        <FormattedMessage id="ui-users.accounts.history.button.waive" />
+      </Button>
+      <Button
+        id="open-closed-all-refund-button"
+        marginBottom0
+        disabled
+        buttonStyle="primary"
+      >
+        <FormattedMessage id="ui-users.accounts.history.button.refund" />
+      </Button>
+      <Button
+        id="open-closed-all-transfer-button"
+        marginBottom0
+        disabled={!((actions.transfer === true) && (buttonDisabled === false))}
+        buttonStyle="primary"
+        onClick={() => { props.onChangeActions({ transferMany: true }); }}
+      >
+        <FormattedMessage id="ui-users.accounts.history.button.transfer" />
+      </Button>
     </div>);
 
   return (

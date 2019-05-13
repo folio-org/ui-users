@@ -5,6 +5,7 @@ import {
   intlShape,
 } from 'react-intl';
 import { ControlledVocab } from '@folio/stripes/smart-components';
+import { withStripes } from '@folio/stripes/core';
 import { validate } from '../util';
 
 class RefundReasonsSettings extends React.Component {
@@ -47,4 +48,4 @@ class RefundReasonsSettings extends React.Component {
   }
 }
 
-export default injectIntl(RefundReasonsSettings);
+export default injectIntl(withStripes(RefundReasonsSettings));

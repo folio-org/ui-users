@@ -1,6 +1,7 @@
 # Change history for ui-users
 
-## 2.22.0 (IN PROGRESS)
+## [2.22.0](https://github.com/folio-org/ui-users/tree/v2.22.0) (2019-05-10)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.22.0...v2.22.0)
 
 * Suppress error on user-details pane when permissions record is missing. Fixes UIU-507.
 * Correct proxy-user query. Fixes UIU-952.
@@ -17,6 +18,23 @@
 * Fix Fee/Fines Details "Created at". Fix UIU-927.
 * Fix "All actions" permission to see Patron Block details. Fix UIU-866.
 * Fix Patron block pop-up for Renewals. Fix UIU-959.
+* UX Consistency Fixes for Patron Blocks: User Information changes. Ref UIU-902.
+* Fix FF Details/History. Fixes UIU-968, UIU-961.
+* Fix Pay and Waive FF fixes. Fix UIU-958.
+* Use strict matching for user-ids when retrieving blocks. Fixes UIU-956.
+* Send singular label in `labelSingular` prop. Fixes UIU-806.
+* Correctly set `sort` field. Refs UIU-869.
+* UX Consistency Fixes for Patron Blocks. Ref uiu-933.
+* Fix incorrect payment status. Fix UIU-931.
+* Fix spacing issue on User Information Fee/Fine section display. Fix UIU-946.
+* Add test to comments settings section. Ref UIU-996.
+* Add user status indication.
+* Add overdue loans report. Part of UIU-983.
+* Add test to owners settings section. Ref UIU-997.
+* Create BigTest for Transfer accounts Settings. Ref UIU-1000.
+* Fix "Shared" Fee/Fine Owner. Fix UIU-989.
+* Fix "Last Updated" column. Fix UIU-960.
+* Add test to Transfer fee/fine modal. Ref UIU-1016.
 
 ## [2.21.0](https://github.com/folio-org/ui-users/tree/v2.21.0) (2019-03-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.20.0...v2.21.0)

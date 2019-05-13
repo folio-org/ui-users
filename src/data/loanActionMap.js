@@ -6,5 +6,6 @@ export default {
   'holdrequested': 'ui-users.data.loanActionMap.holdRequested',
   'recallrequested': 'ui-users.data.loanActionMap.recallRequested',
   'dueDateChanged': 'ui-users.data.loanActionMap.dueDateChanged',
-  'Renewed through override': 'ui-users.data.loanActionMap.renewedThroughOverride',
+  'renewedThroughOverride': 'ui-users.data.loanActionMap.renewedThroughOverride',
+  'checkedOutThroughOverride': 'ui-users.data.loanActionMap.checkedOutThroughOverride',
 };

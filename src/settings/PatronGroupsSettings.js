@@ -6,6 +6,7 @@ import {
   intlShape,
 } from 'react-intl';
 import { ControlledVocab } from '@folio/stripes/smart-components';
+import { stripesConnect, withStripes } from '@folio/stripes/core';
 
 import PatronGroupNumberOfUsers from '../components/PatronGroupNumberOfUsers';
 
@@ -60,7 +61,7 @@ class PatronGroupsSettings extends React.Component {
         baseUrl="groups"
         records="usergroups"
         label={intl.formatMessage({ id: 'ui-users.information.patronGroups' })}
-        labelSingular={intl.formatMessage({ id: 'ui-users.information.patronGroups' })}
+        labelSingular={intl.formatMessage({ id: 'ui-users.information.patronGroup' })}
         objectLabel={<FormattedMessage id="ui-users.information.patronGroup.users" />}
         visibleFields={['group', 'desc']}
         columnMapping={{
@@ -76,4 +77,4 @@ class PatronGroupsSettings extends React.Component {
   }
 }
 
-export default injectIntl(PatronGroupsSettings);
+export default injectIntl(withStripes(stripesConnect(PatronGroupsSettings)));

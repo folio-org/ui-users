@@ -20,6 +20,7 @@ import {
 import { Field } from 'redux-form';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import { EditableList } from '@folio/stripes/smart-components';
+import { stripesConnect } from '@folio/stripes/core';
 import { validate } from '../util';
 
 class OwnerSettings extends React.Component {
@@ -232,6 +233,7 @@ class OwnerSettings extends React.Component {
       'servicePointOwner': ({ fieldProps }) => (
         <Field
           {...fieldProps}
+          id="owner-service-point"
           component={MultiSelection}
           onChange={this.onChangeSelection}
           dataOptions={options}
@@ -262,12 +264,14 @@ class OwnerSettings extends React.Component {
     return (
       <Paneset>
         <Pane
+          id="owners"
           defaultWidth="fill"
           fluidContentWidth
           height="100%"
           paneTitle={formatMessage({ id: 'ui-users.owners.label' })}
         >
           <EditableList
+            id="settings-owners"
             {...this.props}
             label={formatMessage({ id: 'ui-users.owners.label' })}
             height="600"
@@ -293,11 +297,7 @@ class OwnerSettings extends React.Component {
             warn={this.warn}
           />
           <ConfirmationModal
-            id={(
-              <FormattedMessage id="ui-users.owners.singular">
-                {(msg) => `delete${msg.replace(/[^a-zA-Z0-9]/g, '').toLowerCase()}-confirmation`}
-              </FormattedMessage>
-            )}
+            id="confirm-delete-owner"
             open={this.state.showConfirmDialog}
             heading={(
               <FormattedMessage
@@ -311,6 +311,7 @@ class OwnerSettings extends React.Component {
             confirmLabel={<FormattedMessage id="stripes-core.button.delete" />}
           />
           <Modal
+            id="hideItemInUseDialog"
             open={this.state.showItemInUseDialog}
             label={<FormattedMessage id="stripes-smart-components.cv.cannotDeleteTermHeader" values={{ type }} />}
             size="small"
@@ -323,7 +324,7 @@ class OwnerSettings extends React.Component {
             </Row>
             <Row>
               <Col xs>
-                <Button buttonStyle="primary" onClick={this.hideItemInUseDialog}>
+                <Button data-test-ok-button buttonStyle="primary" onClick={this.hideItemInUseDialog}>
                   <FormattedMessage id="stripes-core.label.okay" />
                 </Button>
               </Col>
@@ -336,4 +337,4 @@ class OwnerSettings extends React.Component {
   }
 }
 
-export default injectIntl(OwnerSettings);
+export default injectIntl(stripesConnect(OwnerSettings));

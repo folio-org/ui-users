@@ -25,6 +25,7 @@ import {
   EditableList,
   UserName
 } from '@folio/stripes/smart-components';
+import { stripesConnect, withStripes } from '@folio/stripes/core';
 import { validate } from '../util';
 
 import {
@@ -333,4 +334,4 @@ class PaymentSettings extends React.Component {
   }
 }
 
-export default injectIntl(PaymentSettings);
+export default injectIntl(withStripes(stripesConnect(PaymentSettings)));

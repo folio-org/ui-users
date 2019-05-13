@@ -54,7 +54,7 @@ class ClosedAccounts extends React.Component {
       'metadata.createdDate': f => (f.metadata || {}).createdDate,
       'metadata.updatedDate': f => (f.metadata || {}).updatedDate,
       'feeFineType': f => f.feeFineType,
-      'amount':  f => f.amount,
+      'amount': f => f.amount,
       'remaining': f => f.remaining,
       'paymentStatus.name': f => (f.paymentStatus || {}).name,
       'feeFineOwner': f => f.feeFineOwner,
@@ -139,7 +139,7 @@ class ClosedAccounts extends React.Component {
                     <FormattedMessage id="ui-users.accounts.history.of" />
                     {' '}
                     {n}
-                   :
+                    {':'}
                   </b>
                   {' '}
                   {myComments[n - 1]}
@@ -357,7 +357,7 @@ class ClosedAccounts extends React.Component {
 
     return (
       <MultiColumnList
-        id="list-accountshistory"
+        id="list-accountshistory-closed"
         formatter={this.getAccountsFormatter()}
         columnMapping={columnMapping}
         columnWidths={{

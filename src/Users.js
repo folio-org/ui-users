@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { get } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -6,9 +6,9 @@ import {
   injectIntl,
   intlShape,
 } from 'react-intl';
-
+import { Button } from '@folio/stripes/components';
 import { makeQueryFunction, SearchAndSort } from '@folio/stripes/smart-components';
-import { AppIcon } from '@folio/stripes/core';
+import { AppIcon, stripesConnect, withStripes } from '@folio/stripes/core';
 
 import uuid from 'uuid';
 import ViewUser from './ViewUser';
@@ -17,6 +17,9 @@ import { toUserAddresses } from './converters/address';
 import { getFullName } from './util';
 import packageInfo from '../package';
 import { HasCommand } from './components/Commander';
+import OverdueLoanReport from './reports';
+
+import usersStyles from './Users.css';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
@@ -27,8 +30,8 @@ const filterConfig = [
     name: 'active',
     cql: 'active',
     values: [
-      { name: 'Include inactive users', cql: 'false' },
-      { name: 'Show active users', cql: 'true', hidden: true },
+      { name: 'inactive', cql: 'false' },
+      { name: 'active', cql: 'true' },
     ],
   },
   {
@@ -103,6 +106,11 @@ class Users extends React.Component {
       path: 'users',
       fetch: false,
     },
+    loans: {
+      type: 'okapi',
+      records: 'loans',
+      path: 'circulation/loans?query=(status="Open")',
+    }
   });
 
   static propTypes = {
@@ -111,6 +119,9 @@ class Users extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }),
       addressTypes: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      loans: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }).isRequired,
@@ -155,6 +166,12 @@ class Users extends React.Component {
         handler: this.goToSearch
       }
     ];
+
+    const { formatMessage } = props.intl;
+
+    this.overdueLoanReport = new OverdueLoanReport({
+      formatMessage
+    });
   }
 
   componentDidUpdate() {
@@ -217,6 +234,19 @@ class Users extends React.Component {
     }
   }
 
+  getActionMenu = ({ onToggle }) => (
+    <Button
+      buttonStyle="dropdownItem"
+      id="export-overdue-loan-report"
+      onClick={() => {
+        onToggle();
+        this.overdueLoanReport.toCSV(get(this.props.resources, 'loans.records', []));
+      }}
+    >
+      <FormattedMessage id="ui-users.reports.overdue.label" />
+    </Button>
+  );
+
   render() {
     const {
       onSelectRow,
@@ -231,8 +261,16 @@ class Users extends React.Component {
 
     const resultsFormatter = {
       active: user => (
-        <AppIcon app="users" size="small">
-          {user.active ? <FormattedMessage id="ui-users.active" /> : <FormattedMessage id="ui-users.inactive" />}
+        <AppIcon
+          app="users"
+          size="small"
+          className={user.active || usersStyles.inactiveAppIcon}
+        >
+          {
+            user.active
+              ? <FormattedMessage id="ui-users.active" />
+              : <FormattedMessage id="ui-users.inactive" />
+          }
         </AppIcon>
       ),
       name: user => getFullName(user),
@@ -242,7 +280,7 @@ class Users extends React.Component {
         return pg ? pg.group : '?';
       },
       username: user => user.username,
-      email: user => _.get(user, ['personal', 'email']),
+      email: user => get(user, 'personal.email'),
     };
 
     return (
@@ -250,6 +288,7 @@ class Users extends React.Component {
         <HasCommand commands={this.keyboardCommands}>
           <SearchAndSort
             packageInfo={this.props.packageInfo || packageInfo}
+            actionMenu={this.getActionMenu}
             objectName="user"
             filterConfig={filterConfig}
             initialResultCount={INITIAL_RESULT_COUNT}
@@ -271,7 +310,7 @@ class Users extends React.Component {
             parentMutator={this.props.mutator}
             showSingleResult={showSingleResult}
             columnMapping={{
-              active: intl.formatMessage({ id: 'ui-users.active' }),
+              active: intl.formatMessage({ id: 'ui-users.status' }),
               name: intl.formatMessage({ id: 'ui-users.information.name' }),
               barcode: intl.formatMessage({ id: 'ui-users.information.barcode' }),
               patronGroup: intl.formatMessage({ id: 'ui-users.information.patronGroup' }),
@@ -285,4 +324,4 @@ class Users extends React.Component {
   }
 }
 
-export default injectIntl(Users);
+export default injectIntl(withStripes(stripesConnect(Users)));

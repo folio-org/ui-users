@@ -563,7 +563,7 @@ class LoanActionsHistory extends React.Component {
               open={patronBlockedModal}
               onClose={this.onClosePatronBlockedModal}
               patronBlocks={patronBlocks}
-              viewUserPath={`/users/view/${(user || {}).id}?filters=pg.${patronGroup.group}&sort=Name`}
+              viewUserPath={`/users/view/${(user || {}).id}?filters=pg.${patronGroup.group}&sort=name`}
             />
             { this.renderChangeDueDateDialog() }
           </Pane>
