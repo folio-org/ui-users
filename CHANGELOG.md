@@ -34,6 +34,7 @@
 * Create BigTest for Transfer accounts Settings. Ref UIU-1000.
 * Fix "Shared" Fee/Fine Owner. Fix UIU-989.
 * Fix "Last Updated" column. Fix UIU-960.
+* Add test to Transfer fee/fine modal. Ref UIU-1016.
 
 ## [2.21.0](https://github.com/folio-org/ui-users/tree/v2.21.0) (2019-03-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.20.0...v2.21.0)
