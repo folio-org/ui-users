@@ -59,9 +59,7 @@ class Users extends React.Component {
         params: {
           query: makeQueryFunction(
             'cql.allRecords=1',
-            (parsedQuery, props, localProps) => {
-              return localProps.query.query.split(' ').map(query => compileQuery({ query })).join(' or ');
-            },
+            (parsedQuery, props, localProps) => localProps.query.query.split(' ').map(query => compileQuery({ query })).join(' or '),
             {
               // the keys in this object must match those passed to
               // SearchAndSort's columnMapping prop
