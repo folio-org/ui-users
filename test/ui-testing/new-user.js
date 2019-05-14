@@ -2,7 +2,7 @@
 /* global it describe after Nightmare */
 module.exports.test = function meh(uitestctx) {
   describe('Module test: users:new-user', function bar() {
-    const { config, helpers: { namegen, openApp, logout, clickApp }, meta: { testVersion } } = uitestctx;
+    const { config, helpers: { namegen, logout, clickApp } } = uitestctx;
     const nightmare = new Nightmare(config.nightmare);
     this.timeout(Number(config.test_timeout));
     let pgroup = null;
@@ -67,12 +67,6 @@ module.exports.test = function meh(uitestctx) {
       });
 
       flogin(config.username, config.password);
-
-      it('should open app and find version tag', (done) => {
-        nightmare
-          .use(openApp(nightmare, config, done, 'users', testVersion))
-          .then(result => result);
-      });
 
       it('should navigate to users', (done) => {
         clickApp(nightmare, done, 'users');
