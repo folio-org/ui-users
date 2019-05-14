@@ -2,7 +2,7 @@
 /* global it describe after Nightmare */
 module.exports.test = function meh(uitestctx) {
   describe('Module test: users:new-user', function bar() {
-    const { config, helpers: { namegen, openApp, logout }, meta: { testVersion } } = uitestctx;
+    const { config, helpers: { namegen, openApp, logout, clickApp }, meta: { testVersion } } = uitestctx;
     const nightmare = new Nightmare(config.nightmare);
     this.timeout(Number(config.test_timeout));
     let pgroup = null;
@@ -74,10 +74,12 @@ module.exports.test = function meh(uitestctx) {
           .then(result => result);
       });
 
+      it('should navigate to users', (done) => {
+        clickApp(nightmare, done, 'users');
+      });
+
       it('should extract a patron group value', (done) => {
         nightmare
-          .wait('#clickable-users-module')
-          .click('#clickable-users-module')
           .wait('#input-user-search')
           .type('#input-user-search', '0')
           .wait('button[type=submit]')
@@ -148,10 +150,12 @@ module.exports.test = function meh(uitestctx) {
 
       flogin(config.username, config.password);
 
+      it('should navigate to users', (done) => {
+        clickApp(nightmare, done, 'users');
+      });
+
       it(`should change username for ${user.id}`, (done) => {
         nightmare
-          .wait('#clickable-users-module')
-          .click('#clickable-users-module')
           .wait('#input-user-search')
           .insert('#input-user-search', user.id)
           .wait('button[type=submit]')
