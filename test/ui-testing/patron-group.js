@@ -2,7 +2,7 @@
 /* global it describe before after Nightmare */
 module.exports.test = function foo(uiTestCtx) {
   describe('Module test: users:patron-group', function meh() {
-    const { config, helpers: { openApp, login, logout }, meta: { testVersion } } = uiTestCtx;
+    const { config, helpers: { openApp, login, logout, clickApp, clickSettings }, meta: { testVersion } } = uiTestCtx;
     const nightmare = new Nightmare(config.nightmare);
 
     this.timeout(Number(config.test_timeout));
@@ -31,9 +31,12 @@ module.exports.test = function foo(uiTestCtx) {
           .then(result => result);
       });
 
+      it('should navigate to settings', (done) => {
+        clickSettings(nightmare, done);
+      });
+
       it(`should create a patron group for "${gidlabel}"`, (done) => {
         nightmare
-          .click(config.select.settings)
           .wait('a[href="/settings/users"]')
           .click('a[href="/settings/users"]')
           .wait('a[href="/settings/users/groups"]')
@@ -56,10 +59,12 @@ module.exports.test = function foo(uiTestCtx) {
           .catch(done);
       });
 
+      it('should navigate to users', (done) => {
+        clickApp(nightmare, done, 'users');
+      });
+
       it('should find an active user to edit', (done) => {
         nightmare
-          .wait('#clickable-users-module')
-          .click('#clickable-users-module')
           .wait('#clickable-filter-pg-faculty')
           .click('#clickable-filter-pg-faculty')
           .wait('#list-users div[role="row"]:nth-of-type(2) > a > div:nth-of-type(3)')
@@ -173,10 +178,13 @@ module.exports.test = function foo(uiTestCtx) {
           .catch(done);
       });
 
+      it('should navigate to settings', (done) => {
+        clickSettings(nightmare, done);
+      });
+
       it(`should delete "${gid}" patron group`, (done) => {
         nightmare
           .wait(1111)
-          .click(config.select.settings)
           .wait('a[href="/settings/users"]')
           .click('a[href="/settings/users"]')
           .wait('a[href="/settings/users/groups"]')

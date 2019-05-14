@@ -2,7 +2,7 @@
 /* global it describe before after Nightmare */
 module.exports.test = function foo(uiTestCtx) {
   describe('Module test: users:new-permission-set', function bar() {
-    const { config, helpers: { login, openApp, logout }, meta: { testVersion } } = uiTestCtx;
+    const { config, helpers: { login, openApp, logout, clickSettings }, meta: { testVersion } } = uiTestCtx;
     const nightmare = new Nightmare(config.nightmare);
     this.timeout(Number(config.test_timeout));
 
@@ -25,9 +25,13 @@ module.exports.test = function foo(uiTestCtx) {
           .then(result => result)
           .catch(done);
       });
+
+      it('should navigate to settings', (done) => {
+        clickSettings(nightmare, done);
+      });
+
       it('should create a new permission set', (done) => {
         nightmare
-          .click(config.select.settings)
           .wait('a[href="/settings/users"]')
           .click('a[href="/settings/users"]')
           .wait('a[href="/settings/users/perms"]')
@@ -55,9 +59,13 @@ module.exports.test = function foo(uiTestCtx) {
           })
           .catch(done);
       });
+
+      it('should navigate to settings', (done) => {
+        clickSettings(nightmare, done);
+      });
+
       it('should confirm creation of new permission set', (done) => {
         nightmare
-          .click(config.select.settings)
           .wait('a[href="/settings/users"]')
           .click('a[href="/settings/users"]')
           .wait('a[href="/settings/users/perms"]')
@@ -82,6 +90,7 @@ module.exports.test = function foo(uiTestCtx) {
           })
           .catch(done);
       });
+
       it('should delete new permission set', (done) => {
         nightmare
           .click('#clickable-edit-item')
@@ -99,6 +108,7 @@ module.exports.test = function foo(uiTestCtx) {
           })
           .catch(done);
       });
+
       it('should confirm deletion', (done) => {
         nightmare
           .wait('a[href^="/settings/users/groups"]')
