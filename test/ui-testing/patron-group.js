@@ -2,7 +2,7 @@
 /* global it describe before after Nightmare */
 module.exports.test = function foo(uiTestCtx) {
   describe('Module test: users:patron-group', function meh() {
-    const { config, helpers: { openApp, login, logout, clickApp, clickSettings }, meta: { testVersion } } = uiTestCtx;
+    const { config, helpers: { login, logout, clickApp, clickSettings } } = uiTestCtx;
     const nightmare = new Nightmare(config.nightmare);
 
     this.timeout(Number(config.test_timeout));
@@ -24,12 +24,6 @@ module.exports.test = function foo(uiTestCtx) {
       const gid = `alumni_${Math.floor(Math.random() * 10000)}`;
       const gidlabel = 'Alumni';
       // const deletePath = `div[title="${gid}"] ~ div:last-of-type button[id*="delete"]`;
-
-      it('should open app and find version tag', (done) => {
-        nightmare
-          .use(openApp(nightmare, config, done, 'users', testVersion))
-          .then(result => result);
-      });
 
       it('should navigate to settings', (done) => {
         clickSettings(nightmare, done);

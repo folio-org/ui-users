@@ -2,7 +2,7 @@
 /* global it describe before after Nightmare */
 module.exports.test = function foo(uiTestCtx) {
   describe('Module test: users:new-permission-set', function bar() {
-    const { config, helpers: { login, openApp, logout, clickSettings }, meta: { testVersion } } = uiTestCtx;
+    const { config, helpers: { login, logout, clickSettings } } = uiTestCtx;
     const nightmare = new Nightmare(config.nightmare);
     this.timeout(Number(config.test_timeout));
 
@@ -17,13 +17,6 @@ module.exports.test = function foo(uiTestCtx) {
 
       after((done) => {
         logout(nightmare, config, done);
-      });
-
-      it('should open app and find version tag', (done) => {
-        nightmare
-          .use(openApp(nightmare, config, done, 'users', testVersion))
-          .then(result => result)
-          .catch(done);
       });
 
       it('should navigate to settings', (done) => {
