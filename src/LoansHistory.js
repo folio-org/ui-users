@@ -75,15 +75,16 @@ class LoansHistory extends React.Component {
     const {
       user,
       patronGroup,
+      match: { params },
       openLoans,
       loansHistory,
     } = this.props;
-    const loanStatus = openLoans ? 'Open' : 'Closed';
+    const loanStatus = params.loanstatus;
     const loans = _.filter(loansHistory, loan => loanStatus === _.get(loan, ['status', 'name']));
     if (!loans) return <div />;
 
     return (
-      <Paneset isRoot>
+      <Paneset>
         <Pane
           padContent={false}
           id="pane-loanshistory"
@@ -98,9 +99,12 @@ class LoansHistory extends React.Component {
         >
           { this.getSegmentedControls() }
           {
-            openLoans
-              ? <this.connectedOpenLoans loans={loans} {...this.props} />
-              : <this.connectedClosedLoans loans={loans} {...this.props} />
+            loanStatus === 'open' &&
+              (<OpenLoans loans={loans} {...this.props} />)
+          }
+          {
+            loanStatus === 'closed' &&
+            (<ClosedLoans loans={loans} {...this.props} />)
           }
         </Pane>
       </Paneset>);

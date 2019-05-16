@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import queryString from 'query-string';
+import { stripesConnect } from '@folio/stripes/core';
 import {
   Badge,
   Accordion,
@@ -58,6 +59,7 @@ class UserLoans extends React.Component {
     accordionId: PropTypes.string,
     expanded: PropTypes.bool,
     onToggle: PropTypes.func,
+    match: PropTypes.object,
     location: PropTypes.shape({
       search: PropTypes.string,
       pathname: PropTypes.string,
@@ -71,6 +73,7 @@ class UserLoans extends React.Component {
       accordionId,
       resources,
       location,
+      match: { params },
       onClickViewOpenLoans,
       onClickViewClosedLoans,
     } = this.props;
@@ -101,7 +104,7 @@ class UserLoans extends React.Component {
               <li key={index}>
                 <Link
                   id={item.id}
-                  to={`${location.pathname}?${queryString.stringify({ ...query, layer: item.layer })}`}
+                  to={`/users/${params.id}/loans/${item.status}`}
                   onClick={item.onClick}
                 >
                   <FormattedMessage id={item.formattedMessageId} values={{ count: item.count }} />
@@ -113,14 +116,14 @@ class UserLoans extends React.Component {
                 onClick: onClickViewOpenLoans,
                 count: openLoansCount,
                 formattedMessageId: 'ui-users.loans.numOpenLoans',
-                layer: 'open-loans',
+                status: 'open',
               },
               {
                 id: 'clickable-viewclosedloans',
                 onClick: onClickViewClosedLoans,
                 count: closedLoansCount,
                 formattedMessageId: 'ui-users.loans.numClosedLoans',
-                layer: 'closed-loans',
+                status: 'closed',
               },
             ]}
           /> : <Icon icon="spinner-ellipsis" width="10px" />
@@ -130,4 +133,4 @@ class UserLoans extends React.Component {
   }
 }
 
-export default UserLoans;
+export default stripesConnect(UserLoans);

@@ -1,13 +1,17 @@
 import React from 'react';
-import { Pane, Paneset } from '@folio/stripes/components';
+import { Pane, Paneset, Layout } from '@folio/stripes/components';
 import Loading from './Loading';
 
 const ViewLoading = ({ inPaneset, ...rest }) => {
+  const spinnerStyle = { maxWidth: '15rem', height: '8rem' };
   if (inPaneset) {
     return (
       <Paneset>
         <Pane {...rest}>
-          <Loading />
+          <Layout className="centered full" style={spinnerStyle}>
+            &nbsp;
+            <Loading />
+          </Layout>
         </Pane>
       </Paneset>
     );
@@ -15,7 +19,10 @@ const ViewLoading = ({ inPaneset, ...rest }) => {
 
   return (
     <Pane {...rest}>
-      <Loading />
+      <Layout className="centered full" style={spinnerStyle}>
+        &nbsp;
+        <Loading />
+      </Layout>
     </Pane>
   );
 };

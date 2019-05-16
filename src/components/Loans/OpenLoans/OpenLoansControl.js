@@ -12,31 +12,6 @@ import withRenew from '../../../withRenew';
 import TableModel from './components/OpenLoansWithStaticData';
 
 class OpenLoansControl extends React.Component {
-  static manifest = Object.freeze({
-    query: {},
-    loanPolicies: {
-      type: 'okapi',
-      records: 'loanPolicies',
-      path: 'loan-policy-storage/loan-policies',
-      accumulate: 'true',
-      fetch: false,
-    },
-    requests: {
-      type: 'okapi',
-      path: 'circulation/requests',
-      resourceShouldRefresh: true,
-      records: 'requests',
-      accumulate: 'true',
-      fetch: false,
-    },
-    loanAccount: {
-      type: 'okapi',
-      records: 'accounts',
-      path: 'accounts?query=userId=%{activeRecord.user}&limit=100',
-    },
-    activeRecord: {},
-  });
-
   static propTypes = {
     stripes: stripesShape.isRequired,
     mutator: PropTypes.shape({

@@ -448,6 +448,25 @@ class UserView extends React.Component {
               />
             </IfPermission>
 
+            <IfPermission perm="ui-users.loans.all">
+              <IfInterface name="loan-policy-storage">
+                { /* Check without version, so can support either of multiple versions.
+          Replace with specific check when facility for providing
+          multiple versions is available */ }
+                <IfInterface name="circulation">
+                  <UserLoans
+                    onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
+                    onClickViewOpenLoans={this.onClickViewOpenLoans}
+                    onClickViewClosedLoans={this.onClickViewClosedLoans}
+                    expanded={this.state.sections.loansSection}
+                    onToggle={this.handleSectionToggle}
+                    accordionId="loansSection"
+                    {...this.props}
+                  />
+                </IfInterface>
+              </IfInterface>
+            </IfPermission>
+
             <IfPermission perm="perms.users.get">
               <IfInterface name="permissions" version="5.0">
                 <UserPermissions
