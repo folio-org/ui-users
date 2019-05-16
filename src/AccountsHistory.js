@@ -20,7 +20,7 @@ import {
   Row,
   Col,
   Checkbox,
-  SegmentedControl,
+  ButtonGroup,
   filterState,
 } from '@folio/stripes/components';
 import { makeQueryFunction } from '@folio/stripes/smart-components';
@@ -203,6 +203,8 @@ class AccountsHistory extends React.Component {
         waive: false,
         waiveModal: false,
         waiveMany: false,
+        transferModal: false,
+        transferMany: false,
         refund: false,
         transfer: false,
       },
@@ -250,9 +252,9 @@ class AccountsHistory extends React.Component {
     if (JSON.stringify(accounts) !== JSON.stringify(nextAccounts)) {
       let selected = 0;
       this.state.selectedAccounts.forEach(a => {
-        selected += nextAccounts.find(ac => ac.id === a.id).remaining;
+        selected += (nextAccounts.find(ac => ac.id === a.id).remaining * 100);
       });
-      this.setState({ selected });
+      this.setState({ selected: selected / 100 });
     }
 
     if (this.addRecord !== nextProps.num) {
@@ -313,6 +315,8 @@ class AccountsHistory extends React.Component {
         waive: false,
         waiveModal: false,
         waiveMany: false,
+        transferModal: false,
+        transferMany: false,
         refund: false,
         transfer: false,
       },
@@ -487,17 +491,36 @@ class AccountsHistory extends React.Component {
           {firstMenu}
         </Col>
         <Col xsOffset={2} xs={5}>
-          <SegmentedControl activeId={query.layer} onActivate={this.handleActivate}>
-            <Button bottomMargin0 id="open-accounts">
+          <ButtonGroup
+            fullWidth
+            activeId={query.layer}
+            onActivate={this.handleActivate}
+          >
+            <Button
+              buttonStyle={query.layer === 'open-accounts' ? 'primary' : 'default'}
+              bottomMargin0
+              id="open-accounts"
+              onClick={() => this.handleActivate({ id: 'open-accounts' })}
+            >
               <FormattedMessage id="ui-users.accounts.open" />
             </Button>
-            <Button bottomMargin0 id="closed-accounts">
+            <Button
+              buttonStyle={query.layer === 'closed-accounts' ? 'primary' : 'default'}
+              bottomMargin0
+              id="closed-accounts"
+              onClick={() => this.handleActivate({ id: 'closed-accounts' })}
+            >
               <FormattedMessage id="ui-users.accounts.closed" />
             </Button>
-            <Button bottomMargin0 id="all-accounts">
+            <Button
+              buttonStyle={query.layer === 'all-accounts' ? 'primary' : 'default'}
+              bottomMargin0
+              id="all-accounts"
+              onClick={() => this.handleActivate({ id: 'all-accounts' })}
+            >
               <FormattedMessage id="ui-users.accounts.all" />
             </Button>
-          </SegmentedControl>
+          </ButtonGroup>
         </Col>
       </Row>
     );
@@ -506,15 +529,15 @@ class AccountsHistory extends React.Component {
 
     let balance = 0;
     accounts.forEach((a) => {
-      balance += a.remaining;
+      balance += (parseFloat(a.remaining) * 100);
     });
+    balance /= 100;
 
     const outstandingBalance = (user.id === (accounts[0] || {}).userId)
       ? parseFloat(balance || 0).toFixed(2)
       : '0.00';
 
     const visibleColumns = this.getVisibleColumns();
-
 
     return (
       <Paneset>

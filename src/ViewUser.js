@@ -879,24 +879,30 @@ class ViewUser extends React.Component {
     );
   }
 
+  // eslint-disable-next-line consistent-return
   getActionMenu = ({ onToggle }) => {
-    const { onEdit } = this.props;
+    const {
+      onEdit,
+      stripes,
+    } = this.props;
     const handleClick = () => {
       onEdit();
       onToggle();
     };
 
-    return (
-      <Button
-        data-test-user-instance-edit-action
-        buttonStyle="dropdownItem"
-        onClick={handleClick}
-      >
-        <Icon icon="edit">
-          <FormattedMessage id="ui-users.edit" />
-        </Icon>
-      </Button>
-    );
+    if (stripes.hasPerm('ui-users.edit')) {
+      return (
+        <Button
+          data-test-user-instance-edit-action
+          buttonStyle="dropdownItem"
+          onClick={handleClick}
+        >
+          <Icon icon="edit">
+            <FormattedMessage id="ui-users.edit" />
+          </Icon>
+        </Button>
+      );
+    }
   };
 
   renderUser(user) {

@@ -809,5 +809,22 @@
     "contextMenu.settings": "الإعدادات",
     "contextMenu.usageTips": "نصائح الاستخدام",
     "owners.cannotDeleteOwner": "لا يمكن حذف مالك هذا الرسم/الغرامة، حيث أن لديه أكثر من رسم/غرامة مرتبطة به.",
-    "charge.Pay": "فرض المبلغ والدفع الآن"
+    "charge.Pay": "فرض المبلغ والدفع الآن",
+    "data.loanActionMap.checkedOutThroughOverride": "تمت الإعارة عبر التخطي",
+    "accounts.viewAllFeesFines": "عرض كل الرسوم/الغرامات",
+    "save": "حفظ",
+    "reports.overdue.dueDate": "تاريخ الاستحقاق",
+    "reports.overdue.loanDate": "تاريخ الإعارة",
+    "reports.overdue.loanPolicyId": "معرّف سياسة الإعارة",
+    "reports.overdue.item.title": "عنوان المادة",
+    "reports.overdue.item.materialType.name": "نوع المادة",
+    "reports.overdue.item.status.name": "حالة المادة",
+    "reports.overdue.item.barcode": "الباركود",
+    "reports.overdue.item.callNumber": "رقم الاستدعاء",
+    "reports.overdue.item.contributors": "المساهمون",
+    "reports.overdue.item.location.name": "الموقع",
+    "reports.overdue.item.instanceId": "معرّف الوعاء",
+    "reports.overdue.item.holdingsRecordId": "معرّف المقتنيات",
+    "reports.overdue.itemId": "معرّف المادة",
+    "reports.overdue.label": "تقرير الإعارات المتأخرة (CSV)"
 }

@@ -2,7 +2,8 @@ import {
   interactor,
   scoped,
   collection,
-  clickable
+  clickable,
+  isVisible
 } from '@bigtest/interactor';
 
 @interactor class ActiveUserCheckbox {
@@ -10,9 +11,22 @@ import {
   clickInactive= clickable('#clickable-filter-active-inactive');
 }
 
+@interactor class HeaderDropdown {
+  click = clickable('button');
+}
+
+@interactor class HeaderDropdownMenu {
+  clickExportToCSV = clickable('#export-overdue-loan-report');
+  exportBtnIsVisible = isVisible('#export-overdue-loan-report');
+}
+
+
 export default @interactor class UsersInteractor {
   static defaultScope = '[data-test-user-instances]';
+
   activeUserCheckbox = new ActiveUserCheckbox();
+  headerDropdownMenu = new HeaderDropdownMenu();
+  headerDropdown = new HeaderDropdown('[class*=paneHeaderCenterInner---] [class*=dropdown---]');
   clickFacultyCheckbox = clickable('#clickable-filter-pg-faculty');
   clickGraduateCheckbox = clickable('#clickable-filter-pg-graduate');
   clickStaffCheckbox = clickable('#clickable-filter-pg-staff');

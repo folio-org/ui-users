@@ -2,7 +2,7 @@
 /* global it describe after Nightmare */
 module.exports.test = function meh(uitestctx) {
   describe('Module test: users:new-user', function bar() {
-    const { config, helpers: { namegen, openApp, logout }, meta: { testVersion } } = uitestctx;
+    const { config, helpers: { namegen, logout, clickApp } } = uitestctx;
     const nightmare = new Nightmare(config.nightmare);
     this.timeout(Number(config.test_timeout));
     let pgroup = null;
@@ -68,16 +68,12 @@ module.exports.test = function meh(uitestctx) {
 
       flogin(config.username, config.password);
 
-      it('should open app and find version tag', (done) => {
-        nightmare
-          .use(openApp(nightmare, config, done, 'users', testVersion))
-          .then(result => result);
+      it('should navigate to users', (done) => {
+        clickApp(nightmare, done, 'users');
       });
 
       it('should extract a patron group value', (done) => {
         nightmare
-          .wait('#clickable-users-module')
-          .click('#clickable-users-module')
           .wait('#input-user-search')
           .type('#input-user-search', '0')
           .wait('button[type=submit]')
@@ -125,8 +121,8 @@ module.exports.test = function meh(uitestctx) {
           .insert('#adduser_enrollmentdate', '01/01/2017')
           .wait('#adduser_expirationdate')
           .insert('#adduser_expirationdate', '01/01/2022')
-          .wait('#clickable-createnewuser')
-          .click('#clickable-createnewuser')
+          .wait('#clickable-save')
+          .click('#clickable-save')
           .wait('#userInformationSection')
           .wait((uid) => {
             const us = document.querySelector('#extendedInfoSection');
@@ -148,10 +144,12 @@ module.exports.test = function meh(uitestctx) {
 
       flogin(config.username, config.password);
 
+      it('should navigate to users', (done) => {
+        clickApp(nightmare, done, 'users');
+      });
+
       it(`should change username for ${user.id}`, (done) => {
         nightmare
-          .wait('#clickable-users-module')
-          .click('#clickable-users-module')
           .wait('#input-user-search')
           .insert('#input-user-search', user.id)
           .wait('button[type=submit]')
@@ -179,7 +177,7 @@ module.exports.test = function meh(uitestctx) {
               .insert('#adduser_username', `${user.id}x`)
               .select('#adduser_group', pgroup)
               .wait(555)
-              .click('#clickable-updateuser')
+              .click('#clickable-save')
               .wait(555)
               .wait((uid) => {
                 let rvalue = false;

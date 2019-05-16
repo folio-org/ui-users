@@ -305,9 +305,7 @@ class UserForm extends React.Component {
       ? getFullName(initialValues)
       : <FormattedMessage id="ui-users.crud.createUser" />;
 
-    const lastMenu = initialValues.id
-      ? this.getLastMenu('clickable-updateuser', <FormattedMessage id="ui-users.crud.updateUser" />)
-      : this.getLastMenu('clickable-createnewuser', <FormattedMessage id="ui-users.crud.createUser" />);
+    const lastMenu = this.getLastMenu('clickable-save', <FormattedMessage id="ui-users.save" />);
 
     return (
       <HasCommand commands={this.keyboardCommands}>
