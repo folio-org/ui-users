@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
+import packageInfo from '../package';
 
 export function getFullName(user) {
   const lastName = _.get(user, ['personal', 'lastName'], '');
@@ -45,4 +46,14 @@ export function getRecordObject(resources, ...args) {
     res[resource] = resources[resource].records;
   });
   return res;
+}
+
+export function handleBackLink(location, history, callback = () => { history.replace(packageInfo.stripes.home);}) {
+  if (!location.state) {
+    history.goBack();
+  } else if (location.state && location.state.referrer === 'home') {
+    callback();
+  } else if (location.state && location.state.referrer) {
+    history.push(location.state.referrer);
+  }
 }

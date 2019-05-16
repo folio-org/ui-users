@@ -13,7 +13,7 @@ class FeeFineInfo extends React.Component {
   static propTypes = {
     feefineList: PropTypes.arrayOf(PropTypes.object),
     onChangeOwner: PropTypes.func,
-    owners: PropTypes.arrayOf(PropTypes.object),
+    ownerOptions: PropTypes.arrayOf(PropTypes.object),
     onChangeFeeFine: PropTypes.func,
     feefines: PropTypes.arrayOf(PropTypes.object),
     isPending: PropTypes.object,
@@ -63,7 +63,7 @@ class FeeFineInfo extends React.Component {
                           component={Select}
                           fullWidth
                           disabled={this.props.isPending.owners}
-                          dataOptions={this.props.owners}
+                          dataOptions={this.props.ownerOptions}
                           onChange={this.props.onChangeOwner}
                           placeholder={placeholder}
                         />

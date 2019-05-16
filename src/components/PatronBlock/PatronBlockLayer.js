@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { get as _get, isEmpty as _isEmpty } from 'lodash';
 import React from 'react';
 import {
   intlShape,
@@ -8,30 +8,9 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { ConfirmationModal } from '@folio/stripes/components';
 import PatronBlockForm from './PatronBlockForm';
+import { handleBackLink } from '../../util';
 
 class PatronBlockLayer extends React.Component {
-  static manifest = Object.freeze({
-    patronBlocks: {
-      type: 'okapi',
-      records: 'manualblocks',
-      path:'manualblocks',
-      // TODO: the use of activerecord here is very confusing.
-      // it specifically correspoonds to a userId in the GET query but
-      // is set to an item's ID in onUpdateItem and onDeleteItem.
-      // that's not wrong, but it's not clear.
-      GET: {
-        path: 'manualblocks?query=userId==%{activeRecord.id}',
-      },
-      PUT: {
-        path: 'manualblocks/%{activeRecord.id}',
-      },
-      DELETE: {
-        path: 'manualblocks/%{activeRecord.id}',
-      }
-    },
-    activeRecord: {},
-  });
-
   static propTypes = {
     mutator: PropTypes.shape({
       patronBlocks: PropTypes.shape({
@@ -41,11 +20,17 @@ class PatronBlockLayer extends React.Component {
       }),
       activeRecord: PropTypes.object,
     }).isRequired,
-    resources: PropTypes.object,
-    selectedPatronBlock: PropTypes.object,
-    onCancel: PropTypes.func,
+    resources: PropTypes.shape({
+      patronBlocks: PropTypes.object,
+    }),
+    onDeleteItem: PropTypes.func,
+    onCreateItem: PropTypes.func,
+    onUpdateItem: PropTypes.func,
     user: PropTypes.object,
-    query: PropTypes.object,
+    selectedPatronBlock: PropTypes.object,
+    location: PropTypes.object,
+    history: PropTypes.object,
+    match: PropTypes.object,
     initialValues: PropTypes.object,
     intl: intlShape.isRequired,
     stripes: PropTypes.object,
@@ -58,58 +43,57 @@ class PatronBlockLayer extends React.Component {
       showConfirmDialog: false,
     };
 
-    this.onCreateItem = this.onCreateItem.bind(this);
-    this.onDeleteItem = this.onDeleteItem.bind(this);
-    this.onUpdateItem = this.onUpdateItem.bind(this);
     this.showConfirm = this.showConfirm.bind(this);
     this.hideConfirm = this.hideConfirm.bind(this);
   }
 
   componentDidMount() {
-    const { query, selectedPatronBlock } = this.props;
-
-    if (query.block && !selectedPatronBlock.id) {
-      this.props.mutator.activeRecord.update({ id: query.block });
+    const { match: { params } } = this.props;
+    // if editting an existing patron block, the patronblockid will be present
+    // in match.params.
+    if (!params.patronblockid) {
+      this.props.mutator.activeRecord.update({ blockid: 'x' });
     } else {
-      this.props.mutator.activeRecord.update({ id: 'x' });
+      this.props.mutator.activeRecord.update({ blockid: params.id });
     }
   }
 
-  onCreateItem(item) {
+  onCreateItem = (item) => {
+    const { match: { params } } = this.props;
     item.type = 'Manual';
-    item.userId = (this.props.user || {}).id;
+    item.userId = (params.id);
     if (item.expirationDate) {
       item.expirationDate = moment(item.expirationDate).format();
     }
     return this.props.mutator.patronBlocks.POST(item).then(() => {
-      this.props.mutator.activeRecord.update({ id: item.userId });
-    }).then(() => { this.props.onCancel(); });
+      this.props.mutator.activeRecord.update({ blockid: item.userId });
+    }).then(() => { this.onCancel(); });
   }
 
-  onDeleteItem() {
-    const { query } = this.props;
-    const selectedItem = (query.block && !this.props.selectedPatronBlock.id) ?
-      _.get(this.props.resources, ['patronBlocks', 'records', 0], {})
+  onDeleteItem = () => {
+    const { match: { params } } = this.props;
+    const selectedItem = (params.patronblockid) ?
+      _get(this.props.resources, ['patronBlocks', 'records', 0], {})
       : this.props.selectedPatronBlock;
 
-    this.props.mutator.activeRecord.update({ id: selectedItem.id });
+    this.props.mutator.activeRecord.update({ blockid: selectedItem.id });
     return this.props.mutator.patronBlocks.DELETE({ id: selectedItem.id })
       .then(() => { this.deleteItemResolve(); })
       .catch(() => { this.deleteItemReject(); })
       .finally(() => {
         this.hideConfirm();
-        this.props.onCancel();
+        this.onCancel();
       });
   }
 
-  onUpdateItem(item) {
+  onUpdateItem = (item) => {
     if (item.expirationDate) {
       item.expirationDate = moment(item.expirationDate).format();
     }
     delete item.metadata;
-    this.props.mutator.activeRecord.update({ id: item.id });
+    this.props.mutator.activeRecord.update({ blockid: item.id });
     return this.props.mutator.patronBlocks.PUT(item).then(() => {
-      this.props.onCancel();
+      this.onCancel();
     });
   }
 
@@ -131,24 +115,37 @@ class PatronBlockLayer extends React.Component {
   }
 
   onSubmit = (item) => {
-    const { query } = this.props;
-    if (query.layer === 'add-block') {
-      this.onCreateItem(item);
-    } else {
+    const {
+      match: { params },
+    } = this.props;
+    if (params.patronblockid) {
       this.onUpdateItem(item);
+    } else {
+      this.onCreateItem(item);
     }
+  }
+
+  onCancel = () => {
+    const {
+      location,
+      history,
+    } = this.props;
+    handleBackLink(location, history);
   }
 
   render() {
     const {
-      query,
       intl,
+      match: { params },
+      user,
+      stripes,
+      // initialValues
     } = this.props;
-    const selectedItem = (query.block && !this.props.selectedPatronBlock.id) ?
-      _.get(this.props.resources, ['patronBlocks', 'records', 0], {})
+    const selectedItem = params.patronblockid ?
+      _get(this.props.resources, ['patronBlocks', 'records', 0], {})
       : this.props.selectedPatronBlock;
 
-    const message = !_.isEmpty(selectedItem) ?
+    const message = !_isEmpty(selectedItem) ?
       <span>
         <strong>{selectedItem.desc}</strong>
         {' '}
@@ -156,17 +153,17 @@ class PatronBlockLayer extends React.Component {
       </span> : '';
 
     return (
-      <div>
+      <React.Fragment>
         <PatronBlockForm
-          intl={this.props.intl}
-          stripes={this.props.stripes}
-          onClose={this.props.onCancel}
+          intl={intl}
+          stripes={stripes}
+          onClose={this.onCancel}
           onDeleteItem={this.showConfirm}
-          query={query}
           selectedItem={selectedItem}
-          user={this.props.user}
+          user={user}
           onSubmit={this.onSubmit}
-          initialValues={this.props.initialValues}
+          initialValues={selectedItem}
+          params={params}
         />
         <ConfirmationModal
           open={this.state.showConfirmDialog}
@@ -176,7 +173,7 @@ class PatronBlockLayer extends React.Component {
           heading={intl.formatMessage({ id: 'ui-users.blocks.layer.heading' })}
           message={message}
         />
-      </div>
+      </React.Fragment>
     );
   }
 }

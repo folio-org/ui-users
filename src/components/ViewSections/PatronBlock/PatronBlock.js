@@ -15,6 +15,8 @@ import {
   Button,
   Headline
 } from '@folio/stripes/components';
+import { stripesConnect } from '@folio/stripes/core';
+
 import moment from 'moment';
 
 class PatronBlock extends React.Component {
@@ -35,7 +37,8 @@ class PatronBlock extends React.Component {
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func,
     }),
-    onClickViewPatronBlock: PropTypes.func,
+    history: PropTypes.object,
+    match: PropTypes.object,
     intl: intlShape.isRequired,
     onToggle: PropTypes.func,
     expanded: PropTypes.bool,
@@ -126,12 +129,17 @@ class PatronBlock extends React.Component {
   }
 
   onRowClick(e, row) {
+    const {
+      history,
+      match: { params }
+    } = this.props;
+
     const permAbled = this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
     if (permAbled === true && (e.target.type !== 'button') && (e.target.tagName !== 'IMG')) {
-      this.props.onClickViewPatronBlock(e, 'edit', row);
+      // this.props.onClickViewPatronBlock(e, 'edit', row);
+      history.push(`/users/${params.id}/patronblocks/edit/${row.id}`);
     }
   }
-
 
   getPatronFormatter() {
     const { intl: { formatMessage } } = this.props;
@@ -150,6 +158,7 @@ class PatronBlock extends React.Component {
       onToggle,
       accordionId,
       patronBlocks,
+      match: { params },
     } = props;
     const {
       sortOrder,
@@ -164,7 +173,7 @@ class PatronBlock extends React.Component {
     ];
     const buttonDisabled = this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
     const displayWhenOpen =
-      <Button disabled={!buttonDisabled} onClick={e => { props.onClickViewPatronBlock(e, 'add'); }}>
+      <Button disabled={!buttonDisabled} to={{ pathname: `/users/${params.id}/patronblocks/create`, state:{ referrer: 'userdetail' } }}>
         <FormattedMessage id="ui-users.blocks.buttons.add" />
       </Button>;
     const items =
@@ -202,4 +211,4 @@ class PatronBlock extends React.Component {
   }
 }
 
-export default injectIntl(PatronBlock);
+export default stripesConnect(injectIntl(PatronBlock));

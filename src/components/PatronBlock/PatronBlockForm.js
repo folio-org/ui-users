@@ -6,6 +6,7 @@ import {
   Accordion,
   ExpandAllButton,
   Pane,
+  Paneset,
   Row,
   Col,
   PaneMenu,
@@ -53,8 +54,8 @@ class PatronBlockForm extends React.Component {
     pristine: PropTypes.bool,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
+    params: PropTypes.object,
     selectedItem: PropTypes.object,
-    query: PropTypes.object,
     onDeleteItem: PropTypes.func,
     onClose: PropTypes.func,
     initialize: PropTypes.func,
@@ -150,14 +151,14 @@ class PatronBlockForm extends React.Component {
       pristine,
       submitting,
       invalid,
-      query,
+      params,
     } = this.props;
 
     const submit =
       <Button marginBottom0 buttonStyle="primary" onClick={this.props.handleSubmit} disabled={pristine || submitting || invalid}>
-        {(query.layer === 'edit-block') ? <FormattedMessage id="ui-users.blocks.form.button.save" /> : <FormattedMessage id="ui-users.blocks.form.button.create" />}
+        { params.patronblockid ? <FormattedMessage id="ui-users.blocks.form.button.save" /> : <FormattedMessage id="ui-users.blocks.form.button.create" />}
       </Button>;
-    const del = (query.layer === 'edit-block') ? <Button marginBottom0 buttonStyle="danger" onClick={this.props.onDeleteItem}><FormattedMessage id="ui-users.blocks.form.button.delete" /></Button> : '';
+    const del = params.patronblockid ? <Button marginBottom0 buttonStyle="danger" onClick={this.props.onDeleteItem}><FormattedMessage id="ui-users.blocks.form.button.delete" /></Button> : '';
 
     return (
       <PaneMenu>
@@ -182,136 +183,137 @@ class PatronBlockForm extends React.Component {
 
   render() {
     const user = this.props.user || {};
-    const { intl } = this.props;
-    const title = this.props.query.layer === 'edit-block' ? getFullName(user) : intl.formatMessage({ id: 'ui-users.blocks.layer.newBlockTitle' });
-    const userD = this.props.query.layer !== 'edit-block' ? <UserDetails user={user} /> : '';
+    const { intl, params } = this.props;
+    const title = params.patronblockid ? getFullName(user) : intl.formatMessage({ id: 'ui-users.blocks.layer.newBlockTitle' });
+    const userD = !params.patronblockid ? <UserDetails user={user} /> : '';
 
     const isSelectedItemMetadata = this.props.selectedItem || {};
 
     return (
-      <Pane
-        defaultWidth="20%"
-        firstMenu={this.renderFirstMenu()}
-        lastMenu={this.renderLastMenu()}
-        appIcon={<AppIcon app="users" size="small" />}
-        paneTitle={title}
-      >
-        <TitleManager />
-        {userD}
-        <Row end="xs">
-          <Col xs>
-            <ExpandAllButton accordionStatus={this.state.sections} onToggle={this.handleExpandAll} />
-          </Col>
-        </Row>
-        <Row>
-          <Col xs>
-            <Accordion
-              label={<FormattedMessage id="ui-users.blocks.form.label.information" />}
-              id="blockInformationSection"
-              onToggle={this.handleSectionToggle}
-              open={this.state.sections.blockInformationSection}
-            >
-              { !_.isEmpty(isSelectedItemMetadata) ?
-                <Row>
-                  <Col xs={12} sm={10} md={7} lg={5}>
-                    <this.connectedViewMetaData metadata={this.props.selectedItem.metadata} />
-                  </Col>
-                </Row> : ''
-              }
-              <form>
-                <Row>
-                  <Col xs={12} sm={10} md={7} lg={5}>
-                    <Field
-                      name="desc"
-                      label={<FormattedMessage id="ui-users.blocks.form.label.display" />}
-                      component={TextArea}
-                      placeholder={intl.formatMessage({ id: 'ui-users.blocks.form.placeholder.desc' })}
-                      fullWidth
-                    />
-                  </Col>
-                </Row>
-                <Row>
-                  <Col xs={12} sm={10} md={7} lg={5}>
-                    <Field
-                      name="staffInformation"
-                      label={<FormattedMessage id="ui-users.blocks.form.label.staff" />}
-                      component={TextArea}
-                      placeholder={intl.formatMessage({ id: 'ui-users.blocks.form.placeholder.information' })}
-                      fullWidth
-                    />
-                  </Col>
-                </Row>
-                <Row>
-                  <Col xs={12} sm={10} md={7} lg={5}>
-                    <Field
-                      label={<FormattedMessage id="ui-users.blocks.form.label.message" />}
-                      name="patronMessage"
-                      component={TextArea}
-                      placeholder={intl.formatMessage({ id: 'ui-users.blocks.form.placeholder.message' })}
-                      fullWidth
-                    />
-                  </Col>
-                </Row>
-                <Row>
-                  <Col xs={12} sm={10} md={7} lg={5}>
-                    <Field
-                      component={Datepicker}
-                      dateFormat="YYYY/MM/DD"
-                      name="expirationDate"
-                      label={<FormattedMessage id="ui-users.blocks.form.label.date" />}
-                      backendDateStandard="YYYY/MM/DD"
-                      timeZone="UTC"
-                      useFocus
-                    />
-                  </Col>
-                </Row>
-                <Row>
-                  <Col><FormattedMessage id="ui-users.blocks.form.label.block" /></Col>
-                </Row>
-                <Row>
-                  <Col xs={12} sm={10} md={7} lg={5}>
-                    <Field
-                      name="borrowing"
-                      id="borrowing"
-                      label={<FormattedMessage id="ui-users.blocks.form.label.borrowing" />}
-                      checked={this.state.borrowing}
-                      value={this.state.borrowing}
-                      onChange={this.onToggleActions('borrowing')}
-                      component={Checkbox}
-                    />
-                  </Col>
-                </Row>
-                <Row>
-                  <Col xs={12} sm={10} md={7} lg={5}>
-                    <Field
-                      name="renewals"
-                      id="renewals"
-                      label={<FormattedMessage id="ui-users.blocks.form.label.renewals" />}
-                      checked={this.state.renewals}
-                      onChange={this.onToggleActions('renewals')}
-                      value={this.state.renewals}
-                      component={Checkbox}
-                    />
-                  </Col>
-                </Row>
-                <Row>
-                  <Col xs={12} sm={10} md={7} lg={5}>
-                    <Field
-                      name="requests"
-                      id="requests"
-                      label={<FormattedMessage id="ui-users.blocks.form.label.request" />}
-                      component={Checkbox}
-                      checked={this.state.requests}
-                      onChange={this.onToggleActions('requests')}
-                      value={this.state.requests}
-                    />
-                  </Col>
-                </Row>
-              </form>
-            </Accordion>
-          </Col>
-        </Row>
-      </Pane>
+      <Paneset>
+        <Pane
+          firstMenu={this.renderFirstMenu()}
+          lastMenu={this.renderLastMenu()}
+          appIcon={<AppIcon app="users" size="small" />}
+          paneTitle={title}
+        >
+          <TitleManager />
+          {userD}
+          <Row end="xs">
+            <Col xs>
+              <ExpandAllButton accordionStatus={this.state.sections} onToggle={this.handleExpandAll} />
+            </Col>
+          </Row>
+          <Row>
+            <Col xs>
+              <Accordion
+                label={<FormattedMessage id="ui-users.blocks.form.label.information" />}
+                id="blockInformationSection"
+                onToggle={this.handleSectionToggle}
+                open={this.state.sections.blockInformationSection}
+              >
+                { !_.isEmpty(isSelectedItemMetadata) ?
+                  <Row>
+                    <Col xs={12} sm={10} md={7} lg={5}>
+                      <this.connectedViewMetaData metadata={this.props.selectedItem.metadata} />
+                    </Col>
+                  </Row> : ''
+                }
+                <form>
+                  <Row>
+                    <Col xs={12} sm={10} md={7} lg={5}>
+                      <Field
+                        name="desc"
+                        label={<FormattedMessage id="ui-users.blocks.form.label.display" />}
+                        component={TextArea}
+                        placeholder={intl.formatMessage({ id: 'ui-users.blocks.form.placeholder.desc' })}
+                        fullWidth
+                      />
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col xs={12} sm={10} md={7} lg={5}>
+                      <Field
+                        name="staffInformation"
+                        label={<FormattedMessage id="ui-users.blocks.form.label.staff" />}
+                        component={TextArea}
+                        placeholder={intl.formatMessage({ id: 'ui-users.blocks.form.placeholder.information' })}
+                        fullWidth
+                      />
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col xs={12} sm={10} md={7} lg={5}>
+                      <Field
+                        label={<FormattedMessage id="ui-users.blocks.form.label.message" />}
+                        name="patronMessage"
+                        component={TextArea}
+                        placeholder={intl.formatMessage({ id: 'ui-users.blocks.form.placeholder.message' })}
+                        fullWidth
+                      />
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col xs={12} sm={10} md={7} lg={5}>
+                      <Field
+                        component={Datepicker}
+                        dateFormat="YYYY/MM/DD"
+                        name="expirationDate"
+                        label={<FormattedMessage id="ui-users.blocks.form.label.date" />}
+                        backendDateStandard="YYYY/MM/DD"
+                        timeZone="UTC"
+                        useFocus
+                      />
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col><FormattedMessage id="ui-users.blocks.form.label.block" /></Col>
+                  </Row>
+                  <Row>
+                    <Col xs={12} sm={10} md={7} lg={5}>
+                      <Field
+                        name="borrowing"
+                        id="borrowing"
+                        label={<FormattedMessage id="ui-users.blocks.form.label.borrowing" />}
+                        checked={this.state.borrowing}
+                        value={this.state.borrowing}
+                        onChange={this.onToggleActions('borrowing')}
+                        component={Checkbox}
+                      />
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col xs={12} sm={10} md={7} lg={5}>
+                      <Field
+                        name="renewals"
+                        id="renewals"
+                        label={<FormattedMessage id="ui-users.blocks.form.label.renewals" />}
+                        checked={this.state.renewals}
+                        onChange={this.onToggleActions('renewals')}
+                        value={this.state.renewals}
+                        component={Checkbox}
+                      />
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col xs={12} sm={10} md={7} lg={5}>
+                      <Field
+                        name="requests"
+                        id="requests"
+                        label={<FormattedMessage id="ui-users.blocks.form.label.request" />}
+                        component={Checkbox}
+                        checked={this.state.requests}
+                        onChange={this.onToggleActions('requests')}
+                        value={this.state.requests}
+                      />
+                    </Col>
+                  </Row>
+                </form>
+              </Accordion>
+            </Col>
+          </Row>
+        </Pane>
+      </Paneset>
     );
   }
 }

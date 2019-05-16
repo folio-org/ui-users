@@ -6,6 +6,7 @@ import { FormattedMessage } from 'react-intl';
 import {
   AppIcon,
   IfPermission,
+  IfInterface,
   TitleManager,
 } from '@folio/stripes/core';
 
@@ -42,7 +43,7 @@ import {
 } from '../PatronBlock';
 import { toListAddresses, toUserAddresses } from '../../converters/address';
 import { getFullName, eachPromise } from '../../util';
-
+import ViewLoading from './ViewLoading';
 
 class UserView extends React.Component {
   static propTypes = {
@@ -60,7 +61,7 @@ class UserView extends React.Component {
       permissions: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
-      query: PropTypes.object,
+      // query: PropTypes.object,
       patronGroups: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
@@ -71,16 +72,16 @@ class UserView extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }),
-    mutator: PropTypes.shape({
-      selUser: PropTypes.shape({
-        PUT: PropTypes.func.isRequired,
-      }),
-      permissions: PropTypes.shape({
-        POST: PropTypes.func.isRequired,
-        DELETE: PropTypes.func.isRequired,
-      }),
-      query: PropTypes.object.isRequired,
-    }),
+    // mutator: PropTypes.shape({
+    //   selUser: PropTypes.shape({
+    //     PUT: PropTypes.func.isRequired,
+    //   }),
+    //   permissions: PropTypes.shape({
+    //     POST: PropTypes.func.isRequired,
+    //     DELETE: PropTypes.func.isRequired,
+    //   }),
+    //   query: PropTypes.object.isRequired,
+    // }),
     match: PropTypes.shape({
       path: PropTypes.string.isRequired,
       params: PropTypes.shape({
@@ -91,21 +92,21 @@ class UserView extends React.Component {
     tagsToggle: PropTypes.func,
     location: PropTypes.object,
     history: PropTypes.object,
-    parentResources: PropTypes.shape({
-      addressTypes: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
-      }),
-    }),
-    parentMutator: PropTypes.shape({}),
-    updateProxies: PropTypes.func,
-    updateServicePoints: PropTypes.func,
-    updateSponsors: PropTypes.func,
+    // parentResources: PropTypes.shape({
+    //   addressTypes: PropTypes.shape({
+    //     records: PropTypes.arrayOf(PropTypes.object),
+    //   }),
+    // }),
+    // parentMutator: PropTypes.shape({}),
+    // updateProxies: PropTypes.func,
+    // updateServicePoints: PropTypes.func,
+    // updateSponsors: PropTypes.func,
     getSponsors: PropTypes.func,
     getProxies: PropTypes.func,
     getServicePoints: PropTypes.func,
     getPreferredServicePoint: PropTypes.func,
     tagsEnabled: PropTypes.bool,
-    okapi: PropTypes.object,
+    // okapi: PropTypes.object,
   };
 
   constructor(props) {
@@ -144,11 +145,11 @@ class UserView extends React.Component {
       },
     };
 
-    this.connectedUserInfo = props.stripes.connect(UserInfo);
+    // this.connectedUserInfo = props.stripes.connect(UserInfo);
     this.connectedUserLoans = props.stripes.connect(UserLoans);
     this.connectedUserRequests = props.stripes.connect(UserRequests);
-    this.connectedUserAccounts = props.stripes.connect(UserAccounts);
-    this.connectedPatronBlock = props.stripes.connect(PatronBlock);
+    // this.connectedUserAccounts = props.stripes.connect(UserAccounts);
+    // this.connectedPatronBlock = props.stripes.connect(PatronBlock);
   }
 
   getUser = () => {
@@ -310,18 +311,14 @@ class UserView extends React.Component {
     const detailMenu = this.renderDetailMenu();
 
     return (
-      <Pane
+      <ViewLoading
         id="pane-userdetails"
         defaultWidth="44%"
         paneTitle={<FormattedMessage id="ui-users.information.userDetails" />}
         lastMenu={detailMenu}
         dismissible
         onClose={onClose}
-      >
-        <div style={{ paddingTop: '1rem' }}>
-          <Icon icon="spinner-ellipsis" width="100px" />
-        </div>
-      </Pane>
+      />
     );
   }
 
@@ -332,6 +329,8 @@ class UserView extends React.Component {
       parentResources,
       onClose,
       paneWidth,
+      location,
+      match,
     } = this.props;
 
     const user = this.getUser();
@@ -399,6 +398,80 @@ class UserView extends React.Component {
               expanded={this.state.sections.userInformationSection}
               onToggle={this.handleSectionToggle}
             />
+            <IfPermission perm="manualblocks.collection.get">
+              <PatronBlock
+                accordionId="patronBlocksSection"
+                user={user}
+                hasPatronBlocks={(hasPatronBlocks === 1 && totalPatronBlocks > 0)}
+                patronBlocks={patronBlocks}
+                expanded={this.state.sections.patronBlocksSection}
+                onToggle={this.handleSectionToggle}
+                onClickViewPatronBlock={this.onClickViewPatronBlock}
+                addRecord={this.state.addRecord}
+                {...this.props}
+              />
+            </IfPermission>
+            <ExtendedInfo
+              accordionId="extendedInfoSection"
+              user={user}
+              expanded={this.state.sections.extendedInfoSection}
+              onToggle={this.handleSectionToggle}
+            />
+            <ContactInfo
+              accordionId="contactInfoSection"
+              stripes={stripes}
+              user={user}
+              addresses={addresses}
+              addressTypes={addressTypes}
+              expanded={this.state.sections.contactInfoSection}
+              onToggle={this.handleSectionToggle}
+            />
+            <IfPermission perm="proxiesfor.collection.get">
+              <ProxyPermissions
+                user={user}
+                accordionId="proxySection"
+                onToggle={this.handleSectionToggle}
+                proxies={proxies}
+                sponsors={sponsors}
+                expanded={this.state.sections.proxySection}
+                {...this.props}
+              />
+            </IfPermission>
+            <IfPermission perm="accounts.collection.get">
+              <UserAccounts
+                expanded={this.state.sections.accountsSection}
+                onToggle={this.handleSectionToggle}
+                accordionId="accountsSection"
+                addRecord={this.state.addRecord}
+                location={location}
+                match={match}
+              />
+            </IfPermission>
+
+            <IfPermission perm="perms.users.get">
+              <IfInterface name="permissions" version="5.0">
+                <UserPermissions
+                  expanded={this.state.sections.permissionsSection}
+                  onToggle={this.handleSectionToggle}
+                  userPermissions={permissions}
+                  accordionId="permissionsSection"
+                  {...this.props}
+                />
+              </IfInterface>
+            </IfPermission>
+
+            <IfPermission perm="inventory-storage.service-points.collection.get,inventory-storage.service-points-users.collection.get">
+              <IfInterface name="service-points-users" version="1.0">
+                <UserServicePoints
+                  expanded={this.state.sections.servicePointsSection}
+                  onToggle={this.handleSectionToggle}
+                  accordionId="servicePointsSection"
+                  servicePoints={servicePoints}
+                  preferredServicePoint={preferredServicePoint}
+                  {...this.props}
+                />
+              </IfInterface>
+            </IfPermission>
           </AccordionSet>
         </Pane>
       );

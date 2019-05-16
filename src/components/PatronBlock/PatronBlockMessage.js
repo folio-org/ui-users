@@ -1,5 +1,7 @@
 import React from 'react';
 import { TextField } from '@folio/stripes/components';
+import { stripesConnect } from '@folio/stripes/core';
+
 import {
   injectIntl,
   intlShape,
@@ -19,4 +21,4 @@ class PatronBlockMessage extends React.Component {
     );
   }
 }
-export default injectIntl(PatronBlockMessage);
+export default stripesConnect(injectIntl(PatronBlockMessage));

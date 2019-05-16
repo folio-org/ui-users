@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import uuid from 'uuid';
 import _ from 'lodash';
+import { compose } from 'redux';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import moment from 'moment';
 import {
@@ -10,76 +11,17 @@ import {
 } from '@folio/stripes/components';
 import {
   FormattedMessage,
-  injectIntl,
   intlShape,
+  injectIntl
 } from 'react-intl';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
+// import withServicePoints from '../../../withServicePoints';
 import ChargeForm from './ChargeForm';
 import ItemLookup from './ItemLookup';
 import PayModal from '../Actions/PayModal';
-import { getFullName } from '../../../util';
+import { getFullName, handleBackLink } from '../../../util';
 
 class Charge extends React.Component {
-  static manifest = Object.freeze({
-    curUserServicePoint: {
-      type: 'okapi',
-      path: 'service-points-users?query=(userId==!{currentUser.id})',
-      records: 'servicePointsUsers',
-    },
-    items: {
-      type: 'okapi',
-      records: 'items',
-      path: 'inventory/items?query=barcode=%{activeRecord.barcode}*',
-    },
-    feefines: {
-      type: 'okapi',
-      records: 'feefines',
-      GET: {
-        path: 'feefines?query=(ownerId=%{activeRecord.ownerId} or ownerId=%{activeRecord.shared})&limit=100',
-      },
-    },
-    feefineactions: {
-      type: 'okapi',
-      records: 'feefineactions',
-      path: 'feefineactions',
-    },
-    accounts: {
-      type: 'okapi',
-      records: 'accounts',
-      path: 'accounts',
-      PUT: {
-        path: 'accounts/%{activeRecord.id}'
-      },
-    },
-    account: {
-      type: 'okapi',
-      resource: 'accounts',
-      accumulate: 'true',
-      path: 'accounts',
-    },
-    owners: {
-      type: 'okapi',
-      records: 'owners',
-      path: 'owners?limit=100',
-    },
-    payments: {
-      type: 'okapi',
-      records: 'payments',
-      path: 'payments',
-    },
-    commentRequired: {
-      type: 'okapi',
-      records: 'comments',
-      path: 'comments',
-    },
-    allfeefines: {
-      type: 'okapi',
-      records: 'feefines',
-      path: 'feefines?limit=100',
-    },
-    activeRecord: {},
-  });
-
   static propTypes = {
     resources: PropTypes.shape({
       feefines: PropTypes.shape({
@@ -106,7 +48,6 @@ class Charge extends React.Component {
       }),
     }).isRequired,
     stripes: PropTypes.object.isRequired,
-    onCloseChargeFeeFine: PropTypes.func.isRequired,
     handleAddRecords: PropTypes.func,
     okapi: PropTypes.object,
     selectedLoan: PropTypes.object,
@@ -165,7 +106,8 @@ class Charge extends React.Component {
   onClickCharge(type) {
     const owners = _.get(this.props.resources, ['owners', 'records'], []);
     const feefines = _.get(this.props.resources, ['feefines', 'records'], []);
-    const { selectedLoan, intl: { formatMessage } } = this.props;
+    const selectedLoan = this.props.selectedLoan || {};
+    const { intl: { formatMessage } } = this.props;
     const item = (selectedLoan.id) ? selectedLoan.item : this.item;
 
     type.paymentStatus = {
@@ -187,7 +129,7 @@ class Charge extends React.Component {
     if (selectedLoan.dueDate) type.dueDate = selectedLoan.dueDate;
     if (selectedLoan.returnDate) type.returnedDate = selectedLoan.returnDate;
     type.id = uuid();
-    type.loanId = this.props.selectedLoan.id || '0';
+    type.loanId = selectedLoan.id || '0';
     type.userId = this.props.user.id;
     type.itemId = this.item.id || '0';
     let c = '';
@@ -356,8 +298,9 @@ class Charge extends React.Component {
         this.showCalloutMessage(this.type);
         this.payResolve();
       })
-      .then(() => this.props.handleAddRecords())
-      .then(() => setTimeout(this.props.onCloseChargeFeeFine, 2000));
+      // .then(() => this.props.handleAddRecords())
+      // .then(() => setTimeout(this.props.onCloseChargeFeeFine, 2000));
+      .then(() => { handleBackLink(this.props.location, this.props.history); });
   }
 
   renderConfirmMessage = () => {
@@ -375,8 +318,33 @@ class Charge extends React.Component {
     );
   }
 
+  onSubmitCharge = (data) => {
+    const {
+      location,
+      history
+    } = this.props;
+    if (data.pay) {
+      delete data.pay;
+      this.type.remaining = data.amount;
+      this.onClickPay(data);
+    } else {
+      delete data.pay;
+      this.onClickCharge(data)
+        // .then(() => this.props.handleAddRecords())
+        // .then(() => this.props.onCloseChargeFeeFine());
+        .then(() => { handleBackLink(location, history); });
+    }
+  }
+
   render() {
-    const resources = this.props.resources;
+    const {
+      resources,
+      okapi: { currentUser },
+      user,
+      stripes,
+      location,
+      history,
+    } = this.props;
     const allfeefines = _.get(resources, ['allfeefines', 'records'], []);
     const owners = _.get(resources, ['owners', 'records'], []);
     const list = [];
@@ -420,23 +388,11 @@ class Charge extends React.Component {
     return (
       <div>
         <ChargeForm
-          onClickCancel={this.props.onCloseChargeFeeFine}
           onClickPay={this.onClickPay}
           defaultServicePointId={defaultServicePointId}
           servicePointsIds={servicePointsIds}
-          onSubmit={(data) => {
-            if (data.pay) {
-              delete data.pay;
-              this.type.remaining = data.amount;
-              this.onClickPay(data);
-            } else {
-              delete data.pay;
-              this.onClickCharge(data)
-                .then(() => this.props.handleAddRecords())
-                .then(() => this.props.onCloseChargeFeeFine());
-            }
-          }}
-          user={this.props.user}
+          onSubmit={this.onSubmitCharge}
+          user={user}
           ownerList={(shared) ? owners : list}
           owners={owners}
           isPending={isPending}
@@ -446,38 +402,40 @@ class Charge extends React.Component {
           onFindShared={this.onFindShared}
           onChangeOwner={this.onChangeOwner}
           onClickSelectItem={this.onClickSelectItem}
-          stripes={this.props.stripes}
+          stripes={stripes}
+          location={location}
+          history={history}
           {...this.props}
         />
-        <ItemLookup
-          resources={this.props.resources}
-          items={items}
-          open={(this.state.lookup && items.length > 1)}
-          onChangeItem={this.onChangeItem}
-          onClose={this.onCloseModal}
-        />
-        <PayModal
-          open={this.state.pay}
-          commentRequired={settings.paid}
-          onClose={this.onClosePayModal}
-          accounts={[this.type]}
-          balance={this.type.amount}
-          payments={payments}
-          stripes={this.props.stripes}
-          onSubmit={(values) => { this.showConfirmDialog(values); }}
-          owners={owners}
-          feefines={feefines}
-        />
-        <Callout ref={(ref) => { this.callout = ref; }} />
-        <ConfirmationModal
-          open={this.state.showConfirmDialog}
-          heading={<FormattedMessage id="ui-users.accounts.confirmation.head" values={{ action: 'payment' }} />}
-          message={this.renderConfirmMessage()}
-          onConfirm={this.onConfirm}
-          onCancel={this.hideConfirmDialog}
-          cancelLabel={<FormattedMessage id="ui-users.accounts.cancellation.field.back" />}
-          confirmLabel={<FormattedMessage id="ui-users.accounts.cancellation.field.confirm" />}
-        />
+        {/* <ItemLookup
+        resources={this.props.resources}
+        items={items}
+        open={(this.state.lookup && items.length > 1)}
+        onChangeItem={this.onChangeItem}
+        onClose={this.onCloseModal}
+      />
+      <PayModal
+        open={this.state.pay}
+        commentRequired={settings.paid}
+        onClose={this.onClosePayModal}
+        accounts={[this.type]}
+        balance={this.type.amount}
+        payments={payments}
+        stripes={this.props.stripes}
+        onSubmit={(values) => { this.showConfirmDialog(values); }}
+        owners={owners}
+        feefines={feefines}
+      />
+      <Callout ref={(ref) => { this.callout = ref; }} />
+      <ConfirmationModal
+        open={this.state.showConfirmDialog}
+        heading={<FormattedMessage id="ui-users.accounts.confirmation.head" values={{ action: 'payment' }} />}
+        message={this.renderConfirmMessage()}
+        onConfirm={this.onConfirm}
+        onCancel={this.hideConfirmDialog}
+        cancelLabel={<FormattedMessage id="ui-users.accounts.cancellation.field.back" />}
+        confirmLabel={<FormattedMessage id="ui-users.accounts.cancellation.field.confirm" />}
+      /> */}
       </div>
     );
   }

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { cloneDeep, omit, differenceBy, get } from 'lodash';
 
-import { eachPromise, getRecordObject } from '../../../util';
+import { eachPromise, getRecordObject, handleBackLink } from '../../../util';
 
 import UserForm from './UserForm';
 import ViewLoading from '../ViewLoading';
@@ -31,6 +31,14 @@ class UserEdit extends React.Component {
   static propTypes = {
     stripes: PropTypes.object,
     resources: PropTypes.object,
+    location: PropTypes.object,
+    history: PropTypes.object,
+    match: PropTypes.object,
+    updateProxies: PropTypes.func,
+    updateSponsors: PropTypes.func,
+    updateServicePoints: PropTypes.func,
+    getPreferredServicePoint: PropTypes.func,
+    mutator: PropTypes.object,
   }
 
   getUser() {
@@ -83,7 +91,18 @@ class UserEdit extends React.Component {
   }
 
   update(user) {
-    const addressTypes = (this.props.parentResources.addressTypes || {}).records || [];
+    const {
+      updateProxies,
+      updateSponsors,
+      updateServicePoints,
+      mutator,
+      location,
+      history,
+      resources,
+      stripes,
+    } = this.props;
+
+    const addressTypes = (resources.addressTypes || {}).records || [];
 
     if (user.personal.addresses) {
       user.personal.addresses = toUserAddresses(user.personal.addresses, addressTypes); // eslint-disable-line no-param-reassign
@@ -91,17 +110,17 @@ class UserEdit extends React.Component {
 
     const { proxies, sponsors, permissions, servicePoints, preferredServicePoint } = user;
 
-    if (this.props.stripes.hasPerm('proxiesfor.item.put,proxiesfor.item.post')) {
-      if (proxies) this.props.updateProxies(proxies);
-      if (sponsors) this.props.updateSponsors(sponsors);
+    if (stripes.hasPerm('proxiesfor.item.put,proxiesfor.item.post')) {
+      if (proxies) updateProxies(proxies);
+      if (sponsors) updateSponsors(sponsors);
     }
 
     if (permissions) {
       this.updatePermissions(permissions);
     }
 
-    if (servicePoints && this.props.stripes.hasPerm('inventory-storage.service-points-users.item.post,inventory-storage.service-points-users.item.put')) {
-      this.props.updateServicePoints(servicePoints, preferredServicePoint);
+    if (servicePoints && stripes.hasPerm('inventory-storage.service-points-users.item.post,inventory-storage.service-points-users.item.put')) {
+      updateServicePoints(servicePoints, preferredServicePoint);
     }
 
     const data = omit(user, ['creds', 'proxies', 'sponsors', 'permissions', 'servicePoints', 'preferredServicePoint']);
@@ -109,11 +128,8 @@ class UserEdit extends React.Component {
 
     data.active = (moment(user.expirationDate).endOf('day').isSameOrAfter(today));
 
-    this.props.mutator.selUser.PUT(data).then(() => {
-      this.setState({
-        lastUpdate: new Date().toISOString(),
-      });
-      this.props.onCloseEdit();
+    mutator.selUser.PUT(data).then(() => {
+      handleBackLink(location, history);
     });
   }
 

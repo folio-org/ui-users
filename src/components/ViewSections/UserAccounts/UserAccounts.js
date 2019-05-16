@@ -12,6 +12,9 @@ import {
   List,
   Headline
 } from '@folio/stripes/components';
+import {
+  stripesConnect
+} from '@folio/stripes/core';
 
 /**
  * User-details "Accounts" accordian pane.
@@ -59,7 +62,6 @@ class UserAccounts extends React.Component {
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func,
     }),
-    onClickViewChargeFeeFine: PropTypes.func.isRequired,
     accordionId: PropTypes.string,
     addRecord: PropTypes.bool,
     expanded: PropTypes.bool,
@@ -68,6 +70,9 @@ class UserAccounts extends React.Component {
       search: PropTypes.string,
       pathname: PropTypes.string,
     }),
+    match: PropTypes.shape({
+      params: PropTypes.object,
+    }).isRequired
   };
 
   constructor(props) {
@@ -118,17 +123,17 @@ class UserAccounts extends React.Component {
     const openAccountsTotal = this.state.openAccounts || 0;
     const closedAccountsTotal = this.state.closedAccounts || 0;
     const total = this.state.total || '0.00';
-    const { expanded, onToggle, accordionId } = this.props;
+    const { expanded, onToggle, accordionId, match: { params } } = this.props;
 
     const openAccountsCount = (_.get(resources.openAccountsCount, ['isPending'], true)) ? -1 : openAccountsTotal;
     const closedAccountsCount = (_.get(resources.closedAccountsCount, ['isPending'], true)) ? -1 : closedAccountsTotal;
 
-    const query = this.props.location.search ? queryString.parse(this.props.location.search) : {};
+    // const query = this.props.location.search ? queryString.parse(this.props.location.search) : {};
 
     const accountsLoaded = openAccountsCount >= 0 && closedAccountsCount >= 0;
     const displayWhenClosed = accountsLoaded ? (<Badge>{openAccountsCount}</Badge>) : (<Icon icon="spinner-ellipsis" width="10px" />);
     const buttonDisabled = !this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
-    const displayWhenOpen = (<Button disabled={buttonDisabled} onClick={e => this.props.onClickViewChargeFeeFine(e, {})}><FormattedMessage id="ui-users.accounts.chargeManual" /></Button>);
+    const displayWhenOpen = (<Button disabled={buttonDisabled} to={{ pathname: `/users/${params.id}/chargefee` }}><FormattedMessage id="ui-users.accounts.chargeManual" /></Button>);
     return (
       <Accordion
         open={expanded}
@@ -145,7 +150,7 @@ class UserAccounts extends React.Component {
               <li key={index}>
                 <Link
                   id={item.id}
-                  to={`${this.props.location.pathname}?${queryString.stringify({ ...query, layer: item.layer })}`}
+                  to={`/users/${params.id}/accounts/${item.status}`}
                 >
                   <FormattedMessage id={item.formattedMessageId} values={{ count: item.count }} />
                   {' '}
@@ -158,19 +163,19 @@ class UserAccounts extends React.Component {
                 id: 'clickable-viewcurrentaccounts',
                 count: openAccountsCount,
                 formattedMessageId: 'ui-users.accounts.numOpenAccounts',
-                layer: 'open-accounts',
+                status: 'open',
               },
               {
                 id: 'clickable-viewclosedaccounts',
                 count: closedAccountsCount,
                 formattedMessageId: 'ui-users.accounts.numClosedAccounts',
-                layer: 'closed-accounts',
+                status: 'closed',
               },
               {
                 id: 'clickable-viewallaccounts',
                 count: 0,
                 formattedMessageId: 'ui-users.accounts.viewAllFeesFines',
-                layer: 'all-accounts',
+                status: 'all',
               },
             ]}
           /> : <Icon icon="spinner-ellipsis" width="10px" />
@@ -180,4 +185,4 @@ class UserAccounts extends React.Component {
   }
 }
 
-export default UserAccounts;
+export default stripesConnect(UserAccounts);

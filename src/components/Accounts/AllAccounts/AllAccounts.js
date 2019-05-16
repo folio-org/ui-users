@@ -18,7 +18,6 @@ import {
   MenuItem,
 } from '@folio/stripes/components';
 
-
 class AllAccounts extends React.Component {
   static propTypes = {
     resources: PropTypes.shape({

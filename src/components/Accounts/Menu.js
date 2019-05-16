@@ -12,18 +12,18 @@ import { FormattedMessage } from 'react-intl';
 import { getFullName } from '../../util';
 
 const Menu = (props) => {
-  const { user, showFilters, filters, balance, selected, actions, query } = props;
+  const { user, showFilters, match: { params }, filters, balance, selected, actions, query } = props;
   const outstanding = parseFloat(balance).toFixed(2);
   const showSelected = (selected !== 0 && selected !== parseFloat(0).toFixed(2))
     && outstanding > parseFloat(0).toFixed(2);
   const buttonDisabled = !props.stripes.hasPerm('ui-users.feesfines.actions.all');
 
-  let type = <FormattedMessage id="ui-users.accounts.open" />;
-  if (query.layer === 'closed-accounts') {
-    type = <FormattedMessage id="ui-users.accounts.closed" />;
-  } else if (query.layer === 'all-accounts') {
-    type = <FormattedMessage id="ui-users.accounts.all" />;
-  }
+  const type = <FormattedMessage id={`ui-users.accounts.${params.accountstatus}`} />;
+  // if (query.layer === 'closed-accounts') {
+  //   type = <FormattedMessage id="ui-users.accounts.closed" />;
+  // } else if (query.layer === 'all-accounts') {
+  //   type = <FormattedMessage id="ui-users.accounts.all" />;
+  // }
 
   const firstMenu = (
     <div>
@@ -127,6 +127,7 @@ Menu.propTypes = {
   filters: PropTypes.object,
   actions: PropTypes.object,
   query: PropTypes.object,
+  match: PropTypes.object,
   patronGroup: PropTypes.object,
   onClickViewChargeFeeFine: PropTypes.func,
   onChangeActions: PropTypes.func,

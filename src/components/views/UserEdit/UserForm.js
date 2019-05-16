@@ -32,7 +32,7 @@ import {
 
 import { HasCommand } from '../../Commander';
 
-import { getFullName, getRecordObject } from '../../../util';
+import { getFullName, getRecordObject, handleBackLink } from '../../../util';
 import packageInfo from '../../../../package';
 
 import css from './UserForm.css';
@@ -178,14 +178,9 @@ class UserForm extends React.Component {
   handleCancel = () => {
     const {
       history,
-      match: { params },
-      location: { state: referrer }
+      location,
     } = this.props;
-    if (referrer !== 'home') {
-      history.goBack();
-    } else {
-      history.replace(packageInfo.stripes.home);
-    }
+    handleBackLink(location, history);
   }
 
   getAddFirstMenu() {

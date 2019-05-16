@@ -11,10 +11,12 @@ import {
   Col,
   Checkbox,
 } from '@folio/stripes/components';
+
 import { FormattedMessage } from 'react-intl';
 import stripesForm from '@folio/stripes/form';
 import { Field, change } from 'redux-form';
 
+import { handleBackLink } from '../../../util';
 import UserDetails from './UserDetails';
 import FeeFineInfo from './FeeFineInfo';
 import ItemInfo from './ItemInfo';
@@ -69,7 +71,7 @@ class ChargeForm extends React.Component {
     owners: PropTypes.arrayOf(PropTypes.object),
     ownerList: PropTypes.arrayOf(PropTypes.object),
     feefines: PropTypes.arrayOf(PropTypes.object),
-    onClickCancel: PropTypes.func.isRequired,
+    onClickCancel: PropTypes.func,
     onChangeOwner: PropTypes.func.isRequired,
     onClickPay: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
@@ -84,6 +86,8 @@ class ChargeForm extends React.Component {
     initialize: PropTypes.func,
     servicePointsIds: PropTypes.arrayOf(PropTypes.string),
     defaultServicePointId: PropTypes.string,
+    location: PropTypes.object,
+    history: PropTypes.object,
   }
 
   constructor(props) {
@@ -179,7 +183,12 @@ class ChargeForm extends React.Component {
   }
 
   render() {
-    const { selectedLoan } = this.props;
+    const {
+      location,
+      history,
+    } = this.props;
+
+    const selectedLoan = this.props.selectedLoan || {};
     const editable = !(selectedLoan.id);
     const { user } = this.props;
     const itemLoan = {
@@ -193,11 +202,11 @@ class ChargeForm extends React.Component {
     };
     const item = (editable) ? this.props.item : itemLoan;
     const feefineList = [];
-    const owners = [];
+    const ownerOptions = [];
 
-    this.props.ownerList.forEach(own => {
+    this.props.owners.forEach(own => {
       const owner = own || {};
-      if (owner.owner !== 'Shared') owners.push({ label: owner.owner, value: owner.id });
+      if (owner.owner !== 'Shared') ownerOptions.push({ label: owner.owner, value: owner.id });
     });
 
     this.props.feefines.forEach((feefine) => {
@@ -211,7 +220,7 @@ class ChargeForm extends React.Component {
 
     const lastMenu = (
       <PaneMenu>
-        <Button onClick={this.props.onClickCancel} style={mg}><FormattedMessage id="ui-users.feefines.modal.cancel" /></Button>
+        <Button onClick={() => { handleBackLink(location, history); }} style={mg}><FormattedMessage id="ui-users.feefines.modal.cancel" /></Button>
         <Button
           disabled={this.props.pristine || this.props.submitting || this.props.invalid}
           onClick={this.props.handleSubmit(data => this.props.onSubmit({ ...data, pay: true }))}
@@ -233,7 +242,7 @@ class ChargeForm extends React.Component {
         <Pane
           defaultWidth="100%"
           dismissible
-          onClose={this.props.onClickCancel}
+          onClose={() => { handleBackLink(location, history); }}
           paneTitle={(
             <FormattedMessage id="ui-users.charge.title" />
           )}
@@ -244,7 +253,7 @@ class ChargeForm extends React.Component {
           <form>
             <FeeFineInfo
               stripes={this.props.stripes}
-              owners={owners}
+              ownerOptions={ownerOptions}
               isPending={this.props.isPending}
               onChangeOwner={(e) => { this.props.onChangeOwner(e); this.setState({ showNotify: false }); }}
               onChangeFeeFine={this.onChangeFeeFine}
