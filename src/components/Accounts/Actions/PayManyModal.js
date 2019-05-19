@@ -22,16 +22,17 @@ import css from './PayWaive.css';
 
 const validate = (values, props) => {
   const accounts = props.accounts || [];
-  let selected = parseFloat(0);
+  let selected = 0;
   accounts.forEach(a => {
-    selected += parseFloat(a.remaining);
+    selected += (a.remaining * 100);
   });
+  selected /= 100;
 
   const errors = {};
   if (!values.amount) {
     errors.amount = <FormattedMessage id="ui-users.accounts.error.field" />;
   }
-  if (values.amount < 0) {
+  if (values.amount <= 0) {
     errors.amount = <FormattedMessage id="ui-users.accounts.pay.error.amount" />;
   }
   if (!values.method) {
@@ -92,8 +93,9 @@ class PayModal extends React.Component {
       const accounts = nextProps.accounts || [];
       let selected = parseFloat(0);
       accounts.forEach(a => {
-        selected += parseFloat(a.remaining);
+        selected += (a.remaining * 100);
       });
+      selected /= 100;
       this.setState({
         amount: parseFloat(selected).toFixed(2),
       });
@@ -234,7 +236,7 @@ class PayModal extends React.Component {
               <Row end="xs">
                 <Col xs={7}>
                   <FormattedMessage id="ui-users.accounts.pay.field.totalamount" />
-:
+                  {':'}
                 </Col>
                 <Col xs={4}>
                   {parseFloat(totalAmount).toFixed(2)}
@@ -243,7 +245,7 @@ class PayModal extends React.Component {
               <Row end="xs">
                 <Col xs={7}>
                   <FormattedMessage id="ui-users.accounts.pay.field.selectedamount" />
-:
+                  {':'}
                 </Col>
                 <Col xs={4}>
                   {parseFloat(selected).toFixed(2)}
@@ -253,7 +255,7 @@ class PayModal extends React.Component {
                 <Col xs={7}>
                   <b>
                     <FormattedMessage id="ui-users.accounts.pay.field.paymentamount" />
-*:
+                    {'*:'}
                   </b>
                 </Col>
                 <Col xs={4} className={css.customCol}>
@@ -274,7 +276,7 @@ class PayModal extends React.Component {
               <Row end="xs">
                 <Col xs={7}>
                   <FormattedMessage id="ui-users.accounts.pay.field.remainingamount" />
-:
+                  {':'}
                 </Col>
                 <Col xs={4}>
                   {remaining}
@@ -285,7 +287,7 @@ class PayModal extends React.Component {
               <Row>
                 <Col xs>
                   <FormattedMessage id="ui-users.accounts.pay.field.ownerDesk" />
-*
+                  {'*'}
                 </Col>
               </Row>
               <Row>
@@ -308,7 +310,7 @@ class PayModal extends React.Component {
               <Row>
                 <Col xs>
                   <FormattedMessage id="ui-users.accounts.pay.field.paymentmethod" />
-*
+                  {'*'}
                 </Col>
               </Row>
               <Row>
