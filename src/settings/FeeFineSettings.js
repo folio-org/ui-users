@@ -347,7 +347,7 @@ class FeefineSettings extends React.Component {
           fluidContentWidth
           paneTitle={<FormattedMessage id="ui-users.feefines.title" />}
         >
-          <Owners dataOptions={owners} onChange={this.onChangeOwner} />
+          <Owners filterShared={false} dataOptions={owners} onChange={this.onChangeOwner} />
           <ChargeNotice owner={owner} templates={templates} templateCharge={templateCharge} templateAction={templateAction} onSubmit={(values) => { this.onUpdateOwner(values); }} />
           <EditableList
             {...this.props}
