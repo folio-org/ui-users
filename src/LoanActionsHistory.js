@@ -21,51 +21,17 @@ import {
   Col,
 } from '@folio/stripes/components';
 import { IfPermission } from '@folio/stripes/core';
+import * as nav from './components/Loans/navigationHandlers';
 import PatronBlockModal from './components/PatronBlock/PatronBlockModal';
 import { getFullName } from './util';
 import loanActionMap from './data/loanActionMap';
 import LoanActionsHistoryProxy from './LoanActionsHistoryProxy';
-import withRenew from './withRenew';
+import ViewLoading from './components/views/ViewLoading';
 
 /**
  * Detail view of a user's loan.
  */
 class LoanActionsHistory extends React.Component {
-  static manifest = Object.freeze({
-    loanActionsWithUser: {},
-    users: {
-      type: 'okapi',
-      records: 'users',
-      resourceShouldRefresh: true,
-      path: 'users',
-      accumulate: 'true',
-      fetch: false,
-    },
-    requests: {
-      type: 'okapi',
-      path: 'circulation/requests',
-      resourceShouldRefresh: true,
-      records: 'requests',
-      accumulate: 'true',
-      fetch: false,
-    },
-    loanActions: {
-      type: 'okapi',
-      path: 'loan-storage/loan-history',
-      records: 'loans',
-      resourceShouldRefresh: true,
-      accumulate: 'true',
-      fetch: false,
-    },
-    loanAccountsActions: {
-      type: 'okapi',
-      records: 'accounts',
-      path: 'accounts',
-      accumulate: 'true',
-      fetch: false,
-    },
-  });
-
   static propTypes = {
     stripes: PropTypes.object.isRequired,
     resources: PropTypes.shape({
@@ -85,20 +51,20 @@ class LoanActionsHistory extends React.Component {
     loanid: PropTypes.string,
     user: PropTypes.object,
     onCancel: PropTypes.func.isRequired,
-    onClickUser: PropTypes.func.isRequired,
-    onClickViewAllAccounts: PropTypes.func.isRequired,
-    onClickViewClosedAccounts: PropTypes.func.isRequired,
-    onClickViewOpenAccounts: PropTypes.func.isRequired,
-    onClickViewAccountActionsHistory: PropTypes.func.isRequired,
+    // onClickUser: PropTypes.func.isRequired,
+    // onClickViewAllAccounts: PropTypes.func.isRequired,
+    // onClickViewClosedAccounts: PropTypes.func.isRequired,
+    // onClickViewOpenAccounts: PropTypes.func.isRequired,
+    // onClickViewAccountActionsHistory: PropTypes.func.isRequired,
     renew: PropTypes.func,
     patronBlocks: PropTypes.arrayOf(PropTypes.object),
     intl: intlShape.isRequired,
+    match: PropTypes.object.isRequired,
   };
 
   constructor(props) {
     super(props);
     this.nav = null;
-    this.connectedProxy = props.stripes.connect(LoanActionsHistoryProxy);
     this.connectedChangeDueDateDialog = props.stripes.connect(ChangeDueDateDialog);
     this.renew = this.renew.bind(this);
     this.getContributorslist = this.getContributorslist.bind(this);
@@ -129,21 +95,23 @@ class LoanActionsHistory extends React.Component {
   }
 
   updateLoanActionsOnOverride(prevProps) {
-    const {
-      loan: {
-        renewalCount
-      }
-    } = this.props;
+    if (this.props.loan && prevProps.loan) {
+      const {
+        loan: {
+          renewalCount
+        }
+      } = this.props;
 
-    const {
-      loan: {
-        renewalCount: prevRenewalCount
-      }
-    } = prevProps;
-    const isRenewalCountChanged = prevRenewalCount && renewalCount && renewalCount !== prevRenewalCount;
+      const {
+        loan: {
+          renewalCount: prevRenewalCount
+        }
+      } = prevProps;
+      const isRenewalCountChanged = prevRenewalCount && renewalCount && renewalCount !== prevRenewalCount;
 
-    if (isRenewalCountChanged) {
-      this.getLoanActions();
+      if (isRenewalCountChanged) {
+        this.getLoanActions();
+      }
     }
   }
 
@@ -208,11 +176,10 @@ class LoanActionsHistory extends React.Component {
 
   getLoanActions = () => {
     const {
-      loanid,
       mutator,
-      loan,
+      match: { params }
     } = this.props;
-    const query = `id==${loanid || loan.id}`;
+    const query = `id==${params.loanid}`;
     const limit = 100;
 
     mutator.loanActions.reset();
@@ -221,8 +188,8 @@ class LoanActionsHistory extends React.Component {
   };
 
   getFeeFine() {
-    const { mutator, loan, loanid } = this.props;
-    const query = `loanId=${loanid || loan.id}`;
+    const { mutator, match: { params } } = this.props;
+    const query = `loanId=${params.loanid}`;
 
     mutator.loanAccountsActions.GET({ params: { query } }).then(records => {
       const total = records.reduce((a, { amount }) => (a + parseFloat(amount)), 0);
@@ -247,15 +214,15 @@ class LoanActionsHistory extends React.Component {
     const { feesFines: { accounts } } = this.state;
     const loan = this.loan || {};
     if (accounts.length === 1) {
-      this.props.onClickViewAccountActionsHistory(e, { id: accounts[0].id });
+      nav.onClickViewAccountActionsHistory(e, { id: accounts[0].id });
     } else if (accounts.length > 1) {
       const open = accounts.filter(a => a.status.name === 'Open') || [];
       if (open.length === accounts.length) {
-        this.props.onClickViewOpenAccounts(e, loan);
+        nav.onClickViewOpenAccounts(e, loan);
       } else if (open.length === 0) {
-        this.props.onClickViewClosedAccounts(e, loan);
+        nav.onClickViewClosedAccounts(e, loan);
       } else {
-        this.props.onClickViewAllAccounts(e, loan);
+        nav.onClickViewAllAccounts(e, loan);
       }
     }
   };
@@ -323,11 +290,12 @@ class LoanActionsHistory extends React.Component {
 
   render() {
     const {
-      onCancel,
       onClickUser,
       loan,
       patronGroup,
       patronBlocks,
+      history,
+      match: { params },
       user,
       resources: {
         loanActionsWithUser,
@@ -341,6 +309,16 @@ class LoanActionsHistory extends React.Component {
     const {
       patronBlockedModal,
     } = this.state;
+
+    if (!loan) {
+      return (
+        <ViewLoading
+          inPaneset
+          defaultWidth="100%"
+          paneTitle="Loan action history"
+        />
+      );
+    }
 
     const loanPolicyName = isEmpty(loanPolicies)
       ? '-'
@@ -392,7 +370,7 @@ class LoanActionsHistory extends React.Component {
             id="pane-loandetails"
             defaultWidth="100%"
             dismissible
-            onClose={onCancel}
+            onClose={(e) => { nav.onCloseLoanDetails(e, loan, history, params) }}
             paneTitle={(
               <FormattedMessage id="ui-users.loans.loanDetails">
                 {(loanDetails) => `${loanDetails} - ${getFullName(user)} (${upperFirst(patronGroup.group)})`}
@@ -425,9 +403,9 @@ class LoanActionsHistory extends React.Component {
                 />
               </Col>
               <Col xs={2}>
-                <this.connectedProxy
+                <LoanActionsHistoryProxy
                   id={loan.proxyUserId}
-                  onClick={onClickUser}
+                  // onClick={onClickUser}
                   {...this.props}
                 />
               </Col>
@@ -573,4 +551,4 @@ class LoanActionsHistory extends React.Component {
   }
 }
 
-export default withRenew(injectIntl(LoanActionsHistory));
+export default injectIntl(LoanActionsHistory);

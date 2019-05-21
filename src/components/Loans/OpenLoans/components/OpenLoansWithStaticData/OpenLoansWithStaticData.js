@@ -50,6 +50,8 @@ class OpenLoansWithStaticData extends React.Component {
     onClosePatronBlockedModal: PropTypes.func.isRequired,
     onClickViewLoanActionsHistory: PropTypes.func.isRequired,
     feeFineCount: PropTypes.number,
+    history: PropTypes.object,
+    match: PropTypes.object,
   };
 
   setFormatters() {
@@ -236,8 +238,9 @@ class OpenLoansWithStaticData extends React.Component {
           loanFormatter={this.loanFormatter}
           columnMapping={this.columnMapping}
           sortOrder={this.sortOrder}
-          onClickViewLoanActionsHistory={onClickViewLoanActionsHistory}
           possibleColumns={possibleColumns}
+          history={this.props.history}
+          match={this.props.match}
         />
         <Modals
           user={user}

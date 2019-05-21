@@ -7,15 +7,18 @@ import { stripesShape } from '@folio/stripes/core';
 
 import css from './OpenLoans.css';
 
+import * as nav from '../navigationHandlers';
+
 class OpenLoans extends React.Component {
   static propTypes = {
     stripes: stripesShape.isRequired,
+    history: PropTypes.object.isRequired,
+    match: PropTypes.object.isRequired,
     loans: PropTypes.arrayOf(PropTypes.object).isRequired,
     sortMap: PropTypes.object.isRequired,
     loanFormatter: PropTypes.object.isRequired,
     columnMapping: PropTypes.object.isRequired,
     sortOrder: PropTypes.arrayOf(PropTypes.string).isRequired,
-    onClickViewLoanActionsHistory: PropTypes.func.isRequired,
     visibleColumns: PropTypes.arrayOf(PropTypes.object).isRequired,
     possibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
   };
@@ -81,10 +84,9 @@ class OpenLoans extends React.Component {
   };
 
   onRowClick = (e, row) => {
-    const { onClickViewLoanActionsHistory } = this.props;
-
     if (e.target.type !== 'button') {
-      onClickViewLoanActionsHistory(e, row);
+      const { history, match: { params } } = this.props;
+      nav.onClickViewLoanActionsHistory(e, row, history, params);
     }
   };
 

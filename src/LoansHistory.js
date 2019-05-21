@@ -7,9 +7,10 @@ import {
   Pane,
   Button,
   SegmentedControl,
+  ButtonGroup,
 } from '@folio/stripes/components';
 
-import { getFullName } from './util';
+import { getFullName, handleBackLink } from './util';
 import { OpenLoans, ClosedLoans } from './components/Loans';
 import css from './LoansHistory.css';
 
@@ -21,52 +22,45 @@ import css from './LoansHistory.css';
  */
 class LoansHistory extends React.Component {
   static propTypes = {
-    stripes: PropTypes.shape({
-      connect: PropTypes.func.isRequired,
-    }).isRequired,
     onCancel: PropTypes.func.isRequired,
-    openLoans: PropTypes.bool,
-    onClickViewOpenLoans: PropTypes.func.isRequired,
-    onClickViewClosedLoans: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired,
     patronGroup: PropTypes.object.isRequired,
     loansHistory: PropTypes.arrayOf(PropTypes.object).isRequired,
+    location: PropTypes.object,
+    history: PropTypes.object,
+    match: PropTypes.object,
   };
-
-  constructor(props) {
-    super(props);
-    this.connectedOpenLoans = props.stripes.connect(OpenLoans);
-    this.connectedClosedLoans = props.stripes.connect(ClosedLoans);
-  }
 
   /**
    * Segmented Control to swtich between open and closed loans
    */
   getSegmentedControls = () => {
     const {
-      openLoans,
-      onClickViewOpenLoans,
-      onClickViewClosedLoans,
+      match: { params },
     } = this.props;
-    const activeId = openLoans ? 'loans-show-open' : 'loans-show-closed';
-    const onChange = ({ id }) => {
-      if (id === 'loans-show-open') {
-        onClickViewOpenLoans();
-      } else {
-        onClickViewClosedLoans();
-      }
-    };
 
     return (
       <div className={css.segmentedControlWrap}>
-        <SegmentedControl className={css.segmentedControl} activeId={activeId} onActivate={onChange}>
-          <Button marginBottom0 id="loans-show-open">
+        <ButtonGroup className={css.segmentedControl}>
+          <Button
+            marginBottom0
+            fullWidth
+            id="loans-show-open"
+            buttonStyle={params.loanstatus === 'open' ? 'primary' : 'default'}
+            to={{ pathname: `/users/${params.id}/loans/open` }}
+          >
             <FormattedMessage id="ui-users.loans.openLoans" />
           </Button>
-          <Button marginBottom0 id="loans-show-closed">
+          <Button
+            marginBottom0
+            fullWidth
+            id="loans-show-closed"
+            buttonStyle={params.loanstatus === 'closed' ? 'primary' : 'default'}
+            to={{ pathname: `/users/${params.id}/loans/closed` }}
+          >
             <FormattedMessage id="ui-users.loans.closedLoans" />
           </Button>
-        </SegmentedControl>
+        </ButtonGroup>
       </div>
     );
   }
@@ -76,7 +70,8 @@ class LoansHistory extends React.Component {
       user,
       patronGroup,
       match: { params },
-      openLoans,
+      location,
+      history,
       loansHistory,
     } = this.props;
     const loanStatus = params.loanstatus;
@@ -90,7 +85,7 @@ class LoansHistory extends React.Component {
           id="pane-loanshistory"
           defaultWidth="100%"
           dismissible
-          onClose={this.props.onCancel}
+          onClose={() => { handleBackLink(location, history); }}
           paneTitle={(
             <FormattedMessage id="ui-users.loans.title">
               {(title) => `${title} - ${getFullName(user)} (${_.upperFirst(patronGroup.group)})`}
@@ -104,7 +99,7 @@ class LoansHistory extends React.Component {
           }
           {
             loanStatus === 'closed' &&
-            (<ClosedLoans loans={loans} {...this.props} />)
+              (<ClosedLoans loans={loans} {...this.props} />)
           }
         </Pane>
       </Paneset>);

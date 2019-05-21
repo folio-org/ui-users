@@ -28,6 +28,7 @@ import css from './AccountsHistory.css';
 import { getFullName, handleBackLink } from './util';
 import { Actions } from './components/Accounts/Actions';
 import { count, handleFilterChange, handleFilterClear } from './components/Accounts/accountFunctions';
+import * as nav from './components/Loans/navigationHandlers';
 
 import {
   Menu,
@@ -544,7 +545,7 @@ class AccountsHistory extends React.Component {
                 onChangeActions={this.onChangeActions}
                 patronGroup={patronGroup}
                 handleOptionsChange={this.handleOptionsChange}
-                onClickViewChargeFeeFine={this.props.onClickViewChargeFeeFine}
+                onClickViewChargeFeeFine={nav.onClickViewChargeFeeFine}
               />
               <div className={css.paneContent}>
                 { params.accountstatus === 'open' &&

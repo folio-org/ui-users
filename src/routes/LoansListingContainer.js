@@ -1,9 +1,10 @@
 import React from 'react';
+import _get from 'lodash/get';
 import { stripesConnect } from '@folio/stripes/core';
 import LoansHistory from '../LoansHistory';
 import ViewLoading from '../components/views/ViewLoading';
 
-class LoansContainer extends React.Component {
+class LoansListingContainer extends React.Component {
   static manifest = Object.freeze({
     query: {},
     selUser: {
@@ -24,12 +25,24 @@ class LoansContainer extends React.Component {
       },
       records: 'usergroups',
     },
+    loansHistory: {
+      type: 'okapi',
+      records: 'loans',
+      path: 'circulation/loans?query=(userId=:{id}) sortby id&limit=100',
+      permissionsRequired: 'circulation.loans.collection.get',
+    },
     loanPolicies: {
       type: 'okapi',
       records: 'loanPolicies',
       path: 'loan-policy-storage/loan-policies',
       accumulate: 'true',
       fetch: false,
+    },
+    hasPatronBlocks: {
+      type: 'okapi',
+      records: 'manualblocks',
+      path: 'manualblocks?query=(userId=:{id})&limit=100',
+      permissionsRequired: 'manualblocks.collection.get',
     },
     requests: {
       type: 'okapi',
@@ -66,11 +79,22 @@ class LoansContainer extends React.Component {
   }
 
   render() {
+    const { resources } = this.props;
     const user = this.getUser();
     const patronGroup = this.getPatronGroup();
+    const loans = _get(resources, ['loansHistory', 'records'], []);
+    const patronBlocks = _get(resources, ['hasPatronBlocks', 'records'], []);
+
     if (!user) return (<ViewLoading inPaneset defaultWidth="100%" paneTitle="Loading loans" />);
-    return (<LoansHistory user={user} patronGroup={patronGroup} {...this.props} />);
+    return (
+      <LoansHistory
+        loans={loans}
+        patronBlocks={patronBlocks}
+        user={user}
+        patronGroup={patronGroup}
+        {...this.props}
+      />);
   }
 }
 
-export default stripesConnect(LoansContainer);
+export default stripesConnect(LoansListingContainer);

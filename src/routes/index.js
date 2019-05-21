@@ -5,4 +5,5 @@ export { default as UserEditContainer } from './UserEditContainer';
 export { default as PatronBlockContainer } from './PatronBlockContainer';
 export { default as FeesFinesContainer } from './FeesFinesContainer';
 export { default as AccountsHistoryContainer } from './AccountsHistoryContainer';
-export { default as LoansContainer } from './LoansContainer';
+export { default as LoansListingContainer } from './LoansListingContainer';
+export { default as LoanDetailContainer } from './LoanDetailContainer';

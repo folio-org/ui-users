@@ -144,7 +144,7 @@ class UsersRouting extends React.Component {
       stripes
     } = this.props;
 
-    const basePath = '/users';
+    const base = '/users';
 
     if (showSettings) {
       return (
@@ -162,18 +162,17 @@ class UsersRouting extends React.Component {
     return (
       <CommandList commands={commands}>
         <Switch>
-          {/* <Route
-            path={path}
-            render={() => <this.connectedApp {...this.props} />}
-          /> */}
-          <Route path={`${basePath}/:id/loans/:loanstatus`} component={Routes.LoansContainer} />
-          <Route path={`${basePath}/:id/accounts/:accountstatus`} component={Routes.AccountsHistoryContainer} />
-          <Route path={`${basePath}/:id/chargefee`} component={Routes.FeesFinesContainer} />
-          <Route path={`${basePath}/:id/patronblocks/edit/:patronblockid`} exact component={Routes.PatronBlockContainer} />
-          <Route path={`${basePath}/:id/patronblocks/create`} exact component={Routes.PatronBlockContainer} />
-          <Route path={`${basePath}/:id/edit`} exact component={Routes.UserEditContainer} />
-          <Route path={basePath} component={Routes.UserSearchContainer}>
-            <Route path={`${basePath}/view/:id`} component={Routes.UserViewContainer} />
+          <Route path={`${base}/:id/loans/view/:loanid`} component={Routes.LoanDetailContainer} />
+          <Route path={`${base}/:id/loans/:loanstatus`} component={Routes.LoansListingContainer} />
+          <Route path={`${base}/:id/accounts/:accountstatus`} component={Routes.AccountsHistoryContainer} />
+          <Route path={`${base}/:id/accounts/view/:accountid`} component={Routes.AccountsHistoryContainer} />
+          <Route path={`${base}/:id/chargefee`} component={Routes.FeesFinesContainer} />
+          <Route path={`${base}/:id/patronblocks/edit/:patronblockid`} component={Routes.PatronBlockContainer} />
+          <Route path={`${base}/:id/patronblocks/create`} component={Routes.PatronBlockContainer} />
+          <Route path={`${base}/:id/edit`} component={Routes.UserEditContainer} />
+          <Route path={`${base}/:id`} component={Routes.UserEditContainer} />
+          <Route path={base} component={Routes.UserViewContainer}>
+            <Route path={`${base}/view/:id`} component={Routes.UserViewContainer} />
           </Route>
           <Route render={this.noMatch} />
         </Switch>

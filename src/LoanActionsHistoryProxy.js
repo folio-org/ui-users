@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import Link from 'react-router-dom/Link';
 import { KeyValue } from '@folio/stripes/components';
+import { stripesConnect } from '@folio/stripes/core';
 import { getFullName } from './util';
 
 class LoanActionsHistoryProxy extends React.Component {
@@ -15,7 +16,7 @@ class LoanActionsHistoryProxy extends React.Component {
 
   static propTypes = {
     id: PropTypes.string,
-    onClick: PropTypes.func.isRequired,
+    // onClick: PropTypes.func.isRequired,
     resources: PropTypes.shape({
       proxy: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
@@ -26,7 +27,8 @@ class LoanActionsHistoryProxy extends React.Component {
   getUserFullName() {
     const proxy = (this.props.resources.proxy || {}).records || [];
     if (proxy.length === 1 && proxy[0].id === this.props.id) {
-      return <Link to={`/users/view/${this.props.id}?query=${proxy[0].username}`} onClick={this.props.onClick}>{getFullName(proxy[0])}</Link>;
+      // return <Link to={`/users/view/${this.props.id}?query=${proxy[0].username}`} onClick={this.props.onClick}>{getFullName(proxy[0])}</Link>;
+      return <Link to={`/users/view/${this.props.id}`}>{getFullName(proxy[0])}</Link>;
     }
 
     return this.props.id;
@@ -47,4 +49,4 @@ class LoanActionsHistoryProxy extends React.Component {
   }
 }
 
-export default LoanActionsHistoryProxy;
+export default stripesConnect(LoanActionsHistoryProxy);
