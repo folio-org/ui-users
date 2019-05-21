@@ -15,7 +15,7 @@ const withServicePoints = WrappedComponent => class WithServicePointsComponent e
       ...WrappedComponent.manifest,
       servicePoints: {
         type: 'okapi',
-        path: 'service-points',
+        path: 'service-points?query=cql.allRecords=1 sortby name&limit=1000',
         records: 'servicepoints',
         accumulate: true,
         fetch: false,
