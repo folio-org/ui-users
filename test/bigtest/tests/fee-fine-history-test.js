@@ -8,8 +8,7 @@ import { expect } from 'chai';
 import setupApplication from '../helpers/setup-application';
 import FeeFineHistoryInteractor from '../interactors/fee-fine-history';
 
-
-describe('Test Fee/Fine History', () => {
+describe.only('Test Fee/Fine History', () => {
   setupApplication({ scenarios: ['view-fees-fines'] });
   beforeEach(async function () {
     this.visit('/users/view/ce0e0d5b-b5f3-4ad5-bccb-49c0784298fd');
@@ -60,7 +59,7 @@ describe('Test Fee/Fine History', () => {
 
         it('displays the Search & filter title', () => {
           expect(FeeFineHistoryInteractor.title).to.string('Search & filter');
-        });
+        }).timeout(4000);
       });
 
       describe('selects one row in open accounts and transfer button', () => {
@@ -87,8 +86,7 @@ describe('Test Fee/Fine History', () => {
           });
         });
       });
-      // END all rows
-      // headers
+
       describe('selects headers open Fee/Fine history', () => {
         beforeEach(async () => {
           await FeeFineHistoryInteractor.mclViewFeesFines.headers(1).click();
@@ -118,8 +116,7 @@ describe('Test Fee/Fine History', () => {
           }
         });
       });
-      // END headers
-      // all rows
+
       describe('select one row and go to accounts actions section', () => {
         beforeEach(async () => {
           await FeeFineHistoryInteractor.rows(3).click();
@@ -129,9 +126,7 @@ describe('Test Fee/Fine History', () => {
           expect(FeeFineHistoryInteractor.accountAcctionIsPresent).to.be.true;
         });
       });
-      // END all rows
 
-      // all ellipsis
       describe('Test the ellipsis menu', () => {
         beforeEach(async () => {
           await FeeFineHistoryInteractor.rows(3).cells(13).selectEllipsis();
@@ -140,7 +135,7 @@ describe('Test Fee/Fine History', () => {
         it('the ellipsis menu most be present', () => {
           expect(FeeFineHistoryInteractor.ellipsisMenuIsPresent).to.be.true;
         });
-        // ellipsis pay
+
         describe('select the pay option', () => {
           beforeEach(async () => {
             await FeeFineHistoryInteractor.dropDownEllipsis(0).click();
@@ -149,8 +144,7 @@ describe('Test Fee/Fine History', () => {
             expect(FeeFineHistoryInteractor.payModal.hasHeader).to.be.true;
           });
         });
-        // END ellipsis pay
-        // ellipsis waive
+
         describe('select the waive option', () => {
           beforeEach(async () => {
             await FeeFineHistoryInteractor.dropDownEllipsis(1).click();
@@ -160,8 +154,7 @@ describe('Test Fee/Fine History', () => {
             expect(FeeFineHistoryInteractor.waiveModal.hasHeader).to.be.true;
           });
         });
-        // END ellipsis waive
-        // ellipsis transfer
+
         describe('select the transfer option', () => {
           beforeEach(async () => {
             await FeeFineHistoryInteractor.dropDownEllipsis(3).click();
@@ -172,8 +165,7 @@ describe('Test Fee/Fine History', () => {
             expect(FeeFineHistoryInteractor.transferModal.hasHeader).to.be.true;
           });
         });
-        // END ellipsis transfer
-        // ellipsis error
+
         describe('select the cancel option', () => {
           beforeEach(async () => {
             await FeeFineHistoryInteractor.dropDownEllipsis(4).click();
@@ -183,8 +175,7 @@ describe('Test Fee/Fine History', () => {
             expect(FeeFineHistoryInteractor.cancelModal.hasHeader).to.be.true;
           });
         });
-        // END ellipsis error
-        // ellipsis loans
+
         describe('select loan details option', () => {
           beforeEach(async () => {
             await FeeFineHistoryInteractor.dropDownEllipsis(5).click();
@@ -193,11 +184,7 @@ describe('Test Fee/Fine History', () => {
             expect(FeeFineHistoryInteractor.loanDetailsIsPresent).to.be.true;
           });
         });
-        // END ellipsis loans
       });
-      // END ellipsis
     });
-    // END OPEN
   });
-  // END accordion
 });
