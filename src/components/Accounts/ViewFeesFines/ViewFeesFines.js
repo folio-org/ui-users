@@ -210,8 +210,7 @@ class ViewFeesFines extends React.Component {
       : { ...accounts, [id]: a };
     const allChecked = _.size(checkedAccounts) === this.props.accounts.length;
     this.setState({ checkedAccounts, allChecked });
-
-    const values = Object.values(checkedAccounts) || [];
+    const values = Object.values(checkedAccounts);
 
     let selected = 0;
     values.forEach((v) => {
@@ -235,7 +234,7 @@ class ViewFeesFines extends React.Component {
     const checkedAccounts = (e.target.checked)
       ? accounts.reduce((memo, a) => (Object.assign(memo, { [a.id]: a })), {})
       : {};
-    const values = Object.values(checkedAccounts) || [];
+    const values = Object.values(checkedAccounts);
 
     let selected = 0;
     values.forEach((v) => {
