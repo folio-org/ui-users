@@ -13,7 +13,7 @@ import {
   Pane,
   PaneHeader,
   PaneMenu,
-  IconButton,
+  PaneHeaderIconButton,
   Button,
   Dropdown,
   DropdownMenu,
@@ -458,8 +458,7 @@ class AccountsHistory extends React.Component {
 
     const firstMenu = (
       <PaneMenu>
-        <IconButton
-          id="accountsCount"
+        <PaneHeaderIconButton
           icon="search"
           onClick={this.toggleFilterPane}
           badgeCount={(user.id === (accounts[0] || {}).userId && accounts.length) ? badgeCount : undefined}

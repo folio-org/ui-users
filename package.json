@@ -671,7 +671,7 @@
     "uuid": "^3.0.1"
   },
   "peerDependencies": {
-    "@folio/stripes": "^2.0.0",
+    "@folio/stripes": "^2.1.0",
     "react": "*"
   },
   "optionalDependencies": {
