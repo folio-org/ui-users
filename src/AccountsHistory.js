@@ -568,7 +568,7 @@ class AccountsHistory extends React.Component {
               onChangeFilter={(e) => { this.handleFilterChange(e, 'f'); }}
             />
             <section className={css.pane}>
-              <PaneHeader header={header} />
+              <PaneHeader id="search-filter-paneheader" header={header} />
               <Menu
                 {...this.props}
                 user={user}

@@ -5,13 +5,13 @@ import {
   count,
   text,
   isPresent,
-  isVisible
+  isVisible,
 } from '@bigtest/interactor';
 import ButtonInteractor from '@folio/stripes-components/lib/Button/tests/interactor'; // eslint-disable-line
 import MultiColumnListInteractor from '@folio/stripes-components/lib/MultiColumnList/tests/interactor'; // eslint-disable-line
 import ModalInteractor from '@folio/stripes-components/lib/Modal/tests/interactor'; // eslint-disable-line
 
-@interactor class FeesFinesDropdown {
+@interactor class FeesFinesSection {
   click = clickable();
 }
 
@@ -50,7 +50,7 @@ import ModalInteractor from '@folio/stripes-components/lib/Modal/tests/interacto
   closedFeesFines = text('#clickable-viewclosedaccounts');
   allFeesFines = text('#clickable-viewallaccounts');
 
-  accountAcctionIsPresent = isPresent('#paneHeaderpane-account-action-history-pane-title');
+  accountActionIsPresent = isPresent('#paneHeaderpane-account-action-history-pane-title');
   ellipsisMenuIsPresent = isPresent('#ellipsis-drop-down');
   loanDetailsIsPresent = isPresent('#pane-loandetails');
 
@@ -59,27 +59,28 @@ import ModalInteractor from '@folio/stripes-components/lib/Modal/tests/interacto
   cancelModal = new ModalInteractor('#error-modal');
   transferModal = new ModalInteractor('#transfer-modal');
 
-  sectionFeesFinesDropdown = new FeesFinesDropdown('#accordion-toggle-button-accountsSection')
-  openAccounts = new FeesFinesDropdown('#clickable-viewcurrentaccounts');
-  closedAccounts = new FeesFinesDropdown('#clickable-viewclosedaccounts');
-  allAccounts = new FeesFinesDropdown('#clickable-viewallaccounts');
+  sectionFeesFinesSection = new FeesFinesSection('#accordion-toggle-button-accountsSection')
+  openAccounts = new FeesFinesSection('#clickable-viewcurrentaccounts');
+  closedAccounts = new FeesFinesSection('#clickable-viewclosedaccounts');
+  allAccounts = new FeesFinesSection('#clickable-viewallaccounts');
 
   dropDownEllipsis = collection('#ellipsis-drop-down [class*=button---] [class*=inner---]');
   headerList = collection('[class*=HeaderRow---]', HeaderInteractor);
   rows = collection('#list-accounts-history-view-feesfines [class*=mclRow---]', RowInteractor);
 
-  searchButton = clickable('#accountsCount');
+  searchButton = clickable('[class*=paneMenu---] #accountsCount');
   selectAllCheckbox = clickable('#checkbox');
-  // button Menu File
+
+  closePane = new ButtonInteractor('#filters-pane [class*=paneHeader---] [class*=paneHeaderButtonsArea---] [class*=paneMenu---] [class*=iconButton---]');
   newFeeFineOpenButton = new ButtonInteractor('#open-closed-all-charge-button');
   payButton = new ButtonInteractor('#open-closed-all-pay-button');
   waiveButton = new ButtonInteractor('#open-closed-all-wave-button');
   transferButton = new ButtonInteractor('#open-closed-all-transfer-button');
 
   // file AccountsHistory
-  openMenu = clickable('#open-accounts');
-  closedMenu = clickable('#closed-accounts');
-  allMenu = clickable('#all-accounts');
+  openMenu = new ButtonInteractor('#open-accounts');
+  closedMenu = new ButtonInteractor('#closed-accounts');
+  allMenu = new ButtonInteractor('#all-accounts');
 
   isLoadedOpen = isPresent('#list-accounts-history-view-feesfines > [class*=mclScrollable---] > div:nth-child(5)');
   isViewOpen = isVisible('#list-accounts-history-view-feesfines > [class*=mclScrollable---]');

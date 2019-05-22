@@ -20,7 +20,7 @@ describe.only('Test Fee/Fine History', () => {
 
   describe('displays section Fees/Fines', () => {
     beforeEach(async () => {
-      await FeeFineHistoryInteractor.sectionFeesFinesDropdown.click();
+      await FeeFineHistoryInteractor.sectionFeesFinesSection.click();
     });
 
     it('It should render with the labels', () => {
@@ -60,6 +60,16 @@ describe.only('Test Fee/Fine History', () => {
         it('displays the Search & filter title', () => {
           expect(FeeFineHistoryInteractor.title).to.string('Search & filter');
         }).timeout(4000);
+
+        describe('close the Search & filter pane', () => {
+          beforeEach(async () => {
+            await FeeFineHistoryInteractor.closePane.click();
+          });
+
+          it('close Search & filter button pane', () => {
+            expect(FeeFineHistoryInteractor.openMenu.text).to.equal('Open');
+          });
+        });
       });
 
       describe('selects one row in open accounts and transfer button', () => {
@@ -75,7 +85,7 @@ describe.only('Test Fee/Fine History', () => {
 
       describe('selects all accounts', () => {
         beforeEach(async () => {
-          await FeeFineHistoryInteractor.allMenu();
+          await FeeFineHistoryInteractor.allMenu.click();
         });
         describe('select checkbox header', () => {
           beforeEach(async () => {
@@ -122,8 +132,8 @@ describe.only('Test Fee/Fine History', () => {
           await FeeFineHistoryInteractor.rows(3).click();
         });
 
-        it('displays account acctions section', () => {
-          expect(FeeFineHistoryInteractor.accountAcctionIsPresent).to.be.true;
+        it('displays account actions section', () => {
+          expect(FeeFineHistoryInteractor.accountActionIsPresent).to.be.true;
         });
       });
 
