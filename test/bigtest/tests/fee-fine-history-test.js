@@ -8,7 +8,7 @@ import { expect } from 'chai';
 import setupApplication from '../helpers/setup-application';
 import FeeFineHistoryInteractor from '../interactors/fee-fine-history';
 
-describe.only('Test Fee/Fine History', () => {
+describe('Test Fee/Fine History', () => {
   setupApplication({ scenarios: ['view-fees-fines'] });
   beforeEach(async function () {
     this.visit('/users/view/ce0e0d5b-b5f3-4ad5-bccb-49c0784298fd');
@@ -50,24 +50,24 @@ describe.only('Test Fee/Fine History', () => {
         it('renders proper amount of rows', () => {
           expect(FeeFineHistoryInteractor.mclViewFeesFines.rowCount).to.equal(5);
         }).timeout(7000);
-      });
 
-      describe('active the Search & filter', () => {
-        beforeEach(async () => {
-          await FeeFineHistoryInteractor.searchButton();
-        });
-
-        it('displays the Search & filter title', () => {
-          expect(FeeFineHistoryInteractor.title).to.string('Search & filter');
-        }).timeout(4000);
-
-        describe('close the Search & filter pane', () => {
+        describe('active the Search & filter', () => {
           beforeEach(async () => {
-            await FeeFineHistoryInteractor.closePane.click();
+            await FeeFineHistoryInteractor.filterButton();
           });
 
-          it('close Search & filter button pane', () => {
-            expect(FeeFineHistoryInteractor.openMenu.text).to.equal('Open');
+          it('displays the Search & filter title', () => {
+            expect(FeeFineHistoryInteractor.title).to.string('Search & filter');
+          }).timeout(4000);
+
+          describe('close the Search & filter pane', () => {
+            beforeEach(async () => {
+              await FeeFineHistoryInteractor.closePane.click();
+            });
+
+            it('close Search & filter button pane', () => {
+              expect(FeeFineHistoryInteractor.openMenu.text).to.equal('Open');
+            });
           });
         });
       });
@@ -87,10 +87,12 @@ describe.only('Test Fee/Fine History', () => {
         beforeEach(async () => {
           await FeeFineHistoryInteractor.allMenu.click();
         });
+
         describe('select checkbox header', () => {
           beforeEach(async () => {
             await FeeFineHistoryInteractor.selectAllCheckbox();
           });
+
           it('displays title modal', () => {
             expect(FeeFineHistoryInteractor.payButton.text).to.equal('Pay');
           });
@@ -150,6 +152,7 @@ describe.only('Test Fee/Fine History', () => {
           beforeEach(async () => {
             await FeeFineHistoryInteractor.dropDownEllipsis(0).click();
           });
+
           it('show the pay modal', () => {
             expect(FeeFineHistoryInteractor.payModal.hasHeader).to.be.true;
           });
@@ -171,7 +174,6 @@ describe.only('Test Fee/Fine History', () => {
           });
 
           it('show the transfer modal', () => {
-            console.log('test hoy', FeeFineHistoryInteractor.transferModal.hasHeader);
             expect(FeeFineHistoryInteractor.transferModal.hasHeader).to.be.true;
           });
         });

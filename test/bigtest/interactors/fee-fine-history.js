@@ -68,7 +68,7 @@ import ModalInteractor from '@folio/stripes-components/lib/Modal/tests/interacto
   headerList = collection('[class*=HeaderRow---]', HeaderInteractor);
   rows = collection('#list-accounts-history-view-feesfines [class*=mclRow---]', RowInteractor);
 
-  searchButton = clickable('[class*=paneMenu---] #accountsCount');
+  filterButton = clickable('#history-first-menu');
   selectAllCheckbox = clickable('#checkbox');
 
   closePane = new ButtonInteractor('#filters-pane [class*=paneHeader---] [class*=paneHeaderButtonsArea---] [class*=paneMenu---] [class*=iconButton---]');

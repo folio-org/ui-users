@@ -455,6 +455,7 @@ class AccountsHistory extends React.Component {
     const firstMenu = (
       <PaneMenu>
         <PaneHeaderIconButton
+          id="history-first-menu"
           icon="search"
           onClick={this.toggleFilterPane}
           badgeCount={(user.id === (accounts[0] || {}).userId && accounts.length) ? badgeCount : undefined}
