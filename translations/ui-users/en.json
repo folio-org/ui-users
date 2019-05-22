@@ -371,6 +371,7 @@
   "permissions.empty": "No permissions found",
   "permissions.removePermission": "Remove permission",
   "permissions.addPermission": "Add permission",
+  "permissions.addAllPermissions": "Add all permissions",
   "permissions.availablePermissions": "available permissions",
   "permissions.userPermissions": "User permissions",
   "permissions.isProxyFor": "{name} is proxy for",
