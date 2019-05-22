@@ -29,7 +29,7 @@ describe('Manual charges', () => {
     const firstRow = FeefinesInteractor.list.rows(0);
 
     expect(firstRow.cells(0).text).to.equal('Feefine 1');
-    expect(firstRow.cells(1).text).to.equal('200.00');
+    expect(firstRow.cells(1).text).to.equal('1000.00');
     expect(firstRow.cells(2).text).to.equal('-');
     expect(firstRow.cells(3).text).to.equal('-');
   });
@@ -93,7 +93,7 @@ describe('Manual charges', () => {
       const firstRow = FeefinesInteractor.list.rows(0);
 
       expect(firstRow.cells(0).text).to.equal('Feefine 1');
-      expect(firstRow.cells(1).text).to.equal('200.00');
+      expect(firstRow.cells(1).text).to.equal('1000.00');
       expect(firstRow.cells(3).text).to.equal('-');
     });
   });

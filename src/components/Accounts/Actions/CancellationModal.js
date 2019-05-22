@@ -89,6 +89,7 @@ class CancellationModal extends React.Component {
 
     return (
       <Modal
+        id="error-modal"
         label={<FormattedMessage id="ui-users.accounts.cancellation.field.confirmcancelled" />}
         open={open}
         onClose={this.onClose}

@@ -3,6 +3,7 @@
 ## 2.23.0 (IN PROGRESS)
 
 * Retrieve 1000 service points by default. Fixes UIU-1053.
+* Create BigTest for display Fee/Fine History. Ref UIU-1005.
 
 ## [2.22.0](https://github.com/folio-org/ui-users/tree/v2.22.0) (2019-05-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.22.0...v2.22.0)

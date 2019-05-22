@@ -18,6 +18,7 @@ export default (server) => {
     remaining: 0
   });
   server.create('comments');
+  server.createList('waivers', 4);
 
   server.get('/accounts');
   server.get('/accounts/:id', (schema, request) => {
@@ -33,6 +34,9 @@ export default (server) => {
   server.get('/feefines');
   server.get('/comments');
   server.get('/feefineactions');
+  server.get('/waives', (schema) => {
+    return schema.waivers.all();
+  });
   server.get('/transfers');
 
   server.post('/transfers', (schema, request) => {

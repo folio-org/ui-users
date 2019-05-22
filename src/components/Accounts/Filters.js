@@ -11,7 +11,13 @@ const Filters = (props) => {
   if (props.showFilters === false) return '';
   const value = props.query.q || '';
   return (
-    <Pane defaultWidth="16%" dismissible onClose={props.toggle} paneTitle={<FormattedMessage id="ui-users.accounts.history.filter" />}>
+    <Pane
+      id="filters-pane"
+      defaultWidth="16%"
+      dismissible
+      onClose={props.toggle}
+      paneTitle={<FormattedMessage id="ui-users.accounts.history.filter" />}
+    >
       <SearchField
         onChange={props.onChangeSearch}
         onClear={props.onClearSearch}
@@ -19,6 +25,7 @@ const Filters = (props) => {
       />
       { (props.query.loan) ?
         <button
+          id="search-button"
           type="button"
           onClick={() => {
             props.parentMutator.query.update({ loan: null });
@@ -28,6 +35,7 @@ const Filters = (props) => {
         </button>
         : ''}
       <FilterGroups
+        id="filter-groups"
         config={props.filterConfig}
         filters={props.filters}
         onChangeFilter={props.onChangeFilter}
