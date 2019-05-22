@@ -49,7 +49,7 @@ class Actions extends React.Component {
     },
     waives: {
       type: 'okapi',
-      records: 'waiver',
+      records: 'waivers',
       path: 'waives',
     },
     owners: {
@@ -98,6 +98,7 @@ class Actions extends React.Component {
     handleEdit: PropTypes.func,
     user: PropTypes.object,
     intl: intlShape.isRequired,
+    layer: PropTypes.string,
   };
 
   constructor(props) {
@@ -577,7 +578,8 @@ class Actions extends React.Component {
     const {
       actions,
       stripes,
-      resources
+      resources,
+      layer
     } = this.props;
     const {
       accounts,
@@ -591,14 +593,14 @@ class Actions extends React.Component {
     const waives = _.get(resources, ['waives', 'records'], []);
     const transfers = _.get(resources, ['transfers', 'records'], []);
     const settings = _.get(resources, ['commentRequired', 'records', 0], {});
-    const warning = accounts.filter(a => a.status.name === 'Closed').length !== 0 && (actions.regular || actions.waiveMany || actions.transferMany);
+    const warning = accounts.filter(a => a.status.name === 'Closed').length !== 0 && (actions.regular || actions.waiveMany || actions.transferMany) && layer === 'all-accounts';
     const warningModalLabelId = actions.regular
       ? 'ui-users.accounts.actions.payFeeFine'
       : actions.waiveMany
         ? 'ui-users.accounts.actions.waiveFeeFine'
         : actions.transferMany
           ? 'ui-users.accounts.actions.transferFeeFine'
-          : 'Refund';
+          : 'ui-users.accounts.history.button.refund';
 
     return (
       <div>

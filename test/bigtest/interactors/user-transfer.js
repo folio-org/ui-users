@@ -51,9 +51,9 @@ import SelectInteractor from '@folio/stripes-components/lib/Select/tests/interac
 
 
   confirmation = new ConfirmationModalInteractor('[id*=confirmation-]');
-  mclAll = new MultiColumnListInteractor('#list-accountshistory-all');
-  mclOpen = new MultiColumnListInteractor('#list-accountshistory-open');
-  mclWarning = new MultiColumnListInteractor('#warning-mcl'); // WarningModal
+  mclAll = new MultiColumnListInteractor('#list-accounts-history-view-feesfines');
+  mclOpen = new MultiColumnListInteractor('#list-accounts-history-view-feesfines');
+  mclWarning = new MultiColumnListInteractor('#warning-mcl');
   warningTransferCancel = clickable('#warningTransferCancel');
   warningTransferContinue = clickable('#warningTransferContinue');
 
@@ -62,9 +62,8 @@ import SelectInteractor from '@folio/stripes-components/lib/Select/tests/interac
 
   selectCheckbox = clickable('#checkbox');
 
-  isLoaded = isPresent('#list-accountshistory-all > [class*=mclScrollable---] > div:nth-child(5)');
-  isView = isVisible('#list-accountshistory-all > [class*=mclScrollable---]');
-
+  isLoaded = isPresent('#list-accounts-history-view-feesfines > [class*=mclScrollable---] > div:nth-child(5)');
+  isView = isVisible('#list-accounts-history-view-feesfines > [class*=mclScrollable---]');
   // File
   openAccounts = clickable('#open-accounts');
   closedAccounts = clickable('#closed-accounts');

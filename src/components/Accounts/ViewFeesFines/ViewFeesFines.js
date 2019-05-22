@@ -19,7 +19,7 @@ import {
   FormattedDate,
 } from 'react-intl';
 
-class OpenAccounts extends React.Component {
+class ViewFeesFines extends React.Component {
   static propTypes = {
     resources: PropTypes.shape({
       comments: PropTypes.shape({
@@ -56,12 +56,12 @@ class OpenAccounts extends React.Component {
     this.onRowClick = this.onRowClick.bind(this);
 
     this.sortMap = {
-      'metadata.createdDate': f => (f.metadata || {}).createdDate,
-      'metadata.updatedDate': f => (f.metadata || {}).updatedDate,
+      'metadata.createdDate': f => f.metadata.createdDate,
+      'metadata.updatedDate': f => f.metadata.updatedDate,
       'feeFineType': f => f.feeFineType,
       'amount': f => f.amount,
       'remaining': f => f.remaining,
-      'paymentStatus.name': f => (f.paymentStatus || {}).name,
+      'paymentStatus.name': f => f.paymentStatus.name,
       'feeFineOwner': f => f.feeFineOwner,
       'title': f => f.title,
       'barcode': f => f.barcode,
@@ -127,16 +127,16 @@ class OpenAccounts extends React.Component {
     const n = myComments.length;
 
     return (
-      <div>
+      <div data-test-popover-link>
         <Row>
           <Col>{t}</Col>
           {(n > 0) ?
             <Col style={{ marginLeft: '5px' }}>
-              <Popover key={myComments[n - 1]}>
-                <div data-role="target">
-                  <img src="https://png.icons8.com/color/18/000000/note.png" alt="" />
+              <Popover id="id-popover" key={myComments[n - 1]}>
+                <div id="popover-comments-1" data-role="target">
+                  <img id="popover-comments-img" src="https://png.icons8.com/color/18/000000/note.png" alt="" />
                 </div>
-                <p data-role="popover">
+                <p id="popover-comments" data-role="popover">
                   <b>
                     <FormattedMessage id="ui-users.accounts.history.comment" />
                     {' '}
@@ -210,30 +210,23 @@ class OpenAccounts extends React.Component {
       : { ...accounts, [id]: a };
     const allChecked = _.size(checkedAccounts) === this.props.accounts.length;
     this.setState({ checkedAccounts, allChecked });
+    const values = Object.values(checkedAccounts);
 
-    const values = Object.values(checkedAccounts) || [];
     let selected = 0;
     values.forEach((v) => {
-      selected += v.remaining;
+      selected += (v.remaining * 100);
     });
-
+    selected /= 100;
     this.props.onChangeSelected(parseFloat(selected).toFixed(2), values);
 
-    if (values.length !== 0) {
-      this.props.onChangeActions({
-        waive: true,
-        transfer: true,
-        refund: true,
-        regularpayment: true,
-      });
-    } else {
-      this.props.onChangeActions({
-        waive: false,
-        transfer: false,
-        refund: false,
-        regularpayment: false,
-      });
-    }
+    const open = selected > 0;
+    const closed = values.length > 0;
+    this.props.onChangeActions({
+      waive: open,
+      transfer: open,
+      refund: open || closed,
+      regularpayment: open,
+    });
   }
 
   toggleAll(e) {
@@ -241,29 +234,23 @@ class OpenAccounts extends React.Component {
     const checkedAccounts = (e.target.checked)
       ? accounts.reduce((memo, a) => (Object.assign(memo, { [a.id]: a })), {})
       : {};
-    const values = Object.values(checkedAccounts) || [];
+    const values = Object.values(checkedAccounts);
+
     let selected = 0;
     values.forEach((v) => {
-      selected += v.remaining;
+      selected += (v.remaining * 100);
     });
-
+    selected /= 100;
     this.props.onChangeSelected(parseFloat(selected).toFixed(2), values);
 
-    if (values.length !== 0) {
-      this.props.onChangeActions({
-        waive: true,
-        transfer: true,
-        refund: true,
-        regularpayment: true,
-      });
-    } else {
-      this.props.onChangeActions({
-        waive: false,
-        transfer: false,
-        refund: false,
-        regularpayment: false,
-      });
-    }
+    const open = selected > 0;
+    const closed = values.length > 0;
+    this.props.onChangeActions({
+      waive: open,
+      transfer: open,
+      refund: open || closed,
+      regularpayment: open,
+    });
 
     this.setState(({ allChecked }) => ({
       allChecked: !allChecked,
@@ -281,6 +268,7 @@ class OpenAccounts extends React.Component {
       this[action](a);
     }
   }
+  // ellipsis actions
 
   // eslint-disable-next-line class-methods-use-this
   pay(a, e) {
@@ -316,23 +304,31 @@ class OpenAccounts extends React.Component {
   }
 
   renderActions(a) {
+    const disabled = (a.status.name === 'Closed');
+    const elipsis = {
+      pay: disabled,
+      waive: disabled,
+      transfer: disabled,
+      error: disabled,
+      loan: (a.loanId === '0' || !a.loanId),
+    };
     const buttonDisabled = !this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
-    const disabled = (a.loanId === '0' || !a.loanId);
+
     return (
       <UncontrolledDropdown
         onSelectItem={this.handleOptionsChange}
       >
-        <Button data-role="toggle" buttonStyle="hover dropdownActive">
+        <Button id="ellipsis-button" data-role="toggle" buttonStyle="hover dropdownActive">
           <strong>•••</strong>
         </Button>
-        <DropdownMenu data-role="menu" overrideStyle={{ padding: '7px 3px' }}>
+        <DropdownMenu id="ellipsis-drop-down" data-role="menu" overrideStyle={{ padding: '7px 3px' }}>
           <MenuItem itemMeta={{ a, action: 'pay' }}>
-            <Button disabled={buttonDisabled} buttonStyle="dropdownItem">
+            <Button disabled={!((elipsis.pay === false) && (buttonDisabled === false))} buttonStyle="dropdownItem">
               <FormattedMessage id="ui-users.accounts.history.button.pay" />
             </Button>
           </MenuItem>
           <MenuItem itemMeta={{ a, action: 'waive' }}>
-            <Button disabled={buttonDisabled} buttonStyle="dropdownItem">
+            <Button disabled={!((elipsis.waive === false) && (buttonDisabled === false))} buttonStyle="dropdownItem">
               <FormattedMessage id="ui-users.accounts.history.button.waive" />
             </Button>
           </MenuItem>
@@ -342,18 +338,18 @@ class OpenAccounts extends React.Component {
             </Button>
           </MenuItem>
           <MenuItem itemMeta={{ a, action: 'transfer' }}>
-            <Button disabled={buttonDisabled} buttonStyle="dropdownItem">
+            <Button disabled={!((elipsis.transfer === false) && (buttonDisabled === false))} buttonStyle="dropdownItem">
               <FormattedMessage id="ui-users.accounts.history.button.transfer" />
             </Button>
           </MenuItem>
           <MenuItem itemMeta={{ a, action: 'cancel' }}>
-            <Button disabled={buttonDisabled} buttonStyle="dropdownItem">
+            <Button disabled={!((elipsis.error === false) && (buttonDisabled === false))} buttonStyle="dropdownItem">
               <FormattedMessage id="ui-users.accounts.button.error" />
             </Button>
           </MenuItem>
           <hr />
           <MenuItem itemMeta={{ a, action: 'loanDetails' }}>
-            <Button disabled={disabled} buttonStyle="dropdownItem">
+            <Button disabled={elipsis.loan} buttonStyle="dropdownItem">
               <FormattedMessage id="ui-users.accounts.history.button.loanDetails" />
             </Button>
           </MenuItem>
@@ -387,7 +383,7 @@ class OpenAccounts extends React.Component {
 
     return (
       <MultiColumnList
-        id="list-accountshistory-open"
+        id="list-accounts-history-view-feesfines"
         formatter={this.getAccountsFormatter()}
         columnMapping={columnMapping}
         columnWidths={{
@@ -418,4 +414,4 @@ class OpenAccounts extends React.Component {
   }
 }
 
-export default OpenAccounts;
+export default ViewFeesFines;
