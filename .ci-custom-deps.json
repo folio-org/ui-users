@@ -1,0 +1,10 @@
+[ 
+  {
+    "id" : "mod-users-bl-4.5.0-SNAPSHOT.62",
+    "action" : "enable"
+  },
+  {
+    "id" : "mod-users-15.6.0-SNAPSHOT.76",
+    "action" : "enable"
+  }
+]
