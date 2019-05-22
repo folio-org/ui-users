@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { get, filter, includes } from 'lodash';
 import React from 'react';
 import {
   FormattedMessage,
@@ -89,7 +89,7 @@ class EditablePermissions extends React.Component {
 
     if (!perm.visible && !this.props.stripes.config.listInvisiblePerms) { return false; }
 
-    return _.includes(perm.displayName.toLowerCase() || perm.permissionName.toLowerCase(),
+    return includes(perm.displayName.toLowerCase() || perm.permissionName.toLowerCase(),
       this.state.searchTerm.toLowerCase());
   }
 
@@ -132,7 +132,7 @@ class EditablePermissions extends React.Component {
 
   renderList({ fields }) {
     this.fields = fields;
-    const showPerms = _.get(this.props.stripes, ['config', 'showPerms']);
+    const showPerms = get(this.props.stripes, ['config', 'showPerms']);
     const listFormatter = (fieldName, index) => (this.renderItem(fields.get(index), index, showPerms));
 
     return (
@@ -142,6 +142,13 @@ class EditablePermissions extends React.Component {
         isEmptyMessage={<FormattedMessage id="ui-users.permissions.empty" />}
       />
     );
+  }
+
+  addAllPermissions = () => {
+    filter(this.props.availablePermissions, this.isPermAvailable)
+      .forEach(perm => {
+        this.fields.unshift(perm);
+      });
   }
 
   render() {
@@ -155,7 +162,7 @@ class EditablePermissions extends React.Component {
 
     const permissionsDD = (
       <PermissionList
-        items={_.filter(this.props.availablePermissions, this.isPermAvailable)}
+        items={filter(this.props.availablePermissions, this.isPermAvailable)}
         onClickItem={this.addPermissionHandler}
         onChangeSearch={this.onChangeSearch}
         stripes={this.props.stripes}
@@ -196,7 +203,10 @@ class EditablePermissions extends React.Component {
         }
       >
         <FieldArray name={this.props.name} component={this.renderList} />
-        <div>{permsDropdownButton}</div>
+        <div>
+          {permsDropdownButton}
+          <Button onClick={() => this.addAllPermissions()}><FormattedMessage id="ui-users.permissions.addAllPermissions" /></Button>
+        </div>
       </Accordion>
     );
   }
