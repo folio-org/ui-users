@@ -6,7 +6,7 @@ import {
   Paneset,
   Pane,
   PaneMenu,
-  IconButton,
+  PaneHeaderIconButton,
   TextField,
   TextArea,
   Icon,
@@ -65,7 +65,7 @@ class PermissionSetForm extends React.Component {
       <PaneMenu>
         <FormattedMessage id="ui-users.permissions.closePermissionSetDialog">
           { ariaLabel => (
-            <IconButton
+            <PaneHeaderIconButton
               id="clickable-close-permission-set"
               onClick={this.props.onCancel}
               icon="times"
