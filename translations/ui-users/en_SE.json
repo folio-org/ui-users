@@ -849,5 +849,6 @@
     "accounts.transfer.summary": "{transferType} {feesFinesAmount} {feeFineForm} for a total amount of {transferAmount}",
     "accounts.actions.transferFeeFine": "Transfer fees/fines",
     "accounts.actions.warning.transferAction": "transferred",
-    "accounts.actions.transfer": "transfer"
+    "accounts.actions.transfer": "transfer",
+    "permissions.addAllPermissions": "Add all permissions"
 }

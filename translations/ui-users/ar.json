@@ -849,5 +849,6 @@
     "accounts.transfer.summary": "{transferType} {feesFinesAmount} {feeFineForm} لإجمالي مبلغ {transferAmount}",
     "accounts.actions.transferFeeFine": "تحويل الرسوم/الغرامات",
     "accounts.actions.warning.transferAction": "تحويل",
-    "accounts.actions.transfer": "تحويل"
+    "accounts.actions.transfer": "تحويل",
+    "permissions.addAllPermissions": "إضافة كل الصلاحيات"
 }

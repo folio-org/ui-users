@@ -849,5 +849,6 @@
     "accounts.transfer.summary": "{transferType} {feesFinesAmount} {feeFineForm} para um valor total de {transferAmount}",
     "accounts.actions.transferFeeFine": "Transferir taxas/multas",
     "accounts.actions.warning.transferAction": "transferido",
-    "accounts.actions.transfer": "transferir"
+    "accounts.actions.transfer": "transferir",
+    "permissions.addAllPermissions": "Adicione todas as permissões"
 }
