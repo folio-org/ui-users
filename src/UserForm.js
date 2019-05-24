@@ -75,22 +75,34 @@ function validate(values, props) {
   return errors;
 }
 
-function asyncValidate(values, dispatch, props, blurredField) {
-  if (blurredField === 'username' && values.username !== props.initialValues.username) {
-    return new Promise((resolve, reject) => {
-      const uv = props.parentMutator.uniquenessValidator;
-      const query = `(username=="${values.username}")`;
-      uv.reset();
-      return uv.GET({ params: { query } }).then((users) => {
-        if (users.length > 0) {
-          const error = { username: <FormattedMessage id="ui-users.errors.usernameUnavailable" /> };
-          reject(error);
-        } else {
-          resolve();
-        }
-      });
+function asyncValidateField(field, value, validator) {
+  return new Promise((resolve, reject) => {
+    const query = `(${field}=="${value}")`;
+    validator.reset();
+
+    return validator.GET({ params: { query } }).then((users) => {
+      if (users.length > 0) {
+        const error = { [field]: <FormattedMessage id={`ui-users.errors.${field}Unavailable`} /> };
+        reject(error);
+      } else {
+        resolve();
+      }
     });
+  });
+}
+
+function asyncValidate(values, dispatch, props, blurredField) {
+  const { parentMutator: { uniquenessValidator }, initialValues } = props;
+  const { username, barcode } = values;
+
+  if (blurredField === 'username' && username !== initialValues.username) {
+    return asyncValidateField(blurredField, username, uniquenessValidator);
   }
+
+  if (blurredField === 'barcode' && barcode && barcode !== initialValues.barcode) {
+    return asyncValidateField(blurredField, barcode, uniquenessValidator);
+  }
+
   return new Promise(resolve => resolve());
 }
 
@@ -402,7 +414,7 @@ export default stripesForm({
   form: 'userForm',
   validate,
   asyncValidate,
-  asyncBlurFields: ['username'],
+  asyncBlurFields: ['username', 'barcode'],
   navigationCheck: true,
   enableReinitialize: true,
 })(UserForm);
