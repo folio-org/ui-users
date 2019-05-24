@@ -83,9 +83,9 @@ function asyncValidateField(field, value, validator) {
     return validator.GET({ params: { query } }).then((users) => {
       if (users.length > 0) {
         const error = { [field]: <FormattedMessage id={`ui-users.errors.${field}Unavailable`} /> };
-        reject(error);
+        return reject(error);
       } else {
-        resolve();
+        return resolve();
       }
     });
   });
@@ -94,16 +94,26 @@ function asyncValidateField(field, value, validator) {
 function asyncValidate(values, dispatch, props, blurredField) {
   const { parentMutator: { uniquenessValidator }, initialValues } = props;
   const { username, barcode } = values;
+  const curValue = values[blurredField];
+  const prevValue = initialValues[blurredField];
 
-  if (blurredField === 'username' && username !== initialValues.username) {
-    return asyncValidateField(blurredField, username, uniquenessValidator);
+  // validate on blur
+  if (blurredField && curValue && curValue !== prevValue) {
+    return asyncValidateField(blurredField, curValue, uniquenessValidator);
   }
 
-  if (blurredField === 'barcode' && barcode && barcode !== initialValues.barcode) {
-    return asyncValidateField(blurredField, barcode, uniquenessValidator);
+  const promises = [];
+
+  // validate on submit
+  if (username !== initialValues.username) {
+    promises.push(asyncValidateField('username', username, uniquenessValidator));
   }
 
-  return new Promise(resolve => resolve());
+  if (barcode && barcode !== initialValues.barcode) {
+    promises.push(asyncValidateField('barcode', barcode, uniquenessValidator));
+  }
+
+  return Promise.all(promises);
 }
 
 class UserForm extends React.Component {
@@ -414,6 +424,7 @@ export default stripesForm({
   form: 'userForm',
   validate,
   asyncValidate,
+  // shouldAsyncValidate: () => false,
   asyncBlurFields: ['username', 'barcode'],
   navigationCheck: true,
   enableReinitialize: true,
