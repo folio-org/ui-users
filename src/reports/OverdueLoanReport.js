@@ -2,6 +2,9 @@ import { get } from 'lodash';
 import { exportCsv } from '@folio/stripes/util';
 
 const columns = [
+  'borrower.name',
+  'borrower.barcode',
+  'borrowerId',
   'dueDate',
   'loanDate',
   'loanPolicyId',
@@ -30,6 +33,11 @@ class OverdueLoanReport {
   parse(records) {
     return records.map(r => ({
       ...r,
+      borrower: {
+        ...r.borrower,
+        name: `${r.borrower.lastName}, ${r.borrower.firstName} ${r.borrower.middleName || ''}`,
+      },
+      borrowerId: r.userId,
       item: {
         ...r.item,
         contributors: get(r, 'item.contributors', [])

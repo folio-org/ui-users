@@ -26,14 +26,15 @@ const validate = (values, props) => {
   const accounts = props.accounts || [];
   let selected = 0;
   accounts.forEach(a => {
-    selected += a.remaining;
+    selected += (a.remaining * 100);
   });
+  selected /= 100;
 
   const errors = {};
   if (!values.waive) {
     errors.waive = <FormattedMessage id="ui-users.accounts.error.field" />;
   }
-  if (values.waive < 0) {
+  if (values.waive <= 0) {
     errors.waive = <FormattedMessage id="ui-users.accounts.waive.error.amount" />;
   }
   if (!values.method) {
@@ -210,6 +211,7 @@ class WaiveModal extends React.Component {
     const submitButtonDisabled = pristine || submitting || invalid;
     return (
       <Modal
+        id="waive-modal"
         open={this.props.open}
         label={<FormattedMessage id="ui-users.accounts.waive.modalLabel" />}
         onClose={this.props.onClose}
@@ -226,7 +228,7 @@ class WaiveModal extends React.Component {
               <Row end="xs">
                 <Col xs={7}>
                   <FormattedMessage id="ui-users.accounts.waive.field.totalowed" />
-:
+                  {':'}
                 </Col>
                 <Col xs={4}>
                   {parseFloat(totalAmount).toFixed(2)}
@@ -235,7 +237,7 @@ class WaiveModal extends React.Component {
               <Row end="xs">
                 <Col xs={7}>
                   <FormattedMessage id="ui-users.accounts.waive.field.selectedamount" />
-:
+                  {':'}
                 </Col>
                 <Col xs={4}>
                   {selected.toFixed(2)}
@@ -245,7 +247,7 @@ class WaiveModal extends React.Component {
                 <Col xs={6}>
                   <b>
                     <FormattedMessage id="ui-users.accounts.waive.field.waiveamount" />
-*:
+                    {'*:'}
                   </b>
                 </Col>
                 <Col xs={4} className={css.customCol}>
@@ -266,7 +268,7 @@ class WaiveModal extends React.Component {
               <Row end="xs">
                 <Col xs={7}>
                   <FormattedMessage id="ui-users.accounts.waive.field.remainingamount" />
-:
+                  {':'}
                 </Col>
                 <Col xs={4}>{remaining.toFixed(2)}</Col>
               </Row>
@@ -275,7 +277,7 @@ class WaiveModal extends React.Component {
               <Row>
                 <Col xs>
                   <FormattedMessage id="ui-users.accounts.waive.field.waivereason" />
-*
+                  {'*'}
                 </Col>
               </Row>
               <Row>

@@ -34,7 +34,7 @@ class WaiveSettings extends React.Component {
         stripes={stripes}
         validate={(item, index, items) => validate(item, index, items, 'nameReason', label)}
         baseUrl="waives"
-        records="waiver"
+        records="waivers"
         label={intl.formatMessage({ id: 'ui-users.waives.label' })}
         labelSingular={label}
         objectLabel=""
