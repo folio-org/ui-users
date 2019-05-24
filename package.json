@@ -149,15 +149,6 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.editpermsets",
-        "displayName": "Settings (Users): Can create, edit and remove permission sets [LEGACY]",
-        "description": "",
-        "subPermissions": [
-          "ui-users.settings.permsets"
-        ],
-        "visible": true
-      },
-      {
         "permissionName": "ui-users.settings.usergroups",
         "displayName": "Settings (Users): Can create, edit and remove patron groups",
         "subPermissions": [
