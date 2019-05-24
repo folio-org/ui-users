@@ -13,18 +13,20 @@ describe('ItemEditPage', () => {
   setupApplication();
 
   const users = new UsersInteractor();
-  let user;
+  let user1;
+  let user2;
 
   beforeEach(async function () {
-    user = this.server.create('user');
+    user1 = this.server.create('user');
+    user2 = this.server.create('user');
 
-    this.visit(`/users/view/${user.id}?layer=edit`);
+    this.visit(`/users/view/${user1.id}?layer=edit`);
     await UserFormPage.whenLoaded();
   });
 
   describe('visiting the edit user page', () => {
     it('displays the title in the pane header', () => {
-      expect(UserFormPage.title).to.equal(user.username);
+      expect(UserFormPage.title).to.equal(user1.username);
     });
 
     describe('pane header menu', () => {
@@ -43,4 +45,18 @@ describe('ItemEditPage', () => {
       });
     });
   });
+
+  /*
+  // It's currently impossible to trigger blur programmatically
+  // to get the error: https://github.com/erikras/redux-form/issues/3992
+  // so turning this off for now
+  describe('validating user barcode', () => {
+    beforeEach(async function () {
+      await UserFormPage.barcodeField.fillAndBlur(user2.barcode);
+    });
+
+    it('should display validation error', () => {
+    });
+  });
+  */
 });
