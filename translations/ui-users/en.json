@@ -881,6 +881,9 @@
   "transfers.nodata": "There are no Fee/fine: Transfer accounts",
 
   "reports.overdue.label": "Overdue loans report (CSV)",
+  "reports.overdue.borrower.name": "Borrower name",
+  "reports.overdue.borrower.barcode": "Borrower barcode",
+  "reports.overdue.borrowerId": "Borrower ID",
   "reports.overdue.dueDate": "Due date",
   "reports.overdue.loanDate": "Loan date",
   "reports.overdue.loanPolicyId": "Loan policy ID",
