@@ -49,6 +49,8 @@ import {
   headerDropdownMenu = new HeaderDropdownMenu();
 
   barcodeField = new InputFieldInteractor('#adduser_barcode');
+  clickSave = clickable('#clickable-save');
+  barcodeError = text('[class^="feedbackError---"]');
 }
 
 export default new UserFormPage('[data-test-form-page]');

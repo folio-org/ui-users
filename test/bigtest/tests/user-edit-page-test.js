@@ -46,17 +46,14 @@ describe('ItemEditPage', () => {
     });
   });
 
-  /*
-  // It's currently impossible to trigger blur programmatically
-  // to get the error: https://github.com/erikras/redux-form/issues/3992
-  // so turning this off for now
   describe('validating user barcode', () => {
     beforeEach(async function () {
       await UserFormPage.barcodeField.fillAndBlur(user2.barcode);
+      await UserFormPage.clickSave();
     });
 
     it('should display validation error', () => {
+      expect(UserFormPage.barcodeError).to.equal('This barcode has already been taken');
     });
   });
-  */
 });
