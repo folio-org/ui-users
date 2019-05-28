@@ -850,5 +850,8 @@
     "accounts.actions.transferFeeFine": "Transferir taxas/multas",
     "accounts.actions.warning.transferAction": "transferido",
     "accounts.actions.transfer": "transferir",
-    "permissions.addAllPermissions": "Adicione todas as permissões"
+    "permissions.addAllPermissions": "Adicione todas as permissões",
+    "reports.overdue.borrower.name": "Nome do usuário",
+    "reports.overdue.borrower.barcode": "Código de barras do usuário",
+    "reports.overdue.borrowerId": "ID do usuário"
 }

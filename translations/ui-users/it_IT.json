@@ -850,5 +850,8 @@
     "accounts.actions.transferFeeFine": "Transfer fees/fines",
     "accounts.actions.warning.transferAction": "transferred",
     "accounts.actions.transfer": "transfer",
-    "permissions.addAllPermissions": "Add all permissions"
+    "permissions.addAllPermissions": "Add all permissions",
+    "reports.overdue.borrower.name": "Borrower name",
+    "reports.overdue.borrower.barcode": "Borrower barcode",
+    "reports.overdue.borrowerId": "Borrower ID"
 }
