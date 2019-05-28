@@ -5,6 +5,7 @@
 * Retrieve 1000 service points by default. Fixes UIU-1053.
 * Create BigTest for display Fee/Fine History. Ref UIU-1005.
 * Provide "Add all permissions" button. Fixes UIU-1055.
+* Remove `user`-prop from ChangeDueDateDialog. (STSMACOM-152)
 
 ## [2.22.0](https://github.com/folio-org/ui-users/tree/v2.22.0) (2019-05-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.22.0...v2.22.0)
