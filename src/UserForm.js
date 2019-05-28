@@ -424,7 +424,6 @@ export default stripesForm({
   form: 'userForm',
   validate,
   asyncValidate,
-  // shouldAsyncValidate: () => false,
   asyncBlurFields: ['username', 'barcode'],
   navigationCheck: true,
   enableReinitialize: true,
