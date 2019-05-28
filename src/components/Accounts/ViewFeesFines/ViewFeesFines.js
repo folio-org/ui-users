@@ -2,42 +2,46 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
+  Button,
+  Row,
+  Col,
+  MultiColumnList,
+  UncontrolledDropdown,
+  MenuItem,
+  DropdownMenu,
+  Popover,
+} from '@folio/stripes/components';
+
+import {
   FormattedMessage,
   intlShape,
   FormattedTime,
   FormattedDate,
 } from 'react-intl';
-import {
-  Row,
-  Col,
-  Button,
-  MultiColumnList,
-  UncontrolledDropdown,
-  DropdownMenu,
-  Popover,
-  MenuItem,
-} from '@folio/stripes/components';
 
-class AllAccounts extends React.Component {
+class ViewFeesFines extends React.Component {
   static propTypes = {
     resources: PropTypes.shape({
-      comments: PropTypes.object,
+      comments: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
     }),
-    user: PropTypes.object,
     mutator: PropTypes.shape({
-      activeRecord: PropTypes.object,
-    }),
+      activeRecord: PropTypes.shape({
+        update: PropTypes.func.isRequired,
+      }),
+    }).isRequired,
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func,
     }),
+    onChangeActions: PropTypes.func.isRequired,
     onChangeSelected: PropTypes.func.isRequired,
-    visibleColumns: PropTypes.arrayOf(PropTypes.string),
+    accounts: PropTypes.arrayOf(PropTypes.object),
+    user: PropTypes.object,
     loans: PropTypes.arrayOf(PropTypes.object),
     onClickViewAccountActionsHistory: PropTypes.func.isRequired,
     onClickViewLoanActionsHistory: PropTypes.func.isRequired,
-    accounts: PropTypes.arrayOf(PropTypes.object),
-    selectedAccounts: PropTypes.arrayOf(PropTypes.object),
-    onChangeActions: PropTypes.func.isRequired,
+    visibleColumns: PropTypes.arrayOf(PropTypes.string),
     intl: intlShape.isRequired,
   };
 
@@ -48,25 +52,26 @@ class AllAccounts extends React.Component {
     this.toggleAll = this.toggleAll.bind(this);
     this.handleOptionsChange = this.handleOptionsChange.bind(this);
     this.comments = this.comments.bind(this);
-    this.onRowClick = this.onRowClick.bind(this);
     this.getLoan = this.getLoan.bind(this);
+    this.onRowClick = this.onRowClick.bind(this);
 
     this.sortMap = {
-      'metadata.createdDate': f => (f.metadata || {}).createdDate,
-      'metadata.updatedDate': f => (f.metadata || {}).updatedDate,
+      'metadata.createdDate': f => f.metadata.createdDate,
+      'metadata.updatedDate': f => f.metadata.updatedDate,
       'feeFineType': f => f.feeFineType,
       'amount': f => f.amount,
       'remaining': f => f.remaining,
-      'paymentStatus.name': f => (f.paymentStatus || {}).name,
+      'paymentStatus.name': f => f.paymentStatus.name,
       'feeFineOwner': f => f.feeFineOwner,
       'title': f => f.title,
       'barcode': f => f.barcode,
-      'callNumber': f => f.callNumber,
+      'number': f => f.callNumber,
       'dueDate': f => f.dueDate,
       'returnedDate': f => f.returnedDate,
     };
 
     this.state = {
+      checkedAccounts: {},
       allChecked: false,
       sortOrder: [
         'metadata.createdDate',
@@ -87,12 +92,7 @@ class AllAccounts extends React.Component {
     const nextComments = _.get(nextProps.resources, ['comments', 'records'], []);
     const visibleColumns = this.props.visibleColumns;
     const nextVisibleColumns = nextProps.visibleColumns;
-    const selAccounts = this.props.selectedAccounts || [];
-    const nextSelAccounts = nextProps.selectedAccounts || [];
-    if (!_.isEqual(selAccounts, nextSelAccounts)) {
-      const allChecked = nextSelAccounts.length === this.props.accounts.length;
-      this.setState({ allChecked });
-    }
+
     return visibleColumns !== nextVisibleColumns || comments !== nextComments ||
       props.accounts !== nextProps.accounts ||
       this.state !== nextState;
@@ -116,7 +116,6 @@ class AllAccounts extends React.Component {
       const direction = (sortDirection[0] === 'desc') ? 'asc' : 'desc';
       sortDirection = [direction, sortDirection[1]];
     }
-
     this.setState({ sortOrder, sortDirection });
   }
 
@@ -126,17 +125,18 @@ class AllAccounts extends React.Component {
     const actions = _.orderBy(comments.filter(c => c.accountId === f.id), ['dateAction'], ['asc']);
     const myComments = actions.filter(a => a.comments).map(a => a.comments);
     const n = myComments.length;
+
     return (
-      <div>
+      <div data-test-popover-link>
         <Row>
           <Col>{t}</Col>
           {(n > 0) ?
             <Col style={{ marginLeft: '5px' }}>
-              <Popover>
-                <div data-role="target">
-                  <img src="https://png.icons8.com/color/18/000000/note.png" alt="" />
+              <Popover id="id-popover" key={myComments[n - 1]}>
+                <div id="popover-comments-1" data-role="target">
+                  <img id="popover-comments-img" src="https://png.icons8.com/color/18/000000/note.png" alt="" />
                 </div>
-                <p data-role="popover">
+                <p id="popover-comments" data-role="popover">
                   <b>
                     <FormattedMessage id="ui-users.accounts.history.comment" />
                     {' '}
@@ -162,6 +162,7 @@ class AllAccounts extends React.Component {
 
   getLoan(f) {
     const loan = this.props.loans.find(l => l.id === f.loanId) || {};
+
     return loan;
   }
 
@@ -175,12 +176,11 @@ class AllAccounts extends React.Component {
   }
 
   getAccountsFormatter() {
-    const accounts = this.props.selectedAccounts;
-
+    const checkedAccounts = this.state.checkedAccounts;
     return {
       '  ': f => (
         <input
-          checked={accounts.find(a => a.id === f.id)}
+          checked={!!(checkedAccounts[f.id])}
           onClick={e => this.toggleItem(e, f)}
           type="checkbox"
         />
@@ -201,52 +201,32 @@ class AllAccounts extends React.Component {
     };
   }
 
-  toggleItem(e, account) {
+  toggleItem(e, a) {
     e.stopPropagation();
-    const id = account.id;
-    const accounts = this.props.selectedAccounts || [];
-    const checked = {};
-    accounts.forEach(a => {
-      checked[a.id] = a;
-    });
-    const checkedAccounts = (checked[id])
-      ? _.omit(checked, id)
-      : { ...checked, [id]: account };
+    const id = a.id;
+    const accounts = this.state.checkedAccounts;
+    const checkedAccounts = (accounts[id])
+      ? _.omit(accounts, id)
+      : { ...accounts, [id]: a };
     const allChecked = _.size(checkedAccounts) === this.props.accounts.length;
-    this.setState({ allChecked });
+    this.setState({ checkedAccounts, allChecked });
+    const values = Object.values(checkedAccounts);
 
-    const values = Object.values(checkedAccounts) || [];
     let selected = 0;
     values.forEach((v) => {
-      selected += v.remaining;
+      selected += (v.remaining * 100);
     });
-
+    selected /= 100;
     this.props.onChangeSelected(parseFloat(selected).toFixed(2), values);
-    const closed = values.filter(v => (v.status || {}).name === 'Closed');
-    const open = values.filter(v => (v.status || {}).name === 'Open');
 
-    if (closed.length > 0 && open.length === 0) {
-      this.props.onChangeActions({
-        waive: false,
-        transfer: false,
-        refund: true,
-        regularpayment: false,
-      });
-    } else if (values.length !== 0) {
-      this.props.onChangeActions({
-        waive: true,
-        transfer: true,
-        refund: true,
-        regularpayment: true,
-      });
-    } else {
-      this.props.onChangeActions({
-        waive: false,
-        transfer: false,
-        refund: false,
-        regularpayment: false,
-      });
-    }
+    const open = selected > 0;
+    const closed = values.length > 0;
+    this.props.onChangeActions({
+      waive: open,
+      transfer: open,
+      refund: open || closed,
+      regularpayment: open,
+    });
   }
 
   toggleAll(e) {
@@ -254,33 +234,27 @@ class AllAccounts extends React.Component {
     const checkedAccounts = (e.target.checked)
       ? accounts.reduce((memo, a) => (Object.assign(memo, { [a.id]: a })), {})
       : {};
+    const values = Object.values(checkedAccounts);
 
-    const values = Object.values(checkedAccounts) || [];
     let selected = 0;
     values.forEach((v) => {
-      selected += v.remaining;
+      selected += (v.remaining * 100);
     });
-
+    selected /= 100;
     this.props.onChangeSelected(parseFloat(selected).toFixed(2), values);
 
-    if (values.length !== 0) {
-      this.props.onChangeActions({
-        waive: true,
-        transfer: true,
-        refund: true,
-        regularpayment: true,
-      });
-    } else {
-      this.props.onChangeActions({
-        waive: false,
-        transfer: false,
-        refund: false,
-        regularpayment: false,
-      });
-    }
+    const open = selected > 0;
+    const closed = values.length > 0;
+    this.props.onChangeActions({
+      waive: open,
+      transfer: open,
+      refund: open || closed,
+      regularpayment: open,
+    });
 
     this.setState(({ allChecked }) => ({
       allChecked: !allChecked,
+      checkedAccounts
     }));
   }
 
@@ -294,11 +268,9 @@ class AllAccounts extends React.Component {
       this[action](a);
     }
   }
+  // ellipsis actions
 
-  loanDetails(a, e) {
-    this.props.onClickViewLoanActionsHistory(e, { id: a.loanId });
-  }
-
+  // eslint-disable-next-line class-methods-use-this
   pay(a, e) {
     if (e) e.preventDefault();
     this.props.onChangeActions({
@@ -327,6 +299,10 @@ class AllAccounts extends React.Component {
     }, [a]);
   }
 
+  loanDetails(a, e) {
+    this.props.onClickViewLoanActionsHistory(e, { id: a.loanId });
+  }
+
   renderActions(a) {
     const disabled = (a.status.name === 'Closed');
     const elipsis = {
@@ -342,10 +318,10 @@ class AllAccounts extends React.Component {
       <UncontrolledDropdown
         onSelectItem={this.handleOptionsChange}
       >
-        <Button data-role="toggle" buttonStyle="hover dropdownActive">
+        <Button id="ellipsis-button" data-role="toggle" buttonStyle="hover dropdownActive">
           <strong>•••</strong>
         </Button>
-        <DropdownMenu data-role="menu" overrideStyle={{ padding: '7px 3px' }}>
+        <DropdownMenu id="ellipsis-drop-down" data-role="menu" overrideStyle={{ padding: '7px 3px' }}>
           <MenuItem itemMeta={{ a, action: 'pay' }}>
             <Button disabled={!((elipsis.pay === false) && (buttonDisabled === false))} buttonStyle="dropdownItem">
               <FormattedMessage id="ui-users.accounts.history.button.pay" />
@@ -385,8 +361,8 @@ class AllAccounts extends React.Component {
   render() {
     const { sortOrder, sortDirection, allChecked } = this.state;
     const props = this.props;
-
     const fees = _.orderBy(props.accounts, [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
+
     const { intl } = this.props;
 
     const columnMapping = {
@@ -407,7 +383,7 @@ class AllAccounts extends React.Component {
 
     return (
       <MultiColumnList
-        id="list-accountshistory-all"
+        id="list-accounts-history-view-feesfines"
         formatter={this.getAccountsFormatter()}
         columnMapping={columnMapping}
         columnWidths={{
@@ -430,12 +406,12 @@ class AllAccounts extends React.Component {
         fullWidth
         contentData={fees}
         onHeaderClick={this.onSort}
-        onRowClick={this.onRowClick}
         sortOrder={sortOrder[0]}
         sortDirection={`${sortDirection[0]}ending`}
+        onRowClick={this.onRowClick}
       />
     );
   }
 }
 
-export default AllAccounts;
+export default ViewFeesFines;

@@ -371,6 +371,7 @@
   "permissions.empty": "No permissions found",
   "permissions.removePermission": "Remove permission",
   "permissions.addPermission": "Add permission",
+  "permissions.addAllPermissions": "Add all permissions",
   "permissions.availablePermissions": "available permissions",
   "permissions.userPermissions": "User permissions",
   "permissions.isProxyFor": "{name} is proxy for",
@@ -880,6 +881,9 @@
   "transfers.nodata": "There are no Fee/fine: Transfer accounts",
 
   "reports.overdue.label": "Overdue loans report (CSV)",
+  "reports.overdue.borrower.name": "Borrower name",
+  "reports.overdue.borrower.barcode": "Borrower barcode",
+  "reports.overdue.borrowerId": "Borrower ID",
   "reports.overdue.dueDate": "Due date",
   "reports.overdue.loanDate": "Loan date",
   "reports.overdue.loanPolicyId": "Loan policy ID",

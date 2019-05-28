@@ -13,7 +13,7 @@ import {
   Pane,
   PaneHeader,
   PaneMenu,
-  IconButton,
+  PaneHeaderIconButton,
   Button,
   Dropdown,
   DropdownMenu,
@@ -33,9 +33,7 @@ import * as nav from './navigationHandlers';
 import {
   Menu,
   Filters,
-  OpenAccounts,
-  AllAccounts,
-  ClosedAccounts,
+  ViewFeesFines,
 } from './components/Accounts';
 
 const filterConfig = [
@@ -161,9 +159,7 @@ class AccountsHistory extends React.Component {
     this.onChangeActions = this.onChangeActions.bind(this);
     this.onChangeSelected = this.onChangeSelected.bind(this);
     this.onChangeSelectedAccounts = this.onChangeSelectedAccounts.bind(this);
-    this.connectedOpenAccounts = props.stripes.connect(OpenAccounts);
-    this.connectedClosedAccounts = props.stripes.connect(ClosedAccounts);
-    this.connectedAllAccounts = props.stripes.connect(AllAccounts);
+    this.connectedViewFeesFines = props.stripes.connect(ViewFeesFines);
     this.connectedActions = props.stripes.connect(Actions);
 
     this.accounts = [];
@@ -413,8 +409,8 @@ class AccountsHistory extends React.Component {
 
     const firstMenu = (
       <PaneMenu>
-        <IconButton
-          id="accountsCount"
+        <PaneHeaderIconButton
+          id="history-first-menu"
           icon="search"
           onClick={this.toggleFilterPane}
           badgeCount={(userOwned && accounts.length) ? badgeCount : undefined}
@@ -532,7 +528,7 @@ class AccountsHistory extends React.Component {
               onChangeFilter={(e) => { this.handleFilterChange(e, 'f'); }}
             />
             <section className={css.pane}>
-              <PaneHeader header={header} />
+              <PaneHeader id="search-filter-paneheader" header={header} />
               <Menu
                 {...this.props}
                 user={user}
@@ -549,7 +545,7 @@ class AccountsHistory extends React.Component {
               />
               <div className={css.paneContent}>
                 { params.accountstatus === 'open' &&
-                  (<this.connectedOpenAccounts
+                  (<this.connectedViewFeesFines
                     {...this.props}
                     accounts={this.filterAccountsByStatus(accounts, 'open')}
                     visibleColumns={visibleColumns}
@@ -558,7 +554,7 @@ class AccountsHistory extends React.Component {
                   />)
                 }
                 { params.accountstatus === 'closed' &&
-                  (<this.connectedClosedAccounts
+                  (<this.connectedViewFeesFines
                     {...this.props}
                     accounts={this.filterAccountsByStatus(accounts, 'closed')}
                     visibleColumns={visibleColumns}
@@ -567,7 +563,7 @@ class AccountsHistory extends React.Component {
                   />)
                 }
                 { params.accountstatus === 'all' &&
-                  (<this.connectedAllAccounts
+                  (<this.connectedViewFeesFines
                     {...this.props}
                     accounts={userOwned ? accounts : []}
                     visibleColumns={visibleColumns}
@@ -579,6 +575,7 @@ class AccountsHistory extends React.Component {
               </div>
               <this.connectedActions
                 actions={this.state.actions}
+                layer={query.layer}
                 onChangeActions={this.onChangeActions}
                 user={user}
                 accounts={this.accounts}

@@ -15,7 +15,7 @@ import {
   Button,
   Pane,
   PaneMenu,
-  IconButton,
+  PaneHeaderIconButton,
   Icon,
   ExpandAllButton,
   Row,
@@ -816,7 +816,7 @@ class ViewUser extends React.Component {
           tagsEnabled &&
           <FormattedMessage id="ui-users.showTags">
             {ariaLabel => (
-              <IconButton
+              <PaneHeaderIconButton
                 icon="tag"
                 id="clickable-show-tags"
                 onClick={tagsToggle}
@@ -829,7 +829,7 @@ class ViewUser extends React.Component {
         <IfPermission perm="users.item.put">
           <FormattedMessage id="ui-users.crud.editUser">
             {ariaLabel => (
-              <IconButton
+              <PaneHeaderIconButton
                 icon="edit"
                 id="clickable-edituser"
                 style={{ visibility: !user ? 'hidden' : 'visible' }}
