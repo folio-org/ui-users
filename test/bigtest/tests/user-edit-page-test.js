@@ -64,7 +64,7 @@ describe.only('ItemEditPage', () => {
       await UserFormPage.clickSave();
     });
 
-    it('should display validation error', () => {
+    it('should show user detail view', () => {
       expect(InstanceViewPage.isVisible).to.equal(true);
     });
   });
