@@ -49,6 +49,7 @@ import {
   headerDropdownMenu = new HeaderDropdownMenu();
 
   barcodeField = new InputFieldInteractor('#adduser_barcode');
+  usernameField = new InputFieldInteractor('#adduser_username');
   clickSave = clickable('#clickable-save');
   barcodeError = text('[class^="feedbackError---"]');
 }

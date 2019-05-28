@@ -7,9 +7,10 @@ import { expect } from 'chai';
 
 import setupApplication from '../helpers/setup-application';
 import UserFormPage from '../interactors/user-form-page';
+import InstanceViewPage from '../interactors/user-view-page';
 import UsersInteractor from '../interactors/users';
 
-describe('ItemEditPage', () => {
+describe.only('ItemEditPage', () => {
   setupApplication();
 
   const users = new UsersInteractor();
@@ -54,6 +55,28 @@ describe('ItemEditPage', () => {
 
     it('should display validation error', () => {
       expect(UserFormPage.barcodeError).to.equal('This barcode has already been taken');
+    });
+  });
+
+  describe('validating empty user barcode', () => {
+    beforeEach(async function () {
+      await UserFormPage.barcodeField.fillAndBlur('');
+      await UserFormPage.clickSave();
+    });
+
+    it('should display validation error', () => {
+      expect(InstanceViewPage.isVisible).to.equal(true);
+    });
+  });
+
+  describe('validating username', () => {
+    beforeEach(async function () {
+      await UserFormPage.usernameField.fillAndBlur(user2.username);
+      await UserFormPage.clickSave();
+    });
+
+    it('should display validation error', () => {
+      expect(UserFormPage.barcodeError).to.equal('This username already exists');
     });
   });
 });
