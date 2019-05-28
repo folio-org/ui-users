@@ -20,6 +20,21 @@ class FeeFinesContainer extends React.Component {
         return refresh || (path && path.match(/link/));
       },
     },
+    loan: {
+      type: 'okapi',
+      path: 'loan-storage/loans/?{loan}',
+      clear: false,
+      shouldRefresh: (resource, action, refresh) => {
+        const { path } = action.meta;
+        return refresh || (path && path.match(/link/));
+      },
+    },
+    loansHistory: {
+      type: 'okapi',
+      records: 'loans',
+      path: 'circulation/loans?query=(userId=:{id}) sortby id&limit=100',
+      permissionsRequired: 'circulation.loans.collection.get',
+    },
     curUserServicePoint: {
       type: 'okapi',
       path: 'service-points-users?query=(userId==!{currentUser.id})',
@@ -81,7 +96,7 @@ class FeeFinesContainer extends React.Component {
 
   static propTypes = {
     resources: PropTypes.shape({
-      selUser: PropTypes.object,
+      selUser: PropTypes.arrayOf(PropTypes.object).isRequired,
       feefines: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
@@ -117,6 +132,14 @@ class FeeFinesContainer extends React.Component {
     defaultServicePointId: PropTypes.string,
   };
 
+  getLoan = () => {
+    const { resources, match: { params: { loanid } } } = this.props;
+    const userLoans = (resources.loan || {}).records || [];
+    if (userLoans.length === 0 || !loanid) return null;
+    const loan = userLoans.find(l => l.id === loanid) || {};
+    return loan;
+  }
+
   getUser = () => {
     const { resources, match: { params: { id } } } = this.props;
     const selUser = (resources.selUser || {}).records || [];
@@ -128,7 +151,7 @@ class FeeFinesContainer extends React.Component {
   }
 
   render() {
-    return <ChargeFeeFine user={this.getUser()} {...this.props} />;
+    return <ChargeFeeFine user={this.getUser()} selectedLoan={this.getLoan()} {...this.props} />;
   }
 }
 

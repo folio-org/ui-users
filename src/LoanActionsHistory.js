@@ -21,12 +21,12 @@ import {
   Col,
 } from '@folio/stripes/components';
 import { IfPermission } from '@folio/stripes/core';
-import * as nav from './components/Loans/navigationHandlers';
+import * as nav from './navigationHandlers';
 import PatronBlockModal from './components/PatronBlock/PatronBlockModal';
 import { getFullName } from './util';
 import loanActionMap from './data/loanActionMap';
 import LoanActionsHistoryProxy from './LoanActionsHistoryProxy';
-import ViewLoading from './components/views/ViewLoading';
+import ViewLoading from './components/Loading/ViewLoading';
 
 /**
  * Detail view of a user's loan.
@@ -288,14 +288,22 @@ class LoanActionsHistory extends React.Component {
     );
   }
 
+  handleClose = () => {
+    const { loan, history, match: { params } } = this.props;
+    // if this loan detail was accessed through a fee/fine, accountid will be present.
+    if (params.accountid) {
+      history.push(`/users/${params.id}/accounts/view/${params.accountid}`);
+    }
+    const loanStatus = loan.status ? loan.status.name.toLowerCase() : 'open';
+    history.push(`/users/${params.id}/loans/${loanStatus}`);
+  }
+
   render() {
     const {
       onClickUser,
       loan,
       patronGroup,
       patronBlocks,
-      history,
-      match: { params },
       user,
       resources: {
         loanActionsWithUser,
@@ -370,7 +378,7 @@ class LoanActionsHistory extends React.Component {
             id="pane-loandetails"
             defaultWidth="100%"
             dismissible
-            onClose={(e) => { nav.onCloseLoanDetails(e, loan, history, params) }}
+            onClose={this.handleClose}
             paneTitle={(
               <FormattedMessage id="ui-users.loans.loanDetails">
                 {(loanDetails) => `${loanDetails} - ${getFullName(user)} (${upperFirst(patronGroup.group)})`}

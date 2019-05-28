@@ -7,7 +7,7 @@ import { stripesShape } from '@folio/stripes/core';
 
 import css from './OpenLoans.css';
 
-import * as nav from '../navigationHandlers';
+import * as nav from '../../../navigationHandlers';
 
 class OpenLoans extends React.Component {
   static propTypes = {

@@ -133,34 +133,19 @@ class UserSearchContainer extends React.Component {
   }
 
   render() {
-    const {
-      resources,
-      children,
-      location,
-      match,
-      history
-    } = this.props;
-
     if (this.source) {
       this.source.update(this.props);
     }
 
-    const data = {
-      patronGroups: (resources.patronGroups || {}).records || [],
-      users: get(resources, 'records.records', []),
-    };
     return (
       <UserSearch
         source={this.source}
         filterConfig={filterConfig}
         initialSearch="?sort=name"
         onNeedMoreData={this.onNeedMoreData}
-        data={data}
-        location={location}
-        history={history}
-        match={match}
+        {...this.props}
       >
-        { children }
+        { this.props.children }
       </UserSearch>
     );
   }

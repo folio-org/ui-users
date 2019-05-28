@@ -5,7 +5,7 @@ import { stripesConnect } from '@folio/stripes/core';
 import { makeQueryFunction } from '@folio/stripes/smart-components';
 
 import AccountsHistory from '../AccountsHistory';
-import ViewLoading from '../components/views/ViewLoading';
+import ViewLoading from '../components/Loading/ViewLoading';
 
 const filterConfig = [
   {

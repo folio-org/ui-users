@@ -46,7 +46,10 @@ class UserSearch extends React.Component {
     querySetter: PropTypes.func,
     initialSearch: PropTypes.string,
     source: PropTypes.object,
-    data: PropTypes.object,
+    resources: PropTypes.shape({
+      records: PropTypes.object,
+      patronGroups: PropTypes.object,
+    }).isRequired,
     visibleColumns: PropTypes.arrayOf(PropTypes.string),
     filterConfig: PropTypes.arrayOf(PropTypes.object),
   }
@@ -54,7 +57,6 @@ class UserSearch extends React.Component {
   static defaultProps = {
     idPrefix: 'users-',
     visibleColumns: ['status', 'name', 'barcode', 'patron group', 'username', 'email'],
-    data: {},
   };
 
   state = {
@@ -104,7 +106,7 @@ class UserSearch extends React.Component {
       location: { search },
     } = this.props;
 
-    return `${path}/view/${id}${search}`;
+    return `${path}/preview/${id}${search}`;
   }
 
   // custom row formatter to wrap rows in anchor tags.
@@ -147,12 +149,14 @@ class UserSearch extends React.Component {
       querySetter,
       initialSearch,
       source,
-      data,
+      // data,
+      resources,
       contentRef,
     } = this.props;
 
-    const { patronGroups, users } = data;
-
+    // const { patronGroups, users } = data;
+    const users = get(resources, 'records.records', []);
+    const patronGroups = (resources.patronGroups || {}).records || [];
     const query = queryGetter ? queryGetter() || {} : {};
     const count = source ? source.totalCount() : 0;
     const sortOrder = query.sort || '';

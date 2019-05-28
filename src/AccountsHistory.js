@@ -28,7 +28,7 @@ import css from './AccountsHistory.css';
 import { getFullName, handleBackLink } from './util';
 import { Actions } from './components/Accounts/Actions';
 import { count, handleFilterChange, handleFilterClear } from './components/Accounts/accountFunctions';
-import * as nav from './components/Loans/navigationHandlers';
+import * as nav from './navigationHandlers';
 
 import {
   Menu,

@@ -6,7 +6,7 @@ import { cloneDeep, omit, differenceBy, get } from 'lodash';
 import { eachPromise, getRecordObject, handleBackLink } from '../../../util';
 
 import UserForm from './UserForm';
-import ViewLoading from '../ViewLoading';
+import ViewLoading from '../../Loading/ViewLoading';
 import { toUserAddresses, toListAddresses } from '../../../converters/address';
 
 function resourcesLoaded(obj) {

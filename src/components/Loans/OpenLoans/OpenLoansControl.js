@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { omit, isArray, size, get } from 'lodash';
 
-import * as nav from '../navigationHandlers';
+import * as nav from '../../../navigationHandlers';
 
 import { stripesShape } from '@folio/stripes/core';
 

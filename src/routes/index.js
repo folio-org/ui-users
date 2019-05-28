@@ -1,6 +1,6 @@
 export { default as UserRecordContainer } from './UserRecordContainer';
 export { default as UserSearchContainer } from './UserSearchContainer';
-export { default as UserViewContainer } from './UserViewContainer';
+export { UserDetailContainer, UserDetailFullscreenContainer } from './UserDetailContainer';
 export { default as UserEditContainer } from './UserEditContainer';
 export { default as PatronBlockContainer } from './PatronBlockContainer';
 export { default as FeesFinesContainer } from './FeesFinesContainer';

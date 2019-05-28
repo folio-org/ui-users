@@ -4,7 +4,7 @@ import { compose } from 'redux';
 import { stripesConnect } from '@folio/stripes/core';
 import { withTags } from '@folio/stripes/smart-components';
 
-import { UserView } from '../components/views';
+import { UserDetail } from '../components/views';
 
 import withProxy from '../withProxy';
 import withServicePoints from '../withServicePoints';
@@ -84,7 +84,7 @@ class UserRecordContainer extends React.Component {
       }).isRequired,
     }).isRequired,
     resources: PropTypes.shape({
-      user: PropTypes.arrayOf(PropTypes.object),
+      selUser: PropTypes.arrayOf(PropTypes.object),
       permissions: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
@@ -140,7 +140,7 @@ class UserRecordContainer extends React.Component {
     if (typeof children === 'function') {
       return children({ source: this.source, ...rest });
     }
-    return (<UserView {...this.props} />);
+    return (<UserDetail {...this.props} />);
   }
 }
 

@@ -107,6 +107,7 @@ class Charge extends React.Component {
     const owners = _.get(this.props.resources, ['owners', 'records'], []);
     const feefines = _.get(this.props.resources, ['feefines', 'records'], []);
     const selectedLoan = this.props.selectedLoan || {};
+
     const { intl: { formatMessage } } = this.props;
     const item = (selectedLoan.id) ? selectedLoan.item : this.item;
 
@@ -300,7 +301,7 @@ class Charge extends React.Component {
       })
       // .then(() => this.props.handleAddRecords())
       // .then(() => setTimeout(this.props.onCloseChargeFeeFine, 2000));
-      .then(() => { handleBackLink(this.props.location, this.props.history); });
+      .then(() => { this.props.history.goBack(); });
   }
 
   renderConfirmMessage = () => {
@@ -320,7 +321,6 @@ class Charge extends React.Component {
 
   onSubmitCharge = (data) => {
     const {
-      location,
       history
     } = this.props;
     if (data.pay) {
@@ -330,9 +330,10 @@ class Charge extends React.Component {
     } else {
       delete data.pay;
       this.onClickCharge(data)
+        // both of these commented responses updated state on ViewUser - this is no longer necessary.
         // .then(() => this.props.handleAddRecords())
         // .then(() => this.props.onCloseChargeFeeFine());
-        .then(() => { handleBackLink(location, history); });
+        .then(() => { history.goBack(); });
     }
   }
 

@@ -2,7 +2,7 @@ import React from 'react';
 import _get from 'lodash/get';
 import { stripesConnect } from '@folio/stripes/core';
 import LoansHistory from '../LoansHistory';
-import ViewLoading from '../components/views/ViewLoading';
+import ViewLoading from '../components/Loading/ViewLoading';
 
 class LoansListingContainer extends React.Component {
   static manifest = Object.freeze({

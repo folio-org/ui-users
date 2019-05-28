@@ -164,15 +164,17 @@ class UsersRouting extends React.Component {
         <Switch>
           <Route path={`${base}/:id/loans/view/:loanid`} component={Routes.LoanDetailContainer} />
           <Route path={`${base}/:id/loans/:loanstatus`} component={Routes.LoansListingContainer} />
+          <Route path={`${base}/:id/accounts/view/:accountid/:loanstatus`} exact component={Routes.LoansListingContainer} />
           <Route path={`${base}/:id/accounts/:accountstatus`} component={Routes.AccountsHistoryContainer} />
           <Route path={`${base}/:id/accounts/view/:accountid`} component={Routes.AccountsHistoryContainer} />
+          <Route path={`${base}/:id/loans/view/:loanid/chargefee`} component={Routes.FeesFinesContainer} />
           <Route path={`${base}/:id/chargefee`} component={Routes.FeesFinesContainer} />
           <Route path={`${base}/:id/patronblocks/edit/:patronblockid`} component={Routes.PatronBlockContainer} />
           <Route path={`${base}/:id/patronblocks/create`} component={Routes.PatronBlockContainer} />
           <Route path={`${base}/:id/edit`} component={Routes.UserEditContainer} />
-          <Route path={`${base}/:id`} component={Routes.UserEditContainer} />
-          <Route path={base} component={Routes.UserViewContainer}>
-            <Route path={`${base}/view/:id`} component={Routes.UserViewContainer} />
+          <Route path={`${base}/view/:id`} component={Routes.UserDetailFullscreenContainer} />
+          <Route path={base} component={Routes.UserSearchContainer}>
+            <Route path={`${base}/preview/:id`} component={Routes.UserDetailContainer} />
           </Route>
           <Route render={this.noMatch} />
         </Switch>
