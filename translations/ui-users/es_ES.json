@@ -853,5 +853,6 @@
     "permissions.addAllPermissions": "Añadir todos los permisos",
     "reports.overdue.borrower.name": "Nombre del prestatario",
     "reports.overdue.borrower.barcode": "Código de barras del prestatario",
-    "reports.overdue.borrowerId": "ID de prestatario"
+    "reports.overdue.borrowerId": "ID de prestatario",
+    "errors.barcodeUnavailable": "This barcode has already been taken"
 }
