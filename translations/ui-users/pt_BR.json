@@ -853,5 +853,6 @@
     "permissions.addAllPermissions": "Adicione todas as permissões",
     "reports.overdue.borrower.name": "Nome do usuário",
     "reports.overdue.borrower.barcode": "Código de barras do usuário",
-    "reports.overdue.borrowerId": "ID do usuário"
+    "reports.overdue.borrowerId": "ID do usuário",
+    "errors.barcodeUnavailable": "Este código de barras já foi usado"
 }
