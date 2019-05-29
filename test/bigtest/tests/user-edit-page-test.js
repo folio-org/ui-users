@@ -10,7 +10,7 @@ import UserFormPage from '../interactors/user-form-page';
 import InstanceViewPage from '../interactors/user-view-page';
 import UsersInteractor from '../interactors/users';
 
-describe.only('ItemEditPage', () => {
+describe('ItemEditPage', () => {
   setupApplication();
 
   const users = new UsersInteractor();
