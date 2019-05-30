@@ -7,6 +7,7 @@
 * Provide "Add all permissions" button. Fixes UIU-1055.
 * Remove `user`-prop from ChangeDueDateDialog. (STSMACOM-152)
 * Disallow duplicate barcode in users. Part of UIU-1039.
+* Fix display fee/fine history and payments.
 
 ## [2.22.0](https://github.com/folio-org/ui-users/tree/v2.22.0) (2019-05-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.22.0...v2.22.0)

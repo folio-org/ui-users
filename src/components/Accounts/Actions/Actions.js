@@ -45,7 +45,7 @@ class Actions extends React.Component {
     payments: {
       type: 'okapi',
       records: 'payments',
-      path: 'payments',
+      path: 'payments?limit=100',
     },
     waives: {
       type: 'okapi',
