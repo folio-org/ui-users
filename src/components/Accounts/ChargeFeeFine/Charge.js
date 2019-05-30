@@ -65,7 +65,7 @@ class Charge extends React.Component {
     payments: {
       type: 'okapi',
       records: 'payments',
-      path: 'payments',
+      path: 'payments?limit=100',
     },
     commentRequired: {
       type: 'okapi',
@@ -172,10 +172,10 @@ class Charge extends React.Component {
       name: formatMessage({ id: 'ui-users.accounts.status.outstanding' }),
     };
     type.status = {
-      name: formatMessage({ id: 'ui-users.accounts.open' }),
+      name: 'Open',
     };
     type.remaining = type.amount;
-    type.feeFineType = (feefines.find(f => f.id === type.feeFineId.substring(0, 36)) || {}).feeFineType || '';
+    type.feeFineType = (feefines.find(f => f.id === type.feeFineId) || {}).feeFineType || '';
     type.feeFineOwner = (owners.find(o => o.id === type.ownerId) || {}).owner || '';
     type.title = item.title;
     type.barcode = item.barcode;
@@ -339,7 +339,7 @@ class Charge extends React.Component {
       this.type.remaining = parseFloat(this.type.amount - values.amount).toFixed(2);
       if (this.type.remaining === '0.00') {
         this.type.paymentStatus.name = formatMessage({ id: 'ui-users.accounts.pay.fully' });
-        this.type.status.name = formatMessage({ id: 'ui-users.accounts.closed' });
+        this.type.status.name = 'Closed';
       } else {
         this.type.paymentStatus.name = formatMessage({ id: 'ui-users.accounts.pay.partially' });
       }
