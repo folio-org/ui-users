@@ -112,10 +112,10 @@ class Charge extends React.Component {
     const item = (selectedLoan.id) ? selectedLoan.item : this.item;
 
     type.paymentStatus = {
-      name: formatMessage({ id: 'ui-users.accounts.status.outstanding' }),
+      name: 'outstanding',
     };
     type.status = {
-      name: formatMessage({ id: 'ui-users.accounts.open' }),
+      name: 'open',
     };
     type.remaining = type.amount;
     type.feeFineType = (feefines.find(f => f.id === type.feeFineId.substring(0, 36)) || {}).feeFineType || '';
@@ -408,35 +408,35 @@ class Charge extends React.Component {
           history={history}
           {...this.props}
         />
-        {/* <ItemLookup
-        resources={this.props.resources}
-        items={items}
-        open={(this.state.lookup && items.length > 1)}
-        onChangeItem={this.onChangeItem}
-        onClose={this.onCloseModal}
-      />
-      <PayModal
-        open={this.state.pay}
-        commentRequired={settings.paid}
-        onClose={this.onClosePayModal}
-        accounts={[this.type]}
-        balance={this.type.amount}
-        payments={payments}
-        stripes={this.props.stripes}
-        onSubmit={(values) => { this.showConfirmDialog(values); }}
-        owners={owners}
-        feefines={feefines}
-      />
-      <Callout ref={(ref) => { this.callout = ref; }} />
-      <ConfirmationModal
-        open={this.state.showConfirmDialog}
-        heading={<FormattedMessage id="ui-users.accounts.confirmation.head" values={{ action: 'payment' }} />}
-        message={this.renderConfirmMessage()}
-        onConfirm={this.onConfirm}
-        onCancel={this.hideConfirmDialog}
-        cancelLabel={<FormattedMessage id="ui-users.accounts.cancellation.field.back" />}
-        confirmLabel={<FormattedMessage id="ui-users.accounts.cancellation.field.confirm" />}
-      /> */}
+        <ItemLookup
+          resources={this.props.resources}
+          items={items}
+          open={(this.state.lookup && items.length > 1)}
+          onChangeItem={this.onChangeItem}
+          onClose={this.onCloseModal}
+        />
+        <PayModal
+          open={this.state.pay}
+          commentRequired={settings.paid}
+          onClose={this.onClosePayModal}
+          accounts={[this.type]}
+          balance={this.type.amount}
+          payments={payments}
+          stripes={this.props.stripes}
+          onSubmit={(values) => { this.showConfirmDialog(values); }}
+          owners={owners}
+          feefines={feefines}
+        />
+        <Callout ref={(ref) => { this.callout = ref; }} />
+        <ConfirmationModal
+          open={this.state.showConfirmDialog}
+          heading={<FormattedMessage id="ui-users.accounts.confirmation.head" values={{ action: 'payment' }} />}
+          message={this.renderConfirmMessage()}
+          onConfirm={this.onConfirm}
+          onCancel={this.hideConfirmDialog}
+          cancelLabel={<FormattedMessage id="ui-users.accounts.cancellation.field.back" />}
+          confirmLabel={<FormattedMessage id="ui-users.accounts.cancellation.field.confirm" />}
+        />
       </div>
     );
   }

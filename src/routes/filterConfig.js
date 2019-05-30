@@ -7,15 +7,15 @@ const filterConfig = [
     name: 'active',
     cql: 'active',
     values: [
-      { name: 'Include inactive users', cql: 'false' },
-      { name: 'Show active users', cql: 'true', hidden: true },
+      { name: 'inactive', cql: 'false' },
+      { name: 'active', cql: 'true' },
     ],
   },
   {
     label: <FormattedMessage id="ui-users.information.patronGroup" />,
     name: 'pg',
     cql: 'patronGroup',
-    values: [], // will be filled in by componentWillUpdate
+    values: [], // will be filled in by componentDidUpdate
   },
 ];
 

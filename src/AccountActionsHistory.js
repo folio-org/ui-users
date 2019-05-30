@@ -45,23 +45,6 @@ const columns = [
 ];
 
 class AccountActionsHistory extends React.Component {
-  static manifest = Object.freeze({
-    accountHistory: {
-      type: 'okapi',
-      resource: 'accounts',
-      path: 'accounts/%{activeRecord.accountId}',
-    },
-    accountActions: {
-      type: 'okapi',
-      records: 'feefineactions',
-      accumulate: 'true',
-      path: 'feefineactions?query=(accountId=%{activeRecord.accountId})&limit=50',
-    },
-    activeRecord: {
-      accountId: '0',
-    },
-  });
-
   static propTypes = {
     stripes: PropTypes.object,
     resources: PropTypes.shape({

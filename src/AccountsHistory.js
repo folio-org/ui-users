@@ -106,7 +106,7 @@ class AccountsHistory extends React.Component {
     okapi: PropTypes.object,
     user: PropTypes.object,
     onCancel: PropTypes.func.isRequired,
-    onClickViewChargeFeeFine: PropTypes.func.isRequired,
+    // onClickViewChargeFeeFine: PropTypes.func.isRequired,
     openAccounts: PropTypes.bool,
     patronGroup: PropTypes.object,
     mutator: PropTypes.shape({
@@ -119,6 +119,7 @@ class AccountsHistory extends React.Component {
       query: PropTypes.object.isRequired,
     }),
     history: PropTypes.object,
+    loans: PropTypes.arrayOf(PropTypes.object),
     location: PropTypes.object,
     match: PropTypes.object,
     intl: intlShape.isRequired,
@@ -214,7 +215,7 @@ class AccountsHistory extends React.Component {
 
     let filterAccounts = _.get(resources, ['filter', 'records'], []);
     const query = location.search ? queryString.parse(location.search) : {};
-    filterAccounts = this.filterAccountsByStatus(filterAccounts, params.accountstatus)
+    filterAccounts = this.filterAccountsByStatus(filterAccounts, params.accountstatus);
     const feeFineTypes = count(filterAccounts.map(a => (a.feeFineType)));
     const feeFineOwners = count(filterAccounts.map(a => (a.feeFineOwner)));
     const paymentStatus = count(filterAccounts.map(a => (a.paymentStatus.name)));
@@ -261,7 +262,7 @@ class AccountsHistory extends React.Component {
   }
 
   handleEdit = (val) => {
-    this.props.handleAddRecords();
+    // this.props.handleAddRecords();
     this.editRecord = val;
   }
 
@@ -356,9 +357,10 @@ class AccountsHistory extends React.Component {
   }
 
   filterAccountsByStatus = (accounts, status = 'all') => {
-    if (accounts.length > 0 && this.props.user.id === accounts[0].userId) {
+    const { match: { params } } = this.props;
+    if (accounts.length > 0 && params.id === accounts[0].userId) {
       if (status === 'all') return accounts;
-      const res = accounts.filter(a => a.status.name === status) || [];
+      const res = accounts.filter(a => a.status.name.toLowerCase() === status) || [];
       return res;
     }
     return [];
@@ -442,11 +444,9 @@ class AccountsHistory extends React.Component {
         <Col xs={2}>
           {firstMenu}
         </Col>
-        <Col xsOffset={2} xs={5}>
+        <Col style={{ display: 'flex', alignItems: 'center' }} xsOffset={2} xs={5}>
           <ButtonGroup
             fullWidth
-            activeId={`${params.id}-accounts`}
-            onActivate={this.handleActivate}
           >
             <Button
               buttonStyle={params.accountstatus === 'open' ? 'primary' : 'default'}
@@ -545,7 +545,7 @@ class AccountsHistory extends React.Component {
               />
               <div className={css.paneContent}>
                 { params.accountstatus === 'open' &&
-                  (<this.connectedViewFeesFines
+                  (<ViewFeesFines
                     {...this.props}
                     accounts={this.filterAccountsByStatus(accounts, 'open')}
                     visibleColumns={visibleColumns}
@@ -554,7 +554,7 @@ class AccountsHistory extends React.Component {
                   />)
                 }
                 { params.accountstatus === 'closed' &&
-                  (<this.connectedViewFeesFines
+                  (<ViewFeesFines
                     {...this.props}
                     accounts={this.filterAccountsByStatus(accounts, 'closed')}
                     visibleColumns={visibleColumns}
@@ -563,7 +563,7 @@ class AccountsHistory extends React.Component {
                   />)
                 }
                 { params.accountstatus === 'all' &&
-                  (<this.connectedViewFeesFines
+                  (<ViewFeesFines
                     {...this.props}
                     accounts={userOwned ? accounts : []}
                     visibleColumns={visibleColumns}

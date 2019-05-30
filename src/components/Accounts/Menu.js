@@ -70,7 +70,7 @@ const Menu = (props) => {
         id="open-closed-all-charge-button"
         marginBottom0
         disabled={buttonDisabled}
-        onClick={e => props.onClickViewChargeFeeFine(e, {})}
+        to={`/users/${params.id}/accounts/${params.accountstatus}/charge`}
       >
         <FormattedMessage id="ui-users.accounts.button.new" />
       </Button>
@@ -129,7 +129,6 @@ Menu.propTypes = {
   query: PropTypes.object,
   match: PropTypes.object,
   patronGroup: PropTypes.object,
-  onClickViewChargeFeeFine: PropTypes.func,
   onChangeActions: PropTypes.func,
 };
 

@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { stripesConnect } from '@folio/stripes/core';
 import { makeQueryFunction } from '@folio/stripes/smart-components';
 
-import AccountsHistory from '../AccountsHistory';
+import AccountActionsHistory from '../AccountActionsHistory';
 import ViewLoading from '../components/Loading/ViewLoading';
 
 const filterConfig = [
@@ -47,100 +47,21 @@ const args = [
 
 class AccountsHistoryContainer extends React.Component {
   static manifest = Object.freeze({
-    selUser: {
+    accountHistory: {
       type: 'okapi',
-      path: 'users/:{id}',
-      clear: false,
-      shouldRefresh: (resource, action, refresh) => {
-        const { path } = action.meta;
-        return refresh || (path && path.match(/link/));
-      },
+      resource: 'accounts',
+      path: 'accounts/:{accountid}',
     },
-    patronGroups: {
-      type: 'okapi',
-      path: 'groups',
-      params: {
-        query: 'cql.allRecords=1 sortby group',
-        limit: '40',
-      },
-      records: 'usergroups',
-    },
-    initializedFilterConfig: { initialValue: false },
-    query: { initialValue: {} },
-    comments: {
+    accountActions: {
       type: 'okapi',
       records: 'feefineactions',
-      path: 'feefineactions?query=(userId=:{id} and comments=*)&limit=%{activeRecord.comments}',
+      accumulate: 'true',
+      path: 'feefineactions?query=(accountId=:{accountid}&limit=50',
     },
-    filter: {
-      type: 'okapi',
-      records: 'accounts',
-      recordsRequired: '%{activeRecord.records}',
-      path: 'accounts?query=userId=:{id}&limit=100',
+    activeRecord: {
+      accountId: '0',
     },
-    loans: {
-      type: 'okapi',
-      records: 'loans',
-      path: 'circulation/loans?query=(userId=:{id}) sortby id&limit=100',
-      permissionsRequired: 'circulation.loans.collection.get',
-    },
-    feefineshistory: {
-      type: 'okapi',
-      records: 'accounts',
-      path: 'accounts',
-      recordsRequired: '%{activeRecord.records}',
-      perRequest: 50,
-      GET: {
-        params: {
-          query: queryFunction(
-            'feeFineType=*',
-            'feeFineType="%{query.query}*" or barcode="%{query.query}*" or materialType="%{query.query}" or title="%{query.query}*    " or feeFineOwner="%{query.query}*" or paymentStatus.name="%{query.query}"',
-            { userId: 'userId' },
-            filterConfig,
-            0,
-            { query: 'q', filters: 'f' },
-            args,
-          ),
-        },
-        staticFallback: { params: {} },
-      },
-    },
-    activeRecord: { records: 50 },
-    user: {},
   });
-
-  static propTypes = {
-    stripes: PropTypes.shape({
-      connect: PropTypes.func.isRequired,
-    }),
-    resources: PropTypes.shape({
-      feefineshistory: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
-      }),
-      query: PropTypes.object,
-    }),
-    okapi: PropTypes.object,
-    user: PropTypes.object,
-    // onCancel: PropTypes.func.isRequired,
-    // onClickViewChargeFeeFine: PropTypes.func.isRequired,
-    openAccounts: PropTypes.bool,
-    patronGroup: PropTypes.object,
-    mutator: PropTypes.shape({
-      user: PropTypes.shape({
-        update: PropTypes.func.isRequired,
-      }),
-      activeRecord: PropTypes.object,
-    }),
-    parentMutator: PropTypes.shape({
-      query: PropTypes.object.isRequired,
-    }),
-    history: PropTypes.object,
-    location: PropTypes.object,
-    match: PropTypes.object,
-    // addRecord: PropTypes.bool,
-    num: PropTypes.number,
-    // handleAddRecords: PropTypes.func,
-  };
 
   componentDidMount() {
     const { match: { params } } = this.props;
@@ -175,7 +96,7 @@ class AccountsHistoryContainer extends React.Component {
     const patronGroup = this.getPatronGroup();
     if (!user) return (<ViewLoading inPaneset defaultWidth="100%" paneTitle="Loading accounts" />);
     return (
-      <AccountsHistory user={user} loans={loans} patronGroup={patronGroup} {...this.props} />
+      <AccountActionsHistory user={user} loans={loans} patronGroup={patronGroup} {...this.props} />
     );
   }
 }
