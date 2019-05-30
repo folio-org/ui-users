@@ -212,7 +212,7 @@ class ChargeForm extends React.Component {
     this.props.feefines.forEach((feefine) => {
       const fee = {};
       fee.label = feefine.feeFineType;
-      fee.value = `${feefine.id}-${this.props.ownerId}`;
+      fee.value = feefine.id;
       feefineList.push(fee);
     });
 

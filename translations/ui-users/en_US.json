@@ -853,5 +853,6 @@
     "permissions.addAllPermissions": "Add all permissions",
     "reports.overdue.borrower.name": "Borrower name",
     "reports.overdue.borrower.barcode": "Borrower barcode",
-    "reports.overdue.borrowerId": "Borrower ID"
+    "reports.overdue.borrowerId": "Borrower ID",
+    "errors.barcodeUnavailable": "This barcode has already been taken"
 }

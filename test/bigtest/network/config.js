@@ -133,6 +133,10 @@ export default function config() {
     return schema.users.find(request.params.id).attrs;
   });
 
+  this.put('/users/:id', (schema, request) => {
+    return schema.users.find(request.params.id).attrs;
+  });
+
   this.get('/proxiesfor', {
     proxiesFor: [],
     totalRecords: 0,
@@ -147,6 +151,15 @@ export default function config() {
       userId: cqlParser.tree.term
     });
   });
+
+  this.get('/service-points-users/:id', ({ servicePointsUsers }, request) => {
+    return servicePointsUsers.find(request.params.id).attrs;
+  });
+
+  this.put('/service-points-users/:id', ({ servicePointsUsers }, request) => {
+    return servicePointsUsers.find(request.params.id).attrs;
+  });
+
   this.get('/service-points');
 
   this.get('/circulation/loans', function ({ loans }) {

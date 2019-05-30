@@ -283,7 +283,6 @@ class LoanActionsHistory extends React.Component {
         loanIds={[{ id: this.props.loan.id }]}
         onClose={this.hideChangeDueDateDialog}
         open={this.state.changeDueDateDialogOpen}
-        user={this.props.user}
       />
     );
   }
