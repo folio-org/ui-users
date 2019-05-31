@@ -5,7 +5,6 @@
 * Retrieve 1000 service points by default. Fixes UIU-1053.
 * Create BigTest for display Fee/Fine History. Ref UIU-1005.
 * Provide "Add all permissions" button. Fixes UIU-1055.
-* Remove `user`-prop from ChangeDueDateDialog. (STSMACOM-152)
 * Disallow duplicate barcode in users. Part of UIU-1039.
 * Fix display fee/fine history and payments.
 
