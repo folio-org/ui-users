@@ -283,7 +283,7 @@ class OpenLoansControl extends React.Component {
 
   feefine = (loan, e) => {
     const { history, match: { params } } = this.props;
-    nav.onClickViewChargeFeeFine(e, loan, history, params);
+    nav.onClickChargeFineToLoan(e, loan, history, params);
   };
 
   renew = (loan) => {

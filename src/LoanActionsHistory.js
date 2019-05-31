@@ -300,6 +300,7 @@ class LoanActionsHistory extends React.Component {
   render() {
     const {
       onClickUser,
+      history,
       loan,
       patronGroup,
       patronBlocks,
@@ -377,7 +378,7 @@ class LoanActionsHistory extends React.Component {
             id="pane-loandetails"
             defaultWidth="100%"
             dismissible
-            onClose={this.handleClose}
+            onClose={() => { history.goBack(); }}
             paneTitle={(
               <FormattedMessage id="ui-users.loans.loanDetails">
                 {(loanDetails) => `${loanDetails} - ${getFullName(user)} (${upperFirst(patronGroup.group)})`}
@@ -412,8 +413,6 @@ class LoanActionsHistory extends React.Component {
               <Col xs={2}>
                 <LoanActionsHistoryProxy
                   id={loan.proxyUserId}
-                  // onClick={onClickUser}
-                  {...this.props}
                 />
               </Col>
             </Row>

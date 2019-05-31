@@ -66,7 +66,6 @@ class AccountActionsHistory extends React.Component {
     user: PropTypes.object,
     history: PropTypes.object,
     patronGroup: PropTypes.object,
-    onCancel: PropTypes.func.isRequired,
     onClickViewLoanActionsHistory: PropTypes.func.isRequired,
     handleAddRecords: PropTypes.func.isRequired,
   };
@@ -209,10 +208,10 @@ class AccountActionsHistory extends React.Component {
 
     const {
       handleAddRecords,
-      onCancel,
       onClickViewLoanActionsHistory,
       patronGroup: patron,
       resources,
+      history,
       stripes,
       user,
     } = this.props;
@@ -268,7 +267,7 @@ class AccountActionsHistory extends React.Component {
           id="pane-account-action-history"
           defaultWidth="100%"
           dismissible
-          onClose={onCancel}
+          onClose={() => { history.goBack(); }}
           paneTitle={(
             <FormattedMessage id="ui-users.details.paneTitle.feeFineDetails">
               {(msg) => `${msg} - ${getFullName(user)} (${_.upperFirst(patron.group)}) `}

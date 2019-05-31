@@ -25,7 +25,7 @@ import {
 } from '@folio/stripes/components';
 import css from './AccountsHistory.css';
 
-import { getFullName, handleBackLink } from './util';
+import { getFullName } from './util';
 import { Actions } from './components/Accounts/Actions';
 import { count, handleFilterChange, handleFilterClear } from './components/Accounts/accountFunctions';
 import * as nav from './navigationHandlers';
@@ -453,6 +453,7 @@ class AccountsHistory extends React.Component {
               bottomMargin0
               id="open-accounts"
               to={`/users/${params.id}/accounts/open`}
+              replace
               onClick={this.handleActivate}
             >
               <FormattedMessage id="ui-users.accounts.open" />
@@ -462,6 +463,7 @@ class AccountsHistory extends React.Component {
               bottomMargin0
               id="closed-accounts"
               to={`/users/${params.id}/accounts/closed`}
+              replace
               onClick={this.handleActivate}
             >
               <FormattedMessage id="ui-users.accounts.closed" />
@@ -471,6 +473,7 @@ class AccountsHistory extends React.Component {
               bottomMargin0
               id="all-accounts"
               to={`/users/${params.id}/accounts/all`}
+              replace
               onClick={this.handleActivate}
             >
               <FormattedMessage id="ui-users.accounts.all" />
@@ -500,7 +503,7 @@ class AccountsHistory extends React.Component {
           defaultWidth="100%"
           dismissible
           padContent={false}
-          onClose={() => { handleBackLink(location, history); }}
+          onClose={() => { history.goBack(); }}
           paneTitle={(
             <FormattedMessage id="ui-users.accounts.title">
               {(title) => (

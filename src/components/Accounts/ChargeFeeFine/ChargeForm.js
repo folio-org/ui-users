@@ -242,7 +242,7 @@ class ChargeForm extends React.Component {
         <Pane
           defaultWidth="100%"
           dismissible
-          onClose={() => { handleBackLink(location, history); }}
+          onClose={() => { history.goBack(); }}
           paneTitle={(
             <FormattedMessage id="ui-users.charge.title" />
           )}

@@ -82,15 +82,15 @@ class LoansListingContainer extends React.Component {
     const { resources } = this.props;
     const user = this.getUser();
     const patronGroup = this.getPatronGroup();
-    const loans = _get(resources, ['loansHistory', 'records'], []);
+    const loansHistory = _get(resources, ['loansHistory', 'records'], []);
     const patronBlocks = _get(resources, ['hasPatronBlocks', 'records'], []);
 
     if (!user) return (<ViewLoading inPaneset defaultWidth="100%" paneTitle="Loading loans" />);
     return (
       <LoansHistory
-        loans={loans}
         patronBlocks={patronBlocks}
         user={user}
+        loansHistory={loansHistory}
         patronGroup={patronGroup}
         {...this.props}
       />);

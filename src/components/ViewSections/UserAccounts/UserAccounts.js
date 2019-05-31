@@ -133,7 +133,7 @@ class UserAccounts extends React.Component {
     const accountsLoaded = openAccountsCount >= 0 && closedAccountsCount >= 0;
     const displayWhenClosed = accountsLoaded ? (<Badge>{openAccountsCount}</Badge>) : (<Icon icon="spinner-ellipsis" width="10px" />);
     const buttonDisabled = !this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
-    const displayWhenOpen = (<Button disabled={buttonDisabled} to={{ pathname: `/users/${params.id}/chargefee` }}><FormattedMessage id="ui-users.accounts.chargeManual" /></Button>);
+    const displayWhenOpen = (<Button disabled={buttonDisabled} to={{ pathname: `/users/${params.id}/charge` }}><FormattedMessage id="ui-users.accounts.chargeManual" /></Button>);
     return (
       <Accordion
         open={expanded}

@@ -6,11 +6,10 @@ import {
   Paneset,
   Pane,
   Button,
-  SegmentedControl,
   ButtonGroup,
 } from '@folio/stripes/components';
 
-import { getFullName, handleBackLink } from './util';
+import { getFullName } from './util';
 import { OpenLoans, ClosedLoans } from './components/Loans';
 import css from './LoansHistory.css';
 
@@ -48,6 +47,7 @@ class LoansHistory extends React.Component {
             id="loans-show-open"
             buttonStyle={params.loanstatus === 'open' ? 'primary' : 'default'}
             to={{ pathname: `/users/${params.id}/loans/open` }}
+            replace
           >
             <FormattedMessage id="ui-users.loans.openLoans" />
           </Button>
@@ -57,6 +57,7 @@ class LoansHistory extends React.Component {
             id="loans-show-closed"
             buttonStyle={params.loanstatus === 'closed' ? 'primary' : 'default'}
             to={{ pathname: `/users/${params.id}/loans/closed` }}
+            replace
           >
             <FormattedMessage id="ui-users.loans.closedLoans" />
           </Button>
@@ -70,12 +71,11 @@ class LoansHistory extends React.Component {
       user,
       patronGroup,
       match: { params },
-      location,
       history,
       loansHistory,
     } = this.props;
     const loanStatus = params.loanstatus;
-    const loans = _.filter(loansHistory, loan => loanStatus === _.get(loan, ['status', 'name']));
+    const loans = _.filter(loansHistory, loan => loanStatus === _.get(loan, ['status', 'name']).toLowerCase());
     if (!loans) return <div />;
 
     return (
@@ -85,7 +85,7 @@ class LoansHistory extends React.Component {
           id="pane-loanshistory"
           defaultWidth="100%"
           dismissible
-          onClose={() => { handleBackLink(location, history); }}
+          onClose={() => { history.goBack(); }}
           paneTitle={(
             <FormattedMessage id="ui-users.loans.title">
               {(title) => `${title} - ${getFullName(user)} (${_.upperFirst(patronGroup.group)})`}
@@ -94,12 +94,12 @@ class LoansHistory extends React.Component {
         >
           { this.getSegmentedControls() }
           {
-            loanStatus === 'open' &&
-              (<OpenLoans loans={loans} {...this.props} />)
+            loanStatus === 'open' && (
+              <OpenLoans {...this.props} loans={loans} />)
           }
           {
             loanStatus === 'closed' &&
-              (<ClosedLoans loans={loans} {...this.props} />)
+              (<ClosedLoans {...this.props} loans={loans} />)
           }
         </Pane>
       </Paneset>);

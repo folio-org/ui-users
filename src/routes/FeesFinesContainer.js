@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
+import queryString from 'query-string';
 
 import {
   stripesConnect,
@@ -34,6 +35,10 @@ class FeeFinesContainer extends React.Component {
       records: 'loans',
       path: 'circulation/loans?query=(userId=:{id}) sortby id&limit=100',
       permissionsRequired: 'circulation.loans.collection.get',
+    },
+    loanItem: {
+      type: 'okapi',
+      path: 'inventory/items/%{activeRecord.itemId}'
     },
     curUserServicePoint: {
       type: 'okapi',
@@ -132,18 +137,31 @@ class FeeFinesContainer extends React.Component {
     defaultServicePointId: PropTypes.string,
   };
 
+  componentDidUpdate(prevProps) {
+    // if a selected loan is present, get the associated item of the loan.
+    const { resources: { loan }, mutator } = this.props;
+    const prevLoanResource = (prevProps.resources.loan || {}).records || [];
+    const loanResource = (loan || {}).records || [];
+    if (prevLoanResource.length === 0 && loanResource.length !== 0) {
+      mutator.activeRecord.update({ itemId: loan.records[0].itemId });
+    }
+  }
+
   getLoan = () => {
-    const { resources, match: { params: { loanid } } } = this.props;
+    const { resources, location } = this.props;
+    const queryParams = location.search ? queryString.parse(location.search) : {};
     const userLoans = (resources.loan || {}).records || [];
-    if (userLoans.length === 0 || !loanid) return null;
-    const loan = userLoans.find(l => l.id === loanid) || {};
+    if (userLoans.length === 0 || !queryParams.loan) return null;
+    const loan = userLoans.find(l => l.id === queryParams.loan) || {};
+    if (loan) {
+      loan.item = (resources.loanItem || {}).records[0] || {};
+    }
     return loan;
   }
 
   getUser = () => {
     const { resources, match: { params: { id } } } = this.props;
     const selUser = (resources.selUser || {}).records || [];
-
     if (selUser.length === 0 || !id) return null;
     // Logging below shows this DOES sometimes find the wrong record. But why?
     // console.log(`getUser: found ${selUser.length} users, id '${selUser[0].id}' ${selUser[0].id === id ? '==' : '!='} '${id}'`);

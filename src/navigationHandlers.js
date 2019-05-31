@@ -20,8 +20,12 @@ export function onClickViewLoanActionsHistory(e, loan, history, params) {
   history.push(`/users/${params.id}/loans/view/${loan.id}`);
 }
 
-export function onClickViewChargeFeeFine(e, loan, history, params) {
-  history.push(`/users/${params.id}/chargefee?loan=${loan.id}`);
+export function onClickViewChargeFeeFine(e, history, params) {
+  history.push(`/users/${params.id}/charge`);
+}
+
+export function onClickChargeFineToLoan(e, loan, history, params) {
+  history.push(`/users/${params.id}/charge?loan=${loan.id}`);
 }
 
 export function onCloseLoanDetails(e, loan, history, params) {
