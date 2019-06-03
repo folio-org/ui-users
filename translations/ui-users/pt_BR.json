@@ -253,7 +253,7 @@
     "data.loanActionMap.renewed": "Renovado",
     "data.loanActionMap.source": "Fonte",
     "data.loanActionMap.holdRequested": "Reserva solicitada",
-    "data.loanActionMap.recallRequested": "Devolução solicitada",
+    "data.loanActionMap.recallRequested": "Recall solicitado",
     "loans.title": "Empréstimos",
     "loans.open": "Aberto",
     "loans.closed": "Fechado",
