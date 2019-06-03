@@ -1,52 +1,29 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
 import { stripesConnect } from '@folio/stripes/core';
-import { makeQueryFunction } from '@folio/stripes/smart-components';
 
 import AccountActionsHistory from '../AccountActionsHistory';
 import ViewLoading from '../components/Loading/ViewLoading';
 
-const filterConfig = [
-  {
-    label: <FormattedMessage id="ui-users.feefines.ownerLabel" />,
-    name: 'owner',
-    cql: 'feeFineOwner',
-    values: [],
-  }, {
-    label: <FormattedMessage id="ui-users.accounts.history.columns.status" />,
-    name: 'status',
-    cql: 'paymentStatus.name',
-    values: [],
-  }, {
-    label: <FormattedMessage id="ui-users.details.field.feetype" />,
-    name: 'type',
-    cql: 'feeFineType',
-    values: [],
-  }, {
-    label: <FormattedMessage id="ui-users.details.field.type" />,
-    name: 'material',
-    cql: 'materialType',
-    values: [],
-  },
-];
-
-const queryFunction = (findAll, queryTemplate, sortMap, fConfig, failOnCondition, nsParams, a) => {
-  const getCql = makeQueryFunction(findAll, queryTemplate, sortMap, fConfig, failOnCondition, nsParams);
-  return (queryParams, pathComponents, resourceValues, logger) => {
-    let cql = getCql(queryParams, pathComponents, resourceValues, logger);
-    const userId = a[0].value;
-    if (cql === undefined) { cql = `userId=${userId}`; } else { cql = `(${cql}) and (userId=${userId})`; }
-    return cql;
-  };
-};
-
-const args = [
-  { name: 'user', value: 'x' },
-];
-
-class AccountsHistoryContainer extends React.Component {
+class AccountDetailsContainer extends React.Component {
   static manifest = Object.freeze({
+    selUser: {
+      type: 'okapi',
+      path: 'users/:{id}',
+      clear: false,
+      shouldRefresh: (resource, action, refresh) => {
+        const { path } = action.meta;
+        return refresh || (path && path.match(/link/));
+      },
+    },
+    patronGroups: {
+      type: 'okapi',
+      path: 'groups',
+      params: {
+        query: 'cql.allRecords=1 sortby group',
+        limit: '40',
+      },
+      records: 'usergroups',
+    },
     accountHistory: {
       type: 'okapi',
       resource: 'accounts',
@@ -56,18 +33,12 @@ class AccountsHistoryContainer extends React.Component {
       type: 'okapi',
       records: 'feefineactions',
       accumulate: 'true',
-      path: 'feefineactions?query=(accountId=:{accountid}&limit=50',
+      path: 'feefineactions?query=(accountId=:{accountid})&limit=50',
     },
     activeRecord: {
       accountId: '0',
     },
   });
-
-  componentDidMount() {
-    const { match: { params } } = this.props;
-    this.props.mutator.activeRecord.update({ records: 50, comments: 200, userId: params.id });
-    args[0].value = params.id;
-  }
 
   getUser = () => {
     const { resources, match: { params: { id } } } = this.props;
@@ -79,6 +50,14 @@ class AccountsHistoryContainer extends React.Component {
     return selUser.find(u => u.id === id);
   }
 
+  getAccount = () => {
+    const { resources, match: { params: { accountid } } } = this.props;
+    const account = (resources.accountHistory || {}).records || [];
+
+    if (account.length === 0 || !accountid) return null;
+    return account.find(a => a.id === accountid);
+  }
+
   getPatronGroup = () => {
     const { resources } = this.props;
     const user = this.getUser();
@@ -88,17 +67,14 @@ class AccountsHistoryContainer extends React.Component {
   }
 
   render() {
-    const {
-      resources
-    } = this.props;
     const user = this.getUser();
-    const loans = resources.loans ? resources.loans.records : [];
+    const account = this.getAccount();
     const patronGroup = this.getPatronGroup();
-    if (!user) return (<ViewLoading inPaneset defaultWidth="100%" paneTitle="Loading accounts" />);
+    if (!account) return (<ViewLoading inPaneset defaultWidth="100%" paneTitle="Loading accounts" />);
     return (
-      <AccountActionsHistory user={user} loans={loans} patronGroup={patronGroup} {...this.props} />
+      <AccountActionsHistory user={user} account={account} patronGroup={patronGroup} {...this.props} />
     );
   }
 }
 
-export default stripesConnect(AccountsHistoryContainer);
+export default stripesConnect(AccountDetailsContainer);

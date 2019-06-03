@@ -7,6 +7,8 @@ import {
   intlShape,
 } from 'react-intl';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
+import { stripesConnect } from '@folio/stripes/core';
+
 // eslint-disable-next-line import/no-extraneous-dependencies
 import moment from 'moment';
 import {
@@ -691,4 +693,4 @@ class Actions extends React.Component {
   }
 }
 
-export default injectIntl(Actions);
+export default stripesConnect(injectIntl(Actions));

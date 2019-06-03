@@ -45,7 +45,7 @@ const args = [
   { name: 'user', value: 'x' },
 ];
 
-class AccountsHistoryContainer extends React.Component {
+class AccountsListingContainer extends React.Component {
   static manifest = Object.freeze({
     selUser: {
       type: 'okapi',
@@ -173,11 +173,11 @@ class AccountsHistoryContainer extends React.Component {
     const user = this.getUser();
     const loans = resources.loans ? resources.loans.records : [];
     const patronGroup = this.getPatronGroup();
-    if (!user) return (<ViewLoading inPaneset defaultWidth="100%" paneTitle="Loading accounts" />);
+    if (!user) return (<ViewLoading defaultWidth="100%" paneTitle="Loading accounts" />);
     return (
       <AccountsHistory user={user} loans={loans} patronGroup={patronGroup} {...this.props} />
     );
   }
 }
 
-export default stripesConnect(AccountsHistoryContainer);
+export default stripesConnect(AccountsListingContainer);

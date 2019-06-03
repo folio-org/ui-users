@@ -77,7 +77,7 @@ class AccountActionsHistory extends React.Component {
     } = props;
     this.onSort = this.onSort.bind(this);
     this.onChangeActions = this.onChangeActions.bind(this);
-    this.connectedActions = connect(Actions);
+    // this.connectedActions = connect(Actions);
     this.error = this.error.bind(this);
     this.comment = this.comment.bind(this);
     this.num = props.num;
@@ -111,53 +111,80 @@ class AccountActionsHistory extends React.Component {
   }
 
   componentDidMount() {
-    const { history } = this.props;
-    const str = history.location.search || '';
-    const n = str.indexOf('account=');
-    const id = str.substring(n + 8, n + 44);
-    this.props.mutator.activeRecord.update({ accountId: id, records: this.num });
-    this.getAccountActions();
+    // const { history } = this.props;
+    // const str = history.location.search || '';
+    // const n = str.indexOf('account=');
+    // const id = str.substring(n + 8, n + 44);
+    // this.props.mutator.activeRecord.update({ accountId: id, records: this.num });
+    // this.getAccountActions();
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    const props = this.props;
-    const nextAccounts = _.get(nextProps.resources, ['accountHistory', 'records', 0], {});
-    const accounts = _.get(props.resources, ['accountHistory', 'records', 0], {});
-    const nextActions = _.get(nextProps.resources, ['accountActions', 'records'], []);
-    const actions = _.get(props.resources, ['accountActions', 'records'], []);
+  static getDerivedStateFromProps(props) {
+    const {
+      resources
+    } = props;
 
-    if (this.num !== nextProps.num) {
-      props.mutator.activeRecord.update({ records: nextProps.num });
-      this.num = nextProps.num;
-    }
-    return nextAccounts !== accounts || nextActions !== actions ||
-      this.num !== nextProps.num || props.user !== nextProps.user ||
-      props.account !== nextProps.account ||
-      this.state !== nextState;
-  }
-
-  getAccountActions = () => {
-    return this.props.mutator.accountActions.GET().then(records => {
-      const sortData = _.orderBy(records, ['dateAction'], ['desc']);
-      const balance = (sortData[0] || {}).balance;
-      let paymentStatus;
-      if (sortData.length === 1) {
-        paymentStatus = 'Outstanding';
-      } else {
-        for (let i = 0; i < sortData.length; i++) {
-          paymentStatus = (sortData[i] || {}).typeAction;
-          if (paymentStatus !== 'Comment') {
-            break;
-          }
+    const accountActivity = (resources.accountActions || {}).records || [];
+    const sortData = _.orderBy(accountActivity, ['dateAction'], ['desc']);
+    const balance = (sortData[0] || {}).balance;
+    let paymentStatus;
+    if (sortData.length === 1) {
+      paymentStatus = 'Outstanding';
+    } else {
+      for (let i = 0; i < sortData.length; i++) {
+        paymentStatus = (sortData[i] || {}).typeAction;
+        if (paymentStatus !== 'Comment') {
+          break;
         }
       }
-      this.setState({
-        data: records,
-        remaining: balance,
-        paymentStatus,
-      });
-    });
+    }
+
+    return {
+      data: accountActivity,
+      remaining: balance,
+      paymentStatus,
+    };
   }
+
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   const props = this.props;
+  //   const nextAccounts = _.get(nextProps.resources, ['accountHistory', 'records', 0], {});
+  //   const accounts = _.get(props.resources, ['accountHistory', 'records', 0], {});
+  //   const nextActions = _.get(nextProps.resources, ['accountActions', 'records'], []);
+  //   const actions = _.get(props.resources, ['accountActions', 'records'], []);
+
+  //   if (this.num !== nextProps.num) {
+  //     props.mutator.activeRecord.update({ records: nextProps.num });
+  //     this.num = nextProps.num;
+  //   }
+  //   return nextAccounts !== accounts || nextActions !== actions ||
+  //     this.num !== nextProps.num || props.user !== nextProps.user ||
+  //     props.account !== nextProps.account ||
+  //     this.state !== nextState;
+  // }
+
+  // getAccountActions = () => {
+  //   return this.props.mutator.accountActions.GET().then(records => {
+  //     const sortData = _.orderBy(records, ['dateAction'], ['desc']);
+  //     const balance = (sortData[0] || {}).balance;
+  //     let paymentStatus;
+  //     if (sortData.length === 1) {
+  //       paymentStatus = 'Outstanding';
+  //     } else {
+  //       for (let i = 0; i < sortData.length; i++) {
+  //         paymentStatus = (sortData[i] || {}).typeAction;
+  //         if (paymentStatus !== 'Comment') {
+  //           break;
+  //         }
+  //       }
+  //     }
+  //     this.setState({
+  //       data: records,
+  //       remaining: balance,
+  //       paymentStatus,
+  //     });
+  //   });
+  // }
 
   onChangeActions(actions) {
     this.setState({
@@ -471,7 +498,7 @@ class AccountActionsHistory extends React.Component {
             columnWidths={columnWidths}
             onHeaderClick={this.onSort}
           />
-          <this.connectedActions
+          <Actions
             actions={this.state.actions}
             onChangeActions={this.onChangeActions}
             user={user}
