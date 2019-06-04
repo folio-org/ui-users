@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
+  isEmpty,
   omit,
   size,
   get,
@@ -315,11 +316,17 @@ class OpenLoansControl extends React.Component {
 
   renew = (loan) => {
     const {
+      patronBlocks,
       renew,
       user,
     } = this.props;
+    const countRenew = patronBlocks.filter(b => b.renewals === true);
 
-    renew([loan], user);
+    if (isEmpty(countRenew)) {
+      renew([loan], user);
+    } else {
+      this.openPatronBlockedModal();
+    }
   };
 
   feefinedetails = (loan, e) => {
