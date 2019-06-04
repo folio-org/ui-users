@@ -167,7 +167,7 @@ class AccountsHistory extends React.Component {
     this.addRecord = 50;
     this.editRecord = 0;
 
-    this.transitionToParams = values => this.props.parentMutator.query.update(values);
+    this.transitionToParams = values => this.props.mutator.query.update(values);
     this.handleFilterChange = handleFilterChange.bind(this);
     this.handleFilterClear = handleFilterClear.bind(this);
     this.filterState = filterState.bind(this);
@@ -520,7 +520,7 @@ class AccountsHistory extends React.Component {
           <Paneset>
             <Filters
               query={query}
-              parentMutator={this.props.parentMutator}
+              mutator={this.props.mutator}
               toggle={this.toggleFilterPane}
               showFilters={this.state.showFilters}
               onChangeSearch={this.onChangeSearch}
@@ -544,7 +544,6 @@ class AccountsHistory extends React.Component {
                 onChangeActions={this.onChangeActions}
                 patronGroup={patronGroup}
                 handleOptionsChange={this.handleOptionsChange}
-                onClickViewChargeFeeFine={nav.onClickViewChargeFeeFine}
               />
               <div className={css.paneContent}>
                 { params.accountstatus === 'open' &&

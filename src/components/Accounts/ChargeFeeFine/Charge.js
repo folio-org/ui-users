@@ -81,27 +81,27 @@ class Charge extends React.Component {
     this.callout = null;
   }
 
-  shouldComponentUpdate(nextProps) {
-    const items = _.get(this.props.resources, ['items', 'records'], []);
-    const nextItems = _.get(nextProps.resources, ['items', 'records'], []);
-    const barcode = _.get(this.props.resources, ['activeRecord', 'barcode']);
-    if (nextItems.length === 1 && barcode !== null) {
-      if (nextItems[0].barcode === barcode) this.item = nextItems[0];
-    }
+  // shouldComponentUpdate(nextProps) {
+  //   const items = _.get(this.props.resources, ['items', 'records'], []);
+  //   const nextItems = _.get(nextProps.resources, ['items', 'records'], []);
+  //   const barcode = _.get(this.props.resources, ['activeRecord', 'barcode']);
+  //   if (nextItems.length === 1 && barcode !== null) {
+  //     if (nextItems[0].barcode === barcode) this.item = nextItems[0];
+  //   }
 
-    if (items !== nextItems) {
-      this.setState({
-        lookup: true,
-      });
-    }
+  //   if (items !== nextItems) {
+  //     this.setState({
+  //       lookup: true,
+  //     });
+  //   }
 
-    return true;
-  }
+  //   return true;
+  // }
 
-  componentWillUnmount() {
-    this.item = {};
-    this.props.mutator.activeRecord.update({ barcode: null });
-  }
+  // componentWillUnmount() {
+  //   this.item = {};
+  //   this.props.mutator.activeRecord.update({ barcode: null });
+  // }
 
   onClickCharge(type) {
     const owners = _.get(this.props.resources, ['owners', 'records'], []);
@@ -340,7 +340,6 @@ class Charge extends React.Component {
   render() {
     const {
       resources,
-      okapi: { currentUser },
       user,
       stripes,
       location,

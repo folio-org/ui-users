@@ -1,7 +1,7 @@
 import React from 'react';
 import _get from 'lodash/get';
 import { stripesConnect } from '@folio/stripes/core';
-import LoansHistory from '../LoansListing';
+import LoansListing from '../LoansListing';
 import ViewLoading from '../components/Loading/ViewLoading';
 
 class LoansListingContainer extends React.Component {
@@ -87,7 +87,7 @@ class LoansListingContainer extends React.Component {
 
     if (!user) return (<ViewLoading inPaneset defaultWidth="100%" paneTitle="Loading loans" />);
     return (
-      <LoansHistory
+      <LoansListing
         patronBlocks={patronBlocks}
         user={user}
         loansHistory={loansHistory}

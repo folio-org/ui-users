@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-
+import { withRouter } from 'react-router-dom';
 import {
   Button,
   UncontrolledDropdown,
@@ -20,6 +20,7 @@ class ActionsDropdown extends React.Component {
     requestQueue: PropTypes.bool.isRequired,
     handleOptionsChange: PropTypes.func.isRequired,
     disableFeeFineDetails: PropTypes.bool,
+    match: PropTypes.object,
   };
 
   render() {
@@ -92,10 +93,11 @@ class ActionsDropdown extends React.Component {
               <FormattedMessage id="ui-users.loans.details.loanPolicy" />
             </Button>
           </MenuItem>
-          <MenuItem itemMeta={{
-            loan,
-            action: 'feefine',
-          }}
+          <MenuItem
+            itemMeta={{
+              loan,
+              action: 'feefine',
+            }}
           >
             <Button buttonStyle="dropdownItem" disabled={buttonDisabled}>
               <FormattedMessage id="ui-users.loans.newFeeFine" />
@@ -129,4 +131,4 @@ class ActionsDropdown extends React.Component {
   }
 }
 
-export default ActionsDropdown;
+export default withRouter(ActionsDropdown);

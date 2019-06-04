@@ -54,8 +54,6 @@ class UserLoans extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }),
-    onClickViewOpenLoans: PropTypes.func.isRequired,
-    onClickViewClosedLoans: PropTypes.func.isRequired,
     accordionId: PropTypes.string,
     expanded: PropTypes.bool,
     onToggle: PropTypes.func,
@@ -72,10 +70,7 @@ class UserLoans extends React.Component {
       onToggle,
       accordionId,
       resources,
-      location,
       match: { params },
-      onClickViewOpenLoans,
-      onClickViewClosedLoans,
     } = this.props;
 
     const openLoansTotal = _.get(resources.openLoansCount, ['records', '0', 'totalRecords'], 0);
@@ -84,7 +79,7 @@ class UserLoans extends React.Component {
     const closedLoansCount = (_.get(resources.closedLoansCount, ['isPending'], true)) ? -1 : closedLoansTotal;
     const loansLoaded = openLoansCount >= 0 && closedLoansCount >= 0;
     const displayWhenClosed = loansLoaded ? (<Badge>{openLoansCount}</Badge>) : (<Icon icon="spinner-ellipsis" width="10px" />);
-    const query = location.search ? queryString.parse(location.search) : {};
+    // const query = location.search ? queryString.parse(location.search) : {};
 
     return (
       <Accordion
@@ -105,7 +100,6 @@ class UserLoans extends React.Component {
                 <Link
                   id={item.id}
                   to={`/users/${params.id}/loans/${item.status}`}
-                  onClick={item.onClick}
                 >
                   <FormattedMessage id={item.formattedMessageId} values={{ count: item.count }} />
                 </Link>
@@ -113,14 +107,12 @@ class UserLoans extends React.Component {
             items={[
               {
                 id: 'clickable-viewcurrentloans',
-                onClick: onClickViewOpenLoans,
                 count: openLoansCount,
                 formattedMessageId: 'ui-users.loans.numOpenLoans',
                 status: 'open',
               },
               {
                 id: 'clickable-viewclosedloans',
-                onClick: onClickViewClosedLoans,
                 count: closedLoansCount,
                 formattedMessageId: 'ui-users.loans.numClosedLoans',
                 status: 'closed',

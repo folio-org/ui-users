@@ -105,7 +105,7 @@ class LoanDetailContainer extends React.Component {
     const patronBlocks = (resources.patronBlocks || {}).records || [];
 
     return (
-      <LoanActionsHistory
+      <LoanDetails
         loan={this.getLoan()}
         user={this.getUser()}
         patronGroup={this.getPatronGroup()}

@@ -167,8 +167,7 @@ class UsersRouting extends React.Component {
           <Route path={`${base}/:id/accounts/:accountstatus/charge`} exact component={Routes.FeesFinesContainer} />
           <Route path={`${base}/:id/accounts/view/:accountid`} component={Routes.AccountDetailsContainer} />
           <Route path={`${base}/:id/accounts/:accountstatus`} exact component={Routes.AccountsListingContainer} />
-          <Route path={`${base}/:id/loans/view/:loanid/charge`} exact component={Routes.FeesFinesContainer} />
-          <Route path={`${base}/:id/charge`} component={Routes.FeesFinesContainer} />
+          <Route path={`${base}/:id/charge`} component={Routes.ChargeFeesFinesContainer} />
           <Route path={`${base}/:id/patronblocks/edit/:patronblockid`} component={Routes.PatronBlockContainer} />
           <Route path={`${base}/:id/patronblocks/create`} component={Routes.PatronBlockContainer} />
           <Route path={`${base}/:id/edit`} component={Routes.UserEditContainer} />

@@ -84,6 +84,7 @@ class OpenLoans extends React.Component {
   };
 
   onRowClick = (e, row) => {
+    e.stopPropagation();
     if (e.target.type !== 'button') {
       const { history, match: { params } } = this.props;
       nav.onClickViewLoanActionsHistory(e, row, history, params);

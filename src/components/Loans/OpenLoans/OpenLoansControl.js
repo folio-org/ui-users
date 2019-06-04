@@ -319,32 +319,6 @@ class OpenLoansControl extends React.Component {
     }
   };
 
-  getFeeFinePath = (loan) => {
-    const {
-      resources,
-      match: { params }
-    } = this.props;
-    const accounts = get(resources, ['loanAccount', 'records'], []);
-    const accountsLoan = accounts.filter(a => a.loanId === loan.id) || [];
-    if (accountsLoan.length === 1) {
-      return `/users/${params.id}/accounts/view/${accountsLoan[0].id}`;
-      // this.props.onClickViewAccountActionsHistory(e, { id: accountsLoan[0].id });
-    } else if (accountsLoan.length > 1) {
-      const open = accountsLoan.filter(a => a.status.name === 'Open') || [];
-      if (open.length === accountsLoan.length) {
-        // this.props.onClickViewOpenAccounts(e, loan);
-        return `/users/${params.id}/accounts/open`;
-      } else if (open.length === 0) {
-        // this.props.onClickViewClosedAccounts(e, loan);
-        return `/users/${params.id}/accounts/closed`;
-      } else {
-        // this.props.onClickViewAllAccounts(e, loan);
-        return `/users/${params.id}/accounts/all`;
-      }
-    }
-    return '';
-  }
-
   feeFineCount = (loan) => {
     const { resources } = this.props;
     const accounts = get(resources, ['loanAccount', 'records'], []);

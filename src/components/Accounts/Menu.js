@@ -70,7 +70,7 @@ const Menu = (props) => {
         id="open-closed-all-charge-button"
         marginBottom0
         disabled={buttonDisabled}
-        to={`/users/${params.id}/accounts/${params.accountstatus}/charge`}
+        to={`/users/${params.id}/charge`}
       >
         <FormattedMessage id="ui-users.accounts.button.new" />
       </Button>
