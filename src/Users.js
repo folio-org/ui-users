@@ -42,7 +42,10 @@ const filterConfig = [
   },
 ];
 
-const compileQuery = template('(username="%{query}*" or personal.firstName="%{query}*" or personal.lastName="%{query}*" or personal.email="%{query}*" or barcode="%{query}*" or id="%{query}*" or externalSystemId="%{query}*")', { interpolate: /%{([\s\S]+?)}/g });
+const compileQuery = template(
+  '(username="%{query}*" or personal.firstName="%{query}*" or personal.lastName="%{query}*" or personal.email="%{query}*" or barcode="%{query}*" or id="%{query}*" or externalSystemId="%{query}*")',
+  { interpolate: /%{([\s\S]+?)}/g }
+);
 
 class Users extends React.Component {
   static manifest = Object.freeze({
@@ -59,6 +62,7 @@ class Users extends React.Component {
         params: {
           query: makeQueryFunction(
             'cql.allRecords=1',
+            // TODO: Refactor/remove this after work on FOLIO-2066 and RMB-385 is done
             (parsedQuery, props, localProps) => localProps.query.query.split(' ').map(query => compileQuery({ query })).join(' or '),
             {
               // the keys in this object must match those passed to

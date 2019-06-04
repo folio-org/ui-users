@@ -11,6 +11,7 @@
 * Fix notify patron to charge manual and pay modal. Fix UIU-953.
 * Fix comment column size. Fix UIU-954.
 * Add "Loan policy name" and "Loan ID" fields to Overdue loans report. Ref UIU-985
+* Add ability to search by first and last name. Part of UIU-1068.
 
 ## [2.22.0](https://github.com/folio-org/ui-users/tree/v2.22.0) (2019-05-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.22.0...v2.22.0)
