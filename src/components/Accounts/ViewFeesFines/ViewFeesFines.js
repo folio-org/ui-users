@@ -169,7 +169,8 @@ class ViewFeesFines extends React.Component {
   getLoan(f) {
     const { match: { params: { id } }, loans } = this.props;
     if (loans.length === 0 || !id || f.loanId === '0') return {};
-    return loans.find(l => l.id === f.loanId);
+    const res = loans.find(l => l.id === f.loanId) || {};
+    return res;
   }
 
   formatDateTime(dateTimeStr) {

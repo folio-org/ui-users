@@ -50,7 +50,7 @@ class LoanActionsHistory extends React.Component {
     patronGroup: PropTypes.object,
     loanid: PropTypes.string,
     user: PropTypes.object,
-    onCancel: PropTypes.func.isRequired,
+    // onCancel: PropTypes.func.isRequired,
     // onClickUser: PropTypes.func.isRequired,
     // onClickViewAllAccounts: PropTypes.func.isRequired,
     // onClickViewClosedAccounts: PropTypes.func.isRequired,

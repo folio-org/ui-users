@@ -104,7 +104,6 @@ class UserForm extends React.Component {
     }).isRequired,
     formData: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,
-    match: PropTypes.object,
     location: PropTypes.object,
     history: PropTypes.object,
     mutator: PropTypes.shape({ // eslint-disable-line react/no-unused-prop-types
@@ -116,7 +115,7 @@ class UserForm extends React.Component {
     // resource: PropTypes.object.isRequired,
     pristine: PropTypes.bool,
     submitting: PropTypes.bool,
-    onCancel: PropTypes.func.isRequired,
+    // onCancel: PropTypes.func.isRequired,
     onSubmit: PropTypes.func.isRequired,
     initialValues: PropTypes.object.isRequired,
   };

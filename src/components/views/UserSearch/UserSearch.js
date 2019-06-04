@@ -149,12 +149,11 @@ class UserSearch extends React.Component {
       querySetter,
       initialSearch,
       source,
-      // data,
+      onNeedMoreData,
       resources,
       contentRef,
     } = this.props;
 
-    // const { patronGroups, users } = data;
     const users = get(resources, 'records.records', []);
     const patronGroups = (resources.patronGroups || {}).records || [];
     const query = queryGetter ? queryGetter() || {} : {};
@@ -287,7 +286,7 @@ class UserSearch extends React.Component {
                           formatter={resultsFormatter}
                           rowFormatter={this.anchoredRowFormatter}
                           onRowClick={onSelectRow}
-                          onNeedMoreData={this.onNeedMore}
+                          onNeedMoreData={onNeedMoreData}
                           onHeaderClick={onSort}
                           sortOrder={sortOrder.replace(/^-/, '').replace(/,.*/, '')}
                           sortDirection={sortOrder.startsWith('-') ? 'descending' : 'ascending'}

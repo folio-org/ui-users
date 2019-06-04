@@ -1,7 +1,7 @@
 import React from 'react';
 import { compose } from 'redux';
 import { stripesConnect, withStripes } from '@folio/stripes/core';
-import LoanActionsHistory from '../LoanActionsHistory';
+import LoanDetails from '../LoanDetails';
 import withRenew from '../withRenew';
 
 class LoanDetailContainer extends React.Component {

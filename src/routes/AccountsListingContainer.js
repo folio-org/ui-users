@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { stripesConnect } from '@folio/stripes/core';
 import { makeQueryFunction } from '@folio/stripes/smart-components';
 
-import AccountsHistory from '../AccountsHistory';
+import AccountsListing from '../AccountsListing';
 import ViewLoading from '../components/Loading/ViewLoading';
 
 const filterConfig = [
@@ -175,7 +175,7 @@ class AccountsListingContainer extends React.Component {
     const patronGroup = this.getPatronGroup();
     if (!user) return (<ViewLoading defaultWidth="100%" paneTitle="Loading accounts" />);
     return (
-      <AccountsHistory user={user} loans={loans} patronGroup={patronGroup} {...this.props} />
+      <AccountsListing user={user} loans={loans} patronGroup={patronGroup} {...this.props} />
     );
   }
 }

@@ -19,7 +19,7 @@ import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import ChargeForm from './ChargeForm';
 import ItemLookup from './ItemLookup';
 import PayModal from '../Actions/PayModal';
-import { getFullName, handleBackLink } from '../../../util';
+import { getFullName } from '../../../util';
 
 class Charge extends React.Component {
   static propTypes = {
@@ -112,7 +112,7 @@ class Charge extends React.Component {
     const item = (selectedLoan.id) ? selectedLoan.item : this.item;
 
     type.paymentStatus = {
-      name: 'outstanding',
+      name: 'Outstanding',
     };
     type.status = {
       name: 'Open',

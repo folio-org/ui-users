@@ -1,7 +1,7 @@
 import React from 'react';
 import { stripesConnect } from '@folio/stripes/core';
 
-import AccountActionsHistory from '../AccountActionsHistory';
+import AccountDetails from '../AccountDetails';
 import ViewLoading from '../components/Loading/ViewLoading';
 
 class AccountDetailsContainer extends React.Component {
@@ -72,7 +72,7 @@ class AccountDetailsContainer extends React.Component {
     const patronGroup = this.getPatronGroup();
     if (!account) return (<ViewLoading inPaneset defaultWidth="100%" paneTitle="Loading accounts" />);
     return (
-      <AccountActionsHistory user={user} account={account} patronGroup={patronGroup} {...this.props} />
+      <AccountDetails user={user} account={account} patronGroup={patronGroup} {...this.props} />
     );
   }
 }

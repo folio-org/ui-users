@@ -6,12 +6,11 @@ import {
   Paneset,
   Pane,
   Button,
-  SegmentedControl,
   ButtonGroup,
 } from '@folio/stripes/components';
 
-import { getFullName, handleBackLink } from './util';
-import { OpenLoans, ClosedLoans } from './components/Loans';
+import { getFullName, handleBackLink } from '../../../util';
+import { OpenLoans, ClosedLoans } from '../../Loans';
 import css from './LoansHistory.css';
 
 /**
@@ -22,7 +21,7 @@ import css from './LoansHistory.css';
  */
 class LoansHistory extends React.Component {
   static propTypes = {
-    onCancel: PropTypes.func.isRequired,
+    // onCancel: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired,
     patronGroup: PropTypes.object.isRequired,
     loansHistory: PropTypes.arrayOf(PropTypes.object).isRequired,
