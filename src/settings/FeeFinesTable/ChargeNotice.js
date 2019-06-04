@@ -10,6 +10,8 @@ import {
 import { FormattedMessage } from 'react-intl';
 import { Field, reduxForm } from 'redux-form';
 
+import css from './ChargeNotice.css';
+
 const Item = ({ edit, value, name, dataOptions }) => {
   return ((edit) ?
     <Field
@@ -79,9 +81,11 @@ class ChargeNotice extends React.Component {
       <form>
         <Row>
           <Col xs={4}>
-            <FormattedMessage id="ui-users.feefines.defaultChargeNotice" />
+            <div className={css.customCol}>
+              <FormattedMessage id="ui-users.feefines.defaultChargeNotice" />
+            </div>
           </Col>
-          <Col xs={4}>
+          <Col xs={4} className={css.customCol}>
             <FormattedMessage id="ui-users.feefines.defaultActionNotice" />
           </Col>
         </Row>
