@@ -83,7 +83,8 @@ class PayModal extends React.Component {
 
     this.state = {
       amount: 0,
-      notify: true,
+      showNotify: false,
+      notify: false,
     };
     this.initialAmount = 0;
   }
@@ -367,20 +368,24 @@ class PayModal extends React.Component {
               </FormattedMessage>
             </Col>
           </Row>
-          <Row>
-            <Col xs>
-              <Field
-                name="notify"
-                component={Checkbox}
-                checked={this.state.notify}
-                onChange={this.onToggleNotify}
-                inline
-              />
-              <FormattedMessage id="ui-users.accounts.pay.notifyPatron" />
-            </Col>
-          </Row>
+          {this.state.showNotify &&
+            <div>
+              <Row>
+                <Col xs>
+                  <Field
+                    name="notify"
+                    component={Checkbox}
+                    checked={this.state.notify}
+                    onChange={this.onToggleNotify}
+                    inline
+                  />
+                  <FormattedMessage id="ui-users.accounts.pay.notifyPatron" />
+                </Col>
+              </Row>
+            </div>
+          }
           <br />
-          {this.state.notify &&
+          {(this.state.notify && this.state.showNotify) &&
             <div>
               <Row>
                 <Col xs>
