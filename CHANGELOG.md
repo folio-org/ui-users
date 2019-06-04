@@ -7,6 +7,9 @@
 * Provide "Add all permissions" button. Fixes UIU-1055.
 * Disallow duplicate barcode in users. Part of UIU-1039.
 * Fix display fee/fine history and payments.
+* Fix sort patron blocks. Fix UIU-868.
+* Fix notify patron to charge manual and pay modal. Fix UIU-953.
+* Fix comment column size. Fix UIU-954.
 
 ## [2.22.0](https://github.com/folio-org/ui-users/tree/v2.22.0) (2019-05-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.22.0...v2.22.0)
