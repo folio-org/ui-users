@@ -12,6 +12,7 @@
 * Fix comment column size. Fix UIU-954.
 * Fix displaying patron block pop-up for Renewal. Fix UIU-1062.
 * Fix field label for manual charges settings. Fix UIU-950.
+* Fix default Fee/Fine Owner Desk. Fix UIU-948.
 
 ## [2.22.0](https://github.com/folio-org/ui-users/tree/v2.22.0) (2019-05-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.22.0...v2.22.0)
