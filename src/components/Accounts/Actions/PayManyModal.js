@@ -75,6 +75,8 @@ class PayModal extends React.Component {
     pristine: PropTypes.bool,
     reset: PropTypes.func,
     commentRequired: PropTypes.bool,
+    defaultServicePointId: PropTypes.string,
+    servicePointsIds: PropTypes.arrayOf(PropTypes.string),
     owners: PropTypes.arrayOf(PropTypes.object),
   };
 
@@ -163,7 +165,6 @@ class PayModal extends React.Component {
     onClose();
     reset();
   }
-  
 
   onSubmit = () => {
     const {
