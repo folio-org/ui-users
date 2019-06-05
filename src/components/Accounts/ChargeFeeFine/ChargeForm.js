@@ -220,7 +220,7 @@ class ChargeForm extends React.Component {
 
     const lastMenu = (
       <PaneMenu>
-        <Button onClick={() => { handleBackLink(location, history); }} style={mg}><FormattedMessage id="ui-users.feefines.modal.cancel" /></Button>
+        <Button onClick={() => { this.props.history.goBack(); }} style={mg}><FormattedMessage id="ui-users.feefines.modal.cancel" /></Button>
         <Button
           disabled={this.props.pristine || this.props.submitting || this.props.invalid}
           onClick={this.props.handleSubmit(data => this.props.onSubmit({ ...data, pay: true }))}
