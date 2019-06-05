@@ -7,7 +7,9 @@ const columns = [
   'borrowerId',
   'dueDate',
   'loanDate',
+  'loanPolicy.name',
   'loanPolicyId',
+  'loanId',
   'item.title',
   'item.materialType.name',
   'item.status.name',
@@ -38,6 +40,7 @@ class OverdueLoanReport {
         name: `${r.borrower.lastName}, ${r.borrower.firstName} ${r.borrower.middleName || ''}`,
       },
       borrowerId: r.userId,
+      loanId: r.id,
       item: {
         ...r.item,
         contributors: get(r, 'item.contributors', [])
