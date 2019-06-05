@@ -67,6 +67,11 @@ class Actions extends React.Component {
       records: 'transfers',
       path: 'transfers?limit=100',
     },
+    curUserServicePoint: {
+      type: 'okapi',
+      path: 'service-points-users?query=(userId==!{user.id})',
+      records: 'servicePointsUsers',
+    },
     activeRecord: {},
     user: {},
   });
@@ -587,6 +592,8 @@ class Actions extends React.Component {
       submitting
     } = this.state;
 
+    const defaultServicePointId = _.get(resources, ['curUserServicePoint', 'records', 0, 'defaultServicePointId'], '-');
+    const servicePointsIds = _.get(resources, ['curUserServicePoint', 'records', 0, 'servicePointsIds'], []);
     const payments = _.get(resources, ['payments', 'records'], []);
     const owners = _.get(resources, ['owners', 'records'], []);
     const feefines = _.get(resources, ['feefineTypes', 'records'], []);
@@ -641,6 +648,8 @@ class Actions extends React.Component {
         <PayManyModal
           open={actions.regular && !warning && accounts.length > 1}
           commentRequired={settings.paid}
+          defaultServicePointId={defaultServicePointId}
+          servicePointsIds={servicePointsIds}
           onClose={this.onClosePay}
           account={[this.type]}
           stripes={this.props.stripes}
