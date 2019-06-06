@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { omit, isArray, size, get } from 'lodash';
+import { stripesShape } from '@folio/stripes/core';
 
 import * as nav from '../../../navigationHandlers';
-
-import { stripesShape } from '@folio/stripes/core';
 
 import withRenew from '../../../withRenew';
 import TableModel from './components/OpenLoansWithStaticData';

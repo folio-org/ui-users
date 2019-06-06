@@ -3,7 +3,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
-import queryString from 'query-string';
 import { stripesConnect } from '@folio/stripes/core';
 import {
   Badge,

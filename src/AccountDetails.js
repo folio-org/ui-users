@@ -72,9 +72,6 @@ class AccountDetails extends React.Component {
 
   constructor(props) {
     super(props);
-    const {
-      stripes: { connect },
-    } = props;
     this.onSort = this.onSort.bind(this);
     this.onChangeActions = this.onChangeActions.bind(this);
     // this.connectedActions = connect(Actions);
@@ -110,14 +107,14 @@ class AccountDetails extends React.Component {
     };
   }
 
-  componentDidMount() {
-    // const { history } = this.props;
-    // const str = history.location.search || '';
-    // const n = str.indexOf('account=');
-    // const id = str.substring(n + 8, n + 44);
-    // this.props.mutator.activeRecord.update({ accountId: id, records: this.num });
-    // this.getAccountActions();
-  }
+  // componentDidMount() {
+  // const { history } = this.props;
+  // const str = history.location.search || '';
+  // const n = str.indexOf('account=');
+  // const id = str.substring(n + 8, n + 44);
+  // this.props.mutator.activeRecord.update({ accountId: id, records: this.num });
+  // this.getAccountActions();
+  // }
 
   static getDerivedStateFromProps(props) {
     const {

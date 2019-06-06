@@ -33,7 +33,6 @@ class LoanDetailContainer extends React.Component {
       },
       records: 'usergroups',
     },
-    
     loansHistory: {
       type: 'okapi',
       records: 'loans',

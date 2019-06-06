@@ -28,7 +28,6 @@ import css from './AccountsListing.css';
 import { getFullName } from './util';
 import { Actions } from './components/Accounts/Actions';
 import { count, handleFilterChange, handleFilterClear } from './components/Accounts/accountFunctions';
-import * as nav from './navigationHandlers';
 
 import {
   Menu,
@@ -209,12 +208,10 @@ class AccountsHistory extends React.Component {
   componentDidUpdate() {
     const {
       match: { params },
-      location,
       resources
     } = this.props;
 
     let filterAccounts = _.get(resources, ['filter', 'records'], []);
-    const query = location.search ? queryString.parse(location.search) : {};
     filterAccounts = this.filterAccountsByStatus(filterAccounts, params.accountstatus);
     const feeFineTypes = count(filterAccounts.map(a => (a.feeFineType)));
     const feeFineOwners = count(filterAccounts.map(a => (a.feeFineOwner)));

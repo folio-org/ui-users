@@ -8,7 +8,6 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { ConfirmationModal } from '@folio/stripes/components';
 import PatronBlockForm from './PatronBlockForm';
-import { handleBackLink } from '../../util';
 
 class PatronBlockLayer extends React.Component {
   static propTypes = {
@@ -23,15 +22,13 @@ class PatronBlockLayer extends React.Component {
     resources: PropTypes.shape({
       patronBlocks: PropTypes.object,
     }),
-    onDeleteItem: PropTypes.func,
-    onCreateItem: PropTypes.func,
-    onUpdateItem: PropTypes.func,
+    // onDeleteItem: PropTypes.func,
+    // onCreateItem: PropTypes.func,
+    // onUpdateItem: PropTypes.func,
     user: PropTypes.object,
     selectedPatronBlock: PropTypes.object,
-    location: PropTypes.object,
     history: PropTypes.object,
     match: PropTypes.object,
-    initialValues: PropTypes.object,
     intl: intlShape.isRequired,
     stripes: PropTypes.object,
   };
@@ -126,11 +123,7 @@ class PatronBlockLayer extends React.Component {
   }
 
   onCancel = () => {
-    const {
-      location,
-      history,
-    } = this.props;
-    handleBackLink(location, history);
+    this.props.history.goBack();
   }
 
   render() {

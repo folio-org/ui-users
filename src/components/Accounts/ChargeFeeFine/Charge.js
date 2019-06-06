@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import uuid from 'uuid';
 import _ from 'lodash';
-import { compose } from 'redux';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import moment from 'moment';
 import {

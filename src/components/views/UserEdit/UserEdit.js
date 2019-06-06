@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { cloneDeep, omit, differenceBy, get } from 'lodash';
 
-import { eachPromise, getRecordObject, handleBackLink } from '../../../util';
+import { eachPromise, getRecordObject } from '../../../util';
 
 import UserForm from './UserForm';
 import ViewLoading from '../../Loading/ViewLoading';
@@ -96,7 +96,6 @@ class UserEdit extends React.Component {
       updateSponsors,
       updateServicePoints,
       mutator,
-      location,
       history,
       resources,
       stripes,
@@ -129,7 +128,7 @@ class UserEdit extends React.Component {
     data.active = (moment(user.expirationDate).endOf('day').isSameOrAfter(today));
 
     mutator.selUser.PUT(data).then(() => {
-      handleBackLink(location, history);
+      history.goBack();
     });
   }
 

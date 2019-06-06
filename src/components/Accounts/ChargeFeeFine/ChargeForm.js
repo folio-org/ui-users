@@ -183,7 +183,6 @@ class ChargeForm extends React.Component {
 
   render() {
     const {
-      location,
       history,
     } = this.props;
 

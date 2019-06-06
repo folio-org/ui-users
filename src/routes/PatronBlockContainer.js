@@ -1,7 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
-import _get from 'lodash/get';
 import { stripesConnect } from '@folio/stripes/core';
 import { PatronBlockLayer } from '../components/PatronBlock';
 

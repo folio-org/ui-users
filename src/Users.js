@@ -12,7 +12,7 @@ import { AppIcon, stripesConnect, withStripes } from '@folio/stripes/core';
 
 import uuid from 'uuid';
 import ViewUser from './ViewUser';
-import UserForm from './UserForm';
+import UserForm from './components/views/UserEdit/UserForm';
 import { toUserAddresses } from './converters/address';
 import { getFullName } from './util';
 import packageInfo from '../package';

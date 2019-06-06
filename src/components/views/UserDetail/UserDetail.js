@@ -22,7 +22,7 @@ import {
   Col,
   Headline,
   AccordionSet,
-  HasCommand,
+  // HasCommand,
 } from '@folio/stripes/components';
 
 import {
@@ -33,7 +33,7 @@ import {
   PatronBlock,
   UserPermissions,
   UserLoans,
-  UserRequests,
+  // UserRequests,
   UserAccounts,
   UserServicePoints,
 } from '../../ViewSections';
@@ -41,8 +41,14 @@ import {
 import {
   PatronBlockMessage
 } from '../../PatronBlock';
-import { toListAddresses, toUserAddresses } from '../../../converters/address';
-import { getFullName, eachPromise } from '../../../util';
+import {
+  toListAddresses,
+  // toUserAddresses
+} from '../../../converters/address';
+import {
+  getFullName,
+  // eachPromise
+} from '../../../util';
 import { PaneLoading } from '../../Loading';
 
 class UserView extends React.Component {

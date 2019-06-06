@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import packageInfo from '../package';
 
 export function getFullName(user) {
   const lastName = _.get(user, ['personal', 'lastName'], '');
@@ -46,35 +45,4 @@ export function getRecordObject(resources, ...args) {
     res[resource] = resources[resource].records;
   });
   return res;
-}
-
-// TODO:
-// If no history (direct link) cancel/back buttons should know where to go.
-// this can be set up in the container and relayed through props.
-
-// when a route is visited from outside of the module, the back/cancel should function as a
-// a browser's back button, actually going back in history.
-
-// when a workflow is visited from outside of the module, the back/cancel button should send them
-// back to where they were. This can be handled through Link's 'to: { state: { referrer }}'
-
-// Approach: 
-// Routes set up a default referrer if no referrer/"home" is supplied.
-
-export function handleBackLink(
-  location,
-  history,
-  goHome = () => { history.replace(packageInfo.stripes.home); }
-) {
-  if (!location.state) { // regular back button
-    history.goBack();
-  // page is reachable from outside the module...
-  // this will execute if the 'referrer' field is set on the 'state'
-  // this happens in stripes-core main navigation buttons.
-  } else if (location.state && location.state.referrer === 'home') {
-    goHome();
-    // for non-linear paths wi
-  } else if (location.state && location.state.referrer) {
-    history.push(location.state.referrer);
-  }
 }

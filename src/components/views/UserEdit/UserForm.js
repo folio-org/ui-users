@@ -32,8 +32,10 @@ import {
 
 import { HasCommand } from '../../Commander';
 
-import { getFullName, getRecordObject, handleBackLink } from '../../../util';
-import packageInfo from '../../../../package';
+import {
+  getFullName,
+  // getRecordObject
+} from '../../../util';
 
 import css from './UserForm.css';
 
@@ -125,7 +127,7 @@ class UserForm extends React.Component {
     submitting: false,
   };
 
-  constructor(props) {
+  constructor() {
     super();
 
     this.state = {
@@ -160,7 +162,7 @@ class UserForm extends React.Component {
       },
       {
         name: 'cancel',
-        handler: props.onCancel,
+        handler: this.handleCancel,
         shortcut: 'esc'
       },
       {
@@ -175,11 +177,7 @@ class UserForm extends React.Component {
   }
 
   handleCancel = () => {
-    const {
-      history,
-      location,
-    } = this.props;
-    handleBackLink(location, history);
+    this.props.history.goBack();
   }
 
   getAddFirstMenu() {
@@ -387,7 +385,7 @@ class UserForm extends React.Component {
                         stripes={stripes}
                         change={change}
                       />
-                      {/* <EditUserPerms
+                      <EditUserPerms
                         accordionId="permissions"
                         expanded={sections.permissions}
                         onToggle={this.handleSectionToggle}
@@ -398,7 +396,7 @@ class UserForm extends React.Component {
                         expanded={sections.servicePoints}
                         onToggle={this.handleSectionToggle}
                         {...this.props}
-                      /> */}
+                      />
                     </div>
                   }
                 </AccordionSet>

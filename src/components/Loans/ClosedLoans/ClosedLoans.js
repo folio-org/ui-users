@@ -48,7 +48,7 @@ class ClosedLoans extends React.Component {
 
   static propTypes = {
     stripes: stripesShape.isRequired,
-    buildRecords: PropTypes.func,
+    // buildRecords: PropTypes.func,
     onClickViewLoanActionsHistory: PropTypes.func.isRequired,
     loans: PropTypes.arrayOf(PropTypes.object).isRequired,
     mutator: PropTypes.shape({
