@@ -170,6 +170,7 @@ class UsersRouting extends React.Component {
           <Route path={`${base}/:id/charge/:loanid?`} component={Routes.ChargeFeesFinesContainer} />
           <Route path={`${base}/:id/patronblocks/edit/:patronblockid`} component={Routes.PatronBlockContainer} />
           <Route path={`${base}/:id/patronblocks/create`} component={Routes.PatronBlockContainer} />
+          <Route path={`${base}/create`} component={Routes.UserEditContainer} />
           <Route path={`${base}/:id/edit`} component={Routes.UserEditContainer} />
           <Route path={`${base}/view/:id`} component={Routes.UserDetailFullscreenContainer} />
           <Route path={base} component={Routes.UserSearchContainer}>

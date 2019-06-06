@@ -7,7 +7,7 @@ import noop from 'lodash/noop';
 import get from 'lodash/get';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
-import { IntlConsumer, AppIcon } from '@folio/stripes/core';
+import { IntlConsumer, IfPermission, AppIcon } from '@folio/stripes/core';
 import {
   MultiColumnList,
   SearchField,
@@ -138,6 +138,28 @@ class UserSearch extends React.Component {
     );
   };
 
+  renderNewRecordBtn() {
+    return (
+      <IfPermission perm="users.item.post,login.item.post,perms.users.item.post">
+        <PaneMenu>
+          <FormattedMessage id="stripes-smart-components.addNew">
+            {ariaLabel => (
+              <Button
+                id="clickable-newuser"
+                aria-label={ariaLabel}
+                to="/users/create"
+                buttonStyle="primary"
+                marginBottom0
+              >
+                <FormattedMessage id="stripes-smart-components.new" />
+              </Button>
+            )}
+          </FormattedMessage>
+        </PaneMenu>
+      </IfPermission>
+    );
+  }
+
   render() {
     const {
       filterConfig,
@@ -265,6 +287,7 @@ class UserSearch extends React.Component {
                       }
                       <Pane
                         firstMenu={this.renderResultsFirstMenu(activeFilters)}
+                        lastMenu={this.renderNewRecordBtn()}
                         paneTitle={resultsHeader}
                         paneSub={resultPaneSub}
                         defaultWidth="fill"

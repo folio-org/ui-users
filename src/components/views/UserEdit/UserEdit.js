@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import uuid from 'uuid';
+
 import { cloneDeep, omit, differenceBy, get } from 'lodash';
 
 import { eachPromise, getRecordObject } from '../../../util';
@@ -9,16 +11,18 @@ import UserForm from './UserForm';
 import ViewLoading from '../../Loading/ViewLoading';
 import { toUserAddresses, toListAddresses } from '../../../converters/address';
 
-function resourcesLoaded(obj) {
+function resourcesLoaded(obj, exceptions = []) {
   for (const resource in obj) {
-    if (Object.prototype.hasOwnProperty.call(obj, resource)) {
-      if (obj[resource] === null) {
-        return false;
-      }
-      if (typeof obj[resource] === 'object') {
-        if (Object.prototype.hasOwnProperty.call(obj[resource], 'isPending')) {
-          if (obj[resource].isPending) {
-            return false;
+    if (!exceptions.includes(resource)) {
+      if (Object.prototype.hasOwnProperty.call(obj, resource)) {
+        if (obj[resource] === null) {
+          return false;
+        }
+        if (typeof obj[resource] === 'object') {
+          if (Object.prototype.hasOwnProperty.call(obj[resource], 'isPending')) {
+            if (obj[resource].isPending) {
+              return false;
+            }
           }
         }
       }
@@ -31,7 +35,6 @@ class UserEdit extends React.Component {
   static propTypes = {
     stripes: PropTypes.object,
     resources: PropTypes.object,
-    location: PropTypes.object,
     history: PropTypes.object,
     match: PropTypes.object,
     updateProxies: PropTypes.func,
@@ -54,8 +57,9 @@ class UserEdit extends React.Component {
   getUserFormValues() {
     const {
       getPreferredServicePoint,
-      resources,
+      resources
     } = this.props;
+
     const user = this.getUser();
     const userFormValues = cloneDeep(user);
     const formRecordValues = getRecordObject(
@@ -88,6 +92,31 @@ class UserEdit extends React.Component {
       'addressTypes',
     );
     return formData;
+  }
+
+  create = (userdata) => {
+    const { mutator, history } = this.props;
+    if (userdata.username) {
+      const creds = Object.assign({}, userdata.creds, { username: userdata.username }, userdata.creds.password ? {} : { password: '' });
+      const user = Object.assign({}, userdata, { id: uuid() });
+      if (user.creds) delete user.creds;
+
+      mutator.records.POST(user)
+        .then(newUser => mutator.creds.POST(Object.assign(creds, { userId: newUser.id })))
+        .then(newCreds => mutator.perms.POST({ userId: newCreds.userId, permissions: [] }))
+        .then((perms) => {
+          history.push(`/users/preview/${perms.userId}`);
+        });
+    } else {
+      const user = Object.assign({}, userdata, { id: uuid() });
+      if (user.creds) delete user.creds;
+
+      mutator.records.POST(user)
+        .then((newUser) => mutator.perms.POST({ userId: newUser.id, permissions: [] }))
+        .then((perms) => {
+          history.push(`/users/preview/${perms.userId}`);
+        });
+    }
   }
 
   update(user) {
@@ -144,26 +173,32 @@ class UserEdit extends React.Component {
   render() {
     const {
       history,
-      location,
       resources,
+      match: { params }
     } = this.props;
 
-    if (!resourcesLoaded(resources)) {
-      return <ViewLoading inPaneset paneTitle="Edit User" />;
+    if (!resourcesLoaded(resources, ['uniquenessValidator'])) {
+      return <ViewLoading paneTitle={params.id ? 'Edit User' : 'Create User'} />;
     }
 
-    // values are strictly values...
-    const formValues = this.getUserFormValues();
+    // values are strictly values...if we're editing (id param present) pull in existing values.
+    let formValues = { personal: {} };
+    if (params.id) {
+      formValues = this.getUserFormValues();
+    }
 
     // data is information that the form needs, mostly to populate options lists
     const formData = this.getUserFormData();
+
+    const onSubmit = params.id ? (record) => this.update(record) : (record) => this.create(record);
 
     return (
       <UserForm
         formData={formData}
         initialValues={formValues}
-        onSubmit={record => this.update(record)}
-        onCancel={() => { history.push(location.state.launched); }}
+        onSubmit={onSubmit}
+        onCancel={() => { history.goBack(); }}
+        uniquenessValidator={this.props.mutator.uniquenessValidator}
       />
     );
   }

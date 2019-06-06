@@ -47,6 +47,29 @@ class UserRecordContainer extends React.Component {
       path: 'addresstypes?query=cql.allRecords=1 sortby desc',
       records: 'addressTypes',
     },
+    uniquenessValidator: {
+      type: 'okapi',
+      records: 'users',
+      accumulate: 'true',
+      path: 'users',
+      fetch: false,
+    },
+    records: {
+      type: 'okapi',
+      records: 'users',
+      path: 'users',
+      fetch: false,
+    },
+    creds: {
+      type: 'okapi',
+      path: 'authn/credentials',
+      fetch: false,
+    },
+    perms: {
+      type: 'okapi',
+      path: 'perms/users',
+      fetch: false,
+    },
     // NOTE: 'indexField', used as a parameter in the userPermissions paths,
     // modifies the API call so that the :{userid} parameter is actually
     // interpreted as a user ID. By default, that path component is taken as
@@ -123,7 +146,6 @@ class UserRecordContainer extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }),
-    parentMutator: PropTypes.shape({}),
     updateProxies: PropTypes.func,
     updateServicePoints: PropTypes.func,
     updateSponsors: PropTypes.func,

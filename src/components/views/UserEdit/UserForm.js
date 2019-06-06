@@ -82,7 +82,7 @@ function validate(values, props) {
 function asyncValidate(values, dispatch, props, blurredField) {
   if (blurredField === 'username' && values.username !== props.initialValues.username) {
     return new Promise((resolve, reject) => {
-      const uv = props.parentMutator.uniquenessValidator;
+      const uv = props.uniquenessValidator;
       const query = `(username=="${values.username}")`;
       uv.reset();
       return uv.GET({ params: { query } }).then((users) => {
