@@ -30,7 +30,7 @@ const columnWidths = {
   transactioninfo: 200,
   created: 100,
   source: 150,
-  comments: 550
+  comments: 420
 };
 
 const columns = [
