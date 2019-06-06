@@ -8,328 +8,303 @@ import {
 
 import { Callout } from '@folio/stripes/components';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
+import { stripesConnect } from '@folio/stripes-core';
 
 import BulkRenewalDialog from './components/BulkRenewalDialog';
 import isOverridePossible from './components/Loans/OpenLoans/helpers/isOverridePossible/isOverridePossible';
 
 // HOC used to manage renew
-const withRenew = WrappedComponent => class WithRenewComponent extends React.Component {
-  static manifest = Object.freeze(
-    Object.assign({}, WrappedComponent.manifest, {
-      renew: {
-        fetch: false,
-        type: 'okapi',
-        path: 'circulation/renew-by-barcode',
-        POST: {
-          path: 'circulation/renew-by-barcode',
-        },
-        throwErrors: false,
-      },
-      loanPolicies: {
-        type: 'okapi',
-        records: 'loanPolicies',
-        path: 'loan-policy-storage/loan-policies',
-        accumulate: 'true',
-        fetch: false,
-      },
-      requests: {
-        type: 'okapi',
-        path: 'circulation/requests',
-        resourceShouldRefresh: true,
-        records: 'requests',
-        accumulate: 'true',
-        fetch: false,
-      },
-    }),
-  );
-
-  static propTypes = {
-    mutator: PropTypes.shape({
-      renew: PropTypes.shape({
-        POST: PropTypes.func.isRequired,
+const withRenew = WrappedComponent => {
+  class WithRenewComponent extends React.Component {
+    static propTypes = {
+      mutator: PropTypes.shape({
+        renew: PropTypes.shape({
+          POST: PropTypes.func.isRequired,
+        }),
+        loanPolicies: PropTypes.shape({
+          GET: PropTypes.func.isRequired,
+          reset: PropTypes.func.isRequired,
+        }),
+        requests: PropTypes.shape({
+          GET: PropTypes.func.isRequired,
+          reset: PropTypes.func.isRequired,
+        }),
       }),
-      loanPolicies: PropTypes.shape({
-        GET: PropTypes.func.isRequired,
-        reset: PropTypes.func.isRequired,
-      }),
-      requests: PropTypes.shape({
-        GET: PropTypes.func.isRequired,
-        reset: PropTypes.func.isRequired,
-      }),
-    }),
-    loans: PropTypes.object,
-  };
+      loans: PropTypes.object,
+    };
 
-  static defaultProps = {
-    loans: [],
-  };
-
-  constructor(props) {
-    super(props);
-
-    this.permissions = { allRequests: 'ui-users.requests.all' };
-    this.connectedBulkRenewalDialog = props.stripes.connect(BulkRenewalDialog);
-    this.state = {
+    static defaultProps = {
       loans: [],
-      errors: [],
-      bulkRenewal: false,
-      bulkRenewalDialogOpen: false,
-      renewSuccess: [],
-      renewFailure: [],
-      errorMsg: {},
-      requestCounts: {},
-      loanPolicies: {},
-    };
-  }
-
-  static getDerivedStateFromProps(nextProps, prevState) {
-    const { loans } = nextProps;
-
-    if (prevState.loans.length < nextProps.loans.length) {
-      return { loans };
-    }
-
-    return null;
-  }
-
-  componentDidMount() {
-    const { loans } = this.state;
-
-    if (loans.length > 0) {
-      this.fetchLoanPolicyNames();
-      this.getOpenRequestsCount();
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const { loans } = this.state;
-
-    if (loans.length > prevState.loans.length) {
-      this.fetchLoanPolicyNames();
-      this.getOpenRequestsCount();
-    }
-  }
-
-  renewItem = (loan, patron, bulkRenewal) => {
-    this.setState({ bulkRenewal });
-    const params = {
-      itemBarcode: loan.item.barcode,
-      userBarcode: patron.barcode,
     };
 
-    return new Promise((resolve, reject) => {
-      this.props.mutator.renew.POST(params)
-        .then(resolve)
-        .catch(resp => {
-          const contentType = resp.headers.get('Content-Type');
+    constructor(props) {
+      super(props);
 
-          if (contentType && contentType.startsWith('application/json')) {
-            resp.json()
-              .then((error) => {
-                const errors = this.handleErrors(error);
-
-                reject(this.getMessage(errors));
-              });
-          } else {
-            resp.text()
-              .then(reject);
-          }
-        });
-    });
-  };
-
-  renew = (loans, patron) => {
-    const { patronBlocks } = this.props;
-    const renewSuccess = [];
-    const renewFailure = [];
-    const errorMsg = {};
-    const countRenew = patronBlocks.filter(p => p.renewals);
-    const bulkRenewal = (loans.length > 1);
-
-    if (!isEmpty(countRenew)) {
-      return this.setState({ patronBlockedModal: true });
+      this.permissions = { allRequests: 'ui-users.requests.all' };
+      this.connectedBulkRenewalDialog = props.stripes.connect(BulkRenewalDialog);
+      this.state = {
+        loans: [],
+        errors: [],
+        bulkRenewal: false,
+        bulkRenewalDialogOpen: false,
+        renewSuccess: [],
+        renewFailure: [],
+        errorMsg: {},
+        requestCounts: {},
+        loanPolicies: {},
+      };
     }
 
-    const renewedLoans = loans.map((loan) => {
-      return this.renewItem(loan, patron, bulkRenewal)
-        .then((renewedLoan) => renewSuccess.push(renewedLoan))
-        .catch((error) => {
-          renewFailure.push(loan);
-          const stringErrorMessage = get(error, 'props.values.message', '');
-          errorMsg[loan.id] = {
-            ...error,
-            ...isOverridePossible(stringErrorMessage),
-          };
-        });
-    });
+    static getDerivedStateFromProps(nextProps, prevState) {
+      const { loans } = nextProps;
 
-    this.setState({ errorMsg });
+      if (prevState.loans.length < nextProps.loans.length) {
+        return { loans };
+      }
 
-    return Promise.all(renewedLoans.map(p => p.catch(e => e)))
-      .then(() => {
-        if (!isEmpty(renewFailure) || renewSuccess.length > 1) {
-          this.setState({
-            renewSuccess,
-            renewFailure,
-            bulkRenewalDialogOpen: true
-          });
-        } else {
-          this.showSingleRenewCallout(renewSuccess[0]);
-        }
-      });
-  };
+      return null;
+    }
 
-  showSingleRenewCallout = (loan) => {
-    const message = (
-      <span>
-        <SafeHTMLMessage
-          id="ui-users.loans.item.renewed.callout"
-          values={{ title: loan.item.title }}
-        />
-      </span>
-    );
+    componentDidMount() {
+      const { loans } = this.state;
 
-    this.callout.sendCallout({ message });
-  };
-
-  handleErrors = (error) => {
-    const { errors } = error;
-    this.setState({ errors });
-    return errors;
-  };
-
-  getPolicyName = (errors) => {
-    for (const err of errors) {
-      for (const param of err.parameters) {
-        if (param.key === 'loanPolicyName') {
-          return param.value;
-        }
+      if (loans.length > 0) {
+        this.fetchLoanPolicyNames();
+        this.getOpenRequestsCount();
       }
     }
 
-    return '';
-  };
+    componentDidUpdate(prevProps, prevState) {
+      const { loans } = this.state;
 
-  // eslint-disable-next-line class-methods-use-this
-  getMessage = (errors) => {
-    if (!errors || !errors.length) return '';
-
-    const policyName = this.getPolicyName(errors);
-    const message = errors.reduce((msg, err) => ((msg) ? `${msg}, ${err.message}` : err.message), '');
-
-    return policyName ? (
-      <FormattedMessage
-        id="ui-users.errors.reviewBeforeRenewal"
-        values={{ message, policyName }}
-      />
-    ) : (
-      <FormattedMessage
-        id="ui-users.errors.loanNotRenewedReason"
-        values={{ message }}
-      />
-    );
-  };
-
-  hideBulkRenewalDialog = () => this.setState({ bulkRenewalDialogOpen: false });
-
-  getOpenRequestsCount = () => {
-    const {
-      stripes,
-      mutator: {
-        requests: {
-          reset,
-          GET,
-        },
-      },
-    } = this.props;
-
-    const { loans } = this.state;
-
-    if (!stripes.hasPerm(this.permissions.allRequests)) {
-      return;
+      if (loans.length > prevState.loans.length) {
+        this.fetchLoanPolicyNames();
+        this.getOpenRequestsCount();
+      }
     }
 
-    const q = loans.map(loan => `itemId==${loan.itemId}`).join(' or ');
-    const query = `(${q}) and status==("Open - Awaiting pickup" or "Open - Not yet filled") sortby requestDate desc`;
+    renewItem = (loan, patron, bulkRenewal) => {
+      this.setState({ bulkRenewal });
+      const params = {
+        itemBarcode: loan.item.barcode,
+        userBarcode: patron.barcode,
+      };
 
-    reset();
+      return new Promise((resolve, reject) => {
+        this.props.mutator.renew.POST(params)
+          .then(resolve)
+          .catch(resp => {
+            const contentType = resp.headers.get('Content-Type');
 
-    GET({ params: { query } })
-      .then((requestRecords) => {
-        const requestCountObject = requestRecords.reduce((map, record) => {
-          map[record.itemId] = map[record.itemId]
-            ? map[record.itemId] + 1
-            : 1;
+            if (contentType && contentType.startsWith('application/json')) {
+              resp.json()
+                .then((error) => {
+                  const errors = this.handleErrors(error);
 
-          return map;
-        }, {});
-        this.setState({ requestCounts: requestCountObject });
+                  reject(this.getMessage(errors));
+                });
+            } else {
+              resp.text()
+                .then(reject);
+            }
+          });
       });
-  };
+    };
 
+    renew = (loans, patron) => {
+      const { patronBlocks } = this.props;
+      const renewSuccess = [];
+      const renewFailure = [];
+      const errorMsg = {};
+      const countRenew = patronBlocks.filter(p => p.renewals);
+      const bulkRenewal = (loans.length > 1);
 
-  fetchLoanPolicyNames = () => {
-    const query = this.state.loans.map(loan => `id==${loan.loanPolicyId}`).join(' or ');
-    const {
-      mutator: {
-        loanPolicies: {
-          reset,
-          GET,
+      if (!isEmpty(countRenew)) {
+        return this.setState({ patronBlockedModal: true });
+      }
+
+      const renewedLoans = loans.map((loan) => {
+        return this.renewItem(loan, patron, bulkRenewal)
+          .then((renewedLoan) => renewSuccess.push(renewedLoan))
+          .catch((error) => {
+            renewFailure.push(loan);
+            const stringErrorMessage = get(error, 'props.values.message', '');
+            errorMsg[loan.id] = {
+              ...error,
+              ...isOverridePossible(stringErrorMessage),
+            };
+          });
+      });
+
+      this.setState({ errorMsg });
+
+      return Promise.all(renewedLoans.map(p => p.catch(e => e)))
+        .then(() => {
+          if (!isEmpty(renewFailure) || renewSuccess.length > 1) {
+            this.setState({
+              renewSuccess,
+              renewFailure,
+              bulkRenewalDialogOpen: true
+            });
+          } else {
+            this.showSingleRenewCallout(renewSuccess[0]);
+          }
+        });
+    };
+
+    showSingleRenewCallout = (loan) => {
+      const message = (
+        <span>
+          <SafeHTMLMessage
+            id="ui-users.loans.item.renewed.callout"
+            values={{ title: loan.item.title }}
+          />
+        </span>
+      );
+
+      this.callout.sendCallout({ message });
+    };
+
+    handleErrors = (error) => {
+      const { errors } = error;
+      this.setState({ errors });
+      return errors;
+    };
+
+    getPolicyName = (errors) => {
+      for (const err of errors) {
+        for (const param of err.parameters) {
+          if (param.key === 'loanPolicyName') {
+            return param.value;
+          }
+        }
+      }
+
+      return '';
+    };
+
+    // eslint-disable-next-line class-methods-use-this
+    getMessage = (errors) => {
+      if (!errors || !errors.length) return '';
+
+      const policyName = this.getPolicyName(errors);
+      const message = errors.reduce((msg, err) => ((msg) ? `${msg}, ${err.message}` : err.message), '');
+
+      return policyName ? (
+        <FormattedMessage
+          id="ui-users.errors.reviewBeforeRenewal"
+          values={{ message, policyName }}
+        />
+      ) : (
+        <FormattedMessage
+          id="ui-users.errors.loanNotRenewedReason"
+          values={{ message }}
+        />
+      );
+    };
+
+    hideBulkRenewalDialog = () => this.setState({ bulkRenewalDialogOpen: false });
+
+    getOpenRequestsCount = () => {
+      const {
+        stripes,
+        mutator: {
+          requests: {
+            reset,
+            GET,
+          },
         },
-      },
-    } = this.props;
+      } = this.props;
 
-    reset();
-    GET({ params: { query } })
-      .then((loanPolicies) => {
-        const loanPolicyObject = loanPolicies.reduce((map, loanPolicy) => {
-          map[loanPolicy.id] = loanPolicy.name;
+      const { loans } = this.state;
 
-          return map;
-        }, {});
+      if (!stripes.hasPerm(this.permissions.allRequests)) {
+        return;
+      }
 
-        this.setState({ loanPolicies: loanPolicyObject });
-      });
-  };
+      const q = loans.map(loan => `itemId==${loan.itemId}`).join(' or ');
+      const query = `(${q}) and status==("Open - Awaiting pickup" or "Open - Not yet filled") sortby requestDate desc`;
 
-  render() {
-    const {
-      bulkRenewalDialogOpen,
-      renewSuccess,
-      renewFailure,
-      errorMsg,
-      loanPolicies,
-      requestCounts,
-    } = this.state;
-    const {
-      user,
-      stripes,
-    } = this.props;
+      reset();
 
-    return (
-      <Fragment>
-        <WrappedComponent
-          renew={this.renew}
-          requestCounts={requestCounts}
-          loanPolicies={loanPolicies}
-          calloutRef={(ref) => { this.callout = ref; }}
-          {...this.props}
-        />
-        <this.connectedBulkRenewalDialog
-          user={user}
-          stripes={stripes}
-          errorMessages={errorMsg}
-          loanPolicies={loanPolicies}
-          open={bulkRenewalDialogOpen}
-          failedRenewals={renewFailure}
-          requestCounts={requestCounts}
-          successRenewals={renewSuccess}
-          onClose={this.hideBulkRenewalDialog}
-        />
-        <Callout ref={(ref) => { this.callout = ref; }} />
-      </Fragment>
-    );
+      GET({ params: { query } })
+        .then((requestRecords) => {
+          const requestCountObject = requestRecords.reduce((map, record) => {
+            map[record.itemId] = map[record.itemId]
+              ? map[record.itemId] + 1
+              : 1;
+
+            return map;
+          }, {});
+          this.setState({ requestCounts: requestCountObject });
+        });
+    };
+
+
+    fetchLoanPolicyNames = () => {
+      const query = this.state.loans.map(loan => `id==${loan.loanPolicyId}`).join(' or ');
+      const {
+        mutator: {
+          loanPolicies: {
+            reset,
+            GET,
+          },
+        },
+      } = this.props;
+
+      reset();
+      GET({ params: { query } })
+        .then((loanPolicies) => {
+          const loanPolicyObject = loanPolicies.reduce((map, loanPolicy) => {
+            map[loanPolicy.id] = loanPolicy.name;
+
+            return map;
+          }, {});
+
+          this.setState({ loanPolicies: loanPolicyObject });
+        });
+    };
+
+    render() {
+      const {
+        bulkRenewalDialogOpen,
+        renewSuccess,
+        renewFailure,
+        errorMsg,
+        loanPolicies,
+        requestCounts,
+      } = this.state;
+      const {
+        user,
+        stripes,
+      } = this.props;
+
+      return (
+        <Fragment>
+          <WrappedComponent
+            renew={this.renew}
+            requestCounts={requestCounts}
+            loanPolicies={loanPolicies}
+            calloutRef={(ref) => { this.callout = ref; }}
+            {...this.props}
+          />
+          <this.connectedBulkRenewalDialog
+            user={user}
+            stripes={stripes}
+            errorMessages={errorMsg}
+            loanPolicies={loanPolicies}
+            open={bulkRenewalDialogOpen}
+            failedRenewals={renewFailure}
+            requestCounts={requestCounts}
+            successRenewals={renewSuccess}
+            onClose={this.hideBulkRenewalDialog}
+          />
+          <Callout ref={(ref) => { this.callout = ref; }} />
+        </Fragment>
+      );
+    }
   }
+  return WithRenewComponent;
 };
 
 export default withRenew;

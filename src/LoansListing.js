@@ -19,9 +19,8 @@ import css from './LoansListing.css';
  * Table-view of a user's loans, including links to the loan details and
  * the loan's item-record.
  */
-class LoansHistory extends React.Component {
+class LoansListing extends React.Component {
   static propTypes = {
-    // onCancel: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired,
     patronGroup: PropTypes.object.isRequired,
     loansHistory: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -106,4 +105,4 @@ class LoansHistory extends React.Component {
   }
 }
 
-export default LoansHistory;
+export default LoansListing;

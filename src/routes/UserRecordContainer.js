@@ -107,7 +107,7 @@ class UserRecordContainer extends React.Component {
       }).isRequired,
     }).isRequired,
     resources: PropTypes.shape({
-      selUser: PropTypes.arrayOf(PropTypes.object),
+      selUser: PropTypes.object,
       permissions: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),

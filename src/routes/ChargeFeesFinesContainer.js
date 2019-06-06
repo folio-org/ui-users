@@ -49,18 +49,18 @@ class ChargeFeesFinesContainer extends React.Component {
       records: 'items',
       path: 'inventory/items?query=barcode=%{activeRecord.barcode}*',
     },
-    // feefines: {
-    //   type: 'okapi',
-    //   records: 'feefines',
-    //   GET: {
-    //     path: 'feefines?query=(ownerId=%{activeRecord.ownerId} or ownerId=%{activeRecord.shared})&limit=100',
-    //   },
-    // },
-    // feefineactions: {
-    //   type: 'okapi',
-    //   records: 'feefineactions',
-    //   path: 'feefineactions',
-    // },
+    feefines: {
+      type: 'okapi',
+      records: 'feefines',
+      GET: {
+        path: 'feefines?query=(ownerId=%{activeRecord.ownerId} or ownerId=%{activeRecord.shared})&limit=100',
+      },
+    },
+    feefineactions: {
+      type: 'okapi',
+      records: 'feefineactions',
+      path: 'feefineactions',
+    },
     accounts: {
       type: 'okapi',
       records: 'accounts',

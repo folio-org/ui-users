@@ -214,18 +214,19 @@ class LoanDetails extends React.Component {
   }
 
   feefinedetails = (e) => {
+    const { history, match: { params } } = this.props;
     const { feesFines: { accounts } } = this.state;
     const loan = this.loan || {};
     if (accounts.length === 1) {
-      nav.onClickViewAccountActionsHistory(e, { id: accounts[0].id });
+      nav.onClickViewAccountActionsHistory(e, { id: accounts[0].id }, history, params);
     } else if (accounts.length > 1) {
       const open = accounts.filter(a => a.status.name === 'Open') || [];
       if (open.length === accounts.length) {
-        nav.onClickViewOpenAccounts(e, loan);
+        nav.onClickViewOpenAccounts(e, loan, history, params);
       } else if (open.length === 0) {
-        nav.onClickViewClosedAccounts(e, loan);
+        nav.onClickViewClosedAccounts(e, loan, history, params);
       } else {
-        nav.onClickViewAllAccounts(e, loan);
+        nav.onClickViewAllAccounts(e, loan, history, params);
       }
     }
   };

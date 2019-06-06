@@ -57,6 +57,15 @@ class LoansListingContainer extends React.Component {
       records: 'accounts',
       path: 'accounts?query=userId=:{id}&limit=100',
     },
+    renew: {
+      fetch: false,
+      type: 'okapi',
+      path: 'circulation/renew-by-barcode',
+      POST: {
+        path: 'circulation/renew-by-barcode',
+      },
+      throwErrors: false,
+    },
     activeRecord: {},
   });
 

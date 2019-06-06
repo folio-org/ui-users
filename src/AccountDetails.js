@@ -19,6 +19,7 @@ import {
 
 import { Actions } from './components/Accounts/Actions';
 import { getFullName } from './util';
+import * as nav from './navigationHandlers';
 
 import css from './AccountsListing.css';
 
@@ -65,8 +66,8 @@ class AccountDetails extends React.Component {
     num: PropTypes.number.isRequired,
     user: PropTypes.object,
     history: PropTypes.object,
+    match: PropTypes.object,
     patronGroup: PropTypes.object,
-    onClickViewLoanActionsHistory: PropTypes.func.isRequired,
     handleAddRecords: PropTypes.func.isRequired,
   };
 
@@ -232,11 +233,11 @@ class AccountDetails extends React.Component {
 
     const {
       handleAddRecords,
-      onClickViewLoanActionsHistory,
       patronGroup: patron,
       resources,
       history,
       stripes,
+      match: { params },
       user,
     } = this.props;
 
@@ -397,7 +398,7 @@ class AccountDetails extends React.Component {
                       className={css.btnView}
                       type="button"
                       onClick={(e) => {
-                        onClickViewLoanActionsHistory(e, { id: loanId });
+                        nav.onClickViewLoanActionsHistory(e, { id: loanId }, history, params);
                       }}
                     >
                       <FormattedMessage id="ui-users.details.field.loan" />
