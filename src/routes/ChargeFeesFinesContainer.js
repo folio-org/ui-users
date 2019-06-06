@@ -23,26 +23,26 @@ class ChargeFeesFinesContainer extends React.Component {
     },
     loan: {
       type: 'okapi',
-      path: 'loan-storage/loans/?{loan}',
+      path: 'loan-storage/loans/:{loanid}',
       clear: false,
       shouldRefresh: (resource, action, refresh) => {
         const { path } = action.meta;
         return refresh || (path && path.match(/link/));
       },
     },
-    loansHistory: {
-      type: 'okapi',
-      records: 'loans',
-      path: 'circulation/loans?query=(userId=:{id}) sortby id&limit=100',
-      permissionsRequired: 'circulation.loans.collection.get',
-    },
+    // loansHistory: {
+    //   type: 'okapi',
+    //   records: 'loans',
+    //   path: 'circulation/loans?query=(userId=:{id}) sortby id&limit=100',
+    //   permissionsRequired: 'circulation.loans.collection.get',
+    // },
     loanItem: {
       type: 'okapi',
       path: 'inventory/items/%{activeRecord.itemId}'
     },
     curUserServicePoint: {
       type: 'okapi',
-      path: 'service-points-users?query=(userId==!{currentUser.id})',
+      path: 'service-points-users?query=(userId==:{id})',
       records: 'servicePointsUsers',
     },
     items: {
@@ -50,18 +50,18 @@ class ChargeFeesFinesContainer extends React.Component {
       records: 'items',
       path: 'inventory/items?query=barcode=%{activeRecord.barcode}*',
     },
-    feefines: {
-      type: 'okapi',
-      records: 'feefines',
-      GET: {
-        path: 'feefines?query=(ownerId=%{activeRecord.ownerId} or ownerId=%{activeRecord.shared})&limit=100',
-      },
-    },
-    feefineactions: {
-      type: 'okapi',
-      records: 'feefineactions',
-      path: 'feefineactions',
-    },
+    // feefines: {
+    //   type: 'okapi',
+    //   records: 'feefines',
+    //   GET: {
+    //     path: 'feefines?query=(ownerId=%{activeRecord.ownerId} or ownerId=%{activeRecord.shared})&limit=100',
+    //   },
+    // },
+    // feefineactions: {
+    //   type: 'okapi',
+    //   records: 'feefineactions',
+    //   path: 'feefineactions',
+    // },
     accounts: {
       type: 'okapi',
       records: 'accounts',
@@ -128,33 +128,31 @@ class ChargeFeesFinesContainer extends React.Component {
       }),
     }).isRequired,
     stripes: PropTypes.object.isRequired,
-    // onCloseChargeFeeFine: PropTypes.func.isRequired,
-    // handleAddRecords: PropTypes.func,
     okapi: PropTypes.object,
-    // selectedLoan: PropTypes.object,
-    // user: PropTypes.object,
-    // onSubmit: PropTypes.func,
     initialize: PropTypes.func,
     servicePointsIds: PropTypes.arrayOf(PropTypes.string),
     defaultServicePointId: PropTypes.string,
   };
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate() {
     // if a selected loan is present, get the associated item of the loan.
-    const { resources: { loan }, mutator } = this.props;
-    const prevLoanResource = (prevProps.resources.loan || {}).records || [];
+    const { match: { params }, resources: { loan, loanItem, activeRecord }, mutator } = this.props;
+    const itemResource = (loanItem || {}).records || [];
     const loanResource = (loan || {}).records || [];
-    if (prevLoanResource.length === 0 && loanResource.length !== 0) {
+    // if there's an associated loan, but no loan item yet, update the localResource.
+    if (params.loanid &&
+      itemResource.length === 0 &&
+      loanResource.length > 0 &&
+      !activeRecord.itemId) {
       mutator.activeRecord.update({ itemId: loan.records[0].itemId });
     }
   }
 
   getLoan = () => {
-    const { resources, location } = this.props;
-    const queryParams = location.search ? queryString.parse(location.search) : {};
+    const { resources, match: { params } } = this.props;
     const userLoans = (resources.loan || {}).records || [];
-    if (userLoans.length === 0 || !queryParams.loan) return null;
-    const loan = userLoans.find(l => l.id === queryParams.loan) || {};
+    if (userLoans.length === 0 || !params.loanid) return null;
+    const loan = userLoans.find(l => l.id === params.loanid) || {};
     if (loan) {
       loan.item = (resources.loanItem || {}).records[0] || {};
     }

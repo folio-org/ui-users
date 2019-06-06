@@ -16,7 +16,6 @@ import { FormattedMessage } from 'react-intl';
 import stripesForm from '@folio/stripes/form';
 import { Field, change } from 'redux-form';
 
-import { handleBackLink } from '../../../util';
 import UserDetails from './UserDetails';
 import FeeFineInfo from './FeeFineInfo';
 import ItemInfo from './ItemInfo';
