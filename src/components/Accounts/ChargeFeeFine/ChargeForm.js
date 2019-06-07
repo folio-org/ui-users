@@ -200,7 +200,7 @@ class ChargeForm extends React.Component {
       history,
       user,
     } = this.props;
-
+    const { notify } = this.state;
     const selectedLoan = this.props.selectedLoan || {};
     const editable = !(selectedLoan.id);
     const itemLoan = {
