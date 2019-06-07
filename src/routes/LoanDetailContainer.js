@@ -68,6 +68,15 @@ class LoanDetailContainer extends React.Component {
       path: 'manualblocks?query=(userId=:{id})&limit=100',
       permissionsRequired: 'manualblocks.collection.get',
     },
+    renew: {
+      fetch: false,
+      type: 'okapi',
+      path: 'circulation/renew-by-barcode',
+      POST: {
+        path: 'circulation/renew-by-barcode',
+      },
+      throwErrors: false,
+    },
   });
 
   getLoan = () => {
@@ -118,5 +127,4 @@ class LoanDetailContainer extends React.Component {
 export default compose(
   stripesConnect,
   withStripes,
-  withRenew,
 )(LoanDetailContainer);

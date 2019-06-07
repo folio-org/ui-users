@@ -8,7 +8,7 @@ import {
 
 import { Callout } from '@folio/stripes/components';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
-import { stripesConnect } from '@folio/stripes-core';
+import { stripesConnect, withStripes } from '@folio/stripes-core';
 
 import BulkRenewalDialog from './components/BulkRenewalDialog';
 import isOverridePossible from './components/Loans/OpenLoans/helpers/isOverridePossible/isOverridePossible';
@@ -304,7 +304,7 @@ const withRenew = WrappedComponent => {
       );
     }
   }
-  return WithRenewComponent;
+  return withStripes(WithRenewComponent);
 };
 
 export default withRenew;

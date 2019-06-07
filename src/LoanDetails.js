@@ -24,6 +24,7 @@ import { IfPermission } from '@folio/stripes/core';
 import * as nav from './navigationHandlers';
 import PatronBlockModal from './components/PatronBlock/PatronBlockModal';
 import { getFullName } from './util';
+import withRenew from './withRenew';
 import loanActionMap from './data/loanActionMap';
 import LoanProxyDetails from './LoanProxyDetails';
 import ViewLoading from './components/Loading/ViewLoading';
@@ -287,6 +288,7 @@ class LoanDetails extends React.Component {
         loanIds={[{ id: this.props.loan.id }]}
         onClose={this.hideChangeDueDateDialog}
         open={this.state.changeDueDateDialogOpen}
+        user={this.props.user}
       />
     );
   }
@@ -552,7 +554,7 @@ class LoanDetails extends React.Component {
               patronBlocks={patronBlocks}
               viewUserPath={`/users/view/${(user || {}).id}?filters=pg.${patronGroup.group}&sort=name`}
             />
-            { this.renderChangeDueDateDialog() }
+            { this.props.user && this.renderChangeDueDateDialog() }
           </Pane>
         </Paneset>
       </div>
@@ -560,4 +562,4 @@ class LoanDetails extends React.Component {
   }
 }
 
-export default injectIntl(LoanDetails);
+export default injectIntl(withRenew(LoanDetails));
