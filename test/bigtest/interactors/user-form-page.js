@@ -41,7 +41,7 @@ import {
   isLoaded = isPresent('[class*=paneTitleLabel---]');
 
   whenLoaded() {
-    return this.when(() => this.isLoaded);
+    return this.when(() => this.isLoaded).timeout(3000);
   }
 
   title = text('[class*=paneTitleLabel---]');

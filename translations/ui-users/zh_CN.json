@@ -854,5 +854,7 @@
     "reports.overdue.borrower.name": "Borrower name",
     "reports.overdue.borrower.barcode": "Borrower barcode",
     "reports.overdue.borrowerId": "Borrower ID",
-    "errors.barcodeUnavailable": "This barcode has already been taken"
+    "errors.barcodeUnavailable": "This barcode has already been taken",
+    "reports.overdue.loanPolicy.name": "Loan policy",
+    "reports.overdue.loanId": "Loan ID"
 }

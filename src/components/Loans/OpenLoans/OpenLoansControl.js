@@ -1,6 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { omit, isArray, size, get } from 'lodash';
+import {
+  isEmpty,
+  isArray,
+  omit,
+  size,
+  get,
+} from 'lodash';
+
 import { stripesShape } from '@folio/stripes/core';
 
 import * as nav from '../../../navigationHandlers';
@@ -287,11 +294,17 @@ class OpenLoansControl extends React.Component {
 
   renew = (loan) => {
     const {
+      patronBlocks,
       renew,
       user,
     } = this.props;
+    const countRenew = patronBlocks.filter(b => b.renewals === true);
 
-    renew([loan], user);
+    if (isEmpty(countRenew)) {
+      renew([loan], user);
+    } else {
+      this.openPatronBlockedModal();
+    }
   };
 
   feefinedetails = (loan, e) => {

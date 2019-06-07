@@ -56,6 +56,7 @@ class Modals extends React.Component {
     return (
       <React.Fragment>
         <this.connectedChangeDueDateDialog
+          user={user}
           stripes={stripes}
           loanIds={loanIds}
           open={changeDueDateDialogOpen}

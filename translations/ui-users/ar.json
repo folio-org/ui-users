@@ -854,5 +854,7 @@
     "reports.overdue.borrower.name": "اسم المستعير",
     "reports.overdue.borrower.barcode": "باركود المستعير",
     "reports.overdue.borrowerId": "معرّف المستعير",
-    "errors.barcodeUnavailable": "تم استخدام هذا الباركود بالفعل"
+    "errors.barcodeUnavailable": "تم استخدام هذا الباركود بالفعل",
+    "reports.overdue.loanPolicy.name": "Loan policy",
+    "reports.overdue.loanId": "Loan ID"
 }

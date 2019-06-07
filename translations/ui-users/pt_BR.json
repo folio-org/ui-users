@@ -253,7 +253,7 @@
     "data.loanActionMap.renewed": "Renovado",
     "data.loanActionMap.source": "Fonte",
     "data.loanActionMap.holdRequested": "Reserva solicitada",
-    "data.loanActionMap.recallRequested": "Devolução solicitada",
+    "data.loanActionMap.recallRequested": "Recall solicitado",
     "loans.title": "Empréstimos",
     "loans.open": "Aberto",
     "loans.closed": "Fechado",
@@ -854,5 +854,7 @@
     "reports.overdue.borrower.name": "Nome do usuário",
     "reports.overdue.borrower.barcode": "Código de barras do usuário",
     "reports.overdue.borrowerId": "ID do usuário",
-    "errors.barcodeUnavailable": "Este código de barras já foi usado"
+    "errors.barcodeUnavailable": "Este código de barras já foi usado",
+    "reports.overdue.loanPolicy.name": "Política de empréstimos",
+    "reports.overdue.loanId": "ID do empréstimo"
 }

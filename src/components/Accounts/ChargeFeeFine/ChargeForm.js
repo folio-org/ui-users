@@ -93,6 +93,7 @@ class ChargeForm extends React.Component {
     super(props);
 
     this.onChangeFeeFine = this.onChangeFeeFine.bind(this);
+    this.onChangeOwner = this.onChangeOwner.bind(this);
     this.query = 0;
     this.state = { showNotify: false, notify: false };
   }
@@ -135,7 +136,7 @@ class ChargeForm extends React.Component {
       owners.forEach(o => {
         if (o.servicePointOwner && o.servicePointOwner.find(s => s.value === servicePoint)) {
           this.props.initialize({ ownerId: o.id });
-          this.props.onChangeOwner({ target: { value: o.id } });
+          this.onChangeOwner({ target: { value: o.id } });
         }
       });
     } else if (servicePoints.length === 1) {
@@ -143,7 +144,7 @@ class ChargeForm extends React.Component {
       owners.forEach(o => {
         if (o.servicePointOwner && o.servicePointOwner.find(s => s.value === sp)) {
           this.props.initialize({ ownerId: o.id });
-          this.props.onChangeOwner({ target: { value: o.id } });
+          this.onChangeOwner({ target: { value: o.id } });
         }
       });
     } else if (servicePoints.length === 2) {
@@ -152,7 +153,7 @@ class ChargeForm extends React.Component {
       owners.forEach(o => {
         if (o.servicePointOwner && o.servicePointOwner.find(s => s.value === sp1) && o.servicePointOwner.find(s => s.value === sp2)) {
           this.props.initialize({ ownerId: o.id });
-          this.props.onChangeOwner({ target: { value: o.id } });
+          this.onChangeOwner({ target: { value: o.id } });
         }
       });
     }
@@ -166,13 +167,26 @@ class ChargeForm extends React.Component {
       const feefine = feefines.find(f => f.id === id) || {};
       const owner = owners.find(o => o.id === ownerId) || {};
       if (feefine.chargeNoticeId) {
-        this.setState({ showNotify: true, notify: false });
+        this.setState({ showNotify: true, notify: true });
       } else if (owner.defaultChargeNoticeId) {
-        this.setState({ showNotify: true, notify: false });
+        this.setState({ showNotify: true, notify: true });
       } else {
         this.setState({ showNotify: false, notify: false });
       }
     }
+  }
+
+  onChangeOwner(e) {
+    const { owners } = this.props;
+    const ownerId = e.target.value;
+
+    const owner = owners.find(o => o.id === ownerId) || {};
+    if (owner.defaultChargeNoticeId) {
+      this.setState({ showNotify: true, notify: true });
+    } else {
+      this.setState({ showNotify: false, notify: false });
+    }
+    this.props.onChangeOwner(e);
   }
 
   onToggleNotify = () => {
@@ -184,11 +198,11 @@ class ChargeForm extends React.Component {
   render() {
     const {
       history,
+      user,
     } = this.props;
 
     const selectedLoan = this.props.selectedLoan || {};
     const editable = !(selectedLoan.id);
-    const { user } = this.props;
     const itemLoan = {
       id: selectedLoan.itemId,
       instance: (selectedLoan.item || {}).title,
@@ -221,14 +235,14 @@ class ChargeForm extends React.Component {
         <Button onClick={() => { this.props.history.goBack(); }} style={mg}><FormattedMessage id="ui-users.feefines.modal.cancel" /></Button>
         <Button
           disabled={this.props.pristine || this.props.submitting || this.props.invalid}
-          onClick={this.props.handleSubmit(data => this.props.onSubmit({ ...data, pay: true }))}
+          onClick={this.props.handleSubmit(data => this.props.onSubmit({ ...data, pay: true, notify }))}
           style={mg}
         >
           <FormattedMessage id="ui-users.charge.Pay" />
         </Button>
         <Button
           disabled={this.props.pristine || this.props.submitting || this.props.invalid}
-          onClick={this.props.handleSubmit(data => this.props.onSubmit({ ...data, pay: false }))}
+          onClick={this.props.handleSubmit(data => this.props.onSubmit({ ...data, pay: false, notify }))}
           style={mg}
         >
           <FormattedMessage id="ui-users.charge.onlyCharge" />
@@ -253,7 +267,7 @@ class ChargeForm extends React.Component {
               stripes={this.props.stripes}
               ownerOptions={ownerOptions}
               isPending={this.props.isPending}
-              onChangeOwner={(e) => { this.props.onChangeOwner(e); this.setState({ showNotify: false }); }}
+              onChangeOwner={this.onChangeOwner}
               onChangeFeeFine={this.onChangeFeeFine}
               feefines={this.props.feefines}
               feefineList={feefineList}

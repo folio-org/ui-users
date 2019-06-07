@@ -89,17 +89,20 @@ class PayModal extends React.Component {
       const accounts = nextProps.accounts || [];
       let selected = parseFloat(0);
       let showNotify = false;
+      let notify = false;
       accounts.forEach(a => {
         selected += parseFloat(a.remaining);
         const feefine = this.props.feefines.find(f => f.id === a.feeFineId.substring(0, 36)) || {};
         const owner = this.props.owners.find(o => o.id === a.ownerId) || {};
         if (feefine.actionNoticeId || owner.defaultActionNoticeId) {
           showNotify = true;
+          notify = true;
         }
       });
       this.setState({
         amount: parseFloat(selected).toFixed(2),
         showNotify,
+        notify
       });
 
       this.initialAmount = parseFloat(selected).toFixed(2);
