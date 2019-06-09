@@ -845,8 +845,8 @@
     "accounts.transfer.placeholder.selectAccount": "Select account",
     "accounts.transfer.summary.partiallyTransfer": "Partially transfer",
     "accounts.transfer.summary.transferring": "Transferring",
-    "accounts.transfer.summary.totalAmount": "for a total amount of {transferAmount}",
-    "accounts.transfer.summary": "{transferType} {feesFinesAmount} {feeFineForm} for a total amount of {transferAmount}",
+    "accounts.transfer.summary.totalAmount": "por una cantidad total de {transferAmount}",
+    "accounts.transfer.summary": "{transferType} {feesFinesAmount} {feeFineForm} por un monto total de {transferAmount}",
     "accounts.actions.transferFeeFine": "Transfer fees/fines",
     "accounts.actions.warning.transferAction": "transferred",
     "accounts.actions.transfer": "transfer",
@@ -855,6 +855,6 @@
     "reports.overdue.borrower.barcode": "Código de barras del prestatario",
     "reports.overdue.borrowerId": "ID de prestatario",
     "errors.barcodeUnavailable": "This barcode has already been taken",
-    "reports.overdue.loanPolicy.name": "Loan policy",
-    "reports.overdue.loanId": "Loan ID"
+    "reports.overdue.loanPolicy.name": "Política de préstamo",
+    "reports.overdue.loanId": "ID de préstamo"
 }
