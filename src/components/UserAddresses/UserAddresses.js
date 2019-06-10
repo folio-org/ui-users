@@ -8,7 +8,7 @@ import {
 } from 'react-intl';
 import { AddressList } from '@folio/stripes/smart-components';
 import { Select } from '@folio/stripes/components';
-import { toAddressTypeOptions } from '../../converters/address_type';
+import { toAddressTypeOptions } from '../data/converters/address_type';
 
 class UserAddresses extends React.Component {
   static propTypes = {

@@ -9,7 +9,7 @@ import {
 } from '@folio/stripes/components';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
-import { getFullName } from '../../util';
+import { getFullName } from '../util';
 
 const Menu = (props) => {
   const { user, showFilters, match: { params }, filters, balance, selected, actions } = props;

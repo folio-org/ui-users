@@ -1,7 +1,7 @@
 import React from 'react';
 import _get from 'lodash/get';
 import { stripesConnect } from '@folio/stripes/core';
-import LoansListing from '../LoansListing';
+import LoansListing from '../components/Views';
 import ViewLoading from '../components/Loading/ViewLoading';
 
 class LoansListingContainer extends React.Component {

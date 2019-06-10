@@ -28,8 +28,8 @@ import {
   FormattedMessage,
   intlShape,
 } from 'react-intl';
-import { getFullName } from '../../util';
-import UserDetails from '../Accounts/ChargeFeeFine/UserDetails';
+import { getFullName } from '../util';
+import UserInfo from '../Accounts/ChargeFeeFine/UserInfo';
 
 const validate = (item) => {
   const errors = {};
@@ -185,7 +185,7 @@ class PatronBlockForm extends React.Component {
     const user = this.props.user || {};
     const { intl, params } = this.props;
     const title = params.patronblockid ? getFullName(user) : intl.formatMessage({ id: 'ui-users.blocks.layer.newBlockTitle' });
-    const userD = !params.patronblockid ? <UserDetails user={user} /> : '';
+    const userD = !params.patronblockid ? <UserInfo user={user} /> : '';
 
     const isSelectedItemMetadata = this.props.selectedItem || {};
 

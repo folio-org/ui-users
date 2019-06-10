@@ -21,7 +21,7 @@ import { Field } from 'redux-form';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import { EditableList } from '@folio/stripes/smart-components';
 import { stripesConnect } from '@folio/stripes/core';
-import { validate } from '../util';
+import { validate } from '../components/util';
 
 class OwnerSettings extends React.Component {
   static manifest = Object.freeze({

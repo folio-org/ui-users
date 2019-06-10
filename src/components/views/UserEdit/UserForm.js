@@ -35,7 +35,7 @@ import { HasCommand } from '../../Commander';
 import {
   getFullName,
   // getRecordObject
-} from '../../../util';
+} from '../../util';
 
 import css from './UserForm.css';
 

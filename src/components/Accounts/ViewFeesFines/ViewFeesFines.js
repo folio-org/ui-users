@@ -19,7 +19,7 @@ import {
   FormattedDate,
 } from 'react-intl';
 
-import * as nav from '../../../navigationHandlers';
+import { nav } from '../../util';
 
 class ViewFeesFines extends React.Component {
   static propTypes = {

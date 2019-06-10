@@ -21,7 +21,7 @@ import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import { Field } from 'redux-form';
 import { EditableList } from '@folio/stripes/smart-components';
 import { stripesConnect } from '@folio/stripes/core';
-import { validate } from '../util';
+import { validate } from '../components/util';
 
 import {
   Owners,

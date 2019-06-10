@@ -5,7 +5,7 @@ import { FormattedMessage, FormattedTime } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { Row, Col, KeyValue, LayoutHeader } from '@folio/stripes/components';
 
-import { getFullName } from '../../../util';
+import { getFullName } from '../../util';
 import css from './ProxyItem.css';
 
 const ProxyItem = ({ record }) => {

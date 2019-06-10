@@ -10,9 +10,9 @@ import {
 
 import { stripesShape } from '@folio/stripes/core';
 
-import * as nav from '../../../navigationHandlers';
+import { nav } from '../../util';
 
-import withRenew from '../../../withRenew';
+import { withRenew } from '../../Wrappers';
 import TableModel from './components/OpenLoansWithStaticData';
 
 class OpenLoansControl extends React.Component {

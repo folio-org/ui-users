@@ -4,10 +4,12 @@ import { compose } from 'redux';
 import { stripesConnect } from '@folio/stripes/core';
 import { withTags } from '@folio/stripes/smart-components';
 
-import { UserDetail } from '../components/views';
+import { UserDetail } from '../components/Views';
 
-import withProxy from '../withProxy';
-import withServicePoints from '../withServicePoints';
+import {
+  withProxy,
+  withServicePoints
+} from '../components/Wrappers';
 
 class UserRecordContainer extends React.Component {
   static manifest = Object.freeze({

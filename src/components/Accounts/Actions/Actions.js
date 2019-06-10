@@ -22,7 +22,7 @@ import WaiveModal from './WaiveModal';
 import CommentModal from './CommentModal';
 import WarningModal from './WarningModal';
 import TransferModal from './TransferModal';
-import { getFullName } from '../../../util';
+import { getFullName } from '../../util';
 
 class Actions extends React.Component {
   static manifest = Object.freeze({

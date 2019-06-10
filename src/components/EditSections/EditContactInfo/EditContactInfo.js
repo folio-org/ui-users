@@ -16,8 +16,8 @@ import {
 } from '@folio/stripes/components';
 import { AddressEditList } from '@folio/stripes/smart-components';
 
-import { toAddressTypeOptions } from '../../../converters/address_type';
-import contactTypes from '../../../data/contactTypes';
+import { toAddressTypeOptions } from '../../data/converters/address_type';
+import contactTypes from '../../data/static/contactTypes';
 
 const EditContactInfo = ({
   expanded,

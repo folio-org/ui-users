@@ -26,7 +26,7 @@ import {
   getFormValues,
 } from 'redux-form';
 
-import { getFullName } from '../../../util';
+import { getFullName } from '../../util';
 import css from './ProxyEditItem.css';
 
 class ProxyEditItem extends React.Component {

@@ -199,7 +199,7 @@ class UserSearch extends React.Component {
 
     const resultsFormatter = {
       status: user => (
-        <AppIcon app="users" size="small">
+        <AppIcon app="users" size="small" className={user.active || css.inactiveAppIcon}>
           {user.active ? <FormattedMessage id="ui-users.active" /> : <FormattedMessage id="ui-users.inactive" />}
         </AppIcon>
       ),

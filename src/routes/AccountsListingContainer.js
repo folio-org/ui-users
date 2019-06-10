@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { stripesConnect } from '@folio/stripes/core';
 import { makeQueryFunction } from '@folio/stripes/smart-components';
 
-import AccountsListing from '../AccountsListing';
+import { AccountsListing } from '../components/Views';
 import ViewLoading from '../components/Loading/ViewLoading';
 
 const filterConfig = [

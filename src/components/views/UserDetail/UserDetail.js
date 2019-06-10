@@ -36,7 +36,7 @@ import {
   // UserRequests,
   UserAccounts,
   UserServicePoints,
-} from '../../ViewSections';
+} from '../../UserDetailSections';
 
 import {
   PatronBlockMessage
@@ -44,11 +44,11 @@ import {
 import {
   toListAddresses,
   // toUserAddresses
-} from '../../../converters/address';
+} from '../../data/converters/address';
 import {
   getFullName,
   // eachPromise
-} from '../../../util';
+} from '../../util';
 import { PaneLoading } from '../../Loading';
 
 class UserView extends React.Component {

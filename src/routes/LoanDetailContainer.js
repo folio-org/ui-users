@@ -1,8 +1,7 @@
 import React from 'react';
 import { compose } from 'redux';
 import { stripesConnect, withStripes } from '@folio/stripes/core';
-import LoanDetails from '../LoanDetails';
-import withRenew from '../withRenew';
+import { LoanDetails } from '../components/Views';
 
 class LoanDetailContainer extends React.Component {
   static manifest = Object.freeze({

@@ -43,3 +43,8 @@
 .searchGroupWrap {
   margin-bottom: .5rem;
 }
+
+.inactiveAppIcon {
+  -webkit-filter: grayscale(100%);
+  filter: grayscale(100%);
+}

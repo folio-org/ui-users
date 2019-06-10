@@ -1,6 +1,6 @@
 import React from 'react';
 import UserRecordContainer from './UserRecordContainer';
-import { UserEdit } from '../components/views';
+import { UserEdit } from '../components/Views';
 
 const UserEditContainer = (props) => (
   <UserRecordContainer {...props}>

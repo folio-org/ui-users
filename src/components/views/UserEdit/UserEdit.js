@@ -5,11 +5,11 @@ import uuid from 'uuid';
 
 import { cloneDeep, omit, differenceBy, get } from 'lodash';
 
-import { eachPromise, getRecordObject } from '../../../util';
+import { eachPromise, getRecordObject } from '../../util';
 
 import UserForm from './UserForm';
 import ViewLoading from '../../Loading/ViewLoading';
-import { toUserAddresses, toListAddresses } from '../../../converters/address';
+import { toUserAddresses, toListAddresses } from '../../data/converters/address';
 
 function resourcesLoaded(obj, exceptions = []) {
   for (const resource in obj) {

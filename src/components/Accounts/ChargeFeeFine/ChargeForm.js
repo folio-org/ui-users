@@ -16,7 +16,7 @@ import { FormattedMessage } from 'react-intl';
 import stripesForm from '@folio/stripes/form';
 import { Field, change } from 'redux-form';
 
-import UserDetails from './UserDetails';
+import UserInfo from './UserInfo';
 import FeeFineInfo from './FeeFineInfo';
 import ItemInfo from './ItemInfo';
 
@@ -260,7 +260,7 @@ class ChargeForm extends React.Component {
           )}
           lastMenu={lastMenu}
         >
-          <UserDetails user={user} />
+          <UserInfo user={user} />
           <br />
           <form>
             <FeeFineInfo

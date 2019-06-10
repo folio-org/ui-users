@@ -9,7 +9,7 @@ import {
   ButtonGroup,
 } from '@folio/stripes/components';
 
-import { getFullName } from '../../../util';
+import { getFullName } from '../../util';
 import { OpenLoans, ClosedLoans } from '../../Loans';
 import css from './LoansListing.css';
 
