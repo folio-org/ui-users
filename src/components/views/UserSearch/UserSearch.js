@@ -175,7 +175,7 @@ class UserSearch extends React.Component {
       onNeedMoreData,
       resources,
       contentRef,
-      match: { params }
+      location,
     } = this.props;
 
     const users = get(resources, 'records.records', []);

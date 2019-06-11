@@ -33,7 +33,7 @@ import {
   PatronBlock,
   UserPermissions,
   UserLoans,
-  // UserRequests,
+  UserRequests,
   UserAccounts,
   UserServicePoints,
 } from '../../UserDetailSections';
@@ -440,6 +440,18 @@ class UserView extends React.Component {
                     {...this.props}
                   />
                 </IfInterface>
+              </IfInterface>
+            </IfPermission>
+
+            <IfPermission perm="ui-users.requests.all">
+              <IfInterface name="request-storage" version="2.5 3.0">
+                <UserRequests
+                  expanded={this.state.sections.requestsSection}
+                  onToggle={this.handleSectionToggle}
+                  accordionId="requestsSection"
+                  user={user}
+                  {...this.props}
+                />
               </IfInterface>
             </IfPermission>
 

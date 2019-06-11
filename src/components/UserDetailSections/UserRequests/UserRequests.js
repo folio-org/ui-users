@@ -14,6 +14,7 @@ import {
 } from '@folio/stripes/components';
 import {
   IfPermission,
+  stripesConnect,
 } from '@folio/stripes/core';
 
 /**
@@ -153,4 +154,4 @@ class UserRequests extends React.Component {
   }
 }
 
-export default UserRequests;
+export default stripesConnect(UserRequests);
