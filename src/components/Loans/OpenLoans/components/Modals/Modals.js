@@ -55,13 +55,15 @@ class Modals extends React.Component {
 
     return (
       <React.Fragment>
-        <this.connectedChangeDueDateDialog
-          user={user}
-          stripes={stripes}
-          loanIds={loanIds}
-          open={changeDueDateDialogOpen}
-          onClose={hideChangeDueDateDialog}
-        />
+        {changeDueDateDialogOpen &&
+          <this.connectedChangeDueDateDialog
+            user={user}
+            stripes={stripes}
+            loanIds={loanIds}
+            open={changeDueDateDialogOpen}
+            onClose={hideChangeDueDateDialog}
+          />
+        }
         <PatronBlockModal
           open={patronBlockedModal}
           patronBlocks={patronBlocks}
