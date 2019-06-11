@@ -169,10 +169,13 @@ class TransferModal extends React.Component {
 
   onCancel = () => {
     const {
+      accounts,
       onClose,
       reset,
     } = this.props;
 
+    const selected = this.calculateSelectedAmount(accounts);
+    this.setState({ transfer: selected });
     onClose();
     reset();
   };
@@ -183,9 +186,6 @@ class TransferModal extends React.Component {
     } = this.props;
 
     handleSubmit();
-    this.setState({
-      transfer: this.initialAmount,
-    });
   };
 
   render() {
@@ -213,7 +213,7 @@ class TransferModal extends React.Component {
         id="transfer-modal"
         open={this.props.open}
         label={<FormattedMessage id="ui-users.accounts.transfer.modalLabel" />}
-        onClose={this.props.onClose}
+        onClose={this.onCancel}
         size="medium"
         dismissible
       >

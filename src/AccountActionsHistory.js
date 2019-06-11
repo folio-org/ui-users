@@ -81,6 +81,7 @@ class AccountActionsHistory extends React.Component {
     account: PropTypes.object,
     num: PropTypes.number.isRequired,
     user: PropTypes.object,
+    currentUser: PropTypes.object,
     history: PropTypes.object,
     patronGroup: PropTypes.object,
     onCancel: PropTypes.func.isRequired,
@@ -227,6 +228,7 @@ class AccountActionsHistory extends React.Component {
     const {
       handleAddRecords,
       onCancel,
+      currentUser,
       onClickViewLoanActionsHistory,
       patronGroup: patron,
       resources,
@@ -234,7 +236,7 @@ class AccountActionsHistory extends React.Component {
       user,
     } = this.props;
 
-    const account = _.get(resources, ['accountHistory', 'records', 0]) || this.props.account;
+    const account = _.get(resources, ['accountHistory', 'records', 0]) || {};
     account.remaining = this.state.remaining;
 
     const columnMapping = {
@@ -271,11 +273,14 @@ class AccountActionsHistory extends React.Component {
       comments: action => (action.comments ? (<div>{action.comments.split('\n').map(c => (<Row><Col>{c}</Col></Row>))}</div>) : ''),
     };
 
+    const isAccountsPending = _.get(resources, ['accountHistory', 'isPending'], true);
+    const isActionsPending = _.get(resources, ['accountActions', 'isPending'], true);
+
     const actions = this.state.data || [];
     const actionsSort = _.orderBy(actions, [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
     const amount = (account.amount) ? parseFloat(account.amount).toFixed(2) : '-';
     const loanId = account.loanId || '';
-    const disabled = (_.get(account, ['status', 'name'], '') === 'Closed');
+    const disabled = account.remaining === 0;
     const isAccountId = actions[0] && actions[0].accountId === account.id;
     const buttonDisabled = !this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
 
@@ -296,7 +301,7 @@ class AccountActionsHistory extends React.Component {
             <Col xs={12}>
               <Button
                 id="payAccountActionsHistory"
-                disabled={!((disabled === false) && (buttonDisabled === false))}
+                disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending}
                 buttonStyle="primary"
                 onClick={this.pay}
               >
@@ -304,7 +309,7 @@ class AccountActionsHistory extends React.Component {
               </Button>
               <Button
                 id="waveAccountActionsHistory"
-                disabled={!((disabled === false) && (buttonDisabled === false))}
+                disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending}
                 buttonStyle="primary"
                 onClick={this.waive}
               >
@@ -319,7 +324,7 @@ class AccountActionsHistory extends React.Component {
               </Button>
               <Button
                 id="transferAccountActionsHistory"
-                disabled={!((disabled === false) && (buttonDisabled === false))}
+                disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending}
                 buttonStyle="primary"
                 onClick={this.transfer}
               >
@@ -327,7 +332,7 @@ class AccountActionsHistory extends React.Component {
               </Button>
               <Button
                 id="errorAccountActionsHistory"
-                disabled={!((disabled === false) && (buttonDisabled === false))}
+                disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending}
                 buttonStyle="primary"
                 onClick={this.error}
               >
@@ -493,6 +498,7 @@ class AccountActionsHistory extends React.Component {
             actions={this.state.actions}
             onChangeActions={this.onChangeActions}
             user={user}
+            currentUser={currentUser}
             stripes={stripes}
             balance={account.remaining || 0}
             accounts={[account]}

@@ -649,6 +649,7 @@ class ViewUser extends React.Component {
                 num={(this.state.addRecord ? 51 : 50)}
                 onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
                 user={user}
+                currentUser={currentUser}
                 parentMutator={mutator}
                 patronGroup={patronGroup}
                 stripes={stripes}
@@ -700,6 +701,7 @@ class ViewUser extends React.Component {
             >
               <this.connectedAccountActionsHistory
                 user={user}
+                currentUser={currentUser}
                 patronGroup={patronGroup}
                 account={this.state.selectedAccount}
                 accountid={this.state.selectedAccount.id}
