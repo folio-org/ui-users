@@ -69,7 +69,7 @@ class Actions extends React.Component {
     },
     curUserServicePoint: {
       type: 'okapi',
-      path: 'service-points-users?query=(userId==!{user.id})',
+      path: 'service-points-users?query=(userId==!{currentUser.id})',
       records: 'servicePointsUsers',
     },
     activeRecord: {},
@@ -595,7 +595,7 @@ class Actions extends React.Component {
     const defaultServicePointId = _.get(resources, ['curUserServicePoint', 'records', 0, 'defaultServicePointId'], '-');
     const servicePointsIds = _.get(resources, ['curUserServicePoint', 'records', 0, 'servicePointsIds'], []);
     const payments = _.get(resources, ['payments', 'records'], []);
-    const owners = _.get(resources, ['owners', 'records'], []);
+    const owners = _.get(resources, ['owners', 'records'], []).filter(o => o.owner !== 'Shared');
     const feefines = _.get(resources, ['feefineTypes', 'records'], []);
     const waives = _.get(resources, ['waives', 'records'], []);
     const transfers = _.get(resources, ['transfers', 'records'], []);
