@@ -41,7 +41,7 @@ class OwnerSettings extends React.Component {
         path: 'owners?query=cql.allRecords=1 sortby owner&limit=500'
       }
     },
-    servicePoints: {
+    ownerServicePoints: {
       type: 'okapi',
       resource: 'service-points',
       path: 'service-points',
@@ -144,7 +144,7 @@ class OwnerSettings extends React.Component {
 
   validate({ items }) {
     const { primaryField } = this.state;
-    const servicePoints = _.get(this.props.resources, ['servicePoints', 'records', 0, 'servicepoints'], []);
+    const servicePoints = _.get(this.props.resources, ['ownerServicePoints', 'records', 0, 'servicepoints'], []);
     const none = servicePoints.find(s => s.name === 'None') || {};
 
     if (Array.isArray(items)) {
@@ -182,7 +182,7 @@ class OwnerSettings extends React.Component {
   }
 
   warn = ({ items }) => {
-    const servicePoints = _.get(this.props.resources, ['servicePoints', 'records', 0, 'servicepoints'], []);
+    const servicePoints = _.get(this.props.resources, ['ownerServicePoints', 'records', 0, 'servicepoints'], []);
     const none = servicePoints.find(s => s.name === 'None') || {};
 
     const warnings = [];
@@ -212,7 +212,7 @@ class OwnerSettings extends React.Component {
     const type = formatMessage({ id: 'ui-users.owners.singular' });
     const rows = this.props.resources.owners.records || [];
     const term = this.state.selectedItem[this.state.primaryField];
-    const servicePoints = _.get(this.props.resources, ['servicePoints', 'records', 0, 'servicepoints'], []);
+    const servicePoints = _.get(this.props.resources, ['ownerServicePoints', 'records', 0, 'servicepoints'], []);
     const serviceOwners = [];
     rows.forEach(o => {
       const asp = o.servicePointOwner || [];
