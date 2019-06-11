@@ -37,7 +37,6 @@ const withServicePoints = WrappedComponent => class WithServicePointsComponent e
     };
 
     static propTypes = {
-      parentResources: PropTypes.object,
       resources: PropTypes.shape({
         servicePoints: PropTypes.shape({
           records: PropTypes.arrayOf(PropTypes.object),

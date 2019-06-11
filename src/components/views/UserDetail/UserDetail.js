@@ -78,16 +78,6 @@ class UserView extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }),
-    // mutator: PropTypes.shape({
-    //   selUser: PropTypes.shape({
-    //     PUT: PropTypes.func.isRequired,
-    //   }),
-    //   permissions: PropTypes.shape({
-    //     POST: PropTypes.func.isRequired,
-    //     DELETE: PropTypes.func.isRequired,
-    //   }),
-    //   query: PropTypes.object.isRequired,
-    // }),
     match: PropTypes.shape({
       path: PropTypes.string.isRequired,
       params: PropTypes.shape({
@@ -98,22 +88,12 @@ class UserView extends React.Component {
     tagsToggle: PropTypes.func,
     location: PropTypes.object,
     history: PropTypes.object,
-    // parentResources: PropTypes.shape({
-    //   addressTypes: PropTypes.shape({
-    //     records: PropTypes.arrayOf(PropTypes.object),
-    //   }),
-    // }),
-    // parentMutator: PropTypes.shape({}),
-    // updateProxies: PropTypes.func,
-    // updateServicePoints: PropTypes.func,
-    // updateSponsors: PropTypes.func,
     getSponsors: PropTypes.func,
     getProxies: PropTypes.func,
     getServicePoints: PropTypes.func,
     getPreferredServicePoint: PropTypes.func,
     tagsEnabled: PropTypes.bool,
     paneWidth: PropTypes.string,
-    // okapi: PropTypes.object,
   };
 
   static defaultProps = {
@@ -155,12 +135,6 @@ class UserView extends React.Component {
         servicePointsSection: false,
       },
     };
-
-    // this.connectedUserInfo = props.stripes.connect(UserInfo);
-    // this.connectedUserLoans = props.stripes.connect(UserLoans);
-    // this.connectedUserRequests = props.stripes.connect(UserRequests);
-    // this.connectedUserAccounts = props.stripes.connect(UserAccounts);
-    // this.connectedPatronBlock = props.stripes.connect(PatronBlock);
   }
 
   getUser = () => {

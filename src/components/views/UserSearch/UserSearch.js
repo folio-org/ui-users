@@ -2,6 +2,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { matchPath } from 'react-router';
 
 import noop from 'lodash/noop';
 import get from 'lodash/get';
@@ -174,9 +175,11 @@ class UserSearch extends React.Component {
       onNeedMoreData,
       resources,
       contentRef,
+      match: { params }
     } = this.props;
 
     const users = get(resources, 'records.records', []);
+    const selectedRow = (matchPath(location.pathname, { path: '/users/preview/:id' }) || {}).params;
     const patronGroups = (resources.patronGroups || {}).records || [];
     const query = queryGetter ? queryGetter() || {} : {};
     const count = source ? source.totalCount() : 0;
@@ -313,6 +316,7 @@ class UserSearch extends React.Component {
                           onHeaderClick={onSort}
                           sortOrder={sortOrder.replace(/^-/, '').replace(/,.*/, '')}
                           sortDirection={sortOrder.startsWith('-') ? 'descending' : 'ascending'}
+                          selectedRow={selectedRow}
                           isEmptyMessage={resultsStatusMessage}
                           autosize
                           virtualize

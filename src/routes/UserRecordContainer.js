@@ -110,6 +110,9 @@ class UserRecordContainer extends React.Component {
     }).isRequired,
     resources: PropTypes.shape({
       selUser: PropTypes.object,
+      addressTypes: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
       permissions: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
@@ -143,11 +146,6 @@ class UserRecordContainer extends React.Component {
     tagsToggle: PropTypes.func,
     location: PropTypes.object,
     history: PropTypes.object,
-    parentResources: PropTypes.shape({
-      addressTypes: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
-      }),
-    }),
     updateProxies: PropTypes.func,
     updateServicePoints: PropTypes.func,
     updateSponsors: PropTypes.func,
