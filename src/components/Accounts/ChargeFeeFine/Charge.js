@@ -130,7 +130,6 @@ class Charge extends React.Component {
     this.onClickSelectItem = this.onClickSelectItem.bind(this);
     this.onChangeOwner = this.onChangeOwner.bind(this);
     this.onFindShared = this.onFindShared.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
     this.item = {};
     this.onCloseModal = this.onCloseModal.bind(this);
     this.onChangeItem = this.onChangeItem.bind(this);
@@ -239,10 +238,6 @@ class Charge extends React.Component {
       this.payResolve = resolve;
       this.payReject = reject;
     });
-  }
-
-  onSubmit(data) {
-    this.log('xhr', data);
   }
 
   onClosePayModal() {
@@ -417,6 +412,7 @@ class Charge extends React.Component {
     };
 
     const items = _.get(resources, ['items', 'records'], []);
+
     return (
       <div>
         <ChargeForm
