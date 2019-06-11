@@ -300,7 +300,7 @@ class ChargeForm extends React.Component {
               <div>
                 <Row>
                   <Col xs>
-                  <h4 className="marginTopHalf"><FormattedMessage id="ui-users.accounts.pay.field.infoPatron" /></h4>
+                    <h4 className="marginTopHalf"><FormattedMessage id="ui-users.accounts.pay.field.infoPatron" /></h4>
                   </Col>
                 </Row>
                 <Row>
