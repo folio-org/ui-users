@@ -117,10 +117,11 @@ class PayModal extends React.Component {
     const servicePoint = this.props.defaultServicePointId;
     const servicePoints = this.props.servicePointsIds;
     const owners = this.props.owners || [];
+    let ownerId = 0;
     if (servicePoint && servicePoint !== '-') {
       owners.forEach(o => {
         if (o.servicePointOwner && o.servicePointOwner.find(s => s.value === servicePoint)) {
-          this.props.initialize({ ownerId: o.id, ...initial });
+          ownerId = o.id;
           this.onChangeOwner({ target: { value: o.id } });
         }
       });
@@ -128,7 +129,7 @@ class PayModal extends React.Component {
       const sp = servicePoints[0];
       owners.forEach(o => {
         if (o.servicePointOwner && o.servicePointOwner.find(s => s.value === sp)) {
-          this.props.initialize({ ownerId: o.id, ...initial });
+          ownerId = o.id;
           this.onChangeOwner({ target: { value: o.id } });
         }
       });
@@ -137,11 +138,12 @@ class PayModal extends React.Component {
       const sp2 = servicePoints[1];
       owners.forEach(o => {
         if (o.servicePointOwner && o.servicePointOwner.find(s => s.value === sp1) && o.servicePointOwner.find(s => s.value === sp2)) {
-          this.props.initialize({ ownerId: o.id, ...initial });
+          ownerId = o.id;
           this.onChangeOwner({ target: { value: o.id } });
         }
       });
     }
+    this.props.initialize(ownerId ? { ownerId, ...initial } : { ...initial });
   }
 
   onChangeAmount = (e) => {
@@ -158,10 +160,13 @@ class PayModal extends React.Component {
 
   onClose = () => {
     const {
+      accounts,
       onClose,
       reset,
     } = this.props;
 
+    const selected = this.calculateSelectedAmount(accounts);
+    this.setState({ amount: selected });
     onClose();
     reset();
   }
@@ -169,12 +174,9 @@ class PayModal extends React.Component {
   onSubmit = () => {
     const {
       handleSubmit,
-      reset,
     } = this.props;
 
     handleSubmit();
-    reset();
-    this.setState({ amount: this.initialAmount });
   }
 
   onChangeOwner = (e) => {
@@ -232,7 +234,6 @@ class PayModal extends React.Component {
       submitting,
       invalid,
       pristine,
-      onClose,
       open,
       owners,
       payments,
@@ -256,7 +257,7 @@ class PayModal extends React.Component {
       <Modal
         open={open}
         label={<FormattedMessage id="ui-users.accounts.pay.payFeeFine" />}
-        onClose={onClose}
+        onClose={this.onClose}
         size="medium"
         dismissible
       >
