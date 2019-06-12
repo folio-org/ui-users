@@ -40,6 +40,7 @@ class CreateResetPasswordControl extends React.Component {
     isLocalPasswordSet: {
       type: 'okapi',
       path: 'authn/credentials-existence?userId=!{userId}',
+      permissionsRequired: 'login.credentials-existence.get',
     },
   });
 

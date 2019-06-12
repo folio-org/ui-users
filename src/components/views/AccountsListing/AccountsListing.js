@@ -163,7 +163,7 @@ class AccountsHistory extends React.Component {
     this.connectedActions = props.stripes.connect(Actions);
 
     this.accounts = [];
-    this.addRecord = 50;
+    this.addRecord = 100;
     this.editRecord = 0;
 
     this.transitionToParams = values => this.props.mutator.query.update(values);
@@ -299,6 +299,7 @@ class AccountsHistory extends React.Component {
 
   onChangeSelectedAccounts(selectedAccounts) {
     this.setState({ selectedAccounts });
+    this.accounts = selectedAccounts;
   }
 
   toggleFilterPane = () => {
@@ -369,6 +370,7 @@ class AccountsHistory extends React.Component {
       history,
       match: { params },
       user,
+      currentUser,
       patronGroup,
       resources,
       intl,
@@ -548,6 +550,7 @@ class AccountsHistory extends React.Component {
                     {...this.props}
                     accounts={this.filterAccountsByStatus(accounts, 'open')}
                     visibleColumns={visibleColumns}
+                    selectedAccounts={selectedAccounts}
                     onChangeSelected={this.onChangeSelected}
                     onChangeActions={this.onChangeActions}
                   />)
@@ -557,6 +560,7 @@ class AccountsHistory extends React.Component {
                     {...this.props}
                     accounts={this.filterAccountsByStatus(accounts, 'closed')}
                     visibleColumns={visibleColumns}
+                    selectedAccounts={selectedAccounts}
                     onChangeSelected={this.onChangeSelected}
                     onChangeActions={this.onChangeActions}
                   />)
@@ -577,6 +581,7 @@ class AccountsHistory extends React.Component {
                 layer={query.layer}
                 onChangeActions={this.onChangeActions}
                 user={user}
+                currentUser={currentUser}
                 accounts={this.accounts}
                 selectedAccounts={selectedAccounts}
                 onChangeSelectedAccounts={this.onChangeSelectedAccounts}

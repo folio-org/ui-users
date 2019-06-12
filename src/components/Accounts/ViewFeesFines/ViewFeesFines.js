@@ -48,6 +48,7 @@ class ViewFeesFines extends React.Component {
     user: PropTypes.object,
     visibleColumns: PropTypes.arrayOf(PropTypes.string),
     intl: intlShape.isRequired,
+    selectedAccounts: PropTypes.arrayOf(PropTypes.object),
   };
 
   constructor(props) {
@@ -76,7 +77,6 @@ class ViewFeesFines extends React.Component {
     };
 
     this.state = {
-      checkedAccounts: {},
       allChecked: false,
       sortOrder: [
         'metadata.createdDate',
@@ -97,6 +97,18 @@ class ViewFeesFines extends React.Component {
     const nextComments = _.get(nextProps.resources, ['comments', 'records'], []);
     const visibleColumns = this.props.visibleColumns;
     const nextVisibleColumns = nextProps.visibleColumns;
+    if (!_.isEqual(props.accounts, nextProps.accounts) && props.accounts.length > 0) {
+      const checkedAccounts = _.intersection(nextProps.accounts, nextProps.selectedAccounts);
+      const selected = checkedAccounts.reduce((s, { remaining }) => {
+        return s + parseFloat(remaining);
+      }, 0);
+      this.props.onChangeSelected(parseFloat(selected).toFixed(2), checkedAccounts);
+    }
+
+    if (!_.isEqual(props.selectedAccounts, nextProps.selectedAccounts)) {
+      const allChecked = _.size(nextProps.selectedAccounts) === nextProps.accounts.length;
+      this.setState({ allChecked });
+    }
 
     return visibleColumns !== nextVisibleColumns || comments !== nextComments ||
       props.accounts !== nextProps.accounts ||
@@ -183,11 +195,11 @@ class ViewFeesFines extends React.Component {
   }
 
   getAccountsFormatter() {
-    const checkedAccounts = this.state.checkedAccounts;
+    const accounts = this.props.selectedAccounts;
     return {
       '  ': f => (
         <input
-          checked={!!(checkedAccounts[f.id])}
+          checked={accounts.find(a => a.id === f.id)}
           onClick={e => this.toggleItem(e, f)}
           type="checkbox"
         />
@@ -208,21 +220,26 @@ class ViewFeesFines extends React.Component {
     };
   }
 
-  toggleItem(e, a) {
+  toggleItem(e, account) {
     e.stopPropagation();
-    const id = a.id;
-    const accounts = this.state.checkedAccounts;
-    const checkedAccounts = (accounts[id])
-      ? _.omit(accounts, id)
-      : { ...accounts, [id]: a };
-    const allChecked = _.size(checkedAccounts) === this.props.accounts.length;
-    this.setState({ checkedAccounts, allChecked });
-    const values = Object.values(checkedAccounts);
+    const id = account.id;
+    const accounts = this.props.selectedAccounts || [];
+    const checked = {};
+    accounts.forEach(a => {
+      checked[a.id] = a;
+    });
+    const checkedAccounts = (checked[id])
+      ? _.omit(checked, id)
+      : { ...checked, [id]: account };
 
+    const allChecked = _.size(checkedAccounts) === this.props.accounts.length;
+    this.setState({ allChecked });
+    const values = Object.values(checkedAccounts);
     let selected = 0;
     values.forEach((v) => {
       selected += (v.remaining * 100);
     });
+
     selected /= 100;
     this.props.onChangeSelected(parseFloat(selected).toFixed(2), values);
 
@@ -260,8 +277,7 @@ class ViewFeesFines extends React.Component {
     });
 
     this.setState(({ allChecked }) => ({
-      allChecked: !allChecked,
-      checkedAccounts
+      allChecked: !allChecked
     }));
   }
 
@@ -388,6 +404,7 @@ class ViewFeesFines extends React.Component {
       'dueDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' }),
       'returnedDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' }),
     };
+
 
     return (
       <MultiColumnList
