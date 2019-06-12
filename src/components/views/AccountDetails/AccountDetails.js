@@ -61,10 +61,8 @@ class AccountDetails extends React.Component {
         GET: PropTypes.func.isRequired,
       }),
     }),
-    account: PropTypes.object,
     num: PropTypes.number.isRequired,
     user: PropTypes.object,
-    currentUser: PropTypes.object,
     history: PropTypes.object,
     match: PropTypes.object,
     patronGroup: PropTypes.object,
@@ -108,15 +106,6 @@ class AccountDetails extends React.Component {
     };
   }
 
-  // componentDidMount() {
-  // const { history } = this.props;
-  // const str = history.location.search || '';
-  // const n = str.indexOf('account=');
-  // const id = str.substring(n + 8, n + 44);
-  // this.props.mutator.activeRecord.update({ accountId: id, records: this.num });
-  // this.getAccountActions();
-  // }
-
   static getDerivedStateFromProps(props) {
     const {
       resources
@@ -143,46 +132,6 @@ class AccountDetails extends React.Component {
       paymentStatus,
     };
   }
-
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   const props = this.props;
-  //   const nextAccounts = _.get(nextProps.resources, ['accountHistory', 'records', 0], {});
-  //   const accounts = _.get(props.resources, ['accountHistory', 'records', 0], {});
-  //   const nextActions = _.get(nextProps.resources, ['accountActions', 'records'], []);
-  //   const actions = _.get(props.resources, ['accountActions', 'records'], []);
-
-  //   if (this.num !== nextProps.num) {
-  //     props.mutator.activeRecord.update({ records: nextProps.num });
-  //     this.num = nextProps.num;
-  //   }
-  //   return nextAccounts !== accounts || nextActions !== actions ||
-  //     this.num !== nextProps.num || props.user !== nextProps.user ||
-  //     props.account !== nextProps.account ||
-  //     this.state !== nextState;
-  // }
-
-  // getAccountActions = () => {
-  //   return this.props.mutator.accountActions.GET().then(records => {
-  //     const sortData = _.orderBy(records, ['dateAction'], ['desc']);
-  //     const balance = (sortData[0] || {}).balance;
-  //     let paymentStatus;
-  //     if (sortData.length === 1) {
-  //       paymentStatus = 'Outstanding';
-  //     } else {
-  //       for (let i = 0; i < sortData.length; i++) {
-  //         paymentStatus = (sortData[i] || {}).typeAction;
-  //         if (paymentStatus !== 'Comment') {
-  //           break;
-  //         }
-  //       }
-  //     }
-  //     this.setState({
-  //       data: records,
-  //       remaining: balance,
-  //       paymentStatus,
-  //     });
-  //   });
-  // }
 
   onChangeActions(actions) {
     this.setState({
@@ -503,7 +452,6 @@ class AccountDetails extends React.Component {
             actions={this.state.actions}
             onChangeActions={this.onChangeActions}
             user={user}
-            currentUser={currentUser}
             stripes={stripes}
             balance={account.remaining || 0}
             accounts={[account]}
