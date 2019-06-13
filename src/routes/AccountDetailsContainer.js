@@ -1,7 +1,7 @@
 import React from 'react';
 import { stripesConnect } from '@folio/stripes/core';
 
-import { AccountDetails } from '../components/Views';
+import { AccountDetails } from '../components/views';
 import ViewLoading from '../components/Loading/ViewLoading';
 
 class AccountDetailsContainer extends React.Component {
