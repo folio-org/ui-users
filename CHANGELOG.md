@@ -1,6 +1,7 @@
 # Change history for ui-users
 
-## 2.23.0 (IN PROGRESS)
+## [2.23.0](https://github.com/folio-org/ui-users/tree/v2.23.0) (2019-06-12)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.22.0...v2.23.0)
 
 * Retrieve 1000 service points by default. Fixes UIU-1053.
 * Create BigTest for display Fee/Fine History. Ref UIU-1005.
@@ -20,7 +21,7 @@
 * Fix UX Consistency for New Fee/Fine. Fix UIU-1052.
 
 ## [2.22.0](https://github.com/folio-org/ui-users/tree/v2.22.0) (2019-05-10)
-[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.22.0...v2.22.0)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.21.0...v2.22.0)
 
 * Suppress error on user-details pane when permissions record is missing. Fixes UIU-507.
 * Correct proxy-user query. Fixes UIU-952.
