@@ -6,6 +6,7 @@ import {
   injectIntl,
   intlShape,
 } from 'react-intl';
+import { compose } from 'redux';
 import Link from 'react-router-dom/Link';
 import PropTypes from 'prop-types';
 import { ChangeDueDateDialog } from '@folio/stripes/smart-components';
@@ -325,7 +326,7 @@ class LoanDetails extends React.Component {
     if (!loan) {
       return (
         <ViewLoading
-          inPaneset
+          id="pane-loandetails"
           defaultWidth="100%"
           paneTitle="Loan action history"
         />
@@ -561,4 +562,7 @@ class LoanDetails extends React.Component {
   }
 }
 
-export default injectIntl(withRenew(LoanDetails));
+export default compose(
+  injectIntl,
+  withRenew,
+)(LoanDetails);

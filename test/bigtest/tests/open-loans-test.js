@@ -37,7 +37,7 @@ describe('Open Loans', () => {
     const loan = this.server.create('loan', { status: { name: 'Open' } });
 
     this.server.createList('request', requestsAmount, { itemId: loan.itemId });
-    this.visit(`/users/view/${user.id}?layer=open-loans&query=%20&sort=requests`);
+    this.visit(`/users/${user.id}/loans/open?query=%20&sort=requests`);
   });
 
   it('should be presented', () => {

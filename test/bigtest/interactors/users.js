@@ -31,6 +31,7 @@ export default @interactor class UsersInteractor {
   clickGraduateCheckbox = clickable('#clickable-filter-pg-graduate');
   clickStaffCheckbox = clickable('#clickable-filter-pg-staff');
   clickUndergradCheckbox = clickable('#clickable-filter-pg-undergrad');
+  clickCreateUserButton = clickable('#clickable-newuser');
   instances = collection('[role=row] a');
   instance = scoped('[data-test-instance-details]');
 }

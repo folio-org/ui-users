@@ -1,5 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
+import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import {
   FormattedMessage,
@@ -105,7 +106,7 @@ class Actions extends React.Component {
     handleEdit: PropTypes.func,
     user: PropTypes.object,
     intl: intlShape.isRequired,
-    layer: PropTypes.string,
+    match: PropTypes.object,
   };
 
   constructor(props) {
@@ -586,7 +587,7 @@ class Actions extends React.Component {
       actions,
       stripes,
       resources,
-      layer
+      match: { params }
     } = this.props;
     const {
       accounts,
@@ -602,7 +603,7 @@ class Actions extends React.Component {
     const waives = _.get(resources, ['waives', 'records'], []);
     const transfers = _.get(resources, ['transfers', 'records'], []);
     const settings = _.get(resources, ['commentRequired', 'records', 0], {});
-    const warning = accounts.filter(a => a.status.name === 'Closed').length !== 0 && (actions.regular || actions.waiveMany || actions.transferMany) && layer === 'all-accounts';
+    const warning = accounts.filter(a => a.status.name === 'Closed').length !== 0 && (actions.regular || actions.waiveMany || actions.transferMany) && params.accountstatus;
     const warningModalLabelId = actions.regular
       ? 'ui-users.accounts.actions.payFeeFine'
       : actions.waiveMany
@@ -702,4 +703,4 @@ class Actions extends React.Component {
   }
 }
 
-export default stripesConnect(injectIntl(Actions));
+export default stripesConnect(injectIntl(withRouter(Actions)));

@@ -345,7 +345,7 @@ class ViewFeesFines extends React.Component {
         <Button id="ellipsis-button" data-role="toggle" buttonStyle="hover dropdownActive">
           <strong>•••</strong>
         </Button>
-        <DropdownMenu id="ellipsis-drop-down" data-role="menu" overrideStyle={{ padding: '7px 3px' }}>
+        <DropdownMenu id="ellipsis-drop-down" data-role="menu">
           <MenuItem itemMeta={{ a, action: 'pay' }}>
             <Button disabled={!((elipsis.pay === false) && (buttonDisabled === false))} buttonStyle="dropdownItem">
               <FormattedMessage id="ui-users.accounts.history.button.pay" />

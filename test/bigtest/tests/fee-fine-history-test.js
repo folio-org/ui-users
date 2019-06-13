@@ -51,14 +51,14 @@ describe('Test Fee/Fine History', () => {
           expect(FeeFineHistoryInteractor.mclViewFeesFines.rowCount).to.equal(5);
         }).timeout(7000);
 
-        describe('active the Search & filter', () => {
+        describe('activate the Search & filter', () => {
           beforeEach(async () => {
-            await FeeFineHistoryInteractor.filterButton();
+            await FeeFineHistoryInteractor.clickfilterButton();
           });
 
-          it('displays the Search & filter title', () => {
-            expect(FeeFineHistoryInteractor.title).to.string('Search & filter');
-          }).timeout(4000);
+          it('displays the Search & filter pane', () => {
+            expect(FeeFineHistoryInteractor.filterPaneVisible).to.be.true;
+          });
 
           describe('close the Search & filter pane', () => {
             beforeEach(async () => {
@@ -150,7 +150,7 @@ describe('Test Fee/Fine History', () => {
 
         describe('select the pay option', () => {
           beforeEach(async () => {
-            await FeeFineHistoryInteractor.dropDownEllipsis(0).click();
+            await FeeFineHistoryInteractor.dropDownEllipsisOptions(0).click();
           });
 
           it('show the pay modal', () => {
@@ -160,7 +160,7 @@ describe('Test Fee/Fine History', () => {
 
         describe('select the waive option', () => {
           beforeEach(async () => {
-            await FeeFineHistoryInteractor.dropDownEllipsis(1).click();
+            await FeeFineHistoryInteractor.dropDownEllipsisOptions(1).click();
           });
 
           it('show the waive modal', () => {
@@ -170,7 +170,7 @@ describe('Test Fee/Fine History', () => {
 
         describe('select the transfer option', () => {
           beforeEach(async () => {
-            await FeeFineHistoryInteractor.dropDownEllipsis(3).click();
+            await FeeFineHistoryInteractor.dropDownEllipsisOptions(3).click();
           });
 
           it('show the transfer modal', () => {
@@ -180,7 +180,7 @@ describe('Test Fee/Fine History', () => {
 
         describe('select the cancel option', () => {
           beforeEach(async () => {
-            await FeeFineHistoryInteractor.dropDownEllipsis(4).click();
+            await FeeFineHistoryInteractor.dropDownEllipsisOptions(4).click();
           });
 
           it('show the cancel modal', () => {
@@ -190,7 +190,7 @@ describe('Test Fee/Fine History', () => {
 
         describe('select loan details option', () => {
           beforeEach(async () => {
-            await FeeFineHistoryInteractor.dropDownEllipsis(5).click();
+            await FeeFineHistoryInteractor.dropDownEllipsisOptions(5).click();
           });
           it('show the loan details modal', () => {
             expect(FeeFineHistoryInteractor.loanDetailsIsPresent).to.be.true;

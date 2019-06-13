@@ -38,6 +38,7 @@ import ModalInteractor from '@folio/stripes-components/lib/Modal/tests/interacto
 
   title = text('[class*=paneTitleLabel---]');
   paneTitle = text('#title-test-fee-fine'['class*=paneTitleLabel---']);
+  filtersTitle = text('#paneHeaderfilters-pane-pane-title [class*=paneTitleLabel---]');
   paneSub = text('#title-test-fee-fine'['class*=paneHeader']);
   outstandingMenu = text('#outstanding-balance');
   labelMenu = text('#outstanding-balance'['class*=paneHeaderButtonsArea---']);
@@ -64,11 +65,12 @@ import ModalInteractor from '@folio/stripes-components/lib/Modal/tests/interacto
   closedAccounts = new FeesFinesSection('#clickable-viewclosedaccounts');
   allAccounts = new FeesFinesSection('#clickable-viewallaccounts');
 
-  dropDownEllipsis = collection('#ellipsis-drop-down [class*=button---] [class*=inner---]');
+  dropDownEllipsisOptions = collection('#ellipsis-drop-down [class*=dropdownItem]');
   headerList = collection('[class*=HeaderRow---]', HeaderInteractor);
   rows = collection('#list-accounts-history-view-feesfines [class*=mclRow---]', RowInteractor);
 
-  filterButton = clickable('#history-first-menu');
+  filterPaneVisible = isVisible('#filters-pane')
+  clickfilterButton = clickable('#filter-button');
   selectAllCheckbox = clickable('#checkbox');
 
   closePane = new ButtonInteractor('#filters-pane [class*=paneHeader---] [class*=paneHeaderButtonsArea---] [class*=paneMenu---] [class*=iconButton---]');

@@ -135,6 +135,10 @@ class UserRecordContainer extends React.Component {
         POST: PropTypes.func.isRequired,
         DELETE: PropTypes.func.isRequired,
       }),
+      uniquenessValidator: PropTypes.shape({
+        reset: PropTypes.func.isRequired,
+        GET: PropTypes.func.isRequired,
+      }).isRequired,
       query: PropTypes.object.isRequired,
     }),
     match: PropTypes.shape({

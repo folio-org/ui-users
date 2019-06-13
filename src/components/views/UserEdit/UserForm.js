@@ -79,23 +79,45 @@ function validate(values, props) {
   return errors;
 }
 
-function asyncValidate(values, dispatch, props, blurredField) {
-  if (blurredField === 'username' && values.username !== props.initialValues.username) {
-    return new Promise((resolve, reject) => {
-      const uv = props.uniquenessValidator;
-      const query = `(username=="${values.username}")`;
-      uv.reset();
-      return uv.GET({ params: { query } }).then((users) => {
-        if (users.length > 0) {
-          const error = { username: <FormattedMessage id="ui-users.errors.usernameUnavailable" /> };
-          reject(error);
-        } else {
-          resolve();
-        }
-      });
+function asyncValidateField(field, value, validator) {
+  return new Promise((resolve, reject) => {
+    const query = `(${field}=="${value}")`;
+    validator.reset();
+
+    return validator.GET({ params: { query } }).then((users) => {
+      if (users.length > 0) {
+        const error = { [field]: <FormattedMessage id={`ui-users.errors.${field}Unavailable`} /> };
+        return reject(error);
+      } else {
+        return resolve();
+      }
     });
+  });
+}
+
+function asyncValidate(values, dispatch, props, blurredField) {
+  const { uniquenessValidator, initialValues } = props;
+  const { username, barcode } = values;
+  const curValue = values[blurredField];
+  const prevValue = initialValues[blurredField];
+
+  // validate on blur
+  if (blurredField && curValue && curValue !== prevValue) {
+    return asyncValidateField(blurredField, curValue, uniquenessValidator);
   }
-  return new Promise(resolve => resolve());
+
+  const promises = [];
+
+  // validate on submit
+  if (username !== initialValues.username) {
+    promises.push(asyncValidateField('username', username, uniquenessValidator));
+  }
+
+  if (barcode && barcode !== initialValues.barcode) {
+    promises.push(asyncValidateField('barcode', barcode, uniquenessValidator));
+  }
+
+  return Promise.all(promises);
 }
 
 class UserForm extends React.Component {
@@ -108,11 +130,9 @@ class UserForm extends React.Component {
     handleSubmit: PropTypes.func.isRequired,
     location: PropTypes.object,
     history: PropTypes.object,
-    mutator: PropTypes.shape({ // eslint-disable-line react/no-unused-prop-types
-      uniquenessValidator: PropTypes.shape({
-        reset: PropTypes.func.isRequired,
-        GET: PropTypes.func.isRequired,
-      }).isRequired,
+    uniquenessValidator: PropTypes.shape({
+      reset: PropTypes.func.isRequired,
+      GET: PropTypes.func.isRequired,
     }).isRequired,
     // resource: PropTypes.object.isRequired,
     pristine: PropTypes.bool,
@@ -413,7 +433,7 @@ export default stripesForm({
   form: 'userForm',
   validate,
   asyncValidate,
-  asyncBlurFields: ['username'],
+  asyncBlurFields: ['username', 'barcode'],
   navigationCheck: true,
   enableReinitialize: true,
 })(UserForm);

@@ -1,7 +1,7 @@
 import React from 'react';
 import { compose } from 'redux';
 import { stripesConnect, withStripes } from '@folio/stripes/core';
-import { LoanDetails } from '../components/Views';
+import { LoanDetails } from '../components/views';
 
 class LoanDetailContainer extends React.Component {
   static manifest = Object.freeze({
@@ -61,6 +61,13 @@ class LoanDetailContainer extends React.Component {
       accumulate: 'true',
       fetch: false,
     },
+    loanPolicies: {
+      type: 'okapi',
+      records: 'loanPolicies',
+      path: 'loan-policy-storage/loan-policies',
+      accumulate: 'true',
+      fetch: false,
+    },
     hasPatronBlocks: {
       type: 'okapi',
       records: 'manualblocks',
@@ -110,10 +117,12 @@ class LoanDetailContainer extends React.Component {
     } = this.props;
 
     const patronBlocks = (resources.patronBlocks || {}).records || [];
+    const loan = this.getLoan();
 
     return (
       <LoanDetails
-        loan={this.getLoan()}
+        loans={loan ? [loan] : []}
+        loan={loan}
         user={this.getUser()}
         patronGroup={this.getPatronGroup()}
         patronBlocks={patronBlocks}
