@@ -5,9 +5,11 @@ const data = {
   autoNewDueDate: true,
 };
 
-const isOverridableMessage = (errorMessage) => {
-  for (const { message, showDueDatePicker } of overridePossibleMessages) {
-    if (errorMessage.includes(message)) {
+const isOverridableMessage = (errorMessage, errorsAmount) => {
+  for (const { message, showDueDatePicker, shouldBeSingle } of overridePossibleMessages) {
+    const canBeOverridden = errorMessage.includes(message) && (!shouldBeSingle || errorsAmount === 1);
+
+    if (canBeOverridden) {
       if (showDueDatePicker) {
         data.autoNewDueDate = false;
       }
@@ -22,7 +24,7 @@ const isOverridableMessage = (errorMessage) => {
 export default (text) => {
   const errorMessages = text.split(',');
 
-  data.overridable = errorMessages.every((errorMessage) => isOverridableMessage(errorMessage));
+  data.overridable = errorMessages.every((errorMessage) => isOverridableMessage(errorMessage, errorMessages.length));
 
   return data;
 };

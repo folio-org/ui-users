@@ -47,6 +47,7 @@ class BulkOverrideDialog extends React.Component {
 
     return (
       <Modal
+        id="bulk-override-modal"
         size="large"
         dismissible
         closeOnBackgroundClick
