@@ -3,6 +3,7 @@
 ## 2.24.0 (IN PROGRESS)
 
 * Remove unnecessary settings. Refs UIORG-150.
+* Handle "Active/Inactive" hard-code issue for the search filter. Fixes UIU-894.
 
 ## [2.23.0](https://github.com/folio-org/ui-users/tree/v2.23.0) (2019-06-12)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.22.0...v2.23.0)

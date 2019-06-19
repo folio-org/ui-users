@@ -502,6 +502,8 @@
   "accountActionHistory": "Account Actions History",
   "status": "Status",
   "selectColumns": "Select Columns",
+  "activeUserStatus": "active",
+  "inactiveUserStatus": "inactive",
 
   "accounts.title": "Fees/Fines",
   "accounts.outstandingBalance": "Outstanding Balance: ",
