@@ -189,14 +189,6 @@
         ]
       },
       {
-        "permissionName": "settings.users.enabled",
-        "displayName": "Settings (Users): display list of settings pages",
-        "subPermissions": [
-          "settings.enabled"
-        ],
-        "visible": true
-      },
-      {
         "permissionName": "ui-users.viewproxies",
         "displayName": "Users: Can view proxies assigned to users",
         "subPermissions": [
