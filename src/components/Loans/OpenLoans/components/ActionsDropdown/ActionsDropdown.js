@@ -67,7 +67,10 @@ class ActionsDropdown extends React.Component {
             action: 'renew',
           }}
           >
-            <Button buttonStyle="dropdownItem">
+            <Button
+              buttonStyle="dropdownItem"
+              data-test-dropdown-content-renew-button
+            >
               <FormattedMessage id="ui-users.renew" />
             </Button>
           </MenuItem>

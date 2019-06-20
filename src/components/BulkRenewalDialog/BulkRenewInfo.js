@@ -139,7 +139,10 @@ class BulkRenewInfo extends React.Component {
           <Layout className="textRight">
             {
               !isEmpty(overridableLoans) &&
-              <Button onClick={this.openBulkOverrideDialog}>
+              <Button
+                data-test-override-button
+                onClick={this.openBulkOverrideDialog}
+              >
                 <FormattedMessage id="ui-users.button.override" />
               </Button>
             }
