@@ -48,13 +48,6 @@ class OpenLoansControl extends React.Component {
     loans: PropTypes.arrayOf(PropTypes.object).isRequired,
     patronBlocks: PropTypes.arrayOf(PropTypes.object).isRequired,
     renew: PropTypes.func.isRequired,
-    // buildRecords: PropTypes.func.isRequired,
-    // onClickViewAllAccounts: PropTypes.func.isRequired,
-    // onClickViewOpenAccounts: PropTypes.func.isRequired,
-    // onClickViewChargeFeeFine: PropTypes.func.isRequired,
-    // onClickViewClosedAccounts: PropTypes.func.isRequired,
-    // onClickViewLoanActionsHistory: PropTypes.func.isRequired,
-    // onClickViewAccountActionsHistory: PropTypes.func.isRequired,
   };
 
   constructor(props) {

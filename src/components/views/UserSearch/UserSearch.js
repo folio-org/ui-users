@@ -7,7 +7,7 @@ import { matchPath } from 'react-router';
 import noop from 'lodash/noop';
 import get from 'lodash/get';
 import { Link } from 'react-router-dom';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { IntlConsumer, IfPermission, AppIcon } from '@folio/stripes/core';
 import {
   MultiColumnList,
@@ -25,6 +25,7 @@ import {
   SearchAndSortSearchButton as FilterPaneToggle,
 } from '@folio/stripes/smart-components';
 
+import OverdueLoanReport from '../../data/reports';
 import Filters from './Filters';
 import css from './UserSearch.css';
 
@@ -60,8 +61,16 @@ class UserSearch extends React.Component {
     visibleColumns: ['status', 'name', 'barcode', 'patron group', 'username', 'email'],
   };
 
-  state = {
-    filterPaneIsVisible: true,
+  constructor(props) {
+    super(props);
+    this.state = {
+      filterPaneIsVisible: true,
+    };
+
+    const { formatMessage } = props.intl;
+    this.overdueLoanReport = new OverdueLoanReport({
+      formatMessage
+    });
   }
 
   toggleFilterPane = () => {
@@ -69,6 +78,19 @@ class UserSearch extends React.Component {
       filterPaneIsVisible: !curState.filterPaneIsVisible,
     }));
   }
+
+  getActionMenu = ({ onToggle }) => (
+    <Button
+      buttonStyle="dropdownItem"
+      id="export-overdue-loan-report"
+      onClick={() => {
+        onToggle();
+        this.overdueLoanReport.toCSV(get(this.props.resources, 'loans.records', []));
+      }}
+    >
+      <FormattedMessage id="ui-users.reports.overdue.label" />
+    </Button>
+  );
 
   renderResultsFirstMenu(filters) {
     const { filterPaneIsVisible } = this.state;
@@ -217,7 +239,7 @@ class UserSearch extends React.Component {
     };
 
     return (
-      <div data-test-find-user ref={contentRef}>
+      <div data-test-user-instances ref={contentRef}>
         <SearchAndSortQuery
           querySetter={querySetter}
           queryGetter={queryGetter}
@@ -294,6 +316,7 @@ class UserSearch extends React.Component {
                         paneTitle={resultsHeader}
                         paneSub={resultPaneSub}
                         defaultWidth="fill"
+                        actionMenu={this.getActionMenu}
                         padContent={false}
                         noOverflow
                       >
@@ -334,4 +357,4 @@ class UserSearch extends React.Component {
   }
 }
 
-export default UserSearch;
+export default injectIntl(UserSearch);

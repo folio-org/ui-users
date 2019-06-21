@@ -9,7 +9,7 @@ import {
 } from '@folio/stripes/smart-components';
 
 import filterConfig from './filterConfig';
-import { UserSearch } from '../components/Views';
+import { UserSearch } from '../components/views';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;

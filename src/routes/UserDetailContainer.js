@@ -1,6 +1,6 @@
 import React from 'react';
 import UserRecordContainer from './UserRecordContainer';
-import { UserDetail, UserDetailFullscreen } from '../components/Views';
+import { UserDetail, UserDetailFullscreen } from '../components/views';
 
 export const UserDetailContainer = ({ children, ...rest }) => (
   <UserRecordContainer {...rest}>

@@ -178,7 +178,7 @@ class UserEdit extends React.Component {
     } = this.props;
 
     if (!resourcesLoaded(resources, ['uniquenessValidator'])) {
-      return <ViewLoading paneTitle={params.id ? 'Edit User' : 'Create User'} />;
+      return <ViewLoading data-test-form-page paneTitle={params.id ? 'Edit User' : 'Create User'} />;
     }
 
     // values are strictly values...if we're editing (id param present) pull in existing values.

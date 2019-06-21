@@ -9,13 +9,14 @@ import setupApplication from '../helpers/setup-application';
 import UserFormPage from '../interactors/user-form-page';
 import UsersInteractor from '../interactors/users';
 
-describe('ItemCreatePage', () => {
+describe('User Create Page', () => {
   setupApplication();
 
   const users = new UsersInteractor();
 
   beforeEach(async function () {
-    this.visit('/users?layer=create');
+    this.visit('/users');
+    await users.clickCreateUserButton();
   });
 
   describe('visiting the create user page', () => {
