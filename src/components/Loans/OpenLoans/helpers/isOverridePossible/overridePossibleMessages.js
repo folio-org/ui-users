@@ -16,7 +16,7 @@ export default [
   },
   {
     message: 'items cannot be renewed when there is an active recall request',
-    showDueDatePicker: true,
+    showDueDatePicker: false,
     shouldBeSingle: true,
   },
   {

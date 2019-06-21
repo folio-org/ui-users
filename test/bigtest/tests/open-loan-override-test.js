@@ -68,8 +68,8 @@ describe('open loans override', () => {
                     expect(OpenLoansInteractor.bulkOverrideModal.isPresent).to.be.true;
                   });
 
-                  it('due date picker should be presented', () => {
-                    expect(OpenLoansInteractor.bulkOverrideModal.dueDatePicker.isPresent).to.be.true;
+                  it('due date picker should not be presented', () => {
+                    expect(OpenLoansInteractor.bulkOverrideModal.dueDatePicker.isPresent).to.be.false;
                   });
                 });
               });
