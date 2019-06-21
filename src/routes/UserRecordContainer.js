@@ -162,7 +162,7 @@ class UserRecordContainer extends React.Component {
     if (typeof children === 'function') {
       return children({ source: this.source, ...rest });
     }
-    return (<UserDetail {...this.props} />);
+    return (<UserDetail {...this.props}>{children}</UserDetail>);
   }
 }
 
