@@ -722,8 +722,8 @@
   "accounts.pay.summary.partiallyPay": "Partially paying",
   "accounts.pay.summary.paying": "Paying",
   "accounts.pay.summary": "{payType} {feesFinesAmount} {feeFineForm} for a total amount of {payAmount}",
-  "accounts.pay.fully": "Paid Fully",
-  "accounts.pay.partially": "Paid Partially",
+  "accounts.pay.fully": "Paid fully",
+  "accounts.pay.partially": "Paid partially",
   "accounts.pay.closed": "Closed",
 
   "accounts.waive.error.amount": "Waive amount must be > 0",
