@@ -42,7 +42,7 @@ const Owners = ({ dataOptions, onChange, filterShared }) => {
       <Row>
         <Col xs>
           <span style={{ fontSize: 'large', fontWeight: '600' }}>
-            <FormattedMessage id="ui-users.feefines.ownerLabel" />
+            <FormattedMessage id="ui-users.owners.singular" />
           </span>
         </Col>
       </Row>
