@@ -529,7 +529,6 @@
   "feefines.disabledItem": "Fee/fine Type cannot be deleted when used by one or more user accounts",
   "feefines.modalHeader": "Delete Fee/Fine Type?",
   "feefines.modalMessage": "The Fee/Fine Type <strong>{feefine}</strong> will be <strong>deleted</strong>",
-  "feefines.ownerLabel": "Fee/Fine Owner",
   "feefines.defaultChargeNotice": "Default Charge Notice",
   "feefines.defaultActionNotice": "Default Action Notice",
 
