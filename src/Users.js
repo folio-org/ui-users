@@ -33,12 +33,12 @@ const filterConfig = [
       {
         name: 'inactive',
         cql: 'false',
-        displayName: <FormattedMessage id="ui-users.inactiveUserStatus" />,
+        displayName: <FormattedMessage id="ui-users.inactive" />,
       },
       {
         name: 'active',
         cql: 'true',
-        displayName: <FormattedMessage id="ui-users.activeUserStatus" />,
+        displayName: <FormattedMessage id="ui-users.active" />,
       },
     ],
   },
