@@ -72,7 +72,7 @@ class Users extends React.Component {
           query: makeQueryFunction(
             'cql.allRecords=1',
             // TODO: Refactor/remove this after work on FOLIO-2066 and RMB-385 is done
-            (parsedQuery, props, localProps) => localProps.query.query.split(' ').map(query => compileQuery({ query })).join(' and '),
+            (parsedQuery, props, localProps) => localProps.query.query.trim().split(/\s+/).map(query => compileQuery({ query })).join(' and '),
             {
               // the keys in this object must match those passed to
               // SearchAndSort's columnMapping prop
