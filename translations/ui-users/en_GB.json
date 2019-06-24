@@ -856,5 +856,7 @@
     "reports.overdue.borrowerId": "Borrower ID",
     "errors.barcodeUnavailable": "This barcode has already been taken",
     "reports.overdue.loanPolicy.name": "Loan policy",
-    "reports.overdue.loanId": "Loan ID"
+    "reports.overdue.loanId": "Loan ID",
+    "activeUserStatus": "active",
+    "inactiveUserStatus": "inactive"
 }
