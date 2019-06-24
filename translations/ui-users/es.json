@@ -856,5 +856,7 @@
     "reports.overdue.borrowerId": "ID de prestatario",
     "errors.barcodeUnavailable": "This barcode has already been taken",
     "reports.overdue.loanPolicy.name": "Política de préstamo",
-    "reports.overdue.loanId": "ID de préstamo"
+    "reports.overdue.loanId": "ID de préstamo",
+    "activeUserStatus": "active",
+    "inactiveUserStatus": "inactive"
 }
