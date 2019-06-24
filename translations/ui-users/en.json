@@ -527,7 +527,6 @@
   "feefines.disabledItem": "Fee/fine Type cannot be deleted when used by one or more user accounts",
   "feefines.modalHeader": "Delete Fee/Fine Type?",
   "feefines.modalMessage": "The Fee/Fine Type <strong>{feefine}</strong> will be <strong>deleted</strong>",
-  "feefines.ownerLabel": "Fee/Fine Owner",
   "feefines.defaultChargeNotice": "Default Charge Notice",
   "feefines.defaultActionNotice": "Default Action Notice",
 
@@ -720,8 +719,8 @@
   "accounts.pay.summary.partiallyPay": "Partially paying",
   "accounts.pay.summary.paying": "Paying",
   "accounts.pay.summary": "{payType} {feesFinesAmount} {feeFineForm} for a total amount of {payAmount}",
-  "accounts.pay.fully": "Paid Fully",
-  "accounts.pay.partially": "Paid Partially",
+  "accounts.pay.fully": "Paid fully",
+  "accounts.pay.partially": "Paid partially",
   "accounts.pay.closed": "Closed",
 
   "accounts.waive.error.amount": "Waive amount must be > 0",

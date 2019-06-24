@@ -156,7 +156,7 @@ class PatronBlock extends React.Component {
       sortDirection
     } = this.state;
     let contentData = patronBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrAfter(moment().format()));
-    contentData = _.orderBy(contentData, ['metadata.createdDate'], ['asc']);
+    contentData = _.orderBy(contentData, ['metadata.createdDate'], ['desc']);
     const visibleColumns = [
       'Type',
       'Display description',

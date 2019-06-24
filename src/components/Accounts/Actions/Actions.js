@@ -306,9 +306,9 @@ class Actions extends React.Component {
     const action = { paymentMethod: values.method };
     const owners = _.get(this.props.resources, ['owners', 'records'], []);
     if (payment < type.remaining) {
-      paymentStatus = `${paymentStatus} ${_.capitalize(formatMessage({ id: 'ui-users.accounts.status.partially' }))}`;
+      paymentStatus = `${paymentStatus} ${formatMessage({ id: 'ui-users.accounts.status.partially' })}`;
     } else {
-      paymentStatus = `${paymentStatus} ${_.capitalize(formatMessage({ id: 'ui-users.accounts.status.fully' }))}`;
+      paymentStatus = `${paymentStatus} ${formatMessage({ id: 'ui-users.accounts.status.fully' })}`;
       type.status.name = 'Closed';
     }
     const balance = type.remaining - parseFloat(payment);
