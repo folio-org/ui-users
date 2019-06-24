@@ -856,5 +856,7 @@
     "reports.overdue.borrowerId": "ID do usuário",
     "errors.barcodeUnavailable": "Este código de barras já foi usado",
     "reports.overdue.loanPolicy.name": "Política de empréstimos",
-    "reports.overdue.loanId": "ID do empréstimo"
+    "reports.overdue.loanId": "ID do empréstimo",
+    "activeUserStatus": "ativo",
+    "inactiveUserStatus": "inativo"
 }
