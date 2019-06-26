@@ -525,12 +525,19 @@ class ViewUser extends React.Component {
 
   update(user) {
     const addressTypes = (this.props.parentResources.addressTypes || {}).records || [];
+    const userData = cloneDeep(user);
 
-    if (user.personal.addresses) {
-      user.personal.addresses = toUserAddresses(user.personal.addresses, addressTypes); // eslint-disable-line no-param-reassign
+    if (userData.personal.addresses) {
+      userData.personal.addresses = toUserAddresses(userData.personal.addresses, addressTypes); // eslint-disable-line no-param-reassign
     }
 
-    const { proxies, sponsors, permissions, servicePoints, preferredServicePoint } = user;
+    const {
+      proxies,
+      sponsors,
+      permissions,
+      servicePoints,
+      preferredServicePoint,
+    } = userData;
 
     if (this.props.stripes.hasPerm('proxiesfor.item.put,proxiesfor.item.post')) {
       if (proxies) this.props.updateProxies(proxies);
@@ -545,10 +552,10 @@ class ViewUser extends React.Component {
       this.props.updateServicePoints(servicePoints, preferredServicePoint);
     }
 
-    const data = omit(user, ['creds', 'proxies', 'sponsors', 'permissions', 'servicePoints', 'preferredServicePoint']);
+    const data = omit(userData, ['creds', 'proxies', 'sponsors', 'permissions', 'servicePoints', 'preferredServicePoint']);
     const today = moment().endOf('day');
 
-    data.active = (moment(user.expirationDate).endOf('day').isSameOrAfter(today));
+    data.active = (moment(userData.expirationDate).endOf('day').isSameOrAfter(today));
 
     this.props.mutator.selUser.PUT(data).then(() => {
       this.setState({
