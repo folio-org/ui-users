@@ -34,7 +34,8 @@ import ModalInteractor from '@folio/stripes-components/lib/Modal/tests/interacto
 @interactor class History {
   mclViewFeesFines = new MultiColumnListInteractor('#list-accounts-history-view-feesfines');
   mclAccountActions = new MultiColumnListInteractor('#list-accountactions');
-  section = text('#accordion-toggle-button-accountsSection > span > div > h3');
+  sectionIsPresent = isPresent('#accordion-toggle-button-accountsSection');
+  section = text('#accordion-toggle-button-accountsSection h3');
 
   title = text('[class*=paneTitleLabel---]');
   paneTitle = text('#title-test-fee-fine'['class*=paneTitleLabel---']);
@@ -85,6 +86,9 @@ import ModalInteractor from '@folio/stripes-components/lib/Modal/tests/interacto
   isLoadedOpen = isPresent('#list-accounts-history-view-feesfines > [class*=mclScrollable---] > div:nth-child(5)');
   isViewOpen = isVisible('#list-accounts-history-view-feesfines > [class*=mclScrollable---]');
 
+  whenSectionLoaded() {
+    return this.when(() => this.sectionIsPresent);
+  }
 
   whenLoadedOpen() {
     return this.when(() => this.isLoadedOpen);
