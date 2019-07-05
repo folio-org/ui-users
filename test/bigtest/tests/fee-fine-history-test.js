@@ -10,8 +10,10 @@ import FeeFineHistoryInteractor from '../interactors/fee-fine-history';
 
 describe('Test Fee/Fine History', () => {
   setupApplication({ scenarios: ['view-fees-fines'] });
+
   beforeEach(async function () {
     this.visit('/users/view/ce0e0d5b-b5f3-4ad5-bccb-49c0784298fd');
+    await FeeFineHistoryInteractor.whenSectionLoaded();
   });
 
   it('displays label section Fees/Fines', () => {
