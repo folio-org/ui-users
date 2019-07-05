@@ -32,4 +32,4 @@ import {
   bulkOverrideModal = new BulkOverrideModal();
 }
 
-export default new OpenLoans();
+export default new OpenLoans(5000);
