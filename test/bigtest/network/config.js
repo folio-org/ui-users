@@ -167,7 +167,7 @@ export default function config() {
   });
 
   this.get('loan-storage/loan-history', {
-    loans: [],
+    loansHistory: [],
     totalRecords: 0,
   });
 
