@@ -116,4 +116,4 @@ import ModalInteractor from '@folio/stripes-components/lib/Modal/tests/interacto
     return this.when(() => this.isViewAll);
   }
 }
-export default new History();
+export default new History(5000);
