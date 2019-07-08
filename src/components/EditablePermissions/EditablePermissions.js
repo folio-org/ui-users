@@ -100,7 +100,7 @@ class EditablePermissions extends React.Component {
 
   renderItem(item, index, showPerms) {
     return (
-      <li key={item.permissionName}>
+      <li key={item.permissionName} data-permission-name={`${item.permissionName}`}>
         {
           (showPerms ?
             `${item.permissionName} (${item.displayName})` :
@@ -113,7 +113,7 @@ class EditablePermissions extends React.Component {
                 buttonStyle="fieldControl"
                 align="end"
                 type="button"
-                id="clickable-remove-permission"
+                id={`clickable-remove-permission-${item.permissionName}`}
                 onClick={() => this.removePermission(index)}
                 aria-label={`${aria}: ${item.permissionName}`}
               >
