@@ -10,6 +10,7 @@
 * Fix UX Consistency owners. Fixes UIU-1050.
 * Handle address type validation issue after adding permission to user. Fixes UIU-912.
 * Add missing permissions. Fixes UIU-1088.
+* Accomodate changes in the shape of `/loan-storage/loan-history` data. Refs UIU-1092.
 
 ## [2.23.0](https://github.com/folio-org/ui-users/tree/v2.23.0) (2019-06-12)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.22.0...v2.23.0)
