@@ -26,7 +26,7 @@ export default [
   },
   {
     message: 'renewal date falls outside of date ranges in rolling loan policy',
-    showDueDatePicker: false,
+    showDueDatePicker: true,
     shouldBeSingle: false,
   },
 ];
