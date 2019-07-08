@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "2.23.0",
+  "version": "2.23.1",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -559,7 +559,10 @@
           "owners.collection.get",
           "payments.collection.get",
           "comments.collection.get",
-          "waives.collection.get"
+          "waives.collection.get",
+          "inventory-storage.locations.collection.get",
+          "inventory-storage.location-units.libraries.collection.get",
+          "inventory-storage.material-types.collection.get"
         ],
         "visible": true
       },
@@ -598,7 +601,10 @@
           "inventory-storage.service-points.collection.get",
           "inventory-storage.service-points.item.get",
           "inventory-storage.service-points-users.collection.get",
-          "inventory-storage.service-points-users.item.get"
+          "inventory-storage.service-points-users.item.get",
+          "inventory-storage.locations.collection.get",
+          "inventory-storage.location-units.libraries.collection.get",
+          "inventory-storage.material-types.collection.get"
         ],
         "visible": true
       },

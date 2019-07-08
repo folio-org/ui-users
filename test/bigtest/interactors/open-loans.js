@@ -30,6 +30,10 @@ import {
 
   bulkRenewalModal = new BulkRenewalModal();
   bulkOverrideModal = new BulkOverrideModal();
+
+  whenLoaded() {
+    return this.when(() => this.list.isVisible);
+  }
 }
 
-export default new OpenLoans();
+export default new OpenLoans(5000);
