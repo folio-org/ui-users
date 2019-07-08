@@ -6,6 +6,13 @@ module.exports.test = function foo(uiTestCtx) {
     const nightmare = new Nightmare(config.nightmare);
     this.timeout(Number(config.test_timeout));
 
+    const waitText = (label) => {
+      return Array.from(
+        document.querySelectorAll('ul[class*="PermissionList"] li')
+      )
+        .findIndex(e => e.textContent === label) >= 0;
+    };
+
     describe('Login > Create new permission set > Confirm creation > Delete permission set > Confirm deletion > Logout\n', () => {
       const displayName = 'Circulation employee';
       const description = 'Contains permissions to execute basic circ functions.';
@@ -36,20 +43,19 @@ module.exports.test = function foo(uiTestCtx) {
           .insert('#input-permission-description', description)
           .wait('#clickable-add-permission')
           .click('#clickable-add-permission')
-          .wait('button[class^="itemControl"]')
-          .xclick('//button[contains(.,"Users: Can create new user")]')
-          .then(() => {
-            nightmare
-              .wait('#clickable-add-permission')
-              .click('#clickable-add-permission')
-              .wait('button[class^="itemControl"]')
-              .xclick('//button[contains(.,"Users: Can view proxies")]')
-              .wait('#clickable-save-permission-set')
-              .click('#clickable-save-permission-set')
-              .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
-              .then(done)
-              .catch(done);
-          })
+          .wait('ul[class*="PermissionList"] li button[data-permission-name="ui-users.create"]')
+          .click('ul[class*="PermissionList"] li button[data-permission-name="ui-users.create"]')
+          .wait('#permSection ul li[data-permission-name="ui-users.create"]')
+          .click('#clickable-add-permission')
+          .wait('ul[class*="PermissionList"] li button[data-permission-name="ui-users.viewproxies"]')
+          .click('ul[class*="PermissionList"] li button[data-permission-name="ui-users.viewproxies"]')
+          .wait('#permSection ul li[data-permission-name="ui-users.viewproxies"]')
+          .wait(() => Array.from(document.querySelectorAll('#permSection ul li').length === 2))
+          .wait('#clickable-save-permission-set')
+          .wait(() => !document.querySelector('#clickable-save-permission-set[disabled]'))
+          .click('#clickable-save-permission-set')
+          .wait(() => !document.querySelector('#clickable-save-permission-set'))
+          .then(done)
           .catch(done);
       });
 
