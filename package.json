@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "2.23.1",
+  "version": "2.23.2",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -604,7 +604,8 @@
           "inventory-storage.service-points-users.item.get",
           "inventory-storage.locations.collection.get",
           "inventory-storage.location-units.libraries.collection.get",
-          "inventory-storage.material-types.collection.get"
+          "inventory-storage.material-types.collection.get",
+          "accounts.collection.get"
         ],
         "visible": true
       },
