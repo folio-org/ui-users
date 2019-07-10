@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, FormattedTime } from 'react-intl';
+import { FormattedMessage, FormattedTime, FormattedDate } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { Row, Col, KeyValue, LayoutHeader } from '@folio/stripes/components';
 
@@ -32,8 +32,13 @@ const ProxyItem = ({ record }) => {
   );
 
   const expirationDate = (record.proxy && record.proxy.expirationDate) ?
-    creationDateTime :
-    '-';
+    <FormattedDate
+      value={record.proxy.expirationDate}
+      day="numeric"
+      month="numeric"
+      year="numeric"
+    /> : '-';
+
   return (
     <div className={css.item}>
       <LayoutHeader level={3} title={link} noActions />
