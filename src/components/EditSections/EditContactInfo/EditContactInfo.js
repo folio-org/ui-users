@@ -14,7 +14,8 @@ import {
   Accordion,
   Headline
 } from '@folio/stripes/components';
-import { AddressEditList } from '@folio/stripes/smart-components';
+import AddressEditList from './AddressEditList';
+// import { AddressEditList } from '@folio/stripes/smart-components';
 
 import { toAddressTypeOptions } from '../../../converters/address_type';
 import contactTypes from '../../../data/contactTypes';
