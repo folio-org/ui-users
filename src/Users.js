@@ -125,7 +125,7 @@ class Users extends React.Component {
       type: 'okapi',
       records: 'loans',
       path: 'circulation/loans?query=(status="Open")',
-      permissionsRequired: 'circulation.loans.collection.get',
+      permissionsRequired: 'circulation.loans.collection.get,accounts.collection.get',
     }
   });
 
