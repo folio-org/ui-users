@@ -32,12 +32,7 @@ const ProxyItem = ({ record }) => {
   );
 
   const expirationDate = (record.proxy && record.proxy.expirationDate) ?
-    <FormattedDate
-      value={record.proxy.expirationDate}
-      day="numeric"
-      month="numeric"
-      year="numeric"
-    /> : '-';
+    <FormattedDate value={record.proxy.expirationDate} /> : '-';
 
   return (
     <div className={css.item}>
