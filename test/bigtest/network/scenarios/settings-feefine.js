@@ -1,4 +1,5 @@
 import { Response } from '@bigtest/mirage';
+import CQLParser from '../cql';
 /* istanbul ignore file */
 
 export default (server) => {
@@ -17,6 +18,12 @@ export default (server) => {
   server.createList('transfers', 2, { ownerId: owner1.id });
 
   server.createList('transfers', 3, { ownerId: otherOwner.id });
+
+  server.createList('payments', 5, { ownerId: owner1.id });
+
+  server.createList('refunds', 5);
+
+  server.createList('waivers', 5);
 
   server.createList('service-point', 3);
 
@@ -82,7 +89,20 @@ export default (server) => {
     return model.attrs;
   });
 
-  server.get('/transfers', (schema) => {
+  server.get('/transfers', (schema, request) => {
+    const url = new URL(request.url);
+    const cqlQuery = url.searchParams.get('query');
+
+    if (cqlQuery != null) {
+      const cqlParser = new CQLParser();
+      cqlParser.parse(cqlQuery);
+      if (cqlParser.tree.field === 1) {
+        return schema.transfers.all();
+      }
+
+      return schema.transfers.all();
+    }
+
     return schema.transfers.all();
   });
 
@@ -97,5 +117,103 @@ export default (server) => {
     return matching.update(body);
   });
 
-  server.delete('/transfers/:id');
+  server.del('/transfers/:id', (schema, request) => {
+    return schema.db.transfers.remove(request.params.id);
+  });
+
+  server.get('/refunds', (schema, request) => {
+    const url = new URL(request.url);
+    const cqlQuery = url.searchParams.get('query');
+
+    if (cqlQuery != null) {
+      const cqlParser = new CQLParser();
+      cqlParser.parse(cqlQuery);
+      if (cqlParser.tree.field === 1) {
+        return schema.refunds.all();
+      }
+
+      return schema.refunds.all();
+    }
+
+    return schema.refunds.all();
+  });
+
+  server.post('/refunds', (schema, request) => {
+    const body = JSON.parse(request.requestBody);
+    return schema.refunds.create(body);
+  });
+
+  server.put('/refunds/:id', ({ refunds }, request) => {
+    const matching = refunds.find(request.params.id);
+    const body = JSON.parse(request.requestBody);
+    return matching.update(body);
+  });
+
+  server.del('/refunds/:id', (schema, request) => {
+    return schema.db.refunds.remove(request.params.id);
+  });
+
+  server.get('/waives', (schema, request) => {
+    const url = new URL(request.url);
+    const cqlQuery = url.searchParams.get('query');
+
+    if (cqlQuery != null) {
+      const cqlParser = new CQLParser();
+      cqlParser.parse(cqlQuery);
+      if (cqlParser.tree.field === 1) {
+        return schema.waivers.all();
+      }
+
+      return schema.waivers.all();
+    }
+
+    return schema.waivers.all();
+  });
+
+  server.post('/waives', (schema, request) => {
+    const body = JSON.parse(request.requestBody);
+    return schema.waivers.create(body);
+  });
+
+  server.put('/waives/:id', ({ waivers }, request) => {
+    const matching = waivers.find(request.params.id);
+    const body = JSON.parse(request.requestBody);
+    return matching.update(body);
+  });
+
+  server.del('/waives/:id', (schema, request) => {
+    return schema.db.waivers.remove(request.params.id);
+  });
+
+  server.get('/payments', (schema, request) => {
+    const url = new URL(request.url);
+    const cqlQuery = url.searchParams.get('query');
+
+    if (cqlQuery != null) {
+      const cqlParser = new CQLParser();
+      cqlParser.parse(cqlQuery);
+      if (cqlParser.tree.field === 1) {
+        return schema.payments.all();
+      }
+
+      return schema.payments.all();
+    }
+
+    return schema.payments.all();
+  });
+
+  server.post('/payments', (schema, request) => {
+    const body = JSON.parse(request.requestBody);
+    return schema.payments.create(body);
+  });
+
+  server.put('/payments/:id', ({ payments }, request) => {
+    const matching = payments.find(request.params.id);
+    const body = JSON.parse(request.requestBody);
+    return matching.update(body);
+  });
+
+  server.del('/payments/:id', (schema, request) => {
+    return schema.db.payments.remove(request.params.id);
+  });
 };

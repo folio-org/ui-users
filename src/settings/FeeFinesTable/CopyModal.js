@@ -43,15 +43,7 @@ class CopyForm extends React.Component {
     this.state = {
       option: true,
     };
-    this.handleOption = this.handleOption.bind(this);
-  }
-
-  handleOption(e) {
-    const value = (e.target.value === 'true');
-
-    this.setState({
-      option: value,
-    });
+    props.initialize({ option: 'true' });
   }
 
   render() {
@@ -73,15 +65,11 @@ class CopyForm extends React.Component {
                 label={<FormattedMessage id="ui-users.feefines.modal.yes" />}
                 id="yes"
                 value="true"
-                checked={this.state.option}
-                onChange={this.handleOption}
               />
               <RadioButton
                 label={<FormattedMessage id="ui-users.feefines.modal.no" />}
                 id="no"
                 value="false"
-                checked={!this.state.option}
-                onChange={this.handleOption}
               />
             </Field>
           </Col>
