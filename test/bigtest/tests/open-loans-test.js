@@ -38,6 +38,8 @@ describe('Open Loans', () => {
 
     this.server.createList('request', requestsAmount, { itemId: loan.itemId });
     this.visit(`/users/view/${user.id}?layer=open-loans&query=%20&sort=requests`);
+
+    await OpenLoansInteractor.whenLoaded();
   });
 
   it('should be presented', () => {

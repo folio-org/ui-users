@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "2.23.0",
+  "version": "2.23.4",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -35,7 +35,7 @@
       "circulation": "3.0 4.0 5.0 6.0 7.0",
       "permissions": "5.0",
       "loan-policy-storage": "1.0 2.0",
-      "loan-storage": "4.0 5.0",
+      "loan-storage": "4.0 5.0 6.0",
       "login": "4.7 5.0",
       "feesfines": "15.0",
       "request-storage": "2.5 3.0",
@@ -559,7 +559,10 @@
           "owners.collection.get",
           "payments.collection.get",
           "comments.collection.get",
-          "waives.collection.get"
+          "waives.collection.get",
+          "inventory-storage.locations.collection.get",
+          "inventory-storage.location-units.libraries.collection.get",
+          "inventory-storage.material-types.collection.get"
         ],
         "visible": true
       },
@@ -569,7 +572,6 @@
         "description": "Also includes basic permissions to view users and loans",
         "subPermissions": [
           "ui-users.view",
-          "ui-users.settings.feefines",
           "circulation.loans.collection.get",
           "circulation.requests.collection.get",
           "circulation.requests.item.get",
@@ -580,11 +582,6 @@
           "circulation-storage.requests.collection.delete",
           "circulation-storage.requests.item.get",
           "circulation-storage.requests.item.delete",
-          "proxiesfor.collection.get",
-          "addresstypes.collection.get",
-          "usergroups.collection.get",
-          "configuration.entries.collection.get",
-          "manualblocks.collection.get",
           "inventory.items.collection.get",
           "inventory.items.item.get",
           "inventory.instances.item.get",
@@ -595,10 +592,10 @@
           "inventory-storage.holdings.item.get",
           "inventory-storage.instances.item.get",
           "inventory-storage.instances.collection.get",
-          "inventory-storage.service-points.collection.get",
-          "inventory-storage.service-points.item.get",
-          "inventory-storage.service-points-users.collection.get",
-          "inventory-storage.service-points-users.item.get"
+          "inventory-storage.locations.collection.get",
+          "inventory-storage.location-units.libraries.collection.get",
+          "inventory-storage.material-types.collection.get",
+          "circulation-storage.loan-policies.collection.get"
         ],
         "visible": true
       },
