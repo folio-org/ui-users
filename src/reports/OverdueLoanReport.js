@@ -10,6 +10,7 @@ const columns = [
   'loanPolicy.name',
   'loanPolicyId',
   'loanId',
+  'feeFine',
   'item.title',
   'item.materialType.name',
   'item.status.name',
@@ -41,6 +42,7 @@ class OverdueLoanReport {
       },
       borrowerId: r.userId,
       loanId: r.id,
+      feeFine: get(r, 'feesAndFines.amountRemainingToPay'),
       item: {
         ...r.item,
         contributors: get(r, 'item.contributors', [])
