@@ -39,7 +39,7 @@
       "login": "4.7 5.0",
       "feesfines": "15.0",
       "request-storage": "2.5 3.0",
-      "users-bl": "3.2 4.0"
+      "users-bl": "5.0"
     },
     "permissionSets": [
       {
