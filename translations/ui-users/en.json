@@ -897,5 +897,6 @@
   "reports.overdue.item.location.name": "Location",
   "reports.overdue.item.instanceId": "Instance ID",
   "reports.overdue.item.holdingsRecordId": "Holdings ID",
-  "reports.overdue.itemId": "Item ID"
+  "reports.overdue.itemId": "Item ID",
+  "reports.overdue.feeFine": "Fee/Fine"
 }
