@@ -8,7 +8,7 @@ import { expect } from 'chai';
 import setupApplication from '../helpers/setup-application';
 import FeeFineHistoryInteractor from '../interactors/fee-fine-history';
 
-describe('Test Fee/Fine History', () => {
+describe.only('Test Fee/Fine History', () => {
   setupApplication({ scenarios: ['view-fees-fines'] });
 
   beforeEach(async function () {
@@ -79,7 +79,7 @@ describe('Test Fee/Fine History', () => {
       describe('select columns', () => {
         beforeEach(async function () {
           await FeeFineHistoryInteractor.selectColumns.click();
-          await FeeFineHistoryInteractor.cols(0).clickAndBlur();
+          await FeeFineHistoryInteractor.col.clickAndBlur();
         });
 
         it('renders proper amount of columns', () => {

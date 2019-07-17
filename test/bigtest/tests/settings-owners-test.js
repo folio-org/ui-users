@@ -29,7 +29,7 @@ describe('Settings owners', () => {
   });
 
   it('first renders of proper amount of rows', () => {
-    expect(FeeFineInteractor.list.rowCount).to.equal(3);
+    expect(FeeFineInteractor.list.rowCount).to.equal(5);
   }).timeout(4000);
 
   describe('is visible', () => {
@@ -49,7 +49,7 @@ describe('Settings owners', () => {
     });
 
     it('renders proper amount of rows', () => {
-      expect(FeeFineInteractor.list.rowCount).to.equal(3);
+      expect(FeeFineInteractor.list.rowCount).to.equal(5);
     });
   });
 
@@ -60,7 +60,7 @@ describe('Settings owners', () => {
     });
 
     it('renders proper amount of rows', () => {
-      expect(FeeFineInteractor.list.rowCount).to.equal(3);
+      expect(FeeFineInteractor.list.rowCount).to.equal(4);
     });
   });
 
@@ -119,7 +119,7 @@ describe('Settings owners', () => {
     });
 
     it('renders proper amount of rows', () => {
-      expect(FeeFineInteractor.list.rowCount).to.equal(3);
+      expect(FeeFineInteractor.list.rowCount).to.equal(5);
     });
   });
 
@@ -180,7 +180,7 @@ describe('Settings owners', () => {
     });
 
     it('renders proper amount of rows', () => {
-      expect(FeeFineInteractor.list.rowCount).to.equal(3);
+      expect(FeeFineInteractor.list.rowCount).to.equal(4);
     }).timeout(4000);
   });
 });
