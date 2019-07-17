@@ -46,10 +46,6 @@ const RowInteractor = interactor(class RowInteractor {
     rows = collection(rowSelector, RowInteractor);
 }
 
-@interactor class ItemInUseModal {
-  accept = scoped('[data-test-ok-button]', ButtonInteractor);
-}
-
 @interactor class OwnerInteractor {
     list = new ListInteractor(listContainerSelector);
     callout = new CalloutInteractor();
