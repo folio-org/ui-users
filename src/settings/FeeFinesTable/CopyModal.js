@@ -34,15 +34,13 @@ class CopyForm extends React.Component {
   static propTypes = {
     owners: PropTypes.arrayOf(PropTypes.object),
     onClose: PropTypes.func,
+    initialize: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
   };
 
   constructor(props) {
     super(props);
-    this.state = {
-      option: true,
-    };
     props.initialize({ option: 'true' });
   }
 

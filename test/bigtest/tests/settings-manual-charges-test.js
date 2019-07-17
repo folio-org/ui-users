@@ -214,9 +214,9 @@ describe('Manual charges', () => {
     it('renders proper values after update', () => {
       const lastRow = FeeFineInteractor.list.rows(1);
 
-      expect(lastRow.cells(0).text).to.equal('New feefine');
-      expect(lastRow.cells(1).text).to.equal('100.00');
-      expect(lastRow.cells(3).text).to.equal('Template 2');
+      expect(lastRow.cells(0).text).to.equal('Damage camera fee0');
+      expect(lastRow.cells(1).text).to.equal('1000.00');
+      expect(lastRow.cells(3).text).to.equal('-');
     });
   });
 });
