@@ -859,5 +859,5 @@
     "reports.overdue.loanId": "Loan ID",
     "activeUserStatus": "active",
     "inactiveUserStatus": "inactive",
-    "reports.overdue.feeFine": "Fee/Fine"
+    "reports.overdue.feeFine": "罚款"
 }
