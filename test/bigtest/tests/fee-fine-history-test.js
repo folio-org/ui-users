@@ -8,7 +8,7 @@ import { expect } from 'chai';
 import setupApplication from '../helpers/setup-application';
 import FeeFineHistoryInteractor from '../interactors/fee-fine-history';
 
-describe.only('Test Fee/Fine History', () => {
+describe('Test Fee/Fine History', () => {
   setupApplication({ scenarios: ['view-fees-fines'] });
 
   beforeEach(async function () {
