@@ -41,7 +41,7 @@ class RefundReasonsSettings extends React.Component {
         }}
         nameKey="refund"
         hiddenFields={['numberOfObjects']}
-        id="refunds"
+        id="settings-refunds"
         sortby="nameReason"
       />
     );

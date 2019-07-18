@@ -14,6 +14,7 @@
 * Fix expiration date for sponsor and proxy. Fixes UIU-924.
 * Update tests to cover changes in due date modal in stripes-smart-components. Refs UIU-1070.
 * Extend overdue loans report with fine/fee field. Refs UIU-987.
+* Optimize fee/fine settings and BigTest.
 
 ## [2.23.0](https://github.com/folio-org/ui-users/tree/v2.23.0) (2019-06-12)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.22.0...v2.23.0)
