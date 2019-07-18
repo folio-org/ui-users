@@ -858,5 +858,6 @@
     "reports.overdue.loanPolicy.name": "Política de empréstimos",
     "reports.overdue.loanId": "ID do empréstimo",
     "activeUserStatus": "ativo",
-    "inactiveUserStatus": "inativo"
+    "inactiveUserStatus": "inativo",
+    "reports.overdue.feeFine": "Taxa/Multa"
 }
