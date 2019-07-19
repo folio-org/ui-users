@@ -144,7 +144,7 @@
           "perms.permissions.item.put",
           "perms.permissions.item.post",
           "perms.permissions.item.delete",
-          "settings.users.enabled"
+          "settings.enabled"
         ],
         "visible": true
       },
@@ -157,7 +157,7 @@
           "usergroups.item.get",
           "usergroups.item.post",
           "usergroups.item.put",
-          "settings.users.enabled"
+          "settings.enabled"
         ],
         "visible": true
       },
@@ -177,7 +177,7 @@
           "addresstypes.item.post",
           "addresstypes.item.put",
           "addresstypes.item.delete",
-          "settings.users.enabled"
+          "settings.enabled"
         ],
         "visible": true
       },
@@ -220,7 +220,7 @@
           "comments.item.get",
           "comments.item.post",
           "comments.item.put",
-          "settings.users.enabled"
+          "settings.enabled"
         ],
         "visible": false
       },
@@ -240,7 +240,7 @@
           "feefines.item.get",
           "feefines.item.post",
           "feefines.item.put",
-          "settings.users.enabled"
+          "settings.enabled"
         ],
         "visible": false
       },
@@ -260,7 +260,7 @@
           "owners.item.get",
           "owners.item.post",
           "owners.item.put",
-          "settings.users.enabled"
+          "settings.enabled"
         ],
         "visible": false
       },
@@ -280,7 +280,7 @@
           "payments.item.get",
           "payments.item.post",
           "payments.item.put",
-          "settings.users.enabled"
+          "settings.enabled"
         ],
         "visible": false
       },
@@ -300,7 +300,7 @@
           "refunds.item.get",
           "refunds.item.post",
           "refunds.item.put",
-          "settings.users.enabled"
+          "settings.enabled"
         ],
         "visible": false
       },
@@ -320,7 +320,7 @@
           "waives.item.get",
           "waives.item.post",
           "waives.item.put",
-          "settings.users.enabled"
+          "settings.enabled"
         ],
         "visible": false
       },
@@ -378,7 +378,7 @@
           "transfers.item.get",
           "transfers.item.post",
           "transfers.item.put",
-          "settings.users.enabled"
+          "settings.enabled"
         ],
         "visible": false
       },
@@ -398,7 +398,7 @@
           "transfertypes.item.get",
           "transfertypes.item.post",
           "transfertypes.item.put",
-          "settings.users.enabled"
+          "settings.enabled"
         ],
         "visible": false
       },
