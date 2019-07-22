@@ -4,7 +4,7 @@ export default Factory.extend({
 
   id: () => faker.random.uuid(),
   nameMethod : (i) => 'Cash' + i,
-  allowedRefundMethod : true,
+  allowedRefundMethod : false,
   ownerId : (i) => '4dbc74d7-665c-4b66-a296-949107905cb0' + i,
   metadata : {
     createdDate: faker.date.past(0.1, faker.date.past(0.1)).toString(),

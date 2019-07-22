@@ -9,16 +9,16 @@ import {
 import setupApplication from '../helpers/setup-application';
 import FeeFineInteractor from '../interactors/settings-feefine';
 
-describe('Settings transfers', () => {
+describe('Settings waives', () => {
   setupApplication({ scenarios: ['settings-feefine'] });
 
   beforeEach(async function () {
-    this.visit('/settings/users/transfers');
-    await FeeFineInteractor.ownerSelect.selectAndBlur('Main Admin1');
+    this.visit('/settings/users/waivereasons');
+    await FeeFineInteractor.whenLoaded();
   });
 
   it('renders proper amount of rows', () => {
-    expect(FeeFineInteractor.list.rowCount).to.equal(2);
+    expect(FeeFineInteractor.list.rowCount).to.equal(5);
   });
 
   it('renders proper amount of columns', () => {
@@ -27,19 +27,18 @@ describe('Settings transfers', () => {
 
   it('renders proper values for the first row', () => {
     const firstRow = FeeFineInteractor.list.rows(0);
-    expect(firstRow.cells(0).text).to.equal('USA Bank0');
-    expect(firstRow.cells(1).text).to.equal('Transfer place0');
+    expect(firstRow.cells(0).text).to.equal('First time offender0');
+    expect(firstRow.cells(1).text).to.equal('Penalty abatement0');
   });
 
   describe('delete and cancel', () => {
     beforeEach(async () => {
-      await FeeFineInteractor.ownerSelect.selectAndBlur('Main Admin1');
       await FeeFineInteractor.list.rows(0).deleteButton.click();
       await FeeFineInteractor.confirmationModal.cancelButton.click();
     });
 
     it('renders proper amount of rows', () => {
-      expect(FeeFineInteractor.list.rowCount).to.equal(2);
+      expect(FeeFineInteractor.list.rowCount).to.equal(5);
     });
   });
 
@@ -50,65 +49,65 @@ describe('Settings transfers', () => {
     });
 
     it('renders proper amount of rows', () => {
-      expect(FeeFineInteractor.list.rowCount).to.equal(1);
+      expect(FeeFineInteractor.list.rowCount).to.equal(4);
     });
   });
 
   describe('edit and cancel', () => {
     beforeEach(async () => {
       await FeeFineInteractor.list.rows(0).editButton.click();
-      await FeeFineInteractor.list.rows(0).textfield(0).fillAndBlur('USA Bank3');
-      await FeeFineInteractor.list.rows(0).textfield(1).fillAndBlur('Transfer place3');
+      await FeeFineInteractor.list.rows(0).textfield(0).fillAndBlur('First time offender10');
+      await FeeFineInteractor.list.rows(0).textfield(1).fillAndBlur('Penalty abatement10');
       await FeeFineInteractor.list.rows(0).cancelButton.click();
     });
 
     it('renders proper values after cancel', () => {
       const firstRow = FeeFineInteractor.list.rows(0);
-      expect(firstRow.cells(0).text).to.equal('USA Bank0');
-      expect(firstRow.cells(1).text).to.equal('Transfer place0');
+      expect(firstRow.cells(0).text).to.equal('First time offender0');
+      expect(firstRow.cells(1).text).to.equal('Penalty abatement0');
     });
   });
 
   describe('edit and save', () => {
     beforeEach(async () => {
       await FeeFineInteractor.list.rows(0).editButton.click();
-      await FeeFineInteractor.list.rows(0).textfield(0).fillAndBlur('USA Bank11');
-      await FeeFineInteractor.list.rows(0).textfield(1).fillAndBlur('Transfer place11');
+      await FeeFineInteractor.list.rows(0).textfield(0).fillAndBlur('First time offender10');
+      await FeeFineInteractor.list.rows(0).textfield(1).fillAndBlur('Penalty abatement10');
       await FeeFineInteractor.list.rows(0).saveButton.click();
     });
 
     it('renders proper values after edit', () => {
       const firstRow = FeeFineInteractor.list.rows(0);
-      expect(firstRow.cells(0).text).to.equal('USA Bank11');
-      expect(firstRow.cells(1).text).to.equal('Transfer place11');
+      expect(firstRow.cells(0).text).to.equal('First time offender10');
+      expect(firstRow.cells(1).text).to.equal('Penalty abatement10');
     });
   });
 
-  describe('add a transfers', () => {
+  describe('add a waive', () => {
     beforeEach(async () => {
       await FeeFineInteractor.newItemButton.click();
-      await FeeFineInteractor.list.rows(0).textfield(0).fillAndBlur('USA Bank10');
-      await FeeFineInteractor.list.rows(0).textfield(1).fillAndBlur('Transfer place10');
+      await FeeFineInteractor.list.rows(0).textfield(0).fillAndBlur('First time offender10');
+      await FeeFineInteractor.list.rows(0).textfield(1).fillAndBlur('Penalty abatement10');
       await FeeFineInteractor.list.rows(0).saveButton.click();
     });
 
     it('renders proper values after add', () => {
-      const firstRow = FeeFineInteractor.list.rows(2);
-      expect(firstRow.cells(0).text).to.equal('USA Bank10');
-      expect(firstRow.cells(1).text).to.equal('Transfer place10');
+      const firstRow = FeeFineInteractor.list.rows(5);
+      expect(firstRow.cells(0).text).to.equal('First time offender10');
+      expect(firstRow.cells(1).text).to.equal('Penalty abatement10');
     });
   });
 
-  describe('add an exist transfer', () => {
+  describe('add an exist waive', () => {
     beforeEach(async () => {
       await FeeFineInteractor.newItemButton.click();
-      await FeeFineInteractor.list.rows(0).textfield(0).fillAndBlur('USA Bank0');
-      await FeeFineInteractor.list.rows(0).textfield(1).fillAndBlur('Transfer place0');
+      await FeeFineInteractor.list.rows(0).textfield(0).fillAndBlur('First time offender0');
+      await FeeFineInteractor.list.rows(0).textfield(1).fillAndBlur('Penalty abatement0');
       await FeeFineInteractor.list.rows(0).cancelButton.click();
     });
 
     it('renders proper amount of rows', () => {
-      expect(FeeFineInteractor.list.rowCount).to.equal(2);
+      expect(FeeFineInteractor.list.rowCount).to.equal(5);
     });
   });
 });
