@@ -47,6 +47,13 @@
         "displayName": "UI: Users module is enabled"
       },
       {
+        "permissionName": "settings.users.enabled",
+        "displayName": "Settings (Users): display list of settings pages",
+        "subPermissions": [
+          "settings.enabled"
+        ]
+      },
+      {
         "permissionName": "ui-users.view",
         "displayName": "Users: Can view user profile",
         "description": "Some subperms can be deleted later when submodules use modern permission names",
@@ -144,7 +151,7 @@
           "perms.permissions.item.put",
           "perms.permissions.item.post",
           "perms.permissions.item.delete",
-          "settings.enabled"
+          "settings.users.enabled"
         ],
         "visible": true
       },
@@ -157,7 +164,7 @@
           "usergroups.item.get",
           "usergroups.item.post",
           "usergroups.item.put",
-          "settings.enabled"
+          "settings.users.enabled"
         ],
         "visible": true
       },
@@ -177,7 +184,7 @@
           "addresstypes.item.post",
           "addresstypes.item.put",
           "addresstypes.item.delete",
-          "settings.enabled"
+          "settings.users.enabled"
         ],
         "visible": true
       },
@@ -220,7 +227,7 @@
           "comments.item.get",
           "comments.item.post",
           "comments.item.put",
-          "settings.enabled"
+          "settings.users.enabled"
         ],
         "visible": false
       },
@@ -240,7 +247,7 @@
           "feefines.item.get",
           "feefines.item.post",
           "feefines.item.put",
-          "settings.enabled"
+          "settings.users.enabled"
         ],
         "visible": false
       },
@@ -260,7 +267,7 @@
           "owners.item.get",
           "owners.item.post",
           "owners.item.put",
-          "settings.enabled"
+          "settings.users.enabled"
         ],
         "visible": false
       },
@@ -280,7 +287,7 @@
           "payments.item.get",
           "payments.item.post",
           "payments.item.put",
-          "settings.enabled"
+          "settings.users.enabled"
         ],
         "visible": false
       },
@@ -300,7 +307,7 @@
           "refunds.item.get",
           "refunds.item.post",
           "refunds.item.put",
-          "settings.enabled"
+          "settings.users.enabled"
         ],
         "visible": false
       },
@@ -320,7 +327,7 @@
           "waives.item.get",
           "waives.item.post",
           "waives.item.put",
-          "settings.enabled"
+          "settings.users.enabled"
         ],
         "visible": false
       },
@@ -378,7 +385,7 @@
           "transfers.item.get",
           "transfers.item.post",
           "transfers.item.put",
-          "settings.enabled"
+          "settings.users.enabled"
         ],
         "visible": false
       },
@@ -398,7 +405,7 @@
           "transfertypes.item.get",
           "transfertypes.item.post",
           "transfertypes.item.put",
-          "settings.enabled"
+          "settings.users.enabled"
         ],
         "visible": false
       },
