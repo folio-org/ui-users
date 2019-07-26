@@ -9,7 +9,7 @@ class ContainedPermissions extends React.Component {
     availablePermissions: {
       type: 'okapi',
       records: 'permissions',
-      path: 'perms/permissions?length=1000&query=(mutable==false)',
+      path: 'perms/permissions?length=10000&query=(mutable==false)',
     },
   });
 

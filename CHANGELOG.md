@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## 2.25.0 (IN PROGRESS)
+
+* Retrieve up to 10k permissions, up from the current limit of 1k. Fixes UIU-1134.
+
 ## [2.24.0](https://github.com/folio-org/ui-users/tree/v2.24.0) (2019-07-24)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.23.0...v2.24.0)
 
