@@ -13,12 +13,12 @@ const modules = req.keys().reduce((acc, modulePath) => {
     return Object.assign(acc, {
       [moduleType]: {
         ...(acc[moduleType] || {}),
-        [moduleKey]: req(modulePath).default
+        [moduleKey]: req(modulePath).PermissionsModal
       }
     });
   } else if (modulePath === './config.js') {
     return Object.assign(acc, {
-      baseConfig: req(modulePath).default
+      baseConfig: req(modulePath).PermissionsModal
     });
   }
 

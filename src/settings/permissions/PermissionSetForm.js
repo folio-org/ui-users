@@ -49,7 +49,6 @@ class PermissionSetForm extends React.Component {
     this.confirmDeleteSet = this.confirmDeleteSet.bind(this);
     this.handleExpandAll = this.handleExpandAll.bind(this);
     this.handleSectionToggle = this.handleSectionToggle.bind(this);
-    this.containedPermissions = props.stripes.connect(ContainedPermissions);
     this.cViewMetaData = props.stripes.connect(ViewMetaData);
     this.state = {
       confirmDelete: false,
@@ -274,14 +273,14 @@ class PermissionSetForm extends React.Component {
               confirmLabel={<FormattedMessage id="ui-users.delete" />}
             />
 
-            <this.containedPermissions
+            <ContainedPermissions
               expanded={sections.permSection}
               onToggle={this.handleSectionToggle}
               accordionId="permSection"
               permToRead="perms.permissions.get"
               permToDelete="perms.permissions.item.put"
               permToModify="perms.permissions.item.put"
-              {...this.props}
+              name="subPermissions"
             />
           </Pane>
         </Paneset>
