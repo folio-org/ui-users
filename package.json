@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "2.23.4",
+  "version": "2.24.0",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -36,15 +36,22 @@
       "permissions": "5.0",
       "loan-policy-storage": "1.0 2.0",
       "loan-storage": "4.0 5.0 6.0",
-      "login": "4.7 5.0",
+      "login": "6.0",
       "feesfines": "15.0",
       "request-storage": "2.5 3.0",
-      "users-bl": "3.2 4.0"
+      "users-bl": "5.0"
     },
     "permissionSets": [
       {
         "permissionName": "module.users.enabled",
         "displayName": "UI: Users module is enabled"
+      },
+      {
+        "permissionName": "settings.users.enabled",
+        "displayName": "Settings (Users): display list of settings pages",
+        "subPermissions": [
+          "settings.enabled"
+        ]
       },
       {
         "permissionName": "ui-users.view",

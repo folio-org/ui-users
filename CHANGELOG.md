@@ -1,7 +1,13 @@
 # Change history for ui-users
 
-## 2.24.0 (IN PROGRESS)
+## 2.25.0 (IN PROGRESS)
 
+* Retrieve up to 10k permissions, up from the current limit of 1k. Fixes UIU-1134.
+
+## [2.24.0](https://github.com/folio-org/ui-users/tree/v2.24.0) (2019-07-24)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.23.0...v2.24.0)
+
+* Allow some loan-renewal failures to be overridden. Refs UIU-1017.
 * Remove unnecessary settings. Refs UIORG-150.
 * Handle "Active/Inactive" hard-code issue for the search filter. Fixes UIU-894.
 * Better search string construction won't accidentally match `*`. Fixes UIU-1086.
@@ -14,6 +20,11 @@
 * Fix expiration date for sponsor and proxy. Fixes UIU-924.
 * Update tests to cover changes in due date modal in stripes-smart-components. Refs UIU-1070.
 * Extend overdue loans report with fine/fee field. Refs UIU-987.
+* Optimize fee/fine settings and BigTest.
+* Create BigTest Payment methods. Refs UIU-998.
+* Create BigTest Refund reasons. Refs UIU-999.
+* Create BigTest Waive reasons. Refs UIU-1001.
+* Update `login` API to `v6.0`. Refs UIU-1099.
 
 ## [2.23.0](https://github.com/folio-org/ui-users/tree/v2.23.0) (2019-06-12)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.22.0...v2.23.0)

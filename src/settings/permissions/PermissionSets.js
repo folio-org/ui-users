@@ -34,7 +34,7 @@ class PermissionSets extends React.Component {
         path: 'perms/permissions',
       },
       GET: {
-        path: 'perms/permissions?length=1000&query=(mutable==true)&expandSubs=true',
+        path: 'perms/permissions?length=10000&query=(mutable==true)&expandSubs=true',
       },
       path: 'perms/permissions',
     },

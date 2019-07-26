@@ -64,6 +64,8 @@ describe('Test Fee/Fine History', () => {
 
           describe('close the Search & filter pane', () => {
             beforeEach(async () => {
+              await FeeFineHistoryInteractor.searchField.fillInput('Missing item');
+              await FeeFineHistoryInteractor.checkList(0).clickAndBlur();
               await FeeFineHistoryInteractor.closePane.click();
             });
 
@@ -71,6 +73,17 @@ describe('Test Fee/Fine History', () => {
               expect(FeeFineHistoryInteractor.openMenu.text).to.equal('Open');
             });
           });
+        });
+      });
+
+      describe('select columns', () => {
+        beforeEach(async function () {
+          await FeeFineHistoryInteractor.selectColumns.click();
+          await FeeFineHistoryInteractor.col.clickAndBlur();
+        });
+
+        it('renders proper amount of columns', () => {
+          expect(FeeFineHistoryInteractor.mclViewFeesFines.columnCount).to.equal(13);
         });
       });
 
@@ -87,6 +100,8 @@ describe('Test Fee/Fine History', () => {
 
       describe('selects all accounts', () => {
         beforeEach(async () => {
+          await FeeFineHistoryInteractor.openMenu.click();
+          await FeeFineHistoryInteractor.closedMenu.click();
           await FeeFineHistoryInteractor.allMenu.click();
         });
 
@@ -187,15 +202,6 @@ describe('Test Fee/Fine History', () => {
 
           it('show the cancel modal', () => {
             expect(FeeFineHistoryInteractor.cancelModal.hasHeader).to.be.true;
-          });
-        });
-
-        describe('select loan details option', () => {
-          beforeEach(async () => {
-            await FeeFineHistoryInteractor.dropDownEllipsis(5).click();
-          });
-          it('show the loan details modal', () => {
-            expect(FeeFineHistoryInteractor.loanDetailsIsPresent).to.be.true;
           });
         });
       });
