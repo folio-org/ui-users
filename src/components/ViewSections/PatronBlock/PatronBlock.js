@@ -164,11 +164,12 @@ class PatronBlock extends React.Component {
     ];
     const buttonDisabled = this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
     const displayWhenOpen =
-      <Button disabled={!buttonDisabled} onClick={e => { props.onClickViewPatronBlock(e, 'add'); }}>
+      <Button id="create-patron-block" disabled={!buttonDisabled} onClick={e => { props.onClickViewPatronBlock(e, 'add'); }}>
         <FormattedMessage id="ui-users.blocks.buttons.add" />
       </Button>;
     const items =
       <MultiColumnList
+        id="patron-block-mcl"
         contentData={contentData}
         formatter={this.getPatronFormatter()}
         visibleColumns={visibleColumns}
