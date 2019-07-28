@@ -18,6 +18,7 @@
 * Create BigTest Payment methods. Refs UIU-998.
 * Create BigTest Refund reasons. Refs UIU-999.
 * Create BigTest Waive reasons. Refs UIU-1001.
+* Create BigTest for CRUD patron blocks. Refs UIU-1003.
 
 ## [2.23.0](https://github.com/folio-org/ui-users/tree/v2.23.0) (2019-06-12)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.22.0...v2.23.0)
