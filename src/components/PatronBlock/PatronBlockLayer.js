@@ -169,6 +169,7 @@ class PatronBlockLayer extends React.Component {
           initialValues={this.props.initialValues}
         />
         <ConfirmationModal
+          id="patron-block-confirmation-modal"
           open={this.state.showConfirmDialog}
           onConfirm={this.onDeleteItem}
           onCancel={this.hideConfirm}
