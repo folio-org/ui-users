@@ -126,7 +126,7 @@ class PatronBlock extends React.Component {
   }
 
   onRowClick(e, row) {
-    const permAbled = this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
+    const permAbled = this.props.stripes.hasPerm('ui-users.patron_blocks');
     if (permAbled === true && (e.target.type !== 'button') && (e.target.tagName !== 'IMG')) {
       this.props.onClickViewPatronBlock(e, 'edit', row);
     }
@@ -162,7 +162,7 @@ class PatronBlock extends React.Component {
       'Display description',
       'Blocked actions',
     ];
-    const buttonDisabled = this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
+    const buttonDisabled = this.props.stripes.hasPerm('ui-users.patron_blocks');
     const displayWhenOpen =
       <Button id="create-patron-block" disabled={!buttonDisabled} onClick={e => { props.onClickViewPatronBlock(e, 'add'); }}>
         <FormattedMessage id="ui-users.blocks.buttons.add" />
