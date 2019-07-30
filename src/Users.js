@@ -6,6 +6,8 @@ import {
   injectIntl,
   intlShape,
 } from 'react-intl';
+import moment from 'moment';
+
 import { Button } from '@folio/stripes/components';
 import { makeQueryFunction, SearchAndSort } from '@folio/stripes/smart-components';
 import { AppIcon, stripesConnect, withStripes } from '@folio/stripes/core';
@@ -50,11 +52,12 @@ const filterConfig = [
   },
 ];
 
-
 const compileQuery = template(
   '(username="%{query}*" or personal.firstName="%{query}*" or personal.lastName="%{query}*" or personal.email="%{query}*" or barcode="%{query}*" or id="%{query}*" or externalSystemId="%{query}*")',
   { interpolate: /%{([\s\S]+?)}/g }
 );
+
+const getLoansOverdueDate = () => moment().tz('UTC').format();
 
 class Users extends React.Component {
   static manifest = Object.freeze({
@@ -124,7 +127,7 @@ class Users extends React.Component {
     loans: {
       type: 'okapi',
       records: 'loans',
-      path: 'circulation/loans?query=(status="Open")',
+      path: () => `circulation/loans?query=(status="Open" and dueDate < ${getLoansOverdueDate()})`,
       permissionsRequired: 'circulation.loans.collection.get,accounts.collection.get',
     }
   });
