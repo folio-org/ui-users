@@ -8,6 +8,7 @@
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.24.0...v2.24.1)
 
 * Retrieve up to 10k permissions, up from the current limit of 1k. Fixes UIU-1134.
+* Modify permission for patron blocks. Refs UIU-728.
 
 ## [2.24.0](https://github.com/folio-org/ui-users/tree/v2.24.0) (2019-07-24)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.23.0...v2.24.0)
