@@ -5,6 +5,7 @@ import {
   text
 } from '@bigtest/interactor';
 
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { AccordionInteractor } from '@folio/stripes-components/lib/Accordion/tests/interactor';
 
 @interactor class DeleteConfirmationModal {

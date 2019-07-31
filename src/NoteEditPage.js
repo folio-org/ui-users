@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import ReactRouterPropTypes from 'react-router-prop-types';
 import PropTypes from 'prop-types';
+import ReactRouterPropTypes from 'react-router-prop-types';
 
 import { NoteEditPage } from '@folio/stripes/smart-components';
+
+import { retrieveNoteReferredEntityDataFromLocationState } from './util';
 
 export default class NoteEditRoute extends Component {
   static propTypes = {
@@ -33,17 +35,12 @@ export default class NoteEditRoute extends Component {
 
   render() {
     const {
-      location: { state },
       match,
+      location: { state },
     } = this.props;
 
-    const { id } = match.params;
-
-    const referredEntityData = {
-      name: state.entityName,
-      type: state.entityType,
-      id: state.entityId,
-    };
+    const noteId = match.params.id;
+    const referredEntityData = retrieveNoteReferredEntityDataFromLocationState(state);
 
     return (
       <NoteEditPage
@@ -53,7 +50,7 @@ export default class NoteEditRoute extends Component {
         paneHeaderAppIcon="users"
         domain="users"
         navigateBack={this.goToNoteView}
-        noteId={id}
+        noteId={noteId}
       />
     );
   }

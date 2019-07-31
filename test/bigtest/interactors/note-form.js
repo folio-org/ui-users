@@ -8,10 +8,11 @@ import {
   blurrable,
   selectable,
   text,
+  focusable,
 } from '@bigtest/interactor';
 
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { AccordionInteractor } from '@folio/stripes-components/lib/Accordion/tests/interactor';
-import { focusable } from '@bigtest/interactor';
 
 @interactor class Select {
   selectOption = selectable();

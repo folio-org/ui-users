@@ -925,6 +925,7 @@ class ViewUser extends React.Component {
       parentResources,
       onClose,
       paneWidth,
+      match,
     } = this.props;
 
     const addressTypes = (parentResources.addressTypes || {}).records || [];
@@ -1101,7 +1102,7 @@ class ViewUser extends React.Component {
             </IfPermission>
             <NotesSmartAccordion
               domainName="users"
-              entityId={this.props.match.params.id}
+              entityId={match.params.id}
               entityName={getFullName(user)}
               open={this.state.sections.notesAccordion}
               onToggle={this.handleSectionToggle}

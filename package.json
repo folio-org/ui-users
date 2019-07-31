@@ -645,6 +645,7 @@
   },
   "dependencies": {
     "@folio/react-intl-safe-html": "^1.0.0",
+    "faker": "^4.1.0",
     "hashcode": "^1.0.3",
     "lodash": "^4.17.4",
     "moment": "^2.22.2",
@@ -653,6 +654,7 @@
     "react-hot-loader": "^4.3.12",
     "react-intl": "^2.5.0",
     "react-router-dom": "^4.0.0",
+    "react-router-prop-types": "^1.0.4",
     "redux-form": "^7.0.3",
     "uuid": "^3.0.1"
   },

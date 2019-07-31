@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
-import { Redirect } from 'react-router';
+import { Redirect } from 'react-router-dom';
 
 import { NoteCreatePage } from '@folio/stripes/smart-components';
+
+import { retrieveNoteReferredEntityDataFromLocationState } from './util';
 
 export default class NoteCreateRoute extends Component {
   static propTypes = {
@@ -19,11 +21,7 @@ export default class NoteCreateRoute extends Component {
       location: { state },
     } = this.props;
 
-    const referredRecordData = {
-      name: state.entityName,
-      type: state.entityType,
-      id: state.entityId,
-    };
+    const referredRecordData = retrieveNoteReferredEntityDataFromLocationState(state);
 
     return (
       <NoteCreatePage
@@ -41,6 +39,6 @@ export default class NoteCreateRoute extends Component {
 
     return location.state
       ? this.renderCreatePage()
-      : <Redirect to="/eholdings" />;
+      : <Redirect to="/users" />;
   }
 }

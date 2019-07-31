@@ -28,9 +28,11 @@ export default function config() {
     configs: []
   });
   this.post('/bl-users/login', () => {
-    return new Response(201, {
-      'X-Okapi-Token': `myOkapiToken:${Date.now()}`
-    }, {
+    return new Response(
+      201,
+      {
+        'X-Okapi-Token': `myOkapiToken:${Date.now()}`
+      }, {
         user: {
           id: 'test',
           username: 'testuser',
@@ -43,7 +45,8 @@ export default function config() {
         permissions: {
           permissions: []
         }
-      });
+      }
+    );
   });
   this.get('/groups', {
     'usergroups': [{
@@ -275,28 +278,6 @@ export default function config() {
   });
 
   this.get('/authn/credentials-existence', () => { });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   this.get('/note-types');
 

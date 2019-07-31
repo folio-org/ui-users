@@ -150,7 +150,7 @@ class UsersRouting extends React.Component {
       return (
         <Route path={path} component={Settings}>
           <Switch>
-            {[].concat(<Route path="/notes/new" component={NoteCreatePage} />, ...settingsSections.map(section => section.pages))
+            {[].concat(...settingsSections.map(section => section.pages))
               .filter(setting => !setting.perm || stripes.hasPerm(setting.perm))
               .map(setting => <Route path={`${path}/${setting.route}`} key={setting.route} component={setting.component} />)
             }

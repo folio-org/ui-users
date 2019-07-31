@@ -38,3 +38,15 @@ export function validate(item, index, items, field, label) {
   }
   return error;
 }
+
+export function retrieveNoteReferredEntityDataFromLocationState(state) {
+  if (state) {
+    return {
+      name: state.entityName,
+      type: state.entityType,
+      id: state.entityId,
+    };
+  }
+
+  return false;
+}

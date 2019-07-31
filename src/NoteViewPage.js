@@ -4,13 +4,15 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 
 import { NoteViewPage } from '@folio/stripes/smart-components';
 
+import { retrieveNoteReferredEntityDataFromLocationState } from './util';
+
 class NoteViewRoute extends Component {
   static propTypes = {
     history: ReactRouterPropTypes.history.isRequired,
     location: ReactRouterPropTypes.location.isRequired,
     match: PropTypes.shape({
       params: PropTypes.shape({
-        noteId: PropTypes.string.isRequired,
+        id: PropTypes.string.isRequired,
       }).isRequired,
     }).isRequired,
   };
@@ -23,7 +25,7 @@ class NoteViewRoute extends Component {
     } = this.props;
 
     history.replace({
-      pathname: `/users/notes/${match.params.id}/edit/`,
+      pathname: `/users/notes/${match.params.id}/edit`,
       state: location.state,
     });
   };
@@ -49,13 +51,8 @@ class NoteViewRoute extends Component {
       location: { state },
     } = this.props;
 
-    const { id } = match.params;
-    const referredRecordData = {
-      name: state.entityName,
-      type: state.entityType,
-      id: state.entityId,
-    };
-
+    const noteId = match.params.id;
+    const referredEntityData = retrieveNoteReferredEntityDataFromLocationState(state);
 
     return (
       <NoteViewPage
@@ -64,8 +61,8 @@ class NoteViewRoute extends Component {
         navigateBack={this.navigateBack}
         onEdit={this.onEdit}
         paneHeaderAppIcon="users"
-        referredEntityData={referredRecordData}
-        noteId={id}
+        referredEntityData={referredEntityData}
+        noteId={noteId}
       />
     );
   }

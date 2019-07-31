@@ -15,8 +15,9 @@ const notesModal = new NotesModal();
 const noteForm = new NoteForm();
 const noteView = new NoteView();
 
-describe.only('User notes flow', function () {
+describe('User notes flow', function () {
   setupApplication();
+
   let user;
   let userNote;
   let noteType;
@@ -349,7 +350,7 @@ describe.only('User notes flow', function () {
         });
 
         it('should redirect to note edit page', function () {
-          expect(this.location.pathname + this.location.search).to.equal(`/users/notes/${userNote.id}/edit/`);
+          expect(this.location.pathname + this.location.search).to.equal(`/users/notes/${userNote.id}/edit`);
         });
 
         it('should display general information accordion', () => {
@@ -410,7 +411,7 @@ describe.only('User notes flow', function () {
               });
 
               it('should not redirect to previous location', function () {
-                expect(this.location.pathname + this.location.search).to.equal(`/users/notes/${userNote.id}/edit/`);
+                expect(this.location.pathname + this.location.search).to.equal(`/users/notes/${userNote.id}/edit`);
               });
             });
           });
@@ -443,7 +444,7 @@ describe.only('User notes flow', function () {
                 });
 
                 it('should keep the user on the same page', function () {
-                  expect(this.location.pathname + this.location.search).to.equal(`/users/notes/${userNote.id}/edit/`);
+                  expect(this.location.pathname + this.location.search).to.equal(`/users/notes/${userNote.id}/edit`);
                 });
               });
 
@@ -481,7 +482,7 @@ describe.only('User notes flow', function () {
                 });
 
                 it('should keep the user on the same page', function () {
-                  expect(this.location.pathname + this.location.search).to.equal(`/users/notes/${userNote.id}/edit/`);
+                  expect(this.location.pathname + this.location.search).to.equal(`/users/notes/${userNote.id}/edit`);
                 });
               });
 
