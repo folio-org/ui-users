@@ -55,6 +55,11 @@ class UserSearchContainer extends React.Component {
         limit: '40',
       },
       records: 'usergroups',
+    },
+    tags: {
+      type: 'okapi',
+      path: 'tags?limit=100',
+      records: 'tags',
     }
   });
 
@@ -144,6 +149,7 @@ class UserSearchContainer extends React.Component {
         initialSearch="?sort=name"
         onNeedMoreData={this.onNeedMoreData}
         {...this.props}
+        tags={get(this.props.resources, 'tags.records', [])}
       >
         { this.props.children }
       </UserSearch>

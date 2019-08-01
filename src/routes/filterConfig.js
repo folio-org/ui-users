@@ -17,6 +17,11 @@ const filterConfig = [
     cql: 'patronGroup',
     values: [], // will be filled in by componentDidUpdate
   },
+  {
+    name: 'tags',
+    cql: 'tags',
+    values: [],
+  },
 ];
 
 export default filterConfig;

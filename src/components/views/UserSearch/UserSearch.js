@@ -303,6 +303,7 @@ class UserSearch extends React.Component {
                               </Button>
                             </div>
                             <Filters
+                              tags={this.props.tags}
                               onChangeHandlers={getFilterHandlers()}
                               activeFilters={activeFilters}
                               config={filterConfig}
