@@ -4,14 +4,11 @@ import faker from 'faker';
 
 import setupApplication from '../helpers/setup-application';
 import NotesAccordion from '../interactors/notes-accordion';
-import NotesModal from '../interactors/notes-modal';
 import NoteForm from '../interactors/note-form';
 import NoteView from '../interactors/note-view';
-import wait from '../helpers/wait';
 import { getFullName } from '../../../src/util';
 
 const notesAccordion = new NotesAccordion();
-const notesModal = new NotesModal();
 const noteForm = new NoteForm();
 const noteView = new NoteView();
 
@@ -67,10 +64,6 @@ describe('User notes flow', function () {
 
     it('should display create note button', () => {
       expect(notesAccordion.newButtonDisplayed).to.be.true;
-    });
-
-    it('should display assign button', () => {
-      expect(notesAccordion.assignButtonDisplayed).to.be.true;
     });
 
     it('should display notes list', () => {
@@ -183,80 +176,6 @@ describe('User notes flow', function () {
 
             it('notes accordion should contain 2 notes', () => {
               expect(notesAccordion.notes().length).to.equal(2);
-            });
-          });
-        });
-      });
-    });
-
-    describe('and assign button was clicked', () => {
-      beforeEach(async () => {
-        await notesAccordion.assignButton.click();
-      });
-
-      it('should open notes modal', function () {
-        expect(notesModal.isDisplayed).to.be.true;
-      });
-
-      it('should disable search button', () => {
-        expect(notesModal.searchButtonIsDisabled).to.be.true;
-      });
-
-      it('should display empty message', () => {
-        expect(notesModal.emptyMessageIsDisplayed).to.be.true;
-      });
-
-      describe('and search query was entered', () => {
-        beforeEach(async () => {
-          await notesModal.enterSearchQuery('some note');
-          await wait(300);
-        });
-
-        it('should enable search button', () => {
-          expect(notesModal.searchButtonIsDisabled).to.be.false;
-        });
-
-        describe('and the search button was clicked', () => {
-          beforeEach(async () => {
-            await notesModal.clickSearchButton();
-          });
-
-          it('should display notes list', () => {
-            expect(notesModal.notesListIsDisplayed).to.be.true;
-          });
-        });
-
-        describe('and unassigned filter was selected', () => {
-          beforeEach(async () => {
-            await notesModal.selectUnassignedFilter();
-          });
-
-          it('notes list should contain 2 notes', () => {
-            expect(notesModal.notes().length).to.equal(2);
-          });
-
-          it('notes list should display only unselected notes', () => {
-            expect(notesModal.notes(0).checkboxIsSelected).to.be.false;
-            expect(notesModal.notes(1).checkboxIsSelected).to.be.false;
-          });
-
-          describe('and the first note in the list was checked', () => {
-            beforeEach(async () => {
-              await notesModal.notes(0).clickCheckbox();
-            });
-
-            describe('and save button was clicked', () => {
-              beforeEach(async () => {
-                await notesModal.clickSaveButton();
-              });
-
-              it('should close notes modal', () => {
-                expect(notesModal.isDisplayed).to.be.false;
-              });
-
-              it('notes accordion should contain 2 notes', () => {
-                expect(notesAccordion.notes().length).to.equal(2);
-              });
             });
           });
         });

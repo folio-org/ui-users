@@ -1110,6 +1110,7 @@ class ViewUser extends React.Component {
               entityType="user"
               pathToNoteCreate="/users/notes/new"
               pathToNoteDetails="/users/notes"
+              hideAssignButton
             />
           </AccordionSet>
         </HasCommand>
