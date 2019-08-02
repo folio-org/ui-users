@@ -2,7 +2,6 @@ import {
   interactor,
   clickable,
   text,
-  isPresent,
   isVisible,
 } from '@bigtest/interactor';
 
@@ -32,7 +31,8 @@ import TextFieldInteractor from '@folio/stripes-components/lib/TextField/tests/i
 
   label = text('#accordion-toggle-button-patronBlocksSection > span > div > div > div:nth-child(1) > h3');
 
-  DropdownSection = clickable('#accordion-toggle-button-patronBlocksSection');
+  clickOnPatronBlockSection = clickable('#accordion-toggle-button-patronBlocksSection');
+
   toggleSectionButton = clickable('[view-users-accordion-section]');
   createButton = clickable('#create-patron-block');
 
