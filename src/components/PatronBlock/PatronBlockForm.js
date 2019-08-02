@@ -148,8 +148,6 @@ class PatronBlockForm extends React.Component {
     const title = query.layer === 'edit-block' ? getFullName(user) : intl.formatMessage({ id: 'ui-users.blocks.layer.newBlockTitle' });
     const userD = query.layer !== 'edit-block' ? <UserDetails user={user} /> : '';
 
-    console.log('initial values', initialValues);
-
     return (
       <form id="patron-block-form">
         <Pane
