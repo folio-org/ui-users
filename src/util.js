@@ -48,5 +48,5 @@ export function retrieveNoteReferredEntityDataFromLocationState(state) {
     };
   }
 
-  return false;
+  return null;
 }
