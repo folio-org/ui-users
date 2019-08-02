@@ -636,6 +636,7 @@
     "babel-polyfill": "^6.26.0",
     "chai": "^4.2.0",
     "eslint": "^5.5.0",
+    "faker": "^4.1.0",
     "mocha": "^5.2.0",
     "react": "^16.5.0",
     "react-dom": "^16.5.0",
@@ -645,7 +646,6 @@
   },
   "dependencies": {
     "@folio/react-intl-safe-html": "^1.0.0",
-    "faker": "^4.1.0",
     "hashcode": "^1.0.3",
     "lodash": "^4.17.4",
     "moment": "^2.22.2",
