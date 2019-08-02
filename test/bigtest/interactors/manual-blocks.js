@@ -16,6 +16,7 @@ import TextFieldInteractor from '@folio/stripes-components/lib/TextField/tests/i
 @interactor class PatronBlocksSection {
   sectionIsPresent = isVisible('#accordion-toggle-button-patronBlocksSection');
   patronBlocksAreVisible = isVisible('#patron-block-mcl');
+  formIsVisible = isVisible('#patron-block-form');
 
   whenSectionLoaded() {
     return this.when(() => this.sectionIsPresent);
@@ -23,6 +24,10 @@ import TextFieldInteractor from '@folio/stripes-components/lib/TextField/tests/i
 
   whenBlocksLoaded() {
     return this.when(() => this.patronBlocksAreVisible);
+  }
+
+  whenFormLoaded() {
+    return this.when(() => this.formIsVisible);
   }
 
   label = text('#accordion-toggle-button-patronBlocksSection > span > div > div > div:nth-child(1) > h3');

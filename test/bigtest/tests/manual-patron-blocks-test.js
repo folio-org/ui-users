@@ -65,6 +65,7 @@ describe('Test Patron Blocks section', () => {
   describe('update patron block', async () => {
     beforeEach(async () => {
       await PatronBlocksInteractor.mclPatronBlock.rows(1).click();
+      await PatronBlocksInteractor.whenFormLoaded();
     });
 
     it('compares the value', () => {
