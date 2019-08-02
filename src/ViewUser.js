@@ -971,7 +971,7 @@ class ViewUser extends React.Component {
                 ? <PatronBlockMessage />
                 : ''}
             </Col>
-            <Col xs={2} view-users-accordion-section>
+            <Col xs={2} id="view-users-accordion-section">
               <ExpandAllButton
                 accordionStatus={this.state.sections}
                 onToggle={this.handleExpandAll}
