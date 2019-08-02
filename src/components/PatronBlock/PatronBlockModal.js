@@ -47,7 +47,7 @@ const PatronBlockModal = ({ open, onClose, patronBlocks, viewUserPath }) => {
           <Row end="xs">
             <Col>
               <Button id="patron-block-close-modal" onClick={onClose}><FormattedMessage id="ui-users.blocks.closeButton" /></Button>
-              <Button id="patron-block-details-modal" istyle={{ 'marginLeft': '15px' }} buttonStyle="primary" to={viewUserPath}><FormattedMessage id="ui-users.blocks.detailsButton" /></Button>
+              <Button id="patron-block-details-modal" style={{ 'marginLeft': '15px' }} buttonStyle="primary" to={viewUserPath}><FormattedMessage id="ui-users.blocks.detailsButton" /></Button>
             </Col>
           </Row>
         </Col>

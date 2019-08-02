@@ -632,7 +632,7 @@ class ViewUser extends React.Component {
           {contentLabel => (
             <Layer isOpen contentLabel={contentLabel}>
               <this.connectedPatronBlockLayer
-                {...this.props}
+                stripes={stripes}
                 query={query}
                 user={user}
                 selectedPatronBlock={this.state.selectedPatronBlock}
@@ -971,7 +971,7 @@ class ViewUser extends React.Component {
                 ? <PatronBlockMessage />
                 : ''}
             </Col>
-            <Col xs={2} view-users-accordion-section>
+            <Col xs={2} id="view-users-accordion-section">
               <ExpandAllButton
                 accordionStatus={this.state.sections}
                 onToggle={this.handleExpandAll}
