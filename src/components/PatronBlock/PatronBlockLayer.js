@@ -46,7 +46,6 @@ class PatronBlockLayer extends React.Component {
     onCancel: PropTypes.func,
     user: PropTypes.object,
     query: PropTypes.object,
-    initialValues: PropTypes.object,
     intl: intlShape.isRequired,
     stripes: PropTypes.object,
   };
@@ -143,10 +142,22 @@ class PatronBlockLayer extends React.Component {
     const {
       query,
       intl,
+      selectedPatronBlock,
+      resources,
+      stripes,
+      onCancel,
+      user,
     } = this.props;
-    const selectedItem = (query.block && !this.props.selectedPatronBlock.id) ?
-      _.get(this.props.resources, ['patronBlocks', 'records', 0], {})
-      : this.props.selectedPatronBlock;
+
+    const selectedItem = (query.block && !selectedPatronBlock.id) ?
+      _.get(resources, ['patronBlocks', 'records', 0], {})
+      : selectedPatronBlock;
+
+    const initialValues = _.get(selectedItem, 'id') ? selectedItem : {
+      borrowing: true,
+      renewals: true,
+      requests: true,
+    };
 
     const message = !_.isEmpty(selectedItem) ?
       <span>
@@ -158,15 +169,15 @@ class PatronBlockLayer extends React.Component {
     return (
       <div>
         <PatronBlockForm
-          intl={this.props.intl}
-          stripes={this.props.stripes}
-          onClose={this.props.onCancel}
+          intl={intl}
+          stripes={stripes}
+          onClose={onCancel}
           onDeleteItem={this.showConfirm}
           query={query}
-          selectedItem={selectedItem}
-          user={this.props.user}
+          user={user}
           onSubmit={this.onSubmit}
-          initialValues={this.props.initialValues}
+          selectedItem={this.selectedItem}
+          initialValues={initialValues}
         />
         <ConfirmationModal
           id="patron-block-confirmation-modal"

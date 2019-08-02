@@ -32,6 +32,7 @@ import UserDetails from '../Accounts/ChargeFeeFine/UserDetails';
 
 const validate = (item) => {
   const errors = {};
+
   if (!item.desc) {
     errors.desc = <FormattedMessage id="ui-users.blocks.form.validate.desc" />;
   }
@@ -43,6 +44,7 @@ const validate = (item) => {
   if (moment(moment(item.expirationDate).format()).isBefore(moment().format())) {
     errors.expirationDate = <FormattedMessage id="ui-users.blocks.form.validate.future" />;
   }
+
   return errors;
 };
 
@@ -57,12 +59,11 @@ class PatronBlockForm extends React.Component {
     query: PropTypes.object,
     onDeleteItem: PropTypes.func,
     onClose: PropTypes.func,
-    initialize: PropTypes.func,
     handleSubmit: PropTypes.func.isRequired,
     connect: PropTypes.func,
     intl: intlShape.isRequired,
-    readOnly: PropTypes.bool,
     stripes: PropTypes.object,
+    initialValues: PropTypes.object,
   };
 
   constructor(props) {
@@ -70,7 +71,6 @@ class PatronBlockForm extends React.Component {
 
     this.handleExpandAll = this.handleExpandAll.bind(this);
     this.handleSectionToggle = this.handleSectionToggle.bind(this);
-
     this.connectedViewMetaData = props.stripes.connect(ViewMetaData);
 
     this.state = {
@@ -79,39 +79,7 @@ class PatronBlockForm extends React.Component {
         blockActionsSection: true,
         prueba: true,
       },
-      borrowing: false,
-      renewals: false,
-      requests: false,
-      checkedBlocks: {},
     };
-  }
-
-  componentDidMount() {
-    const item = this.props.selectedItem || {};
-    const state = {
-      borrowing: (item.id) ? item.borrowing : true,
-      renewals: (item.id) ? item.renewals : true,
-      requests: (item.id) ? item.requests : true,
-    };
-    this.setState(state);
-    this.props.initialize(state);
-
-    if (item.id) {
-      this.props.initialize(item);
-    }
-  }
-
-  componentDidUpdate(prevProps) {
-    if (JSON.stringify(prevProps.selectedItem) !== JSON.stringify(this.props.selectedItem)) {
-      const item = this.props.selectedItem || {};
-      // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({
-        borrowing: item.borrowing,
-        renewals: item.renewals,
-        requests: item.requests,
-      });
-      this.props.initialize(item);
-    }
   }
 
   handleSectionToggle({ id }) {
@@ -151,13 +119,15 @@ class PatronBlockForm extends React.Component {
       submitting,
       invalid,
       query,
+      handleSubmit,
+      onDeleteItem,
     } = this.props;
 
     const submit =
-      <Button id="patron-block-save-close" marginBottom0 buttonStyle="primary" onClick={this.props.handleSubmit} disabled={pristine || submitting || invalid}>
+      <Button id="patron-block-save-close" marginBottom0 buttonStyle="primary" onClick={handleSubmit} disabled={pristine || submitting || invalid}>
         {(query.layer === 'edit-block') ? <FormattedMessage id="ui-users.blocks.form.button.save" /> : <FormattedMessage id="ui-users.blocks.form.button.create" />}
       </Button>;
-    const del = (query.layer === 'edit-block') ? <Button id="patron-block-delete" marginBottom0 buttonStyle="danger" onClick={this.props.onDeleteItem}><FormattedMessage id="ui-users.blocks.form.button.delete" /></Button> : '';
+    const del = (query.layer === 'edit-block') ? <Button id="patron-block-delete" marginBottom0 buttonStyle="danger" onClick={onDeleteItem}><FormattedMessage id="ui-users.blocks.form.button.delete" /></Button> : '';
 
     return (
       <PaneMenu>
@@ -167,59 +137,52 @@ class PatronBlockForm extends React.Component {
     );
   }
 
-  onToggleActions = (action) => {
-    const { readOnly } = this.props;
-
-    return (e) => {
-      if (readOnly) {
-        e.preventDefault();
-      }
-      this.setState(prevState => ({
-        [action]: !prevState[action],
-      }));
-    };
-  }
-
   render() {
-    const user = this.props.user || {};
-    const { intl } = this.props;
-    const title = this.props.query.layer === 'edit-block' ? getFullName(user) : intl.formatMessage({ id: 'ui-users.blocks.layer.newBlockTitle' });
-    const userD = this.props.query.layer !== 'edit-block' ? <UserDetails user={user} /> : '';
+    const {
+      intl,
+      initialValues,
+      selectedItem,
+      query,
+      user = {},
+    } = this.props;
+    const title = query.layer === 'edit-block' ? getFullName(user) : intl.formatMessage({ id: 'ui-users.blocks.layer.newBlockTitle' });
+    const userD = query.layer !== 'edit-block' ? <UserDetails user={user} /> : '';
 
-    const isSelectedItemMetadata = this.props.selectedItem || {};
+    console.log('initial values', initialValues);
 
     return (
-      <Pane
-        id="title-patron-block"
-        defaultWidth="20%"
-        firstMenu={this.renderFirstMenu()}
-        lastMenu={this.renderLastMenu()}
-        appIcon={<AppIcon app="users" size="small" />}
-        paneTitle={title}
-      >
-        <TitleManager />
-        {userD}
-        <Row end="xs">
-          <Col xs id="collapse-patron-block">
-            <ExpandAllButton accordionStatus={this.state.sections} onToggle={this.handleExpandAll} />
-          </Col>
-        </Row>
-        <Row>
-          <Col xs>
-            <Accordion
-              id="blockInformationSection"
-              label={<FormattedMessage id="ui-users.blocks.form.label.information" />}
-              onToggle={this.handleSectionToggle}
-              open={this.state.sections.blockInformationSection}
-            >
-              {!_.isEmpty(isSelectedItemMetadata) ?
-                <Row>
-                  <Col xs={12} sm={10} md={7} lg={5}>
-                    <this.connectedViewMetaData metadata={this.props.selectedItem.metadata} />
-                  </Col>
-                </Row> : ''
+      <form id="patron-block-form">
+        <Pane
+          id="title-patron-block"
+          defaultWidth="20%"
+          firstMenu={this.renderFirstMenu()}
+          lastMenu={this.renderLastMenu()}
+          appIcon={<AppIcon app="users" size="small" />}
+          paneTitle={title}
+        >
+          <TitleManager />
+          {userD}
+          <Row end="xs">
+            <Col xs id="collapse-patron-block">
+              <ExpandAllButton accordionStatus={this.state.sections} onToggle={this.handleExpandAll} />
+            </Col>
+          </Row>
+          <Row>
+            <Col xs>
+              <Accordion
+                id="blockInformationSection"
+                label={<FormattedMessage id="ui-users.blocks.form.label.information" />}
+                onToggle={this.handleSectionToggle}
+                open={this.state.sections.blockInformationSection}
+              >
+                {!_.isEmpty(selectedItem) ?
+                  <Row>
+                    <Col xs={12} sm={10} md={7} lg={5}>
+                      <this.connectedViewMetaData metadata={selectedItem.metadata} />
+                    </Col>
+                  </Row> : ''
               }
-              <form>
+
                 <Row>
                   <Col id="patronBlockForm-desc" xs={12} sm={10} md={7} lg={5}>
                     <Field
@@ -272,10 +235,8 @@ class PatronBlockForm extends React.Component {
                   <Col id="patronBlockForm-borrowing" xs={12} sm={10} md={7} lg={5}>
                     <Field
                       name="borrowing"
+                      checked={initialValues.borrowing}
                       label={<FormattedMessage id="ui-users.blocks.form.label.borrowing" />}
-                      checked={this.state.borrowing}
-                      value={this.state.borrowing}
-                      onChange={this.onToggleActions('borrowing')}
                       component={Checkbox}
                     />
                   </Col>
@@ -284,10 +245,8 @@ class PatronBlockForm extends React.Component {
                   <Col id="patronBlockForm-renewals" xs={12} sm={10} md={7} lg={5}>
                     <Field
                       name="renewals"
+                      checked={initialValues.renewals}
                       label={<FormattedMessage id="ui-users.blocks.form.label.renewals" />}
-                      checked={this.state.renewals}
-                      onChange={this.onToggleActions('renewals')}
-                      value={this.state.renewals}
                       component={Checkbox}
                     />
                   </Col>
@@ -296,25 +255,23 @@ class PatronBlockForm extends React.Component {
                   <Col id="patronBlockForm-requests" xs={12} sm={10} md={7} lg={5}>
                     <Field
                       name="requests"
+                      checked={initialValues.requests}
                       label={<FormattedMessage id="ui-users.blocks.form.label.request" />}
                       component={Checkbox}
-                      checked={this.state.requests}
-                      onChange={this.onToggleActions('requests')}
-                      value={this.state.requests}
                     />
                   </Col>
                 </Row>
-              </form>
-            </Accordion>
-          </Col>
-        </Row>
-      </Pane>
+              </Accordion>
+            </Col>
+          </Row>
+        </Pane>
+      </form>
     );
   }
 }
 
 export default stripesForm({
-  form: 'patron-block-form',
+  form: 'patronBlockForm',
+  enableReinitialize: false,
   validate,
-  fields: [],
 })(PatronBlockForm);

@@ -632,7 +632,7 @@ class ViewUser extends React.Component {
           {contentLabel => (
             <Layer isOpen contentLabel={contentLabel}>
               <this.connectedPatronBlockLayer
-                {...this.props}
+                stripes={stripes}
                 query={query}
                 user={user}
                 selectedPatronBlock={this.state.selectedPatronBlock}

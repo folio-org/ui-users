@@ -3,6 +3,7 @@ import {
   clickable,
   text,
   isPresent,
+  isVisible,
 } from '@bigtest/interactor';
 
 import TestAreaInteractor from '@folio/stripes-components/lib/TextArea/tests/interactor'; // eslint-disable-line
@@ -13,10 +14,15 @@ import ConfirmationModalInteractor from '@folio/stripes-components/lib/Confirmat
 import TextFieldInteractor from '@folio/stripes-components/lib/TextField/tests/interactor'; // eslint-disable-line
 
 @interactor class PatronBlocksSection {
-  sectionIsPresent = isPresent('#accordion-toggle-button-patronBlocksSection');
+  sectionIsPresent = isVisible('#accordion-toggle-button-patronBlocksSection');
+  patronBlocksAreVisible = isVisible('#patron-block-mcl');
 
   whenSectionLoaded() {
     return this.when(() => this.sectionIsPresent);
+  }
+
+  whenBlocksLoaded() {
+    return this.when(() => this.patronBlocksAreVisible);
   }
 
   label = text('#accordion-toggle-button-patronBlocksSection > span > div > div > div:nth-child(1) > h3');
