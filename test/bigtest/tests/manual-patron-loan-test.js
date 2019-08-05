@@ -38,7 +38,7 @@ describe('Test Patron Blocks renewals', () => {
       await PatronBlocksInteractor.patronBlockModalDetailsLoan();
       this.visit('/users/view/1ad737b0-d847-11e6-bf26-cec0c932ce02');
       await PatronBlocksInteractor.whenSectionLoaded();
-      await PatronBlocksInteractor.DropdownSection();
+      await PatronBlocksInteractor.clickOnPatronBlockSection();
     });
 
     it('renders proper amount of rows', () => {

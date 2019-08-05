@@ -9,7 +9,6 @@ import { faker } from '@bigtest/mirage';
 import setupApplication from '../helpers/setup-application';
 import PatronBlocksInteractor from '../interactors/manual-blocks';
 
-
 describe('Test Patron Blocks section', () => {
   setupApplication({
     scenarios: ['manual-blocks'],
@@ -21,8 +20,6 @@ describe('Test Patron Blocks section', () => {
   beforeEach(async function () {
     this.visit('/users/view/1ad737b0-d847-11e6-bf26-cec0c932ce02');
     await PatronBlocksInteractor.whenSectionLoaded();
-    await PatronBlocksInteractor.DropdownSection();
-    await PatronBlocksInteractor.DropdownSection();
     await PatronBlocksInteractor.whenBlocksLoaded();
   });
 
@@ -65,6 +62,7 @@ describe('Test Patron Blocks section', () => {
   describe('update patron block', async () => {
     beforeEach(async () => {
       await PatronBlocksInteractor.mclPatronBlock.rows(1).click();
+      await PatronBlocksInteractor.whenFormLoaded();
     });
 
     it('compares the value', () => {

@@ -2,7 +2,6 @@ import {
   interactor,
   clickable,
   text,
-  isPresent,
   isVisible,
 } from '@bigtest/interactor';
 
@@ -16,6 +15,7 @@ import TextFieldInteractor from '@folio/stripes-components/lib/TextField/tests/i
 @interactor class PatronBlocksSection {
   sectionIsPresent = isVisible('#accordion-toggle-button-patronBlocksSection');
   patronBlocksAreVisible = isVisible('#patron-block-mcl');
+  formIsVisible = isVisible('#patron-block-form');
 
   whenSectionLoaded() {
     return this.when(() => this.sectionIsPresent);
@@ -25,9 +25,14 @@ import TextFieldInteractor from '@folio/stripes-components/lib/TextField/tests/i
     return this.when(() => this.patronBlocksAreVisible);
   }
 
+  whenFormLoaded() {
+    return this.when(() => this.formIsVisible);
+  }
+
   label = text('#accordion-toggle-button-patronBlocksSection > span > div > div > div:nth-child(1) > h3');
 
-  DropdownSection = clickable('#accordion-toggle-button-patronBlocksSection');
+  clickOnPatronBlockSection = clickable('#accordion-toggle-button-patronBlocksSection');
+
   toggleSectionButton = clickable('[view-users-accordion-section]');
   createButton = clickable('#create-patron-block');
 
