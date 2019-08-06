@@ -190,8 +190,8 @@ class ActionModal extends React.Component {
       reset,
     } = this.props;
 
-    const selected = calculateSelectedAmount(accounts); // Por que?
-    this.setState({ amount: selected }); // Por que?
+    const selected = calculateSelectedAmount(accounts);
+    this.setState({ amount: selected });
     onClose();
     reset();
   }
@@ -257,7 +257,7 @@ class ActionModal extends React.Component {
   renderMethod = (options) => {
     const { action } = this.props;
     return (
-      <Col xs={action === 'payment' ? 3 : 7}>
+      <Col xs={this.isPaymentAction(action) ? 3 : 7}>
         <Row>
           <Col xs>
             <FormattedMessage id={`ui-users.accounts.${action}.method`} />
@@ -280,6 +280,10 @@ class ActionModal extends React.Component {
         </Row>
       </Col>
     );
+  }
+
+  isPaymentAction = (action) => {
+    return action === 'payment';
   }
 
   render() {
@@ -318,7 +322,7 @@ class ActionModal extends React.Component {
 
     const ownerOptions = owners.filter(o => o.owner !== 'Shared').map(o => ({ value: o.id, label: o.owner }));
 
-    let options = (action === 'payment') ? data.filter(d => (d.ownerId === (accounts.length > 1 ? ownerId : (accounts[0] || {}).ownerId))) : data;
+    let options = (this.isPaymentAction(action)) ? data.filter(d => (d.ownerId === (accounts.length > 1 ? ownerId : (accounts[0] || {}).ownerId))) : data;
     options = _.uniqBy(options.map(o => ({ id: o.id, label: o[label] })), 'label');
 
     return (
@@ -388,7 +392,7 @@ class ActionModal extends React.Component {
                 </Col>
               </Row>
             </Col>
-            {(action === 'payment' && accounts.length > 1) &&
+            {(this.isPaymentAction(action) && accounts.length > 1) &&
               <Col xs={4}>
                 <Row>
                   <Col xs>
@@ -415,7 +419,7 @@ class ActionModal extends React.Component {
               </Col>
             }
             {this.renderMethod(options)}
-            {action === 'payment' && this.renderTransactionInfo()}
+            {this.isPaymentAction(action) && this.renderTransactionInfo()}
           </Row>
           <br />
           {(action === 'paymany' && accounts.length > 1) &&

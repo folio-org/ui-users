@@ -189,21 +189,21 @@ class Charge extends React.Component {
     type.loanId = this.props.selectedLoan.id || '0';
     type.userId = this.props.user.id;
     type.itemId = this.item.id || '0';
-    let c = '';
+    let commentInfo = '';
     const tagStaff = formatMessage({ id: 'ui-users.accounts.actions.tag.staff' });
     const tagPatron = formatMessage({ id: 'ui-users.accounts.actions.tag.patron' });
     if (type.comments) {
-      c = tagStaff + ': ' + type.comments;
+      commentInfo = `${tagStaff} : ${type.comments}`;
     }
     if (type.patronInfo && type.notify) {
-      c = c + '\n' + tagPatron + ': ' + type.patronInfo;
+      commentInfo = `${commentInfo} \n ${tagPatron} : ${type.patronInfo}`;
     }
     delete type.comments;
     delete type.notify;
     delete type.patronInfo;
     this.type = type;
     return this.props.mutator.accounts.POST(type)
-      .then(() => this.newAction({}, type.id, type.feeFineType, type.amount, c, type.remaining, 0, type.feeFineOwner));
+      .then(() => this.newAction({}, type.id, type.feeFineType, type.amount, commentInfo, type.remaining, 0, type.feeFineOwner));
   }
 
   newAction = (action, id, typeAction, amount, comment, balance, transaction, createdAt) => {

@@ -309,17 +309,17 @@ class Actions extends React.Component {
       type.status.name = 'Closed';
     }
     const balance = type.remaining - parseFloat(payment);
-    let c = '';
+    let commentInfo = '';
     if (values.comment) {
-      c = tagStaff + ': ' + values.comment;
+      commentInfo = `${tagStaff} : ${values.comment}`;
     }
     if (values.patronInfo && values.notify) {
-      c = c + '\n' + tagPatron + ': ' + values.patronInfo;
+      commentInfo = `${commentInfo} \n ${tagPatron} : ${values.patronInfo}`;
     }
     const createdAt = (owners.find(o => o.id === values.ownerId) || {}).owner;
 
     return this.editAccount(type, paymentStatus, type.status.name, balance)
-      .then(() => this.newAction(action, type.id, paymentStatus, payment, c, balance, values.transaction, createdAt || type.feeFineOwner));
+      .then(() => this.newAction(action, type.id, paymentStatus, payment, commentInfo, balance, values.transaction, createdAt || type.feeFineOwner));
   }
 
   onClickTransfer(values) {
@@ -377,15 +377,15 @@ class Actions extends React.Component {
       type.status.name = 'Closed';
     }
     const balance = type.remaining - parseFloat(amount);
-    let c = '';
+    let commentInfo = '';
     if (values.comment) {
-      c = tagStaff + ': ' + values.comment;
+      commentInfo = `${tagStaff} : ${values.comment}`;
     }
     if (values.patronInfo && values.notify) {
-      c = c + '\n' + tagPatron + ': ' + values.patronInfo;
+      commentInfo = `${commentInfo} \n ${tagPatron} : ${values.patronInfo}`;
     }
     return this.editAccount(type, paymentStatus, type.status.name, balance)
-      .then(() => this.newAction(action, type.id, paymentStatus, amount, c, balance, 0, type.feeFineOwner));
+      .then(() => this.newAction(action, type.id, paymentStatus, amount, commentInfo, balance, 0, type.feeFineOwner));
   }
 
   onClickWaive(values) {
@@ -443,15 +443,15 @@ class Actions extends React.Component {
       type.status.name = 'Closed';
     }
     const balance = type.remaining - parseFloat(waive);
-    let c = '';
+    let commentInfo = '';
     if (values.comment) {
-      c = tagStaff + ': ' + values.comment;
+      commentInfo = `${tagStaff} : ${values.comment}`;
     }
     if (values.patronInfo && values.notify) {
-      c = c + '\n' + tagPatron + ': ' + values.patronInfo;
+      commentInfo = `${commentInfo} \n ${tagPatron} : ${values.patronInfo}`;
     }
     return this.editAccount(type, paymentStatus, type.status.name, balance)
-      .then(() => this.newAction(action, type.id, paymentStatus, waive, c, balance, 0, type.feeFineOwner));
+      .then(() => this.newAction(action, type.id, paymentStatus, waive, commentInfo, balance, 0, type.feeFineOwner));
   }
 
   onClickComment(values) {
