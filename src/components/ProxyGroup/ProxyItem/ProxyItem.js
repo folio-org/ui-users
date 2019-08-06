@@ -22,10 +22,12 @@ const ProxyItem = ({ record }) => {
       {record.proxy && record.proxy.metadata && record.proxy.metadata.createdDate && (
       <span className={css.creationLabel}>
 
+
         (
         {relationshipCreatedMsg}
           {' '}
           {creationDateTime}
+
 
         )
       </span>

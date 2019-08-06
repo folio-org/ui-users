@@ -169,10 +169,12 @@ class ProxyEditItem extends React.Component {
         {proxyCreatedValue && (
           <span className={css.creationLabel}>
 
+
             (
             {proxyLinkMsg}
               {' '}
               {proxyCreatedDate}
+
 
             )
           </span>
