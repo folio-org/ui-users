@@ -290,7 +290,7 @@ class ChargeForm extends React.Component {
                       onChange={this.onToggleNotify}
                       inline
                     />
-                    <FormattedMessage id="ui-users.accounts.pay.notifyPatron" />
+                    <FormattedMessage id="ui-users.accounts.notifyPatron" />
                   </Col>
                 </Row>
               </div>
@@ -300,7 +300,7 @@ class ChargeForm extends React.Component {
               <div>
                 <Row>
                   <Col xs>
-                    <h4 className="marginTopHalf"><FormattedMessage id="ui-users.accounts.pay.field.infoPatron" /></h4>
+                    <h4 className="marginTopHalf"><FormattedMessage id="ui-users.accounts.infoPatron" /></h4>
                   </Col>
                 </Row>
                 <Row>
