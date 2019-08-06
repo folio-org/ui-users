@@ -168,10 +168,12 @@ class ProxyEditItem extends React.Component {
         <Link to={`/users/view/${record.user.id}`}>{getFullName(record.user)}</Link>
         {proxyCreatedValue && (
           <span className={css.creationLabel}>
+
             (
-              {proxyLinkMsg}
+            {proxyLinkMsg}
               {' '}
               {proxyCreatedDate}
+
             )
           </span>
         )}

@@ -14,12 +14,9 @@ import {
   ConfirmationModal
 } from '@folio/stripes/components';
 import CancellationModal from './CancellationModal';
-import PayModal from './PayModal';
-import PayManyModal from './PayManyModal';
-import WaiveModal from './WaiveModal';
 import CommentModal from './CommentModal';
 import WarningModal from './WarningModal';
-import TransferModal from './TransferModal';
+import ActionModal from './ActionModal';
 import { getFullName } from '../../../util';
 
 class Actions extends React.Component {
@@ -371,6 +368,7 @@ class Actions extends React.Component {
     this.props.mutator.activeRecord.update({ id: type.id });
     let paymentStatus = _.capitalize(formatMessage({ id: 'ui-users.accounts.actions.warning.transferAction' }));
     const tagStaff = formatMessage({ id: 'ui-users.accounts.actions.tag.staff' });
+    const tagPatron = formatMessage({ id: 'ui-users.accounts.actions.tag.patron' });
     const action = { paymentMethod: values.account };
     if (amount < type.remaining) {
       paymentStatus = `${paymentStatus} ${_.capitalize(formatMessage({ id: 'ui-users.accounts.status.partially' }))}`;
@@ -379,22 +377,28 @@ class Actions extends React.Component {
       type.status.name = 'Closed';
     }
     const balance = type.remaining - parseFloat(amount);
-    const comment = values.comment ? (tagStaff + ': ' + values.comment) : '';
+    let c = '';
+    if (values.comment) {
+      c = tagStaff + ': ' + values.comment;
+    }
+    if (values.patronInfo && values.notify) {
+      c = c + '\n' + tagPatron + ': ' + values.patronInfo;
+    }
     return this.editAccount(type, paymentStatus, type.status.name, balance)
-      .then(() => this.newAction(action, type.id, paymentStatus, amount, comment, balance, 0, type.feeFineOwner));
+      .then(() => this.newAction(action, type.id, paymentStatus, amount, c, balance, 0, type.feeFineOwner));
   }
 
   onClickWaive(values) {
     const type = this.props.accounts[0] || {};
     delete type.rowIndex;
-    this.waive(type, values.waive, values)
+    this.waive(type, values.amount, values)
       .then(() => this.props.handleEdit(1))
       .then(() => this.showCalloutMessage(type))
       .then(() => this.onCloseWaive());
   }
 
   onWaiveMany = (values, items) => {
-    let waive = parseFloat(values.waive);
+    let waive = parseFloat(values.amount);
     let offset = 0;
     const promises = [];
     const selected = _.orderBy(items, ['remaining'], ['asc']) || [];
@@ -430,6 +434,7 @@ class Actions extends React.Component {
     this.props.mutator.activeRecord.update({ id: type.id });
     let paymentStatus = _.capitalize(formatMessage({ id: 'ui-users.accounts.actions.warning.waiveAction' }));
     const tagStaff = formatMessage({ id: 'ui-users.accounts.actions.tag.staff' });
+    const tagPatron = formatMessage({ id: 'ui-users.accounts.actions.tag.patron' });
     const action = { paymentMethod: values.method };
     if (waive < type.remaining) {
       paymentStatus = `${paymentStatus} ${_.capitalize(formatMessage({ id: 'ui-users.accounts.status.partially' }))}`;
@@ -438,9 +443,15 @@ class Actions extends React.Component {
       type.status.name = 'Closed';
     }
     const balance = type.remaining - parseFloat(waive);
-    const comment = values.comment ? (tagStaff + ': ' + values.comment) : '';
+    let c = '';
+    if (values.comment) {
+      c = tagStaff + ': ' + values.comment;
+    }
+    if (values.patronInfo && values.notify) {
+      c = c + '\n' + tagPatron + ': ' + values.patronInfo;
+    }
     return this.editAccount(type, paymentStatus, type.status.name, balance)
-      .then(() => this.newAction(action, type.id, paymentStatus, waive, comment, balance, 0, type.feeFineOwner));
+      .then(() => this.newAction(action, type.id, paymentStatus, waive, c, balance, 0, type.feeFineOwner));
   }
 
   onClickComment(values) {
@@ -543,7 +554,7 @@ class Actions extends React.Component {
   renderConfirmMessage = () => {
     const { actions: { pay, regular, waiveModal, waiveMany, transferModal, transferMany }, intl: { formatMessage } } = this.props;
     const { values } = this.state;
-    const amount = (waiveModal || waiveMany) ? values.waive : values.amount;
+    const amount = values.amount;
     let paymentStatus = (pay || regular)
       ? formatMessage({ id: 'ui-users.accounts.actions.warning.payAction' })
       : (waiveModal || waiveMany)
@@ -631,13 +642,22 @@ class Actions extends React.Component {
           stripes={this.props.stripes}
           account={this.props.accounts[0] || {}}
           onSubmit={(values) => { this.onClickCancellation(values); }}
+          owners={owners}
+          feefines={feefines}
         />
-        <PayModal
+        <ActionModal
+          intl={this.props.intl}
+          action="payment"
+          form="payment-modal"
+          label="nameMethod"
+          data={payments}
           open={actions.pay || (actions.regular && accounts.length === 1)}
           commentRequired={settings.paid}
           onClose={this.onClosePay}
           account={[this.type]}
           stripes={this.props.stripes}
+          defaultServicePointId={defaultServicePointId}
+          servicePointsIds={servicePointsIds}
           balance={this.props.balance}
           accounts={(actions.pay) ? this.props.accounts : accounts}
           payments={payments}
@@ -645,7 +665,12 @@ class Actions extends React.Component {
           owners={owners}
           feefines={feefines}
         />
-        <PayManyModal
+        <ActionModal
+          intl={this.props.intl}
+          action="payment"
+          form="payment-many-modal"
+          label="nameMethod"
+          data={payments}
           open={actions.regular && !warning && accounts.length > 1}
           commentRequired={settings.paid}
           defaultServicePointId={defaultServicePointId}
@@ -658,26 +683,39 @@ class Actions extends React.Component {
           payments={payments}
           onSubmit={(values) => { this.showConfirmDialog(values); }}
           owners={owners}
+          feefines={feefines}
         />
-        <WaiveModal
+        <ActionModal
+          intl={this.props.intl}
+          action="waive"
+          form="waive-modal"
+          label="nameReason"
+          data={waives}
           open={actions.waiveModal || (actions.waiveMany && !warning)}
           commentRequired={settings.waived}
           onClose={this.onCloseWaive}
-          stripes={this.props.stripes}
           accounts={(actions.waiveModal) ? this.props.accounts : accounts}
           balance={this.props.balance}
           waives={waives}
           onSubmit={(values) => { this.showConfirmDialog(values); }}
+          owners={owners}
+          feefines={feefines}
         />
-        <TransferModal
-          open={actions.transferModal || (actions.transferMany && !warning)}
-          commentRequired={settings.transferredManually}
+        <ActionModal
+          intl={this.props.intl}
+          action="transfer"
+          form="transfer-modal"
+          label="accountName"
+          data={transfers}
           onClose={this.onCloseTransfer}
-          stripes={this.props.stripes}
+          commentRequired={settings.transferredManually}
           accounts={(actions.transferModal) ? this.props.accounts : accounts}
           balance={this.props.balance}
           transfers={transfers}
           onSubmit={(values) => { this.showConfirmDialog(values); }}
+          owners={owners}
+          feefines={feefines}
+          open={actions.transferModal || (actions.transferMany && !warning)}
         />
         <CommentModal
           open={actions.comment}

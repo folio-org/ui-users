@@ -38,3 +38,10 @@ export function handleFilterClear(name) {
   this.transitionToParams({ f: Object.keys(state).filter(key => state[key]).join(',') });
   return state;
 }
+
+export function calculateSelectedAmount(accounts) {
+  const selected = accounts.reduce((s, { remaining }) => {
+    return s + parseFloat(remaining * 100);
+  }, 0);
+  return parseFloat(selected / 100).toFixed(2);
+}

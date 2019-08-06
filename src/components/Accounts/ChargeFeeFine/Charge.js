@@ -16,7 +16,7 @@ import {
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import ChargeForm from './ChargeForm';
 import ItemLookup from './ItemLookup';
-import PayModal from '../Actions/PayModal';
+import ActionModal from '../Actions/ActionModal';
 import { getFullName } from '../../../util';
 
 class Charge extends React.Component {
@@ -332,12 +332,14 @@ class Charge extends React.Component {
     }
     this.onClickCharge(this.type).then(() => {
       this.type.remaining = parseFloat(this.type.amount - values.amount).toFixed(2);
+      let paymentStatus = _.capitalize(formatMessage({ id: 'ui-users.accounts.actions.warning.payAction' }));
       if (this.type.remaining === '0.00') {
-        this.type.paymentStatus.name = formatMessage({ id: 'ui-users.accounts.pay.fully' });
+        paymentStatus = `${paymentStatus} ${formatMessage({ id: 'ui-users.accounts.status.fully' })}`;
         this.type.status.name = 'Closed';
       } else {
-        this.type.paymentStatus.name = formatMessage({ id: 'ui-users.accounts.pay.partially' });
+        paymentStatus = `${paymentStatus} ${formatMessage({ id: 'ui-users.accounts.status.partially' })}`;
       }
+      this.type.paymentStatus.name = paymentStatus;
       this.props.mutator.activeRecord.update({ id: this.type.id });
       return this.props.mutator.accounts.PUT(this.type);
     })
@@ -360,8 +362,10 @@ class Charge extends React.Component {
     const values = this.state.values || {};
     const type = this.type || {};
     const amount = parseFloat(values.amount || 0).toFixed(2);
-    const statusId = (parseFloat(values.amount) !== parseFloat(type.amount)) ? 'partially' : 'fully';
-    const paymentStatus = formatMessage({ id: `ui-users.accounts.pay.${statusId}` });
+    let paymentStatus = formatMessage({ id: 'ui-users.accounts.actions.warning.payAction' });
+    paymentStatus = `${(parseFloat(values.amount) !== parseFloat(type.amount)
+      ? formatMessage({ id: 'ui-users.accounts.status.partially' })
+      : formatMessage({ id: 'ui-users.accounts.status.fully' }))} ${paymentStatus}`;
     return (
       <SafeHTMLMessage
         id="ui-users.accounts.confirmation.message"
@@ -371,7 +375,13 @@ class Charge extends React.Component {
   }
 
   render() {
-    const resources = this.props.resources;
+    const {
+      resources,
+      onCloseChargeFeeFine,
+      handleAddRecords,
+      stripes,
+      intl,
+    } = this.props;
     const allfeefines = _.get(resources, ['allfeefines', 'records'], []);
     const owners = _.get(resources, ['owners', 'records'], []);
     const list = [];
@@ -416,7 +426,7 @@ class Charge extends React.Component {
     return (
       <div>
         <ChargeForm
-          onClickCancel={this.props.onCloseChargeFeeFine}
+          onClickCancel={onCloseChargeFeeFine}
           onClickPay={this.onClickPay}
           defaultServicePointId={defaultServicePointId}
           servicePointsIds={servicePointsIds}
@@ -428,8 +438,8 @@ class Charge extends React.Component {
             } else {
               delete data.pay;
               this.onClickCharge(data)
-                .then(() => this.props.handleAddRecords())
-                .then(() => this.props.onCloseChargeFeeFine());
+                .then(() => handleAddRecords())
+                .then(() => onCloseChargeFeeFine());
             }
           }}
           user={this.props.user}
@@ -442,24 +452,28 @@ class Charge extends React.Component {
           onFindShared={this.onFindShared}
           onChangeOwner={this.onChangeOwner}
           onClickSelectItem={this.onClickSelectItem}
-          stripes={this.props.stripes}
+          stripes={stripes}
           {...this.props}
         />
         <ItemLookup
-          resources={this.props.resources}
+          resources={resources}
           items={items}
           open={(this.state.lookup && items.length > 1)}
           onChangeItem={this.onChangeItem}
           onClose={this.onCloseModal}
         />
-        <PayModal
+        <ActionModal
+          intl={intl}
+          action="payment"
+          form="payment-modals"
+          label="nameMethod"
           open={this.state.pay}
           commentRequired={settings.paid}
           onClose={this.onClosePayModal}
           accounts={[this.type]}
           balance={this.type.amount}
-          payments={payments}
-          stripes={this.props.stripes}
+          data={payments}
+          stripes={stripes}
           onSubmit={(values) => { this.showConfirmDialog(values); }}
           owners={owners}
           feefines={feefines}
