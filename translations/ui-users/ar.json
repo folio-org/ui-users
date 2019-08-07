@@ -509,7 +509,7 @@
     "accounts.open.columns.status": "حالة السداد",
     "meta.title": "المستخدمين",
     "search": "بحث",
-    "resultCount": "تم العثور على {count, number} {count, plural, one { تسجيلة } other { تسجيلات }}",
+    "resultCount": "تم العثور على {count, number} {count, plural, one { تسجيلة } other { تسجيلة }}",
     "showNotes": "عرض الملاحظات",
     "active": "نشط",
     "inactive": "غير نشط",
