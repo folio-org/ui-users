@@ -3,6 +3,7 @@
 ## 2.25.0 (IN PROGRESS)
 
 * Implement exporting of only overdue loans for overdue loans report. Refs UIU-1121.
+* Implement footer with _Save & close_ and _Canclel_ buttons on the edit user form. Refs STCOM-429.
 
 ## [2.24.1](https://github.com/folio-org/ui-users/tree/v2.24.1) (2019-07-26)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.24.0...v2.24.1)

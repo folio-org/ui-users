@@ -8,13 +8,7 @@ import {
   triggerable,
 } from '@bigtest/interactor';
 
-@interactor class HeaderDropdown {
-  click = clickable('button');
-}
-
-@interactor class HeaderDropdownMenu {
-  clickCancel = clickable('[data-test-cancel-user-form-action]');
-}
+import ButtonInteractor from '@folio/stripes-components/lib/Button/tests/interactor'; // eslint-disable-line
 
 @interactor class InputFieldInteractor {
   clickInput = clickable();
@@ -45,13 +39,11 @@ import {
   }
 
   title = text('[class*=paneTitleLabel---]');
-  headerDropdown = new HeaderDropdown('[class*=paneHeaderCenterInner---] [class*=dropdown---]');
-  headerDropdownMenu = new HeaderDropdownMenu();
-
   barcodeField = new InputFieldInteractor('#adduser_barcode');
   usernameField = new InputFieldInteractor('#adduser_username');
-  clickSave = clickable('#clickable-save');
-  barcodeError = text('[class^="feedbackError---"]');
+  feedbackError = text('[class^="feedbackError---"]');
+  cancelButton = new ButtonInteractor('[data-test-user-form-cancel-button]');
+  submitButton = new ButtonInteractor('[data-test-user-form-submit-button]');
 }
 
 export default new UserFormPage('[data-test-form-page]');
