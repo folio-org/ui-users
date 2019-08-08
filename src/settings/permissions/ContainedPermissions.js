@@ -96,7 +96,9 @@ class ContainedPermissions extends React.Component {
     setTimeout(() => this.forceUpdate());
   }
 
-  openPermissionModal = () => {
+  openPermissionModal = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     this.setState({ permissionModalOpen: true });
   };
 
@@ -154,6 +156,29 @@ class ContainedPermissions extends React.Component {
               <PermissionModal
                 open={permissionModalOpen}
                 onClose={this.closePermissionModal}
+                visibleColumns={
+                  [
+                    'selected',
+                    'permissionName',
+                    'status',
+                  ]
+                }
+                filtersConfig={[{
+                  label: (<FormattedMessage id="ui-users.permissions.modal.filter.status.label" />),
+                  name: 'status',
+                  cql: 'status',
+                  values: [
+                    {
+                      name: 'Assigned',
+                      value: false,
+                    },
+                    {
+                      name: 'Unassigned',
+                      value: true,
+                    },
+                  ],
+                },
+                ]}
               />
           }
         </IfPermission>

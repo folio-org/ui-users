@@ -1,4 +1,5 @@
 import {
+  isEmpty,
   get,
   orderBy,
   remove,
@@ -15,11 +16,13 @@ import {
   Modal,
   Pane,
   Paneset,
+  ModalFooter,
 } from '@folio/stripes/components';
 
 import SearchForm from './components/SearchForm';
 import PermissionsList from './components/PermissionsList';
 import { sortOrders } from './constants';
+import { getInitialFiltersState } from './helpers';
 
 import css from './PermissionsModal.css';
 
@@ -47,10 +50,12 @@ class PermissionsModal extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }),
+    filtersConfig: PropTypes.arrayOf(PropTypes.object).isRequired,
     subPermissions: PropTypes.arrayOf(PropTypes.object).isRequired,
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
     addSubPermissions: PropTypes.func.isRequired,
+    visibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
   };
 
   static defaultProps = {
@@ -60,25 +65,12 @@ class PermissionsModal extends React.Component {
   constructor(props) {
     super(props);
 
-    this.config = [
-      {
-        label: (<FormattedMessage id="ui-users.permissions.modal.filter.status.label" />),
-        name: 'status',
-        cql: 'status',
-        values: ['Assigned', 'Unassigned'],
-      },
-    ];
-
     this.state = {
-      searchText: '',
       allChecked: false,
       permissions: [],
       sortedColumn: 'permissionName',
       sortOrder: sortOrders.asc.name,
-      filters: {
-        'status.Unassigned': true,
-        'status.Assigned': false,
-      },
+      filters: getInitialFiltersState(props.filtersConfig),
       subPermissionsIds: props.subPermissions.map(({ id }) => id)
     };
   }
@@ -99,11 +91,8 @@ class PermissionsModal extends React.Component {
     this.setState({ permissions });
   }
 
-  onSubmitSearch = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
+  onSubmitSearch = (searchText) => {
     const permissions = get(this.props, 'resources.availablePermissions.records', []);
-    const { searchText } = this.state;
 
     const filteredPermissions = permissions.filter(({ displayName, permissionName }) => {
       const permissionText = displayName || permissionName;
@@ -112,10 +101,6 @@ class PermissionsModal extends React.Component {
     });
 
     this.setState({ permissions: filteredPermissions });
-  };
-
-  onSearchChange = ({ target: { value: searchText } }) => {
-    this.setState({ searchText });
   };
 
   onHeaderClick = (e, { name: columnName }) => {
@@ -138,10 +123,11 @@ class PermissionsModal extends React.Component {
   };
 
   onChangeFilter = ({ target }) => {
-    const { filters } = this.state;
+    this.setState(({ filters }) => {
+      filters[target.name] = target.checked;
 
-    filters[target.name] = target.checked;
-    this.setState({ filters });
+      return filters;
+    });
   };
 
   togglePermission = (permissionId) => {
@@ -194,7 +180,7 @@ class PermissionsModal extends React.Component {
     this.setState(({ filters }) => {
       Object.keys(filters).forEach((key) => {
         if (key.startsWith(filterName)) {
-          filters[key] = false;
+          delete filters[key];
         }
       });
 
@@ -203,16 +189,11 @@ class PermissionsModal extends React.Component {
   };
 
   resetSearchForm = () => {
-    this.setState(({ filters }) => {
-      const permissions = get(this.props, 'resources.availablePermissions.records', []);
+    const permissions = get(this.props, 'resources.availablePermissions.records', []);
 
-      Object.keys(filters).forEach((key) => { filters[key] = false; });
-
-      return {
-        searchText: '',
-        filters,
-        permissions,
-      };
+    this.setState({
+      filters: {},
+      permissions,
     });
   };
 
@@ -225,20 +206,22 @@ class PermissionsModal extends React.Component {
       filters: {
         'status.Unassigned': Unassigned,
         'status.Assigned': Assigned,
-      },
+      } = {},
       subPermissionsIds,
       allChecked,
-      searchText,
     } = this.state;
     const {
       open,
       onClose,
+      filtersConfig,
+      visibleColumns,
     } = this.props;
 
     const sorters = {
       permissionName: ({ permissionName }) => permissionName,
       status: ({ id, permissionName }) => [subPermissionsIds.includes(id), permissionName],
     };
+
     const filteredPermissions = permissions.filter(({ id }) => {
       const permissionAssigned = subPermissionsIds.includes(id);
 
@@ -246,6 +229,7 @@ class PermissionsModal extends React.Component {
         (Unassigned && !permissionAssigned && !Assigned)
         || (!Unassigned && permissionAssigned && Assigned)
         || (Unassigned && Assigned)
+        || isEmpty(filters)
       );
     });
 
@@ -262,21 +246,21 @@ class PermissionsModal extends React.Component {
         onClose={onClose}
         contentClass={css.modalContent}
         footer={
-          <React.Fragment>
+          <ModalFooter>
             <Button
-              onClick={onClose}
+              marginBottom0
               buttonStyle="primary"
-              marginBottom0
-            >
-              <FormattedMessage id="ui-users.permissions.modal.cancel" />
-            </Button>
-            <Button
-              marginBottom0
               onClick={this.onSave}
             >
               <FormattedMessage id="ui-users.permissions.modal.save" />
             </Button>
-          </React.Fragment>
+            <Button
+              onClick={onClose}
+              marginBottom0
+            >
+              <FormattedMessage id="ui-users.permissions.modal.cancel" />
+            </Button>
+          </ModalFooter>
         }
       >
         <div>
@@ -286,12 +270,10 @@ class PermissionsModal extends React.Component {
               paneTitle={<FormattedMessage id="ui-users.permissions.modal.search.header" />}
             >
               <SearchForm
-                config={this.config}
+                config={filtersConfig}
                 filters={filters}
-                searchText={searchText}
                 onClearFilter={this.onClearFilter}
                 onSubmitSearch={this.onSubmitSearch}
-                onSearchChange={this.onSearchChange}
                 onChangeFilter={this.onChangeFilter}
                 resetSearchForm={this.resetSearchForm}
               />
@@ -307,6 +289,7 @@ class PermissionsModal extends React.Component {
               defaultWidth="70%"
             >
               <PermissionsList
+                visibleColumns={visibleColumns}
                 allChecked={allChecked}
                 sortOrder={sortOrder}
                 sortedColumn={sortedColumn}

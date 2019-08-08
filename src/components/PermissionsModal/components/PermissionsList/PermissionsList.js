@@ -18,6 +18,7 @@ const PermissionsList = (props) => {
     sortOrder,
     sortedColumn,
     allChecked,
+    visibleColumns,
   } = props;
   return (
     <MultiColumnList
@@ -25,13 +26,7 @@ const PermissionsList = (props) => {
         selected: '35',
         status: '20%',
       }}
-      visibleColumns={
-        [
-          'selected',
-          'permissionName',
-          'status',
-        ]
-      }
+      visibleColumns={visibleColumns}
       contentData={sortedPermissions}
       columnMapping={{
         selected:
@@ -73,9 +68,8 @@ PermissionsList.propTypes = {
   sortedPermissions: PropTypes.arrayOf(
     PropTypes.object,
   ).isRequired,
-  subPermissionsIds: PropTypes.arrayOf(
-    PropTypes.string,
-  ).isRequired,
+  subPermissionsIds: PropTypes.arrayOf(PropTypes.string).isRequired,
+  visibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
   sortOrder: PropTypes.string.isRequired,
   allChecked: PropTypes.bool.isRequired,
   togglePermission: PropTypes.func.isRequired,

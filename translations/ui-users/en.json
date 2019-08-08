@@ -907,5 +907,6 @@
   "permissions.modal.filter.status.label": "Permission Assigment status",
   "permissions.modal.save": "Save",
   "permissions.modal.cancel": "Cancel",
-  "permissions.modal.search.header": "Search & filter"
+  "permissions.modal.search.header": "Search & filter",
+  "permissions.modal.search.resetAll": "Reset all"
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
@@ -14,21 +14,30 @@ import css from './SearchForm.css';
 const SearchForm = (props) => {
   const {
     onSubmitSearch,
-    onSearchChange,
     onChangeFilter,
     config,
     filters,
     resetSearchForm,
     onClearFilter,
-    searchText,
   } = props;
+  const [searchText, setSearchText] = useState('');
+  const onFormSubmit = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    onSubmitSearch(searchText);
+  };
+  const onResetSearchForm = () => {
+    setSearchText('');
+    resetSearchForm();
+  };
+
   return (
-    <form onSubmit={onSubmitSearch}>
+    <form onSubmit={onFormSubmit}>
       <div className={css.searchGroupWrap}>
         <SearchField
           aria-label="user search"
           name="query"
-          onChange={onSearchChange}
+          onChange={({ target: { value } }) => { setSearchText(value); }}
           className={css.searchField}
           value={searchText}
           autoFocus
@@ -39,7 +48,7 @@ const SearchForm = (props) => {
           fullWidth
           marginBottom0
         >
-          Search
+          <FormattedMessage id="ui-users.search" />
         </Button>
       </div>
       <div className={css.resetButtonWrap}>
@@ -47,10 +56,10 @@ const SearchForm = (props) => {
           buttonStyle="none"
           id="clickable-reset-all"
           fullWidth
-          onClick={resetSearchForm}
+          onClick={onResetSearchForm}
         >
           <Icon icon="times-circle-solid">
-            <FormattedMessage id="stripes-smart-components.resetAll" />
+            <FormattedMessage id="ui-users.permissions.modal.search.resetAll" />
           </Icon>
         </Button>
       </div>
@@ -70,11 +79,9 @@ SearchForm.propTypes = {
   ).isRequired,
   filters: PropTypes.object.isRequired,
   onSubmitSearch: PropTypes.func.isRequired,
-  onSearchChange: PropTypes.func.isRequired,
   onChangeFilter: PropTypes.func.isRequired,
   onClearFilter: PropTypes.func.isRequired,
   resetSearchForm: PropTypes.func.isRequired,
-  searchText: PropTypes.string.isRequired,
 };
 
 export default SearchForm;
