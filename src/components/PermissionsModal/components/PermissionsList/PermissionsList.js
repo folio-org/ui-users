@@ -46,16 +46,16 @@ const PermissionsList = (props) => {
         status: <FormattedMessage id="ui-users.information.status" />,
       }}
       formatter={{
-        selected: ({ id: permissionId }) => (
+        selected: permission => (
           <CheckBoxColumn
-            value={permissionId}
-            checked={subPermissionsIds.includes(permissionId)}
-            onChange={() => togglePermission(permissionId)}
+            value={permission.id}
+            checked={subPermissionsIds.includes(permission.id)}
+            onChange={() => togglePermission(permission.id)}
           />
         ),
         permissionName: ({ displayName, permissionName }) => displayName || permissionName,
-        status: ({ id }) => {
-          return subPermissionsIds.includes(id)
+        status: permission => {
+          return subPermissionsIds.includes(permission.id)
             ? <FormattedMessage id="ui-users.permissions.modal.assigned" />
             : <FormattedMessage id="ui-users.permissions.modal.unassigned" />;
         },
