@@ -112,7 +112,6 @@ class Charge extends React.Component {
     selectedLoan: PropTypes.object,
     user: PropTypes.object,
     onSubmit: PropTypes.func,
-    initialize: PropTypes.func,
     servicePointsIds: PropTypes.arrayOf(PropTypes.string),
     defaultServicePointId: PropTypes.string,
     intl: intlShape.isRequired,
@@ -357,6 +356,36 @@ class Charge extends React.Component {
       .then(() => setTimeout(this.props.onCloseChargeFeeFine, 2000));
   }
 
+  loadServicePoints = (values) => {
+    const servicePoint = values.defaultServicePointId;
+    const servicePoints = values.servicePointsIds;
+    const owners = values.owners || [];
+    let ownerId = null;
+    if (servicePoint && servicePoint !== '-') {
+      owners.forEach(o => {
+        if (o.servicePointOwner && o.servicePointOwner.find(s => s.value === servicePoint)) {
+          ownerId = o.id;
+        }
+      });
+    } else if (servicePoints.length === 1) {
+      const sp = servicePoints[0];
+      owners.forEach(o => {
+        if (o.servicePointOwner && o.servicePointOwner.find(s => s.value === sp)) {
+          ownerId = o.id;
+        }
+      });
+    } else if (servicePoints.length === 2) {
+      const sp1 = servicePoints[0];
+      const sp2 = servicePoints[1];
+      owners.forEach(o => {
+        if (o.servicePointOwner && o.servicePointOwner.find(s => s.value === sp1) && o.servicePointOwner.find(s => s.value === sp2)) {
+          ownerId = o.id;
+        }
+      });
+    }
+    return ownerId;
+  }
+
   renderConfirmMessage = () => {
     const { intl: { formatMessage } } = this.props;
     const values = this.state.values || {};
@@ -422,6 +451,8 @@ class Charge extends React.Component {
     };
 
     const items = _.get(resources, ['items', 'records'], []);
+    const ownerId = this.loadServicePoints({ owners: (shared ? owners : list), defaultServicePointId, servicePointsIds });
+    const initialValues = { amount: this.type.amount, notify: true, ownerId };
 
     return (
       <div>
@@ -443,6 +474,7 @@ class Charge extends React.Component {
             }
           }}
           user={this.props.user}
+          initialValues={{ ownerId, notify: true }}
           ownerList={(shared) ? owners : list}
           owners={owners}
           isPending={isPending}
@@ -467,6 +499,7 @@ class Charge extends React.Component {
           action="payment"
           form="payment-modals"
           label="nameMethod"
+          initialValues={initialValues}
           open={this.state.pay}
           commentRequired={settings.paid}
           onClose={this.onClosePayModal}
