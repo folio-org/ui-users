@@ -305,14 +305,15 @@ export default function config() {
     return notes.where((note) => {
       let matches = false;
 
-      for (let i = 0; i < note.links.length; i++) {
-        if (note.links[i].type === params.type && note.links[i].id === params.id) {
+      for (let link of note.links) {
+        if (link.type === params.type && link.id === params.id) {
           matches = true;
           if (queryParams.status === 'assigned') {
             return true;
           }
         }
       }
+
       if (!matches && queryParams.status === 'unassigned') {
         return true;
       }
