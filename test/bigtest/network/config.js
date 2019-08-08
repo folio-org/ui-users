@@ -259,10 +259,10 @@ export default function config() {
   this.get('/perms/users/:id/permissions', {
     permissionNames: [],
   });
-  this.get('/perms/permissions', {
-    permissions: [],
-    totalRecords: 0,
+  this.get('/perms/permissions', function ({ permissions }) {
+    return this.serializerOrRegistry.serialize(permissions.all());
   });
+
   this.get('/feefineactions', {
     feefineactions: [],
     totalRecords: 0,

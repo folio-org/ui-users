@@ -255,11 +255,13 @@ class PermissionsModal extends React.Component {
               <FormattedMessage id="ui-users.permissions.modal.save" />
             </Button>
             <Button
+              className={css.cancelButton}
               onClick={onClose}
               marginBottom0
             >
               <FormattedMessage id="ui-users.permissions.modal.cancel" />
             </Button>
+
           </ModalFooter>
         }
       >

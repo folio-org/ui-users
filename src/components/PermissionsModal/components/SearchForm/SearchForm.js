@@ -35,6 +35,7 @@ const SearchForm = (props) => {
     <form onSubmit={onFormSubmit}>
       <div className={css.searchGroupWrap}>
         <SearchField
+          data-test-search-field
           aria-label="user search"
           name="query"
           onChange={({ target: { value } }) => { setSearchText(value); }}
@@ -43,6 +44,7 @@ const SearchForm = (props) => {
           autoFocus
         />
         <Button
+          data-test-submit-button
           type="submit"
           buttonStyle="primary"
           fullWidth
@@ -53,8 +55,8 @@ const SearchForm = (props) => {
       </div>
       <div className={css.resetButtonWrap}>
         <Button
+          data-test-reset-all-button
           buttonStyle="none"
-          id="clickable-reset-all"
           fullWidth
           onClick={onResetSearchForm}
         >

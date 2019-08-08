@@ -858,5 +858,6 @@
     "reports.overdue.loanPolicy.name": "Loan policy",
     "reports.overdue.loanId": "Loan ID",
     "activeUserStatus": "active",
-    "inactiveUserStatus": "inactive"
+    "inactiveUserStatus": "inactive",
+    "reports.overdue.feeFine": "Fee/Fine"
 }

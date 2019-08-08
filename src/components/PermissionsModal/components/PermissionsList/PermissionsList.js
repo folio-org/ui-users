@@ -21,15 +21,16 @@ const PermissionsList = (props) => {
     visibleColumns,
   } = props;
   return (
-    <MultiColumnList
-      columnWidths={{
-        selected: '35',
-        status: '20%',
-      }}
-      visibleColumns={visibleColumns}
-      contentData={sortedPermissions}
-      columnMapping={{
-        selected:
+    <div data-test-permissions-list>
+      <MultiColumnList
+        columnWidths={{
+          selected: '35',
+          status: '20%',
+        }}
+        visibleColumns={visibleColumns}
+        contentData={sortedPermissions}
+        columnMapping={{
+          selected:
           (
             <CheckBoxColumn
               value="selectAll"
@@ -37,29 +38,39 @@ const PermissionsList = (props) => {
               onChange={toggleAllPermissions}
             />
           ),
-        permissionName: <FormattedMessage id="ui-users.information.name" />,
-        status: <FormattedMessage id="ui-users.information.status" />,
-      }}
-      formatter={{
-        selected: permission => (
-          <CheckBoxColumn
-            value={permission.id}
-            checked={subPermissionsIds.includes(permission.id)}
-            onChange={() => togglePermission(permission.id)}
-          />
-        ),
-        permissionName: ({ displayName, permissionName }) => displayName || permissionName,
-        status: permission => {
-          return subPermissionsIds.includes(permission.id)
-            ? <FormattedMessage id="ui-users.permissions.modal.assigned" />
-            : <FormattedMessage id="ui-users.permissions.modal.unassigned" />;
-        },
-      }}
-      onRowClick={(e, { id: permissionId }) => togglePermission(permissionId)}
-      onHeaderClick={onHeaderClick}
-      sortDirection={sortOrders[sortOrder].fullName}
-      sortedColumn={sortedColumn}
-    />
+          permissionName: <FormattedMessage id="ui-users.information.name" />,
+          status: <FormattedMessage id="ui-users.information.status" />,
+        }}
+        formatter={{
+          selected: permission => (
+            <CheckBoxColumn
+              value={permission.id}
+              checked={subPermissionsIds.includes(permission.id)}
+              onChange={() => togglePermission(permission.id)}
+            />
+          ),
+          // eslint-disable-next-line react/prop-types
+          permissionName: ({ displayName, permissionName }) => (
+            <div data-test-permission-name>
+              { displayName || permissionName }
+            </div>
+          ),
+          status: permission => {
+            const statusText = `ui-users.permissions.modal.${
+              subPermissionsIds.includes(permission.id)
+                ? 'assigned'
+                : 'unassigned'
+            }`;
+
+            return <div data-test-permission-status><FormattedMessage id={statusText} /></div>;
+          },
+        }}
+        onRowClick={(e, { id: permissionId }) => togglePermission(permissionId)}
+        onHeaderClick={onHeaderClick}
+        sortDirection={sortOrders[sortOrder].fullName}
+        sortedColumn={sortedColumn}
+      />
+    </div>
   );
 };
 

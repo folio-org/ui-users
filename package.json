@@ -617,7 +617,7 @@
     ]
   },
   "scripts": {
-    "start": "stripes serve --okapi http://10.23.13.180:9130",
+    "start": "stripes serve",
     "build": "stripes build",
     "lint": "eslint .",
     "test": "stripes test karma",

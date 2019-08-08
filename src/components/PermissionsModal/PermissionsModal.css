@@ -18,3 +18,7 @@
 .searchGroupWrap {
   margin-bottom: .5rem;
 }
+
+.cancelButton {
+  margin-right: auto;
+}
