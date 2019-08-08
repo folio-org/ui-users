@@ -73,16 +73,15 @@ class ActionModal extends React.Component {
     accounts: PropTypes.arrayOf(PropTypes.object),
     data: PropTypes.arrayOf(PropTypes.object),
     balance: PropTypes.number,
-    initialize: PropTypes.func,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
+    initialValues: PropTypes.object,
     pristine: PropTypes.bool,
     reset: PropTypes.func,
     commentRequired: PropTypes.bool,
     owners: PropTypes.arrayOf(PropTypes.object),
     feefines: PropTypes.arrayOf(PropTypes.object),
     label: PropTypes.string,
-    form: PropTypes.string,
     action: PropTypes.string,
     intl: PropTypes.object,
   };
@@ -102,7 +101,6 @@ class ActionModal extends React.Component {
       accounts,
       feefines,
       owners,
-      initialize,
       open,
       pristine,
       invalid,
@@ -110,7 +108,6 @@ class ActionModal extends React.Component {
     if (!_.isEqual(accounts, nextProps.accounts)) {
       let showNotify = false;
       let notify = false;
-      const amount = calculateSelectedAmount(nextProps.accounts);
       nextProps.accounts.forEach(a => {
         const feefine = feefines.find(f => f.id === a.feeFineId) || {};
         const owner = owners.find(o => o.id === a.ownerId) || {};
@@ -120,15 +117,10 @@ class ActionModal extends React.Component {
         }
       });
       this.setState({
-        amount,
+        amount: nextProps.initialValues.amount,
         showNotify,
         notify
       });
-      if (nextProps.form === 'payment-many-modal') {
-        initialize({ amount, notify: true, ownerId: this.loadServicePoints(nextProps) });
-      } else {
-        initialize({ amount, notify: true });
-      }
     }
 
     return (accounts !== nextProps.accounts
@@ -136,39 +128,6 @@ class ActionModal extends React.Component {
       open !== nextProps.open ||
       pristine !== nextProps.pristine ||
       invalid !== nextProps.invalid);
-  }
-
-  loadServicePoints = (props) => {
-    const servicePoint = props.defaultServicePointId;
-    const servicePoints = props.servicePointsIds;
-    const owners = props.owners || [];
-    let ownerId = 0;
-    if (servicePoint && servicePoint !== '-') {
-      owners.forEach(o => {
-        if (o.servicePointOwner && o.servicePointOwner.find(s => s.value === servicePoint)) {
-          ownerId = o.id;
-          this.onChangeOwner({ target: { value: o.id } });
-        }
-      });
-    } else if (servicePoints.length === 1) {
-      const sp = servicePoints[0];
-      owners.forEach(o => {
-        if (o.servicePointOwner && o.servicePointOwner.find(s => s.value === sp)) {
-          ownerId = o.id;
-          this.onChangeOwner({ target: { value: o.id } });
-        }
-      });
-    } else if (servicePoints.length === 2) {
-      const sp1 = servicePoints[0];
-      const sp2 = servicePoints[1];
-      owners.forEach(o => {
-        if (o.servicePointOwner && o.servicePointOwner.find(s => s.value === sp1) && o.servicePointOwner.find(s => s.value === sp2)) {
-          ownerId = o.id;
-          this.onChangeOwner({ target: { value: o.id } });
-        }
-      });
-    }
-    return ownerId;
   }
 
   onChangeAmount = (e) => {
@@ -242,6 +201,7 @@ class ActionModal extends React.Component {
             <FormattedMessage id="ui-users.accounts.payment.transaction.placeholder">
               {placeholder => (
                 <Field
+                  id="transaction"
                   name="transaction"
                   component={TextField}
                   placeholder={placeholder}
@@ -296,6 +256,7 @@ class ActionModal extends React.Component {
       handleSubmit,
       intl: { formatMessage },
       invalid,
+      initialValues,
       label,
       open,
       owners,
@@ -371,6 +332,7 @@ class ActionModal extends React.Component {
                     <Field
                       id="amount"
                       name="amount"
+                      value={initialValues.amount}
                       component={TextField}
                       onChange={this.onChangeAmount}
                       hasClearIcon={false}
@@ -407,6 +369,7 @@ class ActionModal extends React.Component {
                         <Field
                           id="ownerId"
                           name="ownerId"
+                          value={initialValues.ownerId}
                           component={Select}
                           dataOptions={ownerOptions}
                           placeholder={placeholder}
@@ -508,6 +471,7 @@ class ActionModal extends React.Component {
 export default reduxForm({
   asyncBlurFields: ['amount'],
   asyncValidate,
+  enableReinitialize: true,
   onChange,
   validate,
 })(ActionModal);
