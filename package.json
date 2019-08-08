@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "2.24.0",
+  "version": "2.24.1",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -229,7 +229,7 @@
           "comments.item.put",
           "settings.users.enabled"
         ],
-        "visible": false
+        "visible": true
       },
       {
         "permissionName": "settings.comments.all",
@@ -249,7 +249,7 @@
           "feefines.item.put",
           "settings.users.enabled"
         ],
-        "visible": false
+        "visible": true
       },
       {
         "permissionName": "settings.feefines.all",
@@ -269,7 +269,7 @@
           "owners.item.put",
           "settings.users.enabled"
         ],
-        "visible": false
+        "visible": true
       },
       {
         "permissionName": "settings.owners.all",
@@ -289,7 +289,7 @@
           "payments.item.put",
           "settings.users.enabled"
         ],
-        "visible": false
+        "visible": true
       },
       {
         "permissionName": "settings.payments.all",
@@ -309,7 +309,7 @@
           "refunds.item.put",
           "settings.users.enabled"
         ],
-        "visible": false
+        "visible": true
       },
       {
         "permissionName": "settings.refunds.all",
@@ -329,7 +329,7 @@
           "waives.item.put",
           "settings.users.enabled"
         ],
-        "visible": false
+        "visible": true
       },
       {
         "permissionName": "settings.waives.all",
@@ -348,7 +348,7 @@
           "accounts.item.post",
           "accounts.item.put"
         ],
-        "visible": false
+        "visible": true
       },
       {
         "permissionName": "accounts.all",
@@ -367,7 +367,7 @@
           "feefineactions.item.post",
           "feefineactions.item.put"
         ],
-        "visible": false
+        "visible": true
       },
       {
         "permissionName": "feefineactions.all",
@@ -387,7 +387,7 @@
           "transfers.item.put",
           "settings.users.enabled"
         ],
-        "visible": false
+        "visible": true
       },
       {
         "permissionName": "settings.transfers.all",
@@ -407,7 +407,7 @@
           "transfertypes.item.put",
           "settings.users.enabled"
         ],
-        "visible": false
+        "visible": true
       },
       {
         "permissionName": "settings.transfertypes.all",
@@ -427,7 +427,7 @@
           "payments.collection.get",
           "payments.item.get"
         ],
-        "visible": false
+        "visible": true
       },
       {
         "permissionName": "manual_pay.all",
@@ -447,7 +447,7 @@
           "waives.collection.get",
           "waives.item.get"
         ],
-        "visible": false
+        "visible": true
       },
       {
         "permissionName": "manual_waive.all",
@@ -466,7 +466,7 @@
           "feefines.item.get",
           "manual_pay.all"
         ],
-        "visible": false
+        "visible": true
       },
       {
         "permissionName": "manual_charge.all",
@@ -476,8 +476,8 @@
         ]
       },
       {
-        "permissionName": "ui-users.manual_patron_blocks",
-        "displayName": "Patron blocks: Can create, edit and remove manual patron blocks",
+        "permissionName": "ui-users.patron_blocks",
+        "displayName": "Users: Can create, edit and remove patron blocks",
         "subPermissions": [
           "manualblocks.collection.get",
           "manualblocks.item.delete",
@@ -488,10 +488,10 @@
         "visible": true
       },
       {
-        "permissionName": "manual_patron_blocks.all",
-        "displayName": "Patron blocks: Can create, edit and remove manual patron blocks [LEGACY]",
+        "permissionName": "patron_blocks.all",
+        "displayName": "Users: Can create, edit and remove patron blocks [LEGACY]",
         "subPermissions": [
-          "ui-users.manual_patron_blocks"
+          "ui-users.patron_blocks"
         ]
       },
       {
@@ -518,18 +518,17 @@
       },
       {
         "permissionName": "ui-users.feesfines.actions.all",
-        "displayName": "Fees/Fines: All Actions permissions",
+        "displayName": "Users: Can create, edit and remove fees/fines",
         "subPermissions": [
           "manual_charge.all",
           "manual_pay.all",
-          "manual_waive.all",
-          "manual_patron_blocks.all"
+          "manual_waive.all"
         ],
         "visible": true
       },
       {
         "permissionName": "feesfines.actions.all",
-        "displayName": "Fees/Fines: All Actions permissions [LEGACY]",
+        "displayName": "Users: Can create, edit and remove fees/fines [LEGACY]",
         "subPermissions": [
           "ui-users.feesfines.actions.all"
         ]

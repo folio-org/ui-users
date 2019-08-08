@@ -626,14 +626,13 @@ class ViewUser extends React.Component {
     const userFormData = this.getUserFormData(user, addresses, sponsors, proxies, permissions, servicePoints, preferredServicePoint);
     const patronBlocks = get(resources, ['hasPatronBlocks', 'records'], []);
 
-
     if (this.isLayerOpen('add-block') || this.isLayerOpen('edit-block')) {
       return (
         <FormattedMessage id={query.layer === 'add-block' ? 'ui-users.blocks.layer.add' : 'ui-users.blocks.layer.edit'}>
           {contentLabel => (
             <Layer isOpen contentLabel={contentLabel}>
               <this.connectedPatronBlockLayer
-                {...this.props}
+                stripes={stripes}
                 query={query}
                 user={user}
                 selectedPatronBlock={this.state.selectedPatronBlock}
@@ -972,7 +971,7 @@ class ViewUser extends React.Component {
                 ? <PatronBlockMessage />
                 : ''}
             </Col>
-            <Col xs={2}>
+            <Col xs={2} id="view-users-accordion-section">
               <ExpandAllButton
                 accordionStatus={this.state.sections}
                 onToggle={this.handleExpandAll}
