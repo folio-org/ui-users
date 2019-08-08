@@ -305,7 +305,7 @@ export default function config() {
     return notes.where((note) => {
       let matches = false;
 
-      for (let link of note.links) {
+      for (const link of note.links) {
         if (link.type === params.type && link.id === params.id) {
           matches = true;
           if (queryParams.status === 'assigned') {
