@@ -13,6 +13,8 @@ import {
   Callout,
   ConfirmationModal
 } from '@folio/stripes/components';
+
+import { calculateSelectedAmount } from '../accountFunctions';
 import CancellationModal from './CancellationModal';
 import CommentModal from './CommentModal';
 import WarningModal from './WarningModal';
@@ -294,32 +296,40 @@ class Actions extends React.Component {
     });
   }
 
-  pay = (type, payment, values) => {
+  validateComment = (values) => {
     const { intl: { formatMessage } } = this.props;
-    this.props.mutator.activeRecord.update({ id: type.id });
-    let paymentStatus = _.capitalize(formatMessage({ id: 'ui-users.accounts.actions.warning.payAction' }));
     const tagStaff = formatMessage({ id: 'ui-users.accounts.actions.tag.staff' });
     const tagPatron = formatMessage({ id: 'ui-users.accounts.actions.tag.patron' });
-    const action = { paymentMethod: values.method };
-    const owners = _.get(this.props.resources, ['owners', 'records'], []);
-    if (payment < type.remaining) {
-      paymentStatus = `${paymentStatus} ${formatMessage({ id: 'ui-users.accounts.status.partially' })}`;
-    } else {
-      paymentStatus = `${paymentStatus} ${formatMessage({ id: 'ui-users.accounts.status.fully' })}`;
-      type.status.name = 'Closed';
-    }
-    const balance = type.remaining - parseFloat(payment);
     let commentInfo = '';
+
     if (values.comment) {
       commentInfo = `${tagStaff} : ${values.comment}`;
     }
     if (values.patronInfo && values.notify) {
       commentInfo = `${commentInfo} \n ${tagPatron} : ${values.patronInfo}`;
     }
-    const createdAt = (owners.find(o => o.id === values.ownerId) || {}).owner;
 
+    return commentInfo;
+  }
+
+  pay = (type, payment, values) => {
+    const { intl: { formatMessage } } = this.props;
+    this.props.mutator.activeRecord.update({ id: type.id });
+    let paymentStatus = _.capitalize(formatMessage({ id: 'ui-users.accounts.actions.warning.payAction' }));
+    const action = { paymentMethod: values.method };
+    const owners = _.get(this.props.resources, ['owners', 'records'], []);
+
+    if (payment < type.remaining) {
+      paymentStatus = `${paymentStatus} ${formatMessage({ id: 'ui-users.accounts.status.partially' })}`;
+    } else {
+      paymentStatus = `${paymentStatus} ${formatMessage({ id: 'ui-users.accounts.status.fully' })}`;
+      type.status.name = 'Closed';
+    }
+
+    const balance = type.remaining - parseFloat(payment);
+    const createdAt = (owners.find(o => o.id === values.ownerId) || {}).owner;
     return this.editAccount(type, paymentStatus, type.status.name, balance)
-      .then(() => this.newAction(action, type.id, paymentStatus, payment, commentInfo, balance, values.transaction, createdAt || type.feeFineOwner));
+      .then(() => this.newAction(action, type.id, paymentStatus, payment, this.validateComment(values), balance, values.transaction, createdAt || type.feeFineOwner));
   }
 
   onClickTransfer(values) {
@@ -367,9 +377,8 @@ class Actions extends React.Component {
     const { intl: { formatMessage } } = this.props;
     this.props.mutator.activeRecord.update({ id: type.id });
     let paymentStatus = _.capitalize(formatMessage({ id: 'ui-users.accounts.actions.warning.transferAction' }));
-    const tagStaff = formatMessage({ id: 'ui-users.accounts.actions.tag.staff' });
-    const tagPatron = formatMessage({ id: 'ui-users.accounts.actions.tag.patron' });
     const action = { paymentMethod: values.account };
+
     if (amount < type.remaining) {
       paymentStatus = `${paymentStatus} ${_.capitalize(formatMessage({ id: 'ui-users.accounts.status.partially' }))}`;
     } else {
@@ -377,15 +386,9 @@ class Actions extends React.Component {
       type.status.name = 'Closed';
     }
     const balance = type.remaining - parseFloat(amount);
-    let commentInfo = '';
-    if (values.comment) {
-      commentInfo = `${tagStaff} : ${values.comment}`;
-    }
-    if (values.patronInfo && values.notify) {
-      commentInfo = `${commentInfo} \n ${tagPatron} : ${values.patronInfo}`;
-    }
+
     return this.editAccount(type, paymentStatus, type.status.name, balance)
-      .then(() => this.newAction(action, type.id, paymentStatus, amount, commentInfo, balance, 0, type.feeFineOwner));
+      .then(() => this.newAction(action, type.id, paymentStatus, amount, this.validateComment(values), balance, 0, type.feeFineOwner));
   }
 
   onClickWaive(values) {
@@ -433,9 +436,8 @@ class Actions extends React.Component {
     const { intl: { formatMessage } } = this.props;
     this.props.mutator.activeRecord.update({ id: type.id });
     let paymentStatus = _.capitalize(formatMessage({ id: 'ui-users.accounts.actions.warning.waiveAction' }));
-    const tagStaff = formatMessage({ id: 'ui-users.accounts.actions.tag.staff' });
-    const tagPatron = formatMessage({ id: 'ui-users.accounts.actions.tag.patron' });
     const action = { paymentMethod: values.method };
+
     if (waive < type.remaining) {
       paymentStatus = `${paymentStatus} ${_.capitalize(formatMessage({ id: 'ui-users.accounts.status.partially' }))}`;
     } else {
@@ -443,15 +445,9 @@ class Actions extends React.Component {
       type.status.name = 'Closed';
     }
     const balance = type.remaining - parseFloat(waive);
-    let commentInfo = '';
-    if (values.comment) {
-      commentInfo = `${tagStaff} : ${values.comment}`;
-    }
-    if (values.patronInfo && values.notify) {
-      commentInfo = `${commentInfo} \n ${tagPatron} : ${values.patronInfo}`;
-    }
+
     return this.editAccount(type, paymentStatus, type.status.name, balance)
-      .then(() => this.newAction(action, type.id, paymentStatus, waive, commentInfo, balance, 0, type.feeFineOwner));
+      .then(() => this.newAction(action, type.id, paymentStatus, waive, this.validateComment(values), balance, 0, type.feeFineOwner));
   }
 
   onClickComment(values) {
@@ -551,6 +547,36 @@ class Actions extends React.Component {
     );
   }
 
+  loadServicePoints = (values) => {
+    const servicePoint = values.defaultServicePointId;
+    const servicePoints = values.servicePointsIds;
+    const owners = values.owners || [];
+    let ownerId = null;
+    if (servicePoint && servicePoint !== '-') {
+      owners.forEach(o => {
+        if (o.servicePointOwner && o.servicePointOwner.find(s => s.value === servicePoint)) {
+          ownerId = o.id;
+        }
+      });
+    } else if (servicePoints.length === 1) {
+      const sp = servicePoints[0];
+      owners.forEach(o => {
+        if (o.servicePointOwner && o.servicePointOwner.find(s => s.value === sp)) {
+          ownerId = o.id;
+        }
+      });
+    } else if (servicePoints.length === 2) {
+      const sp1 = servicePoints[0];
+      const sp2 = servicePoints[1];
+      owners.forEach(o => {
+        if (o.servicePointOwner && o.servicePointOwner.find(s => s.value === sp1) && o.servicePointOwner.find(s => s.value === sp2)) {
+          ownerId = o.id;
+        }
+      });
+    }
+    return ownerId;
+  }
+
   renderConfirmMessage = () => {
     const { actions: { pay, regular, waiveModal, waiveMany, transferModal, transferMany }, intl: { formatMessage } } = this.props;
     const { values } = this.state;
@@ -603,6 +629,10 @@ class Actions extends React.Component {
       submitting
     } = this.state;
 
+
+    const amount = calculateSelectedAmount((actions.pay || actions.waiveModal || actions.transferModal) ? this.props.accounts : accounts);
+
+
     const defaultServicePointId = _.get(resources, ['curUserServicePoint', 'records', 0, 'defaultServicePointId'], '-');
     const servicePointsIds = _.get(resources, ['curUserServicePoint', 'records', 0, 'servicePointsIds'], []);
     const payments = _.get(resources, ['payments', 'records'], []);
@@ -619,6 +649,9 @@ class Actions extends React.Component {
         : actions.transferMany
           ? 'ui-users.accounts.actions.transferFeeFine'
           : 'ui-users.accounts.history.button.refund';
+
+    const ownerId = this.loadServicePoints({ owners, defaultServicePointId, servicePointsIds });
+    const initialValues = { ownerId, amount, notify: true };
 
     return (
       <div>
@@ -650,6 +683,7 @@ class Actions extends React.Component {
           action="payment"
           form="payment-modal"
           label="nameMethod"
+          initialValues={initialValues}
           data={payments}
           open={actions.pay || (actions.regular && accounts.length === 1)}
           commentRequired={settings.paid}
@@ -670,6 +704,7 @@ class Actions extends React.Component {
           action="payment"
           form="payment-many-modal"
           label="nameMethod"
+          initialValues={initialValues}
           data={payments}
           open={actions.regular && !warning && accounts.length > 1}
           commentRequired={settings.paid}
@@ -690,6 +725,7 @@ class Actions extends React.Component {
           action="waive"
           form="waive-modal"
           label="nameReason"
+          initialValues={initialValues}
           data={waives}
           open={actions.waiveModal || (actions.waiveMany && !warning)}
           commentRequired={settings.waived}
@@ -705,6 +741,7 @@ class Actions extends React.Component {
           intl={this.props.intl}
           action="transfer"
           form="transfer-modal"
+          initialValues={initialValues}
           label="accountName"
           data={transfers}
           onClose={this.onCloseTransfer}
