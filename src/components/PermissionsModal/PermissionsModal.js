@@ -248,6 +248,7 @@ class PermissionsModal extends React.Component {
         footer={
           <ModalFooter>
             <Button
+              data-test-permissions-modal-save
               marginBottom0
               buttonStyle="primary"
               onClick={this.onSave}
@@ -255,6 +256,7 @@ class PermissionsModal extends React.Component {
               <FormattedMessage id="ui-users.permissions.modal.save" />
             </Button>
             <Button
+              data-test-permissions-modal-cancel
               className={css.cancelButton}
               onClick={onClose}
               marginBottom0
