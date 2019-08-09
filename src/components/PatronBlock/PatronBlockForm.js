@@ -26,7 +26,6 @@ import {
 } from 'redux-form';
 
 import { connect } from 'react-redux';
-import stripesForm from '@folio/stripes/form';
 import { ViewMetaData } from '@folio/stripes/smart-components';
 import moment from 'moment';
 import {
