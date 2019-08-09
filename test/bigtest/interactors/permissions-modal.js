@@ -25,6 +25,7 @@ import {
   static defaultScope = '[data-test-permissions-list]';
 
   permissions = collection('[class^="mclRow--"]', Permission);
+  selectAllPermissions = scoped('[data-test-select-all-permissions] input');
 }
 
 @interactor class PermissionsModal {

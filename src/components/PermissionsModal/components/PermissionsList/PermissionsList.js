@@ -32,11 +32,13 @@ const PermissionsList = (props) => {
         columnMapping={{
           selected:
           (
-            <CheckBoxColumn
-              value="selectAll"
-              checked={allChecked}
-              onChange={toggleAllPermissions}
-            />
+            <div data-test-select-all-permissions>
+              <CheckBoxColumn
+                value="selectAll"
+                checked={allChecked}
+                onChange={toggleAllPermissions}
+              />
+            </div>
           ),
           permissionName: <FormattedMessage id="ui-users.information.name" />,
           status: <FormattedMessage id="ui-users.information.status" />,

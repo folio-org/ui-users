@@ -93,10 +93,34 @@ describe('Permission set form', () => {
                 });
               });
             });
+
+            describe('reset button', () => {
+              beforeEach(async function () {
+                await PermissionSetForm.permissionsModal.searchForm.searchField.fill(permissions[0].displayName);
+              });
+
+              it('search field should have proper text', () => {
+                expect(PermissionSetForm.permissionsModal.searchForm.searchField.value).to.equal(permissions[0].displayName);
+              });
+
+              it('should be presented', () => {
+                expect(PermissionSetForm.permissionsModal.searchForm.resetAllButton.isPresent).to.be.true;
+              });
+
+              describe('reset button click', () => {
+                beforeEach(async function () {
+                  await PermissionSetForm.permissionsModal.searchForm.resetAllButton.click();
+                });
+
+                it('search field should be empty', () => {
+                  expect(PermissionSetForm.permissionsModal.searchForm.searchField.value).to.equal('');
+                });
+              });
+            });
           });
         });
 
-        describe('assign 2 permissions adding', () => {
+        describe('assign 2 permissions', () => {
           const assignedPermissionsAmount = 2;
 
           beforeEach(async function () {
@@ -105,9 +129,7 @@ describe('Permission set form', () => {
           });
 
           it('permissions list should be displayed', () => {
-            expect(PermissionSetForm.permissionsModal.permissionsList.permissions().length).to.equal(
-              permissionsAmount - assignedPermissionsAmount
-            );
+            expect(PermissionSetForm.permissionsModal.permissionsList.isPresent).to.be.true;
           });
 
           it('only unassigned permissions should be displayed', () => {
@@ -122,9 +144,7 @@ describe('Permission set form', () => {
             });
 
             it('permissions list should be displayed', () => {
-              expect(PermissionSetForm.permissionsModal.permissionsList.permissions().length).to.equal(
-                permissionsAmount - assignedPermissionsAmount
-              );
+              expect(PermissionSetForm.permissionsModal.permissionsList.isPresent).to.be.true;
             });
 
             it('all permissions should be displayed', () => {
@@ -152,6 +172,20 @@ describe('Permission set form', () => {
             it('should be 0 permissions', () => {
               expect(PermissionSetForm.permissions().length).to.equal(assignedPermissionsAmount);
             });
+          });
+        });
+
+        describe('assign all permissions', () => {
+          beforeEach(async function () {
+            await PermissionSetForm.permissionsModal.permissionsList.selectAllPermissions.click();
+          });
+
+          it('permissions list should be displayed', () => {
+            expect(PermissionSetForm.permissionsModal.permissionsList.isPresent).to.be.true;
+          });
+
+          it('should be 0 unassigned permissions', () => {
+            expect(PermissionSetForm.permissionsModal.permissionsList.permissions().length).to.equal(0);
           });
         });
       });
