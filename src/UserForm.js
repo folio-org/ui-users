@@ -8,8 +8,8 @@ import {
   Paneset,
   Pane,
   PaneMenu,
-  Icon,
   PaneHeaderIconButton,
+  PaneFooter,
   Button,
   ExpandAllButton,
   expandAllFunction,
@@ -217,27 +217,6 @@ class UserForm extends React.Component {
     );
   }
 
-  getLastMenu(id, label) {
-    const {
-      pristine,
-      submitting,
-    } = this.props;
-
-    return (
-      <PaneMenu>
-        <Button
-          id={id}
-          type="submit"
-          disabled={pristine || submitting}
-          buttonStyle="primary paneHeaderNewButton"
-          marginBottom0
-        >
-          {label}
-        </Button>
-      </PaneMenu>
-    );
-  }
-
   handleExpandAll(sections) {
     this.setState({ sections });
   }
@@ -292,25 +271,36 @@ class UserForm extends React.Component {
     submitter();
   }
 
-  getActionMenu = ({ onToggle }) => {
-    const { onCancel } = this.props;
-    const handleClick = () => {
-      onCancel();
-      onToggle();
-    };
+  getPaneFooter() {
+    const {
+      pristine,
+      submitting,
+      invalid,
+      onCancel,
+    } = this.props;
+
+    const disabled = pristine || submitting || invalid;
 
     return (
-      <Button
-        data-test-cancel-user-form-action
-        buttonStyle="dropdownItem"
-        onClick={handleClick}
-      >
-        <Icon icon="times-circle">
+      <PaneFooter>
+        <Button
+          data-test-user-form-cancel-button
+          buttonStyle="default mega"
+          onClick={onCancel}
+        >
           <FormattedMessage id="ui-users.cancel" />
-        </Icon>
-      </Button>
+        </Button>
+        <Button
+          data-test-user-form-submit-button
+          buttonStyle="primary mega"
+          type="submit"
+          disabled={disabled}
+        >
+          <FormattedMessage id="ui-users.saveAndClose" />
+        </Button>
+      </PaneFooter>
     );
-  };
+  }
 
   render() {
     const {
@@ -323,11 +313,10 @@ class UserForm extends React.Component {
 
     const { sections } = this.state;
     const firstMenu = this.getAddFirstMenu();
+    const footer = this.getPaneFooter();
     const paneTitle = initialValues.id
       ? getFullName(initialValues)
       : <FormattedMessage id="ui-users.crud.createUser" />;
-
-    const lastMenu = this.getLastMenu('clickable-save', <FormattedMessage id="ui-users.save" />);
 
     return (
       <HasCommand commands={this.keyboardCommands}>
@@ -340,9 +329,8 @@ class UserForm extends React.Component {
           <Paneset isRoot>
             <Pane
               defaultWidth="100%"
-              actionMenu={this.getActionMenu}
               firstMenu={firstMenu}
-              lastMenu={lastMenu}
+              footer={footer}
               appIcon={<AppIcon app="users" appIconKey="users" />}
               paneTitle={
                 <span data-test-header-title>

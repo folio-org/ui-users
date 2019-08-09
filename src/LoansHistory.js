@@ -6,7 +6,7 @@ import {
   Paneset,
   Pane,
   Button,
-  SegmentedControl,
+  ButtonGroup,
 } from '@folio/stripes/components';
 
 import { getFullName } from './util';
@@ -48,7 +48,6 @@ class LoansHistory extends React.Component {
       onClickViewOpenLoans,
       onClickViewClosedLoans,
     } = this.props;
-    const activeId = openLoans ? 'loans-show-open' : 'loans-show-closed';
     const onChange = ({ id }) => {
       if (id === 'loans-show-open') {
         onClickViewOpenLoans();
@@ -58,16 +57,24 @@ class LoansHistory extends React.Component {
     };
 
     return (
-      <div className={css.segmentedControlWrap}>
-        <SegmentedControl className={css.segmentedControl} activeId={activeId} onActivate={onChange}>
-          <Button marginBottom0 id="loans-show-open">
-            <FormattedMessage id="ui-users.loans.openLoans" />
-          </Button>
-          <Button marginBottom0 id="loans-show-closed">
-            <FormattedMessage id="ui-users.loans.closedLoans" />
-          </Button>
-        </SegmentedControl>
-      </div>
+      <ButtonGroup className={css.buttonGroupWrap}>
+        <Button
+          marginBottom0
+          id="loans-show-open"
+          buttonStyle={openLoans ? 'primary' : 'default'}
+          onClick={() => onChange({ id: 'loans-show-open' })}
+        >
+          <FormattedMessage id="ui-users.loans.openLoans" />
+        </Button>
+        <Button
+          marginBottom0
+          id="loans-show-closed"
+          buttonStyle={openLoans ? 'default' : 'primary'}
+          onClick={() => onChange({ id: 'loans-show-closed' })}
+        >
+          <FormattedMessage id="ui-users.loans.closedLoans" />
+        </Button>
+      </ButtonGroup>
     );
   }
 
