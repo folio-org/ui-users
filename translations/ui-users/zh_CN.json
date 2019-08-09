@@ -859,5 +859,7 @@
     "reports.overdue.loanId": "借阅ID",
     "activeUserStatus": "激活",
     "inactiveUserStatus": "未激活",
-    "reports.overdue.feeFine": "罚款"
+    "reports.overdue.feeFine": "罚款",
+    "user": "User",
+    "user.pluralized": "{count} {count, plural, one {user} other {users}}"
 }

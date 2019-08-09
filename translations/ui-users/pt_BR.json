@@ -859,5 +859,7 @@
     "reports.overdue.loanId": "ID do empréstimo",
     "activeUserStatus": "ativo",
     "inactiveUserStatus": "inativo",
-    "reports.overdue.feeFine": "Taxa/Multa"
+    "reports.overdue.feeFine": "Taxa/Multa",
+    "user": "Usuário",
+    "user.pluralized": "{count} {count, plural, one {usuário} other {usuários}}"
 }
