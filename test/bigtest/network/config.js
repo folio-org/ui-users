@@ -303,22 +303,21 @@ export default function config() {
     }
 
     return notes.where((note) => {
-      let matches = false;
-
-      for (const link of note.links) {
-        if (link.type === params.type && link.id === params.id) {
-          matches = true;
-          if (queryParams.status === 'assigned') {
-            return true;
-          }
+      switch (queryParams.status) {
+        case 'assigned': {
+          return note.links.some(link => {
+            return link.type === params.type && link.id === params.id;
+          });
+        }
+        case 'unassigned': {
+          return note.links.every(link => {
+            return link.type !== params.type || link.id !== params.id;
+          });
+        }
+        default: {
+          return false;
         }
       }
-
-      if (!matches && queryParams.status === 'unassigned') {
-        return true;
-      }
-
-      return false;
     });
   });
 
