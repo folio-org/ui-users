@@ -14,7 +14,7 @@ import {
   ConfirmationModal
 } from '@folio/stripes/components';
 
-import { calculateSelectedAmount } from '../accountFunctions';
+import { calculateSelectedAmount, loadServicePoints } from '../accountFunctions';
 import CancellationModal from './CancellationModal';
 import CommentModal from './CommentModal';
 import WarningModal from './WarningModal';
@@ -547,36 +547,6 @@ class Actions extends React.Component {
     );
   }
 
-  loadServicePoints = (values) => {
-    const servicePoint = values.defaultServicePointId;
-    const servicePoints = values.servicePointsIds;
-    const owners = values.owners || [];
-    let ownerId = null;
-    if (servicePoint && servicePoint !== '-') {
-      owners.forEach(o => {
-        if (o.servicePointOwner && o.servicePointOwner.find(s => s.value === servicePoint)) {
-          ownerId = o.id;
-        }
-      });
-    } else if (servicePoints.length === 1) {
-      const sp = servicePoints[0];
-      owners.forEach(o => {
-        if (o.servicePointOwner && o.servicePointOwner.find(s => s.value === sp)) {
-          ownerId = o.id;
-        }
-      });
-    } else if (servicePoints.length === 2) {
-      const sp1 = servicePoints[0];
-      const sp2 = servicePoints[1];
-      owners.forEach(o => {
-        if (o.servicePointOwner && o.servicePointOwner.find(s => s.value === sp1) && o.servicePointOwner.find(s => s.value === sp2)) {
-          ownerId = o.id;
-        }
-      });
-    }
-    return ownerId;
-  }
-
   renderConfirmMessage = () => {
     const { actions: { pay, regular, waiveModal, waiveMany, transferModal, transferMany }, intl: { formatMessage } } = this.props;
     const { values } = this.state;
@@ -650,7 +620,7 @@ class Actions extends React.Component {
           ? 'ui-users.accounts.actions.transferFeeFine'
           : 'ui-users.accounts.history.button.refund';
 
-    const ownerId = this.loadServicePoints({ owners, defaultServicePointId, servicePointsIds });
+    const ownerId = loadServicePoints({ owners, defaultServicePointId, servicePointsIds });
     const initialValues = { ownerId, amount, notify: true };
 
     return (
