@@ -30,19 +30,13 @@ describe('ItemEditPage', () => {
       expect(UserFormPage.title).to.equal(user1.username);
     });
 
-    describe('pane header menu', () => {
+    describe('clicking on cancel button', () => {
       beforeEach(async () => {
-        await UserFormPage.headerDropdown.click();
+        await UserFormPage.cancelButton.click();
       });
 
-      describe('clicking on cancel', () => {
-        beforeEach(async () => {
-          await UserFormPage.headerDropdownMenu.clickCancel();
-        });
-
-        it('should redirect to view users page after click', () => {
-          expect(users.$root).to.exist;
-        });
+      it('should redirect to view users page after click', () => {
+        expect(users.$root).to.exist;
       });
     });
   });
@@ -50,18 +44,18 @@ describe('ItemEditPage', () => {
   describe('validating user barcode', () => {
     beforeEach(async function () {
       await UserFormPage.barcodeField.fillAndBlur(user2.barcode);
-      await UserFormPage.clickSave();
+      await UserFormPage.submitButton.click();
     });
 
     it('should display validation error', () => {
-      expect(UserFormPage.barcodeError).to.equal('This barcode has already been taken');
+      expect(UserFormPage.feedbackError).to.equal('This barcode has already been taken');
     });
   });
 
   describe('validating empty user barcode', () => {
     beforeEach(async function () {
       await UserFormPage.barcodeField.fillAndBlur('');
-      await UserFormPage.clickSave();
+      await UserFormPage.submitButton.click();
     });
 
     it('should show user detail view', () => {
@@ -72,11 +66,11 @@ describe('ItemEditPage', () => {
   describe('validating username', () => {
     beforeEach(async function () {
       await UserFormPage.usernameField.fillAndBlur(user2.username);
-      await UserFormPage.clickSave();
+      await UserFormPage.submitButton.click();
     });
 
     it('should display validation error', () => {
-      expect(UserFormPage.barcodeError).to.equal('This username already exists');
+      expect(UserFormPage.feedbackError).to.equal('This username already exists');
     });
   });
 });

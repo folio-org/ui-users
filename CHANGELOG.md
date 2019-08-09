@@ -3,6 +3,7 @@
 ## 2.25.0 (IN PROGRESS)
 
 * Implement exporting of only overdue loans for overdue loans report. Refs UIU-1121.
+* Implement footer with _Save & close_ and _Canclel_ buttons on the edit user form. Refs STCOM-429.
 * Finish implementing patron notices. Refs UIU-1113, UIU-1114, UIU-1115.
 * Clean up duplicate code. Refs UIU-932.
 
