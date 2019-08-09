@@ -148,9 +148,17 @@ describe('Permission set form', () => {
             });
 
             it('all permissions should be displayed', () => {
-              expect(PermissionSetForm.permissionsModal.permissionsList.permissions().length).to.equal(
-                permissionsAmount - assignedPermissionsAmount
-              );
+              expect(PermissionSetForm.permissionsModal.permissionsList.permissions().length).to.equal(permissionsAmount);
+            });
+
+            describe('sort permissions by status', () => {
+              beforeEach(async function () {
+                await PermissionSetForm.permissionsModal.permissionsList.sortByStatusButton.click();
+              });
+
+              it('assigned permission should be first', () => {
+                expect(PermissionSetForm.permissionsModal.permissionsList.permissions(0).assigned).to.be.true;
+              });
             });
           });
 
@@ -186,6 +194,18 @@ describe('Permission set form', () => {
 
           it('should be 0 unassigned permissions', () => {
             expect(PermissionSetForm.permissionsModal.permissionsList.permissions().length).to.equal(0);
+          });
+
+          describe('unassign all permissions', () => {
+            beforeEach(async function () {
+              await PermissionSetForm.permissionsModal.searchForm.assignedCheckbox.click();
+              await PermissionSetForm.permissionsModal.searchForm.unassignedCheckbox.click();
+              await PermissionSetForm.permissionsModal.permissionsList.selectAllPermissions.click();
+            });
+
+            it('should be 0 assigned permissions', () => {
+              expect(PermissionSetForm.permissionsModal.permissionsList.permissions().length).to.equal(0);
+            });
           });
         });
       });

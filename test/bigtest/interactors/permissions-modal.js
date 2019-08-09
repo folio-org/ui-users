@@ -17,6 +17,7 @@ import {
 
 @interactor class Permission {
   checkBox = scoped('[data-test-select-item] input');
+  assigned = property('[data-test-select-item] input', 'checked');
   name = scoped('[data-test-permission-name]');
   status = scoped('[data-test-permission-status]');
 }
@@ -26,6 +27,7 @@ import {
 
   permissions = collection('[class^="mclRow--"]', Permission);
   selectAllPermissions = scoped('[data-test-select-all-permissions] input');
+  sortByStatusButton = scoped('#clickable-list-column-status')
 }
 
 @interactor class PermissionsModal {
