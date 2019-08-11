@@ -509,7 +509,7 @@
     "accounts.open.columns.status": "حالة السداد",
     "meta.title": "المستخدمين",
     "search": "بحث",
-    "resultCount": "تم العثور على {count, number} {count, plural, one { تسجيلة } other { تسجيلات }}",
+    "resultCount": "تم العثور على {count, number} {count, plural, one { تسجيلة } other { تسجيلة }}",
     "showNotes": "عرض الملاحظات",
     "active": "نشط",
     "inactive": "غير نشط",
@@ -859,5 +859,7 @@
     "reports.overdue.loanId": "معرف الإعارة",
     "activeUserStatus": "نشط",
     "inactiveUserStatus": "غير نشط",
-    "reports.overdue.feeFine": "الرسم/الغرامة"
+    "reports.overdue.feeFine": "الرسم/الغرامة",
+    "user": "User",
+    "user.pluralized": "{count} {count, plural, one {user} other {users}}"
 }
