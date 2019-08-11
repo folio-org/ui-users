@@ -325,14 +325,14 @@ class Charge extends React.Component {
     const tagPatron = formatMessage({ id: 'ui-users.accounts.actions.tag.patron' });
     let comment = '';
     if (values.comment) {
-      comment = tagStaff + ': ' + values.comment;
+      comment = `${tagStaff} : ${values.comment}`;
     }
     if (values.patronInfo && values.notify) {
-      comment = comment + '\n' + tagPatron + ': ' + values.patronInfo;
+      comment = `${comment} \n ${tagPatron} : ${values.patronInfo}`;
     }
     this.onClickCharge(this.type).then(() => {
       this.type.remaining = parseFloat(this.type.amount - values.amount).toFixed(2);
-      let paymentStatus = _.capitalize(formatMessage({ id: 'ui-users.accounts.actions.warning.payAction' }));
+      let paymentStatus = _.capitalize(formatMessage({ id: 'ui-users.accounts.actions.warning.paymentAction' }));
       if (this.type.remaining === '0.00') {
         paymentStatus = `${paymentStatus} ${formatMessage({ id: 'ui-users.accounts.status.fully' })}`;
         this.type.status.name = 'Closed';
@@ -362,7 +362,7 @@ class Charge extends React.Component {
     const values = this.state.values || {};
     const type = this.type || {};
     const amount = parseFloat(values.amount || 0).toFixed(2);
-    let paymentStatus = formatMessage({ id: 'ui-users.accounts.actions.warning.payAction' });
+    let paymentStatus = formatMessage({ id: 'ui-users.accounts.actions.warning.paymentAction' });
     paymentStatus = `${(parseFloat(values.amount) !== parseFloat(type.amount)
       ? formatMessage({ id: 'ui-users.accounts.status.partially' })
       : formatMessage({ id: 'ui-users.accounts.status.fully' }))} ${paymentStatus}`;
@@ -385,7 +385,7 @@ class Charge extends React.Component {
     const allfeefines = _.get(resources, ['allfeefines', 'records'], []);
     const owners = _.get(resources, ['owners', 'records'], []);
     const list = [];
-    const shared = owners.find(o => o.owner === 'Shared'); // Crear variable Shared en translations
+    const shared = owners.find(o => o.owner === 'Shared');
     allfeefines.forEach(f => {
       if (!list.find(o => (o || {}).id === f.ownerId)) {
         const owner = owners.find(o => (o || {}).id === f.ownerId);
