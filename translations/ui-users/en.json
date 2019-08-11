@@ -836,7 +836,7 @@
   "accounts.actions.warning.remaining": "Remainig",
   "accounts.actions.warning.paymentStatus": "Payment Status",
   "accounts.actions.warning.item": "Item",
-  "accounts.actions.warning.payAction": "paid",
+  "accounts.actions.warning.paymentAction": "paid",
   "accounts.actions.warning.waiveAction": "waived",
   "accounts.actions.warning.transferAction": "transferred",
   "accounts.actions.warning.deselect": "Deselect to continue",
