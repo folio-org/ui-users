@@ -275,10 +275,11 @@ class UserForm extends React.Component {
     const {
       pristine,
       submitting,
+      invalid,
       onCancel,
     } = this.props;
 
-    const disabled = pristine || submitting;
+    const disabled = pristine || submitting || invalid;
 
     return (
       <PaneFooter>
