@@ -5,6 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import {
   MultiColumnList
 } from '@folio/stripes/components';
+
 import CheckBoxColumn from '../CheckboxColumn';
 import { sortOrders } from '../../constants';
 

@@ -1,11 +1,11 @@
+import React from 'react';
+import PropTypes from 'prop-types';
 import {
   isEmpty,
   get,
   orderBy,
   remove,
 } from 'lodash';
-import React from 'react';
-import PropTypes from 'prop-types';
 import { connect as reduxConnect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { change } from 'redux-form';
@@ -50,8 +50,33 @@ class PermissionsModal extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }),
-    filtersConfig: PropTypes.arrayOf(PropTypes.object).isRequired,
-    subPermissions: PropTypes.arrayOf(PropTypes.object).isRequired,
+    filtersConfig: PropTypes.arrayOf(
+      PropTypes.shape({
+        label: PropTypes.node.isRequired,
+        name: PropTypes.string.isRequired,
+        cql: PropTypes.string.isRequired,
+        values: PropTypes.arrayOf(
+          PropTypes.oneOfType([
+            PropTypes.shape({
+              name: PropTypes.string.isRequired,
+              value: PropTypes.bool.isRequired,
+            }),
+            PropTypes.string.isRequired,
+          ]),
+        ).isRequired,
+      })
+    ).isRequired,
+    subPermissions: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        description: PropTypes.string.isRequired,
+        displayName: PropTypes.string.isRequired,
+        permissionName: PropTypes.string.isRequired,
+        dummy: PropTypes.bool.isRequired,
+        mutable: PropTypes.bool.isRequired,
+        visible: PropTypes.bool.isRequired,
+      })
+    ).isRequired,
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
     addSubPermissions: PropTypes.func.isRequired,
@@ -135,10 +160,7 @@ class PermissionsModal extends React.Component {
       const permissionAssigned = subPermissionsIds.includes(permissionId);
 
       if (permissionAssigned) {
-        remove(
-          subPermissionsIds,
-          (id) => id === permissionId
-        );
+        remove(subPermissionsIds, (id) => id === permissionId);
       } else {
         subPermissionsIds.push(permissionId);
       }
@@ -194,6 +216,7 @@ class PermissionsModal extends React.Component {
     this.setState({
       filters: {},
       permissions,
+      subPermissionsIds: [],
     });
   };
 
@@ -257,7 +280,7 @@ class PermissionsModal extends React.Component {
             </Button>
             <Button
               data-test-permissions-modal-cancel
-              className={css.cancelButton}
+              buttonClass={css.cancelButton}
               onClick={onClose}
               marginBottom0
             >
