@@ -25,7 +25,11 @@ import {
   AccordionSet,
   expandAllFunction,
 } from '@folio/stripes/components';
-import { withTags } from '@folio/stripes/smart-components';
+
+import {
+  withTags,
+  NotesSmartAccordion,
+} from '@folio/stripes/smart-components';
 
 import UserForm from './UserForm';
 import LoansHistory from './LoansHistory';
@@ -200,6 +204,7 @@ class ViewUser extends React.Component {
         accountsSection: false,
         permissionsSection: false,
         servicePointsSection: false,
+        notesAccordion: false,
       },
     };
 
@@ -920,6 +925,7 @@ class ViewUser extends React.Component {
       parentResources,
       onClose,
       paneWidth,
+      match,
     } = this.props;
 
     const addressTypes = (parentResources.addressTypes || {}).records || [];
@@ -1094,6 +1100,18 @@ class ViewUser extends React.Component {
                 />
               </IfInterface>
             </IfPermission>
+            <NotesSmartAccordion
+              domainName="users"
+              entityId={match.params.id}
+              entityName={getFullName(user)}
+              open={this.state.sections.notesAccordion}
+              onToggle={this.handleSectionToggle}
+              id="notesAccordion"
+              entityType="user"
+              pathToNoteCreate="/users/notes/new"
+              pathToNoteDetails="/users/notes"
+              hideAssignButton
+            />
           </AccordionSet>
         </HasCommand>
       </Pane>

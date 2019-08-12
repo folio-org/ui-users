@@ -1,4 +1,6 @@
 {
+  "user": "User",
+  "user.pluralized": "{count} {count, plural, one {user} other {users}}",
   "meta.title": "Users",
 
   "loading": "Loading...",

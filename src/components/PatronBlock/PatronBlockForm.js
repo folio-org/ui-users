@@ -19,8 +19,13 @@ import {
   AppIcon,
   TitleManager
 } from '@folio/stripes/core';
-import { Field } from 'redux-form';
-import stripesForm from '@folio/stripes/form';
+import {
+  reduxForm,
+  Field,
+  formValueSelector,
+} from 'redux-form';
+
+import { connect } from 'react-redux';
 import { ViewMetaData } from '@folio/stripes/smart-components';
 import moment from 'moment';
 import {
@@ -64,6 +69,7 @@ class PatronBlockForm extends React.Component {
     intl: intlShape.isRequired,
     stripes: PropTypes.object,
     initialValues: PropTypes.object,
+    currentValues: PropTypes.object,
   };
 
   constructor(props) {
@@ -144,6 +150,11 @@ class PatronBlockForm extends React.Component {
       selectedItem,
       query,
       user = {},
+      currentValues: {
+        borrowing,
+        renewals,
+        requests,
+      },
     } = this.props;
     const title = query.layer === 'edit-block' ? getFullName(user) : intl.formatMessage({ id: 'ui-users.blocks.layer.newBlockTitle' });
     const userD = query.layer !== 'edit-block' ? <UserDetails user={user} /> : '';
@@ -233,7 +244,7 @@ class PatronBlockForm extends React.Component {
                   <Col id="patronBlockForm-borrowing" xs={12} sm={10} md={7} lg={5}>
                     <Field
                       name="borrowing"
-                      checked={initialValues.borrowing}
+                      checked={borrowing}
                       label={<FormattedMessage id="ui-users.blocks.form.label.borrowing" />}
                       component={Checkbox}
                     />
@@ -243,7 +254,7 @@ class PatronBlockForm extends React.Component {
                   <Col id="patronBlockForm-renewals" xs={12} sm={10} md={7} lg={5}>
                     <Field
                       name="renewals"
-                      checked={initialValues.renewals}
+                      checked={renewals}
                       label={<FormattedMessage id="ui-users.blocks.form.label.renewals" />}
                       component={Checkbox}
                     />
@@ -253,7 +264,7 @@ class PatronBlockForm extends React.Component {
                   <Col id="patronBlockForm-requests" xs={12} sm={10} md={7} lg={5}>
                     <Field
                       name="requests"
-                      checked={initialValues.requests}
+                      checked={requests}
                       label={<FormattedMessage id="ui-users.blocks.form.label.request" />}
                       component={Checkbox}
                     />
@@ -268,8 +279,19 @@ class PatronBlockForm extends React.Component {
   }
 }
 
-export default stripesForm({
+const PatronBlockReduxForm = reduxForm({
   form: 'patronBlockForm',
   enableReinitialize: false,
   validate,
 })(PatronBlockForm);
+
+const selector = formValueSelector('patronBlockForm');
+
+export default connect(state => ({
+  currentValues: selector(
+    state,
+    'borrowing',
+    'renewals',
+    'requests'
+  )
+}))(PatronBlockReduxForm);

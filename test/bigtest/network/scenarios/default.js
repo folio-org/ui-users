@@ -17,4 +17,7 @@ export default (server) => {
   });
 
   server.createList('user', 20);
+
+  server.createList('note-type', 10);
+  server.createList('note', 40);
 };
