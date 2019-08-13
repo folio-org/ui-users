@@ -25,7 +25,6 @@ import {
   EditExtendedInfo,
   EditContactInfo,
   EditProxy,
-  EditUserPerms,
   EditServicePoints,
 } from './components/EditSections';
 
@@ -34,6 +33,7 @@ import { HasCommand } from './components/Commander';
 import { getFullName } from './util';
 
 import css from './UserForm.css';
+import ContainedPermissions from './settings/permissions/ContainedPermissions';
 
 function validate(values, props) {
   const errors = {};
@@ -188,10 +188,6 @@ class UserForm extends React.Component {
         handler: this.collapseAllSections,
       }
     ];
-
-    if (props.initialValues.id) {
-      this.connectedEditUserPerms = props.stripes.connect(EditUserPerms);
-    }
   }
 
   componentDidMount() {
@@ -384,11 +380,15 @@ class UserForm extends React.Component {
                         onToggle={this.handleSectionToggle}
                         {...this.props}
                       />
-                      <this.connectedEditUserPerms
+                      <ContainedPermissions
                         accordionId="permissions"
                         expanded={sections.permissions}
                         onToggle={this.handleSectionToggle}
-                        {...this.props}
+                        permToRead="perms.permissions.get"
+                        permToDelete="perms.permissions.item.put"
+                        permToModify="perms.permissions.item.put"
+                        formName="userForm"
+                        permissionsField="permissions"
                       />
                       <EditServicePoints
                         accordionId="servicePoints"

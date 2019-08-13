@@ -77,7 +77,20 @@ const SearchForm = (props) => {
 
 SearchForm.propTypes = {
   config: PropTypes.arrayOf(
-    PropTypes.object,
+    PropTypes.shape({
+      label: PropTypes.node.isRequired,
+      name: PropTypes.string.isRequired,
+      cql: PropTypes.string.isRequired,
+      values: PropTypes.arrayOf(
+        PropTypes.oneOfType([
+          PropTypes.shape({
+            name: PropTypes.string.isRequired,
+            value: PropTypes.bool.isRequired,
+          }),
+          PropTypes.string.isRequired,
+        ]),
+      ).isRequired,
+    })
   ).isRequired,
   filters: PropTypes.object.isRequired,
   onSubmitSearch: PropTypes.func.isRequired,

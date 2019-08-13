@@ -12,15 +12,35 @@ import { sortOrders } from '../../constants';
 const PermissionsList = (props) => {
   const {
     sortedPermissions,
-    subPermissionsIds,
-    toggleAllPermissions,
+    assignedPermissionIds,
     togglePermission,
     onHeaderClick,
     sortOrder,
     sortedColumn,
-    allChecked,
     visibleColumns,
+    setAssignedPermissionIds
   } = props;
+
+  const allChecked = sortedPermissions.every(({ id }) => assignedPermissionIds.includes(id));
+
+  const toggleAllPermissions = ({ target: { checked } }) => {
+    let result = [...assignedPermissionIds];
+
+    if (checked) {
+      sortedPermissions.forEach(({ id }) => {
+        if (!result.includes(id)) {
+          result.push(id);
+        }
+      });
+    } else {
+      result = assignedPermissionIds.filter((assignedPermissionId) => !sortedPermissions.find(
+        ({ id: sortedPermissionId }) => sortedPermissionId === assignedPermissionId
+      ));
+    }
+
+    setAssignedPermissionIds(result);
+  };
+
   return (
     <div data-test-permissions-list>
       <MultiColumnList
@@ -48,7 +68,7 @@ const PermissionsList = (props) => {
           selected: permission => (
             <CheckBoxColumn
               value={permission.id}
-              checked={subPermissionsIds.includes(permission.id)}
+              checked={assignedPermissionIds.includes(permission.id)}
               onChange={() => togglePermission(permission.id)}
             />
           ),
@@ -60,7 +80,7 @@ const PermissionsList = (props) => {
           ),
           status: permission => {
             const statusText = `ui-users.permissions.modal.${
-              subPermissionsIds.includes(permission.id)
+              assignedPermissionIds.includes(permission.id)
                 ? 'assigned'
                 : 'unassigned'
             }`;
@@ -82,13 +102,12 @@ PermissionsList.propTypes = {
   sortedPermissions: PropTypes.arrayOf(
     PropTypes.object,
   ).isRequired,
-  subPermissionsIds: PropTypes.arrayOf(PropTypes.string).isRequired,
+  assignedPermissionIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   visibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
   sortOrder: PropTypes.string.isRequired,
-  allChecked: PropTypes.bool.isRequired,
   togglePermission: PropTypes.func.isRequired,
   onHeaderClick: PropTypes.func.isRequired,
-  toggleAllPermissions: PropTypes.func.isRequired,
+  setAssignedPermissionIds: PropTypes.func.isRequired,
 };
 
 export default PermissionsList;

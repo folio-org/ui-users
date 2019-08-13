@@ -280,7 +280,8 @@ class PermissionSetForm extends React.Component {
               permToRead="perms.permissions.get"
               permToDelete="perms.permissions.item.put"
               permToModify="perms.permissions.item.put"
-              name="subPermissions"
+              formName="permissionSetForm"
+              permissionsField="subPermissions"
             />
           </Pane>
         </Paneset>

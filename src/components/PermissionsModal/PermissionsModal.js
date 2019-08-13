@@ -66,7 +66,7 @@ class PermissionsModal extends React.Component {
         ).isRequired,
       })
     ).isRequired,
-    subPermissions: PropTypes.arrayOf(
+    currentPermissions: PropTypes.arrayOf(
       PropTypes.shape({
         id: PropTypes.string.isRequired,
         description: PropTypes.string.isRequired,
@@ -78,8 +78,12 @@ class PermissionsModal extends React.Component {
       })
     ).isRequired,
     open: PropTypes.bool.isRequired,
+    // eslint-disable-next-line react/no-unused-prop-types
+    formName: PropTypes.string.isRequired,
+    // eslint-disable-next-line react/no-unused-prop-types
+    permissionsField: PropTypes.string.isRequired,
     onClose: PropTypes.func.isRequired,
-    addSubPermissions: PropTypes.func.isRequired,
+    addPermissions: PropTypes.func.isRequired,
     visibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
   };
 
@@ -91,12 +95,11 @@ class PermissionsModal extends React.Component {
     super(props);
 
     this.state = {
-      allChecked: false,
       permissions: [],
       sortedColumn: 'permissionName',
       sortOrder: sortOrders.asc.name,
       filters: getInitialFiltersState(props.filtersConfig),
-      subPermissionsIds: props.subPermissions.map(({ id }) => id)
+      assignedPermissionIds: props.currentPermissions.map(({ id }) => id)
     };
   }
 
@@ -147,55 +150,47 @@ class PermissionsModal extends React.Component {
     }
   };
 
-  onChangeFilter = ({ target }) => {
+  onChangeFilter = ({ target: { name, checked } }) => {
     this.setState(({ filters }) => {
-      filters[target.name] = target.checked;
+      if (checked) {
+        filters[name] = checked;
+      } else {
+        delete filters[name];
+      }
 
       return filters;
     });
   };
 
   togglePermission = (permissionId) => {
-    this.setState(({ subPermissionsIds }) => {
-      const permissionAssigned = subPermissionsIds.includes(permissionId);
+    this.setState(({ assignedPermissionIds }) => {
+      const permissionAssigned = assignedPermissionIds.includes(permissionId);
 
       if (permissionAssigned) {
-        remove(subPermissionsIds, (id) => id === permissionId);
+        remove(assignedPermissionIds, (id) => id === permissionId);
       } else {
-        subPermissionsIds.push(permissionId);
+        assignedPermissionIds.push(permissionId);
       }
 
-      return { subPermissionsIds };
+      return { assignedPermissionIds };
     });
   };
 
   onSave = () => {
-    const { subPermissionsIds } = this.state;
+    const { assignedPermissionIds } = this.state;
     const {
-      addSubPermissions,
+      addPermissions,
       onClose,
     } = this.props;
     const permissions = get(this.props, 'resources.availablePermissions.records', []);
-    const filteredPermissions = permissions.filter(({ id }) => subPermissionsIds.includes(id));
+    const filteredPermissions = permissions.filter(({ id }) => assignedPermissionIds.includes(id));
 
-    addSubPermissions(filteredPermissions);
+    addPermissions(filteredPermissions);
     onClose();
   };
 
-  toggleAllPermissions = () => {
-    const { allChecked } = this.state;
-    let subPermissionsIds = [];
-
-    if (!allChecked) {
-      const permissions = get(this.props, 'resources.availablePermissions.records', []);
-
-      subPermissionsIds = permissions.map(({ id }) => id);
-    }
-
-    this.setState({
-      allChecked: !allChecked,
-      subPermissionsIds,
-    });
+  setAssignedPermissionIds = (assignedPermissionIds) => {
+    this.setState({ assignedPermissionIds });
   };
 
   onClearFilter = (filterName) => {
@@ -216,7 +211,7 @@ class PermissionsModal extends React.Component {
     this.setState({
       filters: {},
       permissions,
-      subPermissionsIds: [],
+      assignedPermissionIds: this.props.currentPermissions.map(({ id }) => id),
     });
   };
 
@@ -230,8 +225,7 @@ class PermissionsModal extends React.Component {
         'status.Unassigned': Unassigned,
         'status.Assigned': Assigned,
       } = {},
-      subPermissionsIds,
-      allChecked,
+      assignedPermissionIds,
     } = this.state;
     const {
       open,
@@ -242,11 +236,11 @@ class PermissionsModal extends React.Component {
 
     const sorters = {
       permissionName: ({ permissionName }) => permissionName,
-      status: ({ id, permissionName }) => [subPermissionsIds.includes(id), permissionName],
+      status: ({ id, permissionName }) => [assignedPermissionIds.includes(id), permissionName],
     };
 
     const filteredPermissions = permissions.filter(({ id }) => {
-      const permissionAssigned = subPermissionsIds.includes(id);
+      const permissionAssigned = assignedPermissionIds.includes(id);
 
       return (
         (Unassigned && !permissionAssigned && !Assigned)
@@ -317,14 +311,13 @@ class PermissionsModal extends React.Component {
             >
               <PermissionsList
                 visibleColumns={visibleColumns}
-                allChecked={allChecked}
                 sortOrder={sortOrder}
                 sortedColumn={sortedColumn}
                 sortedPermissions={sortedPermissions}
-                subPermissionsIds={subPermissionsIds}
+                assignedPermissionIds={assignedPermissionIds}
                 onHeaderClick={this.onHeaderClick}
                 togglePermission={this.togglePermission}
-                toggleAllPermissions={this.toggleAllPermissions}
+                setAssignedPermissionIds={this.setAssignedPermissionIds}
               />
             </Pane>
           </Paneset>
@@ -334,12 +327,12 @@ class PermissionsModal extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
-  subPermissions: state.form.permissionSetForm.values.subPermissions || [],
+const mapStateToProps = (state, { formName, permissionsField }) => ({
+  currentPermissions: state.form[formName].values[permissionsField] || [],
 });
 
-const mapDispatchToProps = dispatch => ({
-  addSubPermissions: (permissions) => dispatch(change('permissionSetForm', 'subPermissions', permissions)),
+const mapDispatchToProps = (dispatch, { formName, permissionsField }) => ({
+  addPermissions: (permissions) => dispatch(change(formName, permissionsField, permissions)),
 });
 
 export default stripesConnect(reduxConnect(mapStateToProps, mapDispatchToProps)(PermissionsModal));

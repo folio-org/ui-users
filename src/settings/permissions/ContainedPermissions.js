@@ -18,19 +18,20 @@ import {
 } from '@folio/stripes-core';
 
 import PermissionModal from '../../components/PermissionsModal';
-import css from '../../components/EditablePermissions/EditablePermissions.css';
+import css from './ContainedPermissions.css';
 
 class ContainedPermissions extends React.Component {
   static propTypes = {
     expanded: PropTypes.bool.isRequired,
     initialValues: PropTypes.object,
     onToggle: PropTypes.func.isRequired,
-    name: PropTypes.string.isRequired,
     accordionId: PropTypes.string.isRequired,
     permToDelete: PropTypes.string.isRequired,
     permToModify: PropTypes.string.isRequired,
     permToRead: PropTypes.string.isRequired,
     stripes: stripesShape.isRequired,
+    formName: PropTypes.string.isRequired,
+    permissionsField: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
@@ -112,8 +113,9 @@ class ContainedPermissions extends React.Component {
       expanded,
       onToggle,
       initialValues,
-      name,
       permToModify,
+      formName,
+      permissionsField,
     } = this.props;
 
     const { permissionModalOpen } = this.state;
@@ -140,7 +142,7 @@ class ContainedPermissions extends React.Component {
           <Badge>{size}</Badge>
         }
       >
-        <FieldArray name={name} component={this.renderList} />
+        <FieldArray name={permissionsField} component={this.renderList} />
         <IfPermission perm={permToModify}>
           <Button
             type="button"
@@ -154,6 +156,8 @@ class ContainedPermissions extends React.Component {
           {
             permissionModalOpen &&
               <PermissionModal
+                formName={formName}
+                permissionsField={permissionsField}
                 open={permissionModalOpen}
                 onClose={this.closePermissionModal}
                 visibleColumns={
