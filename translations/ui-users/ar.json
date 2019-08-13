@@ -860,6 +860,6 @@
     "activeUserStatus": "نشط",
     "inactiveUserStatus": "غير نشط",
     "reports.overdue.feeFine": "الرسم/الغرامة",
-    "user": "User",
-    "user.pluralized": "{count} {count, plural, one {user} other {users}}"
+    "user": "المستخدم",
+    "user.pluralized": "{count} {count, plural, one {مستخدم} other {مستخدم}}"
 }
