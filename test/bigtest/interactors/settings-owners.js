@@ -15,10 +15,10 @@ import ButtonInteractor from '@folio/stripes-components/lib/Button/tests/interac
 import ConfirmationModalInteractor from '@folio/stripes-components/lib/ConfirmationModal/tests/interactor'; // eslint-disable-line
 import TextFieldInteractor from '@folio/stripes-components/lib/TextField/tests/interactor'; // eslint-disable-line
 import MultiSelectInteractor from '@folio/stripes-components/lib/MultiSelection/tests/interactor'; // eslint-disable-line
-
+const listContainerSelector = '#editList-settings-owners';
 const newOwnerSelector = '#clickable-add-settings-owners';
 const textFieldSelector = '[class*=textField--]';
-const listContainerSelector = '#editList-settings-owners';
+
 const rowSelector = '[class*=editListRow--]';
 const cellSelector = '[class*=mclCell--]';
 const lastRow = '#editList-settings-owners > [class*=mclScrollable---] > div > div > div:nth-child(5)';
@@ -46,17 +46,10 @@ const RowInteractor = interactor(class RowInteractor {
     rows = collection(rowSelector, RowInteractor);
 }
 
-@interactor class ItemInUseModal {
-  accept = scoped('[data-test-ok-button]', ButtonInteractor);
-}
-
 @interactor class OwnerInteractor {
-    static defaultScope = '#owners';
     list = new ListInteractor(listContainerSelector);
     callout = new CalloutInteractor();
-    confirmationModal = new ConfirmationModalInteractor('#confirm-delete-owner');
-    hideItemModal = isPresent('#hideItemInUseDialog');
-    itemInUseModal = new ItemInUseModal('#hideItemInUseDialog');
+    confirmationModal = new ConfirmationModalInteractor('#delete-controlled-vocab-entry-confirmation');
     newOwnerButton = new ButtonInteractor(newOwnerSelector);
     isLoaded = isPresent(lastRow);
     isView = isVisible('#editList-settings-owners > [class*=mclScrollable---] > div > div');

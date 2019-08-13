@@ -25,7 +25,11 @@ import {
   AccordionSet,
   expandAllFunction,
 } from '@folio/stripes/components';
-import { withTags } from '@folio/stripes/smart-components';
+
+import {
+  withTags,
+  NotesSmartAccordion,
+} from '@folio/stripes/smart-components';
 
 import UserForm from './UserForm';
 import LoansHistory from './LoansHistory';
@@ -200,6 +204,7 @@ class ViewUser extends React.Component {
         accountsSection: false,
         permissionsSection: false,
         servicePointsSection: false,
+        notesAccordion: false,
       },
     };
 
@@ -525,12 +530,19 @@ class ViewUser extends React.Component {
 
   update(user) {
     const addressTypes = (this.props.parentResources.addressTypes || {}).records || [];
+    const userData = cloneDeep(user);
 
-    if (user.personal.addresses) {
-      user.personal.addresses = toUserAddresses(user.personal.addresses, addressTypes); // eslint-disable-line no-param-reassign
+    if (userData.personal.addresses) {
+      userData.personal.addresses = toUserAddresses(userData.personal.addresses, addressTypes); // eslint-disable-line no-param-reassign
     }
 
-    const { proxies, sponsors, permissions, servicePoints, preferredServicePoint } = user;
+    const {
+      proxies,
+      sponsors,
+      permissions,
+      servicePoints,
+      preferredServicePoint,
+    } = userData;
 
     if (this.props.stripes.hasPerm('proxiesfor.item.put,proxiesfor.item.post')) {
       if (proxies) this.props.updateProxies(proxies);
@@ -545,10 +557,10 @@ class ViewUser extends React.Component {
       this.props.updateServicePoints(servicePoints, preferredServicePoint);
     }
 
-    const data = omit(user, ['creds', 'proxies', 'sponsors', 'permissions', 'servicePoints', 'preferredServicePoint']);
+    const data = omit(userData, ['creds', 'proxies', 'sponsors', 'permissions', 'servicePoints', 'preferredServicePoint']);
     const today = moment().endOf('day');
 
-    data.active = (moment(user.expirationDate).endOf('day').isSameOrAfter(today));
+    data.active = (moment(userData.expirationDate).endOf('day').isSameOrAfter(today));
 
     this.props.mutator.selUser.PUT(data).then(() => {
       this.setState({
@@ -619,14 +631,13 @@ class ViewUser extends React.Component {
     const userFormData = this.getUserFormData(user, addresses, sponsors, proxies, permissions, servicePoints, preferredServicePoint);
     const patronBlocks = get(resources, ['hasPatronBlocks', 'records'], []);
 
-
     if (this.isLayerOpen('add-block') || this.isLayerOpen('edit-block')) {
       return (
         <FormattedMessage id={query.layer === 'add-block' ? 'ui-users.blocks.layer.add' : 'ui-users.blocks.layer.edit'}>
           {contentLabel => (
             <Layer isOpen contentLabel={contentLabel}>
               <this.connectedPatronBlockLayer
-                {...this.props}
+                stripes={stripes}
                 query={query}
                 user={user}
                 selectedPatronBlock={this.state.selectedPatronBlock}
@@ -649,6 +660,7 @@ class ViewUser extends React.Component {
                 num={(this.state.addRecord ? 51 : 50)}
                 onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
                 user={user}
+                currentUser={currentUser}
                 parentMutator={mutator}
                 patronGroup={patronGroup}
                 stripes={stripes}
@@ -700,6 +712,7 @@ class ViewUser extends React.Component {
             >
               <this.connectedAccountActionsHistory
                 user={user}
+                currentUser={currentUser}
                 patronGroup={patronGroup}
                 account={this.state.selectedAccount}
                 accountid={this.state.selectedAccount.id}
@@ -912,6 +925,7 @@ class ViewUser extends React.Component {
       parentResources,
       onClose,
       paneWidth,
+      match,
     } = this.props;
 
     const addressTypes = (parentResources.addressTypes || {}).records || [];
@@ -963,7 +977,7 @@ class ViewUser extends React.Component {
                 ? <PatronBlockMessage />
                 : ''}
             </Col>
-            <Col xs={2}>
+            <Col xs={2} id="view-users-accordion-section">
               <ExpandAllButton
                 accordionStatus={this.state.sections}
                 onToggle={this.handleExpandAll}
@@ -1086,6 +1100,18 @@ class ViewUser extends React.Component {
                 />
               </IfInterface>
             </IfPermission>
+            <NotesSmartAccordion
+              domainName="users"
+              entityId={match.params.id}
+              entityName={getFullName(user)}
+              open={this.state.sections.notesAccordion}
+              onToggle={this.handleSectionToggle}
+              id="notesAccordion"
+              entityType="user"
+              pathToNoteCreate="/users/notes/new"
+              pathToNoteDetails="/users/notes"
+              hideAssignButton
+            />
           </AccordionSet>
         </HasCommand>
       </Pane>

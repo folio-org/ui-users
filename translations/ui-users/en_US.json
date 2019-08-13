@@ -850,5 +850,16 @@
     "accounts.actions.transferFeeFine": "Transfer fees/fines",
     "accounts.actions.warning.transferAction": "transferred",
     "accounts.actions.transfer": "transfer",
-    "permissions.addAllPermissions": "Add all permissions"
+    "permissions.addAllPermissions": "Add all permissions",
+    "reports.overdue.borrower.name": "Borrower name",
+    "reports.overdue.borrower.barcode": "Borrower barcode",
+    "reports.overdue.borrowerId": "Borrower ID",
+    "errors.barcodeUnavailable": "This barcode has already been taken",
+    "reports.overdue.loanPolicy.name": "Loan policy",
+    "reports.overdue.loanId": "Loan ID",
+    "activeUserStatus": "active",
+    "inactiveUserStatus": "inactive",
+    "reports.overdue.feeFine": "Fee/Fine",
+    "user": "User",
+    "user.pluralized": "{count} {count, plural, one {user} other {users}}"
 }

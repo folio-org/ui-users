@@ -8,8 +8,8 @@ import {
   Paneset,
   Pane,
   PaneMenu,
-  Icon,
   PaneHeaderIconButton,
+  PaneFooter,
   Button,
   ExpandAllButton,
   expandAllFunction,
@@ -75,23 +75,45 @@ function validate(values, props) {
   return errors;
 }
 
-function asyncValidate(values, dispatch, props, blurredField) {
-  if (blurredField === 'username' && values.username !== props.initialValues.username) {
-    return new Promise((resolve, reject) => {
-      const uv = props.parentMutator.uniquenessValidator;
-      const query = `(username=="${values.username}")`;
-      uv.reset();
-      return uv.GET({ params: { query } }).then((users) => {
-        if (users.length > 0) {
-          const error = { username: <FormattedMessage id="ui-users.errors.usernameUnavailable" /> };
-          reject(error);
-        } else {
-          resolve();
-        }
-      });
+function asyncValidateField(field, value, validator) {
+  return new Promise((resolve, reject) => {
+    const query = `(${field}=="${value}")`;
+    validator.reset();
+
+    return validator.GET({ params: { query } }).then((users) => {
+      if (users.length > 0) {
+        const error = { [field]: <FormattedMessage id={`ui-users.errors.${field}Unavailable`} /> };
+        return reject(error);
+      } else {
+        return resolve();
+      }
     });
+  });
+}
+
+function asyncValidate(values, dispatch, props, blurredField) {
+  const { parentMutator: { uniquenessValidator }, initialValues } = props;
+  const { username, barcode } = values;
+  const curValue = values[blurredField];
+  const prevValue = initialValues[blurredField];
+
+  // validate on blur
+  if (blurredField && curValue && curValue !== prevValue) {
+    return asyncValidateField(blurredField, curValue, uniquenessValidator);
   }
-  return new Promise(resolve => resolve());
+
+  const promises = [];
+
+  // validate on submit
+  if (username !== initialValues.username) {
+    promises.push(asyncValidateField('username', username, uniquenessValidator));
+  }
+
+  if (barcode && barcode !== initialValues.barcode) {
+    promises.push(asyncValidateField('barcode', barcode, uniquenessValidator));
+  }
+
+  return Promise.all(promises);
 }
 
 class UserForm extends React.Component {
@@ -195,27 +217,6 @@ class UserForm extends React.Component {
     );
   }
 
-  getLastMenu(id, label) {
-    const {
-      pristine,
-      submitting,
-    } = this.props;
-
-    return (
-      <PaneMenu>
-        <Button
-          id={id}
-          type="submit"
-          disabled={pristine || submitting}
-          buttonStyle="primary paneHeaderNewButton"
-          marginBottom0
-        >
-          {label}
-        </Button>
-      </PaneMenu>
-    );
-  }
-
   handleExpandAll(sections) {
     this.setState({ sections });
   }
@@ -270,25 +271,36 @@ class UserForm extends React.Component {
     submitter();
   }
 
-  getActionMenu = ({ onToggle }) => {
-    const { onCancel } = this.props;
-    const handleClick = () => {
-      onCancel();
-      onToggle();
-    };
+  getPaneFooter() {
+    const {
+      pristine,
+      submitting,
+      invalid,
+      onCancel,
+    } = this.props;
+
+    const disabled = pristine || submitting || invalid;
 
     return (
-      <Button
-        data-test-cancel-user-form-action
-        buttonStyle="dropdownItem"
-        onClick={handleClick}
-      >
-        <Icon icon="times-circle">
+      <PaneFooter>
+        <Button
+          data-test-user-form-cancel-button
+          buttonStyle="default mega"
+          onClick={onCancel}
+        >
           <FormattedMessage id="ui-users.cancel" />
-        </Icon>
-      </Button>
+        </Button>
+        <Button
+          data-test-user-form-submit-button
+          buttonStyle="primary mega"
+          type="submit"
+          disabled={disabled}
+        >
+          <FormattedMessage id="ui-users.saveAndClose" />
+        </Button>
+      </PaneFooter>
     );
-  };
+  }
 
   render() {
     const {
@@ -301,11 +313,10 @@ class UserForm extends React.Component {
 
     const { sections } = this.state;
     const firstMenu = this.getAddFirstMenu();
+    const footer = this.getPaneFooter();
     const paneTitle = initialValues.id
       ? getFullName(initialValues)
       : <FormattedMessage id="ui-users.crud.createUser" />;
-
-    const lastMenu = this.getLastMenu('clickable-save', <FormattedMessage id="ui-users.save" />);
 
     return (
       <HasCommand commands={this.keyboardCommands}>
@@ -318,9 +329,8 @@ class UserForm extends React.Component {
           <Paneset isRoot>
             <Pane
               defaultWidth="100%"
-              actionMenu={this.getActionMenu}
               firstMenu={firstMenu}
-              lastMenu={lastMenu}
+              footer={footer}
               appIcon={<AppIcon app="users" appIconKey="users" />}
               paneTitle={
                 <span data-test-header-title>
@@ -402,7 +412,7 @@ export default stripesForm({
   form: 'userForm',
   validate,
   asyncValidate,
-  asyncBlurFields: ['username'],
+  asyncBlurFields: ['username', 'barcode'],
   navigationCheck: true,
   enableReinitialize: true,
 })(UserForm);

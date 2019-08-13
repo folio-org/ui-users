@@ -23,7 +23,7 @@ class EditUserPerms extends React.Component {
     availablePermissions: {
       type: 'okapi',
       records: 'permissions',
-      path: 'perms/permissions?length=1000',
+      path: 'perms/permissions?length=10000',
       permissionsRequired: 'perms.permissions.get'
     },
   });

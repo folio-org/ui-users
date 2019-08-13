@@ -1,4 +1,4 @@
-import { get } from 'lodash';
+import { get, template } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -6,6 +6,8 @@ import {
   injectIntl,
   intlShape,
 } from 'react-intl';
+import moment from 'moment';
+
 import { Button } from '@folio/stripes/components';
 import { makeQueryFunction, SearchAndSort } from '@folio/stripes/smart-components';
 import { AppIcon, stripesConnect, withStripes } from '@folio/stripes/core';
@@ -30,8 +32,16 @@ const filterConfig = [
     name: 'active',
     cql: 'active',
     values: [
-      { name: 'inactive', cql: 'false' },
-      { name: 'active', cql: 'true' },
+      {
+        name: 'inactive',
+        cql: 'false',
+        displayName: <FormattedMessage id="ui-users.inactive" />,
+      },
+      {
+        name: 'active',
+        cql: 'true',
+        displayName: <FormattedMessage id="ui-users.active" />,
+      },
     ],
   },
   {
@@ -41,6 +51,13 @@ const filterConfig = [
     values: [], // will be filled in by componentDidUpdate
   },
 ];
+
+const compileQuery = template(
+  '(username="%{query}*" or personal.firstName="%{query}*" or personal.lastName="%{query}*" or personal.email="%{query}*" or barcode="%{query}*" or id="%{query}*" or externalSystemId="%{query}*")',
+  { interpolate: /%{([\s\S]+?)}/g }
+);
+
+const getLoansOverdueDate = () => moment().tz('UTC').format();
 
 class Users extends React.Component {
   static manifest = Object.freeze({
@@ -57,7 +74,8 @@ class Users extends React.Component {
         params: {
           query: makeQueryFunction(
             'cql.allRecords=1',
-            '(username="%{query.query}*" or personal.firstName="%{query.query}*" or personal.lastName="%{query.query}*" or personal.email="%{query.query}*" or barcode="%{query.query}*" or id="%{query.query}*" or externalSystemId="%{query.query}*")',
+            // TODO: Refactor/remove this after work on FOLIO-2066 and RMB-385 is done
+            (parsedQuery, props, localProps) => localProps.query.query.trim().split(/\s+/).map(query => compileQuery({ query })).join(' and '),
             {
               // the keys in this object must match those passed to
               // SearchAndSort's columnMapping prop
@@ -109,7 +127,8 @@ class Users extends React.Component {
     loans: {
       type: 'okapi',
       records: 'loans',
-      path: 'circulation/loans?query=(status="Open")',
+      path: () => `circulation/loans?query=(status="Open" and dueDate < ${getLoansOverdueDate()})`,
+      permissionsRequired: 'circulation.loans.collection.get,accounts.collection.get',
     }
   });
 

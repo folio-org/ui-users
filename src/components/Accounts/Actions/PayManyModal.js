@@ -75,6 +75,8 @@ class PayModal extends React.Component {
     pristine: PropTypes.bool,
     reset: PropTypes.func,
     commentRequired: PropTypes.bool,
+    defaultServicePointId: PropTypes.string,
+    servicePointsIds: PropTypes.arrayOf(PropTypes.string),
     owners: PropTypes.arrayOf(PropTypes.object),
   };
 
@@ -83,7 +85,8 @@ class PayModal extends React.Component {
 
     this.state = {
       amount: 0,
-      notify: true,
+      showNotify: false,
+      notify: false,
     };
     this.initialAmount = 0;
   }
@@ -100,7 +103,7 @@ class PayModal extends React.Component {
         amount: parseFloat(selected).toFixed(2),
       });
       this.initialAmount = parseFloat(selected).toFixed(2);
-      this.props.initialize({ amount: parseFloat(selected).toFixed(2), notify: true });
+      this.loadServicePoints({ amount: parseFloat(selected).toFixed(2), notify: true });
     }
 
     return (this.props.accounts !== nextProps.accounts
@@ -108,6 +111,39 @@ class PayModal extends React.Component {
       this.props.open !== nextProps.open ||
       this.props.pristine !== nextProps.pristine ||
       this.props.invalid !== nextProps.invalid);
+  }
+
+  loadServicePoints = (initial) => {
+    const servicePoint = this.props.defaultServicePointId;
+    const servicePoints = this.props.servicePointsIds;
+    const owners = this.props.owners || [];
+    let ownerId = 0;
+    if (servicePoint && servicePoint !== '-') {
+      owners.forEach(o => {
+        if (o.servicePointOwner && o.servicePointOwner.find(s => s.value === servicePoint)) {
+          ownerId = o.id;
+          this.onChangeOwner({ target: { value: o.id } });
+        }
+      });
+    } else if (servicePoints.length === 1) {
+      const sp = servicePoints[0];
+      owners.forEach(o => {
+        if (o.servicePointOwner && o.servicePointOwner.find(s => s.value === sp)) {
+          ownerId = o.id;
+          this.onChangeOwner({ target: { value: o.id } });
+        }
+      });
+    } else if (servicePoints.length === 2) {
+      const sp1 = servicePoints[0];
+      const sp2 = servicePoints[1];
+      owners.forEach(o => {
+        if (o.servicePointOwner && o.servicePointOwner.find(s => s.value === sp1) && o.servicePointOwner.find(s => s.value === sp2)) {
+          ownerId = o.id;
+          this.onChangeOwner({ target: { value: o.id } });
+        }
+      });
+    }
+    this.props.initialize(ownerId ? { ownerId, ...initial } : { ...initial });
   }
 
   onChangeAmount = (e) => {
@@ -124,10 +160,13 @@ class PayModal extends React.Component {
 
   onClose = () => {
     const {
+      accounts,
       onClose,
       reset,
     } = this.props;
 
+    const selected = this.calculateSelectedAmount(accounts);
+    this.setState({ amount: selected });
     onClose();
     reset();
   }
@@ -135,12 +174,9 @@ class PayModal extends React.Component {
   onSubmit = () => {
     const {
       handleSubmit,
-      reset,
     } = this.props;
 
     handleSubmit();
-    reset();
-    this.setState({ amount: this.initialAmount });
   }
 
   onChangeOwner = (e) => {
@@ -198,7 +234,6 @@ class PayModal extends React.Component {
       submitting,
       invalid,
       pristine,
-      onClose,
       open,
       owners,
       payments,
@@ -222,7 +257,7 @@ class PayModal extends React.Component {
       <Modal
         open={open}
         label={<FormattedMessage id="ui-users.accounts.pay.payFeeFine" />}
-        onClose={onClose}
+        onClose={this.onClose}
         size="medium"
         dismissible
       >
@@ -367,20 +402,24 @@ class PayModal extends React.Component {
               </FormattedMessage>
             </Col>
           </Row>
-          <Row>
-            <Col xs>
-              <Field
-                name="notify"
-                component={Checkbox}
-                checked={this.state.notify}
-                onChange={this.onToggleNotify}
-                inline
-              />
-              <FormattedMessage id="ui-users.accounts.pay.notifyPatron" />
-            </Col>
-          </Row>
+          {this.state.showNotify &&
+            <div>
+              <Row>
+                <Col xs>
+                  <Field
+                    name="notify"
+                    component={Checkbox}
+                    checked={this.state.notify}
+                    onChange={this.onToggleNotify}
+                    inline
+                  />
+                  <FormattedMessage id="ui-users.accounts.pay.notifyPatron" />
+                </Col>
+              </Row>
+            </div>
+          }
           <br />
-          {this.state.notify &&
+          {(this.state.notify && this.state.showNotify) &&
             <div>
               <Row>
                 <Col xs>

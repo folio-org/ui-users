@@ -45,7 +45,7 @@ class Actions extends React.Component {
     payments: {
       type: 'okapi',
       records: 'payments',
-      path: 'payments',
+      path: 'payments?limit=100',
     },
     waives: {
       type: 'okapi',
@@ -66,6 +66,11 @@ class Actions extends React.Component {
       type: 'okapi',
       records: 'transfers',
       path: 'transfers?limit=100',
+    },
+    curUserServicePoint: {
+      type: 'okapi',
+      path: 'service-points-users?query=(userId==!{currentUser.id})',
+      records: 'servicePointsUsers',
     },
     activeRecord: {},
     user: {},
@@ -301,9 +306,9 @@ class Actions extends React.Component {
     const action = { paymentMethod: values.method };
     const owners = _.get(this.props.resources, ['owners', 'records'], []);
     if (payment < type.remaining) {
-      paymentStatus = `${paymentStatus} ${_.capitalize(formatMessage({ id: 'ui-users.accounts.status.partially' }))}`;
+      paymentStatus = `${paymentStatus} ${formatMessage({ id: 'ui-users.accounts.status.partially' })}`;
     } else {
-      paymentStatus = `${paymentStatus} ${_.capitalize(formatMessage({ id: 'ui-users.accounts.status.fully' }))}`;
+      paymentStatus = `${paymentStatus} ${formatMessage({ id: 'ui-users.accounts.status.fully' })}`;
       type.status.name = 'Closed';
     }
     const balance = type.remaining - parseFloat(payment);
@@ -587,8 +592,10 @@ class Actions extends React.Component {
       submitting
     } = this.state;
 
+    const defaultServicePointId = _.get(resources, ['curUserServicePoint', 'records', 0, 'defaultServicePointId'], '-');
+    const servicePointsIds = _.get(resources, ['curUserServicePoint', 'records', 0, 'servicePointsIds'], []);
     const payments = _.get(resources, ['payments', 'records'], []);
-    const owners = _.get(resources, ['owners', 'records'], []);
+    const owners = _.get(resources, ['owners', 'records'], []).filter(o => o.owner !== 'Shared');
     const feefines = _.get(resources, ['feefineTypes', 'records'], []);
     const waives = _.get(resources, ['waives', 'records'], []);
     const transfers = _.get(resources, ['transfers', 'records'], []);
@@ -641,6 +648,8 @@ class Actions extends React.Component {
         <PayManyModal
           open={actions.regular && !warning && accounts.length > 1}
           commentRequired={settings.paid}
+          defaultServicePointId={defaultServicePointId}
+          servicePointsIds={servicePointsIds}
           onClose={this.onClosePay}
           account={[this.type]}
           stripes={this.props.stripes}

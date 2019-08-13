@@ -10,6 +10,8 @@ import {
 import ButtonInteractor from '@folio/stripes-components/lib/Button/tests/interactor'; // eslint-disable-line
 import MultiColumnListInteractor from '@folio/stripes-components/lib/MultiColumnList/tests/interactor'; // eslint-disable-line
 import ModalInteractor from '@folio/stripes-components/lib/Modal/tests/interactor'; // eslint-disable-line
+import SearchFieldInteractor  from '@folio/stripes-components/lib/SearchField/tests/interactor'; // eslint-disable-line
+import CheckboxInteractor  from '@folio/stripes-components/lib/Checkbox/tests/interactor'; // eslint-disable-line
 
 @interactor class FeesFinesSection {
   click = clickable();
@@ -34,7 +36,8 @@ import ModalInteractor from '@folio/stripes-components/lib/Modal/tests/interacto
 @interactor class History {
   mclViewFeesFines = new MultiColumnListInteractor('#list-accounts-history-view-feesfines');
   mclAccountActions = new MultiColumnListInteractor('#list-accountactions');
-  section = text('#accordion-toggle-button-accountsSection > span > div > h3');
+  sectionIsPresent = isPresent('#accordion-toggle-button-accountsSection');
+  section = text('#accordion-toggle-button-accountsSection h3');
 
   title = text('[class*=paneTitleLabel---]');
   paneTitle = text('#title-test-fee-fine'['class*=paneTitleLabel---']);
@@ -76,6 +79,10 @@ import ModalInteractor from '@folio/stripes-components/lib/Modal/tests/interacto
   payButton = new ButtonInteractor('#open-closed-all-pay-button');
   waiveButton = new ButtonInteractor('#open-closed-all-wave-button');
   transferButton = new ButtonInteractor('#open-closed-all-transfer-button');
+  searchField = new SearchFieldInteractor('[class*=searchFieldWrap---]');
+  checkList = collection('[class*=filterList---] [class*=listItem---]', CheckboxInteractor);
+  col = new CheckboxInteractor('#column-item-0');
+  selectColumns = new ButtonInteractor('#select-columns');
 
   // file AccountsHistory
   openMenu = new ButtonInteractor('#open-accounts');
@@ -84,7 +91,11 @@ import ModalInteractor from '@folio/stripes-components/lib/Modal/tests/interacto
 
   isLoadedOpen = isPresent('#list-accounts-history-view-feesfines > [class*=mclScrollable---] > div:nth-child(5)');
   isViewOpen = isVisible('#list-accounts-history-view-feesfines > [class*=mclScrollable---]');
+  sectionIsPresent = isPresent('#accordion-toggle-button-accountsSection');
 
+  whenSectionLoaded() {
+    return this.when(() => this.sectionIsPresent);
+  }
 
   whenLoadedOpen() {
     return this.when(() => this.isLoadedOpen);
@@ -116,4 +127,4 @@ import ModalInteractor from '@folio/stripes-components/lib/Modal/tests/interacto
     return this.when(() => this.isViewAll);
   }
 }
-export default new History();
+export default new History(5000);

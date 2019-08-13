@@ -67,7 +67,10 @@ class ActionsDropdown extends React.Component {
             action: 'renew',
           }}
           >
-            <Button buttonStyle="dropdownItem">
+            <Button
+              buttonStyle="dropdownItem"
+              data-test-dropdown-content-renew-button
+            >
               <FormattedMessage id="ui-users.renew" />
             </Button>
           </MenuItem>
@@ -76,7 +79,10 @@ class ActionsDropdown extends React.Component {
             action: 'changeDueDate',
           }}
           >
-            <Button buttonStyle="dropdownItem">
+            <Button
+              buttonStyle="dropdownItem"
+              data-test-dropdown-content-change-due-date-button
+            >
               <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />
             </Button>
           </MenuItem>

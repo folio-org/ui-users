@@ -170,10 +170,13 @@ class WaiveModal extends React.Component {
 
   onCancel = () => {
     const {
+      accounts,
       onClose,
       reset,
     } = this.props;
 
+    const selected = this.calculateSelectedAmount(accounts);
+    this.setState({ waive: selected });
     onClose();
     reset();
   };
@@ -184,9 +187,6 @@ class WaiveModal extends React.Component {
     } = this.props;
 
     handleSubmit();
-    this.setState({
-      waive: this.initialWaive,
-    });
   };
 
   render() {
@@ -214,7 +214,7 @@ class WaiveModal extends React.Component {
         id="waive-modal"
         open={this.props.open}
         label={<FormattedMessage id="ui-users.accounts.waive.modalLabel" />}
-        onClose={this.props.onClose}
+        onClose={this.onCancel}
         size="medium"
         dismissible
       >

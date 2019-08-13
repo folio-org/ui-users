@@ -1,4 +1,6 @@
 {
+  "user": "User",
+  "user.pluralized": "{count} {count, plural, one {user} other {users}}",
   "meta.title": "Users",
 
   "loading": "Loading...",
@@ -462,7 +464,7 @@
 
   "errors.userExpired": "User has expired",
   "errors.usernameUnavailable": "This username already exists",
-
+  "errors.barcodeUnavailable": "This barcode has already been taken",
   "errors.proxyrelationship.expired": "Proxy relationship has expired",
   "errors.proxies.expired": "Proxy user record expired",
   "errors.sponsors.expired": "Sponsor user record expired",
@@ -527,7 +529,6 @@
   "feefines.disabledItem": "Fee/fine Type cannot be deleted when used by one or more user accounts",
   "feefines.modalHeader": "Delete Fee/Fine Type?",
   "feefines.modalMessage": "The Fee/Fine Type <strong>{feefine}</strong> will be <strong>deleted</strong>",
-  "feefines.ownerLabel": "Fee/Fine Owner",
   "feefines.defaultChargeNotice": "Default Charge Notice",
   "feefines.defaultActionNotice": "Default Action Notice",
 
@@ -720,8 +721,8 @@
   "accounts.pay.summary.partiallyPay": "Partially paying",
   "accounts.pay.summary.paying": "Paying",
   "accounts.pay.summary": "{payType} {feesFinesAmount} {feeFineForm} for a total amount of {payAmount}",
-  "accounts.pay.fully": "Paid Fully",
-  "accounts.pay.partially": "Paid Partially",
+  "accounts.pay.fully": "Paid fully",
+  "accounts.pay.partially": "Paid partially",
   "accounts.pay.closed": "Closed",
 
   "accounts.waive.error.amount": "Waive amount must be > 0",
@@ -750,18 +751,18 @@
   "accounts.transfer.error.exceeds": "Transfer amount exceeds selected amount",
 
   "accounts.transfer.modalLabel": "Transfer Fee/Fine",
-  "accounts.transfer.field.totalAmount":"fees/fines for a total amount of",
-  "accounts.transfer.field.totalOwed":"Total owed amount",
-  "accounts.transfer.field.selectedAmount":"Selected amount",
-  "accounts.transfer.field.transferAmount":"Transfer amount",
-  "accounts.transfer.field.remainingAmount":"Remaining amount",
-  "accounts.transfer.field.transferAccount":"Transfer Account",
-  "accounts.transfer.field.comment":"Additional information",
-  "accounts.transfer.field.cancel":"Cancel",
-  "accounts.transfer.field.transfer":"Transfer",
+  "accounts.transfer.field.totalAmount": "fees/fines for a total amount of",
+  "accounts.transfer.field.totalOwed": "Total owed amount",
+  "accounts.transfer.field.selectedAmount": "Selected amount",
+  "accounts.transfer.field.transferAmount": "Transfer amount",
+  "accounts.transfer.field.remainingAmount": "Remaining amount",
+  "accounts.transfer.field.transferAccount": "Transfer Account",
+  "accounts.transfer.field.comment": "Additional information",
+  "accounts.transfer.field.cancel": "Cancel",
+  "accounts.transfer.field.transfer": "Transfer",
   "accounts.transfer.field.notifyPatron": "Notify patron",
-  "accounts.transfer.placeholder.additional.required":"Enter more information about the fee/fine transfer (required)",
-  "accounts.transfer.placeholder.additional.optional":"Enter more information about the fee/fine transfer (optional)",
+  "accounts.transfer.placeholder.additional.required": "Enter more information about the fee/fine transfer (required)",
+  "accounts.transfer.placeholder.additional.optional": "Enter more information about the fee/fine transfer (optional)",
   "accounts.transfer.placeholder.selectAccount": "Select account",
   "accounts.transfer.summary.partiallyTransfer": "Partially transfer",
   "accounts.transfer.summary.transferring": "Transferring",
@@ -887,6 +888,8 @@
   "reports.overdue.dueDate": "Due date",
   "reports.overdue.loanDate": "Loan date",
   "reports.overdue.loanPolicyId": "Loan policy ID",
+  "reports.overdue.loanPolicy.name": "Loan policy",
+  "reports.overdue.loanId": "Loan ID",
   "reports.overdue.item.title": "Item title",
   "reports.overdue.item.materialType.name": "Material type",
   "reports.overdue.item.status.name": "Item status",
@@ -896,5 +899,6 @@
   "reports.overdue.item.location.name": "Location",
   "reports.overdue.item.instanceId": "Instance ID",
   "reports.overdue.item.holdingsRecordId": "Holdings ID",
-  "reports.overdue.itemId": "Item ID"
+  "reports.overdue.itemId": "Item ID",
+  "reports.overdue.feeFine": "Fee/Fine"
 }

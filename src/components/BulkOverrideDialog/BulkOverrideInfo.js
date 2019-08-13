@@ -193,13 +193,15 @@ class BulkOverrideInfo extends React.Component {
         </Layout>
         {
           showDueDatePicker &&
-          <DueDatePicker
-            initialValues={this.datePickerDefaults}
-            stripes={stripes}
-            dateProps={{ label: <FormattedMessage id="ui-users.cddd.dateRequired" /> }}
-            timeProps={{ label: <FormattedMessage id="ui-users.cddd.timeRequired" /> }}
-            onChange={this.handleDateTimeChanged}
-          />
+            <div data-test-due-date-picker>
+              <DueDatePicker
+                initialValues={this.datePickerDefaults}
+                stripes={stripes}
+                dateProps={{ label: <FormattedMessage id="ui-users.cddd.dateRequired" /> }}
+                timeProps={{ label: <FormattedMessage id="ui-users.cddd.timeRequired" /> }}
+                onChange={this.handleDateTimeChanged}
+              />
+            </div>
         }
         <this.connectedLoanList
           allChecked={allChecked}

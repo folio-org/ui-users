@@ -21,13 +21,16 @@ import PaymentSettings from './settings/PaymentSettings';
 import CommentRequiredSettings from './settings/CommentRequiredSettings';
 import RefundReasonsSettings from './settings/RefundReasonsSettings';
 import TransferAccountsSettings from './settings/TransferAccountsSettings';
+import NoteCreatePage from './NoteCreatePage';
+import NoteViewPage from './NoteViewPage';
+import NoteEditPage from './NoteEditPage';
 
 const settingsGeneral = [
   {
     route: 'perms',
     label: <FormattedMessage id="ui-users.settings.permissionSet" />,
     component: PermissionSets,
-    perm: 'ui-users.editpermsets',
+    perm: 'ui-users.settings.permsets',
   },
   {
     route: 'groups',
@@ -159,6 +162,9 @@ class UsersRouting extends React.Component {
     return (
       <CommandList commands={commands}>
         <Switch>
+          <Route path="/users/notes/new" exact component={NoteCreatePage} />
+          <Route path="/users/notes/:id" exact component={NoteViewPage} />
+          <Route path="/users/notes/:id/edit" exact component={NoteEditPage} />
           <Route path={path} component={Users} />
           <Route render={this.noMatch} />
         </Switch>

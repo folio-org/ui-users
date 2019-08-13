@@ -87,23 +87,25 @@ class PayModal extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
     if (!_.isEqual(this.props.accounts, nextProps.accounts)) {
       const accounts = nextProps.accounts || [];
-      let selected = parseFloat(0);
       let showNotify = false;
+      let notify = false;
+      const selected = this.calculateSelectedAmount(accounts);
       accounts.forEach(a => {
-        selected += parseFloat(a.remaining);
         const feefine = this.props.feefines.find(f => f.id === a.feeFineId.substring(0, 36)) || {};
         const owner = this.props.owners.find(o => o.id === a.ownerId) || {};
         if (feefine.actionNoticeId || owner.defaultActionNoticeId) {
           showNotify = true;
+          notify = true;
         }
       });
       this.setState({
-        amount: parseFloat(selected).toFixed(2),
+        amount: selected,
         showNotify,
+        notify
       });
 
-      this.initialAmount = parseFloat(selected).toFixed(2);
-      this.props.initialize({ amount: parseFloat(selected).toFixed(2), notify: true });
+      this.initialAmount = selected;
+      this.props.initialize({ amount: selected, notify: true });
     }
 
     return (this.props.accounts !== nextProps.accounts
@@ -127,10 +129,13 @@ class PayModal extends React.Component {
 
   onClose = () => {
     const {
+      accounts,
       onClose,
       reset,
     } = this.props;
 
+    const selected = this.calculateSelectedAmount(accounts);
+    this.setState({ amount: selected });
     onClose();
     reset();
   }
@@ -141,14 +146,13 @@ class PayModal extends React.Component {
     } = this.props;
 
     handleSubmit();
-    this.setState({ amount: this.initialAmount });
   }
 
-  calculateSelectedAmount() {
-    const { accounts } = this.props;
-    return accounts.reduce((selected, { remaining }) => {
-      return selected + parseFloat(remaining);
+  calculateSelectedAmount(accounts) {
+    const selected = accounts.reduce((s, { remaining }) => {
+      return s + parseFloat(remaining * 100);
     }, 0);
+    return parseFloat(selected / 100).toFixed(2);
   }
 
   renderFormMessage() {
@@ -156,9 +160,10 @@ class PayModal extends React.Component {
       accounts = [],
     } = this.props;
 
+
     const { amount } = this.state;
 
-    const selected = this.calculateSelectedAmount();
+    const selected = this.calculateSelectedAmount(accounts);
     const payAmount = amount === ''
       ? 0.00
       : amount;
@@ -194,7 +199,6 @@ class PayModal extends React.Component {
       submitting,
       invalid,
       pristine,
-      onClose,
       open,
       payments,
       commentRequired,
@@ -202,8 +206,7 @@ class PayModal extends React.Component {
     } = this.props;
 
     const { amount } = this.state;
-
-    const selected = this.calculateSelectedAmount();
+    const selected = this.calculateSelectedAmount(accounts);
     const account = (accounts[0] || {});
     const remaining = parseFloat(totalAmount - amount).toFixed(2);
     let dataOptions = payments.filter(p => p.ownerId === account.ownerId);
@@ -219,7 +222,7 @@ class PayModal extends React.Component {
         id="pay-modal"
         open={open}
         label={<FormattedMessage id="ui-users.accounts.pay.payFeeFine" />}
-        onClose={onClose}
+        onClose={this.onClose}
         size="medium"
         dismissible
       >

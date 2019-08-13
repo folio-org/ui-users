@@ -126,7 +126,7 @@ class AccountsHistory extends React.Component {
       records: 'accounts',
       path: 'accounts',
       recordsRequired: '%{activeRecord.records}',
-      perRequest: 50,
+      perRequest: 100,
       GET: {
         params: {
           query: queryFunction(
@@ -142,7 +142,7 @@ class AccountsHistory extends React.Component {
         staticFallback: { params: {} },
       },
     },
-    activeRecord: { records: 50 },
+    activeRecord: { records: 100 },
     user: {},
   });
 
@@ -209,7 +209,6 @@ class AccountsHistory extends React.Component {
     };
 
     this.handleActivate = this.handleActivate.bind(this);
-    this.handleOptionsChange = this.handleOptionsChange.bind(this);
     this.onChangeActions = this.onChangeActions.bind(this);
     this.onChangeSelected = this.onChangeSelected.bind(this);
     this.onChangeSelectedAccounts = this.onChangeSelectedAccounts.bind(this);
@@ -217,7 +216,7 @@ class AccountsHistory extends React.Component {
     this.connectedActions = props.stripes.connect(Actions);
 
     this.accounts = [];
-    this.addRecord = 50;
+    this.addRecord = 100;
     this.editRecord = 0;
 
     this.transitionToParams = values => this.props.parentMutator.query.update(values);
@@ -234,7 +233,7 @@ class AccountsHistory extends React.Component {
   }
 
   componentDidMount() {
-    this.props.mutator.activeRecord.update({ records: 50, comments: 200, userId: this.props.user.id });
+    this.props.mutator.activeRecord.update({ records: 100, comments: 200, userId: this.props.user.id });
     args[0].value = this.props.user.id;
   }
 
@@ -324,19 +323,6 @@ class AccountsHistory extends React.Component {
     this.editRecord = val;
   }
 
-  handleOptionsChange(itemMeta, e) {
-    e.preventDefault();
-    e.stopPropagation();
-
-    if (itemMeta.action && this[itemMeta.action]) {
-      this[itemMeta.action]();
-    }
-  }
-
-  payment() {
-    this.onChangeActions({ regular: true }, this.accounts);
-  }
-
   onChangeSearch = (e) => {
     const query = e.target.value;
     this.transitionToParams({ q: query });
@@ -344,10 +330,6 @@ class AccountsHistory extends React.Component {
 
   onClearSearch = () => {
     this.transitionToParams({ q: '' });
-  }
-
-  onClearSearchAndFilters = () => {
-    this.transitionToParams({ f: this.initialFilters || '', query: '', qindex: '' });
   }
 
   onChangeSelected(value, accounts = []) {
@@ -360,6 +342,7 @@ class AccountsHistory extends React.Component {
 
   onChangeSelectedAccounts(selectedAccounts) {
     this.setState({ selectedAccounts });
+    this.accounts = selectedAccounts;
   }
 
   toggleFilterPane = () => {
@@ -372,7 +355,7 @@ class AccountsHistory extends React.Component {
       .map((column, i) => {
         const name = columnMapping[column.title];
         return (
-          <li key={`columnitem-${i}`}>
+          <li id={`column-item-${i}`} key={`columnitem-${i}`}>
             <Checkbox
               label={name}
               name={name}
@@ -418,6 +401,7 @@ class AccountsHistory extends React.Component {
     const {
       location,
       user,
+      currentUser,
       patronGroup,
       resources,
       intl,
@@ -468,6 +452,7 @@ class AccountsHistory extends React.Component {
           pullRight
         >
           <Button
+            id="select-columns"
             data-role="toggle"
             bottomMargin0
           >
@@ -580,7 +565,6 @@ class AccountsHistory extends React.Component {
                 query={query}
                 onChangeActions={this.onChangeActions}
                 patronGroup={patronGroup}
-                handleOptionsChange={this.handleOptionsChange}
                 onClickViewChargeFeeFine={this.props.onClickViewChargeFeeFine}
               />
               <div className={css.paneContent}>
@@ -589,6 +573,7 @@ class AccountsHistory extends React.Component {
                     {...this.props}
                     accounts={(user.id === (accounts[0] || {}).userId) ? open : []}
                     visibleColumns={visibleColumns}
+                    selectedAccounts={selectedAccounts}
                     onChangeSelected={this.onChangeSelected}
                     onChangeActions={this.onChangeActions}
                   />) : ''
@@ -598,6 +583,7 @@ class AccountsHistory extends React.Component {
                     {...this.props}
                     accounts={(user.id === (accounts[0] || {}).userId) ? closed : []}
                     visibleColumns={visibleColumns}
+                    selectedAccounts={selectedAccounts}
                     onChangeSelected={this.onChangeSelected}
                     onChangeActions={this.onChangeActions}
                   />) : ''
@@ -618,6 +604,7 @@ class AccountsHistory extends React.Component {
                 layer={query.layer}
                 onChangeActions={this.onChangeActions}
                 user={user}
+                currentUser={currentUser}
                 accounts={this.accounts}
                 selectedAccounts={selectedAccounts}
                 onChangeSelectedAccounts={this.onChangeSelectedAccounts}

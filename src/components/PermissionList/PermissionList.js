@@ -25,7 +25,7 @@ function PermissionList(props) {
   const showPerms = _.get(stripes, ['config', 'showPerms']);
   const permissionDDFormatter = item => (
     <li key={item.permissionName}>
-      <button type="button" className={css.itemControl} onClick={() => { handleItemClick(item); }}>
+      <button type="button" className={css.itemControl} onClick={() => { handleItemClick(item); }} data-permission-name={`${item.permissionName}`}>
         {(!item.displayName ?
           item.permissionName :
           (!showPerms ? item.displayName :
