@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  isEmpty,
   get,
-  orderBy,
   remove,
 } from 'lodash';
 import { connect as reduxConnect } from 'react-redux';
@@ -21,7 +19,6 @@ import {
 import SearchForm from '../SearchForm';
 import PermissionsList from '../PermissionsList';
 import ResultsFirstMenu from '../ResultsFirstMenu';
-import { sortOrders } from '../../constants';
 import { getInitialFiltersState } from '../../helpers';
 
 import css from './PermissionsModal.css';
@@ -42,7 +39,6 @@ class PermissionsModal extends React.Component {
       availablePermissions: PropTypes.shape({
         GET: PropTypes.func.isRequired,
         reset: PropTypes.func.isRequired,
-        POST: PropTypes.func.isRequired,
       }),
     }),
     resources: PropTypes.shape({
@@ -65,12 +61,12 @@ class PermissionsModal extends React.Component {
         ).isRequired,
       })
     ).isRequired,
-    currentPermissions: PropTypes.arrayOf(
+    assignedPermissions: PropTypes.arrayOf(
       PropTypes.shape({
         id: PropTypes.string.isRequired,
-        description: PropTypes.string.isRequired,
         displayName: PropTypes.string.isRequired,
         permissionName: PropTypes.string.isRequired,
+        subPermissions: PropTypes.arrayOf(PropTypes.string).isRequired,
         dummy: PropTypes.bool.isRequired,
         mutable: PropTypes.bool.isRequired,
         visible: PropTypes.bool.isRequired,
@@ -96,10 +92,8 @@ class PermissionsModal extends React.Component {
     this.state = {
       filterPaneIsVisible: true,
       permissions: [],
-      sortedColumn: 'permissionName',
-      sortOrder: sortOrders.asc.name,
       filters: getInitialFiltersState(props.filtersConfig),
-      assignedPermissionIds: props.currentPermissions.map(({ id }) => id)
+      assignedPermissionIds: props.assignedPermissions.map(({ id }) => id)
     };
   }
 
@@ -119,6 +113,7 @@ class PermissionsModal extends React.Component {
     this.setState({ permissions });
   }
 
+  // can be moved
   onSubmitSearch = (searchText) => {
     const permissions = get(this.props, 'resources.availablePermissions.records', []);
 
@@ -137,25 +132,7 @@ class PermissionsModal extends React.Component {
     }));
   };
 
-  onHeaderClick = (e, { name: columnName }) => {
-    const {
-      sortOrder,
-      sortedColumn,
-    } = this.state;
-
-    if (sortedColumn !== columnName) {
-      this.setState({
-        sortedColumn: columnName,
-        sortOrder: sortOrders.desc.name,
-      });
-    } else {
-      const newSortOrder = (sortOrder === sortOrders.desc.name)
-        ? sortOrders.asc.name
-        : sortOrders.desc.name;
-      this.setState({ sortOrder: newSortOrder });
-    }
-  };
-
+  // can be moved
   onChangeFilter = ({ target: { name, checked } }) => {
     this.setState(({ filters }) => {
       if (checked) {
@@ -199,6 +176,7 @@ class PermissionsModal extends React.Component {
     this.setState({ assignedPermissionIds });
   };
 
+  // can be moved
   onClearFilter = (filterName) => {
     this.setState(({ filters }) => {
       Object.keys(filters).forEach((key) => {
@@ -217,15 +195,13 @@ class PermissionsModal extends React.Component {
     this.setState({
       filters: {},
       permissions,
-      assignedPermissionIds: this.props.currentPermissions.map(({ id }) => id),
+      assignedPermissionIds: this.props.assignedPermissions.map(({ id }) => id),
     });
   };
 
   render() {
     const {
       permissions,
-      sortedColumn,
-      sortOrder,
       filters,
       assignedPermissionIds,
       filterPaneIsVisible,
@@ -237,12 +213,6 @@ class PermissionsModal extends React.Component {
       visibleColumns,
     } = this.props;
 
-    const sorters = {
-      permissionName: ({ permissionName }) => permissionName,
-      status: ({ id, permissionName }) => [assignedPermissionIds.includes(id), permissionName],
-      type: ({ subPermissions, mutable, permissionName }) => [!mutable && isEmpty(subPermissions), permissionName],
-    };
-
     let filteredPermissions = permissions;
     const FilterGroupsConfig = [];
 
@@ -253,8 +223,6 @@ class PermissionsModal extends React.Component {
       filteredPermissions = filterData.filter(filteredPermissions, filters, assignedPermissionIds);
       FilterGroupsConfig.push(filterConfig);
     });
-
-    const sortedPermissions = orderBy(filteredPermissions, sorters[sortedColumn], sortOrder);
 
     return (
       <Modal
@@ -322,18 +290,15 @@ class PermissionsModal extends React.Component {
               paneSub={
                 <FormattedMessage
                   id="ui-users.permissions.modal.list.pane.subheader"
-                  values={{ amount: sortedPermissions.length }}
+                  values={{ amount: filteredPermissions.length }}
                 />
               }
               defaultWidth="fill"
             >
               <PermissionsList
                 visibleColumns={visibleColumns}
-                sortOrder={sortOrder}
-                sortedColumn={sortedColumn}
-                sortedPermissions={sortedPermissions}
+                filteredPermissions={filteredPermissions}
                 assignedPermissionIds={assignedPermissionIds}
-                onHeaderClick={this.onHeaderClick}
                 togglePermission={this.togglePermission}
                 setAssignedPermissionIds={this.setAssignedPermissionIds}
               />
@@ -346,7 +311,7 @@ class PermissionsModal extends React.Component {
 }
 
 const mapStateToProps = (state, { formName, permissionsField }) => ({
-  currentPermissions: state.form[formName].values[permissionsField] || [],
+  assignedPermissions: state.form[formName].values[permissionsField] || [],
 });
 
 const mapDispatchToProps = (dispatch, { formName, permissionsField }) => ({

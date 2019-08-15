@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { isEmpty } from 'lodash';
+import { isEmpty, orderBy } from 'lodash';
 
 import { MultiColumnList } from '@folio/stripes/components';
 import CheckBoxColumn from '../CheckboxColumn';
@@ -9,16 +9,23 @@ import { sortOrders } from '../../constants';
 
 const PermissionsList = (props) => {
   const {
-    sortedPermissions,
+    filteredPermissions,
     assignedPermissionIds,
     togglePermission,
-    onHeaderClick,
-    sortOrder,
-    sortedColumn,
     visibleColumns,
     setAssignedPermissionIds
   } = props;
 
+  const [sortedColumn, setSortedColumn] = useState('permissionName');
+  const [sortOrder, setSortOrder] = useState(sortOrders.asc.name);
+
+  const sorters = {
+    permissionName: ({ permissionName }) => permissionName,
+    status: ({ id, permissionName }) => [assignedPermissionIds.includes(id), permissionName],
+    type: ({ subPermissions, mutable, permissionName }) => [!mutable && isEmpty(subPermissions), permissionName],
+  };
+
+  const sortedPermissions = orderBy(filteredPermissions, sorters[sortedColumn], sortOrder);
   const allChecked = sortedPermissions.every(({ id }) => assignedPermissionIds.includes(id));
 
   const toggleAllPermissions = ({ target: { checked } }) => {
@@ -37,6 +44,18 @@ const PermissionsList = (props) => {
     }
 
     setAssignedPermissionIds(result);
+  };
+
+  const onHeaderClick = (e, { name: columnName }) => {
+    if (sortedColumn !== columnName) {
+      setSortedColumn(columnName);
+      setSortOrder(sortOrders.desc.name);
+    } else {
+      const newSortOrder = (sortOrder === sortOrders.desc.name)
+        ? sortOrders.asc.name
+        : sortOrders.desc.name;
+      setSortOrder(newSortOrder);
+    }
   };
 
   return (
@@ -109,15 +128,20 @@ const PermissionsList = (props) => {
 };
 
 PermissionsList.propTypes = {
-  sortedColumn: PropTypes.string.isRequired,
-  sortedPermissions: PropTypes.arrayOf(
-    PropTypes.object,
+  filteredPermissions: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      displayName: PropTypes.string.isRequired,
+      permissionName: PropTypes.string.isRequired,
+      subPermissions: PropTypes.arrayOf(PropTypes.string).isRequired,
+      dummy: PropTypes.bool.isRequired,
+      mutable: PropTypes.bool.isRequired,
+      visible: PropTypes.bool.isRequired,
+    })
   ).isRequired,
   assignedPermissionIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   visibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
-  sortOrder: PropTypes.string.isRequired,
   togglePermission: PropTypes.func.isRequired,
-  onHeaderClick: PropTypes.func.isRequired,
   setAssignedPermissionIds: PropTypes.func.isRequired,
 };
 
