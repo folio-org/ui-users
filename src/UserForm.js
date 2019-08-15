@@ -27,13 +27,15 @@ import {
   EditProxy,
   EditServicePoints,
 } from './components/EditSections';
-
 import { HasCommand } from './components/Commander';
-
 import { getFullName } from './util';
+import PermissionsAccordion from './components/PermissionsAccordion';
+import {
+  statusFilterConfig,
+  permissionTypeFilterConfig,
+} from './components/PermissionsAccordion/helpers/filtersConfig';
 
 import css from './UserForm.css';
-import ContainedPermissions from './settings/permissions/ContainedPermissions';
 
 function validate(values, props) {
   const errors = {};
@@ -380,10 +382,21 @@ class UserForm extends React.Component {
                         onToggle={this.handleSectionToggle}
                         {...this.props}
                       />
-                      <ContainedPermissions
+                      <PermissionsAccordion
+                        filtersConfig={[
+                          permissionTypeFilterConfig,
+                          statusFilterConfig,
+                        ]}
+                        visibleColumns={[
+                          'selected',
+                          'permissionName',
+                          'type',
+                          'status',
+                        ]}
                         accordionId="permissions"
                         expanded={sections.permissions}
                         onToggle={this.handleSectionToggle}
+                        headlineContent={<FormattedMessage id="ui-users.permissions.userPermissions" />}
                         permToRead="perms.permissions.get"
                         permToDelete="perms.permissions.item.put"
                         permToModify="perms.permissions.item.put"

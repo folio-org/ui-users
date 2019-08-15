@@ -1,11 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+import { isEmpty } from 'lodash';
 
-import {
-  MultiColumnList
-} from '@folio/stripes/components';
-
+import { MultiColumnList } from '@folio/stripes/components';
 import CheckBoxColumn from '../CheckboxColumn';
 import { sortOrders } from '../../constants';
 
@@ -47,6 +45,7 @@ const PermissionsList = (props) => {
         columnWidths={{
           selected: '35',
           status: '20%',
+          type: '25%',
         }}
         visibleColumns={visibleColumns}
         contentData={sortedPermissions}
@@ -63,6 +62,7 @@ const PermissionsList = (props) => {
           ),
           permissionName: <FormattedMessage id="ui-users.information.name" />,
           status: <FormattedMessage id="ui-users.information.status" />,
+          type: <FormattedMessage id="ui-users.permissions.modal.type" />,
         }}
         formatter={{
           selected: permission => (
@@ -86,6 +86,17 @@ const PermissionsList = (props) => {
             }`;
 
             return <div data-test-permission-status><FormattedMessage id={statusText} /></div>;
+          },
+          // eslint-disable-next-line react/prop-types
+          type: ({ mutable, subPermissions }) => {
+            const isBasePermission = !mutable && isEmpty(subPermissions);
+            const typeText = `ui-users.permissions.modal.${
+              isBasePermission
+                ? 'base'
+                : 'permissionSet'
+            }`;
+
+            return <div data-test-permission-type><FormattedMessage id={typeText} /></div>;
           },
         }}
         onRowClick={(e, { id: permissionId }) => togglePermission(permissionId)}

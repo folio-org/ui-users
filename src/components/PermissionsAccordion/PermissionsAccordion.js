@@ -17,8 +17,8 @@ import {
   stripesShape,
 } from '@folio/stripes-core';
 
-import PermissionModal from '../../components/PermissionsModal';
-import css from './ContainedPermissions.css';
+import PermissionModal from './components/PermissionsModal';
+import css from './PermissionsAccordion.css';
 
 class ContainedPermissions extends React.Component {
   static propTypes = {
@@ -32,6 +32,23 @@ class ContainedPermissions extends React.Component {
     stripes: stripesShape.isRequired,
     formName: PropTypes.string.isRequired,
     permissionsField: PropTypes.string.isRequired,
+    filtersConfig: PropTypes.arrayOf(
+      PropTypes.shape({
+        label: PropTypes.node.isRequired,
+        name: PropTypes.string.isRequired,
+        cql: PropTypes.string.isRequired,
+        filter: PropTypes.func.isRequired,
+        values: PropTypes.arrayOf(
+          PropTypes.shape({
+            name: PropTypes.string.isRequired,
+            displayName: PropTypes.element.isRequired,
+            value: PropTypes.bool.isRequired,
+          }),
+        ).isRequired,
+      })
+    ).isRequired,
+    visibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
+    headlineContent: PropTypes.element.isRequired,
   };
 
   static defaultProps = {
@@ -116,6 +133,9 @@ class ContainedPermissions extends React.Component {
       permToModify,
       formName,
       permissionsField,
+      filtersConfig,
+      visibleColumns,
+      headlineContent,
     } = this.props;
 
     const { permissionModalOpen } = this.state;
@@ -135,7 +155,7 @@ class ContainedPermissions extends React.Component {
             size="large"
             tag="h3"
           >
-            <FormattedMessage id="ui-users.permissions.assignedPermissions" />
+            {headlineContent}
           </Headline>
         }
         displayWhenClosed={
@@ -155,37 +175,14 @@ class ContainedPermissions extends React.Component {
           </Button>
           {
             permissionModalOpen &&
-              <PermissionModal
-                formName={formName}
-                permissionsField={permissionsField}
-                open={permissionModalOpen}
-                onClose={this.closePermissionModal}
-                visibleColumns={
-                  [
-                    'selected',
-                    'permissionName',
-                    'status',
-                  ]
-                }
-                filtersConfig={[{
-                  label: (<FormattedMessage id="ui-users.permissions.modal.filter.status.label" />),
-                  name: 'status',
-                  cql: 'status',
-                  values: [
-                    {
-                      displayName: <FormattedMessage id="ui-users.permissions.modal.assigned" />,
-                      name: 'Assigned',
-                      value: false,
-                    },
-                    {
-                      displayName: <FormattedMessage id="ui-users.permissions.modal.unassigned" />,
-                      name: 'Unassigned',
-                      value: true,
-                    },
-                  ],
-                },
-                ]}
-              />
+            <PermissionModal
+              formName={formName}
+              permissionsField={permissionsField}
+              open={permissionModalOpen}
+              visibleColumns={visibleColumns}
+              filtersConfig={filtersConfig}
+              onClose={this.closePermissionModal}
+            />
           }
         </IfPermission>
       </Accordion>

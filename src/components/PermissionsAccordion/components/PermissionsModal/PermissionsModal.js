@@ -18,11 +18,11 @@ import {
   Paneset,
 } from '@folio/stripes/components';
 
-import SearchForm from './components/SearchForm';
-import PermissionsList from './components/PermissionsList';
-import ResultsFirstMenu from './components/ResultsFirstMenu';
-import { sortOrders } from './constants';
-import { getInitialFiltersState } from './helpers';
+import SearchForm from '../SearchForm';
+import PermissionsList from '../PermissionsList';
+import ResultsFirstMenu from '../ResultsFirstMenu';
+import { sortOrders } from '../../constants';
+import { getInitialFiltersState } from '../../helpers';
 
 import css from './PermissionsModal.css';
 
@@ -31,7 +31,7 @@ class PermissionsModal extends React.Component {
     availablePermissions: {
       type: 'okapi',
       records: 'permissions',
-      path: 'perms/permissions?length=10000&query=(mutable==false and visible==true)',
+      path: 'perms/permissions?length=10000&query=(visible==true)',
       fetch: false,
       accumulate: true,
     },
@@ -55,6 +55,7 @@ class PermissionsModal extends React.Component {
         label: PropTypes.node.isRequired,
         name: PropTypes.string.isRequired,
         cql: PropTypes.string.isRequired,
+        filter: PropTypes.func.isRequired,
         values: PropTypes.arrayOf(
           PropTypes.shape({
             name: PropTypes.string.isRequired,
@@ -226,10 +227,6 @@ class PermissionsModal extends React.Component {
       sortedColumn,
       sortOrder,
       filters,
-      filters: {
-        'status.Unassigned': Unassigned,
-        'status.Assigned': Assigned,
-      } = {},
       assignedPermissionIds,
       filterPaneIsVisible,
     } = this.state;
@@ -243,17 +240,18 @@ class PermissionsModal extends React.Component {
     const sorters = {
       permissionName: ({ permissionName }) => permissionName,
       status: ({ id, permissionName }) => [assignedPermissionIds.includes(id), permissionName],
+      type: ({ subPermissions, mutable, permissionName }) => [!mutable && isEmpty(subPermissions), permissionName],
     };
 
-    const filteredPermissions = permissions.filter(({ id }) => {
-      const permissionAssigned = assignedPermissionIds.includes(id);
+    let filteredPermissions = permissions;
+    const FilterGroupsConfig = [];
 
-      return (
-        (Unassigned && !permissionAssigned && !Assigned)
-        || (!Unassigned && permissionAssigned && Assigned)
-        || (Unassigned && Assigned)
-        || isEmpty(filters)
-      );
+    filtersConfig.forEach((filterData) => {
+      // eslint-disable-next-line no-unused-vars
+      const { filter, ...filterConfig } = filterData;
+
+      filteredPermissions = filterData.filter(filteredPermissions, filters, assignedPermissionIds);
+      FilterGroupsConfig.push(filterConfig);
     });
 
     const sortedPermissions = orderBy(filteredPermissions, sorters[sortedColumn], sortOrder);
@@ -271,12 +269,11 @@ class PermissionsModal extends React.Component {
         footer={
           <div className={css.modalFooter}>
             <Button
-              data-test-permissions-modal-save
+              data-test-permissions-modal-cancel
+              onClick={onClose}
               marginBottom0
-              buttonStyle="primary"
-              onClick={this.onSave}
             >
-              <FormattedMessage id="ui-users.permissions.modal.save" />
+              <FormattedMessage id="ui-users.permissions.modal.cancel" />
             </Button>
             <div>
               <FormattedMessage
@@ -285,11 +282,12 @@ class PermissionsModal extends React.Component {
               />
             </div>
             <Button
-              data-test-permissions-modal-cancel
-              onClick={onClose}
+              data-test-permissions-modal-save
               marginBottom0
+              buttonStyle="primary"
+              onClick={this.onSave}
             >
-              <FormattedMessage id="ui-users.permissions.modal.cancel" />
+              <FormattedMessage id="ui-users.permissions.modal.save" />
             </Button>
           </div>
         }
@@ -303,7 +301,7 @@ class PermissionsModal extends React.Component {
                 paneTitle={<FormattedMessage id="ui-users.permissions.modal.search.header" />}
               >
                 <SearchForm
-                  config={filtersConfig}
+                  config={FilterGroupsConfig}
                   filters={filters}
                   onClearFilter={this.onClearFilter}
                   onSubmitSearch={this.onSubmitSearch}

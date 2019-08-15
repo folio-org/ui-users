@@ -24,7 +24,8 @@ import { ViewMetaData } from '@folio/stripes/smart-components';
 import stripesForm from '@folio/stripes/form';
 import { Field } from 'redux-form';
 
-import ContainedPermissions from './ContainedPermissions';
+import PermissionsAccordion from '../../components/PermissionsAccordion';
+import { statusFilterConfig } from '../../components/PermissionsAccordion/helpers/filtersConfig';
 
 class PermissionSetForm extends React.Component {
   static propTypes = {
@@ -272,9 +273,15 @@ class PermissionSetForm extends React.Component {
               onCancel={() => { this.confirmDeleteSet(false); }}
               confirmLabel={<FormattedMessage id="ui-users.delete" />}
             />
-
-            <ContainedPermissions
+            <PermissionsAccordion
+              filtersConfig={[statusFilterConfig]}
               expanded={sections.permSection}
+              visibleColumns={[
+                'selected',
+                'permissionName',
+                'status',
+              ]}
+              headlineContent={<FormattedMessage id="ui-users.permissions.assignedPermissions" />}
               onToggle={this.handleSectionToggle}
               accordionId="permSection"
               permToRead="perms.permissions.get"
