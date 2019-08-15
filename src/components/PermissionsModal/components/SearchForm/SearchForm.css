@@ -2,11 +2,8 @@
   margin-bottom: calc(var(--control-margin-bottom) / 2);
 }
 
-.resetButtonWrap {
-&.resetButton {
-   border-color: rgba(0, 0, 0, 0.62);
-   color: rgba(0, 0, 0, 0.62);
- }
+.resetButton {
+   padding: 0 3px;
 }
 
 .searchGroupWrap {

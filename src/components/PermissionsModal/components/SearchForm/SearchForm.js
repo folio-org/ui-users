@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { isEmpty } from 'lodash';
 import { FormattedMessage } from 'react-intl';
 
 import {
@@ -48,16 +49,17 @@ const SearchForm = (props) => {
           type="submit"
           buttonStyle="primary"
           fullWidth
+          disabled={isEmpty(searchText)}
           marginBottom0
         >
           <FormattedMessage id="ui-users.search" />
         </Button>
       </div>
-      <div className={css.resetButtonWrap}>
+      <div>
         <Button
+          buttonClass={css.resetButton}
           data-test-reset-all-button
           buttonStyle="none"
-          fullWidth
           onClick={onResetSearchForm}
         >
           <Icon icon="times-circle-solid">
@@ -82,13 +84,11 @@ SearchForm.propTypes = {
       name: PropTypes.string.isRequired,
       cql: PropTypes.string.isRequired,
       values: PropTypes.arrayOf(
-        PropTypes.oneOfType([
-          PropTypes.shape({
-            name: PropTypes.string.isRequired,
-            value: PropTypes.bool.isRequired,
-          }),
-          PropTypes.string.isRequired,
-        ]),
+        PropTypes.shape({
+          name: PropTypes.string.isRequired,
+          displayName: PropTypes.element.isRequired,
+          value: PropTypes.bool.isRequired,
+        }).isRequired,
       ).isRequired,
     })
   ).isRequired,

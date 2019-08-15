@@ -16,11 +16,11 @@ import {
   Modal,
   Pane,
   Paneset,
-  ModalFooter,
 } from '@folio/stripes/components';
 
 import SearchForm from './components/SearchForm';
 import PermissionsList from './components/PermissionsList';
+import ResultsFirstMenu from './components/ResultsFirstMenu';
 import { sortOrders } from './constants';
 import { getInitialFiltersState } from './helpers';
 
@@ -56,13 +56,11 @@ class PermissionsModal extends React.Component {
         name: PropTypes.string.isRequired,
         cql: PropTypes.string.isRequired,
         values: PropTypes.arrayOf(
-          PropTypes.oneOfType([
-            PropTypes.shape({
-              name: PropTypes.string.isRequired,
-              value: PropTypes.bool.isRequired,
-            }),
-            PropTypes.string.isRequired,
-          ]),
+          PropTypes.shape({
+            name: PropTypes.string.isRequired,
+            displayName: PropTypes.element.isRequired,
+            value: PropTypes.bool.isRequired,
+          }),
         ).isRequired,
       })
     ).isRequired,
@@ -95,6 +93,7 @@ class PermissionsModal extends React.Component {
     super(props);
 
     this.state = {
+      filterPaneIsVisible: true,
       permissions: [],
       sortedColumn: 'permissionName',
       sortOrder: sortOrders.asc.name,
@@ -129,6 +128,12 @@ class PermissionsModal extends React.Component {
     });
 
     this.setState({ permissions: filteredPermissions });
+  };
+
+  toggleFilterPane = () => {
+    this.setState(curState => ({
+      filterPaneIsVisible: !curState.filterPaneIsVisible,
+    }));
   };
 
   onHeaderClick = (e, { name: columnName }) => {
@@ -226,6 +231,7 @@ class PermissionsModal extends React.Component {
         'status.Assigned': Assigned,
       } = {},
       assignedPermissionIds,
+      filterPaneIsVisible,
     } = this.state;
     const {
       open,
@@ -263,7 +269,7 @@ class PermissionsModal extends React.Component {
         onClose={onClose}
         contentClass={css.modalContent}
         footer={
-          <ModalFooter>
+          <div className={css.modalFooter}>
             <Button
               data-test-permissions-modal-save
               marginBottom0
@@ -272,34 +278,48 @@ class PermissionsModal extends React.Component {
             >
               <FormattedMessage id="ui-users.permissions.modal.save" />
             </Button>
+            <div>
+              <FormattedMessage
+                id="ui-users.permissions.modal.total"
+                values={{ count: assignedPermissionIds.length }}
+              />
+            </div>
             <Button
               data-test-permissions-modal-cancel
-              buttonClass={css.cancelButton}
               onClick={onClose}
               marginBottom0
             >
               <FormattedMessage id="ui-users.permissions.modal.cancel" />
             </Button>
-
-          </ModalFooter>
+          </div>
         }
       >
         <div>
           <Paneset>
+            {
+              filterPaneIsVisible &&
+              <Pane
+                defaultWidth="30%"
+                paneTitle={<FormattedMessage id="ui-users.permissions.modal.search.header" />}
+              >
+                <SearchForm
+                  config={filtersConfig}
+                  filters={filters}
+                  onClearFilter={this.onClearFilter}
+                  onSubmitSearch={this.onSubmitSearch}
+                  onChangeFilter={this.onChangeFilter}
+                  resetSearchForm={this.resetSearchForm}
+                />
+              </Pane>
+            }
             <Pane
-              defaultWidth="30%"
-              paneTitle={<FormattedMessage id="ui-users.permissions.modal.search.header" />}
-            >
-              <SearchForm
-                config={filtersConfig}
-                filters={filters}
-                onClearFilter={this.onClearFilter}
-                onSubmitSearch={this.onSubmitSearch}
-                onChangeFilter={this.onChangeFilter}
-                resetSearchForm={this.resetSearchForm}
-              />
-            </Pane>
-            <Pane
+              firstMenu={
+                <ResultsFirstMenu
+                  filterPaneIsVisible={filterPaneIsVisible}
+                  filters={filters}
+                  toggleFilterPane={this.toggleFilterPane}
+                />
+              }
               paneTitle={<FormattedMessage id="ui-users.permissions.modal.list.pane.header" />}
               paneSub={
                 <FormattedMessage
@@ -307,7 +327,7 @@ class PermissionsModal extends React.Component {
                   values={{ amount: sortedPermissions.length }}
                 />
               }
-              defaultWidth="70%"
+              defaultWidth="fill"
             >
               <PermissionsList
                 visibleColumns={visibleColumns}

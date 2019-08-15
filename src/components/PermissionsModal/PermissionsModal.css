@@ -4,6 +4,12 @@
   min-height: 500px;
 }
 
+.modalFooter {
+  width: 100%;
+  display: flex;
+  justify-content: space-between
+}
+
 .searchField {
   margin-bottom: calc(var(--control-margin-bottom) / 2);
 }

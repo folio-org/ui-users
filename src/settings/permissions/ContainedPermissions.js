@@ -173,10 +173,12 @@ class ContainedPermissions extends React.Component {
                   cql: 'status',
                   values: [
                     {
+                      displayName: <FormattedMessage id="ui-users.permissions.modal.assigned" />,
                       name: 'Assigned',
                       value: false,
                     },
                     {
+                      displayName: <FormattedMessage id="ui-users.permissions.modal.unassigned" />,
                       name: 'Unassigned',
                       value: true,
                     },
