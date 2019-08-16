@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
@@ -6,7 +6,7 @@ import { PaneMenu } from '@folio/stripes/components';
 
 import { SearchAndSortSearchButton as FilterPaneToggle } from '@folio/stripes/smart-components';
 
-const ResultsFirstMenu = (props) => {
+const ResultsFirstMenu = memo((props) => {
   const {
     filters,
     filterPaneIsVisible,
@@ -38,7 +38,7 @@ const ResultsFirstMenu = (props) => {
       </FormattedMessage>
     </PaneMenu>
   );
-};
+});
 
 ResultsFirstMenu.propTypes = {
   filters: PropTypes.object.isRequired,

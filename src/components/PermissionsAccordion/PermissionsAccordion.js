@@ -65,11 +65,14 @@ class ContainedPermissions extends React.Component {
 
   renderItem(item, index, showPerms) {
     return (
-      <li key={item.permissionName} data-permission-name={`${item.permissionName}`}>
+      <li
+        key={item.id}
+        data-permission-name={`${item.permissionName}`}
+      >
         {
-          (showPerms ?
-            `${item.permissionName} (${item.displayName})` :
-            (item.displayName || item.permissionName))
+          showPerms
+            ? `${item.permissionName} (${item.displayName})`
+            : (item.displayName || item.permissionName)
         }
         <IfPermission perm={this.props.permToDelete}>
           <FormattedMessage id="ui-users.permissions.removePermission">
@@ -143,7 +146,7 @@ class ContainedPermissions extends React.Component {
 
     if (!this.props.stripes.hasPerm(this.props.permToRead)) return null;
 
-    const size = (this.fields) ? this.fields.length : permissions.length;
+    const size = this.fields ? this.fields.length : permissions.length;
 
     return (
       <Accordion
@@ -158,9 +161,7 @@ class ContainedPermissions extends React.Component {
             {headlineContent}
           </Headline>
         }
-        displayWhenClosed={
-          <Badge>{size}</Badge>
-        }
+        displayWhenClosed={<Badge>{size}</Badge>}
       >
         <FieldArray name={permissionsField} component={this.renderList} />
         <IfPermission perm={permToModify}>
