@@ -7,7 +7,49 @@ import { expect } from 'chai';
 
 import setupApplication from '../helpers/setup-application';
 import PermissionSetForm from '../interactors/permission-set-form';
+import UserFormPage from '../interactors/user-form-page';
 import translation from '../../../translations/ui-users/en';
+
+describe('user edit form', () => {
+  setupApplication({ scenarios: ['comments'] });
+  const permissionsAmount = 10;
+  let user;
+
+  beforeEach(async function () {
+    this.server.createList('permissions', permissionsAmount);
+    user = this.server.create('user');
+
+    this.visit(`/users/view/${user.id}?layer=edit&query=%20&sort=name`);
+    await UserFormPage.whenLoaded();
+    await UserFormPage.togglePermissionAccordionButton.click();
+  });
+
+  describe('add permission button', () => {
+    it('should be displayed', () => {
+      expect(UserFormPage.addPermissionButton.isPresent).to.be.true;
+    });
+
+    it('should be 0 permissions', () => {
+      expect(UserFormPage.permissions().length).to.equal(0);
+    });
+
+    describe('add permission button click', () => {
+      beforeEach(async function () {
+        await UserFormPage.addPermissionButton.click();
+      });
+
+      describe('permissions modal', () => {
+        it('should be displayed', () => {
+          expect(UserFormPage.permissionsModal.isPresent).to.be.true;
+        });
+
+        it('should have proper label', () => {
+          expect(UserFormPage.permissionsModal.modalHeader.text).to.equal(translation['permissions.modal.header']);
+        });
+      });
+    });
+  });
+});
 
 describe('Permission set form', () => {
   setupApplication({ scenarios: ['comments'] });
