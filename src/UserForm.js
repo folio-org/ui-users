@@ -275,15 +275,17 @@ class UserForm extends React.Component {
     const {
       pristine,
       submitting,
+      invalid,
       onCancel,
     } = this.props;
 
-    const disabled = pristine || submitting;
+    const disabled = pristine || submitting || invalid;
 
     return (
       <PaneFooter>
         <Button
           data-test-user-form-cancel-button
+          id="clickable-cancel"
           buttonStyle="default mega"
           onClick={onCancel}
         >
@@ -291,6 +293,7 @@ class UserForm extends React.Component {
         </Button>
         <Button
           data-test-user-form-submit-button
+          id="clickable-save"
           buttonStyle="primary mega"
           type="submit"
           disabled={disabled}
