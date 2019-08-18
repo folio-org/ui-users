@@ -6,7 +6,9 @@ import {
   Field,
   reduxForm,
   change,
+  formValueSelector,
 } from 'redux-form';
+import { connect } from 'react-redux';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import {
   Row,
@@ -32,10 +34,10 @@ const validate = (values, props) => {
   const selected = calculateSelectedAmount(accounts);
   const errors = {};
 
-  if (!values.amount) {
+  if (!parseFloat(values.amount)) {
     errors.amount = <FormattedMessage id="ui-users.accounts.error.field" />;
   }
-  if (values.amount <= 0) {
+  if (parseFloat(values.amount) <= 0) {
     errors.amount = <FormattedMessage id={`ui-users.accounts.${action}.error.amount`} />;
   }
   if (!values.method) {
@@ -51,20 +53,6 @@ const validate = (values, props) => {
   return errors;
 };
 
-const onChange = (values, dispatch, props, prevValues) => {
-  if (values.ownerId !== prevValues.ownerId) {
-    dispatch(change('payment-many-modal', 'method', null));
-  }
-};
-
-const asyncValidate = (values, dispatch, props, blurredField) => {
-  if (blurredField === 'amount') {
-    const amount = parseFloat(values.amount || 0).toFixed(2);
-    dispatch(change(props.form, 'amount', amount));
-  }
-  return new Promise(resolve => resolve());
-};
-
 class ActionModal extends React.Component {
   static propTypes = {
     onClose: PropTypes.func,
@@ -75,7 +63,6 @@ class ActionModal extends React.Component {
     balance: PropTypes.number,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
-    initialValues: PropTypes.object,
     pristine: PropTypes.bool,
     reset: PropTypes.func,
     commentRequired: PropTypes.bool,
@@ -84,93 +71,27 @@ class ActionModal extends React.Component {
     label: PropTypes.string,
     action: PropTypes.string,
     intl: PropTypes.object,
+    currentValues: PropTypes.object,
+    dispatch: PropTypes.func,
   };
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      amount: '0.00',
-      showNotify: false,
-      notify: false,
-    };
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    const {
-      accounts,
-      feefines,
-      owners,
-      open,
-      pristine,
-      invalid,
-    } = this.props;
-    if (!_.isEqual(accounts, nextProps.accounts)) {
-      let showNotify = false;
-      let notify = false;
-      nextProps.accounts.forEach(a => {
-        const feefine = feefines.find(f => f.id === a.feeFineId) || {};
-        const owner = owners.find(o => o.id === a.ownerId) || {};
-        if (feefine.actionNoticeId || owner.defaultActionNoticeId) {
-          showNotify = true;
-          notify = true;
-        }
-      });
-      this.setState({
-        amount: nextProps.initialValues.amount,
-        showNotify,
-        notify
-      });
-    }
-
-    return (accounts !== nextProps.accounts
-      || this.state !== nextState ||
-      open !== nextProps.open ||
-      pristine !== nextProps.pristine ||
-      invalid !== nextProps.invalid);
-  }
-
-  onChangeAmount = (e) => {
-    this.setState({
-      amount: parseFloat(e.target.value || 0).toFixed(2),
-    });
-  }
-
-  onToggleNotify = () => {
-    this.setState(prevState => ({
-      notify: !prevState.notify,
-    }));
-  }
-
   onClose = () => {
-    const {
-      accounts,
-      onClose,
-      reset,
-    } = this.props;
+    const { onClose, reset } = this.props;
 
-    const selected = calculateSelectedAmount(accounts);
-    this.setState({ amount: selected });
     onClose();
     reset();
-  }
-
-  onChangeOwner = (e) => {
-    this.setState({
-      ownerId: e.target.value,
-    });
   }
 
   renderModalLabel() {
     const {
       accounts = [],
       action,
+      currentValues: { amount },
       intl: { formatMessage },
     } = this.props;
-    const { amount } = this.state;
 
     const selected = calculateSelectedAmount(accounts);
-    const type = amount < selected
+    const type = parseFloat(amount) < parseFloat(selected)
       ? formatMessage({ id: `ui-users.accounts.${action}.summary.partially` })
       : formatMessage({ id: `ui-users.accounts.${action}.summary.fully` });
 
@@ -246,17 +167,32 @@ class ActionModal extends React.Component {
     return action === 'payment';
   }
 
+  onBlurAmount = (e) => {
+    const amount = parseFloat(e.target.value || 0).toFixed(2);
+    e.target.value = amount;
+  }
+
+  onChangeOwner = () => {
+    const { dispatch } = this.props;
+    dispatch(change('payment-many-modal', 'method', null));
+  }
+
   render() {
     const {
       accounts,
       action,
       balance,
       commentRequired,
+      currentValues: {
+        amount,
+        notify,
+        ownerId
+      },
       data,
+      feefines,
       handleSubmit,
       intl: { formatMessage },
       invalid,
-      initialValues,
       label,
       open,
       owners,
@@ -264,15 +200,17 @@ class ActionModal extends React.Component {
       submitting,
     } = this.props;
 
-    const {
-      amount,
-      ownerId,
-      showNotify,
-      notify
-    } = this.state;
+    let showNotify = false;
+    accounts.forEach(a => {
+      const feefine = feefines.find(f => f.id === a.feeFineId) || {};
+      const owner = owners.find(o => o.id === a.ownerId) || {};
+      if (feefine.actionNoticeId || owner.defaultActionNoticeId) {
+        showNotify = true;
+      }
+    });
 
     const selected = calculateSelectedAmount(accounts);
-    const remaining = parseFloat(balance - amount).toFixed(2);
+    const remaining = amount > 0 ? parseFloat(balance - amount).toFixed(2) : parseFloat(balance).toFixed(2);
     const staffPlaceholder = formatMessage({
       id: 'ui-users.accounts.placeholder.additional'
     },
@@ -332,10 +270,9 @@ class ActionModal extends React.Component {
                     <Field
                       id="amount"
                       name="amount"
-                      value={initialValues.amount}
                       component={TextField}
-                      onChange={this.onChangeAmount}
                       hasClearIcon={false}
+                      onBlur={this.onBlurAmount}
                       fullWidth
                       marginBottom0
                       autoFocus
@@ -369,7 +306,6 @@ class ActionModal extends React.Component {
                         <Field
                           id="ownerId"
                           name="ownerId"
-                          value={initialValues.ownerId}
                           component={Select}
                           dataOptions={ownerOptions}
                           placeholder={placeholder}
@@ -416,7 +352,6 @@ class ActionModal extends React.Component {
                     name="notify"
                     component={Checkbox}
                     checked={notify}
-                    onChange={this.onToggleNotify}
                     inline
                   />
                   <FormattedMessage id="ui-users.accounts.notifyPatron" />
@@ -468,10 +403,19 @@ class ActionModal extends React.Component {
   }
 }
 
-export default reduxForm({
-  asyncBlurFields: ['amount'],
-  asyncValidate,
+const ActionModalRedux = reduxForm({
   enableReinitialize: true,
-  onChange,
   validate,
 })(ActionModal);
+
+const selector = (form, ...other) => (formValueSelector(form))(...other);
+
+export default connect((state, { form }) => ({
+  currentValues: selector(
+    form,
+    state,
+    'amount',
+    'notify',
+    'ownerId'
+  )
+}))(ActionModalRedux);
