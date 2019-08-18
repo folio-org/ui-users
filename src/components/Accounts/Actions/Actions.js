@@ -123,18 +123,15 @@ class Actions extends React.Component {
     this.callout = null;
   }
 
-  componentDidMount() {
-    this.props.mutator.user.update({ id: this.props.user.id });
+  static getDerivedStateFromProps(props, state) {
+    if (props.selectedAccounts !== state.accounts && props.selectedAccounts) {
+      return { accounts: props.selectedAccounts };
+    }
+    return null;
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    const props = this.props;
-    const nextAccounts = nextProps.selectedAccounts || [];
-    if (props.selectedAccounts !== nextProps.selectedAccounts) this.setState({ accounts: nextAccounts });
-    return props.accounts !== nextProps.accounts ||
-      props.actions !== nextProps.actions ||
-      props.selectedAccounts !== nextProps.selectedAccounts ||
-      this.state !== nextState;
+  componentDidMount() {
+    this.props.mutator.user.update({ id: this.props.user.id });
   }
 
   showCalloutMessage({ amount, paymentStatus }) {

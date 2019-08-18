@@ -59,14 +59,6 @@ function onChange(values, dispatch, props, previousValues) {
   return values;
 }
 
-const asyncValidate = (values, dispatch, props, blurredField) => {
-  if (blurredField === 'amount') {
-    const amount = parseFloat(values.amount || 0).toFixed(2);
-    dispatch(change('chargefeefine', 'amount', amount));
-  }
-  return new Promise(resolve => resolve());
-};
-
 class ChargeForm extends React.Component {
   static propTypes = {
     user: PropTypes.object,
@@ -164,6 +156,7 @@ class ChargeForm extends React.Component {
 
   render() {
     const {
+      dispatch,
       initialValues,
       selectedLoan,
       user
@@ -231,6 +224,7 @@ class ChargeForm extends React.Component {
           <br />
           <form>
             <FeeFineInfo
+              dispatch={dispatch}
               initialValues={initialValues}
               stripes={this.props.stripes}
               owners={owners}
@@ -297,8 +291,6 @@ class ChargeForm extends React.Component {
 
 export default stripesForm({
   form: 'chargefeefine',
-  asyncBlurFields: ['amount'],
-  asyncValidate,
   enableReinitialize: true,
   onChange,
   validate,
