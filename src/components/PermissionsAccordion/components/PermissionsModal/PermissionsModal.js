@@ -113,7 +113,6 @@ class PermissionsModal extends React.Component {
     this.setState({ permissions });
   }
 
-  // can be moved
   onSubmitSearch = (searchText) => {
     const permissions = get(this.props, 'resources.availablePermissions.records', []);
 
@@ -132,16 +131,15 @@ class PermissionsModal extends React.Component {
     }));
   };
 
-  // can be moved
   onChangeFilter = ({ target: { name, checked } }) => {
-    this.setState(({ filters }) => {
+    this.setState((prevState) => {
       if (checked) {
-        filters[name] = checked;
+        prevState.filters[name] = checked;
       } else {
-        delete filters[name];
+        delete prevState.filters[name];
       }
 
-      return filters;
+      return prevState;
     });
   };
 
@@ -176,7 +174,6 @@ class PermissionsModal extends React.Component {
     this.setState({ assignedPermissionIds });
   };
 
-  // can be moved
   onClearFilter = (filterName) => {
     this.setState(({ filters }) => {
       Object.keys(filters).forEach((key) => {
