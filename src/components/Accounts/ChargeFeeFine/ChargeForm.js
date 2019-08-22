@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -81,7 +80,6 @@ class ChargeForm extends React.Component {
     selectedLoan: PropTypes.object,
     isPending: PropTypes.object,
     onSubmit: PropTypes.func,
-    initialize: PropTypes.func,
     servicePointsIds: PropTypes.arrayOf(PropTypes.string),
     defaultServicePointId: PropTypes.string,
   }
@@ -96,63 +94,27 @@ class ChargeForm extends React.Component {
   }
 
   componentDidMount() {
+    const { initialValues } = this.props;
     feefineamount = 0.00;
-    if (this.props.ownerList.length > 0) {
-      this.loadServicePoints();
-    }
+    this.props.onChangeOwner({ target: { value: initialValues.ownerId } });
   }
 
   componentDidUpdate(prevProps) {
     const {
       owners,
-      ownerList,
-      isPending: { servicePoints },
+      initialValues,
       onFindShared
     } = this.props;
     const {
       owners: prevOwners,
-      ownerList: prevOwnerList,
-      isPending: { servicePoints: prevServicePoints }
     } = prevProps;
 
     if (prevOwners !== owners) {
       const shared = (owners.find(o => o.owner === 'Shared') || {}).id;
       onFindShared(shared);
     }
-    if (!_.isEqual(prevOwnerList, ownerList)
-      || (!_.isEqual(servicePoints, prevServicePoints) && ownerList.length > 0)) {
-      this.loadServicePoints();
-    }
-  }
-
-  loadServicePoints = () => {
-    const servicePoint = this.props.defaultServicePointId;
-    const servicePoints = this.props.servicePointsIds;
-    const owners = this.props.ownerList || [];
-    if (servicePoint && servicePoint !== '-') {
-      owners.forEach(o => {
-        if (o.servicePointOwner && o.servicePointOwner.find(s => s.value === servicePoint)) {
-          this.props.initialize({ ownerId: o.id });
-          this.onChangeOwner({ target: { value: o.id } });
-        }
-      });
-    } else if (servicePoints.length === 1) {
-      const sp = servicePoints[0];
-      owners.forEach(o => {
-        if (o.servicePointOwner && o.servicePointOwner.find(s => s.value === sp)) {
-          this.props.initialize({ ownerId: o.id });
-          this.onChangeOwner({ target: { value: o.id } });
-        }
-      });
-    } else if (servicePoints.length === 2) {
-      const sp1 = servicePoints[0];
-      const sp2 = servicePoints[1];
-      owners.forEach(o => {
-        if (o.servicePointOwner && o.servicePointOwner.find(s => s.value === sp1) && o.servicePointOwner.find(s => s.value === sp2)) {
-          this.props.initialize({ ownerId: o.id });
-          this.onChangeOwner({ target: { value: o.id } });
-        }
-      });
+    if (initialValues.ownerId !== prevProps.initialValues.ownerId) {
+      this.props.onChangeOwner({ target: { value: initialValues.ownerId } });
     }
   }
 
@@ -193,7 +155,12 @@ class ChargeForm extends React.Component {
   }
 
   render() {
-    const { selectedLoan, user } = this.props;
+    const {
+      dispatch,
+      initialValues,
+      selectedLoan,
+      user
+    } = this.props;
     const { notify } = this.state;
     const editable = !(selectedLoan.id);
     const itemLoan = {
@@ -257,6 +224,8 @@ class ChargeForm extends React.Component {
           <br />
           <form>
             <FeeFineInfo
+              dispatch={dispatch}
+              initialValues={initialValues}
               stripes={this.props.stripes}
               owners={owners}
               isPending={this.props.isPending}
@@ -290,7 +259,7 @@ class ChargeForm extends React.Component {
                       onChange={this.onToggleNotify}
                       inline
                     />
-                    <FormattedMessage id="ui-users.accounts.pay.notifyPatron" />
+                    <FormattedMessage id="ui-users.accounts.notifyPatron" />
                   </Col>
                 </Row>
               </div>
@@ -300,7 +269,7 @@ class ChargeForm extends React.Component {
               <div>
                 <Row>
                   <Col xs>
-                    <h4 className="marginTopHalf"><FormattedMessage id="ui-users.accounts.pay.field.infoPatron" /></h4>
+                    <h4 className="marginTopHalf"><FormattedMessage id="ui-users.accounts.infoPatron" /></h4>
                   </Col>
                 </Row>
                 <Row>
@@ -322,6 +291,7 @@ class ChargeForm extends React.Component {
 
 export default stripesForm({
   form: 'chargefeefine',
+  enableReinitialize: true,
   onChange,
   validate,
   navigationCheck: true,

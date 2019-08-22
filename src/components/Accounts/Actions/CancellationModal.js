@@ -16,12 +16,13 @@ import {
   Col,
 } from '@folio/stripes/components';
 
+import { isEqual } from 'lodash';
 import css from './modal.css';
 
 const validate = (values) => {
   const errors = {};
   if (!values.comment) {
-    errors.comment = 'Comment must be provided';
+    errors.comment = <FormattedMessage id="ui-users.accounts.cancellation.error.comment" />;
   }
   return errors;
 };
@@ -36,29 +37,55 @@ class CancellationModal extends React.Component {
     onClose: PropTypes.func,
     reset: PropTypes.func,
     handleSubmit: PropTypes.func.isRequired,
+    owners: PropTypes.arrayOf(PropTypes.object),
+    feefines: PropTypes.arrayOf(PropTypes.object),
   };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      notify: true,
+      notify: false,
+      showNotify: false,
     };
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const {
+      account,
+      feefines,
+    } = this.props;
+
+    if (!isEqual(account, prevProps.account) || prevState.showNotify !== this.state.showNotify) {
+      let showNotify = false;
+      let notify = false;
+
+      const feefine = feefines.find(f => f.id === account.feeFineId) || {};
+      const owner = this.props.owners.find(o => o.id === account.ownerId) || {};
+      if (feefine.actionNoticeId || owner.defaultActionNoticeId) {
+        showNotify = true;
+        notify = true;
+      }
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({
+        showNotify,
+        notify,
+      });
+    }
   }
 
   reset = () => {
     this.props.reset();
     this.setState({
-      notify: true,
+      notify: false,
+      showNotify: false
     });
   }
 
-  handleNotify = () => {
-    const { notify } = this.state;
-
-    this.setState({
-      notify: !notify,
-    });
+  onToggleNotify = () => {
+    this.setState(prevState => ({
+      notify: !prevState.notify,
+    }));
   }
 
   handleSubmit = () => {
@@ -130,18 +157,41 @@ class CancellationModal extends React.Component {
               </FormattedMessage>
             </Col>
           </Row>
-          <Row>
-            <Col xs>
-              <Field
-                name="notify"
-                component={Checkbox}
-                onChange={this.handleNotify}
-                checked={this.state.notify}
-                inline
-              />
-              <FormattedMessage id="ui-users.accounts.cancellation.field.notifyPatron" />
-            </Col>
-          </Row>
+          {this.state.showNotify &&
+            <div>
+              <Row>
+                <Col xs>
+                  <Field
+                    name="notify"
+                    component={Checkbox}
+                    checked={this.state.notify}
+                    onChange={this.onToggleNotify}
+                    inline
+                  />
+                  <FormattedMessage id="ui-users.accounts.cancellation.field.notifyPatron" />
+                </Col>
+              </Row>
+            </div>
+          }
+          <br />
+          {(this.state.notify && this.state.showNotify) &&
+            <div>
+              <Row>
+                <Col xs>
+                  <FormattedMessage id="ui-users.accounts.field.infoPatron" />
+                </Col>
+              </Row>
+              <br />
+              <Row>
+                <Col xs>
+                  <Field
+                    name="patronInfo"
+                    component={TextArea}
+                  />
+                </Col>
+              </Row>
+            </div>
+          }
           <br />
           <Row>
             <Col xs>
