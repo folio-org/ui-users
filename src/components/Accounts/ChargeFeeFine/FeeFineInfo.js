@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { Field } from 'redux-form';
+import { Field, change } from 'redux-form';
 import {
   Row,
   Col,
@@ -17,6 +17,8 @@ class FeeFineInfo extends React.Component {
     onChangeFeeFine: PropTypes.func,
     feefines: PropTypes.arrayOf(PropTypes.object),
     isPending: PropTypes.object,
+    initialValues: PropTypes.object,
+    dispatch: PropTypes.func,
   };
 
   constructor(props) {
@@ -39,8 +41,18 @@ class FeeFineInfo extends React.Component {
     this.props.onChangeFeeFine(parseFloat(feefine.defaultAmount || 0).toFixed(2), feeFineId);
   }
 
+  onBlurAmount = (e) => {
+    const { dispatch } = this.props;
+    const amount = parseFloat(e.target.value || 0).toFixed(2);
+    e.preventDefault();
+    dispatch(change('chargefeefine', 'amount', amount));
+  }
+
   render() {
-    const { isPending } = this.props;
+    const {
+      initialValues,
+      isPending
+    } = this.props;
 
     return (
       <section>
@@ -62,6 +74,7 @@ class FeeFineInfo extends React.Component {
                           id="ownerId"
                           component={Select}
                           fullWidth
+                          value={initialValues.ownerId}
                           disabled={this.props.isPending.owners}
                           dataOptions={this.props.owners}
                           onChange={this.props.onChangeOwner}
@@ -112,6 +125,7 @@ class FeeFineInfo extends React.Component {
                       fullWidth
                       required
                       onChange={this.onChangeAmount}
+                      onBlur={this.onBlurAmount}
                     />
                   </Col>
                 </Row>
