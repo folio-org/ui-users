@@ -167,10 +167,7 @@ class ActionModal extends React.Component {
     return action === 'payment';
   }
 
-  onBlurAmount = (e) => {
-    const amount = parseFloat(e.target.value || 0).toFixed(2);
-    e.target.value = amount;
-  }
+  normalizeAmount = (value) => parseFloat(value || 0).toFixed(2);
 
   onChangeOwner = () => {
     const { dispatch } = this.props;
@@ -272,7 +269,7 @@ class ActionModal extends React.Component {
                       name="amount"
                       component={TextField}
                       hasClearIcon={false}
-                      onBlur={this.onBlurAmount}
+                      normalize={this.normalizeAmount}
                       fullWidth
                       marginBottom0
                       autoFocus
