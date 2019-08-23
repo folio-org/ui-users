@@ -125,8 +125,8 @@ describe('open loans override', () => {
             });
 
             describe('override button', () => {
-              it('should not be presented', () => {
-                expect(OpenLoansInteractor.bulkRenewalModal.overrideButton.isPresent).to.be.false;
+              it('should be presented', () => {
+                expect(OpenLoansInteractor.bulkRenewalModal.overrideButton.isPresent).to.be.true;
               });
             });
           });
