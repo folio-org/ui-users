@@ -25,15 +25,13 @@ import {
   EditExtendedInfo,
   EditContactInfo,
   EditProxy,
+  EditUserPerms,
   EditServicePoints,
 } from './components/EditSections';
+
 import { HasCommand } from './components/Commander';
+
 import { getFullName } from './util';
-import PermissionsAccordion from './components/PermissionsAccordion';
-import {
-  statusFilterConfig,
-  permissionTypeFilterConfig,
-} from './components/PermissionsAccordion/helpers/filtersConfig';
 
 import css from './UserForm.css';
 
@@ -190,6 +188,10 @@ class UserForm extends React.Component {
         handler: this.collapseAllSections,
       }
     ];
+
+    if (props.initialValues.id) {
+      this.connectedEditUserPerms = props.stripes.connect(EditUserPerms);
+    }
   }
 
   componentDidMount() {
@@ -384,26 +386,11 @@ class UserForm extends React.Component {
                         onToggle={this.handleSectionToggle}
                         {...this.props}
                       />
-                      <PermissionsAccordion
-                        filtersConfig={[
-                          permissionTypeFilterConfig,
-                          statusFilterConfig,
-                        ]}
-                        visibleColumns={[
-                          'selected',
-                          'permissionName',
-                          'type',
-                          'status',
-                        ]}
+                      <this.connectedEditUserPerms
                         accordionId="permissions"
                         expanded={sections.permissions}
                         onToggle={this.handleSectionToggle}
-                        headlineContent={<FormattedMessage id="ui-users.permissions.userPermissions" />}
-                        permToRead="perms.permissions.get"
-                        permToDelete="perms.permissions.item.put"
-                        permToModify="perms.permissions.item.put"
-                        formName="userForm"
-                        permissionsField="permissions"
+                        {...this.props}
                       />
                       <EditServicePoints
                         accordionId="servicePoints"

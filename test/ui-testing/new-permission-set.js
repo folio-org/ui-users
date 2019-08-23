@@ -6,7 +6,6 @@ module.exports.test = function foo(uiTestCtx) {
     const nightmare = new Nightmare(config.nightmare);
     this.timeout(Number(config.test_timeout));
 
-    // eslint-disable-next-line no-unused-vars
     const waitText = (label) => {
       return Array.from(
         document.querySelectorAll('ul[class*="PermissionList"] li')

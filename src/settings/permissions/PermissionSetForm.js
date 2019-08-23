@@ -24,8 +24,7 @@ import { ViewMetaData } from '@folio/stripes/smart-components';
 import stripesForm from '@folio/stripes/form';
 import { Field } from 'redux-form';
 
-import PermissionsAccordion from '../../components/PermissionsAccordion';
-import { statusFilterConfig } from '../../components/PermissionsAccordion/helpers/filtersConfig';
+import ContainedPermissions from './ContainedPermissions';
 
 class PermissionSetForm extends React.Component {
   static propTypes = {
@@ -50,6 +49,7 @@ class PermissionSetForm extends React.Component {
     this.confirmDeleteSet = this.confirmDeleteSet.bind(this);
     this.handleExpandAll = this.handleExpandAll.bind(this);
     this.handleSectionToggle = this.handleSectionToggle.bind(this);
+    this.containedPermissions = props.stripes.connect(ContainedPermissions);
     this.cViewMetaData = props.stripes.connect(ViewMetaData);
     this.state = {
       confirmDelete: false,
@@ -273,22 +273,15 @@ class PermissionSetForm extends React.Component {
               onCancel={() => { this.confirmDeleteSet(false); }}
               confirmLabel={<FormattedMessage id="ui-users.delete" />}
             />
-            <PermissionsAccordion
-              filtersConfig={[statusFilterConfig]}
+
+            <this.containedPermissions
               expanded={sections.permSection}
-              visibleColumns={[
-                'selected',
-                'permissionName',
-                'status',
-              ]}
-              headlineContent={<FormattedMessage id="ui-users.permissions.assignedPermissions" />}
               onToggle={this.handleSectionToggle}
               accordionId="permSection"
               permToRead="perms.permissions.get"
               permToDelete="perms.permissions.item.put"
               permToModify="perms.permissions.item.put"
-              formName="permissionSetForm"
-              permissionsField="subPermissions"
+              {...this.props}
             />
           </Pane>
         </Paneset>
