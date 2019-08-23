@@ -1,0 +1,30 @@
+.modalContent {
+  padding: 0;
+  position: relative;
+  min-height: 500px;
+}
+
+.modalFooter {
+  width: 100%;
+  display: flex;
+  justify-content: space-between
+}
+
+.searchField {
+  margin-bottom: calc(var(--control-margin-bottom) / 2);
+}
+
+.resetButtonWrap {
+  &.resetButton {
+     border-color: rgba(0, 0, 0, 0.62);
+     color: rgba(0, 0, 0, 0.62);
+   }
+}
+
+.searchGroupWrap {
+  margin-bottom: .5rem;
+}
+
+.cancelButton {
+  margin-right: auto;
+}
