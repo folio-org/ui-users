@@ -283,7 +283,7 @@ class Users extends React.Component {
         <AppIcon
           app="users"
           size="small"
-          className={user.active || usersStyles.inactiveAppIcon}
+          className={user.active ? '' : usersStyles.inactiveAppIcon}
         >
           {
             user.active
