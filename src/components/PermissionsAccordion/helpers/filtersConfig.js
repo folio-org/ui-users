@@ -8,13 +8,15 @@ export const permissionTypeFilterConfig = {
   cql: 'permissionType',
   values: [
     {
-      displayName: 'Permission Sets',
+      displayName: <FormattedMessage id="ui-users.permissions.modal.filter.permissionType.permissionSets" />,
       name: 'permissionSets',
+      cql: 'permissionSets',
       value: false,
     },
     {
-      displayName: 'Base permissions',
+      displayName: <FormattedMessage id="ui-users.permissions.modal.filter.permissionType.basePermissions" />,
       name: 'basePermissions',
+      cql: 'basePermissions',
       value: false,
     },
   ],
@@ -45,11 +47,13 @@ export const statusFilterConfig = {
     {
       displayName: <FormattedMessage id="ui-users.permissions.modal.assigned" />,
       name: 'assigned',
+      cql: 'assigned',
       value: false,
     },
     {
       displayName: <FormattedMessage id="ui-users.permissions.modal.unassigned" />,
       name: 'unassigned',
+      cql: 'unassigned',
       value: true,
     },
   ],

@@ -4,9 +4,7 @@ import {
   get,
   remove,
 } from 'lodash';
-import { connect as reduxConnect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { change } from 'redux-form';
 
 import { stripesConnect } from '@folio/stripes/core';
 import {
@@ -73,10 +71,6 @@ class PermissionsModal extends React.Component {
       })
     ).isRequired,
     open: PropTypes.bool.isRequired,
-    // eslint-disable-next-line react/no-unused-prop-types
-    formName: PropTypes.string.isRequired,
-    // eslint-disable-next-line react/no-unused-prop-types
-    permissionsField: PropTypes.string.isRequired,
     onClose: PropTypes.func.isRequired,
     addPermissions: PropTypes.func.isRequired,
     visibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -307,12 +301,4 @@ class PermissionsModal extends React.Component {
   }
 }
 
-const mapStateToProps = (state, { formName, permissionsField }) => ({
-  assignedPermissions: state.form[formName].values[permissionsField] || [],
-});
-
-const mapDispatchToProps = (dispatch, { formName, permissionsField }) => ({
-  addPermissions: (permissions) => dispatch(change(formName, permissionsField, permissions)),
-});
-
-export default stripesConnect(reduxConnect(mapStateToProps, mapDispatchToProps)(PermissionsModal));
+export default stripesConnect(PermissionsModal);

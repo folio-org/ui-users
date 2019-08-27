@@ -1,7 +1,11 @@
 import { get } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FieldArray } from 'redux-form';
+import {
+  arrayRemove, change,
+  FieldArray,
+} from 'redux-form';
+import { connect as reduxConnect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import {
   Icon,
@@ -20,7 +24,7 @@ import {
 import PermissionModal from './components/PermissionsModal';
 import css from './PermissionsAccordion.css';
 
-class ContainedPermissions extends React.Component {
+class PermissionsAccordion extends React.Component {
   static propTypes = {
     expanded: PropTypes.bool.isRequired,
     initialValues: PropTypes.object,
@@ -30,8 +34,20 @@ class ContainedPermissions extends React.Component {
     permToModify: PropTypes.string.isRequired,
     permToRead: PropTypes.string.isRequired,
     stripes: stripesShape.isRequired,
+    // eslint-disable-next-line react/no-unused-prop-types
     formName: PropTypes.string.isRequired,
     permissionsField: PropTypes.string.isRequired,
+    assignedPermissions: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        displayName: PropTypes.string.isRequired,
+        permissionName: PropTypes.string.isRequired,
+        subPermissions: PropTypes.arrayOf(PropTypes.string).isRequired,
+        dummy: PropTypes.bool.isRequired,
+        mutable: PropTypes.bool.isRequired,
+        visible: PropTypes.bool.isRequired,
+      })
+    ).isRequired,
     filtersConfig: PropTypes.arrayOf(
       PropTypes.shape({
         label: PropTypes.node.isRequired,
@@ -49,6 +65,8 @@ class ContainedPermissions extends React.Component {
     ).isRequired,
     visibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
     headlineContent: PropTypes.element.isRequired,
+    unassignPermission: PropTypes.func.isRequired,
+    addPermissions: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -99,13 +117,12 @@ class ContainedPermissions extends React.Component {
   }
 
   renderList = ({ fields }) => {
-    this.fields = fields;
     const showPerms = get(this.props.stripes, ['config', 'showPerms']);
-    const listFormatter = (fieldName, index) => (this.renderItem(this.fields.get(index), index, showPerms));
+    const listFormatter = (fieldName, index) => (this.renderItem(fields.get(index), index, showPerms));
 
     return (
       <List
-        items={this.fields}
+        items={fields}
         itemFormatter={listFormatter}
         isEmptyMessage={<FormattedMessage id="ui-users.permissions.empty" />}
       />
@@ -113,8 +130,7 @@ class ContainedPermissions extends React.Component {
   };
 
   removePermission(index) {
-    this.fields.remove(index);
-    setTimeout(() => this.forceUpdate());
+    this.props.unassignPermission(index);
   }
 
   openPermissionModal = (e) => {
@@ -134,11 +150,12 @@ class ContainedPermissions extends React.Component {
       onToggle,
       initialValues,
       permToModify,
-      formName,
       permissionsField,
       filtersConfig,
       visibleColumns,
       headlineContent,
+      assignedPermissions,
+      addPermissions,
     } = this.props;
 
     const { permissionModalOpen } = this.state;
@@ -146,7 +163,7 @@ class ContainedPermissions extends React.Component {
 
     if (!this.props.stripes.hasPerm(this.props.permToRead)) return null;
 
-    const size = this.fields ? this.fields.length : permissions.length;
+    const size = assignedPermissions ? assignedPermissions.length : permissions.length;
 
     return (
       <Accordion
@@ -177,8 +194,8 @@ class ContainedPermissions extends React.Component {
           {
             permissionModalOpen &&
             <PermissionModal
-              formName={formName}
-              permissionsField={permissionsField}
+              assignedPermissions={assignedPermissions}
+              addPermissions={addPermissions}
               open={permissionModalOpen}
               visibleColumns={visibleColumns}
               filtersConfig={filtersConfig}
@@ -191,4 +208,13 @@ class ContainedPermissions extends React.Component {
   }
 }
 
-export default stripesConnect(ContainedPermissions);
+const mapStateToProps = (state, { formName, permissionsField }) => ({
+  assignedPermissions: state.form[formName].values[permissionsField] || [],
+});
+
+const mapDispatchToProps = (dispatch, { formName, permissionsField }) => ({
+  unassignPermission: (index) => dispatch(arrayRemove(formName, permissionsField, index)),
+  addPermissions: (permissions) => dispatch(change(formName, permissionsField, permissions)),
+});
+
+export default stripesConnect(reduxConnect(mapStateToProps, mapDispatchToProps)(PermissionsAccordion));

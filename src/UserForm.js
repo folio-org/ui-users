@@ -400,7 +400,7 @@ class UserForm extends React.Component {
                         onToggle={this.handleSectionToggle}
                         headlineContent={<FormattedMessage id="ui-users.permissions.userPermissions" />}
                         permToRead="perms.permissions.get"
-                        permToDelete="perms.permissions.item.put"
+                        permToDelete="perms.permissions.item.delete"
                         permToModify="perms.permissions.item.put"
                         formName="userForm"
                         permissionsField="permissions"

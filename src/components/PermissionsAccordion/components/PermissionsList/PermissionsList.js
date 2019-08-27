@@ -20,7 +20,7 @@ const PermissionsList = (props) => {
   const [sortOrder, setSortOrder] = useState(sortOrders.asc.name);
 
   const sorters = {
-    permissionName: ({ permissionName }) => permissionName,
+    permissionName: ({ permissionName, displayName }) => displayName || permissionName,
     status: ({ id, permissionName }) => [assignedPermissionIds.includes(id), permissionName],
     type: ({ subPermissions, mutable, permissionName }) => [!mutable && isEmpty(subPermissions), permissionName],
   };
