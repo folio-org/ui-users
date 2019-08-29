@@ -130,8 +130,8 @@ describe('Permission set form', () => {
                   expect(PermissionSetForm.permissionsModal.searchForm.unassignedCheckbox.isPresent).to.be.true;
                 });
 
-                it('should be checked', () => {
-                  expect(PermissionSetForm.permissionsModal.searchForm.unassignedCheckboxChecked).to.be.true;
+                it('should not be checked', () => {
+                  expect(PermissionSetForm.permissionsModal.searchForm.unassignedCheckboxChecked).to.be.false;
                 });
               });
             });
@@ -219,7 +219,7 @@ describe('Permission set form', () => {
               await PermissionSetForm.permissionsModal.saveButton.click();
             });
 
-            it('should be 0 permissions', () => {
+            it(`should be ${assignedPermissionsAmount} permissions`, () => {
               expect(PermissionSetForm.permissions().length).to.equal(assignedPermissionsAmount);
             });
           });
