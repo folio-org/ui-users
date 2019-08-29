@@ -1,5 +1,4 @@
 import React from 'react';
-import { isEmpty } from 'lodash';
 import { FormattedMessage } from 'react-intl';
 
 export const permissionTypeFilterConfig = {
@@ -26,8 +25,8 @@ export const permissionTypeFilterConfig = {
       [`${this.name}.${this.values[1].name}`]: showBasePermissions,
     } = filters;
 
-    return permissions.filter(({ mutable, subPermissions }) => {
-      const isBasePermission = !mutable && isEmpty(subPermissions);
+    return permissions.filter(({ mutable }) => {
+      const isBasePermission = !mutable;
 
       return (
         (showPermissionSets && !isBasePermission && !showBasePermissions)
@@ -54,7 +53,7 @@ export const statusFilterConfig = {
       displayName: <FormattedMessage id="ui-users.permissions.modal.unassigned" />,
       name: 'unassigned',
       cql: 'unassigned',
-      value: true,
+      value: false,
     },
   ],
   filter(permissions, filters, assignedPermissionIds) {
