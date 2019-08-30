@@ -108,7 +108,7 @@ class ProxyEditItem extends React.Component {
     let error = '';
 
     // proxy user expired
-    if (proxyRel.user.expirationDate && moment(proxyRel.user.expirationDate).endOf('day').isSameOrBefore(today)) {
+    if (get(proxyRel, 'user.expirationDate') && moment(proxyRel.user.expirationDate).endOf('day').isSameOrBefore(today)) {
       error = <FormattedMessage id={`ui-users.errors.${namespace}.expired`} />;
     }
 
@@ -118,7 +118,7 @@ class ProxyEditItem extends React.Component {
     }
 
     // proxy relationship expired
-    if (proxyRel.proxy.expirationDate &&
+    if (get(proxyRel, 'proxy.expirationDate') &&
       moment(proxyRel.proxy.expirationDate).endOf('day').isSameOrBefore(today)) {
       error = <FormattedMessage id="ui-users.errors.proxyrelationship.expired" />;
     }
