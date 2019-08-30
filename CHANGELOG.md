@@ -6,6 +6,7 @@
 * Implement footer with _Save & close_ and _Canclel_ buttons on the edit user form. Refs STCOM-429.
 * Finish implementing patron notices. Refs UIU-1113, UIU-1114, UIU-1115.
 * Clean up duplicate code. Refs UIU-932.
+* Add data instrumentation and update permission-set integration test. Refs UIU-631.
 
 ## [2.24.1](https://github.com/folio-org/ui-users/tree/v2.24.1) (2019-07-26)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.24.0...v2.24.1)

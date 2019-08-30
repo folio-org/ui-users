@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { isEmpty, orderBy } from 'lodash';
 
 import { MultiColumnList } from '@folio/stripes/components';
-import CheckBoxColumn from '../CheckboxColumn';
+import CheckboxColumn from '../CheckboxColumn';
 import { sortOrders } from '../../constants';
 
 const PermissionsList = (props) => {
@@ -61,6 +61,7 @@ const PermissionsList = (props) => {
   return (
     <div data-test-permissions-list>
       <MultiColumnList
+        id="list-permissions"
         columnWidths={{
           selected: '35',
           status: '20%',
@@ -72,7 +73,8 @@ const PermissionsList = (props) => {
           selected:
           (
             <div data-test-select-all-permissions>
-              <CheckBoxColumn
+              <CheckboxColumn
+                permissionName="select-all"
                 value="selectAll"
                 checked={allChecked}
                 onChange={toggleAllPermissions}
@@ -85,7 +87,8 @@ const PermissionsList = (props) => {
         }}
         formatter={{
           selected: permission => (
-            <CheckBoxColumn
+            <CheckboxColumn
+              permissionName={permission.permissionName}
               value={permission.id}
               checked={assignedPermissionIds.includes(permission.id)}
               onChange={() => togglePermission(permission.id)}
