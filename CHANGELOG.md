@@ -3,10 +3,14 @@
 ## 2.25.0 (IN PROGRESS)
 
 * Implement exporting of only overdue loans for overdue loans report. Refs UIU-1121.
-* Implement footer with _Save & close_ and _Canclel_ buttons on the edit user form. Refs STCOM-429.
+* Implement footer with _Save & close_ and _Cancel_ buttons on the edit user form. Refs STCOM-429.
 * Finish implementing patron notices. Refs UIU-1113, UIU-1114, UIU-1115.
 * Clean up duplicate code. Refs UIU-932.
-* Add data instrumentation and update permission-set integration test. Refs UIU-631.
+* Add patron notes. Refs UIU-1112.
+* replace deprecated `<SegmentedControl>` component.
+* Show all reasons when a loan renewal fails. Refs UIU-1129.
+* Pass correct props to `<AppIcon>`.
+* Add new permissions modal component. Refs UIU-629, UIU-631.
 
 ## [2.24.1](https://github.com/folio-org/ui-users/tree/v2.24.1) (2019-07-26)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.24.0...v2.24.1)
