@@ -46,6 +46,48 @@ describe('user edit form', () => {
         it('should have proper label', () => {
           expect(UserFormPage.permissionsModal.modalHeader.text).to.equal(translation['permissions.modal.header']);
         });
+
+        describe('type filter', () => {
+          describe('permission sets checkbox', () => {
+            it('should be presented', () => {
+              expect(UserFormPage.permissionsModal.searchForm.permissionSetsCheckbox.isPresent).to.be.true;
+            });
+
+            it('should not be checked', () => {
+              expect(UserFormPage.permissionsModal.searchForm.permissionSetsCheckboxChecked).to.be.false;
+            });
+
+            describe('permission sets checkbox click', () => {
+              beforeEach(async function () {
+                await UserFormPage.permissionsModal.searchForm.permissionSetsCheckbox.click();
+              });
+
+              it('should be 0 permissions', () => {
+                expect(UserFormPage.permissionsModal.permissionsList.permissions().length).to.equal(0);
+              });
+            });
+          });
+
+          describe('permissions checkbox', () => {
+            it('should be presented', () => {
+              expect(UserFormPage.permissionsModal.searchForm.permissionsCheckbox.isPresent).to.be.true;
+            });
+
+            it('should not be checked', () => {
+              expect(UserFormPage.permissionsModal.searchForm.permissionsCheckboxChecked).to.be.false;
+            });
+
+            describe('permission checkbox click', () => {
+              beforeEach(async function () {
+                await UserFormPage.permissionsModal.searchForm.permissionsCheckbox.click();
+              });
+
+              it(`should be ${permissionsAmount} permissions`, () => {
+                expect(UserFormPage.permissionsModal.permissionsList.permissions().length).to.equal(permissionsAmount);
+              });
+            });
+          });
+        });
       });
     });
   });

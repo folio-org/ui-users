@@ -13,6 +13,10 @@ import {
   assignedCheckboxChecked = property('#clickable-filter-status-assigned', 'checked');
   unassignedCheckbox = scoped('#clickable-filter-status-unassigned');
   unassignedCheckboxChecked = property('#clickable-filter-status-unassigned', 'checked');
+  permissionSetsCheckbox = scoped('#clickable-filter-permission-type-permission-sets');
+  permissionSetsCheckboxChecked = property('#clickable-filter-permission-type-permission-sets', 'checked');
+  permissionsCheckbox = scoped('#clickable-filter-permission-type-permissions');
+  permissionsCheckboxChecked = property('#clickable-filter-permission-type-permissions', 'checked');
 }
 
 @interactor class Permission {
