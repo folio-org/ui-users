@@ -7,31 +7,33 @@ export const permissionTypeFilterConfig = {
   cql: 'permissionType',
   values: [
     {
+      // permission sets created by user
       displayName: <FormattedMessage id="ui-users.permissions.modal.filter.permissionType.permissionSets" />,
       name: 'permissionSets',
       cql: 'permissionSets',
       value: false,
     },
     {
-      displayName: <FormattedMessage id="ui-users.permissions.modal.filter.permissionType.basePermissions" />,
-      name: 'basePermissions',
-      cql: 'basePermissions',
+      // permissions and permission sets created by the system
+      displayName: <FormattedMessage id="ui-users.permissions.modal.filter.permissionType.permissions" />,
+      name: 'permissions',
+      cql: 'permissions',
       value: false,
     },
   ],
   filter(permissions, filters) {
     const {
       [`${this.name}.${this.values[0].name}`]: showPermissionSets,
-      [`${this.name}.${this.values[1].name}`]: showBasePermissions,
+      [`${this.name}.${this.values[1].name}`]: showPermissions,
     } = filters;
 
     return permissions.filter(({ mutable }) => {
       const isBasePermission = !mutable;
 
       return (
-        (showPermissionSets && !isBasePermission && !showBasePermissions)
-          || (!showPermissionSets && isBasePermission && showBasePermissions)
-          || (showPermissionSets && showBasePermissions)
+        (showPermissionSets && !isBasePermission && !showPermissions)
+          || (!showPermissionSets && isBasePermission && showPermissions)
+          || (showPermissionSets && showPermissions)
           || !Object.keys(filters).some((key) => (key.startsWith(this.name)))
       );
     });

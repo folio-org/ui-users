@@ -885,7 +885,7 @@
   "permissions.modal.filter.status.label": "Permission assigment status",
   "permissions.modal.filter.permissionType.label": "Permission types",
   "permissions.modal.filter.permissionType.permissionSets": "Permission sets",
-  "permissions.modal.filter.permissionType.basePermissions": "Permissions",
+  "permissions.modal.filter.permissionType.permissions": "Permissions",
   "permissions.modal.type": "Type",
   "permissions.modal.permission": "Permission",
   "permissions.modal.permissionSet": "Permission set",
