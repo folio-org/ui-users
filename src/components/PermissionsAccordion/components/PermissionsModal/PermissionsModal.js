@@ -228,6 +228,7 @@ class PermissionsModal extends React.Component {
         footer={
           <div className={css.modalFooter}>
             <Button
+              id="clickable-permissions-modal-cancel"
               data-test-permissions-modal-cancel
               onClick={onClose}
               marginBottom0
@@ -241,6 +242,7 @@ class PermissionsModal extends React.Component {
               />
             </div>
             <Button
+              id="clickable-permissions-modal-save"
               data-test-permissions-modal-save
               marginBottom0
               buttonStyle="primary"
