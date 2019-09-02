@@ -31,7 +31,8 @@ import {
 
   permissions = collection('[class^="mclRow--"]', Permission);
   selectAllPermissions = scoped('[data-test-select-all-permissions] input');
-  sortByStatusButton = scoped('#clickable-list-column-status')
+  sortByStatusButton = scoped('#clickable-list-column-status');
+  sortByTypeButton = scoped('#clickable-list-column-type');
 }
 
 @interactor class PermissionsModal {

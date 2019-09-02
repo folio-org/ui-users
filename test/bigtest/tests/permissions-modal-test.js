@@ -13,10 +13,13 @@ import translation from '../../../translations/ui-users/en';
 describe('user edit form', () => {
   setupApplication({ scenarios: ['comments'] });
   const permissionsAmount = 10;
+  const permissionSetsAmount = 1;
+  let permissionSets;
   let user;
 
   beforeEach(async function () {
     this.server.createList('permissions', permissionsAmount);
+    permissionSets = this.server.createList('permissions', permissionSetsAmount, { mutable: true });
     user = this.server.create('user');
 
     this.visit(`/users/view/${user.id}?layer=edit&query=%20&sort=name`);
@@ -47,6 +50,19 @@ describe('user edit form', () => {
           expect(UserFormPage.permissionsModal.modalHeader.text).to.equal(translation['permissions.modal.header']);
         });
 
+        describe('sort permissions by type', () => {
+          beforeEach(async function () {
+            await UserFormPage.permissionsModal.permissionsList.sortByTypeButton.click();
+            await UserFormPage.permissionsModal.permissionsList.sortByTypeButton.click();
+          });
+
+          it('permission set should be first', () => {
+            expect(UserFormPage.permissionsModal.permissionsList.permissions(0).name.text).to.equal(
+              permissionSets[0].displayName
+            );
+          });
+        });
+
         describe('type filter', () => {
           describe('permission sets checkbox', () => {
             it('should be presented', () => {
@@ -63,7 +79,7 @@ describe('user edit form', () => {
               });
 
               it('should be 0 permissions', () => {
-                expect(UserFormPage.permissionsModal.permissionsList.permissions().length).to.equal(0);
+                expect(UserFormPage.permissionsModal.permissionsList.permissions().length).to.equal(permissionSetsAmount);
               });
             });
           });
@@ -82,7 +98,7 @@ describe('user edit form', () => {
                 await UserFormPage.permissionsModal.searchForm.permissionsCheckbox.click();
               });
 
-              it(`should be ${permissionsAmount} permissions`, () => {
+              it(`should be ${permissionsAmount + permissionSetsAmount} permissions`, () => {
                 expect(UserFormPage.permissionsModal.permissionsList.permissions().length).to.equal(permissionsAmount);
               });
             });
@@ -210,14 +226,14 @@ describe('Permission set form', () => {
           beforeEach(async function () {
             await PermissionSetForm.permissionsModal.searchForm.unassignedCheckbox.click();
             await PermissionSetForm.permissionsModal.permissionsList.permissions(1).checkBox.click();
-            await PermissionSetForm.permissionsModal.permissionsList.permissions(2).checkBox.click();
+            await PermissionSetForm.permissionsModal.permissionsList.permissions(2).click();
           });
 
           it('permissions list should be displayed', () => {
             expect(PermissionSetForm.permissionsModal.permissionsList.isPresent).to.be.true;
           });
 
-          it('only unassigned permissions should be displayed', () => {
+          it('unassigned permissions should be displayed', () => {
             expect(PermissionSetForm.permissionsModal.permissionsList.permissions().length).to.equal(
               permissionsAmount - assignedPermissionsAmount
             );
