@@ -166,6 +166,7 @@ describe('Permission set form', () => {
           const assignedPermissionsAmount = 2;
 
           beforeEach(async function () {
+            await PermissionSetForm.permissionsModal.searchForm.unassignedCheckbox.click();
             await PermissionSetForm.permissionsModal.permissionsList.permissions(1).checkBox.click();
             await PermissionSetForm.permissionsModal.permissionsList.permissions(2).checkBox.click();
           });
@@ -227,6 +228,7 @@ describe('Permission set form', () => {
 
         describe('assign all permissions', () => {
           beforeEach(async function () {
+            await PermissionSetForm.permissionsModal.searchForm.unassignedCheckbox.click();
             await PermissionSetForm.permissionsModal.permissionsList.selectAllPermissions.click();
           });
 
