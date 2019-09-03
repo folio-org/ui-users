@@ -243,11 +243,7 @@ class PermissionSetForm extends React.Component {
                 <Col xs={8}>
                   <section>
                     <Field
-                      label={(
-                        <FormattedMessage id="ui-users.permissions.permissionSetName">
-                          {(msg) => msg + ' *'}
-                        </FormattedMessage>
-                      )}
+                      label={<FormattedMessage id="ui-users.permissions.permissionSetName" />}
                       name="displayName"
                       id="input-permission-title"
                       component={TextField}

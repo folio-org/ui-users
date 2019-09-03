@@ -17,7 +17,7 @@ class PatronBlockMessage extends React.Component {
     const { intl } = this.props;
     const place = intl.formatMessage({ id: 'ui-users.blocks.textField.place' });
     return (
-      <TextField fullWidth readOnly value={place} error=" " />
+      <TextField id="patron-block-place" fullWidth readOnly value={place} error=" " />
     );
   }
 }

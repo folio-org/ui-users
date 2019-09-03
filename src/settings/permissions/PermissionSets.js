@@ -34,7 +34,7 @@ class PermissionSets extends React.Component {
         path: 'perms/permissions',
       },
       GET: {
-        path: 'perms/permissions?length=1000&query=(mutable==true)&expandSubs=true',
+        path: 'perms/permissions?length=10000&query=(mutable==true)&expandSubs=true',
       },
       path: 'perms/permissions',
     },
@@ -62,22 +62,26 @@ class PermissionSets extends React.Component {
     } = this.props;
 
     return (
-      <EntryManager
-        {...this.props}
-        parentMutator={mutator}
-        entryList={_.sortBy((entries || {}).records || [], ['displayName'])}
-        detailComponent={PermissionSetDetails}
-        paneTitle={<FormattedMessage id="ui-users.settings.permissionSet" />}
-        entryLabel={<FormattedMessage id="ui-users.permissionSet" />}
-        entryFormComponent={PermissionSetForm}
-        validate={validate}
-        nameKey="displayName"
-        permissions={{
-          put: 'perms.permissions.item.post',
-          post: 'perms.permissions.item.post',
-          delete: 'perms.permissions.item.delete',
-        }}
-      />
+      <FormattedMessage id="ui-users.permissionSet">
+        {(entryLabel) => (
+          <EntryManager
+            {...this.props}
+            parentMutator={mutator}
+            entryList={_.sortBy((entries || {}).records || [], ['displayName'])}
+            detailComponent={PermissionSetDetails}
+            paneTitle={<FormattedMessage id="ui-users.settings.permissionSet" />}
+            entryLabel={entryLabel}
+            entryFormComponent={PermissionSetForm}
+            validate={validate}
+            nameKey="displayName"
+            permissions={{
+              put: 'perms.permissions.item.post',
+              post: 'perms.permissions.item.post',
+              delete: 'perms.permissions.item.delete',
+            }}
+          />
+        )}
+      </FormattedMessage>
     );
   }
 }

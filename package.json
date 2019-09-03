@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "2.22.0",
+  "version": "2.24.2",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -12,11 +12,10 @@
   },
   "main": "src/index.js",
   "stripes": {
-    "type": "app",
+    "actsAs": ["app", "settings"],
     "displayName": "ui-users.meta.title",
     "route": "/users",
     "home": "/users?sort=name",
-    "hasSettings": true,
     "queryResource": "query",
     "actionNames": [
       "stripesHome",
@@ -35,16 +34,23 @@
       "circulation": "3.0 4.0 5.0 6.0 7.0",
       "permissions": "5.0",
       "loan-policy-storage": "1.0 2.0",
-      "loan-storage": "4.0 5.0",
-      "login": "4.7 5.0",
+      "loan-storage": "4.0 5.0 6.0",
+      "login": "6.0",
       "feesfines": "15.0",
       "request-storage": "2.5 3.0",
-      "users-bl": "3.2 4.0"
+      "users-bl": "5.0"
     },
     "permissionSets": [
       {
         "permissionName": "module.users.enabled",
         "displayName": "UI: Users module is enabled"
+      },
+      {
+        "permissionName": "settings.users.enabled",
+        "displayName": "Settings (Users): display list of settings pages",
+        "subPermissions": [
+          "settings.enabled"
+        ]
       },
       {
         "permissionName": "ui-users.view",
@@ -189,14 +195,6 @@
         ]
       },
       {
-        "permissionName": "settings.users.enabled",
-        "displayName": "Settings (Users): display list of settings pages",
-        "subPermissions": [
-          "settings.enabled"
-        ],
-        "visible": true
-      },
-      {
         "permissionName": "ui-users.viewproxies",
         "displayName": "Users: Can view proxies assigned to users",
         "subPermissions": [
@@ -230,7 +228,7 @@
           "comments.item.put",
           "settings.users.enabled"
         ],
-        "visible": false
+        "visible": true
       },
       {
         "permissionName": "settings.comments.all",
@@ -250,7 +248,7 @@
           "feefines.item.put",
           "settings.users.enabled"
         ],
-        "visible": false
+        "visible": true
       },
       {
         "permissionName": "settings.feefines.all",
@@ -270,7 +268,7 @@
           "owners.item.put",
           "settings.users.enabled"
         ],
-        "visible": false
+        "visible": true
       },
       {
         "permissionName": "settings.owners.all",
@@ -290,7 +288,7 @@
           "payments.item.put",
           "settings.users.enabled"
         ],
-        "visible": false
+        "visible": true
       },
       {
         "permissionName": "settings.payments.all",
@@ -310,7 +308,7 @@
           "refunds.item.put",
           "settings.users.enabled"
         ],
-        "visible": false
+        "visible": true
       },
       {
         "permissionName": "settings.refunds.all",
@@ -330,7 +328,7 @@
           "waives.item.put",
           "settings.users.enabled"
         ],
-        "visible": false
+        "visible": true
       },
       {
         "permissionName": "settings.waives.all",
@@ -349,7 +347,7 @@
           "accounts.item.post",
           "accounts.item.put"
         ],
-        "visible": false
+        "visible": true
       },
       {
         "permissionName": "accounts.all",
@@ -368,7 +366,7 @@
           "feefineactions.item.post",
           "feefineactions.item.put"
         ],
-        "visible": false
+        "visible": true
       },
       {
         "permissionName": "feefineactions.all",
@@ -388,7 +386,7 @@
           "transfers.item.put",
           "settings.users.enabled"
         ],
-        "visible": false
+        "visible": true
       },
       {
         "permissionName": "settings.transfers.all",
@@ -408,7 +406,7 @@
           "transfertypes.item.put",
           "settings.users.enabled"
         ],
-        "visible": false
+        "visible": true
       },
       {
         "permissionName": "settings.transfertypes.all",
@@ -428,7 +426,7 @@
           "payments.collection.get",
           "payments.item.get"
         ],
-        "visible": false
+        "visible": true
       },
       {
         "permissionName": "manual_pay.all",
@@ -448,7 +446,7 @@
           "waives.collection.get",
           "waives.item.get"
         ],
-        "visible": false
+        "visible": true
       },
       {
         "permissionName": "manual_waive.all",
@@ -467,7 +465,7 @@
           "feefines.item.get",
           "manual_pay.all"
         ],
-        "visible": false
+        "visible": true
       },
       {
         "permissionName": "manual_charge.all",
@@ -477,8 +475,8 @@
         ]
       },
       {
-        "permissionName": "ui-users.manual_patron_blocks",
-        "displayName": "Patron blocks: Can create, edit and remove manual patron blocks",
+        "permissionName": "ui-users.patron_blocks",
+        "displayName": "Users: Can create, edit and remove patron blocks",
         "subPermissions": [
           "manualblocks.collection.get",
           "manualblocks.item.delete",
@@ -489,10 +487,10 @@
         "visible": true
       },
       {
-        "permissionName": "manual_patron_blocks.all",
-        "displayName": "Patron blocks: Can create, edit and remove manual patron blocks [LEGACY]",
+        "permissionName": "patron_blocks.all",
+        "displayName": "Users: Can create, edit and remove patron blocks [LEGACY]",
         "subPermissions": [
-          "ui-users.manual_patron_blocks"
+          "ui-users.patron_blocks"
         ]
       },
       {
@@ -519,18 +517,17 @@
       },
       {
         "permissionName": "ui-users.feesfines.actions.all",
-        "displayName": "Fees/Fines: All Actions permissions",
+        "displayName": "Users: Can create, edit and remove fees/fines",
         "subPermissions": [
           "manual_charge.all",
           "manual_pay.all",
-          "manual_waive.all",
-          "manual_patron_blocks.all"
+          "manual_waive.all"
         ],
         "visible": true
       },
       {
         "permissionName": "feesfines.actions.all",
-        "displayName": "Fees/Fines: All Actions permissions [LEGACY]",
+        "displayName": "Users: Can create, edit and remove fees/fines [LEGACY]",
         "subPermissions": [
           "ui-users.feesfines.actions.all"
         ]
@@ -567,7 +564,10 @@
           "owners.collection.get",
           "payments.collection.get",
           "comments.collection.get",
-          "waives.collection.get"
+          "waives.collection.get",
+          "inventory-storage.locations.collection.get",
+          "inventory-storage.location-units.libraries.collection.get",
+          "inventory-storage.material-types.collection.get"
         ],
         "visible": true
       },
@@ -577,7 +577,6 @@
         "description": "Also includes basic permissions to view users and loans",
         "subPermissions": [
           "ui-users.view",
-          "ui-users.settings.feefines",
           "circulation.loans.collection.get",
           "circulation.requests.collection.get",
           "circulation.requests.item.get",
@@ -588,11 +587,6 @@
           "circulation-storage.requests.collection.delete",
           "circulation-storage.requests.item.get",
           "circulation-storage.requests.item.delete",
-          "proxiesfor.collection.get",
-          "addresstypes.collection.get",
-          "usergroups.collection.get",
-          "configuration.entries.collection.get",
-          "manualblocks.collection.get",
           "inventory.items.collection.get",
           "inventory.items.item.get",
           "inventory.instances.item.get",
@@ -603,10 +597,10 @@
           "inventory-storage.holdings.item.get",
           "inventory-storage.instances.item.get",
           "inventory-storage.instances.collection.get",
-          "inventory-storage.service-points.collection.get",
-          "inventory-storage.service-points.item.get",
-          "inventory-storage.service-points-users.collection.get",
-          "inventory-storage.service-points-users.item.get"
+          "inventory-storage.locations.collection.get",
+          "inventory-storage.location-units.libraries.collection.get",
+          "inventory-storage.material-types.collection.get",
+          "circulation-storage.loan-policies.collection.get"
         ],
         "visible": true
       },
@@ -641,6 +635,7 @@
     "babel-polyfill": "^6.26.0",
     "chai": "^4.2.0",
     "eslint": "^5.5.0",
+    "faker": "^4.1.0",
     "mocha": "^5.2.0",
     "react": "^16.5.0",
     "react-dom": "^16.5.0",
@@ -658,11 +653,12 @@
     "react-hot-loader": "^4.3.12",
     "react-intl": "^2.5.0",
     "react-router-dom": "^4.0.0",
+    "react-router-prop-types": "^1.0.4",
     "redux-form": "^7.0.3",
     "uuid": "^3.0.1"
   },
   "peerDependencies": {
-    "@folio/stripes": "^2.1.0",
+    "@folio/stripes": "^2.9.0",
     "react-router": "^4.0.0",
     "react": "*"
   },

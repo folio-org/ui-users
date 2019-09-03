@@ -46,3 +46,15 @@ export function getRecordObject(resources, ...args) {
   });
   return res;
 }
+
+export function retrieveNoteReferredEntityDataFromLocationState(state) {
+  if (state) {
+    return {
+      name: state.entityName,
+      type: state.entityType,
+      id: state.entityId,
+    };
+  }
+
+  return null;
+}

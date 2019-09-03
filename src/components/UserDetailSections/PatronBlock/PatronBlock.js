@@ -134,7 +134,7 @@ class PatronBlock extends React.Component {
       match: { params }
     } = this.props;
 
-    const permAbled = this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
+    const permAbled = this.props.stripes.hasPerm('ui-users.patron_blocks');
     if (permAbled === true && (e.target.type !== 'button') && (e.target.tagName !== 'IMG')) {
       // this.props.onClickViewPatronBlock(e, 'edit', row);
       history.push(`/users/${params.id}/patronblocks/edit/${row.id}`);
@@ -165,19 +165,20 @@ class PatronBlock extends React.Component {
       sortDirection
     } = this.state;
     let contentData = patronBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrAfter(moment().format()));
-    contentData = _.orderBy(contentData, ['metadata.createdDate'], ['asc']);
+    contentData = _.orderBy(contentData, ['metadata.createdDate'], ['desc']);
     const visibleColumns = [
       'Type',
       'Display description',
       'Blocked actions',
     ];
-    const buttonDisabled = this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
+    const buttonDisabled = this.props.stripes.hasPerm('ui-users.patron_blocks');
     const displayWhenOpen =
-      <Button disabled={!buttonDisabled} to={{ pathname: `/users/${params.id}/patronblocks/create`, state:{ referrer: 'userdetail' } }}>
+      <Button id="create-patron-block" disabled={!buttonDisabled} to={{ pathname: `/users/${params.id}/patronblocks/create` }}>
         <FormattedMessage id="ui-users.blocks.buttons.add" />
       </Button>;
     const items =
       <MultiColumnList
+        id="patron-block-mcl"
         contentData={contentData}
         formatter={this.getPatronFormatter()}
         visibleColumns={visibleColumns}

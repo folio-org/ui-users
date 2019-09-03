@@ -1,6 +1,41 @@
 # Change history for ui-users
 
-## 2.23.0 (IN PROGRESS)
+## 2.25.0 (IN PROGRESS)
+
+* Implement exporting of only overdue loans for overdue loans report. Refs UIU-1121.
+* Implement footer with _Save & close_ and _Canclel_ buttons on the edit user form. Refs STCOM-429.
+
+## [2.24.1](https://github.com/folio-org/ui-users/tree/v2.24.1) (2019-07-26)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.24.0...v2.24.1)
+
+* Retrieve up to 10k permissions, up from the current limit of 1k. Fixes UIU-1134.
+* Modify permission for patron blocks. Refs UIU-728.
+
+## [2.24.0](https://github.com/folio-org/ui-users/tree/v2.24.0) (2019-07-24)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.23.0...v2.24.0)
+
+* Allow some loan-renewal failures to be overridden. Refs UIU-1017.
+* Remove unnecessary settings. Refs UIORG-150.
+* Handle "Active/Inactive" hard-code issue for the search filter. Fixes UIU-894.
+* Better search string construction won't accidentally match `*`. Fixes UIU-1086.
+* Fix sort patron blocks. Fixes UIU-868.
+* Fix Payment Status from "Charge and pay now". Fixes UIU-931.
+* Fix UX Consistency owners. Fixes UIU-1050.
+* Handle address type validation issue after adding permission to user. Fixes UIU-912.
+* Add missing permissions. Fixes UIU-1088.
+* Accommodate changes in the shape of `/loan-storage/loan-history` data. Refs UIU-1092.
+* Fix expiration date for sponsor and proxy. Fixes UIU-924.
+* Update tests to cover changes in due date modal in stripes-smart-components. Refs UIU-1070.
+* Extend overdue loans report with fine/fee field. Refs UIU-987.
+* Optimize fee/fine settings and BigTest.
+* Create BigTest Payment methods. Refs UIU-998.
+* Create BigTest Refund reasons. Refs UIU-999.
+* Create BigTest Waive reasons. Refs UIU-1001.
+* Update `login` API to `v6.0`. Refs UIU-1099.
+* Create BigTest for CRUD patron blocks. Refs UIU-1003.
+
+## [2.23.0](https://github.com/folio-org/ui-users/tree/v2.23.0) (2019-06-12)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.22.0...v2.23.0)
 
 * Retrieve 1000 service points by default. Fixes UIU-1053.
 * Create BigTest for display Fee/Fine History. Ref UIU-1005.
@@ -20,7 +55,7 @@
 * Fix UX Consistency for New Fee/Fine. Fix UIU-1052.
 
 ## [2.22.0](https://github.com/folio-org/ui-users/tree/v2.22.0) (2019-05-10)
-[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.22.0...v2.22.0)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.21.0...v2.22.0)
 
 * Suppress error on user-details pane when permissions record is missing. Fixes UIU-507.
 * Correct proxy-user query. Fixes UIU-952.

@@ -206,7 +206,7 @@ class ProxyEditItem extends React.Component {
                     label={<FormattedMessage id="ui-users.expirationDate" />}
                     dateFormat="YYYY-MM-DD"
                     name={`${name}.proxy.expirationDate`}
-                    backendDateStandard="YYYY-MM-DD"
+
                     onChange={() => defer(() => this.validateStatus())}
                   />
                 </Col>

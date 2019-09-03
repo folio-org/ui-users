@@ -22,6 +22,9 @@ import PaymentSettings from './settings/PaymentSettings';
 import CommentRequiredSettings from './settings/CommentRequiredSettings';
 import RefundReasonsSettings from './settings/RefundReasonsSettings';
 import TransferAccountsSettings from './settings/TransferAccountsSettings';
+import NoteCreatePage from './NoteCreatePage';
+import NoteViewPage from './NoteViewPage';
+import NoteEditPage from './NoteEditPage';
 
 const settingsGeneral = [
   {
@@ -173,6 +176,9 @@ class UsersRouting extends React.Component {
           <Route path={`${base}/create`} component={Routes.UserEditContainer} />
           <Route path={`${base}/:id/edit`} component={Routes.UserEditContainer} />
           <Route path={`${base}/view/:id`} component={Routes.UserDetailFullscreenContainer} />
+          <Route path={`${base}/notes/new`} exact component={NoteCreatePage} />
+          <Route path={`${base}/notes/:id`} exact component={NoteViewPage} />
+          <Route path={`${base}/notes/:id/edit`} exact component={NoteEditPage} />
           <Route path={base} component={Routes.UserSearchContainer}>
             <Route path={`${base}/preview/:id`} component={Routes.UserDetailContainer} />
           </Route>

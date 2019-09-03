@@ -39,30 +39,28 @@ class LoansListing extends React.Component {
     } = this.props;
 
     return (
-      <div className={css.segmentedControlWrap}>
-        <ButtonGroup className={css.segmentedControl}>
-          <Button
-            marginBottom0
-            fullWidth
-            id="loans-show-open"
-            buttonStyle={params.loanstatus === 'open' ? 'primary' : 'default'}
-            to={{ pathname: `/users/${params.id}/loans/open` }}
-            replace
-          >
-            <FormattedMessage id="ui-users.loans.openLoans" />
-          </Button>
-          <Button
-            marginBottom0
-            fullWidth
-            id="loans-show-closed"
-            buttonStyle={params.loanstatus === 'closed' ? 'primary' : 'default'}
-            to={{ pathname: `/users/${params.id}/loans/closed` }}
-            replace
-          >
-            <FormattedMessage id="ui-users.loans.closedLoans" />
-          </Button>
-        </ButtonGroup>
-      </div>
+      <ButtonGroup className={css.buttonGroupWrap}>
+        <Button
+          marginBottom0
+          fullWidth
+          id="loans-show-open"
+          buttonStyle={params.loanstatus === 'open' ? 'primary' : 'default'}
+          to={{ pathname: `/users/${params.id}/loans/open` }}
+          replace
+        >
+          <FormattedMessage id="ui-users.loans.openLoans" />
+        </Button>
+        <Button
+          marginBottom0
+          fullWidth
+          id="loans-show-closed"
+          buttonStyle={params.loanstatus === 'closed' ? 'primary' : 'default'}
+          to={{ pathname: `/users/${params.id}/loans/closed` }}
+          replace
+        >
+          <FormattedMessage id="ui-users.loans.closedLoans" />
+        </Button>
+      </ButtonGroup>
     );
   }
 

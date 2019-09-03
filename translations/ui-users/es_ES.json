@@ -776,8 +776,8 @@
     "accounts.pay.owner.placeholder": "Select desk",
     "accounts.pay.method.placeholder": "Select type",
     "accounts.pay.transaction.placeholder": "Enter check #, etc.",
-    "accounts.pay.fully": "Paid Fully",
-    "accounts.pay.partially": "Paid Partially",
+    "accounts.pay.fully": "Paid fully",
+    "accounts.pay.partially": "Paid partially",
     "accounts.pay.closed": "Closed",
     "accounts.status.outstanding": "Outstanding",
     "accounts.viewAllAccounts": "View all accounts",
@@ -856,5 +856,10 @@
     "reports.overdue.borrowerId": "ID de prestatario",
     "errors.barcodeUnavailable": "This barcode has already been taken",
     "reports.overdue.loanPolicy.name": "Política de préstamo",
-    "reports.overdue.loanId": "ID de préstamo"
+    "reports.overdue.loanId": "ID de préstamo",
+    "activeUserStatus": "active",
+    "inactiveUserStatus": "inactive",
+    "reports.overdue.feeFine": "Fee/Fine",
+    "user": "User",
+    "user.pluralized": "{count} {count, plural, one {user} other {users}}"
 }

@@ -20,8 +20,13 @@ import {
   AppIcon,
   TitleManager
 } from '@folio/stripes/core';
-import { Field } from 'redux-form';
-import stripesForm from '@folio/stripes/form';
+import {
+  reduxForm,
+  Field,
+  formValueSelector,
+} from 'redux-form';
+
+import { connect } from 'react-redux';
 import { ViewMetaData } from '@folio/stripes/smart-components';
 import moment from 'moment';
 import {
@@ -33,6 +38,7 @@ import UserInfo from '../Accounts/ChargeFeeFine/UserInfo';
 
 const validate = (item) => {
   const errors = {};
+
   if (!item.desc) {
     errors.desc = <FormattedMessage id="ui-users.blocks.form.validate.desc" />;
   }
@@ -44,6 +50,7 @@ const validate = (item) => {
   if (moment(moment(item.expirationDate).format()).isBefore(moment().format())) {
     errors.expirationDate = <FormattedMessage id="ui-users.blocks.form.validate.future" />;
   }
+
   return errors;
 };
 
@@ -58,12 +65,12 @@ class PatronBlockForm extends React.Component {
     selectedItem: PropTypes.object,
     onDeleteItem: PropTypes.func,
     onClose: PropTypes.func,
-    initialize: PropTypes.func,
     handleSubmit: PropTypes.func.isRequired,
     connect: PropTypes.func,
     intl: intlShape.isRequired,
-    readOnly: PropTypes.bool,
     stripes: PropTypes.object,
+    initialValues: PropTypes.object,
+    currentValues: PropTypes.object,
   };
 
   constructor(props) {
@@ -71,7 +78,6 @@ class PatronBlockForm extends React.Component {
 
     this.handleExpandAll = this.handleExpandAll.bind(this);
     this.handleSectionToggle = this.handleSectionToggle.bind(this);
-
     this.connectedViewMetaData = props.stripes.connect(ViewMetaData);
 
     this.state = {
@@ -80,39 +86,7 @@ class PatronBlockForm extends React.Component {
         blockActionsSection: true,
         prueba: true,
       },
-      borrowing: false,
-      renewals: false,
-      requests: false,
-      checkedBlocks: {},
     };
-  }
-
-  componentDidMount() {
-    const item = this.props.selectedItem || {};
-    const state = {
-      borrowing: (item.id) ? item.borrowing : true,
-      renewals: (item.id) ? item.renewals : true,
-      requests: (item.id) ? item.requests : true,
-    };
-    this.setState(state);
-    this.props.initialize(state);
-
-    if (item.id) {
-      this.props.initialize(item);
-    }
-  }
-
-  componentDidUpdate(prevProps) {
-    if (JSON.stringify(prevProps.selectedItem) !== JSON.stringify(this.props.selectedItem)) {
-      const item = this.props.selectedItem || {};
-      // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({
-        borrowing: item.borrowing,
-        renewals: item.renewals,
-        requests: item.requests,
-      });
-      this.props.initialize(item);
-    }
   }
 
   handleSectionToggle({ id }) {
@@ -134,7 +108,7 @@ class PatronBlockForm extends React.Component {
   renderFirstMenu = () => (
     <PaneMenu>
       <FormattedMessage id="ui-users.blocks.form.button.close">
-        { ariaLabel => (
+        {ariaLabel => (
           <PaneHeaderIconButton
             id="close-patron-block"
             onClick={this.props.onClose}
@@ -158,7 +132,7 @@ class PatronBlockForm extends React.Component {
       <Button marginBottom0 buttonStyle="primary" onClick={this.props.handleSubmit} disabled={pristine || submitting || invalid}>
         { params.patronblockid ? <FormattedMessage id="ui-users.blocks.form.button.save" /> : <FormattedMessage id="ui-users.blocks.form.button.create" />}
       </Button>;
-    const del = params.patronblockid ? <Button marginBottom0 buttonStyle="danger" onClick={this.props.onDeleteItem}><FormattedMessage id="ui-users.blocks.form.button.delete" /></Button> : '';
+    const del = params.patronblockid ? <Button id="patron-block-delete" marginBottom0 buttonStyle="danger" onClick={this.props.onDeleteItem}><FormattedMessage id="ui-users.blocks.form.button.delete" /></Button> : '';
 
     return (
       <PaneMenu>
@@ -168,60 +142,57 @@ class PatronBlockForm extends React.Component {
     );
   }
 
-  onToggleActions = (action) => {
-    const { readOnly } = this.props;
-
-    return (e) => {
-      if (readOnly) {
-        e.preventDefault();
-      }
-      this.setState(prevState => ({
-        [action]: !prevState[action],
-      }));
-    };
-  }
-
   render() {
-    const user = this.props.user || {};
-    const { intl, params } = this.props;
+    const {
+      intl,
+      params,
+      selectedItem,
+      user = {},
+      currentValues: {
+        borrowing,
+        renewals,
+        requests,
+      },
+    } = this.props;
     const title = params.patronblockid ? getFullName(user) : intl.formatMessage({ id: 'ui-users.blocks.layer.newBlockTitle' });
     const userD = !params.patronblockid ? <UserInfo user={user} /> : '';
 
-    const isSelectedItemMetadata = this.props.selectedItem || {};
-
     return (
-      <Paneset>
-        <Pane
-          firstMenu={this.renderFirstMenu()}
-          lastMenu={this.renderLastMenu()}
-          appIcon={<AppIcon app="users" size="small" />}
-          paneTitle={title}
-        >
-          <TitleManager />
-          {userD}
-          <Row end="xs">
-            <Col xs>
-              <ExpandAllButton accordionStatus={this.state.sections} onToggle={this.handleExpandAll} />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs>
-              <Accordion
-                label={<FormattedMessage id="ui-users.blocks.form.label.information" />}
-                id="blockInformationSection"
-                onToggle={this.handleSectionToggle}
-                open={this.state.sections.blockInformationSection}
-              >
-                { !_.isEmpty(isSelectedItemMetadata) ?
-                  <Row>
-                    <Col xs={12} sm={10} md={7} lg={5}>
-                      <this.connectedViewMetaData metadata={this.props.selectedItem.metadata} />
-                    </Col>
-                  </Row> : ''
+      <form id="patron-block-form">
+        <Paneset>
+          <Pane
+            id="title-patron-block"
+            defaultWidth="fill"
+            firstMenu={this.renderFirstMenu()}
+            lastMenu={this.renderLastMenu()}
+            appIcon={<AppIcon app="users" size="small" />}
+            paneTitle={title}
+          >
+            <TitleManager />
+            {userD}
+            <Row end="xs">
+              <Col xs id="collapse-patron-block">
+                <ExpandAllButton accordionStatus={this.state.sections} onToggle={this.handleExpandAll} />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs>
+                <Accordion
+                  id="blockInformationSection"
+                  label={<FormattedMessage id="ui-users.blocks.form.label.information" />}
+                  onToggle={this.handleSectionToggle}
+                  open={this.state.sections.blockInformationSection}
+                >
+                  {!_.isEmpty(selectedItem) ?
+                    <Row>
+                      <Col xs={12} sm={10} md={7} lg={5}>
+                        <this.connectedViewMetaData metadata={selectedItem.metadata} />
+                      </Col>
+                    </Row> : ''
                 }
-                <form>
+
                   <Row>
-                    <Col xs={12} sm={10} md={7} lg={5}>
+                    <Col id="patronBlockForm-desc" xs={12} sm={10} md={7} lg={5}>
                       <Field
                         name="desc"
                         label={<FormattedMessage id="ui-users.blocks.form.label.display" />}
@@ -232,7 +203,7 @@ class PatronBlockForm extends React.Component {
                     </Col>
                   </Row>
                   <Row>
-                    <Col xs={12} sm={10} md={7} lg={5}>
+                    <Col id="patronBlockForm-staffInformation" xs={12} sm={10} md={7} lg={5}>
                       <Field
                         name="staffInformation"
                         label={<FormattedMessage id="ui-users.blocks.form.label.staff" />}
@@ -243,7 +214,7 @@ class PatronBlockForm extends React.Component {
                     </Col>
                   </Row>
                   <Row>
-                    <Col xs={12} sm={10} md={7} lg={5}>
+                    <Col id="patronBlockForm-patronMessage" xs={12} sm={10} md={7} lg={5}>
                       <Field
                         label={<FormattedMessage id="ui-users.blocks.form.label.message" />}
                         name="patronMessage"
@@ -254,13 +225,12 @@ class PatronBlockForm extends React.Component {
                     </Col>
                   </Row>
                   <Row>
-                    <Col xs={12} sm={10} md={7} lg={5}>
+                    <Col id="patronBlockForm-expirationDate" xs={12} sm={10} md={7} lg={5}>
                       <Field
                         component={Datepicker}
                         dateFormat="YYYY/MM/DD"
                         name="expirationDate"
                         label={<FormattedMessage id="ui-users.blocks.form.label.date" />}
-                        backendDateStandard="YYYY/MM/DD"
                         timeZone="UTC"
                         useFocus
                       />
@@ -270,56 +240,58 @@ class PatronBlockForm extends React.Component {
                     <Col><FormattedMessage id="ui-users.blocks.form.label.block" /></Col>
                   </Row>
                   <Row>
-                    <Col xs={12} sm={10} md={7} lg={5}>
+                    <Col id="patronBlockForm-borrowing" xs={12} sm={10} md={7} lg={5}>
                       <Field
                         name="borrowing"
-                        id="borrowing"
+                        checked={borrowing}
                         label={<FormattedMessage id="ui-users.blocks.form.label.borrowing" />}
-                        checked={this.state.borrowing}
-                        value={this.state.borrowing}
-                        onChange={this.onToggleActions('borrowing')}
                         component={Checkbox}
                       />
                     </Col>
                   </Row>
                   <Row>
-                    <Col xs={12} sm={10} md={7} lg={5}>
+                    <Col id="patronBlockForm-renewals" xs={12} sm={10} md={7} lg={5}>
                       <Field
                         name="renewals"
-                        id="renewals"
+                        checked={renewals}
                         label={<FormattedMessage id="ui-users.blocks.form.label.renewals" />}
-                        checked={this.state.renewals}
-                        onChange={this.onToggleActions('renewals')}
-                        value={this.state.renewals}
                         component={Checkbox}
                       />
                     </Col>
                   </Row>
                   <Row>
-                    <Col xs={12} sm={10} md={7} lg={5}>
+                    <Col id="patronBlockForm-requests" xs={12} sm={10} md={7} lg={5}>
                       <Field
                         name="requests"
-                        id="requests"
+                        checked={requests}
                         label={<FormattedMessage id="ui-users.blocks.form.label.request" />}
                         component={Checkbox}
-                        checked={this.state.requests}
-                        onChange={this.onToggleActions('requests')}
-                        value={this.state.requests}
                       />
                     </Col>
                   </Row>
-                </form>
-              </Accordion>
-            </Col>
-          </Row>
-        </Pane>
-      </Paneset>
+                </Accordion>
+              </Col>
+            </Row>
+          </Pane>
+        </Paneset>
+      </form>
     );
   }
 }
 
-export default stripesForm({
-  form: 'patron-block-form',
+const PatronBlockReduxForm = reduxForm({
+  form: 'patronBlockForm',
+  enableReinitialize: false,
   validate,
-  fields: [],
 })(PatronBlockForm);
+
+const selector = formValueSelector('patronBlockForm');
+
+export default connect(state => ({
+  currentValues: selector(
+    state,
+    'borrowing',
+    'renewals',
+    'requests'
+  )
+}))(PatronBlockReduxForm);

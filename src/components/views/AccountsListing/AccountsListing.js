@@ -104,8 +104,6 @@ class AccountsHistory extends React.Component {
     }),
     okapi: PropTypes.object,
     user: PropTypes.object,
-    // onCancel: PropTypes.func.isRequired,
-    // onClickViewChargeFeeFine: PropTypes.func.isRequired,
     openAccounts: PropTypes.bool,
     patronGroup: PropTypes.object,
     mutator: PropTypes.shape({
@@ -155,7 +153,6 @@ class AccountsHistory extends React.Component {
     };
 
     this.handleActivate = this.handleActivate.bind(this);
-    this.handleOptionsChange = this.handleOptionsChange.bind(this);
     this.onChangeActions = this.onChangeActions.bind(this);
     this.onChangeSelected = this.onChangeSelected.bind(this);
     this.onChangeSelectedAccounts = this.onChangeSelectedAccounts.bind(this);
@@ -263,19 +260,6 @@ class AccountsHistory extends React.Component {
     this.editRecord = val;
   }
 
-  handleOptionsChange(itemMeta, e) {
-    e.preventDefault();
-    e.stopPropagation();
-
-    if (itemMeta.action && this[itemMeta.action]) {
-      this[itemMeta.action]();
-    }
-  }
-
-  payment() {
-    this.onChangeActions({ regular: true }, this.accounts);
-  }
-
   onChangeSearch = (e) => {
     const query = e.target.value;
     this.transitionToParams({ q: query });
@@ -283,10 +267,6 @@ class AccountsHistory extends React.Component {
 
   onClearSearch = () => {
     this.transitionToParams({ q: '' });
-  }
-
-  onClearSearchAndFilters = () => {
-    this.transitionToParams({ f: this.initialFilters || '', query: '', qindex: '' });
   }
 
   onChangeSelected(value, accounts = []) {
@@ -312,7 +292,7 @@ class AccountsHistory extends React.Component {
       .map((column, i) => {
         const name = columnMapping[column.title];
         return (
-          <li key={`columnitem-${i}`}>
+          <li id={`column-item-${i}`} key={`columnitem-${i}`}>
             <Checkbox
               label={name}
               name={name}
@@ -424,6 +404,7 @@ class AccountsHistory extends React.Component {
           pullRight
         >
           <Button
+            id="select-columns"
             data-role="toggle"
             bottomMargin0
           >

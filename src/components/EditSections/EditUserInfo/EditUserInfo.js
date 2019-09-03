@@ -1,7 +1,9 @@
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
+import { FormattedMessage } from 'react-intl';
+
+import { ViewMetaData } from '@folio/stripes/smart-components';
 import {
   Select,
   TextField,
@@ -11,7 +13,8 @@ import {
   Datepicker,
   Headline
 } from '@folio/stripes/components';
-import { ViewMetaData } from '@folio/stripes/smart-components';
+
+import css from './EditUserInfo.css';
 
 class EditUserInfo extends React.Component {
   static propTypes = {
@@ -107,6 +110,7 @@ class EditUserInfo extends React.Component {
               name="patronGroup"
               id="adduser_group"
               component={Select}
+              selectClass={css.patronGroup}
               fullWidth
               defaultValue={initialValues.patronGroup}
             >

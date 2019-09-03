@@ -188,7 +188,11 @@ class LoanDetails extends React.Component {
 
     mutator.loanActions.reset();
     mutator.loanActions.GET({ params: { query, limit } })
-      .then(loanActions => this.getUsers(loanActions));
+      .then(loanActions => {
+        // the map unwraps the loanActions objects, returning an array of loans
+        // instead of an array of objects containing loans.
+        this.getUsers(loanActions.map(i => i.loan));
+      });
   };
 
   getFeeFine() {

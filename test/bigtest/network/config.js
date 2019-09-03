@@ -4,6 +4,8 @@ import CQLParser from './cql';
 // typical mirage config export
 // http://www.ember-cli-mirage.com/docs/v0.4.x/configuration/
 export default function config() {
+  const server = this;
+
   // okapi endpoints
   this.get('/_/version', () => '0.0.0');
 
@@ -26,22 +28,25 @@ export default function config() {
     configs: []
   });
   this.post('/bl-users/login', () => {
-    return new Response(201, {
-      'X-Okapi-Token': `myOkapiToken:${Date.now()}`
-    }, {
-      user: {
-        id: 'test',
-        username: 'testuser',
-        personal: {
-          lastName: 'User',
-          firstName: 'Test',
-          email: 'user@folio.org',
+    return new Response(
+      201,
+      {
+        'X-Okapi-Token': `myOkapiToken:${Date.now()}`
+      }, {
+        user: {
+          id: 'test',
+          username: 'testuser',
+          personal: {
+            lastName: 'User',
+            firstName: 'Test',
+            email: 'user@folio.org',
+          }
+        },
+        permissions: {
+          permissions: []
         }
-      },
-      permissions: {
-        permissions: []
       }
-    });
+    );
   });
   this.get('/groups', {
     'usergroups': [{
@@ -167,7 +172,7 @@ export default function config() {
   });
 
   this.get('loan-storage/loan-history', {
-    loans: [],
+    loansHistory: [],
     totalRecords: 0,
   });
 
@@ -176,35 +181,35 @@ export default function config() {
   });
 
   this.get('/loan-policy-storage/loan-policies', {
-    'loanPolicies' : [{
-      'id' : 'test',
-      'name' : 'Example Loan Policy',
-      'description' : 'An example loan policy',
-      'loanable' : true,
-      'loansPolicy' : {
-        'profileId' : 'Rolling',
-        'period' : {
-          'duration' : 1,
-          'intervalId' : 'Months'
+    'loanPolicies': [{
+      'id': 'test',
+      'name': 'Example Loan Policy',
+      'description': 'An example loan policy',
+      'loanable': true,
+      'loansPolicy': {
+        'profileId': 'Rolling',
+        'period': {
+          'duration': 1,
+          'intervalId': 'Months'
         },
-        'closedLibraryDueDateManagementId' : 'KEEP_CURRENT_DATE',
-        'gracePeriod' : {
-          'duration' : 7,
-          'intervalId' : 'Days'
+        'closedLibraryDueDateManagementId': 'KEEP_CURRENT_DATE',
+        'gracePeriod': {
+          'duration': 7,
+          'intervalId': 'Days'
         }
       },
-      'renewable' : true,
-      'renewalsPolicy' : {
-        'unlimited' : true,
-        'renewFromId' : 'CURRENT_DUE_DATE',
-        'differentPeriod' : true,
-        'period' : {
-          'duration' : 30,
-          'intervalId' : 'Days'
+      'renewable': true,
+      'renewalsPolicy': {
+        'unlimited': true,
+        'renewFromId': 'CURRENT_DUE_DATE',
+        'differentPeriod': true,
+        'period': {
+          'duration': 30,
+          'intervalId': 'Days'
         }
       }
     }],
-    'totalRecords' : 1
+    'totalRecords': 1
   });
 
   this.get('accounts', {
@@ -272,5 +277,106 @@ export default function config() {
     totalRecords: 0,
   });
 
-  this.get('/authn/credentials-existence', () => {});
+  this.get('/authn/credentials-existence', () => { });
+
+  this.get('/note-types');
+
+  this.post('/note-types', ({ requestBody }) => {
+    const noteTypeData = JSON.parse(requestBody);
+
+    return server.create('note-type', noteTypeData);
+  });
+
+  this.put('/note-types/:id', ({ noteTypes }, { params, requestBody }) => {
+    const noteTypeData = JSON.parse(requestBody);
+
+    return noteTypes.find(params.id).update(noteTypeData);
+  });
+
+  this.delete('/note-types/:id', ({ noteTypes }, { params }) => {
+    return noteTypes.find(params.id).destroy();
+  });
+
+  this.get('/note-links/domain/users/type/:type/id/:id', ({ notes }, { params, queryParams }) => {
+    if (queryParams.status === 'all') {
+      return notes.all();
+    }
+
+    return notes.where((note) => {
+      switch (queryParams.status) {
+        case 'assigned': {
+          return note.links.some(link => {
+            return link.type === params.type && link.id === params.id;
+          });
+        }
+        case 'unassigned': {
+          return note.links.every(link => {
+            return link.type !== params.type || link.id !== params.id;
+          });
+        }
+        default: {
+          return false;
+        }
+      }
+    });
+  });
+
+
+  this.put('/note-links/type/:type/id/:id', ({ notes }, { params, requestBody }) => {
+    const body = JSON.parse(requestBody);
+
+    body.notes.forEach((note) => {
+      const dbNote = notes.find(note.id);
+      const links = [...dbNote.links];
+
+      if (note.status === 'ASSIGNED') {
+        links.push({
+          id: params.id,
+          type: params.type,
+        });
+      } else {
+        for (let i = 0; i < links.length; i++) {
+          if (links[i].type === params.type && links[i].id === params.id) {
+            links.splice(i, 1);
+            break;
+          }
+        }
+      }
+
+      dbNote.update({ links });
+    });
+  });
+
+  this.get('/notes/:id', ({ notes }, { params }) => {
+    return notes.find(params.id);
+  });
+
+  this.post('/notes', (_, { requestBody }) => {
+    const noteData = JSON.parse(requestBody);
+
+    return this.create('note', noteData);
+  });
+
+  this.put('/notes/:id', ({ notes, noteTypes }, { params, requestBody }) => {
+    const noteData = JSON.parse(requestBody);
+    const noteTypeName = noteTypes.find(noteData.typeId).attrs.name;
+
+    return notes.find(params.id).update({
+      ...noteData,
+      type: noteTypeName,
+    });
+  });
+
+  this.delete('/notes/:id', ({ notes, noteTypes }, { params }) => {
+    const note = notes.find(params.id);
+    const noteType = noteTypes.find(note.attrs.typeId);
+
+    noteType.update({
+      usage: {
+        noteTotal: --noteType.attrs.usage.noteTotal,
+      },
+    });
+
+    return notes.find(params.id).destroy();
+  });
 }

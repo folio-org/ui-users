@@ -9,8 +9,8 @@ import {
   Paneset,
   Pane,
   PaneMenu,
-  Icon,
-  IconButton,
+  PaneHeaderIconButton,
+  PaneFooter,
   Button,
   ExpandAllButton,
   expandAllFunction,
@@ -205,7 +205,7 @@ class UserForm extends React.Component {
       <PaneMenu>
         <FormattedMessage id="ui-users.crud.closeNewUserDialog">
           {ariaLabel => (
-            <IconButton
+            <PaneHeaderIconButton
               id="clickable-closenewuserdialog"
               onClick={this.handleCancel}
               ref={this.closeButton}
@@ -214,27 +214,6 @@ class UserForm extends React.Component {
             />
           )}
         </FormattedMessage>
-      </PaneMenu>
-    );
-  }
-
-  getLastMenu(id, label) {
-    const {
-      pristine,
-      submitting,
-    } = this.props;
-
-    return (
-      <PaneMenu>
-        <Button
-          id={id}
-          type="submit"
-          disabled={pristine || submitting}
-          buttonStyle="primary paneHeaderNewButton"
-          marginBottom0
-        >
-          {label}
-        </Button>
       </PaneMenu>
     );
   }
@@ -293,25 +272,38 @@ class UserForm extends React.Component {
     submitter();
   }
 
-  getActionMenu = ({ onToggle }) => {
-    const { onCancel } = this.props;
-    const handleClick = () => {
-      onCancel();
-      onToggle();
-    };
+  getPaneFooter() {
+    const {
+      pristine,
+      submitting,
+      invalid,
+      onCancel,
+    } = this.props;
+
+    const disabled = pristine || submitting || invalid;
 
     return (
-      <Button
-        data-test-cancel-user-form-action
-        buttonStyle="dropdownItem"
-        onClick={handleClick}
-      >
-        <Icon icon="times-circle">
+      <PaneFooter>
+        <Button
+          data-test-user-form-cancel-button
+          id="clickable-cancel"
+          buttonStyle="default mega"
+          onClick={onCancel}
+        >
           <FormattedMessage id="ui-users.cancel" />
-        </Icon>
-      </Button>
+        </Button>
+        <Button
+          data-test-user-form-submit-button
+          id="clickable-save"
+          buttonStyle="primary mega"
+          type="submit"
+          disabled={disabled}
+        >
+          <FormattedMessage id="ui-users.saveAndClose" />
+        </Button>
+      </PaneFooter>
     );
-  };
+  }
 
   render() {
     const {
@@ -319,19 +311,16 @@ class UserForm extends React.Component {
       handleSubmit,
       formData,
       stripes,
+      fullName,
       change, // from redux-form...
     } = this.props;
 
     const { sections } = this.state;
     const firstMenu = this.getAddFirstMenu();
-    const fullName = getFullName(initialValues);
+    const footer = this.getPaneFooter();
     const paneTitle = initialValues.id
       ? fullName
       : <FormattedMessage id="ui-users.crud.createUser" />;
-
-    const lastMenu = initialValues.id
-      ? this.getLastMenu('clickable-updateuser', <FormattedMessage id="ui-users.crud.updateUser" />)
-      : this.getLastMenu('clickable-createnewuser', <FormattedMessage id="ui-users.crud.createUser" />);
 
     return (
       <HasCommand commands={this.keyboardCommands}>
@@ -344,9 +333,8 @@ class UserForm extends React.Component {
           <Paneset>
             <Pane
               defaultWidth="100%"
-              actionMenu={this.getActionMenu}
               firstMenu={firstMenu}
-              lastMenu={lastMenu}
+              footer={footer}
               appIcon={<AppIcon app="users" appIconKey="users" />}
               paneTitle={
                 <span data-test-header-title>

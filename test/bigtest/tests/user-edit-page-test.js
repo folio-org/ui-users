@@ -74,17 +74,11 @@ describe('User Edit Page', () => {
 
     describe('pane header menu', () => {
       beforeEach(async () => {
-        await UserFormPage.headerDropdown.click();
+        await UserFormPage.cancelButton.click();
       });
 
-      describe('clicking on cancel', () => {
-        beforeEach(async () => {
-          await UserFormPage.headerDropdownMenu.clickCancel();
-        });
-
-        it('should redirect to view users page after click', () => {
-          expect(users.$root).to.exist;
-        });
+      it('should redirect to view users page after click', () => {
+        expect(users.$root).to.exist;
       });
     });
   });
