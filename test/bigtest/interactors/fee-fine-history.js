@@ -58,7 +58,7 @@ import CheckboxInteractor  from '@folio/stripes-components/lib/Checkbox/tests/in
   ellipsisMenuIsPresent = isPresent('#ellipsis-drop-down');
   loanDetailsIsPresent = isPresent('#pane-loandetails');
 
-  payModal = new ModalInteractor('#pay-modal');
+  payModal = new ModalInteractor('#payment-modal');
   waiveModal = new ModalInteractor('#waive-modal');
   cancelModal = new ModalInteractor('#error-modal');
   transferModal = new ModalInteractor('#transfer-modal');

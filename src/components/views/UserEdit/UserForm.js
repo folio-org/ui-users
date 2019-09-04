@@ -26,16 +26,15 @@ import {
   EditExtendedInfo,
   EditContactInfo,
   EditProxy,
-  EditUserPerms,
   EditServicePoints,
 } from '../../EditSections';
-
 import { HasCommand } from '../../Commander';
-
+import { getFullName } from '../../util';
+import PermissionsAccordion from '../../PermissionsAccordion';
 import {
-  getFullName,
-  // getRecordObject
-} from '../../util';
+  statusFilterConfig,
+  permissionTypeFilterConfig,
+} from '../../PermissionsAccordion/helpers/filtersConfig';
 
 import css from './UserForm.css';
 
@@ -393,11 +392,26 @@ class UserForm extends React.Component {
                         stripes={stripes}
                         change={change}
                       />
-                      <EditUserPerms
+                      <PermissionsAccordion
+                        filtersConfig={[
+                          permissionTypeFilterConfig,
+                          statusFilterConfig,
+                        ]}
+                        visibleColumns={[
+                          'selected',
+                          'permissionName',
+                          'type',
+                          'status',
+                        ]}
                         accordionId="permissions"
                         expanded={sections.permissions}
                         onToggle={this.handleSectionToggle}
-                        {...this.props}
+                        headlineContent={<FormattedMessage id="ui-users.permissions.userPermissions" />}
+                        permToRead="perms.permissions.get"
+                        permToDelete="perms.permissions.item.delete"
+                        permToModify="perms.permissions.item.put"
+                        formName="userForm"
+                        permissionsField="permissions"
                       />
                       <EditServicePoints
                         accordionId="servicePoints"

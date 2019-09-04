@@ -1,0 +1,15 @@
+.selectableCellButton {
+  & label {
+    &:before,
+    &:after {
+      content: none;
+    }
+
+    & input {
+      margin: 0;
+    }
+
+  justify-content: center;
+  margin-bottom: 0;
+  }
+}

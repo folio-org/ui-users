@@ -37,7 +37,7 @@ import {
 
 const filterConfig = [
   {
-    label: <FormattedMessage id="ui-users.feefines.ownerLabel" />,
+    label: <FormattedMessage id="ui-users.accounts.history.columns.owner" />,
     name: 'owner',
     cql: 'feeFineOwner',
     values: [],
