@@ -45,12 +45,12 @@ describe('User notes flow', function () {
       links: [{ type: 'user', id: 'someId2' }],
     });
 
-    this.visit(`/users/view/${user.id}`);
+    this.visit(`/users/preview/${user.id}`);
   });
 
   describe('when the user details pane is visited', () => {
     beforeEach(async function () {
-      this.visit(`/users/view/${user.id}`);
+      this.visit(`/users/preview/${user.id}`);
       await notesAccordion.toggleAccordion();
     });
 
@@ -93,7 +93,7 @@ describe('User notes flow', function () {
         });
 
         it('should redirect to previous location', function () {
-          expect(this.location.pathname + this.location.search).to.equal(`/users/view/${user.id}?sort=name`);
+          expect(this.location.pathname + this.location.search).to.equal(`/users/preview/${user.id}`);
         });
       });
 
@@ -160,7 +160,7 @@ describe('User notes flow', function () {
               });
 
               it('should redirect to previous page', function () {
-                expect(this.location.pathname + this.location.search).to.equal(`/users/view/${user.id}?sort=name`);
+                expect(this.location.pathname + this.location.search).to.equal(`/users/preview/${user.id}`);
               });
             });
           });
@@ -171,7 +171,7 @@ describe('User notes flow', function () {
             });
 
             it('should redirect to previous page', function () {
-              expect(this.location.pathname + this.location.search).to.equal(`/users/view/${user.id}?sort=name`);
+              expect(this.location.pathname + this.location.search).to.equal(`/users/preview/${user.id}`);
             });
 
             it('notes accordion should contain 2 notes', () => {
@@ -229,7 +229,7 @@ describe('User notes flow', function () {
         });
 
         it('should redirect to previous location', function () {
-          expect(this.location.pathname + this.location.search).to.equal(`/users/view/${user.id}?sort=name`);
+          expect(this.location.pathname + this.location.search).to.equal(`/users/preview/${user.id}`);
         });
       });
 
@@ -258,7 +258,7 @@ describe('User notes flow', function () {
           });
 
           it('should redirect to user details page', function () {
-            expect(this.location.pathname + this.location.search).to.equal(`/users/view/${user.id}?sort=name`);
+            expect(this.location.pathname + this.location.search).to.equal(`/users/preview/${user.id}`);
           });
         });
       });

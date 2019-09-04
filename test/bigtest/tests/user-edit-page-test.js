@@ -42,31 +42,31 @@ describe('User Edit Page', () => {
     describe('validating user barcode', () => {
       beforeEach(async function () {
         await UserFormPage.barcodeField.fillAndBlur(user2.barcode);
-        await UserFormPage.clickSave();
+        await UserFormPage.submitButton.click();
       });
-  
+
       it('should display validation error', () => {
         expect(UserFormPage.barcodeError).to.equal('This barcode has already been taken');
       });
     });
-  
+
     describe('validating empty user barcode', () => {
       beforeEach(async function () {
         await UserFormPage.barcodeField.fillAndBlur('');
-        await UserFormPage.clickSave();
+        await UserFormPage.submitButton.click();
       });
-  
+
       it('should show user detail view', () => {
         expect(InstanceViewPage.isVisible).to.equal(true);
       });
     });
-  
+
     describe('validating username', () => {
       beforeEach(async function () {
         await UserFormPage.usernameField.fillAndBlur(user2.username);
-        await UserFormPage.clickSave();
+        await UserFormPage.submitButton.click();
       });
-  
+
       it('should display validation error', () => {
         expect(UserFormPage.barcodeError).to.equal('This username already exists');
       });

@@ -8,11 +8,11 @@ import { expect } from 'chai';
 import setupApplication from '../helpers/setup-application';
 import FeeFineHistoryInteractor from '../interactors/fee-fine-history';
 
-describe('Test Fee/Fine History', () => {
+describe.only('Test Fee/Fine History', () => {
   setupApplication({ scenarios: ['view-fees-fines'] });
 
   beforeEach(async function () {
-    this.visit('/users/view/ce0e0d5b-b5f3-4ad5-bccb-49c0784298fd');
+    this.visit('/users/preview/ce0e0d5b-b5f3-4ad5-bccb-49c0784298fd');
     await FeeFineHistoryInteractor.whenSectionLoaded();
   });
 
@@ -62,7 +62,7 @@ describe('Test Fee/Fine History', () => {
             expect(FeeFineHistoryInteractor.filterPaneVisible).to.be.true;
           });
 
-          describe('close the Search & filter pane', () => {
+          describe.only('close the Search & filter pane', () => {
             beforeEach(async () => {
               await FeeFineHistoryInteractor.searchField.fillInput('Missing item');
               await FeeFineHistoryInteractor.checkList(0).clickAndBlur();

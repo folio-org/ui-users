@@ -22,7 +22,7 @@ describe('Test Patron Blocks renewals', () => {
     const user = this.server.create('user', { id: '1ad737b0-d847-11e6-bf26-cec0c932ce02' });
 
     this.server.createList('loan', 3, { status: { name: 'Open' }, userId: user.id });
-    this.visit(`/users/view/${user.id}?layer=open-loans`);
+    this.visit(`/users/${user.id}/loans/open`);
 
     await LoansInteractor.whenLoaded();
     await PatronBlocksInteractor.selectAllCheckbox();

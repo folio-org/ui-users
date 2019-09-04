@@ -129,7 +129,7 @@ class PatronBlockForm extends React.Component {
     } = this.props;
 
     const submit =
-      <Button marginBottom0 buttonStyle="primary" onClick={this.props.handleSubmit} disabled={pristine || submitting || invalid}>
+      <Button id="patron-block-save-close" marginBottom0 buttonStyle="primary" onClick={this.props.handleSubmit} disabled={pristine || submitting || invalid}>
         { params.patronblockid ? <FormattedMessage id="ui-users.blocks.form.button.save" /> : <FormattedMessage id="ui-users.blocks.form.button.create" />}
       </Button>;
     const del = params.patronblockid ? <Button id="patron-block-delete" marginBottom0 buttonStyle="danger" onClick={this.props.onDeleteItem}><FormattedMessage id="ui-users.blocks.form.button.delete" /></Button> : '';

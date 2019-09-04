@@ -77,7 +77,7 @@ describe('Open Loans', () => {
           });
 
           it('should be redirected to "requests"', function () {
-            expect(location().pathname).to.to.equal(requestsPath);
+            expect(this.location.pathname).to.to.equal(requestsPath);
           });
         });
       });

@@ -63,6 +63,7 @@ class ActionsDropdown extends React.Component {
             <Button
               buttonStyle="dropdownItem"
               onClick={(e) => { handleOptionsChange({ loan, action:'renew' }, e); }}
+              data-test-dropdown-content-renew-button
             >
               <FormattedMessage id="ui-users.renew" />
             </Button>
@@ -72,6 +73,7 @@ class ActionsDropdown extends React.Component {
             <Button
               buttonStyle="dropdownItem"
               onClick={(e) => { handleOptionsChange({ loan, action:'changeDueDate' }, e); }}
+              data-test-dropdown-content-change-due-date-button
             >
               <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />
             </Button>

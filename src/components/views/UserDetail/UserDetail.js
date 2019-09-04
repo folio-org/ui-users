@@ -26,6 +26,10 @@ import {
 } from '@folio/stripes/components';
 
 import {
+  NotesSmartAccordion
+} from '@folio/stripes/smart-components';
+
+import {
   UserInfo,
   ExtendedInfo,
   ContactInfo,
@@ -135,6 +139,7 @@ class UserDetail extends React.Component {
         accountsSection: false,
         permissionsSection: false,
         servicePointsSection: false,
+        notesAccordion: false,
       },
     };
   }
@@ -500,6 +505,18 @@ class UserDetail extends React.Component {
                   />
                 </IfInterface>
               </IfPermission>
+              <NotesSmartAccordion
+                domainName="users"
+                entityId={match.params.id}
+                entityName={getFullName(user)}
+                open={this.state.sections.notesAccordion}
+                onToggle={this.handleSectionToggle}
+                id="notesAccordion"
+                entityType="user"
+                pathToNoteCreate="/users/notes/new"
+                pathToNoteDetails="/users/notes"
+                hideAssignButton
+              />
             </AccordionSet>
           </Pane>
           { helperApp && <HelperApp appName={helperApp} onClose={this.closeHelperApp} /> }
