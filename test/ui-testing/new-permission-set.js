@@ -6,6 +6,7 @@ module.exports.test = function foo(uiTestCtx) {
     const nightmare = new Nightmare(config.nightmare);
     this.timeout(Number(config.test_timeout));
 
+    // eslint-disable-next-line no-unused-vars
     const waitText = (label) => {
       return Array.from(
         document.querySelectorAll('ul[class*="PermissionList"] li')
@@ -43,14 +44,15 @@ module.exports.test = function foo(uiTestCtx) {
           .insert('#input-permission-description', description)
           .wait('#clickable-add-permission')
           .click('#clickable-add-permission')
-          .wait('ul[class*="PermissionList"] li button[data-permission-name="ui-users.create"]')
-          .click('ul[class*="PermissionList"] li button[data-permission-name="ui-users.create"]')
-          .wait('#permSection ul li[data-permission-name="ui-users.create"]')
-          .click('#clickable-add-permission')
-          .wait('ul[class*="PermissionList"] li button[data-permission-name="ui-users.viewproxies"]')
-          .click('ul[class*="PermissionList"] li button[data-permission-name="ui-users.viewproxies"]')
-          .wait('#permSection ul li[data-permission-name="ui-users.viewproxies"]')
-          .wait(() => Array.from(document.querySelectorAll('#permSection ul li').length === 2))
+          .wait('#list-permissions[aria-rowcount]')
+          .wait('#list-permissions[aria-rowcount] [data-permission-name="ui-users.create"]')
+          .click('#list-permissions[aria-rowcount] [data-permission-name="ui-users.create"]')
+          .wait('#list-permissions[aria-rowcount] [data-permission-name="ui-users.viewproxies"]')
+          .click('#list-permissions[aria-rowcount] [data-permission-name="ui-users.viewproxies"]')
+          .wait('#clickable-permissions-modal-save')
+          .click('#clickable-permissions-modal-save')
+          .wait('#permSection [data-permission-name="ui-users.create"]')
+          .wait('#permSection [data-permission-name="ui-users.viewproxies"]')
           .wait('#clickable-save-permission-set')
           .wait(() => !document.querySelector('#clickable-save-permission-set[disabled]'))
           .click('#clickable-save-permission-set')
