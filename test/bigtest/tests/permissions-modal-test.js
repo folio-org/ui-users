@@ -10,7 +10,7 @@ import PermissionSetForm from '../interactors/permission-set-form';
 import UserFormPage from '../interactors/user-form-page';
 import translation from '../../../translations/ui-users/en';
 
-describe('user edit form', () => {
+describe('Edit permissions', () => {
   setupApplication({ scenarios: ['comments'] });
   const permissionsAmount = 10;
   let user;
@@ -19,7 +19,7 @@ describe('user edit form', () => {
     this.server.createList('permissions', permissionsAmount);
     user = this.server.create('user');
 
-    this.visit(`/users/view/${user.id}?layer=edit&query=%20&sort=name`);
+    this.visit(`/users/${user.id}/edit`);
     await UserFormPage.whenLoaded();
     await UserFormPage.togglePermissionAccordionButton.click();
   });
