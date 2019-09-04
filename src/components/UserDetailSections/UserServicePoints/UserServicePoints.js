@@ -31,8 +31,7 @@ class UserServicePoints extends React.Component {
     let servicePointPreference;
     if (preferredServicePoint === '-') {
       servicePointPreference = <FormattedMessage id="ui-users.sp.preferredSPNone" />;
-    } else {
-      if (!servicePoints) return null;
+    } else if (servicePoints.length > 0) {
       const servicePoint = servicePoints.find(sp => sp.id === preferredServicePoint);
       if (!servicePoint) return null;
       servicePointPreference = servicePoint.name;

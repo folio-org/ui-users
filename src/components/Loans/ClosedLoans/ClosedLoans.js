@@ -359,7 +359,7 @@ class ClosedLoans extends React.Component {
           </MenuItem>
           <MenuItem itemMeta={{ loan, action: 'feefinedetails' }}>
             <Button
-              disabled={!(accountsLoan.length > 0)}
+              disabled={accountsLoan.length === 0}
               buttonStyle="dropdownItem"
               to={accountsLoan.length > 0 ? { pathname: this.getFeeFinePath(loan) } : undefined}
             >

@@ -152,7 +152,7 @@ class ChargeFeesFinesContainer extends React.Component {
     const userLoans = (resources.loan || {}).records || [];
     if (userLoans.length === 0 || !params.loanid) return null;
     const loan = userLoans.find(l => l.id === params.loanid) || {};
-    if (loan) {
+    if (Object.keys(loan).length > 0) {
       loan.item = (resources.loanItem || {}).records[0] || {};
     }
     return loan;
