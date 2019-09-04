@@ -69,7 +69,6 @@ class PatronBlockForm extends React.Component {
     connect: PropTypes.func,
     intl: intlShape.isRequired,
     stripes: PropTypes.object,
-    initialValues: PropTypes.object,
     currentValues: PropTypes.object,
   };
 

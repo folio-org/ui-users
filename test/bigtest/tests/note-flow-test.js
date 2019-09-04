@@ -6,6 +6,7 @@ import setupApplication from '../helpers/setup-application';
 import NotesAccordion from '../interactors/notes-accordion';
 import NoteForm from '../interactors/note-form';
 import NoteView from '../interactors/note-view';
+import InstanceViewPage from '../interactors/user-view-page';
 import { getFullName } from '../../../src/components/util';
 
 const notesAccordion = new NotesAccordion();
@@ -168,10 +169,11 @@ describe('User notes flow', function () {
           describe('and save button was clicked', () => {
             beforeEach(async () => {
               await noteForm.saveButton.click();
+              await InstanceViewPage.whenLoaded();
             });
 
             it('should redirect to previous page', function () {
-              expect(this.location.pathname + this.location.search).to.equal(`/users/preview/${user.id}`);
+              expect(this.location.pathname).to.equal(`/users/preview/${user.id}`);
             });
 
             it('notes accordion should contain 2 notes', () => {

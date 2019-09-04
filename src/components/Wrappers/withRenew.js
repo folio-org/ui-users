@@ -43,8 +43,6 @@ const withRenew = WrappedComponent => {
       this.connectedBulkRenewalDialog = props.stripes.connect(BulkRenewalDialog);
       this.state = {
         loans: [],
-        errors: [],
-        bulkRenewal: false,
         bulkRenewalDialogOpen: false,
         renewSuccess: [],
         renewFailure: [],
@@ -82,8 +80,7 @@ const withRenew = WrappedComponent => {
       }
     }
 
-    renewItem = (loan, patron, bulkRenewal) => {
-      this.setState({ bulkRenewal });
+    renewItem = (loan, patron) => {
       const params = {
         itemBarcode: loan.item.barcode,
         userBarcode: patron.barcode,
@@ -111,16 +108,10 @@ const withRenew = WrappedComponent => {
     };
 
     renew = (loans, patron) => {
-      const { patronBlocks } = this.props;
       const renewSuccess = [];
       const renewFailure = [];
       const errorMsg = {};
-      const countRenew = patronBlocks.filter(p => p.renewals);
       const bulkRenewal = (loans.length > 1);
-
-      if (!isEmpty(countRenew)) {
-        return this.setState({ patronBlockedModal: true });
-      }
 
       const renewedLoans = loans.map((loan) => {
         return this.renewItem(loan, patron, bulkRenewal)
@@ -166,7 +157,6 @@ const withRenew = WrappedComponent => {
 
     handleErrors = (error) => {
       const { errors } = error;
-      this.setState({ errors });
       return errors;
     };
 

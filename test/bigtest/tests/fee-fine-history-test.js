@@ -8,7 +8,7 @@ import { expect } from 'chai';
 import setupApplication from '../helpers/setup-application';
 import FeeFineHistoryInteractor from '../interactors/fee-fine-history';
 
-describe.only('Test Fee/Fine History', () => {
+describe('Test Fee/Fine History', () => {
   setupApplication({ scenarios: ['view-fees-fines'] });
 
   beforeEach(async function () {
@@ -62,7 +62,7 @@ describe.only('Test Fee/Fine History', () => {
             expect(FeeFineHistoryInteractor.filterPaneVisible).to.be.true;
           });
 
-          describe.only('close the Search & filter pane', () => {
+          describe('close the Search & filter pane', () => {
             beforeEach(async () => {
               await FeeFineHistoryInteractor.searchField.fillInput('Missing item');
               await FeeFineHistoryInteractor.checkList(0).clickAndBlur();

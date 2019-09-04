@@ -3,7 +3,6 @@ import {
   describe,
   it,
 } from '@bigtest/mocha';
-import { location } from '@bigtest/react';
 import { expect } from 'chai';
 
 import setupApplication from '../helpers/setup-application';

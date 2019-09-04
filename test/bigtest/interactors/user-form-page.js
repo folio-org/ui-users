@@ -2,12 +2,9 @@ import {
   interactor,
   clickable,
   text,
-  isPresent,
   fillable,
   blurrable,
   triggerable,
-  scoped,
-  collection,
 } from '@bigtest/interactor';
 
 import ButtonInteractor from '@folio/stripes-components/lib/Button/tests/interactor'; // eslint-disable-line

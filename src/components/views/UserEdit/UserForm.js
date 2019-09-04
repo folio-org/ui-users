@@ -311,13 +311,13 @@ class UserForm extends React.Component {
       handleSubmit,
       formData,
       stripes,
-      fullName,
       change, // from redux-form...
     } = this.props;
 
     const { sections } = this.state;
     const firstMenu = this.getAddFirstMenu();
     const footer = this.getPaneFooter();
+    const fullName = getFullName(initialValues);
     const paneTitle = initialValues.id
       ? fullName
       : <FormattedMessage id="ui-users.crud.createUser" />;

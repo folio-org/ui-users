@@ -256,7 +256,6 @@ class UserDetail extends React.Component {
   renderDetailMenu(user) {
     const {
       tagsEnabled,
-      match,
     } = this.props;
 
     const tags = ((user && user.tags) || {}).tagList || [];

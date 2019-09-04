@@ -46,7 +46,7 @@ describe('User Edit Page', () => {
       });
 
       it('should display validation error', () => {
-        expect(UserFormPage.barcodeError).to.equal('This barcode has already been taken');
+        expect(UserFormPage.feedbackError).to.equal('This barcode has already been taken');
       });
     });
 
@@ -68,7 +68,7 @@ describe('User Edit Page', () => {
       });
 
       it('should display validation error', () => {
-        expect(UserFormPage.barcodeError).to.equal('This username already exists');
+        expect(UserFormPage.feedbackError).to.equal('This username already exists');
       });
     });
 
