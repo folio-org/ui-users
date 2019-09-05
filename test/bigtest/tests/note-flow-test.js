@@ -47,11 +47,11 @@ describe('User notes flow', function () {
     });
 
     this.visit(`/users/preview/${user.id}`);
+    await InstanceViewPage.whenLoaded();
   });
 
   describe('when the user details pane is visited', () => {
     beforeEach(async function () {
-      this.visit(`/users/preview/${user.id}`);
       await notesAccordion.toggleAccordion();
     });
 
@@ -94,14 +94,14 @@ describe('User notes flow', function () {
         });
 
         it('should redirect to previous location', function () {
-          expect(this.location.pathname + this.location.search).to.equal(`/users/preview/${user.id}`);
+          expect(this.location.pathname).to.equal(`/users/preview/${user.id}`);
         });
       });
 
       describe('and the form is touched', () => {
         describe('and note title length is exceeded', () => {
           beforeEach(async () => {
-            await noteForm.noteTitleField.enterText(faker.lorem.words(100));
+            await noteForm.noteTitleField.enterText(faker.lorem.words(200));
           });
 
           it('should display title length error', () => {
@@ -319,7 +319,7 @@ describe('User notes flow', function () {
         describe('and the form is touched', () => {
           describe('and note title length is exceeded', () => {
             beforeEach(async () => {
-              await noteForm.noteTitleField.enterText(faker.lorem.words(100));
+              await noteForm.noteTitleField.enterText(faker.lorem.words(200));
             });
 
             it('should display title length error', () => {

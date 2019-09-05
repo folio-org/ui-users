@@ -62,8 +62,8 @@ import SelectInteractor from '@folio/stripes-components/lib/Select/tests/interac
 
   selectCheckbox = clickable('#checkbox');
 
-  isLoaded = isPresent('#list-accounts-history-view-feesfines > [class*=mclScrollable---] > div:nth-child(5)');
-  isView = isVisible('#list-accounts-history-view-feesfines > [class*=mclScrollable---]');
+  isLoaded = isPresent('#list-accounts-history-view-feesfines [class*=mclRowContainer---] > div:nth-child(5)');
+  isView = isVisible('#list-accounts-history-view-feesfines [class*=mclScrollable---]');
   // File
   openAccounts = clickable('#open-accounts');
   closedAccounts = clickable('#closed-accounts');

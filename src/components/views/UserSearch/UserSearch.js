@@ -145,8 +145,6 @@ class UserSearch extends React.Component {
 
     return (
       <div
-        role="row"
-        aria-rowindex={rowIndex + 2}
         key={`row-${rowIndex}`}
       >
         <Link

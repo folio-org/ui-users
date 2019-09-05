@@ -198,6 +198,7 @@ class OpenLoansWithStaticData extends React.Component {
       user,
       possibleColumns,
       hideChangeDueDateDialog,
+      requestCounts,
       renewSelected,
       showChangeDueDateDialog,
       toggleColumn,
@@ -233,6 +234,7 @@ class OpenLoansWithStaticData extends React.Component {
           loans={loans}
           visibleColumns={visibleColumns}
           sortMap={this.sortMap}
+          requestCounts={requestCounts}
           loanFormatter={this.loanFormatter}
           columnMapping={this.columnMapping}
           sortOrder={this.sortOrder}

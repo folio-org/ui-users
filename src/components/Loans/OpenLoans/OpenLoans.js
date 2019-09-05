@@ -17,6 +17,7 @@ class OpenLoans extends React.Component {
     loans: PropTypes.arrayOf(PropTypes.object).isRequired,
     sortMap: PropTypes.object.isRequired,
     loanFormatter: PropTypes.object.isRequired,
+    requestCounts: PropTypes.object.isRequired,
     columnMapping: PropTypes.object.isRequired,
     sortOrder: PropTypes.arrayOf(PropTypes.string).isRequired,
     visibleColumns: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -115,6 +116,8 @@ class OpenLoans extends React.Component {
     return columnsToDisplay;
   };
 
+  rowUpdater = (rowData) => this.props.requestCounts[rowData.itemId];
+
   render() {
     const {
       sortOrder,
@@ -145,6 +148,7 @@ class OpenLoans extends React.Component {
         <MultiColumnList
           id="list-loanshistory"
           fullWidth
+          rowUpdater={this.rowUpdater}
           formatter={loanFormatter}
           contentData={loansSorted}
           columnMapping={columnMapping}

@@ -63,7 +63,7 @@ const PermissionsList = (props) => {
       <MultiColumnList
         id="list-permissions"
         columnWidths={{
-          selected: '35',
+          selected: '35px',
           status: '20%',
           type: '25%',
         }}

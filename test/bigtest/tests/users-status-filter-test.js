@@ -9,19 +9,20 @@ import { expect } from 'chai';
 import setupApplication from '../helpers/setup-application';
 import UsersInteractor from '../interactors/users';
 
-setupApplication();
-const activeUsersAmount = 4;
-const inactiveUsersAmount = 8;
-const allUsers = activeUsersAmount + inactiveUsersAmount;
-
-beforeEach(async function () {
-  this.server.createList('user', activeUsersAmount, { active: true });
-  this.server.createList('user', inactiveUsersAmount, { active: false });
-  this.visit('/users?sort=Name');
-});
-
 describe('Status filter', () => {
+  setupApplication();
+  const activeUsersAmount = 4;
+  const inactiveUsersAmount = 8;
+  const allUsers = activeUsersAmount + inactiveUsersAmount;
+
   const users = new UsersInteractor();
+
+  beforeEach(async function () {
+    this.server.createList('user', activeUsersAmount, { active: true });
+    this.server.createList('user', inactiveUsersAmount, { active: false });
+    this.visit('/users?sort=Name');
+    await users.whenLoaded();
+  });
 
   describe('show inactive users', () => {
     beforeEach(async function () {

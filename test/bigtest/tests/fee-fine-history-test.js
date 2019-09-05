@@ -51,7 +51,7 @@ describe('Test Fee/Fine History', () => {
 
         it('renders proper amount of rows', () => {
           expect(FeeFineHistoryInteractor.mclViewFeesFines.rowCount).to.equal(5);
-        }).timeout(7000);
+        });
 
         describe('activate the Search & filter', () => {
           beforeEach(async () => {
