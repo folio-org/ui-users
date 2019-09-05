@@ -84,15 +84,10 @@ class CommentModal extends React.Component {
           <br />
           <Row>
             <Col xs>
-              <FormattedMessage id="ui-users.accounts.comment.field.enterComment">
-                {placeholder => (
                   <Field
                     name="comment"
                     component={TextArea}
-                    placeholder={placeholder}
                   />
-                )}
-              </FormattedMessage>
             </Col>
           </Row>
           <Row>

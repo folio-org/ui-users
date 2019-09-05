@@ -758,7 +758,7 @@
   "accounts.cancellation.feeFinewillBeCancelled": "<b>{amount}</b> {feeFineType} fee/fine will be <b>cancelled</b>",
   "accounts.cancellation.error.comment": "Comment must be provided",
 
-  "accounts.comment.field.comment": "Comment",
+  "accounts.comment.field.comment": "Additional information for staff",
   "accounts.comment.field.save": "Save",
   "accounts.comment.field.cancel": "Cancel",
   "accounts.comment.staffInfo": "Staff info only",
@@ -822,8 +822,7 @@
   "override.autoNewDueDate": "Due date will be calculated automatically",
   "override.emptyNewDueDate": "Select due date above",
 
-  "accounts.comment.field.feeFineComment": "Fee/fine comment",
-  "accounts.comment.field.enterComment": "Enter a comment",
+  "accounts.comment.field.feeFineComment": "Staff information",
 
   "accounts.actions.calloutMessage": "The {feeFineType} fee/fine of {amount} has been successfully {paymentStatus} for {name}.",
   "accounts.actions.payFeeFine": "Pay fees/fines",
