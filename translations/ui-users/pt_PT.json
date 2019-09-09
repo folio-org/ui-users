@@ -905,13 +905,13 @@
     "permissions.modal.list.pane.header": "Permissions",
     "permissions.modal.assigned": "Assigned",
     "permissions.modal.unassigned": "Unassigned",
-    "permissions.modal.filter.status.label": "Permission Assigment status",
+    "permissions.modal.filter.status.label": "Permission assigment status",
     "permissions.modal.filter.permissionType.label": "Permission types",
-    "permissions.modal.filter.permissionType.permissionSets": "Permission Sets",
+    "permissions.modal.filter.permissionType.permissionSets": "Permission sets",
     "permissions.modal.filter.permissionType.basePermissions": "Base permissions",
     "permissions.modal.type": "Type",
     "permissions.modal.base": "Base",
-    "permissions.modal.permissionSet": "Permission Set",
+    "permissions.modal.permissionSet": "Permission set",
     "permissions.modal.save": "Save",
     "permissions.modal.cancel": "Cancel",
     "permissions.modal.search.header": "Search & filter",
@@ -919,5 +919,7 @@
     "permissions.modal.total": "Total selected: {count}",
     "permissions.modal.hideSearchPane": "Hide search and filters pane.",
     "permissions.modal.showSearchPane": "Show search and filters pane.",
-    "permissions.modal.numberOfFilters": "{count, number} {count, plural, one {applied filter} other {applied filters}}"
+    "permissions.modal.numberOfFilters": "{count, number} {count, plural, one {applied filter} other {applied filters}}",
+    "permissions.modal.filter.permissionType.permissions": "Permissions",
+    "permissions.modal.permission": "Permission"
 }

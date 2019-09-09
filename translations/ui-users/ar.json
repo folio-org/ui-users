@@ -919,5 +919,7 @@
     "permissions.modal.total": "إجمالي المحدد: {count}",
     "permissions.modal.hideSearchPane": "إخفاء لوحة البحث والمنقحات.",
     "permissions.modal.showSearchPane": "إظهار لوحة البحث والمنقحات",
-    "permissions.modal.numberOfFilters": "{count, number} {count, plural, one {منقح مطبق} other {منقحات مطبقة}}"
+    "permissions.modal.numberOfFilters": "{count, number} {count, plural, one {منقح مطبق} other {منقحات مطبقة}}",
+    "permissions.modal.filter.permissionType.permissions": "صلاحيات",
+    "permissions.modal.permission": "صلاحية"
 }
