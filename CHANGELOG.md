@@ -11,6 +11,9 @@
 * Show all reasons when a loan renewal fails. Refs UIU-1129.
 * Pass correct props to `<AppIcon>`.
 * Add new permissions modal component. Refs UIU-629, UIU-631.
+* Add UX Consistency on FF history and charge manual FF. Refs UIU-1101.
+* Add UX Consistency on FF Details. Refs UIU-1103.
+* Fix Shared Fee/Fine Owner showing up as "ghost" . Fixes UIU-1104.
 
 ## [2.24.1](https://github.com/folio-org/ui-users/tree/v2.24.1) (2019-07-26)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.24.0...v2.24.1)
