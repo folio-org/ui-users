@@ -89,8 +89,8 @@ import CheckboxInteractor  from '@folio/stripes-components/lib/Checkbox/tests/in
   closedMenu = new ButtonInteractor('#closed-accounts');
   allMenu = new ButtonInteractor('#all-accounts');
 
-  isLoadedOpen = isPresent('#list-accounts-history-view-feesfines > [class*=mclScrollable---] > div:nth-child(5)');
-  isViewOpen = isVisible('#list-accounts-history-view-feesfines > [class*=mclScrollable---]');
+  isLoadedOpen = isPresent('#list-accounts-history-view-feesfines [class*=mclRowContainer---] > div:nth-child(5)');
+  isViewOpen = isVisible('#list-accounts-history-view-feesfines [class*=mclScrollable---]');
   sectionIsPresent = isPresent('#accordion-toggle-button-accountsSection');
 
   whenSectionLoaded() {
@@ -116,7 +116,7 @@ import CheckboxInteractor  from '@folio/stripes-components/lib/Checkbox/tests/in
     return this.when(() => this.isViewClosed);
   }
 
-  isLoadedAll = isPresent('#list-accounts-history-view-feesfines > [class*=mclScrollable---] > div:nth-child(6)');
+  isLoadedAll = isPresent('#list-accounts-history-view-feesfines [class*=mclRowContainer---] > div:nth-child(6)');
   isViewAll = isVisible('#list-accounts-history-view-feesfines > [class*=mclScrollable---]');
 
   whenLoadedAll() {
