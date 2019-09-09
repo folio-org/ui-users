@@ -84,10 +84,10 @@ class CommentModal extends React.Component {
           <br />
           <Row>
             <Col xs>
-                  <Field
-                    name="comment"
-                    component={TextArea}
-                  />
+              <Field
+                name="comment"
+                component={TextArea}
+              />
             </Col>
           </Row>
           <Row>
