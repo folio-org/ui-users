@@ -758,6 +758,7 @@
   "accounts.cancellation.feeFinewillBeCancelled": "<b>{amount}</b> {feeFineType} fee/fine will be <b>cancelled</b>",
   "accounts.cancellation.error.comment": "Comment must be provided",
 
+  "accounts.comment.error.enterComment": "Enter comment",
   "accounts.comment.field.comment": "Additional information for staff",
   "accounts.comment.field.save": "Save",
   "accounts.comment.field.cancel": "Cancel",
