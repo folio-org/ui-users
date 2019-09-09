@@ -14,6 +14,7 @@ class OpenLoans extends React.Component {
     sortMap: PropTypes.object.isRequired,
     loanFormatter: PropTypes.object.isRequired,
     columnMapping: PropTypes.object.isRequired,
+    requestCounts: PropTypes.object.isRequired,
     sortOrder: PropTypes.arrayOf(PropTypes.string).isRequired,
     onClickViewLoanActionsHistory: PropTypes.func.isRequired,
     visibleColumns: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -112,6 +113,8 @@ class OpenLoans extends React.Component {
     return columnsToDisplay;
   };
 
+  rowUpdater = (rowData) => this.props.requestCounts[rowData.itemId];
+
   render() {
     const {
       sortOrder,
@@ -153,6 +156,7 @@ class OpenLoans extends React.Component {
           visibleColumns={this.getVisibleColumns()}
           onRowClick={this.onRowClick}
           onHeaderClick={this.onSort}
+          rowUpdater={this.rowUpdater}
         />
       </div>
     );
