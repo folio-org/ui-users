@@ -292,7 +292,7 @@ class Charge extends React.Component {
         <FormattedMessage id="ui-users.charge.messageOf" />
         <strong>{`${parseFloat(a.amount).toFixed(2)}`}</strong>
         <FormattedMessage id="ui-users.charge.messageSuccessfully" />
-        {a.paymentStatus.name}
+        <strong>{(a.paymentStatus.name).toLowerCase()}</strong>
         <FormattedMessage id="ui-users.charge.messageFor" />
         <strong>{`${getFullName(this.props.user)}`}</strong>
       </span>;

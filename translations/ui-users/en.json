@@ -744,7 +744,7 @@
 
   "accounts.warning.itemSelected": "{total, number} items selected. {items, number} {items, plural, one {item} other {items}} cannot be {action} because they are already closed.",
 
-  "accounts.cancelError": "Cancelled as Error",
+  "accounts.cancelError": "Cancelled as error",
 
   "accounts.cancellation.field.reason": "Reason for cancellation*",
   "accounts.cancellation.field.cancellationInfo": "Enter information about the cancellation (required)",
