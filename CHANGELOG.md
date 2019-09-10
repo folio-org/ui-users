@@ -11,6 +11,7 @@
 * Show all reasons when a loan renewal fails. Refs UIU-1129.
 * Pass correct props to `<AppIcon>`.
 * Add new permissions modal component. Refs UIU-629, UIU-631.
+* Update `<PaneFooter>`: support arbitrary rendering of the content on two sides. Refs STCOM-521.
 
 ## [2.24.1](https://github.com/folio-org/ui-users/tree/v2.24.1) (2019-07-26)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.24.0...v2.24.1)
