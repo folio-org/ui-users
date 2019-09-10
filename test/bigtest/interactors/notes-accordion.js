@@ -25,7 +25,7 @@ import {
   assignButton = new Button('[data-test-notes-accordion-assign-button]');
 
   notesListIsDisplayed = isPresent('#notes-list');
-  notes = collection('#notes-list [class^="mclRow"]', {
+  notes = collection('#notes-list [class^="mclRow-"]', {
     click: clickable(),
     title: text('[class^="mclCell":last-child]'),
   });
