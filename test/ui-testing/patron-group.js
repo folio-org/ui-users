@@ -64,7 +64,7 @@ module.exports.test = function foo(uiTestCtx) {
           .wait('#clickable-filter-pg-faculty')
           .click('#clickable-filter-pg-faculty')
           .wait('#list-users [aria-rowindex="4"] [role=gridcell]:nth-of-type(3)')
-          .evaluate(() => document.querySelector('#list-users [data-row-index]:nth-of-type(2) [role=gridcell]:nth-of-type(3)').textContent)
+          .evaluate(() => document.querySelector('#list-users [aria-rowindex="4"] [role=gridcell]:nth-of-type(3)').textContent)
           .then((result) => {
             userBarcode = result;
             done();
