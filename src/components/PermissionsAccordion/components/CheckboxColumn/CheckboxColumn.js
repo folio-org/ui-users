@@ -10,6 +10,7 @@ const CheckboxColumn = memo(props => {
   const {
     value,
     checked,
+    permissionName,
     onChange,
   } = props;
 
@@ -25,6 +26,7 @@ const CheckboxColumn = memo(props => {
         name={`selected-${value}`}
         checked={checked}
         onChange={onChange}
+        data-permission-name={permissionName}
       />
     </div>
   );
@@ -33,6 +35,7 @@ const CheckboxColumn = memo(props => {
 CheckboxColumn.propTypes = {
   value: PropTypes.string.isRequired,
   checked: PropTypes.bool,
+  permissionName: PropTypes.string.isRequired,
   onChange: PropTypes.func,
 };
 
