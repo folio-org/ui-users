@@ -20,7 +20,7 @@ export default [
     showDueDatePicker: false,
   },
   {
-    message: 'renewal date falls outside of date ranges in rolling loan policy',
+    message: 'renewal date falls outside of date ranges in the loan policy',
     showDueDatePicker: true,
   },
 ];
