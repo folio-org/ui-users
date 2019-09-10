@@ -85,7 +85,7 @@ module.exports.test = function foo(uiTestCtx) {
           .wait('#list-users[data-total-count="1"]')
           .evaluate((uid) => {
             const node = Array.from(
-              document.querySelectorAll('#list-users [data-row-index] [role="gridcell"]')
+              document.querySelectorAll('#list-users [aria-rowindex] [role="gridcell"]')
             ).find(e => e.textContent === uid);
             if (node) {
               node.parentElement.click();
