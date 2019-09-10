@@ -188,7 +188,7 @@ module.exports.test = function foo(uiTestCtx) {
           .wait('#editList-patrongroups')
           .evaluate((groupId) => {
             Array.from(
-              document.querySelectorAll('#editList-patrongroups [data-row-index] [role="gridcell"]')
+              document.querySelectorAll('#editList-patrongroups [aria-rowindex] [role="gridcell"]')
             )
               .find(e => e.textContent === `${groupId}`)
               .parentElement.querySelector('button[icon="trash"]').click();
