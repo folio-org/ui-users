@@ -19,6 +19,8 @@ const PermissionsList = (props) => {
   const [sortedColumn, setSortedColumn] = useState('permissionName');
   const [sortOrder, setSortOrder] = useState(sortOrders.asc.name);
 
+  const rowUpdater = ({ id }) => assignedPermissionIds.includes(id);
+
   const sorters = {
     permissionName: ({ permissionName, displayName }) => {
       const name = displayName || permissionName || '';
@@ -67,10 +69,9 @@ const PermissionsList = (props) => {
       <MultiColumnList
         id="list-permissions"
         columnWidths={{
-          selected: '35',
-          status: '20%',
-          type: '25%',
+          selected: '35px',
         }}
+        rowUpdater={rowUpdater}
         visibleColumns={visibleColumns}
         contentData={sortedPermissions}
         columnMapping={{
