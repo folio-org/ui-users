@@ -59,10 +59,12 @@ module.exports.test = function foo(uiTestCtx) {
 
       it('should find an active user to edit', (done) => {
         nightmare
+          .wait('#clickable-filter-active-active')
+          .click('#clickable-filter-active-active')
           .wait('#clickable-filter-pg-faculty')
           .click('#clickable-filter-pg-faculty')
-          .wait('#list-users div[role="row"]:nth-of-type(2) > a > div:nth-of-type(3)')
-          .evaluate(() => document.querySelector('#list-users div[role="row"][aria-rowindex="2"] > a > div:nth-of-type(3)').textContent)
+          .wait('#list-users [aria-rowindex="4"] [role=gridcell]:nth-of-type(3)')
+          .evaluate(() => document.querySelector('#list-users [aria-rowindex="4"] [role=gridcell]:nth-of-type(3)').textContent)
           .then((result) => {
             userBarcode = result;
             done();
@@ -83,7 +85,7 @@ module.exports.test = function foo(uiTestCtx) {
           .wait('#list-users[data-total-count="1"]')
           .evaluate((uid) => {
             const node = Array.from(
-              document.querySelectorAll('#list-users div[role="row"] > a > div[role="gridcell"]')
+              document.querySelectorAll('#list-users [aria-rowindex] [role="gridcell"]')
             ).find(e => e.textContent === uid);
             if (node) {
               node.parentElement.click();
@@ -186,7 +188,7 @@ module.exports.test = function foo(uiTestCtx) {
           .wait('#editList-patrongroups')
           .evaluate((groupId) => {
             Array.from(
-              document.querySelectorAll('#editList-patrongroups div[role="gridcell"]')
+              document.querySelectorAll('#editList-patrongroups [aria-rowindex] [role="gridcell"]')
             )
               .find(e => e.textContent === `${groupId}`)
               .parentElement.querySelector('button[icon="trash"]').click();
@@ -206,7 +208,7 @@ module.exports.test = function foo(uiTestCtx) {
           .wait(wait)
           .wait((egid) => {
             const index = Array.from(
-              document.querySelectorAll('#editList-patrongroups div[role="row"] div[role="gridcell"]:first-of-type')
+              document.querySelectorAll('#editList-patrongroups [role="row"] div[role="gridcell"]:first-of-type')
             ).findIndex(e => {
               return e.textContent === egid;
             });
