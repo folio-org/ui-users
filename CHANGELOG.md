@@ -12,6 +12,7 @@
 * Pass correct props to `<AppIcon>`.
 * Add new permissions modal component. Refs UIU-629, UIU-631.
 * Update `<PaneFooter>`: support arbitrary rendering of the content on two sides. Refs STCOM-521.
+* Update integration tests for new MCL. Refs STCOM-363.
 * Add UX Consistency on FF history and charge manual FF. Refs UIU-1101.
 * Add UX Consistency on FF Details. Refs UIU-1103.
 * Fix Shared Fee/Fine Owner showing up as "ghost" . Fixes UIU-1104.
