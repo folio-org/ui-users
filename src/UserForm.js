@@ -133,6 +133,7 @@ class UserForm extends React.Component {
     parentResources: PropTypes.object.isRequired,
     pristine: PropTypes.bool,
     submitting: PropTypes.bool,
+    invalid: PropTypes.bool,
     onCancel: PropTypes.func.isRequired,
     onSubmit: PropTypes.func.isRequired,
     initialValues: PropTypes.object.isRequired,
@@ -141,6 +142,7 @@ class UserForm extends React.Component {
   static defaultProps = {
     pristine: false,
     submitting: false,
+    invalid: false,
   };
 
   constructor(props) {
@@ -279,26 +281,38 @@ class UserForm extends React.Component {
 
     const disabled = pristine || submitting || invalid;
 
+    const startButton = (
+      <Button
+        data-test-user-form-cancel-button
+        marginBottom0
+        id="clickable-cancel"
+        buttonStyle="default mega"
+        onClick={onCancel}
+      >
+        <FormattedMessage id="ui-users.cancel" />
+      </Button>
+    );
+
+    const endButton = (
+      <Button
+        data-test-user-form-submit-button
+        marginBottom0
+        id="clickable-save"
+        buttonStyle="primary mega"
+        type="submit"
+        disabled={disabled}
+      >
+        <FormattedMessage id="ui-users.saveAndClose" />
+      </Button>
+    );
+
     return (
-      <PaneFooter>
-        <Button
-          data-test-user-form-cancel-button
-          id="clickable-cancel"
-          buttonStyle="default mega"
-          onClick={onCancel}
-        >
-          <FormattedMessage id="ui-users.cancel" />
-        </Button>
-        <Button
-          data-test-user-form-submit-button
-          id="clickable-save"
-          buttonStyle="primary mega"
-          type="submit"
-          disabled={disabled}
-        >
-          <FormattedMessage id="ui-users.saveAndClose" />
-        </Button>
-      </PaneFooter>
+      <PaneFooter
+        renderStart={startButton}
+        renderEnd={endButton}
+        className={css.paneFooterClass}
+        innerClassName={css.paneFooterContentClass}
+      />
     );
   }
 
