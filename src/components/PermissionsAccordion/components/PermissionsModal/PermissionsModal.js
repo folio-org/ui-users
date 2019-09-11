@@ -14,9 +14,13 @@ import {
   Paneset,
 } from '@folio/stripes/components';
 
+import {
+  ExpandFilterPaneButton,
+  CollapseFilterPaneButton,
+} from '@folio/stripes/smart-components';
+
 import SearchForm from '../SearchForm';
 import PermissionsList from '../PermissionsList';
-import ResultsFirstMenu from '../ResultsFirstMenu';
 import { getInitialFiltersState } from '../../helpers';
 
 import css from './PermissionsModal.css';
@@ -260,6 +264,7 @@ class PermissionsModal extends React.Component {
               <Pane
                 defaultWidth="30%"
                 paneTitle={<FormattedMessage id="ui-users.permissions.modal.search.header" />}
+                lastMenu={<CollapseFilterPaneButton onClick={this.toggleFilterPane} />}
               >
                 <SearchForm
                   config={FilterGroupsConfig}
@@ -272,13 +277,16 @@ class PermissionsModal extends React.Component {
               </Pane>
             }
             <Pane
-              firstMenu={
-                <ResultsFirstMenu
-                  filterPaneIsVisible={filterPaneIsVisible}
-                  filters={filters}
-                  toggleFilterPane={this.toggleFilterPane}
-                />
-              }
+              {
+                ...(filterPaneIsVisible || {
+                  firstMenu: (
+                    <ExpandFilterPaneButton
+                      onClick={this.toggleFilterPane}
+                      filterCount={filters.count}
+                    />
+                  )
+                }
+              )}
               paneTitle={<FormattedMessage id="ui-users.permissions.modal.list.pane.header" />}
               paneSub={
                 <FormattedMessage
