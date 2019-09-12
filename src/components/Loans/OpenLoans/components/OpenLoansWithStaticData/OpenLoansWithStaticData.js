@@ -209,6 +209,7 @@ class OpenLoansWithStaticData extends React.Component {
       openPatronBlockedModal,
       activeLoan,
       isLoanChecked,
+      requestCounts,
     } = this.props;
 
     this.setFormatters();
@@ -232,6 +233,7 @@ class OpenLoansWithStaticData extends React.Component {
         <OpenLoans
           stripes={stripes}
           loans={loans}
+          requestCounts={requestCounts}
           isLoanChecked={isLoanChecked}
           visibleColumns={visibleColumns}
           sortMap={this.sortMap}
