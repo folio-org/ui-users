@@ -9,7 +9,7 @@ import setupApplication from '../helpers/setup-application';
 import UserFormPage from '../interactors/user-form-page';
 import UsersInteractor from '../interactors/users';
 
-describe('ItemCreatePage', () => {
+describe('User create', () => {
   setupApplication();
 
   const users = new UsersInteractor();
