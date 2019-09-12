@@ -15,7 +15,7 @@ describe('Test transfer', () => {
     await this.visit('users/view/1ad737b0-d847-11e6-bf26-cec0c932ce02?filters=active.inactive&layer=all-accounts&sort=name');
   });
 
-  describe('Test transfer', () => {
+  describe('Transfer fines', () => {
     beforeEach(async function () {
       await TransferInteractor.whenLoaded();
       await TransferInteractor.whenVisibled();
