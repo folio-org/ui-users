@@ -560,6 +560,7 @@
   "owners.columns.asp": "Associated service points",
   "owners.nodata": "There are no Fee/fine: Owners",
   "owners.cannotDeleteOwner": "This Fee/fine Owner cannot be deleted, as it has one or more fees/fines associated with it",
+  "owners.noServicePoints": "Associated service points not allowed for Shared fee/fine owner",
 
   "payments.label": "Fee/fine: Payment methods",
   "payments.singular": "Payment method",
