@@ -120,7 +120,10 @@ class OpenLoans extends React.Component {
       requestCounts,
     } = this.props;
 
-    return isLoanChecked(id) || requestCounts[itemId];
+    return {
+      checked: isLoanChecked(id),
+      requests: requestCounts[itemId],
+    };
   };
 
   render() {
