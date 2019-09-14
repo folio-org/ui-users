@@ -43,11 +43,11 @@ class OwnerSettings extends React.Component {
     this.connectedControlledVocab = props.stripes.connect(ControlledVocab);
   }
 
-  validate = (item, index, items) => {
+  validateItem = (item, index, items) => {
     const { intl: { formatMessage } } = this.props;
     const label = formatMessage({ id: 'ui-users.owners.singular' });
     const itemErrors = validate(item, index, items, 'owner', label);
-    if (item.owner === 'Shared' && item.servicePointOwner.length > 0) {
+    if (item.owner === 'Shared' && item.servicePointOwner) {
       itemErrors.owner = formatMessage({ id: 'ui-users.owners.noServicePoints' });
     }
     return itemErrors;
@@ -146,7 +146,7 @@ class OwnerSettings extends React.Component {
         objectLabel=""
         records="owners"
         sortby="owner"
-        validate={this.validate}
+        validate={this.validateItem}
         visibleFields={['owner', 'desc', 'servicePointOwner']}
         warn={this.warn}
       />
