@@ -9,6 +9,7 @@ import {
 import moment from 'moment';
 
 import ButtonInteractor from '@folio/stripes-components/lib/Button/tests/interactor'; // eslint-disable-line
+import CalloutInteractor from '@folio/stripes-components/lib/Callout/tests/interactor'; // eslint-disable-line
 
 @interactor class BulkOverrideModal {
   static defaultScope = '#bulk-override-modal';
@@ -36,6 +37,7 @@ import ButtonInteractor from '@folio/stripes-components/lib/Button/tests/interac
 @interactor class OpenLoans {
   static defaultScope = '[data-test-open-loans]';
 
+  callout = new CalloutInteractor();
   list = scoped('[data-test-open-loans-list]');
   requests = collection('[data-test-list-requests]');
   actionDropdowns = collection('[data-test-actions-dropdown]');
