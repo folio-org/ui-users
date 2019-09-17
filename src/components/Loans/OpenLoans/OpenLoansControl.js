@@ -143,7 +143,7 @@ class OpenLoansControl extends React.Component {
     }));
   };
 
-  getLoanPolicie = (policieId) => {
+  getLoanPolicy = (policieId) => {
     const { loanPolicies } = this.props;
 
     return loanPolicies[policieId];
@@ -407,7 +407,7 @@ class OpenLoansControl extends React.Component {
           isLoanChecked={this.isLoanChecked}
           requestRecords={(resources.requests || {}).records || []}
           resources={resources}
-          getLoanPolicie={this.getLoanPolicie}
+          getLoanPolicy={this.getLoanPolicy}
           handleOptionsChange={this.handleOptionsChange}
           possibleColumns={this.possibleColumns}
           hideChangeDueDateDialog={this.hideChangeDueDateDialog}
