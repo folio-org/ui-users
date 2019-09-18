@@ -47,7 +47,8 @@ class OwnerSettings extends React.Component {
     const { intl: { formatMessage } } = this.props;
     const label = formatMessage({ id: 'ui-users.owners.singular' });
     const itemErrors = validate(item, index, items, 'owner', label);
-    if (item.owner === 'Shared' && item.servicePointOwner) {
+    const evaluateServicePoint = item.servicePointOwner ? item.servicePointOwner.length : 0;
+    if (item.owner === 'Shared' && evaluateServicePoint > 0) {
       itemErrors.owner = formatMessage({ id: 'ui-users.owners.noServicePoints' });
     }
     return itemErrors;
