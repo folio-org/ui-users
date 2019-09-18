@@ -10,7 +10,7 @@ import { Callout } from '@folio/stripes/components';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 import BulkRenewalDialog from './components/BulkRenewalDialog';
-import isOverridePossible from './components/Loans/OpenLoans/helpers/isOverridePossible/isOverridePossible';
+import isOverridePossible from './components/Loans/OpenLoans/helpers/isOverridePossible';
 
 // HOC used to manage renew
 const withRenew = WrappedComponent => class WithRenewComponent extends React.Component {
@@ -138,7 +138,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
     });
   };
 
-  renew = (loans, patron) => {
+  renew = async (loans, patron) => {
     const { patronBlocks } = this.props;
     const renewSuccess = [];
     const renewFailure = [];
@@ -150,33 +150,36 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
       return this.setState({ patronBlockedModal: true });
     }
 
-    const renewedLoans = loans.map((loan) => {
-      return this.renewItem(loan, patron, bulkRenewal)
-        .then((renewedLoan) => renewSuccess.push(renewedLoan))
-        .catch((error) => {
-          renewFailure.push(loan);
-          const stringErrorMessage = get(error, 'props.values.message', '');
-          errorMsg[loan.id] = {
-            ...error,
-            ...isOverridePossible(stringErrorMessage),
-          };
-        });
+    const renewedLoans = await Promise.all(loans.map(async (loan) => {
+      try {
+        const renewedLoan = await this.renewItem(loan, patron, bulkRenewal);
+
+        renewSuccess.push(renewedLoan);
+      } catch (error) {
+        const stringErrorMessage = get(error, 'props.values.message', '');
+
+        renewFailure.push(loan);
+        errorMsg[loan.id] = {
+          ...error,
+          ...isOverridePossible(stringErrorMessage),
+        };
+      }
+    }));
+
+    if (isEmpty(renewFailure) && renewSuccess.length <= 1) {
+      this.showSingleRenewCallout(renewSuccess[0]);
+
+      return renewedLoans;
+    }
+
+    this.setState({
+      errorMsg,
+      renewSuccess,
+      renewFailure,
+      bulkRenewalDialogOpen: true
     });
 
-    this.setState({ errorMsg });
-
-    return Promise.all(renewedLoans.map(p => p.catch(e => e)))
-      .then(() => {
-        if (!isEmpty(renewFailure) || renewSuccess.length > 1) {
-          this.setState({
-            renewSuccess,
-            renewFailure,
-            bulkRenewalDialogOpen: true
-          });
-        } else {
-          this.showSingleRenewCallout(renewSuccess[0]);
-        }
-      });
+    return renewedLoans;
   };
 
   showSingleRenewCallout = (loan) => {
