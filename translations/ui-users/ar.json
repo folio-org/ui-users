@@ -922,5 +922,5 @@
     "permissions.modal.numberOfFilters": "{count, number} {count, plural, one {منقح مطبق} other {منقحات مطبقة}}",
     "permissions.modal.filter.permissionType.permissions": "صلاحيات",
     "permissions.modal.permission": "صلاحية",
-    "accounts.comment.error.enterComment": "Enter comment"
+    "accounts.comment.error.enterComment": "إدخال تعليق"
 }

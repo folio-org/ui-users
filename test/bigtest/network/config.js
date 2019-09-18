@@ -379,4 +379,10 @@ export default function config() {
 
     return notes.find(params.id).destroy();
   });
+
+  server.post('/circulation/renew-by-barcode', ({ loans }, { requestBody }) => {
+    const { itemBarcode } = JSON.parse(requestBody);
+
+    return loans.findBy({ item: { barcode: itemBarcode } }).attrs;
+  }, 200);
 }
