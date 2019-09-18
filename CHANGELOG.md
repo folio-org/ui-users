@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## 2.24.2 (IN PROGRESS)
+
+* Retrieve up to 1000 loans instead of 100. LIBRARIANS LOVE BOOKS! Refs CHAL-29.
+
 ## [2.24.1](https://github.com/folio-org/ui-users/tree/v2.24.1) (2019-07-26)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.24.0...v2.24.1)
 
