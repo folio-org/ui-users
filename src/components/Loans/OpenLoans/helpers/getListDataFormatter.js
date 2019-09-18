@@ -15,7 +15,7 @@ export default function getListDataFormatter(
   requestRecords,
   requestCounts,
   resources,
-  getLoanPolicie,
+  getLoanPolicy,
   handleOptionsChange,
   stripes,
   getFeeFine,
@@ -86,8 +86,8 @@ export default function getListDataFormatter(
     'loanPolicy': {
       key:'loanPolicy',
       view: formatMessage({ id: 'ui-users.loans.details.loanPolicy' }),
-      formatter: loan => getLoanPolicie(loan.loanPolicyId),
-      sorter: loan => getLoanPolicie(loan.loanPolicyId),
+      formatter: loan => getLoanPolicy(loan.loanPolicyId),
+      sorter: loan => getLoanPolicy(loan.loanPolicyId),
     },
     'contributors': {
       key:'Contributors',
