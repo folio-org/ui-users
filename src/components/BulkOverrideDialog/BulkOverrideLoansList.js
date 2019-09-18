@@ -69,6 +69,12 @@ class BulkOverrideLoansList extends Component {
     return get(errorMessage, 'props.values.message', '');
   };
 
+  rowUpdater = ({ id }) => {
+    const { isLoanChecked } = this.props;
+
+    return isLoanChecked(id);
+  };
+
   render() {
     const {
       failedRenewals,
@@ -157,6 +163,7 @@ class BulkOverrideLoansList extends Component {
           loanPolicy: loan => loanPolicies[loan.loanPolicyId],
         }}
         columnWidths={this.columnWidth}
+        rowUpdater={this.rowUpdater}
       />
     );
   }
