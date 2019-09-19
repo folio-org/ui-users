@@ -42,7 +42,7 @@ class OpenLoansWithStaticData extends React.Component {
     toggleColumn: PropTypes.func.isRequired,
     renewSelected: PropTypes.func.isRequired,
     isLoanChecked: PropTypes.func.isRequired,
-    getLoanPolicie: PropTypes.func.isRequired,
+    getLoanPolicy: PropTypes.func.isRequired,
     handleOptionsChange: PropTypes.func.isRequired,
     openPatronBlockedModal: PropTypes.func.isRequired,
     showChangeDueDateDialog: PropTypes.func.isRequired,
@@ -60,7 +60,7 @@ class OpenLoansWithStaticData extends React.Component {
       requestRecords,
       requestCounts,
       resources,
-      getLoanPolicie,
+      getLoanPolicy,
       handleOptionsChange,
       stripes,
       feeFineCount,
@@ -73,7 +73,7 @@ class OpenLoansWithStaticData extends React.Component {
       requestRecords,
       requestCounts,
       resources,
-      getLoanPolicie,
+      getLoanPolicy,
       handleOptionsChange,
       stripes,
       this.getFeeFine,
@@ -208,7 +208,8 @@ class OpenLoansWithStaticData extends React.Component {
       onClosePatronBlockedModal,
       openPatronBlockedModal,
       activeLoan,
-      requestCounts
+      isLoanChecked,
+      requestCounts,
     } = this.props;
 
     this.setFormatters();
@@ -232,6 +233,8 @@ class OpenLoansWithStaticData extends React.Component {
         <OpenLoans
           stripes={stripes}
           loans={loans}
+          requestCounts={requestCounts}
+          isLoanChecked={isLoanChecked}
           visibleColumns={visibleColumns}
           sortMap={this.sortMap}
           loanFormatter={this.loanFormatter}
@@ -239,7 +242,6 @@ class OpenLoansWithStaticData extends React.Component {
           sortOrder={this.sortOrder}
           onClickViewLoanActionsHistory={onClickViewLoanActionsHistory}
           possibleColumns={possibleColumns}
-          requestCounts={requestCounts}
         />
         <Modals
           user={user}

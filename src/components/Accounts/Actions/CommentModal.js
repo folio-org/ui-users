@@ -20,7 +20,7 @@ import css from './modal.css';
 const validate = (values) => {
   const errors = {};
   if (!values.comment) {
-    errors.comment = 'Enter a comment';
+    errors.comment = <FormattedMessage id="ui-users.accounts.comment.error.enterComment" />;
   }
   return errors;
 };
@@ -84,15 +84,10 @@ class CommentModal extends React.Component {
           <br />
           <Row>
             <Col xs>
-              <FormattedMessage id="ui-users.accounts.comment.field.enterComment">
-                {placeholder => (
-                  <Field
-                    name="comment"
-                    component={TextArea}
-                    placeholder={placeholder}
-                  />
-                )}
-              </FormattedMessage>
+              <Field
+                name="comment"
+                component={TextArea}
+              />
             </Col>
           </Row>
           <Row>

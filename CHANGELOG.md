@@ -1,6 +1,18 @@
 # Change history for ui-users
 
-## 2.25.0 (IN PROGRESS)
+## 2.26.0 (IN PROGRESS)
+
+* Dedupe loan policy list before retrieving it. Refs CHAL-30.
+* Retrieve up to 1000 loans instead of 100. LIBRARIANS LOVE BOOKS! Refs CHAL-29.
+* Correctly display checkboxes in the add-servicepoint modal. Refs UIU-1240.
+
+## [2.25.1](https://github.com/folio-org/ui-users/tree/v2.25.1) (2019-09-11)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.0...v2.25.1)
+
+* Update stripes to v2.10.1 to ensure we get a bug fix it provides.
+
+## [2.25.0](https://github.com/folio-org/ui-users/tree/v2.25.0) (2019-09-11)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.24.1...v2.25.0)
 
 * Implement exporting of only overdue loans for overdue loans report. Refs UIU-1121.
 * Implement footer with _Save & close_ and _Cancel_ buttons on the edit user form. Refs STCOM-429.
@@ -9,9 +21,14 @@
 * Add patron notes. Refs UIU-1112.
 * replace deprecated `<SegmentedControl>` component.
 * Show all reasons when a loan renewal fails. Refs UIU-1129.
-* Pass correct props to `<AppIcon>`.
+* Pass correct props to `<AppIcon>`. Refs UIU-1163
 * Add new permissions modal component. Refs UIU-629, UIU-631.
 * Update `<PaneFooter>`: support arbitrary rendering of the content on two sides. Refs STCOM-521.
+* Update integration tests for new MCL. Refs STCOM-363, UIU-1206.
+* Don't fail a proxy relationship due to an empty account expiration date. Fixes UIU-820.
+* Add UX Consistency on FF history and charge manual FF. Refs UIU-1101.
+* Add UX Consistency on FF Details. Refs UIU-1103.
+* Fix Shared Fee/Fine Owner showing up as "ghost" . Fixes UIU-1104.
 
 ## [2.24.1](https://github.com/folio-org/ui-users/tree/v2.24.1) (2019-07-26)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.24.0...v2.24.1)
