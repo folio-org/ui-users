@@ -1,5 +1,10 @@
 # Change history for ui-users
 
+## [2.25.2](https://github.com/folio-org/ui-users/tree/v2.25.2) (2019-09-23)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.1...v2.25.2)
+
+* Provide `rowUpdater` to MCLs. Fixes UIIN-1178, UIU-1237.
+
 ## [2.25.1](https://github.com/folio-org/ui-users/tree/v2.25.1) (2019-09-11)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.0...v2.25.1)
 
