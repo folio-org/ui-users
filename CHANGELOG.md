@@ -1,6 +1,7 @@
 # Change history for ui-users
 
-## 2.24.2 (IN PROGRESS)
+## [2.24.2](https://github.com/folio-org/ui-users/tree/v2.24.2) (2019-09-24)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.24.1...v2.24.2)
 
 * Retrieve up to 1000 loans instead of 100. LIBRARIANS LOVE BOOKS! Refs CHAL-29.
 * Dedupe loan policy list before retrieving it. Refs CHAL-30.
