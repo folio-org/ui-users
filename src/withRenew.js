@@ -272,7 +272,9 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
 
 
   fetchLoanPolicyNames = () => {
-    const query = this.state.loans.map(loan => `id==${loan.loanPolicyId}`).join(' or ');
+    // get a list of unique policy IDs to retrieve. multiple loans may share
+    // the same policy; we only need to retrieve that policy once.
+    const query = `id==(${[...new Set(this.state.loans.map(loan => loan.loanPolicyId))].join(' or ')})`;
     const {
       mutator: {
         loanPolicies: {

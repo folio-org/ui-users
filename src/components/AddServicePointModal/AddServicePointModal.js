@@ -128,6 +128,7 @@ class AddServicePointModal extends React.Component {
               onChange={() => this.onToggleSelection(sp)}
             />
           }}
+          isSelected={({ item }) => this.state.selection[item.id]}
         />
       </Modal>
     );
