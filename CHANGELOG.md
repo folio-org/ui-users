@@ -5,6 +5,7 @@
 * Dedupe loan policy list before retrieving it. Refs CHAL-30.
 * Retrieve up to 1000 loans instead of 100. LIBRARIANS LOVE BOOKS! Refs CHAL-29.
 * Correctly display checkboxes in the add-servicepoint modal. Refs UIU-1240.
+* Slightly more efficient request retrieval. Refs CHAL-30.
 
 ## [2.25.1](https://github.com/folio-org/ui-users/tree/v2.25.1) (2019-09-11)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.0...v2.25.1)
