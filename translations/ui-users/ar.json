@@ -922,5 +922,6 @@
     "permissions.modal.numberOfFilters": "{count, number} {count, plural, one {منقح مطبق} other {منقحات مطبقة}}",
     "permissions.modal.filter.permissionType.permissions": "صلاحيات",
     "permissions.modal.permission": "صلاحية",
-    "accounts.comment.error.enterComment": "إدخال تعليق"
+    "accounts.comment.error.enterComment": "إدخال تعليق",
+    "owners.noServicePoints": "Associated service points not allowed for Shared fee/fine owner"
 }
