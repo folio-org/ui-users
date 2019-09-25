@@ -44,20 +44,23 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
   );
 
   static propTypes = {
+    loans: PropTypes.object,
     mutator: PropTypes.shape({
-      renew: PropTypes.shape({
-        POST: PropTypes.func.isRequired,
-      }),
       loanPolicies: PropTypes.shape({
         GET: PropTypes.func.isRequired,
         reset: PropTypes.func.isRequired,
+      }),
+      renew: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
       }),
       requests: PropTypes.shape({
         GET: PropTypes.func.isRequired,
         reset: PropTypes.func.isRequired,
       }),
     }),
-    loans: PropTypes.object,
+    stripes: PropTypes.shape({
+      connect: PropTypes.func.isRequired,
+    }),
   };
 
   static defaultProps = {
@@ -235,6 +238,14 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
 
   hideBulkRenewalDialog = () => this.setState({ bulkRenewalDialogOpen: false });
 
+  /**
+   * retrieve count of open requests against this patron's open loans and
+   * store a map of itemId => open-request count in state.
+   *
+   * It sure would be nice if there were a more efficient way to construct
+   * this query than joining the entire list of item-ids, but there ain't.
+   * See CHAL-30 for details of the pain this causes.
+   */
   getOpenRequestsCount = () => {
     const {
       stripes,
@@ -252,25 +263,36 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
       return;
     }
 
-    const q = loans.map(loan => `itemId==${loan.itemId}`).join(' or ');
-    const query = `(${q}) and status==("Open - Awaiting pickup" or "Open - Not yet filled") sortby requestDate desc`;
+    // step through the loans list in small batches in order to create a
+    // short-enough query string that we can avoid a "414 Request URI Too Long"
+    // response from Okapi. Details at CHAL-30
+    const step = 50;
+    for (let i = 0; i < loans.length; i += step) {
+      const loansSlice = loans.slice(i, i + step);
+      const q = loansSlice.map(loan => loan.itemId).join(' or ');
+      const query = `(itemId==(${q})) and status==("Open - Awaiting pickup" or "Open - Not yet filled") sortby requestDate desc`;
+      reset();
+      GET({ params: { query } })
+        .then((requestRecords) => {
+          const requestCountObject = requestRecords.reduce((map, record) => {
+            map[record.itemId] = map[record.itemId]
+              ? map[record.itemId] + 1
+              : 1;
 
-    reset();
+            return map;
+          }, {});
 
-    GET({ params: { query } })
-      .then((requestRecords) => {
-        const requestCountObject = requestRecords.reduce((map, record) => {
-          map[record.itemId] = map[record.itemId]
-            ? map[record.itemId] + 1
-            : 1;
-
-          return map;
-        }, {});
-        this.setState({ requestCounts: requestCountObject });
-      });
+          this.setState(prevState => ({
+            requestCounts: Object.assign({}, prevState.requestCounts, requestCountObject)
+          }));
+        });
+    }
   };
 
-
+  /**
+   * retrieve loan policies related to current loans and store a map of
+   * loan-policy.id => loan-policy.name in state.
+   */
   fetchLoanPolicyNames = () => {
     // get a list of unique policy IDs to retrieve. multiple loans may share
     // the same policy; we only need to retrieve that policy once.
