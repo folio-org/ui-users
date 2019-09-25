@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import {
   Field,
-  reduxForm,
+  reduxForm
 } from 'redux-form';
 
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
@@ -16,7 +16,6 @@ import {
   Col,
 } from '@folio/stripes/components';
 
-import { isEqual } from 'lodash';
 import css from './modal.css';
 
 const validate = (values) => {
@@ -43,43 +42,12 @@ class CancellationModal extends React.Component {
 
   constructor(props) {
     super(props);
-
-    this.state = {
-      notify: false,
-      showNotify: false,
-    };
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const {
-      account,
-      feefines,
-    } = this.props;
-
-    if (!isEqual(account, prevProps.account) || prevState.showNotify !== this.state.showNotify) {
-      let showNotify = false;
-      let notify = false;
-
-      const feefine = feefines.find(f => f.id === account.feeFineId) || {};
-      const owner = this.props.owners.find(o => o.id === account.ownerId) || {};
-      if (feefine.actionNoticeId || owner.defaultActionNoticeId) {
-        showNotify = true;
-        notify = true;
-      }
-      // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({
-        showNotify,
-        notify,
-      });
-    }
+    this.state = { notify: true };
   }
 
   reset = () => {
     this.props.reset();
-    this.setState({
-      notify: false,
-      showNotify: false
-    });
+    this.setState({ notify: true });
   }
 
   onToggleNotify = () => {
@@ -88,29 +56,44 @@ class CancellationModal extends React.Component {
     }));
   }
 
-  handleSubmit = () => {
-    this.props.handleSubmit();
+  handleSubmit = (values) => {
+    const { handleSubmit } = this.props;
+    handleSubmit(values);
     this.reset();
   }
 
-  onClose = () => {
-    this.props.onClose();
+  onCloseModal = () => {
+    const { onClose } = this.props;
+    onClose();
     this.reset();
+    this.setState({ notify: true });
   }
 
   render() {
     const defaultAmount = '0.00';
     const defaultFeeFineType = 'fee/fine type';
     const {
+      account,
       account: {
         amount = defaultAmount,
         feeFineType = defaultFeeFineType,
       },
-      pristine,
-      submitting,
+      feefines,
       invalid,
       open,
+      owners,
+      pristine,
+      submitting
     } = this.props;
+
+    let showNotify = false;
+
+    const feefine = feefines.find(f => f.id === account.feeFineId) || {};
+    const owner = owners.find(o => o.id === account.ownerId) || {};
+
+    if (feefine.actionNoticeId || owner.defaultActionNoticeId) {
+      showNotify = true;
+    }
 
     const submitButtonDisabled = pristine || submitting || invalid;
 
@@ -119,7 +102,7 @@ class CancellationModal extends React.Component {
         id="error-modal"
         label={<FormattedMessage id="ui-users.accounts.cancellation.field.confirmcancelled" />}
         open={open}
-        onClose={this.onClose}
+        onClose={this.onCloseModal}
         size="small"
         dismissible
       >
@@ -157,7 +140,7 @@ class CancellationModal extends React.Component {
               </FormattedMessage>
             </Col>
           </Row>
-          {this.state.showNotify &&
+          {showNotify &&
             <div>
               <Row>
                 <Col xs>
@@ -174,7 +157,7 @@ class CancellationModal extends React.Component {
             </div>
           }
           <br />
-          {(this.state.notify && this.state.showNotify) &&
+          {(this.state.notify && showNotify) &&
             <div>
               <Row>
                 <Col xs>
@@ -204,7 +187,7 @@ class CancellationModal extends React.Component {
                 <FormattedMessage id="ui-users.accounts.cancellation.field.confirm" />
               </Button>
               <Button
-                onClick={this.onClose}
+                onClick={this.onCloseModal}
                 buttonClass={css.rightAlignedButton}
               >
                 <FormattedMessage id="ui-users.accounts.cancellation.field.back" />
@@ -220,5 +203,5 @@ class CancellationModal extends React.Component {
 export default reduxForm({
   form: 'cancellation',
   validate,
-  fields: [],
+  enableReinitialize: true,
 })(CancellationModal);
