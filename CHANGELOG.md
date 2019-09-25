@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## 2.24.3 (IN PROGRESS)
+
+* Retrieve requests-against-patron in batches for a shorter querystring. Refs CHAL-30.
+
 ## [2.24.2](https://github.com/folio-org/ui-users/tree/v2.24.2) (2019-09-24)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.24.1...v2.24.2)
 

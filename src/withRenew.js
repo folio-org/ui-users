@@ -260,24 +260,31 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
       return;
     }
 
-    const q = loans.map(loan => loan.itemId).join(' or ');
-    const query = `(itemId==(${q})) and status==("Open - Awaiting pickup" or "Open - Not yet filled") sortby requestDate desc`;
+    // step through the loans list in small batches in order to create a
+    // short-enough query string that we can avoid a "414 Request URI Too Long"
+    // response from Okapi. Details at CHAL-30
+    const step = 50;
+    for (let i = 0; i < loans.length; i += step) {
+      const loansSlice = loans.slice(i, i + step);
+      const q = loansSlice.map(loan => loan.itemId).join(' or ');
+      const query = `(itemId==(${q})) and status==("Open - Awaiting pickup" or "Open - Not yet filled") sortby requestDate desc`;
+      reset();
+      GET({ params: { query } })
+        .then((requestRecords) => {
+          const requestCountObject = requestRecords.reduce((map, record) => {
+            map[record.itemId] = map[record.itemId]
+              ? map[record.itemId] + 1
+              : 1;
 
-    reset();
+            return map;
+          }, {});
 
-    GET({ params: { query } })
-      .then((requestRecords) => {
-        const requestCountObject = requestRecords.reduce((map, record) => {
-          map[record.itemId] = map[record.itemId]
-            ? map[record.itemId] + 1
-            : 1;
-
-          return map;
-        }, {});
-        this.setState({ requestCounts: requestCountObject });
-      });
+          this.setState(prevState => ({
+            requestCounts: Object.assign({}, prevState.requestCounts, requestCountObject)
+          }));
+        });
+    }
   };
-
 
   /**
    * retrieve loan policies related to current loans and store a map of
