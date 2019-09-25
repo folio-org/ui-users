@@ -20,8 +20,16 @@ describe('User Create Page', () => {
   });
 
   describe('visiting the create user page', () => {
-    it('displays the title in the pane header', () => {
+    it('should display the title in the pane header', () => {
       expect(UserFormPage.title).to.equal('Create User');
+    });
+
+    it('should render a primary button', () => {
+      expect(UserFormPage.submitButton.rendersPrimary).to.be.true;
+    });
+
+    it('should render a default button', () => {
+      expect(UserFormPage.cancelButton.rendersDefault).to.be.true;
     });
 
     describe('clicking on cancel button', () => {

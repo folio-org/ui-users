@@ -560,6 +560,7 @@
   "owners.columns.asp": "Associated service points",
   "owners.nodata": "There are no Fee/fine: Owners",
   "owners.cannotDeleteOwner": "This Fee/fine Owner cannot be deleted, as it has one or more fees/fines associated with it",
+  "owners.noServicePoints": "Associated service points not allowed for Shared fee/fine owner",
 
   "payments.label": "Fee/fine: Payment methods",
   "payments.singular": "Payment method",
@@ -744,7 +745,7 @@
 
   "accounts.warning.itemSelected": "{total, number} items selected. {items, number} {items, plural, one {item} other {items}} cannot be {action} because they are already closed.",
 
-  "accounts.cancelError": "Cancelled as Error",
+  "accounts.cancelError": "Cancelled as error",
 
   "accounts.cancellation.field.reason": "Reason for cancellation*",
   "accounts.cancellation.field.cancellationInfo": "Enter information about the cancellation (required)",
@@ -758,7 +759,8 @@
   "accounts.cancellation.feeFinewillBeCancelled": "<b>{amount}</b> {feeFineType} fee/fine will be <b>cancelled</b>",
   "accounts.cancellation.error.comment": "Comment must be provided",
 
-  "accounts.comment.field.comment": "Comment",
+  "accounts.comment.error.enterComment": "Enter comment",
+  "accounts.comment.field.comment": "Additional information for staff",
   "accounts.comment.field.save": "Save",
   "accounts.comment.field.cancel": "Cancel",
   "accounts.comment.staffInfo": "Staff info only",
@@ -822,8 +824,7 @@
   "override.autoNewDueDate": "Due date will be calculated automatically",
   "override.emptyNewDueDate": "Select due date above",
 
-  "accounts.comment.field.feeFineComment": "Fee/fine comment",
-  "accounts.comment.field.enterComment": "Enter a comment",
+  "accounts.comment.field.feeFineComment": "Staff information",
 
   "accounts.actions.calloutMessage": "The {feeFineType} fee/fine of {amount} has been successfully {paymentStatus} for {name}.",
   "accounts.actions.payFeeFine": "Pay fees/fines",
@@ -882,13 +883,13 @@
   "permissions.modal.list.pane.header": "Permissions",
   "permissions.modal.assigned": "Assigned",
   "permissions.modal.unassigned": "Unassigned",
-  "permissions.modal.filter.status.label": "Permission Assigment status",
+  "permissions.modal.filter.status.label": "Permission assigment status",
   "permissions.modal.filter.permissionType.label": "Permission types",
-  "permissions.modal.filter.permissionType.permissionSets": "Permission Sets",
-  "permissions.modal.filter.permissionType.basePermissions": "Base permissions",
+  "permissions.modal.filter.permissionType.permissionSets": "Permission sets",
+  "permissions.modal.filter.permissionType.permissions": "Permissions",
   "permissions.modal.type": "Type",
-  "permissions.modal.base": "Base",
-  "permissions.modal.permissionSet": "Permission Set",
+  "permissions.modal.permission": "Permission",
+  "permissions.modal.permissionSet": "Permission set",
   "permissions.modal.save": "Save",
   "permissions.modal.cancel": "Cancel",
   "permissions.modal.search.header": "Search & filter",

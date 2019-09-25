@@ -15,7 +15,7 @@ describe('Test transfer', () => {
     await this.visit('users/1ad737b0-d847-11e6-bf26-cec0c932ce02/accounts/all');
   });
 
-  describe('Test transfer', () => {
+  describe('Transfer fines', () => {
     beforeEach(async function () {
       await TransferInteractor.whenLoaded();
       await TransferInteractor.whenVisibled();

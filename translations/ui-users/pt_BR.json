@@ -563,7 +563,7 @@
     "accounts.cancellation.field.confirmcancelled": "Confirmar o cancelamento da taxa/multa",
     "accounts.cancellation.field.confirm": "Confirmar",
     "accounts.cancellation.field.back": "Voltar",
-    "accounts.comment.field.comment": "Comentário",
+    "accounts.comment.field.comment": "Informações adicionais para a equipe",
     "accounts.comment.field.save": "Salvar",
     "accounts.comment.field.cancel": "Cancelar",
     "anonymize": "Anonimizar todos os empréstimos",
@@ -721,7 +721,7 @@
     "accounts.cancellation.field.notifyPatron": "Notificar usuário",
     "accounts.cancellation.field.feefineType": "tipo de taxa/multa",
     "accounts.cancellation.feeFinewillBeCancelled": "<b>{amount}</b> {feeFineType} taxa/multa será <b>cancelada</b>",
-    "accounts.comment.field.feeFineComment": "Comentário de taxa/multa",
+    "accounts.comment.field.feeFineComment": "Informações para a equipe",
     "accounts.comment.field.enterComment": "Digite um comentário",
     "accounts.actions.calloutMessage": "A taxa/multa {feeFineType} de {amount} foi com sucesso {paymentStatus} para {name} .",
     "accounts.actions.payFeeFine": "Pagar taxas/multas",
@@ -907,7 +907,7 @@
     "permissions.modal.unassigned": "Não atribuído",
     "permissions.modal.filter.status.label": "Status de atribuição de permissão",
     "permissions.modal.filter.permissionType.label": "Tipos de permissões",
-    "permissions.modal.filter.permissionType.permissionSets": "Conjunto de permissões",
+    "permissions.modal.filter.permissionType.permissionSets": "Conjuntos de permissões",
     "permissions.modal.filter.permissionType.basePermissions": "Permissões base",
     "permissions.modal.type": "Tipo",
     "permissions.modal.base": "Base",
@@ -919,5 +919,9 @@
     "permissions.modal.total": "Total selecionado: {count}",
     "permissions.modal.hideSearchPane": "Ocultar painel de pesquisa e filtros.",
     "permissions.modal.showSearchPane": "Mostrar painel de pesquisa e filtros.",
-    "permissions.modal.numberOfFilters": "{count, number} {count, plural, one {filtro aplicado} other {filtros aplicados}}"
+    "permissions.modal.numberOfFilters": "{count, number} {count, plural, one {filtro aplicado} other {filtros aplicados}}",
+    "permissions.modal.filter.permissionType.permissions": "Permissões",
+    "permissions.modal.permission": "Permissão",
+    "accounts.comment.error.enterComment": "Digite um comentário",
+    "owners.noServicePoints": "Associated service points not allowed for Shared fee/fine owner"
 }

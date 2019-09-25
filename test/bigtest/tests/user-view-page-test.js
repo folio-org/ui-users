@@ -9,7 +9,7 @@ import setupApplication from '../helpers/setup-application';
 import InstanceViewPage from '../interactors/user-view-page';
 import UserFormPage from '../interactors/user-form-page';
 
-describe('UserViewPage', () => {
+describe('User view', () => {
   setupApplication();
 
   let user;

@@ -13,6 +13,7 @@ class OpenLoans extends React.Component {
   static propTypes = {
     stripes: stripesShape.isRequired,
     history: PropTypes.object.isRequired,
+    isLoanChecked: PropTypes.func.isRequired,
     match: PropTypes.object.isRequired,
     loans: PropTypes.arrayOf(PropTypes.object).isRequired,
     sortMap: PropTypes.object.isRequired,
@@ -116,7 +117,17 @@ class OpenLoans extends React.Component {
     return columnsToDisplay;
   };
 
-  rowUpdater = (rowData) => this.props.requestCounts[rowData.itemId];
+  rowUpdater = ({ id, itemId }) => {
+    const {
+      isLoanChecked,
+      requestCounts,
+    } = this.props;
+
+    return {
+      checked: isLoanChecked(id),
+      requests: requestCounts[itemId],
+    };
+  };
 
   render() {
     const {
@@ -148,7 +159,6 @@ class OpenLoans extends React.Component {
         <MultiColumnList
           id="list-loanshistory"
           fullWidth
-          rowUpdater={this.rowUpdater}
           formatter={loanFormatter}
           contentData={loansSorted}
           columnMapping={columnMapping}
@@ -160,6 +170,7 @@ class OpenLoans extends React.Component {
           visibleColumns={this.getVisibleColumns()}
           onRowClick={this.onRowClick}
           onHeaderClick={this.onSort}
+          rowUpdater={this.rowUpdater}
         />
       </div>
     );

@@ -187,9 +187,9 @@ class PatronBlock extends React.Component {
         sortDirection={`${sortDirection[0]}ending`}
         onRowClick={this.onRowClick}
         columnWidths={{
-          'Type': 100,
-          'Display description': 350,
-          'Blocked actions': 250
+          'Type': '100px',
+          'Display description': '350px',
+          'Blocked actions': '250px'
         }}
       />;
     const title =

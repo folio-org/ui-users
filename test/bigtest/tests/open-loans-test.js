@@ -56,6 +56,34 @@ describe('Open Loans', () => {
       });
     });
 
+    describe('single loan renew', () => {
+      describe('action dropdown', () => {
+        it('icon button should be presented', () => {
+          expect(OpenLoansInteractor.actionDropdowns(0).isPresent).to.be.true;
+        });
+
+        describe('action dropdown click', () => {
+          beforeEach(async () => {
+            await OpenLoansInteractor.actionDropdowns(0).click('button');
+          });
+
+          it('override button should be presented', () => {
+            expect(OpenLoansInteractor.actionDropdownRenewButton.isPresent).to.be.true;
+          });
+
+          describe('click override button', () => {
+            beforeEach(async () => {
+              await OpenLoansInteractor.actionDropdownRenewButton.click();
+            });
+
+            it('success callout should be presented', () => {
+              expect(OpenLoansInteractor.callout.successCalloutIsPresent).to.be.true;
+            });
+          });
+        });
+      });
+    });
+
     describe('action dropdown', () => {
       it('icon button should be presented', () => {
         expect(OpenLoansInteractor.actionDropdowns(0).isPresent).to.be.true;
