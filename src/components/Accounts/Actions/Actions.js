@@ -201,15 +201,28 @@ class Actions extends React.Component {
     return this.props.mutator.accounts.PUT(Object.assign(account, newAccount));
   }
 
+  assembleTagInfo = (values) => {
+    const { intl: { formatMessage } } = this.props;
+    const tagStaff = formatMessage({ id: 'ui-users.accounts.actions.tag.staff' });
+    const tagPatron = formatMessage({ id: 'ui-users.accounts.actions.tag.patron' });
+    let tagInfo = '';
+    if (values.comment) {
+      tagInfo = `${tagStaff} : ${values.comment}`;
+    }
+
+    if (values.patronInfo) {
+      tagInfo = `${tagInfo} \n ${tagPatron} : ${values.patronInfo}`;
+    }
+    return tagInfo;
+  }
+
   onClickCancellation(values) {
     const { intl: { formatMessage } } = this.props;
     const canceled = formatMessage({ id: 'ui-users.accounts.cancelError' });
-    const tagStaff = formatMessage({ id: 'ui-users.accounts.actions.tag.staff' });
     const type = this.props.accounts[0] || {};
     delete type.rowIndex;
     this.props.mutator.activeRecord.update({ id: type.id });
-    const comment = `${tagStaff} : ${values.comment}`;
-    this.newAction({}, type.id, canceled, type.amount, comment, 0, 0, type.feeFineOwner);
+    this.newAction({}, type.id, canceled, type.amount, this.assembleTagInfo(values), 0, 0, type.feeFineOwner);
     this.editAccount(type, canceled, 'Closed', 0.00)
       .then(() => this.props.handleEdit(1))
       .then(() => this.showCalloutMessage(type))
@@ -278,8 +291,6 @@ class Actions extends React.Component {
     const { intl: { formatMessage } } = this.props;
     this.props.mutator.activeRecord.update({ id: type.id });
     let paymentStatus = _.capitalize(formatMessage({ id: `ui-users.accounts.actions.warning.${action}Action` }));
-    const tagStaff = formatMessage({ id: 'ui-users.accounts.actions.tag.staff' });
-    const tagPatron = formatMessage({ id: 'ui-users.accounts.actions.tag.patron' });
     const owners = _.get(this.props.resources, ['owners', 'records'], []);
     if (amount < type.remaining) {
       paymentStatus = `${paymentStatus} ${formatMessage({ id: 'ui-users.accounts.status.partially' })}`;
@@ -288,18 +299,9 @@ class Actions extends React.Component {
       type.status.name = 'Closed';
     }
     const balance = type.remaining - parseFloat(amount);
-
-    let tagInfo = '';
-    if (values.comment) {
-      tagInfo = `${tagStaff} : ${values.comment}`;
-    }
-    if (values.patronInfo && values.notify) {
-      tagInfo = `${tagInfo} \n ${tagPatron} : ${values.patronInfo}`;
-    }
     const createdAt = (owners.find(o => o.id === values.ownerId) || {}).owner;
-
     return this.editAccount(type, paymentStatus, type.status.name, balance)
-      .then(() => this.newAction({ paymentMethod: values.method }, type.id, paymentStatus, amount, tagInfo, balance, values.transaction, createdAt || type.feeFineOwner));
+      .then(() => this.newAction({ paymentMethod: values.method }, type.id, paymentStatus, amount, this.assembleTagInfo(values), balance, values.transaction, createdAt || type.feeFineOwner));
   }
 
   onCloseActionModal() {
@@ -497,7 +499,6 @@ class Actions extends React.Component {
           open={actions.cancellation}
           onClose={this.onCloseCancellation}
           user={this.props.user}
-          stripes={this.props.stripes}
           account={this.props.accounts[0] || {}}
           onSubmit={(values) => { this.onClickCancellation(values); }}
           owners={owners}
