@@ -67,10 +67,12 @@ class PermissionsAccordion extends React.Component {
     headlineContent: PropTypes.element.isRequired,
     unassignPermission: PropTypes.func.isRequired,
     addPermissions: PropTypes.func.isRequired,
+    excludePermissionSets: PropTypes.bool,
   };
 
   static defaultProps = {
     initialValues: {},
+    excludePermissionSets: false,
   };
 
   constructor(props) {
@@ -156,6 +158,7 @@ class PermissionsAccordion extends React.Component {
       headlineContent,
       assignedPermissions,
       addPermissions,
+      excludePermissionSets,
     } = this.props;
 
     const { permissionModalOpen } = this.state;
@@ -197,6 +200,7 @@ class PermissionsAccordion extends React.Component {
               assignedPermissions={assignedPermissions}
               addPermissions={addPermissions}
               open={permissionModalOpen}
+              excludePermissionSets={excludePermissionSets}
               visibleColumns={visibleColumns}
               filtersConfig={filtersConfig}
               onClose={this.closePermissionModal}

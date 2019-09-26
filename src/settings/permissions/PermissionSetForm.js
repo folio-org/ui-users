@@ -289,6 +289,7 @@ class PermissionSetForm extends React.Component {
               permToModify="perms.permissions.item.put"
               formName="permissionSetForm"
               permissionsField="subPermissions"
+              excludePermissionSets
             />
           </Pane>
         </Paneset>
