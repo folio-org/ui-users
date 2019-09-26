@@ -1,5 +1,7 @@
 # Change history for ui-users
 
+## 2.26.0 (IN PROGRESS)
+
 ## [2.25.3](https://github.com/folio-org/ui-users/tree/v2.25.3) (2019-09-26)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.2...v2.25.3)
 
