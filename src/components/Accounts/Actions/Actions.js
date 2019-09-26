@@ -201,7 +201,7 @@ class Actions extends React.Component {
     return this.props.mutator.accounts.PUT(Object.assign(account, newAccount));
   }
 
-  isTagInfo = (values) => {
+  assembleTagInfo = (values) => {
     const { intl: { formatMessage } } = this.props;
     const tagStaff = formatMessage({ id: 'ui-users.accounts.actions.tag.staff' });
     const tagPatron = formatMessage({ id: 'ui-users.accounts.actions.tag.patron' });
@@ -222,7 +222,7 @@ class Actions extends React.Component {
     const type = this.props.accounts[0] || {};
     delete type.rowIndex;
     this.props.mutator.activeRecord.update({ id: type.id });
-    this.newAction({}, type.id, canceled, type.amount, this.isTagInfo(values), 0, 0, type.feeFineOwner);
+    this.newAction({}, type.id, canceled, type.amount, this.assembleTagInfo(values), 0, 0, type.feeFineOwner);
     this.editAccount(type, canceled, 'Closed', 0.00)
       .then(() => this.props.handleEdit(1))
       .then(() => this.showCalloutMessage(type))
@@ -301,7 +301,7 @@ class Actions extends React.Component {
     const balance = type.remaining - parseFloat(amount);
     const createdAt = (owners.find(o => o.id === values.ownerId) || {}).owner;
     return this.editAccount(type, paymentStatus, type.status.name, balance)
-      .then(() => this.newAction({ paymentMethod: values.method }, type.id, paymentStatus, amount, this.isTagInfo(values), balance, values.transaction, createdAt || type.feeFineOwner));
+      .then(() => this.newAction({ paymentMethod: values.method }, type.id, paymentStatus, amount, this.assembleTagInfo(values), balance, values.transaction, createdAt || type.feeFineOwner));
   }
 
   onCloseActionModal() {
