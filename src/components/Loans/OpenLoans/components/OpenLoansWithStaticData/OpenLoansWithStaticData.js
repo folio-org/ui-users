@@ -218,6 +218,7 @@ class OpenLoansWithStaticData extends React.Component {
     return (
       <React.Fragment>
         {!isEmpty(loans) &&
+        
         <OpenLoansSubHeader
           loans={loans}
           patronBlocks={patronBlocks}

@@ -4,14 +4,15 @@ import { FormattedMessage } from 'react-intl';
 
 import {
   Button,
-  UncontrolledDropdown,
   MenuItem,
-  DropdownMenu,
   IconButton,
 } from '@folio/stripes/components';
 import {
   stripesShape,
 } from '@folio/stripes/core';
+
+import Popdown from './Popdown';
+import css from './ActionsDropdown.css';
 
 class ActionsDropdown extends React.Component {
   static propTypes = {
@@ -21,6 +22,14 @@ class ActionsDropdown extends React.Component {
     handleOptionsChange: PropTypes.func.isRequired,
     disableFeeFineDetails: PropTypes.bool,
   };
+
+  itemClick = () => {
+    this.props.handleOptionsChange();
+  }
+
+  renderDropdownTrigger = (triggerRef, onToggle, aria) => (
+    <IconButton icon="ellipsis" ref={triggerRef} onClick={onToggle} {...aria} />
+  );
 
   render() {
     const {
@@ -36,23 +45,19 @@ class ActionsDropdown extends React.Component {
     const buttonDisabled = !this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
 
     return (
-      <UncontrolledDropdown onSelectItem={handleOptionsChange}>
-        <IconButton
-          data-role="toggle"
-          icon="ellipsis"
-          size="small"
-          iconSize="medium"
-        />
-        <DropdownMenu
-          data-role="menu"
-          overrideStyle={{ padding: '7px 3px' }}
-        >
+      <Popdown
+        renderTrigger={this.renderDropdownTrigger}
+        portal
+      >
+        <div className={css.actionDropDown}>
           {
             stripes.hasPerm('inventory.items.item.get') &&
-            <MenuItem itemMeta={{
-              loan,
-              action: 'itemDetails',
-            }}
+            <MenuItem
+              itemMeta={{
+                loan,
+                action: 'itemDetails',
+              }}
+              onSelectItem={handleOptionsChange}
             >
               <Button
                 buttonStyle="dropdownItem"
@@ -62,10 +67,12 @@ class ActionsDropdown extends React.Component {
               </Button>
             </MenuItem>
           }
-          <MenuItem itemMeta={{
-            loan,
-            action: 'renew',
-          }}
+          <MenuItem
+            itemMeta={{
+              loan,
+              action: 'renew',
+            }}
+            onSelectItem={handleOptionsChange}
           >
             <Button
               buttonStyle="dropdownItem"
@@ -74,10 +81,12 @@ class ActionsDropdown extends React.Component {
               <FormattedMessage id="ui-users.renew" />
             </Button>
           </MenuItem>
-          <MenuItem itemMeta={{
-            loan,
-            action: 'changeDueDate',
-          }}
+          <MenuItem
+            itemMeta={{
+              loan,
+              action: 'changeDueDate',
+            }}
+            onSelectItem={handleOptionsChange}
           >
             <Button
               buttonStyle="dropdownItem"
@@ -86,10 +95,12 @@ class ActionsDropdown extends React.Component {
               <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />
             </Button>
           </MenuItem>
-          <MenuItem itemMeta={{
-            loan,
-            action: 'showLoanPolicy',
-          }}
+          <MenuItem
+            itemMeta={{
+              loan,
+              action: 'showLoanPolicy',
+            }}
+            onSelectItem={handleOptionsChange}
           >
             <Button
               buttonStyle="dropdownItem"
@@ -98,29 +109,35 @@ class ActionsDropdown extends React.Component {
               <FormattedMessage id="ui-users.loans.details.loanPolicy" />
             </Button>
           </MenuItem>
-          <MenuItem itemMeta={{
-            loan,
-            action: 'feefine',
-          }}
+          <MenuItem
+            itemMeta={{
+              loan,
+              action: 'feefine',
+            }}
+            onSelectItem={handleOptionsChange}
           >
             <Button buttonStyle="dropdownItem" disabled={buttonDisabled}>
               <FormattedMessage id="ui-users.loans.newFeeFine" />
             </Button>
           </MenuItem>
-          <MenuItem itemMeta={{
-            loan,
-            action: 'feefinedetails',
-          }}
+          <MenuItem
+            itemMeta={{
+              loan,
+              action: 'feefinedetails',
+            }}
+            onSelectItem={handleOptionsChange}
           >
             <Button buttonStyle="dropdownItem" disabled={disableFeeFineDetails}>
               <FormattedMessage id="ui-users.loans.feeFineDetails" />
             </Button>
           </MenuItem>
           { requestQueue && stripes.hasPerm('ui-requests.all') &&
-            <MenuItem itemMeta={{
-              loan,
-              action: 'discoverRequests',
-            }}
+            <MenuItem
+              itemMeta={{
+                loan,
+                action: 'discoverRequests',
+              }}
+              onSelectItem={handleOptionsChange}
             >
               <div data-test-dropdown-content-request-queue>
                 <Button buttonStyle="dropdownItem">
@@ -129,8 +146,8 @@ class ActionsDropdown extends React.Component {
               </div>
             </MenuItem>
           }
-        </DropdownMenu>
-      </UncontrolledDropdown>
+        </div>
+      </Popdown>
     );
   }
 }
