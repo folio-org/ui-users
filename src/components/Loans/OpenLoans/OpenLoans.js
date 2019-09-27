@@ -151,6 +151,7 @@ class OpenLoans extends React.Component {
     return (
       <div
         data-test-open-loans-list
+        className={css.root}
       >
         <MultiColumnList
           id="list-loanshistory"

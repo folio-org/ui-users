@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import {
   Button,
 } from '@folio/stripes/components';
+/* eslint-disable */
 import Popper from '@folio/stripes-components/lib/Popper/Popper';
 import RootCloseWrapper from 'react-overlays/lib/RootCloseWrapper';
+/* eslint-enable */
 
 class Popdown extends React.Component {
   static propTypes = {
