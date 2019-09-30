@@ -1,5 +1,10 @@
 # Change history for ui-users
 
+## [2.25.4](https://github.com/folio-org/ui-users/tree/v2.25.4) (2019-09-30)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.3...v2.25.4)
+
+* Better scrolling performance on open-loans page. Refs CHAL-29, UIU-1271.
+
 ## [2.25.3](https://github.com/folio-org/ui-users/tree/v2.25.3) (2019-09-26)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.2...v2.25.3)
 
