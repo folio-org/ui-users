@@ -8,7 +8,7 @@ import { expect } from 'chai';
 import setupApplication from '../helpers/setup-application';
 import OpenLoansInteractor from '../interactors/open-loans';
 
-describe('open loans override', () => {
+describe('Change due date', () => {
   describe('test change due date overlay', () => {
     setupApplication({
       permissions: {
@@ -24,6 +24,7 @@ describe('open loans override', () => {
 
       this.server.createList('request', requestsAmount, { itemId: loan.itemId });
       this.visit(`/users/view/${user.id}?layer=open-loans&query=%20&sort=requests`);
+      await OpenLoansInteractor.whenLoaded();
     });
 
     it('should be presented', () => {
