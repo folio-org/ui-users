@@ -29,6 +29,10 @@ import {
     click: clickable(),
     title: text('[class^="mclCell":last-child]'),
   });
+
+  whenLoaded() {
+    return this.when(() => this.isDisplayed);
+  }
 }
 
 
