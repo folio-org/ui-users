@@ -1,5 +1,10 @@
 # Change history for ui-users
 
+## [2.24.4](https://github.com/folio-org/ui-users/tree/v2.24.4) (2019-10-02)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.24.3...v2.24.4)
+
+* Use local `<Popdown>` in lieu of `<Dropdown>` for better performance. Refs CHAL-29, UIU-1271.
+
 ## [2.24.3](https://github.com/folio-org/ui-users/tree/v2.24.3) (2019-09-25)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.24.2...v2.24.3)
 
