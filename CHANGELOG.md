@@ -3,6 +3,8 @@
 ## 2.26.0 (IN PROGRESS)
 * Prevent manual anonymization of closed loans with fees/fines. Refs UIU-1083.
 
+* Implement permission assigment by batch. Refs UIU-1249
+
 ## [2.25.3](https://github.com/folio-org/ui-users/tree/v2.25.3) (2019-09-26)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.2...v2.25.3)
 

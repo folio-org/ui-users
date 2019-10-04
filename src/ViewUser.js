@@ -1,10 +1,17 @@
 import moment from 'moment';
-import { cloneDeep, get, omit, differenceBy, find, isArray } from 'lodash';
+import {
+  cloneDeep,
+  get,
+  omit,
+  find,
+  isArray,
+} from 'lodash';
 import React from 'react';
-import { compose } from 'redux';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
 import queryString from 'query-string';
+import { compose } from 'redux';
+import { FormattedMessage } from 'react-intl';
+
 import {
   AppIcon,
   IfInterface,
@@ -40,7 +47,7 @@ import AccountsHistory from './AccountsHistory';
 import AccountActionsHistory from './AccountActionsHistory';
 import { PatronBlockLayer, PatronBlockMessage } from './components/PatronBlock';
 import { toListAddresses, toUserAddresses } from './converters/address';
-import { getFullName, eachPromise } from './util';
+import { getFullName } from './util';
 import withProxy from './withProxy';
 import withServicePoints from './withServicePoints';
 import { HasCommand } from './components/Commander';
@@ -91,6 +98,24 @@ class ViewUser extends React.Component {
       },
       records: 'usergroups',
     },
+    batchPermissions: {
+      type: 'okapi',
+      throwErrors: false,
+      accumulate: true,
+      path: 'perms/users/:{id}',
+      params: { indexField: 'userId' },
+      POST: {
+        path: 'perms/users',
+        clientGeneratePk: false,
+      },
+      PUT: {
+        path: (queryParams, pathComponents, resourceData) => {
+          const { batch_permissions: { records: [{ id }] } } = resourceData;
+
+          return `perms/users/${id}`;
+        },
+      }
+    },
     // NOTE: 'indexField', used as a parameter in the userPermissions paths,
     // modifies the API call so that the :{userid} parameter is actually
     // interpreted as a user ID. By default, that path component is taken as
@@ -99,17 +124,12 @@ class ViewUser extends React.Component {
       type: 'okapi',
       records: 'permissionNames',
       throwErrors: false,
-      DELETE: {
-        pk: 'permissionName',
-        path: 'perms/users/:{id}/permissions',
-        params: { indexField: 'userId' },
-      },
+      path: 'perms/users/:{id}/permissions',
+      params: { indexField: 'userId' },
       GET: {
         path: 'perms/users/:{id}/permissions',
         params: { full: 'true', indexField: 'userId' },
       },
-      path: 'perms/users/:{id}/permissions',
-      params: { indexField: 'userId' },
     },
     settings: {
       type: 'okapi',
@@ -148,9 +168,11 @@ class ViewUser extends React.Component {
       selUser: PropTypes.shape({
         PUT: PropTypes.func.isRequired,
       }),
-      permissions: PropTypes.shape({
+      batchPermissions: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+        PUT: PropTypes.func.isRequired,
         POST: PropTypes.func.isRequired,
-        DELETE: PropTypes.func.isRequired,
+        reset: PropTypes.func.isRequired,
       }),
       query: PropTypes.object.isRequired,
     }),
@@ -570,14 +592,35 @@ class ViewUser extends React.Component {
     });
   }
 
-  updatePermissions(perms) {
-    const mutator = this.props.mutator.permissions;
-    const prevPerms = (this.props.resources.permissions || {}).records || [];
-    const removedPerms = differenceBy(prevPerms, perms, 'id');
-    const addedPerms = differenceBy(perms, prevPerms, 'id');
-    eachPromise(addedPerms, mutator.POST);
-    eachPromise(removedPerms, mutator.DELETE);
-  }
+  // NOTE: To update permissions by batch we need record id.
+  // GET - provides record id or throws an error
+  // PUT - if GET request was successful
+  // POST - for creating a new record
+  updatePermissions = async (perms) => {
+    const permissions = perms.map(({ permissionName }) => permissionName);
+    const {
+      match: { params: { id: userId } },
+      mutator: {
+        batchPermissions: {
+          POST,
+          PUT,
+          GET,
+          reset,
+        },
+      },
+    } = this.props;
+
+    try {
+      await reset();
+      await GET();
+      await PUT({ userId, permissions });
+    } catch (e) {
+      await POST({
+        userId,
+        permissions,
+      });
+    }
+  };
 
   goToEdit = () => {
     this.props.onEdit();
