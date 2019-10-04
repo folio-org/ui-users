@@ -1,6 +1,7 @@
 # Change history for ui-users
 
 ## 2.26.0 (IN PROGRESS)
+* Prevent manual anonymization of closed loans with fees/fines. Refs UIU-1083.
 
 * Implement permission assigment by batch. Refs UIU-1249
 

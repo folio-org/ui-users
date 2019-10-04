@@ -25,6 +25,7 @@ import {
 
 import ActionsBar from '../components/ActionsBar';
 import Label from '../../Label';
+import ErrorModal from '../../ErrorModal';
 
 class ClosedLoans extends React.Component {
   static manifest = Object.freeze({
@@ -36,11 +37,9 @@ class ClosedLoans extends React.Component {
     },
     anonymize: {
       type: 'okapi',
-      records: 'accounts',
-      path: 'circulation/loans',
       fetch: false,
       POST: {
-        path: 'loan-storage/loans/anonymize/%{activeRecord.user}',
+        path: 'loan-anonymization/by-user/%{activeRecord.user}',
       },
     },
     activeRecord: {},
@@ -136,6 +135,8 @@ class ClosedLoans extends React.Component {
         this.columnMapping.checkinServicePoint,
       ],
       sortDirection: ['asc', 'asc'],
+      anonymizationErrorModalOpen: false,
+      failedAnonymizationLoansCount: 0,
     };
     props.mutator.activeRecord.update({ user: props.user.id });
   }
@@ -280,9 +281,42 @@ class ClosedLoans extends React.Component {
     }
   }
 
-  anonymizeLoans() {
-    this.props.mutator.anonymize.POST({});
+  async anonymizeLoans() {
+    const response = await this.props.mutator.anonymize.POST({});
+
+    this.handleLoansAssociatedFeesFinesAnonymizationError(response);
   }
+
+  handleLoansAssociatedFeesFinesAnonymizationError(response) {
+    const errors = _.get(response, 'errors', []);
+    const associatedFeesFinesErrors = _.find(errors, { message: 'haveAssociatedFeesAndFines' });
+
+    if (!associatedFeesFinesErrors) return;
+
+    const parameters = _.get(associatedFeesFinesErrors, 'parameters', []);
+    const loanIds = _.find(parameters, { key: 'loanIds' });
+    const loanIdsValue = _.get(loanIds, 'value', '[]');
+
+    try {
+      const loanIdsCount = JSON.parse(loanIdsValue).length;
+
+      if (!loanIdsCount) return;
+
+      this.setState({
+        anonymizationErrorModalOpen: Boolean(loanIdsCount),
+        failedAnonymizationLoansCount: loanIdsCount,
+      });
+    } catch (error) {
+      console.error(error); // eslint-disable-line no-console
+    }
+  }
+
+  closeLoansAnonymizationErrorModal = () => {
+    this.setState({
+      anonymizationErrorModalOpen: false,
+      failedAnonymizationLoansCount: 0,
+    });
+  };
 
   renderActions(loan) {
     const accounts = _.get(this.props.resources, ['loanAccount', 'records'], []);
@@ -315,14 +349,16 @@ class ClosedLoans extends React.Component {
   render() {
     const {
       sortOrder,
-      sortDirection
+      sortDirection,
+      anonymizationErrorModalOpen,
+      failedAnonymizationLoansCount,
     } = this.state;
-
     const {
       onClickViewLoanActionsHistory,
       loans,
       buildRecords
     } = this.props;
+
     const visibleColumns = ['title', 'dueDate', 'barcode', 'Fee/Fine', 'Call Number', 'Contributors', 'renewals', 'loanDate', 'returnDate', 'checkinServicePoint', ' '];
     const anonymizeString = <FormattedMessage id="ui-users.anonymize" />;
     const loansSorted = _.orderBy(loans,
@@ -330,7 +366,7 @@ class ClosedLoans extends React.Component {
     const clonedLoans = _.cloneDeep(loans);
     const recordsToCSV = buildRecords(clonedLoans);
     return (
-      <div>
+      <div data-test-closed-loans>
         <ActionsBar
           show={loans.length > 0}
           contentStart={
@@ -352,6 +388,18 @@ class ClosedLoans extends React.Component {
               <ExportCsv
                 data={recordsToCSV}
                 onlyFields={this.columnHeadersMap}
+              />
+              <ErrorModal
+                id="anonymization-fees-fines-modal"
+                open={anonymizationErrorModalOpen}
+                label={<FormattedMessage id="ui-users.anonymization.confirmation.header" />}
+                message={(
+                  <FormattedMessage
+                    id="ui-users.anonymization.confirmation.message"
+                    values={{ amount: failedAnonymizationLoansCount }}
+                  />
+                )}
+                onClose={this.closeLoansAnonymizationErrorModal}
               />
             </div>
           }
