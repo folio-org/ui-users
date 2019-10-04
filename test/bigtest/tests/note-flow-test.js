@@ -6,6 +6,7 @@ import setupApplication from '../helpers/setup-application';
 import NotesAccordion from '../interactors/notes-accordion';
 import NoteForm from '../interactors/note-form';
 import NoteView from '../interactors/note-view';
+import InstanceViewPage from '../interactors/user-view-page';
 import { getFullName } from '../../../src/util';
 
 const notesAccordion = new NotesAccordion();
@@ -46,11 +47,12 @@ describe('User notes flow', function () {
     });
 
     this.visit(`/users/view/${user.id}`);
+
+    await notesAccordion.whenLoaded();
   });
 
   describe('when the user details pane is visited', () => {
     beforeEach(async function () {
-      this.visit(`/users/view/${user.id}`);
       await notesAccordion.toggleAccordion();
     });
 
