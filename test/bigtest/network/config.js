@@ -385,4 +385,7 @@ export default function config() {
 
     return loans.findBy({ item: { barcode: itemBarcode } }).attrs;
   }, 200);
+
+  this.get('/perms/users/:id', { id: 'test' });
+  this.put('/perms/users/:id', { id: 'test' });
 }

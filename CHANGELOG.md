@@ -1,11 +1,23 @@
 # Change history for ui-users
 
 ## 2.26.0 (IN PROGRESS)
+* Prevent manual anonymization of closed loans with fees/fines. Refs UIU-1083.
+
+* Implement permission assigment by batch. Refs UIU-1249
+
+## [2.25.3](https://github.com/folio-org/ui-users/tree/v2.25.3) (2019-09-26)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.2...v2.25.3)
 
 * Dedupe loan policy list before retrieving it. Refs CHAL-30.
 * Retrieve up to 1000 loans instead of 100. LIBRARIANS LOVE BOOKS! Refs CHAL-29.
 * Correctly display checkboxes in the add-servicepoint modal. Refs UIU-1240.
 * Retrieve requests-against-patron in batches for a shorter querystring. Refs CHAL-30.
+* Fix additional information for patron. Fixes UIU-1221.
+
+## [2.25.2](https://github.com/folio-org/ui-users/tree/v2.25.2) (2019-09-23)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.1...v2.25.2)
+
+* Provide `rowUpdater` to MCLs. Fixes UIIN-1178, UIU-1237.
 
 ## [2.25.1](https://github.com/folio-org/ui-users/tree/v2.25.1) (2019-09-11)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.0...v2.25.1)

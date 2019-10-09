@@ -1,0 +1,8 @@
+.actionDropDown {
+  padding: 7px 3px;
+  background-color: #fff;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.175);
+  pointer-events: all;
+}

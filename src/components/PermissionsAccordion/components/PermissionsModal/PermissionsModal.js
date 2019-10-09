@@ -30,7 +30,13 @@ class PermissionsModal extends React.Component {
     availablePermissions: {
       type: 'okapi',
       records: 'permissions',
-      path: 'perms/permissions?length=10000&query=(visible==true)',
+      path: (queryParams, pathComponents, resourceData, config, props) => {
+        const excludePermissionSets = props.excludePermissionSets;
+
+        return excludePermissionSets
+          ? 'perms/permissions?length=10000&query=(visible==true and mutable==false)'
+          : 'perms/permissions?length=10000&query=(visible==true)';
+      },
       fetch: false,
       accumulate: true,
     },
@@ -78,10 +84,12 @@ class PermissionsModal extends React.Component {
     onClose: PropTypes.func.isRequired,
     addPermissions: PropTypes.func.isRequired,
     visibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
+    excludePermissionSets: PropTypes.bool,
   };
 
   static defaultProps = {
     resources: { availablePermissions: { records: [] } },
+    excludePermissionSets: false,
   };
 
   constructor(props) {

@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "2.25.1",
+  "version": "2.26.0",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {

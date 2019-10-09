@@ -897,5 +897,8 @@
   "permissions.modal.total": "Total selected: {count}",
   "permissions.modal.hideSearchPane": "Hide search and filters pane.",
   "permissions.modal.showSearchPane": "Show search and filters pane.",
-  "permissions.modal.numberOfFilters": "{count, number} {count, plural, one {applied filter} other {applied filters}}"
+  "permissions.modal.numberOfFilters": "{count, number} {count, plural, one {applied filter} other {applied filters}}",
+
+  "anonymization.confirmation.header": "Anonymization prevented",
+  "anonymization.confirmation.message": "{amount} loan(s) had associated fees/fines and could not be anonymized."
 }

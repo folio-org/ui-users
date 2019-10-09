@@ -46,8 +46,9 @@ describe('User notes flow', function () {
       links: [{ type: 'user', id: 'someId2' }],
     });
 
-    this.visit(`/users/preview/${user.id}`);
-    await InstanceViewPage.whenLoaded();
+    this.visit(`/users/view/${user.id}`);
+
+    await notesAccordion.whenLoaded();
   });
 
   describe('when the user details pane is visited', () => {

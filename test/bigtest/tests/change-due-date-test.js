@@ -8,7 +8,7 @@ import { expect } from 'chai';
 import setupApplication from '../helpers/setup-application';
 import OpenLoansInteractor from '../interactors/open-loans';
 
-describe('Changing a due date', () => {
+describe('Change due date', () => {
   describe('test change due date overlay', () => {
     setupApplication({
       permissions: {
@@ -23,7 +23,8 @@ describe('Changing a due date', () => {
       const loan = this.server.create('loan', { status: { name: 'Open' } });
 
       this.server.createList('request', requestsAmount, { itemId: loan.itemId });
-      this.visit(`/users/${user.id}/loans/open?query=%20&sort=requests`);
+      this.visit(`/users/view/${user.id}?layer=open-loans&query=%20&sort=requests`);
+      await OpenLoansInteractor.whenLoaded();
     });
 
     it('should be presented', () => {
