@@ -28,23 +28,6 @@ import Label from '../../Label';
 import ErrorModal from '../../ErrorModal';
 
 class ClosedLoans extends React.Component {
-  static manifest = Object.freeze({
-    query: {},
-    loanAccount: {
-      type: 'okapi',
-      records: 'accounts',
-      path: 'accounts?query=userId=%{activeRecord.user}',
-    },
-    anonymize: {
-      type: 'okapi',
-      fetch: false,
-      POST: {
-        path: 'loan-anonymization/by-user/%{activeRecord.user}',
-      },
-    },
-    activeRecord: {},
-  });
-
   static propTypes = {
     stripes: stripesShape.isRequired,
     // buildRecords: PropTypes.func,

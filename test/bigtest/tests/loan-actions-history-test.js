@@ -16,7 +16,12 @@ describe('loans actions history', () => {
 
   beforeEach(async function () {
     const user = this.server.create('user');
-    const loan = this.server.create('loan', { status: { name: 'Open' }, loanPolicyId: 'test' });
+    const updatingUser = this.server.create('user');
+    const loan = this.server.create('loan', {
+      metadata: { updatedByUserId: updatingUser.id },
+      status: { name: 'Open' },
+      loanPolicyId: 'test'
+    });
 
     this.server.createList('request', requestsAmount, { itemId: loan.itemId });
     this.visit(`/users/${user.id}/loans/view/${loan.id}`);

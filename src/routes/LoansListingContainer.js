@@ -66,6 +66,13 @@ class LoansListingContainer extends React.Component {
       },
       throwErrors: false,
     },
+    anonymize: {
+      type: 'okapi',
+      fetch: false,
+      POST: {
+        path: 'loan-anonymization/by-user/%{activeRecord.user}',
+      },
+    },
     activeRecord: {},
   });
 
