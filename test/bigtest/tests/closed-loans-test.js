@@ -35,7 +35,7 @@ describe('Closed Loans', () => {
       }]
     }]);
 
-    this.visit(`/users/view/${user.id}?layer=closed-loans`);
+    this.visit(`/users/${user.id}/loans/closed`);
 
     await ClosedLoansInteractor.whenLoaded();
   });

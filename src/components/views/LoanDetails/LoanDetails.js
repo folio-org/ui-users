@@ -40,6 +40,9 @@ class LoanDetails extends React.Component {
       loanActionsWithUser: PropTypes.object,
     }).isRequired,
     mutator: PropTypes.shape({
+      modified: PropTypes.shape({
+        replace: PropTypes.func,
+      }),
       loanActionsWithUser: PropTypes.shape({
         replace: PropTypes.func,
       }),
@@ -49,14 +52,8 @@ class LoanDetails extends React.Component {
     }).isRequired,
     loan: PropTypes.object,
     patronGroup: PropTypes.object,
-    // loanid: PropTypes.string,
     user: PropTypes.object,
-    // onCancel: PropTypes.func.isRequired,
-    // onClickUser: PropTypes.func.isRequired,
-    // onClickViewAllAccounts: PropTypes.func.isRequired,
-    // onClickViewClosedAccounts: PropTypes.func.isRequired,
-    // onClickViewOpenAccounts: PropTypes.func.isRequired,
-    // onClickViewAccountActionsHistory: PropTypes.func.isRequired,
+    loanActionsWithUser: PropTypes.arrayOf(PropTypes.object),
     loanPolicies: PropTypes.arrayOf(PropTypes.object),
     requestCounts: PropTypes.object,
     renew: PropTypes.func,
@@ -90,33 +87,7 @@ class LoanDetails extends React.Component {
   }
 
   componentDidMount() {
-    this.getLoanActions();
     this.getFeeFine();
-  }
-
-  componentDidUpdate(prevProps) {
-    this.updateLoanActionsOnOverride(prevProps);
-  }
-
-  updateLoanActionsOnOverride(prevProps) {
-    if (this.props.loan && prevProps.loan) {
-      const {
-        loan: {
-          renewalCount
-        }
-      } = this.props;
-
-      const {
-        loan: {
-          renewalCount: prevRenewalCount
-        }
-      } = prevProps;
-      const isRenewalCountChanged = prevRenewalCount && renewalCount && renewalCount !== prevRenewalCount;
-
-      if (isRenewalCountChanged) {
-        this.getLoanActions();
-      }
-    }
   }
 
   getContributorslist(loan) {
@@ -135,21 +106,11 @@ class LoanDetails extends React.Component {
     this.setState({
       changeDueDateDialogOpen: false,
     });
+    this.props.mutator.modified.replace({ time: new Date().getTime() });
   }
 
   hideNonRenewedLoansModal() {
     this.setState({ nonRenewedLoansModalOpen: false });
-  }
-
-  joinLoanActionsWithUser(loanActions, users) {
-    const userMap = users.reduce((memo, user) => {
-      return Object.assign(memo, { [user.id]: user });
-    }, {});
-    const records = loanActions.map(la => {
-      return Object.assign({}, la, { user: userMap[la.metadata.updatedByUserId] });
-    });
-
-    this.props.mutator.loanActionsWithUser.replace({ records });
   }
 
   renew() {
@@ -158,42 +119,19 @@ class LoanDetails extends React.Component {
       user,
       patronBlocks,
       renew,
+      mutator: {
+        renewals
+      }
     } = this.props;
     const countRenew = patronBlocks.filter(p => p.renewals);
 
     if (!isEmpty(countRenew)) return this.setState({ patronBlockedModal: true });
 
     return renew([loan], user)
-      .then(this.getLoanActions);
+      .then(renewals.replace({ ts: new Date().getTime() }));
+    // return renew([loan], user)
+    //   .then(this.getLoanActions);
   }
-
-  getUsers(loanActions) {
-    const { mutator } = this.props;
-    const query = loanActions
-      .map(r => `id==${r.metadata.updatedByUserId}`)
-      .join(' or ');
-
-    mutator.users.reset();
-    mutator.users.GET({ params: { query } })
-      .then(users => this.joinLoanActionsWithUser(loanActions, users));
-  }
-
-  getLoanActions = () => {
-    const {
-      mutator,
-      match: { params }
-    } = this.props;
-    const query = `id==${params.loanid}`;
-    const limit = 100;
-
-    mutator.loanActions.reset();
-    mutator.loanActions.GET({ params: { query, limit } })
-      .then(loanActions => {
-        // the map unwraps the loanActions objects, returning an array of loans
-        // instead of an array of objects containing loans.
-        this.getUsers(loanActions.map(i => i.loan));
-      });
-  };
 
   getFeeFine() {
     const { mutator, match: { params } } = this.props;
@@ -314,9 +252,7 @@ class LoanDetails extends React.Component {
       patronGroup,
       patronBlocks,
       user,
-      resources: {
-        loanActionsWithUser,
-      },
+      loanActionsWithUser,
       stripes,
       intl,
       loanPolicies,
@@ -327,7 +263,7 @@ class LoanDetails extends React.Component {
       patronBlockedModal,
     } = this.state;
 
-    if (!loan) {
+    if (!loan || !user || (loan.userId !== user.id)) {
       return (
         <ViewLoading
           id="pane-loandetails"
@@ -527,7 +463,7 @@ class LoanDetails extends React.Component {
               </Col>
             </Row>
             <br />
-            {loanActionsWithUser && loanActionsWithUser.records &&
+            {loanActionsWithUser &&
             <MultiColumnList
               id="list-loanactions"
               formatter={loanActionsFormatter}
@@ -540,7 +476,7 @@ class LoanDetails extends React.Component {
                 source: intl.formatMessage({ id: 'ui-users.loans.columns.source' }),
                 comments: intl.formatMessage({ id: 'ui-users.loans.columns.comments' }),
               }}
-              contentData={loanActionsWithUser.records}
+              contentData={loanActionsWithUser}
             />
           }
             <Modal dismissible closeOnBackgroundClick onClose={this.hideNonRenewedLoansModal} open={this.state.nonRenewedLoansModalOpen} label={nonRenewedLabel}>

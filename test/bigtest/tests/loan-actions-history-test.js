@@ -45,7 +45,7 @@ describe('loans actions history', () => {
         const loan = this.server.create('loan', { status: { name: 'Open' } });
 
         this.server.createList('request', requestsAmount, { itemId: loan.itemId });
-        this.visit(`/users/view/${user.id}?layer=loan&loan=${loan.id}&query=%20%20&sort=name`);
+        this.visit(`/users/${user.id}/loans/${loan.id}`);
       });
 
       it('should not be presented', () => {

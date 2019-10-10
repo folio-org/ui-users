@@ -5,14 +5,21 @@ import { LoanDetails } from '../components/views';
 
 class LoanDetailContainer extends React.Component {
   static manifest = Object.freeze({
-    loanActionsWithUser: {},
+    modified: {},
     users: {
       type: 'okapi',
       records: 'users',
       resourceShouldRefresh: true,
-      path: 'users',
-      accumulate: 'true',
-      fetch: false,
+      path: (_q, _p, _r, _l, props) => {
+        if (props.resources.loanActions &&
+          props.resources.loanActions.records.length > 0) {
+          const query = props.resources.loanActions.records
+            .map(r => `id==${r.loan.metadata.updatedByUserId}`)
+            .join(' or ');
+          return `users?query=(${query})`;
+        }
+        return null;
+      },
     },
     selUser: {
       type: 'okapi',
@@ -32,7 +39,7 @@ class LoanDetailContainer extends React.Component {
       },
       records: 'usergroups',
     },
-    loansHistory: {
+    loanHistory: {
       type: 'okapi',
       records: 'loans',
       path: 'circulation/loans?query=(userId=:{id}) sortby id&limit=100',
@@ -48,11 +55,15 @@ class LoanDetailContainer extends React.Component {
     },
     loanActions: {
       type: 'okapi',
-      path: 'loan-storage/loan-history',
-      records: 'loans',
+      path: 'loan-storage/loan-history?query=(loan.id==:{loanid})&limit=100',
+      records: 'loansHistory',
       resourceShouldRefresh: true,
-      accumulate: 'true',
-      fetch: false,
+      shouldRefresh: (props, nextProps) => {
+        return (
+          (props.resources.modified.time !== nextProps.resources.modified.time) ||
+          (props.resources.renew.succesfulMutations.length !== nextProps.resources.renew.successfulMutations.length)
+        );
+      }
     },
     loanAccountsActions: {
       type: 'okapi',
@@ -87,8 +98,8 @@ class LoanDetailContainer extends React.Component {
 
   getLoan = () => {
     const { resources, match: { params: { loanid } } } = this.props;
-    const userLoans = (resources.loansHistory || {}).records || [];
-    if (userLoans.length === 0 || !loanid) return null;
+    const userLoans = (resources.loanHistory || {}).records || [];
+    if (userLoans.length === 0 || !loanid) return undefined;
     const loan = userLoans.find(l => l.id === loanid) || {};
     return loan;
   }
@@ -111,17 +122,44 @@ class LoanDetailContainer extends React.Component {
     return groups.filter(g => g.id === user.patronGroup)[0] || {};
   }
 
+  joinLoanActionsWithUpdatingUser = (loanActions, users) => {
+    if ((loanActions && loanActions.records.length > 0) &&
+    (users && users.records.length > 0)) {
+      const userMap = users.records.reduce((memo, user) => {
+        return Object.assign(memo, { [user.id]: user });
+      }, {});
+      const records = loanActions.records.map(la => {
+        return Object.assign({}, la.loan, { user: userMap[la.loan.metadata.updatedByUserId] });
+      });
+
+      // this.props.mutator.loanActionsWithUser.replace({ records });
+      return records;
+    }
+    return [];
+  }
+
   render() {
     const {
-      resources
+      resources : {
+        loanActions,
+        users,
+        patronBlocks: resPatronBlocks
+      }
     } = this.props;
 
-    const patronBlocks = (resources.patronBlocks || {}).records || [];
+    const patronBlocks = (resPatronBlocks || {}).records || [];
     const loan = this.getLoan();
+
+
+    const loanActionsWithUser = this.joinLoanActionsWithUpdatingUser(
+      loanActions,
+      users
+    );
 
     return (
       <LoanDetails
         loans={loan ? [loan] : []}
+        loanActionsWithUser={loanActionsWithUser}
         loan={loan}
         user={this.getUser()}
         patronGroup={this.getPatronGroup()}
