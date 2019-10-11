@@ -208,11 +208,10 @@ class Users extends React.Component {
   // XXX something prevents exceptions in this function from being received: see STRIPES-483
   create = (userdata) => {
     const { mutator } = this.props;
-    let { username } = userdata;
 
-    if (username) {
-      username = username.trim();
-      const creds = Object.assign({}, userdata.creds, { username: username }, userdata.creds.password ? {} : { password: '' });
+    if (userdata.username) {
+      userdata.username = userdata.username.trim();
+      const creds = Object.assign({}, userdata.creds, { username: userdata.username }, userdata.creds.password ? {} : { password: '' });
       const user = Object.assign({}, userdata, { id: uuid() });
       if (user.creds) delete user.creds;
 
