@@ -829,6 +829,6 @@
     "permissions.modal.permission": "صلاحية",
     "accounts.comment.error.enterComment": "إدخال تعليق",
     "owners.noServicePoints": "نقاط الخدمة المرتبطة غير المسموح بها لمالك الرسم/الغرامة المشتركة",
-    "anonymization.confirmation.header": "Anonymization prevented",
-    "anonymization.confirmation.message": "{amount} loan(s) had associated fees/fines and could not be anonymized."
+    "anonymization.confirmation.header": "تم منع عدم تعريف الهوية",
+    "anonymization.confirmation.message": "{amount} إعارة برتبط بها رسوم/غرامات ولا يمكن عدم تعريف هويتها."
 }
