@@ -11,7 +11,7 @@ export default Factory.extend({
   dueDate: () => faker.date.future(0.1, faker.date.future(0.1)).toString(),
   returnDate: () => faker.date.future(0.1).toString(),
   systemReturnDate: () => faker.date.future(0.1).toString(),
-  action: () => faker.company.catchPhrase(),
+  action: () => () => faker.random.arrayElement(['checkedout', 'checkedin', 'renewed', 'holdrequested']),
   actionComment: () => faker.company.catchPhrase(),
   itemStatus: () => faker.company.catchPhrase(),
   renewalCount: () => faker.random.number(),

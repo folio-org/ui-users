@@ -13,8 +13,8 @@ class LoanDetailContainer extends React.Component {
       path: (_q, _p, _r, _l, props) => {
         if (props.resources.loanActions &&
           props.resources.loanActions.records.length > 0) {
-          const query = props.resources.loanActions.records
-            .map(r => `id==${r.loan.metadata.updatedByUserId}`)
+          const query = [...new Set(props.resources.loanActions.records
+            .map(r => `id==${r.loan.metadata.updatedByUserId}`))]
             .join(' or ');
           return `users?query=(${query})`;
         }
@@ -55,7 +55,7 @@ class LoanDetailContainer extends React.Component {
     },
     loanActions: {
       type: 'okapi',
-      path: 'loan-storage/loan-history?query=(loan.id==:{loanid})&limit=100',
+      path: 'loan-storage/loan-history?query=(loan.id=:{loanid})&limit=100',
       records: 'loansHistory',
       resourceShouldRefresh: true,
       shouldRefresh: (props, nextProps) => {

@@ -95,7 +95,7 @@ class UserSearchContainer extends React.Component {
 
   componentDidMount() {
     this.source = new StripesConnectedSource(this.props, this.logger);
-    this.props.mutator.query.replace('');
+    // this.props.mutator.query.replace('');
     if (this.searchField.current) {
       this.searchField.current.focus();
     }

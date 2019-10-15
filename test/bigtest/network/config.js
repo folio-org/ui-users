@@ -112,9 +112,12 @@ export default function config() {
   this.get('/users', ({ users }, request) => {
     if (request.queryParams.query) {
       const cqlParser = new CQLParser();
-      const query = request.queryParams.query.split('sortby')[0];
+      // get the CQL query param from 'query=' until the amphersand or end of the string
+      let query = /query=(\(.*\)|%28.*%29)/.exec(request.url)[1];
       const filterField = 'active';
-
+      if (/^%28/.test(query)) {
+        query = decodeURIComponent(query);
+      }
       cqlParser.parse(query);
 
       const {
@@ -167,13 +170,56 @@ export default function config() {
 
   this.get('/service-points');
 
-  this.get('/circulation/loans', function ({ loans }) {
+  this.get('/circulation/loans', function ({ loans }, request) {
+    if (request.queryParams.query) {
+      const url = new URL(request.url.split('sortby')[0]);
+      const query = url.searchParams.get('query');
+      const cqlParser = new CQLParser();
+
+      cqlParser.parse(query);
+
+      const {
+        tree: {
+          term,
+          field,
+        }
+      } = cqlParser;
+
+      if (field === 'userId') {
+        return loans.where((loan) => {
+          return loan.userId === term;
+        });
+      }
+    }
+
     return this.serializerOrRegistry.serialize(loans.all());
   });
 
-  this.get('loan-storage/loan-history', {
-    loansHistory: [],
-    totalRecords: 0,
+  this.get('loan-storage/loan-history', ({ loanactions }, request) => {
+    if (request.queryParams.query) {
+      const query = /query=(\(.*\)|%28.*%29)/.exec(request.url)[1];
+      const cqlParser = new CQLParser();
+
+      cqlParser.parse(query);
+
+      const {
+        tree: {
+          term,
+          field,
+        }
+      } = cqlParser;
+
+      if (field === 'loan.id') {
+        return loanactions.where((loanaction) => {
+          return loanaction.loan.id === term;
+        });
+      }
+    }
+
+    return {
+      loansHistory: [],
+      totalRecords: 0,
+    };
   });
 
   this.get('/circulation/requests', function ({ requests }) {

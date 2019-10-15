@@ -40,6 +40,6 @@ export default @interactor class UsersInteractor {
   instance = scoped('[data-test-instance-details]');
 
   whenLoaded() {
-    return this.when(() => this.patronGroupsPresent).timeout(4000);
+    return this.when(() => this.patronGroupsPresent).timeout(5000);
   }
 }

@@ -19,9 +19,12 @@ describe('loans actions history', () => {
     const updatingUser = this.server.create('user');
     const loan = this.server.create('loan', {
       metadata: { updatedByUserId: updatingUser.id },
+      userId: user.id,
       status: { name: 'Open' },
       loanPolicyId: 'test'
     });
+
+    this.server.createList('loanactions', 5, { loan: { ...loan.attrs } });
 
     this.server.createList('request', requestsAmount, { itemId: loan.itemId });
     this.visit(`/users/${user.id}/loans/view/${loan.id}`);

@@ -46,7 +46,7 @@ describe('User notes flow', function () {
       links: [{ type: 'user', id: 'someId2' }],
     });
 
-    this.visit(`/users/view/${user.id}`);
+    this.visit(`/users/preview/${user.id}`);
 
     await notesAccordion.whenLoaded();
   });
