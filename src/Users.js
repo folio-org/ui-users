@@ -120,13 +120,14 @@ class Users extends React.Component {
     uniquenessValidator: {
       type: 'okapi',
       records: 'users',
-      accumulate: 'true',
+      accumulate: true,
       path: 'users',
       fetch: false,
     },
     loans: {
       type: 'okapi',
       records: 'loans',
+      accumulate: true,
       path: () => `circulation/loans?query=(status="Open" and dueDate < ${getLoansOverdueDate()})`,
       permissionsRequired: 'circulation.loans.collection.get,accounts.collection.get',
     }
@@ -175,6 +176,11 @@ class Users extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      exportInProgress: false,
+    };
+
     this.keyboardCommands = [
       {
         name: 'new',
@@ -257,13 +263,32 @@ class Users extends React.Component {
     }
   }
 
+  generateOverdueLoanReport = props => {
+    const {
+      reset,
+      GET,
+    } = props.mutator.loans;
+    const { exportInProgress } = this.state;
+
+    if (exportInProgress) {
+      return;
+    }
+
+    this.setState({ exportInProgress: true }, () => {
+      reset();
+      GET()
+        .then(loans => this.overdueLoanReport.toCSV(loans))
+        .then(this.setState({ exportInProgress: false }));
+    });
+  }
+
   getActionMenu = ({ onToggle }) => (
     <Button
       buttonStyle="dropdownItem"
       id="export-overdue-loan-report"
       onClick={() => {
         onToggle();
-        this.overdueLoanReport.toCSV(get(this.props.resources, 'loans.records', []));
+        this.generateOverdueLoanReport(this.props);
       }}
     >
       <FormattedMessage id="ui-users.reports.overdue.label" />
