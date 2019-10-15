@@ -223,7 +223,7 @@ class Users extends React.Component {
       const user = { ...createdUserdata, id: uuid() };
       if (user.creds) delete user.creds;
 
-      mutator.records.POST(user)
+      mutator.records.POST(user);
       await (newUser => mutator.creds.POST({ ...creds, userId: newUser.id }));
       await (newCreds => mutator.perms.POST({ userId: newCreds.userId, permissions: [] }));
       await ((perms) => {
@@ -233,7 +233,7 @@ class Users extends React.Component {
       const user = { ...userdata, id: uuid() };
       if (user.creds) delete user.creds;
 
-      mutator.records.POST(user)
+      mutator.records.POST(user);
       await ((newUser) => mutator.perms.POST({ userId: newUser.id, permissions: [] }));
       await ((perms) => {
         mutator.query.update({ _path: `/users/view/${perms.userId}`, layer: null });
