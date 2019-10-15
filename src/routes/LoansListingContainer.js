@@ -101,7 +101,7 @@ class LoansListingContainer extends React.Component {
     const loansHistory = _get(resources, ['loansHistory', 'records'], []);
     const patronBlocks = _get(resources, ['hasPatronBlocks', 'records'], []);
 
-    if (!user) return (<ViewLoading inPaneset defaultWidth="100%" paneTitle="Loading loans" />);
+    if (!user) return (<ViewLoading defaultWidth="100%" paneTitle="Loading loans" />);
     return (
       <LoansListing
         patronBlocks={patronBlocks}

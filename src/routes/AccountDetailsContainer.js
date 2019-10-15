@@ -70,7 +70,7 @@ class AccountDetailsContainer extends React.Component {
     const user = this.getUser();
     const account = this.getAccount();
     const patronGroup = this.getPatronGroup();
-    if (!account) return (<ViewLoading inPaneset defaultWidth="100%" paneTitle="Loading accounts" />);
+    if (!account) return (<ViewLoading defaultWidth="100%" paneTitle="Loading accounts" />);
     return (
       <AccountDetails user={user} account={account} patronGroup={patronGroup} {...this.props} />
     );

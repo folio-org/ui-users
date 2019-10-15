@@ -95,7 +95,7 @@ describe('User notes flow', function () {
         });
 
         it('should redirect to previous location', function () {
-          expect(this.location.pathname).to.equal(`/users/preview/${user.id}`);
+          expect(this.location.pathname).to.include(`/users/preview/${user.id}`);
         });
       });
 
@@ -162,7 +162,7 @@ describe('User notes flow', function () {
               });
 
               it('should redirect to previous page', function () {
-                expect(this.location.pathname + this.location.search).to.equal(`/users/preview/${user.id}`);
+                expect(this.location.pathname + this.location.search).to.include(`/users/preview/${user.id}`);
               });
             });
           });
@@ -232,7 +232,7 @@ describe('User notes flow', function () {
         });
 
         it('should redirect to previous location', function () {
-          expect(this.location.pathname + this.location.search).to.equal(`/users/preview/${user.id}`);
+          expect(this.location.pathname + this.location.search).to.include(`/users/preview/${user.id}`);
         });
       });
 
@@ -261,7 +261,7 @@ describe('User notes flow', function () {
           });
 
           it('should redirect to user details page', function () {
-            expect(this.location.pathname + this.location.search).to.equal(`/users/preview/${user.id}`);
+            expect(this.location.pathname + this.location.search).to.include(`/users/preview/${user.id}`);
           });
         });
       });
@@ -313,7 +313,7 @@ describe('User notes flow', function () {
           });
 
           it('should redirect to previous page', function () {
-            expect(this.location.pathname + this.location.search).to.equal(`/users/notes/${userNote.id}`);
+            expect(this.location.pathname + this.location.search).to.include(`/users/notes/${userNote.id}`);
           });
         });
 

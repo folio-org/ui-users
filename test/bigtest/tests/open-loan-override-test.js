@@ -20,7 +20,7 @@ describe('open loans override', () => {
 
     beforeEach(async function () {
       const user = this.server.create('user');
-      this.server.create('loan', { status: { name: 'Open' } });
+      this.server.create('loan', { status: { name: 'Open' }, userId: user.id });
 
       this.visit(`/users/${user.id}/loans/open?query=%20&sort=requests`);
     });
@@ -91,7 +91,7 @@ describe('open loans override', () => {
 
     beforeEach(async function () {
       const user = this.server.create('user');
-      this.server.create('loan', { status: { name: 'Open' } });
+      this.server.create('loan', { status: { name: 'Open' }, userId: user.id });
 
       this.visit(`/users/${user.id}/loans/open?query=%20&sort=requests`);
     });

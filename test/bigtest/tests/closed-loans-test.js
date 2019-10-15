@@ -24,7 +24,8 @@ describe('Closed Loans', () => {
     const user = this.server.create('user');
     const loan = this.server.create('loan', {
       status: { name: 'Closed' },
-      feesAndFines : { amountRemainingToPay: 200 }
+      feesAndFines : { amountRemainingToPay: 200 },
+      userId: user.id
     });
 
     setupAnonymizationAPIResponse(this.server, [{

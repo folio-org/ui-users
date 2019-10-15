@@ -33,7 +33,7 @@ describe('Open Loans', () => {
 
   beforeEach(async function () {
     const user = this.server.create('user');
-    const loan = this.server.create('loan', { status: { name: 'Open' } });
+    const loan = this.server.create('loan', { status: { name: 'Open' }, userId: user.id });
 
     this.server.createList('request', requestsAmount, { itemId: loan.itemId });
     this.visit(`/users/${user.id}/loans/open?query=%20&sort=requests`);

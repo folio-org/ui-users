@@ -15,7 +15,7 @@ import isOverridePossible from '../Loans/OpenLoans/helpers/isOverridePossible';
 // HOC used to manage renew
 const withRenew = WrappedComponent => class WithRenewComponent extends React.Component {
   static propTypes = {
-    loans: PropTypes.object,
+    loans: PropTypes.arrayOf(PropTypes.object),
     mutator: PropTypes.shape({
       loanPolicies: PropTypes.shape({
         GET: PropTypes.func.isRequired,
