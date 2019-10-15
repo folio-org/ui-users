@@ -2,6 +2,7 @@
 
 ## 2.26.0 (IN PROGRESS)
 * Prevent manual anonymization of closed loans with fees/fines. Refs UIU-1083.
+* Update sponsor and proxy labels. Refs UIU-1018.
 
 * Implement permission assigment by batch. Refs UIU-1249
 * Fix the mechanism for the accumulation of overdue loans in CSV report. Refs UIU-1286.
