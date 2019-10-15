@@ -219,25 +219,27 @@ class Users extends React.Component {
     if (username) {
       username = username.trim();
       const createdUserdata = { ...userdata, username };
-      const creds = { ...createdUserdata.creds, username: createdUserdata.username };
+      const creds = { ...createdUserdata.creds, username: createdUserdata.username, password: userdata.creds.password };
       const user = { ...createdUserdata, id: uuid() };
       if (user.creds) delete user.creds;
 
-      mutator.records.POST(user);
-      await (newUser => mutator.creds.POST({ ...creds, userId: newUser.id }));
-      await (newCreds => mutator.perms.POST({ userId: newCreds.userId, permissions: [] }));
-      await ((perms) => {
-        mutator.query.update({ _path: `/users/view/${perms.userId}`, layer: null });
-      });
+      const newUser = await (() => mutator.records.POST(user))();
+      const newCreds = await (value => mutator.creds.POST({ ...creds, userId: value.id }))(newUser);
+      const newPerms = await (value => mutator.perms.POST({ userId: value.userId, permissions: [] }))(newCreds);
+      const updatedQuery = await (value => {
+        mutator.query.update({ _path: `/users/view/${value.userId}`, layer: null });
+      })(newPerms);
+      return (newUser, newCreds, newPerms, updatedQuery);
     } else {
       const user = { ...userdata, id: uuid() };
       if (user.creds) delete user.creds;
 
-      mutator.records.POST(user);
-      await ((newUser) => mutator.perms.POST({ userId: newUser.id, permissions: [] }));
-      await ((perms) => {
-        mutator.query.update({ _path: `/users/view/${perms.userId}`, layer: null });
-      });
+      const newUser = await mutator.records.POST(user);
+      const perms = await (value => mutator.perms.POST({ userId: value.id, permissions: [] }))(newUser);
+      const updatedQuery = await (value => {
+        mutator.query.update({ _path: `/users/view/${value.userId}`, layer: null });
+      })(perms);
+      return (newUser, perms, updatedQuery);
     }
   }
 
