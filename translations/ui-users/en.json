@@ -2,7 +2,6 @@
   "user": "User",
   "user.pluralized": "{count} {count, plural, one {user} other {users}}",
   "meta.title": "Users",
-
   "loading": "Loading...",
   "search": "Search",
   "expandAll": "Expand all",
@@ -268,7 +267,6 @@
   "data.countries.YEM": "Yemen",
   "data.countries.ZMB": "Zambia",
   "data.countries.ZWE": "Zimbabwe",
-
   "data.loanActionMap.checkedOut": "Checked out",
   "data.loanActionMap.checkedIn": "Checked in",
   "data.loanActionMap.renewed": "Renewed",
@@ -278,7 +276,6 @@
   "data.loanActionMap.dueDateChanged": "Due date changed",
   "data.loanActionMap.renewedThroughOverride": "Renewed through override",
   "data.loanActionMap.checkedOutThroughOverride": "Checked out through override",
-
   "action": "Action",
   "dueDate": "Due date",
   "loanDate": "Loan date",
@@ -307,7 +304,6 @@
   "loans.loanDetails": "Loan details",
   "loans.newFeeFine": "New fee/fine",
   "loans.feeFineDetails": "Fee/fine details",
-
   "settings.label": "Users",
   "settings.general": "General",
   "settings.feefine": "Fee/fine",
@@ -322,7 +318,6 @@
   "settings.refundReasons": "Refund reasons",
   "settings.commentRequired": "Comment required",
   "settings.transferAccounts": "Transfer accounts",
-
   "loans.columns.title": "Item title",
   "loans.columns.itemStatus": "Item status",
   "loans.columns.barcode": "Barcode",
@@ -361,12 +356,10 @@
   "loans.details.feeFine": "Fee/fine",
   "loans.details.proxyBorrower": "Proxy borrower",
   "loans.details.checkinServicePoint": "Check in service point",
-
   "requests.title": "Requests",
   "requests.createRequest": "Create request",
   "requests.numOpenRequests": "{count, number} {count, plural, one {open request} other {open requests}}",
   "requests.numClosedRequests": "{count, number} {count, plural, one {closed request} other {closed requests}}",
-
   "permissions.emptyField": "Please fill this in to continue",
   "permissions.noSponsorsFound": "No sponsors found",
   "permissions.noProxiesFound": "No proxies found",
@@ -376,8 +369,8 @@
   "permissions.addAllPermissions": "Add all permissions",
   "permissions.availablePermissions": "available permissions",
   "permissions.userPermissions": "User permissions",
-  "permissions.isProxyFor": "{name} is proxy for",
-  "permissions.isSponsorOf": "{name} is sponsor of",
+  "permissions.isProxyFor": "Sponsors ({name} can borrow on behalf of these people)",
+  "permissions.isSponsorOf": "Proxies (these people can borrow on behalf of {name})",
   "permissions.proxySponsor": "Proxy/Sponsor",
   "permissions.assignedPermissions": "Assigned permissions",
   "permissions.untitledPermissionSet": "Untitled permission set",
@@ -393,7 +386,6 @@
   "deleteSponsorPrompt": "Delete Sponsor?",
   "deleteProxyPrompt": "Delete Proxy?",
   "proxyWillBeDeleted": "The proxy relationship of <strong>{name1}</strong> to <strong>{name2}</strong> will be deleted.",
-
   "extended.extendedInformation": "Extended information",
   "extended.dateEnrolled": "Date enrolled",
   "extended.externalSystemId": "External system ID",
@@ -403,15 +395,12 @@
   "extended.sendResetPassword": "Send reset password email",
   "extended.sendCreatePassword": "Send create password email",
   "extended.copyLink": "Copy link",
-
   "extended.resetPasswordModal.label": "Reset password email sent",
   "extended.resetPasswordModal.linkWasSent": "A reset password link was sent to:",
   "extended.resetPasswordModal.linkInstructions": "If {name} is not receiving emails from FOLIO, the following link can be sent:",
-
   "extended.createPasswordModal.label": "Create password email confirmation",
   "extended.createPasswordModal.linkWasSent": "A create password link was sent to:",
   "extended.createPasswordModal.linkInstructions": "The following link can be sent if the email was now received",
-
   "contact.contactInformation": "Contact Information",
   "contact.email": "Email",
   "contact.phone": "Phone",
@@ -422,7 +411,6 @@
   "contact.addressTypes": "Address Types",
   "contact.addressType": "Address Type",
   "contact.addresses": "Addresses",
-
   "information.userInformation": "User information",
   "information.userDetails": "User details",
   "information.name": "Name",
@@ -438,19 +426,16 @@
   "information.selectPatronGroup": "Select patron group",
   "information.patronGroup.users": "Users",
   "information.profile.label": "Display profile pictures",
-  "proxy.addProxy": "Add proxy",
+  "proxy.addProxy": "Add",
   "proxy.relationshipCreated": "Relationship Created",
   "proxy.relationshipStatus": "Relationship Status",
   "proxy.requestForSponsor": "Proxy can request for sponsor",
   "proxy.notificationsTo": "Notifications sent to",
   "proxy.accrueTo": "Fees/fines accrue to",
-
-  "sponsor.addSponsor": "Add sponsor",
-
+  "sponsor.addSponsor": "Add",
   "crud.closeNewUserDialog": "Close New User Dialog",
   "crud.editUser": "Edit User",
   "crud.createUser": "Create User",
-
   "errors.missingRequiredField": "Please fill this in to continue",
   "errors.missingRequiredUsername": "Please provide a username when a password is given",
   "errors.missingRequiredPassword": "Please provide a password when a username is given",
@@ -458,10 +443,8 @@
   "errors.missingRequiredContactType": "Please select contact type",
   "errors.missingRequiredAddressType": "Please select address type",
   "errors.missingRequiredPreferredServicePoint": "Please fill this in to continue",
-
   "errors.noMatch.oops": "Uh-oh!",
   "errors.noMatch.how": "How did you get to {location}?",
-
   "errors.userExpired": "User has expired",
   "errors.usernameUnavailable": "This username already exists",
   "errors.barcodeUnavailable": "This barcode has already been taken",
@@ -504,7 +487,6 @@
   "accountActionHistory": "Account Actions History",
   "status": "Status",
   "selectColumns": "Select Columns",
-
   "accounts.title": "Fees/Fines",
   "accounts.outstandingBalance": "Outstanding Balance: ",
   "accounts.header": "Fee/fine details - {userName} ({patronGroup})",
@@ -518,11 +500,9 @@
   "accounts.numClosedAccounts": "{count, number} {count, plural, one {closed fee/fine} other {closed fees/fines}}",
   "accounts.chargeManual": "Create fee/fine",
   "accounts.viewAllFeesFines": "View all fees/fines",
-
   "contextMenu.homePage": "Home page",
   "contextMenu.settings": "Settings",
   "contextMenu.usageTips": "Usage tips",
-
   "feefines.title": "Fee/fine: Manual charges",
   "feefines.singular": "Fee/Fine Type",
   "feefines.callout": "The Fee/Fine Type <strong>{feefine}</strong> was successfully <strong>deleted</strong>.",
@@ -531,17 +511,14 @@
   "feefines.modalMessage": "The Fee/Fine Type <strong>{feefine}</strong> will be <strong>deleted</strong>",
   "feefines.defaultChargeNotice": "Default Charge Notice",
   "feefines.defaultActionNotice": "Default Action Notice",
-
   "feefines.columns.type": "Fee/Fine Type*",
   "feefines.columns.amount": "Default Amount",
   "feefines.columns.chargeNotice": "Charge Notice",
   "feefines.columns.actionNotice": "Action Notice",
-
   "feefines.errors.amountNumeric": "Default Amount must be numeric",
   "feefines.errors.amountPositive": "Default Amount must be positive",
   "feefines.errors.exist": "Fee/fine type exists",
   "feefines.errors.existShared": "Fee/fine type exists for owner {owner}",
-
   "feefines.modal.error": "Select one to continue",
   "feefines.modal.yes": "Yes",
   "feefines.modal.no": "No",
@@ -550,7 +527,6 @@
   "feefines.modal.cancel": "Cancel",
   "feefines.modal.title": "Copy existing fee/fine owner table entries?",
   "feefines.nodata": "There are no Fee/fine: Manual charges",
-
   "owners.label": "Fee/fine: Owners",
   "owners.singular": "Fee/fine Owner",
   "owners.error": "Error",
@@ -561,18 +537,15 @@
   "owners.nodata": "There are no Fee/fine: Owners",
   "owners.cannotDeleteOwner": "This Fee/fine Owner cannot be deleted, as it has one or more fees/fines associated with it",
   "owners.noServicePoints": "Associated service points not allowed for Shared fee/fine owner",
-
   "payments.label": "Fee/fine: Payment methods",
   "payments.singular": "Payment method",
   "payments.columns.name": "Name*",
   "payments.columns.refund": "Refund method allowed",
   "payments.nodata": "There are no Fee/fine: Payment methods",
-
   "refunds.label": "Fee/fine: Refund reasons",
   "refunds.singular": "Refund reason",
   "refunds.columns.nameReason": "Name*",
   "refunds.columns.description": "Description",
-
   "sp.servicePoints": "Service points",
   "sp.availableServicePoints": "Available service points",
   "sp.addServicePoints": "Add service points",
@@ -584,12 +557,10 @@
   "sp.column.name": "Name",
   "sp.column.library": "Library",
   "sp.preferredSPNone": "None",
-
   "waives.label": "Fee/fine: Waive reasons",
   "waives.singular": "Waive reason",
   "waives.columns.reason": "Reason*",
   "waives.columns.desc": "Description",
-
   "comment.title": "Fee/fine: Comment required",
   "comment.message": "Comment required settings were successfully updated.",
   "comment.save": "Save",
@@ -597,7 +568,6 @@
   "comment.waived": "Require comment when fee/fine fully/partially waived",
   "comment.transferred": "Require comment when fee/fine fully/partially transferred",
   "comment.refunded": "Require comment when fee/fine fully/partially refunded",
-
   "charge.owner.label": "Fee/fine owner*",
   "charge.feefine.label": "Fee/fine type*",
   "charge.amount.label": "Fee/fine amount*",
@@ -611,9 +581,7 @@
   "charge.messageOf": " fee/fine Of ",
   "charge.messageSuccessfully": " has been successfully ",
   "charge.messageFor": " for ",
-
   "charge.errors.amount": "Amount is not a number",
-
   "charge.item.title": "Item information",
   "charge.item.placeholder": "Scan or enter item barcode",
   "charge.item.button": "Enter",
@@ -622,11 +590,9 @@
   "charge.item.status": "Item Status",
   "charge.item.callNumber": "Call number",
   "charge.item.location": "Location",
-
   "charge.itemLookup.modalLabel": "Item Lookup",
   "charge.itemLookup.confirm": "Confirm",
   "charge.itemLookup.cancel": "Cancel",
-
   "details.columns.comments": "Additional information",
   "details.columns.date": "Action date",
   "details.columns.action": "Action",
@@ -636,7 +602,6 @@
   "details.columns.created": "Created at",
   "details.columns.source": "Source",
   "details.button.new": "New staff info",
-
   "details.field.loan": "View",
   "details.field.feetype": "Fee/fine type",
   "details.field.owner": "Fee/fine owner",
@@ -651,19 +616,15 @@
   "details.field.location": "Location",
   "details.field.duedate": "Due date",
   "details.field.returnedate": "Returned date",
-
   "details.paneTitle.feeFineDetails": "Fee/fine details",
   "details.label.loanDetails": "Loan details",
-
   "accounts.button.new": " New fee/fine",
   "accounts.button.error": "Error",
-
   "accounts.error.field": "Please fill this field in to continue",
   "accounts.error.comment": "Enter a comment",
   "accounts.error.message": "Enter an amount greater than 0",
   "accounts.error.exceeds": "Pay amount exceeds the selected amount",
   "accounts.error.select": "Select one",
-
   "accounts.history.columns.title": "Instance (Item type)",
   "accounts.history.columns.amount": "Billed",
   "accounts.history.columns.remaining": "Remaining",
@@ -676,27 +637,21 @@
   "accounts.history.columns.status": "Payment status",
   "accounts.history.columns.due": "Due date",
   "accounts.history.columns.returned": "Returned date",
-
   "accounts.history.possibleColumns.columns.created": "Date Created",
-
   "accounts.history.button.select": "Select columns",
   "accounts.history.button.pay": "Pay",
   "accounts.history.button.waive": "Waive",
   "accounts.history.button.refund": "Refund",
   "accounts.history.button.transfer": "Transfer",
   "accounts.history.button.loanDetails": " Loan details",
-
   "accounts.history.comment": "Additional information",
   "accounts.history.of": "of",
   "accounts.history.filter": "Search & Filter",
   "accounts.history.statusLabel": "{type} fees/fines for ",
-
   "accounts.feeFine": "fee/fine",
   "accounts.feesFines": "fees/fines",
-
   "accounts.confirmation.head": "Confirm fee/fine {action}",
   "accounts.confirmation.message": "<b>{count}</b> {count, plural, one {fee/fine} other {fees/fines}} for <b>{amount}</b> will be <b>{action}</b>",
-
   "accounts.totalOwed": "Total owed amount",
   "accounts.selectedAmount": "Selected amount",
   "accounts.remainingAmount": "Remaining amount",
@@ -707,7 +662,6 @@
   "accounts.optional": "optional",
   "accounts.required": "required",
   "accounts.summary": "{type} <b>{count}</b> {count, plural, one {fee/fine} other {fees/fines}} for a total amount of <b>{amount}</b>",
-
   "accounts.payment.modalLabel": "Pay Fee/Fine",
   "accounts.payment.amount": "Payment amount",
   "accounts.payment": "Pay",
@@ -721,8 +675,6 @@
   "accounts.payment.method": "Payment method",
   "accounts.payment.error.amount": "Payment must be > 0",
   "accounts.payment.error.exceeds": "Pay amount exceeds the selected amount",
-
-
   "accounts.waive.modalLabel": "Waive Fee/Fine",
   "accounts.waive.amount": "Waive amount",
   "accounts.waive": "Waive",
@@ -732,7 +684,6 @@
   "accounts.waive.error.exceeds": "Waive amount exceeds the selected amount",
   "accounts.waive.method": "Waive reason",
   "accounts.waive.method.placeholder": "Select reason",
-
   "accounts.transfer.modalLabel": "Transfer Fee/Fine",
   "accounts.transfer.amount": "Transfer amount",
   "accounts.transfer": "Transfer",
@@ -742,11 +693,8 @@
   "accounts.transfer.error.exceeds": "Transfer amount exceeds selected amount",
   "accounts.transfer.method": "Transfer Account",
   "accounts.transfer.method.placeholder": "Select account",
-
   "accounts.warning.itemSelected": "{total, number} items selected. {items, number} {items, plural, one {item} other {items}} cannot be {action} because they are already closed.",
-
   "accounts.cancelError": "Cancelled as error",
-
   "accounts.cancellation.field.reason": "Reason for cancellation*",
   "accounts.cancellation.field.cancellationInfo": "Enter information about the cancellation (required)",
   "accounts.cancellation.field.feefinewill": "fee/fine will be",
@@ -758,18 +706,14 @@
   "accounts.cancellation.field.feefineType": "fee/fine type",
   "accounts.cancellation.feeFinewillBeCancelled": "<b>{amount}</b> {feeFineType} fee/fine will be <b>cancelled</b>",
   "accounts.cancellation.error.comment": "Comment must be provided",
-
   "accounts.comment.error.enterComment": "Enter comment",
   "accounts.comment.field.comment": "Additional information for staff",
   "accounts.comment.field.save": "Save",
   "accounts.comment.field.cancel": "Cancel",
   "accounts.comment.staffInfo": "Staff info only",
-
   "accounts.field.infoPatron": "Additional information for patron",
-
   "cddd.dateRequired": "Date*",
   "cddd.timeRequired": "Time*",
-
   "blocks.columns.type": "Type",
   "blocks.columns.desc": "Display description",
   "blocks.columns.blocked": "Blocked actions",
@@ -783,7 +727,6 @@
   "blocks.detailsButton": "View block details",
   "blocks.closeButton": "Close",
   "blocks.additionalReasons": "View block details to see additional reasons for block...",
-
   "blocks.form.label.information": "Block information",
   "blocks.form.label.display": "Display Description*",
   "blocks.form.label.staff": "Staff only information",
@@ -793,44 +736,34 @@
   "blocks.form.label.borrowing": "Borrowing",
   "blocks.form.label.renewals": "Renewals",
   "blocks.form.label.request": "Request",
-
   "blocks.form.placeholder.desc": "Enter a short description (required)",
   "blocks.form.placeholder.information": "Enter addition information (optional)",
   "blocks.form.placeholder.message": "Enter a message to the patron (optional)",
-
   "blocks.form.validate.desc": "Description is required",
   "blocks.form.validate.any": "Select any option",
   "blocks.form.validate.date": "Expiration date is required",
   "blocks.form.validate.future": "Expiration date must be in the future",
-
   "blocks.form.button.delete": "Delete",
   "blocks.form.button.save": "Save & Close",
   "blocks.form.button.create": "Save & close",
   "blocks.form.button.close": "Close patron block dialog",
-
   "blocks.layer.heading": "Delete patron block?",
   "blocks.layer.confirmLabel": "Delete",
   "blocks.layer.add": "Add Block",
   "blocks.layer.newBlockTitle": "New Block",
   "blocks.layer.edit": "Edit Block",
-
   "blocks.message": "patron block will be removed",
   "blocks.textField.place": "Patron has block(s) in place",
-
   "additionalInfo.label": "Additional information",
   "additionalInfo.placeholder": "Enter more information about the override (required)",
-
   "button.override": "Override",
   "override.autoNewDueDate": "Due date will be calculated automatically",
   "override.emptyNewDueDate": "Select due date above",
-
   "accounts.comment.field.feeFineComment": "Staff information",
-
   "accounts.actions.calloutMessage": "The {feeFineType} fee/fine of {amount} has been successfully {paymentStatus} for {name}.",
   "accounts.actions.payFeeFine": "Pay fees/fines",
   "accounts.actions.waiveFeeFine": "Waive fees/fines",
   "accounts.actions.transferFeeFine": "Transfer fees/fines",
-
   "accounts.actions.warning.summary": "{selectedItemsAmount} items selected. {closedItemsAmount} items cannot be {action} because they are already closed",
   "accounts.actions.warning.alertDetails": "Alert details",
   "accounts.actions.warning.feeFineType": "Fee/Fine type",
@@ -850,14 +783,12 @@
   "accounts.actions.transfer": "transfer",
   "accounts.actions.tag.staff": "STAFF",
   "accounts.actions.tag.patron": "PATRON",
-
   "transfers.label": "Fee/fine: Transfer accounts",
   "transfers.columns.name": "Name",
   "transfers.columns.desc": "Description",
   "transfers.modalHeader": "Delete transfer account",
   "transfers.singular": "Transfer account",
   "transfers.nodata": "There are no Fee/fine: Transfer accounts",
-
   "reports.overdue.label": "Overdue loans report (CSV)",
   "reports.overdue.borrower.name": "Borrower name",
   "reports.overdue.borrower.barcode": "Borrower barcode",
@@ -898,7 +829,6 @@
   "permissions.modal.hideSearchPane": "Hide search and filters pane.",
   "permissions.modal.showSearchPane": "Show search and filters pane.",
   "permissions.modal.numberOfFilters": "{count, number} {count, plural, one {applied filter} other {applied filters}}",
-
   "anonymization.confirmation.header": "Anonymization prevented",
   "anonymization.confirmation.message": "{amount} loan(s) had associated fees/fines and could not be anonymized."
 }
