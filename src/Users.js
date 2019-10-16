@@ -213,37 +213,49 @@ class Users extends React.Component {
 
   // XXX something prevents exceptions in this function from being received: see STRIPES-483
   create = async (userdata) => {
-    const { mutator } = this.props;
+    const {
+      mutator: {
+        records: {
+          POST: recordPost,
+        },
+        creds: {
+          POST: credsPost,
+        },
+        perms: {
+          POST: permsPost,
+        },
+        query: {
+          update: queryUpdate,
+        },
+      }
+    } = this.props;
     let { username } = userdata;
     username = username.trim();
-    const createdUserdata = {
-      ...userdata,
-      username
-    };
-    const creds = {
-      ...createdUserdata.creds,
-      username: createdUserdata.username,
+    const userCreds = {
+      ...userdata.creds,
+      username,
       password: userdata.creds.password
     };
     const user = {
-      ...createdUserdata,
+      ...userdata,
+      username,
       id: uuid()
     };
     if (user.creds) delete user.creds;
-    const newUser = await mutator.records.POST(user);
-    const newCreds = await mutator.creds.POST({
-      ...creds,
-      userId: newUser.id
+    const { id: userId } = user;
+    await recordPost(user);
+    await credsPost({
+      ...userCreds,
+      userId
     });
-    const newPerms = await mutator.perms.POST({
-      userId: newCreds.userId,
+    await permsPost({
+      userId,
       permissions: []
     });
-    const updatedQuery = await mutator.query.update({
-      _path: `/users/view/${newPerms.userId}`,
+    await queryUpdate({
+      _path: `/users/view/${userId}`,
       layer: null
     });
-    return updatedQuery;
   }
 
   massageNewRecord = (userdata) => {
