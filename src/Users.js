@@ -215,32 +215,16 @@ class Users extends React.Component {
   create = async (userdata) => {
     const { mutator } = this.props;
     let { username } = userdata;
-
-    if (username) {
-      username = username.trim();
-      const createdUserdata = { ...userdata, username };
-      const creds = { ...createdUserdata.creds, username: createdUserdata.username, password: userdata.creds.password };
-      const user = { ...createdUserdata, id: uuid() };
-      if (user.creds) delete user.creds;
-
-      const newUser = await (() => mutator.records.POST(user))();
-      const newCreds = await (value => mutator.creds.POST({ ...creds, userId: value.id }))(newUser);
-      const newPerms = await (value => mutator.perms.POST({ userId: value.userId, permissions: [] }))(newCreds);
-      const updatedQuery = await (value => {
-        mutator.query.update({ _path: `/users/view/${value.userId}`, layer: null });
-      })(newPerms);
-      return (newUser, newCreds, newPerms, updatedQuery);
-    } else {
-      const user = { ...userdata, id: uuid() };
-      if (user.creds) delete user.creds;
-
-      const newUser = await mutator.records.POST(user);
-      const perms = await (value => mutator.perms.POST({ userId: value.id, permissions: [] }))(newUser);
-      const updatedQuery = await (value => {
-        mutator.query.update({ _path: `/users/view/${value.userId}`, layer: null });
-      })(perms);
-      return (newUser, perms, updatedQuery);
-    }
+    username = username.trim();
+    const createdUserdata = { ...userdata, username };
+    const creds = { ...createdUserdata.creds, username: createdUserdata.username, password: userdata.creds.password };
+    const user = { ...createdUserdata, id: uuid() };
+    if (user.creds) delete user.creds;
+    const newUser = await mutator.records.POST(user);
+    const newCreds = await mutator.creds.POST({ ...creds, userId: newUser.id });
+    const newPerms = await mutator.perms.POST({ userId: newCreds.userId, permissions: [] });
+    const updatedQuery = await mutator.query.update({ _path: `/users/view/${newPerms.userId}`, layer: null });
+    return updatedQuery;
   }
 
   massageNewRecord = (userdata) => {
