@@ -216,14 +216,33 @@ class Users extends React.Component {
     const { mutator } = this.props;
     let { username } = userdata;
     username = username.trim();
-    const createdUserdata = { ...userdata, username };
-    const creds = { ...createdUserdata.creds, username: createdUserdata.username, password: userdata.creds.password };
-    const user = { ...createdUserdata, id: uuid() };
+    const createdUserdata = {
+      ...userdata,
+      username
+    };
+    const creds = {
+      ...createdUserdata.creds,
+      username: createdUserdata.username,
+      password: userdata.creds.password
+    };
+    const user = {
+      ...createdUserdata,
+      id: uuid()
+    };
     if (user.creds) delete user.creds;
     const newUser = await mutator.records.POST(user);
-    const newCreds = await mutator.creds.POST({ ...creds, userId: newUser.id });
-    const newPerms = await mutator.perms.POST({ userId: newCreds.userId, permissions: [] });
-    const updatedQuery = await mutator.query.update({ _path: `/users/view/${newPerms.userId}`, layer: null });
+    const newCreds = await mutator.creds.POST({
+      ...creds,
+      userId: newUser.id
+    });
+    const newPerms = await mutator.perms.POST({
+      userId: newCreds.userId,
+      permissions: []
+    });
+    const updatedQuery = await mutator.query.update({
+      _path: `/users/view/${newPerms.userId}`,
+      layer: null
+    });
     return updatedQuery;
   }
 
