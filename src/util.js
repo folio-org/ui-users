@@ -3,11 +3,11 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 export function getFullName(user) {
-  const lastName = _.get(user, ['personal', 'lastName'], '');
-  const firstName = _.get(user, ['personal', 'firstName'], '');
-  const middleName = _.get(user, ['personal', 'middleName'], '');
+  const lastName = _.get(user, 'personal.lastName', '');
+  const firstName = _.get(user, 'personal.firstName', '');
+  const middleName = _.get(user, 'personal.middleName', '');
 
-  return `${lastName}${firstName ? ', ' : ' '}${firstName} ${middleName}`;
+  return `${lastName}${firstName ? ', ' : ' '}${firstName}${middleName ? ' ' : ''}${middleName}`;
 }
 
 export function getRowURL(user) {
