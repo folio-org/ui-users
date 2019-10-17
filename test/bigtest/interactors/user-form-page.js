@@ -43,7 +43,10 @@ import PermissionsModal from './permissions-modal';
 
   title = text('[class*=paneTitleLabel---]');
   barcodeField = new InputFieldInteractor('#adduser_barcode');
+  lastNameField = new InputFieldInteractor('#adduser_lastname');
   usernameField = new InputFieldInteractor('#adduser_username');
+  passwordField = new InputFieldInteractor('#pw');
+  emailField = new InputFieldInteractor('#adduser_email');
   feedbackError = text('[class^="feedbackError---"]');
   cancelButton = new ButtonInteractor('[data-test-user-form-cancel-button]');
   submitButton = new ButtonInteractor('[data-test-user-form-submit-button]');
@@ -53,4 +56,4 @@ import PermissionsModal from './permissions-modal';
   permissions = collection('[data-permission-name]');
 }
 
-export default new UserFormPage('[data-test-form-page]');
+export default new UserFormPage('form[data-test-form-page]');

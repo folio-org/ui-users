@@ -5,6 +5,8 @@ import {
   clickable,
   isVisible
 } from '@bigtest/interactor';
+import ButtonInteractor from '@folio/stripes-components/lib/Button/tests/interactor'; // eslint-disable-line
+
 
 @interactor class ActiveUserCheckbox {
   clickActive = clickable('#clickable-filter-active-active');
@@ -19,7 +21,6 @@ import {
   clickExportToCSV = clickable('#export-overdue-loan-report');
   exportBtnIsVisible = isVisible('#export-overdue-loan-report');
 }
-
 
 export default @interactor class UsersInteractor {
   static defaultScope = '[data-test-user-instances]';

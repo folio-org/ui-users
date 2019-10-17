@@ -3,11 +3,15 @@ import {
   describe,
   it,
 } from '@bigtest/mocha';
+import { location } from '@bigtest/react';
 import { expect } from 'chai';
 
 import setupApplication from '../helpers/setup-application';
+// eslint-disable-next-line import/no-duplicates
 import UserFormPage from '../interactors/user-form-page';
+import FormSelectInteractor from '../interactors/user-create-page';
 import UsersInteractor from '../interactors/users';
+import InstanceViewPage from '../interactors/user-view-page';
 
 describe('User create', () => {
   setupApplication();
@@ -15,7 +19,11 @@ describe('User create', () => {
   const users = new UsersInteractor();
 
   beforeEach(async function () {
-    this.visit('/users?layer=create');
+    this.visit('/users?sort=name&layer=create');
+  });
+
+  it('should open create user page', function () {
+    expect(location().search).to.to.equal('?sort=name&layer=create');
   });
 
   describe('visiting the create user page', () => {
@@ -38,6 +46,25 @@ describe('User create', () => {
 
       it('should redirect to view users page after click', () => {
         expect(users.$root).to.exist;
+      });
+    });
+
+    describe('filling create user form', () => {
+      beforeEach(async function () {
+        await UserFormPage.lastNameField.fillAndBlur('Test');
+        await FormSelectInteractor.selectPatronGroup('graduate (Graduate Student)');
+        await UserFormPage.usernameField.fillAndBlur(' test');
+        await UserFormPage.passwordField.fillAndBlur('test');
+        await UserFormPage.emailField.fillAndBlur('test@test.com');
+        await UserFormPage.submitButton.click();
+      });
+
+      it('should display the title in the pane header', () => {
+        expect(InstanceViewPage.userNameTitle).to.equal('Test');
+      });
+
+      it('should display the user email in contact information accordion', () => {
+        expect(InstanceViewPage.userContactsEmail).to.equal('test@test.com');
       });
     });
   });

@@ -40,14 +40,13 @@ import SelectInteractor from '@folio/stripes-components/lib/Select/tests/interac
   listaHeader = collection('[class*=HeaderRow---]', HeaderInteractor);
   checkList = collection('[class*=mclRow---]', CheckboxInteractor);
   rows = collection('#warning-mcl [class*=mclRow---]', RowInteractor);
-
   transferButton = clickable('#open-closed-all-transfer-button');
   cancel = scoped('#cancel-button', ButtonInteractor);
   submit = scoped('#submit-button', ButtonInteractor);
   amount = new TextFieldInteractor('[class*=formControl---]');
-  transferAccount = new SelectInteractor('[class*=selectWrap---]')
+  transferAccount = new SelectInteractor('[class*=selectWrap---]');
   comment = new TextAreaInteractor('[class*=textArea---]');
-  notify = new CheckboxInteractor('[class*=checkbox---]')
+  notify = new CheckboxInteractor('[class*=checkbox---]');
 
 
   confirmation = new ConfirmationModalInteractor('[id*=confirmation-]');
