@@ -640,6 +640,7 @@
     "react": "^16.5.0",
     "react-dom": "^16.5.0",
     "react-redux": "^5.0.7",
+    "react-router-dom": "^5.0.0",
     "redux": "^4.0.0",
     "sinon": "^7.1.1"
   },
@@ -652,14 +653,15 @@
     "query-string": "^5.0.0",
     "react-hot-loader": "^4.3.12",
     "react-intl": "^2.5.0",
-    "react-router-dom": "^4.0.0",
     "react-router-prop-types": "^1.0.4",
     "redux-form": "^7.0.3",
     "uuid": "^3.0.1"
   },
   "peerDependencies": {
     "@folio/stripes": "^2.10.1",
-    "react": "*"
+    "react": "*",
+    "react-router": "*",
+    "react-router-dom": "*"
   },
   "optionalDependencies": {
     "@folio/plugin-find-user": "^1.1.0"

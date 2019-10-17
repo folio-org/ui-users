@@ -13,8 +13,8 @@ import {
   selectOption = selectable();
   optionCount = count('option');
 
-  selectAndBlur(value) {
-    return this.selectOption(value)
+  selectAndBlur(val) {
+    return this.selectOption(val)
       .blur();
   }
 }
