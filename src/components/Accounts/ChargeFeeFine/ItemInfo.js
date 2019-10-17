@@ -16,6 +16,10 @@ class ItemInfo extends React.Component {
     editable: PropTypes.bool,
   };
 
+  static defaultProps = {
+    item: {}
+  }
+
   constructor(props) {
     super(props);
     this.onClickSelectItem = this.onClickSelectItem.bind(this);
@@ -35,13 +39,15 @@ class ItemInfo extends React.Component {
 
   render() {
     const {
-      location,
-      callNumber,
-      itemStatus,
-      instance,
-      barcode,
-      id,
-    } = this.props.item;
+      item: {
+        location,
+        callNumber,
+        itemStatus,
+        instance,
+        barcode,
+        id,
+      }
+    } = this.props;
 
     return (
       <div>

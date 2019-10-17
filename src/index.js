@@ -1,6 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
+import queryString from 'query-string';
 import { hot } from 'react-hot-loader';
 import _ from 'lodash';
 
@@ -118,6 +119,23 @@ class UsersRouting extends React.Component {
     location: PropTypes.object.isRequired,
     match: PropTypes.object.isRequired,
     showSettings: PropTypes.bool,
+    history: PropTypes.object,
+  }
+
+  componentDidMount() {
+    const {
+      location,
+      history
+    } = this.props;
+
+    const query = queryString.parse(location.search);
+    const uidRegEx = /\/([^/]*)$/gm;
+    if (query.layer === 'loan') {
+      if (query.loan) {
+        const uid = uidRegEx.exec(location.pathname);
+        history.replace(`/users/${uid[1]}/loans/view/${query.loan}`);
+      }
+    }
   }
 
   noMatch() {
