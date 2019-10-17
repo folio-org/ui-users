@@ -15,9 +15,9 @@ export default function config() {
       name: 'Circulation Module',
       provides: [
         { id: 'circulation', version: '7.4' },
-        { id: 'loan-policy-storage', version: '7.4' }
+        { id: 'loan-policy-storage', version: '7.4' },
       ]
-    }
+    },
   ]);
 
   this.get('/saml/check', {
