@@ -74,7 +74,7 @@ class FeeFineInfo extends React.Component {
                           id="ownerId"
                           component={Select}
                           fullWidth
-                          value={initialValues.ownerId}
+                          value={initialValues ? initialValues.ownerId : undefined}
                           disabled={this.props.isPending.owners}
                           dataOptions={this.props.ownerOptions}
                           onChange={this.props.onChangeOwner}
@@ -98,6 +98,7 @@ class FeeFineInfo extends React.Component {
                       {placeholder => (
                         <Field
                           name="feeFineId"
+                          id="feeFineType"
                           component={Select}
                           fullWidth
                           disabled={this.props.isPending.feefines}
@@ -121,6 +122,7 @@ class FeeFineInfo extends React.Component {
                   <Col xs={12}>
                     <Field
                       name="amount"
+                      id="amount"
                       component={TextField}
                       fullWidth
                       required

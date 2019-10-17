@@ -29,15 +29,17 @@ class ChargeFeesFinesContainer extends React.Component {
         return refresh || (path && path.match(/link/));
       },
     },
-    // loansHistory: {
-    //   type: 'okapi',
-    //   records: 'loans',
-    //   path: 'circulation/loans?query=(userId=:{id}) sortby id&limit=100',
-    //   permissionsRequired: 'circulation.loans.collection.get',
-    // },
     loanItem: {
       type: 'okapi',
-      path: 'inventory/items/%{activeRecord.itemId}'
+      // path: 'inventory/items/%{activeRecord.itemId}'
+      path: (_q, _p, _r, _l, props) => {
+        const { resources: { loan } } = props;
+        if (loan && loan.records.length > 0) {
+          const itemId = loan.records[0].itemId;
+          return itemId ? `inventory/items/${itemId}` : null;
+        }
+        return null;
+      }
     },
     curUserServicePoint: {
       type: 'okapi',
@@ -135,16 +137,16 @@ class ChargeFeesFinesContainer extends React.Component {
 
   componentDidUpdate() {
     // if a selected loan is present, get the associated item of the loan.
-    const { match: { params }, resources: { loan, loanItem, activeRecord }, mutator } = this.props;
-    const itemResource = (loanItem || {}).records || [];
-    const loanResource = (loan || {}).records || [];
-    // if there's an associated loan, but no loan item yet, update the localResource.
-    if (params.loanid &&
-      itemResource.length === 0 &&
-      loanResource.length > 0 &&
-      !activeRecord.itemId) {
-      mutator.activeRecord.update({ itemId: loan.records[0].itemId });
-    }
+    // const { match: { params }, resources: { loan, loanItem, activeRecord }, mutator } = this.props;
+    // const itemResource = (loanItem || {}).records || [];
+    // const loanResource = (loan || {}).records || [];
+    // // if there's an associated loan, but no loan item yet, update the localResource.
+    // if (params.loanid &&
+    //   itemResource.length === 0 &&
+    //   loanResource.length > 0 &&
+    //   !activeRecord.itemId) {
+    //   mutator.activeRecord.update({ itemId: loan.records[0].itemId });
+    // }
   }
 
   getLoan = () => {

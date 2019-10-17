@@ -168,7 +168,9 @@ export default function config() {
     return servicePointsUsers.find(request.params.id).attrs;
   });
 
-  this.get('/service-points');
+  this.get('/service-points', (schema) => {
+    return this.serializerOrRegistry.serialize(schema.servicePoints.all());
+  });
 
   this.get('/circulation/loans', function ({ loans }, request) {
     if (request.queryParams.query) {
@@ -258,7 +260,7 @@ export default function config() {
     'totalRecords': 1
   });
 
-  this.get('accounts', {
+  this.get('/accounts', {
     accounts: [],
     totalRecords: 0,
     resultInfo: {
@@ -267,6 +269,16 @@ export default function config() {
       diagnostics: [],
     },
   });
+
+  this.get('/accounts/:id', ({ accounts }, request) => {
+    return accounts.find(request.params.id).attrs;
+  });
+
+  this.post('/accounts', function (schema, { requestBody }) {
+    const acct = JSON.parse(requestBody);
+    return server.create('accounts', acct);
+  });
+
   this.get('waives', {
     waiver: [],
     totalRecords: 0,
@@ -294,15 +306,38 @@ export default function config() {
       diagnostics: [],
     },
   });
-  this.get('feefines', {
-    feefines: [],
-    totalRecords: 0,
-    resultInfo: {
+  this.get('feefines', function ({ feefines }, request) {
+    if (request.queryParams.query) {
+      const query = /query=(\(.*\)|%28.*%29)/.exec(request.url)[1];
+      const cqlParser = new CQLParser();
+
+      cqlParser.parse(query);
+
+      const {
+        tree: {
+          left,
+          right,
+        }
+      } = cqlParser;
+
+      if (left.field === 'ownerId' || right.field === 'ownerId') {
+        return feefines.where((feefine) => {
+          return feefine.ownerId === left.term || feefine.ownerId === right.term;
+        });
+      }
+    }
+
+    return {
+      feefines: [],
       totalRecords: 0,
-      facets: [],
-      diagnostics: [],
-    },
+      resultInfo: {
+        totalRecords: 0,
+        facets: [],
+        diagnostics: [],
+      },
+    };
   });
+
   this.get('/manualblocks', {
     manualblocks: [],
     totalRecords: 0,
@@ -314,13 +349,17 @@ export default function config() {
     return this.serializerOrRegistry.serialize(permissions.all());
   });
 
-  this.get('/feefineactions', {
-    feefineactions: [],
-    totalRecords: 0,
+  this.get('/feefineactions', ({ feefineactions }) => {
+    return this.serializerOrRegistry.serialize(feefineactions.all());
   });
-  this.get('/owners', {
-    owners: [],
-    totalRecords: 0,
+
+  this.post('/feefineactions', (schema, { requestBody }) => {
+    const ffAction = JSON.parse(requestBody);
+    return server.create('feefineactions', ffAction);
+  });
+
+  this.get('/owners', ({ owners }) => {
+    return this.serializerOrRegistry.serialize(owners.all());
   });
 
   this.get('/authn/credentials-existence', () => { });

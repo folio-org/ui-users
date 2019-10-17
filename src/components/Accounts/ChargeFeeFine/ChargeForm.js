@@ -99,7 +99,9 @@ class ChargeForm extends React.Component {
   componentDidMount() {
     const { initialValues } = this.props;
     feefineamount = 0.00;
-    this.props.onChangeOwner({ target: { value: initialValues.ownerId } });
+    if (initialValues) {
+      this.props.onChangeOwner({ target: { value: initialValues.ownerId } });
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -116,7 +118,7 @@ class ChargeForm extends React.Component {
       const shared = (owners.find(o => o.owner === 'Shared') || {}).id;
       onFindShared(shared);
     }
-    if (initialValues.ownerId !== prevProps.initialValues.ownerId) {
+    if (initialValues && initialValues.ownerId !== prevProps.initialValues.ownerId) {
       this.props.onChangeOwner({ target: { value: initialValues.ownerId } });
     }
   }
@@ -197,8 +199,9 @@ class ChargeForm extends React.Component {
 
     const lastMenu = (
       <PaneMenu>
-        <Button onClick={() => { this.props.history.goBack(); }} style={mg}><FormattedMessage id="ui-users.feefines.modal.cancel" /></Button>
+        <Button id="cancelCharge" onClick={() => { this.props.history.goBack(); }} style={mg}><FormattedMessage id="ui-users.feefines.modal.cancel" /></Button>
         <Button
+          id="chargeAndPay"
           disabled={this.props.pristine || this.props.submitting || this.props.invalid}
           onClick={this.props.handleSubmit(data => this.props.onSubmit({ ...data, pay: true, notify }))}
           style={mg}
@@ -206,6 +209,7 @@ class ChargeForm extends React.Component {
           <FormattedMessage id="ui-users.charge.Pay" />
         </Button>
         <Button
+          id="chargeOnly"
           disabled={this.props.pristine || this.props.submitting || this.props.invalid}
           onClick={this.props.handleSubmit(data => this.props.onSubmit({ ...data, pay: false, notify }))}
           style={mg}
@@ -227,7 +231,7 @@ class ChargeForm extends React.Component {
         >
           <UserInfo user={user} />
           <br />
-          <form>
+          <form id="feeFineChargeForm">
             <FeeFineInfo
               dispatch={dispatch}
               initialValues={initialValues}

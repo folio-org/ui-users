@@ -21,12 +21,9 @@ describe('Closed Loans', () => {
   });
 
   beforeEach(async function () {
-    const user = this.server.create('user');
-    const loan = this.server.create('loan', {
-      status: { name: 'Closed' },
-      feesAndFines : { amountRemainingToPay: 200 },
-      userId: user.id
-    });
+    const loan = this.server.create('loan',
+      'feesAndFines',
+      { status: { name: 'Closed' } });
 
     setupAnonymizationAPIResponse(this.server, [{
       message: 'haveAssociatedFeesAndFines',
@@ -36,7 +33,7 @@ describe('Closed Loans', () => {
       }]
     }]);
 
-    this.visit(`/users/${user.id}/loans/closed`);
+    this.visit(`/users/${loan.userId}/loans/closed`);
 
     await ClosedLoansInteractor.whenLoaded();
   });
