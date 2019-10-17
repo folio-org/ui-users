@@ -387,5 +387,25 @@ export default function config() {
   }, 200);
 
   this.get('/perms/users/:id', { id: 'test' });
+
   this.put('/perms/users/:id', { id: 'test' });
+
+  this.post('users', ({ users }, { requestBody }) => {
+    const user = JSON.parse(requestBody);
+    const newUser = users.create(user);
+
+    return newUser.attrs;
+  }, 200);
+
+  server.post('/authn/credentials', ({ users }, { requestBody }) => {
+    const { userId } = JSON.parse(requestBody);
+
+    return users.findBy({ id: userId }).attrs;
+  }, 200);
+
+  server.post('/perms/users', ({ users }, { requestBody }) => {
+    const { userId } = JSON.parse(requestBody);
+
+    return users.findBy({ id: userId }).attrs;
+  }, 200);
 }

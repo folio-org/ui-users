@@ -216,47 +216,50 @@ class Users extends React.Component {
     const {
       mutator: {
         records: {
-          POST: recordPost,
+          POST: postRecord,
         },
         creds: {
-          POST: credsPost,
+          POST: postCreds,
         },
         perms: {
-          POST: permsPost,
+          POST: postPerms,
         },
         query: {
-          update: queryUpdate,
+          update: updateQuery,
         },
-      }
+      },
     } = this.props;
-    let { username } = userdata;
-    username = username.trim();
+    const username = userdata.username.trim();
+    const userId = uuid();
     const userCreds = {
       ...userdata.creds,
       username,
-      password: userdata.creds.password
+      password: userdata.creds.password,
     };
     const user = {
       ...userdata,
       username,
-      id: uuid()
+      id: userId,
     };
-    if (user.creds) delete user.creds;
-    const { id: userId } = user;
-    await recordPost(user);
-    await credsPost({
+
+    if (user.creds) {
+      delete user.creds;
+    }
+
+    await postRecord(user);
+    await postCreds({
       ...userCreds,
-      userId
-    });
-    await permsPost({
       userId,
-      permissions: []
     });
-    await queryUpdate({
+    await postPerms({
+      userId,
+      permissions: [],
+    });
+    await updateQuery({
       _path: `/users/view/${userId}`,
-      layer: null
+      layer: null,
     });
-  }
+  };
 
   massageNewRecord = (userdata) => {
     if (userdata.personal.addresses) {
