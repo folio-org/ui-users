@@ -8,6 +8,7 @@ import {
   triggerable,
   scoped,
   collection,
+  selectable,
 } from '@bigtest/interactor';
 
 import ButtonInteractor from '@folio/stripes-components/lib/Button/tests/interactor'; // eslint-disable-line
@@ -47,6 +48,7 @@ import PermissionsModal from './permissions-modal';
   usernameField = new InputFieldInteractor('#adduser_username');
   passwordField = new InputFieldInteractor('#pw');
   emailField = new InputFieldInteractor('#adduser_email');
+  selectPatronGroup = selectable('#adduser_group');
   feedbackError = text('[class^="feedbackError---"]');
   cancelButton = new ButtonInteractor('[data-test-user-form-cancel-button]');
   submitButton = new ButtonInteractor('[data-test-user-form-submit-button]');

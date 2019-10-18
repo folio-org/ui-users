@@ -31,7 +31,10 @@ const ContactInfo = ({
       label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.contact.contactInformation" /></Headline>}
     >
       <Row>
-        <Col xs={3}>
+        <Col
+          data-test-email
+          xs={3}
+        >
           <KeyValue
             label={<FormattedMessage id="ui-users.contact.email" />}
             value={_.get(user, ['personal', 'email'], '')}

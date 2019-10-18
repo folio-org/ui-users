@@ -9,7 +9,6 @@ import { expect } from 'chai';
 import setupApplication from '../helpers/setup-application';
 // eslint-disable-next-line import/no-duplicates
 import UserFormPage from '../interactors/user-form-page';
-import FormSelectInteractor from '../interactors/user-create-page';
 import UsersInteractor from '../interactors/users';
 import InstanceViewPage from '../interactors/user-view-page';
 
@@ -50,21 +49,24 @@ describe('User create', () => {
     });
 
     describe('filling create user form', () => {
+      const lastName = 'Test';
+      const email = 'test@test.com';
+
       beforeEach(async function () {
-        await UserFormPage.lastNameField.fillAndBlur('Test');
-        await FormSelectInteractor.selectPatronGroup('graduate (Graduate Student)');
+        await UserFormPage.lastNameField.fillAndBlur(lastName);
+        await UserFormPage.selectPatronGroup('graduate (Graduate Student)');
         await UserFormPage.usernameField.fillAndBlur(' test');
         await UserFormPage.passwordField.fillAndBlur('test');
-        await UserFormPage.emailField.fillAndBlur('test@test.com');
+        await UserFormPage.emailField.fillAndBlur(email);
         await UserFormPage.submitButton.click();
       });
 
       it('should display the title in the pane header', () => {
-        expect(InstanceViewPage.userNameTitle).to.equal('Test');
+        expect(InstanceViewPage.userNameTitle).to.equal(lastName);
       });
 
       it('should display the user email in contact information accordion', () => {
-        expect(InstanceViewPage.userContactsEmail).to.equal('test@test.com');
+        expect(InstanceViewPage.userContactsEmail.value.text).to.equal(email);
       });
     });
   });
