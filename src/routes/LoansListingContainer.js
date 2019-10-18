@@ -103,13 +103,15 @@ class LoansListingContainer extends React.Component {
 
     if (!user) return (<ViewLoading defaultWidth="100%" paneTitle="Loading loans" />);
     return (
-      <LoansListing
-        patronBlocks={patronBlocks}
-        user={user}
-        loansHistory={loansHistory}
-        patronGroup={patronGroup}
-        {...this.props}
-      />);
+      <ifPermission perm="ui-users.loans.view">
+        <LoansListing
+          patronBlocks={patronBlocks}
+          user={user}
+          loansHistory={loansHistory}
+          patronGroup={patronGroup}
+          {...this.props}
+        />
+      </ifPermission>);
   }
 }
 
