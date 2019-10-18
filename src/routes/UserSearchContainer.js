@@ -31,8 +31,6 @@ class UserSearchContainer extends React.Component {
             'cql.allRecords=1',
             '(username="%{query.query}*" or personal.firstName="%{query.query}*" or personal.lastName="%{query.query}*" or personal.email="%{query.query}*" or barcode="%{query.query}*" or id="%{query.query}*" or externalSystemId="%{query.query}*")',
             {
-              // the keys in this object must match those passed to
-              // SearchAndSort's columnMapping prop
               'active': 'active',
               'name': 'personal.lastName personal.firstName',
               'patronGroup': 'patronGroup.group',
@@ -95,7 +93,6 @@ class UserSearchContainer extends React.Component {
 
   componentDidMount() {
     this.source = new StripesConnectedSource(this.props, this.logger);
-    // this.props.mutator.query.replace('');
     if (this.searchField.current) {
       this.searchField.current.focus();
     }

@@ -78,7 +78,6 @@ class UserLoans extends React.Component {
     const closedLoansCount = (_.get(resources.closedLoansCount, ['isPending'], true)) ? -1 : closedLoansTotal;
     const loansLoaded = openLoansCount >= 0 && closedLoansCount >= 0;
     const displayWhenClosed = loansLoaded ? (<Badge>{openLoansCount}</Badge>) : (<Icon icon="spinner-ellipsis" width="10px" />);
-    // const query = location.search ? queryString.parse(location.search) : {};
 
     return (
       <Accordion

@@ -129,8 +129,6 @@ class LoanDetails extends React.Component {
 
     return renew([loan], user)
       .then(renewals.replace({ ts: new Date().getTime() }));
-    // return renew([loan], user)
-    //   .then(this.getLoanActions);
   }
 
   getFeeFine() {

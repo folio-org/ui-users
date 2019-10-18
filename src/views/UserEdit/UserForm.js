@@ -133,11 +133,9 @@ class UserForm extends React.Component {
       reset: PropTypes.func.isRequired,
       GET: PropTypes.func.isRequired,
     }).isRequired,
-    // resource: PropTypes.object.isRequired,
     pristine: PropTypes.bool,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
-    // onCancel: PropTypes.func.isRequired,
     onSubmit: PropTypes.func.isRequired,
     initialValues: PropTypes.object.isRequired,
   };

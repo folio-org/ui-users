@@ -14,7 +14,6 @@ import {
   injectIntl
 } from 'react-intl';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
-// import withServicePoints from '../../../withServicePoints';
 import ChargeForm from './ChargeForm';
 import ItemLookup from './ItemLookup';
 import ActionModal from '../Actions/ActionModal';

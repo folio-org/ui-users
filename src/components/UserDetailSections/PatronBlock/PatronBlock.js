@@ -136,7 +136,6 @@ class PatronBlock extends React.Component {
 
     const permAbled = this.props.stripes.hasPerm('ui-users.patron_blocks');
     if (permAbled === true && (e.target.type !== 'button') && (e.target.tagName !== 'IMG')) {
-      // this.props.onClickViewPatronBlock(e, 'edit', row);
       history.push(`/users/${params.id}/patronblocks/edit/${row.id}`);
     }
   }

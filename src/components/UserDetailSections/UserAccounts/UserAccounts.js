@@ -127,8 +127,6 @@ class UserAccounts extends React.Component {
     const openAccountsCount = (_.get(resources.openAccountsCount, ['isPending'], true)) ? -1 : openAccountsTotal;
     const closedAccountsCount = (_.get(resources.closedAccountsCount, ['isPending'], true)) ? -1 : closedAccountsTotal;
 
-    // const query = this.props.location.search ? queryString.parse(this.props.location.search) : {};
-
     const accountsLoaded = openAccountsCount >= 0 && closedAccountsCount >= 0;
     const displayWhenClosed = accountsLoaded ? (<Badge>{openAccountsCount}</Badge>) : (<Icon icon="spinner-ellipsis" width="10px" />);
     const buttonDisabled = !this.props.stripes.hasPerm('ui-users.feesfines.actions.all');

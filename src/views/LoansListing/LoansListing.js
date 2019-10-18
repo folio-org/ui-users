@@ -21,7 +21,6 @@ import css from './LoansListing.css';
  */
 class LoansListing extends React.Component {
   static propTypes = {
-    // onCancel: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired,
     patronGroup: PropTypes.object.isRequired,
     loansHistory: PropTypes.arrayOf(PropTypes.object).isRequired,

@@ -39,12 +39,10 @@ class ActionsDropdown extends React.Component {
       requestQueue,
       stripes,
       disableFeeFineDetails,
-      // match: { params }
     } = this.props;
 
     const itemDetailsLink = `/inventory/view/${loan.item.instanceId}/${loan.item.holdingsRecordId}/${loan.itemId}`;
     const loanPolicyLink = `/settings/circulation/loan-policies/${loan.loanPolicyId}`;
-    // const chargeFeeFineLink = `/users/${params.id}/charge/${loan.id}`;
     const buttonDisabled = !this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
 
     return (

@@ -146,20 +146,6 @@ class ChargeFeesFinesContainer extends React.Component {
     defaultServicePointId: PropTypes.string,
   };
 
-  componentDidUpdate() {
-    // if a selected loan is present, get the associated item of the loan.
-    // const { match: { params }, resources: { loan, loanItem, activeRecord }, mutator } = this.props;
-    // const itemResource = (loanItem || {}).records || [];
-    // const loanResource = (loan || {}).records || [];
-    // // if there's an associated loan, but no loan item yet, update the localResource.
-    // if (params.loanid &&
-    //   itemResource.length === 0 &&
-    //   loanResource.length > 0 &&
-    //   !activeRecord.itemId) {
-    //   mutator.activeRecord.update({ itemId: loan.records[0].itemId });
-    // }
-  }
-
   getLoan = () => {
     const { resources, match: { params } } = this.props;
     const userLoans = (resources.loan || {}).records || [];

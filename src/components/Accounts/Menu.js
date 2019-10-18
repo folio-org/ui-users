@@ -19,11 +19,6 @@ const Menu = (props) => {
   const buttonDisabled = !props.stripes.hasPerm('ui-users.feesfines.actions.all');
 
   const type = <FormattedMessage id={`ui-users.accounts.${params.accountstatus}`} />;
-  // if (query.layer === 'closed-accounts') {
-  //   type = <FormattedMessage id="ui-users.accounts.closed" />;
-  // } else if (query.layer === 'all-accounts') {
-  //   type = <FormattedMessage id="ui-users.accounts.all" />;
-  // }
 
   const firstMenu = (
     <div>
