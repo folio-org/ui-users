@@ -776,7 +776,7 @@ class ViewUser extends React.Component {
 
     if (this.isLayerOpen('open-loans') || this.isLayerOpen('closed-loans')) {
       return (
-        <IfPermission perm="ui-users.loans.all">
+        <IfPermission perm="ui-users.loans.view">
           <FormattedMessage id="ui-users.loans.title">
             {contentLabel => (
               <Layer
@@ -811,7 +811,7 @@ class ViewUser extends React.Component {
 
     if (this.isLayerOpen('loan')) {
       return (
-        <IfPermission perm="ui-users.loans.all">
+        <IfPermission perm="ui-users.loans.view">
           <FormattedMessage id="ui-users.loanActionsHistory">
             {contentLabel => (
               <Layer
@@ -1077,7 +1077,7 @@ class ViewUser extends React.Component {
               />
             </IfPermission>
 
-            <IfPermission perm="accounts.collection.get">
+            <IfPermission perm="ui-users.accounts">
               <this.connectedUserAccounts
                 onClickViewChargeFeeFine={this.onClickViewChargeFeeFine}
                 expanded={this.state.sections.accountsSection}
@@ -1088,7 +1088,7 @@ class ViewUser extends React.Component {
               />
             </IfPermission>
 
-            <IfPermission perm="ui-users.loans.all">
+            <IfPermission perm="ui-users.loans.view">
               <IfInterface name="loan-policy-storage">
                 { /* Check without version, so can support either of multiple versions.
           Replace with specific check when facility for providing
@@ -1143,18 +1143,20 @@ class ViewUser extends React.Component {
                 />
               </IfInterface>
             </IfPermission>
-            <NotesSmartAccordion
-              domainName="users"
-              entityId={match.params.id}
-              entityName={getFullName(user)}
-              open={this.state.sections.notesAccordion}
-              onToggle={this.handleSectionToggle}
-              id="notesAccordion"
-              entityType="user"
-              pathToNoteCreate="/users/notes/new"
-              pathToNoteDetails="/users/notes"
-              hideAssignButton
-            />
+            <IfPermission perm="ui-notes.item.view">
+              <NotesSmartAccordion
+                domainName="users"
+                entityId={match.params.id}
+                entityName={getFullName(user)}
+                open={this.state.sections.notesAccordion}
+                onToggle={this.handleSectionToggle}
+                id="notesAccordion"
+                entityType="user"
+                pathToNoteCreate="/users/notes/new"
+                pathToNoteDetails="/users/notes"
+                hideAssignButton
+              />
+            </IfPermission>
           </AccordionSet>
         </HasCommand>
       </Pane>

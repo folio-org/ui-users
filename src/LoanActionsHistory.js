@@ -405,20 +405,24 @@ class LoanActionsHistory extends React.Component {
           >
             <Row>
               <span>
-                <Button
-                  disabled={buttonDisabled}
-                  buttonStyle="primary"
-                  onClick={this.renew}
-                >
-                  <FormattedMessage id="ui-users.renew" />
-                </Button>
-                <Button
-                  disabled={buttonDisabled}
-                  buttonStyle="primary"
-                  onClick={this.showChangeDueDateDialog}
-                >
-                  <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />
-                </Button>
+                <IfPermission perm="ui-users.loans.renew">
+                  <Button
+                    disabled={buttonDisabled}
+                    buttonStyle="primary"
+                    onClick={this.renew}
+                  >
+                    <FormattedMessage id="ui-users.renew" />
+                  </Button>
+                </IfPermission>
+                <IfPermission perm="ui-users.loans.edit">
+                  <Button
+                    disabled={buttonDisabled}
+                    buttonStyle="primary"
+                    onClick={this.showChangeDueDateDialog}
+                  >
+                    <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />
+                  </Button>
+                </IfPermission>
               </span>
             </Row>
             <Row>
