@@ -138,6 +138,20 @@ class UsersRouting extends React.Component {
         history.replace(`/users/${uid[1]}/loans/view/${query.loan}`);
       }
     }
+    if (query.layer === 'account') {
+      if (query.account) {
+        const uid = uidRegEx.exec(location.pathname);
+        history.replace(`/users/${uid[1]}/accounts/view/${query.account}`);
+      }
+    }
+    if (query.layer === 'charge') {
+      const uid = uidRegEx.exec(location.pathname);
+      if (query.loan) {
+        history.replace(`/users/${uid[1]}/charge/${query.loan}`);
+      } else {
+        history.replace(`/users/${uid[1]}/charge`);
+      }
+    }
   }
 
   noMatch() {

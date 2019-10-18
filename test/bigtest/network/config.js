@@ -202,6 +202,11 @@ export default function config() {
     return this.serializerOrRegistry.serialize(loans.all());
   });
 
+  this.get('loan-storage/loans/:loanid', {
+    loans: [],
+    totalRecords: 0
+  });
+
   this.get('loan-storage/loan-history', ({ loanactions }, request) => {
     if (request.queryParams.query) {
       const query = /query=(\(.*\)|%28.*%29)/.exec(request.url)[1];
@@ -285,7 +290,7 @@ export default function config() {
   });
 
   this.get('waives', {
-    waiver: [],
+    waivers: [],
     totalRecords: 0,
     resultInfo: {
       totalRecords: 0,
@@ -313,6 +318,9 @@ export default function config() {
   });
   this.get('feefines', function ({ feefines }, request) {
     if (request.queryParams.query) {
+      if (request.queryParams.query.includes('allRecords')) {
+        return this.serializerOrRegistry.serialize(feefines.all());
+      }
       const query = /query=(\(.*\)|%28.*%29)/.exec(request.url)[1];
       const cqlParser = new CQLParser();
 
