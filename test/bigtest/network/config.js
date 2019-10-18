@@ -168,6 +168,11 @@ export default function config() {
     return servicePointsUsers.find(request.params.id).attrs;
   });
 
+  this.post('/service-points-users/', (schema, { requestBody }) => {
+    const spu = JSON.parse(requestBody);
+    return server.create('service-points-user', spu);
+  });
+
   this.get('/service-points', (schema) => {
     return this.serializerOrRegistry.serialize(schema.servicePoints.all());
   });
@@ -337,7 +342,10 @@ export default function config() {
       },
     };
   });
-
+  this.get('/transfers', {
+    transfers: [],
+    totalRecords: 0
+  });
   this.get('/manualblocks', {
     manualblocks: [],
     totalRecords: 0,
