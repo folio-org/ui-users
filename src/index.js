@@ -5,7 +5,7 @@ import queryString from 'query-string';
 import { hot } from 'react-hot-loader';
 import _ from 'lodash';
 
-import { Route, Switch } from '@folio/stripes/core';
+import { Route, Switch, IfPermission } from '@folio/stripes/core';
 import { CommandList, HasCommand } from '@folio/stripes/components';
 
 import * as Routes from './routes';
@@ -227,8 +227,10 @@ class UsersRouting extends React.Component {
           scope={this.shortcutScope}
         >
           <Switch>
-            <Route path={`${base}/:id/loans/view/:loanid`} component={Routes.LoanDetailContainer} />
-            <Route path={`${base}/:id/loans/:loanstatus`} component={Routes.LoansListingContainer} />
+            <IfPermission perm="ui-users.loans.view">
+              <Route path={`${base}/:id/loans/view/:loanid`} component={Routes.LoanDetailContainer} />
+              <Route path={`${base}/:id/loans/:loanstatus`} component={Routes.LoansListingContainer} />
+            </IfPermission>
             <Route path={`${base}/:id/accounts/:accountstatus/charge`} exact component={Routes.FeesFinesContainer} />
             <Route path={`${base}/:id/accounts/view/:accountid`} component={Routes.AccountDetailsContainer} />
             <Route path={`${base}/:id/accounts/:accountstatus`} exact component={Routes.AccountsListingContainer} />

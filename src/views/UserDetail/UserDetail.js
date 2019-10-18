@@ -476,7 +476,7 @@ class UserDetail extends React.Component {
                   />
                 </IfPermission>
 
-                <IfPermission perm="ui-users.loans.all">
+                <IfPermission perm="ui-users.loans.view">
                   <IfInterface name="loan-policy-storage">
                     { /* Check without version, so can support either of multiple versions.
               Replace with specific check when facility for providing
