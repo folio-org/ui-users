@@ -58,7 +58,7 @@ class UserSearch extends React.Component {
 
   static defaultProps = {
     idPrefix: 'users-',
-    visibleColumns: ['status', 'name', 'barcode', 'patron group', 'username', 'email'],
+    visibleColumns: ['status', 'name', 'barcode', 'patronGroup', 'username', 'email'],
   };
 
   constructor(props) {
@@ -179,6 +179,12 @@ class UserSearch extends React.Component {
         </PaneMenu>
       </IfPermission>
     );
+  }
+
+  rowUpdater = (rowData) => {
+    const { resources: { patronGroups } } = this.props;
+    const groupObj = patronGroups ? patronGroups.records.filter(g => g.id === rowData.patronGroup)[0] : null;
+    return groupObj ? groupObj.group : null;
   }
 
   render() {
@@ -320,6 +326,7 @@ class UserSearch extends React.Component {
                       >
                         <MultiColumnList
                           visibleColumns={visibleColumns}
+                          rowUpdater={this.rowUpdater}
                           contentData={users}
                           totalCount={count}
                           columnMapping={{
