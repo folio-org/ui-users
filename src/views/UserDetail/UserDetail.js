@@ -465,7 +465,7 @@ class UserDetail extends React.Component {
                     {...this.props}
                   />
                 </IfPermission>
-                <IfPermission perm="accounts.collection.get">
+                <IfPermission perm="ui-users.accounts">
                   <UserAccounts
                     expanded={sections.accountsSection}
                     onToggle={this.handleSectionToggle}
@@ -531,18 +531,20 @@ class UserDetail extends React.Component {
                     />
                   </IfInterface>
                 </IfPermission>
-                <NotesSmartAccordion
-                  domainName="users"
-                  entityId={match.params.id}
-                  entityName={getFullName(user)}
-                  open={this.state.sections.notesAccordion}
-                  onToggle={this.handleSectionToggle}
-                  id="notesAccordion"
-                  entityType="user"
-                  pathToNoteCreate="/users/notes/new"
-                  pathToNoteDetails="/users/notes"
-                  hideAssignButton
-                />
+                <IfPermission perm="ui-notes.item.view">
+                  <NotesSmartAccordion
+                    domainName="users"
+                    entityId={match.params.id}
+                    entityName={getFullName(user)}
+                    open={this.state.sections.notesAccordion}
+                    onToggle={this.handleSectionToggle}
+                    id="notesAccordion"
+                    entityType="user"
+                    pathToNoteCreate="/users/notes/new"
+                    pathToNoteDetails="/users/notes"
+                    hideAssignButton
+                  />
+                </IfPermission>
               </AccordionSet>
             </Pane>
           </HasCommand>
