@@ -227,8 +227,22 @@ class UsersRouting extends React.Component {
           scope={this.shortcutScope}
         >
           <Switch>
-            <Route path={`${base}/:id/loans/view/:loanid`} component={Routes.LoanDetailContainer} />
-            <Route path={`${base}/:id/loans/:loanstatus`} component={Routes.LoansListingContainer} />
+            <Route
+              path={`${base}/:id/loans/view/:loanid`}
+              render={(props) => (
+                <IfPermission perm="ui-users.loans.view">
+                  <Routes.LoanDetailContainer {...props} />
+                </IfPermission>
+              )}
+            />
+            <Route
+              path={`${base}/:id/loans/:loanstatus`}
+              render={(props) => (
+                <IfPermission perm="ui-users.loans.view">
+                  <Routes.LoansListingContainer {...props} />
+                </IfPermission>
+              )}
+            />
             <Route path={`${base}/:id/accounts/:accountstatus/charge`} exact component={Routes.FeesFinesContainer} />
             <Route path={`${base}/:id/accounts/view/:accountid`} component={Routes.AccountDetailsContainer} />
             <Route path={`${base}/:id/accounts/:accountstatus`} exact component={Routes.AccountsListingContainer} />

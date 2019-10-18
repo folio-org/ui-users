@@ -157,17 +157,15 @@ class LoanDetailContainer extends React.Component {
     );
 
     return (
-      <ifPermission perm="ui-users.loans.view">
-        <LoanDetails
-          loans={loan ? [loan] : []}
-          loanActionsWithUser={loanActionsWithUser}
-          loan={loan}
-          user={this.getUser()}
-          patronGroup={this.getPatronGroup()}
-          patronBlocks={patronBlocks}
-          {...this.props}
-        />
-      </ifPermission>
+      <LoanDetails
+        loans={loan ? [loan] : []}
+        loanActionsWithUser={loanActionsWithUser}
+        loan={loan}
+        user={this.getUser()}
+        patronGroup={this.getPatronGroup()}
+        patronBlocks={patronBlocks}
+        {...this.props}
+      />
     );
   }
 }
