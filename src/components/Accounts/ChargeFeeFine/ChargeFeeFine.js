@@ -339,6 +339,7 @@ class ChargeFeeFine extends React.Component {
       history,
       intl,
     } = this.props;
+    this.item = _.get(resources, ['items', 'records', [0]]);
     const allfeefines = _.get(resources, ['allfeefines', 'records'], []);
     const owners = _.get(resources, ['owners', 'records'], []);
     const list = [];
@@ -362,15 +363,18 @@ class ChargeFeeFine extends React.Component {
       selected += parseFloat(a.remaining);
     });
     parseFloat(selected).toFixed(2);
-    const item = {
-      id: this.item.id || '',
-      instance: this.item.title || '',
-      barcode: this.item.barcode || '',
-      itemStatus: (this.item.status || {}).name || '',
-      callNumber: this.item.callNumber || '',
-      location: (this.item.effectiveLocation || {}).name || '',
-      type: (this.item.materialType || {}).name || '',
-    };
+    let item;
+    if (this.item) {
+      item = {
+        id: this.item.id || '',
+        instance: this.item.title || '',
+        barcode: this.item.barcode || '',
+        itemStatus: (this.item.status || {}).name || '',
+        callNumber: this.item.callNumber || '',
+        location: (this.item.effectiveLocation || {}).name || '',
+        type: (this.item.materialType || {}).name || '',
+      };
+    }
 
     const isPending = {
       owners: _.get(resources, ['owners', 'isPending'], false),

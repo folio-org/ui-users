@@ -22,7 +22,11 @@ class ChargeFeesFinesContainer extends React.Component {
     },
     loan: {
       type: 'okapi',
-      path: 'loan-storage/loans/:{loanid}',
+      path: (_q, _p, _r, _l, props) => {
+        const { match: { params } } = props;
+        const loanId = _q.loan || params.loanid;
+        return loanId ? `loan-storage/loans/${loanId}` : null;
+      },
       clear: false,
       shouldRefresh: (resource, action, refresh) => {
         const { path } = action.meta;
@@ -33,9 +37,9 @@ class ChargeFeesFinesContainer extends React.Component {
       type: 'okapi',
       // path: 'inventory/items/%{activeRecord.itemId}'
       path: (_q, _p, _r, _l, props) => {
-        const { resources: { loan } } = props;
-        if (loan && loan.records.length > 0) {
-          const itemId = loan.records[0].itemId;
+        const { resources: { loan, activeRecord } } = props;
+        if ((activeRecord && activeRecord.itemId) || (loan && loan.records.length > 0)) {
+          const itemId = activeRecord.itemId || loan.records[0].itemId;
           return itemId ? `inventory/items/${itemId}` : null;
         }
         return null;
@@ -49,7 +53,14 @@ class ChargeFeesFinesContainer extends React.Component {
     items: {
       type: 'okapi',
       records: 'items',
-      path: 'inventory/items?query=barcode=%{activeRecord.barcode}*',
+      path: (_q, _p, _r, _l, props) => {
+        const { resources: { loanItem, activeRecord } } = props;
+        if ((activeRecord && activeRecord.barcode) || (loanItem && loanItem.records.length > 0)) {
+          const itemBar = activeRecord.barcode || loanItem.records[0].barcode;
+          return itemBar ? `inventory/items?query=barcode=${itemBar}*` : null;
+        }
+        return null;
+      },
     },
     feefines: {
       type: 'okapi',
