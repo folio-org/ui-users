@@ -25,15 +25,15 @@ import {
 } from '@folio/stripes/components';
 import css from './AccountsListing.css';
 
-import { getFullName } from '../../util';
-import { Actions } from '../../Accounts/Actions';
-import { count, handleFilterChange, handleFilterClear } from '../../Accounts/accountFunctions';
+import { getFullName } from '../../components/util';
+import { Actions } from '../../components/Accounts/Actions';
+import { count, handleFilterChange, handleFilterClear } from '../../components/Accounts/accountFunctions';
 
 import {
   Menu,
   Filters,
   ViewFeesFines,
-} from '../../Accounts';
+} from '../../components/Accounts';
 
 const filterConfig = [
   {

@@ -23,9 +23,11 @@ import PaymentSettings from './settings/PaymentSettings';
 import CommentRequiredSettings from './settings/CommentRequiredSettings';
 import RefundReasonsSettings from './settings/RefundReasonsSettings';
 import TransferAccountsSettings from './settings/TransferAccountsSettings';
-import NoteCreatePage from './NoteCreatePage';
-import NoteViewPage from './NoteViewPage';
-import NoteEditPage from './NoteEditPage';
+import {
+  NoteCreatePage,
+  NoteViewPage,
+  NoteEditPage
+} from './views';
 
 const settingsGeneral = [
   {

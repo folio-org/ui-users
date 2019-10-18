@@ -4,7 +4,7 @@ import { compose } from 'redux';
 import { stripesConnect } from '@folio/stripes/core';
 import { withTags } from '@folio/stripes/smart-components';
 
-import { UserDetail } from '../components/views';
+import { UserDetail } from '../views';
 
 import {
   withProxy,

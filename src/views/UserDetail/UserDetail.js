@@ -40,22 +40,22 @@ import {
   UserRequests,
   UserAccounts,
   UserServicePoints,
-} from '../../UserDetailSections';
+} from '../../components/UserDetailSections';
 
-import HelperApp from '../../HelperApp';
+import HelperApp from '../../components/HelperApp';
 
 import {
   PatronBlockMessage
-} from '../../PatronBlock';
+} from '../../components/PatronBlock';
 import {
   toListAddresses,
   // toUserAddresses
-} from '../../data/converters/address';
+} from '../../components/data/converters/address';
 import {
   getFullName,
   // eachPromise
-} from '../../util';
-import { PaneLoading } from '../../Loading';
+} from '../../components/util';
+import { PaneLoading } from '../../components/Loading';
 
 class UserDetail extends React.Component {
   static propTypes = {

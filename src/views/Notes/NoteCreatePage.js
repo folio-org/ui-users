@@ -5,7 +5,7 @@ import { Redirect } from 'react-router-dom';
 
 import { NoteCreatePage } from '@folio/stripes/smart-components';
 
-import { retrieveNoteReferredEntityDataFromLocationState } from './components/util';
+import { retrieveNoteReferredEntityDataFromLocationState } from '../../components/util';
 
 export default class NoteCreateRoute extends Component {
   static propTypes = {

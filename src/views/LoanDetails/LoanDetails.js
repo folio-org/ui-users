@@ -22,12 +22,12 @@ import {
   Col,
 } from '@folio/stripes/components';
 import { IfPermission } from '@folio/stripes/core';
-import PatronBlockModal from '../../PatronBlock/PatronBlockModal';
-import { getFullName, nav } from '../../util';
-import { withRenew } from '../../Wrappers';
-import loanActionMap from '../../data/static/loanActionMap';
+import PatronBlockModal from '../../components/PatronBlock/PatronBlockModal';
+import { getFullName, nav } from '../../components/util';
+import { withRenew } from '../../components/Wrappers';
+import loanActionMap from '../../components/data/static/loanActionMap';
 import LoanProxyDetails from './LoanProxyDetails';
-import ViewLoading from '../../Loading/ViewLoading';
+import ViewLoading from '../../components/Loading/ViewLoading';
 
 /**
  * Detail view of a user's loan.

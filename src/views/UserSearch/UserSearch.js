@@ -25,7 +25,7 @@ import {
   SearchAndSortSearchButton as FilterPaneToggle,
 } from '@folio/stripes/smart-components';
 
-import OverdueLoanReport from '../../data/reports';
+import OverdueLoanReport from '../../components/data/reports';
 import Filters from './Filters';
 import css from './UserSearch.css';
 

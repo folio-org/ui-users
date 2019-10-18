@@ -339,7 +339,7 @@ class ChargeFeeFine extends React.Component {
       history,
       intl,
     } = this.props;
-    this.item = _.get(resources, ['items', 'records', [0]]);
+    this.item = _.get(resources, ['items', 'records', [0]], {});
     const allfeefines = _.get(resources, ['allfeefines', 'records'], []);
     const owners = _.get(resources, ['owners', 'records'], []);
     const list = [];

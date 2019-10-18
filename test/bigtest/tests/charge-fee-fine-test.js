@@ -30,7 +30,7 @@ describe('Charge fee/fine', () => {
       this.server.create('feefine',
         { feeFineType: 'testFineType',
           ownerId: owner.id,
-          defaultAmount: '500.00' });
+          defaultAmount: 500.00 });
       loan = this.server.create('loan', { status: { name: 'Open' } });
       visit(`/users/preview/${loan.userId}`);
       await userDetail.whenLoaded();

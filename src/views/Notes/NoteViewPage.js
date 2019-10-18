@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
 
-import { NoteEditPage } from '@folio/stripes/smart-components';
+import { NoteViewPage } from '@folio/stripes/smart-components';
 
-import { retrieveNoteReferredEntityDataFromLocationState } from './components/util';
+import { retrieveNoteReferredEntityDataFromLocationState } from '../../components/util';
 
-export default class NoteEditRoute extends Component {
+class NoteViewRoute extends Component {
   static propTypes = {
     history: ReactRouterPropTypes.history.isRequired,
     location: ReactRouterPropTypes.location.isRequired,
@@ -17,21 +17,33 @@ export default class NoteEditRoute extends Component {
     }).isRequired,
   };
 
-  goToNoteView = () => {
+  onEdit = () => {
     const {
+      history,
+      location,
       match,
+    } = this.props;
+
+    history.replace({
+      pathname: `/users/notes/${match.params.id}/edit`,
+      state: location.state,
+    });
+  };
+
+  navigateBack = () => {
+    const {
       history,
       location,
     } = this.props;
 
-    const { id } = match.params;
-    const noteViewUrl = `/users/notes/${id}`;
-
-    history.replace({
-      pathname: noteViewUrl,
-      state: location.state,
-    });
-  }
+    if (location.state) {
+      history.goBack();
+    } else {
+      history.push({
+        pathname: '/users',
+      });
+    }
+  };
 
   render() {
     const {
@@ -43,15 +55,17 @@ export default class NoteEditRoute extends Component {
     const referredEntityData = retrieveNoteReferredEntityDataFromLocationState(state);
 
     return (
-      <NoteEditPage
-        referredEntityData={referredEntityData}
+      <NoteViewPage
         entityTypeTranslationKeys={{ user: 'ui-users.user' }}
         entityTypePluralizedTranslationKeys={{ user: 'ui-users.user.pluralized' }}
+        navigateBack={this.navigateBack}
+        onEdit={this.onEdit}
         paneHeaderAppIcon="users"
-        domain="users"
-        navigateBack={this.goToNoteView}
+        referredEntityData={referredEntityData}
         noteId={noteId}
       />
     );
   }
 }
+
+export default NoteViewRoute;

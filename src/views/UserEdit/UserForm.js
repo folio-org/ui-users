@@ -27,14 +27,14 @@ import {
   EditContactInfo,
   EditProxy,
   EditServicePoints,
-} from '../../EditSections';
-import { HasCommand } from '../../Commander';
-import { getFullName } from '../../util';
-import PermissionsAccordion from '../../PermissionsAccordion';
+} from '../../components/EditSections';
+import { HasCommand } from '../../components/Commander';
+import { getFullName } from '../../components/util';
+import PermissionsAccordion from '../../components/PermissionsAccordion';
 import {
   statusFilterConfig,
   permissionTypeFilterConfig,
-} from '../../PermissionsAccordion/helpers/filtersConfig';
+} from '../../components/PermissionsAccordion/helpers/filtersConfig';
 
 import css from './UserForm.css';
 

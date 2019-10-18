@@ -17,8 +17,8 @@ import {
   MultiColumnList,
 } from '@folio/stripes/components';
 
-import { Actions } from '../../Accounts/Actions';
-import { getFullName, nav } from '../../util';
+import { Actions } from '../../components/Accounts/Actions';
+import { getFullName, nav } from '../../components/util';
 
 import css from './AccountDetails.css';
 

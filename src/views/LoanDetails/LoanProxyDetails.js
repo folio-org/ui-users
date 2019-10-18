@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import Link from 'react-router-dom/Link';
 import { KeyValue } from '@folio/stripes/components';
 import { stripesConnect } from '@folio/stripes/core';
-import { getFullName } from '../../util';
+import { getFullName } from '../../components/util';
 
 class LoanProxyDetails extends React.Component {
   static manifest = Object.freeze({
