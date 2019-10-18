@@ -17,6 +17,7 @@ import {
   Row,
   Col,
   Headline,
+  HasCommand,
   AccordionSet,
 } from '@folio/stripes/components';
 import stripesForm from '@folio/stripes/form';
@@ -28,7 +29,6 @@ import {
   EditProxy,
   EditServicePoints,
 } from '../../components/EditSections';
-import { HasCommand } from '../../components/Commander';
 import { getFullName } from '../../components/util';
 import PermissionsAccordion from '../../components/PermissionsAccordion';
 import {
@@ -170,6 +170,7 @@ class UserForm extends React.Component {
 
     this.ignoreEnterKey = this.ignoreEnterKey.bind(this);
     this.closeButton = React.createRef();
+    this.saveButton = React.createRef();
 
     this.keyboardCommands = [
       {
@@ -225,7 +226,9 @@ class UserForm extends React.Component {
 
   // eslint-disable-next-line class-methods-use-this
   ignoreEnterKey = (e) => {
-    e.preventDefault();
+    if (e.target !== this.saveButton.current) {
+      e.preventDefault();
+    }
   };
 
   handleSectionToggle({ id }) {
@@ -303,6 +306,7 @@ class UserForm extends React.Component {
         buttonStyle="primary mega"
         type="submit"
         disabled={disabled}
+        buttonRef={this.saveButton}
       >
         <FormattedMessage id="ui-users.saveAndClose" />
       </Button>

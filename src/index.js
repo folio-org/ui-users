@@ -6,11 +6,12 @@ import { hot } from 'react-hot-loader';
 import _ from 'lodash';
 
 import { Route, Switch } from '@folio/stripes/core';
+import { CommandList, HasCommand } from '@folio/stripes/components';
 
 import * as Routes from './routes';
 
+import pkg from '../package';
 import Settings from './settings';
-import { CommandList } from './components/Commander';
 import commands from './commands';
 import PermissionSets from './settings/permissions/PermissionSets';
 import PatronGroupsSettings from './settings/PatronGroupsSettings';
@@ -174,6 +175,27 @@ class UsersRouting extends React.Component {
     );
   }
 
+  focusSearchField = () => {
+    const { history } = this.props;
+    const el = document.getElementById('userSearchField');
+    if (el) {
+      el.focus();
+    } else {
+      history.push(pkg.stripes.home);
+    }
+  }
+
+  shortcuts = [
+    {
+      name: 'search',
+      handler: this.focusSearchField
+    },
+  ];
+
+  checkScope = () => {
+    return document.body.contains(document.activeElement);
+  }
+
   render() {
     const {
       showSettings,
@@ -181,6 +203,7 @@ class UsersRouting extends React.Component {
       stripes
     } = this.props;
 
+    this.shortcutScope = document.body;
     const base = '/users';
 
     if (showSettings) {
@@ -198,26 +221,32 @@ class UsersRouting extends React.Component {
 
     return (
       <CommandList commands={commands}>
-        <Switch>
-          <Route path={`${base}/:id/loans/view/:loanid`} component={Routes.LoanDetailContainer} />
-          <Route path={`${base}/:id/loans/:loanstatus`} component={Routes.LoansListingContainer} />
-          <Route path={`${base}/:id/accounts/:accountstatus/charge`} exact component={Routes.FeesFinesContainer} />
-          <Route path={`${base}/:id/accounts/view/:accountid`} component={Routes.AccountDetailsContainer} />
-          <Route path={`${base}/:id/accounts/:accountstatus`} exact component={Routes.AccountsListingContainer} />
-          <Route path={`${base}/:id/charge/:loanid?`} component={Routes.ChargeFeesFinesContainer} />
-          <Route path={`${base}/:id/patronblocks/edit/:patronblockid`} component={Routes.PatronBlockContainer} />
-          <Route path={`${base}/:id/patronblocks/create`} component={Routes.PatronBlockContainer} />
-          <Route path={`${base}/create`} component={Routes.UserEditContainer} />
-          <Route path={`${base}/:id/edit`} component={Routes.UserEditContainer} />
-          <Route path={`${base}/view/:id`} component={Routes.UserDetailFullscreenContainer} />
-          <Route path={`${base}/notes/new`} exact component={NoteCreatePage} />
-          <Route path={`${base}/notes/:id`} exact component={NoteViewPage} />
-          <Route path={`${base}/notes/:id/edit`} exact component={NoteEditPage} />
-          <Route path={base} component={Routes.UserSearchContainer}>
-            <Route path={`${base}/preview/:id`} component={Routes.UserDetailContainer} />
-          </Route>
-          <Route render={this.noMatch} />
-        </Switch>
+        <HasCommand
+          commands={this.shortcuts}
+          isWithinScope={this.checkScope}
+          scope={this.shortcutScope}
+        >
+          <Switch>
+            <Route path={`${base}/:id/loans/view/:loanid`} component={Routes.LoanDetailContainer} />
+            <Route path={`${base}/:id/loans/:loanstatus`} component={Routes.LoansListingContainer} />
+            <Route path={`${base}/:id/accounts/:accountstatus/charge`} exact component={Routes.FeesFinesContainer} />
+            <Route path={`${base}/:id/accounts/view/:accountid`} component={Routes.AccountDetailsContainer} />
+            <Route path={`${base}/:id/accounts/:accountstatus`} exact component={Routes.AccountsListingContainer} />
+            <Route path={`${base}/:id/charge/:loanid?`} component={Routes.ChargeFeesFinesContainer} />
+            <Route path={`${base}/:id/patronblocks/edit/:patronblockid`} component={Routes.PatronBlockContainer} />
+            <Route path={`${base}/:id/patronblocks/create`} component={Routes.PatronBlockContainer} />
+            <Route path={`${base}/create`} component={Routes.UserEditContainer} />
+            <Route path={`${base}/:id/edit`} component={Routes.UserEditContainer} />
+            <Route path={`${base}/view/:id`} component={Routes.UserDetailFullscreenContainer} />
+            <Route path={`${base}/notes/new`} exact component={NoteCreatePage} />
+            <Route path={`${base}/notes/:id`} exact component={NoteViewPage} />
+            <Route path={`${base}/notes/:id/edit`} exact component={NoteEditPage} />
+            <Route path={base} component={Routes.UserSearchContainer}>
+              <Route path={`${base}/preview/:id`} component={Routes.UserDetailContainer} />
+            </Route>
+            <Route render={this.noMatch} />
+          </Switch>
+        </HasCommand>
       </CommandList>
     );
   }
