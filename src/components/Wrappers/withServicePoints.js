@@ -44,9 +44,7 @@ const withServicePoints = WrappedComponent => class WithServicePointsComponent e
         servicePointsUsers: PropTypes.shape({
           records: PropTypes.arrayOf(PropTypes.object),
         }),
-        servicePointUserId: PropTypes.shape({
-          replace: PropTypes.func.isRequired,
-        }),
+        servicePointUserId: PropTypes.string,
       }),
       match: PropTypes.shape({
         params: PropTypes.shape({

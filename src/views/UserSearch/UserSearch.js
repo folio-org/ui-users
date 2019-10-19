@@ -67,6 +67,7 @@ class UserSearch extends React.Component {
     super(props);
     this.state = {
       filterPaneIsVisible: true,
+      selectedId: null,
     };
 
     this.searchField = React.createRef();
@@ -75,6 +76,13 @@ class UserSearch extends React.Component {
     this.overdueLoanReport = new OverdueLoanReport({
       formatMessage
     });
+  }
+
+  static getDerivedStateFromProps(props) {
+    const urlParams = matchPath(props.location.pathname, { path: '/users/preview/:id' }).params;
+    return {
+      selectedId: urlParams.id
+    };
   }
 
   componentDidMount() {
@@ -214,6 +222,8 @@ class UserSearch extends React.Component {
     },
   ];
 
+  isSelected = ({ item }) => item.id === this.state.selectedId;
+
   render() {
     const {
       filterConfig,
@@ -232,7 +242,6 @@ class UserSearch extends React.Component {
     } = this.props;
 
     const users = get(resources, 'records.records', []);
-    const selectedRow = (matchPath(location.pathname, { path: '/users/preview/:id' }) || {}).params;
     const patronGroups = (resources.patronGroups || {}).records || [];
     const query = queryGetter ? queryGetter() || {} : {};
     const count = source ? source.totalCount() : 0;
@@ -255,7 +264,7 @@ class UserSearch extends React.Component {
 
     const resultsFormatter = {
       status: user => (
-        <AppIcon app="users" size="small" className={user.active || css.inactiveAppIcon}>
+        <AppIcon app="users" size="small" className={user.active ? undefined : css.inactiveAppIcon}>
           {user.active ? <FormattedMessage id="ui-users.active" /> : <FormattedMessage id="ui-users.inactive" />}
         </AppIcon>
       ),
@@ -372,8 +381,8 @@ class UserSearch extends React.Component {
                             onHeaderClick={onSort}
                             sortOrder={sortOrder.replace(/^-/, '').replace(/,.*/, '')}
                             sortDirection={sortOrder.startsWith('-') ? 'descending' : 'ascending'}
-                            selectedRow={selectedRow}
                             isEmptyMessage={resultsStatusMessage}
+                            isSelected={this.isSelected}
                             autosize
                             virtualize
                           />
