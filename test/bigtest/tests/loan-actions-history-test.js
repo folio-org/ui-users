@@ -15,11 +15,15 @@ describe('loans actions history', () => {
   const requestsAmount = 2;
 
   beforeEach(async function () {
-    const user = this.server.create('user');
-    const loan = this.server.create('loan', { status: { name: 'Open' }, loanPolicyId: 'test' });
+    const loan = this.server.create('loan', {
+      status: { name: 'Open' },
+      loanPolicyId: 'test'
+    });
+
+    this.server.createList('loanactions', 5, { loan: { ...loan.attrs } });
 
     this.server.createList('request', requestsAmount, { itemId: loan.itemId });
-    this.visit(`/users/view/${user.id}?layer=loan&loan=${loan.id}&query=%20%20&sort=name`);
+    this.visit(`/users/${loan.userId}/loans/view/${loan.id}`);
   });
 
   it('should be presented', () => {
@@ -41,11 +45,10 @@ describe('loans actions history', () => {
 
     describe('loan without loanPolicy', () => {
       beforeEach(async function () {
-        const user = this.server.create('user');
         const loan = this.server.create('loan', { status: { name: 'Open' } });
 
         this.server.createList('request', requestsAmount, { itemId: loan.itemId });
-        this.visit(`/users/view/${user.id}?layer=loan&loan=${loan.id}&query=%20%20&sort=name`);
+        this.visit(`/users/${loan.userId}/loans/${loan.id}`);
       });
 
       it('should not be presented', () => {

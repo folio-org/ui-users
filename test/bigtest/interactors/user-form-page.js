@@ -2,7 +2,6 @@ import {
   interactor,
   clickable,
   text,
-  isPresent,
   fillable,
   blurrable,
   triggerable,
@@ -35,10 +34,10 @@ import PermissionsModal from './permissions-modal';
 }
 
 @interactor class UserFormPage {
-  isLoaded = isPresent('[class*=paneTitleLabel---]');
+  // isLoaded = isPresent('[class*=paneTitleLabel---]');
 
   whenLoaded() {
-    return this.when(() => this.isLoaded).timeout(3000);
+    return this.when(() => this.isPresent).timeout(4000);
   }
 
   title = text('[class*=paneTitleLabel---]');

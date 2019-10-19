@@ -11,7 +11,7 @@ import { Select } from '@folio/stripes/components';
 import { ControlledVocab } from '@folio/stripes/smart-components';
 import { stripesConnect, withStripes } from '@folio/stripes/core';
 
-import { validate } from '../util';
+import { validate } from '../components/util';
 import {
   Owners,
   CopyModal,

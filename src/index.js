@@ -1,14 +1,17 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
+import queryString from 'query-string';
 import { hot } from 'react-hot-loader';
 import _ from 'lodash';
 
-import { Route, Switch } from '@folio/stripes/core';
+import { Route, Switch, IfPermission } from '@folio/stripes/core';
+import { CommandList, HasCommand } from '@folio/stripes/components';
 
-import Users from './Users';
+import * as Routes from './routes';
+
+import pkg from '../package';
 import Settings from './settings';
-import { CommandList } from './components/Commander';
 import commands from './commands';
 import PermissionSets from './settings/permissions/PermissionSets';
 import PatronGroupsSettings from './settings/PatronGroupsSettings';
@@ -21,9 +24,11 @@ import PaymentSettings from './settings/PaymentSettings';
 import CommentRequiredSettings from './settings/CommentRequiredSettings';
 import RefundReasonsSettings from './settings/RefundReasonsSettings';
 import TransferAccountsSettings from './settings/TransferAccountsSettings';
-import NoteCreatePage from './NoteCreatePage';
-import NoteViewPage from './NoteViewPage';
-import NoteEditPage from './NoteEditPage';
+import {
+  NoteCreatePage,
+  NoteViewPage,
+  NoteEditPage
+} from './views';
 
 const settingsGeneral = [
   {
@@ -117,6 +122,37 @@ class UsersRouting extends React.Component {
     location: PropTypes.object.isRequired,
     match: PropTypes.object.isRequired,
     showSettings: PropTypes.bool,
+    history: PropTypes.object,
+  }
+
+  componentDidMount() {
+    const {
+      location,
+      history
+    } = this.props;
+
+    const query = queryString.parse(location.search);
+    const uidRegEx = /\/([^/]*)$/gm;
+    if (query.layer === 'loan') {
+      if (query.loan) {
+        const uid = uidRegEx.exec(location.pathname);
+        history.replace(`/users/${uid[1]}/loans/view/${query.loan}`);
+      }
+    }
+    if (query.layer === 'account') {
+      if (query.account) {
+        const uid = uidRegEx.exec(location.pathname);
+        history.replace(`/users/${uid[1]}/accounts/view/${query.account}`);
+      }
+    }
+    if (query.layer === 'charge') {
+      const uid = uidRegEx.exec(location.pathname);
+      if (query.loan) {
+        history.replace(`/users/${uid[1]}/charge/${query.loan}`);
+      } else {
+        history.replace(`/users/${uid[1]}/charge`);
+      }
+    }
   }
 
   noMatch() {
@@ -139,12 +175,36 @@ class UsersRouting extends React.Component {
     );
   }
 
+  focusSearchField = () => {
+    const { history } = this.props;
+    const el = document.getElementById('userSearchField');
+    if (el) {
+      el.focus();
+    } else {
+      history.push(pkg.stripes.home);
+    }
+  }
+
+  shortcuts = [
+    {
+      name: 'search',
+      handler: this.focusSearchField
+    },
+  ];
+
+  checkScope = () => {
+    return document.body.contains(document.activeElement);
+  }
+
   render() {
     const {
       showSettings,
       match: { path },
       stripes
     } = this.props;
+
+    this.shortcutScope = document.body;
+    const base = '/users';
 
     if (showSettings) {
       return (
@@ -161,13 +221,46 @@ class UsersRouting extends React.Component {
 
     return (
       <CommandList commands={commands}>
-        <Switch>
-          <Route path="/users/notes/new" exact component={NoteCreatePage} />
-          <Route path="/users/notes/:id" exact component={NoteViewPage} />
-          <Route path="/users/notes/:id/edit" exact component={NoteEditPage} />
-          <Route path={path} component={Users} />
-          <Route render={this.noMatch} />
-        </Switch>
+        <HasCommand
+          commands={this.shortcuts}
+          isWithinScope={this.checkScope}
+          scope={this.shortcutScope}
+        >
+          <Switch>
+            <Route
+              path={`${base}/:id/loans/view/:loanid`}
+              render={(props) => (
+                <IfPermission perm="ui-users.loans.view">
+                  <Routes.LoanDetailContainer {...props} />
+                </IfPermission>
+              )}
+            />
+            <Route
+              path={`${base}/:id/loans/:loanstatus`}
+              render={(props) => (
+                <IfPermission perm="ui-users.loans.view">
+                  <Routes.LoansListingContainer {...props} />
+                </IfPermission>
+              )}
+            />
+            <Route path={`${base}/:id/accounts/:accountstatus/charge`} exact component={Routes.FeesFinesContainer} />
+            <Route path={`${base}/:id/accounts/view/:accountid`} component={Routes.AccountDetailsContainer} />
+            <Route path={`${base}/:id/accounts/:accountstatus`} exact component={Routes.AccountsListingContainer} />
+            <Route path={`${base}/:id/charge/:loanid?`} component={Routes.ChargeFeesFinesContainer} />
+            <Route path={`${base}/:id/patronblocks/edit/:patronblockid`} component={Routes.PatronBlockContainer} />
+            <Route path={`${base}/:id/patronblocks/create`} component={Routes.PatronBlockContainer} />
+            <Route path={`${base}/create`} component={Routes.UserEditContainer} />
+            <Route path={`${base}/:id/edit`} component={Routes.UserEditContainer} />
+            <Route path={`${base}/view/:id`} component={Routes.UserDetailFullscreenContainer} />
+            <Route path={`${base}/notes/new`} exact component={NoteCreatePage} />
+            <Route path={`${base}/notes/:id`} exact component={NoteViewPage} />
+            <Route path={`${base}/notes/:id/edit`} exact component={NoteEditPage} />
+            <Route path={base} component={Routes.UserSearchContainer}>
+              <Route path={`${base}/preview/:id`} component={Routes.UserDetailContainer} />
+            </Route>
+            <Route render={this.noMatch} />
+          </Switch>
+        </HasCommand>
       </CommandList>
     );
   }

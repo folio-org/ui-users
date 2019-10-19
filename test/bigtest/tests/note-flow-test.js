@@ -7,7 +7,7 @@ import NotesAccordion from '../interactors/notes-accordion';
 import NoteForm from '../interactors/note-form';
 import NoteView from '../interactors/note-view';
 import InstanceViewPage from '../interactors/user-view-page';
-import { getFullName } from '../../../src/util';
+import { getFullName } from '../../../src/components/util';
 
 const notesAccordion = new NotesAccordion();
 const noteForm = new NoteForm();
@@ -46,7 +46,7 @@ describe('User notes flow', function () {
       links: [{ type: 'user', id: 'someId2' }],
     });
 
-    this.visit(`/users/view/${user.id}`);
+    this.visit(`/users/preview/${user.id}`);
 
     await notesAccordion.whenLoaded();
   });
@@ -95,7 +95,7 @@ describe('User notes flow', function () {
         });
 
         it('should redirect to previous location', function () {
-          expect(this.location.pathname + this.location.search).to.equal(`/users/view/${user.id}?sort=name`);
+          expect(this.location.pathname).to.include(`/users/preview/${user.id}`);
         });
       });
 
@@ -162,7 +162,7 @@ describe('User notes flow', function () {
               });
 
               it('should redirect to previous page', function () {
-                expect(this.location.pathname + this.location.search).to.equal(`/users/view/${user.id}?sort=name`);
+                expect(this.location.pathname + this.location.search).to.include(`/users/preview/${user.id}`);
               });
             });
           });
@@ -170,10 +170,11 @@ describe('User notes flow', function () {
           describe('and save button was clicked', () => {
             beforeEach(async () => {
               await noteForm.saveButton.click();
+              await InstanceViewPage.whenLoaded();
             });
 
             it('should redirect to previous page', function () {
-              expect(this.location.pathname + this.location.search).to.equal(`/users/view/${user.id}?sort=name`);
+              expect(this.location.pathname).to.equal(`/users/preview/${user.id}`);
             });
 
             it('notes accordion should contain 2 notes', () => {
@@ -231,7 +232,7 @@ describe('User notes flow', function () {
         });
 
         it('should redirect to previous location', function () {
-          expect(this.location.pathname + this.location.search).to.equal(`/users/view/${user.id}?sort=name`);
+          expect(this.location.pathname + this.location.search).to.include(`/users/preview/${user.id}`);
         });
       });
 
@@ -260,7 +261,7 @@ describe('User notes flow', function () {
           });
 
           it('should redirect to user details page', function () {
-            expect(this.location.pathname + this.location.search).to.equal(`/users/view/${user.id}?sort=name`);
+            expect(this.location.pathname + this.location.search).to.include(`/users/preview/${user.id}`);
           });
         });
       });
@@ -312,7 +313,7 @@ describe('User notes flow', function () {
           });
 
           it('should redirect to previous page', function () {
-            expect(this.location.pathname + this.location.search).to.equal(`/users/notes/${userNote.id}`);
+            expect(this.location.pathname + this.location.search).to.include(`/users/notes/${userNote.id}`);
           });
         });
 

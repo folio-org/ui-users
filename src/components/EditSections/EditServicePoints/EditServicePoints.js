@@ -34,7 +34,7 @@ class EditServicePoints extends React.Component {
       servicePoints: PropTypes.array,
     }).isRequired,
     onToggle: PropTypes.func,
-    parentResources: PropTypes.shape({
+    resources: PropTypes.shape({
       servicePoints: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }).isRequired,
@@ -177,7 +177,7 @@ class EditServicePoints extends React.Component {
   }
 
   renderAddServicePointModal() {
-    const servicePoints = get(this.props.parentResources, ['servicePoints', 'records'], []);
+    const servicePoints = get(this.props.resources, ['servicePoints', 'records'], []);
 
     return (
       <AddServicePointModal

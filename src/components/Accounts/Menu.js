@@ -9,21 +9,16 @@ import {
 } from '@folio/stripes/components';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
-import { getFullName } from '../../util';
+import { getFullName } from '../util';
 
 const Menu = (props) => {
-  const { user, showFilters, filters, balance, selected, actions, query } = props;
+  const { user, showFilters, match: { params }, filters, balance, selected, actions } = props;
   const outstanding = parseFloat(balance).toFixed(2);
   const showSelected = (selected !== 0 && selected !== parseFloat(0).toFixed(2))
     && outstanding > parseFloat(0).toFixed(2);
   const buttonDisabled = !props.stripes.hasPerm('ui-users.feesfines.actions.all');
 
-  let type = <FormattedMessage id="ui-users.accounts.open" />;
-  if (query.layer === 'closed-accounts') {
-    type = <FormattedMessage id="ui-users.accounts.closed" />;
-  } else if (query.layer === 'all-accounts') {
-    type = <FormattedMessage id="ui-users.accounts.all" />;
-  }
+  const type = <FormattedMessage id={`ui-users.accounts.${params.accountstatus}`} />;
 
   const firstMenu = (
     <div>
@@ -70,7 +65,7 @@ const Menu = (props) => {
         id="open-closed-all-charge-button"
         marginBottom0
         disabled={buttonDisabled}
-        onClick={e => props.onClickViewChargeFeeFine(e, {})}
+        to={`/users/${params.id}/charge`}
       >
         <FormattedMessage id="ui-users.accounts.button.new" />
       </Button>
@@ -126,9 +121,8 @@ Menu.propTypes = {
   selected: PropTypes.number,
   filters: PropTypes.object,
   actions: PropTypes.object,
-  query: PropTypes.object,
+  match: PropTypes.object,
   patronGroup: PropTypes.object,
-  onClickViewChargeFeeFine: PropTypes.func,
   onChangeActions: PropTypes.func,
 };
 

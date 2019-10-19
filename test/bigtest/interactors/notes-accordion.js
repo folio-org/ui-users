@@ -14,6 +14,7 @@ import {
 
 @interactor class NotesAccordion {
   isDisplayed = isPresent('#notesAccordion');
+  notesLoaded = isPresent('[data-test-notes-accordion-quantity-indicator]');
   toggleAccordion = clickable('#accordion-toggle-button-notesAccordion');
 
   assignButtonDisplayed = isPresent('[data-test-notes-accordion-assign-button]');
@@ -31,7 +32,7 @@ import {
   });
 
   whenLoaded() {
-    return this.when(() => this.isDisplayed);
+    return this.when(() => this.notesLoaded).timeout(3000);
   }
 }
 

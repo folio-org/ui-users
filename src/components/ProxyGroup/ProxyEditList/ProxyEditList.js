@@ -16,7 +16,7 @@ import {
 import { Pluggable } from '@folio/stripes/core';
 
 import ErrorModal from '../../ErrorModal';
-import { getFullName } from '../../../util';
+import { getFullName } from '../../util';
 import css from './ProxyEditList.css';
 
 class ProxyEditList extends React.Component {

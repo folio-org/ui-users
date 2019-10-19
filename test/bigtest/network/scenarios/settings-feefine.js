@@ -4,15 +4,15 @@ import CQLParser from '../cql';
 
 export default (server) => {
   server.create('user', { id: '1ad737b0-d847-11e6-bf26-cec0c932ce02' });
-  server.create('owners', { owner: 'Main Admin0', desc: 'Owner FyF' });
+  server.create('owner', { owner: 'Main Admin0', desc: 'Owner FyF' });
 
-  server.create('owners', { owner: 'Shared', desc: 'Owner Shared' });
+  server.create('owner', { owner: 'Shared', desc: 'Owner Shared' });
 
-  const owner1 = server.create('owners', { owner: 'Main Admin1', desc: 'Owner DGB' });
+  const owner1 = server.create('owner', { owner: 'Main Admin1', desc: 'Owner DGB' });
 
-  const otherOwner = server.create('owners', { owner: 'Main Admin2', desc: 'Owner CCH' });
+  const otherOwner = server.create('owner', { owner: 'Main Admin2', desc: 'Owner CCH' });
 
-  const ownerFeeFine = server.create('owners', { owner: 'Main Admin3', desc: 'Owner DGB' });
+  const ownerFeeFine = server.create('owner', { owner: 'Main Admin3', desc: 'Owner DGB' });
   server.createList('feefines', 4, { ownerId: ownerFeeFine.id });
 
   server.createList('transfers', 2, { ownerId: owner1.id });

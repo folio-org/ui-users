@@ -28,26 +28,8 @@ import Label from '../../Label';
 import ErrorModal from '../../ErrorModal';
 
 class ClosedLoans extends React.Component {
-  static manifest = Object.freeze({
-    query: {},
-    loanAccount: {
-      type: 'okapi',
-      records: 'accounts',
-      path: 'accounts?query=userId=%{activeRecord.user}',
-    },
-    anonymize: {
-      type: 'okapi',
-      fetch: false,
-      POST: {
-        path: 'loan-anonymization/by-user/%{activeRecord.user}',
-      },
-    },
-    activeRecord: {},
-  });
-
   static propTypes = {
     stripes: stripesShape.isRequired,
-    buildRecords: PropTypes.func,
     onClickViewLoanActionsHistory: PropTypes.func.isRequired,
     loans: PropTypes.arrayOf(PropTypes.object).isRequired,
     mutator: PropTypes.shape({
@@ -60,6 +42,7 @@ class ClosedLoans extends React.Component {
     resources: PropTypes.shape({
       query: PropTypes.object,
     }),
+    match: PropTypes.object,
     user: PropTypes.object,
     onClickViewChargeFeeFine: PropTypes.func,
     onClickViewAccountActionsHistory: PropTypes.func.isRequired,
@@ -264,6 +247,28 @@ class ClosedLoans extends React.Component {
     this.props.onClickViewChargeFeeFine(e, loan);
   }
 
+  getFeeFinePath = (loan) => {
+    const {
+      resources,
+      match: { params }
+    } = this.props;
+    const accounts = _.get(resources, ['loanAccount', 'records'], []);
+    const accountsLoan = accounts.filter(a => a.loanId === loan.id) || [];
+    if (accountsLoan.length === 1) {
+      return `/users/${params.id}/accounts/view/${accountsLoan[0].id}`;
+    } else if (accountsLoan.length > 1) {
+      const open = accountsLoan.filter(a => a.status.name === 'Open') || [];
+      if (open.length === accountsLoan.length) {
+        return `/users/${params.id}/accounts/open`;
+      } else if (open.length === 0) {
+        return `/users/${params.id}/accounts/closed`;
+      } else {
+        return `/users/${params.id}/accounts/all`;
+      }
+    }
+    return '';
+  }
+
   feefinedetails(loan, e) {
     const accounts = _.get(this.props.resources, ['loanAccount', 'records'], []);
     const accountsLoan = accounts.filter(a => a.loanId === loan.id) || [];
@@ -311,6 +316,26 @@ class ClosedLoans extends React.Component {
     }
   }
 
+  buildRecords(records) {
+    return records.map((record) => {
+      const {
+        item,
+        item: { contributors },
+      } = record;
+
+      return _.isArray(contributors) ?
+        {
+          ...record,
+          item: {
+            ...item,
+            contributors: contributors
+              .map((currentContributor) => currentContributor.name)
+              .join('; ')
+          }
+        } : record;
+    });
+  }
+
   closeLoansAnonymizationErrorModal = () => {
     this.setState({
       anonymizationErrorModalOpen: false,
@@ -321,7 +346,7 @@ class ClosedLoans extends React.Component {
   renderActions(loan) {
     const accounts = _.get(this.props.resources, ['loanAccount', 'records'], []);
     const accountsLoan = accounts.filter(a => a.loanId === loan.id) || [];
-    const { stripes } = this.props;
+    const { stripes, match: { params } } = this.props;
     const buttonDisabled = !stripes.hasPerm('ui-users.feesfines.actions.all');
 
     return (
@@ -336,10 +361,22 @@ class ClosedLoans extends React.Component {
             </MenuItem>
           </IfPermission>
           <MenuItem itemMeta={{ loan, action: 'feefine' }}>
-            <Button disabled={buttonDisabled} buttonStyle="dropdownItem"><FormattedMessage id="ui-users.loans.newFeeFine" /></Button>
+            <Button
+              disabled={buttonDisabled}
+              to={{ pathname: `/users/${params.id}/loans/view/${loan.id}/chargefee` }}
+              buttonStyle="dropdownItem"
+            >
+              <FormattedMessage id="ui-users.loans.newFeeFine" />
+            </Button>
           </MenuItem>
           <MenuItem itemMeta={{ loan, action: 'feefinedetails' }}>
-            <Button disabled={!(accountsLoan.length > 0)} buttonStyle="dropdownItem"><FormattedMessage id="ui-users.loans.feeFineDetails" /></Button>
+            <Button
+              disabled={accountsLoan.length === 0}
+              buttonStyle="dropdownItem"
+              to={accountsLoan.length > 0 ? { pathname: this.getFeeFinePath(loan) } : undefined}
+            >
+              <FormattedMessage id="ui-users.loans.feeFineDetails" />
+            </Button>
           </MenuItem>
         </DropdownMenu>
       </UncontrolledDropdown>
@@ -356,7 +393,6 @@ class ClosedLoans extends React.Component {
     const {
       onClickViewLoanActionsHistory,
       loans,
-      buildRecords
     } = this.props;
 
     const visibleColumns = ['title', 'dueDate', 'barcode', 'Fee/Fine', 'Call Number', 'Contributors', 'renewals', 'loanDate', 'returnDate', 'checkinServicePoint', ' '];
@@ -364,7 +400,7 @@ class ClosedLoans extends React.Component {
     const loansSorted = _.orderBy(loans,
       [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
     const clonedLoans = _.cloneDeep(loans);
-    const recordsToCSV = buildRecords(clonedLoans);
+    const recordsToCSV = this.buildRecords(clonedLoans);
     return (
       <div data-test-closed-loans>
         <ActionsBar

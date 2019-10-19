@@ -22,7 +22,7 @@ describe('Permissions modal', () => {
     permissionSets = this.server.createList('permissions', permissionSetsAmount, { mutable: true });
     user = this.server.create('user');
 
-    this.visit(`/users/view/${user.id}?layer=edit&query=%20&sort=name`);
+    this.visit(`/users/${user.id}/edit`);
     await UserFormPage.whenLoaded();
     await UserFormPage.togglePermissionAccordionButton.click();
   });

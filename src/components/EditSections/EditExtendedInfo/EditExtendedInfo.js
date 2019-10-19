@@ -24,14 +24,7 @@ class EditExtendedInfo extends Component {
     accordionId: PropTypes.string.isRequired,
     userFirstName: PropTypes.string.isRequired,
     onToggle: PropTypes.func.isRequired,
-    stripesConnect: PropTypes.func.isRequired,
   };
-
-  constructor(props) {
-    super(props);
-
-    this.connectedResetPasswordControl = props.stripesConnect(CreateResetPasswordControl);
-  }
 
   buildAccordionHeader = () => {
     return (
@@ -128,7 +121,7 @@ class EditExtendedInfo extends Component {
           {
             userId
               ? (
-                <this.connectedResetPasswordControl
+                <CreateResetPasswordControl
                   userId={userId}
                   email={userEmail}
                   name={userFirstName}

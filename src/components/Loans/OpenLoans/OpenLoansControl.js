@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   isEmpty,
+  isArray,
   omit,
   size,
   get,
@@ -9,35 +10,12 @@ import {
 
 import { stripesShape } from '@folio/stripes/core';
 
-import withRenew from '../../../withRenew';
+import { nav } from '../../util';
+
+import { withRenew } from '../../Wrappers';
 import TableModel from './components/OpenLoansWithStaticData';
 
 class OpenLoansControl extends React.Component {
-  static manifest = Object.freeze({
-    query: {},
-    loanPolicies: {
-      type: 'okapi',
-      records: 'loanPolicies',
-      path: 'loan-policy-storage/loan-policies',
-      accumulate: 'true',
-      fetch: false,
-    },
-    requests: {
-      type: 'okapi',
-      path: 'circulation/requests',
-      resourceShouldRefresh: true,
-      records: 'requests',
-      accumulate: 'true',
-      fetch: false,
-    },
-    loanAccount: {
-      type: 'okapi',
-      records: 'accounts',
-      path: 'accounts?query=userId=%{activeRecord.user}&limit=100',
-    },
-    activeRecord: {},
-  });
-
   static propTypes = {
     stripes: stripesShape.isRequired,
     mutator: PropTypes.shape({
@@ -63,19 +41,13 @@ class OpenLoansControl extends React.Component {
       id: PropTypes.string.isRequired,
     }).isRequired,
     history: PropTypes.object.isRequired,
+    match: PropTypes.object,
     patronGroup: PropTypes.object.isRequired,
     requestCounts: PropTypes.object.isRequired,
     loanPolicies: PropTypes.object.isRequired,
     loans: PropTypes.arrayOf(PropTypes.object).isRequired,
     patronBlocks: PropTypes.arrayOf(PropTypes.object).isRequired,
     renew: PropTypes.func.isRequired,
-    buildRecords: PropTypes.func.isRequired,
-    onClickViewAllAccounts: PropTypes.func.isRequired,
-    onClickViewOpenAccounts: PropTypes.func.isRequired,
-    onClickViewChargeFeeFine: PropTypes.func.isRequired,
-    onClickViewClosedAccounts: PropTypes.func.isRequired,
-    onClickViewLoanActionsHistory: PropTypes.func.isRequired,
-    onClickViewAccountActionsHistory: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -309,9 +281,8 @@ class OpenLoansControl extends React.Component {
   };
 
   feefine = (loan, e) => {
-    const { onClickViewChargeFeeFine } = this.props;
-
-    onClickViewChargeFeeFine(e, loan);
+    const { history, match: { params } } = this.props;
+    nav.onClickChargeFineToLoan(e, loan, history, params);
   };
 
   renew = (loan) => {
@@ -332,25 +303,23 @@ class OpenLoansControl extends React.Component {
   feefinedetails = (loan, e) => {
     const {
       resources,
-      onClickViewAllAccounts,
-      onClickViewOpenAccounts,
-      onClickViewClosedAccounts,
-      onClickViewAccountActionsHistory,
+      history,
+      match: { params }
     } = this.props;
     const accounts = get(resources, ['loanAccount', 'records'], []);
     const accountsLoan = accounts.filter(a => a.loanId === loan.id) || [];
 
     if (accountsLoan.length === 1) {
-      onClickViewAccountActionsHistory(e, { id: accountsLoan[0].id });
+      nav.onClickViewAccountActionsHistory(e, { id: accountsLoan[0].id }, history, params);
     } else if (accountsLoan.length > 1) {
       const open = accountsLoan.filter(a => a.status.name === 'Open') || [];
 
       if (open.length === accountsLoan.length) {
-        onClickViewOpenAccounts(e, loan);
+        nav.onClickViewOpenAccounts(e, loan, history, params);
       } else if (open.length === 0) {
-        onClickViewClosedAccounts(e, loan);
+        nav.onClickViewClosedAccounts(e, loan, history, params);
       } else {
-        onClickViewAllAccounts(e, loan);
+        nav.onClickViewAllAccounts(e, loan, history, params);
       }
     }
   };
@@ -361,6 +330,26 @@ class OpenLoansControl extends React.Component {
     const accountsLoan = accounts.filter(a => a.loanId === loan.id) || [];
     return accountsLoan.length;
   };
+
+  buildRecords(records) {
+    return records.map((record) => {
+      const {
+        item,
+        item: { contributors },
+      } = record;
+
+      return isArray(contributors) ?
+        {
+          ...record,
+          item: {
+            ...item,
+            contributors: contributors
+              .map((currentContributor) => currentContributor.name)
+              .join('; ')
+          }
+        } : record;
+    });
+  }
 
   render() {
     const {
@@ -376,9 +365,9 @@ class OpenLoansControl extends React.Component {
       requestCounts,
       loans,
       stripes,
-      onClickViewLoanActionsHistory,
+      history,
+      match,
       user,
-      buildRecords,
       patronGroup,
       patronBlocks,
       resources,
@@ -391,7 +380,7 @@ class OpenLoansControl extends React.Component {
           openPatronBlockedModal={this.openPatronBlockedModal}
           patronBlocks={patronBlocks}
           patronGroup={patronGroup}
-          buildRecords={buildRecords}
+          buildRecords={this.buildRecords}
           visibleColumns={visibleColumns}
           checkedLoans={checkedLoans}
           requestCounts={requestCounts}
@@ -400,7 +389,8 @@ class OpenLoansControl extends React.Component {
           loans={loans}
           stripes={stripes}
           feeFineCount={this.feeFineCount}
-          onClickViewLoanActionsHistory={onClickViewLoanActionsHistory}
+          history={history}
+          match={match}
           user={user}
           toggleAll={this.toggleAll}
           toggleItem={this.toggleItem}

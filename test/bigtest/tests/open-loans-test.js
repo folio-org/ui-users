@@ -3,7 +3,6 @@ import {
   describe,
   it,
 } from '@bigtest/mocha';
-import { location } from '@bigtest/react';
 import { expect } from 'chai';
 
 import setupApplication from '../helpers/setup-application';
@@ -33,13 +32,10 @@ describe('Open Loans', () => {
   const requestsAmount = 2;
 
   beforeEach(async function () {
-    const user = this.server.create('user');
     const loan = this.server.create('loan', { status: { name: 'Open' } });
 
     this.server.createList('request', requestsAmount, { itemId: loan.itemId });
-    this.visit(`/users/view/${user.id}?layer=open-loans&query=%20&sort=requests`);
-
-    await OpenLoansInteractor.whenLoaded();
+    this.visit(`/users/${loan.userId}/loans/open?query=%20&sort=requests`);
   });
 
   it('should be presented', () => {
@@ -107,7 +103,7 @@ describe('Open Loans', () => {
           });
 
           it('should be redirected to "requests"', function () {
-            expect(location().pathname).to.to.equal(requestsPath);
+            expect(this.location.pathname).to.to.equal(requestsPath);
           });
         });
       });

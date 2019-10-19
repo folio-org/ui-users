@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { get } from 'lodash';
-
+import { stripesConnect } from '@folio/stripes/core';
 import {
   Col,
   KeyValue,
@@ -150,4 +150,4 @@ class CreateResetPasswordControl extends React.Component {
   }
 }
 
-export default CreateResetPasswordControl;
+export default stripesConnect(CreateResetPasswordControl);

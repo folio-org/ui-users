@@ -6,14 +6,6 @@ module.exports.test = function foo(uiTestCtx) {
     const nightmare = new Nightmare(config.nightmare);
     this.timeout(Number(config.test_timeout));
 
-    // eslint-disable-next-line no-unused-vars
-    const waitText = (label) => {
-      return Array.from(
-        document.querySelectorAll('ul[class*="PermissionList"] li')
-      )
-        .findIndex(e => e.textContent === label) >= 0;
-    };
-
     describe('Login > Create new permission set > Confirm creation > Delete permission set > Confirm deletion > Logout\n', () => {
       const displayName = 'Circulation employee';
       const description = 'Contains permissions to execute basic circ functions.';

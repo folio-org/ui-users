@@ -13,7 +13,6 @@ describe('Settings owners', () => {
 
   beforeEach(async function () {
     await this.server.create('service-point', { name: 'None' });
-
     await this.visit('/settings/users/owners');
     await FeeFineInteractor.whenLoaded();
   });

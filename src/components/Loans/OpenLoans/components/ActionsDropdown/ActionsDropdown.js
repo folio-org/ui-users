@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-
+import { withRouter } from 'react-router-dom';
 import {
   Button,
   MenuItem,
@@ -21,6 +21,7 @@ class ActionsDropdown extends React.Component {
     requestQueue: PropTypes.bool.isRequired,
     handleOptionsChange: PropTypes.func.isRequired,
     disableFeeFineDetails: PropTypes.bool,
+    match: PropTypes.object,
   };
 
   itemClick = () => {
@@ -34,8 +35,8 @@ class ActionsDropdown extends React.Component {
   render() {
     const {
       loan,
-      requestQueue,
       handleOptionsChange,
+      requestQueue,
       stripes,
       disableFeeFineDetails,
     } = this.props;
@@ -61,7 +62,8 @@ class ActionsDropdown extends React.Component {
             >
               <Button
                 buttonStyle="dropdownItem"
-                href={itemDetailsLink}
+                to={itemDetailsLink}
+                onClick={(e) => { e.stopPropagation(); }}
               >
                 <FormattedMessage id="ui-users.itemDetails" />
               </Button>
@@ -76,6 +78,7 @@ class ActionsDropdown extends React.Component {
           >
             <Button
               buttonStyle="dropdownItem"
+              onClick={(e) => { handleOptionsChange({ loan, action:'renew' }, e); }}
               data-test-dropdown-content-renew-button
             >
               <FormattedMessage id="ui-users.renew" />
@@ -90,6 +93,7 @@ class ActionsDropdown extends React.Component {
           >
             <Button
               buttonStyle="dropdownItem"
+              onClick={(e) => { handleOptionsChange({ loan, action:'changeDueDate' }, e); }}
               data-test-dropdown-content-change-due-date-button
             >
               <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />
@@ -152,4 +156,4 @@ class ActionsDropdown extends React.Component {
   }
 }
 
-export default ActionsDropdown;
+export default withRouter(ActionsDropdown);
