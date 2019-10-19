@@ -79,9 +79,9 @@ class UserSearch extends React.Component {
   }
 
   static getDerivedStateFromProps(props) {
-    const urlParams = matchPath(props.location.pathname, { path: '/users/preview/:id' }).params;
+    const urlParams = matchPath(props.location.pathname, { path: '/users/preview/:id' });
     return {
-      selectedId: urlParams.id
+      selectedId: urlParams ? urlParams.params.id : null,
     };
   }
 
