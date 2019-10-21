@@ -20,7 +20,7 @@ class CreateResetPasswordControl extends React.Component {
     userId: PropTypes.string.isRequired,
     resources: PropTypes.shape({
       isLocalPasswordSet: PropTypes.shape({
-        records: PropTypes.object,
+        records: PropTypes.arrayOf(PropTypes.object),
       }).isRequired,
     }).isRequired,
     mutator: PropTypes.shape({

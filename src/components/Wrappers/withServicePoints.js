@@ -125,7 +125,7 @@ const withServicePoints = WrappedComponent => class WithServicePointsComponent e
       }
     }
 
-    getServicePoints = () => {
+    getUserServicePoints = () => {
       return this.state.userServicePoints;
     };
 
@@ -176,7 +176,7 @@ const withServicePoints = WrappedComponent => class WithServicePointsComponent e
       return (
         <Fragment>
           <WrappedComponent
-            getServicePoints={this.getServicePoints}
+            getUserServicePoints={this.getUserServicePoints}
             getPreferredServicePoint={this.getPreferredServicePoint}
             updateServicePoints={this.updateServicePoints}
             {...this.props}
