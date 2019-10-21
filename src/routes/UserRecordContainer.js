@@ -155,7 +155,7 @@ class UserRecordContainer extends React.Component {
     updateSponsors: PropTypes.func,
     getSponsors: PropTypes.func,
     getProxies: PropTypes.func,
-    getServicePoints: PropTypes.func,
+    getUserServicePoints: PropTypes.func,
     getPreferredServicePoint: PropTypes.func,
     tagsEnabled: PropTypes.bool,
     okapi: PropTypes.object,
