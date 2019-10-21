@@ -174,7 +174,8 @@ class UserEdit extends React.Component {
     const {
       history,
       resources,
-      match: { params }
+      match: { params },
+      stripes
     } = this.props;
 
     if (!resourcesLoaded(resources, ['uniquenessValidator'])) {
@@ -194,6 +195,7 @@ class UserEdit extends React.Component {
 
     return (
       <UserForm
+        stripes={stripes}
         formData={formData}
         initialValues={formValues}
         onSubmit={onSubmit}
