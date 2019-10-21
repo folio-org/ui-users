@@ -25,6 +25,7 @@ import usersStyles from './Users.css';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
+const LIMIT_MAX = 2147483647;
 
 const filterConfig = [
   {
@@ -128,7 +129,7 @@ class Users extends React.Component {
       type: 'okapi',
       records: 'loans',
       accumulate: true,
-      path: () => `circulation/loans?query=(status="Open" and dueDate < ${getLoansOverdueDate()})`,
+      path: () => `circulation/loans?limit=${LIMIT_MAX}&query=(status="Open" and dueDate < ${getLoansOverdueDate()})`,
       permissionsRequired: 'circulation.loans.collection.get,accounts.collection.get',
     }
   });
