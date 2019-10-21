@@ -97,6 +97,7 @@ function asyncValidateField(field, value, validator) {
 function asyncValidate(values, dispatch, props, blurredField) {
   const { uniquenessValidator, initialValues } = props;
   const { username, barcode } = values;
+  values.username = username.trim();
   const curValue = values[blurredField];
   const prevValue = initialValues[blurredField];
 
@@ -108,9 +109,9 @@ function asyncValidate(values, dispatch, props, blurredField) {
   const promises = [];
 
   // validate on submit
+
   if (username !== initialValues.username) {
-    const usernameTrimmed = username.trim();
-    promises.push(asyncValidateField('username', usernameTrimmed, uniquenessValidator));
+    promises.push(asyncValidateField('username', username, uniquenessValidator));
   }
 
   if (barcode && barcode !== initialValues.barcode) {
