@@ -97,7 +97,9 @@ function asyncValidateField(field, value, validator) {
 function asyncValidate(values, dispatch, props, blurredField) {
   const { uniquenessValidator, initialValues } = props;
   const { username, barcode } = values;
-  values.username = username.trim();
+  if (username) {
+    values.username = username.trim();
+  }
   const curValue = values[blurredField];
   const prevValue = initialValues[blurredField];
 

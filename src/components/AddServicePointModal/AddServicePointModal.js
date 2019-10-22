@@ -10,6 +10,7 @@ import {
   Checkbox,
   Layout,
   Modal,
+  Button,
   ModalFooter,
 } from '@folio/stripes/components';
 
@@ -69,17 +70,20 @@ class AddServicePointModal extends React.Component {
 
   renderModalFooter() {
     return (
-      <ModalFooter
-        primaryButton={{
-          id: 'save-service-point-btn',
-          label: <FormattedMessage id="ui-users.saveAndClose" />,
-          onClick: this.onSaveAndClose,
-        }}
-        secondaryButton={{
-          label: <FormattedMessage id="stripes-core.button.cancel" />,
-          onClick: this.onCancel,
-        }}
-      />
+      <ModalFooter>
+        <Button
+          buttonStyle="primary"
+          id="save-service-point-btn"
+          onClick={this.onSaveAndClose}
+        >
+          <FormattedMessage id="ui-users.saveAndClose" />
+        </Button>
+        <Button
+          onClick={this.onCancel}
+        >
+          <FormattedMessage id="stripes-core.button.cancel" />
+        </Button>
+      </ModalFooter>
     );
   }
 

@@ -96,7 +96,7 @@ class UserDetail extends React.Component {
     history: PropTypes.object,
     getSponsors: PropTypes.func,
     getProxies: PropTypes.func,
-    getServicePoints: PropTypes.func,
+    getUserServicePoints: PropTypes.func,
     getPreferredServicePoint: PropTypes.func,
     tagsEnabled: PropTypes.bool,
     paneWidth: PropTypes.string,
@@ -355,7 +355,7 @@ class UserDetail extends React.Component {
     const settings = (resources.settings || {}).records || [];
     const sponsors = this.props.getSponsors();
     const proxies = this.props.getProxies();
-    const servicePoints = this.props.getServicePoints();
+    const servicePoints = this.props.getUserServicePoints();
     const preferredServicePoint = this.props.getPreferredServicePoint();
     const hasPatronBlocks = (get(resources, ['hasPatronBlocks', 'isPending'], true)) ? -1 : 1;
     const totalPatronBlocks = get(resources, ['hasPatronBlocks', 'other', 'totalRecords'], 0);
