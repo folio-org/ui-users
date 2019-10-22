@@ -2,18 +2,21 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import {
+  Button,
   Modal,
   ModalFooter,
 } from '@folio/stripes/components';
 
 const ErrorModal = (props) => {
   const footer = (
-    <ModalFooter
-      primaryButton={{
-        'label': <FormattedMessage id="ui-users.okay" />,
-        'onClick': props.onClose,
-      }}
-    />
+    <ModalFooter>
+      <Button
+        buttonStyle="primary"
+        onClick={props.onClose}
+      >
+        <FormattedMessage id="ui-users.okay" />
+      </Button>
+    </ModalFooter>
   );
 
   return (
