@@ -48,7 +48,7 @@ const EditProxy = (props) => {
         <br />
         <FormattedMessage id="ui-users.permissions.isSponsorOf" values={{ name: fullName }}>
           { label => (
-            <ProxyEditList itemComponent={ProxyEditItem} label={label} name="proxies" stripes={stripes} change={change} />
+            <ProxyEditList itemComponent={ProxyEditItem} label={label} name="proxies" stripes={stripes} change={change} initialValues={initialValues} />
           )}
         </FormattedMessage>
         <br />
