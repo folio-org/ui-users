@@ -6,7 +6,10 @@ import {
   Badge,
   Headline
 } from '@folio/stripes/components';
-import { IfPermission } from '@folio/stripes/core';
+import {
+  IfPermission,
+  withStripes
+} from '@folio/stripes/core';
 
 import ProxyEditList from '../../ProxyGroup/ProxyEditList';
 import ProxyEditItem from '../../ProxyGroup/ProxyEditItem';
@@ -21,6 +24,7 @@ const EditProxy = (props) => {
     fullName,
     change,
     stripes,
+    initialValues,
   } = props;
 
   const proxySponsor = <FormattedMessage id="ui-users.permissions.proxySponsor" />;
@@ -38,7 +42,7 @@ const EditProxy = (props) => {
       >
         <FormattedMessage id="ui-users.permissions.isProxyFor" values={{ name: fullName }}>
           { label => (
-            <ProxyEditList itemComponent={ProxyEditItem} label={label} name="sponsors" stripes={stripes} change={change} />
+            <ProxyEditList itemComponent={ProxyEditItem} label={label} name="sponsors" stripes={stripes} change={change} initialValues={initialValues} />
           )}
         </FormattedMessage>
         <br />
@@ -62,6 +66,7 @@ EditProxy.propTypes = {
   proxies: PropTypes.arrayOf(PropTypes.object),
   sponsors: PropTypes.arrayOf(PropTypes.sponsors),
   stripes: PropTypes.object,
+  initialValues: PropTypes.object,
 };
 
-export default EditProxy;
+export default withStripes(EditProxy);

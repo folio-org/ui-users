@@ -411,6 +411,7 @@ class UserForm extends React.Component {
                         fullName={fullName}
                         stripes={stripes}
                         change={change}
+                        initialValues={initialValues}
                       />
                       <PermissionsAccordion
                         filtersConfig={[
