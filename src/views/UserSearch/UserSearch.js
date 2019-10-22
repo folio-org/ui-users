@@ -43,19 +43,23 @@ class UserSearch extends React.Component {
   static propTypes = {
     children: PropTypes.node,
     contentRef: PropTypes.object,
+    filterConfig: PropTypes.arrayOf(PropTypes.object),
+    history: PropTypes.object.isRequired,
     idPrefix: PropTypes.string,
-    onSelectRow: PropTypes.func,
+    initialSearch: PropTypes.string,
+    intl: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
+    match: PropTypes.object.isRequired,
     onComponentWillUnmount: PropTypes.func,
+    onNeedMoreData: PropTypes.func.isRequired,
     queryGetter: PropTypes.func,
     querySetter: PropTypes.func,
-    initialSearch: PropTypes.string,
-    source: PropTypes.object,
     resources: PropTypes.shape({
       records: PropTypes.object,
       patronGroups: PropTypes.object,
     }).isRequired,
+    source: PropTypes.object,
     visibleColumns: PropTypes.arrayOf(PropTypes.string),
-    filterConfig: PropTypes.arrayOf(PropTypes.object),
   }
 
   static defaultProps = {
@@ -227,7 +231,6 @@ class UserSearch extends React.Component {
   render() {
     const {
       filterConfig,
-      onSelectRow,
       onComponentWillUnmount,
       idPrefix,
       visibleColumns,
@@ -238,7 +241,6 @@ class UserSearch extends React.Component {
       onNeedMoreData,
       resources,
       contentRef,
-      location,
     } = this.props;
 
     const users = get(resources, 'records.records', []);
@@ -377,7 +379,6 @@ class UserSearch extends React.Component {
                             }}
                             formatter={resultsFormatter}
                             rowFormatter={this.anchoredRowFormatter}
-                            onRowClick={onSelectRow}
                             onNeedMoreData={onNeedMoreData}
                             onHeaderClick={onSort}
                             sortOrder={sortOrder.replace(/^-/, '').replace(/,.*/, '')}
