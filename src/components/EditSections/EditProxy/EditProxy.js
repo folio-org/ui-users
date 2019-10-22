@@ -6,7 +6,10 @@ import {
   Badge,
   Headline
 } from '@folio/stripes/components';
-import { IfPermission } from '@folio/stripes/core';
+import {
+  IfPermission,
+  withStripes
+} from '@folio/stripes/core';
 
 import ProxyEditList from '../../ProxyGroup/ProxyEditList';
 import ProxyEditItem from '../../ProxyGroup/ProxyEditItem';
@@ -66,4 +69,4 @@ EditProxy.propTypes = {
   initialValues: PropTypes.object,
 };
 
-export default EditProxy;
+export default withStripes(EditProxy);
