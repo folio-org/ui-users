@@ -79,6 +79,7 @@ module.exports.test = function foo(uiTestCtx) {
           .type('#input-user-search', '0')
           .wait('#clickable-reset-all')
           .click('#clickable-reset-all')
+          .wait('[class^="noResultsMessageLabel"]')
           .type('#input-user-search', userBarcode)
           .wait('button[type=submit]')
           .click('button[type=submit]')
