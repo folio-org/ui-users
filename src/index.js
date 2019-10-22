@@ -243,9 +243,33 @@ class UsersRouting extends React.Component {
                 </IfPermission>
               )}
             />
-            <Route path={`${base}/:id/accounts/:accountstatus/charge`} exact component={Routes.FeesFinesContainer} />
-            <Route path={`${base}/:id/accounts/view/:accountid`} component={Routes.AccountDetailsContainer} />
-            <Route path={`${base}/:id/accounts/:accountstatus`} exact component={Routes.AccountsListingContainer} />
+            <Route
+              path={`${base}/:id/accounts/:accountstatus/charge`}
+              exact
+              render={(props) => (
+                <IfPermission perm="ui-users.accounts">
+                  <Routes.FeesFinesContainer {...props} />
+                </IfPermission>
+              )}
+            />
+            <Route
+              path={`${base}/:id/accounts/view/:accountid`}
+              render={(props) => (
+                <IfPermission perm="ui-users.accounts">
+                  <Routes.AccountDetailsContainer {...props} />
+                </IfPermission>
+              )}
+            />
+            <Route
+              path={`${base}/:id/accounts/:accountstatus`}
+              exact
+              component={Routes.AccountsListingContainer}
+              render={(props) => (
+                <IfPermission perm="ui-users.accounts">
+                  <Routes.AccountsListingContainer {...props} />
+                </IfPermission>
+              )}
+            />
             <Route path={`${base}/:id/charge/:loanid?`} component={Routes.ChargeFeesFinesContainer} />
             <Route path={`${base}/:id/patronblocks/edit/:patronblockid`} component={Routes.PatronBlockContainer} />
             <Route path={`${base}/:id/patronblocks/create`} component={Routes.PatronBlockContainer} />

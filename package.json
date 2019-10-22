@@ -345,7 +345,14 @@
           "accounts.item.delete",
           "accounts.item.get",
           "accounts.item.post",
-          "accounts.item.put"
+          "accounts.item.put",
+          "feefineactions.collection.get",
+          "payments.collection.get",
+          "waives.collection.get",
+          "owners.collection.get",
+          "feefines.collection.get",
+          "transfers.collection.get",
+          "inventory-storage.service-points-users.collection.get"
         ],
         "visible": true
       },
@@ -554,15 +561,7 @@
           "circulation-storage.loan-policies.collection.get",
           "accounts.collection.get",
           "circulation-storage.loans-history.collection.get",
-          "comments.collection.get",
-          "feefineactions.collection.get",
-          "payments.collection.get",
-          "waives.collection.get",
-          "owners.collection.get",
-          "feefines.collection.get",
-          "transfers.collection.get",
-          "inventory-storage.service-points-users.collection.get",
-          "accounts.item.get"
+          "comments.collection.get"
         ],
         "visible": true
       },

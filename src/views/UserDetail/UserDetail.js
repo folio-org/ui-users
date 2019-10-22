@@ -96,7 +96,7 @@ class UserDetail extends React.Component {
     history: PropTypes.object,
     getSponsors: PropTypes.func,
     getProxies: PropTypes.func,
-    getServicePoints: PropTypes.func,
+    getUserServicePoints: PropTypes.func,
     getPreferredServicePoint: PropTypes.func,
     tagsEnabled: PropTypes.bool,
     paneWidth: PropTypes.string,
@@ -355,7 +355,7 @@ class UserDetail extends React.Component {
     const settings = (resources.settings || {}).records || [];
     const sponsors = this.props.getSponsors();
     const proxies = this.props.getProxies();
-    const servicePoints = this.props.getServicePoints();
+    const servicePoints = this.props.getUserServicePoints();
     const preferredServicePoint = this.props.getPreferredServicePoint();
     const hasPatronBlocks = (get(resources, ['hasPatronBlocks', 'isPending'], true)) ? -1 : 1;
     const totalPatronBlocks = get(resources, ['hasPatronBlocks', 'other', 'totalRecords'], 0);
@@ -465,7 +465,7 @@ class UserDetail extends React.Component {
                     {...this.props}
                   />
                 </IfPermission>
-                <IfPermission perm="accounts.collection.get">
+                <IfPermission perm="ui-users.accounts">
                   <UserAccounts
                     expanded={sections.accountsSection}
                     onToggle={this.handleSectionToggle}
@@ -531,18 +531,20 @@ class UserDetail extends React.Component {
                     />
                   </IfInterface>
                 </IfPermission>
-                <NotesSmartAccordion
-                  domainName="users"
-                  entityId={match.params.id}
-                  entityName={getFullName(user)}
-                  open={this.state.sections.notesAccordion}
-                  onToggle={this.handleSectionToggle}
-                  id="notesAccordion"
-                  entityType="user"
-                  pathToNoteCreate="/users/notes/new"
-                  pathToNoteDetails="/users/notes"
-                  hideAssignButton
-                />
+                <IfPermission perm="ui-notes.item.view">
+                  <NotesSmartAccordion
+                    domainName="users"
+                    entityId={match.params.id}
+                    entityName={getFullName(user)}
+                    open={this.state.sections.notesAccordion}
+                    onToggle={this.handleSectionToggle}
+                    id="notesAccordion"
+                    entityType="user"
+                    pathToNoteCreate="/users/notes/new"
+                    pathToNoteDetails="/users/notes"
+                    hideAssignButton
+                  />
+                </IfPermission>
               </AccordionSet>
             </Pane>
           </HasCommand>

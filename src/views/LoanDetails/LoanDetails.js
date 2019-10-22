@@ -29,6 +29,8 @@ import loanActionMap from '../../components/data/static/loanActionMap';
 import LoanProxyDetails from './LoanProxyDetails';
 import ViewLoading from '../../components/Loading/ViewLoading';
 
+import css from './LoanDetails.css';
+
 /**
  * Detail view of a user's loan.
  */
@@ -143,15 +145,23 @@ class LoanDetails extends React.Component {
 
   viewFeeFine() {
     const { feesFines: { total } } = this.state;
-    return (total === 0) ? '-' : (
-      <button
-        style={{ color: '#2b75bb' }}
-        onClick={(e) => this.feefinedetails(e)}
-        type="button"
-      >
-        {parseFloat(total).toFixed(2)}
-      </button>
-    );
+    const { stripes } = this.props;
+
+    if (total === 0) return '-';
+
+    const value = parseFloat(total).toFixed(2);
+
+    return stripes.hasPerm('ui-users.accounts')
+      ? (
+        <button
+          className={css.feefineButton}
+          onClick={(e) => this.feefinedetails(e)}
+          type="button"
+        >
+          {value}
+        </button>
+      )
+      : value;
   }
 
   feefinedetails = (e) => {
@@ -442,6 +452,7 @@ class LoanDetails extends React.Component {
               </Col>
               <Col xs={2}>
                 <KeyValue
+                  data-test-loan-fees-fines
                   label={<FormattedMessage id="ui-users.loans.details.fine" />}
                   value={this.viewFeeFine()}
                 />

@@ -30,6 +30,23 @@ describe('loans actions history', () => {
     expect(LoanActionsHistory.isPresent).to.be.true;
   });
 
+  it('having loan without fees/fines incurred should display the "-"', () => {
+    expect(LoanActionsHistory.feeFines.text).to.equal('-');
+  });
+
+  describe('having loan with fees/fines incurred', () => {
+    beforeEach(async function () {
+      this.server.get('/accounts', {
+        accounts: [{ amount: 200 }],
+        totalRecords: 1,
+      });
+    });
+
+    it('should display the fees/fines value', () => {
+      expect(LoanActionsHistory.feeFines.text).to.equal('200.00');
+    });
+  });
+
   describe('requests', () => {
     it('should be presented', () => {
       expect(LoanActionsHistory.requests.isPresent).to.be.true;
