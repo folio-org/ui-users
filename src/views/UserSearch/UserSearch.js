@@ -311,7 +311,7 @@ class UserSearch extends React.Component {
                                 <SearchField
                                   aria-label="user search"
                                   name="query"
-                                  id="userSearchField"
+                                  id="input-user-search"
                                   className={css.searchField}
                                   onChange={getSearchHandlers().query}
                                   value={searchValue.query}
@@ -362,6 +362,7 @@ class UserSearch extends React.Component {
                           noOverflow
                         >
                           <MultiColumnList
+                            id="list-users"
                             visibleColumns={visibleColumns}
                             rowUpdater={this.rowUpdater}
                             contentData={users}
