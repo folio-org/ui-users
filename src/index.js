@@ -177,7 +177,7 @@ class UsersRouting extends React.Component {
 
   focusSearchField = () => {
     const { history } = this.props;
-    const el = document.getElementById('userSearchField');
+    const el = document.getElementById('input-user-search');
     if (el) {
       el.focus();
     } else {
