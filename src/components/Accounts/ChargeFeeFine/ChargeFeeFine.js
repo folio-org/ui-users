@@ -178,8 +178,7 @@ class ChargeFeeFine extends React.Component {
     return new Promise((resolve, reject) => {
       this.payResolve = resolve;
       this.payReject = reject;
-    })
-      .then(() => { this.props.history.goBack(); });
+    });
   }
 
   onClosePayModal() {
