@@ -7,7 +7,7 @@ export default Factory.extend({
   desc: 'Invalid email and mailing addresses.',
   staffInformation: 'Last 3 have bounced back and the letter we sent was returned to us.',
   patronMessage: 'Please contact the Main Library to update your contact information.',
-  expirationDate: '2019-10-23T00:00:00Z',
+  expirationDate: () => faker.date.future(),
   borrowing: true,
   renewals: true,
   requests: true,
