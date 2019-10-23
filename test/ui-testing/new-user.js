@@ -27,18 +27,6 @@ module.exports.test = function meh(uitestctx) {
             .insert(config.select.password, pw)
             .click('#clickable-login')
             .wait('#clickable-logout')
-            /* .wait(() => {
-              let rvalue = false;
-              const success = document.querySelector('#clickable-logout');
-              const fail = document.querySelector('div[class^="formMessage"]');
-              if (fail) {
-                rvalue = false;
-              } else if (success) {
-                rvalue = true;
-              }
-              return rvalue;
-            })
-            .wait(555) */
             .then(() => { done(); })
             .catch(done);
         });
@@ -75,22 +63,22 @@ module.exports.test = function meh(uitestctx) {
       it('should extract a patron group value', (done) => {
         nightmare
           .wait('#input-user-search')
-          .type('#input-user-search', '0')
-          .wait('button[type=submit]')
-          .click('button[type=submit]')
-          .wait('#list-users div[role="row"] > a')
+          .wait('#clickable-newuser')
           .click('#clickable-newuser')
+          .wait(5000)
           .wait('#adduser_group > option:nth-of-type(4)')
           .evaluate(() => document.querySelector('#adduser_group > option:nth-of-type(3)').value)
           .then((result) => {
             done();
             pgroup = result;
+            console.log(`found group-id ${pgroup}`);
           })
           .catch(done);
       });
 
       it(`should create a user: ${user.id}/${user.password}`, (done) => {
         nightmare
+          // user information accordion
           .wait('#adduser_lastname')
           .insert('#adduser_lastname', user.lastname)
           .wait('#adduser_firstname')
@@ -101,6 +89,14 @@ module.exports.test = function meh(uitestctx) {
           .select('#adduser_group', pgroup)
           .wait('#useractive')
           .select('#useractive', 'true')
+          .wait('#adduser_expirationdate')
+          .insert('#adduser_expirationdate', '01/01/2022')
+
+          // extended information accordion
+          .wait('#adduser_enrollmentdate')
+          .insert('#adduser_enrollmentdate', '01/01/2017')
+          .wait('#adduser_dateofbirth')
+          .insert('#adduser_dateofbirth', '05/04/1980')
           .wait('#adduser_username')
           .insert('#adduser_username', user.id)
           .wait('#clickable-toggle-password')
@@ -113,14 +109,14 @@ module.exports.test = function meh(uitestctx) {
           .wait(222)
           .wait('#pw')
           .insert('#pw', user.password)
+
+          // contact information accordion
           .wait('#adduser_email')
           .insert('#adduser_email', user.email)
-          .wait('#adduser_dateofbirth')
-          .insert('#adduser_dateofbirth', '05/04/1980')
-          .wait('#adduser_enrollmentdate')
-          .insert('#adduser_enrollmentdate', '01/01/2017')
-          .wait('#adduser_expirationdate')
-          .insert('#adduser_expirationdate', '01/01/2022')
+          .wait('#adduser_preferredcontact')
+          .type('#adduser_preferredcontact', 'e')
+
+          // save!
           .wait('#clickable-save')
           .click('#clickable-save')
           .wait('#userInformationSection')
@@ -157,7 +153,7 @@ module.exports.test = function meh(uitestctx) {
           .wait('#list-users[data-total-count="1"]')
           .evaluate((uid) => {
             const node = Array.from(
-              document.querySelectorAll('#list-users div[role="row"] > a > div[role="gridcell"]')
+              document.querySelectorAll('#list-users [role="row"] [role="gridcell"]')
             ).find(e => e.textContent === uid);
             if (node) {
               node.parentElement.click();
