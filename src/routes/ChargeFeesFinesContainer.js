@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
+import queryString from 'query-string';
 
 import {
   stripesConnect,
@@ -24,7 +25,7 @@ class ChargeFeesFinesContainer extends React.Component {
       type: 'okapi',
       path: (_q, _p, _r, _l, props) => {
         const { match: { params } } = props;
-        const loanId = _q.loan || params.loanid;
+        const loanId = params.loanid;
         return loanId ? `loan-storage/loans/${loanId}` : null;
       },
       clear: false,
