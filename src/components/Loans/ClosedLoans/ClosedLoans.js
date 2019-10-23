@@ -241,7 +241,7 @@ class ClosedLoans extends React.Component {
 
   feefine = (loan) => {
     const { history, match: { params } } = this.props;
-    history.push(`/users/${params.id}/charge?loan=${loan.id}`);
+    history.push(`/users/${params.id}/charge/${loan.id}`);
   }
 
   feefineDetails = (loan, e) => {
