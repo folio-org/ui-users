@@ -126,9 +126,6 @@ function asyncValidate(values, dispatch, props, blurredField) {
 class UserForm extends React.Component {
   static propTypes = {
     change: PropTypes.func,
-    stripes: PropTypes.shape({
-      store: PropTypes.object,
-    }).isRequired,
     formData: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,
     location: PropTypes.object,
@@ -329,7 +326,6 @@ class UserForm extends React.Component {
       initialValues,
       handleSubmit,
       formData,
-      stripes,
       change, // from redux-form...
     } = this.props;
 
@@ -409,7 +405,6 @@ class UserForm extends React.Component {
                         sponsors={initialValues.sponsors}
                         proxies={initialValues.proxies}
                         fullName={fullName}
-                        stripes={stripes}
                         change={change}
                         initialValues={initialValues}
                       />

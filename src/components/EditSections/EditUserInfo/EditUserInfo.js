@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import { ViewMetaData } from '@folio/stripes/smart-components';
 import {
@@ -18,11 +18,12 @@ import css from './EditUserInfo.css';
 
 class EditUserInfo extends React.Component {
   static propTypes = {
-    patronGroups: PropTypes.arrayOf(PropTypes.object),
-    initialValues: PropTypes.object,
-    expanded: PropTypes.bool,
-    onToggle: PropTypes.func,
     accordionId: PropTypes.string.isRequired,
+    expanded: PropTypes.bool,
+    initialValues: PropTypes.object,
+    intl: PropTypes.object.isRequired,
+    onToggle: PropTypes.func,
+    patronGroups: PropTypes.arrayOf(PropTypes.object),
   };
 
   render() {
@@ -32,11 +33,10 @@ class EditUserInfo extends React.Component {
       expanded,
       onToggle,
       accordionId,
+      intl,
     } = this.props;
 
-    const patronGroupOptions = patronGroups.map(g => (
-      <option key={g.id} value={g.id}>{g.group.concat(g.desc ? ` (${g.desc})` : '')}</option>
-    ));
+
     const isUserExpired = () => {
       const expirationDate = new Date(initialValues.expirationDate);
       const now = Date.now();
@@ -48,6 +48,29 @@ class EditUserInfo extends React.Component {
       statusFieldDisabled = isUserExpired();
       return statusFieldDisabled;
     };
+
+    const patronGroupOptions = [
+      {
+        value: '',
+        label: intl.formatMessage({ id: 'ui-users.information.selectPatronGroup' }),
+      },
+      ...patronGroups.map(g => ({
+        key: g.id,
+        value: g.id,
+        label: g.group.concat(g.desc ? ` (${g.desc})` : ''),
+      }))
+    ];
+
+    const statusOptions = [
+      {
+        value: 'true',
+        label: intl.formatMessage({ id: 'ui-users.active' })
+      },
+      {
+        value: 'false',
+        label: intl.formatMessage({ id: 'ui-users.inactive' })
+      }
+    ];
 
     return (
       <Accordion
@@ -112,13 +135,9 @@ class EditUserInfo extends React.Component {
               component={Select}
               selectClass={css.patronGroup}
               fullWidth
+              dataOptions={patronGroupOptions}
               defaultValue={initialValues.patronGroup}
-            >
-              <FormattedMessage id="ui-users.information.selectPatronGroup">
-                {(message) => <option value="">{message}</option>}
-              </FormattedMessage>
-              {patronGroupOptions}
-            </Field>
+            />
           </Col>
           <Col xs={12} md={3}>
             <Field
@@ -132,15 +151,10 @@ class EditUserInfo extends React.Component {
               component={Select}
               fullWidth
               disabled={isStatusFieldDisabled()}
+              dataOptions={statusOptions}
+              format={(value) => (value ? 'true' : 'false')}
               defaultValue={initialValues.active}
-            >
-              <FormattedMessage id="ui-users.active">
-                {(message) => <option value="true">{message}</option>}
-              </FormattedMessage>
-              <FormattedMessage id="ui-users.inactive">
-                {(message) => <option value="false">{message}</option>}
-              </FormattedMessage>
-            </Field>
+            />
             {isUserExpired() && (
               <span style={{ 'color': '#900', 'position': 'relative', 'top': '-10px', 'fontSize': '0.9em' }}>
                 <FormattedMessage id="ui-users.errors.userExpired" />
@@ -162,4 +176,4 @@ class EditUserInfo extends React.Component {
   }
 }
 
-export default EditUserInfo;
+export default injectIntl(EditUserInfo);
