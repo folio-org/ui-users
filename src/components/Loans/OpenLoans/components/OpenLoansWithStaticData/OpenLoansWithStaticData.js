@@ -48,7 +48,7 @@ class OpenLoansWithStaticData extends React.Component {
     showChangeDueDateDialog: PropTypes.func.isRequired,
     hideChangeDueDateDialog: PropTypes.func.isRequired,
     onClosePatronBlockedModal: PropTypes.func.isRequired,
-    feeFineCount: PropTypes.number,
+    feeFineCount: PropTypes.func.isRequired,
     history: PropTypes.object,
     match: PropTypes.object,
   };
