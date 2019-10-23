@@ -64,7 +64,7 @@ EditProxy.propTypes = {
   onToggle: PropTypes.func,
   accordionId: PropTypes.string.isRequired,
   proxies: PropTypes.arrayOf(PropTypes.object),
-  sponsors: PropTypes.arrayOf(PropTypes.sponsors),
+  sponsors: PropTypes.arrayOf(PropTypes.object),
   stripes: PropTypes.object,
   initialValues: PropTypes.object,
 };
