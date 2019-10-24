@@ -43,6 +43,8 @@ class UserEdit extends React.Component {
     getUserServicePoints: PropTypes.func,
     getPreferredServicePoint: PropTypes.func,
     mutator: PropTypes.object,
+    getProxies: PropTypes.func,
+    getSponsors: PropTypes.func,
   }
 
   getUser() {
@@ -57,6 +59,8 @@ class UserEdit extends React.Component {
 
   getUserFormValues() {
     const {
+      getProxies,
+      getSponsors,
       getPreferredServicePoint,
       getUserServicePoints,
       resources
@@ -66,10 +70,11 @@ class UserEdit extends React.Component {
     const userFormValues = cloneDeep(user);
     const formRecordValues = getRecordObject(
       resources,
-      'sponsors',
-      'proxies',
       'permissions',
     );
+
+    const proxies = getProxies();
+    const sponsors = getSponsors();
 
     const servicePoints = getUserServicePoints();
     const addressTypes = resources.addressTypes.records;
@@ -79,7 +84,9 @@ class UserEdit extends React.Component {
     userFormValues.personal.addresses = addresses;
     Object.assign(userFormValues, formRecordValues, {
       preferredServicePoint,
-      servicePoints
+      servicePoints,
+      proxies,
+      sponsors,
     });
 
     return userFormValues;
