@@ -4,6 +4,7 @@ import {
   get,
   template,
 } from 'lodash';
+import moment from 'moment';
 import { stripesConnect } from '@folio/stripes/core';
 
 import {
@@ -21,6 +22,8 @@ const compileQuery = template(
   '(username="%{query}*" or personal.firstName="%{query}*" or personal.lastName="%{query}*" or personal.email="%{query}*" or barcode="%{query}*" or id="%{query}*" or externalSystemId="%{query}*")',
   { interpolate: /%{([\s\S]+?)}/g }
 );
+
+const getLoansOverdueDate = () => moment().tz('UTC').format();
 
 class UserSearchContainer extends React.Component {
   static manifest = Object.freeze({
@@ -62,6 +65,13 @@ class UserSearchContainer extends React.Component {
         limit: '40',
       },
       records: 'usergroups',
+    },
+    loans: {
+      type: 'okapi',
+      records: 'loans',
+      accumulate: true,
+      path: () => `circulation/loans?query=(status="Open" and dueDate < ${getLoansOverdueDate()})&limit=10000`,
+      permissionsRequired: 'circulation.loans.collection.get,accounts.collection.get',
     }
   });
 
@@ -85,7 +95,11 @@ class UserSearchContainer extends React.Component {
       query: PropTypes.shape({
         update: PropTypes.func.isRequired,
         replace: PropTypes.func.isRequired,
-      })
+      }),
+      loans: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+        reset: PropTypes.func.isRequired,
+      }),
     }).isRequired,
     stripes: PropTypes.shape({
       logger: PropTypes.object
