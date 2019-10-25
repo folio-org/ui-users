@@ -186,14 +186,12 @@ const withProxy = WrappedComponent => class WithProxyComponent extends React.Com
     }
 
     updateProxies(proxies) {
-      const userId = this.props.match.params.id;
       const curProxies = this.getProxies();
 
       this.update('proxies', proxies, curProxies);
     }
 
     updateSponsors(sponsors) {
-      const userId = this.props.match.params.id;
       const curSponsors = this.getSponsors();
 
       this.update('sponsors', sponsors, curSponsors);
