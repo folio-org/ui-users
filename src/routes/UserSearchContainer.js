@@ -70,7 +70,7 @@ class UserSearchContainer extends React.Component {
       type: 'okapi',
       records: 'loans',
       accumulate: true,
-      path: () => `circulation/loans?query=(status="Open" and dueDate < ${getLoansOverdueDate()})&limit=10000`,
+      path: () => `circulation/loans?query=(status="Open" and dueDate < ${getLoansOverdueDate()})`,
       permissionsRequired: 'circulation.loans.collection.get,accounts.collection.get',
     }
   });
