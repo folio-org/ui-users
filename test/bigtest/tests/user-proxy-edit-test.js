@@ -47,7 +47,7 @@ describe('User Edit: Proxy/Sponsor', () => {
     });
 
     it('displays the title in the pane header', () => {
-      expect(UserFormPage.title).to.not.equal('loading');
+      expect(UserFormPage.title).to.not.equal('Edit User');
     });
 
     describe('Edit sponsor', () => {
@@ -82,6 +82,17 @@ describe('User Edit: Proxy/Sponsor', () => {
 
           it('should display proxies in detail view', () => {
             expect(InstanceViewPage.proxySection.sponsorCount).to.equal(1);
+          });
+
+          describe('Back to edit view', () => {
+            beforeEach(async () => {
+              await InstanceViewPage.clickEditButton();
+              await UserFormPage.whenLoaded();
+            });
+
+            it('should navigate to the edit view', () => {
+              expect(UserFormPage.title).to.not.equal('Edit User');
+            });
           });
         });
       });
