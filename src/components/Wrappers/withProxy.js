@@ -115,7 +115,6 @@ const withProxy = WrappedComponent => class WithProxyComponent extends React.Com
         return;
       }
 
-      console.log('proxy load called');
       this.loadSponsors(userId);
       this.loadProxies(userId);
     }

@@ -3,20 +3,17 @@ import {
   describe,
   it,
 } from '@bigtest/mocha';
-import {
-  Interactor
-} from '@bigtest/interactor';
 import { expect } from 'chai';
 
 import findUser from '@folio/plugin-find-user';
+import FindUserInteractor from '@folio/plugin-find-user/test/bigtest/interactors/findUser';
 
 import setupApplication from '../helpers/setup-application';
 import UserFormPage from '../interactors/user-form-page';
 import InstanceViewPage from '../interactors/user-view-page';
 import UsersInteractor from '../interactors/users';
-import FindUserInteractor from '@folio/plugin-find-user/test/bigtest/interactors/findUser';
 
-describe.only('User Edit: Proxy/Sponsor', () => {
+describe('User Edit: Proxy/Sponsor', () => {
   setupApplication({
     scenarios: ['user-proxy-edit'],
     modules: [{
@@ -83,7 +80,7 @@ describe.only('User Edit: Proxy/Sponsor', () => {
             expect(users.$root).to.exist;
           });
 
-          it.only('should display proxies in detail view', () => {
+          it('should display proxies in detail view', () => {
             expect(InstanceViewPage.proxySection.sponsorCount).to.equal(1);
           });
         });
