@@ -3,7 +3,6 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
-
 import { AppIcon } from '@folio/stripes/core';
 import {
   Paneset,
@@ -35,6 +34,7 @@ import {
   statusFilterConfig,
   permissionTypeFilterConfig,
 } from '../../components/PermissionsAccordion/helpers/filtersConfig';
+import { addressTypesShape } from '../../shapes';
 
 import css from './UserForm.css';
 
@@ -126,6 +126,10 @@ function asyncValidate(values, dispatch, props, blurredField) {
 class UserForm extends React.Component {
   static propTypes = {
     change: PropTypes.func,
+    addressTypes: addressTypesShape,
+    stripes: PropTypes.shape({
+      store: PropTypes.object,
+    }).isRequired,
     formData: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,
     location: PropTypes.object,
@@ -327,6 +331,7 @@ class UserForm extends React.Component {
       handleSubmit,
       formData,
       change, // from redux-form...
+      servicePoints,
     } = this.props;
 
     const { sections } = this.state;
@@ -388,6 +393,8 @@ class UserForm extends React.Component {
                     userId={initialValues.id}
                     userFirstName={initialValues.personal.firstName}
                     userEmail={initialValues.personal.email}
+                    servicePoints={servicePoints}
+                    addressTypes={formData.addressTypes}
                   />
                   <EditContactInfo
                     accordionId="contactInfo"

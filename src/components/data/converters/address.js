@@ -1,12 +1,10 @@
 import _ from 'lodash';
 import { hashCode } from 'hashcode';
-import { getAddressTypesByName, getAddressTypesById } from './address_type';
 
-function toListAddress(addr, addrType) {
+function toListAddress(addr) {
   if (addr.id) return { ...addr };
 
   const country = (addr.countryId) ? addr.countryId : '';
-  const addressType = _.get(addrType, ['addressType'], '');
   const id = hashCode().value(addr).toString();
 
   return {
@@ -19,36 +17,31 @@ function toListAddress(addr, addrType) {
     stateRegion: addr.region,
     zipCode: addr.postalCode,
     country,
-    addressType,
+    addressType: addr.addressTypeId,
   };
 }
 
-function toUserAddress(addr, addrType) {
-  // console.log('toUserAddress for', addr, '-- countriesByName[addr.country] =', countriesByName[addr.country]);
-  const countryId = (addr.country) ? addr.country : '';
-  const addressTypeId = _.get(addrType, ['id'], '');
-  return {
-    addressLine1: addr.addressLine1,
-    addressLine2: addr.addressLine2,
-    city: addr.city,
-    primaryAddress: addr.primaryAddress,
-    region: addr.stateRegion,
-    postalCode: addr.zipCode,
-    addressTypeId,
-    countryId,
-  };
-}
-
-export function toListAddresses(addresses, addressTypes) {
+export function getFormAddressList(addresses) {
   if (!addresses || !addresses.length) return addresses;
 
-  const addressTypesById = getAddressTypesById(addressTypes);
-  return _.sortBy(addresses, a => -a.primaryAddress).map(addr => toListAddress(addr, addressTypesById[addr.addressTypeId]));
+  return _.sortBy(addresses, a => -a.primaryAddress)
+    .map(addr => toListAddress(addr));
 }
 
-export function toUserAddresses(addresses, addressTypes) {
-  if (!addresses || !addresses.length) return addresses;
+export function toUserAddresses(addresses) {
+  if (_.isEmpty(addresses)) return;
 
-  const addressTypesByName = getAddressTypesByName(addressTypes);
-  return addresses.map(addr => toUserAddress(addr, addressTypesByName[addr.addressType]));
+  // eslint-disable-next-line consistent-return
+  return addresses.map(address => {
+    return {
+      addressLine1: address.addressLine1,
+      addressLine2: address.addressLine2,
+      city: address.city,
+      primaryAddress: address.primaryAddress,
+      region: address.stateRegion,
+      postalCode: address.zipCode,
+      addressTypeId: address.addressType,
+      countryId: address.country,
+    };
+  });
 }
