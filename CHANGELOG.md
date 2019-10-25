@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## 2.25.5 (IN PROGRESS)
+
+* Retrieve up to 10k loans in the overdue-loans report. Refs UIU-1297.
+
 ## [2.25.4](https://github.com/folio-org/ui-users/tree/v2.25.4) (2019-09-30)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.3...v2.25.4)
 

@@ -127,7 +127,7 @@ class Users extends React.Component {
     loans: {
       type: 'okapi',
       records: 'loans',
-      path: () => `circulation/loans?query=(status="Open" and dueDate < ${getLoansOverdueDate()})`,
+      path: () => `circulation/loans?query=(status="Open" and dueDate < ${getLoansOverdueDate()})&limit=10000`,
       permissionsRequired: 'circulation.loans.collection.get,accounts.collection.get',
     }
   });
