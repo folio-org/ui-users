@@ -125,7 +125,7 @@ class UserSearch extends React.Component {
       reset();
       GET()
         .then(loans => this.overdueLoanReport.toCSV(loans))
-        .then(this.setState({ exportInProgress: false }));
+        .then(() => this.setState({ exportInProgress: false }));
     });
   }
 
