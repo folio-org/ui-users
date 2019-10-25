@@ -399,7 +399,7 @@ class UserForm extends React.Component {
                   {initialValues.id &&
                     <div>
                       <EditProxy
-                        accordionId="proxy"
+                        accordionId="proxyAccordion"
                         expanded={sections.proxy}
                         onToggle={this.handleSectionToggle}
                         sponsors={initialValues.sponsors}
