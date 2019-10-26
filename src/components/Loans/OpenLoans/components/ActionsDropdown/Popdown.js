@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   Button,
@@ -8,75 +8,64 @@ import Popper from '@folio/stripes-components/lib/Popper/Popper';
 import RootCloseWrapper from 'react-overlays/lib/RootCloseWrapper';
 /* eslint-enable */
 
-class Popdown extends React.Component {
-  static propTypes = {
-    children: PropTypes.node,
-    buttonProps: PropTypes.object,
-    label: PropTypes.node,
-    renderTrigger: PropTypes.func,
-    portal: PropTypes.bool,
-  }
+const Popdown = ({ label, buttonProps, children, renderTrigger, portal }) => {
+  const [open, setOpen] = useState(false);
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      open: false
-    };
+  const triggerRef = React.createRef();
 
-    this.triggerRef = React.createRef();
-  }
-
-  toggleMenu = (e) => {
+  const toggleMenu = (e) => {
     e.stopPropagation();
-    this.setState((curState) => {
-      return {
-        open: !curState.open
-      };
-    });
+    setOpen(prevOpen => !prevOpen);
   };
 
-  renderTrigger = () => {
-    const { renderTrigger: renderTriggerProp, buttonProps, label } = this.props;
-    const ariaProps = {
-      'aria-expanded': this.state.open,
-      'aria-haspopup': true
-    };
+  const ariaProps = {
+    'aria-expanded': open,
+    'aria-haspopup': true
+  };
 
-    if (renderTriggerProp) {
-      return renderTriggerProp(this.triggerRef, this.toggleMenu, ariaProps);
-    }
-
-    return (
+  const trigger = renderTrigger ?
+    renderTrigger(triggerRef, toggleMenu, ariaProps) :
+    (
       <Button
-        buttonRef={this.triggerRef}
+        buttonRef={triggerRef}
         buttonStyle="none"
-        onClick={this.toggleMenu}
+        onClick={toggleMenu}
         {...buttonProps}
         {...ariaProps}
       >
         {label}
       </Button>
     );
-  }
 
-  render() {
-    const { children, portal } = this.props;
-    const portalEl = document.getElementById('OverlayContainer');
-    return (
-      <React.Fragment>
-        {this.renderTrigger()}
-        <Popper
-          isOpen={this.state.open}
-          anchorRef={this.triggerRef}
-          portal={portal ? portalEl : null}
-        >
-          <RootCloseWrapper onRootClose={this.toggleMenu}>
-            {children}
-          </RootCloseWrapper>
-        </Popper>
-      </React.Fragment>
-    );
-  }
-}
+  const portalEl = document.getElementById('OverlayContainer');
+
+  return (
+    <React.Fragment>
+      {trigger}
+      <Popper
+        modifiers={{
+          flip: { boundariesElement: 'scrollParent', padding: 10 },
+          preventOverflow: { boundariesElement: 'scrollParent', padding: 10 }
+        }}
+        placement="bottom-start"
+        isOpen={open}
+        anchorRef={triggerRef}
+        portal={portal ? portalEl : null}
+      >
+        <RootCloseWrapper onRootClose={toggleMenu}>
+          {children}
+        </RootCloseWrapper>
+      </Popper>
+    </React.Fragment>
+  );
+};
+
+Popdown.propTypes = {
+  children: PropTypes.node,
+  buttonProps: PropTypes.object,
+  label: PropTypes.node,
+  renderTrigger: PropTypes.func,
+  portal: PropTypes.bool,
+};
 
 export default Popdown;

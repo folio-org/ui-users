@@ -14,7 +14,7 @@ const ProxyViewList = ({ records, name, label, itemComponent, stripes }) => {
   const noneFoundMsg = name === 'sponsors' ? noSponsorsFound : noProxiesFound;
 
   return (
-    <div className={css.list}>
+    <div className={css.list} data-test={name}>
       <Headline tag="h4" size="small" margin="small">{label}</Headline>
       {items.length ? items : <p className={css.isEmptyMessage}>{noneFoundMsg}</p>}
     </div>
