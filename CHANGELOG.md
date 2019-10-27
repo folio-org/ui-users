@@ -9,6 +9,7 @@
 * Implement view loans permission. Refs UIU-1175.
 * Refactor Routing. Switch to using SearchAndSortQuery. UIU-897
 * Resolve bug updating a user just after creation. Fixes UIU-1314.
+* Implement edit loan permission. Refs UIU-1177.
 
 ## [2.25.3](https://github.com/folio-org/ui-users/tree/v2.25.3) (2019-09-26)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.2...v2.25.3)
