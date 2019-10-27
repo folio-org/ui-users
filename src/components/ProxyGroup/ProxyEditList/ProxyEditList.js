@@ -177,15 +177,17 @@ class ProxyEditList extends React.Component {
             <h3 className={css.label}>{label}</h3>
           </Col>
         </Row>
-        {items.length ?
-          items :
-          <p className={css.isEmptyMessage}>
-            <FormattedMessage
-              id="ui-users.noItemFound"
-              values={{ item: name }}
-            />
-          </p>
-        }
+        <Layout className="fullWidth" data-test={name}>
+          {items.length ?
+            items :
+            <p className={css.isEmptyMessage}>
+              <FormattedMessage
+                id="ui-users.noItemFound"
+                values={{ item: name }}
+              />
+            </p>
+          }
+        </Layout>
         <Row>
           <Col xs={4}>
             <Layout>
