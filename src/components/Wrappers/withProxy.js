@@ -137,18 +137,19 @@ const withProxy = WrappedComponent => class WithProxyComponent extends React.Com
     loadResource(resourceName, userId) {
       const [queryKey, recordKey] = (resourceName === 'sponsors')
         ? ['proxyUserId', 'userId'] : ['userId', 'proxyUserId'];
-      const { mutator } = this.props;
+      const { mutator, resources } = this.props;
       const resource = mutator[resourceName];
       const resourceFor = mutator[`${resourceName}For`];
       const query = `(${queryKey}=="${userId}")`;
-
-      resourceFor.reset();
-      resource.reset();
-      resourceFor.GET({ params: { query } }).then((recordsFor) => {
-        if (!recordsFor.length) return;
-        const ids = recordsFor.map(pf => `id=="${pf[recordKey]}"`).join(' or ');
-        resource.GET({ params: { query: `(${ids})` } });
-      });
+      if (resources[resourceName] && !resources[resourceName].isPending) {
+        resourceFor.reset();
+        resource.reset();
+        resourceFor.GET({ params: { query } }).then((recordsFor) => {
+          if (!recordsFor.length) return;
+          const ids = recordsFor.map(pf => `id=="${pf[recordKey]}"`).join(' or ');
+          resource.GET({ params: { query: `(${ids})` } });
+        });
+      }
     }
 
     getRecords(resourceName, idKey) {
@@ -185,19 +186,15 @@ const withProxy = WrappedComponent => class WithProxyComponent extends React.Com
     }
 
     updateProxies(proxies) {
-      const userId = this.props.match.params.id;
       const curProxies = this.getProxies();
 
-      this.update('proxies', proxies, curProxies)
-        .then(() => this.loadProxies(userId));
+      this.update('proxies', proxies, curProxies);
     }
 
     updateSponsors(sponsors) {
-      const userId = this.props.match.params.id;
       const curSponsors = this.getSponsors();
 
-      this.update('sponsors', sponsors, curSponsors)
-        .then(() => this.loadSponsors(userId));
+      this.update('sponsors', sponsors, curSponsors);
     }
 
     render() {
