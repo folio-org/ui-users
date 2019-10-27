@@ -322,6 +322,7 @@ class UserSearch extends React.Component {
                                   data-test-user-search-input
                                 />
                                 <Button
+                                  id="submit-user-search"
                                   type="submit"
                                   buttonStyle="primary"
                                   fullWidth
