@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import queryString from 'query-string';
 
 import {
   stripesConnect,

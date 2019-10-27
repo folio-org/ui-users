@@ -71,7 +71,7 @@ function validate(values, props) {
     });
   }
 
-  if (values.servicePoints && values.preferredServicePoint === undefined) {
+  if (values.servicePoints && values.servicePoints.length > 0 && values.preferredServicePoint === undefined) {
     errors.preferredServicePoint = <FormattedMessage id="ui-users.errors.missingRequiredPreferredServicePoint" />;
   }
 
@@ -147,15 +147,15 @@ class UserForm extends React.Component {
     invalid: false,
   };
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       sections: {
         editUserInfo: true,
         extendedInfo: true,
         contactInfo: true,
-        proxy: false,
+        proxyAccordion: false,
         permissions: false,
         servicePoints: false,
       },
@@ -399,7 +399,7 @@ class UserForm extends React.Component {
                   {initialValues.id &&
                     <div>
                       <EditProxy
-                        accordionId="proxy"
+                        accordionId="proxyAccordion"
                         expanded={sections.proxy}
                         onToggle={this.handleSectionToggle}
                         sponsors={initialValues.sponsors}
