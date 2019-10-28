@@ -65,13 +65,11 @@ module.exports.test = function meh(uitestctx) {
           .wait('#input-user-search')
           .wait('#clickable-newuser')
           .click('#clickable-newuser')
-          .wait(5000)
           .wait('#adduser_group > option:nth-of-type(4)')
           .evaluate(() => document.querySelector('#adduser_group > option:nth-of-type(3)').value)
           .then((result) => {
             done();
             pgroup = result;
-            console.log(`found group-id ${pgroup}`);
           })
           .catch(done);
       });
