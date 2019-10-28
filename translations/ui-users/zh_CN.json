@@ -830,5 +830,17 @@
     "accounts.comment.error.enterComment": "输入备注",
     "owners.noServicePoints": "共享费用/罚款缴费处不允许使用相关服务点",
     "anonymization.confirmation.header": "匿名化被阻止",
-    "anonymization.confirmation.message": "{amount}笔借阅有关联费用/罚款，因此无法匿名化。"
+    "anonymization.confirmation.message": "{amount}笔借阅有关联费用/罚款，因此无法匿名化。",
+    "requests.preferences": "Request preferences",
+    "requests.defaultServicePoint": "Default service point",
+    "requests.fulfillmentPreference": "Fulfillment preference",
+    "requests.defaultDeliveryAddress": "Default delivery address",
+    "requests.deliveryYes": "Delivery - Yes",
+    "requests.deliveryNo": "Delivery - No",
+    "requests.holdShelf": "Hold Shelf",
+    "requests.delivery": "Delivery",
+    "requests.holdShelfYes": "Hold shelf - Yes",
+    "requests.holdShelfNo": "Hold shelf - No",
+    "requests.selectDeliveryAddress": "Select delivery address",
+    "addAddressError": "Please, add at least one address inside \"Addresses\" section"
 }
