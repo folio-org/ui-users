@@ -830,5 +830,17 @@
     "accounts.comment.error.enterComment": "Introducir comentario",
     "owners.noServicePoints": "Associated service points not allowed for Shared fee/fine owner",
     "anonymization.confirmation.header": "Anonymization prevented",
-    "anonymization.confirmation.message": "{amount} loan(s) had associated fees/fines and could not be anonymized."
+    "anonymization.confirmation.message": "{amount} loan(s) had associated fees/fines and could not be anonymized.",
+    "requests.preferences": "Request preferences",
+    "requests.defaultServicePoint": "Default service point",
+    "requests.fulfillmentPreference": "Fulfillment preference",
+    "requests.defaultDeliveryAddress": "Default delivery address",
+    "requests.deliveryYes": "Delivery - Yes",
+    "requests.deliveryNo": "Delivery - No",
+    "requests.holdShelf": "Hold Shelf",
+    "requests.delivery": "Delivery",
+    "requests.holdShelfYes": "Hold shelf - Yes",
+    "requests.holdShelfNo": "Hold shelf - No",
+    "requests.selectDeliveryAddress": "Select delivery address",
+    "addAddressError": "Please, add at least one address inside \"Addresses\" section"
 }
