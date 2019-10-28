@@ -11,6 +11,7 @@ import {
   intlShape,
 } from 'react-intl';
 
+import { IfPermission } from '@folio/stripes/core';
 import {
   Button,
   Dropdown,
@@ -175,14 +176,16 @@ class OpenLoansSubHeader extends React.Component {
             >
               <FormattedMessage id="ui-users.renew" />
             </Button>
-            <Button
-              marginBottom0
-              id="change-due-date-all"
-              disabled={noSelectedLoans}
-              onClick={showChangeDueDateDialog}
-            >
-              <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />
-            </Button>
+            <IfPermission perm="ui-users.loans.edit">
+              <Button
+                marginBottom0
+                id="change-due-date-all"
+                disabled={noSelectedLoans}
+                onClick={showChangeDueDateDialog}
+              >
+                <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />
+              </Button>
+            </IfPermission>
             <ExportCsv
               data={recordsToCSV}
               onlyFields={this.columnHeadersMap}

@@ -7,9 +7,7 @@ import {
   MenuItem,
   IconButton,
 } from '@folio/stripes/components';
-import {
-  stripesShape,
-} from '@folio/stripes/core';
+import { stripesShape } from '@folio/stripes/core';
 
 import Popdown from './Popdown';
 import css from './ActionsDropdown.css';
@@ -84,21 +82,24 @@ class ActionsDropdown extends React.Component {
               <FormattedMessage id="ui-users.renew" />
             </Button>
           </MenuItem>
-          <MenuItem
-            itemMeta={{
-              loan,
-              action: 'changeDueDate',
-            }}
-            onSelectItem={handleOptionsChange}
-          >
-            <Button
-              buttonStyle="dropdownItem"
-              onClick={(e) => { handleOptionsChange({ loan, action:'changeDueDate' }, e); }}
-              data-test-dropdown-content-change-due-date-button
+          {
+            stripes.hasPerm('ui-users.loans.edit') &&
+            <MenuItem
+              itemMeta={{
+                loan,
+                action: 'changeDueDate',
+              }}
+              onSelectItem={handleOptionsChange}
             >
-              <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />
-            </Button>
-          </MenuItem>
+              <Button
+                buttonStyle="dropdownItem"
+                onClick={(e) => { handleOptionsChange({ loan, action:'changeDueDate' }, e); }}
+                data-test-dropdown-content-change-due-date-button
+              >
+                <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />
+              </Button>
+            </MenuItem>
+          }
           <MenuItem
             itemMeta={{
               loan,
