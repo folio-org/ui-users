@@ -97,6 +97,23 @@ class UserRecordContainer extends React.Component {
       records: 'configs',
       path: 'configurations/entries?query=(module==USERS and configName==profile_pictures)',
     },
+    requestPreferences: {
+      type: 'okapi',
+      GET: {
+        path: 'request-preference-storage/request-preference',
+        params: {
+          query: 'userId==:{id}'
+        }
+      },
+      POST: {
+        path: 'request-preference-storage/request-preference',
+      },
+      PUT: {
+        path: (queryParams, pathComponents, resourceData) => {
+          return `request-preference-storage/request-preference/${resourceData.request_preferences.records[0].requestPreferences[0].id}`;
+        },
+      }
+    },
   });
 
   static propTypes = {

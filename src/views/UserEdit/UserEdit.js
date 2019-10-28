@@ -9,7 +9,8 @@ import { eachPromise, getRecordObject } from '../../components/util';
 
 import UserForm from './UserForm';
 import ViewLoading from '../../components/Loading/ViewLoading';
-import { toUserAddresses, toListAddresses } from '../../components/data/converters/address';
+import { toUserAddresses, getFormAddressList } from '../../components/data/converters/address';
+import { deliveryFulfillmentValues } from '../../constants';
 
 function resourcesLoaded(obj, exceptions = []) {
   for (const resource in obj) {
@@ -63,8 +64,23 @@ class UserEdit extends React.Component {
       getSponsors,
       getPreferredServicePoint,
       getUserServicePoints,
-      resources
+      resources,
+      match,
     } = this.props;
+
+    const initialFormValues = {
+      personal: {
+        addresses: [],
+      },
+      requestPreferences: {
+        holdShelf: true,
+        delivery: false,
+        defaultServicePointId: null,
+        defaultDeliveryAddressTypeId: null,
+      }
+    };
+
+    if (!match.params.id) return initialFormValues;
 
     const user = this.getUser();
     const userFormValues = cloneDeep(user);
@@ -73,23 +89,20 @@ class UserEdit extends React.Component {
       'permissions',
     );
 
-    const proxies = getProxies();
-    const sponsors = getSponsors();
+    userFormValues.personal.addresses = getFormAddressList(get(user, 'personal.addresses', []));
 
-    const servicePoints = getUserServicePoints();
-    const addressTypes = resources.addressTypes.records;
-    const addresses = toListAddresses(get(user, ['personal', 'addresses'], []), addressTypes);
-
-    const preferredServicePoint = getPreferredServicePoint();
-    userFormValues.personal.addresses = addresses;
-    Object.assign(userFormValues, formRecordValues, {
-      preferredServicePoint,
-      servicePoints,
-      proxies,
-      sponsors,
-    });
-
-    return userFormValues;
+    return {
+      ...userFormValues,
+      ...formRecordValues,
+      preferredServicePoint: getPreferredServicePoint(),
+      proxies: getProxies(),
+      sponsors: getSponsors(),
+      servicePoints: getUserServicePoints(),
+      requestPreferences: {
+        ...initialFormValues.requestPreferences,
+        ...get(this.props.resources, 'requestPreferences.records[0].requestPreferences[0]', {})
+      },
+    };
   }
 
   getUserFormData() {
@@ -100,38 +113,74 @@ class UserEdit extends React.Component {
       resources,
       'patronGroups',
       'addressTypes',
-      'servicePoints'
     );
 
     return formData;
   }
 
-  create = (userdata) => {
+  createRequestPreferences = (requestPreferencesData, userId) => {
+    const { mutator } = this.props;
+    const payload = {
+      userId,
+      fulfillment: deliveryFulfillmentValues.HOLD_SHELF,
+      ...requestPreferencesData,
+    };
+
+    mutator.requestPreferences.POST(payload);
+  }
+
+  updateRequestPreferences = (requestPreferences) => {
+    const {
+      match,
+      mutator,
+    } = this.props;
+
+    const payload = {
+      userId: match.params.id,
+      holdShelf: true,
+      fulfillment: deliveryFulfillmentValues.HOLD_SHELF,
+      ...requestPreferences,
+    };
+
+    mutator.requestPreferences.PUT(payload);
+  }
+
+  create = ({ requestPreferences, creds, ...userFormData }) => {
     const { mutator, history } = this.props;
-    if (userdata.username) {
-      const creds = Object.assign({}, userdata.creds, { username: userdata.username }, userdata.creds.password ? {} : { password: '' });
-      const user = Object.assign({}, userdata, { id: uuid() });
-      if (user.creds) delete user.creds;
+    const userData = cloneDeep(userFormData);
+    const credentialsAreSet = userData.username;
+    const user = { ...userData, id: uuid() };
+    user.personal.addresses = toUserAddresses(user.personal.addresses);
+
+    if (credentialsAreSet) {
+      const credentials = {
+        password: '',
+        ...creds,
+        username: userData.username,
+      };
 
       mutator.records.POST(user)
-        .then(newUser => mutator.creds.POST(Object.assign(creds, { userId: newUser.id })))
-        .then(newCreds => mutator.perms.POST({ userId: newCreds.userId, permissions: [] }))
-        .then((perms) => {
-          history.push(`/users/preview/${perms.userId}`);
+        .then(() => mutator.creds.POST(Object.assign(credentials, { userId: user.id })))
+        .then(() => {
+          this.createRequestPreferences(requestPreferences, user.id);
+          return mutator.perms.POST({ userId: user.id, permissions: [] });
+        })
+        .then(() => {
+          history.push(`/users/preview/${user.id}`);
         });
     } else {
-      const user = Object.assign({}, userdata, { id: uuid() });
-      if (user.creds) delete user.creds;
-
       mutator.records.POST(user)
-        .then((newUser) => mutator.perms.POST({ userId: newUser.id, permissions: [] }))
-        .then((perms) => {
-          history.push(`/users/preview/${perms.userId}`);
+        .then(() => {
+          this.createRequestPreferences(requestPreferences, user.id);
+          return mutator.perms.POST({ userId: user.id, permissions: [] });
+        })
+        .then(() => {
+          history.push(`/users/preview/${user.id}`);
         });
     }
   }
 
-  update(user) {
+  update({ requestPreferences, ...userFormData }) {
     const {
       updateProxies,
       updateSponsors,
@@ -142,11 +191,15 @@ class UserEdit extends React.Component {
       stripes,
     } = this.props;
 
-    const addressTypes = (resources.addressTypes || {}).records || [];
+    const user = cloneDeep(userFormData);
 
-    if (user.personal.addresses) {
-      user.personal.addresses = toUserAddresses(user.personal.addresses, addressTypes); // eslint-disable-line no-param-reassign
+    if (get(resources, 'requestPreferences.records[0].totalRecords')) {
+      this.updateRequestPreferences(requestPreferences);
+    } else {
+      this.createRequestPreferences(requestPreferences, user.id);
     }
+
+    user.personal.addresses = toUserAddresses(user.personal.addresses); // eslint-disable-line no-param-reassign
 
     const { proxies, sponsors, permissions, servicePoints, preferredServicePoint } = user;
 
@@ -193,12 +246,6 @@ class UserEdit extends React.Component {
       return <ViewLoading data-test-form-page paneTitle={params.id ? 'Edit User' : 'Create User'} defaultWidth="100%" />;
     }
 
-    // values are strictly values...if we're editing (id param present) pull in existing values.
-    let formValues = { personal: {} };
-    if (params.id) {
-      formValues = this.getUserFormValues();
-    }
-
     // data is information that the form needs, mostly to populate options lists
     const formData = this.getUserFormData();
 
@@ -207,9 +254,9 @@ class UserEdit extends React.Component {
     return (
       <UserForm
         formData={formData}
-        initialValues={formValues}
+        initialValues={this.getUserFormValues()} // values are strictly values...if we're editing (id param present) pull in existing values.
         onSubmit={onSubmit}
-        onCancel={() => { history.goBack(); }}
+        onCancel={() => history.goBack()}
         uniquenessValidator={this.props.mutator.uniquenessValidator}
       />
     );
