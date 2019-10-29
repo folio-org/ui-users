@@ -48,7 +48,7 @@ import {
   PatronBlockMessage
 } from '../../components/PatronBlock';
 import {
-  toListAddresses,
+  getFormAddressList,
   // toUserAddresses
 } from '../../components/data/converters/address';
 import {
@@ -350,7 +350,7 @@ class UserDetail extends React.Component {
     const user = this.getUser();
 
     const addressTypes = (resources.addressTypes || {}).records || [];
-    const addresses = toListAddresses(get(user, ['personal', 'addresses'], []), addressTypes);
+    const addresses = getFormAddressList(get(user, 'personal.addresses', []));
     const permissions = (resources.permissions || {}).records || [];
     const settings = (resources.settings || {}).records || [];
     const sponsors = this.props.getSponsors();
@@ -362,6 +362,18 @@ class UserDetail extends React.Component {
     const patronBlocks = get(resources, ['hasPatronBlocks', 'records'], []);
     const patronGroup = this.getPatronGroup(user);
     // const detailMenu = this.renderDetailMenu(user);
+    const requestPreferences = get(resources, 'requestPreferences.records.[0].requestPreferences[0]', {});
+    const allServicePoints = get(resources, 'servicePoints.records', [{}]);
+    const defaultServicePointName = get(
+      allServicePoints.find(servicePoint => servicePoint.id === requestPreferences.defaultServicePointId),
+      'name',
+      '',
+    );
+    const defaultDeliveryAddressTypeName = get(
+      addressTypes.find(addressType => addressType.id === requestPreferences.defaultDeliveryAddressTypeId),
+      'addressType',
+      '',
+    );
 
     if (!user) {
       return (
@@ -443,6 +455,9 @@ class UserDetail extends React.Component {
                   accordionId="extendedInfoSection"
                   user={user}
                   expanded={sections.extendedInfoSection}
+                  requestPreferences={requestPreferences}
+                  defaultServicePointName={defaultServicePointName}
+                  defaultDeliveryAddressTypeName={defaultDeliveryAddressTypeName}
                   onToggle={this.handleSectionToggle}
                 />
                 <ContactInfo

@@ -568,9 +568,8 @@
       {
         "permissionName": "ui-users.loans.edit",
         "displayName": "Users: User loan edit",
-        "description": "Also includes basic permissions to view users",
+        "description": "Also includes backend permissions to perform loan edit",
         "subPermissions": [
-          "ui-users.view",
           "circulation.requests.collection.get",
           "circulation.loans.item.put",
           "circulation.renew-by-barcode.post",

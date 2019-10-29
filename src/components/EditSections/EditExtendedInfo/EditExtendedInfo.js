@@ -13,11 +13,15 @@ import {
   Headline
 } from '@folio/stripes/components';
 
+import { addressTypesShape } from '../../../shapes';
+
 import PasswordControl from './PasswordControl';
 import CreateResetPasswordControl from './CreateResetPasswordControl';
+import RequestPreferencesEdit from './RequestPreferencesEdit';
 
 class EditExtendedInfo extends Component {
   static propTypes = {
+    addressTypes: addressTypesShape,
     expanded: PropTypes.bool.isRequired,
     userId: PropTypes.string.isRequired,
     userEmail: PropTypes.string.isRequired,
@@ -45,9 +49,11 @@ class EditExtendedInfo extends Component {
       userId,
       userFirstName,
       userEmail,
+      addressTypes,
     } = this.props;
 
     const accordionHeader = this.buildAccordionHeader();
+    const isEditForm = !!userId;
 
     return (
       <Accordion
@@ -119,7 +125,7 @@ class EditExtendedInfo extends Component {
             />
           </Col>
           {
-            userId
+            isEditForm
               ? (
                 <CreateResetPasswordControl
                   userId={userId}
@@ -129,6 +135,7 @@ class EditExtendedInfo extends Component {
               )
               : <PasswordControl />
           }
+          <RequestPreferencesEdit addressTypes={addressTypes} />
         </Row>
         <br />
       </Accordion>
