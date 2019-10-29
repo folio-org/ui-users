@@ -13,6 +13,8 @@ import {
   difference,
 } from 'lodash';
 
+import fp from 'lodash/fp';
+
 import {
   Row,
   Col,
@@ -21,6 +23,7 @@ import {
 } from '@folio/stripes/components';
 import { deliveryFulfillmentValues } from '../../../../constants';
 import { addressTypesShape } from '../../../../shapes';
+import { nullOrStringIsRequiredTypeValidator } from '../../../../customTypeValidators';
 import styles from './RequestPreferencesEdit.css';
 
 class RequestPreferencesEdit extends Component {
@@ -33,33 +36,25 @@ class RequestPreferencesEdit extends Component {
     addressTypes: addressTypesShape,
     setFieldValue: PropTypes.func.isRequired,
     intl: intlShape,
-    defaultDeliveryAddressTypeId: PropTypes.oneOfType(
-      PropTypes.string,
-      PropTypes.oneOf([null]),
-    ),
-  };
+    defaultDeliveryAddressTypeId: nullOrStringIsRequiredTypeValidator,
+  }
 
   componentDidUpdate(prevProps) {
-    const {
-      addresses,
-    } = this.props;
-
-    if (this.areAddressTypesChanged(addresses, prevProps.addresses) && !this.isDefaultAddressTypeExists()) {
+    if (this.isDefaultDeliveryAddressResetNeeded(prevProps.addresses, this.props.addresses)) {
       this.resetDefaultDeliveryAddress();
     }
   }
 
-  isDefaultAddressTypeExists(currentAddressTypeIds) {
-    return currentAddressTypeIds.some(addressTypeId => addressTypeId === this.props.defaultDeliveryAddressTypeId);
-  }
+  isDefaultDeliveryAddressResetNeeded(prevAddresses, currentAddresses) {
+    const byAddressType = address => get(address, 'addressType');
+    const prevAddressTypeIds = prevAddresses.map(byAddressType);
+    const currentAddressTypeIds = currentAddresses.map(byAddressType);
+    const addressTypesAreChanged = difference(prevAddressTypeIds, currentAddressTypeIds).length !== 0;
 
-  areAddressTypesChanged(currentAddresses, prevAddresses) {
-    const currentAddressTypeIds = currentAddresses.map(address => get(address, 'addressType'));
-    const prevAddressTypeIds = prevAddresses.map(address => get(address, 'addressType'));
+    const defaultAddressTypeNotExists = !currentAddressTypeIds
+      .some(addressTypeId => addressTypeId === this.props.defaultDeliveryAddressTypeId);
 
-    if (currentAddresses === 0 && prevAddresses.length === 0) return false;
-
-    return difference(prevAddressTypeIds, currentAddressTypeIds).length !== 0;
+    return addressTypesAreChanged && defaultAddressTypeNotExists;
   }
 
   renderDefaultDeliveryAddressSelect() {
@@ -217,17 +212,19 @@ class RequestPreferencesEdit extends Component {
 }
 
 const selectFormValue = formValueSelector('userForm');
-const selectAddresses = (store) => {
-  const addresses = selectFormValue(store, 'personal.addresses') || [];
-  return addresses.filter(address => !isEmpty(address));
-};
-const selectServicePointsWithPickupLocation = store => get(store, 'okapi.currentUser.servicePoints', [])
-  .filter(servicePoint => servicePoint.pickupLocation)
-  .sort();
+const selectNonEmptyAddresses = fp.pipe([
+  store => selectFormValue(store, 'personal.addresses') || [],
+  fp.filter(address => !isEmpty(address)),
+]);
+const selectServicePointsWithPickupLocation = fp.pipe([
+  fp.getOr([], 'okapi.currentUser.servicePoints'),
+  fp.filter(servicePoint => servicePoint.pickupLocation),
+  fp.sortBy('name'),
+]);
 
 export default connect(
   store => ({
-    addresses: selectAddresses(store),
+    addresses: selectNonEmptyAddresses(store),
     defaultDeliveryAddressTypeId: selectFormValue(store, 'requestPreferences.defaultDeliveryAddressTypeId'),
     deliveryAvailable: selectFormValue(store, 'requestPreferences.delivery'),
     servicePoints: selectServicePointsWithPickupLocation(store)
