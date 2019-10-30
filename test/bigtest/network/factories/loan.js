@@ -35,6 +35,16 @@ export default Factory.extend({
     updatedDate: () => faker.date.past(0.1).toString(),
     // updatedByUserId: faker.random.uuid(),
   },
+
+  borrower: trait({
+    borrower: {
+      firstName : () => faker.name.firstName(),
+      lastName : () => faker.name.lastName(),
+      middleName : () => faker.name.middleName,
+      barcode : 109322966913845
+    }
+  }),
+
   afterCreate(loan, server) {
     if (!loan.attrs.userId) {
       const user = server.create('user');

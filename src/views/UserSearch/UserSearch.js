@@ -58,6 +58,9 @@ class UserSearch extends React.Component {
       records: PropTypes.object,
       patronGroups: PropTypes.object,
     }).isRequired,
+    mutator: PropTypes.shape({
+      loans: PropTypes.object,
+    }).isRequired,
     source: PropTypes.object,
     visibleColumns: PropTypes.arrayOf(PropTypes.string),
   }
@@ -72,6 +75,7 @@ class UserSearch extends React.Component {
     this.state = {
       filterPaneIsVisible: true,
       selectedId: null,
+      exportInProgress: false,
     };
 
     this.searchField = React.createRef();
@@ -106,13 +110,32 @@ class UserSearch extends React.Component {
     }));
   }
 
+  generateOverdueLoanReport = props => {
+    const {
+      reset,
+      GET,
+    } = props.mutator.loans;
+    const { exportInProgress } = this.state;
+
+    if (exportInProgress) {
+      return;
+    }
+
+    this.setState({ exportInProgress: true }, () => {
+      reset();
+      GET()
+        .then(loans => this.overdueLoanReport.toCSV(loans))
+        .then(() => this.setState({ exportInProgress: false }));
+    });
+  }
+
   getActionMenu = ({ onToggle }) => (
     <Button
       buttonStyle="dropdownItem"
       id="export-overdue-loan-report"
       onClick={() => {
         onToggle();
-        this.overdueLoanReport.toCSV(get(this.props.resources, 'loans.records', []));
+        this.generateOverdueLoanReport(this.props);
       }}
     >
       <FormattedMessage id="ui-users.reports.overdue.label" />
