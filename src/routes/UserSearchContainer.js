@@ -17,6 +17,7 @@ import { UserSearch } from '../views';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
+const MAX_LIMIT = 2147483647; // from https://s3.amazonaws.com/foliodocs/api/mod-circulation/p/circulation.html#circulation_loans_get
 
 const compileQuery = template(
   '(username="%{query}*" or personal.firstName="%{query}*" or personal.lastName="%{query}*" or personal.email="%{query}*" or barcode="%{query}*" or id="%{query}*" or externalSystemId="%{query}*")',
@@ -70,7 +71,7 @@ class UserSearchContainer extends React.Component {
       type: 'okapi',
       records: 'loans',
       accumulate: true,
-      path: () => `circulation/loans?query=(status="Open" and dueDate < ${getLoansOverdueDate()})`,
+      path: () => `circulation/loans?query=(status="Open" and dueDate < ${getLoansOverdueDate()})&limit=${MAX_LIMIT}`,
       permissionsRequired: 'circulation.loans.collection.get,accounts.collection.get',
     }
   });
