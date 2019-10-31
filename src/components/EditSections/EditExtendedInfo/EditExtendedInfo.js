@@ -8,7 +8,7 @@ import {
   Row,
   Col,
   Accordion,
-  KeyValue,
+  Label,
   Datepicker,
   Headline
 } from '@folio/stripes/components';
@@ -105,9 +105,10 @@ class EditExtendedInfo extends Component {
             xs={12}
             md={3}
           >
-            <KeyValue label={<FormattedMessage id="ui-users.extended.folioNumber" />}>
-              {userId || '-'}
-            </KeyValue>
+            <Label tagName="div">
+              <FormattedMessage id="ui-users.extended.folioNumber" />
+            </Label>
+            <div>{userId || '-'}</div>
           </Col>
         </Row>
         <Row>

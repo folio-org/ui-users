@@ -20,7 +20,9 @@ import {
   Col,
   Select,
   Checkbox,
+  Label,
 } from '@folio/stripes/components';
+
 import { deliveryFulfillmentValues } from '../../../../constants';
 import { addressTypesShape } from '../../../../shapes';
 import { nullOrStringIsRequiredTypeValidator } from '../../../../customTypeValidators';
@@ -85,7 +87,7 @@ class RequestPreferencesEdit extends Component {
     return (
       <Field
         name="requestPreferences.defaultServicePointId"
-        label={<FormattedMessage id="ui-users.requests.defaultServicePoint" />}
+        label={<FormattedMessage id="ui-users.requests.defaultPickupServicePoint" />}
         dataOptions={resultOptions}
         component={Select}
         parse={this.defaultServicePointFieldParser}
@@ -97,7 +99,7 @@ class RequestPreferencesEdit extends Component {
     return value === '' ? null : value;
   }
 
-  renderFulfilmentPreferenceSelect() {
+  renderFulfillmentPreferenceSelect() {
     const { intl } = this.props;
     const options = [
       {
@@ -168,12 +170,15 @@ class RequestPreferencesEdit extends Component {
           <Col
             xs={12}
             md={6}
-            className={styles.heading}
           >
-            <FormattedMessage id="ui-users.requests.preferences" />
+            <Label tagName="div">
+              <span className={styles.heading}>
+                <FormattedMessage id="ui-users.requests.preferences" />
+              </span>
+            </Label>
           </Col>
         </Row>
-        <Row className={styles.heading}>
+        <Row className={styles.rowMargin}>
           <Col xs={12} md={6}>
             <Field
               name="requestPreferences.holdShelf"
@@ -193,15 +198,15 @@ class RequestPreferencesEdit extends Component {
             />
           </Col>
         </Row>
-        <Row className={styles.heading}>
+        <Row>
           <Col xs={12} md={6}>
             {this.renderServicePointSelect()}
           </Col>
           <Col xs={12} md={6}>
-            { deliveryAvailable && this.renderFulfilmentPreferenceSelect() }
+            { deliveryAvailable && this.renderFulfillmentPreferenceSelect() }
           </Col>
         </Row>
-        <Row className={styles.heading}>
+        <Row>
           <Col mdOffset={6} xs={12} md={6}>
             { deliveryAvailable && this.renderDefaultDeliveryAddressSelect() }
           </Col>
@@ -217,7 +222,7 @@ const selectNonEmptyAddresses = fp.pipe([
   fp.filter(address => !isEmpty(address)),
 ]);
 const selectServicePointsWithPickupLocation = fp.pipe([
-  fp.getOr([], 'okapi.currentUser.servicePoints'),
+  fp.getOr([], 'folio_users_service_points.records'),
   fp.filter(servicePoint => servicePoint.pickupLocation),
   fp.sortBy('name'),
 ]);
