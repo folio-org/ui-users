@@ -11,6 +11,7 @@ import { stripesShape } from '@folio/stripes/core';
 
 import withRenew from '../../../withRenew';
 import TableModel from './components/OpenLoansWithStaticData';
+import { getOpenRequestsPath } from '../../../util';
 
 class OpenLoansControl extends React.Component {
   static manifest = Object.freeze({
@@ -300,12 +301,10 @@ class OpenLoansControl extends React.Component {
 
   discoverRequests = (loan) => {
     const { history } = this.props;
-
-    history.push(
-      `/requests?&query=${get(loan, ['item', 'barcode'])}&filters=requestStatus.Open%20-%20Not%` +
-      '20yet%20filled%2CrequestStatus.Open%20-%20Awaiting%20pickup%2CrequestStatus.Open%20-%20Awaitin' +
-      'g%20pickup%2CrequestStatus.Open%20-%20In%20transit&sort=Request%20Date'
-    );
+    const query = get(loan, ['item', 'barcode']);
+    const path = getOpenRequestsPath(query);
+    
+    history.push(path);
   };
 
   feefine = (loan, e) => {

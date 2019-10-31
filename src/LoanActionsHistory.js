@@ -22,7 +22,10 @@ import {
 } from '@folio/stripes/components';
 import { IfPermission } from '@folio/stripes/core';
 import PatronBlockModal from './components/PatronBlock/PatronBlockModal';
-import { getFullName } from './util';
+import { 
+  getFullName,
+  getOpenRequestsPath,
+} from './util';
 import loanActionMap from './data/loanActionMap';
 import LoanActionsHistoryProxy from './LoanActionsHistoryProxy';
 import withRenew from './withRenew';
@@ -366,7 +369,7 @@ class LoanActionsHistory extends React.Component {
 
     const itemRequestCount = requestCounts[this.props.loan.itemId] || 0;
     const requestQueueValue = (itemRequestCount && stripes.hasPerm('ui-users.requests.all,ui-requests.all'))
-      ? (<Link to={`/requests?filters=requestStatus.Open%20-%20Not%20yet%20filled%2CrequestStatus.Open%20-%20Awaiting%20pickup%2CrequestStatus.Open%20-%20In%20transit&query=${loan.item.barcode}&sort=Request%20Date`}>{itemRequestCount}</Link>)
+      ? (<Link to={getOpenRequestsPath(loan.item.barcode)}>{itemRequestCount}</Link>)
       : itemRequestCount;
     const contributorsList = this.getContributorslist(loan);
     const contributorsListString = contributorsList.join(' ');

@@ -16,6 +16,11 @@ import {
   IfPermission,
 } from '@folio/stripes/core';
 
+import { 
+  getOpenRequestStatusesFilterString,
+  getClosedRequestStatusesFilterString,
+} from '../../../util';
+
 /**
  * User-details "Requests" accordion pane.
  *
@@ -114,10 +119,14 @@ class UserRequests extends React.Component {
         </Button>
       </IfPermission>
     );
-
+    
+    const closedFilterString = getClosedRequestStatusesFilterString();
+    const openFilterString = getOpenRequestStatusesFilterString();
     const itemFormatter = stripes.hasPerm('ui-requests.all') ?
       this.renderLinkItem :
       this.renderItem;
+    
+  
 
     return (
       <Accordion
@@ -137,13 +146,13 @@ class UserRequests extends React.Component {
                 id: 'clickable-viewopenrequests',
                 count: openRequestsCount,
                 formattedMessageId: 'ui-users.requests.numOpenRequests',
-                query: { query: barcode, filters: 'requestStatus.Open - Awaiting pickup,requestStatus.Open - Not yet filled,requestStatus.Open - In transit' },
+                query: { query: barcode, filters: openFilterString },
               },
               {
                 id: 'clickable-viewclosedrequests',
                 count: closedRequestsCount,
                 formattedMessageId: 'ui-users.requests.numClosedRequests',
-                query: { query: barcode, filters: 'requestStatus.Closed - Cancelled,requestStatus.Closed - Filled,requestStatus.Closed - Unfilled,requestStatus.Closed - Pickup expired' },
+                query: { query: barcode, filters: closedFilterString },
               },
             ]}
           /> : <Icon icon="spinner-ellipsis" width="10px" />
