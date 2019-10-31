@@ -5,7 +5,7 @@ import { get } from 'lodash';
 import { stripesConnect } from '@folio/stripes/core';
 import {
   Col,
-  KeyValue,
+  Label,
 } from '@folio/stripes/components';
 
 import CreatePasswordModal from './Modals/CreatePasswordModal';
@@ -124,23 +124,21 @@ class CreateResetPasswordControl extends React.Component {
       ? 'ui-users.extended.sendResetPassword'
       : 'ui-users.extended.sendCreatePassword';
 
-    const fieldLabel = <FormattedMessage id="ui-users.extended.folioPassword" />;
-    const contentText = <FormattedMessage id={linkTextKey} />;
-
     return (
       <Col
         xs={12}
         md={3}
       >
-        <KeyValue label={fieldLabel}>
-          <button
-            type="button"
-            className={css.resetPasswordButton}
-            onClick={this.handleLinkClick}
-          >
-            {contentText}
-          </button>
-        </KeyValue>
+        <Label tagName="div">
+          <FormattedMessage id="ui-users.extended.folioPassword" />
+        </Label>
+        <button
+          type="button"
+          className={css.resetPasswordButton}
+          onClick={this.handleLinkClick}
+        >
+          <FormattedMessage id={linkTextKey} />
+        </button>
         {isLocalPasswordSet
           ? this.resetPasswordModal()
           : this.createPasswordModal()

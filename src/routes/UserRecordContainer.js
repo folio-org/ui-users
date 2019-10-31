@@ -99,6 +99,7 @@ class UserRecordContainer extends React.Component {
     },
     requestPreferences: {
       type: 'okapi',
+      throwErrors: false,
       GET: {
         path: 'request-preference-storage/request-preference',
         params: {

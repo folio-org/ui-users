@@ -367,7 +367,7 @@
   "requests.numOpenRequests": "{count, number} {count, plural, one {open request} other {open requests}}",
   "requests.numClosedRequests": "{count, number} {count, plural, one {closed request} other {closed requests}}",
   "requests.preferences": "Request preferences",
-  "requests.defaultServicePoint": "Default service point",
+  "requests.defaultPickupServicePoint": "Default pickup service point",
   "requests.fulfillmentPreference": "Fulfillment preference",
   "requests.defaultDeliveryAddress": "Default delivery address",
   "requests.deliveryYes": "Delivery - Yes",
