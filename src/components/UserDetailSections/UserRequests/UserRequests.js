@@ -20,7 +20,7 @@ import {
 import {
   getOpenRequestStatusesFilterString,
   getClosedRequestStatusesFilterString,
-} from '../../../util';
+} from '../../util';
 
 /**
  * User-details "Requests" accordion pane.

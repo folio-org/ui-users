@@ -10,11 +10,13 @@ import {
 
 import { stripesShape } from '@folio/stripes/core';
 
-import { nav } from '../../util';
+import {
+  nav,
+  getOpenRequestsPath,
+} from '../../util';
 
 import { withRenew } from '../../Wrappers';
 import TableModel from './components/OpenLoansWithStaticData';
-import { getOpenRequestsPath } from '../../../util';
 
 class OpenLoansControl extends React.Component {
   static propTypes = {

@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { requestStatuses } from './constants';
+import { requestStatuses } from '../../constants';
 
 export function getFullName(user) {
   const lastName = _.get(user, 'personal.lastName', '');

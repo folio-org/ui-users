@@ -23,17 +23,17 @@ import {
 } from '@folio/stripes/components';
 import { IfPermission } from '@folio/stripes/core';
 import PatronBlockModal from '../../components/PatronBlock/PatronBlockModal';
-import { getFullName, nav } from '../../components/util';
+import {
+  getFullName,
+  nav,
+  getOpenRequestsPath,
+} from '../../components/util';
 import { withRenew } from '../../components/Wrappers';
 import loanActionMap from '../../components/data/static/loanActionMap';
 import LoanProxyDetails from './LoanProxyDetails';
 import ViewLoading from '../../components/Loading/ViewLoading';
 
 import css from './LoanDetails.css';
-import {
-  getFullName,
-  getOpenRequestsPath,
-} from './util';
 
 class LoanDetails extends React.Component {
   static propTypes = {

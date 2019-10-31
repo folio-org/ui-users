@@ -7,7 +7,7 @@ export const requestStatuses = {
   CANCELLED: 'Closed - Cancelled',
   FILLED: 'Closed - Filled',
   UNFILLED: 'Closed - Unfilled',
-}
+};
 
 export const deliveryFulfillmentValues = {
   HOLD_SHELF: 'Hold Shelf',
