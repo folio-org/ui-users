@@ -1,8 +1,8 @@
 import {
   interactor,
   clickable,
+  count,
   text,
-  isPresent,
   fillable,
   blurrable,
   triggerable,
@@ -12,6 +12,7 @@ import {
 
 import ButtonInteractor from '@folio/stripes-components/lib/Button/tests/interactor'; // eslint-disable-line
 import PermissionsModal from './permissions-modal';
+import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/ProxyEditItem.css';
 
 @interactor class InputFieldInteractor {
   clickInput = clickable();
@@ -34,11 +35,18 @@ import PermissionsModal from './permissions-modal';
   }
 }
 
+@interactor class ProxyEditInteractor {
+  findProxyButton = clickable('#clickable-plugin-find-proxy');
+  findSponsorButton = clickable('#clickable-plugin-find-sponsor');
+  proxyCount = count(`[data-test="proxies"] .${proxyEditItemCSS.item}`);
+  sponsorCount = count(`[data-test="sponsors"] .${proxyEditItemCSS.item}`);
+}
+
 @interactor class UserFormPage {
-  isLoaded = isPresent('[class*=paneTitleLabel---]');
+  // isLoaded = isPresent('[class*=paneTitleLabel---]');
 
   whenLoaded() {
-    return this.when(() => this.isLoaded).timeout(3000);
+    return this.when(() => this.isPresent).timeout(4000);
   }
 
   title = text('[class*=paneTitleLabel---]');
@@ -51,6 +59,7 @@ import PermissionsModal from './permissions-modal';
   addPermissionButton = scoped('#clickable-add-permission');
   permissionsModal = new PermissionsModal();
   permissions = collection('[data-permission-name]');
+  proxySection = scoped('#proxyAccordion', ProxyEditInteractor);
 }
 
 export default new UserFormPage('[data-test-form-page]');

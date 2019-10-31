@@ -6,8 +6,7 @@ import {
 } from 'react-intl';
 import { ControlledVocab } from '@folio/stripes/smart-components';
 import { stripesConnect, withStripes } from '@folio/stripes/core';
-
-import { validate } from '../util';
+import { validate } from '../components/util';
 import { Owners } from './FeeFinesTable';
 
 class TransferAccountsSettings extends React.Component {

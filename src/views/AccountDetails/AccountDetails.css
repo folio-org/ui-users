@@ -1,0 +1,14 @@
+.commentsWrapper { 
+  display: flex; 
+  align-items: center;
+}
+
+.btnView {
+  color: var(--primary);
+}
+
+.addCommentBtn {
+  float: right;
+  margin-left: 50px;
+  margin-bottom: 0;
+}

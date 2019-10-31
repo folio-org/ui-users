@@ -3,6 +3,8 @@ import {
   clickable,
   text,
   isPresent,
+  fillable,
+  selectable,
   count,
   scoped,
   collection,
@@ -11,13 +13,33 @@ import {
 import CalloutInteractor from '@folio/stripes-components/lib/Callout/tests/interactor'; // eslint-disable-line
 import ButtonInteractor from '@folio/stripes-components/lib/Button/tests/interactor'; // eslint-disable-line
 import ConfirmationModalInteractor from '@folio/stripes-components/lib/ConfirmationModal/tests/interactor'; // eslint-disable-line
-import TextFieldInteractor from '@folio/stripes-components/lib/TextField/tests/interactor'; // eslint-disable-line
+// import TextFieldInteractor from '@folio/stripes-components/lib/TextField/tests/interactor'; // eslint-disable-line
 import MultiSelectInteractor from '@folio/stripes-components/lib/MultiSelection/tests/interactor'; // eslint-disable-line
-import SelectInteractor from '@folio/stripes-components/lib/Select/tests/interactor'; // eslint-disable-line
+// import SelectInteractor from '@folio/stripes-components/lib/Select/tests/interactor'; // eslint-disable-line
 import RadioButtonInteractor   from '@folio/stripes-components/lib/RadioButton/tests/interactor'; // eslint-disable-line
 
 const rowSelector = '[class*=editListRow--]';
 const cellSelector = '[class*=mclCell--]';
+
+const SelectInteractor = interactor(class SelectInteractor {
+  selectOption = selectable('select');
+
+  selectAndBlur(val) {
+    return this
+      .selectOption(val)
+      .blur('select');
+  }
+});
+
+const TextFieldInteractor = interactor(class TextFieldInteractor {
+  fill = fillable('[type="text"]');
+
+  fillAndBlur(value) {
+    return this.focus('[type="text"]')
+      .fill(value)
+      .blur('[type="text"]');
+  }
+});
 
 const CellInteractor = interactor(class CellInteractor {
   content = text();
@@ -63,7 +85,7 @@ const RowInteractor = interactor(class RowInteractor {
 
 @interactor class FeeFineInteractor {
   whenLoaded() {
-    return this.when(() => this.isLoaded);
+    return this.when(() => this.isLoaded).timeout(3000);
   }
 
   isLoaded = isPresent(rowSelector);

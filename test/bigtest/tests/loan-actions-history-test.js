@@ -15,15 +15,36 @@ describe('loans actions history', () => {
   const requestsAmount = 2;
 
   beforeEach(async function () {
-    const user = this.server.create('user');
-    const loan = this.server.create('loan', { status: { name: 'Open' }, loanPolicyId: 'test' });
+    const loan = this.server.create('loan', {
+      status: { name: 'Open' },
+      loanPolicyId: 'test'
+    });
+
+    this.server.createList('loanactions', 5, { loan: { ...loan.attrs } });
 
     this.server.createList('request', requestsAmount, { itemId: loan.itemId });
-    this.visit(`/users/view/${user.id}?layer=loan&loan=${loan.id}&query=%20%20&sort=name`);
+    this.visit(`/users/${loan.userId}/loans/view/${loan.id}`);
   });
 
   it('should be presented', () => {
     expect(LoanActionsHistory.isPresent).to.be.true;
+  });
+
+  it('having loan without fees/fines incurred should display the "-"', () => {
+    expect(LoanActionsHistory.feeFines.text).to.equal('-');
+  });
+
+  describe('having loan with fees/fines incurred', () => {
+    beforeEach(async function () {
+      this.server.get('/accounts', {
+        accounts: [{ amount: 200 }],
+        totalRecords: 1,
+      });
+    });
+
+    it('should display the fees/fines value', () => {
+      expect(LoanActionsHistory.feeFines.text).to.equal('200.00');
+    });
   });
 
   describe('requests', () => {
@@ -41,11 +62,10 @@ describe('loans actions history', () => {
 
     describe('loan without loanPolicy', () => {
       beforeEach(async function () {
-        const user = this.server.create('user');
         const loan = this.server.create('loan', { status: { name: 'Open' } });
 
         this.server.createList('request', requestsAmount, { itemId: loan.itemId });
-        this.visit(`/users/view/${user.id}?layer=loan&loan=${loan.id}&query=%20%20&sort=name`);
+        this.visit(`/users/${loan.userId}/loans/${loan.id}`);
       });
 
       it('should not be presented', () => {

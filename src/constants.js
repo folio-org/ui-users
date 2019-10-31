@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/prefer-default-export
 export const requestStatuses = {
   AWAITING_PICKUP: 'Open - Awaiting pickup',
   AWAITING_DELIVERY: 'Open - Awaiting delivery',
@@ -8,4 +7,9 @@ export const requestStatuses = {
   CANCELLED: 'Closed - Cancelled',
   FILLED: 'Closed - Filled',
   UNFILLED: 'Closed - Unfilled',
+}
+
+export const deliveryFulfillmentValues = {
+  HOLD_SHELF: 'Hold Shelf',
+  DELIVERY: 'Delivery',
 };

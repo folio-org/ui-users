@@ -19,10 +19,15 @@ import {
   FormattedDate,
 } from 'react-intl';
 
+import { nav } from '../../util';
+
 class ViewFeesFines extends React.Component {
   static propTypes = {
     resources: PropTypes.shape({
       comments: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      loans: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }),
@@ -37,10 +42,10 @@ class ViewFeesFines extends React.Component {
     onChangeActions: PropTypes.func.isRequired,
     onChangeSelected: PropTypes.func.isRequired,
     accounts: PropTypes.arrayOf(PropTypes.object),
-    user: PropTypes.object,
     loans: PropTypes.arrayOf(PropTypes.object),
-    onClickViewAccountActionsHistory: PropTypes.func.isRequired,
-    onClickViewLoanActionsHistory: PropTypes.func.isRequired,
+    match: PropTypes.object,
+    history: PropTypes.object,
+    user: PropTypes.object,
     visibleColumns: PropTypes.arrayOf(PropTypes.string),
     intl: intlShape.isRequired,
     selectedAccounts: PropTypes.arrayOf(PropTypes.object),
@@ -111,8 +116,9 @@ class ViewFeesFines extends React.Component {
   }
 
   onRowClick(e, row) {
+    const { history, match: { params } } = this.props;
     if ((e.target.type !== 'button') && (e.target.tagName !== 'IMG')) {
-      this.props.onClickViewAccountActionsHistory(e, row);
+      nav.onClickViewAccountActionsHistory(e, row, history, params);
     }
   }
 
@@ -173,9 +179,10 @@ class ViewFeesFines extends React.Component {
   }
 
   getLoan(f) {
-    const loan = this.props.loans.find(l => l.id === f.loanId) || {};
-
-    return loan;
+    const { match: { params: { id } }, loans } = this.props;
+    if (loans.length === 0 || !id || f.loanId === '0') return {};
+    const res = loans.find(l => l.id === f.loanId) || {};
+    return res;
   }
 
   formatDateTime(dateTimeStr) {
@@ -316,7 +323,8 @@ class ViewFeesFines extends React.Component {
   }
 
   loanDetails(a, e) {
-    this.props.onClickViewLoanActionsHistory(e, { id: a.loanId });
+    const { history, match: { params } } = this.props;
+    nav.onClickViewLoanActionsHistory(e, { id: a.loanId }, history, params);
   }
 
   renderActions(a) {
@@ -337,7 +345,7 @@ class ViewFeesFines extends React.Component {
         <Button id="ellipsis-button" data-role="toggle" buttonStyle="hover dropdownActive">
           <strong>•••</strong>
         </Button>
-        <DropdownMenu id="ellipsis-drop-down" data-role="menu" overrideStyle={{ padding: '7px 3px' }}>
+        <DropdownMenu id="ellipsis-drop-down" data-role="menu">
           <MenuItem itemMeta={{ a, action: 'pay' }}>
             <Button disabled={!((elipsis.pay === false) && (buttonDisabled === false))} buttonStyle="dropdownItem">
               <FormattedMessage id="ui-users.accounts.history.button.pay" />

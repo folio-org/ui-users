@@ -60,7 +60,7 @@ class ActionModal extends React.Component {
     open: PropTypes.bool,
     accounts: PropTypes.arrayOf(PropTypes.object),
     data: PropTypes.arrayOf(PropTypes.object),
-    balance: PropTypes.number,
+    balance: PropTypes.string,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
     pristine: PropTypes.bool,

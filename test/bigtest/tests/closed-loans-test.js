@@ -22,20 +22,21 @@ describe('Closed Loans', () => {
 
   beforeEach(async function () {
     const user = this.server.create('user');
-    const loan = this.server.create('loan', {
-      status: { name: 'Closed' },
-      feesAndFines : { amountRemainingToPay: 200 }
+    const loans = this.server.createList('loan', 5, 'feesAndFines', {
+      userId: user.id,
+      item: (i) => ({ ...this.item, barcode: i }),
+      status: { name: 'Closed' }
     });
 
     setupAnonymizationAPIResponse(this.server, [{
       message: 'haveAssociatedFeesAndFines',
       parameters: [{
         key: 'loanIds',
-        value: JSON.stringify([loan]),
+        value: JSON.stringify([loans[0]]),
       }]
     }]);
 
-    this.visit(`/users/view/${user.id}?layer=closed-loans`);
+    this.visit(`/users/${loans[0].userId}/loans/closed`);
 
     await ClosedLoansInteractor.whenLoaded();
   });
@@ -47,6 +48,19 @@ describe('Closed Loans', () => {
   describe('loan list', () => {
     it('should be presented', () => {
       expect(ClosedLoansInteractor.list.isPresent).to.be.true;
+    });
+  });
+
+  describe('sorting loan list', () => {
+    let firstRowValue;
+    beforeEach(async () => {
+      firstRowValue = ClosedLoansInteractor.list.rows(0).cells(2).text;
+      await ClosedLoansInteractor.list.headers(2).click();
+      await ClosedLoansInteractor.list.headers(2).click();
+    });
+
+    it('re-orders the rows', () => {
+      expect(firstRowValue).to.not.equal(ClosedLoansInteractor.list.rows(0).cells(2).text);
     });
   });
 

@@ -6,6 +6,11 @@
 
 * Implement permission assigment by batch. Refs UIU-1249
 * Fix the mechanism for the accumulation of overdue loans in CSV report. Refs UIU-1286.
+* Implement view loans permission. Refs UIU-1175.
+* Refactor Routing. Switch to using SearchAndSortQuery. UIU-897
+* Resolve bug updating a user just after creation. Fixes UIU-1314.
+* Implement edit loan permission. Refs UIU-1177.
+* Retrieve up to max available amount of overdue loans instead of 10 for CSV report. Refs UIU-1297.
 
 ## [2.25.3](https://github.com/folio-org/ui-users/tree/v2.25.3) (2019-09-26)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.2...v2.25.3)

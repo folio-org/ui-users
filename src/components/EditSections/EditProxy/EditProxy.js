@@ -6,24 +6,26 @@ import {
   Badge,
   Headline
 } from '@folio/stripes/components';
-import { IfPermission } from '@folio/stripes/core';
+import {
+  IfPermission,
+  withStripes
+} from '@folio/stripes/core';
 
 import ProxyEditList from '../../ProxyGroup/ProxyEditList';
 import ProxyEditItem from '../../ProxyGroup/ProxyEditItem';
-import { getFullName } from '../../../util';
 
 const EditProxy = (props) => {
   const {
     expanded,
     onToggle,
     accordionId,
-    initialValues,
-  } = props;
-  const {
     sponsors,
     proxies,
-  } = initialValues;
-  const fullName = getFullName(initialValues);
+    fullName,
+    change,
+    stripes,
+    initialValues,
+  } = props;
 
   const proxySponsor = <FormattedMessage id="ui-users.permissions.proxySponsor" />;
 
@@ -40,13 +42,13 @@ const EditProxy = (props) => {
       >
         <FormattedMessage id="ui-users.permissions.isProxyFor" values={{ name: fullName }}>
           { label => (
-            <ProxyEditList itemComponent={ProxyEditItem} label={label} name="sponsors" {...props} />
+            <ProxyEditList itemComponent={ProxyEditItem} label={label} name="sponsors" stripes={stripes} change={change} initialValues={initialValues} />
           )}
         </FormattedMessage>
         <br />
         <FormattedMessage id="ui-users.permissions.isSponsorOf" values={{ name: fullName }}>
           { label => (
-            <ProxyEditList itemComponent={ProxyEditItem} label={label} name="proxies" {...props} />
+            <ProxyEditList itemComponent={ProxyEditItem} label={label} name="proxies" stripes={stripes} change={change} initialValues={initialValues} />
           )}
         </FormattedMessage>
         <br />
@@ -56,11 +58,15 @@ const EditProxy = (props) => {
 };
 
 EditProxy.propTypes = {
-  stripes: PropTypes.object.isRequired,
+  change: PropTypes.func,
+  fullName: PropTypes.string,
   expanded: PropTypes.bool,
   onToggle: PropTypes.func,
   accordionId: PropTypes.string.isRequired,
+  proxies: PropTypes.arrayOf(PropTypes.object),
+  sponsors: PropTypes.arrayOf(PropTypes.object),
+  stripes: PropTypes.object,
   initialValues: PropTypes.object,
 };
 
-export default EditProxy;
+export default withStripes(EditProxy);

@@ -345,7 +345,14 @@
           "accounts.item.delete",
           "accounts.item.get",
           "accounts.item.post",
-          "accounts.item.put"
+          "accounts.item.put",
+          "feefineactions.collection.get",
+          "payments.collection.get",
+          "waives.collection.get",
+          "owners.collection.get",
+          "feefines.collection.get",
+          "transfers.collection.get",
+          "inventory-storage.service-points-users.collection.get"
         ],
         "visible": true
       },
@@ -545,11 +552,39 @@
         "visible": true
       },
       {
+        "permissionName": "ui-users.loans.view",
+        "displayName": "Users: User loans view",
+        "description": "Also includes basic permissions to view users",
+        "subPermissions": [
+          "ui-users.view",
+          "circulation.loans.collection.get",
+          "circulation-storage.loan-policies.collection.get",
+          "accounts.collection.get",
+          "circulation-storage.loans-history.collection.get",
+          "comments.collection.get"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.loans.edit",
+        "displayName": "Users: User loan edit",
+        "description": "Also includes backend permissions to perform loan edit",
+        "subPermissions": [
+          "circulation.requests.collection.get",
+          "circulation.loans.item.put",
+          "circulation.renew-by-barcode.post",
+          "circulation-storage.loans.item.get"
+        ],
+        "visible": true
+      },
+      {
         "permissionName": "ui-users.loans.all",
         "displayName": "Loans: All permissions",
         "description": "Also includes requests, loan-policies and accounts permissions",
         "subPermissions": [
           "ui-users.view",
+          "ui-users.loans.view",
+          "ui-users.loans.edit",
           "ui-users.loans.renew",
           "ui-users.settings.feefines",
           "circulation.loans.item.put",
@@ -640,6 +675,7 @@
     "react": "^16.5.0",
     "react-dom": "^16.5.0",
     "react-redux": "^5.0.7",
+    "react-router-dom": "^4.0.0",
     "redux": "^4.0.0",
     "sinon": "^7.1.1"
   },
@@ -652,14 +688,15 @@
     "query-string": "^5.0.0",
     "react-hot-loader": "^4.3.12",
     "react-intl": "^2.5.0",
-    "react-router-dom": "^4.0.0",
     "react-router-prop-types": "^1.0.4",
     "redux-form": "^7.0.3",
     "uuid": "^3.0.1"
   },
   "peerDependencies": {
     "@folio/stripes": "^2.10.1",
-    "react": "*"
+    "react": "*",
+    "react-router": "*",
+    "react-router-dom": "*"
   },
   "optionalDependencies": {
     "@folio/plugin-find-user": "^1.1.0"

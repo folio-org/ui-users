@@ -19,10 +19,8 @@ describe('open loans override', () => {
     });
 
     beforeEach(async function () {
-      const user = this.server.create('user');
-      this.server.create('loan', { status: { name: 'Open' } });
-
-      this.visit(`/users/view/${user.id}?layer=open-loans&query=%20&sort=requests`);
+      const loan = this.server.create('loan', { status: { name: 'Open' } });
+      this.visit(`/users/${loan.userId}/loans/open?query=%20&sort=requests`);
     });
 
     it('should be presented', () => {
@@ -90,10 +88,8 @@ describe('open loans override', () => {
     });
 
     beforeEach(async function () {
-      const user = this.server.create('user');
-      this.server.create('loan', { status: { name: 'Open' } });
-
-      this.visit(`/users/view/${user.id}?layer=open-loans&query=%20&sort=requests`);
+      const loan = this.server.create('loan', { status: { name: 'Open' } });
+      this.visit(`/users/${loan.userId}/loans/open?query=%20&sort=requests`);
     });
 
     it('should be presented', () => {

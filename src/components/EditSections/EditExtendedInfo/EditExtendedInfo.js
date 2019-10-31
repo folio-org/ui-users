@@ -13,25 +13,22 @@ import {
   Headline
 } from '@folio/stripes/components';
 
+import { addressTypesShape } from '../../../shapes';
+
 import PasswordControl from './PasswordControl';
 import CreateResetPasswordControl from './CreateResetPasswordControl';
+import RequestPreferencesEdit from './RequestPreferencesEdit';
 
 class EditExtendedInfo extends Component {
   static propTypes = {
+    addressTypes: addressTypesShape,
     expanded: PropTypes.bool.isRequired,
     userId: PropTypes.string.isRequired,
     userEmail: PropTypes.string.isRequired,
     accordionId: PropTypes.string.isRequired,
     userFirstName: PropTypes.string.isRequired,
     onToggle: PropTypes.func.isRequired,
-    stripesConnect: PropTypes.func.isRequired,
   };
-
-  constructor(props) {
-    super(props);
-
-    this.connectedResetPasswordControl = props.stripesConnect(CreateResetPasswordControl);
-  }
 
   buildAccordionHeader = () => {
     return (
@@ -52,9 +49,11 @@ class EditExtendedInfo extends Component {
       userId,
       userFirstName,
       userEmail,
+      addressTypes,
     } = this.props;
 
     const accordionHeader = this.buildAccordionHeader();
+    const isEditForm = !!userId;
 
     return (
       <Accordion
@@ -126,9 +125,9 @@ class EditExtendedInfo extends Component {
             />
           </Col>
           {
-            userId
+            isEditForm
               ? (
-                <this.connectedResetPasswordControl
+                <CreateResetPasswordControl
                   userId={userId}
                   email={userEmail}
                   name={userFirstName}
@@ -136,6 +135,7 @@ class EditExtendedInfo extends Component {
               )
               : <PasswordControl />
           }
+          <RequestPreferencesEdit addressTypes={addressTypes} />
         </Row>
         <br />
       </Accordion>

@@ -26,7 +26,7 @@ import {
   getFormValues,
 } from 'redux-form';
 
-import { getFullName } from '../../../util';
+import { getFullName } from '../../util';
 import css from './ProxyEditItem.css';
 
 class ProxyEditItem extends React.Component {
@@ -149,12 +149,6 @@ class ProxyEditItem extends React.Component {
     const relationStatusOptions = this.optionsFor(['active', 'inactive']);
     const requestForSponsorOptions = this.optionsFor(['yes', 'no']);
     const notificationsToOptions = this.optionsFor(['proxy', 'sponsor']);
-
-    // const accrueToOptions = this.optionsFor(['proxy', 'sponsor']);
-    //   label: formatMessage({ id: `ui-users.${option}` }),
-    //   value: option,
-    //   selected: record.proxy && record.proxy.accrueTo === option
-    // }));
     const proxyLinkMsg = <FormattedMessage id="ui-users.proxy.relationshipCreated" />;
     const proxyCreatedValue = get(record, 'proxy.metadata.createdDate', null);
     const proxyCreatedDate = proxyCreatedValue ? <FormattedTime

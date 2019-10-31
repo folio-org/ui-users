@@ -15,9 +15,9 @@ export default function config() {
       name: 'Circulation Module',
       provides: [
         { id: 'circulation', version: '7.4' },
-        { id: 'loan-policy-storage', version: '7.4' }
+        { id: 'loan-policy-storage', version: '7.4' },
       ]
-    }
+    },
   ]);
 
   this.get('/saml/check', {
@@ -112,9 +112,12 @@ export default function config() {
   this.get('/users', ({ users }, request) => {
     if (request.queryParams.query) {
       const cqlParser = new CQLParser();
-      const query = request.queryParams.query.split('sortby')[0];
+      // get the CQL query param from 'query=' until the amphersand or end of the string
+      let query = /query=(\(.*\)|%28.*%29)/.exec(request.url)[1];
       const filterField = 'active';
-
+      if (/^%28/.test(query)) {
+        query = decodeURIComponent(query);
+      }
       cqlParser.parse(query);
 
       const {
@@ -165,15 +168,70 @@ export default function config() {
     return servicePointsUsers.find(request.params.id).attrs;
   });
 
-  this.get('/service-points');
+  this.post('/service-points-users/', (schema, { requestBody }) => {
+    const spu = JSON.parse(requestBody);
+    return server.create('service-points-user', spu);
+  });
 
-  this.get('/circulation/loans', function ({ loans }) {
+  this.get('/service-points', (schema) => {
+    return this.serializerOrRegistry.serialize(schema.servicePoints.all());
+  });
+
+  this.get('/circulation/loans', function ({ loans }, request) {
+    if (request.queryParams.query) {
+      const url = new URL(request.url.split('sortby')[0]);
+      const query = url.searchParams.get('query');
+      const cqlParser = new CQLParser();
+
+      cqlParser.parse(query);
+
+      const {
+        tree: {
+          term,
+          field,
+        }
+      } = cqlParser;
+
+      if (field === 'userId') {
+        return loans.where((loan) => {
+          return loan.userId === term;
+        });
+      }
+    }
+
     return this.serializerOrRegistry.serialize(loans.all());
   });
 
-  this.get('loan-storage/loan-history', {
-    loansHistory: [],
-    totalRecords: 0,
+  this.get('loan-storage/loans/:loanid', {
+    loans: [],
+    totalRecords: 0
+  });
+
+  this.get('loan-storage/loan-history', ({ loanactions }, request) => {
+    if (request.queryParams.query) {
+      const query = /query=(\(.*\)|%28.*%29)/.exec(request.url)[1];
+      const cqlParser = new CQLParser();
+
+      cqlParser.parse(query);
+
+      const {
+        tree: {
+          term,
+          field,
+        }
+      } = cqlParser;
+
+      if (field === 'loan.id') {
+        return loanactions.where((loanaction) => {
+          return loanaction.loan.id === term;
+        });
+      }
+    }
+
+    return {
+      loansHistory: [],
+      totalRecords: 0,
+    };
   });
 
   this.get('/circulation/requests', function ({ requests }) {
@@ -212,7 +270,7 @@ export default function config() {
     'totalRecords': 1
   });
 
-  this.get('accounts', {
+  this.get('/accounts', {
     accounts: [],
     totalRecords: 0,
     resultInfo: {
@@ -221,8 +279,18 @@ export default function config() {
       diagnostics: [],
     },
   });
+
+  this.get('/accounts/:id', ({ accounts }, request) => {
+    return accounts.find(request.params.id).attrs;
+  });
+
+  this.post('/accounts', function (schema, { requestBody }) {
+    const acct = JSON.parse(requestBody);
+    return server.create('accounts', acct);
+  });
+
   this.get('waives', {
-    waiver: [],
+    waivers: [],
     totalRecords: 0,
     resultInfo: {
       totalRecords: 0,
@@ -248,14 +316,43 @@ export default function config() {
       diagnostics: [],
     },
   });
-  this.get('feefines', {
-    feefines: [],
-    totalRecords: 0,
-    resultInfo: {
+  this.get('feefines', function ({ feefines }, request) {
+    if (request.queryParams.query) {
+      if (request.queryParams.query.includes('allRecords')) {
+        return this.serializerOrRegistry.serialize(feefines.all());
+      }
+      const query = /query=(\(.*\)|%28.*%29)/.exec(request.url)[1];
+      const cqlParser = new CQLParser();
+
+      cqlParser.parse(query);
+
+      const {
+        tree: {
+          left,
+          right,
+        }
+      } = cqlParser;
+
+      if (left.field === 'ownerId' || right.field === 'ownerId') {
+        return feefines.where((feefine) => {
+          return feefine.ownerId === left.term || feefine.ownerId === right.term;
+        });
+      }
+    }
+
+    return {
+      feefines: [],
       totalRecords: 0,
-      facets: [],
-      diagnostics: [],
-    },
+      resultInfo: {
+        totalRecords: 0,
+        facets: [],
+        diagnostics: [],
+      },
+    };
+  });
+  this.get('/transfers', {
+    transfers: [],
+    totalRecords: 0
   });
   this.get('/manualblocks', {
     manualblocks: [],
@@ -268,13 +365,17 @@ export default function config() {
     return this.serializerOrRegistry.serialize(permissions.all());
   });
 
-  this.get('/feefineactions', {
-    feefineactions: [],
-    totalRecords: 0,
+  this.get('/feefineactions', ({ feefineactions }) => {
+    return this.serializerOrRegistry.serialize(feefineactions.all());
   });
-  this.get('/owners', {
-    owners: [],
-    totalRecords: 0,
+
+  this.post('/feefineactions', (schema, { requestBody }) => {
+    const ffAction = JSON.parse(requestBody);
+    return server.create('feefineactions', ffAction);
+  });
+
+  this.get('/owners', ({ owners }) => {
+    return this.serializerOrRegistry.serialize(owners.all());
   });
 
   this.get('/authn/credentials-existence', () => { });

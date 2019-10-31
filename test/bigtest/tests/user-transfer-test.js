@@ -12,7 +12,7 @@ describe('Test transfer', () => {
   setupApplication({ scenarios: ['transfers'] });
 
   beforeEach(async function () {
-    await this.visit('users/view/1ad737b0-d847-11e6-bf26-cec0c932ce02?filters=active.inactive&layer=all-accounts&sort=name');
+    await this.visit('users/1ad737b0-d847-11e6-bf26-cec0c932ce02/accounts/all');
   });
 
   describe('Transfer fines', () => {
@@ -144,6 +144,7 @@ describe('Test transfer', () => {
           expect(TransferInteractor.amount.val).to.equal('');
         });
       });
+
       // transfer many
       describe('go to all accounts', () => {
         beforeEach(async () => {

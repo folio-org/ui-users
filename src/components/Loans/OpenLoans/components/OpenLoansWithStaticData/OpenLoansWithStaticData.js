@@ -48,8 +48,9 @@ class OpenLoansWithStaticData extends React.Component {
     showChangeDueDateDialog: PropTypes.func.isRequired,
     hideChangeDueDateDialog: PropTypes.func.isRequired,
     onClosePatronBlockedModal: PropTypes.func.isRequired,
-    onClickViewLoanActionsHistory: PropTypes.func.isRequired,
-    feeFineCount: PropTypes.number,
+    feeFineCount: PropTypes.func.isRequired,
+    history: PropTypes.object,
+    match: PropTypes.object,
   };
 
   setFormatters() {
@@ -194,10 +195,10 @@ class OpenLoansWithStaticData extends React.Component {
       changeDueDateDialogOpen,
       loans,
       stripes,
-      onClickViewLoanActionsHistory,
       user,
       possibleColumns,
       hideChangeDueDateDialog,
+      requestCounts,
       renewSelected,
       showChangeDueDateDialog,
       toggleColumn,
@@ -209,7 +210,6 @@ class OpenLoansWithStaticData extends React.Component {
       openPatronBlockedModal,
       activeLoan,
       isLoanChecked,
-      requestCounts,
     } = this.props;
 
     this.setFormatters();
@@ -240,8 +240,9 @@ class OpenLoansWithStaticData extends React.Component {
           loanFormatter={this.loanFormatter}
           columnMapping={this.columnMapping}
           sortOrder={this.sortOrder}
-          onClickViewLoanActionsHistory={onClickViewLoanActionsHistory}
           possibleColumns={possibleColumns}
+          history={this.props.history}
+          match={this.props.match}
         />
         <Modals
           user={user}

@@ -16,7 +16,7 @@ import {
 import { Pluggable } from '@folio/stripes/core';
 
 import ErrorModal from '../../ErrorModal';
-import { getFullName } from '../../../util';
+import { getFullName } from '../../util';
 import css from './ProxyEditList.css';
 
 class ProxyEditList extends React.Component {
@@ -177,15 +177,17 @@ class ProxyEditList extends React.Component {
             <h3 className={css.label}>{label}</h3>
           </Col>
         </Row>
-        {items.length ?
-          items :
-          <p className={css.isEmptyMessage}>
-            <FormattedMessage
-              id="ui-users.noItemFound"
-              values={{ item: name }}
-            />
-          </p>
-        }
+        <Layout className="fullWidth" data-test={name}>
+          {items.length ?
+            items :
+            <p className={css.isEmptyMessage}>
+              <FormattedMessage
+                id="ui-users.noItemFound"
+                values={{ item: name }}
+              />
+            </p>
+          }
+        </Layout>
         <Row>
           <Col xs={4}>
             <Layout>

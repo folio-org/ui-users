@@ -16,20 +16,19 @@ import {
 } from '@folio/stripes/components';
 import { AddressEditList } from '@folio/stripes/smart-components';
 
-import { toAddressTypeOptions } from '../../../converters/address_type';
-import contactTypes from '../../../data/contactTypes';
+import { toAddressTypeOptions } from '../../data/converters/address_type';
+import contactTypes from '../../data/static/contactTypes';
 
 const EditContactInfo = ({
   expanded,
   onToggle,
   accordionId,
-  parentResources,
-  initialValues,
+  addressTypes,
+  preferredContactTypeId,
   intl,
 }) => {
-  const addressTypes = (parentResources.addressTypes || {}).records || [];
   const contactTypeOptions = (contactTypes || []).map(g => {
-    const selected = initialValues.preferredContactTypeId === g.id;
+    const selected = preferredContactTypeId === g.id;
     return (
       <FormattedMessage key={g.id} id={g.desc}>
         {(message) => <option selected={selected} value={g.id}>{message}</option>}
@@ -112,8 +111,8 @@ EditContactInfo.propTypes = {
   expanded: PropTypes.bool,
   onToggle: PropTypes.func,
   accordionId: PropTypes.string.isRequired,
-  parentResources: PropTypes.object,
-  initialValues: PropTypes.object,
+  addressTypes: PropTypes.arrayOf(PropTypes.object),
+  preferredContactTypeId: PropTypes.string,
   intl: intlShape.isRequired,
 };
 

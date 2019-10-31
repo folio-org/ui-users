@@ -1,15 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-
+import { withRouter } from 'react-router-dom';
 import {
   Button,
   MenuItem,
   IconButton,
 } from '@folio/stripes/components';
-import {
-  stripesShape,
-} from '@folio/stripes/core';
+import { stripesShape } from '@folio/stripes/core';
 
 import Popdown from './Popdown';
 import css from './ActionsDropdown.css';
@@ -21,6 +19,7 @@ class ActionsDropdown extends React.Component {
     requestQueue: PropTypes.bool.isRequired,
     handleOptionsChange: PropTypes.func.isRequired,
     disableFeeFineDetails: PropTypes.bool,
+    match: PropTypes.object,
   };
 
   itemClick = () => {
@@ -34,8 +33,8 @@ class ActionsDropdown extends React.Component {
   render() {
     const {
       loan,
-      requestQueue,
       handleOptionsChange,
+      requestQueue,
       stripes,
       disableFeeFineDetails,
     } = this.props;
@@ -61,7 +60,8 @@ class ActionsDropdown extends React.Component {
             >
               <Button
                 buttonStyle="dropdownItem"
-                href={itemDetailsLink}
+                to={itemDetailsLink}
+                onClick={(e) => { e.stopPropagation(); }}
               >
                 <FormattedMessage id="ui-users.itemDetails" />
               </Button>
@@ -76,25 +76,30 @@ class ActionsDropdown extends React.Component {
           >
             <Button
               buttonStyle="dropdownItem"
+              onClick={(e) => { handleOptionsChange({ loan, action:'renew' }, e); }}
               data-test-dropdown-content-renew-button
             >
               <FormattedMessage id="ui-users.renew" />
             </Button>
           </MenuItem>
-          <MenuItem
-            itemMeta={{
-              loan,
-              action: 'changeDueDate',
-            }}
-            onSelectItem={handleOptionsChange}
-          >
-            <Button
-              buttonStyle="dropdownItem"
-              data-test-dropdown-content-change-due-date-button
+          {
+            stripes.hasPerm('ui-users.loans.edit') &&
+            <MenuItem
+              itemMeta={{
+                loan,
+                action: 'changeDueDate',
+              }}
+              onSelectItem={handleOptionsChange}
             >
-              <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />
-            </Button>
-          </MenuItem>
+              <Button
+                buttonStyle="dropdownItem"
+                onClick={(e) => { handleOptionsChange({ loan, action:'changeDueDate' }, e); }}
+                data-test-dropdown-content-change-due-date-button
+              >
+                <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />
+              </Button>
+            </MenuItem>
+          }
           <MenuItem
             itemMeta={{
               loan,
@@ -152,4 +157,4 @@ class ActionsDropdown extends React.Component {
   }
 }
 
-export default ActionsDropdown;
+export default withRouter(ActionsDropdown);

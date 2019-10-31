@@ -19,11 +19,10 @@ describe('Change due date', () => {
     const requestsAmount = 2;
 
     beforeEach(async function () {
-      const user = this.server.create('user');
       const loan = this.server.create('loan', { status: { name: 'Open' } });
 
       this.server.createList('request', requestsAmount, { itemId: loan.itemId });
-      this.visit(`/users/view/${user.id}?layer=open-loans&query=%20&sort=requests`);
+      this.visit(`/users/${loan.userId}/loans/open`);
       await OpenLoansInteractor.whenLoaded();
     });
 

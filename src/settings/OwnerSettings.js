@@ -11,7 +11,7 @@ import { MultiSelection } from '@folio/stripes/components';
 import { ControlledVocab } from '@folio/stripes/smart-components';
 import { stripesConnect, withStripes } from '@folio/stripes/core';
 
-import { validate } from '../util';
+import { validate } from '../components/util';
 
 class OwnerSettings extends React.Component {
   static manifest = Object.freeze({

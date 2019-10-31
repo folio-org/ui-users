@@ -6,7 +6,7 @@ import {
 } from 'react-intl';
 import { ControlledVocab } from '@folio/stripes/smart-components';
 import { withStripes } from '@folio/stripes/core';
-import { validate } from '../util';
+import { validate } from '../components/util';
 
 class WaiveSettings extends React.Component {
   static propTypes = {

@@ -10,11 +10,12 @@ import {
   Col,
   Checkbox,
 } from '@folio/stripes/components';
+
 import { FormattedMessage } from 'react-intl';
 import stripesForm from '@folio/stripes/form';
 import { Field, change } from 'redux-form';
 
-import UserDetails from './UserDetails';
+import UserInfo from './UserInfo';
 import FeeFineInfo from './FeeFineInfo';
 import ItemInfo from './ItemInfo';
 
@@ -68,7 +69,7 @@ class ChargeForm extends React.Component {
     owners: PropTypes.arrayOf(PropTypes.object),
     ownerList: PropTypes.arrayOf(PropTypes.object),
     feefines: PropTypes.arrayOf(PropTypes.object),
-    onClickCancel: PropTypes.func.isRequired,
+    onClickCancel: PropTypes.func,
     onChangeOwner: PropTypes.func.isRequired,
     onClickPay: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
@@ -82,6 +83,8 @@ class ChargeForm extends React.Component {
     onSubmit: PropTypes.func,
     servicePointsIds: PropTypes.arrayOf(PropTypes.string),
     defaultServicePointId: PropTypes.string,
+    location: PropTypes.object,
+    history: PropTypes.object,
   }
 
   constructor(props) {
@@ -96,7 +99,9 @@ class ChargeForm extends React.Component {
   componentDidMount() {
     const { initialValues } = this.props;
     feefineamount = 0.00;
-    this.props.onChangeOwner({ target: { value: initialValues.ownerId } });
+    if (initialValues) {
+      this.props.onChangeOwner({ target: { value: initialValues.ownerId } });
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -113,7 +118,7 @@ class ChargeForm extends React.Component {
       const shared = (owners.find(o => o.owner === 'Shared') || {}).id;
       onFindShared(shared);
     }
-    if (initialValues.ownerId !== prevProps.initialValues.ownerId) {
+    if (initialValues && initialValues.ownerId !== prevProps.initialValues.ownerId) {
       this.props.onChangeOwner({ target: { value: initialValues.ownerId } });
     }
   }
@@ -156,12 +161,14 @@ class ChargeForm extends React.Component {
 
   render() {
     const {
+      history,
+      user,
       dispatch,
       initialValues,
-      selectedLoan,
-      user
+      selectedLoan: selectedLoanProp,
     } = this.props;
     const { notify } = this.state;
+    const selectedLoan = selectedLoanProp || {};
     const editable = !(selectedLoan.id);
     const itemLoan = {
       id: selectedLoan.itemId,
@@ -174,11 +181,11 @@ class ChargeForm extends React.Component {
     };
     const item = (editable) ? this.props.item : itemLoan;
     const feefineList = [];
-    const owners = [];
+    const ownerOptions = [];
 
-    this.props.ownerList.forEach(own => {
+    this.props.owners.forEach(own => {
       const owner = own || {};
-      if (owner.owner !== 'Shared') owners.push({ label: owner.owner, value: owner.id });
+      if (owner.owner !== 'Shared') ownerOptions.push({ label: owner.owner, value: owner.id });
     });
 
     this.props.feefines.forEach((feefine) => {
@@ -192,8 +199,9 @@ class ChargeForm extends React.Component {
 
     const lastMenu = (
       <PaneMenu>
-        <Button onClick={this.props.onClickCancel} style={mg}><FormattedMessage id="ui-users.feefines.modal.cancel" /></Button>
+        <Button id="cancelCharge" onClick={() => { this.props.history.goBack(); }} style={mg}><FormattedMessage id="ui-users.feefines.modal.cancel" /></Button>
         <Button
+          id="chargeAndPay"
           disabled={this.props.pristine || this.props.submitting || this.props.invalid}
           onClick={this.props.handleSubmit(data => this.props.onSubmit({ ...data, pay: true, notify }))}
           style={mg}
@@ -201,6 +209,7 @@ class ChargeForm extends React.Component {
           <FormattedMessage id="ui-users.charge.Pay" />
         </Button>
         <Button
+          id="chargeOnly"
           disabled={this.props.pristine || this.props.submitting || this.props.invalid}
           onClick={this.props.handleSubmit(data => this.props.onSubmit({ ...data, pay: false, notify }))}
           style={mg}
@@ -214,20 +223,20 @@ class ChargeForm extends React.Component {
         <Pane
           defaultWidth="100%"
           dismissible
-          onClose={this.props.onClickCancel}
+          onClose={() => { history.goBack(); }}
           paneTitle={(
             <FormattedMessage id="ui-users.charge.title" />
           )}
           lastMenu={lastMenu}
         >
-          <UserDetails user={user} />
+          <UserInfo user={user} />
           <br />
-          <form>
+          <form id="feeFineChargeForm">
             <FeeFineInfo
               dispatch={dispatch}
               initialValues={initialValues}
               stripes={this.props.stripes}
-              owners={owners}
+              ownerOptions={ownerOptions}
               isPending={this.props.isPending}
               onChangeOwner={this.onChangeOwner}
               onChangeFeeFine={this.onChangeFeeFine}

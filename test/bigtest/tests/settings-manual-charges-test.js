@@ -110,11 +110,9 @@ describe('Manual charges', () => {
     });
 
     it('renders proper values after update', () => {
-      const firstRow = FeeFineInteractor.list.rows(0);
-
-      expect(firstRow.cells(0).text).to.equal('Changed value');
-      expect(firstRow.cells(1).text).to.equal('300.00');
-      expect(firstRow.cells(3).text).to.equal('Template 1');
+      expect(FeeFineInteractor.list.rows(0).cells(0).text).to.equal('Changed value');
+      expect(FeeFineInteractor.list.rows(0).cells(1).text).to.equal('300.00');
+      expect(FeeFineInteractor.list.rows(0).cells(3).text).to.equal('Template 1');
     });
   });
 

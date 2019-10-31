@@ -48,7 +48,7 @@ const newManualFeeSelector = '#clickable-add-feefine-manual-charges';
   static defaultScope = '#feefines';
 
   whenLoaded() {
-    return this.when(() => this.isLoaded);
+    return this.when(() => this.isLoaded).timeout(3000);
   }
 
   isLoaded = isPresent(rowSelector);

@@ -366,6 +366,17 @@
   "requests.createRequest": "Create request",
   "requests.numOpenRequests": "{count, number} {count, plural, one {open request} other {open requests}}",
   "requests.numClosedRequests": "{count, number} {count, plural, one {closed request} other {closed requests}}",
+  "requests.preferences": "Request preferences",
+  "requests.defaultServicePoint": "Default service point",
+  "requests.fulfillmentPreference": "Fulfillment preference",
+  "requests.defaultDeliveryAddress": "Default delivery address",
+  "requests.deliveryYes": "Delivery - Yes",
+  "requests.deliveryNo": "Delivery - No",
+  "requests.holdShelf": "Hold Shelf",
+  "requests.delivery": "Delivery",
+  "requests.holdShelfYes": "Hold shelf - Yes",
+  "requests.holdShelfNo": "Hold shelf - No",
+  "requests.selectDeliveryAddress": "Select delivery address",
 
   "permissions.emptyField": "Please fill this in to continue",
   "permissions.noSponsorsFound": "No sponsors found",
@@ -900,5 +911,6 @@
   "permissions.modal.numberOfFilters": "{count, number} {count, plural, one {applied filter} other {applied filters}}",
 
   "anonymization.confirmation.header": "Anonymization prevented",
-  "anonymization.confirmation.message": "{amount} loan(s) had associated fees/fines and could not be anonymized."
+  "anonymization.confirmation.message": "{amount} loan(s) had associated fees/fines and could not be anonymized.",
+  "addAddressError": "Please, add at least one address inside \"Addresses\" section"
 }

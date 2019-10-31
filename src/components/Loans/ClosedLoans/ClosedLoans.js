@@ -20,35 +20,18 @@ import {
 
 import {
   IfPermission,
+  IntlConsumer,
   stripesShape,
 } from '@folio/stripes/core';
 
+import { nav } from '../../util';
 import ActionsBar from '../components/ActionsBar';
 import Label from '../../Label';
 import ErrorModal from '../../ErrorModal';
 
 class ClosedLoans extends React.Component {
-  static manifest = Object.freeze({
-    query: {},
-    loanAccount: {
-      type: 'okapi',
-      records: 'accounts',
-      path: 'accounts?query=userId=%{activeRecord.user}',
-    },
-    anonymize: {
-      type: 'okapi',
-      fetch: false,
-      POST: {
-        path: 'loan-anonymization/by-user/%{activeRecord.user}',
-      },
-    },
-    activeRecord: {},
-  });
-
   static propTypes = {
     stripes: stripesShape.isRequired,
-    buildRecords: PropTypes.func,
-    onClickViewLoanActionsHistory: PropTypes.func.isRequired,
     loans: PropTypes.arrayOf(PropTypes.object).isRequired,
     mutator: PropTypes.shape({
       query: PropTypes.object.isRequired,
@@ -60,13 +43,10 @@ class ClosedLoans extends React.Component {
     resources: PropTypes.shape({
       query: PropTypes.object,
     }),
+    match: PropTypes.object,
     user: PropTypes.object,
-    onClickViewChargeFeeFine: PropTypes.func,
-    onClickViewAccountActionsHistory: PropTypes.func.isRequired,
-    onClickViewOpenAccounts: PropTypes.func.isRequired,
-    onClickViewClosedAccounts: PropTypes.func.isRequired,
-    onClickViewAllAccounts: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
+    history: PropTypes.object.isRequired,
   };
 
   constructor(props) {
@@ -155,6 +135,14 @@ class ClosedLoans extends React.Component {
     }
     this.setState({ sortOrder, sortDirection });
   }
+
+  onRowClick = (e, row) => {
+    e.stopPropagation();
+    if (e.target.type !== 'button') {
+      const { history, match: { params } } = this.props;
+      nav.onClickViewLoanActionsHistory(e, row, history, params);
+    }
+  };
 
   getFeeFine(loan) {
     const accounts = _.get(this.props.resources, ['loanAccount', 'records'], []);
@@ -246,37 +234,31 @@ class ClosedLoans extends React.Component {
     }
   }
 
-  itemDetails(loan, e) {
-    if (e) e.preventDefault();
-
-    // none of the query params relevent to finding a user
-    // are relevent to finding instances so we purge them all.
-    const q = {};
-    Object.keys(this.props.resources.query).forEach((k) => { q[k] = null; });
-
-    this.props.mutator.query.update({
-      _path: `/inventory/view/${loan.item.instanceId}/${loan.item.holdingsRecordId}/${loan.itemId}`,
-      ...q,
-    });
+  itemDetails = (loan) => {
+    const { history } = this.props;
+    history.push(`/inventory/view/${loan.item.instanceId}/${loan.item.holdingsRecordId}/${loan.itemId}`);
   }
 
-  feefine(loan, e) {
-    this.props.onClickViewChargeFeeFine(e, loan);
+  feefine = (loan) => {
+    const { history, match: { params } } = this.props;
+    history.push(`/users/${params.id}/charge/${loan.id}`);
   }
 
-  feefinedetails(loan, e) {
+  feefineDetails = (loan, e) => {
+    const { history, match: { params } } = this.props;
+
     const accounts = _.get(this.props.resources, ['loanAccount', 'records'], []);
     const accountsLoan = accounts.filter(a => a.loanId === loan.id) || [];
     if (accountsLoan.length === 1) {
-      this.props.onClickViewAccountActionsHistory(e, { id: accountsLoan[0].id });
+      nav.onClickViewAccountActionsHistory(e, { id: accountsLoan[0].id }, history, params);
     } else if (accountsLoan.length > 1) {
       const open = accountsLoan.filter(a => a.status.name === 'Open') || [];
       if (open.length === accountsLoan.length) {
-        this.props.onClickViewOpenAccounts(e, loan);
+        nav.onClickViewOpenAccounts(e, loan, history, params);
       } else if (open.length === 0) {
-        this.props.onClickViewClosedAccounts(e, loan);
+        nav.onClickViewClosedAccounts(e, loan, history, params);
       } else {
-        this.props.onClickViewAllAccounts(e, loan);
+        nav.onClickViewAllAccounts(e, loan, history, params);
       }
     }
   }
@@ -311,6 +293,26 @@ class ClosedLoans extends React.Component {
     }
   }
 
+  buildRecords(records) {
+    return records.map((record) => {
+      const {
+        item,
+        item: { contributors },
+      } = record;
+
+      return _.isArray(contributors) ?
+        {
+          ...record,
+          item: {
+            ...item,
+            contributors: contributors
+              .map((currentContributor) => currentContributor.name)
+              .join('; ')
+          }
+        } : record;
+    });
+  }
+
   closeLoansAnonymizationErrorModal = () => {
     this.setState({
       anonymizationErrorModalOpen: false,
@@ -318,7 +320,7 @@ class ClosedLoans extends React.Component {
     });
   };
 
-  renderActions(loan) {
+  renderActions = (loan) => {
     const accounts = _.get(this.props.resources, ['loanAccount', 'records'], []);
     const accountsLoan = accounts.filter(a => a.loanId === loan.id) || [];
     const { stripes } = this.props;
@@ -331,15 +333,24 @@ class ClosedLoans extends React.Component {
         <IconButton data-role="toggle" icon="ellipsis" size="small" iconSize="medium" />
         <DropdownMenu data-role="menu" overrideStyle={{ padding: '7px 3px' }}>
           <IfPermission perm="inventory.items.item.get">
-            <MenuItem itemMeta={{ loan, action: 'itemDetails' }}>
-              <Button buttonStyle="dropdownItem" href={`/inventory/view/${loan.item.instanceId}/${loan.item.holdingsRecordId}/${loan.itemId}`}><FormattedMessage id="ui-users.itemDetails" /></Button>
+            <MenuItem itemMeta={{ loan, action: 'itemDetails' }} onSelectItem={this.handleOptionsChange}>
+              <Button buttonStyle="dropdownItem">
+                <FormattedMessage id="ui-users.itemDetails" />
+              </Button>
             </MenuItem>
           </IfPermission>
-          <MenuItem itemMeta={{ loan, action: 'feefine' }}>
-            <Button disabled={buttonDisabled} buttonStyle="dropdownItem"><FormattedMessage id="ui-users.loans.newFeeFine" /></Button>
+          <MenuItem itemMeta={{ loan, action: 'feefine' }} onSelectItem={this.handleOptionsChange}>
+            <Button disabled={buttonDisabled} buttonStyle="dropdownItem">
+              <FormattedMessage id="ui-users.loans.newFeeFine" />
+            </Button>
           </MenuItem>
-          <MenuItem itemMeta={{ loan, action: 'feefinedetails' }}>
-            <Button disabled={!(accountsLoan.length > 0)} buttonStyle="dropdownItem"><FormattedMessage id="ui-users.loans.feeFineDetails" /></Button>
+          <MenuItem itemMeta={{ loan, action: 'feefineDetails' }} onSelectItem={this.handleOptionsChange}>
+            <Button
+              disabled={accountsLoan.length === 0}
+              buttonStyle="dropdownItem"
+            >
+              <FormattedMessage id="ui-users.loans.feeFineDetails" />
+            </Button>
           </MenuItem>
         </DropdownMenu>
       </UncontrolledDropdown>
@@ -354,9 +365,7 @@ class ClosedLoans extends React.Component {
       failedAnonymizationLoansCount,
     } = this.state;
     const {
-      onClickViewLoanActionsHistory,
       loans,
-      buildRecords
     } = this.props;
 
     const visibleColumns = ['title', 'dueDate', 'barcode', 'Fee/Fine', 'Call Number', 'Contributors', 'renewals', 'loanDate', 'returnDate', 'checkinServicePoint', ' '];
@@ -364,7 +373,7 @@ class ClosedLoans extends React.Component {
     const loansSorted = _.orderBy(loans,
       [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
     const clonedLoans = _.cloneDeep(loans);
-    const recordsToCSV = buildRecords(clonedLoans);
+    const recordsToCSV = this.buildRecords(clonedLoans);
     return (
       <div data-test-closed-loans>
         <ActionsBar
@@ -377,31 +386,33 @@ class ClosedLoans extends React.Component {
               />
             </Label>}
           contentEnd={
-            <div>
-              <Button
-                marginBottom0
-                id="anonymize-all"
-                onClick={this.anonymizeLoans}
-              >
-                {anonymizeString}
-              </Button>
-              <ExportCsv
-                data={recordsToCSV}
-                onlyFields={this.columnHeadersMap}
-              />
-              <ErrorModal
-                id="anonymization-fees-fines-modal"
-                open={anonymizationErrorModalOpen}
-                label={<FormattedMessage id="ui-users.anonymization.confirmation.header" />}
-                message={(
-                  <FormattedMessage
-                    id="ui-users.anonymization.confirmation.message"
-                    values={{ amount: failedAnonymizationLoansCount }}
+            <IntlConsumer>
+              {intl => (
+                <div>
+                  <Button
+                    marginBottom0
+                    id="anonymize-all"
+                    onClick={this.anonymizeLoans}
+                  >
+                    {anonymizeString}
+                  </Button>
+                  <ExportCsv
+                    data={recordsToCSV}
+                    onlyFields={this.columnHeadersMap}
                   />
-                )}
-                onClose={this.closeLoansAnonymizationErrorModal}
-              />
-            </div>
+                  <ErrorModal
+                    id="anonymization-fees-fines-modal"
+                    open={anonymizationErrorModalOpen}
+                    label={intl.formatMessage({ id: 'ui-users.anonymization.confirmation.header' })}
+                    message={intl.formatMessage({
+                      id: 'ui-users.anonymization.confirmation.header',
+                      values: { amount: failedAnonymizationLoansCount },
+                    })}
+                    onClose={this.closeLoansAnonymizationErrorModal}
+                  />
+                </div>
+              )}
+            </IntlConsumer>
           }
         />
         <MultiColumnList
@@ -416,7 +427,7 @@ class ClosedLoans extends React.Component {
           contentData={loansSorted}
           sortOrder={sortOrder[0]}
           sortDirection={`${sortDirection[0]}ending`}
-          onRowClick={onClickViewLoanActionsHistory}
+          onRowClick={this.onRowClick}
           totalCount={loansSorted.length}
         />
       </div>

@@ -28,7 +28,7 @@ const Filters = (props) => {
           id="search-button"
           type="button"
           onClick={() => {
-            props.parentMutator.query.update({ loan: null });
+            props.mutator.query.update({ loan: null });
           }}
         >
           {props.query.loan}
@@ -50,7 +50,7 @@ Filters.propTypes = {
   toggle: PropTypes.func,
   showFilters: PropTypes.bool,
   onChangeSearch: PropTypes.func,
-  parentMutator: PropTypes.object,
+  mutator: PropTypes.object,
   filterConfig: PropTypes.arrayOf(PropTypes.object),
   filters: PropTypes.object,
   onChangeFilter: PropTypes.func,
