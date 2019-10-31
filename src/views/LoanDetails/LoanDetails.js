@@ -23,7 +23,11 @@ import {
 } from '@folio/stripes/components';
 import { IfPermission } from '@folio/stripes/core';
 import PatronBlockModal from '../../components/PatronBlock/PatronBlockModal';
-import { getFullName, nav } from '../../components/util';
+import {
+  getFullName,
+  nav,
+  getOpenRequestsPath,
+} from '../../components/util';
 import { withRenew } from '../../components/Wrappers';
 import loanActionMap from '../../components/data/static/loanActionMap';
 import LoanProxyDetails from './LoanProxyDetails';
@@ -31,9 +35,6 @@ import ViewLoading from '../../components/Loading/ViewLoading';
 
 import css from './LoanDetails.css';
 
-/**
- * Detail view of a user's loan.
- */
 class LoanDetails extends React.Component {
   static propTypes = {
     stripes: PropTypes.object.isRequired,
@@ -301,7 +302,7 @@ class LoanDetails extends React.Component {
 
     const itemRequestCount = requestCounts[this.props.loan.itemId] || 0;
     const requestQueueValue = (itemRequestCount && stripes.hasPerm('ui-users.requests.all,ui-requests.all'))
-      ? (<Link to={`/requests?filters=requestStatus.Open%20-%20Not%20yet%20filled%2CrequestStatus.Open%20-%20Awaiting%20pickup%2CrequestStatus.Open%20-%20In%20transit&query=${loan.item.barcode}&sort=Request%20Date`}>{itemRequestCount}</Link>)
+      ? (<Link to={getOpenRequestsPath(loan.item.barcode)}>{itemRequestCount}</Link>)
       : itemRequestCount;
     const contributorsList = this.getContributorslist(loan);
     const contributorsListString = contributorsList.join(' ');

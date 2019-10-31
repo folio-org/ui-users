@@ -2,6 +2,8 @@ import _ from 'lodash';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import { requestStatuses } from '../../constants';
+
 export function getFullName(user) {
   const lastName = _.get(user, 'personal.lastName', '');
   const firstName = _.get(user, 'personal.firstName', '');
@@ -57,4 +59,36 @@ export function retrieveNoteReferredEntityDataFromLocationState(state) {
   }
 
   return null;
+}
+
+export function getFilterStatusesString(statuses) {
+  return statuses.map(status => `requestStatus.${status}`).join(',');
+}
+
+export function getClosedRequestStatusesFilterString() {
+  const closedStatusesArr = [
+    requestStatuses.PICKUP_EXPIRED,
+    requestStatuses.CANCELLED,
+    requestStatuses.FILLED,
+    requestStatuses.UNFILLED,
+  ];
+
+  return getFilterStatusesString(closedStatusesArr);
+}
+
+export function getOpenRequestStatusesFilterString() {
+  const openStatusesArr = [
+    requestStatuses.AWAITING_PICKUP,
+    requestStatuses.AWAITING_DELIVERY,
+    requestStatuses.IN_TRANSIT,
+    requestStatuses.NOT_YET_FILLED,
+  ];
+
+  return getFilterStatusesString(openStatusesArr);
+}
+
+export function getOpenRequestsPath(barcode) {
+  const filterString = getOpenRequestStatusesFilterString();
+
+  return `/requests?filters=${filterString}&query=${barcode}&sort=Request Date`;
 }
