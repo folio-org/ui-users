@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/prefer-default-export
 export const requestStatuses = {
   AWAITING_PICKUP: 'Open - Awaiting pickup',
   AWAITING_DELIVERY: 'Open - Awaiting delivery',

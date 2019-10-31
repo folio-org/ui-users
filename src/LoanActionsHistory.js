@@ -22,7 +22,7 @@ import {
 } from '@folio/stripes/components';
 import { IfPermission } from '@folio/stripes/core';
 import PatronBlockModal from './components/PatronBlock/PatronBlockModal';
-import { 
+import {
   getFullName,
   getOpenRequestsPath,
 } from './util';

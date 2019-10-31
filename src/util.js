@@ -64,7 +64,7 @@ export function getClosedRequestStatusesFilterString() {
     requestStatuses.FILLED,
     requestStatuses.UNFILLED,
   ];
-  
+
   return getFilterStatusesString(closedStatusesArr);
 }
 
@@ -75,12 +75,12 @@ export function getOpenRequestStatusesFilterString() {
     requestStatuses.IN_TRANSIT,
     requestStatuses.NOT_YET_FILLED,
   ];
-  
+
   return getFilterStatusesString(openStatusesArr);
 }
 
 export function getOpenRequestsPath(barcode) {
   const filterString = getOpenRequestStatusesFilterString();
-  
+
   return `/requests?filters=${filterString}&query=${barcode}&sort=Request Date`;
 }

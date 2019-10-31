@@ -303,7 +303,7 @@ class OpenLoansControl extends React.Component {
     const { history } = this.props;
     const query = get(loan, ['item', 'barcode']);
     const path = getOpenRequestsPath(query);
-    
+
     history.push(path);
   };
 

@@ -16,7 +16,7 @@ import {
   IfPermission,
 } from '@folio/stripes/core';
 
-import { 
+import {
   getOpenRequestStatusesFilterString,
   getClosedRequestStatusesFilterString,
 } from '../../../util';
@@ -119,14 +119,12 @@ class UserRequests extends React.Component {
         </Button>
       </IfPermission>
     );
-    
+
     const closedFilterString = getClosedRequestStatusesFilterString();
     const openFilterString = getOpenRequestStatusesFilterString();
     const itemFormatter = stripes.hasPerm('ui-requests.all') ?
       this.renderLinkItem :
       this.renderItem;
-    
-  
 
     return (
       <Accordion
