@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  size,
   cloneDeep,
+  isEmpty,
 } from 'lodash';
 
 import {
@@ -120,7 +120,7 @@ class OpenLoansSubHeader extends React.Component {
       toggleDropdownState,
     } = this.state;
 
-    const noSelectedLoans = size(checkedLoans) === 0;
+    const noSelectedLoans = isEmpty(checkedLoans);
     const resultCount = <FormattedMessage id="ui-users.resultCount" values={{ count: loans.length }} />;
     const clonedLoans = cloneDeep(loans);
     const recordsToCSV = buildRecords(clonedLoans);
@@ -165,17 +165,19 @@ class OpenLoansSubHeader extends React.Component {
         }
         contentEnd={
           <span>
-            <Button
-              marginBottom0
-              id="renew-all"
-              disabled={noSelectedLoans}
-              onClick={countRenews.length > 0
-                ? openPatronBlockedModal
-                : renewSelected
-              }
-            >
-              <FormattedMessage id="ui-users.renew" />
-            </Button>
+            <IfPermission perm="ui-users.loans.renew">
+              <Button
+                marginBottom0
+                id="renew-all"
+                disabled={noSelectedLoans}
+                onClick={!isEmpty(countRenews)
+                  ? openPatronBlockedModal
+                  : renewSelected
+                }
+              >
+                <FormattedMessage id="ui-users.renew" />
+              </Button>
+            </IfPermission>
             <IfPermission perm="ui-users.loans.edit">
               <Button
                 marginBottom0

@@ -67,21 +67,26 @@ class ActionsDropdown extends React.Component {
               </Button>
             </MenuItem>
           }
-          <MenuItem
-            itemMeta={{
-              loan,
-              action: 'renew',
-            }}
-            onSelectItem={handleOptionsChange}
-          >
-            <Button
-              buttonStyle="dropdownItem"
-              onClick={(e) => { handleOptionsChange({ loan, action:'renew' }, e); }}
-              data-test-dropdown-content-renew-button
+          {
+            stripes.hasPerm('ui-users.loans.renew') &&
+            <MenuItem
+              itemMeta={{
+                loan,
+                action: 'renew',
+              }}
+              onSelectItem={handleOptionsChange}
             >
-              <FormattedMessage id="ui-users.renew" />
-            </Button>
-          </MenuItem>
+              <Button
+                buttonStyle="dropdownItem"
+                data-test-dropdown-content-renew-button
+                onClick={(e) => {
+                  handleOptionsChange({ loan, action: 'renew' }, e);
+                }}
+              >
+                <FormattedMessage id="ui-users.renew" />
+              </Button>
+            </MenuItem>
+          }
           {
             stripes.hasPerm('ui-users.loans.edit') &&
             <MenuItem

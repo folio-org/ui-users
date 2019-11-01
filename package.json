@@ -541,13 +541,10 @@
       },
       {
         "permissionName": "ui-users.loans.renew",
-        "displayName": "Loans: Renew loans",
-        "description": "Also includes basic permissions to view users",
+        "displayName": "Users: User loans renew",
+        "description": "Also includes backend permissions to perform loans renew",
         "subPermissions": [
-          "ui-users.view",
-          "circulation.loans.collection.get",
-          "circulation.loans.item.get",
-          "circulation.renew-by-id.post"
+          "circulation.renew-by-barcode.post"
         ],
         "visible": true
       },

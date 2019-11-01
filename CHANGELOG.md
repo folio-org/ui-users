@@ -11,6 +11,7 @@
 * Resolve bug updating a user just after creation. Fixes UIU-1314.
 * Implement edit loan permission. Refs UIU-1177.
 * Retrieve up to max available amount of overdue loans instead of 10 for CSV report. Refs UIU-1297.
+* Implement loans renew permission. Refs UIU-1176.
 
 ## [2.25.3](https://github.com/folio-org/ui-users/tree/v2.25.3) (2019-09-26)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.2...v2.25.3)
