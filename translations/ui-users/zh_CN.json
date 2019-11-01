@@ -832,7 +832,6 @@
     "anonymization.confirmation.header": "匿名化被阻止",
     "anonymization.confirmation.message": "{amount}笔借阅有关联费用/罚款，因此无法匿名化。",
     "requests.preferences": "Request preferences",
-    "requests.defaultServicePoint": "Default service point",
     "requests.fulfillmentPreference": "Fulfillment preference",
     "requests.defaultDeliveryAddress": "Default delivery address",
     "requests.deliveryYes": "Delivery - Yes",
@@ -842,5 +841,6 @@
     "requests.holdShelfYes": "Hold shelf - Yes",
     "requests.holdShelfNo": "Hold shelf - No",
     "requests.selectDeliveryAddress": "Select delivery address",
-    "addAddressError": "Please, add at least one address inside \"Addresses\" section"
+    "addAddressError": "Please, add at least one address inside \"Addresses\" section",
+    "requests.defaultPickupServicePoint": "Default pickup service point"
 }
