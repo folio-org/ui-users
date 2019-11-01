@@ -143,8 +143,17 @@ class RequestPreferencesEdit extends Component {
     }, []);
   }
 
-  defaultDeliveryAddressValidator = () => {
-    return this.props.addresses.length === 0 ? <FormattedMessage id="ui-users.addAddressError" /> : null;
+  // eslint-disable-next-line consistent-return
+  defaultDeliveryAddressValidator = (value, formData) => {
+    const nonEmptyAddresses = get(formData, 'personal.addresses', []).filter(address => !isEmpty(address));
+
+    if (nonEmptyAddresses.length === 0) {
+      return <FormattedMessage id="ui-users.addAddressError" />;
+    }
+
+    if (!value) {
+      return <FormattedMessage id="ui-users.errors.missingRequiredField" />;
+    }
   }
 
   resetDefaultDeliveryAddress() {
@@ -153,9 +162,9 @@ class RequestPreferencesEdit extends Component {
 
   onDeliveryCheckboxChange = (event) => {
     const { setFieldValue } = this.props;
-    const fulfilmentValue = event.target.checked ? deliveryFulfillmentValues.HOLD_SHELF : null;
+    const fulfillmentValue = event.target.checked ? deliveryFulfillmentValues.HOLD_SHELF : null;
 
-    setFieldValue('requestPreferences.fulfillment', fulfilmentValue);
+    setFieldValue('requestPreferences.fulfillment', fulfillmentValue);
     this.resetDefaultDeliveryAddress();
   }
 
