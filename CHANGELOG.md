@@ -3,7 +3,6 @@
 ## 2.26.0 (IN PROGRESS)
 * Prevent manual anonymization of closed loans with fees/fines. Refs UIU-1083.
 * Update sponsor and proxy labels. Refs UIU-1018.
-
 * Implement permission assigment by batch. Refs UIU-1249
 * Fix the mechanism for the accumulation of overdue loans in CSV report. Refs UIU-1286.
 * Implement view loans permission. Refs UIU-1175.
@@ -12,6 +11,7 @@
 * Implement edit loan permission. Refs UIU-1177.
 * Retrieve up to max available amount of overdue loans instead of 10 for CSV report. Refs UIU-1297.
 * Implement loans renew permission. Refs UIU-1176.
+* Retrieve up to 100k of requested user loans instead of 100. Refs UIU-1292.
 
 ## [2.25.3](https://github.com/folio-org/ui-users/tree/v2.25.3) (2019-09-26)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.2...v2.25.3)
