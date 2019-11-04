@@ -28,7 +28,7 @@ class LoansListingContainer extends React.Component {
     loansHistory: {
       type: 'okapi',
       records: 'loans',
-      path: 'circulation/loans?query=(userId=:{id}) sortby id&limit=100',
+      path: 'circulation/loans?query=(userId=:{id}) sortby id&limit=100000',
       permissionsRequired: 'circulation.loans.collection.get',
     },
     loanPolicies: {
