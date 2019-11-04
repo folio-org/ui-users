@@ -107,6 +107,10 @@ class ProxyEditItem extends React.Component {
     const today = moment().endOf('day');
     let error = '';
 
+
+    console.log('expirationDate:', moment(proxyRel.proxy.expirationDate).format("YYYY-MM-DD"));
+    console.log('today date    :', today.format("YYYY-MM-DD"));
+
     // proxy user expired
     if (get(proxyRel, 'user.expirationDate') && moment(proxyRel.user.expirationDate).endOf('day').isSameOrBefore(today)) {
       error = <FormattedMessage id={`ui-users.errors.${namespace}.expired`} />;
@@ -146,7 +150,9 @@ class ProxyEditItem extends React.Component {
       onDelete,
     } = this.props;
 
-    const relationStatusOptions = this.optionsFor(['active', 'inactive']);
+    const activeOptions = this.state.statusDisabled ? ['inactive'] : ['active', 'inactive'];
+    const relationStatusOptions = this.optionsFor(activeOptions);
+
     const requestForSponsorOptions = this.optionsFor(['yes', 'no']);
     const notificationsToOptions = this.optionsFor(['proxy', 'sponsor']);
     const proxyLinkMsg = <FormattedMessage id="ui-users.proxy.relationshipCreated" />;
