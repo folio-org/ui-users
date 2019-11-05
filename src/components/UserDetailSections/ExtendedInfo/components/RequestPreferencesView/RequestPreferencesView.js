@@ -57,7 +57,7 @@ class RequestPreferencesView extends Component {
         <Row>
           <Col xs={4}>
             {requestPreferences.holdShelf && (
-              <KeyValue label={<FormattedMessage id="ui-users.requests.defaultServicePoint" />}>
+              <KeyValue label={<FormattedMessage id="ui-users.requests.defaultPickupServicePoint" />}>
                 { defaultServicePointName || '-' }
               </KeyValue>
             )}
