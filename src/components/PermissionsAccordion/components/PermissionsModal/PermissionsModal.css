@@ -29,7 +29,7 @@
   margin-right: auto;
 }
 
-@media (min-height: 5700px) {
+@media (min-height: 570px) {
   .modalContent {
     min-height: 70vh;
   }
