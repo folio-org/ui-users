@@ -3,7 +3,6 @@ import {
   FormattedMessage,
   FormattedTime,
 } from 'react-intl';
-import moment from 'moment'; // eslint-disable-line import/no-extraneous-dependencies
 import {
   defer,
   isEqual,
@@ -20,9 +19,6 @@ import {
 } from '@folio/stripes/components';
 import {
   Field,
-  stopSubmit,
-  setSubmitFailed,
-  getFormSubmitErrors,
   getFormValues,
 } from 'redux-form';
 
@@ -38,6 +34,7 @@ class ProxyEditItem extends React.Component {
     onDelete: PropTypes.func,
     stripes: PropTypes.object,
     change: PropTypes.func.isRequired,
+    getWarning: PropTypes.func.isRequired,
   };
 
   constructor() {
@@ -55,7 +52,7 @@ class ProxyEditItem extends React.Component {
   }
 
   componentDidMount() {
-    defer(() => this.validateStatus());
+    defer(() => this.updateStatus());
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -65,26 +62,8 @@ class ProxyEditItem extends React.Component {
 
     if (!isEqual(this.state.formValues, prevState.formValues) &&
       prevProxyRel.proxy.status === proxyRel.proxy.status) {
-      this.validateStatus();
+      this.updateStatus();
     }
-  }
-
-  dispatchError(message) {
-    const {
-      name,
-      namespace,
-      index,
-      stripes: {
-        store,
-      },
-    } = this.props;
-    const fieldName = `${name}.proxy.status`;
-    const errors = getFormSubmitErrors('userForm')(store.getState());
-    errors[namespace] = errors[namespace] || new Array(index + 1);
-    errors[namespace][index] = { proxy: { status: message } };
-
-    store.dispatch(stopSubmit('userForm', errors));
-    store.dispatch(setSubmitFailed('userForm', [fieldName]));
   }
 
   toggleStatus(isActive) {
@@ -98,47 +77,31 @@ class ProxyEditItem extends React.Component {
   }
 
   /**
-   * validateStatus
-   * Note the use of the 'day' modifier in all comparisons to force them to be
-   * date comparisons, rather than date-time comparisons subject to the
-   * shenanigans caused by different timezones or DST adjustments.
+   * updateStatus
+   * `status` does double-duty on this form:
    *
-   * Harry Potter's birthday isn't July 31 in London and July 30 in New York.
-   * Sometimes, a date is just a date and all you want to think about is the
-   * date, and that's the case here.
+   * 1. it is a user-settable toggle indicating if the relationship
+   *    is active or inactive
+   * 2. it is indication of whether the relationship is active based
+   *    on the values in other fields, i.e. the relationship cannot
+   *    be active if it is expired or if one of the parties is expired.
+   *
+   * Note: an expired relationship is not a validation error.
+   *
+   * Here, we're dealing with part-2: forcing the status to `inactive`
+   * based on the values in other fields. We can coopt `props.getWarning`
+   * to do that: if there's a warning, it will NOT be active.
+   *
    */
-  validateStatus() {
+  updateStatus() {
     const {
-      namespace,
       index,
+      getWarning,
+      namespace,
     } = this.props;
+
     const formValues = this.state.formValues;
-    const proxyRel = formValues[namespace][index] || {};
-    const today = moment().endOf('day');
-    let error = '';
-
-    // proxy user expired
-    if (get(proxyRel, 'user.expirationDate') && moment(proxyRel.user.expirationDate).isSameOrBefore(today, 'day')) {
-      error = <FormattedMessage id={`ui-users.errors.${namespace}.expired`} />;
-    }
-
-    // user expired
-    if (formValues.expirationDate && moment(formValues.expirationDate).isSameOrBefore(today, 'day')) {
-      error = <FormattedMessage id={`ui-users.errors.${namespace}.expired`} />;
-    }
-
-    // proxy relationship expired
-    if (get(proxyRel, 'proxy.expirationDate') &&
-      moment(proxyRel.proxy.expirationDate).isSameOrBefore(today, 'day')) {
-      error = <FormattedMessage id="ui-users.errors.proxyrelationship.expired" />;
-    }
-
-    if (error) {
-      this.toggleStatus(false);
-      return this.dispatchError(error);
-    }
-
-    return this.toggleStatus(true);
+    this.toggleStatus(!getWarning(formValues, namespace, index));
   }
 
   optionsFor = (list) => {
@@ -174,14 +137,10 @@ class ProxyEditItem extends React.Component {
         <Link to={`/users/view/${record.user.id}`}>{getFullName(record.user)}</Link>
         {proxyCreatedValue && (
           <span className={css.creationLabel}>
-
-
             (
-            {proxyLinkMsg}
+              {proxyLinkMsg}
               {' '}
               {proxyCreatedDate}
-
-
             )
           </span>
         )}
@@ -216,8 +175,7 @@ class ProxyEditItem extends React.Component {
                     label={<FormattedMessage id="ui-users.expirationDate" />}
                     dateFormat="YYYY-MM-DD"
                     name={`${name}.proxy.expirationDate`}
-
-                    onChange={() => defer(() => this.validateStatus())}
+                    onChange={() => defer(() => this.updateStatus())}
                   />
                 </Col>
               </Row>

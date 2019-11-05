@@ -2,6 +2,9 @@ import cloneDeep from 'lodash/cloneDeep';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
+import moment from 'moment';
+import { get } from 'lodash';
+
 
 import { AppIcon } from '@folio/stripes/core';
 import {
@@ -78,6 +81,76 @@ function validate(values, props) {
   return errors;
 }
 
+/**
+ * getProxySponsorWarning
+ * Return a warning for the given namespace-index pair if any one of these
+ * conditions is true:
+ *
+ * 1. the current user is expired
+ * 2. the proxy or sponsor is expired
+ * 3. the proxy relationship itself is expired
+ *
+ * Return an empty string otherwise.
+ *
+ * Sometimes, a date is just a date and you don't care about the time. If
+ * Harry Potter were born at 12:30 a.m. on July 31 in London, there wouldn't
+ * be anybody in Boston claiming his birthday was July 30 because it's only
+ * 8:30 p.m. in Boston. July 31 is July 31, end of story. Thus, the `day`
+ * modifier to all the date comparisons here; we DO NOT CARE about the time.
+ *
+ * @param object values all form values
+ * @param enum namespace one of `proxies` or `sponsors`
+ * @param int index index into the array
+ *
+ * @return empty string indicates no warnings; a string contains a warning message.
+ */
+function getProxySponsorWarning(values, namespace, index) {
+  const proxyRel = values[namespace][index] || {};
+  const today = moment().endOf('day');
+  let warning = '';
+
+  // proxy user expired
+  if (get(proxyRel, 'user.expirationDate') && moment(proxyRel.user.expirationDate).isSameOrBefore(today, 'day')) {
+    warning = <FormattedMessage id={`ui-users.errors.${namespace}.expired`} />;
+  }
+
+  // user expired
+  if (values.expirationDate && moment(values.expirationDate).isSameOrBefore(today, 'day')) {
+    warning = <FormattedMessage id={`ui-users.errors.${namespace}.expired`} />;
+  }
+
+  // proxy relationship expired
+  if (get(proxyRel, 'proxy.expirationDate') &&
+    moment(proxyRel.proxy.expirationDate).isSameOrBefore(today, 'day')) {
+    warning = <FormattedMessage id="ui-users.errors.proxyrelationship.expired" />;
+  }
+
+  return warning;
+}
+
+function warn(values, props) {
+  const warnings = {};
+
+  // note: warnings derived from any field in a proxy-sponsor relationship
+  // are always displayed on the `status` field. `props.touch` is necessary
+  // in order to trigger validation of the status field and thus show the
+  // new warning that has been attached to it.
+  ['sponsors', 'proxies'].forEach(namespace => {
+    values[namespace].forEach((item, index) => {
+      const warning = getProxySponsorWarning(values, namespace, index);
+      if (warning) {
+        if (!warnings[namespace]) {
+          warnings[namespace] = [];
+        }
+        warnings[namespace][index] = { proxy: { status: warning } };
+        props.touch(`${namespace}[${index}].proxy.status`);
+      }
+    });
+  });
+
+  return warnings;
+}
+
 function asyncValidateField(field, value, validator) {
   return new Promise((resolve, reject) => {
     const query = `(${field}=="${value}")`;
@@ -127,9 +200,6 @@ class UserForm extends React.Component {
   static propTypes = {
     change: PropTypes.func,
     addressTypes: addressTypesShape,
-    stripes: PropTypes.shape({
-      store: PropTypes.object,
-    }).isRequired,
     formData: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,
     location: PropTypes.object,
@@ -414,6 +484,7 @@ class UserForm extends React.Component {
                         fullName={fullName}
                         change={change}
                         initialValues={initialValues}
+                        getWarning={getProxySponsorWarning}
                       />
                       <PermissionsAccordion
                         filtersConfig={[
@@ -457,6 +528,7 @@ class UserForm extends React.Component {
 export default stripesForm({
   form: 'userForm',
   validate,
+  warn,
   asyncValidate,
   asyncBlurFields: ['username', 'barcode'],
   navigationCheck: true,

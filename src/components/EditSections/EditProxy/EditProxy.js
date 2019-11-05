@@ -25,6 +25,7 @@ const EditProxy = (props) => {
     change,
     stripes,
     initialValues,
+    getWarning,
   } = props;
 
   const proxySponsor = <FormattedMessage id="ui-users.permissions.proxySponsor" />;
@@ -42,13 +43,29 @@ const EditProxy = (props) => {
       >
         <FormattedMessage id="ui-users.permissions.isProxyFor" values={{ name: fullName }}>
           { label => (
-            <ProxyEditList itemComponent={ProxyEditItem} label={label} name="sponsors" stripes={stripes} change={change} initialValues={initialValues} />
+            <ProxyEditList
+              itemComponent={ProxyEditItem}
+              label={label}
+              name="sponsors"
+              stripes={stripes}
+              change={change}
+              initialValues={initialValues}
+              getWarning={getWarning}
+            />
           )}
         </FormattedMessage>
         <br />
         <FormattedMessage id="ui-users.permissions.isSponsorOf" values={{ name: fullName }}>
           { label => (
-            <ProxyEditList itemComponent={ProxyEditItem} label={label} name="proxies" stripes={stripes} change={change} initialValues={initialValues} />
+            <ProxyEditList
+              itemComponent={ProxyEditItem}
+              label={label}
+              name="proxies"
+              stripes={stripes}
+              change={change}
+              initialValues={initialValues}
+              getWarning={getWarning}
+            />
           )}
         </FormattedMessage>
         <br />
@@ -67,6 +84,7 @@ EditProxy.propTypes = {
   sponsors: PropTypes.arrayOf(PropTypes.object),
   stripes: PropTypes.object,
   initialValues: PropTypes.object,
+  getWarning: PropTypes.func.isRequired,
 };
 
 export default withStripes(EditProxy);
