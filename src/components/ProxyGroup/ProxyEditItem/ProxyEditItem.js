@@ -97,6 +97,16 @@ class ProxyEditItem extends React.Component {
     this.setState({ statusDisabled: !isActive });
   }
 
+  /**
+   * validateStatus
+   * Note the use of the 'day' modifier in all comparisons to force them to be
+   * date comparisons, rather than date-time comparisons subject to the
+   * shenanigans caused by different timezones or DST adjustments.
+   *
+   * Harry Potter's birthday isn't July 31 in London and July 30 in New York.
+   * Sometimes, a date is just a date and all you want to think about is the
+   * date, and that's the case here.
+   */
   validateStatus() {
     const {
       namespace,
@@ -107,23 +117,19 @@ class ProxyEditItem extends React.Component {
     const today = moment().endOf('day');
     let error = '';
 
-
-    console.log('expirationDate:', moment(proxyRel.proxy.expirationDate).format("YYYY-MM-DD"));
-    console.log('today date    :', today.format("YYYY-MM-DD"));
-
     // proxy user expired
-    if (get(proxyRel, 'user.expirationDate') && moment(proxyRel.user.expirationDate).endOf('day').isSameOrBefore(today)) {
+    if (get(proxyRel, 'user.expirationDate') && moment(proxyRel.user.expirationDate).isSameOrBefore(today, 'day')) {
       error = <FormattedMessage id={`ui-users.errors.${namespace}.expired`} />;
     }
 
     // user expired
-    if (formValues.expirationDate && moment(formValues.expirationDate).endOf('day').isSameOrBefore(today)) {
+    if (formValues.expirationDate && moment(formValues.expirationDate).isSameOrBefore(today, 'day')) {
       error = <FormattedMessage id={`ui-users.errors.${namespace}.expired`} />;
     }
 
     // proxy relationship expired
     if (get(proxyRel, 'proxy.expirationDate') &&
-      moment(proxyRel.proxy.expirationDate).endOf('day').isSameOrBefore(today)) {
+      moment(proxyRel.proxy.expirationDate).isSameOrBefore(today, 'day')) {
       error = <FormattedMessage id="ui-users.errors.proxyrelationship.expired" />;
     }
 
