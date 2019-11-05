@@ -36,7 +36,7 @@ class BulkOverrideInfo extends React.Component {
   static propTypes = {
     stripes: stripesShape.isRequired,
     mutator: PropTypes.shape({
-      override: PropTypes.shape({
+      renew: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }).isRequired,
     }).isRequired,

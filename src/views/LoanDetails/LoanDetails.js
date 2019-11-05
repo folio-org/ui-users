@@ -57,7 +57,7 @@ class LoanDetails extends React.Component {
     patronGroup: PropTypes.object,
     user: PropTypes.object,
     loanActionsWithUser: PropTypes.arrayOf(PropTypes.object),
-    loanPolicies: PropTypes.arrayOf(PropTypes.object),
+    loanPolicies: PropTypes.object,
     requestCounts: PropTypes.object,
     renew: PropTypes.func,
     patronBlocks: PropTypes.arrayOf(PropTypes.object),
