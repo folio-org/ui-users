@@ -842,5 +842,5 @@
     "requests.holdShelfNo": "رف الحجز - لا",
     "requests.selectDeliveryAddress": "اختر عنوان التوصيل",
     "addAddressError": "يرجى إضافة عنوان واحد على الأقل في قسم \"عناوين\"",
-    "requests.defaultPickupServicePoint": "Default pickup service point"
+    "requests.defaultPickupServicePoint": "نقطة خدمة الالتقاط الافتراضية"
 }
