@@ -549,6 +549,15 @@
         "visible": true
       },
       {
+        "permissionName": "ui-users.loans.renew-override",
+        "displayName": "Users: User loans renew through override",
+        "description": "Also includes backend permissions to perform loans renew through override",
+        "subPermissions": [
+          "circulation.override-renewal-by-barcode.post"
+        ],
+        "visible": true
+      },
+      {
         "permissionName": "ui-users.loans.view",
         "displayName": "Users: User loans view",
         "description": "Also includes basic permissions to view users",
