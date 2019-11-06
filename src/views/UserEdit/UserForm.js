@@ -135,16 +135,18 @@ function warn(values, props) {
   // in order to trigger validation of the status field and thus show the
   // new warning that has been attached to it.
   ['sponsors', 'proxies'].forEach(namespace => {
-    values[namespace].forEach((item, index) => {
-      const warning = getProxySponsorWarning(values, namespace, index);
-      if (warning) {
-        if (!warnings[namespace]) {
-          warnings[namespace] = [];
+    if (values[namespace]) {
+      values[namespace].forEach((item, index) => {
+        const warning = getProxySponsorWarning(values, namespace, index);
+        if (warning) {
+          if (!warnings[namespace]) {
+            warnings[namespace] = [];
+          }
+          warnings[namespace][index] = { proxy: { status: warning } };
+          props.touch(`${namespace}[${index}].proxy.status`);
         }
-        warnings[namespace][index] = { proxy: { status: warning } };
-        props.touch(`${namespace}[${index}].proxy.status`);
-      }
-    });
+      });
+    }
   });
 
   return warnings;
