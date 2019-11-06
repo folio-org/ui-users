@@ -1,10 +1,9 @@
 import cloneDeep from 'lodash/cloneDeep';
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import { FormattedMessage } from 'react-intl';
 import { get } from 'lodash';
-
 
 import { AppIcon } from '@folio/stripes/core';
 import {
@@ -235,15 +234,9 @@ class UserForm extends React.Component {
       },
     };
 
-    this.handleExpandAll = this.handleExpandAll.bind(this);
-    this.handleSectionToggle = this.handleSectionToggle.bind(this);
-    this.toggleAllSections = this.toggleAllSections.bind(this);
-    this.collapseAllSections = this.collapseAllSections.bind(this);
-    this.expandAllSections = this.expandAllSections.bind(this);
-
-    this.ignoreEnterKey = this.ignoreEnterKey.bind(this);
     this.closeButton = React.createRef();
     this.saveButton = React.createRef();
+    this.cancelButton = React.createRef();
 
     this.keyboardCommands = [
       {
@@ -293,18 +286,23 @@ class UserForm extends React.Component {
     );
   }
 
-  handleExpandAll(sections) {
+  handleExpandAll = (sections) => {
     this.setState({ sections });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   ignoreEnterKey = (e) => {
-    if (e.target !== this.saveButton.current) {
+    const allowedControls = [
+      this.closeButton.current,
+      this.saveButton.current,
+      this.cancelButton.current,
+    ];
+
+    if (!allowedControls.includes(e.target)) {
       e.preventDefault();
     }
   };
 
-  handleSectionToggle({ id }) {
+  handleSectionToggle = ({ id }) => {
     this.setState((curState) => {
       const newState = cloneDeep(curState);
       newState.sections[id] = !newState.sections[id];
@@ -313,7 +311,7 @@ class UserForm extends React.Component {
     });
   }
 
-  toggleAllSections(expand) {
+  toggleAllSections = (expand) => {
     this.setState((curState) => {
       const newSections = expandAllFunction(curState.sections, expand);
 
@@ -323,12 +321,12 @@ class UserForm extends React.Component {
     });
   }
 
-  expandAllSections(e) {
+  expandAllSections = (e) => {
     e.preventDefault();
     this.toggleAllSections(true);
   }
 
-  collapseAllSections(e) {
+  collapseAllSections = (e) => {
     e.preventDefault();
     this.toggleAllSections(false);
   }
@@ -365,6 +363,7 @@ class UserForm extends React.Component {
         marginBottom0
         id="clickable-cancel"
         buttonStyle="default mega"
+        buttonRef={this.cancelButton}
         onClick={onCancel}
       >
         <FormattedMessage id="ui-users.cancel" />
