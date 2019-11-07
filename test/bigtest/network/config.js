@@ -111,6 +111,7 @@ export default function config() {
 
   this.get('/users', ({ users }, request) => {
     if (request.queryParams.query) {
+      console.log('llama business')
       const cqlParser = new CQLParser();
       // get the CQL query param from 'query=' until the amphersand or end of the string
       let query = /query=(\(.*\)|%28.*%29)/.exec(request.url)[1];

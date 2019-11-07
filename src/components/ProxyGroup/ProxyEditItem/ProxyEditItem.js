@@ -154,7 +154,7 @@ class ProxyEditItem extends React.Component {
           <Row>
             <Col xs={4}>
               <Row>
-                <Col xs={12}>
+                <Col xs={12} data-test-proxy-relationship-status>
                   <Field
                     disabled={this.state.statusDisabled}
                     label={<FormattedMessage id="ui-users.proxy.relationshipStatus" />}
@@ -169,7 +169,7 @@ class ProxyEditItem extends React.Component {
             </Col>
             <Col xs={4}>
               <Row>
-                <Col xs={12}>
+                <Col xs={12} data-test-proxy-expiration-date>
                   <Field
                     component={Datepicker}
                     label={<FormattedMessage id="ui-users.expirationDate" />}
@@ -184,7 +184,7 @@ class ProxyEditItem extends React.Component {
           <Row>
             <Col xs={4}>
               <Row>
-                <Col xs={12}>
+                <Col xs={12} data-test-proxy-can-request-for-sponsor>
                   <Field
                     label={<FormattedMessage id="ui-users.proxy.requestForSponsor" />}
                     name={`${name}.proxy.requestForSponsor`}
@@ -198,7 +198,7 @@ class ProxyEditItem extends React.Component {
             </Col>
             <Col xs={4}>
               <Row>
-                <Col xs={12}>
+                <Col xs={12} data-test-proxy-notifications-sent-to>
                   <Field
                     label={<FormattedMessage id="ui-users.proxy.notificationsTo" />}
                     name={`${name}.proxy.notificationsTo`}
