@@ -8,13 +8,11 @@ import {
   triggerable,
   scoped,
   collection,
-  selectable,
 } from '@bigtest/interactor';
 
 import ButtonInteractor from '@folio/stripes-components/lib/Button/tests/interactor'; // eslint-disable-line
 import ModalInteractor from '@folio/stripes-components/lib/Modal/tests/interactor'; // eslint-disable-line
 import SelectInteractor from '@folio/stripes-components/lib/Select/tests/interactor'; // eslint-disable-line
-import DatePickerInteractor from '@folio/stripes-components/lib/DatePicker/tests/interactor'; // eslint-disable-line
 import PermissionsModal from './permissions-modal';
 import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/ProxyEditItem.css';
 

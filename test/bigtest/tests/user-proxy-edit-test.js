@@ -193,14 +193,14 @@ describe('User Edit: Proxy/Sponsor', () => {
       });
     });
 
-    // describe('pane header menu', () => {
-    //   beforeEach(async () => {
-    //     await UserFormPage.cancelButton.click();
-    //   });
+    describe('pane header menu', () => {
+      beforeEach(async () => {
+        await UserFormPage.cancelButton.click();
+      });
 
-    //   it('should redirect to view users page after click', () => {
-    //     expect(users.$root).to.exist;
-    //   });
-    // });
+      it('should redirect to view users page after click', () => {
+        expect(users.$root).to.exist;
+      });
+    });
   });
 });
