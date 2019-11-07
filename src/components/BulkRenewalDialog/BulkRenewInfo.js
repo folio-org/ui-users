@@ -9,7 +9,10 @@ import {
   Layout,
 } from '@folio/stripes/components';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
-import { stripesShape } from '@folio/stripes/core';
+import {
+  stripesShape,
+  IfPermission,
+} from '@folio/stripes/core';
 
 import BulkOverrideDialog from '../BulkOverrideDialog';
 import BulkRenewedLoansList from './BulkRenewedLoansList';
@@ -137,15 +140,17 @@ class BulkRenewInfo extends React.Component {
             errorMessages={errorMessages}
           />
           <Layout className="textRight">
-            {
-              !isEmpty(overridableLoans) &&
-              <Button
-                data-test-override-button
-                onClick={this.openBulkOverrideDialog}
-              >
-                <FormattedMessage id="ui-users.button.override" />
-              </Button>
-            }
+            <IfPermission perm="ui-users.loans.renew-override">
+              {
+                !isEmpty(overridableLoans) &&
+                <Button
+                  data-test-override-button
+                  onClick={this.openBulkOverrideDialog}
+                >
+                  <FormattedMessage id="ui-users.button.override" />
+                </Button>
+              }
+            </IfPermission>
             <Button
               buttonStyle="primary"
               onClick={onCancel}

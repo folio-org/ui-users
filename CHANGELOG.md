@@ -12,6 +12,8 @@
 * Retrieve up to max available amount of overdue loans instead of 10 for CSV report. Refs UIU-1297.
 * Implement loans renew permission. Refs UIU-1176.
 * Retrieve up to 100k of requested user loans instead of 100. Refs UIU-1292.
+* Implement loans renew through override permission. Refs UIU-1184.
+* Add service points to user. Refs UIU-1334.
 * Warn, but do not invalidate, when a proxy relationship is expired for any reason. Refs UIU-820.
 
 ## [2.25.3](https://github.com/folio-org/ui-users/tree/v2.25.3) (2019-09-26)

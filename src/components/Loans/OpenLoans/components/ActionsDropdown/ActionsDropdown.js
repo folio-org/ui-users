@@ -7,7 +7,10 @@ import {
   MenuItem,
   IconButton,
 } from '@folio/stripes/components';
-import { stripesShape } from '@folio/stripes/core';
+import {
+  stripesShape,
+  IfPermission,
+} from '@folio/stripes/core';
 
 import Popdown from './Popdown';
 import css from './ActionsDropdown.css';
@@ -49,8 +52,7 @@ class ActionsDropdown extends React.Component {
         portal
       >
         <div className={css.actionDropDown}>
-          {
-            stripes.hasPerm('inventory.items.item.get') &&
+          <IfPermission perm="inventory.items.item.get">
             <MenuItem
               itemMeta={{
                 loan,
@@ -66,9 +68,8 @@ class ActionsDropdown extends React.Component {
                 <FormattedMessage id="ui-users.itemDetails" />
               </Button>
             </MenuItem>
-          }
-          {
-            stripes.hasPerm('ui-users.loans.renew') &&
+          </IfPermission>
+          <IfPermission perm="ui-users.loans.renew">
             <MenuItem
               itemMeta={{
                 loan,
@@ -86,9 +87,8 @@ class ActionsDropdown extends React.Component {
                 <FormattedMessage id="ui-users.renew" />
               </Button>
             </MenuItem>
-          }
-          {
-            stripes.hasPerm('ui-users.loans.edit') &&
+          </IfPermission>
+          <IfPermission perm="ui-users.loans.edit">
             <MenuItem
               itemMeta={{
                 loan,
@@ -104,21 +104,23 @@ class ActionsDropdown extends React.Component {
                 <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />
               </Button>
             </MenuItem>
-          }
-          <MenuItem
-            itemMeta={{
-              loan,
-              action: 'showLoanPolicy',
-            }}
-            onSelectItem={handleOptionsChange}
-          >
-            <Button
-              buttonStyle="dropdownItem"
-              href={loanPolicyLink}
+          </IfPermission>
+          <IfPermission perm="circulation-storage.loan-policies.item.get">
+            <MenuItem
+              itemMeta={{
+                loan,
+                action: 'showLoanPolicy',
+              }}
+              onSelectItem={handleOptionsChange}
             >
-              <FormattedMessage id="ui-users.loans.details.loanPolicy" />
-            </Button>
-          </MenuItem>
+              <Button
+                buttonStyle="dropdownItem"
+                href={loanPolicyLink}
+              >
+                <FormattedMessage id="ui-users.loans.details.loanPolicy" />
+              </Button>
+            </MenuItem>
+          </IfPermission>
           <MenuItem
             itemMeta={{
               loan,
