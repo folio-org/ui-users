@@ -113,6 +113,7 @@ class UserEdit extends React.Component {
       resources,
       'patronGroups',
       'addressTypes',
+      'servicePoints',
     );
 
     return formData;
