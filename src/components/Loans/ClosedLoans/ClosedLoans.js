@@ -135,7 +135,7 @@ class ClosedLoans extends React.Component {
     this.setState(calculateSortParams({
       sortOrder,
       sortDirection,
-      sortValue: meta.alias
+      sortValue: meta.alias,
     }));
   }
 

@@ -121,7 +121,8 @@ class WarningModal extends React.Component {
 
   onClickContinue() {
     const { checkedAccounts } = this.state;
-    const values = Object.values(checkedAccounts) || [];
+    const values = Object.values(checkedAccounts);
+
     this.props.onChangeAccounts(values);
   }
 
@@ -171,8 +172,9 @@ class WarningModal extends React.Component {
       'Item': formatMessage({ id: 'ui-users.accounts.actions.warning.item' }),
     };
 
-    const values = Object.values(checkedAccounts) || [];
-    const checkedClosed = values.filter(a => a.status.name === 'Closed') || [];
+    const values = Object.values(checkedAccounts);
+    const checkedClosed = values.filter(a => a.status.name === 'Closed');
+
     return (
       <Modal
         id="warning-modal"
