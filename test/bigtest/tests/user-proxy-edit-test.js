@@ -1,3 +1,4 @@
+import faker from 'faker';
 import {
   beforeEach,
   describe,
@@ -12,6 +13,8 @@ import setupApplication from '../helpers/setup-application';
 import UserFormPage from '../interactors/user-form-page';
 import InstanceViewPage from '../interactors/user-view-page';
 import UsersInteractor from '../interactors/users';
+
+import translations from '../../../translations/ui-users/en';
 
 describe('User Edit: Proxy/Sponsor', () => {
   setupApplication({
@@ -50,7 +53,7 @@ describe('User Edit: Proxy/Sponsor', () => {
       expect(UserFormPage.title).to.not.equal('Edit User');
     });
 
-    describe('Edit sponsor', () => {
+    describe('Add sponsor', () => {
       beforeEach(async () => {
         await findUserPlugin.button.click();
       });
@@ -59,41 +62,133 @@ describe('User Edit: Proxy/Sponsor', () => {
         expect(findUserPlugin.modal.isPresent).to.be.true;
       });
 
-      describe('Edit sponsor', () => {
+      describe('Find a valid sponsor', () => {
         beforeEach(async () => {
           await findUserPlugin.modal.searchField.fill('sponsor');
           await findUserPlugin.modal.searchButton.click();
-          await findUserPlugin.modal.instances(1).click();
+          await findUserPlugin.modal.instances(0).click();
         });
 
         it('form should list a selected sponsor', () => {
           expect(UserFormPage.proxySection.sponsorCount).to.equal(1);
         });
 
-        describe('Saving a sponsor', () => {
+        it('sponsor status should have two options', () => {
+          expect(UserFormPage.proxySection.statusCount).to.equal(2);
+        });
+
+        describe('Expire the relationship', () => {
           beforeEach(async () => {
-            await UserFormPage.submitButton.click();
-            await InstanceViewPage.whenLoaded();
+            await UserFormPage.proxySection.expirationDate.fillAndBlur(faker.date.past(1).toJSON().substring(0, 10));
           });
 
-          it('should navigate to the detail view', () => {
-            expect(users.$root).to.exist;
+          it('relationship status should be be restricted', () => {
+            expect(UserFormPage.proxySection.statusCount).to.equal(1);
           });
 
-          it('should display proxies in detail view', () => {
-            expect(InstanceViewPage.proxySection.sponsorCount).to.equal(1);
+          it('relationship status should be inactive', () => {
+            expect(UserFormPage.proxySection.relationshipStatus.val).to.equal('inactive');
           });
 
-          describe('Back to edit view', () => {
-            beforeEach(async () => {
-              await InstanceViewPage.clickEditButton();
-              await UserFormPage.whenLoaded();
-            });
-
-            it('should navigate to the edit view', () => {
-              expect(UserFormPage.title).to.not.equal('Edit User');
-            });
+          it('relationship status should show a warning', () => {
+            expect(UserFormPage.proxySection.relationshipStatus.hasWarningStyle).to.be.true;
+            expect(UserFormPage.proxySection.relationshipStatus.warningText).to.equal(translations['errors.proxyrelationship.expired']);
           });
+        });
+
+        describe('Expire the user', () => {
+          beforeEach(async () => {
+            await UserFormPage.expirationDate.fillAndBlur('2019-01-01');
+          });
+
+          it('relationship status should be be restricted', () => {
+            expect(UserFormPage.proxySection.statusCount).to.equal(1);
+          });
+
+          it('relationship status should be inactive', () => {
+            expect(UserFormPage.proxySection.relationshipStatus.val).to.equal('inactive');
+          });
+
+          it('relationship status should show a warning', () => {
+            expect(UserFormPage.proxySection.relationshipStatus.hasWarningStyle).to.be.true;
+            expect(UserFormPage.proxySection.relationshipStatus.warningText).to.equal(translations['errors.sponsors.expired']);
+          });
+        });
+        // describe('Saving a sponsor', () => {
+        //   beforeEach(async () => {
+        //     await UserFormPage.submitButton.click();
+        //     await InstanceViewPage.whenLoaded();
+        //   });
+
+        //   it('should navigate to the detail view', () => {
+        //     expect(users.$root).to.exist;
+        //   });
+
+        //   it('should display proxies in detail view', () => {
+        //     expect(InstanceViewPage.proxySection.sponsorCount).to.equal(1);
+        //   });
+
+        //   describe('Back to edit view', () => {
+        //     beforeEach(async () => {
+        //       await InstanceViewPage.clickEditButton();
+        //       await UserFormPage.whenLoaded();
+        //     });
+
+        //     it('should navigate to the edit view', () => {
+        //       expect(UserFormPage.title).to.not.equal('Edit User');
+        //     });
+        //   });
+        // });
+      });
+
+      describe('Find an expired sponsor', () => {
+        beforeEach(async () => {
+          await findUserPlugin.modal.searchField.fill('expired');
+          await findUserPlugin.modal.searchButton.click();
+          await findUserPlugin.modal.instances(0).click();
+        });
+
+        it('form should list a selected sponsor', () => {
+          expect(UserFormPage.proxySection.sponsorCount).to.equal(1);
+        });
+
+        it('relationship status should be be restricted', () => {
+          expect(UserFormPage.proxySection.statusCount).to.equal(1);
+        });
+
+        it('relationship status should be inactive', () => {
+          expect(UserFormPage.proxySection.relationshipStatus.val).to.equal('inactive');
+        });
+
+        it('relationship status should show a warning', () => {
+          expect(UserFormPage.proxySection.relationshipStatus.hasWarningStyle).to.be.true;
+          expect(UserFormPage.proxySection.relationshipStatus.warningText).to.equal(translations['errors.sponsors.expired']);
+        });
+      });
+
+      describe('Adding user as own sponsor should fail', () => {
+        beforeEach(async () => {
+          await findUserPlugin.modal.searchField.fill('self');
+          await findUserPlugin.modal.searchButton.click();
+          await findUserPlugin.modal.instances(0).click();
+        });
+
+        it('sponsor list should not include Malkovich', () => {
+          expect(UserFormPage.proxySection.sponsorCount).to.equal(0);
+        });
+
+        it('modal should Malkovich Malkovich Malkovich', () => {
+          expect(UserFormPage.errorModal.isPresent).to.be.true;
+          expect(UserFormPage.errorModal.label).to.equal(translations['errors.sponsors.invalidUserLabel']);
+          expect(UserFormPage.errorModal.text).to.include(translations['errors.sponsors.invalidUserMessage']);
+        });
+
+        it('Malkovich?', () => {
+          expect(true).to.be.true;
+        });
+
+        it('Malkovich! Malkovich Malkovich', () => {
+          expect(true).to.be.true;
         });
       });
     });

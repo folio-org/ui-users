@@ -3,7 +3,6 @@ import {
   FormattedMessage,
   FormattedTime,
 } from 'react-intl';
-import moment from 'moment'; // eslint-disable-line import/no-extraneous-dependencies
 import {
   defer,
   isEqual,
@@ -20,9 +19,6 @@ import {
 } from '@folio/stripes/components';
 import {
   Field,
-  stopSubmit,
-  setSubmitFailed,
-  getFormSubmitErrors,
   getFormValues,
 } from 'redux-form';
 
@@ -38,6 +34,7 @@ class ProxyEditItem extends React.Component {
     onDelete: PropTypes.func,
     stripes: PropTypes.object,
     change: PropTypes.func.isRequired,
+    getWarning: PropTypes.func.isRequired,
   };
 
   constructor() {
@@ -55,7 +52,7 @@ class ProxyEditItem extends React.Component {
   }
 
   componentDidMount() {
-    defer(() => this.validateStatus());
+    defer(() => this.updateStatus());
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -65,26 +62,8 @@ class ProxyEditItem extends React.Component {
 
     if (!isEqual(this.state.formValues, prevState.formValues) &&
       prevProxyRel.proxy.status === proxyRel.proxy.status) {
-      this.validateStatus();
+      this.updateStatus();
     }
-  }
-
-  dispatchError(message) {
-    const {
-      name,
-      namespace,
-      index,
-      stripes: {
-        store,
-      },
-    } = this.props;
-    const fieldName = `${name}.proxy.status`;
-    const errors = getFormSubmitErrors('userForm')(store.getState());
-    errors[namespace] = errors[namespace] || new Array(index + 1);
-    errors[namespace][index] = { proxy: { status: message } };
-
-    store.dispatch(stopSubmit('userForm', errors));
-    store.dispatch(setSubmitFailed('userForm', [fieldName]));
   }
 
   toggleStatus(isActive) {
@@ -97,38 +76,32 @@ class ProxyEditItem extends React.Component {
     this.setState({ statusDisabled: !isActive });
   }
 
-  validateStatus() {
+  /**
+   * updateStatus
+   * `status` does double-duty on this form:
+   *
+   * 1. it is a user-settable toggle indicating if the relationship
+   *    is active or inactive
+   * 2. it is indication of whether the relationship is active based
+   *    on the values in other fields, i.e. the relationship cannot
+   *    be active if it is expired or if one of the parties is expired.
+   *
+   * Note: an expired relationship is not a validation error.
+   *
+   * Here, we're dealing with part-2: forcing the status to `inactive`
+   * based on the values in other fields. We can coopt `props.getWarning`
+   * to do that: if there's a warning, it will NOT be active.
+   *
+   */
+  updateStatus() {
     const {
-      namespace,
       index,
+      getWarning,
+      namespace,
     } = this.props;
+
     const formValues = this.state.formValues;
-    const proxyRel = formValues[namespace][index] || {};
-    const today = moment().endOf('day');
-    let error = '';
-
-    // proxy user expired
-    if (get(proxyRel, 'user.expirationDate') && moment(proxyRel.user.expirationDate).endOf('day').isSameOrBefore(today)) {
-      error = <FormattedMessage id={`ui-users.errors.${namespace}.expired`} />;
-    }
-
-    // user expired
-    if (formValues.expirationDate && moment(formValues.expirationDate).endOf('day').isSameOrBefore(today)) {
-      error = <FormattedMessage id={`ui-users.errors.${namespace}.expired`} />;
-    }
-
-    // proxy relationship expired
-    if (get(proxyRel, 'proxy.expirationDate') &&
-      moment(proxyRel.proxy.expirationDate).endOf('day').isSameOrBefore(today)) {
-      error = <FormattedMessage id="ui-users.errors.proxyrelationship.expired" />;
-    }
-
-    if (error) {
-      this.toggleStatus(false);
-      return this.dispatchError(error);
-    }
-
-    return this.toggleStatus(true);
+    this.toggleStatus(!getWarning(formValues, namespace, index));
   }
 
   optionsFor = (list) => {
@@ -146,7 +119,9 @@ class ProxyEditItem extends React.Component {
       onDelete,
     } = this.props;
 
-    const relationStatusOptions = this.optionsFor(['active', 'inactive']);
+    const activeOptions = this.state.statusDisabled ? ['inactive'] : ['active', 'inactive'];
+    const relationStatusOptions = this.optionsFor(activeOptions);
+
     const requestForSponsorOptions = this.optionsFor(['yes', 'no']);
     const notificationsToOptions = this.optionsFor(['proxy', 'sponsor']);
     const proxyLinkMsg = <FormattedMessage id="ui-users.proxy.relationshipCreated" />;
@@ -162,14 +137,10 @@ class ProxyEditItem extends React.Component {
         <Link to={`/users/view/${record.user.id}`}>{getFullName(record.user)}</Link>
         {proxyCreatedValue && (
           <span className={css.creationLabel}>
-
-
             (
-            {proxyLinkMsg}
+              {proxyLinkMsg}
               {' '}
               {proxyCreatedDate}
-
-
             )
           </span>
         )}
@@ -183,7 +154,7 @@ class ProxyEditItem extends React.Component {
           <Row>
             <Col xs={4}>
               <Row>
-                <Col xs={12}>
+                <Col xs={12} data-test-proxy-relationship-status>
                   <Field
                     disabled={this.state.statusDisabled}
                     label={<FormattedMessage id="ui-users.proxy.relationshipStatus" />}
@@ -198,14 +169,13 @@ class ProxyEditItem extends React.Component {
             </Col>
             <Col xs={4}>
               <Row>
-                <Col xs={12}>
+                <Col xs={12} data-test-proxy-expiration-date>
                   <Field
                     component={Datepicker}
                     label={<FormattedMessage id="ui-users.expirationDate" />}
                     dateFormat="YYYY-MM-DD"
                     name={`${name}.proxy.expirationDate`}
-
-                    onChange={() => defer(() => this.validateStatus())}
+                    onChange={() => defer(() => this.updateStatus())}
                   />
                 </Col>
               </Row>
@@ -214,7 +184,7 @@ class ProxyEditItem extends React.Component {
           <Row>
             <Col xs={4}>
               <Row>
-                <Col xs={12}>
+                <Col xs={12} data-test-proxy-can-request-for-sponsor>
                   <Field
                     label={<FormattedMessage id="ui-users.proxy.requestForSponsor" />}
                     name={`${name}.proxy.requestForSponsor`}
@@ -228,7 +198,7 @@ class ProxyEditItem extends React.Component {
             </Col>
             <Col xs={4}>
               <Row>
-                <Col xs={12}>
+                <Col xs={12} data-test-proxy-notifications-sent-to>
                   <Field
                     label={<FormattedMessage id="ui-users.proxy.notificationsTo" />}
                     name={`${name}.proxy.notificationsTo`}

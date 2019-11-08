@@ -28,6 +28,7 @@ class ProxyEditList extends React.Component {
     initialValues: PropTypes.object,
     change: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
+    getWarning: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -146,6 +147,7 @@ class ProxyEditList extends React.Component {
       stripes,
       change,
       intl,
+      getWarning,
     } = this.props;
     const ComponentToRender = itemComponent;
 
@@ -159,6 +161,7 @@ class ProxyEditList extends React.Component {
         onDelete={record => this.beginDelete(index, record)}
         stripes={stripes}
         change={change}
+        getWarning={getWarning}
       />
     ));
 

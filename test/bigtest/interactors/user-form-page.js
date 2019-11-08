@@ -11,6 +11,8 @@ import {
 } from '@bigtest/interactor';
 
 import ButtonInteractor from '@folio/stripes-components/lib/Button/tests/interactor'; // eslint-disable-line
+import ModalInteractor from '@folio/stripes-components/lib/Modal/tests/interactor'; // eslint-disable-line
+import SelectInteractor from '@folio/stripes-components/lib/Select/tests/interactor'; // eslint-disable-line
 import PermissionsModal from './permissions-modal';
 import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/ProxyEditItem.css';
 
@@ -36,12 +38,15 @@ import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/P
 }
 
 @interactor class ProxyEditInteractor {
-  findProxyButton = clickable('#clickable-plugin-find-proxy');
-  findSponsorButton = clickable('#clickable-plugin-find-sponsor');
   proxyCount = count(`[data-test="proxies"] .${proxyEditItemCSS.item}`);
   sponsorCount = count(`[data-test="sponsors"] .${proxyEditItemCSS.item}`);
-}
 
+  statusCount = count('[data-test-proxy-relationship-status] option');
+  relationshipStatus = new SelectInteractor('[data-test-proxy-relationship-status]');
+  expirationDate = new InputFieldInteractor('[name="sponsors[0].proxy.expirationDate"]');
+  proxyCanRequestForSponsor = new SelectInteractor('[data-test-proxy-can-request-for-sponsor]');
+  notificationsSentTo = new SelectInteractor('[data-test-proxy-notifcations-sent-to]');
+}
 @interactor class UserFormPage {
   // isLoaded = isPresent('[class*=paneTitleLabel---]');
 
@@ -52,6 +57,8 @@ import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/P
   title = text('[class*=paneTitleLabel---]');
   barcodeField = new InputFieldInteractor('#adduser_barcode');
   usernameField = new InputFieldInteractor('#adduser_username');
+  expirationDate = new InputFieldInteractor('#adduser_expirationdate');
+
   feedbackError = text('[class^="feedbackError---"]');
   cancelButton = new ButtonInteractor('[data-test-user-form-cancel-button]');
   submitButton = new ButtonInteractor('[data-test-user-form-submit-button]');
@@ -60,6 +67,7 @@ import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/P
   permissionsModal = new PermissionsModal();
   permissions = collection('[data-permission-name]');
   proxySection = scoped('#proxyAccordion', ProxyEditInteractor);
+  errorModal = new ModalInteractor('#proxy-error-modal');
 }
 
 export default new UserFormPage('[data-test-form-page]');
