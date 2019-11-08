@@ -24,7 +24,10 @@ import {
   stripesShape,
 } from '@folio/stripes/core';
 
-import { nav } from '../../util';
+import {
+  calculateSortParams,
+  nav,
+} from '../../util';
 import ActionsBar from '../components/ActionsBar';
 import Label from '../../Label';
 import ErrorModal from '../../ErrorModal';
@@ -124,16 +127,16 @@ class ClosedLoans extends React.Component {
   onSort(e, meta) {
     if (!this.sortMap[meta.alias]) return;
 
-    let { sortOrder, sortDirection } = this.state;
+    const {
+      sortOrder,
+      sortDirection,
+    } = this.state;
 
-    if (sortOrder[0] !== meta.alias) {
-      sortOrder = [meta.alias, sortOrder[0]];
-      sortDirection = ['asc', sortDirection[0]];
-    } else {
-      const direction = (sortDirection[0] === 'desc') ? 'asc' : 'desc';
-      sortDirection = [direction, sortDirection[1]];
-    }
-    this.setState({ sortOrder, sortDirection });
+    this.setState(calculateSortParams({
+      sortOrder,
+      sortDirection,
+      sortValue: meta.alias
+    }));
   }
 
   onRowClick = (e, row) => {

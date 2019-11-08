@@ -7,7 +7,10 @@ import { stripesShape } from '@folio/stripes/core';
 
 import css from './OpenLoans.css';
 
-import { nav } from '../../util';
+import {
+  calculateSortParams,
+  nav,
+} from '../../util';
 
 class OpenLoans extends React.Component {
   static propTypes = {
@@ -61,28 +64,16 @@ class OpenLoans extends React.Component {
 
     if (!sortMap[meta.alias]) return;
 
-    let {
+    const {
       sortOrder,
       sortDirection,
     } = this.state;
 
-    if (sortOrder[0] !== meta.alias) {
-      sortOrder = [meta.alias, sortOrder[0]];
-      sortDirection = ['asc', sortDirection[0]];
-    } else {
-      const direction = (sortDirection[0] === 'desc')
-        ? 'asc'
-        : 'desc';
-
-      sortDirection = [direction, sortDirection[1]];
-    }
-
-    this.setState(
-      {
-        sortOrder,
-        sortDirection,
-      }
-    );
+    this.setState(calculateSortParams({
+      sortOrder,
+      sortDirection,
+      sortValue: meta.alias,
+    }));
   };
 
   onRowClick = (e, row) => {

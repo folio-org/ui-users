@@ -18,7 +18,11 @@ import {
 } from '@folio/stripes/components';
 
 import { Actions } from '../../components/Accounts/Actions';
-import { getFullName, nav } from '../../components/util';
+import {
+  getFullName,
+  calculateSortParams,
+  nav,
+} from '../../components/util';
 
 import css from './AccountDetails.css';
 
@@ -162,16 +166,18 @@ class AccountDetails extends React.Component {
   onSort(e, meta) {
     if (!this.sortMap[meta.name] || e.target.type === 'button' || e.target.id === 'button') return;
 
-    let { sortOrder, sortDirection } = this.state;
+    const {
+      sortOrder,
+      sortDirection,
+    } = this.state;
 
-    if (sortOrder[0] !== meta.name) {
-      sortOrder = [meta.name, sortOrder[1]];
-      sortDirection = ['asc', sortDirection[1]];
-    } else {
-      const direction = (sortDirection[0] === 'desc') ? 'asc' : 'desc';
-      sortDirection = [direction, sortDirection[1]];
-    }
-    this.setState({ sortOrder, sortDirection });
+    this.setState(calculateSortParams({
+      sortOrder,
+      sortDirection,
+      sortValue: meta.name,
+      secondarySortOrderIndex: 1,
+      secondarySortDirectionIndex: 1,
+    }));
   }
 
   render() {

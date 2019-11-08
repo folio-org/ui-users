@@ -13,3 +13,8 @@ export const deliveryFulfillmentValues = {
   HOLD_SHELF: 'Hold Shelf',
   DELIVERY: 'Delivery',
 };
+
+export const sortTypes = {
+  ASC: 'asc',
+  DESC: 'desc',
+};
