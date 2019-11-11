@@ -2,7 +2,10 @@ import _ from 'lodash';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { requestStatuses } from '../../constants';
+import {
+  requestStatuses,
+  sortTypes,
+} from '../../constants';
 
 export function getFullName(user) {
   const lastName = _.get(user, 'personal.lastName', '');
@@ -91,4 +94,25 @@ export function getOpenRequestsPath(barcode) {
   const filterString = getOpenRequestStatusesFilterString();
 
   return `/requests?filters=${filterString}&query=${barcode}&sort=Request Date`;
+}
+
+export function calculateSortParams({
+  sortOrder,
+  sortValue,
+  sortDirection,
+  secondarySortOrderIndex = 0,
+  secondarySortDirectionIndex = 0,
+}) {
+  const sortParams = {};
+
+  if (sortOrder[0] !== sortValue) {
+    sortParams.sortOrder = [sortValue, sortOrder[secondarySortOrderIndex]];
+    sortParams.sortDirection = [sortTypes.ASC, sortDirection[secondarySortDirectionIndex]];
+  } else {
+    const direction = sortDirection[0] === sortTypes.DESC ? sortTypes.ASC : sortTypes.DESC;
+
+    sortParams.sortDirection = [direction, sortDirection[1]];
+  }
+
+  return sortParams;
 }

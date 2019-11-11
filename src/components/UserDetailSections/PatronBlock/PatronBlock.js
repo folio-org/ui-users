@@ -6,6 +6,8 @@ import {
   injectIntl,
   intlShape,
 } from 'react-intl';
+import moment from 'moment';
+
 import {
   Row,
   Col,
@@ -17,7 +19,8 @@ import {
 } from '@folio/stripes/components';
 import { stripesConnect } from '@folio/stripes/core';
 
-import moment from 'moment';
+
+import { calculateSortParams } from '../../util';
 
 class PatronBlock extends React.Component {
   static manifest = Object.freeze({
@@ -116,16 +119,18 @@ class PatronBlock extends React.Component {
   onSort(e, meta) {
     if (!this.sortMap[meta.alias]) return;
 
-    let { sortOrder, sortDirection } = this.state;
+    const {
+      sortOrder,
+      sortDirection,
+    } = this.state;
 
-    if (sortOrder[0] !== meta.alias) {
-      sortOrder = [meta.alias, sortOrder[1]];
-      sortDirection = ['asc', sortDirection[1]];
-    } else {
-      const direction = (sortDirection[0] === 'desc') ? 'asc' : 'desc';
-      sortDirection = [direction, sortDirection[1]];
-    }
-    this.setState({ sortOrder, sortDirection });
+    this.setState(calculateSortParams({
+      sortOrder,
+      sortDirection,
+      sortValue: meta.alias,
+      secondarySortOrderIndex: 1,
+      secondarySortDirectionIndex: 1,
+    }));
   }
 
   onRowClick(e, row) {

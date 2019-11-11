@@ -20,6 +20,8 @@ import {
   orderBy,
 } from 'lodash';
 
+import { calculateSortParams } from '../../util';
+
 class WarningModal extends React.Component {
   static propTypes = {
     accounts: PropTypes.arrayOf(PropTypes.object),
@@ -86,17 +88,18 @@ class WarningModal extends React.Component {
 
   onSort = (e, meta) => {
     if (!this.sortMap[meta.alias]) return;
-    let { sortOrder, sortDirection } = this.state;
 
-    if (sortOrder[0] !== meta.alias) {
-      sortOrder = [meta.alias, sortOrder[1]];
-      sortDirection = ['asc', sortDirection[1]];
-    } else {
-      const direction = (sortDirection[0] === 'desc') ? 'asc' : 'desc';
-      sortDirection = [direction, sortDirection[1]];
-    }
-    this.setState({ sortOrder, sortDirection });
-  }
+    const {
+      sortOrder,
+      sortDirection,
+    } = this.state;
+
+    this.setState(calculateSortParams({
+      sortOrder,
+      sortDirection,
+      sortValue: meta.alias,
+    }));
+  };
 
   getAccountsFormatter() {
     const { checkedAccounts } = this.state;
@@ -118,7 +121,8 @@ class WarningModal extends React.Component {
 
   onClickContinue() {
     const { checkedAccounts } = this.state;
-    const values = Object.values(checkedAccounts) || [];
+    const values = Object.values(checkedAccounts);
+
     this.props.onChangeAccounts(values);
   }
 
@@ -168,8 +172,9 @@ class WarningModal extends React.Component {
       'Item': formatMessage({ id: 'ui-users.accounts.actions.warning.item' }),
     };
 
-    const values = Object.values(checkedAccounts) || [];
-    const checkedClosed = values.filter(a => a.status.name === 'Closed') || [];
+    const values = Object.values(checkedAccounts);
+    const checkedClosed = values.filter(a => a.status.name === 'Closed');
+
     return (
       <Modal
         id="warning-modal"

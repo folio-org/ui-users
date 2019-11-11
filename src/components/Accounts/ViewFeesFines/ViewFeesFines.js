@@ -19,7 +19,10 @@ import {
   FormattedDate,
 } from 'react-intl';
 
-import { nav } from '../../util';
+import {
+  calculateSortParams,
+  nav,
+} from '../../util';
 
 class ViewFeesFines extends React.Component {
   static propTypes = {
@@ -125,16 +128,18 @@ class ViewFeesFines extends React.Component {
   onSort(e, meta) {
     if (!this.sortMap[meta.name]) return;
 
-    let { sortOrder, sortDirection } = this.state;
+    const {
+      sortOrder,
+      sortDirection,
+    } = this.state;
 
-    if (sortOrder[0] !== meta.name) {
-      sortOrder = [meta.name, sortOrder[1]];
-      sortDirection = ['asc', sortDirection[1]];
-    } else {
-      const direction = (sortDirection[0] === 'desc') ? 'asc' : 'desc';
-      sortDirection = [direction, sortDirection[1]];
-    }
-    this.setState({ sortOrder, sortDirection });
+    this.setState(calculateSortParams({
+      sortOrder,
+      sortDirection,
+      sortValue: meta.name,
+      secondarySortOrderIndex: 1,
+      secondarySortDirectionIndex: 1,
+    }));
   }
 
   comments(f) {
