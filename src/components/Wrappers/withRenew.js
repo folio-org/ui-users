@@ -41,7 +41,6 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
   constructor(props) {
     super(props);
 
-    this.permissions = { allRequests: 'ui-users.requests.all' };
     this.connectedBulkRenewalDialog = props.stripes.connect(BulkRenewalDialog);
     this.state = {
       loans: [],
@@ -219,7 +218,6 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
    */
   getOpenRequestsCount = () => {
     const {
-      stripes,
       mutator: {
         requests: {
           reset,
@@ -229,10 +227,6 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
     } = this.props;
 
     const { loans } = this.state;
-
-    if (!stripes.hasPerm(this.permissions.allRequests)) {
-      return;
-    }
 
     // step through the loans list in small batches in order to create a
     // short-enough query string that we can avoid a "414 Request URI Too Long"

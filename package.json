@@ -544,7 +544,8 @@
         "displayName": "Users: User loans renew",
         "description": "Also includes backend permissions to perform loans renew",
         "subPermissions": [
-          "circulation.renew-by-barcode.post"
+          "circulation.renew-by-barcode.post",
+          "inventory-storage.location-units.libraries.collection.get"
         ],
         "visible": true
       },
@@ -564,9 +565,10 @@
         "subPermissions": [
           "ui-users.view",
           "circulation.loans.collection.get",
+          "circulation.requests.collection.get",
           "circulation-storage.loan-policies.collection.get",
-          "accounts.collection.get",
           "circulation-storage.loans-history.collection.get",
+          "accounts.collection.get",
           "comments.collection.get"
         ],
         "visible": true
@@ -576,7 +578,6 @@
         "displayName": "Users: User loan edit",
         "description": "Also includes backend permissions to perform loan edit",
         "subPermissions": [
-          "circulation.requests.collection.get",
           "circulation.loans.item.put",
           "circulation.renew-by-barcode.post",
           "circulation-storage.loans.item.get"
