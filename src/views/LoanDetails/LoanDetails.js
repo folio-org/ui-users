@@ -1,4 +1,3 @@
-import { get, upperFirst, isEmpty } from 'lodash';
 import React from 'react';
 import {
   FormattedMessage,
@@ -9,6 +8,12 @@ import {
 import { compose } from 'redux';
 import Link from 'react-router-dom/Link';
 import PropTypes from 'prop-types';
+import {
+  get,
+  upperFirst,
+  isEmpty,
+} from 'lodash';
+
 import { ChangeDueDateDialog } from '@folio/stripes/smart-components';
 import {
   Paneset,
@@ -22,6 +27,7 @@ import {
   Col,
 } from '@folio/stripes/components';
 import { IfPermission } from '@folio/stripes/core';
+
 import PatronBlockModal from '../../components/PatronBlock/PatronBlockModal';
 import {
   getFullName,
@@ -309,7 +315,7 @@ class LoanDetails extends React.Component {
     const contributorsLength = contributorsListString.length;
     const loanStatus = get(loan, ['status', 'name'], '-');
     const buttonDisabled = (loanStatus && loanStatus === 'Closed');
-    // Number of characters to trucate the string = 77
+    // Number of characters to truncate the string = 77
     const listTodisplay = (contributorsList === '-') ? '-' : (contributorsListString.length >= 77) ? `${contributorsListString.substring(0, 77)}...` : `${contributorsListString.substring(0, contributorsListString.length - 2)}`;
     const nonRenewedLabel = <FormattedMessage id="ui-users.loans.items.nonRenewed.label" />;
     const failedRenewalsSubHeading = (
@@ -458,17 +464,15 @@ class LoanDetails extends React.Component {
                   value={this.viewFeeFine()}
                 />
               </Col>
-              <IfPermission perm="ui-users.requests.all">
-                <Col
-                  data-test-loan-actions-history-requests
-                  xs={2}
-                >
-                  <KeyValue
-                    label={<FormattedMessage id="ui-users.loans.details.requestQueue" />}
-                    value={requestQueueValue}
-                  />
-                </Col>
-              </IfPermission>
+              <Col
+                data-test-loan-actions-history-requests
+                xs={2}
+              >
+                <KeyValue
+                  label={<FormattedMessage id="ui-users.loans.details.requestQueue" />}
+                  value={requestQueueValue}
+                />
+              </Col>
               <Col xs={2}>
                 <KeyValue
                   label={<FormattedMessage id="ui-users.loans.details.lost" />}

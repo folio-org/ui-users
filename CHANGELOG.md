@@ -15,6 +15,7 @@
 * Implement loans renew through override permission. Refs UIU-1184.
 * Add service points to user. Refs UIU-1334.
 * Warn, but do not invalidate, when a proxy relationship is expired for any reason. Refs UIU-820.
+* Show requests information when user has view loans permission only. Refs UIU-1184.
 
 ## [2.25.3](https://github.com/folio-org/ui-users/tree/v2.25.3) (2019-09-26)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.2...v2.25.3)
