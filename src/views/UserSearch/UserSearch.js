@@ -10,20 +10,21 @@ import { Link } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { IntlConsumer, IfPermission, AppIcon } from '@folio/stripes/core';
 import {
-  MultiColumnList,
-  SearchField,
-  Paneset,
-  Pane,
-  Icon,
   Button,
-  PaneMenu,
   HasCommand,
+  Icon,
+  MultiColumnList,
+  Pane,
+  PaneMenu,
+  Paneset,
+  SearchField,
 } from '@folio/stripes/components';
 
 import {
   SearchAndSortQuery,
   SearchAndSortNoResultsMessage as NoResultsMessage,
-  SearchAndSortSearchButton as FilterPaneToggle,
+  CollapseFilterPaneButton,
+  ExpandFilterPaneButton,
 } from '@folio/stripes/smart-components';
 
 import OverdueLoanReport from '../../components/data/reports';
@@ -144,31 +145,18 @@ class UserSearch extends React.Component {
 
   renderResultsFirstMenu(filters) {
     const { filterPaneIsVisible } = this.state;
-
     const filterCount = filters.string !== '' ? filters.string.split(',').length : 0;
-    const hideOrShowMessageId = filterPaneIsVisible
-      ? 'stripes-smart-components.hideSearchPane'
-      : 'stripes-smart-components.showSearchPane';
+
+    if (filterPaneIsVisible) {
+      return null;
+    }
 
     return (
       <PaneMenu>
-        <FormattedMessage
-          id="stripes-smart-components.numberOfFilters"
-          values={{ count: filterCount }}
-        >
-          {appliedFiltersMessage => (
-            <FormattedMessage id={hideOrShowMessageId}>
-              {hideOrShowMessage => (
-                <FilterPaneToggle
-                  visible={filterPaneIsVisible}
-                  aria-label={`${hideOrShowMessage} \n\n${appliedFiltersMessage}`}
-                  onClick={this.toggleFilterPane}
-                  badge={!filterPaneIsVisible && filterCount ? filterCount : undefined}
-                />
-              )}
-            </FormattedMessage>
-          )}
-        </FormattedMessage>
+        <ExpandFilterPaneButton
+          onClick={this.toggleFilterPane}
+          filterCount={filterCount}
+        />
       </PaneMenu>
     );
   }
@@ -330,7 +318,15 @@ class UserSearch extends React.Component {
                     {intl => (
                       <Paneset id={`${idPrefix}-paneset`}>
                         {this.state.filterPaneIsVisible &&
-                          <Pane defaultWidth="22%" paneTitle="User search">
+                          <Pane
+                            defaultWidth="22%"
+                            paneTitle="User search"
+                            lastMenu={
+                              <PaneMenu>
+                                <CollapseFilterPaneButton onClick={this.toggleFilterPane} />
+                              </PaneMenu>
+                            }
+                          >
                             <form onSubmit={onSubmitSearch}>
                               <div className={css.searchGroupWrap}>
                                 <SearchField
