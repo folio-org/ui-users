@@ -111,7 +111,7 @@ describe('User Edit: Proxy/Sponsor', () => {
 
           it('relationship status should show a warning', () => {
             expect(UserFormPage.proxySection.relationshipStatus.hasWarningStyle).to.be.true;
-            expect(UserFormPage.proxySection.relationshipStatus.warningText).to.equal(translations['errors.sponsors.expired']);
+            expect(UserFormPage.proxySection.relationshipStatus.warningText).to.equal(translations['errors.currentUser.expired']);
           });
         });
         // describe('Saving a sponsor', () => {
