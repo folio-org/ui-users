@@ -108,14 +108,14 @@ function getProxySponsorWarning(values, namespace, index) {
   const today = moment().endOf('day');
   let warning = '';
 
-  // proxy user expired
+  // proxy/sponsor user expired
   if (get(proxyRel, 'user.expirationDate') && moment(proxyRel.user.expirationDate).isSameOrBefore(today, 'day')) {
     warning = <FormattedMessage id={`ui-users.errors.${namespace}.expired`} />;
   }
 
-  // user expired
+  // current user expired
   if (values.expirationDate && moment(values.expirationDate).isSameOrBefore(today, 'day')) {
-    warning = <FormattedMessage id={`ui-users.errors.${namespace}.expired`} />;
+    warning = <FormattedMessage id="ui-users.errors.currentUser.expired" />;
   }
 
   // proxy relationship expired
