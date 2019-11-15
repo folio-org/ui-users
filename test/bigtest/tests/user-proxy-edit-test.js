@@ -33,7 +33,7 @@ describe('User Edit: Proxy/Sponsor', () => {
 
   const users = new UsersInteractor();
   const findUserPlugin = new FindUserInteractor({
-    timeout: 4000,
+    timeout: 6000,
   });
 
   beforeEach(async function () {

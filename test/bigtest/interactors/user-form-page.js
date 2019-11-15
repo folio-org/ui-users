@@ -51,7 +51,7 @@ import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/P
   // isLoaded = isPresent('[class*=paneTitleLabel---]');
 
   whenLoaded() {
-    return this.when(() => this.isPresent).timeout(4000);
+    return this.when(() => this.isPresent);
   }
 
   title = text('[class*=paneTitleLabel---]');
