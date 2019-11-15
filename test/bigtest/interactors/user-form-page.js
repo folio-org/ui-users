@@ -70,4 +70,7 @@ import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/P
   errorModal = new ModalInteractor('#proxy-error-modal');
 }
 
-export default new UserFormPage('[data-test-form-page]');
+export default new UserFormPage({
+  scope: '[data-test-form-page]',
+  timeout: 4000,
+});

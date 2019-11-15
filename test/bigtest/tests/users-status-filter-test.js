@@ -15,7 +15,10 @@ describe('Status filter', () => {
   const inactiveUsersAmount = 8;
   const allUsers = activeUsersAmount + inactiveUsersAmount;
 
-  const users = new UsersInteractor();
+  const users = new UsersInteractor({
+    scope: '[data-test-user-instances]',
+    timeout: 5000,
+  });
 
   beforeEach(async function () {
     await this.server.createList('user', activeUsersAmount, { active: true });

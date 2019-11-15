@@ -9,7 +9,7 @@ import {
 
 @interactor class ActiveUserCheckbox {
   clickActive = clickable('#clickable-filter-active-active');
-  clickInactive= clickable('#clickable-filter-active-inactive');
+  clickInactive = clickable('#clickable-filter-active-inactive');
 }
 
 @interactor class HeaderDropdown {
