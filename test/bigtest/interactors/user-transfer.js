@@ -33,7 +33,7 @@ import SelectInteractor from '@folio/stripes-components/lib/Select/tests/interac
 }
 
 @interactor class HeaderInteractor {
-  selectAll = collection('[class*=mclHeader---]', { click : clickable() });
+  selectAll = collection('[class*=mclHeader---]', { click: clickable() });
 }
 
 @interactor class TransferInteractor {
@@ -80,4 +80,6 @@ import SelectInteractor from '@folio/stripes-components/lib/Select/tests/interac
   }
 }
 
-export default new TransferInteractor(5000);
+export default new TransferInteractor({
+  timeout: 6000,
+});

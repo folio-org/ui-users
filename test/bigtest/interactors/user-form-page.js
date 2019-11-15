@@ -72,5 +72,5 @@ import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/P
 
 export default new UserFormPage({
   scope: '[data-test-form-page]',
-  timeout: 5000,
+  timeout: 6000,
 });
