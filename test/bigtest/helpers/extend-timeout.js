@@ -7,6 +7,8 @@ Interactor.prototype.when = function (assertion) {
   }, {
     _timeout: 10000,
     _queue: this._queue,
+    $root: this.$root,
+    __parent__: this.parent,
   });
 };
 
