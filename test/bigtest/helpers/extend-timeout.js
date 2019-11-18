@@ -2,13 +2,10 @@ import Interactor from '@bigtest/interactor';
 
 // increase timeout globally for all Interactors to 10s
 Interactor.prototype.when = function (assertion) {
-  const parent = Object.assign(Object.create(Object.getPrototypeOf(this)), this, {
-    _timeout: 10000,
-  });
-
   return new this.constructor({
     _queue: [{ assertion }],
-  }, parent);
+    timeout: 10000,
+  }, this);
 };
 
 Interactor.prototype.timeout = function (timeout) {
