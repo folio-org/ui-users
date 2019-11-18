@@ -1,4 +1,5 @@
 import 'babel-polyfill';
+import './helpers/extend-timeout';
 
 // require all modules ending in "-test" from the current directory and
 // all subdirectories
