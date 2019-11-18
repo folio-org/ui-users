@@ -32,7 +32,7 @@ export default (server) => {
     return matching.update(body);
   });
 
-  server.delete('manualblocks/:id');
+  server.delete('manualblocks/:id', {});
   server.post('/manualblocks', (schema, request) => {
     const body = JSON.parse(request.requestBody);
     return schema.manualblocks.create(body);

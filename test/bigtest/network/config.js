@@ -358,7 +358,11 @@ export default function config() {
     manualblocks: [],
     totalRecords: 0,
   });
+  this.delete('/manualblocks/:id', {});
   this.get('/perms/users/:id/permissions', {
+    permissionNames: [],
+  });
+  this.post('/perms/users/:id/permissions', {
     permissionNames: [],
   });
   this.get('/perms/permissions', function ({ permissions }) {
@@ -489,4 +493,11 @@ export default function config() {
 
   this.get('/perms/users/:id', { id: 'test' });
   this.put('/perms/users/:id', { id: 'test' });
+
+  this.get('request-preference-storage/request-preference', {
+    requestPreferences: [],
+    totalRecords: 0,
+  });
+
+  this.post('request-preference-storage/request-preference', {});
 }
