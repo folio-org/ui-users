@@ -9,3 +9,12 @@ Interactor.prototype.when = function (assertion) {
     _queue: this._queue,
   });
 };
+
+Interactor.prototype.timeout = function (timeout) {
+  if (typeof _timeout !== 'undefined') {
+    const _timeout = (timeout < 10000) ? 10000 : timeout;
+    return new this.constructor(_timeout, this);
+  } else {
+    return this._timeout;
+  }
+};
