@@ -51,7 +51,7 @@ import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/P
   // isLoaded = isPresent('[class*=paneTitleLabel---]');
 
   whenLoaded() {
-    return this.when(() => this.isPresent);
+    return this.when(() => this.isPresent).timeout(4000);
   }
 
   title = text('[class*=paneTitleLabel---]');
@@ -70,7 +70,4 @@ import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/P
   errorModal = new ModalInteractor('#proxy-error-modal');
 }
 
-export default new UserFormPage({
-  scope: '[data-test-form-page]',
-  timeout: 6000,
-});
+export default new UserFormPage('[data-test-form-page]');

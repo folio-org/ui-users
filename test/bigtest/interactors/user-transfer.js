@@ -80,6 +80,4 @@ import SelectInteractor from '@folio/stripes-components/lib/Select/tests/interac
   }
 }
 
-export default new TransferInteractor({
-  timeout: 6000,
-});
+export default new TransferInteractor();
