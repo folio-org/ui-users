@@ -16,7 +16,10 @@ import UsersInteractor from '../interactors/users';
 
 import translations from '../../../translations/ui-users/en';
 
-describe('User Edit: Proxy/Sponsor', () => {
+describe('User Edit: Proxy/Sponsor', function () {
+  // some of the beforeEach blocks seem to timeout in CI
+  this.timeout(5000);
+
   setupApplication({
     scenarios: ['user-proxy-edit'],
     modules: [{
