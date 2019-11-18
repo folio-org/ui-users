@@ -11,7 +11,7 @@ Interactor.prototype.when = function (assertion) {
 };
 
 Interactor.prototype.timeout = function (timeout) {
-  if (typeof _timeout !== 'undefined') {
+  if (typeof timeout !== 'undefined') {
     const _timeout = (timeout < 10000) ? 10000 : timeout;
     return new this.constructor(_timeout, this);
   } else {
