@@ -80,4 +80,4 @@ import SelectInteractor from '@folio/stripes-components/lib/Select/tests/interac
   }
 }
 
-export default new TransferInteractor();
+export default new TransferInteractor(5000);
