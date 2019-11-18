@@ -57,7 +57,7 @@ class ChargeFeesFinesContainer extends React.Component {
         const { resources: { loanItem, activeRecord } } = props;
         if ((activeRecord && activeRecord.barcode) || (loanItem && loanItem.records.length > 0)) {
           const itemBar = activeRecord.barcode || loanItem.records[0].barcode;
-          return itemBar ? `inventory/items?query=barcode=${itemBar}*` : null;
+          return itemBar ? `inventory/items?query=barcode==${itemBar}` : null;
         }
         return null;
       },
