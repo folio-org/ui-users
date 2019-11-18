@@ -102,6 +102,7 @@ describe('User notes flow', function () {
       describe('and the form is touched', () => {
         describe('and note title length is exceeded', () => {
           beforeEach(async () => {
+            await noteForm.whenLoaded();
             await noteForm.noteTitleField.enterText(faker.lorem.words(200));
           });
 
@@ -320,6 +321,7 @@ describe('User notes flow', function () {
         describe('and the form is touched', () => {
           describe('and note title length is exceeded', () => {
             beforeEach(async () => {
+              const ready = await noteForm.whenLoaded();
               await noteForm.noteTitleField.enterText(faker.lorem.words(200));
             });
 

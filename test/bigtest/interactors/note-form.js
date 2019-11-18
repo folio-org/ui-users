@@ -50,6 +50,7 @@ import { AccordionInteractor } from '@folio/stripes-components/lib/Accordion/tes
 }
 
 @interactor class NoteForm {
+  formIsPresent = isPresent('#noteForm');
   closeButton = new Button('[data-test-leave-note-form]');
   saveButton = new Button('[data-test-save-note]');
   formFieldsAccordionIsDisplayed = isPresent('#noteForm');
@@ -67,6 +68,10 @@ import { AccordionInteractor } from '@folio/stripes-components/lib/Accordion/tes
   clickPaneHeaderButton = clickable('[class^="paneHeaderCenterButton"]');
   clickDropdownCancelButton = clickable('[data-test-leave-note-form]');
   assignmentAccordion = new AccordionInteractor('#assigned');
+
+  whenLoaded() {
+    return this.when(() => this.formIsPresent);
+  }
 
   enterNoteData(noteType, noteTitle) {
     return this.noteTypesSelect.selectAndBlur(noteType)
