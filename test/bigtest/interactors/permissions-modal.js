@@ -41,7 +41,7 @@ import {
   modalHeader = scoped('[class^="modalHeader--"]');
   saveButton = scoped('[data-test-permissions-modal-save]');
   cancelButton = scoped('[data-test-permissions-modal-cancel]');
-  permissionsList = new PermissionsList();
+  permissionsList = new PermissionsList(5000);
   searchForm = new SearchForm();
 }
 

@@ -10,7 +10,7 @@ const usersAmount = 8;
 describe('Users', () => {
   setupApplication();
 
-  const users = new UsersInteractor();
+  const users = new UsersInteractor({ timeout: 5000 });
 
   beforeEach(async function () {
     this.server.createList('user', usersAmount);
