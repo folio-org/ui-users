@@ -15,7 +15,9 @@ describe('Status filter', () => {
   const inactiveUsersAmount = 8;
   const allUsers = activeUsersAmount + inactiveUsersAmount;
 
-  const users = new UsersInteractor();
+  const users = new UsersInteractor({
+    timeout: 5000,
+  });
 
   beforeEach(async function () {
     await this.server.createList('user', activeUsersAmount, { active: true });
