@@ -36,7 +36,7 @@ export default @interactor class UsersInteractor {
   clickStaffCheckbox = clickable('#clickable-filter-pg-staff');
   clickUndergradCheckbox = clickable('#clickable-filter-pg-undergrad');
   clickCreateUserButton = clickable('#clickable-newuser');
-  instances = collection('[role=group] [role=row]');
+  instances = collection('[role=group] [role=row]').timeout(10000);
   instance = scoped('[data-test-instance-details]');
 
   whenLoaded() {
