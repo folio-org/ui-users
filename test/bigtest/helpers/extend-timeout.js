@@ -1,6 +1,11 @@
 import Interactor from '@bigtest/interactor';
 
-// increase timeout globally for all Interactors to 10s
+// Increase timeout globally for all Interactors to 10s
+
+// This is a terrible hack which should be removed when
+// there is a way to override harcoded 2000ms in Convergence:
+// https://github.com/bigtestjs/convergence/blob/master/src/convergence.js#L104
+
 Interactor.prototype.when = function (assertion) {
   return new this.constructor({
     _queue: [{ assertion }],
