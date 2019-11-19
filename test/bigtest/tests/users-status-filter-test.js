@@ -16,7 +16,7 @@ describe('Status filter', () => {
   const allUsers = activeUsersAmount + inactiveUsersAmount;
 
   const users = new UsersInteractor({
-    timeout: 5000,
+    timeout: 10000,
   });
 
   beforeEach(async function () {
