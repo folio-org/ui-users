@@ -32,7 +32,7 @@ describe('User Edit: Proxy/Sponsor', () => {
   });
 
   const users = new UsersInteractor({ timeout: 10000 });
-  const findUserPlugin = new FindUserInteractor();
+  const findUserPlugin = new FindUserInteractor({ timeout: 10000 });
 
   beforeEach(async function () {
     this.visit('/users/preview/test-user-proxy-unique-id');
