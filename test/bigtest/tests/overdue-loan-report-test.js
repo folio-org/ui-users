@@ -8,7 +8,7 @@ import UsersInteractor from '../interactors/users';
 describe('OverdueLoanReport', () => {
   setupApplication();
 
-  const users = new UsersInteractor();
+  const users = new UsersInteractor({ timeout: 10000 });
   let xhr;
   let requests = [];
   beforeEach(async function () {

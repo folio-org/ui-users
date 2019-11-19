@@ -13,7 +13,7 @@ import UsersInteractor from '../interactors/users';
 describe('User Edit Page', () => {
   setupApplication();
 
-  const users = new UsersInteractor();
+  const users = new UsersInteractor({ timeout: 10000 });
   let user1;
   let user2;
 

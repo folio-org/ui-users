@@ -12,7 +12,7 @@ import UsersInteractor from '../interactors/users';
 describe('User Create Page', () => {
   setupApplication();
 
-  const users = new UsersInteractor();
+  const users = new UsersInteractor({ timeout: 10000 });
 
   beforeEach(async function () {
     this.visit('/users');
