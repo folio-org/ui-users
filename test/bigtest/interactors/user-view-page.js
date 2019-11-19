@@ -34,4 +34,7 @@ import proxyItemCSS from '../../../src/components/ProxyGroup/ProxyItem/ProxyItem
   }
 }
 
-export default new InstanceViewPage('[data-test-instance-details]');
+export default new InstanceViewPage({
+  timeout: 10000,
+  scope: '[data-test-instance-details]',
+});
