@@ -1,4 +1,5 @@
 import {
+  before,
   beforeEach,
   describe,
   it,
@@ -17,8 +18,11 @@ import InstanceViewPage from '../interactors/user-view-page';
 import ChargeFeeFineInteractor from '../interactors/charge-fee-fine';
 
 describe('Charge fee/fine', () => {
-  setupApplication();
   const chargeForm = new ChargeFeeFineInteractor();
+
+  before(function () {
+    setupApplication();
+  });
 
   describe('from the user detail view', () => {
     const userDetail = InstanceViewPage;

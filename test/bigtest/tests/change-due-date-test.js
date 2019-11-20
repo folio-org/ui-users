@@ -1,4 +1,5 @@
 import {
+  before,
   beforeEach,
   describe,
   it,
@@ -10,13 +11,15 @@ import OpenLoansInteractor from '../interactors/open-loans';
 
 describe('Change due date', () => {
   describe('test change due date overlay', () => {
-    setupApplication({
-      permissions: {
-        'circulation.loans.collection.get': true,
-      },
-    });
-
     const requestsAmount = 2;
+
+    before(function () {
+      setupApplication({
+        permissions: {
+          'circulation.loans.collection.get': true,
+        },
+      });
+    });
 
     beforeEach(async function () {
       const loan = this.server.create('loan', { status: { name: 'Open' } });

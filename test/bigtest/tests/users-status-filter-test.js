@@ -22,10 +22,10 @@ describe('Status filter', () => {
   const users = new UsersInteractor();
 
   beforeEach(async function () {
-    await this.server.createList('user', activeUsersAmount, { active: true });
+    this.server.createList('user', activeUsersAmount, { active: true });
     this.server.createList('user', inactiveUsersAmount, { active: false });
     this.visit('/users?sort=Name');
-    users.whenLoaded();
+    await users.whenLoaded();
   });
 
   describe('show inactive users', () => {

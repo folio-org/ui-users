@@ -1,5 +1,6 @@
 import { expect } from 'chai';
 import {
+  before,
   beforeEach,
   describe,
   it,
@@ -9,7 +10,9 @@ import TransferInteractor from '../interactors/user-transfer';
 import setupApplication from '../helpers/setup-application';
 
 describe('Test transfer', () => {
-  setupApplication({ scenarios: ['transfers'] });
+  before(function () {
+    setupApplication({ scenarios: ['transfers'] });
+  });
 
   beforeEach(async function () {
     await this.visit('users/1ad737b0-d847-11e6-bf26-cec0c932ce02/accounts/all');
