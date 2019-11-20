@@ -1,4 +1,5 @@
 import {
+  before,
   beforeEach,
   describe,
   it,
@@ -10,7 +11,10 @@ import setupApplication from '../helpers/setup-application';
 import UsersInteractor from '../interactors/users';
 
 describe('Status filter', () => {
-  setupApplication();
+  before(function () {
+    setupApplication();
+  });
+
   const activeUsersAmount = 4;
   const inactiveUsersAmount = 8;
   const allUsers = activeUsersAmount + inactiveUsersAmount;

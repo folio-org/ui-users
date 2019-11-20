@@ -1,4 +1,5 @@
 import {
+  before,
   beforeEach,
   describe,
   it,
@@ -10,7 +11,9 @@ import InstanceViewPage from '../interactors/user-view-page';
 import UserFormPage from '../interactors/user-form-page';
 
 describe('User view', () => {
-  setupApplication();
+  before(function () {
+    setupApplication();
+  });
 
   let user;
 
