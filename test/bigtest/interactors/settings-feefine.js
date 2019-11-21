@@ -95,7 +95,7 @@ const RowInteractor = interactor(class RowInteractor {
   newItemButton = new ButtonInteractor('[id*=clickable-add-settings-]');
 
   whenLoaded() {
-    return this.when(() => this.ownerSelect.isLoaded).timeout(3000);
+    return this.when(() => this.ownerSelect.isPresent && this.list.isPresent).timeout(3000);
   }
 }
 
