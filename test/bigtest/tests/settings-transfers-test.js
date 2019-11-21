@@ -17,6 +17,8 @@ describe('Settings transfers', () => {
 
   beforeEach(async function () {
     this.visit('/settings/users/transfers');
+
+    await FeeFineInteractor.whenLoaded();
     await FeeFineInteractor.ownerSelect.selectAndBlur('Main Admin1');
   });
 
