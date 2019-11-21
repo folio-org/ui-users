@@ -84,10 +84,6 @@ const RowInteractor = interactor(class RowInteractor {
 }
 
 @interactor class FeeFineInteractor {
-  whenLoaded() {
-    return this.when(() => this.isLoaded).timeout(3000);
-  }
-
   isLoaded = isPresent(rowSelector);
   ownerSelect = new SelectInteractor();
   notice = new NoticeInteractor();
@@ -97,6 +93,10 @@ const RowInteractor = interactor(class RowInteractor {
   callout = new CalloutInteractor();
   confirmationModal = new ConfirmationModalInteractor('#delete-controlled-vocab-entry-confirmation');
   newItemButton = new ButtonInteractor('[id*=clickable-add-settings-]');
+
+  whenLoaded() {
+    return this.when(() => this.ownerSelect.isLoaded).timeout(3000);
+  }
 }
 
 export default new FeeFineInteractor();
