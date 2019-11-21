@@ -1,4 +1,5 @@
 import {
+  before,
   beforeEach,
   describe,
   it,
@@ -11,11 +12,14 @@ import UserFormPage from '../interactors/user-form-page';
 import translation from '../../../translations/ui-users/en';
 
 describe('Permissions modal', () => {
-  setupApplication({ scenarios: ['comments'] });
   const permissionsAmount = 10;
   const permissionSetsAmount = 1;
   let permissionSets;
   let user;
+
+  before(function () {
+    setupApplication({ scenarios: ['comments'] });
+  });
 
   beforeEach(async function () {
     this.server.createList('permissions', permissionsAmount);

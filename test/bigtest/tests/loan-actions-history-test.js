@@ -1,4 +1,4 @@
-import { beforeEach, describe, it } from '@bigtest/mocha';
+import { before, beforeEach, describe, it } from '@bigtest/mocha';
 import { expect } from 'chai';
 
 import setupApplication from '../helpers/setup-application';
@@ -7,12 +7,16 @@ import LoanActionsHistory from '../interactors/loan-actions-history';
 import translations from '../../../translations/ui-users/en';
 
 describe('loans actions history', () => {
-  setupApplication({ permissions: {
-    'manualblocks.collection.get': true,
-    'circulation.loans.collection.get': true,
-  } });
-
   const requestsAmount = 2;
+
+  before(function () {
+    setupApplication({
+      permissions: {
+        'manualblocks.collection.get': true,
+        'circulation.loans.collection.get': true,
+      }
+    });
+  });
 
   beforeEach(async function () {
     const loan = this.server.create('loan', {

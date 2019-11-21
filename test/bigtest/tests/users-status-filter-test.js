@@ -1,4 +1,5 @@
 import {
+  before,
   beforeEach,
   describe,
   it,
@@ -10,7 +11,10 @@ import setupApplication from '../helpers/setup-application';
 import UsersInteractor from '../interactors/users';
 
 describe('Status filter', () => {
-  setupApplication();
+  before(function () {
+    setupApplication();
+  });
+
   const activeUsersAmount = 4;
   const inactiveUsersAmount = 8;
   const allUsers = activeUsersAmount + inactiveUsersAmount;
@@ -18,10 +22,10 @@ describe('Status filter', () => {
   const users = new UsersInteractor();
 
   beforeEach(async function () {
-    await this.server.createList('user', activeUsersAmount, { active: true });
+    this.server.createList('user', activeUsersAmount, { active: true });
     this.server.createList('user', inactiveUsersAmount, { active: false });
     this.visit('/users?sort=Name');
-    users.whenLoaded();
+    await users.whenLoaded();
   });
 
   describe('show inactive users', () => {

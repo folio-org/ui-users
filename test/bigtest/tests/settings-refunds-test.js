@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 
 import {
+  before,
   beforeEach,
   describe,
   it,
@@ -10,7 +11,9 @@ import setupApplication from '../helpers/setup-application';
 import FeeFineInteractor from '../interactors/settings-feefine';
 
 describe('Settings refunds', () => {
-  setupApplication({ scenarios: ['settings-feefine'] });
+  before(function () {
+    setupApplication({ scenarios: ['settings-feefine'] });
+  });
 
   beforeEach(async function () {
     this.visit('/settings/users/refunds');

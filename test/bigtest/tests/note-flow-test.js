@@ -13,7 +13,7 @@ const notesAccordion = new NotesAccordion();
 const noteForm = new NoteForm();
 const noteView = new NoteView();
 
-describe('User notes flow', function () {
+describe.skip('User notes flow', function () {
   setupApplication();
 
   let user;

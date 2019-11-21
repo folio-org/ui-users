@@ -4,7 +4,9 @@ import { expect } from 'chai';
 import setupApplication from '../helpers/setup-application';
 import ApplicationInteractor from '../interactors/application';
 
-describe('Application', () => {
+describe('Application', function () {
+  this.timeout(4000);
+
   const app = new ApplicationInteractor();
 
   setupApplication();
