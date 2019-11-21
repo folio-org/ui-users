@@ -1,4 +1,5 @@
 import {
+  before,
   beforeEach,
   describe,
   it,
@@ -9,7 +10,9 @@ import setupApplication from '../helpers/setup-application';
 import FeeFineInteractor from '../interactors/settings-feefine';
 
 describe('Settings owners', () => {
-  setupApplication({ scenarios: ['settings-feefine'] });
+  before(function () {
+    setupApplication({ scenarios: ['settings-feefine'] });
+  });
 
   beforeEach(async function () {
     await this.server.create('service-point', { name: 'None' });

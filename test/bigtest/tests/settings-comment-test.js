@@ -1,4 +1,5 @@
 import {
+  before,
   beforeEach,
   describe,
   it,
@@ -9,10 +10,12 @@ import setupApplication from '../helpers/setup-application';
 import Comments from '../interactors/settings-comment';
 
 describe('Fee/fines comment required', () => {
-  setupApplication({ scenarios: ['comments'] });
+  before(function () {
+    setupApplication({ scenarios: ['comments'] });
+  });
 
   beforeEach(async function () {
-    await this.visit('/settings/users/comments');
+    this.visit('/settings/users/comments');
     await Comments.whenLoaded();
   });
 

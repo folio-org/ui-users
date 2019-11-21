@@ -1,4 +1,4 @@
-import { beforeEach, describe, it } from '@bigtest/mocha';
+import { before, beforeEach, describe, it } from '@bigtest/mocha';
 
 import { expect } from 'chai';
 
@@ -8,9 +8,11 @@ import UsersInteractor from '../interactors/users';
 const usersAmount = 8;
 
 describe('Users', () => {
-  setupApplication();
-
   const users = new UsersInteractor();
+
+  before(function () {
+    setupApplication();
+  });
 
   beforeEach(async function () {
     this.server.createList('user', usersAmount);

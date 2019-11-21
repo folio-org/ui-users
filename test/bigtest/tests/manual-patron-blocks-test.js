@@ -1,4 +1,5 @@
 import {
+  before,
   beforeEach,
   describe,
   it,
@@ -10,11 +11,13 @@ import setupApplication from '../helpers/setup-application';
 import PatronBlocksInteractor from '../interactors/manual-blocks';
 
 describe('Test Patron Blocks section', () => {
-  setupApplication({
-    scenarios: ['manual-blocks'],
-    permissions: {
-      'manualblocks.collection.get': true
-    },
+  before(function () {
+    setupApplication({
+      scenarios: ['manual-blocks'],
+      permissions: {
+        'manualblocks.collection.get': true
+      },
+    });
   });
 
   beforeEach(async function () {

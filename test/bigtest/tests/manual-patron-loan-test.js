@@ -1,4 +1,5 @@
 import {
+  before,
   beforeEach,
   describe,
   it,
@@ -10,12 +11,14 @@ import PatronBlocksInteractor from '../interactors/manual-blocks';
 import LoansInteractor from '../interactors/open-loans';
 
 describe('Test Patron Blocks renewals', () => {
-  setupApplication({
-    scenarios: ['manual-blocks'],
-    permissions: {
-      'manualblocks.collection.get': true,
-      'circulation.loans.collection.get': true
-    },
+  before(function () {
+    setupApplication({
+      scenarios: ['manual-blocks'],
+      permissions: {
+        'manualblocks.collection.get': true,
+        'circulation.loans.collection.get': true
+      },
+    });
   });
 
   beforeEach(async function () {

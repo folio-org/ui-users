@@ -1,4 +1,4 @@
-import { beforeEach, afterEach, describe, it } from '@bigtest/mocha';
+import { before, beforeEach, afterEach, describe, it } from '@bigtest/mocha';
 import { expect } from 'chai';
 import sinon from 'sinon';
 
@@ -6,11 +6,14 @@ import setupApplication from '../helpers/setup-application';
 import UsersInteractor from '../interactors/users';
 
 describe('OverdueLoanReport', () => {
-  setupApplication();
-
   const users = new UsersInteractor();
   let xhr;
   let requests = [];
+
+  before(function () {
+    setupApplication();
+  });
+
   beforeEach(async function () {
     this.server.createList('loan', 5, 'borrower');
     this.visit('/users?sort=Name');
