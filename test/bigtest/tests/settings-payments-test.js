@@ -1,7 +1,6 @@
 import { expect } from 'chai';
 
 import {
-  before,
   beforeEach,
   describe,
   it,
@@ -11,11 +10,9 @@ import setupApplication from '../helpers/setup-application';
 import FeeFineInteractor from '../interactors/settings-feefine';
 
 describe('Settings payments', () => {
-  before(function () {
-    setupApplication({ scenarios: ['settings-feefine'] });
-  });
-
   beforeEach(async function () {
+    setupApplication({ scenarios: ['settings-feefine'] });
+
     this.visit('/settings/users/payments');
     await FeeFineInteractor.ownerSelect.selectAndBlur('Main Admin1');
   });
