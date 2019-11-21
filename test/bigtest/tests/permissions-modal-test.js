@@ -114,13 +114,16 @@ describe('Permissions modal', () => {
 });
 
 describe('Permission set form', () => {
-  setupApplication({ scenarios: ['comments'] });
   const permissionsAmount = 10;
   let permissions;
 
+  before(async function () {
+    setupApplication({ scenarios: ['comments'] });
+  });
+
   beforeEach(async function () {
     permissions = this.server.createList('permissions', permissionsAmount);
-    await this.visit('/settings/users/perms?layer=add');
+    this.visit('/settings/users/perms?layer=add');
     await PermissionSetForm.whenLoaded();
   });
 
