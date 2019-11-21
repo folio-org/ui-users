@@ -11,6 +11,8 @@ import setupApplication from '../helpers/setup-application';
 import FeeFineInteractor from '../interactors/settings-feefine';
 
 describe('Manual charges', () => {
+  this.timeout(5000);
+
   before(function () {
     setupApplication({ scenarios: ['templates'] });
   });
