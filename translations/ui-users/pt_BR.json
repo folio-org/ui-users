@@ -842,5 +842,6 @@
     "requests.holdShelfNo": "Prateleira de espera - Não",
     "requests.selectDeliveryAddress": "Selecione o endereço de entrega",
     "addAddressError": "Adicione pelo menos um endereço na seção \"Endereços\"",
-    "requests.defaultPickupServicePoint": "Ponto de serviço de retirada padrão"
+    "requests.defaultPickupServicePoint": "Ponto de serviço de retirada padrão",
+    "errors.currentUser.expired": "Current user record expired"
 }
