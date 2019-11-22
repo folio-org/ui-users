@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
@@ -7,11 +7,11 @@ import _ from 'lodash';
 
 import { Route, Switch, IfPermission } from '@folio/stripes/core';
 import { CommandList, HasCommand } from '@folio/stripes/components';
+import { Settings } from '@folio/stripes/smart-components';
 
 import * as Routes from './routes';
 
 import pkg from '../package';
-import Settings from './settings';
 import commands from './commands';
 import PermissionSets from './settings/permissions/PermissionSets';
 import PatronGroupsSettings from './settings/PatronGroupsSettings';
@@ -101,17 +101,6 @@ const settingsFeefines = [
   },
 ];
 
-export const settingsSections = [
-  {
-    label: <FormattedMessage id="ui-users.settings.general" />,
-    pages: _.sortBy(settingsGeneral, ['label']),
-  },
-  {
-    label: <FormattedMessage id="ui-users.settings.feefine" />,
-    pages: _.sortBy(settingsFeefines, ['label']),
-  },
-];
-
 class UsersRouting extends React.Component {
   static actionNames = ['stripesHome', 'usersSortByName'];
 
@@ -123,6 +112,20 @@ class UsersRouting extends React.Component {
     match: PropTypes.object.isRequired,
     showSettings: PropTypes.bool,
     history: PropTypes.object,
+  }
+
+  constructor(props) {
+    super(props);
+    this.sections = [
+      {
+        label: <FormattedMessage id="ui-users.settings.general" />,
+        pages: _.sortBy(settingsGeneral, ['label']),
+      },
+      {
+        label: <FormattedMessage id="ui-users.settings.feefine" />,
+        pages: _.sortBy(settingsFeefines, ['label']),
+      },
+    ];
   }
 
   componentDidMount() {
@@ -208,14 +211,11 @@ class UsersRouting extends React.Component {
 
     if (showSettings) {
       return (
-        <Route path={path} component={Settings}>
-          <Switch>
-            {[].concat(...settingsSections.map(section => section.pages))
-              .filter(setting => !setting.perm || stripes.hasPerm(setting.perm))
-              .map(setting => <Route path={`${path}/${setting.route}`} key={setting.route} component={setting.component} />)
-            }
-          </Switch>
-        </Route>
+        <Settings
+          {...this.props}
+          sections={this.sections}
+          paneTitle={<FormattedMessage id="ui-users.settings.label" />}
+        />
       );
     }
 
