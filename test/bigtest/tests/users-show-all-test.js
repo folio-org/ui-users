@@ -20,6 +20,7 @@ describe('Users', () => {
 
     await users.activeUserCheckbox.clickActive();
     await users.activeUserCheckbox.clickInactive();
+    await users.whenResultsLoaded();
   });
 
   it('shows the list of user items', () => {

@@ -21,6 +21,7 @@ describe('User view', () => {
     user = this.server.create('user');
 
     this.visit(`/users/view/${user.id}`);
+    await InstanceViewPage.whenLoaded();
   });
 
   it('displays the instance title in the pane header', () => {
