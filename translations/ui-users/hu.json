@@ -842,5 +842,6 @@
     "requests.holdShelfNo": "Hold shelf - No",
     "requests.selectDeliveryAddress": "Select delivery address",
     "addAddressError": "Please, add at least one address inside \"Addresses\" section",
-    "requests.defaultPickupServicePoint": "Default pickup service point"
+    "requests.defaultPickupServicePoint": "Default pickup service point",
+    "errors.currentUser.expired": "Current user record expired"
 }
