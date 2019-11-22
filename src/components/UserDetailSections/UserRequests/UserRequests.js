@@ -101,7 +101,17 @@ class UserRequests extends React.Component {
   }
 
   render() {
-    const { stripes, expanded, onToggle, accordionId, user: { barcode }, resources } = this.props;
+    const {
+      stripes,
+      expanded,
+      onToggle,
+      accordionId,
+      user: {
+        barcode,
+        id,
+      },
+      resources
+    } = this.props;
     const openRequestsTotal = _.get(resources.openRequestsCount, ['records', '0', 'totalRecords'], 0);
     const closedRequestsTotal = _.get(resources.closedRequestsCount, ['records', '0', 'totalRecords'], 0);
     const openRequestsCount = (_.get(resources.openRequestsCount, ['isPending'], true)) ? -1 : openRequestsTotal;
@@ -145,13 +155,13 @@ class UserRequests extends React.Component {
                 id: 'clickable-viewopenrequests',
                 count: openRequestsCount,
                 formattedMessageId: 'ui-users.requests.numOpenRequests',
-                query: { query: barcode, filters: openFilterString },
+                query: { query: id, filters: openFilterString },
               },
               {
                 id: 'clickable-viewclosedrequests',
                 count: closedRequestsCount,
                 formattedMessageId: 'ui-users.requests.numClosedRequests',
-                query: { query: barcode, filters: closedFilterString },
+                query: { query: id, filters: closedFilterString },
               },
             ]}
           /> : <Icon icon="spinner-ellipsis" width="10px" />
