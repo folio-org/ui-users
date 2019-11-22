@@ -58,6 +58,8 @@ describe('User Edit: Proxy/Sponsor', function () {
 
     describe('Add sponsor', () => {
       beforeEach(async () => {
+        await UserFormPage.when(() => UserFormPage.proxySection.isPresent);
+        await findUserPlugin.when(() => findUserPlugin.button.isPresent);
         await findUserPlugin.button.click();
       });
 
