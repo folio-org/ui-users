@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 
 import {
+  before,
   beforeEach,
   describe,
   it,
@@ -10,13 +11,15 @@ import setupApplication from '../helpers/setup-application';
 import FeeFineInteractor from '../interactors/settings-feefine';
 
 describe('Manual charges', () => {
-  this.timeout(5000);
+  before(function () {
+    setupApplication({ scenarios: ['templates'] });
+  });
 
   beforeEach(async function () {
-    setupApplication({ scenarios: ['templates'] });
-
     this.visit('/settings/users/feefinestable');
+
     await FeeFineInteractor.whenLoaded();
+    await FeeFineInteractor.whenListLoaded();
   });
 
   it('renders proper amount of rows', () => {

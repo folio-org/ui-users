@@ -18,6 +18,7 @@ describe('Settings refunds', () => {
   beforeEach(async function () {
     this.visit('/settings/users/refunds');
     await FeeFineInteractor.whenLoaded();
+    await FeeFineInteractor.whenListLoaded();
   });
 
   it('renders proper amount of rows', () => {

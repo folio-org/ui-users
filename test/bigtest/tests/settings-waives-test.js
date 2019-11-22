@@ -15,10 +15,10 @@ describe('Settings waives', () => {
     setupApplication({ scenarios: ['settings-feefine'] });
   });
 
-
   beforeEach(async function () {
     this.visit('/settings/users/waivereasons');
     await FeeFineInteractor.whenLoaded();
+    await FeeFineInteractor.whenListLoaded();
   });
 
   it('renders proper amount of rows', () => {

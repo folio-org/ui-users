@@ -20,6 +20,7 @@ describe('Settings transfers', () => {
 
     await FeeFineInteractor.whenLoaded();
     await FeeFineInteractor.ownerSelect.selectAndBlur('Main Admin1');
+    await FeeFineInteractor.whenListLoaded();
   });
 
   it('renders proper amount of rows', () => {
