@@ -1,4 +1,5 @@
 import {
+  before,
   beforeEach,
   describe,
   it,
@@ -10,9 +11,11 @@ import UserFormPage from '../interactors/user-form-page';
 import UsersInteractor from '../interactors/users';
 
 describe('User Create Page', () => {
-  setupApplication();
-
   const users = new UsersInteractor();
+
+  before(function () {
+    setupApplication();
+  });
 
   beforeEach(async function () {
     this.visit('/users');

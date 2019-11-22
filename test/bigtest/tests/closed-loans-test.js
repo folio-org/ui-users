@@ -2,6 +2,7 @@ import {
   beforeEach,
   describe,
   it,
+  before,
 } from '@bigtest/mocha';
 import { expect } from 'chai';
 
@@ -13,11 +14,13 @@ function setupAnonymizationAPIResponse(server, errors) {
 }
 
 describe('Closed Loans', () => {
-  setupApplication({
-    permissions: {
-      'manualblocks.collection.get': true,
-      'circulation.loans.collection.get': true,
-    },
+  before(function () {
+    setupApplication({
+      permissions: {
+        'manualblocks.collection.get': true,
+        'circulation.loans.collection.get': true,
+      },
+    });
   });
 
   beforeEach(async function () {

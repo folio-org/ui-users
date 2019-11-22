@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 
 import {
+  before,
   beforeEach,
   describe,
   it,
@@ -10,11 +11,16 @@ import setupApplication from '../helpers/setup-application';
 import FeeFineInteractor from '../interactors/settings-feefine';
 
 describe('Settings transfers', () => {
-  setupApplication({ scenarios: ['settings-feefine'] });
+  before(function () {
+    setupApplication({ scenarios: ['settings-feefine'] });
+  });
 
   beforeEach(async function () {
     this.visit('/settings/users/transfers');
+
+    await FeeFineInteractor.whenLoaded();
     await FeeFineInteractor.ownerSelect.selectAndBlur('Main Admin1');
+    await FeeFineInteractor.whenListLoaded();
   });
 
   it('renders proper amount of rows', () => {

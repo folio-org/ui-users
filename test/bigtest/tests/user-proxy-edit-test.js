@@ -16,7 +16,10 @@ import UsersInteractor from '../interactors/users';
 
 import translations from '../../../translations/ui-users/en';
 
-describe('User Edit: Proxy/Sponsor', () => {
+describe('User Edit: Proxy/Sponsor', function () {
+  // some of the beforeEach blocks seem to timeout in CI
+  this.timeout(5000);
+
   setupApplication({
     scenarios: ['user-proxy-edit'],
     modules: [{
@@ -111,7 +114,7 @@ describe('User Edit: Proxy/Sponsor', () => {
 
           it('relationship status should show a warning', () => {
             expect(UserFormPage.proxySection.relationshipStatus.hasWarningStyle).to.be.true;
-            expect(UserFormPage.proxySection.relationshipStatus.warningText).to.equal(translations['errors.sponsors.expired']);
+            expect(UserFormPage.proxySection.relationshipStatus.warningText).to.equal(translations['errors.currentUser.expired']);
           });
         });
         // describe('Saving a sponsor', () => {
@@ -173,23 +176,18 @@ describe('User Edit: Proxy/Sponsor', () => {
           await findUserPlugin.modal.instances(0).click();
         });
 
-        it('sponsor list should not include Malkovich', () => {
+        it('sponsor list should be empty', () => {
           expect(UserFormPage.proxySection.sponsorCount).to.equal(0);
         });
 
-        it('modal should Malkovich Malkovich Malkovich', () => {
+        it('error modal should be present', () => {
           expect(UserFormPage.errorModal.isPresent).to.be.true;
           expect(UserFormPage.errorModal.label).to.equal(translations['errors.sponsors.invalidUserLabel']);
           expect(UserFormPage.errorModal.text).to.include(translations['errors.sponsors.invalidUserMessage']);
         });
 
-        it('Malkovich?', () => {
-          expect(true).to.be.true;
-        });
-
-        it('Malkovich! Malkovich Malkovich', () => {
-          expect(true).to.be.true;
-        });
+        it('Malkovich?');
+        it('Malkovich! Malkovich Malkovich');
       });
     });
 

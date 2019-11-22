@@ -1,4 +1,5 @@
 import {
+  before,
   beforeEach,
   describe,
   it,
@@ -11,11 +12,13 @@ import InstanceViewPage from '../interactors/user-view-page';
 import UsersInteractor from '../interactors/users';
 
 describe('User Edit Page', () => {
-  setupApplication();
-
   const users = new UsersInteractor();
   let user1;
   let user2;
+
+  before(function () {
+    setupApplication();
+  });
 
   beforeEach(async function () {
     user1 = this.server.create('user');

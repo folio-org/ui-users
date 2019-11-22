@@ -42,4 +42,8 @@ export default @interactor class UsersInteractor {
   whenLoaded() {
     return this.when(() => this.patronGroupsPresent).timeout(5000);
   }
+
+  whenResultsLoaded() {
+    return this.when(() => !this.emptyMessageDisplayed).timeout(5000);
+  }
 }

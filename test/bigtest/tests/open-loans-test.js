@@ -1,4 +1,5 @@
 import {
+  before,
   beforeEach,
   describe,
   it,
@@ -11,25 +12,26 @@ import OpenLoansInteractor from '../interactors/open-loans';
 
 describe('Open Loans', () => {
   const requestsPath = '/requests';
-
-  setupApplication({
-    permissions: {
-      'manualblocks.collection.get': true,
-      'circulation.loans.collection.get': true,
-    },
-    modules: [{
-      type: 'app',
-      name: '@folio/ui-requests',
-      displayName: 'requests',
-      route: requestsPath,
-      module: DummyComponent,
-    }],
-    translations: {
-      'requests': 'requests'
-    },
-  });
-
   const requestsAmount = 2;
+
+  before(function () {
+    setupApplication({
+      permissions: {
+        'manualblocks.collection.get': true,
+        'circulation.loans.collection.get': true,
+      },
+      modules: [{
+        type: 'app',
+        name: '@folio/ui-requests',
+        displayName: 'requests',
+        route: requestsPath,
+        module: DummyComponent,
+      }],
+      translations: {
+        'requests': 'requests'
+      },
+    });
+  });
 
   beforeEach(async function () {
     const loan = this.server.create('loan', { status: { name: 'Open' } });
