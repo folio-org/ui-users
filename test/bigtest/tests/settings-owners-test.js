@@ -19,6 +19,7 @@ describe('Settings owners', () => {
     this.visit('/settings/users/owners');
 
     await FeeFineInteractor.whenLoaded();
+    await FeeFineInteractor.whenListLoaded();
   });
 
   it('renders proper amount of columns', () => {

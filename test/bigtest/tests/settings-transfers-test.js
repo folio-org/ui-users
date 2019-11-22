@@ -17,7 +17,10 @@ describe('Settings transfers', () => {
 
   beforeEach(async function () {
     this.visit('/settings/users/transfers');
+
+    await FeeFineInteractor.whenLoaded();
     await FeeFineInteractor.ownerSelect.selectAndBlur('Main Admin1');
+    await FeeFineInteractor.whenListLoaded();
   });
 
   it('renders proper amount of rows', () => {
