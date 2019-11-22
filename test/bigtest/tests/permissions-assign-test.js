@@ -1,4 +1,5 @@
 import {
+  before,
   beforeEach,
   describe,
   it,
@@ -11,9 +12,13 @@ import InstanceViewPage from '../interactors/user-view-page';
 import PermissionSetForm from '../interactors/permission-set-form';
 
 describe('Permissions assign', () => {
-  setupApplication({ permissions: { 'perms.users.get': true } });
   const permissionsAmount = 10;
   const permissionSetsAmount = 1;
+
+  before(function () {
+    setupApplication({ permissions: { 'perms.users.get': true } });
+  });
+
 
   beforeEach(async function () {
     this.server.createList('permissions', permissionsAmount);

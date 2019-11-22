@@ -1,4 +1,5 @@
 import {
+  before,
   beforeEach,
   describe,
   it,
@@ -9,7 +10,9 @@ import setupApplication from '../helpers/setup-application';
 import FeeFineHistoryInteractor from '../interactors/fee-fine-history';
 
 describe('Test Fee/Fine History', () => {
-  setupApplication({ scenarios: ['view-fees-fines'] });
+  before(function () {
+    setupApplication({ scenarios: ['view-fees-fines'] });
+  });
 
   beforeEach(async function () {
     this.visit('/users/preview/ce0e0d5b-b5f3-4ad5-bccb-49c0784298fd');

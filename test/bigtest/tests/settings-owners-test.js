@@ -1,4 +1,5 @@
 import {
+  before,
   beforeEach,
   describe,
   it,
@@ -9,12 +10,16 @@ import setupApplication from '../helpers/setup-application';
 import FeeFineInteractor from '../interactors/settings-feefine';
 
 describe('Settings owners', () => {
-  setupApplication({ scenarios: ['settings-feefine'] });
+  before(function () {
+    setupApplication({ scenarios: ['settings-feefine'] });
+  });
 
   beforeEach(async function () {
-    await this.server.create('service-point', { name: 'None' });
-    await this.visit('/settings/users/owners');
+    this.server.create('service-point', { name: 'None' });
+    this.visit('/settings/users/owners');
+
     await FeeFineInteractor.whenLoaded();
+    await FeeFineInteractor.whenListLoaded();
   });
 
   it('renders proper amount of columns', () => {

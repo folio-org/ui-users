@@ -176,23 +176,18 @@ describe('User Edit: Proxy/Sponsor', function () {
           await findUserPlugin.modal.instances(0).click();
         });
 
-        it('sponsor list should not include Malkovich', () => {
+        it('sponsor list should be empty', () => {
           expect(UserFormPage.proxySection.sponsorCount).to.equal(0);
         });
 
-        it('modal should Malkovich Malkovich Malkovich', () => {
+        it('error modal should be present', () => {
           expect(UserFormPage.errorModal.isPresent).to.be.true;
           expect(UserFormPage.errorModal.label).to.equal(translations['errors.sponsors.invalidUserLabel']);
           expect(UserFormPage.errorModal.text).to.include(translations['errors.sponsors.invalidUserMessage']);
         });
 
-        it('Malkovich?', () => {
-          expect(true).to.be.true;
-        });
-
-        it('Malkovich! Malkovich Malkovich', () => {
-          expect(true).to.be.true;
-        });
+        it('Malkovich?');
+        it('Malkovich! Malkovich Malkovich');
       });
     });
 

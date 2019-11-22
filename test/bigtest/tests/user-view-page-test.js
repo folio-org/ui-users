@@ -1,4 +1,5 @@
 import {
+  before,
   beforeEach,
   describe,
   it,
@@ -10,7 +11,9 @@ import InstanceViewPage from '../interactors/user-view-page';
 import UserFormPage from '../interactors/user-form-page';
 
 describe('User view', () => {
-  setupApplication();
+  before(function () {
+    setupApplication();
+  });
 
   let user;
 
@@ -18,6 +21,7 @@ describe('User view', () => {
     user = this.server.create('user');
 
     this.visit(`/users/view/${user.id}`);
+    await InstanceViewPage.whenLoaded();
   });
 
   it('displays the instance title in the pane header', () => {
