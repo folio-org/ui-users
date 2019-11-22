@@ -16,7 +16,10 @@ import UsersInteractor from '../interactors/users';
 
 import translations from '../../../translations/ui-users/en';
 
-describe('User Edit: Proxy/Sponsor', () => {
+describe('User Edit: Proxy/Sponsor', function () {
+  // some of the beforeEach blocks seem to timeout in CI
+  this.timeout(5000);
+
   setupApplication({
     scenarios: ['user-proxy-edit'],
     modules: [{
@@ -111,7 +114,7 @@ describe('User Edit: Proxy/Sponsor', () => {
 
           it('relationship status should show a warning', () => {
             expect(UserFormPage.proxySection.relationshipStatus.hasWarningStyle).to.be.true;
-            expect(UserFormPage.proxySection.relationshipStatus.warningText).to.equal(translations['errors.sponsors.expired']);
+            expect(UserFormPage.proxySection.relationshipStatus.warningText).to.equal(translations['errors.currentUser.expired']);
           });
         });
         // describe('Saving a sponsor', () => {

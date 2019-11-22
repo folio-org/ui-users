@@ -479,6 +479,7 @@
   "errors.proxyrelationship.expired": "Proxy relationship has expired",
   "errors.proxies.expired": "Proxy user record expired",
   "errors.sponsors.expired": "Sponsor user record expired",
+  "errors.currentUser.expired": "Current user record expired",
   "errors.proxies.invalidUserLabel": "Invalid Proxy",
   "errors.sponsors.invalidUserLabel": "Invalid Sponsor",
   "errors.proxies.invalidUserMessage": "Users cannot be proxies for themselves.",
