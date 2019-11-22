@@ -56,8 +56,10 @@ describe('User Edit: Proxy/Sponsor', function () {
       expect(UserFormPage.title).to.not.equal('Edit User');
     });
 
-    describe('Add sponsor', () => {
+    describe.only('Add sponsor', () => {
       beforeEach(async () => {
+        await UserFormPage.when(() => UserFormPage.proxySection.isPresent);
+        await findUserPlugin.when(() => findUserPlugin.button.isPresent);
         await findUserPlugin.button.click();
       });
 
