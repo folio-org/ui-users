@@ -343,7 +343,7 @@
     "crud.editUser": "Редактировать пользователя",
     "crud.createUser": "Создать пользователя",
     "errors.missingRequiredField": "Пожалуйста, заполните это, чтобы продолжить",
-    "errors.missingRequiredUsername": "Please provide a username when a password is given",
+    "errors.missingRequiredUsername": "Пожалуйста, укажите имя пользователя при вводе пароля",
     "errors.missingRequiredPassword": "Пожалуйста, введите пароль для заданного имени пользователя",
     "errors.missingRequiredPatronGroup": "Please select a patron group",
     "errors.missingRequiredContactType": "Пожалуйста, выберите тип контакта",
@@ -819,11 +819,11 @@
     "permissions.modal.permissionSet": "Permission set",
     "permissions.modal.save": "Сохранить",
     "permissions.modal.cancel": "Отмена",
-    "permissions.modal.search.header": "Search & filter",
+    "permissions.modal.search.header": "Поиск и фильтр",
     "permissions.modal.search.resetAll": "Сбросить все",
     "permissions.modal.total": "Всего выбрано: {count}",
-    "permissions.modal.hideSearchPane": "Hide search and filters pane.",
-    "permissions.modal.showSearchPane": "Show search and filters pane.",
+    "permissions.modal.hideSearchPane": "Скрыть панель поиска и фильтров.",
+    "permissions.modal.showSearchPane": "Показать панель поиска и фильтров.",
     "permissions.modal.numberOfFilters": "{count, number} {count, plural, one {applied filter} other {applied filters}}",
     "permissions.modal.filter.permissionType.permissions": "Права доступа",
     "permissions.modal.permission": "Разрешение",
@@ -842,5 +842,6 @@
     "requests.holdShelfNo": "Hold shelf - No",
     "requests.selectDeliveryAddress": "Выберите адрес доставки",
     "addAddressError": "Пожалуйста, добавьте хотя бы один адрес в раздел \"Адреса\"",
-    "requests.defaultPickupServicePoint": "Default pickup service point"
+    "requests.defaultPickupServicePoint": "Default pickup service point",
+    "errors.currentUser.expired": "Current user record expired"
 }
