@@ -19,6 +19,13 @@ describe('User view', () => {
 
   beforeEach(async function () {
     user = this.server.create('user');
+    this.server.create('requestPreferences', {
+      userId: user.id,
+      delivery: true,
+      defaultServicePointId: 'servicepointId1',
+      defaultDeliveryAddressTypeId: 'Type1',
+      fulfillment: 'Delivery',
+    });
 
     this.visit(`/users/view/${user.id}`);
     await InstanceViewPage.whenLoaded();
