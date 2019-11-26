@@ -31,11 +31,19 @@ class PermissionsModal extends React.Component {
       type: 'okapi',
       records: 'permissions',
       path: (queryParams, pathComponents, resourceData, config, props) => {
-        const excludePermissionSets = props.excludePermissionSets;
+        const {
+          stripes: { config : { listInvisiblePerms } },
+          excludePermissionSets,
+        } = props;
+        const query = [
+          ...(listInvisiblePerms || ['visible==true']),
+          ...(excludePermissionSets && ['mutable==false']),
+        ];
+        const queryString = query.length
+          ? `query=(${query.join(' and ')})`
+          : '';
 
-        return excludePermissionSets
-          ? 'perms/permissions?length=10000&query=(visible==true and mutable==false)'
-          : 'perms/permissions?length=10000&query=(visible==true)';
+        return `perms/permissions?length=10000&${queryString}`;
       },
       fetch: false,
       accumulate: true,
