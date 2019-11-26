@@ -842,5 +842,7 @@
     "requests.holdShelfNo": "رف الحجز - لا",
     "requests.selectDeliveryAddress": "اختر عنوان التوصيل",
     "addAddressError": "يرجى إضافة عنوان واحد على الأقل في قسم \"عناوين\"",
-    "requests.defaultPickupServicePoint": "نقطة خدمة الالتقاط الافتراضية"
+    "requests.defaultPickupServicePoint": "نقطة خدمة الالتقاط الافتراضية",
+    "errors.currentUser.expired": "Current user record expired",
+    "data.loanActionMap.declaredLost": "Declared lost"
 }

@@ -842,5 +842,7 @@
     "requests.holdShelfNo": "取り置き棚　- No",
     "requests.selectDeliveryAddress": "デリバリー先住所を選択",
     "addAddressError": "[住所]セクション内に少なくとも1つの住所を追加してください",
-    "requests.defaultPickupServicePoint": "Default pickup service point"
+    "requests.defaultPickupServicePoint": "Default pickup service point",
+    "errors.currentUser.expired": "Current user record expired",
+    "data.loanActionMap.declaredLost": "Declared lost"
 }
