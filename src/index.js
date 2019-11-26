@@ -101,7 +101,7 @@ const settingsFeefines = [
   },
 ];
 
-class UsersRouting extends React.Component {
+class UsersRouting extends Component {
   static actionNames = ['stripesHome', 'usersSortByName'];
 
   static propTypes = {
@@ -201,9 +201,7 @@ class UsersRouting extends React.Component {
 
   render() {
     const {
-      showSettings,
-      match: { path },
-      stripes
+      showSettings
     } = this.props;
 
     this.shortcutScope = document.body;
