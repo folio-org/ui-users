@@ -843,6 +843,6 @@
     "requests.selectDeliveryAddress": "Seleziona l'indirizzo di consegna",
     "addAddressError": "Aggiungi almeno un indirizzo nella sezione \"Indirizzi\"",
     "requests.defaultPickupServicePoint": "Punto di ritiro predefinito",
-    "errors.currentUser.expired": "Current user record expired",
-    "data.loanActionMap.declaredLost": "Declared lost"
+    "errors.currentUser.expired": "Il record utente corrente è scaduto",
+    "data.loanActionMap.declaredLost": "Dichiarato perso"
 }
