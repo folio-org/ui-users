@@ -29,6 +29,11 @@ import proxyItemCSS from '../../../src/components/ProxyGroup/ProxyItem/ProxyItem
   editButtonPresent = isPresent('#clickable-edituser');
   clickEditButton = clickable('#clickable-edituser');
   proxySection = scoped('#proxySection', ProxySectionInteractor);
+  holdShelf = text('[data-test-hold-shelf]');
+  delivery = text('[data-test-delivery]');
+  fulfillmentPreference = text('[data-test-fulfillment-preference]');
+  defaultPickupServicePoint = text('[data-test-default-pickup-service-point]');
+  defaultDeliveryAddress = text('[data-test-default-delivery-address]');
   whenLoaded() {
     return this.when(() => this.isPresent).timeout(5000);
   }

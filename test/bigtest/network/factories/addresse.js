@@ -6,13 +6,6 @@ export default Factory.extend({
   city: () => faker.address.city(),
   region: () => faker.address.state(),
   postalCode: () => faker.address.zipCode(),
-  addressType: () => faker.random.arrayElement([
-    'Claim',
-    'Home',
-    'Order',
-    'Payment',
-    'Returns',
-    'Work'
-  ]),
+  addressType: () => 'Type1',
   primaryAddress: () => true,
 });
