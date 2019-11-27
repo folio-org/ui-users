@@ -44,5 +44,98 @@ describe('User Create Page', () => {
         expect(users.$root).to.exist;
       });
     });
+
+    describe('request preferences', () => {
+      it('should display "hold shelf" checkbox as checked', () => {
+        expect(UserFormPage.holdShelfCheckboxIsChecked).to.be.true;
+      });
+
+      it('should display "hold shelf" checkbox as disabled', () => {
+        expect(UserFormPage.holdShelfCheckboxIsDisabled).to.be.true;
+      });
+
+      it('should display "delivery" checkbox as unchecked by default', () => {
+        expect(UserFormPage.deliveryCheckboxIsChecked).to.be.false;
+      });
+
+      describe('when "delivery" is checked', () => {
+        beforeEach(async () => {
+          await UserFormPage.clickDeliveryCheckbox();
+        });
+
+        it('should display "Fulfillment preference" with selected "Hold shelf" option', () => {
+          expect(UserFormPage.fulfillmentPreference.value).to.equal('Hold Shelf');
+        });
+
+        describe('and address type "Home" is selected and default address type is selected', () => {
+          beforeEach(async () => {
+            await UserFormPage.clickAddAddressButton();
+            await UserFormPage.firstAddressTypeField.selectAndBlur('Home');
+            await UserFormPage.defaultAddressTypeField.selectAndBlur('Home');
+          });
+
+          it('should display selected default address type as "Home"', () => {
+            const HOME_ADDRESS_TYPE_VALUE = 'Type2';
+            expect(UserFormPage.defaultAddressTypeField.value).to.equal(HOME_ADDRESS_TYPE_VALUE);
+          });
+        });
+
+        describe('and selected default address type was changed', () => {
+          beforeEach(async () => {
+            await UserFormPage.clickAddAddressButton();
+            await UserFormPage.firstAddressTypeField.selectAndBlur('Home');
+            await UserFormPage.defaultAddressTypeField.selectAndBlur('Home');
+            await UserFormPage.firstAddressTypeField.selectAndBlur('Order');
+          });
+
+          it('should reset default address type to empty value', () => {
+            expect(UserFormPage.defaultAddressTypeField.value).to.equal('');
+          });
+
+          it('should display validation message of "Default delivery address field"', () => {
+            expect(UserFormPage.defaultAddressTypeValidationMessage).to.equal('Please fill this in to continue');
+          });
+        });
+
+        describe('and selected default address type was deleted', () => {
+          beforeEach(async () => {
+            await UserFormPage.clickAddAddressButton();
+            await UserFormPage.clickAddAddressButton();
+            await UserFormPage.firstAddressTypeField.selectAndBlur('Home');
+            await UserFormPage.secondAddressTypeField.selectAndBlur('Order');
+            await UserFormPage.defaultAddressTypeField.selectAndBlur('Home');
+            await UserFormPage.deleteAddressType();
+          });
+
+          it('should reset default address type to empty value', () => {
+            expect(UserFormPage.defaultAddressTypeField.value).to.equal('');
+          });
+
+          it('should display validation message of "Default delivery address field"', () => {
+            expect(UserFormPage.defaultAddressTypeValidationMessage).to.equal('Please fill this in to continue');
+          });
+        });
+
+        describe('and all address types were deleted', () => {
+          beforeEach(async () => {
+            await UserFormPage.clickAddAddressButton();
+            await UserFormPage.clickAddAddressButton();
+            await UserFormPage.firstAddressTypeField.selectAndBlur('Home');
+            await UserFormPage.secondAddressTypeField.selectAndBlur('Order');
+            await UserFormPage.defaultAddressTypeField.selectAndBlur('Order');
+            await UserFormPage.deleteAddressType();
+            await UserFormPage.deleteAddressType();
+          });
+
+          it('should reset default address type to empty value', () => {
+            expect(UserFormPage.defaultAddressTypeField.value).to.equal('');
+          });
+
+          it('should display error message under "Default address type" field', () => {
+            expect(UserFormPage.defaultAddressTypeValidationMessage).to.equal('Please, add at least one address inside "Addresses" section');
+          });
+        });
+      });
+    });
   });
 });
