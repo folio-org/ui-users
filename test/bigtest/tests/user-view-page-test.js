@@ -19,6 +19,13 @@ describe('User view', () => {
 
   beforeEach(async function () {
     user = this.server.create('user');
+    this.server.create('requestPreferences', {
+      userId: user.id,
+      delivery: true,
+      defaultServicePointId: 'servicepointId1',
+      defaultDeliveryAddressTypeId: 'Type1',
+      fulfillment: 'Delivery',
+    });
 
     this.visit(`/users/view/${user.id}`);
     await InstanceViewPage.whenLoaded();
@@ -41,6 +48,21 @@ describe('User view', () => {
       it('should redirect to instance edit page', () => {
         expect(UserFormPage.$root).to.exist;
       });
+    });
+  });
+
+  describe('request preferences section', () => {
+    it('should display hold shelf value', () => {
+      expect(InstanceViewPage.holdShelf).to.equal('Hold shelf - Yes');
+    });
+    it('should display whether delivery is checked', () => {
+      expect(InstanceViewPage.delivery).to.equal('Delivery - Yes');
+    });
+    it('should display fulfillment preference', () => {
+      expect(InstanceViewPage.fulfillmentPreference).to.equal('Delivery');
+    });
+    it('should display default delivery address', () => {
+      expect(InstanceViewPage.defaultDeliveryAddress).to.equal('Claim');
     });
   });
 });

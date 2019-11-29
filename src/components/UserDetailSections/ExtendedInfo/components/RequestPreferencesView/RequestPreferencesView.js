@@ -47,10 +47,10 @@ class RequestPreferencesView extends Component {
           </Col>
         </Row>
         <Row className={styles['request-preferences-row']}>
-          <Col xs={4}>
+          <Col xs={4} data-test-hold-shelf>
             <FormattedMessage id={this.getHoldShelfStateTranslationKey()} />
           </Col>
-          <Col xs={4}>
+          <Col xs={4} data-test-delivery>
             <FormattedMessage id={this.getDeliveryStateTranslationKey()} />
           </Col>
         </Row>
@@ -58,14 +58,18 @@ class RequestPreferencesView extends Component {
           <Col xs={4}>
             {requestPreferences.holdShelf && (
               <KeyValue label={<FormattedMessage id="ui-users.requests.defaultPickupServicePoint" />}>
-                { defaultServicePointName || '-' }
+                <span data-test-default-pickup-service-point>
+                  { defaultServicePointName || '-' }
+                </span>
               </KeyValue>
             )}
           </Col>
           <Col xs={4}>
             {requestPreferences.delivery && (
               <KeyValue label={<FormattedMessage id="ui-users.requests.fulfillmentPreference" />}>
-                { requestPreferences.fulfillment }
+                <span data-test-fulfillment-preference>
+                  { requestPreferences.fulfillment }
+                </span>
               </KeyValue>
             )}
           </Col>
@@ -74,7 +78,9 @@ class RequestPreferencesView extends Component {
           <Col xsOffset={4} xs={8}>
             {requestPreferences.delivery && (
               <KeyValue label={<FormattedMessage id="ui-users.requests.defaultDeliveryAddress" />}>
-                { defaultDeliveryAddressTypeName || '-'}
+                <span data-test-default-delivery-address>
+                  { defaultDeliveryAddressTypeName || '-'}
+                </span>
               </KeyValue>
             )}
           </Col>

@@ -8,6 +8,12 @@ import {
   triggerable,
   scoped,
   collection,
+  findAll,
+  value,
+  selectable,
+  property,
+  action,
+  focusable,
 } from '@bigtest/interactor';
 
 import ButtonInteractor from '@folio/stripes-components/lib/Button/tests/interactor'; // eslint-disable-line
@@ -37,6 +43,18 @@ import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/P
   }
 }
 
+@interactor class SelectFieldInteractor {
+  select = selectable();
+  focus = focusable();
+  blur = blurrable();
+  selectAndBlur(val) {
+    return this
+      .focus()
+      .select(val)
+      .blur();
+  }
+}
+
 @interactor class ProxyEditInteractor {
   proxyCount = count(`[data-test="proxies"] .${proxyEditItemCSS.item}`);
   sponsorCount = count(`[data-test="sponsors"] .${proxyEditItemCSS.item}`);
@@ -47,6 +65,7 @@ import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/P
   proxyCanRequestForSponsor = new SelectInteractor('[data-test-proxy-can-request-for-sponsor]');
   notificationsSentTo = new SelectInteractor('[data-test-proxy-notifcations-sent-to]');
 }
+
 @interactor class UserFormPage {
   // isLoaded = isPresent('[class*=paneTitleLabel---]');
 
@@ -62,12 +81,26 @@ import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/P
   feedbackError = text('[class^="feedbackError---"]');
   cancelButton = new ButtonInteractor('[data-test-user-form-cancel-button]');
   submitButton = new ButtonInteractor('[data-test-user-form-submit-button]');
+  submitButtonIsDisabled = property('[data-test-user-form-submit-button]', 'disabled');
   togglePermissionAccordionButton = scoped('#accordion-toggle-button-permissions');
   addPermissionButton = scoped('#clickable-add-permission');
   permissionsModal = new PermissionsModal();
   permissions = collection('[data-permission-name]');
   proxySection = scoped('#proxyAccordion', ProxyEditInteractor);
   errorModal = new ModalInteractor('#proxy-error-modal');
+  holdShelfCheckboxIsChecked = property('[data-test-hold-shelf-checkbox]', 'checked');
+  holdShelfCheckboxIsDisabled = property('[data-test-hold-shelf-checkbox]', 'disabled');
+  deliveryCheckboxIsChecked = property('[data-test-delivery-checkbox]', 'checked');
+  clickDeliveryCheckbox = clickable('[data-test-delivery-checkbox]');
+
+  fulfillmentPreference = new SelectInteractor('[data-test-fulfillment-preference]');
+  clickAddAddressButton = clickable('[data-test-add-address-button]');
+  defaultAddressTypeValidationMessage = text('[data-test-default-delivery-address-field] [class^="feedbackError"]');
+  deleteAddressType = clickable('[data-test-delete-address-button]');
+
+  firstAddressTypeField = new SelectFieldInteractor('[name="personal.addresses[0].addressType"]');
+  secondAddressTypeField = new SelectFieldInteractor('[name="personal.addresses[1].addressType"]');
+  defaultAddressTypeField = new SelectFieldInteractor('[data-test-default-delivery-address-field] select');
 }
 
 export default new UserFormPage('[data-test-form-page]');

@@ -489,4 +489,16 @@ export default function config() {
 
   this.get('/perms/users/:id', { id: 'test' });
   this.put('/perms/users/:id', { id: 'test' });
+
+  this.get('/request-preference-storage/request-preference', ({ requestPreferences }, request) => {
+    if (request.queryParams.query) {
+      const cqlParser = new CQLParser();
+      cqlParser.parse(request.queryParams.query);
+      return requestPreferences.where({
+        userId: cqlParser.tree.term
+      });
+    } else {
+      return [];
+    }
+  });
 }

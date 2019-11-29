@@ -843,6 +843,6 @@
     "requests.selectDeliveryAddress": "اختر عنوان التوصيل",
     "addAddressError": "يرجى إضافة عنوان واحد على الأقل في قسم \"عناوين\"",
     "requests.defaultPickupServicePoint": "نقطة خدمة الالتقاط الافتراضية",
-    "errors.currentUser.expired": "Current user record expired",
-    "data.loanActionMap.declaredLost": "Declared lost"
+    "errors.currentUser.expired": "انتهت تسجيلة المستخدم الحالية",
+    "data.loanActionMap.declaredLost": "تم الإعلان عن فقدانه"
 }
