@@ -1,5 +1,8 @@
 # Change history for ui-users
 
+## 2.27.0 (IN PROGRESS)
+* Add default settings for user status and preferred contact in new user creation. Refs UIU-1385.
+
 ## 2.26.0 (IN PROGRESS)
 * Prevent manual anonymization of closed loans with fees/fines. Refs UIU-1083.
 * Update sponsor and proxy labels. Refs UIU-1018.
