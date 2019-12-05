@@ -1,6 +1,8 @@
 # Change history for ui-users
 
-## 2.26.0 (IN PROGRESS)
+## [2.26.0](https://github.com/folio-org/ui-users/tree/v2.26.0) (2019-12-04)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.4...v2.26.0)
+
 * Prevent manual anonymization of closed loans with fees/fines. Refs UIU-1083.
 * Update sponsor and proxy labels. Refs UIU-1018.
 * Implement permission assigment by batch. Refs UIU-1249
@@ -19,6 +21,16 @@
 * Use a more efficient query when searching for an item by barcode to attach a fee/fine. Refs UIU-1380.
 * Use user's id instead of a barcode when navigating to requests module. Refs UIU-1370.
 
+## [2.24.4](https://github.com/folio-org/ui-users/tree/v2.24.4) (2019-10-07)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.3...v2.25.4)
+
+* Use local `<Popdown>` in lieu of `<Dropdown>` for better performance. Refs CHAL-29, UIU-1271.
+
+## [2.25.4](https://github.com/folio-org/ui-users/tree/v2.25.4) (2019-10-01)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.3...v2.25.4)
+
+* Better scrolling performance on open-loans page. Refs CHAL-29, UIU-1271.
+
 ## [2.25.3](https://github.com/folio-org/ui-users/tree/v2.25.3) (2019-09-26)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.2...v2.25.3)
 
@@ -27,6 +39,18 @@
 * Correctly display checkboxes in the add-servicepoint modal. Refs UIU-1240.
 * Retrieve requests-against-patron in batches for a shorter querystring. Refs CHAL-30.
 * Fix additional information for patron. Fixes UIU-1221.
+
+## [2.24.3](https://github.com/folio-org/ui-users/tree/v2.24.3) (2019-09-26)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.24.2...v2.24.3)
+
+Retrieve requests-against-patron in batches for a shorter querystring. Refs CHAL-30.
+
+## [2.24.2](https://github.com/folio-org/ui-users/tree/v2.24.2) (2019-09-24)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.24.1...v2.24.2)
+
+* Retrieve up to 1000 loans instead of 100. LIBRARIANS LOVE BOOKS! Refs CHAL-29.
+* Dedupe loan policy list before retrieving it. Refs CHAL-30.
+* Slightly more efficient request retrieval. Refs CHAL-30.
 
 ## [2.25.2](https://github.com/folio-org/ui-users/tree/v2.25.2) (2019-09-23)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.1...v2.25.2)
