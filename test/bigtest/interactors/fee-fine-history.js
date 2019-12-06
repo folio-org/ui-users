@@ -20,7 +20,7 @@ import CheckboxInteractor  from '@folio/stripes-components/lib/Checkbox/tests/in
 @interactor class CellInteractor {
   content = text();
   selectOne = clickable('input[type="checkbox"]');
-  selectEllipsis = clickable('#ellipsis-button');
+  selectEllipsis = clickable('[data-test-ellipsis-button]');
 }
 
 @interactor class RowInteractor {
@@ -36,7 +36,6 @@ import CheckboxInteractor  from '@folio/stripes-components/lib/Checkbox/tests/in
 @interactor class History {
   mclViewFeesFines = new MultiColumnListInteractor('#list-accounts-history-view-feesfines');
   mclAccountActions = new MultiColumnListInteractor('#list-accountactions');
-  sectionIsPresent = isPresent('#accordion-toggle-button-accountsSection');
   section = text('#accordion-toggle-button-accountsSection h3');
 
   title = text('[class*=paneTitleLabel---]');
@@ -55,7 +54,7 @@ import CheckboxInteractor  from '@folio/stripes-components/lib/Checkbox/tests/in
   allFeesFines = text('#clickable-viewallaccounts');
 
   accountActionIsPresent = isPresent('#paneHeaderpane-account-action-history-pane-title');
-  ellipsisMenuIsPresent = isPresent('#ellipsis-drop-down');
+  ellipsisMenuIsPresent = isPresent('#OverlayContainer #ellipsis-drop-down');
   loanDetailsIsPresent = isPresent('#pane-loandetails');
 
   payModal = new ModalInteractor('#payment-modal');
@@ -84,7 +83,7 @@ import CheckboxInteractor  from '@folio/stripes-components/lib/Checkbox/tests/in
   searchField = new SearchFieldInteractor('[class*=searchFieldWrap---]');
   checkList = collection('[class*=filterList---] [class*=listItem---]', CheckboxInteractor);
   col = new CheckboxInteractor('#column-item-0');
-  selectColumns = new ButtonInteractor('#select-columns');
+  selectColumns = new ButtonInteractor('[data-test-select-columns]');
 
   // file AccountsHistory
   openMenu = new ButtonInteractor('#open-accounts');
