@@ -164,7 +164,7 @@ describe('Test Fee/Fine History', () => {
           await FeeFineHistoryInteractor.rows(3).cells(13).selectEllipsis();
         });
 
-        it('the ellipsis menu most be present', () => {
+        it('the ellipsis menu must be present', () => {
           expect(FeeFineHistoryInteractor.ellipsisMenuIsPresent).to.be.true;
         });
 
