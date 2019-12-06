@@ -83,7 +83,7 @@ import CheckboxInteractor  from '@folio/stripes-components/lib/Checkbox/tests/in
   searchField = new SearchFieldInteractor('[class*=searchFieldWrap---]');
   checkList = collection('[class*=filterList---] [class*=listItem---]', CheckboxInteractor);
   col = new CheckboxInteractor('#column-item-0');
-  selectColumns = new ButtonInteractor('#select-columns');
+  selectColumns = new ButtonInteractor('[data-test-select-columns]');
 
   // file AccountsHistory
   openMenu = new ButtonInteractor('#open-accounts');
