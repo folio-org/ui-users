@@ -1,6 +1,8 @@
 # Change history for ui-users
 
-## 2.26.0 (IN PROGRESS)
+## [2.26.0](https://github.com/folio-org/ui-users/tree/v2.26.0) (2019-12-05)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.3...v2.26.0)
+
 * Prevent manual anonymization of closed loans with fees/fines. Refs UIU-1083.
 * Update sponsor and proxy labels. Refs UIU-1018.
 * Implement permission assigment by batch. Refs UIU-1249
