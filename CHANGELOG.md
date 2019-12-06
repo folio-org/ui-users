@@ -1,6 +1,8 @@
 # Change history for ui-users
 
-## 2.26.0 (IN PROGRESS)
+## [2.26.0](https://github.com/folio-org/ui-users/tree/v2.26.0) (2019-12-05)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.3...v2.26.0)
+
 * Prevent manual anonymization of closed loans with fees/fines. Refs UIU-1083.
 * Update sponsor and proxy labels. Refs UIU-1018.
 * Implement permission assigment by batch. Refs UIU-1249
@@ -18,6 +20,7 @@
 * Show requests information when user has view loans permission only. Refs UIU-1184.
 * Use a more efficient query when searching for an item by barcode to attach a fee/fine. Refs UIU-1380.
 * Use user's id instead of a barcode when navigating to requests module. Refs UIU-1370.
+* Restore display of "invisible" permissions. Refs UIU-1372.
 * Rename "Loans: All permissions" permission to "Users: User loans view, edit, renew (all)". Refs UIU-1344.
 
 ## [2.25.3](https://github.com/folio-org/ui-users/tree/v2.25.3) (2019-09-26)
