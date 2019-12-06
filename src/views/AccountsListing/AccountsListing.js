@@ -404,7 +404,7 @@ class AccountsHistory extends React.Component {
           pullRight
         >
           <Button
-            id="select-columns"
+            data-test-select-columns
             data-role="toggle"
             bottomMargin0
           >

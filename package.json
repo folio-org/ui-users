@@ -586,7 +586,7 @@
       },
       {
         "permissionName": "ui-users.loans.all",
-        "displayName": "Loans: All permissions",
+        "displayName": "Users: User loans view, edit, renew (all)",
         "description": "Also includes requests, loan-policies and accounts permissions",
         "subPermissions": [
           "ui-users.view",

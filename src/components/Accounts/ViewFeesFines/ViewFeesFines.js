@@ -347,7 +347,7 @@ class ViewFeesFines extends React.Component {
       <UncontrolledDropdown
         onSelectItem={this.handleOptionsChange}
       >
-        <Button id="ellipsis-button" data-role="toggle" buttonStyle="hover dropdownActive">
+        <Button data-test-ellipsis-button data-role="toggle" buttonStyle="hover dropdownActive">
           <strong>•••</strong>
         </Button>
         <DropdownMenu id="ellipsis-drop-down" data-role="menu">
