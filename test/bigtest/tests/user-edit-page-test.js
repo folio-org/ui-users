@@ -101,7 +101,7 @@ describe('User Edit Page', () => {
         expect(UserFormPage.holdShelfCheckboxIsDisabled).to.be.true;
       });
 
-      describe.skip('when delivery is activated', () => {
+      describe('when delivery is activated', () => {
         it('should display "delivery" checkbox as checked', () => {
           expect(UserFormPage.deliveryCheckboxIsChecked).to.be.true;
         });

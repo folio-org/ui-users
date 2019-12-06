@@ -58,7 +58,7 @@ describe('User Create Page', () => {
         expect(UserFormPage.deliveryCheckboxIsChecked).to.be.false;
       });
 
-      describe.skip('when "delivery" is checked', () => {
+      describe('when "delivery" is checked', () => {
         beforeEach(async () => {
           await UserFormPage.clickDeliveryCheckbox();
         });
