@@ -4,7 +4,7 @@ import {
   collection,
   count,
   Interactor,
-  property,
+  property
 } from '@bigtest/interactor';
 import moment from 'moment';
 
@@ -45,11 +45,11 @@ import CalloutInteractor from '@folio/stripes-components/lib/Callout/tests/inter
   actionDropdownRenewButton = new Interactor('[data-test-dropdown-content-renew-button]');
   actionDropdownChangeDueDateButton = new Interactor('[data-test-dropdown-content-change-due-date-button]');
   requestsCount = count('[data-test-list-requests]');
-
   bulkRenewalModal = new BulkRenewalModal();
   bulkOverrideModal = new BulkOverrideModal();
   changeDueDateOverlay = new ChangeDueDateOverlay();
   dueDateCalendarCellButton = new ButtonInteractor(`[data-test-date="${moment().format('MM/DD/YYYY')}"]`);
+  rowButtons = collection('[data-test-open-loans-list] button[role="row"]', ButtonInteractor);
 
   whenLoaded() {
     return this.when(() => this.list.isVisible);
