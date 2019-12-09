@@ -276,20 +276,6 @@ class UserDetail extends React.Component {
             )}
           </FormattedMessage>
         }
-        <IfPermission perm="users.item.put">
-          <FormattedMessage id="ui-users.crud.editUser">
-            {ariaLabel => (
-              <IconButton
-                icon="edit"
-                id="clickable-edituser"
-                style={{ visibility: !user ? 'hidden' : 'visible' }}
-                href={this.getEditLink()}
-                ref={this.editButton}
-                ariaLabel={ariaLabel}
-              />
-            )}
-          </FormattedMessage>
-        </IfPermission>
       </PaneMenu>
     );
   }

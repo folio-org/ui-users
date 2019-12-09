@@ -1,6 +1,6 @@
 // This view component contains purely presentational code.
 
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { matchPath } from 'react-router';
 
@@ -130,16 +130,34 @@ class UserSearch extends React.Component {
   }
 
   getActionMenu = ({ onToggle }) => (
-    <Button
-      buttonStyle="dropdownItem"
-      id="export-overdue-loan-report"
-      onClick={() => {
-        onToggle();
-        this.generateOverdueLoanReport(this.props);
-      }}
-    >
-      <FormattedMessage id="ui-users.reports.overdue.label" />
-    </Button>
+    <Fragment>
+      <IfPermission perm="users.item.post,login.item.post,perms.users.item.post">
+        <FormattedMessage id="stripes-smart-components.addNew">
+          {ariaLabel => (
+            <Button
+              id="clickable-newuser"
+              aria-label={ariaLabel}
+              to="/users/create"
+              buttonStyle="dropdownItem"
+              marginBottom0
+            >
+              <FormattedMessage id="stripes-smart-components.new" />
+            </Button>
+          )}
+        </FormattedMessage>
+      </IfPermission>
+      <Button
+        buttonStyle="dropdownItem"
+        id="export-overdue-loan-report"
+        onClick={() => {
+          onToggle();
+          this.generateOverdueLoanReport(this.props);
+        }}
+      >
+        <FormattedMessage id="ui-users.reports.overdue.label" />
+      </Button>
+
+    </Fragment>
   );
 
   renderResultsFirstMenu(filters) {
@@ -208,28 +226,6 @@ class UserSearch extends React.Component {
       </div>
     );
   };
-
-  renderNewRecordBtn() {
-    return (
-      <IfPermission perm="users.item.post,login.item.post,perms.users.item.post">
-        <PaneMenu>
-          <FormattedMessage id="stripes-smart-components.addNew">
-            {ariaLabel => (
-              <Button
-                id="clickable-newuser"
-                aria-label={ariaLabel}
-                to="/users/create"
-                buttonStyle="primary"
-                marginBottom0
-              >
-                <FormattedMessage id="stripes-smart-components.new" />
-              </Button>
-            )}
-          </FormattedMessage>
-        </PaneMenu>
-      </IfPermission>
-    );
-  }
 
   rowUpdater = (rowData) => {
     const { resources: { patronGroups } } = this.props;
@@ -379,7 +375,6 @@ class UserSearch extends React.Component {
                         }
                         <Pane
                           firstMenu={this.renderResultsFirstMenu(activeFilters)}
-                          lastMenu={this.renderNewRecordBtn()}
                           paneTitle={resultsHeader}
                           paneSub={resultPaneSub}
                           defaultWidth="fill"
