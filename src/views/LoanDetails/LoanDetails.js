@@ -70,6 +70,7 @@ class LoanDetails extends React.Component {
     intl: intlShape.isRequired,
     match: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
   };
 
   constructor(props) {
@@ -251,18 +252,28 @@ class LoanDetails extends React.Component {
   }
 
   handleClose = () => {
-    const { loan, history, match: { params } } = this.props;
+    const {
+      loan,
+      history,
+      match: { params },
+      location,
+    } = this.props;
+
     // if this loan detail was accessed through a fee/fine, accountid will be present.
     if (params.accountid) {
       history.push(`/users/${params.id}/accounts/view/${params.accountid}`);
     }
+
     const loanStatus = loan.status ? loan.status.name.toLowerCase() : 'open';
-    history.push(`/users/${params.id}/loans/${loanStatus}`);
+
+    history.push({
+      pathname: `/users/${params.id}/loans/${loanStatus}`,
+      state: location.state,
+    });
   }
 
   render() {
     const {
-      history,
       loan,
       patronGroup,
       patronBlocks,
@@ -338,7 +349,7 @@ class LoanDetails extends React.Component {
             id="pane-loandetails"
             defaultWidth="100%"
             dismissible
-            onClose={() => { history.goBack(); }}
+            onClose={this.handleClose}
             paneTitle={(
               <FormattedMessage id="ui-users.loans.loanDetails">
                 {(loanDetails) => `${loanDetails} - ${getFullName(user)} (${upperFirst(patronGroup.group)})`}

@@ -8,6 +8,8 @@ import { expect } from 'chai';
 
 import setupApplication from '../helpers/setup-application';
 import ClosedLoansInteractor from '../interactors/closed-loans';
+import UsersInteractor from '../interactors/users';
+import LoansListingPane from '../interactors/loans-listing-pane';
 
 function setupAnonymizationAPIResponse(server, errors) {
   server.post('/loan-anonymization/by-user/:id', { errors });
@@ -23,8 +25,10 @@ describe('Closed Loans', () => {
     });
   });
 
+  let user;
+
   beforeEach(async function () {
-    const user = this.server.create('user');
+    user = this.server.create('user');
     const loans = this.server.createList('loan', 5, 'feesAndFines', {
       userId: user.id,
       item: (i) => ({ ...this.item, barcode: i }),
@@ -46,6 +50,10 @@ describe('Closed Loans', () => {
 
   it('should be presented', () => {
     expect(ClosedLoansInteractor.isPresent).to.be.true;
+  });
+
+  it('should display close button', () => {
+    expect(LoansListingPane.closeButton.isPresent).to.be.true;
   });
 
   describe('loan list', () => {
@@ -95,6 +103,20 @@ describe('Closed Loans', () => {
       it('should close the error modal', () => {
         expect(ClosedLoansInteractor.anonymizationFeesFinesErrorModal.isPresent).to.be.false;
       });
+    });
+  });
+
+  describe('clicking the close button', () => {
+    const users = new UsersInteractor();
+
+    beforeEach(async () => {
+      await LoansListingPane.closeButton.click();
+    });
+
+    it('should navigate to user preview form', function () {
+      expect(users.isPresent).to.be.true;
+      expect(users.instance.isPresent).to.be.true;
+      expect(this.location.pathname.endsWith(`users/preview/${user.id}`)).to.be.true;
     });
   });
 });

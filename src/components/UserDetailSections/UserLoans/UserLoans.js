@@ -70,6 +70,7 @@ class UserLoans extends React.Component {
       accordionId,
       resources,
       match: { params },
+      location,
     } = this.props;
 
     const openLoansTotal = _.get(resources.openLoansCount, ['records', '0', 'totalRecords'], 0);
@@ -97,7 +98,10 @@ class UserLoans extends React.Component {
               <li key={index}>
                 <Link
                   id={item.id}
-                  to={`/users/${params.id}/loans/${item.status}`}
+                  to={{
+                    pathname: `/users/${params.id}/loans/${item.status}`,
+                    state: { search: location.search },
+                  }}
                 >
                   <FormattedMessage id={item.formattedMessageId} values={{ count: item.count }} />
                 </Link>
