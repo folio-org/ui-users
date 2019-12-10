@@ -44,6 +44,7 @@ class OpenLoansControl extends React.Component {
       id: PropTypes.string.isRequired,
     }).isRequired,
     history: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
     match: PropTypes.object,
     patronGroup: PropTypes.object.isRequired,
     requestCounts: PropTypes.object.isRequired,
@@ -372,7 +373,9 @@ class OpenLoansControl extends React.Component {
       patronGroup,
       patronBlocks,
       resources,
+      location,
     } = this.props;
+
     return (
       <div data-test-open-loans>
         <TableModel
@@ -391,6 +394,7 @@ class OpenLoansControl extends React.Component {
           stripes={stripes}
           feeFineCount={this.feeFineCount}
           history={history}
+          location={location}
           match={match}
           user={user}
           toggleAll={this.toggleAll}

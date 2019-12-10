@@ -5,6 +5,7 @@ import {
   isPresent,
   scoped,
   count,
+  ButtonInteractor,
 } from '@bigtest/interactor';
 
 import proxyItemCSS from '../../../src/components/ProxyGroup/ProxyItem/ProxyItem.css';
@@ -22,6 +23,16 @@ import proxyItemCSS from '../../../src/components/ProxyGroup/ProxyItem/ProxyItem
   sponsorCount = count(`[data-test="sponsors"] .${proxyItemCSS.item}`);
 }
 
+@interactor class LoansSectionInteractor {
+  accordionButton = scoped('#accordion-toggle-button-loansSection', ButtonInteractor);
+  openLoans = scoped('#clickable-viewcurrentloans', ButtonInteractor);
+  closedLoans = scoped('#clickable-viewclosedloans', ButtonInteractor);
+
+  whenLoaded() {
+    return this.when(() => this.isPresent).timeout(5000);
+  }
+}
+
 @interactor class InstanceViewPage {
   title = text('[data-test-header-title]');
   headerDropdown = new HeaderDropdown('[class*=paneHeaderCenterInner---] [class*=dropdown---]');
@@ -29,11 +40,13 @@ import proxyItemCSS from '../../../src/components/ProxyGroup/ProxyItem/ProxyItem
   editButtonPresent = isPresent('#clickable-edituser');
   clickEditButton = clickable('#clickable-edituser');
   proxySection = scoped('#proxySection', ProxySectionInteractor);
+  loansSection = scoped('#loansSection', LoansSectionInteractor);
   holdShelf = text('[data-test-hold-shelf]');
   delivery = text('[data-test-delivery]');
   fulfillmentPreference = text('[data-test-fulfillment-preference]');
   defaultPickupServicePoint = text('[data-test-default-pickup-service-point]');
   defaultDeliveryAddress = text('[data-test-default-delivery-address]');
+
   whenLoaded() {
     return this.when(() => this.isPresent).timeout(5000);
   }
