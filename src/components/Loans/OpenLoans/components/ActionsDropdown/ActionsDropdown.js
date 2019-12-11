@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router-dom';
+
 import {
   Button,
   MenuItem,
@@ -13,6 +14,7 @@ import {
 } from '@folio/stripes/core';
 
 import Popdown from './Popdown';
+
 import css from './ActionsDropdown.css';
 
 class ActionsDropdown extends React.Component {
@@ -22,12 +24,7 @@ class ActionsDropdown extends React.Component {
     requestQueue: PropTypes.bool.isRequired,
     handleOptionsChange: PropTypes.func.isRequired,
     disableFeeFineDetails: PropTypes.bool,
-    match: PropTypes.object,
   };
-
-  itemClick = () => {
-    this.props.handleOptionsChange();
-  }
 
   renderDropdownTrigger = (triggerRef, onToggle, aria) => (
     <IconButton icon="ellipsis" ref={triggerRef} onClick={onToggle} {...aria} />
@@ -44,7 +41,7 @@ class ActionsDropdown extends React.Component {
 
     const itemDetailsLink = `/inventory/view/${loan.item.instanceId}/${loan.item.holdingsRecordId}/${loan.itemId}`;
     const loanPolicyLink = `/settings/circulation/loan-policies/${loan.loanPolicyId}`;
-    const buttonDisabled = !this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
+    const buttonDisabled = !stripes.hasPerm('ui-users.feesfines.actions.all');
 
     return (
       <Popdown
@@ -98,8 +95,8 @@ class ActionsDropdown extends React.Component {
             >
               <Button
                 buttonStyle="dropdownItem"
-                onClick={(e) => { handleOptionsChange({ loan, action:'changeDueDate' }, e); }}
                 data-test-dropdown-content-change-due-date-button
+                onClick={(e) => { handleOptionsChange({ loan, action:'changeDueDate' }, e); }}
               >
                 <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />
               </Button>
@@ -139,7 +136,10 @@ class ActionsDropdown extends React.Component {
             }}
             onSelectItem={handleOptionsChange}
           >
-            <Button buttonStyle="dropdownItem" disabled={disableFeeFineDetails}>
+            <Button
+              buttonStyle="dropdownItem"
+              disabled={disableFeeFineDetails}
+            >
               <FormattedMessage id="ui-users.loans.feeFineDetails" />
             </Button>
           </MenuItem>
@@ -151,11 +151,12 @@ class ActionsDropdown extends React.Component {
               }}
               onSelectItem={handleOptionsChange}
             >
-              <div data-test-dropdown-content-request-queue>
-                <Button buttonStyle="dropdownItem">
-                  <FormattedMessage id="ui-users.loans.details.requestQueue" />
-                </Button>
-              </div>
+              <Button
+                buttonStyle="dropdownItem"
+                data-test-dropdown-content-request-queue
+              >
+                <FormattedMessage id="ui-users.loans.details.requestQueue" />
+              </Button>
             </MenuItem>
           }
         </div>
