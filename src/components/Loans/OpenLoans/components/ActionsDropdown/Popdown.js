@@ -51,6 +51,7 @@ const Popdown = ({ label, buttonProps, children, renderTrigger, portal }) => {
         isOpen={open}
         anchorRef={triggerRef}
         portal={portal ? portalEl : null}
+        overlayProps={{ onClick: e => { e.stopPropagation(); } }}
       >
         <RootCloseWrapper onRootClose={toggleMenu}>
           {children}
