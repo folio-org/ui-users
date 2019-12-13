@@ -29,6 +29,7 @@ class PatronBlock extends React.Component {
       records: 'manualblocks',
       path: 'manualblocks',
       accumulate: 'true',
+      fetch: false,
       DELETE: {
         path: 'manualblocks/%{activeRecord.blockId}',
       },
