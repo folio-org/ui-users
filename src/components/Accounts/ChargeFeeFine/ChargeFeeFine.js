@@ -47,14 +47,13 @@ class ChargeFeeFine extends React.Component {
       }),
     }).isRequired,
     stripes: PropTypes.object.isRequired,
-    handleAddRecords: PropTypes.func,
+
     okapi: PropTypes.object,
     selectedLoan: PropTypes.object,
     user: PropTypes.object,
-    onSubmit: PropTypes.func,
-    servicePointsIds: PropTypes.arrayOf(PropTypes.string),
-    defaultServicePointId: PropTypes.string,
     intl: intlShape.isRequired,
+    history: PropTypes.object,
+    location: PropTypes.object,
   };
 
   constructor(props) {
