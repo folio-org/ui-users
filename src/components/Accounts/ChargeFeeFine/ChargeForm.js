@@ -85,6 +85,8 @@ class ChargeForm extends React.Component {
     defaultServicePointId: PropTypes.string,
     location: PropTypes.object,
     history: PropTypes.object,
+    initialValues: PropTypes.object,
+    dispatch: PropTypes.func,
   }
 
   constructor(props) {
