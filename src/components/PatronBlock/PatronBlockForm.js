@@ -62,7 +62,6 @@ class PatronBlockForm extends React.Component {
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
     params: PropTypes.object,
-    selectedItem: PropTypes.object,
     onDeleteItem: PropTypes.func,
     onClose: PropTypes.func,
     handleSubmit: PropTypes.func.isRequired,
@@ -146,7 +145,6 @@ class PatronBlockForm extends React.Component {
     const {
       intl,
       params,
-      selectedItem,
       initialValues,
       user = {},
       currentValues: {
