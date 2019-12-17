@@ -70,6 +70,7 @@ class PatronBlockForm extends React.Component {
     intl: intlShape.isRequired,
     stripes: PropTypes.object,
     currentValues: PropTypes.object,
+    initialValues: PropTypes.object,
   };
 
   constructor(props) {
@@ -146,6 +147,7 @@ class PatronBlockForm extends React.Component {
       intl,
       params,
       selectedItem,
+      initialValues,
       user = {},
       currentValues: {
         borrowing,
@@ -182,10 +184,10 @@ class PatronBlockForm extends React.Component {
                   onToggle={this.handleSectionToggle}
                   open={this.state.sections.blockInformationSection}
                 >
-                  {!_.isEmpty(selectedItem) ?
+                  {!_.isEmpty(initialValues) ?
                     <Row>
                       <Col xs={12} sm={10} md={7} lg={5}>
-                        <this.connectedViewMetaData metadata={selectedItem.metadata} />
+                        <this.connectedViewMetaData metadata={initialValues.metadata} />
                       </Col>
                     </Row> : ''
                 }
