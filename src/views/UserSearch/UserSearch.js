@@ -1,6 +1,6 @@
 // This view component contains purely presentational code.
 
-import React from 'react';
+import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
 import { matchPath } from 'react-router';
 
@@ -10,14 +10,15 @@ import { Link } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { IntlConsumer, IfPermission, AppIcon } from '@folio/stripes/core';
 import {
-  MultiColumnList,
-  SearchField,
-  Paneset,
-  Pane,
-  Icon,
   Button,
-  PaneMenu,
   HasCommand,
+  Icon,
+  MultiColumnList,
+  Pane,
+  PaneMenu,
+  Paneset,
+  SearchField,
+  SRStatus,
 } from '@folio/stripes/components';
 
 import {
@@ -76,9 +77,12 @@ class UserSearch extends React.Component {
       filterPaneIsVisible: true,
       selectedId: null,
       exportInProgress: false,
+      searchPending: false,
     };
 
-    this.searchField = React.createRef();
+    this.searchField = createRef();
+    this.paneTitleRef = createRef();
+    this.SRStatusRef = createRef();
 
     const { formatMessage } = props.intl;
     this.overdueLoanReport = new OverdueLoanReport({
@@ -95,6 +99,37 @@ class UserSearch extends React.Component {
 
   componentDidMount() {
     this.possiblyfocusSearchField();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (
+      this.state.searchPending &&
+      prevProps.resources.records &&
+      prevProps.resources.records.isPending &&
+      !this.props.resources.records.isPending) {
+      this.onSearchComplete(this.props.resources.records);
+    }
+  }
+
+  onSearchComplete = records => {
+    const { intl } = this.props;
+    const headerEl = this.paneTitleRef.current;
+    const resultsCount = get(records, 'other.totalRecords', 0);
+    const hasResults = !!resultsCount;
+
+    this.setState({ searchPending: false });
+
+    // Announce the results for screen readers
+    this.SRStatusRef.current.sendMessage(intl.formatMessage({
+      id: 'ui-users.resultCount',
+    }, {
+      count: resultsCount
+    }));
+
+    // Focus the pane header if we have results to minimize tabbing distance
+    if (hasResults) {
+      headerEl.focus();
+    }
   }
 
   possiblyfocusSearchField = () => {
@@ -251,6 +286,14 @@ class UserSearch extends React.Component {
 
   isSelected = ({ item }) => item.id === this.state.selectedId;
 
+  handleSubmit = (e, onSubmit) => {
+    this.setState({
+      searchPending: true,
+    });
+
+    onSubmit(e);
+  }
+
   render() {
     const {
       filterConfig,
@@ -331,7 +374,8 @@ class UserSearch extends React.Component {
                       <Paneset id={`${idPrefix}-paneset`}>
                         {this.state.filterPaneIsVisible &&
                           <Pane defaultWidth="22%" paneTitle="User search">
-                            <form onSubmit={onSubmitSearch}>
+                            <SRStatus ref={this.SRStatusRef} />
+                            <form onSubmit={e => this.handleSubmit(e, onSubmitSearch)}>
                               <div className={css.searchGroupWrap}>
                                 <SearchField
                                   aria-label="user search"
@@ -382,6 +426,7 @@ class UserSearch extends React.Component {
                           lastMenu={this.renderNewRecordBtn()}
                           paneTitle={resultsHeader}
                           paneSub={resultPaneSub}
+                          paneTitleRef={this.paneTitleRef}
                           defaultWidth="fill"
                           actionMenu={this.getActionMenu}
                           padContent={false}
