@@ -87,6 +87,7 @@ class PatronBlock extends React.Component {
   componentDidMount() {
     const { mutator: { patronBlocks }, user, onToggle, expanded, accordionId } = this.props;
     const query = `userId=${user.id}`;
+    patronBlocks.reset();
     patronBlocks.GET({ params: { query } }).then(records => {
       const blocks = records.filter(p => moment(moment(p.expirationDate).format()).isSameOrAfter(moment().format()));
       if ((blocks.length > 0 && !expanded) || (!blocks.length && expanded)) {
