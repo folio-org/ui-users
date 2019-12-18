@@ -50,6 +50,7 @@ class ClosedLoans extends React.Component {
     user: PropTypes.object,
     intl: intlShape.isRequired,
     history: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
   };
 
   constructor(props) {
@@ -141,9 +142,15 @@ class ClosedLoans extends React.Component {
 
   onRowClick = (e, row) => {
     e.stopPropagation();
+
     if (e.target.type !== 'button') {
-      const { history, match: { params } } = this.props;
-      nav.onClickViewLoanActionsHistory(e, row, history, params);
+      const {
+        history,
+        match: { params },
+        location,
+      } = this.props;
+
+      nav.onClickViewLoanActionsHistory(e, row, history, params, location.state);
     }
   };
 

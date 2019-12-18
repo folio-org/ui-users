@@ -62,7 +62,6 @@ class PatronBlockForm extends React.Component {
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
     params: PropTypes.object,
-    selectedItem: PropTypes.object,
     onDeleteItem: PropTypes.func,
     onClose: PropTypes.func,
     handleSubmit: PropTypes.func.isRequired,
@@ -70,6 +69,7 @@ class PatronBlockForm extends React.Component {
     intl: intlShape.isRequired,
     stripes: PropTypes.object,
     currentValues: PropTypes.object,
+    initialValues: PropTypes.object,
   };
 
   constructor(props) {
@@ -145,7 +145,7 @@ class PatronBlockForm extends React.Component {
     const {
       intl,
       params,
-      selectedItem,
+      initialValues,
       user = {},
       currentValues: {
         borrowing,
@@ -182,10 +182,10 @@ class PatronBlockForm extends React.Component {
                   onToggle={this.handleSectionToggle}
                   open={this.state.sections.blockInformationSection}
                 >
-                  {!_.isEmpty(selectedItem) ?
+                  {!_.isEmpty(initialValues) ?
                     <Row>
                       <Col xs={12} sm={10} md={7} lg={5}>
-                        <this.connectedViewMetaData metadata={selectedItem.metadata} />
+                        <this.connectedViewMetaData metadata={initialValues.metadata} />
                       </Col>
                     </Row> : ''
                 }

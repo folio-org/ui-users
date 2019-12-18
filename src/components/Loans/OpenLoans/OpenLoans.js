@@ -14,6 +14,7 @@ import {
 class OpenLoans extends React.Component {
   static propTypes = {
     history: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
     isLoanChecked: PropTypes.func.isRequired,
     match: PropTypes.object.isRequired,
     loans: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -76,9 +77,15 @@ class OpenLoans extends React.Component {
 
   onRowClick = (e, row) => {
     e.stopPropagation();
+
     if (e.target.type !== 'button') {
-      const { history, match: { params } } = this.props;
-      nav.onClickViewLoanActionsHistory(e, row, history, params);
+      const {
+        history,
+        match: { params },
+        location
+      } = this.props;
+
+      nav.onClickViewLoanActionsHistory(e, row, history, params, location.state);
     }
   };
 

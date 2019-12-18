@@ -2,6 +2,12 @@
 
 ## 2.27.0 (IN PROGRESS)
 * Add default settings for user status and preferred contact in new user creation. Refs UIU-1385.
+* Fix navigation paths on cancel button click on loan details, open and closed loan lists pages. Refs UIU-1377.
+* Prevent loan details opening upon click in loans action menu without selecting link. Fixes UIU-1359.
+* Display correct user block on the edit form. Fixes UIU-1397.
+* Clear previous item data when open a new fee/fine form page. Fixes UIU-1410.
+* Add record last updated and created back to manual patron block. Fixes UIU-1420.
+* Go back to user's accounts when clicking on cancel or `x` from fee/fine form. Fixes UIU-1412.
 
 ## [2.26.0](https://github.com/folio-org/ui-users/tree/v2.26.0) (2019-12-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.3...v2.26.0)
