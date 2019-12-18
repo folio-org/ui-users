@@ -4,6 +4,7 @@
 
 * Reset patronBlocks before refetching. Fixes UIU-1430 and UIU-1431.
 * Add record last updated and created back to manual patron block. Fixes UIU-1420.
+* Go back to user's accounts when clicking on cancel or `x` from fee/fine form. Fixes UIU-1412.
 
 ## [2.26.0](https://github.com/folio-org/ui-users/tree/v2.26.0) (2019-12-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.3...v2.26.0)
