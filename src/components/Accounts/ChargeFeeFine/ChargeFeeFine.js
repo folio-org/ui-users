@@ -54,6 +54,7 @@ class ChargeFeeFine extends React.Component {
     intl: intlShape.isRequired,
     history: PropTypes.object,
     location: PropTypes.object,
+    match: PropTypes.object,
   };
 
   constructor(props) {
@@ -336,6 +337,9 @@ class ChargeFeeFine extends React.Component {
       location,
       history,
       intl,
+      match: {
+        params: { loanid },
+      },
     } = this.props;
     this.item = _.get(resources, ['items', 'records', [0]], {});
     const allfeefines = _.get(resources, ['allfeefines', 'records'], []);
@@ -352,6 +356,7 @@ class ChargeFeeFine extends React.Component {
     const payments = _.get(resources, ['payments', 'records'], []).filter(p => p.ownerId === this.state.ownerId);
     const accounts = _.get(resources, ['accounts', 'records'], []);
     const settings = _.get(this.props.resources, ['commentRequired', 'records', 0], {});
+    const barcode = _.get(this.props.resources, 'activeRecord.barcode');
 
     const defaultServicePointId = _.get(resources, ['curUserServicePoint', 'records', 0, 'defaultServicePointId'], '-');
     const servicePointsIds = _.get(resources, ['curUserServicePoint', 'records', 0, 'servicePointsIds'], []);
@@ -362,7 +367,9 @@ class ChargeFeeFine extends React.Component {
     });
     parseFloat(selected).toFixed(2);
     let item;
-    if (this.item) {
+
+
+    if (this.item && (loanid || barcode)) {
       item = {
         id: this.item.id || '',
         instance: this.item.title || '',
