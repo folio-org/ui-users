@@ -483,7 +483,7 @@ class AccountsHistory extends React.Component {
           defaultWidth="100%"
           dismissible
           padContent={false}
-          onClose={() => { history.goBack(); }}
+          onClose={() => { history.push(`/users/preview/${params.id}`); }}
           paneTitle={(
             <FormattedMessage id="ui-users.accounts.title">
               {(title) => (
