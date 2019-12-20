@@ -577,7 +577,7 @@
     "metaData.createdByUserId": "Created by",
     "metadata.updatedDate": "Updated date",
     "metadata.updatedByUserId": "Updated by",
-    "loanPolicyId": "Loan policy ID",
+    "loanPolicyId": "ID de norma de préstamo",
     "requests.title": "Requests",
     "requests.createRequest": "Create request",
     "requests.numOpenRequests": "{count, number} {count, plural, one {open request} other {open requests}}",
