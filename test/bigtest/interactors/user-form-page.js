@@ -8,11 +8,8 @@ import {
   triggerable,
   scoped,
   collection,
-  findAll,
-  value,
   selectable,
   property,
-  action,
   focusable,
 } from '@bigtest/interactor';
 
