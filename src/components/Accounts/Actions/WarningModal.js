@@ -119,6 +119,11 @@ class WarningModal extends React.Component {
     };
   }
 
+  rowUpdater = (a) => {
+    const { checkedAccounts } = this.state;
+    return !!(checkedAccounts[a.id]);
+  }
+
   onClickContinue() {
     const { checkedAccounts } = this.state;
     const values = Object.values(checkedAccounts);
@@ -201,6 +206,7 @@ class WarningModal extends React.Component {
               sortOrder={sortOrder[0]}
               sortDirection={`${sortDirection[0]}ending`}
               contentData={accountOrdered}
+              rowUpdater={this.rowUpdater}
             />
           </Col>
         </Row>
