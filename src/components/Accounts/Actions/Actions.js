@@ -115,6 +115,7 @@ class Actions extends React.Component {
       showConfirmDialog: false,
       values: {},
       submitting: false,
+      notify: null,
     };
     this.onCloseCancellation = this.onCloseCancellation.bind(this);
     this.onClickCancellation = this.onClickCancellation.bind(this);
@@ -178,6 +179,7 @@ class Actions extends React.Component {
   }
 
   newAction = (action, id, typeAction, amount, comment, balance, transaction, createAt) => {
+    const notify = this.state.notify;
     const newAction = {
       typeAction,
       source: `${this.props.okapi.currentUser.lastName}, ${this.props.okapi.currentUser.firstName}`,
@@ -189,6 +191,7 @@ class Actions extends React.Component {
       balance: parseFloat(balance || 0).toFixed(2),
       transactionInformation: transaction || '-',
       comments: comment,
+      notify,
     };
     return this.props.mutator.feefineactions.POST(Object.assign(action, newAction));
   }
@@ -365,10 +368,11 @@ class Actions extends React.Component {
     return amounts;
   }
 
-  showConfirmDialog = (values) => {
+  showConfirmDialog = (values) => { 
     this.setState({
       showConfirmDialog: true,
-      values
+      values,
+      notify: values.notify,
     });
 
     return new Promise((resolve, reject) => {
@@ -404,7 +408,7 @@ class Actions extends React.Component {
   }
 
   renderConfirmMessage = () => {
-    const { actions: { pay, regular, waiveModal, waiveMany, transferModal, transferMany }, intl: { formatMessage } } = this.props;
+    const { actions: { pay, regular, waiveModal, waiveMany, transferModal, transferMany, notify }, intl: { formatMessage } } = this.props;
     const { values } = this.state;
     const amount = values.amount;
     let paymentStatus = (pay || regular)
@@ -465,6 +469,7 @@ class Actions extends React.Component {
     const waives = _.get(resources, ['waives', 'records'], []);
     const transfers = _.get(resources, ['transfers', 'records'], []);
     const settings = _.get(resources, ['commentRequired', 'records', 0], {});
+
     const warning = accounts.filter(a => a.status.name === 'Closed').length !== 0 && (actions.regular || actions.waiveMany || actions.transferMany) && params.accountstatus;
     const warningModalLabelId = actions.regular
       ? 'ui-users.accounts.actions.payFeeFine'
