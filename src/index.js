@@ -265,7 +265,7 @@ class UsersRouting extends React.Component {
               exact
               component={Routes.AccountsListingContainer}
               render={(props) => (
-                <IfPermission perm="ui-users.accounts">
+                <IfPermission perm="ui-users.feesfines.actions.all">
                   <Routes.AccountsListingContainer {...props} />
                 </IfPermission>
               )}

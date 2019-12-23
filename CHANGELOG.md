@@ -11,6 +11,7 @@
 * Reset patronBlocks before refetching. Fixes UIU-1430 and UIU-1431.
 * Fix bug with wrong displaying of address type. Refs UIU-1404
 * Passing `notify` field to BE, when fee/fine is paying. Refs UIU-1413.
+* Replace "Fee/Fine History: Can create, edit and remove accounts" permission with "Users: Can create, edit and remove fees/fines" one for restricting access to the accounts history. Refs UIU-1384.
 
 ## [2.26.0](https://github.com/folio-org/ui-users/tree/v2.26.0) (2019-12-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.3...v2.26.0)
