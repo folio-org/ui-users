@@ -368,7 +368,7 @@ class Actions extends React.Component {
     return amounts;
   }
 
-  showConfirmDialog = (values) => { 
+  showConfirmDialog = (values) => {
     this.setState({
       showConfirmDialog: true,
       values,
