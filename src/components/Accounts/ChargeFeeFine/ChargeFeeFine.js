@@ -64,6 +64,7 @@ class ChargeFeeFine extends React.Component {
       lookup: false,
       pay: false,
       showConfirmDialog: false,
+      notify: null,
     };
     this.onClickCharge = this.onClickCharge.bind(this);
     this.onClickSelectItem = this.onClickSelectItem.bind(this);
@@ -104,11 +105,9 @@ class ChargeFeeFine extends React.Component {
     const owners = _.get(this.props.resources, ['owners', 'records'], []);
     const feefines = _.get(this.props.resources, ['feefines', 'records'], []);
     const selectedLoan = this.props.selectedLoan || {};
-
     const { intl: { formatMessage } } = this.props;
     const item = (selectedLoan.id) ? selectedLoan.item : this.item;
 
-    this.type = type;
     type.paymentStatus = {
       name: 'Outstanding',
     };
@@ -140,17 +139,17 @@ class ChargeFeeFine extends React.Component {
     if (type.patronInfo && type.notify) {
       commentInfo = `${commentInfo} \n ${tagPatron} : ${type.patronInfo}`;
     }
-    delete type.comments;
-    delete type.patronInfo;
-    const typeCopy = { ...type };
-    delete typeCopy.notify;
-    return this.props.mutator.accounts.POST(typeCopy)
-      .then(() => this.newAction({}, typeCopy.id, typeCopy.feeFineType, typeCopy.amount, commentInfo, typeCopy.remaining, 0, typeCopy.feeFineOwner));
+
+    this.setState({ notify: type.notify });
+    const typeAction = _.omit(type, ['comments', 'patronInfo', 'notify']);
+
+    return this.props.mutator.accounts.POST(typeAction)
+      .then(() => this.newAction({}, typeAction.id, typeAction.feeFineType, typeAction.amount, commentInfo, typeAction.remaining, 0, typeAction.feeFineOwner));
   }
 
   newAction = (action, id, typeAction, amount, comment, balance, transaction, createdAt) => {
-    const path = `accounts/${this.type.id}`;
-    const notify = this.type.notify;
+    const path = `accounts/${id}`;
+    const notify = this.state.notify;
 
     return this.props.mutator.account.GET({ path }).then(record => {
       const dateAction = _.get(record, ['metadata', 'updatedDate'], moment().format());
