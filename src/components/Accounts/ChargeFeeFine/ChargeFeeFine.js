@@ -108,6 +108,7 @@ class ChargeFeeFine extends React.Component {
     const { intl: { formatMessage } } = this.props;
     const item = (selectedLoan.id) ? selectedLoan.item : this.item;
 
+    this.type = type;
     type.paymentStatus = {
       name: 'Outstanding',
     };
@@ -140,15 +141,17 @@ class ChargeFeeFine extends React.Component {
       commentInfo = `${commentInfo} \n ${tagPatron} : ${type.patronInfo}`;
     }
     delete type.comments;
-    delete type.notify;
     delete type.patronInfo;
-    this.type = type;
-    return this.props.mutator.accounts.POST(type)
-      .then(() => this.newAction({}, type.id, type.feeFineType, type.amount, commentInfo, type.remaining, 0, type.feeFineOwner));
+    const typeCopy = { ...type };
+    delete typeCopy.notify;
+    return this.props.mutator.accounts.POST(typeCopy)
+      .then(() => this.newAction({}, typeCopy.id, typeCopy.feeFineType, typeCopy.amount, commentInfo, typeCopy.remaining, 0, typeCopy.feeFineOwner));
   }
 
   newAction = (action, id, typeAction, amount, comment, balance, transaction, createdAt) => {
     const path = `accounts/${this.type.id}`;
+    const notify = this.type.notify;
+
     return this.props.mutator.account.GET({ path }).then(record => {
       const dateAction = _.get(record, ['metadata', 'updatedDate'], moment().format());
 
@@ -163,6 +166,7 @@ class ChargeFeeFine extends React.Component {
         balance: parseFloat(balance || 0).toFixed(2),
         transactionInformation: transaction || '-',
         comments: comment,
+        notify,
       };
       this.props.mutator.feefineactions.POST(Object.assign(action, newAction));
     });
