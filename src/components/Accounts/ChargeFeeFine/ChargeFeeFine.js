@@ -139,18 +139,15 @@ class ChargeFeeFine extends React.Component {
     if (type.patronInfo && type.notify) {
       commentInfo = `${commentInfo} \n ${tagPatron} : ${type.patronInfo}`;
     }
-
     delete type.comments;
     delete type.notify;
     delete type.patronInfo;
-
     return this.props.mutator.accounts.POST(type)
       .then(() => this.newAction({}, type.id, type.feeFineType, type.amount, commentInfo, type.remaining, 0, type.feeFineOwner));
   }
 
   newAction = (action, id, typeAction, amount, comment, balance, transaction, createdAt) => {
     const path = `accounts/${this.type.id}`;
-
     return this.props.mutator.account.GET({ path }).then(record => {
       const dateAction = _.get(record, ['metadata', 'updatedDate'], moment().format());
 
