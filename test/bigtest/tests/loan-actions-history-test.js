@@ -25,7 +25,15 @@ describe('loans actions history', () => {
   beforeEach(async function () {
     openLoan = this.server.create('loan', {
       status: { name: 'Open' },
-      loanPolicyId: 'test'
+      loanPolicyId: 'test',
+      overdueFinePolicyId: 'test',
+      lostItemPolicyId: 'test',
+      overdueFinePolicy: {
+        'name': 'One Hour1'
+      },
+      lostItemPolicy: {
+        'name': 'One Hour2'
+      },
     });
 
     this.server.createList('loanactions', 5, { loan: { ...openLoan.attrs } });
@@ -44,6 +52,42 @@ describe('loans actions history', () => {
 
   it('should display close button', () => {
     expect(LoanActionsHistory.closeButton.isPresent).to.be.true;
+  });
+
+  describe('display Overdue Fine Policy and Lost Item Fee Policy', () => {
+    it('fields should be presented', () => {
+      expect(LoanActionsHistory.overduePolicy.isPresent).to.be.true;
+      expect(LoanActionsHistory.lostItemPolicy.isPresent).to.be.true;
+    });
+
+    it('should display the field name', () => {
+      expect(LoanActionsHistory.overduePolicy.text).to.equal('One Hour1');
+      expect(LoanActionsHistory.lostItemPolicy.text).to.equal('One Hour2');
+    });
+
+    describe('clicking the overdue policy link', () => {
+      beforeEach(async function () {
+        await LoanActionsHistory.overduePolicy.click();
+        await this.visit(`/settings/circulation/fine-policies/${openLoan.overdueFinePolicyId}`);
+      });
+
+      it('should navigate to the user open loans list page', function () {
+        expect(LoanActionsHistory.overduePolicy.isPresent).to.be.false;
+        expect(this.location.pathname.endsWith(`/settings/circulation/fine-policies/${openLoan.overdueFinePolicyId}`)).to.be.true;
+      });
+    });
+
+    describe('clicking the lost item policy link', () => {
+      beforeEach(async function () {
+        await LoanActionsHistory.lostItemPolicy.click();
+        await this.visit(`/settings/circulation/lost-item-fee-policy/${openLoan.lostItemPolicyId}`);
+      });
+
+      it('should navigate to the user open loans list page', function () {
+        expect(LoanActionsHistory.lostItemPolicy.isPresent).to.be.false;
+        expect(this.location.pathname.endsWith(`/settings/circulation/lost-item-fee-policy/${openLoan.lostItemPolicyId}`)).to.be.true;
+      });
+    });
   });
 
   describe('having loan with fees/fines incurred', () => {

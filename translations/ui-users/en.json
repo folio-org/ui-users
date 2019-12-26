@@ -362,6 +362,8 @@
   "loans.details.feeFine": "Fee/fine",
   "loans.details.proxyBorrower": "Proxy borrower",
   "loans.details.checkinServicePoint": "Check in service point",
+  "loans.details.overduePolicy": "Overdue policy",
+  "loans.details.lostItemPolicy": "Lost item policy",
 
   "requests.title": "Requests",
   "requests.createRequest": "Create request",

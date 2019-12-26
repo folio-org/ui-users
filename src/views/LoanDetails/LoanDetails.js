@@ -270,7 +270,7 @@ class LoanDetails extends React.Component {
       pathname: `/users/${params.id}/loans/${loanStatus}`,
       state: location.state,
     });
-  }
+  };
 
   render() {
     const {
@@ -325,6 +325,8 @@ class LoanDetails extends React.Component {
     const contributorsListString = contributorsList.join(' ');
     const contributorsLength = contributorsListString.length;
     const loanStatus = get(loan, ['status', 'name'], '-');
+    const overduePolicyName = get(loan, ['overdueFinePolicy', 'name'], '-');
+    const lostItemPolicyName = get(loan, ['lostItemPolicy', 'name'], '-');
     const buttonDisabled = (loanStatus && loanStatus === 'Closed');
     // Number of characters to truncate the string = 77
     const listTodisplay = (contributorsList === '-') ? '-' : (contributorsListString.length >= 77) ? `${contributorsListString.substring(0, 77)}...` : `${contributorsListString.substring(0, contributorsListString.length - 2)}`;
@@ -416,6 +418,12 @@ class LoanDetails extends React.Component {
                   value={get(loan, ['item', 'location', 'name'], '-')}
                 />
               </Col>
+              <Col xs={2}>
+                <KeyValue
+                  label={<FormattedMessage id="ui-users.loans.details.checkinServicePoint" />}
+                  value={get(loan, ['checkinServicePoint', 'name'], '-')}
+                />
+              </Col>
             </Row>
             <Row>
               <Col xs={2}>
@@ -450,8 +458,9 @@ class LoanDetails extends React.Component {
               </Col>
               <Col xs={2}>
                 <KeyValue
-                  label={<FormattedMessage id="ui-users.loans.details.checkinServicePoint" />}
-                  value={get(loan, ['checkinServicePoint', 'name'], '-')}
+                  data-test-overdue-policy
+                  label={<FormattedMessage id="ui-users.loans.details.overduePolicy" />}
+                  value={<Link to={`/settings/circulation/fine-policies/${loan.overdueFinePolicyId}`}>{overduePolicyName}</Link>}
                 />
               </Col>
             </Row>
@@ -488,6 +497,13 @@ class LoanDetails extends React.Component {
                 <KeyValue
                   label={<FormattedMessage id="ui-users.loans.details.lost" />}
                   value="TODO"
+                />
+              </Col>
+              <Col xs={2}>
+                <KeyValue
+                  data-test-lost-item-policy
+                  label={<FormattedMessage id="ui-users.loans.details.lostItemPolicy" />}
+                  value={<Link to={`/settings/circulation/lost-item-fee-policy/${loan.lostItemPolicyId}`}>{lostItemPolicyName}</Link>}
                 />
               </Col>
             </Row>
