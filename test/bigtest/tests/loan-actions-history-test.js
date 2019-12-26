@@ -65,28 +65,9 @@ describe('loans actions history', () => {
       expect(LoanActionsHistory.lostItemPolicy.text).to.equal('One Hour2');
     });
 
-    describe('clicking the overdue policy link', () => {
-      beforeEach(async function () {
-        await LoanActionsHistory.overduePolicy.click();
-        await this.visit(`/settings/circulation/fine-policies/${openLoan.overdueFinePolicyId}`);
-      });
-
-      it('should navigate to the user open loans list page', function () {
-        expect(LoanActionsHistory.overduePolicy.isPresent).to.be.false;
-        expect(this.location.pathname.endsWith(`/settings/circulation/fine-policies/${openLoan.overdueFinePolicyId}`)).to.be.true;
-      });
-    });
-
-    describe('clicking the lost item policy link', () => {
-      beforeEach(async function () {
-        await LoanActionsHistory.lostItemPolicy.click();
-        await this.visit(`/settings/circulation/lost-item-fee-policy/${openLoan.lostItemPolicyId}`);
-      });
-
-      it('should navigate to the user open loans list page', function () {
-        expect(LoanActionsHistory.lostItemPolicy.isPresent).to.be.false;
-        expect(this.location.pathname.endsWith(`/settings/circulation/lost-item-fee-policy/${openLoan.lostItemPolicyId}`)).to.be.true;
-      });
+    it('should contain properly href attribute value', () => {
+      expect(LoanActionsHistory.linkLostItemPolicyHref).to.equal(`/settings/circulation/lost-item-fee-policy/${openLoan.lostItemPolicyId}`);
+      expect(LoanActionsHistory.linkOverduePolicyHref).to.equal(`/settings/circulation/fine-policies/${openLoan.overdueFinePolicyId}`);
     });
   });
 
