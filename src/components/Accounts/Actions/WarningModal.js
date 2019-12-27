@@ -136,7 +136,7 @@ class WarningModal extends React.Component {
     } = this.props;
 
     const selectedItemsAmount = accounts.length;
-    const closedItemsAmount = accounts.filter(a => a.status.name === 'Closed').length;
+    const closedItemsAmount = accounts.filter(a => a.status && a.status.name === 'Closed').length;
     const action = label === formatMessage({ id: 'ui-users.accounts.actions.payFeeFine' })
       ? <FormattedMessage id="ui-users.accounts.actions.warning.paymentAction" />
       : (label === formatMessage({ id: 'ui-users.accounts.actions.waiveFeeFine' }))
@@ -173,7 +173,7 @@ class WarningModal extends React.Component {
     };
 
     const values = Object.values(checkedAccounts);
-    const checkedClosed = values.filter(a => a.status.name === 'Closed');
+    const checkedClosed = values.filter(a => a.status && a.status.name === 'Closed');
 
     return (
       <Modal

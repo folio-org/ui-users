@@ -469,7 +469,7 @@ class Actions extends React.Component {
     const waives = _.get(resources, ['waives', 'records'], []);
     const transfers = _.get(resources, ['transfers', 'records'], []);
     const settings = _.get(resources, ['commentRequired', 'records', 0], {});
-    const warning = accounts.filter(a => a.status.name === 'Closed').length !== 0 && (actions.regular || actions.waiveMany || actions.transferMany) && params.accountstatus;
+    const warning = accounts.filter(a => a.status && a.status.name === 'Closed').length !== 0 && (actions.regular || actions.waiveMany || actions.transferMany) && params.accountstatus;
     const warningModalLabelId = actions.regular
       ? 'ui-users.accounts.actions.payFeeFine'
       : actions.waiveMany

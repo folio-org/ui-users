@@ -11,6 +11,7 @@
 * Reset patronBlocks before refetching. Fixes UIU-1430 and UIU-1431.
 * Fix bug with wrong displaying of address type. Refs UIU-1404
 * Passing `notify` field to BE, when fee/fine is paying. Refs UIU-1413.
+* Fix page crash when a multiple fee/fine payment is made. Refs UIU-1413.
 
 ## [2.26.0](https://github.com/folio-org/ui-users/tree/v2.26.0) (2019-12-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.3...v2.26.0)
