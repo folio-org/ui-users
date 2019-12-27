@@ -89,7 +89,7 @@ describe('Charge fee/fine', () => {
             });
 
             it('navigate to previous page', function () {
-              expect(this.location.pathname).to.equal(`/users/preview/${loan.userId}`);
+              expect(this.location.pathname).to.equal(`/users/${loan.userId}/charge`);
             });
           });
         });
