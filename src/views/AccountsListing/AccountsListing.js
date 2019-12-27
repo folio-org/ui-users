@@ -156,7 +156,6 @@ class AccountsHistory extends React.Component {
     this.onChangeActions = this.onChangeActions.bind(this);
     this.onChangeSelected = this.onChangeSelected.bind(this);
     this.onChangeSelectedAccounts = this.onChangeSelectedAccounts.bind(this);
-    this.connectedViewFeesFines = props.stripes.connect(ViewFeesFines);
     this.connectedActions = props.stripes.connect(Actions);
 
     this.accounts = [];
