@@ -469,7 +469,10 @@ class Actions extends React.Component {
     const waives = _.get(resources, ['waives', 'records'], []);
     const transfers = _.get(resources, ['transfers', 'records'], []);
     const settings = _.get(resources, ['commentRequired', 'records', 0], {});
-    const warning = accounts.filter(a => a.status && a.status.name === 'Closed').length !== 0 && (actions.regular || actions.waiveMany || actions.transferMany) && params.accountstatus;
+    const closedAccounts = accounts.filter(a => a.status && a.status.name === 'Closed');
+    const isWarning = closedAccounts.length !== 0
+        && (actions.regular || actions.waiveMany || actions.transferMany)
+        && params.accountstatus;
     const warningModalLabelId = actions.regular
       ? 'ui-users.accounts.actions.payFeeFine'
       : actions.waiveMany
@@ -482,9 +485,9 @@ class Actions extends React.Component {
     const initialValues = { ownerId, amount, notify: true };
     const modals = [
       { action: 'payment', item: actions.pay, label: 'nameMethod', data: payments, comment: 'paid', open: actions.pay || (actions.regular && accounts.length === 1) },
-      { action: 'payment', form: 'payment-many-modal', label: 'nameMethod', accounts, data: payments, comment: 'paid', open: actions.regular && !warning && accounts.length > 1 },
-      { action: 'waive', item: actions.waiveModal, label: 'nameReason', data: waives, comment: 'waived', open: actions.waiveModal || (actions.waiveMany && !warning) },
-      { action: 'transfer', item: actions.transferModal, label: 'accountName', data: transfers, comment: 'transferredManually', open: actions.transferModal || (actions.transferMany && !warning) }
+      { action: 'payment', form: 'payment-many-modal', label: 'nameMethod', accounts, data: payments, comment: 'paid', open: actions.regular && !isWarning && accounts.length > 1 },
+      { action: 'waive', item: actions.waiveModal, label: 'nameReason', data: waives, comment: 'waived', open: actions.waiveModal || (actions.waiveMany && !isWarning) },
+      { action: 'transfer', item: actions.transferModal, label: 'accountName', data: transfers, comment: 'transferredManually', open: actions.transferModal || (actions.transferMany && !isWarning) }
     ];
 
     return (
@@ -493,7 +496,7 @@ class Actions extends React.Component {
           {label => (
             <WarningModal
               id="actions-warning-modal"
-              open={warning && !submitting}
+              open={isWarning && !submitting}
               accounts={accounts}
               onChangeAccounts={this.onChangeAccounts}
               stripes={stripes}
