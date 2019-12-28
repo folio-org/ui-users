@@ -173,7 +173,7 @@ class WarningModal extends React.Component {
     };
 
     const values = Object.values(checkedAccounts);
-    const checkedClosed = values.filter(a => a.status && a.status.name === 'Closed');
+    const hasClosedAccounts = values.some(a => a.status && a.status.name === 'Closed');
 
     return (
       <Modal
@@ -207,7 +207,7 @@ class WarningModal extends React.Component {
         <Row end="xs">
           <Col xs>
             <Button id="warningTransferCancel" onClick={this.props.onClose}><FormattedMessage id="ui-users.feefines.modal.cancel" /></Button>
-            <Button id="warningTransferContinue" disabled={checkedClosed.length > 0 || values.length === 0} buttonStyle="primary" onClick={this.onClickContinue}><FormattedMessage id="ui-users.feefines.modal.submit" /></Button>
+            <Button id="warningTransferContinue" disabled={hasClosedAccounts || values.length === 0} buttonStyle="primary" onClick={this.onClickContinue}><FormattedMessage id="ui-users.feefines.modal.submit" /></Button>
           </Col>
         </Row>
       </Modal>
