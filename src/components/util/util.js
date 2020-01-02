@@ -88,6 +88,10 @@ export function getOpenRequestsPath(barcode) {
   return `/requests?filters=${filterString}&query=${barcode}&sort=Request Date`;
 }
 
+export function getChargeFineToLoanPath(userId, loanId) {
+  return `/users/${userId}/charge/${loanId}`;
+}
+
 export function calculateSortParams({
   sortOrder,
   sortValue,

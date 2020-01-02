@@ -10,11 +10,7 @@ import {
 
 import { stripesShape } from '@folio/stripes/core';
 
-import {
-  nav,
-  getOpenRequestsPath,
-} from '../../util';
-
+import { nav } from '../../util';
 import { withRenew } from '../../Wrappers';
 import TableModel from './components/OpenLoansWithStaticData';
 
@@ -194,14 +190,7 @@ class OpenLoansControl extends React.Component {
     });
   };
 
-  /**
-   * change handler for the options-menu prevents the event from bubbling
-   * up to the event handler attached to the row.
-   */
-  handleOptionsChange = (itemMeta, e) => {
-    e.preventDefault();
-    e.stopPropagation();
-
+  handleOptionsChange = itemMeta => {
     const {
       loan,
       action,
@@ -210,81 +199,6 @@ class OpenLoansControl extends React.Component {
     if (action && this[action]) {
       this[action](loan);
     }
-  };
-
-  itemDetails(loan, e) {
-    if (e) e.preventDefault();
-
-    const {
-      resources: {
-        query,
-      },
-      mutator: {
-        query: {
-          update,
-        },
-      },
-    } = this.props;
-    const {
-      item:{
-        instanceId,
-        holdingsRecordId,
-      },
-      itemId,
-    } = loan;
-
-    // none of the query params relevent to finding a user
-    // are relevent to finding instances so we purge them all.
-    const q = {};
-    Object.keys(query).forEach((k) => { q[k] = null; });
-
-    update({
-      _path: `/inventory/view/${instanceId}/${holdingsRecordId}/${itemId}`,
-      ...q,
-    });
-  }
-
-  changeDueDate = (loan) => {
-    this.setState({
-      activeLoan: loan.id,
-      changeDueDateDialogOpen: true,
-    });
-  };
-
-  showLoanPolicy = (loan, e) => {
-    if (e) e.preventDefault();
-
-    const {
-      resources: {
-        query,
-      },
-      mutator: {
-        query: {
-          update,
-        },
-      },
-    } = this.props;
-    const q = {};
-
-    Object.keys(query).forEach((k) => { q[k] = null; });
-
-    update({
-      _path: `/settings/circulation/loan-policies/${loan.loanPolicyId}`,
-      ...q,
-    });
-  };
-
-  discoverRequests = (loan) => {
-    const { history } = this.props;
-    const query = get(loan, ['item', 'barcode']);
-    const path = getOpenRequestsPath(query);
-
-    history.push(path);
-  };
-
-  feefine = (loan, e) => {
-    const { history, match: { params } } = this.props;
-    nav.onClickChargeFineToLoan(e, loan, history, params);
   };
 
   renew = (loan) => {
@@ -302,7 +216,14 @@ class OpenLoansControl extends React.Component {
     }
   };
 
-  feefinedetails = (loan, e) => {
+  changeDueDate = loan => {
+    this.setState({
+      activeLoan: loan.id,
+      changeDueDateDialogOpen: true,
+    });
+  };
+
+  feefineDetails = (loan, e) => {
     const {
       resources,
       history,
