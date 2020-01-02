@@ -593,6 +593,7 @@
           "ui-users.loans.view",
           "ui-users.loans.edit",
           "ui-users.loans.renew",
+          "ui-users.loans.renew-override",
           "ui-users.settings.feefines",
           "circulation.loans.item.put",
           "circulation.renew-by-barcode.post",

@@ -1,6 +1,7 @@
 import {
   interactor,
   scoped,
+  ButtonInteractor,
 } from '@bigtest/interactor';
 
 import KeyValue from './KeyValue';
@@ -10,6 +11,7 @@ import KeyValue from './KeyValue';
 
   requests = scoped('[data-test-loan-actions-history-requests] div', KeyValue);
   feeFines = scoped('[data-test-loan-fees-fines] [data-test-kv-value]', KeyValue);
+  closeButton = scoped('button[icon=times]', ButtonInteractor);
 }
 
 export default new LoanActionsHistory();

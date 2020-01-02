@@ -1,7 +1,18 @@
 # Change history for ui-users
 
-## 2.26.1 (IN PROGRESS)
-
+## 2.27.0 (IN PROGRESS)
+* Add default settings for user status and preferred contact in new user creation. Refs UIU-1385.
+* Fix navigation paths on cancel button click on loan details, open and closed loan lists pages. Refs UIU-1377.
+* Prevent loan details opening upon click in loans action menu without selecting link. Fixes UIU-1359.
+* Display correct user block on the edit form. Fixes UIU-1397.
+* Clear previous item data when open a new fee/fine form page. Fixes UIU-1410.
+* Add record last updated and created back to manual patron block. Fixes UIU-1420.
+* Go back to user's accounts when clicking on cancel or `x` from fee/fine form. Fixes UIU-1412.
+* Reset patronBlocks before refetching. Fixes UIU-1430 and UIU-1431.
+* Fix bug with wrong displaying of address type. Refs UIU-1404
+* Passing `notify` field to BE, when fee/fine is paying. Refs UIU-1413.
+* Replace "Fee/Fine History: Can create, edit and remove accounts" permission with "Users: Can create, edit and remove fees/fines" one for restricting access to the accounts history. Refs UIU-1384.
+* Fix page crash when a multiple fee/fine payment is made. Refs UIU-1413.
 * Correctly handle checkboxes in MCLs. Refs UIU-1407.
 
 ## [2.26.0](https://github.com/folio-org/ui-users/tree/v2.26.0) (2019-12-05)
