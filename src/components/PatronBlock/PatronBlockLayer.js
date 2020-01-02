@@ -161,7 +161,6 @@ class PatronBlockLayer extends React.Component {
           onDeleteItem={this.showConfirm}
           user={user}
           onSubmit={this.onSubmit}
-          selectedItem={this.selectedItem}
           initialValues={initialValues}
           params={params}
         />
