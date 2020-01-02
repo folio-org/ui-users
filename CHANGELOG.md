@@ -2,6 +2,7 @@
 
 ## 2.26.1 (IN PROGRESS)
 
+* Reset patronBlocks before refetching. Fixes UIU-1430 and UIU-1431.
 * Add record last updated and created back to manual patron block. Fixes UIU-1420.
 
 ## [2.26.0](https://github.com/folio-org/ui-users/tree/v2.26.0) (2019-12-05)
