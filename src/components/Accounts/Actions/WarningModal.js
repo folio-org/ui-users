@@ -154,6 +154,10 @@ class WarningModal extends React.Component {
     );
   }
 
+  isSelected = ({ item }) => (
+    this.state.allChecked || !!this.state.checkedAccounts[item.id]
+  );
+
   render() {
     const { formatMessage } = this.props.intl;
     const {
@@ -201,6 +205,7 @@ class WarningModal extends React.Component {
               sortOrder={sortOrder[0]}
               sortDirection={`${sortDirection[0]}ending`}
               contentData={accountOrdered}
+              isSelected={this.isSelected}
             />
           </Col>
         </Row>
