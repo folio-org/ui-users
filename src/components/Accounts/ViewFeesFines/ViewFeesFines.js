@@ -387,6 +387,10 @@ class ViewFeesFines extends React.Component {
     );
   }
 
+  isSelected = (item) => (
+    this.state.allChecked || !!this.props.selectedAccounts.find(account => account.id === item.id)
+  );
+
   render() {
     const { sortOrder, sortDirection, allChecked } = this.state;
     const props = this.props;
@@ -439,6 +443,7 @@ class ViewFeesFines extends React.Component {
         sortOrder={sortOrder[0]}
         sortDirection={`${sortDirection[0]}ending`}
         onRowClick={this.onRowClick}
+        isSelected={this.isSelected}
       />
     );
   }
