@@ -1,5 +1,6 @@
 import faker from 'faker';
 import {
+  before,
   beforeEach,
   describe,
   it,
@@ -83,7 +84,7 @@ describe('User Edit: Proxy/Sponsor', function () {
         });
 
         describe('Expire the relationship', () => {
-          beforeEach(async () => {
+          before(async () => {
             await UserFormPage.proxySection.expirationDate.fillAndBlur(faker.date.past(1).toJSON().substring(0, 10));
           });
 
@@ -102,7 +103,7 @@ describe('User Edit: Proxy/Sponsor', function () {
         });
 
         describe('Expire the user', () => {
-          beforeEach(async () => {
+          before(async () => {
             await UserFormPage.expirationDate.fillAndBlur('2019-01-01');
           });
 
@@ -147,7 +148,7 @@ describe('User Edit: Proxy/Sponsor', function () {
       });
 
       describe('Find an expired sponsor', () => {
-        beforeEach(async () => {
+        before(async () => {
           await findUserPlugin.modal.searchField.fill('expired');
           await findUserPlugin.modal.searchButton.click();
           await findUserPlugin.modal.instances(0).click();
@@ -172,7 +173,7 @@ describe('User Edit: Proxy/Sponsor', function () {
       });
 
       describe('Adding user as own sponsor should fail', () => {
-        beforeEach(async () => {
+        before(async () => {
           await findUserPlugin.modal.searchField.fill('self');
           await findUserPlugin.modal.searchButton.click();
           await findUserPlugin.modal.instances(0).click();
