@@ -11,6 +11,7 @@
 * Go back to user's accounts when clicking on cancel or `x` from fee/fine form. Fixes UIU-1412.
 * Reset patronBlocks before refetching. Fixes UIU-1430 and UIU-1431.
 * Fix bug with wrong displaying of address type. Refs UIU-1404
+* Omit 'notify' field upon creating fee/fine in order to prevent backend error. Fixes UIU-1438.
 
 ## [2.26.0](https://github.com/folio-org/ui-users/tree/v2.26.0) (2019-12-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.3...v2.26.0)
