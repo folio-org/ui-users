@@ -7,17 +7,16 @@ import {
   intlShape,
 } from 'react-intl';
 import PropTypes from 'prop-types';
+
 import {
   Button,
   MultiColumnList,
-  UncontrolledDropdown,
-  MenuItem,
+  Dropdown,
   DropdownMenu,
   Popover,
   IconButton,
   ExportCsv,
 } from '@folio/stripes/components';
-
 import {
   IfPermission,
   IntlConsumer,
@@ -26,6 +25,7 @@ import {
 
 import {
   calculateSortParams,
+  getChargeFineToLoanPath,
   nav,
 } from '../../util';
 import ActionsBar from '../components/ActionsBar';
@@ -229,30 +229,32 @@ class ClosedLoans extends React.Component {
         />;
       },
       'checkinServicePoint': loan => _.get(loan, ['checkinServicePoint', 'name'], '-'),
-      ' ': loan => this.renderActions(loan),
+      ' ': loan => {
+        return <Dropdown
+          usePortal
+          renderTrigger={({ getTriggerProps }) => (
+            <IconButton
+              {...getTriggerProps()}
+              icon="ellipsis"
+            />
+          )}
+          modifiers={{
+            preventOverflow: { boundariesElement: 'viewport', padding: 10 },
+            flip: { boundariesElement: 'viewport', padding: 10 },
+          }}
+          renderMenu={this.renderDropDownMenu(loan)}
+        />;
+      }
     };
   }
 
-  handleOptionsChange(itemMeta, e) {
-    e.preventDefault();
-    e.stopPropagation();
-
+  handleOptionsChange = itemMeta => {
     const { loan, action } = itemMeta;
 
     if (action && this[action]) {
       this[action](loan);
     }
-  }
-
-  itemDetails = (loan) => {
-    const { history } = this.props;
-    history.push(`/inventory/view/${loan.item.instanceId}/${loan.item.holdingsRecordId}/${loan.itemId}`);
-  }
-
-  feefine = (loan) => {
-    const { history, match: { params } } = this.props;
-    history.push(`/users/${params.id}/charge/${loan.id}`);
-  }
+  };
 
   feefineDetails = (loan, e) => {
     const { history, match: { params } } = this.props;
@@ -271,7 +273,7 @@ class ClosedLoans extends React.Component {
         nav.onClickViewAllAccounts(e, loan, history, params);
       }
     }
-  }
+  };
 
   async anonymizeLoans() {
     const response = await this.props.mutator.anonymize.POST({});
@@ -330,42 +332,47 @@ class ClosedLoans extends React.Component {
     });
   };
 
-  renderActions = (loan) => {
+  renderDropDownMenu = loan => () => {
+    const {
+      stripes,
+      handleOptionsChange,
+      match: { params },
+    } = this.props;
+
     const accounts = _.get(this.props.resources, ['loanAccount', 'records'], []);
     const accountsLoan = accounts.filter(a => a.loanId === loan.id) || [];
-    const { stripes } = this.props;
+    const itemDetailsLink = `/inventory/view/${loan.item.instanceId}/${loan.item.holdingsRecordId}/${loan.itemId}`;
     const buttonDisabled = !stripes.hasPerm('ui-users.feesfines.actions.all');
 
     return (
-      <UncontrolledDropdown
-        onSelectItem={this.handleOptionsChange}
-      >
-        <IconButton data-role="toggle" icon="ellipsis" size="small" iconSize="medium" />
-        <DropdownMenu data-role="menu" overrideStyle={{ padding: '7px 3px' }}>
-          <IfPermission perm="inventory.items.item.get">
-            <MenuItem itemMeta={{ loan, action: 'itemDetails' }} onSelectItem={this.handleOptionsChange}>
-              <Button buttonStyle="dropdownItem">
-                <FormattedMessage id="ui-users.itemDetails" />
-              </Button>
-            </MenuItem>
-          </IfPermission>
-          <MenuItem itemMeta={{ loan, action: 'feefine' }} onSelectItem={this.handleOptionsChange}>
-            <Button disabled={buttonDisabled} buttonStyle="dropdownItem">
-              <FormattedMessage id="ui-users.loans.newFeeFine" />
-            </Button>
-          </MenuItem>
-          <MenuItem itemMeta={{ loan, action: 'feefineDetails' }} onSelectItem={this.handleOptionsChange}>
-            <Button
-              disabled={accountsLoan.length === 0}
-              buttonStyle="dropdownItem"
-            >
-              <FormattedMessage id="ui-users.loans.feeFineDetails" />
-            </Button>
-          </MenuItem>
-        </DropdownMenu>
-      </UncontrolledDropdown>
+      <DropdownMenu data-role="menu">
+        <IfPermission perm="inventory.items.item.get">
+          <Button
+            buttonStyle="dropdownItem"
+            to={itemDetailsLink}
+          >
+            <FormattedMessage id="ui-users.itemDetails" />
+          </Button>
+        </IfPermission>
+        <Button
+          disabled={buttonDisabled}
+          buttonStyle="dropdownItem"
+          to={getChargeFineToLoanPath(params.id, loan.id)}
+        >
+          <FormattedMessage id="ui-users.loans.newFeeFine" />
+        </Button>
+        <Button
+          disabled={_.isEmpty(accountsLoan)}
+          buttonStyle="dropdownItem"
+          onClick={() => {
+            handleOptionsChange({ loan, action: 'feefineDetails' });
+          }}
+        >
+          <FormattedMessage id="ui-users.loans.feeFineDetails" />
+        </Button>
+      </DropdownMenu>
     );
-  }
+  };
 
   render() {
     const {

@@ -41,7 +41,7 @@ import CalloutInteractor from '@folio/stripes-components/lib/Callout/tests/inter
   list = scoped('[data-test-open-loans-list]');
   requests = collection('[data-test-list-requests]');
   actionDropdowns = collection('[data-test-actions-dropdown]');
-  actionDropdownContainer = new Interactor('[class*=actionDropDown---]');
+  actionDropdownContainer = new Interactor('[class*=DropdownMenu---]');
   actionDropdownRequestQueue = new Interactor('[data-test-dropdown-content-request-queue]');
   actionDropdownRenewButton = new Interactor('[data-test-dropdown-content-renew-button]');
   actionDropdownChangeDueDateButton = new Interactor('[data-test-dropdown-content-change-due-date-button]');
