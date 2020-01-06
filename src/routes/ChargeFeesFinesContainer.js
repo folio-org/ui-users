@@ -53,6 +53,7 @@ class ChargeFeesFinesContainer extends React.Component {
     items: {
       type: 'okapi',
       records: 'items',
+      resourceShouldRefresh: true,
       path: (_q, _p, _r, _l, props) => {
         const { resources: { loanItem, activeRecord } } = props;
         if ((activeRecord && activeRecord.barcode) || (loanItem && loanItem.records.length > 0)) {
