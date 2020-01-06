@@ -136,10 +136,6 @@ class ActionsDropdown extends React.Component {
           />
         )}
         renderMenu={this.renderMenu}
-        modifiers={{
-          preventOverflow: { boundariesElement: 'viewport', padding: 10 },
-          flip: { boundariesElement: 'viewport', padding: 10 },
-        }}
       />
     );
   }
