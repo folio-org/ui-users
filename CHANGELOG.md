@@ -1,16 +1,18 @@
 # Change history for ui-users
 
-## 2.26.1 (IN PROGRESS)
+## [2.26.1](https://github.com/folio-org/ui-users/tree/v2.26.1) (2020-01-06)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.26.0...v2.26.1)
 
 * Reset patronBlocks before refetching. Fixes UIU-1430 and UIU-1431.
 * Add record last updated and created back to manual patron block. Fixes UIU-1420.
 * Add default settings for user status and preferred contact in new user creation. Refs UIU-1385.
-* Display correct user block on the edit form. Fixes UIU-1397.
+* Display correct user block on the edit form. Fixes UIU-1397 (and UIU-1393).
 * Clear previous item data when open a new fee/fine form page. Fixes UIU-1410.
 * Add record last updated and created back to manual patron block. Fixes UIU-1420.
 * Go back to user's accounts when clicking on cancel or `x` from fee/fine form. Fixes UIU-1412.
 * Reset patronBlocks before refetching. Fixes UIU-1430 and UIU-1431.
 * Fix bug with wrong displaying of address type. Refs UIU-1404
+* Correctly handle checkboxes in fees/fines MCLs. Refs UIU-1407, UIU-1408.
 * Omit 'notify' field upon creating fee/fine in order to prevent backend error. Fixes UIU-1438.
 
 ## [2.26.0](https://github.com/folio-org/ui-users/tree/v2.26.0) (2019-12-05)
