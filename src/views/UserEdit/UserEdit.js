@@ -3,13 +3,20 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import uuid from 'uuid';
 
-import { cloneDeep, omit, differenceBy, get } from 'lodash';
+import {
+  cloneDeep,
+  find,
+  omit,
+  differenceBy,
+  get,
+} from 'lodash';
 
 import { eachPromise, getRecordObject } from '../../components/util';
 
 import UserForm from './UserForm';
 import ViewLoading from '../../components/Loading/ViewLoading';
 import { toUserAddresses, getFormAddressList } from '../../components/data/converters/address';
+import contactTypes from '../../components/data/static/contactTypes';
 import { deliveryFulfillmentValues } from '../../constants';
 
 function resourcesLoaded(obj, exceptions = []) {
@@ -69,8 +76,10 @@ class UserEdit extends React.Component {
     } = this.props;
 
     const initialFormValues = {
+      active: true,
       personal: {
         addresses: [],
+        preferredContactTypeId: (find(contactTypes, { 'name': 'email' }) || {}).id,
       },
       requestPreferences: {
         holdShelf: true,

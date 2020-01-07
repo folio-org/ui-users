@@ -204,7 +204,7 @@ class ViewFeesFines extends React.Component {
     return {
       '  ': f => (
         <input
-          checked={accounts.find(a => a.id === f.id)}
+          checked={(accounts.findIndex(a => a.id === f.id) !== -1)}
           onClick={e => this.toggleItem(e, f)}
           type="checkbox"
         />
@@ -285,6 +285,12 @@ class ViewFeesFines extends React.Component {
       allChecked: !allChecked
     }));
   }
+
+  rowUpdater = (f) => {
+    const accounts = this.props.selectedAccounts;
+    return this.state.allChecked ||
+    (accounts.findIndex(a => a.id === f.id) !== -1);
+  };
 
   handleOptionsChange(itemMeta, e) {
     e.preventDefault();
@@ -439,6 +445,7 @@ class ViewFeesFines extends React.Component {
         sortOrder={sortOrder[0]}
         sortDirection={`${sortDirection[0]}ending`}
         onRowClick={this.onRowClick}
+        rowUpdater={this.rowUpdater}
       />
     );
   }

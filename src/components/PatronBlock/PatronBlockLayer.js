@@ -22,7 +22,6 @@ class PatronBlockLayer extends React.Component {
     resources: PropTypes.shape({
       patronBlocks: PropTypes.object,
     }),
-    onCancel: PropTypes.func,
     user: PropTypes.object,
     selectedPatronBlock: PropTypes.object,
     history: PropTypes.object,
@@ -130,13 +129,13 @@ class PatronBlockLayer extends React.Component {
       selectedPatronBlock,
       resources,
       stripes,
-      onCancel,
       user,
       match: { params },
     } = this.props;
 
-    const selectedItem = params.patronblockid ?
-      _get(resources, ['patronBlocks', 'records', 0], {})
+    const patronBlocks = _get(resources, 'patronBlocks.records', []);
+    const selectedItem = params.patronblockid
+      ? patronBlocks.find(pb => pb.id === params.patronblockid)
       : selectedPatronBlock;
 
     const initialValues = _get(selectedItem, 'id') ? selectedItem : {
@@ -157,7 +156,7 @@ class PatronBlockLayer extends React.Component {
         <PatronBlockForm
           intl={intl}
           stripes={stripes}
-          onClose={onCancel}
+          onClose={this.onCancel}
           onDeleteItem={this.showConfirm}
           user={user}
           onSubmit={this.onSubmit}
