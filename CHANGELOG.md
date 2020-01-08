@@ -1,6 +1,7 @@
 # Change history for ui-users
 
-## 2.26.2 (IN PROGRESS)
+## [2.26.2](https://github.com/folio-org/ui-users/tree/v2.26.2) (2020-01-07)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.26.1...v2.26.2)
 
 * Go back to user's accounts when clicking on cancel or `x` from fee/fine form. Fixes UIU-1412.
 
