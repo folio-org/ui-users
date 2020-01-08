@@ -63,12 +63,21 @@ class LoansListing extends React.Component {
     );
   }
 
+  handleClose = () => {
+    const {
+      history,
+      location,
+      match: { params },
+    } = this.props;
+
+    history.push(`/users/preview/${params.id}${_.get(location, ['state', 'search'], '')}`);
+  }
+
   render() {
     const {
       user,
       patronGroup,
       match: { params },
-      history,
       loansHistory,
     } = this.props;
     const loanStatus = params.loanstatus;
@@ -82,7 +91,7 @@ class LoansListing extends React.Component {
           id="pane-loanshistory"
           defaultWidth="100%"
           dismissible
-          onClose={() => { history.goBack(); }}
+          onClose={this.handleClose}
           paneTitle={(
             <FormattedMessage id="ui-users.loans.title">
               {(title) => `${title} - ${getFullName(user)} (${_.upperFirst(patronGroup.group)})`}
