@@ -1,5 +1,10 @@
 # Change history for ui-users
 
+## [2.26.3](https://github.com/folio-org/ui-users/tree/v2.26.3) (2020-01-09)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.26.2...v2.26.3)
+
+* Go back to user details when closing loan listing and details pages. Refs UIU-1412, UIU-1377.
+
 ## [2.26.2](https://github.com/folio-org/ui-users/tree/v2.26.2) (2020-01-07)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.26.1...v2.26.2)
 
