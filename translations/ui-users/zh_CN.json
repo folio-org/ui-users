@@ -844,5 +844,10 @@
     "addAddressError": "请在“地址”部分中添加至少一个地址",
     "requests.defaultPickupServicePoint": "默认取件服务点",
     "errors.currentUser.expired": "当前用户记录已过期",
-    "data.loanActionMap.declaredLost": "已声明丢失"
+    "data.loanActionMap.declaredLost": "已声明丢失",
+    "confirm": "Confirm",
+    "loans.declareLost": "Declare lost",
+    "loans.declareLostDialogBody": "<strong>{title} {materialType}</strong> (Barcode: {barcode}) will be <strong>declared lost</strong>",
+    "loans.confirmLostState": "Confirm lost state",
+    "loans.declareLost.additionalInfoPlaceholder": "Enter more information about the lost item (required)"
 }
