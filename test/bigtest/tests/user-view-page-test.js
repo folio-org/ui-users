@@ -19,7 +19,7 @@ describe('User view', () => {
 
   beforeEach(async function () {
     user = this.server.create('user');
-    this.server.create('requestPreferences', {
+    this.server.create('requestPreference', {
       userId: user.id,
       delivery: true,
       defaultServicePointId: 'servicepointId1',

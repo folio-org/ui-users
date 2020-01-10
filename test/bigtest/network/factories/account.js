@@ -1,4 +1,5 @@
-import { Factory, faker, trait } from '@bigtest/mirage';
+import { Factory, trait } from 'miragejs';
+import faker from 'faker';
 
 export default Factory.extend({
 
@@ -33,12 +34,12 @@ export default Factory.extend({
 
   // eslint-disable-next-line quote-props
   withAccounts: trait({
-    afterCreate(accounts, server) {
+    afterCreate(account, server) {
       const owneraccount = server.create('owner');
       const feefinesaccount = server.create('feefines');
-      accounts.update('ownerId', owneraccount.id);
-      accounts.update('feeFineId', feefinesaccount.id);
-      accounts.save();
+      account.update('ownerId', owneraccount.id);
+      account.update('feeFineId', feefinesaccount.id);
+      account.save();
     }
   })
 

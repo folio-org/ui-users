@@ -1,4 +1,4 @@
-import { describe, beforeEach, it } from '@bigtest/mocha';
+import { describe, before, beforeEach, it } from '@bigtest/mocha';
 import { expect } from 'chai';
 
 import setupApplication from '../helpers/setup-application';
@@ -9,7 +9,9 @@ describe('Application', function () {
 
   const app = new ApplicationInteractor();
 
-  setupApplication();
+  before(function () {
+    setupApplication();
+  });
 
   describe('home', () => {
     beforeEach(function () {

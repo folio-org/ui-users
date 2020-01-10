@@ -286,7 +286,7 @@ export default function config() {
 
   this.post('/accounts', function (schema, { requestBody }) {
     const acct = JSON.parse(requestBody);
-    return server.create('accounts', acct);
+    return server.create('account', acct);
   });
 
   this.get('waives', {
@@ -371,7 +371,7 @@ export default function config() {
 
   this.post('/feefineactions', (schema, { requestBody }) => {
     const ffAction = JSON.parse(requestBody);
-    return server.create('feefineactions', ffAction);
+    return server.create('feefineaction', ffAction);
   });
 
   this.get('/owners', ({ owners }) => {

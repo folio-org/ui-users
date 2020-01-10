@@ -5,7 +5,7 @@ import {
   it,
 } from '@bigtest/mocha';
 import { expect } from 'chai';
-import { faker } from '@bigtest/mirage';
+import faker from 'faker';
 
 import setupApplication from '../helpers/setup-application';
 import PatronBlocksInteractor from '../interactors/manual-blocks';

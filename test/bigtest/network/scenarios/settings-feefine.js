@@ -1,4 +1,4 @@
-import { Response } from '@bigtest/mirage';
+import { Response } from 'miragejs';
 import CQLParser from '../cql';
 /* istanbul ignore file */
 
@@ -13,17 +13,17 @@ export default (server) => {
   const otherOwner = server.create('owner', { owner: 'Main Admin2', desc: 'Owner CCH' });
 
   const ownerFeeFine = server.create('owner', { owner: 'Main Admin3', desc: 'Owner DGB' });
-  server.createList('feefines', 4, { ownerId: ownerFeeFine.id });
+  server.createList('feefine', 4, { ownerId: ownerFeeFine.id });
 
-  server.createList('transfers', 2, { ownerId: owner1.id });
+  server.createList('transfer', 2, { ownerId: owner1.id });
 
-  server.createList('transfers', 3, { ownerId: otherOwner.id });
+  server.createList('transfer', 3, { ownerId: otherOwner.id });
 
-  server.createList('payments', 5, { ownerId: owner1.id });
+  server.createList('payment', 5, { ownerId: owner1.id });
 
-  server.createList('refunds', 5);
+  server.createList('refund', 5);
 
-  server.createList('waivers', 5);
+  server.createList('waiver', 5);
 
   server.createList('service-point', 3);
 

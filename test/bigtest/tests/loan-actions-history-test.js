@@ -28,7 +28,7 @@ describe('loans actions history', () => {
       loanPolicyId: 'test'
     });
 
-    this.server.createList('loanactions', 5, { loan: { ...openLoan.attrs } });
+    this.server.createList('loanaction', 5, { loan: { ...openLoan.attrs } });
     this.server.createList('request', requestsAmount, { itemId: openLoan.itemId });
 
     this.visit(`/users/${openLoan.userId}/loans/view/${openLoan.id}`);
@@ -106,7 +106,7 @@ describe('loans actions history', () => {
         loanPolicyId: 'test'
       });
 
-      this.server.createList('loanactions', 5, { loan: { ...closedLoan.attrs } });
+      this.server.createList('loanaction', 5, { loan: { ...closedLoan.attrs } });
       this.server.createList('request', requestsAmount, { itemId: closedLoan.itemId });
 
       this.visit(`/users/${closedLoan.userId}/loans/view/${closedLoan.id}`);

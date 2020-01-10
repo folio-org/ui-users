@@ -12,7 +12,10 @@
   },
   "main": "src/index.js",
   "stripes": {
-    "actsAs": ["app", "settings"],
+    "actsAs": [
+      "app",
+      "settings"
+    ],
     "displayName": "ui-users.meta.title",
     "route": "/users",
     "home": "/users?sort=name",
@@ -668,7 +671,6 @@
   },
   "devDependencies": {
     "@bigtest/interactor": "^0.7.2",
-    "@bigtest/mirage": "^0.0.1",
     "@bigtest/mocha": "^0.5.2",
     "@bigtest/react": "^0.1.2",
     "@folio/eslint-config-stripes": "^3.2.1",
@@ -680,6 +682,7 @@
     "chai": "^4.2.0",
     "eslint": "^5.5.0",
     "faker": "^4.1.0",
+    "miragejs": "^0.1.32",
     "mocha": "^5.2.0",
     "react": "^16.5.0",
     "react-dom": "^16.5.0",
