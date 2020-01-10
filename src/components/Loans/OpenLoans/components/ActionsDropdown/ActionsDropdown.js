@@ -77,6 +77,18 @@ class ActionsDropdown extends React.Component {
             <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />
           </Button>
         </IfPermission>
+        { get(loan, ['item', 'status', 'name']) !== 'Declared lost' &&
+          <Button
+            buttonStyle="dropdownItem"
+            data-test-dropdown-content-declare-lost-button
+            onClick={(e) => {
+              handleOptionsChange({ loan, action:'declareLost' });
+              onToggle(e);
+            }}
+          >
+            <FormattedMessage id="ui-users.loans.declareLost" />
+          </Button>
+        }
         <IfPermission perm="circulation-storage.loan-policies.item.get">
           <Button
             buttonStyle="dropdownItem"
