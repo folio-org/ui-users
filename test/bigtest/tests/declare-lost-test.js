@@ -5,7 +5,7 @@ import {
   it,
 } from '@bigtest/mocha';
 import { expect } from 'chai';
-import { Response } from '@bigtest/mirage';
+import { Response } from 'miragejs';
 
 import setupApplication from '../helpers/setup-application';
 import OpenLoansInteractor from '../interactors/open-loans';
