@@ -11,7 +11,10 @@ import {
 import { stripesShape } from '@folio/stripes/core';
 
 import { nav } from '../../util';
-import { withRenew } from '../../Wrappers';
+import {
+  withRenew,
+  withDeclareLost,
+} from '../../Wrappers';
 import TableModel from './components/OpenLoansWithStaticData';
 
 class OpenLoansControl extends React.Component {
@@ -48,6 +51,7 @@ class OpenLoansControl extends React.Component {
     loans: PropTypes.arrayOf(PropTypes.object).isRequired,
     patronBlocks: PropTypes.arrayOf(PropTypes.object).isRequired,
     renew: PropTypes.func.isRequired,
+    declareLost: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -223,6 +227,8 @@ class OpenLoansControl extends React.Component {
     });
   };
 
+  declareLost = loan => { this.props.declareLost(loan); };
+
   feefineDetails = (loan, e) => {
     const {
       resources,
@@ -337,4 +343,4 @@ class OpenLoansControl extends React.Component {
   }
 }
 
-export default withRenew(OpenLoansControl);
+export default withDeclareLost(withRenew(OpenLoansControl));
