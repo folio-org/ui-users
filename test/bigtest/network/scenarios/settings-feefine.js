@@ -56,7 +56,7 @@ export default (server) => {
 
   server.post('owners', (schema, request) => {
     const json = JSON.parse(request.requestBody);
-    const record = server.create('owners', json);
+    const record = server.create('owner', json);
     return record.attrs;
   });
 

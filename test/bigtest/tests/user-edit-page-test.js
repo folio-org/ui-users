@@ -23,7 +23,7 @@ describe('User Edit Page', () => {
   beforeEach(async function () {
     user1 = this.server.create('user');
     user2 = this.server.create('user');
-    this.server.create('requestPreferences', {
+    this.server.create('requestPreference', {
       userId: user1.id,
       delivery: true,
       defaultServicePointId: 'servicepointId1',
