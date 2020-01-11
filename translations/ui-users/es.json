@@ -844,5 +844,10 @@
     "addAddressError": "Por favor, agregue al menos una dirección dentro de la sección \"Direcciones\"",
     "requests.defaultPickupServicePoint": "Punto de servicio de recogida predeterminado",
     "errors.currentUser.expired": "Actual registro de usuario expirado",
-    "data.loanActionMap.declaredLost": "Declarado perdido"
+    "data.loanActionMap.declaredLost": "Declarado perdido",
+    "confirm": "Confirm",
+    "loans.declareLost": "Declare lost",
+    "loans.declareLostDialogBody": "<strong>{title} {materialType}</strong> (Barcode: {barcode}) will be <strong>declared lost</strong>",
+    "loans.confirmLostState": "Confirm lost state",
+    "loans.declareLost.additionalInfoPlaceholder": "Enter more information about the lost item (required)"
 }
