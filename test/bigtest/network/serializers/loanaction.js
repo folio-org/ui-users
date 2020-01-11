@@ -6,6 +6,7 @@ export default ApplicationSerializer.extend({
 
     json.totalRecords = json.loanactions.length;
     json.loansHistory = json.loanactions;
+
     delete json.loanactions;
     return json;
   }
