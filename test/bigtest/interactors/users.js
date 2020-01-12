@@ -27,10 +27,9 @@ export default @interactor class UsersInteractor {
   activeUserCheckbox = new ActiveUserCheckbox();
   headerDropdownMenu = new HeaderDropdownMenu();
   searchFocused = isPresent('[data-test-user-search-input]:focus');
-  emptyMessageDisplayed = isPresent('[data-test-user-search-no-results-message]');
   patronGroupsPresent = isPresent('#clickable-filter-pg-faculty');
   instancePresent = isPresent('[data-test-user-instances] [data-test-instance-details]');
-  instancesPresent = isPresent('[data-test-user-instances] [role=group] [role=row]');
+  instancesPresent = isPresent('[role=group] [role=row]');
   headerDropdown = new HeaderDropdown('[class*=paneHeaderCenterInner---] [class*=dropdown---]');
   clickFacultyCheckbox = clickable('#clickable-filter-pg-faculty');
   clickGraduateCheckbox = clickable('#clickable-filter-pg-graduate');
@@ -50,9 +49,5 @@ export default @interactor class UsersInteractor {
 
   whenLoaded() {
     return this.when(() => this.patronGroupsPresent).timeout(5000);
-  }
-
-  whenResultsLoaded() {
-    return this.when(() => !this.emptyMessageDisplayed).timeout(5000);
   }
 }

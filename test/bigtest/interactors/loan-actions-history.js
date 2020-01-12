@@ -2,7 +2,7 @@ import {
   interactor,
   scoped,
   ButtonInteractor,
-  property
+  property,
 } from '@bigtest/interactor';
 
 import KeyValue from './KeyValue';
@@ -17,6 +17,10 @@ import KeyValue from './KeyValue';
   closeButton = scoped('button[icon=times]', ButtonInteractor);
   declareLostButton = scoped('[data-test-declare-lost-button]', ButtonInteractor);
   isDeclareLostButtonDisabled = property('[data-test-declare-lost-button]', 'disabled');
+
+  whenLoaded() {
+    return this.when(() => this.isPresent).timeout(5000);
+  }
 }
 
 export default new LoanActionsHistory();
