@@ -238,10 +238,6 @@ class ClosedLoans extends React.Component {
               icon="ellipsis"
             />
           )}
-          modifiers={{
-            preventOverflow: { boundariesElement: 'viewport', padding: 10 },
-            flip: { boundariesElement: 'viewport', padding: 10 },
-          }}
           renderMenu={this.renderDropDownMenu(loan)}
         />;
       }

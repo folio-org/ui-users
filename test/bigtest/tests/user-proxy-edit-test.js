@@ -13,6 +13,7 @@ import setupApplication from '../helpers/setup-application';
 import UserFormPage from '../interactors/user-form-page';
 import InstanceViewPage from '../interactors/user-view-page';
 import UsersInteractor from '../interactors/users';
+import FindUserInstancesInteractor from '../interactors/FindUserInstances';
 
 import translations from '../../../translations/ui-users/en';
 
@@ -36,6 +37,7 @@ describe('User Edit: Proxy/Sponsor', function () {
 
   const users = new UsersInteractor();
   const findUserPlugin = new FindUserInteractor();
+  const findUserInstances = new FindUserInstancesInteractor();
 
   beforeEach(async function () {
     this.visit('/users/preview/test-user-proxy-unique-id');
@@ -71,6 +73,7 @@ describe('User Edit: Proxy/Sponsor', function () {
         beforeEach(async () => {
           await findUserPlugin.modal.searchField.fill('sponsor');
           await findUserPlugin.modal.searchButton.click();
+          await findUserInstances.whenInstancesLoaded();
           await findUserPlugin.modal.instances(0).click();
         });
 
@@ -150,6 +153,7 @@ describe('User Edit: Proxy/Sponsor', function () {
         beforeEach(async () => {
           await findUserPlugin.modal.searchField.fill('expired');
           await findUserPlugin.modal.searchButton.click();
+          await findUserInstances.whenInstancesLoaded();
           await findUserPlugin.modal.instances(0).click();
         });
 
@@ -175,6 +179,7 @@ describe('User Edit: Proxy/Sponsor', function () {
         beforeEach(async () => {
           await findUserPlugin.modal.searchField.fill('self');
           await findUserPlugin.modal.searchButton.click();
+          await findUserInstances.whenInstancesLoaded();
           await findUserPlugin.modal.instances(0).click();
         });
 
