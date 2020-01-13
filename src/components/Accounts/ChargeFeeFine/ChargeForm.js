@@ -85,6 +85,9 @@ class ChargeForm extends React.Component {
     defaultServicePointId: PropTypes.string,
     location: PropTypes.object,
     history: PropTypes.object,
+    initialValues: PropTypes.object,
+    dispatch: PropTypes.func,
+    match: PropTypes.object,
   }
 
   constructor(props) {
@@ -159,9 +162,19 @@ class ChargeForm extends React.Component {
     }));
   }
 
-  render() {
+  goToAccounts = () => {
     const {
       history,
+      match: {
+        params: { id },
+      },
+    } = this.props;
+
+    history.push(`/users/${id}/accounts/open`);
+  }
+
+  render() {
+    const {
       user,
       dispatch,
       initialValues,
@@ -199,7 +212,7 @@ class ChargeForm extends React.Component {
 
     const lastMenu = (
       <PaneMenu>
-        <Button id="cancelCharge" onClick={() => { this.props.history.goBack(); }} style={mg}><FormattedMessage id="ui-users.feefines.modal.cancel" /></Button>
+        <Button id="cancelCharge" onClick={this.goToAccounts} style={mg}><FormattedMessage id="ui-users.feefines.modal.cancel" /></Button>
         <Button
           id="chargeAndPay"
           disabled={this.props.pristine || this.props.submitting || this.props.invalid}
@@ -223,7 +236,7 @@ class ChargeForm extends React.Component {
         <Pane
           defaultWidth="100%"
           dismissible
-          onClose={() => { history.goBack(); }}
+          onClose={this.goToAccounts}
           paneTitle={(
             <FormattedMessage id="ui-users.charge.title" />
           )}

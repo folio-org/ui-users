@@ -28,6 +28,7 @@ class ChargeFeesFinesContainer extends React.Component {
         return loanId ? `loan-storage/loans/${loanId}` : null;
       },
       clear: false,
+      resourceShouldRefresh: true,
       shouldRefresh: (resource, action, refresh) => {
         const { path } = action.meta;
         return refresh || (path && path.match(/link/));
@@ -35,7 +36,7 @@ class ChargeFeesFinesContainer extends React.Component {
     },
     loanItem: {
       type: 'okapi',
-      // path: 'inventory/items/%{activeRecord.itemId}'
+      resourceShouldRefresh: true,
       path: (_q, _p, _r, _l, props) => {
         const { resources: { loan, activeRecord } } = props;
         if ((activeRecord && activeRecord.itemId) || (loan && loan.records.length > 0)) {
@@ -43,7 +44,7 @@ class ChargeFeesFinesContainer extends React.Component {
           return itemId ? `inventory/items/${itemId}` : null;
         }
         return null;
-      }
+      },
     },
     curUserServicePoint: {
       type: 'okapi',
@@ -53,6 +54,7 @@ class ChargeFeesFinesContainer extends React.Component {
     items: {
       type: 'okapi',
       records: 'items',
+      resourceShouldRefresh: true,
       path: (_q, _p, _r, _l, props) => {
         const { resources: { loanItem, activeRecord } } = props;
         if ((activeRecord && activeRecord.barcode) || (loanItem && loanItem.records.length > 0)) {

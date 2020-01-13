@@ -34,6 +34,7 @@ class LoansListing extends React.Component {
    */
   getSegmentedControls = () => {
     const {
+      location,
       match: { params },
     } = this.props;
 
@@ -44,7 +45,10 @@ class LoansListing extends React.Component {
           fullWidth
           id="loans-show-open"
           buttonStyle={params.loanstatus === 'open' ? 'primary' : 'default'}
-          to={{ pathname: `/users/${params.id}/loans/open` }}
+          to={{
+            pathname: `/users/${params.id}/loans/open`,
+            state: location.state,
+          }}
           replace
         >
           <FormattedMessage id="ui-users.loans.openLoans" />
@@ -54,7 +58,10 @@ class LoansListing extends React.Component {
           fullWidth
           id="loans-show-closed"
           buttonStyle={params.loanstatus === 'closed' ? 'primary' : 'default'}
-          to={{ pathname: `/users/${params.id}/loans/closed` }}
+          to={{
+            pathname: `/users/${params.id}/loans/closed`,
+            state: location.state,
+          }}
           replace
         >
           <FormattedMessage id="ui-users.loans.closedLoans" />
@@ -63,12 +70,21 @@ class LoansListing extends React.Component {
     );
   }
 
+  handleClose = () => {
+    const {
+      history,
+      location,
+      match: { params },
+    } = this.props;
+
+    history.push(`/users/preview/${params.id}${_.get(location, ['state', 'search'], '')}`);
+  }
+
   render() {
     const {
       user,
       patronGroup,
       match: { params },
-      history,
       loansHistory,
     } = this.props;
     const loanStatus = params.loanstatus;
@@ -82,7 +98,7 @@ class LoansListing extends React.Component {
           id="pane-loanshistory"
           defaultWidth="100%"
           dismissible
-          onClose={() => { history.goBack(); }}
+          onClose={this.handleClose}
           paneTitle={(
             <FormattedMessage id="ui-users.loans.title">
               {(title) => `${title} - ${getFullName(user)} (${_.upperFirst(patronGroup.group)})`}

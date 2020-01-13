@@ -31,10 +31,11 @@ describe('Status filter', () => {
   describe('show inactive users', () => {
     beforeEach(async function () {
       await users.activeUserCheckbox.clickInactive();
+      await users.whenInstancesLoaded();
     });
 
     it('should show the list of users', () => {
-      expect(users.isVisible).to.equal(true);
+      expect(users.isVisible).to.be.true;
     });
 
     it('should be proper amount of users', () => {
@@ -45,10 +46,11 @@ describe('Status filter', () => {
   describe('show active users', () => {
     beforeEach(async function () {
       await users.activeUserCheckbox.clickActive();
+      await users.whenInstancesLoaded();
     });
 
     it('should show the list of users', () => {
-      expect(users.isVisible).to.equal(true);
+      expect(users.isVisible).to.be.true;
     });
 
     it('should be proper amount of users', () => {
@@ -60,10 +62,11 @@ describe('Status filter', () => {
     beforeEach(async function () {
       await users.activeUserCheckbox.clickActive();
       await users.activeUserCheckbox.clickInactive();
+      await users.whenInstancesLoaded();
     });
 
     it('should show the list of users', () => {
-      expect(users.isVisible).to.equal(true);
+      expect(users.isVisible).to.be.true;
     });
 
     it('should be proper amount of users', () => {

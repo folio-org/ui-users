@@ -50,6 +50,7 @@ class OpenLoansWithStaticData extends React.Component {
     onClosePatronBlockedModal: PropTypes.func.isRequired,
     feeFineCount: PropTypes.func.isRequired,
     history: PropTypes.object,
+    location: PropTypes.object,
     match: PropTypes.object,
   };
 
@@ -242,6 +243,7 @@ class OpenLoansWithStaticData extends React.Component {
           sortOrder={this.sortOrder}
           possibleColumns={possibleColumns}
           history={this.props.history}
+          location={this.props.location}
           match={this.props.match}
         />
         <Modals

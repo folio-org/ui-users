@@ -47,14 +47,14 @@ class ChargeFeeFine extends React.Component {
       }),
     }).isRequired,
     stripes: PropTypes.object.isRequired,
-    handleAddRecords: PropTypes.func,
+
     okapi: PropTypes.object,
     selectedLoan: PropTypes.object,
     user: PropTypes.object,
-    onSubmit: PropTypes.func,
-    servicePointsIds: PropTypes.arrayOf(PropTypes.string),
-    defaultServicePointId: PropTypes.string,
     intl: intlShape.isRequired,
+    history: PropTypes.object,
+    location: PropTypes.object,
+    match: PropTypes.object,
   };
 
   constructor(props) {
@@ -64,6 +64,7 @@ class ChargeFeeFine extends React.Component {
       lookup: false,
       pay: false,
       showConfirmDialog: false,
+      notify: null,
     };
     this.onClickCharge = this.onClickCharge.bind(this);
     this.onClickSelectItem = this.onClickSelectItem.bind(this);
@@ -104,7 +105,6 @@ class ChargeFeeFine extends React.Component {
     const owners = _.get(this.props.resources, ['owners', 'records'], []);
     const feefines = _.get(this.props.resources, ['feefines', 'records'], []);
     const selectedLoan = this.props.selectedLoan || {};
-
     const { intl: { formatMessage } } = this.props;
     const item = (selectedLoan.id) ? selectedLoan.item : this.item;
 
@@ -139,16 +139,18 @@ class ChargeFeeFine extends React.Component {
     if (type.patronInfo && type.notify) {
       commentInfo = `${commentInfo} \n ${tagPatron} : ${type.patronInfo}`;
     }
-    delete type.comments;
-    delete type.notify;
-    delete type.patronInfo;
-    this.type = type;
-    return this.props.mutator.accounts.POST(type)
-      .then(() => this.newAction({}, type.id, type.feeFineType, type.amount, commentInfo, type.remaining, 0, type.feeFineOwner));
+
+    this.setState({ notify: type.notify });
+    const typeAction = _.omit(type, ['comments', 'patronInfo', 'notify']);
+
+    return this.props.mutator.accounts.POST(typeAction)
+      .then(() => this.newAction({}, typeAction.id, typeAction.feeFineType, typeAction.amount, commentInfo, typeAction.remaining, 0, typeAction.feeFineOwner));
   }
 
   newAction = (action, id, typeAction, amount, comment, balance, transaction, createdAt) => {
-    const path = `accounts/${this.type.id}`;
+    const path = `accounts/${id}`;
+    const notify = this.state.notify;
+
     return this.props.mutator.account.GET({ path }).then(record => {
       const dateAction = _.get(record, ['metadata', 'updatedDate'], moment().format());
 
@@ -163,6 +165,7 @@ class ChargeFeeFine extends React.Component {
         balance: parseFloat(balance || 0).toFixed(2),
         transactionInformation: transaction || '-',
         comments: comment,
+        notify,
       };
       this.props.mutator.feefineactions.POST(Object.assign(action, newAction));
     });
@@ -282,7 +285,8 @@ class ChargeFeeFine extends React.Component {
       }
       this.type.paymentStatus.name = paymentStatus;
       this.props.mutator.activeRecord.update({ id: this.type.id });
-      return this.props.mutator.accounts.PUT(this.type);
+
+      return this.props.mutator.accounts.PUT(_.omit(this.type, ['notify']));
     })
       .then(() => this.newAction({ paymentMethod: values.method }, this.type.id,
         this.type.paymentStatus.name, values.amount,
@@ -337,6 +341,9 @@ class ChargeFeeFine extends React.Component {
       location,
       history,
       intl,
+      match: {
+        params: { loanid },
+      },
     } = this.props;
     this.item = _.get(resources, ['items', 'records', [0]], {});
     const allfeefines = _.get(resources, ['allfeefines', 'records'], []);
@@ -353,6 +360,7 @@ class ChargeFeeFine extends React.Component {
     const payments = _.get(resources, ['payments', 'records'], []).filter(p => p.ownerId === this.state.ownerId);
     const accounts = _.get(resources, ['accounts', 'records'], []);
     const settings = _.get(this.props.resources, ['commentRequired', 'records', 0], {});
+    const barcode = _.get(this.props.resources, 'activeRecord.barcode');
 
     const defaultServicePointId = _.get(resources, ['curUserServicePoint', 'records', 0, 'defaultServicePointId'], '-');
     const servicePointsIds = _.get(resources, ['curUserServicePoint', 'records', 0, 'servicePointsIds'], []);
@@ -363,7 +371,9 @@ class ChargeFeeFine extends React.Component {
     });
     parseFloat(selected).toFixed(2);
     let item;
-    if (this.item) {
+
+
+    if (this.item && (loanid || barcode)) {
       item = {
         id: this.item.id || '',
         instance: this.item.title || '',

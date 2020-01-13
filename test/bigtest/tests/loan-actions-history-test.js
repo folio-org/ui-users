@@ -3,6 +3,8 @@ import { expect } from 'chai';
 
 import setupApplication from '../helpers/setup-application';
 import LoanActionsHistory from '../interactors/loan-actions-history';
+import OpenLoansInteractor from '../interactors/open-loans';
+import ClosedLoansInteractor from '../interactors/closed-loans';
 
 import translations from '../../../translations/ui-users/en';
 
@@ -18,16 +20,18 @@ describe('loans actions history', () => {
     });
   });
 
+  let openLoan;
+
   beforeEach(async function () {
-    const loan = this.server.create('loan', {
+    openLoan = this.server.create('loan', {
       status: { name: 'Open' },
       loanPolicyId: 'test'
     });
 
-    this.server.createList('loanactions', 5, { loan: { ...loan.attrs } });
+    this.server.createList('loanactions', 5, { loan: { ...openLoan.attrs } });
+    this.server.createList('request', requestsAmount, { itemId: openLoan.itemId });
 
-    this.server.createList('request', requestsAmount, { itemId: loan.itemId });
-    this.visit(`/users/${loan.userId}/loans/view/${loan.id}`);
+    this.visit(`/users/${openLoan.userId}/loans/view/${openLoan.id}`);
   });
 
   it('should be presented', () => {
@@ -36,6 +40,10 @@ describe('loans actions history', () => {
 
   it('having loan without fees/fines incurred should display the "-"', () => {
     expect(LoanActionsHistory.feeFines.text).to.equal('-');
+  });
+
+  it('should display close button', () => {
+    expect(LoanActionsHistory.closeButton.isPresent).to.be.true;
   });
 
   describe('having loan with fees/fines incurred', () => {
@@ -74,6 +82,48 @@ describe('loans actions history', () => {
 
       it('should not be presented', () => {
         expect(LoanActionsHistory.requests.isPresent).to.be.false;
+      });
+    });
+  });
+
+  describe('clicking the close button', () => {
+    beforeEach(async () => {
+      await LoanActionsHistory.closeButton.click();
+    });
+
+    it('should navigate to the user open loans list page', function () {
+      expect(OpenLoansInteractor.isPresent).to.be.true;
+      expect(this.location.pathname.endsWith(`/users/${openLoan.userId}/loans/open`)).to.be.true;
+    });
+  });
+
+  describe('visiting the actions history of the closed loans', () => {
+    let closedLoan;
+
+    beforeEach(async function () {
+      closedLoan = this.server.create('loan', {
+        status: { name: 'Closed' },
+        loanPolicyId: 'test'
+      });
+
+      this.server.createList('loanactions', 5, { loan: { ...closedLoan.attrs } });
+      this.server.createList('request', requestsAmount, { itemId: closedLoan.itemId });
+
+      this.visit(`/users/${closedLoan.userId}/loans/view/${closedLoan.id}`);
+    });
+
+    it('should display the close button', () => {
+      expect(LoanActionsHistory.closeButton.isPresent).to.be.true;
+    });
+
+    describe('clicking the close button', () => {
+      beforeEach(async () => {
+        await LoanActionsHistory.closeButton.click();
+      });
+
+      it('should navigate to the user closed loans list page', function () {
+        expect(ClosedLoansInteractor.isPresent).to.be.true;
+        expect(this.location.pathname.endsWith(`/users/${closedLoan.userId}/loans/closed`)).to.be.true;
       });
     });
   });

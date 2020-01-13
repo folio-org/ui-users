@@ -1,6 +1,26 @@
 # Change history for ui-users
 
-## 2.26.0 (IN PROGRESS)
+## 2.27.0 (IN PROGRESS)
+* Add default settings for user status and preferred contact in new user creation. Refs UIU-1385.
+* Fix navigation paths on cancel button click on loan details, open and closed loan lists pages. Refs UIU-1377.
+* Prevent loan details opening upon click in loans action menu without selecting link. Fixes UIU-1359.
+* Display correct user block on the edit form. Fixes UIU-1397.
+* Clear previous item data when open a new fee/fine form page. Fixes UIU-1410.
+* Add record last updated and created back to manual patron block. Fixes UIU-1420.
+* Go back to user's accounts when clicking on cancel or `x` from fee/fine form. Fixes UIU-1412.
+* Reset patronBlocks before refetching. Fixes UIU-1430 and UIU-1431.
+* Fix bug with wrong displaying of address type. Refs UIU-1404
+* Passing `notify` field to BE, when fee/fine is paying. Refs UIU-1413.
+* Replace "Fee/Fine History: Can create, edit and remove accounts" permission with "Users: Can create, edit and remove fees/fines" one for restricting access to the accounts history. Refs UIU-1384.
+* Fix page crash when a multiple fee/fine payment is made. Refs UIU-1413.
+* Refactor open and closed loans lists to use <Dropdown /> from stripes-components
+* Omit 'notify' field upon creating fee/fine in order to prevent backend error. Fixes UIU-1438.
+* Refresh list of loans after anonymization. Fixes UIU-1046.
+* Add UI to mark items Declared lost. Refs UIU-1202.
+
+## [2.26.0](https://github.com/folio-org/ui-users/tree/v2.26.0) (2019-12-05)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.3...v2.26.0)
+
 * Prevent manual anonymization of closed loans with fees/fines. Refs UIU-1083.
 * Update sponsor and proxy labels. Refs UIU-1018.
 * Implement permission assigment by batch. Refs UIU-1249
@@ -18,6 +38,8 @@
 * Show requests information when user has view loans permission only. Refs UIU-1184.
 * Use a more efficient query when searching for an item by barcode to attach a fee/fine. Refs UIU-1380.
 * Use user's id instead of a barcode when navigating to requests module. Refs UIU-1370.
+* Restore display of "invisible" permissions. Refs UIU-1372.
+* Rename "Loans: All permissions" permission to "Users: User loans view, edit, renew (all)". Refs UIU-1344.
 
 ## [2.25.3](https://github.com/folio-org/ui-users/tree/v2.25.3) (2019-09-26)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.2...v2.25.3)

@@ -14,14 +14,13 @@ export function onClickViewAllAccounts(e, loan, history, params) {
   history.push(`/users/${params.id}/accounts/all?loan=${loan.id}`);
 }
 
-export function onClickViewLoanActionsHistory(e, loan, history, params) {
-  history.push(`/users/${params.id}/loans/view/${loan.id}`);
+export function onClickViewLoanActionsHistory(e, loan, history, params, state) {
+  history.push({
+    pathname: `/users/${params.id}/loans/view/${loan.id}`,
+    state,
+  });
 }
 
 export function onClickViewChargeFeeFine(e, history, params) {
   history.push(`/users/${params.id}/charge`);
-}
-
-export function onClickChargeFineToLoan(e, loan, history, params) {
-  history.push(`/users/${params.id}/charge/${loan.id}`);
 }

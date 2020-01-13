@@ -9,6 +9,8 @@ import { expect } from 'chai';
 import setupApplication from '../helpers/setup-application';
 import DummyComponent from '../helpers/DummyComponent';
 import OpenLoansInteractor from '../interactors/open-loans';
+import UsersInteractor from '../interactors/users';
+import LoansListingPane from '../interactors/loans-listing-pane';
 
 describe('Open Loans', () => {
   const requestsPath = '/requests';
@@ -33,16 +35,23 @@ describe('Open Loans', () => {
     });
   });
 
+  let userId = '';
+
   beforeEach(async function () {
     const loan = this.server.create('loan', { status: { name: 'Open' } });
+    userId = loan.userId;
 
     this.server.createList('request', requestsAmount, { itemId: loan.itemId });
-    this.visit(`/users/${loan.userId}/loans/open?query=%20&sort=requests`);
+    this.visit(`/users/${userId}/loans/open?query=%20&sort=requests`);
   });
 
   it('should be presented', () => {
     expect(OpenLoansInteractor.isPresent).to.be.true;
   }).timeout(4000);
+
+  it('should display the close button', () => {
+    expect(LoansListingPane.closeButton.isPresent).to.be.true;
+  });
 
   describe('loan list', () => {
     it('should be presented', () => {
@@ -99,15 +108,39 @@ describe('Open Loans', () => {
           expect(OpenLoansInteractor.actionDropdownRequestQueue.isPresent).to.be.true;
         });
 
-        describe('click request queue', () => {
+        describe('clicking on request queue dropdown item', () => {
           beforeEach(async () => {
-            await OpenLoansInteractor.actionDropdownRequestQueue.click('button');
+            await OpenLoansInteractor.actionDropdownRequestQueue.click();
           });
 
-          it('should be redirected to "requests"', function () {
+          it('should redirect to "requests"', function () {
             expect(this.location.pathname).to.to.equal(requestsPath);
           });
         });
+
+        describe('clicking on dropdown container', () => {
+          beforeEach(async () => {
+            await OpenLoansInteractor.actionDropdownContainer.click();
+          });
+
+          it('should not close the dropdown', function () {
+            expect(OpenLoansInteractor.actionDropdownContainer.isVisible).to.be.true;
+          });
+        });
+      });
+    });
+
+    describe('clicking the close button', () => {
+      const users = new UsersInteractor();
+
+      beforeEach(async () => {
+        await LoansListingPane.closeButton.click();
+      });
+
+      it('should navigate to the user preview form', function () {
+        expect(users.isPresent).to.be.true;
+        expect(users.instance.isPresent).to.be.true;
+        expect(this.location.pathname.endsWith(`users/preview/${userId}`)).to.be.true;
       });
     });
   });

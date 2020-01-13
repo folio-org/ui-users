@@ -586,13 +586,15 @@
       },
       {
         "permissionName": "ui-users.loans.all",
-        "displayName": "Loans: All permissions",
+        "displayName": "Users: User loans view, edit, renew (all)",
         "description": "Also includes requests, loan-policies and accounts permissions",
         "subPermissions": [
           "ui-users.view",
           "ui-users.loans.view",
           "ui-users.loans.edit",
           "ui-users.loans.renew",
+          "circulation.loans.declare-item-lost.post",
+          "ui-users.loans.renew-override",
           "ui-users.settings.feefines",
           "circulation.loans.item.put",
           "circulation.renew-by-barcode.post",
@@ -665,7 +667,7 @@
     "test-int": "stripes test nightmare"
   },
   "devDependencies": {
-    "@bigtest/interactor": "^0.9.1",
+    "@bigtest/interactor": "^0.7.2",
     "@bigtest/mirage": "^0.0.1",
     "@bigtest/mocha": "^0.5.2",
     "@bigtest/react": "^0.1.2",

@@ -156,7 +156,6 @@ class AccountsHistory extends React.Component {
     this.onChangeActions = this.onChangeActions.bind(this);
     this.onChangeSelected = this.onChangeSelected.bind(this);
     this.onChangeSelectedAccounts = this.onChangeSelectedAccounts.bind(this);
-    this.connectedViewFeesFines = props.stripes.connect(ViewFeesFines);
     this.connectedActions = props.stripes.connect(Actions);
 
     this.accounts = [];
@@ -404,7 +403,7 @@ class AccountsHistory extends React.Component {
           pullRight
         >
           <Button
-            id="select-columns"
+            data-test-select-columns
             data-role="toggle"
             bottomMargin0
           >
@@ -483,7 +482,7 @@ class AccountsHistory extends React.Component {
           defaultWidth="100%"
           dismissible
           padContent={false}
-          onClose={() => { history.goBack(); }}
+          onClose={() => { history.push(`/users/preview/${params.id}`); }}
           paneTitle={(
             <FormattedMessage id="ui-users.accounts.title">
               {(title) => (
