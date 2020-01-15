@@ -79,16 +79,13 @@ describe('User Edit: Proxy/Sponsor', function () {
           await UserFormPage.proxySection.expirationDate.fillAndBlur(faker.date.past(1).toJSON().substring(0, 10));
         });
 
-        it('relationship status should be be restricted', () => {
+        it('relationship statuses should be correct', () => {
           expect(UserFormPage.proxySection.statusCount).to.equal(1);
-        });
-
-        it('relationship status should be inactive', () => {
           expect(UserFormPage.proxySection.relationshipStatus.val).to.equal('inactive');
+          expect(UserFormPage.proxySection.relationshipStatus.hasWarningStyle).to.be.true;
         });
 
-        it('relationship status should show a warning', () => {
-          expect(UserFormPage.proxySection.relationshipStatus.hasWarningStyle).to.be.true;
+        it('should be the correct warning', () => {
           expect(UserFormPage.proxySection.relationshipStatus.warningText).to.equal(translations['errors.proxyrelationship.expired']);
         });
       });
@@ -98,44 +95,16 @@ describe('User Edit: Proxy/Sponsor', function () {
           await UserFormPage.expirationDate.fillAndBlur('2019-01-01');
         });
 
-        it('relationship status should be be restricted', () => {
+        it('relationship statuses should be correct', () => {
           expect(UserFormPage.proxySection.statusCount).to.equal(1);
-        });
-
-        it('relationship status should be inactive', () => {
           expect(UserFormPage.proxySection.relationshipStatus.val).to.equal('inactive');
+          expect(UserFormPage.proxySection.relationshipStatus.hasWarningStyle).to.be.true;
         });
 
-        it('relationship status should show a warning', () => {
-          expect(UserFormPage.proxySection.relationshipStatus.hasWarningStyle).to.be.true;
+        it('should be the correct warning', () => {
           expect(UserFormPage.proxySection.relationshipStatus.warningText).to.equal(translations['errors.currentUser.expired']);
         });
       });
-      // describe('Saving a sponsor', () => {
-      //   beforeEach(async () => {
-      //     await UserFormPage.submitButton.click();
-      //     await InstanceViewPage.whenLoaded();
-      //   });
-
-      //   it('should navigate to the detail view', () => {
-      //     expect(users.$root).to.exist;
-      //   });
-
-      //   it('should display proxies in detail view', () => {
-      //     expect(InstanceViewPage.proxySection.sponsorCount).to.equal(1);
-      //   });
-
-      //   describe('Back to edit view', () => {
-      //     beforeEach(async () => {
-      //       await InstanceViewPage.clickEditButton();
-      //       await UserFormPage.whenLoaded();
-      //     });
-
-      //     it('should navigate to the edit view', () => {
-      //       expect(UserFormPage.title).to.not.equal('Edit User');
-      //     });
-      //   });
-      // });
     });
 
     describe('Find an expired sponsor', () => {
@@ -146,20 +115,14 @@ describe('User Edit: Proxy/Sponsor', function () {
         await findUserPlugin.modal.instances(0).click();
       });
 
-      it('form should list a selected sponsor', () => {
+      it('relationship statuses should be correct', () => {
         expect(UserFormPage.proxySection.sponsorCount).to.equal(1);
-      });
-
-      it('relationship status should be be restricted', () => {
         expect(UserFormPage.proxySection.statusCount).to.equal(1);
-      });
-
-      it('relationship status should be inactive', () => {
         expect(UserFormPage.proxySection.relationshipStatus.val).to.equal('inactive');
+        expect(UserFormPage.proxySection.relationshipStatus.hasWarningStyle).to.be.true;
       });
 
-      it('relationship status should show a warning', () => {
-        expect(UserFormPage.proxySection.relationshipStatus.hasWarningStyle).to.be.true;
+      it('should be the correct warning', () => {
         expect(UserFormPage.proxySection.relationshipStatus.warningText).to.equal(translations['errors.sponsors.expired']);
       });
     });
@@ -181,9 +144,6 @@ describe('User Edit: Proxy/Sponsor', function () {
         expect(UserFormPage.errorModal.label).to.equal(translations['errors.sponsors.invalidUserLabel']);
         expect(UserFormPage.errorModal.text).to.include(translations['errors.sponsors.invalidUserMessage']);
       });
-
-      it('Malkovich?');
-      it('Malkovich! Malkovich Malkovich');
     });
   });
 
