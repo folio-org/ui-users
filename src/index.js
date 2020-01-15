@@ -8,16 +8,9 @@ import _ from 'lodash';
 import { Route, Switch, IfPermission } from '@folio/stripes/core';
 import { CommandList, HasCommand } from '@folio/stripes/components';
 
-import * as Routes from './routes';
-
 import pkg from '../package';
 import Settings from './settings';
 import commands from './commands';
-import {
-  NoteCreatePage,
-  NoteViewPage,
-  NoteEditPage
-} from './views';
 
 const PermissionSets = React.lazy(() => import('./settings/permissions/PermissionSets'));
 const PatronGroupsSettings = React.lazy(() => import('./settings/PatronGroupsSettings'));
@@ -30,6 +23,21 @@ const PaymentSettings = React.lazy(() => import('./settings/PaymentSettings'));
 const CommentRequiredSettings = React.lazy(() => import('./settings/CommentRequiredSettings'));
 const RefundReasonsSettings = React.lazy(() => import('./settings/RefundReasonsSettings'));
 const TransferAccountsSettings = React.lazy(() => import('./settings/TransferAccountsSettings'));
+
+const NoteCreatePage = React.lazy(() => import('./views/Notes/NoteCreatePage'));
+const NoteEditPage = React.lazy(() => import('./views/Notes/NoteEditPage'));
+const NoteViewPage = React.lazy(() => import('./views/Notes/NoteViewPage'));
+
+const UserSearchContainer = React.lazy(() => import('./routes/UserSearchContainer'));
+const UserDetailContainer = React.lazy(() => import('./routes/UserDetailContainer'));
+const UserDetailFullscreenContainer = React.lazy(() => import('./routes/UserDetailFullscreenContainer'));
+const UserEditContainer = React.lazy(() => import('./routes/UserEditContainer'));
+const PatronBlockContainer = React.lazy(() => import('./routes/PatronBlockContainer'));
+const ChargeFeesFinesContainer = React.lazy(() => import('./routes/ChargeFeesFinesContainer'));
+const AccountsListingContainer = React.lazy(() => import('./routes/AccountsListingContainer'));
+const LoansListingContainer = React.lazy(() => import('./routes/LoansListingContainer'));
+const LoanDetailContainer = React.lazy(() => import('./routes/LoanDetailContainer'));
+const AccountDetailsContainer = React.lazy(() => import('./routes/AccountDetailsContainer'));
 
 const settingsGeneral = [
   {
@@ -235,7 +243,7 @@ class UsersRouting extends React.Component {
                 path={`${base}/:id/loans/view/:loanid`}
                 render={(props) => (
                   <IfPermission perm="ui-users.loans.view">
-                    <Routes.LoanDetailContainer {...props} />
+                    <LoanDetailContainer {...props} />
                   </IfPermission>
                 )}
               />
@@ -243,7 +251,7 @@ class UsersRouting extends React.Component {
                 path={`${base}/:id/loans/:loanstatus`}
                 render={(props) => (
                   <IfPermission perm="ui-users.loans.view">
-                    <Routes.LoansListingContainer {...props} />
+                    <LoansListingContainer {...props} />
                   </IfPermission>
                 )}
               />
@@ -252,7 +260,7 @@ class UsersRouting extends React.Component {
                 exact
                 render={(props) => (
                   <IfPermission perm="ui-users.feesfines.actions.all">
-                    <Routes.FeesFinesContainer {...props} />
+                    <ChargeFeesFinesContainer {...props} />
                   </IfPermission>
                 )}
               />
@@ -260,31 +268,30 @@ class UsersRouting extends React.Component {
                 path={`${base}/:id/accounts/view/:accountid`}
                 render={(props) => (
                   <IfPermission perm="ui-users.feesfines.actions.all">
-                    <Routes.AccountDetailsContainer {...props} />
+                    <AccountDetailsContainer {...props} />
                   </IfPermission>
                 )}
               />
               <Route
                 path={`${base}/:id/accounts/:accountstatus`}
                 exact
-                component={Routes.AccountsListingContainer}
                 render={(props) => (
                   <IfPermission perm="ui-users.feesfines.actions.all">
-                    <Routes.AccountsListingContainer {...props} />
+                    <AccountsListingContainer {...props} />
                   </IfPermission>
                 )}
               />
-              <Route path={`${base}/:id/charge/:loanid?`} component={Routes.ChargeFeesFinesContainer} />
-              <Route path={`${base}/:id/patronblocks/edit/:patronblockid`} component={Routes.PatronBlockContainer} />
-              <Route path={`${base}/:id/patronblocks/create`} component={Routes.PatronBlockContainer} />
-              <Route path={`${base}/create`} component={Routes.UserEditContainer} />
-              <Route path={`${base}/:id/edit`} component={Routes.UserEditContainer} />
-              <Route path={`${base}/view/:id`} component={Routes.UserDetailFullscreenContainer} />
+              <Route path={`${base}/:id/charge/:loanid?`} component={ChargeFeesFinesContainer} />
+              <Route path={`${base}/:id/patronblocks/edit/:patronblockid`} component={PatronBlockContainer} />
+              <Route path={`${base}/:id/patronblocks/create`} component={PatronBlockContainer} />
+              <Route path={`${base}/create`} component={UserEditContainer} />
+              <Route path={`${base}/:id/edit`} component={UserEditContainer} />
+              <Route path={`${base}/view/:id`} component={UserDetailFullscreenContainer} />
               <Route path={`${base}/notes/new`} exact component={NoteCreatePage} />
               <Route path={`${base}/notes/:id`} exact component={NoteViewPage} />
               <Route path={`${base}/notes/:id/edit`} exact component={NoteEditPage} />
-              <Route path={base} component={Routes.UserSearchContainer}>
-                <Route path={`${base}/preview/:id`} component={Routes.UserDetailContainer} />
+              <Route path={base} component={UserSearchContainer}>
+                <Route path={`${base}/preview/:id`} component={UserDetailContainer} />
               </Route>
               <Route render={this.noMatch} />
             </Switch>
