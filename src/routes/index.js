@@ -1,4 +1,3 @@
-export { default as UserRecordContainer } from './UserRecordContainer';
 export { default as UserSearchContainer } from './UserSearchContainer';
 export { UserDetailContainer, UserDetailFullscreenContainer } from './UserDetailContainer';
 export { default as UserEditContainer } from './UserEditContainer';
