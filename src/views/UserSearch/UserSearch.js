@@ -335,7 +335,7 @@ class UserSearch extends React.Component {
                               <div className={css.searchGroupWrap}>
                                 <SearchField
                                   aria-label="user search"
-                                  autoComplete="off"
+                                  autocomplete="off"
                                   name="query"
                                   id="input-user-search"
                                   className={css.searchField}
