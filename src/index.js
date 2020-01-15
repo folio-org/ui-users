@@ -218,7 +218,7 @@ class UsersRouting extends React.Component {
     if (showSettings) {
       return (
         <Route path={path} component={Settings}>
-          <React.Suspense fallback={<div>Loading...</div>}>
+          <React.Suspense fallback={null}>
             <Switch>
               {[].concat(...settingsSections.map(section => section.pages))
                 .filter(setting => !setting.perm || stripes.hasPerm(setting.perm))
@@ -237,7 +237,7 @@ class UsersRouting extends React.Component {
           isWithinScope={this.checkScope}
           scope={this.shortcutScope}
         >
-          <React.Suspense fallback={<div>Loading...</div>}>
+          <React.Suspense fallback={null}>
             <Switch>
               <Route
                 path={`${base}/:id/loans/view/:loanid`}
