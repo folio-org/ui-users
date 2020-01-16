@@ -37,16 +37,12 @@ describe('Users', () => {
 
     await usersInteractor.activeUserCheckbox.clickActive();
     await usersInteractor.activeUserCheckbox.clickInactive();
-    await usersInteractor.whenResultsLoaded();
+    await usersInteractor.whenInstancesLoaded();
 
     searchQuery = this.location.search;
   });
 
-  it('shows the list of user items', () => {
-    expect(usersInteractor.isVisible).to.equal(true);
-  });
-
-  it('renders each user instance', () => {
+  it('renders proper amount of users', () => {
     expect(usersInteractor.instances().length).to.be.equal(usersAmount);
   });
 
@@ -93,27 +89,29 @@ describe('Users', () => {
       describe('clicking on the open loans link', function () {
         beforeEach(async function () {
           await InstanceViewPage.loansSection.openLoans.click();
+          await OpenLoansInteractor.whenLoaded();
         });
 
         it('should navigate to the list of open user loans ', function () {
-          expect(OpenLoansInteractor.isPresent).to.be.true;
           expect(this.location.pathname.endsWith(`/users/${users[0].id}/loans/open`)).to.be.true;
         });
 
         describe('clicking on the first row', function () {
           beforeEach(async function () {
             await OpenLoansInteractor.rowButtons(0).click();
+            await LoanActionsHistory.whenLoaded();
           });
 
           it('should navigate to the loan actions history', function () {
-            expect(LoanActionsHistory.isPresent).to.be.true;
             expect(this.location.pathname.endsWith(`/users/${users[0].id}/loans/view/${openLoan.id}`)).to.be.true;
           });
 
           describe('clicking on the close buttons on loan actions history and open loan panes', function () {
             beforeEach(async function () {
               await LoanActionsHistory.closeButton.click();
+              await LoansListingPane.whenLoaded();
               await LoansListingPane.closeButton.click();
+              await usersInteractor.whenInstanceLoaded();
             });
 
             it('should navigate to the user preview page', () => {
@@ -131,27 +129,29 @@ describe('Users', () => {
       describe('clicking on the closed loans link', function () {
         beforeEach(async function () {
           await InstanceViewPage.loansSection.closedLoans.click();
+          await ClosedLoansInteractor.whenLoaded();
         });
 
         it('should navigate to the list of closed user loans ', function () {
-          expect(ClosedLoansInteractor.isPresent).to.be.true;
           expect(this.location.pathname.endsWith(`/users/${users[0].id}/loans/closed`)).to.be.true;
         });
 
         describe('clicking on the first row', function () {
           beforeEach(async function () {
             await ClosedLoansInteractor.rowButtons(0).click();
+            await LoanActionsHistory.whenLoaded();
           });
 
           it('should navigate to the loan actions history', function () {
-            expect(LoanActionsHistory.isPresent).to.be.true;
             expect(this.location.pathname.endsWith(`/users/${users[0].id}/loans/view/${closedLoan.id}`)).to.be.true;
           });
 
           describe('clicking on the close buttons on loan actions history and closed loan panes', function () {
             beforeEach(async function () {
               await LoanActionsHistory.closeButton.click();
+              await LoansListingPane.whenLoaded();
               await LoansListingPane.closeButton.click();
+              await usersInteractor.whenInstanceLoaded();
             });
 
             it('should navigate to the user preview page', () => {

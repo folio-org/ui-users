@@ -6,6 +6,7 @@
   "loading": "Loading...",
   "search": "Search",
   "expandAll": "Expand all",
+  "confirm": "Confirm",
   "collapseAll": "Collapse all",
   "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}",
   "closedLoansCount": "{count, number} {count, plural, one {closed loan} other {closed loans}}",
@@ -306,6 +307,10 @@
   "loans.numOpenLoans": "{count, number} {count, plural, one {open loan} other {open loans}}",
   "loans.numClosedLoans": "{count, number} {count, plural, one {closed loan} other {closed loans}}",
   "loans.loanDetails": "Loan details",
+  "loans.declareLost": "Declare lost",
+  "loans.declareLostDialogBody": "<strong>{title} {materialType}</strong> (Barcode: {barcode}) will be <strong>declared lost</strong>",
+  "loans.confirmLostState": "Confirm lost state",
+  "loans.declareLost.additionalInfoPlaceholder": "Enter more information about the lost item (required)",
   "loans.newFeeFine": "New fee/fine",
   "loans.feeFineDetails": "Fee/fine details",
 

@@ -12,6 +12,12 @@
 * Fix bug with wrong displaying of address type. Refs UIU-1404
 * Passing `notify` field to BE, when fee/fine is paying. Refs UIU-1413.
 * Display `Overdue fine policy` and `Lost item fee policy` on the `Loan Details` page. Refs UIU-1246.
+* Replace "Fee/Fine History: Can create, edit and remove accounts" permission with "Users: Can create, edit and remove fees/fines" one for restricting access to the accounts history. Refs UIU-1384.
+* Fix page crash when a multiple fee/fine payment is made. Refs UIU-1413.
+* Refactor open and closed loans lists to use <Dropdown /> from stripes-components
+* Omit 'notify' field upon creating fee/fine in order to prevent backend error. Fixes UIU-1438.
+* Refresh list of loans after anonymization. Fixes UIU-1046.
+* Add UI to mark items Declared lost. Refs UIU-1202.
 
 ## [2.26.0](https://github.com/folio-org/ui-users/tree/v2.26.0) (2019-12-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.3...v2.26.0)

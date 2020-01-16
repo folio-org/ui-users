@@ -34,9 +34,13 @@ import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/P
   fillAndBlur(val) {
     return this
       .clickInput()
+      .timeout(5000)
       .fillInput(val)
+      .timeout(5000)
       .pressEnter()
-      .blurInput();
+      .timeout(5000)
+      .blurInput()
+      .timeout(5000);
   }
 }
 
@@ -47,8 +51,11 @@ import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/P
   selectAndBlur(val) {
     return this
       .focus()
+      .timeout(5000)
       .select(val)
-      .blur();
+      .timeout(5000)
+      .blur()
+      .timeout(5000);
   }
 }
 

@@ -284,7 +284,8 @@ class ChargeFeeFine extends React.Component {
       }
       this.type.paymentStatus.name = paymentStatus;
       this.props.mutator.activeRecord.update({ id: this.type.id });
-      return this.props.mutator.accounts.PUT(this.type);
+
+      return this.props.mutator.accounts.PUT(_.omit(this.type, ['notify']));
     })
       .then(() => this.newAction({ paymentMethod: values.method }, this.type.id,
         this.type.paymentStatus.name, values.amount,

@@ -25,6 +25,7 @@ import {
   KeyValue,
   Row,
   Col,
+  NoValue,
 } from '@folio/stripes/components';
 import { IfPermission } from '@folio/stripes/core';
 
@@ -34,7 +35,10 @@ import {
   nav,
   getOpenRequestsPath,
 } from '../../components/util';
-import { withRenew } from '../../components/Wrappers';
+import {
+  withRenew,
+  withDeclareLost,
+} from '../../components/Wrappers';
 import loanActionMap from '../../components/data/static/loanActionMap';
 import LoanProxyDetails from './LoanProxyDetails';
 import ViewLoading from '../../components/Loading/ViewLoading';
@@ -66,6 +70,7 @@ class LoanDetails extends React.Component {
     loanPolicies: PropTypes.object,
     requestCounts: PropTypes.object,
     renew: PropTypes.func,
+    declareLost: PropTypes.func,
     patronBlocks: PropTypes.arrayOf(PropTypes.object),
     intl: intlShape.isRequired,
     match: PropTypes.object.isRequired,
@@ -113,10 +118,7 @@ class LoanDetails extends React.Component {
   }
 
   hideChangeDueDateDialog() {
-    this.setState({
-      changeDueDateDialogOpen: false,
-    });
-    this.props.mutator.modified.replace({ time: new Date().getTime() });
+    this.setState({ changeDueDateDialogOpen: false });
   }
 
   hideNonRenewedLoansModal() {
@@ -283,6 +285,7 @@ class LoanDetails extends React.Component {
       intl,
       loanPolicies,
       requestCounts,
+      declareLost,
     } = this.props;
 
     const {
@@ -327,6 +330,15 @@ class LoanDetails extends React.Component {
     const loanStatus = get(loan, ['status', 'name'], '-');
     const overduePolicyName = get(loan, ['overdueFinePolicy', 'name'], '-');
     const lostItemPolicyName = get(loan, ['lostItemPolicy', 'name'], '-');
+    const itemStatus = get(loan, ['item', 'status', 'name'], '-');
+    const isDeclaredLostItem = itemStatus === 'Declared lost';
+    let lostDate;
+    const declaredLostActions = loanActionsWithUser.filter(currentAction => get(currentAction, ['action'], '') === 'declaredLost');
+
+    if (isDeclaredLostItem && declaredLostActions.length) {
+      lostDate = get(declaredLostActions[0], ['metadata', 'updatedDate']);
+    }
+
     const buttonDisabled = (loanStatus && loanStatus === 'Closed');
     // Number of characters to truncate the string = 77
     const listTodisplay = (contributorsList === '-') ? '-' : (contributorsListString.length >= 77) ? `${contributorsListString.substring(0, 77)}...` : `${contributorsListString.substring(0, contributorsListString.length - 2)}`;
@@ -378,6 +390,14 @@ class LoanDetails extends React.Component {
                     <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />
                   </Button>
                 </IfPermission>
+                <Button
+                  data-test-declare-lost-button
+                  disabled={buttonDisabled || isDeclaredLostItem}
+                  buttonStyle="primary"
+                  onClick={() => declareLost(loan)}
+                >
+                  <FormattedMessage id="ui-users.loans.declareLost" />
+                </Button>
               </span>
             </Row>
             <Row>
@@ -426,10 +446,13 @@ class LoanDetails extends React.Component {
               </Col>
             </Row>
             <Row>
-              <Col xs={2}>
+              <Col
+                data-test-loan-actions-history-item-status
+                xs={2}
+              >
                 <KeyValue
                   label={<FormattedMessage id="ui-users.loans.columns.itemStatus" />}
-                  value={get(loan, ['item', 'status', 'name'], '-')}
+                  value={itemStatus}
                 />
               </Col>
               <Col xs={2}>
@@ -493,10 +516,13 @@ class LoanDetails extends React.Component {
                   value={requestQueueValue}
                 />
               </Col>
-              <Col xs={2}>
+              <Col
+                data-test-loan-actions-history-lost
+                xs={2}
+              >
                 <KeyValue
                   label={<FormattedMessage id="ui-users.loans.details.lost" />}
-                  value="TODO"
+                  value={lostDate ? (<FormattedTime value={lostDate} day="numeric" month="numeric" year="numeric" />) : (<NoValue />)}
                 />
               </Col>
               <Col xs={2}>
@@ -550,4 +576,5 @@ class LoanDetails extends React.Component {
 export default compose(
   injectIntl,
   withRenew,
+  withDeclareLost,
 )(LoanDetails);
