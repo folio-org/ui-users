@@ -45,6 +45,7 @@ class UserEdit extends React.Component {
     resources: PropTypes.object,
     history: PropTypes.object,
     match: PropTypes.object,
+    location: PropTypes.object,
     updateProxies: PropTypes.func,
     updateSponsors: PropTypes.func,
     updateServicePoints: PropTypes.func,
@@ -249,7 +250,8 @@ class UserEdit extends React.Component {
     const {
       history,
       resources,
-      match: { params }
+      match: { params },
+      location,
     } = this.props;
 
     if (!resourcesLoaded(resources, ['uniquenessValidator'])) {
@@ -268,6 +270,9 @@ class UserEdit extends React.Component {
         onSubmit={onSubmit}
         onCancel={() => history.goBack()}
         uniquenessValidator={this.props.mutator.uniquenessValidator}
+        match={this.props.match}
+        location={location}
+        history={history}
       />
     );
   }
