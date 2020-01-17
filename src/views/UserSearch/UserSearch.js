@@ -27,7 +27,6 @@ import {
 } from '@folio/stripes/smart-components';
 
 import OverdueLoanReport from '../../components/data/reports';
-import pkg from '../../../package';
 import Filters from './Filters';
 import css from './UserSearch.css';
 
@@ -78,8 +77,6 @@ class UserSearch extends React.Component {
       exportInProgress: false,
     };
 
-    this.searchField = React.createRef();
-
     const { formatMessage } = props.intl;
     this.overdueLoanReport = new OverdueLoanReport({
       formatMessage
@@ -91,17 +88,6 @@ class UserSearch extends React.Component {
     return {
       selectedId: urlParams ? urlParams.params.id : null,
     };
-  }
-
-  componentDidMount() {
-    this.possiblyfocusSearchField();
-  }
-
-  possiblyfocusSearchField = () => {
-    const { search, pathname } = window.location;
-    if ((pathname + search) === pkg.stripes.home && this.searchField.current) {
-      this.searchField.current.focus();
-    }
   }
 
   toggleFilterPane = () => {
@@ -342,7 +328,6 @@ class UserSearch extends React.Component {
                                   onChange={getSearchHandlers().query}
                                   value={searchValue.query}
                                   marginBottom0
-                                  inputRef={this.searchField}
                                   data-test-user-search-input
                                 />
                                 <Button
