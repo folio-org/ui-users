@@ -19,7 +19,7 @@ import translations from '../../../translations/ui-users/en';
 
 describe('User Edit: Proxy/Sponsor', function () {
   // some of the beforeEach blocks seem to timeout in CI
-  this.timeout(5000);
+  // this.timeout(5000);
 
   setupApplication({
     scenarios: ['user-proxy-edit'],
@@ -35,9 +35,9 @@ describe('User Edit: Proxy/Sponsor', function () {
     },
   });
 
-  const users = new UsersInteractor();
-  const findUserPlugin = new FindUserInteractor();
-  const findUserInstances = new FindUserInstancesInteractor();
+  const users = new UsersInteractor({ timeout: 5000 });
+  const findUserPlugin = new FindUserInteractor({ timeout: 5000 });
+  const findUserInstances = new FindUserInstancesInteractor({ timeout: 5000 });
 
   describe('visiting user details', () => {
     beforeEach(async function () {
@@ -202,6 +202,7 @@ describe('User Edit: Proxy/Sponsor', function () {
       describe('pane header menu', () => {
         beforeEach(async () => {
           await UserFormPage.cancelButton.click();
+          await users.whenLoaded();
         });
 
         it('should redirect to view users page after click', () => {

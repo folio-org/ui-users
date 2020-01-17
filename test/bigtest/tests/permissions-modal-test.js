@@ -20,8 +20,8 @@ describe('Permissions modal', () => {
 
   describe('visit user-edit', () => {
     beforeEach(async function () {
-      this.server.createList('permissions', permissionsAmount);
-      permissionSets = this.server.createList('permissions', permissionSetsAmount, { mutable: true });
+      this.server.createList('permission', permissionsAmount);
+      permissionSets = this.server.createList('permission', permissionSetsAmount, { mutable: true });
       user = this.server.create('user');
 
       this.visit(`/users/${user.id}/edit`);
@@ -120,7 +120,7 @@ describe('Permission set form', () => {
 
   describe('visit users-settings: permissions', () => {
     beforeEach(async function () {
-      permissions = this.server.createList('permissions', permissionsAmount);
+      permissions = this.server.createList('permission', permissionsAmount);
       this.visit('/settings/users/perms?layer=add');
       await PermissionSetForm.whenLoaded();
     });

@@ -16,7 +16,7 @@ import LoansListingPane from '../interactors/loans-listing-pane';
 const usersAmount = 8;
 
 describe('Users', () => {
-  const usersInteractor = new UsersInteractor();
+  const usersInteractor = new UsersInteractor({ timeout: 5000 });
 
   setupApplication({
     permissions: {

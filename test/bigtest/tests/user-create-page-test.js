@@ -10,13 +10,14 @@ import UserFormPage from '../interactors/user-form-page';
 import UsersInteractor from '../interactors/users';
 
 describe('User Create Page', () => {
-  const users = new UsersInteractor();
+  const users = new UsersInteractor({ timeout: 5000 });
   setupApplication();
 
   describe('visit users', () => {
     beforeEach(async function () {
       this.visit('/users');
       await users.clickCreateUserButton();
+      await UserFormPage.whenLoaded();
     });
 
     describe('visiting the create user page', () => {

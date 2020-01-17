@@ -181,7 +181,7 @@ describe('Declare Lost', () => {
 
       this.server.create('user', { id: loan.userId });
 
-      this.server.create('loanactions', {
+      this.server.create('loanaction', {
         loan: {
           ...loan.attrs,
         },

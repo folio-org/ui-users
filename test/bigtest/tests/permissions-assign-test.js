@@ -18,8 +18,8 @@ describe('Permissions assign', () => {
 
   describe('visit user details', () => {
     beforeEach(async function () {
-      this.server.createList('permissions', permissionsAmount);
-      this.server.createList('permissions', permissionSetsAmount, { mutable: true });
+      this.server.createList('permission', permissionsAmount);
+      this.server.createList('permission', permissionSetsAmount, { mutable: true });
       const user = this.server.create('user');
 
       this.visit(`/users/preview/${user.id}`);
