@@ -157,7 +157,7 @@ class UserEdit extends React.Component {
   }
 
   create = ({ requestPreferences, creds, ...userFormData }) => {
-    const { mutator, history } = this.props;
+    const { mutator, history, location: { search } } = this.props;
     const userData = cloneDeep(userFormData);
     const credentialsAreSet = userData.username;
     const user = { ...userData, id: uuid() };
@@ -177,7 +177,7 @@ class UserEdit extends React.Component {
           return mutator.perms.POST({ userId: user.id, permissions: [] });
         })
         .then(() => {
-          history.push(`/users/preview/${user.id}`);
+          history.push(`/users/preview/${user.id}${search}`);
         });
     } else {
       mutator.records.POST(user)
@@ -186,7 +186,7 @@ class UserEdit extends React.Component {
           return mutator.perms.POST({ userId: user.id, permissions: [] });
         })
         .then(() => {
-          history.push(`/users/preview/${user.id}`);
+          history.push(`/users/preview/${user.id}${search}`);
         });
     }
   }
