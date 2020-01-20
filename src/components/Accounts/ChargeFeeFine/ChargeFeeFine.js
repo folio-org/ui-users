@@ -163,7 +163,6 @@ class ChargeFeeFine extends React.Component {
         amountAction: parseFloat(amount || 0).toFixed(2),
         balance: parseFloat(balance || 0).toFixed(2),
         transactionInformation: transaction || '-',
-        comments: comment,
         notify,
       };
       this.props.mutator.feefineactions.POST(Object.assign(action, newAction));
@@ -285,7 +284,7 @@ class ChargeFeeFine extends React.Component {
       this.type.paymentStatus.name = paymentStatus;
       this.props.mutator.activeRecord.update({ id: this.type.id });
 
-      return this.props.mutator.accounts.PUT(_.omit(this.type, ['notify']));
+      return this.props.mutator.accounts.PUT(_.omit(this.type, ['comments', 'patronInfo', 'notify']));
     })
       .then(() => this.newAction({ paymentMethod: values.method }, this.type.id,
         this.type.paymentStatus.name, values.amount,
