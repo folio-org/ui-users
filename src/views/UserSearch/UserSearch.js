@@ -154,8 +154,8 @@ class UserSearch extends React.Component {
     return (
       <PaneMenu>
         <ExpandFilterPaneButton
-          onClick={this.toggleFilterPane}
           filterCount={filterCount}
+          onClick={this.toggleFilterPane}
         />
       </PaneMenu>
     );
