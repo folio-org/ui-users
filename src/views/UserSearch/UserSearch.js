@@ -269,7 +269,6 @@ class UserSearch extends React.Component {
         />
       </div>) : 'no source yet';
 
-    const resultsHeader = 'User Search Results';
     let resultPaneSub = <FormattedMessage id="stripes-smart-components.searchCriteria" />;
     if (source && source.loaded()) {
       resultPaneSub = <FormattedMessage id="stripes-smart-components.searchResultsCountHeader" values={{ count }} />;
@@ -320,7 +319,7 @@ class UserSearch extends React.Component {
                         {this.state.filterPaneIsVisible &&
                           <Pane
                             defaultWidth="22%"
-                            paneTitle="User search"
+                            paneTitle={<FormattedMessage id="ui-users.userSearch" />}
                             lastMenu={
                               <PaneMenu>
                                 <CollapseFilterPaneButton onClick={this.toggleFilterPane} />
@@ -329,17 +328,21 @@ class UserSearch extends React.Component {
                           >
                             <form onSubmit={onSubmitSearch}>
                               <div className={css.searchGroupWrap}>
-                                <SearchField
-                                  aria-label="user search"
-                                  name="query"
-                                  id="input-user-search"
-                                  className={css.searchField}
-                                  onChange={getSearchHandlers().query}
-                                  value={searchValue.query}
-                                  marginBottom0
-                                  inputRef={this.searchField}
-                                  data-test-user-search-input
-                                />
+                                <FormattedMessage id="ui-users.userSearch">
+                                  {label => (
+                                    <SearchField
+                                      ariaLabel={label}
+                                      name="query"
+                                      id="input-user-search"
+                                      className={css.searchField}
+                                      onChange={getSearchHandlers().query}
+                                      value={searchValue.query}
+                                      marginBottom0
+                                      inputRef={this.searchField}
+                                      data-test-user-search-input
+                                    />
+                                  )}
+                                </FormattedMessage>
                                 <Button
                                   id="submit-user-search"
                                   type="submit"
@@ -376,7 +379,7 @@ class UserSearch extends React.Component {
                         <Pane
                           firstMenu={this.renderResultsFirstMenu(activeFilters)}
                           lastMenu={this.renderNewRecordBtn()}
-                          paneTitle={resultsHeader}
+                          paneTitle={<FormattedMessage id="ui-users.userSearchResults" />}
                           paneSub={resultPaneSub}
                           defaultWidth="fill"
                           actionMenu={this.getActionMenu}
