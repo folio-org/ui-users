@@ -844,5 +844,10 @@
     "addAddressError": "Aggiungi almeno un indirizzo nella sezione \"Indirizzi\"",
     "requests.defaultPickupServicePoint": "Punto di ritiro predefinito",
     "errors.currentUser.expired": "Il record utente corrente è scaduto",
-    "data.loanActionMap.declaredLost": "Dichiarato perso"
+    "data.loanActionMap.declaredLost": "Dichiarato perso",
+    "confirm": "Confirm",
+    "loans.declareLost": "Declare lost",
+    "loans.declareLostDialogBody": "<strong>{title} {materialType}</strong> (Barcode: {barcode}) will be <strong>declared lost</strong>",
+    "loans.confirmLostState": "Confirm lost state",
+    "loans.declareLost.additionalInfoPlaceholder": "Enter more information about the lost item (required)"
 }
