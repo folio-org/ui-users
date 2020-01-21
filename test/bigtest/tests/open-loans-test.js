@@ -108,13 +108,23 @@ describe('Open Loans', () => {
           expect(OpenLoansInteractor.actionDropdownRequestQueue.isPresent).to.be.true;
         });
 
-        describe('click request queue', () => {
+        describe('clicking on request queue dropdown item', () => {
           beforeEach(async () => {
-            await OpenLoansInteractor.actionDropdownRequestQueue.click('button');
+            await OpenLoansInteractor.actionDropdownRequestQueue.click();
           });
 
-          it('should be redirected to "requests"', function () {
+          it('should redirect to "requests"', function () {
             expect(this.location.pathname).to.to.equal(requestsPath);
+          });
+        });
+
+        describe('clicking on dropdown container', () => {
+          beforeEach(async () => {
+            await OpenLoansInteractor.actionDropdownContainer.click();
+          });
+
+          it('should not close the dropdown', function () {
+            expect(OpenLoansInteractor.actionDropdownContainer.isVisible).to.be.true;
           });
         });
       });
