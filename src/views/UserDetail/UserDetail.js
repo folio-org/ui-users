@@ -1,7 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import get from 'lodash/get';
-import cloneDeep from 'lodash/cloneDeep';
+import {
+  get,
+  keyBy,
+  cloneDeep,
+} from 'lodash';
 import { FormattedMessage } from 'react-intl';
 import {
   AppIcon,
@@ -317,6 +320,17 @@ class UserDetail extends React.Component {
     }
   ]
 
+  getAddressesList(addresses, addressTypes) {
+    const addressTypesById = keyBy(addressTypes, 'id');
+
+    return addresses.map(address => {
+      const addressTypeOption = addressTypesById[address.addressType];
+      const addressType = get(addressTypeOption, ['addressType']);
+
+      return { ...address, addressType };
+    });
+  }
+
   render() {
     const {
       resources,
@@ -337,6 +351,7 @@ class UserDetail extends React.Component {
 
     const addressTypes = (resources.addressTypes || {}).records || [];
     const addresses = getFormAddressList(get(user, 'personal.addresses', []));
+    const addressesList = this.getAddressesList(addresses, addressTypes);
     const permissions = (resources.permissions || {}).records || [];
     const settings = (resources.settings || {}).records || [];
     const sponsors = this.props.getSponsors();
@@ -450,7 +465,7 @@ class UserDetail extends React.Component {
                   accordionId="contactInfoSection"
                   stripes={stripes}
                   user={user}
-                  addresses={addresses}
+                  addresses={addressesList}
                   addressTypes={addressTypes}
                   expanded={sections.contactInfoSection}
                   onToggle={this.handleSectionToggle}
@@ -466,7 +481,7 @@ class UserDetail extends React.Component {
                     {...this.props}
                   />
                 </IfPermission>
-                <IfPermission perm="ui-users.accounts">
+                <IfPermission perm="ui-users.feesfines.actions.all">
                   <UserAccounts
                     expanded={sections.accountsSection}
                     onToggle={this.handleSectionToggle}

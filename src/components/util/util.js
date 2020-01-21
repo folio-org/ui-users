@@ -15,14 +15,6 @@ export function getFullName(user) {
   return `${lastName}${firstName ? ', ' : ' '}${firstName}${middleName ? ' ' : ''}${middleName}`;
 }
 
-export function getRowURL(user) {
-  return `/users/view/${user.id}`;
-}
-
-export function isSubstringsInString(listSubStrings, testString) {
-  return new RegExp(listSubStrings.join('|')).test(testString);
-}
-
 export function eachPromise(arr, fn) {
   if (!Array.isArray(arr)) return Promise.reject(new Error('Array not found'));
   return arr.reduce((prev, cur) => (prev.then(() => fn(cur))), Promise.resolve());
@@ -94,6 +86,10 @@ export function getOpenRequestsPath(barcode) {
   const filterString = getOpenRequestStatusesFilterString();
 
   return `/requests?filters=${filterString}&query=${barcode}&sort=Request Date`;
+}
+
+export function getChargeFineToLoanPath(userId, loanId) {
+  return `/users/${userId}/charge/${loanId}`;
 }
 
 export function calculateSortParams({

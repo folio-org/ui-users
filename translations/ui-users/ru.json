@@ -270,7 +270,7 @@
     "loans.columns.returnDate": "Return date",
     "loans.columns.renewals": "Renewal count",
     "loans.columns.actionDate": "Action Date",
-    "loans.columns.contributors": "Contributors",
+    "loans.columns.contributors": "Авторы",
     "loans.columns.action": "Действие",
     "loans.item.renewed.callout": "The loan for <strong>{title}</strong> was successfully <strong>renewed</strong>.",
     "loans.items.renewed.callout": "Renewed {strongCount} {count, plural, one {loan} other {loans}}",
@@ -567,7 +567,7 @@
     "systemReturnDate": "System returnDate",
     "item.barcode": "Штрих-код",
     "item.callNumber": "Call number",
-    "item.contributors": "Contributor names",
+    "item.contributors": "Имена автора",
     "item.holdingsRecordId": "Holdings record ID",
     "item.instanceId": "Instance ID",
     "item.status.name": "Состояние элемента",
@@ -747,7 +747,7 @@
     "reports.overdue.item.status.name": "Состояние элемента",
     "reports.overdue.item.barcode": "Штрих-код",
     "reports.overdue.item.callNumber": "Call number",
-    "reports.overdue.item.contributors": "Contributors",
+    "reports.overdue.item.contributors": "Авторы",
     "reports.overdue.item.location.name": "Местоположение",
     "reports.overdue.item.instanceId": "Instance ID",
     "reports.overdue.item.holdingsRecordId": "Holdings ID",
@@ -844,5 +844,10 @@
     "addAddressError": "Пожалуйста, добавьте хотя бы один адрес в раздел \"Адреса\"",
     "requests.defaultPickupServicePoint": "Точка обслуживания по умолчанию",
     "errors.currentUser.expired": "Срок действия текущей записи пользователя истек",
-    "data.loanActionMap.declaredLost": "Declared lost"
+    "data.loanActionMap.declaredLost": "Declared lost",
+    "confirm": "Confirm",
+    "loans.declareLost": "Declare lost",
+    "loans.declareLostDialogBody": "<strong>{title} {materialType}</strong> (Barcode: {barcode}) will be <strong>declared lost</strong>",
+    "loans.confirmLostState": "Confirm lost state",
+    "loans.declareLost.additionalInfoPlaceholder": "Enter more information about the lost item (required)"
 }

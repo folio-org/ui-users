@@ -119,6 +119,11 @@ class WarningModal extends React.Component {
     };
   }
 
+  rowUpdater = (a) => {
+    const { checkedAccounts } = this.state;
+    return !!(checkedAccounts[a.id]);
+  }
+
   onClickContinue() {
     const { checkedAccounts } = this.state;
     const values = Object.values(checkedAccounts);
@@ -136,7 +141,7 @@ class WarningModal extends React.Component {
     } = this.props;
 
     const selectedItemsAmount = accounts.length;
-    const closedItemsAmount = accounts.filter(a => a.status.name === 'Closed').length;
+    const closedItemsAmount = accounts.filter(a => a.status && a.status.name === 'Closed').length;
     const action = label === formatMessage({ id: 'ui-users.accounts.actions.payFeeFine' })
       ? <FormattedMessage id="ui-users.accounts.actions.warning.paymentAction" />
       : (label === formatMessage({ id: 'ui-users.accounts.actions.waiveFeeFine' }))
@@ -173,7 +178,7 @@ class WarningModal extends React.Component {
     };
 
     const values = Object.values(checkedAccounts);
-    const checkedClosed = values.filter(a => a.status.name === 'Closed');
+    const hasClosedAccounts = values.some(a => a.status && a.status.name === 'Closed');
 
     return (
       <Modal
@@ -201,13 +206,14 @@ class WarningModal extends React.Component {
               sortOrder={sortOrder[0]}
               sortDirection={`${sortDirection[0]}ending`}
               contentData={accountOrdered}
+              rowUpdater={this.rowUpdater}
             />
           </Col>
         </Row>
         <Row end="xs">
           <Col xs>
             <Button id="warningTransferCancel" onClick={this.props.onClose}><FormattedMessage id="ui-users.feefines.modal.cancel" /></Button>
-            <Button id="warningTransferContinue" disabled={checkedClosed.length > 0 || values.length === 0} buttonStyle="primary" onClick={this.onClickContinue}><FormattedMessage id="ui-users.feefines.modal.submit" /></Button>
+            <Button id="warningTransferContinue" disabled={hasClosedAccounts || values.length === 0} buttonStyle="primary" onClick={this.onClickContinue}><FormattedMessage id="ui-users.feefines.modal.submit" /></Button>
           </Col>
         </Row>
       </Modal>

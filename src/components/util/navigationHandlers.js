@@ -24,7 +24,3 @@ export function onClickViewLoanActionsHistory(e, loan, history, params, state) {
 export function onClickViewChargeFeeFine(e, history, params) {
   history.push(`/users/${params.id}/charge`);
 }
-
-export function onClickChargeFineToLoan(e, loan, history, params) {
-  history.push(`/users/${params.id}/charge/${loan.id}`);
-}

@@ -395,7 +395,7 @@
     "brd.header.title": "Título",
     "brd.failedRenewal": "Item não renovado",
     "brd.successfulRenewal": "Item renovado com sucesso",
-    "brd.itemNotRenewed": "<strong>{count}</strong> {count, plural, one {item} other {itens}} <b>não renovado(s)</b>.",
+    "brd.itemNotRenewed": "<strong>{count}</strong> {count, plural, one {item} other {itens}} <b>não renovado(s)</b>. ",
     "brd.itemSuccessfullyRenewed": "<strong>{count}</strong> {count, plural, one {item} other {itens}} <b>renovado com sucesso</b>",
     "loans.newFeeFine": "Nova taxa/multa",
     "loans.columns.feefine": "Taxa/Multa",
@@ -679,7 +679,7 @@
     "cancel": "Cancelar",
     "brd.overrideAndRenew": "Sobrescrever & renovar",
     "brd.header.newDueDate": "Nova data de vencimento",
-    "brd.itemsSelected": "<strong>{count}</strong> {count, plural, one { item } other { itens }} <b>selecionado(s)</b> .",
+    "brd.itemsSelected": "<strong>{count}</strong> {count, plural, one { item } other { itens }} <b>selecionado(s)</b> . ",
     "selectColumns": "Selecione as colunas",
     "cddd.dateRequired": "Data*",
     "cddd.timeRequired": "Horário*",
@@ -844,5 +844,10 @@
     "addAddressError": "Adicione pelo menos um endereço na seção \"Endereços\"",
     "requests.defaultPickupServicePoint": "Ponto de serviço de retirada padrão",
     "errors.currentUser.expired": "Registro de usuário atual expirou",
-    "data.loanActionMap.declaredLost": "Declarado perdido"
+    "data.loanActionMap.declaredLost": "Declarado perdido",
+    "confirm": "Confirmar",
+    "loans.declareLost": "Declarar perdido",
+    "loans.declareLostDialogBody": "<strong>{title} {materialType}</strong> (Código de barras: {barcode}) será <strong>declarado perdido</strong>",
+    "loans.confirmLostState": "Confirmar estado de perdido",
+    "loans.declareLost.additionalInfoPlaceholder": "Digite mais informações sobre o item perdido (obrigatório)"
 }

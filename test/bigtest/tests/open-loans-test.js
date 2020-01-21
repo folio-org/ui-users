@@ -124,7 +124,7 @@ describe('Open Loans', () => {
           });
 
           it('should not close the dropdown', function () {
-            expect(OpenLoansInteractor.actionDropdownContainer.isPresent).to.be.true;
+            expect(OpenLoansInteractor.actionDropdownContainer.isVisible).to.be.true;
           });
         });
       });
