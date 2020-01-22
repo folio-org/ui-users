@@ -11,11 +11,14 @@ export default (server) => {
   server.create('template', { category: 'FeeFineCharge', name: 'Template 4' });
   server.create('feefine', { feeFineType: 'Feefine 1', ownerId: owner.attrs.id });
 
-  server.get('owners');
-  server.get('templates');
+  server.get('/owners');
+  server.get('/templates');
 
-  server.get('feefines');
-  server.delete('feefines/:id');
+  // server.get('/feefines', (schema) => schema.feefines.all());
+
+  server.delete('feefines/:id', () => {
+    return {};
+  });
 
   server.put('owners/:id', (schema, request) => {
     const {

@@ -23,4 +23,4 @@ import KeyValue from './KeyValue';
   }
 }
 
-export default new LoanActionsHistory();
+export default new LoanActionsHistory({ timeout: 5000 });

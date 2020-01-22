@@ -286,10 +286,10 @@ export default function config() {
 
   this.post('/accounts', function (schema, { requestBody }) {
     const acct = JSON.parse(requestBody);
-    return server.create('accounts', acct);
+    return server.create('account', acct);
   });
 
-  this.get('waives', {
+  this.get('/waives', {
     waivers: [],
     totalRecords: 0,
     resultInfo: {
@@ -298,7 +298,7 @@ export default function config() {
       diagnostics: [],
     },
   });
-  this.get('payments', {
+  this.get('/payments', {
     payments: [],
     totalRecords: 0,
     resultInfo: {
@@ -307,7 +307,7 @@ export default function config() {
       diagnostics: [],
     },
   });
-  this.get('comments', {
+  this.get('/comments', {
     comments: [],
     totalRecords: 0,
     resultInfo: {
@@ -316,7 +316,7 @@ export default function config() {
       diagnostics: [],
     },
   });
-  this.get('feefines', function ({ feefines }, request) {
+  this.get('/feefines', function ({ feefines }, request) {
     if (request.queryParams.query) {
       if (request.queryParams.query.includes('allRecords')) {
         return this.serializerOrRegistry.serialize(feefines.all());
@@ -364,6 +364,11 @@ export default function config() {
   this.get('/perms/permissions', function ({ permissions }) {
     return this.serializerOrRegistry.serialize(permissions.all());
   });
+  this.post('/perms/users/:id/permissions', {
+    permissionNames: [],
+  });
+
+  this.post('/perms/users/:id/permissions?indexField=userId');
 
   this.get('/feefineactions', ({ feefineactions }) => {
     return this.serializerOrRegistry.serialize(feefineactions.all());
@@ -371,7 +376,7 @@ export default function config() {
 
   this.post('/feefineactions', (schema, { requestBody }) => {
     const ffAction = JSON.parse(requestBody);
-    return server.create('feefineactions', ffAction);
+    return server.create('feefineaction', ffAction);
   });
 
   this.get('/owners', ({ owners }) => {
@@ -501,4 +506,6 @@ export default function config() {
       return [];
     }
   });
+
+  this.post('/request-preference-storage/request-preference');
 }
