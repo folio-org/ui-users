@@ -35,7 +35,7 @@ export default Factory.extend({
   withAccounts: trait({
     afterCreate(accounts, server) {
       const owneraccount = server.create('owner');
-      const feefinesaccount = server.create('feefines');
+      const feefinesaccount = server.create('feefine');
       accounts.update('ownerId', owneraccount.id);
       accounts.update('feeFineId', feefinesaccount.id);
       accounts.save();
