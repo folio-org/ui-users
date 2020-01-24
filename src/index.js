@@ -6,7 +6,7 @@ import { hot } from 'react-hot-loader';
 import _ from 'lodash';
 
 import { Route, Switch, IfPermission } from '@folio/stripes/core';
-import { CommandList, HasCommand } from '@folio/stripes/components';
+// import { CommandList, HasCommand } from '@folio/stripes/components';
 
 import * as Routes from './routes';
 
@@ -220,12 +220,14 @@ class UsersRouting extends React.Component {
     }
 
     return (
+      {/*
       <CommandList commands={commands}>
         <HasCommand
           commands={this.shortcuts}
           isWithinScope={this.checkScope}
           scope={this.shortcutScope}
         >
+      */}
           <Switch>
             <Route
               path={`${base}/:id/loans/view/:loanid`}
@@ -284,8 +286,10 @@ class UsersRouting extends React.Component {
             </Route>
             <Route render={this.noMatch} />
           </Switch>
+        {/*
         </HasCommand>
       </CommandList>
+      */}
     );
   }
 }
