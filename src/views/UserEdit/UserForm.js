@@ -402,6 +402,7 @@ class UserForm extends React.Component {
       formData,
       change, // from redux-form...
       servicePoints,
+      onCancel,
     } = this.props;
 
     const { sections } = this.state;
@@ -430,6 +431,7 @@ class UserForm extends React.Component {
                 {paneTitle}
               </span>
             }
+            onClose={onCancel}
           >
             <div className={css.UserFormContent}>
               <Headline
