@@ -65,6 +65,7 @@ class ChargeFeeFine extends React.Component {
       pay: false,
       showConfirmDialog: false,
       notify: null,
+      paymentNotify: null,
     };
     this.onClickCharge = this.onClickCharge.bind(this);
     this.onClickSelectItem = this.onClickSelectItem.bind(this);
@@ -149,7 +150,7 @@ class ChargeFeeFine extends React.Component {
 
   newAction = (action, id, typeAction, amount, comment, balance, transaction, createdAt) => {
     const path = `accounts/${id}`;
-    const notify = this.state.notify;
+    const notify = _.isEmpty(action) ? this.state.notify : this.state.paymentNotify;
 
     return this.props.mutator.account.GET({ path }).then(record => {
       const dateAction = _.get(record, ['metadata', 'updatedDate'], moment().format());
@@ -164,7 +165,6 @@ class ChargeFeeFine extends React.Component {
         amountAction: parseFloat(amount || 0).toFixed(2),
         balance: parseFloat(balance || 0).toFixed(2),
         transactionInformation: transaction || '-',
-        comments: comment,
         notify,
       };
       this.props.mutator.feefineactions.POST(Object.assign(action, newAction));
@@ -245,8 +245,9 @@ class ChargeFeeFine extends React.Component {
 
   showConfirmDialog = (values) => {
     this.setState({
+      values,
       showConfirmDialog: true,
-      values
+      paymentNotify: values.notify
     });
 
     return new Promise((resolve, reject) => {
@@ -286,7 +287,7 @@ class ChargeFeeFine extends React.Component {
       this.type.paymentStatus.name = paymentStatus;
       this.props.mutator.activeRecord.update({ id: this.type.id });
 
-      return this.props.mutator.accounts.PUT(_.omit(this.type, ['notify']));
+      return this.props.mutator.accounts.PUT(_.omit(this.type, ['comments', 'patronInfo', 'notify']));
     })
       .then(() => this.newAction({ paymentMethod: values.method }, this.type.id,
         this.type.paymentStatus.name, values.amount,

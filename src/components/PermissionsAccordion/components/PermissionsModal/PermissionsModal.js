@@ -36,8 +36,8 @@ class PermissionsModal extends React.Component {
           excludePermissionSets,
         } = props;
         const query = [
-          ...(listInvisiblePerms || ['visible==true']),
-          ...(excludePermissionSets && ['mutable==false']),
+          ...(listInvisiblePerms ? [] : ['visible==true']),
+          ...(excludePermissionSets ? ['mutable==false'] : []),
         ];
         const queryString = query.length
           ? `query=(${query.join(' and ')})`

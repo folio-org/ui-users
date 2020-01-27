@@ -1,5 +1,4 @@
 import {
-  before,
   beforeEach,
   describe,
   it,
@@ -11,9 +10,7 @@ import setupApplication from '../helpers/setup-application';
 import UsersInteractor from '../interactors/users';
 
 describe('Status filter', () => {
-  before(function () {
-    setupApplication();
-  });
+  setupApplication();
 
   const activeUsersAmount = 4;
   const inactiveUsersAmount = 8;
@@ -21,56 +18,58 @@ describe('Status filter', () => {
 
   const users = new UsersInteractor();
 
-  beforeEach(async function () {
-    this.server.createList('user', activeUsersAmount, { active: true });
-    this.server.createList('user', inactiveUsersAmount, { active: false });
-    this.visit('/users?sort=Name');
-    await users.whenLoaded();
-  });
-
-  describe('show inactive users', () => {
+  describe('visit user search', () => {
     beforeEach(async function () {
-      await users.activeUserCheckbox.clickInactive();
-      await users.whenInstancesLoaded();
+      this.server.createList('user', activeUsersAmount, { active: true });
+      this.server.createList('user', inactiveUsersAmount, { active: false });
+      this.visit('/users?sort=Name');
+      await users.whenLoaded();
     });
 
-    it('should show the list of users', () => {
-      expect(users.isVisible).to.be.true;
+    describe('show inactive users', () => {
+      beforeEach(async function () {
+        await users.activeUserCheckbox.clickInactive();
+        await users.whenInstancesLoaded();
+      });
+
+      it('should show the list of users', () => {
+        expect(users.isVisible).to.be.true;
+      });
+
+      it('should be proper amount of users', () => {
+        expect(users.instances().length).to.equal(inactiveUsersAmount);
+      });
     });
 
-    it('should be proper amount of users', () => {
-      expect(users.instances().length).to.equal(inactiveUsersAmount);
-    });
-  });
+    describe('show active users', () => {
+      beforeEach(async function () {
+        await users.activeUserCheckbox.clickActive();
+        await users.whenInstancesLoaded();
+      });
 
-  describe('show active users', () => {
-    beforeEach(async function () {
-      await users.activeUserCheckbox.clickActive();
-      await users.whenInstancesLoaded();
-    });
+      it('should show the list of users', () => {
+        expect(users.isVisible).to.be.true;
+      });
 
-    it('should show the list of users', () => {
-      expect(users.isVisible).to.be.true;
-    });
-
-    it('should be proper amount of users', () => {
-      expect(users.instances().length).to.equal(activeUsersAmount);
-    });
-  });
-
-  describe('show all users', () => {
-    beforeEach(async function () {
-      await users.activeUserCheckbox.clickActive();
-      await users.activeUserCheckbox.clickInactive();
-      await users.whenInstancesLoaded();
+      it('should be proper amount of users', () => {
+        expect(users.instances().length).to.equal(activeUsersAmount);
+      });
     });
 
-    it('should show the list of users', () => {
-      expect(users.isVisible).to.be.true;
-    });
+    describe('show all users', () => {
+      beforeEach(async function () {
+        await users.activeUserCheckbox.clickActive();
+        await users.activeUserCheckbox.clickInactive();
+        await users.whenInstancesLoaded();
+      });
 
-    it('should be proper amount of users', () => {
-      expect(users.instances().length).to.equal(allUsers);
+      it('should show the list of users', () => {
+        expect(users.isVisible).to.be.true;
+      });
+
+      it('should be proper amount of users', () => {
+        expect(users.instances().length).to.equal(allUsers);
+      });
     });
   });
 });

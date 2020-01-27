@@ -28,7 +28,7 @@ export default @interactor class UsersInteractor {
   headerDropdownMenu = new HeaderDropdownMenu();
   searchFocused = isPresent('[data-test-user-search-input]:focus');
   patronGroupsPresent = isPresent('#clickable-filter-pg-faculty');
-  instancePresent = isPresent('[data-test-user-instances] [data-test-instance-details]');
+  instancePresent = isPresent('[data-test-instance-details]');
   instancesPresent = isPresent('[role=group] [role=row]');
   headerDropdown = new HeaderDropdown('[class*=paneHeaderCenterInner---] [class*=dropdown---]');
   clickFacultyCheckbox = clickable('#clickable-filter-pg-faculty');
