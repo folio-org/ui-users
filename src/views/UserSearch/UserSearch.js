@@ -320,6 +320,7 @@ class UserSearch extends React.Component {
                               <SearchField
                                 aria-label="user search"
                                 autoFocus
+                                autoComplete="off"
                                 name="query"
                                 id="input-user-search"
                                 className={css.searchField}
