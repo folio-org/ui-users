@@ -65,6 +65,7 @@ class ChargeFeeFine extends React.Component {
       pay: false,
       showConfirmDialog: false,
       notify: null,
+      paymentNotify: null,
     };
     this.onClickCharge = this.onClickCharge.bind(this);
     this.onClickSelectItem = this.onClickSelectItem.bind(this);
@@ -148,7 +149,7 @@ class ChargeFeeFine extends React.Component {
 
   newAction = (action, id, typeAction, amount, comment, balance, transaction, createdAt) => {
     const path = `accounts/${id}`;
-    const notify = this.state.notify;
+    const notify = _.isEmpty(action) ? this.state.notify : this.state.paymentNotify;
 
     return this.props.mutator.account.GET({ path }).then(record => {
       const dateAction = _.get(record, ['metadata', 'updatedDate'], moment().format());
@@ -243,8 +244,9 @@ class ChargeFeeFine extends React.Component {
 
   showConfirmDialog = (values) => {
     this.setState({
+      values,
       showConfirmDialog: true,
-      values
+      paymentNotify: values.notify
     });
 
     return new Promise((resolve, reject) => {

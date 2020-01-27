@@ -1,5 +1,4 @@
 import {
-  before,
   beforeEach,
   describe,
   it,
@@ -12,13 +11,11 @@ import OpenLoansInteractor from '../interactors/open-loans';
 import LoanActionsHistory from '../interactors/loan-actions-history';
 
 describe('Declare Lost', () => {
-  before(function () {
-    setupApplication({
-      permissions: {
-        'manualblocks.collection.get': true,
-        'circulation.loans.collection.get': true,
-      },
-    });
+  setupApplication({
+    permissions: {
+      'manualblocks.collection.get': true,
+      'circulation.loans.collection.get': true,
+    },
   });
 
   describe('Visiting open loans list page with not declared lost item', () => {
@@ -184,7 +181,7 @@ describe('Declare Lost', () => {
 
       this.server.create('user', { id: loan.userId });
 
-      this.server.create('loanactions', {
+      this.server.create('loanaction', {
         loan: {
           ...loan.attrs,
         },
