@@ -61,4 +61,4 @@ import DeclareLostDialog from './declare-lost-dialog';
   }
 }
 
-export default new OpenLoans(5000);
+export default new OpenLoans({ timeout: 5000 });

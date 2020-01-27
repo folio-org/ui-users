@@ -844,5 +844,10 @@
     "addAddressError": "Пожалуйста, добавьте хотя бы один адрес в раздел \"Адреса\"",
     "requests.defaultPickupServicePoint": "Точка обслуживания по умолчанию",
     "errors.currentUser.expired": "Срок действия текущей записи пользователя истек",
-    "data.loanActionMap.declaredLost": "Declared lost"
+    "data.loanActionMap.declaredLost": "Declared lost",
+    "confirm": "Confirm",
+    "loans.declareLost": "Declare lost",
+    "loans.declareLostDialogBody": "<strong>{title} {materialType}</strong> (Barcode: {barcode}) will be <strong>declared lost</strong>",
+    "loans.confirmLostState": "Confirm lost state",
+    "loans.declareLost.additionalInfoPlaceholder": "Enter more information about the lost item (required)"
 }

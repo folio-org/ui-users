@@ -18,6 +18,8 @@
 * Refresh list of loans after anonymization. Fixes UIU-1046.
 * Add UI to mark items Declared lost. Refs UIU-1202.
 * Omit `comments`, `patronInfo` fields, when fee/fine is paying, to prevent backend error. Fixes UIU-1413.
+* Don't update state in `withRenew` when unmounted. Fixes UIU-1450.
+* Update circulation okapiInterface to version `9.0`. Part of UIU-1440.
 
 ## [2.26.0](https://github.com/folio-org/ui-users/tree/v2.26.0) (2019-12-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.3...v2.26.0)
