@@ -34,58 +34,58 @@ describe('loans actions history', () => {
       },
     });
 
-      this.server.createList('loanaction', 5, { loan: { ...openLoan.attrs } });
-      this.server.createList('request', requestsAmount, { itemId: openLoan.itemId });
+    this.server.createList('loanaction', 5, { loan: { ...openLoan.attrs } });
+    this.server.createList('request', requestsAmount, { itemId: openLoan.itemId });
+  });
+
+  describe('loans without fees/fines', () => {
+    beforeEach(function () {
+      this.visit(`/users/${openLoan.userId}/loans/view/${openLoan.id}`);
     });
 
-    describe('loans without fees/fines', () => {
-      beforeEach(function () {
-        this.visit(`/users/${openLoan.userId}/loans/view/${openLoan.id}`);
-      });
-
-      it('should be presented', () => {
-        expect(LoanActionsHistory.isPresent).to.be.true;
-      });
-
-      it('having loan without fees/fines incurred should display the "-"', () => {
-        expect(LoanActionsHistory.feeFines.text).to.equal('-');
-      });
-
-      it('should display close button', () => {
-        expect(LoanActionsHistory.closeButton.isPresent).to.be.true;
-      });
+    it('should be presented', () => {
+      expect(LoanActionsHistory.isPresent).to.be.true;
     });
 
-    describe('loans with fees/fines', () => {
-      beforeEach(function () {
-        this.server.get('/accounts', {
-          accounts: [{ amount: 200 }],
-          totalRecords: 1,
-        });
+    it('having loan without fees/fines incurred should display the "-"', () => {
+      expect(LoanActionsHistory.feeFines.text).to.equal('-');
+    });
 
-        this.visit(`/users/${openLoan.userId}/loans/view/${openLoan.id}`);
+    it('should display close button', () => {
+      expect(LoanActionsHistory.closeButton.isPresent).to.be.true;
+    });
+  });
+
+  describe('loans with fees/fines', () => {
+    beforeEach(function () {
+      this.server.get('/accounts', {
+        accounts: [{ amount: 200 }],
+        totalRecords: 1,
       });
 
-      it('fields should be presented', () => {
-        expect(LoanActionsHistory.overduePolicy.isPresent).to.be.true;
-        expect(LoanActionsHistory.lostItemPolicy.isPresent).to.be.true;
+      this.visit(`/users/${openLoan.userId}/loans/view/${openLoan.id}`);
+    });
+
+    it('fields should be presented', () => {
+      expect(LoanActionsHistory.overduePolicy.isPresent).to.be.true;
+      expect(LoanActionsHistory.lostItemPolicy.isPresent).to.be.true;
+    });
+
+    it('should display the field name', () => {
+      expect(LoanActionsHistory.overduePolicy.text).to.equal('One Hour1');
+      expect(LoanActionsHistory.lostItemPolicy.text).to.equal('One Hour2');
+    });
+
+    describe('click Overdue Fine Policy link', () => {
+      beforeEach(async () => {
+        await LoanActionsHistory.clickLinkOverduePolicy();
       });
 
-      it('should display the field name', () => {
-        expect(LoanActionsHistory.overduePolicy.text).to.equal('One Hour1');
-        expect(LoanActionsHistory.lostItemPolicy.text).to.equal('One Hour2');
+      it('should navigate to the user open loans list page', function () {
+        expect(LoanActionsHistory.overduePolicy.isPresent).to.be.false;
+        expect(this.location.pathname.endsWith(`/settings/circulation/fine-policies/${openLoan.overdueFinePolicyId}`)).to.be.true;
       });
-
-      describe('click Overdue Fine Policy link', () => {
-        beforeEach(async () => {
-          await LoanActionsHistory.clickLinkOverduePolicy();
-        });
-
-        it('should navigate to the user open loans list page', function () {
-          expect(LoanActionsHistory.overduePolicy.isPresent).to.be.false;
-          expect(this.location.pathname.endsWith(`/settings/circulation/fine-policies/${openLoan.overdueFinePolicyId}`)).to.be.true;
-        });
-      });
+    });
 
     describe('click Lost Item Fee Policy link', () => {
       beforeEach(async () => {
@@ -107,84 +107,83 @@ describe('loans actions history', () => {
       });
     });
 
-      it('should display the fees/fines value', () => {
-        expect(LoanActionsHistory.feeFines.text).to.equal('200.00');
+    it('should display the fees/fines value', () => {
+      expect(LoanActionsHistory.feeFines.text).to.equal('200.00');
+    });
+  });
+
+  describe('requests', () => {
+    describe('loan without loanPolicy', () => {
+      beforeEach(function () {
+        this.visit(`/users/${openLoan.userId}/loans/view/${openLoan.id}`);
+      });
+
+      it('should be presented', () => {
+        expect(LoanActionsHistory.requests.isPresent).to.be.true;
+      });
+
+      it('should have proper value', () => {
+        expect(LoanActionsHistory.requests.value.text).to.equal(requestsAmount.toString());
+      });
+
+      it('should have proper label', () => {
+        expect(LoanActionsHistory.requests.label.text).to.equal(translations['loans.details.requestQueue']);
       });
     });
 
-    describe('requests', () => {
-      describe('loan without loanPolicy', () => {
-        beforeEach(function () {
-          this.visit(`/users/${openLoan.userId}/loans/view/${openLoan.id}`);
-        });
+    describe('loan without loanPolicy', () => {
+      beforeEach(function () {
+        const loan = this.server.create('loan', { status: { name: 'Open' } });
 
-        it('should be presented', () => {
-          expect(LoanActionsHistory.requests.isPresent).to.be.true;
-        });
-
-        it('should have proper value', () => {
-          expect(LoanActionsHistory.requests.value.text).to.equal(requestsAmount.toString());
-        });
-
-        it('should have proper label', () => {
-          expect(LoanActionsHistory.requests.label.text).to.equal(translations['loans.details.requestQueue']);
-        });
+        this.server.createList('request', requestsAmount, { itemId: loan.itemId });
+        this.visit(`/users/${loan.userId}/loans/${loan.id}`);
       });
 
-      describe('loan without loanPolicy', () => {
-        beforeEach(function () {
-          const loan = this.server.create('loan', { status: { name: 'Open' } });
-
-          this.server.createList('request', requestsAmount, { itemId: loan.itemId });
-          this.visit(`/users/${loan.userId}/loans/${loan.id}`);
-        });
-
-        it('should not be presented', () => {
-          expect(LoanActionsHistory.requests.isPresent).to.be.false;
-        });
+      it('should not be presented', () => {
+        expect(LoanActionsHistory.requests.isPresent).to.be.false;
       });
+    });
+  });
+
+  describe('clicking the close button', () => {
+    beforeEach(async function () {
+      this.visit(`/users/${openLoan.userId}/loans/view/${openLoan.id}`);
+      await LoanActionsHistory.closeButton.click();
+    });
+
+    it('should navigate to the user open loans list page', function () {
+      expect(OpenLoansInteractor.isPresent).to.be.true;
+      expect(this.location.pathname.endsWith(`/users/${openLoan.userId}/loans/open`)).to.be.true;
+    });
+  });
+
+  describe('visiting the actions history of the closed loans', () => {
+    let closedLoan;
+
+    beforeEach(function () {
+      closedLoan = this.server.create('loan', {
+        status: { name: 'Closed' },
+        loanPolicyId: 'test'
+      });
+
+      this.server.createList('loanaction', 5, { loan: { ...closedLoan.attrs } });
+      this.server.createList('request', requestsAmount, { itemId: closedLoan.itemId });
+
+      this.visit(`/users/${closedLoan.userId}/loans/view/${closedLoan.id}`);
+    });
+
+    it('should display the close button', () => {
+      expect(LoanActionsHistory.closeButton.isPresent).to.be.true;
     });
 
     describe('clicking the close button', () => {
-      beforeEach(async function () {
-        this.visit(`/users/${openLoan.userId}/loans/view/${openLoan.id}`);
+      beforeEach(async () => {
         await LoanActionsHistory.closeButton.click();
       });
 
-      it('should navigate to the user open loans list page', function () {
-        expect(OpenLoansInteractor.isPresent).to.be.true;
-        expect(this.location.pathname.endsWith(`/users/${openLoan.userId}/loans/open`)).to.be.true;
-      });
-    });
-
-    describe('visiting the actions history of the closed loans', () => {
-      let closedLoan;
-
-      beforeEach(function () {
-        closedLoan = this.server.create('loan', {
-          status: { name: 'Closed' },
-          loanPolicyId: 'test'
-        });
-
-        this.server.createList('loanaction', 5, { loan: { ...closedLoan.attrs } });
-        this.server.createList('request', requestsAmount, { itemId: closedLoan.itemId });
-
-        this.visit(`/users/${closedLoan.userId}/loans/view/${closedLoan.id}`);
-      });
-
-      it('should display the close button', () => {
-        expect(LoanActionsHistory.closeButton.isPresent).to.be.true;
-      });
-
-      describe('clicking the close button', () => {
-        beforeEach(async () => {
-          await LoanActionsHistory.closeButton.click();
-        });
-
-        it('should navigate to the user closed loans list page', function () {
-          expect(ClosedLoansInteractor.isPresent).to.be.true;
-          expect(this.location.pathname.endsWith(`/users/${closedLoan.userId}/loans/closed`)).to.be.true;
-        });
+      it('should navigate to the user closed loans list page', function () {
+        expect(ClosedLoansInteractor.isPresent).to.be.true;
+        expect(this.location.pathname.endsWith(`/users/${closedLoan.userId}/loans/closed`)).to.be.true;
       });
     });
   });
