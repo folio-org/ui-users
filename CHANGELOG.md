@@ -21,6 +21,7 @@
 * Don't update state in `withRenew` when unmounted. Fixes UIU-1450.
 * Update circulation okapiInterface to version `9.0`. Part of UIU-1440.
 * Disable `autoComplete` in user's search box. Refs UIU-1426.
+* Correctly sort "Active" column. Refs UIU-1406.
 
 ## [2.26.0](https://github.com/folio-org/ui-users/tree/v2.26.0) (2019-12-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.3...v2.26.0)
