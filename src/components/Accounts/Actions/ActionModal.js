@@ -211,13 +211,7 @@ class ActionModal extends React.Component {
 
     const selected = calculateSelectedAmount(accounts);
     const remaining = amount > 0 ? parseFloat(balance - amount).toFixed(2) : parseFloat(balance).toFixed(2);
-    const staffPlaceholder = formatMessage({
-      id: 'ui-users.accounts.placeholder.additional'
-    },
-    {
-      action: formatMessage({ id: `ui-users.accounts.actions.${action}` }),
-      type: formatMessage({ id: `ui-users.accounts.${(commentRequired) ? 'required' : 'optional'}` })
-    });
+    
 
     const ownerOptions = owners.filter(o => o.owner !== 'Shared').map(o => ({ value: o.id, label: o.owner }));
 
@@ -339,7 +333,6 @@ class ActionModal extends React.Component {
                 id="comments"
                 name="comment"
                 component={TextArea}
-                placeholder={staffPlaceholder}
               />
             </Col>
           </Row>

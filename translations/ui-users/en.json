@@ -719,7 +719,6 @@
   "accounts.selectedAmount": "Selected amount",
   "accounts.remainingAmount": "Remaining amount",
   "accounts.commentStaff": "Additional information for staff",
-  "accounts.placeholder.additional": "Enter more information about the fee/fine {action} ({type})",
   "accounts.notifyPatron": "Notify patron",
   "accounts.infoPatron": "Additional information for patron",
   "accounts.optional": "optional",
@@ -741,7 +740,7 @@
   "accounts.payment.error.exceeds": "Pay amount exceeds the selected amount",
 
 
-  "accounts.waive.modalLabel": "Waive Fee/Fine",
+  "accounts.waive.modalLabel": "Waive fee/fine",
   "accounts.waive.amount": "Waive amount",
   "accounts.waive": "Waive",
   "accounts.waive.summary.partially": "Partially waive",
@@ -751,7 +750,7 @@
   "accounts.waive.method": "Waive reason",
   "accounts.waive.method.placeholder": "Select reason",
 
-  "accounts.transfer.modalLabel": "Transfer Fee/Fine",
+  "accounts.transfer.modalLabel": "Transfer fee/fine",
   "accounts.transfer.amount": "Transfer amount",
   "accounts.transfer": "Transfer",
   "accounts.transfer.summary.partially": "Partially transfer",
@@ -766,7 +765,6 @@
   "accounts.cancelError": "Cancelled as error",
 
   "accounts.cancellation.field.reason": "Reason for cancellation*",
-  "accounts.cancellation.field.cancellationInfo": "Enter information about the cancellation (required)",
   "accounts.cancellation.field.feefinewill": "fee/fine will be",
   "accounts.cancellation.field.cancelled": "cancelled",
   "accounts.cancellation.field.confirmcancelled": "Confirm fee/fine cancellation",
