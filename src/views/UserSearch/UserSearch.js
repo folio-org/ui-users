@@ -10,19 +10,19 @@ import { Link } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { IntlConsumer, IfPermission, AppIcon } from '@folio/stripes/core';
 import {
-  MultiColumnList,
-  SearchField,
-  Paneset,
-  Pane,
-  Icon,
   Button,
+  Icon,
+  MultiColumnList,
+  Pane,
   PaneMenu,
+  Paneset,
+  SearchField,
 } from '@folio/stripes/components';
 
 import {
   SearchAndSortQuery,
   SearchAndSortNoResultsMessage as NoResultsMessage,
-  SearchAndSortSearchButton as FilterPaneToggle,
+  ExpandFilterPaneButton,
 } from '@folio/stripes/smart-components';
 
 import OverdueLoanReport from '../../components/data/reports';
@@ -65,7 +65,7 @@ class UserSearch extends React.Component {
 
   static defaultProps = {
     idPrefix: 'users-',
-    visibleColumns: ['status', 'name', 'barcode', 'patronGroup', 'username', 'email'],
+    visibleColumns: ['active', 'name', 'barcode', 'patronGroup', 'username', 'email'],
   };
 
   constructor(props) {
@@ -129,31 +129,18 @@ class UserSearch extends React.Component {
 
   renderResultsFirstMenu(filters) {
     const { filterPaneIsVisible } = this.state;
-
     const filterCount = filters.string !== '' ? filters.string.split(',').length : 0;
-    const hideOrShowMessageId = filterPaneIsVisible
-      ? 'stripes-smart-components.hideSearchPane'
-      : 'stripes-smart-components.showSearchPane';
+
+    if (filterPaneIsVisible) {
+      return null;
+    }
 
     return (
       <PaneMenu>
-        <FormattedMessage
-          id="stripes-smart-components.numberOfFilters"
-          values={{ count: filterCount }}
-        >
-          {appliedFiltersMessage => (
-            <FormattedMessage id={hideOrShowMessageId}>
-              {hideOrShowMessage => (
-                <FilterPaneToggle
-                  visible={filterPaneIsVisible}
-                  aria-label={`${hideOrShowMessage} \n\n${appliedFiltersMessage}`}
-                  onClick={this.toggleFilterPane}
-                  badge={!filterPaneIsVisible && filterCount ? filterCount : undefined}
-                />
-              )}
-            </FormattedMessage>
-          )}
-        </FormattedMessage>
+        <ExpandFilterPaneButton
+          filterCount={filterCount}
+          onClick={this.toggleFilterPane}
+        />
       </PaneMenu>
     );
   }
@@ -266,14 +253,13 @@ class UserSearch extends React.Component {
         />
       </div>) : 'no source yet';
 
-    const resultsHeader = 'User Search Results';
     let resultPaneSub = <FormattedMessage id="stripes-smart-components.searchCriteria" />;
     if (source && source.loaded()) {
       resultPaneSub = <FormattedMessage id="stripes-smart-components.searchResultsCountHeader" values={{ count }} />;
     }
 
     const resultsFormatter = {
-      status: user => (
+      active: user => (
         <AppIcon app="users" size="small" className={user.active ? undefined : css.inactiveAppIcon}>
           {user.active ? <FormattedMessage id="ui-users.active" /> : <FormattedMessage id="ui-users.inactive" />}
         </AppIcon>
@@ -365,7 +351,7 @@ class UserSearch extends React.Component {
                       <Pane
                         firstMenu={this.renderResultsFirstMenu(activeFilters)}
                         lastMenu={this.renderNewRecordBtn()}
-                        paneTitle={resultsHeader}
+                        paneTitle={<FormattedMessage id="ui-users.userSearchResults" />}
                         paneSub={resultPaneSub}
                         defaultWidth="fill"
                         actionMenu={this.getActionMenu}
@@ -379,7 +365,7 @@ class UserSearch extends React.Component {
                           contentData={users}
                           totalCount={count}
                           columnMapping={{
-                            status: intl.formatMessage({ id: 'ui-users.active' }),
+                            active: intl.formatMessage({ id: 'ui-users.active' }),
                             name: intl.formatMessage({ id: 'ui-users.information.name' }),
                             barcode: intl.formatMessage({ id: 'ui-users.information.barcode' }),
                             patronGroup: intl.formatMessage({ id: 'ui-users.information.patronGroup' }),

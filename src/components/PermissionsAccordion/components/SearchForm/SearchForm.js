@@ -35,15 +35,19 @@ const SearchForm = (props) => {
   return (
     <form onSubmit={onFormSubmit}>
       <div className={css.searchGroupWrap}>
-        <SearchField
-          data-test-search-field
-          aria-label="user search"
-          name="query"
-          onChange={({ target: { value } }) => { setSearchText(value); }}
-          className={css.searchField}
-          value={searchText}
-          autoFocus
-        />
+        <FormattedMessage id="ui-users.userSearch">
+          {label => (
+            <SearchField
+              data-test-search-field
+              aria-label={label}
+              name="query"
+              onChange={({ target: { value } }) => { setSearchText(value); }}
+              className={css.searchField}
+              value={searchText}
+              autoFocus
+            />
+          )}
+        </FormattedMessage>
         <Button
           data-test-submit-button
           type="submit"
