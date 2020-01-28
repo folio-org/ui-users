@@ -346,7 +346,6 @@ class UserSearch extends React.Component {
                       }
                       <Pane
                         firstMenu={this.renderResultsFirstMenu(activeFilters)}
-                        lastMenu={this.renderNewRecordBtn()}
                         paneTitle={<FormattedMessage id="ui-users.userSearchResults" />}
                         paneSub={resultPaneSub}
                         defaultWidth="fill"
