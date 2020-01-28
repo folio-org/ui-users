@@ -750,7 +750,7 @@
     "reports.overdue.item.contributors": "Contributeurs",
     "reports.overdue.item.location.name": "Emplacement",
     "reports.overdue.item.instanceId": "ID de l'instance",
-    "reports.overdue.item.holdingsRecordId": "Holdings ID",
+    "reports.overdue.item.holdingsRecordId": "ID fonds documentaires",
     "reports.overdue.itemId": "ID de l'article",
     "reports.overdue.label": "Rapport sur les prêts en retard (CSV)",
     "accounts.transfer.error.amount": "Le montant du transfert doit être supérieur à zéro",
