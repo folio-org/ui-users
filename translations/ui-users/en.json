@@ -5,6 +5,8 @@
 
   "loading": "Loading...",
   "search": "Search",
+  "userSearch": "User search",
+  "userSearchResults": "User search results",
   "expandAll": "Expand all",
   "confirm": "Confirm",
   "collapseAll": "Collapse all",
