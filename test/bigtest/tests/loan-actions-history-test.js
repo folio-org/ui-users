@@ -67,10 +67,6 @@ describe('loans actions history', () => {
         this.visit(`/users/${openLoan.userId}/loans/view/${openLoan.id}`);
       });
 
-      it('should display the fees/fines value', () => {
-        expect(LoanActionsHistory.feeFines.text).to.equal('200.00');
-      });
-
       it('fields should be presented', () => {
         expect(LoanActionsHistory.overduePolicy.isPresent).to.be.true;
         expect(LoanActionsHistory.lostItemPolicy.isPresent).to.be.true;
@@ -90,17 +86,32 @@ describe('loans actions history', () => {
           expect(LoanActionsHistory.overduePolicy.isPresent).to.be.false;
           expect(this.location.pathname.endsWith(`/settings/circulation/fine-policies/${openLoan.overdueFinePolicyId}`)).to.be.true;
         });
+      });
 
-        describe('click Lost Item Fee Policy link', () => {
-          beforeEach(async () => {
-            await LoanActionsHistory.clickLinkLostItemPolicy();
-          });
-
-          it('should navigate to the user open loans list page', function () {
-            expect(LoanActionsHistory.lostItemPolicy.isPresent).to.be.false;
-            expect(this.location.pathname.endsWith(`/settings/circulation/lost-item-fee-policy/${openLoan.lostItemPolicyId}`)).to.be.true;
-          });
+      describe('click Lost Item Fee Policy link', () => {
+        beforeEach(async () => {
+          await LoanActionsHistory.clickLinkLostItemPolicy();
         });
+
+        it('should navigate to the user open loans list page', function () {
+          expect(LoanActionsHistory.lostItemPolicy.isPresent).to.be.false;
+          expect(this.location.pathname.endsWith(`/settings/circulation/lost-item-fee-policy/${openLoan.lostItemPolicyId}`)).to.be.true;
+        });
+      });
+    });
+
+    describe('having loan with fees/fines incurred', () => {
+      beforeEach(function () {
+        this.server.get('/accounts', {
+          accounts: [{ amount: 200 }],
+          totalRecords: 1,
+        });
+
+        this.visit(`/users/${openLoan.userId}/loans/view/${openLoan.id}`);
+      });
+
+      it('should display the fees/fines value', () => {
+        expect(LoanActionsHistory.feeFines.text).to.equal('200.00');
       });
     });
 
