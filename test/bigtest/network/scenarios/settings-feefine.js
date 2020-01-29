@@ -1,4 +1,4 @@
-import { Response } from '@bigtest/mirage';
+import { Response } from 'miragejs';
 import CQLParser from '../cql';
 /* istanbul ignore file */
 
