@@ -23,6 +23,7 @@ import {
   SearchAndSortQuery,
   SearchAndSortNoResultsMessage as NoResultsMessage,
   ExpandFilterPaneButton,
+  CollapseFilterPaneButton,
 } from '@folio/stripes/smart-components';
 
 import OverdueLoanReport from '../../components/data/reports';
@@ -300,21 +301,33 @@ class UserSearch extends React.Component {
                   {intl => (
                     <Paneset id={`${idPrefix}-paneset`}>
                       {this.state.filterPaneIsVisible &&
-                        <Pane defaultWidth="22%" paneTitle="User search">
+                        <Pane
+                          defaultWidth="22%"
+                          paneTitle={<FormattedMessage id="ui-users.userSearch" />}
+                          lastMenu={
+                            <PaneMenu>
+                              <CollapseFilterPaneButton onClick={this.toggleFilterPane} />
+                            </PaneMenu>
+                          }
+                        >
                           <form onSubmit={onSubmitSearch}>
                             <div className={css.searchGroupWrap}>
-                              <SearchField
-                                aria-label="user search"
-                                autoFocus
-                                autoComplete="off"
-                                name="query"
-                                id="input-user-search"
-                                className={css.searchField}
-                                onChange={getSearchHandlers().query}
-                                value={searchValue.query}
-                                marginBottom0
-                                data-test-user-search-input
-                              />
+                              <FormattedMessage id="ui-users.userSearch">
+                                {label => (
+                                  <SearchField
+                                    ariaLabel={label}
+                                    autoFocus
+                                    autoComplete="off"
+                                    name="query"
+                                    id="input-user-search"
+                                    className={css.searchField}
+                                    onChange={getSearchHandlers().query}
+                                    value={searchValue.query}
+                                    marginBottom0
+                                    data-test-user-search-input
+                                  />
+                                )}
+                              </FormattedMessage>
                               <Button
                                 id="submit-user-search"
                                 type="submit"
