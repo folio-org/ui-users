@@ -10,24 +10,23 @@ import { Link } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { IntlConsumer, IfPermission, AppIcon } from '@folio/stripes/core';
 import {
-  MultiColumnList,
-  SearchField,
-  Paneset,
-  Pane,
-  Icon,
   Button,
+  Icon,
+  MultiColumnList,
+  Pane,
   PaneMenu,
-  HasCommand,
+  Paneset,
+  SearchField,
 } from '@folio/stripes/components';
 
 import {
   SearchAndSortQuery,
   SearchAndSortNoResultsMessage as NoResultsMessage,
-  SearchAndSortSearchButton as FilterPaneToggle,
+  ExpandFilterPaneButton,
+  CollapseFilterPaneButton,
 } from '@folio/stripes/smart-components';
 
 import OverdueLoanReport from '../../components/data/reports';
-import pkg from '../../../package';
 import Filters from './Filters';
 import css from './UserSearch.css';
 
@@ -67,7 +66,7 @@ class UserSearch extends React.Component {
 
   static defaultProps = {
     idPrefix: 'users-',
-    visibleColumns: ['status', 'name', 'barcode', 'patronGroup', 'username', 'email'],
+    visibleColumns: ['active', 'name', 'barcode', 'patronGroup', 'username', 'email'],
   };
 
   constructor(props) {
@@ -77,8 +76,6 @@ class UserSearch extends React.Component {
       selectedId: null,
       exportInProgress: false,
     };
-
-    this.searchField = React.createRef();
 
     const { formatMessage } = props.intl;
     this.overdueLoanReport = new OverdueLoanReport({
@@ -91,17 +88,6 @@ class UserSearch extends React.Component {
     return {
       selectedId: urlParams ? urlParams.params.id : null,
     };
-  }
-
-  componentDidMount() {
-    this.possiblyfocusSearchField();
-  }
-
-  possiblyfocusSearchField = () => {
-    const { search, pathname } = window.location;
-    if ((pathname + search) === pkg.stripes.home && this.searchField.current) {
-      this.searchField.current.focus();
-    }
   }
 
   toggleFilterPane = () => {
@@ -144,31 +130,18 @@ class UserSearch extends React.Component {
 
   renderResultsFirstMenu(filters) {
     const { filterPaneIsVisible } = this.state;
-
     const filterCount = filters.string !== '' ? filters.string.split(',').length : 0;
-    const hideOrShowMessageId = filterPaneIsVisible
-      ? 'stripes-smart-components.hideSearchPane'
-      : 'stripes-smart-components.showSearchPane';
+
+    if (filterPaneIsVisible) {
+      return null;
+    }
 
     return (
       <PaneMenu>
-        <FormattedMessage
-          id="stripes-smart-components.numberOfFilters"
-          values={{ count: filterCount }}
-        >
-          {appliedFiltersMessage => (
-            <FormattedMessage id={hideOrShowMessageId}>
-              {hideOrShowMessage => (
-                <FilterPaneToggle
-                  visible={filterPaneIsVisible}
-                  aria-label={`${hideOrShowMessage} \n\n${appliedFiltersMessage}`}
-                  onClick={this.toggleFilterPane}
-                  badge={!filterPaneIsVisible && filterCount ? filterCount : undefined}
-                />
-              )}
-            </FormattedMessage>
-          )}
-        </FormattedMessage>
+        <ExpandFilterPaneButton
+          filterCount={filterCount}
+          onClick={this.toggleFilterPane}
+        />
       </PaneMenu>
     );
   }
@@ -281,14 +254,13 @@ class UserSearch extends React.Component {
         />
       </div>) : 'no source yet';
 
-    const resultsHeader = 'User Search Results';
     let resultPaneSub = <FormattedMessage id="stripes-smart-components.searchCriteria" />;
     if (source && source.loaded()) {
       resultPaneSub = <FormattedMessage id="stripes-smart-components.searchResultsCountHeader" values={{ count }} />;
     }
 
     const resultsFormatter = {
-      status: user => (
+      active: user => (
         <AppIcon app="users" size="small" className={user.active ? undefined : css.inactiveAppIcon}>
           {user.active ? <FormattedMessage id="ui-users.active" /> : <FormattedMessage id="ui-users.inactive" />}
         </AppIcon>
@@ -304,125 +276,136 @@ class UserSearch extends React.Component {
     };
 
     return (
-      <HasCommand commands={this.shortcuts}>
-        <div data-test-user-instances ref={contentRef}>
-          <SearchAndSortQuery
-            querySetter={querySetter}
-            queryGetter={queryGetter}
-            onComponentWillUnmount={onComponentWillUnmount}
-            initialSearch={initialSearch}
-            initialSearchState={{ qindex: '', query: '' }}
-          >
-            {
-              ({
-                searchValue,
-                getSearchHandlers,
-                onSubmitSearch,
-                onSort,
-                getFilterHandlers,
-                activeFilters,
-                filterChanged,
-                searchChanged,
-                resetAll,
-              }) => {
-                return (
-                  <IntlConsumer>
-                    {intl => (
-                      <Paneset id={`${idPrefix}-paneset`}>
-                        {this.state.filterPaneIsVisible &&
-                          <Pane defaultWidth="22%" paneTitle="User search">
-                            <form onSubmit={onSubmitSearch}>
-                              <div className={css.searchGroupWrap}>
-                                <SearchField
-                                  aria-label="user search"
-                                  name="query"
-                                  id="input-user-search"
-                                  className={css.searchField}
-                                  onChange={getSearchHandlers().query}
-                                  value={searchValue.query}
-                                  marginBottom0
-                                  inputRef={this.searchField}
-                                  data-test-user-search-input
-                                />
-                                <Button
-                                  id="submit-user-search"
-                                  type="submit"
-                                  buttonStyle="primary"
-                                  fullWidth
-                                  marginBottom0
-                                  disabled={(!searchValue.query || searchValue.query === '')}
-                                  data-test-user-search-submit
-                                >
-                                  Search
-                                </Button>
-                              </div>
-                              <div className={css.resetButtonWrap}>
-                                <Button
-                                  buttonStyle="none"
-                                  id="clickable-reset-all"
-                                  disabled={!(filterChanged || searchChanged)}
-                                  fullWidth
-                                  onClick={resetAll}
-                                >
-                                  <Icon icon="times-circle-solid">
-                                    <FormattedMessage id="stripes-smart-components.resetAll" />
-                                  </Icon>
-                                </Button>
-                              </div>
-                              <Filters
-                                onChangeHandlers={getFilterHandlers()}
-                                activeFilters={activeFilters}
-                                config={filterConfig}
-                              />
-                            </form>
-                          </Pane>
-                        }
+      <div data-test-user-instances ref={contentRef}>
+        <SearchAndSortQuery
+          querySetter={querySetter}
+          queryGetter={queryGetter}
+          onComponentWillUnmount={onComponentWillUnmount}
+          initialSearch={initialSearch}
+          initialSearchState={{ qindex: '', query: '' }}
+        >
+          {
+            ({
+              searchValue,
+              getSearchHandlers,
+              onSubmitSearch,
+              onSort,
+              getFilterHandlers,
+              activeFilters,
+              filterChanged,
+              searchChanged,
+              resetAll,
+            }) => {
+              return (
+                <IntlConsumer>
+                  {intl => (
+                    <Paneset id={`${idPrefix}-paneset`}>
+                      {this.state.filterPaneIsVisible &&
                         <Pane
-                          firstMenu={this.renderResultsFirstMenu(activeFilters)}
-                          lastMenu={this.renderNewRecordBtn()}
-                          paneTitle={resultsHeader}
-                          paneSub={resultPaneSub}
-                          defaultWidth="fill"
-                          actionMenu={this.getActionMenu}
-                          padContent={false}
-                          noOverflow
+                          defaultWidth="22%"
+                          paneTitle={<FormattedMessage id="ui-users.userSearch" />}
+                          lastMenu={
+                            <PaneMenu>
+                              <CollapseFilterPaneButton onClick={this.toggleFilterPane} />
+                            </PaneMenu>
+                          }
                         >
-                          <MultiColumnList
-                            id="list-users"
-                            visibleColumns={visibleColumns}
-                            rowUpdater={this.rowUpdater}
-                            contentData={users}
-                            totalCount={count}
-                            columnMapping={{
-                              status: intl.formatMessage({ id: 'ui-users.active' }),
-                              name: intl.formatMessage({ id: 'ui-users.information.name' }),
-                              barcode: intl.formatMessage({ id: 'ui-users.information.barcode' }),
-                              patronGroup: intl.formatMessage({ id: 'ui-users.information.patronGroup' }),
-                              username: intl.formatMessage({ id: 'ui-users.information.username' }),
-                              email: intl.formatMessage({ id: 'ui-users.contact.email' }),
-                            }}
-                            formatter={resultsFormatter}
-                            rowFormatter={this.anchoredRowFormatter}
-                            onNeedMoreData={onNeedMoreData}
-                            onHeaderClick={onSort}
-                            sortOrder={sortOrder.replace(/^-/, '').replace(/,.*/, '')}
-                            sortDirection={sortOrder.startsWith('-') ? 'descending' : 'ascending'}
-                            isEmptyMessage={resultsStatusMessage}
-                            isSelected={this.isSelected}
-                            autosize
-                            virtualize
-                          />
-
+                          <form onSubmit={onSubmitSearch}>
+                            <div className={css.searchGroupWrap}>
+                              <FormattedMessage id="ui-users.userSearch">
+                                {label => (
+                                  <SearchField
+                                    ariaLabel={label}
+                                    autoFocus
+                                    autoComplete="off"
+                                    name="query"
+                                    id="input-user-search"
+                                    className={css.searchField}
+                                    onChange={getSearchHandlers().query}
+                                    value={searchValue.query}
+                                    marginBottom0
+                                    data-test-user-search-input
+                                  />
+                                )}
+                              </FormattedMessage>
+                              <Button
+                                id="submit-user-search"
+                                type="submit"
+                                buttonStyle="primary"
+                                fullWidth
+                                marginBottom0
+                                disabled={(!searchValue.query || searchValue.query === '')}
+                                data-test-user-search-submit
+                              >
+                                Search
+                              </Button>
+                            </div>
+                            <div className={css.resetButtonWrap}>
+                              <Button
+                                buttonStyle="none"
+                                id="clickable-reset-all"
+                                disabled={!(filterChanged || searchChanged)}
+                                fullWidth
+                                onClick={resetAll}
+                              >
+                                <Icon icon="times-circle-solid">
+                                  <FormattedMessage id="stripes-smart-components.resetAll" />
+                                </Icon>
+                              </Button>
+                            </div>
+                            <Filters
+                              onChangeHandlers={getFilterHandlers()}
+                              activeFilters={activeFilters}
+                              config={filterConfig}
+                            />
+                          </form>
                         </Pane>
-                        { this.props.children }
-                      </Paneset>
-                    )}
-                  </IntlConsumer>
-                );
-              }}
-          </SearchAndSortQuery>
-        </div>
-      </HasCommand>);
+                      }
+                      <Pane
+                        firstMenu={this.renderResultsFirstMenu(activeFilters)}
+                        lastMenu={this.renderNewRecordBtn()}
+                        paneTitle={<FormattedMessage id="ui-users.userSearchResults" />}
+                        paneSub={resultPaneSub}
+                        defaultWidth="fill"
+                        actionMenu={this.getActionMenu}
+                        padContent={false}
+                        noOverflow
+                      >
+                        <MultiColumnList
+                          id="list-users"
+                          visibleColumns={visibleColumns}
+                          rowUpdater={this.rowUpdater}
+                          contentData={users}
+                          totalCount={count}
+                          columnMapping={{
+                            active: intl.formatMessage({ id: 'ui-users.active' }),
+                            name: intl.formatMessage({ id: 'ui-users.information.name' }),
+                            barcode: intl.formatMessage({ id: 'ui-users.information.barcode' }),
+                            patronGroup: intl.formatMessage({ id: 'ui-users.information.patronGroup' }),
+                            username: intl.formatMessage({ id: 'ui-users.information.username' }),
+                            email: intl.formatMessage({ id: 'ui-users.contact.email' }),
+                          }}
+                          formatter={resultsFormatter}
+                          rowFormatter={this.anchoredRowFormatter}
+                          onNeedMoreData={onNeedMoreData}
+                          onHeaderClick={onSort}
+                          sortOrder={sortOrder.replace(/^-/, '').replace(/,.*/, '')}
+                          sortDirection={sortOrder.startsWith('-') ? 'descending' : 'ascending'}
+                          isEmptyMessage={resultsStatusMessage}
+                          isSelected={this.isSelected}
+                          autosize
+                          virtualize
+                        />
+
+                      </Pane>
+                      { this.props.children }
+                    </Paneset>
+                  )}
+                </IntlConsumer>
+              );
+            }}
+        </SearchAndSortQuery>
+      </div>);
   }
 }
 

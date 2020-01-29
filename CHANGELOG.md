@@ -20,6 +20,8 @@
 * Omit `comments`, `patronInfo` fields, when fee/fine is paying, to prevent backend error. Fixes UIU-1413.
 * Don't update state in `withRenew` when unmounted. Fixes UIU-1450.
 * Update circulation okapiInterface to version `9.0`. Part of UIU-1440.
+* Disable `autoComplete` in user's search box. Refs UIU-1426.
+* Correctly sort "Active" column. Refs UIU-1406.
 
 ## [2.26.0](https://github.com/folio-org/ui-users/tree/v2.26.0) (2019-12-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.3...v2.26.0)
@@ -43,6 +45,7 @@
 * Use user's id instead of a barcode when navigating to requests module. Refs UIU-1370.
 * Restore display of "invisible" permissions. Refs UIU-1372.
 * Rename "Loans: All permissions" permission to "Users: User loans view, edit, renew (all)". Refs UIU-1344.
+* Add `autoFocus` prop to `<SearchField>`. Refs UIU-1248.
 
 ## [2.25.3](https://github.com/folio-org/ui-users/tree/v2.25.3) (2019-09-26)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.2...v2.25.3)
