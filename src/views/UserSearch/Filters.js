@@ -41,29 +41,7 @@ export default class Filters extends React.Component {
     return sortByKey ? sortBy(items, key) : items;
   };
 
-  parseActiveFilters = () => {
-    const { string: queryString } = this.props.activeFilters;
-
-    if (!queryString) {
-      return {};
-    }
-
-    return queryString
-      .split(',')
-      .reduce((filterMap, currentFilter) => {
-        const [name, value] = currentFilter.split('.');
-
-        if (!Array.isArray(filterMap[name])) {
-          filterMap[name] = [];
-        }
-
-        filterMap[name].push(value);
-
-        return filterMap;
-      }, {});
-  };
-
-  handleFilterChange = (group) => {
+  handleFilterChange = (filter) => {
     const {
       activeFilters,
       onChangeHandlers,
@@ -71,20 +49,19 @@ export default class Filters extends React.Component {
 
     onChangeHandlers.state({
       ...activeFilters,
-      [group.name]: group.values
+      [filter.name]: filter.values
     });
   };
 
   render() {
     const {
+      activeFilters: {
+        active = [],
+        pg = [],
+        tags = [],
+      },
       onChangeHandlers: { clearGroup },
     } = this.props;
-
-    const {
-      active = [],
-      pg = [],
-      tags = [],
-    } = this.parseActiveFilters();
 
     return (
       <AccordionSet>

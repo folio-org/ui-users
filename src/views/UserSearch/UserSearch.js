@@ -399,10 +399,9 @@ class UserSearch extends React.Component {
                               </Button>
                             </div>
                             <Filters
-                              onChangeHandlers={getFilterHandlers()}
-                              activeFilters={activeFilters}
-                              config={filterConfig}
+                              activeFilters={activeFilters.state}
                               resources={this.props.resources}
+                              onChangeHandlers={getFilterHandlers()}
                             />
                           </form>
                         </Pane>
