@@ -24,7 +24,15 @@ describe('loans actions history', () => {
     beforeEach(function () {
       openLoan = this.server.create('loan', {
         status: { name: 'Open' },
-        loanPolicyId: 'test'
+        loanPolicyId: 'test',
+        overdueFinePolicyId: 'test',
+        lostItemPolicyId: 'test',
+        overdueFinePolicy: {
+          'name': 'One Hour1'
+        },
+        lostItemPolicy: {
+          'name': 'One Hour2'
+        },
       });
 
       this.server.createList('loanaction', 5, { loan: { ...openLoan.attrs } });
@@ -50,6 +58,49 @@ describe('loans actions history', () => {
     });
 
     describe('loans with fees/fines', () => {
+      beforeEach(function () {
+        this.server.get('/accounts', {
+          accounts: [{ amount: 200 }],
+          totalRecords: 1,
+        });
+
+        this.visit(`/users/${openLoan.userId}/loans/view/${openLoan.id}`);
+      });
+
+      it('fields should be presented', () => {
+        expect(LoanActionsHistory.overduePolicy.isPresent).to.be.true;
+        expect(LoanActionsHistory.lostItemPolicy.isPresent).to.be.true;
+      });
+
+      it('should display the field name', () => {
+        expect(LoanActionsHistory.overduePolicy.text).to.equal('One Hour1');
+        expect(LoanActionsHistory.lostItemPolicy.text).to.equal('One Hour2');
+      });
+
+      describe('click Overdue Fine Policy link', () => {
+        beforeEach(async () => {
+          await LoanActionsHistory.clickLinkOverduePolicy();
+        });
+
+        it('should navigate to the user open loans list page', function () {
+          expect(LoanActionsHistory.overduePolicy.isPresent).to.be.false;
+          expect(this.location.pathname.endsWith(`/settings/circulation/fine-policies/${openLoan.overdueFinePolicyId}`)).to.be.true;
+        });
+      });
+
+      describe('click Lost Item Fee Policy link', () => {
+        beforeEach(async () => {
+          await LoanActionsHistory.clickLinkLostItemPolicy();
+        });
+
+        it('should navigate to the user open loans list page', function () {
+          expect(LoanActionsHistory.lostItemPolicy.isPresent).to.be.false;
+          expect(this.location.pathname.endsWith(`/settings/circulation/lost-item-fee-policy/${openLoan.lostItemPolicyId}`)).to.be.true;
+        });
+      });
+    });
+
+    describe('having loan with fees/fines incurred', () => {
       beforeEach(function () {
         this.server.get('/accounts', {
           accounts: [{ amount: 200 }],

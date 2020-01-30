@@ -140,7 +140,6 @@ class ChargeFeeFine extends React.Component {
     if (type.patronInfo && type.notify) {
       commentInfo = `${commentInfo} \n ${tagPatron} : ${type.patronInfo}`;
     }
-
     this.setState({ notify: type.notify });
     const typeAction = _.omit(type, ['comments', 'patronInfo', 'notify']);
 
