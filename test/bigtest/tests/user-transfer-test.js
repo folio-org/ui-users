@@ -15,7 +15,7 @@ describe('Transfer fines', () => {
     beforeEach(async function () {
       this.visit('users/1ad737b0-d847-11e6-bf26-cec0c932ce02/accounts/all');
 
-      await TransferInteractor.whenLoaded();
+      await TransferInteractor.whenLoaded().timeout(5000);
       await TransferInteractor.whenVisibled();
     });
 
