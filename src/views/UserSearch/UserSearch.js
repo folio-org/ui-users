@@ -79,7 +79,7 @@ class UserSearch extends React.Component {
       searchPending: false,
     };
 
-    this.paneTitleRef = createRef();
+    this.resultsPaneTitleRef = createRef();
     this.SRStatusRef = createRef();
 
     const { formatMessage } = props.intl;
@@ -107,7 +107,7 @@ class UserSearch extends React.Component {
 
   onSearchComplete = records => {
     const { intl } = this.props;
-    const headerEl = this.paneTitleRef.current;
+    const headerEl = this.resultsPaneTitleRef.current;
     const resultsCount = get(records, 'other.totalRecords', 0);
     const hasResults = !!resultsCount;
 
@@ -121,7 +121,7 @@ class UserSearch extends React.Component {
     }));
 
     // Focus the pane header if we have results to minimize tabbing distance
-    if (hasResults) {
+    if (hasResults && headerEl) {
       headerEl.focus();
     }
   }
@@ -354,7 +354,7 @@ class UserSearch extends React.Component {
                             </PaneMenu>
                           }
                         >
-                          <form onSubmit={onSubmitSearch}>
+                          <form onSubmit={e => this.handleSubmit(e, onSubmitSearch)}>
                             <SRStatus ref={this.SRStatusRef} />
                             <div className={css.searchGroupWrap}>
                               <FormattedMessage id="ui-users.userSearch">
@@ -407,8 +407,10 @@ class UserSearch extends React.Component {
                         </Pane>
                       }
                       <Pane
+                        id="users-search-results-pane"
                         firstMenu={this.renderResultsFirstMenu(activeFilters)}
                         lastMenu={this.renderNewRecordBtn()}
+                        paneTitleRef={this.resultsPaneTitleRef}
                         paneTitle={<FormattedMessage id="ui-users.userSearchResults" />}
                         paneSub={resultPaneSub}
                         defaultWidth="fill"

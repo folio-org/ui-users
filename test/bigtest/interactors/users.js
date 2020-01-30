@@ -1,10 +1,12 @@
 import {
-  interactor,
-  scoped,
-  collection,
   clickable,
+  collection,
+  is,
+  interactor,
+  Interactor,
+  isPresent,
   isVisible,
-  isPresent
+  scoped,
 } from '@bigtest/interactor';
 
 @interactor class ActiveUserCheckbox {
@@ -21,12 +23,19 @@ import {
   exportBtnIsVisible = isVisible('#export-overdue-loan-report');
 }
 
+@interactor class SearchFieldInteractor {
+  static defaultScope = '[data-test-user-search-input]';
+}
+
 export default @interactor class UsersInteractor {
   static defaultScope = '[data-test-user-instances]';
 
   activeUserCheckbox = new ActiveUserCheckbox();
   headerDropdownMenu = new HeaderDropdownMenu();
+  searchField = new SearchFieldInteractor();
+  searchButton = new Interactor('[data-test-user-search-submit]');
   searchFocused = isPresent('[data-test-user-search-input]:focus');
+  paneHeaderFocused = is('#users-search-results-pane [class*=paneHeader---]', ':focus');
   patronGroupsPresent = isPresent('#clickable-filter-pg-faculty');
   instancePresent = isPresent('[data-test-instance-details]');
   instancesPresent = isPresent('[role=group] [role=row]');
