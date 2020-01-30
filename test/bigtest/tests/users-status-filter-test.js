@@ -72,7 +72,7 @@ describe('Status filter', () => {
       });
     });
 
-    describe.only('search for users', () => {
+    describe('search for users', () => {
       beforeEach(async function () {
         await users.searchField.fill('a');
         await users.searchButton.click();
@@ -86,10 +86,6 @@ describe('Status filter', () => {
       it('should have search results', () => {
         expect(users.instances().length).to.be.above(0);
       });
-
-      // it('should focus pane header if there are results', () => {
-      //   expect(users.paneHeaderFocused).to.equal(true);
-      // });
     });
   });
 });
