@@ -1,6 +1,6 @@
 // This view component contains purely presentational code.
 
-import React from 'react';
+import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
 import { matchPath } from 'react-router';
 
@@ -17,6 +17,7 @@ import {
   PaneMenu,
   Paneset,
   SearchField,
+  SRStatus,
 } from '@folio/stripes/components';
 
 import {
@@ -75,7 +76,11 @@ class UserSearch extends React.Component {
       filterPaneIsVisible: true,
       selectedId: null,
       exportInProgress: false,
+      searchPending: false,
     };
+
+    this.resultsPaneTitleRef = createRef();
+    this.SRStatusRef = createRef();
 
     const { formatMessage } = props.intl;
     this.overdueLoanReport = new OverdueLoanReport({
@@ -88,6 +93,37 @@ class UserSearch extends React.Component {
     return {
       selectedId: urlParams ? urlParams.params.id : null,
     };
+  }
+
+  componentDidUpdate(prevProps) {
+    if (
+      this.state.searchPending &&
+      prevProps.resources.records &&
+      prevProps.resources.records.isPending &&
+      !this.props.resources.records.isPending) {
+      this.onSearchComplete(this.props.resources.records);
+    }
+  }
+
+  onSearchComplete = records => {
+    const { intl } = this.props;
+    const headerEl = this.resultsPaneTitleRef.current;
+    const resultsCount = get(records, 'other.totalRecords', 0);
+    const hasResults = !!resultsCount;
+
+    this.setState({ searchPending: false });
+
+    // Announce the results for screen readers
+    this.SRStatusRef.current.sendMessage(intl.formatMessage({
+      id: 'ui-users.resultCount',
+    }, {
+      count: resultsCount
+    }));
+
+    // Focus the pane header if we have results to minimize tabbing distance
+    if (hasResults && headerEl) {
+      headerEl.focus();
+    }
   }
 
   toggleFilterPane = () => {
@@ -224,6 +260,14 @@ class UserSearch extends React.Component {
 
   isSelected = ({ item }) => item.id === this.state.selectedId;
 
+  handleSubmit = (e, onSubmit) => {
+    this.setState({
+      searchPending: true,
+    });
+
+    onSubmit(e);
+  }
+
   render() {
     const {
       filterConfig,
@@ -310,7 +354,8 @@ class UserSearch extends React.Component {
                             </PaneMenu>
                           }
                         >
-                          <form onSubmit={onSubmitSearch}>
+                          <form onSubmit={e => this.handleSubmit(e, onSubmitSearch)}>
+                            <SRStatus ref={this.SRStatusRef} />
                             <div className={css.searchGroupWrap}>
                               <FormattedMessage id="ui-users.userSearch">
                                 {label => (
@@ -362,8 +407,10 @@ class UserSearch extends React.Component {
                         </Pane>
                       }
                       <Pane
+                        id="users-search-results-pane"
                         firstMenu={this.renderResultsFirstMenu(activeFilters)}
                         lastMenu={this.renderNewRecordBtn()}
+                        paneTitleRef={this.resultsPaneTitleRef}
                         paneTitle={<FormattedMessage id="ui-users.userSearchResults" />}
                         paneSub={resultPaneSub}
                         defaultWidth="fill"
