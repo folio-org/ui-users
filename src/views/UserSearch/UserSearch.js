@@ -367,6 +367,7 @@ class UserSearch extends React.Component {
                           }
                         >
                           <form onSubmit={onSubmitSearch}>
+                            <SRStatus ref={this.SRStatusRef} />
                             <div className={css.searchGroupWrap}>
                               <FormattedMessage id="ui-users.userSearch">
                                 {label => (
