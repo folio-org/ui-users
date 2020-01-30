@@ -272,7 +272,7 @@ class LoanDetails extends React.Component {
       pathname: `/users/${params.id}/loans/${loanStatus}`,
       state: location.state,
     });
-  };
+  }
 
   render() {
     const {
