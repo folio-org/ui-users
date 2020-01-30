@@ -79,7 +79,6 @@ class UserSearch extends React.Component {
       searchPending: false,
     };
 
-    this.searchField = createRef();
     this.paneTitleRef = createRef();
     this.SRStatusRef = createRef();
 
@@ -94,10 +93,6 @@ class UserSearch extends React.Component {
     return {
       selectedId: urlParams ? urlParams.params.id : null,
     };
-  }
-
-  componentDidMount() {
-    this.possiblyfocusSearchField();
   }
 
   componentDidUpdate(prevProps) {
@@ -128,13 +123,6 @@ class UserSearch extends React.Component {
     // Focus the pane header if we have results to minimize tabbing distance
     if (hasResults) {
       headerEl.focus();
-    }
-  }
-
-  possiblyfocusSearchField = () => {
-    const { search, pathname } = window.location;
-    if ((pathname + search) === pkg.stripes.home && this.searchField.current) {
-      this.searchField.current.focus();
     }
   }
 
