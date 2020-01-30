@@ -73,7 +73,16 @@ class UserSearchContainer extends React.Component {
       accumulate: true,
       path: () => `circulation/loans?query=(status="Open" and dueDate < ${getLoansOverdueDate()})&limit=${MAX_LIMIT}`,
       permissionsRequired: 'circulation.loans.collection.get,accounts.collection.get',
-    }
+    },
+    tags: {
+      throwErrors: false,
+      type: 'okapi',
+      path: 'tags',
+      params: {
+        query: 'cql.allRecords=1 sortby label',
+      },
+      records: 'tags',
+    },
   });
 
   static propTypes = {

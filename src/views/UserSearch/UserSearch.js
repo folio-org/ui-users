@@ -402,6 +402,7 @@ class UserSearch extends React.Component {
                               onChangeHandlers={getFilterHandlers()}
                               activeFilters={activeFilters}
                               config={filterConfig}
+                              resources={this.props.resources}
                             />
                           </form>
                         </Pane>

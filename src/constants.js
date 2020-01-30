@@ -18,3 +18,8 @@ export const sortTypes = {
   ASC: 'asc',
   DESC: 'desc',
 };
+
+export const statusFilter = [
+  'active',
+  'inactive'
+];
