@@ -20,6 +20,6 @@ export const sortTypes = {
 };
 
 export const statusFilter = [
-  'active',
-  'inactive'
+  { label: 'ui-users.filters.status.active', value: 'active' },
+  { label: 'ui-users.filters.status.inactive', value: 'inactive' }
 ];

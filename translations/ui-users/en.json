@@ -674,5 +674,7 @@
   "anonymization.confirmation.message": "{amount} loan(s) had associated fees/fines and could not be anonymized.",
   "addAddressError": "Please, add at least one address inside \"Addresses\" section",
   
-  "tags": "Tags"
+  "tags": "Tags",
+  "filters.status.active": "active",
+  "filters.status.inactive": "inactive"
 }
