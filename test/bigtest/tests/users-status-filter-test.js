@@ -71,5 +71,21 @@ describe('Status filter', () => {
         expect(users.instances().length).to.equal(allUsers);
       });
     });
+
+    describe('search for users', () => {
+      beforeEach(async function () {
+        await users.searchField.fill('a');
+        await users.searchButton.click();
+        await users.whenLoaded();
+      });
+
+      it('entering a search query', () => {
+        expect(users.searchField.value).to.equal('a');
+      });
+
+      it('should have search results', () => {
+        expect(users.instances().length).to.be.above(0);
+      });
+    });
   });
 });
