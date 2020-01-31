@@ -270,7 +270,6 @@ class UserSearch extends React.Component {
 
   render() {
     const {
-      filterConfig,
       onComponentWillUnmount,
       idPrefix,
       visibleColumns,

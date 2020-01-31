@@ -170,7 +170,6 @@ class UserSearchContainer extends React.Component {
     return (
       <UserSearch
         source={this.source}
-        filterConfig={filterConfig}
         initialSearch="?sort=name"
         onNeedMoreData={this.onNeedMoreData}
         {...this.props}

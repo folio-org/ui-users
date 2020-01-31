@@ -31,7 +31,7 @@ export default class Filters extends React.Component {
   }
 
   getStaticFilterValues = (items) => {
-    return items.map(({ label, value }) => ({ 
+    return items.map(({ label, value }) => ({
       label: <FormattedMessage id={label} />,
       value,
     }));
