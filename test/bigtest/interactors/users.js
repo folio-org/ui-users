@@ -47,6 +47,7 @@ export default @interactor class UsersInteractor {
   clickCreateUserButton = clickable('#clickable-newuser');
   instance = scoped('[data-test-instance-details]');
   instances = collection('[role=group] [role=row]');
+  clearStatusFilter = clickable('[data-test-clear-button]');
 
   whenInstanceLoaded() {
     return this.when(() => this.instancePresent).timeout(5000);
