@@ -37,11 +37,11 @@ export default class Filters extends React.Component {
     }));
   };
 
-  getValuesFromResources = (type, key, sortByKey = false) => {
+  getValuesFromResources = (type, key) => {
     const items = get(this.props.resources, `${type}.records`, [])
       .map(item => ({ label: item[key], value: item[key] }));
 
-    return sortByKey ? sortBy(items, key) : items;
+    return sortBy(items, 'label');
   };
 
   handleFilterChange = (filter) => {
@@ -107,7 +107,7 @@ export default class Filters extends React.Component {
           onClearFilter={() => clearGroup('tags')}
         >
           <MultiSelectionFilter
-            dataOptions={this.getValuesFromResources('tags', 'label', true)}
+            dataOptions={this.getValuesFromResources('tags', 'label')}
             name="tags"
             selectedValues={tags}
             onChange={this.handleFilterChange}
