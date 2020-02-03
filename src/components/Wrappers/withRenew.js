@@ -66,6 +66,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
   }
 
   componentDidMount() {
+    this._isMounted = true;
     const { loans } = this.state;
 
     if (loans.length > 0) {
@@ -82,6 +83,17 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
       this.getOpenRequestsCount();
     }
   }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
+  // fetchLoanPolicyNames and getOpenRequestsCount both execute XHRs that resolve
+  // asynchronously and save their results in state. This causes a memory leak if
+  // the component is unmounted before the promise resolves as state will not be
+  // available at that point. By setting _isMounted in cDM/cWU, we can use it in a
+  // condition in those methods to determine whether it is safe to update state.
+  _isMounted = false;
 
   renewItem = (loan, patron, bulkRenewal) => {
     this.setState({ bulkRenewal });
@@ -247,9 +259,11 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
             return map;
           }, {});
 
-          this.setState(prevState => ({
-            requestCounts: Object.assign({}, prevState.requestCounts, requestCountObject)
-          }));
+          if (this._isMounted) {
+            this.setState(prevState => ({
+              requestCounts: Object.assign({}, prevState.requestCounts, requestCountObject)
+            }));
+          }
         });
     }
   };
@@ -280,7 +294,9 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
           return map;
         }, {});
 
-        this.setState({ loanPolicies: loanPolicyObject });
+        if (this._isMounted) {
+          this.setState({ loanPolicies: loanPolicyObject });
+        }
       });
   };
 

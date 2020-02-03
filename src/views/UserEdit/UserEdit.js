@@ -44,6 +44,7 @@ class UserEdit extends React.Component {
     stripes: PropTypes.object,
     resources: PropTypes.object,
     history: PropTypes.object,
+    location: PropTypes.object,
     match: PropTypes.object,
     location: PropTypes.object,
     updateProxies: PropTypes.func,
@@ -199,6 +200,8 @@ class UserEdit extends React.Component {
       mutator,
       history,
       resources,
+      match: { params },
+      location: { state },
       stripes,
     } = this.props;
 
@@ -233,7 +236,10 @@ class UserEdit extends React.Component {
     data.active = (moment(user.expirationDate).endOf('day').isSameOrAfter(today));
 
     mutator.selUser.PUT(data).then(() => {
-      history.goBack();
+      history.push({
+        pathname: params.id ? `/users/preview/${params.id}` : '/users',
+        state,
+      });
     });
   }
 
@@ -250,8 +256,8 @@ class UserEdit extends React.Component {
     const {
       history,
       resources,
-      match: { params },
       location,
+      match: { params },
     } = this.props;
 
     if (!resourcesLoaded(resources, ['uniquenessValidator'])) {
@@ -260,7 +266,6 @@ class UserEdit extends React.Component {
 
     // data is information that the form needs, mostly to populate options lists
     const formData = this.getUserFormData();
-
     const onSubmit = params.id ? (record) => this.update(record) : (record) => this.create(record);
 
     return (
@@ -268,7 +273,12 @@ class UserEdit extends React.Component {
         formData={formData}
         initialValues={this.getUserFormValues()} // values are strictly values...if we're editing (id param present) pull in existing values.
         onSubmit={onSubmit}
-        onCancel={() => history.goBack()}
+        onCancel={() => {
+          history.push({
+            pathname: params.id ? `/users/preview/${params.id}` : '/users',
+            state: location.state,
+          });
+        }}
         uniquenessValidator={this.props.mutator.uniquenessValidator}
         match={this.props.match}
         location={location}

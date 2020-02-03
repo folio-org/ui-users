@@ -5,10 +5,10 @@ export default (server) => {
   const user = server.create('user', { id: 'ce0e0d5b-b5f3-4ad5-bccb-49c0784298fd' });
   server.createList('owner', 3);
   server.createList('feefine', 5);
-  const account = server.create('accounts', { userId: user.id });
-  server.createList('feefineactions', 1, { accountId: account.id });
-  server.createList('accounts', 3, { userId: user.id });
-  server.create('accounts', {
+  const account = server.create('account', { userId: user.id });
+  server.createList('feefineaction', 1, { accountId: account.id });
+  server.createList('account', 3, { userId: user.id });
+  server.create('account', {
     userId: user.id,
     status: {
       name: 'Open'
@@ -16,7 +16,7 @@ export default (server) => {
     amount: 100,
     remaining: 100
   });
-  server.create('accounts', {
+  server.create('account', {
     userId: user.id,
     status: {
       name: 'Closed'
@@ -24,10 +24,10 @@ export default (server) => {
     amount: 0,
     remaining: 0
   });
-  server.create('comments');
-  server.createList('waivers', 4);
-  server.createList('payments', 4);
-  server.createList('transfers', 4);
+  server.create('comment');
+  server.createList('waiver', 4);
+  server.createList('payment', 4);
+  server.createList('transfer', 4);
   server.get('/accounts');
   server.get('/accounts/:id', (schema, request) => {
     return schema.accounts.find(request.params.id).attrs;

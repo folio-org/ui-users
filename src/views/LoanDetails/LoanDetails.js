@@ -328,6 +328,8 @@ class LoanDetails extends React.Component {
     const contributorsListString = contributorsList.join(' ');
     const contributorsLength = contributorsListString.length;
     const loanStatus = get(loan, ['status', 'name'], '-');
+    const overduePolicyName = get(loan, ['overdueFinePolicy', 'name'], '-');
+    const lostItemPolicyName = get(loan, ['lostItemPolicy', 'name'], '-');
     const itemStatus = get(loan, ['item', 'status', 'name'], '-');
     const isDeclaredLostItem = itemStatus === 'Declared lost';
     let lostDate;
@@ -436,6 +438,12 @@ class LoanDetails extends React.Component {
                   value={get(loan, ['item', 'location', 'name'], '-')}
                 />
               </Col>
+              <Col xs={2}>
+                <KeyValue
+                  label={<FormattedMessage id="ui-users.loans.details.checkinServicePoint" />}
+                  value={get(loan, ['checkinServicePoint', 'name'], '-')}
+                />
+              </Col>
             </Row>
             <Row>
               <Col
@@ -473,8 +481,9 @@ class LoanDetails extends React.Component {
               </Col>
               <Col xs={2}>
                 <KeyValue
-                  label={<FormattedMessage id="ui-users.loans.details.checkinServicePoint" />}
-                  value={get(loan, ['checkinServicePoint', 'name'], '-')}
+                  data-test-overdue-policy
+                  label={<FormattedMessage id="ui-users.loans.details.overduePolicy" />}
+                  value={<Link to={`/settings/circulation/fine-policies/${loan.overdueFinePolicyId}`}>{overduePolicyName}</Link>}
                 />
               </Col>
             </Row>
@@ -514,6 +523,13 @@ class LoanDetails extends React.Component {
                 <KeyValue
                   label={<FormattedMessage id="ui-users.loans.details.lost" />}
                   value={lostDate ? (<FormattedTime value={lostDate} day="numeric" month="numeric" year="numeric" />) : (<NoValue />)}
+                />
+              </Col>
+              <Col xs={2}>
+                <KeyValue
+                  data-test-lost-item-policy
+                  label={<FormattedMessage id="ui-users.loans.details.lostItemPolicy" />}
+                  value={<Link to={`/settings/circulation/lost-item-fee-policy/${loan.lostItemPolicyId}`}>{lostItemPolicyName}</Link>}
                 />
               </Col>
             </Row>
