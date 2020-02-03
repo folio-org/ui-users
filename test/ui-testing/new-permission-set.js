@@ -7,7 +7,7 @@ module.exports.test = function foo(uiTestCtx) {
     this.timeout(Number(config.test_timeout));
 
     describe('Login > Create new permission set > Confirm creation > Delete permission set > Confirm deletion > Logout\n', () => {
-      const displayName = 'Circulation employee';
+      const displayName = `Circulation employee-${Math.floor(Math.random() * 10000)}`;
       const description = 'Contains permissions to execute basic circ functions.';
       let uuid = null;
 
@@ -66,7 +66,7 @@ module.exports.test = function foo(uiTestCtx) {
           .wait('div.hasEntries')
           .evaluate((name) => {
             const node = Array.from(
-              document.querySelectorAll('div.hasEntries nav a div')
+              document.querySelectorAll('div.hasEntries a div')
             ).find(e => e.textContent === name);
             if (node) {
               node.parentElement.click();
@@ -117,6 +117,7 @@ module.exports.test = function foo(uiTestCtx) {
             return true;
           }, uuid)
           .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
+          .wait(30000)
           .then(() => { done(); })
           .catch(done);
       });
