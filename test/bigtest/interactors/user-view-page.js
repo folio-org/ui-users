@@ -11,7 +11,7 @@ import {
 import proxyItemCSS from '../../../src/components/ProxyGroup/ProxyItem/ProxyItem.css';
 
 @interactor class HeaderDropdown {
-  click = clickable('button');
+  click = clickable('[data-test-pane-header-actions-button]');
 }
 
 @interactor class HeaderDropdownMenu {
@@ -35,7 +35,7 @@ import proxyItemCSS from '../../../src/components/ProxyGroup/ProxyItem/ProxyItem
 
 @interactor class InstanceViewPage {
   title = text('[data-test-header-title]');
-  headerDropdown = new HeaderDropdown('[class*=paneHeaderCenterInner---] [class*=dropdown---]');
+  headerDropdown = new HeaderDropdown();
   headerDropdownMenu = new HeaderDropdownMenu();
   editButtonPresent = isPresent('#clickable-edituser');
   clickEditButton = clickable('#clickable-edituser');
