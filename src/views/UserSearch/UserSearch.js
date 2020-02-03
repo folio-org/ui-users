@@ -270,7 +270,6 @@ class UserSearch extends React.Component {
 
   render() {
     const {
-      filterConfig,
       onComponentWillUnmount,
       idPrefix,
       visibleColumns,
@@ -399,9 +398,9 @@ class UserSearch extends React.Component {
                               </Button>
                             </div>
                             <Filters
+                              activeFilters={activeFilters.state}
+                              resources={this.props.resources}
                               onChangeHandlers={getFilterHandlers()}
-                              activeFilters={activeFilters}
-                              config={filterConfig}
                             />
                           </form>
                         </Pane>
