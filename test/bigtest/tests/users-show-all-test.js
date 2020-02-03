@@ -44,6 +44,16 @@ describe('Users', () => {
       expect(usersInteractor.instances().length).to.be.equal(usersAmount);
     });
 
+    describe('click clear status filter', () => {
+      beforeEach(async function () {
+        await usersInteractor.clearStatusFilter();
+      });
+
+      it('should display empty list', () => {
+        expect(usersInteractor.instances().length).to.be.equal(0);
+      });
+    });
+
     describe('clicking on the first user item', function () {
       let openLoan;
       let closedLoan;

@@ -219,6 +219,10 @@ class UserSearch extends React.Component {
   };
 
   renderNewRecordBtn() {
+    const {
+      location: { search }
+    } = this.props;
+
     return (
       <IfPermission perm="users.item.post,login.item.post,perms.users.item.post">
         <PaneMenu>
@@ -227,7 +231,7 @@ class UserSearch extends React.Component {
               <Button
                 id="clickable-newuser"
                 aria-label={ariaLabel}
-                to="/users/create"
+                to={`/users/create${search}`}
                 buttonStyle="primary"
                 marginBottom0
               >
@@ -270,7 +274,6 @@ class UserSearch extends React.Component {
 
   render() {
     const {
-      filterConfig,
       onComponentWillUnmount,
       idPrefix,
       visibleColumns,
@@ -399,9 +402,9 @@ class UserSearch extends React.Component {
                               </Button>
                             </div>
                             <Filters
+                              activeFilters={activeFilters.state}
+                              resources={this.props.resources}
                               onChangeHandlers={getFilterHandlers()}
-                              activeFilters={activeFilters}
-                              config={filterConfig}
                             />
                           </form>
                         </Pane>

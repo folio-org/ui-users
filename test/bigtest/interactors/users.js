@@ -15,7 +15,7 @@ import {
 }
 
 @interactor class HeaderDropdown {
-  click = clickable('button');
+  click = clickable('[data-test-pane-header-actions-button]');
 }
 
 @interactor class HeaderDropdownMenu {
@@ -39,7 +39,7 @@ export default @interactor class UsersInteractor {
   patronGroupsPresent = isPresent('#clickable-filter-pg-faculty');
   instancePresent = isPresent('[data-test-instance-details]');
   instancesPresent = isPresent('[role=group] [role=row]');
-  headerDropdown = new HeaderDropdown('[class*=paneHeaderCenterInner---] [class*=dropdown---]');
+  headerDropdown = new HeaderDropdown();
   clickFacultyCheckbox = clickable('#clickable-filter-pg-faculty');
   clickGraduateCheckbox = clickable('#clickable-filter-pg-graduate');
   clickStaffCheckbox = clickable('#clickable-filter-pg-staff');
@@ -47,6 +47,7 @@ export default @interactor class UsersInteractor {
   clickCreateUserButton = clickable('#clickable-newuser');
   instance = scoped('[data-test-instance-details]');
   instances = collection('[role=group] [role=row]');
+  clearStatusFilter = clickable('[data-test-clear-button]');
 
   whenInstanceLoaded() {
     return this.when(() => this.instancePresent).timeout(5000);
