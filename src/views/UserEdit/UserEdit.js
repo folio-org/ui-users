@@ -46,6 +46,7 @@ class UserEdit extends React.Component {
     history: PropTypes.object,
     location: PropTypes.object,
     match: PropTypes.object,
+    location: PropTypes.object,
     updateProxies: PropTypes.func,
     updateSponsors: PropTypes.func,
     updateServicePoints: PropTypes.func,
@@ -157,7 +158,7 @@ class UserEdit extends React.Component {
   }
 
   create = ({ requestPreferences, creds, ...userFormData }) => {
-    const { mutator, history } = this.props;
+    const { mutator, history, location: { search } } = this.props;
     const userData = cloneDeep(userFormData);
     const credentialsAreSet = userData.username;
     const user = { ...userData, id: uuid() };
@@ -177,7 +178,7 @@ class UserEdit extends React.Component {
           return mutator.perms.POST({ userId: user.id, permissions: [] });
         })
         .then(() => {
-          history.push(`/users/preview/${user.id}`);
+          history.push(`/users/preview/${user.id}${search}`);
         });
     } else {
       mutator.records.POST(user)
@@ -186,7 +187,7 @@ class UserEdit extends React.Component {
           return mutator.perms.POST({ userId: user.id, permissions: [] });
         })
         .then(() => {
-          history.push(`/users/preview/${user.id}`);
+          history.push(`/users/preview/${user.id}${search}`);
         });
     }
   }
@@ -255,8 +256,8 @@ class UserEdit extends React.Component {
     const {
       history,
       resources,
-      location: { state },
-      match: { params }
+      location,
+      match: { params },
     } = this.props;
 
     if (!resourcesLoaded(resources, ['uniquenessValidator'])) {
@@ -275,10 +276,13 @@ class UserEdit extends React.Component {
         onCancel={() => {
           history.push({
             pathname: params.id ? `/users/preview/${params.id}` : '/users',
-            state,
+            state: location.state,
           });
         }}
         uniquenessValidator={this.props.mutator.uniquenessValidator}
+        match={this.props.match}
+        location={location}
+        history={history}
       />
     );
   }

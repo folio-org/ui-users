@@ -236,7 +236,12 @@ class UserDetail extends React.Component {
   };
 
   getEditLink = () => {
-    return `/users/${this.props.match.params.id}/edit/`;
+    const {
+      match: { params },
+      location: { search }
+    } = this.props;
+
+    return `/users/${params.id}/edit${search}`;
   }
 
   onClose = () => {
