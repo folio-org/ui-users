@@ -24,6 +24,7 @@
 * Disable `autoComplete` in user's search box. Refs UIU-1426.
 * Correctly sort "Active" column. Refs UIU-1406.
 * Filter Users by Tags. Refs UIU-1448.
+* Restore `CommandList`, `HasCommand` wrappers now that they don't leak memory. Refs UIU-1457.
 
 ## [2.26.0](https://github.com/folio-org/ui-users/tree/v2.26.0) (2019-12-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.3...v2.26.0)
