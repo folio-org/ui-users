@@ -117,7 +117,6 @@ module.exports.test = function foo(uiTestCtx) {
             return true;
           }, uuid)
           .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
-          .wait(30000)
           .then(() => { done(); })
           .catch(done);
       });
