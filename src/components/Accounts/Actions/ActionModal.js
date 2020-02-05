@@ -191,7 +191,6 @@ class ActionModal extends React.Component {
       data,
       feefines,
       handleSubmit,
-      intl: { formatMessage },
       invalid,
       label,
       open,
@@ -211,8 +210,6 @@ class ActionModal extends React.Component {
 
     const selected = calculateSelectedAmount(accounts);
     const remaining = amount > 0 ? parseFloat(balance - amount).toFixed(2) : parseFloat(balance).toFixed(2);
-    
-
     const ownerOptions = owners.filter(o => o.owner !== 'Shared').map(o => ({ value: o.id, label: o.owner }));
 
     let options = (this.isPaymentAction(action)) ? data.filter(d => (d.ownerId === (accounts.length > 1 ? ownerId : (accounts[0] || {}).ownerId))) : data;
