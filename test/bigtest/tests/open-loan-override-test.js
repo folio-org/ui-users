@@ -9,15 +9,16 @@ import setupApplication from '../helpers/setup-application';
 import OpenLoansInteractor from '../interactors/open-loans';
 
 describe('open loans override', () => {
+  setupApplication({
+    scenarios: ['request-related-failure'],
+    permissions: {
+      'manualblocks.collection.get': true,
+      'circulation.loans.collection.get': true,
+    },
+  });
+
   describe('request related failure', () => {
     beforeEach(async function () {
-      setupApplication({
-        scenarios: ['request-related-failure'],
-        permissions: {
-          'manualblocks.collection.get': true,
-          'circulation.loans.collection.get': true,
-        },
-      });
       const loan = this.server.create('loan', { status: { name: 'Open' } });
       this.visit(`/users/${loan.userId}/loans/open?query=%20&sort=requests`);
     });
@@ -76,16 +77,19 @@ describe('open loans override', () => {
       });
     });
   });
+});
 
-  describe('multiple errors: request related failure, item is not loanable', () => {
+describe('multiple errors: request related failure, item is not loanable', () => {
+  setupApplication({
+    scenarios: ['request-related-failure-multiple-errors'],
+    permissions: {
+      'manualblocks.collection.get': true,
+      'circulation.loans.collection.get': true,
+    },
+  });
+
+  describe('visit user open loans', () => {
     beforeEach(async function () {
-      setupApplication({
-        scenarios: ['request-related-failure-multiple-errors'],
-        permissions: {
-          'manualblocks.collection.get': true,
-          'circulation.loans.collection.get': true,
-        },
-      });
       const loan = this.server.create('loan', { status: { name: 'Open' } });
       this.visit(`/users/${loan.userId}/loans/open?query=%20&sort=requests`);
     });

@@ -154,7 +154,10 @@ class Actions extends React.Component {
         }}
       />
     );
-    this.callout.sendCallout({ message });
+
+    if (this.callout) {
+      this.callout.sendCallout({ message });
+    }
   }
 
   onCloseCancellation() {

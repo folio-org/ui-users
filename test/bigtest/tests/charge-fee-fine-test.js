@@ -1,5 +1,4 @@
 import {
-  before,
   beforeEach,
   describe,
   it,
@@ -19,10 +18,7 @@ import ChargeFeeFineInteractor from '../interactors/charge-fee-fine';
 
 describe('Charge fee/fine', () => {
   const chargeForm = new ChargeFeeFineInteractor();
-
-  before(function () {
-    setupApplication();
-  });
+  setupApplication();
 
   describe('from the user detail view', () => {
     const userDetail = InstanceViewPage;
@@ -89,7 +85,7 @@ describe('Charge fee/fine', () => {
             });
 
             it('navigate to previous page', function () {
-              expect(this.location.pathname).to.equal(`/users/preview/${loan.userId}`);
+              expect(this.location.pathname).to.equal(`/users/${loan.userId}/charge`);
             });
           });
         });

@@ -11,6 +11,7 @@
 * Reset patronBlocks before refetching. Fixes UIU-1430 and UIU-1431.
 * Fix bug with wrong displaying of address type. Refs UIU-1404
 * Passing `notify` field to BE, when fee/fine is paying. Refs UIU-1413.
+* Display `Overdue fine policy` and `Lost item fee policy` on the `Loan Details` page. Refs UIU-1246.
 * Replace "Fee/Fine History: Can create, edit and remove accounts" permission with "Users: Can create, edit and remove fees/fines" one for restricting access to the accounts history. Refs UIU-1384.
 * Fix page crash when a multiple fee/fine payment is made. Refs UIU-1413.
 * Refactor open and closed loans lists to use <Dropdown /> from stripes-components
@@ -19,6 +20,12 @@
 * Add UI to mark items Declared lost. Refs UIU-1202.
 * Omit `comments`, `patronInfo` fields, when fee/fine is paying, to prevent backend error. Fixes UIU-1413.
 * Don't update state in `withRenew` when unmounted. Fixes UIU-1450.
+* Update circulation okapiInterface to version `9.0`. Part of UIU-1440.
+* Disable `autoComplete` in user's search box. Refs UIU-1426.
+* Correctly sort "Active" column. Refs UIU-1406.
+* Filter Users by Tags. Refs UIU-1448.
+* Replace deprecated babel dependencies. Refs UIU-1461, STCOR-381.
+* Fix a bug keeping fee/fine payment modals open after submission. Fixes UIU-1417.
 
 ## [2.26.0](https://github.com/folio-org/ui-users/tree/v2.26.0) (2019-12-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.3...v2.26.0)
@@ -42,6 +49,7 @@
 * Use user's id instead of a barcode when navigating to requests module. Refs UIU-1370.
 * Restore display of "invisible" permissions. Refs UIU-1372.
 * Rename "Loans: All permissions" permission to "Users: User loans view, edit, renew (all)". Refs UIU-1344.
+* Add `autoFocus` prop to `<SearchField>`. Refs UIU-1248.
 
 ## [2.25.3](https://github.com/folio-org/ui-users/tree/v2.25.3) (2019-09-26)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.2...v2.25.3)

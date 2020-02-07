@@ -18,3 +18,8 @@ export const sortTypes = {
   ASC: 'asc',
   DESC: 'desc',
 };
+
+export const statusFilter = [
+  { label: 'ui-users.filters.status.active', value: 'active' },
+  { label: 'ui-users.filters.status.inactive', value: 'inactive' }
+];

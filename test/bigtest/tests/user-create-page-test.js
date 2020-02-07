@@ -1,5 +1,4 @@
 import {
-  before,
   beforeEach,
   describe,
   it,
@@ -11,128 +10,128 @@ import UserFormPage from '../interactors/user-form-page';
 import UsersInteractor from '../interactors/users';
 
 describe('User Create Page', () => {
-  const users = new UsersInteractor();
+  const users = new UsersInteractor({ timeout: 5000 });
+  setupApplication();
 
-  before(function () {
-    setupApplication();
-  });
-
-  beforeEach(async function () {
-    this.visit('/users');
-    await users.clickCreateUserButton();
-  });
-
-  describe('visiting the create user page', () => {
-    it('should display the title in the pane header', () => {
-      expect(UserFormPage.title).to.equal('Create User');
+  describe('visit users', () => {
+    beforeEach(async function () {
+      this.visit('/users');
+      await users.clickCreateUserButton();
+      await UserFormPage.whenLoaded();
     });
 
-    it('should render a primary button', () => {
-      expect(UserFormPage.submitButton.rendersPrimary).to.be.true;
-    });
-
-    it('should render a default button', () => {
-      expect(UserFormPage.cancelButton.rendersDefault).to.be.true;
-    });
-
-    describe('clicking on cancel button', () => {
-      beforeEach(async () => {
-        await UserFormPage.cancelButton.click();
+    describe('visiting the create user page', () => {
+      it('should display the title in the pane header', () => {
+        expect(UserFormPage.title).to.equal('Create User');
       });
 
-      it('should redirect to view users page after click', () => {
-        expect(users.$root).to.exist;
-      });
-    });
-
-    describe('request preferences', () => {
-      it('should display "hold shelf" checkbox as checked', () => {
-        expect(UserFormPage.holdShelfCheckboxIsChecked).to.be.true;
+      it('should render a primary button', () => {
+        expect(UserFormPage.submitButton.rendersPrimary).to.be.true;
       });
 
-      it('should display "hold shelf" checkbox as disabled', () => {
-        expect(UserFormPage.holdShelfCheckboxIsDisabled).to.be.true;
+      it('should render a default button', () => {
+        expect(UserFormPage.cancelButton.rendersDefault).to.be.true;
       });
 
-      it('should display "delivery" checkbox as unchecked by default', () => {
-        expect(UserFormPage.deliveryCheckboxIsChecked).to.be.false;
-      });
-
-      describe('when "delivery" is checked', () => {
+      describe('clicking on cancel button', () => {
         beforeEach(async () => {
-          await UserFormPage.clickDeliveryCheckbox();
+          await UserFormPage.cancelButton.click();
         });
 
-        it('should display "Fulfillment preference" with selected "Hold shelf" option', () => {
-          expect(UserFormPage.fulfillmentPreference.value).to.equal('Hold Shelf');
+        it('should redirect to view users page after click', () => {
+          expect(users.$root).to.exist;
+        });
+      });
+
+      describe('request preferences', () => {
+        it('should display "hold shelf" checkbox as checked', () => {
+          expect(UserFormPage.holdShelfCheckboxIsChecked).to.be.true;
         });
 
-        describe('and address type "Home" is selected and default address type is selected', () => {
+        it('should display "hold shelf" checkbox as disabled', () => {
+          expect(UserFormPage.holdShelfCheckboxIsDisabled).to.be.true;
+        });
+
+        it('should display "delivery" checkbox as unchecked by default', () => {
+          expect(UserFormPage.deliveryCheckboxIsChecked).to.be.false;
+        });
+
+        describe('when "delivery" is checked', () => {
           beforeEach(async () => {
-            await UserFormPage.clickAddAddressButton();
-            await UserFormPage.firstAddressTypeField.selectAndBlur('Home');
-            await UserFormPage.defaultAddressTypeField.selectAndBlur('Home');
+            await UserFormPage.clickDeliveryCheckbox();
           });
 
-          it('should display selected default address type as "Home"', () => {
-            const HOME_ADDRESS_TYPE_VALUE = 'Type2';
-            expect(UserFormPage.defaultAddressTypeField.value).to.equal(HOME_ADDRESS_TYPE_VALUE);
-          });
-        });
-
-        describe('and selected default address type was changed', () => {
-          beforeEach(async () => {
-            await UserFormPage.clickAddAddressButton();
-            await UserFormPage.firstAddressTypeField.selectAndBlur('Home');
-            await UserFormPage.defaultAddressTypeField.selectAndBlur('Home');
-            await UserFormPage.firstAddressTypeField.selectAndBlur('Order');
+          it('should display "Fulfillment preference" with selected "Hold shelf" option', () => {
+            expect(UserFormPage.fulfillmentPreference.value).to.equal('Hold Shelf');
           });
 
-          it('should reset default address type to empty value', () => {
-            expect(UserFormPage.defaultAddressTypeField.value).to.equal('');
+          describe('and address type "Home" is selected and default address type is selected', () => {
+            beforeEach(async () => {
+              await UserFormPage.clickAddAddressButton();
+              await UserFormPage.firstAddressTypeField.selectAndBlur('Home');
+              await UserFormPage.defaultAddressTypeField.selectAndBlur('Home');
+            });
+
+            it('should display selected default address type as "Home"', () => {
+              const HOME_ADDRESS_TYPE_VALUE = 'Type2';
+              expect(UserFormPage.defaultAddressTypeField.value).to.equal(HOME_ADDRESS_TYPE_VALUE);
+            });
           });
 
-          it('should display validation message of "Default delivery address field"', () => {
-            expect(UserFormPage.defaultAddressTypeValidationMessage).to.equal('Please fill this in to continue');
-          });
-        });
+          describe('and selected default address type was changed', () => {
+            beforeEach(async () => {
+              await UserFormPage.clickAddAddressButton();
+              await UserFormPage.firstAddressTypeField.selectAndBlur('Home');
+              await UserFormPage.defaultAddressTypeField.selectAndBlur('Home');
+              await UserFormPage.firstAddressTypeField.selectAndBlur('Order');
+            });
 
-        describe('and selected default address type was deleted', () => {
-          beforeEach(async () => {
-            await UserFormPage.clickAddAddressButton();
-            await UserFormPage.clickAddAddressButton();
-            await UserFormPage.firstAddressTypeField.selectAndBlur('Home');
-            await UserFormPage.secondAddressTypeField.selectAndBlur('Order');
-            await UserFormPage.defaultAddressTypeField.selectAndBlur('Home');
-            await UserFormPage.deleteAddressType();
-          });
+            it('should reset default address type to empty value', () => {
+              expect(UserFormPage.defaultAddressTypeField.value).to.equal('');
+            });
 
-          it('should reset default address type to empty value', () => {
-            expect(UserFormPage.defaultAddressTypeField.value).to.equal('');
+            it('should display validation message of "Default delivery address field"', () => {
+              expect(UserFormPage.defaultAddressTypeValidationMessage).to.equal('Please fill this in to continue');
+            });
           });
 
-          it('should display validation message of "Default delivery address field"', () => {
-            expect(UserFormPage.defaultAddressTypeValidationMessage).to.equal('Please fill this in to continue');
-          });
-        });
+          describe('and selected default address type was deleted', () => {
+            beforeEach(async () => {
+              await UserFormPage.clickAddAddressButton();
+              await UserFormPage.clickAddAddressButton();
+              await UserFormPage.firstAddressTypeField.selectAndBlur('Home');
+              await UserFormPage.secondAddressTypeField.selectAndBlur('Order');
+              await UserFormPage.defaultAddressTypeField.selectAndBlur('Home');
+              await UserFormPage.deleteAddressType();
+            });
 
-        describe('and all address types were deleted', () => {
-          beforeEach(async () => {
-            await UserFormPage.clickAddAddressButton();
-            await UserFormPage.clickAddAddressButton();
-            await UserFormPage.firstAddressTypeField.selectAndBlur('Home');
-            await UserFormPage.secondAddressTypeField.selectAndBlur('Order');
-            await UserFormPage.defaultAddressTypeField.selectAndBlur('Order');
-            await UserFormPage.deleteAddressType();
-            await UserFormPage.deleteAddressType();
+            it('should reset default address type to empty value', () => {
+              expect(UserFormPage.defaultAddressTypeField.value).to.equal('');
+            });
+
+            it('should display validation message of "Default delivery address field"', () => {
+              expect(UserFormPage.defaultAddressTypeValidationMessage).to.equal('Please fill this in to continue');
+            });
           });
 
-          it('should reset default address type to empty value', () => {
-            expect(UserFormPage.defaultAddressTypeField.value).to.equal('');
-          });
+          describe('and all address types were deleted', () => {
+            beforeEach(async () => {
+              await UserFormPage.clickAddAddressButton();
+              await UserFormPage.clickAddAddressButton();
+              await UserFormPage.firstAddressTypeField.selectAndBlur('Home');
+              await UserFormPage.secondAddressTypeField.selectAndBlur('Order');
+              await UserFormPage.defaultAddressTypeField.selectAndBlur('Order');
+              await UserFormPage.deleteAddressType();
+              await UserFormPage.deleteAddressType();
+            });
 
-          it('should display error message under "Default address type" field', () => {
-            expect(UserFormPage.defaultAddressTypeValidationMessage).to.equal('Please, add at least one address inside "Addresses" section');
+            it('should reset default address type to empty value', () => {
+              expect(UserFormPage.defaultAddressTypeField.value).to.equal('');
+            });
+
+            it('should display error message under "Default address type" field', () => {
+              expect(UserFormPage.defaultAddressTypeValidationMessage).to.equal('Please, add at least one address inside "Addresses" section');
+            });
           });
         });
       });

@@ -18,7 +18,6 @@ import {
   Row,
   Col,
   Headline,
-  HasCommand,
   AccordionSet,
 } from '@folio/stripes/components';
 import stripesForm from '@folio/stripes/form';
@@ -209,6 +208,7 @@ class UserForm extends React.Component {
       reset: PropTypes.func.isRequired,
       GET: PropTypes.func.isRequired,
     }).isRequired,
+    match: PropTypes.object,
     pristine: PropTypes.bool,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
@@ -267,7 +267,24 @@ class UserForm extends React.Component {
   }
 
   handleCancel = () => {
-    this.props.history.goBack();
+    const {
+      match: {
+        params
+      },
+      location: {
+        search,
+      },
+      history
+    } = this.props;
+
+    const idParam = params.id || '';
+    if (idParam) {
+      // if an id param is present, it's an edit view, go back to the user detail page...
+      history.push(`/users/preview/${idParam}${search}`);
+    } else {
+      // if no id param, it's a create form, go back to the top level search view.
+      history.push(`/users/${search}`);
+    }
   }
 
   getAddFirstMenu() {
@@ -403,6 +420,7 @@ class UserForm extends React.Component {
       formData,
       change, // from redux-form...
       servicePoints,
+      onCancel,
     } = this.props;
 
     const { sections } = this.state;
@@ -414,114 +432,113 @@ class UserForm extends React.Component {
       : <FormattedMessage id="ui-users.crud.createUser" />;
 
     return (
-      <HasCommand commands={this.keyboardCommands}>
-        <form
-          data-test-form-page
-          className={css.UserFormRoot}
-          id="form-user"
-          onSubmit={handleSubmit}
-        >
-          <Paneset>
-            <Pane
-              defaultWidth="100%"
-              firstMenu={firstMenu}
-              footer={footer}
-              appIcon={<AppIcon app="users" appIconKey="users" />}
-              paneTitle={
-                <span data-test-header-title>
-                  {paneTitle}
-                </span>
-              }
-            >
-              <div className={css.UserFormContent}>
-                <Headline
-                  size="xx-large"
-                  tag="h2"
-                  data-test-header-title
-                >
-                  {fullName}
-                </Headline>
-                <Row end="xs">
-                  <Col xs>
-                    <ExpandAllButton
-                      accordionStatus={sections}
-                      onToggle={this.handleExpandAll}
+      <form
+        data-test-form-page
+        className={css.UserFormRoot}
+        id="form-user"
+        onSubmit={handleSubmit}
+      >
+        <Paneset>
+          <Pane
+            defaultWidth="100%"
+            firstMenu={firstMenu}
+            footer={footer}
+            appIcon={<AppIcon app="users" appIconKey="users" />}
+            paneTitle={
+              <span data-test-header-title>
+                {paneTitle}
+              </span>
+            }
+            onClose={onCancel}
+          >
+            <div className={css.UserFormContent}>
+              <Headline
+                size="xx-large"
+                tag="h2"
+                data-test-header-title
+              >
+                {fullName}
+              </Headline>
+              <Row end="xs">
+                <Col xs>
+                  <ExpandAllButton
+                    accordionStatus={sections}
+                    onToggle={this.handleExpandAll}
+                  />
+                </Col>
+              </Row>
+              <AccordionSet>
+                <EditUserInfo
+                  accordionId="editUserInfo"
+                  expanded={sections.editUserInfo}
+                  onToggle={this.handleSectionToggle}
+                  initialValues={initialValues}
+                  patronGroups={formData.patronGroups}
+                />
+                <EditExtendedInfo
+                  accordionId="extendedInfo"
+                  expanded={sections.extendedInfo}
+                  onToggle={this.handleSectionToggle}
+                  userId={initialValues.id}
+                  userFirstName={initialValues.personal.firstName}
+                  userEmail={initialValues.personal.email}
+                  servicePoints={servicePoints}
+                  addressTypes={formData.addressTypes}
+                />
+                <EditContactInfo
+                  accordionId="contactInfo"
+                  expanded={sections.contactInfo}
+                  onToggle={this.handleSectionToggle}
+                  addressTypes={formData.addressTypes}
+                  preferredContactTypeId={initialValues.preferredContactTypeId}
+                />
+                {initialValues.id &&
+                  <div>
+                    <EditProxy
+                      accordionId="proxyAccordion"
+                      expanded={sections.proxy}
+                      onToggle={this.handleSectionToggle}
+                      sponsors={initialValues.sponsors}
+                      proxies={initialValues.proxies}
+                      fullName={fullName}
+                      change={change}
+                      initialValues={initialValues}
+                      getWarning={getProxySponsorWarning}
                     />
-                  </Col>
-                </Row>
-                <AccordionSet>
-                  <EditUserInfo
-                    accordionId="editUserInfo"
-                    expanded={sections.editUserInfo}
-                    onToggle={this.handleSectionToggle}
-                    initialValues={initialValues}
-                    patronGroups={formData.patronGroups}
-                  />
-                  <EditExtendedInfo
-                    accordionId="extendedInfo"
-                    expanded={sections.extendedInfo}
-                    onToggle={this.handleSectionToggle}
-                    userId={initialValues.id}
-                    userFirstName={initialValues.personal.firstName}
-                    userEmail={initialValues.personal.email}
-                    servicePoints={servicePoints}
-                    addressTypes={formData.addressTypes}
-                  />
-                  <EditContactInfo
-                    accordionId="contactInfo"
-                    expanded={sections.contactInfo}
-                    onToggle={this.handleSectionToggle}
-                    addressTypes={formData.addressTypes}
-                    preferredContactTypeId={initialValues.preferredContactTypeId}
-                  />
-                  {initialValues.id &&
-                    <div>
-                      <EditProxy
-                        accordionId="proxyAccordion"
-                        expanded={sections.proxy}
-                        onToggle={this.handleSectionToggle}
-                        sponsors={initialValues.sponsors}
-                        proxies={initialValues.proxies}
-                        fullName={fullName}
-                        change={change}
-                        initialValues={initialValues}
-                        getWarning={getProxySponsorWarning}
-                      />
-                      <PermissionsAccordion
-                        filtersConfig={[
-                          permissionTypeFilterConfig,
-                          statusFilterConfig,
-                        ]}
-                        visibleColumns={[
-                          'selected',
-                          'permissionName',
-                          'type',
-                          'status',
-                        ]}
-                        accordionId="permissions"
-                        expanded={sections.permissions}
-                        onToggle={this.handleSectionToggle}
-                        headlineContent={<FormattedMessage id="ui-users.permissions.userPermissions" />}
-                        permToRead="perms.permissions.get"
-                        permToDelete="perms.permissions.item.delete"
-                        permToModify="perms.permissions.item.put"
-                        formName="userForm"
-                        permissionsField="permissions"
-                      />
-                      <EditServicePoints
-                        accordionId="servicePoints"
-                        expanded={sections.servicePoints}
-                        onToggle={this.handleSectionToggle}
-                        {...this.props}
-                      />
-                    </div>
-                  }
-                </AccordionSet>
-              </div>
-            </Pane>
-          </Paneset>
-        </form>
-      </HasCommand>
+                    <PermissionsAccordion
+                      filtersConfig={[
+                        permissionTypeFilterConfig,
+                        statusFilterConfig,
+                      ]}
+                      visibleColumns={[
+                        'selected',
+                        'permissionName',
+                        'type',
+                        'status',
+                      ]}
+                      accordionId="permissions"
+                      expanded={sections.permissions}
+                      onToggle={this.handleSectionToggle}
+                      headlineContent={<FormattedMessage id="ui-users.permissions.userPermissions" />}
+                      permToRead="perms.permissions.get"
+                      permToDelete="perms.permissions.item.delete"
+                      permToModify="perms.permissions.item.put"
+                      formName="userForm"
+                      permissionsField="permissions"
+                    />
+                    <EditServicePoints
+                      accordionId="servicePoints"
+                      expanded={sections.servicePoints}
+                      onToggle={this.handleSectionToggle}
+                      {...this.props}
+                    />
+                  </div>
+                }
+              </AccordionSet>
+            </div>
+          </Pane>
+        </Paneset>
+      </form>
     );
   }
 }
