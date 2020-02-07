@@ -25,6 +25,7 @@
 * Correctly sort "Active" column. Refs UIU-1406.
 * Filter Users by Tags. Refs UIU-1448.
 * Replace deprecated babel dependencies. Refs UIU-1461, STCOR-381.
+* Fix a bug keeping fee/fine payment modals open after submission. Fixes UIU-1417.
 
 ## [2.26.0](https://github.com/folio-org/ui-users/tree/v2.26.0) (2019-12-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.3...v2.26.0)

@@ -46,7 +46,6 @@ class UserEdit extends React.Component {
     history: PropTypes.object,
     location: PropTypes.object,
     match: PropTypes.object,
-    location: PropTypes.object,
     updateProxies: PropTypes.func,
     updateSponsors: PropTypes.func,
     updateServicePoints: PropTypes.func,
