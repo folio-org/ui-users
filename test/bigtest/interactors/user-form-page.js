@@ -80,6 +80,9 @@ import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/P
   title = text('[class*=paneTitleLabel---]');
   barcodeField = new InputFieldInteractor('#adduser_barcode');
   usernameField = new InputFieldInteractor('#adduser_username');
+  isUsernameFieldRequired = property('#adduser_username', 'required');
+  passwordField = new InputFieldInteractor('#pw');
+  isPasswordFieldRequired = property('#pw', 'required');
   expirationDate = new InputFieldInteractor('#adduser_expirationdate');
 
   feedbackError = text('[class^="feedbackError---"]');

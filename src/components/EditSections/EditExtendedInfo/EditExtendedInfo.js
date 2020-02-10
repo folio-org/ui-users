@@ -30,6 +30,10 @@ class EditExtendedInfo extends Component {
     onToggle: PropTypes.func.isRequired,
   };
 
+  state = { isCredentialFieldRequired: false };
+
+  toggleCredentialFieldRequired = (_, value) => this.setState({ isCredentialFieldRequired: !!value });
+
   buildAccordionHeader = () => {
     return (
       <Headline
@@ -51,6 +55,8 @@ class EditExtendedInfo extends Component {
       userEmail,
       addressTypes,
     } = this.props;
+
+    const { isCredentialFieldRequired } = this.state;
 
     const accordionHeader = this.buildAccordionHeader();
     const isEditForm = !!userId;
@@ -122,7 +128,9 @@ class EditExtendedInfo extends Component {
               id="adduser_username"
               component={TextField}
               fullWidth
+              required={isCredentialFieldRequired}
               validStylesEnabled
+              onChange={this.toggleCredentialFieldRequired}
             />
           </Col>
           {
@@ -134,7 +142,12 @@ class EditExtendedInfo extends Component {
                   name={userFirstName}
                 />
               )
-              : <PasswordControl />
+              : (
+                <PasswordControl
+                  isRequired={isCredentialFieldRequired}
+                  toggleRequired={this.toggleCredentialFieldRequired}
+                />
+              )
           }
           <RequestPreferencesEdit addressTypes={addressTypes} />
         </Row>
