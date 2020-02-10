@@ -103,7 +103,7 @@ class UsersRouting extends Component {
   static actionNames = ['stripesHome', 'usersSortByName'];
 
   static propTypes = {
-    stripes: /.shape({
+    stripes: PropTypes.shape({
       hasPerm: PropTypes.func.isRequired,
     }).isRequired,
     location: PropTypes.object.isRequired,
