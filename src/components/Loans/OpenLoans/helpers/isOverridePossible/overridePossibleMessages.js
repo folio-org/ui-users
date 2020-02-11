@@ -8,6 +8,10 @@ export default [
     showDueDatePicker: true,
   },
   {
+    message: 'item is Declared lost',
+    showDueDatePicker: false,
+  },
+  {
     message: 'renewal date falls outside of date ranges in fixed loan policy',
     showDueDatePicker: true,
   },
