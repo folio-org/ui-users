@@ -462,8 +462,12 @@ class AccountDetails extends React.Component {
             balance={account.remaining || 0}
             accounts={[account]}
             handleEdit={() => {
-              this.getAccountActions();
-              handleAddRecords();
+              // Neither of the following two functions exists after refactoring
+              // done for v2.26.0. This was causing an error when attempting to
+              // do a fine payment/waiver. But payment/waiving seems to work
+              // perfectly well without them. ¯\_(ツ)_/¯
+              // this.getAccountActions();
+              // handleAddRecords();
             }}
           />
 

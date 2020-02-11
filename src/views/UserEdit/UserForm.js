@@ -209,6 +209,7 @@ class UserForm extends React.Component {
       reset: PropTypes.func.isRequired,
       GET: PropTypes.func.isRequired,
     }).isRequired,
+    match: PropTypes.object,
     pristine: PropTypes.bool,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
@@ -267,7 +268,24 @@ class UserForm extends React.Component {
   }
 
   handleCancel = () => {
-    this.props.history.goBack();
+    const {
+      match: {
+        params
+      },
+      location: {
+        search,
+      },
+      history
+    } = this.props;
+
+    const idParam = params.id || '';
+    if (idParam) {
+      // if an id param is present, it's an edit view, go back to the user detail page...
+      history.push(`/users/preview/${idParam}${search}`);
+    } else {
+      // if no id param, it's a create form, go back to the top level search view.
+      history.push(`/users/${search}`);
+    }
   }
 
   getAddFirstMenu() {

@@ -220,6 +220,10 @@ class UserSearch extends React.Component {
   };
 
   renderNewRecordBtn() {
+    const {
+      location: { search }
+    } = this.props;
+
     return (
       <IfPermission perm="users.item.post,login.item.post,perms.users.item.post">
         <PaneMenu>
@@ -228,7 +232,7 @@ class UserSearch extends React.Component {
               <Button
                 id="clickable-newuser"
                 aria-label={ariaLabel}
-                to="/users/create"
+                to={`/users/create${search}`}
                 buttonStyle="primary"
                 marginBottom0
               >

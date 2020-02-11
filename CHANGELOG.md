@@ -24,6 +24,9 @@
 * Disable `autoComplete` in user's search box. Refs UIU-1426.
 * Correctly sort "Active" column. Refs UIU-1406.
 * Filter Users by Tags. Refs UIU-1448.
+* Replace deprecated babel dependencies. Refs UIU-1461, STCOR-381.
+* Fix a bug keeping fee/fine payment modals open after submission. Fixes UIU-1417.
+* Mark fields as required when filling in the username or password. Fixes UIU-1350.
 * Restore `CommandList`, `HasCommand` wrappers now that they don't leak memory. Refs UIU-1457.
 
 ## [2.26.0](https://github.com/folio-org/ui-users/tree/v2.26.0) (2019-12-05)
