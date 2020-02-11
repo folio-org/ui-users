@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { EditCustomFieldsPage } from '@folio/stripes/smart-components';
+import { EditCustomFieldsSettings } from '@folio/stripes/smart-components';
 
 class EditCustomFields extends Component {
   static propTypes = {
@@ -16,9 +16,8 @@ class EditCustomFields extends Component {
 
   render() {
     return (
-      <EditCustomFieldsPage
+      <EditCustomFieldsSettings
         backendModuleName="users"
-        appIconName="users"
         entityType="user"
         entityTypeTranslationId="ui-users.meta.title"
         redirectToView={this.redirectToView}

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { CustomFieldsSettingsPane } from '@folio/stripes/smart-components';
+import { ViewCustomFieldsSettings } from '@folio/stripes/smart-components';
 
 class CustomFieldsSettings extends Component {
   static propTypes = {
@@ -15,9 +15,8 @@ class CustomFieldsSettings extends Component {
 
   render() {
     return (
-      <CustomFieldsSettingsPane
+      <ViewCustomFieldsSettings
         backendModuleName="users"
-        appIconName="users"
         entityTypeTranslationId="ui-users.meta.title"
         redirectToEdit={this.redirectToEdit}
       />
