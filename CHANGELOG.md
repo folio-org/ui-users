@@ -28,6 +28,7 @@
 * Fix a bug keeping fee/fine payment modals open after submission. Fixes UIU-1417.
 * Mark fields as required when filling in the username or password. Fixes UIU-1350.
 * Enable override for renewal of declared lost items. Refs UIU-1208.
+* Show edit button only if user has "Can edit user profile" permission. Fixes UIU-1435.
 
 ## [2.26.0](https://github.com/folio-org/ui-users/tree/v2.26.0) (2019-12-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.3...v2.26.0)
