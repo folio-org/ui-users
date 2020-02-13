@@ -283,7 +283,7 @@ class UserDetail extends React.Component {
             )}
           </FormattedMessage>
         }
-        <IfPermission perm="users.item.put">
+        <IfPermission perm="ui-users.edit">
           <FormattedMessage id="ui-users.crud.editUser">
             {ariaLabel => (
               <IconButton
@@ -303,16 +303,18 @@ class UserDetail extends React.Component {
 
   getActionMenu = ({ onToggle }) => {
     return (
-      <Button
-        data-test-user-instance-edit-action
-        buttonStyle="dropdownItem"
-        onClick={onToggle}
-        to={this.getEditLink()}
-      >
-        <Icon icon="edit">
-          <FormattedMessage id="ui-users.edit" />
-        </Icon>
-      </Button>
+      <IfPermission perm="ui-users.edit">
+        <Button
+          data-test-user-instance-edit-action
+          buttonStyle="dropdownItem"
+          onClick={onToggle}
+          to={this.getEditLink()}
+        >
+          <Icon icon="edit">
+            <FormattedMessage id="ui-users.edit" />
+          </Icon>
+        </Button>
+      </IfPermission>
     );
   };
 
