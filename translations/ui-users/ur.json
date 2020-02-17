@@ -268,7 +268,7 @@
     "accounts.history.columns.updated": "Date updated",
     "accounts.history.columns.type": "Fee/fine type",
     "accounts.history.columns.owner": "ذمہ دارواجب الاد",
-    "accounts.history.columns.number": "Call number",
+    "accounts.history.columns.number": "کال نمبر",
     "accounts.history.columns.status": "ادائیگی کی حیثیت",
     "accounts.history.columns.due": "اخری تاریخ",
     "accounts.history.columns.returned": "اخری تاریخ",
