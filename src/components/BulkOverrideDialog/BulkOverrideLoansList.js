@@ -12,6 +12,7 @@ import {
   Icon,
   MultiColumnList,
 } from '@folio/stripes/components';
+import getEffectiveCallNumber from '@folio/stripes-util/lib/effectiveCallNumber';
 
 class BulkOverrideLoansList extends Component {
   static propTypes = {
@@ -113,7 +114,7 @@ class BulkOverrideLoansList extends Component {
           currentDueDate:  formatMessage({ id: 'ui-users.loans.columns.dueDate' }),
           requestQueue:  formatMessage({ id: 'ui-users.loans.details.requests' }),
           barcode:  formatMessage({ id: 'ui-users.information.barcode' }),
-          callNumber:  formatMessage({ id: 'ui-users.loans.details.callNumber' }),
+          callNumber:  formatMessage({ id: 'ui-users.loans.details.effectiveCallNumber' }),
           renewals:  formatMessage({ id: 'ui-users.loans.columns.renewals' }),
           loanPolicy:  formatMessage({ id: 'ui-users.loans.details.loanPolicy' }),
         }}
@@ -158,7 +159,7 @@ class BulkOverrideLoansList extends Component {
           ),
           requestQueue: loan => requestCounts[loan.itemId] || 0,
           barcode: loan => get(loan, ['item', 'barcode']),
-          callNumber: loan => get(loan, ['item', 'callNumber'], '-'),
+          callNumber: loan => getEffectiveCallNumber(loan),
           renewals: loan => get(loan, 'renewalCount', 0),
           loanPolicy: loan => loanPolicies[loan.loanPolicyId],
         }}

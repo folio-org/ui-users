@@ -28,6 +28,7 @@ import {
   NoValue,
 } from '@folio/stripes/components';
 import { IfPermission } from '@folio/stripes/core';
+import getEffectiveCallNumber from '@folio/stripes-util/lib/effectiveCallNumber';
 
 import PatronBlockModal from '../../components/PatronBlock/PatronBlockModal';
 import {
@@ -428,8 +429,8 @@ class LoanDetails extends React.Component {
               </Col>
               <Col xs={2}>
                 <KeyValue
-                  label={<FormattedMessage id="ui-users.loans.details.callNumber" />}
-                  value={get(loan, ['item', 'callNumber'], '-')}
+                  label={<FormattedMessage id="ui-users.loans.details.effectiveCallNumber" />}
+                  value={getEffectiveCallNumber(loan)}
                 />
               </Col>
               <Col xs={2}>
