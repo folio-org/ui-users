@@ -9,6 +9,7 @@ import setupApplication from '../helpers/setup-application';
 import ClosedLoansInteractor from '../interactors/closed-loans';
 import UsersInteractor from '../interactors/users';
 import LoansListingPane from '../interactors/loans-listing-pane';
+import OpenLoansInteractor from "../interactors/open-loans";
 
 function setupAnonymizationAPIResponse(server, errors) {
   server.post('/loan-anonymization/by-user/:id', { errors });
@@ -29,8 +30,19 @@ describe('Closed Loans', () => {
       user = this.server.create('user');
       const loans = this.server.createList('loan', 5, 'feesAndFines', {
         userId: user.id,
-        item: (i) => ({ ...this.item, barcode: i }),
-        status: { name: 'Closed' }
+        item: (i) => ({
+          ...this.item,
+          barcode: i,
+          callNumberComponents: {
+            prefix: 'prefix',
+            callNumber: 'callNumber',
+            suffix: 'suffix',
+          },
+          enumeration: 'enumeration',
+          chronology: 'chronology',
+          volume: 'volume',
+        }),
+        status: { name: 'Closed' },
       });
 
       setupAnonymizationAPIResponse(this.server, [{
@@ -57,6 +69,12 @@ describe('Closed Loans', () => {
     describe('loan list', () => {
       it('should be presented', () => {
         expect(ClosedLoansInteractor.list.isPresent).to.be.true;
+      });
+
+      it('loan should have effective call number', () => {
+        const callNumber = 'prefix callNumber suffix enumeration chronology volume';
+
+        expect(ClosedLoansInteractor.callNumbers(0).text).to.equal(callNumber);
       });
     });
 

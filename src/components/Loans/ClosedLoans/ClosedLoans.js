@@ -189,7 +189,7 @@ class ClosedLoans extends React.Component {
       },
       'barcode': loan => _.get(loan, ['item', 'barcode'], ''),
       'Fee/Fine': loan => this.getFeeFine(loan),
-      'callNumber': loan => effectiveCallNumber(loan),
+      'callNumber': loan => (<div data-test-list-call-numbers>{ effectiveCallNumber(loan) }</div>),
       'Contributors': (loan) => {
         const contributorsList = this.getContributorslist(loan);
         const contributorsListString = contributorsList.join(' ');

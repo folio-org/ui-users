@@ -429,6 +429,7 @@ class LoanDetails extends React.Component {
               </Col>
               <Col xs={2}>
                 <KeyValue
+                  data-test-effective-call-number
                   label={<FormattedMessage id="ui-users.loans.details.effectiveCallNumber" />}
                   value={getEffectiveCallNumber(loan)}
                 />

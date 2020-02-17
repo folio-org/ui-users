@@ -42,6 +42,7 @@ import DeclareLostDialog from './declare-lost-dialog';
   callout = new CalloutInteractor();
   list = scoped('[data-test-open-loans-list]');
   requests = collection('[data-test-list-requests]');
+  callNumbers = collection('[data-test-list-call-numbers]');
   actionDropdowns = collection('[data-test-actions-dropdown]');
   actionDropdownContainer = new Interactor('[class*=DropdownMenu---]');
   actionDropdownRequestQueue = new Interactor('[data-test-dropdown-content-request-queue]');
