@@ -9,7 +9,6 @@ import setupApplication from '../helpers/setup-application';
 import ClosedLoansInteractor from '../interactors/closed-loans';
 import UsersInteractor from '../interactors/users';
 import LoansListingPane from '../interactors/loans-listing-pane';
-import OpenLoansInteractor from "../interactors/open-loans";
 
 function setupAnonymizationAPIResponse(server, errors) {
   server.post('/loan-anonymization/by-user/:id', { errors });
