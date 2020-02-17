@@ -46,7 +46,7 @@ class OpenLoans extends React.Component {
       'requests': 90,
       'barcode': 130,
       'Fee/Fine': 100,
-      'Call number': 120,
+      'callNumber': 120,
       'Contributors': 160,
       'renewals': 70,
       'loanPolicy': 100,
