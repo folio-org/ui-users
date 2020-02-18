@@ -275,6 +275,7 @@
   "showTags": "Show Tags",
   "itemDetails": "Item details",
   "renew": "Renew",
+  "renewInProgress": "Renew in progress",
   "anonymize": "Anonymize all loans",
   "bulkActions.tooltip": "Multiple loans can be processed at the same time. Please select loans first.",
   "loanNotRenewed": "Loan not renewed",
@@ -675,7 +676,7 @@
   "anonymization.confirmation.header": "Anonymization prevented",
   "anonymization.confirmation.message": "{amount} loan(s) had associated fees/fines and could not be anonymized.",
   "addAddressError": "Please, add at least one address inside \"Addresses\" section",
-  
+
   "tags": "Tags",
   "filters.status.active": "active",
   "filters.status.inactive": "inactive"

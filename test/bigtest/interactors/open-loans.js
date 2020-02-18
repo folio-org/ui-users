@@ -4,7 +4,8 @@ import {
   collection,
   count,
   Interactor,
-  property
+  property,
+  clickable
 } from '@bigtest/interactor';
 import moment from 'moment';
 
@@ -58,6 +59,9 @@ import ClaimReturnedDialog from './claim-returned-dialog';
   claimReturnedDialog = new ClaimReturnedDialog();
   dueDateCalendarCellButton = new ButtonInteractor(`[data-test-date="${moment().format('MM/DD/YYYY')}"]`);
   rowButtons = collection('[data-test-open-loans-list] button[role="row"]', ButtonInteractor);
+
+  selectAllCheckboxes = clickable('#clickable-list-column- input[type="checkbox"]');
+  clickRenew = clickable('#renew-all');
 
   whenLoaded() {
     return this.when(() => this.list.isVisible);

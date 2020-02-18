@@ -135,11 +135,12 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
       return this.setState({ patronBlockedModal: true });
     }
 
-    const renewedLoans = await Promise.all(loans.map(async (loan) => {
+    for (const loan of loans) {
       try {
-        const renewedLoan = await this.renewItem(loan, patron, bulkRenewal);
-
-        renewSuccess.push(renewedLoan);
+        // We actually want to execute it in a sequence so turning off eslint warning
+        // https://issues.folio.org/browse/UIU-1299
+        // eslint-disable-next-line no-await-in-loop
+        renewSuccess.push(await this.renewItem(loan, patron, bulkRenewal));
       } catch (error) {
         const stringErrorMessage = get(error, 'props.values.message', '');
 
@@ -149,12 +150,12 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
           ...isOverridePossible(stringErrorMessage),
         };
       }
-    }));
+    }
 
     if (isEmpty(renewFailure) && renewSuccess.length <= 1) {
       this.showSingleRenewCallout(renewSuccess[0]);
 
-      return renewedLoans;
+      return renewSuccess;
     }
 
     this.setState({
@@ -164,7 +165,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
       bulkRenewalDialogOpen: true
     });
 
-    return renewedLoans;
+    return renewSuccess;
   };
 
   showSingleRenewCallout = (loan) => {
