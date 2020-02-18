@@ -181,8 +181,14 @@ class Actions extends React.Component {
     });
   }
 
-  newAction = (action, id, typeAction, amount, comment, balance, transaction, createAt) => {
-    const notify = this.state.notify;
+  newAction = (action, id, typeAction, amount, comment, balance, transaction, createAt, values) => {
+    let notify;
+    if (values) {
+      notify = _.isUndefined(values.notify) ? true : values.notify;
+    } else {
+      notify = this.state.notify;
+    }
+
     const newAction = {
       typeAction,
       source: `${this.props.okapi.currentUser.lastName}, ${this.props.okapi.currentUser.firstName}`,
@@ -231,7 +237,7 @@ class Actions extends React.Component {
     const type = this.props.accounts[0] || {};
     delete type.rowIndex;
     this.props.mutator.activeRecord.update({ id: type.id });
-    this.newAction({}, type.id, canceled, type.amount, this.assembleTagInfo(values), 0, 0, type.feeFineOwner);
+    this.newAction({}, type.id, canceled, type.amount, this.assembleTagInfo(values), 0, 0, type.feeFineOwner, values);
     this.editAccount(type, canceled, 'Closed', 0.00)
       .then(() => this.props.handleEdit(1))
       .then(() => this.showCalloutMessage(type))
@@ -509,6 +515,7 @@ class Actions extends React.Component {
           )}
         </FormattedMessage>
         <CancellationModal
+          form="error-modal"
           open={actions.cancellation}
           onClose={this.onCloseCancellation}
           user={this.props.user}
