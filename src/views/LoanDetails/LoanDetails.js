@@ -383,7 +383,7 @@ class LoanDetails extends React.Component {
                 </IfPermission>
                 <IfPermission perm="ui-users.loans.edit">
                   <Button
-                    disabled={buttonDisabled}
+                    disabled={buttonDisabled || isDeclaredLostItem}
                     buttonStyle="primary"
                     onClick={this.showChangeDueDateDialog}
                   >
