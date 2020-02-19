@@ -28,9 +28,11 @@
 * Fix a bug keeping fee/fine payment modals open after submission. Fixes UIU-1417.
 * Mark fields as required when filling in the username or password. Fixes UIU-1350.
 * Enable override for renewal of declared lost items. Refs UIU-1208.
+* Add more granular call number fields to loans exports. Refs. UIU-1358.
 * Show edit button only if user has "Can edit user profile" permission. Fixes UIU-1435.
 * Send `Notify Patron` checkbox value to backend in the Confirm fee/fine cancellation modal. Refs UIU-1483. 
 * Add UI to mark items Claim returned. Refs UIU-1213.
+* Execute loan renew in sequence. Fixes UIU-1299.
 * Display `effective call number prefix`, `call number`, `call number suffix`, `enumeration`, `chronology`, `volume` in loans contexts. Refs UIU-1391.
 
 ## [2.26.0](https://github.com/folio-org/ui-users/tree/v2.26.0) (2019-12-05)
