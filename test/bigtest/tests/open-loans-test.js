@@ -77,7 +77,7 @@ describe('Open Loans', () => {
 
         describe('Call number', () => {
           it('loan should have effective call number', () => {
-            const callNumber = 'prefix callNumber suffix enumeration chronology volume';
+            const callNumber = 'prefix callNumber suffix volume enumeration chronology';
 
             expect(OpenLoansInteractor.callNumbers(0).text).to.equal(callNumber);
           });

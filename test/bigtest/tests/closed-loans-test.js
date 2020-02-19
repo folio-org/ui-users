@@ -71,7 +71,7 @@ describe('Closed Loans', () => {
       });
 
       it('loan should have effective call number', () => {
-        const callNumber = 'prefix callNumber suffix enumeration chronology volume';
+        const callNumber = 'prefix callNumber suffix volume enumeration chronology';
 
         expect(ClosedLoansInteractor.callNumbers(0).text).to.equal(callNumber);
       });

@@ -63,7 +63,7 @@ describe('loans actions history', () => {
       });
 
       it('loan call number should display the string', () => {
-        const callNumber = 'prefix callNumber suffix enumeration chronology volume';
+        const callNumber = 'prefix callNumber suffix volume enumeration chronology';
 
         expect(LoanActionsHistory.effectiveCallNumber.text).to.equal(callNumber);
       });
