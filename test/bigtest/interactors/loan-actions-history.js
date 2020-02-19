@@ -11,6 +11,7 @@ import KeyValue from './KeyValue';
 @interactor class LoanActionsHistory {
   static defaultScope = '[data-test-loan-actions-history]';
 
+  claimedReturnedDate = scoped('[data-test-loan-claimed-returned] div', KeyValue);
   requests = scoped('[data-test-loan-actions-history-requests] div', KeyValue);
   lostDate = scoped('[data-test-loan-actions-history-lost] div', KeyValue);
   itemStatus = scoped('[data-test-loan-actions-history-item-status] div', KeyValue);
@@ -22,6 +23,8 @@ import KeyValue from './KeyValue';
   closeButton = scoped('button[icon=times]', ButtonInteractor);
   declareLostButton = scoped('[data-test-declare-lost-button]', ButtonInteractor);
   isDeclareLostButtonDisabled = property('[data-test-declare-lost-button]', 'disabled');
+  claimReturnedButton = scoped('[data-test-claim-returned-button]', ButtonInteractor);
+  isClaimReturnedButtonDisabled = property('[data-test-claim-returned-button]', 'disabled');
 
   whenLoaded() {
     return this.when(() => this.isPresent).timeout(5000);

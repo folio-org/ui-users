@@ -36,6 +36,7 @@
   "data.loanActionMap.renewedThroughOverride": "Renewed through override",
   "data.loanActionMap.checkedOutThroughOverride": "Checked out through override",
   "data.loanActionMap.declaredLost": "Declared lost",
+  "data.loanActionMap.claimedReturned": "Claimed returned",
 
   "action": "Action",
   "dueDate": "Due date",
@@ -67,6 +68,9 @@
   "loans.declareLostDialogBody": "<strong>{title} {materialType}</strong> (Barcode: {barcode}) will be <strong>declared lost</strong>",
   "loans.confirmLostState": "Confirm lost state",
   "loans.declareLost.additionalInfoPlaceholder": "Enter more information about the lost item (required)",
+  "loans.claimReturned": "Claim returned",
+  "loans.claimReturnedDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be <strong>claimed returned</strong>",
+  "loans.confirmClaimReturned": "Confirm claim returned",
   "loans.newFeeFine": "New fee/fine",
   "loans.feeFineDetails": "Fee/fine details",
 
