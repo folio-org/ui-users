@@ -30,6 +30,7 @@
 * Enable override for renewal of declared lost items. Refs UIU-1208.
 * Show edit button only if user has "Can edit user profile" permission. Fixes UIU-1435.
 * Send `Notify Patron` checkbox value to backend in the Confirm fee/fine cancellation modal. Refs UIU-1483. 
+* Add UI to mark items Claim returned. Refs UIU-1213.
 
 ## [2.26.0](https://github.com/folio-org/ui-users/tree/v2.26.0) (2019-12-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.3...v2.26.0)
