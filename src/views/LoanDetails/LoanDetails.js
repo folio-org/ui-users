@@ -39,6 +39,7 @@ import {
 import {
   withRenew,
   withDeclareLost,
+  withClaimReturned,
 } from '../../components/Wrappers';
 import loanActionMap from '../../components/data/static/loanActionMap';
 import LoanProxyDetails from './LoanProxyDetails';
@@ -72,6 +73,7 @@ class LoanDetails extends React.Component {
     requestCounts: PropTypes.object,
     renew: PropTypes.func,
     declareLost: PropTypes.func,
+    claimReturned: PropTypes.func,
     patronBlocks: PropTypes.arrayOf(PropTypes.object),
     intl: intlShape.isRequired,
     match: PropTypes.object.isRequired,
@@ -287,6 +289,7 @@ class LoanDetails extends React.Component {
       loanPolicies,
       requestCounts,
       declareLost,
+      claimReturned,
     } = this.props;
 
     const {
@@ -332,6 +335,7 @@ class LoanDetails extends React.Component {
     const overduePolicyName = get(loan, ['overdueFinePolicy', 'name'], '-');
     const lostItemPolicyName = get(loan, ['lostItemPolicy', 'name'], '-');
     const itemStatus = get(loan, ['item', 'status', 'name'], '-');
+    const claimedReturnedDate = itemStatus === 'Claimed returned' && loan.claimedReturnedDate;
     const isDeclaredLostItem = itemStatus === 'Declared lost';
     let lostDate;
     const declaredLostActions = loanActionsWithUser.filter(currentAction => get(currentAction, ['action'], '') === 'declaredLost');
@@ -382,6 +386,14 @@ class LoanDetails extends React.Component {
                     <FormattedMessage id="ui-users.renew" />
                   </Button>
                 </IfPermission>
+                <Button
+                  data-test-claim-returned-button
+                  disabled={buttonDisabled || itemStatus === 'Claimed returned'}
+                  buttonStyle="primary"
+                  onClick={() => claimReturned(loan)}
+                >
+                  <FormattedMessage id="ui-users.loans.claimReturned" />
+                </Button>
                 <IfPermission perm="ui-users.loans.edit">
                   <Button
                     disabled={buttonDisabled}
@@ -475,10 +487,16 @@ class LoanDetails extends React.Component {
                   value={get(loan, ['renewalCount'], '-')}
                 />
               </Col>
-              <Col xs={2}>
+              <Col
+                data-test-loan-claimed-returned
+                xs={2}
+              >
                 <KeyValue
                   label={<FormattedMessage id="ui-users.loans.details.claimedReturned" />}
-                  value="TODO"
+                  value={claimedReturnedDate ?
+                    (<FormattedTime value={claimedReturnedDate} day="numeric" month="numeric" year="numeric" />) :
+                    (<NoValue />)
+                  }
                 />
               </Col>
               <Col xs={2}>
@@ -579,4 +597,5 @@ export default compose(
   injectIntl,
   withRenew,
   withDeclareLost,
+  withClaimReturned,
 )(LoanDetails);

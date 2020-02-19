@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router-dom';
-import { get } from 'lodash';
 
 import {
   Button,
@@ -57,7 +56,7 @@ class ActionsDropdown extends React.Component {
           <Button
             buttonStyle="dropdownItem"
             data-test-dropdown-content-renew-button
-            onClick={(e) => {
+            onClick={e => {
               handleOptionsChange({ loan, action: 'renew' });
               onToggle(e);
             }}
@@ -65,11 +64,23 @@ class ActionsDropdown extends React.Component {
             <FormattedMessage id="ui-users.renew" />
           </Button>
         </IfPermission>
+        { loan?.item?.status?.name !== 'Claimed returned' &&
+          <Button
+            buttonStyle="dropdownItem"
+            data-test-dropdown-content-claim-returned-button
+            onClick={e => {
+              handleOptionsChange({ loan, action:'claimReturned' });
+              onToggle(e);
+            }}
+          >
+            <FormattedMessage id="ui-users.loans.claimReturned" />
+          </Button>
+        }
         <IfPermission perm="ui-users.loans.edit">
           <Button
             buttonStyle="dropdownItem"
             data-test-dropdown-content-change-due-date-button
-            onClick={(e) => {
+            onClick={e => {
               handleOptionsChange({ loan, action:'changeDueDate' });
               onToggle(e);
             }}
@@ -77,11 +88,11 @@ class ActionsDropdown extends React.Component {
             <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />
           </Button>
         </IfPermission>
-        { get(loan, ['item', 'status', 'name']) !== 'Declared lost' &&
+        { loan?.item?.status?.name !== 'Declared lost' &&
           <Button
             buttonStyle="dropdownItem"
             data-test-dropdown-content-declare-lost-button
-            onClick={(e) => {
+            onClick={e => {
               handleOptionsChange({ loan, action:'declareLost' });
               onToggle(e);
             }}
@@ -117,7 +128,7 @@ class ActionsDropdown extends React.Component {
           <Button
             buttonStyle="dropdownItem"
             data-test-dropdown-content-request-queue
-            to={getOpenRequestsPath(get(loan, ['item', 'barcode']))}
+            to={getOpenRequestsPath(loan?.item?.barcode)}
           >
             <FormattedMessage id="ui-users.loans.details.requestQueue" />
           </Button>

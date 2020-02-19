@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
 import {
   isEmpty,
   isArray,
   omit,
   size,
-  get,
 } from 'lodash';
 
 import { stripesShape } from '@folio/stripes/core';
@@ -14,6 +14,7 @@ import { nav } from '../../util';
 import {
   withRenew,
   withDeclareLost,
+  withClaimReturned,
 } from '../../Wrappers';
 import TableModel from './components/OpenLoansWithStaticData';
 
@@ -52,6 +53,7 @@ class OpenLoansControl extends React.Component {
     patronBlocks: PropTypes.arrayOf(PropTypes.object).isRequired,
     renew: PropTypes.func.isRequired,
     declareLost: PropTypes.func.isRequired,
+    claimReturned: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -107,7 +109,7 @@ class OpenLoansControl extends React.Component {
     this.permissions = { allRequests: 'ui-users.requests.all' };
   }
 
-  toggleAll = (e) => {
+  toggleAll = e => {
     const { loans } = this.props;
     const checkedLoans = e.target.checked
       ? loans.reduce((memo, loan) => Object.assign(memo, { [loan.id]: loan }), {})
@@ -119,13 +121,13 @@ class OpenLoansControl extends React.Component {
     }));
   };
 
-  getLoanPolicy = (policyId) => {
+  getLoanPolicy = policyId => {
     const { loanPolicies } = this.props;
 
     return loanPolicies[policyId];
   };
 
-  isLoanChecked = (id) => {
+  isLoanChecked = id => {
     const { checkedLoans } = this.state;
 
     return (id in checkedLoans);
@@ -145,7 +147,7 @@ class OpenLoansControl extends React.Component {
     this.setState({ checkedLoans, allChecked });
   };
 
-  toggleColumn = (e) => {
+  toggleColumn = e => {
     this.setState(({ visibleColumns }) => ({
       visibleColumns: visibleColumns.map(column => {
         if (column.title === e) {
@@ -205,7 +207,7 @@ class OpenLoansControl extends React.Component {
     }
   };
 
-  renew = (loan) => {
+  renew = loan => {
     const {
       patronBlocks,
       renew,
@@ -227,7 +229,9 @@ class OpenLoansControl extends React.Component {
     });
   };
 
-  declareLost = loan => { this.props.declareLost(loan); };
+  declareLost = loan => this.props.declareLost(loan);
+
+  claimReturned = loan => this.props.claimReturned(loan);
 
   feefineDetails = (loan, e) => {
     const {
@@ -235,7 +239,7 @@ class OpenLoansControl extends React.Component {
       history,
       match: { params }
     } = this.props;
-    const accounts = get(resources, ['loanAccount', 'records'], []);
+    const accounts = resources?.loanAccount?.records || [];
     const accountsLoan = accounts.filter(a => a.loanId === loan.id) || [];
 
     if (accountsLoan.length === 1) {
@@ -253,9 +257,9 @@ class OpenLoansControl extends React.Component {
     }
   };
 
-  feeFineCount = (loan) => {
+  feeFineCount = loan => {
     const { resources } = this.props;
-    const accounts = get(resources, ['loanAccount', 'records'], []);
+    const accounts = resources?.loanAccount?.records || [];
     const accountsLoan = accounts.filter(a => a.loanId === loan.id) || [];
     return accountsLoan.length;
   };
@@ -343,4 +347,8 @@ class OpenLoansControl extends React.Component {
   }
 }
 
-export default withDeclareLost(withRenew(OpenLoansControl));
+export default compose(
+  withRenew,
+  withDeclareLost,
+  withClaimReturned,
+)(OpenLoansControl);
