@@ -84,7 +84,6 @@ class LoanDetails extends React.Component {
     super(props);
     this.nav = null;
     this.connectedChangeDueDateDialog = props.stripes.connect(ChangeDueDateDialog);
-    this.renew = this.renew.bind(this);
     this.getContributorslist = this.getContributorslist.bind(this);
     this.showContributors = this.showContributors.bind(this);
     this.hideNonRenewedLoansModal = this.hideNonRenewedLoansModal.bind(this);
@@ -127,7 +126,7 @@ class LoanDetails extends React.Component {
     this.setState({ nonRenewedLoansModalOpen: false });
   }
 
-  renew() {
+  renew = async () => {
     const {
       loan,
       user,
@@ -141,8 +140,8 @@ class LoanDetails extends React.Component {
 
     if (!isEmpty(countRenew)) return this.setState({ patronBlockedModal: true });
 
-    return renew([loan], user)
-      .then(renewals.replace({ ts: new Date().getTime() }));
+    await renew([loan], user);
+    return renewals.replace({ ts: new Date().getTime() });
   }
 
   getFeeFine() {
