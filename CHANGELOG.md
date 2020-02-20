@@ -33,6 +33,7 @@
 * Send `Notify Patron` checkbox value to backend in the Confirm fee/fine cancellation modal. Refs UIU-1483. 
 * Add UI to mark items Claim returned. Refs UIU-1213.
 * Execute loan renew in sequence. Fixes UIU-1299.
+* Fix active/inactive state for Save button. Fixes UIU-1194.
 * Display `effective call number prefix`, `call number`, `call number suffix`, `enumeration`, `chronology`, `volume` in loans contexts. Refs UIU-1347, UIU-1391.
 
 ## [2.26.0](https://github.com/folio-org/ui-users/tree/v2.26.0) (2019-12-05)
