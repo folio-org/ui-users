@@ -36,7 +36,19 @@ describe('Open Loans', () => {
 
   describe('visit open loans', () => {
     beforeEach(async function () {
-      const loan = this.server.create('loan', { status: { name: 'Open' } });
+      const loan = this.server.create('loan', {
+        status: { name: 'Open' },
+        item: {
+          callNumberComponents: {
+            prefix: 'prefix',
+            callNumber: 'callNumber',
+            suffix: 'suffix',
+          },
+          enumeration: 'enumeration',
+          chronology: 'chronology',
+          volume: 'volume',
+        },
+      });
       userId = loan.userId;
 
       this.server.createList('request', requestsAmount, { itemId: loan.itemId });
@@ -60,6 +72,14 @@ describe('Open Loans', () => {
         describe('requests', () => {
           it('loan should have requests', () => {
             expect(OpenLoansInteractor.requests(0).text).to.equal(requestsAmount.toString());
+          });
+        });
+
+        describe('Call number', () => {
+          it('loan should have effective call number', () => {
+            const callNumber = 'prefix callNumber suffix volume enumeration chronology';
+
+            expect(OpenLoansInteractor.callNumbers(0).text).to.equal(callNumber);
           });
         });
       });

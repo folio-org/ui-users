@@ -22,6 +22,7 @@ import {
   IntlConsumer,
   stripesShape,
 } from '@folio/stripes/core';
+import { effectiveCallNumber } from '@folio/stripes-util';
 
 import {
   calculateSortParams,
@@ -63,7 +64,8 @@ class ClosedLoans extends React.Component {
     this.getFeeFine = this.getFeeFine.bind(this);
     this.anonymizeLoans = this.anonymizeLoans.bind(this);
     const { intl } = props;
-    this.headers = ['action', 'dueDate', 'loanDate', 'returnDate', 'systemReturnDate', 'item.barcode', 'item.callNumber', 'item.contributors',
+    this.headers = ['action', 'dueDate', 'loanDate', 'returnDate', 'systemReturnDate', 'item.barcode', 'item.callNumberComponents.prefix',
+      'item.callNumberComponents.callNumber', 'item.callNumberComponents.suffix', 'item.enumeration', 'item.volume', 'item.contributors',
       'item.holdingsRecordId', 'item.instanceId', 'item.status.name', 'item.title', 'item.materialType.name',
       'item.location.name', 'metaData.createdByUserId', 'metadata.updatedDate', 'metadata.updatedByUserId', 'loanPolicyId'];
 
@@ -83,7 +85,7 @@ class ClosedLoans extends React.Component {
       'dueDate': intl.formatMessage({ id: 'ui-users.loans.columns.dueDate' }),
       'returnDate': intl.formatMessage({ id: 'ui-users.loans.columns.returnDate' }),
       'renewals': intl.formatMessage({ id: 'ui-users.loans.columns.renewals' }),
-      'Call Number': intl.formatMessage({ id: 'ui-users.loans.details.callNumber' }),
+      'callNumber': intl.formatMessage({ id: 'ui-users.loans.details.effectiveCallNumber' }),
       'Contributors': intl.formatMessage({ id: 'ui-users.loans.columns.contributors' }),
       'checkinServicePoint': intl.formatMessage({ id: 'ui-users.loans.details.checkinServicePoint' }),
     };
@@ -93,7 +95,7 @@ class ClosedLoans extends React.Component {
       [this.columnMapping.barcode]: loan => _.get(loan, ['item', 'barcode']),
       [this.columnMapping['Fee/Fine']]: loan => this.getFeeFine(loan),
       [this.columnMapping.loanDate]: loan => loan.loanDate,
-      [this.columnMapping['Call Number']]: loan => _.get(loan, ['item', 'callNumber']),
+      [this.columnMapping.callNumber]: loan => effectiveCallNumber(loan),
       [this.columnMapping.Contributors]: loan => {
         const contributorsList = this.getContributorslist(loan);
         const contributorsListString = contributorsList.join(' ');
@@ -112,7 +114,7 @@ class ClosedLoans extends React.Component {
         this.columnMapping['Fee/Fine'],
         this.columnMapping.loanDate,
         this.columnMapping.dueDate,
-        this.columnMapping['Call Number'],
+        this.columnMapping.callNumber,
         this.columnMapping.Contributors,
         this.columnMapping.renewals,
         this.columnMapping.renewals,
@@ -188,7 +190,7 @@ class ClosedLoans extends React.Component {
       },
       'barcode': loan => _.get(loan, ['item', 'barcode'], ''),
       'Fee/Fine': loan => this.getFeeFine(loan),
-      'Call Number': loan => _.get(loan, ['item', 'callNumber'], '-'),
+      'callNumber': loan => (<div data-test-list-call-numbers>{effectiveCallNumber(loan)}</div>),
       'Contributors': (loan) => {
         const contributorsList = this.getContributorslist(loan);
         const contributorsListString = contributorsList.join(' ');
@@ -381,7 +383,7 @@ class ClosedLoans extends React.Component {
       loans,
     } = this.props;
 
-    const visibleColumns = ['title', 'dueDate', 'barcode', 'Fee/Fine', 'Call Number', 'Contributors', 'renewals', 'loanDate', 'returnDate', 'checkinServicePoint', ' '];
+    const visibleColumns = ['title', 'dueDate', 'barcode', 'Fee/Fine', 'callNumber', 'Contributors', 'renewals', 'loanDate', 'returnDate', 'checkinServicePoint', ' '];
     const anonymizeString = <FormattedMessage id="ui-users.anonymize" />;
     const loansSorted = _.orderBy(loans,
       [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
@@ -432,7 +434,7 @@ class ClosedLoans extends React.Component {
           id="list-loanshistory"
           fullWidth
           formatter={this.getLoansFormatter()}
-          columnWidths={{ 'title': 200, 'dueDate': 150, 'barcode': 140, 'Fee/Fine': 100, 'Call Number': 110, 'Contributors': 170, 'renewals': 90, 'loanDate': 150, 'returnDate': 150, 'checkinServicePoint': 150, ' ': 35 }}
+          columnWidths={{ 'title': 200, 'dueDate': 150, 'barcode': 140, 'Fee/Fine': 100, 'callNumber': 110, 'Contributors': 170, 'renewals': 90, 'loanDate': 150, 'returnDate': 150, 'checkinServicePoint': 150, ' ': 35 }}
           visibleColumns={visibleColumns}
           columnMapping={this.columnMapping}
           onHeaderClick={this.onSort}

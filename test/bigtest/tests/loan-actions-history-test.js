@@ -33,6 +33,16 @@ describe('loans actions history', () => {
         lostItemPolicy: {
           'name': 'One Hour2'
         },
+        item: {
+          callNumberComponents: {
+            prefix: 'prefix',
+            callNumber: 'callNumber',
+            suffix: 'suffix',
+          },
+          enumeration: 'enumeration',
+          chronology: 'chronology',
+          volume: 'volume',
+        },
       });
 
       this.server.createList('loanaction', 5, { loan: { ...openLoan.attrs } });
@@ -50,6 +60,12 @@ describe('loans actions history', () => {
 
       it('having loan without fees/fines incurred should display the "-"', () => {
         expect(LoanActionsHistory.feeFines.text).to.equal('-');
+      });
+
+      it('loan call number should display the string', () => {
+        const callNumber = 'prefix callNumber suffix volume enumeration chronology';
+
+        expect(LoanActionsHistory.effectiveCallNumber.text).to.equal(callNumber);
       });
 
       it('should display close button', () => {

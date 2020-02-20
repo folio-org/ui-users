@@ -28,6 +28,7 @@ import {
   NoValue,
 } from '@folio/stripes/components';
 import { IfPermission } from '@folio/stripes/core';
+import { effectiveCallNumber } from '@folio/stripes-util';
 
 import PatronBlockModal from '../../components/PatronBlock/PatronBlockModal';
 import {
@@ -38,6 +39,7 @@ import {
 import {
   withRenew,
   withDeclareLost,
+  withClaimReturned,
 } from '../../components/Wrappers';
 import loanActionMap from '../../components/data/static/loanActionMap';
 import LoanProxyDetails from './LoanProxyDetails';
@@ -71,6 +73,7 @@ class LoanDetails extends React.Component {
     requestCounts: PropTypes.object,
     renew: PropTypes.func,
     declareLost: PropTypes.func,
+    claimReturned: PropTypes.func,
     patronBlocks: PropTypes.arrayOf(PropTypes.object),
     intl: intlShape.isRequired,
     match: PropTypes.object.isRequired,
@@ -82,7 +85,6 @@ class LoanDetails extends React.Component {
     super(props);
     this.nav = null;
     this.connectedChangeDueDateDialog = props.stripes.connect(ChangeDueDateDialog);
-    this.renew = this.renew.bind(this);
     this.getContributorslist = this.getContributorslist.bind(this);
     this.showContributors = this.showContributors.bind(this);
     this.hideNonRenewedLoansModal = this.hideNonRenewedLoansModal.bind(this);
@@ -125,7 +127,7 @@ class LoanDetails extends React.Component {
     this.setState({ nonRenewedLoansModalOpen: false });
   }
 
-  renew() {
+  renew = async () => {
     const {
       loan,
       user,
@@ -139,8 +141,8 @@ class LoanDetails extends React.Component {
 
     if (!isEmpty(countRenew)) return this.setState({ patronBlockedModal: true });
 
-    return renew([loan], user)
-      .then(renewals.replace({ ts: new Date().getTime() }));
+    await renew([loan], user);
+    return renewals.replace({ ts: new Date().getTime() });
   }
 
   getFeeFine() {
@@ -286,6 +288,7 @@ class LoanDetails extends React.Component {
       loanPolicies,
       requestCounts,
       declareLost,
+      claimReturned,
     } = this.props;
 
     const {
@@ -331,6 +334,7 @@ class LoanDetails extends React.Component {
     const overduePolicyName = get(loan, ['overdueFinePolicy', 'name'], '-');
     const lostItemPolicyName = get(loan, ['lostItemPolicy', 'name'], '-');
     const itemStatus = get(loan, ['item', 'status', 'name'], '-');
+    const claimedReturnedDate = itemStatus === 'Claimed returned' && loan.claimedReturnedDate;
     const isDeclaredLostItem = itemStatus === 'Declared lost';
     let lostDate;
     const declaredLostActions = loanActionsWithUser.filter(currentAction => get(currentAction, ['action'], '') === 'declaredLost');
@@ -381,6 +385,14 @@ class LoanDetails extends React.Component {
                     <FormattedMessage id="ui-users.renew" />
                   </Button>
                 </IfPermission>
+                <Button
+                  data-test-claim-returned-button
+                  disabled={buttonDisabled || itemStatus === 'Claimed returned'}
+                  buttonStyle="primary"
+                  onClick={() => claimReturned(loan)}
+                >
+                  <FormattedMessage id="ui-users.loans.claimReturned" />
+                </Button>
                 <IfPermission perm="ui-users.loans.edit">
                   <Button
                     disabled={buttonDisabled || isDeclaredLostItem}
@@ -428,8 +440,9 @@ class LoanDetails extends React.Component {
               </Col>
               <Col xs={2}>
                 <KeyValue
-                  label={<FormattedMessage id="ui-users.loans.details.callNumber" />}
-                  value={get(loan, ['item', 'callNumber'], '-')}
+                  data-test-effective-call-number
+                  label={<FormattedMessage id="ui-users.loans.details.effectiveCallNumber" />}
+                  value={effectiveCallNumber(loan)}
                 />
               </Col>
               <Col xs={2}>
@@ -473,10 +486,16 @@ class LoanDetails extends React.Component {
                   value={get(loan, ['renewalCount'], '-')}
                 />
               </Col>
-              <Col xs={2}>
+              <Col
+                data-test-loan-claimed-returned
+                xs={2}
+              >
                 <KeyValue
                   label={<FormattedMessage id="ui-users.loans.details.claimedReturned" />}
-                  value="TODO"
+                  value={claimedReturnedDate ?
+                    (<FormattedTime value={claimedReturnedDate} day="numeric" month="numeric" year="numeric" />) :
+                    (<NoValue />)
+                  }
                 />
               </Col>
               <Col xs={2}>
@@ -577,4 +596,5 @@ export default compose(
   injectIntl,
   withRenew,
   withDeclareLost,
+  withClaimReturned,
 )(LoanDetails);

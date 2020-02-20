@@ -4,7 +4,8 @@ import {
   collection,
   count,
   Interactor,
-  property
+  property,
+  clickable
 } from '@bigtest/interactor';
 import moment from 'moment';
 
@@ -12,17 +13,22 @@ import ButtonInteractor from '@folio/stripes-components/lib/Button/tests/interac
 import CalloutInteractor from '@folio/stripes-components/lib/Callout/tests/interactor'; // eslint-disable-line
 
 import DeclareLostDialog from './declare-lost-dialog';
+import ClaimReturnedDialog from './claim-returned-dialog';
 
 @interactor class BulkOverrideModal {
   static defaultScope = '#bulk-override-modal';
 
-  dueDatePicker = scoped('[data-test-due-date-picker]')
+  dueDatePicker = scoped('[data-test-due-date-picker]');
+  callNumbers = collection('[data-test-bulk-override-call-numbers]');
+  columnHeaders = collection('div[role="columnheader"]');
 }
 
 @interactor class BulkRenewalModal {
   static defaultScope = '#bulk-renewal-modal';
 
-  overrideButton = scoped('[data-test-override-button]')
+  overrideButton = scoped('[data-test-override-button]');
+  callNumbers = collection('[data-test-bulk-renew-call-numbers]');
+  columnHeaders = collection('div[role="columnheader"]');
 }
 
 @interactor class ChangeDueDateOverlay {
@@ -42,19 +48,25 @@ import DeclareLostDialog from './declare-lost-dialog';
   callout = new CalloutInteractor();
   list = scoped('[data-test-open-loans-list]');
   requests = collection('[data-test-list-requests]');
+  callNumbers = collection('[data-test-list-call-numbers]');
   actionDropdowns = collection('[data-test-actions-dropdown]');
   actionDropdownContainer = new Interactor('[class*=DropdownMenu---]');
   actionDropdownRequestQueue = new Interactor('[data-test-dropdown-content-request-queue]');
   actionDropdownRenewButton = new Interactor('[data-test-dropdown-content-renew-button]');
   actionDropdownChangeDueDateButton = new Interactor('[data-test-dropdown-content-change-due-date-button]');
   actionDropdownDeclareLostButton = new Interactor('[data-test-dropdown-content-declare-lost-button]');
+  actionDropdownClaimReturnedButton = new Interactor('[data-test-dropdown-content-claim-returned-button]');
   requestsCount = count('[data-test-list-requests]');
   bulkRenewalModal = new BulkRenewalModal();
   bulkOverrideModal = new BulkOverrideModal();
   changeDueDateOverlay = new ChangeDueDateOverlay();
   declareLostDialog = new DeclareLostDialog();
+  claimReturnedDialog = new ClaimReturnedDialog();
   dueDateCalendarCellButton = new ButtonInteractor(`[data-test-date="${moment().format('MM/DD/YYYY')}"]`);
   rowButtons = collection('[data-test-open-loans-list] button[role="row"]', ButtonInteractor);
+
+  selectAllCheckboxes = clickable('#clickable-list-column- input[type="checkbox"]');
+  clickRenew = clickable('#renew-all');
 
   whenLoaded() {
     return this.when(() => this.list.isVisible);

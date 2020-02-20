@@ -5,6 +5,8 @@ import {
   FormattedDate,
 } from 'react-intl';
 
+import { effectiveCallNumber } from '@folio/stripes-util';
+
 import ActionsDropdown from '../components/ActionsDropdown/ActionsDropdown';
 import ContributorsView from '../components/ContributorsView/ContributorsView';
 
@@ -78,10 +80,9 @@ export default function getListDataFormatter(
       sorter:  loan => requestCounts[loan.itemId] || 0,
     },
     'callNumber': {
-      key:'Call number',
-      view: formatMessage({ id: 'ui-users.loans.details.callNumber' }),
-      formatter: loan => get(loan, ['item', 'callNumber'], '-'),
-      sorter: loan => get(loan, ['item', 'callNumber']),
+      key:'callNumber',
+      view: formatMessage({ id: 'ui-users.loans.details.effectiveCallNumber' }),
+      formatter: loan => (<div data-test-list-call-numbers>{effectiveCallNumber(loan)}</div>),
     },
     'loanPolicy': {
       key:'loanPolicy',

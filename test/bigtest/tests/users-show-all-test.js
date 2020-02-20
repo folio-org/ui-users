@@ -44,6 +44,27 @@ describe('Users', () => {
       expect(usersInteractor.instances().length).to.be.equal(usersAmount);
     });
 
+    describe('fill search field', function () {
+      beforeEach(async function () {
+        await usersInteractor.searchField.fill('test');
+        await usersInteractor.searchButton.click();
+      });
+
+      it('should contain test value in query param', function () {
+        expect(this.location.search).to.contain('&query=test');
+      });
+
+      describe('empty search control', function () {
+        beforeEach(async function () {
+          await usersInteractor.searchField.fill('');
+        });
+
+        it('should not contain query param in query string', function () {
+          expect(this.location.search).to.not.contain('&query=test');
+        });
+      });
+    });
+
     describe('click clear status filter', () => {
       beforeEach(async function () {
         await usersInteractor.clearStatusFilter();

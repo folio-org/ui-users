@@ -16,6 +16,8 @@ import MultiColumnListInteractor from '@folio/stripes-components/lib/MultiColumn
   anonymizationConfirmButton = new ButtonInteractor('#anonymization-fees-fines-modal-footer button');
   list = scoped('#list-loanshistory', MultiColumnListInteractor);
   rowButtons = collection('[data-test-closed-loans] button[role="row"]', ButtonInteractor);
+  callNumbers = collection('[data-test-list-call-numbers]');
+  columnHeaders = collection('[role="columnheader"]');
 
   whenLoaded() {
     return this.when(() => this.list.isVisible);
