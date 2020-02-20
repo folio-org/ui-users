@@ -369,7 +369,13 @@ class UserSearch extends React.Component {
                                     name="query"
                                     id="input-user-search"
                                     className={css.searchField}
-                                    onChange={getSearchHandlers().query}
+                                    onChange={(e) => {
+                                      if (e.target.value) {
+                                        getSearchHandlers().query(e);
+                                      } else {
+                                        getSearchHandlers().reset();
+                                      }
+                                    }}
                                     value={searchValue.query}
                                     marginBottom0
                                     data-test-user-search-input
