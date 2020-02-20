@@ -159,7 +159,7 @@ class BulkOverrideLoansList extends Component {
           ),
           requestQueue: loan => requestCounts[loan.itemId] || 0,
           barcode: loan => get(loan, ['item', 'barcode']),
-          callNumber: loan => (<div data-test-bulk-override-call-numbers>{ effectiveCallNumber(loan) }</div>),
+          callNumber: loan => (<div data-test-bulk-override-call-numbers>{effectiveCallNumber(loan)}</div>),
           renewals: loan => get(loan, 'renewalCount', 0),
           loanPolicy: loan => loanPolicies[loan.loanPolicyId],
         }}
