@@ -5,7 +5,7 @@ import {
   FormattedDate,
 } from 'react-intl';
 
-import effectiveCallNumber from '@folio/stripes-util/lib/effectiveCallNumber';
+import { effectiveCallNumber } from '@folio/stripes-util';
 
 import ActionsDropdown from '../components/ActionsDropdown/ActionsDropdown';
 import ContributorsView from '../components/ContributorsView/ContributorsView';

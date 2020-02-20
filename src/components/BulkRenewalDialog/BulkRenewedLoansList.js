@@ -11,7 +11,7 @@ import {
   Icon,
   MultiColumnList,
 } from '@folio/stripes/components';
-import getEffectiveCallNumber from '@folio/stripes-util/lib/effectiveCallNumber';
+import { effectiveCallNumber } from '@folio/stripes-util';
 
 const propTypes = {
   height: PropTypes.number,
@@ -117,7 +117,7 @@ const BulkRenewedLoansList = (props) => {
         ),
         requestQueue: loan => requestCounts[loan.itemId] || 0,
         barcode: loan => get(loan, ['item', 'barcode']),
-        callNumber: loan => (<div data-test-bulk-renew-call-numbers>{ getEffectiveCallNumber(loan) }</div>),
+        callNumber: loan => (<div data-test-bulk-renew-call-numbers>{ effectiveCallNumber(loan) }</div>),
         loanPolicy: loan => loanPolicies[loan.loanPolicyId],
       }}
       columnWidths={{
