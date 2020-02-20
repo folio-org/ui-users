@@ -695,6 +695,7 @@
   },
   "dependencies": {
     "@folio/react-intl-safe-html": "^1.0.0",
+    "@folio/stripes-util": "^1.6.2",
     "hashcode": "^1.0.3",
     "lodash": "^4.17.4",
     "moment": "^2.22.2",

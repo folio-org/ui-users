@@ -16,6 +16,7 @@ import KeyValue from './KeyValue';
   lostDate = scoped('[data-test-loan-actions-history-lost] div', KeyValue);
   itemStatus = scoped('[data-test-loan-actions-history-item-status] div', KeyValue);
   feeFines = scoped('[data-test-loan-fees-fines] [data-test-kv-value]', KeyValue);
+  effectiveCallNumber = scoped('[data-test-effective-call-number] [data-test-kv-value]', KeyValue);
   overduePolicy = scoped('[data-test-overdue-policy] [data-test-kv-value]', KeyValue);
   clickLinkOverduePolicy = clickable('[data-test-overdue-policy] [data-test-kv-value] a');
   lostItemPolicy = scoped('[data-test-lost-item-policy] [data-test-kv-value]', KeyValue);

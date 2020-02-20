@@ -5,6 +5,7 @@ import {
 } from '@bigtest/mocha';
 import { expect } from 'chai';
 
+import translations from '../../../translations/ui-users/en';
 import setupApplication from '../helpers/setup-application';
 import OpenLoansInteractor from '../interactors/open-loans';
 
@@ -19,7 +20,19 @@ describe('open loans override', () => {
 
   describe('request related failure', () => {
     beforeEach(async function () {
-      const loan = this.server.create('loan', { status: { name: 'Open' } });
+      const loan = this.server.create('loan', {
+        status: { name: 'Open' },
+        item: {
+          callNumberComponents: {
+            prefix: 'prefix',
+            callNumber: 'callNumber',
+            suffix: 'suffix',
+          },
+          enumeration: 'enumeration',
+          chronology: 'chronology',
+          volume: 'volume',
+        },
+      });
       this.visit(`/users/${loan.userId}/loans/open?query=%20&sort=requests`);
     });
 
@@ -51,6 +64,16 @@ describe('open loans override', () => {
               expect(OpenLoansInteractor.bulkRenewalModal.isPresent).to.be.true;
             });
 
+            it('loan should have effective call number', () => {
+              const callNumber = 'prefix callNumber suffix volume enumeration chronology';
+
+              expect(OpenLoansInteractor.bulkRenewalModal.callNumbers(0).text).to.equal(callNumber);
+            });
+
+            it('loan table call number column header should have title', () => {
+              expect(OpenLoansInteractor.bulkRenewalModal.columnHeaders(6).text).to.equal(translations['loans.details.effectiveCallNumber']);
+            });
+
             describe('override button', () => {
               it('should be presented', () => {
                 expect(OpenLoansInteractor.bulkRenewalModal.overrideButton.isPresent).to.be.true;
@@ -68,6 +91,16 @@ describe('open loans override', () => {
 
                   it('due date picker should not be presented', () => {
                     expect(OpenLoansInteractor.bulkOverrideModal.dueDatePicker.isPresent).to.be.false;
+                  });
+
+                  it('loan should have effective call number', () => {
+                    const callNumber = 'prefix callNumber suffix volume enumeration chronology';
+
+                    expect(OpenLoansInteractor.bulkOverrideModal.callNumbers(0).text).to.equal(callNumber);
+                  });
+
+                  it('loan table call number column header should have title', () => {
+                    expect(OpenLoansInteractor.bulkOverrideModal.columnHeaders(8).text).to.equal(translations['loans.details.effectiveCallNumber']);
                   });
                 });
               });
