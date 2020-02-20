@@ -134,7 +134,7 @@ class OpenLoansSubHeader extends React.Component {
     // and values being the associated loan properties -- e.g. { uuid: {loan}, uuid2: {loan2} }. This makes
     // it a little complicated to determine whether any loan in checkedLoans has a particular property -- like
     // an item that's been declared lost
-    const onlyLostItemsSelected = !Object.values(checkedLoans).find(loan => get(loan, ['item', 'status', 'name']) !== 'Declared lost');
+    const onlyLostItemsSelected = !Object.values(checkedLoans).find(loan => loan?.item?.status?.name !== 'Declared lost');
 
 console.log("plain loans", loans)
 console.log("checked loans", checkedLoans)
