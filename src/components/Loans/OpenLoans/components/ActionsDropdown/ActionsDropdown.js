@@ -77,8 +77,7 @@ class ActionsDropdown extends React.Component {
           </Button>
         }
         <IfPermission perm="ui-users.loans.edit">
-<<<<<<< HEAD
-          { get(loan, ['item', 'status', 'name']) !== 'Declared lost' &&
+          { loan?.item?.status?.name !== 'Declared lost' &&
             <Button
               buttonStyle="dropdownItem"
               data-test-dropdown-content-change-due-date-button
@@ -90,18 +89,6 @@ class ActionsDropdown extends React.Component {
               <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />
             </Button>
           }
-=======
-          <Button
-            buttonStyle="dropdownItem"
-            data-test-dropdown-content-change-due-date-button
-            onClick={e => {
-              handleOptionsChange({ loan, action:'changeDueDate' });
-              onToggle(e);
-            }}
-          >
-            <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />
-          </Button>
->>>>>>> origin/master
         </IfPermission>
         { loan?.item?.status?.name !== 'Declared lost' &&
           <Button
