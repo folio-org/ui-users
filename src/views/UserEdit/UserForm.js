@@ -211,7 +211,6 @@ class UserForm extends React.Component {
     match: PropTypes.object,
     pristine: PropTypes.bool,
     submitting: PropTypes.bool,
-    invalid: PropTypes.bool,
     onSubmit: PropTypes.func.isRequired,
     initialValues: PropTypes.object.isRequired,
   };
@@ -219,7 +218,6 @@ class UserForm extends React.Component {
   static defaultProps = {
     pristine: false,
     submitting: false,
-    invalid: false,
   };
 
   constructor(props) {
@@ -370,11 +368,10 @@ class UserForm extends React.Component {
     const {
       pristine,
       submitting,
-      invalid,
       onCancel,
     } = this.props;
 
-    const disabled = pristine || submitting || invalid;
+    const disabled = pristine || submitting;
 
     const startButton = (
       <Button
