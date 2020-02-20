@@ -18,13 +18,17 @@ import ClaimReturnedDialog from './claim-returned-dialog';
 @interactor class BulkOverrideModal {
   static defaultScope = '#bulk-override-modal';
 
-  dueDatePicker = scoped('[data-test-due-date-picker]')
+  dueDatePicker = scoped('[data-test-due-date-picker]');
+  callNumbers = collection('[data-test-bulk-override-call-numbers]');
+  columnHeaders = collection('div[role="columnheader"]');
 }
 
 @interactor class BulkRenewalModal {
   static defaultScope = '#bulk-renewal-modal';
 
-  overrideButton = scoped('[data-test-override-button]')
+  overrideButton = scoped('[data-test-override-button]');
+  callNumbers = collection('[data-test-bulk-renew-call-numbers]');
+  columnHeaders = collection('div[role="columnheader"]');
 }
 
 @interactor class ChangeDueDateOverlay {

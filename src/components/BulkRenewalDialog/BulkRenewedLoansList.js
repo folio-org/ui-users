@@ -117,7 +117,7 @@ const BulkRenewedLoansList = (props) => {
         ),
         requestQueue: loan => requestCounts[loan.itemId] || 0,
         barcode: loan => get(loan, ['item', 'barcode']),
-        callNumber: loan => getEffectiveCallNumber(loan),
+        callNumber: loan => (<div data-test-bulk-renew-call-numbers>{ getEffectiveCallNumber(loan) }</div>),
         loanPolicy: loan => loanPolicies[loan.loanPolicyId],
       }}
       columnWidths={{

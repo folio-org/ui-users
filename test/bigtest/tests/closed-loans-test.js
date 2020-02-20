@@ -5,6 +5,7 @@ import {
 } from '@bigtest/mocha';
 import { expect } from 'chai';
 
+import translations from '../../../translations/ui-users/en';
 import setupApplication from '../helpers/setup-application';
 import ClosedLoansInteractor from '../interactors/closed-loans';
 import UsersInteractor from '../interactors/users';
@@ -52,7 +53,7 @@ describe('Closed Loans', () => {
         }]
       }]);
 
-      this.visit(`/users/${loans[0].userId}/loans/closed`);
+      this.visit(`/users/${loans[0].userId}/loans/closed?query=%20&sort=requests`);
 
       await ClosedLoansInteractor.whenLoaded();
     });
@@ -74,6 +75,10 @@ describe('Closed Loans', () => {
         const callNumber = 'prefix callNumber suffix volume enumeration chronology';
 
         expect(ClosedLoansInteractor.callNumbers(0).text).to.equal(callNumber);
+      });
+
+      it('loan table call number column header should have title', () => {
+        expect(ClosedLoansInteractor.columnHeaders(4).text).to.equal(translations['loans.details.effectiveCallNumber']);
       });
     });
 
