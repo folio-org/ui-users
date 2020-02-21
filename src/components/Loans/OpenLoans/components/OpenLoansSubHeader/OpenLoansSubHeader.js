@@ -136,8 +136,6 @@ class OpenLoansSubHeader extends React.Component {
     // an item that's been declared lost
     const onlyLostItemsSelected = !Object.values(checkedLoans).find(loan => loan?.item?.status?.name !== 'Declared lost');
 
-console.log("plain loans", loans)
-console.log("checked loans", checkedLoans)
     return (
       <ActionsBar
         contentStart={
