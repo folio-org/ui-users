@@ -31,8 +31,7 @@ const Menu = (props) => {
           </Link>
           {(Object.values(filters).length !== 0 && !showFilters)
             ? <img alt="" src="https://png.icons8.com/color/40/f39c12/filled-filter.png" />
-            : ''
-          }
+            : ''}
         </Col>
       </Row>
       <Row>
@@ -53,8 +52,7 @@ const Menu = (props) => {
               values={{
                 amount: parseFloat(selected).toFixed(2)
               }}
-            />
-          }
+            />}
         </Col>
       </Row>
     </div>);

@@ -53,6 +53,8 @@ class UserAccounts extends React.Component {
       accountsHistory: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
+      closedAccountsCount: PropTypes.number,
+      openAccountsCount: PropTypes.number,
     }),
     mutator: PropTypes.shape({
       openAccountsCount: PropTypes.object,
@@ -175,8 +177,7 @@ class UserAccounts extends React.Component {
                 status: 'all',
               },
             ]}
-          /> : <Icon icon="spinner-ellipsis" width="10px" />
-        }
+          /> : <Icon icon="spinner-ellipsis" width="10px" />}
       </Accordion>
     );
   }

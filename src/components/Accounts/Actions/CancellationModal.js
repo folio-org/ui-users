@@ -149,8 +149,7 @@ class CancellationModal extends React.Component {
                   <FormattedMessage id="ui-users.accounts.cancellation.field.notifyPatron" />
                 </Col>
               </Row>
-            </div>
-          }
+            </div>}
           <br />
           {(this.state.notify && showNotify) &&
             <div>
@@ -168,8 +167,7 @@ class CancellationModal extends React.Component {
                   />
                 </Col>
               </Row>
-            </div>
-          }
+            </div>}
           <br />
           <Row>
             <Col xs>

@@ -51,6 +51,22 @@ class FeeFineSettings extends React.Component {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
     }).isRequired,
+    resources: PropTypes.object,
+    mutator: PropTypes.shape({
+      feefines: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      templates: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+      }),
+      activeRecord: PropTypes.shape({
+        update: PropTypes.func,
+      }),
+      owners: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+        PUT: PropTypes.func.isRequired,
+      }),
+    }).isRequired,
     intl: intlShape.isRequired,
   };
 

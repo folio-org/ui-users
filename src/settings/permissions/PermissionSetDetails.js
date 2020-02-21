@@ -87,8 +87,7 @@ class PermissionSetDetails extends React.Component {
               <Col xs={12}>
                 <this.cViewMetaData metadata={selectedSet.metadata} />
               </Col>
-            </Row>
-          }
+            </Row>}
           <Row>
             <Col xs={12}>
               <section>

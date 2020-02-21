@@ -348,8 +348,7 @@ class OpenLoansControl extends React.Component {
             showChangeDueDateDialog={this.showChangeDueDateDialog}
             toggleColumn={this.toggleColumn}
             allChecked={allChecked}
-          />
-        }
+          />}
       </div>
     );
   }

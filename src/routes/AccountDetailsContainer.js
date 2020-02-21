@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { stripesConnect } from '@folio/stripes/core';
 
 import { AccountDetails } from '../views';
@@ -39,6 +40,26 @@ class AccountDetailsContainer extends React.Component {
       accountId: '0',
     },
   });
+
+  static propTypes = {
+    resources: PropTypes.shape({
+      accountHistory: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      patronGroups: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      selUser: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+    }),
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        accountid: PropTypes.string,
+        id: PropTypes.string,
+      })
+    }),
+  }
 
   getUser = () => {
     const { resources, match: { params: { id } } } = this.props;

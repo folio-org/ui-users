@@ -284,8 +284,7 @@ class ChargeForm extends React.Component {
                     <FormattedMessage id="ui-users.accounts.notifyPatron" />
                   </Col>
                 </Row>
-              </div>
-            }
+              </div>}
             <br />
             {(this.state.notify && this.state.showNotify) &&
               <div>
@@ -302,8 +301,7 @@ class ChargeForm extends React.Component {
                     />
                   </Col>
                 </Row>
-              </div>
-            }
+              </div>}
           </form>
         </Pane>
       </Paneset>

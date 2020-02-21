@@ -30,7 +30,11 @@ class EditExtendedInfo extends Component {
     onToggle: PropTypes.func.isRequired,
   };
 
-  state = { isCredentialFieldRequired: false };
+  constructor(props) {
+    super(props);
+
+    this.state = { isCredentialFieldRequired: false };
+  }
 
   toggleCredentialFieldRequired = (_, value) => this.setState({ isCredentialFieldRequired: !!value });
 
@@ -40,7 +44,7 @@ class EditExtendedInfo extends Component {
         size="large"
         tag="h3"
       >
-        {<FormattedMessage id="ui-users.extended.extendedInformation" />}
+        <FormattedMessage id="ui-users.extended.extendedInformation" />
       </Headline>
     );
   };

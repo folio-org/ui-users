@@ -46,6 +46,7 @@ class PatronBlock extends React.Component {
     intl: intlShape.isRequired,
     onToggle: PropTypes.func,
     expanded: PropTypes.bool,
+    hasPatronBlocks: PropTypes.bool,
     accordionId: PropTypes.string,
     patronBlocks: PropTypes.arrayOf(PropTypes.object),
     mutator: PropTypes.shape({
@@ -54,6 +55,8 @@ class PatronBlock extends React.Component {
       }),
       patronBlocks: PropTypes.shape({
         DELETE: PropTypes.func,
+        GET: PropTypes.func,
+        reset: PropTypes.func,
       }),
     }),
     user: PropTypes.object,

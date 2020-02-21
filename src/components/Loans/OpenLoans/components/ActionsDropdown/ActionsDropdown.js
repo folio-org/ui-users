@@ -26,6 +26,9 @@ class ActionsDropdown extends React.Component {
     requestQueue: PropTypes.bool.isRequired,
     handleOptionsChange: PropTypes.func.isRequired,
     disableFeeFineDetails: PropTypes.bool,
+    match: PropTypes.shape({
+      params: PropTypes.object
+    }),
   };
 
   renderMenu = ({ onToggle }) => {
@@ -74,8 +77,7 @@ class ActionsDropdown extends React.Component {
             }}
           >
             <FormattedMessage id="ui-users.loans.claimReturned" />
-          </Button>
-        }
+          </Button>}
         <IfPermission perm="ui-users.loans.edit">
           { loan?.item?.status?.name !== 'Declared lost' &&
             <Button
@@ -87,8 +89,7 @@ class ActionsDropdown extends React.Component {
               }}
             >
               <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />
-            </Button>
-          }
+            </Button>}
         </IfPermission>
         { loan?.item?.status?.name !== 'Declared lost' &&
           <Button
@@ -100,8 +101,7 @@ class ActionsDropdown extends React.Component {
             }}
           >
             <FormattedMessage id="ui-users.loans.declareLost" />
-          </Button>
-        }
+          </Button>}
         <IfPermission perm="circulation-storage.loan-policies.item.get">
           <Button
             buttonStyle="dropdownItem"
@@ -133,8 +133,7 @@ class ActionsDropdown extends React.Component {
             to={getOpenRequestsPath(loan?.item?.barcode)}
           >
             <FormattedMessage id="ui-users.loans.details.requestQueue" />
-          </Button>
-        }
+          </Button>}
       </DropdownMenu>
     );
   };

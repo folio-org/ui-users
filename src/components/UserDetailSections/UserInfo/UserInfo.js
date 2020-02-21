@@ -54,7 +54,7 @@ class UserInfo extends React.Component {
             size="large"
             tag="h3"
           >
-            {<FormattedMessage id="ui-users.information.userInformation" />}
+            <FormattedMessage id="ui-users.information.userInformation" />
           </Headline>)}
       >
         <Row>
@@ -120,8 +120,7 @@ class UserInfo extends React.Component {
                   <img className="floatEnd" src="http://placehold.it/100x100" alt="presentation" />
                 </Col>
               </Row>
-            </Col>
-          }
+            </Col>}
         </Row>
       </Accordion>
     );

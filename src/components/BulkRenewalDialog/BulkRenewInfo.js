@@ -95,7 +95,7 @@ class BulkRenewInfo extends React.Component {
     } = this.state;
 
     return (
-      <React.Fragment>
+      <>
         <div>
           <Layout className="flex">
             {
@@ -174,7 +174,7 @@ class BulkRenewInfo extends React.Component {
             onClose={this.closeBulkOverrideDialog}
           />
         }
-      </React.Fragment>
+      </>
     );
   }
 }

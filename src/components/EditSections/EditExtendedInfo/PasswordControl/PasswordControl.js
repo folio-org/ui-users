@@ -16,8 +16,12 @@ class PasswordControl extends React.Component {
     toggleRequired: PropTypes.func.isRequired,
   };
 
-  state = {
-    showPassword: false,
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      showPassword: false,
+    };
   }
 
   togglePassword = () => {
@@ -33,7 +37,7 @@ class PasswordControl extends React.Component {
     } = this.props;
 
     return (
-      <React.Fragment>
+      <>
         <Col xs={12} md={3}>
           <Field
             component={TextField}
@@ -51,11 +55,10 @@ class PasswordControl extends React.Component {
           <Button onClick={this.togglePassword} id="clickable-toggle-password">
             {this.state.showPassword
               ? <FormattedMessage id="ui-users.hide" />
-              : <FormattedMessage id="ui-users.show" />
-            }
+              : <FormattedMessage id="ui-users.show" />}
           </Button>
         </Col>
-      </React.Fragment>
+      </>
     );
   }
 }

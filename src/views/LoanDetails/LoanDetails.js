@@ -64,6 +64,12 @@ class LoanDetails extends React.Component {
       userIds: PropTypes.shape({
         replace: PropTypes.func,
       }),
+      renewals: PropTypes.shape({
+        replace: PropTypes.func,
+      }),
+      loanAccountsActions: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+      }),
     }).isRequired,
     loan: PropTypes.object,
     patronGroup: PropTypes.object,
@@ -134,7 +140,7 @@ class LoanDetails extends React.Component {
       patronBlocks,
       renew,
       mutator: {
-        renewals
+        renewals,
       }
     } = this.props;
     const countRenew = patronBlocks.filter(p => p.renewals);
@@ -354,7 +360,7 @@ class LoanDetails extends React.Component {
           values={{
             strongCount: <strong>{nonRenewedLoanItems.length}</strong>,
             count: nonRenewedLoanItems.length,
-            verb: <strong>{<FormattedMessage id="ui-users.loans.item.nonRenewed.callout.verb" />}</strong>,
+            verb: <strong><FormattedMessage id="ui-users.loans.item.nonRenewed.callout.verb" /></strong>,
           }}
         />
       </p>
@@ -494,8 +500,7 @@ class LoanDetails extends React.Component {
                   label={<FormattedMessage id="ui-users.loans.details.claimedReturned" />}
                   value={claimedReturnedDate ?
                     (<FormattedTime value={claimedReturnedDate} day="numeric" month="numeric" year="numeric" />) :
-                    (<NoValue />)
-                  }
+                    (<NoValue />)}
                 />
               </Col>
               <Col xs={2}>
@@ -567,8 +572,7 @@ class LoanDetails extends React.Component {
                 comments: intl.formatMessage({ id: 'ui-users.loans.columns.comments' }),
               }}
               contentData={loanActionsWithUser}
-            />
-          }
+            />}
             <Modal dismissible closeOnBackgroundClick onClose={this.hideNonRenewedLoansModal} open={this.state.nonRenewedLoansModalOpen} label={nonRenewedLabel}>
               {failedRenewalsSubHeading}
               {

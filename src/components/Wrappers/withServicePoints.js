@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { get } from 'lodash';
 
@@ -69,10 +69,14 @@ const withServicePoints = WrappedComponent => class WithServicePointsComponent e
       stripes: stripesShape.isRequired,
     };
 
-    state = {
-      userServicePoints: [],
-      userPreferredServicePoint: undefined,
-    };
+    constructor(props) {
+      super(props);
+
+      this.state = {
+        userServicePoints: [],
+        userPreferredServicePoint: undefined,
+      };
+    }
 
     static getDerivedStateFromProps(nextProps, state) {
       // Save the id of the record in the service-points-users table for later use when mutating it.
@@ -174,7 +178,7 @@ const withServicePoints = WrappedComponent => class WithServicePointsComponent e
 
     render() {
       return (
-        <Fragment>
+        <>
           <WrappedComponent
             getUserServicePoints={this.getUserServicePoints}
             getPreferredServicePoint={this.getPreferredServicePoint}
@@ -186,9 +190,8 @@ const withServicePoints = WrappedComponent => class WithServicePointsComponent e
               props={{ onClose: () => this.setState({ showChangeServicePointHandler: false }) }}
               event={events.CHANGE_SERVICE_POINT}
               stripes={this.props.stripes}
-            /> : null
-          }
-        </Fragment>
+            /> : null}
+        </>
       );
     }
 };

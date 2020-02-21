@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { stripesConnect, withStripes } from '@folio/stripes/core';
 import { LoanDetails } from '../views';
@@ -95,6 +96,31 @@ class LoanDetailContainer extends React.Component {
     },
   });
 
+  static propTypes = {
+    resources: PropTypes.shape({
+      loanHistory: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      patronBlocks: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      patronGroups: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      selUser: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      loanActions: PropTypes.object,
+      users: PropTypes.object,
+    }),
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        id: PropTypes.string,
+        loanid: PropTypes.string,
+      })
+    }),
+  }
+
   getLoan = () => {
     const { resources, match: { params: { loanid } } } = this.props;
     const userLoans = (resources.loanHistory || {}).records || [];
@@ -128,7 +154,7 @@ class LoanDetailContainer extends React.Component {
         return Object.assign(memo, { [user.id]: user });
       }, {});
       const records = loanActions.records.map(la => {
-        return Object.assign({}, la.loan, { user: userMap[la.loan.metadata.updatedByUserId] });
+        return { ...la.loan, user: userMap[la.loan.metadata.updatedByUserId] };
       });
 
       // this.props.mutator.loanActionsWithUser.replace({ records });

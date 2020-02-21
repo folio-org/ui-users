@@ -413,8 +413,7 @@ class UserSearch extends React.Component {
                               onChangeHandlers={getFilterHandlers()}
                             />
                           </form>
-                        </Pane>
-                      }
+                        </Pane>}
                       <Pane
                         id="users-search-results-pane"
                         firstMenu={this.renderResultsFirstMenu(activeFilters)}
@@ -459,7 +458,8 @@ class UserSearch extends React.Component {
                   )}
                 </IntlConsumer>
               );
-            }}
+            }
+}
         </SearchAndSortQuery>
       </div>);
   }

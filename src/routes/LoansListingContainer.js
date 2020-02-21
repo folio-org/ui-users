@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import _get from 'lodash/get';
 import { stripesConnect } from '@folio/stripes/core';
 import { LoansListing } from '../views';
@@ -79,6 +80,23 @@ class LoansListingContainer extends React.Component {
     },
     activeRecord: {},
   });
+
+  static propTypes = {
+    resources: PropTypes.shape({
+      patronGroups: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      selUser: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+    }),
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        id: PropTypes.string,
+      })
+    }),
+  }
+
 
   getUser = () => {
     const { resources, match: { params: { id } } } = this.props;

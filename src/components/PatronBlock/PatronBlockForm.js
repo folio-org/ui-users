@@ -187,8 +187,7 @@ class PatronBlockForm extends React.Component {
                       <Col xs={12} sm={10} md={7} lg={5}>
                         <this.connectedViewMetaData metadata={initialValues.metadata} />
                       </Col>
-                    </Row> : ''
-                }
+                    </Row> : ''}
 
                   <Row>
                     <Col id="patronBlockForm-desc" xs={12} sm={10} md={7} lg={5}>

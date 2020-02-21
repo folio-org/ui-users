@@ -44,10 +44,14 @@ class CreateResetPasswordControl extends React.Component {
     },
   });
 
-  state = {
-    showModal: false,
-    link: '',
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      showModal: false,
+      link: '',
+    };
+  }
 
   closeModal = () => {
     this.setState({ showModal: false });
@@ -141,8 +145,7 @@ class CreateResetPasswordControl extends React.Component {
         </button>
         {isLocalPasswordSet
           ? this.resetPasswordModal()
-          : this.createPasswordModal()
-        }
+          : this.createPasswordModal()}
       </Col>
     );
   }

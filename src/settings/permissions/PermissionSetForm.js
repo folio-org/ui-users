@@ -133,8 +133,7 @@ class PermissionSetForm extends React.Component {
             >
               <FormattedMessage id="ui-users.delete" />
             </Button>
-          </IfPermission>
-        }
+          </IfPermission>}
         <Button
           id="clickable-save-permission-set"
           type="submit"
@@ -150,10 +149,9 @@ class PermissionSetForm extends React.Component {
 
   saveSet(data) {
     const filtered = omit(data, ['childOf', 'grantedTo', 'dummy']);
-    const permSet = Object.assign({}, filtered, {
+    const permSet = { ...filtered,
       mutable: true,
-      subPermissions: (data.subPermissions || []).map(p => p.permissionName),
-    });
+      subPermissions: (data.subPermissions || []).map(p => p.permissionName) };
 
     this.props.onSave(permSet);
   }
@@ -237,8 +235,7 @@ class PermissionSetForm extends React.Component {
                   <Col xs={12}>
                     <this.cViewMetaData metadata={selectedSet.metadata} />
                   </Col>
-                </Row>
-              }
+                </Row>}
               <Row>
                 <Col xs={8}>
                   <section>

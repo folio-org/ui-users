@@ -104,10 +104,14 @@ class AccountsHistory extends React.Component {
     }),
     okapi: PropTypes.object,
     user: PropTypes.object,
+    currentUser: PropTypes.object,
     openAccounts: PropTypes.bool,
     patronGroup: PropTypes.object,
     mutator: PropTypes.shape({
       user: PropTypes.shape({
+        update: PropTypes.func.isRequired,
+      }),
+      query: PropTypes.shape({
         update: PropTypes.func.isRequired,
       }),
       activeRecord: PropTypes.object,
@@ -533,8 +537,7 @@ class AccountsHistory extends React.Component {
                     selectedAccounts={selectedAccounts}
                     onChangeSelected={this.onChangeSelected}
                     onChangeActions={this.onChangeActions}
-                  />)
-                }
+                  />)}
                 { params.accountstatus === 'closed' &&
                   (<ViewFeesFines
                     {...this.props}
@@ -543,8 +546,7 @@ class AccountsHistory extends React.Component {
                     selectedAccounts={selectedAccounts}
                     onChangeSelected={this.onChangeSelected}
                     onChangeActions={this.onChangeActions}
-                  />)
-                }
+                  />)}
                 { params.accountstatus === 'all' &&
                   (<ViewFeesFines
                     {...this.props}
@@ -553,8 +555,7 @@ class AccountsHistory extends React.Component {
                     selectedAccounts={selectedAccounts}
                     onChangeSelected={this.onChangeSelected}
                     onChangeActions={this.onChangeActions}
-                  />)
-                }
+                  />)}
               </div>
               <this.connectedActions
                 actions={this.state.actions}

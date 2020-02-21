@@ -21,8 +21,7 @@ const Item = ({ edit, value, name, dataOptions }) => {
           component={Select}
           dataOptions={dataOptions}
         />
-        : (value || '-')
-      }
+        : (value || '-')}
     </div>
   );
 };
@@ -115,8 +114,7 @@ class ChargeNotice extends React.Component {
           <Col xs={4}>
             <Button id="charge-notice-primary" onClick={buttonAction}>{buttonLabel}</Button>
             {edit &&
-              <Button id="charge-notice-cancel" onClick={this.onCancel}><FormattedMessage id="ui-users.cancel" /></Button>
-            }
+              <Button id="charge-notice-cancel" onClick={this.onCancel}><FormattedMessage id="ui-users.cancel" /></Button>}
           </Col>
         </Row>
       </form>

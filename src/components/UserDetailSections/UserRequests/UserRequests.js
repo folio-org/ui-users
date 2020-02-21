@@ -164,8 +164,7 @@ class UserRequests extends React.Component {
                 query: { query: id, filters: closedFilterString },
               },
             ]}
-          /> : <Icon icon="spinner-ellipsis" width="10px" />
-        }
+          /> : <Icon icon="spinner-ellipsis" width="10px" />}
       </Accordion>
     );
   }

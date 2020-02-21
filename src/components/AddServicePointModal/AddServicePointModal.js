@@ -23,8 +23,12 @@ class AddServicePointModal extends React.Component {
     intl: intlShape.isRequired,
   }
 
-  state = {
-    selection: {},
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      selection: {},
+    };
   }
 
   static getDerivedStateFromProps(props, state) {

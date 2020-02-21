@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { FieldArray } from 'redux-form';
 import {
@@ -188,8 +188,7 @@ class ProxyEditList extends React.Component {
                 id="ui-users.noItemFound"
                 values={{ item: name }}
               />
-            </p>
-          }
+            </p>}
         </Layout>
         <Row>
           <Col xs={4}>
@@ -224,11 +223,11 @@ class ProxyEditList extends React.Component {
     const { error, confirmDelete } = this.state;
 
     return (
-      <Fragment>
+      <>
         <FieldArray name={this.props.name} component={this.renderList} />
         {confirmDelete && this.renderConfirmModal()}
         {error && this.renderErrorModal()}
-      </Fragment>
+      </>
     );
   }
 }

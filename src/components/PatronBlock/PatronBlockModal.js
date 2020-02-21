@@ -30,13 +30,14 @@ const PatronBlockModal = ({ open, onClose, patronBlocks, viewUserPath }) => {
           {' '}
           <FormattedMessage id="ui-users.blocks.modal.header" />
           {' '}
-        </b>}
+        </b>
+}
       dismissible
     >
       <Row>
         <Col xs>
           <FormattedMessage id="ui-users.blocks.reason" />
-          {':'}
+          `:`
         </Col>
       </Row>
       {renderBlocks}

@@ -40,8 +40,7 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
             loan={loan}
             open={claimReturnedDialogOpen}
             onClose={this.hideClaimReturnedDialog}
-          />
-        }
+          />}
       </>
     );
   }

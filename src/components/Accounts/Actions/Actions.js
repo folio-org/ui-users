@@ -10,7 +10,6 @@ import {
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import { stripesConnect } from '@folio/stripes/core';
 
-// eslint-disable-next-line import/no-extraneous-dependencies
 import moment from 'moment';
 import {
   Callout,

@@ -70,7 +70,6 @@ class AccountDetails extends React.Component {
     history: PropTypes.object,
     match: PropTypes.object,
     patronGroup: PropTypes.object,
-    handleAddRecords: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -187,7 +186,6 @@ class AccountDetails extends React.Component {
     } = this.state;
 
     const {
-      handleAddRecords,
       patronGroup: patron,
       resources,
       history,
@@ -367,8 +365,7 @@ class AccountDetails extends React.Component {
                 <KeyValue
                   label={<FormattedMessage id="ui-users.details.label.loanDetails" />}
                   value="-"
-                />
-              }
+                />}
             </Col>
           </Row>
           <Row>
