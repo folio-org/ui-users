@@ -32,7 +32,6 @@
     "loans.items.renewed.label": "Renovaciones exitosas",
     "loans.details.location": "Localización",
     "loans.details.requestQueue": "Cola de petición",
-    "loans.details.callNumber": "Número de llamada",
     "loans.details.claimedReturned": "Reclamado devuelto",
     "loans.details.loanPolicy": "Política de préstamo",
     "loans.details.lost": "Perdido",
@@ -616,5 +615,6 @@
     "reports.overdue.item.callNumberComponents.callNumber": "Call number",
     "reports.overdue.item.callNumberComponents.suffix": "Call number suffix",
     "reports.overdue.item.enumeration": "Enumeration",
-    "reports.overdue.item.volume": "Volume"
+    "reports.overdue.item.volume": "Volume",
+    "loans.details.effectiveCallNumber": "Effective call number string"
 }

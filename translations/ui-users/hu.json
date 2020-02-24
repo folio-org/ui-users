@@ -32,7 +32,6 @@
     "loans.items.renewed.label": "Sikeres meghosszabbítások",
     "loans.details.location": "Lelőhely",
     "loans.details.requestQueue": "Igénylista",
-    "loans.details.callNumber": "Raktári jelzet",
     "loans.details.claimedReturned": "Állítólag visszaadott",
     "loans.details.loanPolicy": "Kölcsönzési politika",
     "loans.details.lost": "Elveszett",
@@ -616,5 +615,6 @@
     "reports.overdue.item.callNumberComponents.callNumber": "Call number",
     "reports.overdue.item.callNumberComponents.suffix": "Call number suffix",
     "reports.overdue.item.enumeration": "Enumeration",
-    "reports.overdue.item.volume": "Volume"
+    "reports.overdue.item.volume": "Volume",
+    "loans.details.effectiveCallNumber": "Effective call number string"
 }
