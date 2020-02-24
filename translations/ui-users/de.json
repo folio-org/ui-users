@@ -32,7 +32,6 @@
     "loans.items.renewed.label": "Erfolgreiche Verlängerungen",
     "loans.details.location": "Standort",
     "loans.details.requestQueue": "Vormerk-Warteschlange",
-    "loans.details.callNumber": "Signatur",
     "loans.details.claimedReturned": "angeblich zurückgegeben",
     "loans.details.loanPolicy": "Ausleihparameter",
     "loans.details.lost": "Verloren",
@@ -616,5 +615,6 @@
     "reports.overdue.item.callNumberComponents.callNumber": "Call number",
     "reports.overdue.item.callNumberComponents.suffix": "Call number suffix",
     "reports.overdue.item.enumeration": "Enumeration",
-    "reports.overdue.item.volume": "Volume"
+    "reports.overdue.item.volume": "Volume",
+    "loans.details.effectiveCallNumber": "Effective call number string"
 }

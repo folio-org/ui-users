@@ -32,7 +32,6 @@
     "loans.items.renewed.label": "Rinnovi effettuati con successo",
     "loans.details.location": "Sezione",
     "loans.details.requestQueue": "Coda richieste",
-    "loans.details.callNumber": "Collocazione",
     "loans.details.claimedReturned": "Dichiarato reso",
     "loans.details.loanPolicy": "Politica di prestito",
     "loans.details.lost": "Perso",
@@ -616,5 +615,6 @@
     "reports.overdue.item.callNumberComponents.callNumber": "Collocazione",
     "reports.overdue.item.callNumberComponents.suffix": "Suffisso collocazione",
     "reports.overdue.item.enumeration": "Enumerazione",
-    "reports.overdue.item.volume": "Volume"
+    "reports.overdue.item.volume": "Volume",
+    "loans.details.effectiveCallNumber": "Effective call number string"
 }

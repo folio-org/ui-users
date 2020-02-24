@@ -32,7 +32,6 @@
     "loans.items.renewed.label": "Renouvellements réussis",
     "loans.details.location": "Emplacement",
     "loans.details.requestQueue": "File d'attente",
-    "loans.details.callNumber": "Call number",
     "loans.details.claimedReturned": "Claimed returned",
     "loans.details.loanPolicy": "Politique de prêt",
     "loans.details.lost": "Perdu",
@@ -587,7 +586,7 @@
     "requests.selectDeliveryAddress": "Sélectionnez l'adresse de livraison",
     "addAddressError": "Merci d'ajouter au moins une adresse dans la section \"Adresses\".",
     "requests.defaultPickupServicePoint": "Point de retrait par défaut",
-    "errors.currentUser.expired": "Current user record expired",
+    "errors.currentUser.expired": "L'enregistrement utilisateur actuel a expiré",
     "data.loanActionMap.declaredLost": "Déclaré perdu",
     "confirm": "Confirmer",
     "loans.declareLost": "Déclarer comme perdu",
@@ -616,5 +615,6 @@
     "reports.overdue.item.callNumberComponents.callNumber": "Call number",
     "reports.overdue.item.callNumberComponents.suffix": "Call number suffix",
     "reports.overdue.item.enumeration": "Énumération",
-    "reports.overdue.item.volume": "Volume"
+    "reports.overdue.item.volume": "Volume",
+    "loans.details.effectiveCallNumber": "Effective call number string"
 }
