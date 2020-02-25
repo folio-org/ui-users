@@ -426,7 +426,7 @@
   "details.field.billedamount": "Billed amount",
   "details.field.remainingamount": "Remaining amount",
   "details.field.latest": "Latest payment status",
-  "details.field.instance": "Instance",
+  "details.field.instance.type": "Instance (Material type)",
   "details.field.type": "Item type",
   "details.field.barcode": "Barcode",
   "details.field.callnumber": "Call number",

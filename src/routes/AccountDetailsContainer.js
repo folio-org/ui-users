@@ -1,8 +1,11 @@
 import React from 'react';
+import _ from 'lodash';
+
 import { stripesConnect } from '@folio/stripes/core';
 
 import { AccountDetails } from '../views';
 import ViewLoading from '../components/Loading/ViewLoading';
+
 
 class AccountDetailsContainer extends React.Component {
   static manifest = Object.freeze({
@@ -38,6 +41,12 @@ class AccountDetailsContainer extends React.Component {
     activeRecord: {
       accountId: '0',
     },
+    loanHistory: {
+      type: 'okapi',
+      records: 'loans',
+      path: 'circulation/loans?query=(userId=:{id})&limit=100',
+      permissionsRequired: 'circulation.loans.collection.get',
+    },
   });
 
   getUser = () => {
@@ -54,6 +63,13 @@ class AccountDetailsContainer extends React.Component {
     const { resources, match: { params: { accountid } } } = this.props;
     const account = (resources.accountHistory || {}).records || [];
 
+    console.log('resources');
+    console.log(resources);
+
+    console.log('accountid');
+    console.log(accountid);
+
+
     if (account.length === 0 || !accountid) return null;
     return account.find(a => a.id === accountid);
   }
@@ -66,13 +82,33 @@ class AccountDetailsContainer extends React.Component {
     return groups.filter(g => g.id === user.patronGroup)[0] || {};
   }
 
+  getLoans = () => {
+    const { resources } = this.props;
+    console.log(' in get Loans');
+    console.log(resources);
+
+    return _.get(resources, ['loanHistory', 'records'], []);
+  }
+
   render() {
+    const loans = this.getLoans();
     const user = this.getUser();
     const account = this.getAccount();
     const patronGroup = this.getPatronGroup();
+
+    console.log('333 account');
+    console.log(account);
+
     if (!account) return (<ViewLoading defaultWidth="100%" paneTitle="Loading accounts" />);
+
     return (
-      <AccountDetails user={user} account={account} patronGroup={patronGroup} {...this.props} />
+      <AccountDetails
+        user={user}
+        account={account}
+        patronGroup={patronGroup}
+        loans={loans}
+        {...this.props}
+      />
     );
   }
 }
