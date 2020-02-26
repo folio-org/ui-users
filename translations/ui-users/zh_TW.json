@@ -32,7 +32,6 @@
     "loans.items.renewed.label": "成功续借",
     "loans.details.location": "馆藏地",
     "loans.details.requestQueue": "预约队列",
-    "loans.details.callNumber": "索书号",
     "loans.details.claimedReturned": "声称已归还",
     "loans.details.loanPolicy": "借阅政策",
     "loans.details.lost": "丢失",
@@ -616,5 +615,6 @@
     "reports.overdue.item.callNumberComponents.callNumber": "Call number",
     "reports.overdue.item.callNumberComponents.suffix": "Call number suffix",
     "reports.overdue.item.enumeration": "Enumeration",
-    "reports.overdue.item.volume": "Volume"
+    "reports.overdue.item.volume": "Volume",
+    "loans.details.effectiveCallNumber": "Effective call number string"
 }

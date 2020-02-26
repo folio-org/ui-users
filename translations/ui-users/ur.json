@@ -32,7 +32,6 @@
     "loans.items.renewed.label": "Successful renewals",
     "loans.details.location": "Location",
     "loans.details.requestQueue": "Request queue",
-    "loans.details.callNumber": "Call number",
     "loans.details.claimedReturned": "Claimed returned",
     "loans.details.loanPolicy": "Loan policy",
     "loans.details.lost": "Lost",
@@ -616,5 +615,6 @@
     "reports.overdue.item.callNumberComponents.callNumber": "کال نمبر",
     "reports.overdue.item.callNumberComponents.suffix": "کال نمبر لاحقہ",
     "reports.overdue.item.enumeration": "شمار",
-    "reports.overdue.item.volume": "جلد"
+    "reports.overdue.item.volume": "جلد",
+    "loans.details.effectiveCallNumber": "Effective call number string"
 }

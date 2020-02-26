@@ -32,7 +32,6 @@
     "loans.items.renewed.label": "Successful renewals",
     "loans.details.location": "Location",
     "loans.details.requestQueue": "Request queue",
-    "loans.details.callNumber": "Call number",
     "loans.details.claimedReturned": "Claimed returned",
     "loans.details.loanPolicy": "Loan policy",
     "loans.details.lost": "Lost",
@@ -616,5 +615,6 @@
     "reports.overdue.item.callNumberComponents.callNumber": "Call number",
     "reports.overdue.item.callNumberComponents.suffix": "Call number suffix",
     "reports.overdue.item.enumeration": "Enumeration",
-    "reports.overdue.item.volume": "Volume"
+    "reports.overdue.item.volume": "Volume",
+    "loans.details.effectiveCallNumber": "Effective call number string"
 }

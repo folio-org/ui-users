@@ -32,7 +32,6 @@
     "loans.items.renewed.label": "Успешное продление",
     "loans.details.location": "Местоположение",
     "loans.details.requestQueue": "Очередь запросов",
-    "loans.details.callNumber": "Телефонный номер",
     "loans.details.claimedReturned": "Claimed returned",
     "loans.details.loanPolicy": "Loan policy",
     "loans.details.lost": "Потерянный",
@@ -616,5 +615,6 @@
     "reports.overdue.item.callNumberComponents.callNumber": "Call number",
     "reports.overdue.item.callNumberComponents.suffix": "Call number suffix",
     "reports.overdue.item.enumeration": "Enumeration",
-    "reports.overdue.item.volume": "Volume"
+    "reports.overdue.item.volume": "Volume",
+    "loans.details.effectiveCallNumber": "Effective call number string"
 }
