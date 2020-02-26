@@ -52,6 +52,8 @@ class UserLoans extends React.Component {
       loansHistory: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
+      closedLoansCount: PropTypes.object,
+      openLoansCount: PropTypes.object,
     }),
     accordionId: PropTypes.string,
     expanded: PropTypes.bool,

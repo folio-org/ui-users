@@ -217,7 +217,7 @@ class OpenLoansWithStaticData extends React.Component {
     this.columnMapping = this.getColumnMapping();
 
     return (
-      <React.Fragment>
+      <>
         {!isEmpty(loans) &&
         <OpenLoansSubHeader
           loans={loans}
@@ -259,7 +259,7 @@ class OpenLoansWithStaticData extends React.Component {
           hideChangeDueDateDialog={hideChangeDueDateDialog}
           onClosePatronBlockedModal={onClosePatronBlockedModal}
         />
-      </React.Fragment>
+      </>
     );
   }
 }

@@ -54,7 +54,7 @@ class Modals extends React.Component {
 
 
     return (
-      <React.Fragment>
+      <>
         {changeDueDateDialogOpen &&
           <this.connectedChangeDueDateDialog
             user={user}
@@ -70,7 +70,7 @@ class Modals extends React.Component {
           onClose={onClosePatronBlockedModal}
           viewUserPath={`/users/view/${(user || {}).id}?filters=pg.${patronGroup.group}&sort=name`}
         />
-      </React.Fragment>
+      </>
     );
   }
 }

@@ -37,6 +37,7 @@
 * Display `effective call number prefix`, `call number`, `call number suffix`, `enumeration`, `chronology`, `volume` in loans contexts. Refs UIU-1347, UIU-1391.
 * Prevent change due date for declared lost items. Refs UIU-1207.
 * Tweak text for declared lost modal. Refs UIU-1444.
+* Update eslint to >= 6.2.1 or eslint-util >= 1.4.1. Refs UIU-1446.
 
 ## [2.26.0](https://github.com/folio-org/ui-users/tree/v2.26.0) (2019-12-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.3...v2.26.0)

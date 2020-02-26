@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 
 import DeclareLostDialog from '../DeclareLostDialog';
 
@@ -30,7 +30,7 @@ const withDeclareLost = WrappedComponent => class WithDeclareLost extends React.
     } = this.state;
 
     return (
-      <Fragment>
+      <>
         <WrappedComponent
           declareLost={this.declareLost}
           {...this.props}
@@ -42,7 +42,7 @@ const withDeclareLost = WrappedComponent => class WithDeclareLost extends React.
             onClose={this.hideDeclareLostDialog}
           />
         }
-      </Fragment>
+      </>
     );
   }
 };

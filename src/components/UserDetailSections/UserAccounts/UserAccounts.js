@@ -53,6 +53,8 @@ class UserAccounts extends React.Component {
       accountsHistory: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
+      closedAccountsCount: PropTypes.number,
+      openAccountsCount: PropTypes.number,
     }),
     mutator: PropTypes.shape({
       openAccountsCount: PropTypes.object,
