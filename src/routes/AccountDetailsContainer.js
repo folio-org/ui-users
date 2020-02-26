@@ -46,6 +46,7 @@ class AccountDetailsContainer extends React.Component {
         const { resources } = props;
         const account = (resources.accountHistory || {}).records || [];
         const loanId = account[0]?.loanId;
+        if (loanId === '0') return null;
 
         return loanId ? `loan-storage/loans/${loanId}` : null;
       },

@@ -71,8 +71,12 @@ class AccountDetails extends React.Component {
     match: PropTypes.object,
     patronGroup: PropTypes.object,
     handleAddRecords: PropTypes.func.isRequired,
-    itemDetails: PropTypes.object.isRequired,
+    itemDetails: PropTypes.object,
   };
+
+  static defaultProps = {
+    itemDetails: {},
+  }
 
   constructor(props) {
     super(props);
@@ -117,8 +121,6 @@ class AccountDetails extends React.Component {
     } = props;
 
     const accountActivity = (resources.accountActions || {}).records || [];
-    console.log('accountActivity');
-    console.log(accountActivity);
     const sortData = _.orderBy(accountActivity, ['dateAction'], ['desc']);
     const balance = (sortData[0] || {}).balance;
     let paymentStatus;

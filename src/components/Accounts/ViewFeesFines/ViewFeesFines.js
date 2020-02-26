@@ -190,6 +190,12 @@ class ViewFeesFines extends React.Component {
     return res;
   }
 
+  formatTitle(f) {
+    const instanceTypeString = f.materialType ? `(${f.materialType})` : '';
+
+    return `${f.title} ${instanceTypeString}` || '-';
+  }
+
   formatDateTime(dateTimeStr) {
     return <FormattedTime
       value={dateTimeStr}
@@ -216,7 +222,7 @@ class ViewFeesFines extends React.Component {
       'remaining': f => parseFloat(f.remaining).toFixed(2) || '0.00',
       'paymentStatus.name': f => (f.paymentStatus || {}).name || '-',
       'feeFineOwner': f => (f.feeFineOwner ? f.feeFineOwner : '-'),
-      'title': f => (f.title ? `${f.title} (${f.materialType})` : '-'),
+      'title': f => this.formatTitle(f),
       'barcode': f => (f.barcode ? f.barcode : '-'),
       'callNumber': f => (f.callNumber ? f.callNumber : '-'),
       'dueDate': f => (f.dueDate ? this.formatDateTime(f.dueDate) : '-'),
@@ -409,7 +415,7 @@ class ViewFeesFines extends React.Component {
       'remaining': intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' }),
       'paymentStatus.name': intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' }),
       'feeFineOwner': intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' }),
-      'title': intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' }),
+      'title': intl.formatMessage({ id: 'ui-users.accounts.history.columns.instance' }),
       'barcode': intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' }),
       'callNumber': intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' }),
       'dueDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' }),

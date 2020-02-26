@@ -447,6 +447,7 @@
   "accounts.error.select": "Select one",
 
   "accounts.history.columns.title": "Instance (Item type)",
+  "accounts.history.columns.instance": "Instance (Material type)",
   "accounts.history.columns.amount": "Billed",
   "accounts.history.columns.remaining": "Remaining",
   "accounts.history.columns.barcode": "Barcode",
