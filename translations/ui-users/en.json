@@ -489,7 +489,7 @@
   "accounts.required": "required",
   "accounts.summary": "{type} <b>{count}</b> {count, plural, one {fee/fine} other {fees/fines}} for a total amount of <b>{amount}</b>",
 
-  "accounts.payment.modalLabel": "Pay Fee/Fine",
+  "accounts.payment.modalLabel": "Pay fee/fine",
   "accounts.payment.amount": "Payment amount",
   "accounts.payment": "Pay",
   "accounts.payment.summary.partially": "Partially paying",
