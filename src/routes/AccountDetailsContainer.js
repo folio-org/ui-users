@@ -6,7 +6,6 @@ import { stripesConnect } from '@folio/stripes/core';
 import { AccountDetails } from '../views';
 import ViewLoading from '../components/Loading/ViewLoading';
 
-
 class AccountDetailsContainer extends React.Component {
   static manifest = Object.freeze({
     selUser: {
@@ -41,11 +40,20 @@ class AccountDetailsContainer extends React.Component {
     activeRecord: {
       accountId: '0',
     },
+    loan: {
+      type: 'okapi',
+      path: (_q, _p, _r, _l, props) => {
+        const { resources } = props;
+        const account = (resources.accountHistory || {}).records || [];
+        const loanId = account[0]?.loanId;
+
+        return loanId ? `loan-storage/loans/${loanId}` : null;
+      },
+    },
     loanHistory: {
       type: 'okapi',
       records: 'loans',
       path: 'circulation/loans?query=(userId=:{id})&limit=100',
-      permissionsRequired: 'circulation.loans.collection.get',
     },
   });
 
@@ -62,14 +70,6 @@ class AccountDetailsContainer extends React.Component {
   getAccount = () => {
     const { resources, match: { params: { accountid } } } = this.props;
     const account = (resources.accountHistory || {}).records || [];
-
-    console.log('resources');
-    console.log(resources);
-
-    console.log('accountid');
-    console.log(accountid);
-
-
     if (account.length === 0 || !accountid) return null;
     return account.find(a => a.id === accountid);
   }
@@ -82,22 +82,33 @@ class AccountDetailsContainer extends React.Component {
     return groups.filter(g => g.id === user.patronGroup)[0] || {};
   }
 
-  getLoans = () => {
+  getItemDetails = () => {
     const { resources } = this.props;
-    console.log(' in get Loans');
-    console.log(resources);
+    const userLoan = (resources.loan || {}).records || [];
+    if (userLoan.length === 0) return null;
+    const { overdueFinePolicyId, lostItemPolicyId, itemId } = userLoan[0];
+    const loanRecord = _.get(resources, ['loanHistory', 'records'], []);
+    const currentRecord = loanRecord.filter((record) => record.id === userLoan[0].id) || [];
+    const item = currentRecord[0]?.item || {};
+    const contributors = item?.contributors?.map(({ name }) => name.split(',').reverse().join(' ')) || [];
+    const overdueFinePolicyName = currentRecord[0]?.overdueFinePolicy?.name;
+    const lostItemPolicyName = currentRecord[0]?.lostItemPolicy?.name;
 
-    return _.get(resources, ['loanHistory', 'records'], []);
+    return {
+      overdueFinePolicyId,
+      lostItemPolicyId,
+      itemId,
+      contributors,
+      overdueFinePolicyName,
+      lostItemPolicyName,
+    };
   }
 
   render() {
-    const loans = this.getLoans();
     const user = this.getUser();
     const account = this.getAccount();
     const patronGroup = this.getPatronGroup();
-
-    console.log('333 account');
-    console.log(account);
+    const itemDetails = this.getItemDetails();
 
     if (!account) return (<ViewLoading defaultWidth="100%" paneTitle="Loading accounts" />);
 
@@ -106,7 +117,7 @@ class AccountDetailsContainer extends React.Component {
         user={user}
         account={account}
         patronGroup={patronGroup}
-        loans={loans}
+        itemDetails={itemDetails}
         {...this.props}
       />
     );
