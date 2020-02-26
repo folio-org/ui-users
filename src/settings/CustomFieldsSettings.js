@@ -17,6 +17,7 @@ class CustomFieldsSettings extends Component {
     return (
       <ViewCustomFieldsSettings
         backendModuleName="users"
+        entityType="user"
         entityTypeTranslationId="ui-users.meta.title"
         redirectToEdit={this.redirectToEdit}
       />
