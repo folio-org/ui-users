@@ -1,28 +1,29 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { ViewCustomFieldsSettings } from '@folio/stripes/smart-components';
 
-class CustomFieldsSettings extends Component {
-  static propTypes = {
-    history: PropTypes.shape({
-      push: PropTypes.func.isRequired,
-    }).isRequired,
+const propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+};
+
+const CustomFieldsSettings = ({
+  history,
+}) => {
+  const redirectToEdit = () => {
+    history.push('/users/custom-fields/edit');
   };
 
-  redirectToEdit = () => {
-    this.props.history.push('/users/custom-fields/edit');
-  }
+  return (
+    <ViewCustomFieldsSettings
+      backendModuleName="users"
+      entityType="user"
+      redirectToEdit={redirectToEdit}
+    />
+  );
+};
 
-  render() {
-    return (
-      <ViewCustomFieldsSettings
-        backendModuleName="users"
-        entityType="user"
-        entityTypeTranslationId="ui-users.meta.title"
-        redirectToEdit={this.redirectToEdit}
-      />
-    );
-  }
-}
+CustomFieldsSettings.propTypes = propTypes;
 
 export default CustomFieldsSettings;
