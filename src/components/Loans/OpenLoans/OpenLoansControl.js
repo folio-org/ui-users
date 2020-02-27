@@ -1,22 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
 import {
   isEmpty,
   isArray,
   omit,
   size,
-  get,
 } from 'lodash';
+import { FormattedMessage } from 'react-intl';
 
 import { stripesShape } from '@folio/stripes/core';
 
+import { nav } from '../../util';
 import {
-  nav,
-  getOpenRequestsPath,
-} from '../../util';
-
-import { withRenew } from '../../Wrappers';
+  withRenew,
+  withDeclareLost,
+  withClaimReturned,
+} from '../../Wrappers';
 import TableModel from './components/OpenLoansWithStaticData';
+import { ViewLoading } from '../../Loading';
 
 class OpenLoansControl extends React.Component {
   static propTypes = {
@@ -52,6 +54,8 @@ class OpenLoansControl extends React.Component {
     loans: PropTypes.arrayOf(PropTypes.object).isRequired,
     patronBlocks: PropTypes.arrayOf(PropTypes.object).isRequired,
     renew: PropTypes.func.isRequired,
+    declareLost: PropTypes.func.isRequired,
+    claimReturned: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -65,7 +69,7 @@ class OpenLoansControl extends React.Component {
       'requests',
       'barcode',
       'Fee/Fine',
-      'Call number',
+      'callNumber',
       'Contributors',
       'renewals',
       'loanPolicy',
@@ -82,7 +86,7 @@ class OpenLoansControl extends React.Component {
       'requests',
       'barcode',
       'Fee/Fine',
-      'Call number',
+      'callNumber',
       'Contributors',
       'renewals',
       'loanPolicy',
@@ -100,6 +104,7 @@ class OpenLoansControl extends React.Component {
       patronBlockedModal: false,
       changeDueDateDialogOpen:false,
       activeLoan: null,
+      renewing: false,
     };
 
     props.mutator.activeRecord.update({ user: props.user.id });
@@ -107,7 +112,7 @@ class OpenLoansControl extends React.Component {
     this.permissions = { allRequests: 'ui-users.requests.all' };
   }
 
-  toggleAll = (e) => {
+  toggleAll = e => {
     const { loans } = this.props;
     const checkedLoans = e.target.checked
       ? loans.reduce((memo, loan) => Object.assign(memo, { [loan.id]: loan }), {})
@@ -119,13 +124,13 @@ class OpenLoansControl extends React.Component {
     }));
   };
 
-  getLoanPolicy = (policyId) => {
+  getLoanPolicy = policyId => {
     const { loanPolicies } = this.props;
 
     return loanPolicies[policyId];
   };
 
-  isLoanChecked = (id) => {
+  isLoanChecked = id => {
     const { checkedLoans } = this.state;
 
     return (id in checkedLoans);
@@ -145,7 +150,7 @@ class OpenLoansControl extends React.Component {
     this.setState({ checkedLoans, allChecked });
   };
 
-  toggleColumn = (e) => {
+  toggleColumn = e => {
     this.setState(({ visibleColumns }) => ({
       visibleColumns: visibleColumns.map(column => {
         if (column.title === e) {
@@ -157,7 +162,7 @@ class OpenLoansControl extends React.Component {
     }));
   };
 
-  renewSelected = () => {
+  renewSelected = async () => {
     const { checkedLoans } = this.state;
     const {
       renew,
@@ -165,8 +170,9 @@ class OpenLoansControl extends React.Component {
     } = this.props;
     const selectedLoans = Object.values(checkedLoans);
 
-    renew(selectedLoans, user);
-    this.setState({ checkedLoans: {}, allChecked: false });
+    this.setState({ renewing: true });
+    await renew(selectedLoans, user);
+    this.setState({ checkedLoans: {}, allChecked: false, renewing: false });
   };
 
   hideChangeDueDateDialog = () => {
@@ -194,14 +200,7 @@ class OpenLoansControl extends React.Component {
     });
   };
 
-  /**
-   * change handler for the options-menu prevents the event from bubbling
-   * up to the event handler attached to the row.
-   */
-  handleOptionsChange = (itemMeta, e) => {
-    e.preventDefault();
-    e.stopPropagation();
-
+  handleOptionsChange = itemMeta => {
     const {
       loan,
       action,
@@ -212,82 +211,7 @@ class OpenLoansControl extends React.Component {
     }
   };
 
-  itemDetails(loan, e) {
-    if (e) e.preventDefault();
-
-    const {
-      resources: {
-        query,
-      },
-      mutator: {
-        query: {
-          update,
-        },
-      },
-    } = this.props;
-    const {
-      item:{
-        instanceId,
-        holdingsRecordId,
-      },
-      itemId,
-    } = loan;
-
-    // none of the query params relevent to finding a user
-    // are relevent to finding instances so we purge them all.
-    const q = {};
-    Object.keys(query).forEach((k) => { q[k] = null; });
-
-    update({
-      _path: `/inventory/view/${instanceId}/${holdingsRecordId}/${itemId}`,
-      ...q,
-    });
-  }
-
-  changeDueDate = (loan) => {
-    this.setState({
-      activeLoan: loan.id,
-      changeDueDateDialogOpen: true,
-    });
-  };
-
-  showLoanPolicy = (loan, e) => {
-    if (e) e.preventDefault();
-
-    const {
-      resources: {
-        query,
-      },
-      mutator: {
-        query: {
-          update,
-        },
-      },
-    } = this.props;
-    const q = {};
-
-    Object.keys(query).forEach((k) => { q[k] = null; });
-
-    update({
-      _path: `/settings/circulation/loan-policies/${loan.loanPolicyId}`,
-      ...q,
-    });
-  };
-
-  discoverRequests = (loan) => {
-    const { history } = this.props;
-    const query = get(loan, ['item', 'barcode']);
-    const path = getOpenRequestsPath(query);
-
-    history.push(path);
-  };
-
-  feefine = (loan, e) => {
-    const { history, match: { params } } = this.props;
-    nav.onClickChargeFineToLoan(e, loan, history, params);
-  };
-
-  renew = (loan) => {
+  renew = loan => {
     const {
       patronBlocks,
       renew,
@@ -302,13 +226,24 @@ class OpenLoansControl extends React.Component {
     }
   };
 
-  feefinedetails = (loan, e) => {
+  changeDueDate = loan => {
+    this.setState({
+      activeLoan: loan.id,
+      changeDueDateDialogOpen: true,
+    });
+  };
+
+  declareLost = loan => this.props.declareLost(loan);
+
+  claimReturned = loan => this.props.claimReturned(loan);
+
+  feefineDetails = (loan, e) => {
     const {
       resources,
       history,
       match: { params }
     } = this.props;
-    const accounts = get(resources, ['loanAccount', 'records'], []);
+    const accounts = resources?.loanAccount?.records || [];
     const accountsLoan = accounts.filter(a => a.loanId === loan.id) || [];
 
     if (accountsLoan.length === 1) {
@@ -326,9 +261,9 @@ class OpenLoansControl extends React.Component {
     }
   };
 
-  feeFineCount = (loan) => {
+  feeFineCount = loan => {
     const { resources } = this.props;
-    const accounts = get(resources, ['loanAccount', 'records'], []);
+    const accounts = resources?.loanAccount?.records || [];
     const accountsLoan = accounts.filter(a => a.loanId === loan.id) || [];
     return accountsLoan.length;
   };
@@ -361,6 +296,7 @@ class OpenLoansControl extends React.Component {
       changeDueDateDialogOpen,
       allChecked,
       patronBlockedModal,
+      renewing,
     } = this.state;
 
     const {
@@ -378,42 +314,49 @@ class OpenLoansControl extends React.Component {
 
     return (
       <div data-test-open-loans>
-        <TableModel
-          patronBlockedModal={patronBlockedModal}
-          onClosePatronBlockedModal={this.onClosePatronBlockedModal}
-          openPatronBlockedModal={this.openPatronBlockedModal}
-          patronBlocks={patronBlocks}
-          patronGroup={patronGroup}
-          buildRecords={this.buildRecords}
-          visibleColumns={visibleColumns}
-          checkedLoans={checkedLoans}
-          requestCounts={requestCounts}
-          activeLoan={activeLoan}
-          changeDueDateDialogOpen={changeDueDateDialogOpen}
-          loans={loans}
-          stripes={stripes}
-          feeFineCount={this.feeFineCount}
-          history={history}
-          location={location}
-          match={match}
-          user={user}
-          toggleAll={this.toggleAll}
-          toggleItem={this.toggleItem}
-          isLoanChecked={this.isLoanChecked}
-          requestRecords={(resources.requests || {}).records || []}
-          resources={resources}
-          getLoanPolicy={this.getLoanPolicy}
-          handleOptionsChange={this.handleOptionsChange}
-          possibleColumns={this.possibleColumns}
-          hideChangeDueDateDialog={this.hideChangeDueDateDialog}
-          renewSelected={this.renewSelected}
-          showChangeDueDateDialog={this.showChangeDueDateDialog}
-          toggleColumn={this.toggleColumn}
-          allChecked={allChecked}
-        />
+        {renewing
+          ? <ViewLoading data-test-form-page paneTitle={<FormattedMessage id="ui-users.renewInProgress" />} defaultWidth="100%" />
+          : <TableModel
+            patronBlockedModal={patronBlockedModal}
+            onClosePatronBlockedModal={this.onClosePatronBlockedModal}
+            openPatronBlockedModal={this.openPatronBlockedModal}
+            patronBlocks={patronBlocks}
+            patronGroup={patronGroup}
+            buildRecords={this.buildRecords}
+            visibleColumns={visibleColumns}
+            checkedLoans={checkedLoans}
+            requestCounts={requestCounts}
+            activeLoan={activeLoan}
+            changeDueDateDialogOpen={changeDueDateDialogOpen}
+            loans={loans}
+            stripes={stripes}
+            feeFineCount={this.feeFineCount}
+            history={history}
+            location={location}
+            match={match}
+            user={user}
+            toggleAll={this.toggleAll}
+            toggleItem={this.toggleItem}
+            isLoanChecked={this.isLoanChecked}
+            requestRecords={(resources.requests || {}).records || []}
+            resources={resources}
+            getLoanPolicy={this.getLoanPolicy}
+            handleOptionsChange={this.handleOptionsChange}
+            possibleColumns={this.possibleColumns}
+            hideChangeDueDateDialog={this.hideChangeDueDateDialog}
+            renewSelected={this.renewSelected}
+            showChangeDueDateDialog={this.showChangeDueDateDialog}
+            toggleColumn={this.toggleColumn}
+            allChecked={allChecked}
+          />
+        }
       </div>
     );
   }
 }
 
-export default withRenew(OpenLoansControl);
+export default compose(
+  withRenew,
+  withDeclareLost,
+  withClaimReturned,
+)(OpenLoansControl);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
@@ -6,13 +6,11 @@ import { hot } from 'react-hot-loader';
 import _ from 'lodash';
 
 import { Route, Switch, IfPermission } from '@folio/stripes/core';
-import { CommandList, HasCommand } from '@folio/stripes/components';
+import { Settings } from '@folio/stripes/smart-components';
 
 import * as Routes from './routes';
 
 import pkg from '../package';
-import Settings from './settings';
-import commands from './commands';
 import PermissionSets from './settings/permissions/PermissionSets';
 import PatronGroupsSettings from './settings/PatronGroupsSettings';
 import AddressTypesSettings from './settings/AddressTypesSettings';
@@ -107,18 +105,7 @@ const settingsFeefines = [
   },
 ];
 
-export const settingsSections = [
-  {
-    label: <FormattedMessage id="ui-users.settings.general" />,
-    pages: _.sortBy(settingsGeneral, ['label']),
-  },
-  {
-    label: <FormattedMessage id="ui-users.settings.feefine" />,
-    pages: _.sortBy(settingsFeefines, ['label']),
-  },
-];
-
-class UsersRouting extends React.Component {
+class UsersRouting extends Component {
   static actionNames = ['stripesHome', 'usersSortByName'];
 
   static propTypes = {
@@ -129,6 +116,20 @@ class UsersRouting extends React.Component {
     match: PropTypes.object.isRequired,
     showSettings: PropTypes.bool,
     history: PropTypes.object,
+  }
+
+  constructor(props) {
+    super(props);
+    this.sections = [
+      {
+        label: <FormattedMessage id="ui-users.settings.general" />,
+        pages: _.sortBy(settingsGeneral, ['label']),
+      },
+      {
+        label: <FormattedMessage id="ui-users.settings.feefine" />,
+        pages: _.sortBy(settingsFeefines, ['label']),
+      },
+    ];
   }
 
   componentDidMount() {
@@ -204,9 +205,7 @@ class UsersRouting extends React.Component {
 
   render() {
     const {
-      showSettings,
-      match: { path },
-      stripes
+      showSettings
     } = this.props;
 
     this.shortcutScope = document.body;
@@ -214,85 +213,74 @@ class UsersRouting extends React.Component {
 
     if (showSettings) {
       return (
-        <Route path={path} component={Settings}>
-          <Switch>
-            {[].concat(...settingsSections.map(section => section.pages))
-              .filter(setting => !setting.perm || stripes.hasPerm(setting.perm))
-              .map(setting => <Route path={`${path}/${setting.route}`} key={setting.route} component={setting.component} />)
-            }
-          </Switch>
-        </Route>
+        <Settings
+          {...this.props}
+          sections={this.sections}
+          paneTitle={<FormattedMessage id="ui-users.settings.label" />}
+        />
       );
     }
 
     return (
-      <CommandList commands={commands}>
-        <HasCommand
-          commands={this.shortcuts}
-          isWithinScope={this.checkScope}
-          scope={this.shortcutScope}
-        >
-          <Switch>
-            <Route
-              path={`${base}/:id/loans/view/:loanid`}
-              render={(props) => (
-                <IfPermission perm="ui-users.loans.view">
-                  <Routes.LoanDetailContainer {...props} />
-                </IfPermission>
-              )}
-            />
-            <Route
-              path={`${base}/:id/loans/:loanstatus`}
-              render={(props) => (
-                <IfPermission perm="ui-users.loans.view">
-                  <Routes.LoansListingContainer {...props} />
-                </IfPermission>
-              )}
-            />
-            <Route
-              path={`${base}/:id/accounts/:accountstatus/charge`}
-              exact
-              render={(props) => (
-                <IfPermission perm="ui-users.accounts">
-                  <Routes.FeesFinesContainer {...props} />
-                </IfPermission>
-              )}
-            />
-            <Route
-              path={`${base}/:id/accounts/view/:accountid`}
-              render={(props) => (
-                <IfPermission perm="ui-users.accounts">
-                  <Routes.AccountDetailsContainer {...props} />
-                </IfPermission>
-              )}
-            />
-            <Route
-              path={`${base}/:id/accounts/:accountstatus`}
-              exact
-              component={Routes.AccountsListingContainer}
-              render={(props) => (
-                <IfPermission perm="ui-users.accounts">
-                  <Routes.AccountsListingContainer {...props} />
-                </IfPermission>
-              )}
-            />
-            <Route path={`${base}/:id/charge/:loanid?`} component={Routes.ChargeFeesFinesContainer} />
-            <Route path={`${base}/:id/patronblocks/edit/:patronblockid`} component={Routes.PatronBlockContainer} />
-            <Route path={`${base}/:id/patronblocks/create`} component={Routes.PatronBlockContainer} />
-            <Route path={`${base}/create`} component={Routes.UserEditContainer} />
-            <Route path={`${base}/custom-fields/edit`} exact component={Routes.EditCustomFields} />
-            <Route path={`${base}/:id/edit`} component={Routes.UserEditContainer} />
-            <Route path={`${base}/view/:id`} component={Routes.UserDetailFullscreenContainer} />
-            <Route path={`${base}/notes/new`} exact component={NoteCreatePage} />
-            <Route path={`${base}/notes/:id`} exact component={NoteViewPage} />
-            <Route path={`${base}/notes/:id/edit`} exact component={NoteEditPage} />
-            <Route path={base} component={Routes.UserSearchContainer}>
-              <Route path={`${base}/preview/:id`} component={Routes.UserDetailContainer} />
-            </Route>
-            <Route render={this.noMatch} />
-          </Switch>
-        </HasCommand>
-      </CommandList>
+      <Switch>
+        <Route
+          path={`${base}/:id/loans/view/:loanid`}
+          render={(props) => (
+            <IfPermission perm="ui-users.loans.view">
+              <Routes.LoanDetailContainer {...props} />
+            </IfPermission>
+          )}
+        />
+        <Route
+          path={`${base}/:id/loans/:loanstatus`}
+          render={(props) => (
+            <IfPermission perm="ui-users.loans.view">
+              <Routes.LoansListingContainer {...props} />
+            </IfPermission>
+          )}
+        />
+        <Route
+          path={`${base}/:id/accounts/:accountstatus/charge`}
+          exact
+          render={(props) => (
+            <IfPermission perm="ui-users.feesfines.actions.all">
+              <Routes.FeesFinesContainer {...props} />
+            </IfPermission>
+          )}
+        />
+        <Route
+          path={`${base}/:id/accounts/view/:accountid`}
+          render={(props) => (
+            <IfPermission perm="ui-users.feesfines.actions.all">
+              <Routes.AccountDetailsContainer {...props} />
+            </IfPermission>
+          )}
+        />
+        <Route
+          path={`${base}/:id/accounts/:accountstatus`}
+          exact
+          component={Routes.AccountsListingContainer}
+          render={(props) => (
+            <IfPermission perm="ui-users.feesfines.actions.all">
+              <Routes.AccountsListingContainer {...props} />
+            </IfPermission>
+          )}
+        />
+        <Route path={`${base}/:id/charge/:loanid?`} component={Routes.ChargeFeesFinesContainer} />
+        <Route path={`${base}/:id/patronblocks/edit/:patronblockid`} component={Routes.PatronBlockContainer} />
+        <Route path={`${base}/:id/patronblocks/create`} component={Routes.PatronBlockContainer} />
+        <Route path={`${base}/create`} component={Routes.UserEditContainer} />
+        <Route path={`${base}/custom-fields/edit`} exact component={Routes.EditCustomFields} />
+        <Route path={`${base}/:id/edit`} component={Routes.UserEditContainer} />
+        <Route path={`${base}/view/:id`} component={Routes.UserDetailFullscreenContainer} />
+        <Route path={`${base}/notes/new`} exact component={NoteCreatePage} />
+        <Route path={`${base}/notes/:id`} exact component={NoteViewPage} />
+        <Route path={`${base}/notes/:id/edit`} exact component={NoteEditPage} />
+        <Route path={base} component={Routes.UserSearchContainer}>
+          <Route path={`${base}/preview/:id`} component={Routes.UserDetailContainer} />
+        </Route>
+        <Route render={this.noMatch} />
+      </Switch>
     );
   }
 }

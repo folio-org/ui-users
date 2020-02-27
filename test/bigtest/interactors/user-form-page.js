@@ -34,9 +34,13 @@ import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/P
   fillAndBlur(val) {
     return this
       .clickInput()
+      .timeout(5000)
       .fillInput(val)
+      .timeout(5000)
       .pressEnter()
-      .blurInput();
+      .timeout(5000)
+      .blurInput()
+      .timeout(5000);
   }
 }
 
@@ -47,8 +51,11 @@ import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/P
   selectAndBlur(val) {
     return this
       .focus()
+      .timeout(5000)
       .select(val)
-      .blur();
+      .timeout(5000)
+      .blur()
+      .timeout(5000);
   }
 }
 
@@ -73,6 +80,9 @@ import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/P
   title = text('[class*=paneTitleLabel---]');
   barcodeField = new InputFieldInteractor('#adduser_barcode');
   usernameField = new InputFieldInteractor('#adduser_username');
+  isUsernameFieldRequired = property('#adduser_username', 'required');
+  passwordField = new InputFieldInteractor('#pw');
+  isPasswordFieldRequired = property('#pw', 'required');
   expirationDate = new InputFieldInteractor('#adduser_expirationdate');
 
   feedbackError = text('[class^="feedbackError---"]');

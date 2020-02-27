@@ -66,6 +66,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
   }
 
   componentDidMount() {
+    this._isMounted = true;
     const { loans } = this.state;
 
     if (loans.length > 0) {
@@ -82,6 +83,17 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
       this.getOpenRequestsCount();
     }
   }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
+  // fetchLoanPolicyNames and getOpenRequestsCount both execute XHRs that resolve
+  // asynchronously and save their results in state. This causes a memory leak if
+  // the component is unmounted before the promise resolves as state will not be
+  // available at that point. By setting _isMounted in cDM/cWU, we can use it in a
+  // condition in those methods to determine whether it is safe to update state.
+  _isMounted = false;
 
   renewItem = (loan, patron, bulkRenewal) => {
     this.setState({ bulkRenewal });
@@ -123,11 +135,12 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
       return this.setState({ patronBlockedModal: true });
     }
 
-    const renewedLoans = await Promise.all(loans.map(async (loan) => {
+    for (const loan of loans) {
       try {
-        const renewedLoan = await this.renewItem(loan, patron, bulkRenewal);
-
-        renewSuccess.push(renewedLoan);
+        // We actually want to execute it in a sequence so turning off eslint warning
+        // https://issues.folio.org/browse/UIU-1299
+        // eslint-disable-next-line no-await-in-loop
+        renewSuccess.push(await this.renewItem(loan, patron, bulkRenewal));
       } catch (error) {
         const stringErrorMessage = get(error, 'props.values.message', '');
 
@@ -137,12 +150,12 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
           ...isOverridePossible(stringErrorMessage),
         };
       }
-    }));
+    }
 
     if (isEmpty(renewFailure) && renewSuccess.length <= 1) {
       this.showSingleRenewCallout(renewSuccess[0]);
 
-      return renewedLoans;
+      return renewSuccess;
     }
 
     this.setState({
@@ -152,7 +165,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
       bulkRenewalDialogOpen: true
     });
 
-    return renewedLoans;
+    return renewSuccess;
   };
 
   showSingleRenewCallout = (loan) => {
@@ -247,9 +260,11 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
             return map;
           }, {});
 
-          this.setState(prevState => ({
-            requestCounts: Object.assign({}, prevState.requestCounts, requestCountObject)
-          }));
+          if (this._isMounted) {
+            this.setState(prevState => ({
+              requestCounts: Object.assign({}, prevState.requestCounts, requestCountObject)
+            }));
+          }
         });
     }
   };
@@ -280,7 +295,9 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
           return map;
         }, {});
 
-        this.setState({ loanPolicies: loanPolicyObject });
+        if (this._isMounted) {
+          this.setState({ loanPolicies: loanPolicyObject });
+        }
       });
   };
 

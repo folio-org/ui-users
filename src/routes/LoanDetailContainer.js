@@ -58,12 +58,11 @@ class LoanDetailContainer extends React.Component {
       path: 'loan-storage/loan-history?query=(loan.id=:{loanid})&limit=100',
       records: 'loansHistory',
       resourceShouldRefresh: true,
-      shouldRefresh: (props, nextProps) => {
-        return (
-          (props.resources.modified.time !== nextProps.resources.modified.time) ||
-          (props.resources.renew.succesfulMutations.length !== nextProps.resources.renew.successfulMutations.length)
-        );
-      }
+      shouldRefresh: (resource, action, refresh) => {
+        const { path } = action.meta;
+
+        return refresh || (path && path.match(/circulation/));
+      },
     },
     loanAccountsActions: {
       type: 'okapi',

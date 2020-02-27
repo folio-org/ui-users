@@ -115,6 +115,7 @@ class Actions extends React.Component {
       showConfirmDialog: false,
       values: {},
       submitting: false,
+      notify: null,
     };
     this.onCloseCancellation = this.onCloseCancellation.bind(this);
     this.onClickCancellation = this.onClickCancellation.bind(this);
@@ -153,7 +154,10 @@ class Actions extends React.Component {
         }}
       />
     );
-    this.callout.sendCallout({ message });
+
+    if (this.callout) {
+      this.callout.sendCallout({ message });
+    }
   }
 
   onCloseCancellation() {
@@ -177,7 +181,14 @@ class Actions extends React.Component {
     });
   }
 
-  newAction = (action, id, typeAction, amount, comment, balance, transaction, createAt) => {
+  newAction = (action, id, typeAction, amount, comment, balance, transaction, createAt, values) => {
+    let notify;
+    if (values) {
+      notify = _.isUndefined(values.notify) ? true : values.notify;
+    } else {
+      notify = this.state.notify;
+    }
+
     const newAction = {
       typeAction,
       source: `${this.props.okapi.currentUser.lastName}, ${this.props.okapi.currentUser.firstName}`,
@@ -189,6 +200,7 @@ class Actions extends React.Component {
       balance: parseFloat(balance || 0).toFixed(2),
       transactionInformation: transaction || '-',
       comments: comment,
+      notify,
     };
     return this.props.mutator.feefineactions.POST(Object.assign(action, newAction));
   }
@@ -225,7 +237,7 @@ class Actions extends React.Component {
     const type = this.props.accounts[0] || {};
     delete type.rowIndex;
     this.props.mutator.activeRecord.update({ id: type.id });
-    this.newAction({}, type.id, canceled, type.amount, this.assembleTagInfo(values), 0, 0, type.feeFineOwner);
+    this.newAction({}, type.id, canceled, type.amount, this.assembleTagInfo(values), 0, 0, type.feeFineOwner, values);
     this.editAccount(type, canceled, 'Closed', 0.00)
       .then(() => this.props.handleEdit(1))
       .then(() => this.showCalloutMessage(type))
@@ -368,7 +380,8 @@ class Actions extends React.Component {
   showConfirmDialog = (values) => {
     this.setState({
       showConfirmDialog: true,
-      values
+      values,
+      notify: values.notify,
     });
 
     return new Promise((resolve, reject) => {
@@ -465,7 +478,10 @@ class Actions extends React.Component {
     const waives = _.get(resources, ['waives', 'records'], []);
     const transfers = _.get(resources, ['transfers', 'records'], []);
     const settings = _.get(resources, ['commentRequired', 'records', 0], {});
-    const warning = accounts.filter(a => a.status.name === 'Closed').length !== 0 && (actions.regular || actions.waiveMany || actions.transferMany) && params.accountstatus;
+    const hasClosedAccounts = accounts.some(a => a.status && a.status.name === 'Closed');
+    const isWarning = hasClosedAccounts
+        && (actions.regular || actions.waiveMany || actions.transferMany)
+        && params.accountstatus;
     const warningModalLabelId = actions.regular
       ? 'ui-users.accounts.actions.payFeeFine'
       : actions.waiveMany
@@ -478,9 +494,9 @@ class Actions extends React.Component {
     const initialValues = { ownerId, amount, notify: true };
     const modals = [
       { action: 'payment', item: actions.pay, label: 'nameMethod', data: payments, comment: 'paid', open: actions.pay || (actions.regular && accounts.length === 1) },
-      { action: 'payment', form: 'payment-many-modal', label: 'nameMethod', accounts, data: payments, comment: 'paid', open: actions.regular && !warning && accounts.length > 1 },
-      { action: 'waive', item: actions.waiveModal, label: 'nameReason', data: waives, comment: 'waived', open: actions.waiveModal || (actions.waiveMany && !warning) },
-      { action: 'transfer', item: actions.transferModal, label: 'accountName', data: transfers, comment: 'transferredManually', open: actions.transferModal || (actions.transferMany && !warning) }
+      { action: 'payment', form: 'payment-many-modal', label: 'nameMethod', accounts, data: payments, comment: 'paid', open: actions.regular && !isWarning && accounts.length > 1 },
+      { action: 'waive', item: actions.waiveModal, label: 'nameReason', data: waives, comment: 'waived', open: actions.waiveModal || (actions.waiveMany && !isWarning) },
+      { action: 'transfer', item: actions.transferModal, label: 'accountName', data: transfers, comment: 'transferredManually', open: actions.transferModal || (actions.transferMany && !isWarning) }
     ];
 
     return (
@@ -489,7 +505,7 @@ class Actions extends React.Component {
           {label => (
             <WarningModal
               id="actions-warning-modal"
-              open={warning && !submitting}
+              open={isWarning && !submitting}
               accounts={accounts}
               onChangeAccounts={this.onChangeAccounts}
               stripes={stripes}
@@ -499,6 +515,7 @@ class Actions extends React.Component {
           )}
         </FormattedMessage>
         <CancellationModal
+          form="error-modal"
           open={actions.cancellation}
           onClose={this.onCloseCancellation}
           user={this.props.user}

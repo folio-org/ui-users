@@ -50,7 +50,11 @@ class OpenLoansSubHeader extends React.Component {
       'dueDate',
       'loanDate',
       'item.barcode',
-      'item.callNumber',
+      'item.callNumberComponents.prefix',
+      'item.callNumberComponents.callNumber',
+      'item.callNumberComponents.suffix',
+      'item.enumeration',
+      'item.volume',
       'item.contributors',
       'item.holdingsRecordId',
       'item.instanceId',
@@ -125,6 +129,11 @@ class OpenLoansSubHeader extends React.Component {
     const clonedLoans = cloneDeep(loans);
     const recordsToCSV = buildRecords(clonedLoans);
     const countRenews = patronBlocks.filter(p => p.renewals === true);
+    // For better or worse, checkedLoans is passed down as an object with keys corresponding to the loan UUIDs
+    // and values being the associated loan properties -- e.g. { uuid: {loan}, uuid2: {loan2} }. This makes
+    // it a little complicated to determine whether any loan in checkedLoans has a particular property -- like
+    // an item that's been declared lost
+    const onlyLostItemsSelected = !Object.values(checkedLoans).find(loan => loan?.item?.status?.name !== 'Declared lost');
 
     return (
       <ActionsBar
@@ -182,7 +191,7 @@ class OpenLoansSubHeader extends React.Component {
               <Button
                 marginBottom0
                 id="change-due-date-all"
-                disabled={noSelectedLoans}
+                disabled={noSelectedLoans || onlyLostItemsSelected}
                 onClick={showChangeDueDateDialog}
               >
                 <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />

@@ -7,25 +7,26 @@ import {
   intlShape,
 } from 'react-intl';
 import PropTypes from 'prop-types';
+
 import {
   Button,
   MultiColumnList,
-  UncontrolledDropdown,
-  MenuItem,
+  Dropdown,
   DropdownMenu,
   Popover,
   IconButton,
   ExportCsv,
 } from '@folio/stripes/components';
-
 import {
   IfPermission,
   IntlConsumer,
   stripesShape,
 } from '@folio/stripes/core';
+import { effectiveCallNumber } from '@folio/stripes-util';
 
 import {
   calculateSortParams,
+  getChargeFineToLoanPath,
   nav,
 } from '../../util';
 import ActionsBar from '../components/ActionsBar';
@@ -63,7 +64,8 @@ class ClosedLoans extends React.Component {
     this.getFeeFine = this.getFeeFine.bind(this);
     this.anonymizeLoans = this.anonymizeLoans.bind(this);
     const { intl } = props;
-    this.headers = ['action', 'dueDate', 'loanDate', 'returnDate', 'systemReturnDate', 'item.barcode', 'item.callNumber', 'item.contributors',
+    this.headers = ['action', 'dueDate', 'loanDate', 'returnDate', 'systemReturnDate', 'item.barcode', 'item.callNumberComponents.prefix',
+      'item.callNumberComponents.callNumber', 'item.callNumberComponents.suffix', 'item.enumeration', 'item.volume', 'item.contributors',
       'item.holdingsRecordId', 'item.instanceId', 'item.status.name', 'item.title', 'item.materialType.name',
       'item.location.name', 'metaData.createdByUserId', 'metadata.updatedDate', 'metadata.updatedByUserId', 'loanPolicyId'];
 
@@ -83,7 +85,7 @@ class ClosedLoans extends React.Component {
       'dueDate': intl.formatMessage({ id: 'ui-users.loans.columns.dueDate' }),
       'returnDate': intl.formatMessage({ id: 'ui-users.loans.columns.returnDate' }),
       'renewals': intl.formatMessage({ id: 'ui-users.loans.columns.renewals' }),
-      'Call Number': intl.formatMessage({ id: 'ui-users.loans.details.callNumber' }),
+      'callNumber': intl.formatMessage({ id: 'ui-users.loans.details.effectiveCallNumber' }),
       'Contributors': intl.formatMessage({ id: 'ui-users.loans.columns.contributors' }),
       'checkinServicePoint': intl.formatMessage({ id: 'ui-users.loans.details.checkinServicePoint' }),
     };
@@ -93,7 +95,7 @@ class ClosedLoans extends React.Component {
       [this.columnMapping.barcode]: loan => _.get(loan, ['item', 'barcode']),
       [this.columnMapping['Fee/Fine']]: loan => this.getFeeFine(loan),
       [this.columnMapping.loanDate]: loan => loan.loanDate,
-      [this.columnMapping['Call Number']]: loan => _.get(loan, ['item', 'callNumber']),
+      [this.columnMapping.callNumber]: loan => effectiveCallNumber(loan),
       [this.columnMapping.Contributors]: loan => {
         const contributorsList = this.getContributorslist(loan);
         const contributorsListString = contributorsList.join(' ');
@@ -112,7 +114,7 @@ class ClosedLoans extends React.Component {
         this.columnMapping['Fee/Fine'],
         this.columnMapping.loanDate,
         this.columnMapping.dueDate,
-        this.columnMapping['Call Number'],
+        this.columnMapping.callNumber,
         this.columnMapping.Contributors,
         this.columnMapping.renewals,
         this.columnMapping.renewals,
@@ -188,7 +190,7 @@ class ClosedLoans extends React.Component {
       },
       'barcode': loan => _.get(loan, ['item', 'barcode'], ''),
       'Fee/Fine': loan => this.getFeeFine(loan),
-      'Call Number': loan => _.get(loan, ['item', 'callNumber'], '-'),
+      'callNumber': loan => (<div data-test-list-call-numbers>{effectiveCallNumber(loan)}</div>),
       'Contributors': (loan) => {
         const contributorsList = this.getContributorslist(loan);
         const contributorsListString = contributorsList.join(' ');
@@ -229,30 +231,28 @@ class ClosedLoans extends React.Component {
         />;
       },
       'checkinServicePoint': loan => _.get(loan, ['checkinServicePoint', 'name'], '-'),
-      ' ': loan => this.renderActions(loan),
+      ' ': loan => {
+        return <Dropdown
+          usePortal
+          renderTrigger={({ getTriggerProps }) => (
+            <IconButton
+              {...getTriggerProps()}
+              icon="ellipsis"
+            />
+          )}
+          renderMenu={this.renderDropDownMenu(loan)}
+        />;
+      }
     };
   }
 
-  handleOptionsChange(itemMeta, e) {
-    e.preventDefault();
-    e.stopPropagation();
-
+  handleOptionsChange = itemMeta => {
     const { loan, action } = itemMeta;
 
     if (action && this[action]) {
       this[action](loan);
     }
-  }
-
-  itemDetails = (loan) => {
-    const { history } = this.props;
-    history.push(`/inventory/view/${loan.item.instanceId}/${loan.item.holdingsRecordId}/${loan.itemId}`);
-  }
-
-  feefine = (loan) => {
-    const { history, match: { params } } = this.props;
-    history.push(`/users/${params.id}/charge/${loan.id}`);
-  }
+  };
 
   feefineDetails = (loan, e) => {
     const { history, match: { params } } = this.props;
@@ -271,7 +271,7 @@ class ClosedLoans extends React.Component {
         nav.onClickViewAllAccounts(e, loan, history, params);
       }
     }
-  }
+  };
 
   async anonymizeLoans() {
     const response = await this.props.mutator.anonymize.POST({});
@@ -330,42 +330,47 @@ class ClosedLoans extends React.Component {
     });
   };
 
-  renderActions = (loan) => {
+  renderDropDownMenu = loan => () => {
+    const {
+      stripes,
+      handleOptionsChange,
+      match: { params },
+    } = this.props;
+
     const accounts = _.get(this.props.resources, ['loanAccount', 'records'], []);
     const accountsLoan = accounts.filter(a => a.loanId === loan.id) || [];
-    const { stripes } = this.props;
+    const itemDetailsLink = `/inventory/view/${loan.item.instanceId}/${loan.item.holdingsRecordId}/${loan.itemId}`;
     const buttonDisabled = !stripes.hasPerm('ui-users.feesfines.actions.all');
 
     return (
-      <UncontrolledDropdown
-        onSelectItem={this.handleOptionsChange}
-      >
-        <IconButton data-role="toggle" icon="ellipsis" size="small" iconSize="medium" />
-        <DropdownMenu data-role="menu" overrideStyle={{ padding: '7px 3px' }}>
-          <IfPermission perm="inventory.items.item.get">
-            <MenuItem itemMeta={{ loan, action: 'itemDetails' }} onSelectItem={this.handleOptionsChange}>
-              <Button buttonStyle="dropdownItem">
-                <FormattedMessage id="ui-users.itemDetails" />
-              </Button>
-            </MenuItem>
-          </IfPermission>
-          <MenuItem itemMeta={{ loan, action: 'feefine' }} onSelectItem={this.handleOptionsChange}>
-            <Button disabled={buttonDisabled} buttonStyle="dropdownItem">
-              <FormattedMessage id="ui-users.loans.newFeeFine" />
-            </Button>
-          </MenuItem>
-          <MenuItem itemMeta={{ loan, action: 'feefineDetails' }} onSelectItem={this.handleOptionsChange}>
-            <Button
-              disabled={accountsLoan.length === 0}
-              buttonStyle="dropdownItem"
-            >
-              <FormattedMessage id="ui-users.loans.feeFineDetails" />
-            </Button>
-          </MenuItem>
-        </DropdownMenu>
-      </UncontrolledDropdown>
+      <DropdownMenu data-role="menu">
+        <IfPermission perm="inventory.items.item.get">
+          <Button
+            buttonStyle="dropdownItem"
+            to={itemDetailsLink}
+          >
+            <FormattedMessage id="ui-users.itemDetails" />
+          </Button>
+        </IfPermission>
+        <Button
+          disabled={buttonDisabled}
+          buttonStyle="dropdownItem"
+          to={getChargeFineToLoanPath(params.id, loan.id)}
+        >
+          <FormattedMessage id="ui-users.loans.newFeeFine" />
+        </Button>
+        <Button
+          disabled={_.isEmpty(accountsLoan)}
+          buttonStyle="dropdownItem"
+          onClick={() => {
+            handleOptionsChange({ loan, action: 'feefineDetails' });
+          }}
+        >
+          <FormattedMessage id="ui-users.loans.feeFineDetails" />
+        </Button>
+      </DropdownMenu>
     );
-  }
+  };
 
   render() {
     const {
@@ -378,7 +383,7 @@ class ClosedLoans extends React.Component {
       loans,
     } = this.props;
 
-    const visibleColumns = ['title', 'dueDate', 'barcode', 'Fee/Fine', 'Call Number', 'Contributors', 'renewals', 'loanDate', 'returnDate', 'checkinServicePoint', ' '];
+    const visibleColumns = ['title', 'dueDate', 'barcode', 'Fee/Fine', 'callNumber', 'Contributors', 'renewals', 'loanDate', 'returnDate', 'checkinServicePoint', ' '];
     const anonymizeString = <FormattedMessage id="ui-users.anonymize" />;
     const loansSorted = _.orderBy(loans,
       [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
@@ -429,7 +434,7 @@ class ClosedLoans extends React.Component {
           id="list-loanshistory"
           fullWidth
           formatter={this.getLoansFormatter()}
-          columnWidths={{ 'title': 200, 'dueDate': 150, 'barcode': 140, 'Fee/Fine': 100, 'Call Number': 110, 'Contributors': 170, 'renewals': 90, 'loanDate': 150, 'returnDate': 150, 'checkinServicePoint': 150, ' ': 35 }}
+          columnWidths={{ 'title': 200, 'dueDate': 150, 'barcode': 140, 'Fee/Fine': 100, 'callNumber': 110, 'Contributors': 170, 'renewals': 90, 'loanDate': 150, 'returnDate': 150, 'checkinServicePoint': 150, ' ': 35 }}
           visibleColumns={visibleColumns}
           columnMapping={this.columnMapping}
           onHeaderClick={this.onSort}

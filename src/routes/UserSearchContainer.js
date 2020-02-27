@@ -73,7 +73,13 @@ class UserSearchContainer extends React.Component {
       accumulate: true,
       path: () => `circulation/loans?query=(status="Open" and dueDate < ${getLoansOverdueDate()})&limit=${MAX_LIMIT}`,
       permissionsRequired: 'circulation.loans.collection.get,accounts.collection.get',
-    }
+    },
+    tags: {
+      throwErrors: false,
+      type: 'okapi',
+      path: 'tags',
+      records: 'tags',
+    },
   });
 
   static propTypes = {
@@ -161,9 +167,9 @@ class UserSearchContainer extends React.Component {
     return (
       <UserSearch
         source={this.source}
-        filterConfig={filterConfig}
         initialSearch="?sort=name"
         onNeedMoreData={this.onNeedMoreData}
+        queryGetter={this.queryGetter}
         {...this.props}
       >
         { this.props.children }

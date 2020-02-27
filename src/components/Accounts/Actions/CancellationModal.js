@@ -129,15 +129,10 @@ class CancellationModal extends React.Component {
           <br />
           <Row>
             <Col xs>
-              <FormattedMessage id="ui-users.accounts.cancellation.field.cancellationInfo">
-                {placeholder => (
-                  <Field
-                    name="comment"
-                    component={TextArea}
-                    placeholder={placeholder}
-                  />
-                )}
-              </FormattedMessage>
+              <Field
+                name="comment"
+                component={TextArea}
+              />
             </Col>
           </Row>
           {showNotify &&

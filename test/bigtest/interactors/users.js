@@ -1,10 +1,12 @@
 import {
-  interactor,
-  scoped,
-  collection,
   clickable,
+  collection,
+  is,
+  interactor,
+  Interactor,
+  isPresent,
   isVisible,
-  isPresent
+  scoped,
 } from '@bigtest/interactor';
 
 @interactor class ActiveUserCheckbox {
@@ -13,7 +15,7 @@ import {
 }
 
 @interactor class HeaderDropdown {
-  click = clickable('button');
+  click = clickable('[data-test-pane-header-actions-button]');
 }
 
 @interactor class HeaderDropdownMenu {
@@ -21,29 +23,41 @@ import {
   exportBtnIsVisible = isVisible('#export-overdue-loan-report');
 }
 
+@interactor class SearchFieldInteractor {
+  static defaultScope = '[data-test-user-search-input]';
+}
 
 export default @interactor class UsersInteractor {
   static defaultScope = '[data-test-user-instances]';
 
   activeUserCheckbox = new ActiveUserCheckbox();
   headerDropdownMenu = new HeaderDropdownMenu();
+  searchField = new SearchFieldInteractor();
+  searchButton = new Interactor('[data-test-user-search-submit]');
   searchFocused = isPresent('[data-test-user-search-input]:focus');
-  emptyMessageDisplayed = isPresent('[data-test-user-search-no-results-message]');
+  paneHeaderFocused = is('#users-search-results-pane [class*=paneHeader---]', ':focus');
   patronGroupsPresent = isPresent('#clickable-filter-pg-faculty');
-  headerDropdown = new HeaderDropdown('[class*=paneHeaderCenterInner---] [class*=dropdown---]');
+  instancePresent = isPresent('[data-test-instance-details]');
+  instancesPresent = isPresent('[role=group] [role=row]');
+  headerDropdown = new HeaderDropdown();
   clickFacultyCheckbox = clickable('#clickable-filter-pg-faculty');
   clickGraduateCheckbox = clickable('#clickable-filter-pg-graduate');
   clickStaffCheckbox = clickable('#clickable-filter-pg-staff');
   clickUndergradCheckbox = clickable('#clickable-filter-pg-undergrad');
   clickCreateUserButton = clickable('#clickable-newuser');
-  instances = collection('[role=group] [role=row]');
   instance = scoped('[data-test-instance-details]');
+  instances = collection('[role=group] [role=row]');
+  clearStatusFilter = clickable('[data-test-clear-button]');
+
+  whenInstanceLoaded() {
+    return this.when(() => this.instancePresent).timeout(5000);
+  }
+
+  whenInstancesLoaded() {
+    return this.when(() => this.instancesPresent).timeout(5000);
+  }
 
   whenLoaded() {
     return this.when(() => this.patronGroupsPresent).timeout(5000);
-  }
-
-  whenResultsLoaded() {
-    return this.when(() => !this.emptyMessageDisplayed).timeout(5000);
   }
 }
