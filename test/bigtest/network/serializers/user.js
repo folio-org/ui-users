@@ -1,7 +1,6 @@
 import ApplicationSerializer from './application';
 
 const { isArray } = Array;
-const { assign } = Object;
 
 export default ApplicationSerializer.extend({
 
@@ -9,14 +8,13 @@ export default ApplicationSerializer.extend({
     const json = ApplicationSerializer.prototype.serialize.apply(this, args);
 
     if (isArray(json.users)) {
-      return assign({}, json, {
+      return { ...json,
         totalRecords: json.users.length,
         resultsInfo: {
           totalRecords: json.users.length,
           facets: [],
           diagnostics: []
-        }
-      });
+        } };
     }
 
     return json.users;

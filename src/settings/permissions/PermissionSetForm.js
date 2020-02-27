@@ -150,10 +150,11 @@ class PermissionSetForm extends React.Component {
 
   saveSet(data) {
     const filtered = omit(data, ['childOf', 'grantedTo', 'dummy']);
-    const permSet = Object.assign({}, filtered, {
+    const permSet = {
+      ...filtered,
       mutable: true,
-      subPermissions: (data.subPermissions || []).map(p => p.permissionName),
-    });
+      subPermissions: (data.subPermissions || []).map(p => p.permissionName)
+    };
 
     this.props.onSave(permSet);
   }

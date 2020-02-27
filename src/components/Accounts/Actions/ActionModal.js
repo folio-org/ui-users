@@ -142,7 +142,7 @@ class ActionModal extends React.Component {
         <Row>
           <Col xs>
             <FormattedMessage id={`ui-users.accounts.${action}.method`} />
-            {'*'}
+            *
           </Col>
         </Row>
         <Row>
@@ -234,7 +234,7 @@ class ActionModal extends React.Component {
               <Row end="xs">
                 <Col xs={7}>
                   <FormattedMessage id="ui-users.accounts.totalOwed" />
-                  {':'}
+                  :
                 </Col>
                 <Col xs={4}>
                   {balance}
@@ -243,7 +243,7 @@ class ActionModal extends React.Component {
               <Row end="xs">
                 <Col xs={7}>
                   <FormattedMessage id="ui-users.accounts.selectedAmount" />
-                  {':'}
+                  :
                 </Col>
                 <Col xs={4}>
                   {selected}
@@ -253,7 +253,7 @@ class ActionModal extends React.Component {
                 <Col xs={7}>
                   <b>
                     <FormattedMessage id={`ui-users.accounts.${action}.amount`} />
-                    {'*:'}
+                    *:
                   </b>
                 </Col>
                 <Col xs={4} className={css.customCol}>
@@ -275,7 +275,7 @@ class ActionModal extends React.Component {
               <Row end="xs">
                 <Col xs={7}>
                   <FormattedMessage id="ui-users.accounts.remainingAmount" />
-                  {':'}
+                  :
                 </Col>
                 <Col xs={4}>
                   {remaining}
@@ -287,7 +287,7 @@ class ActionModal extends React.Component {
                 <Row>
                   <Col xs>
                     <FormattedMessage id="ui-users.accounts.payment.field.ownerDesk" />
-                    {'*'}
+                    *
                   </Col>
                 </Row>
                 <Row>

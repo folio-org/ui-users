@@ -52,6 +52,7 @@ class ClosedLoans extends React.Component {
     intl: intlShape.isRequired,
     history: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
+    handleOptionsChange: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -399,7 +400,8 @@ class ClosedLoans extends React.Component {
                 id="ui-users.closedLoansCount"
                 values={{ count: loans.length }}
               />
-            </Label>}
+            </Label>
+          }
           contentEnd={
             <IntlConsumer>
               {intl => (

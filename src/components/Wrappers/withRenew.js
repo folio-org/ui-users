@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import {
@@ -16,6 +16,7 @@ import isOverridePossible from '../Loans/OpenLoans/helpers/isOverridePossible';
 const withRenew = WrappedComponent => class WithRenewComponent extends React.Component {
   static propTypes = {
     loans: PropTypes.arrayOf(PropTypes.object),
+    patronBlocks: PropTypes.arrayOf(PropTypes.object),
     mutator: PropTypes.shape({
       loanPolicies: PropTypes.shape({
         GET: PropTypes.func.isRequired,
@@ -32,6 +33,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
     }),
+    user: PropTypes.object,
   };
 
   static defaultProps = {
@@ -262,7 +264,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
 
           if (this._isMounted) {
             this.setState(prevState => ({
-              requestCounts: Object.assign({}, prevState.requestCounts, requestCountObject)
+              requestCounts: { ...prevState.requestCounts, ...requestCountObject }
             }));
           }
         });
@@ -316,7 +318,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
     } = this.props;
 
     return (
-      <Fragment>
+      <>
         <WrappedComponent
           renew={this.renew}
           requestCounts={requestCounts}
@@ -336,7 +338,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
           onClose={this.hideBulkRenewalDialog}
         />
         <Callout ref={(ref) => { this.callout = ref; }} />
-      </Fragment>
+      </>
     );
   }
 };

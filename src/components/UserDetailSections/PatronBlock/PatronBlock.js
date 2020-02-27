@@ -48,12 +48,15 @@ class PatronBlock extends React.Component {
     expanded: PropTypes.bool,
     accordionId: PropTypes.string,
     patronBlocks: PropTypes.arrayOf(PropTypes.object),
+    hasPatronBlocks: PropTypes.bool,
     mutator: PropTypes.shape({
       activeRecord: PropTypes.shape({
         update: PropTypes.func,
       }),
       patronBlocks: PropTypes.shape({
         DELETE: PropTypes.func,
+        GET: PropTypes.func,
+        reset: PropTypes.func,
       }),
     }),
     user: PropTypes.object,
@@ -164,6 +167,7 @@ class PatronBlock extends React.Component {
       onToggle,
       accordionId,
       patronBlocks,
+      hasPatronBlocks,
       match: { params },
     } = props;
     const {
@@ -201,7 +205,7 @@ class PatronBlock extends React.Component {
     const title =
       <Row>
         <Col><Headline style={{ 'marginLeft': '8px' }} size="large" tag="h3"><FormattedMessage id="ui-users.blocks.label" /></Headline></Col>
-        <Col>{(props.hasPatronBlocks) ? <Icon size="medium" icon="exclamation-circle" status="error" /> : ''}</Col>
+        <Col>{(hasPatronBlocks) ? <Icon size="medium" icon="exclamation-circle" status="error" /> : ''}</Col>
       </Row>;
     return (
       <Accordion

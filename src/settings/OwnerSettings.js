@@ -34,6 +34,7 @@ class OwnerSettings extends React.Component {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
     }).isRequired,
+    resources: PropTypes.object,
     intl: intlShape.isRequired,
   };
 
