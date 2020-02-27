@@ -266,6 +266,7 @@ class AccountDetails extends React.Component {
     return (
       <Paneset isRoot>
         <Pane
+          data-test-fee-fine-details
           id="pane-account-action-history"
           defaultWidth="100%"
           dismissible
@@ -366,7 +367,10 @@ class AccountDetails extends React.Component {
                 value={this.state.paymentStatus}
               />
             </Col>
-            <Col xs={1.5}>
+            <Col
+              data-test-overdue-policy
+              xs={1.5}
+            >
               <KeyValue
                 label={<FormattedMessage id="ui-users.loans.details.overduePolicy" />}
                 value={overdueFinePolicyId
@@ -375,7 +379,10 @@ class AccountDetails extends React.Component {
                 }
               />
             </Col>
-            <Col xs={1.5}>
+            <Col
+              data-test-lost-item-policy
+              xs={1.5}
+            >
               <KeyValue
                 label={<FormattedMessage id="ui-users.loans.details.lostItemPolicy" />}
                 value={lostItemPolicyId
@@ -386,16 +393,22 @@ class AccountDetails extends React.Component {
             </Col>
           </Row>
           <Row>
-            <Col xs={1.5}>
+            <Col
+              data-test-instance
+              xs={1.5}
+            >
               <KeyValue
                 label={<FormattedMessage id="ui-users.details.field.instance.type" />}
                 value={this.getInstanceInfo()}
               />
             </Col>
-            <Col xs={1.5}>
+            <Col
+              data-test-contributors
+              xs={1.5}
+            >
               <KeyValue
                 label={<FormattedMessage id="ui-users.reports.overdue.item.contributors" />}
-                value={contributors}
+                value={contributors || '-'}
               />
             </Col>
             <Col xs={1.5}>

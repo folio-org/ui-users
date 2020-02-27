@@ -108,7 +108,7 @@ class AccountDetailsContainer extends React.Component {
   getItemDetails = () => {
     const { resources } = this.props;
     const userLoan = (resources.loan || {}).records || [];
-    if (userLoan.length === 0) return null;
+    if (_.isEmpty(userLoan)) return null;
     const { overdueFinePolicyId, lostItemPolicyId, itemId } = userLoan[0];
     const loanRecord = _.get(resources, ['loanHistory', 'records'], []);
     const currentRecord = loanRecord.filter((record) => record.id === userLoan[0].id) || [];

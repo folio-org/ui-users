@@ -5,10 +5,12 @@ import {
 } from '@bigtest/mocha';
 import { expect } from 'chai';
 
+import translations from '../../../translations/ui-users/en';
 import setupApplication from '../helpers/setup-application';
 import FeeFineHistoryInteractor from '../interactors/fee-fine-history';
+import FeeFineDetails from '../interactors/fee-fine-details';
 
-describe('Test Fee/Fine History', () => {
+describe.only('Test Fee/Fine History', () => {
   setupApplication({ scenarios: ['view-fees-fines'] });
   describe('visit user details', () => {
     beforeEach(async function () {
@@ -146,13 +148,33 @@ describe('Test Fee/Fine History', () => {
           });
         });
 
-        describe('select one row and go to accounts actions section', () => {
+        describe.only('select one row and go to accounts actions section', () => {
           beforeEach(async () => {
             await FeeFineHistoryInteractor.rows(3).click();
           });
 
           it('displays account actions section', () => {
-            expect(FeeFineHistoryInteractor.accountActionIsPresent).to.be.true;
+            expect(FeeFineDetails.isPresent).to.be.true;
+          });
+
+          it('displays fee/fine details overdue policy', () => {
+            expect(FeeFineDetails.overduePolicy.label.text).to.equal(translations['loans.details.overduePolicy']);
+            expect(FeeFineDetails.overduePolicy.value.text).to.equal('-');
+          });
+
+          it('displays fee/fine details lost item policy', () => {
+            expect(FeeFineDetails.lostItemPolicy.label.text).to.equal(translations['loans.details.lostItemPolicy']);
+            expect(FeeFineDetails.lostItemPolicy.value.text).to.equal('-');
+          });
+
+          it('displays fee/fine item instance and material type', () => {
+            expect(FeeFineDetails.instanceAndType.label.text).to.equal(translations['details.field.instance.type']);
+            expect(FeeFineDetails.instanceAndType.value.text).to.equal('GROẞE DUDEN3 (book)');
+          });
+
+          it('displays fee/fine item contributors', () => {
+            expect(FeeFineDetails.contributors.label.text).to.equal(translations['reports.overdue.item.contributors']);
+            expect(FeeFineDetails.contributors.value.text).to.equal('-');
           });
         });
 
