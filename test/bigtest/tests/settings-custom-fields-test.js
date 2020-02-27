@@ -14,7 +14,7 @@ describe('Settings custom fields', () => {
   setupApplication();
 
   describe('when there are custom fields saved', () => {
-    beforeEach(async function() {
+    beforeEach(async function () {
       this.server.get('/custom-fields', (schema, request) => {
         return new Response(200, { 'X-Request-URL': request.url }, {
           customFields: [
@@ -58,9 +58,9 @@ describe('Settings custom fields', () => {
           totalRecords: 2
         });
       });
-  
+
       this.visit('/settings/users/custom-fields');
-  
+
       await CustomFieldsInteractor.whenCustomFieldsLoaded();
     });
 
@@ -71,14 +71,14 @@ describe('Settings custom fields', () => {
     it('should render list of custom field accordions', () => {
       expect(CustomFieldsInteractor.customFieldsList.isPresent);
     });
-  
+
     it('should render all available custom fields', () => {
       expect(CustomFieldsInteractor.customFieldsList.set().length).to.equal(2);
     });
   });
 
   describe('when there are no custom fields saved', () => {
-    beforeEach(async function() {
+    beforeEach(async function () {
       this.server.get('/custom-fields', (schema, request) => {
         return new Response(200, { 'X-Request-URL': request.url }, {
           'customFields': [],
@@ -109,7 +109,7 @@ describe('Settings custom fields', () => {
       await CustomFieldsInteractor.clickEditFieldsButton();
     });
 
-    it('should redirect to Custom Fields edit page', function() {
+    it('should redirect to Custom Fields edit page', function () {
       expect(this.location.pathname).to.equal('/users/custom-fields/edit');
     });
   });
