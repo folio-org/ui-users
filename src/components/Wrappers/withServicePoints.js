@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { get } from 'lodash';
 
@@ -174,7 +174,7 @@ const withServicePoints = WrappedComponent => class WithServicePointsComponent e
 
     render() {
       return (
-        <Fragment>
+        <>
           <WrappedComponent
             getUserServicePoints={this.getUserServicePoints}
             getPreferredServicePoint={this.getPreferredServicePoint}
@@ -188,7 +188,7 @@ const withServicePoints = WrappedComponent => class WithServicePointsComponent e
               stripes={this.props.stripes}
             /> : null
           }
-        </Fragment>
+        </>
       );
     }
 };

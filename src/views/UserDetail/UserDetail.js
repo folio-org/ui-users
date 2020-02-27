@@ -72,6 +72,9 @@ class UserDetail extends React.Component {
     resources: PropTypes.shape({
       selUser: PropTypes.object,
       user: PropTypes.arrayOf(PropTypes.object),
+      addressTypes: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
       permissions: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
@@ -408,7 +411,7 @@ class UserDetail extends React.Component {
       );
     } else {
       return (
-        <React.Fragment>
+        <>
           <Pane
             data-test-instance-details
             id="pane-userdetails"
@@ -579,7 +582,7 @@ class UserDetail extends React.Component {
             </AccordionSet>
           </Pane>
           { helperApp && <HelperApp appName={helperApp} onClose={this.closeHelperApp} /> }
-        </React.Fragment>
+        </>
       );
     }
   }

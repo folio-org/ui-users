@@ -1,5 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
+import PropTypes from 'prop-types';
 
 import { stripesConnect } from '@folio/stripes/core';
 
@@ -58,6 +59,26 @@ class AccountDetailsContainer extends React.Component {
     },
   });
 
+  static propTypes = {
+    resources: PropTypes.shape({
+      accountHistory: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      patronGroups: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      selUser: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+    }),
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        accountid: PropTypes.string,
+        id: PropTypes.string,
+      })
+    }),
+  }
+
   getUser = () => {
     const { resources, match: { params: { id } } } = this.props;
     const selUser = (resources.selUser || {}).records || [];
@@ -71,6 +92,7 @@ class AccountDetailsContainer extends React.Component {
   getAccount = () => {
     const { resources, match: { params: { accountid } } } = this.props;
     const account = (resources.accountHistory || {}).records || [];
+
     if (account.length === 0 || !accountid) return null;
     return account.find(a => a.id === accountid);
   }

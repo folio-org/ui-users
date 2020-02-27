@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import {
@@ -38,7 +38,7 @@ class RequestPreferencesView extends Component {
     } = this.props;
 
     return (
-      <Fragment>
+      <>
         <Row>
           <Col xs={4}>
             <span className={styles.heading}>
@@ -85,7 +85,7 @@ class RequestPreferencesView extends Component {
             )}
           </Col>
         </Row>
-      </Fragment>
+      </>
     );
   }
 }

@@ -15,7 +15,7 @@ import { validate } from '../components/util';
 import {
   Owners,
   CopyModal,
-  ChargeNotice
+  ChargeNotice,
 } from './FeeFinesTable';
 
 class FeeFineSettings extends React.Component {
@@ -50,6 +50,22 @@ class FeeFineSettings extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
+    }).isRequired,
+    resources: PropTypes.object,
+    mutator: PropTypes.shape({
+      feefines: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      templates: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+      }),
+      activeRecord: PropTypes.shape({
+        update: PropTypes.func,
+      }),
+      owners: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+        PUT: PropTypes.func.isRequired,
+      }),
     }).isRequired,
     intl: intlShape.isRequired,
   };

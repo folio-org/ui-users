@@ -70,7 +70,6 @@ class AccountDetails extends React.Component {
     history: PropTypes.object,
     match: PropTypes.object,
     patronGroup: PropTypes.object,
-    handleAddRecords: PropTypes.func.isRequired,
     itemDetails: PropTypes.object,
   };
 
