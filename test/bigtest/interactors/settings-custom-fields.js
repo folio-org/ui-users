@@ -4,7 +4,7 @@ import {
   clickable,
 } from '@bigtest/interactor';
 
-import { AccordionSetInteractor } from '@folio/stripes-components/lib/Accordion/tests/interactor'; // eslint-disable-line
+import { AccordionSetInteractor } from '@folio/stripes-components/lib/Accordion/tests/interactor';
 
 @interactor class CustomFieldsInteractor {
   editFieldsButtonPresent = isPresent('[data-test-custom-fields-edit-button]');

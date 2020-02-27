@@ -5,7 +5,6 @@ import {
   describe,
   it,
 } from '@bigtest/mocha';
-import { Response } from '@bigtest/mirage';
 
 import setupApplication from '../helpers/setup-application';
 import CustomFieldsInteractor from '../interactors/settings-custom-fields';
