@@ -64,6 +64,12 @@ class LoanDetails extends React.Component {
       userIds: PropTypes.shape({
         replace: PropTypes.func,
       }),
+      renewals: PropTypes.shape({
+        replace: PropTypes.func,
+      }),
+      loanAccountsActions: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+      }),
     }).isRequired,
     loan: PropTypes.object,
     patronGroup: PropTypes.object,
@@ -133,9 +139,7 @@ class LoanDetails extends React.Component {
       user,
       patronBlocks,
       renew,
-      mutator: {
-        renewals
-      }
+      mutator: { renewals },
     } = this.props;
     const countRenew = patronBlocks.filter(p => p.renewals);
 
@@ -354,7 +358,7 @@ class LoanDetails extends React.Component {
           values={{
             strongCount: <strong>{nonRenewedLoanItems.length}</strong>,
             count: nonRenewedLoanItems.length,
-            verb: <strong>{<FormattedMessage id="ui-users.loans.item.nonRenewed.callout.verb" />}</strong>,
+            verb: <strong><FormattedMessage id="ui-users.loans.item.nonRenewed.callout.verb" /></strong>,
           }}
         />
       </p>

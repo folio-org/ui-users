@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
@@ -11,7 +11,7 @@ import withCopyModal from './WithCopyModal';
 
 const CreatePasswordModalBody = ({ email }) => {
   return (
-    <Fragment>
+    <>
       <FormattedMessage id="ui-users.extended.createPasswordModal.linkWasSent" />
       <Row>
         <Col
@@ -22,7 +22,7 @@ const CreatePasswordModalBody = ({ email }) => {
         </Col>
       </Row>
       <FormattedMessage id="ui-users.extended.createPasswordModal.linkInstructions" />
-    </Fragment>
+    </>
   );
 };
 

@@ -27,6 +27,12 @@ class PaymentSettings extends React.Component {
       connect: PropTypes.func.isRequired,
     }).isRequired,
     intl: intlShape.isRequired,
+    mutator: PropTypes.shape({
+      owners: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+        reset: PropTypes.func.isRequired,
+      }),
+    }).isRequired,
   };
 
   constructor(props) {
