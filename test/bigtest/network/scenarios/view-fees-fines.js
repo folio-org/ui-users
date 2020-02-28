@@ -6,6 +6,7 @@ export default (server) => {
   server.createList('owner', 3);
   server.createList('feefine', 5);
   const account = server.create('account', { userId: user.id });
+  server.create('loan', { userId: user.id });
   server.createList('feefineaction', 1, { accountId: account.id });
   server.createList('account', 3, { userId: user.id });
   server.create('account', {
@@ -14,7 +15,8 @@ export default (server) => {
       name: 'Open'
     },
     amount: 100,
-    remaining: 100
+    remaining: 100,
+    loanId: '8e9f211b-6024-4828-8c14-ace39c6c2863',
   });
   server.create('account', {
     userId: user.id,
@@ -37,6 +39,7 @@ export default (server) => {
   server.get('/feefines');
   server.get('/comments');
   server.get('/feefineactions');
+  server.get('/loans');
   server.get('/transfers');
   server.get('/payments');
   server.get('/waives', (schema) => {
@@ -76,6 +79,30 @@ export default (server) => {
 
   server.get('/feefineactions/:id', (schema, request) => {
     return schema.feefineactions.find(request.params.id);
+  });
+
+  server.post('/loans', (schema, request) => {
+    const body = JSON.parse(request.requestBody);
+    return schema.feefineactions.create(body);
+  });
+
+  server.get('/loans', (schema, request) => {
+    const url = new URL(request.url);
+    const cqlQuery = url.searchParams.get('query');
+    if (cqlQuery != null) {
+      const cqlParser = new CQLParser();
+      cqlParser.parse(cqlQuery);
+      if (cqlParser.tree.term) {
+        return schema.feefineactions.where({
+          accountId: cqlParser.tree.term
+        });
+      }
+    }
+    return schema.feefineactions.all();
+  });
+
+  server.get('/loans/:id', (schema, request) => {
+    return schema.loans.find(request.params.id);
   });
 
   server.post('/transfers', (schema, request) => {

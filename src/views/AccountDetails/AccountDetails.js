@@ -246,12 +246,6 @@ class AccountDetails extends React.Component {
       comments: action => (action.comments ? (<div>{action.comments.split('\n').map(c => (<Row><Col>{c}</Col></Row>))}</div>) : ''),
     };
 
-    const overdueFinePolicyId = itemDetails?.overdueFinePolicyId;
-    const overdueFinePolicyName = itemDetails?.overdueFinePolicyName;
-    const lostItemPolicyId = itemDetails?.lostItemPolicyId;
-    const lostItemPolicyName = itemDetails?.lostItemPolicyName;
-    const contributors = itemDetails?.contributors.join(',');
-
     const isAccountsPending = _.get(resources, ['accountHistory', 'isPending'], true);
     const isActionsPending = _.get(resources, ['accountActions', 'isPending'], true);
 
@@ -262,6 +256,12 @@ class AccountDetails extends React.Component {
     const disabled = account.remaining === 0;
     const isAccountId = actions[0] && actions[0].accountId === account.id;
     const buttonDisabled = !this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
+
+    const overdueFinePolicyId = itemDetails?.overdueFinePolicyId;
+    const overdueFinePolicyName = itemDetails?.overdueFinePolicyName;
+    const lostItemPolicyId = itemDetails?.lostItemPolicyId;
+    const lostItemPolicyName = itemDetails?.lostItemPolicyName;
+    const contributors = itemDetails?.contributors.join(',');
 
     return (
       <Paneset isRoot>

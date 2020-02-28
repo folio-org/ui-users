@@ -37,8 +37,10 @@ export default Factory.extend({
     afterCreate(accounts, server) {
       const owneraccount = server.create('owner');
       const feefinesaccount = server.create('feefine');
+      const loanaccount = server.create('loan');
       accounts.update('ownerId', owneraccount.id);
       accounts.update('feeFineId', feefinesaccount.id);
+      accounts.update('loanId', loanaccount.id);
       accounts.save();
     }
   })

@@ -2,8 +2,6 @@ import {
   interactor,
   scoped,
   clickable,
-  ButtonInteractor,
-  property,
 } from '@bigtest/interactor';
 
 import KeyValue from './KeyValue';
@@ -12,7 +10,9 @@ import KeyValue from './KeyValue';
   static defaultScope = '[data-test-fee-fine-details]';
 
   overduePolicy = scoped('[data-test-overdue-policy] div', KeyValue);
+  overduePolicyClick = clickable('[data-test-overdue-policy] a');
   lostItemPolicy = scoped('[data-test-lost-item-policy] div', KeyValue);
+  lostItemPolicyClick = clickable('[data-test-lost-item-policy] a');
   instanceAndType = scoped('[data-test-instance] div', KeyValue);
   contributors = scoped('[data-test-contributors] div', KeyValue);
 

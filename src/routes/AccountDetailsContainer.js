@@ -41,18 +41,7 @@ class AccountDetailsContainer extends React.Component {
     activeRecord: {
       accountId: '0',
     },
-    loan: {
-      type: 'okapi',
-      path: (_q, _p, _r, _l, props) => {
-        const { resources } = props;
-        const account = (resources.accountHistory || {}).records || [];
-        const loanId = account[0]?.loanId;
-        if (loanId === '0') return null;
-
-        return loanId ? `loan-storage/loans/${loanId}` : null;
-      },
-    },
-    loanHistory: {
+    loans: {
       type: 'okapi',
       records: 'loans',
       path: 'circulation/loans?query=(userId=:{id})&limit=100',
@@ -106,16 +95,20 @@ class AccountDetailsContainer extends React.Component {
   }
 
   getItemDetails = () => {
+    const account = this.getAccount();
     const { resources } = this.props;
-    const userLoan = (resources.loan || {}).records || [];
-    if (_.isEmpty(userLoan)) return null;
-    const { overdueFinePolicyId, lostItemPolicyId, itemId } = userLoan[0];
-    const loanRecord = _.get(resources, ['loanHistory', 'records'], []);
-    const currentRecord = loanRecord.filter((record) => record.id === userLoan[0].id) || [];
+    const loanId = account?.loanId;
+    const itemId = account?.itemId;
+
+    if (loanId === '0') return null;
+    const loanRecord = _.get(resources, ['loans', 'records'], []);
+    const currentRecord = loanRecord.filter((record) => record.id === loanId) || [];
     const item = currentRecord[0]?.item || {};
     const contributors = item?.contributors?.map(({ name }) => name.split(',').reverse().join(' ')) || [];
     const overdueFinePolicyName = currentRecord[0]?.overdueFinePolicy?.name;
+    const overdueFinePolicyId = currentRecord[0]?.overdueFinePolicyId;
     const lostItemPolicyName = currentRecord[0]?.lostItemPolicy?.name;
+    const lostItemPolicyId = currentRecord[0]?.lostItemPolicyId;
 
     return {
       overdueFinePolicyId,
