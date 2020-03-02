@@ -616,5 +616,6 @@
     "reports.overdue.item.callNumberComponents.suffix": "لاحقة رقم الاستدعاء",
     "reports.overdue.item.enumeration": "الترقيم",
     "reports.overdue.item.volume": "مجلد",
-    "loans.details.effectiveCallNumber": "مقطع رقم الاستدعاء النشط"
+    "loans.details.effectiveCallNumber": "مقطع رقم الاستدعاء النشط",
+    "settings.customFields": "Custom fields"
 }
