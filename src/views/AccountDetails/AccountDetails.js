@@ -185,9 +185,10 @@ class AccountDetails extends React.Component {
   }
 
   getInstanceInfo = () => {
-    const account = _.get(this.props.resources, ['accountHistory', 'records', 0]) || {};
-    const instanceTitle = _.get(account, ['title'], '');
-    const instanceType = _.get(account, ['materialType'], '');
+    const { resources } = this.props;
+    const account = resources?.accountHistory?.records[0] ?? {};
+    const instanceTitle = account?.title;
+    const instanceType = account?.materialType;
     const instanceTypeString = instanceType ? `(${instanceType})` : '';
 
     return `${instanceTitle} ${instanceTypeString}` || '-';

@@ -190,10 +190,10 @@ class ViewFeesFines extends React.Component {
     return res;
   }
 
-  formatTitle(f) {
-    const instanceTypeString = f.materialType ? `(${f.materialType})` : '';
+  formatTitle(item) {
+    const instanceTypeString = item.materialType ? `(${item.materialType})` : '';
 
-    return `${f.title} ${instanceTypeString}` || '-';
+    return `${item.title} ${instanceTypeString}` || '-';
   }
 
   formatDateTime(dateTimeStr) {
@@ -222,7 +222,7 @@ class ViewFeesFines extends React.Component {
       'remaining': f => parseFloat(f.remaining).toFixed(2) || '0.00',
       'paymentStatus.name': f => (f.paymentStatus || {}).name || '-',
       'feeFineOwner': f => (f.feeFineOwner ? f.feeFineOwner : '-'),
-      'title': f => this.formatTitle(f),
+      'title': item => this.formatTitle(item),
       'barcode': f => (f.barcode ? f.barcode : '-'),
       'callNumber': f => (f.callNumber ? f.callNumber : '-'),
       'dueDate': f => (f.dueDate ? this.formatDateTime(f.dueDate) : '-'),

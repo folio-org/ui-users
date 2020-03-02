@@ -48,9 +48,11 @@ export default (server) => {
   server.get('/loans', (schema, request) => {
     const url = new URL(request.url);
     const cqlQuery = url.searchParams.get('query');
+    
     if (cqlQuery != null) {
       const cqlParser = new CQLParser();
       cqlParser.parse(cqlQuery);
+
       if (cqlParser.tree.term) {
         return schema.feefineactions.where({
           accountId: cqlParser.tree.term
