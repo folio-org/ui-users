@@ -97,14 +97,16 @@ class AccountDetailsContainer extends React.Component {
   getItemDetails = () => {
     const account = this.getAccount();
     const { resources } = this.props;
-    const loanId = account?.loanId;
-    const itemId = account?.itemId;
-
-    if (loanId === '0') return null;
     const loanRecord = _.get(resources, ['loans', 'records'], []);
+    const itemId = account?.itemId;
+    const item = loanRecord.filter((loan) => loan.itemId === itemId);
+    const contributorsRecord = item[0]?.item?.contributors ?? [];
+    const contributors = contributorsRecord.map(({ name }) => name.split(',').reverse().join(', ')) || [];
+    const loanId = account?.loanId;
+
+    if (loanId === '0') return { contributors };
+
     const currentRecord = loanRecord.filter((record) => record.id === loanId) || [];
-    const item = currentRecord[0]?.item || {};
-    const contributors = item?.contributors?.map(({ name }) => name.split(',').reverse().join(' ')) || [];
     const overdueFinePolicyName = currentRecord[0]?.overdueFinePolicy?.name;
     const overdueFinePolicyId = currentRecord[0]?.overdueFinePolicyId;
     const lostItemPolicyName = currentRecord[0]?.lostItemPolicy?.name;
@@ -113,7 +115,6 @@ class AccountDetailsContainer extends React.Component {
     return {
       overdueFinePolicyId,
       lostItemPolicyId,
-      itemId,
       contributors,
       overdueFinePolicyName,
       lostItemPolicyName,

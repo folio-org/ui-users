@@ -261,7 +261,7 @@ class AccountDetails extends React.Component {
     const overdueFinePolicyName = itemDetails?.overdueFinePolicyName;
     const lostItemPolicyId = itemDetails?.lostItemPolicyId;
     const lostItemPolicyName = itemDetails?.lostItemPolicyName;
-    const contributors = itemDetails?.contributors.join(',');
+    const contributors = itemDetails?.contributors.join(', ');
 
     return (
       <Paneset isRoot>
