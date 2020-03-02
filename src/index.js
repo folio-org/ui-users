@@ -22,6 +22,7 @@ import PaymentSettings from './settings/PaymentSettings';
 import CommentRequiredSettings from './settings/CommentRequiredSettings';
 import RefundReasonsSettings from './settings/RefundReasonsSettings';
 import TransferAccountsSettings from './settings/TransferAccountsSettings';
+import CustomFieldsSettingsPane from './settings/CustomFieldsSettings';
 import {
   NoteCreatePage,
   NoteViewPage,
@@ -52,6 +53,11 @@ const settingsGeneral = [
     label: <FormattedMessage id="ui-users.settings.profilePictures" />,
     component: ProfilePictureSettings,
   },
+  {
+    route: 'custom-fields',
+    label: <FormattedMessage id="ui-users.settings.customFields" />,
+    component: CustomFieldsSettingsPane,
+  }
 ];
 
 const settingsFeefines = [
@@ -264,6 +270,7 @@ class UsersRouting extends Component {
         <Route path={`${base}/:id/patronblocks/edit/:patronblockid`} component={Routes.PatronBlockContainer} />
         <Route path={`${base}/:id/patronblocks/create`} component={Routes.PatronBlockContainer} />
         <Route path={`${base}/create`} component={Routes.UserEditContainer} />
+        <Route path={`${base}/custom-fields/edit`} exact component={Routes.EditCustomFields} />
         <Route path={`${base}/:id/edit`} component={Routes.UserEditContainer} />
         <Route path={`${base}/view/:id`} component={Routes.UserDetailFullscreenContainer} />
         <Route path={`${base}/notes/new`} exact component={NoteCreatePage} />
