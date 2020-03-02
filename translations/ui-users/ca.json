@@ -590,8 +590,8 @@
     "data.loanActionMap.declaredLost": "Declared lost",
     "confirm": "Confirm",
     "loans.declareLost": "Declare lost",
-    "loans.declareLostDialogBody": "<strong>{title} {materialType}</strong> (Barcode: {barcode}) will be <strong>declared lost</strong>",
-    "loans.confirmLostState": "Confirm lost state",
+    "loans.declareLostDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be <strong>declared lost</strong>",
+    "loans.confirmLostState": "Confirm Declared lost status",
     "loans.declareLost.additionalInfoPlaceholder": "Introduïu més informació sobre l'element perdut (requerit)",
     "userSearch": "User search",
     "userSearchResults": "User search results",
@@ -616,5 +616,6 @@
     "reports.overdue.item.callNumberComponents.suffix": "Call number suffix",
     "reports.overdue.item.enumeration": "Enumeration",
     "reports.overdue.item.volume": "Volume",
-    "loans.details.effectiveCallNumber": "Effective call number string"
+    "loans.details.effectiveCallNumber": "Effective call number string",
+    "settings.customFields": "Custom fields"
 }
