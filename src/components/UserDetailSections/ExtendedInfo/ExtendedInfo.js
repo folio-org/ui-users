@@ -43,7 +43,7 @@ const ExtendedInfo = (props) => {
         </Col>
         <Col xs={12} md={3}>
           <KeyValue label={<FormattedMessage id="ui-users.extended.birthDate" />}>
-            {user.personal.dateOfBirth ? <FormattedDate value={user.personal.dateOfBirth} timeZone="UTC" /> : '-'}
+            {user.personal?.dateOfBirth ? <FormattedDate value={user.personal.dateOfBirth} timeZone="UTC" /> : '-'}
           </KeyValue>
         </Col>
       </Row>
