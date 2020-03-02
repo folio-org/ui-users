@@ -2,7 +2,7 @@ import { Factory, trait } from 'miragejs';
 import faker from 'faker';
 
 export default Factory.extend({
-  id: () => '8e9f211b-6024-4828-8c14-ace39c6c2863',
+  id: () => faker.random.uuid(),
   itemId: () => faker.random.uuid(),
   status: {
     name: () => faker.random.arrayElement(['Open', 'Closed']),
@@ -16,14 +16,6 @@ export default Factory.extend({
   itemStatus: () => faker.company.catchPhrase(),
   renewalCount: () => faker.random.number(),
   loanPolicyId: () => faker.random.uuid(),
-  overdueFinePolicyId: () => 'a6130d37-0468-48ca-a336-c2bde575768d',
-  lostItemPolicyId: () => '48a3115d-d476-4582-b6a8-55c09eed7ec7',
-  overdueFinePolicy: {
-    name: () => 'Overdue Fine Policy name',
-  },
-  lostItemPolicy: {
-    name: () => 'Lost Item Policy name',
-  },
 
   item: {
     id: () => faker.random.uuid(),
