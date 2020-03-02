@@ -11,6 +11,14 @@ export default function config() {
 
   this.get('_/proxy/tenants/:id/modules', [
     {
+      id: 'mod-circulation-16.0.0-SNAPSHOT.253',
+      name: 'Circulation Module',
+      provides: [
+        { id: 'circulation', version: '7.4' },
+        { id: 'loan-policy-storage', version: '7.4' },
+      ]
+    },
+    {
       id: 'mod-users-16.0.1-SNAPSHOT.121',
       name: 'users',
       provides: []
