@@ -44,7 +44,7 @@ class AccountDetailsContainer extends React.Component {
     loans: {
       type: 'okapi',
       records: 'loans',
-      path: 'circulation/loans?query=(userId=:{id})&limit=100',
+      path: 'circulation/loans?query=(userId=:{id})&limit=1000',
     },
   });
 
@@ -100,8 +100,8 @@ class AccountDetailsContainer extends React.Component {
     const loanRecords = resources?.loans?.records ?? [];
     const itemId = account?.itemId;
     const item = loanRecords.filter((loan) => loan.itemId === itemId);
-    const contributorsRecord = item[0]?.item?.contributors ?? [];
-    const contributors = contributorsRecord.map(({ name }) => name.split(',').reverse().join(', ')) || [];
+    const contributorRecords = item[0]?.item?.contributors ?? [];
+    const contributors = contributorRecords.map(({ name }) => name.split(',').reverse().join(', ')) || [];
     const loanId = account?.loanId;
 
     if (loanId === '0') return { contributors };
