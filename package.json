@@ -257,10 +257,11 @@
         "permissionName": "ui-users.settings.customfields.view",
         "displayName": "Settings (Users): Can view custom fields",
         "subPermissions": [
-          "customfields.collection.get",
-          "customfields.item.get",
+          "custom.fields.collection.get",
+          "custom.fields.item.get",
           "custom.fields.item.stats.get",
-          "settings.users.enabled"
+          "settings.users.enabled",
+          "configuration.entries.collection.get"
         ],
         "visible": true
       },
@@ -270,8 +271,10 @@
         "subPermissions": [
           "ui-users.settings.customfields.view",
           "custom.fields.collection.put",
-          "customfields.item.post",
-          "customfields.item.put"
+          "custom.fields.item.post",
+          "custom.fields.item.put",
+          "configuration.entries.item.post",
+          "configuration.entries.item.put"
         ],
         "visible": true
       },
@@ -281,8 +284,7 @@
         "subPermissions": [
           "ui-users.settings.customfields.view",
           "ui-users.settings.customfields.edit",
-          "custom.fields.item.delete",
-          "settings.users.enabled"
+          "custom.fields.item.delete"
         ],
         "visible": true
       },
