@@ -38,6 +38,8 @@
 * Prevent change due date for declared lost items. Refs UIU-1207.
 * Tweak text for declared lost modal. Refs UIU-1444.
 * Update eslint to >= 6.2.1 or eslint-util >= 1.4.1. Refs UIU-1446.
+* Add 'Custom Fields' under User Settings to give circulation managers ability to add more fields to records. Refs UIU-1441
+* Validate presence of `user.personal` before accessing it. Fixes UIU-1510.
 * Add link to Overdue Fine Policy and Lost Item Fee Policy on Fee/Fine Details page. Refs UIU-1247.
 
 ## [2.26.0](https://github.com/folio-org/ui-users/tree/v2.26.0) (2019-12-05)

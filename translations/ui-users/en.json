@@ -92,6 +92,7 @@
   "settings.refundReasons": "Refund reasons",
   "settings.commentRequired": "Comment required",
   "settings.transferAccounts": "Transfer accounts",
+  "settings.customFields": "Custom fields",
 
   "loans.columns.title": "Item title",
   "loans.columns.itemStatus": "Item status",
