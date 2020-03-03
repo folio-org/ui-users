@@ -254,6 +254,39 @@
         "visible": true
       },
       {
+        "permissionName": "ui-users.settings.customfields.view",
+        "displayName": "Settings (Users): Can view custom fields",
+        "subPermissions": [
+          "customfields.collection.get",
+          "customfields.item.get",
+          "custom.fields.item.stats.get",
+          "settings.users.enabled"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.customfields.edit",
+        "displayName": "Settings (Users): Can create, edit, and view custom fields",
+        "subPermissions": [
+          "ui-users.settings.customfields.view",
+          "custom.fields.collection.put",
+          "customfields.item.post",
+          "customfields.item.put"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.customfields.all",
+        "displayName": "Settings (Users): Can create, edit, view and delete custom fields",
+        "subPermissions": [
+          "ui-users.settings.customfields.view",
+          "ui-users.settings.customfields.edit",
+          "custom.fields.item.delete",
+          "settings.users.enabled"
+        ],
+        "visible": true
+      },
+      {
         "permissionName": "settings.feefines.all",
         "displayName": "Settings (Users): Can create, edit and remove feefines [LEGACY]",
         "subPermissions": [
