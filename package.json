@@ -519,11 +519,12 @@
         "visible": true
       },
       {
-        "permissionName": "settings.feesfines.all",
-        "displayName": "Settings (Users): Can create, edit and remove fee/fine settings [LEGACY]",
+        "permissionName": "ui-users.settings.patronBlocks",
+        "displayName": "Settings (Users): Can create, edit and remove fee/fine settings",
         "subPermissions": [
-          "ui-users.settings.feefine"
-        ]
+
+        ],
+        "visible": true
       },
       {
         "permissionName": "ui-users.feesfines.actions.all",
