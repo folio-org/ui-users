@@ -33,7 +33,7 @@ class PasswordControl extends React.Component {
     } = this.props;
 
     return (
-      <React.Fragment>
+      <>
         <Col xs={12} md={3}>
           <Field
             component={TextField}
@@ -55,7 +55,7 @@ class PasswordControl extends React.Component {
             }
           </Button>
         </Col>
-      </React.Fragment>
+      </>
     );
   }
 }

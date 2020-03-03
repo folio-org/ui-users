@@ -26,6 +26,9 @@ class ActionsDropdown extends React.Component {
     requestQueue: PropTypes.bool.isRequired,
     handleOptionsChange: PropTypes.func.isRequired,
     disableFeeFineDetails: PropTypes.bool,
+    match: PropTypes.shape({
+      params: PropTypes.object
+    }),
   };
 
   renderMenu = ({ onToggle }) => {

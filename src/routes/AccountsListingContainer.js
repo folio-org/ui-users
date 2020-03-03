@@ -117,7 +117,16 @@ class AccountsListingContainer extends React.Component {
       feefineshistory: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
+      loans: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
       query: PropTypes.object,
+      patronGroups: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      selUser: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
     }),
     okapi: PropTypes.object,
     user: PropTypes.object,

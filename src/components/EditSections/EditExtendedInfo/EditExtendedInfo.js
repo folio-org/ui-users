@@ -40,7 +40,7 @@ class EditExtendedInfo extends Component {
         size="large"
         tag="h3"
       >
-        {<FormattedMessage id="ui-users.extended.extendedInformation" />}
+        <FormattedMessage id="ui-users.extended.extendedInformation" />
       </Headline>
     );
   };

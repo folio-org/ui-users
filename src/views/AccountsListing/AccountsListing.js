@@ -104,10 +104,14 @@ class AccountsHistory extends React.Component {
     }),
     okapi: PropTypes.object,
     user: PropTypes.object,
+    currentUser: PropTypes.object,
     openAccounts: PropTypes.bool,
     patronGroup: PropTypes.object,
     mutator: PropTypes.shape({
       user: PropTypes.shape({
+        update: PropTypes.func.isRequired,
+      }),
+      query: PropTypes.shape({
         update: PropTypes.func.isRequired,
       }),
       activeRecord: PropTypes.object,

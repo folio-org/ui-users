@@ -616,5 +616,6 @@
     "reports.overdue.item.callNumberComponents.suffix": "Sufixo do número de chamada",
     "reports.overdue.item.enumeration": "Enumeração",
     "reports.overdue.item.volume": "Volume",
-    "loans.details.effectiveCallNumber": "Seqüência efetiva do número de chamada"
+    "loans.details.effectiveCallNumber": "Seqüência efetiva do número de chamada",
+    "settings.customFields": "Campos personalizados"
 }

@@ -124,6 +124,12 @@ class ChargeFeesFinesContainer extends React.Component {
       owners: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
+      loan: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      loanItem: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
       activeRecord: PropTypes.object,
     }).isRequired,
     mutator: PropTypes.shape({
@@ -146,6 +152,12 @@ class ChargeFeesFinesContainer extends React.Component {
     initialize: PropTypes.func,
     servicePointsIds: PropTypes.arrayOf(PropTypes.string),
     defaultServicePointId: PropTypes.string,
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        id: PropTypes.string,
+        loanid: PropTypes.string,
+      })
+    }),
   };
 
   getLoan = () => {
