@@ -23,6 +23,7 @@ import CommentRequiredSettings from './settings/CommentRequiredSettings';
 import RefundReasonsSettings from './settings/RefundReasonsSettings';
 import TransferAccountsSettings from './settings/TransferAccountsSettings';
 import CustomFieldsSettingsPane from './settings/CustomFieldsSettings';
+import ConditionsSettings from './settings/ConditionsSettings';
 import {
   NoteCreatePage,
   NoteViewPage,
@@ -106,6 +107,15 @@ const settingsFeefines = [
   },
 ];
 
+const settingsPatronBlocks = [
+  {
+    route: 'conditions',
+    label: <FormattedMessage id="ui-users.settings.conditions" />,
+    component: ConditionsSettings,
+    perm: '',
+  }
+];
+
 class UsersRouting extends Component {
   static actionNames = ['stripesHome', 'usersSortByName'];
 
@@ -129,6 +139,10 @@ class UsersRouting extends Component {
       {
         label: <FormattedMessage id="ui-users.settings.feefine" />,
         pages: _.sortBy(settingsFeefines, ['label']),
+      },
+      {
+        label: <FormattedMessage id="ui-users.settings.patronBlocks" />,
+        pages: _.sortBy(settingsPatronBlocks, ['label']),
       },
     ];
   }
