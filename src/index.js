@@ -57,6 +57,7 @@ const settingsGeneral = [
     route: 'custom-fields',
     label: <FormattedMessage id="ui-users.settings.customFields" />,
     component: CustomFieldsSettingsPane,
+    perm: 'ui-users.settings.customfields.view',
   }
 ];
 
@@ -270,7 +271,14 @@ class UsersRouting extends Component {
         <Route path={`${base}/:id/patronblocks/edit/:patronblockid`} component={Routes.PatronBlockContainer} />
         <Route path={`${base}/:id/patronblocks/create`} component={Routes.PatronBlockContainer} />
         <Route path={`${base}/create`} component={Routes.UserEditContainer} />
-        <Route path={`${base}/custom-fields/edit`} exact component={Routes.EditCustomFields} />
+        <Route
+          path={`${base}/custom-fields/edit`}
+          exact
+          render={(props) => (
+            <IfPermission perm="ui-users.settings.customfields.edit">
+              <Routes.EditCustomFields {...props} />
+            </IfPermission>
+          )}/>
         <Route path={`${base}/:id/edit`} component={Routes.UserEditContainer} />
         <Route path={`${base}/view/:id`} component={Routes.UserDetailFullscreenContainer} />
         <Route path={`${base}/notes/new`} exact component={NoteCreatePage} />

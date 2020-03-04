@@ -106,4 +106,25 @@ describe('Settings custom fields', () => {
       expect(this.location.pathname).to.equal('/users/custom-fields/edit');
     });
   });
+
+  describe('when user does not have view permissions', () => {
+    beforeEach(async function () {
+      this.visit('/settings/users/custom-fields');
+    });
+
+    it('should not display Custom fields pane', () => {
+      expect(CustomFieldsInteractor.customFieldsPaneIsPresent).to.be.false;
+    });
+  });
+
+  describe('when user does have view permissions', () => {
+    beforeEach(async function () {
+      this.visit('/settings/users/custom-fields');
+      await CustomFieldsInteractor.whenLoaded();
+    });
+
+    it('should display Custom fields pane', () => {
+      expect(CustomFieldsInteractor.customFieldsPaneIsPresent).to.be.true;
+    });
+  });
 });

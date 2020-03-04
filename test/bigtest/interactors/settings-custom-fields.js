@@ -7,6 +7,7 @@ import {
 import { AccordionSetInteractor } from '@folio/stripes-components/lib/Accordion/tests/interactor'; // eslint-disable-line import/no-extraneous-dependencies
 
 @interactor class CustomFieldsInteractor {
+  customFieldsPaneIsPresent = isPresent('#custom-fields-pane');
   editFieldsButtonPresent = isPresent('[data-test-custom-fields-edit-button]');
   clickEditFieldsButton = clickable('[data-test-custom-fields-edit-button]');
   noCustomFieldsMessagePresent = isPresent('[data-test-custom-fields-no-fields-message]');
