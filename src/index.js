@@ -278,7 +278,8 @@ class UsersRouting extends Component {
             <IfPermission perm="ui-users.settings.customfields.edit">
               <Routes.EditCustomFields {...props} />
             </IfPermission>
-          )}/>
+          )}
+        />
         <Route path={`${base}/:id/edit`} component={Routes.UserEditContainer} />
         <Route path={`${base}/view/:id`} component={Routes.UserDetailFullscreenContainer} />
         <Route path={`${base}/notes/new`} exact component={NoteCreatePage} />

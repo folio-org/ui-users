@@ -159,24 +159,24 @@ describe('Settings custom fields', () => {
       beforeEach(async function () {
         this.visit('/settings/users/custom-fields');
       });
-  
+
       it('should not display Custom fields pane', () => {
         expect(CustomFieldsInteractor.viewCustomFieldsPaneIsPresent).to.be.false;
       });
     });
-  
+
     describe('when user does have view permissions', () => {
       before(() => {
         setupApplication({
           permissions: ['ui-users.settings.customfields.view'],
         });
       });
-  
+
       beforeEach(async function () {
         this.visit('/settings/users/custom-fields');
         await CustomFieldsInteractor.whenLoaded();
       });
-  
+
       it('should display Custom fields pane', () => {
         expect(CustomFieldsInteractor.viewCustomFieldsPaneIsPresent).to.be.true;
       });
