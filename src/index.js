@@ -112,6 +112,7 @@ const settingsPatronBlocks = [
     route: 'conditions',
     label: <FormattedMessage id="ui-users.settings.conditions" />,
     component: ConditionsSettings,
+    //perm: 'ui-users.settings.conditions',
     perm: '',
   }
 ];
@@ -230,6 +231,7 @@ class UsersRouting extends Component {
       return (
         <Settings
           {...this.props}
+          //navPaneWidth="20%"
           sections={this.sections}
           paneTitle={<FormattedMessage id="ui-users.settings.label" />}
         />

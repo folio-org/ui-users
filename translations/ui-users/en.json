@@ -104,6 +104,7 @@
   "settings.block.borrowing": "Block borrowing",
   "settings.block.renew": "Block renewals",
   "settings.block.request": "Block request",
+  "settings.block.message": "Message to be displayed",
 
   "loans.columns.title": "Item title",
   "loans.columns.itemStatus": "Item status",
