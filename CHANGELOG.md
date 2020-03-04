@@ -64,6 +64,7 @@
 * Restore display of "invisible" permissions. Refs UIU-1372.
 * Rename "Loans: All permissions" permission to "Users: User loans view, edit, renew (all)". Refs UIU-1344.
 * Add `autoFocus` prop to `<SearchField>`. Refs UIU-1248.
+* Implement declare items lost permission. Refs UIU-1265.
 
 ## [2.25.3](https://github.com/folio-org/ui-users/tree/v2.25.3) (2019-09-26)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.2...v2.25.3)
