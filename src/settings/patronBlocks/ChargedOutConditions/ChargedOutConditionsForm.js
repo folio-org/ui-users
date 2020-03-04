@@ -4,6 +4,11 @@ import {
   injectIntl,
   FormattedMessage, intlShape,
 } from 'react-intl';
+import {
+  Field,
+  FieldArray,
+  getFormValues,
+} from 'redux-form';
 
 import {
   Row,
@@ -14,7 +19,6 @@ import {
   Button,
   TextArea,
 } from '@folio/stripes/components';
-import { Field } from 'redux-form';
 import { ConfigManager } from '@folio/stripes/smart-components';
 import stripesForm from '@folio/stripes/form';
 import { stripesShape } from '@folio/stripes-core';
@@ -24,7 +28,7 @@ import css from '../conditions.css';
 class ChargedOutConditionsForm extends Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
-    // handleSubmit: PropTypes.func.isRequired,
+    handleSubmit: PropTypes.func.isRequired,
     onSubmit: PropTypes.func.isRequired,
     pristine: PropTypes.bool,
     submitting: PropTypes.bool,
@@ -36,22 +40,17 @@ class ChargedOutConditionsForm extends Component {
     super(props);
   }
 
-  onSave = () => {
-    const {
-      dispatch,
-      onSubmit,
-    } = this.props;
-
-    const normalizedData = normalize({ data, dispatch });
-
-    onSubmit({ chargeOutConditions: JSON.stringify(normalizedData) });
+  onSave = (values) => {
+    
   }
 
   renderFooter = () => {
     const {
       pristine,
       submitting,
+      handleSubmit,
     } = this.props;
+    const isDisabled = pristine || submitting;
 
     return (
       <PaneFooter
@@ -60,7 +59,7 @@ class ChargedOutConditionsForm extends Component {
             data-test-charged-out-conditions-save-button
             type="submit"
             buttonStyle="primary paneHeaderNewButton"
-            disabled={pristine || submitting}
+            disabled={isDisabled}
             marginBottom0
           >
             <FormattedMessage id="stripes-core.button.save" />
@@ -70,6 +69,12 @@ class ChargedOutConditionsForm extends Component {
     );
   }
 
+  getCurrentValues = () => {
+    const { store } = this.props.stripes;
+    const state = store.getState();
+
+    return getFormValues('chargedOutConditionsForm')(state) || {};
+  }
 
   render() {
     const { label } = this.props;
@@ -78,6 +83,7 @@ class ChargedOutConditionsForm extends Component {
       <form
         id="chargedOutConditionsForm"
         className={css.conditionsForm}
+        onSubmit={(values)=> this.onSave(values)}
       >
         <Pane
           defaultWidth="30%"

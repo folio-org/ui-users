@@ -231,7 +231,7 @@ class UsersRouting extends Component {
       return (
         <Settings
           {...this.props}
-          //navPaneWidth="20%"
+          navPaneWidth="20%"
           sections={this.sections}
           paneTitle={<FormattedMessage id="ui-users.settings.label" />}
         />
