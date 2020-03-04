@@ -11,50 +11,56 @@ import setupApplication from '../helpers/setup-application';
 import CustomFieldsInteractor from '../interactors/settings-custom-fields';
 
 describe('Settings custom fields', () => {
-  setupApplication();
+  const customFields = [
+    {
+      id: 'daf98472-7311-487d-a018-65fb2496e3e4',
+      name: 'Custom field 1',
+      refId: 'custom-field-_1',
+      type: 'TEXTBOX_LONG',
+      entityType: 'user',
+      visible: false,
+      required: false,
+      order: 1,
+      helpText: 'Very helpful text',
+      metadata: {
+        createdDate: '2020-02-25T09:06:16.182+0000',
+        createdByUserId: '6be4382b-cfa9-5571-a7ed-cb89536de85b',
+        createdByUsername: 'diku_admin',
+        updatedDate: '2020-02-25T09:06:16.182+0000',
+        updatedByUserId: '6be4382b-cfa9-5571-a7ed-cb89536de85b'
+      }
+    },
+    {
+      id: '4e8f8e16-8fd2-4d69-8d64-3ee8c0bb385f',
+      name: 'Custom field 2',
+      refId: 'custom-field-_2',
+      type: 'TEXTBOX_SHORT',
+      entityType: 'user',
+      visible: true,
+      required: true,
+      order: 2,
+      helpText: '',
+      metadata: {
+        createdDate: '2020-02-25T09:06:16.182+0000',
+        createdByUserId: '6be4382b-cfa9-5571-a7ed-cb89536de85b',
+        createdByUsername: 'diku_admin',
+        updatedDate: '2020-02-25T09:06:16.182+0000',
+        updatedByUserId: '6be4382b-cfa9-5571-a7ed-cb89536de85b'
+      }
+    },
+  ];
 
   describe('when there are custom fields saved', () => {
+    before(() => {
+      setupApplication({
+        permissions: ['ui-users.settings.customfields.edit'],
+      });
+    });
+
     beforeEach(async function () {
       this.server.get('/custom-fields', () => ({
-        'customFields': [
-          {
-            id: 'daf98472-7311-487d-a018-65fb2496e3e4',
-            name: 'Custom field 1',
-            refId: 'custom-field-_1',
-            type: 'TEXTBOX_LONG',
-            entityType: 'user',
-            visible: false,
-            required: false,
-            order: 1,
-            helpText: 'Very helpful text',
-            metadata: {
-              createdDate: '2020-02-25T09:06:16.182+0000',
-              createdByUserId: '6be4382b-cfa9-5571-a7ed-cb89536de85b',
-              createdByUsername: 'diku_admin',
-              updatedDate: '2020-02-25T09:06:16.182+0000',
-              updatedByUserId: '6be4382b-cfa9-5571-a7ed-cb89536de85b'
-            }
-          },
-          {
-            id: '4e8f8e16-8fd2-4d69-8d64-3ee8c0bb385f',
-            name: 'Custom field 2',
-            refId: 'custom-field-_2',
-            type: 'TEXTBOX_SHORT',
-            entityType: 'user',
-            visible: true,
-            required: true,
-            order: 2,
-            helpText: '',
-            metadata: {
-              createdDate: '2020-02-25T09:06:16.182+0000',
-              createdByUserId: '6be4382b-cfa9-5571-a7ed-cb89536de85b',
-              createdByUsername: 'diku_admin',
-              updatedDate: '2020-02-25T09:06:16.182+0000',
-              updatedByUserId: '6be4382b-cfa9-5571-a7ed-cb89536de85b'
-            }
-          },
-        ],
-        'totalRecords': 2
+        'customFields': customFields,
+        'totalRecords': 2,
       }));
 
       this.visit('/settings/users/custom-fields');
@@ -76,6 +82,12 @@ describe('Settings custom fields', () => {
   });
 
   describe('when there are no custom fields saved', () => {
+    before(() => {
+      setupApplication({
+        permissions: ['ui-users.settings.customfields.edit'],
+      });
+    });
+
     beforeEach(async function () {
       this.server.get('/custom-fields', () => ({
         'customFields': [],
@@ -92,10 +104,16 @@ describe('Settings custom fields', () => {
   });
 
   describe('when clicking on Edit button', () => {
+    before(() => {
+      setupApplication({
+        permissions: ['ui-users.settings.customfields.edit'],
+      });
+    });
+
     beforeEach(async function () {
       this.server.get('/custom-fields', () => ({
         'customFields': [],
-        'totalRecords': 0
+        'totalRecords': 0,
       }));
 
       this.visit('/settings/users/custom-fields');
@@ -109,49 +127,10 @@ describe('Settings custom fields', () => {
   });
 
   describe('permissions', () => {
-    const customFields = [
-      {
-        id: 'daf98472-7311-487d-a018-65fb2496e3e4',
-        name: 'Custom field 1',
-        refId: 'custom-field-_1',
-        type: 'TEXTBOX_LONG',
-        entityType: 'user',
-        visible: false,
-        required: false,
-        order: 1,
-        helpText: 'Very helpful text',
-        metadata: {
-          createdDate: '2020-02-25T09:06:16.182+0000',
-          createdByUserId: '6be4382b-cfa9-5571-a7ed-cb89536de85b',
-          createdByUsername: 'diku_admin',
-          updatedDate: '2020-02-25T09:06:16.182+0000',
-          updatedByUserId: '6be4382b-cfa9-5571-a7ed-cb89536de85b'
-        }
-      },
-      {
-        id: '4e8f8e16-8fd2-4d69-8d64-3ee8c0bb385f',
-        name: 'Custom field 2',
-        refId: 'custom-field-_2',
-        type: 'TEXTBOX_SHORT',
-        entityType: 'user',
-        visible: true,
-        required: true,
-        order: 2,
-        helpText: '',
-        metadata: {
-          createdDate: '2020-02-25T09:06:16.182+0000',
-          createdByUserId: '6be4382b-cfa9-5571-a7ed-cb89536de85b',
-          createdByUsername: 'diku_admin',
-          updatedDate: '2020-02-25T09:06:16.182+0000',
-          updatedByUserId: '6be4382b-cfa9-5571-a7ed-cb89536de85b'
-        }
-      },
-    ];
-
     beforeEach(function () {
       this.server.get('/custom-fields', () => ({
         'customFields': customFields,
-        'totalRecords': 2
+        'totalRecords': 2,
       }));
     });
 
