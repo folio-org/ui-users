@@ -99,6 +99,10 @@ class UserEdit extends React.Component {
       'permissions',
     );
 
+    if (!userFormValues.personal) {
+      userFormValues.personal = {};
+    }
+
     userFormValues.personal.addresses = getFormAddressList(get(user, 'personal.addresses', []));
 
     return {

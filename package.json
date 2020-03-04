@@ -254,6 +254,41 @@
         "visible": true
       },
       {
+        "permissionName": "ui-users.settings.customfields.view",
+        "displayName": "Settings (Users): Can view custom fields",
+        "subPermissions": [
+          "custom.fields.collection.get",
+          "custom.fields.item.get",
+          "custom.fields.item.stats.get",
+          "settings.users.enabled",
+          "configuration.entries.collection.get"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.customfields.edit",
+        "displayName": "Settings (Users): Can create, edit, and view custom fields",
+        "subPermissions": [
+          "ui-users.settings.customfields.view",
+          "custom.fields.collection.put",
+          "custom.fields.item.post",
+          "custom.fields.item.put",
+          "configuration.entries.item.post",
+          "configuration.entries.item.put"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.customfields.all",
+        "displayName": "Settings (Users): Can create, edit, view and delete custom fields",
+        "subPermissions": [
+          "ui-users.settings.customfields.view",
+          "ui-users.settings.customfields.edit",
+          "custom.fields.item.delete"
+        ],
+        "visible": true
+      },
+      {
         "permissionName": "settings.feefines.all",
         "displayName": "Settings (Users): Can create, edit and remove feefines [LEGACY]",
         "subPermissions": [
@@ -558,6 +593,19 @@
         "description": "Also includes backend permissions to perform loans renew through override",
         "subPermissions": [
           "circulation.override-renewal-by-barcode.post"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.loans.declare-item-lost",
+        "displayName": "Users: User loans declare lost",
+        "description": "Also includes backend permissions to declare items lost",
+        "subPermissions": [
+          "circulation.loans.declare-item-lost.post",
+          "circulation-storage.loans.item.get",
+          "inventory-storage.items.item.get",
+          "inventory-storage.holdings.item.get",
+          "inventory-storage.instances.item.get"
         ],
         "visible": true
       },
