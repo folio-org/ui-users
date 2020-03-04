@@ -20,7 +20,7 @@ export default (server) => {
   server.create('account', {
     userId: user.id,
     status: {
-      name: 'Open'
+      name: 'Open',
     },
     amount: 100,
     remaining: 100,
@@ -29,7 +29,7 @@ export default (server) => {
   server.create('account', {
     userId: user.id,
     status: {
-      name: 'Closed'
+      name: 'Closed',
     },
     amount: 0,
     remaining: 0
@@ -42,13 +42,14 @@ export default (server) => {
 
   server.post('/loans', (schema, request) => {
     const body = JSON.parse(request.requestBody);
+
     return schema.feefineactions.create(body);
   });
 
   server.get('/loans', (schema, request) => {
     const url = new URL(request.url);
     const cqlQuery = url.searchParams.get('query');
-    
+
     if (cqlQuery != null) {
       const cqlParser = new CQLParser();
       cqlParser.parse(cqlQuery);
@@ -59,6 +60,7 @@ export default (server) => {
         });
       }
     }
+
     return schema.feefineactions.all();
   });
 

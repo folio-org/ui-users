@@ -1,5 +1,4 @@
 import React from 'react';
-import _ from 'lodash';
 import PropTypes from 'prop-types';
 
 import { stripesConnect } from '@folio/stripes/core';
@@ -95,8 +94,8 @@ class AccountDetailsContainer extends React.Component {
   }
 
   getItemDetails = () => {
-    const account = this.getAccount();
     const { resources } = this.props;
+    const account = this.getAccount();
     const loanRecords = resources?.loans?.records ?? [];
     const itemId = account?.itemId;
     const item = loanRecords.filter((loan) => loan.itemId === itemId);

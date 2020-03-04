@@ -6,7 +6,6 @@ import {
   text,
   isPresent,
   isVisible,
-  scoped,
 } from '@bigtest/interactor';
 import ButtonInteractor from '@folio/stripes-components/lib/Button/tests/interactor'; // eslint-disable-line
 import MultiColumnListInteractor from '@folio/stripes-components/lib/MultiColumnList/tests/interactor'; // eslint-disable-line

@@ -191,9 +191,13 @@ class ViewFeesFines extends React.Component {
   }
 
   formatTitle(item) {
-    const instanceTypeString = item.materialType ? `(${item.materialType})` : '';
+    const {
+      materialType,
+      title,
+    } = item;
+    const instanceTypeString = materialType ? `(${materialType})` : '';
 
-    return `${item.title} ${instanceTypeString}` || '-';
+    return `${title} ${instanceTypeString}`;
   }
 
   formatDateTime(dateTimeStr) {
