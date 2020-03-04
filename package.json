@@ -519,10 +519,14 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.settings.patronBlocks",
-        "displayName": "Settings (Users): Can create, edit and remove fee/fine settings",
+        "permissionName": "ui-users.settings.conditions",
+        "displayName": "Settings (Users): Can create, edit and remove patron blocks conditions",
         "subPermissions": [
-
+          "patron-block-conditions.collection.get",
+          "patron-block-conditions.item.get",
+          "patron-block-conditions.item.post",
+          "patron-block-conditions.item.put",
+          "patron-block-conditions.item.delete"
         ],
         "visible": true
       },

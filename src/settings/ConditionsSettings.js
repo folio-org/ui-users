@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 
 import { Settings } from '@folio/stripes/smart-components';
 
-import ChargedOutConditions from './patronBlocks/ChargedOutConditions';
+import ChargedOutConditions from './patronBlocks/ChargedOutConditions/ChargedOutConditions';
 import OutstandingConditions from './patronBlocks/OutstandingConditions';
 import LostItemConditions from './patronBlocks/LostItemConditions';
 import OverdueItemConditions from './patronBlocks/OverdueItemConditions';
@@ -58,6 +58,7 @@ function getConditions(conditionItems) {
 
 export default props => <Settings
   {...props}
+  navPaneWidth="20%"
   pages={getConditions(conditions)}
   paneTitle={<FormattedMessage id="ui-users.settings.conditions" />}
 />;
