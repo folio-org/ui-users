@@ -97,7 +97,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
   // condition in those methods to determine whether it is safe to update state.
   _isMounted = false;
 
-  renewItem = (loan, patron, bulkRenewal) => {
+  renewItem = (loan, patron, bulkRenewal, silent) => {
     this.setState({ bulkRenewal });
     const params = {
       itemBarcode: loan.item.barcode,
@@ -105,7 +105,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
     };
 
     return new Promise((resolve, reject) => {
-      this.props.mutator.renew.POST(params)
+      this.props.mutator.renew.POST(params, { silent })
         .then(resolve)
         .catch(resp => {
           const contentType = resp.headers.get('Content-Type');
@@ -131,18 +131,19 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
     const renewFailure = [];
     const errorMsg = {};
     const countRenew = patronBlocks.filter(p => p.renewals);
-    const bulkRenewal = (loans.length > 1);
+    const loansSize = loans.length;
+    const bulkRenewal = (loansSize > 1);
 
     if (!isEmpty(countRenew)) {
       return this.setState({ patronBlockedModal: true });
     }
 
-    for (const loan of loans) {
+    for (const [index, loan] of loans.entries()) {
       try {
         // We actually want to execute it in a sequence so turning off eslint warning
         // https://issues.folio.org/browse/UIU-1299
         // eslint-disable-next-line no-await-in-loop
-        renewSuccess.push(await this.renewItem(loan, patron, bulkRenewal));
+        renewSuccess.push(await this.renewItem(loan, patron, bulkRenewal, index !== loansSize - 1));
       } catch (error) {
         const stringErrorMessage = get(error, 'props.values.message', '');
 
