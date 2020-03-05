@@ -2,13 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
   FormattedMessage,
-  injectIntl,
-  intlShape,
 } from 'react-intl';
 
 import { ConfigManager } from '@folio/stripes/smart-components';
 import {
-  stripesShape,
   withStripes,
 } from '@folio/stripes/core';
 
@@ -16,12 +13,12 @@ import ChargedOutConditionsForm from './ChargedOutConditionsForm';
 
 class ChargedOutConditions extends Component {
   static manifest = Object.freeze({
-    patronBlockConditionId: {},
-    patronBlockConditions: {
+    conditions: {
       type: 'okapi',
       records: 'conditions',
-      path: 'conditions',
-      accumulate: 'true',
+      GET: {
+        path: 'patron-block-conditions',
+      },
       PUT: {
         path: 'patron-block-conditions/{patronBlockConditionId}',
       },
@@ -30,18 +27,16 @@ class ChargedOutConditions extends Component {
 
   static propTypes = {
     mutator: PropTypes.shape({
-      patronBlockConditionId: PropTypes.shape({}),
-      patronBlockConditions: PropTypes.shape({
+      conditions: PropTypes.shape({
         PUT: PropTypes.func,
         GET: PropTypes.func,
       }),
     }),
     resources: PropTypes.shape({
-      patronBlockConditions: PropTypes.shape({
+      conditions: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }),
-    intl: intlShape.isRequired,
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
     }).isRequired,
@@ -51,33 +46,23 @@ class ChargedOutConditions extends Component {
     super(props);
     const {
       stripes,
-      intl,
     } = props;
 
     this.configManager = stripes.connect(ConfigManager);
-    //this.formatMessage = intl.formatMessage;
   }
 
   componentDidMount() {
     const {
-      mutator: { patronBlockConditions }
+      mutator: { conditions }
     } = this.props;
 
-    patronBlockConditions.GET().then(records => {
-      const defaultConfig = {
-        blockBorrowing: false,
-        blockRenewals: false,
-        blockRequests: false,
-        message: '',
-      };
-  
-      if (records.length === 0) {
-        console.log('ttt');
-      }
-    });
+    //conditions.GET().then(record => console.log(record));
+
+    console.log(this.props.mutator);
   }
 
   getInitialValues(settings) {
+    console.log(settings);
     const defaultConfig = {
       blockBorrowing: false,
       blockRenewals: false,
@@ -87,6 +72,12 @@ class ChargedOutConditions extends Component {
 
     return defaultConfig;
   }
+
+  /*getInitialValues(settings) {
+    console.log(settings);
+    //const value = settings.length && settings[0].value === 'true';
+    //return { profile_pictures: value };
+  }*/
 
   render() {
     return (
