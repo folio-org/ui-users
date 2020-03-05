@@ -710,6 +710,7 @@
     "react-intl": "^2.5.0",
     "react-router-prop-types": "^1.0.4",
     "redux-form": "^7.0.3",
+    "react-final-form": "^6.3.0",
     "uuid": "^3.0.1"
   },
   "peerDependencies": {
