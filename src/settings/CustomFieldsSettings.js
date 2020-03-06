@@ -26,7 +26,7 @@ const CustomFieldsSettings = ({
   };
 
   if (!permissions.canView) {
-    history.push('/settings/users');
+    history.replace('/settings/users');
   }
 
   return (

@@ -26,7 +26,7 @@ const EditCustomFields = ({
   };
 
   if (!permissions.canView) {
-    history.push('/users');
+    history.replace('/users');
   }
 
   return (
