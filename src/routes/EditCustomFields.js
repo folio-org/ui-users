@@ -1,22 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { withStripes } from '@folio/stripes-core';
+import { useStripes } from '@folio/stripes-core';
 import { EditCustomFieldsSettings } from '@folio/stripes/smart-components';
 
 const propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
-  stripes: PropTypes.shape({
-    hasPerm: PropTypes.func.isRequired,
-  }).isRequired,
 };
 
 const EditCustomFields = ({
   history,
-  stripes,
 }) => {
+  const stripes = useStripes();
+
   const redirectToView = () => {
     history.push('/settings/users/custom-fields');
   };
@@ -26,6 +24,10 @@ const EditCustomFields = ({
     canEdit: stripes.hasPerm('ui-users.settings.customfields.edit'),
     canDelete: stripes.hasPerm('ui-users.stripes.customfields.delete'),
   };
+
+  if (!permissions.canView) {
+    history.push('/users');
+  }
 
   return (
     <EditCustomFieldsSettings
@@ -39,4 +41,4 @@ const EditCustomFields = ({
 
 EditCustomFields.propTypes = propTypes;
 
-export default withStripes(EditCustomFields);
+export default EditCustomFields;
