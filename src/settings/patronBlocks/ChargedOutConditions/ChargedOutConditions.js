@@ -12,28 +12,15 @@ import {
 import ChargedOutConditionsForm from './ChargedOutConditionsForm';
 
 class ChargedOutConditions extends Component {
-  static manifest = Object.freeze({
-    conditions: {
-      type: 'okapi',
-      records: 'conditions',
-      GET: {
-        path: 'patron-block-conditions',
-      },
-      PUT: {
-        path: 'patron-block-conditions/{patronBlockConditionId}',
-      },
-    },
-  });
-
   static propTypes = {
     mutator: PropTypes.shape({
-      conditions: PropTypes.shape({
-        PUT: PropTypes.func,
+      patronBlockConditions: PropTypes.shape({
         GET: PropTypes.func,
+        PUT: PropTypes.func,
       }),
     }),
     resources: PropTypes.shape({
-      conditions: PropTypes.shape({
+      patronBlockConditions: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }),
@@ -42,42 +29,32 @@ class ChargedOutConditions extends Component {
     }).isRequired,
   };
 
+  static manifest = Object.freeze({
+    patronBlockConditions: {
+      type: 'okapi',
+      records: 'patronBlockConditions',
+      path: 'patron-block-conditions',
+      accumulate: 'true',
+    },
+  });
+
+
   constructor(props) {
     super(props);
-    const {
-      stripes,
-    } = props;
 
-    this.configManager = stripes.connect(ConfigManager);
+    this.state = {
+      initialValues: {},
+    }
+
+    this.configManager = this.props.stripes.connect(ConfigManager);
   }
 
   componentDidMount() {
-    const {
-      mutator: { conditions }
-    } = this.props;
-
-    //conditions.GET().then(record => console.log(record));
-
-    console.log(this.props.mutator);
   }
 
-  getInitialValues(settings) {
-    console.log(settings);
-    const defaultConfig = {
-      blockBorrowing: false,
-      blockRenewals: false,
-      blockRequests: false,
-      message: '',
-    };
-
-    return defaultConfig;
+  getInitialValues(conditions) {
+    console.log(conditions);
   }
-
-  /*getInitialValues(settings) {
-    console.log(settings);
-    //const value = settings.length && settings[0].value === 'true';
-    //return { profile_pictures: value };
-  }*/
 
   render() {
     return (
@@ -86,7 +63,7 @@ class ChargedOutConditions extends Component {
         moduleName="USERS"
         configName="chargeOutConditions"
         configFormComponent={ChargedOutConditionsForm}
-        getInitialValues={this.getInitialValues}
+        //getInitialValues={this.getInitialValues(conditionsRecord)}
         stripes={this.props.stripes}
       />
     );
