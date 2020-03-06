@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { stripesConnect } from '@folio/stripes-core';
+import { withStripes } from '@folio/stripes-core';
 import { EditCustomFieldsSettings } from '@folio/stripes/smart-components';
 
 const propTypes = {
@@ -39,4 +39,4 @@ const EditCustomFields = ({
 
 EditCustomFields.propTypes = propTypes;
 
-export default stripesConnect(EditCustomFields);
+export default withStripes(EditCustomFields);
