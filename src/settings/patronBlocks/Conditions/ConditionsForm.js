@@ -18,14 +18,30 @@ import {
 import stripesForm from '@folio/stripes/form';
 import { stripesShape } from '@folio/stripes-core';
 
-import css from '../conditions.css';
+import css from './conditions.css';
 
-class ChargedOutConditionsForm extends Component {
+class ConditionsForm extends Component {
+  state = { // TODO:: Fix state!!!!!
+    id: this.props.initialValues.id,
+    name: this.props.initialValues.name,
+    blockBorrowing: this.props.initialValues.blockBorrowing,
+    blockRenewals: this.props.initialValues.blockRenewals,
+    blockRequests: this.props.initialValues.blockRequests,
+    message: this.props.initialValues.message,
+  };
+
   static propTypes = {
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    blockBorrowing: PropTypes.bool.isRequired,
+    blockRenewals: PropTypes.bool.isRequired,
+    blockRequests: PropTypes.bool.isRequired,
+    message: PropTypes.string.isRequired,
+
     onSubmit: PropTypes.func.isRequired,
     pristine: PropTypes.bool,
     submitting: PropTypes.bool,
-    label: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
+    label: PropTypes.string.isRequired,
     stripes: stripesShape.isRequired,
     errors: PropTypes.arrayOf(PropTypes.object),
   };
@@ -34,17 +50,9 @@ class ChargedOutConditionsForm extends Component {
     errors: []
   };
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-
-    };
-  }
-
   onSave = (values) => {
 
-  }
+  };
 
   renderFooter = () => {
     const {
@@ -64,19 +72,12 @@ class ChargedOutConditionsForm extends Component {
             disabled={isDisabled}
             marginBottom0
           >
-            <FormattedMessage id="stripes-core.button.save" />
+            <FormattedMessage id="stripes-core.button.save"/>
           </Button>
-            )}
+        )}
       />
     );
-  }
-
-  getCurrentValues = () => {
-    const { store } = this.props.stripes;
-    const state = store.getState();
-
-    // return getFormValues('chargedOutConditionsForm')(state) || {};
-  }
+  };
 
   render() {
     const {
@@ -87,6 +88,13 @@ class ChargedOutConditionsForm extends Component {
       handleSubmit,
       getInitialValues,
     } = this.props;
+
+    const {
+      blockBorrowing,
+      blockRenewals,
+      blockRequests,
+      message,
+    } = this.state;
 
     return (
       <Form
@@ -107,37 +115,43 @@ class ChargedOutConditionsForm extends Component {
               <Row>
                 <Col xs={12}>
                   <Field
-                    component={Checkbox}
-                    type="checkbox"
                     id="blockBorrowing"
+                    type="checkbox"
                     name="blockBorrowing"
-                    label={<FormattedMessage id="ui-users.settings.block.borrowing" />}
+                    label={<FormattedMessage id="ui-users.settings.block.borrowing"/>}
+                    component={Checkbox}
+                    checked={blockBorrowing}
+                    onChange={(event) => this.onToggleValue(event, 'blockBorrowing')}
                   />
                 </Col>
               </Row>
               <Row>
                 <Col xs={12}>
                   <Field
-                    component={Checkbox}
-                    type="checkbox"
                     id="blockRenewals"
+                    type="checkbox"
                     name="blockRenewals"
-                    label={<FormattedMessage id="ui-users.settings.block.renew" />}
+                    label={<FormattedMessage id="ui-users.settings.block.renew"/>}
+                    component={Checkbox}
+                    checked={blockRenewals}
+                    onChange={(event) => this.onToggleValue(event, 'blockRenewals')}
                   />
                 </Col>
               </Row>
               <Row>
                 <Col xs={12}>
                   <Field
-                    component={Checkbox}
-                    type="checkbox"
                     id="blockRequests"
+                    type="checkbox"
                     name="blockRequests"
-                    label={<FormattedMessage id="ui-users.settings.block.request" />}
+                    label={<FormattedMessage id="ui-users.settings.block.request"/>}
+                    component={Checkbox}
+                    checked={blockRequests}
+                    onChange={(event) => this.onToggleValue(event, 'blockRequests')}
                   />
                 </Col>
               </Row>
-              <br />
+              <br/>
               <Row>
                 <Col xs={12}>
                   <Field
@@ -145,7 +159,7 @@ class ChargedOutConditionsForm extends Component {
                     type="textarea"
                     id="message"
                     name="message"
-                    label={<FormattedMessage id="ui-users.settings.block.message" />}
+                    label={<FormattedMessage id="ui-users.settings.block.message"/>}
                   />
                 </Col>
               </Row>
@@ -155,6 +169,8 @@ class ChargedOutConditionsForm extends Component {
       />
     );
   }
+
+  onToggleValue = (event, propsName) => {}
 }
 
-export default ChargedOutConditionsForm;
+export default ConditionsForm;
