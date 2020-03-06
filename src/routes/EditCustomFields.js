@@ -7,6 +7,7 @@ import { EditCustomFieldsSettings } from '@folio/stripes/smart-components';
 const propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
+    replace: PropTypes.func.isRequired,
   }).isRequired,
 };
 
