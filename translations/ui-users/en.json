@@ -324,6 +324,7 @@
   "feefines.errors.amountPositive": "Default Amount must be positive",
   "feefines.errors.exist": "Fee/fine type exists",
   "feefines.errors.existShared": "Fee/fine type exists for owner {owner}",
+  "feefines.errors.reservedName": "Fee/fine type already exists as automated fee/fine",
 
   "feefines.modal.error": "Select one to continue",
   "feefines.modal.yes": "Yes",
