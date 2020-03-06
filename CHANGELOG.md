@@ -40,6 +40,7 @@
 * Update eslint to >= 6.2.1 or eslint-util >= 1.4.1. Refs UIU-1446.
 * Add 'Custom Fields' under User Settings to give circulation managers ability to add more fields to records. Refs UIU-1441
 * Validate presence of `user.personal` before accessing it. Fixes UIU-1510.
+* Add link to Overdue Fine Policy and Lost Item Fee Policy on Fee/Fine Details page. Refs UIU-1247.
 
 ## [2.26.0](https://github.com/folio-org/ui-users/tree/v2.26.0) (2019-12-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.3...v2.26.0)
@@ -64,6 +65,7 @@
 * Restore display of "invisible" permissions. Refs UIU-1372.
 * Rename "Loans: All permissions" permission to "Users: User loans view, edit, renew (all)". Refs UIU-1344.
 * Add `autoFocus` prop to `<SearchField>`. Refs UIU-1248.
+* Implement declare items lost permission. Refs UIU-1265.
 
 ## [2.25.3](https://github.com/folio-org/ui-users/tree/v2.25.3) (2019-09-26)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.2...v2.25.3)

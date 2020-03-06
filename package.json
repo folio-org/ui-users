@@ -597,6 +597,19 @@
         "visible": true
       },
       {
+        "permissionName": "ui-users.loans.declare-item-lost",
+        "displayName": "Users: User loans declare lost",
+        "description": "Also includes backend permissions to declare items lost",
+        "subPermissions": [
+          "circulation.loans.declare-item-lost.post",
+          "circulation-storage.loans.item.get",
+          "inventory-storage.items.item.get",
+          "inventory-storage.holdings.item.get",
+          "inventory-storage.instances.item.get"
+        ],
+        "visible": true
+      },
+      {
         "permissionName": "ui-users.loans.view",
         "displayName": "Users: User loans view",
         "description": "Also includes basic permissions to view users",
