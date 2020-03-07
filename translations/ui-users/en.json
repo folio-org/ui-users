@@ -104,6 +104,7 @@
   "settings.block.renew": "Block renewals",
   "settings.block.request": "Block request",
   "settings.block.message": "Message to be displayed",
+  "settings.callout.message": "The patron block condition <strong>{name}</strong> has been successfully <strong>updated</strong>.",
 
   "loans.columns.title": "Item title",
   "loans.columns.itemStatus": "Item status",

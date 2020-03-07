@@ -9,12 +9,6 @@ import {
 import ConditionsForm from './ConditionsForm';
 
 class Conditions extends Component {
-  constructor(props) {
-    super(props);
-
-    this.configManager = this.props.stripes.connect(ConfigManager);
-  }
-
   static propTypes = {
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
@@ -25,16 +19,26 @@ class Conditions extends Component {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
     }).isRequired,
+    resources: PropTypes.shape({
+      patronBlockConditions: PropTypes.object,
+    }).isRequired,
+    mutator: PropTypes.shape({
+      patronBlockConditions: PropTypes.shape({
+        PUT: PropTypes.func.isRequired,
+      }),
+    }).isRequired,
   };
 
-  static manifest = Object.freeze({
-    patronBlockConditions: {
-      type: 'okapi',
-      records: 'patronBlockConditions',
-      path: 'patron-block-conditions',
-      accumulate: 'true',
-    },
-  });
+  constructor(props) {
+    super(props);
+
+    this.configManager = this.props.stripes.connect(ConfigManager);
+  }
+  
+  componentDidMount() {
+    console.log('In component did mpount');
+    console.log(this.props);
+  }
 
   render() {
     const {
@@ -45,9 +49,10 @@ class Conditions extends Component {
       <this.configManager
         label={name}
         moduleName="USERS"
-        configName="chargeOutConditions"
+        configName="patron_block__conditions"
         configFormComponent={ConditionsForm}
         getInitialValues={() => this.getInitialValues()}
+        validate={this.validate}
         stripes={this.props.stripes}
       />
     );
@@ -71,6 +76,21 @@ class Conditions extends Component {
       blockRequests,
       message,
     }
+  }
+
+  validate = (values) => {
+    const errors = {};
+    const {
+      blockBorrowing,
+      blockRenewals,
+      blockRequests,
+      message,
+    } = values;
+
+    console.log('.... values');
+    console.log(values);
+
+    return errors;
   }
 }
 
