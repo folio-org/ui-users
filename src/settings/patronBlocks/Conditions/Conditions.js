@@ -7,6 +7,7 @@ import {
 } from '@folio/stripes/core';
 
 import ConditionsForm from './ConditionsForm';
+import css from './conditions.css'
 
 class Conditions extends Component {
   static propTypes = {
@@ -46,15 +47,17 @@ class Conditions extends Component {
     } = this.props;
 
     return (
-      <this.configManager
-        label={name}
-        moduleName="USERS"
-        configName="patron_block__conditions"
-        configFormComponent={ConditionsForm}
-        getInitialValues={() => this.getInitialValues()}
-        validate={this.validate}
-        stripes={this.props.stripes}
-      />
+      <section className={css.conditiionsWrapper}>
+        <this.configManager
+          label={name}
+          moduleName="USERS"
+          configName="patron_block__conditions"
+          configFormComponent={ConditionsForm}
+          getInitialValues={() => this.getInitialValues()}
+          validate={this.validate}
+          stripes={this.props.stripes}
+        />
+      </section>
     );
   }
 

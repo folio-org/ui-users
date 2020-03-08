@@ -14,6 +14,7 @@ import {
 } from '@folio/stripes/components';
 import { stripesShape } from '@folio/stripes-core';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
+import stripesForm from '@folio/stripes/form';
 
 import css from './conditions.css';
 
@@ -71,18 +72,28 @@ class ConditionsForm extends Component {
       <SafeHTMLMessage
         id="ui-users.settings.callout.message"
         values={{ name: this.state.name }}
-      />);
+      />
+    );
     const condition = {
       ...this.state,
       message: values.message,
     };
-    patronBlockConditions.PUT(condition).then(() => {
+    patronBlockConditions.PUT(condition)
+    .then(() => {
       this.callout.sendCallout({ message: calloutMessage });
     });
   };
 
+
   renderFooter = (submitting, pristine) => {
-    const isDisabled = pristine || submitting;
+    const {
+      blockBorrowing,
+      blockRenewals,
+      blockRequests,
+      message,
+    } = this.state;
+    const formFilled = message && (blockBorrowing || blockRenewals || blockRequests);
+    const isDisabled = !formFilled && (pristine || submitting);
 
     return (
       <PaneFooter
@@ -100,6 +111,37 @@ class ConditionsForm extends Component {
       />
     );
   };
+
+  onChangeMessage = (e) => {
+    this.setState({ message: e.target.value });
+  }
+
+  showValidationMessage = () => {
+    const {
+      blockBorrowing,
+      blockRenewals,
+      blockRequests,
+      message,
+    } = this.state;
+
+    console.log('message');
+    console.log(message);
+    console.log(typeof(message));
+    const isChecked = blockBorrowing || blockRenewals || blockRequests;
+    const case1 = isChecked && !message;
+    const case2 = message && !isChecked;
+    let error = '';
+
+    if(case1) {
+      error = <FormattedMessage id="ui-users.settings.error.noMessage" />
+    }
+
+    if(case2) {
+      error = <FormattedMessage id="ui-users.settings.error.noCheckbox" />
+    }
+      
+    return error;
+  }
 
   render() {
     const {
@@ -124,7 +166,9 @@ class ConditionsForm extends Component {
           handleSubmit,
           submitting,
           pristine,
-        }) => {console.log('&&& ', values); return (
+        }) => {
+          console.log('&&& ', values);
+          return (
           <form
             id="chargedOutConditionsForm"
             className={css.conditionsForm}
@@ -183,9 +227,15 @@ class ConditionsForm extends Component {
                     type="textarea"
                     id="message"
                     name="message"
-                    value={values.message || message}
+                    value={message}
                     label={<FormattedMessage id="ui-users.settings.block.message" />}
-                  />
+                    validationEnabled
+                    //error={this.showError()}
+                    error={this.showValidationMessage()}
+                    required={blockBorrowing || blockRenewals || blockRequests}
+                    //onChange={(e) => this.onChangeMessage}
+                  >
+                  </Field>
                 </Col>
               </Row>
             </Pane>
@@ -196,4 +246,11 @@ class ConditionsForm extends Component {
   }
 }
 
-export default ConditionsForm;
+//export default ConditionsForm;
+export default stripesForm({
+  form: 'patronBlocktConditions',
+  navigationCheck: true,
+  enableReinitialize: true,
+  destroyOnUnmount: false,
+})(ConditionsForm);
+
