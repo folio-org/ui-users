@@ -1,3 +1,9 @@
 .conditionsForm {
     height: 100%;
 }
+
+.conditiionsWrapper {
+    display: flex;
+    flex: 0 0 40%;
+    overflow: hidden;
+}
