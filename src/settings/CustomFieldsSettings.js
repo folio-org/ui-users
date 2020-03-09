@@ -6,10 +6,13 @@ const propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
+  stripes: PropTypes.shape({
+    hasPerm: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 const CustomFieldsSettings = ({
-  history,
+  history, stripes,
 }) => {
   const redirectToEdit = () => {
     history.push('/users/custom-fields/edit');
@@ -20,6 +23,11 @@ const CustomFieldsSettings = ({
       backendModuleName="users"
       entityType="user"
       redirectToEdit={redirectToEdit}
+      permissions={{
+        canDelete: stripes.hasPerm('ui-users.settings.customfields.all'),
+        canEdit: stripes.hasPerm('ui-users.settings.customfields.edit'),
+        canView: stripes.hasPerm('ui-users.settings.customfields.view'),
+      }}
     />
   );
 };
