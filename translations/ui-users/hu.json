@@ -252,7 +252,6 @@
     "details.field.billedamount": "Számlázott összeg",
     "details.field.remainingamount": "Fennmaradó összeg",
     "details.field.latest": "Legutóbbi fizetési státusz",
-    "details.field.instance": "Példány",
     "details.field.type": "Tétel típusa",
     "details.field.barcode": "Vonalkód",
     "details.field.callnumber": "Raktári jelzet",
@@ -617,5 +616,7 @@
     "reports.overdue.item.enumeration": "Enumeration",
     "reports.overdue.item.volume": "Volume",
     "loans.details.effectiveCallNumber": "Effective call number string",
-    "settings.customFields": "Custom fields"
+    "settings.customFields": "Custom fields",
+    "details.field.instance.type": "Instance (Material type)",
+    "accounts.history.columns.instance": "Instance (Material type)"
 }

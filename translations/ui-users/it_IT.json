@@ -252,7 +252,6 @@
     "details.field.billedamount": "Importo fatturato",
     "details.field.remainingamount": "Importo residuo",
     "details.field.latest": "Ultimo stato pagamento",
-    "details.field.instance": "Istanza",
     "details.field.type": "Tipologia item",
     "details.field.barcode": "Codice a barre",
     "details.field.callnumber": "Collocazione",
@@ -617,5 +616,7 @@
     "reports.overdue.item.enumeration": "Enumerazione",
     "reports.overdue.item.volume": "Volume",
     "loans.details.effectiveCallNumber": "Effective call number string",
-    "settings.customFields": "Custom fields"
+    "settings.customFields": "Custom fields",
+    "details.field.instance.type": "Instance (Material type)",
+    "accounts.history.columns.instance": "Instance (Material type)"
 }
