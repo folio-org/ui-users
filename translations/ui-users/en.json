@@ -92,6 +92,7 @@
   "settings.refundReasons": "Refund reasons",
   "settings.commentRequired": "Comment required",
   "settings.transferAccounts": "Transfer accounts",
+  "settings.customFields": "Custom fields",
 
   "loans.columns.title": "Item title",
   "loans.columns.itemStatus": "Item status",
@@ -426,7 +427,7 @@
   "details.field.billedamount": "Billed amount",
   "details.field.remainingamount": "Remaining amount",
   "details.field.latest": "Latest payment status",
-  "details.field.instance": "Instance",
+  "details.field.instance.type": "Instance (Material type)",
   "details.field.type": "Item type",
   "details.field.barcode": "Barcode",
   "details.field.callnumber": "Call number",
@@ -447,6 +448,7 @@
   "accounts.error.select": "Select one",
 
   "accounts.history.columns.title": "Instance (Item type)",
+  "accounts.history.columns.instance": "Instance (Material type)",
   "accounts.history.columns.amount": "Billed",
   "accounts.history.columns.remaining": "Remaining",
   "accounts.history.columns.barcode": "Barcode",

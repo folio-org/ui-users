@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
@@ -14,7 +14,7 @@ const ResetPasswordModalBody = ({
   name,
 }) => {
   return (
-    <Fragment>
+    <>
       <FormattedMessage id="ui-users.extended.resetPasswordModal.linkWasSent" />
       <Row>
         <Col
@@ -28,7 +28,7 @@ const ResetPasswordModalBody = ({
         id="ui-users.extended.resetPasswordModal.linkInstructions"
         values={{ name }}
       />
-    </Fragment>
+    </>
   );
 };
 

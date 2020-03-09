@@ -8,7 +8,7 @@ class HelperApp extends React.Component {
   static propTypes = {
     match: PropTypes.object,
     stripes: PropTypes.object,
-    close: PropTypes.func,
+    onClose: PropTypes.func,
     appName: PropTypes.string,
   };
 
@@ -23,7 +23,7 @@ class HelperApp extends React.Component {
     const {
       match: { params },
       appName,
-      onClose
+      onClose,
     } = this.props;
 
     const HelperAppComponent = this.helperApps[appName];

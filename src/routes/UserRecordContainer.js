@@ -177,6 +177,7 @@ class UserRecordContainer extends React.Component {
     getPreferredServicePoint: PropTypes.func,
     tagsEnabled: PropTypes.bool,
     okapi: PropTypes.object,
+    children: PropTypes.node,
   };
 
   render() {

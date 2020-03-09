@@ -152,7 +152,7 @@ class PatronBlockLayer extends React.Component {
       </span> : '';
 
     return (
-      <React.Fragment>
+      <>
         <PatronBlockForm
           intl={intl}
           stripes={stripes}
@@ -172,7 +172,7 @@ class PatronBlockLayer extends React.Component {
           heading={intl.formatMessage({ id: 'ui-users.blocks.layer.heading' })}
           message={message}
         />
-      </React.Fragment>
+      </>
     );
   }
 }

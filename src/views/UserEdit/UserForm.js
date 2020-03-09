@@ -211,8 +211,11 @@ class UserForm extends React.Component {
     match: PropTypes.object,
     pristine: PropTypes.bool,
     submitting: PropTypes.bool,
+    invalid: PropTypes.bool,
+    onCancel: PropTypes.func.isRequired,
     onSubmit: PropTypes.func.isRequired,
     initialValues: PropTypes.object.isRequired,
+    servicePoints: PropTypes.object.isRequired,
   };
 
   static defaultProps = {
