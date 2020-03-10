@@ -17,7 +17,7 @@ import { AccordionSetInteractor } from '@folio/stripes-components/lib/Accordion/
   deleteCustomFieldButtonsCount = count('[type="button"][data-test-custom-field-delete-button]');
 
   whenLoaded() {
-    return this.when(() => this.isPresent).timeout(1000);
+    return this.when(() => this.isPresent);
   }
 
   whenCustomFieldsLoaded() {
