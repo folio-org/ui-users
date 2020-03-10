@@ -57,6 +57,7 @@ const settingsGeneral = [
     route: 'custom-fields',
     label: <FormattedMessage id="ui-users.settings.customFields" />,
     component: CustomFieldsSettingsPane,
+    perm: 'ui-users.settings.customfields.view',
   }
 ];
 
