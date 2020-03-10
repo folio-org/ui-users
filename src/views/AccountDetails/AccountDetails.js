@@ -1,5 +1,5 @@
-import _ from 'lodash';
 import React from 'react';
+import _ from 'lodash';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import {
@@ -70,7 +70,12 @@ class AccountDetails extends React.Component {
     history: PropTypes.object,
     match: PropTypes.object,
     patronGroup: PropTypes.object,
+    itemDetails: PropTypes.object,
   };
+
+  static defaultProps = {
+    itemDetails: {},
+  }
 
   constructor(props) {
     super(props);
@@ -111,7 +116,7 @@ class AccountDetails extends React.Component {
 
   static getDerivedStateFromProps(props) {
     const {
-      resources
+      resources,
     } = props;
 
     const accountActivity = (resources.accountActions || {}).records || [];
@@ -179,6 +184,16 @@ class AccountDetails extends React.Component {
     }));
   }
 
+  getInstanceInfo = () => {
+    const { resources } = this.props;
+    const account = resources?.accountHistory?.records[0] ?? {};
+    const instanceTitle = account?.title;
+    const instanceType = account?.materialType;
+    const instanceTypeString = instanceType ? `(${instanceType})` : '';
+
+    return `${instanceTitle} ${instanceTypeString}`;
+  }
+
   render() {
     const {
       sortOrder,
@@ -192,6 +207,7 @@ class AccountDetails extends React.Component {
       stripes,
       match: { params },
       user,
+      itemDetails,
     } = this.props;
 
     const account = _.get(resources, ['accountHistory', 'records', 0]) || {};
@@ -242,9 +258,16 @@ class AccountDetails extends React.Component {
     const isAccountId = actions[0] && actions[0].accountId === account.id;
     const buttonDisabled = !this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
 
+    const overdueFinePolicyId = itemDetails?.overdueFinePolicyId;
+    const overdueFinePolicyName = itemDetails?.overdueFinePolicyName;
+    const lostItemPolicyId = itemDetails?.lostItemPolicyId;
+    const lostItemPolicyName = itemDetails?.lostItemPolicyName;
+    const contributors = itemDetails?.contributors.join(', ');
+
     return (
       <Paneset isRoot>
         <Pane
+          data-test-fee-fine-details
           id="pane-account-action-history"
           defaultWidth="100%"
           dismissible
@@ -345,41 +368,48 @@ class AccountDetails extends React.Component {
                 value={this.state.paymentStatus}
               />
             </Col>
-            <Col xs={1.5}>
-              {(loanId !== '0' && user.id === account.userId) ?
-                <KeyValue
-                  label={<FormattedMessage id="ui-users.details.label.loanDetails" />}
-                  value={(
-                    <button
-                      className={css.btnView}
-                      type="button"
-                      onClick={(e) => {
-                        nav.onClickViewLoanActionsHistory(e, { id: loanId }, history, params);
-                      }}
-                    >
-                      <FormattedMessage id="ui-users.details.field.loan" />
-                    </button>
-                  )}
-                />
-                :
-                <KeyValue
-                  label={<FormattedMessage id="ui-users.details.label.loanDetails" />}
-                  value="-"
-                />
-              }
+            <Col
+              data-test-overdue-policy
+              xs={1.5}
+            >
+              <KeyValue
+                label={<FormattedMessage id="ui-users.loans.details.overduePolicy" />}
+                value={overdueFinePolicyId
+                  ? <Link to={`/settings/circulation/fine-policies/${overdueFinePolicyId}`}>{overdueFinePolicyName}</Link>
+                  : '-'
+                }
+              />
+            </Col>
+            <Col
+              data-test-lost-item-policy
+              xs={1.5}
+            >
+              <KeyValue
+                label={<FormattedMessage id="ui-users.loans.details.lostItemPolicy" />}
+                value={lostItemPolicyId
+                  ? <Link to={`/settings/circulation/lost-item-fee-policy/${lostItemPolicyId}`}>{lostItemPolicyName}</Link>
+                  : '-'
+                }
+              />
             </Col>
           </Row>
           <Row>
-            <Col xs={1.5}>
+            <Col
+              data-test-instance
+              xs={1.5}
+            >
               <KeyValue
-                label={<FormattedMessage id="ui-users.details.field.instance" />}
-                value={_.get(account, ['title'], '-')}
+                label={<FormattedMessage id="ui-users.details.field.instance.type" />}
+                value={this.getInstanceInfo()}
               />
             </Col>
-            <Col xs={1.5}>
+            <Col
+              data-test-contributors
+              xs={1.5}
+            >
               <KeyValue
-                label={<FormattedMessage id="ui-users.details.field.type" />}
-                value={_.get(account, ['materialType'], '-')}
+                label={<FormattedMessage id="ui-users.reports.overdue.item.contributors" />}
+                value={contributors || '-'}
               />
             </Col>
             <Col xs={1.5}>
@@ -437,6 +467,29 @@ class AccountDetails extends React.Component {
                     : '-'
                 }
               />
+            </Col>
+            <Col xs={1.5}>
+              {(loanId !== '0' && user.id === account.userId) ?
+                <KeyValue
+                  label={<FormattedMessage id="ui-users.details.label.loanDetails" />}
+                  value={(
+                    <button
+                      className={css.btnView}
+                      type="button"
+                      onClick={(e) => {
+                        nav.onClickViewLoanActionsHistory(e, { id: loanId }, history, params);
+                      }}
+                    >
+                      <FormattedMessage id="ui-users.details.field.loan" />
+                    </button>
+                  )}
+                />
+                :
+                <KeyValue
+                  label={<FormattedMessage id="ui-users.details.label.loanDetails" />}
+                  value="-"
+                />
+              }
             </Col>
           </Row>
           <br />

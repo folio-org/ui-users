@@ -427,7 +427,7 @@
   "details.field.billedamount": "Billed amount",
   "details.field.remainingamount": "Remaining amount",
   "details.field.latest": "Latest payment status",
-  "details.field.instance": "Instance",
+  "details.field.instance.type": "Instance (Material type)",
   "details.field.type": "Item type",
   "details.field.barcode": "Barcode",
   "details.field.callnumber": "Call number",
@@ -448,6 +448,7 @@
   "accounts.error.select": "Select one",
 
   "accounts.history.columns.title": "Instance (Item type)",
+  "accounts.history.columns.instance": "Instance (Material type)",
   "accounts.history.columns.amount": "Billed",
   "accounts.history.columns.remaining": "Remaining",
   "accounts.history.columns.barcode": "Barcode",
@@ -490,7 +491,7 @@
   "accounts.required": "required",
   "accounts.summary": "{type} <b>{count}</b> {count, plural, one {fee/fine} other {fees/fines}} for a total amount of <b>{amount}</b>",
 
-  "accounts.payment.modalLabel": "Pay Fee/Fine",
+  "accounts.payment.modalLabel": "Pay fee/fine",
   "accounts.payment.amount": "Payment amount",
   "accounts.payment": "Pay",
   "accounts.payment.summary.partially": "Partially paying",
