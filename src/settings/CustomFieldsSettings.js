@@ -9,10 +9,13 @@ const propTypes = {
     push: PropTypes.func.isRequired,
     replace: PropTypes.func.isRequired,
   }).isRequired,
+  stripes: PropTypes.shape({
+    hasPerm: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 const CustomFieldsSettings = ({
-  history,
+  history, stripes,
 }) => {
   const stripes = useStripes();
 
@@ -23,7 +26,7 @@ const CustomFieldsSettings = ({
   const permissions = {
     canView: stripes.hasPerm('ui-users.settings.customfields.view'),
     canEdit: stripes.hasPerm('ui-users.settings.customfields.edit'),
-    canDelete: stripes.hasPerm('ui-users.stripes.customfields.delete'),
+    canDelete: stripes.hasPerm('ui-users.stripes.customfields.all'),
   };
 
   if (!permissions.canView) {

@@ -164,6 +164,7 @@ class ChargeFeeFine extends React.Component {
         amountAction: parseFloat(amount || 0).toFixed(2),
         balance: parseFloat(balance || 0).toFixed(2),
         transactionInformation: transaction || '-',
+        comments: comment,
         notify,
       };
       this.props.mutator.feefineactions.POST(Object.assign(action, newAction));
