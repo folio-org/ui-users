@@ -42,6 +42,7 @@
 * Validate presence of `user.personal` before accessing it. Fixes UIU-1510.
 * Add link to Overdue Fine Policy and Lost Item Fee Policy on Fee/Fine Details page. Refs UIU-1247.
 * Provide permissions to custom fields. Refs UIU-1521.
+* Fix bug with assign and unassign permissions to users. Refs UIU-1518.
 
 ## [2.26.0](https://github.com/folio-org/ui-users/tree/v2.26.0) (2019-12-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.3...v2.26.0)
