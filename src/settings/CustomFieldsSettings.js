@@ -9,13 +9,10 @@ const propTypes = {
     push: PropTypes.func.isRequired,
     replace: PropTypes.func.isRequired,
   }).isRequired,
-  stripes: PropTypes.shape({
-    hasPerm: PropTypes.func.isRequired,
-  }).isRequired,
 };
 
 const CustomFieldsSettings = ({
-  history, stripes,
+  history,
 }) => {
   const stripes = useStripes();
 
