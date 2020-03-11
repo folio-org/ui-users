@@ -704,5 +704,12 @@
 
   "tags": "Tags",
   "filters.status.active": "active",
-  "filters.status.inactive": "inactive"
+  "filters.status.inactive": "inactive",
+
+  "patronBlockConditions.maximumNumberOfItemsChargedOut": "Maximum number of items charged out",
+  "patronBlockConditions.maximumNumberOfLostItems": "Maximum number of lost items",
+  "patronBlockConditions.maximumNumberOfOverdueItems": "Maximum number of overdue items",
+  "patronBlockConditions.maximumNumberOfOverdueRecalls": "Maximum number of overdue recalls",
+  "patronBlockConditions.maximumOutstandingFeeFineBalance": "Maximum outstanding fee/fine balance",
+  "patronBlockConditions.recallOverdueByMaximumNumberOfDays": "Recall overdue by maximum number of days"
 }

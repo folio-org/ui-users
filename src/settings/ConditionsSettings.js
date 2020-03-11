@@ -1,63 +1,90 @@
-import React from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
 import { Settings } from '@folio/stripes/smart-components';
+import { stripesConnect } from '@folio/stripes/core';
 
-import ChargedOutConditions from './patronBlocks/ChargedOutConditions';
-import OutstandingConditions from './patronBlocks/OutstandingConditions';
-import LostItemConditions from './patronBlocks/LostItemConditions';
-import OverdueItemConditions from './patronBlocks/OverdueItemConditions';
-import OverdueRecallConditions from './patronBlocks/OverdueRecallConditions';
-import RecallOverdueByConditions from './patronBlocks/RecallOverdueByConditions';
+import Conditions from './patronBlocks/Conditions/Conditions';
 
-const conditions = [
-  {
-    route: 'maximum-fee-fine-balance',
-    labelKey: 'ui-users.settings.feefine.balance',
-    component: OutstandingConditions,
-  },
-  {
-    route: 'maximum-items-charged',
-    labelKey: 'ui-users.settings.items.charged',
-    component: ChargedOutConditions,
-  },
-  {
-    route: 'maximum-lost-items',
-    labelKey: 'ui-users.settings.lost.items',
-    component: LostItemConditions,
-  },
-  {
-    route: 'maximum-overdue-items',
-    labelKey: 'ui-users.settings.overdue.items',
-    component: OverdueItemConditions,
-  },
-  {
-    route: 'maximum-overdue-recalls',
-    labelKey: 'ui-users.settings.overdue.recalls',
-    component: OverdueRecallConditions,
-  },
-  {
-    route: 'maximum-overdue-days',
-    labelKey: 'ui-users.settings.overdue.recallMax',
-    component: RecallOverdueByConditions,
-  }
-];
+const PATRON_BLOCK_CONDITION_LOCALIZATION_MAP = {
+  '3d7c52dc-c732-4223-8bf8-e5917801386f': 'patronBlockConditions.maximumNumberOfItemsChargedOut',
+  '72b67965-5b73-4840-bc0b-be8f3f6e047e': 'patronBlockConditions.maximumNumberOfLostItems',
+  '584fbd4f-6a34-4730-a6ca-73a6a6a9d845': 'patronBlockConditions.maximumNumberOfOverdueItems',
+  'e5b45031-a202-4abb-917b-e1df9346fe2c': 'patronBlockConditions.maximumNumberOfOverdueRecalls',
+  'cf7a0d5f-a327-4ca1-aa9e-dc55ec006b8a': 'patronBlockConditions.maximumOutstandingFeeFineBalance',
+  '08530ac4-07f2-48e6-9dda-a97bc2bf7053': 'patronBlockConditions.recallOverdueByMaximumNumberOfDays',
+};
 
-function getConditions(conditionItems) {
-  const routes = [];
-  conditionItems.forEach(({ route, labelKey, component }) => {
-    routes.push({
-      route,
-      label: <FormattedMessage id={labelKey} />,
-      component,
-    });
+class ConditionsSettings extends Component {
+  static manifest = Object.freeze({
+    entries: {
+      type: 'okapi',
+      records: 'patronBlockConditions',
+      path: 'patron-block-conditions',
+    },
   });
-  return routes;
+
+  static propTypes = {
+    resources: PropTypes.shape({
+      entries: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+    }),
+    mutator: PropTypes.shape({
+      entries: PropTypes.shape({
+        GET: PropTypes.func,
+      }),
+    }),
+  };
+
+  getConditions = () => {
+    const {
+      resources: {
+        entries: {
+          records: patronBlockConditions,
+        }
+      }
+    } = this.props;
+    const routes = [];
+
+    patronBlockConditions.forEach((patronBlockCondition) => {
+      const {
+        id,
+      } = patronBlockCondition;
+      const name = <FormattedMessage id={`ui-users.${PATRON_BLOCK_CONDITION_LOCALIZATION_MAP[id]}`} />;
+
+      routes.push({
+        route: id,
+        label: name,
+        component: () => <Conditions
+          {...patronBlockCondition}
+          name={name}
+        />,
+      });
+    });
+
+    return routes;
+  }
+
+  shouldRenderSettings = () => {
+    return !!this.props?.resources?.entries?.records.length;
+  }
+
+  render() {
+    if (!this.shouldRenderSettings()) {
+      return null;
+    }
+
+    return (
+      <Settings
+        {...this.props}
+        navPaneWidth="20%" // TODO:: Fix it!!!!!
+        pages={this.getConditions()}
+        paneTitle={<FormattedMessage id="ui-users.settings.conditions" />}
+      />
+    );
+  }
 }
 
-export default (props) => <Settings
-  {...props}
-  navPaneWidth="20%"
-  pages={getConditions(conditions)}
-  paneTitle={<FormattedMessage id="ui-users.settings.conditions" />}
-/>;
+export default stripesConnect(ConditionsSettings);
