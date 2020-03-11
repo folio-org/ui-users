@@ -14,86 +14,73 @@ import {
 } from '@folio/stripes/components';
 import { stripesShape } from '@folio/stripes-core';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
-import stripesForm from '@folio/stripes/form';
+import stripesFinalForm from '@folio/stripes/final-form';
 
 import css from './conditions.css';
 
-class ConditionsForm extends Component {
-  static propTypes = {
-    initialValues: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      blockBorrowing: PropTypes.bool.isRequired,
-      blockRenewals: PropTypes.bool.isRequired,
-      blockRequests: PropTypes.bool.isRequired,
-      message: PropTypes.string.isRequired,
-    }).isRequired,
-    onSubmit: PropTypes.func.isRequired,
-    label: PropTypes.string.isRequired,
-    stripes: stripesShape.isRequired,
-    errors: PropTypes.arrayOf(PropTypes.object),
-    mutator: PropTypes.shape({
-      PUT:PropTypes.func.isRequired,
-    })
-  };
+const showValidationMessage = (values) => {
+  const {
+    blockBorrowing,
+    blockRenewals,
+    blockRequests,
+    message
+  } = values;
+  const errors = {};
+  const isChecked = blockBorrowing || blockRenewals || blockRequests;
+  const case1 = isChecked && !message;
+  const case2 = message && !isChecked;
 
-  static defaultProps = {
-    errors: []
-  };
-
-  constructor(props) {
-    super(props);
-
-    const {
-      id,
-      name,
-      blockBorrowing,
-      blockRenewals,
-      blockRequests,
-      message,
-    } = props.initialValues;
-
-    this.state = {
-      id,
-      name,
-      blockBorrowing,
-      blockRenewals,
-      blockRequests,
-      message,
-    };
+  if (case1) {
+    errors.message = <FormattedMessage id="ui-users.settings.error.noMessage" />;
   }
 
-  onSave = (values) => {
+  if (case2) {
+    errors.message = <FormattedMessage id="ui-users.settings.error.noCheckbox" />;
+  }
+
+  return errors;
+};
+
+const ConditionsForm = (props) => {
+  const onSave = (values) => {
+    console.log('values onSave');
+    console.log(values);
     const {
       mutator: { patronBlockConditions },
-      initialValues: { id: conditionId },
-    } = this.props;
+      initialValues: {
+        id,
+        name,
+      },
+    } = props;
     const calloutMessage = (
       <SafeHTMLMessage
         id="ui-users.settings.callout.message"
-        values={{ name: this.state.name }}
+        values={{ name }}
       />
     );
     const condition = {
-      ...this.state,
-      message: values.message,
+      ...values,
+      id,
+      name
+      // message: values.message,
     };
     patronBlockConditions.PUT(condition)
-    .then(() => {
-      this.callout.sendCallout({ message: calloutMessage });
-    });
+      .then(() => {
+        this.callout.sendCallout({ message: calloutMessage });
+      });
   };
 
 
-  renderFooter = (submitting, pristine) => {
+  const renderFooter = (submitting, pristine, values) => {
     const {
       blockBorrowing,
       blockRenewals,
       blockRequests,
-      message,
-    } = this.state;
+      message
+    } = values;
     const formFilled = message && (blockBorrowing || blockRenewals || blockRequests);
-    const isDisabled = !formFilled && (pristine || submitting);
+
+    const isDisabled = (pristine || submitting) && !formFilled;
 
     return (
       <PaneFooter
@@ -107,150 +94,125 @@ class ConditionsForm extends Component {
           >
             <FormattedMessage id="stripes-core.button.save" />
           </Button>
-        )}
+            )}
       />
     );
   };
 
-  onChangeMessage = (e) => {
-    this.setState({ message: e.target.value });
-  }
+  const isTextAreaRequired = () => {
+    const { values } = props.form.getState();
 
-  showValidationMessage = () => {
-    const {
+    return values?.blockBorrowing || values?.blockRenewals || values?.blockRequests;
+  };
+
+  const {
+    label,
+    initialValues: {
       blockBorrowing,
       blockRenewals,
       blockRequests,
       message,
-    } = this.state;
+    },
+    pristine,
+    submitting,
+    onCancel,
+    initialValues,
+    handleSubmit,
+    form: { getValues },
+    error,
+    validate,
+  } = props;
 
-    console.log('message');
-    console.log(message);
-    console.log(typeof(message));
-    const isChecked = blockBorrowing || blockRenewals || blockRequests;
-    const case1 = isChecked && !message;
-    const case2 = message && !isChecked;
-    let error = '';
+  console.log('55555555');
+  console.log(props);
+  console.log('form 5555');
+  console.log(validate);
 
-    if(case1) {
-      error = <FormattedMessage id="ui-users.settings.error.noMessage" />
-    }
+  return (
+    <form
+      id="chargedOutConditionsForm"
+      className={css.conditionsForm}
+    >
+      <Pane
+        defaultWidth="30%"
+        fluidContentWidth
+        paneTitle={label}
+        footer={renderFooter(submitting, pristine, initialValues)}
+      >
+        <Row>
+          <Col xs={12}>
+            <Field
+              id="blockBorrowing"
+              type="checkbox"
+              name="blockBorrowing"
+              label={<FormattedMessage id="ui-users.settings.block.borrowing" />}
+              component={Checkbox}
+            />
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={12}>
+            <Field
+              id="blockRenewals"
+              type="checkbox"
+              name="blockRenewals"
+              label={<FormattedMessage id="ui-users.settings.block.renew" />}
+              component={Checkbox}
+            />
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={12}>
+            <Field
+              id="blockRequests"
+              type="checkbox"
+              name="blockRequests"
+              label={<FormattedMessage id="ui-users.settings.block.request" />}
+              component={Checkbox}
+            />
+          </Col>
+        </Row>
+        <br />
+        <Row>
+          <Col xs={12}>
+            <Field
+              name="message"
+              component={TextArea}
+              type="textarea"
+              id="message"
+              label={<FormattedMessage id="ui-users.settings.block.message" />}
+              required={isTextAreaRequired()}
+            />
+          </Col>
+        </Row>
+      </Pane>
+    </form>
+  );
+};
 
-    if(case2) {
-      error = <FormattedMessage id="ui-users.settings.error.noCheckbox" />
-    }
-      
-    return error;
-  }
+ConditionsForm.propTypes = {
+  initialValues: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    blockBorrowing: PropTypes.bool.isRequired,
+    blockRenewals: PropTypes.bool.isRequired,
+    blockRequests: PropTypes.bool.isRequired,
+    message: PropTypes.string.isRequired,
+  }).isRequired,
+  form: PropTypes.shape({
+    getState: PropTypes.func.isRequired,
+  }).object.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  label: PropTypes.string.isRequired,
+  stripes: stripesShape.isRequired,
+  mutator: PropTypes.shape({
+    PUT: PropTypes.func.isRequired,
+  })
+};
 
-  render() {
-    const {
-      onSubmit,
-      label,
-      getInitialValues,
-    } = this.props;
-
-    const {
-      blockBorrowing,
-      blockRenewals,
-      blockRequests,
-      message,
-    } = this.state;
-
-    return (
-      <Form
-        onSubmit={values => this.onSave(values)}
-        initialValues={getInitialValues}
-        render={({
-          values,
-          handleSubmit,
-          submitting,
-          pristine,
-        }) => {
-          console.log('&&& ', values);
-          return (
-          <form
-            id="chargedOutConditionsForm"
-            className={css.conditionsForm}
-            onSubmit={handleSubmit}
-          >
-            <Pane
-              defaultWidth="30%"
-              fluidContentWidth
-              paneTitle={label}
-              footer={this.renderFooter(submitting, pristine)}
-            >
-              <Row>
-                <Col xs={12}>
-                  <Field
-                    id="blockBorrowing"
-                    type="checkbox"
-                    name="blockBorrowing"
-                    label={<FormattedMessage id="ui-users.settings.block.borrowing" />}
-                    component={Checkbox}
-                    checked={blockBorrowing}
-                    onChange={() => this.setState(prevState => ({ 'blockBorrowing': !prevState.blockBorrowing }))}
-                  />
-                </Col>
-              </Row>
-              <Row>
-                <Col xs={12}>
-                  <Field
-                    id="blockRenewals"
-                    type="checkbox"
-                    name="blockRenewals"
-                    label={<FormattedMessage id="ui-users.settings.block.renew" />}
-                    component={Checkbox}
-                    checked={blockRenewals}
-                    onChange={() => this.setState(prevState => ({ 'blockRenewals': !prevState.blockRenewals }))}
-                  />
-                </Col>
-              </Row>
-              <Row>
-                <Col xs={12}>
-                  <Field
-                    id="blockRequests"
-                    type="checkbox"
-                    name="blockRequests"
-                    label={<FormattedMessage id="ui-users.settings.block.request" />}
-                    component={Checkbox}
-                    checked={blockRequests}
-                    onChange={() => this.setState(prevState => ({ 'blockRequests': !prevState.blockRequests }))}
-                  />
-                </Col>
-              </Row>
-              <br />
-              <Row>
-                <Col xs={12}>
-                  <Field
-                    component={TextArea}
-                    type="textarea"
-                    id="message"
-                    name="message"
-                    value={message}
-                    label={<FormattedMessage id="ui-users.settings.block.message" />}
-                    validationEnabled
-                    //error={this.showError()}
-                    error={this.showValidationMessage()}
-                    required={blockBorrowing || blockRenewals || blockRequests}
-                    //onChange={(e) => this.onChangeMessage}
-                  >
-                  </Field>
-                </Col>
-              </Row>
-            </Pane>
-          </form>
-        )}}
-      />
-    );
-  }
-}
-
-//export default ConditionsForm;
-export default stripesForm({
-  form: 'patronBlocktConditions',
+// export default ConditionsForm;
+export default stripesFinalForm({
+  validate: showValidationMessage,
   navigationCheck: true,
-  enableReinitialize: true,
-  destroyOnUnmount: false,
+  validateOnBlur: true,
 })(ConditionsForm);
-

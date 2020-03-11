@@ -7,7 +7,7 @@ import {
 } from '@folio/stripes/core';
 
 import ConditionsForm from './ConditionsForm';
-import css from './conditions.css'
+import css from './conditions.css';
 
 class Conditions extends Component {
   static propTypes = {
@@ -17,6 +17,7 @@ class Conditions extends Component {
     blockRenewals: PropTypes.bool.isRequired,
     blockRequests: PropTypes.bool.isRequired,
     message: PropTypes.string.isRequired,
+    initialValues: PropTypes.object.isRequired,
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
     }).isRequired,
@@ -28,6 +29,17 @@ class Conditions extends Component {
         PUT: PropTypes.func.isRequired,
       }),
     }).isRequired,
+    form: PropTypes.object,
+    handlers: PropTypes.shape({
+      onClose: PropTypes.func.isRequired,
+    }),
+    handleSubmit: PropTypes.func.isRequired,
+    isLoading: PropTypes.bool,
+    onSubmit: PropTypes.func.isRequired,
+    pristine: PropTypes.bool,
+    submitting: PropTypes.bool,
+    values: PropTypes.object,
+    error: PropTypes.object,
   };
 
   constructor(props) {
@@ -35,10 +47,13 @@ class Conditions extends Component {
 
     this.configManager = this.props.stripes.connect(ConfigManager);
   }
-  
-  componentDidMount() {
-    console.log('In component did mpount');
-    console.log(this.props);
+
+  getInitialValues = () => {
+    console.log('this.props.initialValues');
+    console.log(this.props.initialValues);
+    return {
+      ...this.props.initialValues
+    };
   }
 
   render() {
@@ -47,53 +62,17 @@ class Conditions extends Component {
     } = this.props;
 
     return (
-      <section className={css.conditiionsWrapper}>
+      <section className={css.conditionsWrapper}>
         <this.configManager
           label={name}
           moduleName="USERS"
-          configName="patron_block__conditions"
+          configName="patron_block_conditions"
           configFormComponent={ConditionsForm}
-          getInitialValues={() => this.getInitialValues()}
-          validate={this.validate}
+          getInitialValues={this.getInitialValues}
           stripes={this.props.stripes}
         />
       </section>
     );
-  }
-
-  getInitialValues() {
-    const {
-      id,
-      name,
-      blockBorrowing,
-      blockRenewals,
-      blockRequests,
-      message,
-    } = this.props;
-
-    return {
-      id,
-      name,
-      blockBorrowing,
-      blockRenewals,
-      blockRequests,
-      message,
-    }
-  }
-
-  validate = (values) => {
-    const errors = {};
-    const {
-      blockBorrowing,
-      blockRenewals,
-      blockRequests,
-      message,
-    } = values;
-
-    console.log('.... values');
-    console.log(values);
-
-    return errors;
   }
 }
 
