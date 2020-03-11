@@ -23,7 +23,7 @@ const EditCustomFields = ({
   const permissions = {
     canView: stripes.hasPerm('ui-users.settings.customfields.view'),
     canEdit: stripes.hasPerm('ui-users.settings.customfields.edit'),
-    canDelete: stripes.hasPerm('ui-users.stripes.customfields.all'),
+    canDelete: stripes.hasPerm('ui-users.settings.customfields.all'),
   };
 
   if (!permissions.canView) {
