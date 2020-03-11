@@ -293,4 +293,4 @@ class FeeFineSettings extends React.Component {
   }
 }
 
-export default injectIntl(withStripes(stripesConnect(FeeFineSettings)));
+export default injectIntl(withStripes(FeeFineSettings));
