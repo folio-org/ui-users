@@ -54,13 +54,14 @@ class ConditionsSettings extends Component {
       } = patronBlockCondition;
       const name = <FormattedMessage id={`ui-users.${PATRON_BLOCK_CONDITION_LOCALIZATION_MAP[id]}`} />;
 
+      function tempConditions() {
+        return <Conditions {...patronBlockCondition} name={name} />;
+      }
+
       routes.push({
         route: id,
         label: name,
-        component: () => <Conditions
-          {...patronBlockCondition}
-          name={name}
-        />,
+        component: tempConditions,
       });
     });
 
@@ -79,7 +80,6 @@ class ConditionsSettings extends Component {
     return (
       <Settings
         {...this.props}
-        navPaneWidth="20%" // TODO:: Fix it!!!!!
         pages={this.getConditions()}
         paneTitle={<FormattedMessage id="ui-users.settings.conditions" />}
       />

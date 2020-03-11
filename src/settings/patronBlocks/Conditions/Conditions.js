@@ -17,29 +17,9 @@ class Conditions extends Component {
     blockRenewals: PropTypes.bool.isRequired,
     blockRequests: PropTypes.bool.isRequired,
     message: PropTypes.string.isRequired,
-    initialValues: PropTypes.object.isRequired,
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
     }).isRequired,
-    resources: PropTypes.shape({
-      patronBlockConditions: PropTypes.object,
-    }).isRequired,
-    mutator: PropTypes.shape({
-      patronBlockConditions: PropTypes.shape({
-        PUT: PropTypes.func.isRequired,
-      }),
-    }).isRequired,
-    form: PropTypes.object,
-    handlers: PropTypes.shape({
-      onClose: PropTypes.func.isRequired,
-    }),
-    handleSubmit: PropTypes.func.isRequired,
-    isLoading: PropTypes.bool,
-    onSubmit: PropTypes.func.isRequired,
-    pristine: PropTypes.bool,
-    submitting: PropTypes.bool,
-    values: PropTypes.object,
-    error: PropTypes.object,
   };
 
   constructor(props) {
@@ -49,10 +29,22 @@ class Conditions extends Component {
   }
 
   getInitialValues = () => {
-    console.log('this.props.initialValues');
-    console.log(this.props.initialValues);
+    const {
+      id,
+      name,
+      blockBorrowing,
+      blockRenewals,
+      blockRequests,
+      message,
+    } = this.props;
+
     return {
-      ...this.props.initialValues
+      id,
+      name,
+      blockBorrowing,
+      blockRenewals,
+      blockRequests,
+      message,
     };
   }
 

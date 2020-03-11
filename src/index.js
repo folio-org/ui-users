@@ -112,7 +112,6 @@ const settingsPatronBlocks = [
     route: 'conditions',
     label: <FormattedMessage id="ui-users.settings.conditions" />,
     component: ConditionsSettings,
-    perm: 'ui-users.settings.transfers', // TODO:: Change to ui-users.settings.conditions
   }
 ];
 
