@@ -147,6 +147,9 @@ class FeeFineSettings extends React.Component {
     const myFeeFines = feefines.filter(f => f.ownerId !== this.state.ownerId) || [];
     const label = formatMessage({ id: 'ui-users.feefines.singular' });
     const itemErrors = validate(item, index, items, 'feeFineType', label);
+    const isAutomatedFeeFineNameUsed = feefines.some(feeFine => {
+      return feeFine.automatic && item.feeFineType.toLowerCase() === feeFine.feeFineType.toLowerCase();
+    });
 
     if (Number.isNaN(Number(item.defaultAmount)) && item.defaultAmount) {
       itemErrors.defaultAmount = formatMessage({ id: 'ui-users.feefines.errors.amountNumeric' });
@@ -177,6 +180,11 @@ class FeeFineSettings extends React.Component {
           />;
       }
     }
+
+    if (isAutomatedFeeFineNameUsed) {
+      itemErrors.feeFineType = <FormattedMessage id="ui-users.feefines.errors.reservedName" />;
+    }
+
     return itemErrors;
   }
 
@@ -244,6 +252,7 @@ class FeeFineSettings extends React.Component {
 
     const preCreateHook = (item) => {
       item.ownerId = ownerId;
+      item.automatic = false;
       return item;
     };
 
@@ -283,7 +292,7 @@ class FeeFineSettings extends React.Component {
         preCreateHook={preCreateHook}
         records="feefines"
         rowFilter={rowFilter}
-        rowFilterFunction={(item) => (item.ownerId === ownerId)}
+        rowFilterFunction={(item) => (item.ownerId === ownerId && !item.automatic)}
         sortby="feeFineType"
         validate={this.validate}
         visibleFields={['feeFineType', 'defaultAmount', 'chargeNoticeId', 'actionNoticeId']}
