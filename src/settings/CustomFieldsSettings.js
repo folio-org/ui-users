@@ -1,33 +1,41 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
+import { useStripes } from '@folio/stripes-core';
 import { ViewCustomFieldsSettings } from '@folio/stripes/smart-components';
 
 const propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
-  }).isRequired,
-  stripes: PropTypes.shape({
-    hasPerm: PropTypes.func.isRequired,
+    replace: PropTypes.func.isRequired,
   }).isRequired,
 };
 
 const CustomFieldsSettings = ({
-  history, stripes,
+  history,
 }) => {
+  const stripes = useStripes();
+
   const redirectToEdit = () => {
     history.push('/users/custom-fields/edit');
   };
+
+  const permissions = {
+    canView: stripes.hasPerm('ui-users.settings.customfields.view'),
+    canEdit: stripes.hasPerm('ui-users.settings.customfields.edit'),
+    canDelete: stripes.hasPerm('ui-users.settings.customfields.all'),
+  };
+
+  if (!permissions.canView) {
+    history.replace('/settings/users');
+  }
 
   return (
     <ViewCustomFieldsSettings
       backendModuleName="users"
       entityType="user"
       redirectToEdit={redirectToEdit}
-      permissions={{
-        canDelete: stripes.hasPerm('ui-users.settings.customfields.all'),
-        canEdit: stripes.hasPerm('ui-users.settings.customfields.edit'),
-        canView: stripes.hasPerm('ui-users.settings.customfields.view'),
-      }}
+      permissions={permissions}
     />
   );
 };
