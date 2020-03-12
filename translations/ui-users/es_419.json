@@ -252,7 +252,6 @@
     "details.field.billedamount": "Billed amount",
     "details.field.remainingamount": "Remaining amount",
     "details.field.latest": "Latest payment status",
-    "details.field.instance": "Instance",
     "details.field.type": "Item type",
     "details.field.barcode": "Barcode",
     "details.field.callnumber": "Call number",
@@ -617,5 +616,8 @@
     "reports.overdue.item.enumeration": "Enumeración",
     "reports.overdue.item.volume": "Volumen",
     "loans.details.effectiveCallNumber": "Effective call number string",
-    "settings.customFields": "Custom fields"
+    "settings.customFields": "Custom fields",
+    "details.field.instance.type": "Instance (Material type)",
+    "accounts.history.columns.instance": "Instance (Material type)",
+    "feefines.errors.reservedName": "Fee/fine type already exists as automated fee/fine"
 }
