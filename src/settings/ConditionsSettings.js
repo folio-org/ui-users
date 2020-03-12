@@ -80,6 +80,7 @@ class ConditionsSettings extends Component {
     return (
       <Settings
         {...this.props}
+        navPaneWidth="fill"
         pages={this.getConditions()}
         paneTitle={<FormattedMessage id="ui-users.settings.conditions" />}
       />
