@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { Field, Form } from 'react-final-form';
+import { Field } from 'react-final-form';
 
 import {
   Row,
@@ -15,6 +15,28 @@ import {
 import stripesFinalForm from '@folio/stripes/final-form';
 
 import css from './conditions.css';
+
+function showValidationErrors(values) {
+  const {
+    blockBorrowing,
+    blockRenewals,
+    blockRequests,
+    message,
+  } = values;
+  const isCheckboxChecked = blockBorrowing || blockRenewals || blockRequests;
+  const isTextAreaValueExists = !!message;
+  const errors = {};
+
+  if (!isTextAreaValueExists && isCheckboxChecked) {
+    errors.message = <FormattedMessage id="ui-users.settings.error.noMessage" />;
+  }
+
+  if (isTextAreaValueExists && !isCheckboxChecked) {
+    errors.message = <FormattedMessage id="ui-users.settings.error.noCheckbox" />;
+  }
+
+  return errors;
+}
 
 class ConditionsForm extends Component {
   static propTypes = {
@@ -32,6 +54,7 @@ class ConditionsForm extends Component {
     form: PropTypes.shape({
       getState: PropTypes.func.isRequired,
     }),
+    handleSubmit: PropTypes.func.isRequired,
   };
 
   getValueFromState = () => {
@@ -71,11 +94,7 @@ class ConditionsForm extends Component {
       pristine,
       submitting,
     } = this.props;
-    const {
-      message,
-    } = this.getValueFromState();
-    const formFilled = message && this.isCheckboxChecked();
-    const isDisabled = !formFilled && (pristine || submitting);
+    const isDisabled = pristine || submitting;
 
     return (
       <PaneFooter
@@ -97,14 +116,14 @@ class ConditionsForm extends Component {
   render() {
     const {
       label,
+      handleSubmit,
     } = this.props;
 
     return (
       <form
         id="chargedOutConditionsForm"
         className={css.conditionsForm}
-        onSubmit={() => {
-        }}
+        onSubmit={handleSubmit}
       >
         <Pane
           defaultWidth="30%"
@@ -153,6 +172,7 @@ class ConditionsForm extends Component {
                 name="message"
                 type="textarea"
                 component={TextArea}
+                value={this.props.initialValues.message}
                 label={<FormattedMessage id="ui-users.settings.block.message" />}
                 required={this.isTextAreaRequired()}
               />
@@ -165,8 +185,7 @@ class ConditionsForm extends Component {
 }
 
 export default stripesFinalForm({
-  validate: () => {},
   navigationCheck: true,
   validateOnBlur: true,
-  undoable: false,
+  validate: showValidationErrors,
 })(ConditionsForm);
