@@ -252,7 +252,6 @@
     "details.field.billedamount": "账单金额",
     "details.field.remainingamount": "剩余金额",
     "details.field.latest": "最近支付状态",
-    "details.field.instance": "实例",
     "details.field.type": "单件类型",
     "details.field.barcode": "条码",
     "details.field.callnumber": "索书号",
@@ -617,5 +616,8 @@
     "reports.overdue.item.enumeration": "期数",
     "reports.overdue.item.volume": "卷",
     "loans.details.effectiveCallNumber": "有效的索书号字符串",
-    "settings.customFields": "Custom fields"
+    "settings.customFields": "Custom fields",
+    "details.field.instance.type": "Instance (Material type)",
+    "accounts.history.columns.instance": "Instance (Material type)",
+    "feefines.errors.reservedName": "Fee/fine type already exists as automated fee/fine"
 }

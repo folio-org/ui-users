@@ -44,6 +44,7 @@
 * Provide permissions to custom fields. Refs UIU-1521.
 * Fix bug with assign and unassign permissions to users. Refs UIU-1518.
 * Default charge and action notices not saved on manual fee/fine charge settings. Refs UIU-1486.
+* Create Patron Blocks Conditions Table in Settings -> Users. Refs UIU-1272.
 
 ## [2.26.0](https://github.com/folio-org/ui-users/tree/v2.26.0) (2019-12-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.3...v2.26.0)

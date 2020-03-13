@@ -252,7 +252,6 @@
     "details.field.billedamount": "Montant facturé",
     "details.field.remainingamount": "Montant restant",
     "details.field.latest": "Dernier statut de paiement",
-    "details.field.instance": "Instance",
     "details.field.type": "Type d'élément",
     "details.field.barcode": "Code-barres",
     "details.field.callnumber": "Cote",
@@ -617,5 +616,8 @@
     "reports.overdue.item.enumeration": "Énumération",
     "reports.overdue.item.volume": "Volume",
     "loans.details.effectiveCallNumber": "Chaîne de caractères de la cote",
-    "settings.customFields": "Custom fields"
+    "settings.customFields": "Champs personnalisés",
+    "details.field.instance.type": "Instance (Type de matériel)",
+    "accounts.history.columns.instance": "Instance (Type de matériel)",
+    "feefines.errors.reservedName": "Fee/fine type already exists as automated fee/fine"
 }

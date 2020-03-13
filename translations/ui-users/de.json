@@ -252,7 +252,6 @@
     "details.field.billedamount": "Billed amount",
     "details.field.remainingamount": "Remaining amount",
     "details.field.latest": "Latest payment status",
-    "details.field.instance": "Instanz",
     "details.field.type": "Exemplartyp",
     "details.field.barcode": "Barcode",
     "details.field.callnumber": "Signatur",
@@ -522,7 +521,7 @@
     "accounts.optional": "optional",
     "accounts.required": "required",
     "accounts.summary": "{type} <b>{count}</b> {count, plural, one {fee/fine} other {fees/fines}} for a total amount of <b>{amount}</b>",
-    "accounts.payment.modalLabel": "Pay Fee/Fine",
+    "accounts.payment.modalLabel": "Pay fee/fine",
     "accounts.payment.amount": "Payment amount",
     "accounts.payment": "Pay",
     "accounts.payment.summary.partially": "Partially paying",
@@ -617,5 +616,8 @@
     "reports.overdue.item.enumeration": "Enumeration",
     "reports.overdue.item.volume": "Volume",
     "loans.details.effectiveCallNumber": "Effective call number string",
-    "settings.customFields": "Custom fields"
+    "settings.customFields": "Custom fields",
+    "details.field.instance.type": "Instance (Material type)",
+    "accounts.history.columns.instance": "Instance (Material type)",
+    "feefines.errors.reservedName": "Fee/fine type already exists as automated fee/fine"
 }

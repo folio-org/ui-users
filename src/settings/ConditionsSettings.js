@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+import _ from 'lodash';
 
 import { Settings } from '@folio/stripes/smart-components';
-import { stripesConnect } from '@folio/stripes/core';
 
 import Conditions from './patronBlocks/Conditions/Conditions';
 
@@ -19,14 +19,14 @@ class ConditionsSettings extends Component {
   static propTypes = {
     resources: PropTypes.shape({
       patronBlockConditions: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
-      }),
-    }),
+        records: PropTypes.arrayOf(PropTypes.object).isRequired,
+      }).isRequired,
+    }).isRequired,
     mutator: PropTypes.shape({
       patronBlockConditions: PropTypes.shape({
-        GET: PropTypes.func,
-      }),
-    }),
+        GET: PropTypes.func.isRequired,
+      }).isRequired,
+    }).isRequired,
   };
 
   getConditions = () => {
@@ -60,7 +60,12 @@ class ConditionsSettings extends Component {
   }
 
   shouldRenderSettings = () => {
-    return !!this.props?.resources?.patronBlockConditions?.records.length;
+    const {
+      resources,
+    } = this.props;
+    const patronBlockConditions = _.get(resources, ['patronBlockConditions', 'records'], []);
+
+    return !!patronBlockConditions.length;
   }
 
   render() {
@@ -79,4 +84,4 @@ class ConditionsSettings extends Component {
   }
 }
 
-export default stripesConnect(ConditionsSettings);
+export default ConditionsSettings;

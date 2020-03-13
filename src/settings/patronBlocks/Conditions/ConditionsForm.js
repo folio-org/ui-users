@@ -12,8 +12,6 @@ import {
   Button,
   TextArea,
 } from '@folio/stripes/components';
-import { stripesShape } from '@folio/stripes-core';
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import stripesFinalForm from '@folio/stripes/final-form';
 
 import css from './conditions.css';

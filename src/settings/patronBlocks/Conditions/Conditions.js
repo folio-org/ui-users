@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
 
-import {
-  stripesConnect,
-} from '@folio/stripes/core';
+import { stripesConnect } from '@folio/stripes/core';
 import { Callout } from '@folio/stripes/components';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
@@ -31,9 +28,9 @@ class Conditions extends Component {
     children: PropTypes.node.isRequired,
     mutator: PropTypes.shape({
       patronBlockCondition: PropTypes.shape({
-        PUT: PropTypes.func,
-      }),
-    }),
+        PUT: PropTypes.func.isRequired,
+      }).isRequired,
+    }).isRequired,
   };
 
   getInitialValues = () => {
@@ -62,9 +59,7 @@ class Conditions extends Component {
         this.callout.sendCallout({
           message: <SafeHTMLMessage
             id="ui-users.settings.callout.message"
-            values={{
-              name: value.name,
-            }}
+            values={{ name: value.name }}
           />
         });
       }
@@ -89,12 +84,12 @@ class Conditions extends Component {
     } = this.getInitialValues();
 
     return (
-      <section className={css.conditionsWrapper}>
-        <div style={{ width: '100%' }}>
+      <section className={css.conditionsWrapperHolder}>
+        <div className={css.conditionsWrapper}>
           <ConditionsForm
-            onSubmit={this.onSubmit}
-            initialValues={this.getInitialValues()}
             label={name}
+            initialValues={this.getInitialValues()}
+            onSubmit={this.onSubmit}
           >
             {children}
           </ConditionsForm>
