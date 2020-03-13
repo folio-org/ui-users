@@ -513,4 +513,23 @@ export default function config() {
   });
 
   this.post('/request-preference-storage/request-preference');
+
+  this.get('/patron-block-conditions/:id', ({ patronBlockConditions }, request) => {
+    return patronBlockConditions.find(request.params.id).attrs;
+  });
+
+  this.put('/patron-block-conditions/:id', ({ patronBlockConditions }, request) => {
+    return patronBlockConditions.find(request.params.id).attrs;
+  });
+
+  this.post('/patron-block-conditions', (schema, { requestBody }) => {
+    const conditions = JSON.parse(requestBody);
+
+    return server.createList('patronBlockCondition', 6, conditions);
+  });
+
+  this.get('/patron-block-conditions', ({ patronBlockConditions }) => {
+    console.log(patronBlockConditions);
+    return this.serializerOrRegistry.serialize(patronBlockConditions.all());
+  });
 }

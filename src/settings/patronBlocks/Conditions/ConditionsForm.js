@@ -12,6 +12,8 @@ import {
   Button,
   TextArea,
 } from '@folio/stripes/components';
+import { stripesShape } from '@folio/stripes-core';
+import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import stripesFinalForm from '@folio/stripes/final-form';
 
 import css from './conditions.css';
@@ -121,6 +123,7 @@ class ConditionsForm extends Component {
 
     return (
       <form
+        data-test-conditions-form
         id="chargedOutConditionsForm"
         className={css.conditionsForm}
         onSubmit={handleSubmit}
@@ -134,6 +137,7 @@ class ConditionsForm extends Component {
           <Row>
             <Col xs={12}>
               <Field
+                data-test-block-borrowing
                 id="blockBorrowing"
                 name="blockBorrowing"
                 type="checkbox"
@@ -145,6 +149,7 @@ class ConditionsForm extends Component {
           <Row>
             <Col xs={12}>
               <Field
+                data-test-block-renewals
                 id="blockRenewals"
                 name="blockRenewals"
                 type="checkbox"
@@ -156,6 +161,7 @@ class ConditionsForm extends Component {
           <Row>
             <Col xs={12}>
               <Field
+                data-test-block-requests
                 id="blockRequests"
                 name="blockRequests"
                 type="checkbox"
@@ -168,6 +174,7 @@ class ConditionsForm extends Component {
           <Row>
             <Col xs={12}>
               <Field
+                data-test-block-message
                 id="message"
                 name="message"
                 type="textarea"
