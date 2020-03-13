@@ -148,7 +148,7 @@ class FeeFineSettings extends React.Component {
     const label = formatMessage({ id: 'ui-users.feefines.singular' });
     const itemErrors = validate(item, index, items, 'feeFineType', label);
     const isAutomatedFeeFineNameUsed = feefines.some(feeFine => {
-      return feeFine.automatic && item.feeFineType.toLowerCase() === feeFine.feeFineType.toLowerCase();
+      return item.feeFineType && feeFine.automatic && item.feeFineType.toLowerCase() === feeFine.feeFineType.toLowerCase();
     });
 
     if (Number.isNaN(Number(item.defaultAmount)) && item.defaultAmount) {
