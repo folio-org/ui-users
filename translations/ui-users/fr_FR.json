@@ -619,5 +619,5 @@
     "settings.customFields": "Champs personnalisés",
     "details.field.instance.type": "Instance (Type de matériel)",
     "accounts.history.columns.instance": "Instance (Type de matériel)",
-    "feefines.errors.reservedName": "Fee/fine type already exists as automated fee/fine"
+    "feefines.errors.reservedName": "Le type de frais / amende existe déjà en tant que frais / amende automatisé"
 }

@@ -619,5 +619,5 @@
     "settings.customFields": "Campos personalizados",
     "details.field.instance.type": "Instância (Tipo de material)",
     "accounts.history.columns.instance": "Instância (Tipo de material)",
-    "feefines.errors.reservedName": "Fee/fine type already exists as automated fee/fine"
+    "feefines.errors.reservedName": "O tipo de taxa/multa já existe como taxa/multa automatizada"
 }

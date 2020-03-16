@@ -619,5 +619,5 @@
     "settings.customFields": "حقول مخصصة",
     "details.field.instance.type": "الوعاء (نوع المادة)",
     "accounts.history.columns.instance": "الوعاء (نوع المادة)",
-    "feefines.errors.reservedName": "Fee/fine type already exists as automated fee/fine"
+    "feefines.errors.reservedName": "نوع الرسم/الغرامة موجود بالفعل كرسم/غرامة مؤتمتة"
 }
