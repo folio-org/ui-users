@@ -603,7 +603,7 @@
     "data.loanActionMap.claimedReturned": "Claimed returned",
     "loans.claimReturned": "Claim returned",
     "loans.claimReturnedDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be <strong>claimed returned</strong>",
-    "loans.confirmClaimReturned": "Confirm claim returned",
+    "loans.confirmClaimReturned": "Confirmer le retour (?)",
     "renewInProgress": "Renouvellement en cours",
     "item.callNumberComponents.prefix": "Préfixe de la cote",
     "item.callNumberComponents.callNumber": "Cote",
