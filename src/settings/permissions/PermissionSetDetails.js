@@ -112,7 +112,7 @@ class PermissionSetDetails extends React.Component {
           heading={<FormattedMessage id="ui-users.permissions.assignedPermissions" />}
           listedPermissions={selectedSet.subPermissions}
           permToRead="perms.permissions.get"
-          permToDelete="perms.permissions.item.put"
+          permToDelete="perms.permissions.item.delete"
           permToModify="perms.permissions.item.put"
           {...this.props}
         />

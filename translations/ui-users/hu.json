@@ -252,7 +252,6 @@
     "details.field.billedamount": "Számlázott összeg",
     "details.field.remainingamount": "Fennmaradó összeg",
     "details.field.latest": "Legutóbbi fizetési státusz",
-    "details.field.instance": "Példány",
     "details.field.type": "Tétel típusa",
     "details.field.barcode": "Vonalkód",
     "details.field.callnumber": "Raktári jelzet",
@@ -522,7 +521,7 @@
     "accounts.optional": "optional",
     "accounts.required": "required",
     "accounts.summary": "{type} <b>{count}</b> {count, plural, one {fee/fine} other {fees/fines}} for a total amount of <b>{amount}</b>",
-    "accounts.payment.modalLabel": "Pay Fee/Fine",
+    "accounts.payment.modalLabel": "Pay fee/fine",
     "accounts.payment.amount": "Payment amount",
     "accounts.payment": "Pay",
     "accounts.payment.summary.partially": "Partially paying",
@@ -590,8 +589,8 @@
     "data.loanActionMap.declaredLost": "Declared lost",
     "confirm": "Confirm",
     "loans.declareLost": "Declare lost",
-    "loans.declareLostDialogBody": "<strong>{title} {materialType}</strong> (Barcode: {barcode}) will be <strong>declared lost</strong>",
-    "loans.confirmLostState": "Confirm lost state",
+    "loans.declareLostDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be <strong>declared lost</strong>",
+    "loans.confirmLostState": "Confirm Declared lost status",
     "loans.declareLost.additionalInfoPlaceholder": "Enter more information about the lost item (required)",
     "userSearch": "User search",
     "userSearchResults": "User search results",
@@ -616,5 +615,9 @@
     "reports.overdue.item.callNumberComponents.suffix": "Call number suffix",
     "reports.overdue.item.enumeration": "Enumeration",
     "reports.overdue.item.volume": "Volume",
-    "loans.details.effectiveCallNumber": "Effective call number string"
+    "loans.details.effectiveCallNumber": "Effective call number string",
+    "settings.customFields": "Custom fields",
+    "details.field.instance.type": "Instance (Material type)",
+    "accounts.history.columns.instance": "Instance (Material type)",
+    "feefines.errors.reservedName": "Fee/fine type already exists as automated fee/fine"
 }

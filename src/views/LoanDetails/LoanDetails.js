@@ -323,7 +323,7 @@ class LoanDetails extends React.Component {
       actionDate: la => <FormattedTime value={get(la, ['metadata', 'updatedDate'], '-')} day="numeric" month="numeric" year="numeric" />,
       dueDate: la => <FormattedTime value={la.dueDate} day="numeric" month="numeric" year="numeric" />,
       itemStatus: la => la.itemStatus,
-      source: la => <Link to={`/users/view/${la.user.id}`}>{getFullName(la.user)}</Link>,
+      source: la => <Link to={`/users/view/${la.user?.id}`}>{getFullName(la.user)}</Link>,
       comments: ({ actionComment }) => (actionComment || '-'),
     };
 
@@ -406,14 +406,16 @@ class LoanDetails extends React.Component {
                     <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />
                   </Button>
                 </IfPermission>
-                <Button
-                  data-test-declare-lost-button
-                  disabled={buttonDisabled || isDeclaredLostItem}
-                  buttonStyle="primary"
-                  onClick={() => declareLost(loan)}
-                >
-                  <FormattedMessage id="ui-users.loans.declareLost" />
-                </Button>
+                <IfPermission perm="ui-users.loans.declare-item-lost">
+                  <Button
+                    data-test-declare-lost-button
+                    disabled={buttonDisabled || isDeclaredLostItem}
+                    buttonStyle="primary"
+                    onClick={() => declareLost(loan)}
+                  >
+                    <FormattedMessage id="ui-users.loans.declareLost" />
+                  </Button>
+                </IfPermission>
               </span>
             </Row>
             <Row>

@@ -18,6 +18,11 @@ export default function config() {
         { id: 'loan-policy-storage', version: '7.4' },
       ]
     },
+    {
+      id: 'mod-users-16.0.1-SNAPSHOT.121',
+      name: 'users',
+      provides: []
+    },
   ]);
 
   this.get('/saml/check', {
