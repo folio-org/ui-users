@@ -148,12 +148,14 @@ class UserSearchContainer extends React.Component {
     }
   };
 
-  querySetter = ({ nsValues }) => {
+  querySetter = ({ nsValues, state}) => {
     const { location : locationProp, history } = this.props;
+
+    console.log(state);
 
     let location = locationProp;
     // modifying the location hides the user detail view if a search/filter is triggered.
-    if (!location.pathname.endsWith('users')) {
+    if (state.changeType !== 'init.reset' && !location.pathname.endsWith('users')) {
       const pathname = '/users';
       location = { ...locationProp, pathname };
     }
