@@ -10,6 +10,7 @@ import { stripesConnect } from '@folio/stripes/core';
 import {
   makeQueryFunction,
   StripesConnectedSource,
+  buildUrl,
 } from '@folio/stripes/smart-components';
 
 import filterConfig from './filterConfig';
@@ -148,11 +149,17 @@ class UserSearchContainer extends React.Component {
   };
 
   querySetter = ({ nsValues, state }) => {
-    if (/reset/.test(state.changeType)) {
-      this.props.mutator.query.replace(nsValues);
-    } else {
-      this.props.mutator.query.update(nsValues);
+    const { location : locationProp, history } = this.props;
+
+    let location = locationProp;
+    // modifying the location hides the user detail view if a search/filter is triggered.
+    if (state.changeType !== 'init.reset' && !location.pathname.endsWith('users')) {
+      const pathname = '/users';
+      location = { ...locationProp, pathname };
     }
+
+    const url = buildUrl(location, nsValues);
+    history.push(url);
   }
 
   queryGetter = () => {
@@ -170,6 +177,7 @@ class UserSearchContainer extends React.Component {
         initialSearch="?sort=name"
         onNeedMoreData={this.onNeedMoreData}
         queryGetter={this.queryGetter}
+        querySetter={this.querySetter}
         {...this.props}
       >
         { this.props.children }
