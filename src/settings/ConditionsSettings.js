@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import _ from 'lodash';
 
 import { Settings } from '@folio/stripes/smart-components';
 
@@ -9,10 +8,14 @@ import Conditions from './patronBlocks/Conditions/Conditions';
 
 class ConditionsSettings extends Component {
   static manifest = Object.freeze({
+    query: {},
     patronBlockConditions: {
       type: 'okapi',
-      records: 'patronBlockConditions',
       path: 'patron-block-conditions',
+      params: {
+        query: 'cql.allRecords=1 sortby name',
+      },
+      records: 'patronBlockConditions',
     },
   });
 
@@ -60,10 +63,8 @@ class ConditionsSettings extends Component {
   }
 
   shouldRenderSettings = () => {
-    const {
-      resources,
-    } = this.props;
-    const patronBlockConditions = _.get(resources, ['patronBlockConditions', 'records'], []);
+    const { resources } = this.props;
+    const patronBlockConditions = resources?.patronBlockConditions?.records ?? [];
 
     return !!patronBlockConditions.length;
   }
