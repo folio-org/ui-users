@@ -252,7 +252,6 @@
     "details.field.billedamount": "مبلغ الفاتورة",
     "details.field.remainingamount": "المبلغ المتبقي",
     "details.field.latest": "أحدث حالة سداد",
-    "details.field.instance": "الوعاء",
     "details.field.type": "نوع المادة",
     "details.field.barcode": "الباركود",
     "details.field.callnumber": "رقم الاستدعاء",
@@ -617,5 +616,8 @@
     "reports.overdue.item.enumeration": "الترقيم",
     "reports.overdue.item.volume": "مجلد",
     "loans.details.effectiveCallNumber": "مقطع رقم الاستدعاء النشط",
-    "settings.customFields": "Custom fields"
+    "settings.customFields": "حقول مخصصة",
+    "details.field.instance.type": "الوعاء (نوع المادة)",
+    "accounts.history.columns.instance": "الوعاء (نوع المادة)",
+    "feefines.errors.reservedName": "نوع الرسم/الغرامة موجود بالفعل كرسم/غرامة مؤتمتة"
 }
