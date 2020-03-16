@@ -1,63 +1,87 @@
-import React from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+import _ from 'lodash';
 
 import { Settings } from '@folio/stripes/smart-components';
 
-import ChargedOutConditions from './patronBlocks/ChargedOutConditions';
-import OutstandingConditions from './patronBlocks/OutstandingConditions';
-import LostItemConditions from './patronBlocks/LostItemConditions';
-import OverdueItemConditions from './patronBlocks/OverdueItemConditions';
-import OverdueRecallConditions from './patronBlocks/OverdueRecallConditions';
-import RecallOverdueByConditions from './patronBlocks/RecallOverdueByConditions';
+import Conditions from './patronBlocks/Conditions/Conditions';
 
-const conditions = [
-  {
-    route: 'maximum-fee-fine-balance',
-    labelKey: 'ui-users.settings.feefine.balance',
-    component: OutstandingConditions,
-  },
-  {
-    route: 'maximum-items-charged',
-    labelKey: 'ui-users.settings.items.charged',
-    component: ChargedOutConditions,
-  },
-  {
-    route: 'maximum-lost-items',
-    labelKey: 'ui-users.settings.lost.items',
-    component: LostItemConditions,
-  },
-  {
-    route: 'maximum-overdue-items',
-    labelKey: 'ui-users.settings.overdue.items',
-    component: OverdueItemConditions,
-  },
-  {
-    route: 'maximum-overdue-recalls',
-    labelKey: 'ui-users.settings.overdue.recalls',
-    component: OverdueRecallConditions,
-  },
-  {
-    route: 'maximum-overdue-days',
-    labelKey: 'ui-users.settings.overdue.recallMax',
-    component: RecallOverdueByConditions,
-  }
-];
-
-function getConditions(conditionItems) {
-  const routes = [];
-  conditionItems.forEach(({ route, labelKey, component }) => {
-    routes.push({
-      route,
-      label: <FormattedMessage id={labelKey} />,
-      component,
-    });
+class ConditionsSettings extends Component {
+  static manifest = Object.freeze({
+    patronBlockConditions: {
+      type: 'okapi',
+      records: 'patronBlockConditions',
+      path: 'patron-block-conditions',
+    },
   });
-  return routes;
+
+  static propTypes = {
+    resources: PropTypes.shape({
+      patronBlockConditions: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object).isRequired,
+      }).isRequired,
+    }).isRequired,
+    mutator: PropTypes.shape({
+      patronBlockConditions: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+      }).isRequired,
+    }).isRequired,
+  };
+
+  getConditions = () => {
+    const {
+      resources: {
+        patronBlockConditions: {
+          records: patronBlockConditions,
+        }
+      }
+    } = this.props;
+    const routes = [];
+
+    patronBlockConditions.forEach((patronBlockCondition) => {
+      const {
+        id,
+        name,
+      } = patronBlockCondition;
+
+      function tempConditions() {
+        return <Conditions id={id} />;
+      }
+
+      routes.push({
+        route: id,
+        label: name,
+        component: tempConditions,
+      });
+    });
+
+    return routes;
+  }
+
+  shouldRenderSettings = () => {
+    const {
+      resources,
+    } = this.props;
+    const patronBlockConditions = _.get(resources, ['patronBlockConditions', 'records'], []);
+
+    return !!patronBlockConditions.length;
+  }
+
+  render() {
+    if (!this.shouldRenderSettings()) {
+      return null;
+    }
+
+    return (
+      <Settings
+        {...this.props}
+        navPaneWidth="fill"
+        pages={this.getConditions()}
+        paneTitle={<FormattedMessage id="ui-users.settings.conditions" />}
+      />
+    );
+  }
 }
 
-export default (props) => <Settings
-  {...props}
-  navPaneWidth="20%"
-  pages={getConditions(conditions)}
-  paneTitle={<FormattedMessage id="ui-users.settings.conditions" />}
-/>;
+export default ConditionsSettings;

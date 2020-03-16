@@ -1,100 +1,102 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { ConfigManager } from '@folio/stripes/smart-components';
-import {
-  withStripes,
-} from '@folio/stripes/core';
+import { stripesConnect } from '@folio/stripes/core';
+import { Callout } from '@folio/stripes/components';
+import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 import ConditionsForm from './ConditionsForm';
-import css from './conditions.css'
+import css from './conditions.css';
 
 class Conditions extends Component {
+  static manifest = Object.freeze({
+    patronBlockCondition: {
+      type: 'okapi',
+      records: 'patronBlockConditions',
+      GET: {
+        path: 'patron-block-conditions',
+      },
+      PUT: {
+        path: 'patron-block-conditions/!{id}',
+      },
+    },
+  });
+
   static propTypes = {
     id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    blockBorrowing: PropTypes.bool.isRequired,
-    blockRenewals: PropTypes.bool.isRequired,
-    blockRequests: PropTypes.bool.isRequired,
-    message: PropTypes.string.isRequired,
-    stripes: PropTypes.shape({
-      connect: PropTypes.func.isRequired,
-    }).isRequired,
-    resources: PropTypes.shape({
-      patronBlockConditions: PropTypes.object,
-    }).isRequired,
+    children: PropTypes.node.isRequired,
     mutator: PropTypes.shape({
-      patronBlockConditions: PropTypes.shape({
+      patronBlockCondition: PropTypes.shape({
         PUT: PropTypes.func.isRequired,
-      }),
+      }).isRequired,
     }).isRequired,
   };
 
-  constructor(props) {
-    super(props);
+  getInitialValues = () => {
+    const {
+      id : conditionsId,
+    } = this.props;
+    const currentConditions = this.props?.resources?.patronBlockCondition?.records
+      .filter(({ id }) => id === conditionsId)[0];
 
-    this.configManager = this.props.stripes.connect(ConfigManager);
+    return currentConditions;
   }
-  
-  componentDidMount() {
-    console.log('In component did mpount');
-    console.log(this.props);
+
+  normalize = (value) => {
+    return {
+      ...this.getInitialValues(),
+      ...value,
+      message: value.message || '',
+    };
+  }
+
+  onSubmit = (value) => {
+    return this.props.mutator.patronBlockCondition.PUT({
+      ...this.normalize(value),
+    }).then(() => {
+      if (this.callout) {
+        this.callout.sendCallout({
+          message: <SafeHTMLMessage
+            id="ui-users.settings.callout.message"
+            values={{ name: value.name }}
+          />
+        });
+      }
+    });
+  }
+
+
+  shouldRenderCondition = () => {
+    return !!this.props?.resources?.patronBlockCondition?.records.length;
   }
 
   render() {
+    if (!this.shouldRenderCondition()) {
+      return null;
+    }
+
+    const {
+      children,
+    } = this.props;
     const {
       name,
-    } = this.props;
+    } = this.getInitialValues();
 
     return (
-      <section className={css.conditiionsWrapper}>
-        <this.configManager
-          label={name}
-          moduleName="USERS"
-          configName="patron_block__conditions"
-          configFormComponent={ConditionsForm}
-          getInitialValues={() => this.getInitialValues()}
-          validate={this.validate}
-          stripes={this.props.stripes}
-        />
+      <section className={css.conditionsWrapperHolder}>
+        <div className={css.conditionsWrapper}>
+          <ConditionsForm
+            label={name}
+            initialValues={this.getInitialValues()}
+            onSubmit={this.onSubmit}
+          >
+            {children}
+          </ConditionsForm>
+          <Callout ref={(ref) => { this.callout = ref; }} />
+        </div>
       </section>
     );
   }
-
-  getInitialValues() {
-    const {
-      id,
-      name,
-      blockBorrowing,
-      blockRenewals,
-      blockRequests,
-      message,
-    } = this.props;
-
-    return {
-      id,
-      name,
-      blockBorrowing,
-      blockRenewals,
-      blockRequests,
-      message,
-    }
-  }
-
-  validate = (values) => {
-    const errors = {};
-    const {
-      blockBorrowing,
-      blockRenewals,
-      blockRequests,
-      message,
-    } = values;
-
-    console.log('.... values');
-    console.log(values);
-
-    return errors;
-  }
 }
 
-export default withStripes(Conditions);
+export default stripesConnect(Conditions);

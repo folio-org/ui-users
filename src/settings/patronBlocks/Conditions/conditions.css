@@ -2,8 +2,12 @@
     height: 100%;
 }
 
-.conditiionsWrapper {
+.conditionsWrapperHolder {
     display: flex;
-    flex: 0 0 40%;
+    flex: 0 0 30%;
     overflow: hidden;
+}
+
+.conditionsWrapper {
+    width: 100%;
 }

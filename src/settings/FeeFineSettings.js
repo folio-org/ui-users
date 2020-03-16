@@ -9,7 +9,6 @@ import {
 import { Field } from 'redux-form';
 import { Select } from '@folio/stripes/components';
 import { ControlledVocab } from '@folio/stripes/smart-components';
-import { stripesConnect, withStripes } from '@folio/stripes/core';
 
 import { validate } from '../components/util';
 import {
@@ -148,6 +147,9 @@ class FeeFineSettings extends React.Component {
     const myFeeFines = feefines.filter(f => f.ownerId !== this.state.ownerId) || [];
     const label = formatMessage({ id: 'ui-users.feefines.singular' });
     const itemErrors = validate(item, index, items, 'feeFineType', label);
+    const isAutomatedFeeFineNameUsed = feefines.some(feeFine => {
+      return item.feeFineType && feeFine.automatic && item.feeFineType.toLowerCase() === feeFine.feeFineType.toLowerCase();
+    });
 
     if (Number.isNaN(Number(item.defaultAmount)) && item.defaultAmount) {
       itemErrors.defaultAmount = formatMessage({ id: 'ui-users.feefines.errors.amountNumeric' });
@@ -178,6 +180,11 @@ class FeeFineSettings extends React.Component {
           />;
       }
     }
+
+    if (isAutomatedFeeFineNameUsed) {
+      itemErrors.feeFineType = <FormattedMessage id="ui-users.feefines.errors.reservedName" />;
+    }
+
     return itemErrors;
   }
 
@@ -245,6 +252,7 @@ class FeeFineSettings extends React.Component {
 
     const preCreateHook = (item) => {
       item.ownerId = ownerId;
+      item.automatic = false;
       return item;
     };
 
@@ -265,7 +273,7 @@ class FeeFineSettings extends React.Component {
 
     return (
       <this.connectedControlledVocab
-        {...this.props}
+        stripes={this.props.stripes}
         baseUrl="feefines"
         columnMapping={{
           feeFineType: formatMessage({ id: 'ui-users.feefines.columns.type' }),
@@ -284,7 +292,7 @@ class FeeFineSettings extends React.Component {
         preCreateHook={preCreateHook}
         records="feefines"
         rowFilter={rowFilter}
-        rowFilterFunction={(item) => (item.ownerId === ownerId)}
+        rowFilterFunction={(item) => (item.ownerId === ownerId && !item.automatic)}
         sortby="feeFineType"
         validate={this.validate}
         visibleFields={['feeFineType', 'defaultAmount', 'chargeNoticeId', 'actionNoticeId']}
@@ -293,4 +301,4 @@ class FeeFineSettings extends React.Component {
   }
 }
 
-export default injectIntl(withStripes(stripesConnect(FeeFineSettings)));
+export default injectIntl(FeeFineSettings);

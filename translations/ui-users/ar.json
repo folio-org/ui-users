@@ -252,7 +252,6 @@
     "details.field.billedamount": "مبلغ الفاتورة",
     "details.field.remainingamount": "المبلغ المتبقي",
     "details.field.latest": "أحدث حالة سداد",
-    "details.field.instance": "الوعاء",
     "details.field.type": "نوع المادة",
     "details.field.barcode": "الباركود",
     "details.field.callnumber": "رقم الاستدعاء",
@@ -616,5 +615,9 @@
     "reports.overdue.item.callNumberComponents.suffix": "لاحقة رقم الاستدعاء",
     "reports.overdue.item.enumeration": "الترقيم",
     "reports.overdue.item.volume": "مجلد",
-    "loans.details.effectiveCallNumber": "مقطع رقم الاستدعاء النشط"
+    "loans.details.effectiveCallNumber": "مقطع رقم الاستدعاء النشط",
+    "settings.customFields": "حقول مخصصة",
+    "details.field.instance.type": "الوعاء (نوع المادة)",
+    "accounts.history.columns.instance": "الوعاء (نوع المادة)",
+    "feefines.errors.reservedName": "Fee/fine type already exists as automated fee/fine"
 }
