@@ -762,6 +762,6 @@
     "react-router-dom": "*"
   },
   "optionalDependencies": {
-    "@folio/plugin-find-user": "^1.1.0"
+    "@folio/plugin-find-user": "^2.0.0"
   }
 }
