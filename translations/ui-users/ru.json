@@ -619,5 +619,5 @@
     "settings.customFields": "Custom fields",
     "details.field.instance.type": "Instance (Material type)",
     "accounts.history.columns.instance": "Instance (Material type)",
-    "feefines.errors.reservedName": "Fee/fine type already exists as automated fee/fine"
+    "feefines.errors.reservedName": "Тип оплаты уже существует в автоматизированном виде"
 }
