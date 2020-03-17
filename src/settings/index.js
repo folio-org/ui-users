@@ -10,7 +10,8 @@ import {
   Pane,
   PaneBackLink,
 } from '@folio/stripes/components';
-import { settingsSections } from '..';
+
+import sections from './sections';
 
 export default class Settings extends Component {
   static propTypes = {
@@ -35,7 +36,7 @@ export default class Settings extends Component {
           )}
         >
           <NavList>
-            {settingsSections.map((section, index) => (
+            {sections.map((section, index) => (
               <NavListSection key={index} label={section.label}>
                 {section.pages.map(setting => (setting.perm ? (
                   <IfPermission key={setting.route} perm={setting.perm}>
