@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { IfPermission } from '@folio/stripes/core';
@@ -23,7 +23,7 @@ export default class Settings extends Component {
     const { children, match: { path } } = this.props;
 
     return (
-      <Fragment>
+      <>
         <Pane
           defaultWidth="20%"
           paneTitle={
@@ -50,7 +50,7 @@ export default class Settings extends Component {
           </NavList>
         </Pane>
         {children}
-      </Fragment>
+      </>
     );
   }
 }
