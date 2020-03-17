@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { FormattedMessage } from 'react-intl';
 import { get } from 'lodash';
+import { Field } from 'redux-form';
 
 import { AppIcon } from '@folio/stripes/core';
 import {
@@ -20,6 +21,7 @@ import {
   Headline,
   AccordionSet,
 } from '@folio/stripes/components';
+import { EditCustomFieldsRecord } from '@folio/stripes/smart-components';
 import stripesForm from '@folio/stripes/form';
 
 import {
@@ -234,6 +236,7 @@ class UserForm extends React.Component {
         proxyAccordion: false,
         permissions: false,
         servicePoints: false,
+        customFields: true,
       },
     };
 
@@ -491,6 +494,14 @@ class UserForm extends React.Component {
                   onToggle={this.handleSectionToggle}
                   addressTypes={formData.addressTypes}
                   preferredContactTypeId={initialValues.preferredContactTypeId}
+                />
+                <EditCustomFieldsRecord
+                  accordionId="customFields"
+                  onToggle={this.handleSectionToggle}
+                  expanded={this.state.sections.customFields}
+                  backendModuleName="users"
+                  entityType="user"
+                  fieldComponent={Field}
                 />
                 {initialValues.id &&
                   <div>

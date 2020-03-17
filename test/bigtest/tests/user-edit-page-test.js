@@ -158,4 +158,73 @@ describe('User Edit Page', () => {
       });
     });
   });
+
+  describe('with custom fields', () => {
+    it('custom fields accordion is present', () => {
+      expect(UserFormPage.customFieldsSection.isPresent).to.be.true;
+    });
+
+    it('has correct accordion label', () => {
+      expect(UserFormPage.customFieldsSection.label).to.equal('Custom Fields Test');
+    });
+
+    it('custom fields length', () => {
+      expect(UserFormPage.customFieldsSection.fields().length).to.equal(3);
+    });
+
+    it('field has popover', () => {
+      expect(UserFormPage.customFieldsSection.fields(0).popoverIsPresent).to.be.true;
+    });
+
+    describe('set empty falue to required field', () => {
+      beforeEach(async () => {
+        await UserFormPage.customFieldsSection.fields(0).input.fillAndBlur('');
+      });
+
+      it('show validation message', () => {
+        expect(UserFormPage.customFieldsSection.fields(0).validationMessage).to.equal('Textbox 1 is required');
+      });
+    });
+
+    describe('set value to textbox out of length limit', () => {
+      beforeEach(async () => {
+        await UserFormPage.customFieldsSection.fields(0).input.fillAndBlur((new Array(151)).fill('a').join(''));
+      });
+
+      it('show validation message', () => {
+        expect(UserFormPage.customFieldsSection.fields(0).validationMessage)
+          .to.equal('Textbox 1 character limit has been exceeded. Please revise.');
+      });
+    });
+
+    describe('set to textarea value out of length limit', () => {
+      beforeEach(async () => {
+        await UserFormPage.customFieldsSection.fields(2).input.fillAndBlur((new Array(1501)).fill('a').join(''));
+      });
+
+      it('show validation message', () => {
+        expect(UserFormPage.customFieldsSection.fields(2).validationMessage)
+          .to.equal('Textarea 4 character limit has been exceeded. Please revise.');
+      });
+    });
+  });
+});
+
+describe('without custom fields', () => {
+  setupApplication();
+
+  beforeEach(async function () {
+    const user = this.server.create('user');
+
+    this.server.get('/custom-fields', {
+      customFields: [],
+    });
+
+    this.visit(`/users/${user.id}/edit`);
+    await UserFormPage.whenLoaded();
+  });
+
+  it('custom-fields accordion does not present', () => {
+    expect(UserFormPage.customFieldsSection.isPresent).to.be.false;
+  });
 });

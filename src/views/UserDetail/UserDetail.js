@@ -28,7 +28,8 @@ import {
 } from '@folio/stripes/components';
 
 import {
-  NotesSmartAccordion
+  NotesSmartAccordion,
+  ViewCustomFieldsRecord,
 } from '@folio/stripes/smart-components';
 
 import {
@@ -145,6 +146,7 @@ class UserDetail extends React.Component {
         permissionsSection: false,
         servicePointsSection: false,
         notesAccordion: false,
+        customFields: false,
       },
     };
   }
@@ -398,6 +400,7 @@ class UserDetail extends React.Component {
       'addressType',
       '',
     );
+    const customFields = user?.customFields || [];
 
     if (!user) {
       return (
@@ -487,6 +490,14 @@ class UserDetail extends React.Component {
                 addressTypes={addressTypes}
                 expanded={sections.contactInfoSection}
                 onToggle={this.handleSectionToggle}
+              />
+              <ViewCustomFieldsRecord
+                accordionId="customFields"
+                onToggle={this.handleSectionToggle}
+                expanded={this.state.sections.customFields}
+                backendModuleName="users"
+                entityType="user"
+                customFieldsValues={customFields}
               />
               <IfPermission perm="proxiesfor.collection.get">
                 <ProxyPermissions

@@ -33,6 +33,11 @@ import proxyItemCSS from '../../../src/components/ProxyGroup/ProxyItem/ProxyItem
   }
 }
 
+@interactor class CustomFieldsSectionInteractor {
+  accordionButton = scoped('#accordion-toggle-button-customfields', ButtonInteractor);
+  label = text('[class*="labelArea---"]');
+}
+
 @interactor class InstanceViewPage {
   title = text('[data-test-header-title]');
   headerDropdown = new HeaderDropdown();
@@ -46,6 +51,7 @@ import proxyItemCSS from '../../../src/components/ProxyGroup/ProxyItem/ProxyItem
   fulfillmentPreference = text('[data-test-fulfillment-preference]');
   defaultPickupServicePoint = text('[data-test-default-pickup-service-point]');
   defaultDeliveryAddress = text('[data-test-default-delivery-address]');
+  customFieldsSection = scoped('#customFields', CustomFieldsSectionInteractor);
 
   whenLoaded() {
     return this.when(() => this.isPresent).timeout(5000);
