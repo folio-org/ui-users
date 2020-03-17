@@ -1,6 +1,8 @@
 # Change history for ui-users
 
-## 2.27.0 (IN PROGRESS)
+## [3.0.0](https://github.com/folio-org/ui-users/tree/v3.0.0) (2020-03-17)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v2.26.0...v3.0.0)
+
 * Add default settings for user status and preferred contact in new user creation. Refs UIU-1385.
 * Fix navigation paths on cancel button click on loan details, open and closed loan lists pages. Refs UIU-1377.
 * Prevent loan details opening upon click in loans action menu without selecting link. Fixes UIU-1359.
@@ -44,6 +46,8 @@
 * Provide permissions to custom fields. Refs UIU-1521.
 * Fix bug with assign and unassign permissions to users. Refs UIU-1518.
 * Default charge and action notices not saved on manual fee/fine charge settings. Refs UIU-1486.
+* Update to `@folio/stripes` `v3.0.0` compatible version of `plugin-find-user`.
+* Happy St. Patrick's day! 🍀 🍀 🍀
 
 ## [2.26.0](https://github.com/folio-org/ui-users/tree/v2.26.0) (2019-12-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.25.3...v2.26.0)
