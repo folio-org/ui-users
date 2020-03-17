@@ -725,7 +725,7 @@
     "@folio/eslint-config-stripes": "^5.2.0",
     "@folio/stripes": "^3.0.0",
     "@folio/stripes-cli": "^1.13.0",
-    "@folio/stripes-core": "~4.0.0",
+    "@folio/stripes-core": "^4.0.0",
     "babel-eslint": "^10.0.3",
     "chai": "^4.2.0",
     "core-js": "^3.6.4",
@@ -762,6 +762,6 @@
     "react-router-dom": "*"
   },
   "optionalDependencies": {
-    "@folio/plugin-find-user": "^1.1.0"
+    "@folio/plugin-find-user": "^2.0.0"
   }
 }
