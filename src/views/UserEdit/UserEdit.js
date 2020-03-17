@@ -251,7 +251,7 @@ class UserEdit extends React.Component {
     const prevPerms = (this.props.resources.permissions || {}).records || [];
     const removedPerms = differenceBy(prevPerms, perms, 'id');
     const addedPerms = differenceBy(perms, prevPerms, 'id');
-    
+
     await eachPromise(removedPerms, mutator.DELETE);
     await eachPromise(addedPerms, mutator.POST);
   }
