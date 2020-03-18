@@ -1,114 +1,23 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
 import { hot } from 'react-hot-loader';
-import _ from 'lodash';
 
 import { Route, Switch, IfPermission } from '@folio/stripes/core';
-import { Settings } from '@folio/stripes/smart-components';
 
 import * as Routes from './routes';
 
 import pkg from '../package';
-import PermissionSets from './settings/permissions/PermissionSets';
-import PatronGroupsSettings from './settings/PatronGroupsSettings';
-import AddressTypesSettings from './settings/AddressTypesSettings';
-import ProfilePictureSettings from './settings/ProfilePictureSettings';
-import OwnerSettings from './settings/OwnerSettings';
-import FeeFineSettings from './settings/FeeFineSettings';
-import WaiveSettings from './settings/WaiveSettings';
-import PaymentSettings from './settings/PaymentSettings';
-import CommentRequiredSettings from './settings/CommentRequiredSettings';
-import RefundReasonsSettings from './settings/RefundReasonsSettings';
-import TransferAccountsSettings from './settings/TransferAccountsSettings';
-import CustomFieldsSettingsPane from './settings/CustomFieldsSettings';
+import Settings from './settings';
+import sections from './settings/sections';
 import {
   NoteCreatePage,
   NoteViewPage,
   NoteEditPage
 } from './views';
 
-const settingsGeneral = [
-  {
-    route: 'perms',
-    label: <FormattedMessage id="ui-users.settings.permissionSet" />,
-    component: PermissionSets,
-    perm: 'ui-users.settings.permsets',
-  },
-  {
-    route: 'groups',
-    label: <FormattedMessage id="ui-users.settings.patronGroups" />,
-    component: PatronGroupsSettings,
-    perm: 'ui-users.settings.usergroups',
-  },
-  {
-    route: 'addresstypes',
-    label: <FormattedMessage id="ui-users.settings.addressTypes" />,
-    component: AddressTypesSettings,
-    perm: 'ui-users.settings.addresstypes',
-  },
-  {
-    route: 'profilepictures',
-    label: <FormattedMessage id="ui-users.settings.profilePictures" />,
-    component: ProfilePictureSettings,
-  },
-  {
-    route: 'custom-fields',
-    label: <FormattedMessage id="ui-users.settings.customFields" />,
-    component: CustomFieldsSettingsPane,
-    perm: 'ui-users.settings.customfields.view',
-  }
-];
-
-const settingsFeefines = [
-  {
-    route: 'owners',
-    label: <FormattedMessage id="ui-users.settings.owners" />,
-    component: OwnerSettings,
-    perm: 'ui-users.settings.feefine',
-  },
-  {
-    route: 'feefinestable',
-    label: <FormattedMessage id="ui-users.settings.manualCharges" />,
-    component: FeeFineSettings,
-    perm: 'ui-users.settings.feefine',
-  },
-  {
-    route: 'waivereasons',
-    label: <FormattedMessage id="ui-users.settings.waiveReasons" />,
-    component: WaiveSettings,
-    perm: 'ui-users.settings.feefine',
-  },
-  {
-    route: 'payments',
-    label: <FormattedMessage id="ui-users.settings.paymentMethods" />,
-    component: PaymentSettings,
-    perm: 'ui-users.settings.feefine',
-  },
-  {
-    route: 'refunds',
-    label: <FormattedMessage id="ui-users.settings.refundReasons" />,
-    component: RefundReasonsSettings,
-    perm: 'ui-users.settings.feefine',
-  },
-  {
-    route: 'comments',
-    label: <FormattedMessage id="ui-users.settings.commentRequired" />,
-    component: CommentRequiredSettings,
-    perm: 'ui-users.settings.feefine',
-  },
-  {
-    route: 'transfers',
-    label: <FormattedMessage id="ui-users.settings.transferAccounts" />,
-    component: TransferAccountsSettings,
-    perm: 'ui-users.settings.transfers',
-  },
-];
-
-class UsersRouting extends Component {
-  static actionNames = ['stripesHome', 'usersSortByName'];
-
+class UsersRouting extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func.isRequired,
@@ -117,20 +26,6 @@ class UsersRouting extends Component {
     match: PropTypes.object.isRequired,
     showSettings: PropTypes.bool,
     history: PropTypes.object,
-  }
-
-  constructor(props) {
-    super(props);
-    this.sections = [
-      {
-        label: <FormattedMessage id="ui-users.settings.general" />,
-        pages: _.sortBy(settingsGeneral, ['label']),
-      },
-      {
-        label: <FormattedMessage id="ui-users.settings.feefine" />,
-        pages: _.sortBy(settingsFeefines, ['label']),
-      },
-    ];
   }
 
   componentDidMount() {
@@ -162,6 +57,8 @@ class UsersRouting extends Component {
       }
     }
   }
+
+  static actionNames = ['stripesHome', 'usersSortByName'];
 
   noMatch() {
     const {
@@ -206,7 +103,9 @@ class UsersRouting extends Component {
 
   render() {
     const {
-      showSettings
+      showSettings,
+      match: { path },
+      stripes
     } = this.props;
 
     this.shortcutScope = document.body;
@@ -214,11 +113,14 @@ class UsersRouting extends Component {
 
     if (showSettings) {
       return (
-        <Settings
-          {...this.props}
-          sections={this.sections}
-          paneTitle={<FormattedMessage id="ui-users.settings.label" />}
-        />
+        <Route path={path} component={Settings}>
+          <Switch>
+            {[].concat(...sections.map(section => section.pages))
+              .filter(setting => !setting.perm || stripes.hasPerm(setting.perm))
+              .map(setting => <Route path={`${path}/${setting.route}`} key={setting.route} component={setting.component} />)
+            }
+          </Switch>
+        </Route>
       );
     }
 
