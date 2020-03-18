@@ -498,7 +498,7 @@ class UserForm extends React.Component {
                 <EditCustomFieldsRecord
                   accordionId="customFields"
                   onToggle={this.handleSectionToggle}
-                  expanded={this.state.sections.customFields}
+                  expanded={sections.customFields}
                   backendModuleName="users"
                   entityType="user"
                   fieldComponent={Field}

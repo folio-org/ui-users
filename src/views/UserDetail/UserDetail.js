@@ -494,7 +494,7 @@ class UserDetail extends React.Component {
               <ViewCustomFieldsRecord
                 accordionId="customFields"
                 onToggle={this.handleSectionToggle}
-                expanded={this.state.sections.customFields}
+                expanded={sections.customFields}
                 backendModuleName="users"
                 entityType="user"
                 customFieldsValues={customFields}
