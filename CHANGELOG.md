@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## 3.1.0 (IN PROGRESS)
+
+* Restore `CommandList`, `HasCommand` wrappers now that they don't leak memory. Refs UIU-1457.
+
 ## [3.0.0](https://github.com/folio-org/ui-users/tree/v3.0.0) (2020-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.26.0...v3.0.0)
 
