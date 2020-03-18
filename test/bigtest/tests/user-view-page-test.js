@@ -64,7 +64,7 @@ describe('User view', () => {
       });
     });
 
-    describe('custom fields section', () => {
+    describe('when custom fields are in stock', () => {
       it('should display custom fields accordion', () => {
         expect(InstanceViewPage.customFieldsSection.isPresent).to.be.true;
       });
@@ -75,18 +75,18 @@ describe('User view', () => {
     });
   });
 
-  describe('visit user-details without custom fields', () => {
+  describe('when custom fields are not in stock', () => {
     beforeEach(async function () {
       user = this.server.create('user');
       this.server.get('/custom-fields', {
-        customFiedls: [],
+        customFields: [],
       });
 
       this.visit(`/users/view/${user.id}`);
       await InstanceViewPage.whenLoaded();
     });
 
-    it('does not display custom fields accordion', () => {
+    it('should not display custom fields accordion', () => {
       expect(InstanceViewPage.customFieldsSection.isPresent).to.be.false;
     });
   });
