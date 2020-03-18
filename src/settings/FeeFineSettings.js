@@ -9,6 +9,8 @@ import {
 import { Field } from 'redux-form';
 import { Select } from '@folio/stripes/components';
 import { ControlledVocab } from '@folio/stripes/smart-components';
+import { stripesConnect, withStripes } from '@folio/stripes/core';
+
 
 import { validate } from '../components/util';
 import {
@@ -306,4 +308,4 @@ class FeeFineSettings extends React.Component {
   }
 }
 
-export default injectIntl(FeeFineSettings);
+export default injectIntl(withStripes(stripesConnect(FeeFineSettings)));
