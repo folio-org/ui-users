@@ -63,5 +63,31 @@ describe('User view', () => {
         expect(InstanceViewPage.defaultDeliveryAddress).to.equal('Claim');
       });
     });
+
+    describe('when custom fields are in stock', () => {
+      it('should display custom fields accordion', () => {
+        expect(InstanceViewPage.customFieldsSection.isPresent).to.be.true;
+      });
+
+      it('should display correct accordion title', () => {
+        expect(InstanceViewPage.customFieldsSection.label).to.equal('Custom Fields Test');
+      });
+    });
+  });
+
+  describe('when custom fields are not in stock', () => {
+    beforeEach(async function () {
+      user = this.server.create('user');
+      this.server.get('/custom-fields', {
+        customFields: [],
+      });
+
+      this.visit(`/users/view/${user.id}`);
+      await InstanceViewPage.whenLoaded();
+    });
+
+    it('should not display custom fields accordion', () => {
+      expect(InstanceViewPage.customFieldsSection.isPresent).to.be.false;
+    });
   });
 });
