@@ -274,6 +274,23 @@ class UserDetail extends React.Component {
 
     return (
       <PaneMenu>
+        <IfPermission perm="ui-users.edit">
+          <FormattedMessage id="ui-users.crud.editUser">
+            {ariaLabel => (
+              <Button
+                id="clickable-edituser"
+                buttonStyle="primary"
+                style={{ visibility: !user ? 'hidden' : 'visible' }}
+                to={this.getEditLink()}
+                buttonRef={this.editButton}
+                ariaLabel={ariaLabel}
+                marginBottom0
+              >
+                <FormattedMessage id="ui-users.edit" />
+              </Button>
+            )}
+          </FormattedMessage>
+        </IfPermission>
         {
           tagsEnabled &&
           <FormattedMessage id="ui-users.showTags">
@@ -288,40 +305,9 @@ class UserDetail extends React.Component {
             )}
           </FormattedMessage>
         }
-        <IfPermission perm="ui-users.edit">
-          <FormattedMessage id="ui-users.crud.editUser">
-            {ariaLabel => (
-              <IconButton
-                icon="edit"
-                id="clickable-edituser"
-                style={{ visibility: !user ? 'hidden' : 'visible' }}
-                href={this.getEditLink()}
-                ref={this.editButton}
-                ariaLabel={ariaLabel}
-              />
-            )}
-          </FormattedMessage>
-        </IfPermission>
       </PaneMenu>
     );
   }
-
-  getActionMenu = ({ onToggle }) => {
-    return (
-      <IfPermission perm="ui-users.edit">
-        <Button
-          data-test-user-instance-edit-action
-          buttonStyle="dropdownItem"
-          onClick={onToggle}
-          to={this.getEditLink()}
-        >
-          <Icon icon="edit">
-            <FormattedMessage id="ui-users.edit" />
-          </Icon>
-        </Button>
-      </IfPermission>
-    );
-  };
 
   checkScope = () => true;
 
@@ -428,7 +414,6 @@ class UserDetail extends React.Component {
             lastMenu={this.renderDetailMenu(user)}
             dismissible
             onClose={this.onClose}
-            actionMenu={this.getActionMenu}
           >
             <TitleManager record={getFullName(user)} />
             <Headline
