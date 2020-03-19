@@ -564,7 +564,7 @@ export default function config() {
       'type': 'TEXTBOX_LONG',
       'entityType': 'user',
       'visible': true,
-      'required': true,
+      'required': false,
       'order': 4,
       'helpText': 'help text',
     }]
