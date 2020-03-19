@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  injectIntl,
+} from 'react-intl';
 
+import { stripesConnect, withStripes } from '@folio/stripes/core';
 import { Settings } from '@folio/stripes/smart-components';
 
 import Conditions from './patronBlocks/Conditions/Conditions';
@@ -85,4 +89,4 @@ class ConditionsSettings extends Component {
   }
 }
 
-export default ConditionsSettings;
+export default injectIntl(withStripes(stripesConnect(ConditionsSettings)));

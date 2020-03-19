@@ -2,6 +2,7 @@
 
 ## [3.1.0] (IN PROGRESS)
 
+* Add posibility to view/create/edit custom fields on user record. UIU-1279.
 * Create Patron Blocks Conditions Table in Settings -> Users. Refs UIU-1272.
 
 ## [3.0.0](https://github.com/folio-org/ui-users/tree/v3.0.0) (2020-03-17)
