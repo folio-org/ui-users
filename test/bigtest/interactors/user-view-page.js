@@ -10,14 +10,6 @@ import {
 
 import proxyItemCSS from '../../../src/components/ProxyGroup/ProxyItem/ProxyItem.css';
 
-@interactor class HeaderDropdown {
-  click = clickable('[data-test-pane-header-actions-button]');
-}
-
-@interactor class HeaderDropdownMenu {
-  clickEdit = clickable('[data-test-user-instance-edit-action]');
-}
-
 @interactor class ProxySectionInteractor {
   proxyCount = count(`[data-test="proxies"] .${proxyItemCSS.item}`);
   sponsorCount = count(`[data-test="sponsors"] .${proxyItemCSS.item}`);
@@ -40,8 +32,8 @@ import proxyItemCSS from '../../../src/components/ProxyGroup/ProxyItem/ProxyItem
 
 @interactor class InstanceViewPage {
   title = text('[data-test-header-title]');
-  headerDropdown = new HeaderDropdown();
-  headerDropdownMenu = new HeaderDropdownMenu();
+  // headerDropdown = new HeaderDropdown();
+  // headerDropdownMenu = new HeaderDropdownMenu();
   editButtonPresent = isPresent('#clickable-edituser');
   clickEditButton = clickable('#clickable-edituser');
   proxySection = scoped('#proxySection', ProxySectionInteractor);
