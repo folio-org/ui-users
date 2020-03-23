@@ -20,7 +20,6 @@ import {
   expandAllFunction,
   ExpandAllButton,
   Button,
-  Icon,
   Row,
   Col,
   Headline,
