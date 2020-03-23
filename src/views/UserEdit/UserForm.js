@@ -485,6 +485,7 @@ class UserForm extends React.Component {
                   userId={initialValues.id}
                   userFirstName={initialValues.personal.firstName}
                   userEmail={initialValues.personal.email}
+                  username={initialValues.username}
                   servicePoints={servicePoints}
                   addressTypes={formData.addressTypes}
                 />

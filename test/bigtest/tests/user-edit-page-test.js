@@ -36,6 +36,10 @@ describe('User Edit Page', () => {
     expect(UserFormPage.title).to.equal(user1.username);
   });
 
+  it('should display reset password link', () => {
+    expect(UserFormPage.resetPasswordLink.isPresent).to.be.true;
+  });
+
   describe('validating user barcode', () => {
     beforeEach(async function () {
       await UserFormPage.barcodeField.fillAndBlur(user2.barcode);
