@@ -9,6 +9,11 @@ export const requestStatuses = {
   UNFILLED: 'Closed - Unfilled',
 };
 
+export const itemStatuses = {
+  CLAIMED_RETURNED: 'Claimed returned',
+  DECLARED_LOST: 'Declared lost',
+};
+
 export const deliveryFulfillmentValues = {
   HOLD_SHELF: 'Hold Shelf',
   DELIVERY: 'Delivery',

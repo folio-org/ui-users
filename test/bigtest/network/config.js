@@ -18,14 +18,31 @@ export default function config() {
         { id: 'loan-policy-storage', version: '7.4' },
       ]
     },
+    {
+      id: 'mod-users-16.0.1-SNAPSHOT.121',
+      name: 'users',
+      provides: []
+    },
   ]);
 
   this.get('/saml/check', {
     ssoEnabled: false
   });
 
-  this.get('/configurations/entries', {
-    configs: []
+  this.get('/configurations/entries', (schema, request) => {
+    if (request.url.includes('custom_fields_label')) {
+      return {
+        configs: [{
+          id: 'tested-custom-field-label',
+          module: 'USERS',
+          configName: 'custom_fields_label',
+          enabled: true,
+          value: 'Custom Fields Test',
+        }],
+      };
+    }
+
+    return { configs: [] };
   });
   this.post('/bl-users/login', () => {
     return new Response(
@@ -508,4 +525,48 @@ export default function config() {
   });
 
   this.post('/request-preference-storage/request-preference');
+
+  this.get('/custom-fields', {
+    'customFields': [{
+      'id': '1',
+      'name': 'Textbox 1',
+      'refId': 'textbox-1',
+      'type': 'TEXTBOX_SHORT',
+      'entityType': 'user',
+      'visible': true,
+      'required': true,
+      'order': 1,
+      'helpText': 'helpful text',
+    }, {
+      'id': '2',
+      'name': 'Textbox 2',
+      'refId': 'textbox-2',
+      'type': 'TEXTBOX_SHORT',
+      'entityType': 'user',
+      'visible': true,
+      'required': false,
+      'order': 2,
+      'helpText': '',
+    }, {
+      'id': '3',
+      'name': 'Textarea 3',
+      'refId': 'textarea-3',
+      'type': 'TEXTBOX_LONG',
+      'entityType': 'user',
+      'visible': false,
+      'required': false,
+      'order': 3,
+      'helpText': '',
+    }, {
+      'id': '4',
+      'name': 'Textarea 4',
+      'refId': 'textarea-4',
+      'type': 'TEXTBOX_LONG',
+      'entityType': 'user',
+      'visible': true,
+      'required': false,
+      'order': 4,
+      'helpText': 'help text',
+    }]
+  });
 }

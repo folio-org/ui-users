@@ -19,6 +19,8 @@ import {
   getOpenRequestsPath,
 } from '../../../../util';
 
+import { itemStatuses } from '../../../../../constants';
+
 class ActionsDropdown extends React.Component {
   static propTypes = {
     stripes: stripesShape.isRequired,
@@ -26,6 +28,9 @@ class ActionsDropdown extends React.Component {
     requestQueue: PropTypes.bool.isRequired,
     handleOptionsChange: PropTypes.func.isRequired,
     disableFeeFineDetails: PropTypes.bool,
+    match: PropTypes.shape({
+      params: PropTypes.object
+    }),
   };
 
   renderMenu = ({ onToggle }) => {
@@ -38,6 +43,7 @@ class ActionsDropdown extends React.Component {
       match: { params },
     } = this.props;
 
+    const itemStatusName = loan?.item?.status?.name;
     const itemDetailsLink = `/inventory/view/${loan.item.instanceId}/${loan.item.holdingsRecordId}/${loan.itemId}`;
     const loanPolicyLink = `/settings/circulation/loan-policies/${loan.loanPolicyId}`;
     const buttonDisabled = !stripes.hasPerm('ui-users.feesfines.actions.all');
@@ -64,7 +70,7 @@ class ActionsDropdown extends React.Component {
             <FormattedMessage id="ui-users.renew" />
           </Button>
         </IfPermission>
-        { loan?.item?.status?.name !== 'Claimed returned' &&
+        { itemStatusName !== itemStatuses.CLAIMED_RETURNED &&
           <Button
             buttonStyle="dropdownItem"
             data-test-dropdown-content-claim-returned-button
@@ -77,7 +83,7 @@ class ActionsDropdown extends React.Component {
           </Button>
         }
         <IfPermission perm="ui-users.loans.edit">
-          { loan?.item?.status?.name !== 'Declared lost' &&
+          { itemStatusName !== itemStatuses.DECLARED_LOST &&
             <Button
               buttonStyle="dropdownItem"
               data-test-dropdown-content-change-due-date-button
@@ -90,18 +96,20 @@ class ActionsDropdown extends React.Component {
             </Button>
           }
         </IfPermission>
-        { loan?.item?.status?.name !== 'Declared lost' &&
-          <Button
-            buttonStyle="dropdownItem"
-            data-test-dropdown-content-declare-lost-button
-            onClick={e => {
-              handleOptionsChange({ loan, action:'declareLost' });
-              onToggle(e);
-            }}
-          >
-            <FormattedMessage id="ui-users.loans.declareLost" />
-          </Button>
-        }
+        <IfPermission perm="ui-users.loans.declare-item-lost">
+          { itemStatusName !== itemStatuses.DECLARED_LOST &&
+            <Button
+              buttonStyle="dropdownItem"
+              data-test-dropdown-content-declare-lost-button
+              onClick={e => {
+                handleOptionsChange({ loan, action:'declareLost' });
+                onToggle(e);
+              }}
+            >
+              <FormattedMessage id="ui-users.loans.declareLost" />
+            </Button>
+          }
+        </IfPermission>
         <IfPermission perm="circulation-storage.loan-policies.item.get">
           <Button
             buttonStyle="dropdownItem"

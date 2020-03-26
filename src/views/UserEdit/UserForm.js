@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { FormattedMessage } from 'react-intl';
 import { get } from 'lodash';
+import { Field } from 'redux-form';
 
 import { AppIcon } from '@folio/stripes/core';
 import {
@@ -20,6 +21,7 @@ import {
   Headline,
   AccordionSet,
 } from '@folio/stripes/components';
+import { EditCustomFieldsRecord } from '@folio/stripes/smart-components';
 import stripesForm from '@folio/stripes/form';
 
 import {
@@ -211,8 +213,11 @@ class UserForm extends React.Component {
     match: PropTypes.object,
     pristine: PropTypes.bool,
     submitting: PropTypes.bool,
+    invalid: PropTypes.bool,
+    onCancel: PropTypes.func.isRequired,
     onSubmit: PropTypes.func.isRequired,
     initialValues: PropTypes.object.isRequired,
+    servicePoints: PropTypes.object.isRequired,
   };
 
   static defaultProps = {
@@ -231,6 +236,7 @@ class UserForm extends React.Component {
         proxyAccordion: false,
         permissions: false,
         servicePoints: false,
+        customFields: true,
       },
     };
 
@@ -479,6 +485,7 @@ class UserForm extends React.Component {
                   userId={initialValues.id}
                   userFirstName={initialValues.personal.firstName}
                   userEmail={initialValues.personal.email}
+                  username={initialValues.username}
                   servicePoints={servicePoints}
                   addressTypes={formData.addressTypes}
                 />
@@ -488,6 +495,14 @@ class UserForm extends React.Component {
                   onToggle={this.handleSectionToggle}
                   addressTypes={formData.addressTypes}
                   preferredContactTypeId={initialValues.preferredContactTypeId}
+                />
+                <EditCustomFieldsRecord
+                  accordionId="customFields"
+                  onToggle={this.handleSectionToggle}
+                  expanded={sections.customFields}
+                  backendModuleName="users"
+                  entityType="user"
+                  fieldComponent={Field}
                 />
                 {initialValues.id &&
                   <div>
@@ -517,9 +532,9 @@ class UserForm extends React.Component {
                       expanded={sections.permissions}
                       onToggle={this.handleSectionToggle}
                       headlineContent={<FormattedMessage id="ui-users.permissions.userPermissions" />}
-                      permToRead="perms.permissions.get"
-                      permToDelete="perms.permissions.item.delete"
-                      permToModify="perms.permissions.item.put"
+                      permToRead="perms.users.get"
+                      permToDelete="perms.users.item.delete"
+                      permToModify="perms.users.item.put"
                       formName="userForm"
                       permissionsField="permissions"
                     />

@@ -252,7 +252,6 @@
     "details.field.billedamount": "Billed amount",
     "details.field.remainingamount": "Remaining amount",
     "details.field.latest": "Latest payment status",
-    "details.field.instance": "Instance",
     "details.field.type": "Item type",
     "details.field.barcode": "Barcode",
     "details.field.callnumber": "Call number",
@@ -590,8 +589,8 @@
     "data.loanActionMap.declaredLost": "Declarado perdido",
     "confirm": "Confirm",
     "loans.declareLost": "Declare lost",
-    "loans.declareLostDialogBody": "<strong>{title} {materialType}</strong> (Barcode: {barcode}) will be <strong>declared lost</strong>",
-    "loans.confirmLostState": "Confirm lost state",
+    "loans.declareLostDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be <strong>declared lost</strong>",
+    "loans.confirmLostState": "Confirm Declared lost status",
     "loans.declareLost.additionalInfoPlaceholder": "Enter more information about the lost item (required)",
     "userSearch": "User search",
     "userSearchResults": "User search results",
@@ -616,5 +615,9 @@
     "reports.overdue.item.callNumberComponents.suffix": "Sufijo del número de clasificación",
     "reports.overdue.item.enumeration": "Enumeración",
     "reports.overdue.item.volume": "Volumen",
-    "loans.details.effectiveCallNumber": "Effective call number string"
+    "loans.details.effectiveCallNumber": "Effective call number string",
+    "settings.customFields": "Custom fields",
+    "details.field.instance.type": "Instance (Material type)",
+    "accounts.history.columns.instance": "Instance (Material type)",
+    "feefines.errors.reservedName": "Fee/fine type already exists as automated fee/fine"
 }

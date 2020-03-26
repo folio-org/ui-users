@@ -10,14 +10,6 @@ import {
 
 import proxyItemCSS from '../../../src/components/ProxyGroup/ProxyItem/ProxyItem.css';
 
-@interactor class HeaderDropdown {
-  click = clickable('[data-test-pane-header-actions-button]');
-}
-
-@interactor class HeaderDropdownMenu {
-  clickEdit = clickable('[data-test-user-instance-edit-action]');
-}
-
 @interactor class ProxySectionInteractor {
   proxyCount = count(`[data-test="proxies"] .${proxyItemCSS.item}`);
   sponsorCount = count(`[data-test="sponsors"] .${proxyItemCSS.item}`);
@@ -33,10 +25,15 @@ import proxyItemCSS from '../../../src/components/ProxyGroup/ProxyItem/ProxyItem
   }
 }
 
+@interactor class CustomFieldsSectionInteractor {
+  accordionButton = scoped('#accordion-toggle-button-customfields', ButtonInteractor);
+  label = text('[class*="labelArea---"]');
+}
+
 @interactor class InstanceViewPage {
   title = text('[data-test-header-title]');
-  headerDropdown = new HeaderDropdown();
-  headerDropdownMenu = new HeaderDropdownMenu();
+  // headerDropdown = new HeaderDropdown();
+  // headerDropdownMenu = new HeaderDropdownMenu();
   editButtonPresent = isPresent('#clickable-edituser');
   clickEditButton = clickable('#clickable-edituser');
   proxySection = scoped('#proxySection', ProxySectionInteractor);
@@ -46,6 +43,7 @@ import proxyItemCSS from '../../../src/components/ProxyGroup/ProxyItem/ProxyItem
   fulfillmentPreference = text('[data-test-fulfillment-preference]');
   defaultPickupServicePoint = text('[data-test-default-pickup-service-point]');
   defaultDeliveryAddress = text('[data-test-default-delivery-address]');
+  customFieldsSection = scoped('#customFields', CustomFieldsSectionInteractor);
 
   whenLoaded() {
     return this.when(() => this.isPresent).timeout(5000);

@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "2.26.0",
+  "version": "3.0.0",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -250,6 +250,41 @@
           "feefines.item.post",
           "feefines.item.put",
           "settings.users.enabled"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.customfields.view",
+        "displayName": "Settings (Users): Can view custom fields",
+        "subPermissions": [
+          "user-settings.custom-fields.collection.get",
+          "user-settings.custom-fields.item.get",
+          "user-settings.custom-fields.item.stats.get",
+          "settings.users.enabled",
+          "configuration.entries.collection.get"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.customfields.edit",
+        "displayName": "Settings (Users): Can create, edit, and view custom fields",
+        "subPermissions": [
+          "ui-users.settings.customfields.view",
+          "user-settings.custom-fields.collection.put",
+          "user-settings.custom-fields.item.post",
+          "user-settings.custom-fields.item.put",
+          "configuration.entries.item.post",
+          "configuration.entries.item.put"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.customfields.all",
+        "displayName": "Settings (Users): Can create, edit, view and delete custom fields",
+        "subPermissions": [
+          "ui-users.settings.customfields.view",
+          "ui-users.settings.customfields.edit",
+          "user-settings.custom-fields.item.delete"
         ],
         "visible": true
       },
@@ -562,6 +597,19 @@
         "visible": true
       },
       {
+        "permissionName": "ui-users.loans.declare-item-lost",
+        "displayName": "Users: User loans declare lost",
+        "description": "Also includes backend permissions to declare items lost",
+        "subPermissions": [
+          "circulation.loans.declare-item-lost.post",
+          "circulation-storage.loans.item.get",
+          "inventory-storage.items.item.get",
+          "inventory-storage.holdings.item.get",
+          "inventory-storage.instances.item.get"
+        ],
+        "visible": true
+      },
+      {
         "permissionName": "ui-users.loans.view",
         "displayName": "Users: User loans view",
         "description": "Also includes basic permissions to view users",
@@ -674,14 +722,14 @@
     "@bigtest/mirage": "^0.0.1",
     "@bigtest/mocha": "^0.5.2",
     "@bigtest/react": "^0.1.2",
-    "@folio/eslint-config-stripes": "^3.2.1",
-    "@folio/stripes": "^2.10.1",
-    "@folio/stripes-cli": "^1.11.0",
-    "@folio/stripes-core": "^3.12.0",
-    "babel-eslint": "^9.0.0",
+    "@folio/eslint-config-stripes": "^5.2.0",
+    "@folio/stripes": "^3.0.0",
+    "@folio/stripes-cli": "^1.13.0",
+    "@folio/stripes-core": "^4.0.0",
+    "babel-eslint": "^10.0.3",
     "chai": "^4.2.0",
     "core-js": "^3.6.4",
-    "eslint": "^5.5.0",
+    "eslint": "^6.2.1",
     "faker": "^4.1.0",
     "mocha": "^5.2.0",
     "miragejs": "^0.1.32",
@@ -695,7 +743,7 @@
   },
   "dependencies": {
     "@folio/react-intl-safe-html": "^1.0.0",
-    "@folio/stripes-util": "^1.6.2",
+    "@folio/stripes-util": "^2.0.0",
     "hashcode": "^1.0.3",
     "lodash": "^4.17.4",
     "moment": "^2.22.2",
@@ -708,12 +756,12 @@
     "uuid": "^3.0.1"
   },
   "peerDependencies": {
-    "@folio/stripes": "^2.13.0",
+    "@folio/stripes": "^3.0.0",
     "react": "*",
     "react-router": "*",
     "react-router-dom": "*"
   },
   "optionalDependencies": {
-    "@folio/plugin-find-user": "^1.1.0"
+    "@folio/plugin-find-user": "^2.0.0"
   }
 }

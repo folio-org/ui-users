@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import { stripesConnect } from '@folio/stripes/core';
 
 import { AccountDetails } from '../views';
@@ -38,7 +40,32 @@ class AccountDetailsContainer extends React.Component {
     activeRecord: {
       accountId: '0',
     },
+    loans: {
+      type: 'okapi',
+      records: 'loans',
+      path: 'circulation/loans?query=(userId=:{id})&limit=1000',
+    },
   });
+
+  static propTypes = {
+    resources: PropTypes.shape({
+      accountHistory: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      patronGroups: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      selUser: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+    }),
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        accountid: PropTypes.string,
+        id: PropTypes.string,
+      })
+    }),
+  }
 
   getUser = () => {
     const { resources, match: { params: { id } } } = this.props;
@@ -66,13 +93,49 @@ class AccountDetailsContainer extends React.Component {
     return groups.filter(g => g.id === user.patronGroup)[0] || {};
   }
 
+  getItemDetails = () => {
+    const { resources } = this.props;
+    const account = this.getAccount();
+    const loanRecords = resources?.loans?.records ?? [];
+    const itemId = account?.itemId;
+    const item = loanRecords.filter((loan) => loan.itemId === itemId);
+    const contributorRecords = item[0]?.item?.contributors ?? [];
+    const contributors = contributorRecords.map(({ name }) => name.split(',').reverse().join(', ')) || [];
+    const loanId = account?.loanId;
+
+    if (loanId === '0') return { contributors };
+
+    const currentRecord = loanRecords.filter((record) => record.id === loanId) || [];
+    const overdueFinePolicyName = currentRecord[0]?.overdueFinePolicy?.name;
+    const overdueFinePolicyId = currentRecord[0]?.overdueFinePolicyId;
+    const lostItemPolicyName = currentRecord[0]?.lostItemPolicy?.name;
+    const lostItemPolicyId = currentRecord[0]?.lostItemPolicyId;
+
+    return {
+      overdueFinePolicyId,
+      lostItemPolicyId,
+      contributors,
+      overdueFinePolicyName,
+      lostItemPolicyName,
+    };
+  }
+
   render() {
     const user = this.getUser();
     const account = this.getAccount();
     const patronGroup = this.getPatronGroup();
+    const itemDetails = this.getItemDetails();
+
     if (!account) return (<ViewLoading defaultWidth="100%" paneTitle="Loading accounts" />);
+
     return (
-      <AccountDetails user={user} account={account} patronGroup={patronGroup} {...this.props} />
+      <AccountDetails
+        user={user}
+        account={account}
+        patronGroup={patronGroup}
+        itemDetails={itemDetails}
+        {...this.props}
+      />
     );
   }
 }

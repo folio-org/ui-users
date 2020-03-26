@@ -99,6 +99,10 @@ class UserEdit extends React.Component {
       'permissions',
     );
 
+    if (!userFormValues.personal) {
+      userFormValues.personal = {};
+    }
+
     userFormValues.personal.addresses = getFormAddressList(get(user, 'personal.addresses', []));
 
     return {
@@ -242,13 +246,14 @@ class UserEdit extends React.Component {
     });
   }
 
-  updatePermissions(perms) {
+  async updatePermissions(perms) {
     const mutator = this.props.mutator.permissions;
     const prevPerms = (this.props.resources.permissions || {}).records || [];
     const removedPerms = differenceBy(prevPerms, perms, 'id');
     const addedPerms = differenceBy(perms, prevPerms, 'id');
-    eachPromise(addedPerms, mutator.POST);
-    eachPromise(removedPerms, mutator.DELETE);
+
+    await eachPromise(removedPerms, mutator.DELETE);
+    await eachPromise(addedPerms, mutator.POST);
   }
 
   render() {

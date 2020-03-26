@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 // HOC used to manage proxies and sponsors
 const withProxy = WrappedComponent => class WithProxyComponent extends React.Component {
     static manifest = Object.freeze(
-      Object.assign({}, WrappedComponent.manifest, {
+      { ...WrappedComponent.manifest,
         sponsors: {
           type: 'okapi',
           records: 'users',
@@ -33,8 +33,7 @@ const withProxy = WrappedComponent => class WithProxyComponent extends React.Com
           path: 'proxiesfor',
           accumulate: 'true',
           fetch: false,
-        },
-      }),
+        } },
     );
 
     static propTypes = {
@@ -53,6 +52,7 @@ const withProxy = WrappedComponent => class WithProxyComponent extends React.Com
       mutator: PropTypes.shape({
         proxiesFor: PropTypes.shape({
           POST: PropTypes.func.isRequired,
+          PUT: PropTypes.func.isRequired,
           GET: PropTypes.func.isRequired,
           DELETE: PropTypes.func.isRequired,
           reset: PropTypes.func,
