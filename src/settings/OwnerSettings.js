@@ -18,7 +18,7 @@ class OwnerSettings extends React.Component {
     ownerServicePoints: {
       type: 'okapi',
       resource: 'service-points',
-      path: 'service-points',
+      path: 'service-points?limit=50',
     },
     owners: {
       type: 'okapi',
