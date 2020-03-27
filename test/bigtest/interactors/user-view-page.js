@@ -5,10 +5,15 @@ import {
   isPresent,
   scoped,
   count,
+  collection,
   ButtonInteractor,
 } from '@bigtest/interactor';
 
 import proxyItemCSS from '../../../src/components/ProxyGroup/ProxyItem/ProxyItem.css';
+
+@interactor class AccordionSection {
+  keyValues = collection('[data-test-kv-value]');
+}
 
 @interactor class ProxySectionInteractor {
   proxyCount = count(`[data-test="proxies"] .${proxyItemCSS.item}`);
@@ -44,6 +49,7 @@ import proxyItemCSS from '../../../src/components/ProxyGroup/ProxyItem/ProxyItem
   defaultPickupServicePoint = text('[data-test-default-pickup-service-point]');
   defaultDeliveryAddress = text('[data-test-default-delivery-address]');
   customFieldsSection = scoped('#customFields', CustomFieldsSectionInteractor);
+  userInfo = new AccordionSection('#userInformationSection');
 
   whenLoaded() {
     return this.when(() => this.isPresent).timeout(5000);

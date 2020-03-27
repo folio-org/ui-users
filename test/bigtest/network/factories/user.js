@@ -16,7 +16,7 @@ export default Factory.extend({
     'group7',
   ]),
   enrollmentDate: () => '2015-12-14T00:00:00.000+0000',
-  expirationDate: () => '2020-04-07T00:00:00.000+0000',
+  expirationDate: () => faker.date.future(10),
   createdDate: () => '2018-11-20T11:42:53.385+0000',
   updatedDate: () => '2018-11-20T20:00:47.409+0000',
   customFields: {
