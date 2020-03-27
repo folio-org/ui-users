@@ -89,7 +89,7 @@ class FeeFineSettings extends React.Component {
 
   componentDidMount() {
     this.props.mutator.owners.GET().then(records => {
-      const shared = records.find(o => o.owner === 'Shared');
+      const shared = records.find(o => o?.owner?.toLowerCase() === 'shared');
       this.shared = shared;
       const ownerId = (shared) ? shared.id : ((records.length > 0) ? records[0].id : '');
       this.setState({ ownerId, owners: records });
