@@ -158,8 +158,16 @@ export default function config() {
     return schema.users.find(request.params.id).attrs;
   });
 
-  this.put('/users/:id', (schema, request) => {
-    return schema.users.find(request.params.id).attrs;
+  this.put('/users/:id', (schema, { params, requestBody }) => {
+    const data = JSON.parse(requestBody);
+    // The active field is not converted to boolean correctly
+    // So we do it here manually
+    data.active = (data.active === 'true');
+    const user = schema.users.find(params.id);
+
+    user.update(data);
+
+    return user.attrs;
   });
 
   this.get('/proxiesfor', {

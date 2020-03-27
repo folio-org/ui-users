@@ -209,6 +209,7 @@ class UserEdit extends React.Component {
     } = this.props;
 
     const user = cloneDeep(userFormData);
+    const prevUser = resources?.selUser?.records?.[0] ?? {};
 
     if (get(resources, 'requestPreferences.records[0].totalRecords')) {
       this.updateRequestPreferences(requestPreferences);
@@ -235,8 +236,16 @@ class UserEdit extends React.Component {
 
     const data = omit(user, ['creds', 'proxies', 'sponsors', 'permissions', 'servicePoints', 'preferredServicePoint']);
     const today = moment().endOf('day');
+    const curActive = user.active;
+    const prevActive = prevUser.active;
 
-    data.active = (moment(user.expirationDate).endOf('day').isSameOrAfter(today));
+    // if active has been changed manually on the form
+    // or if the expirationDate has been removed
+    if (curActive !== prevActive || !user.expirationDate) {
+      data.active = curActive;
+    } else {
+      data.active = (moment(user.expirationDate).endOf('day').isSameOrAfter(today));
+    }
 
     mutator.selUser.PUT(data).then(() => {
       history.push({
