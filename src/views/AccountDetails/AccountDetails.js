@@ -191,7 +191,7 @@ class AccountDetails extends React.Component {
     const instanceType = account?.materialType;
     const instanceTypeString = instanceType ? `(${instanceType})` : '';
 
-    return `${instanceTitle} ${instanceTypeString}`;
+    return instanceTitle ? `${instanceTitle} ${instanceTypeString}` : '-';
   }
 
   render() {
