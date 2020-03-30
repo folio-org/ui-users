@@ -191,8 +191,21 @@ class AccountDetails extends React.Component {
     const instanceType = account?.materialType;
     const instanceTypeString = instanceType ? `(${instanceType})` : '';
 
-    return `${instanceTitle} ${instanceTypeString}`;
+    return instanceTitle ? `${instanceTitle} ${instanceTypeString}` : '-';
   }
+
+  handleClose = () => {
+    const {
+      history,
+      match: { params },
+      resources
+    } = this.props;
+
+    const account = _.get(resources, ['accountHistory', 'records', 0]) || {};
+    const status = account?.status?.name?.toLowerCase() || 'all';
+
+    history.push({ pathname: `/users/${params.id}/accounts/${status}` });
+  };
 
   render() {
     const {
@@ -271,7 +284,7 @@ class AccountDetails extends React.Component {
           id="pane-account-action-history"
           defaultWidth="100%"
           dismissible
-          onClose={() => { history.goBack(); }}
+          onClose={this.handleClose}
           paneTitle={(
             <FormattedMessage id="ui-users.details.paneTitle.feeFineDetails">
               {(msg) => `${msg} - ${getFullName(user)} (${_.upperFirst(patron.group)}) `}

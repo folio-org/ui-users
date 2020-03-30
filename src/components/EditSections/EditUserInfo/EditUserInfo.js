@@ -36,7 +36,6 @@ class EditUserInfo extends React.Component {
       intl,
     } = this.props;
 
-
     const isUserExpired = () => {
       const expirationDate = new Date(initialValues.expirationDate);
       const now = Date.now();
@@ -63,11 +62,11 @@ class EditUserInfo extends React.Component {
 
     const statusOptions = [
       {
-        value: 'true',
+        value: true,
         label: intl.formatMessage({ id: 'ui-users.active' })
       },
       {
-        value: 'false',
+        value: false,
         label: intl.formatMessage({ id: 'ui-users.inactive' })
       }
     ];
@@ -152,7 +151,6 @@ class EditUserInfo extends React.Component {
               fullWidth
               disabled={isStatusFieldDisabled()}
               dataOptions={statusOptions}
-              format={(value) => (value ? 'true' : 'false')}
               defaultValue={initialValues.active}
             />
             {isUserExpired() && (
