@@ -455,8 +455,10 @@
   "accounts.error.comment": "Enter a comment",
   "accounts.error.message": "Enter an amount greater than 0",
   "accounts.error.exceeds": "Pay amount exceeds the selected amount",
-  "accounts.error.select": "Select one",
-
+  "accounts.payment.error.select": "No Payment methods exist for Fee/fine owner",  
+  "accounts.waive.error.select": "No Waive reasons exist",  
+  "accounts.transfer.error.select": "No Transfer accounts exist for Fee/fine owner",
+   
   "accounts.history.columns.title": "Instance (Item type)",
   "accounts.history.columns.instance": "Instance (Material type)",
   "accounts.history.columns.amount": "Billed",
