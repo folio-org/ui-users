@@ -103,6 +103,7 @@ import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/P
   isUsernameFieldRequired = property('#adduser_username', 'required');
   resetPasswordLink = scoped('[class*=resetPasswordButton]');
   expirationDate = new InputFieldInteractor('#adduser_expirationdate');
+  clearExpirationDate = clickable('#datepicker-clear-button-adduser_expirationdate');
 
   feedbackError = text('[class^="feedbackError---"]');
   cancelButton = new ButtonInteractor('[data-test-user-form-cancel-button]');
@@ -127,7 +128,7 @@ import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/P
   firstAddressTypeField = new SelectFieldInteractor('[name="personal.addresses[0].addressType"]');
   secondAddressTypeField = new SelectFieldInteractor('[name="personal.addresses[1].addressType"]');
   defaultAddressTypeField = new SelectFieldInteractor('[data-test-default-delivery-address-field] select');
-
+  statusField = new SelectFieldInteractor('#useractive');
   customFieldsSection = scoped('#customFields', CustomFieldsSectionInteractor);
 }
 
