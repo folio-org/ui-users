@@ -212,6 +212,33 @@ describe('User Edit Page', () => {
       });
     });
   });
+
+  describe('changing status field', () => {
+    describe('changing status to inactive', () => {
+      beforeEach(async function () {
+        await UserFormPage.statusField.selectAndBlur('Inactive');
+        await UserFormPage.submitButton.click();
+        await InstanceViewPage.whenLoaded();
+      });
+
+      it('should display inactive status', () => {
+        expect(InstanceViewPage.userInfo.keyValues(5).text).to.equal('inactive');
+      });
+    });
+
+    describe('clearing expirationDate field', () => {
+      beforeEach(async function () {
+        await UserFormPage.statusField.selectAndBlur('Active');
+        await UserFormPage.clearExpirationDate();
+        await UserFormPage.submitButton.click();
+        await InstanceViewPage.whenLoaded();
+      });
+
+      it('should display active status', () => {
+        expect(InstanceViewPage.userInfo.keyValues(5).text).to.equal('active');
+      });
+    });
+  });
 });
 
 describe('when custom fields are not in stock', () => {
