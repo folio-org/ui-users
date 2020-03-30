@@ -28,6 +28,9 @@ class UsersRouting extends React.Component {
     history: PropTypes.object,
   }
 
+  static actionNames = ['stripesHome', 'usersSortByName'];
+
+
   componentDidMount() {
     const {
       location,
@@ -57,8 +60,6 @@ class UsersRouting extends React.Component {
       }
     }
   }
-
-  static actionNames = ['stripesHome', 'usersSortByName'];
 
   noMatch() {
     const {

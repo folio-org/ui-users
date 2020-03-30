@@ -14,7 +14,7 @@ import CommentRequiredSettings from './CommentRequiredSettings';
 import RefundReasonsSettings from './RefundReasonsSettings';
 import TransferAccountsSettings from './TransferAccountsSettings';
 import CustomFieldsSettingsPane from './CustomFieldsSettings';
-
+import ConditionsSettings from './ConditionsSettings';
 
 const settingsGeneral = [
   {
@@ -93,6 +93,15 @@ const settingsFeefines = [
   },
 ];
 
+const settingsPatronBlocks = [
+  {
+    route: 'conditions',
+    label: <FormattedMessage id="ui-users.settings.conditions" />,
+    component: ConditionsSettings,
+    perm: 'ui-users.settings.conditions',
+  }
+];
+
 export default [
   {
     label: <FormattedMessage id="ui-users.settings.general" />,
@@ -101,5 +110,9 @@ export default [
   {
     label: <FormattedMessage id="ui-users.settings.feefine" />,
     pages: sortBy(settingsFeefines, ['label']),
+  },
+  {
+    label: <FormattedMessage id="ui-users.settings.patronBlocks" />,
+    pages: sortBy(settingsPatronBlocks, ['label']),
   },
 ];
