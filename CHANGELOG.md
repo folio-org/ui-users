@@ -3,6 +3,7 @@
 ## [3.1.0](IN PROGRESS)
 
 * Add posibility to view/create/edit custom fields on user record. UIU-1279.
+* Increase limit of service points in the Associated Service Points dropdown at Settings --> Users --> Fee/Fine Owners. Refs UIU-1540.
 * Fix ability to mark user as inactive. Fixes UIU-913.
 * Add permission and permission check to claim an item returned. Refs UIU-1266.
 
