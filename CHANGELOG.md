@@ -4,6 +4,7 @@
 
 * Add posibility to view/create/edit custom fields on user record. UIU-1279.
 * Fix ability to mark user as inactive. Fixes UIU-913.
+* Add permission and permission check to claim an item returned. Refs UIU-1266.
 
 ## [3.0.0](https://github.com/folio-org/ui-users/tree/v3.0.0) (2020-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.26.0...v3.0.0)

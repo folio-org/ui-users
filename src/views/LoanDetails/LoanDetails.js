@@ -389,14 +389,16 @@ class LoanDetails extends React.Component {
                     <FormattedMessage id="ui-users.renew" />
                   </Button>
                 </IfPermission>
-                <Button
-                  data-test-claim-returned-button
-                  disabled={buttonDisabled || itemStatus === 'Claimed returned'}
-                  buttonStyle="primary"
-                  onClick={() => claimReturned(loan)}
-                >
-                  <FormattedMessage id="ui-users.loans.claimReturned" />
-                </Button>
+                <IfPermission perm="ui-users.loans.claim-item-returned">
+                  <Button
+                    data-test-claim-returned-button
+                    disabled={buttonDisabled || itemStatus === 'Claimed returned'}
+                    buttonStyle="primary"
+                    onClick={() => claimReturned(loan)}
+                  >
+                    <FormattedMessage id="ui-users.loans.claimReturned" />
+                  </Button>
+                </IfPermission>
                 <IfPermission perm="ui-users.loans.edit">
                   <Button
                     disabled={buttonDisabled || isDeclaredLostItem}
