@@ -306,10 +306,8 @@ class ClosedLoans extends React.Component {
 
   buildRecords(records) {
     return records.map((record) => {
-      const {
-        item,
-        item: { contributors },
-      } = record;
+      const { item } = record;
+      const contributors = item?.contributors;
 
       return _.isArray(contributors) ?
         {
@@ -340,19 +338,21 @@ class ClosedLoans extends React.Component {
 
     const accounts = _.get(this.props.resources, ['loanAccount', 'records'], []);
     const accountsLoan = accounts.filter(a => a.loanId === loan.id) || [];
-    const itemDetailsLink = `/inventory/view/${loan.item.instanceId}/${loan.item.holdingsRecordId}/${loan.itemId}`;
+    const itemDetailsLink = loan.item ? `/inventory/view/${loan.item.instanceId}/${loan.item.holdingsRecordId}/${loan.itemId}` : undefined;
     const buttonDisabled = !stripes.hasPerm('ui-users.feesfines.actions.all');
 
     return (
       <DropdownMenu data-role="menu">
-        <IfPermission perm="inventory.items.item.get">
-          <Button
-            buttonStyle="dropdownItem"
-            to={itemDetailsLink}
-          >
-            <FormattedMessage id="ui-users.itemDetails" />
-          </Button>
-        </IfPermission>
+        {itemDetailsLink &&
+          <IfPermission perm="inventory.items.item.get">
+            <Button
+              buttonStyle="dropdownItem"
+              to={itemDetailsLink}
+            >
+              <FormattedMessage id="ui-users.itemDetails" />
+            </Button>
+          </IfPermission>
+        }
         <Button
           disabled={buttonDisabled}
           buttonStyle="dropdownItem"
