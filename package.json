@@ -610,6 +610,19 @@
         "visible": true
       },
       {
+        "permissionName": "ui-users.loans.claim-item-returned",
+        "displayName": "Users: User loans claim returned",
+        "description": "Also includes backend permissions to claim items returned",
+        "subPermissions": [
+          "circulation.loans.claim-item-returned.post",
+          "circulation-storage.loans.item.get",
+          "inventory-storage.items.item.get",
+          "inventory-storage.holdings.item.get",
+          "inventory-storage.instances.item.get"
+        ],
+        "visible": true
+      },
+      {
         "permissionName": "ui-users.loans.view",
         "displayName": "Users: User loans view",
         "description": "Also includes basic permissions to view users",
@@ -645,6 +658,7 @@
           "ui-users.loans.edit",
           "ui-users.loans.renew",
           "circulation.loans.declare-item-lost.post",
+          "circulation.loans.claim-item-returned.post",
           "ui-users.loans.renew-override",
           "ui-users.settings.feefines",
           "circulation.loans.item.put",

@@ -443,6 +443,7 @@ class UserSearch extends React.Component {
                           isSelected={this.isSelected}
                           autosize
                           virtualize
+                          hasMargin
                         />
 
                       </Pane>
