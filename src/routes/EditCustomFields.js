@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { useStripes } from '@folio/stripes-core';
+import { useStripes } from '@folio/stripes/core';
 import { EditCustomFieldsSettings } from '@folio/stripes/smart-components';
 
 const propTypes = {

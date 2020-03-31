@@ -554,11 +554,16 @@
         "visible": true
       },
       {
-        "permissionName": "settings.feesfines.all",
-        "displayName": "Settings (Users): Can create, edit and remove fee/fine settings [LEGACY]",
+        "permissionName": "ui-users.settings.conditions",
+        "displayName": "Settings (Users): Can create, edit and remove patron blocks conditions",
         "subPermissions": [
-          "ui-users.settings.feefine"
-        ]
+          "patron-block-conditions.collection.get",
+          "patron-block-conditions.item.get",
+          "patron-block-conditions.item.post",
+          "patron-block-conditions.item.put",
+          "patron-block-conditions.item.delete"
+        ],
+        "visible": true
       },
       {
         "permissionName": "ui-users.feesfines.actions.all",
@@ -739,7 +744,9 @@
     "@folio/eslint-config-stripes": "^5.2.0",
     "@folio/stripes": "^3.0.0",
     "@folio/stripes-cli": "^1.13.0",
-    "@folio/stripes-core": "^4.0.0",
+    "@folio/stripes-core": "~4.0.0",
+    "@folio/stripes-components": "^5.0.3",
+    "@folio/stripes-final-form": "^2.0.0",
     "babel-eslint": "^10.0.3",
     "chai": "^4.2.0",
     "core-js": "^3.6.4",
@@ -767,6 +774,7 @@
     "react-intl": "^2.5.0",
     "react-router-prop-types": "^1.0.4",
     "redux-form": "^7.0.3",
+    "react-final-form": "^6.3.0",
     "uuid": "^3.0.1"
   },
   "peerDependencies": {
