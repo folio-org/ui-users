@@ -7,6 +7,7 @@
 * Fix ability to mark user as inactive. Fixes UIU-913.
 * Add permission and permission check to claim an item returned. Refs UIU-1266.
 * Create Patron Blocks Conditions Table in Settings -> Users. Refs UIU-1272.
+* Fix bug preventing closed loans list from loading properly when an item has been deleted. Fixes UIU-1411.
 
 ## [3.0.0](https://github.com/folio-org/ui-users/tree/v3.0.0) (2020-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.26.0...v3.0.0)
