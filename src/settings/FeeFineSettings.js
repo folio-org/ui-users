@@ -197,8 +197,8 @@ class FeeFineSettings extends React.Component {
     const { owners } = this.state;
 
     items.forEach(i => {
-      const owner = owners.find(o => o.id === i.ownerId) || {};
-      if (!filterOwners.some(o => o.id === owner.id) && owner.id !== (this.shared || {}).id) {
+      const owner = owners.find(o => o.id === i.ownerId);
+      if (owner && !filterOwners.some(o => o.id === owner.id) && owner.id !== (this.shared || {}).id) {
         filterOwners.push(owner);
       }
     });
