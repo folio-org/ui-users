@@ -338,7 +338,7 @@ class ClosedLoans extends React.Component {
 
     const accounts = _.get(this.props.resources, ['loanAccount', 'records'], []);
     const accountsLoan = accounts.filter(a => a.loanId === loan.id) || [];
-    const itemDetailsLink = loan.item ? `/inventory/view/${loan.item.instanceId}/${loan.item.holdingsRecordId}/${loan.itemId}` : undefined;
+    const itemDetailsLink = loan.item && `/inventory/view/${loan.item.instanceId}/${loan.item.holdingsRecordId}/${loan.itemId}`;
     const buttonDisabled = !stripes.hasPerm('ui-users.feesfines.actions.all');
 
     return (
