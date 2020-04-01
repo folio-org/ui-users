@@ -24,11 +24,12 @@ describe('Closed Loans', () => {
   });
 
   let user;
+  let loans;
 
   describe('visit closed loans', () => {
     beforeEach(async function () {
       user = this.server.create('user');
-      const loans = this.server.createList('loan', 5, 'feesAndFines', {
+      loans = this.server.createList('loan', 5, 'feesAndFines', {
         userId: user.id,
         item: (i) => ({
           ...this.item,
@@ -137,6 +138,17 @@ describe('Closed Loans', () => {
         expect(users.isPresent).to.be.true;
         expect(users.instance.isPresent).to.be.true;
         expect(this.location.pathname.endsWith(`users/preview/${user.id}`)).to.be.true;
+      });
+    });
+
+    describe('viewing a closed loan list with a deleted/undefined item', function () {
+      beforeEach(async () => {
+        loans[1].item = undefined;
+      });
+
+      it('should load the page without errors', () => {
+        expect(ClosedLoansInteractor.isPresent).to.be.true;
+        expect(ClosedLoansInteractor.list.isPresent).to.be.true;
       });
     });
   });
