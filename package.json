@@ -744,7 +744,7 @@
     "@folio/eslint-config-stripes": "^5.2.0",
     "@folio/stripes": "^3.0.0",
     "@folio/stripes-cli": "^1.13.0",
-    "@folio/stripes-core": "~4.0.0",
+    "@folio/stripes-core": "^4.0.0",
     "@folio/stripes-components": "^5.0.3",
     "@folio/stripes-final-form": "^2.0.0",
     "babel-eslint": "^10.0.3",
