@@ -121,7 +121,7 @@ class ChargeFeeFine extends React.Component {
     type.title = item.title;
     type.barcode = item.barcode;
     type.callNumber = item.callNumber;
-    type.location = (selectedLoan.id) ? (item.location || {}).name : (item.effectiveLocation || {}).name;
+    type.location = item?.location?.name || item?.effectiveLocation?.name;
     type.materialType = (item.materialType || {}).name;
     type.materialTypeId = (selectedLoan.id) ? '0' : (item.materialType || {}).id || '0';
 
