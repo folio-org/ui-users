@@ -21,7 +21,6 @@ import { Actions } from '../../components/Accounts/Actions';
 import {
   getFullName,
   calculateSortParams,
-  nav,
 } from '../../components/util';
 
 import css from './AccountDetails.css';
@@ -216,7 +215,6 @@ class AccountDetails extends React.Component {
     const {
       patronGroup: patron,
       resources,
-      history,
       stripes,
       match: { params },
       user,
@@ -486,15 +484,11 @@ class AccountDetails extends React.Component {
                 <KeyValue
                   label={<FormattedMessage id="ui-users.details.label.loanDetails" />}
                   value={(
-                    <button
-                      className={css.btnView}
-                      type="button"
-                      onClick={(e) => {
-                        nav.onClickViewLoanActionsHistory(e, { id: loanId }, history, params);
-                      }}
+                    <Link
+                      to={`/users/${params.id}/loans/view/${loanId}`}
                     >
                       <FormattedMessage id="ui-users.details.field.loan" />
-                    </button>
+                    </Link>
                   )}
                 />
                 :
