@@ -15,6 +15,7 @@ import {
   Col,
   KeyValue,
   MultiColumnList,
+  NoValue,
 } from '@folio/stripes/components';
 
 import { Actions } from '../../components/Accounts/Actions';
@@ -435,7 +436,7 @@ class AccountDetails extends React.Component {
                     >
                       {_.get(account, ['barcode'], '')}
                     </Link>
-                  ) : '-'
+                  ) : <NoValue />
                 }
               />
             </Col>
