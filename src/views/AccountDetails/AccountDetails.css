@@ -1,20 +1,6 @@
-@import "@folio/stripes-components/lib/variables";
-
 .commentsWrapper { 
   display: flex; 
   align-items: center;
-}
-
-.btnView {
-  color: var(--primary);
-
-  &:hover {
-    text-decoration: underline;
-  }
-
-  &:active {
-    outline: none;
-  }
 }
 
 .addCommentBtn {
