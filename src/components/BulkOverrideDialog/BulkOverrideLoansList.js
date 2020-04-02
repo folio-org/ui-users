@@ -12,7 +12,7 @@ import {
   Icon,
   MultiColumnList,
 } from '@folio/stripes/components';
-import { effectiveCallNumber } from '@folio/stripes-util';
+import { effectiveCallNumber } from '@folio/stripes/util';
 
 class BulkOverrideLoansList extends Component {
   static propTypes = {

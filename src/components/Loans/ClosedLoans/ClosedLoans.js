@@ -22,7 +22,7 @@ import {
   IntlConsumer,
   stripesShape,
 } from '@folio/stripes/core';
-import { effectiveCallNumber } from '@folio/stripes-util';
+import { effectiveCallNumber } from '@folio/stripes/util';
 
 import {
   calculateSortParams,
