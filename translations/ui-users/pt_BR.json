@@ -620,15 +620,15 @@
     "accounts.history.columns.instance": "Instância (Tipo de material)",
     "feefines.errors.reservedName": "O tipo de taxa/multa já existe como taxa/multa automatizada",
     "accounts.payment.error.select": "No Payment methods exist for Fee/fine owner",
-    "accounts.waive.error.select": "No Waive reasons exist",
+    "accounts.waive.error.select": "Não existem razões de renúncia",
     "accounts.transfer.error.select": "No Transfer accounts exist for Fee/fine owner",
     "settings.patronBlocks": "Patron blocks",
-    "settings.conditions": "Conditions",
+    "settings.conditions": "Condições",
     "settings.block.borrowing": "Block borrowing",
     "settings.block.renew": "Block renewals",
     "settings.block.request": "Block request",
-    "settings.block.message": "Message to be displayed",
+    "settings.block.message": "Mensagem a ser exibida",
     "settings.callout.message": "The patron block condition <strong>{name}</strong> has been successfully <strong>updated</strong>.",
-    "settings.error.noMessage": "Message to be displayed is a required field if one or more Blocked actions selected",
-    "settings.error.noCheckbox": "One or more Blocked actions must be selected for Message to be displayed to be used"
+    "settings.error.noMessage": "A mensagem a ser exibida é um campo obrigatório se uma ou mais ações bloqueadas selecionadas",
+    "settings.error.noCheckbox": "Uma ou mais ações bloqueadas devem ser selecionadas para que a Mensagem seja exibida para ser usada"
 }
