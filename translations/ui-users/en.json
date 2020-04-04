@@ -102,6 +102,7 @@
   "settings.callout.message": "The patron block condition <strong>{name}</strong> has been successfully <strong>updated</strong>.",
   "settings.error.noMessage": "Message to be displayed is a required field if one or more Blocked actions selected",
   "settings.error.noCheckbox": "One or more Blocked actions must be selected for Message to be displayed to be used",
+  "settings.limits": "Limits",
 
   "loans.columns.title": "Item title",
   "loans.columns.itemStatus": "Item status",

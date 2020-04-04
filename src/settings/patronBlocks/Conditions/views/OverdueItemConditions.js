@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import Conditions from './Conditions/Conditions';
+import Conditions from '../Conditions';
 
-class OutstandingConditions extends Component {
+class OverdueRecallConditions extends Component {
   static propTypes = {
     id: PropTypes.string,
     name: PropTypes.string,
@@ -14,8 +14,8 @@ class OutstandingConditions extends Component {
   };
 
   static defaultProps = {
-    id: '72b67965-5b73-4840-bc0b-be8f3f6e047e',
-    name: 'The maximum number of lost items has been reached',
+    id: '584fbd4f-6a34-4730-a6ca-73a6a6a9d845',
+    name: 'The maximum number of overdue items has been reached',
     blockBorrowing: false,
     blockRenewals: false,
     blockRequests: false,
@@ -45,4 +45,4 @@ class OutstandingConditions extends Component {
   }
 }
 
-export default OutstandingConditions;
+export default OverdueRecallConditions;

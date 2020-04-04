@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import Conditions from './Conditions/Conditions';
+import Conditions from '../Conditions';
 
 class LostItemConditions extends Component {
   static propTypes = {
@@ -14,8 +14,8 @@ class LostItemConditions extends Component {
   };
 
   static defaultProps = {
-    id: 'e5b45031-a202-4abb-917b-e1df9346fe2c',
-    name: 'Maximum number of overdue recalls',
+    id: 'cf7a0d5f-a327-4ca1-aa9e-dc55ec006b8a',
+    name: 'Maximum outstanding fee/fine balance',
     blockBorrowing: false,
     blockRenewals: false,
     blockRequests: false,

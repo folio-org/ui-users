@@ -15,6 +15,8 @@ import RefundReasonsSettings from './RefundReasonsSettings';
 import TransferAccountsSettings from './TransferAccountsSettings';
 import CustomFieldsSettingsPane from './CustomFieldsSettings';
 import ConditionsSettings from './ConditionsSettings';
+import LimitsSettings from './LimitsSettings';
+
 
 const settingsGeneral = [
   {
@@ -99,6 +101,12 @@ const settingsPatronBlocks = [
     label: <FormattedMessage id="ui-users.settings.conditions" />,
     component: ConditionsSettings,
     perm: 'ui-users.settings.conditions',
+  },
+  {
+    route: 'limits',
+    label: <FormattedMessage id="ui-users.settings.limits" />,
+    component: LimitsSettings,
+    perm: '',
   }
 ];
 
