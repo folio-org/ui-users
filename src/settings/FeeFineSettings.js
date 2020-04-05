@@ -256,6 +256,10 @@ class FeeFineSettings extends React.Component {
       return item;
     };
 
+    const preUpdateHook = (item) => {
+      return _.pickBy(item, field => field !== '');
+    };
+
     const owner = owners.find(o => o.id === ownerId) || {};
 
     const rowFilter =
@@ -290,6 +294,7 @@ class FeeFineSettings extends React.Component {
         nameKey="feefine"
         objectLabel=""
         preCreateHook={preCreateHook}
+        preUpdateHook={preUpdateHook}
         records="feefines"
         rowFilter={rowFilter}
         rowFilterFunction={(item) => (item.ownerId === ownerId && !item.automatic)}
