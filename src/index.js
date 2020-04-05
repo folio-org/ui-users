@@ -200,10 +200,6 @@ class UsersRouting extends Component {
     },
   ];
 
-  checkScope = () => {
-    return document.body.contains(document.activeElement);
-  }
-
   render() {
     const {
       showSettings
