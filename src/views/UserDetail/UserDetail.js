@@ -159,10 +159,6 @@ class UserDetail extends React.Component {
     return selUser.find(u => u.id === id);
   }
 
-  checkScope = () => {
-    return document.getElementById('ModuleContainer').contains(document.activeElement);
-  };
-
   // This is a helper function for the "last updated" date element. Since the
   // date/time is actually set on the server when the record is updated, the
   // lastUpdated element of the record on the client side might contain a stale
@@ -320,8 +316,6 @@ class UserDetail extends React.Component {
       </IfPermission>
     );
   };
-
-  checkScope = () => true;
 
   goToEdit = () => {
     const { history, match: { params } } = this.props;
