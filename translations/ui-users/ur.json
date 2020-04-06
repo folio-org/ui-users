@@ -520,7 +520,7 @@
     "accounts.optional": "optional",
     "accounts.required": "required",
     "accounts.summary": "{type} <b>{count}</b> {count, plural, one {fee/fine} other {fees/fines}} for a total amount of <b>{amount}</b>",
-    "accounts.payment.modalLabel": "Pay fee/fine",
+    "accounts.payment.modalLabel": " واجب الاد فیس/جرمانہ",
     "accounts.payment.amount": "Payment amount",
     "accounts.payment": "Pay",
     "accounts.payment.summary.partially": "Partially paying",
