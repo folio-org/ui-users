@@ -1,8 +1,13 @@
 # Change history for ui-users
 
-## 3.1.1 (IN PROGRESS)
+## [3.0.1](https://github.com/folio-org/ui-users/tree/v3.0.1) (2020-04-05)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v3.0.0...v3.0.1)
 
-* Increase limit of service points in the Associated Service Points dropdown at Settings --> Users --> Fee/Fine Owners. Refs UIU-1540.
+* Increase limit of service points in Settings > Users > Fee/Fine Owners. Refs UIU-1540.
+* Correctly display material type. Refs UIU-1541.
+* Correctly handle close-account-details pane. Refs UIU-1542.
+* Correctly specify record id in Settings > Users > Comment required. Refs UIU-1544.
+* Correctly save Settings > Users > Manual charges entries. Refs UIU-1546.
 
 ## [3.0.0](https://github.com/folio-org/ui-users/tree/v3.0.0) (2020-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.26.0...v3.0.0)
