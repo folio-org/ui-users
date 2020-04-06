@@ -6,6 +6,7 @@ import { orderBy } from 'lodash';
 import { MultiColumnList } from '@folio/stripes/components';
 import CheckboxColumn from '../CheckboxColumn';
 import { sortOrders } from '../../constants';
+import { renderPermission } from '../../../../constants';
 
 const PermissionsList = (props) => {
   const {
@@ -24,7 +25,6 @@ const PermissionsList = (props) => {
   const sorters = {
     permissionName: ({ permissionName, displayName }) => {
       const name = displayName || permissionName || '';
-
       return name.toLowerCase();
     },
     status: ({ id, permissionName }) => [assignedPermissionIds.includes(id), permissionName],
@@ -100,9 +100,9 @@ const PermissionsList = (props) => {
             />
           ),
           // eslint-disable-next-line react/prop-types
-          permissionName: ({ displayName, permissionName }) => (
+          permissionName: permission => (
             <div data-test-permission-name>
-              { displayName || permissionName }
+              { renderPermission(permission.permissionName) }
             </div>
           ),
           status: permission => {

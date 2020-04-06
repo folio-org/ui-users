@@ -1,3 +1,6 @@
+import React from 'react';
+import { FormattedMessage } from 'react-intl';
+
 export const requestStatuses = {
   AWAITING_PICKUP: 'Open - Awaiting pickup',
   AWAITING_DELIVERY: 'Open - Awaiting delivery',
@@ -28,3 +31,8 @@ export const statusFilter = [
   { label: 'ui-users.filters.status.active', value: 'active' },
   { label: 'ui-users.filters.status.inactive', value: 'inactive' }
 ];
+
+export const renderPermission = (name) => {
+  const [pPrefix, ...pName] = name.split('.');
+  return <FormattedMessage id={`${pPrefix}.permission.${pName.join('.')}`} />;
+};

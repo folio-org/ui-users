@@ -9,6 +9,8 @@ import {
   Headline
 } from '@folio/stripes/components';
 
+import { renderPermission } from '../../constants';
+
 class RenderPermissions extends React.Component {
   static propTypes = {
     heading: PropTypes.node.isRequired,
@@ -36,8 +38,8 @@ class RenderPermissions extends React.Component {
       <li key={item.permissionName}>
         {
           (showPerms ?
-            `${item.permissionName} (${item.displayName})` :
-            (item.displayName || item.permissionName))
+            `${item.permissionName} (${renderPermission(item.permissionName)})` :
+            (renderPermission(item.permissionName)))
         }
       </li>
     ));

@@ -22,6 +22,7 @@ import {
 } from '@folio/stripes-core';
 
 import PermissionModal from './components/PermissionsModal';
+import { renderPermission } from '../../constants';
 import css from './PermissionsAccordion.css';
 
 class PermissionsAccordion extends React.Component {
@@ -91,8 +92,8 @@ class PermissionsAccordion extends React.Component {
       >
         {
           showPerms
-            ? `${item.permissionName} (${item.displayName})`
-            : (item.displayName || item.permissionName)
+            ? `${item.permissionName} (${renderPermission(item.permissionName)})`
+            : renderPermission(item.permissionName)
         }
         <IfPermission perm={this.props.permToDelete}>
           <FormattedMessage id="ui-users.permissions.removePermission">
