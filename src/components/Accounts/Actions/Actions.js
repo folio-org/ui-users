@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import {
   FormattedMessage,
   injectIntl,
-  intlShape,
 } from 'react-intl';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import { stripesConnect } from '@folio/stripes/core';
@@ -104,7 +103,7 @@ class Actions extends React.Component {
     stripes: PropTypes.object,
     handleEdit: PropTypes.func,
     user: PropTypes.object,
-    intl: intlShape.isRequired,
+    intl: PropTypes.object.isRequired,
     match: PropTypes.object,
   };
 

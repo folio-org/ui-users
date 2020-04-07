@@ -8,7 +8,6 @@ import {
 import {
   FormattedMessage,
   injectIntl,
-  intlShape,
 } from 'react-intl';
 
 import { IfPermission } from '@folio/stripes/core';
@@ -25,7 +24,7 @@ import Label from '../../../../Label/Label';
 
 class OpenLoansSubHeader extends React.Component {
   static propTypes = {
-    intl: intlShape.isRequired,
+    intl: PropTypes.object.isRequired,
     checkedLoans: PropTypes.object.isRequired,
     columnMapping: PropTypes.object.isRequired,
     loans: PropTypes.arrayOf(PropTypes.object).isRequired,

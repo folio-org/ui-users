@@ -1,7 +1,6 @@
 import { get as _get, isEmpty as _isEmpty } from 'lodash';
 import React from 'react';
 import {
-  intlShape,
   injectIntl
 } from 'react-intl';
 import PropTypes from 'prop-types';
@@ -26,7 +25,7 @@ class PatronBlockLayer extends React.Component {
     selectedPatronBlock: PropTypes.object,
     history: PropTypes.object,
     match: PropTypes.object,
-    intl: intlShape.isRequired,
+    intl: PropTypes.object.isRequired,
     stripes: PropTypes.object,
   };
 
