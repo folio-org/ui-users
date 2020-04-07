@@ -38,6 +38,7 @@ class RequestPreferencesEdit extends Component {
     addressTypes: addressTypesShape,
     setFieldValue: PropTypes.func.isRequired,
     defaultDeliveryAddressTypeId: nullOrStringIsRequiredTypeValidator,
+    intl: PropTypes.object.isRequired,
   }
 
   componentDidUpdate(prevProps) {
