@@ -32,11 +32,12 @@ class UserSearchContainer extends React.Component {
     initializedFilterConfig: { initialValue: false },
     query: { initialValue: { sort: 'name' } },
     resultCount: { initialValue: INITIAL_RESULT_COUNT },
+    resultOffset: { initialValue: 0 },
     records: {
       type: 'okapi',
       records: 'users',
-      recordsRequired: '%{resultCount}',
-      perRequest: 30,
+      resultOffset: '%{resultOffset}',
+      perRequest: 100,
       path: 'users',
       GET: {
         params: {
@@ -91,7 +92,7 @@ class UserSearchContainer extends React.Component {
     resources: PropTypes.shape({
       patronGroups: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
-      })
+      }),
     }).isRequired,
     mutator: PropTypes.shape({
       initializedFilterConfig: PropTypes.shape({
@@ -107,6 +108,9 @@ class UserSearchContainer extends React.Component {
       loans: PropTypes.shape({
         GET: PropTypes.func.isRequired,
         reset: PropTypes.func.isRequired,
+      }),
+      resultOffset: PropTypes.shape({
+        replace: PropTypes.func.isRequired,
       }),
     }).isRequired,
     stripes: PropTypes.shape({
@@ -142,9 +146,15 @@ class UserSearchContainer extends React.Component {
     this.source.update(this.props);
   }
 
-  onNeedMoreData = () => {
+  onNeedMoreData = (askAmount, index) => {
+    const { resultOffset } = this.props.mutator;
+
     if (this.source) {
-      this.source.fetchMore(RESULT_COUNT_INCREMENT);
+      if (resultOffset && index >= 0) {
+        this.source.fetchOffset(index);
+      } else {
+        this.source.fetchMore(RESULT_COUNT_INCREMENT);
+      }
     }
   };
 
