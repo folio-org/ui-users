@@ -1,4 +1,3 @@
-import { get } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -22,7 +21,7 @@ import {
 } from '@folio/stripes-core';
 
 import PermissionModal from './components/PermissionsModal';
-import { renderPermission } from '../../constants';
+import PermissionLabel from '../PermissionLabel';
 import css from './PermissionsAccordion.css';
 
 class PermissionsAccordion extends React.Component {
@@ -90,11 +89,7 @@ class PermissionsAccordion extends React.Component {
         key={item.id}
         data-permission-name={`${item.permissionName}`}
       >
-        {
-          showPerms
-            ? `${item.permissionName} (${renderPermission(item.permissionName)})`
-            : renderPermission(item.permissionName)
-        }
+        <PermissionLabel permission={item} showRaw={showPerms} />
         <IfPermission perm={this.props.permToDelete}>
           <FormattedMessage id="ui-users.permissions.removePermission">
             {aria => (
@@ -120,8 +115,9 @@ class PermissionsAccordion extends React.Component {
   }
 
   renderList = ({ fields }) => {
-    const showPerms = get(this.props.stripes, ['config', 'showPerms']);
-    const listFormatter = (fieldName, index) => (this.renderItem(fields.get(index), index, showPerms));
+    const listFormatter = (_fieldName, index) => (
+      this.renderItem(fields.get(index), index, this.props.stripes?.config?.showPerms)
+    );
 
     return (
       <List
