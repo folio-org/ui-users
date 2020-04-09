@@ -1,5 +1,12 @@
 # Change history for ui-users
 
+## [3.0.2](https://github.com/folio-org/ui-users/tree/v3.0.2) (2020-04-09)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v3.0.1...v3.0.2)
+
+* removed blank option from copy modal owners dropdown. Refs UIU-1550.
+* provide correct path details in link from fee/fine details to inventory. Refs UIU-1553.
+* provide location when creating new fee/fine via checkout. Refs UIU-1554.
+
 ## [3.0.1](https://github.com/folio-org/ui-users/tree/v3.0.1) (2020-04-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v3.0.0...v3.0.1)
 
@@ -25,7 +32,7 @@
 * Display `Overdue fine policy` and `Lost item fee policy` on the `Loan Details` page. Refs UIU-1246.
 * Replace "Fee/Fine History: Can create, edit and remove accounts" permission with "Users: Can create, edit and remove fees/fines" one for restricting access to the accounts history. Refs UIU-1384.
 * Fix page crash when a multiple fee/fine payment is made. Refs UIU-1413.
-* Refactor open and closed loans lists to use <Dropdown /> from stripes-components
+* Refactor open and closed loans lists to use `<Dropdown />` from stripes-components
 * Omit 'notify' field upon creating fee/fine in order to prevent backend error. Fixes UIU-1438.
 * Refresh list of loans after anonymization. Fixes UIU-1046.
 * Add UI to mark items Declared lost. Refs UIU-1202.
