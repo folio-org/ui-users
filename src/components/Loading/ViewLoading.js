@@ -7,7 +7,7 @@ const ViewLoading = (props) => {
   return (
     <Paneset>
       <Pane {...props}>
-        <Layout className="centered full" className={css.spinnerStyle}>
+        <Layout className={`centered full ${css.spinnerStyle}`}>
           &nbsp;
           <Loading />
         </Layout>

@@ -4,10 +4,9 @@ import Loading from './Loading';
 import css from './DotSpinner.css';
 
 const PaneLoading = (props) => {
-
   return (
     <Pane {...props}>
-      <Layout className="centered full" className={css.spinnerStyle}>
+      <Layout className={`centered full ${css.spinnerStyle}`}>
         &nbsp;
         <Loading />
       </Layout>

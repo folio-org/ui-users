@@ -114,12 +114,12 @@ class WarningModal extends React.Component {
         />
       ),
       'Alert details': a => (
-        ((a.status || {}).name === 'Closed') 
-        ?
-        <span className={css.redSpan}>
-          <FormattedMessage id="ui-users.accounts.actions.warning.deselect" />
-        </span> 
-        : ''
+        ((a.status || {}).name === 'Closed')
+          ?
+            <span className={css.redSpan}>
+              <FormattedMessage id="ui-users.accounts.actions.warning.deselect" />
+            </span>
+          : ''
       ),
       'Fee/Fine type': a => a.feeFineType || '',
       'Remaining': a => parseFloat(a.remaining).toFixed(2) || '0.00',

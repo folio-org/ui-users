@@ -212,7 +212,7 @@ class ChargeForm extends React.Component {
 
     const lastMenu = (
       <PaneMenu>
-        <Button 
+        <Button
           id="cancelCharge"
           onClick={this.goToAccounts}
           className={css.margin6}

@@ -7,7 +7,7 @@ import { stripesConnect } from '@folio/stripes/core';
 
 import CommentRequiredForm from './CommentRequiredForm';
 
-import css from './CommentRequiredSettings.css'
+import css from './CommentRequiredSettings.css';
 
 class CommentRequiredSettings extends React.Component {
   static manifest = Object.freeze({
