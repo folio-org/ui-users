@@ -5,7 +5,6 @@ import {
   FormattedTime,
   FormattedMessage,
   injectIntl,
-  intlShape,
 } from 'react-intl';
 
 import {
@@ -16,7 +15,7 @@ import { effectiveCallNumber } from '@folio/stripes/util';
 
 class BulkOverrideLoansList extends Component {
   static propTypes = {
-    intl: intlShape.isRequired,
+    intl: PropTypes.object.isRequired,
     height: PropTypes.number,
     allChecked: PropTypes.bool.isRequired,
     loanPolicies: PropTypes.object.isRequired,
