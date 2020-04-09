@@ -218,7 +218,7 @@ class LoanDetails extends React.Component {
     return (contributorsLength >= 77) ?
       (
         <Popover>
-          <div data-role="target" style={{ cursor: 'pointer' }}>
+          <div data-role="target" className={css.cursor}>
             {contributorsList}
           </div>
           <div data-role="popover">

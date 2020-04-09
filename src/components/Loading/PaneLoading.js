@@ -1,12 +1,13 @@
 import React from 'react';
 import { Pane, Layout } from '@folio/stripes/components';
 import Loading from './Loading';
+import css from './DotSpinner.css';
 
 const PaneLoading = (props) => {
-  const spinnerStyle = { maxWidth: '15rem', height: '8rem' };
+
   return (
     <Pane {...props}>
-      <Layout className="centered full" style={spinnerStyle}>
+      <Layout className="centered full" className={css.spinnerStyle}>
         &nbsp;
         <Loading />
       </Layout>

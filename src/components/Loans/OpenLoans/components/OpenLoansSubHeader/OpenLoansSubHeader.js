@@ -23,6 +23,8 @@ import {
 import ActionsBar from '../../../components/ActionsBar/ActionsBar';
 import Label from '../../../../Label/Label';
 
+import css from './OpenLoansSubHeader.css';
+
 class OpenLoansSubHeader extends React.Component {
   static propTypes = {
     intl: intlShape.isRequired,
@@ -144,10 +146,7 @@ class OpenLoansSubHeader extends React.Component {
             </Label>
             <Dropdown
               id="columnsDropdown"
-              style={{
-                float: 'right',
-                marginLeft: '10px',
-              }}
+              className={css.columnsDropdown}
               group
               pullRight
               onToggle={this.onDropdownClick}

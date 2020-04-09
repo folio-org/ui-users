@@ -13,6 +13,8 @@ import {
 } from '@folio/stripes/components';
 import { effectiveCallNumber } from '@folio/stripes/util';
 
+import css from './BulkRenewedLoansList.css';
+
 const propTypes = {
   height: PropTypes.number,
   failedRenewals: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -35,10 +37,6 @@ const BulkRenewedLoansList = (props) => {
     requestCounts,
     loanPolicies,
   } = props;
-  const iconAlignStyle = {
-    display: 'flex',
-    alignItems: 'center'
-  };
 
   const visibleColumns = [
     'renewalStatus',
@@ -94,7 +92,7 @@ const BulkRenewedLoansList = (props) => {
             ) : null;
           } else {
             return (
-              <span style={iconAlignStyle}>
+              <span className={css.iconAlign}>
                 <Icon
                   size="medium"
                   icon="check-circle"

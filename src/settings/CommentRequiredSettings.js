@@ -7,6 +7,8 @@ import { stripesConnect } from '@folio/stripes/core';
 
 import CommentRequiredForm from './CommentRequiredForm';
 
+import css from './CommentRequiredSettings.css'
+
 class CommentRequiredSettings extends React.Component {
   static manifest = Object.freeze({
     record: {},
@@ -93,7 +95,7 @@ class CommentRequiredSettings extends React.Component {
     };
 
     return (
-      <div style={{ width: '100%' }}>
+      <div className={css.fullWidth}>
         <CommentRequiredForm
           {...this.props}
           initialValues={initialValues}

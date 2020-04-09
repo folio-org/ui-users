@@ -1,3 +1,5 @@
+@import "@folio/stripes-components/lib/variables.css";
+
 .root {
   padding: 0;
 }
@@ -5,12 +7,12 @@
 .label {
   display: flex;
   flex-grow: 2;
-  color: #999;
-  font-weight: 600;
+  color: var(--secondary);
+  font-weight: var(--text-weight-medium);
   justify-content: flex-start;
   padding: 0px 0px 10px 22px;
   & h2 {
-    font-size: 1.7rem;
+    font-size: var(--font-size-x-large);
   }
 }
 
@@ -23,4 +25,11 @@
 
 .patronGroup {
   padding-right: 25px;
+}
+
+.expiredMessage {
+  color: var(--error);
+  position: relative;
+  top: -10px;
+  font-size: var(--font-size-small);
 }

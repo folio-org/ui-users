@@ -22,6 +22,8 @@ import {
 
 import { calculateSortParams } from '../../util';
 
+import css from './modal.css';
+
 class WarningModal extends React.Component {
   static propTypes = {
     accounts: PropTypes.arrayOf(PropTypes.object),
@@ -111,7 +113,14 @@ class WarningModal extends React.Component {
           type="checkbox"
         />
       ),
-      'Alert details': a => (((a.status || {}).name === 'Closed') ? <span style={{ color: 'red' }}><FormattedMessage id="ui-users.accounts.actions.warning.deselect" /></span> : ''),
+      'Alert details': a => (
+        ((a.status || {}).name === 'Closed') 
+        ?
+        <span className={css.redSpan}>
+          <FormattedMessage id="ui-users.accounts.actions.warning.deselect" />
+        </span> 
+        : ''
+      ),
       'Fee/Fine type': a => a.feeFineType || '',
       'Remaining': a => parseFloat(a.remaining).toFixed(2) || '0.00',
       'Payment Status': a => (a.paymentStatus || {}).name || '-',

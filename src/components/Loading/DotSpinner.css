@@ -46,3 +46,8 @@
     transform: scale(1);
   }
 }
+
+.spinnerStyle {
+  max-width: 15rem;
+  height: 8rem;
+}

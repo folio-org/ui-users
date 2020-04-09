@@ -276,10 +276,10 @@ class UserDetail extends React.Component {
         <IfPermission perm="ui-users.edit">
           <FormattedMessage id="ui-users.crud.editUser">
             {ariaLabel => (
+              user &&
               <Button
                 id="clickable-edituser"
                 buttonStyle="primary"
-                style={{ visibility: !user ? 'hidden' : 'visible' }}
                 to={this.getEditLink()}
                 buttonRef={this.editButton}
                 ariaLabel={ariaLabel}

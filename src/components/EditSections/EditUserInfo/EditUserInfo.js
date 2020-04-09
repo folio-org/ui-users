@@ -154,7 +154,7 @@ class EditUserInfo extends React.Component {
               defaultValue={initialValues.active}
             />
             {isUserExpired() && (
-              <span style={{ 'color': '#900', 'position': 'relative', 'top': '-10px', 'fontSize': '0.9em' }}>
+              <span className={css.expiredMessage}>
                 <FormattedMessage id="ui-users.errors.userExpired" />
               </span>
             )}

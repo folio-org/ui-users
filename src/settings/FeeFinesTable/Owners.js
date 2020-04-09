@@ -8,6 +8,8 @@ import {
   Select,
 } from '@folio/stripes/components';
 
+import css from './FeeFinesTable.css';
+
 const Owners = ({ dataOptions, onChange, filterShared }) => {
   const options = [];
   const shared = dataOptions.find(d => d.owner === 'Shared') || {};
@@ -41,7 +43,7 @@ const Owners = ({ dataOptions, onChange, filterShared }) => {
     <div>
       <Row>
         <Col xs>
-          <span style={{ fontSize: 'large', fontWeight: '600' }}>
+          <span className={css.singularMesage}>
             <FormattedMessage id="ui-users.owners.singular" />
           </span>
         </Col>

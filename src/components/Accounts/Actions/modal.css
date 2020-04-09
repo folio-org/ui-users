@@ -2,3 +2,7 @@
   float: right;
   margin-right: 10px;
 }
+
+.redSpan {
+  color: 'red';
+}

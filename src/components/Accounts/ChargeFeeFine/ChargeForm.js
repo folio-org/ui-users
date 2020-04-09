@@ -19,6 +19,8 @@ import UserInfo from './UserInfo';
 import FeeFineInfo from './FeeFineInfo';
 import ItemInfo from './ItemInfo';
 
+import css from './index.css';
+
 let feefineamount = 0;
 
 function validate(type) {
@@ -208,16 +210,20 @@ class ChargeForm extends React.Component {
       feefineList.push(fee);
     });
 
-    const mg = { margin: '6px' };
-
     const lastMenu = (
       <PaneMenu>
-        <Button id="cancelCharge" onClick={this.goToAccounts} style={mg}><FormattedMessage id="ui-users.feefines.modal.cancel" /></Button>
+        <Button 
+          id="cancelCharge"
+          onClick={this.goToAccounts}
+          className={css.margin6}
+        >
+          <FormattedMessage id="ui-users.feefines.modal.cancel" />
+        </Button>
         <Button
           id="chargeAndPay"
           disabled={this.props.pristine || this.props.submitting || this.props.invalid}
           onClick={this.props.handleSubmit(data => this.props.onSubmit({ ...data, pay: true, notify }))}
-          style={mg}
+          className={css.margin6}
         >
           <FormattedMessage id="ui-users.charge.Pay" />
         </Button>
@@ -225,7 +231,7 @@ class ChargeForm extends React.Component {
           id="chargeOnly"
           disabled={this.props.pristine || this.props.submitting || this.props.invalid}
           onClick={this.props.handleSubmit(data => this.props.onSubmit({ ...data, pay: false, notify }))}
-          style={mg}
+          className={css.margin6}
         >
           <FormattedMessage id="ui-users.charge.onlyCharge" />
         </Button>

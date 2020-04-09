@@ -8,6 +8,7 @@ import {
 } from '@folio/stripes/components';
 
 import withCopyModal from './WithCopyModal';
+import css from './PasswordModal.css';
 
 const ResetPasswordModalBody = ({
   email,
@@ -19,7 +20,7 @@ const ResetPasswordModalBody = ({
       <Row>
         <Col
           xs={12}
-          style={{ fontWeight: 'bold', padding: '10px' }}
+          className={css.emailText}
         >
           {email}
         </Col>

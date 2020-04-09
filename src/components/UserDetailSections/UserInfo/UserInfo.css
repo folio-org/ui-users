@@ -1,3 +1,5 @@
+@import "@folio/stripes-components/lib/variables.css";
+
 .root {
   padding: 0 1.2em;
 }
@@ -11,7 +13,7 @@
   padding: 0 22px;
   & h2 {
     margin: none;
-    font-size: 1.8rem;
+    font-size: var(--font-size-xx-large);
   }
 }
 
