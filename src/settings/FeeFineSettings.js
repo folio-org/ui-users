@@ -3,7 +3,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   injectIntl,
-  intlShape,
   FormattedMessage,
 } from 'react-intl';
 import { Field } from 'redux-form';
@@ -68,7 +67,7 @@ class FeeFineSettings extends React.Component {
         PUT: PropTypes.func.isRequired,
       }),
     }).isRequired,
-    intl: intlShape.isRequired,
+    intl: PropTypes.object.isRequired,
   };
 
   constructor(props) {

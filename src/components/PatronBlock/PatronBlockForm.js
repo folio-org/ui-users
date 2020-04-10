@@ -31,7 +31,6 @@ import { ViewMetaData } from '@folio/stripes/smart-components';
 import moment from 'moment';
 import {
   FormattedMessage,
-  intlShape,
 } from 'react-intl';
 import { getFullName } from '../util';
 import UserInfo from '../Accounts/ChargeFeeFine/UserInfo';
@@ -66,7 +65,7 @@ class PatronBlockForm extends React.Component {
     onClose: PropTypes.func,
     handleSubmit: PropTypes.func.isRequired,
     connect: PropTypes.func,
-    intl: intlShape.isRequired,
+    intl: PropTypes.object.isRequired,
     stripes: PropTypes.object,
     currentValues: PropTypes.object,
     initialValues: PropTypes.object,

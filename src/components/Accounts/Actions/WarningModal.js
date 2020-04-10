@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import {
   FormattedMessage,
   injectIntl,
-  intlShape,
 } from 'react-intl';
 
 import {
@@ -31,7 +30,7 @@ class WarningModal extends React.Component {
     open: PropTypes.bool,
     label: PropTypes.string,
     onClose: PropTypes.func.isRequired,
-    intl: intlShape.isRequired,
+    intl: PropTypes.object.isRequired,
   };
 
   constructor(props) {

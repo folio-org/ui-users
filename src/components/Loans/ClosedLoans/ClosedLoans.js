@@ -4,7 +4,6 @@ import {
   FormattedMessage,
   FormattedTime,
   injectIntl,
-  intlShape,
 } from 'react-intl';
 import PropTypes from 'prop-types';
 
@@ -51,7 +50,7 @@ class ClosedLoans extends React.Component {
     }),
     match: PropTypes.object,
     user: PropTypes.object,
-    intl: intlShape.isRequired,
+    intl: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
     handleOptionsChange: PropTypes.func.isRequired,
