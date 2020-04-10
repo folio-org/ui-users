@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import {
   List,
@@ -9,11 +9,20 @@ import {
   Headline
 } from '@folio/stripes/components';
 
+import PermissionLabel from '../PermissionLabel';
+import { getPermissionLabelString } from '../data/converters/permission';
+
 class RenderPermissions extends React.Component {
   static propTypes = {
+    accordionId: PropTypes.string,
+    expanded: PropTypes.bool,
     heading: PropTypes.node.isRequired,
-    permToRead: PropTypes.string.isRequired,
+    intl: PropTypes.shape({
+      formatMessage: PropTypes.func.isRequired,
+    }),
     listedPermissions: PropTypes.arrayOf(PropTypes.object),
+    onToggle: PropTypes.func,
+    permToRead: PropTypes.string.isRequired,
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func.isRequired,
       config: PropTypes.shape({
@@ -21,24 +30,18 @@ class RenderPermissions extends React.Component {
         listInvisiblePerms: PropTypes.bool,
       }).isRequired,
     }).isRequired,
-    accordionId: PropTypes.string,
-    expanded: PropTypes.bool,
-    onToggle: PropTypes.func,
   };
 
   renderList() {
     const {
-      stripes,
+      intl: { formatMessage },
       listedPermissions,
+      stripes,
     } = this.props;
     const showPerms = _.get(stripes, ['config', 'showPerms']);
     const listFormatter = item => ((
       <li key={item.permissionName}>
-        {
-          (showPerms ?
-            `${item.permissionName} (${item.displayName})` :
-            (item.displayName || item.permissionName))
-        }
+        <PermissionLabel permission={item} showRaw={showPerms} />
       </li>
     ));
     const noPermissionsFound = <FormattedMessage id="ui-users.permissions.empty" />;
@@ -46,12 +49,10 @@ class RenderPermissions extends React.Component {
     return (
       <List
         items={(listedPermissions || []).sort((a, b) => {
-          const key = showPerms ? 'permissionName' : 'displayName';
-          if (Object.prototype.hasOwnProperty.call(a, key) &&
-            Object.prototype.hasOwnProperty.call(b, key)) {
-            return (a[key].toLowerCase() < b[key].toLowerCase() ? -1 : 1);
-          }
-          return 1;
+          const permA = getPermissionLabelString(a, formatMessage, showPerms);
+          const permB = getPermissionLabelString(b, formatMessage, showPerms);
+
+          return permA.localeCompare(permB);
         })}
         itemFormatter={listFormatter}
         isEmptyMessage={noPermissionsFound}
@@ -88,4 +89,4 @@ class RenderPermissions extends React.Component {
   }
 }
 
-export default RenderPermissions;
+export default injectIntl(RenderPermissions);

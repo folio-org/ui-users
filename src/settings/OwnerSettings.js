@@ -3,7 +3,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   injectIntl,
-  intlShape,
   FormattedMessage,
 } from 'react-intl';
 import { Field } from 'redux-form';
@@ -18,7 +17,7 @@ class OwnerSettings extends React.Component {
     ownerServicePoints: {
       type: 'okapi',
       resource: 'service-points',
-      path: 'service-points',
+      path: 'service-points?limit=200',
     },
     owners: {
       type: 'okapi',
@@ -35,7 +34,7 @@ class OwnerSettings extends React.Component {
       connect: PropTypes.func.isRequired,
     }).isRequired,
     resources: PropTypes.object,
-    intl: intlShape.isRequired,
+    intl: PropTypes.object.isRequired,
   };
 
   constructor(props) {

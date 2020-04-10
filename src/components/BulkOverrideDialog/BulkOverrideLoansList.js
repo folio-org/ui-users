@@ -5,18 +5,17 @@ import {
   FormattedTime,
   FormattedMessage,
   injectIntl,
-  intlShape,
 } from 'react-intl';
 
 import {
   Icon,
   MultiColumnList,
 } from '@folio/stripes/components';
-import { effectiveCallNumber } from '@folio/stripes-util';
+import { effectiveCallNumber } from '@folio/stripes/util';
 
 class BulkOverrideLoansList extends Component {
   static propTypes = {
-    intl: intlShape.isRequired,
+    intl: PropTypes.object.isRequired,
     height: PropTypes.number,
     allChecked: PropTypes.bool.isRequired,
     loanPolicies: PropTypes.object.isRequired,

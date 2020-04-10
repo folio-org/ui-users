@@ -11,6 +11,7 @@ import {
   selectable,
   property,
   focusable,
+  isPresent,
 } from '@bigtest/interactor';
 
 import ButtonInteractor from '@folio/stripes-components/lib/Button/tests/interactor'; // eslint-disable-line
@@ -70,6 +71,25 @@ import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/P
   notificationsSentTo = new SelectInteractor('[data-test-proxy-notifcations-sent-to]');
 }
 
+@interactor class CustomFieldsSectionInteractor {
+  fields = collection('[data-test-record-edit-custom-field]', {
+    input: scoped('[type="text"]', {
+      fillInput: fillable(),
+      blurInput: blurrable(),
+
+      fillAndBlur(val) {
+        return this
+          .fillInput(val)
+          .blurInput();
+      }
+    }),
+    popoverIsPresent: isPresent('[class^=popoverTarget---]'),
+    validationMessage: text('[class^=feedbackError---]'),
+  });
+
+  label = text('[class*="labelArea---"]');
+}
+
 @interactor class UserFormPage {
   // isLoaded = isPresent('[class*=paneTitleLabel---]');
 
@@ -81,9 +101,9 @@ import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/P
   barcodeField = new InputFieldInteractor('#adduser_barcode');
   usernameField = new InputFieldInteractor('#adduser_username');
   isUsernameFieldRequired = property('#adduser_username', 'required');
-  passwordField = new InputFieldInteractor('#pw');
-  isPasswordFieldRequired = property('#pw', 'required');
+  resetPasswordLink = scoped('[class*=resetPasswordButton]');
   expirationDate = new InputFieldInteractor('#adduser_expirationdate');
+  clearExpirationDate = clickable('#datepicker-clear-button-adduser_expirationdate');
 
   feedbackError = text('[class^="feedbackError---"]');
   cancelButton = new ButtonInteractor('[data-test-user-form-cancel-button]');
@@ -108,6 +128,8 @@ import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/P
   firstAddressTypeField = new SelectFieldInteractor('[name="personal.addresses[0].addressType"]');
   secondAddressTypeField = new SelectFieldInteractor('[name="personal.addresses[1].addressType"]');
   defaultAddressTypeField = new SelectFieldInteractor('[data-test-default-delivery-address-field] select');
+  statusField = new SelectFieldInteractor('#useractive');
+  customFieldsSection = scoped('#customFields', CustomFieldsSectionInteractor);
 }
 
 export default new UserFormPage('[data-test-form-page]');

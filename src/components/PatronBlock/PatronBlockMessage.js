@@ -1,16 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { TextField } from '@folio/stripes/components';
 import { stripesConnect } from '@folio/stripes/core';
 
 import {
   injectIntl,
-  intlShape,
 }
   from 'react-intl';
 
 class PatronBlockMessage extends React.Component {
   static propTypes = {
-    intl: intlShape.isRequired,
+    intl: PropTypes.object.isRequired,
   }
 
   render() {

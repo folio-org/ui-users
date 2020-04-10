@@ -1,5 +1,16 @@
 # Change history for ui-users
 
+## [3.1.0] (IN PROGRESS)
+
+* Add posibility to view/create/edit custom fields on user record. UIU-1279.
+* Increase limit of service points in the Associated Service Points dropdown at Settings --> Users --> Fee/Fine Owners. Refs UIU-1540.
+* Fix ability to mark user as inactive. Fixes UIU-913.
+* Add permission and permission check to claim an item returned. Refs UIU-1266.
+* Create Patron Blocks Conditions Table in Settings -> Users. Refs UIU-1272.
+* Fix bug preventing closed loans list from loading properly when an item has been deleted. Fixes UIU-1411.
+* Fix import path to stripes util. Fixes UIU-1515.
+* Use localized permission names. Refs UIU-488.
+
 ## [3.0.0](https://github.com/folio-org/ui-users/tree/v3.0.0) (2020-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.26.0...v3.0.0)
 

@@ -29,8 +29,20 @@ export default function config() {
     ssoEnabled: false
   });
 
-  this.get('/configurations/entries', {
-    configs: []
+  this.get('/configurations/entries', (schema, request) => {
+    if (request.url.includes('custom_fields_label')) {
+      return {
+        configs: [{
+          id: 'tested-custom-field-label',
+          module: 'USERS',
+          configName: 'custom_fields_label',
+          enabled: true,
+          value: 'Custom Fields Test',
+        }],
+      };
+    }
+
+    return { configs: [] };
   });
   this.post('/bl-users/login', () => {
     return new Response(
@@ -146,8 +158,16 @@ export default function config() {
     return schema.users.find(request.params.id).attrs;
   });
 
-  this.put('/users/:id', (schema, request) => {
-    return schema.users.find(request.params.id).attrs;
+  this.put('/users/:id', (schema, { params, requestBody }) => {
+    const data = JSON.parse(requestBody);
+    // The active field is not converted to boolean correctly
+    // So we do it here manually
+    data.active = (data.active === 'true');
+    const user = schema.users.find(params.id);
+
+    user.update(data);
+
+    return user.attrs;
   });
 
   this.get('/proxiesfor', {
@@ -513,4 +533,66 @@ export default function config() {
   });
 
   this.post('/request-preference-storage/request-preference');
+
+  this.get('/patron-block-conditions/:id', ({ patronBlockConditions }, request) => {
+    return patronBlockConditions.find(request.params.id).attrs;
+  });
+
+  this.put('/patron-block-conditions/:id', ({ patronBlockConditions }, request) => {
+    return patronBlockConditions.find(request.params.id).attrs;
+  });
+
+  this.post('/patron-block-conditions', (schema, { requestBody }) => {
+    const conditions = JSON.parse(requestBody);
+
+    return server.createList('patronBlockCondition', 6, conditions);
+  });
+
+  this.get('/patron-block-conditions', ({ patronBlockConditions }) => {
+    return this.serializerOrRegistry.serialize(patronBlockConditions.all());
+  });
+
+  this.get('/custom-fields', {
+    'customFields': [{
+      'id': '1',
+      'name': 'Textbox 1',
+      'refId': 'textbox-1',
+      'type': 'TEXTBOX_SHORT',
+      'entityType': 'user',
+      'visible': true,
+      'required': true,
+      'order': 1,
+      'helpText': 'helpful text',
+    }, {
+      'id': '2',
+      'name': 'Textbox 2',
+      'refId': 'textbox-2',
+      'type': 'TEXTBOX_SHORT',
+      'entityType': 'user',
+      'visible': true,
+      'required': false,
+      'order': 2,
+      'helpText': '',
+    }, {
+      'id': '3',
+      'name': 'Textarea 3',
+      'refId': 'textarea-3',
+      'type': 'TEXTBOX_LONG',
+      'entityType': 'user',
+      'visible': false,
+      'required': false,
+      'order': 3,
+      'helpText': '',
+    }, {
+      'id': '4',
+      'name': 'Textarea 4',
+      'refId': 'textarea-4',
+      'type': 'TEXTBOX_LONG',
+      'entityType': 'user',
+      'visible': true,
+      'required': false,
+      'order': 4,
+      'helpText': 'help text',
+    }]
+  });
 }
