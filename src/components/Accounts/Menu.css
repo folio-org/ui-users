@@ -1,5 +1,7 @@
+@import "@folio/stripes-components/lib/variables";
+
 .firstMenuLastItem {
-  margin-left: 10px;
+  margin-left: var(--gutter-static-two-thirds);
 }
 
 .firstMenuItems {

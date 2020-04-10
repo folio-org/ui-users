@@ -206,7 +206,7 @@ class PatronBlock extends React.Component {
     const title =
       <Row>
         <Col>
-          <Headline className={css.marginLeft8} size="large" tag="h3">
+          <Headline className={css.headlineLabel} size="large" tag="h3">
             <FormattedMessage id="ui-users.blocks.label" />
           </Headline>
         </Col>

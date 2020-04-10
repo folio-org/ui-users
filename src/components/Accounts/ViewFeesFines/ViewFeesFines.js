@@ -156,7 +156,7 @@ class ViewFeesFines extends React.Component {
         <Row>
           <Col>{t}</Col>
           {(n > 0) ?
-            <Col className={css.marginLeft5}>
+            <Col className={css.popoverWrap}>
               <Popover id="id-popover" key={myComments[n - 1]}>
                 <div id="popover-comments-1" data-role="target">
                   <img id="popover-comments-img" src="https://png.icons8.com/color/18/000000/note.png" alt="" />

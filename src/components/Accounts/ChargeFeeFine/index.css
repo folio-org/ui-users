@@ -10,7 +10,7 @@
 }
 
 .userInfoLink {
-  margin-right: 10px;
+  margin-right: var(--gutter-static-two-thirds);
 }
 
 .lastMenuButton {

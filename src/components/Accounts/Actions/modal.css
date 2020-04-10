@@ -2,7 +2,7 @@
 
 .rightAlignedButton {
   float: right;
-  margin-right: 10px;
+  margin-right: var(--gutter-static-two-thirds);
 }
 
 .alertDetails {

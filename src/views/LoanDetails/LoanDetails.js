@@ -29,6 +29,7 @@ import {
 } from '@folio/stripes/components';
 import { IfPermission } from '@folio/stripes/core';
 import { effectiveCallNumber } from '@folio/stripes/util';
+import { LoadingView } from '@folio/stripes-components/lib/Loading';
 
 import PatronBlockModal from '../../components/PatronBlock/PatronBlockModal';
 import {
@@ -43,7 +44,6 @@ import {
 } from '../../components/Wrappers';
 import loanActionMap from '../../components/data/static/loanActionMap';
 import LoanProxyDetails from './LoanProxyDetails';
-import ViewLoading from '../../components/Loading/ViewLoading';
 
 import css from './LoanDetails.css';
 
@@ -301,7 +301,7 @@ class LoanDetails extends React.Component {
 
     if (!loan || !user || (loan.userId !== user.id)) {
       return (
-        <ViewLoading
+        <LoadingView
           id="pane-loandetails"
           defaultWidth="100%"
           paneTitle="Loan action history"

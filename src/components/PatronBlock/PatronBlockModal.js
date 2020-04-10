@@ -56,7 +56,7 @@ const PatronBlockModal = ({ open, onClose, patronBlocks, viewUserPath }) => {
               </Button>
               <Button
                 id="patron-block-details-modal"
-                className={css.marginLeft15}
+                className={css.detailsButton}
                 buttonStyle="primary"
                 to={viewUserPath}
               >

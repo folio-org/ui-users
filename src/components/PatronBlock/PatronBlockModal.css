@@ -1,3 +1,5 @@
-.marginLeft15 {
-  margin-left: 15px;
+@import "@folio/stripes-components/lib/variables";
+
+.detailsButton {
+  margin-left: var(--gutter-static);
 }

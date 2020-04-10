@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { stripesConnect } from '@folio/stripes/core';
 import { makeQueryFunction } from '@folio/stripes/smart-components';
+import { LoadingView } from '@folio/stripes-components/lib/Loading';
 
 import { AccountsListing } from '../views';
-import ViewLoading from '../components/Loading/ViewLoading';
 
 const filterConfig = [
   {
@@ -182,7 +182,7 @@ class AccountsListingContainer extends React.Component {
     const user = this.getUser();
     const loans = resources.loans ? resources.loans.records : [];
     const patronGroup = this.getPatronGroup();
-    if (!user) return (<ViewLoading defaultWidth="100%" paneTitle="Loading accounts" />);
+    if (!user) return (<LoadingView defaultWidth="100%" paneTitle="Loading accounts" />);
     return (
       <AccountsListing user={user} loans={loans} patronGroup={patronGroup} {...this.props} />
     );

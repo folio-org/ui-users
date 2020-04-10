@@ -1,3 +1,5 @@
-.marginLeft5 {
-  margin-left: 5px;
+@import "@folio/stripes-components/lib/variables";
+
+.popoverWrap {
+  margin-left: var(--gutter-static-one-third);
 }

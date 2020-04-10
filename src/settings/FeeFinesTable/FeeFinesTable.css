@@ -12,6 +12,6 @@
 }
 
 .ownerIdField {
-  margin-left: 10px;
+  margin-left: var(--gutter-static-two-thirds);
   width: 120;
 }

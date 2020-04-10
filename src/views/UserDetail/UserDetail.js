@@ -31,6 +31,8 @@ import {
   ViewCustomFieldsRecord,
 } from '@folio/stripes/smart-components';
 
+import { LoadingPane } from '@folio/stripes-components/lib/PaneMenu';
+
 import {
   UserInfo,
   ExtendedInfo,
@@ -57,7 +59,6 @@ import {
   getFullName,
   // eachPromise
 } from '../../components/util';
-import { PaneLoading } from '../../components/Loading';
 
 class UserDetail extends React.Component {
   static propTypes = {
@@ -389,7 +390,7 @@ class UserDetail extends React.Component {
 
     if (!user) {
       return (
-        <PaneLoading
+        <LoadingPane
           id="pane-userdetails"
           defaultWidth={paneWidth}
           paneTitle={<FormattedMessage id="ui-users.information.userDetails" />}
