@@ -10,7 +10,7 @@ import {
 import { FormattedMessage } from 'react-intl';
 
 import { stripesShape } from '@folio/stripes/core';
-import { LoadingView } from '@folio/stripes-components/lib/Loading';
+import { LoadingView } from '@folio/stripes/components';
 
 import { nav } from '../../util';
 import {

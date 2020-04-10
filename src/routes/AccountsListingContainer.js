@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { stripesConnect } from '@folio/stripes/core';
 import { makeQueryFunction } from '@folio/stripes/smart-components';
-import { LoadingView } from '@folio/stripes-components/lib/Loading';
+import { LoadingView } from '@folio/stripes/components';
 
 import { AccountsListing } from '../views';
 

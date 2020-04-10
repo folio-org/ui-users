@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import _get from 'lodash/get';
 
 import { stripesConnect } from '@folio/stripes/core';
-import { LoadingView } from '@folio/stripes-components/lib/Loading';
+import { LoadingView } from '@folio/stripes/components';
 
 import { LoansListing } from '../views';
 

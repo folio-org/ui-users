@@ -26,10 +26,10 @@ import {
   Row,
   Col,
   NoValue,
+  LoadingView
 } from '@folio/stripes/components';
 import { IfPermission } from '@folio/stripes/core';
 import { effectiveCallNumber } from '@folio/stripes/util';
-import { LoadingView } from '@folio/stripes-components/lib/Loading';
 
 import PatronBlockModal from '../../components/PatronBlock/PatronBlockModal';
 import {

@@ -24,14 +24,13 @@ import {
   Col,
   Headline,
   AccordionSet,
+  LoadingPane
 } from '@folio/stripes/components';
 
 import {
   NotesSmartAccordion,
   ViewCustomFieldsRecord,
 } from '@folio/stripes/smart-components';
-
-import { LoadingPane } from '@folio/stripes-components/lib/PaneMenu';
 
 import {
   UserInfo,

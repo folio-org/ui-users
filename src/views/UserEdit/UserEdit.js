@@ -11,7 +11,7 @@ import {
   get,
 } from 'lodash';
 
-import { LoadingView } from '@folio/stripes-components/lib/Loading';
+import { LoadingView } from '@folio/stripes/components';
 
 import { eachPromise, getRecordObject } from '../../components/util';
 

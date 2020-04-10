@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { stripesConnect } from '@folio/stripes/core';
-import { LoadingView } from '@folio/stripes-components/lib/Loading';
+import { LoadingView } from '@folio/stripes/components';
 
 import { AccountDetails } from '../views';
 
