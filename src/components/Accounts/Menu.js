@@ -25,7 +25,7 @@ const Menu = (props) => {
   const firstMenu = (
     <div>
       <Row>
-        <Col className={css.marginLeft20}>
+        <Col className={css.firstMenuItems}>
           <b><FormattedMessage id="ui-users.accounts.history.statusLabel" values={{ type }} /></b>
           {' '}
           <Link to={`/users/view/${user.id}`}>
@@ -38,7 +38,7 @@ const Menu = (props) => {
         </Col>
       </Row>
       <Row>
-        <Col className={css.marginLeft20}>
+        <Col className={css.firstMenuItems}>
           <div id="outstanding-balance">
             <FormattedMessage
               id="ui-users.accounts.outstanding"
@@ -48,7 +48,7 @@ const Menu = (props) => {
             />
           </div>
         </Col>
-        <Col className={css.marginLeft10}>
+        <Col className={css.firstMenuLastItem}>
           {showSelected &&
             <FormattedMessage
               id="ui-users.accounts.selected"

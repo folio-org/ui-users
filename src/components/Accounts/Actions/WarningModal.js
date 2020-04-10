@@ -114,9 +114,9 @@ class WarningModal extends React.Component {
         />
       ),
       'Alert details': a => (
-        ((a.status || {}).name === 'Closed')
+        (a?.status?.name === 'Closed')
           ?
-            <span className={css.redSpan}>
+            <span className={css.alertDetails}>
               <FormattedMessage id="ui-users.accounts.actions.warning.deselect" />
             </span>
           : ''

@@ -4,15 +4,15 @@
   background-color: color(#fcfcfc contrast(100%) blend(#fcfcfc 90%));
   border-radius: 6px;
   padding: 10px 30px;
-  font-weight: bold;
+  font-weight: var(--text-weight-bold);
   font-size: var(--font-size-medium);
-  line-height: 1.5;
+  line-height: var(--line-height);
 }
 
-.marginRight10 {
+.userInfoLink {
   margin-right: 10px;
 }
 
-.margin6 {
+.lastMenuButton {
   margin: 6px;
 }

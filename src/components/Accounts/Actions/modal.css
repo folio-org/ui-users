@@ -1,8 +1,10 @@
+@import "@folio/stripes-components/lib/variables.css";
+
 .rightAlignedButton {
   float: right;
   margin-right: 10px;
 }
 
-.redSpan {
-  color: 'red';
+.alertDetails {
+  color: var(--error);
 }

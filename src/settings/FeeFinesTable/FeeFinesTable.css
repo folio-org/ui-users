@@ -1,9 +1,9 @@
 @import "@folio/stripes-components/lib/variables.css";
 
 .customCol {
-  font-weight: 600;
+  font-weight: var(--text-weight-medium);
   font-size: var(--font-size-medium);
-  color: rgba(0, 0, 0, 0.62);
+  color: var(--color-icon);
 }
 
 .singularMessage {

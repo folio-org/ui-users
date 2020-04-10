@@ -215,7 +215,7 @@ class ChargeForm extends React.Component {
         <Button
           id="cancelCharge"
           onClick={this.goToAccounts}
-          className={css.margin6}
+          className={css.lastMenuButton}
         >
           <FormattedMessage id="ui-users.feefines.modal.cancel" />
         </Button>
@@ -223,7 +223,7 @@ class ChargeForm extends React.Component {
           id="chargeAndPay"
           disabled={this.props.pristine || this.props.submitting || this.props.invalid}
           onClick={this.props.handleSubmit(data => this.props.onSubmit({ ...data, pay: true, notify }))}
-          className={css.margin6}
+          className={css.lastMenuButton}
         >
           <FormattedMessage id="ui-users.charge.Pay" />
         </Button>
@@ -231,7 +231,7 @@ class ChargeForm extends React.Component {
           id="chargeOnly"
           disabled={this.props.pristine || this.props.submitting || this.props.invalid}
           onClick={this.props.handleSubmit(data => this.props.onSubmit({ ...data, pay: false, notify }))}
-          className={css.margin6}
+          className={css.lastMenuButton}
         >
           <FormattedMessage id="ui-users.charge.onlyCharge" />
         </Button>
