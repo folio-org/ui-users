@@ -48,7 +48,7 @@ const Menu = (props) => {
             />
           </div>
         </Col>
-        <Col className={css.firstMenuLastItem}>
+        <Col className={css.firstMenuItems}>
           {showSelected &&
             <FormattedMessage
               id="ui-users.accounts.selected"

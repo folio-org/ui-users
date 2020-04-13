@@ -10,6 +10,7 @@ import {
   MenuItem,
   DropdownMenu,
   Popover,
+  Layout,
 } from '@folio/stripes/components';
 
 import {
@@ -22,8 +23,6 @@ import {
   calculateSortParams,
   nav,
 } from '../../util';
-
-import css from './ViewFeesFines.css';
 
 class ViewFeesFines extends React.Component {
   static propTypes = {
@@ -155,28 +154,30 @@ class ViewFeesFines extends React.Component {
         <Row>
           <Col>{t}</Col>
           {(n > 0) ?
-            <Col className={css.popoverWrap}>
-              <Popover id="id-popover" key={myComments[n - 1]}>
-                <div id="popover-comments-1" data-role="target">
-                  <img id="popover-comments-img" src="https://png.icons8.com/color/18/000000/note.png" alt="" />
-                </div>
-                <p id="popover-comments" data-role="popover">
-                  <b>
-                    <FormattedMessage id="ui-users.accounts.history.comment" />
+            <Col>
+              <Layout className="margin-start-gutter">
+                <Popover id="id-popover" key={myComments[n - 1]}>
+                  <div id="popover-comments-1" data-role="target">
+                    <img id="popover-comments-img" src="https://png.icons8.com/color/18/000000/note.png" alt="" />
+                  </div>
+                  <p id="popover-comments" data-role="popover">
+                    <b>
+                      <FormattedMessage id="ui-users.accounts.history.comment" />
+                      {' '}
+                      {n}
+                      {' '}
+                      <FormattedMessage id="ui-users.accounts.history.of" />
+                      {' '}
+                      {n}
+                      {':'}
+                    </b>
                     {' '}
-                    {n}
+                    {myComments[n - 1]}
                     {' '}
-                    <FormattedMessage id="ui-users.accounts.history.of" />
-                    {' '}
-                    {n}
-                    {':'}
-                  </b>
-                  {' '}
-                  {myComments[n - 1]}
-                  {' '}
-                  <a href="/users/123" className="active">Go to details</a>
-                </p>
-              </Popover>
+                    <a href="/users/123" className="active">Go to details</a>
+                  </p>
+                </Popover>
+              </Layout>
             </Col>
             : ' '}
         </Row>
