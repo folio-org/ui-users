@@ -1,22 +1,19 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { orderBy } from 'lodash';
 
 import { MultiColumnList } from '@folio/stripes/components';
-import PermissionLabel from '../../../PermissionLabel';
 import CheckboxColumn from '../CheckboxColumn';
 import { sortOrders } from '../../constants';
-import { getPermissionLabelString } from '../../../data/converters/permission';
 
 const PermissionsList = (props) => {
   const {
-    assignedPermissionIds,
     filteredPermissions,
-    intl: { formatMessage },
-    setAssignedPermissionIds,
+    assignedPermissionIds,
     togglePermission,
     visibleColumns,
+    setAssignedPermissionIds
   } = props;
 
   const [sortedColumn, setSortedColumn] = useState('permissionName');
@@ -25,7 +22,11 @@ const PermissionsList = (props) => {
   const rowUpdater = ({ id }) => assignedPermissionIds.includes(id);
 
   const sorters = {
-    permissionName: permission => getPermissionLabelString(permission, formatMessage)?.toLowerCase(),
+    permissionName: ({ permissionName, displayName }) => {
+      const name = displayName || permissionName || '';
+
+      return name.toLowerCase();
+    },
     status: ({ id, permissionName }) => [assignedPermissionIds.includes(id), permissionName],
     type: ({ mutable, permissionName }) => [!mutable, permissionName],
   };
@@ -99,9 +100,9 @@ const PermissionsList = (props) => {
             />
           ),
           // eslint-disable-next-line react/prop-types
-          permissionName: permission => (
+          permissionName: ({ displayName, permissionName }) => (
             <div data-test-permission-name>
-              <PermissionLabel permission={permission} />
+              { displayName || permissionName }
             </div>
           ),
           status: permission => {
@@ -134,7 +135,6 @@ const PermissionsList = (props) => {
 };
 
 PermissionsList.propTypes = {
-  assignedPermissionIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   filteredPermissions: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
@@ -146,12 +146,10 @@ PermissionsList.propTypes = {
       visible: PropTypes.bool.isRequired,
     })
   ).isRequired,
-  intl: PropTypes.shape({
-    formatMessage: PropTypes.func.isRequired,
-  }),
-  setAssignedPermissionIds: PropTypes.func.isRequired,
-  togglePermission: PropTypes.func.isRequired,
+  assignedPermissionIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   visibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
+  togglePermission: PropTypes.func.isRequired,
+  setAssignedPermissionIds: PropTypes.func.isRequired,
 };
 
-export default injectIntl(PermissionsList);
+export default PermissionsList;

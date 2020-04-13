@@ -14,6 +14,7 @@ import {
 
 import {
   FormattedMessage,
+  intlShape,
   FormattedTime,
   FormattedDate,
 } from 'react-intl';
@@ -49,7 +50,7 @@ class ViewFeesFines extends React.Component {
     history: PropTypes.object,
     user: PropTypes.object,
     visibleColumns: PropTypes.arrayOf(PropTypes.string),
-    intl: PropTypes.object.isRequired,
+    intl: intlShape.isRequired,
     selectedAccounts: PropTypes.arrayOf(PropTypes.object),
   };
 
@@ -196,7 +197,7 @@ class ViewFeesFines extends React.Component {
     } = item;
     const instanceTypeString = materialType ? `(${materialType})` : '';
 
-    return title ? `${title} ${instanceTypeString}` : '-';
+    return `${title} ${instanceTypeString}`;
   }
 
   formatDateTime(dateTimeStr) {

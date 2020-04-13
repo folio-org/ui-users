@@ -2,6 +2,7 @@ import React from 'react';
 import {
   FormattedMessage,
   injectIntl,
+  intlShape,
 } from 'react-intl';
 import PropTypes from 'prop-types';
 import { get, uniqBy } from 'lodash';
@@ -34,7 +35,7 @@ class EditServicePoints extends React.Component {
     }).isRequired,
     onToggle: PropTypes.func,
     formData: PropTypes.object.isRequired,
-    intl: PropTypes.object.isRequired,
+    intl: intlShape.isRequired,
   };
 
   constructor(props) {

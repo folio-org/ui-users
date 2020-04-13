@@ -4,6 +4,7 @@ import {
   FormattedMessage,
   FormattedTime,
   injectIntl,
+  intlShape,
 } from 'react-intl';
 import PropTypes from 'prop-types';
 
@@ -21,7 +22,7 @@ import {
   IntlConsumer,
   stripesShape,
 } from '@folio/stripes/core';
-import { effectiveCallNumber } from '@folio/stripes/util';
+import { effectiveCallNumber } from '@folio/stripes-util';
 
 import {
   calculateSortParams,
@@ -48,7 +49,7 @@ class ClosedLoans extends React.Component {
     }),
     match: PropTypes.object,
     user: PropTypes.object,
-    intl: PropTypes.object.isRequired,
+    intl: intlShape.isRequired,
     history: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
     handleOptionsChange: PropTypes.func.isRequired,
@@ -305,8 +306,10 @@ class ClosedLoans extends React.Component {
 
   buildRecords(records) {
     return records.map((record) => {
-      const { item } = record;
-      const contributors = item?.contributors;
+      const {
+        item,
+        item: { contributors },
+      } = record;
 
       return _.isArray(contributors) ?
         {
@@ -337,21 +340,19 @@ class ClosedLoans extends React.Component {
 
     const accounts = _.get(this.props.resources, ['loanAccount', 'records'], []);
     const accountsLoan = accounts.filter(a => a.loanId === loan.id) || [];
-    const itemDetailsLink = loan.item && `/inventory/view/${loan.item.instanceId}/${loan.item.holdingsRecordId}/${loan.itemId}`;
+    const itemDetailsLink = `/inventory/view/${loan.item.instanceId}/${loan.item.holdingsRecordId}/${loan.itemId}`;
     const buttonDisabled = !stripes.hasPerm('ui-users.feesfines.actions.all');
 
     return (
       <DropdownMenu data-role="menu">
-        {itemDetailsLink &&
-          <IfPermission perm="inventory.items.item.get">
-            <Button
-              buttonStyle="dropdownItem"
-              to={itemDetailsLink}
-            >
-              <FormattedMessage id="ui-users.itemDetails" />
-            </Button>
-          </IfPermission>
-        }
+        <IfPermission perm="inventory.items.item.get">
+          <Button
+            buttonStyle="dropdownItem"
+            to={itemDetailsLink}
+          >
+            <FormattedMessage id="ui-users.itemDetails" />
+          </Button>
+        </IfPermission>
         <Button
           disabled={buttonDisabled}
           buttonStyle="dropdownItem"

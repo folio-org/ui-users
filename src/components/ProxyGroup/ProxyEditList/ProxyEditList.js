@@ -4,6 +4,7 @@ import { FieldArray } from 'redux-form';
 import {
   FormattedMessage,
   injectIntl,
+  intlShape,
 } from 'react-intl';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import {
@@ -26,7 +27,7 @@ class ProxyEditList extends React.Component {
     itemComponent: PropTypes.func.isRequired,
     initialValues: PropTypes.object,
     change: PropTypes.func.isRequired,
-    intl: PropTypes.object.isRequired,
+    intl: intlShape.isRequired,
     getWarning: PropTypes.func.isRequired,
   };
 

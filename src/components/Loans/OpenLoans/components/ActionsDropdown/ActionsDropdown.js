@@ -70,20 +70,18 @@ class ActionsDropdown extends React.Component {
             <FormattedMessage id="ui-users.renew" />
           </Button>
         </IfPermission>
-        <IfPermission perm="ui-users.loans.claim-item-returned">
-          { itemStatusName !== itemStatuses.CLAIMED_RETURNED &&
-            <Button
-              buttonStyle="dropdownItem"
-              data-test-dropdown-content-claim-returned-button
-              onClick={e => {
-                handleOptionsChange({ loan, action:'claimReturned' });
-                onToggle(e);
-              }}
-            >
-              <FormattedMessage id="ui-users.loans.claimReturned" />
-            </Button>
-          }
-        </IfPermission>
+        { itemStatusName !== itemStatuses.CLAIMED_RETURNED &&
+          <Button
+            buttonStyle="dropdownItem"
+            data-test-dropdown-content-claim-returned-button
+            onClick={e => {
+              handleOptionsChange({ loan, action:'claimReturned' });
+              onToggle(e);
+            }}
+          >
+            <FormattedMessage id="ui-users.loans.claimReturned" />
+          </Button>
+        }
         <IfPermission perm="ui-users.loans.edit">
           { itemStatusName !== itemStatuses.DECLARED_LOST &&
             <Button

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {
   FormattedMessage,
   injectIntl,
+  intlShape,
 } from 'react-intl';
 import { ControlledVocab } from '@folio/stripes/smart-components';
 import { withStripes } from '@folio/stripes/core';
@@ -12,7 +13,7 @@ class AddressTypesSettings extends React.Component {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
     }).isRequired,
-    intl: PropTypes.object.isRequired,
+    intl: intlShape.isRequired,
   };
 
   constructor(props) {

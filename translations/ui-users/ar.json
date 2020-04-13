@@ -449,6 +449,7 @@
     "blocks.form.button.close": "غلق المربع الحواري لحظر المستفيد",
     "blocks.layer.newBlockTitle": "حظر جديد",
     "accounts.totalOpenAccounts": "(الإجمالي: {amount} )",
+    "accounts.error.select": "اختر واحدًا",
     "accounts.status.outstanding": "المتبقي",
     "feefines.defaultChargeNotice": "إخطار الرسوم الافتراضي",
     "feefines.defaultActionNotice": "إخطار الإجراء الافتراضي",
@@ -618,17 +619,5 @@
     "settings.customFields": "حقول مخصصة",
     "details.field.instance.type": "الوعاء (نوع المادة)",
     "accounts.history.columns.instance": "الوعاء (نوع المادة)",
-    "feefines.errors.reservedName": "نوع الرسم/الغرامة موجود بالفعل كرسم/غرامة مؤتمتة",
-    "accounts.payment.error.select": "لا توجد طرق دفع لمالك الرسم/الغرامة",
-    "accounts.waive.error.select": "لا توجد أسباب للإعفاء",
-    "accounts.transfer.error.select": "لا توجد حسابات تحويل لمالك الرسم/الغرامة",
-    "settings.patronBlocks": "حظر المستفيدين",
-    "settings.conditions": "الشروط",
-    "settings.block.borrowing": "حظر الاستعارة",
-    "settings.block.renew": "حظر التجديدات",
-    "settings.block.request": "حظر الطلب",
-    "settings.block.message": "الرسالة التي سيتم عرضها",
-    "settings.callout.message": "تم <strong>تحديث</strong> شرط حظر المستفيد <strong>{name}</strong> بنجاح",
-    "settings.error.noMessage": "الرسالة التي سيتم عرضها هي حقل مطلوب إذا تم تحديد إجراء محظور أو أكثر",
-    "settings.error.noCheckbox": "يجب تحديد إجراء حظر أو أكثر ليتم استخدام الرسالة المعروضة"
+    "feefines.errors.reservedName": "نوع الرسم/الغرامة موجود بالفعل كرسم/غرامة مؤتمتة"
 }

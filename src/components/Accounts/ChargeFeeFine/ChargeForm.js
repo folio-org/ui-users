@@ -189,7 +189,7 @@ class ChargeForm extends React.Component {
       barcode: (selectedLoan.item || {}).barcode,
       itemStatus: ((selectedLoan.item || {}).status || {}).name,
       callNumber: (selectedLoan.item || {}).callNumber,
-      location: selectedLoan?.item?.effectiveLocation?.name,
+      location: ((selectedLoan.item || {}).location || {}).name,
       type: ((selectedLoan.item || {}).materialType || {}).name
     };
     const item = (editable) ? this.props.item : itemLoan;

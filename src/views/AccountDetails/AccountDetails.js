@@ -15,13 +15,13 @@ import {
   Col,
   KeyValue,
   MultiColumnList,
-  NoValue,
 } from '@folio/stripes/components';
 
 import { Actions } from '../../components/Accounts/Actions';
 import {
   getFullName,
   calculateSortParams,
+  nav,
 } from '../../components/util';
 
 import css from './AccountDetails.css';
@@ -191,21 +191,8 @@ class AccountDetails extends React.Component {
     const instanceType = account?.materialType;
     const instanceTypeString = instanceType ? `(${instanceType})` : '';
 
-    return instanceTitle ? `${instanceTitle} ${instanceTypeString}` : '-';
+    return `${instanceTitle} ${instanceTypeString}`;
   }
-
-  handleClose = () => {
-    const {
-      history,
-      match: { params },
-      resources
-    } = this.props;
-
-    const account = _.get(resources, ['accountHistory', 'records', 0]) || {};
-    const status = account?.status?.name?.toLowerCase() || 'all';
-
-    history.push({ pathname: `/users/${params.id}/accounts/${status}` });
-  };
 
   render() {
     const {
@@ -216,6 +203,7 @@ class AccountDetails extends React.Component {
     const {
       patronGroup: patron,
       resources,
+      history,
       stripes,
       match: { params },
       user,
@@ -283,7 +271,7 @@ class AccountDetails extends React.Component {
           id="pane-account-action-history"
           defaultWidth="100%"
           dismissible
-          onClose={this.handleClose}
+          onClose={() => { history.goBack(); }}
           paneTitle={(
             <FormattedMessage id="ui-users.details.paneTitle.feeFineDetails">
               {(msg) => `${msg} - ${getFullName(user)} (${_.upperFirst(patron.group)}) `}
@@ -430,11 +418,11 @@ class AccountDetails extends React.Component {
                 value={
                   (_.get(account, ['barcode'])) ? (
                     <Link
-                      to={`/inventory/view/${_.get(account, ['instanceId'], '')}/${_.get(account, ['holdingsRecordId'], '')}/${_.get(account, ['itemId'], '')}`}
+                      to={`/inventory/view/${_.get(account, ['itemId'], '')}?query=${_.get(account, ['itemId'], '')}`}
                     >
-                      {_.get(account, ['barcode'], '')}
+                      {_.get(account, ['barcode'])}
                     </Link>
-                  ) : <NoValue />
+                  ) : '-'
                 }
               />
             </Col>
@@ -485,11 +473,15 @@ class AccountDetails extends React.Component {
                 <KeyValue
                   label={<FormattedMessage id="ui-users.details.label.loanDetails" />}
                   value={(
-                    <Link
-                      to={`/users/${params.id}/loans/view/${loanId}`}
+                    <button
+                      className={css.btnView}
+                      type="button"
+                      onClick={(e) => {
+                        nav.onClickViewLoanActionsHistory(e, { id: loanId }, history, params);
+                      }}
                     >
                       <FormattedMessage id="ui-users.details.field.loan" />
-                    </Link>
+                    </button>
                   )}
                 />
                 :

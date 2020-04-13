@@ -3,6 +3,7 @@ import {
   FormattedMessage,
   FormattedTime,
   injectIntl,
+  intlShape,
 } from 'react-intl';
 import { compose } from 'redux';
 import Link from 'react-router-dom/Link';
@@ -27,7 +28,7 @@ import {
   NoValue,
 } from '@folio/stripes/components';
 import { IfPermission } from '@folio/stripes/core';
-import { effectiveCallNumber } from '@folio/stripes/util';
+import { effectiveCallNumber } from '@folio/stripes-util';
 
 import PatronBlockModal from '../../components/PatronBlock/PatronBlockModal';
 import {
@@ -80,7 +81,7 @@ class LoanDetails extends React.Component {
     declareLost: PropTypes.func,
     claimReturned: PropTypes.func,
     patronBlocks: PropTypes.arrayOf(PropTypes.object),
-    intl: PropTypes.object.isRequired,
+    intl: intlShape.isRequired,
     match: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
@@ -388,16 +389,14 @@ class LoanDetails extends React.Component {
                     <FormattedMessage id="ui-users.renew" />
                   </Button>
                 </IfPermission>
-                <IfPermission perm="ui-users.loans.claim-item-returned">
-                  <Button
-                    data-test-claim-returned-button
-                    disabled={buttonDisabled || itemStatus === 'Claimed returned'}
-                    buttonStyle="primary"
-                    onClick={() => claimReturned(loan)}
-                  >
-                    <FormattedMessage id="ui-users.loans.claimReturned" />
-                  </Button>
-                </IfPermission>
+                <Button
+                  data-test-claim-returned-button
+                  disabled={buttonDisabled || itemStatus === 'Claimed returned'}
+                  buttonStyle="primary"
+                  onClick={() => claimReturned(loan)}
+                >
+                  <FormattedMessage id="ui-users.loans.claimReturned" />
+                </Button>
                 <IfPermission perm="ui-users.loans.edit">
                   <Button
                     disabled={buttonDisabled || isDeclaredLostItem}

@@ -449,6 +449,7 @@
     "blocks.form.button.close": "关闭读者冻结对话框",
     "blocks.layer.newBlockTitle": "新建冻结",
     "accounts.totalOpenAccounts": "（总计： {amount} ）",
+    "accounts.error.select": "选择一个",
     "accounts.status.outstanding": "未结",
     "feefines.defaultChargeNotice": "默认收费通知",
     "feefines.defaultActionNotice": "默认操作通知",
@@ -618,17 +619,5 @@
     "settings.customFields": "Custom fields",
     "details.field.instance.type": "Instance (Material type)",
     "accounts.history.columns.instance": "Instance (Material type)",
-    "feefines.errors.reservedName": "Fee/fine type already exists as automated fee/fine",
-    "accounts.payment.error.select": "No Payment methods exist for Fee/fine owner",
-    "accounts.waive.error.select": "No Waive reasons exist",
-    "accounts.transfer.error.select": "No Transfer accounts exist for Fee/fine owner",
-    "settings.patronBlocks": "Patron blocks",
-    "settings.conditions": "Conditions",
-    "settings.block.borrowing": "Block borrowing",
-    "settings.block.renew": "Block renewals",
-    "settings.block.request": "Block request",
-    "settings.block.message": "Message to be displayed",
-    "settings.callout.message": "The patron block condition <strong>{name}</strong> has been successfully <strong>updated</strong>.",
-    "settings.error.noMessage": "Message to be displayed is a required field if one or more Blocked actions selected",
-    "settings.error.noCheckbox": "One or more Blocked actions must be selected for Message to be displayed to be used"
+    "feefines.errors.reservedName": "Fee/fine type already exists as automated fee/fine"
 }

@@ -2,6 +2,7 @@ import React from 'react';
 import {
   FormattedMessage,
   injectIntl,
+  intlShape,
 } from 'react-intl';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
@@ -112,7 +113,7 @@ EditContactInfo.propTypes = {
   accordionId: PropTypes.string.isRequired,
   addressTypes: PropTypes.arrayOf(PropTypes.object),
   preferredContactTypeId: PropTypes.string,
-  intl: PropTypes.object.isRequired,
+  intl: intlShape.isRequired,
 };
 
 export default injectIntl(EditContactInfo);

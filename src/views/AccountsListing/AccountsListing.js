@@ -2,6 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import {
   FormattedMessage,
+  intlShape,
   injectIntl,
 } from 'react-intl';
 import PropTypes from 'prop-types';
@@ -122,7 +123,7 @@ class AccountsHistory extends React.Component {
     loans: PropTypes.arrayOf(PropTypes.object),
     location: PropTypes.object,
     match: PropTypes.object,
-    intl: PropTypes.object.isRequired,
+    intl: intlShape.isRequired,
     num: PropTypes.number,
   };
 

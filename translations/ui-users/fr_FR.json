@@ -449,6 +449,7 @@
     "blocks.form.button.close": "Fermer la fenêtre \"suspension adhérent\"",
     "blocks.layer.newBlockTitle": "Nouvelle suspension",
     "accounts.totalOpenAccounts": "(Total: {amount} )",
+    "accounts.error.select": "En choisir un",
     "accounts.status.outstanding": "En suspens",
     "feefines.defaultChargeNotice": "Frais : annotation par défaut",
     "feefines.defaultActionNotice": "Action : annotation par défaut",
@@ -618,17 +619,5 @@
     "settings.customFields": "Champs personnalisés",
     "details.field.instance.type": "Instance (Type de matériel)",
     "accounts.history.columns.instance": "Instance (Type de matériel)",
-    "feefines.errors.reservedName": "Le type de frais / amende existe déjà en tant que frais / amende automatisé",
-    "accounts.payment.error.select": "No Payment methods exist for Fee/fine owner",
-    "accounts.waive.error.select": "No Waive reasons exist",
-    "accounts.transfer.error.select": "No Transfer accounts exist for Fee/fine owner",
-    "settings.patronBlocks": "Patron blocks",
-    "settings.conditions": "Conditions",
-    "settings.block.borrowing": "Block borrowing",
-    "settings.block.renew": "Block renewals",
-    "settings.block.request": "Block request",
-    "settings.block.message": "Message to be displayed",
-    "settings.callout.message": "The patron block condition <strong>{name}</strong> has been successfully <strong>updated</strong>.",
-    "settings.error.noMessage": "Message to be displayed is a required field if one or more Blocked actions selected",
-    "settings.error.noCheckbox": "One or more Blocked actions must be selected for Message to be displayed to be used"
+    "feefines.errors.reservedName": "Le type de frais / amende existe déjà en tant que frais / amende automatisé"
 }

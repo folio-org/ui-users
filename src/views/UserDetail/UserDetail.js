@@ -20,6 +20,7 @@ import {
   expandAllFunction,
   ExpandAllButton,
   Button,
+  Icon,
   Row,
   Col,
   Headline,
@@ -27,8 +28,7 @@ import {
 } from '@folio/stripes/components';
 
 import {
-  NotesSmartAccordion,
-  ViewCustomFieldsRecord,
+  NotesSmartAccordion
 } from '@folio/stripes/smart-components';
 
 import {
@@ -145,7 +145,6 @@ class UserDetail extends React.Component {
         permissionsSection: false,
         servicePointsSection: false,
         notesAccordion: false,
-        customFields: false,
       },
     };
   }
@@ -273,23 +272,6 @@ class UserDetail extends React.Component {
 
     return (
       <PaneMenu>
-        <IfPermission perm="ui-users.edit">
-          <FormattedMessage id="ui-users.crud.editUser">
-            {ariaLabel => (
-              <Button
-                id="clickable-edituser"
-                buttonStyle="primary"
-                style={{ visibility: !user ? 'hidden' : 'visible' }}
-                to={this.getEditLink()}
-                buttonRef={this.editButton}
-                ariaLabel={ariaLabel}
-                marginBottom0
-              >
-                <FormattedMessage id="ui-users.edit" />
-              </Button>
-            )}
-          </FormattedMessage>
-        </IfPermission>
         {
           tagsEnabled &&
           <FormattedMessage id="ui-users.showTags">
@@ -304,9 +286,40 @@ class UserDetail extends React.Component {
             )}
           </FormattedMessage>
         }
+        <IfPermission perm="ui-users.edit">
+          <FormattedMessage id="ui-users.crud.editUser">
+            {ariaLabel => (
+              <IconButton
+                icon="edit"
+                id="clickable-edituser"
+                style={{ visibility: !user ? 'hidden' : 'visible' }}
+                href={this.getEditLink()}
+                ref={this.editButton}
+                ariaLabel={ariaLabel}
+              />
+            )}
+          </FormattedMessage>
+        </IfPermission>
       </PaneMenu>
     );
   }
+
+  getActionMenu = ({ onToggle }) => {
+    return (
+      <IfPermission perm="ui-users.edit">
+        <Button
+          data-test-user-instance-edit-action
+          buttonStyle="dropdownItem"
+          onClick={onToggle}
+          to={this.getEditLink()}
+        >
+          <Icon icon="edit">
+            <FormattedMessage id="ui-users.edit" />
+          </Icon>
+        </Button>
+      </IfPermission>
+    );
+  };
 
   checkScope = () => true;
 
@@ -385,7 +398,6 @@ class UserDetail extends React.Component {
       'addressType',
       '',
     );
-    const customFields = user?.customFields || [];
 
     if (!user) {
       return (
@@ -413,6 +425,7 @@ class UserDetail extends React.Component {
             lastMenu={this.renderDetailMenu(user)}
             dismissible
             onClose={this.onClose}
+            actionMenu={this.getActionMenu}
           >
             <TitleManager record={getFullName(user)} />
             <Headline
@@ -474,14 +487,6 @@ class UserDetail extends React.Component {
                 addressTypes={addressTypes}
                 expanded={sections.contactInfoSection}
                 onToggle={this.handleSectionToggle}
-              />
-              <ViewCustomFieldsRecord
-                accordionId="customFields"
-                onToggle={this.handleSectionToggle}
-                expanded={sections.customFields}
-                backendModuleName="users"
-                entityType="user"
-                customFieldsValues={customFields}
               />
               <IfPermission perm="proxiesfor.collection.get">
                 <ProxyPermissions

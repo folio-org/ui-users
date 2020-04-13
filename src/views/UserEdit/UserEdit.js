@@ -209,7 +209,6 @@ class UserEdit extends React.Component {
     } = this.props;
 
     const user = cloneDeep(userFormData);
-    const prevUser = resources?.selUser?.records?.[0] ?? {};
 
     if (get(resources, 'requestPreferences.records[0].totalRecords')) {
       this.updateRequestPreferences(requestPreferences);
@@ -236,16 +235,8 @@ class UserEdit extends React.Component {
 
     const data = omit(user, ['creds', 'proxies', 'sponsors', 'permissions', 'servicePoints', 'preferredServicePoint']);
     const today = moment().endOf('day');
-    const curActive = user.active;
-    const prevActive = prevUser.active;
 
-    // if active has been changed manually on the form
-    // or if the expirationDate has been removed
-    if (curActive !== prevActive || !user.expirationDate) {
-      data.active = curActive;
-    } else {
-      data.active = (moment(user.expirationDate).endOf('day').isSameOrAfter(today));
-    }
+    data.active = (moment(user.expirationDate).endOf('day').isSameOrAfter(today));
 
     mutator.selUser.PUT(data).then(() => {
       history.push({
@@ -255,14 +246,13 @@ class UserEdit extends React.Component {
     });
   }
 
-  async updatePermissions(perms) {
+  updatePermissions(perms) {
     const mutator = this.props.mutator.permissions;
     const prevPerms = (this.props.resources.permissions || {}).records || [];
     const removedPerms = differenceBy(prevPerms, perms, 'id');
     const addedPerms = differenceBy(perms, prevPerms, 'id');
-
-    await eachPromise(removedPerms, mutator.DELETE);
-    await eachPromise(addedPerms, mutator.POST);
+    eachPromise(addedPerms, mutator.POST);
+    eachPromise(removedPerms, mutator.DELETE);
   }
 
   render() {

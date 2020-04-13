@@ -7,6 +7,7 @@ import { expect } from 'chai';
 
 import setupApplication from '../helpers/setup-application';
 import InstanceViewPage from '../interactors/user-view-page';
+import UserFormPage from '../interactors/user-form-page';
 
 describe('User view', () => {
   setupApplication();
@@ -32,6 +33,22 @@ describe('User view', () => {
       expect(InstanceViewPage.title).to.equal(user.username);
     });
 
+    describe('pane header dropdown menu', () => {
+      beforeEach(async () => {
+        await InstanceViewPage.headerDropdown.click();
+      });
+
+      describe('clicking on edit', () => {
+        beforeEach(async () => {
+          await InstanceViewPage.headerDropdownMenu.clickEdit();
+        });
+
+        it('should redirect to instance edit page', () => {
+          expect(UserFormPage.$root).to.exist;
+        });
+      });
+    });
+
     describe('request preferences section', () => {
       it('should display hold shelf value', () => {
         expect(InstanceViewPage.holdShelf).to.equal('Hold shelf - Yes');
@@ -45,32 +62,6 @@ describe('User view', () => {
       it('should display default delivery address', () => {
         expect(InstanceViewPage.defaultDeliveryAddress).to.equal('Claim');
       });
-    });
-
-    describe('when custom fields are in stock', () => {
-      it('should display custom fields accordion', () => {
-        expect(InstanceViewPage.customFieldsSection.isPresent).to.be.true;
-      });
-
-      it('should display correct accordion title', () => {
-        expect(InstanceViewPage.customFieldsSection.label).to.equal('Custom Fields Test');
-      });
-    });
-  });
-
-  describe('when custom fields are not in stock', () => {
-    beforeEach(async function () {
-      user = this.server.create('user');
-      this.server.get('/custom-fields', {
-        customFields: [],
-      });
-
-      this.visit(`/users/view/${user.id}`);
-      await InstanceViewPage.whenLoaded();
-    });
-
-    it('should not display custom fields accordion', () => {
-      expect(InstanceViewPage.customFieldsSection.isPresent).to.be.false;
     });
   });
 });

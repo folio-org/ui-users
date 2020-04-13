@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import {
   FormattedMessage,
   injectIntl,
+  intlShape,
 } from 'react-intl';
 import moment from 'moment';
 
@@ -42,7 +43,7 @@ class PatronBlock extends React.Component {
     }),
     history: PropTypes.object,
     match: PropTypes.object,
-    intl: PropTypes.object.isRequired,
+    intl: intlShape.isRequired,
     onToggle: PropTypes.func,
     expanded: PropTypes.bool,
     accordionId: PropTypes.string,

@@ -9,22 +9,22 @@ import CommentRequiredForm from './CommentRequiredForm';
 
 class CommentRequiredSettings extends React.Component {
   static manifest = Object.freeze({
-    record: {},
+    recordId: {},
     commentRequired: {
       type: 'okapi',
       records: 'comments',
       path: 'comments',
       accumulate: 'true',
       PUT: {
-        path: 'comments/%{record.id}',
+        path: 'comments/%{recordId}',
       },
     },
   });
 
   static propTypes = {
     mutator: PropTypes.shape({
-      record: PropTypes.shape({
-        update: PropTypes.func,
+      recordId: PropTypes.shape({
+        replace: PropTypes.func,
       }),
       commentRequired: PropTypes.shape({
         POST: PropTypes.func,
@@ -61,7 +61,7 @@ class CommentRequiredSettings extends React.Component {
     const {
       mutator: {
         commentRequired,
-        record,
+        recordId,
       }
     } = this.props;
 
@@ -71,7 +71,7 @@ class CommentRequiredSettings extends React.Component {
         id: records[0].id,
         ...values
       };
-      record.update({ id: records[0].id });
+      recordId.replace(records[0].id);
       return body;
     }).then((b) => {
       commentRequired.PUT(b);

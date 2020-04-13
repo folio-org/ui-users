@@ -3,13 +3,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   injectIntl,
+  intlShape,
   FormattedMessage,
 } from 'react-intl';
 import { Field } from 'redux-form';
 import { Select } from '@folio/stripes/components';
 import { ControlledVocab } from '@folio/stripes/smart-components';
-import { stripesConnect, withStripes } from '@folio/stripes/core';
-
 
 import { validate } from '../components/util';
 import {
@@ -67,7 +66,7 @@ class FeeFineSettings extends React.Component {
         PUT: PropTypes.func.isRequired,
       }),
     }).isRequired,
-    intl: PropTypes.object.isRequired,
+    intl: intlShape.isRequired,
   };
 
   constructor(props) {
@@ -196,8 +195,8 @@ class FeeFineSettings extends React.Component {
     const { owners } = this.state;
 
     items.forEach(i => {
-      const owner = owners.find(o => o.id === i.ownerId);
-      if (owner && !filterOwners.some(o => o.id === owner.id) && owner.id !== (this.shared || {}).id) {
+      const owner = owners.find(o => o.id === i.ownerId) || {};
+      if (!filterOwners.some(o => o.id === owner.id) && owner.id !== (this.shared || {}).id) {
         filterOwners.push(owner);
       }
     });
@@ -257,10 +256,6 @@ class FeeFineSettings extends React.Component {
       return item;
     };
 
-    const preUpdateHook = (item) => {
-      return _.pickBy(item, field => field !== '');
-    };
-
     const owner = owners.find(o => o.id === ownerId) || {};
 
     const rowFilter =
@@ -295,7 +290,6 @@ class FeeFineSettings extends React.Component {
         nameKey="feefine"
         objectLabel=""
         preCreateHook={preCreateHook}
-        preUpdateHook={preUpdateHook}
         records="feefines"
         rowFilter={rowFilter}
         rowFilterFunction={(item) => (item.ownerId === ownerId && !item.automatic)}
@@ -307,4 +301,4 @@ class FeeFineSettings extends React.Component {
   }
 }
 
-export default injectIntl(withStripes(stripesConnect(FeeFineSettings)));
+export default injectIntl(FeeFineSettings);

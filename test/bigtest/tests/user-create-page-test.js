@@ -43,6 +43,60 @@ describe('User Create Page', () => {
         });
       });
 
+      describe('Extended information', () => {
+        it('should not display "username" field as required', () => {
+          expect(UserFormPage.isUsernameFieldRequired).to.be.false;
+        });
+
+        it('should not display "password" field as required', () => {
+          expect(UserFormPage.isPasswordFieldRequired).to.be.false;
+        });
+
+        describe('filling "username" field', () => {
+          beforeEach(async function () {
+            await UserFormPage.usernameField.fillAndBlur('test');
+          });
+
+          it('should mark "username" and "password" fields as required', () => {
+            expect(UserFormPage.isUsernameFieldRequired).to.be.true;
+            expect(UserFormPage.isPasswordFieldRequired).to.be.true;
+          });
+
+          describe('clearing "username" field', () => {
+            beforeEach(async function () {
+              await UserFormPage.usernameField.fillAndBlur('');
+            });
+
+            it('should unmark "username" and "password" fields as required', () => {
+              expect(UserFormPage.isUsernameFieldRequired).to.be.false;
+              expect(UserFormPage.isPasswordFieldRequired).to.be.false;
+            });
+          });
+        });
+
+        describe('filling "password" field', () => {
+          beforeEach(async function () {
+            await UserFormPage.passwordField.fillAndBlur('test');
+          });
+
+          it('should mark "username" and "password" fields as required', () => {
+            expect(UserFormPage.isUsernameFieldRequired).to.be.true;
+            expect(UserFormPage.isPasswordFieldRequired).to.be.true;
+          });
+
+          describe('clearing "username" field', () => {
+            beforeEach(async function () {
+              await UserFormPage.passwordField.fillAndBlur('');
+            });
+
+            it('should unmark "username" and "password" fields as required', () => {
+              expect(UserFormPage.isUsernameFieldRequired).to.be.false;
+              expect(UserFormPage.isPasswordFieldRequired).to.be.false;
+            });
+          });
+        });
+      });
+
       describe('request preferences', () => {
         it('should display "hold shelf" checkbox as checked', () => {
           expect(UserFormPage.holdShelfCheckboxIsChecked).to.be.true;
@@ -133,16 +187,6 @@ describe('User Create Page', () => {
               expect(UserFormPage.defaultAddressTypeValidationMessage).to.equal('Please, add at least one address inside "Addresses" section');
             });
           });
-        });
-      });
-
-      describe('fill username', () => {
-        beforeEach(async () => {
-          await UserFormPage.usernameField.fillAndBlur('username');
-        });
-
-        it('should display reset password link', () => {
-          expect(UserFormPage.resetPasswordLink.isPresent).to.be.false;
         });
       });
     });

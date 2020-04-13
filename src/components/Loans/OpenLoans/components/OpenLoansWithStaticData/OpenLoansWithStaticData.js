@@ -6,6 +6,7 @@ import {
 import PropTypes from 'prop-types';
 import {
   injectIntl,
+  intlShape,
 } from 'react-intl';
 
 import { stripesShape } from '@folio/stripes/core';
@@ -17,7 +18,7 @@ import getListDataFormatter from '../../helpers/getListDataFormatter';
 
 class OpenLoansWithStaticData extends React.Component {
   static propTypes = {
-    intl: PropTypes.object.isRequired,
+    intl: intlShape.isRequired,
     stripes: stripesShape.isRequired,
     user: PropTypes.shape({
       id: PropTypes.string.isRequired,

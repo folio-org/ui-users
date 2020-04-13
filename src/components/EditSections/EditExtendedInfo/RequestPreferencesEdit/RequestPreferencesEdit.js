@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import {
   Field,
   formValueSelector,
@@ -37,8 +37,8 @@ class RequestPreferencesEdit extends Component {
     })),
     addressTypes: addressTypesShape,
     setFieldValue: PropTypes.func.isRequired,
+    intl: intlShape,
     defaultDeliveryAddressTypeId: nullOrStringIsRequiredTypeValidator,
-    intl: PropTypes.object.isRequired,
   }
 
   componentDidUpdate(prevProps) {

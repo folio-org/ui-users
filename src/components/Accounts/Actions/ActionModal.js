@@ -41,7 +41,7 @@ const validate = (values, props) => {
     errors.amount = <FormattedMessage id={`ui-users.accounts.${action}.error.amount`} />;
   }
   if (!values.method) {
-    errors.method = <FormattedMessage id={`ui-users.accounts.${action}.error.select`} />;
+    errors.method = <FormattedMessage id="ui-users.accounts.error.select" />;
   }
   if (commentRequired && !values.comment) {
     errors.comment = <FormattedMessage id="ui-users.accounts.error.comment" />;

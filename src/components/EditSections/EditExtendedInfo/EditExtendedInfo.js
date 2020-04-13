@@ -15,6 +15,7 @@ import {
 
 import { addressTypesShape } from '../../../shapes';
 
+import PasswordControl from './PasswordControl';
 import CreateResetPasswordControl from './CreateResetPasswordControl';
 import RequestPreferencesEdit from './RequestPreferencesEdit';
 
@@ -26,9 +27,12 @@ class EditExtendedInfo extends Component {
     userEmail: PropTypes.string.isRequired,
     accordionId: PropTypes.string.isRequired,
     userFirstName: PropTypes.string.isRequired,
-    username: PropTypes.string.isRequired,
     onToggle: PropTypes.func.isRequired,
   };
+
+  state = { isCredentialFieldRequired: false };
+
+  toggleCredentialFieldRequired = (_, value) => this.setState({ isCredentialFieldRequired: !!value });
 
   buildAccordionHeader = () => {
     return (
@@ -49,9 +53,10 @@ class EditExtendedInfo extends Component {
       userId,
       userFirstName,
       userEmail,
-      username,
       addressTypes,
     } = this.props;
+
+    const { isCredentialFieldRequired } = this.state;
 
     const accordionHeader = this.buildAccordionHeader();
     const isEditForm = !!userId;
@@ -123,21 +128,27 @@ class EditExtendedInfo extends Component {
               id="adduser_username"
               component={TextField}
               fullWidth
+              required={isCredentialFieldRequired}
               validStylesEnabled
+              onChange={this.toggleCredentialFieldRequired}
             />
           </Col>
-          {isEditForm && username &&
-            (
-              <CreateResetPasswordControl
-                userId={userId}
-                email={userEmail}
-                name={userFirstName}
-                username={username}
-              />
-            )
+          {
+            isEditForm
+              ? (
+                <CreateResetPasswordControl
+                  userId={userId}
+                  email={userEmail}
+                  name={userFirstName}
+                />
+              )
+              : (
+                <PasswordControl
+                  isRequired={isCredentialFieldRequired}
+                  toggleRequired={this.toggleCredentialFieldRequired}
+                />
+              )
           }
-        </Row>
-        <Row>
           <RequestPreferencesEdit addressTypes={addressTypes} />
         </Row>
         <br />
