@@ -1,7 +1,7 @@
 @import "@folio/stripes-components/lib/variables";
 
 .firstMenuItems {
-  margin-left: calc(2*var(--gutter-static-two-thirds));
+  margin-left: calc(var(--gutter-static-two-thirds) * 2);
 
   &:last-of-type: {
     margin-left: var(--gutter-static-two-thirds);
