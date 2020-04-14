@@ -6,9 +6,8 @@ import {
   Row,
   Col,
   Select,
+  Headline,
 } from '@folio/stripes/components';
-
-import css from './FeeFinesTable.css';
 
 const Owners = ({ dataOptions, onChange, filterShared }) => {
   const options = [];
@@ -43,9 +42,9 @@ const Owners = ({ dataOptions, onChange, filterShared }) => {
     <div>
       <Row>
         <Col xs>
-          <span className={css.singularMesage}>
+          <Headline size="large" weight="medium">
             <FormattedMessage id="ui-users.owners.singular" />
-          </span>
+          </Headline>
         </Col>
       </Row>
       <Row>

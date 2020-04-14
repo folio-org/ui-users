@@ -182,7 +182,14 @@ class AccountsListingContainer extends React.Component {
     const user = this.getUser();
     const loans = resources.loans ? resources.loans.records : [];
     const patronGroup = this.getPatronGroup();
-    if (!user) return (<LoadingView defaultWidth="100%" paneTitle="Loading accounts" />);
+    if (!user) {
+      return (
+        <LoadingView
+          defaultWidth="100%"
+          paneTitle={<FormattedMessage id="accounts.loading" />}
+        />
+      );
+    }
     return (
       <AccountsListing user={user} loans={loans} patronGroup={patronGroup} {...this.props} />
     );

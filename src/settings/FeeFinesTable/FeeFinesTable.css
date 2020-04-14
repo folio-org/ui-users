@@ -6,11 +6,6 @@
   color: var(--color-icon);
 }
 
-.singularMessage {
-  font-size: var(--font-size-large);
-  font-weight: var(--text-weight-medium);
-}
-
 .ownerIdField {
   margin-left: var(--gutter-static-two-thirds);
   width: 120;
