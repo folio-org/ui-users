@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import Conditions from '../Conditions';
+import Conditions from './Conditions/Conditions';
 
-class ChargedOutConditions extends Component {
+class RecallOverdueByConditions extends Component {
   static propTypes = {
     id: PropTypes.string,
     name: PropTypes.string,
@@ -14,9 +14,9 @@ class ChargedOutConditions extends Component {
   };
 
   static defaultProps = {
-    id: '3d7c52dc-c732-4223-8bf8-e5917801386f',
-    name: 'Maximum number of items charged out',
-    blockBorrowing: false,
+    id: '08530ac4-07f2-48e6-9dda-a97bc2bf7053',
+    name: 'Recall overdue by maximum number of days',
+    blockBorrowing: true,
     blockRenewals: false,
     blockRequests: false,
     message: '',
@@ -45,4 +45,4 @@ class ChargedOutConditions extends Component {
   }
 }
 
-export default ChargedOutConditions;
+export default RecallOverdueByConditions;
