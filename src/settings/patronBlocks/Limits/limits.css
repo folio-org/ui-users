@@ -1,0 +1,13 @@
+.limitsForm {
+  height: 100%;
+}
+
+.limitsWrapperHolder {
+  display: flex;
+  flex: 0 0 30%;
+  overflow: hidden;
+}
+
+.limitsWrapper {
+  width: 100%;
+}

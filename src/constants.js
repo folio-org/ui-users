@@ -28,3 +28,5 @@ export const statusFilter = [
   { label: 'ui-users.filters.status.active', value: 'active' },
   { label: 'ui-users.filters.status.inactive', value: 'inactive' }
 ];
+
+export const feeFineBalanceId = 'cf7a0d5f-a327-4ca1-aa9e-dc55ec006b8a';

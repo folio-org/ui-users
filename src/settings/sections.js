@@ -106,7 +106,7 @@ const settingsPatronBlocks = [
     route: 'limits',
     label: <FormattedMessage id="ui-users.settings.limits" />,
     component: LimitsSettings,
-    perm: '',
+    perm: 'ui-users.settings.limits',
   }
 ];
 

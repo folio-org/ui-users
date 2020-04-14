@@ -2,51 +2,90 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Field } from 'react-final-form';
+import { toNumber, map } from 'lodash';
 
 import {
   Row,
   Col,
-  Checkbox,
   Pane,
   PaneFooter,
   Button,
+  Label,
   TextField,
 } from '@folio/stripes/components';
 import stripesFinalForm from '@folio/stripes/final-form';
 
+import { feeFineBalanceId } from '../../../constants';
+import css from './limits.css';
+
+function limitsValidation(value) {
+  const numberValue = toNumber(value);
+
+  if (numberValue < 0.01 || numberValue > 9999.99) {
+    return <FormattedMessage id="ui-users.settings.limits.validation.error" />;
+  }
+
+  return null;
+}
+
+function feeFineBalanceValidation(value) {
+  const numberValue = toNumber(value);
+
+  if (numberValue < 0.01 || numberValue > 9999.99) {
+    return <FormattedMessage id="ui-users.settings.limits.feeFine.error" />;
+  }
+
+  return null;
+}
 
 class LimitsForm extends Component {
+  static propTypes = {
+    patronGroup: PropTypes.string.isRequired,
+    patronBlockConditions: PropTypes.arrayOf(
+      PropTypes.object
+    ),
+    pristine: PropTypes.bool.isRequired,
+    submitting: PropTypes.bool.isRequired,
+    handleSubmit: PropTypes.func.isRequired,
+  }
 
   static defaultProps = {
     patronBlockConditions: [],
   }
 
   renderConditions = () => {
-    const {
-      patronBlockConditions,
-    } = this.props;
+    const { patronBlockConditions } = this.props;
 
     return (
-      patronBlockConditions.map((condition) => (
-        <>
-          <Row>
-            <Col xs={12}>
-              <b>{condition}</b>
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={3}>
-              <Field
-                data-test-limit-field
-                id={condition}
-                name={condition}
-                type="text"
-                component={TextField}
-              />
-            </Col>
-          </Row>
-        </>
-      ))
+      map(patronBlockConditions, ({ name: condition, id }) => {
+        return (
+          <div key={id}>
+            <Row>
+              <Col xs={12}>
+                <Label
+                  data-test-limit-label
+                  tagName="label"
+                  htmlFor={id}
+                >
+                  <b>{condition}</b>
+                </Label>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={4}>
+                <Field
+                  data-test-limit-field
+                  id={id}
+                  component={TextField}
+                  type="number"
+                  name={id}
+                  validate={id === feeFineBalanceId ? feeFineBalanceValidation : limitsValidation}
+                />
+              </Col>
+            </Row>
+          </div>
+        );
+      })
     );
   }
 
@@ -76,21 +115,30 @@ class LimitsForm extends Component {
 
   render() {
     const {
+      patronGroup,
       handleSubmit,
     } = this.props;
 
     return (
       <form
+        data-test-limits-form
+        className={css.limitsForm}
         onSubmit={handleSubmit}
       >
-        { this.renderConditions() }
+        <Pane
+          defaultWidth="fill"
+          fluidContentWidth
+          paneTitle={patronGroup}
+          footer={this.renderFooter()}
+        >
+          {this.renderConditions()}
+        </Pane>
       </form>
     );
   }
 }
 
 export default stripesFinalForm({
-  //navigationCheck: true,
-  //validateOnBlur: true,
-  //validate: showValidationErrors,
+  navigationCheck: true,
+  validateOnBlur: true,
 })(LimitsForm);
