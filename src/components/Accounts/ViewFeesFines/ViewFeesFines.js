@@ -14,7 +14,6 @@ import {
 
 import {
   FormattedMessage,
-  intlShape,
   FormattedTime,
   FormattedDate,
 } from 'react-intl';
@@ -50,7 +49,7 @@ class ViewFeesFines extends React.Component {
     history: PropTypes.object,
     user: PropTypes.object,
     visibleColumns: PropTypes.arrayOf(PropTypes.string),
-    intl: intlShape.isRequired,
+    intl: PropTypes.object.isRequired,
     selectedAccounts: PropTypes.arrayOf(PropTypes.object),
   };
 

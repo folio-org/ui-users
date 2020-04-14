@@ -10,7 +10,6 @@ import {
 } from '@folio/stripes/components';
 import {
   FormattedMessage,
-  intlShape,
   injectIntl
 } from 'react-intl';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
@@ -51,7 +50,7 @@ class ChargeFeeFine extends React.Component {
     okapi: PropTypes.object,
     selectedLoan: PropTypes.object,
     user: PropTypes.object,
-    intl: intlShape.isRequired,
+    intl: PropTypes.object.isRequired,
     history: PropTypes.object,
     location: PropTypes.object,
     match: PropTypes.object,

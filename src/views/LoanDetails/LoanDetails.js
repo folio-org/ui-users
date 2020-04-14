@@ -3,7 +3,6 @@ import {
   FormattedMessage,
   FormattedTime,
   injectIntl,
-  intlShape,
 } from 'react-intl';
 import { compose } from 'redux';
 import Link from 'react-router-dom/Link';
@@ -81,7 +80,7 @@ class LoanDetails extends React.Component {
     declareLost: PropTypes.func,
     claimReturned: PropTypes.func,
     patronBlocks: PropTypes.arrayOf(PropTypes.object),
-    intl: intlShape.isRequired,
+    intl: PropTypes.object.isRequired,
     match: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
