@@ -10,6 +10,7 @@
 * Fix bug preventing closed loans list from loading properly when an item has been deleted. Fixes UIU-1411.
 * Fix import path to stripes util. Fixes UIU-1515.
 * Use localized permission names. Refs UIU-488.
+* Create Patron Blocks Limits Table in Settings -> Users. Refs UIU-1167.
 
 ## [3.0.0](https://github.com/folio-org/ui-users/tree/v3.0.0) (2020-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.26.0...v3.0.0)
