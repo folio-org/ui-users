@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Field } from 'react-final-form';
-import { toNumber, map } from 'lodash';
+import {
+  toNumber,
+  map,
+} from 'lodash';
 
 import {
   Row,
@@ -16,26 +19,27 @@ import {
 import stripesFinalForm from '@folio/stripes/final-form';
 
 import { feeFineBalanceId } from '../../../constants';
+
 import css from './limits.css';
 
-function limitsValidation(value) {
+function validation(value, type) {
   const numberValue = toNumber(value);
+  const min = 0.01;
+  const max = 9999.99;
 
-  if (numberValue < 0.01 || numberValue > 9999.99) {
-    return <FormattedMessage id="ui-users.settings.limits.validation.error" />;
+  if (numberValue < min || numberValue > max) {
+    return <FormattedMessage id={`ui-users.settings.limits.${type}.error`} />;
   }
 
   return null;
 }
 
 function feeFineBalanceValidation(value) {
-  const numberValue = toNumber(value);
+  return validation(value, 'feeFine');
+}
 
-  if (numberValue < 0.01 || numberValue > 9999.99) {
-    return <FormattedMessage id="ui-users.settings.limits.feeFine.error" />;
-  }
-
-  return null;
+function limitsValidation(value) {
+  return validation(value, 'validation');
 }
 
 class LimitsForm extends Component {
@@ -141,4 +145,5 @@ class LimitsForm extends Component {
 export default stripesFinalForm({
   navigationCheck: true,
   validateOnBlur: true,
+  validate: limitsValidation,
 })(LimitsForm);

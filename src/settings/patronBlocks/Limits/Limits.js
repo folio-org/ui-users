@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { forIn } from 'lodash';
+import {
+  forIn,
+  isNumber,
+} from 'lodash';
 
 import { stripesConnect } from '@folio/stripes/core';
 import { Callout } from '@folio/stripes/components';
@@ -50,13 +53,13 @@ class Limits extends Component {
     patronGroup: PropTypes.string.isRequired,
   }
 
-
   constructor(props) {
     super(props);
 
     this.state = {
       currentPatronGroupLimits: []
     };
+    this.callout = React.createRef();
   }
 
   componentDidMount() {
@@ -79,11 +82,21 @@ class Limits extends Component {
   }
 
   normializeValue = (value) => {
-    if (typeof (value) !== 'number' || value === 0) {
+    if (!isNumber(value) || value === 0) {
       return null;
     }
 
     return value;
+  }
+
+  findPatronGroupLimit = (blockConditionId, currentPatronGroupId) => {
+    const { currentPatronGroupLimits } = this.state;
+
+    const foundLimit = currentPatronGroupLimits.find(({ patronGroupId, conditionId }) => {
+      return conditionId === blockConditionId && patronGroupId === currentPatronGroupId;
+    });
+
+    return foundLimit;
   }
 
   getInitialValues = () => {
@@ -91,16 +104,13 @@ class Limits extends Component {
       patronGroupId: currentPatronGroupId,
       patronBlockConditions
     } = this.props;
-    const { currentPatronGroupLimits } = this.state;
     const initialLimits = {};
 
     patronBlockConditions.forEach(({ id }) => {
-      const values = currentPatronGroupLimits.filter(({ patronGroupId, conditionId }) => {
-        return conditionId === id && patronGroupId === currentPatronGroupId;
-      })[0];
+      const values = this.findPatronGroupLimit(id, currentPatronGroupId);
 
       if (values?.conditionId) {
-        initialLimits[values?.conditionId] = values?.value;
+        initialLimits[values.conditionId] = values.value;
       }
     });
 
@@ -112,14 +122,11 @@ class Limits extends Component {
       mutator,
       patronGroupId: currentPatronGroupId,
     } = this.props;
-    const { currentPatronGroupLimits } = this.state;
     const promises = [];
     let limitPromise;
 
     forIn(value, (limitValue, blockConditionId) => {
-      const foundLimit = currentPatronGroupLimits.find(({ patronGroupId, conditionId }) => {
-        return blockConditionId === conditionId && currentPatronGroupId === patronGroupId;
-      });
+      const foundLimit = this.findPatronGroupLimit(blockConditionId, currentPatronGroupId);
 
       if (foundLimit?.value === limitValue) return;
 
@@ -158,12 +165,12 @@ class Limits extends Component {
 
     if (this.callout) {
       Promise.all(limits)
-        .then(() => this.callout.sendCallout({
+        .then(() => this.callout.current.sendCallout({
           type: 'success',
           message: showSuccessMessage
         }))
         .catch(() => {
-          this.callout.sendCallout({
+          this.callout.current.sendCallout({
             type: 'error',
             message: showErrorMessage
           });
@@ -193,7 +200,7 @@ class Limits extends Component {
             onSubmit={this.onSubmit}
           />
 
-          <Callout ref={(ref) => { this.callout = ref; }} />
+          <Callout ref={this.callout} />
         </div>
       </section>
     );

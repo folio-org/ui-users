@@ -4,7 +4,10 @@ import {
   FormattedMessage,
   injectIntl,
 } from 'react-intl';
-import { isEmpty } from 'lodash';
+import {
+  isEmpty,
+  capitalize,
+} from 'lodash';
 
 import {
   stripesConnect,
@@ -19,11 +22,11 @@ class LimitsSettings extends Component {
     query: {},
     groups: {
       type: 'okapi',
+      records: 'usergroups',
       path: 'groups',
       params: {
         query: 'cql.allRecords=1 sortby group',
       },
-      records: 'usergroups',
     },
     patronBlockCondition: {
       type: 'okapi',
@@ -64,10 +67,6 @@ class LimitsSettings extends Component {
     }
   }
 
-  capitilizeLabel = (label) => {
-    return label.charAt(0).toUpperCase() + label.slice(1);
-  }
-
   getPatronBlockConditions = () => {
     return this.props?.resources?.patronBlockCondition?.records ?? [];
   }
@@ -76,7 +75,7 @@ class LimitsSettings extends Component {
     return this.props?.resources?.patronBlockLimits?.records ?? [];
   }
 
-  getPatronGroups = () => {
+  getPatronGroupsPages = () => {
     const {
       resources: {
         groups: {
@@ -91,7 +90,7 @@ class LimitsSettings extends Component {
         id,
         group: patronGroup,
       } = group;
-      const capitilizedPatronGroup = this.capitilizeLabel(patronGroup);
+      const capitilizedPatronGroup = capitalize(patronGroup);
       const renderLimits = () => {
         return (
           <Limits
@@ -128,7 +127,7 @@ class LimitsSettings extends Component {
         {...this.props}
         navPaneWidth="fill"
         paneTitle={<FormattedMessage id="ui-users.settings.limits" />}
-        pages={this.getPatronGroups()}
+        pages={this.getPatronGroupsPages()}
       />
     );
   }

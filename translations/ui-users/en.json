@@ -732,6 +732,7 @@
   "permission.settings.addresstypes": "Settings (Users): Can create, edit and remove address types",
   "permission.settings.comments": "Settings (Users): Can create, edit and remove comments",
   "permission.settings.conditions": "Settings (Users): Can create, edit and remove patron blocks conditions",
+  "permission.settings.limits": "Settings (Users): Can create, edit and remove patron blocks limits",
   "permission.settings.customfields.all": "Settings (Users): Can create, edit, view and delete custom fields",
   "permission.settings.customfields.edit": "Settings (Users): Can create, edit, and view custom fields",
   "permission.settings.customfields.view": "Settings (Users): Can view custom fields",
