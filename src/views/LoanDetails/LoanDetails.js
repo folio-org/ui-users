@@ -303,7 +303,7 @@ class LoanDetails extends React.Component {
         <LoadingView
           id="pane-loandetails"
           defaultWidth="100%"
-          paneTitle="Loan action history"
+          paneTitle={<FormattedMessage id="ui-users.loans.history" />}
         />
       );
     }

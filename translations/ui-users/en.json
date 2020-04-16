@@ -77,6 +77,7 @@
   "loans.confirmClaimReturned": "Confirm claim returned",
   "loans.newFeeFine": "New fee/fine",
   "loans.feeFineDetails": "Fee/fine details",
+  "loans.history": "Loan action history",
 
   "settings.label": "Users",
   "settings.general": "General",

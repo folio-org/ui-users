@@ -131,7 +131,7 @@ class AccountDetailsContainer extends React.Component {
       return (
         <LoadingView
           defaultWidth="100%"
-          paneTitle={<FormattedMessage id="accounts.loading" />}
+          paneTitle={<FormattedMessage id="ui-users.accounts.loading" />}
         />
       );
     }

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import uuid from 'uuid';
+import { FormattedMessage } from 'react-intl';
 
 import {
   cloneDeep,
@@ -275,7 +276,16 @@ class UserEdit extends React.Component {
     } = this.props;
 
     if (!resourcesLoaded(resources, ['uniquenessValidator'])) {
-      return <LoadingView data-test-form-page paneTitle={params.id ? 'Edit User' : 'Create User'} defaultWidth="100%" />;
+      return (
+        <LoadingView
+          data-test-form-page
+          paneTitle={params.id ?
+            <FormattedMessage id="ui-users.crud.editUser" /> :
+            <FormattedMessage id="ui-users.crud.createUser" />
+          }
+          defaultWidth="100%"
+        />
+      );
     }
 
     // data is information that the form needs, mostly to populate options lists
