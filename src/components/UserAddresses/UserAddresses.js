@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import {
   FormattedMessage,
   injectIntl,
-  intlShape,
 } from 'react-intl';
 import { AddressList } from '@folio/stripes/smart-components';
 import { Select } from '@folio/stripes/components';
@@ -17,7 +16,7 @@ class UserAddresses extends React.Component {
     onUpdate: PropTypes.func,
     expanded: PropTypes.bool,
     editable: PropTypes.bool,
-    intl: intlShape.isRequired,
+    intl: PropTypes.object.isRequired,
   };
 
   constructor(props) {

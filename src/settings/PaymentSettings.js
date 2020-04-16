@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   injectIntl,
-  intlShape,
 } from 'react-intl';
 import { Field } from 'redux-form';
 import { Select } from '@folio/stripes/components';
@@ -26,7 +25,7 @@ class PaymentSettings extends React.Component {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
     }).isRequired,
-    intl: intlShape.isRequired,
+    intl: PropTypes.object.isRequired,
     mutator: PropTypes.shape({
       owners: PropTypes.shape({
         GET: PropTypes.func.isRequired,

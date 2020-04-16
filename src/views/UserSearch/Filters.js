@@ -24,6 +24,9 @@ export default class Filters extends React.Component {
     activeFilters: PropTypes.object,
     resources: PropTypes.object.isRequired,
     onChangeHandlers: PropTypes.object.isRequired,
+    resultOffset: PropTypes.shape({
+      replace: PropTypes.func.isRequired,
+    }),
   };
 
   static defaultProps = {
@@ -48,7 +51,12 @@ export default class Filters extends React.Component {
     const {
       activeFilters,
       onChangeHandlers,
+      resultOffset,
     } = this.props;
+
+    if (resultOffset) {
+      resultOffset.replace(0);
+    }
 
     onChangeHandlers.state({
       ...activeFilters,
