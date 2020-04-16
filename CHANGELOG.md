@@ -14,6 +14,7 @@
 * Add `Load more` button at the end of the result list. Fixes UIU-1532.
 * Increase limit of patron fee/fines, owners and patron groups. Refs UIU-1585.
 * Build filter string by using ids instead of names. Fixes UIU-1596.
+* Add UI to mark claimed returned items as missing. Refs UIU-1216.
 
 ## [3.0.0](https://github.com/folio-org/ui-users/tree/v3.0.0) (2020-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.26.0...v3.0.0)

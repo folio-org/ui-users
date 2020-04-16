@@ -14,6 +14,7 @@ import CalloutInteractor from '@folio/stripes-components/lib/Callout/tests/inter
 
 import DeclareLostDialog from './declare-lost-dialog';
 import ClaimReturnedDialog from './claim-returned-dialog';
+import MarkAsMissingDialog from './mark-as-missing-dialog';
 
 @interactor class BulkOverrideModal {
   static defaultScope = '#bulk-override-modal';
@@ -56,12 +57,14 @@ import ClaimReturnedDialog from './claim-returned-dialog';
   actionDropdownChangeDueDateButton = new Interactor('[data-test-dropdown-content-change-due-date-button]');
   actionDropdownDeclareLostButton = new Interactor('[data-test-dropdown-content-declare-lost-button]');
   actionDropdownClaimReturnedButton = new Interactor('[data-test-dropdown-content-claim-returned-button]');
+  actionDropdownMarkAsMissingButton = new Interactor('[data-test-dropdown-content-mark-as-missing-button]');
   requestsCount = count('[data-test-list-requests]');
   bulkRenewalModal = new BulkRenewalModal();
   bulkOverrideModal = new BulkOverrideModal();
   changeDueDateOverlay = new ChangeDueDateOverlay();
   declareLostDialog = new DeclareLostDialog();
   claimReturnedDialog = new ClaimReturnedDialog();
+  markAsMissingDialog = new MarkAsMissingDialog();
   dueDateCalendarCellButton = new ButtonInteractor(`[data-test-date="${moment().format('MM/DD/YYYY')}"]`);
   rowButtons = collection('[data-test-open-loans-list] button[role="row"]', ButtonInteractor);
 

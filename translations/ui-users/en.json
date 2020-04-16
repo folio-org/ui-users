@@ -37,6 +37,7 @@
   "data.loanActionMap.checkedOutThroughOverride": "Checked out through override",
   "data.loanActionMap.declaredLost": "Declared lost",
   "data.loanActionMap.claimedReturned": "Claimed returned",
+  "data.loanActionMap.markedAsMissing": "Marked as missing",
 
   "action": "Action",
   "dueDate": "Due date",
@@ -75,6 +76,9 @@
   "loans.claimReturned": "Claim returned",
   "loans.claimReturnedDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be <strong>claimed returned</strong>",
   "loans.confirmClaimReturned": "Confirm claim returned",
+  "loans.markAsMissing": "Mark as missing",
+  "loans.markAsMissingDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be marked <strong>Missing</strong> and patron will not be billed",
+  "loans.confirmAsMissing": "Confirm item as missing",
   "loans.newFeeFine": "New fee/fine",
   "loans.feeFineDetails": "Fee/fine details",
   "loans.history": "Loan action history",

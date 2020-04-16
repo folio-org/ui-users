@@ -17,6 +17,7 @@ import {
   withRenew,
   withDeclareLost,
   withClaimReturned,
+  withMarkAsMissing,
 } from '../../Wrappers';
 import TableModel from './components/OpenLoansWithStaticData';
 
@@ -56,6 +57,7 @@ class OpenLoansControl extends React.Component {
     renew: PropTypes.func.isRequired,
     declareLost: PropTypes.func.isRequired,
     claimReturned: PropTypes.func.isRequired,
+    markAsMissing: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -237,6 +239,8 @@ class OpenLoansControl extends React.Component {
 
   claimReturned = loan => this.props.claimReturned(loan);
 
+  markAsMissing = loan => this.props.markAsMissing(loan);
+
   feefineDetails = (loan, e) => {
     const {
       resources,
@@ -359,4 +363,5 @@ export default compose(
   withRenew,
   withDeclareLost,
   withClaimReturned,
+  withMarkAsMissing,
 )(OpenLoansControl);
