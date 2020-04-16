@@ -671,5 +671,7 @@
     "permission.view": "المستخدمين: إمكانية عرض بروفايل المستخدم",
     "permission.viewperms": "المستخدمين: إمكانية عرض الصلاحيات المعينة إلى المستخدمين",
     "permission.viewproxies": "المستخدمين: إمكانية عرض النواب المعينين إلى المستخدمين",
-    "permission.viewuserservicepoints": "المستخدمين: إمكانية عرض نقاط الخدمة المعينة إلى المستخدمين"
+    "permission.viewuserservicepoints": "المستخدمين: إمكانية عرض نقاط الخدمة المعينة إلى المستخدمين",
+    "loans.history": "Loan action history",
+    "accounts.loading": "Loading accounts"
 }

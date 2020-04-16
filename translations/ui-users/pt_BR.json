@@ -671,5 +671,7 @@
     "permission.view": "Usuários: Pode visualizar o perfil do usuário",
     "permission.viewperms": "Usuários: Pode ver as permissões atribuídas aos usuários",
     "permission.viewproxies": "Usuários: Pode visualizar os proxies atribuídos aos usuários",
-    "permission.viewuserservicepoints": "Usuários: Pode visualizar os pontos de serviço atribuídos aos usuários"
+    "permission.viewuserservicepoints": "Usuários: Pode visualizar os pontos de serviço atribuídos aos usuários",
+    "loans.history": "Loan action history",
+    "accounts.loading": "Loading accounts"
 }
