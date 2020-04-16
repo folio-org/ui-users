@@ -9,6 +9,8 @@ import {
   Row
 } from '@folio/stripes/components';
 
+import css from './PatronBlockModal.css';
+
 const PatronBlockModal = ({ open, onClose, patronBlocks, viewUserPath }) => {
   const blocks = take(orderBy(patronBlocks, ['metadata.updatedDate'], ['desc']), 3);
   const renderBlocks = blocks.map(block => {
@@ -46,8 +48,20 @@ const PatronBlockModal = ({ open, onClose, patronBlocks, viewUserPath }) => {
         <Col xs={4}>
           <Row end="xs">
             <Col>
-              <Button id="patron-block-close-modal" onClick={onClose}><FormattedMessage id="ui-users.blocks.closeButton" /></Button>
-              <Button id="patron-block-details-modal" style={{ 'marginLeft': '15px' }} buttonStyle="primary" to={viewUserPath}><FormattedMessage id="ui-users.blocks.detailsButton" /></Button>
+              <Button
+                id="patron-block-close-modal"
+                onClick={onClose}
+              >
+                <FormattedMessage id="ui-users.blocks.closeButton" />
+              </Button>
+              <Button
+                id="patron-block-details-modal"
+                className={css.detailsButton}
+                buttonStyle="primary"
+                to={viewUserPath}
+              >
+                <FormattedMessage id="ui-users.blocks.detailsButton" />
+              </Button>
             </Col>
           </Row>
         </Col>

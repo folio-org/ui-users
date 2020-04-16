@@ -10,7 +10,7 @@ import {
 import { FormattedMessage } from 'react-intl';
 import { Field, reduxForm } from 'redux-form';
 
-import css from './ChargeNotice.css';
+import css from './FeeFinesTable.css';
 
 const Item = ({ edit, value, name, dataOptions }) => {
   return (

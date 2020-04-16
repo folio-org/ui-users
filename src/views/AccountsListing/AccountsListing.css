@@ -32,6 +32,16 @@
   }
 }
 
+.buttonGroupWrap {
+  display: flex;
+  align-items: center;
+}
+
+.dropDownStyle {
+  float: right;
+  margin-left: 20px;
+}
+
 @media (--medium-up) {
   .pane {
     position: relative;

@@ -401,7 +401,7 @@ class AccountsHistory extends React.Component {
         <Dropdown
           open={this.state.toggleDropdownState}
           onToggle={this.onDropdownClick}
-          style={{ float: 'right', marginLeft: '20px' }}
+          className={css.dropDownStyle}
           group
           pullRight
         >
@@ -426,7 +426,7 @@ class AccountsHistory extends React.Component {
         <Col xs={2}>
           {firstMenu}
         </Col>
-        <Col style={{ display: 'flex', alignItems: 'center' }} xsOffset={2} xs={5}>
+        <Col className={css.buttonGroupWrap} xsOffset={2} xs={5}>
           <ButtonGroup
             fullWidth
           >

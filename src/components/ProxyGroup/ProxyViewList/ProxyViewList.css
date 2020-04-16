@@ -2,11 +2,11 @@
 
 .label {
   color: #444;
-  margin-bottom: 5px;
+  margin-bottom: var(--gutter-static-one-third);
 }
 
 .list {
-  margin-bottom: 10px;
+  margin-bottom: var(--gutter-static-two-thirds);
 }
 
 .isEmptyMessage {
