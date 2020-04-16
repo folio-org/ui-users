@@ -18,8 +18,9 @@ import {
 } from '@folio/stripes/components';
 import { stripesConnect } from '@folio/stripes/core';
 
-
 import { calculateSortParams } from '../../util';
+
+import css from './PatronBlock.css';
 
 class PatronBlock extends React.Component {
   static manifest = Object.freeze({
@@ -203,7 +204,11 @@ class PatronBlock extends React.Component {
       />;
     const title =
       <Row>
-        <Col><Headline style={{ 'marginLeft': '8px' }} size="large" tag="h3"><FormattedMessage id="ui-users.blocks.label" /></Headline></Col>
+        <Col>
+          <Headline className={css.headlineLabel} size="large" tag="h3">
+            <FormattedMessage id="ui-users.blocks.label" />
+          </Headline>
+        </Col>
         <Col>{(hasPatronBlocks) ? <Icon size="medium" icon="exclamation-circle" status="error" /> : ''}</Col>
       </Row>;
     return (

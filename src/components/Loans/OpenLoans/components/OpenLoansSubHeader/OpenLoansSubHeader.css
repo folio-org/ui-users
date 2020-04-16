@@ -1,0 +1,6 @@
+@import "@folio/stripes-components/lib/variables";
+
+.columnsDropdown {
+  float: right;
+  margin-left: var(--gutter-static-two-thirds);
+}

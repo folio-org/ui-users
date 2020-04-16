@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import _get from 'lodash/get';
+
 import { stripesConnect } from '@folio/stripes/core';
+import { LoadingView } from '@folio/stripes/components';
+
 import { LoansListing } from '../views';
-import ViewLoading from '../components/Loading/ViewLoading';
 
 class LoansListingContainer extends React.Component {
   static manifest = Object.freeze({
@@ -122,7 +124,7 @@ class LoansListingContainer extends React.Component {
     const loansHistory = _get(resources, ['loansHistory', 'records'], []);
     const patronBlocks = _get(resources, ['hasPatronBlocks', 'records'], []);
 
-    if (!user) return (<ViewLoading defaultWidth="100%" paneTitle="Loading loans" />);
+    if (!user) return (<LoadingView defaultWidth="100%" paneTitle="Loading loans" />);
     return (
       <LoansListing
         patronBlocks={patronBlocks}

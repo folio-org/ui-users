@@ -10,6 +10,7 @@ import {
 import { FormattedMessage } from 'react-intl';
 
 import { stripesShape } from '@folio/stripes/core';
+import { LoadingView } from '@folio/stripes/components';
 
 import { nav } from '../../util';
 import {
@@ -18,7 +19,6 @@ import {
   withClaimReturned,
 } from '../../Wrappers';
 import TableModel from './components/OpenLoansWithStaticData';
-import { ViewLoading } from '../../Loading';
 
 class OpenLoansControl extends React.Component {
   static propTypes = {
@@ -315,7 +315,7 @@ class OpenLoansControl extends React.Component {
     return (
       <div data-test-open-loans>
         {renewing
-          ? <ViewLoading data-test-form-page paneTitle={<FormattedMessage id="ui-users.renewInProgress" />} defaultWidth="100%" />
+          ? <LoadingView data-test-form-page paneTitle={<FormattedMessage id="ui-users.renewInProgress" />} defaultWidth="100%" />
           : <TableModel
             patronBlockedModal={patronBlockedModal}
             onClosePatronBlockedModal={this.onClosePatronBlockedModal}

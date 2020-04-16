@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
 import {
-  Row,
-  Col,
+  Layout,
 } from '@folio/stripes/components';
 
 import withCopyModal from './WithCopyModal';
@@ -16,14 +15,9 @@ const ResetPasswordModalBody = ({
   return (
     <>
       <FormattedMessage id="ui-users.extended.resetPasswordModal.linkWasSent" />
-      <Row>
-        <Col
-          xs={12}
-          style={{ fontWeight: 'bold', padding: '10px' }}
-        >
-          {email}
-        </Col>
-      </Row>
+      <Layout class="padding-all-gutter">
+        <strong>{email}</strong>
+      </Layout>
       <FormattedMessage
         id="ui-users.extended.resetPasswordModal.linkInstructions"
         values={{ name }}

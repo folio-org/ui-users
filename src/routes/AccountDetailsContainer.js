@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 
 import { stripesConnect } from '@folio/stripes/core';
+import { LoadingView } from '@folio/stripes/components';
 
 import { AccountDetails } from '../views';
-import ViewLoading from '../components/Loading/ViewLoading';
 
 class AccountDetailsContainer extends React.Component {
   static manifest = Object.freeze({
@@ -126,7 +127,14 @@ class AccountDetailsContainer extends React.Component {
     const patronGroup = this.getPatronGroup();
     const itemDetails = this.getItemDetails();
 
-    if (!account) return (<ViewLoading defaultWidth="100%" paneTitle="Loading accounts" />);
+    if (!account) {
+      return (
+        <LoadingView
+          defaultWidth="100%"
+          paneTitle={<FormattedMessage id="ui-users.accounts.loading" />}
+        />
+      );
+    }
 
     return (
       <AccountDetails

@@ -32,6 +32,8 @@ import ActionsBar from '../components/ActionsBar';
 import Label from '../../Label';
 import ErrorModal from '../../ErrorModal';
 
+import css from './ClosedLoans.css';
+
 class ClosedLoans extends React.Component {
   static propTypes = {
     stripes: stripesShape.isRequired,
@@ -199,7 +201,7 @@ class ClosedLoans extends React.Component {
         return (contributorsList.length > 2) ?
           (
             <Popover>
-              <div data-role="target" style={{ cursor: 'pointer' }}>{listTodisplay}</div>
+              <div data-role="target" className={css.pointer}>{listTodisplay}</div>
               <div data-role="popover">
                 {
                   contributorsList.map(contributor => <p key={contributor}>{contributor}</p>)

@@ -1,9 +1,11 @@
+@import "@folio/stripes-components/lib/variables.css";
+
 .textField {
   width: 100%;
   padding: 3px;
 }
   
 .copyControl {
-  margin-top: 10px;
+  margin-top: var(--gutter-static-two-thirds);
 }
   
