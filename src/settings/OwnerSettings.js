@@ -25,7 +25,7 @@ class OwnerSettings extends React.Component {
       records: 'owners',
       path: 'owners',
       GET: {
-        path: 'owners?query=cql.allRecords=1 sortby owner&limit=500'
+        path: 'owners?query=cql.allRecords=1 sortby owner&limit=2000'
       }
     },
   });

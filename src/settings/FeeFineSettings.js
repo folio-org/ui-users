@@ -27,13 +27,13 @@ class FeeFineSettings extends React.Component {
       path: 'feefines',
       throwErrors: false,
       GET: {
-        path: 'feefines?query=cql.allRecords=1 sortby feeFineType&limit=500',
+        path: 'feefines?query=cql.allRecords=1 sortby feeFineType&limit=10000',
       },
     },
     owners: {
       type: 'okapi',
       records: 'owners',
-      path: 'owners?query=cql.allRecords=1 sortby owner&limit=500',
+      path: 'owners?query=cql.allRecords=1 sortby owner&limit=2000',
       accumulate: 'true',
       PUT: {
         path: 'owners/%{activeRecord.ownerId}',

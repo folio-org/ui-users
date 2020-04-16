@@ -22,7 +22,7 @@ class LoansListingContainer extends React.Component {
       path: 'groups',
       params: {
         query: 'cql.allRecords=1 sortby group',
-        limit: '40',
+        limit: '200',
       },
       records: 'usergroups',
     },
@@ -60,7 +60,7 @@ class LoansListingContainer extends React.Component {
     loanAccount: {
       type: 'okapi',
       records: 'accounts',
-      path: 'accounts?query=userId=:{id}&limit=100',
+      path: 'accounts?query=userId=:{id}&limit=10000',
     },
     renew: {
       fetch: false,
