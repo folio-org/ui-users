@@ -671,5 +671,7 @@
     "permission.view": "用户：可以查看用户配置文件",
     "permission.viewperms": "用户：可以查看分配给用户的权限",
     "permission.viewproxies": "用户：可以查看分配给用户的代理",
-    "permission.viewuserservicepoints": "用户：可以查看分配给用户的服务点"
+    "permission.viewuserservicepoints": "用户：可以查看分配给用户的服务点",
+    "loans.history": "Loan action history",
+    "accounts.loading": "Loading accounts"
 }
