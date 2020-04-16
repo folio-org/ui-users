@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 
 import { Modal } from '@folio/stripes/components';
 
-import ClaimReturnedInfo from './ClaimReturnedInfo';
+import ModalContent from '../ModalContent';
 
 class ClaimReturnedDialog extends React.Component {
   static propTypes = {
@@ -34,7 +34,8 @@ class ClaimReturnedDialog extends React.Component {
         label={modalLabel}
         onClose={onClose}
       >
-        <ClaimReturnedInfo
+        <ModalContent
+          loanAction="claimReturned"
           loan={loan}
           onClose={onClose}
         />

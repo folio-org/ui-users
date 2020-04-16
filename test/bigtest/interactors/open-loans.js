@@ -12,9 +12,7 @@ import moment from 'moment';
 import ButtonInteractor from '@folio/stripes-components/lib/Button/tests/interactor'; // eslint-disable-line
 import CalloutInteractor from '@folio/stripes-components/lib/Callout/tests/interactor'; // eslint-disable-line
 
-import DeclareLostDialog from './declare-lost-dialog';
-import ClaimReturnedDialog from './claim-returned-dialog';
-import MarkAsMissingDialog from './mark-as-missing-dialog';
+import DialogInteractor from './dialog';
 
 @interactor class BulkOverrideModal {
   static defaultScope = '#bulk-override-modal';
@@ -62,9 +60,9 @@ import MarkAsMissingDialog from './mark-as-missing-dialog';
   bulkRenewalModal = new BulkRenewalModal();
   bulkOverrideModal = new BulkOverrideModal();
   changeDueDateOverlay = new ChangeDueDateOverlay();
-  declareLostDialog = new DeclareLostDialog();
-  claimReturnedDialog = new ClaimReturnedDialog();
-  markAsMissingDialog = new MarkAsMissingDialog();
+  declareLostDialog = new DialogInteractor('#declare-lost-modal');
+  claimReturnedDialog = new DialogInteractor('#claim-returned-modal');
+  markAsMissingDialog = new DialogInteractor('#mark-as-missing-modal');
   dueDateCalendarCellButton = new ButtonInteractor(`[data-test-date="${moment().format('MM/DD/YYYY')}"]`);
   rowButtons = collection('[data-test-open-loans-list] button[role="row"]', ButtonInteractor);
 

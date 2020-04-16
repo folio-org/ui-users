@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 
 import { Modal } from '@folio/stripes/components';
 
-import MarkAsMissingInfo from './MarkAsMissingInfo';
+import ModalContent from '../ModalContent';
 
 class MarkAsMissingDialog extends React.Component {
   static propTypes = {
@@ -34,7 +34,8 @@ class MarkAsMissingDialog extends React.Component {
         label={modalLabel}
         onClose={onClose}
       >
-        <MarkAsMissingInfo
+        <ModalContent
+          loanAction="markAsMissing"
           loan={loan}
           onClose={onClose}
         />

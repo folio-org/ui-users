@@ -12,15 +12,29 @@ import {
 import { stripesConnect } from '@folio/stripes/core';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
-import css from './ClaimReturnedDialog.css';
+import css from './ModalContent.css';
 
-class ClaimReturnedInfo extends React.Component {
+class ModalContent extends React.Component {
   static manifest = Object.freeze({
     claimReturned: {
       type: 'okapi',
       fetch: false,
       POST: {
         path: 'circulation/loans/!{loan.id}/claim-item-returned',
+      },
+    },
+    declareLost: {
+      type: 'okapi',
+      fetch: false,
+      POST: {
+        path: 'circulation/loans/!{loan.id}/declare-item-lost',
+      },
+    },
+    markAsMissing: {
+      type: 'okapi',
+      fetch: false,
+      POST: {
+        path: 'circulation/loans/!{loan.id}/declare-claimed-returned-item-as-missing',
       },
     },
   });
@@ -30,7 +44,14 @@ class ClaimReturnedInfo extends React.Component {
       claimReturned: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }).isRequired,
+      declareLost: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }).isRequired,
+      markAsMissing: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }).isRequired,
     }).isRequired,
+    loanAction: PropTypes.string.isRequired,
     loan: PropTypes.object.isRequired,
     onClose: PropTypes.func.isRequired,
   };
@@ -47,22 +68,27 @@ class ClaimReturnedInfo extends React.Component {
     this.setState({ additionalInfo: event.target.value });
   };
 
-  submitClaimReturned = async () => {
+  submit = async () => {
     const { additionalInfo } = this.state;
+
+    const { loanAction } = this.props;
 
     const {
       mutator: {
-        claimReturned: {
+        [loanAction]: {
           POST,
         }
       },
       onClose,
     } = this.props;
 
-    await POST({
-      itemClaimedReturnedDateTime: new Date().toISOString(),
-      comment: additionalInfo,
-    });
+    const requestData = { comment: additionalInfo };
+
+    if (loanAction === 'claimReturned') {
+      requestData.itemClaimedReturnedDateTime = new Date().toISOString();
+    }
+
+    await POST(requestData);
 
     onClose();
   };
@@ -70,6 +96,7 @@ class ClaimReturnedInfo extends React.Component {
   render() {
     const {
       loan,
+      loanAction,
       onClose,
     } = this.props;
 
@@ -80,7 +107,7 @@ class ClaimReturnedInfo extends React.Component {
         <Layout className="flex">
           <Layout className="flex">
             <SafeHTMLMessage
-              id="ui-users.loans.claimReturnedDialogBody"
+              id={`ui-users.loans.${loanAction}DialogBody`}
               values={{
                 title: loan?.item?.title,
                 materialType: loan?.item?.materialType?.name,
@@ -92,7 +119,7 @@ class ClaimReturnedInfo extends React.Component {
         <Row>
           <Col sm={12} className={css.additionalInformation}>
             <TextArea
-              data-test-claim-returned-additional-info-textarea
+              data-test-additional-info-textarea
               label={<FormattedMessage id="ui-users.additionalInfo.label" />}
               required
               onChange={this.handleAdditionalInfoChange}
@@ -101,16 +128,16 @@ class ClaimReturnedInfo extends React.Component {
         </Row>
         <Layout className="textRight">
           <Button
-            data-test-claim-returned-dialog-cancel-button
+            data-test-dialog-cancel-button
             onClick={onClose}
           >
             <FormattedMessage id="ui-users.cancel" />
           </Button>
           <Button
-            data-test-claim-returned-dialog-confirm-button
+            data-test-dialog-confirm-button
             buttonStyle="primary"
             disabled={!additionalInfo}
-            onClick={this.submitClaimReturned}
+            onClick={this.submit}
           >
             <FormattedMessage id="ui-users.confirm" />
           </Button>
@@ -120,4 +147,4 @@ class ClaimReturnedInfo extends React.Component {
   }
 }
 
-export default stripesConnect(ClaimReturnedInfo);
+export default stripesConnect(ModalContent);
