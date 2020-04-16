@@ -61,7 +61,7 @@ class Actions extends React.Component {
     feefineTypes: {
       type: 'okapi',
       records: 'feefines',
-      path: 'feefines?query=cql.allRecords=1&limit=10000',
+      path: 'feefines?query=cql.allRecords=1&limit=100',
     },
     transfers: {
       type: 'okapi',
