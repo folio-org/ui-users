@@ -23,7 +23,7 @@ class AccountDetailsContainer extends React.Component {
       path: 'groups',
       params: {
         query: 'cql.allRecords=1 sortby group',
-        limit: '40',
+        limit: '200',
       },
       records: 'usergroups',
     },
@@ -36,7 +36,7 @@ class AccountDetailsContainer extends React.Component {
       type: 'okapi',
       records: 'feefineactions',
       accumulate: 'true',
-      path: 'feefineactions?query=(accountId=:{accountid})&limit=50',
+      path: 'feefineactions?query=(accountId=:{accountid})&limit=10000',
     },
     activeRecord: {
       accountId: '0',
