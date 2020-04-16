@@ -1,6 +1,6 @@
 import React from 'react';
 
-import DeclareLostDialog from '../DeclareLostDialog';
+import LoanActionDialog from '../LoanActionDialog';
 
 const withDeclareLost = WrappedComponent => class WithDeclareLost extends React.Component {
   constructor(props) {
@@ -29,6 +29,12 @@ const withDeclareLost = WrappedComponent => class WithDeclareLost extends React.
       loan,
     } = this.state;
 
+    const loanActionProps = {
+      loanAction: 'declareLost',
+      modalId: 'declare-lost-modal',
+      modalLabel: 'confirmLostState',
+    };
+
     return (
       <>
         <WrappedComponent
@@ -36,8 +42,9 @@ const withDeclareLost = WrappedComponent => class WithDeclareLost extends React.
           {...this.props}
         />
         { loan &&
-          <DeclareLostDialog
+          <LoanActionDialog
             loan={loan}
+            loanActionProps={loanActionProps}
             open={declareLostDialogOpen}
             onClose={this.hideDeclareLostDialog}
           />

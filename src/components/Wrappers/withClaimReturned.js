@@ -1,6 +1,6 @@
 import React from 'react';
 
-import ClaimReturnedDialog from '../ClaimReturnedDialog';
+import LoanActionDialog from '../LoanActionDialog';
 
 const withClaimReturned = WrappedComponent => class withClaimReturnedComponent extends React.Component {
   constructor(props) {
@@ -29,6 +29,12 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
       loan,
     } = this.state;
 
+    const loanActionProps = {
+      loanAction: 'claimReturned',
+      modalId: 'claim-returned-modal',
+      modalLabel: 'confirmClaimReturned',
+    };
+
     return (
       <>
         <WrappedComponent
@@ -36,8 +42,9 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
           {...this.props}
         />
         { loan &&
-          <ClaimReturnedDialog
+          <LoanActionDialog
             loan={loan}
+            loanActionProps={loanActionProps}
             open={claimReturnedDialogOpen}
             onClose={this.hideClaimReturnedDialog}
           />

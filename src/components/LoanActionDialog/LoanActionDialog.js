@@ -6,11 +6,12 @@ import { Modal } from '@folio/stripes/components';
 
 import ModalContent from '../ModalContent';
 
-class MarkAsMissingDialog extends React.Component {
+class LoanActionDialog extends React.Component {
   static propTypes = {
     onClose: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
     loan: PropTypes.object.isRequired,
+    loanActionProps: PropTypes.object.isRequired,
   };
 
   render() {
@@ -18,24 +19,29 @@ class MarkAsMissingDialog extends React.Component {
       onClose,
       open,
       loan,
+      loanActionProps: {
+        loanAction,
+        modalId,
+        modalLabel,
+      },
     } = this.props;
 
     if (!loan) return null;
 
-    const modalLabel = <FormattedMessage id="ui-users.loans.confirmAsMissing" />;
+    const label = <FormattedMessage id={`ui-users.loans.${modalLabel}`} />;
 
     return (
       <Modal
-        id="mark-as-missing-modal"
+        id={modalId}
         size="small"
         dismissible
         closeOnBackgroundClick
         open={open}
-        label={modalLabel}
+        label={label}
         onClose={onClose}
       >
         <ModalContent
-          loanAction="markAsMissing"
+          loanAction={loanAction}
           loan={loan}
           onClose={onClose}
         />
@@ -44,4 +50,4 @@ class MarkAsMissingDialog extends React.Component {
   }
 }
 
-export default MarkAsMissingDialog;
+export default LoanActionDialog;

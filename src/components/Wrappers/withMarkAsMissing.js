@@ -1,6 +1,6 @@
 import React from 'react';
 
-import MarkAsMissingDialog from '../MarkAsMissingDialog';
+import LoanActionDialog from '../LoanActionDialog';
 
 const withMarkAsMissing = WrappedComponent => class withMarkAsMissingComponent extends React.Component {
   constructor(props) {
@@ -29,6 +29,12 @@ const withMarkAsMissing = WrappedComponent => class withMarkAsMissingComponent e
       loan,
     } = this.state;
 
+    const loanActionProps = {
+      loanAction: 'markAsMissing',
+      modalId: 'mark-as-missing-modal',
+      modalLabel: 'confirmAsMissing',
+    };
+
     return (
       <>
         <WrappedComponent
@@ -36,8 +42,9 @@ const withMarkAsMissing = WrappedComponent => class withMarkAsMissingComponent e
           {...this.props}
         />
         { loan &&
-          <MarkAsMissingDialog
+          <LoanActionDialog
             loan={loan}
+            loanActionProps={loanActionProps}
             open={markAsMissingDialogOpen}
             onClose={this.hideMarkAsMissingDialog}
           />
