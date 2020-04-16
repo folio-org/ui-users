@@ -61,7 +61,7 @@ class AccountsListingContainer extends React.Component {
       path: 'groups',
       params: {
         query: 'cql.allRecords=1 sortby group',
-        limit: '40',
+        limit: '200',
       },
       records: 'usergroups',
     },
@@ -76,7 +76,7 @@ class AccountsListingContainer extends React.Component {
       type: 'okapi',
       records: 'accounts',
       recordsRequired: '%{activeRecord.records}',
-      path: 'accounts?query=userId=:{id}&limit=100',
+      path: 'accounts?query=userId=:{id}&limit=10000',
     },
     loans: {
       type: 'okapi',
@@ -89,7 +89,7 @@ class AccountsListingContainer extends React.Component {
       records: 'accounts',
       path: 'accounts',
       recordsRequired: '%{activeRecord.records}',
-      perRequest: 50,
+      perRequest: 10000,
       GET: {
         params: {
           query: queryFunction(
@@ -105,7 +105,7 @@ class AccountsListingContainer extends React.Component {
         staticFallback: { params: {} },
       },
     },
-    activeRecord: { records: 50 },
+    activeRecord: { records: 10000 },
     user: {},
   });
 
