@@ -24,6 +24,7 @@ import {
   Col,
   Headline,
   AccordionSet,
+  LoadingPane
 } from '@folio/stripes/components';
 
 import {
@@ -57,7 +58,6 @@ import {
   getFullName,
   // eachPromise
 } from '../../components/util';
-import { PaneLoading } from '../../components/Loading';
 
 class UserDetail extends React.Component {
   static propTypes = {
@@ -276,10 +276,10 @@ class UserDetail extends React.Component {
         <IfPermission perm="ui-users.edit">
           <FormattedMessage id="ui-users.crud.editUser">
             {ariaLabel => (
+              user &&
               <Button
                 id="clickable-edituser"
                 buttonStyle="primary"
-                style={{ visibility: !user ? 'hidden' : 'visible' }}
                 to={this.getEditLink()}
                 buttonRef={this.editButton}
                 ariaLabel={ariaLabel}
@@ -389,7 +389,7 @@ class UserDetail extends React.Component {
 
     if (!user) {
       return (
-        <PaneLoading
+        <LoadingPane
           id="pane-userdetails"
           defaultWidth={paneWidth}
           paneTitle={<FormattedMessage id="ui-users.information.userDetails" />}

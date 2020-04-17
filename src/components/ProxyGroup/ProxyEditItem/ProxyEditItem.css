@@ -1,3 +1,5 @@
+@import "@folio/stripes-components/lib/variables";
+
 .item {
   border-color: #999;
   border-width: 1px 1px 0 1px;
@@ -15,5 +17,5 @@
 }
 
 .creationLabel {
-  margin-left: 10px;
+  margin-left: var(--gutter-static-two-thirds);
 }

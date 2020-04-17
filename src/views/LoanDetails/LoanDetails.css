@@ -3,3 +3,8 @@
 .feefineButton {
   color: var(--primary) !important;
 }
+
+.cursor {
+  cursor: pointer;
+}
+

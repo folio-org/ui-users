@@ -1,0 +1,12 @@
+@import "@folio/stripes-components/lib/variables.css";
+
+.customCol {
+  font-weight: var(--text-weight-medium);
+  font-size: var(--font-size-medium);
+  color: var(--color-icon);
+}
+
+.ownerIdField {
+  margin-left: var(--gutter-static-two-thirds);
+  width: 120;
+}

@@ -25,6 +25,7 @@ import {
   Row,
   Col,
   NoValue,
+  LoadingView
 } from '@folio/stripes/components';
 import { IfPermission } from '@folio/stripes/core';
 import { effectiveCallNumber } from '@folio/stripes/util';
@@ -42,7 +43,6 @@ import {
 } from '../../components/Wrappers';
 import loanActionMap from '../../components/data/static/loanActionMap';
 import LoanProxyDetails from './LoanProxyDetails';
-import ViewLoading from '../../components/Loading/ViewLoading';
 
 import css from './LoanDetails.css';
 
@@ -217,7 +217,7 @@ class LoanDetails extends React.Component {
     return (contributorsLength >= 77) ?
       (
         <Popover>
-          <div data-role="target" style={{ cursor: 'pointer' }}>
+          <div data-role="target" className={css.cursor}>
             {contributorsList}
           </div>
           <div data-role="popover">
@@ -300,10 +300,10 @@ class LoanDetails extends React.Component {
 
     if (!loan || !user || (loan.userId !== user.id)) {
       return (
-        <ViewLoading
+        <LoadingView
           id="pane-loandetails"
           defaultWidth="100%"
-          paneTitle="Loan action history"
+          paneTitle={<FormattedMessage id="ui-users.loans.history" />}
         />
       );
     }

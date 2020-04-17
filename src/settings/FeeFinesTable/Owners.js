@@ -6,6 +6,7 @@ import {
   Row,
   Col,
   Select,
+  Headline,
 } from '@folio/stripes/components';
 
 const Owners = ({ dataOptions, onChange, filterShared }) => {
@@ -41,9 +42,9 @@ const Owners = ({ dataOptions, onChange, filterShared }) => {
     <div>
       <Row>
         <Col xs>
-          <span style={{ fontSize: 'large', fontWeight: '600' }}>
+          <Headline size="large" weight="medium">
             <FormattedMessage id="ui-users.owners.singular" />
-          </span>
+          </Headline>
         </Col>
       </Row>
       <Row>

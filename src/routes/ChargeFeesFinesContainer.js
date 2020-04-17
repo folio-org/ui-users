@@ -68,13 +68,13 @@ class ChargeFeesFinesContainer extends React.Component {
       type: 'okapi',
       records: 'feefines',
       GET: {
-        path: 'feefines?query=(ownerId=%{activeRecord.ownerId} or ownerId=%{activeRecord.shared})&limit=100',
+        path: 'feefines?query=(ownerId=%{activeRecord.ownerId} or ownerId=%{activeRecord.shared})&limit=10000',
       },
     },
     feefineactions: {
       type: 'okapi',
       records: 'feefineactions',
-      path: 'feefineactions',
+      path: 'feefineactions?limit=10000',
     },
     accounts: {
       type: 'okapi',
@@ -93,7 +93,7 @@ class ChargeFeesFinesContainer extends React.Component {
     owners: {
       type: 'okapi',
       records: 'owners',
-      path: 'owners?limit=100',
+      path: 'owners?limit=2000',
     },
     payments: {
       type: 'okapi',
@@ -108,7 +108,7 @@ class ChargeFeesFinesContainer extends React.Component {
     allfeefines: {
       type: 'okapi',
       records: 'feefines',
-      path: 'feefines?limit=100',
+      path: 'feefines?limit=10000',
     },
     activeRecord: {},
   });

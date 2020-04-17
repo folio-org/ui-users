@@ -13,12 +13,12 @@ const UserInfo = (props) => {
     <div className={css.root}>
       <Row><FormattedMessage id="ui-users.charge.patron" /></Row>
       <Row>
-        <Col style={{ 'marginRight': '10px' }}>
+        <Col className={css.userInfoLink}>
           <Link to={`/users/view/${user.id}`}>
             {`${getFullName(user)}`}
           </Link>
         </Col>
-        <Col style={{ 'marginRight': '10px' }}>
+        <Col className={css.userInfoLink}>
           <FormattedMessage id="ui-users.charge.barcode" />
           <Link to={`/users/view/${user.id}`}>
             {user.barcode}
