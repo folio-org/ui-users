@@ -2,7 +2,7 @@ import { beforeEach, describe, it } from '@bigtest/mocha';
 import { expect } from 'chai';
 
 import setupApplication from '../../helpers/setup-application';
-import SettingsConditionsForm from '../../interactors/patronBlockConditions/settings-conditions-form';
+import SettingsConditionsForm from '../../interactors/parton-blocks/settings-conditions-form';
 
 describe('Conditions form', () => {
   let condition;

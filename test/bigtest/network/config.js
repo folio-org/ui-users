@@ -552,6 +552,24 @@ export default function config() {
     return this.serializerOrRegistry.serialize(patronBlockConditions.all());
   });
 
+  this.get('/patron-block-limits/:id', ({ patronBlockLimits }, request) => {
+    return patronBlockLimits.find(request.params.id).attrs;
+  });
+
+  this.put('/patron-block-limits/:id', ({ patronBlockLimits }, request) => {
+    return patronBlockLimits.find(request.params.id).attrs;
+  });
+
+  this.post('/patron-block-limits', function (schema, { requestBody }) {
+    const limit = JSON.parse(requestBody);
+
+    return server.create('patron-block-limit', limit);
+  });
+
+  this.get('/patron-block-limits', ({ patronBlockLimits }) => {
+    return this.serializerOrRegistry.serialize(patronBlockLimits.all());
+  });
+
   this.get('/custom-fields', {
     'customFields': [{
       'id': '1',

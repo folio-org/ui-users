@@ -10,6 +10,7 @@
 * Fix bug preventing closed loans list from loading properly when an item has been deleted. Fixes UIU-1411.
 * Fix import path to stripes util. Fixes UIU-1515.
 * Use localized permission names. Refs UIU-488.
+* Create Patron Blocks Limits Table in Settings -> Users. Refs UIU-1167.
 * Add `Load more` button at the end of the result list. Fixes UIU-1532.
 * Increase limit of patron fee/fines, owners and patron groups. Refs UIU-1585.
 

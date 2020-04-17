@@ -566,6 +566,19 @@
         "visible": true
       },
       {
+        "permissionName": "ui-users.settings.limits",
+        "displayName": "Settings (Users): Can create, edit and remove patron blocks limits",
+        "subPermissions": [
+          "ui-users.settings.conditions",
+          "patron-block-limits.collection.get",
+          "patron-block-limits.item.get",
+          "patron-block-limits.item.post",
+          "patron-block-limits.item.put",
+          "patron-block-limits.item.delete"
+        ],
+        "visible": true
+      },
+      {
         "permissionName": "ui-users.feesfines.actions.all",
         "displayName": "Users: Can create, edit and remove fees/fines",
         "subPermissions": [

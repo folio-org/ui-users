@@ -2,7 +2,7 @@ import { beforeEach, describe, it } from '@bigtest/mocha';
 import { expect } from 'chai';
 
 import setupApplication from '../../helpers/setup-application';
-import ConditionSettings from '../../interactors/patronBlockConditions/settings-conditions';
+import ConditionSettings from '../../interactors/parton-blocks/settings-conditions';
 
 describe('Patron block conditions ', () => {
   setupApplication();
