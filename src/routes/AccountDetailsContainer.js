@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 
 import { stripesConnect } from '@folio/stripes/core';
+import { LoadingView } from '@folio/stripes/components';
 
 import { AccountDetails } from '../views';
-import ViewLoading from '../components/Loading/ViewLoading';
 
 class AccountDetailsContainer extends React.Component {
   static manifest = Object.freeze({
@@ -22,7 +23,7 @@ class AccountDetailsContainer extends React.Component {
       path: 'groups',
       params: {
         query: 'cql.allRecords=1 sortby group',
-        limit: '40',
+        limit: '200',
       },
       records: 'usergroups',
     },
@@ -35,7 +36,7 @@ class AccountDetailsContainer extends React.Component {
       type: 'okapi',
       records: 'feefineactions',
       accumulate: 'true',
-      path: 'feefineactions?query=(accountId=:{accountid})&limit=50',
+      path: 'feefineactions?query=(accountId=:{accountid})&limit=10000',
     },
     activeRecord: {
       accountId: '0',
@@ -126,7 +127,14 @@ class AccountDetailsContainer extends React.Component {
     const patronGroup = this.getPatronGroup();
     const itemDetails = this.getItemDetails();
 
-    if (!account) return (<ViewLoading defaultWidth="100%" paneTitle="Loading accounts" />);
+    if (!account) {
+      return (
+        <LoadingView
+          defaultWidth="100%"
+          paneTitle={<FormattedMessage id="ui-users.accounts.loading" />}
+        />
+      );
+    }
 
     return (
       <AccountDetails

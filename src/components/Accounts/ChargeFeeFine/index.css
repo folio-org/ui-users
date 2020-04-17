@@ -1,9 +1,14 @@
+@import "@folio/stripes-components/lib/variables.css";
+
 .root {  
   background-color: color(#fcfcfc contrast(100%) blend(#fcfcfc 90%));
   border-radius: 6px;
   padding: 10px 30px;
-  font-weight: bold;
-  font-size: 1rem;
-  line-height: 1.5;
+  font-weight: var(--text-weight-bold);
+  font-size: var(--font-size-medium);
+  line-height: var(--line-height);
 }
 
+.userInfoLink {
+  margin-right: var(--gutter-static-two-thirds);
+}

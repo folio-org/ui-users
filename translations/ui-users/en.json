@@ -37,6 +37,7 @@
   "data.loanActionMap.checkedOutThroughOverride": "Checked out through override",
   "data.loanActionMap.declaredLost": "Declared lost",
   "data.loanActionMap.claimedReturned": "Claimed returned",
+  "data.loanActionMap.markedAsMissing": "Marked as missing",
 
   "action": "Action",
   "dueDate": "Due date",
@@ -75,8 +76,12 @@
   "loans.claimReturned": "Claim returned",
   "loans.claimReturnedDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be <strong>claimed returned</strong>",
   "loans.confirmClaimReturned": "Confirm claim returned",
+  "loans.markAsMissing": "Mark as missing",
+  "loans.markAsMissingDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be marked <strong>Missing</strong> and patron will not be billed",
+  "loans.confirmAsMissing": "Confirm item as missing",
   "loans.newFeeFine": "New fee/fine",
   "loans.feeFineDetails": "Fee/fine details",
+  "loans.history": "Loan action history",
 
   "settings.label": "Users",
   "settings.general": "General",
@@ -102,6 +107,11 @@
   "settings.callout.message": "The patron block condition <strong>{name}</strong> has been successfully <strong>updated</strong>.",
   "settings.error.noMessage": "Message to be displayed is a required field if one or more Blocked actions selected",
   "settings.error.noCheckbox": "One or more Blocked actions must be selected for Message to be displayed to be used",
+  "settings.limits": "Limits",
+  "settings.limits.callout.message": "The patron block limit for patron group <strong>{patronGroup}</strong> has been successfully <strong>updated</strong>.",
+  "settings.limits.callout.error": "Something went wrong",
+  "settings.limits.feeFine.error": "A maximum balance of 0 will result in all patrons in this group being blocked; to skip this limit, leave value set to blank",
+  "settings.limits.validation.error": "Must be blank or a number from 0 to 999999",
 
   "loans.columns.title": "Item title",
   "loans.columns.itemStatus": "Item status",
@@ -309,6 +319,7 @@
   "accounts.numClosedAccounts": "{count, number} {count, plural, one {closed fee/fine} other {closed fees/fines}}",
   "accounts.chargeManual": "Create fee/fine",
   "accounts.viewAllFeesFines": "View all fees/fines",
+  "accounts.loading": "Loading accounts",
 
   "contextMenu.homePage": "Home page",
   "contextMenu.settings": "Settings",
@@ -727,6 +738,7 @@
   "permission.settings.addresstypes": "Settings (Users): Can create, edit and remove address types",
   "permission.settings.comments": "Settings (Users): Can create, edit and remove comments",
   "permission.settings.conditions": "Settings (Users): Can create, edit and remove patron blocks conditions",
+  "permission.settings.limits": "Settings (Users): Can create, edit and remove patron blocks limits",
   "permission.settings.customfields.all": "Settings (Users): Can create, edit, view and delete custom fields",
   "permission.settings.customfields.edit": "Settings (Users): Can create, edit, and view custom fields",
   "permission.settings.customfields.view": "Settings (Users): Can view custom fields",

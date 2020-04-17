@@ -1,6 +1,9 @@
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 
-import ClaimReturnedDialog from '../ClaimReturnedDialog';
+import LoanActionDialog from '../LoanActionDialog';
+
+import { loanActions } from '../../constants';
 
 const withClaimReturned = WrappedComponent => class withClaimReturnedComponent extends React.Component {
   constructor(props) {
@@ -29,6 +32,8 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
       loan,
     } = this.state;
 
+    const modalLabel = <FormattedMessage id="ui-users.loans.confirmClaimReturned" />;
+
     return (
       <>
         <WrappedComponent
@@ -36,8 +41,10 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
           {...this.props}
         />
         { loan &&
-          <ClaimReturnedDialog
+          <LoanActionDialog
             loan={loan}
+            loanAction={loanActions.CLAIMED_RETURNED}
+            modalLabel={modalLabel}
             open={claimReturnedDialogOpen}
             onClose={this.hideClaimReturnedDialog}
           />

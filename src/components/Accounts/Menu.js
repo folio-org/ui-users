@@ -11,6 +11,8 @@ import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import { getFullName } from '../util';
 
+import css from './Menu.css';
+
 const Menu = (props) => {
   const { user, showFilters, match: { params }, filters, balance, selected, actions } = props;
   const outstanding = parseFloat(balance).toFixed(2);
@@ -23,7 +25,7 @@ const Menu = (props) => {
   const firstMenu = (
     <div>
       <Row>
-        <Col style={{ marginLeft: '20px' }}>
+        <Col className={css.firstMenuItems}>
           <b><FormattedMessage id="ui-users.accounts.history.statusLabel" values={{ type }} /></b>
           {' '}
           <Link to={`/users/view/${user.id}`}>
@@ -36,7 +38,7 @@ const Menu = (props) => {
         </Col>
       </Row>
       <Row>
-        <Col style={{ marginLeft: '20px' }}>
+        <Col className={css.firstMenuItems}>
           <div id="outstanding-balance">
             <FormattedMessage
               id="ui-users.accounts.outstanding"
@@ -46,7 +48,7 @@ const Menu = (props) => {
             />
           </div>
         </Col>
-        <Col style={{ marginLeft: '10px' }}>
+        <Col className={css.firstMenuItems}>
           {showSelected &&
             <FormattedMessage
               id="ui-users.accounts.selected"

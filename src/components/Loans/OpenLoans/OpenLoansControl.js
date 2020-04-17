@@ -10,15 +10,16 @@ import {
 import { FormattedMessage } from 'react-intl';
 
 import { stripesShape } from '@folio/stripes/core';
+import { LoadingView } from '@folio/stripes/components';
 
 import { nav } from '../../util';
 import {
   withRenew,
   withDeclareLost,
   withClaimReturned,
+  withMarkAsMissing,
 } from '../../Wrappers';
 import TableModel from './components/OpenLoansWithStaticData';
-import { ViewLoading } from '../../Loading';
 
 class OpenLoansControl extends React.Component {
   static propTypes = {
@@ -56,6 +57,7 @@ class OpenLoansControl extends React.Component {
     renew: PropTypes.func.isRequired,
     declareLost: PropTypes.func.isRequired,
     claimReturned: PropTypes.func.isRequired,
+    markAsMissing: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -237,6 +239,8 @@ class OpenLoansControl extends React.Component {
 
   claimReturned = loan => this.props.claimReturned(loan);
 
+  markAsMissing = loan => this.props.markAsMissing(loan);
+
   feefineDetails = (loan, e) => {
     const {
       resources,
@@ -315,7 +319,7 @@ class OpenLoansControl extends React.Component {
     return (
       <div data-test-open-loans>
         {renewing
-          ? <ViewLoading data-test-form-page paneTitle={<FormattedMessage id="ui-users.renewInProgress" />} defaultWidth="100%" />
+          ? <LoadingView data-test-form-page paneTitle={<FormattedMessage id="ui-users.renewInProgress" />} defaultWidth="100%" />
           : <TableModel
             patronBlockedModal={patronBlockedModal}
             onClosePatronBlockedModal={this.onClosePatronBlockedModal}
@@ -359,4 +363,5 @@ export default compose(
   withRenew,
   withDeclareLost,
   withClaimReturned,
+  withMarkAsMissing,
 )(OpenLoansControl);

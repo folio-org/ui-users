@@ -3,6 +3,7 @@ export default {
   'checkedin': 'ui-users.data.loanActionMap.checkedIn',
   'declaredLost': 'ui-users.data.loanActionMap.declaredLost',
   'claimedReturned': 'ui-users.data.loanActionMap.claimedReturned',
+  'markedMissing': 'ui-users.data.loanActionMap.markedAsMissing',
   'renewed': 'ui-users.data.loanActionMap.renewed',
   'Operator': 'ui-users.data.loanActionMap.source',
   'holdrequested': 'ui-users.data.loanActionMap.holdRequested',

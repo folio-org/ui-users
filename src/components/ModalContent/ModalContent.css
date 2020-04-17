@@ -1,0 +1,5 @@
+@import "@folio/stripes-components/lib/variables.css";
+
+.additionalInformation {
+  margin-top: var(--gutter-static-two-thirds);
+}
