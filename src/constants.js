@@ -14,6 +14,12 @@ export const itemStatuses = {
   DECLARED_LOST: 'Declared lost',
 };
 
+export const loanActions = {
+  CLAIMED_RETURNED: 'claimReturned',
+  DECLARE_LOST: 'declareLost',
+  MARK_AS_MISSING: 'markAsMissing',
+};
+
 export const deliveryFulfillmentValues = {
   HOLD_SHELF: 'Hold Shelf',
   DELIVERY: 'Delivery',

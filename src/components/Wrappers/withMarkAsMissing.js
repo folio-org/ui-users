@@ -1,6 +1,9 @@
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import LoanActionDialog from '../LoanActionDialog';
+
+import { loanActions } from '../../constants';
 
 const withMarkAsMissing = WrappedComponent => class withMarkAsMissingComponent extends React.Component {
   constructor(props) {
@@ -29,11 +32,7 @@ const withMarkAsMissing = WrappedComponent => class withMarkAsMissingComponent e
       loan,
     } = this.state;
 
-    const loanActionProps = {
-      loanAction: 'markAsMissing',
-      modalId: 'mark-as-missing-modal',
-      modalLabel: 'confirmAsMissing',
-    };
+    const modalLabel = <FormattedMessage id="ui-users.loans.confirmAsMissing" />;
 
     return (
       <>
@@ -44,7 +43,8 @@ const withMarkAsMissing = WrappedComponent => class withMarkAsMissingComponent e
         { loan &&
           <LoanActionDialog
             loan={loan}
-            loanActionProps={loanActionProps}
+            loanAction={loanActions.MARK_AS_MISSING}
+            modalLabel={modalLabel}
             open={markAsMissingDialogOpen}
             onClose={this.hideMarkAsMissingDialog}
           />

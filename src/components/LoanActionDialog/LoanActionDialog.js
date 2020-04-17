@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
 
 import { Modal } from '@folio/stripes/components';
 
@@ -11,7 +10,8 @@ class LoanActionDialog extends React.Component {
     onClose: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
     loan: PropTypes.object.isRequired,
-    loanActionProps: PropTypes.object.isRequired,
+    loanAction: PropTypes.string.isRequired,
+    modalLabel: PropTypes.object.isRequired,
   };
 
   render() {
@@ -19,25 +19,20 @@ class LoanActionDialog extends React.Component {
       onClose,
       open,
       loan,
-      loanActionProps: {
-        loanAction,
-        modalId,
-        modalLabel,
-      },
+      loanAction,
+      modalLabel,
     } = this.props;
 
     if (!loan) return null;
 
-    const label = <FormattedMessage id={`ui-users.loans.${modalLabel}`} />;
-
     return (
       <Modal
-        id={modalId}
+        id={`${loanAction}-modal`}
         size="small"
         dismissible
         closeOnBackgroundClick
         open={open}
-        label={label}
+        label={modalLabel}
         onClose={onClose}
       >
         <ModalContent

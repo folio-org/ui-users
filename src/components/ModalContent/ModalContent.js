@@ -12,6 +12,8 @@ import {
 import { stripesConnect } from '@folio/stripes/core';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
+import { loanActions } from '../../constants';
+
 import css from './ModalContent.css';
 
 class ModalContent extends React.Component {
@@ -84,7 +86,7 @@ class ModalContent extends React.Component {
 
     const requestData = { comment: additionalInfo };
 
-    if (loanAction === 'claimReturned') {
+    if (loanAction === loanActions.CLAIMED_RETURNED) {
       requestData.itemClaimedReturnedDateTime = new Date().toISOString();
     }
 

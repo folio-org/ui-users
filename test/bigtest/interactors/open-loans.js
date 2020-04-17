@@ -60,9 +60,9 @@ import DialogInteractor from './dialog';
   bulkRenewalModal = new BulkRenewalModal();
   bulkOverrideModal = new BulkOverrideModal();
   changeDueDateOverlay = new ChangeDueDateOverlay();
-  declareLostDialog = new DialogInteractor('#declare-lost-modal');
-  claimReturnedDialog = new DialogInteractor('#claim-returned-modal');
-  markAsMissingDialog = new DialogInteractor('#mark-as-missing-modal');
+  declareLostDialog = new DialogInteractor('#declareLost-modal');
+  claimReturnedDialog = new DialogInteractor('#claimReturned-modal');
+  markAsMissingDialog = new DialogInteractor('#markAsMissing-modal');
   dueDateCalendarCellButton = new ButtonInteractor(`[data-test-date="${moment().format('MM/DD/YYYY')}"]`);
   rowButtons = collection('[data-test-open-loans-list] button[role="row"]', ButtonInteractor);
 
