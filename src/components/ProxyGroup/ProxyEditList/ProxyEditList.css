@@ -3,7 +3,7 @@
 .label {
   margin-top: var(--gutter-static-two-thirds);
   color: #333;
-  font-size: 21px;
+  font-size:  calc(var(--gutter-static-two-thirds) * 2);
   font-weight: normal;
   margin-bottom: var(--gutter-static-one-third);
 }
