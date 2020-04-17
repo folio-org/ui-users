@@ -42,8 +42,7 @@ export default class Filters extends React.Component {
 
   getValuesFromResources = (type, key) => {
     const items = get(this.props.resources, `${type}.records`, [])
-      .map(item => ({ label: item[key], value: item[key] }));
-
+      .map(item => ({ label: item[key], value: item.id }));
     return sortBy(items, 'label');
   };
 
