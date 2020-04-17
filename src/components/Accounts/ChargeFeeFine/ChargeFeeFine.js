@@ -156,7 +156,7 @@ class ChargeFeeFine extends React.Component {
       const newAction = {
         typeAction,
         source: `${this.props.okapi.currentUser.lastName}, ${this.props.okapi.currentUser.firstName}`,
-        createdAt: `${this.props.stripes.okapi.currentUser.curServicePoint.name}`,
+        createdAt: `${this.props.okapi.currentUser.curServicePoint.name}`,
         accountId: id,
         dateAction,
         userId: this.props.user.id,
