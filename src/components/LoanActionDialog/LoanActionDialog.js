@@ -1,16 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
 
 import { Modal } from '@folio/stripes/components';
 
-import DeclareLostInfo from './DeclareLostInfo';
+import ModalContent from '../ModalContent';
 
-class DeclareLostDialog extends React.Component {
+class LoanActionDialog extends React.Component {
   static propTypes = {
     onClose: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
     loan: PropTypes.object.isRequired,
+    loanAction: PropTypes.string.isRequired,
+    modalLabel: PropTypes.object.isRequired,
   };
 
   render() {
@@ -18,15 +19,15 @@ class DeclareLostDialog extends React.Component {
       onClose,
       open,
       loan,
+      loanAction,
+      modalLabel,
     } = this.props;
 
     if (!loan) return null;
 
-    const modalLabel = <FormattedMessage id="ui-users.loans.confirmLostState" />;
-
     return (
       <Modal
-        id="declare-lost-modal"
+        id={`${loanAction}-modal`}
         size="small"
         dismissible
         closeOnBackgroundClick
@@ -34,7 +35,8 @@ class DeclareLostDialog extends React.Component {
         label={modalLabel}
         onClose={onClose}
       >
-        <DeclareLostInfo
+        <ModalContent
+          loanAction={loanAction}
           loan={loan}
           onClose={onClose}
         />
@@ -43,4 +45,4 @@ class DeclareLostDialog extends React.Component {
   }
 }
 
-export default DeclareLostDialog;
+export default LoanActionDialog;
