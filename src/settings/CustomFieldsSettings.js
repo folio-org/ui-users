@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Switch, Route } from 'react-router-dom';
 
 import { useStripes } from '@folio/stripes/core';
-import { ViewCustomFieldsSettings } from '@folio/stripes/smart-components';
+import { ViewCustomFieldsSettings, EditCustomFieldsSettings } from '@folio/stripes/smart-components';
 
 const propTypes = {
   history: PropTypes.shape({
@@ -16,8 +17,14 @@ const CustomFieldsSettings = ({
 }) => {
   const stripes = useStripes();
 
+  const base = '/settings/users/custom-fields';
+
   const redirectToEdit = () => {
-    history.push('/users/custom-fields/edit');
+    history.push(`${base}/edit`);
+  };
+
+  const redirectToView = () => {
+    history.push(`${base}`);
   };
 
   const permissions = {
@@ -26,17 +33,33 @@ const CustomFieldsSettings = ({
     canDelete: stripes.hasPerm('ui-users.settings.customfields.all'),
   };
 
+  const backendModuleName = 'users';
+  const entityType = 'user';
+
+
   if (!permissions.canView) {
     history.replace('/settings/users');
   }
 
   return (
-    <ViewCustomFieldsSettings
-      backendModuleName="users"
-      entityType="user"
-      redirectToEdit={redirectToEdit}
-      permissions={permissions}
-    />
+    <Switch>
+      <Route exact path={base}>
+        <ViewCustomFieldsSettings
+          backendModuleName={backendModuleName}
+          entityType={entityType}
+          redirectToEdit={redirectToEdit}
+          permissions={permissions}
+        />
+      </Route>
+      <Route exact path={`${base}/edit`}>
+        <EditCustomFieldsSettings
+          backendModuleName={backendModuleName}
+          entityType={entityType}
+          redirectToView={redirectToView}
+          permissions={permissions}
+        />
+      </Route>
+    </Switch>
   );
 };
 
