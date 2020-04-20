@@ -2,6 +2,7 @@
 
 ## [3.1.0] (IN PROGRESS)
 
+* Support `loan-storage` interface version 7.0. UIU-1598.
 * Add posibility to view/create/edit custom fields on user record. UIU-1279.
 * Increase limit of service points in the Associated Service Points dropdown at Settings --> Users --> Fee/Fine Owners. Refs UIU-1540.
 * Fix ability to mark user as inactive. Fixes UIU-913.
