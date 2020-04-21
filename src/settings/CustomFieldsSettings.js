@@ -19,14 +19,6 @@ const CustomFieldsSettings = ({
 
   const base = '/settings/users/custom-fields';
 
-  const redirectToEdit = () => {
-    history.push(`${base}/edit`);
-  };
-
-  const redirectToView = () => {
-    history.push(`${base}`);
-  };
-
   const permissions = {
     canView: stripes.hasPerm('ui-users.settings.customfields.view'),
     canEdit: stripes.hasPerm('ui-users.settings.customfields.edit'),
@@ -47,7 +39,7 @@ const CustomFieldsSettings = ({
         <ViewCustomFieldsSettings
           backendModuleName={backendModuleName}
           entityType={entityType}
-          redirectToEdit={redirectToEdit}
+          editRoute={`${base}/edit`}
           permissions={permissions}
         />
       </Route>
@@ -55,7 +47,7 @@ const CustomFieldsSettings = ({
         <EditCustomFieldsSettings
           backendModuleName={backendModuleName}
           entityType={entityType}
-          redirectToView={redirectToView}
+          viewRoute={base}
           permissions={permissions}
         />
       </Route>
