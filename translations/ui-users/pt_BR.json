@@ -680,8 +680,8 @@
     "settings.limits.feeFine.error": "Um saldo máximo de 0 resultará no bloqueio de todos os usuários deste grupo; para pular esse limite, deixe o valor definido em branco",
     "settings.limits.validation.error": "Deve estar em branco ou um número entre 0 e 999999",
     "permission.settings.limits": "Configurações (Usuários): Pode criar, editar e remover limites de blocos de usuários",
-    "data.loanActionMap.markedAsMissing": "Marked as missing",
-    "loans.markAsMissing": "Mark as missing",
-    "loans.markAsMissingDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be marked <strong>Missing</strong> and patron will not be billed",
-    "loans.confirmAsMissing": "Confirm item as missing"
+    "data.loanActionMap.markedAsMissing": "Marcado como desaparecido",
+    "loans.markAsMissing": "Marcar como desaparecido",
+    "loans.markAsMissingDialogBody": "<strong>{title} ({materialType})</strong> (Código de barras: {barcode}) será marcado como <strong>desaparecido</strong> e o usuário não será cobrado",
+    "loans.confirmAsMissing": "Confirmar item como desaparecido"
 }
