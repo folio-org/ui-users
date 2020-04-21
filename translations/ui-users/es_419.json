@@ -675,13 +675,13 @@
     "loans.history": "Loan action history",
     "accounts.loading": "Cargando cuentas",
     "settings.limits": "Límites",
-    "settings.limits.callout.message": "The patron block limit for patron group <strong>{patronGroup}</strong> has been successfully <strong>updated</strong>.",
+    "settings.limits.callout.message": "El limite de bloqueo para el grupo <strong> {title} </strong> fue actualizado con <strong>éxito </strong> ",
     "settings.limits.callout.error": "Algo estuvo mal",
-    "settings.limits.feeFine.error": "A maximum balance of 0 will result in all patrons in this group being blocked; to skip this limit, leave value set to blank",
-    "settings.limits.validation.error": "Must be blank or a number from 0 to 999999",
-    "permission.settings.limits": "Settings (Users): Can create, edit and remove patron blocks limits",
+    "settings.limits.feeFine.error": "Un saldo máximo de 0 dará como resultado el bloqueo de todos los usuarios de este grupo; para omitir este límite, deje el valor establecido en blanco",
+    "settings.limits.validation.error": "Debe estar en blanco o un número desde 0 al 999999",
+    "permission.settings.limits": "Configuración (Usuarios): Pueden crear, editar y borrar el limite de bloqueo de usuarios",
     "data.loanActionMap.markedAsMissing": "Marcado como perdido",
     "loans.markAsMissing": "Marcar como perdido",
-    "loans.markAsMissingDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be marked <strong>Missing</strong> and patron will not be billed",
+    "loans.markAsMissingDialogBody": "<strong>{title} ({materialType})</strong> (El Código de barras: {barcode}) podría se marcado como <strong>Perdido y el usuario no asumirá ninguna multa o cargo. </strong>",
     "loans.confirmAsMissing": "Confirmar ítem como perdido"
 }
