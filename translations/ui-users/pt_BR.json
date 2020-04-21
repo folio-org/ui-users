@@ -673,5 +673,15 @@
     "permission.viewproxies": "Usuários: Pode visualizar os proxies atribuídos aos usuários",
     "permission.viewuserservicepoints": "Usuários: Pode visualizar os pontos de serviço atribuídos aos usuários",
     "loans.history": "Histórico de ações de empréstimos",
-    "accounts.loading": "Carregando contas"
+    "accounts.loading": "Carregando contas",
+    "settings.limits": "Limites",
+    "settings.limits.callout.message": "O limite do bloco de usuário para o grupo de usuário <strong>{patronGroup}</strong> foi <strong>atualizado com sucesso</strong>.",
+    "settings.limits.callout.error": "Algo deu errado",
+    "settings.limits.feeFine.error": "Um saldo máximo de 0 resultará no bloqueio de todos os usuários deste grupo; para pular esse limite, deixe o valor definido em branco",
+    "settings.limits.validation.error": "Deve estar em branco ou um número entre 0 e 999999",
+    "permission.settings.limits": "Configurações (Usuários): Pode criar, editar e remover limites de blocos de usuários",
+    "data.loanActionMap.markedAsMissing": "Marcado como desaparecido",
+    "loans.markAsMissing": "Marcar como desaparecido",
+    "loans.markAsMissingDialogBody": "<strong>{title} ({materialType})</strong> (Código de barras: {barcode}) será marcado como <strong>desaparecido</strong> e o usuário não será cobrado",
+    "loans.confirmAsMissing": "Confirmar item como desaparecido"
 }
