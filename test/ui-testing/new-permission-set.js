@@ -64,18 +64,26 @@ module.exports.test = function foo(uiTestCtx) {
           .wait('a[href="/settings/users/perms"]')
           .click('a[href="/settings/users/perms"]')
           .wait('div.hasEntries')
-          .evaluate((name) => {
-            const node = Array.from(
-              document.querySelectorAll('div.hasEntries a div')
-            ).find(e => e.textContent === name);
-            if (node) {
-              node.parentElement.click();
-            } else {
-              throw new Error(`Could not find the permission set ${name}`);
-            }
+          .wait((dn) => {
+            const index = Array.from(
+              document.querySelectorAll('#ModuleContainer div.hasEntries a[class^=NavListItem]')
+            ).findIndex(e => e.textContent === dn);
+            return index >= 0;
           }, displayName)
-          .then(() => {
+          .evaluate((dn) => {
+            const index = Array.from(
+              document.querySelectorAll('#ModuleContainer div.hasEntries a[class^=NavListItem]')
+            ).findIndex(e => e.textContent === dn);
+            if (index === -1) {
+              throw new Error(`Could not find the permission-set ${dn}`);
+            }
+            // CSS selectors are 1-based, which is just totally awesome.
+            return index + 1;
+          }, displayName)
+          .then((entryIndex) => {
             nightmare
+              .wait(`#ModuleContainer div.hasEntries div:nth-of-type(${entryIndex}) a[class^=NavListItem]`)
+              .click(`#ModuleContainer div.hasEntries div:nth-of-type(${entryIndex}) a[class^=NavListItem]`)
               .wait('#clickable-edit-item')
               .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
               .then(done)
