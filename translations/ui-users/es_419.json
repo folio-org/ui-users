@@ -672,7 +672,7 @@
     "permission.viewperms": "Users: Can view permissions assigned to users",
     "permission.viewproxies": "Users: Can view proxies assigned to users",
     "permission.viewuserservicepoints": "Users: Can view service points assigned to users",
-    "loans.history": "Loan action history",
+    "loans.history": "Historial de préstamos",
     "accounts.loading": "Cargando cuentas",
     "settings.limits": "Límites",
     "settings.limits.callout.message": "El limite de bloqueo para el grupo <strong> {title} </strong> fue actualizado con <strong>éxito </strong> ",
