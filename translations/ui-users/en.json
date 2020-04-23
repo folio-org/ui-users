@@ -38,6 +38,7 @@
   "data.loanActionMap.declaredLost": "Declared lost",
   "data.loanActionMap.claimedReturned": "Claimed returned",
   "data.loanActionMap.markedAsMissing": "Marked as missing",
+  "data.loanActionMap.closedLoan": "Closed loan",
 
   "action": "Action",
   "dueDate": "Due date",
