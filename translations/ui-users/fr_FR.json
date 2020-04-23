@@ -683,5 +683,5 @@
     "data.loanActionMap.markedAsMissing": "Marqué comme manquant",
     "loans.markAsMissing": "Marquer comme manquant",
     "loans.markAsMissingDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be marked <strong>Missing</strong> and patron will not be billed",
-    "loans.confirmAsMissing": "Confirm item as missing"
+    "loans.confirmAsMissing": "Confirmer l’article comme manquant"
 }
