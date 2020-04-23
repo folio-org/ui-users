@@ -16,7 +16,8 @@ import {
   Row,
   Col,
   ConfirmationModal,
-  Headline
+  Headline,
+  PaneFooter,
 } from '@folio/stripes/components';
 import { IfPermission } from '@folio/stripes/core';
 import { ViewMetaData } from '@folio/stripes/smart-components';
@@ -108,42 +109,61 @@ class PermissionSetForm extends React.Component {
     });
   }
 
-  saveLastMenu() {
+  getFooter() {
     const {
       pristine,
       submitting,
+      onCancel,
+    } = this.props;
+
+    const cancelButton = (
+      <Button
+        buttonStyle="default mega"
+        id="clickable-close-permission-set"
+        onClick={onCancel}
+      >
+        <FormattedMessage id="ui-users.cancel" />
+      </Button>
+    );
+    const saveButton = (
+      <Button
+        id="clickable-save-permission-set"
+        type="submit"
+        buttonStyle="primary mega"
+        marginBottom0
+        disabled={(pristine || submitting)}
+      >
+        <FormattedMessage id="ui-users.saveAndClose" />
+      </Button>
+    );
+
+    return (
+      <PaneFooter
+        renderStart={cancelButton}
+        renderEnd={saveButton}
+      />
+    );
+  }
+
+  saveLastMenu() {
+    const {
       initialValues,
     } = this.props;
     const { confirmDelete } = this.state;
-    const edit = initialValues && initialValues.id;
-    const saveLabel = edit ?
-      <FormattedMessage id="ui-users.saveAndClose" /> :
-      <FormattedMessage id="ui-users.permissions.createPermissionSet" />;
 
-    return (
+    return initialValues?.id && (
       <PaneMenu>
-        {edit &&
-          <IfPermission perm="perms.permissions.item.delete">
-            <Button
-              id="clickable-delete-set"
-              buttonStyle="danger"
-              onClick={this.beginDelete}
-              disabled={confirmDelete}
-              marginBottom0
-            >
-              <FormattedMessage id="ui-users.delete" />
-            </Button>
-          </IfPermission>
-        }
-        <Button
-          id="clickable-save-permission-set"
-          type="submit"
-          buttonStyle="primary paneHeaderNewButton"
-          marginBottom0
-          disabled={(pristine || submitting)}
-        >
-          {saveLabel}
-        </Button>
+        <IfPermission perm="perms.permissions.item.delete">
+          <Button
+            id="clickable-delete-set"
+            buttonStyle="danger"
+            onClick={this.beginDelete}
+            disabled={confirmDelete}
+            marginBottom0
+          >
+            <FormattedMessage id="ui-users.delete" />
+          </Button>
+        </IfPermission>
       </PaneMenu>
     );
   }
@@ -165,14 +185,9 @@ class PermissionSetForm extends React.Component {
 
     if (selectedSet.id) {
       return (
-        <div>
-          <Icon size="small" icon="edit" />
-          <span>
-            <FormattedMessage id="ui-users.edit">
-              {(editLabel) => `${editLabel}: ${selectedSet.displayName}`}
-            </FormattedMessage>
-          </span>
-        </div>
+        <FormattedMessage id="ui-users.edit">
+          {(editLabel) => `${editLabel}: ${selectedSet.displayName}`}
+        </FormattedMessage>
       );
     }
 
@@ -218,6 +233,7 @@ class PermissionSetForm extends React.Component {
             firstMenu={this.addFirstMenu()}
             lastMenu={this.saveLastMenu()}
             paneTitle={this.renderPaneTitle()}
+            footer={this.getFooter()}
           >
             <Row end="xs">
               <Col xs>
