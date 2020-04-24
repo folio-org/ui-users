@@ -11,4 +11,5 @@ export default {
   'dueDateChanged': 'ui-users.data.loanActionMap.dueDateChanged',
   'renewedThroughOverride': 'ui-users.data.loanActionMap.renewedThroughOverride',
   'checkedOutThroughOverride': 'ui-users.data.loanActionMap.checkedOutThroughOverride',
+  'closedLoan': 'ui-users.data.loanActionMap.closedLoan',
 };

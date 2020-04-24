@@ -17,6 +17,7 @@
 * Add UI to mark claimed returned items as missing. Refs UIU-1216.
 * Fix routing loop caused by incorrect Custom Fields routing. Refs UIU-1594.
 * Settings > Users > Create/Edit Permission set. Refs UIU-1587.
+* Add `Closed loan` translation. Part of UIU-1603.
 
 ## [3.0.0](https://github.com/folio-org/ui-users/tree/v3.0.0) (2020-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.26.0...v3.0.0)
