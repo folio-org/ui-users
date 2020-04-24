@@ -9,7 +9,6 @@ import {
   PaneHeaderIconButton,
   TextField,
   TextArea,
-  Icon,
   Button,
   Accordion,
   ExpandAllButton,
