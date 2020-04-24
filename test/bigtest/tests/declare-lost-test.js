@@ -16,6 +16,9 @@ describe('Declare Lost', () => {
       'manualblocks.collection.get': true,
       'circulation.loans.collection.get': true,
     },
+    currentUser: {
+      curServicePoint: { id: 1 },
+    },
   });
 
   describe('Visiting open loans list page with not declared lost item', () => {

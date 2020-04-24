@@ -10,6 +10,7 @@ export default function setupApplication({
   hasAllPerms = true,
   modules,
   translations,
+  currentUser,
 } = {}) {
   setupStripesCore({
     mirageOptions,
@@ -18,7 +19,8 @@ export default function setupApplication({
     modules,
     translations,
     stripesConfig: {
-      hasAllPerms
+      hasAllPerms,
     },
+    currentUser,
   });
 }
