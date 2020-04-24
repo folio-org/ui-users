@@ -683,5 +683,6 @@
     "data.loanActionMap.markedAsMissing": "Marked as missing",
     "loans.markAsMissing": "Mark as missing",
     "loans.markAsMissingDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be marked <strong>Missing</strong> and patron will not be billed",
-    "loans.confirmAsMissing": "Подтвердите, что элемент отсутствует"
+    "loans.confirmAsMissing": "Подтвердите, что элемент отсутствует",
+    "data.loanActionMap.closedLoan": "Closed loan"
 }

@@ -683,5 +683,6 @@
     "data.loanActionMap.markedAsMissing": "تمت الإشارة إليه كمفقود",
     "loans.markAsMissing": "الإشارة إليه كمفقود",
     "loans.markAsMissingDialogBody": "<strong>{title} ({materialType})</strong> (باركود: {barcode}) سيتم الإشارة إليها كـ<strong>مفقودة</strong> ولن يتم تغريم المستفيد.",
-    "loans.confirmAsMissing": "تأكيد المادة كمفقودة"
+    "loans.confirmAsMissing": "تأكيد المادة كمفقودة",
+    "data.loanActionMap.closedLoan": "Closed loan"
 }
