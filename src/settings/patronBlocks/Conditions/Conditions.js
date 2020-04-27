@@ -6,7 +6,7 @@ import { Callout } from '@folio/stripes/components';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 import ConditionsForm from './ConditionsForm';
-import css from './conditions.css';
+import css from '../patronBlocks.css';
 
 class Conditions extends Component {
   static manifest = Object.freeze({
@@ -81,8 +81,8 @@ class Conditions extends Component {
     } = this.getInitialValues();
 
     return (
-      <section className={css.conditionsWrapperHolder}>
-        <div className={css.conditionsWrapper}>
+      <section className={css.partonBlockWrapperHolder}>
+        <div className={css.partonBlockWrapper}>
           <ConditionsForm
             label={name}
             initialValues={this.getInitialValues()}

@@ -11,7 +11,7 @@ import { Callout } from '@folio/stripes/components';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 import LimitsForm from './LimitsForm';
-import css from './limits.css';
+import css from '../patronBlocks.css';
 
 class Limits extends Component {
   static manifest = Object.freeze({
@@ -190,8 +190,8 @@ class Limits extends Component {
     if (!this._isMounted) return null;
 
     return (
-      <section className={css.limitsWrapperHolder}>
-        <div className={css.limitsWrapper}>
+      <section className={css.partonBlockWrapperHolder}>
+        <div className={css.partonBlockWrapper}>
           <LimitsForm
             patronGroup={patronGroup}
             patronGroupId={patronGroupId}
