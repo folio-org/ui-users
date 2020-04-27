@@ -82,7 +82,10 @@ class Conditions extends Component {
 
     return (
       <section className={css.partonBlockWrapperHolder}>
-        <div className={css.partonBlockWrapper}>
+        <div
+          data-test-conditions-wrapper
+          className={css.partonBlockWrapper}
+        >
           <ConditionsForm
             label={name}
             initialValues={this.getInitialValues()}

@@ -191,7 +191,10 @@ class Limits extends Component {
 
     return (
       <section className={css.partonBlockWrapperHolder}>
-        <div className={css.partonBlockWrapper}>
+        <div
+          data-test-limits-wrapper
+          className={css.partonBlockWrapper}
+        >
           <LimitsForm
             patronGroup={patronGroup}
             patronGroupId={patronGroupId}
