@@ -24,13 +24,14 @@ class Conditions extends Component {
 
   static propTypes = {
     id: PropTypes.string.isRequired,
-    children: PropTypes.node.isRequired,
     mutator: PropTypes.shape({
       patronBlockCondition: PropTypes.shape({
         PUT: PropTypes.func.isRequired,
       }).isRequired,
     }).isRequired,
   };
+
+  callout = React.createRef();
 
   getInitialValues = () => {
     const {
@@ -55,7 +56,7 @@ class Conditions extends Component {
       ...this.normalize(value),
     }).then(() => {
       if (this.callout) {
-        this.callout.sendCallout({
+        this.callout.current.sendCallout({
           message: <SafeHTMLMessage
             id="ui-users.settings.callout.message"
             values={{ name: value.name }}
@@ -76,9 +77,6 @@ class Conditions extends Component {
     }
 
     const {
-      children,
-    } = this.props;
-    const {
       name,
     } = this.getInitialValues();
 
@@ -89,10 +87,8 @@ class Conditions extends Component {
             label={name}
             initialValues={this.getInitialValues()}
             onSubmit={this.onSubmit}
-          >
-            {children}
-          </ConditionsForm>
-          <Callout ref={(ref) => { this.callout = ref; }} />
+          />
+          <Callout ref={this.callout} />
         </div>
       </section>
     );

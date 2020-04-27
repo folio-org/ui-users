@@ -122,7 +122,6 @@ class ConditionsForm extends Component {
     return (
       <form
         data-test-conditions-form
-        id="chargedOutConditionsForm"
         className={css.conditionsForm}
         onSubmit={handleSubmit}
       >
