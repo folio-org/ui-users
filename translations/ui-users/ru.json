@@ -674,14 +674,15 @@
     "permission.viewuserservicepoints": "Users: Can view service points assigned to users",
     "loans.history": "Loan action history",
     "accounts.loading": "Loading accounts",
-    "settings.limits": "Limits",
+    "settings.limits": "Ограничения",
     "settings.limits.callout.message": "The patron block limit for patron group <strong>{patronGroup}</strong> has been successfully <strong>updated</strong>.",
-    "settings.limits.callout.error": "Something went wrong",
+    "settings.limits.callout.error": "Произошла ошибка",
     "settings.limits.feeFine.error": "A maximum balance of 0 will result in all patrons in this group being blocked; to skip this limit, leave value set to blank",
     "settings.limits.validation.error": "Must be blank or a number from 0 to 999999",
     "permission.settings.limits": "Settings (Users): Can create, edit and remove patron blocks limits",
-    "data.loanActionMap.markedAsMissing": "Marked as missing",
-    "loans.markAsMissing": "Mark as missing",
+    "data.loanActionMap.markedAsMissing": "Отмечен как отсутствующий",
+    "loans.markAsMissing": "Отметить как отсутствующий",
     "loans.markAsMissingDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be marked <strong>Missing</strong> and patron will not be billed",
-    "loans.confirmAsMissing": "Подтвердите, что элемент отсутствует"
+    "loans.confirmAsMissing": "Подтвердите, что элемент отсутствует",
+    "data.loanActionMap.closedLoan": "Closed loan"
 }
