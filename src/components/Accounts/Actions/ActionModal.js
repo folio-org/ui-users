@@ -21,7 +21,7 @@ import {
   Select,
 } from '@folio/stripes/components';
 
-import { calculateSelectedAmount } from '../accountFunctions';
+import { calculateSelectedAmount, calculateRemainingAmount } from '../accountFunctions';
 import css from './PayWaive.css';
 
 const validate = (values, props) => {
@@ -31,7 +31,7 @@ const validate = (values, props) => {
     commentRequired
   } = props;
 
-  const selected = calculateSelectedAmount(accounts);
+  const selected = calculateSelectedAmount(accounts, action === 'refund');
   const errors = {};
 
   if (!parseFloat(values.amount)) {
@@ -61,6 +61,8 @@ class ActionModal extends React.Component {
     accounts: PropTypes.arrayOf(PropTypes.object),
     data: PropTypes.arrayOf(PropTypes.object),
     balance: PropTypes.string,
+    totalPaidAmount: PropTypes.string,
+    owedAmount: PropTypes.number,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
     pristine: PropTypes.bool,
@@ -167,6 +169,10 @@ class ActionModal extends React.Component {
     return action === 'payment';
   }
 
+  isRefundAction = (action) => {
+    return action === 'refund';
+  }
+
   onBlurAmount = (e) => {
     const amount = parseFloat(e.target.value || 0).toFixed(2);
     e.target.value = amount;
@@ -182,6 +188,8 @@ class ActionModal extends React.Component {
       accounts,
       action,
       balance,
+      totalPaidAmount,
+      owedAmount,
       commentRequired,
       currentValues: {
         amount,
@@ -208,8 +216,9 @@ class ActionModal extends React.Component {
       }
     });
 
-    const selected = calculateSelectedAmount(accounts);
-    const remaining = amount > 0 ? parseFloat(balance - amount).toFixed(2) : parseFloat(balance).toFixed(2);
+    const selected = calculateSelectedAmount(accounts, action === 'refund');
+    const remaining = calculateRemainingAmount(amount, balance, selected, action);
+
     const ownerOptions = owners.filter(o => o.owner !== 'Shared').map(o => ({ value: o.id, label: o.owner }));
 
     let options = (this.isPaymentAction(action)) ? data.filter(d => (d.ownerId === (accounts.length > 1 ? ownerId : (accounts[0] || {}).ownerId))) : data;
@@ -231,15 +240,27 @@ class ActionModal extends React.Component {
           <br />
           <Row>
             <Col xs={5}>
-              <Row end="xs">
-                <Col xs={7}>
-                  <FormattedMessage id="ui-users.accounts.totalOwed" />
-                  :
-                </Col>
-                <Col xs={4}>
-                  {balance}
-                </Col>
-              </Row>
+              {this.isRefundAction(action) ? (
+                <Row end="xs">
+                  <Col xs={7}>
+                    <FormattedMessage id="ui-users.accounts.totalPaid" />
+                    :
+                  </Col>
+                  <Col xs={4}>
+                    {totalPaidAmount}
+                  </Col>
+                </Row>
+              ) : (
+                <Row end="xs">
+                  <Col xs={7}>
+                    <FormattedMessage id="ui-users.accounts.totalOwed" />
+                    :
+                  </Col>
+                  <Col xs={4}>
+                    {balance}
+                  </Col>
+                </Row>
+              )}
               <Row end="xs">
                 <Col xs={7}>
                   <FormattedMessage id="ui-users.accounts.selectedAmount" />
@@ -281,6 +302,17 @@ class ActionModal extends React.Component {
                   {remaining}
                 </Col>
               </Row>
+              {this.isRefundAction(action) && (
+                <Row end="xs">
+                  <Col xs={7}>
+                    <FormattedMessage id="ui-users.accounts.otherOwed" />
+                    :
+                  </Col>
+                  <Col xs={4}>
+                    {owedAmount}
+                  </Col>
+                </Row>
+              )}
             </Col>
             {(this.isPaymentAction(action) && accounts.length > 1) &&
               <Col xs={4}>

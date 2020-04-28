@@ -24,6 +24,8 @@ import {
   nav,
 } from '../../util';
 
+import { isRefundAllowed } from '../accountFunctions';
+
 class ViewFeesFines extends React.Component {
   static propTypes = {
     resources: PropTypes.shape({
@@ -345,6 +347,13 @@ class ViewFeesFines extends React.Component {
     }, [a]);
   }
 
+  refund(a, e) {
+    if (e) e.preventDefault();
+    this.props.onChangeActions({
+      refundModal: true,
+    }, [a]);
+  }
+
   loanDetails(a, e) {
     const { history, match: { params } } = this.props;
     nav.onClickViewLoanActionsHistory(e, { id: a.loanId }, history, params);
@@ -358,6 +367,7 @@ class ViewFeesFines extends React.Component {
       transfer: disabled,
       error: disabled,
       loan: (a.loanId === '0' || !a.loanId),
+      refund: !isRefundAllowed(a),
     };
     const buttonDisabled = !this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
 
@@ -379,8 +389,8 @@ class ViewFeesFines extends React.Component {
               <FormattedMessage id="ui-users.accounts.history.button.waive" />
             </Button>
           </MenuItem>
-          <MenuItem>
-            <Button disabled buttonStyle="dropdownItem">
+          <MenuItem itemMeta={{ a, action: 'refund' }}>
+            <Button disabled={!((elipsis.refund === false) && (buttonDisabled === false))} buttonStyle="dropdownItem">
               <FormattedMessage id="ui-users.accounts.history.button.refund" />
             </Button>
           </MenuItem>

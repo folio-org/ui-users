@@ -35,6 +35,13 @@ export const statusFilter = [
   { label: 'ui-users.filters.status.inactive', value: 'inactive' }
 ];
 
+export const paymentStatusesAllowedToRefund = [
+  'Paid fully',
+  'Paid partially',
+  'Transferred fully',
+  'Transferred partially',
+];
+
 /* With current id determines that this is fee/fine condition,
  because this condition is validating with different message,
  and condition fields are rendering dinamically.

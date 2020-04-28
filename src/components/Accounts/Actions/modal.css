@@ -8,3 +8,7 @@
 .alertDetails {
   color: var(--error);
 }
+
+.warning {
+  color: red;
+}

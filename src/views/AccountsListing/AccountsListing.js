@@ -26,7 +26,7 @@ import css from './AccountsListing.css';
 
 import { getFullName } from '../../components/util';
 import { Actions } from '../../components/Accounts/Actions';
-import { count, handleFilterChange, handleFilterClear } from '../../components/Accounts/accountFunctions';
+import { count, handleFilterChange, handleFilterClear, calculateTotalPaymentAmount, calculateOwedFeeFines } from '../../components/Accounts/accountFunctions';
 
 import {
   Menu,
@@ -150,8 +150,10 @@ class AccountsHistory extends React.Component {
         waiveMany: false,
         transferModal: false,
         transferMany: false,
-        refund: false,
         transfer: false,
+        refund: false,
+        refundModal: false,
+        refundMany: false,
       },
     };
 
@@ -251,8 +253,10 @@ class AccountsHistory extends React.Component {
         waiveMany: false,
         transferModal: false,
         transferMany: false,
-        refund: false,
         transfer: false,
+        refund: false,
+        refundModal: false,
+        refundMany: false,
       },
     });
   }
@@ -473,6 +477,14 @@ class AccountsHistory extends React.Component {
     });
     balance /= 100;
 
+    const totalPaidAmount = calculateTotalPaymentAmount(resources?.feefineshistory?.records);
+    const uncheckedAccounts = _.differenceWith(
+      this.actions || resources?.feefineshistory?.records || [],
+      this.state.selectedAccounts,
+      (account, selectedAcctount) => (account.id === selectedAcctount.id)
+    );
+    const owedAmount = calculateOwedFeeFines(uncheckedAccounts);
+
     const outstandingBalance = userOwned
       ? parseFloat(balance || 0).toFixed(2)
       : '0.00';
@@ -521,6 +533,7 @@ class AccountsHistory extends React.Component {
                 filters={filters}
                 balance={userOwned ? balance : 0}
                 selected={selected}
+                selectedAccounts={selectedAccounts}
                 actions={this.state.actions}
                 query={query}
                 onChangeActions={this.onChangeActions}
@@ -569,6 +582,8 @@ class AccountsHistory extends React.Component {
                 selectedAccounts={selectedAccounts}
                 onChangeSelectedAccounts={this.onChangeSelectedAccounts}
                 balance={balance}
+                totalPaidAmount={totalPaidAmount}
+                owedAmount={owedAmount}
                 handleEdit={this.handleEdit}
               />
             </section>
