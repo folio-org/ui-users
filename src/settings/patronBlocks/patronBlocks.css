@@ -1,13 +1,13 @@
-.limitsForm {
+.partonBlockForm {
   height: 100%;
 }
 
-.limitsWrapperHolder {
+.partonBlockWrapperHolder {
   display: flex;
   flex: 0 0 30%;
   overflow: hidden;
 }
 
-.limitsWrapper {
+.partonBlockWrapper {
   width: 100%;
 }

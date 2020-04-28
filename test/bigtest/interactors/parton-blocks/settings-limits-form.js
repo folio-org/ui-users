@@ -11,7 +11,7 @@ import CalloutInteractor from '@folio/stripes-components/lib/Callout/tests/inter
 import TextFieldInteractor from './text-field';
 
 @interactor class SettingsLimitsForm {
-  static defaultScope = ('[class*=limitsWrapper]');
+  static defaultScope = ('[data-test-limits-wrapper]');
 
   form = scoped('[data-test-limits-form]');
   formHeader = text('[class*=paneTitleLabel]');

@@ -36,7 +36,7 @@ class ConditionsSettings extends Component {
     }).isRequired,
   };
 
-  getConditions = () => {
+  getConditionsPages = () => {
     const {
       resources: {
         patronBlockConditions: {
@@ -52,14 +52,14 @@ class ConditionsSettings extends Component {
         name,
       } = patronBlockCondition;
 
-      function tempConditions() {
+      function renderConditions() {
         return <Conditions id={id} />;
       }
 
       routes.push({
         route: id,
         label: name,
-        component: tempConditions,
+        component: renderConditions,
       });
     });
 
@@ -74,15 +74,13 @@ class ConditionsSettings extends Component {
   }
 
   render() {
-    if (!this.shouldRenderSettings()) {
-      return null;
-    }
+    if (!this.shouldRenderSettings()) return null;
 
     return (
       <Settings
         {...this.props}
         navPaneWidth="fill"
-        pages={this.getConditions()}
+        pages={this.getConditionsPages()}
         paneTitle={<FormattedMessage id="ui-users.settings.conditions" />}
       />
     );
