@@ -214,7 +214,7 @@
 
   "extended.createPasswordModal.label": "Create password email confirmation",
   "extended.createPasswordModal.linkWasSent": "A create password link was sent to:",
-  "extended.createPasswordModal.linkInstructions": "The following link can be sent if the email was now received",
+  "extended.createPasswordModal.linkInstructions": "The following link can be sent if the email was not received",
 
   "contact.contactInformation": "Contact Information",
   "contact.email": "Email",
