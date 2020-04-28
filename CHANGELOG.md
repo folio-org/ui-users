@@ -1,5 +1,10 @@
 # Change history for ui-users
 
+## [3.0.4](https://github.com/folio-org/ui-users/tree/v3.0.4) (2020-04-28)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v3.0.3...v3.0.4)
+
+* The Fee/fine details page should display a link to the loan-details. Fixes UIU-1578.
+
 ## [3.0.3](https://github.com/folio-org/ui-users/tree/v3.0.3) (2020-04-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v3.0.2...v3.0.3)
 
