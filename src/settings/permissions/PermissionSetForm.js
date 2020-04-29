@@ -27,6 +27,8 @@ import { Field } from 'redux-form';
 import PermissionsAccordion from '../../components/PermissionsAccordion';
 import { statusFilterConfig } from '../../components/PermissionsAccordion/helpers/filtersConfig';
 
+import styles from './PermissionSetForm.css';
+
 class PermissionSetForm extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
@@ -224,6 +226,7 @@ class PermissionSetForm extends React.Component {
     return (
       <form
         id="form-permission-set"
+        classNmae={styles.permSetForm}
         onSubmit={handleSubmit(this.saveSet)}
       >
         <Paneset isRoot>
