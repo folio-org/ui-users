@@ -21,7 +21,11 @@ import {
   Select,
 } from '@folio/stripes/components';
 
-import { calculateSelectedAmount, calculateRemainingAmount } from '../accountFunctions';
+import {
+  calculateSelectedAmount,
+  calculateRemainingAmount,
+} from '../accountFunctions';
+
 import css from './PayWaive.css';
 
 const validate = (values, props) => {
@@ -62,7 +66,7 @@ class ActionModal extends React.Component {
     data: PropTypes.arrayOf(PropTypes.object),
     balance: PropTypes.string,
     totalPaidAmount: PropTypes.string,
-    owedAmount: PropTypes.number,
+    owedAmount: PropTypes.string,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
     pristine: PropTypes.bool,
@@ -75,6 +79,11 @@ class ActionModal extends React.Component {
     intl: PropTypes.object,
     currentValues: PropTypes.object,
     dispatch: PropTypes.func,
+  };
+
+  static defaultProps = {
+    totalPaidAmount: '',
+    owedAmount: '',
   };
 
   onClose = () => {

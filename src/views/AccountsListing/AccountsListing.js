@@ -26,7 +26,13 @@ import css from './AccountsListing.css';
 
 import { getFullName } from '../../components/util';
 import { Actions } from '../../components/Accounts/Actions';
-import { count, handleFilterChange, handleFilterClear, calculateTotalPaymentAmount, calculateOwedFeeFines } from '../../components/Accounts/accountFunctions';
+import {
+  calculateTotalPaymentAmount,
+  calculateOwedFeeFines,
+  count,
+  handleFilterChange,
+  handleFilterClear,
+} from '../../components/Accounts/accountFunctions';
 
 import {
   Menu,
@@ -479,10 +485,11 @@ class AccountsHistory extends React.Component {
 
     const totalPaidAmount = calculateTotalPaymentAmount(resources?.feefineshistory?.records);
     const uncheckedAccounts = _.differenceWith(
-      this.actions || resources?.feefineshistory?.records || [],
-      this.state.selectedAccounts,
+      resources?.feefineshistory?.records || [],
+      this.accounts || this.state.selectedAccounts,
       (account, selectedAcctount) => (account.id === selectedAcctount.id)
     );
+
     const owedAmount = calculateOwedFeeFines(uncheckedAccounts);
 
     const outstandingBalance = userOwned

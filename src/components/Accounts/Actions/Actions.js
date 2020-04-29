@@ -16,12 +16,16 @@ import {
   ConfirmationModal
 } from '@folio/stripes/components';
 
-import { calculateSelectedAmount, loadServicePoints, isRefundAllowed } from '../accountFunctions';
 import CancellationModal from './CancellationModal';
 import CommentModal from './CommentModal';
 import WarningModal from './WarningModal';
 import ActionModal from './ActionModal';
 import { getFullName } from '../../util';
+import {
+  calculateSelectedAmount,
+  isRefundAllowed,
+  loadServicePoints,
+} from '../accountFunctions';
 
 class Actions extends React.Component {
   static manifest = Object.freeze({
@@ -87,6 +91,9 @@ class Actions extends React.Component {
       accounts: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
+      refunds: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
     }),
     mutator: PropTypes.shape({
       user: PropTypes.object,
@@ -112,6 +119,11 @@ class Actions extends React.Component {
     user: PropTypes.object,
     intl: PropTypes.object.isRequired,
     match: PropTypes.object,
+  };
+
+  static defaultProps = {
+    totalPaidAmount: 0,
+    owedAmount: 0,
   };
 
   constructor(props) {
@@ -270,7 +282,7 @@ class Actions extends React.Component {
   onSubmit(values, action) {
     const type = this.props.accounts[0] || {};
     delete type.rowIndex;
-    this.action(type, values.amount, values, action)
+    return this.action(type, values.amount, values, action)
       .then(() => this.props.handleEdit(1))
       .then(() => this.showCalloutMessage(type))
       .then(() => this.onCloseActionModal());
@@ -303,7 +315,7 @@ class Actions extends React.Component {
       promises.push(promise);
     });
 
-    Promise.all(promises).then(() => {
+    return Promise.all(promises).then(() => {
       this.props.handleEdit(1);
       this.onCloseActionModal();
     });
@@ -314,7 +326,7 @@ class Actions extends React.Component {
     this.props.mutator.activeRecord.update({ id: type.id });
     let paymentStatus = _.capitalize(formatMessage({ id: `ui-users.accounts.actions.warning.${action}Action` }));
     const owners = _.get(this.props.resources, ['owners', 'records'], []);
-    if (amount < type.remaining) {
+    if (parseFloat(amount) < type.remaining) {
       paymentStatus = `${paymentStatus} ${formatMessage({ id: 'ui-users.accounts.status.partially' })}`;
     } else {
       paymentStatus = `${paymentStatus} ${formatMessage({ id: 'ui-users.accounts.status.fully' })}`;
@@ -343,7 +355,7 @@ class Actions extends React.Component {
     });
   }
 
-  onConfirm = () => {
+  onConfirm = async () => {
     const { actions, selectedAccounts } = this.props;
     const { values } = this.state;
 
@@ -360,9 +372,13 @@ class Actions extends React.Component {
     } else if (actions.transferMany) {
       this.onSubmitMany(values, selectedAccounts, 'transfer');
     } else if (actions.refundModal) {
-      this.onSubmit(values, 'refund');
+      this.onSubmit(values, 'credit').then(() => {
+        this.onSubmit(values, 'refund');
+      });
     } else if (actions.refundMany) {
-      this.onSubmitMany(values, selectedAccounts, 'refund');
+      this.onSubmitMany(values, selectedAccounts, 'credit').then(() => {
+        this.onSubmitMany(values, selectedAccounts, 'refund');
+      });
     }
     this.setState({ submitting: true });
 

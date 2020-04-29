@@ -80,6 +80,7 @@ class AccountDetails extends React.Component {
   static defaultProps = {
     itemDetails: {},
     account: {},
+    owedAmount: 0,
   }
 
   constructor(props) {

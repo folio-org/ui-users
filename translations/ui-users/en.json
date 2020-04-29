@@ -659,6 +659,7 @@
   "accounts.actions.warning.waiveAction": "waived",
   "accounts.actions.warning.transferAction": "transferred",
   "accounts.actions.warning.refundAction": "refunded",
+  "accounts.actions.warning.creditAction": "credited",
   "accounts.actions.warning.deselect": "Deselect to continue",
   "accounts.actions.warning.closedItems": "are already closed",
   "accounts.actions.warning.unpaidItems": "were not paid",

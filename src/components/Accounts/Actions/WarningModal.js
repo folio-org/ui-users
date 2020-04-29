@@ -24,8 +24,6 @@ import { isRefundAllowed } from '../accountFunctions';
 
 import css from './modal.css';
 
-import css from './modal.css';
-
 class WarningModal extends React.Component {
   static propTypes = {
     accounts: PropTypes.arrayOf(PropTypes.object),

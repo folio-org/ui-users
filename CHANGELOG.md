@@ -20,6 +20,7 @@
 * Add `Closed loan` translation. Part of UIU-1603.
 * Pass current `servicePointId` to `declare-item-lost`. Part of UIU-1203.
 * Remove hardcoded ids from Parton Block Conditions page. Refs UIU-1609.
+* Refund fees/fines: Enter refund. Refs UIU-1139.
 
 ## [3.0.0](https://github.com/folio-org/ui-users/tree/v3.0.0) (2020-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.26.0...v3.0.0)
