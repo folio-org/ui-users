@@ -214,6 +214,7 @@ describe('User Edit Page', () => {
   });
 
   describe('changing status field', () => {
+    this.timeout(6000);
     describe('changing status to inactive', () => {
       beforeEach(async function () {
         await UserFormPage.statusField.selectAndBlur('Inactive');
