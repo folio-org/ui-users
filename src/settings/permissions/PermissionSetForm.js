@@ -226,7 +226,7 @@ class PermissionSetForm extends React.Component {
     return (
       <form
         id="form-permission-set"
-        classNmae={styles.permSetForm}
+        className={styles.permSetForm}
         onSubmit={handleSubmit(this.saveSet)}
       >
         <Paneset isRoot>
