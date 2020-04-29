@@ -214,7 +214,6 @@ describe('User Edit Page', () => {
   });
 
   describe('changing status field', () => {
-    this.timeout(6000);
     describe('changing status to inactive', () => {
       beforeEach(async function () {
         await UserFormPage.statusField.selectAndBlur('Inactive');
@@ -224,7 +223,7 @@ describe('User Edit Page', () => {
 
       it('should display inactive status', () => {
         expect(InstanceViewPage.userInfo.keyValues(5).text).to.equal('inactive');
-      });
+      }).timeout(6000);
     });
 
     describe('clearing expirationDate field', () => {
@@ -237,7 +236,7 @@ describe('User Edit Page', () => {
 
       it('should display active status', () => {
         expect(InstanceViewPage.userInfo.keyValues(5).text).to.equal('active');
-      });
+      }).timeout(6000);
     });
   });
 });
