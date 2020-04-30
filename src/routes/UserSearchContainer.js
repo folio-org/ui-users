@@ -177,6 +177,10 @@ class UserSearchContainer extends React.Component {
   }
 
   render() {
+    const {
+      location: { search },
+    } = this.props;
+
     if (this.source) {
       this.source.update(this.props);
     }
@@ -184,7 +188,7 @@ class UserSearchContainer extends React.Component {
     return (
       <UserSearch
         source={this.source}
-        initialSearch="?sort=name"
+        initialSearch={search}
         onNeedMoreData={this.onNeedMoreData}
         queryGetter={this.queryGetter}
         querySetter={this.querySetter}
