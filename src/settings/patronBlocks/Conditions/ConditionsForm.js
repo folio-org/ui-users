@@ -14,7 +14,7 @@ import {
 } from '@folio/stripes/components';
 import stripesFinalForm from '@folio/stripes/final-form';
 
-import css from './conditions.css';
+import css from '../patronBlocks.css';
 
 function showValidationErrors(values) {
   const {
@@ -122,8 +122,7 @@ class ConditionsForm extends Component {
     return (
       <form
         data-test-conditions-form
-        id="chargedOutConditionsForm"
-        className={css.conditionsForm}
+        className={css.partonBlockForm}
         onSubmit={handleSubmit}
       >
         <Pane

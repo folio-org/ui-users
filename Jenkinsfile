@@ -5,6 +5,6 @@ buildNPM {
   runLint = 'yes'
   runRegression = 'no'
   runSonarqube = true
-  runTest = 'no'
-  runTestOptions = '--karma.singleRun --karma.browsers ChromeDocker --karma.reporters mocha junit --coverage'
+  runTest = 'yes'
+  runTestOptions = '--bundle --karma.singleRun --karma.browsers ChromeDocker --karma.reporters mocha junit --coverage'
 }

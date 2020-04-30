@@ -6,7 +6,7 @@ import { Callout } from '@folio/stripes/components';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 import ConditionsForm from './ConditionsForm';
-import css from './conditions.css';
+import css from '../patronBlocks.css';
 
 class Conditions extends Component {
   static manifest = Object.freeze({
@@ -24,13 +24,14 @@ class Conditions extends Component {
 
   static propTypes = {
     id: PropTypes.string.isRequired,
-    children: PropTypes.node.isRequired,
     mutator: PropTypes.shape({
       patronBlockCondition: PropTypes.shape({
         PUT: PropTypes.func.isRequired,
       }).isRequired,
     }).isRequired,
   };
+
+  callout = React.createRef();
 
   getInitialValues = () => {
     const {
@@ -55,7 +56,7 @@ class Conditions extends Component {
       ...this.normalize(value),
     }).then(() => {
       if (this.callout) {
-        this.callout.sendCallout({
+        this.callout.current.sendCallout({
           message: <SafeHTMLMessage
             id="ui-users.settings.callout.message"
             values={{ name: value.name }}
@@ -76,23 +77,21 @@ class Conditions extends Component {
     }
 
     const {
-      children,
-    } = this.props;
-    const {
       name,
     } = this.getInitialValues();
 
     return (
-      <section className={css.conditionsWrapperHolder}>
-        <div className={css.conditionsWrapper}>
+      <section className={css.partonBlockWrapperHolder}>
+        <div
+          data-test-conditions-wrapper
+          className={css.partonBlockWrapper}
+        >
           <ConditionsForm
             label={name}
             initialValues={this.getInitialValues()}
             onSubmit={this.onSubmit}
-          >
-            {children}
-          </ConditionsForm>
-          <Callout ref={(ref) => { this.callout = ref; }} />
+          />
+          <Callout ref={this.callout} />
         </div>
       </section>
     );

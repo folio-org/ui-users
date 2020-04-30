@@ -672,6 +672,17 @@
     "permission.viewperms": "المستخدمين: إمكانية عرض الصلاحيات المعينة إلى المستخدمين",
     "permission.viewproxies": "المستخدمين: إمكانية عرض النواب المعينين إلى المستخدمين",
     "permission.viewuserservicepoints": "المستخدمين: إمكانية عرض نقاط الخدمة المعينة إلى المستخدمين",
-    "loans.history": "Loan action history",
-    "accounts.loading": "Loading accounts"
+    "loans.history": "سجل إجراءات الإعارة",
+    "accounts.loading": "جاري تحميل الحسابات",
+    "settings.limits": "حدود",
+    "settings.limits.callout.message": "تم <strong>تحديث</strong> حد كتلة المستفيد لمجموعة المستفيدين <strong>{patronGroup}</strong> بنجاح.",
+    "settings.limits.callout.error": "لقد حدث خطأ ما",
+    "settings.limits.feeFine.error": "سيؤدي الحد الأقصى للرصيد 0 إلى حظر جميع المستفيدين في هذه المجموعة؛ لتخطي هذا الحد، اترك تعيين القيمة  فارغاً",
+    "settings.limits.validation.error": "يجب أن يكون فارغًا أو رقمًا من 0 إلى 999999",
+    "permission.settings.limits": "الإعدادات (المستخدمين): إمكانية إنشاء، وتحرير وإزالة حدود كتل المستفيد",
+    "data.loanActionMap.markedAsMissing": "تمت الإشارة إليه كمفقود",
+    "loans.markAsMissing": "الإشارة إليه كمفقود",
+    "loans.markAsMissingDialogBody": "<strong>{title} ({materialType})</strong> (باركود: {barcode}) سيتم الإشارة إليها كـ<strong>مفقودة</strong> ولن يتم تغريم المستفيد.",
+    "loans.confirmAsMissing": "تأكيد المادة كمفقودة",
+    "data.loanActionMap.closedLoan": "إعارة مغلقة"
 }

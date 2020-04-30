@@ -20,7 +20,7 @@ import stripesFinalForm from '@folio/stripes/final-form';
 
 import { feeFineBalanceId } from '../../../constants';
 
-import css from './limits.css';
+import css from '../patronBlocks.css';
 
 function validation(value, type) {
   const numberValue = toNumber(value);
@@ -126,7 +126,7 @@ class LimitsForm extends Component {
     return (
       <form
         data-test-limits-form
-        className={css.limitsForm}
+        className={css.partonBlockForm}
         onSubmit={handleSubmit}
       >
         <Pane

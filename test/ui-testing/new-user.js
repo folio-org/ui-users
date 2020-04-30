@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
-/* global it describe after Nightmare */
+/* global it describe before after Nightmare */
 module.exports.test = function meh(uitestctx) {
   describe('Module test: users:new-user', function bar() {
-    const { config, helpers: { namegen, logout, clickApp } } = uitestctx;
+    const { config, helpers: { namegen, login, logout, clickApp } } = uitestctx;
     const nightmare = new Nightmare(config.nightmare);
     this.timeout(Number(config.test_timeout));
     let pgroup = null;
@@ -10,52 +10,15 @@ module.exports.test = function meh(uitestctx) {
     // user.id = 'hellox';
     user.password = user.id;
 
-    // before((done) => {
-    //   login(nightmare, config, done); // logs in with the default admin credentials
-    // });
+    before((done) => {
+      login(nightmare, config, done); // logs in with the default admin credentials
+    });
+
     after((done) => {
       logout(nightmare, config, done);
     });
 
-
-    describe('Login > Create new user > Logout > Login as new user > Logout > Login > Edit new user and confirm changes', () => {
-      const flogin = function buh(un, pw) {
-        it(`should login as ${un}/${pw}`, (done) => {
-          nightmare
-            .wait(config.select.username)
-            .insert(config.select.username, un)
-            .insert(config.select.password, pw)
-            .click('#clickable-login')
-            .wait('#clickable-logout')
-            .then(() => { done(); })
-            .catch(done);
-        });
-      };
-      const flogout = function sma() {
-        it('should logout', (done) => {
-          nightmare
-            .wait('#clickable-logout')
-            .click('#clickable-logout')
-            .wait('#clickable-login')
-            .wait(parseInt(process.env.FOLIO_UI_DEBUG, 10) ? parseInt(config.debug_sleep, 10) : 555) // debugging
-            .then(() => { done(); })
-            .catch(done);
-        });
-      };
-
-      it('should load login page', (done) => {
-        nightmare
-          .on('page', (type, message) => {
-            throw new Error(message);
-          })
-          .goto(config.url)
-          .wait(Number(config.login_wait))
-          .then(() => { done(); })
-          .catch(done);
-      });
-
-      flogin(config.username, config.password);
-
+    describe('Login > Create new user > Edit new user and confirm changes', () => {
       it('should navigate to users', (done) => {
         clickApp(nightmare, done, 'users');
       });
@@ -97,16 +60,6 @@ module.exports.test = function meh(uitestctx) {
           .insert('#adduser_dateofbirth', '05/04/1980')
           .wait('#adduser_username')
           .insert('#adduser_username', user.id)
-          .wait('#clickable-toggle-password')
-          .click('#clickable-toggle-password')
-          // It would be super-cool if the async username-blur validation
-          // fired reliably in electron, but for some reason it doesn't,
-          // which means waiting for the validation-success sometimes means
-          // we wait forever. It _does_ fire reliably with a real browser.
-          // .wait('#icon-adduser_username-validation-success')
-          .wait(222)
-          .wait('#pw')
-          .insert('#pw', user.password)
 
           // contact information accordion
           .wait('#adduser_email')
@@ -128,18 +81,6 @@ module.exports.test = function meh(uitestctx) {
           }, user.id)
           .then(done)
           .catch(done);
-      });
-
-      flogout();
-
-      flogin(user.id, user.password);
-
-      flogout();
-
-      flogin(config.username, config.password);
-
-      it('should navigate to users', (done) => {
-        clickApp(nightmare, done, 'users');
       });
 
       it(`should change username for ${user.id}`, (done) => {
@@ -185,20 +126,6 @@ module.exports.test = function meh(uitestctx) {
               .then(() => { done(); })
               .catch(done);
           })
-          .catch(done);
-      });
-
-      flogout();
-
-      it(`Should login as ${user.id}x/${user.password}`, (done) => {
-        nightmare
-          .wait('#input-username')
-          .wait(222)
-          .insert('#input-username', `${user.id}x`)
-          .insert('#input-password', user.password)
-          .click('#clickable-login')
-          .wait('#clickable-logout')
-          .then(done)
           .catch(done);
       });
     });
