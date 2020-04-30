@@ -6,6 +6,8 @@ import { Popover } from '@folio/stripes/components';
 
 import getListPresentation from '../../helpers/getListPresentation';
 
+import css from './ContributorsView.css';
+
 const propTypes = {
   contributorsList: PropTypes.arrayOf(PropTypes.string).isRequired
 };
@@ -23,7 +25,7 @@ const ContributorsView = (props) => {
       <Popover>
         <div
           data-role="target"
-          style={{ cursor: 'pointer' }}
+          className={css.pointer}
         >
           {listTodisplay}
         </div>

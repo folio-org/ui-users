@@ -358,7 +358,7 @@ export default function config() {
         }
       } = cqlParser;
 
-      if (left.field === 'ownerId' || right.field === 'ownerId') {
+      if (left?.field === 'ownerId' || right?.field === 'ownerId') {
         return feefines.where((feefine) => {
           return feefine.ownerId === left.term || feefine.ownerId === right.term;
         });
@@ -550,6 +550,24 @@ export default function config() {
 
   this.get('/patron-block-conditions', ({ patronBlockConditions }) => {
     return this.serializerOrRegistry.serialize(patronBlockConditions.all());
+  });
+
+  this.get('/patron-block-limits/:id', ({ patronBlockLimits }, request) => {
+    return patronBlockLimits.find(request.params.id).attrs;
+  });
+
+  this.put('/patron-block-limits/:id', ({ patronBlockLimits }, request) => {
+    return patronBlockLimits.find(request.params.id).attrs;
+  });
+
+  this.post('/patron-block-limits', function (schema, { requestBody }) {
+    const limit = JSON.parse(requestBody);
+
+    return server.create('patron-block-limit', limit);
+  });
+
+  this.get('/patron-block-limits', ({ patronBlockLimits }) => {
+    return this.serializerOrRegistry.serialize(patronBlockLimits.all());
   });
 
   this.get('/custom-fields', {

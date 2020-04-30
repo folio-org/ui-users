@@ -73,7 +73,7 @@ describe('Settings custom fields', () => {
     });
 
     it('should redirect to Custom Fields edit page', function () {
-      expect(this.location.pathname).to.equal('/users/custom-fields/edit');
+      expect(this.location.pathname).to.equal('/settings/users/custom-fields/edit');
     });
   });
 

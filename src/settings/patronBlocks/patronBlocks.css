@@ -1,0 +1,13 @@
+.partonBlockForm {
+  height: 100%;
+}
+
+.partonBlockWrapperHolder {
+  display: flex;
+  flex: 0 0 30%;
+  overflow: hidden;
+}
+
+.partonBlockWrapper {
+  width: 100%;
+}

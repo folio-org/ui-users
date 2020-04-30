@@ -1,4 +1,10 @@
+@import "@folio/stripes-components/lib/variables.css";
+
 .rightAlignedButton {
   float: right;
-  margin-right: 10px;
+  margin-right: var(--gutter-static-two-thirds);
+}
+
+.alertDetails {
+  color: var(--error);
 }

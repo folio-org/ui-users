@@ -442,7 +442,7 @@
     "extended.copyLink": "Copy link",
     "extended.createPasswordModal.label": "Create password email confirmation",
     "extended.createPasswordModal.linkWasSent": "A create password link was sent to:",
-    "extended.createPasswordModal.linkInstructions": "The following link can be sent if the email was now received",
+    "extended.createPasswordModal.linkInstructions": "The following link can be sent if the email was not received",
     "data.loanActionMap.renewedThroughOverride": "Renewed through override",
     "loans.columns.comments": "Comments",
     "override.autoNewDueDate": "Due date will be calculated automatically",
@@ -671,5 +671,18 @@
     "permission.view": "Users: Can view user profile",
     "permission.viewperms": "Users: Can view permissions assigned to users",
     "permission.viewproxies": "Users: Can view proxies assigned to users",
-    "permission.viewuserservicepoints": "Users: Can view service points assigned to users"
+    "permission.viewuserservicepoints": "Users: Can view service points assigned to users",
+    "loans.history": "Loan action history",
+    "accounts.loading": "Loading accounts",
+    "settings.limits": "Limits",
+    "settings.limits.callout.message": "The patron block limit for patron group <strong>{patronGroup}</strong> has been successfully <strong>updated</strong>.",
+    "settings.limits.callout.error": "Something went wrong",
+    "settings.limits.feeFine.error": "A maximum balance of 0 will result in all patrons in this group being blocked; to skip this limit, leave value set to blank",
+    "settings.limits.validation.error": "Must be blank or a number from 0 to 999999",
+    "permission.settings.limits": "Settings (Users): Can create, edit and remove patron blocks limits",
+    "data.loanActionMap.markedAsMissing": "Marked as missing",
+    "loans.markAsMissing": "Mark as missing",
+    "loans.markAsMissingDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be marked <strong>Missing</strong> and patron will not be billed",
+    "loans.confirmAsMissing": "Confirm item as missing",
+    "data.loanActionMap.closedLoan": "Closed loan"
 }

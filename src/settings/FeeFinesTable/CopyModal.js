@@ -16,6 +16,8 @@ import {
   RadioButtonGroup,
 } from '@folio/stripes/components';
 
+import css from './FeeFinesTable.css';
+
 const validate = (type) => {
   const errors = {};
 
@@ -72,7 +74,7 @@ class CopyForm extends React.Component {
           </Col>
           <Col>
             <Field
-              style={{ marginLeft: '10px', width: 120 }}
+              className={css.ownerIdField}
               name="ownerId"
               component={Select}
               dataOptions={options}
