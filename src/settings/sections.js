@@ -41,6 +41,7 @@ const settingsGeneral = [
     route: 'profilepictures',
     label: <FormattedMessage id="ui-users.settings.profilePictures" />,
     component: ProfilePictureSettings,
+    perm: 'ui-users.settings.profilePictures'
   },
   {
     route: 'custom-fields',
@@ -55,37 +56,37 @@ const settingsFeefines = [
     route: 'owners',
     label: <FormattedMessage id="ui-users.settings.owners" />,
     component: OwnerSettings,
-    perm: 'ui-users.settings.feefine',
+    perm: 'ui-users.settings.owners',
   },
   {
     route: 'feefinestable',
     label: <FormattedMessage id="ui-users.settings.manualCharges" />,
     component: FeeFineSettings,
-    perm: 'ui-users.settings.feefine',
+    perm: 'ui-users.settings.feefines',
   },
   {
     route: 'waivereasons',
     label: <FormattedMessage id="ui-users.settings.waiveReasons" />,
     component: WaiveSettings,
-    perm: 'ui-users.settings.feefine',
+    perm: 'ui-users.settings.waives',
   },
   {
     route: 'payments',
     label: <FormattedMessage id="ui-users.settings.paymentMethods" />,
     component: PaymentSettings,
-    perm: 'ui-users.settings.feefine',
+    perm: 'ui-users.settings.payments',
   },
   {
     route: 'refunds',
     label: <FormattedMessage id="ui-users.settings.refundReasons" />,
     component: RefundReasonsSettings,
-    perm: 'ui-users.settings.feefine',
+    perm: 'ui-users.settings.refunds',
   },
   {
     route: 'comments',
     label: <FormattedMessage id="ui-users.settings.commentRequired" />,
     component: CommentRequiredSettings,
-    perm: 'ui-users.settings.feefine',
+    perm: 'ui-users.settings.comments',
   },
   {
     route: 'transfers',
