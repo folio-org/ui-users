@@ -442,7 +442,7 @@
     "extended.copyLink": "Copy link",
     "extended.createPasswordModal.label": "Create password email confirmation",
     "extended.createPasswordModal.linkWasSent": "A create password link was sent to:",
-    "extended.createPasswordModal.linkInstructions": "The following link can be sent if the email was now received",
+    "extended.createPasswordModal.linkInstructions": "The following link can be sent if the email was not received",
     "data.loanActionMap.renewedThroughOverride": "Renewed through override",
     "loans.columns.comments": "Comments",
     "override.autoNewDueDate": "Due date will be calculated automatically",
@@ -683,5 +683,6 @@
     "data.loanActionMap.markedAsMissing": "Marked as missing",
     "loans.markAsMissing": "Mark as missing",
     "loans.markAsMissingDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be marked <strong>Missing</strong> and patron will not be billed",
-    "loans.confirmAsMissing": "Confirm item as missing"
+    "loans.confirmAsMissing": "Confirm item as missing",
+    "data.loanActionMap.closedLoan": "Closed loan"
 }

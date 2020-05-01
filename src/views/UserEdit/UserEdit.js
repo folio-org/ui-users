@@ -206,7 +206,10 @@ class UserEdit extends React.Component {
       history,
       resources,
       match: { params },
-      location: { state },
+      location: {
+        state,
+        search,
+      },
       stripes,
     } = this.props;
 
@@ -251,7 +254,7 @@ class UserEdit extends React.Component {
 
     mutator.selUser.PUT(data).then(() => {
       history.push({
-        pathname: params.id ? `/users/preview/${params.id}` : '/users',
+        pathname: params.id ? `/users/preview/${params.id}/${search}` : `/users/${search}`,
         state,
       });
     });

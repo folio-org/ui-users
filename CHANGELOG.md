@@ -2,6 +2,7 @@
 
 ## [3.1.0] (IN PROGRESS)
 
+* Support `loan-storage` interface version 7.0. UIU-1598.
 * Add posibility to view/create/edit custom fields on user record. UIU-1279.
 * Increase limit of service points in the Associated Service Points dropdown at Settings --> Users --> Fee/Fine Owners. Refs UIU-1540.
 * Fix ability to mark user as inactive. Fixes UIU-913.
@@ -18,6 +19,9 @@
 * Fix routing loop caused by incorrect Custom Fields routing. Refs UIU-1594.
 * Settings > Users > Create/Edit Permission set. Refs UIU-1587.
 * Add `Closed loan` translation. Part of UIU-1603.
+* Pass current `servicePointId` to `declare-item-lost`. Part of UIU-1203.
+* Preserve filters after user is edited. Fixes UIU-1604.
+* Remove hardcoded ids from Parton Block Conditions page. Refs UIU-1609.
 * Correctly configure fee/fines and profile-pictures permissions. Refs UIU-1574.
 
 ## [3.0.0](https://github.com/folio-org/ui-users/tree/v3.0.0) (2020-03-17)

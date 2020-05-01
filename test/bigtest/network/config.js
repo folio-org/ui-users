@@ -358,7 +358,7 @@ export default function config() {
         }
       } = cqlParser;
 
-      if (left.field === 'ownerId' || right.field === 'ownerId') {
+      if (left?.field === 'ownerId' || right?.field === 'ownerId') {
         return feefines.where((feefine) => {
           return feefine.ownerId === left.term || feefine.ownerId === right.term;
         });

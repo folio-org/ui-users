@@ -53,6 +53,11 @@ class ModalContent extends React.Component {
         POST: PropTypes.func.isRequired,
       }).isRequired,
     }).isRequired,
+    stripes: PropTypes.shape({
+      user: PropTypes.shape({
+        user: PropTypes.object,
+      }).isRequired,
+    }).isRequired,
     loanAction: PropTypes.string.isRequired,
     loan: PropTypes.object.isRequired,
     onClose: PropTypes.func.isRequired,
@@ -73,13 +78,22 @@ class ModalContent extends React.Component {
   submit = async () => {
     const { additionalInfo } = this.state;
 
-    const { loanAction } = this.props;
+    const {
+      loanAction,
+      stripes: {
+        user: {
+          user: {
+            curServicePoint,
+          },
+        },
+      },
+    } = this.props;
 
     const {
       mutator: {
         [loanAction]: {
           POST,
-        }
+        },
       },
       onClose,
     } = this.props;
@@ -88,6 +102,11 @@ class ModalContent extends React.Component {
 
     if (loanAction === loanActions.CLAIMED_RETURNED) {
       requestData.itemClaimedReturnedDateTime = new Date().toISOString();
+    }
+
+    if (loanAction === loanActions.DECLARE_LOST) {
+      requestData.servicePointId = curServicePoint?.id;
+      requestData.declaredLostDateTime = new Date().toISOString();
     }
 
     await POST(requestData);

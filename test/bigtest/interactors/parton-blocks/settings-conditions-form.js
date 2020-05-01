@@ -22,4 +22,4 @@ import CalloutInteractor from '@folio/stripes-components/lib/Callout/tests/inter
   calloutMessage = new CalloutInteractor();
 }
 
-export default new SettingsConditionsForm('[class*=conditionsWrapper]');
+export default new SettingsConditionsForm('[data-test-conditions-wrapper]');
