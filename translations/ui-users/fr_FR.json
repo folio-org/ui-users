@@ -442,7 +442,7 @@
     "extended.copyLink": "Copier le lien",
     "extended.createPasswordModal.label": "Créer un email de confirmation de mot de passe",
     "extended.createPasswordModal.linkWasSent": "A create password link was sent to:",
-    "extended.createPasswordModal.linkInstructions": "Le lien suivant peut être envoyé si l'e-mail a été reçu",
+    "extended.createPasswordModal.linkInstructions": "Le lien suivant peut être envoyé si l'e-mail n'a pas été reçu",
     "data.loanActionMap.renewedThroughOverride": "Renewed through override",
     "loans.columns.comments": "Commentaires",
     "override.autoNewDueDate": "La date d'échéance sera calculée automatiquement",
