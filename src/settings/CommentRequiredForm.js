@@ -9,8 +9,15 @@ import {
   Row,
   Col,
   Select,
+  PaneFooter,
 } from '@folio/stripes/components';
 import stripesForm from '@folio/stripes/form';
+
+const styles = {
+  form: {
+    height: '100%',
+  },
+};
 
 const Setting = ({
   name,
@@ -50,27 +57,32 @@ class CommentRequiredForm extends React.Component {
       handleSubmit,
     } = this.props;
 
-    const lastMenu = (
-      <Button
-        type="submit"
-        buttonStyle="primary"
-        marginBottom0
-        disabled={(pristine || submitting)}
-        id="clickable-save-comment"
-      >
-        <FormattedMessage id="ui-users.comment.save" />
-      </Button>
+    const footer = (
+      <PaneFooter
+        renderEnd={(
+          <Button
+            type="submit"
+            buttonStyle="primary"
+            marginBottom0
+            disabled={(pristine || submitting)}
+            id="clickable-save-comment"
+          >
+            <FormattedMessage id="ui-users.comment.save" />
+          </Button>
+        )}
+      />
     );
 
     return (
       <form
         id="form-require-comment"
         onSubmit={handleSubmit}
+        style={styles.form}
       >
         <Pane
           defaultWidth="fill"
           paneTitle={<FormattedMessage id="ui-users.comment.title" />}
-          lastMenu={lastMenu}
+          footer={footer}
         >
           <Setting
             {...this.props}
