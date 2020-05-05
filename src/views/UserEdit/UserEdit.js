@@ -258,12 +258,12 @@ class UserEdit extends React.Component {
         ...creds,
         username: user.username,
       };
-      const creds = {
+      const createdCreds = {
         ...credentials,
         userId: user.id,
-      }
+      };
 
-      mutator.creds.POST(creds);
+      mutator.creds.POST(createdCreds);
     }
 
     mutator.selUser.PUT(data).then(() => {
