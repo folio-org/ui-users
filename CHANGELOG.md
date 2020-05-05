@@ -22,6 +22,7 @@
 * Pass current `servicePointId` to `declare-item-lost`. Part of UIU-1203.
 * Preserve filters after user is edited. Fixes UIU-1604.
 * Remove hardcoded ids from Parton Block Conditions page. Refs UIU-1609.
+* Add possibility to create system user from already existing account. Refs UIU-1503.
 
 ## [3.0.0](https://github.com/folio-org/ui-users/tree/v3.0.0) (2020-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.26.0...v3.0.0)
