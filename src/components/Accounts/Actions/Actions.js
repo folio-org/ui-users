@@ -94,6 +94,9 @@ class Actions extends React.Component {
       refunds: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
+      feefineactions: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
     }),
     mutator: PropTypes.shape({
       user: PropTypes.object,
@@ -324,16 +327,25 @@ class Actions extends React.Component {
   action = (type, amount, values, action) => {
     const { intl: { formatMessage } } = this.props;
     this.props.mutator.activeRecord.update({ id: type.id });
+
+    const refundSelectedAmount = calculateSelectedAmount(this.props.accounts, true);
+    const refundRelatedActions = ['credit', 'refund'];
+    const partialAction = (refundRelatedActions.includes(action) && refundSelectedAmount > amount) 
+      || (!refundRelatedActions.includes(action) && parseFloat(amount) < type.remaining);
+
     let paymentStatus = _.capitalize(formatMessage({ id: `ui-users.accounts.actions.warning.${action}Action` }));
     const owners = _.get(this.props.resources, ['owners', 'records'], []);
-    if (parseFloat(amount) < type.remaining) {
+    if (partialAction) {
       paymentStatus = `${paymentStatus} ${formatMessage({ id: 'ui-users.accounts.status.partially' })}`;
     } else {
       paymentStatus = `${paymentStatus} ${formatMessage({ id: 'ui-users.accounts.status.fully' })}`;
       type.status.name = 'Closed';
     }
-    const balance = type.remaining - parseFloat(amount);
+    const balance = values.balance ? values.balance : type.remaining - parseFloat(amount);
     const createdAt = (owners.find(o => o.id === values.ownerId) || {}).owner;
+
+    debugger;
+
     return this.editAccount(type, paymentStatus, type.status.name, balance)
       .then(() => this.newAction({ paymentMethod: values.method }, type.id, paymentStatus, amount, this.assembleTagInfo(values), balance, values.transaction, createdAt || type.feeFineOwner));
   }
@@ -355,6 +367,85 @@ class Actions extends React.Component {
     });
   }
 
+  getAccountActions = (accountId) => {
+    const feeFineActions = this.props.resources?.feefineactions?.records || [];
+    const refundActionTypes = ['Paid partially', 'Paid fully'];
+    const transferActionTypes = ['Transferred partially', 'Transferred fully'];
+
+    return feeFineActions.reduce((actions, action) => {
+      const isAccountAction = action.accountId === accountId;
+
+      actions.transferActionsAmount = isAccountAction && transferActionTypes.includes(action.typeAction)
+        ? actions.transferActionsAmount + action.amountAction
+        : actions.transferActionsAmount;
+
+      actions.paymentActionsAmount = isAccountAction && refundActionTypes.includes(action.typeAction)
+        ? actions.paymentActionsAmount + action.amountAction
+        : actions.paymentActionsAmount;
+
+      return actions;
+    }, { transferActionsAmount: 0, paymentActionsAmount: 0 });
+  }
+
+  calculateRefundAmount = (totalAmount) => {
+    let paymentAmount;
+    let transferAmount;
+    let availableForRefund = parseFloat(totalAmount);
+
+    const { id } = this.props.accounts[0] || {};
+    const { transferActionsAmount, paymentActionsAmount } = this.getAccountActions(id);
+
+    if (transferActionsAmount > availableForRefund) {
+      transferAmount = availableForRefund;
+      availableForRefund = 0;
+    } else {
+      transferAmount = transferActionsAmount;
+      availableForRefund -= transferActionsAmount;
+    }
+
+    if (paymentActionsAmount > availableForRefund) {
+      paymentAmount = availableForRefund;
+      availableForRefund = 0;
+    } else {
+      paymentAmount = paymentActionsAmount;
+      availableForRefund -= paymentActionsAmount;
+    }
+
+    return {
+      paymentAmount,
+      transferAmount,
+    };
+  }
+
+  onRefundConfirm = async (values) => {
+    const {
+      paymentAmount,
+      transferAmount,
+    } = this.calculateRefundAmount(values.amount);
+
+    let { remaining = 0 } = _.head(this.props.accounts);
+
+    if (transferAmount > 0) {
+      const transferCreditBalance = remaining - parseFloat(values.amount);
+      remaining -= parseFloat(values.amount);
+      const transferRefundBalance = remaining + parseFloat(values.amount);
+      remaining += parseFloat(values.amount);
+
+      await this.onSubmit({ ...values, amount: transferAmount, balance: transferCreditBalance }, 'credit');
+      await this.onSubmit({ ...values, amount: transferAmount, balance: transferRefundBalance }, 'refund');
+    }
+
+    if (paymentAmount > 0) {
+      const paymentCreditBalance = remaining - parseFloat(values.amount);
+      remaining -= parseFloat(values.amount);
+      const paymentRefundBalance = remaining + parseFloat(values.amount);
+      remaining += parseFloat(values.amount);
+
+      await this.onSubmit({ ...values, amount: paymentAmount, balance: paymentCreditBalance }, 'credit');
+      await this.onSubmit({ ...values, amount: paymentAmount, balance: paymentRefundBalance }, 'refund');
+    }
+  }
+
   onConfirm = async () => {
     const { actions, selectedAccounts } = this.props;
     const { values } = this.state;
@@ -372,9 +463,7 @@ class Actions extends React.Component {
     } else if (actions.transferMany) {
       this.onSubmitMany(values, selectedAccounts, 'transfer');
     } else if (actions.refundModal) {
-      this.onSubmit(values, 'credit').then(() => {
-        this.onSubmit(values, 'refund');
-      });
+      this.onRefundConfirm(values);
     } else if (actions.refundMany) {
       this.onSubmitMany(values, selectedAccounts, 'credit').then(() => {
         this.onSubmitMany(values, selectedAccounts, 'refund');
@@ -461,7 +550,7 @@ class Actions extends React.Component {
 
     if (pay || waiveModal || transferModal || refundModal) {
       const account = this.props.accounts[0] || {};
-      const total = account.remaining || 0;
+      const total = (refundModal ? account.amount : account.remaining) || 0;
       paymentStatus = `${((amount < total)
         ? formatMessage({ id: 'ui-users.accounts.status.partially' })
         : formatMessage({ id: 'ui-users.accounts.status.fully' }))} ${paymentStatus}`;
