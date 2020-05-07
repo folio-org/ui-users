@@ -268,7 +268,8 @@ class UserEdit extends React.Component {
 
     mutator.selUser.PUT(data).then(() => {
       history.push({
-        pathname: params.id ? `/users/preview/${params.id}/${search}` : `/users/${search}`,
+        pathname: params.id ? `/users/preview/${params.id}` : '/users',
+        search,
         state,
       });
     });
