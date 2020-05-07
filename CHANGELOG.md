@@ -25,6 +25,7 @@
 * Settings > Users > Fee/Fine > Comment | Move Save button to the footer. Refs UIU-1589.
 * Pin `moment` at `~2.24.0`. Refs STRIPES-678.
 * Add possibility to create system user from already existing account. Refs UIU-1503.
+* Provide `search` explicitly to `history.push`. Fixes UIU-1620.
 
 ## [3.0.0](https://github.com/folio-org/ui-users/tree/v3.0.0) (2020-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.26.0...v3.0.0)
