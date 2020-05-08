@@ -197,7 +197,7 @@ class UserEdit extends React.Component {
     }
   }
 
-  update({ requestPreferences, ...userFormData }) {
+  update({ requestPreferences, creds, ...userFormData }) {
     const {
       updateProxies,
       updateSponsors,
@@ -252,9 +252,24 @@ class UserEdit extends React.Component {
       data.active = (moment(user.expirationDate).endOf('day').isSameOrAfter(today));
     }
 
+    if (user.username) {
+      const credentials = {
+        password: '',
+        ...creds,
+        username: user.username,
+      };
+      const createdCreds = {
+        ...credentials,
+        userId: user.id,
+      };
+
+      mutator.creds.POST(createdCreds);
+    }
+
     mutator.selUser.PUT(data).then(() => {
       history.push({
-        pathname: params.id ? `/users/preview/${params.id}/${search}` : `/users/${search}`,
+        pathname: params.id ? `/users/preview/${params.id}` : '/users',
+        search,
         state,
       });
     });
