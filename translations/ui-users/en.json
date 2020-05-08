@@ -336,7 +336,7 @@
   "feefines.defaultActionNotice": "Default Action Notice",
   "feefines.ownerLabel": "Owner",
 
-  "feefines.columns.type": "Fee/Fine Type*",
+  "feefines.columns.type": "Fee/Fine Type",
   "feefines.columns.amount": "Default Amount",
   "feefines.columns.chargeNotice": "Charge Notice",
   "feefines.columns.actionNotice": "Action Notice",
@@ -360,7 +360,7 @@
   "owners.singular": "Fee/fine Owner",
   "owners.error": "Error",
   "owners.warning": "Warning: Overdue fines/lost item fees will not be collected without a service point",
-  "owners.columns.owner": "Owner*",
+  "owners.columns.owner": "Owner",
   "owners.columns.desc": "Description",
   "owners.columns.asp": "Associated service points",
   "owners.nodata": "There are no Fee/fine: Owners",
@@ -369,13 +369,13 @@
 
   "payments.label": "Fee/fine: Payment methods",
   "payments.singular": "Payment method",
-  "payments.columns.name": "Name*",
+  "payments.columns.name": "Name",
   "payments.columns.refund": "Refund method allowed",
   "payments.nodata": "There are no Fee/fine: Payment methods",
 
   "refunds.label": "Fee/fine: Refund reasons",
   "refunds.singular": "Refund reason",
-  "refunds.columns.nameReason": "Name*",
+  "refunds.columns.nameReason": "Name",
   "refunds.columns.description": "Description",
 
   "sp.servicePoints": "Service points",
@@ -392,7 +392,7 @@
 
   "waives.label": "Fee/fine: Waive reasons",
   "waives.singular": "Waive reason",
-  "waives.columns.reason": "Reason*",
+  "waives.columns.reason": "Reason",
   "waives.columns.desc": "Description",
 
   "comment.title": "Fee/fine: Comment required",
