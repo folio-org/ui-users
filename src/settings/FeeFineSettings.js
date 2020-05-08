@@ -6,7 +6,10 @@ import {
   FormattedMessage,
 } from 'react-intl';
 import { Field } from 'redux-form';
-import { Select } from '@folio/stripes/components';
+import {
+  Select,
+  Label,
+} from '@folio/stripes/components';
 import { ControlledVocab } from '@folio/stripes/smart-components';
 import { stripesConnect, withStripes } from '@folio/stripes/core';
 
@@ -17,6 +20,20 @@ import {
   CopyModal,
   ChargeNotice,
 } from './FeeFinesTable';
+
+const columnMapping = {
+  feeFineType: (
+    <Label
+      tagName="span"
+      required
+    >
+      <FormattedMessage id="ui-users.feefines.columns.type" />
+    </Label>
+  ),
+  defaultAmount: <FormattedMessage id="ui-users.feefines.columns.amount" />,
+  chargeNoticeId: <FormattedMessage id="ui-users.feefines.columns.chargeNotice" />,
+  actionNoticeId: <FormattedMessage id="ui-users.feefines.columns.actionNotice" />,
+};
 
 class FeeFineSettings extends React.Component {
   static manifest = Object.freeze({
@@ -280,12 +297,7 @@ class FeeFineSettings extends React.Component {
       <this.connectedControlledVocab
         stripes={this.props.stripes}
         baseUrl="feefines"
-        columnMapping={{
-          feeFineType: formatMessage({ id: 'ui-users.feefines.columns.type' }),
-          defaultAmount: formatMessage({ id: 'ui-users.feefines.columns.amount' }),
-          chargeNoticeId: formatMessage({ id: 'ui-users.feefines.columns.chargeNotice' }),
-          actionNoticeId: formatMessage({ id: 'ui-users.feefines.columns.actionNotice' }),
-        }}
+        columnMapping={columnMapping}
         fieldComponents={fieldComponents}
         formatter={formatter}
         hiddenFields={['lastUpdated', 'numberOfObjects']}

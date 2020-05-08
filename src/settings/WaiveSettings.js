@@ -2,10 +2,26 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   injectIntl,
+  FormattedMessage,
 } from 'react-intl';
+import {
+  Label,
+} from '@folio/stripes/components';
 import { ControlledVocab } from '@folio/stripes/smart-components';
 import { withStripes } from '@folio/stripes/core';
 import { validate } from '../components/util';
+
+const columnMapping = {
+  nameReason: (
+    <Label
+      tagName="span"
+      required
+    >
+      <FormattedMessage id="ui-users.waives.columns.reason" />
+    </Label>
+  ),
+  description: <FormattedMessage id="ui-users.waives.columns.desc" />,
+};
 
 class WaiveSettings extends React.Component {
   static propTypes = {
@@ -38,10 +54,7 @@ class WaiveSettings extends React.Component {
         labelSingular={label}
         objectLabel=""
         visibleFields={['nameReason', 'description']}
-        columnMapping={{
-          'nameReason': intl.formatMessage({ id: 'ui-users.waives.columns.reason' }),
-          'description': intl.formatMessage({ id: 'ui-users.waives.columns.desc' }),
-        }}
+        columnMapping={columnMapping}
         nameKey="waiveReasons"
         hiddenFields={['numberOfObjects']}
         id="settings-waives"
