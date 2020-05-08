@@ -2,14 +2,30 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   injectIntl,
+  FormattedMessage,
 } from 'react-intl';
 import { Field } from 'redux-form';
-import { Select } from '@folio/stripes/components';
+import {
+  Select,
+  Label,
+} from '@folio/stripes/components';
 import { ControlledVocab } from '@folio/stripes/smart-components';
 import { stripesConnect, withStripes } from '@folio/stripes/core';
 
 import { validate } from '../components/util';
 import { Owners } from './FeeFinesTable';
+
+const columnMapping = {
+  nameMethod: (
+    <Label
+      tagName="span"
+      required
+    >
+      <FormattedMessage id="ui-users.payments.columns.name" />
+    </Label>
+  ),
+  allowedRefundMethod: <FormattedMessage id="ui-users.payments.columns.refund" />,
+};
 
 class PaymentSettings extends React.Component {
   static manifest = Object.freeze({
@@ -93,10 +109,7 @@ class PaymentSettings extends React.Component {
       <this.connectedControlledVocab
         {...this.props}
         baseUrl="payments"
-        columnMapping={{
-          nameMethod: formatMessage({ id: 'ui-users.payments.columns.name' }),
-          allowedRefundMethod: formatMessage({ id: 'ui-users.payments.columns.refund' }),
-        }}
+        columnMapping={columnMapping}
         fieldComponents={fieldComponents}
         formatter={formatter}
         hiddenFields={['numberOfObjects']}
