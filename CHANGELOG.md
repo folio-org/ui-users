@@ -27,6 +27,7 @@
 * Add possibility to create system user from already existing account. Refs UIU-1503.
 * Provide `search` explicitly to `history.push`. Fixes UIU-1620.
 * Settings > Users > Fee/Fine pages > replace black asterisk with red asterisk. Refs UIU-1611.
+* Match the protocol of the current page in images pulled from remote sites. Refs UIU-496.
 
 ## [3.0.0](https://github.com/folio-org/ui-users/tree/v3.0.0) (2020-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.26.0...v3.0.0)
