@@ -1,6 +1,6 @@
 # Change history for ui-users
 
-## [3.1.0] (IN PROGRESS)
+## [4.0.0] (IN PROGRESS)
 
 * Support `loan-storage` interface version 7.0. UIU-1598.
 * Add posibility to view/create/edit custom fields on user record. UIU-1279.
@@ -24,6 +24,7 @@
 * Remove hardcoded ids from Parton Block Conditions page. Refs UIU-1609.
 * Settings > Users > Fee/Fine > Comment | Move Save button to the footer. Refs UIU-1589.
 * Pin `moment` at `~2.24.0`. Refs STRIPES-678.
+* Increment `stripes` to `v4.0`, `react-intl` to `v4.5`, `react-intl-safe-html` to `v2.0`. Refs STRIPES-672.
 
 ## [3.0.0](https://github.com/folio-org/ui-users/tree/v3.0.0) (2020-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.26.0...v3.0.0)
