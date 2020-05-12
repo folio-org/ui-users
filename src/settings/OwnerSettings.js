@@ -6,11 +6,27 @@ import {
   FormattedMessage,
 } from 'react-intl';
 import { Field } from 'redux-form';
-import { MultiSelection } from '@folio/stripes/components';
+import {
+  MultiSelection,
+  Label,
+} from '@folio/stripes/components';
 import { ControlledVocab } from '@folio/stripes/smart-components';
 import { stripesConnect, withStripes } from '@folio/stripes/core';
 
 import { validate } from '../components/util';
+
+const columnMapping = {
+  owner: (
+    <Label
+      tagName="span"
+      required
+    >
+      <FormattedMessage id="ui-users.owners.columns.owner" />
+    </Label>
+  ),
+  desc: <FormattedMessage id="ui-users.owners.columns.desc" />,
+  servicePointOwner: <FormattedMessage id="ui-users.owners.columns.asp" />,
+};
 
 class OwnerSettings extends React.Component {
   static manifest = Object.freeze({
@@ -132,11 +148,7 @@ class OwnerSettings extends React.Component {
       <this.connectedControlledVocab
         {...this.props}
         baseUrl="owners"
-        columnMapping={{
-          'owner': formatMessage({ id: 'ui-users.owners.columns.owner' }),
-          'desc': formatMessage({ id: 'ui-users.owners.columns.desc' }),
-          'servicePointOwner': formatMessage({ id: 'ui-users.owners.columns.asp' }),
-        }}
+        columnMapping={columnMapping}
         fieldComponents={fieldComponents}
         formatter={formatter}
         hiddenFields={['lastUpdated', 'numberOfObjects']}
