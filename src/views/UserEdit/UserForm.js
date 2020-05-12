@@ -497,6 +497,8 @@ class UserForm extends React.Component {
                   preferredContactTypeId={initialValues.preferredContactTypeId}
                 />
                 <EditCustomFieldsRecord
+                  formName="userForm"
+                  isReduxForm
                   accordionId="customFields"
                   onToggle={this.handleSectionToggle}
                   expanded={sections.customFields}
