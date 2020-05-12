@@ -10,6 +10,7 @@ import {
   omit,
   differenceBy,
   get,
+  has,
 } from 'lodash';
 
 import { LoadingView } from '@folio/stripes/components';
@@ -252,7 +253,9 @@ class UserEdit extends React.Component {
       data.active = (moment(user.expirationDate).endOf('day').isSameOrAfter(today));
     }
 
-    if (user.username) {
+    const userBeforeUpdate = resources.records.records.find(({ id }) => id === user.id);
+
+    if (user.username && !has(userBeforeUpdate, 'username')) {
       const credentials = {
         password: '',
         ...creds,
