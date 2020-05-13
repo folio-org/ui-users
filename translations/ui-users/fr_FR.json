@@ -167,7 +167,7 @@
     "feefines.disabledItem": "Le type de frais / amende ne peut pas être supprimé lorsqu'il est utilisé par un ou plusieurs comptes utilisateurs",
     "feefines.modalHeader": "Supprimer le type de frais/amende ?",
     "feefines.modalMessage": "Le type de frais / amende<strong> {feefine} </strong> sera <strong> supprimé </strong>",
-    "feefines.columns.type": "Type de frais/amende*",
+    "feefines.columns.type": "Type de frais / amende",
     "feefines.columns.amount": "Montant par défaut",
     "feefines.errors.amountNumeric": "Le montant par défaut doit être numérique",
     "feefines.errors.amountPositive": "Le montant par défaut doit être positif",
@@ -182,7 +182,7 @@
     "feefines.modal.title": "Copy existing fee/fine owner table entries?",
     "owners.label": "Frais / amende: propriétaires",
     "owners.singular": "Propriétaire Frais/amende ",
-    "owners.columns.owner": "Propriétaire*",
+    "owners.columns.owner": "Propriétaire",
     "owners.columns.desc": "Description",
     "payments.label": "Frais / amende: Moyens de paiement",
     "payments.singular": "Moyen de paiement",
@@ -190,7 +190,7 @@
     "payments.columns.refund": "Méthode de remboursement autorisée",
     "refunds.label": "Frais/amende : Motifs du remboursement",
     "refunds.singular": "Motifs du remboursement",
-    "refunds.columns.nameReason": "Nom*",
+    "refunds.columns.nameReason": "Nom",
     "refunds.columns.description": "Description",
     "sp.servicePoints": "Points/lieux de service",
     "sp.availableServicePoints": "Points/lieux de service disponibles",
@@ -205,7 +205,7 @@
     "sp.preferredSPNone": "Aucun",
     "waives.label": "Frais/amende : Motifs de renonciation",
     "waives.singular": "Motif de la renonciation",
-    "waives.columns.reason": "Motif*",
+    "waives.columns.reason": "Motif",
     "waives.columns.desc": "Description",
     "comment.title": "Frais / amende: Commentaire requis",
     "comment.message": "Les paramètres de commentaire requis ont été mis à jour avec succès.",
@@ -684,5 +684,5 @@
     "loans.markAsMissing": "Marquer comme manquant",
     "loans.markAsMissingDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be marked <strong>Missing</strong> and patron will not be billed",
     "loans.confirmAsMissing": "Confirmer l’article comme manquant",
-    "data.loanActionMap.closedLoan": "Closed loan"
+    "data.loanActionMap.closedLoan": "Prêt fermé"
 }
