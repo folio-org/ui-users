@@ -117,7 +117,7 @@ class UserInfo extends React.Component {
             <Col xs={3}>
               <Row>
                 <Col xs={12}>
-                  <img className="floatEnd" src="http://placehold.it/100x100" alt="presentation" />
+                  <img className="floatEnd" src="//placehold.it/100x100" alt="presentation" />
                 </Col>
               </Row>
             </Col>

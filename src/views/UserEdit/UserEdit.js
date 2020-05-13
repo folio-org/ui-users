@@ -10,6 +10,7 @@ import {
   omit,
   differenceBy,
   get,
+  has,
 } from 'lodash';
 
 import { LoadingView } from '@folio/stripes/components';
@@ -197,7 +198,7 @@ class UserEdit extends React.Component {
     }
   }
 
-  update({ requestPreferences, ...userFormData }) {
+  update({ requestPreferences, creds, ...userFormData }) {
     const {
       updateProxies,
       updateSponsors,
@@ -252,9 +253,26 @@ class UserEdit extends React.Component {
       data.active = (moment(user.expirationDate).endOf('day').isSameOrAfter(today));
     }
 
+    const userBeforeUpdate = resources.records.records.find(({ id }) => id === user.id);
+
+    if (user.username && !has(userBeforeUpdate, 'username')) {
+      const credentials = {
+        password: '',
+        ...creds,
+        username: user.username,
+      };
+      const createdCreds = {
+        ...credentials,
+        userId: user.id,
+      };
+
+      mutator.creds.POST(createdCreds);
+    }
+
     mutator.selUser.PUT(data).then(() => {
       history.push({
-        pathname: params.id ? `/users/preview/${params.id}/${search}` : `/users/${search}`,
+        pathname: params.id ? `/users/preview/${params.id}` : '/users',
+        search,
         state,
       });
     });
