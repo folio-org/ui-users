@@ -1,6 +1,6 @@
 # Change history for ui-users
 
-## [3.1.0] (IN PROGRESS)
+## [4.0.0] (IN PROGRESS)
 
 * Support `loan-storage` interface version 7.0. UIU-1598.
 * Add posibility to view/create/edit custom fields on user record. UIU-1279.
@@ -29,6 +29,7 @@
 * Settings > Users > Fee/Fine pages > replace black asterisk with red asterisk. Refs UIU-1611.
 * Match the protocol of the current page in images pulled from remote sites. Refs UIU-496.
 * Correctly configure fee/fines and profile-pictures permissions. Refs UIU-1574.
+* Increment `stripes` to `v4.0`, `react-intl` to `v4.5`, `react-intl-safe-html` to `v2.0`. Refs STRIPES-672.
 
 ## [3.0.0](https://github.com/folio-org/ui-users/tree/v3.0.0) (2020-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.26.0...v3.0.0)
