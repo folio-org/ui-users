@@ -30,6 +30,7 @@
 * Match the protocol of the current page in images pulled from remote sites. Refs UIU-496.
 * Correctly configure fee/fines and profile-pictures permissions. Refs UIU-1574.
 * Increment `stripes` to `v4.0`, `react-intl` to `v4.5`, `react-intl-safe-html` to `v2.0`. Refs STRIPES-672.
+* Display the correct link for create/reset password. Refs UIU-1608.
 
 ## [3.0.0](https://github.com/folio-org/ui-users/tree/v3.0.0) (2020-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.26.0...v3.0.0)

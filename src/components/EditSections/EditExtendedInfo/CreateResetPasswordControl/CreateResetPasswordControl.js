@@ -1,7 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { get } from 'lodash';
+import { isEmpty } from 'lodash';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import crypto from 'crypto';
+
 import { stripesConnect } from '@folio/stripes/core';
 import {
   Col,
@@ -19,7 +22,7 @@ class CreateResetPasswordControl extends React.Component {
     name: PropTypes.string.isRequired,
     userId: PropTypes.string.isRequired,
     resources: PropTypes.shape({
-      isLocalPasswordSet: PropTypes.shape({
+      credentials: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }).isRequired,
     }).isRequired,
@@ -37,17 +40,49 @@ class CreateResetPasswordControl extends React.Component {
       fetch: false,
       throwErrors: false,
     },
-    isLocalPasswordSet: {
+    credentials: {
       type: 'okapi',
-      path: 'authn/credentials-existence?userId=!{userId}',
-      permissionsRequired: 'login.credentials-existence.get',
+      path: 'authn/credentials?query=(userId=!{userId})',
     },
   });
 
   state = {
     showModal: false,
+    isLocalPasswordSet: false,
     link: '',
   };
+
+  componentDidUpdate(prevProps) {
+    if (this.props.resources.credentials !== prevProps.resources.credentials) {
+      this.checkPasswordExistence();
+    }
+  }
+
+  checkPasswordExistence = async () => {
+    const {
+      resources: {
+        credentials,
+      },
+    } = this.props;
+    const credentialsRecord = credentials?.records[0]?.credentials[0] ?? {};
+
+    if (isEmpty(credentialsRecord)) {
+      return;
+    }
+
+    const normalizeSalt = Buffer.from(credentialsRecord.salt, 'hex');
+
+    await crypto.pbkdf2('', normalizeSalt, 1000, 32, 'sha1', (err, derivedKey) => {
+      if (err) {
+        throw err;
+      }
+      const formattedDerivedKey = derivedKey.toString('hex').toUpperCase();
+
+      if (!formattedDerivedKey.includes(credentialsRecord.hash)) {
+        this.setState({ isLocalPasswordSet: true });
+      }
+    });
+  }
 
   closeModal = () => {
     this.setState({ showModal: false });
@@ -117,9 +152,7 @@ class CreateResetPasswordControl extends React.Component {
   };
 
   render() {
-    const pathToResponse = 'resources.isLocalPasswordSet.records[0].credentialsExist';
-    const isLocalPasswordSet = get(this.props, pathToResponse, true);
-
+    const { isLocalPasswordSet } = this.state;
     const linkTextKey = isLocalPasswordSet
       ? 'ui-users.extended.sendResetPassword'
       : 'ui-users.extended.sendCreatePassword';
