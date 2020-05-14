@@ -5,6 +5,8 @@ import {
 } from '@bigtest/mocha';
 import { expect } from 'chai';
 
+import translations from '../../../translations/ui-users/en';
+
 import setupApplication from '../helpers/setup-application';
 import UserFormPage from '../interactors/user-form-page';
 import InstanceViewPage from '../interactors/user-view-page';
@@ -257,5 +259,26 @@ describe('when custom fields are not in stock', () => {
 
   it('should custom fields accordion does not present', () => {
     expect(UserFormPage.customFieldsSection.isPresent).to.be.false;
+  });
+});
+
+describe('User password was not setted yet', () => {
+  let user3;
+
+  setupApplication();
+
+  beforeEach(async function () {
+    user3 = this.server.create('user');
+    this.server.create('credential', {
+      userId: user3.id
+    });
+
+    this.visit(`/users/${user3.id}/edit`);
+    await UserFormPage.whenLoaded();
+  });
+
+  it('should display create password link', () => {
+    expect(UserFormPage.resetPasswordLink.isPresent).to.be.true;
+    expect(UserFormPage.resetPasswordLink.text).to.equal(translations['extended.sendCreatePassword']);
   });
 });

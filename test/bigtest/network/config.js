@@ -613,4 +613,29 @@ export default function config() {
       'helpText': 'help text',
     }]
   });
+
+  this.post('/credentials', (schema, { requestBody }) => {
+    const creds = JSON.parse(requestBody);
+    return server.create('credential', creds);
+  });
+
+  this.put('/credentials/:id', ({ users }, request) => {
+    return users.find(request.params.id).attrs;
+  });
+
+  this.get('/credentials/:id', ({ users }, request) => {
+    return users.find(request.params.id).attrs;
+  });
+
+  // this.get('credentials/:userId', {
+  //   'credentials': [
+  //     {
+  //       'id': 'b26c8935-5bd9-433a-8730-140b70e5706d',
+  //       'userId': 'd1f39cbe-7cea-42ad-a477-5b0ea2c7dd5b',
+  //       'hash': '74B44431F0F9E0FD13385B4610D24B1A1C369E8C',
+  //       'salt': '66268FAF2435F891DE2EA55AF47A03F2C37AE029'
+  //     }
+  //   ],
+  //   'totalRecords': 1
+  // });
 }

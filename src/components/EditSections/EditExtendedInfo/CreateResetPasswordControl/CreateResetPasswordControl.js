@@ -43,6 +43,7 @@ class CreateResetPasswordControl extends React.Component {
     credentials: {
       type: 'okapi',
       path: 'authn/credentials?query=(userId=!{userId})',
+      permissionsRequired: 'login.collection.get'
     },
   });
 
