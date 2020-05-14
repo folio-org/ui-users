@@ -10,7 +10,7 @@ import {
 import setupApplication from '../helpers/setup-application';
 import CustomFieldsInteractor from '../interactors/settings-custom-fields';
 
-describe('Settings custom fields', () => {
+describe.skip('Settings custom fields', () => {
   describe('when there are custom fields saved', () => {
     before(() => {
       setupApplication({
