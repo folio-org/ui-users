@@ -13,7 +13,7 @@ import PaymentSettings from './PaymentSettings';
 import CommentRequiredSettings from './CommentRequiredSettings';
 import RefundReasonsSettings from './RefundReasonsSettings';
 import TransferAccountsSettings from './TransferAccountsSettings';
-import CustomFieldsSettingsPane from './CustomFieldsSettings';
+// import CustomFieldsSettingsPane from './CustomFieldsSettings';
 import ConditionsSettings from './ConditionsSettings';
 import LimitsSettings from './LimitsSettings';
 
@@ -43,12 +43,12 @@ const settingsGeneral = [
     component: ProfilePictureSettings,
     perm: 'ui-users.settings.profilePictures'
   },
-  {
-    route: 'custom-fields',
-    label: <FormattedMessage id="ui-users.settings.customFields" />,
-    component: CustomFieldsSettingsPane,
-    perm: 'ui-users.settings.customfields.view',
-  }
+  // {
+  //   route: 'custom-fields',
+  //   label: <FormattedMessage id="ui-users.settings.customFields" />,
+  //   component: CustomFieldsSettingsPane,
+  //   perm: 'ui-users.settings.customfields.view',
+  // }
 ];
 
 const settingsFeefines = [
