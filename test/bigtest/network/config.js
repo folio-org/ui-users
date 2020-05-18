@@ -624,7 +624,7 @@ export default function config() {
     });
   });
 
-  this.post('/authn/credentials', (schema, { requestBody }) => {
+  this.post('/authn/credentials', ({ requestBody }) => {
     const creds = JSON.parse(requestBody);
     return server.create('credential', creds);
   });
