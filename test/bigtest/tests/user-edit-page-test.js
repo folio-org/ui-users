@@ -166,7 +166,7 @@ describe('User Edit Page', () => {
     });
   });
 
-  describe('when custom fields are in stock', () => {
+  describe.skip('when custom fields are in stock', () => {
     it('should show custom fields accordion', () => {
       expect(UserFormPage.customFieldsSection.isPresent).to.be.true;
     });
