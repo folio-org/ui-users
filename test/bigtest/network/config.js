@@ -624,9 +624,4 @@ export default function config() {
       userId: cqlParser.tree.term
     });
   });
-
-  this.post('/authn/credentials/', (schema, { requestBody }) => {
-    const creds = JSON.parse(requestBody);
-    return server.create('credential', creds);
-  });
 }
