@@ -33,6 +33,13 @@ export default Factory.extend({
       'defaultServicePointId': 'servicepointId1',
     });
 
+    server.create('credential', {
+      'id': () => faker.random.uuid(),
+      'password': '',
+      'userId': user.id,
+      'username': user.username
+    });
+
     const personal = server.create('user-personal', {
       lastName: faker.name.lastName(),
       firstName: faker.name.firstName(),
