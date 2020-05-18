@@ -34,9 +34,9 @@ export default Factory.extend({
     });
 
     server.create('credential', {
-      'id': () => faker.random.uuid(),
-      'password': '',
+      'id': faker.random.uuid,
       'userId': user.id,
+      'password': faker.random.password,
       'username': user.username
     });
 

@@ -1,4 +1,3 @@
-/* eslint-disable indent */
 import {
   beforeEach,
   describe,
@@ -11,7 +10,7 @@ import translations from '../../../translations/ui-users/en';
 import setupApplication from '../helpers/setup-application';
 import UserFormPage from '../interactors/user-form-page';
 
-describe('Edit Page, user with password', () => {
+describe.skip('Edit Page, user with password', () => {
   setupApplication({ scenarios: ['user-with-password'] });
 
   beforeEach(async function () {
