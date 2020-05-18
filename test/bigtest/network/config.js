@@ -409,7 +409,6 @@ export default function config() {
   });
 
   this.get('/authn/credentials-existence', () => { });
-  this.post('/authn/credentials');
 
   this.get('/note-types');
 
