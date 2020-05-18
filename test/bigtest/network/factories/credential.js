@@ -6,10 +6,4 @@ export default Factory.extend({
   userId: () => faker.random.uuid(),
   hash: '74B44431F0F9E0FD13385B4610D24B1A1C369E8C',
   salt: '66268FAF2435F891DE2EA55AF47A03F2C37AE029',
-  metadata: {
-    createdDate: faker.date.past(0.1, faker.date.past(0.1)).toString(),
-    createdByUserId: () => faker.random.uuid(),
-    updatedDate: faker.date.past(0.1).toString(),
-    updatedByUserId: () => faker.random.uuid()
-  }
 });

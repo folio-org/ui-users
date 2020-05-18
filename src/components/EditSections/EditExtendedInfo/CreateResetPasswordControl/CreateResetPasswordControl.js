@@ -43,7 +43,6 @@ class CreateResetPasswordControl extends React.Component {
     credentials: {
       type: 'okapi',
       path: 'authn/credentials?query=(userId=!{userId})',
-      permissionsRequired: 'login.collection.get'
     },
   });
 
@@ -60,6 +59,14 @@ class CreateResetPasswordControl extends React.Component {
   }
 
   checkPasswordExistence = async () => {
+    /*
+    We need to differ the user WITH setted password from user WITHOUT password.
+    When user was created by default setted password is '' (empty string).
+    When we edit user, we receive the object with credentials.
+    Then we encrypt the '' with received salt from credentials, and if hash is simular,
+    then we know that password was not set for the current user yet, then display 'Create password',
+    otherwise 'Reset password' link.
+    */
     const {
       resources: {
         credentials,
@@ -74,6 +81,9 @@ class CreateResetPasswordControl extends React.Component {
     const normalizeSalt = Buffer.from(credentialsRecord.salt, 'hex');
 
     await crypto.pbkdf2('', normalizeSalt, 1000, 32, 'sha1', (err, derivedKey) => {
+      // '' - password, encrypted with normalizeSalt
+      // 1000 - number of iterations
+      // 32 - length of derivedKey
       if (err) {
         throw err;
       }
