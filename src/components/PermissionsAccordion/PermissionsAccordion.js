@@ -6,6 +6,7 @@ import {
 } from 'redux-form';
 import { connect as reduxConnect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
+import { sortBy } from 'lodash';
 import {
   Icon,
   Button,
@@ -115,8 +116,9 @@ class PermissionsAccordion extends React.Component {
   }
 
   renderList = ({ fields }) => {
+    const sortedFields = sortBy(fields.getAll(), 'displayName');
     const listFormatter = (_fieldName, index) => (
-      this.renderItem(fields.get(index), index, this.props.stripes?.config?.showPerms)
+      this.renderItem(sortedFields[index], index, this.props.stripes?.config?.showPerms)
     );
 
     return (
