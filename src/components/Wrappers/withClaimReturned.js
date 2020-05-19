@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 
 import LoanActionDialog from '../LoanActionDialog';
 
-import { loanActions } from '../../constants';
+import { loanActionMutators } from '../../constants';
 
 const withClaimReturned = WrappedComponent => class withClaimReturnedComponent extends React.Component {
   constructor(props) {
@@ -43,7 +43,7 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
         { loan &&
           <LoanActionDialog
             loan={loan}
-            loanAction={loanActions.CLAIMED_RETURNED}
+            loanAction={loanActionMutators.CLAIMED_RETURNED}
             modalLabel={modalLabel}
             open={claimReturnedDialogOpen}
             onClose={this.hideClaimReturnedDialog}

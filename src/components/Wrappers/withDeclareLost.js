@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 
 import LoanActionDialog from '../LoanActionDialog';
 
-import { loanActions } from '../../constants';
+import { loanActionMutators } from '../../constants';
 
 const withDeclareLost = WrappedComponent => class WithDeclareLost extends React.Component {
   constructor(props) {
@@ -43,7 +43,7 @@ const withDeclareLost = WrappedComponent => class WithDeclareLost extends React.
         { loan &&
           <LoanActionDialog
             loan={loan}
-            loanAction={loanActions.DECLARE_LOST}
+            loanAction={loanActionMutators.DECLARE_LOST}
             modalLabel={modalLabel}
             open={declareLostDialogOpen}
             onClose={this.hideDeclareLostDialog}
