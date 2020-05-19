@@ -53,6 +53,17 @@ class OpenLoansWithStaticData extends React.Component {
     match: PropTypes.object,
   };
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      showBulkClaimReturnedModal: false,
+    };
+
+    this.onCancelBulkClaimReturned = this.onCancelBulkClaimReturned.bind(this);
+    this.onClickOpenBulkClaimReturned = this.onClickOpenBulkClaimReturned.bind(this);
+  }
+
   setFormatters() {
     const {
       intl: { formatMessage },
@@ -188,6 +199,14 @@ class OpenLoansWithStaticData extends React.Component {
     return contributorsList;
   };
 
+  onClickOpenBulkClaimReturned = () => {
+    this.setState({ showBulkClaimReturnedModal: true });
+  }
+
+  onCancelBulkClaimReturned = () => {
+    this.setState({ showBulkClaimReturnedModal: false });
+  }
+
   render() {
     const {
       visibleColumns,
@@ -211,6 +230,7 @@ class OpenLoansWithStaticData extends React.Component {
       activeLoan,
       isLoanChecked,
     } = this.props;
+    const { showBulkClaimReturnedModal } = this.state;
 
     this.setFormatters();
     this.columnMapping = this.getColumnMapping();
@@ -229,6 +249,7 @@ class OpenLoansWithStaticData extends React.Component {
           showChangeDueDateDialog={showChangeDueDateDialog}
           buildRecords={buildRecords}
           openPatronBlockedModal={openPatronBlockedModal}
+          openBulkClaimReturnedModal={this.onClickOpenBulkClaimReturned}
         />}
         <OpenLoans
           stripes={stripes}
@@ -257,6 +278,8 @@ class OpenLoansWithStaticData extends React.Component {
           changeDueDateDialogOpen={changeDueDateDialogOpen}
           hideChangeDueDateDialog={hideChangeDueDateDialog}
           onClosePatronBlockedModal={onClosePatronBlockedModal}
+          showBulkClaimReturnedModal={showBulkClaimReturnedModal}
+          onBulkClaimReturnedCancel={this.onCancelBulkClaimReturned}
         />
       </>
     );

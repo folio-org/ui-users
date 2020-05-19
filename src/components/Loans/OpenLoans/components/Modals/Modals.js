@@ -6,6 +6,7 @@ import { stripesShape } from '@folio/stripes/core';
 
 // eslint-disable-next-line
 import PatronBlockModal from '@folio/users/src/components/PatronBlock/PatronBlockModal';
+import BulkClaimedReturnedModal from '@folio/users/src/components/Loans/OpenLoans/components/BulkClaimReturnedModal';
 
 class Modals extends React.Component {
   static propTypes = {
@@ -46,6 +47,8 @@ class Modals extends React.Component {
       patronBlockedModal,
       onClosePatronBlockedModal,
       patronGroup,
+      showBulkClaimReturnedModal,
+      onBulkClaimReturnedCancel,
     } = this.props;
 
     const loanIds = activeLoan
@@ -69,6 +72,10 @@ class Modals extends React.Component {
           patronBlocks={patronBlocks}
           onClose={onClosePatronBlockedModal}
           viewUserPath={`/users/view/${(user || {}).id}?filters=pg.${patronGroup.group}&sort=name`}
+        />
+        <BulkClaimedReturnedModal
+          open={showBulkClaimReturnedModal}
+          onCancel={onBulkClaimReturnedCancel}
         />
       </>
     );

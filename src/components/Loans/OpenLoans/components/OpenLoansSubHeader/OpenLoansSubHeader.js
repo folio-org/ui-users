@@ -132,6 +132,7 @@ class OpenLoansSubHeader extends React.Component {
       buildRecords,
       patronBlocks,
       openPatronBlockedModal,
+      openBulkClaimReturnedModal,
     } = this.props;
 
     const {
@@ -143,12 +144,6 @@ class OpenLoansSubHeader extends React.Component {
     const clonedLoans = cloneDeep(loans);
     const recordsToCSV = buildRecords(clonedLoans);
     const countRenews = patronBlocks.filter(p => p.renewals === true);
-    // For better or worse, checkedLoans is passed down as an object with keys corresponding to the loan UUIDs
-    // and values being the associated loan properties -- e.g. { uuid: {loan}, uuid2: {loan2} }. This makes
-    // it a little complicated to determine whether any loan in checkedLoans has a particular property -- like
-    // an item that's been declared lost
-    const onlyLostItemsSelected = !Object.values(checkedLoans).find(loan => loan?.item?.status?.name !== 'Declared lost');
-    const onlyClaimedReturnedItemsSelected = !Object.values(checkedLoans).find(loan => loan?.item?.status?.name !== 'Claimed returned');
 
     return (
       <ActionsBar
@@ -203,7 +198,7 @@ class OpenLoansSubHeader extends React.Component {
               marginBottom0
               id="bulk-claim-returned"
               disabled={noSelectedLoans || this.onlyStatusSelected(itemStatuses.CLAIMED_RETURNED)}
-              onClick={showChangeDueDateDialog}
+              onClick={openBulkClaimReturnedModal}
             >
               <FormattedMessage id="ui-users.loans.claimReturned" />
             </Button>         
