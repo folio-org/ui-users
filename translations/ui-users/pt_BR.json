@@ -317,7 +317,7 @@
     "systemReturnDate": "Data de devolução do sistema",
     "item.barcode": "Código de barras",
     "item.contributors": "Nomes de autores",
-    "item.holdingsRecordId": "ID dos registros de acervo",
+    "item.holdingsRecordId": "ID dos registros de holdings",
     "item.instanceId": "ID da instância",
     "item.status.name": "Status do item",
     "item.title": "Título do item",
