@@ -54,7 +54,7 @@ class Modals extends React.Component {
     const loanIds = activeLoan
       ? loans.filter(loan => activeLoan === loan.id) // Only changing one due date.
       : loans.filter(loan => checkedLoans[loan.id]); // Bulk-changing due dates.
-
+console.log("checked", checkedLoans)
 
     return (
       <>
@@ -74,6 +74,7 @@ class Modals extends React.Component {
           viewUserPath={`/users/view/${(user || {}).id}?filters=pg.${patronGroup.group}&sort=name`}
         />
         <BulkClaimedReturnedModal
+          checkedLoansIndex={checkedLoans}
           open={showBulkClaimReturnedModal}
           onCancel={onBulkClaimReturnedCancel}
         />
