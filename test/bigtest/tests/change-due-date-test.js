@@ -44,7 +44,7 @@ describe('Change due date', () => {
           expect(OpenLoansInteractor.actionDropdownChangeDueDateButton.isPresent).to.be.true;
         });
 
-        describe.skip('click change due date button', () => {
+        describe('click change due date button', () => {
           beforeEach(async () => {
             await OpenLoansInteractor.actionDropdownChangeDueDateButton.click();
           });
