@@ -69,10 +69,14 @@ const withServicePoints = WrappedComponent => class WithServicePointsComponent e
       stripes: stripesShape.isRequired,
     };
 
-    state = {
-      userServicePoints: [],
-      userPreferredServicePoint: undefined,
-    };
+    constructor(props) {
+      super(props);
+
+      this.state = {
+        userServicePoints: [],
+        userPreferredServicePoint: undefined,
+      };
+    }
 
     static getDerivedStateFromProps(nextProps, state) {
       // Save the id of the record in the service-points-users table for later use when mutating it.
