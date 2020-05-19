@@ -33,17 +33,18 @@ export default Factory.extend({
       'defaultServicePointId': 'servicepointId1',
     });
 
-    server.create('credential', {
-      'id': faker.random.uuid,
-      'userId': user.id,
-      'password': faker.random.password,
-      'username': user.username
-    });
-
     const personal = server.create('user-personal', {
       lastName: faker.name.lastName(),
       firstName: faker.name.firstName(),
     });
+
+    if (user.username) {
+      server.create('credential', {
+        'userId': user.id,
+        'username': user.username,
+        'password': faker.internet.password(),
+      });
+    }
 
     user.update('username', `${personal.lastName}, ${personal.firstName}`);
     user.update('personal', personal.toJSON());

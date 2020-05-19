@@ -614,18 +614,23 @@ export default function config() {
     }]
   });
 
-  this.get('/authn/credentials', ({ credentials }, request) => {
+  this.post('/authn/credentials');
+
+  this.get('/authn/credentials', (schema, request) => {
     const url = new URL(request.url);
     const cqlQuery = url.searchParams.get('query');
-    const cqlParser = new CQLParser();
-    cqlParser.parse(cqlQuery);
-    return credentials.where({
-      userId: cqlParser.tree.term
-    });
-  });
 
-  this.post('/authn/credentials', (schema, { requestBody }) => {
-    const creds = JSON.parse(requestBody);
-    return server.create('credential', creds);
+    if (cqlQuery != null) {
+      const cqlParser = new CQLParser();
+      cqlParser.parse(cqlQuery);
+
+      if (cqlParser.tree.term) {
+        return schema.credentials.where({
+          userId: cqlParser.tree.term
+        });
+      }
+    }
+
+    return schema.credentials.all();
   });
 }

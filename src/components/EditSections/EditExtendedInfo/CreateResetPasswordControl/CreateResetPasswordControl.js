@@ -46,16 +46,29 @@ class CreateResetPasswordControl extends React.Component {
     },
   });
 
-  state = {
-    showModal: false,
-    isLocalPasswordSet: false,
-    link: '',
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      showModal: false,
+      isLocalPasswordSet: false,
+      link: '',
+    };
+
+    this._isMounted = false;
+  }
+
+  componentDidMount() {
+    this._isMounted = true;
+  }
 
   componentDidUpdate(prevProps) {
-    if (this.props.resources.credentials !== prevProps.resources.credentials) {
+    if (this._isMounted && (this.props.resources.credentials !== prevProps.resources.credentials)) {
       this.checkPasswordExistence();
     }
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   checkPasswordExistence = async () => {
