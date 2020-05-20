@@ -82,9 +82,13 @@ class UserAccounts extends React.Component {
       openAccounts: 0,
       closedAccounts: 0,
     };
+
+    this._isMounted = false;
   }
 
   componentDidMount() {
+    this._isMounted = true;
+
     this.props.mutator.openAccountsCount.GET().then(records => {
       this.setState({
         total: this.getTotalOpenAccounts(records.accounts),
@@ -101,17 +105,25 @@ class UserAccounts extends React.Component {
   componentDidUpdate(prevProps) {
     if (this.props.addRecord !== prevProps.addRecord) {
       this.props.mutator.openAccountsCount.GET().then(records => {
-        this.setState({
-          total: this.getTotalOpenAccounts(records.accounts),
-          openAccounts: records.totalRecords,
-        });
+        if (this._isMounted) {
+          this.setState({
+            total: this.getTotalOpenAccounts(records.accounts),
+            openAccounts: records.totalRecords,
+          });
+        }
       });
       this.props.mutator.closedAccountsCount.GET().then(records => {
-        this.setState({
-          closedAccounts: records.totalRecords,
-        });
+        if (this._isMounted) {
+          this.setState({
+            closedAccounts: records.totalRecords,
+          });
+        }
       });
     }
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   getTotalOpenAccounts = (accounts) => {
