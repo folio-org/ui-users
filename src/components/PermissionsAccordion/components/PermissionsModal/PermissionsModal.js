@@ -12,6 +12,7 @@ import {
   Modal,
   Pane,
   Paneset,
+  PaneHeader,
 } from '@folio/stripes/components';
 
 import {
@@ -235,6 +236,13 @@ class PermissionsModal extends React.Component {
       FilterGroupsConfig.push(filterConfig);
     });
 
+    const firstMenuBtn = () => (
+      <ExpandFilterPaneButton
+        onClick={this.toggleFilterPane}
+        filterCount={filters.count}
+      />
+    );
+
     return (
       <Modal
         open={open}
@@ -268,19 +276,24 @@ class PermissionsModal extends React.Component {
               buttonStyle="primary"
               onClick={this.onSave}
             >
-              <FormattedMessage id="ui-users.permissions.modal.save" />
+              <FormattedMessage id="ui-users.saveAndClose" />
             </Button>
           </div>
         }
       >
         <div>
           <Paneset>
-            {
-              filterPaneIsVisible &&
+            {filterPaneIsVisible &&
               <Pane
                 defaultWidth="30%"
-                paneTitle={<FormattedMessage id="ui-users.permissions.modal.search.header" />}
-                lastMenu={<CollapseFilterPaneButton onClick={this.toggleFilterPane} />}
+                renderHeader={renderProps => (
+                  <PaneHeader
+                    {...renderProps}
+                    paneTitle={<FormattedMessage id="ui-users.permissions.modal.search.header" />}
+                    lastMenu={<CollapseFilterPaneButton onClick={this.toggleFilterPane} />}
+                    className={css.modalHeader}
+                  />
+                )}
               >
                 <SearchForm
                   config={FilterGroupsConfig}
@@ -293,24 +306,21 @@ class PermissionsModal extends React.Component {
               </Pane>
             }
             <Pane
-              {
-                ...(filterPaneIsVisible || {
-                  firstMenu: (
-                    <ExpandFilterPaneButton
-                      onClick={this.toggleFilterPane}
-                      filterCount={filters.count}
-                    />
-                  )
-                }
-              )}
-              paneTitle={<FormattedMessage id="ui-users.permissions.modal.list.pane.header" />}
-              paneSub={
-                <FormattedMessage
-                  id="ui-users.permissions.modal.list.pane.subheader"
-                  values={{ amount: filteredPermissions.length }}
-                />
-              }
               defaultWidth="fill"
+              renderHeader={renderProps => (
+                <PaneHeader
+                  {...renderProps}
+                  className={css.modalHeader}
+                  paneTitle={<FormattedMessage id="ui-users.permissions.modal.list.pane.header" />}
+                  paneSub={
+                    <FormattedMessage
+                      id="ui-users.permissions.modal.list.pane.subheader"
+                      values={{ amount: filteredPermissions.length }}
+                    />
+                  }
+                  {...(filterPaneIsVisible || { firstMenu: firstMenuBtn() })}
+                />
+              )}
             >
               <PermissionsList
                 visibleColumns={visibleColumns}
