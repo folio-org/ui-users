@@ -32,6 +32,7 @@
 * Increment `stripes` to `v4.0`, `react-intl` to `v4.5`, `react-intl-safe-html` to `v2.0`. Refs STRIPES-672.
 * Fix `Reset all` button for filters and query. Fixes UIU-1628.
 * Sort user permissions in alphabetical order on create/edit screen. Refs UIU-1353.
+* Fix memory leak in `UserAccounts.js` discovered by @mkuklis.
 
 ## [3.0.0](https://github.com/folio-org/ui-users/tree/v3.0.0) (2020-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.26.0...v3.0.0)
