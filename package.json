@@ -676,7 +676,6 @@
     "@folio/react-intl-safe-html": "^2.0.0",
     "hashcode": "^1.0.3",
     "lodash": "^4.17.4",
-    "moment": "~2.24.0",
     "prop-types": "^15.5.10",
     "query-string": "^5.0.0",
     "react-hot-loader": "^4.3.12",
@@ -687,6 +686,7 @@
   },
   "peerDependencies": {
     "@folio/stripes": "^4.0.0",
+    "moment": "^2.25.3",
     "react": "*",
     "react-intl": "^4.5.3",
     "react-router": "*",
@@ -694,8 +694,5 @@
   },
   "optionalDependencies": {
     "@folio/plugin-find-user": "^2.0.0"
-  },
-  "resolutions": {
-    "moment": "~2.24.0"
   }
 }
