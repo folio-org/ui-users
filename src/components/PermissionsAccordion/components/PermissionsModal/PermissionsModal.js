@@ -236,13 +236,6 @@ class PermissionsModal extends React.Component {
       FilterGroupsConfig.push(filterConfig);
     });
 
-    const firstMenuBtn = () => (
-      <ExpandFilterPaneButton
-        onClick={this.toggleFilterPane}
-        filterCount={filters.count}
-      />
-    );
-
     return (
       <Modal
         open={open}
@@ -318,7 +311,15 @@ class PermissionsModal extends React.Component {
                       values={{ amount: filteredPermissions.length }}
                     />
                   }
-                  {...(filterPaneIsVisible || { firstMenu: firstMenuBtn() })}
+                  {...(filterPaneIsVisible || {
+                    firstMenu: (
+                      <ExpandFilterPaneButton
+                        onClick={this.toggleFilterPane}
+                        filterCount={filters.count}
+                      />
+                    )
+                  }
+                  )}
                 />
               )}
             >

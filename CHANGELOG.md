@@ -31,6 +31,7 @@
 * Correctly configure fee/fines and profile-pictures permissions. Refs UIU-1574.
 * Increment `stripes` to `v4.0`, `react-intl` to `v4.5`, `react-intl-safe-html` to `v2.0`. Refs STRIPES-672.
 * Fix `Reset all` button for filters and query. Fixes UIU-1628.
+* Sort user permissions in alphabetical order on create/edit screen. Refs UIU-1353.
 * UI updates to the Permissions modal. Refs UIU-1466.
 
 ## [3.0.0](https://github.com/folio-org/ui-users/tree/v3.0.0) (2020-03-17)
