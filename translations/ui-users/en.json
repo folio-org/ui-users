@@ -756,6 +756,8 @@
   "permission.view": "Users: Can view user profile",
   "permission.viewperms": "Users: Can view permissions assigned to users",
   "permission.viewproxies": "Users: Can view proxies assigned to users",
-  "permission.viewuserservicepoints": "Users: Can view service points assigned to users"
+  "permission.viewuserservicepoints": "Users: Can view service points assigned to users",
+
+  "bulkClaimReturned.item.title": "Title"
 
 }

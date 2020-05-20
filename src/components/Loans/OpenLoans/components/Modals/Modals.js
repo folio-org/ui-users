@@ -47,6 +47,7 @@ class Modals extends React.Component {
       patronBlockedModal,
       onClosePatronBlockedModal,
       patronGroup,
+      requestCounts,
       showBulkClaimReturnedModal,
       onBulkClaimReturnedCancel,
     } = this.props;
@@ -75,6 +76,7 @@ console.log("checked", checkedLoans)
         />
         <BulkClaimedReturnedModal
           checkedLoansIndex={checkedLoans}
+          requestCounts={requestCounts}
           open={showBulkClaimReturnedModal}
           onCancel={onBulkClaimReturnedCancel}
         />

@@ -280,6 +280,7 @@ class OpenLoansWithStaticData extends React.Component {
           onClosePatronBlockedModal={onClosePatronBlockedModal}
           showBulkClaimReturnedModal={showBulkClaimReturnedModal}
           onBulkClaimReturnedCancel={this.onCancelBulkClaimReturned}
+          requestCounts={requestCounts}
         />
       </>
     );
