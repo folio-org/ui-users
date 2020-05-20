@@ -635,7 +635,7 @@
   "accounts.actions.waiveFeeFine": "Waive fees/fines",
   "accounts.actions.transferFeeFine": "Transfer fees/fines",
 
-  "accounts.actions.warning.summary": "{selectedItemsAmount} items selected. {closedItemsAmount} items cannot be {action} because they are already closed",
+  "accounts.actions.warning.summary": "{selectedItemsAmount} fees/fines selected. Deselect closed fees/fines to continue.",
   "accounts.actions.warning.alertDetails": "Alert details",
   "accounts.actions.warning.feeFineType": "Fee/Fine type",
   "accounts.actions.warning.remaining": "Remainig",
