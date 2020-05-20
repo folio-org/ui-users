@@ -135,16 +135,6 @@ describe('Open Loans', () => {
               expect(this.location.pathname).to.to.equal(requestsPath);
             });
           });
-
-          describe('clicking on dropdown container', () => {
-            beforeEach(async () => {
-              await OpenLoansInteractor.actionDropdownContainer.click();
-            });
-
-            it('should not close the dropdown', function () {
-              expect(OpenLoansInteractor.actionDropdownContainer.isVisible).to.be.true;
-            });
-          });
         });
       });
 
