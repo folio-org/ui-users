@@ -146,7 +146,7 @@ class ChargeFeeFine extends React.Component {
       .then(() => this.newAction({}, typeAction.id, typeAction.feeFineType, typeAction.amount, commentInfo, typeAction.remaining, 0, typeAction.feeFineOwner));
   }
 
-  newAction = (action, id, typeAction, amount, comment, balance, transaction, createdAt) => {
+  newAction = (action, id, typeAction, amount, comment, balance, transaction) => {
     const path = `accounts/${id}`;
     const notify = _.isEmpty(action) ? this.state.notify : this.state.paymentNotify;
 
@@ -156,7 +156,7 @@ class ChargeFeeFine extends React.Component {
       const newAction = {
         typeAction,
         source: `${this.props.okapi.currentUser.lastName}, ${this.props.okapi.currentUser.firstName}`,
-        createdAt: `${this.props.okapi.currentUser.curServicePoint.name}`,
+        createdAt: this.props.okapi.currentUser.curServicePoint.id,
         accountId: id,
         dateAction,
         userId: this.props.user.id,
