@@ -171,13 +171,6 @@
         "visible": true
       },
       {
-        "permissionName": "settings.usergroups.all",
-        "displayName": "Settings (Users): Can create, edit and remove patron groups [LEGACY]",
-        "subPermissions": [
-          "ui-users.settings.usergroups"
-        ]
-      },
-      {
         "permissionName": "ui-users.settings.addresstypes",
         "displayName": "Settings (Users): Can create, edit and remove address types",
         "subPermissions": [
@@ -189,13 +182,6 @@
           "settings.users.enabled"
         ],
         "visible": true
-      },
-      {
-        "permissionName": "settings.addresstypes.all",
-        "displayName": "Settings (Users): Can create, edit and remove address types [LEGACY]",
-        "subPermissions": [
-          "ui-users.settings.addresstypes"
-        ]
       },
       {
         "permissionName": "ui-users.viewproxies",
@@ -234,11 +220,20 @@
         "visible": true
       },
       {
-        "permissionName": "settings.comments.all",
-        "displayName": "Settings (Users): Can create, edit and remove comments [LEGACY]",
+        "permissionName": "ui-users.settings.feefines.all",
+        "displayName": "Settings (Users): Can create, edit and remove all feefines-related entries",
         "subPermissions": [
-          "ui-users.settings.comments"
-        ]
+          "settings.users.enabled",
+          "ui-users.settings.owners",
+          "ui-users.settings.feefines",
+          "ui-users.settings.waives",
+          "ui-users.settings.payments",
+          "ui-users.settings.refunds",
+          "ui-users.settings.comments",
+          "ui-users.settings.transfers",
+          "ui-users.settings.transfertypes"
+        ],
+        "visible": true
       },
       {
         "permissionName": "ui-users.settings.feefines",
@@ -288,13 +283,7 @@
         ],
         "visible": true
       },
-      {
-        "permissionName": "settings.feefines.all",
-        "displayName": "Settings (Users): Can create, edit and remove feefines [LEGACY]",
-        "subPermissions": [
-          "ui-users.settings.feefines"
-        ]
-      },
+
       {
         "permissionName": "ui-users.settings.owners",
         "displayName": "Settings (Users): Can create, edit and remove owners",
@@ -307,13 +296,6 @@
           "settings.users.enabled"
         ],
         "visible": true
-      },
-      {
-        "permissionName": "settings.owners.all",
-        "displayName": "Settings (Users): Can create, edit and remove owners [LEGACY]",
-        "subPermissions": [
-          "ui-users.settings.owners"
-        ]
       },
       {
         "permissionName": "ui-users.settings.payments",
@@ -329,13 +311,6 @@
         "visible": true
       },
       {
-        "permissionName": "settings.payments.all",
-        "displayName": "Settings (Users): Can create, edit and remove payments [LEGACY]",
-        "subPermissions": [
-          "ui-users.settings.payments"
-        ]
-      },
-      {
         "permissionName": "ui-users.settings.refunds",
         "displayName": "Settings (Users): Can create, edit and remove refunds",
         "subPermissions": [
@@ -349,13 +324,6 @@
         "visible": true
       },
       {
-        "permissionName": "settings.refunds.all",
-        "displayName": "Settings (Users): Can create, edit and remove refunds [LEGACY]",
-        "subPermissions": [
-          "ui-users.settings.refunds"
-        ]
-      },
-      {
         "permissionName": "ui-users.settings.waives",
         "displayName": "Settings (Users): Can create, edit and remove waives",
         "subPermissions": [
@@ -367,13 +335,6 @@
           "settings.users.enabled"
         ],
         "visible": true
-      },
-      {
-        "permissionName": "settings.waives.all",
-        "displayName": "Settings (Users): Can create, edit and remove waives [LEGACY]",
-        "subPermissions": [
-          "ui-users.settings.waives"
-        ]
       },
       {
         "permissionName": "ui-users.accounts",
@@ -394,13 +355,7 @@
         ],
         "visible": true
       },
-      {
-        "permissionName": "accounts.all",
-        "displayName": "Fee/Fine History: Can create, edit and remove accounts [LEGACY]",
-        "subPermissions": [
-          "ui-users.accounts"
-        ]
-      },
+
       {
         "permissionName": "ui-users.feefineactions",
         "displayName": "Fee/Fine Details: Can create, edit and remove fee/fine actions",
@@ -412,13 +367,6 @@
           "feefineactions.item.put"
         ],
         "visible": true
-      },
-      {
-        "permissionName": "feefineactions.all",
-        "displayName": "Fee/Fine Details: Can create, edit and remove fee/fine actions [LEGACY]",
-        "subPermissions": [
-          "ui-users.feefineactions"
-        ]
       },
       {
         "permissionName": "ui-users.settings.transfers",
@@ -434,13 +382,6 @@
         "visible": true
       },
       {
-        "permissionName": "settings.transfers.all",
-        "displayName": "Settings (Users): Can create, edit and remove transfer accounts [LEGACY]",
-        "subPermissions": [
-          "ui-users.settings.transfers"
-        ]
-      },
-      {
         "permissionName": "ui-users.settings.transfertypes",
         "displayName": "Settings (Users): Can create, edit and remove transfer criteria",
         "subPermissions": [
@@ -454,18 +395,11 @@
         "visible": true
       },
       {
-        "permissionName": "settings.transfertypes.all",
-        "displayName": "Settings (Users): Can create, edit and remove transfer criteria [LEGACY]",
-        "subPermissions": [
-          "ui-users.settings.transfertypes"
-        ]
-      },
-      {
         "permissionName": "ui-users.manual_pay",
         "displayName": "Fees/Fines: Can pay",
         "subPermissions": [
-          "accounts.all",
-          "feefineactions.all",
+          "ui-users.accounts",
+          "ui-users.feefineactions",
           "comments.collection.get",
           "comments.item.get",
           "payments.collection.get",
@@ -474,31 +408,17 @@
         "visible": true
       },
       {
-        "permissionName": "manual_pay.all",
-        "displayName": "Fees/Fines: Can pay [LEGACY]",
-        "subPermissions": [
-          "ui-users.manual_pay"
-        ]
-      },
-      {
         "permissionName": "ui-users.manual_waive",
         "displayName": "Fees/Fines: Can waive",
         "subPermissions": [
-          "accounts.all",
-          "feefineactions.all",
+          "ui-users.accounts",
+          "ui-users.feefineactions",
           "comments.collection.get",
           "comments.item.get",
           "waives.collection.get",
           "waives.item.get"
         ],
         "visible": true
-      },
-      {
-        "permissionName": "manual_waive.all",
-        "displayName": "Fees/Fines: Can waive [LEGACY]",
-        "subPermissions": [
-          "ui-users.manual_waive"
-        ]
       },
       {
         "permissionName": "ui-users.manual_charge",
@@ -508,16 +428,9 @@
           "owners.item.get",
           "feefines.collection.get",
           "feefines.item.get",
-          "manual_pay.all"
+          "ui-users.manual_pay"
         ],
         "visible": true
-      },
-      {
-        "permissionName": "manual_charge.all",
-        "displayName": "Fees/Fines: Can charge [LEGACY]",
-        "subPermissions": [
-          "ui-users.manual_charge"
-        ]
       },
       {
         "permissionName": "ui-users.patron_blocks",
@@ -528,28 +441,6 @@
           "manualblocks.item.get",
           "manualblocks.item.post",
           "manualblocks.item.put"
-        ],
-        "visible": true
-      },
-      {
-        "permissionName": "patron_blocks.all",
-        "displayName": "Users: Can create, edit and remove patron blocks [LEGACY]",
-        "subPermissions": [
-          "ui-users.patron_blocks"
-        ]
-      },
-      {
-        "permissionName": "ui-users.settings.feefine",
-        "displayName": "Settings (Users): Can create, edit and remove fee/fine settings",
-        "subPermissions": [
-          "settings.owners.all",
-          "settings.feefines.all",
-          "settings.payments.all",
-          "settings.waives.all",
-          "settings.refunds.all",
-          "settings.transfers.all",
-          "settings.comments.all",
-          "settings.tranfertypes.all"
         ],
         "visible": true
       },
@@ -582,18 +473,11 @@
         "permissionName": "ui-users.feesfines.actions.all",
         "displayName": "Users: Can create, edit and remove fees/fines",
         "subPermissions": [
-          "manual_charge.all",
-          "manual_pay.all",
-          "manual_waive.all"
+          "ui-users.manual_charge",
+          "ui-users.manual_pay",
+          "ui-users.manual_waive"
         ],
         "visible": true
-      },
-      {
-        "permissionName": "feesfines.actions.all",
-        "displayName": "Users: Can create, edit and remove fees/fines [LEGACY]",
-        "subPermissions": [
-          "ui-users.feesfines.actions.all"
-        ]
       },
       {
         "permissionName": "ui-users.loans.renew",
@@ -678,7 +562,6 @@
           "circulation.loans.declare-item-lost.post",
           "circulation.loans.claim-item-returned.post",
           "ui-users.loans.renew-override",
-          "ui-users.settings.feefines",
           "circulation.loans.item.put",
           "circulation.renew-by-barcode.post",
           "circulation-storage.loans-history.collection.get",
@@ -739,6 +622,19 @@
           "login.credentials-existence.get"
         ],
         "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.profilePictures",
+        "displayName": "Settings (Users): Can create, edit and remove permission sets",
+        "description": "",
+        "subPermissions": [
+          "settings.users.enabled",
+          "configuration.entries.collection.get",
+          "configuration.entries.item.get",
+          "configuration.entries.item.post",
+          "configuration.entries.item.put"
+        ],
+        "visible": true
       }
     ]
   },
@@ -755,20 +651,21 @@
     "@bigtest/mocha": "^0.5.2",
     "@bigtest/react": "^0.1.2",
     "@folio/eslint-config-stripes": "^5.2.0",
-    "@folio/stripes": "^3.0.0",
+    "@folio/stripes": "^4.0.0",
     "@folio/stripes-cli": "^1.13.0",
-    "@folio/stripes-core": "^4.0.0",
-    "@folio/stripes-components": "^6.0.3",
-    "@folio/stripes-final-form": "^2.0.0",
+    "@folio/stripes-core": "^5.0.0",
+    "@folio/stripes-components": "^7.0.0",
+    "@folio/stripes-final-form": "^3.0.0",
     "babel-eslint": "^10.0.3",
     "chai": "^4.2.0",
     "core-js": "^3.6.4",
     "eslint": "^6.2.1",
     "faker": "^4.1.0",
-    "mocha": "^5.2.0",
     "miragejs": "^0.1.32",
+    "mocha": "^5.2.0",
     "react": "^16.5.0",
     "react-dom": "^16.5.0",
+    "react-intl": "^4.5.3",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.0.0",
     "redux": "^4.0.0",
@@ -776,23 +673,22 @@
     "sinon": "^7.1.1"
   },
   "dependencies": {
-    "@folio/react-intl-safe-html": "^1.0.0",
-    "@folio/stripes-util": "^2.0.0",
+    "@folio/react-intl-safe-html": "^2.0.0",
     "hashcode": "^1.0.3",
     "lodash": "^4.17.4",
     "moment": "~2.24.0",
     "prop-types": "^15.5.10",
     "query-string": "^5.0.0",
     "react-hot-loader": "^4.3.12",
-    "react-intl": "^2.5.0",
     "react-router-prop-types": "^1.0.4",
     "redux-form": "^7.0.3",
     "react-final-form": "^6.3.0",
     "uuid": "^3.0.1"
   },
   "peerDependencies": {
-    "@folio/stripes": "^3.0.0",
+    "@folio/stripes": "^4.0.0",
     "react": "*",
+    "react-intl": "^4.5.3",
     "react-router": "*",
     "react-router-dom": "*"
   },

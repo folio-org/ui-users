@@ -1,6 +1,6 @@
 # Change history for ui-users
 
-## [3.1.0] (IN PROGRESS)
+## [4.0.0] (IN PROGRESS)
 
 * Change Fee/Fine Owner by Service Point name where the transaction took place. Refs. UIU-1398.
 * Support `loan-storage` interface version 7.0. UIU-1598.
@@ -25,6 +25,15 @@
 * Remove hardcoded ids from Parton Block Conditions page. Refs UIU-1609.
 * Settings > Users > Fee/Fine > Comment | Move Save button to the footer. Refs UIU-1589.
 * Pin `moment` at `~2.24.0`. Refs STRIPES-678.
+* Add possibility to create system user from already existing account. Refs UIU-1503.
+* Provide `search` explicitly to `history.push`. Fixes UIU-1620.
+* Settings > Users > Fee/Fine pages > replace black asterisk with red asterisk. Refs UIU-1611.
+* Match the protocol of the current page in images pulled from remote sites. Refs UIU-496.
+* Correctly configure fee/fines and profile-pictures permissions. Refs UIU-1574.
+* Increment `stripes` to `v4.0`, `react-intl` to `v4.5`, `react-intl-safe-html` to `v2.0`. Refs STRIPES-672.
+* Fix `Reset all` button for filters and query. Fixes UIU-1628.
+* Sort user permissions in alphabetical order on create/edit screen. Refs UIU-1353.
+* Fix memory leak in `UserAccounts.js` discovered by @mkuklis.
 
 ## [3.0.0](https://github.com/folio-org/ui-users/tree/v3.0.0) (2020-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.26.0...v3.0.0)
