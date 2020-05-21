@@ -624,9 +624,9 @@
     "accounts.transfer.error.select": "No Transfer accounts exist for Fee/fine owner",
     "settings.patronBlocks": "Patron blocks",
     "settings.conditions": "Conditions",
-    "settings.block.borrowing": "Block borrowing",
+    "settings.block.borrowing": "Bloquer les emprunts",
     "settings.block.renew": "Block renewals",
-    "settings.block.request": "Block request",
+    "settings.block.request": "Bloquer la demande",
     "settings.block.message": "Message to be displayed",
     "settings.callout.message": "The patron block condition <strong>{name}</strong> has been successfully <strong>updated</strong>.",
     "settings.error.noMessage": "Message to be displayed is a required field if one or more Blocked actions selected",
@@ -684,5 +684,6 @@
     "loans.markAsMissing": "Marquer comme manquant",
     "loans.markAsMissingDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be marked <strong>Missing</strong> and patron will not be billed",
     "loans.confirmAsMissing": "Confirmer l’article comme manquant",
-    "data.loanActionMap.closedLoan": "Prêt fermé"
+    "data.loanActionMap.closedLoan": "Prêt fermé",
+    "loans.numClaimedReturnedLoans": "({count, number} {count, plural, one {claimed returned} other {claimed returned}})"
 }
