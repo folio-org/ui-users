@@ -59,6 +59,7 @@ class ActionsDropdown extends React.Component {
           </Button>
         </IfPermission>
         <IfPermission perm="ui-users.loans.renew">
+          { itemStatusName !== itemStatuses.CLAIMED_RETURNED &&
           <Button
             buttonStyle="dropdownItem"
             data-test-dropdown-content-renew-button
@@ -69,6 +70,7 @@ class ActionsDropdown extends React.Component {
           >
             <FormattedMessage id="ui-users.renew" />
           </Button>
+          }
         </IfPermission>
         <IfPermission perm="ui-users.loans.claim-item-returned">
           { itemStatusName !== itemStatuses.CLAIMED_RETURNED &&

@@ -22,6 +22,8 @@ import {
 import ActionsBar from '../../../components/ActionsBar/ActionsBar';
 import { itemStatuses } from '../../../../../constants';
 
+import { hasEveryLoanItemStatus } from '../../../../util';
+
 import css from './OpenLoansSubHeader.css';
 
 class OpenLoansSubHeader extends React.Component {
@@ -135,7 +137,8 @@ class OpenLoansSubHeader extends React.Component {
     // and values being the associated loan properties -- e.g. { uuid: {loan}, uuid2: {loan2} }. This makes
     // it a little complicated to determine whether any loan in checkedLoans has a particular property -- like
     // an item that's been declared lost
-    const onlyLostItemsSelected = !Object.values(checkedLoans).find(loan => loan?.item?.status?.name !== 'Declared lost');
+    const onlyLostItemsSelected = hasEveryLoanItemStatus(checkedLoans, itemStatuses.DECLARED_LOST);
+    const onlyClaimedReturnedItemsSelected = hasEveryLoanItemStatus(checkedLoans, itemStatuses.CLAIMED_RETURNED);
 
     return (
       <ActionsBar
@@ -179,7 +182,7 @@ class OpenLoansSubHeader extends React.Component {
               <Button
                 marginBottom0
                 id="renew-all"
-                disabled={noSelectedLoans}
+                disabled={noSelectedLoans || onlyClaimedReturnedItemsSelected}
                 onClick={!isEmpty(countRenews)
                   ? openPatronBlockedModal
                   : renewSelected
