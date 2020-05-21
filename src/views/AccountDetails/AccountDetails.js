@@ -71,6 +71,7 @@ class AccountDetails extends React.Component {
     match: PropTypes.object,
     patronGroup: PropTypes.object,
     itemDetails: PropTypes.object,
+    okapi: PropTypes.object,
   };
 
   static defaultProps = {
