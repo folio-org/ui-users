@@ -5,7 +5,8 @@ import {
   count,
   Interactor,
   property,
-  clickable
+  clickable,
+  text,
 } from '@bigtest/interactor';
 import moment from 'moment';
 
@@ -65,6 +66,7 @@ import DialogInteractor from './dialog';
   markAsMissingDialog = new DialogInteractor('#markAsMissing-modal');
   dueDateCalendarCellButton = new ButtonInteractor(`[data-test-date="${moment().format('MM/DD/YYYY')}"]`);
   rowButtons = collection('[data-test-open-loans-list] button[role="row"]', ButtonInteractor);
+  loanCount = text('#loan-count');
 
   selectAllCheckboxes = clickable('#clickable-list-column- input[type="checkbox"]');
   clickRenew = clickable('#renew-all');

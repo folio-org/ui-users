@@ -20,7 +20,7 @@ import {
 } from '@folio/stripes/components';
 
 import ActionsBar from '../../../components/ActionsBar/ActionsBar';
-import Label from '../../../../Label/Label';
+import { itemStatuses } from '../../../../../constants';
 
 import css from './OpenLoansSubHeader.css';
 
@@ -127,6 +127,7 @@ class OpenLoansSubHeader extends React.Component {
 
     const noSelectedLoans = isEmpty(checkedLoans);
     const resultCount = <FormattedMessage id="ui-users.resultCount" values={{ count: loans.length }} />;
+    const claimedReturnedCount = loans.filter(l => l?.item?.status?.name === itemStatuses.CLAIMED_RETURNED).length;
     const clonedLoans = cloneDeep(loans);
     const recordsToCSV = buildRecords(clonedLoans);
     const countRenews = patronBlocks.filter(p => p.renewals === true);
@@ -140,9 +141,11 @@ class OpenLoansSubHeader extends React.Component {
       <ActionsBar
         contentStart={
           <span style={{ display: 'flex' }}>
-            <Label>
-              {resultCount}
-            </Label>
+            <span id="loan-count">
+              {resultCount} {claimedReturnedCount > 0 &&
+                <FormattedMessage id="ui-users.loans.numClaimedReturnedLoans" values={{ count: claimedReturnedCount }} />
+              }
+            </span>
             <Dropdown
               id="columnsDropdown"
               className={css.columnsDropdown}
