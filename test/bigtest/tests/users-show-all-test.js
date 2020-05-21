@@ -81,6 +81,7 @@ describe('Users', () => {
 
       beforeEach(async function () {
         openLoan = this.server.create('loan', {
+          action: 'claimedReturned',
           status: { name: 'Open' },
           userId: users[0].id,
           loanPolicyId: 'test'
@@ -108,6 +109,10 @@ describe('Users', () => {
         it('should display links to closed and open loans ', () => {
           expect(InstanceViewPage.loansSection.openLoans.isPresent).to.be.true;
           expect(InstanceViewPage.loansSection.closedLoans.isPresent).to.be.true;
+        });
+
+        it('should count claimed returned', () => {
+          expect(InstanceViewPage.loansSection.claimedReturnedCount).to.equal('(1 claimed returned)');
         });
 
         describe('clicking on the open loans link', function () {

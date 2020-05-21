@@ -128,6 +128,10 @@ describe('Claim returned', () => {
       await OpenLoansInteractor.whenLoaded();
     });
 
+    it('should display claimed returned count', () => {
+      expect(OpenLoansInteractor.loanCount).to.equal('1 record found (1 claimed returned)');
+    });
+
     describe('opening dropdown for claimed returned item', () => {
       beforeEach(async () => {
         await OpenLoansInteractor.actionDropdowns(0).click('button');
@@ -191,7 +195,6 @@ describe('Claim returned', () => {
 
       this.visit(`/users/${loan.userId}/loans/view/${loan.id}`);
     });
-
 
     it('should display disabled claim returned button', () => {
       expect(LoanActionsHistory.claimReturnedButton.isPresent).to.be.true;

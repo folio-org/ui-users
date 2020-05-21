@@ -31,6 +31,7 @@
 * Correctly configure fee/fines and profile-pictures permissions. Refs UIU-1574.
 * Increment `stripes` to `v4.0`, `react-intl` to `v4.5`, `react-intl-safe-html` to `v2.0`. Refs STRIPES-672.
 * Fix `Reset all` button for filters and query. Fixes UIU-1628.
+* Display count of claim returned items. Refs UIU-1215.
 * Sort user permissions in alphabetical order on create/edit screen. Refs UIU-1353.
 * Fix memory leak in `UserAccounts.js` discovered by @mkuklis.
 
