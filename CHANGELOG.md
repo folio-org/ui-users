@@ -35,6 +35,7 @@
 * Sort user permissions in alphabetical order on create/edit screen. Refs UIU-1353.
 * Fix memory leak in `UserAccounts.js` discovered by @mkuklis.
 * UI updates to the Permissions modal. Refs UIU-1466.
+* Add permission and permission check for mark a claimed item missing. Refs UIU-1268.
 * Prevent the renewal of claimed returned items. Refs UIU-1261.
 * Display the correct link for create/reset password. Refs UIU-1608.
 

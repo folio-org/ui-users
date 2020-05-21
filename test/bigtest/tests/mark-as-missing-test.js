@@ -11,14 +11,17 @@ import OpenLoansInteractor from '../interactors/open-loans';
 import LoanActionsHistory from '../interactors/loan-actions-history';
 
 describe('Mark as missing', () => {
-  setupApplication({
-    permissions: {
-      'manualblocks.collection.get': true,
-      'circulation.loans.collection.get': true,
-    },
-  });
-
   describe('Visiting open loans list page with not claimed returned item', () => {
+    setupApplication({
+      hasAllPerms: false,
+      permissions: {
+        'module.users.enabled': true,
+        'ui-users.loans.view': true,
+        'manualblocks.collection.get': true,
+        'circulation.loans.collection.get': true,
+      },
+    });
+
     beforeEach(async function () {
       const loan = this.server.create('loan', { status: { name: 'Open' } });
 
@@ -46,7 +49,51 @@ describe('Mark as missing', () => {
     });
   });
 
-  describe('Visiting open loans list page with claimed returned item', () => {
+  describe('Visiting open loans list page with claimed returned item without permissions', () => {
+    setupApplication({
+      hasAllPerms: false,
+      permissions: {
+        'module.users.enabled': true,
+        'ui-users.loans.view': true,
+        'manualblocks.collection.get': true,
+        'circulation.loans.collection.get': true,
+      },
+    });
+
+    beforeEach(async function () {
+      const loan = this.server.create('loan', {
+        status: { name: 'Open' },
+        item: { status: { name: 'Claimed returned' } },
+      });
+
+      this.visit(`/users/${loan.userId}/loans/open`);
+
+      await OpenLoansInteractor.whenLoaded();
+    });
+
+    describe('opening dropdown for claimed returned item', () => {
+      beforeEach(async () => {
+        await OpenLoansInteractor.actionDropdowns(0).click('button');
+      });
+
+      it('should not display mark as missing button', () => {
+        expect(OpenLoansInteractor.actionDropdownMarkAsMissingButton.isPresent).to.be.false;
+      });
+    });
+  });
+
+  describe('Visiting open loans list page with claimed returned item and correct permissions', () => {
+    setupApplication({
+      hasAllPerms: false,
+      permissions: {
+        'ui-users.loans.declare-claimed-returned-item-as-missing': true,
+        'module.users.enabled': true,
+        'ui-users.loans.view': true,
+        'manualblocks.collection.get': true,
+        'circulation.loans.collection.get': true,
+      },
+    });
+
     let loan;
 
     beforeEach(async function () {
@@ -140,6 +187,16 @@ describe('Mark as missing', () => {
   });
 
   describe('Visiting loan details page with marked as missing item', () => {
+    setupApplication({
+      hasAllPerms: false,
+      permissions: {
+        'module.users.enabled': true,
+        'ui-users.loans.view': true,
+        'manualblocks.collection.get': true,
+        'circulation.loans.collection.get': true,
+      },
+    });
+
     beforeEach(async function () {
       const loan = this.server.create('loan', {
         status: { name: 'Closed' },
