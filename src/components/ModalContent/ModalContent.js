@@ -12,7 +12,7 @@ import {
 import { stripesConnect } from '@folio/stripes/core';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
-import { loanActions } from '../../constants';
+import { loanActionMutators } from '../../constants';
 
 import css from './ModalContent.css';
 
@@ -100,11 +100,11 @@ class ModalContent extends React.Component {
 
     const requestData = { comment: additionalInfo };
 
-    if (loanAction === loanActions.CLAIMED_RETURNED) {
+    if (loanAction === loanActionMutators.CLAIMED_RETURNED) {
       requestData.itemClaimedReturnedDateTime = new Date().toISOString();
     }
 
-    if (loanAction === loanActions.DECLARE_LOST) {
+    if (loanAction === loanActionMutators.DECLARE_LOST) {
       requestData.servicePointId = curServicePoint?.id;
       requestData.declaredLostDateTime = new Date().toISOString();
     }
