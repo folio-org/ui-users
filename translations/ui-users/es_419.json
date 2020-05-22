@@ -240,7 +240,7 @@
     "details.columns.source": "Fuente",
     "meta.title": "Users",
     "search": "Search",
-    "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}",
+    "resultCount": "{count, number} {count, plural, one {record found} other {records found}}",
     "active": "Active",
     "inactive": "Inactive",
     "okay": "OK",
@@ -684,5 +684,6 @@
     "loans.markAsMissing": "Marcar como perdido",
     "loans.markAsMissingDialogBody": "<strong>{title} ({materialType})</strong> (El Código de barras: {barcode}) podría se marcado como <strong>Perdido y el usuario no asumirá ninguna multa o cargo. </strong>",
     "loans.confirmAsMissing": "Confirmar ítem como perdido",
-    "data.loanActionMap.closedLoan": "Closed loan"
+    "data.loanActionMap.closedLoan": "Closed loan",
+    "loans.numClaimedReturnedLoans": "({count, number} {count, plural, one {claimed returned} other {claimed returned}})"
 }

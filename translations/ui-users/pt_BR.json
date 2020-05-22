@@ -317,7 +317,7 @@
     "systemReturnDate": "Data de devolução do sistema",
     "item.barcode": "Código de barras",
     "item.contributors": "Nomes de autores",
-    "item.holdingsRecordId": "ID dos registros de acervo",
+    "item.holdingsRecordId": "ID dos registros de holdings",
     "item.instanceId": "ID da instância",
     "item.status.name": "Status do item",
     "item.title": "Título do item",
@@ -406,7 +406,7 @@
     "accounts.actions.calloutMessage": "A taxa/multa {feeFineType} de {amount} foi com sucesso {paymentStatus} para {name} .",
     "accounts.actions.payFeeFine": "Pagar taxas/multas",
     "accounts.actions.waiveFeeFine": "Renunciar a taxas/multas",
-    "accounts.actions.warning.summary": "{selectedItemsAmount} itens selecionados. {closedItemsAmount} itens não podem ser {action} porque já estão fechados",
+    "accounts.actions.warning.summary": "{selectedItemsAmount} taxas/multas selecionadas. Desmarque taxas/multas encerradas para continuar.",
     "accounts.actions.warning.alertDetails": "Detalhes de alertas",
     "accounts.actions.warning.feeFineType": "Tipo de taxa/multa",
     "accounts.actions.warning.remaining": "Remanescente",
@@ -684,5 +684,6 @@
     "loans.markAsMissing": "Marcar como desaparecido",
     "loans.markAsMissingDialogBody": "<strong>{title} ({materialType})</strong> (Código de barras: {barcode}) será marcado como <strong>desaparecido</strong> e o usuário não será cobrado",
     "loans.confirmAsMissing": "Confirmar item como desaparecido",
-    "data.loanActionMap.closedLoan": "Empréstimo encerrado"
+    "data.loanActionMap.closedLoan": "Empréstimo encerrado",
+    "loans.numClaimedReturnedLoans": "({count, number} {count, plural, one {claimed returned} other {claimed returned}})"
 }
