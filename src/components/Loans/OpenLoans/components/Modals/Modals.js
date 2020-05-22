@@ -32,6 +32,7 @@ class Modals extends React.Component {
 
     const { stripes } = props;
     this.connectedChangeDueDateDialog = stripes.connect(ChangeDueDateDialog);
+    this.connectedBulkClaimReturnedDialog = stripes.connect(BulkClaimedReturnedModal);
   }
 
   render() {
@@ -74,7 +75,7 @@ console.log("checked", checkedLoans)
           onClose={onClosePatronBlockedModal}
           viewUserPath={`/users/view/${(user || {}).id}?filters=pg.${patronGroup.group}&sort=name`}
         />
-        <BulkClaimedReturnedModal
+        <this.connectedBulkClaimReturnedDialog
           checkedLoansIndex={checkedLoans}
           requestCounts={requestCounts}
           open={showBulkClaimReturnedModal}

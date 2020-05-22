@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { isEmpty } from 'lodash';
+import moment from 'moment';
 
 import {
   Button,
@@ -21,6 +22,28 @@ import css from '../../../../ModalContent';
 
 class BulkClaimReturnedModal extends React.Component {
 
+  static manifest = Object.freeze({
+    claimReturned: {
+      type: 'okapi',
+      fetch: false,
+      POST: {
+        path: 'circulation/loans/%{loanId}/claim-item-returned',
+      },
+    },
+    loanId: {},
+  });
+
+  static propTypes = {
+    mutator: PropTypes.shape({
+      claimReturned: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }).isRequired,
+      itemId: PropTypes.shape({
+        replace: PropTypes.func.isRequired,
+      }).isRequired,
+    })
+  }
+
   constructor(props) {
     super(props);
 
@@ -28,6 +51,7 @@ class BulkClaimReturnedModal extends React.Component {
       additionalInfo: '',
     };
 
+    this.claimAllReturned = this.claimAllReturned.bind(this);
     this.handleAdditionalInfoChange = this.handleAdditionalInfoChange.bind(this)
   }
 
@@ -38,16 +62,33 @@ class BulkClaimReturnedModal extends React.Component {
   getRequestCountForItem = id => this.props.requestCounts[id] || 0;
 
   handleAdditionalInfoChange = e => {
-    console.log("calling")
     this.setState({ additionalInfo: e.target.value });
   };
 
+  claimItemReturned = (loan) => {
+    if (!loan) return null;
+
+    this.props.mutator.loanId.replace(loan.id);
+    return this.props.mutator.claimReturned.POST(
+      {
+        itemClaimedReturnedDateTime: moment().format(),
+        comment: this.state.additionalInfo,
+      }
+    );
+  }
+
   claimAllReturned = () => {
-    console.log("claiming returned")
+    const promises = Object.values(this.props.checkedLoansIndex).map(loan => this.claimItemReturned(loan).catch(e => e));
+    Promise.all(promises)
+      .then(results => this.finishClaims(results));
+  }
+
+  finishClaims = (results) => {
+    console.log("got results!", results)
   }
 
   render() {
-    const { checkedLoansIndex, open, onCancel, requestCounts } = this.props;
+    const { checkedLoansIndex, open, onCancel } = this.props;
     const { additionalInfo } = this.state;
     const loans = checkedLoansIndex ? Object.values(checkedLoansIndex) : [];
 
