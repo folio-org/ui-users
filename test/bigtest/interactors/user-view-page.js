@@ -24,6 +24,7 @@ import proxyItemCSS from '../../../src/components/ProxyGroup/ProxyItem/ProxyItem
   accordionButton = scoped('#accordion-toggle-button-loansSection', ButtonInteractor);
   openLoans = scoped('#clickable-viewcurrentloans', ButtonInteractor);
   closedLoans = scoped('#clickable-viewclosedloans', ButtonInteractor);
+  claimedReturnedCount = text('#claimed-returned-count');
 
   whenLoaded() {
     return this.when(() => this.isPresent).timeout(5000);

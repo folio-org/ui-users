@@ -406,7 +406,7 @@
     "accounts.actions.calloutMessage": "The {feeFineType} fee/fine of {amount} has been successfully {paymentStatus} for {name}.",
     "accounts.actions.payFeeFine": "Pay fees/fines",
     "accounts.actions.waiveFeeFine": "Waive fees/fines",
-    "accounts.actions.warning.summary": "{selectedItemsAmount} items selected. {closedItemsAmount} items cannot be {action} because they are already closed",
+    "accounts.actions.warning.summary": "{selectedItemsAmount} fees/fines selected. Deselect closed fees/fines to continue.",
     "accounts.actions.warning.alertDetails": "Alert details",
     "accounts.actions.warning.feeFineType": "Fee/Fine type",
     "accounts.actions.warning.remaining": "Remainig",
@@ -684,5 +684,6 @@
     "loans.markAsMissing": "Mark as missing",
     "loans.markAsMissingDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be marked <strong>Missing</strong> and patron will not be billed",
     "loans.confirmAsMissing": "Confirm item as missing",
-    "data.loanActionMap.closedLoan": "Closed loan"
+    "data.loanActionMap.closedLoan": "Closed loan",
+    "loans.numClaimedReturnedLoans": "({count, number} {count, plural, one {claimed returned} other {claimed returned}})"
 }

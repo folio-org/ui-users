@@ -20,7 +20,9 @@ import {
 } from '@folio/stripes/components';
 
 import ActionsBar from '../../../components/ActionsBar/ActionsBar';
-import Label from '../../../../Label/Label';
+import { itemStatuses } from '../../../../../constants';
+
+import { hasEveryLoanItemStatus } from '../../../../util';
 
 import css from './OpenLoansSubHeader.css';
 
@@ -127,6 +129,7 @@ class OpenLoansSubHeader extends React.Component {
 
     const noSelectedLoans = isEmpty(checkedLoans);
     const resultCount = <FormattedMessage id="ui-users.resultCount" values={{ count: loans.length }} />;
+    const claimedReturnedCount = loans.filter(l => l?.item?.status?.name === itemStatuses.CLAIMED_RETURNED).length;
     const clonedLoans = cloneDeep(loans);
     const recordsToCSV = buildRecords(clonedLoans);
     const countRenews = patronBlocks.filter(p => p.renewals === true);
@@ -134,15 +137,18 @@ class OpenLoansSubHeader extends React.Component {
     // and values being the associated loan properties -- e.g. { uuid: {loan}, uuid2: {loan2} }. This makes
     // it a little complicated to determine whether any loan in checkedLoans has a particular property -- like
     // an item that's been declared lost
-    const onlyLostItemsSelected = !Object.values(checkedLoans).find(loan => loan?.item?.status?.name !== 'Declared lost');
+    const onlyLostItemsSelected = hasEveryLoanItemStatus(checkedLoans, itemStatuses.DECLARED_LOST);
+    const onlyClaimedReturnedItemsSelected = hasEveryLoanItemStatus(checkedLoans, itemStatuses.CLAIMED_RETURNED);
 
     return (
       <ActionsBar
         contentStart={
           <span style={{ display: 'flex' }}>
-            <Label>
-              {resultCount}
-            </Label>
+            <span id="loan-count">
+              {resultCount} {claimedReturnedCount > 0 &&
+                <FormattedMessage id="ui-users.loans.numClaimedReturnedLoans" values={{ count: claimedReturnedCount }} />
+              }
+            </span>
             <Dropdown
               id="columnsDropdown"
               className={css.columnsDropdown}
@@ -176,7 +182,7 @@ class OpenLoansSubHeader extends React.Component {
               <Button
                 marginBottom0
                 id="renew-all"
-                disabled={noSelectedLoans}
+                disabled={noSelectedLoans || onlyClaimedReturnedItemsSelected}
                 onClick={!isEmpty(countRenews)
                   ? openPatronBlockedModal
                   : renewSelected
