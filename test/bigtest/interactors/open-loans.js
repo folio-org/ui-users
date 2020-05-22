@@ -12,6 +12,7 @@ import moment from 'moment';
 
 import ButtonInteractor from '@folio/stripes-components/lib/Button/tests/interactor'; // eslint-disable-line
 import CalloutInteractor from '@folio/stripes-components/lib/Callout/tests/interactor'; // eslint-disable-line
+import CheckboxInteractor from '@folio/stripes-components/lib/Checkbox/tests/interactor';
 
 import DialogInteractor from './dialog';
 
@@ -69,7 +70,10 @@ import DialogInteractor from './dialog';
   loanCount = text('#loan-count');
 
   selectAllCheckboxes = clickable('#clickable-list-column- input[type="checkbox"]');
+  checkboxes = collection('#list-loanshistory button[role="row"]', CheckboxInteractor);
   clickRenew = clickable('#renew-all');
+
+  isBulkRenewButtonDisabled = property('#renew-all', 'disabled');
 
   whenLoaded() {
     return this.when(() => this.list.isVisible);
