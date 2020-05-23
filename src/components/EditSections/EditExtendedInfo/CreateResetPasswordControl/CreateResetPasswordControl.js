@@ -53,22 +53,12 @@ class CreateResetPasswordControl extends React.Component {
       isLocalPasswordSet: false,
       link: '',
     };
-
-    this._isMounted = false;
-  }
-
-  componentDidMount() {
-    this._isMounted = true;
   }
 
   componentDidUpdate(prevProps) {
-    if (this._isMounted && (this.props.resources.credentials !== prevProps.resources.credentials)) {
+    if (this.props.resources.credentials !== prevProps.resources.credentials) {
       this.checkPasswordExistence();
     }
-  }
-
-  componentWillUnmount() {
-    this._isMounted = false;
   }
 
   checkPasswordExistence = async () => {
@@ -93,19 +83,15 @@ class CreateResetPasswordControl extends React.Component {
 
     const normalizeSalt = Buffer.from(credentialsRecord.salt, 'hex');
 
-    await crypto.pbkdf2('', normalizeSalt, 1000, 32, 'sha1', (err, derivedKey) => {
-      // '' - password, encrypted with normalizeSalt
-      // 1000 - number of iterations
-      // 32 - length of derivedKey
-      if (err) {
-        throw err;
-      }
-      const formattedDerivedKey = derivedKey.toString('hex').toUpperCase();
+    // '' - password, encrypted with normalizeSalt
+    // 1000 - number of iterations
+    // 32 - length of derivedKey
+    const derivedKey = crypto.pbkdf2Sync('', normalizeSalt, 1000, 32, 'sha1');
+    const formattedDerivedKey = derivedKey.toString('hex').toUpperCase();
 
-      if (!formattedDerivedKey.includes(credentialsRecord.hash)) {
-        this.setState({ isLocalPasswordSet: true });
-      }
-    });
+    if (!formattedDerivedKey.includes(credentialsRecord.hash)) {
+      this.setState({ isLocalPasswordSet: true });
+    }
   }
 
   closeModal = () => {
