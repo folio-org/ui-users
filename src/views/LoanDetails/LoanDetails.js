@@ -36,6 +36,7 @@ import {
   nav,
   getOpenRequestsPath,
 } from '../../components/util';
+import { itemStatuses } from '../../constants';
 import {
   withRenew,
   withDeclareLost,
@@ -337,8 +338,9 @@ class LoanDetails extends React.Component {
     const overduePolicyName = get(loan, ['overdueFinePolicy', 'name'], '-');
     const lostItemPolicyName = get(loan, ['lostItemPolicy', 'name'], '-');
     const itemStatus = get(loan, ['item', 'status', 'name'], '-');
-    const claimedReturnedDate = itemStatus === 'Claimed returned' && loan.claimedReturnedDate;
-    const isDeclaredLostItem = itemStatus === 'Declared lost';
+    const claimedReturnedDate = itemStatus === itemStatuses.CLAIMED_RETURNED && loan.claimedReturnedDate;
+    const isClaimedReturnedItem = itemStatus === itemStatuses.CLAIMED_RETURNED;
+    const isDeclaredLostItem = itemStatus === itemStatuses.DECLARED_LOST;
     let lostDate;
     const declaredLostActions = loanActionsWithUser.filter(currentAction => get(currentAction, ['action'], '') === 'declaredLost');
 
@@ -381,7 +383,8 @@ class LoanDetails extends React.Component {
               <span>
                 <IfPermission perm="ui-users.loans.renew">
                   <Button
-                    disabled={buttonDisabled}
+                    data-test-renew-button
+                    disabled={buttonDisabled || isClaimedReturnedItem}
                     buttonStyle="primary"
                     onClick={this.renew}
                   >
@@ -391,7 +394,7 @@ class LoanDetails extends React.Component {
                 <IfPermission perm="ui-users.loans.claim-item-returned">
                   <Button
                     data-test-claim-returned-button
-                    disabled={buttonDisabled || itemStatus === 'Claimed returned'}
+                    disabled={buttonDisabled || isClaimedReturnedItem}
                     buttonStyle="primary"
                     onClick={() => claimReturned(loan)}
                   >

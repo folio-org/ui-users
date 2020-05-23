@@ -14,7 +14,18 @@ export const itemStatuses = {
   DECLARED_LOST: 'Declared lost',
 };
 
+export const loanStatuses = {
+  CLOSED: 'Closed',
+};
+
 export const loanActions = {
+  CLAIMED_RETURNED: 'claimedReturned',
+};
+
+// The names of the mutators which can executed on a given loan.
+// Currently used in:
+// "withMarkAsMissing", "withClaimReturned" and "withDeclareLost"
+export const loanActionMutators = {
   CLAIMED_RETURNED: 'claimReturned',
   DECLARE_LOST: 'declareLost',
   MARK_AS_MISSING: 'markAsMissing',

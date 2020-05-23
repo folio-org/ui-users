@@ -217,6 +217,12 @@ export default function config() {
         }
       } = cqlParser;
 
+      if (query.match('claimedReturned')) {
+        return loans.where((loan) => {
+          return loan.action === 'claimedReturned';
+        });
+      }
+
       if (field === 'userId') {
         return loans.where((loan) => {
           return loan.userId === term;

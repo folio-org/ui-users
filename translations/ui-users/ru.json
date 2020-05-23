@@ -167,7 +167,7 @@
     "feefines.disabledItem": "Fee/fine Type cannot be deleted when used by one or more user accounts",
     "feefines.modalHeader": "Delete Fee/Fine Type?",
     "feefines.modalMessage": "The Fee/Fine Type <strong>{feefine}</strong> will be <strong>deleted</strong>",
-    "feefines.columns.type": "Fee/Fine Type",
+    "feefines.columns.type": "Тип оплаты",
     "feefines.columns.amount": "Сумма по умолчанию",
     "feefines.errors.amountNumeric": "Сумма по умолчанию должна быть числом",
     "feefines.errors.amountPositive": "Сумма по умолчанию должна быть положительной",
@@ -182,7 +182,7 @@
     "feefines.modal.title": "Copy existing fee/fine owner table entries?",
     "owners.label": "Fee/fine: Owners",
     "owners.singular": "Fee/fine Owner",
-    "owners.columns.owner": "Owner",
+    "owners.columns.owner": "Владелец",
     "owners.columns.desc": "Описание",
     "payments.label": "Fee/fine: Payment methods",
     "payments.singular": "Способ оплаты",
@@ -205,7 +205,7 @@
     "sp.preferredSPNone": "None",
     "waives.label": "Fee/fine: Waive reasons",
     "waives.singular": "Waive reason",
-    "waives.columns.reason": "Reason",
+    "waives.columns.reason": "Причина",
     "waives.columns.desc": "Описание",
     "comment.title": "Fee/fine: Comment required",
     "comment.message": "Необходимые параметры комментария были успешно обновлены.",
@@ -240,7 +240,7 @@
     "details.columns.source": "Источник",
     "meta.title": "Пользователи",
     "search": "Поиск",
-    "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}",
+    "resultCount": "{count, number} {count, plural, one {record found} other {records found}}",
     "active": "Активный",
     "inactive": "Неактивный",
     "okay": "ОК",
@@ -684,5 +684,6 @@
     "loans.markAsMissing": "Отметить как отсутствующий",
     "loans.markAsMissingDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be marked <strong>Missing</strong> and patron will not be billed",
     "loans.confirmAsMissing": "Подтвердите, что элемент отсутствует",
-    "data.loanActionMap.closedLoan": "Closed loan"
+    "data.loanActionMap.closedLoan": "Closed loan",
+    "loans.numClaimedReturnedLoans": "({count, number} {count, plural, one {claimed returned} other {claimed returned}})"
 }

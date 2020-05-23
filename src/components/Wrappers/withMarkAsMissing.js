@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 
 import LoanActionDialog from '../LoanActionDialog';
 
-import { loanActions } from '../../constants';
+import { loanActionMutators } from '../../constants';
 
 const withMarkAsMissing = WrappedComponent => class withMarkAsMissingComponent extends React.Component {
   constructor(props) {
@@ -43,7 +43,7 @@ const withMarkAsMissing = WrappedComponent => class withMarkAsMissingComponent e
         { loan &&
           <LoanActionDialog
             loan={loan}
-            loanAction={loanActions.MARK_AS_MISSING}
+            loanAction={loanActionMutators.MARK_AS_MISSING}
             modalLabel={modalLabel}
             open={markAsMissingDialogOpen}
             onClose={this.hideMarkAsMissingDialog}
