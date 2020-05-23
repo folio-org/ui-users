@@ -5,7 +5,10 @@ import {
   FieldArray,
 } from 'redux-form';
 import { connect as reduxConnect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  injectIntl,
+} from 'react-intl';
 import {
   Icon,
   Button,
@@ -20,6 +23,7 @@ import {
   stripesShape,
 } from '@folio/stripes-core';
 
+import { getPermissionLabelString } from '../data/converters/permission';
 import PermissionModal from './components/PermissionsModal';
 import PermissionLabel from '../PermissionLabel';
 import css from './PermissionsAccordion.css';
@@ -28,6 +32,9 @@ class PermissionsAccordion extends React.Component {
   static propTypes = {
     expanded: PropTypes.bool.isRequired,
     initialValues: PropTypes.object,
+    intl: PropTypes.shape({
+      formatMessage: PropTypes.func.isRequired,
+    }),
     onToggle: PropTypes.func.isRequired,
     accordionId: PropTypes.string.isRequired,
     permToDelete: PropTypes.string.isRequired,
@@ -115,13 +122,25 @@ class PermissionsAccordion extends React.Component {
   }
 
   renderList = ({ fields }) => {
+    const {
+      assignedPermissions,
+      intl: { formatMessage },
+    } = this.props;
+    const showPerms = this.props.stripes?.config?.showPerms;
+
     const listFormatter = (_fieldName, index) => (
       this.renderItem(fields.get(index), index, this.props.stripes?.config?.showPerms)
     );
+    const sortedItems = (assignedPermissions || []).sort((a, b) => {
+      const permA = getPermissionLabelString(a, formatMessage, showPerms);
+      const permB = getPermissionLabelString(b, formatMessage, showPerms);
+
+      return permA.localeCompare(permB);
+    });
 
     return (
       <List
-        items={fields}
+        items={sortedItems}
         itemFormatter={listFormatter}
         isEmptyMessage={<FormattedMessage id="ui-users.permissions.empty" />}
       />
@@ -218,4 +237,4 @@ const mapDispatchToProps = (dispatch, { formName, permissionsField }) => ({
   addPermissions: (permissions) => dispatch(change(formName, permissionsField, permissions)),
 });
 
-export default stripesConnect(reduxConnect(mapStateToProps, mapDispatchToProps)(PermissionsAccordion));
+export default stripesConnect(reduxConnect(mapStateToProps, mapDispatchToProps)(injectIntl(PermissionsAccordion)));

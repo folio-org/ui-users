@@ -11,8 +11,9 @@ import {
   Col,
   Accordion,
   Datepicker,
-  Headline
+  Headline,
 } from '@folio/stripes/components';
+import Asterisk from '@folio/stripes-components/lib/Label/components/Asterisk';
 
 import css from './EditUserInfo.css';
 
@@ -125,9 +126,10 @@ class EditUserInfo extends React.Component {
           <Col xs={12} md={3}>
             <Field
               label={(
-                <FormattedMessage id="ui-users.information.patronGroup">
-                  {(msg) => msg + ' *'}
-                </FormattedMessage>
+                <>
+                  <FormattedMessage id="ui-users.information.patronGroup" />
+                  <Asterisk />
+                </>
               )}
               name="patronGroup"
               id="adduser_group"

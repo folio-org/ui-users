@@ -4,6 +4,10 @@
   min-height: 50vh;
 }
 
+.modalHeader {
+  background-color: #fff;
+}
+
 .modalFooter {
   width: 100%;
   display: flex;
