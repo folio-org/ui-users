@@ -661,8 +661,7 @@
     "core-js": "^3.6.4",
     "eslint": "^6.2.1",
     "faker": "^4.1.0",
-    "moment": "^2.25.3",
-    "moment-timezone": "^0.5.17",
+    "moment": "~2.24.0",
     "miragejs": "^0.1.32",
     "mocha": "^5.2.0",
     "react": "^16.5.0",
@@ -688,7 +687,7 @@
   },
   "peerDependencies": {
     "@folio/stripes": "^4.0.0",
-    "moment": "^2.25.3",
+    "moment": "~2.24.0",
     "react": "*",
     "react-intl": "^4.5.3",
     "react-router": "*",
