@@ -415,7 +415,6 @@ export default function config() {
   });
 
   this.get('/authn/credentials-existence', () => { });
-  this.post('/authn/credentials');
 
   this.get('/note-types');
 
@@ -619,5 +618,25 @@ export default function config() {
       'order': 4,
       'helpText': 'help text',
     }]
+  });
+
+  this.post('/authn/credentials');
+
+  this.get('/authn/credentials', (schema, request) => {
+    const url = new URL(request.url);
+    const cqlQuery = url.searchParams.get('query');
+
+    if (cqlQuery != null) {
+      const cqlParser = new CQLParser();
+      cqlParser.parse(cqlQuery);
+
+      if (cqlParser.tree.term) {
+        return schema.credentials.where({
+          userId: cqlParser.tree.term
+        });
+      }
+    }
+
+    return schema.credentials.all();
   });
 }

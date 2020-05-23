@@ -2,7 +2,6 @@ import {
   interactor,
   clickable,
   text,
-  isVisible,
   isPresent,
 } from '@bigtest/interactor';
 
