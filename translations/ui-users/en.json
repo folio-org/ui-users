@@ -714,8 +714,8 @@
   "addAddressError": "Please, add at least one address inside \"Addresses\" section",
 
   "tags": "Tags",
-  "filters.status.active": "active",
-  "filters.status.inactive": "inactive",
+  "filters.status.active": "Active",
+  "filters.status.inactive": "Inactive",
 
   "permission.accounts": "Fee/Fine History: Can create, edit and remove accounts",
   "permission.create": "Users: Can create new user",
