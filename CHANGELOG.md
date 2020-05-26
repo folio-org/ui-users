@@ -36,6 +36,7 @@
 * Fix memory leak in `UserAccounts.js` discovered by @mkuklis.
 * UI updates to the Permissions modal. Refs UIU-1466.
 * Prevent the renewal of claimed returned items. Refs UIU-1261.
+* Fix Patron Group, Status, and Preferred contact fields, are not read a required by screen reader. Refs UIU-1642.
 
 ## [3.0.0](https://github.com/folio-org/ui-users/tree/v3.0.0) (2020-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.26.0...v3.0.0)

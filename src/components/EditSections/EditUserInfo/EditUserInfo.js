@@ -124,11 +124,7 @@ class EditUserInfo extends React.Component {
         <Row>
           <Col xs={12} md={3}>
             <Field
-              label={(
-                <FormattedMessage id="ui-users.information.patronGroup">
-                  {(msg) => msg + ' *'}
-                </FormattedMessage>
-              )}
+              label={<FormattedMessage id="ui-users.information.patronGroup" />}
               name="patronGroup"
               id="adduser_group"
               component={Select}
@@ -136,15 +132,12 @@ class EditUserInfo extends React.Component {
               fullWidth
               dataOptions={patronGroupOptions}
               defaultValue={initialValues.patronGroup}
+              required
             />
           </Col>
           <Col xs={12} md={3}>
             <Field
-              label={(
-                <FormattedMessage id="ui-users.information.status">
-                  {(msg) => msg + ' *'}
-                </FormattedMessage>
-              )}
+              label={<FormattedMessage id="ui-users.information.status" />}
               name="active"
               id="useractive"
               component={Select}
@@ -152,6 +145,7 @@ class EditUserInfo extends React.Component {
               disabled={isStatusFieldDisabled()}
               dataOptions={statusOptions}
               defaultValue={initialValues.active}
+              required
             />
             {isUserExpired() && (
               <span className={css.expiredMessage}>
