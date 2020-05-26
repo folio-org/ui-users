@@ -11,7 +11,7 @@ import {
   Row,
   Col,
   Accordion,
-  Headline
+  Headline,
 } from '@folio/stripes/components';
 import { AddressEditList } from '@folio/stripes/smart-components';
 

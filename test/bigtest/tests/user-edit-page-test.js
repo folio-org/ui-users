@@ -5,6 +5,8 @@ import {
 } from '@bigtest/mocha';
 import { expect } from 'chai';
 
+import translations from '../../../translations/ui-users/en';
+
 import setupApplication from '../helpers/setup-application';
 import UserFormPage from '../interactors/user-form-page';
 import InstanceViewPage from '../interactors/user-view-page';
@@ -36,8 +38,9 @@ describe('User Edit Page', () => {
     expect(UserFormPage.title).to.equal(user1.username);
   });
 
-  it('should display reset password link', () => {
+  it('should display create password link', () => {
     expect(UserFormPage.resetPasswordLink.isPresent).to.be.true;
+    expect(UserFormPage.resetPasswordLink.text).to.equal(translations['extended.sendCreatePassword']);
   });
 
   describe('validating user barcode', () => {

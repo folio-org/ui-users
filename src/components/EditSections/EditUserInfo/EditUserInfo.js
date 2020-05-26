@@ -11,7 +11,7 @@ import {
   Col,
   Accordion,
   Datepicker,
-  Headline
+  Headline,
 } from '@folio/stripes/components';
 
 import css from './EditUserInfo.css';
