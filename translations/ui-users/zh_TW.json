@@ -684,5 +684,8 @@
     "loans.markAsMissing": "標示為遺失",
     "loans.markAsMissingDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be marked <strong>Missing</strong> and patron will not be billed",
     "loans.confirmAsMissing": "確認單件遺失",
-    "data.loanActionMap.closedLoan": "Closed loan"
+    "data.loanActionMap.closedLoan": "Closed loan",
+    "loans.numClaimedReturnedLoans": "({count, number} {count, plural, one {claimed returned} other {claimed returned}})",
+    "data.loanActionMap.checkedInReturnedByPatron": "Checked in returned by patron",
+    "data.loanActionMap.checkedInFoundByLibrary": "Checked in found by library"
 }

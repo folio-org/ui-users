@@ -240,7 +240,7 @@
     "details.columns.source": "Fuente",
     "meta.title": "Users",
     "search": "Search",
-    "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}",
+    "resultCount": "{count, number} {count, plural, one {record found} other {records found}}",
     "active": "Active",
     "inactive": "Inactive",
     "okay": "Bien",
@@ -684,5 +684,8 @@
     "loans.markAsMissing": "Mark as missing",
     "loans.markAsMissingDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be marked <strong>Missing</strong> and patron will not be billed",
     "loans.confirmAsMissing": "Confirm item as missing",
-    "data.loanActionMap.closedLoan": "Closed loan"
+    "data.loanActionMap.closedLoan": "Closed loan",
+    "loans.numClaimedReturnedLoans": "({count, number} {count, plural, one {claimed returned} other {claimed returned}})",
+    "data.loanActionMap.checkedInReturnedByPatron": "Checked in returned by patron",
+    "data.loanActionMap.checkedInFoundByLibrary": "Checked in found by library"
 }

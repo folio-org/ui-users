@@ -38,6 +38,14 @@ export default Factory.extend({
       firstName: faker.name.firstName(),
     });
 
+    if (user.username) {
+      server.create('credential', {
+        'userId': user.id,
+        'username': user.username,
+        'password': faker.internet.password(),
+      });
+    }
+
     user.update('username', `${personal.lastName}, ${personal.firstName}`);
     user.update('personal', personal.toJSON());
     user.save();

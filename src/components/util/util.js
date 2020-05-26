@@ -112,3 +112,7 @@ export function calculateSortParams({
 
   return sortParams;
 }
+
+export function hasEveryLoanItemStatus(loans, itemStatus) {
+  return _.every(Object.values(loans), loan => loan?.item?.status?.name === itemStatus);
+}

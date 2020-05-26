@@ -59,6 +59,7 @@ class ActionsDropdown extends React.Component {
           </Button>
         </IfPermission>
         <IfPermission perm="ui-users.loans.renew">
+          { itemStatusName !== itemStatuses.CLAIMED_RETURNED &&
           <Button
             buttonStyle="dropdownItem"
             data-test-dropdown-content-renew-button
@@ -69,6 +70,7 @@ class ActionsDropdown extends React.Component {
           >
             <FormattedMessage id="ui-users.renew" />
           </Button>
+          }
         </IfPermission>
         <IfPermission perm="ui-users.loans.claim-item-returned">
           { itemStatusName !== itemStatuses.CLAIMED_RETURNED &&
@@ -112,7 +114,8 @@ class ActionsDropdown extends React.Component {
             </Button>
           }
         </IfPermission>
-        { itemStatusName === itemStatuses.CLAIMED_RETURNED &&
+        <IfPermission perm="ui-users.loans.declare-claimed-returned-item-as-missing">
+          { itemStatusName === itemStatuses.CLAIMED_RETURNED &&
           <Button
             buttonStyle="dropdownItem"
             data-test-dropdown-content-mark-as-missing-button
@@ -124,6 +127,7 @@ class ActionsDropdown extends React.Component {
             <FormattedMessage id="ui-users.loans.markAsMissing" />
           </Button>
         }
+        </IfPermission>
         <IfPermission perm="circulation-storage.loan-policies.item.get">
           <Button
             buttonStyle="dropdownItem"

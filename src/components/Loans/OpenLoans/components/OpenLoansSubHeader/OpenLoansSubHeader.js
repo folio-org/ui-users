@@ -20,8 +20,8 @@ import {
 } from '@folio/stripes/components';
 
 import ActionsBar from '../../../components/ActionsBar/ActionsBar';
-import Label from '../../../../Label/Label';
 import { itemStatuses } from '../../../../../constants';
+import { hasEveryLoanItemStatus } from '../../../../util';
 
 import css from './OpenLoansSubHeader.css';
 
@@ -141,17 +141,22 @@ class OpenLoansSubHeader extends React.Component {
 
     const noSelectedLoans = isEmpty(checkedLoans);
     const resultCount = <FormattedMessage id="ui-users.resultCount" values={{ count: loans.length }} />;
+    const claimedReturnedCount = loans.filter(l => l?.item?.status?.name === itemStatuses.CLAIMED_RETURNED).length;
     const clonedLoans = cloneDeep(loans);
     const recordsToCSV = buildRecords(clonedLoans);
     const countRenews = patronBlocks.filter(p => p.renewals === true);
+    const onlyLostItemsSelected = hasEveryLoanItemStatus(checkedLoans, itemStatuses.DECLARED_LOST);
+    const onlyClaimedReturnedItemsSelected = hasEveryLoanItemStatus(checkedLoans, itemStatuses.CLAIMED_RETURNED);
 
     return (
       <ActionsBar
         contentStart={
           <span style={{ display: 'flex' }}>
-            <Label>
-              {resultCount}
-            </Label>
+            <span id="loan-count">
+              {resultCount} {claimedReturnedCount > 0 &&
+                <FormattedMessage id="ui-users.loans.numClaimedReturnedLoans" values={{ count: claimedReturnedCount }} />
+              }
+            </span>
             <Dropdown
               id="columnsDropdown"
               className={css.columnsDropdown}
@@ -185,7 +190,7 @@ class OpenLoansSubHeader extends React.Component {
               <Button
                 marginBottom0
                 id="renew-all"
-                disabled={noSelectedLoans}
+                disabled={noSelectedLoans || onlyClaimedReturnedItemsSelected}
                 onClick={!isEmpty(countRenews)
                   ? openPatronBlockedModal
                   : renewSelected
@@ -197,7 +202,7 @@ class OpenLoansSubHeader extends React.Component {
             <Button
               marginBottom0
               id="bulk-claim-returned"
-              disabled={noSelectedLoans || this.onlyStatusSelected(itemStatuses.CLAIMED_RETURNED)}
+              disabled={noSelectedLoans || onlyClaimedReturnedItemsSelected}
               onClick={openBulkClaimReturnedModal}
             >
               <FormattedMessage id="ui-users.loans.claimReturned" />
@@ -206,7 +211,7 @@ class OpenLoansSubHeader extends React.Component {
               <Button
                 marginBottom0
                 id="change-due-date-all"
-                disabled={noSelectedLoans || this.onlyStatusSelected(itemStatuses.DECLARED_LOST)}
+                disabled={noSelectedLoans || onlyLostItemsSelected}
                 onClick={showChangeDueDateDialog}
               >
                 <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />

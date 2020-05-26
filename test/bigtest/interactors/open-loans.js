@@ -5,12 +5,14 @@ import {
   count,
   Interactor,
   property,
-  clickable
+  clickable,
+  text,
 } from '@bigtest/interactor';
 import moment from 'moment';
 
 import ButtonInteractor from '@folio/stripes-components/lib/Button/tests/interactor'; // eslint-disable-line
 import CalloutInteractor from '@folio/stripes-components/lib/Callout/tests/interactor'; // eslint-disable-line
+import CheckboxInteractor from '@folio/stripes-components/lib/Checkbox/tests/interactor';
 
 import DialogInteractor from './dialog';
 
@@ -65,9 +67,13 @@ import DialogInteractor from './dialog';
   markAsMissingDialog = new DialogInteractor('#markAsMissing-modal');
   dueDateCalendarCellButton = new ButtonInteractor(`[data-test-date="${moment().format('MM/DD/YYYY')}"]`);
   rowButtons = collection('[data-test-open-loans-list] button[role="row"]', ButtonInteractor);
+  loanCount = text('#loan-count');
 
   selectAllCheckboxes = clickable('#clickable-list-column- input[type="checkbox"]');
+  checkboxes = collection('#list-loanshistory button[role="row"]', CheckboxInteractor);
   clickRenew = clickable('#renew-all');
+
+  isBulkRenewButtonDisabled = property('#renew-all', 'disabled');
 
   whenLoaded() {
     return this.when(() => this.list.isVisible);

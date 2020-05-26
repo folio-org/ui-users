@@ -118,23 +118,60 @@ describe('Claim returned', () => {
 
   describe('Visiting open loans list page with claimed returned item', () => {
     beforeEach(async function () {
-      const loan = this.server.create('loan', {
+      const user = this.server.create('user');
+
+      this.server.create('loan', {
         status: { name: 'Open' },
-        item: { status: { name: 'Claimed returned' } },
+        item: { status: { name: 'Checked out' } },
+        userId: user.id,
       });
 
-      this.visit(`/users/${loan.userId}/loans/open`);
+      this.server.create('loan', {
+        status: { name: 'Open' },
+        item: { status: { name: 'Claimed returned' } },
+        userId: user.id,
+      });
+
+      this.visit(`/users/${user.id}/loans/open`);
 
       await OpenLoansInteractor.whenLoaded();
     });
 
+    it('should display claimed returned count', () => {
+      expect(OpenLoansInteractor.loanCount).to.equal('2 records found (1 claimed returned)');
+    });
+
     describe('opening dropdown for claimed returned item', () => {
       beforeEach(async () => {
-        await OpenLoansInteractor.actionDropdowns(0).click('button');
+        await OpenLoansInteractor.actionDropdowns(1).click('button');
+      });
+
+      it('should not display renew button', () => {
+        expect(OpenLoansInteractor.actionDropdownRenewButton.isVisible).to.be.false;
       });
 
       it('should not display claim returned button', () => {
-        expect(OpenLoansInteractor.actionDropdownClaimReturnedButton.isPresent).to.be.false;
+        expect(OpenLoansInteractor.actionDropdownClaimReturnedButton.isVisible).to.be.false;
+      });
+    });
+
+    describe('when check the claimed returned item', () => {
+      beforeEach(async () => {
+        await OpenLoansInteractor.checkboxes(1).clickInput();
+      });
+
+      it('should display disabled bulk renew button', () => {
+        expect(OpenLoansInteractor.isBulkRenewButtonDisabled).to.be.true;
+      });
+
+      describe('when check the checked out item', () => {
+        beforeEach(async () => {
+          await OpenLoansInteractor.checkboxes(0).clickInput();
+        });
+
+        it('should display enabled bulk renew button', () => {
+          expect(OpenLoansInteractor.isBulkRenewButtonDisabled).to.be.false;
+        });
       });
     });
   });
@@ -192,6 +229,9 @@ describe('Claim returned', () => {
       this.visit(`/users/${loan.userId}/loans/view/${loan.id}`);
     });
 
+    it('should display disabled renew button', () => {
+      expect(LoanActionsHistory.isRenewButtonDisabled).to.be.true;
+    });
 
     it('should display disabled claim returned button', () => {
       expect(LoanActionsHistory.claimReturnedButton.isPresent).to.be.true;
