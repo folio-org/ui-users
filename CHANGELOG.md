@@ -38,6 +38,7 @@
 * Add permission and permission check for mark a claimed item missing. Refs UIU-1268.
 * Prevent the renewal of claimed returned items. Refs UIU-1261.
 * Display the correct link for create/reset password. Refs UIU-1608.
+* Permissions -> Users: Create/reset password send. Refs UIU-1337.
 
 ## [3.0.0](https://github.com/folio-org/ui-users/tree/v3.0.0) (2020-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.26.0...v3.0.0)

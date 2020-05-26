@@ -145,8 +145,12 @@ class OpenLoansSubHeader extends React.Component {
         contentStart={
           <span style={{ display: 'flex' }}>
             <span id="loan-count">
-              {resultCount} {claimedReturnedCount > 0 &&
-                <FormattedMessage id="ui-users.loans.numClaimedReturnedLoans" values={{ count: claimedReturnedCount }} />
+              {resultCount}
+              {claimedReturnedCount > 0 &&
+                <FormattedMessage
+                  id="ui-users.loans.numClaimedReturnedLoans"
+                  values={{ count: claimedReturnedCount }}
+                />
               }
             </span>
             <Dropdown
