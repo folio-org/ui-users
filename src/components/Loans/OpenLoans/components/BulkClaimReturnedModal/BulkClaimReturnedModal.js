@@ -242,6 +242,7 @@ class BulkClaimReturnedModal extends React.Component {
 
     return (
       <Modal
+        data-test-bulk-claim-returned-modal
         label={modalHeader}
         closeOnBackgroundClick
         dismissible
