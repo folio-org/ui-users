@@ -240,7 +240,7 @@
     "details.columns.source": "Fonte",
     "meta.title": "Usuários",
     "search": "Pesquisa",
-    "resultCount": "{count, number} {count, plural, one {Registro encontrado} other {Registros encontrados}}",
+    "resultCount": "{count, number} {count, plural, one {registro encontrado} other {registros encontrados}}",
     "active": "Ativo",
     "inactive": "Inativo",
     "okay": "OK",
@@ -685,5 +685,7 @@
     "loans.markAsMissingDialogBody": "<strong>{title} ({materialType})</strong> (Código de barras: {barcode}) será marcado como <strong>desaparecido</strong> e o usuário não será cobrado",
     "loans.confirmAsMissing": "Confirmar item como desaparecido",
     "data.loanActionMap.closedLoan": "Empréstimo encerrado",
-    "loans.numClaimedReturnedLoans": "({count, number} {count, plural, one {claimed returned} other {claimed returned}})"
+    "loans.numClaimedReturnedLoans": "({count, number} {count, plural, one {alegou ter devolvido} other {alegou ter devolvido}} )",
+    "data.loanActionMap.checkedInReturnedByPatron": "Devolução feita pelo usuário",
+    "data.loanActionMap.checkedInFoundByLibrary": "Devolução encontrada pela biblioteca"
 }
