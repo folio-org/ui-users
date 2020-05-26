@@ -37,6 +37,7 @@
 * UI updates to the Permissions modal. Refs UIU-1466.
 * Add permission and permission check for mark a claimed item missing. Refs UIU-1268.
 * Prevent the renewal of claimed returned items. Refs UIU-1261.
+* Adds `checkedInFoundByLibrary` and `checkedInReturnedByPatron` to loan action map. Fixes UIU-1643.
 * Display the correct link for create/reset password. Refs UIU-1608.
 * Permissions -> Users: Create/reset password send. Refs UIU-1337.
 
