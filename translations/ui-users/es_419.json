@@ -685,5 +685,7 @@
     "loans.markAsMissingDialogBody": "<strong>{title} ({materialType})</strong> (El Código de barras: {barcode}) podría se marcado como <strong>Perdido y el usuario no asumirá ninguna multa o cargo. </strong>",
     "loans.confirmAsMissing": "Confirmar ítem como perdido",
     "data.loanActionMap.closedLoan": "Closed loan",
-    "loans.numClaimedReturnedLoans": "({count, number} {count, plural, one {claimed returned} other {claimed returned}})"
+    "loans.numClaimedReturnedLoans": "({count, number} {count, plural, one {claimed returned} other {claimed returned}})",
+    "data.loanActionMap.checkedInReturnedByPatron": "Checked in returned by patron",
+    "data.loanActionMap.checkedInFoundByLibrary": "Checked in found by library"
 }

@@ -685,5 +685,7 @@
     "loans.markAsMissingDialogBody": "<strong>{title} ({materialType})</strong> (باركود: {barcode}) سيتم الإشارة إليها كـ<strong>مفقودة</strong> ولن يتم تغريم المستفيد.",
     "loans.confirmAsMissing": "تأكيد المادة كمفقودة",
     "data.loanActionMap.closedLoan": "إعارة مغلقة",
-    "loans.numClaimedReturnedLoans": "({count, number} {count, plural, one {claimed returned} other {claimed returned}})"
+    "loans.numClaimedReturnedLoans": "({count, number} {count, plural, one {تم إدعاء إعادتها} other {تم إدعاء إعادتها}})",
+    "data.loanActionMap.checkedInReturnedByPatron": "تم الرد وإعادتها بواسطة المستفيد",
+    "data.loanActionMap.checkedInFoundByLibrary": "تم الرد والعثور عليها بواسطة المكتبة"
 }

@@ -15,7 +15,7 @@ const ResetPasswordModalBody = ({
   return (
     <>
       <FormattedMessage id="ui-users.extended.resetPasswordModal.linkWasSent" />
-      <Layout class="padding-all-gutter">
+      <Layout className="padding-all-gutter">
         <strong>{email}</strong>
       </Layout>
       <FormattedMessage

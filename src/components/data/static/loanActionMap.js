@@ -12,4 +12,6 @@ export default {
   'renewedThroughOverride': 'ui-users.data.loanActionMap.renewedThroughOverride',
   'checkedOutThroughOverride': 'ui-users.data.loanActionMap.checkedOutThroughOverride',
   'closedLoan': 'ui-users.data.loanActionMap.closedLoan',
+  'checkedInReturnedByPatron': 'ui-users.data.loanActionMap.checkedInReturnedByPatron',
+  'checkedInFoundByLibrary': 'ui-users.data.loanActionMap.checkedInFoundByLibrary',
 };

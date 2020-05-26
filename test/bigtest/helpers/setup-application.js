@@ -3,7 +3,6 @@ import mirageOptions from '../network';
 
 mirageOptions.serverType = 'miragejs';
 
-
 export default function setupApplication({
   scenarios,
   permissions = {},

@@ -114,7 +114,8 @@ class ActionsDropdown extends React.Component {
             </Button>
           }
         </IfPermission>
-        { itemStatusName === itemStatuses.CLAIMED_RETURNED &&
+        <IfPermission perm="ui-users.loans.declare-claimed-returned-item-as-missing">
+          { itemStatusName === itemStatuses.CLAIMED_RETURNED &&
           <Button
             buttonStyle="dropdownItem"
             data-test-dropdown-content-mark-as-missing-button
@@ -126,6 +127,7 @@ class ActionsDropdown extends React.Component {
             <FormattedMessage id="ui-users.loans.markAsMissing" />
           </Button>
         }
+        </IfPermission>
         <IfPermission perm="circulation-storage.loan-policies.item.get">
           <Button
             buttonStyle="dropdownItem"
