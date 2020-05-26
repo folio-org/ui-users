@@ -1,14 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, FormattedDate, injectIntl } from 'react-intl';
 import { isEmpty } from 'lodash';
 import moment from 'moment';
 
 import {
   Button,
-  Checkbox,
   Col,
-  Icon,
   Layout,
   Modal,
   ModalFooter,
@@ -21,7 +19,6 @@ import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import css from '../../../../ModalContent';
 
 class BulkClaimReturnedModal extends React.Component {
-
   static manifest = Object.freeze({
     claimReturned: {
       type: 'okapi',
@@ -35,14 +32,19 @@ class BulkClaimReturnedModal extends React.Component {
   });
 
   static propTypes = {
+    checkedLoansIndex: PropTypes.object.isRequired,
+    intl: PropTypes.object.isRequired,
     mutator: PropTypes.shape({
       claimReturned: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }).isRequired,
-      itemId: PropTypes.shape({
+      loanId: PropTypes.shape({
         replace: PropTypes.func.isRequired,
       }).isRequired,
-    })
+    }),
+    onCancel: PropTypes.func.isRequired,
+    open: PropTypes.bool.isRequired,
+    requestCounts: PropTypes.object.isRequired,
   }
 
   constructor(props) {
@@ -53,9 +55,6 @@ class BulkClaimReturnedModal extends React.Component {
       operationResults: [],   // An array of results returned from the server after a POST
       operationState: 'pre',  // Whether we're at the start ('pre') or end ('post') of a transaction
     };
-
-   // this.claimAllReturned = this.claimAllReturned.bind(this);
-  //  this.handleAdditionalInfoChange = this.handleAdditionalInfoChange.bind(this)
   }
 
   // Return the number of requests for item @id
@@ -71,7 +70,7 @@ class BulkClaimReturnedModal extends React.Component {
   claimItemReturned = (loan) => {
     if (!loan) return null;
 
-    this.props.mutator.loanId.replace('abc');
+    this.props.mutator.loanId.replace(loan.id);
     return this.props.mutator.claimReturned.POST(
       {
         itemClaimedReturnedDateTime: moment().format(),
@@ -83,8 +82,8 @@ class BulkClaimReturnedModal extends React.Component {
   claimAllReturned = () => {
     this.setState({ operationResults: [] });
     const promises = Object
-                      .values(this.props.checkedLoansIndex)
-                      .map(loan => this.claimItemReturned(loan).catch(e => e));
+      .values(this.props.checkedLoansIndex)
+      .map(loan => this.claimItemReturned(loan).catch(e => e));
     Promise.all(promises)
       .then(results => this.finishClaims(results));
   }
@@ -111,8 +110,15 @@ class BulkClaimReturnedModal extends React.Component {
     this.props.onCancel();
   }
 
+  // Renders a modal dialog containing a list of items to be claimed returned for both
+  // pre-operation review and post-operation feedback (i.e., there's one modal, but the
+  // contents will be different before and after clicking the 'Confirm' button.)
   render() {
-    const { checkedLoansIndex, open } = this.props;
+    const {
+      checkedLoansIndex,
+      intl,
+      open
+    } = this.props;
     const {
       additionalInfo,
       operationResults,
@@ -121,9 +127,9 @@ class BulkClaimReturnedModal extends React.Component {
     const loans = checkedLoansIndex ? Object.values(checkedLoansIndex) : [];
     // List of loans for which the claim returned operation failed
     const unchangedLoans = this.getUnchangedLoansList(operationResults);
-    console.log("unchangedloans", unchangedLoans)
 
-    const footer = (
+    // Controls for the preview dialog
+    const preOpFooter = (
       <ModalFooter>
         <Layout className="textRight">
           <Button
@@ -143,23 +149,35 @@ class BulkClaimReturnedModal extends React.Component {
       </ModalFooter>
     );
 
+    // Control for the feedback dialog
+    const postOpFooter = (
+      <ModalFooter>
+        <Layout className="textRight">
+          <Button
+            buttonStyle="primary"
+            onClick={this.onCancel}
+          >
+            <FormattedMessage id="ui-users.blocks.closeButton" />
+          </Button>
+        </Layout>
+      </ModalFooter>
+    );
+
     const columns = ['title', 'dueDate', 'requests', 'barcode', 'callNumber', 'loanPolicy'];
     if (operationState === 'post') { columns.unshift('status'); }
+
     const statuses = {
-      OK: 'Item successfully claimed returned',
-      NOT_OK: 'Item could not be claimed returned',
+      OK: <FormattedMessage id="ui-users.bulkClaimReturned.status.ok" />,
+      NOT_OK: <FormattedMessage id="ui-users.bulkClaimReturned.status.notOk" />,
     };
 
-console.log("loans list", loans)
-console.log("results", operationResults)
     const loansList =
       <MultiColumnList
         interactive={false}
-        //height={props.height}
         contentData={loans}
         visibleColumns={columns}
         columnMapping={{
-          status: 'Claim returned status',
+          status: <FormattedMessage id="ui-users.bulkClaimReturned.status" />,
           title: <FormattedMessage id="ui-users.bulkClaimReturned.item.title" />,
           dueDate: <FormattedMessage id="ui-users.dueDate" />,
           requests: <FormattedMessage id="ui-users.loans.details.requests" />,
@@ -168,50 +186,68 @@ console.log("results", operationResults)
           loanPolicy: <FormattedMessage id="ui-users.loans.details.loanPolicy" />,
         }}
         formatter={{
-          status: loan => unchangedLoans.includes(loan.id) ? statuses.NOT_OK : statuses.OK,
+          status: loan => (unchangedLoans.includes(loan.id) ? statuses.NOT_OK : statuses.OK),
           title: loan => loan?.item?.title,
-          dueDate: loan => loan?.dueDate,
+          dueDate: loan => <FormattedDate value={loan?.dueDate} />,
           requests: loan => this.getRequestCountForItem(loan?.item?.id),
           barcode: loan => loan?.item?.barcode,
           callNumber: loan => loan?.item?.callNumber,
           loanPolicy: loan => loan?.loanPolicy?.name,
         }}
-        // columnWidths={{
-          // alertDetails: 120,
-          // selected: 40,
-        // }}
-      />
+      />;
 
-      let modalHeader, statusMessage;
-      if (operationState === 'pre') {
-        modalHeader = "Confirm claimed returned";
-        statusMessage = <span>{loans.length} item(s) will be claimed returned.</span>;
-      }
-      else {
-        const numSuccessfulOperations = loans.length - unchangedLoans.length;
-        modalHeader = "Claim returned confirmation";
-        statusMessage = <span>{unchangedLoans.length} item(s) <strong>not</strong> claimed returned. {numSuccessfulOperations} item(s) successfully claimed returned.</span>;
-      }
-
-      const modalContent =
+    let modalHeader;
+    let statusMessage;
+    if (operationState === 'pre') {
+      modalHeader = <FormattedMessage id="ui-users.bulkClaimReturned.preConfirm" />;
+      statusMessage =
+        <SafeHTMLMessage
+          id="ui-users.bulkClaimReturned.summary"
+          values={{ numLoans: loans.length }}
+        />;
+    } else {
+      const numSuccessfulOperations = loans.length - unchangedLoans.length;
+      modalHeader = <FormattedMessage id="ui-users.bulkClaimReturned.postConfirm" />;
+      statusMessage = unchangedLoans.length > 0 ?
         <>
-          {statusMessage}
-          {loansList}
-          <Col sm={12} className={css.additionalInformation}>
-            <TextArea
-              label={<FormattedMessage id="ui-users.additionalInfo.label" />}
-              required
-              onChange={this.handleAdditionalInfoChange}
-            />
-          </Col>
-        </>
+          <SafeHTMLMessage
+            id="ui-users.bulkClaimReturned.items.notOk"
+            values={{ numItems: unchangedLoans.length }}
+          />
+          {' '}
+          <SafeHTMLMessage
+            id="ui-users.bulkClaimReturned.items.ok"
+            values={{ numItems: numSuccessfulOperations }}
+          />
+        </> :
+        <SafeHTMLMessage
+          id="ui-users.bulkClaimReturned.items.ok"
+          values={{ numItems: numSuccessfulOperations }}
+        />;
+    }
+
+    const modalContent =
+      <>
+        {statusMessage}
+        {loansList}
+        <Col sm={12} className={css.additionalInformation}>
+          <TextArea
+            label={<FormattedMessage id="ui-users.additionalInfo.label" />}
+            placeholder={intl.formatMessage({ id: 'ui-users.bulkClaimReturned.moreInfoPlaceholder' })}
+            required
+            onChange={this.handleAdditionalInfoChange}
+          />
+        </Col>
+      </>;
 
     return (
       <Modal
         label={modalHeader}
+        closeOnBackgroundClick
         dismissible
+        onClose={this.onCancel}
         open={open}
-        footer={footer}
+        footer={operationState === 'pre' ? preOpFooter : postOpFooter}
       >
         {
           isEmpty(loans) ?
@@ -225,4 +261,4 @@ console.log("results", operationResults)
   }
 }
 
-export default BulkClaimReturnedModal;
+export default injectIntl(BulkClaimReturnedModal);

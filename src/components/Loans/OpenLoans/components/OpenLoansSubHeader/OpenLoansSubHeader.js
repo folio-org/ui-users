@@ -36,6 +36,7 @@ class OpenLoansSubHeader extends React.Component {
     toggleColumn: PropTypes.func.isRequired,
     buildRecords: PropTypes.func.isRequired,
     renewSelected: PropTypes.func.isRequired,
+    openBulkClaimReturnedModal: PropTypes.func.isRequired,
     openPatronBlockedModal: PropTypes.func.isRequired,
     showChangeDueDateDialog: PropTypes.func.isRequired,
   };
@@ -206,7 +207,7 @@ class OpenLoansSubHeader extends React.Component {
               onClick={openBulkClaimReturnedModal}
             >
               <FormattedMessage id="ui-users.loans.claimReturned" />
-            </Button>         
+            </Button>
             <IfPermission perm="ui-users.loans.edit">
               <Button
                 marginBottom0

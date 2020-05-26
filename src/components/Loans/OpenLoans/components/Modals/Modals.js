@@ -6,7 +6,7 @@ import { stripesShape } from '@folio/stripes/core';
 
 // eslint-disable-next-line
 import PatronBlockModal from '@folio/users/src/components/PatronBlock/PatronBlockModal';
-import BulkClaimedReturnedModal from '@folio/users/src/components/Loans/OpenLoans/components/BulkClaimReturnedModal';
+import BulkClaimedReturnedModal from '../BulkClaimReturnedModal';
 
 class Modals extends React.Component {
   static propTypes = {
@@ -21,6 +21,9 @@ class Modals extends React.Component {
     hideChangeDueDateDialog: PropTypes.func.isRequired,
     changeDueDateDialogOpen: PropTypes.bool.isRequired,
     onClosePatronBlockedModal: PropTypes.func.isRequired,
+    requestCounts: PropTypes.object.isRequired,
+    onBulkClaimReturnedCancel: PropTypes.func.isRequired,
+    showBulkClaimReturnedModal: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -56,7 +59,6 @@ class Modals extends React.Component {
     const loanIds = activeLoan
       ? loans.filter(loan => activeLoan === loan.id) // Only changing one due date.
       : loans.filter(loan => checkedLoans[loan.id]); // Bulk-changing due dates.
-console.log("checked", checkedLoans)
 
     return (
       <>
