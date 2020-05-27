@@ -45,6 +45,9 @@ import DialogInteractor from './dialog';
 
 @interactor class BulkClaimReturnedModal {
   static defaultScope = '[data-test-bulk-claim-returned-modal]';
+  
+  cancelButton = clickable('[data-test-bulk-cr-cancel-button]');
+  confirmButton = clickable('[data-test-bulk-cr-continue-button]');
 }
 
 @interactor class OpenLoans {
@@ -80,6 +83,7 @@ import DialogInteractor from './dialog';
   clickClaimReturned = clickable('#bulk-claim-returned');
 
   isBulkRenewButtonDisabled = property('#renew-all', 'disabled');
+  isBulkClaimReturnedDisabled = property('#bulk-claim-returned', 'disabled');
 
   whenLoaded() {
     return this.when(() => this.list.isVisible);

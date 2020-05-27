@@ -133,11 +133,13 @@ class BulkClaimReturnedModal extends React.Component {
       <ModalFooter>
         <Layout className="textRight">
           <Button
+            data-test-bulk-cr-cancel-button
             onClick={this.onCancel}
           >
             <FormattedMessage id="ui-users.cancel" />
           </Button>
           <Button
+            data-test-bulk-cr-confirm-button
             buttonStyle="primary"
             onClick={this.claimAllReturned}
             disabled={!additionalInfo}

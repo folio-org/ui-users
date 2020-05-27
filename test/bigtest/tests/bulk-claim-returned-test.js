@@ -15,7 +15,23 @@ describe.only('Bulk claim returned modal', () => {
     },
   });
 
-  describe('visit open loans', () => {
+  describe('Bulk claim returned button', () => {
+    beforeEach(async function () {
+      const user = this.server.create('user');
+
+      this.server.createList('loan', 3, { status: { name: 'Open' }, userId: user.id });
+      this.visit(`/users/${user.id}/loans/open`);
+
+      await LoansInteractor.whenLoaded();
+    });
+
+    it('Disables the button if no items are selected', () => {
+      expect(LoansInteractor.isBulkClaimReturnedDisabled).to.be.true;
+    });
+
+  });
+
+  describe('Working with checked out items', () => {
     beforeEach(async function () {
       const user = this.server.create('user');
 
@@ -27,7 +43,7 @@ describe.only('Bulk claim returned modal', () => {
       await LoansInteractor.clickClaimReturned();
     });
 
-    it('should show bulk claim returned modal', () => {
+    it('shows the bulk claim returned modal', () => {
       expect(LoansInteractor.bulkClaimReturnedModal.isPresent).to.be.true;
     });
   });
