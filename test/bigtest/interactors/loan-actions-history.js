@@ -29,6 +29,7 @@ import KeyValue from './KeyValue';
   claimReturnedButton = scoped('[data-test-claim-returned-button]', ButtonInteractor);
   isClaimReturnedButtonDisabled = property('[data-test-claim-returned-button]', 'disabled');
   isRenewButtonDisabled = property('[data-test-renew-button]', 'disabled');
+  isChangeDueDateButtonDisabled = property('[data-test-change-due-date-button]', 'disabled');
   loanActions = scoped('#list-loanactions', MultiColumnListInteractor);
 
   resolveClaimMenu = scoped('#resolve-claim-menu button');

@@ -200,7 +200,7 @@ class OpenLoansSubHeader extends React.Component {
               <Button
                 marginBottom0
                 id="change-due-date-all"
-                disabled={noSelectedLoans || onlyLostItemsSelected}
+                disabled={noSelectedLoans || onlyLostItemsSelected || onlyClaimedReturnedItemsSelected}
                 onClick={showChangeDueDateDialog}
               >
                 <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />
