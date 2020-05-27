@@ -8,7 +8,7 @@ import { expect } from 'chai';
 import setupApplication from '../helpers/setup-application';
 import LoansInteractor from '../interactors/open-loans';
 
-describe.only('Bulk claim returned modal', () => {
+describe('Bulk claim returned modal', () => {
   setupApplication({
     permissions: {
       'circulation.loans.collection.get': true
@@ -28,7 +28,6 @@ describe.only('Bulk claim returned modal', () => {
     it('Disables the button if no items are selected', () => {
       expect(LoansInteractor.isBulkClaimReturnedDisabled).to.be.true;
     });
-
   });
 
   describe('Working with checked out items', () => {

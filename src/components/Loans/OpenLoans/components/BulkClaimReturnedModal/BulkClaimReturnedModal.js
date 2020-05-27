@@ -143,7 +143,6 @@ class BulkClaimReturnedModal extends React.Component {
             buttonStyle="primary"
             onClick={this.claimAllReturned}
             disabled={!additionalInfo}
-            onChange={this.handleAdditionalInfoChange}
           >
             <FormattedMessage id="ui-users.confirm" />
           </Button>

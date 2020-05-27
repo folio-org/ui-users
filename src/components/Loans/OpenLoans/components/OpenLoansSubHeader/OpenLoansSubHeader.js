@@ -111,18 +111,6 @@ class OpenLoansSubHeader extends React.Component {
     }));
   };
 
-  // Compare a particular status name (@targetStatus) to all the items in the checkedLoans object.
-  // Returns true if *all* the items have the target status, false otherwise.
-  onlyStatusSelected = (targetStatus) => {
-    // For better or worse, checkedLoans is passed down as an object with keys corresponding to the loan UUIDs
-    // and values being the associated loan properties -- e.g. { uuid: {loan}, uuid2: {loan2} }. This makes
-    // it a little complicated to determine whether any loan in checkedLoans has a particular property -- like
-    // an item that's been declared lost
-    return !Object
-      .values(this.props.checkedLoans)
-      .find(loan => loan?.item?.status?.name !== targetStatus);
-  }
-
   render() {
     const {
       loans,

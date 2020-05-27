@@ -59,9 +59,6 @@ class OpenLoansWithStaticData extends React.Component {
     this.state = {
       showBulkClaimReturnedModal: false,
     };
-
-    this.onCancelBulkClaimReturned = this.onCancelBulkClaimReturned.bind(this);
-    this.onClickOpenBulkClaimReturned = this.onClickOpenBulkClaimReturned.bind(this);
   }
 
   setFormatters() {
