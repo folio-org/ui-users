@@ -2,6 +2,7 @@
 
 ## [4.0.0] (IN PROGRESS)
 
+* Change Fee/Fine Owner by Service Point name where the transaction took place. Refs. UIU-1398.
 * Support `loan-storage` interface version 7.0. UIU-1598.
 * Add posibility to view/create/edit custom fields on user record. UIU-1279.
 * Increase limit of service points in the Associated Service Points dropdown at Settings --> Users --> Fee/Fine Owners. Refs UIU-1540.
