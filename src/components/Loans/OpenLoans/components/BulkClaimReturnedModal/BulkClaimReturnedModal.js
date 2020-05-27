@@ -117,7 +117,7 @@ class BulkClaimReturnedModal extends React.Component {
     const {
       checkedLoansIndex,
       intl,
-      open
+      open,
     } = this.props;
     const {
       additionalInfo,
