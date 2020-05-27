@@ -52,8 +52,8 @@ class BulkClaimReturnedModal extends React.Component {
 
     this.state = {
       additionalInfo: '',     // The 'additional information' text included as part of a claim returned POST
-      operationResults: [],   // An array of results returned from the server after a POST
       operationState: 'pre',  // Whether we're at the start ('pre') or end ('post') of a transaction
+      unchangedLoans: [],     // An array of loans that were *not* changed (i.e., had errors) after a POST
     };
   }
 
@@ -80,7 +80,6 @@ class BulkClaimReturnedModal extends React.Component {
   }
 
   claimAllReturned = () => {
-    this.setState({ operationResults: [] });
     const promises = Object
       .values(this.props.checkedLoansIndex)
       .map(loan => this.claimItemReturned(loan).catch(e => e));
@@ -90,19 +89,12 @@ class BulkClaimReturnedModal extends React.Component {
 
   finishClaims = (results) => {
     this.setState({
-      operationResults: results,
       operationState: 'post',
+      // Each item in the results array will either be a simple object that represents a
+      // successful change (including an id value) or a larger object representing
+      // a CORS error (identifiable by the properties ok: false and url).
+      unchangedLoans: results.filter(r => r.ok === false).map(r => r.url?.match(/^.*\/(.*)\/claim-item-returned/)[1]),
     });
-  }
-
-  // @results: array of results of the claim-returned operation for each loan
-  // Each item in the array will either be a simple object that represents a
-  // successful change (including an id value) or a larger object representing
-  // a CORS error (identifiable by the properties ok: false and url).
-  //
-  // @return array of loan IDs for which the operation returned an error.
-  getUnchangedLoansList = (results) => {
-    return results.filter(r => r.ok === false).map(r => r.url?.match(/^.*\/(.*)\/claim-item-returned/)[1]);
   }
 
   onCancel = () => {
@@ -121,12 +113,10 @@ class BulkClaimReturnedModal extends React.Component {
     } = this.props;
     const {
       additionalInfo,
-      operationResults,
       operationState,
+      unchangedLoans, // List of loans for which the claim returned operation failed
     } = this.state;
     const loans = checkedLoansIndex ? Object.values(checkedLoansIndex) : [];
-    // List of loans for which the claim returned operation failed
-    const unchangedLoans = this.getUnchangedLoansList(operationResults);
 
     // Controls for the preview dialog
     const preOpFooter = (
