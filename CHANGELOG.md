@@ -40,6 +40,7 @@
 * Prevent the renewal of claimed returned items. Refs UIU-1261.
 * Adds `checkedInFoundByLibrary` and `checkedInReturnedByPatron` to loan action map. Fixes UIU-1643.
 * Display the correct link for create/reset password. Refs UIU-1608.
+* Add a bulk claim returned function. Refs UIU-1627.
 
 ## [3.0.0](https://github.com/folio-org/ui-users/tree/v3.0.0) (2020-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.26.0...v3.0.0)
