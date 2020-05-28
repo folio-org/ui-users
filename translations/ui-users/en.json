@@ -758,6 +758,16 @@
   "permission.view": "Users: Can view user profile",
   "permission.viewperms": "Users: Can view permissions assigned to users",
   "permission.viewproxies": "Users: Can view proxies assigned to users",
-  "permission.viewuserservicepoints": "Users: Can view service points assigned to users"
+  "permission.viewuserservicepoints": "Users: Can view service points assigned to users",
 
+  "bulkClaimReturned.item.title": "Title",
+  "bulkClaimReturned.preConfirm": "Confirm claim returned",
+  "bulkClaimReturned.postConfirm": "Claim returned confirmation",
+  "bulkClaimReturned.summary": "<strong>{numLoans}</strong> item(s) will be <strong>claimed returned</strong>.",
+  "bulkClaimReturned.status": "Claim returned status",
+  "bulkClaimReturned.status.ok": "Item successfully claimed returned",
+  "bulkClaimReturned.status.notOk": "Item could not be claimed returned: item is already claimed returned",
+  "bulkClaimReturned.items.ok": "{numItems} item(s) <strong>successfully</strong> claimed returned.",
+  "bulkClaimReturned.items.notOk": "{numItems} item(s) <strong>not</strong> claimed returned.",
+  "bulkClaimReturned.moreInfoPlaceholder": "Enter more information about the claim (required)"
 }

@@ -44,6 +44,13 @@ import DialogInteractor from './dialog';
   isSaveButtonDisabled = property('[data-test-change-due-date-save-button]', 'disabled');
 }
 
+@interactor class BulkClaimReturnedModal {
+  static defaultScope = '[data-test-bulk-claim-returned-modal]';
+
+  cancelButton = clickable('[data-test-bulk-cr-cancel-button]');
+  confirmButton = clickable('[data-test-bulk-cr-continue-button]');
+}
+
 @interactor class OpenLoans {
   static defaultScope = '[data-test-open-loans]';
 
@@ -63,6 +70,7 @@ import DialogInteractor from './dialog';
   bulkRenewalModal = new BulkRenewalModal();
   bulkOverrideModal = new BulkOverrideModal();
   changeDueDateOverlay = new ChangeDueDateOverlay();
+  bulkClaimReturnedModal = new BulkClaimReturnedModal();
   declareLostDialog = new DialogInteractor('#declareLost-modal');
   claimReturnedDialog = new DialogInteractor('#claimReturned-modal');
   markAsMissingDialog = new DialogInteractor('#markAsMissing-modal');
@@ -73,8 +81,10 @@ import DialogInteractor from './dialog';
   selectAllCheckboxes = clickable('#clickable-list-column- input[type="checkbox"]');
   checkboxes = collection('#list-loanshistory [role="gridcell"]:first-child', CheckboxInteractor);
   clickRenew = clickable('#renew-all');
+  clickClaimReturned = clickable('#bulk-claim-returned');
 
   isBulkRenewButtonDisabled = property('#renew-all', 'disabled');
+  isBulkClaimReturnedDisabled = property('#bulk-claim-returned', 'disabled');
 
   itemsPresent = isVisible('#list-loanshistory [role="gridcell"]');
 
