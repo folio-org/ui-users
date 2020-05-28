@@ -5,6 +5,7 @@ import {
   FormattedMessage,
   FormattedDate
 } from 'react-intl';
+import classNames from 'classnames';
 import {
   Row,
   Col,
@@ -14,6 +15,8 @@ import {
 } from '@folio/stripes/components';
 
 import { ViewMetaData } from '@folio/stripes/smart-components';
+import css from './UserInfo.css';
+import appIcon from '../../../../icons/app.png';
 
 class UserInfo extends React.Component {
   static propTypes = {
@@ -117,7 +120,7 @@ class UserInfo extends React.Component {
             <Col xs={3}>
               <Row>
                 <Col xs={12}>
-                  <img className="floatEnd" src="//placehold.it/100x100" alt="presentation" />
+                  <img className={classNames('floatEnd', css.profilePlaceholder)} src={appIcon} alt="presentation" />
                 </Col>
               </Row>
             </Col>
