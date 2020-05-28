@@ -176,7 +176,7 @@ describe('Claim returned', () => {
     });
   });
 
-  describe('Visiting loan details  page with not claimed returned item', () => {
+  describe('Visiting loan details page with not claimed returned item', () => {
     beforeEach(async function () {
       const loan = this.server.create('loan', {
         status: { name: 'Open' },
@@ -233,13 +233,22 @@ describe('Claim returned', () => {
       expect(LoanActionsHistory.isRenewButtonDisabled).to.be.true;
     });
 
-    it('should display disabled claim returned button', () => {
-      expect(LoanActionsHistory.claimReturnedButton.isPresent).to.be.true;
-      expect(LoanActionsHistory.isClaimReturnedButtonDisabled).to.be.true;
+    it('should hide claim returned button', () => {
+      expect(LoanActionsHistory.claimReturnedButton.isPresent).to.be.false;
     }).timeout(5000);
 
     it('should display the claimed returned date in `Claimed returned` field', () => {
       expect(LoanActionsHistory.claimedReturnedDate.value.text).to.not.equal('-');
+    });
+
+    describe('show resolve claim menu with actions', () => {
+      beforeEach(async function () {
+        await LoanActionsHistory.resolveClaimMenu.click();
+      });
+
+      it('should show declare lost button', () => {
+        expect(LoanActionsHistory.declareLostButton.isPresent).to.be.true;
+      }).timeout(5000);
     });
   });
 });

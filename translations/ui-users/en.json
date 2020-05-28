@@ -85,6 +85,7 @@
   "loans.newFeeFine": "New fee/fine",
   "loans.feeFineDetails": "Fee/fine details",
   "loans.history": "Loan action history",
+  "loans.resolveClaim": "Resolve claim",
 
   "settings.label": "Users",
   "settings.general": "General",
