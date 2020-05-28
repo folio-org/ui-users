@@ -225,7 +225,7 @@ describe('User Edit Page', () => {
       });
 
       it('should display inactive status', () => {
-        expect(InstanceViewPage.userInfo.keyValues(5).text).to.equal('inactive');
+        expect(InstanceViewPage.userInfo.keyValues(5).text).to.equal('Inactive');
       }).timeout(6000);
     });
 
@@ -238,7 +238,7 @@ describe('User Edit Page', () => {
       });
 
       it('should display active status', () => {
-        expect(InstanceViewPage.userInfo.keyValues(5).text).to.equal('active');
+        expect(InstanceViewPage.userInfo.keyValues(5).text).to.equal('Active');
       }).timeout(6000);
     });
   });

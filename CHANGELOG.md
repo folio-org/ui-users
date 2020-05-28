@@ -2,6 +2,7 @@
 
 ## [4.0.0] (IN PROGRESS)
 
+* Change Fee/Fine Owner by Service Point name where the transaction took place. Refs. UIU-1398.
 * Support `loan-storage` interface version 7.0. UIU-1598.
 * Add posibility to view/create/edit custom fields on user record. UIU-1279.
 * Increase limit of service points in the Associated Service Points dropdown at Settings --> Users --> Fee/Fine Owners. Refs UIU-1540.
@@ -40,6 +41,7 @@
 * Adds `checkedInFoundByLibrary` and `checkedInReturnedByPatron` to loan action map. Fixes UIU-1643.
 * Display the correct link for create/reset password. Refs UIU-1608.
 * Format action message for claim returned checkin. Refs UIU-1218.
+* Capitalize user status when displayed. Fixes UIU-1523.
 
 ## [3.0.0](https://github.com/folio-org/ui-users/tree/v3.0.0) (2020-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.26.0...v3.0.0)
