@@ -620,7 +620,7 @@ export default function config() {
     }]
   });
 
-  this.post('/authn/credentials');
+  this.post('/authn/credentials', {});
 
   this.get('/authn/credentials', (schema, request) => {
     const url = new URL(request.url);

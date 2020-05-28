@@ -15,7 +15,7 @@ import MultiColumnListInteractor from '@folio/stripes-components/lib/MultiColumn
   anonymizationFeesFinesErrorModal = new Interactor('#anonymization-fees-fines-modal');
   anonymizationConfirmButton = new ButtonInteractor('#anonymization-fees-fines-modal-footer button');
   list = scoped('#list-loanshistory', MultiColumnListInteractor);
-  rowButtons = collection('[data-test-closed-loans] button[role="row"]', ButtonInteractor);
+  rowButtons = collection('[data-test-closed-loans] [data-row-inner]', ButtonInteractor);
   callNumbers = collection('[data-test-list-call-numbers]');
   columnHeaders = collection('[role="columnheader"]');
 

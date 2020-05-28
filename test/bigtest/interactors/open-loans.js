@@ -7,6 +7,7 @@ import {
   property,
   clickable,
   text,
+  isVisible,
 } from '@bigtest/interactor';
 import moment from 'moment';
 
@@ -74,19 +75,21 @@ import DialogInteractor from './dialog';
   claimReturnedDialog = new DialogInteractor('#claimReturned-modal');
   markAsMissingDialog = new DialogInteractor('#markAsMissing-modal');
   dueDateCalendarCellButton = new ButtonInteractor(`[data-test-date="${moment().format('MM/DD/YYYY')}"]`);
-  rowButtons = collection('[data-test-open-loans-list] button[role="row"]', ButtonInteractor);
+  rowButtons = collection('[data-test-open-loans-list] [data-row-inner]', ButtonInteractor);
   loanCount = text('#loan-count');
 
   selectAllCheckboxes = clickable('#clickable-list-column- input[type="checkbox"]');
-  checkboxes = collection('#list-loanshistory button[role="row"]', CheckboxInteractor);
+  checkboxes = collection('#list-loanshistory [role="gridcell"]:first-child', CheckboxInteractor);
   clickRenew = clickable('#renew-all');
   clickClaimReturned = clickable('#bulk-claim-returned');
 
   isBulkRenewButtonDisabled = property('#renew-all', 'disabled');
   isBulkClaimReturnedDisabled = property('#bulk-claim-returned', 'disabled');
 
+  itemsPresent = isVisible('#list-loanshistory [role="gridcell"]');
+
   whenLoaded() {
-    return this.when(() => this.list.isVisible);
+    return this.timeout(10000).when(() => this.itemsPresent);
   }
 }
 
