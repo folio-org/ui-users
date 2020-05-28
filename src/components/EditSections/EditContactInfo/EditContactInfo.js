@@ -13,6 +13,7 @@ import {
   Accordion,
   Headline,
 } from '@folio/stripes/components';
+import Asterisk from '@folio/stripes-components/lib/Label/components/Asterisk';
 import { AddressEditList } from '@folio/stripes/smart-components';
 
 import { toAddressTypeOptions } from '../../data/converters/address_type';
@@ -83,12 +84,17 @@ const EditContactInfo = ({
         </Col>
         <Col xs={12} md={3}>
           <Field
-            label={<FormattedMessage id="ui-users.contact.preferredContact" />}
+            label={(
+              <>
+                <FormattedMessage id="ui-users.contact.preferredContact" />
+                <Asterisk />
+              </>
+            )}
             name="personal.preferredContactTypeId"
             id="adduser_preferredcontact"
             component={Select}
             fullWidth
-            required
+            aria-required="true"
           >
             <FormattedMessage id="ui-users.contact.selectContactType">
               {(message) => <option value="">{message}</option>}
