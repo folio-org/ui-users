@@ -43,6 +43,7 @@
 * Add a bulk claim returned function. Refs UIU-1627.
 * Format action message for claim returned checkin. Refs UIU-1218.
 * Capitalize user status when displayed. Fixes UIU-1523.
+* Permissions -> Users: Create/reset password send. Refs UIU-1337.
 
 ## [3.0.0](https://github.com/folio-org/ui-users/tree/v3.0.0) (2020-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.26.0...v3.0.0)

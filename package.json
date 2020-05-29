@@ -630,10 +630,14 @@
       },
       {
         "permissionName": "ui-users.reset-password-link.send",
-        "displayName": "Users: Can send create/reset password link",
+        "displayName": "Users: Create/reset password send",
         "subPermissions": [
-          "users-bl.password-reset-link.generate",
-          "login.credentials-existence.get"
+          "login.credentials-existence.get",
+          "login.collection.get",
+          "ui-users.view",
+          "ui-users.edit",
+          "ui-users.settings.customfields.view",
+          "users-bl.password-reset-link.generate"
         ],
         "visible": true
       },
