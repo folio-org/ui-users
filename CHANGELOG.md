@@ -42,6 +42,7 @@
 * Display the correct link for create/reset password. Refs UIU-1608.
 * Add a bulk claim returned function. Refs UIU-1627.
 * Format action message for claim returned checkin. Refs UIU-1218.
+* Add resolve claim to loan details screen. Refs UIU-1524.
 * Capitalize user status when displayed. Fixes UIU-1523.
 * Permissions -> Users: Create/reset password send. Refs UIU-1337.
 

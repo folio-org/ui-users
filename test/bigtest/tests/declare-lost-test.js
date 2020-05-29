@@ -142,14 +142,28 @@ describe('Declare Lost', () => {
     });
   });
 
-  describe('Visiting loan details  page with not declared lost item', () => {
+  describe('Visiting loan details page with not declared lost item', () => {
     beforeEach(async function () {
       const loan = this.server.create('loan', {
         status: { name: 'Open' },
-        loanPolicyId: 'test'
+        loanPolicyId: 'test',
+        action: 'claimedReturned',
+        actionComment: 'Claim returned confirmation',
+        item: { status: { name: 'Claimed returned' } },
+        itemStatus: 'Claimed returned',
+        claimedReturnedDate: new Date().toISOString(),
+      });
+
+      this.server.create('user', { id: loan.userId });
+      this.server.create('loanaction', {
+        loan: {
+          ...loan.attrs,
+        },
       });
 
       this.visit(`/users/${loan.userId}/loans/view/${loan.id}`);
+
+      await LoanActionsHistory.resolveClaimMenu.click();
     });
 
     it('should display enabled declare lost button', () => {
@@ -197,10 +211,8 @@ describe('Declare Lost', () => {
       this.visit(`/users/${loan.userId}/loans/view/${loan.id}`);
     });
 
-
-    it('should display disabled declare lost button', () => {
-      expect(LoanActionsHistory.declareLostButton.isPresent).to.be.true;
-      expect(LoanActionsHistory.isDeclareLostButtonDisabled).to.be.true;
+    it('should hide declare lost button', () => {
+      expect(LoanActionsHistory.declareLostButton.isPresent).to.be.false;
     }).timeout(5000);
 
     it('should display the lost date in lost field', () => {
