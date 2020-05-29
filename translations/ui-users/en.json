@@ -39,8 +39,8 @@
   "data.loanActionMap.claimedReturned": "Claimed returned",
   "data.loanActionMap.markedAsMissing": "Marked as missing",
   "data.loanActionMap.closedLoan": "Closed loan",
-  "data.loanActionMap.checkedInReturnedByPatron": "Checked in returned by patron",
-  "data.loanActionMap.checkedInFoundByLibrary": "Checked in found by library",
+  "data.loanActionMap.checkedInReturnedByPatron": "Checked in (returned by patron)",
+  "data.loanActionMap.checkedInFoundByLibrary": "Checked in (found by library)",
   "action": "Action",
   "dueDate": "Due date",
   "loanDate": "Loan date",
@@ -714,8 +714,8 @@
   "addAddressError": "Please, add at least one address inside \"Addresses\" section",
 
   "tags": "Tags",
-  "filters.status.active": "active",
-  "filters.status.inactive": "inactive",
+  "filters.status.active": "Active",
+  "filters.status.inactive": "Inactive",
 
   "permission.accounts": "Fee/Fine History: Can create, edit and remove accounts",
   "permission.create": "Users: Can create new user",
@@ -758,6 +758,16 @@
   "permission.view": "Users: Can view user profile",
   "permission.viewperms": "Users: Can view permissions assigned to users",
   "permission.viewproxies": "Users: Can view proxies assigned to users",
-  "permission.viewuserservicepoints": "Users: Can view service points assigned to users"
+  "permission.viewuserservicepoints": "Users: Can view service points assigned to users",
 
+  "bulkClaimReturned.item.title": "Title",
+  "bulkClaimReturned.preConfirm": "Confirm claim returned",
+  "bulkClaimReturned.postConfirm": "Claim returned confirmation",
+  "bulkClaimReturned.summary": "<strong>{numLoans}</strong> item(s) will be <strong>claimed returned</strong>.",
+  "bulkClaimReturned.status": "Claim returned status",
+  "bulkClaimReturned.status.ok": "Item successfully claimed returned",
+  "bulkClaimReturned.status.notOk": "Item could not be claimed returned: item is already claimed returned",
+  "bulkClaimReturned.items.ok": "{numItems} item(s) <strong>successfully</strong> claimed returned.",
+  "bulkClaimReturned.items.notOk": "{numItems} item(s) <strong>not</strong> claimed returned.",
+  "bulkClaimReturned.moreInfoPlaceholder": "Enter more information about the claim (required)"
 }

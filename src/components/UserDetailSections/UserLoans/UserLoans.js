@@ -160,7 +160,9 @@ class UserLoans extends React.Component {
                   <FormattedMessage id={item.formattedMessageId} values={{ count: item.count }} />
                 </Link>
                 {item.claimedReturnedCount > 0 &&
-                  <span id="claimed-returned-count"> <FormattedMessage id="ui-users.loans.numClaimedReturnedLoans" values={{ count: item.claimedReturnedCount }} /></span>
+                  <span id="claimed-returned-count">
+                    <FormattedMessage id="ui-users.loans.numClaimedReturnedLoans" values={{ count: item.claimedReturnedCount }} />
+                  </span>
                 }
               </li>)}
             items={items}

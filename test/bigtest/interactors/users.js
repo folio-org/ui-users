@@ -38,7 +38,7 @@ export default @interactor class UsersInteractor {
   paneHeaderFocused = is('#users-search-results-pane [class*=paneHeader---]', ':focus');
   patronGroupsPresent = isPresent('#clickable-filter-pg-faculty');
   instancePresent = isPresent('[data-test-instance-details]');
-  instancesPresent = isPresent('[role=group] [role=row]');
+  instancesPresent = isPresent('[role=rowgroup] [role=row]');
   headerDropdown = new HeaderDropdown();
   clickFacultyCheckbox = clickable('#clickable-filter-pg-faculty');
   clickGraduateCheckbox = clickable('#clickable-filter-pg-graduate');
@@ -46,7 +46,7 @@ export default @interactor class UsersInteractor {
   clickUndergradCheckbox = clickable('#clickable-filter-pg-undergrad');
   clickCreateUserButton = clickable('#clickable-newuser');
   instance = scoped('[data-test-instance-details]');
-  instances = collection('[role=group] [role=row]');
+  instances = collection('[role=rowgroup] [data-row-inner]');
   clearStatusFilter = clickable('[data-test-clear-button]');
 
   whenInstanceLoaded() {
