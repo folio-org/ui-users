@@ -12,7 +12,7 @@ import UserFormPage from '../interactors/user-form-page';
 import InstanceViewPage from '../interactors/user-view-page';
 import UsersInteractor from '../interactors/users';
 
-describe.only('User Edit Page', () => {
+describe('User Edit Page', () => {
   const users = new UsersInteractor();
   let user1;
   let user2;
