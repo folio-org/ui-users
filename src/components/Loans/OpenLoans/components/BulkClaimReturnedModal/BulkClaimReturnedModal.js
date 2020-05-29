@@ -221,14 +221,16 @@ class BulkClaimReturnedModal extends React.Component {
       <>
         {statusMessage}
         {loansList}
-        <Col sm={12} className={css.additionalInformation}>
-          <TextArea
-            label={<FormattedMessage id="ui-users.additionalInfo.label" />}
-            placeholder={intl.formatMessage({ id: 'ui-users.bulkClaimReturned.moreInfoPlaceholder' })}
-            required
-            onChange={this.handleAdditionalInfoChange}
-          />
-        </Col>
+        {operationState === 'pre' &&
+          <Col sm={12} className={css.additionalInformation}>
+            <TextArea
+              label={<FormattedMessage id="ui-users.additionalInfo.label" />}
+              placeholder={intl.formatMessage({ id: 'ui-users.bulkClaimReturned.moreInfoPlaceholder' })}
+              required
+              onChange={this.handleAdditionalInfoChange}
+            />
+          </Col>
+        }
       </>;
 
     return (
