@@ -439,7 +439,8 @@ class LoanDetails extends React.Component {
                 }
                 <IfPermission perm="ui-users.loans.edit">
                   <Button
-                    disabled={buttonDisabled || isDeclaredLostItem}
+                    data-test-change-due-date-button
+                    disabled={buttonDisabled || isDeclaredLostItem || isClaimedReturnedItem}
                     buttonStyle="primary"
                     onClick={this.showChangeDueDateDialog}
                   >

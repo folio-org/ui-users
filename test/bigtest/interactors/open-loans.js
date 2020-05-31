@@ -85,6 +85,7 @@ import DialogInteractor from './dialog';
 
   isBulkRenewButtonDisabled = property('#renew-all', 'disabled');
   isBulkClaimReturnedDisabled = property('#bulk-claim-returned', 'disabled');
+  isBulkChangeDueDateButtonDisabled = property('#change-due-date-all', 'disabled');
 
   itemsPresent = isVisible('#list-loanshistory [role="gridcell"]');
 
