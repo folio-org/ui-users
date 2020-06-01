@@ -4,6 +4,7 @@ import {
   get,
   keyBy,
   cloneDeep,
+  concat,
 } from 'lodash';
 import { FormattedMessage } from 'react-intl';
 import {
@@ -368,9 +369,16 @@ class UserDetail extends React.Component {
     const proxies = this.props.getProxies();
     const servicePoints = this.props.getUserServicePoints();
     const preferredServicePoint = this.props.getPreferredServicePoint();
-    const hasPatronBlocks = (get(resources, ['hasPatronBlocks', 'isPending'], true)) ? -1 : 1;
-    const totalPatronBlocks = get(resources, ['hasPatronBlocks', 'other', 'totalRecords'], 0);
-    const patronBlocks = get(resources, ['hasPatronBlocks', 'records'], []);
+    const hasManualPatronBlocks = (get(resources, ['hasManualPatronBlocks', 'isPending'], true)) ? -1 : 1;
+    const hasAutomatedPatronBlocks = (get(resources, ['hasAutomatedPatronBlocks', 'isPending'], true)) ? -1 : 1;
+    const totalManualPatronBlocks = get(resources, ['hasManualPatronBlocks', 'other', 'totalRecords'], 0);
+    const totalAutomatedPatronBlocks = get(resources, ['hasAutomatedPatronBlocks', 'other', 'totalRecords'], 0);
+    const totalPatronBlocks = totalManualPatronBlocks + totalAutomatedPatronBlocks;
+    const manualPatronBlocks = get(resources, ['hasManualPatronBlocks', 'records'], []);
+    const automatedPatronBlocks = get(resources, ['hasAutomatedPatronBlocks', 'records'], []);
+    const patronBlocks = concat(automatedPatronBlocks, manualPatronBlocks);
+    const hasPatronBlocks = (hasManualPatronBlocks === 1 || hasAutomatedPatronBlocks === 1) && totalPatronBlocks > 0;
+    const hasPatronBlocksPermissions = stripes.hasPerm('automated-patron-blocks.collection.get') || stripes.hasPerm('manualblocks.collection.get');
     const patronGroup = this.getPatronGroup(user);
     // const detailMenu = this.renderDetailMenu(user);
     const requestPreferences = get(resources, 'requestPreferences.records.[0].requestPreferences[0]', {});
@@ -423,7 +431,7 @@ class UserDetail extends React.Component {
             </Headline>
             <Row>
               <Col xs={10}>
-                {(hasPatronBlocks === 1 && totalPatronBlocks > 0)
+                {hasPatronBlocks
                   ? <PatronBlockMessage />
                   : ''}
               </Col>
@@ -444,19 +452,20 @@ class UserDetail extends React.Component {
                 expanded={sections.userInformationSection}
                 onToggle={this.handleSectionToggle}
               />
-              <IfPermission perm="manualblocks.collection.get">
+              {hasPatronBlocksPermissions &&
                 <PatronBlock
                   accordionId="patronBlocksSection"
                   user={user}
-                  hasPatronBlocks={(hasPatronBlocks === 1 && totalPatronBlocks > 0)}
+                  hasPatronBlocks={hasPatronBlocks && totalPatronBlocks > 0}
                   patronBlocks={patronBlocks}
+                  automatedPatronBlocks={automatedPatronBlocks}
                   expanded={sections.patronBlocksSection}
                   onToggle={this.handleSectionToggle}
                   onClickViewPatronBlock={this.onClickViewPatronBlock}
                   addRecord={this.state.addRecord}
                   {...this.props}
                 />
-              </IfPermission>
+              }
               <ExtendedInfo
                 accordionId="extendedInfoSection"
                 user={user}

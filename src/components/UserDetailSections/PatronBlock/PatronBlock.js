@@ -34,6 +34,11 @@ class PatronBlock extends React.Component {
         path: 'manualblocks/%{activeRecord.blockId}',
       },
     },
+    automatedPatronBlocks: {
+      type: 'okapi',
+      records: 'automatedPatronBlocks',
+      path: 'automated-patron-blocks?query=(patronId=:{id})&limit=100',
+    },
     activeRecord: {},
   });
 
@@ -48,6 +53,7 @@ class PatronBlock extends React.Component {
     expanded: PropTypes.bool,
     accordionId: PropTypes.string,
     patronBlocks: PropTypes.arrayOf(PropTypes.object),
+    automatedPatronBlocks: PropTypes.arrayOf(PropTypes.object),
     hasPatronBlocks: PropTypes.bool,
     mutator: PropTypes.shape({
       activeRecord: PropTypes.shape({
@@ -58,8 +64,38 @@ class PatronBlock extends React.Component {
         GET: PropTypes.func,
         reset: PropTypes.func,
       }),
+      automatedPatronBlocks: PropTypes.shape({
+        GET: PropTypes.func,
+      }),
     }),
     user: PropTypes.object,
+  };
+
+  static defaultProps = {
+    patronBlocks: [],
+    automatedPatronBlocks: [
+      {
+        'patronBlockConditionId': '48a3115d-d476-4582-b6a8-55c09eed7ec7',
+        'blockBorrowing': true,
+        'blockRenewal': false,
+        'blockRequest': false,
+        'message': 'Patron has reached maximum allowed number of items charged out'
+      },
+      {
+        'patronBlockConditionId': '48a3115d-d476-4582-b6a8-55c09eed7ec7',
+        'blockBorrowing': false,
+        'blockRenewal': false,
+        'blockRequest': true,
+        'message': 'Patron has reached maximum allowed outstanding fee/fine balance for his/her patron group'
+      },
+      {
+        'patronBlockConditionId': '48a3115d-d476-4582-b6a8-55c09eed7ec7',
+        'blockBorrowing': true,
+        'blockRenewal': true,
+        'blockRequest': true,
+        'message': 'Patron has reached maximum allowed outstanding fee/fine balance for his/her patron group'
+      }
+    ],
   };
 
   constructor(props) {
@@ -71,7 +107,7 @@ class PatronBlock extends React.Component {
 
     this.sortMap = {
       [formatMessage({ id: 'ui-users.blocks.columns.type' })]: f => f.type,
-      [formatMessage({ id: 'ui-users.blocks.columns.desc' })]: f => f.desc,
+      [formatMessage({ id: 'ui-users.blocks.columns.desc' })]: f => f.desc || f.message,
       [formatMessage({ id: 'ui-users.blocks.columns.blocked' })]: f => f.renewals,
     };
 
@@ -100,11 +136,15 @@ class PatronBlock extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { patronBlocks } = this.props;
-    const prevBlocks = prevProps.patronBlocks;
+    const {
+      patronBlocks,
+      automatedPatronBlocks,
+    } = this.props;
+    const prevManualBlocks = prevProps.patronBlocks;
+    const prevAutomatedBlocks = prevProps.automatedPatronBlocks;
     const { submitting } = this.state;
-    const prevExpirated = prevBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
-    const expirated = patronBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
+    const prevExpirated = prevManualBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
+    const expirated = prevManualBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
 
     if (prevExpirated.length > 0 && expirated.length === 0) {
       // eslint-disable-next-line react/no-did-update-set-state
@@ -151,31 +191,52 @@ class PatronBlock extends React.Component {
   }
 
   getPatronFormatter() {
-    const { intl: { formatMessage } } = this.props;
+    const {
+      intl: {
+        formatMessage
+      },
+    } = this.props;
 
     return {
-      'Type': f => f.type,
-      'Display description': f => f.desc,
-      'Blocked actions': f => `${f.borrowing ? [formatMessage({ id: 'ui-users.blocks.columns.borrowing' })] : ''}${f.renewals && f.borrowing ? ', ' : ''}${f.renewals ? [formatMessage({ id: 'ui-users.blocks.columns.renewals' })] : ''}${(f.requests && f.renewals) || (f.borrowing && f.requests) ? ', ' : ''}${f.requests ? [formatMessage({ id: 'ui-users.blocks.columns.requests' })] : ''}`,
+      'Type': f => f.type || [formatMessage({ id: 'ui-users.blocks.columns.automated.type' })],
+      'Display description': f => f.desc || f.message,
+      'Blocked actions': f => {
+        const blockedActions = [];
+
+        if (f.borrowing || f.blockBorrowing) {
+          blockedActions.push([formatMessage({ id: 'ui-users.blocks.columns.borrowing' })]);
+        }
+
+        if (f.renewals || f.blockRenewal) {
+          blockedActions.push([formatMessage({ id: 'ui-users.blocks.columns.renewals' })]);
+        }
+
+        if (f.requests || f.blockRequest) {
+          blockedActions.push([formatMessage({ id: 'ui-users.blocks.columns.requests' })]);
+        }
+
+        return blockedActions.join(', ');
+      }
     };
   }
 
   render() {
-    const props = this.props;
     const {
       expanded,
       onToggle,
       accordionId,
       patronBlocks,
+      automatedPatronBlocks,
       hasPatronBlocks,
       match: { params },
-    } = props;
+    } = this.props;
     const {
       sortOrder,
       sortDirection
     } = this.state;
     let contentData = patronBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrAfter(moment().format()));
     contentData = _.orderBy(contentData, ['metadata.createdDate'], ['desc']);
+    const totalPatronBlocks = _.concat(automatedPatronBlocks, contentData);
     const visibleColumns = [
       'Type',
       'Display description',
@@ -189,7 +250,7 @@ class PatronBlock extends React.Component {
     const items =
       <MultiColumnList
         id="patron-block-mcl"
-        contentData={contentData}
+        contentData={totalPatronBlocks}
         formatter={this.getPatronFormatter()}
         visibleColumns={visibleColumns}
         onHeaderClick={this.onSort}

@@ -14,6 +14,7 @@ import TextFieldInteractor from '@folio/stripes-components/lib/TextField/tests/i
 
 @interactor class PatronBlocksSection {
   sectionIsPresent = isPresent('#accordion-toggle-button-patronBlocksSection');
+  collapsePatronBlocks = clickable('#accordion-toggle-button-patronBlocksSection');
   patronBlocksAreVisible = isPresent('#patron-block-mcl');
   formIsVisible = isPresent('#patron-block-form');
 
