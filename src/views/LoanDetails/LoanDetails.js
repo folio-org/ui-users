@@ -447,6 +447,16 @@ class LoanDetails extends React.Component {
                     <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />
                   </Button>
                 </IfPermission>
+                <IfPermission perm="ui-users.loans.declare-item-lost">
+                  <Button
+                    data-test-declare-lost-button
+                    disabled={buttonDisabled || isDeclaredLostItem}
+                    buttonStyle="primary"
+                    onClick={() => declareLost(loan)}
+                  >
+                    <FormattedMessage id="ui-users.loans.declareLost" />
+                  </Button>
+                </IfPermission>
               </span>
             </Row>
             <Row>
