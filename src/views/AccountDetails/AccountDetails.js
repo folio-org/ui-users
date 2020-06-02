@@ -527,6 +527,7 @@ class AccountDetails extends React.Component {
               // perfectly well without them. ¯\_(ツ)_/¯
               // this.getAccountActions();
               // handleAddRecords();
+              this.props.mutator.accountActions.GET();
             }}
           />
 
