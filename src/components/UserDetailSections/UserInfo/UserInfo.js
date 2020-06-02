@@ -5,7 +5,6 @@ import {
   FormattedMessage,
   FormattedDate
 } from 'react-intl';
-import classNames from 'classnames';
 import {
   Row,
   Col,
@@ -120,7 +119,7 @@ class UserInfo extends React.Component {
             <Col xs={3}>
               <Row>
                 <Col xs={12}>
-                  <img className={classNames('floatEnd', css.profilePlaceholder)} src={appIcon} alt="presentation" />
+                  <img className={`floatEnd ${css.profilePlaceholder}`} src={appIcon} alt="presentation" />
                 </Col>
               </Row>
             </Col>
