@@ -44,7 +44,9 @@ class UserInfo extends React.Component {
       accordionId,
       onToggle,
     } = this.props;
-    const userStatus = (get(user, ['active'], '') ? 'active' : 'inactive');
+    const userStatus = (user?.active ?
+      <FormattedMessage id="ui-users.active" /> :
+      <FormattedMessage id="ui-users.inactive" />);
     const hasProfilePicture = (settings.length && settings[0].value === 'true');
 
     return (

@@ -144,15 +144,6 @@ class UsersRouting extends React.Component {
           )}
         />
         <Route
-          path={`${base}/:id/accounts/:accountstatus/charge`}
-          exact
-          render={(props) => (
-            <IfPermission perm="ui-users.feesfines.actions.all">
-              <Routes.FeesFinesContainer {...props} />
-            </IfPermission>
-          )}
-        />
-        <Route
           path={`${base}/:id/accounts/view/:accountid`}
           render={(props) => (
             <IfPermission perm="ui-users.feesfines.actions.all">

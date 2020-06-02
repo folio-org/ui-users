@@ -21,7 +21,6 @@ import {
 
 import ActionsBar from '../../../components/ActionsBar/ActionsBar';
 import { itemStatuses } from '../../../../../constants';
-
 import { hasEveryLoanItemStatus } from '../../../../util';
 
 import css from './OpenLoansSubHeader.css';
@@ -37,6 +36,7 @@ class OpenLoansSubHeader extends React.Component {
     toggleColumn: PropTypes.func.isRequired,
     buildRecords: PropTypes.func.isRequired,
     renewSelected: PropTypes.func.isRequired,
+    openBulkClaimReturnedModal: PropTypes.func.isRequired,
     openPatronBlockedModal: PropTypes.func.isRequired,
     showChangeDueDateDialog: PropTypes.func.isRequired,
   };
@@ -121,6 +121,7 @@ class OpenLoansSubHeader extends React.Component {
       buildRecords,
       patronBlocks,
       openPatronBlockedModal,
+      openBulkClaimReturnedModal,
     } = this.props;
 
     const {
@@ -133,10 +134,6 @@ class OpenLoansSubHeader extends React.Component {
     const clonedLoans = cloneDeep(loans);
     const recordsToCSV = buildRecords(clonedLoans);
     const countRenews = patronBlocks.filter(p => p.renewals === true);
-    // For better or worse, checkedLoans is passed down as an object with keys corresponding to the loan UUIDs
-    // and values being the associated loan properties -- e.g. { uuid: {loan}, uuid2: {loan2} }. This makes
-    // it a little complicated to determine whether any loan in checkedLoans has a particular property -- like
-    // an item that's been declared lost
     const onlyLostItemsSelected = hasEveryLoanItemStatus(checkedLoans, itemStatuses.DECLARED_LOST);
     const onlyClaimedReturnedItemsSelected = hasEveryLoanItemStatus(checkedLoans, itemStatuses.CLAIMED_RETURNED);
 
@@ -191,11 +188,19 @@ class OpenLoansSubHeader extends React.Component {
                 <FormattedMessage id="ui-users.renew" />
               </Button>
             </IfPermission>
+            <Button
+              marginBottom0
+              id="bulk-claim-returned"
+              disabled={noSelectedLoans || onlyClaimedReturnedItemsSelected}
+              onClick={openBulkClaimReturnedModal}
+            >
+              <FormattedMessage id="ui-users.loans.claimReturned" />
+            </Button>
             <IfPermission perm="ui-users.loans.edit">
               <Button
                 marginBottom0
                 id="change-due-date-all"
-                disabled={noSelectedLoans || onlyLostItemsSelected}
+                disabled={noSelectedLoans || onlyLostItemsSelected || onlyClaimedReturnedItemsSelected}
                 onClick={showChangeDueDateDialog}
               >
                 <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />
