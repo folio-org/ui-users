@@ -687,5 +687,16 @@
     "data.loanActionMap.closedLoan": "إعارة مغلقة",
     "loans.numClaimedReturnedLoans": "({count, number} {count, plural, one {تم إدعاء إعادتها} other {تم إدعاء إعادتها}})",
     "data.loanActionMap.checkedInReturnedByPatron": "تم الرد وإعادتها بواسطة المستفيد",
-    "data.loanActionMap.checkedInFoundByLibrary": "تم الرد والعثور عليها بواسطة المكتبة"
+    "data.loanActionMap.checkedInFoundByLibrary": "تم الرد والعثور عليها بواسطة المكتبة",
+    "bulkClaimReturned.item.title": "عنوان",
+    "bulkClaimReturned.preConfirm": "تأكيد إدعاء الإعادة",
+    "bulkClaimReturned.postConfirm": "تأكيد إدعاء الإعادة",
+    "bulkClaimReturned.summary": "سيتم <strong>إدعاء إعادة</strong> <strong>{numLoans}</strong> مادة",
+    "bulkClaimReturned.status": "حالة تم إدعاء إعادته",
+    "bulkClaimReturned.status.ok": "تم إدعاء إعادة المادة بنجاح",
+    "bulkClaimReturned.status.notOk": "تعذر إدعاء إعادة هذه المادة. المادة بالفعل تم إدعاء إعادتها.",
+    "bulkClaimReturned.items.ok": "تم إدعاء إعادة {numItems} مادة <strong>بنجاح</strong>",
+    "bulkClaimReturned.items.notOk": "<strong>لم</strong> يتم إدعاء إعادة {numItems} مادة",
+    "bulkClaimReturned.moreInfoPlaceholder": "قم بإدخال المزيد من المعلومات حول المطالبة (مطلوب)",
+    "loans.resolveClaim": "حل المطالبة"
 }
