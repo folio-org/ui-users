@@ -25,7 +25,9 @@ import {
   Row,
   Col,
   NoValue,
-  LoadingView
+  LoadingView,
+  Dropdown,
+  DropdownMenu,
 } from '@folio/stripes/components';
 import { IfPermission } from '@folio/stripes/core';
 import { effectiveCallNumber } from '@folio/stripes/util';
@@ -41,6 +43,7 @@ import {
   withRenew,
   withDeclareLost,
   withClaimReturned,
+  withMarkAsMissing,
 } from '../../components/Wrappers';
 import loanActionMap from '../../components/data/static/loanActionMap';
 import LoanProxyDetails from './LoanProxyDetails';
@@ -79,6 +82,7 @@ class LoanDetails extends React.Component {
     requestCounts: PropTypes.object,
     renew: PropTypes.func,
     declareLost: PropTypes.func,
+    markAsMissing: PropTypes.func,
     claimReturned: PropTypes.func,
     patronBlocks: PropTypes.arrayOf(PropTypes.object),
     intl: PropTypes.object.isRequired,
@@ -292,6 +296,7 @@ class LoanDetails extends React.Component {
       loanPolicies,
       requestCounts,
       declareLost,
+      markAsMissing,
       claimReturned,
     } = this.props;
 
@@ -391,19 +396,51 @@ class LoanDetails extends React.Component {
                     <FormattedMessage id="ui-users.renew" />
                   </Button>
                 </IfPermission>
-                <IfPermission perm="ui-users.loans.claim-item-returned">
-                  <Button
-                    data-test-claim-returned-button
-                    disabled={buttonDisabled || isClaimedReturnedItem}
-                    buttonStyle="primary"
-                    onClick={() => claimReturned(loan)}
+                {isClaimedReturnedItem &&
+                  <Dropdown
+                    id="resolve-claim-menu"
+                    label={<FormattedMessage id="ui-users.loans.resolveClaim" />}
+                    buttonProps={{ buttonStyle: 'primary' }}
                   >
-                    <FormattedMessage id="ui-users.loans.claimReturned" />
-                  </Button>
-                </IfPermission>
+                    <DropdownMenu data-test-resolve-claim-dropdown data-role="menu">
+                      <IfPermission perm="ui-users.loans.declare-item-lost">
+                        <Button
+                          buttonStyle="dropdownItem"
+                          data-test-declare-lost-button
+                          disabled={buttonDisabled || isDeclaredLostItem}
+                          onClick={() => declareLost(loan)}
+                        >
+                          <FormattedMessage id="ui-users.loans.declareLost" />
+                        </Button>
+                      </IfPermission>
+                      <IfPermission perm="ui-users.loans.declare-claimed-returned-item-as-missing">
+                        <Button
+                          buttonStyle="dropdownItem"
+                          data-test-dropdown-content-mark-as-missing-button
+                          onClick={() => markAsMissing(loan)}
+                        >
+                          <FormattedMessage id="ui-users.loans.markAsMissing" />
+                        </Button>
+                      </IfPermission>
+                    </DropdownMenu>
+                  </Dropdown>
+                }
+                {!isClaimedReturnedItem &&
+                  <IfPermission perm="ui-users.loans.claim-item-returned">
+                    <Button
+                      data-test-claim-returned-button
+                      disabled={buttonDisabled}
+                      buttonStyle="primary"
+                      onClick={() => claimReturned(loan)}
+                    >
+                      <FormattedMessage id="ui-users.loans.claimReturned" />
+                    </Button>
+                  </IfPermission>
+                }
                 <IfPermission perm="ui-users.loans.edit">
                   <Button
-                    disabled={buttonDisabled || isDeclaredLostItem}
+                    data-test-change-due-date-button
+                    disabled={buttonDisabled || isDeclaredLostItem || isClaimedReturnedItem}
                     buttonStyle="primary"
                     onClick={this.showChangeDueDateDialog}
                   >
@@ -607,4 +644,5 @@ export default compose(
   withRenew,
   withDeclareLost,
   withClaimReturned,
+  withMarkAsMissing,
 )(LoanDetails);

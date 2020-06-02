@@ -6,4 +6,5 @@ export default Factory.extend({
   userId: () => faker.random.uuid(),
   username: () => faker.internet.userName(),
   password: () => faker.internet.password(),
+  salt: () => faker.random.uuid(),
 });

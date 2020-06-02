@@ -10,8 +10,9 @@ import {
   Accordion,
   Label,
   Datepicker,
-  Headline
+  Headline,
 } from '@folio/stripes/components';
+import { IfPermission } from '@folio/stripes/core';
 
 import { addressTypesShape } from '../../../shapes';
 
@@ -126,16 +127,18 @@ class EditExtendedInfo extends Component {
               validStylesEnabled
             />
           </Col>
-          {isEditForm && username &&
-            (
-              <CreateResetPasswordControl
-                userId={userId}
-                email={userEmail}
-                name={userFirstName}
-                username={username}
-              />
-            )
-          }
+          <IfPermission perm="ui-users.reset-password-link.send">
+            {isEditForm && username &&
+              (
+                <CreateResetPasswordControl
+                  userId={userId}
+                  email={userEmail}
+                  name={userFirstName}
+                  username={username}
+                />
+              )
+            }
+          </IfPermission>
         </Row>
         <Row>
           <RequestPreferencesEdit addressTypes={addressTypes} />

@@ -7,19 +7,16 @@ import {
 import { expect } from 'chai';
 
 import findUser from '@folio/plugin-find-user';
-import FindUserInteractor from '@folio/plugin-find-user/test/bigtest/interactors/findUser';
 
 import setupApplication from '../helpers/setup-application';
 import UserFormPage from '../interactors/user-form-page';
 import UsersInteractor from '../interactors/users';
+import FindUserInteractor from '../interactors/find-user';
 import FindUserInstancesInteractor from '../interactors/FindUserInstances';
 
 import translations from '../../../translations/ui-users/en';
 
 describe('User Edit: Proxy/Sponsor', function () {
-  // some of the beforeEach blocks seem to timeout in CI
-  // this.timeout(5000);
-
   setupApplication({
     scenarios: ['user-proxy-edit'],
     modules: [{
