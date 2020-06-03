@@ -13,7 +13,6 @@ import {
   Datepicker,
   Headline,
 } from '@folio/stripes/components';
-import Asterisk from '@folio/stripes-components/lib/Label/components/Asterisk';
 
 import css from './EditUserInfo.css';
 
@@ -125,12 +124,7 @@ class EditUserInfo extends React.Component {
         <Row>
           <Col xs={12} md={3}>
             <Field
-              label={(
-                <>
-                  <FormattedMessage id="ui-users.information.patronGroup" />
-                  <Asterisk />
-                </>
-              )}
+              label={<FormattedMessage id="ui-users.information.patronGroup" />}
               name="patronGroup"
               id="adduser_group"
               component={Select}
@@ -138,17 +132,12 @@ class EditUserInfo extends React.Component {
               fullWidth
               dataOptions={patronGroupOptions}
               defaultValue={initialValues.patronGroup}
-              aria-required="true"
+              required
             />
           </Col>
           <Col xs={12} md={3}>
             <Field
-              label={(
-                <>
-                  <FormattedMessage id="ui-users.information.status" />
-                  <Asterisk />
-                </>
-              )}
+              label={<FormattedMessage id="ui-users.information.status" />}
               name="active"
               id="useractive"
               component={Select}
@@ -156,7 +145,7 @@ class EditUserInfo extends React.Component {
               disabled={isStatusFieldDisabled()}
               dataOptions={statusOptions}
               defaultValue={initialValues.active}
-              aria-required="true"
+              required
             />
             {isUserExpired() && (
               <span className={css.expiredMessage}>
