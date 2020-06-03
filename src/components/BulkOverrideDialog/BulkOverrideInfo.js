@@ -183,14 +183,10 @@ class BulkOverrideInfo extends React.Component {
 
     return (
       <div>
-        <Layout className="flex">
-          <Layout className="flex">
-            <SafeHTMLMessage
-              id="ui-users.brd.itemsSelected"
-              values={{ count: selectedItems }}
-            />
-          </Layout>
-        </Layout>
+        <SafeHTMLMessage
+          id="ui-users.brd.itemsSelected"
+          values={{ count: selectedItems }}
+        />
         {
           showDueDatePicker &&
             <div data-test-due-date-picker>
