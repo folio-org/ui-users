@@ -150,6 +150,10 @@ describe('Claim returned', () => {
         expect(OpenLoansInteractor.actionDropdownRenewButton.isVisible).to.be.false;
       });
 
+      it('should not display change due date button', () => {
+        expect(OpenLoansInteractor.actionDropdownChangeDueDateButton.isVisible).to.be.false;
+      });
+
       it('should not display claim returned button', () => {
         expect(OpenLoansInteractor.actionDropdownClaimReturnedButton.isVisible).to.be.false;
       });
@@ -164,6 +168,10 @@ describe('Claim returned', () => {
         expect(OpenLoansInteractor.isBulkRenewButtonDisabled).to.be.true;
       });
 
+      it('should display disabled bulk change due date button', () => {
+        expect(OpenLoansInteractor.isBulkChangeDueDateButtonDisabled).to.be.true;
+      });
+
       describe('when check the checked out item', () => {
         beforeEach(async () => {
           await OpenLoansInteractor.checkboxes(0).clickInput();
@@ -172,11 +180,15 @@ describe('Claim returned', () => {
         it('should display enabled bulk renew button', () => {
           expect(OpenLoansInteractor.isBulkRenewButtonDisabled).to.be.false;
         });
+
+        it('should display enabled bulk change due date button', () => {
+          expect(OpenLoansInteractor.isBulkChangeDueDateButtonDisabled).to.be.false;
+        });
       });
     });
   });
 
-  describe('Visiting loan details  page with not claimed returned item', () => {
+  describe('Visiting loan details page with not claimed returned item', () => {
     beforeEach(async function () {
       const loan = this.server.create('loan', {
         status: { name: 'Open' },
@@ -233,13 +245,26 @@ describe('Claim returned', () => {
       expect(LoanActionsHistory.isRenewButtonDisabled).to.be.true;
     });
 
-    it('should display disabled claim returned button', () => {
-      expect(LoanActionsHistory.claimReturnedButton.isPresent).to.be.true;
-      expect(LoanActionsHistory.isClaimReturnedButtonDisabled).to.be.true;
-    }).timeout(5000);
+    it('should hide claim returned button', () => {
+      expect(LoanActionsHistory.claimReturnedButton.isPresent).to.be.false;
+    });
+
+    it('should display disabled change due date button', () => {
+      expect(LoanActionsHistory.isChangeDueDateButtonDisabled).to.be.true;
+    });
 
     it('should display the claimed returned date in `Claimed returned` field', () => {
       expect(LoanActionsHistory.claimedReturnedDate.value.text).to.not.equal('-');
+    });
+
+    describe('show resolve claim menu with actions', () => {
+      beforeEach(async function () {
+        await LoanActionsHistory.resolveClaimMenu.click();
+      });
+
+      it('should show declare lost button', () => {
+        expect(LoanActionsHistory.declareLostButton.isPresent).to.be.true;
+      }).timeout(5000);
     });
   });
 });

@@ -40,6 +40,15 @@
 * Prevent the renewal of claimed returned items. Refs UIU-1261.
 * Adds `checkedInFoundByLibrary` and `checkedInReturnedByPatron` to loan action map. Fixes UIU-1643.
 * Display the correct link for create/reset password. Refs UIU-1608.
+* Add a bulk claim returned function. Refs UIU-1627.
+* Format action message for claim returned checkin. Refs UIU-1218.
+* Add resolve claim to loan details screen. Refs UIU-1524.
+* Capitalize user status when displayed. Fixes UIU-1523.
+* Permissions -> Users: Create/reset password send. Refs UIU-1337.
+* Prevent change due date for claimed returned items. Refs UIU-1260.
+* Bring back `Declare lost` button. Fixes UIU-1662.
+* Use the app logo as a profile placeholder. Yep, it's kinda hacky. Refs UIU-496.
+* Fee/Fine Details is not refreshing, which may result in user entering duplicate actions. Fixes UIU-1644.
 * Fix Patron Group, Status, and Preferred contact fields, are not read a required by screen reader. Refs UIU-1642.
 
 ## [3.0.0](https://github.com/folio-org/ui-users/tree/v3.0.0) (2020-03-17)

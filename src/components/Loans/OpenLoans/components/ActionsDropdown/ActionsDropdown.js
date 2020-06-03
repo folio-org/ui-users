@@ -88,6 +88,7 @@ class ActionsDropdown extends React.Component {
         </IfPermission>
         <IfPermission perm="ui-users.loans.edit">
           { itemStatusName !== itemStatuses.DECLARED_LOST &&
+            itemStatusName !== itemStatuses.CLAIMED_RETURNED &&
             <Button
               buttonStyle="dropdownItem"
               data-test-dropdown-content-change-due-date-button
