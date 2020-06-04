@@ -51,6 +51,7 @@
 * Fee/Fine Details is not refreshing, which may result in user entering duplicate actions. Fixes UIU-1644.
 * Protect loan action history page from CQL null query errors. Fixes UIU-1652.
 * Fix the arrangement of elements inside the `SafeHTMLMessage` component. Fixes UIU-1660.
+* Fix Patron Group, Status, and Preferred contact fields, are not read a required by screen reader. Refs UIU-1642.
 
 ## [3.0.0](https://github.com/folio-org/ui-users/tree/v3.0.0) (2020-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.26.0...v3.0.0)
