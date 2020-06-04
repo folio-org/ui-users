@@ -1,9 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { isEmpty } from 'lodash';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import crypto from 'crypto';
 
 import { stripesConnect } from '@folio/stripes/core';
 import {
@@ -21,11 +18,6 @@ class CreateResetPasswordControl extends React.Component {
     email: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     userId: PropTypes.string.isRequired,
-    resources: PropTypes.shape({
-      credentials: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
-      }).isRequired,
-    }).isRequired,
     mutator: PropTypes.shape({
       resetPassword: PropTypes.shape({
         POST: PropTypes.func.isRequired,
@@ -40,58 +32,15 @@ class CreateResetPasswordControl extends React.Component {
       fetch: false,
       throwErrors: false,
     },
-    credentials: {
-      type: 'okapi',
-      path: 'authn/credentials?query=(userId=!{userId})',
-    },
+
   });
 
   constructor(props) {
     super(props);
     this.state = {
       showModal: false,
-      isLocalPasswordSet: false,
       link: '',
     };
-  }
-
-  componentDidUpdate(prevProps) {
-    if (this.props.resources.credentials !== prevProps.resources.credentials) {
-      this.checkPasswordExistence();
-    }
-  }
-
-  checkPasswordExistence = async () => {
-    /*
-    We need to differ the user WITH setted password from user WITHOUT password.
-    When user was created by default setted password is '' (empty string).
-    When we edit user, we receive the object with credentials.
-    Then we encrypt the '' with received salt from credentials, and if hash is simular,
-    then we know that password was not set for the current user yet, then display 'Create password',
-    otherwise 'Reset password' link.
-    */
-    const {
-      resources: {
-        credentials,
-      },
-    } = this.props;
-    const credentialsRecord = credentials?.records[0]?.credentials[0] ?? {};
-
-    if (isEmpty(credentialsRecord)) {
-      return;
-    }
-
-    const normalizeSalt = Buffer.from(credentialsRecord.salt, 'hex');
-
-    // '' - password, encrypted with normalizeSalt
-    // 1000 - number of iterations
-    // 32 - length of derivedKey
-    const derivedKey = crypto.pbkdf2Sync('', normalizeSalt, 1000, 32, 'sha1');
-    const formattedDerivedKey = derivedKey.toString('hex').toUpperCase();
-
-    if (!formattedDerivedKey.includes(credentialsRecord.hash)) {
-      this.setState({ isLocalPasswordSet: true });
-    }
   }
 
   closeModal = () => {
@@ -162,11 +111,6 @@ class CreateResetPasswordControl extends React.Component {
   };
 
   render() {
-    const { isLocalPasswordSet } = this.state;
-    const linkTextKey = isLocalPasswordSet
-      ? 'ui-users.extended.sendResetPassword'
-      : 'ui-users.extended.sendCreatePassword';
-
     return (
       <Col
         xs={12}
@@ -180,12 +124,9 @@ class CreateResetPasswordControl extends React.Component {
           className={css.resetPasswordButton}
           onClick={this.handleLinkClick}
         >
-          <FormattedMessage id={linkTextKey} />
+          <FormattedMessage id="ui-users.extended.sendResetPassword" />
         </button>
-        {isLocalPasswordSet
-          ? this.resetPasswordModal()
-          : this.createPasswordModal()
-        }
+        {this.resetPasswordModal()}
       </Col>
     );
   }
