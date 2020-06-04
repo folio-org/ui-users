@@ -119,7 +119,7 @@ class AccountDetails extends React.Component {
       resources,
     } = props;
 
-    const accountActivity = (resources.accountActions || {}).records || [];
+    const accountActivity = _.uniqBy(resources?.accountActions?.records || [], action => action.id);
     const sortData = _.orderBy(accountActivity, ['dateAction'], ['desc']);
     const balance = (sortData[0] || {}).balance;
     let paymentStatus;
@@ -527,6 +527,7 @@ class AccountDetails extends React.Component {
               // perfectly well without them. ¯\_(ツ)_/¯
               // this.getAccountActions();
               // handleAddRecords();
+              this.props.mutator.accountActions.GET();
             }}
           />
 
