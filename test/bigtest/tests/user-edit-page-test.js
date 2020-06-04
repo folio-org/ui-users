@@ -12,7 +12,7 @@ import UserFormPage from '../interactors/user-form-page';
 import InstanceViewPage from '../interactors/user-view-page';
 import UsersInteractor from '../interactors/users';
 
-describe('User Edit Page', () => {
+describe.only('User Edit Page', () => {
   const users = new UsersInteractor();
   let user1;
   let user2;
@@ -41,7 +41,7 @@ describe('User Edit Page', () => {
 
     it('should display create password link', () => {
       expect(UserFormPage.resetPasswordLink.isPresent).to.be.true;
-      expect(UserFormPage.resetPasswordLink.text).to.equal(translations['extended.sendCreatePassword']);
+      expect(UserFormPage.resetPasswordLink.text).to.equal(translations['extended.sendResetPassword']);
     });
 
     describe('validating user barcode', () => {
