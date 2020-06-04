@@ -1,6 +1,7 @@
 # Change history for ui-users
 
-## 3.0.5 (IN PROGRESS)
+## [3.0.5](https://github.com/folio-org/ui-users/tree/v3.0.5) (2020-06-04)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v3.0.4...v3.0.5)
 
 * Fee/Fine Details is not refreshing, which may result in user entering duplicate actions. Fixes UIU-1644.
 
