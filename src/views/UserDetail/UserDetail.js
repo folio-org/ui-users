@@ -372,8 +372,8 @@ class UserDetail extends React.Component {
     const hasManualPatronBlocks = (get(resources, ['hasManualPatronBlocks', 'isPending'], true)) ? -1 : 1;
     const hasAutomatedPatronBlocks = (get(resources, ['hasAutomatedPatronBlocks', 'isPending'], true)) ? -1 : 1;
     const totalManualPatronBlocks = get(resources, ['hasManualPatronBlocks', 'other', 'totalRecords'], 0);
-    const totalAutomatedPatronBlocks = get(resources, ['hasAutomatedPatronBlocks', 'other', 'totalRecords'], 0);
-    const totalPatronBlocks = totalManualPatronBlocks + totalAutomatedPatronBlocks;
+    const totalAutomatedPatronBlocks = get(resources, ['hasAutomatedPatronBlocks', 'records'], []);
+    const totalPatronBlocks = totalManualPatronBlocks + totalAutomatedPatronBlocks.length;
     const manualPatronBlocks = get(resources, ['hasManualPatronBlocks', 'records'], []);
     const automatedPatronBlocks = get(resources, ['hasAutomatedPatronBlocks', 'records'], []);
     const patronBlocks = concat(automatedPatronBlocks, manualPatronBlocks);
@@ -456,7 +456,7 @@ class UserDetail extends React.Component {
                 <PatronBlock
                   accordionId="patronBlocksSection"
                   user={user}
-                  hasPatronBlocks={hasPatronBlocks && totalPatronBlocks > 0}
+                  hasPatronBlocks={hasPatronBlocks}
                   patronBlocks={patronBlocks}
                   automatedPatronBlocks={automatedPatronBlocks}
                   expanded={sections.patronBlocksSection}

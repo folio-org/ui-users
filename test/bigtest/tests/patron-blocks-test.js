@@ -27,7 +27,7 @@ describe('Test Patron Blocks section', () => {
       });
 
       it('displays Patron Blocks label section', () => {
-        expect(PatronBlocksInteractor.label).to.equal('Patron Blocks');
+        expect(PatronBlocksInteractor.label).to.equal(translations['blocks.label']);
       });
 
       it('renders proper amount of rows', () => {
@@ -151,7 +151,7 @@ describe('Test Patron Blocks section', () => {
     });
   });
 
-  describe.only('Automated blocks', () => {
+  describe('Automated blocks', () => {
     setupApplication({
       scenarios: ['automated-blocks'],
       permissions: {
@@ -167,29 +167,29 @@ describe('Test Patron Blocks section', () => {
       });
 
       it('displays Patron Blocks label section', () => {
-        expect(PatronBlocksInteractor.label).to.equal('Patron Blocks');
+        expect(PatronBlocksInteractor.label).to.equal(translations['blocks.label']);
+      });
+
+      it('displays Patron Blocks banner', () => {
+        expect(PatronBlocksInteractor.patronBlockMessage.isPresent).to.be.true;
       });
 
       it('renders proper amount of rows', () => {
-        expect(PatronBlocksInteractor.mclPatronBlock.rowCount).to.equal(3);
+        expect(PatronBlocksInteractor.mclPatronBlock.rowCount).to.equal(1);
       }).timeout(4000);
 
-      describe('expand patron block', () => {
-        beforeEach(async () => {
-          await PatronBlocksInteractor.collapsePatronBlocks(); // remove
-        });
-
-        it('displays patron block type', () => {
+      describe('patron block information', () => {
+        it('displays type', () => {
           expect(PatronBlocksInteractor.mclPatronBlock.rows(0).cells(0).content).to.equal(translations['blocks.columns.automated.type']);
         });
 
-        it('displays patron block description', () => {
+        it('displays description', () => {
           const description = 'Patron has reached maximum allowed number of items charged out';
 
           expect(PatronBlocksInteractor.mclPatronBlock.rows(0).cells(1).content).to.equal(description);
         });
 
-        it('displays patron block blocked actions', () => {
+        it('displays blocked actions', () => {
           const blockedActions = 'Borrowing';
 
           expect(PatronBlocksInteractor.mclPatronBlock.rows(0).cells(2).content).to.equal(blockedActions);

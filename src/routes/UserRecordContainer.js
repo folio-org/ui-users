@@ -32,7 +32,8 @@ class UserRecordContainer extends React.Component {
     hasAutomatedPatronBlocks: {
       type: 'okapi',
       records: 'automatedPatronBlocks',
-      path: 'automated-patron-blocks?query=(patronId=:{id})&limit=100',
+      path: 'automated-patron-blocks/:{id}',
+      params: { limit: '100' },
       permissionsRequired: 'automated-patron-blocks.collection.get',
     },
     loansHistory: {

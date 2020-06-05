@@ -3,6 +3,7 @@ import {
   clickable,
   text,
   isPresent,
+  scoped,
 } from '@bigtest/interactor';
 
 import TestAreaInteractor from '@folio/stripes-components/lib/TextArea/tests/interactor'; // eslint-disable-line
@@ -30,7 +31,7 @@ import TextFieldInteractor from '@folio/stripes-components/lib/TextField/tests/i
     return this.when(() => this.formIsVisible);
   }
 
-  label = text('#accordion-toggle-button-patronBlocksSection > span > div > div > div:nth-child(1) > h3');
+  label = text('#accordion-toggle-button-patronBlocksSection [data-test-headline]');
 
   clickOnPatronBlockSection = clickable('#accordion-toggle-button-patronBlocksSection');
 
@@ -71,7 +72,7 @@ import TextFieldInteractor from '@folio/stripes-components/lib/TextField/tests/i
   title = text('#paneHeadertitle-patron-block-pane-title > h2 > span');
 
   // view
-  PatronBlockMessage = new TextFieldInteractor('#patron-block-place');
+  patronBlockMessage = scoped('#patron-block-place', TextFieldInteractor);
 }
 
 export default new PatronBlocksSection(5000);
