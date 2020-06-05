@@ -23,6 +23,14 @@ export default function config() {
       name: 'users',
       provides: []
     },
+    {
+      id: 'mod-feesfines-15.8.0-SNAPSHOT.73',
+      name: 'feesfines',
+      provides: [{
+        id: 'feesfines',
+        version: '15.2',
+      }]
+    }
   ]);
 
   this.get('/saml/check', {

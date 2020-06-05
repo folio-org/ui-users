@@ -444,19 +444,21 @@ class UserDetail extends React.Component {
                 expanded={sections.userInformationSection}
                 onToggle={this.handleSectionToggle}
               />
-              <IfPermission perm="manualblocks.collection.get">
-                <PatronBlock
-                  accordionId="patronBlocksSection"
-                  user={user}
-                  hasPatronBlocks={(hasPatronBlocks === 1 && totalPatronBlocks > 0)}
-                  patronBlocks={patronBlocks}
-                  expanded={sections.patronBlocksSection}
-                  onToggle={this.handleSectionToggle}
-                  onClickViewPatronBlock={this.onClickViewPatronBlock}
-                  addRecord={this.state.addRecord}
-                  {...this.props}
-                />
-              </IfPermission>
+              <IfInterface name="feesfines">
+                <IfPermission perm="manualblocks.collection.get">
+                  <PatronBlock
+                    accordionId="patronBlocksSection"
+                    user={user}
+                    hasPatronBlocks={(hasPatronBlocks === 1 && totalPatronBlocks > 0)}
+                    patronBlocks={patronBlocks}
+                    expanded={sections.patronBlocksSection}
+                    onToggle={this.handleSectionToggle}
+                    onClickViewPatronBlock={this.onClickViewPatronBlock}
+                    addRecord={this.state.addRecord}
+                    {...this.props}
+                  />
+                </IfPermission>
+              </IfInterface>
               <ExtendedInfo
                 accordionId="extendedInfoSection"
                 user={user}
@@ -494,16 +496,18 @@ class UserDetail extends React.Component {
                   {...this.props}
                 />
               </IfPermission>
-              <IfPermission perm="ui-users.feesfines.actions.all">
-                <UserAccounts
-                  expanded={sections.accountsSection}
-                  onToggle={this.handleSectionToggle}
-                  accordionId="accountsSection"
-                  addRecord={addRecord}
-                  location={location}
-                  match={match}
-                />
-              </IfPermission>
+              <IfInterface name="feesfines">
+                <IfPermission perm="ui-users.feesfines.actions.all">
+                  <UserAccounts
+                    expanded={sections.accountsSection}
+                    onToggle={this.handleSectionToggle}
+                    accordionId="accountsSection"
+                    addRecord={addRecord}
+                    location={location}
+                    match={match}
+                  />
+                </IfPermission>
+              </IfInterface>
 
               <IfPermission perm="ui-users.loans.view">
                 <IfInterface name="loan-policy-storage">
@@ -526,13 +530,15 @@ class UserDetail extends React.Component {
 
               <IfPermission perm="ui-users.requests.all">
                 <IfInterface name="request-storage" version="2.5 3.0">
-                  <UserRequests
-                    expanded={sections.requestsSection}
-                    onToggle={this.handleSectionToggle}
-                    accordionId="requestsSection"
-                    user={user}
-                    {...this.props}
-                  />
+                  <IfInterface name="circulation">
+                    <UserRequests
+                      expanded={sections.requestsSection}
+                      onToggle={this.handleSectionToggle}
+                      accordionId="requestsSection"
+                      user={user}
+                      {...this.props}
+                    />
+                  </IfInterface>
                 </IfInterface>
               </IfPermission>
 
@@ -560,20 +566,22 @@ class UserDetail extends React.Component {
                   />
                 </IfInterface>
               </IfPermission>
-              <IfPermission perm="ui-notes.item.view">
-                <NotesSmartAccordion
-                  domainName="users"
-                  entityId={match.params.id}
-                  entityName={getFullName(user)}
-                  open={this.state.sections.notesAccordion}
-                  onToggle={this.handleSectionToggle}
-                  id="notesAccordion"
-                  entityType="user"
-                  pathToNoteCreate="/users/notes/new"
-                  pathToNoteDetails="/users/notes"
-                  hideAssignButton
-                />
-              </IfPermission>
+              <IfInterface name="notes">
+                <IfPermission perm="ui-notes.item.view">
+                  <NotesSmartAccordion
+                    domainName="users"
+                    entityId={match.params.id}
+                    entityName={getFullName(user)}
+                    open={this.state.sections.notesAccordion}
+                    onToggle={this.handleSectionToggle}
+                    id="notesAccordion"
+                    entityType="user"
+                    pathToNoteCreate="/users/notes/new"
+                    pathToNoteDetails="/users/notes"
+                    hideAssignButton
+                  />
+                </IfPermission>
+              </IfInterface>
             </AccordionSet>
           </Pane>
           { helperApp && <HelperApp appName={helperApp} onClose={this.closeHelperApp} /> }
