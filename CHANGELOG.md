@@ -52,6 +52,7 @@
 * Protect loan action history page from CQL null query errors. Fixes UIU-1652.
 * Fix the arrangement of elements inside the `SafeHTMLMessage` component. Fixes UIU-1660.
 * Fix Patron Group, Status, and Preferred contact fields, are not read a required by screen reader. Refs UIU-1642.
+* Check for an empty loan to protect from generating incorrect CQL. Fixes UIU-1653.
 * Add checks for multiple okapi interfaces on user's details screen. Fixes UIU-1600.
 * On user-edit screen, show "send reset password link" whenever username is present. Refs UIU-1672.
 
