@@ -125,18 +125,14 @@ class ModalContent extends React.Component {
 
     return (
       <div>
-        <Layout className="flex">
-          <Layout className="flex">
-            <SafeHTMLMessage
-              id={`ui-users.loans.${loanAction}DialogBody`}
-              values={{
-                title: loan?.item?.title,
-                materialType: loan?.item?.materialType?.name,
-                barcode: loan?.item?.barcode,
-              }}
-            />
-          </Layout>
-        </Layout>
+        <SafeHTMLMessage
+          id={`ui-users.loans.${loanAction}DialogBody`}
+          values={{
+            title: loan?.item?.title,
+            materialType: loan?.item?.materialType?.name,
+            barcode: loan?.item?.barcode,
+          }}
+        />
         <Row>
           <Col sm={12} className={css.additionalInformation}>
             <TextArea

@@ -250,7 +250,10 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
     const step = 50;
     for (let i = 0; i < loans.length; i += step) {
       const loansSlice = loans.slice(i, i + step);
-      const q = loansSlice.map(loan => loan.itemId).join(' or ');
+      const q = loansSlice
+        .filter(loan => loan.itemId)
+        .map(loan => loan.itemId)
+        .join(' or ');
       const query = `(itemId==(${q})) and status==("Open - Awaiting pickup" or "Open - Not yet filled") sortby requestDate desc`;
       reset();
       GET({ params: { query } })
@@ -279,7 +282,11 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
   fetchLoanPolicyNames = () => {
     // get a list of unique policy IDs to retrieve. multiple loans may share
     // the same policy; we only need to retrieve that policy once.
-    const query = `id==(${[...new Set(this.state.loans.map(loan => loan.loanPolicyId))].join(' or ')})`;
+    const ids = [...new Set(this.state.loans
+      .filter(loan => loan.loanPolicyId)
+      .map(loan => loan.loanPolicyId))]
+      .join(' or ');
+    const query = `id==(${ids})`;
     const {
       mutator: {
         loanPolicies: {
