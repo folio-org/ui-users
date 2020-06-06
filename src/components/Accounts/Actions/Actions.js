@@ -313,7 +313,7 @@ class Actions extends React.Component {
       type.status.name = 'Closed';
     }
     const balance = type.remaining - parseFloat(amount);
-    const createdAt = (owners.find(o => o.id === values.ownerId) || {}).owner;
+    const createdAt = this.props.okapi.currentUser.curServicePoint.id;
     return this.editAccount(type, paymentStatus, type.status.name, balance)
       .then(() => this.newAction({ paymentMethod: values.method }, type.id, paymentStatus, amount, this.assembleTagInfo(values), balance, values.transaction, createdAt || type.feeFineOwner));
   }
