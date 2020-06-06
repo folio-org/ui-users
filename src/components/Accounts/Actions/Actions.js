@@ -234,9 +234,10 @@ class Actions extends React.Component {
     const { intl: { formatMessage } } = this.props;
     const canceled = formatMessage({ id: 'ui-users.accounts.cancelError' });
     const type = this.props.accounts[0] || {};
+    const createdAt = this.props.okapi.currentUser.curServicePoint.id;
     delete type.rowIndex;
     this.props.mutator.activeRecord.update({ id: type.id });
-    this.newAction({}, type.id, canceled, type.amount, this.assembleTagInfo(values), 0, 0, type.feeFineOwner, values);
+    this.newAction({}, type.id, canceled, type.amount, this.assembleTagInfo(values), 0, 0, createdAt || type.feeFineOwner, values);
     this.editAccount(type, canceled, 'Closed', 0.00)
       .then(() => this.props.handleEdit(1))
       .then(() => this.showCalloutMessage(type))
