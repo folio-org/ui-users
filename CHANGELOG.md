@@ -48,6 +48,13 @@
 * Permissions -> Users: Create/reset password send. Refs UIU-1337.
 * Prevent change due date for claimed returned items. Refs UIU-1260.
 * Bring back `Declare lost` button. Fixes UIU-1662.
+* Use the app logo as a profile placeholder. Yep, it's kinda hacky. Refs UIU-496.
+* Fee/Fine Details is not refreshing, which may result in user entering duplicate actions. Fixes UIU-1644.
+* Protect loan action history page from CQL null query errors. Fixes UIU-1652.
+* Fix the arrangement of elements inside the `SafeHTMLMessage` component. Fixes UIU-1660.
+* Fix Patron Group, Status, and Preferred contact fields, are not read a required by screen reader. Refs UIU-1642.
+* Check for an empty loan to protect from generating incorrect CQL. Fixes UIU-1653.
+* Add checks for multiple okapi interfaces on user's details screen. Fixes UIU-1600.
 
 ## [3.0.0](https://github.com/folio-org/ui-users/tree/v3.0.0) (2020-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.26.0...v3.0.0)
