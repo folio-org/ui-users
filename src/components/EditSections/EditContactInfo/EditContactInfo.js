@@ -88,6 +88,7 @@ const EditContactInfo = ({
             id="adduser_preferredcontact"
             component={Select}
             fullWidth
+            aria-required="true"
             required
           >
             <FormattedMessage id="ui-users.contact.selectContactType">
