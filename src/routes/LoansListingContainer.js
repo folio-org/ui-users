@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import _get from 'lodash/get';
+import {
+  get,
+  concat,
+} from 'lodash';
 
 import { stripesConnect } from '@folio/stripes/core';
 import { LoadingView } from '@folio/stripes/components';
@@ -45,11 +48,17 @@ class LoansListingContainer extends React.Component {
       accumulate: 'true',
       fetch: false,
     },
-    hasPatronBlocks: {
+    hasManualPatronBlocks: {
       type: 'okapi',
       records: 'manualblocks',
       path: 'manualblocks?query=(userId=:{id})&limit=100',
       permissionsRequired: 'manualblocks.collection.get',
+    },
+    hasAutomatedPatronBlocks: {
+      type: 'okapi',
+      records: 'automatedPatronBlocks',
+      path: 'automated-patron-blocks?query=(patronId=:{id})&limit=100',
+      permissionsRequired: 'automated-patron-blocks.collection.get',
     },
     requests: {
       type: 'okapi',
@@ -121,8 +130,10 @@ class LoansListingContainer extends React.Component {
     const { resources } = this.props;
     const user = this.getUser();
     const patronGroup = this.getPatronGroup();
-    const loansHistory = _get(resources, ['loansHistory', 'records'], []);
-    const patronBlocks = _get(resources, ['hasPatronBlocks', 'records'], []);
+    const loansHistory = get(resources, ['loansHistory', 'records'], []);
+    const manualPatronBlocks = get(resources, ['hasManualPatronBlocks', 'records'], []);
+    const automatedPatronBlocks = get(resources, ['hasAutomatedPatronBlocks', 'records'], []);
+    const patronBlocks = concat(automatedPatronBlocks, manualPatronBlocks);
 
     if (!user) return (<LoadingView defaultWidth="100%" paneTitle="Loading loans" />);
     return (
