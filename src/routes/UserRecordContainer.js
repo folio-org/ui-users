@@ -23,11 +23,18 @@ class UserRecordContainer extends React.Component {
         return refresh || (path && path.match(/link/));
       },
     },
-    hasPatronBlocks: {
+    hasManualPatronBlocks: {
       type: 'okapi',
       records: 'manualblocks',
       path: 'manualblocks?query=(userId=:{id})&limit=100',
       permissionsRequired: 'manualblocks.collection.get',
+    },
+    hasAutomatedPatronBlocks: {
+      type: 'okapi',
+      records: 'automatedPatronBlocks',
+      path: 'automated-patron-blocks/:{id}',
+      params: { limit: '100' },
+      permissionsRequired: 'automated-patron-blocks.collection.get',
     },
     loansHistory: {
       type: 'okapi',

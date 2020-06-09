@@ -1,3 +1,4 @@
+import isEmpty from 'lodash/isEmpty';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
@@ -189,7 +190,7 @@ class LoanDetailContainer extends React.Component {
 
     return (
       <LoanDetails
-        loans={loan ? [loan] : []}
+        loans={isEmpty(loan) ? [] : [loan]}
         loanActionsWithUser={loanActionsWithUser}
         loan={loan}
         user={this.getUser()}
