@@ -17,7 +17,7 @@ const PatronBlockModal = ({ open, onClose, patronBlocks, viewUserPath }) => {
     return (
       <Row>
         <Col xs>
-          <b>{block.desc || block.message || ''}</b>
+          <b data-test-patron-block-reason>{block.desc || block.message || ''}</b>
         </Col>
       </Row>
     );

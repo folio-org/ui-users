@@ -12,184 +12,143 @@ import UsersInteractor from '../interactors/users';
 import LoansListingPane from '../interactors/loans-listing-pane';
 
 describe('Open Loans', () => {
-  describe('', () => {
-    const requestsPath = '/requests';
-    const requestsAmount = 2;
+  const requestsPath = '/requests';
+  const requestsAmount = 2;
 
-    setupApplication({
-      permissions: {
-        'manualblocks.collection.get': true,
-        'circulation.loans.collection.get': true,
-      },
-      modules: [{
-        type: 'app',
-        name: '@folio/ui-requests',
-        displayName: 'requests',
-        route: requestsPath,
-        module: DummyComponent,
-      }],
-      translations: {
-        'requests': 'requests'
-      },
+  setupApplication({
+    permissions: {
+      'manualblocks.collection.get': true,
+      'circulation.loans.collection.get': true,
+    },
+    modules: [{
+      type: 'app',
+      name: '@folio/ui-requests',
+      displayName: 'requests',
+      route: requestsPath,
+      module: DummyComponent,
+    }],
+    translations: {
+      'requests': 'requests'
+    },
+  });
+
+  let userId = '';
+
+  describe('visit open loans', () => {
+    beforeEach(async function () {
+      const loan = this.server.create('loan', {
+        status: { name: 'Open' },
+        item: {
+          callNumberComponents: {
+            prefix: 'prefix',
+            callNumber: 'callNumber',
+            suffix: 'suffix',
+          },
+          enumeration: 'enumeration',
+          chronology: 'chronology',
+          volume: 'volume',
+        },
+      });
+      userId = loan.userId;
+
+      this.server.createList('request', requestsAmount, { itemId: loan.itemId });
+      this.visit(`/users/${userId}/loans/open?query=%20&sort=requests`);
     });
 
-    let userId = '';
+    it('should be presented', () => {
+      expect(OpenLoansInteractor.isPresent).to.be.true;
+    }).timeout(4000);
 
-    describe('visit open loans', () => {
-      beforeEach(async function () {
-        const loan = this.server.create('loan', {
-          status: { name: 'Open' },
-          item: {
-            callNumberComponents: {
-              prefix: 'prefix',
-              callNumber: 'callNumber',
-              suffix: 'suffix',
-            },
-            enumeration: 'enumeration',
-            chronology: 'chronology',
-            volume: 'volume',
-          },
-        });
-        userId = loan.userId;
+    it('should display the close button', () => {
+      expect(LoansListingPane.closeButton.isPresent).to.be.true;
+    });
 
-        this.server.createList('request', requestsAmount, { itemId: loan.itemId });
-        this.visit(`/users/${userId}/loans/open?query=%20&sort=requests`);
-      });
-
+    describe('loan list', () => {
       it('should be presented', () => {
-        expect(OpenLoansInteractor.isPresent).to.be.true;
-      }).timeout(4000);
-
-      it('should display the close button', () => {
-        expect(LoansListingPane.closeButton.isPresent).to.be.true;
+        expect(OpenLoansInteractor.list.isPresent).to.be.true;
       });
 
-      describe('loan list', () => {
-        it('should be presented', () => {
-          expect(OpenLoansInteractor.list.isPresent).to.be.true;
-        });
-
-        describe('loan item', () => {
-          describe('requests', () => {
-            it('loan should have requests', () => {
-              expect(OpenLoansInteractor.requests(0).text).to.equal(requestsAmount.toString());
-            });
-          });
-
-          describe('Call number', () => {
-            it('loan should have effective call number', () => {
-              const callNumber = 'prefix callNumber suffix volume enumeration chronology';
-
-              expect(OpenLoansInteractor.callNumbers(0).text).to.equal(callNumber);
-            });
+      describe('loan item', () => {
+        describe('requests', () => {
+          it('loan should have requests', () => {
+            expect(OpenLoansInteractor.requests(0).text).to.equal(requestsAmount.toString());
           });
         });
 
-        describe('single loan renew', () => {
-          describe('action dropdown', () => {
-            it('icon button should be presented', () => {
-              expect(OpenLoansInteractor.actionDropdowns(0).isPresent).to.be.true;
-            });
+        describe('Call number', () => {
+          it('loan should have effective call number', () => {
+            const callNumber = 'prefix callNumber suffix volume enumeration chronology';
 
-            describe('action dropdown click', () => {
-              beforeEach(async () => {
-                await OpenLoansInteractor.actionDropdowns(0).click('button');
-              });
-
-              it('override button should be presented', () => {
-                expect(OpenLoansInteractor.actionDropdownRenewButton.isPresent).to.be.true;
-              });
-
-              describe('click override button', () => {
-                beforeEach(async () => {
-                  await OpenLoansInteractor.actionDropdownRenewButton.click();
-                });
-
-                it('success callout should be presented', () => {
-                  expect(OpenLoansInteractor.callout.successCalloutIsPresent).to.be.true;
-                });
-              });
-            });
+            expect(OpenLoansInteractor.callNumbers(0).text).to.equal(callNumber);
           });
         });
+      });
 
+      describe('single loan renew', () => {
         describe('action dropdown', () => {
           it('icon button should be presented', () => {
             expect(OpenLoansInteractor.actionDropdowns(0).isPresent).to.be.true;
           });
 
-          describe('click', () => {
+          describe('action dropdown click', () => {
             beforeEach(async () => {
               await OpenLoansInteractor.actionDropdowns(0).click('button');
             });
 
-            it('icon button should be presented', () => {
-              expect(OpenLoansInteractor.actionDropdownRequestQueue.isPresent).to.be.true;
+            it('override button should be presented', () => {
+              expect(OpenLoansInteractor.actionDropdownRenewButton.isPresent).to.be.true;
             });
 
-            describe('clicking on request queue dropdown item', () => {
+            describe('click override button', () => {
               beforeEach(async () => {
-                await OpenLoansInteractor.actionDropdownRequestQueue.click();
+                await OpenLoansInteractor.actionDropdownRenewButton.click();
               });
 
-              it('should redirect to "requests"', function () {
-                expect(this.location.pathname).to.to.equal(requestsPath);
+              it('success callout should be presented', () => {
+                expect(OpenLoansInteractor.callout.successCalloutIsPresent).to.be.true;
               });
             });
           });
         });
+      });
 
-        describe('clicking the close button', () => {
-          const users = new UsersInteractor();
+      describe('action dropdown', () => {
+        it('icon button should be presented', () => {
+          expect(OpenLoansInteractor.actionDropdowns(0).isPresent).to.be.true;
+        });
 
+        describe('click', () => {
           beforeEach(async () => {
-            await LoansListingPane.closeButton.click();
+            await OpenLoansInteractor.actionDropdowns(0).click('button');
           });
 
-          it('should navigate to the user preview form', function () {
-            expect(users.isPresent).to.be.true;
-            expect(users.instance.isPresent).to.be.true;
-            expect(this.location.pathname.endsWith(`users/preview/${userId}`)).to.be.true;
+          it('icon button should be presented', () => {
+            expect(OpenLoansInteractor.actionDropdownRequestQueue.isPresent).to.be.true;
+          });
+
+          describe('clicking on request queue dropdown item', () => {
+            beforeEach(async () => {
+              await OpenLoansInteractor.actionDropdownRequestQueue.click();
+            });
+
+            it('should redirect to "requests"', function () {
+              expect(this.location.pathname).to.to.equal(requestsPath);
+            });
           });
         });
       });
-    });
-  });
 
-  describe.only('Patron has an automated patron block on renewing', () => {
-    setupApplication({
-      scenarios: ['automated-blocks'],
-      permissions: {
-        'automated-patron-blocks.collection.get': true
-      }
-    });
+      describe('clicking the close button', () => {
+        const users = new UsersInteractor();
 
-    let userId = '';
-
-    describe('visit open loans', () => {
-      beforeEach(async function () {
-        const loan = this.server.create('loan', {
-          status: { name: 'Open' },
-        });
-
-        userId = loan.userId;
-
-        this.server.createList('request', requestsAmount, { itemId: loan.itemId });
-        this.visit(`/users/${userId}/loans/open?query=%20&sort=requests`);
-      });
-
-      describe('action dropdown click', () => {
         beforeEach(async () => {
-          await OpenLoansInteractor.actionDropdowns(0).click('button');
-          await OpenLoansInteractor.actionDropdownRenewButton.click();
+          await LoansListingPane.closeButton.click();
         });
 
-        it('patron block modal should be present', () => {
-          expect(OpenLoansInteractor.patronBlockModal.isPresent).to.be.true;
-        });
-
-        it('patron block modal content should have the reason', () => {
-          expect(OpenLoansInteractor.patronBlockModal.modalContent(1).text).to.be.equal('');
+        it('should navigate to the user preview form', function () {
+          expect(users.isPresent).to.be.true;
+          expect(users.instance.isPresent).to.be.true;
+          expect(this.location.pathname.endsWith(`users/preview/${userId}`)).to.be.true;
         });
       });
     });

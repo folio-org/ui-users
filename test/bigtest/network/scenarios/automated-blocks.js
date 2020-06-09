@@ -6,7 +6,7 @@ export default (server) => {
     automatedPatronBlocks: {
       patronBlockConditionId: '1',
       blockBorrowing: true,
-      blockRenewals: true,
+      blockRenewals: false,
       blockRequests: false,
       message: 'Patron has reached maximum allowed number of items charged out'
     },

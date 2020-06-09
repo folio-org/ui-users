@@ -15,6 +15,7 @@ import ButtonInteractor from '@folio/stripes-components/lib/Button/tests/interac
 import CalloutInteractor from '@folio/stripes-components/lib/Callout/tests/interactor'; // eslint-disable-line
 import CheckboxInteractor from '@folio/stripes-components/lib/Checkbox/tests/interactor';
 
+import PatronBlockModal from './parton-blocks/modal';
 import DialogInteractor from './dialog';
 
 @interactor class BulkOverrideModal {
@@ -49,12 +50,6 @@ import DialogInteractor from './dialog';
 
   cancelButton = clickable('[data-test-bulk-cr-cancel-button]');
   confirmButton = clickable('[data-test-bulk-cr-continue-button]');
-}
-
-@interactor class PatronBlockModal {
-  static defaultScope = '[data-test-patron-block-modal]';
-
-  modalContent = collection('.modalContent b');
 }
 
 @interactor class OpenLoans {
