@@ -51,6 +51,12 @@ import DialogInteractor from './dialog';
   confirmButton = clickable('[data-test-bulk-cr-continue-button]');
 }
 
+@interactor class PatronBlockModal {
+  static defaultScope = '[data-test-patron-block-modal]';
+
+  modalContent = collection('.modalContent b');
+}
+
 @interactor class OpenLoans {
   static defaultScope = '[data-test-open-loans]';
 
@@ -69,6 +75,7 @@ import DialogInteractor from './dialog';
   requestsCount = count('[data-test-list-requests]');
   bulkRenewalModal = new BulkRenewalModal();
   bulkOverrideModal = new BulkOverrideModal();
+  patronBlockModal = new PatronBlockModal();
   changeDueDateOverlay = new ChangeDueDateOverlay();
   bulkClaimReturnedModal = new BulkClaimReturnedModal();
   declareLostDialog = new DialogInteractor('#declareLost-modal');

@@ -145,7 +145,7 @@ class LoanDetails extends React.Component {
       renew,
       mutator: { renewals },
     } = this.props;
-    const countRenew = patronBlocks.filter(p => p.renewals);
+    const countRenew = patronBlocks.filter(p => p.renewals || p.blockRenewals);
 
     if (!isEmpty(countRenew)) return this.setState({ patronBlockedModal: true });
 

@@ -17,7 +17,7 @@ const PatronBlockModal = ({ open, onClose, patronBlocks, viewUserPath }) => {
     return (
       <Row>
         <Col xs>
-          <b>{block.desc || ''}</b>
+          <b>{block.desc || block.message || ''}</b>
         </Col>
       </Row>
     );
@@ -25,6 +25,7 @@ const PatronBlockModal = ({ open, onClose, patronBlocks, viewUserPath }) => {
 
   return (
     <Modal
+      data-test-patron-block-modal
       open={open}
       onClose={onClose}
       label={
