@@ -698,5 +698,6 @@
     "bulkClaimReturned.items.ok": "{numItems} item(s) <strong>successfully</strong> claimed returned.",
     "bulkClaimReturned.items.notOk": "{numItems} item(s) <strong>not</strong> claimed returned.",
     "bulkClaimReturned.moreInfoPlaceholder": "Enter more information about the claim (required)",
-    "loans.resolveClaim": "Resolve claim"
+    "loans.resolveClaim": "Resolve claim",
+    "blocks.columns.automated.type": "Automated (cannot be edited)"
 }
