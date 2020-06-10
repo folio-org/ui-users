@@ -132,6 +132,7 @@ class EditUserInfo extends React.Component {
               fullWidth
               dataOptions={patronGroupOptions}
               defaultValue={initialValues.patronGroup}
+              aria-required="true"
               required
             />
           </Col>
@@ -145,6 +146,7 @@ class EditUserInfo extends React.Component {
               disabled={isStatusFieldDisabled()}
               dataOptions={statusOptions}
               defaultValue={initialValues.active}
+              aria-required="true"
               required
             />
             {isUserExpired() && (
