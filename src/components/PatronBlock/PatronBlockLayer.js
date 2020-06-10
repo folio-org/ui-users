@@ -11,7 +11,7 @@ import PatronBlockForm from './PatronBlockForm';
 class PatronBlockLayer extends React.Component {
   static propTypes = {
     mutator: PropTypes.shape({
-      patronBlocks: PropTypes.shape({
+      manualPatronBlocks: PropTypes.shape({
         POST: PropTypes.func.isRequired,
         PUT: PropTypes.func.isRequired,
         DELETE: PropTypes.func.isRequired
@@ -19,7 +19,7 @@ class PatronBlockLayer extends React.Component {
       activeRecord: PropTypes.object,
     }).isRequired,
     resources: PropTypes.shape({
-      patronBlocks: PropTypes.object,
+      manualPatronBlocks: PropTypes.object,
     }),
     user: PropTypes.object,
     selectedPatronBlock: PropTypes.object,
@@ -58,7 +58,7 @@ class PatronBlockLayer extends React.Component {
     if (item.expirationDate) {
       item.expirationDate = moment(item.expirationDate).format();
     }
-    return this.props.mutator.patronBlocks.POST(item).then(() => {
+    return this.props.mutator.manualPatronBlocks.POST(item).then(() => {
       this.props.mutator.activeRecord.update({ blockid: item.userId });
     }).then(() => { this.onCancel(); });
   }
@@ -66,11 +66,11 @@ class PatronBlockLayer extends React.Component {
   onDeleteItem = () => {
     const { match: { params } } = this.props;
     const selectedItem = (params.patronblockid) ?
-      _get(this.props.resources, ['patronBlocks', 'records', 0], {})
+      _get(this.props.resources, ['manualPatronBlocks', 'records', 0], {})
       : this.props.selectedPatronBlock;
 
     this.props.mutator.activeRecord.update({ blockid: selectedItem.id });
-    return this.props.mutator.patronBlocks.DELETE({ id: selectedItem.id })
+    return this.props.mutator.manualPatronBlocks.DELETE({ id: selectedItem.id })
       .then(() => { this.deleteItemResolve(); })
       .catch(() => { this.deleteItemReject(); })
       .finally(() => {
@@ -85,7 +85,7 @@ class PatronBlockLayer extends React.Component {
     }
     delete item.metadata;
     this.props.mutator.activeRecord.update({ blockid: item.id });
-    return this.props.mutator.patronBlocks.PUT(item).then(() => {
+    return this.props.mutator.manualPatronBlocks.PUT(item).then(() => {
       this.onCancel();
     });
   }
@@ -132,9 +132,9 @@ class PatronBlockLayer extends React.Component {
       match: { params },
     } = this.props;
 
-    const patronBlocks = _get(resources, 'patronBlocks.records', []);
+    const manualPatronBlocks = _get(resources, 'manualPatronBlocks.records', []);
     const selectedItem = params.patronblockid
-      ? patronBlocks.find(pb => pb.id === params.patronblockid)
+      ? manualPatronBlocks.find(pb => pb.id === params.patronblockid)
       : selectedPatronBlock;
 
     const initialValues = _get(selectedItem, 'id') ? selectedItem : {

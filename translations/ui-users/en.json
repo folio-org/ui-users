@@ -580,6 +580,7 @@
   "cddd.timeRequired": "Time*",
 
   "blocks.columns.type": "Type",
+  "blocks.columns.automated.type": "Automated (cannot be edited)",
   "blocks.columns.desc": "Display description",
   "blocks.columns.blocked": "Blocked actions",
   "blocks.columns.borrowing": "Borrowing",
