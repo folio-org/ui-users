@@ -2,6 +2,7 @@ import isEmpty from 'lodash/isEmpty';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
+import { concat } from 'lodash';
 import { stripesConnect, withStripes } from '@folio/stripes/core';
 import { LoanDetails } from '../views';
 
@@ -80,11 +81,17 @@ class LoanDetailContainer extends React.Component {
       accumulate: 'true',
       fetch: false,
     },
-    hasPatronBlocks: {
+    hasManualPatronBlocks: {
       type: 'okapi',
       records: 'manualblocks',
       path: 'manualblocks?query=(userId=:{id})&limit=100',
       permissionsRequired: 'manualblocks.collection.get',
+    },
+    hasAutomatedPatronBlocks: {
+      type: 'okapi',
+      records: 'automatedPatronBlocks',
+      path: 'automated-patron-blocks/:{id}?limit=100',
+      permissionsRequired: 'automated-patron-blocks.collection.get',
     },
     renew: {
       fetch: false,
@@ -102,7 +109,10 @@ class LoanDetailContainer extends React.Component {
       loanHistory: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
-      patronBlocks: PropTypes.shape({
+      hasManualPatronBlocks: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      hasAutomatedPatronBlocks: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
       patronGroups: PropTypes.shape({
@@ -148,6 +158,14 @@ class LoanDetailContainer extends React.Component {
     return groups.filter(g => g.id === user.patronGroup)[0] || {};
   }
 
+  getPatronBlocks = () => {
+    const { resources } = this.props;
+    const automatedPatronBlocks = resources?.hasAutomatedPatronBlocks?.records ?? [];
+    const manualPatronBlocks = resources?.hasManualPatronBlocks?.records ?? [];
+
+    return concat(automatedPatronBlocks, manualPatronBlocks);
+  }
+
   joinLoanActionsWithUpdatingUser = (loanActions, users) => {
     if ((loanActions && loanActions.records.length > 0) &&
     (users && users.records.length > 0)) {
@@ -169,14 +187,10 @@ class LoanDetailContainer extends React.Component {
       resources : {
         loanActions,
         users,
-        patronBlocks: resPatronBlocks
       }
     } = this.props;
 
-    const patronBlocks = (resPatronBlocks || {}).records || [];
     const loan = this.getLoan();
-
-
     const loanActionsWithUser = this.joinLoanActionsWithUpdatingUser(
       loanActions,
       users
@@ -189,7 +203,7 @@ class LoanDetailContainer extends React.Component {
         loan={loan}
         user={this.getUser()}
         patronGroup={this.getPatronGroup()}
-        patronBlocks={patronBlocks}
+        patronBlocks={this.getPatronBlocks()}
         {...this.props}
       />
     );
