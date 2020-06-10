@@ -54,6 +54,7 @@
 * Fix Patron Group, Status, and Preferred contact fields, are not read a required by screen reader. Refs UIU-1642.
 * Check for an empty loan to protect from generating incorrect CQL. Fixes UIU-1653.
 * Add checks for multiple okapi interfaces on user's details screen. Fixes UIU-1600.
+* Display automated patron blocks on User Information page. Refs UIU-1273.
 * On user-edit screen, show "send reset password link" whenever username is present. Refs UIU-1672.
 
 ## [3.0.0](https://github.com/folio-org/ui-users/tree/v3.0.0) (2020-03-17)
