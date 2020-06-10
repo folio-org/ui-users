@@ -698,5 +698,6 @@
     "bulkClaimReturned.items.ok": "{numItems} item ns) alegado como devolvido <strong>com sucesso</strong>.",
     "bulkClaimReturned.items.notOk": "{numItems} item(ns) <strong>não</strong> reivindicados como devolvidos.",
     "bulkClaimReturned.moreInfoPlaceholder": "Digite mais informações sobre a alegação (obrigatório)",
-    "loans.resolveClaim": "Resolver reclamação"
+    "loans.resolveClaim": "Resolver reclamação",
+    "blocks.columns.automated.type": "Automated (cannot be edited)"
 }

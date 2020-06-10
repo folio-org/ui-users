@@ -698,5 +698,6 @@
     "bulkClaimReturned.items.ok": "تم إدعاء إعادة {numItems} مادة <strong>بنجاح</strong>",
     "bulkClaimReturned.items.notOk": "<strong>لم</strong> يتم إدعاء إعادة {numItems} مادة",
     "bulkClaimReturned.moreInfoPlaceholder": "قم بإدخال المزيد من المعلومات حول المطالبة (مطلوب)",
-    "loans.resolveClaim": "حل المطالبة"
+    "loans.resolveClaim": "حل المطالبة",
+    "blocks.columns.automated.type": "Automated (cannot be edited)"
 }

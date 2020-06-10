@@ -698,5 +698,6 @@
     "bulkClaimReturned.items.ok": "{numItems} экземпляр(ов) <strong>успешно</strong> возвращены",
     "bulkClaimReturned.items.notOk": "{numItems} экземпляр(ов) <strong>не</strong> возвращены",
     "bulkClaimReturned.moreInfoPlaceholder": "Введите дополнительную информацию о запросе (обязательно для заполнения)",
-    "loans.resolveClaim": "Разрешить претензию"
+    "loans.resolveClaim": "Разрешить претензию",
+    "blocks.columns.automated.type": "Automated (cannot be edited)"
 }
