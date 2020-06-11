@@ -10,7 +10,6 @@ import {
   omit,
   differenceBy,
   get,
-  has,
 } from 'lodash';
 
 import { LoadingView } from '@folio/stripes/components';
@@ -163,42 +162,23 @@ class UserEdit extends React.Component {
     mutator.requestPreferences.PUT(payload);
   }
 
-  create = ({ requestPreferences, creds, ...userFormData }) => {
+  create = ({ requestPreferences, ...userFormData }) => {
     const { mutator, history, location: { search } } = this.props;
     const userData = cloneDeep(userFormData);
-    const credentialsAreSet = userData.username;
     const user = { ...userData, id: uuid() };
     user.personal.addresses = toUserAddresses(user.personal.addresses);
 
-    if (credentialsAreSet) {
-      const credentials = {
-        password: '',
-        ...creds,
-        username: userData.username,
-      };
-
-      mutator.records.POST(user)
-        .then(() => mutator.creds.POST(Object.assign(credentials, { userId: user.id })))
-        .then(() => {
-          this.createRequestPreferences(requestPreferences, user.id);
-          return mutator.perms.POST({ userId: user.id, permissions: [] });
-        })
-        .then(() => {
-          history.push(`/users/preview/${user.id}${search}`);
-        });
-    } else {
-      mutator.records.POST(user)
-        .then(() => {
-          this.createRequestPreferences(requestPreferences, user.id);
-          return mutator.perms.POST({ userId: user.id, permissions: [] });
-        })
-        .then(() => {
-          history.push(`/users/preview/${user.id}${search}`);
-        });
-    }
+    mutator.records.POST(user)
+      .then(() => {
+        this.createRequestPreferences(requestPreferences, user.id);
+        return mutator.perms.POST({ userId: user.id, permissions: [] });
+      })
+      .then(() => {
+        history.push(`/users/preview/${user.id}${search}`);
+      });
   }
 
-  update({ requestPreferences, creds, ...userFormData }) {
+  update({ requestPreferences, ...userFormData }) {
     const {
       updateProxies,
       updateSponsors,
@@ -251,22 +231,6 @@ class UserEdit extends React.Component {
       data.active = curActive;
     } else {
       data.active = (moment(user.expirationDate).endOf('day').isSameOrAfter(today));
-    }
-
-    const userBeforeUpdate = resources.records.records.find(({ id }) => id === user.id);
-
-    if (user.username && !has(userBeforeUpdate, 'username')) {
-      const credentials = {
-        password: '',
-        ...creds,
-        username: user.username,
-      };
-      const createdCreds = {
-        ...credentials,
-        userId: user.id,
-      };
-
-      mutator.creds.POST(createdCreds);
     }
 
     mutator.selUser.PUT(data).then(() => {
