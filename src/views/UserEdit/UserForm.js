@@ -496,7 +496,7 @@ class UserForm extends React.Component {
                   addressTypes={formData.addressTypes}
                   preferredContactTypeId={initialValues.preferredContactTypeId}
                 />
-                {/* <EditCustomFieldsRecord
+                <EditCustomFieldsRecord
                   formName="userForm"
                   isReduxForm
                   accordionId="customFields"
@@ -505,7 +505,7 @@ class UserForm extends React.Component {
                   backendModuleName="users"
                   entityType="user"
                   fieldComponent={Field}
-                /> */}
+                />
                 {initialValues.id &&
                   <div>
                     <EditProxy
