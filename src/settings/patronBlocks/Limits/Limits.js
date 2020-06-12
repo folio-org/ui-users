@@ -9,6 +9,7 @@ import {
   difference,
   without,
   isEmpty,
+  concat,
 } from 'lodash';
 
 import { stripesConnect } from '@folio/stripes/core';
@@ -138,47 +139,76 @@ class Limits extends Component {
     const promises = [];
     let limitPromise;
 
+    console.log('initialValues--> ', initialValues);
+    console.log('existedLimits--> ', existedLimits);
+    console.log('receivedFromFormLimits--> ', receivedFromFormLimits);
+
     const limitsToRemove = difference(existedLimits, receivedFromFormLimits);
     const limitsToCreate = difference(receivedFromFormLimits, existedLimits);
-    const limitsToUpdate = without(receivedFromFormLimits, ...limitsToRemove, ...limitsToCreate);
+    const notUpdatedLimits = concat(limitsToCreate, limitsToCreate);
+    const limitsToUpdate = without(receivedFromFormLimits, ...notUpdatedLimits);
     console.log('limitsToRemove--> ', limitsToRemove);
     console.log('limitsToCreate--> ', limitsToCreate);
     console.log('limitsToUpdate--> ', limitsToUpdate);
 
     // delete is ready!
-    currentPatronGroupLimits.forEach(({ conditionId, patronGroupId }) => {
-      if (includes(limitsToRemove, conditionId)) {
-        console.log('delete@@@@@@@@@@@');
-        
-        const foundLimit = this.findPatronGroupLimit(conditionId, patronGroupId);
-        console.log('foundLimit deleted', foundLimit);
-        limitPromise = mutator.patronBlockLimits.DELETE({
-          id: foundLimit.id
-        });
+    if (!isEmpty(limitsToRemove)) {
+      currentPatronGroupLimits.forEach(({ conditionId, patronGroupId }) => {
+        if (includes(limitsToRemove, conditionId)) {
+          console.log('delete@@@@@@@@@@@');
 
-        promises.push(limitPromise);
-      }
-    });
+          const foundLimit = this.findPatronGroupLimit(conditionId, patronGroupId);
+          console.log('foundLimit deleted', foundLimit);
+          limitPromise = mutator.patronBlockLimits.DELETE({
+            id: foundLimit.id
+          });
+
+          promises.push(limitPromise);
+        }
+      });
+    }
 
     // post works
     if (!isEmpty(limitsToCreate)) {
       limitsToCreate.forEach((conditionId) => {
+        console.log('create@@@@@@@@@@@');
         const receivedValue = parseFloat(value[conditionId]);
-        console.log('conditionId to POST', conditionId);
-        limitPromise = mutator.patronBlockLimits.POST({
-          patronGroupId: currentPatronGroupId,
-          conditionId,
-          value: this.normializeValue(receivedValue),
-        });
 
-        promises.push(limitPromise);
+        const foundLimit = this.findPatronGroupLimit(conditionId, currentPatronGroupId);
+        console.log('foundLimit created', foundLimit);
+        if (!foundLimit) {
+          limitPromise = mutator.patronBlockLimits.POST({
+            patronGroupId: currentPatronGroupId,
+            conditionId,
+            value: this.normializeValue(receivedValue),
+          });
+
+          promises.push(limitPromise);
+        }
       });
+      // limitsToCreate.forEach((conditionId) => {
+      //   const foundLimit = this.findPatronGroupLimit(conditionId, currentPatronGroupId);
+      //   console.log('foundLimit ++ ', foundLimit);
+      //   if (!foundLimit) {
+      //     const receivedValue = parseFloat(value[conditionId]);
+      //     console.log('conditionId to POST', conditionId);
+      //     limitPromise = mutator.patronBlockLimits.POST({
+      //       patronGroupId: currentPatronGroupId,
+      //       conditionId,
+      //       value: this.normializeValue(receivedValue),
+      //     });
+
+      //     promises.push(limitPromise);
+      //   }
+      // });
     }
 
     if (!isEmpty(limitsToUpdate)) {
       limitsToUpdate.forEach((conditionId) => {
         const foundLimit = this.findPatronGroupLimit(conditionId, currentPatronGroupId);
         const receivedValue = parseFloat(value[conditionId]);
+        console.log('receivedValue---> ', receivedValue);
+        console.log('foundLimit.value---> ', foundLimit.value);
         if (foundLimit.value !== receivedValue) {
           console.log('conditionId to PUT', conditionId);
           limitPromise = mutator.patronBlockLimits.PUT({
