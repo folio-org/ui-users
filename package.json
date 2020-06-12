@@ -633,14 +633,13 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.reset-password-link.send",
+        "permissionName": "ui-users.reset-password.link",
         "displayName": "Users: Create/reset password send",
         "subPermissions": [
           "login.credentials-existence.get",
           "login.collection.get",
           "ui-users.view",
           "ui-users.edit",
-          "ui-users.settings.customfields.view",
           "users-bl.password-reset-link.generate"
         ],
         "visible": true
