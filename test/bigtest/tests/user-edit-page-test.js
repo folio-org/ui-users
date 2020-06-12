@@ -245,10 +245,10 @@ describe('User Edit Page', () => {
     });
   });
 
-  describe('User without permission create/reset password', () => {
+  describe.('User without permission create/reset password', () => {
     setupApplication({
       permissions: {
-        'ui-users.ui-users.reset-password.link': false
+        'ui-users.reset-password.link': false
       }
     });
 
