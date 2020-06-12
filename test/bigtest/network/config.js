@@ -647,4 +647,9 @@ export default function config() {
 
     return schema.credentials.all();
   });
+
+  this.get('/automated-patron-blocks/:id', {
+    automatedPatronBlocks: [],
+    totalRecords: 0,
+  });
 }

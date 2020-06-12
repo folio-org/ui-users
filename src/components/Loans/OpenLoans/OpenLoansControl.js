@@ -219,7 +219,7 @@ class OpenLoansControl extends React.Component {
       renew,
       user,
     } = this.props;
-    const countRenew = patronBlocks.filter(b => b.renewals === true);
+    const countRenew = patronBlocks.filter(b => b.renewals === true || b.blockRenewals === true);
 
     if (isEmpty(countRenew)) {
       renew([loan], user);

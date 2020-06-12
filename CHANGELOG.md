@@ -2,7 +2,6 @@
 
 ## [4.0.0] (IN PROGRESS)
 
-* Change Pay/Waive/Transfer/Cancel Fee/Fine Owner by Service Point name where the transaction took place. Refs. UIU-1399.
 * Change Fee/Fine Owner by Service Point name where the transaction took place. Refs. UIU-1398.
 * Support `loan-storage` interface version 7.0. UIU-1598.
 * Add posibility to view/create/edit custom fields on user record. UIU-1279.
@@ -55,6 +54,13 @@
 * Fix Patron Group, Status, and Preferred contact fields, are not read a required by screen reader. Refs UIU-1642.
 * Check for an empty loan to protect from generating incorrect CQL. Fixes UIU-1653.
 * Add checks for multiple okapi interfaces on user's details screen. Fixes UIU-1600.
+* Display automated patron blocks on User Information page. Refs UIU-1273.
+* On user-edit screen, show "send reset password link" whenever username is present. Refs UIU-1672.
+* Display automated patron blocks on renewing in loans context. Refs UIU-1276.
+* Do not create an empty-string password when adding a username to a user. Refs UIU-1671.
+* Support `login` `v7.0` (some unused endpoints were removed). Refs UIU-1663, UIU-1672.
+* Support `users-bl` `v6.0` (some unused endpoints were removed). Refs STCOR-436, STRIPES-685.
+* Change Pay/Waive/Transfer/Cancel Fee/Fine Owner by Service Point name where the transaction took place. Refs UIU-1399.
 
 ## [3.0.0](https://github.com/folio-org/ui-users/tree/v3.0.0) (2020-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.26.0...v3.0.0)

@@ -15,6 +15,7 @@ import ButtonInteractor from '@folio/stripes-components/lib/Button/tests/interac
 import CalloutInteractor from '@folio/stripes-components/lib/Callout/tests/interactor'; // eslint-disable-line
 import CheckboxInteractor from '@folio/stripes-components/lib/Checkbox/tests/interactor';
 
+import PatronBlockModal from './parton-blocks/modal';
 import DialogInteractor from './dialog';
 
 @interactor class BulkOverrideModal {
@@ -69,6 +70,7 @@ import DialogInteractor from './dialog';
   requestsCount = count('[data-test-list-requests]');
   bulkRenewalModal = new BulkRenewalModal();
   bulkOverrideModal = new BulkOverrideModal();
+  patronBlockModal = new PatronBlockModal();
   changeDueDateOverlay = new ChangeDueDateOverlay();
   bulkClaimReturnedModal = new BulkClaimReturnedModal();
   declareLostDialog = new DialogInteractor('#declareLost-modal');

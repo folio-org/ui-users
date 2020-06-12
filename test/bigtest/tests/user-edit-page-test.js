@@ -41,7 +41,7 @@ describe('User Edit Page', () => {
 
     it('should display create password link', () => {
       expect(UserFormPage.resetPasswordLink.isPresent).to.be.true;
-      expect(UserFormPage.resetPasswordLink.text).to.equal(translations['extended.sendCreatePassword']);
+      expect(UserFormPage.resetPasswordLink.text).to.equal(translations['extended.sendResetPassword']);
     });
 
     describe('validating user barcode', () => {
