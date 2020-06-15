@@ -127,7 +127,7 @@ class EditExtendedInfo extends Component {
               validStylesEnabled
             />
           </Col>
-          <IfPermission perm="ui-users.reset-password-link.send">
+          <IfPermission perm="ui-users.reset-password.link">
             {isEditForm && username &&
               (
                 <CreateResetPasswordControl
