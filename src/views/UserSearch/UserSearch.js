@@ -60,6 +60,9 @@ class UserSearch extends React.Component {
     }).isRequired,
     mutator: PropTypes.shape({
       loans: PropTypes.object,
+      resultOffset: PropTypes.shape({
+        replace: PropTypes.func.isRequired,
+      }),
     }).isRequired,
     source: PropTypes.object,
     visibleColumns: PropTypes.arrayOf(PropTypes.string),
@@ -284,6 +287,7 @@ class UserSearch extends React.Component {
       onNeedMoreData,
       resources,
       contentRef,
+      mutator: { resultOffset },
     } = this.props;
 
     const users = get(resources, 'records.records', []);
@@ -409,8 +413,9 @@ class UserSearch extends React.Component {
                             </div>
                             <Filters
                               activeFilters={activeFilters.state}
-                              resources={this.props.resources}
+                              resources={resources}
                               onChangeHandlers={getFilterHandlers()}
+                              resultOffset={resultOffset}
                             />
                           </form>
                         </Pane>
@@ -451,6 +456,9 @@ class UserSearch extends React.Component {
                           isSelected={this.isSelected}
                           autosize
                           virtualize
+                          hasMargin
+                          pageAmount={100}
+                          pagingType="click"
                         />
 
                       </Pane>
