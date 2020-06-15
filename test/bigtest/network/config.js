@@ -574,6 +574,10 @@ export default function config() {
     return patronBlockLimits.find(request.params.id).attrs;
   });
 
+  this.delete('/patron-block-limits/:id', ({ patronBlockLimits }, request) => {
+    return patronBlockLimits.find(request.params.id).destroy();
+  });
+
   this.post('/patron-block-limits', function (schema, { requestBody }) {
     const limit = JSON.parse(requestBody);
 
