@@ -2,6 +2,7 @@
 
 ## [4.0.0] (IN PROGRESS)
 
+* Stripping asterisks out of user searches.  Fixes UIU-681
 * Support `login` `v7.0` (some unused endpoints were removed). Refs UIU-1663, UIU-1672.
 * Support `users-bl` `v6.0` (some unused endpoints were removed). Refs STCOR-436, STRIPES-685.
 * Change Fee/Fine Owner by Service Point name where the transaction took place. Refs. UIU-1398.
