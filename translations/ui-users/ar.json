@@ -651,7 +651,6 @@
     "permission.manual_waive": "الرسوم والغرامات: إمكانية الإعفاء",
     "permission.patron_blocks": "المستخدمين: إمكانية إنشاء، وتحرير وإزالة كتل المستفيد",
     "permission.requests.all": "المستخدمين: اعرض الطلبات",
-    "permission.reset-password-link.send": "المستخدمين: إمكانية إرسال رابط إنشاء/إعادة تعيين كلمة المرور",
     "permission.settings.addresstypes": "الإعدادات (المستخدمين): إمكانية إنشاء، وتحرير وإزالة أنواع العناوين",
     "permission.settings.comments": "الإعدادات (المستخدمين): إمكانية إنشاء، وتحرير، وإزالة التعليقات",
     "permission.settings.conditions": "الإعدادات (المستخدمين): إمكانية إنشاء، وتحرير وإزالة شروط كتل المستفيد",
@@ -699,5 +698,6 @@
     "bulkClaimReturned.items.notOk": "<strong>لم</strong> يتم إدعاء إعادة {numItems} مادة",
     "bulkClaimReturned.moreInfoPlaceholder": "قم بإدخال المزيد من المعلومات حول المطالبة (مطلوب)",
     "loans.resolveClaim": "حل المطالبة",
-    "blocks.columns.automated.type": "Automated (cannot be edited)"
+    "blocks.columns.automated.type": "مؤتمت (لا يمكن تحريره)",
+    "permission.reset.password": "المستخدمين: أنشئ/أعد تعيين كلمة المرور"
 }
