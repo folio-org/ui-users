@@ -2,10 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import {
-  forIn,
   isNumber,
   keysIn,
-  includes,
   difference,
   without,
   isEmpty,
@@ -77,6 +75,18 @@ class Limits extends Component {
     this._isMounted = true;
   }
 
+  componentDidUpdate(prevProps) {
+    const { patronBlockLimits: prevPatronBlockLimits } = prevProps;
+    const { patronBlockLimits } = this.props;
+    const differenceInPrevLimits = difference(prevPatronBlockLimits, patronBlockLimits);
+    const differenceInCurrentLimits = difference(patronBlockLimits, prevPatronBlockLimits);
+    const differenceInLimits = [...differenceInPrevLimits, ...differenceInCurrentLimits];
+
+    if (!isEmpty(differenceInLimits)) {
+      this.getCurrentPatronGroupLimits();
+    }
+  }
+
   componentWillUnmount() {
     this._isMounted = false;
   }
@@ -132,51 +142,33 @@ class Limits extends Component {
       mutator,
       patronGroupId: currentPatronGroupId,
     } = this.props;
-    const { currentPatronGroupLimits } = this.state;
     const initialValues = this.getInitialValues();
     const existedLimits = keysIn(initialValues);
     const receivedFromFormLimits = keysIn(value);
-    const promises = [];
-    let limitPromise;
-
-    console.log('initialValues--> ', initialValues);
-    console.log('existedLimits--> ', existedLimits);
-    console.log('receivedFromFormLimits--> ', receivedFromFormLimits);
-
     const limitsToRemove = difference(existedLimits, receivedFromFormLimits);
     const limitsToCreate = difference(receivedFromFormLimits, existedLimits);
     const notUpdatedLimits = concat(limitsToCreate, limitsToCreate);
     const limitsToUpdate = without(receivedFromFormLimits, ...notUpdatedLimits);
-    console.log('limitsToRemove--> ', limitsToRemove);
-    console.log('limitsToCreate--> ', limitsToCreate);
-    console.log('limitsToUpdate--> ', limitsToUpdate);
+    const promises = [];
+    let limitPromise;
 
-    // delete is ready!
     if (!isEmpty(limitsToRemove)) {
-      currentPatronGroupLimits.forEach(({ conditionId, patronGroupId }) => {
-        if (includes(limitsToRemove, conditionId)) {
-          console.log('delete@@@@@@@@@@@');
+      limitsToRemove.forEach((conditionId) => {
+        const foundLimit = this.findPatronGroupLimit(conditionId, currentPatronGroupId);
 
-          const foundLimit = this.findPatronGroupLimit(conditionId, patronGroupId);
-          console.log('foundLimit deleted', foundLimit);
-          limitPromise = mutator.patronBlockLimits.DELETE({
-            id: foundLimit.id
-          });
+        limitPromise = mutator.patronBlockLimits.DELETE({ id: foundLimit.id });
 
-          promises.push(limitPromise);
-        }
+        promises.push(limitPromise);
       });
     }
 
-    // post works
     if (!isEmpty(limitsToCreate)) {
       limitsToCreate.forEach((conditionId) => {
-        console.log('create@@@@@@@@@@@');
-        const receivedValue = parseFloat(value[conditionId]);
-
         const foundLimit = this.findPatronGroupLimit(conditionId, currentPatronGroupId);
-        console.log('foundLimit created', foundLimit);
+
         if (!foundLimit) {
+          const receivedValue = parseFloat(value[conditionId]);
+
           limitPromise = mutator.patronBlockLimits.POST({
             patronGroupId: currentPatronGroupId,
             conditionId,
@@ -186,31 +178,14 @@ class Limits extends Component {
           promises.push(limitPromise);
         }
       });
-      // limitsToCreate.forEach((conditionId) => {
-      //   const foundLimit = this.findPatronGroupLimit(conditionId, currentPatronGroupId);
-      //   console.log('foundLimit ++ ', foundLimit);
-      //   if (!foundLimit) {
-      //     const receivedValue = parseFloat(value[conditionId]);
-      //     console.log('conditionId to POST', conditionId);
-      //     limitPromise = mutator.patronBlockLimits.POST({
-      //       patronGroupId: currentPatronGroupId,
-      //       conditionId,
-      //       value: this.normializeValue(receivedValue),
-      //     });
-
-      //     promises.push(limitPromise);
-      //   }
-      // });
     }
 
     if (!isEmpty(limitsToUpdate)) {
       limitsToUpdate.forEach((conditionId) => {
         const foundLimit = this.findPatronGroupLimit(conditionId, currentPatronGroupId);
         const receivedValue = parseFloat(value[conditionId]);
-        console.log('receivedValue---> ', receivedValue);
-        console.log('foundLimit.value---> ', foundLimit.value);
-        if (foundLimit.value !== receivedValue) {
-          console.log('conditionId to PUT', conditionId);
+
+        if (foundLimit && (foundLimit.value !== receivedValue)) {
           limitPromise = mutator.patronBlockLimits.PUT({
             id: foundLimit.id,
             patronGroupId: foundLimit.patronGroupId,
@@ -222,42 +197,6 @@ class Limits extends Component {
         }
       });
     }
-
-    // forIn(value, (limitValue, blockConditionId) => {
-    //   const foundLimit = this.findPatronGroupLimit(blockConditionId, currentPatronGroupId);
-    //   const limitValueNumber = parseFloat(limitValue);
-
-    //   console.log('foundLimit ID _____> ', foundLimit);
-
-
-    //   // if (foundLimit?.value === limitValue) {
-    //   //   return;
-    //   // }
-    //   console.log('currentPatronGroupLimits ', currentPatronGroupLimits);
-    //   console.log('value--> ', value);
-    //   console.log('initialValues--> ', initialValues);
-    //   console.log('existedLimits--> ', existedLimits);
-    //   console.log(foundLimit);
-    //   console.log(foundLimit?.value);
-    //   console.log('limitValue--> ', limitValue);
-
-
-    //   if (foundLimit) {
-    //     //mutator.patronBlockLimitId.update(foundLimit.id);
-    //     limitPromise = mutator.patronBlockLimits.PUT({
-    //       ...foundLimit,
-    //       value: this.normializeValue(limitValueNumber),
-    //     });
-    //   } else {
-    //     limitPromise = mutator.patronBlockLimits.POST({
-    //       patronGroupId: currentPatronGroupId,
-    //       conditionId: blockConditionId,
-    //       value: this.normializeValue(limitValueNumber),
-    //     });
-    //   }
-
-      
-    // });
 
     return promises;
   }
