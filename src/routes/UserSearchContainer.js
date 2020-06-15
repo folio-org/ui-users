@@ -44,7 +44,9 @@ class UserSearchContainer extends React.Component {
           query: makeQueryFunction(
             'cql.allRecords=1',
             // TODO: Refactor/remove this after work on FOLIO-2066 and RMB-385 is done
-            (parsedQuery, props, localProps) => localProps.query.query.trim().split(/\s+/).map(query => compileQuery({ query })).join(' and '),
+            (parsedQuery, props, localProps) => localProps.query.query.trim().replace('*', '').split(/\s+/)
+              .map(query => compileQuery({ query }))
+              .join(' and '),
             {
               'active': 'active',
               'name': 'personal.lastName personal.firstName',
@@ -160,7 +162,7 @@ class UserSearchContainer extends React.Component {
 
   querySetter = ({ nsValues, state }) => {
     const { location : locationProp, history } = this.props;
-
+    nsValues.query = nsValues.query.replace('*', '');
     let location = locationProp;
     // modifying the location hides the user detail view if a search/filter is triggered.
     if (state.changeType !== 'init.reset' && !location.pathname.endsWith('users')) {
