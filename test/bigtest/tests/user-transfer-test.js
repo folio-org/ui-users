@@ -9,7 +9,12 @@ import TransferInteractor from '../interactors/user-transfer';
 import setupApplication from '../helpers/setup-application';
 
 describe('Transfer fines', () => {
-  setupApplication({ scenarios: ['transfers'] });
+  setupApplication({
+    scenarios: ['transfers'],
+    currentUser: {
+      curServicePoint: { id: 1 },
+    },
+  });
 
   describe('visit users-details: accounts', () => {
     beforeEach(async function () {
