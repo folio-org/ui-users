@@ -225,12 +225,14 @@ class ClosedLoans extends React.Component {
         />;
       },
       'returnDate': loan => {
-        return <FormattedTime
-          value={loan.returnDate}
-          day="numeric"
-          month="numeric"
-          year="numeric"
-        />;
+        return loan.returnDate
+          ? (<FormattedTime
+            value={loan.returnDate}
+            day="numeric"
+            month="numeric"
+            year="numeric"
+          />)
+          : '-';
       },
       'checkinServicePoint': loan => _.get(loan, ['checkinServicePoint', 'name'], '-'),
       ' ': loan => {

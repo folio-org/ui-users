@@ -60,6 +60,7 @@
 * On user-edit screen, show "send reset password link" whenever username is present. Refs UIU-1672.
 * Display automated patron blocks on renewing in loans context. Refs UIU-1276.
 * Do not create an empty-string password when adding a username to a user. Refs UIU-1671.
+* Fix incorrect display of the date in the `Return date` field. Refs UIU-1204.
 * Add `delete` request to patron block limits. Refs UIU-1675.
 
 ## [3.0.0](https://github.com/folio-org/ui-users/tree/v3.0.0) (2020-03-17)
