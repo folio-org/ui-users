@@ -248,7 +248,7 @@ describe('User Edit Page', () => {
   describe('User without permission create/reset password', () => {
     setupApplication({
       permissions: {
-        'ui-users.reset-password-link.send': false
+        'ui-users.reset.password': false
       }
     });
 

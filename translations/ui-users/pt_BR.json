@@ -651,7 +651,6 @@
     "permission.manual_waive": "Taxas/multas: Pode renunciar",
     "permission.patron_blocks": "Usuários: Podem criar, editar e remover blocos de usuários",
     "permission.requests.all": "Usuários: Ver requisições",
-    "permission.reset-password-link.send": "Usuários: Criar/redefinir o link da senha",
     "permission.settings.addresstypes": "Configurações (Usuários): Pode criar, editar e remover tipos de endereço",
     "permission.settings.comments": "Configurações (Usuários): Pode criar, editar e remover comentários",
     "permission.settings.conditions": "Configurações (Usuários): Pode criar, editar e remover condições de suspensões de usuários",
@@ -699,5 +698,6 @@
     "bulkClaimReturned.items.notOk": "{numItems} item(ns) <strong>não</strong> reivindicados como devolvidos.",
     "bulkClaimReturned.moreInfoPlaceholder": "Digite mais informações sobre a alegação (obrigatório)",
     "loans.resolveClaim": "Resolver reclamação",
-    "blocks.columns.automated.type": "Automated (cannot be edited)"
+    "blocks.columns.automated.type": "Automatizado (não pode ser editado)",
+    "permission.reset.password": "Usuários: Criar/redefinir senha"
 }
