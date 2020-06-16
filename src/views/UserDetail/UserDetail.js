@@ -283,7 +283,7 @@ class UserDetail extends React.Component {
                 buttonStyle="primary"
                 to={this.getEditLink()}
                 buttonRef={this.editButton}
-                ariaLabel={ariaLabel}
+                aria-label={ariaLabel}
                 marginBottom0
               >
                 <FormattedMessage id="ui-users.edit" />
@@ -300,7 +300,7 @@ class UserDetail extends React.Component {
                 id="clickable-show-tags"
                 onClick={() => { this.showHelperApp('tags'); }}
                 badgeCount={tags.length}
-                ariaLabel={ariaLabel}
+                aria-label={ariaLabel}
               />
             )}
           </FormattedMessage>

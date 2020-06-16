@@ -110,7 +110,7 @@ class PatronBlockForm extends React.Component {
           <PaneHeaderIconButton
             id="close-patron-block"
             onClick={this.props.onClose}
-            ariaLabel={ariaLabel}
+            aria-label={ariaLabel}
             icon="times"
           />
         )}
