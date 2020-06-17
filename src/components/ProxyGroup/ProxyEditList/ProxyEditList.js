@@ -43,7 +43,8 @@ class ProxyEditList extends React.Component {
   validate(user) {
     const {
       initialValues: { id },
-      name, stripes: { store },
+      stripes: { store },
+      name,
     } = this.props;
     const currentValues = getFormValues('userForm')(store.getState());
     let error;
