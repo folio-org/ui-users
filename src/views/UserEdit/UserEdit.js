@@ -178,6 +178,18 @@ class UserEdit extends React.Component {
       });
   }
 
+  formatCustomFieldsPayload(customFields) {
+    const copiedCustomFields = { ...customFields };
+
+    Object.keys(copiedCustomFields).forEach(customFieldId => {
+      if (!copiedCustomFields[customFieldId]) {
+        delete copiedCustomFields[customFieldId];
+      }
+    });
+
+    return copiedCustomFields;
+  }
+
   update({ requestPreferences, ...userFormData }) {
     const {
       updateProxies,
@@ -224,6 +236,10 @@ class UserEdit extends React.Component {
     const today = moment().endOf('day');
     const curActive = user.active;
     const prevActive = prevUser.active;
+
+    const formattedCustomFieldsPayload = this.formatCustomFieldsPayload(data.customFields);
+
+    data.customFields = formattedCustomFieldsPayload;
 
     // if active has been changed manually on the form
     // or if the expirationDate has been removed

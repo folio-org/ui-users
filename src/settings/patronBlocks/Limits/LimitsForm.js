@@ -28,7 +28,7 @@ function validation(value, type) {
   const max = 9999.99;
 
   if (numberValue < min || numberValue > max) {
-    return <FormattedMessage id={`ui-users.settings.limits.${type}.error`} />;
+    return <FormattedMessage id={`ui-users.settings.limits.${type}.error.message`} />;
   }
 
   return null;
