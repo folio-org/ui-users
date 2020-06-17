@@ -37,28 +37,6 @@ describe('Settings custom fields', () => {
     });
   });
 
-  describe('when there are no custom fields saved', () => {
-    before(() => {
-      setupApplication({
-        permissions: ['ui-users.settings.customfields.edit'],
-      });
-    });
-
-    beforeEach(async function () {
-      this.server.get('/custom-fields', () => ({
-        'customFields': [],
-        'totalRecords': 0
-      }));
-
-      this.visit('/settings/users/custom-fields');
-      await CustomFieldsInteractor.whenLoaded();
-    });
-
-    it('should render no custom fields message', () => {
-      expect(CustomFieldsInteractor.noCustomFieldsMessagePresent).to.be.true;
-    });
-  });
-
   describe('when clicking on Edit button', () => {
     before(() => {
       setupApplication({
