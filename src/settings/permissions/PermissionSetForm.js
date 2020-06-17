@@ -71,7 +71,7 @@ class PermissionSetForm extends React.Component {
               id="clickable-close-permission-set"
               onClick={this.props.onCancel}
               icon="times"
-              ariaLabel={ariaLabel}
+              aria-label={ariaLabel}
             />
           )}
         </FormattedMessage>

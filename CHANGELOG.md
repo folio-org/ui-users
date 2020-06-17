@@ -65,6 +65,7 @@
 * Fix incorrect display of the date in the `Return date` field. Refs UIU-1204.
 * Add `delete` request to patron block limits. Refs UIU-1675.
 * Validate duplicate proxy/sponsor. Fixes UIU-925.
+* Prefer `aria-label` to `ariaLabel` per React documentation.
 
 ## [3.0.0](https://github.com/folio-org/ui-users/tree/v3.0.0) (2020-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.26.0...v3.0.0)

@@ -360,7 +360,7 @@ class UserSearch extends React.Component {
                               <FormattedMessage id="ui-users.userSearch">
                                 {label => (
                                   <SearchField
-                                    ariaLabel={label}
+                                    aria-label={label}
                                     autoFocus
                                     autoComplete="off"
                                     name="query"

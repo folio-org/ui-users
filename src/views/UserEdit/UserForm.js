@@ -300,7 +300,7 @@ class UserForm extends React.Component {
               id="clickable-closenewuserdialog"
               onClick={this.handleCancel}
               ref={this.closeButton}
-              ariaLabel={ariaLabel}
+              aria-label={ariaLabel}
               icon="times"
             />
           )}
