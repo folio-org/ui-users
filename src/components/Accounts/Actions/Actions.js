@@ -306,7 +306,6 @@ class Actions extends React.Component {
     const { intl: { formatMessage } } = this.props;
     this.props.mutator.activeRecord.update({ id: type.id });
     let paymentStatus = _.capitalize(formatMessage({ id: `ui-users.accounts.actions.warning.${action}Action` }));
-    const owners = _.get(this.props.resources, ['owners', 'records'], []);
     if (amount < type.remaining) {
       paymentStatus = `${paymentStatus} ${formatMessage({ id: 'ui-users.accounts.status.partially' })}`;
     } else {
