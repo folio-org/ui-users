@@ -2,8 +2,6 @@
 
 ## [4.0.0] (IN PROGRESS)
 
-* Support `login` `v7.0` (some unused endpoints were removed). Refs UIU-1663, UIU-1672.
-* Support `users-bl` `v6.0` (some unused endpoints were removed). Refs STCOR-436, STRIPES-685.
 * Change Fee/Fine Owner by Service Point name where the transaction took place. Refs. UIU-1398.
 * Support `loan-storage` interface version 7.0. UIU-1598.
 * Add posibility to view/create/edit custom fields on user record. UIU-1279.
@@ -60,6 +58,8 @@
 * On user-edit screen, show "send reset password link" whenever username is present. Refs UIU-1672.
 * Display automated patron blocks on renewing in loans context. Refs UIU-1276.
 * Do not create an empty-string password when adding a username to a user. Refs UIU-1671.
+* Support `login` `v7.0` (some unused endpoints were removed). Refs UIU-1663, UIU-1672.
+* Support `users-bl` `v6.0` (some unused endpoints were removed). Refs STCOR-436, STRIPES-685.
 * Fix incorrect display of the date in the `Return date` field. Refs UIU-1204.
 
 ## [3.0.0](https://github.com/folio-org/ui-users/tree/v3.0.0) (2020-03-17)
