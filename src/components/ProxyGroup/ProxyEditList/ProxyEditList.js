@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FieldArray } from 'redux-form';
+import {
+  FieldArray,
+  getFormValues,
+} from 'redux-form';
 import {
   FormattedMessage,
   injectIntl,
@@ -40,17 +43,32 @@ class ProxyEditList extends React.Component {
   validate(user) {
     const { initialValues, name } = this.props;
     const { id } = initialValues;
+    const { stripes: { store } } = this.props;
+    const currentValues = getFormValues('userForm')(store.getState());
+    let error;
 
-    if (id !== user.id) return true;
+    if (id === user.id) {
+      error = {
+        label: <FormattedMessage id={`ui-users.errors.${name}.invalidUserLabel`} />,
+        message: <FormattedMessage id={`ui-users.errors.${name}.invalidUserMessage`} />,
+      };
+    }
 
-    const error = {
-      label: <FormattedMessage id={`ui-users.errors.${name}.invalidUserLabel`} />,
-      message: <FormattedMessage id={`ui-users.errors.${name}.invalidUserMessage`} />,
-    };
+    currentValues[name].forEach(({ user: { id: userId } }) => {
+      if (userId === user.id) {
+        error = {
+          label: <FormattedMessage id={`ui-users.errors.${name}.invalidUserLabel`} />,
+          message: <FormattedMessage id={`ui-users.errors.${name}.duplicateUserMessage`} />,
+        };
+      }
+    });
 
-    this.setState({ error });
+    if (error) {
+      this.setState({ error });
+      return false;
+    }
 
-    return false;
+    return true;
   }
 
   onAdd(user) {
