@@ -78,6 +78,10 @@ function validate(values, props) {
     errors.preferredServicePoint = <FormattedMessage id="ui-users.errors.missingRequiredPreferredServicePoint" />;
   }
 
+  if (values.personal.preferredName && !/^[\x00-\x7F]*$/.test(values.personal.preferredName)) { // eslint-disable-line
+    errors.personal.preferredName = 'Aliens not allowed (need a better message)';
+  }
+
   return errors;
 }
 
