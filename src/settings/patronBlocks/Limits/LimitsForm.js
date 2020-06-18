@@ -7,6 +7,7 @@ import {
   map,
 } from 'lodash';
 
+import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import {
   Row,
   Col,
@@ -18,28 +19,55 @@ import {
 } from '@folio/stripes/components';
 import stripesFinalForm from '@folio/stripes/final-form';
 
-import { feeFineBalanceId } from '../../../constants';
+import {
+  feeFineBalanceId,
+  recallOverdueId,
+} from '../../../constants';
 
 import css from '../patronBlocks.css';
 
 function validation(value, type) {
   const numberValue = toNumber(value);
-  const min = 0.01;
-  const max = 9999.99;
+  let min;
+  let max;
+
+  if (type === 'limits') {
+    min = 1;
+    max = 999999;
+  }
+
+  if (type === 'feefine') {
+    min = 0.01;
+    max = 999999.99;
+  }
+
+  if (type === 'overdue') {
+    min = 0.01;
+    max = 999999;
+  }
 
   if (numberValue < min || numberValue > max) {
-    return <FormattedMessage id={`ui-users.settings.limits.${type}.error.message`} />;
+    return (
+      <SafeHTMLMessage
+        id="ui-users.settings.limits.validation.message"
+        values={{ min, max }}
+      />
+    );
   }
 
   return null;
 }
 
-function feeFineBalanceValidation(value) {
-  return validation(value, 'feeFine');
+function limitsValidation(value) {
+  return validation(value, 'limits');
 }
 
-function limitsValidation(value) {
-  return validation(value, 'validation');
+function feeFineLimitsValidation(value) {
+  return validation(value, 'feefine');
+}
+
+function overdueLimitsValidation(value) {
+  return validation(value, 'overdue');
 }
 
 class LimitsForm extends Component {
@@ -62,6 +90,16 @@ class LimitsForm extends Component {
 
     return (
       map(patronBlockConditions, ({ name: condition, id }) => {
+        let validate;
+
+        if (id === feeFineBalanceId) {
+          validate = feeFineLimitsValidation;
+        } else if (id === recallOverdueId) {
+          validate = overdueLimitsValidation;
+        } else {
+          validate = limitsValidation;
+        }
+
         return (
           <div key={id}>
             <Row>
@@ -83,7 +121,7 @@ class LimitsForm extends Component {
                   component={TextField}
                   type="number"
                   name={id}
-                  validate={id === feeFineBalanceId ? feeFineBalanceValidation : limitsValidation}
+                  validate={validate}
                 />
               </Col>
             </Row>
