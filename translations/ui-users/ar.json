@@ -676,8 +676,6 @@
     "settings.limits": "حدود",
     "settings.limits.callout.message": "تم <strong>تحديث</strong> حد كتلة المستفيد لمجموعة المستفيدين <strong>{patronGroup}</strong> بنجاح.",
     "settings.limits.callout.error": "لقد حدث خطأ ما",
-    "settings.limits.feeFine.error": "سيؤدي الحد الأقصى للرصيد 0 إلى حظر جميع المستفيدين في هذه المجموعة؛ لتخطي هذا الحد، اترك تعيين القيمة  فارغاً",
-    "settings.limits.validation.error": "يجب أن يكون فارغًا أو رقمًا من 0 إلى 999999",
     "permission.settings.limits": "الإعدادات (المستخدمين): إمكانية إنشاء، وتحرير وإزالة حدود كتل المستفيد",
     "data.loanActionMap.markedAsMissing": "تمت الإشارة إليه كمفقود",
     "loans.markAsMissing": "الإشارة إليه كمفقود",
@@ -699,5 +697,9 @@
     "bulkClaimReturned.moreInfoPlaceholder": "قم بإدخال المزيد من المعلومات حول المطالبة (مطلوب)",
     "loans.resolveClaim": "حل المطالبة",
     "blocks.columns.automated.type": "مؤتمت (لا يمكن تحريره)",
-    "permission.reset.password": "المستخدمين: أنشئ/أعد تعيين كلمة المرور"
+    "permission.reset.password": "المستخدمين: أنشئ/أعد تعيين كلمة المرور",
+    "settings.limits.feeFine.error.message": "سيؤدي الحد الأقصى للرصيد 0.01 إلى حظر جميع المستفيدين في هذه المجموعة؛ لتخطي هذا الحد، اترك تعيين القيمة  فارغاً",
+    "settings.limits.validation.error.message": "يجب أن يكون فارغًا أو رقمًا من 0.01 إلى 999999",
+    "errors.proxies.duplicateUserMessage": "تم إدخال نائب مكرر",
+    "errors.sponsors.duplicateUserMessage": "تم إدخال راعي مكرر"
 }

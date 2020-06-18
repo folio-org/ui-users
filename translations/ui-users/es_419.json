@@ -676,8 +676,6 @@
     "settings.limits": "Límites",
     "settings.limits.callout.message": "El limite de bloqueo para el grupo <strong> {title} </strong> fue actualizado con <strong>éxito </strong> ",
     "settings.limits.callout.error": "Algo estuvo mal",
-    "settings.limits.feeFine.error": "Un saldo máximo de 0 dará como resultado el bloqueo de todos los usuarios de este grupo; para omitir este límite, deje el valor establecido en blanco",
-    "settings.limits.validation.error": "Debe estar en blanco o un número desde 0 al 999999",
     "permission.settings.limits": "Configuración (Usuarios): Pueden crear, editar y borrar el limite de bloqueo de usuarios",
     "data.loanActionMap.markedAsMissing": "Marcado como perdido",
     "loans.markAsMissing": "Marcar como perdido",
@@ -699,5 +697,9 @@
     "bulkClaimReturned.moreInfoPlaceholder": "Enter more information about the claim (required)",
     "loans.resolveClaim": "Resolve claim",
     "blocks.columns.automated.type": "Automated (cannot be edited)",
-    "permission.reset.password": "Users: Create/reset password"
+    "permission.reset.password": "Users: Create/reset password",
+    "settings.limits.feeFine.error.message": "A maximum balance of 0.01 will result in all patrons in this group being blocked; to skip this limit, leave value set to blank",
+    "settings.limits.validation.error.message": "Must be blank or a number from 0.01 to 999999",
+    "errors.proxies.duplicateUserMessage": "Duplicate proxy has been entered.",
+    "errors.sponsors.duplicateUserMessage": "Duplicate sponsor has been entered."
 }
