@@ -16,7 +16,7 @@ describe('Patron blocks limits form', () => {
   const validationMessage = 'Must be blank or a number from 1 to 999999';
   const feeFineValidationMessage = 'Must be blank or a number from 0.01 to 999999.99';
   const overdueRecallValidationMessage = 'Must be blank or a number from 0.01 to 999999';
-  
+
   setupApplication();
 
   describe('Visit patron blocks limits form', () => {
