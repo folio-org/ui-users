@@ -51,6 +51,7 @@ import proxyItemCSS from '../../../src/components/ProxyGroup/ProxyItem/ProxyItem
   defaultDeliveryAddress = text('[data-test-default-delivery-address]');
   customFieldsSection = scoped('#customFields', CustomFieldsSectionInteractor);
   userInfo = new AccordionSection('#userInformationSection');
+  contactInfo = new AccordionSection('#contactInfoSection');
 
   whenLoaded() {
     return this.when(() => this.isPresent).timeout(5000);

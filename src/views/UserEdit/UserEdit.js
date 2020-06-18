@@ -167,6 +167,7 @@ class UserEdit extends React.Component {
     const userData = cloneDeep(userFormData);
     const user = { ...userData, id: uuid() };
     user.personal.addresses = toUserAddresses(user.personal.addresses);
+    user.personal.email = user.personal.email.trim();
 
     mutator.records.POST(user)
       .then(() => {
@@ -216,6 +217,7 @@ class UserEdit extends React.Component {
     }
 
     user.personal.addresses = toUserAddresses(user.personal.addresses); // eslint-disable-line no-param-reassign
+    user.personal.email = user.personal.email.trim();
 
     const { proxies, sponsors, permissions, servicePoints, preferredServicePoint } = user;
 
