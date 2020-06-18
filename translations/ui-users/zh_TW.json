@@ -676,8 +676,6 @@
     "settings.limits": "限制",
     "settings.limits.callout.message": "The patron block limit for patron group <strong>{patronGroup}</strong> has been successfully <strong>updated</strong>.",
     "settings.limits.callout.error": "發生了一些問題",
-    "settings.limits.feeFine.error": "A maximum balance of 0 will result in all patrons in this group being blocked; to skip this limit, leave value set to blank",
-    "settings.limits.validation.error": "必須為空白或是 0 到 999999 之間的數字",
     "permission.settings.limits": "設定（使用者）：可新增、編輯或移除讀者使用限制",
     "data.loanActionMap.markedAsMissing": "已標示為遺失",
     "loans.markAsMissing": "標示為遺失",
@@ -699,5 +697,9 @@
     "bulkClaimReturned.moreInfoPlaceholder": "Enter more information about the claim (required)",
     "loans.resolveClaim": "Resolve claim",
     "blocks.columns.automated.type": "Automated (cannot be edited)",
-    "permission.reset.password": "Users: Create/reset password"
+    "permission.reset.password": "Users: Create/reset password",
+    "settings.limits.feeFine.error.message": "A maximum balance of 0.01 will result in all patrons in this group being blocked; to skip this limit, leave value set to blank",
+    "settings.limits.validation.error.message": "Must be blank or a number from 0.01 to 999999",
+    "errors.proxies.duplicateUserMessage": "Duplicate proxy has been entered.",
+    "errors.sponsors.duplicateUserMessage": "Duplicate sponsor has been entered."
 }
