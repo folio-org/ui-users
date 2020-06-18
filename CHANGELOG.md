@@ -3,6 +3,7 @@
 ## 4.0.1 (IN PROGRESS)
 
 * Increment `ui-plugin-find-user` to `^3.0.0` for `@folio/stripes` `v4.0.0` compatibility.
+* Change Pay/Waive/Transfer/Cancel Fee/Fine Owner by Service Point name where the transaction took place. Refs. UIU-1399.
 
 ## [4.0.0](https://github.com/folio-org/ui-users/tree/v4.0.0) (2020-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v3.0.0...v4.0.0)
