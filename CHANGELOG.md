@@ -1,6 +1,11 @@
 # Change history for ui-users
 
-## [4.0.0] (IN PROGRESS)
+## [4.1.0] (IN PROGRESS)
+
+* Trim email address in user record to remove blanks. Fixes UIU-1528.
+
+## [4.0.0](https://github.com/folio-org/ui-users/tree/v4.0.0) (2020-06-17)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v3.0.0...v4.0.0)
 
 * Stripping asterisks out of user searches.  Fixes UIU-681
 * Support `login` `v7.0` (some unused endpoints were removed). Refs UIU-1663, UIU-1672.
