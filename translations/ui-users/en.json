@@ -114,8 +114,7 @@
   "settings.limits": "Limits",
   "settings.limits.callout.message": "The patron block limit for patron group <strong>{patronGroup}</strong> has been successfully <strong>updated</strong>.",
   "settings.limits.callout.error": "Something went wrong",
-  "settings.limits.feeFine.error.message": "A maximum balance of 0.01 will result in all patrons in this group being blocked; to skip this limit, leave value set to blank",
-  "settings.limits.validation.error.message": "Must be blank or a number from 0.01 to 999999",
+  "settings.limits.validation.message": "Must be blank or a number from {min} to {max}",
 
   "loans.columns.title": "Item title",
   "loans.columns.itemStatus": "Item status",

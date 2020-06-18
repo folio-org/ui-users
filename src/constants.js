@@ -46,9 +46,11 @@ export const statusFilter = [
   { label: 'ui-users.filters.status.inactive', value: 'inactive' }
 ];
 
-/* With current id determines that this is fee/fine condition,
- because this condition is validating with different message,
+/* With current ids determines that this is fee/fine condition or
+ recall overdue by maximum number of days condition,
+ because this conditions are validating with different message,
  and condition fields are rendering dinamically.
  All conditions (thare are 6 of them) are always present on BE
  with hardcoded ids for now. */
 export const feeFineBalanceId = 'cf7a0d5f-a327-4ca1-aa9e-dc55ec006b8a';
+export const recallOverdueId = '08530ac4-07f2-48e6-9dda-a97bc2bf7053';
