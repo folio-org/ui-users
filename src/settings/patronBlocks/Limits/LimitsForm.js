@@ -26,25 +26,8 @@ import {
 
 import css from '../patronBlocks.css';
 
-function validation(value, type) {
+function validation(value, min, max) {
   const numberValue = toNumber(value);
-  let min;
-  let max;
-
-  if (type === 'limits') {
-    min = 1;
-    max = 999999;
-  }
-
-  if (type === 'feefine') {
-    min = 0.01;
-    max = 999999.99;
-  }
-
-  if (type === 'overdue') {
-    min = 0.01;
-    max = 999999;
-  }
 
   if (numberValue < min || numberValue > max) {
     return (
@@ -59,15 +42,15 @@ function validation(value, type) {
 }
 
 function limitsValidation(value) {
-  return validation(value, 'limits');
+  return validation(value, 1, 999999);
 }
 
 function feeFineLimitsValidation(value) {
-  return validation(value, 'feefine');
+  return validation(value, 0.01, 999999.99);
 }
 
 function overdueLimitsValidation(value) {
-  return validation(value, 'overdue');
+  return validation(value, 0.01, 999999);
 }
 
 class LimitsForm extends Component {

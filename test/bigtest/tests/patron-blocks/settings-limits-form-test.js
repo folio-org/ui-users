@@ -1,6 +1,11 @@
 import { beforeEach, describe, it } from '@bigtest/mocha';
 import { expect } from 'chai';
 
+import {
+  feeFineBalanceId,
+  recallOverdueId,
+} from '../../../../src/constants';
+
 import setupApplication from '../../helpers/setup-application';
 import SettingsLimitsForm from '../../interactors/parton-blocks/settings-limits-form';
 
@@ -8,11 +13,17 @@ describe('Patron blocks limits form', () => {
   let condition;
   let conditionData;
 
+  const validationMessage = 'Must be blank or a number from 1 to 999999';
+  const feeFineValidationMessage = 'Must be blank or a number from 0.01 to 999999.99';
+  const overdueRecallValidationMessage = 'Must be blank or a number from 0.01 to 999999';
+  
   setupApplication();
 
   describe('Visit patron blocks limits form', () => {
     beforeEach(async function () {
-      condition = await this.server.createList('patronBlockCondition', 6);
+      condition = await this.server.createList('patronBlockCondition', 4);
+      await this.server.create('patronBlockCondition', { id: feeFineBalanceId });
+      await this.server.create('patronBlockCondition', { id: recallOverdueId });
       conditionData = condition.map((c) => c.attrs);
 
       this.visit('/settings/users/limits/group4');
@@ -29,7 +40,7 @@ describe('Patron blocks limits form', () => {
     });
 
     it('should have limit inputs', () => {
-      expect(SettingsLimitsForm.limitField().length).to.equal(condition.length);
+      expect(SettingsLimitsForm.limitField().length).to.equal(condition.length + 2);
     });
 
     it('should have limit label', () => {
@@ -70,6 +81,31 @@ describe('Patron blocks limits form', () => {
 
       it('should show error message', () => {
         expect(SettingsLimitsForm.errorMessage.isPresent).to.be.true;
+        expect(SettingsLimitsForm.errorMessage.text).to.equal(validationMessage);
+      });
+    });
+
+    describe('set invalid limit value for fee fine limit', () => {
+      beforeEach(async function () {
+        await SettingsLimitsForm.limitField(4)
+          .fillAndBlur(-12);
+      });
+
+      it('should show error message', () => {
+        expect(SettingsLimitsForm.errorMessage.isPresent).to.be.true;
+        expect(SettingsLimitsForm.errorMessage.text).to.equal(feeFineValidationMessage);
+      });
+    });
+
+    describe('set invalid limit value for overdue recall limit', () => {
+      beforeEach(async function () {
+        await SettingsLimitsForm.limitField(5)
+          .fillAndBlur(-12);
+      });
+
+      it('should show error message', () => {
+        expect(SettingsLimitsForm.errorMessage.isPresent).to.be.true;
+        expect(SettingsLimitsForm.errorMessage.text).to.equal(overdueRecallValidationMessage);
       });
     });
   });
