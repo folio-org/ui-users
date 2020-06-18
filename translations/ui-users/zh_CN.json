@@ -676,8 +676,6 @@
     "settings.limits": "限制",
     "settings.limits.callout.message": "读者组<strong> {patronGroup} </strong>的读者冻结限制已成功<strong>更新</strong> 。",
     "settings.limits.callout.error": "出问题了",
-    "settings.limits.feeFine.error": "最大余额为0将导致该组中的所有读者被冻结；要跳过此限制，请将值设置为空白",
-    "settings.limits.validation.error": "必须为空白或0到999999之间的数字",
     "permission.settings.limits": "设置（用户）：可以创建、编辑和移除用户冻结限制",
     "data.loanActionMap.markedAsMissing": "标记为遗失",
     "loans.markAsMissing": "标记为遗失",
@@ -699,5 +697,9 @@
     "bulkClaimReturned.moreInfoPlaceholder": "输入有关声称的更多信息（必填）",
     "loans.resolveClaim": "解决声称",
     "blocks.columns.automated.type": "自动（无法编辑）",
-    "permission.reset.password": "Users: Create/reset password"
+    "permission.reset.password": "Users: Create/reset password",
+    "settings.limits.feeFine.error.message": "A maximum balance of 0.01 will result in all patrons in this group being blocked; to skip this limit, leave value set to blank",
+    "settings.limits.validation.error.message": "Must be blank or a number from 0.01 to 999999",
+    "errors.proxies.duplicateUserMessage": "Duplicate proxy has been entered.",
+    "errors.sponsors.duplicateUserMessage": "Duplicate sponsor has been entered."
 }

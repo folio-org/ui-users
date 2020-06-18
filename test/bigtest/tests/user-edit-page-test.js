@@ -243,6 +243,18 @@ describe('User Edit Page', () => {
         }).timeout(6000);
       });
     });
+
+    describe('trim email', () => {
+      beforeEach(async function () {
+        await UserFormPage.emailField.fillAndBlur(' test@localhost.com   ');
+        await UserFormPage.submitButton.click();
+        await InstanceViewPage.whenLoaded();
+      });
+
+      it('should display trimmed email', () => {
+        expect(InstanceViewPage.contactInfo.keyValues(0).text).to.equal('test@localhost.com');
+      }).timeout(6000);
+    });
   });
 
   describe('User without permission create/reset password', () => {

@@ -676,8 +676,6 @@
     "settings.limits": "Ограничения",
     "settings.limits.callout.message": "The patron block limit for patron group <strong>{patronGroup}</strong> has been successfully <strong>updated</strong>.",
     "settings.limits.callout.error": "Произошла ошибка",
-    "settings.limits.feeFine.error": "A maximum balance of 0 will result in all patrons in this group being blocked; to skip this limit, leave value set to blank",
-    "settings.limits.validation.error": "Must be blank or a number from 0 to 999999",
     "permission.settings.limits": "Settings (Users): Can create, edit and remove patron blocks limits",
     "data.loanActionMap.markedAsMissing": "Отмечен как отсутствующий",
     "loans.markAsMissing": "Отметить как отсутствующий",
@@ -699,5 +697,9 @@
     "bulkClaimReturned.moreInfoPlaceholder": "Введите дополнительную информацию о запросе (обязательно для заполнения)",
     "loans.resolveClaim": "Разрешить претензию",
     "blocks.columns.automated.type": "Автоматически (не может быть отредактировано)",
-    "permission.reset.password": "Пользователи: Создать/сбросить пароль"
+    "permission.reset.password": "Пользователи: Создать/сбросить пароль",
+    "settings.limits.feeFine.error.message": "A maximum balance of 0.01 will result in all patrons in this group being blocked; to skip this limit, leave value set to blank",
+    "settings.limits.validation.error.message": "Must be blank or a number from 0.01 to 999999",
+    "errors.proxies.duplicateUserMessage": "Введён дубликат прокси.",
+    "errors.sponsors.duplicateUserMessage": "Введён дубликат спонсора."
 }

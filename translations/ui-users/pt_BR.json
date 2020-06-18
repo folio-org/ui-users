@@ -676,8 +676,6 @@
     "settings.limits": "Limites",
     "settings.limits.callout.message": "O limite do bloco de usuário para o grupo de usuário <strong>{patronGroup}</strong> foi <strong>atualizado com sucesso</strong>.",
     "settings.limits.callout.error": "Algo deu errado",
-    "settings.limits.feeFine.error": "Um saldo máximo de 0 resultará no bloqueio de todos os usuários deste grupo; para pular esse limite, deixe o valor definido em branco",
-    "settings.limits.validation.error": "Deve estar em branco ou um número entre 0 e 999999",
     "permission.settings.limits": "Configurações (Usuários): Pode criar, editar e remover limites de blocos de usuários",
     "data.loanActionMap.markedAsMissing": "Marcado como desaparecido",
     "loans.markAsMissing": "Marcar como desaparecido",
@@ -699,5 +697,9 @@
     "bulkClaimReturned.moreInfoPlaceholder": "Digite mais informações sobre a alegação (obrigatório)",
     "loans.resolveClaim": "Resolver reclamação",
     "blocks.columns.automated.type": "Automatizado (não pode ser editado)",
-    "permission.reset.password": "Usuários: Criar/redefinir senha"
+    "permission.reset.password": "Usuários: Criar/redefinir senha",
+    "settings.limits.feeFine.error.message": "Um saldo máximo de 0,01 resultará no bloqueio de todos os usuários deste grupo; para pular esse limite, deixe o valor definido em branco",
+    "settings.limits.validation.error.message": "Deve estar em branco ou um número de 0,01 a 999999",
+    "errors.proxies.duplicateUserMessage": "Foi inserido um proxy duplicado.",
+    "errors.sponsors.duplicateUserMessage": "Foi inserido um financiador duplicado."
 }
