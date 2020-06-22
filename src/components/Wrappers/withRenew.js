@@ -254,7 +254,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
         .filter(loan => loan.itemId)
         .map(loan => loan.itemId)
         .join(' or ');
-      const query = `(itemId==(${q})) and status==("Open - Awaiting pickup" or "Open - Not yet filled") sortby requestDate desc`;
+      const query = `(itemId==(${q})) and status==("Open - Awaiting pickup" or "Open - Not yet filled" or "Open - In transit") sortby requestDate desc`;
       reset();
       GET({ params: { query } })
         .then((requestRecords) => {
