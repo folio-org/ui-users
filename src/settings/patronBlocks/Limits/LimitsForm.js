@@ -7,7 +7,6 @@ import {
   map,
 } from 'lodash';
 
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import {
   Row,
   Col,
@@ -28,7 +27,7 @@ function validation(value, min, max) {
 
   if (numberValue < min || numberValue > max) {
     return (
-      <SafeHTMLMessage
+      <FormattedMessage
         id="ui-users.settings.limits.validation.message"
         values={{ min, max }}
       />

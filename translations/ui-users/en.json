@@ -114,7 +114,7 @@
   "settings.limits": "Limits",
   "settings.limits.callout.message": "The patron block limit for patron group <strong>{patronGroup}</strong> has been successfully <strong>updated</strong>.",
   "settings.limits.callout.error": "Something went wrong",
-  "settings.limits.validation.message": "Must be blank or a number from {min} to {max}",
+  "settings.limits.validation.message": "Must be blank or a number from {min, number} to {max, number}",
 
   "loans.columns.title": "Item title",
   "loans.columns.itemStatus": "Item status",
