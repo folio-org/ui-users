@@ -370,7 +370,6 @@
     "blocks.form.label.block": "Action -  suspension sur : *",
     "blocks.form.label.borrowing": "Emprunt",
     "blocks.form.label.renewals": "Renouvellements",
-    "blocks.form.label.request": "Demande",
     "blocks.form.placeholder.desc": "Saisir une brève description (obligatoire)",
     "blocks.form.placeholder.information": "Saisir une information complémentaire (facultatif)",
     "blocks.form.placeholder.message": "Saisir un message pour l'utilisateur (optionnel)",
@@ -698,8 +697,8 @@
     "loans.resolveClaim": "Résoudre la réclamation",
     "blocks.columns.automated.type": "Automatisé (ne peut pas être modifié)",
     "permission.reset.password": "Utilisateurs: créer / réinitialiser le mot de passe",
-    "settings.limits.feeFine.error.message": "A maximum balance of 0.01 will result in all patrons in this group being blocked; to skip this limit, leave value set to blank",
-    "settings.limits.validation.error.message": "Doit être vide ou un nombre de 0,01 à 999999",
     "errors.proxies.duplicateUserMessage": "Duplicate proxy has been entered.",
-    "errors.sponsors.duplicateUserMessage": "Duplicate sponsor has been entered."
+    "errors.sponsors.duplicateUserMessage": "Duplicate sponsor has been entered.",
+    "settings.limits.validation.message": "Doit être vide ou un nombre de {min} à {max}",
+    "blocks.form.label.requests": "Requests"
 }
