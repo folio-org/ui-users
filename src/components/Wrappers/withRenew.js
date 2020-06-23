@@ -11,6 +11,8 @@ import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 import BulkRenewalDialog from '../BulkRenewalDialog';
 import isOverridePossible from '../Loans/OpenLoans/helpers/isOverridePossible';
+import { requestStatuses } from '../../constants';
+
 
 // HOC used to manage renew
 const withRenew = WrappedComponent => class WithRenewComponent extends React.Component {
@@ -248,13 +250,19 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
     // short-enough query string that we can avoid a "414 Request URI Too Long"
     // response from Okapi. Details at CHAL-30
     const step = 50;
+
+    const statusList = requestStatuses
+      .filter(s => s.startsWith('Open - '))
+      .map(s => `"${s}"`)
+      .join(' OR ');
+
     for (let i = 0; i < loans.length; i += step) {
       const loansSlice = loans.slice(i, i + step);
       const q = loansSlice
         .filter(loan => loan.itemId)
         .map(loan => loan.itemId)
         .join(' or ');
-      const query = `(itemId==(${q})) and status==("Open - Awaiting pickup" or "Open - Not yet filled" or "Open - In transit") sortby requestDate desc`;
+      const query = `(itemId==(${q})) and status==(${statusList}) sortby requestDate desc`;
       reset();
       GET({ params: { query } })
         .then((requestRecords) => {
