@@ -3,6 +3,7 @@
 ## [4.1.0] (IN PROGRESS)
 
 * Trim email address in user record to remove blanks. Fixes UIU-1528.
+* Retrieve up to 2000 patron groups when setting Fee/Fine limits. Refs UIU-1715.
 
 ## [4.0.0](https://github.com/folio-org/ui-users/tree/v4.0.0) (2020-06-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v3.0.0...v4.0.0)
