@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## 4.0.2 (IN PROGRESS)
+
+* Retrieve up to 2000 patron groups when setting Fee/Fine limits. Refs UIU-1715.
+
 ## [4.0.1](https://github.com/folio-org/ui-users/tree/v4.0.1) (2020-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v4.0.0...v4.0.1)
 

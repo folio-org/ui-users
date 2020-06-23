@@ -17,6 +17,11 @@ import { Settings } from '@folio/stripes/smart-components';
 
 import Limits from './patronBlocks/Limits/Limits';
 
+// retrieve up to MAX_RECORDS items from lookup tables
+// this is the same value set by stripes-smart-components
+// probably it should be a constant exported by stripes-connect instead.
+const MAX_RECORDS = '2000';
+
 class LimitsSettings extends Component {
   static manifest = Object.freeze({
     query: {},
@@ -26,6 +31,7 @@ class LimitsSettings extends Component {
       path: 'groups',
       params: {
         query: 'cql.allRecords=1 sortby group',
+        limit: MAX_RECORDS,
       },
     },
     patronBlockCondition: {
@@ -36,14 +42,19 @@ class LimitsSettings extends Component {
       },
       params: {
         query: 'cql.allRecords=1 sortby name',
+        limit: MAX_RECORDS,
       },
     },
     patronBlockLimits: {
       type: 'okapi',
       records: 'patronBlockLimits',
       GET: {
-        path: 'patron-block-limits?limit=1500',
-      }
+        path: 'patron-block-limits',
+      },
+      params: {
+        query: 'cql.allRecords=1',
+        limit: MAX_RECORDS,
+      },
     },
   });
 
