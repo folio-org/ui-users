@@ -709,7 +709,7 @@
   "peerDependencies": {
     "@folio/stripes": "^4.0.0",
     "react": "*",
-    "react-intl": "^4.5.3",
+    "react-intl": "~4.6.10",
     "react-router": "*",
     "react-router-dom": "*"
   },
