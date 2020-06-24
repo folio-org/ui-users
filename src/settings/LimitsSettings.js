@@ -17,10 +17,10 @@ import { Settings } from '@folio/stripes/smart-components';
 
 import Limits from './patronBlocks/Limits/Limits';
 
-// retrieve up to MAX_RECORDS items from lookup tables
-// this is the same value set by stripes-smart-components
-// probably it should be a constant exported by stripes-connect instead.
-const MAX_RECORDS = '2000';
+// Only 6 patron block conditions exist. If patron groups or 
+// patron block conditions limit change, then LIMITS_RECORDS must be changed as well.
+// For now we have: 6 * 200 = 1200.
+const LIMITS_RECORDS = '1200';
 
 class LimitsSettings extends Component {
   static manifest = Object.freeze({
@@ -31,7 +31,7 @@ class LimitsSettings extends Component {
       path: 'groups',
       params: {
         query: 'cql.allRecords=1 sortby group',
-        limit: MAX_RECORDS,
+        limit: '200',
       },
     },
     patronBlockCondition: {
@@ -42,7 +42,6 @@ class LimitsSettings extends Component {
       },
       params: {
         query: 'cql.allRecords=1 sortby name',
-        limit: MAX_RECORDS,
       },
     },
     patronBlockLimits: {
@@ -53,7 +52,7 @@ class LimitsSettings extends Component {
       },
       params: {
         query: 'cql.allRecords=1',
-        limit: MAX_RECORDS,
+        limit: LIMITS_RECORDS,
       },
     },
   });
