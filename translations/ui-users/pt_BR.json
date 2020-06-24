@@ -700,5 +700,6 @@
     "errors.proxies.duplicateUserMessage": "Foi inserido um proxy duplicado.",
     "errors.sponsors.duplicateUserMessage": "Foi inserido um financiador duplicado.",
     "settings.limits.validation.message": "Deve estar em branco ou um número de {min} a {max}",
-    "blocks.form.label.requests": "Requisições"
+    "blocks.form.label.requests": "Requisições",
+    "information.preferredName": "Preferred first name"
 }
