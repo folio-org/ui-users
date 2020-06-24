@@ -36,7 +36,7 @@ describe('User Edit Page', () => {
     });
 
     it('displays the title in the pane header', () => {
-      expect(UserFormPage.title).to.equal(user1.username);
+      expect(UserFormPage.title).to.equal('Edit');
     });
 
     it('should display create password link', () => {

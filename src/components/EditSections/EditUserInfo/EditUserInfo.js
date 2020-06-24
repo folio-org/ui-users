@@ -112,9 +112,9 @@ class EditUserInfo extends React.Component {
           </Col>
           <Col xs={12} md={3}>
             <Field
-              label={<FormattedMessage id="ui-users.information.barcode" />}
-              name="barcode"
-              id="adduser_barcode"
+              label={<FormattedMessage id="ui-users.information.preferredName" />}
+              name="personal.preferredFirstName"
+              id="adduser_preferredname"
               component={TextField}
               fullWidth
             />
@@ -162,6 +162,15 @@ class EditUserInfo extends React.Component {
               dateFormat="YYYY-MM-DD"
               name="expirationDate"
               id="adduser_expirationdate"
+            />
+          </Col>
+          <Col xs={12} md={3}>
+            <Field
+              label={<FormattedMessage id="ui-users.information.barcode" />}
+              name="barcode"
+              id="adduser_barcode"
+              component={TextField}
+              fullWidth
             />
           </Col>
         </Row>

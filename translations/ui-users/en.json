@@ -232,6 +232,7 @@
   "information.userInformation": "User information",
   "information.userDetails": "User details",
   "information.name": "Name",
+  "information.preferredName": "Preferred first name",
   "information.lastName": "Last name",
   "information.firstName": "First name",
   "information.middleName": "Middle name",
