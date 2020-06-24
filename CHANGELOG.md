@@ -72,6 +72,9 @@
 * Add `delete` request to patron block limits. Refs UIU-1675.
 * Validate duplicate proxy/sponsor. Fixes UIU-925.
 * Prefer `aria-label` to `ariaLabel` per React documentation.
+* Apply default pane max-width value on the edit page. Refs UIU-1649.
+* Change user form pane title. UIU-1649.
+* Add preferred first name field on user record. Refs UIU-1649.
 
 ## [3.0.0](https://github.com/folio-org/ui-users/tree/v3.0.0) (2020-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.26.0...v3.0.0)

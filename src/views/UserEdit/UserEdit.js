@@ -283,7 +283,7 @@ class UserEdit extends React.Component {
         <LoadingView
           data-test-form-page
           paneTitle={params.id ?
-            <FormattedMessage id="ui-users.crud.editUser" /> :
+            <FormattedMessage id="ui-users.edit" /> :
             <FormattedMessage id="ui-users.crud.createUser" />
           }
           defaultWidth="100%"
