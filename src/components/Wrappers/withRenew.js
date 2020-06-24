@@ -251,7 +251,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
     // response from Okapi. Details at CHAL-30
     const step = 50;
 
-    const statusList = requestStatuses
+    const statusList = Object.values(requestStatuses)
       .filter(s => s.startsWith('Open - '))
       .map(s => `"${s}"`)
       .join(' OR ');
