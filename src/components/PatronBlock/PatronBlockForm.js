@@ -262,7 +262,7 @@ class PatronBlockForm extends React.Component {
                       <Field
                         name="requests"
                         checked={requests}
-                        label={<FormattedMessage id="ui-users.blocks.form.label.request" />}
+                        label={<FormattedMessage id="ui-users.blocks.form.label.requests" />}
                         component={Checkbox}
                       />
                     </Col>

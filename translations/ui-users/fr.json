@@ -370,7 +370,6 @@
     "blocks.form.label.block": "Block actions*",
     "blocks.form.label.borrowing": "Borrowing",
     "blocks.form.label.renewals": "Renewals",
-    "blocks.form.label.request": "Request",
     "blocks.form.placeholder.desc": "Enter a short description (required)",
     "blocks.form.placeholder.information": "Enter addition information (optional)",
     "blocks.form.placeholder.message": "Enter a message to the patron (optional)",
@@ -698,8 +697,8 @@
     "loans.resolveClaim": "Resolve claim",
     "blocks.columns.automated.type": "Automated (cannot be edited)",
     "permission.reset.password": "Users: Create/reset password",
-    "settings.limits.feeFine.error.message": "A maximum balance of 0.01 will result in all patrons in this group being blocked; to skip this limit, leave value set to blank",
-    "settings.limits.validation.error.message": "Must be blank or a number from 0.01 to 999999",
     "errors.proxies.duplicateUserMessage": "Duplicate proxy has been entered.",
-    "errors.sponsors.duplicateUserMessage": "Duplicate sponsor has been entered."
+    "errors.sponsors.duplicateUserMessage": "Duplicate sponsor has been entered.",
+    "settings.limits.validation.message": "Must be blank or a number from {min} to {max}",
+    "blocks.form.label.requests": "Requests"
 }

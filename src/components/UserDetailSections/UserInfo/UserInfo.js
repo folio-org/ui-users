@@ -10,7 +10,8 @@ import {
   Col,
   KeyValue,
   Accordion,
-  Headline
+  Headline,
+  NoValue,
 } from '@folio/stripes/components';
 
 import { ViewMetaData } from '@folio/stripes/smart-components';
@@ -89,8 +90,8 @@ class UserInfo extends React.Component {
               </Col>
               <Col xs={3}>
                 <KeyValue
-                  label={<FormattedMessage id="ui-users.information.barcode" />}
-                  value={get(user, ['barcode'], '')}
+                  label={<FormattedMessage id="ui-users.information.preferredName" />}
+                  value={get(user, ['personal', 'preferredFirstName']) || <NoValue />}
                 />
               </Col>
             </Row>
@@ -112,6 +113,12 @@ class UserInfo extends React.Component {
                 <KeyValue
                   label={<FormattedMessage id="ui-users.information.expirationDate" />}
                   value={user.expirationDate ? <FormattedDate value={user.expirationDate} /> : '-'}
+                />
+              </Col>
+              <Col xs={3}>
+                <KeyValue
+                  label={<FormattedMessage id="ui-users.information.barcode" />}
+                  value={get(user, ['barcode'], '')}
                 />
               </Col>
             </Row>

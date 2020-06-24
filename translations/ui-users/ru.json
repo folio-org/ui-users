@@ -370,7 +370,6 @@
     "blocks.form.label.block": "Block actions*",
     "blocks.form.label.borrowing": "Borrowing",
     "blocks.form.label.renewals": "Renewals",
-    "blocks.form.label.request": "Запрос",
     "blocks.form.placeholder.desc": "Введите краткое описание (обязательно)",
     "blocks.form.placeholder.information": "Введите дополнительную информацию (необязательно)",
     "blocks.form.placeholder.message": "Введите сообщение для читателя (необязательно)",
@@ -698,8 +697,8 @@
     "loans.resolveClaim": "Разрешить претензию",
     "blocks.columns.automated.type": "Автоматически (не может быть отредактировано)",
     "permission.reset.password": "Пользователи: Создать/сбросить пароль",
-    "settings.limits.feeFine.error.message": "A maximum balance of 0.01 will result in all patrons in this group being blocked; to skip this limit, leave value set to blank",
-    "settings.limits.validation.error.message": "Must be blank or a number from 0.01 to 999999",
     "errors.proxies.duplicateUserMessage": "Введён дубликат прокси.",
-    "errors.sponsors.duplicateUserMessage": "Введён дубликат спонсора."
+    "errors.sponsors.duplicateUserMessage": "Введён дубликат спонсора.",
+    "settings.limits.validation.message": "Должно быть пустым или числом от {min} до {max}",
+    "blocks.form.label.requests": "Запросы"
 }
