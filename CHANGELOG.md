@@ -3,6 +3,7 @@
 ## [4.1.0] (IN PROGRESS)
 
 * Trim email address in user record to remove blanks. Fixes UIU-1528.
+* `withRenew` should include in-transit items when calculating the open-request-count. Fixes UIU-1254.
 * Retrieve up to 200 patron groups when setting Fee/Fine limits. Refs UIU-1715.
 
 ## [4.0.0](https://github.com/folio-org/ui-users/tree/v4.0.0) (2020-06-17)
