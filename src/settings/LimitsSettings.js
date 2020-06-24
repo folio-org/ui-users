@@ -17,7 +17,7 @@ import { Settings } from '@folio/stripes/smart-components';
 
 import Limits from './patronBlocks/Limits/Limits';
 
-// Only 6 patron block conditions exist. If patron groups or 
+// Only 6 patron block conditions exist. If patron groups or
 // patron block conditions limit change, then LIMITS_RECORDS must be changed as well.
 // For now we have: 6 * 200 = 1200.
 const LIMITS_RECORDS = '1200';
