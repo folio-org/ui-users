@@ -5,6 +5,7 @@
 * Trim email address in user record to remove blanks. Fixes UIU-1528.
 * `withRenew` should include in-transit items when calculating the open-request-count. Fixes UIU-1254.
 * Restore `CommandList`, `HasCommand` wrappers now that they don't leak memory. Refs UIU-1457.
+* Increment `@folio/plugin-find-user` to `v3.0.0` for `@folio/stripes` `v4.0` compatibility.
 
 ## [4.0.0](https://github.com/folio-org/ui-users/tree/v4.0.0) (2020-06-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v3.0.0...v4.0.0)
