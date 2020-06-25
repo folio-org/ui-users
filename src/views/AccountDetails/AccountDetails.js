@@ -71,6 +71,7 @@ class AccountDetails extends React.Component {
     match: PropTypes.object,
     patronGroup: PropTypes.object,
     itemDetails: PropTypes.object,
+    okapi: PropTypes.object,
   };
 
   static defaultProps = {
@@ -119,7 +120,7 @@ class AccountDetails extends React.Component {
       resources,
     } = props;
 
-    const accountActivity = (resources.accountActions || {}).records || [];
+    const accountActivity = _.uniqBy(resources?.accountActions?.records || [], action => action.id);
     const sortData = _.orderBy(accountActivity, ['dateAction'], ['desc']);
     const balance = (sortData[0] || {}).balance;
     let paymentStatus;
@@ -254,7 +255,7 @@ class AccountDetails extends React.Component {
       amount: action => (action.amountAction > 0 ? parseFloat(action.amountAction).toFixed(2) : '-'),
       balance: action => (action.balance > 0 ? parseFloat(action.balance).toFixed(2) : '-'),
       transactioninfo: action => action.transactionInformation || '-',
-      created: action => action.createdAt,
+      created: action => (this.props.okapi.currentUser.servicePoints.find(sp => sp.id === action.createdAt) || {}).name,
       source: action => action.source,
       comments: action => (action.comments ? (<div>{action.comments.split('\n').map(c => (<Row><Col>{c}</Col></Row>))}</div>) : ''),
     };
@@ -527,6 +528,7 @@ class AccountDetails extends React.Component {
               // perfectly well without them. ¯\_(ツ)_/¯
               // this.getAccountActions();
               // handleAddRecords();
+              this.props.mutator.accountActions.GET();
             }}
           />
 

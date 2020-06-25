@@ -7,6 +7,7 @@ import {
   property,
   clickable,
   text,
+  isVisible,
 } from '@bigtest/interactor';
 import moment from 'moment';
 
@@ -14,6 +15,7 @@ import ButtonInteractor from '@folio/stripes-components/lib/Button/tests/interac
 import CalloutInteractor from '@folio/stripes-components/lib/Callout/tests/interactor'; // eslint-disable-line
 import CheckboxInteractor from '@folio/stripes-components/lib/Checkbox/tests/interactor';
 
+import PatronBlockModal from './parton-blocks/modal';
 import DialogInteractor from './dialog';
 
 @interactor class BulkOverrideModal {
@@ -43,6 +45,13 @@ import DialogInteractor from './dialog';
   isSaveButtonDisabled = property('[data-test-change-due-date-save-button]', 'disabled');
 }
 
+@interactor class BulkClaimReturnedModal {
+  static defaultScope = '[data-test-bulk-claim-returned-modal]';
+
+  cancelButton = clickable('[data-test-bulk-cr-cancel-button]');
+  confirmButton = clickable('[data-test-bulk-cr-continue-button]');
+}
+
 @interactor class OpenLoans {
   static defaultScope = '[data-test-open-loans]';
 
@@ -61,22 +70,29 @@ import DialogInteractor from './dialog';
   requestsCount = count('[data-test-list-requests]');
   bulkRenewalModal = new BulkRenewalModal();
   bulkOverrideModal = new BulkOverrideModal();
+  patronBlockModal = new PatronBlockModal();
   changeDueDateOverlay = new ChangeDueDateOverlay();
+  bulkClaimReturnedModal = new BulkClaimReturnedModal();
   declareLostDialog = new DialogInteractor('#declareLost-modal');
   claimReturnedDialog = new DialogInteractor('#claimReturned-modal');
   markAsMissingDialog = new DialogInteractor('#markAsMissing-modal');
   dueDateCalendarCellButton = new ButtonInteractor(`[data-test-date="${moment().format('MM/DD/YYYY')}"]`);
-  rowButtons = collection('[data-test-open-loans-list] button[role="row"]', ButtonInteractor);
+  rowButtons = collection('[data-test-open-loans-list] [data-row-inner]', ButtonInteractor);
   loanCount = text('#loan-count');
 
   selectAllCheckboxes = clickable('#clickable-list-column- input[type="checkbox"]');
-  checkboxes = collection('#list-loanshistory button[role="row"]', CheckboxInteractor);
+  checkboxes = collection('#list-loanshistory [role="gridcell"]:first-child', CheckboxInteractor);
   clickRenew = clickable('#renew-all');
+  clickClaimReturned = clickable('#bulk-claim-returned');
 
   isBulkRenewButtonDisabled = property('#renew-all', 'disabled');
+  isBulkClaimReturnedDisabled = property('#bulk-claim-returned', 'disabled');
+  isBulkChangeDueDateButtonDisabled = property('#change-due-date-all', 'disabled');
+
+  itemsPresent = isVisible('#list-loanshistory [role="gridcell"]');
 
   whenLoaded() {
-    return this.when(() => this.list.isVisible);
+    return this.timeout(10000).when(() => this.itemsPresent);
   }
 }
 

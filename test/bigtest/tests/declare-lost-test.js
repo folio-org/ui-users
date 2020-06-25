@@ -142,14 +142,28 @@ describe('Declare Lost', () => {
     });
   });
 
-  describe('Visiting loan details  page with not declared lost item', () => {
+  describe('Visiting loan details page with not declared lost item', () => {
     beforeEach(async function () {
       const loan = this.server.create('loan', {
         status: { name: 'Open' },
-        loanPolicyId: 'test'
+        loanPolicyId: 'test',
+        action: 'claimedReturned',
+        actionComment: 'Claim returned confirmation',
+        item: { status: { name: 'Claimed returned' } },
+        itemStatus: 'Claimed returned',
+        claimedReturnedDate: new Date().toISOString(),
+      });
+
+      this.server.create('user', { id: loan.userId });
+      this.server.create('loanaction', {
+        loan: {
+          ...loan.attrs,
+        },
       });
 
       this.visit(`/users/${loan.userId}/loans/view/${loan.id}`);
+
+      await LoanActionsHistory.resolveClaimMenu.click();
     });
 
     it('should display enabled declare lost button', () => {
@@ -169,6 +183,58 @@ describe('Declare Lost', () => {
       it('should display declare lost dialog', () => {
         expect(OpenLoansInteractor.declareLostDialog.isVisible).to.be.true;
       });
+    });
+  });
+
+  describe('Fine incurred after marking item as lost', () => {
+    let refreshCounter = 0;
+
+    beforeEach(async function () {
+      const loan = this.server.create('loan', {
+        status: { name: 'Open' },
+        loanPolicyId: 'test',
+        action: 'claimedReturned',
+        actionComment: 'Claim returned confirmation',
+        item: { status: { name: 'Claimed returned' } },
+        itemStatus: 'Claimed returned',
+        claimedReturnedDate: new Date().toISOString(),
+      });
+
+      this.server.create('user', { id: loan.userId });
+      this.server.create('loanaction', {
+        loan: {
+          ...loan.attrs,
+        },
+      });
+
+      // This is ugly but it allows for moving forward without mocking up
+      // too many other backend things.
+      this.server.get('/accounts', () => {
+        const accounts = (refreshCounter > 3) ? [{ id: 1, amount: 250 }] : [];
+        refreshCounter++;
+        return { accounts };
+      });
+
+      this.visit(`/users/${loan.userId}/loans/view/${loan.id}`);
+
+      await LoanActionsHistory.whenLoaded();
+    });
+
+    it('should show empty fine incurred amount', () => {
+      expect(LoanActionsHistory.feeFines.text).to.equal('-');
+    });
+
+    describe('Update fine incurred', () => {
+      beforeEach(async function () {
+        await LoanActionsHistory.declareLostButton.click();
+        await OpenLoansInteractor.declareLostDialog.additionalInfoTextArea.focus();
+        await OpenLoansInteractor.declareLostDialog.additionalInfoTextArea.fill('item lost');
+        await OpenLoansInteractor.declareLostDialog.confirmButton.click();
+      });
+    });
+
+    it('should update fine incurred amount', () => {
+      expect(LoanActionsHistory.feeFines.text).to.equal('250.00');
     });
   });
 
@@ -197,10 +263,8 @@ describe('Declare Lost', () => {
       this.visit(`/users/${loan.userId}/loans/view/${loan.id}`);
     });
 
-
-    it('should display disabled declare lost button', () => {
-      expect(LoanActionsHistory.declareLostButton.isPresent).to.be.true;
-      expect(LoanActionsHistory.isDeclareLostButtonDisabled).to.be.true;
+    it('should hide declare lost button', () => {
+      expect(LoanActionsHistory.declareLostButton.isPresent).to.be.false;
     }).timeout(5000);
 
     it('should display the lost date in lost field', () => {

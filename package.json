@@ -34,14 +34,18 @@
     "okapiInterfaces": {
       "users": "15.0",
       "configuration": "2.0",
-      "circulation": "9.0",
       "permissions": "5.0",
       "loan-policy-storage": "1.0 2.0",
       "loan-storage": "4.0 5.0 6.0 7.0",
-      "login": "6.0",
-      "feesfines": "15.0",
+      "login": "6.0 7.0",
       "request-storage": "2.5 3.0",
-      "users-bl": "5.0"
+      "users-bl": "5.0 6.0",
+      "automated-patron-blocks": "0.1"
+    },
+    "optionalOkapiInterfaces": {
+      "circulation": "9.0",
+      "feesfines": "15.0",
+      "notes": "1.0"
     },
     "permissionSets": [
       {
@@ -512,6 +516,19 @@
         "visible": true
       },
       {
+        "permissionName": "ui-users.loans.declare-claimed-returned-item-as-missing",
+        "displayName": "Users: User loans mark claimed returned missing",
+        "description": "Also includes backend permission to declare claimed returned item as missing",
+        "subPermissions": [
+          "circulation.loans.declare-claimed-returned-item-as-missing.post",
+          "circulation-storage.loans.item.get",
+          "inventory-storage.items.item.get",
+          "inventory-storage.holdings.item.get",
+          "inventory-storage.instances.item.get"
+        ],
+        "visible": true
+      },
+      {
         "permissionName": "ui-users.loans.claim-item-returned",
         "displayName": "Users: User loans claim returned",
         "description": "Also includes backend permissions to claim items returned",
@@ -561,6 +578,7 @@
           "ui-users.loans.renew",
           "circulation.loans.declare-item-lost.post",
           "circulation.loans.claim-item-returned.post",
+          "circulation.loans.declare-claimed-returned-item-as-missing.post",
           "ui-users.loans.renew-override",
           "circulation.loans.item.put",
           "circulation.renew-by-barcode.post",
@@ -615,11 +633,14 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.reset-password-link.send",
-        "displayName": "Users: Can send create/reset password link",
+        "permissionName": "ui-users.reset.password",
+        "displayName": "Users: Create/reset password",
         "subPermissions": [
-          "users-bl.password-reset-link.generate",
-          "login.credentials-existence.get"
+          "login.credentials-existence.get",
+          "login.collection.get",
+          "ui-users.view",
+          "ui-users.edit",
+          "users-bl.password-reset-link.generate"
         ],
         "visible": true
       },
@@ -694,6 +715,9 @@
     "react-router-dom": "*"
   },
   "optionalDependencies": {
-    "@folio/plugin-find-user": "^2.0.0"
+    "@folio/plugin-find-user": "^3.0.0"
+  },
+  "resolutions": {
+    "moment": "~2.24.0"
   }
 }

@@ -25,7 +25,9 @@ import {
   Row,
   Col,
   NoValue,
-  LoadingView
+  LoadingView,
+  Dropdown,
+  DropdownMenu,
 } from '@folio/stripes/components';
 import { IfPermission } from '@folio/stripes/core';
 import { effectiveCallNumber } from '@folio/stripes/util';
@@ -41,6 +43,7 @@ import {
   withRenew,
   withDeclareLost,
   withClaimReturned,
+  withMarkAsMissing,
 } from '../../components/Wrappers';
 import loanActionMap from '../../components/data/static/loanActionMap';
 import LoanProxyDetails from './LoanProxyDetails';
@@ -67,9 +70,6 @@ class LoanDetails extends React.Component {
       renewals: PropTypes.shape({
         replace: PropTypes.func,
       }),
-      loanAccountsActions: PropTypes.shape({
-        GET: PropTypes.func.isRequired,
-      }),
     }).isRequired,
     loan: PropTypes.object,
     patronGroup: PropTypes.object,
@@ -79,6 +79,7 @@ class LoanDetails extends React.Component {
     requestCounts: PropTypes.object,
     renew: PropTypes.func,
     declareLost: PropTypes.func,
+    markAsMissing: PropTypes.func,
     claimReturned: PropTypes.func,
     patronBlocks: PropTypes.arrayOf(PropTypes.object),
     intl: PropTypes.object.isRequired,
@@ -97,7 +98,6 @@ class LoanDetails extends React.Component {
     this.showTitle = this.showTitle.bind(this);
     this.showChangeDueDateDialog = this.showChangeDueDateDialog.bind(this);
     this.hideChangeDueDateDialog = this.hideChangeDueDateDialog.bind(this);
-    this.getFeeFine = this.getFeeFine.bind(this);
     this.viewFeeFine = this.viewFeeFine.bind(this);
 
     this.state = {
@@ -107,10 +107,6 @@ class LoanDetails extends React.Component {
       feesFines: {},
       patronBlockedModal: false,
     };
-  }
-
-  componentDidMount() {
-    this.getFeeFine();
   }
 
   getContributorslist(loan) {
@@ -141,7 +137,7 @@ class LoanDetails extends React.Component {
       renew,
       mutator: { renewals },
     } = this.props;
-    const countRenew = patronBlocks.filter(p => p.renewals);
+    const countRenew = patronBlocks.filter(p => p.renewals || p.blockRenewals);
 
     if (!isEmpty(countRenew)) return this.setState({ patronBlockedModal: true });
 
@@ -149,19 +145,10 @@ class LoanDetails extends React.Component {
     return renewals.replace({ ts: new Date().getTime() });
   }
 
-  getFeeFine() {
-    const { mutator, match: { params } } = this.props;
-    const query = `loanId=${params.loanid}`;
-
-    mutator.loanAccountsActions.GET({ params: { query } }).then(records => {
-      const total = records.reduce((a, { amount }) => (a + parseFloat(amount)), 0);
-      this.setState({ feesFines: { total, accounts: records } });
-    });
-  }
-
   viewFeeFine() {
-    const { feesFines: { total } } = this.state;
-    const { stripes } = this.props;
+    const { stripes, resources } = this.props;
+    const records = resources?.loanAccountsActions?.records ?? [];
+    const total = records.reduce((acc, { amount }) => (acc + parseFloat(amount)), 0);
 
     if (total === 0) return '-';
 
@@ -292,6 +279,7 @@ class LoanDetails extends React.Component {
       loanPolicies,
       requestCounts,
       declareLost,
+      markAsMissing,
       claimReturned,
     } = this.props;
 
@@ -391,19 +379,51 @@ class LoanDetails extends React.Component {
                     <FormattedMessage id="ui-users.renew" />
                   </Button>
                 </IfPermission>
-                <IfPermission perm="ui-users.loans.claim-item-returned">
-                  <Button
-                    data-test-claim-returned-button
-                    disabled={buttonDisabled || isClaimedReturnedItem}
-                    buttonStyle="primary"
-                    onClick={() => claimReturned(loan)}
+                {isClaimedReturnedItem &&
+                  <Dropdown
+                    id="resolve-claim-menu"
+                    label={<FormattedMessage id="ui-users.loans.resolveClaim" />}
+                    buttonProps={{ buttonStyle: 'primary' }}
                   >
-                    <FormattedMessage id="ui-users.loans.claimReturned" />
-                  </Button>
-                </IfPermission>
+                    <DropdownMenu data-test-resolve-claim-dropdown data-role="menu">
+                      <IfPermission perm="ui-users.loans.declare-item-lost">
+                        <Button
+                          buttonStyle="dropdownItem"
+                          data-test-declare-lost-button
+                          disabled={buttonDisabled || isDeclaredLostItem}
+                          onClick={() => declareLost(loan)}
+                        >
+                          <FormattedMessage id="ui-users.loans.declareLost" />
+                        </Button>
+                      </IfPermission>
+                      <IfPermission perm="ui-users.loans.declare-claimed-returned-item-as-missing">
+                        <Button
+                          buttonStyle="dropdownItem"
+                          data-test-dropdown-content-mark-as-missing-button
+                          onClick={() => markAsMissing(loan)}
+                        >
+                          <FormattedMessage id="ui-users.loans.markAsMissing" />
+                        </Button>
+                      </IfPermission>
+                    </DropdownMenu>
+                  </Dropdown>
+                }
+                {!isClaimedReturnedItem &&
+                  <IfPermission perm="ui-users.loans.claim-item-returned">
+                    <Button
+                      data-test-claim-returned-button
+                      disabled={buttonDisabled}
+                      buttonStyle="primary"
+                      onClick={() => claimReturned(loan)}
+                    >
+                      <FormattedMessage id="ui-users.loans.claimReturned" />
+                    </Button>
+                  </IfPermission>
+                }
                 <IfPermission perm="ui-users.loans.edit">
                   <Button
-                    disabled={buttonDisabled || isDeclaredLostItem}
+                    data-test-change-due-date-button
+                    disabled={buttonDisabled || isDeclaredLostItem || isClaimedReturnedItem}
                     buttonStyle="primary"
                     onClick={this.showChangeDueDateDialog}
                   >
@@ -607,4 +627,5 @@ export default compose(
   withRenew,
   withDeclareLost,
   withClaimReturned,
+  withMarkAsMissing,
 )(LoanDetails);

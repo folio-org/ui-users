@@ -23,6 +23,14 @@ export default function config() {
       name: 'users',
       provides: []
     },
+    {
+      id: 'mod-feesfines-15.8.0-SNAPSHOT.73',
+      name: 'feesfines',
+      provides: [{
+        id: 'feesfines',
+        version: '15.2',
+      }]
+    }
   ]);
 
   this.get('/saml/check', {
@@ -401,6 +409,8 @@ export default function config() {
 
   this.post('/perms/users/:id/permissions?indexField=userId');
 
+  this.post('/circulation/loans/:loanId/declare-item-lost', []);
+
   this.get('/feefineactions', ({ feefineactions }) => {
     return this.serializerOrRegistry.serialize(feefineactions.all());
   });
@@ -415,7 +425,6 @@ export default function config() {
   });
 
   this.get('/authn/credentials-existence', () => { });
-  this.post('/authn/credentials');
 
   this.get('/note-types');
 
@@ -567,6 +576,10 @@ export default function config() {
     return patronBlockLimits.find(request.params.id).attrs;
   });
 
+  this.delete('/patron-block-limits/:id', ({ patronBlockLimits }, request) => {
+    return patronBlockLimits.find(request.params.id).destroy();
+  });
+
   this.post('/patron-block-limits', function (schema, { requestBody }) {
     const limit = JSON.parse(requestBody);
 
@@ -619,5 +632,30 @@ export default function config() {
       'order': 4,
       'helpText': 'help text',
     }]
+  });
+
+  this.post('/authn/credentials', {});
+
+  this.get('/authn/credentials', (schema, request) => {
+    const url = new URL(request.url);
+    const cqlQuery = url.searchParams.get('query');
+
+    if (cqlQuery != null) {
+      const cqlParser = new CQLParser();
+      cqlParser.parse(cqlQuery);
+
+      if (cqlParser.tree.term) {
+        return schema.credentials.where({
+          userId: cqlParser.tree.term
+        });
+      }
+    }
+
+    return schema.credentials.all();
+  });
+
+  this.get('/automated-patron-blocks/:id', {
+    automatedPatronBlocks: [],
+    totalRecords: 0,
   });
 }

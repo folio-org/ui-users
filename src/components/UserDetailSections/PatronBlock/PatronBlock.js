@@ -20,11 +20,9 @@ import { stripesConnect } from '@folio/stripes/core';
 
 import { calculateSortParams } from '../../util';
 
-import css from './PatronBlock.css';
-
 class PatronBlock extends React.Component {
   static manifest = Object.freeze({
-    patronBlocks: {
+    manualPatronBlocks: {
       type: 'okapi',
       records: 'manualblocks',
       path: 'manualblocks',
@@ -48,18 +46,25 @@ class PatronBlock extends React.Component {
     expanded: PropTypes.bool,
     accordionId: PropTypes.string,
     patronBlocks: PropTypes.arrayOf(PropTypes.object),
+    automatedPatronBlocks: PropTypes.arrayOf(PropTypes.object),
+    manualPatronBlocks: PropTypes.arrayOf(PropTypes.object),
     hasPatronBlocks: PropTypes.bool,
     mutator: PropTypes.shape({
       activeRecord: PropTypes.shape({
         update: PropTypes.func,
       }),
-      patronBlocks: PropTypes.shape({
+      manualPatronBlocks: PropTypes.shape({
         DELETE: PropTypes.func,
         GET: PropTypes.func,
         reset: PropTypes.func,
       }),
     }),
     user: PropTypes.object,
+  };
+
+  static defaultProps = {
+    patronBlocks: [],
+    automatedPatronBlocks: [],
   };
 
   constructor(props) {
@@ -88,23 +93,37 @@ class PatronBlock extends React.Component {
   }
 
   componentDidMount() {
-    const { mutator: { patronBlocks }, user, onToggle, expanded, accordionId } = this.props;
+    const {
+      mutator: {
+        manualPatronBlocks,
+      },
+      user,
+      onToggle,
+      expanded,
+      accordionId,
+      automatedPatronBlocks,
+    } = this.props;
     const query = `userId=${user.id}`;
-    patronBlocks.reset();
-    patronBlocks.GET({ params: { query } }).then(records => {
-      const blocks = records.filter(p => moment(moment(p.expirationDate).format()).isSameOrAfter(moment().format()));
-      if ((blocks.length > 0 && !expanded) || (!blocks.length && expanded)) {
-        onToggle({ id: accordionId });
-      }
-    });
+
+    manualPatronBlocks.reset();
+    manualPatronBlocks.GET({ params: { query } })
+      .then(records => {
+        const blocks = records.filter(p => moment(moment(p.expirationDate).format()).isSameOrAfter(moment().format()));
+        if ((blocks.length > 0 && !expanded) || (!blocks.length && expanded)) {
+          onToggle({ id: accordionId });
+        }
+      });
+
+    if ((automatedPatronBlocks.length && !expanded) || (!automatedPatronBlocks.length && expanded)) {
+      onToggle({ id: accordionId });
+    }
   }
 
   componentDidUpdate(prevProps) {
-    const { patronBlocks } = this.props;
-    const prevBlocks = prevProps.patronBlocks;
+    const prevPatronBlocks = prevProps.patronBlocks;
     const { submitting } = this.state;
-    const prevExpirated = prevBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
-    const expirated = patronBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
+    const prevExpirated = prevPatronBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
+    const expirated = prevPatronBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
 
     if (prevExpirated.length > 0 && expirated.length === 0) {
       // eslint-disable-next-line react/no-did-update-set-state
@@ -116,7 +135,7 @@ class PatronBlock extends React.Component {
       this.setState({ submitting: true });
       expirated.forEach(p => {
         this.props.mutator.activeRecord.update({ blockId: p.id });
-        this.props.mutator.patronBlocks.DELETE({ id: p.id });
+        this.props.mutator.manualPatronBlocks.DELETE({ id: p.id });
       });
     }
   }
@@ -144,24 +163,48 @@ class PatronBlock extends React.Component {
       match: { params }
     } = this.props;
 
+    if (!row.type) {
+      return;
+    }
+
     const permAbled = this.props.stripes.hasPerm('ui-users.patron_blocks');
+
     if (permAbled === true && (e.target.type !== 'button') && (e.target.tagName !== 'IMG')) {
       history.push(`/users/${params.id}/patronblocks/edit/${row.id}`);
     }
   }
 
   getPatronFormatter() {
-    const { intl: { formatMessage } } = this.props;
+    const {
+      intl: {
+        formatMessage
+      },
+    } = this.props;
 
     return {
-      'Type': f => f.type,
-      'Display description': f => f.desc,
-      'Blocked actions': f => `${f.borrowing ? [formatMessage({ id: 'ui-users.blocks.columns.borrowing' })] : ''}${f.renewals && f.borrowing ? ', ' : ''}${f.renewals ? [formatMessage({ id: 'ui-users.blocks.columns.renewals' })] : ''}${(f.requests && f.renewals) || (f.borrowing && f.requests) ? ', ' : ''}${f.requests ? [formatMessage({ id: 'ui-users.blocks.columns.requests' })] : ''}`,
+      'Type': f => f?.type ?? <FormattedMessage id="ui-users.blocks.columns.automated.type" />,
+      'Display description': f => f.desc || f.message,
+      'Blocked actions': f => {
+        const blockedActions = [];
+
+        if (f.borrowing || f.blockBorrowing) {
+          blockedActions.push([formatMessage({ id: 'ui-users.blocks.columns.borrowing' })]);
+        }
+
+        if (f.renewals || f.blockRenewals) {
+          blockedActions.push([formatMessage({ id: 'ui-users.blocks.columns.renewals' })]);
+        }
+
+        if (f.requests || f.blockRequests) {
+          blockedActions.push([formatMessage({ id: 'ui-users.blocks.columns.requests' })]);
+        }
+
+        return blockedActions.join(', ');
+      }
     };
   }
 
   render() {
-    const props = this.props;
     const {
       expanded,
       onToggle,
@@ -169,7 +212,7 @@ class PatronBlock extends React.Component {
       patronBlocks,
       hasPatronBlocks,
       match: { params },
-    } = props;
+    } = this.props;
     const {
       sortOrder,
       sortDirection
@@ -181,6 +224,7 @@ class PatronBlock extends React.Component {
       'Display description',
       'Blocked actions',
     ];
+
     const buttonDisabled = this.props.stripes.hasPerm('ui-users.patron_blocks');
     const displayWhenOpen =
       <Button id="create-patron-block" disabled={!buttonDisabled} to={{ pathname: `/users/${params.id}/patronblocks/create` }}>
@@ -189,6 +233,7 @@ class PatronBlock extends React.Component {
     const items =
       <MultiColumnList
         id="patron-block-mcl"
+        interactive={false}
         contentData={contentData}
         formatter={this.getPatronFormatter()}
         visibleColumns={visibleColumns}
@@ -203,14 +248,11 @@ class PatronBlock extends React.Component {
         }}
       />;
     const title =
-      <Row>
-        <Col>
-          <Headline className={css.headlineLabel} size="large" tag="h3">
-            <FormattedMessage id="ui-users.blocks.label" />
-          </Headline>
-        </Col>
-        <Col>{(hasPatronBlocks) ? <Icon size="medium" icon="exclamation-circle" status="error" /> : ''}</Col>
-      </Row>;
+      <Headline size="large" tag="h3">
+        <FormattedMessage id="ui-users.blocks.label" />
+        {(hasPatronBlocks) ? <Icon size="medium" icon="exclamation-circle" status="error" /> : ''}
+      </Headline>;
+
     return (
       <Accordion
         open={expanded}

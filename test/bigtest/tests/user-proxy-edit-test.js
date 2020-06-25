@@ -7,19 +7,16 @@ import {
 import { expect } from 'chai';
 
 import findUser from '@folio/plugin-find-user';
-import FindUserInteractor from '@folio/plugin-find-user/test/bigtest/interactors/findUser';
 
 import setupApplication from '../helpers/setup-application';
 import UserFormPage from '../interactors/user-form-page';
 import UsersInteractor from '../interactors/users';
+import FindUserInteractor from '../interactors/find-user';
 import FindUserInstancesInteractor from '../interactors/FindUserInstances';
 
 import translations from '../../../translations/ui-users/en';
 
 describe('User Edit: Proxy/Sponsor', function () {
-  // some of the beforeEach blocks seem to timeout in CI
-  // this.timeout(5000);
-
   setupApplication({
     scenarios: ['user-proxy-edit'],
     modules: [{
@@ -143,6 +140,26 @@ describe('User Edit: Proxy/Sponsor', function () {
         expect(UserFormPage.errorModal.isPresent).to.be.true;
         expect(UserFormPage.errorModal.label).to.equal(translations['errors.sponsors.invalidUserLabel']);
         expect(UserFormPage.errorModal.text).to.include(translations['errors.sponsors.invalidUserMessage']);
+      });
+    });
+
+    describe('Adding the same user as sponsor should fail', () => {
+      beforeEach(async () => {
+        await findUserPlugin.modal.searchField.fill('sponsor');
+        await findUserPlugin.modal.searchButton.click();
+        await findUserInstances.whenInstancesLoaded();
+        await findUserPlugin.modal.instances(0).click();
+
+        await findUserPlugin.modal.searchField.fill('sponsor');
+        await findUserPlugin.modal.searchButton.click();
+        await findUserInstances.whenInstancesLoaded();
+        await findUserPlugin.modal.instances(0).click();
+      });
+
+      it('error modal should be present', () => {
+        expect(UserFormPage.errorModal.isPresent).to.be.true;
+        expect(UserFormPage.errorModal.label).to.equal(translations['errors.sponsors.invalidUserLabel']);
+        expect(UserFormPage.errorModal.text).to.include(translations['errors.sponsors.duplicateUserMessage']);
       });
     });
   });

@@ -110,7 +110,7 @@ class PatronBlockForm extends React.Component {
           <PaneHeaderIconButton
             id="close-patron-block"
             onClick={this.props.onClose}
-            ariaLabel={ariaLabel}
+            aria-label={ariaLabel}
             icon="times"
           />
         )}
@@ -262,7 +262,7 @@ class PatronBlockForm extends React.Component {
                       <Field
                         name="requests"
                         checked={requests}
-                        label={<FormattedMessage id="ui-users.blocks.form.label.request" />}
+                        label={<FormattedMessage id="ui-users.blocks.form.label.requests" />}
                         component={Checkbox}
                       />
                     </Col>

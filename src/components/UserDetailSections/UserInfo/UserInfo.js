@@ -10,10 +10,13 @@ import {
   Col,
   KeyValue,
   Accordion,
-  Headline
+  Headline,
+  NoValue,
 } from '@folio/stripes/components';
 
 import { ViewMetaData } from '@folio/stripes/smart-components';
+import css from './UserInfo.css';
+import appIcon from '../../../../icons/app.png';
 
 class UserInfo extends React.Component {
   static propTypes = {
@@ -41,7 +44,9 @@ class UserInfo extends React.Component {
       accordionId,
       onToggle,
     } = this.props;
-    const userStatus = (get(user, ['active'], '') ? 'active' : 'inactive');
+    const userStatus = (user?.active ?
+      <FormattedMessage id="ui-users.active" /> :
+      <FormattedMessage id="ui-users.inactive" />);
     const hasProfilePicture = (settings.length && settings[0].value === 'true');
 
     return (
@@ -85,8 +90,8 @@ class UserInfo extends React.Component {
               </Col>
               <Col xs={3}>
                 <KeyValue
-                  label={<FormattedMessage id="ui-users.information.barcode" />}
-                  value={get(user, ['barcode'], '')}
+                  label={<FormattedMessage id="ui-users.information.preferredName" />}
+                  value={get(user, ['personal', 'preferredFirstName']) || <NoValue />}
                 />
               </Col>
             </Row>
@@ -110,6 +115,12 @@ class UserInfo extends React.Component {
                   value={user.expirationDate ? <FormattedDate value={user.expirationDate} /> : '-'}
                 />
               </Col>
+              <Col xs={3}>
+                <KeyValue
+                  label={<FormattedMessage id="ui-users.information.barcode" />}
+                  value={get(user, ['barcode'], '')}
+                />
+              </Col>
             </Row>
           </Col>
 
@@ -117,7 +128,7 @@ class UserInfo extends React.Component {
             <Col xs={3}>
               <Row>
                 <Col xs={12}>
-                  <img className="floatEnd" src="//placehold.it/100x100" alt="presentation" />
+                  <img className={`floatEnd ${css.profilePlaceholder}`} src={appIcon} alt="presentation" />
                 </Col>
               </Row>
             </Col>

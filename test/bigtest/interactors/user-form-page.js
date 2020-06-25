@@ -100,6 +100,7 @@ import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/P
   title = text('[class*=paneTitleLabel---]');
   barcodeField = new InputFieldInteractor('#adduser_barcode');
   usernameField = new InputFieldInteractor('#adduser_username');
+  emailField = new InputFieldInteractor('#adduser_email');
   isUsernameFieldRequired = property('#adduser_username', 'required');
   resetPasswordLink = scoped('[class*=resetPasswordButton]');
   expirationDate = new InputFieldInteractor('#adduser_expirationdate');

@@ -15,9 +15,9 @@ const PatronBlockModal = ({ open, onClose, patronBlocks, viewUserPath }) => {
   const blocks = take(orderBy(patronBlocks, ['metadata.updatedDate'], ['desc']), 3);
   const renderBlocks = blocks.map(block => {
     return (
-      <Row>
+      <Row key={block.id || block.patronBlockConditionId}>
         <Col xs>
-          <b>{block.desc || ''}</b>
+          <b data-test-patron-block-reason>{block.desc || block.message || ''}</b>
         </Col>
       </Row>
     );
@@ -25,6 +25,7 @@ const PatronBlockModal = ({ open, onClose, patronBlocks, viewUserPath }) => {
 
   return (
     <Modal
+      data-test-patron-block-modal
       open={open}
       onClose={onClose}
       label={

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { get } from 'lodash';
+
 import { stripesConnect } from '@folio/stripes/core';
 import {
   Col,
@@ -18,11 +18,6 @@ class CreateResetPasswordControl extends React.Component {
     email: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     userId: PropTypes.string.isRequired,
-    resources: PropTypes.shape({
-      isLocalPasswordSet: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
-      }).isRequired,
-    }).isRequired,
     mutator: PropTypes.shape({
       resetPassword: PropTypes.shape({
         POST: PropTypes.func.isRequired,
@@ -37,17 +32,16 @@ class CreateResetPasswordControl extends React.Component {
       fetch: false,
       throwErrors: false,
     },
-    isLocalPasswordSet: {
-      type: 'okapi',
-      path: 'authn/credentials-existence?userId=!{userId}',
-      permissionsRequired: 'login.credentials-existence.get',
-    },
+
   });
 
-  state = {
-    showModal: false,
-    link: '',
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      showModal: false,
+      link: '',
+    };
+  }
 
   closeModal = () => {
     this.setState({ showModal: false });
@@ -117,13 +111,6 @@ class CreateResetPasswordControl extends React.Component {
   };
 
   render() {
-    const pathToResponse = 'resources.isLocalPasswordSet.records[0].credentialsExist';
-    const isLocalPasswordSet = get(this.props, pathToResponse, true);
-
-    const linkTextKey = isLocalPasswordSet
-      ? 'ui-users.extended.sendResetPassword'
-      : 'ui-users.extended.sendCreatePassword';
-
     return (
       <Col
         xs={12}
@@ -137,12 +124,9 @@ class CreateResetPasswordControl extends React.Component {
           className={css.resetPasswordButton}
           onClick={this.handleLinkClick}
         >
-          <FormattedMessage id={linkTextKey} />
+          <FormattedMessage id="ui-users.extended.sendResetPassword" />
         </button>
-        {isLocalPasswordSet
-          ? this.resetPasswordModal()
-          : this.createPasswordModal()
-        }
+        {this.resetPasswordModal()}
       </Col>
     );
   }

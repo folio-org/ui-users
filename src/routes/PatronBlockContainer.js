@@ -14,7 +14,7 @@ class PatronBlockContainer extends React.Component {
         return refresh || (path && path.match(/link/));
       },
     },
-    patronBlocks: {
+    manualPatronBlocks: {
       type: 'okapi',
       records: 'manualblocks',
       path:'manualblocks',
@@ -31,7 +31,7 @@ class PatronBlockContainer extends React.Component {
 
   static propTypes = {
     mutator: PropTypes.shape({
-      patronBlocks: PropTypes.shape({
+      manualPatronBlocks: PropTypes.shape({
         POST: PropTypes.func.isRequired,
         PUT: PropTypes.func.isRequired,
         DELETE: PropTypes.func.isRequired

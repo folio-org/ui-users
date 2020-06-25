@@ -1,7 +1,23 @@
 # Change history for ui-users
 
-## [4.0.0] (IN PROGRESS)
+## [4.1.0] (IN PROGRESS)
 
+* Trim email address in user record to remove blanks. Fixes UIU-1528.
+* `withRenew` should include in-transit items when calculating the open-request-count. Fixes UIU-1254.
+* Restore `CommandList`, `HasCommand` wrappers now that they don't leak memory. Refs UIU-1457.
+* Retrieve up to 200 patron groups when setting Fee/Fine limits. Refs UIU-1715.
+* Use `==` for more efficient queries. Refs PERF-62.
+* Increment `@folio/plugin-find-user` to `v3.0.0` for `@folio/stripes` `v4.0` compatibility.
+* Refresh Fine incurred field when item declared lost. Fixes UIU-1669.
+
+## [4.0.0](https://github.com/folio-org/ui-users/tree/v4.0.0) (2020-06-17)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v3.0.0...v4.0.0)
+
+* Stripping asterisks out of user searches.  Fixes UIU-681
+* Support `login` `v7.0` (some unused endpoints were removed). Refs UIU-1663, UIU-1672.
+* Support `users-bl` `v6.0` (some unused endpoints were removed). Refs STCOR-436, STRIPES-685.
+* Change Pay/Waive/Transfer/Cancel Fee/Fine Owner by Service Point name where the transaction took place. Refs. UIU-1399.
+* Change Fee/Fine Owner by Service Point name where the transaction took place. Refs. UIU-1398.
 * Support `loan-storage` interface version 7.0. UIU-1598.
 * Add posibility to view/create/edit custom fields on user record. UIU-1279.
 * Increase limit of service points in the Associated Service Points dropdown at Settings --> Users --> Fee/Fine Owners. Refs UIU-1540.
@@ -35,7 +51,35 @@
 * Sort user permissions in alphabetical order on create/edit screen. Refs UIU-1353.
 * Fix memory leak in `UserAccounts.js` discovered by @mkuklis.
 * UI updates to the Permissions modal. Refs UIU-1466.
+* Add permission and permission check for mark a claimed item missing. Refs UIU-1268.
 * Prevent the renewal of claimed returned items. Refs UIU-1261.
+* Adds `checkedInFoundByLibrary` and `checkedInReturnedByPatron` to loan action map. Fixes UIU-1643.
+* Display the correct link for create/reset password. Refs UIU-1608.
+* Add a bulk claim returned function. Refs UIU-1627.
+* Format action message for claim returned checkin. Refs UIU-1218.
+* Add resolve claim to loan details screen. Refs UIU-1524.
+* Capitalize user status when displayed. Fixes UIU-1523.
+* Permissions -> Users: Create/reset password send. Refs UIU-1337.
+* Prevent change due date for claimed returned items. Refs UIU-1260.
+* Bring back `Declare lost` button. Fixes UIU-1662.
+* Use the app logo as a profile placeholder. Yep, it's kinda hacky. Refs UIU-496.
+* Fee/Fine Details is not refreshing, which may result in user entering duplicate actions. Fixes UIU-1644.
+* Protect loan action history page from CQL null query errors. Fixes UIU-1652.
+* Fix the arrangement of elements inside the `SafeHTMLMessage` component. Fixes UIU-1660.
+* Fix Patron Group, Status, and Preferred contact fields, are not read a required by screen reader. Refs UIU-1642.
+* Check for an empty loan to protect from generating incorrect CQL. Fixes UIU-1653.
+* Add checks for multiple okapi interfaces on user's details screen. Fixes UIU-1600.
+* Display automated patron blocks on User Information page. Refs UIU-1273.
+* On user-edit screen, show "send reset password link" whenever username is present. Refs UIU-1672.
+* Display automated patron blocks on renewing in loans context. Refs UIU-1276.
+* Do not create an empty-string password when adding a username to a user. Refs UIU-1671.
+* Fix incorrect display of the date in the `Return date` field. Refs UIU-1204.
+* Add `delete` request to patron block limits. Refs UIU-1675.
+* Validate duplicate proxy/sponsor. Fixes UIU-925.
+* Prefer `aria-label` to `ariaLabel` per React documentation.
+* Apply default pane max-width value on the edit page. Refs UIU-1649.
+* Change user form pane title. UIU-1649.
+* Add preferred first name field on user record. Refs UIU-1649.
 
 ## [3.0.0](https://github.com/folio-org/ui-users/tree/v3.0.0) (2020-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.26.0...v3.0.0)

@@ -4,15 +4,16 @@ import {
   clickable,
   ButtonInteractor,
   property,
+  isPresent,
 } from '@bigtest/interactor';
 
 import MultiColumnListInteractor from '@folio/stripes-components/lib/MultiColumnList/tests/interactor'; // eslint-disable-line
 
+import PatronBlockModal from './parton-blocks/modal';
 import KeyValue from './KeyValue';
 
 @interactor class LoanActionsHistory {
-  static defaultScope = '[data-test-loan-actions-history]';
-
+  actionHistoryPresent = isPresent('[data-test-loan-actions-history]');
   claimedReturnedDate = scoped('[data-test-loan-claimed-returned] div', KeyValue);
   requests = scoped('[data-test-loan-actions-history-requests] div', KeyValue);
   lostDate = scoped('[data-test-loan-actions-history-lost] div', KeyValue);
@@ -29,10 +30,15 @@ import KeyValue from './KeyValue';
   claimReturnedButton = scoped('[data-test-claim-returned-button]', ButtonInteractor);
   isClaimReturnedButtonDisabled = property('[data-test-claim-returned-button]', 'disabled');
   isRenewButtonDisabled = property('[data-test-renew-button]', 'disabled');
+  renewButton = scoped('[data-test-renew-button]', ButtonInteractor);
+  isChangeDueDateButtonDisabled = property('[data-test-change-due-date-button]', 'disabled');
   loanActions = scoped('#list-loanactions', MultiColumnListInteractor);
+  patronBlockModal = new PatronBlockModal();
+
+  resolveClaimMenu = scoped('#resolve-claim-menu button');
 
   whenLoaded() {
-    return this.when(() => this.isPresent).timeout(5000);
+    return this.when(() => this.actionHistoryPresent).timeout(5000);
   }
 }
 

@@ -10,7 +10,6 @@ import {
   omit,
   differenceBy,
   get,
-  has,
 } from 'lodash';
 
 import { LoadingView } from '@folio/stripes/components';
@@ -163,42 +162,36 @@ class UserEdit extends React.Component {
     mutator.requestPreferences.PUT(payload);
   }
 
-  create = ({ requestPreferences, creds, ...userFormData }) => {
+  create = ({ requestPreferences, ...userFormData }) => {
     const { mutator, history, location: { search } } = this.props;
     const userData = cloneDeep(userFormData);
-    const credentialsAreSet = userData.username;
     const user = { ...userData, id: uuid() };
     user.personal.addresses = toUserAddresses(user.personal.addresses);
+    user.personal.email = user.personal.email.trim();
 
-    if (credentialsAreSet) {
-      const credentials = {
-        password: '',
-        ...creds,
-        username: userData.username,
-      };
-
-      mutator.records.POST(user)
-        .then(() => mutator.creds.POST(Object.assign(credentials, { userId: user.id })))
-        .then(() => {
-          this.createRequestPreferences(requestPreferences, user.id);
-          return mutator.perms.POST({ userId: user.id, permissions: [] });
-        })
-        .then(() => {
-          history.push(`/users/preview/${user.id}${search}`);
-        });
-    } else {
-      mutator.records.POST(user)
-        .then(() => {
-          this.createRequestPreferences(requestPreferences, user.id);
-          return mutator.perms.POST({ userId: user.id, permissions: [] });
-        })
-        .then(() => {
-          history.push(`/users/preview/${user.id}${search}`);
-        });
-    }
+    mutator.records.POST(user)
+      .then(() => {
+        this.createRequestPreferences(requestPreferences, user.id);
+        return mutator.perms.POST({ userId: user.id, permissions: [] });
+      })
+      .then(() => {
+        history.push(`/users/preview/${user.id}${search}`);
+      });
   }
 
-  update({ requestPreferences, creds, ...userFormData }) {
+  formatCustomFieldsPayload(customFields) {
+    const copiedCustomFields = { ...customFields };
+
+    Object.keys(copiedCustomFields).forEach(customFieldId => {
+      if (!copiedCustomFields[customFieldId]) {
+        delete copiedCustomFields[customFieldId];
+      }
+    });
+
+    return copiedCustomFields;
+  }
+
+  update({ requestPreferences, ...userFormData }) {
     const {
       updateProxies,
       updateSponsors,
@@ -224,6 +217,7 @@ class UserEdit extends React.Component {
     }
 
     user.personal.addresses = toUserAddresses(user.personal.addresses); // eslint-disable-line no-param-reassign
+    user.personal.email = user.personal.email.trim();
 
     const { proxies, sponsors, permissions, servicePoints, preferredServicePoint } = user;
 
@@ -245,28 +239,16 @@ class UserEdit extends React.Component {
     const curActive = user.active;
     const prevActive = prevUser.active;
 
+    const formattedCustomFieldsPayload = this.formatCustomFieldsPayload(data.customFields);
+
+    data.customFields = formattedCustomFieldsPayload;
+
     // if active has been changed manually on the form
     // or if the expirationDate has been removed
     if (curActive !== prevActive || !user.expirationDate) {
       data.active = curActive;
     } else {
       data.active = (moment(user.expirationDate).endOf('day').isSameOrAfter(today));
-    }
-
-    const userBeforeUpdate = resources.records.records.find(({ id }) => id === user.id);
-
-    if (user.username && !has(userBeforeUpdate, 'username')) {
-      const credentials = {
-        password: '',
-        ...creds,
-        username: user.username,
-      };
-      const createdCreds = {
-        ...credentials,
-        userId: user.id,
-      };
-
-      mutator.creds.POST(createdCreds);
     }
 
     mutator.selUser.PUT(data).then(() => {
@@ -301,7 +283,7 @@ class UserEdit extends React.Component {
         <LoadingView
           data-test-form-page
           paneTitle={params.id ?
-            <FormattedMessage id="ui-users.crud.editUser" /> :
+            <FormattedMessage id="ui-users.edit" /> :
             <FormattedMessage id="ui-users.crud.createUser" />
           }
           defaultWidth="100%"
