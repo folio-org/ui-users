@@ -7,6 +7,7 @@
 * Restore `CommandList`, `HasCommand` wrappers now that they don't leak memory. Refs UIU-1457.
 * Retrieve up to 200 patron groups when setting Fee/Fine limits. Refs UIU-1715.
 * Use `==` for more efficient queries. Refs PERF-62.
+* Increment `@folio/plugin-find-user` to `v3.0.0` for `@folio/stripes` `v4.0` compatibility.
 
 ## [4.0.0](https://github.com/folio-org/ui-users/tree/v4.0.0) (2020-06-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v3.0.0...v4.0.0)
