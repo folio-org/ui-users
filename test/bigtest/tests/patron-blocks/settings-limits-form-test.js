@@ -80,6 +80,18 @@ describe('Patron blocks limits form', () => {
       });
     });
 
+    describe('set float limit value', () => {
+      beforeEach(async function () {
+        await SettingsLimitsForm.limitField(0)
+          .fillAndBlur(12.5);
+      });
+
+      it('should show error message', () => {
+        expect(SettingsLimitsForm.errorMessage.isPresent).to.be.true;
+        expect(SettingsLimitsForm.errorMessage.text).to.equal(validationMessage);
+      });
+    });
+
     describe('set invalid limit value for fee fine limit', () => {
       beforeEach(async function () {
         await SettingsLimitsForm.limitField(5)
@@ -89,6 +101,17 @@ describe('Patron blocks limits form', () => {
       it('should show error message', () => {
         expect(SettingsLimitsForm.errorMessage.isPresent).to.be.true;
         expect(SettingsLimitsForm.errorMessage.text).to.equal(feeFineValidationMessage);
+      });
+    });
+
+    describe('set float limit value for fee fine limit', () => {
+      beforeEach(async function () {
+        await SettingsLimitsForm.limitField(5)
+          .fillAndBlur(12.5);
+      });
+
+      it('should show error message', () => {
+        expect(SettingsLimitsForm.errorMessage.isPresent).to.be.false;
       });
     });
   });
