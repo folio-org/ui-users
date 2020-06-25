@@ -68,7 +68,7 @@ class ChargeFeesFinesContainer extends React.Component {
       type: 'okapi',
       records: 'feefines',
       GET: {
-        path: 'feefines?query=(ownerId=%{activeRecord.ownerId} or ownerId=%{activeRecord.shared})&limit=10000',
+        path: 'feefines?query=(ownerId==%{activeRecord.ownerId} or ownerId==%{activeRecord.shared})&limit=10000',
       },
     },
     feefineactions: {
