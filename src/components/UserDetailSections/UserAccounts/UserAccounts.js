@@ -27,21 +27,21 @@ class UserAccounts extends React.Component {
       type: 'okapi',
       records: 'accounts',
       GET: {
-        path: 'accounts?query=(userId=:{id})&limit=10000',
+        path: 'accounts?query=(userId==:{id})&limit=10000',
       },
     },
     openAccountsCount: {
       type: 'okapi',
       accumulate: 'true',
       GET: {
-        path: 'accounts?query=(userId=:{id} and status.name<>Closed)&limit=10000',
+        path: 'accounts?query=(userId==:{id} and status.name<>Closed)&limit=10000',
       },
     },
     closedAccountsCount: {
       type: 'okapi',
       accumulate: 'true',
       GET: {
-        path: 'accounts?query=(userId=:{id} and status.name=Closed)&limit=1',
+        path: 'accounts?query=(userId==:{id} and status.name=Closed)&limit=1',
       },
     },
     activeRecord: {},
