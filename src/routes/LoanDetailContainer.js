@@ -45,7 +45,7 @@ class LoanDetailContainer extends React.Component {
     loanHistory: {
       type: 'okapi',
       records: 'loans',
-      path: 'circulation/loans?query=(userId=:{id}) sortby id&limit=100',
+      path: 'circulation/loans?query=(userId==:{id}) sortby id&limit=100',
       permissionsRequired: 'circulation.loans.collection.get',
     },
     requests: {
@@ -58,7 +58,7 @@ class LoanDetailContainer extends React.Component {
     },
     loanActions: {
       type: 'okapi',
-      path: 'loan-storage/loan-history?query=(loan.id=:{loanid})&limit=100',
+      path: 'loan-storage/loan-history?query=(loan.id==:{loanid})&limit=100',
       records: 'loansHistory',
       resourceShouldRefresh: true,
       shouldRefresh: (resource, action, refresh) => {
@@ -84,7 +84,7 @@ class LoanDetailContainer extends React.Component {
     hasManualPatronBlocks: {
       type: 'okapi',
       records: 'manualblocks',
-      path: 'manualblocks?query=(userId=:{id})&limit=100',
+      path: 'manualblocks?query=(userId==:{id})&limit=100',
       permissionsRequired: 'manualblocks.collection.get',
     },
     hasAutomatedPatronBlocks: {

@@ -36,7 +36,7 @@ const queryFunction = (findAll, queryTemplate, sortMap, fConfig, failOnCondition
   return (queryParams, pathComponents, resourceValues, logger) => {
     let cql = getCql(queryParams, pathComponents, resourceValues, logger);
     const userId = a[0].value;
-    if (cql === undefined) { cql = `userId=${userId}`; } else { cql = `(${cql}) and (userId=${userId})`; }
+    if (cql === undefined) { cql = `userId==${userId}`; } else { cql = `(${cql}) and (userId==${userId})`; }
     return cql;
   };
 };
@@ -70,18 +70,18 @@ class AccountsListingContainer extends React.Component {
     comments: {
       type: 'okapi',
       records: 'feefineactions',
-      path: 'feefineactions?query=(userId=:{id} and comments=*)&limit=%{activeRecord.comments}',
+      path: 'feefineactions?query=(userId==:{id} and comments=*)&limit=%{activeRecord.comments}',
     },
     filter: {
       type: 'okapi',
       records: 'accounts',
       recordsRequired: '%{activeRecord.records}',
-      path: 'accounts?query=userId=:{id}&limit=10000',
+      path: 'accounts?query=userId==:{id}&limit=10000',
     },
     loans: {
       type: 'okapi',
       records: 'loans',
-      path: 'circulation/loans?query=(userId=:{id}) sortby id&limit=100',
+      path: 'circulation/loans?query=(userId==:{id}) sortby id&limit=100',
       permissionsRequired: 'circulation.loans.collection.get',
     },
     feefineshistory: {

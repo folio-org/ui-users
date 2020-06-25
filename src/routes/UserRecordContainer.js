@@ -26,7 +26,7 @@ class UserRecordContainer extends React.Component {
     hasManualPatronBlocks: {
       type: 'okapi',
       records: 'manualblocks',
-      path: 'manualblocks?query=(userId=:{id})&limit=100',
+      path: 'manualblocks?query=(userId==:{id})&limit=100',
       permissionsRequired: 'manualblocks.collection.get',
     },
     hasAutomatedPatronBlocks: {
@@ -39,7 +39,7 @@ class UserRecordContainer extends React.Component {
     loansHistory: {
       type: 'okapi',
       records: 'loans',
-      path: 'circulation/loans?query=(userId=:{id}) sortby id&limit=100',
+      path: 'circulation/loans?query=(userId==:{id}) sortby id&limit=100',
       permissionsRequired: 'circulation.loans.collection.get',
     },
     patronGroups: {
