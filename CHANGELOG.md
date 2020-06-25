@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## 4.0.4 (IN PROGRESS)
+
+* Refresh Fine incurred field when item declared lost. Fixes UIU-1669.
+
 ## [4.0.3](https://github.com/folio-org/ui-users/tree/v4.0.3) (2020-07-08)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v4.0.2...v4.0.3)
 
