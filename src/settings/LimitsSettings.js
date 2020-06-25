@@ -17,6 +17,11 @@ import { Settings } from '@folio/stripes/smart-components';
 
 import Limits from './patronBlocks/Limits/Limits';
 
+// Only 6 patron block conditions exist. If patron groups or
+// patron block conditions limit change, then LIMITS_RECORDS must be changed as well.
+// For now we have: 6 * 200 = 1200.
+const LIMITS_RECORDS = '1200';
+
 class LimitsSettings extends Component {
   static manifest = Object.freeze({
     query: {},
@@ -26,6 +31,7 @@ class LimitsSettings extends Component {
       path: 'groups',
       params: {
         query: 'cql.allRecords=1 sortby group',
+        limit: '200',
       },
     },
     patronBlockCondition: {
@@ -42,8 +48,12 @@ class LimitsSettings extends Component {
       type: 'okapi',
       records: 'patronBlockLimits',
       GET: {
-        path: 'patron-block-limits?limit=1500',
-      }
+        path: 'patron-block-limits',
+      },
+      params: {
+        query: 'cql.allRecords=1',
+        limit: LIMITS_RECORDS,
+      },
     },
   });
 
