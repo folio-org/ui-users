@@ -39,7 +39,7 @@ function validation(value, min, max) {
     return errorMessage;
   }
 
-  if (isInteger(min) && !isInteger(value) && !Number.isNaN(value)) {
+  if (isInteger(min) && !isInteger(numberValue) && !Number.isNaN(numberValue)) {
     return errorMessage;
   }
 
