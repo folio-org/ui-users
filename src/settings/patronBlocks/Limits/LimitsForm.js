@@ -22,16 +22,25 @@ import { feeFineBalanceId } from '../../../constants';
 
 import css from '../patronBlocks.css';
 
+function isInteger(value) {
+  return value % 1 === 0;
+}
+
 function validation(value, min, max) {
   const numberValue = toNumber(value);
+  const errorMessage = (
+    <FormattedMessage
+      id="ui-users.settings.limits.validation.message"
+      values={{ min, max }}
+    />
+  );
 
   if (numberValue < min || numberValue > max) {
-    return (
-      <FormattedMessage
-        id="ui-users.settings.limits.validation.message"
-        values={{ min, max }}
-      />
-    );
+    return errorMessage;
+  }
+
+  if (isInteger(min) && !isInteger(value) && !Number.isNaN(value)) {
+    return errorMessage;
   }
 
   return null;
