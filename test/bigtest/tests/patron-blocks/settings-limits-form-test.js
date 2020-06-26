@@ -104,14 +104,15 @@ describe('Patron blocks limits form', () => {
       });
     });
 
-    describe('set float limit value for fee fine limit', () => {
+    describe('save float limit value for fee fine limit', () => {
       beforeEach(async function () {
         await SettingsLimitsForm.limitField(5)
           .fillAndBlur(12.5);
+        await SettingsLimitsForm.saveButton.click();
       });
 
-      it('should show error message', () => {
-        expect(SettingsLimitsForm.errorMessage.isPresent).to.be.false;
+      it('should appear callout message', () => {
+        expect(SettingsLimitsForm.calloutMessage.successCalloutIsPresent).to.be.true;
       });
     });
   });
