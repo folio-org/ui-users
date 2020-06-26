@@ -70,9 +70,6 @@ class LoanDetails extends React.Component {
       renewals: PropTypes.shape({
         replace: PropTypes.func,
       }),
-      loanAccountsActions: PropTypes.shape({
-        GET: PropTypes.func.isRequired,
-      }),
     }).isRequired,
     loan: PropTypes.object,
     patronGroup: PropTypes.object,
@@ -101,7 +98,6 @@ class LoanDetails extends React.Component {
     this.showTitle = this.showTitle.bind(this);
     this.showChangeDueDateDialog = this.showChangeDueDateDialog.bind(this);
     this.hideChangeDueDateDialog = this.hideChangeDueDateDialog.bind(this);
-    this.getFeeFine = this.getFeeFine.bind(this);
     this.viewFeeFine = this.viewFeeFine.bind(this);
 
     this.state = {
@@ -111,10 +107,6 @@ class LoanDetails extends React.Component {
       feesFines: {},
       patronBlockedModal: false,
     };
-  }
-
-  componentDidMount() {
-    this.getFeeFine();
   }
 
   getContributorslist(loan) {
@@ -153,19 +145,10 @@ class LoanDetails extends React.Component {
     return renewals.replace({ ts: new Date().getTime() });
   }
 
-  getFeeFine() {
-    const { mutator, match: { params } } = this.props;
-    const query = `loanId=${params.loanid}`;
-
-    mutator.loanAccountsActions.GET({ params: { query } }).then(records => {
-      const total = records.reduce((a, { amount }) => (a + parseFloat(amount)), 0);
-      this.setState({ feesFines: { total, accounts: records } });
-    });
-  }
-
   viewFeeFine() {
-    const { feesFines: { total } } = this.state;
-    const { stripes } = this.props;
+    const { stripes, resources } = this.props;
+    const records = resources?.loanAccountsActions?.records ?? [];
+    const total = records.reduce((acc, { amount }) => (acc + parseFloat(amount)), 0);
 
     if (total === 0) return '-';
 
