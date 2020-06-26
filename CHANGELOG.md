@@ -9,6 +9,7 @@
 * Use `==` for more efficient queries. Refs PERF-62.
 * Increment `@folio/plugin-find-user` to `v3.0.0` for `@folio/stripes` `v4.0` compatibility.
 * Refresh Fine incurred field when item declared lost. Fixes UIU-1669.
+* Add validation to integer values for patron block limits. Refs UIU-1675.
 
 ## [4.0.0](https://github.com/folio-org/ui-users/tree/v4.0.0) (2020-06-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v3.0.0...v4.0.0)
