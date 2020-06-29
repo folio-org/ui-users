@@ -65,8 +65,8 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
           },
         }
       } = this.props;
-      const lostStatus = 'Lost Item Fee  (manual)';
-      const processingStatus = 'Lost Item Processing Fee (manual)';
+      const lostStatus = 'Lost Item Fee';
+      const processingStatus = 'Lost Item Processing Fee';
       const pathParts = [
         'accounts?query=',
         `barcode=="${itemBarcode}"`,
