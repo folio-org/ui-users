@@ -29,7 +29,7 @@ import {
   Dropdown,
   DropdownMenu,
 } from '@folio/stripes/components';
-import { IfPermission } from '@folio/stripes/core';
+import { IfPermission, stripesConnect} from '@folio/stripes/core';
 import { effectiveCallNumber } from '@folio/stripes/util';
 
 import PatronBlockModal from '../../components/PatronBlock/PatronBlockModal';
@@ -626,6 +626,7 @@ export default compose(
   injectIntl,
   withRenew,
   withDeclareLost,
+  stripesConnect,
   withClaimReturned,
   withMarkAsMissing,
 )(LoanDetails);
