@@ -20,6 +20,7 @@ import {
   Col,
   Headline,
   AccordionSet,
+  HasCommand,
 } from '@folio/stripes/components';
 import { EditCustomFieldsRecord } from '@folio/stripes/smart-components';
 import stripesForm from '@folio/stripes/form';
@@ -431,30 +432,30 @@ class UserForm extends React.Component {
     const footer = this.getPaneFooter();
     const fullName = getFullName(initialValues);
     const paneTitle = initialValues.id
-      ? fullName
+      ? <FormattedMessage id="ui-users.edit" />
       : <FormattedMessage id="ui-users.crud.createUser" />;
 
     return (
-      <form
-        data-test-form-page
-        className={css.UserFormRoot}
-        id="form-user"
-        onSubmit={handleSubmit}
-      >
-        <Paneset>
-          <Pane
-            defaultWidth="100%"
-            firstMenu={firstMenu}
-            footer={footer}
-            appIcon={<AppIcon app="users" appIconKey="users" />}
-            paneTitle={
-              <span data-test-header-title>
-                {paneTitle}
-              </span>
-            }
-            onClose={onCancel}
-          >
-            <div className={css.UserFormContent}>
+      <HasCommand commands={this.keyboardCommands}>
+        <form
+          data-test-form-page
+          className={css.UserFormRoot}
+          id="form-user"
+          onSubmit={handleSubmit}
+        >
+          <Paneset>
+            <Pane
+              firstMenu={firstMenu}
+              footer={footer}
+              centerContent
+              appIcon={<AppIcon app="users" appIconKey="users" />}
+              paneTitle={
+                <span data-test-header-title>
+                  {paneTitle}
+                </span>
+              }
+              onClose={onCancel}
+            >
               <Headline
                 size="xx-large"
                 tag="h2"
@@ -549,10 +550,10 @@ class UserForm extends React.Component {
                   </div>
                 }
               </AccordionSet>
-            </div>
-          </Pane>
-        </Paneset>
-      </form>
+            </Pane>
+          </Paneset>
+        </form>
+      </HasCommand>
     );
   }
 }

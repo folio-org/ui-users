@@ -370,7 +370,6 @@
     "blocks.form.label.block": "إجراءات الحظر*",
     "blocks.form.label.borrowing": "الاستعارة",
     "blocks.form.label.renewals": "التجديدات",
-    "blocks.form.label.request": "طلب",
     "blocks.form.placeholder.desc": "قم بإدخال وصف قصير (مطلوب)",
     "blocks.form.placeholder.information": "قم بإدخال معلومات إضافية (اختياري)",
     "blocks.form.placeholder.message": "قم بإدخال رسالة إلى المستفيد (اختياري)",
@@ -698,8 +697,9 @@
     "loans.resolveClaim": "حل المطالبة",
     "blocks.columns.automated.type": "مؤتمت (لا يمكن تحريره)",
     "permission.reset.password": "المستخدمين: أنشئ/أعد تعيين كلمة المرور",
-    "settings.limits.feeFine.error.message": "سيؤدي الحد الأقصى للرصيد 0.01 إلى حظر جميع المستفيدين في هذه المجموعة؛ لتخطي هذا الحد، اترك تعيين القيمة  فارغاً",
-    "settings.limits.validation.error.message": "يجب أن يكون فارغًا أو رقمًا من 0.01 إلى 999999",
     "errors.proxies.duplicateUserMessage": "تم إدخال نائب مكرر",
-    "errors.sponsors.duplicateUserMessage": "تم إدخال راعي مكرر"
+    "errors.sponsors.duplicateUserMessage": "تم إدخال راعي مكرر",
+    "settings.limits.validation.message": "يجب أن يكون فارغاً أو رقماً من {min} إلى {max}",
+    "blocks.form.label.requests": "طلبات",
+    "information.preferredName": "الاسم الأول المفضل"
 }

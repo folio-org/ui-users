@@ -7,7 +7,6 @@ import {
   map,
 } from 'lodash';
 
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import {
   Row,
   Col,
@@ -19,23 +18,29 @@ import {
 } from '@folio/stripes/components';
 import stripesFinalForm from '@folio/stripes/final-form';
 
-import {
-  feeFineBalanceId,
-  recallOverdueId,
-} from '../../../constants';
+import { feeFineBalanceId } from '../../../constants';
 
 import css from '../patronBlocks.css';
 
+function isInteger(value) {
+  return value % 1 === 0;
+}
+
 function validation(value, min, max) {
   const numberValue = toNumber(value);
+  const errorMessage = (
+    <FormattedMessage
+      id="ui-users.settings.limits.validation.message"
+      values={{ min, max }}
+    />
+  );
 
   if (numberValue < min || numberValue > max) {
-    return (
-      <SafeHTMLMessage
-        id="ui-users.settings.limits.validation.message"
-        values={{ min, max }}
-      />
-    );
+    return errorMessage;
+  }
+
+  if (isInteger(min) && !isInteger(numberValue) && !Number.isNaN(numberValue)) {
+    return errorMessage;
   }
 
   return null;
@@ -47,10 +52,6 @@ function limitsValidation(value) {
 
 function feeFineLimitsValidation(value) {
   return validation(value, 0.01, 999999.99);
-}
-
-function overdueLimitsValidation(value) {
-  return validation(value, 0.01, 999999);
 }
 
 class LimitsForm extends Component {
@@ -73,16 +74,6 @@ class LimitsForm extends Component {
 
     return (
       map(patronBlockConditions, ({ name: condition, id }) => {
-        let validate;
-
-        if (id === feeFineBalanceId) {
-          validate = feeFineLimitsValidation;
-        } else if (id === recallOverdueId) {
-          validate = overdueLimitsValidation;
-        } else {
-          validate = limitsValidation;
-        }
-
         return (
           <div key={id}>
             <Row>
@@ -104,7 +95,7 @@ class LimitsForm extends Component {
                   component={TextField}
                   type="number"
                   name={id}
-                  validate={validate}
+                  validate={id === feeFineBalanceId ? feeFineLimitsValidation : limitsValidation}
                 />
               </Col>
             </Row>

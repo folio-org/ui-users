@@ -370,7 +370,6 @@
     "blocks.form.label.block": "Bloquear ações*",
     "blocks.form.label.borrowing": "Emprestando",
     "blocks.form.label.renewals": "Renovações",
-    "blocks.form.label.request": "Pedido de compra",
     "blocks.form.placeholder.desc": "Insira uma breve descrição (obrigatória)",
     "blocks.form.placeholder.information": "Inserir informações adicionais (opcional)",
     "blocks.form.placeholder.message": "Digite uma mensagem para o usuário (opcional)",
@@ -698,8 +697,9 @@
     "loans.resolveClaim": "Resolver reclamação",
     "blocks.columns.automated.type": "Automatizado (não pode ser editado)",
     "permission.reset.password": "Usuários: Criar/redefinir senha",
-    "settings.limits.feeFine.error.message": "Um saldo máximo de 0,01 resultará no bloqueio de todos os usuários deste grupo; para pular esse limite, deixe o valor definido em branco",
-    "settings.limits.validation.error.message": "Deve estar em branco ou um número de 0,01 a 999999",
     "errors.proxies.duplicateUserMessage": "Foi inserido um proxy duplicado.",
-    "errors.sponsors.duplicateUserMessage": "Foi inserido um financiador duplicado."
+    "errors.sponsors.duplicateUserMessage": "Foi inserido um financiador duplicado.",
+    "settings.limits.validation.message": "Deve estar em branco ou um número de {min, number} a {max, number}",
+    "blocks.form.label.requests": "Requisições",
+    "information.preferredName": "Nome preferido"
 }

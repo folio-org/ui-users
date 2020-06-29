@@ -3,6 +3,13 @@
 ## [4.1.0] (IN PROGRESS)
 
 * Trim email address in user record to remove blanks. Fixes UIU-1528.
+* `withRenew` should include in-transit items when calculating the open-request-count. Fixes UIU-1254.
+* Restore `CommandList`, `HasCommand` wrappers now that they don't leak memory. Refs UIU-1457.
+* Retrieve up to 200 patron groups when setting Fee/Fine limits. Refs UIU-1715.
+* Use `==` for more efficient queries. Refs PERF-62.
+* Increment `@folio/plugin-find-user` to `v3.0.0` for `@folio/stripes` `v4.0` compatibility.
+* Refresh Fine incurred field when item declared lost. Fixes UIU-1669.
+* Add validation to integer values for patron block limits. Refs UIU-1675.
 
 ## [4.0.0](https://github.com/folio-org/ui-users/tree/v4.0.0) (2020-06-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v3.0.0...v4.0.0)
@@ -71,6 +78,9 @@
 * Add `delete` request to patron block limits. Refs UIU-1675.
 * Validate duplicate proxy/sponsor. Fixes UIU-925.
 * Prefer `aria-label` to `ariaLabel` per React documentation.
+* Apply default pane max-width value on the edit page. Refs UIU-1649.
+* Change user form pane title. UIU-1649.
+* Add preferred first name field on user record. Refs UIU-1649.
 
 ## [3.0.0](https://github.com/folio-org/ui-users/tree/v3.0.0) (2020-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v2.26.0...v3.0.0)

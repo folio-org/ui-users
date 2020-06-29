@@ -36,7 +36,7 @@ class AccountDetailsContainer extends React.Component {
       type: 'okapi',
       records: 'feefineactions',
       accumulate: 'true',
-      path: 'feefineactions?query=(accountId=:{accountid})&limit=10000',
+      path: 'feefineactions?query=(accountId==:{accountid})&limit=10000',
     },
     activeRecord: {
       accountId: '0',
@@ -44,7 +44,7 @@ class AccountDetailsContainer extends React.Component {
     loans: {
       type: 'okapi',
       records: 'loans',
-      path: 'circulation/loans?query=(userId=:{id})&limit=1000',
+      path: 'circulation/loans?query=(userId==:{id})&limit=1000',
     },
   });
 

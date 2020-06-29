@@ -33,7 +33,7 @@ class Actions extends React.Component {
     accounts: {
       type: 'okapi',
       records: 'accounts',
-      path: 'accounts?query=(userId=%{user.id})&limit=10000',
+      path: 'accounts?query=(userId==%{user.id})&limit=10000',
       PUT: {
         path: 'accounts/%{activeRecord.id}'
       },
