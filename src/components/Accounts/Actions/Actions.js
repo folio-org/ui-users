@@ -21,6 +21,7 @@ import CancellationModal from './CancellationModal';
 import CommentModal from './CommentModal';
 import WarningModal from './WarningModal';
 import ActionModal from './ActionModal';
+import { MAX_RECORDS } from '../../../constants';
 import { getFullName } from '../../util';
 
 class Actions extends React.Component {
@@ -70,7 +71,7 @@ class Actions extends React.Component {
     },
     curUserServicePoint: {
       type: 'okapi',
-      path: 'service-points-users?query=(userId==!{currentUser.id})',
+      path: `service-points-users?query=(userId==!{currentUser.id})&limit=${MAX_RECORDS}`,
       records: 'servicePointsUsers',
     },
     activeRecord: {},
