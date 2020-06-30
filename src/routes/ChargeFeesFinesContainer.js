@@ -7,6 +7,7 @@ import {
   withStripes,
 } from '@folio/stripes/core';
 
+import { MAX_RECORDS } from '../constants';
 import { ChargeFeeFine } from '../components/Accounts';
 
 class ChargeFeesFinesContainer extends React.Component {
@@ -48,7 +49,7 @@ class ChargeFeesFinesContainer extends React.Component {
     },
     curUserServicePoint: {
       type: 'okapi',
-      path: 'service-points-users?query=(userId==:{id})',
+      path: `service-points-users?query=(userId==:{id})&limit=${MAX_RECORDS}`,
       records: 'servicePointsUsers',
     },
     items: {
@@ -68,13 +69,13 @@ class ChargeFeesFinesContainer extends React.Component {
       type: 'okapi',
       records: 'feefines',
       GET: {
-        path: 'feefines?query=(ownerId==%{activeRecord.ownerId} or ownerId==%{activeRecord.shared})&limit=10000',
+        path: `feefines?query=(ownerId==%{activeRecord.ownerId} or ownerId==%{activeRecord.shared})&limit=${MAX_RECORDS}`,
       },
     },
     feefineactions: {
       type: 'okapi',
       records: 'feefineactions',
-      path: 'feefineactions?limit=10000',
+      path: `feefineactions?limit=${MAX_RECORDS}`,
     },
     accounts: {
       type: 'okapi',
@@ -88,7 +89,7 @@ class ChargeFeesFinesContainer extends React.Component {
       type: 'okapi',
       resource: 'accounts',
       accumulate: 'true',
-      path: 'accounts',
+      path: `accounts?limit=${MAX_RECORDS}`,
     },
     owners: {
       type: 'okapi',
@@ -98,17 +99,17 @@ class ChargeFeesFinesContainer extends React.Component {
     payments: {
       type: 'okapi',
       records: 'payments',
-      path: 'payments',
+      path: `payments?limit=${MAX_RECORDS}`,
     },
     commentRequired: {
       type: 'okapi',
       records: 'comments',
-      path: 'comments',
+      path: `comments?limit=${MAX_RECORDS}`,
     },
     allfeefines: {
       type: 'okapi',
       records: 'feefines',
-      path: 'feefines?limit=10000',
+      path: `feefines?limit=${MAX_RECORDS}`,
     },
     activeRecord: {},
   });
