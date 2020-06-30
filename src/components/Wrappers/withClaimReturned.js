@@ -145,7 +145,7 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
         paymentMethod: '',
         accountId: account.id,
         userId: currentUserId,
-        createdAt: `${this.props.okapi.currentUser.curServicePoint.name}`,
+        createdAt: `${this.props.okapi.currentUser.curServicePoint.id}`,
       };
     };
 
