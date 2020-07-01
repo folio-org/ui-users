@@ -1,10 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { cloneDeep, orderBy } from 'lodash';
-
+import {
+  concat,
+  cloneDeep,
+  last,
+  orderBy,
+  set,
+  zip
+} from 'lodash';
+import moment from 'moment';
 import LoanActionDialog from '../LoanActionDialog';
-
 import { loanActionMutators } from '../../constants';
 
 const withClaimReturned = WrappedComponent => class withClaimReturnedComponent extends React.Component {
@@ -37,14 +43,18 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
       feefineactions: PropTypes.shape({
         GET: PropTypes.func.isRequired,
         POST: PropTypes.func.isRequired,
+      }),
+      activeAccount: PropTypes.shape({
+        update: PropTypes.func,
       }).isRequired,
-      activeAccount: PropTypes.object,
+    }).isRequired,
+    loan: PropTypes.object.isRequired,
+    okapi: PropTypes.shape({
+      currentUser: PropTypes.object.isRequired,
     }).isRequired,
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
     }),
-    loan: PropTypes.object.isRequired,
-    okapi: PropTypes.object.isRequired
   };
 
   constructor(props) {
@@ -56,7 +66,7 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
     };
   }
 
-  validateClaimReturned = async () => {
+  refundTransfers = async () => {
     const getAccounts = (itemBarcode, userId) => {
       const {
         mutator: {
@@ -65,8 +75,8 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
           },
         }
       } = this.props;
-      const lostStatus = 'Lost Item Fee';
-      const processingStatus = 'Lost Item Processing Fee';
+      const lostStatus = 'Lost item fee';
+      const processingStatus = 'Lost item processing fee';
       const pathParts = [
         'accounts?query=',
         `barcode=="${itemBarcode}"`,
@@ -99,7 +109,6 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
       return PUT(record);
     };
 
-
     const getAccountActions = account => {
       const {
         mutator: {
@@ -117,19 +126,27 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
         record => record.typeAction && record.typeAction.startsWith('Transferred')
       );
 
-    const createRefundAction = (account, actions, type) => {
+    const getLastBalance = actions => (
+      actions.length > 0
+        ? orderBy(actions, ['dateAction'], ['desc'])[0].balance
+        : 0.0
+    );
+
+    const createRefundActionTemplate = (account, transferredActions, type) => {
       const {
         okapi: {
           currentUser: {
-            id: currentUserId
+            id: currentUserId,
+            curServicePoint: {
+              id: servicePointId
+            }
           },
         },
       } = this.props;
-      const orderedActions = orderBy(actions, ['dateAction'], ['desc']);
-      const now = new Date().toISOString();
-      const lastBalance = orderedActions[0].balance;
-      const amount = actions.reduce((acc, record) => acc + record.amountAction, 0.0);
-      const balance = lastBalance - amount;
+      const orderedActions = orderBy(transferredActions, ['dateAction'], ['desc']);
+      const now = moment().format();
+      const sign = type.startsWith('Credited') ? -1 : 1;
+      const amount = sign * transferredActions.reduce((acc, record) => acc + record.amountAction, 0.0);
       const transactionVerb = type.startsWith('Credited')
         ? 'Refund'
         : 'Refunded';
@@ -139,21 +156,21 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
         comments: '',
         notify: false,
         amountAction: amount,
-        balance,
-        transactionInformation: `${transactionVerb} to ${actions[0].paymentMethod}`,
+        balance: 0,
+        transactionInformation: `${transactionVerb} to ${orderedActions[0].paymentMethod}`,
         source: orderedActions[0].source,
         paymentMethod: '',
         accountId: account.id,
         userId: currentUserId,
-        createdAt: `${this.props.okapi.currentUser.curServicePoint.id}`,
+        createdAt: servicePointId,
       };
     };
 
     const createRefunds = (account, actions) => {
       return actions.length > 0
         ? [
-          createRefundAction(account, actions, 'Credited fully-Claim returned'),
-          createRefundAction(account, actions, 'Refunded fully-Claim returned')
+          createRefundActionTemplate(account, actions, 'Credited fully'),
+          createRefundActionTemplate(account, actions, 'Refunded fully')
         ]
         : [];
     };
@@ -192,27 +209,36 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
           .map(getAccountActions)
       );
 
-      const transferredActions = accountsActions
-        .map(filterTransferredActions);
-
-      const accountsWithTransferredActions = accounts
-        .map((account, index) => {
-          return {
+      const refundActions = zip(accounts, accountsActions)
+        .map(([account, actions]) => [
+          createRefunds(
             account,
-            actions: transferredActions[index]
-          };
-        });
-
-      const refunds = accountsWithTransferredActions
-        .map(({ account, actions }) => createRefunds(account, actions))
+            filterTransferredActions(actions)
+          ),
+          actions
+        ])
+        .map(
+          ([refunds, actions]) => refunds
+            .reduce(
+              (accum, refund, index) => (
+                index === 0
+                  ? [set(refund, 'balance', accum + refund.amountAction)]
+                  : concat(accum, set(refund, 'balance', last(accum).balance + refund.amountAction))
+              ),
+              getLastBalance(actions)
+            )
+        )
         .flat(1);
 
-      await Promise.all(refunds.map(persistRefundAction));
+      const persistedRefundActions = await Promise.all(
+        refundActions.map(persistRefundAction)
+      );
+
+      return persistedRefundActions;
     };
 
-    await processAccounts(this.props.loan);
-  };
-
+    await processAccounts();
+  }
 
   openClaimReturnedDialog = loan => {
     this.setState({
@@ -241,7 +267,7 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
         />
         { loan &&
           <LoanActionDialog
-            validateAction={this.validateClaimReturned}
+            validateAction={this.refundTransfers}
             loan={loan}
             loanAction={loanActionMutators.CLAIMED_RETURNED}
             modalLabel={modalLabel}
