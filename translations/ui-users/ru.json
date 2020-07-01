@@ -701,5 +701,5 @@
     "errors.sponsors.duplicateUserMessage": "Введён дубликат спонсора.",
     "settings.limits.validation.message": "Должно быть пустым или числом от {min, number} до {max, number}",
     "blocks.form.label.requests": "Запросы",
-    "information.preferredName": "Preferred first name"
+    "information.preferredName": "Предпочитаемое имя"
 }
