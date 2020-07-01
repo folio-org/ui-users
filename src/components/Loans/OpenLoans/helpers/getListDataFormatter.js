@@ -129,6 +129,7 @@ export default function getListDataFormatter(
     },
     ' ': {
       key: ' ',
+      view: formatMessage({ id: 'ui-users.action' }),
       formatter: (loan) => {
         let requestQueue = false;
 
