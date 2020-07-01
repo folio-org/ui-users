@@ -11,6 +11,7 @@
 * Refresh Fine incurred field when item declared lost. Fixes UIU-1669.
 * Add validation to integer values for patron block limits. Refs UIU-1675.
 * Increase limits for `ChargeFeesFines`. Refs UIU-1722.
+* Fix Custom Fields related error toast notification in User Details page. Fixes UIU-1736.
 
 ## [4.0.0](https://github.com/folio-org/ui-users/tree/v4.0.0) (2020-06-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v3.0.0...v4.0.0)

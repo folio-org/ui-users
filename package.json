@@ -72,7 +72,10 @@
           "users.item.get",
           "usergroups.collection.get",
           "login.item.get",
-          "configuration.entries.collection.get"
+          "configuration.entries.collection.get",
+          "user-settings.custom-fields.collection.get",
+          "user-settings.custom-fields.item.get",
+          "user-settings.custom-fields.item.stats.get"
         ],
         "visible": true
       },
@@ -256,9 +259,6 @@
         "permissionName": "ui-users.settings.customfields.view",
         "displayName": "Settings (Users): Can view custom fields",
         "subPermissions": [
-          "user-settings.custom-fields.collection.get",
-          "user-settings.custom-fields.item.get",
-          "user-settings.custom-fields.item.stats.get",
           "settings.users.enabled",
           "configuration.entries.collection.get"
         ],
