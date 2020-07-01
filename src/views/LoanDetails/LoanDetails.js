@@ -104,7 +104,6 @@ class LoanDetails extends React.Component {
       nonRenewedLoanItems: [],
       nonRenewedLoansModalOpen: false,
       changeDueDateDialogOpen: false,
-      feesFines: {},
       patronBlockedModal: false,
     };
   }
