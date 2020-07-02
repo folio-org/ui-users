@@ -12,6 +12,7 @@ class LoanActionDialog extends React.Component {
     loan: PropTypes.object.isRequired,
     loanAction: PropTypes.string.isRequired,
     modalLabel: PropTypes.object.isRequired,
+    disableButton: PropTypes.func,
   };
 
   render() {
@@ -21,6 +22,7 @@ class LoanActionDialog extends React.Component {
       loan,
       loanAction,
       modalLabel,
+      disableButton,
     } = this.props;
 
     if (!loan) return null;
@@ -39,6 +41,7 @@ class LoanActionDialog extends React.Component {
           loanAction={loanAction}
           loan={loan}
           onClose={onClose}
+          disableButton={disableButton}
         />
       </Modal>
     );
