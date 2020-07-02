@@ -701,5 +701,6 @@
     "errors.sponsors.duplicateUserMessage": "Duplicate sponsor has been entered.",
     "settings.limits.validation.message": "Must be blank or a number from {min, number} to {max, number}",
     "blocks.form.label.requests": "Reservationer",
-    "information.preferredName": "Preferred first name"
+    "information.preferredName": "Preferred first name",
+    "reports.overdue.inProgress": "Export in progress"
 }
