@@ -90,6 +90,7 @@ class ClosedLoans extends React.Component {
       'callNumber': intl.formatMessage({ id: 'ui-users.loans.details.effectiveCallNumber' }),
       'Contributors': intl.formatMessage({ id: 'ui-users.loans.columns.contributors' }),
       'checkinServicePoint': intl.formatMessage({ id: 'ui-users.loans.details.checkinServicePoint' }),
+      ' ': intl.formatMessage({ id: 'ui-users.action' }),
     };
 
     this.sortMap = {

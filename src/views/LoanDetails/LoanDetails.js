@@ -168,9 +168,10 @@ class LoanDetails extends React.Component {
   }
 
   feefinedetails = (e) => {
-    const { history, match: { params } } = this.props;
-    const { feesFines: { accounts } } = this.state;
+    const { history, match: { params }, resources } = this.props;
+    const accounts = resources?.loanAccountsActions?.records ?? [];
     const loan = this.loan || {};
+
     if (accounts.length === 1) {
       nav.onClickViewAccountActionsHistory(e, { id: accounts[0].id }, history, params);
     } else if (accounts.length > 1) {
