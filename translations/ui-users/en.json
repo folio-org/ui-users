@@ -690,6 +690,7 @@
   "reports.overdue.item.holdingsRecordId": "Holdings ID",
   "reports.overdue.itemId": "Item ID",
   "reports.overdue.feeFine": "Fee/Fine",
+  "reports.overdue.inProgress": "Export in progress",
   "permissions.modal.header": "Select Permissions",
   "permissions.modal.list.pane.subheader": "{amount} permissions found",
   "permissions.modal.list.pane.header": "Permissions",

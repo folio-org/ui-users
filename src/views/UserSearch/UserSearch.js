@@ -8,7 +8,7 @@ import noop from 'lodash/noop';
 import get from 'lodash/get';
 import { Link } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { IntlConsumer, IfPermission, AppIcon } from '@folio/stripes/core';
+import { IntlConsumer, IfPermission, AppIcon, CalloutContext } from '@folio/stripes/core';
 import {
   Button,
   Icon,
@@ -73,6 +73,8 @@ class UserSearch extends React.Component {
     visibleColumns: ['active', 'name', 'barcode', 'patronGroup', 'username', 'email'],
   };
 
+  static contextType = CalloutContext;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -98,6 +100,10 @@ class UserSearch extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this._mounted = true;
+  }
+
   componentDidUpdate(prevProps) {
     if (
       this.state.searchPending &&
@@ -106,6 +112,10 @@ class UserSearch extends React.Component {
       !this.props.resources.records.isPending) {
       this.onSearchComplete(this.props.resources.records);
     }
+  }
+
+  componentWillUnmount() {
+    this._mounted = false;
   }
 
   onSearchComplete = records => {
@@ -136,21 +146,18 @@ class UserSearch extends React.Component {
   }
 
   generateOverdueLoanReport = props => {
-    const {
-      reset,
-      GET,
-    } = props.mutator.loans;
     const { exportInProgress } = this.state;
 
     if (exportInProgress) {
       return;
     }
 
-    this.setState({ exportInProgress: true }, () => {
-      reset();
-      GET()
-        .then(loans => this.overdueLoanReport.toCSV(loans))
-        .then(() => this.setState({ exportInProgress: false }));
+    this.setState({ exportInProgress: true }, async () => {
+      this.context.sendCallout({ message: <FormattedMessage id="ui-users.reports.overdue.inProgress" /> });
+      await this.overdueLoanReport.generate(props.mutator.loans);
+      if (this._mounted) {
+        this.setState({ exportInProgress: false });
+      }
     });
   }
 

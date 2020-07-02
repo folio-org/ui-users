@@ -4,6 +4,7 @@
 
 * Retrieve up to 200 patron groups when setting Fee/Fine limits. Refs UIU-1715.
 * Increase limits for `ChargeFeesFines`. Refs UIU-1722.
+* Generate overdue loans report via pagination. Fixes UIU-1747.
 
 ## [4.0.1](https://github.com/folio-org/ui-users/tree/v4.0.1) (2020-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v4.0.0...v4.0.1)

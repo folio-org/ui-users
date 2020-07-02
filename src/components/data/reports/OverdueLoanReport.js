@@ -1,5 +1,6 @@
 import { get } from 'lodash';
 import { exportCsv } from '@folio/stripes/util';
+import moment from 'moment';
 
 const columns = [
   'borrower.name',
@@ -35,6 +36,39 @@ class OverdueLoanReport {
       label: formatMessage({ id: `ui-users.reports.overdue.${value}` }),
       value
     }));
+  }
+
+  async fetchData(mutator) {
+    const { GET, reset } = mutator;
+    const overDueDate = moment().tz('UTC').format();
+    const query = `(status.name=="Open" and dueDate < "${overDueDate}") sortby metadata.updatedDate desc`;
+    const limit = 1000;
+    const data = [];
+
+    let offset = 0;
+    let hasData = true;
+
+    while (hasData) {
+      try {
+        reset();
+        // eslint-disable-next-line no-await-in-loop
+        const result = await GET({ params: { query, limit, offset } });
+        hasData = result.length;
+        offset += limit;
+        if (hasData) {
+          data.push(...result);
+        }
+      } catch (err) {
+        hasData = false;
+      }
+    }
+
+    return data;
+  }
+
+  async generate(mutator) {
+    const loans = await this.fetchData(mutator);
+    this.toCSV(loans);
   }
 
   parse(records) {
