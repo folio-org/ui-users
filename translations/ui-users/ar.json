@@ -701,5 +701,6 @@
     "errors.sponsors.duplicateUserMessage": "تم إدخال راعي مكرر",
     "settings.limits.validation.message": "يجب أن يكون فارغاً أو رقماً من {min} إلى {max}",
     "blocks.form.label.requests": "طلبات",
-    "information.preferredName": "الاسم الأول المفضل"
+    "information.preferredName": "الاسم الأول المفضل",
+    "reports.overdue.inProgress": "Export in progress"
 }

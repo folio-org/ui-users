@@ -701,5 +701,6 @@
     "errors.sponsors.duplicateUserMessage": "Duplicate sponsor has been entered.",
     "settings.limits.validation.message": "Doit être vide ou un nombre de {min, number} à {max, number}",
     "blocks.form.label.requests": "Requests",
-    "information.preferredName": "Prénom préféré"
+    "information.preferredName": "Prénom préféré",
+    "reports.overdue.inProgress": "Export in progress"
 }
