@@ -271,4 +271,37 @@ describe('Declare Lost', () => {
       expect(LoanActionsHistory.lostDate.value.text).to.not.equal('-');
     });
   });
+
+  describe('Visiting loan details page with checked out item', () => {
+    beforeEach(async function () {
+      const loan = this.server.create('loan', {
+        status: { name: 'Open' },
+        loanPolicyId: 'test',
+        action: 'checkedOut',
+        actionComment: 'Checked out confirmation',
+        item: { status: { name: 'Checked out' } },
+        itemStatus: 'Checked out',
+      });
+
+      this.visit(`/users/${loan.userId}/loans/view/${loan.id}`);
+    });
+
+    describe('clicking on declare lost button twice', () => {
+      beforeEach(async function () {
+        await LoanActionsHistory.declareLostButton.click();
+        await OpenLoansInteractor.declareLostDialog.additionalInfoTextArea.focus();
+        await OpenLoansInteractor.declareLostDialog.additionalInfoTextArea.fill('some text');
+        await OpenLoansInteractor.declareLostDialog.confirmButton.click();
+        await LoanActionsHistory.declareLostButton.click();
+      });
+
+      it('should display disabled declare lost button', () => {
+        expect(LoanActionsHistory.isDeclareLostButtonDisabled).to.be.true;
+      });
+
+      it('should not display declare lost dialog', () => {
+        expect(OpenLoansInteractor.declareLostDialog.isPresent).to.be.false;
+      });
+    });
+  });
 });
