@@ -114,8 +114,7 @@
   "settings.limits": "Limits",
   "settings.limits.callout.message": "The patron block limit for patron group <strong>{patronGroup}</strong> has been successfully <strong>updated</strong>.",
   "settings.limits.callout.error": "Something went wrong",
-  "settings.limits.feeFine.error": "A maximum balance of 0 will result in all patrons in this group being blocked; to skip this limit, leave value set to blank",
-  "settings.limits.validation.error": "Must be blank or a number from 0 to 999999",
+  "settings.limits.validation.message": "Must be blank or a number from {min, number} to {max, number}",
 
   "loans.columns.title": "Item title",
   "loans.columns.itemStatus": "Item status",
@@ -690,6 +689,7 @@
   "reports.overdue.item.holdingsRecordId": "Holdings ID",
   "reports.overdue.itemId": "Item ID",
   "reports.overdue.feeFine": "Fee/Fine",
+  "reports.overdue.inProgress": "Export in progress",
   "permissions.modal.header": "Select Permissions",
   "permissions.modal.list.pane.subheader": "{amount} permissions found",
   "permissions.modal.list.pane.header": "Permissions",

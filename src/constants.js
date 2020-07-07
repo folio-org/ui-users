@@ -47,7 +47,7 @@ export const statusFilter = [
 ];
 
 /* With current id determines that this is fee/fine condition,
- because this condition is validating with different message,
+ because this conditions are validating with different message,
  and condition fields are rendering dinamically.
  All conditions (thare are 6 of them) are always present on BE
  with hardcoded ids for now. */
