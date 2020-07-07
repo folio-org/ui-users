@@ -134,6 +134,13 @@ class BulkOverrideInfo extends React.Component {
       user: {
         barcode: userBarcode
       },
+      stripes: {
+        user: {
+          user: {
+            curServicePoint,
+          },
+        },
+      },
       onCancel,
       onCloseRenewModal,
     } = this.props;
@@ -149,7 +156,8 @@ class BulkOverrideInfo extends React.Component {
             userBarcode,
             itemBarcode: barcode,
             comment: additionalInfo,
-            ...(datetime && { dueDate: datetime })
+            servicePointId: curServicePoint?.id,
+            ...(datetime && { dueDate: datetime }),
           }
         );
       }

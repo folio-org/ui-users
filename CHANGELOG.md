@@ -14,6 +14,7 @@
 * Fix Custom Fields related error toast notification in User Details page. Fixes UIU-1736.
 * Generate overdue loans report via pagination. Fixes UIU-1747.
 * Prevent declaring an item lost if it is already lost. Fixes UIU-1714.
+* Add `servicePointId` property when overriding a loan. Refs UIU-1712.
 * Change capitalization of sections in User Information. Refs UIU-1754.
 
 ## [4.0.0](https://github.com/folio-org/ui-users/tree/v4.0.0) (2020-06-17)
