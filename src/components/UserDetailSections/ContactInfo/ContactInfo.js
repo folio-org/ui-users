@@ -28,7 +28,7 @@ const ContactInfo = ({
       open={expanded}
       id={accordionId}
       onToggle={onToggle}
-      label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.contact.contactInformation" /></Headline>}
+      label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.contact.contactInfo" /></Headline>}
     >
       <Row>
         <Col xs={3}>

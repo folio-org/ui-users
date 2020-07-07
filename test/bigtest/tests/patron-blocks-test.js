@@ -27,7 +27,7 @@ describe('Test Patron Blocks section', () => {
       });
 
       it('displays Patron Blocks label section', () => {
-        expect(PatronBlocksInteractor.label).to.equal(translations['blocks.label']);
+        expect(PatronBlocksInteractor.label).to.equal(translations['settings.patronBlocks']);
       });
 
       it('renders proper amount of rows', () => {
@@ -166,11 +166,11 @@ describe('Test Patron Blocks section', () => {
         await PatronBlocksInteractor.whenBlocksLoaded();
       });
 
-      it('displays Patron Blocks label section', () => {
-        expect(PatronBlocksInteractor.label).to.equal(translations['blocks.label']);
+      it('displays Patron blocks label section', () => {
+        expect(PatronBlocksInteractor.label).to.equal(translations['settings.patronBlocks']);
       });
 
-      it('displays Patron Blocks banner', () => {
+      it('displays Patron blocks banner', () => {
         expect(PatronBlocksInteractor.patronBlockMessage.isPresent).to.be.true;
       });
 

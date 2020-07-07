@@ -218,7 +218,7 @@
   "extended.createPasswordModal.linkWasSent": "A create password link was sent to:",
   "extended.createPasswordModal.linkInstructions": "The following link can be sent if the email was not received",
 
-  "contact.contactInformation": "Contact Information",
+  "contact.contactInfo": "Contact information",
   "contact.email": "Email",
   "contact.phone": "Phone",
   "contact.mobilePhone": "Mobile phone",
@@ -589,7 +589,6 @@
   "blocks.columns.requests": "Requests",
   "blocks.columns.renewals": "Renewals",
   "blocks.buttons.add": "Create block",
-  "blocks.label": "Patron Blocks",
   "blocks.reason": "Reason for block",
   "blocks.modal.header": "Patron blocked from renewing",
   "blocks.detailsButton": "View block details",
