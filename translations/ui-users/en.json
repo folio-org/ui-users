@@ -1,4 +1,4 @@
-{
+ fee/fine{
   "user": "User",
   "user.pluralized": "{count} {count, plural, one {user} other {users}}",
   "meta.title": "Users",
@@ -333,10 +333,10 @@
 
   "feefines.title": "Fee/fine: manual charges",
   "feefines.singular": "Fee/fine type",
-  "feefines.callout": "The fee/Fine type <strong>{feefine}</strong> was successfully <strong>deleted</strong>.",
+  "feefines.callout": "The fee/fine type <strong>{feefine}</strong> was successfully <strong>deleted</strong>.",
   "feefines.disabledItem": "Fee/fine type cannot be deleted when used by one or more user accounts",
-  "feefines.modalHeader": "Delete fee/Fine type?",
-  "feefines.modalMessage": "The fee/Fine type <strong>{feefine}</strong> will be <strong>deleted</strong>",
+  "feefines.modalHeader": "Delete fee/fine type?",
+  "feefines.modalMessage": "The fee/fine type <strong>{feefine}</strong> will be <strong>deleted</strong>",
   "feefines.defaultChargeNotice": "Default charge notice",
   "feefines.defaultActionNotice": "Default action notice",
   "feefines.ownerLabel": "Owner",
