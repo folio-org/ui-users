@@ -62,7 +62,6 @@
     "extended.birthDate": "Date de naissance",
     "extended.folioNumber": "Numéro FOLIO",
     "extended.folioPassword": "Mot de passe Folio",
-    "contact.contactInformation": "Informations de contact",
     "contact.email": "Email",
     "contact.phone": "Téléphone",
     "contact.mobilePhone": "Téléphone portable",
@@ -361,7 +360,6 @@
     "blocks.columns.requests": "Demandes-Réservations",
     "blocks.columns.renewals": "Renouvellements",
     "blocks.buttons.add": "Créer une suspension",
-    "blocks.label": "Suspensions utilisateur",
     "blocks.form.label.information": "Informations sur la suspension",
     "blocks.form.label.display": "Afficher la description*",
     "blocks.form.label.staff": "Information réservée au personnel",
@@ -702,5 +700,6 @@
     "settings.limits.validation.message": "Doit être vide ou un nombre de {min, number} à {max, number}",
     "blocks.form.label.requests": "Requests",
     "information.preferredName": "Prénom préféré",
-    "reports.overdue.inProgress": "Export in progress"
+    "reports.overdue.inProgress": "Export en cours",
+    "contact.contactInfo": "Contact information"
 }

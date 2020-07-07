@@ -62,7 +62,6 @@
     "extended.birthDate": "تاريخ الميلاد",
     "extended.folioNumber": "رقم فوليو",
     "extended.folioPassword": "كلمة مرور فوليو",
-    "contact.contactInformation": "معلومات الاتصال",
     "contact.email": "البريد الإلكتروني",
     "contact.phone": "الهاتف",
     "contact.mobilePhone": "الهاتف المحمول",
@@ -361,7 +360,6 @@
     "blocks.columns.requests": "طلبات",
     "blocks.columns.renewals": "التجديدات",
     "blocks.buttons.add": "إضافة حظر",
-    "blocks.label": "حظورات المستفيد",
     "blocks.form.label.information": "بيانات الحظر",
     "blocks.form.label.display": "عرض الوصف*",
     "blocks.form.label.staff": "بيانات للموظفين فقط",
@@ -702,5 +700,6 @@
     "settings.limits.validation.message": "يجب أن يكون فارغاً أو رقماً من {min} إلى {max}",
     "blocks.form.label.requests": "طلبات",
     "information.preferredName": "الاسم الأول المفضل",
-    "reports.overdue.inProgress": "Export in progress"
+    "reports.overdue.inProgress": "التصدير قيد التقدم",
+    "contact.contactInfo": "بيانات الاتصال"
 }

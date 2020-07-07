@@ -62,7 +62,6 @@
     "extended.birthDate": "Birth date",
     "extended.folioNumber": "Folio number",
     "extended.folioPassword": "Folio password",
-    "contact.contactInformation": "Contact Information",
     "contact.email": "Email",
     "contact.phone": "Phone",
     "contact.mobilePhone": "Mobile phone",
@@ -361,7 +360,6 @@
     "blocks.columns.requests": "Requests",
     "blocks.columns.renewals": "Renewals",
     "blocks.buttons.add": "Create block",
-    "blocks.label": "Patron Blocks",
     "blocks.form.label.information": "Block information",
     "blocks.form.label.display": "Display Description*",
     "blocks.form.label.staff": "Staff only information",
@@ -702,5 +700,6 @@
     "settings.limits.validation.message": "Must be blank or a number from {min, number} to {max, number}",
     "blocks.form.label.requests": "Reservationer",
     "information.preferredName": "Preferred first name",
-    "reports.overdue.inProgress": "Export in progress"
+    "reports.overdue.inProgress": "Export in progress",
+    "contact.contactInfo": "Contact information"
 }
