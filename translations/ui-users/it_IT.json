@@ -62,7 +62,6 @@
     "extended.birthDate": "Data di nascita",
     "extended.folioNumber": "Numero di Folio",
     "extended.folioPassword": "Password di Folio",
-    "contact.contactInformation": "Informazioni di contatto",
     "contact.email": "Email",
     "contact.phone": "Telefono fisso",
     "contact.mobilePhone": "Cellulare",
@@ -361,7 +360,6 @@
     "blocks.columns.requests": "Richieste",
     "blocks.columns.renewals": "Rinnovi",
     "blocks.buttons.add": "Crea blocco",
-    "blocks.label": "Blocchi utente",
     "blocks.form.label.information": "Informazioni blocco",
     "blocks.form.label.display": "Mostra descrizione*",
     "blocks.form.label.staff": "Informazioni per lo staff",
@@ -702,5 +700,6 @@
     "settings.limits.validation.message": "Must be blank or a number from {min, number} to {max, number}",
     "blocks.form.label.requests": "Requests",
     "information.preferredName": "Preferred first name",
-    "reports.overdue.inProgress": "Export in progress"
+    "reports.overdue.inProgress": "Export in progress",
+    "contact.contactInfo": "Contact information"
 }
