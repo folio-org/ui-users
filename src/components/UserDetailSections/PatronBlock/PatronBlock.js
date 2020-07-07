@@ -249,7 +249,7 @@ class PatronBlock extends React.Component {
       />;
     const title =
       <Headline size="large" tag="h3">
-        <FormattedMessage id="ui-users.blocks.label" />
+        <FormattedMessage id="ui-users.settings.patronBlocks" />
         {(hasPatronBlocks) ? <Icon size="medium" icon="exclamation-circle" status="error" /> : ''}
       </Headline>;
 
