@@ -218,7 +218,10 @@ class WarningModal extends React.Component {
             />
           </Col>
         </Row>
-        <Row end="xs">
+        <Row
+          end="xs"
+          className={css.lastRow}
+        >
           <Col xs>
             <Button id="warningTransferCancel" onClick={this.props.onClose}><FormattedMessage id="ui-users.feefines.modal.cancel" /></Button>
             <Button id="warningTransferContinue" disabled={hasClosedAccounts || values.length === 0} buttonStyle="primary" onClick={this.onClickContinue}><FormattedMessage id="ui-users.feefines.modal.submit" /></Button>
