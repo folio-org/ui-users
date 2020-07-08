@@ -1,6 +1,7 @@
 # Change history for ui-users
 
-## 4.0.3 (IN PROGRESS)
+## [4.0.3](https://github.com/folio-org/ui-users/tree/v4.0.3) (2020-07-08)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v4.0.2...v4.0.3)
 
 * Include `MAX_RECORDS` constant, used by `ChargeFeesFinesContainer`.
 
