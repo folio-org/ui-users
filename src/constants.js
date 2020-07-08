@@ -52,3 +52,7 @@ export const statusFilter = [
  All conditions (thare are 6 of them) are always present on BE
  with hardcoded ids for now. */
 export const feeFineBalanceId = 'cf7a0d5f-a327-4ca1-aa9e-dc55ec006b8a';
+
+/* how many records to retrieve, instead of the default 10, form an API endpoint */
+export const MAX_RECORDS = '10000';
+
