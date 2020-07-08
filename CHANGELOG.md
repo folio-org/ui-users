@@ -1,6 +1,6 @@
 # Change history for ui-users
 
-## [4.1.0] (IN PROGRESS)
+## 5.0.0 (IN PROGRESS)
 
 * Trim email address in user record to remove blanks. Fixes UIU-1528.
 * `withRenew` should include in-transit items when calculating the open-request-count. Fixes UIU-1254.
@@ -16,6 +16,7 @@
 * Prevent declaring an item lost if it is already lost. Fixes UIU-1714.
 * Add `servicePointId` property when overriding a loan. Refs UIU-1712.
 * Change capitalization of sections in User Information. Refs UIU-1754.
+* Increment `@folio/stripes` to `v5.0`, `react-router` to `v5.2`.
 
 ## [4.0.0](https://github.com/folio-org/ui-users/tree/v4.0.0) (2020-06-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v3.0.0...v4.0.0)
