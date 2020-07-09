@@ -12,6 +12,7 @@ const withDeclareLost = WrappedComponent => class WithDeclareLost extends React.
     this.state = {
       declareLostDialogOpen: false,
       loan: null,
+      declarationInProgress: false,
     };
   }
 
@@ -26,9 +27,18 @@ const withDeclareLost = WrappedComponent => class WithDeclareLost extends React.
     this.setState({ declareLostDialogOpen: false });
   }
 
+  disableButton = () => {
+    this.setState({ declarationInProgress: true });
+  }
+
+  enableButton = () => {
+    this.setState({ declarationInProgress: false });
+  }
+
   render() {
     const {
       declareLostDialogOpen,
+      declarationInProgress,
       loan,
     } = this.state;
 
@@ -38,6 +48,8 @@ const withDeclareLost = WrappedComponent => class WithDeclareLost extends React.
       <>
         <WrappedComponent
           declareLost={this.declareLost}
+          declarationInProgress={declarationInProgress}
+          enableButton={this.enableButton}
           {...this.props}
         />
         { loan &&
@@ -47,6 +59,7 @@ const withDeclareLost = WrappedComponent => class WithDeclareLost extends React.
             modalLabel={modalLabel}
             open={declareLostDialogOpen}
             onClose={this.hideDeclareLostDialog}
+            disableButton={this.disableButton}
           />
         }
       </>

@@ -11,6 +11,13 @@
 * Refresh Fine incurred field when item declared lost. Fixes UIU-1669.
 * Add validation to integer values for patron block limits. Refs UIU-1675.
 * Increase limits for `ChargeFeesFines`. Refs UIU-1722.
+* Fix Custom Fields related error toast notification in User Details page. Fixes UIU-1736.
+* Generate overdue loans report via pagination. Fixes UIU-1747.
+* Prevent declaring an item lost if it is already lost. Fixes UIU-1714.
+* Add `servicePointId` property when overriding a loan. Refs UIU-1712.
+* Change capitalization of sections in User Information. Refs UIU-1754.
+* Fix buttons layout in `Warning modal`. Refs UIU-1756.
+* Change `-` to `Default` if default notice exists at Fee/Fine: Manual Charges. Refs UIU-1755.
 * `Fee/fines details` not always include `Service Point` as `Created at`. Refs UIU-1725.
 
 ## [4.0.0](https://github.com/folio-org/ui-users/tree/v4.0.0) (2020-06-17)

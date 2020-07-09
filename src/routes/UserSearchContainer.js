@@ -4,7 +4,6 @@ import {
   get,
   template,
 } from 'lodash';
-import moment from 'moment';
 import { stripesConnect } from '@folio/stripes/core';
 
 import {
@@ -18,14 +17,11 @@ import { UserSearch } from '../views';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
-const MAX_LIMIT = 2147483647; // from https://s3.amazonaws.com/foliodocs/api/mod-circulation/p/circulation.html#circulation_loans_get
 
 const compileQuery = template(
   '(username="%{query}*" or personal.firstName="%{query}*" or personal.lastName="%{query}*" or personal.email="%{query}*" or barcode="%{query}*" or id="%{query}*" or externalSystemId="%{query}*")',
   { interpolate: /%{([\s\S]+?)}/g }
 );
-
-const getLoansOverdueDate = () => moment().tz('UTC').format();
 
 class UserSearchContainer extends React.Component {
   static manifest = Object.freeze({
@@ -75,7 +71,7 @@ class UserSearchContainer extends React.Component {
       type: 'okapi',
       records: 'loans',
       accumulate: true,
-      path: () => `circulation/loans?query=(status="Open" and dueDate < ${getLoansOverdueDate()})&limit=${MAX_LIMIT}`,
+      path: () => 'circulation/loans',
       permissionsRequired: 'circulation.loans.collection.get,accounts.collection.get',
     },
     tags: {

@@ -62,7 +62,6 @@
     "extended.birthDate": "生日",
     "extended.folioNumber": "Folio 紀錄號",
     "extended.folioPassword": "FOLIO 密碼",
-    "contact.contactInformation": "聯繫資料",
     "contact.email": "電子郵件",
     "contact.phone": "電話",
     "contact.mobilePhone": "手機",
@@ -361,7 +360,6 @@
     "blocks.columns.requests": "預約",
     "blocks.columns.renewals": "续借",
     "blocks.buttons.add": "创建冻结",
-    "blocks.label": "读者冻结",
     "blocks.form.label.information": "凍結資訊",
     "blocks.form.label.display": "显示描述",
     "blocks.form.label.staff": "仅限员工信息",
@@ -701,5 +699,8 @@
     "errors.sponsors.duplicateUserMessage": "Duplicate sponsor has been entered.",
     "settings.limits.validation.message": "Must be blank or a number from {min, number} to {max, number}",
     "blocks.form.label.requests": "Requests",
-    "information.preferredName": "Preferred first name"
+    "information.preferredName": "Preferred first name",
+    "reports.overdue.inProgress": "Export in progress",
+    "contact.contactInfo": "Contact information",
+    "settings.default": "Default"
 }

@@ -81,11 +81,17 @@ class LoanDetails extends React.Component {
     declareLost: PropTypes.func,
     markAsMissing: PropTypes.func,
     claimReturned: PropTypes.func,
+    enableButton: PropTypes.func,
+    declarationInProgress: PropTypes.bool,
     patronBlocks: PropTypes.arrayOf(PropTypes.object),
     intl: PropTypes.object.isRequired,
     match: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
+  };
+
+  static defaultProps = {
+    enableButton: () => {},
   };
 
   constructor(props) {
@@ -104,9 +110,17 @@ class LoanDetails extends React.Component {
       nonRenewedLoanItems: [],
       nonRenewedLoansModalOpen: false,
       changeDueDateDialogOpen: false,
-      feesFines: {},
       patronBlockedModal: false,
     };
+  }
+
+  componentDidUpdate(prevProps) {
+    const prevItemStatus = prevProps.loan?.item.status?.name;
+    const thistItemStatus = this.props.loan?.item.status?.name;
+
+    if (prevItemStatus && prevItemStatus !== thistItemStatus) {
+      this.props.enableButton();
+    }
   }
 
   getContributorslist(loan) {
@@ -282,6 +296,7 @@ class LoanDetails extends React.Component {
       declareLost,
       markAsMissing,
       claimReturned,
+      declarationInProgress,
     } = this.props;
 
     const {
@@ -434,7 +449,7 @@ class LoanDetails extends React.Component {
                 <IfPermission perm="ui-users.loans.declare-item-lost">
                   <Button
                     data-test-declare-lost-button
-                    disabled={buttonDisabled || isDeclaredLostItem}
+                    disabled={declarationInProgress || buttonDisabled || isDeclaredLostItem}
                     buttonStyle="primary"
                     onClick={() => declareLost(loan)}
                   >
