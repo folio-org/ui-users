@@ -701,5 +701,6 @@
     "blocks.form.label.requests": "Requests",
     "information.preferredName": "Prénom préféré",
     "reports.overdue.inProgress": "Export en cours",
-    "contact.contactInfo": "Contact information"
+    "contact.contactInfo": "Contact information",
+    "settings.default": "Default"
 }
