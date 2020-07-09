@@ -7,8 +7,8 @@ import {
   withStripes,
 } from '@folio/stripes/core';
 
-import { MAX_RECORDS } from '../constants';
 import { ChargeFeeFine } from '../components/Accounts';
+import { MAX_RECORDS } from '../constants';
 
 class ChargeFeesFinesContainer extends React.Component {
   static manifest = Object.freeze({
