@@ -255,7 +255,11 @@ class AccountDetails extends React.Component {
       amount: action => (action.amountAction > 0 ? parseFloat(action.amountAction).toFixed(2) : '-'),
       balance: action => (action.balance > 0 ? parseFloat(action.balance).toFixed(2) : '-'),
       transactioninfo: action => action.transactionInformation || '-',
-      created: action => (this.props.okapi.currentUser.servicePoints.find(sp => sp.id === action.createdAt) || {}).name,
+      created: action => {
+        const servicePoint = this.props.okapi.currentUser.servicePoints.find(sp => sp.id === action.createdAt);
+
+        return servicePoint ? servicePoint.name : action.createdAt;
+      },
       source: action => action.source,
       comments: action => (action.comments ? (<div>{action.comments.split('\n').map(c => (<Row><Col>{c}</Col></Row>))}</div>) : ''),
     };
