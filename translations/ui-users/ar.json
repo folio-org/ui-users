@@ -701,5 +701,6 @@
     "blocks.form.label.requests": "طلبات",
     "information.preferredName": "الاسم الأول المفضل",
     "reports.overdue.inProgress": "التصدير قيد التقدم",
-    "contact.contactInfo": "بيانات الاتصال"
+    "contact.contactInfo": "بيانات الاتصال",
+    "settings.default": "Default"
 }

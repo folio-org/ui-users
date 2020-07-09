@@ -701,5 +701,6 @@
     "blocks.form.label.requests": "Reservationer",
     "information.preferredName": "Preferred first name",
     "reports.overdue.inProgress": "Export in progress",
-    "contact.contactInfo": "Contact information"
+    "contact.contactInfo": "Contact information",
+    "settings.default": "Default"
 }
