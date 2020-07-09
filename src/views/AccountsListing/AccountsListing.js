@@ -487,7 +487,7 @@ class AccountsHistory extends React.Component {
           padContent={false}
           onClose={() => { history.push(`/users/preview/${params.id}`); }}
           paneTitle={(
-            <FormattedMessage id="ui-users.accounts.title">
+            <FormattedMessage id="ui-users.accounts.title.feeFine">
               {(title) => (
                 `${title} - ${getFullName(user)} ${patronGroup ? '(' + _.upperFirst(patronGroup.group) + ')' : ''}`
               )}

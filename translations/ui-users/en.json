@@ -185,7 +185,7 @@
   "permissions.userPermissions": "User permissions",
   "permissions.isProxyFor": "Sponsors ({name} can borrow on behalf of these people)",
   "permissions.isSponsorOf": "Proxies (these people can borrow on behalf of {name})",
-  "permissions.proxySponsor": "Proxy/Sponsor",
+  "permissions.proxy.sponsor": "Proxy/sponsor",
   "permissions.assignedPermissions": "Assigned permissions",
   "permissions.untitledPermissionSet": "Untitled permission set",
   "permissions.closePermissionSetDialog": "Close permission set dialog",
@@ -313,7 +313,7 @@
   "status": "Status",
   "selectColumns": "Select Columns",
 
-  "accounts.title": "Fees/Fines",
+  "accounts.title.feeFine": "Fees/fines",
   "accounts.outstandingBalance": "Outstanding Balance: ",
   "accounts.header": "Fee/fine details - {userName} ({patronGroup})",
   "accounts.outstanding": "Outstanding Balance: {amount}",

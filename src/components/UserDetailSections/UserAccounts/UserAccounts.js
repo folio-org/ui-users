@@ -150,7 +150,7 @@ class UserAccounts extends React.Component {
         open={expanded}
         id={accordionId}
         onToggle={onToggle}
-        label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.accounts.title" /></Headline>}
+        label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.accounts.title.feeFine" /></Headline>}
         displayWhenClosed={displayWhenClosed}
         displayWhenOpen={displayWhenOpen}
       >
