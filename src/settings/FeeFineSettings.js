@@ -9,6 +9,7 @@ import { Field } from 'redux-form';
 import {
   Select,
   Label,
+  NoValue,
 } from '@folio/stripes/components';
 import { ControlledVocab } from '@folio/stripes/smart-components';
 import { stripesConnect, withStripes } from '@folio/stripes/core';
@@ -252,7 +253,7 @@ class FeeFineSettings extends React.Component {
     } else if (!noticeTypeId && defaultNoticeId) {
       templateName = defaultMessage;
     } else {
-      templateName = '-';
+      templateName = <NoValue />;
     }
 
     return templateName;
@@ -290,7 +291,7 @@ class FeeFineSettings extends React.Component {
     };
 
     const formatter = {
-      'defaultAmount': (value) => (value.defaultAmount ? parseFloat(value.defaultAmount).toFixed(2) : '-'),
+      'defaultAmount': (value) => (value.defaultAmount ? parseFloat(value.defaultAmount).toFixed(2) : <NoValue />),
       'chargeNoticeId': ({ chargeNoticeId }) => this.getNotice(chargeNoticeId, 'Charge'),
       'actionNoticeId': ({ actionNoticeId }) => this.getNotice(actionNoticeId, 'Action'),
     };
