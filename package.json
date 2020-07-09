@@ -707,7 +707,7 @@
     "uuid": "^3.0.1"
   },
   "peerDependencies": {
-    "@folio/stripes": "^4.0.0",
+    "@folio/stripes": "^5.0.0",
     "react": "*",
     "react-intl": "^4.5.3",
     "react-router": "^5.2.0",
