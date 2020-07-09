@@ -6,6 +6,8 @@ import {
   it,
 } from '@bigtest/mocha';
 
+import translations from '../../../translations/ui-users/en';
+
 import setupApplication from '../helpers/setup-application';
 import FeeFineInteractor from '../interactors/settings-feefine';
 
@@ -167,8 +169,12 @@ describe('Manual charges', () => {
       });
 
       it('renders proper values after update', () => {
+        const lastRow = FeeFineInteractor.list.rows(1);
+
         expect(FeeFineInteractor.notice.ownerChargeNoticeValue).to.equal('Template 3');
         expect(FeeFineInteractor.notice.ownerActionNoticeValue).to.equal('Template 2');
+        expect(lastRow.cells(2).text).to.equal(translations['settings.default']);
+        expect(lastRow.cells(3).text).to.equal(translations['settings.default']);
       });
     });
 
