@@ -34,10 +34,10 @@ describe('User view', () => {
 
     describe('request preferences section', () => {
       it('should display hold shelf value', () => {
-        expect(InstanceViewPage.holdShelf).to.equal('Hold shelf - Yes');
+        expect(InstanceViewPage.holdShelf).to.equal('Hold shelf - yes');
       });
       it('should display whether delivery is checked', () => {
-        expect(InstanceViewPage.delivery).to.equal('Delivery - Yes');
+        expect(InstanceViewPage.delivery).to.equal('Delivery - yes');
       });
       it('should display fulfillment preference', () => {
         expect(InstanceViewPage.fulfillmentPreference).to.equal('Delivery');

@@ -125,7 +125,7 @@ describe('Test Patron Blocks section', () => {
         });
 
         it('displays title', () => {
-          expect(PatronBlocksInteractor.title).to.equal('New Block');
+          expect(PatronBlocksInteractor.title).to.equal('New block');
         }).timeout(4000);
 
         describe('collapse patron block', () => {

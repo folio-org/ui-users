@@ -18,7 +18,7 @@ describe('Fee/fines comment required', () => {
     });
 
     it('displays the title in the pane header', () => {
-      expect(Comments.commentRequiredTitle).to.equal('Fee/fine: Comment required');
+      expect(Comments.commentRequiredTitle).to.equal('Fee/fine: comment required');
     });
 
     it('displays the labels', () => {

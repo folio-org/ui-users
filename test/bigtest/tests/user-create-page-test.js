@@ -22,7 +22,7 @@ describe('User Create Page', () => {
 
     describe('visiting the create user page', () => {
       it('should display the title in the pane header', () => {
-        expect(UserFormPage.title).to.equal('Create User');
+        expect(UserFormPage.title).to.equal('Create user');
       });
 
       it('should render a primary button', () => {

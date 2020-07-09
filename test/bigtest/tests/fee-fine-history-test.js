@@ -38,9 +38,9 @@ describe('Test Fee/Fine History', () => {
 
         it('displays the pane title menu', () => {
           expect(FeeFineHistoryInteractor.paneTitle).to.string('Fees/Fines -');
-          expect(FeeFineHistoryInteractor.paneSub).to.string('Outstanding Balance');
+          expect(FeeFineHistoryInteractor.paneSub).to.string('Outstanding balance');
           expect(FeeFineHistoryInteractor.labelMenu).to.string('Open fees/fines for');
-          expect(FeeFineHistoryInteractor.outstandingMenu).to.string('Outstanding Balance');
+          expect(FeeFineHistoryInteractor.outstandingMenu).to.string('Outstanding balance');
         });
 
         describe('displays open fees/fines rows', () => {
