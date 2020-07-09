@@ -9,6 +9,7 @@ import { Field } from 'redux-form';
 import {
   Select,
   Label,
+  NoValue,
 } from '@folio/stripes/components';
 import { ControlledVocab } from '@folio/stripes/smart-components';
 import { stripesConnect, withStripes } from '@folio/stripes/core';
@@ -93,7 +94,7 @@ class FeeFineSettings extends React.Component {
     this.state = {
       ownerId: '',
       owners: [],
-      templates: []
+      templates: [],
     };
 
     this.connectedControlledVocab = props.stripes.connect(ControlledVocab);
@@ -221,6 +222,16 @@ class FeeFineSettings extends React.Component {
     return filterOwners;
   }
 
+  getDefaultNotices = () => {
+    const { owners, ownerId } = this.state;
+    const { defaultActionNoticeId, defaultChargeNoticeId } = owners.find(o => o.id === ownerId) || {};
+
+    return {
+      defaultChargeNoticeId,
+      defaultActionNoticeId,
+    };
+  }
+
   onUpdateOwner(item) {
     const { owners, ownerId } = this.state;
     const owner = owners.find(o => o.id === ownerId) || {};
@@ -228,6 +239,24 @@ class FeeFineSettings extends React.Component {
     owner.defaultActionNoticeId = item.defaultActionNoticeId;
     this.props.mutator.activeRecord.update({ ownerId });
     return this.props.mutator.owners.PUT(owner);
+  }
+
+  getNotice = (noticeTypeId, noticeType) => {
+    const { templates } = this.state;
+    const defaultNotices = this.getDefaultNotices();
+    const defaultNoticeId = defaultNotices[`default${noticeType}NoticeId`];
+    const defaultMessage = <FormattedMessage id="ui-users.settings.default" />;
+    let templateName = templates.find(t => t.id === noticeTypeId) || {};
+
+    if (noticeTypeId) {
+      templateName = templateName?.name;
+    } else if (!noticeTypeId && defaultNoticeId) {
+      templateName = defaultMessage;
+    } else {
+      templateName = <NoValue />;
+    }
+
+    return templateName;
   }
 
   render() {
@@ -262,9 +291,9 @@ class FeeFineSettings extends React.Component {
     };
 
     const formatter = {
-      'defaultAmount': (value) => (value.defaultAmount ? parseFloat(value.defaultAmount).toFixed(2) : '-'),
-      'chargeNoticeId': (value) => (value.chargeNoticeId ? ((templates.find(t => t.id === value.chargeNoticeId) || {}).name) : '-'),
-      'actionNoticeId': (value) => (value.actionNoticeId ? ((templates.find(t => t.id === value.actionNoticeId) || {}).name) : '-'),
+      'defaultAmount': (value) => (value.defaultAmount ? parseFloat(value.defaultAmount).toFixed(2) : <NoValue />),
+      'chargeNoticeId': ({ chargeNoticeId }) => this.getNotice(chargeNoticeId, 'Charge'),
+      'actionNoticeId': ({ actionNoticeId }) => this.getNotice(actionNoticeId, 'Action'),
     };
 
 
