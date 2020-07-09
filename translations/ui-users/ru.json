@@ -701,5 +701,6 @@
     "blocks.form.label.requests": "Запросы",
     "information.preferredName": "Предпочитаемое имя",
     "reports.overdue.inProgress": "Выполняется экспорт",
-    "contact.contactInfo": "Contact information"
+    "contact.contactInfo": "Контактная информация",
+    "settings.default": "Default"
 }
