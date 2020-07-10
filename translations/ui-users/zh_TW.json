@@ -46,7 +46,6 @@
     "permissions.userPermissions": "使用者權限",
     "permissions.isProxyFor": "{name}是代理",
     "permissions.isSponsorOf": "{name}是厂商",
-    "permissions.proxySponsor": "代理/厂商",
     "permissions.assignedPermissions": "分配的权限",
     "permissions.untitledPermissionSet": "未命名的權限組合",
     "permissions.closePermissionSetDialog": "關閉權限組合對話框",
@@ -154,7 +153,6 @@
     "errors.missingRequiredPreferredServicePoint": "請填妥內容以繼續",
     "duplicated": "{field} 已存在",
     "showTags": "顯示標籤",
-    "accounts.title": "費用 / 罰款",
     "accounts.open": "打开",
     "accounts.closed": "已關閉",
     "accounts.all": "所有",
@@ -702,5 +700,7 @@
     "information.preferredName": "Preferred first name",
     "reports.overdue.inProgress": "Export in progress",
     "contact.contactInfo": "Contact information",
-    "settings.default": "Default"
+    "settings.default": "Default",
+    "permissions.proxy.sponsor": "Proxy/sponsor",
+    "accounts.title.feeFine": "Fees/fines"
 }

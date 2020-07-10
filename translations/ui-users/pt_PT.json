@@ -46,7 +46,6 @@
     "permissions.userPermissions": "Permissões de utilizador",
     "permissions.isProxyFor": "{name} é autorizado por",
     "permissions.isSponsorOf": "{name} é patrocinador de",
-    "permissions.proxySponsor": "Autorizador/Patrocinador",
     "permissions.assignedPermissions": "Permissões atribuídas",
     "permissions.untitledPermissionSet": "Conjunto de permissões sem título",
     "permissions.closePermissionSetDialog": "Fechar caixa de diálogo do conjunto de permissões",
@@ -154,7 +153,6 @@
     "errors.missingRequiredPreferredServicePoint": "Por favor preencha isto para continuar",
     "duplicated": "{field} já existe",
     "showTags": "Mostrar etiquetas",
-    "accounts.title": "Taxas/Multas",
     "accounts.open": "Aberto",
     "accounts.closed": "Fechado",
     "accounts.all": "Todos",
@@ -702,5 +700,7 @@
     "information.preferredName": "Preferred first name",
     "reports.overdue.inProgress": "Export in progress",
     "contact.contactInfo": "Contact information",
-    "settings.default": "Default"
+    "settings.default": "Default",
+    "permissions.proxy.sponsor": "Proxy/sponsor",
+    "accounts.title.feeFine": "Fees/fines"
 }

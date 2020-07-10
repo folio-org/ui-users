@@ -46,7 +46,6 @@
     "permissions.userPermissions": "用户权限",
     "permissions.isProxyFor": "赞助人（ {name}可以代表这些人借用）",
     "permissions.isSponsorOf": "代理（这些人可以代表{name}借用）",
-    "permissions.proxySponsor": "代理/厂商",
     "permissions.assignedPermissions": "分配的权限",
     "permissions.untitledPermissionSet": "未命名的权限集",
     "permissions.closePermissionSetDialog": "关闭权限集对话框",
@@ -154,7 +153,6 @@
     "errors.missingRequiredPreferredServicePoint": "请填写此内容以继续",
     "duplicated": "{field} 已存在",
     "showTags": "显示标签",
-    "accounts.title": "费用/罚款",
     "accounts.open": "打开",
     "accounts.closed": "已关闭",
     "accounts.all": "所有",
@@ -702,5 +700,7 @@
     "information.preferredName": "Preferred first name",
     "reports.overdue.inProgress": "Export in progress",
     "contact.contactInfo": "Contact information",
-    "settings.default": "Default"
+    "settings.default": "Default",
+    "permissions.proxy.sponsor": "Proxy/sponsor",
+    "accounts.title.feeFine": "Fees/fines"
 }
