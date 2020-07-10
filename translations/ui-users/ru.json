@@ -46,7 +46,6 @@
     "permissions.userPermissions": "Разрешения пользователя",
     "permissions.isProxyFor": "Sponsors ({name} can borrow on behalf of these people)",
     "permissions.isSponsorOf": "Proxies (these people can borrow on behalf of {name})",
-    "permissions.proxySponsor": "Proxy/Sponsor",
     "permissions.assignedPermissions": "Assigned permissions",
     "permissions.untitledPermissionSet": "Untitled permission set",
     "permissions.closePermissionSetDialog": "Close permission set dialog",
@@ -154,7 +153,6 @@
     "errors.missingRequiredPreferredServicePoint": "Пожалуйста, заполните это, чтобы продолжить",
     "duplicated": "{field} уже существует",
     "showTags": "Показать теги",
-    "accounts.title": "Fees/Fines",
     "accounts.open": "Открыть",
     "accounts.closed": "Закрыто",
     "accounts.all": "Все",
@@ -702,5 +700,7 @@
     "information.preferredName": "Предпочитаемое имя",
     "reports.overdue.inProgress": "Выполняется экспорт",
     "contact.contactInfo": "Контактная информация",
-    "settings.default": "Default"
+    "settings.default": "Default",
+    "permissions.proxy.sponsor": "Прокси/спонсор",
+    "accounts.title.feeFine": "Сборы/пени"
 }

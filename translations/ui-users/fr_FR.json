@@ -46,7 +46,6 @@
     "permissions.userPermissions": "Autorisations utilisateur",
     "permissions.isProxyFor": "Le commanditaire ( {name} peut emprunter au nom de ces personnes)",
     "permissions.isSponsorOf": "Procurations (ces personnes peuvent emprunter au nom de {name} )",
-    "permissions.proxySponsor": "Procurations/Commanditaires",
     "permissions.assignedPermissions": "Autorisations attribuées",
     "permissions.untitledPermissionSet": "Ensemble d'autorisations sans titre",
     "permissions.closePermissionSetDialog": "Fermer la boîte de dialogue des autorisations",
@@ -154,7 +153,6 @@
     "errors.missingRequiredPreferredServicePoint": "Merci de remplir pour continuer",
     "duplicated": "{field} existe déjà",
     "showTags": "Afficher les mots-clés",
-    "accounts.title": "Frais / amendes",
     "accounts.open": "Ouvert",
     "accounts.closed": "Fermé",
     "accounts.all": "Tout",
@@ -702,5 +700,7 @@
     "information.preferredName": "Prénom préféré",
     "reports.overdue.inProgress": "Export en cours",
     "contact.contactInfo": "Contact information",
-    "settings.default": "Default"
+    "settings.default": "Default",
+    "permissions.proxy.sponsor": "Proxy/sponsor",
+    "accounts.title.feeFine": "Fees/fines"
 }

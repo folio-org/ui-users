@@ -46,7 +46,6 @@
     "permissions.userPermissions": "Felhasználói engedélyek",
     "permissions.isProxyFor": "{name} meghatalmazottja",
     "permissions.isSponsorOf": "{name} szponzora",
-    "permissions.proxySponsor": "Meghatalmazott/Szponzor",
     "permissions.assignedPermissions": "Hozzárendelt engedélyek",
     "permissions.untitledPermissionSet": "Cím nélküli engedély halmaz",
     "permissions.closePermissionSetDialog": "Zárja be az engedélyek párbeszédablakot",
@@ -154,7 +153,6 @@
     "errors.missingRequiredPreferredServicePoint": "Kérem, töltse ki ezt a folytatáshoz",
     "duplicated": "{field} már létezik",
     "showTags": "Címkék mutatása",
-    "accounts.title": "Díjak/bírságok",
     "accounts.open": "Megnyit",
     "accounts.closed": "Zárva",
     "accounts.all": "Összes",
@@ -702,5 +700,7 @@
     "information.preferredName": "Preferred first name",
     "reports.overdue.inProgress": "Export in progress",
     "contact.contactInfo": "Contact information",
-    "settings.default": "Default"
+    "settings.default": "Default",
+    "permissions.proxy.sponsor": "Proxy/sponsor",
+    "accounts.title.feeFine": "Fees/fines"
 }

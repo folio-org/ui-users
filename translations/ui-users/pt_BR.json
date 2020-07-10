@@ -46,7 +46,6 @@
     "permissions.userPermissions": "Permissões de usuário",
     "permissions.isProxyFor": "Autorizadores ({name} pode emprestar em nome dessas pessoas)",
     "permissions.isSponsorOf": "Autorizados (essas pessoas podem pedir emprestado em nome de {name})",
-    "permissions.proxySponsor": "Autorizado/Autorizador",
     "permissions.assignedPermissions": "Permissões atribuídas",
     "permissions.untitledPermissionSet": "Conjunto de permissões sem título",
     "permissions.closePermissionSetDialog": "Fechar caixa de diálogo do conjunto de permissão",
@@ -154,7 +153,6 @@
     "errors.missingRequiredPreferredServicePoint": "Por favor, preencha isto para continuar",
     "duplicated": "{field} já existe",
     "showTags": "Mostrar tags",
-    "accounts.title": "Taxas/Multas",
     "accounts.open": "Aberto",
     "accounts.closed": "Fechado",
     "accounts.all": "Todos",
@@ -701,6 +699,8 @@
     "blocks.form.label.requests": "Requisições",
     "information.preferredName": "Nome preferido",
     "reports.overdue.inProgress": "Exportação em andamento",
-    "contact.contactInfo": "Contact information",
-    "settings.default": "Default"
+    "contact.contactInfo": "Informações de contato",
+    "settings.default": "Padrão",
+    "permissions.proxy.sponsor": "Autorizado/Autorizador",
+    "accounts.title.feeFine": "Taxas/multas"
 }
