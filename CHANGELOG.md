@@ -1,6 +1,7 @@
 # Change history for ui-users
 
-## 4.0.4 (IN PROGRESS)
+## [4.0.4](https://github.com/folio-org/ui-users/tree/v4.0.4) (2020-07-10)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v4.0.3...v4.0.4)
 
 * Refresh Fine incurred field when item declared lost. Fixes UIU-1669.
 * Fix Custom Fields related error toast notification in User Details page. Fixes UIU-1736.
