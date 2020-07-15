@@ -26,7 +26,7 @@ const withServicePoints = WrappedComponent => class WithServicePointsComponent e
         accumulate: true,
         fetch: false,
       },
-      servicePointUserId: '',
+      servicePointUserId: { initialValue: '' },
       servicePointsUsers: {
         type: 'okapi',
         path: `service-points-users?query=(userId==:{id})&limit=${MAX_RECORDS}`,
