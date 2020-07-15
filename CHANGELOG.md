@@ -1,6 +1,6 @@
 # Change history for ui-users
 
-## [4.1.0] (IN PROGRESS)
+## 5.0.0 (IN PROGRESS)
 
 * Trim email address in user record to remove blanks. Fixes UIU-1528.
 * `withRenew` should include in-transit items when calculating the open-request-count. Fixes UIU-1254.
@@ -21,6 +21,7 @@
 * `Fee/fines details` not always include `Service Point` as `Created at`. Refs UIU-1725.
 * Add permission to anonymize manually closed loans. Fixes UIU-1757.
 * Include tag-related permissions in `ui-users.edit` permission. Refs UITAG-29.
+* Increment `@folio/stripes` to `v5.0`, `react-router` to `v5.2`.
 
 ## [4.0.0](https://github.com/folio-org/ui-users/tree/v4.0.0) (2020-06-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v3.0.0...v4.0.0)
