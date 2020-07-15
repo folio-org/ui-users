@@ -1,6 +1,7 @@
 # Change history for ui-users
 
-## 4.0.6 (IN PROGRESS)
+## [4.0.6](https://github.com/folio-org/ui-users/tree/v4.0.6) (2020-07-15)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v4.0.5...v4.0.6)
 
 * Include tag-view permissions in `ui-users.view` permission. Refs UIU-1774.
 
