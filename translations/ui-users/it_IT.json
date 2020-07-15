@@ -46,7 +46,6 @@
     "permissions.userPermissions": "Permessi utente",
     "permissions.isProxyFor": "{name} è proxy per",
     "permissions.isSponsorOf": "{name} è garante di",
-    "permissions.proxySponsor": "Proxy/Garante",
     "permissions.assignedPermissions": "Assegna permessi",
     "permissions.untitledPermissionSet": "Impostazione permessi senza titolo",
     "permissions.closePermissionSetDialog": "Chiudi finestra Impostazione permessi",
@@ -154,7 +153,6 @@
     "errors.missingRequiredPreferredServicePoint": "Compila per continuare",
     "duplicated": "{field} esiste già",
     "showTags": "Mostra tag",
-    "accounts.title": "Tariffe/multe",
     "accounts.open": "Apri",
     "accounts.closed": "Chiuso",
     "accounts.all": "Tutto",
@@ -702,5 +700,7 @@
     "information.preferredName": "Preferred first name",
     "reports.overdue.inProgress": "Export in progress",
     "contact.contactInfo": "Contact information",
-    "settings.default": "Default"
+    "settings.default": "Default",
+    "permissions.proxy.sponsor": "Proxy/sponsor",
+    "accounts.title.feeFine": "Fees/fines"
 }

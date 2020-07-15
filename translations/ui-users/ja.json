@@ -46,7 +46,6 @@
     "permissions.userPermissions": "User permissions",
     "permissions.isProxyFor": "Sponsors ({name} can borrow on behalf of these people)",
     "permissions.isSponsorOf": "Proxies (these people can borrow on behalf of {name})",
-    "permissions.proxySponsor": "Proxy/Sponsor",
     "permissions.assignedPermissions": "Assigned permissions",
     "permissions.untitledPermissionSet": "Untitled permission set",
     "permissions.closePermissionSetDialog": "Close permission set dialog",
@@ -154,7 +153,6 @@
     "errors.missingRequiredPreferredServicePoint": "続行するには入力してください",
     "duplicated": "{field} already exists",
     "showTags": "Show Tags",
-    "accounts.title": "Fees/Fines",
     "accounts.open": "Open",
     "accounts.closed": "Closed",
     "accounts.all": "All",
@@ -702,5 +700,7 @@
     "information.preferredName": "Preferred first name",
     "reports.overdue.inProgress": "Export in progress",
     "contact.contactInfo": "Contact information",
-    "settings.default": "Default"
+    "settings.default": "Default",
+    "permissions.proxy.sponsor": "Proxy/sponsor",
+    "accounts.title.feeFine": "Fees/fines"
 }

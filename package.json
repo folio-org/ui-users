@@ -87,7 +87,9 @@
           "ui-users.view",
           "users-bl.item.put",
           "users.item.put",
-          "login.item.put"
+          "login.item.put",
+          "tags.collection.get",
+          "tags.item.post"
         ],
         "visible": true
       },
@@ -579,6 +581,7 @@
           "circulation.loans.declare-item-lost.post",
           "circulation.loans.claim-item-returned.post",
           "circulation.loans.declare-claimed-returned-item-as-missing.post",
+          "circulation.loans.collection.anonymize.user.post",
           "ui-users.loans.renew-override",
           "circulation.loans.item.put",
           "circulation.renew-by-barcode.post",

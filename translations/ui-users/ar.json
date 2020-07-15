@@ -46,7 +46,6 @@
     "permissions.userPermissions": "صلاحيات المستخدم",
     "permissions.isProxyFor": "الرعاة ( يمكن لـ {name} الاستعارة نيابةً عن هؤلاء الأشخاص)",
     "permissions.isSponsorOf": "النواب (يمكن لهؤلاء الأشخاص الاستعارة نيابة عن {name})",
-    "permissions.proxySponsor": "النائب/الراعي",
     "permissions.assignedPermissions": "الصلاحيات المعينة",
     "permissions.untitledPermissionSet": "مجموعة صلاحية بلا عنوان",
     "permissions.closePermissionSetDialog": "إغلاق المربع الحواري لمجموعة الصلاحية",
@@ -154,7 +153,6 @@
     "errors.missingRequiredPreferredServicePoint": "يرجى ملء هذا للمتابعة",
     "duplicated": "{field} موجود بالفعل",
     "showTags": "عرض الوسوم",
-    "accounts.title": "رسوم/غرامات",
     "accounts.open": "مفتوح",
     "accounts.closed": "مغلق",
     "accounts.all": "الكل",
@@ -702,5 +700,7 @@
     "information.preferredName": "الاسم الأول المفضل",
     "reports.overdue.inProgress": "التصدير قيد التقدم",
     "contact.contactInfo": "بيانات الاتصال",
-    "settings.default": "Default"
+    "settings.default": "الافتراضي",
+    "permissions.proxy.sponsor": "النائب/الراعي",
+    "accounts.title.feeFine": "الرسوم/الغرامات"
 }

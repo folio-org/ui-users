@@ -28,7 +28,7 @@ const EditProxy = (props) => {
     getWarning,
   } = props;
 
-  const proxySponsor = <FormattedMessage id="ui-users.permissions.proxySponsor" />;
+  const proxySponsor = <FormattedMessage id="ui-users.permissions.proxy.sponsor" />;
 
   return (
     <IfPermission perm="ui-users.editproxies">

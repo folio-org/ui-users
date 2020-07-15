@@ -18,6 +18,9 @@
 * Change capitalization of sections in User Information. Refs UIU-1754.
 * Fix buttons layout in `Warning modal`. Refs UIU-1756.
 * Change `-` to `Default` if default notice exists at Fee/Fine: Manual Charges. Refs UIU-1755.
+* `Fee/fines details` not always include `Service Point` as `Created at`. Refs UIU-1725.
+* Add permission to anonymize manually closed loans. Fixes UIU-1757.
+* Include tag-related permissions in `ui-users.edit` permission. Refs UITAG-29.
 * Increment `@folio/stripes` to `v5.0`, `react-router` to `v5.2`.
 
 ## [4.0.0](https://github.com/folio-org/ui-users/tree/v4.0.0) (2020-06-17)
