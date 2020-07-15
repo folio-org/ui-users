@@ -8,6 +8,7 @@
 * Prevent declaring an item lost if it is already lost. Fixes UIU-1714.
 * `Fee/fines details` not always include `Service Point` as `Created at`. Refs UIU-1725.
 * Add permission to anonymize manually closed loans. Fixes UIU-1757.
+* Include tag-related permissions in `ui-users.edit` permission. Refs UITAG-29.
 
 ## [4.0.3](https://github.com/folio-org/ui-users/tree/v4.0.3) (2020-07-08)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v4.0.2...v4.0.3)

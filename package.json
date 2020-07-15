@@ -87,7 +87,9 @@
           "ui-users.view",
           "users-bl.item.put",
           "users.item.put",
-          "login.item.put"
+          "login.item.put",
+          "tags.collection.get",
+          "tags.item.post"
         ],
         "visible": true
       },
