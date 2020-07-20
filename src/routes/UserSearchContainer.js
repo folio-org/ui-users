@@ -18,10 +18,33 @@ import { UserSearch } from '../views';
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
 
-const compileQuery = template(
-  '(username="%{query}*" or personal.firstName="%{query}*" or personal.lastName="%{query}*" or personal.email="%{query}*" or barcode="%{query}*" or id="%{query}*" or externalSystemId="%{query}*")',
-  { interpolate: /%{([\s\S]+?)}/g }
-);
+
+
+/**
+ * compileQuery
+ * If the value starts with anything other than an open paren, use a query
+ * template. But if we have an open paren, then we can assume we are receiving
+ * a CQL query and leave the exact value as is.
+ *
+ *
+ */
+const compileQuery = (parsedQuery, props, localProps) => {
+  let q = localProps.query.query.trim();
+  if (q.indexOf('(') !== 0) {
+    const compileTemplate = template(
+      '(username="%{query}*" or personal.firstName="%{query}*" or personal.lastName="%{query}*" or personal.email="%{query}*" or barcode="%{query}*" or id="%{query}*" or externalSystemId="%{query}*")',
+      { interpolate: /%{([\s\S]+?)}/g }
+    );
+    // we could allow quoted strings if we split and filtered like this:
+    // .split(/([^\s"]+)|"([^"]+)"/gi).filter(i => i && !i.match(/^\s+$/))
+    q = q.replace('*', '').split(/\s+/)
+      .map(query => compileTemplate({ query }))
+      .join(' and ');
+  }
+
+  return q;
+};
+
 
 class UserSearchContainer extends React.Component {
   static manifest = Object.freeze({
@@ -39,10 +62,11 @@ class UserSearchContainer extends React.Component {
         params: {
           query: makeQueryFunction(
             'cql.allRecords=1',
-            // TODO: Refactor/remove this after work on FOLIO-2066 and RMB-385 is done
-            (parsedQuery, props, localProps) => localProps.query.query.trim().replace('*', '').split(/\s+/)
-              .map(query => compileQuery({ query }))
-              .join(' and '),
+            compileQuery,
+            // // TODO: Refactor/remove this after work on FOLIO-2066 and RMB-385 is done
+            // (parsedQuery, props, localProps) => localProps.query.query.trim().replace('*', '').split(/\s+/)
+            //   .map(query => compileQuery({ query }))
+            //   .join(' and '),
             {
               'active': 'active',
               'name': 'personal.lastName personal.firstName',
@@ -159,7 +183,12 @@ class UserSearchContainer extends React.Component {
   querySetter = ({ nsValues, state }) => {
     const { location : locationProp, history } = this.props;
     if (nsValues.query) {
-      nsValues.query = nsValues.query.replace('*', '');
+      // excise wildcards from the search string, unless it starts with open-paren,
+      // indicating the user is running straight CQL and therefore purpots to know
+      // what they are doing and is handling the syntax manually.
+      if (nsValues.query.indexOf('(') !== 0) {
+        nsValues.query = nsValues.query.replace('*', '');
+      }
     }
     let location = locationProp;
     // modifying the location hides the user detail view if a search/filter is triggered.
