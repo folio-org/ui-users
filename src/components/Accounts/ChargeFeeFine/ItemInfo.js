@@ -59,6 +59,7 @@ class ItemInfo extends React.Component {
             <FormattedMessage id="ui-users.charge.item.placeholder">
               {placeholder => (
                 <TextField
+                  data-test-fee-fine-barcode
                   placeholder={placeholder}
                   disabled={!this.props.editable}
                   onChange={this.onChangeSelectItem}
@@ -68,6 +69,7 @@ class ItemInfo extends React.Component {
           </Col>
           <Col xs={2}>
             <Button
+              data-test-enter-barcode
               buttonStyle="primary"
               onClick={this.onClickSelectItem}
               disabled={!this.props.editable}

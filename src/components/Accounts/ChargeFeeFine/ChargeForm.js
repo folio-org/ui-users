@@ -193,6 +193,7 @@ class ChargeForm extends React.Component {
       type: ((selectedLoan.item || {}).materialType || {}).name
     };
     const item = (editable) ? this.props.item : itemLoan;
+    const isDisabled = this.props.pristine || this.props.submitting || this.props.invalid || !item?.id;
     const feefineList = [];
     const ownerOptions = [];
 
@@ -219,7 +220,7 @@ class ChargeForm extends React.Component {
         </Button>
         <Button
           id="chargeAndPay"
-          disabled={this.props.pristine || this.props.submitting || this.props.invalid}
+          disabled={isDisabled}
           onClick={this.props.handleSubmit(data => this.props.onSubmit({ ...data, pay: true, notify }))}
           marginBottom0
         >
@@ -227,7 +228,7 @@ class ChargeForm extends React.Component {
         </Button>
         <Button
           id="chargeOnly"
-          disabled={this.props.pristine || this.props.submitting || this.props.invalid}
+          disabled={isDisabled}
           onClick={this.props.handleSubmit(data => this.props.onSubmit({ ...data, pay: false, notify }))}
           marginBottom0
         >

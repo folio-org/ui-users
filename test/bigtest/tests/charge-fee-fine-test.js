@@ -68,6 +68,18 @@ describe('Charge fee/fine', () => {
             expect(chargeForm.amountField.value).to.equal('500.00');
           });
 
+          describe('fill item barcode', () => {
+            beforeEach(async () => {
+              await chargeForm.barcodeField.fillAndBlur('123');
+              await chargeForm.clickEnterBarcode();
+            });
+
+            it('charge buttons should be disabled', () => {
+              expect(chargeForm.submitChargeAndPayIsDisabled).to.be.true;
+              expect(chargeForm.submitChargeIsDisabled).to.be.true;
+            });
+          });
+
           describe('cancel the charge', () => {
             beforeEach(async () => {
               await chargeForm.clickCancel();

@@ -129,7 +129,7 @@ class ChargeFeeFine extends React.Component {
     type.id = uuid();
     type.loanId = selectedLoan.id || '0';
     type.userId = this.props.user.id;
-    type.itemId = this.item.id || '0';
+    type.itemId = this.item.id;
     let commentInfo = '';
     const tagStaff = formatMessage({ id: 'ui-users.accounts.actions.tag.staff' });
     const tagPatron = formatMessage({ id: 'ui-users.accounts.actions.tag.patron' });
