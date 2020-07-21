@@ -658,4 +658,22 @@ export default function config() {
     automatedPatronBlocks: [],
     totalRecords: 0,
   });
+
+  this.get('/inventory/items/:barcode', ({ items }, request) => {
+    const url = new URL(request.url);
+    const cqlQuery = url.searchParams.get('query');
+
+    if (cqlQuery != null) {
+      const cqlParser = new CQLParser();
+      cqlParser.parse(cqlQuery);
+
+      if (cqlParser.tree.term) {
+        return items.where({
+          barcode: cqlParser.tree.term
+        });
+      }
+    }
+
+    return items.all();
+  });
 }
