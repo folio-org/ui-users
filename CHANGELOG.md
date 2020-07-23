@@ -22,6 +22,7 @@
 * Add permission to anonymize manually closed loans. Fixes UIU-1757.
 * Include tag-related permissions in `ui-users.edit` permission. Refs UITAG-29.
 * Increment `@folio/stripes` to `v5.0`, `react-router` to `v5.2`.
+* Support ability to search by Preferred first name. Refs UIU-1767.
 
 ## [4.0.0](https://github.com/folio-org/ui-users/tree/v4.0.0) (2020-06-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v3.0.0...v4.0.0)
