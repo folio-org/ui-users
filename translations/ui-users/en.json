@@ -50,6 +50,7 @@
   "item.callNumberComponents.prefix": "Call number prefix",
   "item.callNumberComponents.callNumber": "Call number",
   "item.callNumberComponents.suffix": "Call number suffix",
+  "item.enumeration": "Enumeration",
   "item.chronology": "Chronology",
   "item.volume": "Volume",
   "item.contributors": "Contributor names",
