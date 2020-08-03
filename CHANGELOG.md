@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## 4.0.7 (IN PROGRESS)
+
+* Manual charge with item should not be associated with loan. Fixes UIU-1786.
+
 ## [4.0.6](https://github.com/folio-org/ui-users/tree/v4.0.6) (2020-07-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v4.0.5...v4.0.6)
 

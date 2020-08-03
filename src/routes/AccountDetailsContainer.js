@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { first } from 'lodash';
 import { FormattedMessage } from 'react-intl';
 
 import { stripesConnect } from '@folio/stripes/core';
@@ -40,16 +41,25 @@ class AccountDetailsContainer extends React.Component {
     },
     activeRecord: {
       accountId: '0',
+      instanceId: '',
     },
     loans: {
       type: 'okapi',
       records: 'loans',
       path: 'circulation/loans?query=(userId=:{id})&limit=1000',
     },
+    instance: {
+      type: 'okapi',
+      path: 'instance-storage/instances/%{activeRecord.instanceId}',
+    }
   });
 
   static propTypes = {
     resources: PropTypes.shape({
+      loans: PropTypes.object,
+      activeRecord: PropTypes.shape({
+        instanceId: PropTypes.string,
+      }),
       accountHistory: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
@@ -59,12 +69,20 @@ class AccountDetailsContainer extends React.Component {
       selUser: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
+      instance: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
     }),
     match: PropTypes.shape({
       params: PropTypes.shape({
         accountid: PropTypes.string,
         id: PropTypes.string,
       })
+    }),
+    mutator: PropTypes.shape({
+      activeRecord: PropTypes.shape({
+        update: PropTypes.func.isRequired
+      }).isRequired
     }),
   }
 
@@ -95,13 +113,23 @@ class AccountDetailsContainer extends React.Component {
   }
 
   getItemDetails = () => {
-    const { resources } = this.props;
+    const {
+      mutator: {
+        activeRecord: {
+          update: updateInstanceId,
+        }
+      },
+      resources,
+    } = this.props;
+
     const account = this.getAccount();
+    if (account?.instanceId && account.instanceId !== resources.activeRecord.instanceId) {
+      updateInstanceId({ instanceId: account.instanceId });
+    }
+
+    const instance = first(resources?.instance?.records || []) || { contributors: [] };
     const loanRecords = resources?.loans?.records ?? [];
-    const itemId = account?.itemId;
-    const item = loanRecords.filter((loan) => loan.itemId === itemId);
-    const contributorRecords = item[0]?.item?.contributors ?? [];
-    const contributors = contributorRecords.map(({ name }) => name.split(',').reverse().join(', ')) || [];
+    const contributors = instance.contributors.map(({ name }) => name.split(',').reverse().join(', '));
     const loanId = account?.loanId;
 
     if (loanId === '0') return { contributors };
