@@ -22,6 +22,7 @@ const columns = [
   'item.volume',
   'item.enumeration',
   'item.chronology',
+  'item.copyNumber',
   'item.contributors',
   'item.location.name',
   'item.instanceId',
