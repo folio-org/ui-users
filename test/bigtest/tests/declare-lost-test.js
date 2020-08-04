@@ -210,7 +210,7 @@ describe('Declare Lost', () => {
       // This is ugly but it allows for moving forward without mocking up
       // too many other backend things.
       this.server.get('/accounts', () => {
-        const accounts = (refreshCounter > 3) ? [{ id: 1, amount: 250 }] : [];
+        const accounts = (refreshCounter > 2) ? [{ id: 1, amount: 250 }] : [];
         refreshCounter++;
         return { accounts };
       });
