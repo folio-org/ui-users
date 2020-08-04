@@ -2,7 +2,7 @@
 
 ## 5.0.0 (IN PROGRESS)
 
-* changed tests accessing user edit screen such that they go through 
+* Temporary fix for broken tests relating to UIU-1801.  Does not resolve that issue.
 * changed user search to filter based on tag name rather than ID.  Fixes UIU-1750
 * Trim email address in user record to remove blanks. Fixes UIU-1528.
 * `withRenew` should include in-transit items when calculating the open-request-count. Fixes UIU-1254.
