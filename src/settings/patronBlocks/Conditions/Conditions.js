@@ -8,6 +8,8 @@ import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import ConditionsForm from './ConditionsForm';
 import css from '../patronBlocks.css';
 
+/* eslint react/prop-types: "off" */
+
 class Conditions extends Component {
   static manifest = Object.freeze({
     patronBlockCondition: {
