@@ -48,6 +48,8 @@ const columns = [
   'comments',
 ];
 
+/* eslint react/prop-types: "off" */
+
 class AccountDetails extends React.Component {
   static propTypes = {
     stripes: PropTypes.object,

@@ -13,7 +13,7 @@ import UserFormPage from '../interactors/user-form-page';
 import UsersInteractor from '../interactors/users';
 import FindUserInteractor from '../interactors/find-user';
 import FindUserInstancesInteractor from '../interactors/FindUserInstances';
-
+import InstanceViewPage from '../interactors/user-view-page';
 import translations from '../../../translations/ui-users/en';
 
 describe('User Edit: Proxy/Sponsor', function () {
@@ -36,7 +36,9 @@ describe('User Edit: Proxy/Sponsor', function () {
   const findUserInstances = new FindUserInstancesInteractor({ timeout: 5000 });
 
   beforeEach(async function () {
-    this.visit('/users/test-user-proxy-unique-id/edit');
+    this.visit('/users/preview/test-user-proxy-unique-id');
+    await InstanceViewPage.whenLoaded();
+    await InstanceViewPage.clickEditButton();
     await UserFormPage.whenLoaded();
   });
 
