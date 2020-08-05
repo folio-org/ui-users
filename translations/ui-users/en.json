@@ -116,6 +116,13 @@
   "settings.limits.callout.error": "Something went wrong",
   "settings.limits.validation.message": "Must be blank or a number from {min, number} to {max, number}",
   "settings.default": "Default",
+  "settings.departments": "Departments",
+  "settings.department": "Department",
+  "settings.departments.name": "Name",
+  "settings.departments.name.error": "Name already exists",
+  "settings.departments.code": "Code",
+  "settings.departments.code.error": "Code already exists",
+  "settings.departments.users": "Users",
 
   "loans.columns.title": "Item title",
   "loans.columns.itemStatus": "Item status",
