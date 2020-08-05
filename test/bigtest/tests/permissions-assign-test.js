@@ -16,7 +16,7 @@ describe('Permissions assign', () => {
 
   setupApplication({ permissions: { 'perms.users.get': true } });
 
-  describe('visit user details', () => {
+  describe('visit user details, then navigate to edit', () => {
     beforeEach(async function () {
       this.server.createList('permission', permissionsAmount);
       this.server.createList('permission', permissionSetsAmount, { mutable: true });

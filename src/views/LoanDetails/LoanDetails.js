@@ -50,6 +50,8 @@ import LoanProxyDetails from './LoanProxyDetails';
 
 import css from './LoanDetails.css';
 
+/* eslint react/prop-types: "off" */
+
 class LoanDetails extends React.Component {
   static propTypes = {
     stripes: PropTypes.object.isRequired,
