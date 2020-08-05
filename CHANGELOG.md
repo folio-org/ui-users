@@ -25,6 +25,7 @@
 * Include tag-related permissions in `ui-users.edit` permission. Refs UITAG-29.
 * Increment `@folio/stripes` to `v5.0`, `react-router` to `v5.2`.
 * Support ability to search by Preferred first name. Refs UIU-1767.
+* Handle display of loan details for `Aged to lost`, and for unknown statuses as well. Refs UIU-1791.
 
 ## [4.0.0](https://github.com/folio-org/ui-users/tree/v4.0.0) (2020-06-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v3.0.0...v4.0.0)
