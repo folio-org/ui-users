@@ -8,7 +8,6 @@ import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import ConditionsForm from './ConditionsForm';
 import css from '../patronBlocks.css';
 
-/* eslint react/prop-types: "off" */
 
 class Conditions extends Component {
   static manifest = Object.freeze({
@@ -25,6 +24,9 @@ class Conditions extends Component {
   });
 
   static propTypes = {
+    resources: PropTypes.shape({
+      patronBlockCondition: PropTypes.object
+    }),
     id: PropTypes.string.isRequired,
     mutator: PropTypes.shape({
       patronBlockCondition: PropTypes.shape({
