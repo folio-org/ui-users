@@ -231,10 +231,9 @@ describe('Declare Lost', () => {
         await OpenLoansInteractor.declareLostDialog.additionalInfoTextArea.fill('item lost');
         await OpenLoansInteractor.declareLostDialog.confirmButton.click();
       });
-    });
-
-    it('should update fine incurred amount', () => {
-      expect(LoanActionsHistory.feeFines.text).to.equal('250.00');
+      it('should update fine incurred amount', () => {
+        expect(LoanActionsHistory.feeFines.text).to.equal('250.00');
+      });
     });
   });
 
