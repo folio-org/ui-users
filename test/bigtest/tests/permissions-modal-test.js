@@ -8,6 +8,7 @@ import { expect } from 'chai';
 import setupApplication from '../helpers/setup-application';
 import PermissionSetForm from '../interactors/permission-set-form';
 import UserFormPage from '../interactors/user-form-page';
+import InstanceViewPage from '../interactors/user-view-page';
 import translation from '../../../translations/ui-users/en';
 
 describe('Permissions modal', () => {
@@ -18,13 +19,15 @@ describe('Permissions modal', () => {
 
   setupApplication({ scenarios: ['comments'] });
 
-  describe('visit user-edit', () => {
+  describe('visit user-preview', () => {
     beforeEach(async function () {
       this.server.createList('permission', permissionsAmount);
       permissionSets = this.server.createList('permission', permissionSetsAmount, { mutable: true });
       user = this.server.create('user');
 
-      this.visit(`/users/${user.id}/edit`);
+      this.visit(`/users/preview/${user.id}`);
+      await InstanceViewPage.whenLoaded();
+      await InstanceViewPage.clickEditButton();
       await UserFormPage.whenLoaded();
       await UserFormPage.togglePermissionAccordionButton.click();
     });
