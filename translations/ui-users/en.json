@@ -41,6 +41,8 @@
   "data.loanActionMap.closedLoan": "Closed loan",
   "data.loanActionMap.checkedInReturnedByPatron": "Checked in (returned by patron)",
   "data.loanActionMap.checkedInFoundByLibrary": "Checked in (found by library)",
+  "data.loanActionMap.itemAgedToLost": "Aged to lost",
+  "data.loanActionMap.unknownAction": "Unknown action",
   "action": "Action",
   "dueDate": "Due date",
   "loanDate": "Loan date",

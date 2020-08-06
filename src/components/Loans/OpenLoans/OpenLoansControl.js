@@ -21,8 +21,6 @@ import {
 } from '../../Wrappers';
 import TableModel from './components/OpenLoansWithStaticData';
 
-/* eslint react/prop-types: "off" */
-
 class OpenLoansControl extends React.Component {
   static propTypes = {
     stripes: stripesShape.isRequired,
@@ -39,6 +37,7 @@ class OpenLoansControl extends React.Component {
       }),
     }),
     resources: PropTypes.shape({
+      loanAccount: PropTypes.object,
       query: PropTypes.object,
       requests: PropTypes.shape({
         GET: PropTypes.func,

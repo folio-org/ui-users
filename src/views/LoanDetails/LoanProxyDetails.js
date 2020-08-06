@@ -6,7 +6,7 @@ import { KeyValue } from '@folio/stripes/components';
 import { stripesConnect } from '@folio/stripes/core';
 import { getFullName } from '../../components/util';
 
-/* eslint react/prop-types: "off" */
+
 
 class LoanProxyDetails extends React.Component {
   static manifest = Object.freeze({
