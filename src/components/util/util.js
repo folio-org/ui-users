@@ -82,10 +82,10 @@ export function getOpenRequestStatusesFilterString() {
   return getFilterStatusesString(openStatusesArr);
 }
 
-export function getOpenRequestsPath(barcode) {
+export function getOpenRequestsPath(itemId) {
   const filterString = getOpenRequestStatusesFilterString();
 
-  return `/requests?filters=${filterString}&query=${barcode}&sort=Request Date`;
+  return `/requests?filters=${filterString}&query=${itemId}&sort=Request Date`;
 }
 
 export function getChargeFineToLoanPath(userId, loanId) {

@@ -28,6 +28,7 @@
 * Handle display of loan details for `Aged to lost`, and for unknown statuses as well. Refs UIU-1791.
 * Settings > Users > Departments CRUD. Refs UIU-1211.
 * Reorder volume/enum/chron fields in loans export (CSV). Refs UIU-1504.
+* Use item id instead of barcode for links to `ui-requests` module. Fixes UIU-1727.
 
 ## [4.0.0](https://github.com/folio-org/ui-users/tree/v4.0.0) (2020-06-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v3.0.0...v4.0.0)
