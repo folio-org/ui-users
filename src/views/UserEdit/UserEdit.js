@@ -292,6 +292,11 @@ class UserEdit extends React.Component {
     }
 
     // data is information that the form needs, mostly to populate options lists
+
+    // check to see if we are editing an existing user, and if the data on that user has finished loading.
+    if (!this.getUser() && this.props.match.params.id) {
+      return null;
+    }
     const formData = this.getUserFormData();
     const onSubmit = params.id ? (record) => this.update(record) : (record) => this.create(record);
 
