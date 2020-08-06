@@ -7,8 +7,6 @@ import { LoadingView } from '@folio/stripes/components';
 
 import { AccountDetails } from '../views';
 
-/* eslint react/prop-types: "off" */
-
 class AccountDetailsContainer extends React.Component {
   static manifest = Object.freeze({
     selUser: {
@@ -52,6 +50,7 @@ class AccountDetailsContainer extends React.Component {
 
   static propTypes = {
     resources: PropTypes.shape({
+      loans: PropTypes.object,
       accountHistory: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),

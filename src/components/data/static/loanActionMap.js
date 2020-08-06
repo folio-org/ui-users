@@ -14,4 +14,6 @@ export default {
   'closedLoan': 'ui-users.data.loanActionMap.closedLoan',
   'checkedInReturnedByPatron': 'ui-users.data.loanActionMap.checkedInReturnedByPatron',
   'checkedInFoundByLibrary': 'ui-users.data.loanActionMap.checkedInFoundByLibrary',
+  'itemAgedToLost': 'ui-users.data.loanActionMap.itemAgedToLost',
+  'unknownAction': 'ui-users.data.loanActionMap.unknownAction',
 };

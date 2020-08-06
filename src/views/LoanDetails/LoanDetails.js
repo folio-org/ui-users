@@ -50,12 +50,11 @@ import LoanProxyDetails from './LoanProxyDetails';
 
 import css from './LoanDetails.css';
 
-/* eslint react/prop-types: "off" */
-
 class LoanDetails extends React.Component {
   static propTypes = {
     stripes: PropTypes.object.isRequired,
     resources: PropTypes.shape({
+      loanAccountsActions: PropTypes.object,
       loanActions: PropTypes.object,
       loanActionsWithUser: PropTypes.object,
     }).isRequired,
@@ -325,7 +324,7 @@ class LoanDetails extends React.Component {
 
     const { nonRenewedLoanItems } = this.state;
     const loanActionsFormatter = {
-      action: la => <FormattedMessage id={loanActionMap[la.action]} />,
+      action: la => <FormattedMessage id={loanActionMap[la.action] ?? loanActionMap.unknownAction} />,
       actionDate: la => <FormattedTime value={get(la, ['metadata', 'updatedDate'], '-')} day="numeric" month="numeric" year="numeric" />,
       dueDate: la => <FormattedTime value={la.dueDate} day="numeric" month="numeric" year="numeric" />,
       itemStatus: la => la.itemStatus,
