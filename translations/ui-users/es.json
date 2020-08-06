@@ -702,5 +702,17 @@
     "contact.contactInfo": "Contact information",
     "settings.default": "Default",
     "permissions.proxy.sponsor": "Proxy/sponsor",
-    "accounts.title.feeFine": "Fees/fines"
+    "accounts.title.feeFine": "Fees/fines",
+    "data.loanActionMap.itemAgedToLost": "Aged to lost",
+    "data.loanActionMap.unknownAction": "Unknown action",
+    "item.chronology": "Chronology",
+    "reports.overdue.item.chronology": "Chronology",
+    "settings.departments": "Departments",
+    "settings.department": "Department",
+    "settings.departments.name": "Name",
+    "settings.departments.name.error": "Name already exists",
+    "settings.departments.code": "Code",
+    "settings.departments.code.error": "Code already exists",
+    "settings.departments.users": "Users",
+    "reports.overdue.item.copyNumber": "Copy number"
 }

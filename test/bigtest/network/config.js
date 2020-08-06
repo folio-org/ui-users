@@ -658,4 +658,31 @@ export default function config() {
     automatedPatronBlocks: [],
     totalRecords: 0,
   });
+
+  this.get('/departments', {
+    departments: [{
+      id: 'ce0e0d5b-b5f3-4ad5-bccb-49c0784298f5',
+      name: 'Test1',
+      code: 'test1',
+      usageNumber: 0,
+      metadata: {
+        createdDate: () => '2019-02-05T18:49:20.839+0000',
+        createdByUserId: () => 'ce0e0d5b-b5f3-4ad5-bccb-49c0784298fd',
+        updatedDate: () => '2019-02-05T18:49:20.839+0000',
+        updatedByUserId: () => 'ce0e0d5b-b5f3-4ad5-bccb-49c0784298fd'
+      },
+    },
+    {
+      id: 'ce0e0d5b-b5f3-4ad5-bccb-49c0784298f7',
+      name: 'Test2',
+      code: 'test2',
+      usageNumber: 1,
+      metadata: {
+        createdDate: () => '2019-02-05T18:49:20.839+0000',
+        createdByUserId: () => 'ce0e0d5b-b5f3-4ad5-bccb-49c0784298fd',
+        updatedDate: () => '2019-02-05T18:49:20.839+0000',
+        updatedByUserId: () => 'ce0e0d5b-b5f3-4ad5-bccb-49c0784298fd'
+      },
+    }]
+  });
 }
