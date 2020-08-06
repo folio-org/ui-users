@@ -702,5 +702,17 @@
     "contact.contactInfo": "بيانات الاتصال",
     "settings.default": "الافتراضي",
     "permissions.proxy.sponsor": "النائب/الراعي",
-    "accounts.title.feeFine": "الرسوم/الغرامات"
+    "accounts.title.feeFine": "الرسوم/الغرامات",
+    "data.loanActionMap.itemAgedToLost": "تأخر وتم اعتباره مفقوداً",
+    "data.loanActionMap.unknownAction": "إجراء غير معروف",
+    "item.chronology": "التسلسل الزمني",
+    "reports.overdue.item.chronology": "التسلسل الزمني",
+    "settings.departments": "أقسام",
+    "settings.department": "القسم",
+    "settings.departments.name": "الاسم",
+    "settings.departments.name.error": "الاسم موجود بالفعل",
+    "settings.departments.code": "رمز",
+    "settings.departments.code.error": "الرمز موجود بالفعل",
+    "settings.departments.users": "المستخدمين",
+    "reports.overdue.item.copyNumber": "رقم النسخة"
 }
