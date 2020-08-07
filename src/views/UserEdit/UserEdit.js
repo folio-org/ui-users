@@ -10,6 +10,7 @@ import {
   omit,
   differenceBy,
   get,
+  compact,
 } from 'lodash';
 
 import { LoadingView } from '@folio/stripes/components';
@@ -130,6 +131,7 @@ class UserEdit extends React.Component {
       'patronGroups',
       'addressTypes',
       'servicePoints',
+      'departments',
     );
 
     return formData;
@@ -168,6 +170,7 @@ class UserEdit extends React.Component {
     const user = { ...userData, id: uuid() };
     user.personal.addresses = toUserAddresses(user.personal.addresses);
     user.personal.email = user.personal.email.trim();
+    user.departments = compact(user.departments);
 
     mutator.records.POST(user)
       .then(() => {
@@ -218,6 +221,7 @@ class UserEdit extends React.Component {
 
     user.personal.addresses = toUserAddresses(user.personal.addresses); // eslint-disable-line no-param-reassign
     user.personal.email = user.personal.email.trim();
+    user.departments = compact(user.departments);
 
     const { proxies, sponsors, permissions, servicePoints, preferredServicePoint } = user;
 

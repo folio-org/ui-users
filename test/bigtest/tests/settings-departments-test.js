@@ -64,7 +64,17 @@ describe('Settings departments', () => {
         });
 
         it('should display validation message', () => {
-          expect(DepartmentsInteractor.list.rows(0).nameValidationMessage).to.equal(translation['settings.departments.code.error']);
+          expect(DepartmentsInteractor.list.rows(0).codeValidationMessage).to.equal(translation['settings.departments.code.error']);
+        });
+      });
+
+      describe('when setting empty code value', () => {
+        beforeEach(async () => {
+          await DepartmentsInteractor.list.rows(0).codeInput.fillAndBlur('');
+        });
+
+        it('should display validation message', () => {
+          expect(DepartmentsInteractor.list.rows(0).codeValidationMessage).to.equal(translation['settings.departments.code.required']);
         });
       });
     });

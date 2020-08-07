@@ -489,6 +489,7 @@ class UserForm extends React.Component {
                   username={initialValues.username}
                   servicePoints={servicePoints}
                   addressTypes={formData.addressTypes}
+                  departments={formData.departments}
                 />
                 <EditContactInfo
                   accordionId="contactInfo"

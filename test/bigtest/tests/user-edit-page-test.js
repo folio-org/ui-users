@@ -46,6 +46,10 @@ describe('User Edit Page', () => {
       expect(UserFormPage.resetPasswordLink.text).to.equal(translations['extended.sendResetPassword']);
     });
 
+    it('should display department name without fields', () => {
+      expect(UserFormPage.departmentName.items.length).to.equal(0);
+    });
+
     describe('validating user barcode', () => {
       beforeEach(async function () {
         await UserFormPage.barcodeField.fillAndBlur(user2.barcode);
@@ -166,6 +170,16 @@ describe('User Edit Page', () => {
               .to.equal('Please, add at least one address inside "Addresses" section');
           });
         });
+      });
+    });
+
+    describe('department name', () => {
+      beforeEach(() => {
+        UserFormPage.departmentName.clickAddButton();
+      });
+
+      it('should add new select field', () => {
+        expect(UserFormPage.departmentName.items.length).to.equal(0);
       });
     });
 

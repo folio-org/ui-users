@@ -10,6 +10,7 @@ import {
   Col,
   Headline,
   KeyValue,
+  NoValue,
   Row
 } from '@folio/stripes/components';
 
@@ -26,6 +27,7 @@ const ExtendedInfo = (props) => {
     requestPreferences,
     defaultServicePointName,
     defaultDeliveryAddressTypeName,
+    departments,
   } = props;
 
   return (
@@ -73,6 +75,18 @@ const ExtendedInfo = (props) => {
           />
         </Col>
       </Row>
+      <Row>
+        <Col
+          xs={12}
+          md={6}
+        >
+          <KeyValue label={<FormattedMessage id="ui-users.extended.department.name" />}>
+            <span data-test-department-name>
+              {departments.length ? departments.join(', ') : <NoValue />}
+            </span>
+          </KeyValue>
+        </Col>
+      </Row>
     </Accordion>
   );
 };
@@ -85,6 +99,7 @@ ExtendedInfo.propTypes = {
   defaultServicePointName: PropTypes.string,
   requestPreferences: requestPreferencesShape,
   defaultDeliveryAddressTypeName: PropTypes.string.isRequired,
+  departments: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default ExtendedInfo;
