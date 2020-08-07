@@ -157,7 +157,7 @@ class ActionsDropdown extends React.Component {
           <Button
             buttonStyle="dropdownItem"
             data-test-dropdown-content-request-queue
-            to={getOpenRequestsPath(loan?.item?.barcode)}
+            to={getOpenRequestsPath(loan?.itemId)}
           >
             <FormattedMessage id="ui-users.loans.details.requestQueue" />
           </Button>

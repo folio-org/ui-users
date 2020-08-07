@@ -324,7 +324,7 @@ class LoanDetails extends React.Component {
 
     const { nonRenewedLoanItems } = this.state;
     const loanActionsFormatter = {
-      action: la => <FormattedMessage id={loanActionMap[la.action]} />,
+      action: la => <FormattedMessage id={loanActionMap[la.action] ?? loanActionMap.unknownAction} />,
       actionDate: la => <FormattedTime value={get(la, ['metadata', 'updatedDate'], '-')} day="numeric" month="numeric" year="numeric" />,
       dueDate: la => <FormattedTime value={la.dueDate} day="numeric" month="numeric" year="numeric" />,
       itemStatus: la => la.itemStatus,
@@ -334,7 +334,7 @@ class LoanDetails extends React.Component {
 
     const itemRequestCount = requestCounts[this.props.loan.itemId] || 0;
     const requestQueueValue = (itemRequestCount && stripes.hasPerm('ui-users.requests.all,ui-requests.all'))
-      ? (<Link to={getOpenRequestsPath(loan.item.barcode)}>{itemRequestCount}</Link>)
+      ? (<Link to={getOpenRequestsPath(loan.itemId)}>{itemRequestCount}</Link>)
       : itemRequestCount;
     const contributorsList = this.getContributorslist(loan);
     const contributorsListString = contributorsList.join(' ');
