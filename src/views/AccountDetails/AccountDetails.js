@@ -52,6 +52,7 @@ class AccountDetails extends React.Component {
   static propTypes = {
     stripes: PropTypes.object,
     resources: PropTypes.shape({
+      accountHistory: PropTypes.object,
       accountActions: PropTypes.object,
     }),
     mutator: PropTypes.shape({

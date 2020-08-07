@@ -37,6 +37,7 @@ class OpenLoansControl extends React.Component {
       }),
     }),
     resources: PropTypes.shape({
+      loanAccount: PropTypes.object,
       query: PropTypes.object,
       requests: PropTypes.shape({
         GET: PropTypes.func,

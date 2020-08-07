@@ -31,7 +31,9 @@ describe('User Edit Page', () => {
         fulfillment: 'Delivery',
       });
 
-      this.visit(`/users/${user1.id}/edit`);
+      this.visit(`/users/preview/${user1.id}`);
+      await InstanceViewPage.whenLoaded();
+      await InstanceViewPage.clickEditButton();
       await UserFormPage.whenLoaded();
     });
 
@@ -267,7 +269,9 @@ describe('User Edit Page', () => {
     beforeEach(async function () {
       user1 = this.server.create('user');
 
-      this.visit(`/users/${user1.id}/edit`);
+      this.visit(`/users/preview/${user1.id}`);
+      await InstanceViewPage.whenLoaded();
+      await InstanceViewPage.clickEditButton();
       await UserFormPage.whenLoaded();
     });
 
@@ -287,7 +291,9 @@ describe('when custom fields are not in stock', () => {
       customFields: [],
     });
 
-    this.visit(`/users/${user.id}/edit`);
+    this.visit(`/users/preview/${user.id}`);
+    await InstanceViewPage.whenLoaded();
+    await InstanceViewPage.clickEditButton();
     await UserFormPage.whenLoaded();
   });
 
