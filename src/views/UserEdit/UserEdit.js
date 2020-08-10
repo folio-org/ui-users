@@ -282,7 +282,7 @@ class UserEdit extends React.Component {
       match: { params },
     } = this.props;
 
-    if (!resourcesLoaded(resources, ['uniquenessValidator'])) {
+    if (!resourcesLoaded(resources, ['uniquenessValidator']) || (!this.getUser() && this.props.match.params.id)) {
       return (
         <LoadingView
           data-test-form-page
