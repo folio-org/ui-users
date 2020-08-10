@@ -125,6 +125,7 @@
   "settings.departments.name.error": "Name already exists",
   "settings.departments.code": "Code",
   "settings.departments.code.error": "Code already exists",
+  "settings.departments.code.required": "Code is required",
   "settings.departments.users": "Users",
 
   "loans.columns.title": "Item title",
@@ -220,6 +221,9 @@
   "extended.sendResetPassword": "Send reset password email",
   "extended.sendCreatePassword": "Send create password email",
   "extended.copyLink": "Copy link",
+  "extended.department.name": "Department name",
+  "extended.department.add": "Add department",
+  "extended.department.default": "Select department",
 
   "extended.resetPasswordModal.label": "Reset password email sent",
   "extended.resetPasswordModal.linkWasSent": "A reset password link was sent to:",

@@ -60,6 +60,7 @@ import {
   getFullName,
   // eachPromise
 } from '../../components/util';
+import { departmentsShape } from '../../shapes';
 
 class UserDetail extends React.Component {
   static propTypes = {
@@ -76,6 +77,9 @@ class UserDetail extends React.Component {
       user: PropTypes.arrayOf(PropTypes.object),
       addressTypes: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      departments: PropTypes.shape({
+        records: departmentsShape,
       }),
       permissions: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
@@ -395,6 +399,9 @@ class UserDetail extends React.Component {
       '',
     );
     const customFields = user?.customFields || [];
+    const departments = resources?.departments?.records || [];
+    const userDepartments = (user?.departments || [])
+      .map(departmentId => departments.find(({ id }) => id === departmentId)?.name);
 
     if (!user) {
       return (
@@ -482,6 +489,7 @@ class UserDetail extends React.Component {
                   defaultServicePointName={defaultServicePointName}
                   defaultDeliveryAddressTypeName={defaultDeliveryAddressTypeName}
                   onToggle={this.handleSectionToggle}
+                  departments={userDepartments}
                 />
                 <ContactInfo
                   accordionId="contactInfoSection"

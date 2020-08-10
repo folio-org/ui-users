@@ -32,6 +32,10 @@ describe('User view', () => {
       expect(InstanceViewPage.title).to.equal(user.username);
     });
 
+    it('should display empty department name', () => {
+      expect(InstanceViewPage.departmentName).to.equal('-');
+    });
+
     describe('request preferences section', () => {
       it('should display hold shelf value', () => {
         expect(InstanceViewPage.holdShelf).to.equal('Hold shelf - Yes');
@@ -71,6 +75,24 @@ describe('User view', () => {
 
     it('should not display custom fields accordion', () => {
       expect(InstanceViewPage.customFieldsSection.isPresent).to.be.false;
+    });
+  });
+
+  describe('when user has departments', () => {
+    beforeEach(async function () {
+      const departments = this.server.createList('department', 2);
+
+      this.server.get('/departments', { departments });
+      user = this.server.create('user', {
+        departments: departments.map(({ id }) => id),
+      });
+
+      this.visit(`/users/view/${user.id}`);
+      await InstanceViewPage.whenLoaded();
+    });
+
+    it('should display department name value', () => {
+      expect(InstanceViewPage.departmentName).to.equal('TestName0, TestName1');
     });
   });
 });

@@ -13,6 +13,7 @@ import proxyItemCSS from '../../../src/components/ProxyGroup/ProxyItem/ProxyItem
 
 @interactor class AccordionSection {
   keyValues = collection('[data-test-kv-value]');
+  click = clickable();
 }
 
 @interactor class ProxySectionInteractor {
@@ -52,6 +53,7 @@ import proxyItemCSS from '../../../src/components/ProxyGroup/ProxyItem/ProxyItem
   customFieldsSection = scoped('#customFields', CustomFieldsSectionInteractor);
   userInfo = new AccordionSection('#userInformationSection');
   contactInfo = new AccordionSection('#contactInfoSection');
+  departmentName = text('[data-test-department-name]');
 
   whenLoaded() {
     return this.when(() => this.isPresent).timeout(5000);

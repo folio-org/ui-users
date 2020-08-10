@@ -25,6 +25,10 @@ const DepartmentsSettings = () => {
       errors.code = <FormattedMessage id="ui-users.settings.departments.code.error" />;
     }
 
+    if (!item.code) {
+      errors.code = <FormattedMessage id="ui-users.settings.departments.code.required" />;
+    }
+
     return errors;
   };
 
