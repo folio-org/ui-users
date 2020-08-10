@@ -59,6 +59,7 @@ class OpenLoansSubHeader extends React.Component {
       'item.volume',
       'item.enumeration',
       'item.chronology',
+      'item.copyNumber',
       'item.contributors',
       'item.holdingsRecordId',
       'item.instanceId',

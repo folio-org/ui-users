@@ -55,6 +55,7 @@
   "item.enumeration": "Enumeration",
   "item.chronology": "Chronology",
   "item.volume": "Volume",
+  "item.copyNumber": "Copy number",
   "item.contributors": "Contributor names",
   "item.holdingsRecordId": "Holdings record ID",
   "item.instanceId": "Instance ID",

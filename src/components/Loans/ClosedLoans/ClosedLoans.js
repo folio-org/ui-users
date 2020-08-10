@@ -67,8 +67,8 @@ class ClosedLoans extends React.Component {
     this.anonymizeLoans = this.anonymizeLoans.bind(this);
     const { intl } = props;
     this.headers = ['action', 'dueDate', 'loanDate', 'returnDate', 'systemReturnDate', 'item.barcode', 'item.callNumberComponents.prefix',
-      'item.callNumberComponents.callNumber', 'item.callNumberComponents.suffix', 'item.volume', 'item.enumeration', 'item.chronology', 'item.contributors',
-      'item.holdingsRecordId', 'item.instanceId', 'item.status.name', 'item.title', 'item.materialType.name',
+      'item.callNumberComponents.callNumber', 'item.callNumberComponents.suffix', 'item.volume', 'item.enumeration', 'item.chronology',
+      'item.copyNumber', 'item.contributors', 'item.holdingsRecordId', 'item.instanceId', 'item.status.name', 'item.title', 'item.materialType.name',
       'item.location.name', 'metaData.createdByUserId', 'metadata.updatedDate', 'metadata.updatedByUserId', 'loanPolicyId'];
 
     // Map to pass into exportCsv
