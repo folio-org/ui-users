@@ -714,5 +714,10 @@
     "settings.departments.code": "Code",
     "settings.departments.code.error": "Code already exists",
     "settings.departments.users": "Users",
-    "reports.overdue.item.copyNumber": "Copy number"
+    "reports.overdue.item.copyNumber": "Copy number",
+    "settings.departments.code.required": "Code is required",
+    "extended.department.name": "Department name",
+    "extended.department.add": "Add department",
+    "extended.department.default": "Select department",
+    "item.copyNumber": "Copy number"
 }
