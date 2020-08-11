@@ -714,5 +714,10 @@
     "settings.departments.code": "رمز",
     "settings.departments.code.error": "الرمز موجود بالفعل",
     "settings.departments.users": "المستخدمين",
-    "reports.overdue.item.copyNumber": "رقم النسخة"
+    "reports.overdue.item.copyNumber": "رقم النسخة",
+    "settings.departments.code.required": "الرمز مطلوب",
+    "extended.department.name": "اسم القسم",
+    "extended.department.add": "إضافة قسم",
+    "extended.department.default": "اختر قسم",
+    "item.copyNumber": "رقم النسخة"
 }
