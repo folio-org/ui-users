@@ -25,6 +25,7 @@ export default Factory.extend({
     'textarea-3': faker.lorem.sentence(),
     'textarea-4': ''
   },
+  departments: [],
 
   afterCreate(user, server) {
     server.create('service-points-user', {

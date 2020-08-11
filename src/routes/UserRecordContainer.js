@@ -10,6 +10,8 @@ import {
   withProxy,
   withServicePoints
 } from '../components/Wrappers';
+import { departmentsShape } from '../shapes';
+import { MAX_RECORDS } from '../constants';
 
 class UserRecordContainer extends React.Component {
   static manifest = Object.freeze({
@@ -55,6 +57,11 @@ class UserRecordContainer extends React.Component {
       type: 'okapi',
       path: 'addresstypes?query=cql.allRecords=1 sortby desc',
       records: 'addressTypes',
+    },
+    departments: {
+      type: 'okapi',
+      path: `departments?query=cql.allRecords=1 sortby name&limit=${MAX_RECORDS}`,
+      records: 'departments',
     },
     uniquenessValidator: {
       type: 'okapi',
@@ -137,6 +144,9 @@ class UserRecordContainer extends React.Component {
       selUser: PropTypes.object,
       addressTypes: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      departments: PropTypes.shape({
+        records: departmentsShape,
       }),
       permissions: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),

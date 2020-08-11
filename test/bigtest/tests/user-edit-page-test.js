@@ -31,9 +31,7 @@ describe('User Edit Page', () => {
         fulfillment: 'Delivery',
       });
 
-      this.visit(`/users/preview/${user1.id}`);
-      await InstanceViewPage.whenLoaded();
-      await InstanceViewPage.clickEditButton();
+      this.visit(`/users/${user1.id}/edit`);
       await UserFormPage.whenLoaded();
     });
 
@@ -44,6 +42,10 @@ describe('User Edit Page', () => {
     it('should display create password link', () => {
       expect(UserFormPage.resetPasswordLink.isPresent).to.be.true;
       expect(UserFormPage.resetPasswordLink.text).to.equal(translations['extended.sendResetPassword']);
+    });
+
+    it('should display department name without fields', () => {
+      expect(UserFormPage.departmentName.items.length).to.equal(0);
     });
 
     describe('validating user barcode', () => {
@@ -169,6 +171,16 @@ describe('User Edit Page', () => {
       });
     });
 
+    describe('department name', () => {
+      beforeEach(() => {
+        UserFormPage.departmentName.clickAddButton();
+      });
+
+      it('should add new select field', () => {
+        expect(UserFormPage.departmentName.items.length).to.equal(0);
+      });
+    });
+
     describe('when custom fields are in stock', () => {
       it('should show custom fields accordion', () => {
         expect(UserFormPage.customFieldsSection.isPresent).to.be.true;
@@ -269,9 +281,7 @@ describe('User Edit Page', () => {
     beforeEach(async function () {
       user1 = this.server.create('user');
 
-      this.visit(`/users/preview/${user1.id}`);
-      await InstanceViewPage.whenLoaded();
-      await InstanceViewPage.clickEditButton();
+      this.visit(`/users/${user1.id}/edit`);
       await UserFormPage.whenLoaded();
     });
 
@@ -291,9 +301,7 @@ describe('when custom fields are not in stock', () => {
       customFields: [],
     });
 
-    this.visit(`/users/preview/${user.id}`);
-    await InstanceViewPage.whenLoaded();
-    await InstanceViewPage.clickEditButton();
+    this.visit(`/users/${user.id}/edit`);
     await UserFormPage.whenLoaded();
   });
 
