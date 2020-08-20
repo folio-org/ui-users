@@ -660,7 +660,7 @@
       },
       {
         "permissionName": "ui-users.settings.departments.view",
-        "displayName": "Settings (Users) : View departments",
+        "displayName": "Settings (Users): View departments",
         "subPermissions": [
           "settings.users.enabled"
         ],
@@ -668,7 +668,7 @@
       },
       {
         "permissionName": "ui-users.settings.departments.edit",
-        "displayName": "Settings (Users) : Edit departments",
+        "displayName": "Settings (Users): Edit departments",
         "subPermissions": [
           "settings.users.enabled"
         ],
@@ -676,7 +676,7 @@
       },
       {
         "permissionName": "ui-users.settings.departments.create",
-        "displayName": "Settings (Users) : Create departments",
+        "displayName": "Settings (Users): Create departments",
         "subPermissions": [
           "settings.users.enabled"
         ],
@@ -684,7 +684,7 @@
       },
       {
         "permissionName": "ui-users.settings.departments.delete",
-        "displayName": "Settings (Users) : Delete departments",
+        "displayName": "Settings (Users): Delete departments",
         "subPermissions": [
           "settings.users.enabled"
         ],
@@ -692,7 +692,7 @@
       },
       {
         "permissionName": "ui-users.settings.departments.create.edit.view.delete",
-        "displayName": "Settings (Users) : Create, edit, view, and delete departments",
+        "displayName": "Settings (Users): Create, edit, view, and delete departments",
         "subPermissions": [
           "ui-users.settings.departments.create",
           "ui-users.settings.departments.edit",
@@ -703,7 +703,7 @@
       },
       {
         "permissionName": "ui-users.settings.departments.create.edit.view",
-        "displayName": "Settings (Users) : Create, edit, and view departments",
+        "displayName": "Settings (Users): Create, edit, and view departments",
         "subPermissions": [
           "ui-users.settings.departments.create",
           "ui-users.settings.departments.edit",

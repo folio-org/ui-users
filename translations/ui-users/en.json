@@ -781,6 +781,12 @@
   "permission.viewperms": "Users: Can view permissions assigned to users",
   "permission.viewproxies": "Users: Can view proxies assigned to users",
   "permission.viewuserservicepoints": "Users: Can view service points assigned to users",
+  "permission.settings.departments.view":"Settings (Users): View departments",
+  "permission.settings.departments.edit":"Settings (Users): Edit departments",
+  "permission.settings.departments.create":"Settings (Users): Create departments",
+  "permission.settings.departments.delete":"Settings (Users): Delete departments",
+  "permission.settings.departments.create.edit.view.delete":"Settings (Users): Create, edit, view, and delete departments",
+  "permission.settings.departments.create.edit.view":"Settings (Users): Create, edit, and view departments",
 
   "bulkClaimReturned.item.title": "Title",
   "bulkClaimReturned.preConfirm": "Confirm claim returned",
