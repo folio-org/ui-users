@@ -11,7 +11,7 @@ import {
 } from 'lodash';
 import moment from 'moment';
 import LoanActionDialog from '../LoanActionDialog';
-import { loanActionMutators } from '../../constants';
+import { loanActionMutators, refundClaimReturned } from '../../constants';
 
 const withClaimReturned = WrappedComponent => class withClaimReturnedComponent extends React.Component {
   static manifest = Object.freeze({
@@ -75,8 +75,10 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
           },
         }
       } = this.props;
-      const lostStatus = 'Lost item fee';
-      const processingStatus = 'Lost item processing fee';
+
+      const lostStatus = refundClaimReturned.LOST_STATUS;
+      const processingStatus = refundClaimReturned.PROCESSING_STATUS;
+
       const pathParts = [
         'accounts?query=',
         `barcode=="${itemBarcode}"`,
@@ -90,7 +92,7 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
 
     const setPaymentStatus = record => {
       const updatedRec = cloneDeep(record);
-      updatedRec.paymentStatus.name = 'Suspended claim returned';
+      updatedRec.paymentStatus.name = refundClaimReturned.PAYMENT_STATUS;
       return updatedRec;
     };
 
@@ -123,8 +125,9 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
 
     const filterTransferredActions = actions => actions
       .filter(
-        record => record.typeAction && record.typeAction.startsWith('Transferred')
+        record => record.typeAction && record.typeAction.startsWith(refundClaimReturned.TYPE_ACTION)
       );
+
 
     const getLastBalance = actions => (
       actions.length > 0
@@ -145,11 +148,12 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
       } = this.props;
       const orderedActions = orderBy(transferredActions, ['dateAction'], ['desc']);
       const now = moment().format();
-      const sign = type.startsWith('Credited') ? -1 : 1;
+      const sign = type.startsWith(refundClaimReturned.TRANSACTION_CREDITED) ? -1 : 1;
       const amount = sign * transferredActions.reduce((acc, record) => acc + record.amountAction, 0.0);
-      const transactionVerb = type.startsWith('Credited')
+      const transactionVerb = type.startsWith(refundClaimReturned.TRANSACTION_CREDITED)
         ? 'Refund'
         : 'Refunded';
+
       return {
         dateAction: now,
         typeAction: type,
@@ -169,8 +173,8 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
     const createRefunds = (account, actions) => {
       return actions.length > 0
         ? [
-          createRefundActionTemplate(account, actions, 'Credited fully'),
-          createRefundActionTemplate(account, actions, 'Refunded fully')
+          createRefundActionTemplate(account, actions, refundClaimReturned.CREDITED_ACTION),
+          createRefundActionTemplate(account, actions, refundClaimReturned.REFUNDED_ACTION)
         ]
         : [];
     };

@@ -46,7 +46,6 @@
     "permissions.userPermissions": "Felhasználói engedélyek",
     "permissions.isProxyFor": "{name} meghatalmazottja",
     "permissions.isSponsorOf": "{name} szponzora",
-    "permissions.proxySponsor": "Meghatalmazott/Szponzor",
     "permissions.assignedPermissions": "Hozzárendelt engedélyek",
     "permissions.untitledPermissionSet": "Cím nélküli engedély halmaz",
     "permissions.closePermissionSetDialog": "Zárja be az engedélyek párbeszédablakot",
@@ -62,7 +61,6 @@
     "extended.birthDate": "Születési dátum",
     "extended.folioNumber": "Folio szám",
     "extended.folioPassword": "Folio jelszó",
-    "contact.contactInformation": "Elérhetőség",
     "contact.email": "E-mail",
     "contact.phone": "Telefon",
     "contact.mobilePhone": "Mobil",
@@ -155,7 +153,6 @@
     "errors.missingRequiredPreferredServicePoint": "Kérem, töltse ki ezt a folytatáshoz",
     "duplicated": "{field} már létezik",
     "showTags": "Címkék mutatása",
-    "accounts.title": "Díjak/bírságok",
     "accounts.open": "Megnyit",
     "accounts.closed": "Zárva",
     "accounts.all": "Összes",
@@ -361,7 +358,6 @@
     "blocks.columns.requests": "Requests",
     "blocks.columns.renewals": "Renewals",
     "blocks.buttons.add": "Create block",
-    "blocks.label": "Patron Blocks",
     "blocks.form.label.information": "Block information",
     "blocks.form.label.display": "Display Description*",
     "blocks.form.label.staff": "Staff only information",
@@ -701,5 +697,10 @@
     "errors.sponsors.duplicateUserMessage": "Duplicate sponsor has been entered.",
     "settings.limits.validation.message": "Must be blank or a number from {min, number} to {max, number}",
     "blocks.form.label.requests": "Requests",
-    "information.preferredName": "Preferred first name"
+    "information.preferredName": "Preferred first name",
+    "reports.overdue.inProgress": "Export in progress",
+    "contact.contactInfo": "Contact information",
+    "settings.default": "Default",
+    "permissions.proxy.sponsor": "Proxy/sponsor",
+    "accounts.title.feeFine": "Fees/fines"
 }

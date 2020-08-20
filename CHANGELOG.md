@@ -1,6 +1,6 @@
 # Change history for ui-users
 
-## [4.1.0] (IN PROGRESS)
+## 5.0.0 (IN PROGRESS)
 
 * Trim email address in user record to remove blanks. Fixes UIU-1528.
 * `withRenew` should include in-transit items when calculating the open-request-count. Fixes UIU-1254.
@@ -10,6 +10,18 @@
 * Increment `@folio/plugin-find-user` to `v3.0.0` for `@folio/stripes` `v4.0` compatibility.
 * Refresh Fine incurred field when item declared lost. Fixes UIU-1669.
 * Add validation to integer values for patron block limits. Refs UIU-1675.
+* Increase limits for `ChargeFeesFines`. Refs UIU-1722.
+* Fix Custom Fields related error toast notification in User Details page. Fixes UIU-1736.
+* Generate overdue loans report via pagination. Fixes UIU-1747.
+* Prevent declaring an item lost if it is already lost. Fixes UIU-1714.
+* Add `servicePointId` property when overriding a loan. Refs UIU-1712.
+* Change capitalization of sections in User Information. Refs UIU-1754.
+* Fix buttons layout in `Warning modal`. Refs UIU-1756.
+* Change `-` to `Default` if default notice exists at Fee/Fine: Manual Charges. Refs UIU-1755.
+* `Fee/fines details` not always include `Service Point` as `Created at`. Refs UIU-1725.
+* Add permission to anonymize manually closed loans. Fixes UIU-1757.
+* Include tag-related permissions in `ui-users.edit` permission. Refs UITAG-29.
+* Increment `@folio/stripes` to `v5.0`, `react-router` to `v5.2`.
 
 ## [4.0.0](https://github.com/folio-org/ui-users/tree/v4.0.0) (2020-06-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v3.0.0...v4.0.0)

@@ -46,7 +46,6 @@
     "permissions.userPermissions": "Permissões de utilizador",
     "permissions.isProxyFor": "{name} é autorizado por",
     "permissions.isSponsorOf": "{name} é patrocinador de",
-    "permissions.proxySponsor": "Autorizador/Patrocinador",
     "permissions.assignedPermissions": "Permissões atribuídas",
     "permissions.untitledPermissionSet": "Conjunto de permissões sem título",
     "permissions.closePermissionSetDialog": "Fechar caixa de diálogo do conjunto de permissões",
@@ -62,7 +61,6 @@
     "extended.birthDate": "Data de nascimento",
     "extended.folioNumber": "Número do Folio",
     "extended.folioPassword": "Senha do Folio",
-    "contact.contactInformation": "Informações de contacto",
     "contact.email": "E-mail",
     "contact.phone": "Telefone",
     "contact.mobilePhone": "Telefone móvel",
@@ -155,7 +153,6 @@
     "errors.missingRequiredPreferredServicePoint": "Por favor preencha isto para continuar",
     "duplicated": "{field} já existe",
     "showTags": "Mostrar etiquetas",
-    "accounts.title": "Taxas/Multas",
     "accounts.open": "Aberto",
     "accounts.closed": "Fechado",
     "accounts.all": "Todos",
@@ -361,7 +358,6 @@
     "blocks.columns.requests": "Requests",
     "blocks.columns.renewals": "Renewals",
     "blocks.buttons.add": "Create block",
-    "blocks.label": "Bloqueios ao utilizador",
     "blocks.form.label.information": "Block information",
     "blocks.form.label.display": "Display Description*",
     "blocks.form.label.staff": "Staff only information",
@@ -701,5 +697,10 @@
     "errors.sponsors.duplicateUserMessage": "Duplicate sponsor has been entered.",
     "settings.limits.validation.message": "Must be blank or a number from {min, number} to {max, number}",
     "blocks.form.label.requests": "Requests",
-    "information.preferredName": "Preferred first name"
+    "information.preferredName": "Preferred first name",
+    "reports.overdue.inProgress": "Export in progress",
+    "contact.contactInfo": "Contact information",
+    "settings.default": "Default",
+    "permissions.proxy.sponsor": "Proxy/sponsor",
+    "accounts.title.feeFine": "Fees/fines"
 }

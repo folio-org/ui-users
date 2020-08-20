@@ -52,3 +52,14 @@ export const statusFilter = [
  All conditions (thare are 6 of them) are always present on BE
  with hardcoded ids for now. */
 export const feeFineBalanceId = 'cf7a0d5f-a327-4ca1-aa9e-dc55ec006b8a';
+export const MAX_RECORDS = '10000';
+
+export const refundClaimReturned = {
+  PAYMENT_STATUS: 'Suspended claim returned',
+  LOST_STATUS: 'Lost item fee manual',
+  PROCESSING_STATUS: 'Lost item processing fee manual',
+  TYPE_ACTION: 'Transferred',
+  CREDITED_ACTION: 'Credited fully-Claim returned',
+  REFUNDED_ACTION: 'Refunded fully-Claim returned',
+  TRANSACTION_CREDITED: 'Credited',
+};

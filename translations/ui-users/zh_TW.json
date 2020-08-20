@@ -46,7 +46,6 @@
     "permissions.userPermissions": "使用者權限",
     "permissions.isProxyFor": "{name}是代理",
     "permissions.isSponsorOf": "{name}是厂商",
-    "permissions.proxySponsor": "代理/厂商",
     "permissions.assignedPermissions": "分配的权限",
     "permissions.untitledPermissionSet": "未命名的權限組合",
     "permissions.closePermissionSetDialog": "關閉權限組合對話框",
@@ -62,7 +61,6 @@
     "extended.birthDate": "生日",
     "extended.folioNumber": "Folio 紀錄號",
     "extended.folioPassword": "FOLIO 密碼",
-    "contact.contactInformation": "聯繫資料",
     "contact.email": "電子郵件",
     "contact.phone": "電話",
     "contact.mobilePhone": "手機",
@@ -155,7 +153,6 @@
     "errors.missingRequiredPreferredServicePoint": "請填妥內容以繼續",
     "duplicated": "{field} 已存在",
     "showTags": "顯示標籤",
-    "accounts.title": "費用 / 罰款",
     "accounts.open": "打开",
     "accounts.closed": "已關閉",
     "accounts.all": "所有",
@@ -361,7 +358,6 @@
     "blocks.columns.requests": "預約",
     "blocks.columns.renewals": "续借",
     "blocks.buttons.add": "创建冻结",
-    "blocks.label": "读者冻结",
     "blocks.form.label.information": "凍結資訊",
     "blocks.form.label.display": "显示描述",
     "blocks.form.label.staff": "仅限员工信息",
@@ -701,5 +697,10 @@
     "errors.sponsors.duplicateUserMessage": "Duplicate sponsor has been entered.",
     "settings.limits.validation.message": "Must be blank or a number from {min, number} to {max, number}",
     "blocks.form.label.requests": "Requests",
-    "information.preferredName": "Preferred first name"
+    "information.preferredName": "Preferred first name",
+    "reports.overdue.inProgress": "Export in progress",
+    "contact.contactInfo": "Contact information",
+    "settings.default": "Default",
+    "permissions.proxy.sponsor": "Proxy/sponsor",
+    "accounts.title.feeFine": "Fees/fines"
 }

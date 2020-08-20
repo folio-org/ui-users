@@ -61,7 +61,12 @@ class ModalContent extends React.Component {
     loanAction: PropTypes.string.isRequired,
     loan: PropTypes.object.isRequired,
     onClose: PropTypes.func.isRequired,
+    disableButton: PropTypes.func,
     validateAction: PropTypes.func,
+  };
+
+  static defaultProps = {
+    disableButton: () => {},
   };
 
   constructor(props) {
@@ -97,6 +102,7 @@ class ModalContent extends React.Component {
         },
       },
       onClose,
+      disableButton,
     } = this.props;
 
     const requestData = { comment: additionalInfo };
@@ -110,6 +116,8 @@ class ModalContent extends React.Component {
       requestData.servicePointId = curServicePoint?.id;
       requestData.declaredLostDateTime = new Date().toISOString();
     }
+
+    disableButton();
 
     await POST(requestData);
 

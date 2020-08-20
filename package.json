@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "3.0.0",
+  "version": "5.0.0",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -72,7 +72,10 @@
           "users.item.get",
           "usergroups.collection.get",
           "login.item.get",
-          "configuration.entries.collection.get"
+          "configuration.entries.collection.get",
+          "user-settings.custom-fields.collection.get",
+          "user-settings.custom-fields.item.get",
+          "user-settings.custom-fields.item.stats.get"
         ],
         "visible": true
       },
@@ -84,7 +87,9 @@
           "ui-users.view",
           "users-bl.item.put",
           "users.item.put",
-          "login.item.put"
+          "login.item.put",
+          "tags.collection.get",
+          "tags.item.post"
         ],
         "visible": true
       },
@@ -256,9 +261,6 @@
         "permissionName": "ui-users.settings.customfields.view",
         "displayName": "Settings (Users): Can view custom fields",
         "subPermissions": [
-          "user-settings.custom-fields.collection.get",
-          "user-settings.custom-fields.item.get",
-          "user-settings.custom-fields.item.stats.get",
           "settings.users.enabled",
           "configuration.entries.collection.get"
         ],
@@ -579,6 +581,7 @@
           "circulation.loans.declare-item-lost.post",
           "circulation.loans.claim-item-returned.post",
           "circulation.loans.declare-claimed-returned-item-as-missing.post",
+          "circulation.loans.collection.anonymize.user.post",
           "ui-users.loans.renew-override",
           "circulation.loans.item.put",
           "circulation.renew-by-barcode.post",
@@ -672,11 +675,11 @@
     "@bigtest/mocha": "^0.5.2",
     "@bigtest/react": "^0.1.2",
     "@folio/eslint-config-stripes": "^5.2.0",
-    "@folio/stripes": "^4.0.0",
-    "@folio/stripes-cli": "^1.13.0",
-    "@folio/stripes-core": "^5.0.0",
-    "@folio/stripes-components": "^7.0.0",
-    "@folio/stripes-final-form": "^3.0.0",
+    "@folio/stripes": "^5.0.0",
+    "@folio/stripes-cli": "^1.18.0",
+    "@folio/stripes-core": "^6.0.0",
+    "@folio/stripes-components": "^8.0.0",
+    "@folio/stripes-final-form": "^4.0.0",
     "babel-eslint": "^10.0.3",
     "chai": "^4.2.0",
     "core-js": "^3.6.4",
@@ -688,7 +691,7 @@
     "react-dom": "^16.5.0",
     "react-intl": "^4.5.3",
     "react-redux": "^5.0.7",
-    "react-router-dom": "^4.0.0",
+    "react-router-dom": "^5.2.0",
     "redux": "^4.0.0",
     "regenerator-runtime": "^0.13.3",
     "sinon": "^7.1.1"
@@ -707,11 +710,11 @@
     "uuid": "^3.0.1"
   },
   "peerDependencies": {
-    "@folio/stripes": "^4.0.0",
+    "@folio/stripes": "^5.0.0",
     "react": "*",
     "react-intl": "^4.5.3",
-    "react-router": "*",
-    "react-router-dom": "*"
+    "react-router": "^5.2.0",
+    "react-router-dom": "^5.2.0"
   },
   "optionalDependencies": {
     "@folio/plugin-find-user": "^3.0.0"
