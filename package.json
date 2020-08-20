@@ -662,7 +662,9 @@
         "permissionName": "ui-users.settings.departments.view",
         "displayName": "Settings (Users): View departments",
         "subPermissions": [
-          "settings.users.enabled"
+          "settings.users.enabled",
+          "departments.collection.get",
+          "departments.item.get"
         ],
         "visible": true
       },
@@ -670,7 +672,8 @@
         "permissionName": "ui-users.settings.departments.edit",
         "displayName": "Settings (Users): Edit departments",
         "subPermissions": [
-          "settings.users.enabled"
+          "settings.users.enabled",
+          "departments.item.put"
         ],
         "visible": false
       },
@@ -678,7 +681,8 @@
         "permissionName": "ui-users.settings.departments.create",
         "displayName": "Settings (Users): Create departments",
         "subPermissions": [
-          "settings.users.enabled"
+          "settings.users.enabled",
+          "departments.item.post"
         ],
         "visible": false
       },
@@ -686,7 +690,8 @@
         "permissionName": "ui-users.settings.departments.delete",
         "displayName": "Settings (Users): Delete departments",
         "subPermissions": [
-          "settings.users.enabled"
+          "settings.users.enabled",
+          "departments.item.delete"
         ],
         "visible": false
       },
