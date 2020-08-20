@@ -696,23 +696,23 @@
         "visible": false
       },
       {
-        "permissionName": "ui-users.settings.departments.create.edit.view.delete",
-        "displayName": "Settings (Users): Create, edit, view, and delete departments",
-        "subPermissions": [
-          "ui-users.settings.departments.create",
-          "ui-users.settings.departments.edit",
-          "ui-users.settings.departments.view",
-          "ui-users.settings.departments.delete"
-        ],
-        "visible": true
-      },
-      {
         "permissionName": "ui-users.settings.departments.create.edit.view",
         "displayName": "Settings (Users): Create, edit, and view departments",
         "subPermissions": [
           "ui-users.settings.departments.create",
           "ui-users.settings.departments.edit",
           "ui-users.settings.departments.view"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.departments.all",
+        "displayName": "Settings (Users): Create, edit, view, and delete departments",
+        "subPermissions": [
+          "ui-users.settings.departments.create",
+          "ui-users.settings.departments.edit",
+          "ui-users.settings.departments.view",
+          "ui-users.settings.departments.delete"
         ],
         "visible": true
       }

@@ -785,8 +785,8 @@
   "permission.settings.departments.edit":"Settings (Users): Edit departments",
   "permission.settings.departments.create":"Settings (Users): Create departments",
   "permission.settings.departments.delete":"Settings (Users): Delete departments",
-  "permission.settings.departments.create.edit.view.delete":"Settings (Users): Create, edit, view, and delete departments",
   "permission.settings.departments.create.edit.view":"Settings (Users): Create, edit, and view departments",
+  "permission.settings.departments.all":"Settings (Users): Create, edit, view, and delete departments",
 
   "bulkClaimReturned.item.title": "Title",
   "bulkClaimReturned.preConfirm": "Confirm claim returned",
