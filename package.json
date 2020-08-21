@@ -75,7 +75,9 @@
           "configuration.entries.collection.get",
           "user-settings.custom-fields.collection.get",
           "user-settings.custom-fields.item.get",
-          "user-settings.custom-fields.item.stats.get"
+          "user-settings.custom-fields.item.stats.get",
+          "departments.collection.get",
+          "departments.item.get"
         ],
         "visible": true
       },
