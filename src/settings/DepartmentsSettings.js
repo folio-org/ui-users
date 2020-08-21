@@ -58,8 +58,8 @@ const DepartmentsSettings = () => {
       }}
       validate={validate}
       actionSuppressor={{
-        delete: item => hasDeletePerm || item.usageNumber,
-        edit: () => hasEditPerm,
+        delete: item => !hasDeletePerm || item.usageNumber,
+        edit: () => !hasEditPerm,
       }}
     />
   );
