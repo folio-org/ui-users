@@ -1,0 +1,12 @@
+{
+  "app": {
+    "command": "yarn --cwd .. start --port 36000 --okapi 'http://localhost:36000' --hasAllPerms",
+    "port": 36000
+  },
+  "testFiles": [
+    "./integration/**/*.test.js"
+  ],
+  "launch": [
+    "chrome"
+  ]
+}

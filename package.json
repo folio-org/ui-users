@@ -664,13 +664,12 @@
     "start": "stripes serve",
     "build": "stripes build",
     "lint": "eslint .",
-    "test": "stripes test karma",
-    "test-int": "stripes test nightmare"
+    "test": "yarn --cwd test bigtest ci",
+    "test:server": "yarn --cwd test bigtest server",
+    "test:run": "yarn --cwd test bigtest test",
+    "postinstall": "yarn install --cwd test"
   },
   "devDependencies": {
-    "@bigtest/interactor": "^0.7.2",
-    "@bigtest/mocha": "^0.5.2",
-    "@bigtest/react": "^0.1.2",
     "@folio/eslint-config-stripes": "^5.2.0",
     "@folio/stripes": "^5.0.0",
     "@folio/stripes-cli": "^1.18.0",
@@ -682,7 +681,7 @@
     "core-js": "^3.6.4",
     "eslint": "^6.2.1",
     "faker": "^4.1.0",
-    "miragejs": "^0.1.32",
+    "miragejs": "^0.1.40",
     "mocha": "^5.2.0",
     "react": "^16.5.0",
     "react-dom": "^16.5.0",

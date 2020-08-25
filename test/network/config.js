@@ -1,11 +1,11 @@
+import { Response } from 'miragejs';
 // eslint-disable-next-line jsx-a11y/label-has-associated-control
 import CQLParser from './cql';
 
 // typical mirage config export
 // http://www.ember-cli-mirage.com/docs/v0.4.x/configuration/
 export default function config() {
-  const server = this;
-
+  this.urlPrefix = 'http://localhost:36000';
   // okapi endpoints
   this.get('/_/version', () => '0.0.0');
 
@@ -203,7 +203,7 @@ export default function config() {
 
   this.post('/service-points-users/', (schema, { requestBody }) => {
     const spu = JSON.parse(requestBody);
-    return server.create('service-points-user', spu);
+    return this.create('service-points-user', spu);
   });
 
   this.get('/service-points', (schema) => {
@@ -325,7 +325,7 @@ export default function config() {
 
   this.post('/accounts', function (schema, { requestBody }) {
     const acct = JSON.parse(requestBody);
-    return server.create('account', acct);
+    return this.create('account', acct);
   });
 
   this.get('/waives', {
@@ -417,7 +417,7 @@ export default function config() {
 
   this.post('/feefineactions', (schema, { requestBody }) => {
     const ffAction = JSON.parse(requestBody);
-    return server.create('feefineaction', ffAction);
+    return this.create('feefineaction', ffAction);
   });
 
   this.get('/owners', ({ owners }) => {
@@ -431,7 +431,7 @@ export default function config() {
   this.post('/note-types', ({ requestBody }) => {
     const noteTypeData = JSON.parse(requestBody);
 
-    return server.create('note-type', noteTypeData);
+    return this.create('note-type', noteTypeData);
   });
 
   this.put('/note-types/:id', ({ noteTypes }, { params, requestBody }) => {
@@ -467,7 +467,6 @@ export default function config() {
       }
     });
   });
-
 
   this.put('/note-links/type/:type/id/:id', ({ notes }, { params, requestBody }) => {
     const body = JSON.parse(requestBody);
@@ -527,7 +526,7 @@ export default function config() {
     return notes.find(params.id).destroy();
   });
 
-  server.post('/circulation/renew-by-barcode', ({ loans }, { requestBody }) => {
+  this.post('/circulation/renew-by-barcode', ({ loans }, { requestBody }) => {
     const { itemBarcode } = JSON.parse(requestBody);
 
     return loans.findBy({ item: { barcode: itemBarcode } }).attrs;
@@ -561,7 +560,7 @@ export default function config() {
   this.post('/patron-block-conditions', (schema, { requestBody }) => {
     const conditions = JSON.parse(requestBody);
 
-    return server.createList('patronBlockCondition', 6, conditions);
+    return this.createList('patronBlockCondition', 6, conditions);
   });
 
   this.get('/patron-block-conditions', ({ patronBlockConditions }) => {
@@ -583,7 +582,7 @@ export default function config() {
   this.post('/patron-block-limits', function (schema, { requestBody }) {
     const limit = JSON.parse(requestBody);
 
-    return server.create('patron-block-limit', limit);
+    return this.create('patron-block-limit', limit);
   });
 
   this.get('/patron-block-limits', ({ patronBlockLimits }) => {
@@ -685,4 +684,7 @@ export default function config() {
       },
     }]
   });
+
+  this.urlPrefix = '';
+  this.passthrough();
 }
