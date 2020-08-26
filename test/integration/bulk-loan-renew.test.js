@@ -7,7 +7,7 @@ import Checkbox from '../interactors/Checkbox';
 import Header from '../interactors/Header';
 import ActionsBar from '../interactors/ActionsBar';
 
-export default test('bulk claim returned', { permissions: ['circulation.loans.collection.get'] })
+export default test('bulk loan renew', { permissions: ['circulation.loans.collection.get'] })
   .step('seed data', async () => {
     const user = store.create('user');
     store.createList('loan', 3, {
@@ -25,17 +25,13 @@ export default test('bulk claim returned', { permissions: ['circulation.loans.co
   .step('visit "/users/1/loans/open"', async () => {
     await App.visit('/users/1/loans/open');
   })
-  .child('bulk claim returned button', test => test
-    .assertion('disables the button if no items are selected', async () => {
-      await ActionsBar('').find(Button('Claim returned')).is({ disabled: true });
-    }))
   .child('working with checked out items', test => test
     .step('select all checkboxes', async () => {
       await Checkbox.findByName('check-all').click();
     })
     .step('click "Claim returned"', async () => {
-      await ActionsBar('').find(Button('Claim returned', { enabled: true })).click();
+      await ActionsBar('').find(Button('Renew')).click();
     })
     .assertion('shows the bulk claim returned modal', async () => {
-      await Header('Confirm claim returned').exists();
+      await Header('Renew Confirmation').exists();
     }));
