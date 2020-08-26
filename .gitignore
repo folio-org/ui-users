@@ -7,3 +7,5 @@ yarn-error.log
 ModuleDescriptor.json
 artifacts
 .bigtest
+
+!test/yarn.lock

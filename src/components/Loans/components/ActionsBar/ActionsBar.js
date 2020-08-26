@@ -22,7 +22,7 @@ const ActionsBar = ({ show, contentStart, contentEnd }) => {
   }
 
   return (
-    <section className={css.actionsBar}>
+    <section data-test-actions-bar className={css.actionsBar}>
       { contentStart && <div className={css.actionsBarStart}>{contentStart}</div>}
       { contentEnd && <div className={css.actionsBarEnd}>{contentEnd}</div>}
     </section>

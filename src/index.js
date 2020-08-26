@@ -32,7 +32,6 @@ class UsersRouting extends React.Component {
 
   static actionNames = ['stripesHome', 'usersSortByName'];
 
-
   componentDidMount() {
     const {
       location,
@@ -145,11 +144,13 @@ class UsersRouting extends React.Component {
             />
             <Route
               path={`${base}/:id/loans/:loanstatus`}
-              render={(props) => (
-                <IfPermission perm="ui-users.loans.view">
-                  <Routes.LoansListingContainer {...props} />
-                </IfPermission>
-              )}
+              render={(props) => {
+                return (
+                  <IfPermission perm="ui-users.loans.view">
+                    <Routes.LoansListingContainer {...props} />
+                  </IfPermission>
+                );
+              }}
             />
             <Route
               path={`${base}/:id/accounts/view/:accountid`}

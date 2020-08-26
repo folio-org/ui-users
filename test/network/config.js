@@ -4,7 +4,7 @@ import CQLParser from './cql';
 
 // typical mirage config export
 // http://www.ember-cli-mirage.com/docs/v0.4.x/configuration/
-export default function config() {
+export default function config({ permissions = [] } = { permissions: [] }) {
   this.urlPrefix = 'http://localhost:36000';
   // okapi endpoints
   this.get('/_/version', () => '0.0.0');
@@ -52,23 +52,18 @@ export default function config() {
 
     return { configs: [] };
   });
-  this.post('/bl-users/login', () => {
+  this.post('/bl-users/login', (schema, request) => {
+    const { username } = JSON.parse(request.requestBody);
+    const user = schema.users.findBy({ username });
+
     return new Response(
       201,
       {
         'X-Okapi-Token': `myOkapiToken:${Date.now()}`
       }, {
-        user: {
-          id: 'test',
-          username: 'testuser',
-          personal: {
-            lastName: 'User',
-            firstName: 'Test',
-            email: 'user@folio.org',
-          }
-        },
+        user,
         permissions: {
-          permissions: []
+          permissions: permissions.map(permissionName => ({ permissionName }))
         }
       }
     );
@@ -309,14 +304,30 @@ export default function config() {
     'totalRecords': 1
   });
 
-  this.get('/accounts', {
-    accounts: [],
-    totalRecords: 0,
-    resultInfo: {
-      totalRecords: 0,
-      facets: [],
-      diagnostics: [],
-    },
+  this.get('/accounts', ({ accounts }, request) => {
+    const url = new URL(request.url);
+    const cqlQuery = url.searchParams.get('query');
+    const cqlParser = new CQLParser();
+
+    cqlParser.parse(cqlQuery);
+
+    let results = [];
+
+    if (cqlParser.tree.term) {
+      results = accounts.where({
+        userId: cqlParser.tree.term
+      });
+    }
+
+    return {
+      accounts: results,
+      totalRecords: results.length,
+      resultInfo: {
+        totalRecords: results.length,
+        facets: [],
+        diagnostics: [],
+      },
+    };
   });
 
   this.get('/accounts/:id', ({ accounts }, request) => {

@@ -1,15 +1,15 @@
 import { createServer } from 'miragejs';
-import config from '../network';
+import createConfig from '../network';
 
-function setUpMirage() {
-  return createServer(config);
+function setUpMirage(options) {
+  return createServer({ ...createConfig(options), logging: false });
 }
 
 let currentMirage;
 
-export function start() {
+export function start(options) {
   if (currentMirage) currentMirage.shutdown();
-  currentMirage = setUpMirage();
+  currentMirage = setUpMirage(options);
 }
 
 export const store = {
@@ -18,5 +18,8 @@ export const store = {
   },
   createList(...args) {
     return currentMirage.createList(...args);
+  },
+  get schema() {
+    return currentMirage.schema;
   }
 };

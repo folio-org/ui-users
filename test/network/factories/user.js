@@ -28,6 +28,7 @@ export default Factory.extend({
   departments: [],
 
   afterCreate(user, server) {
+    console.error('🤹‍♀️');
     server.create('service-points-user', {
       'userId': user.id,
       'servicePointsIds': ['servicepointId1', 'servicepointId2'],
@@ -49,6 +50,5 @@ export default Factory.extend({
 
     user.update('username', `${personal.lastName}, ${personal.firstName}`);
     user.update('personal', personal.toJSON());
-    user.save();
   }
 });

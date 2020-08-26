@@ -5,9 +5,10 @@
     "@bigtest/interactor": "changeset-release_v0",
     "@bigtest/suite": "^0.5.2",
     "@bigtest/globals": "*",
+    "chai": "^4.2.0",
     "core-js": "^3.6.4",
     "faker": "^4.1.0",
-    "miragejs": "^0.1.32",
+    "miragejs": "^0.1.40",
     "regenerator-runtime": "^0.13.3",
     "sinon": "^7.1.1"
   }
