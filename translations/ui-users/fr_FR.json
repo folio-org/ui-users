@@ -717,7 +717,7 @@
     "reports.overdue.item.copyNumber": "Numéro d'exemplaire",
     "settings.departments.code.required": "Le code est requis",
     "extended.department.name": "Department name",
-    "extended.department.add": "Add department",
+    "extended.department.add": "Ajouter un département/service",
     "extended.department.default": "Select department",
     "item.copyNumber": "Copy number"
 }
