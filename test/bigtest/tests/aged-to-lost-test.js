@@ -10,7 +10,7 @@ import setupApplication from '../helpers/setup-application';
 import OpenLoansInteractor from '../interactors/open-loans';
 import LoanActionsHistory from '../interactors/loan-actions-history';
 
-describe.only('Loans with Aged to lost items', () => {
+describe('Loans with Aged to lost items', () => {
   setupApplication({
     permissions: {
       'manualblocks.collection.get': true,
