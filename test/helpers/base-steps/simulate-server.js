@@ -5,12 +5,6 @@ import { start } from '../server';
 
 bigtestGlobals.defaultInteractorTimeout = 10000;
 
-function flattenPossiblePromise(fn) {
-  return async () => {
-    await fn();
-  };
-}
-
 export default function simulateServer(name, { permissions = [] } = { permissions: [] }) {
   return test(name)
     .step('set up localforage', async () => {
