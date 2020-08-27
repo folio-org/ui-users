@@ -7,6 +7,7 @@ import {
   Col,
   TextField,
   Select,
+  Label
 } from '@folio/stripes/components';
 
 class FeeFineInfo extends React.Component {
@@ -62,7 +63,7 @@ class FeeFineInfo extends React.Component {
               <Col xs={4}>
                 <Row>
                   <Col xs={12}>
-                    <b><FormattedMessage id="ui-users.charge.owner.label" /></b>
+                    <Label tagName="label" htmlFor="ownerId"><FormattedMessage id="ui-users.charge.owner.label" /></Label>
                   </Col>
                 </Row>
                 <Row>
@@ -89,7 +90,7 @@ class FeeFineInfo extends React.Component {
               <Col xs={4}>
                 <Row>
                   <Col xs={12}>
-                    <b><FormattedMessage id="ui-users.charge.feefine.label" /></b>
+                    <Label tagName="label" htmlFor="feeFineType"><FormattedMessage id="ui-users.charge.feefine.label" /></Label>
                   </Col>
                 </Row>
                 <Row>
@@ -115,7 +116,7 @@ class FeeFineInfo extends React.Component {
               <Col xs={4}>
                 <Row>
                   <Col xs={12}>
-                    <b><FormattedMessage id="ui-users.charge.amount.label" /></b>
+                    <Label tagName="label" htmlFor="amount"><FormattedMessage id="ui-users.charge.amount.label" /></Label>
                   </Col>
                 </Row>
                 <Row>
