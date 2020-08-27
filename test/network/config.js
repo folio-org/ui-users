@@ -307,16 +307,20 @@ export default function config({ permissions = [] } = { permissions: [] }) {
   this.get('/accounts', ({ accounts }, request) => {
     const url = new URL(request.url);
     const cqlQuery = url.searchParams.get('query');
-    const cqlParser = new CQLParser();
-
-    cqlParser.parse(cqlQuery);
-
     let results = [];
 
-    if (cqlParser.tree.term) {
-      results = accounts.where({
-        userId: cqlParser.tree.term
-      });
+    if (cqlQuery) {
+      const cqlParser = new CQLParser();
+
+      cqlParser.parse(cqlQuery);
+
+      if (cqlParser.tree.term) {
+        results = accounts.where({
+          userId: cqlParser.tree.term
+        });
+      }
+    } else {
+      results = accounts.all();
     }
 
     return {
@@ -336,7 +340,7 @@ export default function config({ permissions = [] } = { permissions: [] }) {
 
   this.post('/accounts', function (schema, { requestBody }) {
     const acct = JSON.parse(requestBody);
-    return this.create('account', acct);
+    return schema.create('account', acct);
   });
 
   this.get('/waives', {

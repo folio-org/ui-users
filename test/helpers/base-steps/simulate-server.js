@@ -18,7 +18,8 @@ export default function simulateServer(name, { permissions = [] } = { permission
           lastName: 'User',
           email: 'user@folio.org',
           addresses: [],
-          servicePoints: []
+          servicePoints: [],
+          curServicePoint: { id: null }
         },
         perms: permissions.reduce((memo, perm) => ({ ...memo, [perm]: true }), {})
       });

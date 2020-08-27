@@ -1,5 +1,4 @@
 import { createInteractor } from '@bigtest/interactor';
-import Button from './Button';
 
 export default createInteractor('table cell')({
   selector: '[role=gridcell]',
@@ -27,7 +26,6 @@ export default createInteractor('table cell')({
       )[position];
 
       return headerAtPosition.textContent;
-    },
-    length: element => [...element.querySelectorAll('[class^=mclRow-]')].length
+    }
   }
 });
