@@ -4,11 +4,9 @@ import {
   it,
 } from '@bigtest/mocha';
 import { expect } from 'chai';
-import { Response } from 'miragejs';
 
 import setupApplication from '../helpers/setup-application';
 import OpenLoansInteractor from '../interactors/open-loans';
-import LoanActionsHistory from '../interactors/loan-actions-history';
 
 describe('Loans with Aged to lost items', () => {
   setupApplication({
@@ -41,7 +39,7 @@ describe('Loans with Aged to lost items', () => {
 
     describe('opening dropdown for Aged to lost item', () => {
       beforeEach(async () => {
-        await OpenLoansInteractor.actionDropdowns(1).click('button');
+        await OpenLoansInteractor.actionDropdowns(0).click('button');
       });
 
       it('should not display change due date button', () => {
@@ -51,7 +49,7 @@ describe('Loans with Aged to lost items', () => {
 
     describe('when an Aged to lost item is selected', () => {
       beforeEach(async () => {
-        await OpenLoansInteractor.checkboxes(1).clickInput();
+        await OpenLoansInteractor.checkboxes(0).clickInput();
       });
 
       it('should disable the bulk change due date button', () => {
@@ -60,7 +58,7 @@ describe('Loans with Aged to lost items', () => {
 
       describe('when a checked out item is selected', () => {
         beforeEach(async () => {
-          await OpenLoansInteractor.checkboxes(0).clickInput();
+          await OpenLoansInteractor.checkboxes(1).clickInput();
         });
 
         it('should enable the bulk change due date button', () => {
