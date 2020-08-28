@@ -2,13 +2,10 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import {
-  Field,
-  reduxForm,
-  change,
-  formValueSelector,
-} from 'redux-form';
-import { connect } from 'react-redux';
+
+import { Field } from 'react-final-form';
+import stripesFinalForm from '@folio/stripes/final-form';
+
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import {
   Row,
@@ -24,37 +21,9 @@ import {
 import { calculateSelectedAmount } from '../accountFunctions';
 import css from './PayWaive.css';
 
-const validate = (values, props) => {
-  const {
-    accounts,
-    action,
-    commentRequired
-  } = props;
-
-  const selected = calculateSelectedAmount(accounts);
-  const errors = {};
-
-  if (!parseFloat(values.amount)) {
-    errors.amount = <FormattedMessage id="ui-users.accounts.error.field" />;
-  }
-  if (parseFloat(values.amount) <= 0) {
-    errors.amount = <FormattedMessage id={`ui-users.accounts.${action}.error.amount`} />;
-  }
-  if (!values.method) {
-    errors.method = <FormattedMessage id={`ui-users.accounts.${action}.error.select`} />;
-  }
-  if (commentRequired && !values.comment) {
-    errors.comment = <FormattedMessage id="ui-users.accounts.error.comment" />;
-  }
-  if (parseFloat(values.amount) > parseFloat(selected)) {
-    errors.amount = <FormattedMessage id={`ui-users.accounts.${action}.error.exceeds`} />;
-  }
-
-  return errors;
-};
-
 class ActionModal extends React.Component {
   static propTypes = {
+    form: PropTypes.object.isRequired,
     onClose: PropTypes.func,
     handleSubmit: PropTypes.func,
     open: PropTypes.bool,
@@ -62,7 +31,6 @@ class ActionModal extends React.Component {
     data: PropTypes.arrayOf(PropTypes.object),
     balance: PropTypes.string,
     submitting: PropTypes.bool,
-    invalid: PropTypes.bool,
     pristine: PropTypes.bool,
     reset: PropTypes.func,
     commentRequired: PropTypes.bool,
@@ -71,12 +39,21 @@ class ActionModal extends React.Component {
     label: PropTypes.string,
     action: PropTypes.string,
     intl: PropTypes.object,
-    currentValues: PropTypes.object,
-    dispatch: PropTypes.func,
+    checkAmount: PropTypes.string,
+    okapi: PropTypes.object,
   };
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      actionAllowed: false,
+      remainingAmount: '0.00'
+    };
+  }
+
   onClose = () => {
-    const { onClose, reset } = this.props;
+    const { onClose, form: { reset } } = this.props;
 
     onClose();
     reset();
@@ -86,9 +63,11 @@ class ActionModal extends React.Component {
     const {
       accounts = [],
       action,
-      currentValues: { amount },
+      form: { getState },
       intl: { formatMessage },
     } = this.props;
+
+    const { values: { amount } } = getState();
 
     const selected = calculateSelectedAmount(accounts);
     const type = parseFloat(amount) < parseFloat(selected)
@@ -154,6 +133,7 @@ class ActionModal extends React.Component {
                   component={Select}
                   dataOptions={options}
                   placeholder={placeholder}
+                  validate={this.validateMethod}
                 />
               )}
             </FormattedMessage>
@@ -167,14 +147,75 @@ class ActionModal extends React.Component {
     return action === 'payment';
   }
 
-  onBlurAmount = (e) => {
-    const amount = parseFloat(e.target.value || 0).toFixed(2);
-    e.target.value = amount;
+  onChangeOwner = () => {
+    const { form: { change } } = this.props;
+    change('payment-many-modal', 'method', null);
   }
 
-  onChangeOwner = () => {
-    const { dispatch } = this.props;
-    dispatch(change('payment-many-modal', 'method', null));
+  triggerCheckEndpoint = (amount, accountId) => {
+    const {
+      checkAmount,
+      okapi,
+    } = this.props;
+
+    return fetch(`${okapi.url}/accounts/${accountId}/${checkAmount}`,
+      {
+        method: 'POST',
+        headers: {
+          'X-Okapi-Tenant': okapi.tenant,
+          'X-Okapi-Token': okapi.token,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ amount })
+      });
+  };
+
+  validateAmount = async (value) => {
+    let error;
+
+    if (_.isEmpty(value)) {
+      error = <FormattedMessage id="ui-users.accounts.error.field" />;
+    } else {
+      const { id } = _.head(this.props.accounts);
+      const response = await this.triggerCheckEndpoint(value, id);
+      const {
+        allowed,
+        errorMessage,
+        remainingAmount,
+      } = await response.json();
+
+      if (!_.isUndefined(errorMessage)) {
+        error = errorMessage;
+      }
+
+      if (this.state.actionAllowed !== allowed || this.state.remainingAmount !== remainingAmount) {
+        this.setState({ actionAllowed: allowed, remainingAmount });
+      }
+    }
+
+    return error;
+  }
+
+  validateMethod = (value) => {
+    let error;
+    const { action } = this.props;
+
+    if (!value) {
+      error = <FormattedMessage id={`ui-users.accounts.${action}.error.select`} />;
+    }
+
+    return error;
+  }
+
+  validateComment = (value) => {
+    let error;
+    const { commentRequired } = this.props;
+
+    if (commentRequired && !value) {
+      error = <FormattedMessage id="ui-users.accounts.error.comment" />;
+    }
+
+    return error;
   }
 
   render() {
@@ -183,21 +224,24 @@ class ActionModal extends React.Component {
       action,
       balance,
       commentRequired,
-      currentValues: {
-        amount,
-        notify,
-        ownerId
-      },
+      form: { getState },
       data,
       feefines,
       handleSubmit,
-      invalid,
       label,
       open,
       owners,
       pristine,
       submitting,
     } = this.props;
+
+    const {
+      valid,
+      values: {
+        notify,
+        ownerId,
+      }
+    } = getState();
 
     let showNotify = false;
     accounts.forEach(a => {
@@ -209,7 +253,6 @@ class ActionModal extends React.Component {
     });
 
     const selected = calculateSelectedAmount(accounts);
-    const remaining = amount > 0 ? parseFloat(balance - amount).toFixed(2) : parseFloat(balance).toFixed(2);
     const ownerOptions = owners.filter(o => o.owner !== 'Shared').map(o => ({ value: o.id, label: o.owner }));
 
     let options = (this.isPaymentAction(action)) ? data.filter(d => (d.ownerId === (accounts.length > 1 ? ownerId : (accounts[0] || {}).ownerId))) : data;
@@ -224,7 +267,7 @@ class ActionModal extends React.Component {
         size="medium"
         dismissible
       >
-        <form>
+        <form onSubmit={handleSubmit}>
           <Row>
             <Col xs>{this.renderModalLabel()}</Col>
           </Row>
@@ -263,24 +306,26 @@ class ActionModal extends React.Component {
                       name="amount"
                       component={TextField}
                       hasClearIcon={false}
-                      onBlur={this.onBlurAmount}
                       fullWidth
                       marginBottom0
                       autoFocus
                       required
+                      validate={this.validateAmount}
                     />
                   </div>
                 </Col>
               </Row>
-              <Row end="xs">
-                <Col xs={7}>
-                  <FormattedMessage id="ui-users.accounts.remainingAmount" />
-                  :
-                </Col>
-                <Col xs={4}>
-                  {remaining}
-                </Col>
-              </Row>
+              { !_.isUndefined(this.state.remainingAmount) && (
+                <Row end="xs">
+                  <Col xs={7}>
+                    <FormattedMessage id="ui-users.accounts.remainingAmount" />
+                    :
+                  </Col>
+                  <Col xs={4}>
+                    {this.state.remainingAmount}
+                  </Col>
+                </Row>
+              )}
             </Col>
             {(this.isPaymentAction(action) && accounts.length > 1) &&
               <Col xs={4}>
@@ -330,6 +375,7 @@ class ActionModal extends React.Component {
                 id="comments"
                 name="comment"
                 component={TextArea}
+                validate={this.validateComment}
               />
             </Col>
           </Row>
@@ -380,8 +426,8 @@ class ActionModal extends React.Component {
               <Button
                 id="submit-button"
                 buttonStyle="primary"
-                onClick={handleSubmit}
-                disabled={pristine || submitting || invalid}
+                type="submit"
+                disabled={pristine || submitting || !valid || !this.state.actionAllowed}
               >
                 <FormattedMessage id={`ui-users.accounts.${action}`} />
               </Button>
@@ -393,19 +439,4 @@ class ActionModal extends React.Component {
   }
 }
 
-const ActionModalRedux = reduxForm({
-  enableReinitialize: true,
-  validate,
-})(ActionModal);
-
-const selector = (form, ...other) => (formValueSelector(form))(...other);
-
-export default connect((state, { form }) => ({
-  currentValues: selector(
-    form,
-    state,
-    'amount',
-    'notify',
-    'ownerId'
-  )
-}))(ActionModalRedux);
+export default stripesFinalForm({})(ActionModal);

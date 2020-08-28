@@ -440,6 +440,8 @@ class ChargeFeeFine extends React.Component {
           onSubmit={(values) => { this.showConfirmDialog(values); }}
           owners={owners}
           feefines={feefines}
+          okapi={this.props.okapi}
+          checkAmount="check-pay"
         />
         <Callout ref={(ref) => { this.callout = ref; }} />
         <ConfirmationModal
