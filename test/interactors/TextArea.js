@@ -1,7 +1,7 @@
 import { createInteractor, perform } from '@bigtest/interactor';
 
-export default createInteractor('text field')({
-  selector: 'input[type=text], input[type=password]',
+export default createInteractor('text area')({
+  selector: 'textarea',
   defaultLocator: element => element.labels[0]?.textContent,
   filters: {
     enabled: element => !element.disabled,

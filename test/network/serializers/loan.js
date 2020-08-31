@@ -6,6 +6,12 @@ export default ApplicationSerializer.extend({
 
     json.totalRecords = json.loans.length;
 
+    json.loans.forEach(loan => {
+      const userId = loan.user;
+      delete loan.user;
+      loan.userId = userId;
+    });
+
     return json;
   }
 });

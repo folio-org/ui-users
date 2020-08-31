@@ -221,15 +221,15 @@ export default function config({ permissions = [] } = { permissions: [] }) {
       } = cqlParser;
 
       if (query.match('claimedReturned')) {
-        return loans.where((loan) => {
+        return this.serializerOrRegistry.serialize(loans.where((loan) => {
           return loan.action === 'claimedReturned';
-        });
+        }));
       }
 
       if (field === 'userId') {
-        return loans.where((loan) => {
+        return this.serializerOrRegistry.serialize(loans.where((loan) => {
           return loan.userId === term;
-        });
+        }));
       }
     }
 
@@ -256,9 +256,9 @@ export default function config({ permissions = [] } = { permissions: [] }) {
       } = cqlParser;
 
       if (field === 'loan.id') {
-        return loanactions.where((loanaction) => {
-          return loanaction.loan.id === term;
-        });
+        return this.serializerOrRegistry.serialize(loanactions.where((loanaction) => {
+          return loanaction.loanId === term;
+        }));
       }
     }
 
@@ -425,6 +425,11 @@ export default function config({ permissions = [] } = { permissions: [] }) {
   this.post('/perms/users/:id/permissions?indexField=userId');
 
   this.post('/circulation/loans/:loanId/declare-item-lost', []);
+
+  this.post('/circulation/loans/:loanId/claim-item-returned', ({ loans }, { params }) => {
+    loans.find(params.loanId).update({ status: { name: 'Closed' } });
+    return {};
+  });
 
   this.get('/feefineactions', ({ feefineactions }) => {
     return this.serializerOrRegistry.serialize(feefineactions.all());

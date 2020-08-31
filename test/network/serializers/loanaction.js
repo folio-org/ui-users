@@ -1,6 +1,8 @@
 import ApplicationSerializer from './application';
 
 export default ApplicationSerializer.extend({
+  embed: true,
+  include: ['loan'],
   serialize(...args) {
     const json = ApplicationSerializer.prototype.serialize.apply(this, args);
 

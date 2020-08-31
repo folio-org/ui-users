@@ -399,12 +399,12 @@ class ClosedLoans extends React.Component {
         <ActionsBar
           show={loans.length > 0}
           contentStart={
-            <Label>
+            <p>
               <FormattedMessage
                 id="ui-users.closedLoansCount"
                 values={{ count: loans.length }}
               />
-            </Label>
+            </p>
           }
           contentEnd={
             <IntlConsumer>
