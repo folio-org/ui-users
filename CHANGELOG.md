@@ -36,6 +36,7 @@
 * Handle Aged to lost items in bulk due date change. Refs UIU-1495.
 * Add permissions for Departments CRUD. Refs UIU-1778.
 * Add missing permission `departments.collection.get` permission. Fixes UIU-1812.
+* Prevent UI crashing when loading loan with deleted item. Fixes UIU-1819.
 
 ## [4.0.0](https://github.com/folio-org/ui-users/tree/v4.0.0) (2020-06-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v3.0.0...v4.0.0)
