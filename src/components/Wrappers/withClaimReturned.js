@@ -148,8 +148,14 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
       } = this.props;
       const orderedActions = orderBy(transferredActions, ['dateAction'], ['desc']);
       const now = moment().format();
-      const sign = type.startsWith(refundClaimReturned.TRANSACTION_CREDITED) ? -1 : 1;
-      const amount = sign * transferredActions.reduce((acc, record) => acc + record.amountAction, 0.0);
+      const amount = transferredActions.reduce((acc, record) => acc + record.amountAction, 0.0);
+      const lastBalance = orderedActions[orderedActions.length - 1].balance;
+      // const amount = actions.reduce((acc, record) => acc + record.amountAction, 0.0);
+      // const balance = lastBalance - amount;
+      // const amount = transferredActions.reduce((acc, record) => acc + record.amountAction, 0.0);
+      const balanceTotal = type.startsWith(refundClaimReturned.TRANSACTION_CREDITED)
+        ? 0.0
+        : lastBalance;
       const transactionVerb = type.startsWith(refundClaimReturned.TRANSACTION_CREDITED)
         ? 'Refund'
         : 'Refunded';
@@ -160,7 +166,7 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
         comments: '',
         notify: false,
         amountAction: amount,
-        balance: 0,
+        balance: balanceTotal,
         transactionInformation: `${transactionVerb} to ${orderedActions[0].paymentMethod}`,
         source: orderedActions[0].source,
         paymentMethod: '',
@@ -221,7 +227,7 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
           ),
           actions
         ])
-        .map(
+     /*   .map(
           ([refunds, actions]) => refunds
             .reduce(
               (accum, refund, index) => (
@@ -231,7 +237,7 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
               ),
               getLastBalance(actions)
             )
-        )
+        ) */
         .flat(1);
 
       const persistedRefundActions = await Promise.all(
