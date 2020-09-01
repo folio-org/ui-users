@@ -10,7 +10,13 @@ import Header from '../interactors/Header';
 
 export default test('charge fee/fine', { permissions: ['circulation.loans.collection.get'] })
   .step('seed data', async () => {
-    const user = store.create('user');
+    const user = store.create('user', {
+      patronGroup: 'group7',
+      personal: store.create('user-personal', {
+        firstName: 'Tim',
+        lastName: 'Berners-Lee'
+      })
+    });
     const owner = store.create('owner', { owner: 'testOwner' });
     store.create('feefine', {
       feeFineType: 'testFineType',
@@ -55,12 +61,12 @@ export default test('charge fee/fine', { permissions: ['circulation.loans.collec
       await Button('Close without saving').click();
     })
     .assertion('arrive on fees/fines page', async () => {
-      await Header('Fees/fines -   ()').exists();
-    }))
-  .child('submitting the charge', test => test
-    .step('click the "Charge only" button', async () => {
-      await Button('Charge only').click();
-    })
-    .assertion('arrive on fees/fines page', async () => {
-      await Header('User search').exists();
+      await Header('Fees/fines - Berners-Lee, Tim (Undergrad)').exists();
     }));
+// .child('submitting the charge', test => test
+//   .step('click the "Charge only" button', async () => {
+//     await Button('Charge only').click();
+//   })
+//   .assertion('arrive on fees/fines page', async () => {
+//     await Header('User search').exists();
+//   }));

@@ -1,5 +1,4 @@
 import { createInteractor } from '@bigtest/interactor';
-import Button from './Button';
 
 export default createInteractor('overlay container')({
   selector: '#OverlayContainer',

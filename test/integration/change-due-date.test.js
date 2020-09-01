@@ -5,6 +5,7 @@ import { store } from '../helpers/server';
 import Button from '../interactors/Button';
 import Header from '../interactors/Header';
 import TableCell from '../interactors/TableCell';
+import OverlayContainer from '../interactors/OverlayContainer';
 
 export default test('change due date', { permissions: ['circulation.loans.collection.get'] })
   .step('seed data', async () => {
@@ -35,7 +36,7 @@ export default test('change due date', { permissions: ['circulation.loans.collec
     await Header('Change due date').exists();
   })
   .assertion('shows the requests count', async () => {
-    await TableCell('2', { rowNumber: 0, columnTitle: 'Requests' }).exists();
+    await OverlayContainer('').find(TableCell('2', { rowNumber: 0, columnTitle: 'Requests' })).exists();
   })
   .assertion('save button is disabled', async () => {
     await Button('Save and close').is({ disabled: true });

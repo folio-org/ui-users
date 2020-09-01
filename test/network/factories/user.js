@@ -1,8 +1,7 @@
-import { Factory } from 'miragejs';
+import { Factory, association } from 'miragejs';
 import faker from 'faker';
 
 export default Factory.extend({
-  id: (i) => 'userId' + i,
   barcode: (i) => 'testBarcode' + i,
   active: () => faker.random.boolean(),
   username: () => faker.internet.userName(),
@@ -26,17 +25,13 @@ export default Factory.extend({
     'textarea-4': ''
   },
   departments: [],
+  personal: association(),
 
   afterCreate(user, server) {
     server.create('service-points-user', {
       'userId': user.id,
       'servicePointsIds': ['servicepointId1', 'servicepointId2'],
       'defaultServicePointId': 'servicepointId1',
-    });
-
-    const personal = server.create('user-personal', {
-      lastName: faker.name.lastName(),
-      firstName: faker.name.firstName(),
     });
 
     if (user.username) {
@@ -46,8 +41,5 @@ export default Factory.extend({
         'password': faker.internet.password(),
       });
     }
-
-    user.update('username', `${personal.lastName}, ${personal.firstName}`);
-    user.update('personal', personal.toJSON());
   }
 });

@@ -2,6 +2,8 @@ import { Factory } from 'miragejs';
 import faker from 'faker';
 
 export default Factory.extend({
+  firstName: () => faker.name.firstName(),
+  lastName: () => faker.name.lastName(),
   email: () => faker.internet.email(),
   phone: () => faker.phone.phoneNumber(),
   mobilePhone: () => faker.phone.phoneNumber(),
@@ -10,6 +12,5 @@ export default Factory.extend({
   afterCreate(userPersonal, server) {
     const addresses = server.createList('addresse', 1);
     userPersonal.update('addresses', addresses);
-    userPersonal.save();
   }
 });

@@ -158,7 +158,7 @@ export default function config({ permissions = [] } = { permissions: [] }) {
   });
 
   this.get('/users/:id', (schema, request) => {
-    return schema.users.find(request.params.id).attrs;
+    return this.serializerOrRegistry.serialize(schema.users.find(request.params.id));
   });
 
   this.put('/users/:id', (schema, { params, requestBody }) => {

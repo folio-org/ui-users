@@ -3,7 +3,8 @@ import ApplicationSerializer from './application';
 const { isArray } = Array;
 
 export default ApplicationSerializer.extend({
-
+  embed: true,
+  include: ['personal'],
   serialize(...args) {
     const json = ApplicationSerializer.prototype.serialize.apply(this, args);
 
@@ -17,6 +18,6 @@ export default ApplicationSerializer.extend({
         } };
     }
 
-    return json.users;
+    return json.users || json.user;
   }
 });
