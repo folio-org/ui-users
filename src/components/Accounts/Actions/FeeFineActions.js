@@ -76,15 +76,19 @@ class Actions extends React.Component {
     },
     activeRecord: {},
     user: {},
-    /* checkPay: {
+    checkPay: {
       type: 'okapi',
-      path: 'accounts/:{accountId}/check-pay',
+      POST: {
+        path: 'accounts/%{accountId}/check-pay',
+      },
       fetch: false,
       clientGeneratePk: false,
-    }, */
+    },
     pay: {
       type: 'okapi',
-      path: 'accounts/%{activeRecord.id}/pay',
+      POST: {
+        path: 'accounts/%{activeRecord.id}/pay',
+      },
       fetch: false,
       clientGeneratePk: false,
     }
@@ -106,6 +110,9 @@ class Actions extends React.Component {
         POST: PropTypes.func.isRequired,
       }),
       checkPay: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      pay: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }),
     }),
@@ -318,10 +325,10 @@ class Actions extends React.Component {
       .then(() => this.onCloseActionModal());
 
     // delete type.rowIndex;
-    /* this.action(type, values.amount, values, action)
-      .then(() => this.props.handleEdit(1))
-      .then(() => this.showCalloutMessage(type))
-      .then(() => this.onCloseActionModal()); */
+    // this.action(type, values.amount, values, action)
+    //   .then(() => this.props.handleEdit(1))
+    //   .then(() => this.showCalloutMessage(type))
+    //   .then(() => this.onCloseActionModal());
   }
 
   onSubmitMany = (values, items, action) => {

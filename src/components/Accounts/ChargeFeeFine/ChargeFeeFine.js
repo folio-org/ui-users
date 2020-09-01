@@ -325,7 +325,9 @@ class ChargeFeeFine extends React.Component {
     if (data.pay) {
       delete data.pay;
       this.type.remaining = data.amount;
-      this.onClickPay(data);
+      this.onClickCharge(data)
+        .then(() => this.onClickPay(data))
+        .then(() => history.goBack());
     } else {
       delete data.pay;
       this.onClickCharge(data)
