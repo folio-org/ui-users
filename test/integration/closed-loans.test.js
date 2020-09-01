@@ -8,18 +8,16 @@ import TableCell from '../interactors/TableCell';
 import TableColumnHeader from '../interactors/TableColumnHeader';
 import OverlayContainer from '../interactors/OverlayContainer';
 
-function setupAnonymizationAPIResponse(errors) {
-  routes.post('/loan-anonymization/by-user/:id', { errors });
-}
-
 export default test('closed loans', { permissions: ['manualblocks.collection.get', 'circulation.loans.collection.get'] })
   .child('loans with items', test => test
     .step('seed data', async () => {
+      const earlierDate = new Date(133700000).toString();
+      const laterDate = new Date(3133700000000).toString();
       const user = store.create('user');
       const loan1 = store.create('loan', 'feesAndFines', {
         user,
         status: { name: 'Closed' },
-        dueDate: () => new Date(133700000).toString(),
+        dueDate: earlierDate,
         item: {
           holdingsRecordId: () => faker.random.uuid(),
           instanceId: () => faker.random.uuid(),
@@ -38,7 +36,7 @@ export default test('closed loans', { permissions: ['manualblocks.collection.get
       const loan2 = store.create('loan', 'feesAndFines', {
         user,
         status: { name: 'Closed' },
-        dueDate: () => new Date(3133700000000).toString(),
+        dueDate: laterDate,
         item: {
           holdingsRecordId: () => faker.random.uuid(),
           instanceId: () => faker.random.uuid(),
@@ -55,13 +53,15 @@ export default test('closed loans', { permissions: ['manualblocks.collection.get
         }
       });
 
-      setupAnonymizationAPIResponse([{
-        message: 'haveAssociatedFeesAndFines',
-        parameters: [{
-          key: 'loanIds',
-          value: JSON.stringify([loan1]),
+      routes.post('/loan-anonymization/by-user/:id', {
+        errors: [{
+          message: 'haveAssociatedFeesAndFines',
+          parameters: [{
+            key: 'loanIds',
+            value: JSON.stringify([loan1]),
+          }]
         }]
-      }]);
+      });
 
       return { user, loan1, loan2 };
     })
@@ -103,15 +103,17 @@ export default test('closed loans', { permissions: ['manualblocks.collection.get
         item: undefined
       });
 
-      setupAnonymizationAPIResponse([{
-        message: 'haveAssociatedFeesAndFines',
-        parameters: [{
-          key: 'loanIds',
-          value: JSON.stringify([loan]),
+      routes.post('/loan-anonymization/by-user/:id', {
+        errors: [{
+          message: 'haveAssociatedFeesAndFines',
+          parameters: [{
+            key: 'loanIds',
+            value: JSON.stringify([loan]),
+          }]
         }]
-      }]);
+      });
 
-      return { user, loan };
+      return { user };
     })
     .step('visit "/users/:user_id/loans/closed"', async ({ user }) => {
       await App.visit(`/users/${user.id}/loans/closed`);
