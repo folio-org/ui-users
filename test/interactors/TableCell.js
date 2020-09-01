@@ -5,7 +5,7 @@ export default createInteractor('table cell')({
   defaultLocator: element => element.textContent,
   filters: {
     rowNumber: element => {
-      const headerRowOffset = 1;
+      const headerRowOffset = 2;
       return element.closest('[role=row]').getAttribute('aria-rowindex') - headerRowOffset;
     },
     columnTitle: element => {

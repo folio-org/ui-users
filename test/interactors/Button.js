@@ -3,7 +3,7 @@ import { createInteractor, perform } from '@bigtest/interactor';
 export default createInteractor('button')({
   selector: 'button',
   locators: {
-    findByAriaLabel: element => element.getAttribute('aria-label')
+    findByAriaLabel: element => element.getAttribute('aria-label')?.trim()
   },
   filters: {
     enabled: element => !element.disabled,

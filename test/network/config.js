@@ -705,6 +705,9 @@ export default function config({ permissions = [] } = { permissions: [] }) {
     }]
   });
 
+  // this.post('/loan-anonymization/by-user/:id', { errors: [] });
+
   this.urlPrefix = '';
   this.passthrough();
+  this.urlPrefix = 'http://localhost:36000';
 }

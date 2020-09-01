@@ -35,7 +35,7 @@ export default test('change due date', { permissions: ['circulation.loans.collec
     await Header('Change due date').exists();
   })
   .assertion('shows the requests count', async () => {
-    await TableCell('2', { rowNumber: 1, columnTitle: 'Requests' }).exists();
+    await TableCell('2', { rowNumber: 0, columnTitle: 'Requests' }).exists();
   })
   .assertion('save button is disabled', async () => {
     await Button('Save and close').is({ disabled: true });

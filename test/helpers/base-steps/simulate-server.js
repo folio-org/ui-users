@@ -3,7 +3,7 @@ import { bigtestGlobals } from '@bigtest/globals';
 import localforage from 'localforage';
 import { start } from '../server';
 
-bigtestGlobals.defaultInteractorTimeout = 10_000;
+bigtestGlobals.defaultInteractorTimeout = 12_000;
 
 export default function simulateServer(name, { permissions = [] } = { permissions: [] }) {
   return test(name)
