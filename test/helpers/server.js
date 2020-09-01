@@ -8,7 +8,6 @@ function setUpMirage(options) {
 let currentMirage;
 
 export function start(options) {
-  if (currentMirage) currentMirage.shutdown();
   currentMirage = setUpMirage(options);
 }
 

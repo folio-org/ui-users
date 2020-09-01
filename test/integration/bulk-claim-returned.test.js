@@ -25,7 +25,7 @@ export default test('bulk claim returned', { permissions: ['circulation.loans.co
   })
   .child('when no items are selected', test => test
     .assertion('the "Claim returned" button is disabled', async () => {
-      await OpenLoansControl('').is({ actionBarClaimReturnedDisabled: true });
+      await OpenLoansControl('').is({ actionsBarClaimReturnedDisabled: true });
     }))
   .child('working with checked out items', test => test
     .step('select all checkboxes', async () => {
