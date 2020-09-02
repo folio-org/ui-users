@@ -33,6 +33,7 @@
 * Use item id instead of barcode for links to `ui-requests` module. Fixes UIU-1727.
 * Add departments to User crate/edit/view pages. Refs UIU-1224.
 * Enable renewal override for Aged to lost items. Refs UIU-1464.
+* Handle Aged to lost items in bulk due date change. Refs UIU-1495.
 
 ## [4.0.0](https://github.com/folio-org/ui-users/tree/v4.0.0) (2020-06-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v3.0.0...v4.0.0)
