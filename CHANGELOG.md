@@ -2,6 +2,7 @@
 
 ## 5.0.0 (IN PROGRESS)
 
+* Fixing breaking tests.  
 * Adding fix for UIU-1801.  Removing temporary fixes to tests.
 * Temporary fix for broken tests relating to UIU-1801.  Does not resolve that issue.
 * changed user search to filter based on tag name rather than ID.  Fixes UIU-1750
