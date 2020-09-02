@@ -90,6 +90,7 @@
   "loans.feeFineDetails": "Fee/fine details",
   "loans.history": "Loan action history",
   "loans.resolveClaim": "Resolve claim",
+  "loans.action.source.system": "System",
 
   "settings.label": "Users",
   "settings.general": "General",
