@@ -32,8 +32,13 @@ const DepartmentsSettings = () => {
     return errors;
   };
 
+  const hasEditPerm = stripes.hasPerm('ui-users.settings.departments.edit');
+  const hasDeletePerm = stripes.hasPerm('ui-users.settings.departments.delete');
+  const hasCreatePerm = stripes.hasPerm('ui-users.settings.departments.create');
+
   return (
     <ConnectedControlledVocab
+      canCreate={hasCreatePerm}
       stripes={stripes}
       baseUrl="departments"
       records="departments"
@@ -53,8 +58,8 @@ const DepartmentsSettings = () => {
       }}
       validate={validate}
       actionSuppressor={{
-        delete: item => item.usageNumber,
-        edit: () => false,
+        delete: item => !hasDeletePerm || item.usageNumber,
+        edit: () => !hasEditPerm,
       }}
     />
   );
