@@ -41,6 +41,7 @@ const settingsGeneral = [
     route: 'departments',
     label: <FormattedMessage id="ui-users.settings.departments" />,
     component: DepartmentsSettings,
+    perm: 'ui-users.settings.departments.view'
   },
   {
     route: 'profilepictures',

@@ -116,8 +116,8 @@ class LoanDetails extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const prevItemStatus = prevProps.loan?.item.status?.name;
-    const thistItemStatus = this.props.loan?.item.status?.name;
+    const prevItemStatus = prevProps.loan?.item?.status?.name;
+    const thistItemStatus = this.props.loan?.item?.status?.name;
 
     if (prevItemStatus && prevItemStatus !== thistItemStatus) {
       this.props.enableButton();
