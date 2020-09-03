@@ -12,6 +12,10 @@ export default [
     showDueDatePicker: false,
   },
   {
+    message: 'item is Aged to lost',
+    showDueDatePicker: false,
+  },
+  {
     message: 'renewal date falls outside of date ranges in fixed loan policy',
     showDueDatePicker: true,
   },

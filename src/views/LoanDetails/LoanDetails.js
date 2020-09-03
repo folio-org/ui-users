@@ -116,8 +116,8 @@ class LoanDetails extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const prevItemStatus = prevProps.loan?.item.status?.name;
-    const thistItemStatus = this.props.loan?.item.status?.name;
+    const prevItemStatus = prevProps.loan?.item?.status?.name;
+    const thistItemStatus = this.props.loan?.item?.status?.name;
 
     if (prevItemStatus && prevItemStatus !== thistItemStatus) {
       this.props.enableButton();
@@ -346,6 +346,7 @@ class LoanDetails extends React.Component {
     const claimedReturnedDate = itemStatus === itemStatuses.CLAIMED_RETURNED && loan.claimedReturnedDate;
     const isClaimedReturnedItem = itemStatus === itemStatuses.CLAIMED_RETURNED;
     const isDeclaredLostItem = itemStatus === itemStatuses.DECLARED_LOST;
+    const isAgedToLostItem = itemStatus === itemStatuses.AGED_TO_LOST;
     let lostDate;
     const declaredLostActions = loanActionsWithUser.filter(currentAction => get(currentAction, ['action'], '') === 'declaredLost');
 
@@ -440,7 +441,12 @@ class LoanDetails extends React.Component {
                 <IfPermission perm="ui-users.loans.edit">
                   <Button
                     data-test-change-due-date-button
-                    disabled={buttonDisabled || isDeclaredLostItem || isClaimedReturnedItem}
+                    disabled={
+                      buttonDisabled ||
+                      isDeclaredLostItem ||
+                      isClaimedReturnedItem ||
+                      isAgedToLostItem
+                    }
                     buttonStyle="primary"
                     onClick={this.showChangeDueDateDialog}
                   >
