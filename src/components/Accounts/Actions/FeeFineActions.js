@@ -86,10 +86,9 @@ class Actions extends React.Component {
     },
     pay: {
       type: 'okapi',
-      POST: {
-        path: 'accounts/%{activeRecord.id}/pay',
-      },
+      path: 'accounts/%{activeRecord.id}/pay',
       fetch: false,
+      accumulate: 'true',
       clientGeneratePk: false,
     }
   });
@@ -317,9 +316,9 @@ class Actions extends React.Component {
     } = this.props;
 
     const account = _.head(accounts) || {};
-    this.props.mutator.activeRecord.update({ id: account.id });
+    mutator.activeRecord.update({ id: account.id });
     const payload = this.buildActionBody(values);
-    mutator[this.actionToEndpointMapping[action]].POST(payload)
+    mutator[this.actionToEndpointMapping[action]].POST(_.omit(payload, ['id']))
       .then(() => this.props.handleEdit(1))
       .then(() => this.showCalloutMessage(account))
       .then(() => this.onCloseActionModal());
@@ -610,6 +609,7 @@ class Actions extends React.Component {
           onSubmit={(values) => { this.onClickComment(values); }}
         />
         <ConfirmationModal
+          style={{ position: 'relative', zIndex: 1000 }}
           open={showConfirmDialog}
           heading={this.renderConfirmHeading()}
           message={(showConfirmDialog) ? this.renderConfirmMessage() : ''}
