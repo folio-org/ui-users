@@ -2,6 +2,7 @@
 
 ## 5.0.0 (IN PROGRESS)
 
+* modified the lost date display to include aged to lost status. Fixes UIU-1804.
 * Fixing breaking tests.  
 * Adding fix for UIU-1801.  Removing temporary fixes to tests.
 * Temporary fix for broken tests relating to UIU-1801.  Does not resolve that issue.

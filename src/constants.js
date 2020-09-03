@@ -13,6 +13,7 @@ export const itemStatuses = {
   CLAIMED_RETURNED: 'Claimed returned',
   DECLARED_LOST: 'Declared lost',
   AGED_TO_LOST: 'Aged to lost',
+  LOST_AND_PAID: 'Lost and paid',
 };
 
 export const loanStatuses = {

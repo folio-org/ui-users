@@ -116,9 +116,9 @@ class LoanDetails extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const prevItemStatus = prevProps.loan?.item.status?.name;
-    const thistItemStatus = this.props.loan?.item.status?.name;
 
+    const prevItemStatus = prevProps.loan?.item?.status?.name;
+    const thistItemStatus = this.props.loan?.item?.status?.name;
     if (prevItemStatus && prevItemStatus !== thistItemStatus) {
       this.props.enableButton();
     }
@@ -347,11 +347,17 @@ class LoanDetails extends React.Component {
     const isClaimedReturnedItem = itemStatus === itemStatuses.CLAIMED_RETURNED;
     const isDeclaredLostItem = itemStatus === itemStatuses.DECLARED_LOST;
     const isAgedToLostItem = itemStatus === itemStatuses.AGED_TO_LOST;
+    const isLostAndPaid = itemStatus === itemStatuses.LOST_AND_PAID;
     let lostDate;
     const declaredLostActions = loanActionsWithUser.filter(currentAction => get(currentAction, ['action'], '') === 'declaredLost');
-
+    const agedTolostLostActions = loanActionsWithUser.filter(currentAction => get(currentAction, ['action'], '') === 'itemAgedToLost');
+    const lostAndPaidActions = loanActionsWithUser.filter(currentAction => get(currentAction, ['action'], '') === 'closedLoan');
     if (isDeclaredLostItem && declaredLostActions.length) {
       lostDate = get(declaredLostActions[0], ['metadata', 'updatedDate']);
+    } else if (isAgedToLostItem && agedTolostLostActions.length) {
+      lostDate = get(agedTolostLostActions[0], ['metadata', 'updatedDate']);
+    } else if (isLostAndPaid) {
+      lostDate = get(lostAndPaidActions[0], ['declaredLostDate']);
     }
 
     const buttonDisabled = (loanStatus && loanStatus === 'Closed');
