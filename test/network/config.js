@@ -133,8 +133,14 @@ export default function config({ permissions = [] } = { permissions: [] }) {
     if (request.queryParams.query) {
       const cqlParser = new CQLParser();
       // get the CQL query param from 'query=' until the amphersand or end of the string
-      let query = /query=(\(.*\)|%28.*%29)/.exec(request.url)[1];
       const filterField = 'active';
+      let query;
+      try {
+        query = /query=(\(.*\)|%28.*%29)/.exec(request.url)[1];
+      } catch {
+        query = new URL(request.url).searchParams.get('query');
+      }
+      
       if (/^%28/.test(query)) {
         query = decodeURIComponent(query);
       }
