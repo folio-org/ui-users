@@ -189,7 +189,7 @@ class LoanDetails extends React.Component {
     if (accounts.length === 1) {
       nav.onClickViewAccountActionsHistory(e, { id: accounts[0].id }, history, params);
     } else if (accounts.length > 1) {
-      const open = accounts.filter(a => a.status.name === 'Open') || [];
+      const open = accounts.filter(a => a?.status?.name === 'Open') || [];
       if (open.length === accounts.length) {
         nav.onClickViewOpenAccounts(e, loan, history, params);
       } else if (open.length === 0) {
@@ -274,7 +274,7 @@ class LoanDetails extends React.Component {
       history.push(`/users/${params.id}/accounts/view/${params.accountid}`);
     }
 
-    const loanStatus = loan.status ? loan.status.name.toLowerCase() : 'open';
+    const loanStatus = loan?.status ? loan.status?.name?.toLowerCase() : 'open';
 
     history.push({
       pathname: `/users/${params.id}/loans/${loanStatus}`,
