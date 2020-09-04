@@ -2,7 +2,7 @@
 
 ## 5.0.0 (IN PROGRESS)
 
-* Fixing breaking tests.  
+* Fixing breaking tests.
 * Adding fix for UIU-1801.  Removing temporary fixes to tests.
 * Temporary fix for broken tests relating to UIU-1801.  Does not resolve that issue.
 * changed user search to filter based on tag name rather than ID.  Fixes UIU-1750
@@ -38,6 +38,7 @@
 * Add permissions for Departments CRUD. Refs UIU-1778.
 * Add missing permission `departments.collection.get` permission. Fixes UIU-1812.
 * Prevent UI crashing when loading loan with deleted item. Fixes UIU-1819.
+* Remove user count from patron groups. Fixes UIU-1562.
 
 ## [4.0.0](https://github.com/folio-org/ui-users/tree/v4.0.0) (2020-06-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v3.0.0...v4.0.0)
