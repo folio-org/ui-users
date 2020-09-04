@@ -25,16 +25,14 @@ export default test('status filter', {})
     })
     .assertion('should be the correct amount of inactive users', async () => {
       await Table('').has({ dataRowCount: 8 });
-    })
-  )
+    }))
   .child('show active users', test => test
     .step('select active users', async () => {
       await Checkbox('Active').click();
     })
     .assertion('should be the correct amount of inactive users', async () => {
       await Table('').has({ dataRowCount: 4 });
-    })
-  )
+    }))
   .child('show all users', test => test
     .step('select active and inactive users', async () => {
       await Checkbox('Active').click();
@@ -42,18 +40,16 @@ export default test('status filter', {})
     })
     .assertion('should be the correct amount of inactive users', async () => {
       await Table('').has({ dataRowCount: 12 });
-    })
-  )
-  
-  // skipping because search function is broken; search for '/users' getter in network/config.js
+    }));
 
-  // .child('search for users', test => test
-  //   .step('enter a search query', async () => {
-  //     await Search('input-user-search').fill('Mary Poppins');
-  //     await Button.findById('submit-user-search').click();
-  //   })
-  //   .assertion('should be the correct amount of inactive users', async () => {
-  //     await Table('').has({ dataRowCount: 1 });
-  //   })
-  // )
-  
+// skipping because search function is broken; search for '/users' getter in network/config.js
+
+// .child('search for users', test => test
+//   .step('enter a search query', async () => {
+//     await Search('input-user-search').fill('Mary Poppins');
+//     await Button.findById('submit-user-search').click();
+//   })
+//   .assertion('should be the correct amount of inactive users', async () => {
+//     await Table('').has({ dataRowCount: 1 });
+//   })
+// )
