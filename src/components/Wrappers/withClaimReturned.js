@@ -2,11 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import {
-  concat,
   cloneDeep,
-  last,
   orderBy,
-  set,
   zip
 } from 'lodash';
 import moment from 'moment';
@@ -149,7 +146,7 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
       const orderedActions = orderBy(transferredActions, ['dateAction'], ['desc']);
       const now = moment().format();
       const amount = transferredActions.reduce((acc, record) => acc + record.amountAction, 0.0);
-      const lastBalance = orderedActions[orderedActions.length - 1].balance;
+      const lastBalance = transferredActions[0].balance + amount;
       // const amount = actions.reduce((acc, record) => acc + record.amountAction, 0.0);
       // const balance = lastBalance - amount;
       // const amount = transferredActions.reduce((acc, record) => acc + record.amountAction, 0.0);
@@ -159,6 +156,7 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
       const transactionVerb = type.startsWith(refundClaimReturned.TRANSACTION_CREDITED)
         ? 'Refund'
         : 'Refunded';
+
 
       return {
         dateAction: now,
@@ -219,32 +217,24 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
           .map(getAccountActions)
       );
 
-      const refundActions = zip(accounts, accountsActions)
-        .map(([account, actions]) => [
-          createRefunds(
+      const transferredActions = accountsActions
+        .map(filterTransferredActions);
+
+      const accountsWithTransferredActions = accounts
+        .map((account, index) => {
+          return {
             account,
-            filterTransferredActions(actions)
-          ),
-          actions
-        ])
-     /*   .map(
-          ([refunds, actions]) => refunds
-            .reduce(
-              (accum, refund, index) => (
-                index === 0
-                  ? [set(refund, 'balance', accum + refund.amountAction)]
-                  : concat(accum, set(refund, 'balance', last(accum).balance + refund.amountAction))
-              ),
-              getLastBalance(actions)
-            )
-        ) */
+            actions: transferredActions[index]
+          };
+        });
+
+
+      const refunds = accountsWithTransferredActions
+        .map(({ account, actions }) => createRefunds(account, actions))
         .flat(1);
 
-      const persistedRefundActions = await Promise.all(
-        refundActions.map(persistRefundAction)
-      );
 
-      return persistedRefundActions;
+      await Promise.all(refunds.map(persistRefundAction));
     };
 
     await processAccounts();
