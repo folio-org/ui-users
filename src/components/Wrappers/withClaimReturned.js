@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import {
   cloneDeep,
-  orderBy,
-  zip
+  orderBy
 } from 'lodash';
 import moment from 'moment';
 import LoanActionDialog from '../LoanActionDialog';
@@ -125,13 +124,6 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
         record => record.typeAction && record.typeAction.startsWith(refundClaimReturned.TYPE_ACTION)
       );
 
-
-    const getLastBalance = actions => (
-      actions.length > 0
-        ? orderBy(actions, ['dateAction'], ['desc'])[0].balance
-        : 0.0
-    );
-
     const createRefundActionTemplate = (account, transferredActions, type) => {
       const {
         okapi: {
@@ -146,10 +138,7 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
       const orderedActions = orderBy(transferredActions, ['dateAction'], ['desc']);
       const now = moment().format();
       const amount = transferredActions.reduce((acc, record) => acc + record.amountAction, 0.0);
-      const lastBalance = transferredActions[0].balance + amount;
-      // const amount = actions.reduce((acc, record) => acc + record.amountAction, 0.0);
-      // const balance = lastBalance - amount;
-      // const amount = transferredActions.reduce((acc, record) => acc + record.amountAction, 0.0);
+      const lastBalance = orderedActions[0].balance + amount;
       const balanceTotal = type.startsWith(refundClaimReturned.TRANSACTION_CREDITED)
         ? 0.0
         : lastBalance;
