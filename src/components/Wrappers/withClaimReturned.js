@@ -63,7 +63,7 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
   }
 
   refundTransfers = async () => {
-    const getAccounts = (itemBarcode, userId) => {
+    const getAccounts = (itemBarcode, userId, loanId) => {
       const {
         mutator: {
           accounts: {
@@ -78,6 +78,7 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
       const pathParts = [
         'accounts?query=',
         `barcode=="${itemBarcode}"`,
+        ` and loanId=="${loanId}"`,
         ` and userId=="${userId}"`,
         ` and (feeFineType=="${lostStatus}"`,
         ` or feeFineType=="${processingStatus}")`
@@ -124,6 +125,17 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
         record => record.typeAction && record.typeAction.startsWith(refundClaimReturned.TYPE_ACTION)
       );
 
+    const persistRefundAction = action => {
+      const {
+        mutator: {
+          feefineactions: {
+            POST,
+          },
+        },
+      } = this.props;
+      return POST(action);
+    };
+
     const createRefundActionTemplate = (account, transferredActions, type) => {
       const {
         okapi: {
@@ -147,7 +159,7 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
         : 'Refunded';
 
 
-      return {
+      const newAction = {
         dateAction: now,
         typeAction: type,
         comments: '',
@@ -161,27 +173,18 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
         userId: currentUserId,
         createdAt: servicePointId,
       };
+
+      return persistRefundAction(newAction);
     };
 
     const createRefunds = (account, actions) => {
-      return actions.length > 0
-        ? [
-          createRefundActionTemplate(account, actions, refundClaimReturned.CREDITED_ACTION),
-          createRefundActionTemplate(account, actions, refundClaimReturned.REFUNDED_ACTION)
-        ]
-        : [];
+      if (actions.length > 0) {
+        createRefundActionTemplate(account, actions, refundClaimReturned.REFUNDED_ACTION).then(
+          createRefundActionTemplate(account, actions, refundClaimReturned.CREDITED_ACTION)
+        );
+      }
     };
 
-    const persistRefundAction = action => {
-      const {
-        mutator: {
-          feefineactions: {
-            POST,
-          },
-        },
-      } = this.props;
-      return POST(action);
-    };
 
     const processAccounts = async () => {
       const {
@@ -190,10 +193,11 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
             barcode: loanItemBarcode,
           },
           userId: loanUserId,
+          id: loanId,
         },
       } = this.props;
 
-      const accounts = await getAccounts(loanItemBarcode, loanUserId);
+      const accounts = await getAccounts(loanItemBarcode, loanUserId, loanId);
 
       const updatedAccounts = await Promise.all(
         accounts
@@ -218,12 +222,11 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
         });
 
 
-      const refunds = accountsWithTransferredActions
-        .map(({ account, actions }) => createRefunds(account, actions))
-        .flat(1);
+      await Promise.all(accountsWithTransferredActions
+        .map(({ account, actions }) => createRefunds(account, actions)));
 
 
-      await Promise.all(refunds.map(persistRefundAction));
+      // await Promise.all(refunds.map(persistRefundAction));
     };
 
     await processAccounts();
