@@ -390,6 +390,7 @@ class ActionModal extends React.Component {
                     checked={notify}
                     inline
                   />
+                  {' '}
                   <FormattedMessage id="ui-users.accounts.notifyPatron" />
                 </Col>
               </Row>
