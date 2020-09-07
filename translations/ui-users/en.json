@@ -438,8 +438,6 @@
   "charge.messageSuccessfully": " has been successfully ",
   "charge.messageFor": " for ",
 
-  "charge.errors.amount": "Amount is not a number",
-
   "charge.item.title": "Item information",
   "charge.item.placeholder": "Scan or enter item barcode",
   "charge.item.button": "Enter",
@@ -486,7 +484,6 @@
 
   "accounts.error.field": "Please fill this field in to continue",
   "accounts.error.comment": "Enter a comment",
-  "accounts.error.message": "Enter an amount greater than 0",
   "accounts.error.exceeds": "Pay amount exceeds the selected amount",
   "accounts.payment.error.select": "No Payment methods exist for Fee/fine owner",
   "accounts.waive.error.select": "No Waive reasons exist",

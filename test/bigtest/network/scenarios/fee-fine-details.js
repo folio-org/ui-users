@@ -16,15 +16,31 @@ export default (server) => {
       name: () => 'Lost Item Policy name',
     },
   });
-  server.createList('account', 3, { userId: user.id });
-  server.create('account', {
+  const owner = server.create('owner');
+  server.create('payment', {
+    nameMethod: 'visa',
+    ownerId: owner.id,
+  });
+  const feeFine = server.create('feefine', {
+    feeFineType: 'type',
+    ownerId: owner.id,
+    defaultAmount: 10
+  });
+  server.createList('account', 3, {
+    userId: user.id
+  });
+  const openAccount = server.create('account', {
     userId: user.id,
     status: {
       name: 'Open',
     },
-    amount: 100,
-    remaining: 100,
+    amount: 500,
+    remaining: 500,
     loanId: loan.id,
+    ownerId: owner.id,
+    feeFineType : feeFine.feeFineType,
+    feeFineOwner : owner.owner,
+    feeFineId: feeFine.id
   });
   server.create('account', {
     userId: user.id,
@@ -34,10 +50,25 @@ export default (server) => {
     amount: 0,
     remaining: 0
   });
+  server.create('feefineaction', {
+    accountId: openAccount.id,
+    amountAction: 500,
+    balance: 500,
+    userId: user.id,
+    typeAction: feeFine.feeFineType,
+  });
+  server.create('check-pay', {
+    accountId: openAccount.id,
+    amount: '500.00',
+    allowed: true,
+    remainingAmount: '0.00'
+  });
+  server.get('/payments');
   server.get('/accounts');
   server.get('/accounts/:id', (schema, request) => {
     return schema.accounts.find(request.params.id).attrs;
   });
+  server.get('/feefineactions');
   server.get('/loans');
 
   server.post('/loans', (schema, request) => {
