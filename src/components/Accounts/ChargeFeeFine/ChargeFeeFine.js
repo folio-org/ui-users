@@ -330,30 +330,37 @@ class ChargeFeeFine extends React.Component {
       };
 
       return mutator.pay.POST(payBody)
-        .then(this.updateAccountAfterPay(values, comment));
+        .then(this.updateAccountAfterPay(values, comment))
+        .then(this.showCalloutMessage(this.type));
     } else {
       return this.updateAccountAfterPay(values, comment);
     }
   }
 
   updateAccountAfterPay = (values, comment) => {
-    return this.props.mutator.accounts.PUT(_.omit(this.type, ['comments', 'patronInfo', 'notify']))
+    const type = this.type;
+    return this.props.mutator.accounts.PUT(_.omit(type, ['comments', 'patronInfo', 'notify']))
       .then(() => this.newAction(
         { paymentMethod: values.method },
-        this.type.id,
-        this.type.paymentStatus.name,
+        type.id,
+        type.paymentStatus.name,
         values.amount,
         comment,
-        this.type.remaining,
+        type.remaining,
         values.transaction,
-        this.type.feeFineOwner
+        type.feeFineOwner
       ))
       .then(() => this.hideConfirmDialog())
       .then(() => this.onClosePayModal())
       .then(() => this.payResolve())
-      .catch(() => this.payReject())
-      .then(() => this.showCalloutMessage(this.type))
-      .then(() => this.props.history.goBack());
+      .catch((error) => {
+        this.payReject();
+        this.callout.current.sendCallout({
+          type: 'error',
+          message: error
+        });
+      })
+      .then(() => this.showCalloutMessage(type));
   }
 
   renderConfirmMessage = () => {

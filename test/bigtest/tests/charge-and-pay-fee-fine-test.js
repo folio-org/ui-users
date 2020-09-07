@@ -124,7 +124,7 @@ describe('Charge and pay fee/fine', () => {
               });
 
               it('displays confirmation modal', () => {
-                expect(chargeFeeFine.paymentConfirmationModal.body.isPresent).to.be.true;
+                expect(chargeFeeFine.confirmationModal.body.isPresent).to.be.true;
               });
 
               describe('confirm fine payment', () => {

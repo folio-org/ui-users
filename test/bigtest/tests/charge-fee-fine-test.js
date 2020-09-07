@@ -71,7 +71,7 @@ describe('Charge fee/fine', () => {
           describe('cancel the charge', () => {
             beforeEach(async () => {
               await chargeForm.clickCancel();
-              await chargeForm.confirmationModal.clickCancel();
+              await chargeForm.confirmationModal.cancelButton.click();
             });
 
             it('navigate to previous page', function () {
