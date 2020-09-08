@@ -34,7 +34,7 @@ class Actions extends React.Component {
     accounts: {
       type: 'okapi',
       records: 'accounts',
-      path: 'accounts?query=(userId==%{user.id})&limit=10000',
+      path: `accounts?query=(userId==%{user.id})&limit=${MAX_RECORDS}`,
       PUT: {
         path: 'accounts/%{activeRecord.id}'
       },
@@ -42,7 +42,7 @@ class Actions extends React.Component {
     feefineactions: {
       type: 'okapi',
       records: 'feefineactions',
-      path: 'feefineactions?limit=10000',
+      path: `feefineactions?limit=${MAX_RECORDS}`,
     },
     payments: {
       type: 'okapi',
@@ -57,7 +57,7 @@ class Actions extends React.Component {
     owners: {
       type: 'okapi',
       records: 'owners',
-      path: 'owners?query=cql.allRecords=1&limit=2000',
+      path: `owners?query=cql.allRecords=1&limit=${MAX_RECORDS}`,
     },
     feefineTypes: {
       type: 'okapi',

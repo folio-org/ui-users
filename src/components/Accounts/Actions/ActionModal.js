@@ -260,6 +260,7 @@ class ActionModal extends React.Component {
 
     return (
       <Modal
+        data-test-fee-fine-action-modal
         id={`${action}-modal`}
         open={open}
         label={<FormattedMessage id={`ui-users.accounts.${action}.modalLabel`} />}

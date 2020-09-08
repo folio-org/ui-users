@@ -359,8 +359,7 @@ class ChargeFeeFine extends React.Component {
           type: 'error',
           message: error
         });
-      })
-      .then(() => this.showCalloutMessage(type));
+      });
   }
 
   renderConfirmMessage = () => {

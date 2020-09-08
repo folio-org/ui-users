@@ -5,7 +5,7 @@ export default Factory.extend({
 
   id: () => faker.random.uuid(),
   amount : (i) => i * 10 + 100.0,
-  remaining : (i) => i * 10 + 100.0,
+  remaining :(i) => i * 10 + 100.0,
   status : {
     name : 'Open'
   },

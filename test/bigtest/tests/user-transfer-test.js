@@ -8,7 +8,7 @@ import {
 import TransferInteractor from '../interactors/user-transfer';
 import setupApplication from '../helpers/setup-application';
 
-describe.only('Transfer fines', () => {
+describe('Transfer fines', () => {
   setupApplication({
     scenarios: ['transfers'],
     currentUser: {

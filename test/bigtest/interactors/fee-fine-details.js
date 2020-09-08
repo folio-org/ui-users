@@ -57,12 +57,12 @@ import KeyValue from './KeyValue';
   instanceAndType = scoped('[data-test-instance] div', KeyValue);
   contributors = scoped('[data-test-contributors] div', KeyValue);
   payButton = new ButtonInteractor('#payAccountActionsHistory');
-  paymentModal = new ModalInteractor('#payment-modal');
-  paymentModalButton = new ButtonInteractor('#payment-modal #submit-button');
-  paymentModalButtonIsDisabled = is('#payment-modal #submit-button[disabled]');
-  paymentModalAmountField = new InputFieldInteractor('input[name="amount"]');
-  paymentModalSelect = new SelectFieldInteractor('select[id*="select-"]');
-  paymentConfirmationModal = new ConfirmationModalInteractor();
+  actionModal = new ModalInteractor('[data-test-fee-fine-action-modal]');
+  actionModalSubmitButton = new ButtonInteractor('[data-test-fee-fine-action-modal] #submit-button');
+  actionModalSubmitButtonIsDisabled = is('[data-test-fee-fine-action-modal] #submit-button[disabled]');
+  actionModalAmountField = new InputFieldInteractor('input[name="amount"]');
+  actionModalSelect = new SelectFieldInteractor('select[id*="select-"]');
+  actionConfirmationModal = new ConfirmationModalInteractor();
   callout = new CalloutInteractor();
 
   whenLoaded() {

@@ -92,40 +92,40 @@ describe('Test Fee/Fine details', () => {
       });
 
       it('displays payment modal', () => {
-        expect(FeeFineDetails.paymentModal.isPresent).to.be.true;
+        expect(FeeFineDetails.actionModal.isPresent).to.be.true;
       });
 
       it('displays payment modal amount field', () => {
-        expect(FeeFineDetails.paymentModalAmountField.value).to.equal('500.00');
+        expect(FeeFineDetails.actionModalAmountField.value).to.equal('500.00');
       });
 
       describe('Choose payment method', () => {
         beforeEach(async () => {
-          await FeeFineDetails.paymentModalAmountField.pressTab();
-          await FeeFineDetails.paymentModalSelect.selectAndBlur('visa');
+          await FeeFineDetails.actionModalAmountField.pressTab();
+          await FeeFineDetails.actionModalSelect.selectAndBlur('visa');
         });
 
         it('displays payment modal select option', () => {
-          expect(FeeFineDetails.paymentModalSelect.value).to.equal('visa');
+          expect(FeeFineDetails.actionModalSelect.value).to.equal('visa');
         });
 
         it('displays pay button', () => {
-          expect(FeeFineDetails.paymentModalButton.isPresent).to.be.true;
-          expect(FeeFineDetails.paymentModalButtonIsDisabled).to.be.false;
+          expect(FeeFineDetails.actionModalSubmitButton.isPresent).to.be.true;
+          expect(FeeFineDetails.actionModalSubmitButtonIsDisabled).to.be.false;
         });
 
         describe('pay fine', () => {
           beforeEach(async () => {
-            await FeeFineDetails.paymentModalButton.click();
+            await FeeFineDetails.actionModalSubmitButton.click();
           });
 
           it('displays confirmation modal', () => {
-            expect(FeeFineDetails.paymentConfirmationModal.body.isPresent).to.be.true;
+            expect(FeeFineDetails.actionConfirmationModal.body.isPresent).to.be.true;
           });
 
           describe('confirm fine payment', () => {
             beforeEach(async () => {
-              await FeeFineDetails.paymentConfirmationModal.confirmButton.click();
+              await FeeFineDetails.actionConfirmationModal.confirmButton.click();
             });
 
             it('show successfull callout', () => {
