@@ -307,7 +307,7 @@ class AccountDetails extends React.Component {
                 <FormattedMessage id="ui-users.accounts.history.button.pay" />
               </Button>
               <Button
-                id="waveAccountActionsHistory"
+                id="waiveAccountActionsHistory"
                 disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending}
                 buttonStyle="primary"
                 onClick={this.waive}
