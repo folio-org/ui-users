@@ -38,7 +38,7 @@ import {
   nav,
   getOpenRequestsPath,
 } from '../../components/util';
-import { itemStatuses } from '../../constants';
+import { itemStatuses, loanActions } from '../../constants';
 import {
   withRenew,
   withDeclareLost,
@@ -349,9 +349,9 @@ class LoanDetails extends React.Component {
     const isAgedToLostItem = itemStatus === itemStatuses.AGED_TO_LOST;
     const isLostAndPaid = itemStatus === itemStatuses.LOST_AND_PAID;
     let lostDate;
-    const declaredLostActions = loanActionsWithUser.filter(currentAction => get(currentAction, ['action'], '') === 'declaredLost');
-    const agedTolostLostActions = loanActionsWithUser.filter(currentAction => get(currentAction, ['action'], '') === 'itemAgedToLost');
-    const lostAndPaidActions = loanActionsWithUser.filter(currentAction => get(currentAction, ['action'], '') === 'closedLoan');
+    const declaredLostActions = loanActionsWithUser.filter(currentAction => get(currentAction, ['action'], '') === loanActions.DECLARED_LOST);
+    const agedTolostLostActions = loanActionsWithUser.filter(currentAction => get(currentAction, ['action'], '') === loanActions.AGED_TO_LOST);
+    const lostAndPaidActions = loanActionsWithUser.filter(currentAction => get(currentAction, ['action'], '') === loanActions.CLOSED_LOAN);
     if (isDeclaredLostItem && declaredLostActions.length) {
       lostDate = get(declaredLostActions[0], ['metadata', 'updatedDate']);
     } else if (isAgedToLostItem && agedTolostLostActions.length) {

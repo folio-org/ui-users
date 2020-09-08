@@ -22,6 +22,9 @@ export const loanStatuses = {
 
 export const loanActions = {
   CLAIMED_RETURNED: 'claimedReturned',
+  DECLARED_LOST:'declaredLost',
+  AGED_TO_LOST:'itemAgedToLost',
+  CLOSED_LOAN:'closedLoan',
 };
 
 // The names of the mutators which can executed on a given loan.
