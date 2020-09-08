@@ -1,4 +1,4 @@
-import { createInteractor } from '@bigtest/interactor';
+import { createInteractor, perform } from '@bigtest/interactor';
 
 export default createInteractor('table cell')({
   selector: '[role=gridcell]',
@@ -27,5 +27,10 @@ export default createInteractor('table cell')({
 
       return headerAtPosition.textContent;
     }
+  },
+  actions: {
+    click: perform((element) => {
+      element.click();
+    })
   }
 });
