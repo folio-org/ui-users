@@ -11,9 +11,9 @@ export default test('status filter', {})
   .step('seed data', async () => {
     store.createList('user', 3, { active: true });
     store.createList('user', 8, { active: false });
-    store.create('user', { 
+    store.create('user', {
       active: true,
-      personal: store.create('user-personal', { firstName: 'Mary', lastName: 'Poppins'})
+      personal: store.create('user-personal', { firstName: 'Mary', lastName: 'Poppins' })
     });
   })
   .step('visit "/users"', async () => {
@@ -24,14 +24,14 @@ export default test('status filter', {})
       await Checkbox('Inactive').click();
     })
     .assertion('should be the correct amount of inactive users', async () => {
-      await Table('').has({ dataRowCount: 8 });
+      await Table('list-users').has({ dataRowCount: 8 });
     }))
   .child('show active users', test => test
     .step('select active users', async () => {
       await Checkbox('Active').click();
     })
     .assertion('should be the correct amount of inactive users', async () => {
-      await Table('').has({ dataRowCount: 4 });
+      await Table('list-users').has({ dataRowCount: 4 });
     }))
   .child('show all users', test => test
     .step('select active and inactive users', async () => {
@@ -39,7 +39,7 @@ export default test('status filter', {})
       await Checkbox('Inactive').click();
     })
     .assertion('should be the correct amount of inactive users', async () => {
-      await Table('').has({ dataRowCount: 12 });
+      await Table('list-users').has({ dataRowCount: 12 });
     }));
 
 // skipping because search function is broken; search for '/users' getter in network/config.js
