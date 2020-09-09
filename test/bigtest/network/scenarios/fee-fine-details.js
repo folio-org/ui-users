@@ -26,6 +26,7 @@ export default (server) => {
     ownerId: owner.id,
     defaultAmount: 10
   });
+  server.create('waife', { nameReason : 'waiveReason' });
   server.createList('account', 3, {
     userId: user.id
   });
@@ -64,6 +65,7 @@ export default (server) => {
     remainingAmount: '0.00'
   });
   server.get('/payments');
+  server.get('/waives');
   server.get('/accounts');
   server.get('/accounts/:id', (schema, request) => {
     return schema.accounts.find(request.params.id).attrs;

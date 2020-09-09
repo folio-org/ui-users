@@ -84,13 +84,28 @@ class Actions extends React.Component {
       fetch: false,
       clientGeneratePk: false,
     },
+    checkWaive: {
+      type: 'okapi',
+      POST: {
+        path: 'accounts/%{accountId}/check-waive',
+      },
+      fetch: false,
+      clientGeneratePk: false,
+    },
     pay: {
       type: 'okapi',
       path: 'accounts/%{activeRecord.id}/pay',
       fetch: false,
       accumulate: 'true',
       clientGeneratePk: false,
-    }
+    },
+    waive: {
+      type: 'okapi',
+      path: 'accounts/%{activeRecord.id}/waive',
+      fetch: false,
+      accumulate: 'true',
+      clientGeneratePk: false,
+    },
   });
 
   static propTypes = {
@@ -111,7 +126,13 @@ class Actions extends React.Component {
       checkPay: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }),
+      checkWaive: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
       pay: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      waive: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }),
     }),
@@ -148,7 +169,8 @@ class Actions extends React.Component {
     this.callout = null;
 
     this.actionToEndpointMapping = {
-      'payment': 'pay'
+      'payment': 'pay',
+      'waive': 'waive'
     };
   }
 
@@ -555,7 +577,7 @@ class Actions extends React.Component {
     const modals = [
       { action: 'payment', checkAmount: 'check-pay', item: actions.pay, label: 'nameMethod', data: payments, comment: 'paid', open: actions.pay || (actions.regular && accounts.length === 1) },
       { action: 'payment', checkAmount: 'check-pay', form: 'payment-many-modal', label: 'nameMethod', accounts, data: payments, comment: 'paid', open: actions.regular && !isWarning && accounts.length > 1 },
-      { action: 'waive', item: actions.waiveModal, label: 'nameReason', data: waives, comment: 'waived', open: actions.waiveModal || (actions.waiveMany && !isWarning) },
+      { action: 'waive', checkAmount: 'check-waive', item: actions.waiveModal, label: 'nameReason', data: waives, comment: 'waived', open: actions.waiveModal || (actions.waiveMany && !isWarning) },
       { action: 'transfer', item: actions.transferModal, label: 'accountName', data: transfers, comment: 'transferredManually', open: actions.transferModal || (actions.transferMany && !isWarning) }
     ];
 

@@ -135,5 +135,55 @@ describe('Test Fee/Fine details', () => {
         });
       });
     });
+
+    describe('Waive fee/fine', () => {
+      beforeEach(async () => {
+        await FeeFineDetails.waiveButton.click();
+      });
+
+      it('displays waive modal', () => {
+        expect(FeeFineDetails.actionModal.isPresent).to.be.true;
+      });
+
+      it('displays waive modal amount field', () => {
+        expect(FeeFineDetails.actionModalAmountField.value).to.equal('500.00');
+      });
+
+      describe('Choose waive reason', () => {
+        beforeEach(async () => {
+          await FeeFineDetails.actionModalAmountField.pressTab();
+          await FeeFineDetails.actionModalSelect.selectAndBlur('waiveReason');
+        });
+
+        it('displays waive modal select option', () => {
+          expect(FeeFineDetails.actionModalSelect.value).to.equal('waiveReason');
+        });
+
+        it('displays waive button', () => {
+          expect(FeeFineDetails.actionModalSubmitButton.isPresent).to.be.true;
+          expect(FeeFineDetails.actionModalSubmitButtonIsDisabled).to.be.false;
+        });
+
+        describe('waive fine', () => {
+          beforeEach(async () => {
+            await FeeFineDetails.actionModalSubmitButton.click();
+          });
+
+          it('displays confirmation modal', () => {
+            expect(FeeFineDetails.actionConfirmationModal.body.isPresent).to.be.true;
+          });
+
+          describe('confirm fine waivement', () => {
+            beforeEach(async () => {
+              await FeeFineDetails.actionConfirmationModal.confirmButton.click();
+            });
+
+            it('show successfull callout', () => {
+              expect(FeeFineDetails.callout.successCalloutIsPresent).to.be.true;
+            });
+          });
+        });
+      });
+    });
   });
 });
