@@ -58,6 +58,7 @@ import KeyValue from './KeyValue';
   contributors = scoped('[data-test-contributors] div', KeyValue);
   payButton = new ButtonInteractor('#payAccountActionsHistory');
   waiveButton = new ButtonInteractor('#waiveAccountActionsHistory');
+  transferButton = new ButtonInteractor('#transferAccountActionsHistory');
   actionModal = new ModalInteractor('[data-test-fee-fine-action-modal]');
   actionModalSubmitButton = new ButtonInteractor('[data-test-fee-fine-action-modal] #submit-button');
   actionModalSubmitButtonIsDisabled = is('[data-test-fee-fine-action-modal] #submit-button[disabled]');
