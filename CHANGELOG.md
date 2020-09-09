@@ -2,6 +2,8 @@
 
 ## 5.0.0 (IN PROGRESS)
 
+* modified the lost date display to include aged to lost status. Fixes UIU-1804.
+* Fixing breaking tests.  
 * Adding fix for UIU-1801.  Removing temporary fixes to tests.
 * Temporary fix for broken tests relating to UIU-1801.  Does not resolve that issue.
 * changed user search to filter based on tag name rather than ID.  Fixes UIU-1750
@@ -31,6 +33,13 @@
 * Reorder volume/enum/chron fields in loans export (CSV). Refs UIU-1504.
 * Use item id instead of barcode for links to `ui-requests` module. Fixes UIU-1727.
 * Add departments to User crate/edit/view pages. Refs UIU-1224.
+* Enable renewal override for Aged to lost items. Refs UIU-1464.
+* Handle Aged to lost items in bulk due date change. Refs UIU-1495.
+* Include Aged to lost in loan details action history. Refs UIU-1803.
+* Add permissions for Departments CRUD. Refs UIU-1778.
+* Add missing permission `departments.collection.get` permission. Fixes UIU-1812.
+* Prevent UI crashing when loading loan with deleted item. Fixes UIU-1819.
+* Remove user count from patron groups. Fixes UIU-1562.
 
 ## [4.0.0](https://github.com/folio-org/ui-users/tree/v4.0.0) (2020-06-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v3.0.0...v4.0.0)

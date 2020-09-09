@@ -75,7 +75,9 @@
           "configuration.entries.collection.get",
           "user-settings.custom-fields.collection.get",
           "user-settings.custom-fields.item.get",
-          "user-settings.custom-fields.item.stats.get"
+          "user-settings.custom-fields.item.stats.get",
+          "departments.collection.get",
+          "departments.item.get"
         ],
         "visible": true
       },
@@ -655,6 +657,64 @@
           "configuration.entries.item.get",
           "configuration.entries.item.post",
           "configuration.entries.item.put"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.departments.view",
+        "displayName": "Settings (Users): View departments",
+        "subPermissions": [
+          "settings.users.enabled",
+          "departments.collection.get",
+          "departments.item.get"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.departments.edit",
+        "displayName": "Settings (Users): Edit departments",
+        "subPermissions": [
+          "settings.users.enabled",
+          "departments.item.put"
+        ],
+        "visible": false
+      },
+      {
+        "permissionName": "ui-users.settings.departments.create",
+        "displayName": "Settings (Users): Create departments",
+        "subPermissions": [
+          "settings.users.enabled",
+          "departments.item.post"
+        ],
+        "visible": false
+      },
+      {
+        "permissionName": "ui-users.settings.departments.delete",
+        "displayName": "Settings (Users): Delete departments",
+        "subPermissions": [
+          "settings.users.enabled",
+          "departments.item.delete"
+        ],
+        "visible": false
+      },
+      {
+        "permissionName": "ui-users.settings.departments.create.edit.view",
+        "displayName": "Settings (Users): Create, edit, and view departments",
+        "subPermissions": [
+          "ui-users.settings.departments.create",
+          "ui-users.settings.departments.edit",
+          "ui-users.settings.departments.view"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.departments.all",
+        "displayName": "Settings (Users): Create, edit, view, and delete departments",
+        "subPermissions": [
+          "ui-users.settings.departments.create",
+          "ui-users.settings.departments.edit",
+          "ui-users.settings.departments.view",
+          "ui-users.settings.departments.delete"
         ],
         "visible": true
       }

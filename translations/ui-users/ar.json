@@ -719,5 +719,12 @@
     "extended.department.name": "اسم القسم",
     "extended.department.add": "إضافة قسم",
     "extended.department.default": "اختر قسم",
-    "item.copyNumber": "رقم النسخة"
+    "item.copyNumber": "رقم النسخة",
+    "permission.settings.departments.view": "الإعدادات (المستخدمين): اعرض الأقسام",
+    "permission.settings.departments.edit": "الإعدادات (المستخدمين): حرّر الأقسام",
+    "permission.settings.departments.create": "الإعدادات (المستخدمين): أنشئ الأقسام",
+    "permission.settings.departments.delete": "الإعدادات (المستخدمين): احذف الأقسام",
+    "permission.settings.departments.create.edit.view": "الإعدادات (المستخدمين):أنشئ، حرّر واعرض الأقسام",
+    "permission.settings.departments.all": "الإعدادات (المستخدمين):أنشئ، حرّر ،اعرض واحذف الأقسام",
+    "loans.action.source.system": "النظام"
 }

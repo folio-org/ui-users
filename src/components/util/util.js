@@ -113,6 +113,13 @@ export function calculateSortParams({
   return sortParams;
 }
 
+// Return true if every item in loans has the status itemStatus
 export function hasEveryLoanItemStatus(loans, itemStatus) {
   return _.every(Object.values(loans), loan => loan?.item?.status?.name === itemStatus);
 }
+
+// Return true if every item in loans has one of the statuses in the itemStatuses array
+export function hasAnyLoanItemStatus(loans, itemStatuses) {
+  return _.every(Object.values(loans), loan => itemStatuses.includes(loan?.item?.status?.name));
+}
+
