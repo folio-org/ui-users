@@ -2,10 +2,10 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-
 import { Field } from 'react-final-form';
-import stripesFinalForm from '@folio/stripes/final-form';
+import setFieldData from 'final-form-set-field-data';
 
+import stripesFinalForm from '@folio/stripes/final-form';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import {
   Row,
@@ -388,7 +388,7 @@ class ActionModal extends React.Component {
                     id="notify"
                     name="notify"
                     component={Checkbox}
-                    checked={notify}
+                    type="checkbox"
                     inline
                   />
                   {' '}
@@ -441,4 +441,9 @@ class ActionModal extends React.Component {
   }
 }
 
-export default stripesFinalForm({})(ActionModal);
+export default stripesFinalForm({
+  initialValuesEqual: (a, b) => _.isEqual(a, b),
+  navigationCheck: true,
+  subscription: { values: true },
+  mutators: { setFieldData }
+})(ActionModal);
