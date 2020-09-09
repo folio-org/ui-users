@@ -172,7 +172,8 @@ class LoanDetailContainer extends React.Component {
       const userMap = users.records.reduce((memo, user) => {
         return Object.assign(memo, { [user.id]: user });
       }, {});
-      const records = loanActions.records.map(la => {
+
+      const records = loanActions.records.filter(la => la?.loan?.action).map(la => {
         return { ...la.loan, user: userMap[la.loan.metadata.updatedByUserId] };
       });
 
