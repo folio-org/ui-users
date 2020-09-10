@@ -106,6 +106,13 @@ class Actions extends React.Component {
       accumulate: 'true',
       clientGeneratePk: false,
     },
+    cancel: {
+      type: 'okapi',
+      path: 'accounts/%{activeRecord.id}/cancel',
+      fetch: false,
+      accumulate: 'true',
+      clientGeneratePk: false,
+    },
   });
 
   static propTypes = {
@@ -133,6 +140,9 @@ class Actions extends React.Component {
         POST: PropTypes.func.isRequired,
       }),
       waive: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      cancel: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }),
     }),
@@ -279,16 +289,19 @@ class Actions extends React.Component {
   }
 
   onClickCancellation(values) {
-    const { intl: { formatMessage } } = this.props;
+    const { intl: { formatMessage }, mutator } = this.props;
     const canceled = formatMessage({ id: 'ui-users.accounts.cancelError' });
-    const type = this.props.accounts[0] || {};
+    const account = this.props.accounts[0] || {};
     const createdAt = this.props.okapi.currentUser.curServicePoint.id;
-    delete type.rowIndex;
-    this.props.mutator.activeRecord.update({ id: type.id });
-    this.newAction({}, type.id, canceled, type.amount, this.assembleTagInfo(values), 0, 0, createdAt || type.feeFineOwner, values);
-    this.editAccount(type, canceled, 'Closed', 0.00)
+    delete account.rowIndex;
+    this.props.mutator.activeRecord.update({ id: account.id });
+    const payload = this.buildActionBody(values);
+    payload.amount = parseFloat(account.amount).toFixed(2);
+    mutator.cancel.POST(_.omit(payload, ['id']))
+    // this.newAction({}, type.id, canceled, type.amount, this.assembleTagInfo(values), 0, 0, createdAt || type.feeFineOwner, values);
+    // this.editAccount(type, canceled, 'Closed', 0.00)
       .then(() => this.props.handleEdit(1))
-      .then(() => this.showCalloutMessage(type))
+      .then(() => this.showCalloutMessage(account))
       .then(() => this.onCloseCancellation());
   }
 
@@ -598,6 +611,7 @@ class Actions extends React.Component {
         </FormattedMessage>
         <CancellationModal
           form="error-modal"
+          initialValues={initialValues}
           open={actions.cancellation}
           onClose={this.onCloseCancellation}
           user={this.props.user}

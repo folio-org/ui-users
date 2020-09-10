@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { isEmpty } from 'lodash';
 import { FormattedMessage } from 'react-intl';
-import {
-  Field,
-  reduxForm
-} from 'redux-form';
+import { Field } from 'react-final-form';
+import setFieldData from 'final-form-set-field-data';
 
+import stripesFinalForm from '@folio/stripes/final-form';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import {
   Modal,
@@ -18,20 +18,12 @@ import {
 
 import css from './modal.css';
 
-const validate = (values) => {
-  const errors = {};
-  if (!values.comment) {
-    errors.comment = <FormattedMessage id="ui-users.accounts.cancellation.error.comment" />;
-  }
-  return errors;
-};
-
 class CancellationModal extends React.Component {
   static propTypes = {
+    form: PropTypes.object.isRequired,
     open: PropTypes.bool,
     pristine: PropTypes.bool,
     submitting: PropTypes.bool,
-    invalid: PropTypes.bool,
     account: PropTypes.object,
     onClose: PropTypes.func,
     reset: PropTypes.func,
@@ -40,34 +32,19 @@ class CancellationModal extends React.Component {
     feefines: PropTypes.arrayOf(PropTypes.object),
   };
 
-  constructor(props) {
-    super(props);
-    this.state = { notify: true };
-  }
-
-  reset = () => {
-    this.props.reset();
-    this.setState({ notify: true });
-  }
-
-  onToggleNotify = () => {
-    this.setState(prevState => ({
-      notify: !prevState.notify,
-    }));
-  }
-
-  handleSubmit = (values) => {
-    const { handleSubmit } = this.props;
-    handleSubmit(values);
-    this.reset();
-  }
-
   onCloseModal = () => {
-    const { onClose } = this.props;
+    const { onClose, form: { reset } } = this.props;
     onClose();
-    this.reset();
-    this.setState({ notify: true });
+    reset();
   }
+
+  validateComment = (value) => {
+    let error;
+    if (isEmpty(value)) {
+      error = <FormattedMessage id="ui-users.accounts.cancellation.error.comment" />;
+    }
+    return error;
+  };
 
   render() {
     const defaultAmount = '0.00';
@@ -79,23 +56,29 @@ class CancellationModal extends React.Component {
         feeFineType = defaultFeeFineType,
       },
       feefines,
-      invalid,
       open,
       owners,
       pristine,
-      submitting
+      submitting,
+      handleSubmit,
+      form: { getState },
     } = this.props;
 
-    let showNotify = false;
+    const {
+      valid,
+      values: {
+        notify,
+      }
+    } = getState();
 
+    let showNotify = false;
     const feefine = feefines.find(f => f.id === account.feeFineId) || {};
     const owner = owners.find(o => o.id === account.ownerId) || {};
+    const submitButtonDisabled = pristine || submitting || !valid;
 
     if (feefine.actionNoticeId || owner.defaultActionNoticeId) {
       showNotify = true;
     }
-
-    const submitButtonDisabled = pristine || submitting || invalid;
 
     return (
       <Modal
@@ -106,7 +89,7 @@ class CancellationModal extends React.Component {
         size="small"
         dismissible
       >
-        <form>
+        <form onSubmit={handleSubmit}>
           <Row>
             <Col xs>
               <span>
@@ -132,6 +115,7 @@ class CancellationModal extends React.Component {
               <Field
                 name="comment"
                 component={TextArea}
+                validate={this.validateComment}
               />
             </Col>
           </Row>
@@ -142,17 +126,17 @@ class CancellationModal extends React.Component {
                   <Field
                     name="notify"
                     component={Checkbox}
-                    checked={this.state.notify}
-                    onChange={this.onToggleNotify}
+                    type="checkbox"
                     inline
                   />
+                  {' '}
                   <FormattedMessage id="ui-users.accounts.cancellation.field.notifyPatron" />
                 </Col>
               </Row>
             </div>
           }
           <br />
-          {(this.state.notify && showNotify) &&
+          {notify && showNotify &&
             <div>
               <Row>
                 <Col xs>
@@ -175,7 +159,7 @@ class CancellationModal extends React.Component {
             <Col xs>
               <Button
                 buttonStyle="primary"
-                onClick={this.handleSubmit}
+                type="submit"
                 disabled={submitButtonDisabled}
                 buttonClass={css.rightAlignedButton}
               >
@@ -195,8 +179,7 @@ class CancellationModal extends React.Component {
   }
 }
 
-export default reduxForm({
-  form: 'cancellation',
-  validate,
-  enableReinitialize: true,
+export default stripesFinalForm({
+  subscription: { values: true },
+  mutators: { setFieldData }
 })(CancellationModal);
