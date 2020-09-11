@@ -224,9 +224,6 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
 
       await Promise.all(accountsWithTransferredActions
         .map(({ account, actions }) => createRefunds(account, actions)));
-
-
-      // await Promise.all(refunds.map(persistRefundAction));
     };
 
     await processAccounts();
