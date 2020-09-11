@@ -733,4 +733,14 @@ export default function config() {
       feeFineActionId: account.feeFineActionId
     };
   });
+
+  this.post('/accounts/:id/cancel', ({ accounts }, request) => {
+    const account = accounts.find(request.params.id).attrs;
+
+    return {
+      accountId: account.id,
+      amount: account.amount,
+      feeFineActionId: account.feeFineActionId
+    };
+  });
 }

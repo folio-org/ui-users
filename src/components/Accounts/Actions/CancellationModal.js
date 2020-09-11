@@ -158,6 +158,7 @@ class CancellationModal extends React.Component {
           <Row>
             <Col xs>
               <Button
+                data-test-error-submit
                 buttonStyle="primary"
                 type="submit"
                 disabled={submitButtonDisabled}

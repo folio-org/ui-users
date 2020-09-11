@@ -296,7 +296,8 @@ class Actions extends React.Component {
     delete account.rowIndex;
     this.props.mutator.activeRecord.update({ id: account.id });
     const payload = this.buildActionBody(values);
-    payload.amount = parseFloat(account.amount).toFixed(2);
+    delete payload.amount;
+    // payload.amount = parseFloat(account.amount).toFixed(2);
     mutator.cancel.POST(_.omit(payload, ['id']))
     // this.newAction({}, type.id, canceled, type.amount, this.assembleTagInfo(values), 0, 0, createdAt || type.feeFineOwner, values);
     // this.editAccount(type, canceled, 'Closed', 0.00)
@@ -563,13 +564,15 @@ class Actions extends React.Component {
       submitting
     } = this.state;
 
+    const account = this.props.accounts[0] || {};
     const amount = calculateSelectedAmount((actions.pay || actions.waiveModal || actions.transferModal) ? this.props.accounts : accounts);
-
     const defaultServicePointId = _.get(resources, ['curUserServicePoint', 'records', 0, 'defaultServicePointId'], '-');
     const servicePointsIds = _.get(resources, ['curUserServicePoint', 'records', 0, 'servicePointsIds'], []);
     const payments = _.get(resources, ['payments', 'records'], []);
     const owners = _.get(resources, ['owners', 'records'], []).filter(o => o.owner !== 'Shared');
     const feefines = _.get(resources, ['feefineTypes', 'records'], []);
+    const feefineAction = _.get(resources, ['feefineactions', 'records'], [])
+      .find(({ accountId }) => accountId === account.id);
     const waives = _.get(resources, ['waives', 'records'], []);
     const transfers = _.get(resources, ['transfers', 'records'], []);
     const settings = _.get(resources, ['commentRequired', 'records', 0], {});
@@ -586,7 +589,11 @@ class Actions extends React.Component {
           : 'ui-users.accounts.history.button.refund';
 
     const ownerId = loadServicePoints({ owners, defaultServicePointId, servicePointsIds });
-    const initialValues = { ownerId, amount, notify: true };
+    const initialValues = {
+      ownerId,
+      amount,
+      notify: feefineAction?.notify ?? true,
+    };
     const modals = [
       { action: 'payment', checkAmount: 'check-pay', item: actions.pay, label: 'nameMethod', data: payments, comment: 'paid', open: actions.pay || (actions.regular && accounts.length === 1) },
       { action: 'payment', checkAmount: 'check-pay', form: 'payment-many-modal', label: 'nameMethod', accounts, data: payments, comment: 'paid', open: actions.regular && !isWarning && accounts.length > 1 },
@@ -615,7 +622,7 @@ class Actions extends React.Component {
           open={actions.cancellation}
           onClose={this.onCloseCancellation}
           user={this.props.user}
-          account={this.props.accounts[0] || {}}
+          account={account}
           onSubmit={(values) => { this.onClickCancellation(values); }}
           owners={owners}
           feefines={feefines}
