@@ -1,10 +1,10 @@
 {
   "license": "Apache-2.0",
   "devDependencies": {
-    "@bigtest/cli": "^0.8.0",
-    "@bigtest/globals": "^0.6.1",
-    "@bigtest/interactor": "^0.15.1",
-    "@bigtest/suite": "^0.6.0",
+    "@bigtest/cli": "^0.10.0",
+    "@bigtest/globals": "^0.6.3",
+    "@bigtest/interactor": "^0.16.1",
+    "@bigtest/suite": "^0.8.0",
     "chai": "^4.2.0",
     "chromedriver": ">=85",
     "core-js": "^3.6.4",
