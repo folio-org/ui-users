@@ -21,20 +21,10 @@ export default test('bulk claim returned', { permissions: ['circulation.loans.co
       },
     });
   })
-  .step('visit "/users/1/loans/open"', async () => {
-    await App.visit('/users/1/loans/open');
-  })
+  .step('visit "/users/1/loans/open"', () => App.visit('/users/1/loans/open'))
   .child('when no items are selected', test => test
-    .assertion('the "Claim returned" button is disabled', async () => {
-      await OpenLoansControl('').is({ actionsBarClaimReturnedDisabled: true });
-    }))
+    .assertion(OpenLoansControl('').is({ actionsBarClaimReturnedDisabled: true })))
   .child('working with checked out items', test => test
-    .step('select all checkboxes', async () => {
-      await OpenLoansControl('').selectAll();
-    })
-    .step('click "Claim returned"', async () => {
-      await OpenLoansControl('').clickClaimReturnedForSelected();
-    })
-    .assertion('shows the bulk claim returned modal', async () => {
-      await Header('Confirm claim returned').exists();
-    }));
+    .step(OpenLoansControl('').selectAll())
+    .step(OpenLoansControl('').clickClaimReturnedForSelected())
+    .assertion(Header('Confirm claim returned').exists()));

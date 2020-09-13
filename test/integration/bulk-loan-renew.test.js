@@ -23,16 +23,8 @@ export default test('bulk loan renew', { permissions: ['circulation.loans.collec
       },
     });
   })
-  .step('visit "/users/1/loans/open"', async () => {
-    await App.visit('/users/1/loans/open');
-  })
+  .step('visit "/users/1/loans/open"', () => App.visit('/users/1/loans/open'))
   .child('working with checked out items', test => test
-    .step('select all checkboxes', async () => {
-      await Checkbox.findByName('check-all').click();
-    })
-    .step('click "Claim returned"', async () => {
-      await ActionsBar('').find(Button('Renew')).click();
-    })
-    .assertion('shows the bulk claim returned modal', async () => {
-      await Header('Renew Confirmation').exists();
-    }));
+    .step(Checkbox.findByName('check-all').click())
+    .step(ActionsBar('').find(Button('Renew')).click())
+    .assertion(Header('Renew Confirmation').exists()));
