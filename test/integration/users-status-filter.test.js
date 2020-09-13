@@ -16,40 +16,21 @@ export default test('status filter', {})
       personal: store.create('user-personal', { firstName: 'Mary', lastName: 'Poppins' })
     });
   })
-  .step('visit "/users"', async () => {
-    await App.visit('/users');
-  })
+  .step(App.visit('/users'))
   .child('show inactive users', test => test
-    .step('select inactive users', async () => {
-      await Checkbox('Inactive').click();
-    })
-    .assertion('should be the correct amount of inactive users', async () => {
-      await Table('list-users').has({ dataRowCount: 8 });
-    }))
+    .step(Checkbox('Inactive').click())
+    .assertion(Table('list-users').has({ dataRowCount: 8 })))
   .child('show active users', test => test
-    .step('select active users', async () => {
-      await Checkbox('Active').click();
-    })
-    .assertion('should be the correct amount of inactive users', async () => {
-      await Table('list-users').has({ dataRowCount: 4 });
-    }))
+    .step(Checkbox('Active').click())
+    .assertion(Table('list-users').has({ dataRowCount: 4 })))
   .child('show all users', test => test
-    .step('select active and inactive users', async () => {
-      await Checkbox('Active').click();
-      await Checkbox('Inactive').click();
-    })
-    .assertion('should be the correct amount of inactive users', async () => {
-      await Table('list-users').has({ dataRowCount: 12 });
-    }));
+    .step(Checkbox('Active').click())
+    .step(Checkbox('Inactive').click()))
+    .assertion(Table('list-users').has({ dataRowCount: 12 })));
 
 // skipping because search function is broken; search for '/users' getter in network/config.js
 
 // .child('search for users', test => test
-//   .step('enter a search query', async () => {
-//     await Search('input-user-search').fill('Mary Poppins');
-//     await Button.findById('submit-user-search').click();
-//   })
-//   .assertion('should be the correct amount of inactive users', async () => {
-//     await Table('').has({ dataRowCount: 1 });
-//   })
-// )
+//   .step(Search('input-user-search').fill('Mary Poppins'))
+//   .step(Button.findById('submit-user-search').click())
+//   .assertion(Table('').has({ dataRowCount: 1 })))
