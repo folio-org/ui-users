@@ -10,7 +10,8 @@ export default createInteractor('checkbox')({
     enabled: {
       apply: element => !element.disabled,
       default: true
-    }
+    },
+    value: element => element.value
   },
   actions: {
     click: perform(element => {

@@ -3,6 +3,9 @@ import { createInteractor, perform } from '@bigtest/interactor';
 export default createInteractor('text area')({
   selector: 'textarea',
   defaultLocator: element => element.labels[0]?.textContent,
+  locators: {
+    findByName: element => element.name
+  },
   filters: {
     enabled: element => !element.disabled,
     disabled: element => element.disabled,
