@@ -2,11 +2,12 @@ import faker from 'faker';
 import { App } from '@bigtest/interactor';
 import test from '../helpers/base-steps/simulate-server';
 import { store, routes } from '../helpers/server';
-import Header from '../interactors/Header';
+
 import Button from '../interactors/Button';
+import Header from '../interactors/Header';
+import OverlayContainer from '../interactors/OverlayContainer';
 import TableCell from '../interactors/TableCell';
 import TableColumnHeader from '../interactors/TableColumnHeader';
-import OverlayContainer from '../interactors/OverlayContainer';
 
 export default test('closed loans', { permissions: ['manualblocks.collection.get', 'circulation.loans.collection.get'] })
   .child('loans with items', test => test

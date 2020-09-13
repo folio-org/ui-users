@@ -2,10 +2,11 @@ import faker from 'faker';
 import { App } from '@bigtest/interactor';
 import test from '../helpers/base-steps/simulate-server';
 import { store } from '../helpers/server';
+
 import Button from '../interactors/Button';
 import Header from '../interactors/Header';
-import TableCell from '../interactors/TableCell';
 import OverlayContainer from '../interactors/OverlayContainer';
+import TableCell from '../interactors/TableCell';
 
 export default test('change due date', { permissions: ['circulation.loans.collection.get'] })
   .step('seed data', async () => {

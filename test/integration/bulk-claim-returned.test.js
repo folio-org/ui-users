@@ -2,6 +2,7 @@ import faker from 'faker';
 import { App } from '@bigtest/interactor';
 import test from '../helpers/base-steps/simulate-server';
 import { store } from '../helpers/server';
+
 import Header from '../interactors/Header';
 import OpenLoansControl from '../interactors/OpenLoansControl';
 
