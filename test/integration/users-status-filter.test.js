@@ -16,7 +16,7 @@ export default test('status filter', {})
       personal: store.create('user-personal', { firstName: 'Mary', lastName: 'Poppins' })
     });
   })
-  .step(App.visit('/users'))
+  .step('visit "/users"', () => App.visit('/users'))
   .child('show inactive users', test => test
     .step(Checkbox('Inactive').click())
     .assertion(Table('list-users').has({ dataRowCount: 8 })))
@@ -25,7 +25,7 @@ export default test('status filter', {})
     .assertion(Table('list-users').has({ dataRowCount: 4 })))
   .child('show all users', test => test
     .step(Checkbox('Active').click())
-    .step(Checkbox('Inactive').click()))
+    .step(Checkbox('Inactive').click())
     .assertion(Table('list-users').has({ dataRowCount: 12 })));
 
 // skipping because search function is broken; search for '/users' getter in network/config.js
