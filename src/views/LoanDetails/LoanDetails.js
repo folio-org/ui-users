@@ -5,7 +5,7 @@ import {
   injectIntl,
 } from 'react-intl';
 import { compose } from 'redux';
-import Link from 'react-router-dom/Link';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   get,
