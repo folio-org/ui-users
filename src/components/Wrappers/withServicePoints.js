@@ -84,7 +84,7 @@ const withServicePoints = WrappedComponent => class WithServicePointsComponent e
       // Save the id of the record in the service-points-users table for later use when mutating it.
       const servicePointUserId = get(nextProps.resources.servicePointsUsers, ['records', 0, 'id'], '');
       const localServicePointUserId = nextProps.resources.servicePointUserId;
-      if (servicePointUserId !== localServicePointUserId) {
+      if (servicePointUserId && servicePointUserId !== localServicePointUserId) {
         nextProps.mutator.servicePointUserId.replace(servicePointUserId);
       }
 
