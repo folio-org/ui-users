@@ -3,13 +3,9 @@ import test from '../helpers/base-steps/simulate-server';
 import { store, routes } from '../helpers/server';
 
 import Button from '../interactors/Button';
-import Checkbox from '../interactors/Checkbox';
 import Div from '../interactors/Div';
-import Link from '../interactors/Link';
 import Section from '../interactors/Section';
 import Span from '../interactors/Span';
-import Table from '../interactors/Table';
-import TableCell from '../interactors/TableCell';
 
 export default test('user details page')
   .step('seed data', async () => {
