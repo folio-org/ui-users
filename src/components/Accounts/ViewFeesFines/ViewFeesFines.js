@@ -6,7 +6,7 @@ import {
   Row,
   Col,
   MultiColumnList,
-  UncontrolledDropdown,
+  Dropdown,
   MenuItem,
   DropdownMenu,
   Popover,
@@ -362,7 +362,7 @@ class ViewFeesFines extends React.Component {
     const buttonDisabled = !this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
 
     return (
-      <UncontrolledDropdown
+      <Dropdown
         onSelectItem={this.handleOptionsChange}
       >
         <Button data-test-ellipsis-button data-role="toggle" buttonStyle="hover dropdownActive">
@@ -401,7 +401,7 @@ class ViewFeesFines extends React.Component {
             </Button>
           </MenuItem>
         </DropdownMenu>
-      </UncontrolledDropdown>
+      </Dropdown>
     );
   }
 
