@@ -42,6 +42,7 @@
 * Remove user count from patron groups. Fixes UIU-1562.
 * Assign user permissions more efficiently. Fixes UIU-1369.
 * Filter out blank actions on loan details UI. Fixes UIU-1820.
+* Increment `react-intl` to `v5` for `@folio/stripes` `v5` compatibility. Refs STRIPES-694.
 
 ## [4.0.0](https://github.com/folio-org/ui-users/tree/v4.0.0) (2020-06-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v3.0.0...v4.0.0)
