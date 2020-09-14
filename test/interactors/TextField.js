@@ -18,6 +18,7 @@ export default createInteractor('text field')({
       element.value = value;
       element.dispatchEvent(new Event('input', { bubbles: true, cancelable: true }));
       element.dispatchEvent(new Event('change', { bubbles: true, cancelable: true }));
+      element.dispatchEvent(new Event('blur', { bubbles: true, cancelable: true }));
       if (descriptor) {
         Object.defineProperty(element, 'value', descriptor);
       }
