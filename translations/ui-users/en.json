@@ -429,7 +429,7 @@
   "charge.feefine.label": "Fee/fine type*",
   "charge.amount.label": "Fee/fine amount*",
   "charge.patron": "Patron",
-  "charge.barcode": "Barcode: ",
+  "charge.barcode": "Barcode",
   "charge.title": "New fee/fine",
   "charge.Pay": "Charge & pay now",
   "charge.onlyCharge": "Charge only",
