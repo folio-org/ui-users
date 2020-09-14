@@ -524,8 +524,9 @@ class Actions extends React.Component {
           owners={owners}
           feefines={feefines}
         />
-        {modals.map(m => (
+        {modals.map((m, i) => (
           <ActionModal
+            key={`${m.action}-modal-${i}`}
             {...m}
             intl={this.props.intl}
             initialValues={initialValues}

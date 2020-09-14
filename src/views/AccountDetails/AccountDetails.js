@@ -262,7 +262,7 @@ class AccountDetails extends React.Component {
         return servicePoint ? servicePoint.name : action.createdAt;
       },
       source: action => action.source,
-      comments: action => (action.comments ? (<div>{action.comments.split('\n').map(c => (<Row><Col>{c}</Col></Row>))}</div>) : ''),
+      comments: action => (action.comments ? (<div>{action.comments.split('\n').map((c, i) => (<Row key={i}><Col>{c}</Col></Row>))}</div>) : ''),
     };
 
     const isAccountsPending = _.get(resources, ['accountHistory', 'isPending'], true);
