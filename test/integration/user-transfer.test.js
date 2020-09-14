@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable newline-per-chained-call */
 import { App } from '@bigtest/interactor';
 import test from '../helpers/base-steps/simulate-server';
 import { store, routes } from '../helpers/server';
@@ -37,7 +37,7 @@ export default test('Transfer user fines', { permissions: [] }, { curServicePoin
     });
     store.create('comment');
     store.createList('waiver', 4);
-  
+
     return { user };
   })
   .step('query routes', async () => {
@@ -57,23 +57,23 @@ export default test('Transfer user fines', { permissions: [] }, { curServicePoin
     routes.get('/feefineactions');
     routes.get('/waives');
     routes.get('/transfers');
-  
+
     routes.post('/transfers', (schema, request) => {
       const body = JSON.parse(request.requestBody);
       return schema.transfers.create(body);
     });
-  
+
     routes.put('/transfers/:id', ({ transfers }, request) => {
       const matching = transfers.find(request.params.id);
       const body = JSON.parse(request.requestBody);
       return matching.update(body);
     });
-  
+
     routes.post('/feefineactions', (schema, request) => {
       const body = JSON.parse(request.requestBody);
       return schema.feefineactions.create(body);
     });
-  
+
     routes.get('/feefineactions', (schema, request) => {
       const url = new URL(request.url);
       const cqlQuery = url.searchParams.get('query');
@@ -88,7 +88,7 @@ export default test('Transfer user fines', { permissions: [] }, { curServicePoin
       }
       return schema.feefineactions.all();
     });
-  
+
     routes.get('/feefineactions/:id', (schema, request) => {
       return schema.feefineactions.find(request.params.id);
     });
@@ -141,6 +141,4 @@ export default test('Transfer user fines', { permissions: [] }, { curServicePoin
       .assertion(Table('list-accounts-history-view-feesfines').find(TableRowGroup('')).find(TableRow.findByRowNumber(2)).find(TableCell('10.00', { columnTitle: 'Remaining' })).exists())
       .assertion(Table('list-accounts-history-view-feesfines').find(TableRowGroup('')).find(TableRow.findByRowNumber(3)).find(TableCell('20.00', { columnTitle: 'Remaining' })).exists())
       .assertion(Table('list-accounts-history-view-feesfines').find(TableRowGroup('')).find(TableRow.findByRowNumber(4)).find(TableCell('30.00', { columnTitle: 'Remaining' })).exists())
-      .assertion(Table('list-accounts-history-view-feesfines').find(TableRowGroup('')).find(TableRow.findByRowNumber(5)).find(TableCell('0.00', { columnTitle: 'Remaining' })).exists())
-    )
-  )
+      .assertion(Table('list-accounts-history-view-feesfines').find(TableRowGroup('')).find(TableRow.findByRowNumber(5)).find(TableCell('0.00', { columnTitle: 'Remaining' })).exists())));
