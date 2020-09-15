@@ -92,6 +92,14 @@ class Actions extends React.Component {
       fetch: false,
       clientGeneratePk: false,
     },
+    checkTransfer: {
+      type: 'okapi',
+      POST: {
+        path: 'accounts/%{accountId}/check-transfer',
+      },
+      fetch: false,
+      clientGeneratePk: false,
+    },
     pay: {
       type: 'okapi',
       path: 'accounts/%{activeRecord.id}/pay',
@@ -102,6 +110,13 @@ class Actions extends React.Component {
     waive: {
       type: 'okapi',
       path: 'accounts/%{activeRecord.id}/waive',
+      fetch: false,
+      accumulate: 'true',
+      clientGeneratePk: false,
+    },
+    transfer: {
+      type: 'okapi',
+      path: 'accounts/%{activeRecord.id}/transfer',
       fetch: false,
       accumulate: 'true',
       clientGeneratePk: false,
@@ -129,10 +144,16 @@ class Actions extends React.Component {
       checkWaive: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }),
+      checkTransfer: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
       pay: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }),
       waive: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      transfer: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }),
     }),
@@ -170,7 +191,8 @@ class Actions extends React.Component {
 
     this.actionToEndpointMapping = {
       'payment': 'pay',
-      'waive': 'waive'
+      'waive': 'waive',
+      'transfer': 'transfer',
     };
   }
 
@@ -340,6 +362,7 @@ class Actions extends React.Component {
     const account = _.head(accounts) || {};
     mutator.activeRecord.update({ id: account.id });
     const payload = this.buildActionBody(values);
+    this.action(account, values.amount, values, action);
     mutator[this.actionToEndpointMapping[action]].POST(_.omit(payload, ['id']))
       .then(() => this.props.handleEdit(1))
       .then(() => this.showCalloutMessage(account))
@@ -572,7 +595,7 @@ class Actions extends React.Component {
       { action: 'payment', checkAmount: 'check-pay', item: actions.pay, label: 'nameMethod', data: payments, comment: 'paid', open: actions.pay || (actions.regular && accounts.length === 1) },
       { action: 'payment', checkAmount: 'check-pay', form: 'payment-many-modal', label: 'nameMethod', accounts, data: payments, comment: 'paid', open: actions.regular && !isWarning && accounts.length > 1 },
       { action: 'waive', checkAmount: 'check-waive', item: actions.waiveModal, label: 'nameReason', data: waives, comment: 'waived', open: actions.waiveModal || (actions.waiveMany && !isWarning) },
-      { action: 'transfer', item: actions.transferModal, label: 'accountName', data: transfers, comment: 'transferredManually', open: actions.transferModal || (actions.transferMany && !isWarning) }
+      { action: 'transfer', checkAmount: 'check-transfer', item: actions.transferModal, label: 'accountName', data: transfers, comment: 'transferredManually', open: actions.transferModal || (actions.transferMany && !isWarning) }
     ];
 
     return (

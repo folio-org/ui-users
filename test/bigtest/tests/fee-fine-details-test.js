@@ -185,5 +185,55 @@ describe('Test Fee/Fine details', () => {
         });
       });
     });
+
+    describe('Transfer fee/fine', () => {
+      beforeEach(async () => {
+        await FeeFineDetails.transferButton.click();
+      });
+
+      it('displays transfer modal', () => {
+        expect(FeeFineDetails.actionModal.isPresent).to.be.true;
+      });
+
+      it('displays transfer modal amount field', () => {
+        expect(FeeFineDetails.actionModalAmountField.value).to.equal('500.00');
+      });
+
+      describe('Choose transfer account name', () => {
+        beforeEach(async () => {
+          await FeeFineDetails.actionModalAmountField.pressTab();
+          await FeeFineDetails.actionModalSelect.selectAndBlur('transferAccount');
+        });
+
+        it('displays transfer modal select option', () => {
+          expect(FeeFineDetails.actionModalSelect.value).to.equal('transferAccount');
+        });
+
+        it('displays transfer button', () => {
+          expect(FeeFineDetails.actionModalSubmitButton.isPresent).to.be.true;
+          expect(FeeFineDetails.actionModalSubmitButtonIsDisabled).to.be.false;
+        });
+
+        describe('transfer fine', () => {
+          beforeEach(async () => {
+            await FeeFineDetails.actionModalSubmitButton.click();
+          });
+
+          it('displays confirmation modal', () => {
+            expect(FeeFineDetails.actionConfirmationModal.body.isPresent).to.be.true;
+          });
+
+          describe('confirm fine transfering', () => {
+            beforeEach(async () => {
+              await FeeFineDetails.actionConfirmationModal.confirmButton.click();
+            });
+
+            it('show successfull callout', () => {
+              expect(FeeFineDetails.callout.successCalloutIsPresent).to.be.true;
+            });
+          });
+        });
+      });
+    });
   });
 });
