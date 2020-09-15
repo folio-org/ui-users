@@ -394,6 +394,21 @@ class ClosedLoans extends React.Component {
       [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
     const clonedLoans = _.cloneDeep(loans);
     const recordsToCSV = this.buildRecords(clonedLoans);
+
+    const columnWidths = {
+      'title': { max: 200 },
+      'dueDate': { max: 150 },
+      'barcode': { max: 140 },
+      'Fee/Fine': { max: 100 },
+      'callNumber': { max: 110 },
+      'Contributors': { max: 170 },
+      'renewals': { max: 90 },
+      'loanDate': { max: 150 },
+      'returnDate': { max: 150 },
+      'checkinServicePoint': { max: 150 },
+      ' ': { max: 35 }
+    };
+
     return (
       <div data-test-closed-loans>
         <ActionsBar
@@ -440,7 +455,7 @@ class ClosedLoans extends React.Component {
           id="list-loanshistory"
           fullWidth
           formatter={this.getLoansFormatter()}
-          columnWidths={{ 'title': 200, 'dueDate': 150, 'barcode': 140, 'Fee/Fine': 100, 'callNumber': 110, 'Contributors': 170, 'renewals': 90, 'loanDate': 150, 'returnDate': 150, 'checkinServicePoint': 150, ' ': 35 }}
+          columnWidths={columnWidths}
           visibleColumns={visibleColumns}
           columnMapping={this.columnMapping}
           onHeaderClick={this.onSort}
