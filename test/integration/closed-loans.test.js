@@ -86,7 +86,7 @@ export default test('closed loans', {
       .assertion(Header('Anonymization prevented').exists())
       .child('confirming anonymization', test => test
         .step(Button('OK').click())
-        .assertion(OverlayContainer('').has({ modal: false }))))
+        .assertion(OverlayContainer().has({ modal: false }))))
     .child('clicking the close button', test => test
       .step(Button.findByAriaLabel('C').click())
       .assertion(Header('User search results').exists())))

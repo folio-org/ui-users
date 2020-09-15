@@ -126,7 +126,7 @@ export default test('Transfer user fines', { permissions: [] }, { curServicePoin
     .assertion(Table('warning-mcl').find(TableRowGroup('', { dataRowCount: 5 })).exists())
     .assertion(Table('warning-mcl').find(HeaderRow('', { columnRowCount: 6 })).exists())
     .child('deselect closed account and continue transfer', test => test
-      .step(Table('warning-mcl').find(TableRow.findByRowNumber(1)).find(Checkbox('')).click())
+      .step(Table('warning-mcl').find(TableRow.findByRowNumber(1)).find(Checkbox()).click())
       .step(Button.findById('warningTransferContinue').click())
       .step(TextField.findById('amount').fill('400.00'))
       .step(Select.findByName('method').select('USA Bank1'))
@@ -134,8 +134,8 @@ export default test('Transfer user fines', { permissions: [] }, { curServicePoin
       .step(Button.findById('submit-button').click())
       .step(Button('Confirm').click())
       .assertion(Table('list-accounts-history-view-feesfines', { dataRowCount: 5 }).exists())
-      .assertion(Table('list-accounts-history-view-feesfines').find(TableRowGroup('')).find(TableRow.findByRowNumber(1)).find(TableCell('0.00', { columnTitle: 'Remaining' })).exists())
-      .assertion(Table('list-accounts-history-view-feesfines').find(TableRowGroup('')).find(TableRow.findByRowNumber(2)).find(TableCell('10.00', { columnTitle: 'Remaining' })).exists())
-      .assertion(Table('list-accounts-history-view-feesfines').find(TableRowGroup('')).find(TableRow.findByRowNumber(3)).find(TableCell('20.00', { columnTitle: 'Remaining' })).exists())
-      .assertion(Table('list-accounts-history-view-feesfines').find(TableRowGroup('')).find(TableRow.findByRowNumber(4)).find(TableCell('30.00', { columnTitle: 'Remaining' })).exists())
-      .assertion(Table('list-accounts-history-view-feesfines').find(TableRowGroup('')).find(TableRow.findByRowNumber(5)).find(TableCell('0.00', { columnTitle: 'Remaining' })).exists())));
+      .assertion(Table('list-accounts-history-view-feesfines').find(TableRowGroup()).find(TableRow.findByRowNumber(1)).find(TableCell('0.00', { columnTitle: 'Remaining' })).exists())
+      .assertion(Table('list-accounts-history-view-feesfines').find(TableRowGroup()).find(TableRow.findByRowNumber(2)).find(TableCell('10.00', { columnTitle: 'Remaining' })).exists())
+      .assertion(Table('list-accounts-history-view-feesfines').find(TableRowGroup()).find(TableRow.findByRowNumber(3)).find(TableCell('20.00', { columnTitle: 'Remaining' })).exists())
+      .assertion(Table('list-accounts-history-view-feesfines').find(TableRowGroup()).find(TableRow.findByRowNumber(4)).find(TableCell('30.00', { columnTitle: 'Remaining' })).exists())
+      .assertion(Table('list-accounts-history-view-feesfines').find(TableRowGroup()).find(TableRow.findByRowNumber(5)).find(TableCell('0.00', { columnTitle: 'Remaining' })).exists())));

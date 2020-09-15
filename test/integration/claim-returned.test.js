@@ -125,4 +125,4 @@ export default test('claim returned', {
     })
     .step('visit "/users/:user_id/loans/view/:loan_id"', ({ user, loan }) => App.visit(`/users/${user.id}/loans/view/${loan.id}`))
     .step(Button('Resolve claim').click())
-    .assertion(DropdownMenu('').find(Button('Declare lost', { enabled: true })).exists()));
+    .assertion(DropdownMenu().find(Button('Declare lost', { enabled: true })).exists()));

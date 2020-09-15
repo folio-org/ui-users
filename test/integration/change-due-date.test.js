@@ -31,7 +31,7 @@ export default test('change due date', { permissions: ['circulation.loans.collec
   .step(Button.findByAriaLabel('ellipsis').click())
   .step(Button('Change due date', { enabled: true }).click())
   .assertion(Header('Change due date').exists())
-  .assertion(OverlayContainer('').find(TableCell('2', { rowNumber: 0, columnTitle: 'Requests' })).exists())
+  .assertion(OverlayContainer().find(TableCell('2', { rowNumber: 0, columnTitle: 'Requests' })).exists())
   .assertion(Button('Save and close').is({ disabled: true }))
   .assertion(Button('Cancel').is({ enabled: true }))
   .child('selecting a new due date', test => test

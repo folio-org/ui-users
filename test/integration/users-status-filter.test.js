@@ -30,4 +30,4 @@ export default test('status filter', {})
 // .child('search for users', test => test
 //   .step(Search('input-user-search').fill('Mary Poppins'))
 //   .step(Button.findById('submit-user-search').click())
-//   .assertion(Table('').has({ dataRowCount: 1 })))
+//   .assertion(Table().has({ dataRowCount: 1 })))
