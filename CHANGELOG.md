@@ -2,6 +2,7 @@
 
 ## 5.0.0 (IN PROGRESS)
 
+* modified the lost date display to include aged to lost status. Fixes UIU-1804.
 * Fixing breaking tests.
 * Adding fix for UIU-1801.  Removing temporary fixes to tests.
 * Temporary fix for broken tests relating to UIU-1801.  Does not resolve that issue.
@@ -39,6 +40,12 @@
 * Add missing permission `departments.collection.get` permission. Fixes UIU-1812.
 * Prevent UI crashing when loading loan with deleted item. Fixes UIU-1819.
 * Remove user count from patron groups. Fixes UIU-1562.
+* Assign user permissions more efficiently. Fixes UIU-1369.
+* Filter out blank actions on loan details UI. Fixes UIU-1820.
+* Increment `react-intl` to `v5` for `@folio/stripes` `v5` compatibility. Refs STRIPES-694.
+* Only set `servicePointUserId` when it's present. Fixes UIU-1849.
+* Modify default columns and MCL columnWidths on Loans Listing. Fixes UIU-1844
+* Refactoring of `pay`, `waive` fee/fine single actions. Refs UIU-1793.
 
 ## [4.0.0](https://github.com/folio-org/ui-users/tree/v4.0.0) (2020-06-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v3.0.0...v4.0.0)

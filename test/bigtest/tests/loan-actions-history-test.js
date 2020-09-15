@@ -207,4 +207,40 @@ describe('loans actions history', () => {
       });
     });
   });
+
+  describe('Loans without action', () => {
+    beforeEach(function () {
+      openLoan = this.server.create('loan', {
+        status: { name: 'Open' },
+        loanPolicyId: 'test',
+        overdueFinePolicyId: 'test',
+        lostItemPolicyId: 'test',
+        overdueFinePolicy: {
+          'name': 'One Hour1'
+        },
+        lostItemPolicy: {
+          'name': 'One Hour2'
+        },
+        item: {
+          callNumberComponents: {
+            prefix: 'prefix',
+            callNumber: 'callNumber',
+            suffix: 'suffix',
+          },
+          enumeration: 'enumeration',
+          chronology: 'chronology',
+          volume: 'volume',
+        },
+      });
+
+      this.server.createList('loanaction', 2, { loan: { ...openLoan.attrs } });
+      this.server.createList('loanaction', 2, { loan: { ...openLoan.attrs, action: '' } });
+      this.server.createList('request', 2, { itemId: openLoan.itemId });
+      this.visit(`/users/${openLoan.userId}/loans/view/${openLoan.id}`);
+    });
+
+    it('only renders loan actions with action present', () => {
+      expect(LoanActionsHistory.loanActions.rowCount).to.equal(2);
+    });
+  });
 });
