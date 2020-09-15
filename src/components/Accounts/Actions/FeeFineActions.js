@@ -446,18 +446,25 @@ class Actions extends React.Component {
   }
 
   onConfirm = () => {
-    const { actions, selectedAccounts } = this.props;
+    const { actions, selectedAccounts = [] } = this.props;
     const { values } = this.state;
 
-    if (actions.pay) {
+    const singleSelectedAccount = selectedAccounts.length === 1;
+    const singlePay = actions.pay || (actions.regular && singleSelectedAccount);
+    const singleWaive = actions.waiveModal || (actions.waiveMany && singleSelectedAccount);
+    const singleTransfer = actions.transferModal || (actions.transferMany && singleSelectedAccount);
+
+    // debugger;
+
+    if (singlePay) {
       this.onSubmit(values, 'payment');
     } else if (actions.regular) {
       this.onSubmitMany(values, selectedAccounts, 'payment');
-    } else if (actions.waiveModal) {
+    } else if (singleWaive) {
       this.onSubmit(values, 'waive');
     } else if (actions.waiveMany) {
       this.onSubmitMany(values, selectedAccounts, 'waive');
-    } else if (actions.transferModal) {
+    } else if (singleTransfer) {
       this.onSubmit(values, 'transfer');
     } else if (actions.transferMany) {
       this.onSubmitMany(values, selectedAccounts, 'transfer');
