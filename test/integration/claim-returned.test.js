@@ -3,13 +3,15 @@ import { App } from '@bigtest/interactor';
 import test from '../helpers/base-steps/simulate-server';
 import { store } from '../helpers/server';
 
-import ActionsBar from '../interactors/ActionsBar';
-import Button from '../interactors/Button';
-import DropdownMenu from '../interactors/DropdownMenu';
-import Header from '../interactors/Header';
-import Link from '../interactors/Link';
-import Paragraph from '../interactors/Paragraph';
-import TextArea from '../interactors/TextArea';
+import {
+  ActionsBar,
+  Button,
+  DropdownMenu,
+  Header,
+  Link,
+  Paragraph,
+  TextArea
+} from '../interactors';
 
 export default test('claim returned', {
   permissions: ['manualblocks.collection.get', 'circulation.loans.collection.get']

@@ -3,11 +3,13 @@ import { App } from '@bigtest/interactor';
 import test from '../helpers/base-steps/simulate-server';
 import { store } from '../helpers/server';
 
-import Button from '../interactors/Button';
-import Header from '../interactors/Header';
-import Link from '../interactors/Link';
-import Select from '../interactors/Select';
-import TextField from '../interactors/TextField';
+import {
+  Button,
+  Header,
+  Link,
+  Select,
+  TextField
+} from '../interactors';
 
 export default test('charge fee/fine', { permissions: ['circulation.loans.collection.get'] })
   .step('seed data', async () => {

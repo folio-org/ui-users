@@ -2,10 +2,7 @@ import { App } from '@bigtest/interactor';
 import test from '../helpers/base-steps/simulate-server';
 import { store, routes } from '../helpers/server';
 
-import Button from '../interactors/Button';
-import Div from '../interactors/Div';
-import Section from '../interactors/Section';
-import Span from '../interactors/Span';
+import { Button, Div, Section, Span } from '../interactors';
 
 export default test('user details page')
   .step('seed data', async () => {

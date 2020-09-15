@@ -2,10 +2,7 @@ import { App } from '@bigtest/interactor';
 import test from '../helpers/base-steps/simulate-server';
 import { store } from '../helpers/server';
 
-import Checkbox from '../interactors/Checkbox';
-import Table from '../interactors/Table';
-// import Search from '../interactors/Search';
-// import Button from '../interactors/Button';
+import { Button, Checkbox, Search, Table } from '../interactors';
 
 export default test('status filter', {})
   .step('seed data', async () => {

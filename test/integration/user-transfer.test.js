@@ -4,19 +4,21 @@ import test from '../helpers/base-steps/simulate-server';
 import { store, routes } from '../helpers/server';
 import CQLParser from '../network/cql';
 
-import Alert from '../interactors/Alert';
-import Button from '../interactors/Button';
-import Checkbox from '../interactors/Checkbox';
-import Div from '../interactors/Div';
-import HeaderRow from '../interactors/HeaderRow';
-import Link from '../interactors/Link';
-import Select from '../interactors/Select';
-import Table from '../interactors/Table';
-import TableCell from '../interactors/TableCell';
-import TableRow from '../interactors/TableRow';
-import TableRowGroup from '../interactors/TableRowGroup';
-import TextArea from '../interactors/TextArea';
-import TextField from '../interactors/TextField';
+import {
+  Alert,
+  Button,
+  Checkbox,
+  Div,
+  HeaderRow,
+  Link,
+  Select,
+  Table,
+  TableCell,
+  TableRow,
+  TableRowGroup,
+  TextArea,
+  TextField
+} from '../interactors';
 
 export default test('Transfer user fines', { permissions: [] }, { curServicePoint: { id: 1 } })
   .step('seed data', async () => {

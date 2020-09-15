@@ -3,11 +3,13 @@ import { App } from '@bigtest/interactor';
 import test from '../helpers/base-steps/simulate-server';
 import { store } from '../helpers/server';
 
-import Button from '../interactors/Button';
-import CalendarButton from '../interactors/CalendarButton';
-import Header from '../interactors/Header';
-import OverlayContainer from '../interactors/OverlayContainer';
-import TableCell from '../interactors/TableCell';
+import {
+  Button,
+  CalendarButton,
+  Header,
+  OverlayContainer,
+  TableCell
+} from '../interactors';
 
 export default test('change due date', { permissions: ['circulation.loans.collection.get'] })
   .step('seed data', async () => {

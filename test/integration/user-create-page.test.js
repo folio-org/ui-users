@@ -1,17 +1,19 @@
 import { App } from '@bigtest/interactor';
 import test from '../helpers/base-steps/simulate-server';
 
-import AddressForm from '../interactors/AddressForm';
-import Alert from '../interactors/Alert';
-import Button from '../interactors/Button';
-import Checkbox from '../interactors/Checkbox';
-import Div from '../interactors/Div';
-import Header from '../interactors/Header';
-import Link from '../interactors/Link';
-import Option from '../interactors/Option';
-import Select from '../interactors/Select';
-import Span from '../interactors/Span';
-import TextField from '../interactors/TextField';
+import {
+  AddressForm,
+  Alert,
+  Button,
+  Checkbox,
+  Div,
+  Header,
+  Link,
+  Option,
+  Select,
+  Span,
+  TextField
+} from '../interactors';
 
 export default test('user create page')
   .step('visit "/users"', () => App.visit('/users'))

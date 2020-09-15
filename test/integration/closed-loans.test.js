@@ -3,11 +3,13 @@ import { App } from '@bigtest/interactor';
 import test from '../helpers/base-steps/simulate-server';
 import { store, routes } from '../helpers/server';
 
-import Button from '../interactors/Button';
-import Header from '../interactors/Header';
-import OverlayContainer from '../interactors/OverlayContainer';
-import TableCell from '../interactors/TableCell';
-import TableColumnHeader from '../interactors/TableColumnHeader';
+import {
+  Button,
+  Header,
+  OverlayContainer,
+  TableCell,
+  TableColumnHeader
+} from '../interactors';
 
 export default test('closed loans', {
   permissions: ['manualblocks.collection.get', 'circulation.loans.collection.get']

@@ -2,12 +2,14 @@ import { App } from '@bigtest/interactor';
 import test from '../helpers/base-steps/simulate-server';
 import { store } from '../helpers/server';
 
-import Button from '../interactors/Button';
-import Checkbox from '../interactors/Checkbox';
-import Link from '../interactors/Link';
-import Section from '../interactors/Section';
-import Table from '../interactors/Table';
-import TableCell from '../interactors/TableCell';
+import {
+  Button,
+  Checkbox,
+  Link,
+  Section,
+  Table,
+  TableCell
+} from '../interactors';
 
 export default test('user loans', {
   permissions: ['manualblocks.collection.get', 'circulation.loans.collection.get']

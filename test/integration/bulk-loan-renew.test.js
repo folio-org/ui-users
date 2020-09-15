@@ -3,10 +3,7 @@ import { App } from '@bigtest/interactor';
 import test from '../helpers/base-steps/simulate-server';
 import { store } from '../helpers/server';
 
-import ActionsBar from '../interactors/ActionsBar';
-import Button from '../interactors/Button';
-import Checkbox from '../interactors/Checkbox';
-import Header from '../interactors/Header';
+import { ActionsBar, Button, Checkbox, Header } from '../interactors';
 
 export default test('bulk loan renew', { permissions: ['circulation.loans.collection.get'] })
   .step('seed data', async () => {
