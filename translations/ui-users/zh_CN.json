@@ -215,7 +215,7 @@
     "charge.feefine.label": "费用/罚款类型*",
     "charge.amount.label": "费用/罚款金额*",
     "charge.patron": "读者",
-    "charge.barcode": "条码：",
+    "charge.barcode": "条码",
     "charge.title": "新增费用/罚款",
     "charge.onlyCharge": "仅收费",
     "charge.comment": "员工附加信息",

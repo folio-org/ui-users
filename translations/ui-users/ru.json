@@ -215,7 +215,7 @@
     "charge.feefine.label": "Тип оплаты*",
     "charge.amount.label": "Fee/fine amount*",
     "charge.patron": "Читатель",
-    "charge.barcode": "Штрихкод: ",
+    "charge.barcode": "Штрихкод",
     "charge.title": " Новая оплата",
     "charge.onlyCharge": "Charge only",
     "charge.comment": "Дополнительная информация для персонала",

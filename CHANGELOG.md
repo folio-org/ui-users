@@ -49,6 +49,7 @@
 * Refactoring of `error` fee/fine single action. Refs UIU-1796.
 * Refactoring of `transfer` fee/fine single action. Refs UIU-1795.
 * Clean up invalid fee/fine type-popover code.
+* Consistent spacing around barcode link. 
 
 ## [4.0.0](https://github.com/folio-org/ui-users/tree/v4.0.0) (2020-06-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v3.0.0...v4.0.0)

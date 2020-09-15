@@ -215,7 +215,7 @@
     "charge.feefine.label": "Type de frais/amende*",
     "charge.amount.label": "Montant des frais / amende *",
     "charge.patron": "Utilisateur",
-    "charge.barcode": "Code-barres:",
+    "charge.barcode": "Code-barres",
     "charge.title": "Nouveaux frais / amende",
     "charge.onlyCharge": "Frais seulement",
     "charge.comment": "Informations complémentaires pour le personnel",
