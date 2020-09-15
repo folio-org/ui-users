@@ -43,6 +43,11 @@
 * Assign user permissions more efficiently. Fixes UIU-1369.
 * Filter out blank actions on loan details UI. Fixes UIU-1820.
 * Increment `react-intl` to `v5` for `@folio/stripes` `v5` compatibility. Refs STRIPES-694.
+* Only set `servicePointUserId` when it's present. Fixes UIU-1849.
+* Modify default columns and MCL columnWidths on Loans Listing. Fixes UIU-1844
+* Refactoring of `pay`, `waive` fee/fine single actions. Refs UIU-1793.
+* Refactoring of `error` fee/fine single action. Refs UIU-1796.
+* Refactoring of `transfer` fee/fine single action. Refs UIU-1795.
 * Clean up invalid fee/fine type-popover code.
 
 ## [4.0.0](https://github.com/folio-org/ui-users/tree/v4.0.0) (2020-06-17)
