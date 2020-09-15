@@ -73,7 +73,7 @@ export default test('claim returned', {
       return { user };
     })
     .step('visit "/users/:user_id/loans/open"', ({ user }) => App.visit(`/users/${user.id}/loans/open`))
-    .assertion(ActionsBar('').has({ loanCount: '2 records found (1 claimed returned)' })))
+    .assertion(ActionsBar().has({ loanCount: '2 records found (1 claimed returned)' })))
   .child('visiting loan detail without claimed returned item', test => test
     .step('seed data', async () => {
       const user = store.create('user');

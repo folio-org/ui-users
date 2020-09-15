@@ -3,7 +3,7 @@ import { App } from '@bigtest/interactor';
 import test from '../helpers/base-steps/simulate-server';
 import { store } from '../helpers/server';
 
-import { ActionsBar, Button, Checkbox, Header } from '../interactors';
+import { ActionsBar, Checkbox, Header } from '../interactors';
 
 export default test('bulk loan renew', { permissions: ['circulation.loans.collection.get'] })
   .step('seed data', async () => {
@@ -20,8 +20,8 @@ export default test('bulk loan renew', { permissions: ['circulation.loans.collec
       },
     });
   })
-  .step('visit "/users/1/loans/open"', () => App.visit('/users/1/loans/open'))
+  .step(App.visit('/users/1/loans/open'))
   .child('working with checked out items', test => test
     .step(Checkbox.findByName('check-all').click())
-    .step(ActionsBar('').find(Button('Renew')).click())
+    .step(ActionsBar().clickButton('Renew'))
     .assertion(Header('Renew Confirmation').exists()));
