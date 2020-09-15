@@ -6,7 +6,7 @@ import { start } from '../server';
 
 bigtestGlobals.defaultInteractorTimeout = 12_000;
 
-export default function simulateServer(name, { permissions = [] } = { permissions: [] }, user) {
+export default function simulateServer(name, { user, permissions } = { user: {}, permissions: [] }) {
   return test(name)
     .step('set up localforage', async () => {
       localforage.clear();
@@ -25,6 +25,6 @@ export default function simulateServer(name, { permissions = [] } = { permission
       });
     })
     .step('start simulated server', async () => {
-      start({ permissions });
+      start(permissions);
     });
 }
