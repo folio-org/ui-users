@@ -11,7 +11,12 @@ import FeeFineHistoryInteractor from '../interactors/fee-fine-history';
 import FeeFineDetails from '../interactors/fee-fine-details';
 
 describe('Test Fee/Fine details', () => {
-  setupApplication({ scenarios: ['fee-fine-details'] });
+  setupApplication({
+    scenarios: ['fee-fine-details'],
+    currentUser: {
+      curServicePoint: { id: 1 },
+    },
+  });
   describe('visit Fee/fine details', () => {
     beforeEach(async function () {
       this.visit('/users/preview/ce0e0d5b-b5f3-4ad5-bccb-49c0784298fd');
@@ -64,6 +69,120 @@ describe('Test Fee/Fine details', () => {
       it('should navigate to', function () {
         const path = '/settings/circulation/lost-item-fee-policy/48a3115d-d476-4582-b6a8-55c09eed7ec7';
         expect(this.location.pathname.endsWith(path)).to.be.true;
+      });
+    });
+  });
+
+  describe('visit Fee/fine details', () => {
+    beforeEach(async function () {
+      this.visit('/users/preview/ce0e0d5b-b5f3-4ad5-bccb-49c0784298fd');
+      await FeeFineHistoryInteractor.whenSectionLoaded();
+      await FeeFineHistoryInteractor.sectionFeesFinesSection.click();
+      await FeeFineHistoryInteractor.openAccounts.click();
+      await FeeFineHistoryInteractor.rows(4).click();
+    });
+
+    it('displays account actions section', () => {
+      expect(FeeFineDetails.isPresent).to.be.true;
+    });
+
+    describe('Pay fee/fine', () => {
+      beforeEach(async () => {
+        await FeeFineDetails.payButton.click();
+      });
+
+      it('displays payment modal', () => {
+        expect(FeeFineDetails.actionModal.isPresent).to.be.true;
+      });
+
+      it('displays payment modal amount field', () => {
+        expect(FeeFineDetails.actionModalAmountField.value).to.equal('500.00');
+      });
+
+      describe('Choose payment method', () => {
+        beforeEach(async () => {
+          await FeeFineDetails.actionModalAmountField.pressTab();
+          await FeeFineDetails.actionModalSelect.selectAndBlur('visa');
+        });
+
+        it('displays payment modal select option', () => {
+          expect(FeeFineDetails.actionModalSelect.value).to.equal('visa');
+        });
+
+        it('displays pay button', () => {
+          expect(FeeFineDetails.actionModalSubmitButton.isPresent).to.be.true;
+          expect(FeeFineDetails.actionModalSubmitButtonIsDisabled).to.be.false;
+        });
+
+        describe('pay fine', () => {
+          beforeEach(async () => {
+            await FeeFineDetails.actionModalSubmitButton.click();
+          });
+
+          it('displays confirmation modal', () => {
+            expect(FeeFineDetails.actionConfirmationModal.body.isPresent).to.be.true;
+          });
+
+          describe('confirm fine payment', () => {
+            beforeEach(async () => {
+              await FeeFineDetails.actionConfirmationModal.confirmButton.click();
+            });
+
+            it('show successfull callout', () => {
+              expect(FeeFineDetails.callout.successCalloutIsPresent).to.be.true;
+            });
+          });
+        });
+      });
+    });
+
+    describe('Waive fee/fine', () => {
+      beforeEach(async () => {
+        await FeeFineDetails.waiveButton.click();
+      });
+
+      it('displays waive modal', () => {
+        expect(FeeFineDetails.actionModal.isPresent).to.be.true;
+      });
+
+      it('displays waive modal amount field', () => {
+        expect(FeeFineDetails.actionModalAmountField.value).to.equal('500.00');
+      });
+
+      describe('Choose waive reason', () => {
+        beforeEach(async () => {
+          await FeeFineDetails.actionModalAmountField.pressTab();
+          await FeeFineDetails.actionModalSelect.selectAndBlur('waiveReason');
+        });
+
+        it('displays waive modal select option', () => {
+          expect(FeeFineDetails.actionModalSelect.value).to.equal('waiveReason');
+        });
+
+        it('displays waive button', () => {
+          expect(FeeFineDetails.actionModalSubmitButton.isPresent).to.be.true;
+          expect(FeeFineDetails.actionModalSubmitButtonIsDisabled).to.be.false;
+        });
+
+        describe('waive fine', () => {
+          beforeEach(async () => {
+            await FeeFineDetails.actionModalSubmitButton.click();
+          });
+
+          it('displays confirmation modal', () => {
+            expect(FeeFineDetails.actionConfirmationModal.body.isPresent).to.be.true;
+          });
+
+          describe('confirm fine waivement', () => {
+            beforeEach(async () => {
+              await FeeFineDetails.actionConfirmationModal.confirmButton.click();
+            });
+
+            it('show successfull callout', () => {
+              expect(FeeFineDetails.callout.successCalloutIsPresent).to.be.true;
+            });
+          });
+        });
       });
     });
   });

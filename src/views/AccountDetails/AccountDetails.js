@@ -18,7 +18,7 @@ import {
   NoValue,
 } from '@folio/stripes/components';
 
-import { Actions } from '../../components/Accounts/Actions';
+import Actions from '../../components/Accounts/Actions/FeeFineActions';
 import {
   getFullName,
   calculateSortParams,
@@ -307,7 +307,7 @@ class AccountDetails extends React.Component {
                 <FormattedMessage id="ui-users.accounts.history.button.pay" />
               </Button>
               <Button
-                id="waveAccountActionsHistory"
+                id="waiveAccountActionsHistory"
                 disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending}
                 buttonStyle="primary"
                 onClick={this.waive}

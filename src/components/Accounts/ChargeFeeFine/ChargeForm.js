@@ -21,26 +21,6 @@ import ItemInfo from './ItemInfo';
 
 let feefineamount = 0;
 
-function validate(type) {
-  const errors = [];
-  if (!type.feeFineId) {
-    errors.feeFineId = <FormattedMessage id="ui-users.feefines.modal.error" />;
-  }
-  if (!type.ownerId) {
-    errors.ownerId = <FormattedMessage id="ui-users.feefines.modal.error" />;
-  }
-  if (Number(type.amount) <= 0) {
-    errors.amount = <FormattedMessage id="ui-users.accounts.error.message" />;
-  }
-  if (!type.amount && !feefineamount) {
-    errors.amount = <FormattedMessage id="ui-users.errors.missingRequiredField" />;
-  }
-  if (Number.isNaN(Number(type.amount)) && type.amount) {
-    errors.amount = <FormattedMessage id="ui-users.charge.errors.amount" />;
-  }
-  return errors;
-}
-
 function onChange(values, dispatch, props, previousValues) {
   if (values.ownerId !== previousValues.ownerId) {
     dispatch(change('chargefeefine', 'amount', null));
@@ -236,7 +216,7 @@ class ChargeForm extends React.Component {
       </PaneMenu>);
 
     return (
-      <Paneset>
+      <Paneset data-test-charge-form>
         <Pane
           defaultWidth="100%"
           dismissible
@@ -319,6 +299,5 @@ export default stripesForm({
   form: 'chargefeefine',
   enableReinitialize: true,
   onChange,
-  validate,
   navigationCheck: true,
 })(ChargeForm);
