@@ -59,6 +59,7 @@ import KeyValue from './KeyValue';
   contributors = scoped('[data-test-contributors] div', KeyValue);
   payButton = new ButtonInteractor('#payAccountActionsHistory');
   waiveButton = new ButtonInteractor('#waiveAccountActionsHistory');
+  transferButton = new ButtonInteractor('#transferAccountActionsHistory');
   errorButton = new ButtonInteractor('#errorAccountActionsHistory');
   errorModal = new ModalInteractor('#error-modal');
   errorComment = new TextAreaInteractor('[class*=textArea---]');
