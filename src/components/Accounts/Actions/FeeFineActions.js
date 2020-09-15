@@ -289,18 +289,16 @@ class Actions extends React.Component {
   }
 
   onClickCancellation(values) {
-    const { intl: { formatMessage }, mutator } = this.props;
-    const canceled = formatMessage({ id: 'ui-users.accounts.cancelError' });
-    const account = this.props.accounts[0] || {};
-    const createdAt = this.props.okapi.currentUser.curServicePoint.id;
+    const {
+      mutator,
+      accounts,
+    } = this.props;
+    const account = accounts[0] || {};
     delete account.rowIndex;
-    this.props.mutator.activeRecord.update({ id: account.id });
+    mutator.activeRecord.update({ id: account.id });
     const payload = this.buildActionBody(values);
     delete payload.amount;
-    // payload.amount = parseFloat(account.amount).toFixed(2);
     mutator.cancel.POST(_.omit(payload, ['id']))
-    // this.newAction({}, type.id, canceled, type.amount, this.assembleTagInfo(values), 0, 0, createdAt || type.feeFineOwner, values);
-    // this.editAccount(type, canceled, 'Closed', 0.00)
       .then(() => this.props.handleEdit(1))
       .then(() => this.showCalloutMessage(account))
       .then(() => this.onCloseCancellation());
