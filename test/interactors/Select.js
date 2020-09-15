@@ -4,7 +4,8 @@ export default createInteractor('select')({
   selector: 'select',
   defaultLocator: element => element.labels[0].textContent,
   locators: {
-    findByName: element => element.name
+    findByName: element => element.name,
+    findById: element => element.id
   },
   actions: {
     select: perform((element, value) => {
