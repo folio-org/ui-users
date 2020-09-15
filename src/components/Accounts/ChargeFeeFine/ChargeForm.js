@@ -3,7 +3,10 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Field } from 'react-final-form';
 import setFieldData from 'final-form-set-field-data';
-import { isEqual, toNumber } from 'lodash';
+import {
+  isEqual,
+  toNumber,
+} from 'lodash';
 
 import stripesFinalForm from '@folio/stripes/final-form';
 import {
@@ -150,6 +153,8 @@ class ChargeForm extends React.Component {
       },
       submitting,
       pristine,
+      isPending,
+      stripes,
     } = this.props;
     const {
       valid,
@@ -209,7 +214,7 @@ class ChargeForm extends React.Component {
           disabled={pristine || submitting || !valid}
           onClick={() => {
             change('pay', true);
-            handleSubmit(data => onSubmit({ ...data }));
+            handleSubmit(data => onSubmit(data));
           }}
           marginBottom0
         >
@@ -221,7 +226,7 @@ class ChargeForm extends React.Component {
           disabled={pristine || submitting || !valid}
           onClick={() => {
             change('pay', false);
-            handleSubmit(data => onSubmit({ ...data }));
+            handleSubmit(data => onSubmit(data));
           }}
           marginBottom0
         >
@@ -249,9 +254,9 @@ class ChargeForm extends React.Component {
             <FeeFineInfo
               form={form}
               initialValues={initialValues}
-              stripes={this.props.stripes}
+              stripes={stripes}
               ownerOptions={ownerOptions}
-              isPending={this.props.isPending}
+              isPending={isPending}
               onChangeOwner={this.onChangeOwner}
               onChangeFeeFine={this.onChangeFeeFine}
               feefines={this.props.feefines}

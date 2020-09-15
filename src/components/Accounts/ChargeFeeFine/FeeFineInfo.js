@@ -57,6 +57,9 @@ class FeeFineInfo extends React.Component {
     const {
       initialValues,
       isPending,
+      ownerOptions,
+      feefineList,
+      onChangeOwner,
     } = this.props;
 
     return (
@@ -82,8 +85,8 @@ class FeeFineInfo extends React.Component {
                           fullWidth
                           value={initialValues ? initialValues.ownerId : undefined}
                           disabled={isPending.owners}
-                          dataOptions={this.props.ownerOptions}
-                          onChange={this.props.onChangeOwner}
+                          dataOptions={ownerOptions}
+                          onChange={onChangeOwner}
                           placeholder={placeholder}
                         />
                       )}
@@ -109,7 +112,7 @@ class FeeFineInfo extends React.Component {
                           component={Select}
                           fullWidth
                           disabled={isPending.feefines}
-                          dataOptions={this.props.feefineList}
+                          dataOptions={feefineList}
                           placeholder={placeholder}
                           onChange={this.onChangeFeeFine}
                         />
