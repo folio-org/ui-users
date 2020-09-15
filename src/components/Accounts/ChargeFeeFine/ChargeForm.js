@@ -179,15 +179,14 @@ class ChargeForm extends React.Component {
     const feefineList = [];
     const ownerOptions = [];
 
-    this.props.owners.forEach(own => {
-      const owner = own || {};
-      if (owner.owner !== 'Shared') ownerOptions.push({ label: owner.owner, value: owner.id });
+    this.props.owners.forEach((own = {}) => {
+      if (own.owner !== 'Shared') ownerOptions.push({ label: own.owner, value: own.id });
     });
 
-    this.props.feefines.forEach((feefine) => {
+    this.props.feefines.forEach((feefineItem) => {
       const fee = {};
-      fee.label = feefine.feeFineType;
-      fee.value = feefine.id;
+      fee.label = feefineItem.feeFineType;
+      fee.value = feefineItem.id;
       feefineList.push(fee);
     });
 
