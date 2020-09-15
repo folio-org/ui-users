@@ -22,8 +22,8 @@ export default test('bulk claim returned', { permissions: ['circulation.loans.co
   })
   .step(App.visit('/users/1/loans/open'))
   .child('when no items are selected', test => test
-    .assertion(OpenLoansControl('').is({ actionsBarClaimReturnedDisabled: true })))
+    .assertion(OpenLoansControl().is({ actionsBarClaimReturnedDisabled: true })))
   .child('working with checked out items', test => test
-    .step(OpenLoansControl('').selectAll())
-    .step(OpenLoansControl('').clickClaimReturnedForSelected())
+    .step(OpenLoansControl().selectAll())
+    .step(OpenLoansControl().clickClaimReturnedForSelected())
     .assertion(Header('Confirm claim returned').exists()));

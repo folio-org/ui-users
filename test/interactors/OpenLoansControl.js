@@ -4,7 +4,6 @@ import ActionsBar from './ActionsBar';
 
 export default createInteractor('open loans')({
   selector: '[data-test-open-loans]',
-  defaultLocator: () => '',
   filters: {
     actionsBarClaimReturnedDisabled: element => {
       return Array.from(element.querySelectorAll('[data-test-actions-bar] button').values())
