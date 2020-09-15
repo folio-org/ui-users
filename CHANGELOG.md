@@ -45,6 +45,7 @@
 * Increment `react-intl` to `v5` for `@folio/stripes` `v5` compatibility. Refs STRIPES-694.
 * Only set `servicePointUserId` when it's present. Fixes UIU-1849.
 * Modify default columns and MCL columnWidths on Loans Listing. Fixes UIU-1844
+* Refactoring of `pay`, `waive` fee/fine single actions. Refs UIU-1793.
 
 ## [4.0.0](https://github.com/folio-org/ui-users/tree/v4.0.0) (2020-06-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v3.0.0...v4.0.0)
