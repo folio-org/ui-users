@@ -27,7 +27,7 @@ export default test('change due date', { permissions: ['circulation.loans.collec
     });
     store.createList('request', 2, { itemId: loan.itemId });
   })
-  .step('visit "/users/1/loans/open"', () => App.visit('/users/1/loans/open'))
+  .step(App.visit('/users/1/loans/open'))
   .step(Button.findByAriaLabel('ellipsis').click())
   .step(Button('Change due date', { enabled: true }).click())
   .assertion(Header('Change due date').exists())
