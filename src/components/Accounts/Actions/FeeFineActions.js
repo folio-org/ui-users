@@ -358,12 +358,6 @@ class Actions extends React.Component {
       .then(() => this.props.handleEdit(1))
       .then(() => this.showCalloutMessage(account))
       .then(() => this.onCloseActionModal());
-
-    // delete type.rowIndex;
-    // this.action(type, values.amount, values, action)
-    //   .then(() => this.props.handleEdit(1))
-    //   .then(() => this.showCalloutMessage(type))
-    //   .then(() => this.onCloseActionModal());
   }
 
   onSubmitMany = (values, items, action) => {
