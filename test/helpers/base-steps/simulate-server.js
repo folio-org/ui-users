@@ -11,8 +11,8 @@ export default function simulateServer(name,
   { user: {}, permissions: [], modules: [] }) {
   return test(name)
     .step('set up localforage', async () => {
-      localforage.clear();
-      localforage.setItem('okapiSess', {
+      await localforage.clear();
+      await localforage.setItem('okapiSess', {
         token: 'test',
         user: { id: 'test',
           username: 'testuser',
