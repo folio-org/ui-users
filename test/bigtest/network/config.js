@@ -751,4 +751,10 @@ export default function config() {
       amount: account.amount
     };
   });
+
+  this.post('/accounts/:id/cancel', ({ accounts }, request) => {
+    const account = accounts.find(request.params.id).attrs;
+
+    return { accountId: account.id };
+  });
 }
