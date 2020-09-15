@@ -730,8 +730,7 @@ export default function config() {
 
     return {
       accountId: account.id,
-      amount: account.amount,
-      feeFineActionId: account.feeFineActionId
+      amount: account.amount
     };
   });
 
@@ -740,8 +739,7 @@ export default function config() {
 
     return {
       accountId: account.id,
-      amount: account.amount,
-      feeFineActionId: account.feeFineActionId
+      amount: account.amount
     };
   });
 
@@ -750,8 +748,7 @@ export default function config() {
 
     return {
       accountId: account.id,
-      amount: account.amount,
-      feeFineActionId: account.feeFineActionId
+      amount: account.amount
     };
   });
 }
