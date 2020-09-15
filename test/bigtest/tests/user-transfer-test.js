@@ -94,7 +94,7 @@ describe('Transfer fines', () => {
           expect(TransferInteractor.transferAccount.val).to.equal('USA Bank1');
         });
 
-        describe.skip('submit and confirm the transfer', () => {
+        describe('submit and confirm the transfer', () => {
           beforeEach(async () => {
             await TransferInteractor.submit.click();
             await TransferInteractor.confirmationModal.confirmButton.click();
