@@ -6,7 +6,9 @@ import { start } from '../server';
 
 bigtestGlobals.defaultInteractorTimeout = 12_000;
 
-export default function simulateServer(name, { user, permissions } = { user: {}, permissions: [] }) {
+export default function simulateServer(name,
+  { user = {}, permissions = [], modules = [] } =
+  { user: {}, permissions: [], modules: [] }) {
   return test(name)
     .step('set up localforage', async () => {
       localforage.clear();
@@ -21,7 +23,8 @@ export default function simulateServer(name, { user, permissions } = { user: {},
           servicePoints: [],
           curServicePoint: { id: null },
           ...user },
-        perms: permissions.reduce((memo, perm) => ({ ...memo, [perm]: true }), {})
+        perms: permissions.reduce((memo, perm) => ({ ...memo, [perm]: true }), {}),
+        modules: [...modules]
       });
     })
     .step('start simulated server', async () => {
