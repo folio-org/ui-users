@@ -45,7 +45,6 @@ function showValidationErrors({ feeFineId, ownerId, amount }) {
   return errors;
 }
 
-
 class ChargeForm extends React.Component {
   static propTypes = {
     user: PropTypes.object,
