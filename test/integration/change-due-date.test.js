@@ -4,6 +4,7 @@ import test from '../helpers/base-steps/simulate-server';
 import { store } from '../helpers/server';
 
 import Button from '../interactors/Button';
+import CalendarButton from '../interactors/CalendarButton';
 import Header from '../interactors/Header';
 import OverlayContainer from '../interactors/OverlayContainer';
 import TableCell from '../interactors/TableCell';
@@ -32,7 +33,7 @@ export default test('change due date', { permissions: ['circulation.loans.collec
   .assertion(Button('Save and close').is({ disabled: true }))
   .assertion(Button('Cancel').is({ enabled: true }))
   .child('selecting a new due date', test => test
-    .step(Button.findByAriaLabel('Show/hide datepicker').click())
-    .step(Button.findByAriaLabel('Go to next month').click())
-    .step(Button('15').click())
+    .step(Button.findByAttribute('data-test-calendar-button').click())
+    .step(Button.findByAttribute('data-test-calendar-next-month').click())
+    .step(CalendarButton('15').click())
     .assertion(Button('Save and close').is({ enabled: true })));

@@ -69,7 +69,7 @@ export default test('closed loans', {
       return { user, loan1, loan2 };
     })
     .step('visit "/users/:user_id/loans/closed"', ({ user }) => App.visit(`/users/${user.id}/loans/closed`))
-    .assertion(Button.findByAriaLabel('Close').exists())
+    .assertion(Button.findByAriaLabel('C').exists())
     .assertion(TableCell('prefix callNumber suffix volume enumeration chronology', { rowNumber: 1, columnTitle: 'Effective call number string' }).exists())
     .child('sorting loan list', test => test
       .step(TableColumnHeader('Due date').click())
@@ -86,7 +86,7 @@ export default test('closed loans', {
         .step(Button('OK').click())
         .assertion(OverlayContainer('').has({ modal: false }))))
     .child('clicking the close button', test => test
-      .step(Button.findByAriaLabel('Close').click())
+      .step(Button.findByAriaLabel('C').click())
       .assertion(Header('User search results').exists())))
   .child('loans without items', test => test
     .step('seed data', async () => {
