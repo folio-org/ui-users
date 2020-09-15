@@ -19,7 +19,7 @@ export default test('user loans', {
     const user = users[0];
     return { users, user };
   })
-  .step('visit "/users"', () => App.visit('/users'))
+  .step(App.visit('/users'))
   .step(Checkbox('Active').click())
   .step(Checkbox('Inactive').click())
   .child('reset all status filter', test => test

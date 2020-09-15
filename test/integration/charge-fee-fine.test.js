@@ -38,7 +38,7 @@ export default test('charge fee/fine', { permissions: ['circulation.loans.collec
       },
     });
   })
-  .step('visit "/users/preview/1"', async () => App.visit('/users/preview/1'))
+  .step(App.visit('/users/preview/1'))
   .step(Button('Fees/fines').click())
   .step(Link('Create fee/fine').click())
   .step(Select('Fee/fine owner*').select('testOwner'))

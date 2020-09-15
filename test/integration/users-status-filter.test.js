@@ -13,7 +13,7 @@ export default test('status filter', {})
       personal: store.create('user-personal', { firstName: 'Mary', lastName: 'Poppins' })
     });
   })
-  .step('visit "/users"', () => App.visit('/users'))
+  .step(App.visit('/users'))
   .child('show inactive users', test => test
     .step(Checkbox('Inactive').click())
     .assertion(Table('list-users').has({ dataRowCount: 8 })))

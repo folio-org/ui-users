@@ -16,7 +16,7 @@ import {
 } from '../interactors';
 
 export default test('user create page')
-  .step('visit "/users"', () => App.visit('/users'))
+  .step(App.visit('/users'))
   .step(Button.findByAttribute('data-test-pane-header-actions-button').click())
   .step(Link('New').click())
   .assertion(Header.findByAttribute('data-test-pane-header-title').find(Span('data-test-header-title', { value: 'Create User' })).exists())

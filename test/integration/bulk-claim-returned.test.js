@@ -20,7 +20,7 @@ export default test('bulk claim returned', { permissions: ['circulation.loans.co
       },
     });
   })
-  .step('visit "/users/1/loans/open"', () => App.visit('/users/1/loans/open'))
+  .step(App.visit('/users/1/loans/open'))
   .child('when no items are selected', test => test
     .assertion(OpenLoansControl('').is({ actionsBarClaimReturnedDisabled: true })))
   .child('working with checked out items', test => test
