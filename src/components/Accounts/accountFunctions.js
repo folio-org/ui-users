@@ -51,6 +51,7 @@ export function loadServicePoints(values) {
   const servicePoints = values.servicePointsIds;
   const owners = values.owners || [];
   let ownerId = null;
+  console.log('values loadServicePoints', values);
   if (servicePoint && servicePoint !== '-') {
     owners.forEach(o => {
       if (o.servicePointOwner && o.servicePointOwner.find(s => s.value === servicePoint)) {

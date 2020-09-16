@@ -374,7 +374,6 @@ class Actions extends React.Component {
     const account = _.head(accounts) || {};
     mutator.activeRecord.update({ id: account.id });
     const payload = this.buildActionBody(values);
-    // this.action(account, values.amount, values, action);
     mutator[this.actionToEndpointMapping[action]].POST(_.omit(payload, ['id']))
       .then(() => this.props.handleEdit(1))
       .then(() => this.showCalloutMessage(account))
@@ -448,13 +447,12 @@ class Actions extends React.Component {
   onConfirm = () => {
     const { actions, selectedAccounts = [] } = this.props;
     const { values } = this.state;
+    console.log('values ', values);
 
     const singleSelectedAccount = selectedAccounts.length === 1;
     const singlePay = actions.pay || (actions.regular && singleSelectedAccount);
     const singleWaive = actions.waiveModal || (actions.waiveMany && singleSelectedAccount);
     const singleTransfer = actions.transferModal || (actions.transferMany && singleSelectedAccount);
-
-    // debugger;
 
     if (singlePay) {
       this.onSubmit(values, 'payment');
