@@ -215,7 +215,7 @@
     "charge.feefine.label": "نوع الغرامة/الرسم*",
     "charge.amount.label": "مبلغ الرسم/الغرامة*",
     "charge.patron": "المستفيد",
-    "charge.barcode": "الباركود:",
+    "charge.barcode": "الباركود",
     "charge.title": "غرامة/رسم جديد",
     "charge.onlyCharge": "فرض فقط",
     "charge.comment": "تعليقات",

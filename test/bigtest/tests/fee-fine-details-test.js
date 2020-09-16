@@ -185,5 +185,98 @@ describe('Test Fee/Fine details', () => {
         });
       });
     });
+
+    describe('Transfer fee/fine', () => {
+      beforeEach(async () => {
+        await FeeFineDetails.transferButton.click();
+      });
+
+      it('displays transfer modal', () => {
+        expect(FeeFineDetails.actionModal.isPresent).to.be.true;
+      });
+
+      it('displays transfer modal amount field', () => {
+        expect(FeeFineDetails.actionModalAmountField.value).to.equal('500.00');
+      });
+
+      describe('Choose transfer account name', () => {
+        beforeEach(async () => {
+          await FeeFineDetails.actionModalAmountField.pressTab();
+          await FeeFineDetails.actionModalSelect.selectAndBlur('transferAccount');
+        });
+
+        it('displays transfer modal select option', () => {
+          expect(FeeFineDetails.actionModalSelect.value).to.equal('transferAccount');
+        });
+
+        it('displays transfer button', () => {
+          expect(FeeFineDetails.actionModalSubmitButton.isPresent).to.be.true;
+          expect(FeeFineDetails.actionModalSubmitButtonIsDisabled).to.be.false;
+        });
+
+        describe('transfer fine', () => {
+          beforeEach(async () => {
+            await FeeFineDetails.actionModalSubmitButton.click();
+          });
+
+          it('displays confirmation modal', () => {
+            expect(FeeFineDetails.actionConfirmationModal.body.isPresent).to.be.true;
+          });
+
+          describe('confirm fine transfering', () => {
+            beforeEach(async () => {
+              await FeeFineDetails.actionConfirmationModal.confirmButton.click();
+            });
+
+            it('show successfull callout', () => {
+              expect(FeeFineDetails.callout.successCalloutIsPresent).to.be.true;
+            });
+          });
+        });
+      });
+    });
+
+    describe('Cancel fee/fine', () => {
+      beforeEach(async () => {
+        await FeeFineDetails.errorButton.click();
+      });
+
+      it('displays error modal', () => {
+        expect(FeeFineDetails.errorModal.isPresent).to.be.true;
+      });
+
+      it('displays error modal submit button', () => {
+        expect(FeeFineDetails.errorModalSubmit.isPresent).to.be.true;
+      });
+
+      it('displays error modal comment field', () => {
+        expect(FeeFineDetails.errorComment.isPresent).to.be.true;
+      });
+
+      describe('Fill cancel reason', () => {
+        beforeEach(async () => {
+          await FeeFineDetails.errorComment.focusTextArea();
+          await FeeFineDetails.errorComment.fillAndBlur('Cancellation reason');
+        });
+
+        it('displays cancel reason value', () => {
+          expect(FeeFineDetails.errorComment.val).to.equal('Cancellation reason');
+        });
+
+        it('displays active submit cancel button', () => {
+          expect(FeeFineDetails.errorModalSubmitIsDisabled).to.be.false;
+        });
+
+        describe('cancel fine', () => {
+          beforeEach(async () => {
+            await FeeFineDetails.errorModalSubmit.click();
+          });
+
+          it('show successfull callout', () => {
+            expect(FeeFineDetails.callout.successCalloutIsPresent).to.be.true;
+          });
+        });
+      });
+    });
   });
 });

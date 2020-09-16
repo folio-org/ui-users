@@ -215,7 +215,7 @@
     "charge.feefine.label": "Tipologia tariffa/multa*",
     "charge.amount.label": "Importo tariffa/multa*",
     "charge.patron": "Utente",
-    "charge.barcode": "Barcode: ",
+    "charge.barcode": "Barcode",
     "charge.title": "Nuova tariffa/multa",
     "charge.onlyCharge": "Solo addebito",
     "charge.comment": "Ulteriori informazioni per lo staff",

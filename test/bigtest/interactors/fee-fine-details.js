@@ -10,6 +10,7 @@ import {
 } from '@bigtest/interactor';
 
 import ButtonInteractor from '@folio/stripes-components/lib/Button/tests/interactor'; // eslint-disable-line
+import TextAreaInteractor from '@folio/stripes-components/lib/TextArea/tests/interactor'; // eslint-disable-line
 import ModalInteractor from '@folio/stripes-components/lib/Modal/tests/interactor'; // eslint-disable-line
 import ConfirmationModalInteractor from '@folio/stripes-components/lib/ConfirmationModal/tests/interactor'; // eslint-disable-line
 import CalloutInteractor from '@folio/stripes-components/lib/Callout/tests/interactor'; // eslint-disable-line
@@ -58,6 +59,12 @@ import KeyValue from './KeyValue';
   contributors = scoped('[data-test-contributors] div', KeyValue);
   payButton = new ButtonInteractor('#payAccountActionsHistory');
   waiveButton = new ButtonInteractor('#waiveAccountActionsHistory');
+  transferButton = new ButtonInteractor('#transferAccountActionsHistory');
+  errorButton = new ButtonInteractor('#errorAccountActionsHistory');
+  errorModal = new ModalInteractor('#error-modal');
+  errorComment = new TextAreaInteractor('[class*=textArea---]');
+  errorModalSubmit = new ButtonInteractor('[data-test-error-submit]');
+  errorModalSubmitIsDisabled = is('[data-test-error-submit][disabled]');
   actionModal = new ModalInteractor('[data-test-fee-fine-action-modal]');
   actionModalSubmitButton = new ButtonInteractor('[data-test-fee-fine-action-modal] #submit-button');
   actionModalSubmitButtonIsDisabled = is('[data-test-fee-fine-action-modal] #submit-button[disabled]');

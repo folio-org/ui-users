@@ -208,7 +208,6 @@ class ChargeForm extends React.Component {
         </Button>
         <Button
           id="chargeAndPay"
-          type="submit"
           disabled={pristine || submitting || !valid}
           onClick={() => {
             change('pay', true);
@@ -220,7 +219,6 @@ class ChargeForm extends React.Component {
         </Button>
         <Button
           id="chargeOnly"
-          type="submit"
           disabled={pristine || submitting || !valid}
           onClick={() => {
             change('pay', false);
