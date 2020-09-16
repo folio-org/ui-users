@@ -281,10 +281,16 @@ class UserEdit extends React.Component {
     // as the last step.
     if (permUserRecords.records.length === 1) {
       const record = permUserRecords.records[0];
+
       // N.B. permUserId is the id of the *permissions user* record, not the regular
       // user record!
       permUserId.replace(record.id);
       record.permissions = permissionNames;
+
+      // Currently there is a bug (https://issues.folio.org/browse/MODPERMS-100) that
+      // requires us to remove the metadata object before sending the request.
+      delete record.metadata;
+
       permissionsMutator.PUT(record);
     } else {
       // Create a new permissions user record first
