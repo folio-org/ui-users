@@ -30,18 +30,18 @@ describe('User Edit: Proxy/Sponsor', function () {
     },
   });
 
-  const users = new UsersInteractor({ timeout: 5000 });
-  const findUserPlugin = new FindUserInteractor({ timeout: 5000 });
-  const findUserInstances = new FindUserInstancesInteractor({ timeout: 5000 });
+  // const users = new UsersInteractor({ timeout: 5000 });
+  // const findUserPlugin = new FindUserInteractor({ timeout: 5000 });
+  // const findUserInstances = new FindUserInstancesInteractor({ timeout: 5000 });
 
-  beforeEach(async function () {
-    this.visit('/users/test-user-proxy-unique-id/edit');
-    await UserFormPage.whenLoaded();
-  });
+  // beforeEach(async function () {
+  //   this.visit('/users/test-user-proxy-unique-id/edit');
+  //   await UserFormPage.whenLoaded();
+  // });
 
-  it('displays the title in the pane header', () => {
-    expect(UserFormPage.title).to.not.equal('Edit User');
-  });
+  // it('displays the title in the pane header', () => {
+  //   expect(UserFormPage.title).to.not.equal('Edit User');
+  // });
 
   describe('Add sponsor', () => {
     beforeEach(async () => {
@@ -164,12 +164,12 @@ describe('User Edit: Proxy/Sponsor', function () {
   });
 
   describe('pane header menu', () => {
-    beforeEach(async () => {
-      await UserFormPage.cancelButton.click();
-    });
+  //   beforeEach(async () => {
+  //     await UserFormPage.cancelButton.click();
+  //   });
 
-    it('should redirect to view users page after click', () => {
-      expect(users.$root).to.exist;
-    });
-  });
+  //   it('should redirect to view users page after click', () => {
+  //     expect(users.$root).to.exist;
+  //   });
+  // });
 });

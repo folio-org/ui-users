@@ -11,6 +11,8 @@ import OpenLoansInteractor from '../interactors/open-loans';
 import UsersInteractor from '../interactors/users';
 import LoansListingPane from '../interactors/loans-listing-pane';
 
+// 🧹 skipping because of module issue
+
 describe('Open Loans', () => {
   const requestsPath = '/requests';
   const requestsAmount = 2;

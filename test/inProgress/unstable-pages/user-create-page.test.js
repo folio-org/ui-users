@@ -15,6 +15,8 @@ import {
   TextField
 } from '../interactors';
 
+// 🧹 unstable page
+
 export default test('user create page')
   .step(App.visit('/users'))
   .step(Button.findByAttribute('data-test-pane-header-actions-button').click())
@@ -57,5 +59,4 @@ export default test('user create page')
   //   .step(TextField.findById('adduser_username').fill('username'))
   //   .assertion(Link('Password Reset').exists()));
 
-// last assertion broken because password reset button is nowhere to be found
-// 🧹
+// 🧹 last assertion broken because password reset button is nowhere to be found
