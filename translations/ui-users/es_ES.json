@@ -215,7 +215,7 @@
     "charge.feefine.label": "Tipo de tarifa/multa*",
     "charge.amount.label": "Cantidad de la tarifa/multa*",
     "charge.patron": "Patrón",
-    "charge.barcode": "Código de barras:",
+    "charge.barcode": "Código de barras",
     "charge.title": "Nueva tarifa/multa",
     "charge.onlyCharge": "Cargar solamente",
     "charge.comment": "Comentarios",

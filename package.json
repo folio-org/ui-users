@@ -761,6 +761,7 @@
     "prop-types": "^15.5.10",
     "query-string": "^5.0.0",
     "react-final-form": "^6.3.0",
+    "final-form-set-field-data": "^1.0.2",
     "react-hot-loader": "^4.3.12",
     "react-router-prop-types": "^1.0.4",
     "redux-form": "^7.0.3",
