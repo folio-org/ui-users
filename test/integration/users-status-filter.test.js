@@ -4,7 +4,7 @@ import { store } from '../helpers/server';
 
 import { Button, Checkbox, Search, Table } from '../interactors';
 
-export default test('status filter', {})
+export default test('status filter')
   .step('seed data', async () => {
     store.createList('user', 3, { active: true });
     store.createList('user', 8, { active: false });
@@ -26,6 +26,7 @@ export default test('status filter', {})
     .assertion(Table('list-users').has({ dataRowCount: 12 })));
 
 // skipping because search function is broken; search for '/users' getter in network/config.js
+// 🧹
 
 // .child('search for users', test => test
 //   .step(Search('input-user-search').fill('Mary Poppins'))

@@ -20,7 +20,12 @@ import {
   TextField
 } from '../interactors';
 
-export default test('Transfer user fines', { permissions: [] }, { curServicePoint: { id: 1 } })
+export default test('Transfer user fines', {
+  permissions: [],
+  user: {
+    curServicePoint: { id: 1 }
+  }
+})
   .step('seed data', async () => {
     const user = store.create('user', { id: '1ad737b0-d847-11e6-bf26-cec0c932ce02' });
     store.createList('owner', 5);
@@ -43,6 +48,7 @@ export default test('Transfer user fines', { permissions: [] }, { curServicePoin
     return { user };
   })
   .step('query routes', async () => {
+    // 🧹
     routes.get('/accounts');
     routes.get('/accounts/:id', (schema, request) => {
       return schema.accounts.find(request.params.id).attrs;
