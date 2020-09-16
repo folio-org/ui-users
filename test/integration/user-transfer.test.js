@@ -1,4 +1,3 @@
-/* eslint-disable newline-per-chained-call */
 import { App } from '@bigtest/interactor';
 import test from '../helpers/base-steps/simulate-server';
 import { store, routes } from '../helpers/server';
@@ -140,8 +139,28 @@ export default test('Transfer user fines', {
       .step(Button.findById('submit-button').click())
       .step(Button('Confirm').click())
       .assertion(Table('list-accounts-history-view-feesfines', { dataRowCount: 5 }).exists())
-      .assertion(Table('list-accounts-history-view-feesfines').find(TableRowGroup()).find(TableRow.findByRowNumber(1)).find(TableCell('0.00', { columnTitle: 'Remaining' })).exists())
-      .assertion(Table('list-accounts-history-view-feesfines').find(TableRowGroup()).find(TableRow.findByRowNumber(2)).find(TableCell('10.00', { columnTitle: 'Remaining' })).exists())
-      .assertion(Table('list-accounts-history-view-feesfines').find(TableRowGroup()).find(TableRow.findByRowNumber(3)).find(TableCell('20.00', { columnTitle: 'Remaining' })).exists())
-      .assertion(Table('list-accounts-history-view-feesfines').find(TableRowGroup()).find(TableRow.findByRowNumber(4)).find(TableCell('30.00', { columnTitle: 'Remaining' })).exists())
-      .assertion(Table('list-accounts-history-view-feesfines').find(TableRowGroup()).find(TableRow.findByRowNumber(5)).find(TableCell('0.00', { columnTitle: 'Remaining' })).exists())));
+      .assertion(Table('list-accounts-history-view-feesfines')
+        .find(TableRowGroup())
+        .find(TableRow.findByRowNumber(1))
+        .find(TableCell('0.00', { columnTitle: 'Remaining' }))
+        .exists())
+      .assertion(Table('list-accounts-history-view-feesfines')
+        .find(TableRowGroup())
+        .find(TableRow.findByRowNumber(2))
+        .find(TableCell('10.00', { columnTitle: 'Remaining' }))
+        .exists())
+      .assertion(Table('list-accounts-history-view-feesfines')
+        .find(TableRowGroup())
+        .find(TableRow.findByRowNumber(3))
+        .find(TableCell('20.00', { columnTitle: 'Remaining' }))
+        .exists())
+      .assertion(Table('list-accounts-history-view-feesfines')
+        .find(TableRowGroup())
+        .find(TableRow.findByRowNumber(4))
+        .find(TableCell('30.00', { columnTitle: 'Remaining' }))
+        .exists())
+      .assertion(Table('list-accounts-history-view-feesfines')
+        .find(TableRowGroup())
+        .find(TableRow.findByRowNumber(5))
+        .find(TableCell('0.00', { columnTitle: 'Remaining' }))
+        .exists())));
