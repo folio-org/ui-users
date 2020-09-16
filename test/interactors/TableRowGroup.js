@@ -6,6 +6,9 @@ export default createInteractor('table cell')({
   filters: {
     dataRowCount: element => {
       return element.querySelectorAll('[role=row]').length;
+    },
+    dataRowContainerCount: element => {
+      return element.querySelectorAll('div[class^="mclRowFormatterContainer-"]').length;
     }
   }
 });

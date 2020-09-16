@@ -6,6 +6,9 @@ export default createInteractor('table')({
   filters: {
     dataRowCount: element => {
       return element.querySelectorAll('[role=row]').length - 1;
+    },
+    dataColumnCount: element => {
+      return element.querySelectorAll('[role="columnheader"]').length;
     }
-  },
+  }
 });
