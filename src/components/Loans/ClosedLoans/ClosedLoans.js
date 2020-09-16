@@ -3,6 +3,7 @@ import React from 'react';
 import {
   FormattedMessage,
   FormattedTime,
+  FormattedDate,
   injectIntl,
 } from 'react-intl';
 import PropTypes from 'prop-types';
@@ -183,14 +184,12 @@ class ClosedLoans extends React.Component {
   getLoansFormatter() {
     return {
       'title': loan => _.get(loan, ['item', 'title'], ''),
-      'dueDate': loan => {
-        return <FormattedTime
-          value={loan.dueDate}
-          day="numeric"
-          month="numeric"
-          year="numeric"
-        />;
-      },
+      'dueDate': loan => (
+        <div>
+          <div><FormattedDate tagName="div" value={loan.dueDate} /></div>
+          <div><FormattedTime tagName="div" value={loan.dueDate} /></div>
+        </div>
+      ),
       'barcode': loan => _.get(loan, ['item', 'barcode'], ''),
       'Fee/Fine': loan => this.getFeeFine(loan),
       'callNumber': loan => (<div data-test-list-call-numbers>{effectiveCallNumber(loan)}</div>),
@@ -388,7 +387,19 @@ class ClosedLoans extends React.Component {
       loans,
     } = this.props;
 
-    const visibleColumns = ['title', 'dueDate', 'barcode', 'Fee/Fine', 'callNumber', 'Contributors', 'renewals', 'loanDate', 'returnDate', 'checkinServicePoint', ' '];
+    const visibleColumns = [
+      'title',
+      'dueDate',
+      'barcode',
+      'Fee/Fine',
+      'callNumber',
+      // 'Contributors',
+      'renewals',
+      // 'loanDate',
+      'returnDate',
+      'checkinServicePoint',
+      ' '
+    ];
     const anonymizeString = <FormattedMessage id="ui-users.anonymize" />;
     const loansSorted = _.orderBy(loans,
       [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);

@@ -40,9 +40,9 @@ class OpenLoans extends React.Component {
 
     this.columnWidths = {
       '  ': { max: 35 },
-      'title': { max: 150 },
+      'title': { max: 200 },
       'itemStatus': { max: 100 },
-      'dueDate': { max: 140 },
+      'dueDate': { max: 120 },
       'requests': { max: 90 },
       'barcode': { max: 135 },
       'Fee/Fine': { max: 100 },

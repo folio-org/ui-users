@@ -106,12 +106,10 @@ export default function getListDataFormatter(
       key:'dueDate',
       view: formatMessage({ id: 'ui-users.loans.columns.dueDate' }),
       formatter: loan => (
-        <FormattedTime
-          value={get(loan, ['dueDate'])}
-          day="numeric"
-          month="numeric"
-          year="numeric"
-        />
+        <div>
+          <div><FormattedDate tagName="div" value={loan.dueDate} /></div>
+          <div><FormattedTime tagName="div" value={loan.dueDate} /></div>
+        </div>
       ),
       sorter: loan => loan.dueDate,
     },

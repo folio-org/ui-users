@@ -609,7 +609,7 @@
     "reports.overdue.item.callNumberComponents.suffix": "Call number suffix",
     "reports.overdue.item.enumeration": "Enumeration",
     "reports.overdue.item.volume": "Volume",
-    "loans.details.effectiveCallNumber": "Effective call number string",
+    "loans.details.effectiveCallNumber": "Effective call number",
     "settings.customFields": "Custom fields",
     "details.field.instance.type": "Instance (Material type)",
     "accounts.history.columns.instance": "實例（資料類型）",

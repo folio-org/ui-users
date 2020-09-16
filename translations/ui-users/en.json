@@ -158,7 +158,7 @@
   "loans.details.location": "Location",
   "loans.details.requestQueue": "Request queue",
   "loans.details.requests": "Requests",
-  "loans.details.effectiveCallNumber": "Effective call number string",
+  "loans.details.effectiveCallNumber": "Effective call number",
   "loans.details.claimedReturned": "Claimed returned",
   "loans.details.loanPolicy": "Loan policy",
   "loans.details.lost": "Lost",
