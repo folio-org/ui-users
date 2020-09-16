@@ -1,7 +1,7 @@
 import { createInteractor, perform } from '@bigtest/interactor';
 
 export default createInteractor('checkbox')({
-  selector: 'input[type=checkbox]',
+  selector: 'input[type=checkbox], input[type=radio]',
   defaultLocator: element => element.labels[0].textContent,
   locators: {
     findByName: element => element.name

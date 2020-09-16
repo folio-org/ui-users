@@ -4,6 +4,7 @@ import AddressForm from './AddressForm';
 import Alert from './Alert';
 import Button from './Button';
 import CalendarButton from './CalendarButton';
+import ChargesTable from './ChargesTable';
 import Checkbox from './Checkbox';
 import Div from './Div';
 import DropdownMenu from './DropdownMenu';
@@ -33,6 +34,7 @@ export {
   Alert,
   Button,
   CalendarButton,
+  ChargesTable,
   Checkbox,
   Div,
   DropdownMenu,
