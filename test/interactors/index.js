@@ -8,10 +8,13 @@ import ChargesTable from './ChargesTable';
 import Checkbox from './Checkbox';
 import Div from './Div';
 import DropdownMenu from './DropdownMenu';
+import Form from './Form';
 import Header from './Header';
 import HeaderRow from './HeaderRow';
+import InputNumber from './InputNumber';
 import Link from './Link';
 import ListItem from './ListItem';
+import Nav from './Nav';
 import OpenLoansControl from './OpenLoansControl';
 import Option from './Option';
 import OverlayContainer from './OverlayContainer';
@@ -39,10 +42,13 @@ export {
   Checkbox,
   Div,
   DropdownMenu,
+  Form,
   Header,
   HeaderRow,
+  InputNumber,
   Link,
   ListItem,
+  Nav,
   OpenLoansControl,
   Option,
   OverlayContainer,
