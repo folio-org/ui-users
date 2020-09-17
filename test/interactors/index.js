@@ -11,6 +11,7 @@ import DropdownMenu from './DropdownMenu';
 import Header from './Header';
 import HeaderRow from './HeaderRow';
 import Link from './Link';
+import ListItem from './ListItem';
 import OpenLoansControl from './OpenLoansControl';
 import Option from './Option';
 import OverlayContainer from './OverlayContainer';
@@ -41,6 +42,7 @@ export {
   Header,
   HeaderRow,
   Link,
+  ListItem,
   OpenLoansControl,
   Option,
   OverlayContainer,

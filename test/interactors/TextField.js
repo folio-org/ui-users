@@ -4,7 +4,8 @@ export default createInteractor('text field')({
   selector: 'input[type=text], input[type=password]',
   defaultLocator: element => element.labels[0]?.textContent,
   locators: {
-    findById: element => element.id
+    findById: element => element.id,
+    findByPlaceholder: element => element.placeholder
   },
   filters: {
     enabled: element => !element.disabled,
