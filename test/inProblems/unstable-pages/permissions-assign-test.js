@@ -17,13 +17,13 @@ describe('Permissions assign', () => {
   setupApplication({ permissions: { 'perms.users.get': true } });
 
   describe('visit user details, then navigate to edit', () => {
-    beforeEach(async function () {
-      this.server.createList('permission', permissionsAmount);
-      this.server.createList('permission', permissionSetsAmount, { mutable: true });
-      const user = this.server.create('user');
+    // beforeEach(async function () {
+    //   this.server.createList('permission', permissionsAmount);
+    //   this.server.createList('permission', permissionSetsAmount, { mutable: true });
+    //   const user = this.server.create('user');
 
-      this.visit(`/users/preview/${user.id}`);
-      await InstanceViewPage.whenLoaded();
+    //   this.visit(`/users/preview/${user.id}`);
+    //   await InstanceViewPage.whenLoaded();
     });
 
     it('edit button is present', () => {
