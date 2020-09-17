@@ -379,7 +379,54 @@ class Actions extends React.Component {
       .then(() => this.onCloseActionModal());
   }
 
-  onSubmitMany = () => {}
+  onSubmitMany = (values, items, action) => {
+    let amount = parseFloat(values.amount);
+    let offset = 0;
+    const promises = [];
+    const selected = _.orderBy(items, ['remaining'], ['asc']) || [];
+    let partialAmounts = this.partialAmount(amount, selected.length);
+
+    selected.forEach((item, index) => {
+      const promise = new Promise((resolve, reject) => {
+        if (partialAmounts[index - offset] >= item.remaining) {
+          offset++;
+          partialAmounts = this.partialAmount(amount - item.remaining, selected.length - offset);
+          amount -= item.remaining;
+          this.action(item, item.remaining, values, action).then(() => {
+            this.showCalloutMessage(item);
+            resolve();
+          }).catch(reject);
+        } else {
+          this.action(item, partialAmounts[index - offset], values, action).then(() => {
+            this.showCalloutMessage(item);
+            resolve();
+          }).catch(reject);
+        }
+      });
+      promises.push(promise);
+    });
+
+    Promise.all(promises).then(() => {
+      this.props.handleEdit(1);
+      this.onCloseActionModal();
+    });
+  }
+
+  action = (type, amount, values, action) => {
+    const { intl: { formatMessage } } = this.props;
+    this.props.mutator.activeRecord.update({ id: type.id });
+    let paymentStatus = _.capitalize(formatMessage({ id: `ui-users.accounts.actions.warning.${action}Action` }));
+    if (amount < type.remaining) {
+      paymentStatus = `${paymentStatus} ${formatMessage({ id: 'ui-users.accounts.status.partially' })}`;
+    } else {
+      paymentStatus = `${paymentStatus} ${formatMessage({ id: 'ui-users.accounts.status.fully' })}`;
+      type.status.name = 'Closed';
+    }
+    const balance = type.remaining - parseFloat(amount);
+    const createdAt = this.props.okapi.currentUser.curServicePoint.id;
+    return this.editAccount(type, paymentStatus, type.status.name, balance)
+      .then(() => this.newAction({ paymentMethod: values.method }, type.id, paymentStatus, amount, this.assembleTagInfo(values), balance, values.transaction, createdAt || type.feeFineOwner));
+  }
 
   onCloseActionModal() {
     this.props.onChangeActions({
@@ -421,6 +468,22 @@ class Actions extends React.Component {
   onChangeAccounts = (accounts) => {
     this.props.onChangeSelectedAccounts(accounts);
     this.setState({ accounts: accounts || [] });
+  }
+
+  partialAmount = (total, n) => {
+    const amount = total / n;
+    const amounts = Array(n);
+    const stringAmount = amount.toString();
+    const decimal = stringAmount.indexOf('.');
+    if (decimal === -1) { return amounts.fill(amount); }
+    const rounding = stringAmount.substring(0, decimal + 3);
+    amounts.fill(parseFloat(rounding));
+    let partialAmount = stringAmount.substring(decimal + 3);
+    partialAmount = '0.' + '0'.repeat(stringAmount.length - partialAmount.length - decimal - 1) + partialAmount;
+    partialAmount = parseFloat(partialAmount);
+    partialAmount = parseFloat(partialAmount * n).toFixed(2);
+    amounts[0] += parseFloat(partialAmount);
+    return amounts;
   }
 
   showConfirmDialog = (values) => {
