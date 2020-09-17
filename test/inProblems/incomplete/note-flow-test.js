@@ -16,39 +16,39 @@ const noteView = new NoteView();
 describe.skip('User notes flow', function () {
   setupApplication();
 
-  let user;
-  let userNote;
-  let noteType;
+  // let user;
+  // let userNote;
+  // let noteType;
 
-  beforeEach(async function () {
-    user = this.server.create('user');
+  // beforeEach(async function () {
+  //   user = this.server.create('user');
 
-    noteType = this.server.create('note-type', {
-      id: 'noteType1',
-      name: 'Test note type',
-    });
+  //   noteType = this.server.create('note-type', {
+  //     id: 'noteType1',
+  //     name: 'Test note type',
+  //   });
 
-    userNote = this.server.create('note', {
-      type: noteType.name,
-      typeId: noteType.id,
-      links: [{ type: 'user', id: user.id }],
-    });
+  //   userNote = this.server.create('note', {
+  //     type: noteType.name,
+  //     typeId: noteType.id,
+  //     links: [{ type: 'user', id: user.id }],
+  //   });
 
-    this.server.create('note', {
-      type: noteType.name,
-      typeId: noteType.id,
-      links: [{ type: 'user', id: 'someId' }],
-    });
+  //   this.server.create('note', {
+  //     type: noteType.name,
+  //     typeId: noteType.id,
+  //     links: [{ type: 'user', id: 'someId' }],
+  //   });
 
-    this.server.create('note', {
-      type: noteType.name,
-      typeId: noteType.id,
-      links: [{ type: 'user', id: 'someId2' }],
-    });
+  //   this.server.create('note', {
+  //     type: noteType.name,
+  //     typeId: noteType.id,
+  //     links: [{ type: 'user', id: 'someId2' }],
+  //   });
 
-    this.visit(`/users/preview/${user.id}`);
+  //   this.visit(`/users/preview/${user.id}`);
 
-    await notesAccordion.whenLoaded();
+  //   await notesAccordion.whenLoaded();
   });
 
   describe('when the user details pane is visited', () => {
