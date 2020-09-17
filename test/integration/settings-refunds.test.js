@@ -215,4 +215,4 @@ export default test('settings refunds')
     .step(Button.findById('clickable-add-settings-refunds').click())
     .step(TextField.findByPlaceholder('nameReason').fill('Reason1'))
     .step(Button('Save').click())
-    .assertion(TableRow.findByDataRowIndex('row-0').find(Alert('Refund reason already exists')).exists()));
+    .assertion(Alert('Refund reason already exists').exists()));

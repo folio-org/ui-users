@@ -213,4 +213,4 @@ export default test('settings-waives')
     .step(Button.findById('clickable-add-settings-waives').click())
     .step(TextField.findByPlaceholder('nameReason').fill('First time offender1'))
     .step(Button('Save').click())
-    .assertion(TableRow.findByDataRowIndex('row-0').find(Alert('Waive reason already exists')).exists()));
+    .assertion(Alert('Waive reason already exists').exists()));
