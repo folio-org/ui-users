@@ -89,6 +89,7 @@ class ActionsDropdown extends React.Component {
         <IfPermission perm="ui-users.loans.edit">
           { itemStatusName !== itemStatuses.DECLARED_LOST &&
             itemStatusName !== itemStatuses.CLAIMED_RETURNED &&
+            itemStatusName !== itemStatuses.AGED_TO_LOST &&
             <Button
               buttonStyle="dropdownItem"
               data-test-dropdown-content-change-due-date-button
@@ -157,7 +158,7 @@ class ActionsDropdown extends React.Component {
           <Button
             buttonStyle="dropdownItem"
             data-test-dropdown-content-request-queue
-            to={getOpenRequestsPath(loan?.item?.barcode)}
+            to={getOpenRequestsPath(loan?.itemId)}
           >
             <FormattedMessage id="ui-users.loans.details.requestQueue" />
           </Button>

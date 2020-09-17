@@ -34,7 +34,7 @@ class Actions extends React.Component {
     accounts: {
       type: 'okapi',
       records: 'accounts',
-      path: 'accounts?query=(userId==%{user.id})&limit=10000',
+      path: `accounts?query=(userId==%{user.id})&limit=${MAX_RECORDS}`,
       PUT: {
         path: 'accounts/%{activeRecord.id}'
       },
@@ -42,7 +42,7 @@ class Actions extends React.Component {
     feefineactions: {
       type: 'okapi',
       records: 'feefineactions',
-      path: 'feefineactions?limit=10000',
+      path: `feefineactions?limit=${MAX_RECORDS}`,
     },
     payments: {
       type: 'okapi',
@@ -57,7 +57,7 @@ class Actions extends React.Component {
     owners: {
       type: 'okapi',
       records: 'owners',
-      path: 'owners?query=cql.allRecords=1&limit=2000',
+      path: `owners?query=cql.allRecords=1&limit=${MAX_RECORDS}`,
     },
     feefineTypes: {
       type: 'okapi',
@@ -76,6 +76,58 @@ class Actions extends React.Component {
     },
     activeRecord: {},
     user: {},
+    checkPay: {
+      type: 'okapi',
+      POST: {
+        path: 'accounts/%{accountId}/check-pay',
+      },
+      fetch: false,
+      clientGeneratePk: false,
+    },
+    checkWaive: {
+      type: 'okapi',
+      POST: {
+        path: 'accounts/%{accountId}/check-waive',
+      },
+      fetch: false,
+      clientGeneratePk: false,
+    },
+    checkTransfer: {
+      type: 'okapi',
+      POST: {
+        path: 'accounts/%{accountId}/check-transfer',
+      },
+      fetch: false,
+      clientGeneratePk: false,
+    },
+    pay: {
+      type: 'okapi',
+      path: 'accounts/%{activeRecord.id}/pay',
+      fetch: false,
+      accumulate: 'true',
+      clientGeneratePk: false,
+    },
+    waive: {
+      type: 'okapi',
+      path: 'accounts/%{activeRecord.id}/waive',
+      fetch: false,
+      accumulate: 'true',
+      clientGeneratePk: false,
+    },
+    transfer: {
+      type: 'okapi',
+      path: 'accounts/%{activeRecord.id}/transfer',
+      fetch: false,
+      accumulate: 'true',
+      clientGeneratePk: false,
+    },
+    cancel: {
+      type: 'okapi',
+      path: 'accounts/%{activeRecord.id}/cancel',
+      fetch: false,
+      accumulate: 'true',
+      clientGeneratePk: false,
+    },
   });
 
   static propTypes = {
@@ -91,6 +143,27 @@ class Actions extends React.Component {
         PUT: PropTypes.func.isRequired,
       }),
       feefineactions: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      checkPay: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      checkWaive: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      checkTransfer: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      pay: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      waive: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      transfer: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      cancel: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }),
     }),
@@ -125,6 +198,12 @@ class Actions extends React.Component {
     this.onCloseComment = this.onCloseComment.bind(this);
     this.onClickComment = this.onClickComment.bind(this);
     this.callout = null;
+
+    this.actionToEndpointMapping = {
+      'payment': 'pay',
+      'waive': 'waive',
+      'transfer': 'transfer',
+    };
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -232,16 +311,18 @@ class Actions extends React.Component {
   }
 
   onClickCancellation(values) {
-    const { intl: { formatMessage } } = this.props;
-    const canceled = formatMessage({ id: 'ui-users.accounts.cancelError' });
-    const type = this.props.accounts[0] || {};
-    const createdAt = this.props.okapi.currentUser.curServicePoint.id;
-    delete type.rowIndex;
-    this.props.mutator.activeRecord.update({ id: type.id });
-    this.newAction({}, type.id, canceled, type.amount, this.assembleTagInfo(values), 0, 0, createdAt || type.feeFineOwner, values);
-    this.editAccount(type, canceled, 'Closed', 0.00)
+    const {
+      mutator,
+      accounts,
+    } = this.props;
+    const account = accounts[0] || {};
+    delete account.rowIndex;
+    mutator.activeRecord.update({ id: account.id });
+    const payload = this.buildActionBody(values);
+    delete payload.amount;
+    mutator.cancel.POST(_.omit(payload, ['id']))
       .then(() => this.props.handleEdit(1))
-      .then(() => this.showCalloutMessage(type))
+      .then(() => this.showCalloutMessage(account))
       .then(() => this.onCloseCancellation());
   }
 
@@ -261,12 +342,42 @@ class Actions extends React.Component {
       .then(() => this.onCloseComment());
   }
 
+  buildActionBody = (values) => {
+    const {
+      okapi: {
+        currentUser: {
+          firstName,
+          lastName,
+          curServicePoint: { id: servicePointId }
+        },
+      }
+    } = this.props;
+
+    const body = {};
+
+    body.amount = values.amount;
+    body.paymentMethod = values.method;
+    body.notifyPatron = values.notify;
+    body.comments = this.assembleTagInfo(values);
+    body.servicePointId = servicePointId;
+    body.userName = `${lastName}, ${firstName}`;
+
+    return body;
+  };
+
   onSubmit(values, action) {
-    const type = this.props.accounts[0] || {};
-    delete type.rowIndex;
-    this.action(type, values.amount, values, action)
+    const {
+      accounts,
+      mutator,
+    } = this.props;
+
+    const account = _.head(accounts) || {};
+    mutator.activeRecord.update({ id: account.id });
+    const payload = this.buildActionBody(values);
+    this.action(account, values.amount, values, action);
+    mutator[this.actionToEndpointMapping[action]].POST(_.omit(payload, ['id']))
       .then(() => this.props.handleEdit(1))
-      .then(() => this.showCalloutMessage(type))
+      .then(() => this.showCalloutMessage(account))
       .then(() => this.onCloseActionModal());
   }
 
@@ -468,13 +579,15 @@ class Actions extends React.Component {
       submitting
     } = this.state;
 
+    const account = this.props.accounts[0] || {};
     const amount = calculateSelectedAmount((actions.pay || actions.waiveModal || actions.transferModal) ? this.props.accounts : accounts);
-
     const defaultServicePointId = _.get(resources, ['curUserServicePoint', 'records', 0, 'defaultServicePointId'], '-');
     const servicePointsIds = _.get(resources, ['curUserServicePoint', 'records', 0, 'servicePointsIds'], []);
     const payments = _.get(resources, ['payments', 'records'], []);
     const owners = _.get(resources, ['owners', 'records'], []).filter(o => o.owner !== 'Shared');
     const feefines = _.get(resources, ['feefineTypes', 'records'], []);
+    const feefineAction = _.get(resources, ['feefineactions', 'records'], [])
+      .find(({ accountId }) => accountId === account.id);
     const waives = _.get(resources, ['waives', 'records'], []);
     const transfers = _.get(resources, ['transfers', 'records'], []);
     const settings = _.get(resources, ['commentRequired', 'records', 0], {});
@@ -491,12 +604,16 @@ class Actions extends React.Component {
           : 'ui-users.accounts.history.button.refund';
 
     const ownerId = loadServicePoints({ owners, defaultServicePointId, servicePointsIds });
-    const initialValues = { ownerId, amount, notify: true };
+    const initialValues = {
+      ownerId,
+      amount,
+      notify: feefineAction?.notify ?? true,
+    };
     const modals = [
-      { action: 'payment', item: actions.pay, label: 'nameMethod', data: payments, comment: 'paid', open: actions.pay || (actions.regular && accounts.length === 1) },
-      { action: 'payment', form: 'payment-many-modal', label: 'nameMethod', accounts, data: payments, comment: 'paid', open: actions.regular && !isWarning && accounts.length > 1 },
-      { action: 'waive', item: actions.waiveModal, label: 'nameReason', data: waives, comment: 'waived', open: actions.waiveModal || (actions.waiveMany && !isWarning) },
-      { action: 'transfer', item: actions.transferModal, label: 'accountName', data: transfers, comment: 'transferredManually', open: actions.transferModal || (actions.transferMany && !isWarning) }
+      { action: 'payment', checkAmount: 'check-pay', item: actions.pay, label: 'nameMethod', data: payments, comment: 'paid', open: actions.pay || (actions.regular && accounts.length === 1) },
+      { action: 'payment', checkAmount: 'check-pay', form: 'payment-many-modal', label: 'nameMethod', accounts, data: payments, comment: 'paid', open: actions.regular && !isWarning && accounts.length > 1 },
+      { action: 'waive', checkAmount: 'check-waive', item: actions.waiveModal, label: 'nameReason', data: waives, comment: 'waived', open: actions.waiveModal || (actions.waiveMany && !isWarning) },
+      { action: 'transfer', checkAmount: 'check-transfer', item: actions.transferModal, label: 'accountName', data: transfers, comment: 'transferredManually', open: actions.transferModal || (actions.transferMany && !isWarning) }
     ];
 
     return (
@@ -516,10 +633,11 @@ class Actions extends React.Component {
         </FormattedMessage>
         <CancellationModal
           form="error-modal"
+          initialValues={initialValues}
           open={actions.cancellation}
           onClose={this.onCloseCancellation}
           user={this.props.user}
-          account={this.props.accounts[0] || {}}
+          account={account}
           onSubmit={(values) => { this.onClickCancellation(values); }}
           owners={owners}
           feefines={feefines}
@@ -539,6 +657,7 @@ class Actions extends React.Component {
             onSubmit={(values) => { this.showConfirmDialog(values); }}
             owners={owners}
             feefines={feefines}
+            okapi={this.props.okapi}
           />
         ))}
         <CommentModal
@@ -548,6 +667,7 @@ class Actions extends React.Component {
           onSubmit={(values) => { this.onClickComment(values); }}
         />
         <ConfirmationModal
+          style={{ position: 'relative', zIndex: 1000 }}
           open={showConfirmDialog}
           heading={this.renderConfirmHeading()}
           message={(showConfirmDialog) ? this.renderConfirmMessage() : ''}

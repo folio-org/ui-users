@@ -2,6 +2,11 @@
 
 ## 5.0.0 (IN PROGRESS)
 
+* modified the lost date display to include aged to lost status. Fixes UIU-1804.
+* Fixing breaking tests.
+* Adding fix for UIU-1801.  Removing temporary fixes to tests.
+* Temporary fix for broken tests relating to UIU-1801.  Does not resolve that issue.
+* changed user search to filter based on tag name rather than ID.  Fixes UIU-1750
 * Trim email address in user record to remove blanks. Fixes UIU-1528.
 * `withRenew` should include in-transit items when calculating the open-request-count. Fixes UIU-1254.
 * Restore `CommandList`, `HasCommand` wrappers now that they don't leak memory. Refs UIU-1457.
@@ -22,6 +27,30 @@
 * Add permission to anonymize manually closed loans. Fixes UIU-1757.
 * Include tag-related permissions in `ui-users.edit` permission. Refs UITAG-29.
 * Increment `@folio/stripes` to `v5.0`, `react-router` to `v5.2`.
+* Support ability to search by Preferred first name. Refs UIU-1767.
+* Handle display of loan details for `Aged to lost`, and for unknown statuses as well. Refs UIU-1791.
+* Settings > Users > Departments CRUD. Refs UIU-1211.
+* Reorder volume/enum/chron fields in loans export (CSV). Refs UIU-1504.
+* Use item id instead of barcode for links to `ui-requests` module. Fixes UIU-1727.
+* Add departments to User crate/edit/view pages. Refs UIU-1224.
+* Enable renewal override for Aged to lost items. Refs UIU-1464.
+* Handle Aged to lost items in bulk due date change. Refs UIU-1495.
+* Include Aged to lost in loan details action history. Refs UIU-1803.
+* Add permissions for Departments CRUD. Refs UIU-1778.
+* Add missing permission `departments.collection.get` permission. Fixes UIU-1812.
+* Prevent UI crashing when loading loan with deleted item. Fixes UIU-1819.
+* Remove user count from patron groups. Fixes UIU-1562.
+* Assign user permissions more efficiently. Fixes UIU-1369.
+* Filter out blank actions on loan details UI. Fixes UIU-1820.
+* Increment `react-intl` to `v5` for `@folio/stripes` `v5` compatibility. Refs STRIPES-694.
+* Only set `servicePointUserId` when it's present. Fixes UIU-1849.
+* Modify default columns and MCL columnWidths on Loans Listing. Fixes UIU-1844
+* Refactoring of `pay`, `waive` fee/fine single actions. Refs UIU-1793.
+* Refactoring of `error` fee/fine single action. Refs UIU-1796.
+* Refactoring of `transfer` fee/fine single action. Refs UIU-1795.
+* Clean up invalid fee/fine type-popover code.
+* Consistent spacing around barcode link.
+* Refactoring of `charge & pay` fee/fine form. Refs UIU-1836.
 
 ## [4.0.0](https://github.com/folio-org/ui-users/tree/v4.0.0) (2020-06-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v3.0.0...v4.0.0)

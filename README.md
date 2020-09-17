@@ -1,6 +1,6 @@
 # ui-users
 
-Copyright (C) 2016-2019 The Open Library Foundation
+Copyright (C) 2016-2020 The Open Library Foundation
 
 This software is distributed under the terms of the Apache License,
 Version 2.0. See the file "[LICENSE](LICENSE)" for more information.
@@ -50,7 +50,7 @@ $ yarn test-int --show
 
 To skip the build step and run integration tests against a build that is already running, provide the URL.
 ```
-$ yarn test-int --url http://folio-testing.aws.indexdata.com/
+$ yarn test-int --url https://folio-testing.dev.folio.org/
 ```
 
 As a convenience, `--local` can be used in place of `--url http://localhost:3000` for running tests a development server that has already been started.

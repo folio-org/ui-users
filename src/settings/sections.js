@@ -16,7 +16,7 @@ import TransferAccountsSettings from './TransferAccountsSettings';
 import CustomFieldsSettingsPane from './CustomFieldsSettings';
 import ConditionsSettings from './ConditionsSettings';
 import LimitsSettings from './LimitsSettings';
-
+import DepartmentsSettings from './DepartmentsSettings';
 
 const settingsGeneral = [
   {
@@ -36,6 +36,12 @@ const settingsGeneral = [
     label: <FormattedMessage id="ui-users.settings.addressTypes" />,
     component: AddressTypesSettings,
     perm: 'ui-users.settings.addresstypes',
+  },
+  {
+    route: 'departments',
+    label: <FormattedMessage id="ui-users.settings.departments" />,
+    component: DepartmentsSettings,
+    perm: 'ui-users.settings.departments.view'
   },
   {
     route: 'profilepictures',

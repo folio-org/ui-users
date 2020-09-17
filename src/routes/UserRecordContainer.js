@@ -10,10 +10,13 @@ import {
   withProxy,
   withServicePoints
 } from '../components/Wrappers';
+import { departmentsShape } from '../shapes';
+import { MAX_RECORDS } from '../constants';
 
 class UserRecordContainer extends React.Component {
   static manifest = Object.freeze({
     query: {},
+    permUserId: {},   // ID of the current permissions user record (see UserEdit.js)
     selUser: {
       type: 'okapi',
       path: 'users/:{id}',
@@ -56,6 +59,11 @@ class UserRecordContainer extends React.Component {
       path: 'addresstypes?query=cql.allRecords=1 sortby desc',
       records: 'addressTypes',
     },
+    departments: {
+      type: 'okapi',
+      path: `departments?query=cql.allRecords=1 sortby name&limit=${MAX_RECORDS}`,
+      records: 'departments',
+    },
     uniquenessValidator: {
       type: 'okapi',
       records: 'users',
@@ -76,8 +84,12 @@ class UserRecordContainer extends React.Component {
     },
     perms: {
       type: 'okapi',
-      path: 'perms/users',
-      fetch: false,
+      throwErrors: false,
+      POST: {
+        path: 'perms/users',
+      },
+      path: 'perms/users/:{id}',
+      params: { full: 'true', indexField: 'userId' },
     },
     // NOTE: 'indexField', used as a parameter in the userPermissions paths,
     // modifies the API call so that the :{userid} parameter is actually
@@ -95,6 +107,9 @@ class UserRecordContainer extends React.Component {
       GET: {
         path: 'perms/users/:{id}/permissions',
         params: { full: 'true', indexField: 'userId' },
+      },
+      PUT: {
+        path: 'perms/users/%{permUserId}',
       },
       path: 'perms/users/:{id}/permissions',
       params: { indexField: 'userId' },
@@ -138,7 +153,13 @@ class UserRecordContainer extends React.Component {
       addressTypes: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
+      departments: PropTypes.shape({
+        records: departmentsShape,
+      }),
       permissions: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      perms: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
       query: PropTypes.object,
@@ -157,8 +178,11 @@ class UserRecordContainer extends React.Component {
         PUT: PropTypes.func.isRequired,
       }),
       permissions: PropTypes.shape({
-        POST: PropTypes.func.isRequired,
+        PUT: PropTypes.func.isRequired,
         DELETE: PropTypes.func.isRequired,
+      }),
+      perms: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
       }),
       uniquenessValidator: PropTypes.shape({
         reset: PropTypes.func.isRequired,

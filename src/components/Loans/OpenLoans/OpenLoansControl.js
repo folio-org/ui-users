@@ -37,6 +37,7 @@ class OpenLoansControl extends React.Component {
       }),
     }),
     resources: PropTypes.shape({
+      loanAccount: PropTypes.object,
       query: PropTypes.object,
       requests: PropTypes.shape({
         GET: PropTypes.func,
@@ -96,13 +97,20 @@ class OpenLoansControl extends React.Component {
       'loanDate',
     ];
 
+    this.excludedDefault = [
+      'loanDate',
+      'Contributors',
+      'location'
+    ];
+
     this.state = {
       checkedLoans: {},
       allChecked: false,
-      visibleColumns: this.controllableColumns.map(columnName => ({
-        title: columnName,
-        status: true,
-      })),
+      visibleColumns: this.controllableColumns
+        .map(columnName => ({
+          title: columnName,
+          status: !this.excludedDefault.includes(columnName),
+        })),
       patronBlockedModal: false,
       changeDueDateDialogOpen:false,
       activeLoan: null,

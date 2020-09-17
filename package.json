@@ -75,7 +75,9 @@
           "configuration.entries.collection.get",
           "user-settings.custom-fields.collection.get",
           "user-settings.custom-fields.item.get",
-          "user-settings.custom-fields.item.stats.get"
+          "user-settings.custom-fields.item.stats.get",
+          "departments.collection.get",
+          "departments.item.get"
         ],
         "visible": true
       },
@@ -289,7 +291,6 @@
         ],
         "visible": true
       },
-
       {
         "permissionName": "ui-users.settings.owners",
         "displayName": "Settings (Users): Can create, edit and remove owners",
@@ -361,7 +362,6 @@
         ],
         "visible": true
       },
-
       {
         "permissionName": "ui-users.feefineactions",
         "displayName": "Fee/Fine Details: Can create, edit and remove fee/fine actions",
@@ -659,6 +659,64 @@
           "configuration.entries.item.put"
         ],
         "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.departments.view",
+        "displayName": "Settings (Users): View departments",
+        "subPermissions": [
+          "settings.users.enabled",
+          "departments.collection.get",
+          "departments.item.get"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.departments.edit",
+        "displayName": "Settings (Users): Edit departments",
+        "subPermissions": [
+          "settings.users.enabled",
+          "departments.item.put"
+        ],
+        "visible": false
+      },
+      {
+        "permissionName": "ui-users.settings.departments.create",
+        "displayName": "Settings (Users): Create departments",
+        "subPermissions": [
+          "settings.users.enabled",
+          "departments.item.post"
+        ],
+        "visible": false
+      },
+      {
+        "permissionName": "ui-users.settings.departments.delete",
+        "displayName": "Settings (Users): Delete departments",
+        "subPermissions": [
+          "settings.users.enabled",
+          "departments.item.delete"
+        ],
+        "visible": false
+      },
+      {
+        "permissionName": "ui-users.settings.departments.create.edit.view",
+        "displayName": "Settings (Users): Create, edit, and view departments",
+        "subPermissions": [
+          "ui-users.settings.departments.create",
+          "ui-users.settings.departments.edit",
+          "ui-users.settings.departments.view"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.departments.all",
+        "displayName": "Settings (Users): Create, edit, view, and delete departments",
+        "subPermissions": [
+          "ui-users.settings.departments.create",
+          "ui-users.settings.departments.edit",
+          "ui-users.settings.departments.view",
+          "ui-users.settings.departments.delete"
+        ],
+        "visible": true
       }
     ]
   },
@@ -671,14 +729,13 @@
   },
   "devDependencies": {
     "@bigtest/interactor": "^0.7.2",
-    "@bigtest/mirage": "^0.0.1",
     "@bigtest/mocha": "^0.5.2",
     "@bigtest/react": "^0.1.2",
     "@folio/eslint-config-stripes": "^5.2.0",
     "@folio/stripes": "^5.0.0",
     "@folio/stripes-cli": "^1.18.0",
-    "@folio/stripes-core": "^6.0.0",
     "@folio/stripes-components": "^8.0.0",
+    "@folio/stripes-core": "^6.0.0",
     "@folio/stripes-final-form": "^4.0.0",
     "babel-eslint": "^10.0.3",
     "chai": "^4.2.0",
@@ -689,7 +746,7 @@
     "mocha": "^5.2.0",
     "react": "^16.5.0",
     "react-dom": "^16.5.0",
-    "react-intl": "^4.5.3",
+    "react-intl": "^5.8.0",
     "react-redux": "^5.0.7",
     "react-router-dom": "^5.2.0",
     "redux": "^4.0.0",
@@ -703,16 +760,17 @@
     "moment": "~2.24.0",
     "prop-types": "^15.5.10",
     "query-string": "^5.0.0",
+    "react-final-form": "^6.3.0",
+    "final-form-set-field-data": "^1.0.2",
     "react-hot-loader": "^4.3.12",
     "react-router-prop-types": "^1.0.4",
     "redux-form": "^7.0.3",
-    "react-final-form": "^6.3.0",
     "uuid": "^3.0.1"
   },
   "peerDependencies": {
     "@folio/stripes": "^5.0.0",
     "react": "*",
-    "react-intl": "^4.5.3",
+    "react-intl": "^5.8.0",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0"
   },

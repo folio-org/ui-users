@@ -3,14 +3,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Button,
-  Row,
-  Col,
   MultiColumnList,
-  UncontrolledDropdown,
+  Dropdown,
   MenuItem,
   DropdownMenu,
-  Popover,
-  Layout,
 } from '@folio/stripes/components';
 
 import {
@@ -60,7 +56,6 @@ class ViewFeesFines extends React.Component {
     this.onSort = this.onSort.bind(this);
     this.toggleAll = this.toggleAll.bind(this);
     this.handleOptionsChange = this.handleOptionsChange.bind(this);
-    this.comments = this.comments.bind(this);
     this.getLoan = this.getLoan.bind(this);
     this.onRowClick = this.onRowClick.bind(this);
 
@@ -142,49 +137,6 @@ class ViewFeesFines extends React.Component {
     }));
   }
 
-  comments(f) {
-    const t = f.feeFineType ? f.feeFineType : '';
-    const comments = _.get(this.props.resources, ['comments', 'records'], []);
-    const actions = _.orderBy(comments.filter(c => c.accountId === f.id), ['dateAction'], ['asc']);
-    const myComments = actions.filter(a => a.comments).map(a => a.comments);
-    const n = myComments.length;
-
-    return (
-      <div data-test-popover-link>
-        <Row>
-          <Col>{t}</Col>
-          {(n > 0) ?
-            <Col>
-              <Layout className="margin-start-gutter">
-                <Popover id="id-popover" key={myComments[n - 1]}>
-                  <div id="popover-comments-1" data-role="target">
-                    <img id="popover-comments-img" src="https://png.icons8.com/color/18/000000/note.png" alt="" />
-                  </div>
-                  <p id="popover-comments" data-role="popover">
-                    <b>
-                      <FormattedMessage id="ui-users.accounts.history.comment" />
-                      {' '}
-                      {n}
-                      {' '}
-                      <FormattedMessage id="ui-users.accounts.history.of" />
-                      {' '}
-                      {n}
-                      {':'}
-                    </b>
-                    {' '}
-                    {myComments[n - 1]}
-                    {' '}
-                    <a href="/users/123" className="active">Go to details</a>
-                  </p>
-                </Popover>
-              </Layout>
-            </Col>
-            : ' '}
-        </Row>
-      </div>
-    );
-  }
-
   getLoan(f) {
     const { match: { params: { id } }, loans } = this.props;
     if (loans.length === 0 || !id || f.loanId === '0') return {};
@@ -223,7 +175,7 @@ class ViewFeesFines extends React.Component {
       ),
       'metadata.createdDate': f => (f.metadata ? <FormattedDate value={f.metadata.createdDate} /> : '-'),
       'metadata.updatedDate': f => (f.metadata && f.metadata.createdDate !== f.metadata.updatedDate ? <FormattedDate value={f.metadata.updatedDate} /> : '-'),
-      'feeFineType': f => (f.feeFineType ? this.comments(f) : '-'),
+      'feeFineType': f => (f.feeFineType ?? '-'),
       'amount': f => (f.amount ? parseFloat(f.amount).toFixed(2) : '-'),
       'remaining': f => parseFloat(f.remaining).toFixed(2) || '0.00',
       'paymentStatus.name': f => (f.paymentStatus || {}).name || '-',
@@ -362,7 +314,7 @@ class ViewFeesFines extends React.Component {
     const buttonDisabled = !this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
 
     return (
-      <UncontrolledDropdown
+      <Dropdown
         onSelectItem={this.handleOptionsChange}
       >
         <Button data-test-ellipsis-button data-role="toggle" buttonStyle="hover dropdownActive">
@@ -401,7 +353,7 @@ class ViewFeesFines extends React.Component {
             </Button>
           </MenuItem>
         </DropdownMenu>
-      </UncontrolledDropdown>
+      </Dropdown>
     );
   }
 

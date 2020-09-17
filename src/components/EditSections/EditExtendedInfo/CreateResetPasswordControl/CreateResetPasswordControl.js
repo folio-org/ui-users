@@ -114,7 +114,7 @@ class CreateResetPasswordControl extends React.Component {
     return (
       <Col
         xs={12}
-        md={3}
+        md={6}
       >
         <Label tagName="div">
           <FormattedMessage id="ui-users.extended.folioPassword" />

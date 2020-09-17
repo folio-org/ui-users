@@ -328,6 +328,12 @@ export default function config() {
     return server.create('account', acct);
   });
 
+  this.put('/accounts/:id', ({ accounts }, { params, requestBody }) => {
+    const account = JSON.parse(requestBody);
+
+    return accounts.find(params.id).update(account);
+  });
+
   this.get('/waives', {
     waivers: [],
     totalRecords: 0,
@@ -657,5 +663,98 @@ export default function config() {
   this.get('/automated-patron-blocks/:id', {
     automatedPatronBlocks: [],
     totalRecords: 0,
+  });
+
+  this.get('/departments', {
+    departments: [{
+      id: 'ce0e0d5b-b5f3-4ad5-bccb-49c0784298f5',
+      name: 'Test1',
+      code: 'test1',
+      usageNumber: 0,
+      metadata: {
+        createdDate: () => '2019-02-05T18:49:20.839+0000',
+        createdByUserId: () => 'ce0e0d5b-b5f3-4ad5-bccb-49c0784298fd',
+        updatedDate: () => '2019-02-05T18:49:20.839+0000',
+        updatedByUserId: () => 'ce0e0d5b-b5f3-4ad5-bccb-49c0784298fd'
+      },
+    },
+    {
+      id: 'ce0e0d5b-b5f3-4ad5-bccb-49c0784298f7',
+      name: 'Test2',
+      code: 'test2',
+      usageNumber: 1,
+      metadata: {
+        createdDate: () => '2019-02-05T18:49:20.839+0000',
+        createdByUserId: () => 'ce0e0d5b-b5f3-4ad5-bccb-49c0784298fd',
+        updatedDate: () => '2019-02-05T18:49:20.839+0000',
+        updatedByUserId: () => 'ce0e0d5b-b5f3-4ad5-bccb-49c0784298fd'
+      },
+    }]
+  });
+
+  this.post('/accounts/:id/check-pay', ({ accounts }, request) => {
+    const account = accounts.find(request.params.id).attrs;
+
+    return {
+      accountId: account.id,
+      amount: '500.00',
+      allowed: true,
+      remainingAmount: '0.00'
+    };
+  });
+
+  this.post('/accounts/:id/check-waive', ({ accounts }, request) => {
+    const account = accounts.find(request.params.id).attrs;
+
+    return {
+      accountId: account.id,
+      amount: '500.00',
+      allowed: true,
+      remainingAmount: '0.00'
+    };
+  });
+
+  this.post('/accounts/:id/check-transfer', ({ accounts }, request) => {
+    const account = accounts.find(request.params.id).attrs;
+
+    return {
+      accountId: account.id,
+      amount: '500.00',
+      allowed: true,
+      remainingAmount: '0.00'
+    };
+  });
+
+  this.post('/accounts/:id/pay', ({ accounts }, request) => {
+    const account = accounts.find(request.params.id).attrs;
+
+    return {
+      accountId: account.id,
+      amount: account.amount
+    };
+  });
+
+  this.post('/accounts/:id/waive', ({ accounts }, request) => {
+    const account = accounts.find(request.params.id).attrs;
+
+    return {
+      accountId: account.id,
+      amount: account.amount
+    };
+  });
+
+  this.post('/accounts/:id/transfer', ({ accounts }, request) => {
+    const account = accounts.find(request.params.id).attrs;
+
+    return {
+      accountId: account.id,
+      amount: account.amount
+    };
+  });
+
+  this.post('/accounts/:id/cancel', ({ accounts }, request) => {
+    const account = accounts.find(request.params.id).attrs;
+
+    return { accountId: account.id };
   });
 }

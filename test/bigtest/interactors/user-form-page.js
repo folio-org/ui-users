@@ -15,10 +15,12 @@ import {
 } from '@bigtest/interactor';
 
 import ButtonInteractor from '@folio/stripes-components/lib/Button/tests/interactor'; // eslint-disable-line
+import RepeatableFieldInteractor from '@folio/stripes-components/lib/RepeatableField/tests/interactor';
 import ModalInteractor from '@folio/stripes-components/lib/Modal/tests/interactor'; // eslint-disable-line
 import SelectInteractor from '@folio/stripes-components/lib/Select/tests/interactor'; // eslint-disable-line
 import PermissionsModal from './permissions-modal';
 import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/ProxyEditItem.css';
+
 
 @interactor class InputFieldInteractor {
   clickInput = clickable();
@@ -131,6 +133,7 @@ import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/P
   defaultAddressTypeField = new SelectFieldInteractor('[data-test-default-delivery-address-field] select');
   statusField = new SelectFieldInteractor('#useractive');
   customFieldsSection = scoped('#customFields', CustomFieldsSectionInteractor);
+  departmentName = new RepeatableFieldInteractor('#department-name');
 }
 
 export default new UserFormPage('[data-test-form-page]');

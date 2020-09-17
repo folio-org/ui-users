@@ -177,7 +177,7 @@ class RequestPreferencesEdit extends Component {
     } = this.props;
 
     return (
-      <Col xs={12} md={6}>
+      <Col xs={12}>
         <Row>
           <Col
             xs={12}

@@ -20,3 +20,9 @@ export const requestPreferencesShape = PropTypes.shape({
   defaultServicePointId: PropTypes.string,
   fulfillment: PropTypes.oneOf([HOLD_SHELF, DELIVERY])
 });
+
+export const departmentsShape = PropTypes.arrayOf(PropTypes.shape({
+  id: PropTypes.string.isRequired,
+  code: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+}));

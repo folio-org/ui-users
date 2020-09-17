@@ -5,7 +5,7 @@ import {
   injectIntl,
 } from 'react-intl';
 import { compose } from 'redux';
-import Link from 'react-router-dom/Link';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   get,
@@ -38,7 +38,7 @@ import {
   nav,
   getOpenRequestsPath,
 } from '../../components/util';
-import { itemStatuses } from '../../constants';
+import { itemStatuses, loanActions } from '../../constants';
 import {
   withRenew,
   withDeclareLost,
@@ -54,6 +54,7 @@ class LoanDetails extends React.Component {
   static propTypes = {
     stripes: PropTypes.object.isRequired,
     resources: PropTypes.shape({
+      loanAccountsActions: PropTypes.object,
       loanActions: PropTypes.object,
       loanActionsWithUser: PropTypes.object,
     }).isRequired,
@@ -115,9 +116,8 @@ class LoanDetails extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const prevItemStatus = prevProps.loan?.item.status?.name;
-    const thistItemStatus = this.props.loan?.item.status?.name;
-
+    const prevItemStatus = prevProps.loan?.item?.status?.name;
+    const thistItemStatus = this.props.loan?.item?.status?.name;
     if (prevItemStatus && prevItemStatus !== thistItemStatus) {
       this.props.enableButton();
     }
@@ -189,7 +189,7 @@ class LoanDetails extends React.Component {
     if (accounts.length === 1) {
       nav.onClickViewAccountActionsHistory(e, { id: accounts[0].id }, history, params);
     } else if (accounts.length > 1) {
-      const open = accounts.filter(a => a.status.name === 'Open') || [];
+      const open = accounts.filter(a => a?.status?.name === 'Open') || [];
       if (open.length === accounts.length) {
         nav.onClickViewOpenAccounts(e, loan, history, params);
       } else if (open.length === 0) {
@@ -274,7 +274,7 @@ class LoanDetails extends React.Component {
       history.push(`/users/${params.id}/accounts/view/${params.accountid}`);
     }
 
-    const loanStatus = loan.status ? loan.status.name.toLowerCase() : 'open';
+    const loanStatus = loan?.status ? loan.status?.name?.toLowerCase() : 'open';
 
     history.push({
       pathname: `/users/${params.id}/loans/${loanStatus}`,
@@ -323,17 +323,21 @@ class LoanDetails extends React.Component {
 
     const { nonRenewedLoanItems } = this.state;
     const loanActionsFormatter = {
-      action: la => <FormattedMessage id={loanActionMap[la.action]} />,
+      action: la => <FormattedMessage id={loanActionMap[la.action] ?? loanActionMap.unknownAction} />,
       actionDate: la => <FormattedTime value={get(la, ['metadata', 'updatedDate'], '-')} day="numeric" month="numeric" year="numeric" />,
       dueDate: la => <FormattedTime value={la.dueDate} day="numeric" month="numeric" year="numeric" />,
       itemStatus: la => la.itemStatus,
-      source: la => <Link to={`/users/view/${la.user?.id}`}>{getFullName(la.user)}</Link>,
+      source: la => {
+        return la.user ?
+          <Link to={`/users/view/${la.user?.id}`}>{getFullName(la.user)}</Link> :
+          <FormattedMessage id="ui-users.loans.action.source.system" />;
+      },
       comments: ({ actionComment }) => (actionComment || '-'),
     };
 
     const itemRequestCount = requestCounts[this.props.loan.itemId] || 0;
     const requestQueueValue = (itemRequestCount && stripes.hasPerm('ui-users.requests.all,ui-requests.all'))
-      ? (<Link to={getOpenRequestsPath(loan.item.barcode)}>{itemRequestCount}</Link>)
+      ? (<Link to={getOpenRequestsPath(loan.itemId)}>{itemRequestCount}</Link>)
       : itemRequestCount;
     const contributorsList = this.getContributorslist(loan);
     const contributorsListString = contributorsList.join(' ');
@@ -345,11 +349,18 @@ class LoanDetails extends React.Component {
     const claimedReturnedDate = itemStatus === itemStatuses.CLAIMED_RETURNED && loan.claimedReturnedDate;
     const isClaimedReturnedItem = itemStatus === itemStatuses.CLAIMED_RETURNED;
     const isDeclaredLostItem = itemStatus === itemStatuses.DECLARED_LOST;
+    const isAgedToLostItem = itemStatus === itemStatuses.AGED_TO_LOST;
+    const isLostAndPaid = itemStatus === itemStatuses.LOST_AND_PAID;
     let lostDate;
-    const declaredLostActions = loanActionsWithUser.filter(currentAction => get(currentAction, ['action'], '') === 'declaredLost');
-
+    const declaredLostActions = loanActionsWithUser.filter(currentAction => get(currentAction, ['action'], '') === loanActions.DECLARED_LOST);
+    const agedTolostLostActions = loanActionsWithUser.filter(currentAction => get(currentAction, ['action'], '') === loanActions.AGED_TO_LOST);
+    const lostAndPaidActions = loanActionsWithUser.filter(currentAction => get(currentAction, ['action'], '') === loanActions.CLOSED_LOAN);
     if (isDeclaredLostItem && declaredLostActions.length) {
       lostDate = get(declaredLostActions[0], ['metadata', 'updatedDate']);
+    } else if (isAgedToLostItem && agedTolostLostActions.length) {
+      lostDate = get(agedTolostLostActions[0], ['metadata', 'updatedDate']);
+    } else if (isLostAndPaid) {
+      lostDate = get(lostAndPaidActions[0], ['declaredLostDate']);
     }
 
     const buttonDisabled = (loanStatus && loanStatus === 'Closed');
@@ -439,7 +450,12 @@ class LoanDetails extends React.Component {
                 <IfPermission perm="ui-users.loans.edit">
                   <Button
                     data-test-change-due-date-button
-                    disabled={buttonDisabled || isDeclaredLostItem || isClaimedReturnedItem}
+                    disabled={
+                      buttonDisabled ||
+                      isDeclaredLostItem ||
+                      isClaimedReturnedItem ||
+                      isAgedToLostItem
+                    }
                     buttonStyle="primary"
                     onClick={this.showChangeDueDateDialog}
                   >

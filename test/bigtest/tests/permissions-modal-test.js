@@ -18,7 +18,7 @@ describe('Permissions modal', () => {
 
   setupApplication({ scenarios: ['comments'] });
 
-  describe('visit user-edit', () => {
+  describe('visit user-preview', () => {
     beforeEach(async function () {
       this.server.createList('permission', permissionsAmount);
       permissionSets = this.server.createList('permission', permissionSetsAmount, { mutable: true });

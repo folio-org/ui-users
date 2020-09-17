@@ -21,9 +21,18 @@ import {
 
 import ActionsBar from '../../../components/ActionsBar/ActionsBar';
 import { itemStatuses } from '../../../../../constants';
-import { hasEveryLoanItemStatus } from '../../../../util';
+import { hasEveryLoanItemStatus, hasAnyLoanItemStatus } from '../../../../util';
 
 import css from './OpenLoansSubHeader.css';
+
+// For convenience of enabling or disabling buttons for similar item states,
+// this groups together all the relevant item statuses for items that are
+// lost in one way or another ('losty' items?).
+const lostItemStatuses = [
+  itemStatuses.AGED_TO_LOST,
+  itemStatuses.CLAIMED_RETURNED,
+  itemStatuses.DECLARED_LOST,
+];
 
 class OpenLoansSubHeader extends React.Component {
   static propTypes = {
@@ -56,8 +65,10 @@ class OpenLoansSubHeader extends React.Component {
       'item.callNumberComponents.prefix',
       'item.callNumberComponents.callNumber',
       'item.callNumberComponents.suffix',
-      'item.enumeration',
       'item.volume',
+      'item.enumeration',
+      'item.chronology',
+      'item.copyNumber',
       'item.contributors',
       'item.holdingsRecordId',
       'item.instanceId',
@@ -134,8 +145,8 @@ class OpenLoansSubHeader extends React.Component {
     const clonedLoans = cloneDeep(loans);
     const recordsToCSV = buildRecords(clonedLoans);
     const countRenews = patronBlocks.filter(p => p.renewals === true);
-    const onlyLostItemsSelected = hasEveryLoanItemStatus(checkedLoans, itemStatuses.DECLARED_LOST);
     const onlyClaimedReturnedItemsSelected = hasEveryLoanItemStatus(checkedLoans, itemStatuses.CLAIMED_RETURNED);
+    const onlyLostyItemsSelected = hasAnyLoanItemStatus(checkedLoans, lostItemStatuses);
 
     return (
       <ActionsBar
@@ -200,7 +211,7 @@ class OpenLoansSubHeader extends React.Component {
               <Button
                 marginBottom0
                 id="change-due-date-all"
-                disabled={noSelectedLoans || onlyLostItemsSelected || onlyClaimedReturnedItemsSelected}
+                disabled={noSelectedLoans || onlyLostyItemsSelected}
                 onClick={showChangeDueDateDialog}
               >
                 <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />
