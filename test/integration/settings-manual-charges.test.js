@@ -84,8 +84,8 @@ export default test('manual charges')
       .assertion(TableRow().absent())))
   .child('edit change', test => test
     .step(TableRow.findByDataRowIndex('row-0').find(Button.findByAriaLabel('Edit this item')).click())
-    .step(TextField.findById('text-input-8').fill('300'))
-    .step(Select.findById('select-10').select('Template 1'))
+    .step(TextField.findByPlaceholder('defaultAmount').fill('300'))
+    .step(Select.findByName('items[0].actionNoticeId').select('Template 1'))
     .child('cancel edit', test => test
       .step(Button('Cancel').click())
       .assertion(TableRow.findByDataRowIndex('row-0').find(TableCell('1050.00')).exists()))
@@ -95,9 +95,9 @@ export default test('manual charges')
       .assertion(TableRow.findByDataRowIndex('row-0').find(TableCell('Template 1')).exists())))
   .child('create new', test => test
     .step(Button.findById('clickable-add-settings-feefines').click())
-    .step(TextField.findById('text-input-7').fill('New feefine'))
-    .step(TextField.findById('text-input-8').fill('100'))
-    .step(Select.findById('select-9').select('Template 3'))
+    .step(TextField.findByPlaceholder('feeFineType').fill('New feefine'))
+    .step(TextField.findByPlaceholder('defaultAmount').fill('100'))
+    .step(Select.findByName('items[0].chargeNoticeId').select('Template 3'))
     .step(Button('Save').click())
     .assertion(TableRowGroup().has({ dataRowContainerCount: 2 }))
     .assertion(TableRow.findByDataRowIndex('row-1').find(TableCell('New feefine')).exists())
@@ -129,18 +129,18 @@ export default test('manual charges')
     .child('create new manual charge with error', test => test
       .step(Button.findById('clickable-add-settings-feefines').click())
       .child('fee/fine type when empty', step => step
-        .step(TextField.findById('text-input-9').fill(''))
+        .step(TextField.findByPlaceholder('feeFineType').fill(''))
         .assertion(Button('Save', { disabled: true }).exists())
         .assertion(Alert('Please fill this in to continue').exists()))
       .child('duplicate fee/fine type', step => step
-        .step(TextField.findById('text-input-9').fill('Damage camera fee0'))
+        .step(TextField.findByPlaceholder('feeFineType').fill('Damage camera fee0'))
         .assertion(Button('Save', { disabled: true }).exists())
         .assertion(Alert('Fee/Fine Type already exists').exists()))
       .child('amount is non numeric', test => test
-        .step(TextField.findById('text-input-10').fill('hundred'))
+        .step(TextField.findByPlaceholder('defaultAmount').fill('hundred'))
         .assertion(Button('Save', { disabled: true }).exists())
         .assertion(Alert('Default Amount must be numeric').exists()))
       .child('amount is negative', test => test
-        .step(TextField.findById('text-input-10').fill('-100'))
+        .step(TextField.findByPlaceholder('defaultAmount').fill('-100'))
         .assertion(Button('Save', { disabled: true }).exists())
         .assertion(Alert('Default Amount must be positive').exists()))));

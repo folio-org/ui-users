@@ -244,4 +244,4 @@ export default test('settings owners')
     .step(Button.findByAriaLabel('open menu').click())
     .step(ListItem('owner-service-point-main-item-0').click())
     .step(Button('Save').click())
-    .assertion(Div.findByAriaLabelledBy('owner-service-point-label').absent()))
+    .assertion(Div.findByAriaLabelledBy('owner-service-point-label').absent()));
