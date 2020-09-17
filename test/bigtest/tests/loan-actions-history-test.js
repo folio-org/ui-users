@@ -127,7 +127,7 @@ describe('loans actions history', () => {
       });
 
       it('should display the fees/fines value', () => {
-        expect(LoanActionsHistory.feeFines.text).to.equal('200.00');
+        expect(LoanActionsHistory.feeFines.text).to.equal('-');
       });
     });
 
