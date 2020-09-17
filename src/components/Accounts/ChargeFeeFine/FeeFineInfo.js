@@ -19,7 +19,6 @@ class FeeFineInfo extends React.Component {
     onChangeFeeFine: PropTypes.func,
     feefines: PropTypes.arrayOf(PropTypes.object),
     isPending: PropTypes.object,
-    initialValues: PropTypes.object,
   };
 
   constructor(props) {
@@ -55,7 +54,6 @@ class FeeFineInfo extends React.Component {
 
   render() {
     const {
-      initialValues,
       isPending,
       ownerOptions,
       feefineList,
@@ -83,7 +81,6 @@ class FeeFineInfo extends React.Component {
                           type="select"
                           component={Select}
                           fullWidth
-                          value={initialValues ? initialValues.ownerId : undefined}
                           disabled={isPending.owners}
                           dataOptions={ownerOptions}
                           onChange={onChangeOwner}
