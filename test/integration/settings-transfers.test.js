@@ -216,4 +216,4 @@ export default test('settings transfers')
     .child('confirm addition', test => test
       .step(Button('Save').click())
       .assertion(TableRow.findByDataRowIndex('row-2').find(TableCell('USA Bank5')).exists())
-      .assertion(TableRow.findByDataRowIndex('row-2').find(TableCell('Transfer place5')).exists())))
+      .assertion(TableRow.findByDataRowIndex('row-2').find(TableCell('Transfer place5')).exists())));
