@@ -182,7 +182,7 @@ export default test('settings transfers')
   .step(App.visit('/settings/users/transfers'))
   .step(Select.findById('select-owner').select('Main Admin1'))
   .assertion(TableRowGroup().has({ dataRowContainerCount: 2 }))
-  .assertion(Table('editList-settings-transfers', { dataColumnCount: 4}).exists())
+  .assertion(Table('editList-settings-transfers', { dataColumnCount: 4 }).exists())
   .assertion(TableRow.findByDataRowIndex('row-0').find(TableCell('USA Bank0')).exists())
   .assertion(TableRow.findByDataRowIndex('row-0').find(TableCell('Transfer place0')).exists())
   .child('delete', test => test
