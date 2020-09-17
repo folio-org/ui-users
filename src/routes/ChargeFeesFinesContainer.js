@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { compose } from 'redux';
 
 import {
   stripesConnect,
@@ -196,7 +195,4 @@ class ChargeFeesFinesContainer extends React.Component {
   }
 }
 
-export default compose(
-  stripesConnect,
-  withStripes,
-)(ChargeFeesFinesContainer);
+export default stripesConnect(withStripes(ChargeFeesFinesContainer));

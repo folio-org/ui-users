@@ -459,7 +459,9 @@ class ChargeFeeFine extends React.Component {
     return (
       <div>
         <ChargeForm
+          form="feeFineChargeForm"
           onClickPay={this.onClickPay}
+          initialValues={initialValues}
           defaultServicePointId={defaultServicePointId}
           servicePointsIds={servicePointsIds}
           onSubmit={this.onSubmitCharge}
