@@ -176,7 +176,7 @@ class ActionModal extends React.Component {
     if (_.isEmpty(value)) {
       error = <FormattedMessage id="ui-users.accounts.error.field" />;
     } else {
-      const { id } = _.head(this.props.accounts);
+      const id = this.props?.accounts[0]?.id;
       const response = await this.triggerCheckEndpoint(value, id);
       const {
         allowed,
