@@ -20,6 +20,7 @@ import OpenLoansControl from './OpenLoansControl';
 import Option from './Option';
 import OverlayContainer from './OverlayContainer';
 import Paragraph from './Paragraph';
+import Root from './Root';
 import Search from './Search';
 import Section from './Section';
 import Select from './Select';
@@ -55,6 +56,7 @@ export {
   Option,
   OverlayContainer,
   Paragraph,
+  Root,
   Search,
   Section,
   Select,
