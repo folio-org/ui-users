@@ -2,10 +2,8 @@ import faker from 'faker';
 import { App } from '@bigtest/interactor';
 import test from '../helpers/base-steps/simulate-server';
 import { store } from '../helpers/server';
-import Button from '../interactors/Button';
-import Checkbox from '../interactors/Checkbox';
-import Header from '../interactors/Header';
-import ActionsBar from '../interactors/ActionsBar';
+
+import { ActionsBar, Checkbox, Header } from '../interactors';
 
 export default test('bulk loan renew', { permissions: ['circulation.loans.collection.get'] })
   .step('seed data', async () => {
@@ -22,16 +20,8 @@ export default test('bulk loan renew', { permissions: ['circulation.loans.collec
       },
     });
   })
-  .step('visit "/users/1/loans/open"', async () => {
-    await App.visit('/users/1/loans/open');
-  })
+  .step(App.visit('/users/1/loans/open'))
   .child('working with checked out items', test => test
-    .step('select all checkboxes', async () => {
-      await Checkbox.findByName('check-all').click();
-    })
-    .step('click "Claim returned"', async () => {
-      await ActionsBar('').find(Button('Renew')).click();
-    })
-    .assertion('shows the bulk claim returned modal', async () => {
-      await Header('Renew Confirmation').exists();
-    }));
+    .step(Checkbox.findByName('check-all').click())
+    .step(ActionsBar().clickButton('Renew'))
+    .assertion(Header('Renew Confirmation').exists()));

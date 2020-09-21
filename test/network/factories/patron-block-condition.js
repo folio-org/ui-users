@@ -5,7 +5,7 @@ export default Factory.extend({
   id: () => faker.random.uuid(),
   name: () => faker.lorem.sentence(),
   blockBorrowing: () => faker.random.boolean(),
-  blockRenewals: () => faker.random.boolean(),
+  blockRenewals: () => false,
   blockRequests: () => faker.random.boolean(),
   valueType: 'Integer',
   message: () => faker.lorem.sentence(),

@@ -2,13 +2,16 @@ import faker from 'faker';
 import { App } from '@bigtest/interactor';
 import test from '../helpers/base-steps/simulate-server';
 import { store } from '../helpers/server';
-import Button from '../interactors/Button';
-import Link from '../interactors/Link';
-import TextArea from '../interactors/TextArea';
-import Header from '../interactors/Header';
-import Paragraph from '../interactors/Paragraph';
-import ActionsBar from '../interactors/ActionsBar';
-import DropdownMenu from '../interactors/DropdownMenu';
+
+import {
+  ActionsBar,
+  Button,
+  DropdownMenu,
+  Header,
+  Link,
+  Paragraph,
+  TextArea
+} from '../interactors';
 
 export default test('claim returned', {
   permissions: ['manualblocks.collection.get', 'circulation.loans.collection.get']
@@ -30,16 +33,16 @@ export default test('claim returned', {
       return { user, loan };
     })
     .step('visit "/users/:user_id/loans/open"', ({ user }) => App.visit(`/users/${user.id}/loans/open`))
-    .step('click the actions dropdown', () => Button.findByAriaLabel('ellipsis').click())
-    .step('click the "Claim returned" button', () => Button('Claim returned', { enabled: true }).click())
-    .assertion('"Confirm claim returned" modal is present', () => Header('Confirm claim returned').exists())
-    .assertion('"Confirm" button is present and disabled', () => Button('Confirm', { disabled: true }).exists())
-    .assertion('"Additional information" text area is present', () => TextArea('Additional information*').exists())
+    .step(Button.findByAriaLabel('ellipsis').click())
+    .step(Button('Claim returned', { enabled: true }).click())
+    .assertion(Header('Confirm claim returned').exists())
+    .assertion(Button('Confirm', { disabled: true }).exists())
+    .assertion(TextArea('Additional information*').exists())
     .child('confirming claim returned', test => test
-      .step('fill in "Additional information" text area', () => TextArea('Additional information*').fill('hello'))
-      .step('click "Confirm" button', () => Button('Confirm').click())
-      .step('click "Closed loans" tab', () => Link('Closed loans').click())
-      .assertion('loan is now closed', () => Paragraph('1 closed loan').exists())))
+      .step(TextArea('Additional information*').fill('hello'))
+      .step(Button('Confirm').click())
+      .step(Link('Closed loans').click())
+      .assertion(Paragraph('1 closed loan').exists())))
   .child('visiting open loans list with claimed returned item', test => test
     .step('seed data', async () => {
       const user = store.create('user');
@@ -70,7 +73,7 @@ export default test('claim returned', {
       return { user };
     })
     .step('visit "/users/:user_id/loans/open"', ({ user }) => App.visit(`/users/${user.id}/loans/open`))
-    .assertion('claimed returned count is displayed', () => ActionsBar('').has({ loanCount: '2 records found (1 claimed returned)' })))
+    .assertion(ActionsBar().has({ loanCount: '2 records found (1 claimed returned)' })))
   .child('visiting loan detail without claimed returned item', test => test
     .step('seed data', async () => {
       const user = store.create('user');
@@ -89,8 +92,8 @@ export default test('claim returned', {
       return { user, loan };
     })
     .step('visit "/users/:user_id/loans/view/:loan_id"', ({ user, loan }) => App.visit(`/users/${user.id}/loans/view/${loan.id}`))
-    .step('click "Claim returned" button', () => Button('Claim returned').click())
-    .assertion('"Confirm claim returned" modal is present', () => Header('Confirm claim returned').exists()))
+    .step(Button('Claim returned').click())
+    .assertion(Header('Confirm claim returned').exists()))
   .child('visiting loan detail with claimed returned item', test => test
     .step('seed data', async () => {
       const user = store.create('user');
@@ -121,5 +124,5 @@ export default test('claim returned', {
       return { user, loan };
     })
     .step('visit "/users/:user_id/loans/view/:loan_id"', ({ user, loan }) => App.visit(`/users/${user.id}/loans/view/${loan.id}`))
-    .step('click "Resolve claim" dropdown button', () => Button('Resolve claim').click())
-    .assertion('"Declare lost" button is present', () => DropdownMenu('').find(Button('Declare lost', { enabled: true })).exists()));
+    .step(Button('Resolve claim').click())
+    .assertion(DropdownMenu().find(Button('Declare lost', { enabled: true })).exists()));
