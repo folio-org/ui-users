@@ -181,7 +181,7 @@ export default test('settings refunds')
   })
   .step(App.visit('/settings/users/refunds'))
   .assertion(TableRowGroup().has({ dataRowContainerCount: 5 }))
-  .assertion(Table('editList-settings-refunds', { dataColumnCount: 4 }).exists())
+  .assertion(Table('editList-settings-refunds', { dataColumnCount: 4 }).exists()) // 🧹 this fails unreliably
   .assertion(TableRow.findByDataRowIndex('row-0').find(TableCell('Reason0')).exists())
   .assertion(TableRow.findByDataRowIndex('row-0').find(TableCell('Reason Desc0')).exists())
   .child('delete', test => test
