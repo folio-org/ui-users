@@ -12,5 +12,4 @@ export default createInteractor('div')({
     value: element => element.textContent,
     sectionsCount: element => element.querySelectorAll('section').length
   },
-
 });

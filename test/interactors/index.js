@@ -6,6 +6,7 @@ import Button from './Button';
 import CalendarButton from './CalendarButton';
 import ChargesTable from './ChargesTable';
 import Checkbox from './Checkbox';
+import ColumnDiv from './ColumnDiv';
 import Div from './Div';
 import DropdownMenu from './DropdownMenu';
 import Form from './Form';
@@ -40,6 +41,7 @@ export {
   CalendarButton,
   ChargesTable,
   Checkbox,
+  ColumnDiv,
   Div,
   DropdownMenu,
   Form,
