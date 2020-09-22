@@ -68,7 +68,7 @@ export default test('fee/fine details')
             accountId: cqlParser.tree.term
           });
         }
-      };
+      }
       return schema.feefineactions.all();
     });
     routes.get('/loans/:id', (schema, request) => {
@@ -93,4 +93,4 @@ export default test('fee/fine details')
   .child('lost item policy', test => test
     .step(Link('Lost Item Policy name').click())
     // 🧹 original test checked location.pathname but clicking on this link does not go to a real page
-    .assertion(Section.findByAttribute('data-test-fee-fine-details').absent()))
+    .assertion(Section.findByAttribute('data-test-fee-fine-details').absent()));

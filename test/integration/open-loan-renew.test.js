@@ -60,4 +60,4 @@ export default test('open loan renew', { permissions: [
     // .step(Button('Renew').click())
     // .assertion(Div.findByAttribute('data-test-patron-block-modal').exists())
     // .assertion(Bold('Patron has reached maximum allowed number of items charged out').exists())
-  )
+  );
