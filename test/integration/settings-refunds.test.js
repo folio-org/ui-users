@@ -191,10 +191,10 @@ export default test('settings refunds')
     });
   })
   .step(visit('/settings/users/refunds'))
-  .assertion(TableRowGroup().has({ dataRowContainerCount: 5 })) // 🧹 this fails unreliably
-  .assertion(Table('editList-settings-refunds', { dataColumnCount: 4 }).exists()) // 🧹 this fails unreliably
-  .assertion(TableRow.findByDataRowIndex('row-0').find(TableCell('Reason0')).exists()) // 🧹 this fails unreliably
-  .assertion(TableRow.findByDataRowIndex('row-0').find(TableCell('Reason Desc0')).exists()) // 🧹 this fails unreliably
+  .assertion(TableRowGroup().has({ dataRowContainerCount: 5 }))
+  .assertion(Table('editList-settings-refunds', { dataColumnCount: 4 }).exists())
+  .assertion(TableRow.findByDataRowIndex('row-0').find(TableCell('Reason0')).exists())
+  .assertion(TableRow.findByDataRowIndex('row-0').find(TableCell('Reason Desc0')).exists())
   .child('delete', test => test
     .step(Button.findById('clickable-delete-settings-refunds-0').click())
     .child('cancel delete', test => test
@@ -204,7 +204,7 @@ export default test('settings refunds')
       .step(Button('Delete').click())
       .assertion(TableRowGroup().has({ dataRowContainerCount: 4 }))))
   .child('edit', test => test
-    .step(Button.findById('clickable-edit-settings-refunds-0').click()) // 🧹 this fails unreliably
+    .step(Button.findById('clickable-edit-settings-refunds-0').click())
     .step(TextField.findByPlaceholder('nameReason').fill('Reason10'))
     .step(TextField.findByPlaceholder('description').fill('Reason Desc10'))
     .child('cancel edit', test => test
@@ -216,14 +216,14 @@ export default test('settings refunds')
       .assertion(TableRow.findByDataRowIndex('row-0').find(TableCell('Reason10')).exists())
       .assertion(TableRow.findByDataRowIndex('row-0').find(TableCell('Reason Desc10')).exists())))
   .child('add a refund', test => test
-    .step(Button.findById('clickable-add-settings-refunds').click()) // 🧹 this fails unreliably
+    .step(Button.findById('clickable-add-settings-refunds').click())
     .step(TextField.findByPlaceholder('nameReason').fill('Reason10'))
     .step(TextField.findByPlaceholder('description').fill('Reason Desc10'))
     .step(Button('Save').click())
     .assertion(TableRow.findByDataRowIndex('row-5').find(TableCell('Reason10')).exists())
     .assertion(TableRow.findByDataRowIndex('row-5').find(TableCell('Reason Desc10')).exists()))
   .child('add a pre-existing refund', test => test
-    .step(Button.findById('clickable-add-settings-refunds').click()) // 🧹 this fails unreliably
+    .step(Button.findById('clickable-add-settings-refunds').click())
     .step(TextField.findByPlaceholder('nameReason').fill('Reason1'))
     .step(Button('Save').click())
-    .assertion(Alert('Refund reason already exists').exists())); // 🧹 this fails unreliably
+    .assertion(Alert('Refund reason already exists').exists()));

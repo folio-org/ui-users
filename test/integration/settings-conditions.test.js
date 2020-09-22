@@ -36,5 +36,3 @@ export default test('patron block conditions')
       .child('saving change', test => test
         .step(Button('Save').click())
         .assertion(Div.findByAttribute('data-test-callout-element').exists()))));
-
-// 🧹 the reason why the last assertion was randomly failing is because the checkbox values are randomized and in order for the save to trigger, one of the three checkboxes must be checked. i changed the factory default of the renewal checkbox to be false to ensure one of the checkboxes will be changed to true for the last assertion.

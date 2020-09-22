@@ -49,17 +49,7 @@ export default test('mark as missing', { permissions: [
         .assertion(Div.findById('markAsMissing-modal').absent()))
       .child('submitting missing', test => test
         .step(TextArea('Additional information*').fill('text'))
-        .step('query route', async ({ loan }) => {
-          let parsedRequestBody;
-          routes.post(`/circulation/loans/${loan.id}/declare-claimed-returned-item-as-missing`, (_, request) => {
-            parsedRequestBody = JSON.parse(request.requestBody);
-            return new Response(204, {});
-          });
-          return { parsedRequestBody };
-        })
         .step(Button('Confirm').click())
-        // 🧹 there's a test here to confirm the response but is not reflected in the UI
-        // expect(parsedRequestBody.comment).to.equal('text')
         .assertion(Div.findById('markAsMissing-modal').absent()))))
   .child('with item marked missing', test => test
     .step('seed data', async () => {

@@ -88,9 +88,7 @@ export default test('fee/fine details')
   .assertion(Div.findByAttribute('data-test-contributors').find(Div('-')).exists())
   .child('overdue policy', test => test
     .step(Link('Overdue Fine Policy name').click())
-    // 🧹 original test checked location.pathname but clicking on this link does not go to a real page
     .assertion(Section.findByAttribute('data-test-fee-fine-details').absent()))
   .child('lost item policy', test => test
     .step(Link('Lost Item Policy name').click())
-    // 🧹 original test checked location.pathname but clicking on this link does not go to a real page
     .assertion(Section.findByAttribute('data-test-fee-fine-details').absent()));

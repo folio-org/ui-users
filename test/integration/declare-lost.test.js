@@ -35,16 +35,6 @@ export default test('declare lost', {
     .child('submit declare lost', test => test
       .step(TextArea('Additional information*').fill('text'))
       .step(Button('Confirm').click())
-      .step('query routes', async ({ loan }) => {
-        let parsedRequestBody;
-        routes.post(`/circulation/loans/${loan.id}/declare-item-lost`, (_, request) => {
-          parsedRequestBody = JSON.parse(request.requestBody);
-          return new Response(204, {});
-        });
-        return { parsedRequestBody };
-      })
-      // 🧹 there's a test here to confirm the response but is not reflected in the UI
-      // expect(parsedRequestBody.comment).to.equal('text')
       .assertion(Div.findById('declareLost-modal').absent())))
   .child('visiting open loans with declared lost item', test => test
     .step('seed data', async () => {
@@ -109,7 +99,7 @@ export default test('declare lost', {
     })
     .assertion(Div.findByAttribute('data-test-loan-fees-fines').find(Div('-')).exists())
     .child('mark lost and update fine', test => test
-      .step(Div.findById('resolve-claim-menu').find(Button('Declare lost')).click()) // 🧹 same issue as above
+      .step(Div.findById('resolve-claim-menu').find(Button('Declare lost')).click()) // 🧹 same issue as above; two identical buttons
       .step(TextArea('Additional information*').fill('item lost'))
       .step(Button('Confirm').click())
       // .assertion(Div.findByAttribute('data-test-loan-fees-fines').find(Div('250.00')).exists()) // 🧹 issue with the ugly querying and the counter
