@@ -4,7 +4,7 @@
     "url": "http://localhost:36000"
   },
   "testFiles": [
-    "./integration/**/settings-refunds.test.js"
+    "./integration/**/*.test.js"
   ],
   "launch": [
     "chrome"
