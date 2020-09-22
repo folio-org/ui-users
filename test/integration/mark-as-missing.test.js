@@ -5,7 +5,6 @@ import { store, routes } from '../helpers/server';
 import {
   Button,
   Div,
-  TableCell,
   TextArea
 } from '../interactors';
 
@@ -78,4 +77,4 @@ export default test('mark as missing', { permissions: [
     .step('visit /users/loan.userId/loans/view/loan.id', async ({ loan }) => {
       await App.visit(`/users/${loan.userId}/loans/view/${loan.id}`);
     })
-    .assertion(Div.findByAttribute('data-test-loan-actions-history-item-status').find(Div('Missing')).exists()))
+    .assertion(Div.findByAttribute('data-test-loan-actions-history-item-status').find(Div('Missing')).exists()));
