@@ -2,6 +2,7 @@ import ActionsBar from './ActionsBar';
 import ActionsDropdown from './ActionsDropdown';
 import AddressForm from './AddressForm';
 import Alert from './Alert';
+import Bold from './Bold';
 import Button from './Button';
 import CalendarButton from './CalendarButton';
 import ChargesTable from './ChargesTable';
@@ -38,6 +39,7 @@ export {
   ActionsDropdown,
   AddressForm,
   Alert,
+  Bold,
   Button,
   CalendarButton,
   ChargesTable,
