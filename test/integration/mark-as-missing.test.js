@@ -58,7 +58,7 @@ export default test('mark as missing', { permissions: [
           return { parsedRequestBody };
         })
         .step(Button('Confirm').click())
-        // there's a test here to confirm the response but is not reflected in the UI
+        // 🧹 there's a test here to confirm the response but is not reflected in the UI
         // expect(parsedRequestBody.comment).to.equal('text')
         .assertion(Div.findById('markAsMissing-modal').absent()))))
   .child('with item marked missing', test => test
