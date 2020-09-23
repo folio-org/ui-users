@@ -446,8 +446,6 @@ class Actions extends React.Component {
   onConfirm = () => {
     const { actions, selectedAccounts = [] } = this.props;
     const { values } = this.state;
-    console.log('values ', values);
-
     const singleSelectedAccount = selectedAccounts.length === 1;
     const singlePay = actions.pay || (actions.regular && singleSelectedAccount);
     const singleWaive = actions.waiveModal || (actions.waiveMany && singleSelectedAccount);
