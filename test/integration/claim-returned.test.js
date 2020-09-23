@@ -37,9 +37,9 @@ export default test('claim returned', {
     .step(Button('Claim returned', { enabled: true }).click())
     .assertion(Header('Confirm claim returned').exists())
     .assertion(Button('Confirm', { disabled: true }).exists())
-    .assertion(TextArea('Additional information*').exists())
+    .assertion(TextArea('Additional information').exists())
     .child('confirming claim returned', test => test
-      .step(TextArea('Additional information*').fill('hello'))
+      .step(TextArea('Additional information').fill('hello'))
       .step(Button('Confirm').click())
       .step(Link('Closed loans').click())
       .assertion(Paragraph('1 closed loan').exists())))

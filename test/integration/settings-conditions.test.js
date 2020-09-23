@@ -28,11 +28,13 @@ export default test('patron block conditions')
     .assertion(Checkbox('Block borrowing').exists())
     .assertion(Checkbox('Block renewals').exists())
     .assertion(Checkbox('Block request').exists())
-    .assertion(TextArea('Message to be displayed*').exists())
+    .assertion(TextArea('Message to be displayed').exists())
     .assertion(Button('Save', { disabled: true }).exists())
     .child('change value', test => test
       .step(Checkbox('Block renewals').click())
+      .step(Checkbox('Block request').click())
       .assertion(Button('Save', { disabled: true }).absent())
       .child('saving change', test => test
+        .step(Button('Save').click())
         .step(Button('Save').click())
         .assertion(Div.findByAttribute('data-test-callout-element').exists()))));

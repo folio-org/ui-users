@@ -43,12 +43,20 @@ export default test('mark as missing', { permissions: [
       .assertion(Div.findById('markAsMissing-modal').exists())
       .assertion(Button('Cancel').exists())
       .assertion(Button('Confirm', { disabled: true }).exists())
-      .assertion(TextArea('Additional information*').exists())
+      .assertion(TextArea('Additional information').exists())
       .child('cancel', test => test
         .step(Button('Cancel').click())
         .assertion(Div.findById('markAsMissing-modal').absent()))
       .child('submitting missing', test => test
-        .step(TextArea('Additional information*').fill('text'))
+        .step(TextArea('Additional information').fill('text'))
+        .step('query route', async ({ loan }) => {
+          let parsedRequestBody;
+          routes.post(`/circulation/loans/${loan.id}/declare-claimed-returned-item-as-missing`, (_, request) => {
+            parsedRequestBody = JSON.parse(request.requestBody);
+            return new Response(204, {});
+          });
+          return { parsedRequestBody };
+        })
         .step(Button('Confirm').click())
         .assertion(Div.findById('markAsMissing-modal').absent()))))
   .child('with item marked missing', test => test

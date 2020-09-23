@@ -41,9 +41,9 @@ export default test('charge fee/fine', { permissions: ['circulation.loans.collec
   .step(App.visit('/users/preview/1'))
   .step(Button('Fees/fines').click())
   .step(Link('Create fee/fine').click())
-  .step(Select('Fee/fine owner*').select('testOwner'))
-  .step(Select('Fee/fine type*').select('testFineType'))
-  .assertion(TextField('Fee/fine amount*').has({ value: '500.00' }))
+  .step(Select('Fee/fine owner').select('testOwner'))
+  .step(Select('Fee/fine type').select('testFineType'))
+  .assertion(TextField('Fee/fine amount').has({ value: '500.00' }))
   .child('cancelling the charge', test => test
     .step(Button('Cancel').click())
     .step(Button('Close without saving').click())

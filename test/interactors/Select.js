@@ -2,7 +2,7 @@ import { createInteractor, perform } from '@bigtest/interactor';
 
 export default createInteractor('select')({
   selector: 'select',
-  defaultLocator: element => element.labels[0].textContent,
+  defaultLocator: element => element.labels[0]?.textContent.replace(/\*$/, '').trim(),
   locators: {
     findByName: element => element.name,
     findById: element => element.id

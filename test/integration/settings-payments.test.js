@@ -6,6 +6,7 @@ import CQLParser from '../network/cql';
 import {
   Alert,
   Button,
+  Root,
   Select,
   Table,
   TableCell,
@@ -14,7 +15,17 @@ import {
   TextField
 } from '../interactors';
 
-export default test('settings refunds')
+function visit(url) {
+  return {
+    description: `visit ${url}`,
+    async action() {
+      await App.visit(url);
+      await Root().exists();
+    }
+  };
+}
+
+export default test('settings payments')
   .step('seed data', async () => {
     store.create('user', { id: '1ad737b0-d847-11e6-bf26-cec0c932ce02' });
     store.create('owner', { owner: 'Main Admin0', desc: 'Owner FyF' });
@@ -180,7 +191,7 @@ export default test('settings refunds')
       return schema.db.payments.remove(request.params.id);
     });
   })
-  .step(App.visit('/settings/users/payments'))
+  .step(visit('/settings/users/payments'))
   .step(Select.findById('select-owner').select('Main Admin1'))
   .assertion(TableRowGroup().has({ dataRowContainerCount: 5 }))
   .assertion(Table('editList-settings-payments', { dataColumnCount: 4 }).exists())

@@ -33,8 +33,18 @@ export default test('declare lost', {
       .step(Button('Cancel').click())
       .assertion(Div.findById('declareLost-modal').absent()))
     .child('submit declare lost', test => test
-      .step(TextArea('Additional information*').fill('text'))
+      .step(TextArea('Additional information').fill('text'))
       .step(Button('Confirm').click())
+      .step('query routes', async ({ loan }) => {
+        let parsedRequestBody;
+        routes.post(`/circulation/loans/${loan.id}/declare-item-lost`, (_, request) => {
+          parsedRequestBody = JSON.parse(request.requestBody);
+          return new Response(204, {});
+        });
+        return { parsedRequestBody };
+      })
+      // 🧹 there's a test here to confirm the response but is not reflected in the UI
+      // expect(parsedRequestBody.comment).to.equal('text')
       .assertion(Div.findById('declareLost-modal').absent())))
   .child('visiting open loans with declared lost item', test => test
     .step('seed data', async () => {
@@ -100,7 +110,7 @@ export default test('declare lost', {
     .assertion(Div.findByAttribute('data-test-loan-fees-fines').find(Div('-')).exists())
     .child('mark lost and update fine', test => test
       .step(Div.findById('resolve-claim-menu').find(Button('Declare lost')).click()) // 🧹 same issue as above; two identical buttons
-      .step(TextArea('Additional information*').fill('item lost'))
+      .step(TextArea('Additional information').fill('item lost'))
       .step(Button('Confirm').click())
       // .assertion(Div.findByAttribute('data-test-loan-fees-fines').find(Div('250.00')).exists()) // 🧹 issue with the ugly querying and the counter
     ))
@@ -142,6 +152,6 @@ export default test('declare lost', {
       await App.visit(`/users/${loan.userId}/loans/view/${loan.id}`);
     })
     .step(Button('Declare lost').click())
-    .step(TextArea('Additional information*').fill('item lost'))
+    .step(TextArea('Additional information').fill('item lost'))
     .step(Button('Confirm').click())
     .assertion(Button('Declare lost', { disabled: true }).exists()))

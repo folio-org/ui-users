@@ -6,7 +6,7 @@ export default Factory.extend({
   name: () => faker.lorem.sentence(),
   blockBorrowing: () => faker.random.boolean(),
   blockRenewals: () => false,
-  blockRequests: () => faker.random.boolean(),
+  blockRequests: () => false,
   valueType: 'Integer',
   message: () => faker.lorem.sentence(),
   metadata : {
