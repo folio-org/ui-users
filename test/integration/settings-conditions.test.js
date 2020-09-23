@@ -33,8 +33,8 @@ export default test('patron block conditions')
     .child('change value', test => test
       .step(Checkbox('Block renewals').click())
       .step(Checkbox('Block request').click())
+      .step(TextArea('Message to be displayed').fill('test'))
       .assertion(Button('Save', { disabled: true }).absent())
       .child('saving change', test => test
-        .step(Button('Save').click())
         .step(Button('Save').click())
         .assertion(Div.findByAttribute('data-test-callout-element').exists()))));
