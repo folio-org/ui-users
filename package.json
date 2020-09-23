@@ -665,7 +665,7 @@
     "build": "stripes build",
     "lint": "eslint .",
     "test": "yarn --cwd test bigtest ci",
-    "test:server": "yarn --cwd test bigtest server",
+    "test:server": "rm -rf ./test/.bigtest/manifest/ && yarn --cwd test bigtest server",
     "test:run": "yarn --cwd test bigtest test",
     "postinstall": "yarn install --cwd test"
   },
