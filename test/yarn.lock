@@ -862,14 +862,14 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
-"@bigtest/agent@^0.12.0":
-  version "0.12.0"
-  resolved "https://registry.yarnpkg.com/@bigtest/agent/-/agent-0.12.0.tgz#ae8bbcbb2b45109b9741a33db9fc0b22da432d62"
-  integrity sha512-POmm374jlRFxvSDlcbj4lZHF09Tjq2sNfxlZxf/s9sIB3NsLIuP0ysMG/U70WiRsnXU/gU09FfHnd2CCx6p4UA==
+"@bigtest/agent@^0.13.0":
+  version "0.13.0"
+  resolved "https://registry.yarnpkg.com/@bigtest/agent/-/agent-0.13.0.tgz#b5953c127cf03689e8f3bf3b1b4f50bb84ba9013"
+  integrity sha512-/x0fD4MVRyHzym97DLgLNxsEgG0hcKEZqJx7uiOGwK6tOVsBkTxyyvsYmXY/6GhIyB8p4AJOBbDoKocKigaylg==
   dependencies:
     "@bigtest/effection" "^0.5.4"
     "@bigtest/effection-express" "^0.8.0"
-    "@bigtest/globals" "^0.6.3"
+    "@bigtest/globals" "^0.7.0"
     "@effection/events" "^0.7.8"
     "@effection/subscription" "^0.11.0"
     bowser "^2.9.0"
@@ -877,10 +877,10 @@
     error-stack-parser "^2.0.6"
     get-source "^2.0.11"
 
-"@bigtest/atom@^0.8.1", "@bigtest/atom@^0.8.2":
-  version "0.8.2"
-  resolved "https://registry.yarnpkg.com/@bigtest/atom/-/atom-0.8.2.tgz#b08689a8ee067cab42ffc11b90b65647025b3f2f"
-  integrity sha512-Pa4jv7hFqzbY+eBtcNpldeDTSU3UvG5zlXSxM6Fl2KbCAYgalJI4+s0GEm+GlC3oKV1yngujSDLTmiep8fjhug==
+"@bigtest/atom@^0.9.0":
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/@bigtest/atom/-/atom-0.9.0.tgz#378d2c54c7f8e5516840e917ac7f1c0508994510"
+  integrity sha512-sP5DrXBhyHoFFr5ripQWMi+hiED6xHNY6/oNNT4YEd4L3YynsUMr1frtnGYoOopH9OGJEFCbfEVtPFmzr/BeWA==
   dependencies:
     "@effection/channel" "^0.6.7"
     "@effection/events" "^0.7.8"
@@ -888,10 +888,10 @@
     effection "0.7.0"
     ramda "0.27.0"
 
-"@bigtest/bundler@^0.9.0":
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/@bigtest/bundler/-/bundler-0.9.0.tgz#0d4874a6b3d3360ce9820dce3bc25a31f4c0ac8a"
-  integrity sha512-1yEHJHFDBIXFDP6NHMbv8tB1GuHeM0B5iTQWCD+/uz1HThAeoD5bj7aCgOpWo3iwTeSFSj4rei5i6Rq8ycVa5w==
+"@bigtest/bundler@^0.10.0":
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/@bigtest/bundler/-/bundler-0.10.0.tgz#b40e59f60e26fb2245f7a4760271b48d059e295e"
+  integrity sha512-g8p4YgwkxB9t92ALLWYMHbRKGBio4VkqJMDBvNnBdR8QfXa+Nu9ghC27XSB6nS47VbdN6P8q+18Qbia8QpSPzw==
   dependencies:
     "@babel/core" "^7.10.4"
     "@babel/plugin-transform-runtime" "^7.10.4"
@@ -899,7 +899,7 @@
     "@babel/preset-typescript" "^7.10.4"
     "@babel/runtime" "^7.10.4"
     "@bigtest/effection" "^0.5.4"
-    "@bigtest/project" "^0.8.0"
+    "@bigtest/project" "^0.9.0"
     "@effection/channel" "^0.6.7"
     "@effection/events" "^0.7.8"
     "@effection/node" "^0.8.0"
@@ -911,16 +911,16 @@
     rollup "^2.23.0"
     rollup-plugin-inject-process-env "^1.3.0"
 
-"@bigtest/cli@^0.11.0":
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/@bigtest/cli/-/cli-0.11.0.tgz#cc5868afa7174646b28def75c63fec438e1a4ead"
-  integrity sha512-13qUSmbkUtuLB8Wt0JHixzxYhvnMJMAzrzFfzg41Hk9i+y05kF53oZq4kRIaBq3hvPt3FMzuQPbKnqY5p4TUZA==
+"@bigtest/cli@^0.12.0":
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/@bigtest/cli/-/cli-0.12.0.tgz#5664d437ff4bb6bdbd90e61b7f6213441ac5f682"
+  integrity sha512-vfhEzw50muMTShg1v8EzTmlI6GRG0thkGn/00WQINrBAcJs5UMw9vUKeYmK2UMey95lVu7816P0PT0owqPQs6w==
   dependencies:
     "@bigtest/client" "^0.3.0"
     "@bigtest/effection" "^0.5.4"
     "@bigtest/performance" "^0.5.0"
-    "@bigtest/project" "^0.8.0"
-    "@bigtest/server" "^0.14.0"
+    "@bigtest/project" "^0.9.0"
+    "@bigtest/server" "^0.15.0"
     "@effection/node" "^0.8.0"
     capture-console "^1.0.1"
     chalk "^4.1.0"
@@ -966,20 +966,20 @@
     "@types/node" "^13.13.4"
     effection "^0.7.0"
 
-"@bigtest/globals@^0.6.3":
-  version "0.6.3"
-  resolved "https://registry.yarnpkg.com/@bigtest/globals/-/globals-0.6.3.tgz#2ad684b777efd45af5c3c7758277d2c0bd4aae3b"
-  integrity sha512-HcXI3Z7vQ17d5O8434DrfRQsSmushtY7Wh4HDaUQVkLQA7rHFbaq1wihKVafeARs0AhAeJU0UIbPapzTv2aquw==
+"@bigtest/globals@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@bigtest/globals/-/globals-0.7.0.tgz#11d768fecba981d4910b844e67be3e42b7c805d4"
+  integrity sha512-aXVQAoj4BvVK2Jey45QySWtIYNQD7mwpVYr4DIYOIGoVUxkivBLGzy+cp3lz7iRSOpO+3pUhajQd6Wd1mw2Vhg==
   dependencies:
-    "@bigtest/suite" "^0.8.0"
+    "@bigtest/suite" "^0.9.0"
     effection "^0.7.0"
 
-"@bigtest/interactor@^0.16.1":
-  version "0.16.1"
-  resolved "https://registry.yarnpkg.com/@bigtest/interactor/-/interactor-0.16.1.tgz#cc05fc2380a9f5240a054e6bf858b984382f3193"
-  integrity sha512-VlbaHJjbD4ovjFGclaWvJUFV6/eCMaObxqvdecz3pF1znVbSMCDZw9a1M9cxXUks8dZUCo6Tze0r/8SyLEvo/A==
+"@bigtest/interactor@^0.17.0":
+  version "0.17.0"
+  resolved "https://registry.yarnpkg.com/@bigtest/interactor/-/interactor-0.17.0.tgz#bae14b924338ba69d942ecbe15fd19fbf3b93c65"
+  integrity sha512-58MkPVDflDxudItU741OA0i3zv3AotDaS1QQ5uKQW7FFxRMIdIxfas9gyYGVOE08DSL0QA0fjhbD2TzmFlOZTw==
   dependencies:
-    "@bigtest/globals" "^0.6.3"
+    "@bigtest/globals" "^0.7.0"
     "@bigtest/performance" "^0.5.0"
     change-case "^4.1.1"
 
@@ -993,34 +993,34 @@
   resolved "https://registry.yarnpkg.com/@bigtest/performance/-/performance-0.5.0.tgz#195f2c445cbe2ebe4357e08f7b39449240bf62d7"
   integrity sha512-5lmaul6UIdyEApxapYumCShEdKca7PjwYlcIHiu/5iI032DUQsq4dygYMX07cgevfCZSR2fss57uMGfdB22GbQ==
 
-"@bigtest/project@^0.8.0":
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/@bigtest/project/-/project-0.8.0.tgz#bd6a5f3f2ca21ff950d1311086fb7691538b17dd"
-  integrity sha512-kkUQXKuOezpW740eDrnV8s6Ox6+qvKHX36Hf3aRrar3FI0EfBpM/CSp+tBhfqLn4ABF4J0m3xACzgHoyNufMgA==
+"@bigtest/project@^0.9.0":
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/@bigtest/project/-/project-0.9.0.tgz#898258c614fde2aad2111a34a1a06c90ef79e766"
+  integrity sha512-wlYKZjhrhxfPGXqfIFAcGVICStwfEo3calDeT7fh+gsd129ZNzvRhH9Q8QNtCTPCgzC4Y7vyGAYbq3KdqVIdUA==
   dependencies:
     "@bigtest/driver" "^0.5.3"
     effection "^0.7.0"
 
-"@bigtest/server@^0.14.0":
-  version "0.14.1"
-  resolved "https://registry.yarnpkg.com/@bigtest/server/-/server-0.14.1.tgz#ca15b03269006923304da75b9953563ca554697b"
-  integrity sha512-M7SlW7KV94cffZQEh1vYp/af+vgNzHFno3PFcLQDVjgZp66S8p9FbgVldpBbFZFybMz3Jto+Dtmutt8227QQ9g==
+"@bigtest/server@^0.15.0":
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/@bigtest/server/-/server-0.15.0.tgz#4d70a68ae25de93db75ba4c88af0ede4593592a7"
+  integrity sha512-kcR4Ww+ab/DXSa0S/Z2YgGcNjmQA1s+ykNeLincaC9jvZn1D1fXIVCoTZXb3IOio2/ZTbT1yFBpikwJL+utYbA==
   dependencies:
     "@babel/core" "^7.10.4"
     "@babel/plugin-transform-runtime" "^7.10.4"
     "@babel/preset-env" "^7.10.4"
-    "@bigtest/agent" "^0.12.0"
-    "@bigtest/atom" "^0.8.2"
-    "@bigtest/bundler" "^0.9.0"
+    "@bigtest/agent" "^0.13.0"
+    "@bigtest/atom" "^0.9.0"
+    "@bigtest/bundler" "^0.10.0"
     "@bigtest/client" "^0.3.0"
     "@bigtest/driver" "^0.5.3"
     "@bigtest/effection" "^0.5.4"
     "@bigtest/effection-express" "^0.8.0"
-    "@bigtest/globals" "^0.6.3"
+    "@bigtest/globals" "^0.7.0"
     "@bigtest/logging" "^0.5.1"
-    "@bigtest/project" "^0.8.0"
-    "@bigtest/suite" "^0.8.0"
-    "@bigtest/webdriver" "^0.6.1"
+    "@bigtest/project" "^0.9.0"
+    "@bigtest/suite" "^0.9.0"
+    "@bigtest/webdriver" "^0.6.2"
     "@effection/events" "^0.7.8"
     "@effection/fetch" "^0.1.2"
     "@effection/node" "^0.8.0"
@@ -1042,17 +1042,17 @@
     websocket "^1.0.30"
     yargs "^15.0.2"
 
-"@bigtest/suite@^0.8.0":
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/@bigtest/suite/-/suite-0.8.0.tgz#8d0178629e54e143373df34323c57f1bc70ef123"
-  integrity sha512-5bMMSl5tY84skiyL2vxiGCJIQa3D+bO73DTKTxP9Bmiczh7citbJNBpIix6Y6Lf1ggp+jalLt7kh+cyYMGymVw==
+"@bigtest/suite@^0.9.0":
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/@bigtest/suite/-/suite-0.9.0.tgz#7a7714d50bc80f7ae4afc1a6a5c175ae205f03fa"
+  integrity sha512-q33/unTqAxRgPPakEUkOMELuEhbRHL9eRfsjwccJGuh03kgslXCNCBQ5oGgHckJZqirhVqoY98WVsqiKZGYP4g==
 
-"@bigtest/webdriver@^0.6.1":
-  version "0.6.1"
-  resolved "https://registry.yarnpkg.com/@bigtest/webdriver/-/webdriver-0.6.1.tgz#a98b244a481b3e426d4fc3bb3802747158ace42d"
-  integrity sha512-uOFLtUDDMndCyfMhvmpk/sxBiy1SYdOuWM3TAjgC4Hk+BOGcuNx5XrQUCuR07eXuJiUHBH8fPLdZv5vFb2TISw==
+"@bigtest/webdriver@^0.6.2":
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/@bigtest/webdriver/-/webdriver-0.6.2.tgz#994de45042c759b0e8db2112ec4cf743544c40ec"
+  integrity sha512-cOqVtGwlOnl0uH0EF4DQCGEaf4RZMRefij+G+8XganyFTljevctvIlLzlmB1keC1EJaJpcW5u048QLbuf6a/KQ==
   dependencies:
-    "@bigtest/atom" "^0.8.1"
+    "@bigtest/atom" "^0.9.0"
     "@bigtest/driver" "^0.5.3"
     "@effection/fetch" "^0.1.2"
     "@effection/node" "^0.8.0"
