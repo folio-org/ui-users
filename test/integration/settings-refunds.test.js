@@ -6,23 +6,12 @@ import CQLParser from '../network/cql';
 import {
   Alert,
   Button,
-  Root,
   Table,
   TableCell,
   TableRow,
   TableRowGroup,
   TextField
 } from '../interactors';
-
-function visit(url) {
-  return {
-    description: `visit ${url}`,
-    async action() {
-      await App.visit(url);
-      await Root().exists();
-    }
-  };
-}
 
 export default test('settings refunds')
   .step('seed data', async () => {
@@ -190,7 +179,7 @@ export default test('settings refunds')
       return schema.db.payments.remove(request.params.id);
     });
   })
-  .step(visit('/settings/users/refunds'))
+  .step(App.visit('/settings/users/refunds'))
   .assertion(TableRowGroup().has({ dataRowContainerCount: 5 }))
   .assertion(Table('editList-settings-refunds', { dataColumnCount: 4 }).exists())
   .assertion(TableRow.findByDataRowIndex('row-0').find(TableCell('Reason0')).exists())

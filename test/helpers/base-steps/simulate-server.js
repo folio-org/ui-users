@@ -5,6 +5,7 @@ import localforage from 'localforage';
 import { start } from '../server';
 
 bigtestGlobals.defaultInteractorTimeout = 10_000;
+bigtestGlobals.defaultAppTimeout = 30_000;
 
 export default function simulateServer(name,
   { user = {}, permissions = [], modules = [] } =
