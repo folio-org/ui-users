@@ -17,8 +17,8 @@ import {
 
 export default test('patron block limits')
   .step('seed data', async () => {
-    const condition = await store.createList('patronBlockCondition', 5);
-    const feeFineCondition = await store.create('patronBlockCondition', { id: feeFineBalanceId });
+    const condition = store.createList('patronBlockCondition', 5);
+    const feeFineCondition = store.create('patronBlockCondition', { id: feeFineBalanceId });
     const conditionData = condition.map((c) => c.attrs);
     return { conditionData, feeFineCondition };
   })
@@ -60,7 +60,7 @@ export default test('patron block limits')
       .assertion(Div.findByAttribute('data-test-callout-element').exists())))
   .child('visit group with preexisting limit', test => test
     .step('seed more data', async ({ conditionData }) => {
-      await store.create('patronBlockLimit', {
+      store.create('patronBlockLimit', {
         conditionId: conditionData[0].id,
         patronGroupId: 'group4',
         value: 13,
