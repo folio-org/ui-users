@@ -29,7 +29,7 @@ export default test('loans actions history', { permission: [
         volume: 'volume',
       },
     });
-    store.createList('loanaction', 5, { loan: { ...openLoan.attrs } }); // 🧹 error
+    store.createList('loanaction', 5, { loan: openLoan });
     store.createList('request', 2, { itemId: openLoan.itemId });
     return { openLoan };
   })
@@ -38,4 +38,3 @@ export default test('loans actions history', { permission: [
       await App.visit(`/users/${openLoan.userId}/loans/view/${openLoan.id}`);
     })
   )
-
