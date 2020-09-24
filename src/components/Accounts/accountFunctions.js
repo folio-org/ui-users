@@ -1,3 +1,5 @@
+import { paymentStatusesAllowedToRefund } from '../../constants';
+
 export function count(array) {
   const list = [];
   const countList = [];
@@ -39,11 +41,20 @@ export function handleFilterClear(name) {
   return state;
 }
 
-export function calculateSelectedAmount(accounts) {
-  const selected = accounts.reduce((s, { remaining }) => {
-    return s + parseFloat(remaining * 100);
+export function calculateSelectedAmount(accounts, isRefundAction = false) {
+  const selected = accounts.reduce((s, { amount, remaining }) => {
+    return isRefundAction
+      ? s + parseFloat((amount - remaining) * 100)
+      : s + parseFloat(remaining * 100);
   }, 0);
+
   return parseFloat(selected / 100).toFixed(2);
+}
+
+export function calculateRemainingAmount(amount, balance, selected, action) {
+  return action === 'refund'
+    ? parseFloat(selected - amount).toFixed(2)
+    : amount > 0 ? parseFloat(balance - amount).toFixed(2) : parseFloat(balance).toFixed(2);
 }
 
 export function loadServicePoints(values) {
@@ -74,4 +85,29 @@ export function loadServicePoints(values) {
     });
   }
   return ownerId;
+}
+
+export function accountRefundInfo(account) {
+  const hasBeenPaid = paymentStatusesAllowedToRefund.includes(account?.paymentStatus?.name);
+  const paidAmount = (parseFloat(account.amount - account.remaining) * 100) / 100;
+
+  return { hasBeenPaid, paidAmount };
+}
+
+export function isRefundAllowed(account) {
+  const { hasBeenPaid, paidAmount } = accountRefundInfo(account);
+  return hasBeenPaid && paidAmount > 0;
+}
+
+export function calculateTotalPaymentAmount(accounts = []) {
+  return accounts.reduce((amount, account) => {
+    const { hasBeenPaid, paidAmount } = accountRefundInfo(account);
+    return hasBeenPaid ? amount + paidAmount : amount;
+  }, 0);
+}
+
+export function calculateOwedFeeFines(accounts = []) {
+  return accounts.reduce((owed, account) => {
+    return account?.status?.name === 'Open' ? parseFloat(owed + account.remaining) : owed;
+  }, 0);
 }

@@ -13,12 +13,14 @@ import {
   Button,
   TextArea,
   Modal,
+  NoValue,
   TextField,
   Checkbox,
   Select,
 } from '@folio/stripes/components';
 
 import { calculateSelectedAmount } from '../accountFunctions';
+
 import css from './PayWaive.css';
 
 class ActionModal extends React.Component {
@@ -30,6 +32,8 @@ class ActionModal extends React.Component {
     accounts: PropTypes.arrayOf(PropTypes.object),
     data: PropTypes.arrayOf(PropTypes.object),
     balance: PropTypes.string,
+    totalPaidAmount: PropTypes.string,
+    owedAmount: PropTypes.string,
     submitting: PropTypes.bool,
     pristine: PropTypes.bool,
     reset: PropTypes.func,
@@ -38,22 +42,40 @@ class ActionModal extends React.Component {
     feefines: PropTypes.arrayOf(PropTypes.object),
     label: PropTypes.string,
     action: PropTypes.string,
-    intl: PropTypes.object,
+    intl: PropTypes.object.isRequired,
     checkAmount: PropTypes.string,
     okapi: PropTypes.object,
   };
+
+  static defaultProps = {
+    totalPaidAmount: '',
+    owedAmount: '',
+  }
 
   constructor(props) {
     super(props);
 
     this.state = {
       actionAllowed: false,
-      remainingAmount: '0.00'
+      accountRemainingAmount: '0.00',
+      prevValidatedAmount: null,
+      prevValidationError: '',
     };
+
+    this._isMounted = false;
+  }
+
+  componentDidMount() {
+    this._isMounted = true;
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   onClose = () => {
     const { onClose, form: { reset } } = this.props;
+    this._isMounted = false;
 
     onClose();
     reset();
@@ -69,7 +91,7 @@ class ActionModal extends React.Component {
 
     const { values: { amount } } = getState();
 
-    const selected = calculateSelectedAmount(accounts);
+    const selected = calculateSelectedAmount(accounts, action === 'refund');
     const type = parseFloat(amount) < parseFloat(selected)
       ? formatMessage({ id: `ui-users.accounts.${action}.summary.partially` })
       : formatMessage({ id: `ui-users.accounts.${action}.summary.fully` });
@@ -115,7 +137,10 @@ class ActionModal extends React.Component {
   }
 
   renderMethod = (options) => {
-    const { action } = this.props;
+    const {
+      action,
+      intl: { formatMessage }
+    } = this.props;
     return (
       <Col xs={this.isPaymentAction(action) ? 3 : 7}>
         <Row>
@@ -126,17 +151,13 @@ class ActionModal extends React.Component {
         </Row>
         <Row>
           <Col xs id="action-selection">
-            <FormattedMessage id={`ui-users.accounts.${action}.method.placeholder`}>
-              {placeholder => (
-                <Field
-                  name="method"
-                  component={Select}
-                  dataOptions={options}
-                  placeholder={placeholder}
-                  validate={this.validateMethod}
-                />
-              )}
-            </FormattedMessage>
+            <Field
+              name="method"
+              component={Select}
+              dataOptions={options}
+              placeholder={formatMessage({ id: `ui-users.accounts.${action}.method.placeholder` })}
+              validate={this.validateMethod}
+            />
           </Col>
         </Row>
       </Col>
@@ -145,6 +166,10 @@ class ActionModal extends React.Component {
 
   isPaymentAction = (action) => {
     return action === 'payment';
+  }
+
+  isRefundAction = (action) => {
+    return action === 'refund';
   }
 
   onChangeOwner = () => {
@@ -173,10 +198,17 @@ class ActionModal extends React.Component {
   validateAmount = async (value) => {
     let error;
 
+    const {
+      actionAllowed,
+      accountRemainingAmount,
+      prevValidatedAmount,
+      prevValidationError,
+    } = this.state;
+
     if (_.isEmpty(value)) {
       error = <FormattedMessage id="ui-users.accounts.error.field" />;
-    } else {
-      const id = this.props?.accounts[0]?.id;
+    } else if (value !== prevValidatedAmount && this._isMounted) {
+      const { id } = _.head(this.props.accounts) || {};
       const response = await this.triggerCheckEndpoint(value, id);
       const {
         allowed,
@@ -184,13 +216,21 @@ class ActionModal extends React.Component {
         remainingAmount,
       } = await response.json();
 
+      this.setState({ prevValidatedAmount: value });
+
       if (!_.isUndefined(errorMessage)) {
+        this.setState({ prevValidationError: errorMessage });
         error = errorMessage;
       }
 
-      if (this.state.actionAllowed !== allowed || this.state.remainingAmount !== remainingAmount) {
-        this.setState({ actionAllowed: allowed, remainingAmount });
+      if (actionAllowed !== allowed || accountRemainingAmount !== remainingAmount) {
+        this.setState({
+          actionAllowed: allowed,
+          accountRemainingAmount: remainingAmount,
+        });
       }
+    } else {
+      error = prevValidationError;
     }
 
     return error;
@@ -223,8 +263,11 @@ class ActionModal extends React.Component {
       accounts,
       action,
       balance,
+      totalPaidAmount,
+      owedAmount,
       commentRequired,
       form: { getState },
+      intl: { formatMessage },
       data,
       feefines,
       handleSubmit,
@@ -234,6 +277,8 @@ class ActionModal extends React.Component {
       pristine,
       submitting,
     } = this.props;
+
+    const { accountRemainingAmount } = this.state;
 
     const {
       valid,
@@ -252,7 +297,7 @@ class ActionModal extends React.Component {
       }
     });
 
-    const selected = calculateSelectedAmount(accounts);
+    const selected = calculateSelectedAmount(accounts, action === 'refund');
     const ownerOptions = owners.filter(o => o.owner !== 'Shared').map(o => ({ value: o.id, label: o.owner }));
 
     let options = (this.isPaymentAction(action)) ? data.filter(d => (d.ownerId === (accounts.length > 1 ? ownerId : (accounts[0] || {}).ownerId))) : data;
@@ -275,15 +320,27 @@ class ActionModal extends React.Component {
           <br />
           <Row>
             <Col xs={5}>
-              <Row end="xs">
-                <Col xs={7}>
-                  <FormattedMessage id="ui-users.accounts.totalOwed" />
-                  :
-                </Col>
-                <Col xs={4}>
-                  {balance}
-                </Col>
-              </Row>
+              { this.isRefundAction(action) ? (
+                <Row end="xs">
+                  <Col xs={7}>
+                    <FormattedMessage id="ui-users.accounts.totalPaid" />
+                    :
+                  </Col>
+                  <Col xs={4}>
+                    {totalPaidAmount}
+                  </Col>
+                </Row>
+              ) : (
+                <Row end="xs">
+                  <Col xs={7}>
+                    <FormattedMessage id="ui-users.accounts.totalOwed" />
+                    :
+                  </Col>
+                  <Col xs={4}>
+                    {balance}
+                  </Col>
+                </Row>
+              ) }
               <Row end="xs">
                 <Col xs={7}>
                   <FormattedMessage id="ui-users.accounts.selectedAmount" />
@@ -316,14 +373,23 @@ class ActionModal extends React.Component {
                   </div>
                 </Col>
               </Row>
-              { !_.isUndefined(this.state.remainingAmount) && (
+              <Row end="xs">
+                <Col xs={7}>
+                  <FormattedMessage id="ui-users.accounts.remainingAmount" />
+                  :
+                </Col>
+                <Col xs={4}>
+                  { accountRemainingAmount || <NoValue /> }
+                </Col>
+              </Row>
+              { this.isRefundAction(action) && (
                 <Row end="xs">
                   <Col xs={7}>
-                    <FormattedMessage id="ui-users.accounts.remainingAmount" />
+                    <FormattedMessage id="ui-users.accounts.otherOwed" />
                     :
                   </Col>
                   <Col xs={4}>
-                    {this.state.remainingAmount}
+                    {owedAmount}
                   </Col>
                 </Row>
               )}
@@ -338,18 +404,14 @@ class ActionModal extends React.Component {
                 </Row>
                 <Row>
                   <Col xs>
-                    <FormattedMessage id="ui-users.accounts.payment.owner.placeholder">
-                      {placeholder => (
-                        <Field
-                          id="ownerId"
-                          name="ownerId"
-                          component={Select}
-                          dataOptions={ownerOptions}
-                          placeholder={placeholder}
-                          onChange={this.onChangeOwner}
-                        />
-                      )}
-                    </FormattedMessage>
+                    <Field
+                      id="ownerId"
+                      name="ownerId"
+                      component={Select}
+                      dataOptions={ownerOptions}
+                      placeholder={formatMessage({ id: 'ui-users.accounts.payment.owner.placeholder' })}
+                      onChange={this.onChangeOwner}
+                    />
                   </Col>
                 </Row>
               </Col>
@@ -445,5 +507,5 @@ export default stripesFinalForm({
   initialValuesEqual: (a, b) => _.isEqual(a, b),
   navigationCheck: true,
   subscription: { values: true },
-  mutators: { setFieldData }
+  mutators: { setFieldData },
 })(ActionModal);
