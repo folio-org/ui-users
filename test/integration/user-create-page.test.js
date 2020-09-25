@@ -57,6 +57,6 @@ export default test('user create page')
   //     .assertion(Div.findByAttribute('data-test-default-delivery-address-field').find(Alert('Please, add at least one address inside "Addresses" section')).exists())))
   // .child('display reset password link', test => test
   //   .step(TextField.findById('adduser_username').fill('username'))
-  //   .assertion(Link('Password Reset').exists()));
+  //   // .assertion(Link('Password Reset').exists()) // 🧹 password reset button is nowhere to be found
+  // );
 
-// 🧹 last assertion broken because password reset button is nowhere to be found
