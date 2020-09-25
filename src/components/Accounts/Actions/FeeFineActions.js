@@ -684,7 +684,12 @@ class Actions extends React.Component {
           : 'ui-users.accounts.actions.refundFeeFine';
 
     const ownerId = loadServicePoints({ owners, defaultServicePointId, servicePointsIds });
-    const initialValues = { ownerId, amount: calculateSelectedAmount(this.props.accounts), notify: feefineAction?.notify ?? true };
+    const currentFeeFineType = feefines.find(({ feeFineType }) => feeFineType === account?.feeFineType);
+    const initialValues = {
+      ownerId,
+      amount: calculateSelectedAmount(this.props.accounts),
+      notify: !!(currentFeeFineType?.actionNoticeId || currentFeeFineType?.chargeNoticeId),
+    };
 
     const modals = [
       {
