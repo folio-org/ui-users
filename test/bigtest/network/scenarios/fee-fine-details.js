@@ -28,15 +28,19 @@ export default (server) => {
   });
   server.create('waife', { nameReason : 'waiveReason' });
   server.create('transfer', { accountName : 'transferAccount' });
+  server.create('refund', { nameReason: 'Overpaid' });
   server.createList('account', 3, {
-    userId: user.id
+    userId: user.id,
   });
   const openAccount = server.create('account', {
     userId: user.id,
     status: {
       name: 'Open',
     },
-    amount: 500,
+    paymentStatus : {
+      name : 'Paid partially'
+    },
+    amount: 600,
     remaining: 500,
     loanId: loan.id,
     ownerId: owner.id,
@@ -68,6 +72,7 @@ export default (server) => {
   server.get('/payments');
   server.get('/waives');
   server.get('/transfers');
+  server.get('/refunds');
   server.get('/accounts');
   server.get('/accounts/:id', (schema, request) => {
     return schema.accounts.find(request.params.id).attrs;

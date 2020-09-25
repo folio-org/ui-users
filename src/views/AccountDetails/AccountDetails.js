@@ -24,6 +24,8 @@ import {
   calculateSortParams,
 } from '../../components/util';
 
+import { calculateTotalPaymentAmount } from '../../components/Accounts/accountFunctions';
+
 import css from './AccountDetails.css';
 
 const columnWidths = {
@@ -52,8 +54,8 @@ class AccountDetails extends React.Component {
   static propTypes = {
     stripes: PropTypes.object,
     resources: PropTypes.shape({
-      accountHistory: PropTypes.object,
       accountActions: PropTypes.object,
+      accounts: PropTypes.object.isRequired,
     }),
     mutator: PropTypes.shape({
       activeRecord: PropTypes.shape({
@@ -73,17 +75,20 @@ class AccountDetails extends React.Component {
     patronGroup: PropTypes.object,
     itemDetails: PropTypes.object,
     okapi: PropTypes.object,
+    account: PropTypes.object,
+    owedAmount: PropTypes.number,
   };
 
   static defaultProps = {
     itemDetails: {},
+    account: {},
+    owedAmount: 0,
   }
 
   constructor(props) {
     super(props);
     this.onSort = this.onSort.bind(this);
     this.onChangeActions = this.onChangeActions.bind(this);
-    // this.connectedActions = connect(Actions);
     this.error = this.error.bind(this);
     this.comment = this.comment.bind(this);
     this.num = props.num;
@@ -108,6 +113,8 @@ class AccountDetails extends React.Component {
         comment: false,
         regular: false,
         transferModal: false,
+        refundModal: false,
+        refundMany: false,
       },
       sortOrder: ['date', 'date'],
       sortDirection: ['desc', 'desc'],
@@ -144,9 +151,7 @@ class AccountDetails extends React.Component {
   }
 
   onChangeActions(actions) {
-    this.setState({
-      actions,
-    });
+    this.setState({ actions });
   }
 
   waive = () => {
@@ -169,6 +174,10 @@ class AccountDetails extends React.Component {
     this.onChangeActions({ transferModal: true });
   }
 
+  refund = () => {
+    this.onChangeActions({ refundModal: true });
+  }
+
   onSort(e, meta) {
     if (!this.sortMap[meta.name] || e.target.type === 'button' || e.target.id === 'button') return;
 
@@ -187,8 +196,7 @@ class AccountDetails extends React.Component {
   }
 
   getInstanceInfo = () => {
-    const { resources } = this.props;
-    const account = resources?.accountHistory?.records[0] ?? {};
+    const { account } = this.props;
     const instanceTitle = account?.title;
     const instanceType = account?.materialType;
     const instanceTypeString = instanceType ? `(${instanceType})` : '';
@@ -198,12 +206,11 @@ class AccountDetails extends React.Component {
 
   handleClose = () => {
     const {
+      account,
       history,
       match: { params },
-      resources
     } = this.props;
 
-    const account = _.get(resources, ['accountHistory', 'records', 0]) || {};
     const status = account?.status?.name?.toLowerCase() || 'all';
 
     history.push({ pathname: `/users/${params.id}/accounts/${status}` });
@@ -216,6 +223,8 @@ class AccountDetails extends React.Component {
     } = this.state;
 
     const {
+      account,
+      owedAmount,
       patronGroup: patron,
       resources,
       stripes,
@@ -224,7 +233,6 @@ class AccountDetails extends React.Component {
       itemDetails,
     } = this.props;
 
-    const account = _.get(resources, ['accountHistory', 'records', 0]) || {};
     account.remaining = this.state.remaining;
 
     const columnMapping = {
@@ -265,7 +273,7 @@ class AccountDetails extends React.Component {
       comments: action => (action.comments ? (<div>{action.comments.split('\n').map(c => (<Row><Col>{c}</Col></Row>))}</div>) : ''),
     };
 
-    const isAccountsPending = _.get(resources, ['accountHistory', 'isPending'], true);
+    const isAccountsPending = _.get(resources, ['accounts', 'isPending'], true);
     const isActionsPending = _.get(resources, ['accountActions', 'isPending'], true);
 
     const actions = this.state.data || [];
@@ -281,6 +289,9 @@ class AccountDetails extends React.Component {
     const lostItemPolicyId = itemDetails?.lostItemPolicyId;
     const lostItemPolicyName = itemDetails?.lostItemPolicyName;
     const contributors = itemDetails?.contributors.join(', ');
+
+    const totalPaidAmount = calculateTotalPaymentAmount(resources?.accounts?.records);
+    const refundAllowed = totalPaidAmount > 0;
 
     return (
       <Paneset isRoot>
@@ -316,8 +327,9 @@ class AccountDetails extends React.Component {
               </Button>
               <Button
                 id="refundAccountActionsHistory"
-                disabled
+                disabled={!refundAllowed || buttonDisabled || isActionsPending || isAccountsPending}
                 buttonStyle="primary"
+                onClick={this.refund}
               >
                 <FormattedMessage id="ui-users.accounts.history.button.refund" />
               </Button>
@@ -525,6 +537,8 @@ class AccountDetails extends React.Component {
             user={user}
             stripes={stripes}
             balance={account.remaining || 0}
+            totalPaidAmount={totalPaidAmount}
+            owedAmount={owedAmount}
             accounts={[account]}
             handleEdit={() => {
               // Neither of the following two functions exists after refactoring
