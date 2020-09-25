@@ -60,6 +60,7 @@ import KeyValue from './KeyValue';
   payButton = new ButtonInteractor('#payAccountActionsHistory');
   waiveButton = new ButtonInteractor('#waiveAccountActionsHistory');
   transferButton = new ButtonInteractor('#transferAccountActionsHistory');
+  refundButton = new ButtonInteractor('#refundAccountActionsHistory');
   errorButton = new ButtonInteractor('#errorAccountActionsHistory');
   errorModal = new ModalInteractor('#error-modal');
   errorComment = new TextAreaInteractor('[class*=textArea---]');

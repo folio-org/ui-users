@@ -484,7 +484,7 @@
   "accounts.button.error": "Error",
 
   "accounts.error.field": "Please fill this field in to continue",
-  "accounts.error.comment": "Enter a comment",
+  "accounts.error.comment": "Additional information for staff is required",
   "accounts.error.exceeds": "Pay amount exceeds the selected amount",
   "accounts.payment.error.select": "No Payment methods exist for Fee/fine owner",
   "accounts.waive.error.select": "No Waive reasons exist",
@@ -525,6 +525,8 @@
   "accounts.confirmation.message": "<b>{count}</b> {count, plural, one {fee/fine} other {fees/fines}} for <b>{amount}</b> will be <b>{action}</b>",
 
   "accounts.totalOwed": "Total owed amount",
+  "accounts.otherOwed": "Other fees/fines owed",
+  "accounts.totalPaid": "Total paid amount",
   "accounts.selectedAmount": "Selected amount",
   "accounts.remainingAmount": "Remaining amount",
   "accounts.commentStaff": "Additional information for staff",
@@ -568,6 +570,15 @@
   "accounts.transfer.error.exceeds": "Transfer amount exceeds selected amount",
   "accounts.transfer.method": "Transfer Account",
   "accounts.transfer.method.placeholder": "Select account",
+
+  "accounts.refund.modalLabel": "Refund fee/fine",
+  "accounts.refund.amount": "Refund amount",
+  "accounts.refund": "Refund",
+  "accounts.refund.summary.partially": "Partially refunding",
+  "accounts.refund.summary.fully": "Refunding",
+  "accounts.refund.method": "Refund reason",
+  "accounts.refund.method.placeholder": "Select reason",
+  "accounts.refund.error.select": "Refund reason is required",
 
   "accounts.warning.itemSelected": "{total, number} items selected. {items, number} {items, plural, one {item} other {items}} cannot be {action} because they are already closed.",
 
@@ -653,8 +664,9 @@
   "accounts.actions.payFeeFine": "Pay fees/fines",
   "accounts.actions.waiveFeeFine": "Waive fees/fines",
   "accounts.actions.transferFeeFine": "Transfer fees/fines",
+  "accounts.actions.refundFeeFine": "Refund fees/fines",
 
-  "accounts.actions.warning.summary": "{selectedItemsAmount} fees/fines selected. Deselect closed fees/fines to continue.",
+  "accounts.actions.warning.summary": "{selectedItemsAmount} items selected. {invalidItemsAmount} items cannot be {action} because they {reason}.",
   "accounts.actions.warning.alertDetails": "Alert details",
   "accounts.actions.warning.feeFineType": "Fee/Fine type",
   "accounts.actions.warning.remaining": "Remainig",
@@ -663,7 +675,10 @@
   "accounts.actions.warning.paymentAction": "paid",
   "accounts.actions.warning.waiveAction": "waived",
   "accounts.actions.warning.transferAction": "transferred",
+  "accounts.actions.warning.refundAction": "refunded",
   "accounts.actions.warning.deselect": "Deselect to continue",
+  "accounts.actions.warning.closedItems": "are already closed",
+  "accounts.actions.warning.unpaidItems": "were not paid",
   "accounts.actions.cancellation.success": "<b>{count}</b> {count, plural, one {fee/fine} other {fees/fines}} for <b>{amount}</b> has been successfully <b>{action}</b> for <b>{user}</b>",
   "accounts.status.outstanding": "Outstanding",
   "accounts.status.partially": "partially",
@@ -673,6 +688,7 @@
   "accounts.actions.transfer": "transfer",
   "accounts.actions.tag.staff": "STAFF",
   "accounts.actions.tag.patron": "PATRON",
+  "accounts.actions.refund": "refund",
 
   "transfers.label": "Fee/fine: Transfer accounts",
   "transfers.columns.name": "Name",
