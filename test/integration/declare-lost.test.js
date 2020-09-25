@@ -112,7 +112,7 @@ export default test('declare lost', {
       .step(Div.findById('resolve-claim-menu').find(Button('Declare lost')).click()) // 🧹 same issue as above; two identical buttons
       .step(TextArea('Additional information').fill('item lost'))
       .step(Button('Confirm').click())
-      // .assertion(Div.findByAttribute('data-test-loan-fees-fines').find(Div('250.00')).exists()) // 🧹 issue with the ugly querying and the counter
+      // .assertion(Div.findByAttribute('data-test-loan-fees-fines').find(Div('250.00')).exists()) // 🧹 issue with the route configurations and the counter; see 'query routes' above.
     ))
   .child('visiting loan details with declared lost item', test => test
     .step('seed data', async () => {

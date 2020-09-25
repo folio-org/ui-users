@@ -9,10 +9,10 @@ import { expect } from 'chai';
 import findUser from '@folio/plugin-find-user';
 
 import setupApplication from '../helpers/setup-application';
-import UserFormPage from '../interactors/user-form-page';
-import UsersInteractor from '../interactors/users';
-import FindUserInteractor from '../interactors/find-user';
-import FindUserInstancesInteractor from '../interactors/FindUserInstances';
+// import UserFormPage from '../interactors/user-form-page';
+// import UsersInteractor from '../interactors/users';
+// import FindUserInteractor from '../interactors/find-user';
+// import FindUserInstancesInteractor from '../interactors/FindUserInstances';
 import translations from '../../../translations/ui-users/en';
 
 describe('User Edit: Proxy/Sponsor', function () {

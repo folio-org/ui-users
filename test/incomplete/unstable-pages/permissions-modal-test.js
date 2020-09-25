@@ -6,8 +6,8 @@ import {
 import { expect } from 'chai';
 
 import setupApplication from '../helpers/setup-application';
-import PermissionSetForm from '../interactors/permission-set-form';
-import UserFormPage from '../interactors/user-form-page';
+// import PermissionSetForm from '../interactors/permission-set-form';
+// import UserFormPage from '../interactors/user-form-page';
 import translation from '../../../translations/ui-users/en';
 
 describe('Permissions modal', () => {

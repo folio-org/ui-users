@@ -2,9 +2,9 @@ import { beforeEach, describe, it } from '@bigtest/mocha';
 import { expect } from 'chai';
 
 import setupApplication from '../helpers/setup-application';
-import LoanActionsHistory from '../interactors/loan-actions-history';
-import OpenLoansInteractor from '../interactors/open-loans';
-import ClosedLoansInteractor from '../interactors/closed-loans';
+// import LoanActionsHistory from '../interactors/loan-actions-history';
+// import OpenLoansInteractor from '../interactors/open-loans';
+// import ClosedLoansInteractor from '../interactors/closed-loans';
 
 import translations from '../../../translations/ui-users/en';
 

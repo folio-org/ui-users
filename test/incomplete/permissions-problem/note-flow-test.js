@@ -3,10 +3,10 @@ import { expect } from 'chai';
 import faker from 'faker';
 
 import setupApplication from '../helpers/setup-application';
-import NotesAccordion from '../interactors/notes-accordion';
-import NoteForm from '../interactors/note-form';
-import NoteView from '../interactors/note-view';
-import InstanceViewPage from '../interactors/user-view-page';
+// import NotesAccordion from '../interactors/notes-accordion';
+// import NoteForm from '../interactors/note-form';
+// import NoteView from '../interactors/note-view';
+// import InstanceViewPage from '../interactors/user-view-page';
 import { getFullName } from '../../../src/components/util';
 
 const notesAccordion = new NotesAccordion();

@@ -8,9 +8,9 @@ import { expect } from 'chai';
 import translations from '../../../translations/ui-users/en';
 
 import setupApplication from '../helpers/setup-application';
-import UserFormPage from '../interactors/user-form-page';
-import InstanceViewPage from '../interactors/user-view-page';
-import UsersInteractor from '../interactors/users';
+// import UserFormPage from '../interactors/user-form-page';
+// import InstanceViewPage from '../interactors/user-view-page';
+// import UsersInteractor from '../interactors/users';
 
 describe('User Edit Page', () => {
   const users = new UsersInteractor();

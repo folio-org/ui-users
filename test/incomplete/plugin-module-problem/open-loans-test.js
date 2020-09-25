@@ -7,9 +7,9 @@ import { expect } from 'chai';
 
 import setupApplication from '../helpers/setup-application';
 import DummyComponent from '../helpers/DummyComponent';
-import OpenLoansInteractor from '../interactors/open-loans';
-import UsersInteractor from '../interactors/users';
-import LoansListingPane from '../interactors/loans-listing-pane';
+// import OpenLoansInteractor from '../interactors/open-loans';
+// import UsersInteractor from '../interactors/users';
+// import LoansListingPane from '../interactors/loans-listing-pane';
 
 // 🧹 skipping because of module issue
 
