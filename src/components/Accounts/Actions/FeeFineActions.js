@@ -16,13 +16,17 @@ import {
   ConfirmationModal
 } from '@folio/stripes/components';
 
-import { calculateSelectedAmount, loadServicePoints, isRefundAllowed } from '../accountFunctions';
 import CancellationModal from './CancellationModal';
 import CommentModal from './CommentModal';
 import WarningModal from './WarningModal';
 import ActionModal from './ActionModal';
 import { MAX_RECORDS } from '../../../constants';
 import { getFullName } from '../../util';
+import {
+  calculateSelectedAmount,
+  isRefundAllowed,
+  loadServicePoints,
+} from '../accountFunctions';
 
 class Actions extends React.Component {
   static manifest = Object.freeze({
@@ -656,7 +660,6 @@ class Actions extends React.Component {
     } = this.state;
 
     const account = this.props.accounts[0] || {};
-    // const amount = calculateSelectedAmount((actions.pay || actions.waiveModal || actions.transferModal) ? this.props.accounts : accounts);
     const defaultServicePointId = _.get(resources, ['curUserServicePoint', 'records', 0, 'defaultServicePointId'], '-');
     const servicePointsIds = _.get(resources, ['curUserServicePoint', 'records', 0, 'servicePointsIds'], []);
     const payments = _.get(resources, ['payments', 'records'], []);

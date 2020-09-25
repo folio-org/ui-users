@@ -91,7 +91,7 @@ class ActionModal extends React.Component {
 
     const { values: { amount } } = getState();
 
-    const selected = calculateSelectedAmount(accounts, action === 'refund');
+    const selected = calculateSelectedAmount(accounts, this.isRefundAction(action));
     const type = parseFloat(amount) < parseFloat(selected)
       ? formatMessage({ id: `ui-users.accounts.${action}.summary.partially` })
       : formatMessage({ id: `ui-users.accounts.${action}.summary.fully` });
@@ -297,7 +297,7 @@ class ActionModal extends React.Component {
       }
     });
 
-    const selected = calculateSelectedAmount(accounts, action === 'refund');
+    const selected = calculateSelectedAmount(accounts, this.isRefundAction(action));
     const ownerOptions = owners.filter(o => o.owner !== 'Shared').map(o => ({ value: o.id, label: o.owner }));
 
     let options = (this.isPaymentAction(action)) ? data.filter(d => (d.ownerId === (accounts.length > 1 ? ownerId : (accounts[0] || {}).ownerId))) : data;
