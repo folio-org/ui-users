@@ -20,7 +20,7 @@ export default test('', { permissions: ['perms.users.get'] })
     const user = store.create('user');
     return { user };
   })
-  .step('visit "/users/preview/user.id"', ({ user }) => App.visit(`/users/preview/${user.id}`))
+  .step('visit "/users/preview/user.id"', ({ user }) => App.visit(`/users/preview/${user.id}`));
   // .step(Link('Edit').click())
   // .step(Button('User permissions').click())
   // .assertion(Paragraph('No permissions found').exists())

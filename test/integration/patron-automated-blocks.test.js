@@ -42,4 +42,4 @@ export default test('patron automated blocks', { permissions: ['automated-patron
     .exists())
   .assertion(Div.findByAriaLabelledBy('accordion-toggle-button-patronBlocksSection')
     .find(TableCell('Borrowing', { rowNumber: 0 }))
-    .exists())
+    .exists());

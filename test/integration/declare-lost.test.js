@@ -154,4 +154,4 @@ export default test('declare lost', {
     .step(Button('Declare lost').click())
     .step(TextArea('Additional information').fill('item lost'))
     .step(Button('Confirm').click())
-    .assertion(Button('Declare lost', { disabled: true }).exists()))
+    .assertion(Button('Declare lost', { disabled: true }).exists()));
