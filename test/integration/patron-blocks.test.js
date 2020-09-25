@@ -44,33 +44,35 @@ export default test('patron blocks section', { permissions: ['manualblocks.colle
       const body = JSON.parse(request.requestBody);
       return matching.update(body);
     });
-    routes.delete('manualblocks/:id', () => {});
+    routes.delete('manualblocks/:id', () => {
+      // 🧹 original test had this route as an empty function
+    });
     routes.post('/manualblocks', (schema, request) => {
       const body = JSON.parse(request.requestBody);
       return schema.manualblocks.create(body);
     });
   })
   .step(App.visit('/users/view/1ad737b0-d847-11e6-bf26-cec0c932ce02'))
-  .assertion(Button('Patron blocks').exists()) // 🧹 this occasionally fails
+  .assertion(Button('Patron blocks').exists())
   .assertion(Div.findByAriaLabelledBy('accordion-toggle-button-patronBlocksSection')
     .find(TableRowGroup())
     .has({ dataRowContainerCount: 3 }))
   .assertion(Div.findByAriaLabelledBy('accordion-toggle-button-patronBlocksSection')
     .find(TableCell('Invalid email and mailing addresses.', { rowNumber: 0 }))
     .exists())
-  // .child('add patron block', test => test
-  //   .step(Link('Create block').click())
-  //   .assertion(Button('Save & close', { disabled: true }).exists())
-  //   .child('save new patron block', test => test
-  //     .step(TextArea('Display Description*').fill('Description'))
-  //     .step(TextArea('Staff only information').fill('Staff information'))
-  //     .step(TextArea('Message to Patron').fill('Message to Patron'))
-  //     .step(Checkbox('Renewals').click())
-  //     .step(Checkbox('Borrowing').click())
-  //     .step(Button('Save & close').click())
-  //     .assertion(Div.findByAriaLabelledBy('accordion-toggle-button-patronBlocksSection')
-  //       .find(TableRowGroup())
-  //       .has({ dataRowContainerCount: 4 }))))
+  .child('add patron block', test => test
+    .step(Link('Create block').click())
+    .assertion(Button('Save & close', { disabled: true }).exists())
+    .child('save new patron block', test => test
+      .step(TextArea('Display Description').fill('Description'))
+      .step(TextArea('Staff only information').fill('Staff information'))
+      .step(TextArea('Message to Patron').fill('Message to Patron'))
+      .step(Checkbox('Renewals').click())
+      .step(Checkbox('Borrowing').click())
+      .step(Button('Save & close').click())
+      .assertion(Div.findByAriaLabelledBy('accordion-toggle-button-patronBlocksSection')
+        .find(TableRowGroup())
+        .has({ dataRowContainerCount: 4 }))))
   // .child('update patron block', test => test
   //   .step(TableRow.findByRowNumber(1).find(TableCell('Manual')).click())
   //   // 🧹 clicking on block does not direct user to page with information
@@ -82,8 +84,14 @@ export default test('patron blocks section', { permissions: ['manualblocks.colle
   //     .has({ dataRowContainerCount: 3 }))
   // )
   // .child('delete block', test => test
-  //   // 🧹 delete button does not work
+  //   // 🧹 clicking on block does not direct user like above
+  //   // 🧹 delete button does not work even when manually clicked
   // )
-  // .child('collapse/expand button', test => test
-      // look at where it says resume here
-  // )
+  .child('collapse/expand button', test => test
+    .step(Link('Create block').click())
+    .step(Button('Block information').click())
+    .child('collapsing one section', test => test
+      .assertion(Button('Block information').has({ ariaExpanded: 'false' })))
+    .child('collapse all', test => test
+      .step(Button('Collapse all').click())
+      .assertion(Button('Expand all').exists())));

@@ -10,7 +10,8 @@ export default createInteractor('button')({
   },
   filters: {
     enabled: element => !element.disabled,
-    disabled: element => element.disabled
+    disabled: element => element.disabled,
+    ariaExpanded: element => element.getAttribute('aria-expanded')
   },
   actions: {
     click: perform((element) => {
