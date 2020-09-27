@@ -9,7 +9,12 @@ import setupApplication from '../helpers/setup-application';
 import FeeFineHistoryInteractor from '../interactors/fee-fine-history';
 
 describe('Test Fee/Fine History', () => {
-  setupApplication({ scenarios: ['view-fees-fines'] });
+  setupApplication({
+    scenarios: ['view-fees-fines'],
+    currentUser: {
+      curServicePoint: { id: 1 },
+    },
+  });
   describe('visit user details', () => {
     beforeEach(async function () {
       this.visit('/users/preview/ce0e0d5b-b5f3-4ad5-bccb-49c0784298fd');
@@ -87,14 +92,162 @@ describe('Test Fee/Fine History', () => {
           });
         });
 
-        describe('selects one row in open accounts and transfer button', () => {
+        describe('selects one row in open accounts', () => {
           beforeEach(async () => {
             await FeeFineHistoryInteractor.rows(2).cells(0).selectOne();
-            await FeeFineHistoryInteractor.transferButton.click();
           });
 
-          it('displays title transfer modal', () => {
-            expect(FeeFineHistoryInteractor.transferModal.hasHeader).to.be.true;
+          describe('transfer single select account', () => {
+            beforeEach(async () => {
+              await FeeFineHistoryInteractor.transferButton.click();
+            });
+
+            it('displays title transfer modal', () => {
+              expect(FeeFineHistoryInteractor.actionModal.hasHeader).to.be.true;
+            });
+
+            describe('Choose transfer account name', () => {
+              beforeEach(async () => {
+                await FeeFineHistoryInteractor.actionModalAmountField.pressTab();
+                await FeeFineHistoryInteractor.actionModalSelect.selectAndBlur('USA Bank0');
+              });
+
+              it('displays transfer modal select option', () => {
+                expect(FeeFineHistoryInteractor.actionModalSelect.value).to.equal('USA Bank0');
+              });
+
+              it('displays transfer button', () => {
+                expect(FeeFineHistoryInteractor.actionModalSubmitButton.isPresent).to.be.true;
+                expect(FeeFineHistoryInteractor.actionModalSubmitButtonIsDisabled).to.be.false;
+              });
+
+              describe('Fill transfer comment', () => {
+                beforeEach(async () => {
+                  await FeeFineHistoryInteractor.commentField.focusTextArea();
+                  await FeeFineHistoryInteractor.commentField.fillAndBlur('Transfer comment');
+                });
+
+                it('displays transfer comment value', () => {
+                  expect(FeeFineHistoryInteractor.commentField.val).to.equal('Transfer comment');
+                });
+
+                it('displays active submit transfer button', () => {
+                  expect(FeeFineHistoryInteractor.actionModalSubmitButtonIsDisabled).to.be.false;
+                });
+
+                describe('transfer fine', () => {
+                  beforeEach(async () => {
+                    await FeeFineHistoryInteractor.actionModalSubmitButton.click();
+                  });
+
+                  it('displays confirmation modal', () => {
+                    expect(FeeFineHistoryInteractor.actionConfirmationModal.body.isPresent).to.be.true;
+                  });
+
+                  describe('confirm fine transfering', () => {
+                    beforeEach(async () => {
+                      await FeeFineHistoryInteractor.actionConfirmationModal.confirmButton.click();
+                    });
+
+                    it('show successfull callout', () => {
+                      expect(FeeFineHistoryInteractor.callout.successCalloutIsPresent).to.be.true;
+                    });
+                  });
+                });
+              });
+            });
+          });
+
+          describe('pay single select account', () => {
+            beforeEach(async () => {
+              await FeeFineHistoryInteractor.payButton.click();
+            });
+
+            it('displays title payment modal', () => {
+              expect(FeeFineHistoryInteractor.actionModal.hasHeader).to.be.true;
+            });
+
+            describe('Choose payment method', () => {
+              beforeEach(async () => {
+                await FeeFineHistoryInteractor.actionModalAmountField.pressTab();
+                await FeeFineHistoryInteractor.actionModalSelect.selectAndBlur('Cash0');
+              });
+
+              it('displays payment modal select option', () => {
+                expect(FeeFineHistoryInteractor.actionModalSelect.value).to.equal('Cash0');
+              });
+
+              it('displays pay button', () => {
+                expect(FeeFineHistoryInteractor.actionModalSubmitButton.isPresent).to.be.true;
+                expect(FeeFineHistoryInteractor.actionModalSubmitButtonIsDisabled).to.be.false;
+              });
+
+              describe('Pay fee/fine', () => {
+                beforeEach(async () => {
+                  await FeeFineHistoryInteractor.actionModalSubmitButton.click();
+                });
+
+                it('displays confirmation modal', () => {
+                  expect(FeeFineHistoryInteractor.actionConfirmationModal.body.isPresent).to.be.true;
+                });
+
+                describe('confirm fine payment', () => {
+                  beforeEach(async () => {
+                    await FeeFineHistoryInteractor.actionConfirmationModal.confirmButton.click();
+                  });
+
+                  it('show successfull callout', () => {
+                    expect(FeeFineHistoryInteractor.callout.successCalloutIsPresent).to.be.true;
+                  });
+                });
+              });
+            });
+          });
+
+          describe('waive single select account', () => {
+            beforeEach(async () => {
+              await FeeFineHistoryInteractor.waiveButton.click();
+            });
+
+            it('displays title waivement modal', () => {
+              expect(FeeFineHistoryInteractor.actionModal.hasHeader).to.be.true;
+            });
+
+            describe('Choose waivement reason', () => {
+              beforeEach(async () => {
+                await FeeFineHistoryInteractor.actionModalAmountField.pressTab();
+                await FeeFineHistoryInteractor.actionModalSelect.selectAndBlur('First time offender0');
+              });
+
+              it('displays waivement modal select option', () => {
+                expect(FeeFineHistoryInteractor.actionModalSelect.value).to.equal('First time offender0');
+              });
+
+              it('displays waive button', () => {
+                expect(FeeFineHistoryInteractor.actionModalSubmitButton.isPresent).to.be.true;
+                expect(FeeFineHistoryInteractor.actionModalSubmitButtonIsDisabled).to.be.false;
+              });
+
+              describe('Waive fee/fine', () => {
+                beforeEach(async () => {
+                  await FeeFineHistoryInteractor.actionModalSubmitButton.click();
+                });
+
+                it('displays confirmation modal', () => {
+                  expect(FeeFineHistoryInteractor.actionConfirmationModal.body.isPresent).to.be.true;
+                });
+
+                describe('confirm fine waivement', () => {
+                  beforeEach(async () => {
+                    await FeeFineHistoryInteractor.actionConfirmationModal.confirmButton.click();
+                  });
+
+                  it('show successfull callout', () => {
+                    expect(FeeFineHistoryInteractor.callout.successCalloutIsPresent).to.be.true;
+                  });
+                });
+              });
+            });
           });
         });
 
