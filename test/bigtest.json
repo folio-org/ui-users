@@ -4,7 +4,7 @@
     "url": "http://localhost:36000"
   },
   "testFiles": [
-    "./integration/**/*.test.js"
+    "./integration/**/settings/*.test.js"
   ],
   "launch": [
     "chrome"

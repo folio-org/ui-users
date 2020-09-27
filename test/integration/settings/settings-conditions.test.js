@@ -1,6 +1,6 @@
 import { App } from '@bigtest/interactor';
-import test from '../helpers/base-steps/simulate-server';
-import { store } from '../helpers/server';
+import test from '../../helpers/base-steps/simulate-server';
+import { store } from '../../helpers/server';
 
 import {
   Button,
@@ -9,7 +9,7 @@ import {
   Form,
   Nav,
   TextArea
-} from '../interactors';
+} from '../../interactors';
 
 export default test('patron block conditions')
   .step('seed data', async () => {

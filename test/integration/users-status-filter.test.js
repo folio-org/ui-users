@@ -25,8 +25,7 @@ export default test('status filter')
     .step(Checkbox('Inactive').click())
     .assertion(Table('list-users').has({ dataRowCount: 12 })));
 
-// skipping because search function is broken; search for '/users' getter in network/config.js
-// 🧹
+// 🧹  skipping because search function is broken; search for '/users' getter in network/config.js
 
 // .child('search for users', test => test
 //   .step(Search('input-user-search').fill('Mary Poppins'))

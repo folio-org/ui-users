@@ -1,5 +1,5 @@
 import { App } from '@bigtest/interactor';
-import test from '../helpers/base-steps/simulate-server';
+import test from '../../helpers/base-steps/simulate-server';
 
 import {
   Button,
@@ -7,7 +7,7 @@ import {
   Header,
   Link,
   Section
-} from '../interactors';
+} from '../../interactors';
 
 export default test('settings custom fields', {
   permissions: [

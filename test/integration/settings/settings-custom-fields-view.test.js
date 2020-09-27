@@ -1,12 +1,12 @@
 import { App } from '@bigtest/interactor';
-import test from '../helpers/base-steps/simulate-server';
+import test from '../../helpers/base-steps/simulate-server';
 
 import {
   Div,
   Header,
   Link,
   Section
-} from '../interactors';
+} from '../../interactors';
 
 // 🧹 permissions does not work
 // ui.users.settings.customfields.view is supposed to not display the edit button but it does

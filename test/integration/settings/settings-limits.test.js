@@ -1,8 +1,8 @@
 import { App } from '@bigtest/interactor';
-import test from '../helpers/base-steps/simulate-server';
-import { store, routes } from '../helpers/server';
+import test from '../../helpers/base-steps/simulate-server';
+import { store, routes } from '../../helpers/server';
 
-import { feeFineBalanceId } from '../../src/constants';
+import { feeFineBalanceId } from '../../../src/constants';
 
 import {
   Alert,
@@ -13,7 +13,7 @@ import {
   InputNumber,
   Link,
   Nav
-} from '../interactors';
+} from '../../interactors';
 
 export default test('patron block limits')
   .step('seed data', async () => {

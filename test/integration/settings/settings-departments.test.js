@@ -1,5 +1,5 @@
 import { App } from '@bigtest/interactor';
-import test from '../helpers/base-steps/simulate-server';
+import test from '../../helpers/base-steps/simulate-server';
 
 import {
   Alert,
@@ -8,7 +8,7 @@ import {
   TableRow,
   TableRowGroup,
   TextField
-} from '../interactors';
+} from '../../interactors';
 
 export default test('settings departments')
   .step(App.visit('/settings/users/departments'))

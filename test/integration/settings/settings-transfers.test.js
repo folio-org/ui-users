@@ -1,19 +1,19 @@
 import { App } from '@bigtest/interactor';
-import test from '../helpers/base-steps/simulate-server';
-import { store, routes } from '../helpers/server';
-import CQLParser from '../network/cql';
+import test from '../../helpers/base-steps/simulate-server';
+import { store, routes } from '../../helpers/server';
+import CQLParser from '../../network/cql';
 
 import {
-  Alert,
   Button,
+  Select,
   Table,
   TableCell,
   TableRow,
   TableRowGroup,
   TextField
-} from '../interactors';
+} from '../../interactors';
 
-export default test('settings refunds')
+export default test('settings transfers')
   .step('seed data', async () => {
     store.create('user', { id: '1ad737b0-d847-11e6-bf26-cec0c932ce02' });
     store.create('owner', { owner: 'Main Admin0', desc: 'Owner FyF' });
@@ -179,40 +179,41 @@ export default test('settings refunds')
       return schema.db.payments.remove(request.params.id);
     });
   })
-  .step(App.visit('/settings/users/refunds'))
-  .assertion(TableRowGroup().has({ dataRowContainerCount: 5 }))
-  .assertion(Table('editList-settings-refunds', { dataColumnCount: 4 }).exists())
-  .assertion(TableRow.findByDataRowIndex('row-0').find(TableCell('Reason0')).exists())
-  .assertion(TableRow.findByDataRowIndex('row-0').find(TableCell('Reason Desc0')).exists())
+  .step(App.visit('/settings/users/transfers'))
+  .step(Select.findById('select-owner').select('Main Admin1'))
+  .assertion(TableRowGroup().has({ dataRowContainerCount: 2 }))
+  .assertion(Table('editList-settings-transfers', { dataColumnCount: 4 }).exists())
+  .assertion(TableRow.findByDataRowIndex('row-0').find(TableCell('USA Bank0')).exists())
+  .assertion(TableRow.findByDataRowIndex('row-0').find(TableCell('Transfer place0')).exists())
   .child('delete', test => test
-    .step(Button.findById('clickable-delete-settings-refunds-0').click())
+    .step(Button.findById('clickable-delete-settings-transfers-0').click())
     .child('cancel delete', test => test
       .step(Button('Cancel').click())
-      .assertion(TableRowGroup().has({ dataRowContainerCount: 5 })))
+      .assertion(TableRowGroup().has({ dataRowContainerCount: 2 })))
     .child('confirm delete', test => test
       .step(Button('Delete').click())
-      .assertion(TableRowGroup().has({ dataRowContainerCount: 4 }))))
+      .assertion(TableRowGroup().has({ dataRowContainerCount: 1 }))))
   .child('edit', test => test
-    .step(Button.findById('clickable-edit-settings-refunds-0').click())
-    .step(TextField.findByPlaceholder('nameReason').fill('Reason10'))
-    .step(TextField.findByPlaceholder('description').fill('Reason Desc10'))
+    .step(Button.findById('clickable-edit-settings-transfers-0').click())
+    .step(TextField.findByPlaceholder('accountName').fill('USA Bank3'))
+    .step(TextField.findByPlaceholder('desc').fill('Transfer place3'))
     .child('cancel edit', test => test
       .step(Button('Cancel').click())
-      .assertion(TableRow.findByDataRowIndex('row-0').find(TableCell('Reason0')).exists())
-      .assertion(TableRow.findByDataRowIndex('row-0').find(TableCell('Reason Desc0')).exists()))
+      .assertion(TableRow.findByDataRowIndex('row-0').find(TableCell('USA Bank0')).exists())
+      .assertion(TableRow.findByDataRowIndex('row-0').find(TableCell('Transfer place0')).exists()))
     .child('confirm edit', test => test
       .step(Button('Save').click())
-      .assertion(TableRow.findByDataRowIndex('row-0').find(TableCell('Reason10')).exists())
-      .assertion(TableRow.findByDataRowIndex('row-0').find(TableCell('Reason Desc10')).exists())))
-  .child('add a refund', test => test
-    .step(Button.findById('clickable-add-settings-refunds').click())
-    .step(TextField.findByPlaceholder('nameReason').fill('Reason10'))
-    .step(TextField.findByPlaceholder('description').fill('Reason Desc10'))
-    .step(Button('Save').click())
-    .assertion(TableRow.findByDataRowIndex('row-5').find(TableCell('Reason10')).exists())
-    .assertion(TableRow.findByDataRowIndex('row-5').find(TableCell('Reason Desc10')).exists()))
-  .child('add a pre-existing refund', test => test
-    .step(Button.findById('clickable-add-settings-refunds').click())
-    .step(TextField.findByPlaceholder('nameReason').fill('Reason1'))
-    .step(Button('Save').click())
-    .assertion(Alert('Refund reason already exists').exists()));
+      .assertion(TableRow.findByDataRowIndex('row-0').find(TableCell('USA Bank3')).exists())
+      .assertion(TableRow.findByDataRowIndex('row-0').find(TableCell('Transfer place3')).exists())))
+  .child('add new transfer', test => test
+    .step(Button.findById('clickable-add-settings-transfers').click())
+    .step(TextField.findByPlaceholder('accountName').fill('USA Bank5'))
+    .step(TextField.findByPlaceholder('desc').fill('Transfer place5'))
+    .child('cancel addition', test => test
+      .step(Button('Cancel').click())
+      .assertion(TableRow.findByDataRowIndex('row-0').find(TableCell('USA Bank0')).exists())
+      .assertion(TableRow.findByDataRowIndex('row-0').find(TableCell('Transfer place0')).exists()))
+    .child('confirm addition', test => test
+      .step(Button('Save').click())
+      .assertion(TableRow.findByDataRowIndex('row-2').find(TableCell('USA Bank5')).exists())
+      .assertion(TableRow.findByDataRowIndex('row-2').find(TableCell('Transfer place5')).exists())));

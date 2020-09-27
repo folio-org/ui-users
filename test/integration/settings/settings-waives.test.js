@@ -1,7 +1,7 @@
 import { App } from '@bigtest/interactor';
-import test from '../helpers/base-steps/simulate-server';
-import { store, routes } from '../helpers/server';
-import CQLParser from '../network/cql';
+import test from '../../helpers/base-steps/simulate-server';
+import { store, routes } from '../../helpers/server';
+import CQLParser from '../../network/cql';
 
 import {
   Alert,
@@ -11,7 +11,7 @@ import {
   TableRow,
   TableRowGroup,
   TextField
-} from '../interactors';
+} from '../../interactors';
 
 export default test('settings-waives')
   .step('seed data', async () => {
