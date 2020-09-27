@@ -495,6 +495,7 @@ class Actions extends React.Component {
     const singlePay = actions.pay || (actions.regular && singleSelectedAccount);
     const singleWaive = actions.waiveModal || (actions.waiveMany && singleSelectedAccount);
     const singleTransfer = actions.transferModal || (actions.transferMany && singleSelectedAccount);
+    const singeRefund = actions.refundModal || (actions.refundMany && singleSelectedAccount);
 
     if (singlePay) {
       this.onSubmit(values, 'payment');
@@ -508,7 +509,7 @@ class Actions extends React.Component {
       this.onSubmit(values, 'transfer');
     } else if (actions.transferMany) {
       this.onSubmitMany(values, selectedAccounts, 'transfer');
-    } else if (actions.refundModal) {
+    } else if (singeRefund) {
       this.onSubmit(values, 'refund');
     } else if (actions.refundMany) {
       this.onSubmitMany(values, selectedAccounts, 'refund');
