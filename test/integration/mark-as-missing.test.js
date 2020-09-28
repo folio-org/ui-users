@@ -23,8 +23,7 @@ export default test('mark as missing', { permissions: [
       await App.visit(`/users/${loan.userId}/loans/open`);
     })
     .step(Div.findByAttribute('data-test-actions-dropdown').find(Button.findByAriaLabel('ellipsis')).click())
-    .assertion(Div.findByAttribute('data-test-dropdown-menu-overlay').find(Button('Mark as missing')).absent())
-  )
+    .assertion(Div.findByAttribute('data-test-dropdown-menu-overlay').find(Button('Mark as missing')).absent()))
   .child('with returned claims', test => test
     .step('seed data', async () => {
       const loan = store.create('loan', {
