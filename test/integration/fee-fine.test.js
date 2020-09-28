@@ -1,3 +1,4 @@
+import faker from 'faker';
 import { App } from '@bigtest/interactor';
 import test from '../helpers/base-steps/simulate-server';
 import { store, routes } from '../helpers/server';
@@ -7,22 +8,34 @@ import {
   Button,
   Checkbox,
   Div,
+  Header,
   Link,
   Search,
   Section,
+  Select,
   Table,
   TableCell,
   TableRow,
-  TableRowGroup
+  TableRowGroup,
+  TextField
 } from '../interactors';
 
-export default test('fee/fines')
+export default test('fee/fines', { permissions: ['circulation.loans.collection.get'] })
   .step('seed data', async () => {
-    const user = store.create('user', { id: 'ce0e0d5b-b5f3-4ad5-bccb-49c0784298fd' });
+    const user = store.create('user', { 
+      id: 'ce0e0d5b-b5f3-4ad5-bccb-49c0784298fd' ,
+      patronGroup: 'group7',
+      personal: store.create('user-personal', {
+        firstName: 'Tim',
+        lastName: 'Berners-Lee'
+      })
+    });
     const account = store.create('account', { userId: user.id });
     const loan = store.create('loan', {
       id: '8e9f211b-6024-4828-8c14-ace39c6c2863',
+      user,
       userId: user.id,
+      status: { name: 'Open' },
       overdueFinePolicyId: () => 'a6130d37-0468-48ca-a336-c2bde575768d',
       lostItemPolicyId: () => '48a3115d-d476-4582-b6a8-55c09eed7ec7',
       overdueFinePolicy: {
@@ -31,9 +44,22 @@ export default test('fee/fines')
       lostItemPolicy: {
         name: () => 'Lost Item Policy name',
       },
+      item: {
+        id: () => faker.random.uuid(),
+        holdingsRecordId: () => faker.random.uuid(),
+        instanceId: () => faker.random.uuid(),
+        title: () => faker.company.catchPhrase(),
+        barcode: () => faker.random.number(),
+      },
     });
-    store.createList('owner', 3);
-    store.createList('feefine', 5);
+    const owner = store.create('owner', { owner: 'testOwner' });
+    store.create('feefine', {
+      feeFineType: 'testFineType',
+      ownerId: owner.id,
+      defaultAmount: 500.00
+    });
+    store.createList('owner', 2);
+    store.createList('feefine', 4);
     store.createList('feefineaction', 1, { accountId: account.id });
     store.createList('account', 3, { userId: user.id });
     store.create('account', {
@@ -161,6 +187,19 @@ export default test('fee/fines')
   .step('visit /users/preview/userid', async ({ user }) => {
     await App.visit(`/users/preview/${user.id}`);
   })
+  .child('charge fee', test => test
+    .step(Button('Fees/fines').click())
+    .step(Link('Create fee/fine').click())
+    .step(Select('Fee/fine owner').select('testOwner'))
+    .step(Select('Fee/fine type').select('testFineType'))
+    .assertion(TextField('Fee/fine amount').has({ value: '500.00' }))
+    .child('cancelling the charge', test => test
+      .step(Button('Cancel').click())
+      .step(Button('Close without saving').click())
+      .assertion(Header('Fees/fines - Berners-Lee, Tim (Undergrad)').exists()))
+    .child('submitting the charge', test => test
+      .step(Button('Charge only').click())
+      .assertion(Header('User search').exists())))
   .child('fee details', test => test
     .step(Button.findById('accordion-toggle-button-accountsSection').click())
     .step(Link.findById('clickable-viewcurrentaccounts').click())
