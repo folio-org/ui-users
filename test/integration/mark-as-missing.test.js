@@ -14,7 +14,7 @@ export default test('mark as missing', { permissions: [
   'manualblocks.collection.get',
   'circulation.loans.collection.get'
 ] })
-  .child('without any returned claims', test => test  
+  .child('without any returned claims', test => test
     .step('seed data', async () => {
       const loan = store.create('loan', { status: { name: 'Open' } });
       return { loan };

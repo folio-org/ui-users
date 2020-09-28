@@ -22,8 +22,8 @@ import {
 
 export default test('fee/fines', { permissions: ['circulation.loans.collection.get'] })
   .step('seed data', async () => {
-    const user = store.create('user', { 
-      id: 'ce0e0d5b-b5f3-4ad5-bccb-49c0784298fd' ,
+    const user = store.create('user', {
+      id: 'ce0e0d5b-b5f3-4ad5-bccb-49c0784298fd',
       patronGroup: 'group7',
       personal: store.create('user-personal', {
         firstName: 'Tim',
