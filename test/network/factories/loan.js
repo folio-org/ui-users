@@ -34,7 +34,7 @@ export default Factory.extend({
     createdDate: () => faker.date.past(0.1, faker.date.past(0.1)).toString(),
     createdByUserId: () => faker.random.uuid(),
     updatedDate: () => faker.date.past(0.1).toString(),
-    // updatedByUserId: faker.random.uuid(),
+    updatedByUserId: () => faker.random.uuid(),
   },
 
   borrower: trait({

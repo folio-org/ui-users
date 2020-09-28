@@ -367,14 +367,15 @@ export default function config({ permissions = [] } = { permissions: [] }) {
       diagnostics: [],
     },
   });
-  this.get('/comments', {
-    comments: [],
-    totalRecords: 0,
-    resultInfo: {
-      totalRecords: 0,
-      facets: [],
-      diagnostics: [],
-    },
+  this.get('/comments');
+  this.post('/comments', (schema, request) => {
+    const body = JSON.parse(request.requestBody);
+    return schema.comments.create(body);
+  });
+  this.put('/comments/:id', ({ comments }, request) => {
+    const matching = comments.find(request.params.id);
+    const body = JSON.parse(request.requestBody);
+    return matching.update(body);
   });
   this.get('/feefines', function ({ feefines }, request) {
     if (request.queryParams.query) {
@@ -609,6 +610,12 @@ export default function config({ permissions = [] } = { permissions: [] }) {
     const limit = JSON.parse(requestBody);
 
     return this.create('patron-block-limit', limit);
+  });
+
+  this.post('/patron-block-limits', function (schema, { requestBody }) {
+    const json = JSON.parse(requestBody);
+    const limit = this.create('patron-block-limit', json);
+    return limit.attrs;
   });
 
   this.get('/patron-block-limits', ({ patronBlockLimits }) => {

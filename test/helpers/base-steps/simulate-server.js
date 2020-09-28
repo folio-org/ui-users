@@ -7,6 +7,28 @@ import { start } from '../server';
 bigtestGlobals.defaultInteractorTimeout = 10_000;
 bigtestGlobals.defaultAppTimeout = 30_000;
 
+export async function updatePermissions(
+  permissions,
+  { user = {}, modules = [] } =
+  { user: {}, modules: [] }
+) {
+  const perms = permissions.reduce((memo, perm) => ({ ...memo, [perm]: true }), {});
+  return localforage.setItem('okapiSess', {
+    token: 'test',
+    user: { id: 'test',
+      username: 'testuser',
+      firstName: 'Test',
+      lastName: 'User',
+      email: 'user@folio.org',
+      addresses: [],
+      servicePoints: [],
+      curServicePoint: { id: null },
+      ...user },
+    perms,
+    modules: [...modules]
+  });
+}
+
 export default function simulateServer(name,
   { user = {}, permissions = [], modules = [] } =
   { user: {}, permissions: [], modules: [] }) {
@@ -14,20 +36,7 @@ export default function simulateServer(name,
   return test(name)
     .step('set up localforage', async () => {
       await localforage.clear();
-      await localforage.setItem('okapiSess', {
-        token: 'test',
-        user: { id: 'test',
-          username: 'testuser',
-          firstName: 'Test',
-          lastName: 'User',
-          email: 'user@folio.org',
-          addresses: [],
-          servicePoints: [],
-          curServicePoint: { id: null },
-          ...user },
-        perms,
-        modules: [...modules]
-      });
+      await updatePermissions(permissions, { user, modules });
     })
     .step('start simulated server', async () => {
       start(perms);
