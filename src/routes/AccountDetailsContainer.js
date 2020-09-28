@@ -6,6 +6,8 @@ import { FormattedMessage } from 'react-intl';
 import { stripesConnect } from '@folio/stripes/core';
 import { LoadingView } from '@folio/stripes/components';
 
+import { calculateOwedFeeFines } from '../components/Accounts/accountFunctions';
+
 import { AccountDetails } from '../views';
 
 class AccountDetailsContainer extends React.Component {
@@ -28,10 +30,14 @@ class AccountDetailsContainer extends React.Component {
       },
       records: 'usergroups',
     },
-    accountHistory: {
+    accounts: {
       type: 'okapi',
-      resource: 'accounts',
-      path: 'accounts/:{accountid}',
+      records: 'accounts',
+      path: 'accounts',
+      params: {
+        query: 'userId=:{id}',
+        limit: '1000',
+      },
     },
     accountActions: {
       type: 'okapi',
@@ -60,7 +66,7 @@ class AccountDetailsContainer extends React.Component {
       activeRecord: PropTypes.shape({
         instanceId: PropTypes.string,
       }),
-      accountHistory: PropTypes.shape({
+      accounts: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
       patronGroups: PropTypes.shape({
@@ -98,10 +104,13 @@ class AccountDetailsContainer extends React.Component {
 
   getAccount = () => {
     const { resources, match: { params: { accountid } } } = this.props;
-    const account = (resources.accountHistory || {}).records || [];
+    const accounts = resources?.accounts?.records || [];
 
-    if (account.length === 0 || !accountid) return null;
-    return account.find(a => a.id === accountid);
+    if (accounts.length === 0 || !accountid) {
+      return null;
+    }
+
+    return accounts.find(a => a.id === accountid);
   }
 
   getPatronGroup = () => {
@@ -110,6 +119,21 @@ class AccountDetailsContainer extends React.Component {
     const groups = resources.patronGroups ? resources.patronGroups.records : null;
     if (!user || !groups) return {};
     return groups.filter(g => g.id === user.patronGroup)[0] || {};
+  }
+
+  getOwedAmount = () => {
+    const {
+      match: {
+        params: {
+          accountid,
+        }
+      },
+      resources,
+    } = this.props;
+
+    const accounts = resources?.accounts?.records || [];
+
+    return calculateOwedFeeFines(accounts.filter(account => account.id !== accountid));
   }
 
   getItemDetails = () => {
@@ -154,6 +178,7 @@ class AccountDetailsContainer extends React.Component {
     const account = this.getAccount();
     const patronGroup = this.getPatronGroup();
     const itemDetails = this.getItemDetails();
+    const owedAmount = this.getOwedAmount();
 
     if (!account) {
       return (
@@ -168,6 +193,7 @@ class AccountDetailsContainer extends React.Component {
       <AccountDetails
         user={user}
         account={account}
+        owedAmount={owedAmount}
         patronGroup={patronGroup}
         itemDetails={itemDetails}
         {...this.props}

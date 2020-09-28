@@ -6,12 +6,20 @@ import {
   text,
   isPresent,
   isVisible,
+  focusable,
+  blurrable,
+  selectable,
+  triggerable,
+  is,
 } from '@bigtest/interactor';
 import ButtonInteractor from '@folio/stripes-components/lib/Button/tests/interactor'; // eslint-disable-line
 import MultiColumnListInteractor from '@folio/stripes-components/lib/MultiColumnList/tests/interactor'; // eslint-disable-line
 import ModalInteractor from '@folio/stripes-components/lib/Modal/tests/interactor'; // eslint-disable-line
 import SearchFieldInteractor  from '@folio/stripes-components/lib/SearchField/tests/interactor'; // eslint-disable-line
 import CheckboxInteractor  from '@folio/stripes-components/lib/Checkbox/tests/interactor'; // eslint-disable-line
+import TextAreaInteractor from '@folio/stripes-components/lib/TextArea/tests/interactor'; // eslint-disable-line
+import ConfirmationModalInteractor from '@folio/stripes-components/lib/ConfirmationModal/tests/interactor'; // eslint-disable-line
+import CalloutInteractor from '@folio/stripes-components/lib/Callout/tests/interactor'; // eslint-disable-line
 
 @interactor class FeesFinesSection {
   click = clickable();
@@ -31,6 +39,37 @@ import CheckboxInteractor  from '@folio/stripes-components/lib/Checkbox/tests/in
 
 @interactor class HeaderInteractor {
   selectAll = collection('[class*=mclHeader---]', { click: clickable() });
+}
+
+@interactor class InputFieldInteractor {
+  clickInput = clickable();
+  blurInput = blurrable();
+
+  pressTab = triggerable('keydown', {
+    bubbles: true,
+    cancelable: true,
+    keyCode: 9,
+    key: 'Tab',
+  });
+}
+
+@interactor class SelectFieldInteractor {
+  select = selectable();
+  focus = focusable();
+  blur = blurrable();
+  selectAndBlur(val) {
+    return this
+      .focus()
+      .timeout(5000)
+      .select(val)
+      .timeout(5000)
+      .blur()
+      .timeout(5000);
+  }
+
+  whenLoaded() {
+    return this.when(() => this.isPresent).timeout(5000);
+  }
 }
 
 @interactor class History {
@@ -61,6 +100,14 @@ import CheckboxInteractor  from '@folio/stripes-components/lib/Checkbox/tests/in
   waiveModal = new ModalInteractor('#waive-modal');
   cancelModal = new ModalInteractor('#error-modal');
   transferModal = new ModalInteractor('#transfer-modal');
+  actionModal = new ModalInteractor('[data-test-fee-fine-action-modal]');
+  actionModalSubmitButton = new ButtonInteractor('[data-test-fee-fine-action-modal] #submit-button');
+  actionModalSubmitButtonIsDisabled = is('[data-test-fee-fine-action-modal] #submit-button[disabled]');
+  actionModalAmountField = new InputFieldInteractor('input[name="amount"]');
+  actionModalSelect = new SelectFieldInteractor('select[id*="select-"]');
+  commentField = new TextAreaInteractor('[class*=textArea---]');
+  actionConfirmationModal = new ConfirmationModalInteractor();
+  callout = new CalloutInteractor();
 
   sectionFeesFinesSection = new FeesFinesSection('#accordion-toggle-button-accountsSection')
   openAccounts = new FeesFinesSection('#clickable-viewcurrentaccounts');

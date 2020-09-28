@@ -328,6 +328,12 @@ export default function config() {
     return server.create('account', acct);
   });
 
+  this.put('/accounts/:id', ({ accounts }, { params, requestBody }) => {
+    const account = JSON.parse(requestBody);
+
+    return accounts.find(params.id).update(account);
+  });
+
   this.get('/waives', {
     waivers: [],
     totalRecords: 0,
@@ -684,5 +690,91 @@ export default function config() {
         updatedByUserId: () => 'ce0e0d5b-b5f3-4ad5-bccb-49c0784298fd'
       },
     }]
+  });
+
+  this.post('/accounts/:id/check-pay', ({ accounts }, request) => {
+    const account = accounts.find(request.params.id).attrs;
+
+    return {
+      accountId: account.id,
+      amount: '500.00',
+      allowed: true,
+      remainingAmount: '0.00'
+    };
+  });
+
+  this.post('/accounts/:id/check-waive', ({ accounts }, request) => {
+    const account = accounts.find(request.params.id).attrs;
+
+    return {
+      accountId: account.id,
+      amount: '500.00',
+      allowed: true,
+      remainingAmount: '0.00'
+    };
+  });
+
+  this.post('/accounts/:id/check-transfer', ({ accounts }, request) => {
+    const account = accounts.find(request.params.id).attrs;
+
+    return {
+      accountId: account.id,
+      amount: '500.00',
+      allowed: true,
+      remainingAmount: '0.00'
+    };
+  });
+
+  this.post('/accounts/:id/check-refund', ({ accounts }, request) => {
+    const account = accounts.find(request.params.id).attrs;
+
+    return {
+      accountId: account.id,
+      amount: '100.00',
+      allowed: true,
+      remainingAmount: '0.00'
+    };
+  });
+
+  this.post('/accounts/:id/pay', ({ accounts }, request) => {
+    const account = accounts.find(request.params.id).attrs;
+
+    return {
+      accountId: account.id,
+      amount: account.amount
+    };
+  });
+
+  this.post('/accounts/:id/waive', ({ accounts }, request) => {
+    const account = accounts.find(request.params.id).attrs;
+
+    return {
+      accountId: account.id,
+      amount: account.amount
+    };
+  });
+
+  this.post('/accounts/:id/transfer', ({ accounts }, request) => {
+    const account = accounts.find(request.params.id).attrs;
+
+    return {
+      accountId: account.id,
+      amount: account.amount
+    };
+  });
+
+  this.post('/accounts/:id/refund', ({ accounts }, request) => {
+    const account = accounts.find(request.params.id).attrs;
+
+    return {
+      accountId: account.id,
+      amount: account.amount
+    };
+  });
+
+  this.post('/accounts/:id/cancel', ({ accounts }, request) => {
+    const account = accounts.find(request.params.id).attrs;
+
+    return { accountId: account.id };
   });
 }

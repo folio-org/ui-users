@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { compose } from 'redux';
 
 import {
   stripesConnect,
@@ -111,6 +110,13 @@ class ChargeFeesFinesContainer extends React.Component {
       records: 'feefines',
       path: `feefines?limit=${MAX_RECORDS}`,
     },
+    pay: {
+      type: 'okapi',
+      path: 'accounts/%{activeRecord.id}/pay',
+      fetch: false,
+      accumulate: 'true',
+      clientGeneratePk: false,
+    },
     activeRecord: {},
   });
 
@@ -146,6 +152,9 @@ class ChargeFeesFinesContainer extends React.Component {
       }),
       account: PropTypes.shape({
         GET: PropTypes.func,
+      }),
+      pay: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
       }),
     }).isRequired,
     stripes: PropTypes.object.isRequired,
@@ -186,7 +195,4 @@ class ChargeFeesFinesContainer extends React.Component {
   }
 }
 
-export default compose(
-  stripesConnect,
-  withStripes,
-)(ChargeFeesFinesContainer);
+export default stripesConnect(withStripes(ChargeFeesFinesContainer));
