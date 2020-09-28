@@ -1,5 +1,5 @@
 import { App } from '@bigtest/interactor';
-import test, { updatePermissions } from '../helpers/base-steps/simulate-server';
+import test from '../helpers/base-steps/simulate-server';
 import { store } from '../helpers/server';
 
 import {

@@ -12,7 +12,7 @@ export default test('permissions modal')
     const user = store.create('user');
     return { permissionSets, user };
   })
-  .step('query routes', async () => {
+  .step('configure routes', async () => {
     routes.get('/comments');
     routes.post('/comments', (schema, request) => {
       const body = JSON.parse(request.requestBody);

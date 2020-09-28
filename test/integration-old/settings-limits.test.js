@@ -22,7 +22,7 @@ export default test('patron block limits')
     const conditionData = condition.map((c) => c.attrs);
     return { conditionData, feeFineCondition };
   })
-  .step('query routes', async () => {
+  .step('configure routes', async () => {
     routes.post('/patron-block-limits', function (schema, { requestBody }) {
       const json = JSON.parse(requestBody);
       const limit = store.create('patron-block-limit', json);

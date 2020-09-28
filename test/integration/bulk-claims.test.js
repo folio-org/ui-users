@@ -3,7 +3,12 @@ import { App } from '@bigtest/interactor';
 import test from '../helpers/base-steps/simulate-server';
 import { store } from '../helpers/server';
 
-import { ActionsBar, Checkbox, Header, OpenLoansControl } from '../interactors';
+import {
+  ActionsBar,
+  Checkbox,
+  Header,
+  OpenLoansControl
+} from '../interactors';
 
 export default test('bulk claims', { permissions: ['circulation.loans.collection.get'] })
   .step('seed data', async () => {

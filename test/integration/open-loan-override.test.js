@@ -31,7 +31,7 @@ export default test('request related failure', { permissions: [
       });
       return { loan };
     })
-    .step('query routes', async () => {
+    .step('configure routes', async () => {
       routes.post('/circulation/renew-by-barcode', {
         'errors' : [{
           'message' : 'items cannot be renewed when there is an active recall request',
@@ -60,7 +60,7 @@ export default test('request related failure', { permissions: [
       const loan = store.create('loan', { status: { name: 'Open' } });
       return { loan };
     })
-    .step('query routes', async () => {
+    .step('configure routes', async () => {
       routes.post('/circulation/renew-by-barcode', {
         'errors' : [{
           'message' : 'items cannot be renewed when there is an active recall request',

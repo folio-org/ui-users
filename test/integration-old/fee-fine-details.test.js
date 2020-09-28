@@ -47,7 +47,7 @@ export default test('fee/fine details')
     });
     return { user, loan };
   })
-  .step('query routes', async () => {
+  .step('configure routes', async () => {
     routes.get('/accounts');
     routes.get('/accounts/:id', (schema, request) => {
       return schema.accounts.find(request.params.id).attrs;

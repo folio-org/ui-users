@@ -21,7 +21,7 @@ export default test('patron blocks section', { permissions: ['manualblocks.colle
     store.createList('manualblock', 3, { userId: usertmp.id });
     store.create('manualblock', { userId: usertmp.id, expirationDate: '2019-05-23T00:00:00Z' });
   })
-  .step('query routes', async () => {
+  .step('configure routes', async () => {
     routes.get('/manualblocks', (schema, request) => {
       const url = new URL(request.url);
       const cqlQuery = url.searchParams.get('query');

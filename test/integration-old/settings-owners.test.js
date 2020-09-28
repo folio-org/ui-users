@@ -33,7 +33,7 @@ export default test('settings owners')
     store.createList('service-point', 3);
     store.create('service-point', { name: 'none' });
   })
-  .step('query routes', async () => {
+  .step('configure routes', async () => {
     routes.get('feefines');
     routes.post('feefine', (schema, request) => {
       const json = JSON.parse(request.requestBody);

@@ -46,7 +46,7 @@ export default test('Transfer user fines', {
 
     return { user };
   })
-  .step('query routes', async () => {
+  .step('configure routes', async () => {
     // 🧹
     routes.get('/accounts');
     routes.get('/accounts/:id', (schema, request) => {

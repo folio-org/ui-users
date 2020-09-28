@@ -19,7 +19,7 @@ export default test('test patron block renewals', { permissions: [
     store.createList('loan', 3, { status: { name: 'Open' }, userId: user.id });
     return { user };
   })
-  .step('query routes', async () => {
+  .step('configure routes', async () => {
     routes.get('/manualblocks', (schema, request) => {
       const url = new URL(request.url);
       const cqlQuery = url.searchParams.get('query');

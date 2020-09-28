@@ -15,7 +15,7 @@ import {
 // 🧹 the original tests for this component is not so great. i just translated them over to the new bigtest
 
 export default test('fee/fines comments')
-  .step('query routes', async () => {
+  .step('configure routes', async () => {
     routes.get('/comments');
     routes.post('/comments', (schema, request) => {
       const body = JSON.parse(request.requestBody);

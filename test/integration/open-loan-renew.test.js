@@ -29,7 +29,7 @@ export default test('open loan renew', { permissions: [
     });
     return { loan };
   })
-  .step('query routes', async ({ loan }) => {
+  .step('configure routes', async ({ loan }) => {
     routes.get(`/automated-patron-blocks/${loan.userId}`, {
       automatedPatronBlocks: {
         patronBlockConditionId: '1',

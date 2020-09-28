@@ -6,10 +6,25 @@ import CQLParser from '../network/cql';
 import { feeFineBalanceId } from '../../src/constants';
 
 import {
-  Alert, Button, Checkbox, ColumnDiv,
-  Div, Form, Header, InputNumber, Link, ListItem,
-  Nav, Paragraph, Section, Select, Table,
-  TableCell, TableRow, TableRowGroup, TextArea,
+  Alert,
+  Button,
+  Checkbox,
+  ColumnDiv,
+  Div,
+  Form,
+  Header,
+  InputNumber,
+  Link,
+  ListItem,
+  Nav,
+  Paragraph,
+  Section,
+  Select,
+  Table,
+  TableCell,
+  TableRow,
+  TableRowGroup,
+  TextArea,
   TextField
 } from '../interactors';
 
@@ -41,7 +56,7 @@ export default test('settings')
 
     return { condition, feeFineCondition };
   })
-  .step('query routes', async () => {
+  .step('configure routes', async () => {
     routes.get('/feefines');
     routes.post('/feefine', (schema, request) => {
       const json = JSON.parse(request.requestBody);
@@ -477,7 +492,7 @@ export default test('settings')
       .step(Button('Save').click())
       .assertion(Alert('Waive reason already exists').exists())))
   .child('patron block limits', test => test
-    .step('query routes', async () => {
+    .step('configure routes', async () => {
       routes.post('/patron-block-limits', function (schema, { requestBody }) {
         const json = JSON.parse(requestBody);
         const limit = store.create('patron-block-limit', json);

@@ -46,7 +46,7 @@ export default test('fee fine history')
     store.createList('transfer', 4);
     return { user };
   })
-  .step('query routes', async () => {
+  .step('configure routes', async () => {
     routes.get('/accounts');
     routes.get('/accounts/:id', (schema, request) => {
       return schema.accounts.find(request.params.id).attrs;

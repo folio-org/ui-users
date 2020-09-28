@@ -15,7 +15,7 @@ export default test('patron automated blocks', { permissions: ['automated-patron
     const user = store.create('user', { id: 'user1' });
     return { user };
   })
-  .step('query routes', async ({ user }) => {
+  .step('configure routes', async ({ user }) => {
     const patronBlock = {
       automatedPatronBlocks: {
         patronBlockConditionId: '1',

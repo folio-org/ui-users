@@ -29,7 +29,7 @@ export default test('manual charges')
     store.create('template', { category: 'FeeFineCharge', name: 'Template 4' });
     store.create('feefine', { feeFineType: 'Feefine 1', ownerId: owner.attrs.id });
   })
-  .step('query routes', async () => {
+  .step('configure routes', async () => {
     routes.get('/owners');
     routes.get('/templates');
     routes.delete('feefines/:id', () => {

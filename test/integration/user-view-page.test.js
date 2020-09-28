@@ -24,7 +24,7 @@ export default test('user details page')
   .assertion(Span('data-test-default-delivery-address', { value: 'Claim' }).exists())
   .assertion(Section('customFields').exists())
   .child('when custom fiels are not in stock', test => test
-    .step('query routes', async () => {
+    .step('configure routes', async () => {
       routes.get('/custom-fields', {
         customFields: [],
       });

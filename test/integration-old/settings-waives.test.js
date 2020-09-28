@@ -29,7 +29,7 @@ export default test('settings-waives')
     store.createList('waiver', 5);
     store.createList('service-point', 3);
   })
-  .step('query routes', async () => {
+  .step('configure routes', async () => {
     routes.get('feefines');
     routes.post('feefine', (schema, request) => {
       const json = JSON.parse(request.requestBody);
