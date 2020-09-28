@@ -1,6 +1,6 @@
 import { App } from '@bigtest/interactor';
-import test from '../../helpers/base-steps/simulate-server';
-import { store, routes } from '../../helpers/server';
+import test from '../helpers/base-steps/simulate-server';
+import { store, routes } from '../helpers/server';
 
 import {
   Alert,
@@ -15,7 +15,7 @@ import {
   TableRow,
   TableRowGroup,
   TextField
-} from '../../interactors';
+} from '../interactors';
 
 export default test('manual charges')
   .step('seed data', async () => {

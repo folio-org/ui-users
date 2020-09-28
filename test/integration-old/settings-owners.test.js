@@ -1,19 +1,22 @@
 import { App } from '@bigtest/interactor';
-import test from '../../helpers/base-steps/simulate-server';
-import { store, routes } from '../../helpers/server';
-import CQLParser from '../../network/cql';
+import test from '../helpers/base-steps/simulate-server';
+import { store, routes } from '../helpers/server';
+import CQLParser from '../network/cql';
 
 import {
   Alert,
   Button,
+  Div,
+  ListItem,
+  Paragraph,
   Table,
   TableCell,
   TableRow,
   TableRowGroup,
   TextField
-} from '../../interactors';
+} from '../interactors';
 
-export default test('settings refunds')
+export default test('settings owners')
   .step('seed data', async () => {
     store.create('user', { id: '1ad737b0-d847-11e6-bf26-cec0c932ce02' });
     store.create('owner', { owner: 'Main Admin0', desc: 'Owner FyF' });
@@ -28,6 +31,7 @@ export default test('settings refunds')
     store.createList('refund', 5);
     store.createList('waiver', 5);
     store.createList('service-point', 3);
+    store.create('service-point', { name: 'none' });
   })
   .step('query routes', async () => {
     routes.get('feefines');
@@ -179,13 +183,18 @@ export default test('settings refunds')
       return schema.db.payments.remove(request.params.id);
     });
   })
-  .step(App.visit('/settings/users/refunds'))
+  .step(App.visit('/settings/users/owners'))
+  .assertion(Table('editList-settings-owners', { dataColumnCount: 4 }).exists())
+  .assertion(TableRow.findByDataRowIndex('row-0')
+    .find(TableCell('Main Admin0'))
+    .exists())
+  .assertion(TableRow.findByDataRowIndex('row-0')
+    .find(TableCell('Owner FyF'))
+    .exists())
   .assertion(TableRowGroup().has({ dataRowContainerCount: 5 }))
-  .assertion(Table('editList-settings-refunds', { dataColumnCount: 4 }).exists())
-  .assertion(TableRow.findByDataRowIndex('row-0').find(TableCell('Reason0')).exists())
-  .assertion(TableRow.findByDataRowIndex('row-0').find(TableCell('Reason Desc0')).exists())
   .child('delete', test => test
-    .step(Button.findById('clickable-delete-settings-refunds-0').click())
+    .step(TableRow.findByDataRowIndex('row-0').find(Button.findById('clickable-delete-settings-owners-0')).click())
+    .assertion(Paragraph('The Fee/fine Owner Main Admin0 will be deleted.').exists())
     .child('cancel delete', test => test
       .step(Button('Cancel').click())
       .assertion(TableRowGroup().has({ dataRowContainerCount: 5 })))
@@ -193,26 +202,46 @@ export default test('settings refunds')
       .step(Button('Delete').click())
       .assertion(TableRowGroup().has({ dataRowContainerCount: 4 }))))
   .child('edit', test => test
-    .step(Button.findById('clickable-edit-settings-refunds-0').click())
-    .step(TextField.findByPlaceholder('nameReason').fill('Reason10'))
-    .step(TextField.findByPlaceholder('description').fill('Reason Desc10'))
+    .step(TableRow.findByDataRowIndex('row-0').find(Button.findById('clickable-edit-settings-owners-0')).click())
+    .step(TextField.findByPlaceholder('owner').fill('Main Admin10'))
+    .step(TextField.findByPlaceholder('desc').fill('Owner Test'))
     .child('cancel edit', test => test
       .step(Button('Cancel').click())
-      .assertion(TableRow.findByDataRowIndex('row-0').find(TableCell('Reason0')).exists())
-      .assertion(TableRow.findByDataRowIndex('row-0').find(TableCell('Reason Desc0')).exists()))
-    .child('confirm edit', test => test
+      .assertion(TableRow.findByDataRowIndex('row-0')
+        .find(TableCell('Main Admin0'))
+        .exists())
+      .assertion(TableRow.findByDataRowIndex('row-0')
+        .find(TableCell('Owner FyF'))
+        .exists()))
+    .child('save edit', test => test
       .step(Button('Save').click())
-      .assertion(TableRow.findByDataRowIndex('row-0').find(TableCell('Reason10')).exists())
-      .assertion(TableRow.findByDataRowIndex('row-0').find(TableCell('Reason Desc10')).exists())))
-  .child('add a refund', test => test
-    .step(Button.findById('clickable-add-settings-refunds').click())
-    .step(TextField.findByPlaceholder('nameReason').fill('Reason10'))
-    .step(TextField.findByPlaceholder('description').fill('Reason Desc10'))
+      .assertion(TableRow.findByDataRowIndex('row-1')
+        .find(TableCell('Main Admin10'))
+        .exists())
+      .assertion(TableRow.findByDataRowIndex('row-1')
+        .find(TableCell('Owner Test'))
+        .exists())))
+  .child('adding owner', test => test
+    .step(Button.findById('clickable-add-settings-owners').click())
+    .child('submit new owner', test => test
+      .step(TextField.findByPlaceholder('owner').fill('Main CUIB'))
+      .step(TextField.findByPlaceholder('desc').fill('CUIB'))
+      .step(Button('Save').click())
+      .assertion(TableRow.findByDataRowIndex('row-4')
+        .find(TableCell('Main CUIB'))
+        .exists())
+      .assertion(TableRow.findByDataRowIndex('row-4')
+        .find(TableCell('CUIB'))
+        .exists()))
+    .child('type pre-existing owner', test => test
+      .step(TextField.findByPlaceholder('owner').fill('Main Admin0'))
+      .assertion(Alert('Fee/fine Owner already exists').exists())
+      .assertion(Button('Save', { disabled: true }).exists())))
+  .child('edit service-point', test => test
+    .step(TableRow.findByDataRowIndex('row-0').find(Button.findById('clickable-edit-settings-owners-0')).click())
+    .step(TextField.findByPlaceholder('owner').fill('Main Admin10'))
+    .step(TextField.findByPlaceholder('desc').fill('Owner Test'))
+    .step(Button.findByAriaLabel('open menu').click())
+    .step(ListItem('owner-service-point-main-item-0').click())
     .step(Button('Save').click())
-    .assertion(TableRow.findByDataRowIndex('row-5').find(TableCell('Reason10')).exists())
-    .assertion(TableRow.findByDataRowIndex('row-5').find(TableCell('Reason Desc10')).exists()))
-  .child('add a pre-existing refund', test => test
-    .step(Button.findById('clickable-add-settings-refunds').click())
-    .step(TextField.findByPlaceholder('nameReason').fill('Reason1'))
-    .step(Button('Save').click())
-    .assertion(Alert('Refund reason already exists').exists()));
+    .assertion(Div.findByAriaLabelledBy('owner-service-point-label').absent()));

@@ -1,6 +1,6 @@
 import { App } from '@bigtest/interactor';
-import test from '../../helpers/base-steps/simulate-server';
-import { routes } from '../../helpers/server';
+import test from '../helpers/base-steps/simulate-server';
+import { routes } from '../helpers/server';
 
 import {
   Button,
@@ -10,7 +10,7 @@ import {
   Header,
   Option,
   Select
-} from '../../interactors';
+} from '../interactors';
 
 // 🧹 the original tests for this component is not so great. i just translated them over to the new bigtest
 
