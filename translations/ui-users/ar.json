@@ -400,7 +400,7 @@
     "accounts.actions.calloutMessage": "رسم/غرامة {feeFineType} البالغ قيمتها {amount} تم {paymentStatus} بنجاح لـ {name}",
     "accounts.actions.payFeeFine": "سداد الرسوم/الغرامات",
     "accounts.actions.waiveFeeFine": "العفو عن الرسوم/الغرامات",
-    "accounts.actions.warning.summary": "تم تحديد {selectedItemsAmount} رسوم/غرامات. قم بإلغاء تحديد الرسوم/الغرامات للمتابعة.",
+    "accounts.actions.warning.summary": "تم تحديد {selectedItemsAmount}. لا يمكن {action} {invalidItemsAmount} مادة لأنها {reason}.",
     "accounts.actions.warning.alertDetails": "تفاصيل التنبيه",
     "accounts.actions.warning.feeFineType": "نوع الرسم/الغرامة",
     "accounts.actions.warning.remaining": "المتبقي",
