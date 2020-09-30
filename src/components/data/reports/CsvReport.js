@@ -1,49 +1,39 @@
 import { get } from 'lodash';
 import { exportCsv } from '@folio/stripes/util';
 import moment from 'moment';
+import reportColumns from './reportColumns';
 
-const columns = [
-  'borrower.name',
-  'borrower.barcode',
-  'borrowerId',
-  'dueDate',
-  'loanDate',
-  'loanPolicy.name',
-  'loanPolicyId',
-  'loanId',
-  'feeFine',
-  'item.title',
-  'item.materialType.name',
-  'item.status.name',
-  'item.barcode',
-  'item.callNumberComponents.prefix',
-  'item.callNumberComponents.callNumber',
-  'item.callNumberComponents.suffix',
-  'item.volume',
-  'item.enumeration',
-  'item.chronology',
-  'item.copyNumber',
-  'item.contributors',
-  'item.location.name',
-  'item.instanceId',
-  'item.holdingsRecordId',
-  'itemId',
-];
 
-class OverdueLoanReport {
+
+class CsvReport {
   constructor(options) {
     const { formatMessage } = options;
+    this.formatMessage = formatMessage;
+  }
+
+  setUp(type) {
+    const overDueDate = moment().tz('UTC').format();
+    let columns;
+    this.queryString = '';
+    if (type === 'overdue') {
+      columns = reportColumns.Overdue;
+      this.queryString = `(status.name=="Open" and dueDate < "${overDueDate}") sortby metadata.updatedDate desc`;
+    } else if (type === 'claimedReturned') {
+      columns = reportColumns.ClaimsReturned;
+      this.queryString = '(status.name=="Open" and action="claimedReturned") sortby metadata.updatedDate desc';
+    } else {
+      return;
+    }
 
     this.columnsMap = columns.map(value => ({
-      label: formatMessage({ id: `ui-users.reports.overdue.${value}` }),
+      label: this.formatMessage({ id: `ui-users.reports.${value}` }),
       value
     }));
   }
 
   async fetchData(mutator) {
     const { GET, reset } = mutator;
-    const overDueDate = moment().tz('UTC').format();
-    const query = `(status.name=="Open" and dueDate < "${overDueDate}") sortby metadata.updatedDate desc`;
+    const query = this.queryString;
     const limit = 1000;
     const data = [];
 
@@ -68,7 +58,8 @@ class OverdueLoanReport {
     return data;
   }
 
-  async generate(mutator) {
+  async generate(mutator, type) {
+    this.setUp(type);
     const loans = await this.fetchData(mutator);
     this.toCSV(loans);
   }
@@ -100,4 +91,4 @@ class OverdueLoanReport {
   }
 }
 
-export default OverdueLoanReport;
+export default CsvReport;

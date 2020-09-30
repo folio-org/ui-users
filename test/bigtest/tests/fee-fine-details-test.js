@@ -49,7 +49,7 @@ describe('Test Fee/Fine details', () => {
       expect(FeeFineDetails.contributors.label.text).to.equal(translations['reports.overdue.item.contributors']);
       expect(FeeFineDetails.contributors.value.text).to.equal('-');
     });
-
+    
     describe('Overdue policy link', () => {
       beforeEach(async function () {
         await FeeFineDetails.overduePolicyClick();
