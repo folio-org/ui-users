@@ -406,6 +406,7 @@ class ChargeFeeFine extends React.Component {
         params: { loanid },
       },
     } = this.props;
+    const { ownerId } = this.state;
     this.item = _.get(resources, ['items', 'records', [0]], {});
     const allfeefines = _.get(resources, ['allfeefines', 'records'], []);
     const owners = _.get(resources, ['owners', 'records'], []);
@@ -452,11 +453,11 @@ class ChargeFeeFine extends React.Component {
     };
 
     const items = _.get(resources, ['items', 'records'], []);
-    const ownerId = loadServicePoints({ owners: (shared ? owners : list), defaultServicePointId, servicePointsIds });
+    const servicePointOwnerId = loadServicePoints({ owners: (shared ? owners : list), defaultServicePointId, servicePointsIds });
     const initialValues = {
       amount: this.type.amount,
       notify: !!(feefines?.[0]?.actionNoticeId || feefines?.[0]?.chargeNoticeId),
-      ownerId
+      ownerId: ownerId !== '0' ? ownerId : servicePointOwnerId
     };
 
     return (

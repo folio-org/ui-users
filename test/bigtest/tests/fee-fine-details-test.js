@@ -236,6 +236,56 @@ describe('Test Fee/Fine details', () => {
       });
     });
 
+    describe('Refund fee/fine', () => {
+      beforeEach(async () => {
+        await FeeFineDetails.refundButton.click();
+      });
+
+      it('displays refund modal', () => {
+        expect(FeeFineDetails.actionModal.isPresent).to.be.true;
+      });
+
+      it('displays refund modal amount field', () => {
+        expect(FeeFineDetails.actionModalAmountField.value).to.equal('100.00');
+      });
+
+      describe('Choose refund reason name', () => {
+        beforeEach(async () => {
+          await FeeFineDetails.actionModalAmountField.pressTab();
+          await FeeFineDetails.actionModalSelect.selectAndBlur('Overpaid');
+        });
+
+        it('displays refund modal select option', () => {
+          expect(FeeFineDetails.actionModalSelect.value).to.equal('Overpaid');
+        });
+
+        it('displays refund button', () => {
+          expect(FeeFineDetails.actionModalSubmitButton.isPresent).to.be.true;
+          expect(FeeFineDetails.actionModalSubmitButtonIsDisabled).to.be.false;
+        });
+
+        describe('refund fine', () => {
+          beforeEach(async () => {
+            await FeeFineDetails.actionModalSubmitButton.click();
+          });
+
+          it('displays confirmation modal', () => {
+            expect(FeeFineDetails.actionConfirmationModal.body.isPresent).to.be.true;
+          });
+
+          describe('confirm fine transfering', () => {
+            beforeEach(async () => {
+              await FeeFineDetails.actionConfirmationModal.confirmButton.click();
+            });
+
+            it('show successfull callout', () => {
+              expect(FeeFineDetails.callout.successCalloutIsPresent).to.be.true;
+            });
+          });
+        });
+      });
+    });
+
     describe('Cancel fee/fine', () => {
       beforeEach(async () => {
         await FeeFineDetails.errorButton.click();

@@ -68,3 +68,10 @@ export const refundClaimReturned = {
   REFUNDED_ACTION: 'Refunded fully-Claim returned',
   TRANSACTION_CREDITED: 'Credited',
 };
+
+export const paymentStatusesAllowedToRefund = [
+  'Paid fully',
+  'Paid partially',
+  'Transferred fully',
+  'Transferred partially',
+];

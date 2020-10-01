@@ -3,11 +3,14 @@ import CQLParser from '../cql';
 
 export default (server) => {
   const user = server.create('user', { id: 'ce0e0d5b-b5f3-4ad5-bccb-49c0784298fd' });
-  server.createList('owner', 3);
+  const owners = server.createList('owner', 3);
   server.createList('feefine', 5);
   const account = server.create('account', { userId: user.id });
   server.createList('feefineaction', 1, { accountId: account.id });
-  server.createList('account', 3, { userId: user.id });
+  server.createList('account', 3, {
+    userId: user.id,
+    ownerId: owners[0].id,
+  });
   server.create('account', {
     userId: user.id,
     status: {
@@ -26,7 +29,7 @@ export default (server) => {
   });
   server.create('comment');
   server.createList('waiver', 4);
-  server.createList('payment', 4);
+  server.createList('payment', 4, { ownerId: owners[0].id });
   server.createList('transfer', 4);
   server.get('/accounts');
   server.get('/accounts/:id', (schema, request) => {
