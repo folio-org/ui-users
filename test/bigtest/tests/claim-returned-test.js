@@ -80,6 +80,8 @@ describe('Claim returned', () => {
 
         describe('filling additional information textarea', () => {
           const additionalInfoText = 'text';
+          let parsedRequestFeeFineBody;
+          let parsedRequestBody;
 
           beforeEach(async () => {
             await OpenLoansInteractor.claimReturnedDialog.additionalInfoTextArea.focus();
@@ -91,25 +93,55 @@ describe('Claim returned', () => {
           });
 
           describe('clicking confirm button', () => {
-            let parsedRequestBody;
+            describe('Refund transferred amount if necessary and submit claimed returned', () => {
 
-            beforeEach(async function () {
-              this.server.post(`/circulation/loans/${loan.id}/claim-item-returned`, (_, request) => {
-                parsedRequestBody = JSON.parse(request.requestBody);
+              beforeEach(async function () {
+                setupApplication({
+                  scenarios: ['claim-returned'],
+                });
+                this.server.get('/feefineaction', (_, request) => {
+                  parsedRequestFeeFineBody = JSON.parse(request.requestBody);
+                  return new Response(204, {});
+                });
+                this.server.post(`/circulation/loans/${loan.id}/claim-item-returned`, (_, request) => {
+                  parsedRequestBody = JSON.parse(request.requestBody);
+                  return new Response(204, {});
+                });
 
-                return new Response(204, {});
+                await OpenLoansInteractor.claimReturnedDialog.confirmButton.click();
+              });
+              it('should send correct request body', () => {
+                expect(parsedRequestBody.comment).to.equal(additionalInfoText);
+              });
+              it('should hide claim returned dialog', () => {
+                expect(OpenLoansInteractor.claimReturnedDialog.isPresent).to.be.false;
+              });
+            });
+
+
+            describe('Without Fees/Fines and submit claimed returned', () => {
+              beforeEach(async function () {
+                this.server.post(`/circulation/loans/${loan.id}/claim-item-returned`, (_, request) => {
+                  parsedRequestBody = JSON.parse(request.requestBody);
+                  return new Response(204, {});
+                });
+
+                await OpenLoansInteractor.claimReturnedDialog.confirmButton.click();
               });
 
-              await OpenLoansInteractor.claimReturnedDialog.confirmButton.click();
+              it('should send correct request body', () => {
+                expect(parsedRequestBody.comment).to.equal(additionalInfoText);
+              });
+
+
+
+              it('should hide claim returned dialog', () => {
+                expect(OpenLoansInteractor.claimReturnedDialog.isPresent).to.be.false;
+              });
             });
 
-            it('should send correct request body', () => {
-              expect(parsedRequestBody.comment).to.equal(additionalInfoText);
-            });
 
-            it('should hide claim returned dialog', () => {
-              expect(OpenLoansInteractor.claimReturnedDialog.isPresent).to.be.false;
-            });
+           
           });
         });
       });
