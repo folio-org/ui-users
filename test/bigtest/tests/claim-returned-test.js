@@ -97,10 +97,6 @@ describe('Claim returned', () => {
                 setupApplication({
                   scenarios: ['claim-returned'],
                 });
-                this.server.get('/feefineaction', (_, request) => {
-                  parsedRequestFeeFineBody = JSON.parse(request.requestBody);
-                  return new Response(204, {});
-                });
                 this.server.post(`/circulation/loans/${loan.id}/claim-item-returned`, (_, request) => {
                   parsedRequestBody = JSON.parse(request.requestBody);
                   return new Response(204, {});
