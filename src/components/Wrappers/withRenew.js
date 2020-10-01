@@ -48,6 +48,10 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
     this.connectedBulkRenewalDialog = props.stripes.connect(BulkRenewalDialog);
     this.state = {
       loans: [],
+      // eslint-disable-next-line react/no-unused-state
+      errors: [],
+      // eslint-disable-next-line react/no-unused-state
+      bulkRenewal: false,
       bulkRenewalDialogOpen: false,
       renewSuccess: [],
       renewFailure: [],
@@ -97,7 +101,9 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
   // condition in those methods to determine whether it is safe to update state.
   _isMounted = false;
 
-  renewItem = (loan, patron, silent) => {
+  renewItem = (loan, patron, bulkRenewal, silent) => {
+    // eslint-disable-next-line react/no-unused-state
+    this.setState({ bulkRenewal });
     const params = {
       itemBarcode: loan.item.barcode,
       userBarcode: patron.barcode,
@@ -112,7 +118,8 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
           if (contentType && contentType.startsWith('application/json')) {
             resp.json()
               .then((error) => {
-                reject(this.getMessage(error));
+                const errors = this.handleErrors(error);
+                reject(this.getMessage(errors));
               });
           } else {
             resp.text()
@@ -123,17 +130,25 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
   };
 
   renew = async (loans, patron) => {
+    const { patronBlocks } = this.props;
     const renewSuccess = [];
     const renewFailure = [];
     const errorMsg = {};
+    const countRenew = patronBlocks.filter(p => p.renewals);
     const loansSize = loans.length;
+    const bulkRenewal = (loansSize > 1);
+
+    if (!isEmpty(countRenew)) {
+      // eslint-disable-next-line react/no-unused-state
+      return this.setState({ patronBlockedModal: true });
+    }
 
     for (const [index, loan] of loans.entries()) {
       try {
         // We actually want to execute it in a sequence so turning off eslint warning
         // https://issues.folio.org/browse/UIU-1299
         // eslint-disable-next-line no-await-in-loop
-        renewSuccess.push(await this.renewItem(loan, patron, index !== loansSize - 1));
+        renewSuccess.push(await this.renewItem(loan, patron, bulkRenewal, index !== loansSize - 1));
       } catch (error) {
         const stringErrorMessage = get(error, 'props.values.message', '');
 
@@ -172,6 +187,13 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
     );
 
     this.callout.sendCallout({ message });
+  };
+
+  handleErrors = (error) => {
+    const { errors } = error;
+    // eslint-disable-next-line react/no-unused-state
+    this.setState({ errors });
+    return errors;
   };
 
   getPolicyName = (errors) => {
