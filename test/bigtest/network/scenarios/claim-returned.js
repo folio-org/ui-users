@@ -59,6 +59,8 @@ export default (server) => {
         });
       }
     }
+
+    return schema.feefineactions.all();
   });
 
   server.get('/accounts/:id', (schema, request) => {
@@ -101,5 +103,4 @@ export default (server) => {
     remaining: 0
   });
   server.get('/feefineaction');
-
 };

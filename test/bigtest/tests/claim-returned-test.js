@@ -80,7 +80,6 @@ describe('Claim returned', () => {
 
         describe('filling additional information textarea', () => {
           const additionalInfoText = 'text';
-          let parsedRequestFeeFineBody;
           let parsedRequestBody;
 
           beforeEach(async () => {
@@ -94,7 +93,6 @@ describe('Claim returned', () => {
 
           describe('clicking confirm button', () => {
             describe('Refund transferred amount if necessary and submit claimed returned', () => {
-
               beforeEach(async function () {
                 setupApplication({
                   scenarios: ['claim-returned'],
@@ -128,20 +126,13 @@ describe('Claim returned', () => {
 
                 await OpenLoansInteractor.claimReturnedDialog.confirmButton.click();
               });
-
               it('should send correct request body', () => {
                 expect(parsedRequestBody.comment).to.equal(additionalInfoText);
               });
-
-
-
               it('should hide claim returned dialog', () => {
                 expect(OpenLoansInteractor.claimReturnedDialog.isPresent).to.be.false;
               });
             });
-
-
-           
           });
         });
       });
