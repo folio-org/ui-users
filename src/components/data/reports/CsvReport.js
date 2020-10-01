@@ -1,7 +1,6 @@
 import { get } from 'lodash';
 import { exportCsv } from '@folio/stripes/util';
-import moment from 'moment';
-import reportColumns from './reportColumns';
+import settings from './reportSettings';
 
 
 
@@ -12,18 +11,8 @@ class CsvReport {
   }
 
   setUp(type) {
-    const overDueDate = moment().tz('UTC').format();
-    let columns;
-    this.queryString = '';
-    if (type === 'overdue') {
-      columns = reportColumns.Overdue;
-      this.queryString = `(status.name=="Open" and dueDate < "${overDueDate}") sortby metadata.updatedDate desc`;
-    } else if (type === 'claimedReturned') {
-      columns = reportColumns.ClaimsReturned;
-      this.queryString = '(status.name=="Open" and action="claimedReturned") sortby metadata.updatedDate desc';
-    } else {
-      return;
-    }
+    this.queryString = settings[type].queryString();
+    const columns = settings[type].columns;
 
     this.columnsMap = columns.map(value => ({
       label: this.formatMessage({ id: `ui-users.reports.${value}` }),
