@@ -697,7 +697,7 @@
   "transfers.singular": "Transfer account",
   "transfers.nodata": "There are no Fee/fine: Transfer accounts",
 
-  "reports.claimsReturned.label": "Claims returned report (CSV)",
+  "reports.claimReturned.label": "Claimed returned report (CSV)",
   "reports.overdue.label": "Overdue loans report (CSV)",
   "reports.borrower.name": "Borrower name",
   "reports.borrower.barcode": "Borrower barcode",

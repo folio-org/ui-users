@@ -200,7 +200,7 @@ class UserSearch extends React.Component {
           this.generateReport(this.props, 'claimedReturned');
         }}
       >
-        <FormattedMessage id="ui-users.reports.claimsReturned.label" />
+        <FormattedMessage id="ui-users.reports.claimReturned.label" />
       </Button>
     </>
   );
