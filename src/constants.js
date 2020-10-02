@@ -65,3 +65,31 @@ export const paymentStatusesAllowedToRefund = [
   'Transferred fully',
   'Transferred partially',
 ];
+
+export const reportColumns = [
+  'borrower.name',
+  'borrower.barcode',
+  'borrowerId',
+  'dueDate',
+  'loanDate',
+  'loanPolicy.name',
+  'loanPolicyId',
+  'loanId',
+  'feeFine',
+  'item.title',
+  'item.materialType.name',
+  'item.status.name',
+  'item.barcode',
+  'item.callNumberComponents.prefix',
+  'item.callNumberComponents.callNumber',
+  'item.callNumberComponents.suffix',
+  'item.volume',
+  'item.enumeration',
+  'item.chronology',
+  'item.copyNumber',
+  'item.contributors',
+  'item.location.name',
+  'item.instanceId',
+  'item.holdingsRecordId',
+  'itemId'
+];

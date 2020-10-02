@@ -1,6 +1,7 @@
 import { get } from 'lodash';
 import { exportCsv } from '@folio/stripes/util';
 import settings from './reportSettings';
+import { reportColumns } from '../../../constants';
 
 
 
@@ -12,7 +13,8 @@ class CsvReport {
 
   setUp(type) {
     this.queryString = settings[type].queryString();
-    const columns = settings[type].columns;
+    console.log(reportColumns);
+    const columns = reportColumns;
 
     this.columnsMap = columns.map(value => ({
       label: this.formatMessage({ id: `ui-users.reports.${value}` }),
