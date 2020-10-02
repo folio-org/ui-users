@@ -156,8 +156,16 @@ class UserSearch extends React.Component {
 
     this.setState({ exportInProgress: true }, async () => {
       this.context.sendCallout({ message: <FormattedMessage id="ui-users.reports.inProgress" /> });
-      await this.CsvReport.generate(props.mutator.loans, type);
-      if (this._mounted) {
+      let reportError = false;
+      try {
+        await this.CsvReport.generate(props.mutator.loans, type, this.context);
+      } catch (error) {
+        if (error.message === 'noItemsFound') {
+          reportError = true;
+          this.context.sendCallout({ type: 'error', message: <FormattedMessage id="ui-users.reports.noItemsFound" /> });
+        }
+      }
+      if (this._mounted || reportError === true) {
         this.setState({ exportInProgress: false });
       }
     });

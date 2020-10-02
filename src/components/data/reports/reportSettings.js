@@ -1,12 +1,12 @@
 import moment from 'moment';
 
 const settings = {
-  'overdue': {
-    'queryString': () => {
+  overdue: {
+    queryString: () => {
       const overDueDate = moment().tz('UTC').format();
       return `(status.name=="Open" and dueDate < "${overDueDate}") sortby metadata.updatedDate desc`;
     },
-    'columns' : [
+    columns : [
       'borrower.name',
       'borrower.barcode',
       'borrowerId',
@@ -34,11 +34,11 @@ const settings = {
       'itemId']
   },
 
-  'claimedReturned': {
-    'queryString': () => {
+  claimedReturned: {
+    queryString: () => {
       return '(status.name=="Open" and action="claimedReturned") sortby metadata.updatedDate desc';
     },
-    'columns': [
+    columns: [
       'borrower.name',
       'borrower.barcode',
       'borrowerId',

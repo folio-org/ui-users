@@ -28,7 +28,6 @@ class CsvReport {
 
     let offset = 0;
     let hasData = true;
-
     while (hasData) {
       try {
         reset();
@@ -50,7 +49,9 @@ class CsvReport {
   async generate(mutator, type) {
     this.setUp(type);
     const loans = await this.fetchData(mutator);
-    this.toCSV(loans);
+    if (loans.length !== 0) {
+      this.toCSV(loans);
+    } else { throw new Error('noItemsFound'); }
   }
 
   parse(records) {
