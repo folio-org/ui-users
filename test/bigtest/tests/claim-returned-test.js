@@ -95,102 +95,45 @@ describe('Claim returned', () => {
           });
 
           describe('clicking confirm button', () => {
+            beforeEach(async function () {
+              this.server.post(`/circulation/loans/${loan.id}/claim-item-returned`, (_, request) => {
+                parsedRequestBody = JSON.parse(request.requestBody);
+                return new Response(204, {});
+              });
+
+              await OpenLoansInteractor.claimReturnedDialog.confirmButton.click();
+            });
+
             describe('Loan with Lost item fee or Lost item processing fee with Payment Status = Transferred Partially', () => {
               let loanClaimedReturned;
               beforeEach(async function () {
-                loanClaimedReturned = this.server.create('loan', {
-                  status: { name: 'Open' },
-                  loanPolicyId: 'test',
-                  action: 'claimedReturned',
-                  actionComment: 'Claim returned confirmation',
-                  item: { status: { name: 'Claimed returned' } },
-                  itemStatus: 'Claimed returned',
-                  claimedReturnedDate: new Date().toISOString(),
-                });
-
-                this.server.create('user', { id: loanClaimedReturned.userId });
-                this.server.create('loanaction', {
-                  loan: {
-                    ...loanClaimedReturned.attrs,
+                setupApplication({
+                  scenarios: ['claim-returned'],
+                  currentUser: {
+                    curServicePoint: { id: 1 },
                   },
                 });
 
-                this.server.get('/accounts', () => {
-                  const accounts = [{
-                    id:'b7def5a0-4139-4abb-ba75-7f5eb02c0354',
-                    userId: loanClaimedReturned.userId,
-                    status: {
-                      name: 'Open',
-                    },
-                    paymentStatus: {
-                      name: 'Transferred partially',
-                    },
-                    amount: 180,
-                    balance: 20,
-                    feeFineType: 'Lost item fee',
-                    loanId: loanClaimedReturned.id,
-                  }, {
-                    id:'b7def5a0-4139-4abb-ba75-7f5eb02c0355',
-                    userId: loanClaimedReturned.userId,
-                    status: {
-                      name: 'Open',
-                    },
-                    paymentStatus: {
-                      name: 'Transferred partially',
-                    },
-                    amount: 180,
-                    balance: 20,
-                    feeFineType: 'Lost item processing fee',
-                    loanId: loanClaimedReturned.id,
-                  }];
-                  return { accounts };
-                });
-
                 this.visit(`/users/${loanClaimedReturned.userId}/loans/view/${loanClaimedReturned.id}`);
-
                 await LoanActionsHistory.whenLoaded();
               });
 
               it('should show empty fine incurred amount', () => {
                 expect(LoanActionsHistory.feeFines.text).to.equal('-');
               });
+              it('should send correct request body', () => {
+                expect(parsedRequestBody.comment).to.equal(additionalInfoText);
+              });
+              it('should hide claim returned dialog', () => {
+                expect(OpenLoansInteractor.claimReturnedDialog.isPresent).to.be.false;
+              });
 
               describe('With Refund and Credit Action', () => {
-                beforeEach(function () {
-                  this.server.get('/accounts', () => {
-                    const accounts = [{
-                      userId: loanClaimedReturned.userId,
-                      transactionInformation: 'Refunded to Community',
-                      typeAction: 'Refunded fully-Claim returned',
-                      accountId: 'b7def5a0-4139-4abb-ba75-7f5eb02c0354',
-                      amount: 180,
-                      balance: 200,
-                      loanId: loanClaimedReturned.id,
-                    },
-                    {
-                      userId: loanClaimedReturned.userId,
-                      transactionInformation: 'Refunded to Community',
-                      typeAction: 'Credited fully-Claim returned',
-                      accountId: 'b7def5a0-4139-4abb-ba75-7f5eb02c0354',
-                      amount: 180,
-                      balance: 0,
-                      loanId: loanClaimedReturned.id,
-                    }];
-                    return { accounts };
-                  });
-                });
-              });
+                
             });
 
             describe('Without Fees/Fines and submit claimed returned', () => {
-              beforeEach(async function () {
-                this.server.post(`/circulation/loans/${loan.id}/claim-item-returned`, (_, request) => {
-                  parsedRequestBody = JSON.parse(request.requestBody);
-                  return new Response(204, {});
-                });
-
-                await OpenLoansInteractor.claimReturnedDialog.confirmButton.click();
-              });
+              
               it('should send correct request body', () => {
                 expect(parsedRequestBody.comment).to.equal(additionalInfoText);
               });
