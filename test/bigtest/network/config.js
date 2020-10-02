@@ -9,6 +9,13 @@ export default function config() {
   // okapi endpoints
   this.get('/_/version', () => '0.0.0');
 
+  this.get('/refunds', [
+    {
+      'refunds': [],
+      'totalRecords': 0
+    }
+  ]);
+
   this.get('_/proxy/tenants/:id/modules', [
     {
       id: 'mod-circulation-16.0.0-SNAPSHOT.253',

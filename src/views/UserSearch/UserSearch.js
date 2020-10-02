@@ -28,7 +28,7 @@ import {
   CollapseFilterPaneButton,
 } from '@folio/stripes/smart-components';
 
-import OverdueLoanReport from '../../components/data/reports';
+import CsvReport from '../../components/data/reports';
 import Filters from './Filters';
 import css from './UserSearch.css';
 
@@ -89,7 +89,7 @@ class UserSearch extends React.Component {
     this.SRStatusRef = createRef();
 
     const { formatMessage } = props.intl;
-    this.overdueLoanReport = new OverdueLoanReport({
+    this.CsvReport = new CsvReport({
       formatMessage
     });
   }
@@ -145,8 +145,9 @@ class UserSearch extends React.Component {
       filterPaneIsVisible: !curState.filterPaneIsVisible,
     }));
   }
+  // now generates both overdue and claims returned reports
 
-  generateOverdueLoanReport = props => {
+  generateReport = (props, type) => {
     const { exportInProgress } = this.state;
 
     if (exportInProgress) {
@@ -154,9 +155,17 @@ class UserSearch extends React.Component {
     }
 
     this.setState({ exportInProgress: true }, async () => {
-      this.context.sendCallout({ message: <FormattedMessage id="ui-users.reports.overdue.inProgress" /> });
-      await this.overdueLoanReport.generate(props.mutator.loans);
-      if (this._mounted) {
+      this.context.sendCallout({ message: <FormattedMessage id="ui-users.reports.inProgress" /> });
+      let reportError = false;
+      try {
+        await this.CsvReport.generate(props.mutator.loans, type, this.context);
+      } catch (error) {
+        if (error.message === 'noItemsFound') {
+          reportError = true;
+          this.context.sendCallout({ type: 'error', message: <FormattedMessage id="ui-users.reports.noItemsFound" /> });
+        }
+      }
+      if (this._mounted || reportError === true) {
         this.setState({ exportInProgress: false });
       }
     });
@@ -186,10 +195,20 @@ class UserSearch extends React.Component {
         id="export-overdue-loan-report"
         onClick={() => {
           onToggle();
-          this.generateOverdueLoanReport(this.props);
+          this.generateReport(this.props, 'overdue');
         }}
       >
         <FormattedMessage id="ui-users.reports.overdue.label" />
+      </Button>
+      <Button
+        buttonStyle="dropdownItem"
+        id="export-claimed-returned-loan-report"
+        onClick={() => {
+          onToggle();
+          this.generateReport(this.props, 'claimedReturned');
+        }}
+      >
+        <FormattedMessage id="ui-users.reports.claimReturned.label" />
       </Button>
     </>
   );
