@@ -16,6 +16,9 @@ describe('Claim returned', () => {
       'manualblocks.collection.get': true,
       'circulation.loans.collection.get': true,
     },
+    currentUser: {
+      curServicePoint: { id: 1 },
+    },
   });
 
   describe('Visiting open loans list page with not claimed returned item', () => {
@@ -92,11 +95,104 @@ describe('Claim returned', () => {
           });
 
           describe('clicking confirm button', () => {
+
+            describe('Loan with Lost item fee or Lost item processing fee with Payment Status = Transferred Partially', () => {
+              beforeEach(async function () {
+                const loan = this.server.create('loan', {
+                  status: { name: 'Open' },
+                  loanPolicyId: 'test',
+                  action: 'claimedReturned',
+                  actionComment: 'Claim returned confirmation',
+                  item: { status: { name: 'Claimed returned' } },
+                  itemStatus: 'Claimed returned',
+                  claimedReturnedDate: new Date().toISOString(),
+                });
+          
+                this.server.create('user', { id: loan.userId });
+                this.server.create('loanaction', {
+                  loan: {
+                    ...loan.attrs,
+                  },
+                });
+                 
+                this.server.get('/accounts', () => {
+
+                  const accounts = [{
+                  id:'b7def5a0-4139-4abb-ba75-7f5eb02c0354',
+                  userId: loan.userId,
+                  status: {
+                    name: 'Open',
+                  },
+                  paymentStatus: {
+                    name: 'Transferred partially',
+                  },
+                  amount: 180,
+                  balance: 20,
+                  feeFineType: 'Lost item fee',
+                  loanId: loan.id,
+                },{
+                  id:'b7def5a0-4139-4abb-ba75-7f5eb02c0355',
+                  userId: loan.userId,
+                  status: {
+                    name: 'Open',
+                  },
+                  paymentStatus: {
+                    name: 'Transferred partially',
+                  },
+                  amount: 180,
+                  balance: 20,
+                  feeFineType: 'Lost item processing fee',
+                  loanId: loan.id,
+                }];
+                return { accounts };
+              });
+              
+              this.visit(`/users/${loan.userId}/loans/view/${loan.id}`);
+          
+              await LoanActionsHistory.whenLoaded();
+
+            });
+
+            it('should show empty fine incurred amount', () => {
+              expect(LoanActionsHistory.feeFines.text).to.equal('-');
+            });
+                   
+            
+            });
+
+            describe('With Refund and Credit Action', () => {             
+              beforeEach(function () {              
+                this.server.get('/accounts',() => {
+                 const accounts = [ {
+                    userId: loan.userId,
+                    transactionInformation: 'Refunded to Community',
+                    typeAction: 'Refunded fully-Claim returned',
+                    accountId: 'b7def5a0-4139-4abb-ba75-7f5eb02c0354',
+                    amount: 180,
+                    balance: 200,
+                    loanId: loan.id,
+                  },
+                  {
+                    userId: loan.userId,
+                    transactionInformation: 'Refunded to Community',
+                    typeAction: 'Credited fully-Claim returned',
+                    accountId: 'b7def5a0-4139-4abb-ba75-7f5eb02c0354',
+                    amount: 180,
+                    balance: 0,
+                    loanId: loan.id,
+                  }];
+                  return { accounts };
+              });
+
+
+            });
+          });
+
+
+         
             describe('Refund transferred amount if necessary and submit claimed returned', () => {
               beforeEach(async function () {
-                setupApplication({
-                  scenarios: ['claim-returned'],
-                });
+               
                 this.server.post(`/circulation/loans/${loan.id}/claim-item-returned`, (_, request) => {
                   parsedRequestBody = JSON.parse(request.requestBody);
                   return new Response(204, {});
@@ -104,6 +200,7 @@ describe('Claim returned', () => {
 
                 await OpenLoansInteractor.claimReturnedDialog.confirmButton.click();
               });
+
               it('should send correct request body', () => {
                 expect(parsedRequestBody.comment).to.equal(additionalInfoText);
               });
