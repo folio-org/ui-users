@@ -115,25 +115,21 @@ describe('Claim returned', () => {
                 });
 
                 this.visit(`/users/${loanClaimedReturned.userId}/loans/view/${loanClaimedReturned.id}`);
+
                 await LoanActionsHistory.whenLoaded();
               });
 
               it('should show empty fine incurred amount', () => {
                 expect(LoanActionsHistory.feeFines.text).to.equal('-');
               });
-              it('should send correct request body', () => {
-                expect(parsedRequestBody.comment).to.equal(additionalInfoText);
-              });
-              it('should hide claim returned dialog', () => {
-                expect(OpenLoansInteractor.claimReturnedDialog.isPresent).to.be.false;
-              });
 
               describe('With Refund and Credit Action', () => {
-                
+
             });
+          });
 
             describe('Without Fees/Fines and submit claimed returned', () => {
-              
+
               it('should send correct request body', () => {
                 expect(parsedRequestBody.comment).to.equal(additionalInfoText);
               });
