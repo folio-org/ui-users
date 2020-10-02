@@ -105,7 +105,7 @@ describe('Claim returned', () => {
             });
 
             describe('Loan with Lost item fee or Lost item processing fee with Payment Status = Transferred Partially', () => {
-              let loanClaimedReturned;
+              //let loanClaimedReturned;
               beforeEach(async function () {
                 setupApplication({
                   scenarios: ['claim-returned'],
@@ -114,7 +114,7 @@ describe('Claim returned', () => {
                   },
                 });
 
-                this.visit(`/users/${loanClaimedReturned.userId}/loans/view/${loanClaimedReturned.id}`);
+                this.visit(`/users/${loan.userId}/loans/view/${loan.id}`);
 
                 await LoanActionsHistory.whenLoaded();
               });
@@ -122,14 +122,9 @@ describe('Claim returned', () => {
               it('should show empty fine incurred amount', () => {
                 expect(LoanActionsHistory.feeFines.text).to.equal('-');
               });
-
-              describe('With Refund and Credit Action', () => {
-
             });
-          });
 
             describe('Without Fees/Fines and submit claimed returned', () => {
-
               it('should send correct request body', () => {
                 expect(parsedRequestBody.comment).to.equal(additionalInfoText);
               });
