@@ -19,7 +19,6 @@ class FeeFineInfo extends React.Component {
     onChangeFeeFine: PropTypes.func,
     feefines: PropTypes.arrayOf(PropTypes.object),
     isPending: PropTypes.object,
-    // initialValues: PropTypes.object,
   };
 
   constructor(props) {
@@ -33,20 +32,6 @@ class FeeFineInfo extends React.Component {
     this.props.onChangeFeeFine(this.amount || 0);
   }
 
-  // onChangeFeeFine(e) {
-  //   const {
-  //     form: { change },
-  //     feefines,
-  //   } = this.props;
-  //   const feeFineId = e.target.value;
-  //   const feefine = feefines.find(f => f.id === feeFineId) || {};
-  //   this.amount = feefine.defaultAmount || 0;
-  //   this.amount = parseFloat(this.amount).toFixed(2);
-  //   const defaultAmount = parseFloat(feefine.defaultAmount || 0).toFixed(2);
-  //   this.props.onChangeFeeFine(defaultAmount, feeFineId);
-  //   change('amount', defaultAmount);
-  // }
-
   onBlurAmount = () => {
     const { form: { change } } = this.props;
     change('amount', this.amount);
@@ -54,7 +39,6 @@ class FeeFineInfo extends React.Component {
 
   render() {
     const {
-      // initialValues,
       isPending,
       ownerOptions,
       feefineList,
@@ -83,7 +67,6 @@ class FeeFineInfo extends React.Component {
                           type="select"
                           component={Select}
                           fullWidth
-                          // value={initialValues ? initialValues.ownerId : undefined}
                           disabled={isPending.owners}
                           dataOptions={ownerOptions}
                           onChange={onChangeOwner}

@@ -63,6 +63,7 @@ class ChargeFeeFine extends React.Component {
     super(props);
     this.state = {
       ownerId: '0',
+      feeFineTypeId: null,
       lookup: false,
       pay: false,
       showConfirmDialog: false,
@@ -73,6 +74,7 @@ class ChargeFeeFine extends React.Component {
     this.payAction = this.payAction.bind(this);
     this.onClickSelectItem = this.onClickSelectItem.bind(this);
     this.onChangeOwner = this.onChangeOwner.bind(this);
+    this.onChangeFeeFine = this.onChangeFeeFine.bind(this);
     this.onFindShared = this.onFindShared.bind(this);
     this.item = {};
     this.onCloseModal = this.onCloseModal.bind(this);
@@ -239,6 +241,12 @@ class ChargeFeeFine extends React.Component {
     });
   }
 
+  onChangeFeeFine(e) {
+    this.setState({
+      feeFineTypeId: e.target.value
+    });
+  }
+
   onChangeItem(item) {
     this.item = item;
   }
@@ -382,7 +390,6 @@ class ChargeFeeFine extends React.Component {
     if (data.pay) {
       delete data.pay;
       this.type.remaining = data.amount;
-      console.log('data ', data);
       this.chargeAction(data)
         .then(() => this.payAction(data))
         .then(() => history.goBack());
@@ -405,7 +412,10 @@ class ChargeFeeFine extends React.Component {
         params: { loanid },
       },
     } = this.props;
-    const { ownerId } = this.state;
+    const {
+      ownerId,
+      feeFineTypeId,
+    } = this.state;
     this.item = _.get(resources, ['items', 'records', [0]], {});
     const allfeefines = _.get(resources, ['allfeefines', 'records'], []);
     const owners = _.get(resources, ['owners', 'records'], []);
@@ -453,11 +463,15 @@ class ChargeFeeFine extends React.Component {
     const items = _.get(resources, ['items', 'records'], []);
     const servicePointOwnerId = loadServicePoints({ owners: (shared ? owners : list), defaultServicePointId, servicePointsIds });
     const initialOwnerId = ownerId !== '0' ? ownerId : servicePointOwnerId;
-    console.log('initialOwnerId ', initialOwnerId);
-    console.log('feefines[0] ', feefines?.[0]);
-    const initialValues = {
+    const selectedFeeFine = feefines.find(f => f.id === feeFineTypeId);
+    const selectedOwner = owners.find(o => o.id === initialOwnerId);
+    const initialChargeValues = {
+      notify: !!(selectedFeeFine?.chargeNoticeId || selectedOwner?.defaultChargeNoticeId),
+    };
+
+    const initialActionValues = {
       amount: this.type.amount,
-      notify: !!(feefines?.[0]?.actionNoticeId || feefines?.[0]?.chargeNoticeId),
+      notify: !!(selectedFeeFine?.actionNoticeId || selectedOwner?.defaultActionNoticeId),
       ownerId: initialOwnerId
     };
 
@@ -465,7 +479,7 @@ class ChargeFeeFine extends React.Component {
       <div>
         <ChargeForm
           form="feeFineChargeForm"
-          initialValues={initialValues}
+          initialValues={initialChargeValues}
           defaultServicePointId={defaultServicePointId}
           servicePointsIds={servicePointsIds}
           onSubmit={this.onSubmitCharge}
@@ -478,6 +492,7 @@ class ChargeFeeFine extends React.Component {
           item={item}
           onFindShared={this.onFindShared}
           onChangeOwner={this.onChangeOwner}
+          onChangeFeeFine={this.onChangeFeeFine}
           onClickSelectItem={this.onClickSelectItem}
           stripes={stripes}
           location={location}
@@ -496,7 +511,7 @@ class ChargeFeeFine extends React.Component {
           action="payment"
           form="payment-modals"
           label="nameMethod"
-          initialValues={initialValues}
+          initialValues={initialActionValues}
           open={this.state.pay}
           commentRequired={settings.paid}
           onClose={this.onClosePayModal}
@@ -506,7 +521,6 @@ class ChargeFeeFine extends React.Component {
           stripes={stripes}
           onSubmit={(values) => { this.showConfirmDialog(values); }}
           owners={owners}
-          feefines={feefines}
           okapi={this.props.okapi}
           checkAmount="check-pay"
         />

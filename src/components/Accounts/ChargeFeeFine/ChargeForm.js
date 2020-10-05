@@ -57,6 +57,7 @@ class ChargeForm extends React.Component {
     form: PropTypes.object.isRequired,
     onClickCancel: PropTypes.func,
     onChangeOwner: PropTypes.func.isRequired,
+    onChangeFeeFine: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     onClickSelectItem: PropTypes.func.isRequired,
     onFindShared: PropTypes.func.isRequired,
@@ -83,13 +84,6 @@ class ChargeForm extends React.Component {
     this.feeFineId = null;
   }
 
-  componentDidMount() {
-    // const { initialValues } = this.props;
-    // if (initialValues) {
-    //   this.props.onChangeOwner({ target: { value: initialValues.ownerId } });
-    // }
-  }
-
   componentDidUpdate(prevProps) {
     const {
       owners,
@@ -103,15 +97,6 @@ class ChargeForm extends React.Component {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  // onChangeFeeFine(amount, id) {
-  //   const { feefines, form: { change } } = this.props;
-  //   if (id) {
-  //     const feefine = feefines.find(f => f.id === id) || {};
-  //     change('feeFineId', feefine.id);
-  //   }
-  // }
-
   onChangeFeeFine(e) {
     const {
       feefines,
@@ -120,6 +105,7 @@ class ChargeForm extends React.Component {
     const feeFineId = e.target.value;
 
     if (feeFineId) {
+      this.props.onChangeFeeFine(e);
       const feefine = feefines.find(f => f.id === feeFineId) || {};
       change('feeFineId', feefine.id);
       this.amount = feefine.defaultAmount || 0;
@@ -155,7 +141,6 @@ class ChargeForm extends React.Component {
       selectedLoan: selectedLoanProp,
       onSubmit,
       handleSubmit,
-      initialValues,
       form,
       form : {
         getState,
@@ -204,7 +189,7 @@ class ChargeForm extends React.Component {
     let showNotify = false;
     const feefine = this.props.feefines.find(f => f.id === feeFineId) || {};
     const owner = this.props.owners.find(o => o.id === ownerId) || {};
-    if (feefine.actionNoticeId || owner.defaultActionNoticeId) {
+    if (feefine?.chargeNoticeId || owner?.defaultChargeNoticeId) {
       showNotify = true;
     }
 
@@ -260,7 +245,6 @@ class ChargeForm extends React.Component {
           >
             <FeeFineInfo
               form={form}
-              // initialValues={this.props.initialValues}
               stripes={stripes}
               ownerOptions={ownerOptions}
               isPending={isPending}

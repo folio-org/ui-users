@@ -39,7 +39,6 @@ class ActionModal extends React.Component {
     reset: PropTypes.func,
     commentRequired: PropTypes.bool,
     owners: PropTypes.arrayOf(PropTypes.object),
-    feefines: PropTypes.arrayOf(PropTypes.object),
     label: PropTypes.string,
     action: PropTypes.string,
     intl: PropTypes.object.isRequired,
@@ -270,7 +269,6 @@ class ActionModal extends React.Component {
       form: { getState },
       intl: { formatMessage },
       data,
-      feefines,
       initialValues,
       handleSubmit,
       label,
@@ -290,17 +288,7 @@ class ActionModal extends React.Component {
       }
     } = getState();
 
-    // let showNotify = false;
-    // accounts.forEach(a => {
-    //   const feefine = feefines.find(f => f.id === a.feeFineId) || {};
-    //   const owner = owners.find(o => o.id === a.ownerId) || {};
-    //   if (feefine.actionNoticeId || owner.defaultActionNoticeId) {
-    //     showNotify = true;
-    //   }
-    // });
     const showNotify = initialValues.notify;
-
-
     const selected = calculateSelectedAmount(accounts, this.isRefundAction(action));
     const ownerOptions = owners.filter(o => o.owner !== 'Shared').map(o => ({ value: o.id, label: o.owner }));
 
