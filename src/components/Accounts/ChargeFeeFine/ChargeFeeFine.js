@@ -69,7 +69,8 @@ class ChargeFeeFine extends React.Component {
       notify: null,
       paymentNotify: null,
     };
-    this.onClickCharge = this.onClickCharge.bind(this);
+    this.chargeAction = this.chargeAction.bind(this);
+    this.payAction = this.payAction.bind(this);
     this.onClickSelectItem = this.onClickSelectItem.bind(this);
     this.onChangeOwner = this.onChangeOwner.bind(this);
     this.onFindShared = this.onFindShared.bind(this);
@@ -77,7 +78,6 @@ class ChargeFeeFine extends React.Component {
     this.onCloseModal = this.onCloseModal.bind(this);
     this.onChangeItem = this.onChangeItem.bind(this);
     this.onClosePayModal = this.onClosePayModal.bind(this);
-    this.onClickPay = this.onClickPay.bind(this);
     this.onFormAccountData = this.onFormAccountData.bind(this);
     this.type = {};
     this.callout = null;
@@ -152,7 +152,7 @@ class ChargeFeeFine extends React.Component {
     };
   }
 
-  onClickCharge(type) {
+  chargeAction(type) {
     const {
       typeAction,
       commentInfo,
@@ -191,15 +191,12 @@ class ChargeFeeFine extends React.Component {
     });
   }
 
-  onClickPay(type) {
+  payAction(type) {
     this.type = type;
     this.type.remaining = type.amount;
     this.setState({
       pay: true,
     });
-    const { typeAction } = this.onFormAccountData(type);
-
-    this.props.mutator.accounts.POST(typeAction);
 
     return new Promise((resolve, reject) => {
       this.payResolve = resolve;
@@ -385,11 +382,13 @@ class ChargeFeeFine extends React.Component {
     if (data.pay) {
       delete data.pay;
       this.type.remaining = data.amount;
-      this.onClickPay(data)
+      console.log('data ', data);
+      this.chargeAction(data)
+        .then(() => this.payAction(data))
         .then(() => history.goBack());
     } else {
       delete data.pay;
-      this.onClickCharge(data)
+      this.chargeAction(data)
         .then(() => history.goBack());
     }
   }
@@ -453,18 +452,20 @@ class ChargeFeeFine extends React.Component {
 
     const items = _.get(resources, ['items', 'records'], []);
     const servicePointOwnerId = loadServicePoints({ owners: (shared ? owners : list), defaultServicePointId, servicePointsIds });
+    const initialOwnerId = ownerId !== '0' ? ownerId : servicePointOwnerId;
+    console.log('initialOwnerId ', initialOwnerId);
+    console.log('feefines[0] ', feefines?.[0]);
     const initialValues = {
       amount: this.type.amount,
       notify: !!(feefines?.[0]?.actionNoticeId || feefines?.[0]?.chargeNoticeId),
-      ownerId: ownerId !== '0' ? ownerId : servicePointOwnerId
+      ownerId: initialOwnerId
     };
 
     return (
       <div>
         <ChargeForm
           form="feeFineChargeForm"
-          onClickPay={this.onClickPay}
-          // initialValues={defaultChargeNotify}
+          initialValues={initialValues}
           defaultServicePointId={defaultServicePointId}
           servicePointsIds={servicePointsIds}
           onSubmit={this.onSubmitCharge}

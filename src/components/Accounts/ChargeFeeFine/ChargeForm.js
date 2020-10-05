@@ -57,7 +57,6 @@ class ChargeForm extends React.Component {
     form: PropTypes.object.isRequired,
     onClickCancel: PropTypes.func,
     onChangeOwner: PropTypes.func.isRequired,
-    onClickPay: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     onClickSelectItem: PropTypes.func.isRequired,
     onFindShared: PropTypes.func.isRequired,
@@ -81,6 +80,7 @@ class ChargeForm extends React.Component {
     this.onChangeFeeFine = this.onChangeFeeFine.bind(this);
     this.onChangeOwner = this.onChangeOwner.bind(this);
     this.query = 0;
+    this.feeFineId = null;
   }
 
   componentDidMount() {
