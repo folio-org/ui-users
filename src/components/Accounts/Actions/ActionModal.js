@@ -41,6 +41,7 @@ class ActionModal extends React.Component {
     intl: PropTypes.object,
     checkAmount: PropTypes.string,
     okapi: PropTypes.object,
+    initialValues: PropTypes.object,
   };
 
   constructor(props) {
@@ -227,6 +228,7 @@ class ActionModal extends React.Component {
       form: { getState },
       data,
       feefines,
+      initialValues,
       handleSubmit,
       label,
       open,
@@ -243,14 +245,16 @@ class ActionModal extends React.Component {
       }
     } = getState();
 
-    let showNotify = false;
-    accounts.forEach(a => {
-      const feefine = feefines.find(f => f.id === a.feeFineId) || {};
-      const owner = owners.find(o => o.id === a.ownerId) || {};
-      if (feefine.actionNoticeId || owner.defaultActionNoticeId) {
-        showNotify = true;
-      }
-    });
+    // let showNotify = false;
+    // accounts.forEach(a => {
+    //   const feefine = feefines.find(f => f.id === a.feeFineId) || {};
+    //   const owner = owners.find(o => o.id === a.ownerId) || {};
+    //   if (feefine.actionNoticeId || owner.defaultActionNoticeId) {
+    //     showNotify = true;
+    //   }
+    // });
+    const showNotify = initialValues.notify;
+
 
     const selected = calculateSelectedAmount(accounts);
     const ownerOptions = owners.filter(o => o.owner !== 'Shared').map(o => ({ value: o.id, label: o.owner }));

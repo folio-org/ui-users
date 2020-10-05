@@ -425,7 +425,6 @@ class ChargeFeeFine extends React.Component {
 
     const defaultServicePointId = _.get(resources, ['curUserServicePoint', 'records', 0, 'defaultServicePointId'], '-');
     const servicePointsIds = _.get(resources, ['curUserServicePoint', 'records', 0, 'servicePointsIds'], []);
-
     let selected = parseFloat(0);
     accounts.forEach(a => {
       selected += parseFloat(a.remaining);
@@ -453,15 +452,28 @@ class ChargeFeeFine extends React.Component {
     };
 
     const items = _.get(resources, ['items', 'records'], []);
-    const ownerId = loadServicePoints({ owners: (shared ? owners : list), defaultServicePointId, servicePointsIds });
-    const initialValues = { amount: this.type.amount, notify: true, ownerId };
+    const servicePointOwnerId = loadServicePoints({ owners: (shared ? owners : list), defaultServicePointId, servicePointsIds });
+    const initialValues = {
+      amount: this.type.amount,
+      notify: !!(feefines?.[0]?.actionNoticeId || feefines?.[0]?.chargeNoticeId),
+      ownerId: this.state.ownerId !== '0' ? this.state.ownerId : servicePointOwnerId
+    };
+    // const owner = owners.find(o => o.id === ownerId) || {};
+    // const currentFeeFineAction = feefines.find(f => f.id === this.state.feeFineId);
+    // const defaultChargeNotify = { notify: false };
+    // const defaultActionNotify = !!(currentFeeFineAction?.actionNoticeId || owner?.defaultActionNoticeId);
+    // const initialValues = {
+    //   amount: this.type.amount,
+    //   notify: defaultActionNotify,
+    //   ownerId
+    // };
 
     return (
       <div>
         <ChargeForm
           form="feeFineChargeForm"
           onClickPay={this.onClickPay}
-          initialValues={initialValues}
+          // initialValues={defaultChargeNotify}
           defaultServicePointId={defaultServicePointId}
           servicePointsIds={servicePointsIds}
           onSubmit={this.onSubmitCharge}

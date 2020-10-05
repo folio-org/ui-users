@@ -586,8 +586,6 @@ class Actions extends React.Component {
     const payments = _.get(resources, ['payments', 'records'], []);
     const owners = _.get(resources, ['owners', 'records'], []).filter(o => o.owner !== 'Shared');
     const feefines = _.get(resources, ['feefineTypes', 'records'], []);
-    const feefineAction = _.get(resources, ['feefineactions', 'records'], [])
-      .find(({ accountId }) => accountId === account.id);
     const waives = _.get(resources, ['waives', 'records'], []);
     const transfers = _.get(resources, ['transfers', 'records'], []);
     const settings = _.get(resources, ['commentRequired', 'records', 0], {});
@@ -604,10 +602,11 @@ class Actions extends React.Component {
           : 'ui-users.accounts.history.button.refund';
 
     const ownerId = loadServicePoints({ owners, defaultServicePointId, servicePointsIds });
+    const currentFeeFineType = feefines.find(({ feeFineType }) => feeFineType === account?.feeFineType);
     const initialValues = {
       ownerId,
       amount,
-      notify: feefineAction?.notify ?? true,
+      notify: !!(currentFeeFineType?.actionNoticeId || currentFeeFineType?.chargeNoticeId),
     };
     const modals = [
       { action: 'payment', checkAmount: 'check-pay', item: actions.pay, label: 'nameMethod', data: payments, comment: 'paid', open: actions.pay || (actions.regular && accounts.length === 1) },

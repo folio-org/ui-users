@@ -19,13 +19,12 @@ class FeeFineInfo extends React.Component {
     onChangeFeeFine: PropTypes.func,
     feefines: PropTypes.arrayOf(PropTypes.object),
     isPending: PropTypes.object,
-    initialValues: PropTypes.object,
+    // initialValues: PropTypes.object,
   };
 
   constructor(props) {
     super(props);
     this.onChangeAmount = this.onChangeAmount.bind(this);
-    this.onChangeFeeFine = this.onChangeFeeFine.bind(this);
     this.amount = 0;
   }
 
@@ -34,19 +33,19 @@ class FeeFineInfo extends React.Component {
     this.props.onChangeFeeFine(this.amount || 0);
   }
 
-  onChangeFeeFine(e) {
-    const {
-      form: { change },
-      feefines,
-    } = this.props;
-    const feeFineId = e.target.value;
-    const feefine = feefines.find(f => f.id === feeFineId) || {};
-    this.amount = feefine.defaultAmount || 0;
-    this.amount = parseFloat(this.amount).toFixed(2);
-    const defaultAmount = parseFloat(feefine.defaultAmount || 0).toFixed(2);
-    this.props.onChangeFeeFine(defaultAmount, feeFineId);
-    change('amount', defaultAmount);
-  }
+  // onChangeFeeFine(e) {
+  //   const {
+  //     form: { change },
+  //     feefines,
+  //   } = this.props;
+  //   const feeFineId = e.target.value;
+  //   const feefine = feefines.find(f => f.id === feeFineId) || {};
+  //   this.amount = feefine.defaultAmount || 0;
+  //   this.amount = parseFloat(this.amount).toFixed(2);
+  //   const defaultAmount = parseFloat(feefine.defaultAmount || 0).toFixed(2);
+  //   this.props.onChangeFeeFine(defaultAmount, feeFineId);
+  //   change('amount', defaultAmount);
+  // }
 
   onBlurAmount = () => {
     const { form: { change } } = this.props;
@@ -55,11 +54,12 @@ class FeeFineInfo extends React.Component {
 
   render() {
     const {
-      initialValues,
+      // initialValues,
       isPending,
       ownerOptions,
       feefineList,
       onChangeOwner,
+      onChangeFeeFine,
     } = this.props;
 
     return (
@@ -83,7 +83,7 @@ class FeeFineInfo extends React.Component {
                           type="select"
                           component={Select}
                           fullWidth
-                          value={initialValues ? initialValues.ownerId : undefined}
+                          // value={initialValues ? initialValues.ownerId : undefined}
                           disabled={isPending.owners}
                           dataOptions={ownerOptions}
                           onChange={onChangeOwner}
@@ -114,7 +114,7 @@ class FeeFineInfo extends React.Component {
                           disabled={isPending.feefines}
                           dataOptions={feefineList}
                           placeholder={placeholder}
-                          onChange={this.onChangeFeeFine}
+                          onChange={onChangeFeeFine}
                         />
                       )}
                     </FormattedMessage>

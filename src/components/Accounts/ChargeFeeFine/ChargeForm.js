@@ -84,37 +84,48 @@ class ChargeForm extends React.Component {
   }
 
   componentDidMount() {
-    const { initialValues } = this.props;
-    if (initialValues) {
-      this.props.onChangeOwner({ target: { value: initialValues.ownerId } });
-    }
+    // const { initialValues } = this.props;
+    // if (initialValues) {
+    //   this.props.onChangeOwner({ target: { value: initialValues.ownerId } });
+    // }
   }
 
   componentDidUpdate(prevProps) {
     const {
       owners,
-      initialValues,
-      onFindShared
+      onFindShared,
     } = this.props;
-    const {
-      owners: prevOwners,
-    } = prevProps;
+    const { owners: prevOwners } = prevProps;
 
     if (prevOwners !== owners) {
       const shared = (owners.find(o => o.owner === 'Shared') || {}).id;
       onFindShared(shared);
     }
-    if (initialValues && initialValues.ownerId !== prevProps.initialValues.ownerId) {
-      this.props.onChangeOwner({ target: { value: initialValues.ownerId } });
-    }
   }
 
   // eslint-disable-next-line class-methods-use-this
-  onChangeFeeFine(amount, id) {
-    const { feefines, form: { change } } = this.props;
-    if (id) {
-      const feefine = feefines.find(f => f.id === id) || {};
+  // onChangeFeeFine(amount, id) {
+  //   const { feefines, form: { change } } = this.props;
+  //   if (id) {
+  //     const feefine = feefines.find(f => f.id === id) || {};
+  //     change('feeFineId', feefine.id);
+  //   }
+  // }
+
+  onChangeFeeFine(e) {
+    const {
+      feefines,
+      form: { change },
+    } = this.props;
+    const feeFineId = e.target.value;
+
+    if (feeFineId) {
+      const feefine = feefines.find(f => f.id === feeFineId) || {};
       change('feeFineId', feefine.id);
+      this.amount = feefine.defaultAmount || 0;
+      this.amount = parseFloat(this.amount).toFixed(2);
+      const defaultAmount = parseFloat(feefine.defaultAmount || 0).toFixed(2);
+      change('amount', defaultAmount);
     }
   }
 
@@ -141,10 +152,10 @@ class ChargeForm extends React.Component {
   render() {
     const {
       user,
-      initialValues,
       selectedLoan: selectedLoanProp,
       onSubmit,
       handleSubmit,
+      initialValues,
       form,
       form : {
         getState,
@@ -249,7 +260,7 @@ class ChargeForm extends React.Component {
           >
             <FeeFineInfo
               form={form}
-              initialValues={initialValues}
+              // initialValues={this.props.initialValues}
               stripes={stripes}
               ownerOptions={ownerOptions}
               isPending={isPending}
@@ -289,7 +300,7 @@ class ChargeForm extends React.Component {
               </div>
             }
             <br />
-            {notify && showNotify &&
+            {(notify && showNotify) &&
               <div>
                 <Row>
                   <Col xs>
