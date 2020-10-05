@@ -49,7 +49,6 @@ describe('Test Fee/Fine details', () => {
       expect(FeeFineDetails.contributors.label.text).to.equal(translations['reports.overdue.item.contributors']);
       expect(FeeFineDetails.contributors.value.text).to.equal('-');
     });
-
     describe('Overdue policy link', () => {
       beforeEach(async function () {
         await FeeFineDetails.overduePolicyClick();
@@ -215,6 +214,56 @@ describe('Test Fee/Fine details', () => {
         });
 
         describe('transfer fine', () => {
+          beforeEach(async () => {
+            await FeeFineDetails.actionModalSubmitButton.click();
+          });
+
+          it('displays confirmation modal', () => {
+            expect(FeeFineDetails.actionConfirmationModal.body.isPresent).to.be.true;
+          });
+
+          describe('confirm fine transfering', () => {
+            beforeEach(async () => {
+              await FeeFineDetails.actionConfirmationModal.confirmButton.click();
+            });
+
+            it('show successfull callout', () => {
+              expect(FeeFineDetails.callout.successCalloutIsPresent).to.be.true;
+            });
+          });
+        });
+      });
+    });
+
+    describe('Refund fee/fine', () => {
+      beforeEach(async () => {
+        await FeeFineDetails.refundButton.click();
+      });
+
+      it('displays refund modal', () => {
+        expect(FeeFineDetails.actionModal.isPresent).to.be.true;
+      });
+
+      it('displays refund modal amount field', () => {
+        expect(FeeFineDetails.actionModalAmountField.value).to.equal('100.00');
+      });
+
+      describe('Choose refund reason name', () => {
+        beforeEach(async () => {
+          await FeeFineDetails.actionModalAmountField.pressTab();
+          await FeeFineDetails.actionModalSelect.selectAndBlur('Overpaid');
+        });
+
+        it('displays refund modal select option', () => {
+          expect(FeeFineDetails.actionModalSelect.value).to.equal('Overpaid');
+        });
+
+        it('displays refund button', () => {
+          expect(FeeFineDetails.actionModalSubmitButton.isPresent).to.be.true;
+          expect(FeeFineDetails.actionModalSubmitButtonIsDisabled).to.be.false;
+        });
+
+        describe('refund fine', () => {
           beforeEach(async () => {
             await FeeFineDetails.actionModalSubmitButton.click();
           });

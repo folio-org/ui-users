@@ -275,7 +275,7 @@ class PermissionsModal extends React.Component {
         }
       >
         <div>
-          <Paneset>
+          <Paneset isRoot>
             {filterPaneIsVisible &&
               <Pane
                 defaultWidth="30%"

@@ -20,7 +20,7 @@ const UserInfo = (props) => {
         </Col>
         <Col className={css.userInfoLink}>
           <FormattedMessage id="ui-users.charge.barcode" />
-          {': '}
+          :
           <Link to={`/users/view/${user.id}`}>
             {user.barcode}
           </Link>

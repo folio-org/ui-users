@@ -78,6 +78,7 @@ class ChargeFeeFine extends React.Component {
     this.onChangeItem = this.onChangeItem.bind(this);
     this.onClosePayModal = this.onClosePayModal.bind(this);
     this.onClickPay = this.onClickPay.bind(this);
+    this.onFormAccountData = this.onFormAccountData.bind(this);
     this.type = {};
     this.callout = null;
   }
@@ -104,7 +105,7 @@ class ChargeFeeFine extends React.Component {
     this.props.mutator.activeRecord.update({ barcode: null });
   }
 
-  onClickCharge(type) {
+  onFormAccountData(type) {
     const owners = _.get(this.props.resources, ['owners', 'records'], []);
     const feefines = _.get(this.props.resources, ['feefines', 'records'], []);
     const selectedLoan = this.props.selectedLoan || {};
@@ -145,6 +146,18 @@ class ChargeFeeFine extends React.Component {
     this.setState({ notify: type.notify });
     const typeAction = _.omit(type, ['comments', 'patronInfo', 'notify']);
 
+    return {
+      typeAction,
+      commentInfo,
+    };
+  }
+
+  onClickCharge(type) {
+    const {
+      typeAction,
+      commentInfo,
+    } = this.onFormAccountData(type);
+
     return this.props.mutator.accounts.POST(typeAction)
       .then(() => this.newAction({}, typeAction.id, typeAction.feeFineType, typeAction.amount, commentInfo, typeAction.remaining, 0, typeAction.feeFineOwner));
   }
@@ -184,7 +197,10 @@ class ChargeFeeFine extends React.Component {
     this.setState({
       pay: true,
     });
-    this.onClickCharge(type);
+    const { typeAction } = this.onFormAccountData(type);
+
+    this.props.mutator.accounts.POST(typeAction);
+
     return new Promise((resolve, reject) => {
       this.payResolve = resolve;
       this.payReject = reject;
@@ -330,36 +346,20 @@ class ChargeFeeFine extends React.Component {
       };
 
       return mutator.pay.POST(payBody)
-        .then(this.updateAccountAfterPay(values, comment))
-        .then(this.showCalloutMessage(this.type));
-    } else {
-      return this.updateAccountAfterPay(values, comment);
-    }
-  }
-
-  updateAccountAfterPay = (values, comment) => {
-    const type = this.type;
-    return this.props.mutator.accounts.PUT(_.omit(type, ['comments', 'patronInfo', 'notify']))
-      .then(() => this.newAction(
-        { paymentMethod: values.method },
-        type.id,
-        type.paymentStatus.name,
-        values.amount,
-        comment,
-        type.remaining,
-        values.transaction,
-        type.feeFineOwner
-      ))
-      .then(() => this.hideConfirmDialog())
-      .then(() => this.onClosePayModal())
-      .then(() => this.payResolve())
-      .catch((error) => {
-        this.payReject();
-        this.callout.current.sendCallout({
-          type: 'error',
-          message: error
+        .then(() => this.hideConfirmDialog())
+        .then(() => this.onClosePayModal())
+        .then(this.showCalloutMessage(this.type))
+        .then(() => this.payResolve())
+        .catch((error) => {
+          this.payReject();
+          this.callout.current.sendCallout({
+            type: 'error',
+            message: error
+          });
         });
-      });
+    } else {
+      return this.showCalloutMessage(this.type);
+    }
   }
 
   renderConfirmMessage = () => {
@@ -406,6 +406,7 @@ class ChargeFeeFine extends React.Component {
         params: { loanid },
       },
     } = this.props;
+    const { ownerId } = this.state;
     this.item = _.get(resources, ['items', 'records', [0]], {});
     const allfeefines = _.get(resources, ['allfeefines', 'records'], []);
     const owners = _.get(resources, ['owners', 'records'], []);
@@ -422,7 +423,6 @@ class ChargeFeeFine extends React.Component {
     const accounts = _.get(resources, ['accounts', 'records'], []);
     const settings = _.get(resources, ['commentRequired', 'records', 0], {});
     const barcode = _.get(resources, 'activeRecord.barcode');
-
     const defaultServicePointId = _.get(resources, ['curUserServicePoint', 'records', 0, 'defaultServicePointId'], '-');
     const servicePointsIds = _.get(resources, ['curUserServicePoint', 'records', 0, 'servicePointsIds'], []);
     let selected = parseFloat(0);
@@ -456,17 +456,8 @@ class ChargeFeeFine extends React.Component {
     const initialValues = {
       amount: this.type.amount,
       notify: !!(feefines?.[0]?.actionNoticeId || feefines?.[0]?.chargeNoticeId),
-      ownerId: this.state.ownerId !== '0' ? this.state.ownerId : servicePointOwnerId
+      ownerId: ownerId !== '0' ? ownerId : servicePointOwnerId
     };
-    // const owner = owners.find(o => o.id === ownerId) || {};
-    // const currentFeeFineAction = feefines.find(f => f.id === this.state.feeFineId);
-    // const defaultChargeNotify = { notify: false };
-    // const defaultActionNotify = !!(currentFeeFineAction?.actionNoticeId || owner?.defaultActionNoticeId);
-    // const initialValues = {
-    //   amount: this.type.amount,
-    //   notify: defaultActionNotify,
-    //   ownerId
-    // };
 
     return (
       <div>

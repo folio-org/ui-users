@@ -9,6 +9,13 @@ export default function config() {
   // okapi endpoints
   this.get('/_/version', () => '0.0.0');
 
+  this.get('/refunds', [
+    {
+      'refunds': [],
+      'totalRecords': 0
+    }
+  ]);
+
   this.get('_/proxy/tenants/:id/modules', [
     {
       id: 'mod-circulation-16.0.0-SNAPSHOT.253',
@@ -725,6 +732,17 @@ export default function config() {
     };
   });
 
+  this.post('/accounts/:id/check-refund', ({ accounts }, request) => {
+    const account = accounts.find(request.params.id).attrs;
+
+    return {
+      accountId: account.id,
+      amount: '100.00',
+      allowed: true,
+      remainingAmount: '0.00'
+    };
+  });
+
   this.post('/accounts/:id/pay', ({ accounts }, request) => {
     const account = accounts.find(request.params.id).attrs;
 
@@ -744,6 +762,15 @@ export default function config() {
   });
 
   this.post('/accounts/:id/transfer', ({ accounts }, request) => {
+    const account = accounts.find(request.params.id).attrs;
+
+    return {
+      accountId: account.id,
+      amount: account.amount
+    };
+  });
+
+  this.post('/accounts/:id/refund', ({ accounts }, request) => {
     const account = accounts.find(request.params.id).attrs;
 
     return {

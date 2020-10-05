@@ -51,6 +51,9 @@
 * Clean up invalid fee/fine type-popover code.
 * Consistent spacing around barcode link.
 * Refactoring of `charge & pay` fee/fine form. Refs UIU-1836.
+* Correctly handle permissions modal display over edit pane. Fixes UIU-1857.
+* Adding of `refund` fee/fine single action. Refs UIU-1850.
+* Refactor actions for single list item. Refs UIU-1797.
 
 ## [4.0.0](https://github.com/folio-org/ui-users/tree/v4.0.0) (2020-06-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v3.0.0...v4.0.0)

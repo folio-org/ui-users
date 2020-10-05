@@ -58,3 +58,38 @@ export const statusFilter = [
  with hardcoded ids for now. */
 export const feeFineBalanceId = 'cf7a0d5f-a327-4ca1-aa9e-dc55ec006b8a';
 export const MAX_RECORDS = '10000';
+
+export const paymentStatusesAllowedToRefund = [
+  'Paid fully',
+  'Paid partially',
+  'Transferred fully',
+  'Transferred partially',
+];
+
+export const reportColumns = [
+  'borrower.name',
+  'borrower.barcode',
+  'borrowerId',
+  'dueDate',
+  'loanDate',
+  'loanPolicy.name',
+  'loanPolicyId',
+  'loanId',
+  'feeFine',
+  'item.title',
+  'item.materialType.name',
+  'item.status.name',
+  'item.barcode',
+  'item.callNumberComponents.prefix',
+  'item.callNumberComponents.callNumber',
+  'item.callNumberComponents.suffix',
+  'item.volume',
+  'item.enumeration',
+  'item.chronology',
+  'item.copyNumber',
+  'item.contributors',
+  'item.location.name',
+  'item.instanceId',
+  'item.holdingsRecordId',
+  'itemId'
+];
