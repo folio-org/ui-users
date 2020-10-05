@@ -190,16 +190,18 @@ class UserSearch extends React.Component {
           </FormattedMessage>
         </PaneMenu>
       </IfPermission>
-      <Button
-        buttonStyle="dropdownItem"
-        id="export-overdue-loan-report"
-        onClick={() => {
-          onToggle();
-          this.generateReport(this.props, 'overdue');
-        }}
-      >
-        <FormattedMessage id="ui-users.reports.overdue.label" />
-      </Button>
+      <IfPermission perm="ui-users.loans.view">
+        <Button
+          buttonStyle="dropdownItem"
+          id="export-overdue-loan-report"
+          onClick={() => {
+            onToggle();
+            this.generateReport(this.props, 'overdue');
+          }}
+        >
+          <FormattedMessage id="ui-users.reports.overdue.label" />
+        </Button>
+      </IfPermission>
       <Button
         buttonStyle="dropdownItem"
         id="export-claimed-returned-loan-report"

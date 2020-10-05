@@ -60,4 +60,43 @@ describe('OverdueLoanReport', () => {
       });
     });
   });
+
+  describe('When patron has view loans permissions', () => {
+    setupApplication({
+      hasAllPerms: false,
+      permissions: {
+        'module.users.enabled': true,
+        'ui-users.loans.view': true,
+      },
+    });
+
+    beforeEach(async function () {
+      this.visit('/users?sort=Name');
+      await users.whenLoaded();
+      await users.headerDropdown.click();
+    });
+
+    it('Overdue loans report button should be present', () => {
+      expect(users.headerDropdownMenu.isExportBtnPresent).to.be.true;
+    });
+  });
+
+  describe('When patron does not have view loans permissions', () => {
+    setupApplication({
+      hasAllPerms: false,
+      permissions: {
+        'module.users.enabled': true,
+      },
+    });
+
+    beforeEach(async function () {
+      this.visit('/users?sort=Name');
+      await users.whenLoaded();
+      await users.headerDropdown.click();
+    });
+
+    it('Overdue loans report button should not be present', () => {
+      expect(users.headerDropdownMenu.isExportBtnPresent).to.be.false;
+    });
+  });
 });
