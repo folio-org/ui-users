@@ -21,6 +21,7 @@ import {
 @interactor class HeaderDropdownMenu {
   clickExportToCSV = clickable('#export-overdue-loan-report');
   exportBtnIsVisible = isVisible('#export-overdue-loan-report');
+  isExportBtnPresent = isPresent('#export-overdue-loan-report');
 }
 
 @interactor class SearchFieldInteractor {
