@@ -974,10 +974,10 @@
     "@bigtest/suite" "^0.9.0"
     effection "^0.7.0"
 
-"@bigtest/interactor@^0.17.0":
-  version "0.17.0"
-  resolved "https://registry.yarnpkg.com/@bigtest/interactor/-/interactor-0.17.0.tgz#bae14b924338ba69d942ecbe15fd19fbf3b93c65"
-  integrity sha512-58MkPVDflDxudItU741OA0i3zv3AotDaS1QQ5uKQW7FFxRMIdIxfas9gyYGVOE08DSL0QA0fjhbD2TzmFlOZTw==
+"@bigtest/interactor@no-locators":
+  version "0.17.0-836d197a"
+  resolved "https://registry.yarnpkg.com/@bigtest/interactor/-/interactor-0.17.0-836d197a.tgz#97b762d2b11a5d0ae1347c60297e6665add3feea"
+  integrity sha512-rBV62mtcQHpdr+6yWyJDX1gPLWsg6/YmXj6qJ8rc33MWg63JqJQzCbcNyO7ymdlEEt4FtXV1PQnQGOrS7kxacg==
   dependencies:
     "@bigtest/globals" "^0.7.0"
     "@bigtest/performance" "^0.5.0"

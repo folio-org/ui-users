@@ -2,9 +2,9 @@ import { createInteractor } from '@bigtest/interactor';
 
 export default createInteractor('table row')({
   selector: '[role=row]',
-  defaultLocator: element => element.textContent,
-  locators: {
-    findByRowNumber: element => element.ariaRowIndex - 1,
-    findByDataRowIndex: element => element.getAttribute('data-row-index')
+  locator: element => element.textContent,
+  filters: {
+    dataRowIndex: element => element.getAttribute('data-row-index'),
+    rowNumber: element => element.ariaRowIndex - 1
   }
 });

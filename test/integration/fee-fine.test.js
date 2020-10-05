@@ -201,53 +201,53 @@ export default test('fee/fines', { permissions: ['circulation.loans.collection.g
       .step(Button('Charge only').click())
       .assertion(Header('User search').exists())))
   .child('fee details', test => test
-    .step(Button.findById('accordion-toggle-button-accountsSection').click())
-    .step(Link.findById('clickable-viewcurrentaccounts').click())
+    .step(Button({ id: 'accordion-toggle-button-accountsSection' }).click())
+    .step(Link({ id: 'clickable-viewcurrentaccounts' }).click())
     .step(TableCell('Main Circ2').click())
-    .assertion(Section.findByAttribute('data-test-fee-fine-details').exists())
-    .assertion(Div.findByAttribute('data-test-overdue-policy').find(Div('Overdue Fine Policy name')).exists())
-    .assertion(Div.findByAttribute('data-test-lost-item-policy').find(Div('Lost Item Policy name')).exists())
-    .assertion(Div.findByAttribute('data-test-instance').find(Div('GROẞE DUDEN2 (book)')).exists())
-    .assertion(Div.findByAttribute('data-test-contributors').find(Div('-')).exists())
+    .assertion(Section({ attribute: 'data-test-fee-fine-details' }).exists())
+    .assertion(Div({ attribute: 'data-test-overdue-policy' }).find(Div('Overdue Fine Policy name')).exists())
+    .assertion(Div({ attribute: 'data-test-lost-item-policy' }).find(Div('Lost Item Policy name')).exists())
+    .assertion(Div({ attribute: 'data-test-instance' }).find(Div('GROẞE DUDEN2 (book)')).exists())
+    .assertion(Div({ attribute: 'data-test-contributors' }).find(Div('-')).exists())
     .child('overdue policy', test => test
       .step(Link('Overdue Fine Policy name').click())
-      .assertion(Section.findByAttribute('data-test-fee-fine-details').absent()))
+      .assertion(Section({ attribute: 'data-test-fee-fine-details' }).absent()))
     .child('lost item policy', test => test
       .step(Link('Lost Item Policy name').click())
-      .assertion(Section.findByAttribute('data-test-fee-fine-details').absent())))
+      .assertion(Section({ attribute: 'data-test-fee-fine-details' }).absent())))
   .child('fee history', test => test
-    .step(Button.findById('accordion-toggle-button-accountsSection').click())
-    .step(Link.findById('clickable-viewcurrentaccounts').click())
+    .step(Button({ id: 'accordion-toggle-button-accountsSection' }).click())
+    .step(Link({ id: 'clickable-viewcurrentaccounts' }).click())
     .assertion(TableRowGroup().has({ dataRowContainerCount: 5 }))
     .assertion(Table('list-accounts-history-view-feesfines', { dataColumnCount: 14 }).exists())
     .child('filter pane', test => test
-      .step(Button.findById('filter-button').click())
+      .step(Button({ id: 'filter-button' }).click())
       .step(Search().fill('Missing item'))
-      .step(Checkbox.findByName('owner.Main Circ0').click())
-      .step(Button.findById('filter-button').click())
-      .assertion(Link.findById('open-accounts', { value: 'Open' }).exists())) // 🧹 this test suite makes no sense. filter probably broken
+      .step(Checkbox({ name: 'owner.Main Circ0' }).click())
+      .step(Button({ id: 'filter-button' }).click())
+      .assertion(Link({ id: 'open-accounts', value: 'Open' }).exists())) // 🧹 this test suite makes no sense. filter probably broken
     .child('selecting all accounts', test => test
-      .step(Link.findById('all-accounts').click())
-      .step(Checkbox.findByName('check-all').click())
-      .assertion(Button.findById('open-closed-all-pay-button', { disabled: true }).absent()))
+      .step(Link({ id: 'all-accounts' }).click())
+      .step(Checkbox({ name: 'check-all' }).click())
+      .assertion(Button({ id: 'open-closed-all-pay-button', disabled: true }).absent()))
     .child('selecting one account', test => test
       .step(TableCell('Main Circ0').click())
-      .assertion(Section.findByAttribute('data-test-fee-fine-details').exists()))
+      .assertion(Section({ attribute: 'data-test-fee-fine-details' }).exists()))
     .child('ellipsis menu', test => test
-      .step(TableRowGroup().find(TableRow.findByRowNumber(1)).find(Button.findByAttribute('data-test-ellipsis-button')).click())
+      .step(TableRowGroup().find(TableRow({ rowNumber: 1 })).find(Button({ attribute: 'data-test-ellipsis-button' })).click())
       .child('pay option', test => test
-        .step(Div.findByAttribute('data-test-dropdown-menu-overlay').find(Button('Pay')).click())
-        .assertion(Div.findById('payment-modal').exists()))
+        .step(Div({ attribute: 'data-test-dropdown-menu-overlay' }).find(Button('Pay')).click())
+        .assertion(Div({ id: 'payment-modal' }).exists()))
       .child('waive modal', test => test
-        .step(Div.findByAttribute('data-test-dropdown-menu-overlay').find(Button('Waive')).click())
-        .assertion(Div.findById('waive-modal').exists()))
+        .step(Div({ attribute: 'data-test-dropdown-menu-overlay' }).find(Button('Waive')).click())
+        .assertion(Div({ id: 'waive-modal' }).exists()))
       .child('transfer modal', test => test
-        .step(Div.findByAttribute('data-test-dropdown-menu-overlay').find(Button('Transfer')).click())
-        .assertion(Div.findById('transfer-modal').exists()))
+        .step(Div({ attribute: 'data-test-dropdown-menu-overlay' }).find(Button('Transfer')).click())
+        .assertion(Div({ id: 'transfer-modal' }).exists()))
       .child('error modal', test => test
         // 🧹 this test was originally called 'select the cancel option' but UI shows the button as 'Error'; not sure if it's meant to be 'Error'
-        .step(Div.findByAttribute('data-test-dropdown-menu-overlay').find(Button('Error')).click())
-        .assertion(Div.findById('error-modal').exists()))
+        .step(Div({ attribute: 'data-test-dropdown-menu-overlay' }).find(Button('Error')).click())
+        .assertion(Div({ id: 'error-modal' }).exists()))
       .child('loan details', test => test
         // 🧹 this route is broken
-        .step(Div.findByAttribute('data-test-dropdown-menu-overlay').find(Button(' Loan details')).click()))));
+        .step(Div({ attribute: 'data-test-dropdown-menu-overlay' }).find(Button(' Loan details')).click()))));

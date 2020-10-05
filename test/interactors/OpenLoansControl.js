@@ -11,11 +11,11 @@ export default createInteractor('open loans')({
     }
   },
   actions: {
-    selectAll: async interactor => {
-      await interactor.find(Checkbox.findByName('check-all')).click();
-    },
     clickClaimReturnedForSelected: async interactor => {
-      await interactor.find(ActionsBar('')).clickClaimReturned();
+      await interactor.find(ActionsBar()).clickClaimReturned();
+    },
+    selectAll: async interactor => {
+      await interactor.find(Checkbox({ name: 'check-all' })).click();
     }
   }
 });

@@ -51,27 +51,27 @@ export default test('users', {
     // .child('search for users', test => test
     //   // 🧹  search function is broken
     //   .step(Search('input-user-search').fill('Mary Poppins'))
-    //   .step(Button.findById('submit-user-search').click())
+    //   .step(Button({ id: 'submit-user-search' }).click())
     //   .assertion(Table().has({ dataRowCount: 1 })))
     .child('reset all status filter', test => test
-      .step(Button.findById('clickable-reset-all').click())
+      .step(Button({ id: 'clickable-reset-all' }).click())
       .assertion(Table('list-users').absent())))
   .child('click user', test => test
     .step('click on first user', ({ user }) => TableCell(user.username).click())
-    .step(Button.findById('accordion-toggle-button-loansSection').click())
+    .step(Button({ id: 'accordion-toggle-button-loansSection' }).click())
     .child('clicking on the open loans link', test => test
       .step(Link('2 open loans').click())
       .step('clicking on the first loan', ({ openLoan }) => TableCell(openLoan.item.barcode.toString()).click())
-      .step(Button.findByAriaLabel('C').click())
-      .step(Button.findByAriaLabel('C').click())
-      .assertion(Button.findById('accordion-toggle-button-loansSection').exists())
+      .step(Button({ ariaLabel: 'C' }).click())
+      .step(Button({ ariaLabel: 'C' }).click())
+      .assertion(Button({ id: 'accordion-toggle-button-loansSection' }).exists())
       .assertion(Section('pane-loandetails').absent())
       .assertion(Section('pane-loanhistory').absent()))
     .child('clicking on the closed loans link', test => test
       .step(Link('2 closed loans').click())
       .step('clicking on the first loan', ({ closedLoan }) => TableCell(closedLoan.item.barcode.toString()).click())
-      .step(Button.findByAriaLabel('C').click())
-      .step(Button.findByAriaLabel('C').click())
-      .assertion(Button.findById('accordion-toggle-button-loansSection').exists())
+      .step(Button({ ariaLabel: 'C' }).click())
+      .step(Button({ ariaLabel: 'C' }).click())
+      .assertion(Button({ id: 'accordion-toggle-button-loansSection' }).exists())
       .assertion(Section('pane-loandetails').absent())
       .assertion(Section('pane-loanhistory').absent())));

@@ -2,12 +2,8 @@ import { createInteractor, perform } from '@bigtest/interactor';
 
 export default createInteractor('table cell')({
   selector: '[role=gridcell]',
-  defaultLocator: element => element.textContent,
+  locator: element => element.textContent,
   filters: {
-    rowNumber: element => {
-      const headerRowOffset = 2;
-      return element.closest('[role=row]').getAttribute('aria-rowindex') - headerRowOffset;
-    },
     columnTitle: element => {
       const siblingCells = Array.from(element.closest('[class^=mclRow-]').querySelectorAll('[role=gridcell]'));
       let position = -1;
@@ -26,6 +22,10 @@ export default createInteractor('table cell')({
       )[position];
 
       return headerAtPosition.textContent;
+    },
+    rowNumber: element => {
+      const headerRowOffset = 2;
+      return element.closest('[role=row]').getAttribute('aria-rowindex') - headerRowOffset;
     }
   },
   actions: {

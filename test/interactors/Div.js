@@ -2,14 +2,12 @@ import { createInteractor } from '@bigtest/interactor';
 
 export default createInteractor('div')({
   selector: 'div',
-  defaultLocator: element => element.textContent,
-  locators: {
-    findByAttribute: element => element.getAttributeNames().find(attr => /data-test/.exec(attr)),
-    findById: element => element.id,
-    findByAriaLabelledBy: element => element.getAttribute('aria-labelledby')
-  },
+  locator: element => element.textContent,
   filters: {
-    value: element => element.textContent,
-    sectionsCount: element => element.querySelectorAll('section').length
+    ariaLabelledBy: element => element.getAttribute('aria-labelledby'),
+    attribute: element => element.getAttributeNames().find(attr => /data-test/.exec(attr)),
+    id: element => element.id,
+    sectionsCount: element => element.querySelectorAll('section').length,
+    value: element => element.textContent
   },
 });

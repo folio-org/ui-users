@@ -2,13 +2,11 @@ import { createInteractor, perform } from '@bigtest/interactor';
 
 export default createInteractor('text area')({
   selector: 'textarea',
-  defaultLocator: element => element.labels[0]?.textContent.replace(/\*$/, '').trim(),
-  locators: {
-    findByName: element => element.name
-  },
+  locator: element => element.labels[0]?.textContent.replace(/\*$/, '').trim(),
   filters: {
-    enabled: element => !element.disabled,
     disabled: element => element.disabled,
+    enabled: element => !element.disabled,
+    name: element => element.name,
     value: element => element.value
   },
   actions: {

@@ -2,14 +2,12 @@ import { createInteractor, perform } from '@bigtest/interactor';
 
 export default createInteractor('text field')({
   selector: 'input[type=text], input[type=password]',
-  defaultLocator: element => element.labels[0]?.textContent.replace(/\*$/, '').trim(),
-  locators: {
-    findById: element => element.id,
-    findByPlaceholder: element => element.placeholder
-  },
+  locator: element => element.labels[0]?.textContent.replace(/\*$/, '').trim(),
   filters: {
-    enabled: element => !element.disabled,
     disabled: element => element.disabled,
+    enabled: element => !element.disabled,
+    id: element => element.id,
+    placeholder: element => element.placeholder,
     value: element => element.value
   },
   actions: {

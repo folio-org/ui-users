@@ -26,9 +26,9 @@ export default test('', { permissions: ['perms.users.get'] })
   // .assertion(Paragraph('No permissions found').exists())
   // .child('add permission', test => test
   //   .step(Button('Add permission').click())
-  //   .assertion(Div.findById('permissions-modal').exists())
+  //   .assertion(Div({ id: 'permissions-modal' }).exists())
   //   .child('assign all permissions', test => test
-  //     .step(Checkbox.findByName('selected-selectAll').click())
-  //     .step(Button.findById('clickable-permissions-modal-save').click())
-  //     .assertion(Div.findById('permissions-modal').absent())
-  //     .assertion(Div.findByAriaLabelledBy('accordion-toggle-button-permissions').find(UnorderedList()).has({ itemCount: '11' }))));
+  //     .step(Checkbox({ name: 'selected-selectAll' }).click())
+  //     .step(Button({ id: 'clickable-permissions-modal-save' }).click())
+  //     .assertion(Div({ id: 'permissions-modal' }).absent())
+  //     .assertion(Div({ ariaLabelledBy: 'accordion-toggle-button-permissions' }).find(UnorderedList()).has({ itemCount: '11' }))));

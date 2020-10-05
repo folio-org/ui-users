@@ -24,14 +24,14 @@ export default test('declare lost', {
     .step('visit /users/loan.userid/loans/open', async ({ loan }) => {
       await App.visit(`/users/${loan.userId}/loans/open`);
     })
-    .step(Div.findByAttribute('data-test-actions-dropdown').find(Button.findByAriaLabel('ellipsis')).click())
+    .step(Div({ attribute: 'data-test-actions-dropdown' }).find(Button({ ariaLabel: 'ellipsis' })).click())
     .step(Button('Declare lost').click())
-    .assertion(Div.findById('declareLost-modal').exists())
+    .assertion(Div({ id: 'declareLost-modal' }).exists())
     .assertion(Button('Cancel').exists())
     .assertion(Button('Confirm', { disabled: true }).exists())
     .child('cancel declare lost', test => test
       .step(Button('Cancel').click())
-      .assertion(Div.findById('declareLost-modal').absent()))
+      .assertion(Div({ id: 'declareLost-modal' }).absent()))
     .child('submit declare lost', test => test
       .step(TextArea('Additional information').fill('text'))
       .step(Button('Confirm').click())
@@ -45,7 +45,7 @@ export default test('declare lost', {
       })
       // 🧹 there's a test here to confirm the response but is not reflected in the UI
       // expect(parsedRequestBody.comment).to.equal('text')
-      .assertion(Div.findById('declareLost-modal').absent())))
+      .assertion(Div({ id: 'declareLost-modal' }).absent())))
   .child('visiting open loans with declared lost item', test => test
     .step('seed data', async () => {
       const loan = store.create('loan', {
@@ -57,7 +57,7 @@ export default test('declare lost', {
     .step('visit /users/loan.userid/loans/open', async ({ loan }) => {
       await App.visit(`/users/${loan.userId}/loans/open`);
     })
-    .step(Div.findByAttribute('data-test-actions-dropdown').find(Button.findByAriaLabel('ellipsis')).click())
+    .step(Div({ attribute: 'data-test-actions-dropdown' }).find(Button({ ariaLabel: 'ellipsis' })).click())
     .assertion(Button('Declare lost').absent()))
   .child('visiting loan details with no declared lost item', test => test
     .step('seed data', async () => {
@@ -77,10 +77,10 @@ export default test('declare lost', {
     .step('visit /users/loan.userid/loans/view/loan.id', async ({ loan }) => {
       await App.visit(`/users/${loan.userId}/loans/view/${loan.id}`);
     })
-    .assertion(Div.findByAttribute('data-test-loan-actions-history-lost').find(Span.findByTextContent('-')).exists())
+    .assertion(Div({ attribute: 'data-test-loan-actions-history-lost' }).find(Span({ value: '-' })).exists())
     .child('declare lost', test => test
-      .step(Div.findById('resolve-claim-menu').find(Button('Declare lost')).click()) // 🧹 two identical buttons and unfortunately i had to anchor to the dropdown to grab one of them
-      .assertion(Div.findById('declareLost-modal').exists())))
+      .step(Div({ id: 'resolve-claim-menu' }).find(Button('Declare lost')).click()) // 🧹 two identical buttons and unfortunately i had to anchor to the dropdown to grab one of them
+      .assertion(Div({ id: 'declareLost-modal' }).exists())))
   .child('fine incurred after marking item as lost', test => test
     .step('seed data', async () => {
       const loan = store.create('loan', {
@@ -107,12 +107,12 @@ export default test('declare lost', {
     .step('visit /users/loan.userid/loans/view/loan.id', async ({ loan }) => {
       await App.visit(`/users/${loan.userId}/loans/view/${loan.id}`);
     })
-    .assertion(Div.findByAttribute('data-test-loan-fees-fines').find(Div('-')).exists())
+    .assertion(Div({ attribute: 'data-test-loan-fees-fines' }).find(Div('-')).exists())
     .child('mark lost and update fine', test => test
-      .step(Div.findById('resolve-claim-menu').find(Button('Declare lost')).click()) // 🧹 same issue as above; two identical buttons
+      .step(Div({ id: 'resolve-claim-menu' }).find(Button('Declare lost')).click()) // 🧹 same issue as above; two identical buttons
       .step(TextArea('Additional information').fill('item lost'))
       .step(Button('Confirm').click())
-      // .assertion(Div.findByAttribute('data-test-loan-fees-fines').find(Div('250.00')).exists()) // 🧹 issue with the route configurations and the counter; see 'query routes' above.
+      // .assertion(Div({ attribute: 'data-test-loan-fees-fines' }).find(Div('250.00')).exists()) // 🧹 issue with the route configurations and the counter; see 'query routes' above.
     ))
   .child('visiting loan details with declared lost item', test => test
     .step('seed data', async () => {
@@ -135,7 +135,7 @@ export default test('declare lost', {
       await App.visit(`/users/${loan.userId}/loans/view/${loan.id}`);
     })
     .assertion(Button('Declare lost', { disabled: true }).exists())
-    .assertion(Div.findByAttribute('data-test-loan-actions-history-lost').find(Div('-')).absent()))
+    .assertion(Div({ attribute: 'data-test-loan-actions-history-lost' }).find(Div('-')).absent()))
   .child('visiting loan details with checked out item', test => test
     .step('seed data', async () => {
       const loan = store.create('loan', {

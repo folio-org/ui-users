@@ -2,11 +2,7 @@ import { createInteractor, perform } from '@bigtest/interactor';
 
 export default createInteractor('select')({
   selector: 'select',
-  defaultLocator: element => element.labels[0]?.textContent.replace(/\*$/, '').trim(),
-  locators: {
-    findByName: element => element.name,
-    findById: element => element.id
-  },
+  locator: element => element.labels[0]?.textContent.replace(/\*$/, '').trim(),
   actions: {
     select: perform((element, value) => {
       const options = Array.from(element.options);
@@ -20,6 +16,8 @@ export default createInteractor('select')({
     })
   },
   filters: {
+    id: element => element.id,
+    name: element => element.name,
     value: element => element.value
   }
 });

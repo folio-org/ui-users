@@ -2,11 +2,9 @@ import { createInteractor } from '@bigtest/interactor';
 
 export default createInteractor('section')({
   selector: 'section',
-  defaultLocator: element => element.id,
-  locators: {
-    findByAttribute: element => element.getAttributeNames().find(attr => /data-test/.exec(attr))
-  },
+  locator: element => element.id,
   filters: {
+    attribute: element => element.getAttributeNames().find(attr => /data-test/.exec(attr)),
     id: element => element.id
   }
 });

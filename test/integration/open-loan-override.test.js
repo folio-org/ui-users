@@ -46,15 +46,15 @@ export default test('request related failure', { permissions: [
       await App.visit(`/users/${loan.userId}/loans/open`);
     })
     .child('bulk renew modal', test => test
-      .step(Div.findByAttribute('data-test-actions-dropdown').find(Button.findByAriaLabel('ellipsis')).click())
-      .step(Button.findByAttribute('data-test-dropdown-content-renew-button').click())
-      .assertion(Div.findById('bulk-renewal-modal').exists())
-      .assertion(Div.findByAttribute('data-test-bulk-renew-call-numbers', { value: 'prefix callNumber suffix volume enumeration chronology' }).exists())
+      .step(Div({ attribute: 'data-test-actions-dropdown' }).find(Button({ ariaLabel: 'ellipsis' })).click())
+      .step(Button({ attribute: 'data-test-dropdown-content-renew-button' }).click())
+      .assertion(Div({ id: 'bulk-renewal-modal' }).exists())
+      .assertion(Div({ attribute: 'data-test-bulk-renew-call-numbers', value: 'prefix callNumber suffix volume enumeration chronology' }).exists())
       .assertion(TableColumnHeader('Effective call number string').exists())
       .child('override', test => test
         .step(Button('Override').click())
-        .assertion(Div.findByAttribute('data-test-bulk-override-call-numbers', { value: 'prefix callNumber suffix volume enumeration chronology' }).exists())
-        .assertion(Div.findById('bulk-override-modal').find(TableColumnHeader('Effective call number string')).exists()))))
+        .assertion(Div({ attribute: 'data-test-bulk-override-call-numbers', value: 'prefix callNumber suffix volume enumeration chronology' }).exists())
+        .assertion(Div({ id: 'bulk-override-modal' }).find(TableColumnHeader('Effective call number string')).exists()))))
   .child('multiple override', test => test
     .step('seed data', async () => {
       const loan = store.create('loan', { status: { name: 'Open' } });
@@ -82,7 +82,7 @@ export default test('request related failure', { permissions: [
     .step('visit /users/loan.userid/loans/open', async ({ loan }) => {
       await App.visit(`/users/${loan.userId}/loans/open`);
     })
-    .step(Div.findByAttribute('data-test-actions-dropdown').find(Button.findByAriaLabel('ellipsis')).click())
-    .step(Button.findByAttribute('data-test-dropdown-content-renew-button').click())
-    .assertion(Div.findById('bulk-renewal-modal').exists())
+    .step(Div({ attribute: 'data-test-actions-dropdown' }).find(Button({ ariaLabel: 'ellipsis' })).click())
+    .step(Button({ attribute: 'data-test-dropdown-content-renew-button' }).click())
+    .assertion(Div({ id: 'bulk-renewal-modal' }).exists())
     .assertion(Button('Override').exists()));

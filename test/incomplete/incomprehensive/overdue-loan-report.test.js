@@ -14,4 +14,4 @@ export default test('overdue loan report')
   .step(App.visit('/users'))
   .step(Button('Actions').click())
   .step(Button('Overdue loans report (CSV)').click())
-  .assertion(Div.findByAttribute('data-test-callout-element').exists());
+  .assertion(Div({ attribute: 'data-test-callout-element' }).exists());

@@ -7,7 +7,6 @@ import {
   Button,
   CalendarButton,
   Header,
-  OverlayContainer,
   TableCell
 } from '../interactors';
 
@@ -28,14 +27,14 @@ export default test('change due date', { permissions: ['circulation.loans.collec
     store.createList('request', 2, { itemId: loan.itemId });
   })
   .step(App.visit('/users/1/loans/open'))
-  .step(Button.findByAriaLabel('ellipsis').click())
+  .step(Button({ ariaLabel: 'ellipsis' }).click())
   .step(Button('Change due date', { enabled: true }).click())
   .assertion(Header('Change due date').exists())
-  .assertion(OverlayContainer().find(TableCell('2', { rowNumber: 0, columnTitle: 'Requests' })).exists())
+  .assertion(TableCell('2', { columnTitle: 'Requests' }).exists())
   .assertion(Button('Save and close').is({ disabled: true }))
   .assertion(Button('Cancel').is({ enabled: true }))
   .child('selecting a new due date', test => test
-    .step(Button.findByAttribute('data-test-calendar-button').click())
-    .step(Button.findByAttribute('data-test-calendar-next-month').click())
+    .step(Button({ attribute: 'data-test-calendar-button' }).click())
+    .step(Button({ attribute: 'data-test-calendar-next-month' }).click())
     .step(CalendarButton('15').click())
     .assertion(Button('Save and close').is({ enabled: true })));

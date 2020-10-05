@@ -2,7 +2,7 @@ import { createInteractor, perform } from '@bigtest/interactor';
 
 export default createInteractor('text field')({
   selector: 'input[type=number]',
-  defaultLocator: element => element.labels[0]?.textContent,
+  locator: element => element.labels[0]?.textContent,
   actions: {
     fill: perform((element, value) => {
       const descriptor = Object.getOwnPropertyDescriptor(element, 'value');

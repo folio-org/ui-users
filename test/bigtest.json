@@ -7,6 +7,6 @@
     "./integration/**/*.test.js"
   ],
   "launch": [
-    "chrome"
+    "chrome.headless"
   ]
 }

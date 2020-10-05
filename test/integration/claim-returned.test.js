@@ -33,7 +33,7 @@ export default test('claim returned', {
       return { user, loan };
     })
     .step('visit "/users/:user_id/loans/open"', ({ user }) => App.visit(`/users/${user.id}/loans/open`))
-    .step(Button.findByAriaLabel('ellipsis').click())
+    .step(Button({ ariaLabel: 'ellipsis' }).click())
     .step(Button('Claim returned', { enabled: true }).click())
     .assertion(Header('Confirm claim returned').exists())
     .assertion(Button('Confirm', { disabled: true }).exists())

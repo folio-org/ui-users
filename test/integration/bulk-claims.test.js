@@ -27,7 +27,7 @@ export default test('bulk claims', { permissions: ['circulation.loans.collection
   })
   .step(App.visit('/users/1/loans/open'))
   .child('renew', test => test
-    .step(Checkbox.findByName('check-all').click())
+    .step(Checkbox({ name: 'check-all' }).click())
     .step(ActionsBar().clickButton('Renew'))
     .assertion(Header('Renew Confirmation').exists()))
   .child('return', test => test

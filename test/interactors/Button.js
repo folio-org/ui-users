@@ -2,16 +2,14 @@ import { createInteractor, perform } from '@bigtest/interactor';
 
 export default createInteractor('button')({
   selector: 'button',
-  defaultLocator: element => element.textContent,
-  locators: {
-    findByAriaLabel: element => element.getAttribute('aria-label')?.trim(),
-    findById: element => element.getAttribute('id'),
-    findByAttribute: element => element.getAttributeNames().find(attr => /data-test/.exec(attr))
-  },
+  locator: element => element.textContent,
   filters: {
-    enabled: element => !element.disabled,
+    ariaExpanded: element => element.getAttribute('aria-expanded'),
+    ariaLabel: element => element.getAttribute('aria-label')?.trim(),
+    attribute: element => element.getAttributeNames().find(attr => /data-test/.exec(attr)),
     disabled: element => element.disabled,
-    ariaExpanded: element => element.getAttribute('aria-expanded')
+    enabled: element => !element.disabled,
+    id: element => element.getAttribute('id')
   },
   actions: {
     click: perform((element) => {

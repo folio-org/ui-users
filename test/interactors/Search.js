@@ -2,10 +2,10 @@ import { createInteractor, perform } from '@bigtest/interactor';
 
 export default createInteractor('search')({
   selector: '[type=search]',
-  defaultLocator: element => element.id,
+  locator: element => element.id,
   filters: {
-    enabled: element => !element.disabled,
     disabled: element => element.disabled,
+    enabled: element => !element.disabled,
     value: element => element.value
   },
   actions: {

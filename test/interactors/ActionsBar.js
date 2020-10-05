@@ -7,11 +7,11 @@ export default createInteractor('actions bar')({
     loanCount: element => element.querySelector('#loan-count')?.textContent
   },
   actions: {
-    clickClaimReturned: async interactor => {
-      await interactor.find(Button('Claim returned', { enabled: true })).click();
-    },
     clickButton: async (element, value) => {
       await element.find(Button(value)).click();
+    },
+    clickClaimReturned: async interactor => {
+      await interactor.find(Button('Claim returned', { enabled: true })).click();
     }
   }
 });

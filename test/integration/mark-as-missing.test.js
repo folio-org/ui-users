@@ -22,8 +22,8 @@ export default test('mark as missing', { permissions: [
     .step('visit /users/loan.userid/loans/open', async ({ loan }) => {
       await App.visit(`/users/${loan.userId}/loans/open`);
     })
-    .step(Div.findByAttribute('data-test-actions-dropdown').find(Button.findByAriaLabel('ellipsis')).click())
-    .assertion(Div.findByAttribute('data-test-dropdown-menu-overlay').find(Button('Mark as missing')).absent()))
+    .step(Div({ attribute: 'data-test-actions-dropdown' }).find(Button({ ariaLabel: 'ellipsis' })).click())
+    .assertion(Div({ attribute: 'data-test-dropdown-menu-overlay' }).find(Button('Mark as missing')).absent()))
   .child('with returned claims', test => test
     .step('seed data', async () => {
       const loan = store.create('loan', {
@@ -35,17 +35,17 @@ export default test('mark as missing', { permissions: [
     .step('visit /users/loan.userid/loans/open', async ({ loan }) => {
       await App.visit(`/users/${loan.userId}/loans/open`);
     })
-    .step(Div.findByAttribute('data-test-actions-dropdown').find(Button.findByAriaLabel('ellipsis')).click())
-    .assertion(Div.findByAttribute('data-test-dropdown-menu-overlay').find(Button('Mark as missing')).exists())
+    .step(Div({ attribute: 'data-test-actions-dropdown' }).find(Button({ ariaLabel: 'ellipsis' })).click())
+    .assertion(Div({ attribute: 'data-test-dropdown-menu-overlay' }).find(Button('Mark as missing')).exists())
     .child('mark missing', test => test
       .step(Button('Mark as missing').click())
-      .assertion(Div.findById('markAsMissing-modal').exists())
+      .assertion(Div({ id: 'markAsMissing-modal' }).exists())
       .assertion(Button('Cancel').exists())
       .assertion(Button('Confirm', { disabled: true }).exists())
       .assertion(TextArea('Additional information').exists())
       .child('cancel', test => test
         .step(Button('Cancel').click())
-        .assertion(Div.findById('markAsMissing-modal').absent()))
+        .assertion(Div({ id: 'markAsMissing-modal' }).absent()))
       .child('submitting missing', test => test
         .step(TextArea('Additional information').fill('text'))
         .step('query route', async ({ loan }) => {
@@ -57,7 +57,7 @@ export default test('mark as missing', { permissions: [
           return { parsedRequestBody };
         })
         .step(Button('Confirm').click())
-        .assertion(Div.findById('markAsMissing-modal').absent()))))
+        .assertion(Div({ id: 'markAsMissing-modal' }).absent()))))
   .child('with item marked missing', test => test
     .step('seed data', async () => {
       const loan = store.create('loan', {
@@ -74,4 +74,4 @@ export default test('mark as missing', { permissions: [
     .step('visit /users/loan.userId/loans/view/loan.id', async ({ loan }) => {
       await App.visit(`/users/${loan.userId}/loans/view/${loan.id}`);
     })
-    .assertion(Div.findByAttribute('data-test-loan-actions-history-item-status').find(Div('Missing')).exists()));
+    .assertion(Div({ attribute: 'data-test-loan-actions-history-item-status' }).find(Div('Missing')).exists()));
