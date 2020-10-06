@@ -16,13 +16,17 @@ import {
   ConfirmationModal
 } from '@folio/stripes/components';
 
-import { calculateSelectedAmount, loadServicePoints } from '../accountFunctions';
 import CancellationModal from './CancellationModal';
 import CommentModal from './CommentModal';
 import WarningModal from './WarningModal';
 import ActionModal from './ActionModal';
 import { MAX_RECORDS } from '../../../constants';
 import { getFullName } from '../../util';
+import {
+  calculateSelectedAmount,
+  isRefundAllowed,
+  loadServicePoints,
+} from '../accountFunctions';
 
 class Actions extends React.Component {
   static manifest = Object.freeze({
@@ -34,7 +38,7 @@ class Actions extends React.Component {
     accounts: {
       type: 'okapi',
       records: 'accounts',
-      path: 'accounts?query=(userId==%{user.id})&limit=10000',
+      path: `accounts?query=(userId==%{user.id})&limit=${MAX_RECORDS}`,
       PUT: {
         path: 'accounts/%{activeRecord.id}'
       },
@@ -42,7 +46,7 @@ class Actions extends React.Component {
     feefineactions: {
       type: 'okapi',
       records: 'feefineactions',
-      path: 'feefineactions?limit=10000',
+      path: `feefineactions?limit=${MAX_RECORDS}`,
     },
     payments: {
       type: 'okapi',
@@ -54,10 +58,15 @@ class Actions extends React.Component {
       records: 'waivers',
       path: 'waives',
     },
+    refunds: {
+      type: 'okapi',
+      records: 'refunds',
+      path: 'refunds',
+    },
     owners: {
       type: 'okapi',
       records: 'owners',
-      path: 'owners?query=cql.allRecords=1&limit=2000',
+      path: `owners?query=cql.allRecords=1&limit=${MAX_RECORDS}`,
     },
     feefineTypes: {
       type: 'okapi',
@@ -76,11 +85,81 @@ class Actions extends React.Component {
     },
     activeRecord: {},
     user: {},
+    checkPay: {
+      type: 'okapi',
+      POST: {
+        path: 'accounts/%{accountId}/check-pay',
+      },
+      fetch: false,
+      clientGeneratePk: false,
+    },
+    checkWaive: {
+      type: 'okapi',
+      POST: {
+        path: 'accounts/%{accountId}/check-waive',
+      },
+      fetch: false,
+      clientGeneratePk: false,
+    },
+    checkTransfer: {
+      type: 'okapi',
+      POST: {
+        path: 'accounts/%{accountId}/check-transfer',
+      },
+      fetch: false,
+      clientGeneratePk: false,
+    },
+    checkRefund: {
+      type: 'okapi',
+      POST: {
+        path: 'accounts/%{accountId}/check-refund',
+      },
+      fetch: false,
+      clientGeneratePk: false,
+    },
+    pay: {
+      type: 'okapi',
+      path: 'accounts/%{activeRecord.id}/pay',
+      fetch: false,
+      accumulate: 'true',
+      clientGeneratePk: false,
+    },
+    waive: {
+      type: 'okapi',
+      path: 'accounts/%{activeRecord.id}/waive',
+      fetch: false,
+      accumulate: 'true',
+      clientGeneratePk: false,
+    },
+    transfer: {
+      type: 'okapi',
+      path: 'accounts/%{activeRecord.id}/transfer',
+      fetch: false,
+      accumulate: 'true',
+      clientGeneratePk: false,
+    },
+    cancel: {
+      type: 'okapi',
+      path: 'accounts/%{activeRecord.id}/cancel',
+      fetch: false,
+      accumulate: 'true',
+      clientGeneratePk: false,
+    },
+    refund: {
+      type: 'okapi',
+      path: 'accounts/%{activeRecord.id}/refund',
+      fetch: false,
+      accumulate: 'true',
+      clientGeneratePk: false,
+    },
   });
 
   static propTypes = {
     resources: PropTypes.shape({
       accounts: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      refunds: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }),
@@ -93,9 +172,38 @@ class Actions extends React.Component {
       feefineactions: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }),
+      checkPay: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      checkWaive: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      checkTransfer: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      checkRefund: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      pay: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      waive: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      transfer: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      cancel: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      refund: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
     }),
     okapi: PropTypes.object,
     balance: PropTypes.number,
+    totalPaidAmount: PropTypes.number,
+    owedAmount: PropTypes.number,
     accounts: PropTypes.arrayOf(PropTypes.object),
     selectedAccounts: PropTypes.arrayOf(PropTypes.object),
     onChangeSelectedAccounts: PropTypes.func,
@@ -108,6 +216,11 @@ class Actions extends React.Component {
     match: PropTypes.object,
   };
 
+  static defaultProps = {
+    totalPaidAmount: 0,
+    owedAmount: 0,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -115,7 +228,6 @@ class Actions extends React.Component {
       showConfirmDialog: false,
       values: {},
       submitting: false,
-      notify: null,
     };
     this.onCloseCancellation = this.onCloseCancellation.bind(this);
     this.onClickCancellation = this.onClickCancellation.bind(this);
@@ -125,6 +237,13 @@ class Actions extends React.Component {
     this.onCloseComment = this.onCloseComment.bind(this);
     this.onClickComment = this.onClickComment.bind(this);
     this.callout = null;
+
+    this.actionToEndpointMapping = {
+      'payment': 'pay',
+      'waive': 'waive',
+      'transfer': 'transfer',
+      'refund': 'refund'
+    };
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -171,6 +290,7 @@ class Actions extends React.Component {
       regular: false,
       waiveMany: false,
       transferMany: false,
+      refundMany: false,
     });
     this.setState({ accounts: this.props.selectedAccounts || [] });
   }
@@ -232,16 +352,18 @@ class Actions extends React.Component {
   }
 
   onClickCancellation(values) {
-    const { intl: { formatMessage } } = this.props;
-    const canceled = formatMessage({ id: 'ui-users.accounts.cancelError' });
-    const type = this.props.accounts[0] || {};
-    const createdAt = this.props.okapi.currentUser.curServicePoint.id;
-    delete type.rowIndex;
-    this.props.mutator.activeRecord.update({ id: type.id });
-    this.newAction({}, type.id, canceled, type.amount, this.assembleTagInfo(values), 0, 0, createdAt || type.feeFineOwner, values);
-    this.editAccount(type, canceled, 'Closed', 0.00)
+    const {
+      mutator,
+      accounts,
+    } = this.props;
+    const account = accounts[0] || {};
+    delete account.rowIndex;
+    mutator.activeRecord.update({ id: account.id });
+    const payload = this.buildActionBody(values);
+    delete payload.amount;
+    mutator.cancel.POST(_.omit(payload, ['id']))
       .then(() => this.props.handleEdit(1))
-      .then(() => this.showCalloutMessage(type))
+      .then(() => this.showCalloutMessage(account))
       .then(() => this.onCloseCancellation());
   }
 
@@ -261,12 +383,42 @@ class Actions extends React.Component {
       .then(() => this.onCloseComment());
   }
 
+  buildActionBody = (values) => {
+    const {
+      okapi: {
+        currentUser: {
+          firstName,
+          lastName,
+          curServicePoint: { id: servicePointId }
+        },
+      }
+    } = this.props;
+
+    const body = {};
+
+    body.amount = values.amount;
+    body.paymentMethod = values.method;
+    body.notifyPatron = values.notify;
+    body.comments = this.assembleTagInfo(values);
+    body.servicePointId = servicePointId;
+    body.userName = `${lastName}, ${firstName}`;
+
+    return body;
+  };
+
   onSubmit(values, action) {
-    const type = this.props.accounts[0] || {};
-    delete type.rowIndex;
-    this.action(type, values.amount, values, action)
+    const {
+      accounts,
+      mutator,
+    } = this.props;
+
+    const account = _.head(accounts) || {};
+    mutator.activeRecord.update({ id: account.id });
+    const payload = this.buildActionBody(values);
+
+    mutator[this.actionToEndpointMapping[action]].POST(_.omit(payload, ['id']))
       .then(() => this.props.handleEdit(1))
-      .then(() => this.showCalloutMessage(type))
+      .then(() => this.showCalloutMessage(account))
       .then(() => this.onCloseActionModal());
   }
 
@@ -327,6 +479,8 @@ class Actions extends React.Component {
       waiveMany: false,
       transferModal: false,
       transferMany: false,
+      refundModal: false,
+      refundMany: false,
     });
     this.setState({
       accounts: this.props.selectedAccounts || [],
@@ -335,21 +489,30 @@ class Actions extends React.Component {
   }
 
   onConfirm = () => {
-    const { actions, selectedAccounts } = this.props;
+    const { actions, selectedAccounts = [] } = this.props;
     const { values } = this.state;
+    const singleSelectedAccount = selectedAccounts.length === 1;
+    const singlePay = actions.pay || (actions.regular && singleSelectedAccount);
+    const singleWaive = actions.waiveModal || (actions.waiveMany && singleSelectedAccount);
+    const singleTransfer = actions.transferModal || (actions.transferMany && singleSelectedAccount);
+    const singeRefund = actions.refundModal || (actions.refundMany && singleSelectedAccount);
 
-    if (actions.pay) {
+    if (singlePay) {
       this.onSubmit(values, 'payment');
     } else if (actions.regular) {
       this.onSubmitMany(values, selectedAccounts, 'payment');
-    } else if (actions.waiveModal) {
+    } else if (singleWaive) {
       this.onSubmit(values, 'waive');
     } else if (actions.waiveMany) {
       this.onSubmitMany(values, selectedAccounts, 'waive');
-    } else if (actions.transferModal) {
+    } else if (singleTransfer) {
       this.onSubmit(values, 'transfer');
     } else if (actions.transferMany) {
       this.onSubmitMany(values, selectedAccounts, 'transfer');
+    } else if (singeRefund) {
+      this.onSubmit(values, 'refund');
+    } else if (actions.refundMany) {
+      this.onSubmitMany(values, selectedAccounts, 'refund');
     }
     this.setState({ submitting: true });
 
@@ -381,7 +544,6 @@ class Actions extends React.Component {
     this.setState({
       showConfirmDialog: true,
       values,
-      notify: values.notify,
     });
 
     return new Promise((resolve, reject) => {
@@ -398,14 +560,30 @@ class Actions extends React.Component {
   }
 
   renderConfirmHeading = () => {
-    const { actions: { pay, regular, waiveModal, waiveMany, transferModal, transferMany }, intl: { formatMessage } } = this.props;
+    const {
+      actions: {
+        pay,
+        regular,
+        waiveModal,
+        waiveMany,
+        transferModal,
+        transferMany,
+        refundModal,
+        refundMany,
+      },
+      intl: { formatMessage },
+    } = this.props;
+
     let action = '';
+
     if (pay || regular) {
       action = formatMessage({ id: 'ui-users.accounts.actions.payment' });
     } else if (waiveModal || waiveMany) {
       action = formatMessage({ id: 'ui-users.accounts.actions.waive' });
     } else if (transferModal || transferMany) {
       action = formatMessage({ id: 'ui-users.accounts.actions.transfer' });
+    } else if (refundModal || refundMany) {
+      action = formatMessage({ id: 'ui-users.accounts.actions.refund' });
     }
 
     return (
@@ -417,17 +595,33 @@ class Actions extends React.Component {
   }
 
   renderConfirmMessage = () => {
-    const { actions: { pay, regular, waiveModal, waiveMany, transferModal, transferMany }, intl: { formatMessage } } = this.props;
+    const {
+      actions: {
+        pay,
+        regular,
+        waiveModal,
+        waiveMany,
+        transferModal,
+        transferMany,
+        refundModal,
+        refundMany,
+      },
+      intl: { formatMessage }
+    } = this.props;
+
     const { values } = this.state;
     const amount = values.amount;
     let paymentStatus = (pay || regular)
       ? formatMessage({ id: 'ui-users.accounts.actions.warning.paymentAction' })
       : (waiveModal || waiveMany)
         ? formatMessage({ id: 'ui-users.accounts.actions.warning.waiveAction' })
-        : formatMessage({ id: 'ui-users.accounts.actions.warning.transferAction' });
-    if (pay || waiveModal || transferModal) {
+        : (transferModal || transferMany)
+          ? formatMessage({ id: 'ui-users.accounts.actions.warning.transferAction' })
+          : formatMessage({ id: 'ui-users.accounts.actions.warning.refundAction' });
+
+    if (pay || waiveModal || transferModal || refundModal) {
       const account = this.props.accounts[0] || {};
-      const total = account.remaining || 0;
+      const total = (refundModal ? account.amount : account.remaining) || 0;
       paymentStatus = `${((amount < total)
         ? formatMessage({ id: 'ui-users.accounts.status.partially' })
         : formatMessage({ id: 'ui-users.accounts.status.fully' }))} ${paymentStatus}`;
@@ -437,7 +631,7 @@ class Actions extends React.Component {
           values={{ count: 1, amount, action: paymentStatus }}
         />
       );
-    } else if (regular || waiveMany || transferMany) {
+    } else if (regular || waiveMany || transferMany || refundMany) {
       const accounts = this.props.selectedAccounts || [];
       const total = accounts.reduce((selected, { remaining }) => {
         return selected + parseFloat(remaining);
@@ -452,6 +646,7 @@ class Actions extends React.Component {
         />
       );
     }
+
     return '';
   }
 
@@ -460,7 +655,8 @@ class Actions extends React.Component {
       actions,
       stripes,
       resources,
-      match: { params }
+      match: { params },
+      intl: { formatMessage },
     } = this.props;
     const {
       accounts,
@@ -468,19 +664,21 @@ class Actions extends React.Component {
       submitting
     } = this.state;
 
-    const amount = calculateSelectedAmount((actions.pay || actions.waiveModal || actions.transferModal) ? this.props.accounts : accounts);
-
+    const account = this.props.accounts[0] || {};
     const defaultServicePointId = _.get(resources, ['curUserServicePoint', 'records', 0, 'defaultServicePointId'], '-');
     const servicePointsIds = _.get(resources, ['curUserServicePoint', 'records', 0, 'servicePointsIds'], []);
     const payments = _.get(resources, ['payments', 'records'], []);
+    const refunds = _.get(resources, ['refunds', 'records'], []);
     const owners = _.get(resources, ['owners', 'records'], []).filter(o => o.owner !== 'Shared');
     const feefines = _.get(resources, ['feefineTypes', 'records'], []);
     const waives = _.get(resources, ['waives', 'records'], []);
     const transfers = _.get(resources, ['transfers', 'records'], []);
     const settings = _.get(resources, ['commentRequired', 'records', 0], {});
-    const hasClosedAccounts = accounts.some(a => a.status && a.status.name === 'Closed');
-    const isWarning = hasClosedAccounts
-        && (actions.regular || actions.waiveMany || actions.transferMany)
+    const hasInvalidAccounts = accounts.some(a => {
+      return actions.refundMany ? !isRefundAllowed(a) : a?.status?.name === 'Closed';
+    });
+    const isWarning = hasInvalidAccounts
+        && (actions.regular || actions.waiveMany || actions.transferMany || actions.refundMany)
         && params.accountstatus;
     const warningModalLabelId = actions.regular
       ? 'ui-users.accounts.actions.payFeeFine'
@@ -488,59 +686,117 @@ class Actions extends React.Component {
         ? 'ui-users.accounts.actions.waiveFeeFine'
         : actions.transferMany
           ? 'ui-users.accounts.actions.transferFeeFine'
-          : 'ui-users.accounts.history.button.refund';
+          : 'ui-users.accounts.actions.refundFeeFine';
 
     const ownerId = loadServicePoints({ owners, defaultServicePointId, servicePointsIds });
-    const initialValues = { ownerId, amount, notify: true };
+    const currentFeeFineType = feefines.find(({ feeFineType }) => feeFineType === account?.feeFineType);
+    const initialValues = {
+      ownerId,
+      amount: calculateSelectedAmount(this.props.accounts),
+      notify: !!(currentFeeFineType?.actionNoticeId || currentFeeFineType?.chargeNoticeId),
+    };
+
     const modals = [
-      { action: 'payment', item: actions.pay, label: 'nameMethod', data: payments, comment: 'paid', open: actions.pay || (actions.regular && accounts.length === 1) },
-      { action: 'payment', form: 'payment-many-modal', label: 'nameMethod', accounts, data: payments, comment: 'paid', open: actions.regular && !isWarning && accounts.length > 1 },
-      { action: 'waive', item: actions.waiveModal, label: 'nameReason', data: waives, comment: 'waived', open: actions.waiveModal || (actions.waiveMany && !isWarning) },
-      { action: 'transfer', item: actions.transferModal, label: 'accountName', data: transfers, comment: 'transferredManually', open: actions.transferModal || (actions.transferMany && !isWarning) }
+      {
+        action: 'payment',
+        checkAmount: 'check-pay',
+        item: actions.pay,
+        label: 'nameMethod',
+        data: payments,
+        comment: 'paid',
+        open: actions.pay || (actions.regular && accounts.length === 1),
+        initialValues,
+      },
+      {
+        action: 'payment',
+        checkAmount: 'check-pay',
+        form: 'payment-many-modal',
+        label: 'nameMethod',
+        accounts,
+        data: payments,
+        comment: 'paid',
+        open: actions.regular && !isWarning && accounts.length > 1,
+        initialValues: { ...initialValues, amount: calculateSelectedAmount(accounts) },
+      },
+      {
+        action: 'waive',
+        checkAmount: 'check-waive',
+        item: actions.waiveModal,
+        label: 'nameReason',
+        data: waives,
+        comment: 'waived',
+        open: actions.waiveModal || (actions.waiveMany && !isWarning),
+        initialValues,
+      },
+      {
+        action: 'transfer',
+        checkAmount: 'check-transfer',
+        item: actions.transferModal,
+        label: 'accountName',
+        data: transfers,
+        comment: 'transferredManually',
+        open: actions.transferModal || (actions.transferMany && !isWarning),
+        initialValues,
+      },
+      {
+        action: 'refund',
+        checkAmount: 'check-refund',
+        item: actions.refundModal,
+        label: 'nameReason',
+        data: refunds,
+        comment: 'refunded',
+        open: actions.refundModal || (actions.refundMany && !isWarning),
+        initialValues: { ...initialValues, amount: calculateSelectedAmount(this.props.accounts, true) }
+      },
     ];
 
     return (
       <div>
-        <FormattedMessage id={warningModalLabelId}>
-          {label => (
-            <WarningModal
-              id="actions-warning-modal"
-              open={isWarning && !submitting}
-              accounts={accounts}
-              onChangeAccounts={this.onChangeAccounts}
-              stripes={stripes}
-              onClose={this.onCloseWarning}
-              label={label}
-            />
-          )}
-        </FormattedMessage>
+        <WarningModal
+          id="actions-warning-modal"
+          open={isWarning && !submitting}
+          label={formatMessage({ id: warningModalLabelId })}
+          accounts={accounts}
+          onChangeAccounts={this.onChangeAccounts}
+          stripes={stripes}
+          onClose={this.onCloseWarning}
+        />
         <CancellationModal
           form="error-modal"
+          initialValues={initialValues}
           open={actions.cancellation}
           onClose={this.onCloseCancellation}
           user={this.props.user}
-          account={this.props.accounts[0] || {}}
+          account={account}
           onSubmit={(values) => { this.onClickCancellation(values); }}
           owners={owners}
           feefines={feefines}
         />
-        {modals.map(m => (
-          <ActionModal
-            {...m}
-            intl={this.props.intl}
-            initialValues={initialValues}
-            commentRequired={settings[m.comment]}
-            form={m.form ? m.form : `${m.action}-modal`}
-            onClose={this.onCloseActionModal}
-            defaultServicePointId={defaultServicePointId}
-            servicePointsIds={servicePointsIds}
-            balance={parseFloat(this.props.balance).toFixed(2)}
-            accounts={(m.accounts) ? m.accounts : ((m.item) ? this.props.accounts : accounts)}
-            onSubmit={(values) => { this.showConfirmDialog(values); }}
-            owners={owners}
-            feefines={feefines}
-          />
-        ))}
+        {modals.reduce((am, m) => {
+          if (m.open) {
+            am.push(
+              <ActionModal
+                {...m}
+                intl={this.props.intl}
+                commentRequired={settings[m.comment]}
+                form={m.form ? m.form : `${m.action}-modal`}
+                onClose={this.onCloseActionModal}
+                defaultServicePointId={defaultServicePointId}
+                servicePointsIds={servicePointsIds}
+                balance={parseFloat(this.props.balance).toFixed(2)}
+                accounts={(m.accounts) ? m.accounts : ((m.item) ? this.props.accounts : accounts)}
+                onSubmit={(values) => { this.showConfirmDialog(values); }}
+                owners={owners}
+                feefines={feefines}
+                okapi={this.props.okapi}
+                totalPaidAmount={parseFloat(this.props.totalPaidAmount).toFixed(2)}
+                owedAmount={parseFloat(this.props.owedAmount).toFixed(2)}
+              />
+            );
+          }
+
+          return am;
+        }, [])}
         <CommentModal
           open={actions.comment}
           stripes={this.props.stripes}
@@ -548,6 +804,7 @@ class Actions extends React.Component {
           onSubmit={(values) => { this.onClickComment(values); }}
         />
         <ConfirmationModal
+          style={{ position: 'relative', zIndex: 1000 }}
           open={showConfirmDialog}
           heading={this.renderConfirmHeading()}
           message={(showConfirmDialog) ? this.renderConfirmMessage() : ''}
