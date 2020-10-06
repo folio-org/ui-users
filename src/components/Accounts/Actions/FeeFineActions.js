@@ -86,38 +86,6 @@ class Actions extends React.Component {
     },
     activeRecord: {},
     user: {},
-    checkPay: {
-      type: 'okapi',
-      POST: {
-        path: 'accounts/%{accountId}/check-pay',
-      },
-      fetch: false,
-      clientGeneratePk: false,
-    },
-    checkWaive: {
-      type: 'okapi',
-      POST: {
-        path: 'accounts/%{accountId}/check-waive',
-      },
-      fetch: false,
-      clientGeneratePk: false,
-    },
-    checkTransfer: {
-      type: 'okapi',
-      POST: {
-        path: 'accounts/%{accountId}/check-transfer',
-      },
-      fetch: false,
-      clientGeneratePk: false,
-    },
-    checkRefund: {
-      type: 'okapi',
-      POST: {
-        path: 'accounts/%{accountId}/check-refund',
-      },
-      fetch: false,
-      clientGeneratePk: false,
-    },
     pay: {
       type: 'okapi',
       path: 'accounts/%{activeRecord.id}/pay',
@@ -171,18 +139,6 @@ class Actions extends React.Component {
         PUT: PropTypes.func.isRequired,
       }),
       feefineactions: PropTypes.shape({
-        POST: PropTypes.func.isRequired,
-      }),
-      checkPay: PropTypes.shape({
-        POST: PropTypes.func.isRequired,
-      }),
-      checkWaive: PropTypes.shape({
-        POST: PropTypes.func.isRequired,
-      }),
-      checkTransfer: PropTypes.shape({
-        POST: PropTypes.func.isRequired,
-      }),
-      checkRefund: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }),
       pay: PropTypes.shape({
