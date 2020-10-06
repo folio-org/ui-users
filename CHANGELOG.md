@@ -54,6 +54,7 @@
 * Correctly handle permissions modal display over edit pane. Fixes UIU-1857.
 * Adding of `refund` fee/fine single action. Refs UIU-1850.
 * Refactor actions for single list item. Refs UIU-1797.
+* Hide the Overdue loans report option when user doesn't have view loans permissions. Refs UIU-1858.
 
 ## [4.0.0](https://github.com/folio-org/ui-users/tree/v4.0.0) (2020-06-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v3.0.0...v4.0.0)
