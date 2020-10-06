@@ -125,8 +125,7 @@ describe('Permission set form', () => {
         {
           permissionName: 'ui-users.patron_blocks',
           displayName: 'Users: Can create, edit and remove patron blocks',
-        }
-      );
+        });
       this.visit('/settings/users/perms?layer=add');
       await PermissionSetForm.whenLoaded();
     });
