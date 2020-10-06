@@ -350,10 +350,7 @@ class LoanDetails extends React.Component {
     const isClaimedReturnedItem = itemStatus === itemStatuses.CLAIMED_RETURNED;
     const isDeclaredLostItem = itemStatus === itemStatuses.DECLARED_LOST;
     const isAgedToLostItem = itemStatus === itemStatuses.AGED_TO_LOST;
-<<<<<<< HEAD
-=======
     const isLostAndPaid = itemStatus === itemStatuses.LOST_AND_PAID;
->>>>>>> origin/master
     let lostDate;
     const declaredLostActions = loanActionsWithUser.filter(currentAction => get(currentAction, ['action'], '') === loanActions.DECLARED_LOST);
     const agedTolostLostActions = loanActionsWithUser.filter(currentAction => get(currentAction, ['action'], '') === loanActions.AGED_TO_LOST);
