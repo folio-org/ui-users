@@ -29,7 +29,7 @@ class FeeFineInfo extends React.Component {
 
   onChangeAmount(e) {
     this.amount = parseFloat(e.target.value || 0).toFixed(2);
-    this.props.onChangeFeeFine(this.amount || 0);
+    this.props.onChangeFeeFine(this.amount);
   }
 
   onBlurAmount = () => {

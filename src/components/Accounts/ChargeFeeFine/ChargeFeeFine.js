@@ -304,7 +304,7 @@ class ChargeFeeFine extends React.Component {
   }
 
   onConfirm = () => {
-    const { values, pay, notify } = this.state;
+    const { values, pay } = this.state;
     const {
       intl: { formatMessage },
       okapi: {
@@ -342,7 +342,7 @@ class ChargeFeeFine extends React.Component {
     if (pay) {
       const payBody = {
         amount: values.amount,
-        notifyPatron: notify,
+        notifyPatron: values.notify,
         servicePointId,
         userName: getFullName(user),
         paymentMethod: values.method,
@@ -466,7 +466,10 @@ class ChargeFeeFine extends React.Component {
     const selectedFeeFine = feefines.find(f => f.id === feeFineTypeId);
     const selectedOwner = owners.find(o => o.id === initialOwnerId);
     const initialChargeValues = {
+      ownerId: initialOwnerId,
       notify: !!(selectedFeeFine?.chargeNoticeId || selectedOwner?.defaultChargeNoticeId),
+      feeFineId: '',
+      amount: ''
     };
 
     const initialActionValues = {

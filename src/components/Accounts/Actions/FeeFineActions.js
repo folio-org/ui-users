@@ -237,6 +237,7 @@ class Actions extends React.Component {
     this.onCloseComment = this.onCloseComment.bind(this);
     this.onClickComment = this.onClickComment.bind(this);
     this.callout = null;
+    this.paymentStatus = '';
 
     this.actionToEndpointMapping = {
       'payment': 'pay',
@@ -257,8 +258,9 @@ class Actions extends React.Component {
     this.props.mutator.user.update({ id: this.props.user.id });
   }
 
-  showCalloutMessage({ amount, paymentStatus }) {
+  showCalloutMessage({ amount }) {
     const { user } = this.props;
+    const paymentStatus = this.paymentStatus;
     const formattedAmount = parseFloat(amount).toFixed(2);
     const fullName = getFullName(user);
 
@@ -268,7 +270,7 @@ class Actions extends React.Component {
         values={{
           count: 1,
           amount: formattedAmount,
-          action: (paymentStatus.name || '').toLowerCase(),
+          action: paymentStatus.toLowerCase(),
           user: fullName
         }}
       />
@@ -355,8 +357,10 @@ class Actions extends React.Component {
     const {
       mutator,
       accounts,
+      intl: { formatMessage },
     } = this.props;
     const account = accounts[0] || {};
+    this.paymentStatus = formatMessage({ id: 'ui-users.accounts.cancelError' });
     delete account.rowIndex;
     mutator.activeRecord.update({ id: account.id });
     const payload = this.buildActionBody(values);
@@ -625,6 +629,9 @@ class Actions extends React.Component {
       paymentStatus = `${((amount < total)
         ? formatMessage({ id: 'ui-users.accounts.status.partially' })
         : formatMessage({ id: 'ui-users.accounts.status.fully' }))} ${paymentStatus}`;
+
+      this.paymentStatus = paymentStatus;
+
       return (
         <SafeHTMLMessage
           id="ui-users.accounts.confirmation.message"
@@ -639,6 +646,9 @@ class Actions extends React.Component {
       paymentStatus = `${((amount < total)
         ? formatMessage({ id: 'ui-users.accounts.status.partially' })
         : formatMessage({ id: 'ui-users.accounts.status.fully' }))} ${paymentStatus}`;
+
+      this.paymentStatus = paymentStatus;
+
       return (
         <SafeHTMLMessage
           id="ui-users.accounts.confirmation.message"

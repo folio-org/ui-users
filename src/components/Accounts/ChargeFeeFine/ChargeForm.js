@@ -102,9 +102,9 @@ class ChargeForm extends React.Component {
       feefines,
       form: { change },
     } = this.props;
-    const feeFineId = e.target.value;
 
-    if (feeFineId) {
+    if (e.target.value) {
+      const feeFineId = e.target.value;
       this.props.onChangeFeeFine(e);
       const feefine = feefines.find(f => f.id === feeFineId) || {};
       change('feeFineId', feefine.id);
@@ -141,6 +141,7 @@ class ChargeForm extends React.Component {
       selectedLoan: selectedLoanProp,
       onSubmit,
       handleSubmit,
+      initialValues,
       form,
       form : {
         getState,
@@ -246,6 +247,7 @@ class ChargeForm extends React.Component {
             <FeeFineInfo
               form={form}
               stripes={stripes}
+              initialValues={initialValues}
               ownerOptions={ownerOptions}
               isPending={isPending}
               onChangeOwner={this.onChangeOwner}
