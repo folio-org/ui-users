@@ -113,7 +113,7 @@ describe('Permissions modal', () => {
 });
 
 describe('Permission set form', () => {
-  const permissionsAmount = 10;
+  let permissionsAmount = 10;
   let permissions;
 
   setupApplication({ scenarios: ['comments'] });
