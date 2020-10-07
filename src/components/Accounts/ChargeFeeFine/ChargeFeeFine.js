@@ -63,21 +63,23 @@ class ChargeFeeFine extends React.Component {
     super(props);
     this.state = {
       ownerId: '0',
+      feeFineTypeId: null,
       lookup: false,
       pay: false,
       showConfirmDialog: false,
       notify: null,
       paymentNotify: null,
     };
-    this.onClickCharge = this.onClickCharge.bind(this);
+    this.chargeAction = this.chargeAction.bind(this);
+    this.payAction = this.payAction.bind(this);
     this.onClickSelectItem = this.onClickSelectItem.bind(this);
     this.onChangeOwner = this.onChangeOwner.bind(this);
+    this.onChangeFeeFine = this.onChangeFeeFine.bind(this);
     this.onFindShared = this.onFindShared.bind(this);
     this.item = {};
     this.onCloseModal = this.onCloseModal.bind(this);
     this.onChangeItem = this.onChangeItem.bind(this);
     this.onClosePayModal = this.onClosePayModal.bind(this);
-    this.onClickPay = this.onClickPay.bind(this);
     this.onFormAccountData = this.onFormAccountData.bind(this);
     this.type = {};
     this.callout = null;
@@ -152,7 +154,7 @@ class ChargeFeeFine extends React.Component {
     };
   }
 
-  onClickCharge(type) {
+  chargeAction(type) {
     const {
       typeAction,
       commentInfo,
@@ -191,15 +193,12 @@ class ChargeFeeFine extends React.Component {
     });
   }
 
-  onClickPay(type) {
+  payAction(type) {
     this.type = type;
     this.type.remaining = type.amount;
     this.setState({
       pay: true,
     });
-    const { typeAction } = this.onFormAccountData(type);
-
-    this.props.mutator.accounts.POST(typeAction);
 
     return new Promise((resolve, reject) => {
       this.payResolve = resolve;
@@ -239,6 +238,12 @@ class ChargeFeeFine extends React.Component {
     mutator.activeRecord.update({ ownerId });
     this.setState({
       ownerId,
+    });
+  }
+
+  onChangeFeeFine(e) {
+    this.setState({
+      feeFineTypeId: e.target.value
     });
   }
 
@@ -299,7 +304,7 @@ class ChargeFeeFine extends React.Component {
   }
 
   onConfirm = () => {
-    const { values, pay, notify } = this.state;
+    const { values, pay } = this.state;
     const {
       intl: { formatMessage },
       okapi: {
@@ -337,7 +342,7 @@ class ChargeFeeFine extends React.Component {
     if (pay) {
       const payBody = {
         amount: values.amount,
-        notifyPatron: notify,
+        notifyPatron: values.notify,
         servicePointId,
         userName: getFullName(user),
         paymentMethod: values.method,
@@ -385,11 +390,12 @@ class ChargeFeeFine extends React.Component {
     if (data.pay) {
       delete data.pay;
       this.type.remaining = data.amount;
-      this.onClickPay(data)
+      this.chargeAction(data)
+        .then(() => this.payAction(data))
         .then(() => history.goBack());
     } else {
       delete data.pay;
-      this.onClickCharge(data)
+      this.chargeAction(data)
         .then(() => history.goBack());
     }
   }
@@ -406,7 +412,10 @@ class ChargeFeeFine extends React.Component {
         params: { loanid },
       },
     } = this.props;
-    const { ownerId } = this.state;
+    const {
+      ownerId,
+      feeFineTypeId,
+    } = this.state;
     this.item = _.get(resources, ['items', 'records', [0]], {});
     const allfeefines = _.get(resources, ['allfeefines', 'records'], []);
     const owners = _.get(resources, ['owners', 'records'], []);
@@ -425,14 +434,12 @@ class ChargeFeeFine extends React.Component {
     const barcode = _.get(resources, 'activeRecord.barcode');
     const defaultServicePointId = _.get(resources, ['curUserServicePoint', 'records', 0, 'defaultServicePointId'], '-');
     const servicePointsIds = _.get(resources, ['curUserServicePoint', 'records', 0, 'servicePointsIds'], []);
-
     let selected = parseFloat(0);
     accounts.forEach(a => {
       selected += parseFloat(a.remaining);
     });
     parseFloat(selected).toFixed(2);
     let item;
-
 
     if (this.item && (loanid || barcode)) {
       item = {
@@ -454,18 +461,27 @@ class ChargeFeeFine extends React.Component {
 
     const items = _.get(resources, ['items', 'records'], []);
     const servicePointOwnerId = loadServicePoints({ owners: (shared ? owners : list), defaultServicePointId, servicePointsIds });
-    const initialValues = {
+    const initialOwnerId = ownerId !== '0' ? ownerId : servicePointOwnerId;
+    const selectedFeeFine = feefines.find(f => f.id === feeFineTypeId);
+    const selectedOwner = owners.find(o => o.id === initialOwnerId);
+    const initialChargeValues = {
+      ownerId: initialOwnerId,
+      notify: !!(selectedFeeFine?.chargeNoticeId || selectedOwner?.defaultChargeNoticeId),
+      feeFineId: '',
+      amount: ''
+    };
+
+    const initialActionValues = {
       amount: this.type.amount,
-      notify: !!(feefines?.[0]?.actionNoticeId || feefines?.[0]?.chargeNoticeId),
-      ownerId: ownerId !== '0' ? ownerId : servicePointOwnerId
+      notify: !!(selectedFeeFine?.actionNoticeId || selectedOwner?.defaultActionNoticeId),
+      ownerId: initialOwnerId
     };
 
     return (
       <div>
         <ChargeForm
           form="feeFineChargeForm"
-          onClickPay={this.onClickPay}
-          initialValues={initialValues}
+          initialValues={initialChargeValues}
           defaultServicePointId={defaultServicePointId}
           servicePointsIds={servicePointsIds}
           onSubmit={this.onSubmitCharge}
@@ -478,6 +494,7 @@ class ChargeFeeFine extends React.Component {
           item={item}
           onFindShared={this.onFindShared}
           onChangeOwner={this.onChangeOwner}
+          onChangeFeeFine={this.onChangeFeeFine}
           onClickSelectItem={this.onClickSelectItem}
           stripes={stripes}
           location={location}
@@ -496,7 +513,7 @@ class ChargeFeeFine extends React.Component {
           action="payment"
           form="payment-modals"
           label="nameMethod"
-          initialValues={initialValues}
+          initialValues={initialActionValues}
           open={this.state.pay}
           commentRequired={settings.paid}
           onClose={this.onClosePayModal}
@@ -506,7 +523,6 @@ class ChargeFeeFine extends React.Component {
           stripes={stripes}
           onSubmit={(values) => { this.showConfirmDialog(values); }}
           owners={owners}
-          feefines={feefines}
           okapi={this.props.okapi}
           checkAmount="check-pay"
         />
