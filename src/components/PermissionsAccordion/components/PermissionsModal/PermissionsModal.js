@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   get,
+  mapKeys,
   pickBy,
   remove,
 } from 'lodash';
@@ -171,13 +172,13 @@ class PermissionsModal extends React.Component {
     // permissionName value to a matched translation string key, which is not quite the same:
     // permissionName: ui-users.settings.departments.all
     // translation key: ui-users.permission.settings.departments.all
-    // This transforms the matched permission translations into an array of permissionNames.
+    // This transforms the matched permission translations into a dictionary of permissionNames/translations.
     // BUT -- this assumes that all permission translation keys are identifiable by the inclusion of
     // the string '.permission.', which seems rather optimistic.
-    const matchedPermissionKeys = Object.keys(matchedPermTranslations).map(k => k.replace('permission.', ''));
+    const matchedPermissionKeys = mapKeys(matchedPermTranslations, (v, k) => k.replace('permission.', ''));
 
     // Return the subset of all permissions that appears in the matched translations
-    return permissions.filter(p => matchedPermissionKeys.includes(p.permissionName));
+    return permissions.filter(p => matchedPermissionKeys[p.permissionName]);
   }
 
   toggleFilterPane = () => {
