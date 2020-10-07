@@ -286,7 +286,7 @@ class ChargeForm extends React.Component {
               </div>
             }
             <br />
-            {(notify && showNotify) &&
+            {notify && showNotify &&
               <div>
                 <Row>
                   <Col xs>

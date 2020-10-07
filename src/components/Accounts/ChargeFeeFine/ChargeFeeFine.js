@@ -441,7 +441,6 @@ class ChargeFeeFine extends React.Component {
     parseFloat(selected).toFixed(2);
     let item;
 
-
     if (this.item && (loanid || barcode)) {
       item = {
         id: this.item.id || '',

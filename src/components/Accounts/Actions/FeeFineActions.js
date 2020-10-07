@@ -403,6 +403,7 @@ class Actions extends React.Component {
     body.amount = values.amount;
     body.paymentMethod = values.method;
     body.notifyPatron = values.notify;
+    body.transactionInfo = values.transaction || '-';
     body.comments = this.assembleTagInfo(values);
     body.servicePointId = servicePointId;
     body.userName = `${lastName}, ${firstName}`;
@@ -698,12 +699,14 @@ class Actions extends React.Component {
           ? 'ui-users.accounts.actions.transferFeeFine'
           : 'ui-users.accounts.actions.refundFeeFine';
 
-    const ownerId = loadServicePoints({ owners, defaultServicePointId, servicePointsIds });
+    const servicePointOwnerId = loadServicePoints({ owners, defaultServicePointId, servicePointsIds });
     const currentFeeFineType = feefines.find(({ feeFineType }) => feeFineType === account?.feeFineType);
+    const currentOwnerId = servicePointOwnerId || currentFeeFineType?.ownerId || account?.ownerId;
+    const currentOwner = owners.find(o => o.id === currentOwnerId) || {};
     const initialValues = {
-      ownerId,
+      ownerId: currentOwnerId,
       amount: calculateSelectedAmount(this.props.accounts),
-      notify: !!(currentFeeFineType?.actionNoticeId || currentFeeFineType?.chargeNoticeId),
+      notify: !!(currentFeeFineType?.actionNoticeId || currentOwner?.defaultActionNoticeId),
     };
 
     const modals = [

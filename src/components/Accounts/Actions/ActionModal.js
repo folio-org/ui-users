@@ -263,13 +263,13 @@ class ActionModal extends React.Component {
       accounts,
       action,
       balance,
+      initialValues,
       totalPaidAmount,
       owedAmount,
       commentRequired,
       form: { getState },
       intl: { formatMessage },
       data,
-      initialValues,
       handleSubmit,
       label,
       open,
@@ -288,12 +288,13 @@ class ActionModal extends React.Component {
       }
     } = getState();
 
-    const showNotify = initialValues.notify;
     const selected = calculateSelectedAmount(accounts, this.isRefundAction(action));
     const ownerOptions = owners.filter(o => o.owner !== 'Shared').map(o => ({ value: o.id, label: o.owner }));
 
     let options = (this.isPaymentAction(action)) ? data.filter(d => (d.ownerId === (accounts.length > 1 ? ownerId : (accounts[0] || {}).ownerId))) : data;
     options = _.uniqBy(options.map(o => ({ id: o.id, label: o[label] })), 'label');
+
+    const showNotify = initialValues.notify;
 
     return (
       <Modal
@@ -452,7 +453,7 @@ class ActionModal extends React.Component {
             </div>
           }
           <br />
-          {(notify && showNotify) &&
+          {notify && showNotify &&
             <div>
               <Row>
                 <Col xs>
