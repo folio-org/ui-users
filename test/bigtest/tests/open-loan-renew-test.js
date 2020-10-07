@@ -78,6 +78,28 @@ describe('Renew loan', () => {
             expect(OpenLoansInteractor.patronBlockModal.modalContent(0).text).to.be.equal(blockReason);
           });
         });
+
+        describe("overriding when renew won't change due date", () => {
+          beforeEach(async function() {
+            server.post('/circulation/renew-by-barcode', {
+              'errors' : [{
+                'message' : 'renewal would not change the due date',
+                'parameters' : [{
+                  'key' : 'request id',
+                  'value' : 'b67e73a8-b6b7-46fd-a918-77ce907dd3aa'
+                }]
+              }]
+            }, 422);
+            this.visit(`/users/${userId}/loans/open?query=%20&sort=requests`);
+
+            await OpenLoansInteractor.actionDropdowns(0).click('button');
+          });
+
+          it('allows an override', () => {
+            expect(OpenLoansInteractor.actionDropdownRenewButton.isPresent).to.be.true;
+          });
+        });
+   
       });
 
       describe('loan detail page', () => {
