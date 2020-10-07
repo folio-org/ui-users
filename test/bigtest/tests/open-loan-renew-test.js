@@ -80,8 +80,8 @@ describe('Renew loan', () => {
         });
 
         describe("overriding when renew won't change due date", () => {
-          beforeEach(async function() {
-            server.post('/circulation/renew-by-barcode', {
+          beforeEach(async function () {
+            this.server.post('/circulation/renew-by-barcode', {
               'errors' : [{
                 'message' : 'renewal would not change the due date',
                 'parameters' : [{
@@ -99,7 +99,6 @@ describe('Renew loan', () => {
             expect(OpenLoansInteractor.actionDropdownRenewButton.isPresent).to.be.true;
           });
         });
-   
       });
 
       describe('loan detail page', () => {
