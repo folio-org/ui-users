@@ -403,7 +403,6 @@ class Actions extends React.Component {
     body.amount = values.amount;
     body.paymentMethod = values.method;
     body.notifyPatron = values.notify;
-    body.transactionInfo = values.transaction || '-';
     body.comments = this.assembleTagInfo(values);
     body.servicePointId = servicePointId;
     body.userName = `${lastName}, ${firstName}`;
@@ -420,6 +419,10 @@ class Actions extends React.Component {
     const account = _.head(accounts) || {};
     mutator.activeRecord.update({ id: account.id });
     const payload = this.buildActionBody(values);
+
+    if (action === 'payment') {
+      payload.transactionInfo = values.transaction || '-';
+    }
 
     mutator[this.actionToEndpointMapping[action]].POST(_.omit(payload, ['id']))
       .then(() => this.props.handleEdit(1))
