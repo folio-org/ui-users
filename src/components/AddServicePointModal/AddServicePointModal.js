@@ -12,6 +12,11 @@ import {
   Button,
   ModalFooter,
 } from '@folio/stripes/components';
+import {
+  isEqual,
+  isEmpty,
+  every,
+} from 'lodash';
 
 class AddServicePointModal extends React.Component {
   static propTypes = {
@@ -19,6 +24,7 @@ class AddServicePointModal extends React.Component {
     onClose: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
     servicePoints: PropTypes.arrayOf(PropTypes.object),
+    assignedServicePoints: PropTypes.arrayOf(PropTypes.object),
     intl: PropTypes.object.isRequired,
   }
 
@@ -27,22 +33,33 @@ class AddServicePointModal extends React.Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    if (props.servicePoints.length !== Object.values(state.selection).length) {
+    const assignedServicePointIds = props.assignedServicePoints.map(({ id }) => id);
+    const selectionIds = Object.keys(state.selection).filter(id => state.selection[id]);
+
+    if (!isEqual(assignedServicePointIds, selectionIds)) {
       const selection = {};
 
-      props.servicePoints.forEach((sp) => { selection[sp.id] = false; });
+      props.servicePoints.forEach(({ id }) => {
+        selection[id] = assignedServicePointIds.includes(id);
+      });
 
-      return { selection };
+      return { selection: props.open ? { ...selection, ...state.selection } : selection };
     }
 
     return null;
   }
 
   onSaveAndClose = () => {
-    const servicePoints = this.props.servicePoints.filter(sp => this.state.selection[sp.id]);
+    const {
+      servicePoints,
+      onSave,
+      onClose,
+    } = this.props;
 
-    this.props.onSave(servicePoints);
-    this.props.onClose();
+    const selectedServicePoints = servicePoints.filter(sp => this.state.selection[sp.id]);
+
+    onSave(selectedServicePoints);
+    onClose();
   }
 
   onCancel = () => {
@@ -50,7 +67,7 @@ class AddServicePointModal extends React.Component {
   }
 
   onToggleBulkSelection = () => {
-    const select = Object.values(this.state.selection).includes(false);
+    const select = isEmpty(this.state.selection) || Object.values(this.state.selection).includes(false);
     const selection = {};
 
     this.props.servicePoints.forEach((sp) => { selection[sp.id] = select; });
@@ -92,11 +109,13 @@ class AddServicePointModal extends React.Component {
       onClose,
       intl,
       servicePoints,
-
     } = this.props;
+
+    const { selection } = this.state;
 
     return (
       <Modal
+        id="service-points-modal"
         footer={this.renderModalFooter()}
         open={open}
         onClose={onClose}
@@ -116,8 +135,9 @@ class AddServicePointModal extends React.Component {
           columnMapping={{
             selected: (
               <Checkbox
+                data-test-sp-modal-checkbox="select-all"
                 name="selected-all"
-                checked={Object.values(this.state.selection).includes(false) !== true}
+                checked={!isEmpty(selection) && every(selection, el => el === true)}
                 onChange={this.onToggleBulkSelection}
               />
             ),
@@ -126,12 +146,12 @@ class AddServicePointModal extends React.Component {
           columnWidths={{ selected: 35 }}
           formatter={{
             selected: sp => <Checkbox
+              data-test-sp-modal-checkbox={sp.id}
               name={`selected-${sp.id}`}
-              checked={!!(this.state.selection[sp.id])}
+              checked={selection[sp.id]}
               onChange={() => this.onToggleSelection(sp)}
             />
           }}
-          isSelected={({ item }) => this.state.selection[item.id]}
         />
       </Modal>
     );
