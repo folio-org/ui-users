@@ -58,10 +58,10 @@ export default (server) => {
   });
   server.create('feefineaction', {
     accountId: openAccount.id,
-    amountAction: 500,
+    amountAction: 100,
     balance: 500,
     userId: user.id,
-    typeAction: feeFine.feeFineType,
+    typeAction: openAccount.paymentStatus.name,
   });
   server.create('check-pay', {
     accountId: openAccount.id,
