@@ -10,6 +10,7 @@ export default function setupApplication({
   modules,
   translations,
   currentUser,
+  interfaces = {},
 } = {}) {
   const initialState = {
     discovery: {
@@ -32,7 +33,7 @@ export default function setupApplication({
         'feesfines': '15.3',
         'users': '15.2',
         'loan-policy-storage':'1.0',
-        'service-points-users': '1.0',
+        ...interfaces,
       },
     },
   };

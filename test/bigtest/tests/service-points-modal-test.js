@@ -9,7 +9,11 @@ import setupApplication from '../helpers/setup-application';
 import UserFormPage from '../interactors/user-form-page';
 
 describe('Service points modal', () => {
-  setupApplication();
+  setupApplication({
+    interfaces: {
+      'service-points-users': '1.0',
+    }
+  });
 
   describe('visit user edit page', () => {
     beforeEach(async function () {
