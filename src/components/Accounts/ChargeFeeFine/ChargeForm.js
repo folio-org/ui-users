@@ -281,9 +281,8 @@ class ChargeForm extends React.Component {
                       component={Checkbox}
                       type="checkbox"
                       inline
+                      label={<FormattedMessage id="ui-users.accounts.notifyPatron" />}
                     />
-                    {' '}
-                    <FormattedMessage id="ui-users.accounts.notifyPatron" />
                   </Col>
                 </Row>
               </div>
