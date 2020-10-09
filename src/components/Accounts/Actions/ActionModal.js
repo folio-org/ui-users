@@ -39,12 +39,12 @@ class ActionModal extends React.Component {
     reset: PropTypes.func,
     commentRequired: PropTypes.bool,
     owners: PropTypes.arrayOf(PropTypes.object),
-    feefines: PropTypes.arrayOf(PropTypes.object),
     label: PropTypes.string,
     action: PropTypes.string,
     intl: PropTypes.object.isRequired,
     checkAmount: PropTypes.string,
     okapi: PropTypes.object,
+    initialValues: PropTypes.object,
   };
 
   static defaultProps = {
@@ -263,13 +263,13 @@ class ActionModal extends React.Component {
       accounts,
       action,
       balance,
+      initialValues,
       totalPaidAmount,
       owedAmount,
       commentRequired,
       form: { getState },
       intl: { formatMessage },
       data,
-      feefines,
       handleSubmit,
       label,
       open,
@@ -288,20 +288,13 @@ class ActionModal extends React.Component {
       }
     } = getState();
 
-    let showNotify = false;
-    accounts.forEach(a => {
-      const feefine = feefines.find(f => f.id === a.feeFineId) || {};
-      const owner = owners.find(o => o.id === a.ownerId) || {};
-      if (feefine.actionNoticeId || owner.defaultActionNoticeId) {
-        showNotify = true;
-      }
-    });
-
     const selected = calculateSelectedAmount(accounts, this.isRefundAction(action));
     const ownerOptions = owners.filter(o => o.owner !== 'Shared').map(o => ({ value: o.id, label: o.owner }));
 
     let options = (this.isPaymentAction(action)) ? data.filter(d => (d.ownerId === (accounts.length > 1 ? ownerId : (accounts[0] || {}).ownerId))) : data;
     options = _.uniqBy(options.map(o => ({ id: o.id, label: o[label] })), 'label');
+
+    const showNotify = initialValues.notify;
 
     return (
       <Modal
@@ -459,7 +452,7 @@ class ActionModal extends React.Component {
             </div>
           }
           <br />
-          {(notify && showNotify) &&
+          {notify && showNotify &&
             <div>
               <Row>
                 <Col xs>

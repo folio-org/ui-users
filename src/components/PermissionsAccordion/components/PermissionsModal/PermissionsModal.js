@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   get,
+  mapKeys,
+  pickBy,
   remove,
 } from 'lodash';
 import { FormattedMessage } from 'react-intl';
@@ -52,6 +54,11 @@ class PermissionsModal extends React.Component {
   });
 
   static propTypes = {
+    stripes: PropTypes.shape({
+      okapi: PropTypes.shape({
+        translations: PropTypes.object,
+      }).isRequired,
+    }).isRequired,
     mutator: PropTypes.shape({
       availablePermissions: PropTypes.shape({
         GET: PropTypes.func.isRequired,
@@ -128,17 +135,51 @@ class PermissionsModal extends React.Component {
     this.setState({ permissions });
   }
 
+  // Search for permissions
   onSubmitSearch = (searchText) => {
-    const permissions = get(this.props, 'resources.availablePermissions.records', []);
+    const permissions = this.props.resources?.availablePermissions?.records || [];
+    // Need a bit of extra work to search for terms that might appear only in a translated label
+    const translationResults = this.getMatchedTranslations(searchText, permissions);
 
+    // Search in permission display names or permission names
     const filteredPermissions = permissions.filter(({ displayName, permissionName }) => {
       const permissionText = displayName || permissionName;
-
       return permissionText.toLowerCase().includes(searchText.toLowerCase());
     });
 
-    this.setState({ permissions: filteredPermissions });
+    // Combine the search results from translated labels with those of permission/display names
+    const mergedPermissions = [...new Set([...filteredPermissions, ...translationResults])];
+
+    this.setState({ permissions: mergedPermissions });
   };
+
+  // Given a search query, which can be part of a permission name or permission display name,
+  // and a set of permissions, return a subset of permissions for which the query
+  // appears in the *translated* display name (if found in Okapi translations).
+  getMatchedTranslations = (query, permissions) => {
+    const translations = this.props.stripes.okapi.translations;
+
+    // Translations are received from Stripes as an object with properties of the form
+    // <translation key>: <translated label/display name>. To avoid cluttering search
+    // results with things that aren't permissions, we check for the string '.permission.',
+    // in the translation key, e.g. ui-users.permission.loans.all, before looking for the
+    // search query.
+    const matchedPermTranslations = pickBy(translations, (label, key) => {
+      return /\.permission\./.test(key) && label.toLowerCase().match(query.toLowerCase());
+    });
+
+    // Matched permissions may not have a displayName value. We have to compare a permission's
+    // permissionName value to a matched translation string key, which is not quite the same:
+    // permissionName: ui-users.settings.departments.all
+    // translation key: ui-users.permission.settings.departments.all
+    // This transforms the matched permission translations into a dictionary of permissionNames/translations.
+    // BUT -- this assumes that all permission translation keys are identifiable by the inclusion of
+    // the string '.permission.', which seems rather optimistic.
+    const matchedPermissionKeys = mapKeys(matchedPermTranslations, (v, k) => k.replace('permission.', ''));
+
+    // Return the subset of all permissions that appears in the matched translations
+    return permissions.filter(p => matchedPermissionKeys[p.permissionName]);
+  }
 
   toggleFilterPane = () => {
     this.setState(curState => ({
