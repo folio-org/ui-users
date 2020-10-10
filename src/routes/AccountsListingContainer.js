@@ -141,9 +141,6 @@ class AccountsListingContainer extends React.Component {
       user: PropTypes.shape({
         update: PropTypes.func.isRequired,
       }),
-      feefineshistory: PropTypes.shape({
-        GET: PropTypes.func.isRequired,
-      }),
       activeRecord: PropTypes.object,
     }),
     parentMutator: PropTypes.shape({

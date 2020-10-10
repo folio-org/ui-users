@@ -223,13 +223,6 @@ class Actions extends React.Component {
     this.onClickComment = this.onClickComment.bind(this);
     this.callout = null;
     this.paymentStatus = '';
-
-    this.actionToEndpointMapping = {
-      'payment': 'pay',
-      'waive': 'waive',
-      'transfer': 'transfer',
-      'refund': 'refund'
-    };
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -243,17 +236,7 @@ class Actions extends React.Component {
     this.props.mutator.user.update({ id: this.props.user.id });
   }
 
-  showBulkCalloutMessage(actions) {
-    _.forEach(actions, ({ accountId, typeAction }) => {
-      const { amount } = this.state.accounts.find(({ id }) => id === accountId);
-      this.showCalloutMessage({
-        amount,
-        paymentStatus: { name: typeAction },
-      });
-    });
-  }
-
-  showCalloutMessage({ amount, paymentStatus }) {
+  showCalloutMessage({ amount }) {
     const { user } = this.props;
     const paymentStatus = this.paymentStatus;
     const formattedAmount = parseFloat(amount).toFixed(2);
@@ -420,24 +403,14 @@ class Actions extends React.Component {
       payload.transactionInfo = values.transaction || '-';
     }
 
-    mutator[this.actionToEndpointMapping[action]].POST(_.omit(payload, ['id']))
+    mutator[action].POST(_.omit(payload, ['id']))
       .then(() => this.props.handleEdit(1))
       .then(() => this.showCalloutMessage(account))
       .then(() => this.onCloseActionModal());
   }
 
   onSubmitMany = (values, items, action) => {
-    const {
-      // accounts,
-      mutator,
-    } = this.props;
-    // debugger;
-
-    /* let amount = parseFloat(values.amount);
-    let offset = 0;
-    const promises = [];
-    const selected = _.orderBy(items, ['remaining'], ['asc']) || [];
-    let partialAmounts = this.partialAmount(amount, selected.length); */
+    const { mutator } = this.props;
 
     const accountIds = items.reduce((ids, account) => {
       ids.push(account.id);
@@ -450,36 +423,9 @@ class Actions extends React.Component {
     };
 
     mutator[action].POST(_.omit(payload, ['id']))
-      .then(response => this.showBulkCalloutMessage(response.feefineactions))
       .then(() => this.props.handleEdit(1))
+      .then(() => _.forEach(items, item => this.showCalloutMessage(item)))
       .then(() => this.onCloseActionModal());
-
-    // debugger;
-
-    /* selected.forEach((item, index) => {
-      const promise = new Promise((resolve, reject) => {
-        if (partialAmounts[index - offset] >= item.remaining) {
-          offset++;
-          partialAmounts = this.partialAmount(amount - item.remaining, selected.length - offset);
-          amount -= item.remaining;
-          this.action(item, item.remaining, values, action).then(() => {
-            this.showCalloutMessage(item);
-            resolve();
-          }).catch(reject);
-        } else {
-          this.action(item, partialAmounts[index - offset], values, action).then(() => {
-            this.showCalloutMessage(item);
-            resolve();
-          }).catch(reject);
-        }
-      });
-      promises.push(promise);
-    });
-
-    Promise.all(promises).then(() => {
-      this.props.handleEdit(1);
-      this.onCloseActionModal();
-    }); */
   }
 
   action = (type, amount, values, action) => {
@@ -525,7 +471,7 @@ class Actions extends React.Component {
     const singeRefund = actions.refundModal || (actions.refundMany && singleSelectedAccount);
 
     if (singlePay) {
-      this.onSubmit(values, 'payment');
+      this.onSubmit(values, 'pay');
     } else if (actions.regular) {
       this.onSubmitMany(values, selectedAccounts, 'bulkPay');
     } else if (singleWaive) {
@@ -549,22 +495,6 @@ class Actions extends React.Component {
   onChangeAccounts = (accounts) => {
     this.props.onChangeSelectedAccounts(accounts);
     this.setState({ accounts: accounts || [] });
-  }
-
-  partialAmount = (total, n) => {
-    const amount = total / n;
-    const amounts = Array(n);
-    const stringAmount = amount.toString();
-    const decimal = stringAmount.indexOf('.');
-    if (decimal === -1) { return amounts.fill(amount); }
-    const rounding = stringAmount.substring(0, decimal + 3);
-    amounts.fill(parseFloat(rounding));
-    let partialAmount = stringAmount.substring(decimal + 3);
-    partialAmount = '0.' + '0'.repeat(stringAmount.length - partialAmount.length - decimal - 1) + partialAmount;
-    partialAmount = parseFloat(partialAmount);
-    partialAmount = parseFloat(partialAmount * n).toFixed(2);
-    amounts[0] += parseFloat(partialAmount);
-    return amounts;
   }
 
   showConfirmDialog = (values) => {
@@ -814,6 +744,7 @@ class Actions extends React.Component {
             am.push(
               <ActionModal
                 {...m}
+                key={m.action}
                 intl={this.props.intl}
                 commentRequired={settings[m.comment]}
                 form={m.form ? m.form : `${m.action}-modal`}
