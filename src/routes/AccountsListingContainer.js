@@ -104,6 +104,9 @@ class AccountsListingContainer extends React.Component {
         },
         staticFallback: { params: {} },
       },
+      shouldRefresh: (resource, action, refresh) => {
+        return refresh || action.meta.path === 'accounts-bulk';
+      },
     },
     activeRecord: { records: 10000 },
     user: {},
@@ -137,6 +140,9 @@ class AccountsListingContainer extends React.Component {
     mutator: PropTypes.shape({
       user: PropTypes.shape({
         update: PropTypes.func.isRequired,
+      }),
+      feefineshistory: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
       }),
       activeRecord: PropTypes.object,
     }),

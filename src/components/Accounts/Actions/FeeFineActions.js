@@ -90,44 +90,60 @@ class Actions extends React.Component {
       type: 'okapi',
       path: 'accounts/%{activeRecord.id}/pay',
       fetch: false,
-      accumulate: 'true',
       clientGeneratePk: false,
     },
     waive: {
       type: 'okapi',
       path: 'accounts/%{activeRecord.id}/waive',
       fetch: false,
-      accumulate: 'true',
       clientGeneratePk: false,
     },
     transfer: {
       type: 'okapi',
       path: 'accounts/%{activeRecord.id}/transfer',
       fetch: false,
-      accumulate: 'true',
       clientGeneratePk: false,
     },
     cancel: {
       type: 'okapi',
       path: 'accounts/%{activeRecord.id}/cancel',
       fetch: false,
-      accumulate: 'true',
       clientGeneratePk: false,
     },
     refund: {
       type: 'okapi',
       path: 'accounts/%{activeRecord.id}/refund',
       fetch: false,
-      accumulate: 'true',
+      clientGeneratePk: false,
+    },
+    bulkPay: {
+      type: 'okapi',
+      path: 'accounts-bulk/pay',
+      fetch: false,
+      clientGeneratePk: false,
+    },
+    bulkWaive: {
+      type: 'okapi',
+      path: 'accounts-bulk/waive',
+      fetch: false,
+      clientGeneratePk: false,
+    },
+    bulkTransfer: {
+      type: 'okapi',
+      path: 'accounts-bulk/transfer',
+      fetch: false,
+      clientGeneratePk: false,
+    },
+    bulkRefund: {
+      type: 'okapi',
+      path: 'accounts-bulk/refund',
+      fetch: false,
       clientGeneratePk: false,
     },
   });
 
   static propTypes = {
     resources: PropTypes.shape({
-      accounts: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
-      }),
       refunds: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
@@ -154,6 +170,18 @@ class Actions extends React.Component {
         POST: PropTypes.func.isRequired,
       }),
       refund: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      bulkPay: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      bulkWaive: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      bulkTransfer: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      bulkRefund: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }),
     }),
@@ -215,7 +243,17 @@ class Actions extends React.Component {
     this.props.mutator.user.update({ id: this.props.user.id });
   }
 
-  showCalloutMessage({ amount }) {
+  showBulkCalloutMessage(actions) {
+    _.forEach(actions, ({ accountId, typeAction }) => {
+      const { amount } = this.state.accounts.find(({ id }) => id === accountId);
+      this.showCalloutMessage({
+        amount,
+        paymentStatus: { name: typeAction },
+      });
+    });
+  }
+
+  showCalloutMessage({ amount, paymentStatus }) {
     const { user } = this.props;
     const paymentStatus = this.paymentStatus;
     const formattedAmount = parseFloat(amount).toFixed(2);
@@ -348,8 +386,8 @@ class Actions extends React.Component {
     const {
       okapi: {
         currentUser: {
-          firstName,
-          lastName,
+          firstName = '',
+          lastName = '',
           curServicePoint: { id: servicePointId }
         },
       }
@@ -363,6 +401,7 @@ class Actions extends React.Component {
     body.comments = this.assembleTagInfo(values);
     body.servicePointId = servicePointId;
     body.userName = `${lastName}, ${firstName}`;
+    body.transactionInfo = values.transaction || '-';
 
     return body;
   };
@@ -388,13 +427,36 @@ class Actions extends React.Component {
   }
 
   onSubmitMany = (values, items, action) => {
-    let amount = parseFloat(values.amount);
+    const {
+      // accounts,
+      mutator,
+    } = this.props;
+    // debugger;
+
+    /* let amount = parseFloat(values.amount);
     let offset = 0;
     const promises = [];
     const selected = _.orderBy(items, ['remaining'], ['asc']) || [];
-    let partialAmounts = this.partialAmount(amount, selected.length);
+    let partialAmounts = this.partialAmount(amount, selected.length); */
 
-    selected.forEach((item, index) => {
+    const accountIds = items.reduce((ids, account) => {
+      ids.push(account.id);
+      return ids;
+    }, []);
+
+    const payload = {
+      accountIds,
+      ...this.buildActionBody(values)
+    };
+
+    mutator[action].POST(_.omit(payload, ['id']))
+      .then(response => this.showBulkCalloutMessage(response.feefineactions))
+      .then(() => this.props.handleEdit(1))
+      .then(() => this.onCloseActionModal());
+
+    // debugger;
+
+    /* selected.forEach((item, index) => {
       const promise = new Promise((resolve, reject) => {
         if (partialAmounts[index - offset] >= item.remaining) {
           offset++;
@@ -417,7 +479,7 @@ class Actions extends React.Component {
     Promise.all(promises).then(() => {
       this.props.handleEdit(1);
       this.onCloseActionModal();
-    });
+    }); */
   }
 
   action = (type, amount, values, action) => {
@@ -465,19 +527,19 @@ class Actions extends React.Component {
     if (singlePay) {
       this.onSubmit(values, 'payment');
     } else if (actions.regular) {
-      this.onSubmitMany(values, selectedAccounts, 'payment');
+      this.onSubmitMany(values, selectedAccounts, 'bulkPay');
     } else if (singleWaive) {
       this.onSubmit(values, 'waive');
     } else if (actions.waiveMany) {
-      this.onSubmitMany(values, selectedAccounts, 'waive');
+      this.onSubmitMany(values, selectedAccounts, 'bulkWaive');
     } else if (singleTransfer) {
       this.onSubmit(values, 'transfer');
     } else if (actions.transferMany) {
-      this.onSubmitMany(values, selectedAccounts, 'transfer');
+      this.onSubmitMany(values, selectedAccounts, 'bulkTransfer');
     } else if (singeRefund) {
       this.onSubmit(values, 'refund');
     } else if (actions.refundMany) {
-      this.onSubmitMany(values, selectedAccounts, 'refund');
+      this.onSubmitMany(values, selectedAccounts, 'bulkRefund');
     }
     this.setState({ submitting: true });
 
