@@ -784,4 +784,22 @@ export default function config() {
 
     return { accountId: account.id };
   });
+
+  this.post('/accounts-bulk/check-transfer', ({ accounts }, request) => {
+    return {
+      amounts: [
+        {
+          accountId: 'e74d50c9-0c69-4f80-9e1b-a819719fc0c9',
+          amount: 100
+        },
+        {
+          accountId: '983d43fc-2fa8-4eb7-b3e7-30e60159f237',
+          amount: 100
+        }
+      ],
+      allowed: true,
+      amount: 100,
+      remainingAmount: 100
+    };
+  });
 }
