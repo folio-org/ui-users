@@ -52,7 +52,7 @@ class Actions extends React.Component {
     payments: {
       type: 'okapi',
       records: 'payments',
-      path: 'payments?limit=100',
+      path: `payments?limit=${MAX_RECORDS}`,
     },
     waives: {
       type: 'okapi',
@@ -72,7 +72,7 @@ class Actions extends React.Component {
     feefineTypes: {
       type: 'okapi',
       records: 'feefines',
-      path: 'feefines?query=cql.allRecords=1&limit=100',
+      path: `feefines?query=cql.allRecords=1&limit=${MAX_RECORDS}`,
     },
     transfers: {
       type: 'okapi',
@@ -343,7 +343,7 @@ class Actions extends React.Component {
     mutator.activeRecord.update({ id: account.id });
     const payload = this.buildActionBody(values);
     delete payload.amount;
-    mutator.cancel.POST(_.omit(payload, ['id']))
+    mutator.cancel.POST(payload)
       .then(() => this.props.handleEdit(1))
       .then(() => this.showCalloutMessage(account))
       .then(() => this.onCloseCancellation());
@@ -403,7 +403,7 @@ class Actions extends React.Component {
       payload.transactionInfo = values.transaction || '-';
     }
 
-    mutator[action].POST(_.omit(payload, ['id']))
+    mutator[action].POST(payload, ['id'])
       .then(() => this.props.handleEdit(1))
       .then(() => this.showCalloutMessage(account))
       .then(() => this.onCloseActionModal());
@@ -422,26 +422,10 @@ class Actions extends React.Component {
       ...this.buildActionBody(values)
     };
 
-    mutator[action].POST(_.omit(payload, ['id']))
+    mutator[action].POST(payload, ['id'])
       .then(() => this.props.handleEdit(1))
       .then(() => _.forEach(items, item => this.showCalloutMessage(item)))
       .then(() => this.onCloseActionModal());
-  }
-
-  action = (type, amount, values, action) => {
-    const { intl: { formatMessage } } = this.props;
-    this.props.mutator.activeRecord.update({ id: type.id });
-    let paymentStatus = _.capitalize(formatMessage({ id: `ui-users.accounts.actions.warning.${action}Action` }));
-    if (amount < type.remaining) {
-      paymentStatus = `${paymentStatus} ${formatMessage({ id: 'ui-users.accounts.status.partially' })}`;
-    } else {
-      paymentStatus = `${paymentStatus} ${formatMessage({ id: 'ui-users.accounts.status.fully' })}`;
-      type.status.name = 'Closed';
-    }
-    const balance = type.remaining - parseFloat(amount);
-    const createdAt = this.props.okapi.currentUser.curServicePoint.id;
-    return this.editAccount(type, paymentStatus, type.status.name, balance)
-      .then(() => this.newAction({ paymentMethod: values.method }, type.id, paymentStatus, amount, this.assembleTagInfo(values), balance, values.transaction, createdAt || type.feeFineOwner));
   }
 
   onCloseActionModal() {
