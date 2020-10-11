@@ -789,17 +789,62 @@ export default function config() {
     return {
       amounts: [
         {
-          accountId: 'e74d50c9-0c69-4f80-9e1b-a819719fc0c9',
+          accountId: 'id1',
           amount: 100
         },
         {
-          accountId: '983d43fc-2fa8-4eb7-b3e7-30e60159f237',
+          accountId: 'id2',
           amount: 100
         }
       ],
       allowed: true,
       amount: 100,
       remainingAmount: 100
+    };
+  });
+
+  this.post('/accounts-bulk/transfer', ({ accounts }, request) => {
+    return {
+      accountIds: ['id1', 'id2', 'id3', 'id4'],
+      feefineactions: [
+        {
+          typeAction: 'Transferred partially',
+          amountAction: 10.0,
+          balance: 980.0,
+          paymentMethod: 'account',
+          accountId: 'id1',
+          userId: 'id4',
+          id: 'id5'
+        },
+        {
+          typeAction: 'Transferred partially',
+          amountAction: 10.0,
+          balance: 980.0,
+          paymentMethod: 'account',
+          accountId: 'id2',
+          userId: 'id4',
+          id: 'id6'
+        },
+        {
+          typeAction: 'Transferred partially',
+          amountAction: 10.0,
+          balance: 980.0,
+          paymentMethod: 'account',
+          accountId: 'id3',
+          userId: 'id4',
+          id: 'id7'
+        },
+        {
+          typeAction: 'Transferred partially',
+          amountAction: 10.0,
+          balance: 980.0,
+          paymentMethod: 'account',
+          accountId: 'id4',
+          userId: 'id4',
+          id: 'id8'
+        },
+      ],
+      amount : 40.00
     };
   });
 }
