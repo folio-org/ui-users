@@ -807,6 +807,7 @@ class Actions extends React.Component {
                 onSubmit={(values) => { this.showConfirmDialog(values); }}
                 owners={owners}
                 feefines={feefines}
+                feeFineActions={feeFineActions}
                 okapi={this.props.okapi}
                 totalPaidAmount={parseFloat(this.props.totalPaidAmount).toFixed(2)}
                 owedAmount={parseFloat(this.props.owedAmount).toFixed(2)}

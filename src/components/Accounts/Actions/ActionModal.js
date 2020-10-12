@@ -19,7 +19,7 @@ import {
   Select,
 } from '@folio/stripes/components';
 
-import { calculateSelectedAmount } from '../accountFunctions';
+import { calculateRefundSelectedAmount } from '../accountFunctions';
 
 import css from './PayWaive.css';
 
@@ -30,6 +30,7 @@ class ActionModal extends React.Component {
     handleSubmit: PropTypes.func,
     open: PropTypes.bool,
     accounts: PropTypes.arrayOf(PropTypes.object),
+    feeFineActions: PropTypes.arrayOf(PropTypes.object),
     data: PropTypes.arrayOf(PropTypes.object),
     balance: PropTypes.string,
     totalPaidAmount: PropTypes.string,
@@ -84,14 +85,14 @@ class ActionModal extends React.Component {
   renderModalLabel() {
     const {
       accounts = [],
+      feeFineActions = [],
       action,
       form: { getState },
       intl: { formatMessage },
     } = this.props;
 
     const { values: { amount } } = getState();
-
-    const selected = calculateSelectedAmount(accounts, this.isRefundAction(action));
+    const selected = calculateRefundSelectedAmount(feeFineActions);
     const type = parseFloat(amount) < parseFloat(selected)
       ? formatMessage({ id: `ui-users.accounts.${action}.summary.partially` })
       : formatMessage({ id: `ui-users.accounts.${action}.summary.fully` });
@@ -261,6 +262,7 @@ class ActionModal extends React.Component {
   render() {
     const {
       accounts,
+      feeFineActions,
       action,
       balance,
       initialValues,
@@ -277,7 +279,6 @@ class ActionModal extends React.Component {
       pristine,
       submitting,
     } = this.props;
-
     const { accountRemainingAmount } = this.state;
 
     const {
@@ -288,7 +289,7 @@ class ActionModal extends React.Component {
       }
     } = getState();
 
-    const selected = calculateSelectedAmount(accounts, this.isRefundAction(action));
+    const selected = calculateRefundSelectedAmount(feeFineActions);
     const ownerOptions = owners.filter(o => o.owner !== 'Shared').map(o => ({ value: o.id, label: o.owner }));
 
     let options = (this.isPaymentAction(action)) ? data.filter(d => (d.ownerId === (accounts.length > 1 ? ownerId : (accounts[0] || {}).ownerId))) : data;

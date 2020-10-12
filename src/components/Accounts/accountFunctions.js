@@ -42,17 +42,15 @@ export function handleFilterClear(name) {
   return state;
 }
 
-export function calculateSelectedAmount(accounts, isRefundAction = false) {
-  const selected = accounts.reduce((s, { amount, remaining }) => {
-    return isRefundAction
-      ? s + parseFloat((amount - remaining) * 100)
-      : s + parseFloat(remaining * 100);
+export function calculateSelectedAmount(accounts) {
+  const selected = accounts.reduce((s, { remaining }) => {
+    return s + parseFloat(remaining * 100);
   }, 0);
 
   return parseFloat(selected / 100).toFixed(2);
 }
 
-function getPaidActions(feeFineActions) {
+function getPaidActions(feeFineActions = []) {
   return feeFineActions.filter(({ typeAction }) => paymentStatusesAllowedToRefund.includes(typeAction));
 }
 
