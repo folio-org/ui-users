@@ -751,6 +751,7 @@
   "addAddressError": "Please, add at least one address inside \"Addresses\" section",
 
   "tags": "Tags",
+  "departments": "Departments",
   "filters.status.active": "Active",
   "filters.status.inactive": "Inactive",
 

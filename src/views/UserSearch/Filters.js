@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  injectIntl,
+} from 'react-intl';
 import {
   get,
   sortBy,
@@ -19,9 +22,12 @@ import {
 
 import { statusFilter } from '../../constants';
 
-export default class Filters extends React.Component {
+class Filters extends React.Component {
   static propTypes = {
     activeFilters: PropTypes.object,
+    intl: PropTypes.shape({
+      formatMessage: PropTypes.func.isRequired,
+    }).isRequired,
     resources: PropTypes.object.isRequired,
     onChangeHandlers: PropTypes.object.isRequired,
     resultOffset: PropTypes.shape({
@@ -40,9 +46,9 @@ export default class Filters extends React.Component {
     }));
   };
 
-  getValuesFromResources = (type, key) => {
+  getValuesFromResources = (type, labelKey, valueKey) => {
     const items = get(this.props.resources, `${type}.records`, [])
-      .map(item => ({ label: item[key], value: item[key] }));
+      .map(item => ({ label: item[labelKey], value: item[valueKey] }));
     return sortBy(items, 'label');
   };
 
@@ -69,9 +75,14 @@ export default class Filters extends React.Component {
         active = [],
         pg = [],
         tags = [],
+        departments = [],
       },
       onChangeHandlers: { clearGroup },
+      intl: { formatMessage },
+      resources,
     } = this.props;
+
+    const departmentsAreNotEmpty = !!resources.departments?.records?.length;
 
     return (
       <AccordionSet>
@@ -79,7 +90,7 @@ export default class Filters extends React.Component {
           displayClearButton
           id="users-filter-accordion-status"
           header={FilterAccordionHeader}
-          label={<FormattedMessage id="ui-users.status" />}
+          label={formatMessage({ id: 'ui-users.status' })}
           separator={false}
           onClearFilter={() => clearGroup('active')}
         >
@@ -94,27 +105,45 @@ export default class Filters extends React.Component {
           displayClearButton
           id="users-filter-accordion-patron-group"
           header={FilterAccordionHeader}
-          label={<FormattedMessage id="ui-users.information.patronGroup" />}
+          label={formatMessage({ id: 'ui-users.information.patronGroup' })}
           separator={false}
           onClearFilter={() => clearGroup('pg')}
         >
           <CheckboxFilter
-            dataOptions={this.getValuesFromResources('patronGroups', 'group')}
+            dataOptions={this.getValuesFromResources('patronGroups', 'group', 'group')}
             name="pg"
             selectedValues={pg}
             onChange={this.handleFilterChange}
           />
         </Accordion>
+        {departmentsAreNotEmpty && (
+          <Accordion
+            displayClearButton
+            id="users-filter-accordion-departments"
+            header={FilterAccordionHeader}
+            label={formatMessage({ id: 'ui-users.departments' })}
+            separator={false}
+            onClearFilter={() => clearGroup('departments')}
+          >
+            <MultiSelectionFilter
+              id="departments-filter"
+              dataOptions={this.getValuesFromResources('departments', 'name', 'id')}
+              name="departments"
+              selectedValues={departments}
+              onChange={this.handleFilterChange}
+            />
+          </Accordion>
+        )}
         <Accordion
           displayClearButton
           id="users-filter-accordion-tags"
           header={FilterAccordionHeader}
-          label={<FormattedMessage id="ui-users.tags" />}
+          label={formatMessage({ id: 'ui-users.tags' })}
           separator={false}
           onClearFilter={() => clearGroup('tags')}
         >
           <MultiSelectionFilter
-            dataOptions={this.getValuesFromResources('tags', 'label')}
+            dataOptions={this.getValuesFromResources('tags', 'label', 'label')}
             name="tags"
             selectedValues={tags}
             onChange={this.handleFilterChange}
@@ -124,3 +153,5 @@ export default class Filters extends React.Component {
     );
   }
 }
+
+export default injectIntl(Filters);

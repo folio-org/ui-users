@@ -80,6 +80,11 @@ class UserSearchContainer extends React.Component {
       path: 'tags',
       records: 'tags',
     },
+    departments: {
+      type: 'okapi',
+      path: 'departments',
+      records: 'departments',
+    },
   });
 
   static propTypes = {

@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## 6.0.0 (IN PROGRESS)
+
+* Add Departments filter. Refs UIU-1355.
+
 ## 5.0.0 (IN PROGRESS)
 
 * modified the lost date display to include aged to lost status. Fixes UIU-1804.

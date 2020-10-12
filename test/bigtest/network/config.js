@@ -147,6 +147,7 @@ export default function config() {
       // get the CQL query param from 'query=' until the amphersand or end of the string
       let query = /query=(\(.*\)|%28.*%29)/.exec(request.url)[1];
       const filterField = 'active';
+      const departmentsField = 'departments';
       if (/^%28/.test(query)) {
         query = decodeURIComponent(query);
       }
@@ -162,6 +163,11 @@ export default function config() {
       if (field === filterField) {
         return users.where({
           [filterField]: term === 'true'
+        });
+      }
+      if (field === departmentsField) {
+        return users.where({
+          [departmentsField]: [term],
         });
       }
     }
@@ -674,7 +680,7 @@ export default function config() {
 
   this.get('/departments', {
     departments: [{
-      id: 'ce0e0d5b-b5f3-4ad5-bccb-49c0784298f5',
+      id: 'test-1',
       name: 'Test1',
       code: 'test1',
       usageNumber: 0,
@@ -686,7 +692,7 @@ export default function config() {
       },
     },
     {
-      id: 'ce0e0d5b-b5f3-4ad5-bccb-49c0784298f7',
+      id: 'test-2',
       name: 'Test2',
       code: 'test2',
       usageNumber: 1,
