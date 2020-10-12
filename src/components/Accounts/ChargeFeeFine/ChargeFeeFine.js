@@ -465,7 +465,7 @@ class ChargeFeeFine extends React.Component {
     const selectedFeeFine = feefines.find(f => f.id === feeFineTypeId);
     const selectedOwner = owners.find(o => o.id === initialOwnerId);
     const initialChargeValues = {
-      ownerId: initialOwnerId,
+      ownerId: '',
       notify: !!(selectedFeeFine?.chargeNoticeId || selectedOwner?.defaultChargeNoticeId),
       feeFineId: '',
       amount: ''

@@ -24,6 +24,7 @@ import { MAX_RECORDS } from '../../../constants';
 import { getFullName } from '../../util';
 import {
   calculateSelectedAmount,
+  calculateRefundSelectedAmount,
   isRefundAllowed,
   loadServicePoints,
 } from '../accountFunctions';
@@ -679,6 +680,8 @@ class Actions extends React.Component {
     } = this.state;
 
     const account = this.props.accounts[0] || {};
+    const feeFineActions = _.get(resources, ['feefineactions', 'records'], [])
+      .filter(({ accountId }) => account.id === accountId);
     const defaultServicePointId = _.get(resources, ['curUserServicePoint', 'records', 0, 'defaultServicePointId'], '-');
     const servicePointsIds = _.get(resources, ['curUserServicePoint', 'records', 0, 'servicePointsIds'], []);
     const payments = _.get(resources, ['payments', 'records'], []);
@@ -762,7 +765,7 @@ class Actions extends React.Component {
         data: refunds,
         comment: 'refunded',
         open: actions.refundModal || (actions.refundMany && !isWarning),
-        initialValues: { ...initialValues, amount: calculateSelectedAmount(this.props.accounts, true) }
+        initialValues: { ...initialValues, amount: calculateRefundSelectedAmount(feeFineActions) }
       },
     ];
 
@@ -804,6 +807,7 @@ class Actions extends React.Component {
                 onSubmit={(values) => { this.showConfirmDialog(values); }}
                 owners={owners}
                 feefines={feefines}
+                feeFineActions={feeFineActions}
                 okapi={this.props.okapi}
                 totalPaidAmount={parseFloat(this.props.totalPaidAmount).toFixed(2)}
                 owedAmount={parseFloat(this.props.owedAmount).toFixed(2)}
