@@ -1,9 +1,5 @@
 # Change history for ui-users
 
-## 6.0.0 (IN PROGRESS)
-
-* Add Departments filter. Refs UIU-1355.
-
 ## 5.0.0 (IN PROGRESS)
 
 * modified the lost date display to include aged to lost status. Fixes UIU-1804.
@@ -62,6 +58,7 @@
 * Hide the Overdue loans report option when user doesn't have view loans permissions. Refs UIU-1858.
 * Allow renewal override if due date isn't changed. Refs UIU-1853.
 * Make the assigned service points for the user have been checked in the Add service points modal. Fixes UIU-1560.
+* Add Departments filter. Refs UIU-1355.
 
 ## [4.0.0](https://github.com/folio-org/ui-users/tree/v4.0.0) (2020-06-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v3.0.0...v4.0.0)
