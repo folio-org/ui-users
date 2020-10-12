@@ -9,12 +9,10 @@ export default function config() {
   // okapi endpoints
   this.get('/_/version', () => '0.0.0');
 
-  this.get('/refunds', [
-    {
-      'refunds': [],
-      'totalRecords': 0
-    }
-  ]);
+  this.get('/refunds', {
+    refunds: [],
+    totalRecords: 0
+  });
 
   this.get('_/proxy/tenants/:id/modules', [
     {
@@ -783,5 +781,68 @@ export default function config() {
     const account = accounts.find(request.params.id).attrs;
 
     return { accountId: account.id };
+  });
+
+  this.post('/accounts-bulk/check-transfer', ({ accounts }, request) => {
+    return {
+      amounts: [
+        {
+          accountId: 'id1',
+          amount: 100
+        },
+        {
+          accountId: 'id2',
+          amount: 100
+        }
+      ],
+      allowed: true,
+      amount: 100,
+      remainingAmount: 100
+    };
+  });
+
+  this.post('/accounts-bulk/transfer', ({ accounts }, request) => {
+    return {
+      accountIds: ['id1', 'id2', 'id3', 'id4'],
+      feefineactions: [
+        {
+          typeAction: 'Transferred partially',
+          amountAction: 10.0,
+          balance: 980.0,
+          paymentMethod: 'account',
+          accountId: 'id1',
+          userId: 'id4',
+          id: 'id5'
+        },
+        {
+          typeAction: 'Transferred partially',
+          amountAction: 10.0,
+          balance: 980.0,
+          paymentMethod: 'account',
+          accountId: 'id2',
+          userId: 'id4',
+          id: 'id6'
+        },
+        {
+          typeAction: 'Transferred partially',
+          amountAction: 10.0,
+          balance: 980.0,
+          paymentMethod: 'account',
+          accountId: 'id3',
+          userId: 'id4',
+          id: 'id7'
+        },
+        {
+          typeAction: 'Transferred partially',
+          amountAction: 10.0,
+          balance: 980.0,
+          paymentMethod: 'account',
+          accountId: 'id4',
+          userId: 'id4',
+          id: 'id8'
+        },
+      ],
+      amount : 40.00
+    };
   });
 }
