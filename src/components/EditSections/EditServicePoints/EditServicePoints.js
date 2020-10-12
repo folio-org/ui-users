@@ -64,7 +64,10 @@ class EditServicePoints extends React.Component {
     const sp = this.userServicePoints.get(index);
 
     return (
-      <li key={sp.id}>
+      <li
+        data-test-service-point={sp.id}
+        key={sp.id}
+      >
         {sp.name}
         <FormattedMessage id="ui-users.sp.removeServicePoint">
           {aria => (
@@ -171,14 +174,20 @@ class EditServicePoints extends React.Component {
   }
 
   renderAddServicePointModal() {
+    const {
+      addingServicePoint,
+      userServicePoints,
+    } = this.state;
+
     const servicePoints = get(this.props.formData, 'servicePoints', []);
 
     return (
       <AddServicePointModal
         onClose={() => this.setState({ addingServicePoint: false })}
         onSave={this.onAddServicePoints}
-        open={this.state.addingServicePoint}
+        open={addingServicePoint}
         servicePoints={servicePoints}
+        assignedServicePoints={userServicePoints}
       />
     );
   }
