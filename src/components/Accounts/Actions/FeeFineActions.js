@@ -384,7 +384,6 @@ class Actions extends React.Component {
     body.comments = this.assembleTagInfo(values);
     body.servicePointId = servicePointId;
     body.userName = `${lastName}, ${firstName}`;
-    body.transactionInfo = values.transaction || '-';
 
     return body;
   };
@@ -421,6 +420,10 @@ class Actions extends React.Component {
       accountIds,
       ...this.buildActionBody(values)
     };
+
+    if (action === 'bulkPay') {
+      payload.transactionInfo = values.transaction || '-';
+    }
 
     mutator[action].POST(payload, ['id'])
       .then(() => this.props.handleEdit(1))
