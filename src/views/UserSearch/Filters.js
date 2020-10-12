@@ -46,6 +46,15 @@ class Filters extends React.Component {
     }));
   };
 
+  /**
+   * Helper for formatting resource records information for <MultiSelection> component
+   *
+   * @param {String} type - resource type
+   * @param {String} labelKey - propery of resource record that will serve as an option label
+   * @param {String} valueKey - property of resource record that will serve as an option value.
+   * Will be passed to search request query parameter string as a value.
+   * @returns {Array} - an array of data options for <MultiSelection> component.
+   */
   getValuesFromResources = (type, labelKey, valueKey) => {
     const items = get(this.props.resources, `${type}.records`, [])
       .map(item => ({ label: item[labelKey], value: item[valueKey] }));
@@ -110,7 +119,7 @@ class Filters extends React.Component {
           onClearFilter={() => clearGroup('pg')}
         >
           <CheckboxFilter
-            dataOptions={this.getValuesFromResources('patronGroups', 'group', 'group')}
+            dataOptions={this.getValuesFromResources('patronGroups', 'group', 'id')}
             name="pg"
             selectedValues={pg}
             onChange={this.handleFilterChange}
