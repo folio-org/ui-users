@@ -432,7 +432,10 @@ class ActionModal extends React.Component {
                   </Col>
                 </Row>
                 <Row>
-                  <Col xs>
+                  <Col
+                    xs
+                    data-test-payment-owner
+                  >
                     <Field
                       id="ownerId"
                       name="ownerId"
