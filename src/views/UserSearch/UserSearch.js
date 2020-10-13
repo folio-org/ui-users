@@ -40,6 +40,12 @@ function getFullName(user) {
   return `${lastName}${firstName ? ', ' : ' '}${firstName} ${middleName}`;
 }
 
+const rawSearchableIndexes = [
+  { label: 'ui-users.index.all', value: '' },
+  { label: 'ui-users.index.username', value: 'username' },
+];
+let searchableIndexes;
+
 class UserSearch extends React.Component {
   static propTypes = {
     children: PropTypes.node,
@@ -59,12 +65,18 @@ class UserSearch extends React.Component {
       records: PropTypes.object,
       patronGroups: PropTypes.object,
       departments: PropTypes.object,
+      query: PropTypes.shape({
+        qindex: PropTypes.string,
+      }).isRequired,
     }).isRequired,
     mutator: PropTypes.shape({
       loans: PropTypes.object,
       resultOffset: PropTypes.shape({
         replace: PropTypes.func.isRequired,
       }),
+      query: PropTypes.shape({
+        update: PropTypes.func.isRequired,
+      }).isRequired,
     }).isRequired,
     source: PropTypes.object,
     visibleColumns: PropTypes.arrayOf(PropTypes.string),
@@ -281,6 +293,14 @@ class UserSearch extends React.Component {
     history.push('/users/create');
   }
 
+  onChangeIndex = (index, getSearchHandlers, searchValue) => {
+    this.props.mutator.query.update({ qindex: index });
+    // getSearchHandlers.state({
+    //   query: searchValue.query,
+    //   qindex: index,
+    // });
+  };
+
   shortcuts = [
     {
       name: 'new',
@@ -312,6 +332,12 @@ class UserSearch extends React.Component {
       contentRef,
       mutator: { resultOffset },
     } = this.props;
+
+    if (!searchableIndexes) {
+      searchableIndexes = rawSearchableIndexes.map(x => (
+        { value: x.value, label: this.props.intl.formatMessage({ id: x.label }) }
+      ));
+    }
 
     const users = get(resources, 'records.records', []);
     const patronGroups = (resources.patronGroups || {}).records || [];
@@ -357,7 +383,6 @@ class UserSearch extends React.Component {
             queryGetter={queryGetter}
             onComponentWillUnmount={onComponentWillUnmount}
             initialSearch={initialSearch}
-            initialSearchState={{ qindex: '', query: '' }}
           >
             {
               ({
@@ -405,6 +430,9 @@ class UserSearch extends React.Component {
                                         }
                                       }}
                                       value={searchValue.query}
+                                      searchableIndexes={searchableIndexes}
+                                      selectedIndex={get(resources.query, 'qindex')}
+                                      onChangeIndex={(e) => { this.onChangeIndex(e.target.value, getSearchHandlers(), searchValue); }}
                                       marginBottom0
                                       data-test-user-search-input
                                     />

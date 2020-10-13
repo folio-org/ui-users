@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   get,
+  isNil,
   template,
 } from 'lodash';
 import { stripesConnect } from '@folio/stripes/core';
@@ -18,10 +19,20 @@ import { UserSearch } from '../views';
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
 
-const compileQuery = template(
+const compileAllIndexQuery = template(
   '(username="%{query}*" or personal.firstName="%{query}*" or personal.preferredFirstName="%{query}*" or personal.lastName="%{query}*" or personal.email="%{query}*" or barcode="%{query}*" or id="%{query}*" or externalSystemId="%{query}*")',
   { interpolate: /%{([\s\S]+?)}/g }
 );
+
+const compileQuery = (parsedQuery, localProps) => {
+  if (isNil(parsedQuery.index)) {
+    return localProps.query.query.trim().replace('*', '').split(/\s+/)
+      .map(query => compileAllIndexQuery({ query }))
+      .join(' and ');
+  } else {
+    return `${parsedQuery.index}="${parsedQuery.query}"`;
+  }
+};
 
 class UserSearchContainer extends React.Component {
   static manifest = Object.freeze({
@@ -40,9 +51,7 @@ class UserSearchContainer extends React.Component {
           query: makeQueryFunction(
             'cql.allRecords=1',
             // TODO: Refactor/remove this after work on FOLIO-2066 and RMB-385 is done
-            (parsedQuery, props, localProps) => localProps.query.query.trim().replace('*', '').split(/\s+/)
-              .map(query => compileQuery({ query }))
-              .join(' and '),
+            (parsedQuery, _, localProps) => compileQuery(parsedQuery, localProps),
             {
               'active': 'active',
               'name': 'personal.lastName personal.firstName',

@@ -168,6 +168,11 @@ export default function config() {
           [departmentsField]: [term],
         });
       }
+      if (field === 'username') {
+        return users.where({
+          username: term
+        });
+      }
     }
 
     return users.all();

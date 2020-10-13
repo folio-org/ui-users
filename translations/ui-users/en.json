@@ -813,5 +813,8 @@
   "bulkClaimReturned.status.notOk": "Item could not be claimed returned: item is already claimed returned",
   "bulkClaimReturned.items.ok": "{numItems} item(s) <strong>successfully</strong> claimed returned.",
   "bulkClaimReturned.items.notOk": "{numItems} item(s) <strong>not</strong> claimed returned.",
-  "bulkClaimReturned.moreInfoPlaceholder": "Enter more information about the claim (required)"
+  "bulkClaimReturned.moreInfoPlaceholder": "Enter more information about the claim (required)",
+
+  "index.username": "Username",
+  "index.all": "All"
 }
