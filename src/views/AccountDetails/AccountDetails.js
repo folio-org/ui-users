@@ -24,7 +24,10 @@ import {
   calculateSortParams,
 } from '../../components/util';
 
-import { calculateTotalPaymentAmount } from '../../components/Accounts/accountFunctions';
+import {
+  calculateTotalPaymentAmount,
+  isPaymentOccured,
+} from '../../components/Accounts/accountFunctions';
 
 import css from './AccountDetails.css';
 
@@ -291,7 +294,7 @@ class AccountDetails extends React.Component {
     const contributors = itemDetails?.contributors.join(', ');
 
     const totalPaidAmount = calculateTotalPaymentAmount(resources?.accounts?.records);
-    const refundAllowed = totalPaidAmount > 0;
+    const refundAllowed = isPaymentOccured(resources?.accountActions?.records);
 
     return (
       <Paneset isRoot>

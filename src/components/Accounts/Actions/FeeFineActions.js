@@ -24,6 +24,7 @@ import { MAX_RECORDS } from '../../../constants';
 import { getFullName } from '../../util';
 import {
   calculateSelectedAmount,
+  calculateRefundSelectedAmount,
   isRefundAllowed,
   loadServicePoints,
 } from '../accountFunctions';
@@ -51,7 +52,7 @@ class Actions extends React.Component {
     payments: {
       type: 'okapi',
       records: 'payments',
-      path: 'payments?limit=100',
+      path: `payments?limit=${MAX_RECORDS}`,
     },
     waives: {
       type: 'okapi',
@@ -71,7 +72,7 @@ class Actions extends React.Component {
     feefineTypes: {
       type: 'okapi',
       records: 'feefines',
-      path: 'feefines?query=cql.allRecords=1&limit=100',
+      path: `feefines?query=cql.allRecords=1&limit=${MAX_RECORDS}`,
     },
     transfers: {
       type: 'okapi',
@@ -85,80 +86,64 @@ class Actions extends React.Component {
     },
     activeRecord: {},
     user: {},
-    checkPay: {
-      type: 'okapi',
-      POST: {
-        path: 'accounts/%{accountId}/check-pay',
-      },
-      fetch: false,
-      clientGeneratePk: false,
-    },
-    checkWaive: {
-      type: 'okapi',
-      POST: {
-        path: 'accounts/%{accountId}/check-waive',
-      },
-      fetch: false,
-      clientGeneratePk: false,
-    },
-    checkTransfer: {
-      type: 'okapi',
-      POST: {
-        path: 'accounts/%{accountId}/check-transfer',
-      },
-      fetch: false,
-      clientGeneratePk: false,
-    },
-    checkRefund: {
-      type: 'okapi',
-      POST: {
-        path: 'accounts/%{accountId}/check-refund',
-      },
-      fetch: false,
-      clientGeneratePk: false,
-    },
     pay: {
       type: 'okapi',
       path: 'accounts/%{activeRecord.id}/pay',
       fetch: false,
-      accumulate: 'true',
       clientGeneratePk: false,
     },
     waive: {
       type: 'okapi',
       path: 'accounts/%{activeRecord.id}/waive',
       fetch: false,
-      accumulate: 'true',
       clientGeneratePk: false,
     },
     transfer: {
       type: 'okapi',
       path: 'accounts/%{activeRecord.id}/transfer',
       fetch: false,
-      accumulate: 'true',
       clientGeneratePk: false,
     },
     cancel: {
       type: 'okapi',
       path: 'accounts/%{activeRecord.id}/cancel',
       fetch: false,
-      accumulate: 'true',
       clientGeneratePk: false,
     },
     refund: {
       type: 'okapi',
       path: 'accounts/%{activeRecord.id}/refund',
       fetch: false,
-      accumulate: 'true',
+      clientGeneratePk: false,
+    },
+    bulkPay: {
+      type: 'okapi',
+      path: 'accounts-bulk/pay',
+      fetch: false,
+      clientGeneratePk: false,
+    },
+    bulkWaive: {
+      type: 'okapi',
+      path: 'accounts-bulk/waive',
+      fetch: false,
+      clientGeneratePk: false,
+    },
+    bulkTransfer: {
+      type: 'okapi',
+      path: 'accounts-bulk/transfer',
+      fetch: false,
+      clientGeneratePk: false,
+    },
+    bulkRefund: {
+      type: 'okapi',
+      path: 'accounts-bulk/refund',
+      fetch: false,
       clientGeneratePk: false,
     },
   });
 
   static propTypes = {
     resources: PropTypes.shape({
-      accounts: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
-      }),
       refunds: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
@@ -170,18 +155,6 @@ class Actions extends React.Component {
         PUT: PropTypes.func.isRequired,
       }),
       feefineactions: PropTypes.shape({
-        POST: PropTypes.func.isRequired,
-      }),
-      checkPay: PropTypes.shape({
-        POST: PropTypes.func.isRequired,
-      }),
-      checkWaive: PropTypes.shape({
-        POST: PropTypes.func.isRequired,
-      }),
-      checkTransfer: PropTypes.shape({
-        POST: PropTypes.func.isRequired,
-      }),
-      checkRefund: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }),
       pay: PropTypes.shape({
@@ -197,6 +170,18 @@ class Actions extends React.Component {
         POST: PropTypes.func.isRequired,
       }),
       refund: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      bulkPay: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      bulkWaive: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      bulkTransfer: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      bulkRefund: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }),
     }),
@@ -238,13 +223,6 @@ class Actions extends React.Component {
     this.onClickComment = this.onClickComment.bind(this);
     this.callout = null;
     this.paymentStatus = '';
-
-    this.actionToEndpointMapping = {
-      'payment': 'pay',
-      'waive': 'waive',
-      'transfer': 'transfer',
-      'refund': 'refund'
-    };
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -365,7 +343,7 @@ class Actions extends React.Component {
     mutator.activeRecord.update({ id: account.id });
     const payload = this.buildActionBody(values);
     delete payload.amount;
-    mutator.cancel.POST(_.omit(payload, ['id']))
+    mutator.cancel.POST(payload)
       .then(() => this.props.handleEdit(1))
       .then(() => this.showCalloutMessage(account))
       .then(() => this.onCloseCancellation());
@@ -391,8 +369,8 @@ class Actions extends React.Component {
     const {
       okapi: {
         currentUser: {
-          firstName,
-          lastName,
+          firstName = '',
+          lastName = '',
           curServicePoint: { id: servicePointId }
         },
       }
@@ -424,59 +402,33 @@ class Actions extends React.Component {
       payload.transactionInfo = values.transaction || '-';
     }
 
-    mutator[this.actionToEndpointMapping[action]].POST(_.omit(payload, ['id']))
+    mutator[action].POST(payload, ['id'])
       .then(() => this.props.handleEdit(1))
       .then(() => this.showCalloutMessage(account))
       .then(() => this.onCloseActionModal());
   }
 
   onSubmitMany = (values, items, action) => {
-    let amount = parseFloat(values.amount);
-    let offset = 0;
-    const promises = [];
-    const selected = _.orderBy(items, ['remaining'], ['asc']) || [];
-    let partialAmounts = this.partialAmount(amount, selected.length);
+    const { mutator } = this.props;
 
-    selected.forEach((item, index) => {
-      const promise = new Promise((resolve, reject) => {
-        if (partialAmounts[index - offset] >= item.remaining) {
-          offset++;
-          partialAmounts = this.partialAmount(amount - item.remaining, selected.length - offset);
-          amount -= item.remaining;
-          this.action(item, item.remaining, values, action).then(() => {
-            this.showCalloutMessage(item);
-            resolve();
-          }).catch(reject);
-        } else {
-          this.action(item, partialAmounts[index - offset], values, action).then(() => {
-            this.showCalloutMessage(item);
-            resolve();
-          }).catch(reject);
-        }
-      });
-      promises.push(promise);
-    });
+    const accountIds = items.reduce((ids, account) => {
+      ids.push(account.id);
+      return ids;
+    }, []);
 
-    Promise.all(promises).then(() => {
-      this.props.handleEdit(1);
-      this.onCloseActionModal();
-    });
-  }
+    const payload = {
+      accountIds,
+      ...this.buildActionBody(values)
+    };
 
-  action = (type, amount, values, action) => {
-    const { intl: { formatMessage } } = this.props;
-    this.props.mutator.activeRecord.update({ id: type.id });
-    let paymentStatus = _.capitalize(formatMessage({ id: `ui-users.accounts.actions.warning.${action}Action` }));
-    if (amount < type.remaining) {
-      paymentStatus = `${paymentStatus} ${formatMessage({ id: 'ui-users.accounts.status.partially' })}`;
-    } else {
-      paymentStatus = `${paymentStatus} ${formatMessage({ id: 'ui-users.accounts.status.fully' })}`;
-      type.status.name = 'Closed';
+    if (action === 'bulkPay') {
+      payload.transactionInfo = values.transaction || '-';
     }
-    const balance = type.remaining - parseFloat(amount);
-    const createdAt = this.props.okapi.currentUser.curServicePoint.id;
-    return this.editAccount(type, paymentStatus, type.status.name, balance)
-      .then(() => this.newAction({ paymentMethod: values.method }, type.id, paymentStatus, amount, this.assembleTagInfo(values), balance, values.transaction, createdAt || type.feeFineOwner));
+
+    mutator[action].POST(payload, ['id'])
+      .then(() => this.props.handleEdit(1))
+      .then(() => _.forEach(items, item => this.showCalloutMessage(item)))
+      .then(() => this.onCloseActionModal());
   }
 
   onCloseActionModal() {
@@ -506,21 +458,21 @@ class Actions extends React.Component {
     const singeRefund = actions.refundModal || (actions.refundMany && singleSelectedAccount);
 
     if (singlePay) {
-      this.onSubmit(values, 'payment');
+      this.onSubmit(values, 'pay');
     } else if (actions.regular) {
-      this.onSubmitMany(values, selectedAccounts, 'payment');
+      this.onSubmitMany(values, selectedAccounts, 'bulkPay');
     } else if (singleWaive) {
       this.onSubmit(values, 'waive');
     } else if (actions.waiveMany) {
-      this.onSubmitMany(values, selectedAccounts, 'waive');
+      this.onSubmitMany(values, selectedAccounts, 'bulkWaive');
     } else if (singleTransfer) {
       this.onSubmit(values, 'transfer');
     } else if (actions.transferMany) {
-      this.onSubmitMany(values, selectedAccounts, 'transfer');
+      this.onSubmitMany(values, selectedAccounts, 'bulkTransfer');
     } else if (singeRefund) {
       this.onSubmit(values, 'refund');
     } else if (actions.refundMany) {
-      this.onSubmitMany(values, selectedAccounts, 'refund');
+      this.onSubmitMany(values, selectedAccounts, 'bulkRefund');
     }
     this.setState({ submitting: true });
 
@@ -530,22 +482,6 @@ class Actions extends React.Component {
   onChangeAccounts = (accounts) => {
     this.props.onChangeSelectedAccounts(accounts);
     this.setState({ accounts: accounts || [] });
-  }
-
-  partialAmount = (total, n) => {
-    const amount = total / n;
-    const amounts = Array(n);
-    const stringAmount = amount.toString();
-    const decimal = stringAmount.indexOf('.');
-    if (decimal === -1) { return amounts.fill(amount); }
-    const rounding = stringAmount.substring(0, decimal + 3);
-    amounts.fill(parseFloat(rounding));
-    let partialAmount = stringAmount.substring(decimal + 3);
-    partialAmount = '0.' + '0'.repeat(stringAmount.length - partialAmount.length - decimal - 1) + partialAmount;
-    partialAmount = parseFloat(partialAmount);
-    partialAmount = parseFloat(partialAmount * n).toFixed(2);
-    amounts[0] += parseFloat(partialAmount);
-    return amounts;
   }
 
   showConfirmDialog = (values) => {
@@ -679,6 +615,8 @@ class Actions extends React.Component {
     } = this.state;
 
     const account = this.props.accounts[0] || {};
+    const feeFineActions = _.get(resources, ['feefineactions', 'records'], [])
+      .filter(({ accountId }) => account.id === accountId);
     const defaultServicePointId = _.get(resources, ['curUserServicePoint', 'records', 0, 'defaultServicePointId'], '-');
     const servicePointsIds = _.get(resources, ['curUserServicePoint', 'records', 0, 'servicePointsIds'], []);
     const payments = _.get(resources, ['payments', 'records'], []);
@@ -762,7 +700,7 @@ class Actions extends React.Component {
         data: refunds,
         comment: 'refunded',
         open: actions.refundModal || (actions.refundMany && !isWarning),
-        initialValues: { ...initialValues, amount: calculateSelectedAmount(this.props.accounts, true) }
+        initialValues: { ...initialValues, amount: calculateRefundSelectedAmount(feeFineActions) }
       },
     ];
 
@@ -793,6 +731,7 @@ class Actions extends React.Component {
             am.push(
               <ActionModal
                 {...m}
+                key={m.action}
                 intl={this.props.intl}
                 commentRequired={settings[m.comment]}
                 form={m.form ? m.form : `${m.action}-modal`}
@@ -804,6 +743,7 @@ class Actions extends React.Component {
                 onSubmit={(values) => { this.showConfirmDialog(values); }}
                 owners={owners}
                 feefines={feefines}
+                feeFineActions={feeFineActions}
                 okapi={this.props.okapi}
                 totalPaidAmount={parseFloat(this.props.totalPaidAmount).toFixed(2)}
                 owedAmount={parseFloat(this.props.owedAmount).toFixed(2)}

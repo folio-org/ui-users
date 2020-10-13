@@ -104,6 +104,9 @@ class AccountsListingContainer extends React.Component {
         },
         staticFallback: { params: {} },
       },
+      shouldRefresh: (resource, action, refresh) => {
+        return refresh || action.meta.path === 'accounts-bulk';
+      },
     },
     activeRecord: { records: 10000 },
     user: {},

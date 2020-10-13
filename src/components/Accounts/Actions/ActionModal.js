@@ -19,7 +19,7 @@ import {
   Select,
 } from '@folio/stripes/components';
 
-import { calculateSelectedAmount } from '../accountFunctions';
+import { calculateRefundSelectedAmount } from '../accountFunctions';
 
 import css from './PayWaive.css';
 
@@ -30,6 +30,7 @@ class ActionModal extends React.Component {
     handleSubmit: PropTypes.func,
     open: PropTypes.bool,
     accounts: PropTypes.arrayOf(PropTypes.object),
+    feeFineActions: PropTypes.arrayOf(PropTypes.object),
     data: PropTypes.arrayOf(PropTypes.object),
     balance: PropTypes.string,
     totalPaidAmount: PropTypes.string,
@@ -84,14 +85,14 @@ class ActionModal extends React.Component {
   renderModalLabel() {
     const {
       accounts = [],
+      feeFineActions = [],
       action,
       form: { getState },
       intl: { formatMessage },
     } = this.props;
 
     const { values: { amount } } = getState();
-
-    const selected = calculateSelectedAmount(accounts, this.isRefundAction(action));
+    const selected = calculateRefundSelectedAmount(feeFineActions);
     const type = parseFloat(amount) < parseFloat(selected)
       ? formatMessage({ id: `ui-users.accounts.${action}.summary.partially` })
       : formatMessage({ id: `ui-users.accounts.${action}.summary.fully` });
@@ -172,12 +173,14 @@ class ActionModal extends React.Component {
     return action === 'refund';
   }
 
-  onChangeOwner = () => {
-    const { form: { change } } = this.props;
-    change('payment-many-modal', 'method', null);
+  onChangeOwner = ({ target: { value } }) => {
+    const { change } = this.props.form;
+
+    change('ownerId', value);
+    change('method', null);
   }
 
-  triggerCheckEndpoint = (amount, accountId) => {
+  singleItemCheck = (amount, accountId) => {
     const {
       checkAmount,
       okapi,
@@ -195,8 +198,42 @@ class ActionModal extends React.Component {
       });
   };
 
+  multipleItemsCheck = (amount, accounts) => {
+    const {
+      checkAmount,
+      okapi,
+    } = this.props;
+
+    const accountIds = accounts.reduce((ids, account) => {
+      ids.push(account.id);
+      return ids;
+    }, []);
+
+    return fetch(`${okapi.url}/accounts-bulk/${checkAmount}`,
+      {
+        method: 'POST',
+        headers: {
+          'X-Okapi-Tenant': okapi.tenant,
+          'X-Okapi-Token': okapi.token,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ accountIds, amount })
+      });
+  };
+
+  triggerCheckEndpoint = (amount, accounts) => {
+    if (accounts.length === 1) {
+      const { id } = _.head(accounts) || {};
+      return this.singleItemCheck(amount, id);
+    }
+
+    return this.multipleItemsCheck(amount, accounts);
+  };
+
   validateAmount = async (value) => {
     let error;
+
+    const { accounts } = this.props;
 
     const {
       actionAllowed,
@@ -208,8 +245,7 @@ class ActionModal extends React.Component {
     if (_.isEmpty(value)) {
       error = <FormattedMessage id="ui-users.accounts.error.field" />;
     } else if (value !== prevValidatedAmount && this._isMounted) {
-      const { id } = _.head(this.props.accounts) || {};
-      const response = await this.triggerCheckEndpoint(value, id);
+      const response = await this.triggerCheckEndpoint(value, accounts);
       const {
         allowed,
         errorMessage,
@@ -261,6 +297,7 @@ class ActionModal extends React.Component {
   render() {
     const {
       accounts,
+      feeFineActions,
       action,
       balance,
       initialValues,
@@ -277,7 +314,6 @@ class ActionModal extends React.Component {
       pristine,
       submitting,
     } = this.props;
-
     const { accountRemainingAmount } = this.state;
 
     const {
@@ -288,7 +324,7 @@ class ActionModal extends React.Component {
       }
     } = getState();
 
-    const selected = calculateSelectedAmount(accounts, this.isRefundAction(action));
+    const selected = calculateRefundSelectedAmount(feeFineActions);
     const ownerOptions = owners.filter(o => o.owner !== 'Shared').map(o => ({ value: o.id, label: o.owner }));
 
     let options = (this.isPaymentAction(action)) ? data.filter(d => (d.ownerId === (accounts.length > 1 ? ownerId : (accounts[0] || {}).ownerId))) : data;
@@ -396,7 +432,10 @@ class ActionModal extends React.Component {
                   </Col>
                 </Row>
                 <Row>
-                  <Col xs>
+                  <Col
+                    xs
+                    data-test-payment-owner
+                  >
                     <Field
                       id="ownerId"
                       name="ownerId"
@@ -404,6 +443,7 @@ class ActionModal extends React.Component {
                       dataOptions={ownerOptions}
                       placeholder={formatMessage({ id: 'ui-users.accounts.payment.owner.placeholder' })}
                       onChange={this.onChangeOwner}
+                      value={ownerId}
                     />
                   </Col>
                 </Row>
