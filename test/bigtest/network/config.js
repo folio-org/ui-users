@@ -146,6 +146,7 @@ export default function config() {
       let query = /query=(\(.*\)|%28.*%29)/.exec(request.url)[1];
       const filterField = 'active';
       const departmentsField = 'departments';
+      const usernameField = 'username';
       if (/^%28/.test(query)) {
         query = decodeURIComponent(query);
       }
@@ -168,9 +169,9 @@ export default function config() {
           [departmentsField]: [term],
         });
       }
-      if (field === 'username') {
+      if (field === usernameField) {
         return users.where({
-          username: term
+          [usernameField]: term.replace('*', '')
         });
       }
     }
