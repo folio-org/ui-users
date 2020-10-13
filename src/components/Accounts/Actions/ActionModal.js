@@ -19,7 +19,7 @@ import {
   Select,
 } from '@folio/stripes/components';
 
-import { calculateRefundSelectedAmount } from '../accountFunctions';
+import { calculateSelectedAmount } from '../accountFunctions';
 
 import css from './PayWaive.css';
 
@@ -92,7 +92,7 @@ class ActionModal extends React.Component {
     } = this.props;
 
     const { values: { amount } } = getState();
-    const selected = calculateRefundSelectedAmount(feeFineActions);
+    const selected = calculateSelectedAmount(accounts, this.isRefundAction(action), feeFineActions);
     const type = parseFloat(amount) < parseFloat(selected)
       ? formatMessage({ id: `ui-users.accounts.${action}.summary.partially` })
       : formatMessage({ id: `ui-users.accounts.${action}.summary.fully` });
@@ -325,7 +325,7 @@ class ActionModal extends React.Component {
       }
     } = getState();
 
-    const selected = calculateRefundSelectedAmount(feeFineActions);
+    const selected = calculateSelectedAmount(accounts, this.isRefundAction(action), feeFineActions);
     const ownerOptions = owners.filter(o => o.owner !== 'Shared').map(o => ({ value: o.id, label: o.owner }));
 
     let options = (this.isPaymentAction(action)) ? data.filter(d => (d.ownerId === (accounts.length > 1 ? ownerId : (accounts[0] || {}).ownerId))) : data;
