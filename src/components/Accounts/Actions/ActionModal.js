@@ -263,6 +263,7 @@ class ActionModal extends React.Component {
         this.setState({
           actionAllowed: allowed,
           accountRemainingAmount: remainingAmount,
+          prevValidationError: errorMessage,
         });
       }
     } else {
