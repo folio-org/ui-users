@@ -58,6 +58,7 @@ class UserSearch extends React.Component {
     resources: PropTypes.shape({
       records: PropTypes.object,
       patronGroups: PropTypes.object,
+      departments: PropTypes.object,
     }).isRequired,
     mutator: PropTypes.shape({
       loans: PropTypes.object,
