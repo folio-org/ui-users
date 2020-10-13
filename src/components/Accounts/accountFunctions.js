@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash';
 import { paymentStatusesAllowedToRefund } from '../../constants';
 
 export function count(array) {
@@ -41,14 +42,29 @@ export function handleFilterClear(name) {
   return state;
 }
 
-export function calculateSelectedAmount(accounts, isRefundAction = false) {
-  const selected = accounts.reduce((s, { amount, remaining }) => {
-    return isRefundAction
-      ? s + parseFloat((amount - remaining) * 100)
-      : s + parseFloat(remaining * 100);
+export function calculateSelectedAmount(accounts) {
+  const selected = accounts.reduce((s, { remaining }) => {
+    return s + parseFloat(remaining * 100);
   }, 0);
 
   return parseFloat(selected / 100).toFixed(2);
+}
+
+function getPaidActions(feeFineActions = []) {
+  return feeFineActions.filter(({ typeAction }) => paymentStatusesAllowedToRefund.includes(typeAction));
+}
+
+export function calculateRefundSelectedAmount(feeFineActions) {
+  const paidActions = getPaidActions(feeFineActions);
+  const selected = paidActions.reduce((s, { amountAction }) => {
+    return s + parseFloat((amountAction) * 100);
+  }, 0);
+
+  return parseFloat(selected / 100).toFixed(2);
+}
+
+export function isPaymentOccured(feeFineActions) {
+  return !isEmpty(getPaidActions(feeFineActions));
 }
 
 export function calculateRemainingAmount(amount, balance, selected, action) {

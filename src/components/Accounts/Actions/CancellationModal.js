@@ -128,9 +128,8 @@ class CancellationModal extends React.Component {
                     component={Checkbox}
                     type="checkbox"
                     inline
+                    label={<FormattedMessage id="ui-users.accounts.cancellation.field.notifyPatron" />}
                   />
-                  {' '}
-                  <FormattedMessage id="ui-users.accounts.cancellation.field.notifyPatron" />
                 </Col>
               </Row>
             </div>

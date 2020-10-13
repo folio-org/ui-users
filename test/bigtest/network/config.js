@@ -9,12 +9,10 @@ export default function config() {
   // okapi endpoints
   this.get('/_/version', () => '0.0.0');
 
-  this.get('/refunds', [
-    {
-      'refunds': [],
-      'totalRecords': 0
-    }
-  ]);
+  this.get('/refunds', {
+    refunds: [],
+    totalRecords: 0
+  });
 
   this.get('_/proxy/tenants/:id/modules', [
     {
@@ -147,6 +145,7 @@ export default function config() {
       // get the CQL query param from 'query=' until the amphersand or end of the string
       let query = /query=(\(.*\)|%28.*%29)/.exec(request.url)[1];
       const filterField = 'active';
+      const departmentsField = 'departments';
       if (/^%28/.test(query)) {
         query = decodeURIComponent(query);
       }
@@ -162,6 +161,11 @@ export default function config() {
       if (field === filterField) {
         return users.where({
           [filterField]: term === 'true'
+        });
+      }
+      if (field === departmentsField) {
+        return users.where({
+          [departmentsField]: [term],
         });
       }
     }
@@ -674,7 +678,7 @@ export default function config() {
 
   this.get('/departments', {
     departments: [{
-      id: 'ce0e0d5b-b5f3-4ad5-bccb-49c0784298f5',
+      id: 'test-1',
       name: 'Test1',
       code: 'test1',
       usageNumber: 0,
@@ -686,7 +690,7 @@ export default function config() {
       },
     },
     {
-      id: 'ce0e0d5b-b5f3-4ad5-bccb-49c0784298f7',
+      id: 'test-2',
       name: 'Test2',
       code: 'test2',
       usageNumber: 1,
@@ -783,5 +787,68 @@ export default function config() {
     const account = accounts.find(request.params.id).attrs;
 
     return { accountId: account.id };
+  });
+
+  this.post('/accounts-bulk/check-transfer', ({ accounts }, request) => {
+    return {
+      amounts: [
+        {
+          accountId: 'id1',
+          amount: 100
+        },
+        {
+          accountId: 'id2',
+          amount: 100
+        }
+      ],
+      allowed: true,
+      amount: 100,
+      remainingAmount: 100
+    };
+  });
+
+  this.post('/accounts-bulk/transfer', ({ accounts }, request) => {
+    return {
+      accountIds: ['id1', 'id2', 'id3', 'id4'],
+      feefineactions: [
+        {
+          typeAction: 'Transferred partially',
+          amountAction: 10.0,
+          balance: 980.0,
+          paymentMethod: 'account',
+          accountId: 'id1',
+          userId: 'id4',
+          id: 'id5'
+        },
+        {
+          typeAction: 'Transferred partially',
+          amountAction: 10.0,
+          balance: 980.0,
+          paymentMethod: 'account',
+          accountId: 'id2',
+          userId: 'id4',
+          id: 'id6'
+        },
+        {
+          typeAction: 'Transferred partially',
+          amountAction: 10.0,
+          balance: 980.0,
+          paymentMethod: 'account',
+          accountId: 'id3',
+          userId: 'id4',
+          id: 'id7'
+        },
+        {
+          typeAction: 'Transferred partially',
+          amountAction: 10.0,
+          balance: 980.0,
+          paymentMethod: 'account',
+          accountId: 'id4',
+          userId: 'id4',
+          id: 'id8'
+        },
+      ],
+      amount : 40.00
+    };
   });
 }

@@ -9,9 +9,19 @@ import {
   scoped,
 } from '@bigtest/interactor';
 
+import MultiSelectInteractor from '@folio/stripes-components/lib/MultiSelection/tests/interactor';
+
 @interactor class ActiveUserCheckbox {
   clickActive = clickable('#clickable-filter-active-active');
   clickInactive= clickable('#clickable-filter-active-inactive');
+}
+
+@interactor class DepartmentsFilter {
+  multiSelect = new MultiSelectInteractor('#departments-filter');
+  isAccordionPresent = isPresent('#users-filter-accordion-departments');
+  whenLoaded() {
+    return this.when(() => isPresent('#departments-filter'));
+  }
 }
 
 @interactor class HeaderDropdown {
@@ -21,6 +31,7 @@ import {
 @interactor class HeaderDropdownMenu {
   clickExportToCSV = clickable('#export-overdue-loan-report');
   exportBtnIsVisible = isVisible('#export-overdue-loan-report');
+  isExportBtnPresent = isPresent('#export-overdue-loan-report');
 }
 
 @interactor class SearchFieldInteractor {
@@ -31,6 +42,7 @@ export default @interactor class UsersInteractor {
   static defaultScope = '[data-test-user-instances]';
 
   activeUserCheckbox = new ActiveUserCheckbox();
+  departmentsFilter = new DepartmentsFilter();
   headerDropdownMenu = new HeaderDropdownMenu();
   searchField = new SearchFieldInteractor();
   searchButton = new Interactor('[data-test-user-search-submit]');
