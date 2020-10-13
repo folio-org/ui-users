@@ -26,7 +26,7 @@ import {
 
 import {
   calculateTotalPaymentAmount,
-  isPaymentOccured,
+  isRefundAllowed,
 } from '../../components/Accounts/accountFunctions';
 
 import css from './AccountDetails.css';
@@ -294,7 +294,7 @@ class AccountDetails extends React.Component {
     const contributors = itemDetails?.contributors.join(', ');
 
     const totalPaidAmount = calculateTotalPaymentAmount(resources?.accounts?.records);
-    const refundAllowed = isPaymentOccured(resources?.accountActions?.records);
+    const refundAllowed = isRefundAllowed(account);
 
     return (
       <Paneset isRoot>

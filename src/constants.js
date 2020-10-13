@@ -66,6 +66,11 @@ export const paymentStatusesAllowedToRefund = [
   'Transferred partially',
 ];
 
+export const waiveStatuses = [
+  'Waived fully',
+  'Waived partially'
+];
+
 export const reportColumns = [
   'borrower.name',
   'borrower.barcode',

@@ -24,7 +24,6 @@ import { MAX_RECORDS } from '../../../constants';
 import { getFullName } from '../../util';
 import {
   calculateSelectedAmount,
-  calculateRefundSelectedAmount,
   isRefundAllowed,
   loadServicePoints,
 } from '../accountFunctions';
@@ -48,6 +47,9 @@ class Actions extends React.Component {
       type: 'okapi',
       records: 'feefineactions',
       path: `feefineactions?limit=${MAX_RECORDS}`,
+      shouldRefresh: (resource, action, refresh) => {
+        return refresh || action.meta.path === 'accounts';
+      },
     },
     payments: {
       type: 'okapi',
@@ -700,7 +702,7 @@ class Actions extends React.Component {
         data: refunds,
         comment: 'refunded',
         open: actions.refundModal || (actions.refundMany && !isWarning),
-        initialValues: { ...initialValues, amount: calculateRefundSelectedAmount(feeFineActions) }
+        initialValues: { ...initialValues, amount: calculateSelectedAmount(this.props.accounts, true, feeFineActions) }
       },
     ];
 
