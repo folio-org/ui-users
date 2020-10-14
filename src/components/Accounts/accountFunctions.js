@@ -123,7 +123,7 @@ export function accountRefundInfo(account) {
 
 export function isRefundAllowed(account) {
   const { hasBeenPaid, paidAmount } = accountRefundInfo(account);
-  return hasBeenPaid && paidAmount > 0;
+  return false; // hasBeenPaid && paidAmount > 0;
 }
 
 export function calculateTotalPaymentAmount(accounts = []) {
