@@ -121,9 +121,13 @@ export function accountRefundInfo(account) {
   return { hasBeenPaid, paidAmount };
 }
 
-export function isRefundAllowed(account) {
-  const { hasBeenPaid, paidAmount } = accountRefundInfo(account);
-  return false; // hasBeenPaid && paidAmount > 0;
+// export function isRefundAllowed(account) {
+//   const { hasBeenPaid, paidAmount } = accountRefundInfo(account);
+//   return hasBeenPaid && paidAmount > 0;
+// }
+
+export function isRefundAllowed() {
+  return false;
 }
 
 export function calculateTotalPaymentAmount(accounts = []) {
