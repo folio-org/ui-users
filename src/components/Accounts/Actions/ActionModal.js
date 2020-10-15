@@ -51,6 +51,7 @@ class ActionModal extends React.Component {
   static defaultProps = {
     totalPaidAmount: '',
     owedAmount: '',
+    feeFineActions: [],
   }
 
   constructor(props) {

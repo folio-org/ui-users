@@ -8,35 +8,35 @@ import PropTypes from 'prop-types';
 import queryString from 'query-string';
 
 import {
-  Paneset,
-  Pane,
-  PaneHeader,
-  PaneMenu,
-  PaneHeaderIconButton,
   Button,
+  ButtonGroup,
+  Checkbox,
+  Col,
   Dropdown,
   DropdownMenu,
-  Row,
-  Col,
-  Checkbox,
-  ButtonGroup,
   filterState,
+  Pane,
+  PaneHeader,
+  PaneHeaderIconButton,
+  PaneMenu,
+  Paneset,
+  Row,
 } from '@folio/stripes/components';
 import css from './AccountsListing.css';
 
 import { getFullName } from '../../components/util';
 import Actions from '../../components/Accounts/Actions/FeeFineActions';
 import {
-  calculateTotalPaymentAmount,
   calculateOwedFeeFines,
+  calculateTotalPaymentAmount,
   count,
   handleFilterChange,
   handleFilterClear,
 } from '../../components/Accounts/accountFunctions';
 
 import {
-  Menu,
   Filters,
+  Menu,
   ViewFeesFines,
 } from '../../components/Accounts';
 
@@ -103,6 +103,9 @@ class AccountsHistory extends React.Component {
     }),
     resources: PropTypes.shape({
       feefineshistory: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      comments: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
       query: PropTypes.object,
@@ -367,10 +370,9 @@ class AccountsHistory extends React.Component {
       resources,
       intl,
     } = this.props;
-
     const query = location.search ? queryString.parse(location.search) : {};
-
     let accounts = _.get(resources, ['feefineshistory', 'records'], []);
+    const feeFineActions = _.get(resources, ['comments', 'records'], []);
     if (query.loan) {
       accounts = accounts.filter(a => a.loanId === query.loan);
     }
@@ -382,7 +384,6 @@ class AccountsHistory extends React.Component {
     // else if (query.layer === 'closed-accounts') badgeCount = closed.length;
     const filters = filterState(this.queryParam('f'));
     const selectedAccounts = this.state.selectedAccounts.map(a => accounts.find(ac => ac.id === a.id) || {});
-
     const userOwned = (user && user.id === (accounts[0] || {}).userId);
 
     const columnMapping = {
@@ -483,11 +484,11 @@ class AccountsHistory extends React.Component {
     });
     balance /= 100;
 
-    const totalPaidAmount = calculateTotalPaymentAmount(resources?.feefineshistory?.records);
+    const totalPaidAmount = calculateTotalPaymentAmount(resources?.feefineshistory?.records, feeFineActions);
     const uncheckedAccounts = _.differenceWith(
       resources?.feefineshistory?.records || [],
       this.accounts || this.state.selectedAccounts,
-      (account, selectedAcctount) => (account.id === selectedAcctount.id)
+      (account, selectedAccount) => (account.id === selectedAccount.id)
     );
 
     const owedAmount = calculateOwedFeeFines(uncheckedAccounts);
@@ -541,6 +542,7 @@ class AccountsHistory extends React.Component {
                 balance={userOwned ? balance : 0}
                 selected={selected}
                 selectedAccounts={selectedAccounts}
+                feeFineActions={feeFineActions}
                 actions={this.state.actions}
                 query={query}
                 onChangeActions={this.onChangeActions}
@@ -552,6 +554,7 @@ class AccountsHistory extends React.Component {
                   (<ViewFeesFines
                     {...this.props}
                     accounts={this.filterAccountsByStatus(accounts, 'open')}
+                    feeFineActions={feeFineActions}
                     visibleColumns={visibleColumns}
                     selectedAccounts={selectedAccounts}
                     onChangeSelected={this.onChangeSelected}
@@ -563,6 +566,7 @@ class AccountsHistory extends React.Component {
                     {...this.props}
                     accounts={this.filterAccountsByStatus(accounts, 'closed')}
                     visibleColumns={visibleColumns}
+                    feeFineActions={feeFineActions}
                     selectedAccounts={selectedAccounts}
                     onChangeSelected={this.onChangeSelected}
                     onChangeActions={this.onChangeActions}
@@ -572,6 +576,7 @@ class AccountsHistory extends React.Component {
                   (<ViewFeesFines
                     {...this.props}
                     accounts={userOwned ? accounts : []}
+                    feeFineActions={feeFineActions}
                     visibleColumns={visibleColumns}
                     selectedAccounts={selectedAccounts}
                     onChangeSelected={this.onChangeSelected}
@@ -586,6 +591,7 @@ class AccountsHistory extends React.Component {
                 user={user}
                 currentUser={currentUser}
                 accounts={this.accounts}
+                feeFineActions={feeFineActions}
                 selectedAccounts={selectedAccounts}
                 totalPaidAmount={totalPaidAmount}
                 owedAmount={owedAmount}
