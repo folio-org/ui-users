@@ -726,7 +726,7 @@
     "reports.loanPolicy.name": "Loan policy",
     "reports.loanId": "Loan ID",
     "reports.item.title": "Item title",
-    "reports.item.materialType.name": "Material type",
+    "reports.item.materialType.name": "Tipologia materiale",
     "reports.item.status.name": "Item status",
     "reports.item.barcode": "Codice a barre",
     "reports.item.callNumberComponents.prefix": "Call number prefix",
@@ -741,5 +741,6 @@
     "reports.item.holdingsRecordId": "Holdings ID",
     "reports.itemId": "Item ID",
     "reports.feeFine": "Fee/Fine",
-    "reports.inProgress": "Export in progress"
+    "reports.inProgress": "Export in progress",
+    "departments": "Departments"
 }

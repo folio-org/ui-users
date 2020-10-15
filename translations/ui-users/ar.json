@@ -741,5 +741,6 @@
     "reports.item.holdingsRecordId": "معرّف المقتنيات",
     "reports.itemId": "معرّف المادة",
     "reports.feeFine": "الرسم/الغرامة",
-    "reports.inProgress": "التصدير قيد التقدم"
+    "reports.inProgress": "التصدير قيد التقدم",
+    "departments": "الأقسام"
 }

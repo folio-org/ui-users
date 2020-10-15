@@ -1,5 +1,7 @@
-import { isEmpty } from 'lodash';
-import { paymentStatusesAllowedToRefund } from '../../constants';
+import {
+  paymentStatusesAllowedToRefund,
+  waiveStatuses,
+} from '../../constants';
 
 export function count(array) {
   const list = [];
@@ -42,16 +44,29 @@ export function handleFilterClear(name) {
   return state;
 }
 
-export function calculateSelectedAmount(accounts) {
-  const selected = accounts.reduce((s, { remaining }) => {
-    return s + parseFloat(remaining * 100);
+function getPaidActions(feeFineActions = []) {
+  return feeFineActions.filter(({ typeAction }) => paymentStatusesAllowedToRefund.includes(typeAction));
+}
+
+function getWaiveActions(feeFineActions = []) {
+  return feeFineActions.filter(({ typeAction }) => waiveStatuses.includes(typeAction));
+}
+
+export function calculateSelectedAmount(accounts, isRefundAction = false, feeFineActions = []) {
+  const selected = accounts.reduce((s, { amount, remaining }) => {
+    if (isRefundAction) {
+      const waiveActions = getWaiveActions(feeFineActions);
+      const waivedAmount = waiveActions.reduce((a, { amountAction }) => {
+        return a + parseFloat(amountAction * 100);
+      }, 0);
+
+      return s + parseFloat((amount - remaining) * 100) - waivedAmount;
+    } else {
+      return s + parseFloat(remaining * 100);
+    }
   }, 0);
 
   return parseFloat(selected / 100).toFixed(2);
-}
-
-function getPaidActions(feeFineActions = []) {
-  return feeFineActions.filter(({ typeAction }) => paymentStatusesAllowedToRefund.includes(typeAction));
 }
 
 export function calculateRefundSelectedAmount(feeFineActions) {
@@ -61,10 +76,6 @@ export function calculateRefundSelectedAmount(feeFineActions) {
   }, 0);
 
   return parseFloat(selected / 100).toFixed(2);
-}
-
-export function isPaymentOccured(feeFineActions) {
-  return !isEmpty(getPaidActions(feeFineActions));
 }
 
 export function calculateRemainingAmount(amount, balance, selected, action) {
@@ -110,9 +121,13 @@ export function accountRefundInfo(account) {
   return { hasBeenPaid, paidAmount };
 }
 
-export function isRefundAllowed(account) {
-  const { hasBeenPaid, paidAmount } = accountRefundInfo(account);
-  return hasBeenPaid && paidAmount > 0;
+// export function isRefundAllowed(account) {
+//   const { hasBeenPaid, paidAmount } = accountRefundInfo(account);
+//   return hasBeenPaid && paidAmount > 0;
+// }
+
+export function isRefundAllowed() {
+  return false;
 }
 
 export function calculateTotalPaymentAmount(accounts = []) {
