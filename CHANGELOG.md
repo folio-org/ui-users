@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## 5.1.0 IN PROGRESS
+
+* Allow search by username. Refs UIU-1707.
+
 ## [5.0.1](https://github.com/folio-org/ui-users/tree/v5.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.0...v5.0.1)
 
