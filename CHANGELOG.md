@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## 5.0.1 IN PROGRESS
+
+* Update plugins to `stripes v5`-compatible versions. Refs UIU-1901.
+
 ## [5.0.0](https://github.com/folio-org/ui-users/tree/v5.0.0) (2020-10-14)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v4.0.0...v5.0.0)
 
