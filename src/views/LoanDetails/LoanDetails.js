@@ -246,7 +246,11 @@ class LoanDetails extends React.Component {
         )}
       />;
     }
-    return '-';
+
+    return <KeyValue
+      label={<FormattedMessage id="ui-users.loans.columns.title" />}
+      value="-"
+    />;
   }
 
   renderChangeDueDateDialog() {

@@ -235,7 +235,7 @@ describe('Test Fee/Fine details', () => {
       });
     });
 
-    describe('Refund fee/fine', () => {
+    describe.skip('Refund fee/fine', () => {
       beforeEach(async () => {
         await FeeFineDetails.refundButton.click();
       });
