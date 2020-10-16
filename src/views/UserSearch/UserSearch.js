@@ -293,12 +293,9 @@ class UserSearch extends React.Component {
     history.push('/users/create');
   }
 
-  onChangeIndex = (index, getSearchHandlers, searchValue) => {
+  onChangeIndex = (e) => {
+    const index = e.target.value;
     this.props.mutator.query.update({ qindex: index });
-    // getSearchHandlers.state({
-    //   query: searchValue.query,
-    //   qindex: index,
-    // });
   };
 
   shortcuts = [
@@ -432,7 +429,7 @@ class UserSearch extends React.Component {
                                       value={searchValue.query}
                                       searchableIndexes={searchableIndexes}
                                       selectedIndex={get(resources.query, 'qindex')}
-                                      onChangeIndex={(e) => { this.onChangeIndex(e.target.value, getSearchHandlers(), searchValue); }}
+                                      onChangeIndex={this.onChangeIndex}
                                       marginBottom0
                                       data-test-user-search-input
                                     />
