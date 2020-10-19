@@ -314,6 +314,46 @@ class UserDetail extends React.Component {
     );
   }
 
+  getActionMenu = (barcode) => (
+    <>
+      <IfPermission perm="ui-requests.all">
+        <Button
+          buttonStyle="dropdownItem"
+          to={{ pathname: `/requests/?layer=create&userBarcode=${barcode}` }}
+        >
+          <FormattedMessage id="ui-users.requests.createRequest" />
+        </Button>
+      </IfPermission>
+      <IfPermission perm="ui-users.feesfines.actions.all">
+        <Button
+          buttonStyle="dropdownItem"
+          to={{ pathname: `/users/${this.props.match.params.id}/charge` }}
+        >
+          <FormattedMessage id="ui-users.accounts.chargeManual" />
+        </Button>
+      </IfPermission>
+      <IfPermission perm="ui-users.patron_blocks">
+        <Button
+          buttonStyle="dropdownItem"
+          id="create-patron-block"
+          to={{ pathname: `/users/${this.props.match.params.id}/patronblocks/create` }}
+        >
+          <FormattedMessage id="ui-users.blocks.buttons.add" />
+        </Button>
+      </IfPermission>
+      <IfPermission perm="ui-users.edit">
+        <Button
+          buttonStyle="dropdownItem"
+          id="clickable-edituser"
+          to={this.getEditLink()}
+          buttonRef={this.editButton}
+        >
+          <FormattedMessage id="ui-users.crud.editUser" />
+        </Button>
+      </IfPermission>
+    </>
+  );
+
   checkScope = () => true;
 
   goToEdit = () => {
@@ -345,6 +385,10 @@ class UserDetail extends React.Component {
 
       return { ...address, addressType };
     });
+  }
+
+  getBarcode(user) {
+    return get(user, 'barcode', '');
   }
 
   render() {
@@ -431,7 +475,7 @@ class UserDetail extends React.Component {
                   {getFullName(user)}
                 </span>
               }
-              lastMenu={this.renderDetailMenu(user)}
+              actionMenu={() => this.getActionMenu(this.getBarcode(user))}
               dismissible
               onClose={this.onClose}
             >
