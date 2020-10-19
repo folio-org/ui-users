@@ -55,8 +55,9 @@ class PatronBlockLayer extends React.Component {
     const { match: { params } } = this.props;
     item.type = 'Manual';
     item.userId = (params.id);
+    console.log('onCreateItem ', item);
     if (item.expirationDate) {
-      item.expirationDate = moment(item.expirationDate).format();
+      item.expirationDate = moment(item.expirationDate).endOf('day');
     }
     return this.props.mutator.manualPatronBlocks.POST(item).then(() => {
       this.props.mutator.activeRecord.update({ blockid: item.userId });
@@ -80,8 +81,10 @@ class PatronBlockLayer extends React.Component {
   }
 
   onUpdateItem = (item) => {
+    console.log('onUpdateItem ', item);
     if (item.expirationDate) {
-      item.expirationDate = moment(item.expirationDate).format();
+      item.expirationDate = moment(item.expirationDate).endOf('day');
+      console.log('onUpdateItem ', item);
     }
     delete item.metadata;
     this.props.mutator.activeRecord.update({ blockid: item.id });
@@ -137,11 +140,23 @@ class PatronBlockLayer extends React.Component {
       ? manualPatronBlocks.find(pb => pb.id === params.patronblockid)
       : selectedPatronBlock;
 
-    const initialValues = _get(selectedItem, 'id') ? selectedItem : {
+    const patronBlockSettings = _get(selectedItem, 'id') ? selectedItem : {
       borrowing: true,
       renewals: true,
       requests: true,
     };
+
+    console.log('patronBlockSettings ', patronBlockSettings);
+
+    const initialValues = {
+      desc: '',
+      staffInformation: '',
+      patronMessage: '',
+      expirationDate: '',
+      ...patronBlockSettings,
+    }
+
+    console.log('initialValues ', initialValues);
 
     const message = !_isEmpty(selectedItem) ?
       <span>
