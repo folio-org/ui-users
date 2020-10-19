@@ -816,5 +816,5 @@
   "bulkClaimReturned.moreInfoPlaceholder": "Enter more information about the claim (required)",
 
   "index.username": "Username",
-  "index.all": "All"
+  "index.all": "Keyword (name, email, identifier)"
 }
