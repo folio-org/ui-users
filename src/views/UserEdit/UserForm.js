@@ -420,32 +420,14 @@ class UserForm extends React.Component {
     );
   }
 
-  goToRequest = () => {
-    const { history } = this.props;
-    history.push(`/requests/?layer=create&userBarcode=${this.props.initialValues.barcode}`);
-  }
-
-  goToPatronBlocks = () => {
-    const { history, match: { params } } = this.props;
-    history.push(`/users/${params.id}/patronblocks/create`);
-  }
-
-  goToFeesFines = () => {
-    const { history, match: { params } } = this.props;
-    history.push(`/users/${params.id}/charge`);
-  }
-
   getActionMenu = ({ onToggle }) => (
-    <IfPermission perm="ui-requests.all,ui-users.feesfines.actions.all,ui-users.patron_blocks,ui-users.edit">
+    <IfPermission perm="ui-requests.all,ui-users.feesfines.actions.all,ui-users.patron_blocks">
       <>
         <IfPermission perm="ui-requests.all">
           <Button
             buttonStyle="dropdownItem"
-            // to={{ pathname: `/requests/?layer=create&userBarcode=${barcode}` }}
-            onClick={() => {
-              onToggle();
-              this.goToRequest();
-            }}
+            to={{ pathname: `/requests/?layer=create&userBarcode=${this.props.initialValues.barcode}` }}
+            onClick={onToggle}
           >
             <FormattedMessage id="ui-users.requests.createRequest" />
           </Button>
@@ -453,11 +435,8 @@ class UserForm extends React.Component {
         <IfPermission perm="ui-users.feesfines.actions.all">
           <Button
             buttonStyle="dropdownItem"
-            // to={{ pathname: `/users/${this.props.match.params.id}/charge` }}
-            onClick={() => {
-              onToggle();
-              this.goToFeesFines();
-            }}
+            to={{ pathname: `/users/${this.props.match.params.id}/charge` }}
+            onClick={onToggle}
           >
             <FormattedMessage id="ui-users.accounts.chargeManual" />
           </Button>
@@ -466,11 +445,8 @@ class UserForm extends React.Component {
           <Button
             buttonStyle="dropdownItem"
             id="create-patron-block"
-            // to={{ pathname: `/users/${this.props.match.params.id}/patronblocks/create` }}
-            onClick={() => {
-              onToggle();
-              this.goToPatronBlocks();
-            }}
+            to={{ pathname: `/users/${this.props.match.params.id}/patronblocks/create` }}
+            onClick={onToggle}
           >
             <FormattedMessage id="ui-users.blocks.buttons.add" />
           </Button>
