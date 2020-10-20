@@ -381,21 +381,6 @@ class UserDetail extends React.Component {
     history.push(`/users/${params.id}/edit`);
   }
 
-  goToRequest = (barcode) => {
-    const { history } = this.props;
-    history.push(`/requests/?layer=create&userBarcode=${barcode}`);
-  }
-
-  goToPatronBlocks = () => {
-    const { history, match: { params } } = this.props;
-    history.push(`/users/${params.id}/patronblocks/create`);
-  }
-
-  goToFeesFines = () => {
-    const { history, match: { params } } = this.props;
-    history.push(`/users/${params.id}/charge`);
-  }
-
   shortcuts = [
     {
       name: 'edit',

@@ -222,9 +222,6 @@ class UserForm extends React.Component {
     onSubmit: PropTypes.func.isRequired,
     initialValues: PropTypes.object.isRequired,
     servicePoints: PropTypes.object.isRequired,
-    // stripes: PropTypes.shape({
-    //   hasPerm: PropTypes.func.isRequired,
-    // }).isRequired,
     stripes: PropTypes.object,
   };
 
