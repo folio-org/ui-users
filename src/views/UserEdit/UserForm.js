@@ -222,6 +222,9 @@ class UserForm extends React.Component {
     onSubmit: PropTypes.func.isRequired,
     initialValues: PropTypes.object.isRequired,
     servicePoints: PropTypes.object.isRequired,
+    // stripes: PropTypes.shape({
+    //   hasPerm: PropTypes.func.isRequired,
+    // }).isRequired,
     stripes: PropTypes.object,
   };
 
@@ -421,38 +424,50 @@ class UserForm extends React.Component {
     );
   }
 
-  getActionMenu = ({ onToggle }) => (
-    <>
-      <IfPermission perm="ui-requests.all">
-        <Button
-          buttonStyle="dropdownItem"
-          to={{ pathname: `/requests/?layer=create&userBarcode=${this.props.initialValues.barcode}` }}
-          onClick={onToggle}
-        >
-          <FormattedMessage id="ui-users.requests.createRequest" />
-        </Button>
-      </IfPermission>
-      <IfPermission perm="ui-users.feesfines.actions.all">
-        <Button
-          buttonStyle="dropdownItem"
-          to={{ pathname: `/users/${this.props.match.params.id}/charge` }}
-          onClick={onToggle}
-        >
-          <FormattedMessage id="ui-users.accounts.chargeManual" />
-        </Button>
-      </IfPermission>
-      <IfPermission perm="ui-users.patron_blocks">
-        <Button
-          buttonStyle="dropdownItem"
-          id="create-patron-block"
-          to={{ pathname: `/users/${this.props.match.params.id}/patronblocks/create` }}
-          onClick={onToggle}
-        >
-          <FormattedMessage id="ui-users.blocks.buttons.add" />
-        </Button>
-      </IfPermission>
-    </>
-  );
+
+
+  getActionMenu = ({ onToggle }) => {
+    const showActionMenu = this.props.stripes.hasPerm('ui-users.patron_blocks')
+      || this.props.stripes.hasPerm('ui-users.feesfines.actions.all')
+      || this.props.stripes.hasPerm('ui-requests.all');
+
+    if (showActionMenu) {
+      return (
+        <>
+          <IfPermission perm="ui-requests.all">
+            <Button
+              buttonStyle="dropdownItem"
+              to={{ pathname: `/requests/?layer=create&userBarcode=${this.props.initialValues.barcode}` }}
+              onClick={onToggle}
+            >
+              <FormattedMessage id="ui-users.requests.createRequest" />
+            </Button>
+          </IfPermission>
+          <IfPermission perm="ui-users.feesfines.actions.all">
+            <Button
+              buttonStyle="dropdownItem"
+              to={{ pathname: `/users/${this.props.match.params.id}/charge` }}
+              onClick={onToggle}
+            >
+              <FormattedMessage id="ui-users.accounts.chargeManual" />
+            </Button>
+          </IfPermission>
+          <IfPermission perm="ui-users.patron_blocks">
+            <Button
+              buttonStyle="dropdownItem"
+              id="create-patron-block"
+              to={{ pathname: `/users/${this.props.match.params.id}/patronblocks/create` }}
+              onClick={onToggle}
+            >
+              <FormattedMessage id="ui-users.blocks.buttons.add" />
+            </Button>
+          </IfPermission>
+        </>
+      );
+    } else {
+      return null;
+    }
+  }
 
   render() {
     const {
@@ -462,7 +477,6 @@ class UserForm extends React.Component {
       change, // from redux-form...
       servicePoints,
       onCancel,
-      stripes,
     } = this.props;
 
     const { sections } = this.state;
@@ -472,10 +486,6 @@ class UserForm extends React.Component {
     const paneTitle = initialValues.id
       ? <FormattedMessage id="ui-users.edit" />
       : <FormattedMessage id="ui-users.crud.createUser" />;
-
-    const showActionMenu = stripes.hasPerm('ui-users.patron_blocks')
-      || stripes.hasPerm('ui-users.feesfines.actions.all')
-      || stripes.hasPerm('ui-requests.all');
 
     return (
       <HasCommand commands={this.keyboardCommands}>
@@ -487,7 +497,7 @@ class UserForm extends React.Component {
         >
           <Paneset>
             <Pane
-              {... (showActionMenu ? this.getActionMenu : {})}
+              actionMenu={this.getActionMenu}
               firstMenu={firstMenu}
               footer={footer}
               centerContent
