@@ -22,10 +22,6 @@ import {
 } from '@folio/stripes/core';
 import { Field } from 'react-final-form';
 import setFieldData from 'final-form-set-field-data';
-import {
-  isEqual,
-  toNumber,
-} from 'lodash';
 
 import stripesFinalForm from '@folio/stripes/final-form';
 import { ViewMetaData } from '@folio/stripes/smart-components';
@@ -54,10 +50,8 @@ const showValidationErrors = (item) => {
   return errors;
 };
 
-
 class PatronBlockForm extends React.Component {
   static propTypes = {
-    form: PropTypes.object.isRequired,
     user: PropTypes.object,
     pristine: PropTypes.bool,
     submitting: PropTypes.bool,
@@ -69,7 +63,6 @@ class PatronBlockForm extends React.Component {
     connect: PropTypes.func,
     intl: PropTypes.object.isRequired,
     stripes: PropTypes.object,
-    currentValues: PropTypes.object,
     initialValues: PropTypes.object,
   };
 
@@ -129,7 +122,7 @@ class PatronBlockForm extends React.Component {
     } = this.props;
 
     const submit =
-      <Button id="patron-block-save-close" marginBottom0 buttonStyle="primary" onClick={this.props.handleSubmit} disabled={pristine || submitting || invalid}>
+      <Button id="patron-block-save-close" marginBottom0 buttonStyle="primary" type="submit" disabled={pristine || submitting || invalid}>
         { params.patronblockid ? <FormattedMessage id="ui-users.blocks.form.button.save" /> : <FormattedMessage id="ui-users.blocks.form.button.create" />}
       </Button>;
     const del = params.patronblockid ? <Button id="patron-block-delete" marginBottom0 buttonStyle="danger" onClick={this.props.onDeleteItem}><FormattedMessage id="ui-users.blocks.form.button.delete" /></Button> : '';
@@ -149,12 +142,9 @@ class PatronBlockForm extends React.Component {
       initialValues,
       handleSubmit,
       user = {},
-      form: { getState}
     } = this.props;
     const title = params.patronblockid ? getFullName(user) : intl.formatMessage({ id: 'ui-users.blocks.layer.newBlockTitle' });
     const userD = !params.patronblockid ? <UserInfo user={user} /> : '';
-    const { values } = getState();
-    console.log('values ##', values);
 
     return (
       <form
@@ -281,7 +271,7 @@ class PatronBlockForm extends React.Component {
 }
 
 export default stripesFinalForm({
-  initialValuesEqual: (a, b) => isEqual(a, b),
+  initialValuesEqual: (a, b) => _.isEqual(a, b),
   navigationCheck: true,
   subscription: { values: true },
   mutators: { setFieldData },
