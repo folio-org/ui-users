@@ -179,7 +179,7 @@ class EditServicePoints extends React.Component {
       userServicePoints,
     } = this.state;
 
-    const servicePoints = get(this.props.formData, 'servicePoints', []);
+    const servicePoints = uniqBy(this.props.formData?.servicePoints, 'id');
 
     return (
       <AddServicePointModal
