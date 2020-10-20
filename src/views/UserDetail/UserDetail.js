@@ -7,6 +7,7 @@ import {
   concat,
 } from 'lodash';
 import { FormattedMessage } from 'react-intl';
+import queryString from 'query-string';
 import {
   AppIcon,
   IfPermission,
@@ -327,7 +328,11 @@ class UserDetail extends React.Component {
           <IfPermission perm="ui-requests.all">
             <Button
               buttonStyle="dropdownItem"
-              to={{ pathname: `/requests/?layer=create&userBarcode=${barcode}` }}
+              // to={{ pathname: `/requests/?layer=create&userBarcode=${barcode}` }}
+              to={`/requests/?${queryString.stringify({
+                layer: 'create',
+                userBarcode: barcode,
+              })}`}
               onClick={onToggle}
             >
               <FormattedMessage id="ui-users.requests.createRequest" />
@@ -363,7 +368,7 @@ class UserDetail extends React.Component {
               buttonRef={this.editButton}
             >
               <Icon icon="edit">
-                <FormattedMessage id="ui-users.crud.editUser" />
+                <FormattedMessage id="ui-users.edit" />
               </Icon>
             </Button>
           </IfPermission>
