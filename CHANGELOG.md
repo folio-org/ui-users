@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## 5.0.4 IN PROGRESS
+
+* Fix bug showing duplicated service points in add service point dialog. Fixes UIU-1892.
+
 ## [5.0.3](https://github.com/folio-org/ui-users/tree/v5.0.3) (2020-10-27)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.2...v5.0.3)
 
