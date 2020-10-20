@@ -17,6 +17,7 @@ import {
 import {
   Pane,
   PaneMenu,
+  Icon,
   IconButton,
   expandAllFunction,
   ExpandAllButton,
@@ -314,44 +315,64 @@ class UserDetail extends React.Component {
     );
   }
 
-  getActionMenu = (barcode) => (
-    <>
-      <IfPermission perm="ui-requests.all">
-        <Button
-          buttonStyle="dropdownItem"
-          to={{ pathname: `/requests/?layer=create&userBarcode=${barcode}` }}
-        >
-          <FormattedMessage id="ui-users.requests.createRequest" />
-        </Button>
-      </IfPermission>
-      <IfPermission perm="ui-users.feesfines.actions.all">
-        <Button
-          buttonStyle="dropdownItem"
-          to={{ pathname: `/users/${this.props.match.params.id}/charge` }}
-        >
-          <FormattedMessage id="ui-users.accounts.chargeManual" />
-        </Button>
-      </IfPermission>
-      <IfPermission perm="ui-users.patron_blocks">
-        <Button
-          buttonStyle="dropdownItem"
-          id="create-patron-block"
-          to={{ pathname: `/users/${this.props.match.params.id}/patronblocks/create` }}
-        >
-          <FormattedMessage id="ui-users.blocks.buttons.add" />
-        </Button>
-      </IfPermission>
-      <IfPermission perm="ui-users.edit">
-        <Button
-          buttonStyle="dropdownItem"
-          id="clickable-edituser"
-          to={this.getEditLink()}
-          buttonRef={this.editButton}
-        >
-          <FormattedMessage id="ui-users.crud.editUser" />
-        </Button>
-      </IfPermission>
-    </>
+  getActionMenu = barcode => ({ onToggle }) => (
+    <IfPermission perm="ui-requests.all,ui-users.feesfines.actions.all,ui-users.patron_blocks,ui-users.edit">
+      <>
+        <IfPermission perm="ui-requests.all">
+          <Button
+            buttonStyle="dropdownItem"
+            // to={{ pathname: `/requests/?layer=create&userBarcode=${barcode}` }}
+            onClick={() => {
+              onToggle();
+              this.goToRequest(barcode);
+            }}
+          >
+            <FormattedMessage id="ui-users.requests.createRequest" />
+          </Button>
+        </IfPermission>
+        <IfPermission perm="ui-users.feesfines.actions.all">
+          <Button
+            buttonStyle="dropdownItem"
+            // to={{ pathname: `/users/${this.props.match.params.id}/charge` }}
+            onClick={() => {
+              onToggle();
+              this.goToFeesFines();
+            }}
+          >
+            <FormattedMessage id="ui-users.accounts.chargeManual" />
+          </Button>
+        </IfPermission>
+        <IfPermission perm="ui-users.patron_blocks">
+          <Button
+            buttonStyle="dropdownItem"
+            id="create-patron-block"
+            // to={{ pathname: `/users/${this.props.match.params.id}/patronblocks/create` }}
+            onClick={() => {
+              onToggle();
+              this.goToPatronBlocks();
+            }}
+          >
+            <FormattedMessage id="ui-users.blocks.buttons.add" />
+          </Button>
+        </IfPermission>
+        <IfPermission perm="ui-users.edit">
+          <Button
+            buttonStyle="dropdownItem"
+            id="clickable-edituser"
+            // to={this.goToEdit()}
+            onClick={() => {
+              onToggle();
+              this.goToEdit();
+            }}
+            buttonRef={this.editButton}
+          >
+            <Icon icon="edit">
+              <FormattedMessage id="ui-users.crud.editUser" />
+            </Icon>
+          </Button>
+        </IfPermission>
+      </>
+    </IfPermission>
   );
 
   checkScope = () => true;
@@ -359,6 +380,21 @@ class UserDetail extends React.Component {
   goToEdit = () => {
     const { history, match: { params } } = this.props;
     history.push(`/users/${params.id}/edit`);
+  }
+
+  goToRequest = (barcode) => {
+    const { history } = this.props;
+    history.push(`/requests/?layer=create&userBarcode=${barcode}`);
+  }
+
+  goToPatronBlocks = () => {
+    const { history, match: { params } } = this.props;
+    history.push(`/users/${params.id}/patronblocks/create`);
+  }
+
+  goToFeesFines = () => {
+    const { history, match: { params } } = this.props;
+    history.push(`/users/${params.id}/charge`);
   }
 
   shortcuts = [
@@ -475,7 +511,7 @@ class UserDetail extends React.Component {
                   {getFullName(user)}
                 </span>
               }
-              actionMenu={() => this.getActionMenu(this.getBarcode(user))}
+              actionMenu={this.getActionMenu(this.getBarcode(user))}
               dismissible
               onClose={this.onClose}
             >
