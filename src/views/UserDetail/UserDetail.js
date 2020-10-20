@@ -327,11 +327,8 @@ class UserDetail extends React.Component {
           <IfPermission perm="ui-requests.all">
             <Button
               buttonStyle="dropdownItem"
-              // to={{ pathname: `/requests/?layer=create&userBarcode=${barcode}` }}
-              onClick={() => {
-                onToggle();
-                this.goToRequest(barcode);
-              }}
+              to={{ pathname: `/requests/?layer=create&userBarcode=${barcode}` }}
+              onClick={onToggle}
             >
               <FormattedMessage id="ui-users.requests.createRequest" />
             </Button>
@@ -339,11 +336,8 @@ class UserDetail extends React.Component {
           <IfPermission perm="ui-users.feesfines.actions.all">
             <Button
               buttonStyle="dropdownItem"
-              // to={{ pathname: `/users/${this.props.match.params.id}/charge` }}
-              onClick={() => {
-                onToggle();
-                this.goToFeesFines();
-              }}
+              to={{ pathname: `/users/${this.props.match.params.id}/charge` }}
+              onClick={onToggle}
             >
               <FormattedMessage id="ui-users.accounts.chargeManual" />
             </Button>
@@ -352,11 +346,8 @@ class UserDetail extends React.Component {
             <Button
               buttonStyle="dropdownItem"
               id="create-patron-block"
-              // to={{ pathname: `/users/${this.props.match.params.id}/patronblocks/create` }}
-              onClick={() => {
-                onToggle();
-                this.goToPatronBlocks();
-              }}
+              to={{ pathname: `/users/${this.props.match.params.id}/patronblocks/create` }}
+              onClick={onToggle}
             >
               <FormattedMessage id="ui-users.blocks.buttons.add" />
             </Button>
@@ -365,7 +356,6 @@ class UserDetail extends React.Component {
             <Button
               buttonStyle="dropdownItem"
               id="clickable-edituser"
-              // to={this.goToEdit()}
               onClick={() => {
                 onToggle();
                 this.goToEdit();
@@ -430,10 +420,6 @@ class UserDetail extends React.Component {
 
       return { ...address, addressType };
     });
-  }
-
-  getBarcode(user) {
-    return get(user, 'barcode', '');
   }
 
   render() {
@@ -520,7 +506,7 @@ class UserDetail extends React.Component {
                   {getFullName(user)}
                 </span>
               }
-              actionMenu={this.getActionMenu(this.getBarcode(user))}
+              actionMenu={this.getActionMenu(get(user, 'barcode', ''))}
               dismissible
               onClose={this.onClose}
             >
