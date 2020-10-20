@@ -222,6 +222,7 @@ class UserForm extends React.Component {
     onSubmit: PropTypes.func.isRequired,
     initialValues: PropTypes.object.isRequired,
     servicePoints: PropTypes.object.isRequired,
+    stripes: PropTypes.object,
   };
 
   static defaultProps = {
@@ -421,38 +422,36 @@ class UserForm extends React.Component {
   }
 
   getActionMenu = ({ onToggle }) => (
-    <IfPermission perm="ui-requests.all,ui-users.feesfines.actions.all,ui-users.patron_blocks">
-      <>
-        <IfPermission perm="ui-requests.all">
-          <Button
-            buttonStyle="dropdownItem"
-            to={{ pathname: `/requests/?layer=create&userBarcode=${this.props.initialValues.barcode}` }}
-            onClick={onToggle}
-          >
-            <FormattedMessage id="ui-users.requests.createRequest" />
-          </Button>
-        </IfPermission>
-        <IfPermission perm="ui-users.feesfines.actions.all">
-          <Button
-            buttonStyle="dropdownItem"
-            to={{ pathname: `/users/${this.props.match.params.id}/charge` }}
-            onClick={onToggle}
-          >
-            <FormattedMessage id="ui-users.accounts.chargeManual" />
-          </Button>
-        </IfPermission>
-        <IfPermission perm="ui-users.patron_blocks">
-          <Button
-            buttonStyle="dropdownItem"
-            id="create-patron-block"
-            to={{ pathname: `/users/${this.props.match.params.id}/patronblocks/create` }}
-            onClick={onToggle}
-          >
-            <FormattedMessage id="ui-users.blocks.buttons.add" />
-          </Button>
-        </IfPermission>
-      </>
-    </IfPermission>
+    <>
+      <IfPermission perm="ui-requests.all">
+        <Button
+          buttonStyle="dropdownItem"
+          to={{ pathname: `/requests/?layer=create&userBarcode=${this.props.initialValues.barcode}` }}
+          onClick={onToggle}
+        >
+          <FormattedMessage id="ui-users.requests.createRequest" />
+        </Button>
+      </IfPermission>
+      <IfPermission perm="ui-users.feesfines.actions.all">
+        <Button
+          buttonStyle="dropdownItem"
+          to={{ pathname: `/users/${this.props.match.params.id}/charge` }}
+          onClick={onToggle}
+        >
+          <FormattedMessage id="ui-users.accounts.chargeManual" />
+        </Button>
+      </IfPermission>
+      <IfPermission perm="ui-users.patron_blocks">
+        <Button
+          buttonStyle="dropdownItem"
+          id="create-patron-block"
+          to={{ pathname: `/users/${this.props.match.params.id}/patronblocks/create` }}
+          onClick={onToggle}
+        >
+          <FormattedMessage id="ui-users.blocks.buttons.add" />
+        </Button>
+      </IfPermission>
+    </>
   );
 
   render() {
@@ -463,6 +462,7 @@ class UserForm extends React.Component {
       change, // from redux-form...
       servicePoints,
       onCancel,
+      stripes,
     } = this.props;
 
     const { sections } = this.state;
@@ -472,6 +472,10 @@ class UserForm extends React.Component {
     const paneTitle = initialValues.id
       ? <FormattedMessage id="ui-users.edit" />
       : <FormattedMessage id="ui-users.crud.createUser" />;
+
+    const showActionMenu = stripes.hasPerm('ui-users.patron_blocks')
+      || stripes.hasPerm('ui-users.feesfines.actions.all')
+      || stripes.hasPerm('ui-requests.all');
 
     return (
       <HasCommand commands={this.keyboardCommands}>
@@ -483,7 +487,7 @@ class UserForm extends React.Component {
         >
           <Paneset>
             <Pane
-              actionMenu={this.getActionMenu}
+              {... (showActionMenu ? this.getActionMenu : {})}
               firstMenu={firstMenu}
               footer={footer}
               centerContent
