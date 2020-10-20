@@ -328,7 +328,6 @@ class UserDetail extends React.Component {
           <IfPermission perm="ui-requests.all">
             <Button
               buttonStyle="dropdownItem"
-              // to={{ pathname: `/requests/?layer=create&userBarcode=${barcode}` }}
               to={`/requests/?${queryString.stringify({
                 layer: 'create',
                 userBarcode: barcode,
