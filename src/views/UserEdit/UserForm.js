@@ -6,7 +6,10 @@ import { FormattedMessage } from 'react-intl';
 import { get } from 'lodash';
 import { Field } from 'redux-form';
 
-import { AppIcon } from '@folio/stripes/core';
+import {
+  AppIcon,
+  IfPermission,
+} from '@folio/stripes/core';
 import {
   Paneset,
   Pane,
@@ -417,6 +420,65 @@ class UserForm extends React.Component {
     );
   }
 
+  goToRequest = () => {
+    const { history } = this.props;
+    history.push(`/requests/?layer=create&userBarcode=${this.props.initialValues.barcode}`);
+  }
+
+  goToPatronBlocks = () => {
+    const { history, match: { params } } = this.props;
+    history.push(`/users/${params.id}/patronblocks/create`);
+  }
+
+  goToFeesFines = () => {
+    const { history, match: { params } } = this.props;
+    history.push(`/users/${params.id}/charge`);
+  }
+
+  getActionMenu = ({ onToggle }) => (
+    <IfPermission perm="ui-requests.all,ui-users.feesfines.actions.all,ui-users.patron_blocks,ui-users.edit">
+      <>
+        <IfPermission perm="ui-requests.all">
+          <Button
+            buttonStyle="dropdownItem"
+            // to={{ pathname: `/requests/?layer=create&userBarcode=${barcode}` }}
+            onClick={() => {
+              onToggle();
+              this.goToRequest();
+            }}
+          >
+            <FormattedMessage id="ui-users.requests.createRequest" />
+          </Button>
+        </IfPermission>
+        <IfPermission perm="ui-users.feesfines.actions.all">
+          <Button
+            buttonStyle="dropdownItem"
+            // to={{ pathname: `/users/${this.props.match.params.id}/charge` }}
+            onClick={() => {
+              onToggle();
+              this.goToFeesFines();
+            }}
+          >
+            <FormattedMessage id="ui-users.accounts.chargeManual" />
+          </Button>
+        </IfPermission>
+        <IfPermission perm="ui-users.patron_blocks">
+          <Button
+            buttonStyle="dropdownItem"
+            id="create-patron-block"
+            // to={{ pathname: `/users/${this.props.match.params.id}/patronblocks/create` }}
+            onClick={() => {
+              onToggle();
+              this.goToPatronBlocks();
+            }}
+          >
+            <FormattedMessage id="ui-users.blocks.buttons.add" />
+          </Button>
+        </IfPermission>
+      </>
+    </IfPermission>
+  );
+
   render() {
     const {
       initialValues,
@@ -445,6 +507,7 @@ class UserForm extends React.Component {
         >
           <Paneset>
             <Pane
+              actionMenu={this.getActionMenu}
               firstMenu={firstMenu}
               footer={footer}
               centerContent
