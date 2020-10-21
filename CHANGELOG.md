@@ -1,7 +1,9 @@
 # Change history for ui-users
 
-## 5.1.0 IN PROGRESS
+## 6.0.0 (IN PROGRESS)
 
+* Fix bug showing duplicated service points in add service point dialog. Fixes UIU-1892.
+* Add report icon for report menu items. Refs UIU-1505.
 * Allow search by username. Refs UIU-1707.
 
 ## [5.0.1](https://github.com/folio-org/ui-users/tree/v5.0.1) (2020-10-15)

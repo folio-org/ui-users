@@ -212,7 +212,9 @@ class UserSearch extends React.Component {
             this.generateReport(this.props, 'overdue');
           }}
         >
-          <FormattedMessage id="ui-users.reports.overdue.label" />
+          <Icon icon="report">
+            <FormattedMessage id="ui-users.reports.overdue.label" />
+          </Icon>
         </Button>
       </IfPermission>
       <Button
@@ -223,7 +225,9 @@ class UserSearch extends React.Component {
           this.generateReport(this.props, 'claimedReturned');
         }}
       >
-        <FormattedMessage id="ui-users.reports.claimReturned.label" />
+        <Icon icon="report">
+          <FormattedMessage id="ui-users.reports.claimReturned.label" />
+        </Icon>
       </Button>
     </>
   );
