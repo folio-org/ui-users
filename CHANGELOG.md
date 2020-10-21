@@ -2,6 +2,7 @@
 
 ## 6.0.0 (IN PROGRESS)
 
+* Add create request, create fee/fine and create block options to the actions menu. Refs UIU-775.
 * Fix bug showing duplicated service points in add service point dialog. Fixes UIU-1892.
 * Add report icon for report menu items. Refs UIU-1505.
 * Allow search by username. Refs UIU-1707.
