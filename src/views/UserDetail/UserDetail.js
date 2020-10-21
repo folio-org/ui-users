@@ -322,16 +322,17 @@ class UserDetail extends React.Component {
     || this.props.stripes.hasPerm('ui-users.feesfines.actions.all')
     || this.props.stripes.hasPerm('ui-requests.all');
 
+    const linkToCreateRequest = barcode ?
+      `/requests/?${queryString.stringify({ layer: 'create', userBarcode: barcode })}` :
+      `/requests/?${queryString.stringify({ layer: 'create' })}`;
+
     if (showActionMenu) {
       return (
         <>
           <IfPermission perm="ui-requests.all">
             <Button
               buttonStyle="dropdownItem"
-              to={`/requests/?${queryString.stringify({
-                layer: 'create',
-                userBarcode: barcode,
-              })}`}
+              to={linkToCreateRequest}
               onClick={onToggle}
             >
               <FormattedMessage id="ui-users.requests.createRequest" />
