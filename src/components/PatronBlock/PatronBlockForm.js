@@ -32,18 +32,25 @@ import {
 import { getFullName } from '../util';
 import UserInfo from '../Accounts/ChargeFeeFine/UserInfo';
 
-const showValidationErrors = (item) => {
+const showValidationErrors = ({
+  desc,
+  borrowing,
+  renewals,
+  requests,
+  expirationDate,
+}) => {
   const errors = {};
+  const patronBlockError = <FormattedMessage id="ui-users.blocks.form.validate.any" />;
 
-  if (!item.desc) {
+  if (!desc) {
     errors.desc = <FormattedMessage id="ui-users.blocks.form.validate.desc" />;
   }
-  if (!item.borrowing && !item.renewals && !item.requests) {
-    errors.borrowing = <FormattedMessage id="ui-users.blocks.form.validate.any" />;
-    errors.renewals = <FormattedMessage id="ui-users.blocks.form.validate.any" />;
-    errors.requests = <FormattedMessage id="ui-users.blocks.form.validate.any" />;
+  if (!borrowing && !renewals && !requests) {
+    errors.borrowing = patronBlockError;
+    errors.renewals = patronBlockError;
+    errors.requests = patronBlockError;
   }
-  if (moment(moment(item.expirationDate).endOf('day')).isBefore(moment().endOf('day'))) {
+  if (moment(moment(expirationDate).endOf('day')).isBefore(moment().endOf('day'))) {
     errors.expirationDate = <FormattedMessage id="ui-users.blocks.form.validate.future" />;
   }
 
@@ -148,7 +155,7 @@ class PatronBlockForm extends React.Component {
 
     return (
       <form
-        onSubmit={handleSubmit} 
+        onSubmit={handleSubmit}
         id="patron-block-form"
       >
         <Paneset>
