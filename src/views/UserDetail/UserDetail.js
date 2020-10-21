@@ -61,7 +61,7 @@ import {
   getFullName,
   // eachPromise
 } from '../../components/util';
-import ActionMenuCreateButtons from '../../components/util/actionMenu';
+import ActionMenuCreateButtons from '../../components/util/ActionMenuCreateButtons';
 import { departmentsShape } from '../../shapes';
 
 class UserDetail extends React.Component {

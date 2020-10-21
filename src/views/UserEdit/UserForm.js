@@ -33,7 +33,7 @@ import {
   EditServicePoints,
 } from '../../components/EditSections';
 import { getFullName } from '../../components/util';
-import ActionMenuCreateButtons from '../../components/util/actionMenu';
+import ActionMenuCreateButtons from '../../components/util/ActionMenuCreateButtons';
 import PermissionsAccordion from '../../components/PermissionsAccordion';
 import {
   statusFilterConfig,
