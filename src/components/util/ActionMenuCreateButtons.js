@@ -24,6 +24,7 @@ class ActionMenuCreateButtons extends React.Component {
         <IfPermission perm="ui-requests.all">
           <Button
             buttonStyle="dropdownItem"
+            data-test-actions-menu-create-request
             to={linkToCreateRequest}
             onClick={onToggle}
           >
@@ -33,6 +34,7 @@ class ActionMenuCreateButtons extends React.Component {
         <IfPermission perm="ui-users.feesfines.actions.all">
           <Button
             buttonStyle="dropdownItem"
+            data-test-actions-menu-create-feesfines
             to={{ pathname: `/users/${userId}/charge` }}
             onClick={onToggle}
           >
@@ -42,6 +44,7 @@ class ActionMenuCreateButtons extends React.Component {
         <IfPermission perm="ui-users.patron_blocks">
           <Button
             buttonStyle="dropdownItem"
+            data-test-actions-menu-create-patronblocks
             id="create-patron-block"
             to={{ pathname: `/users/${userId}/patronblocks/create` }}
             onClick={onToggle}

@@ -52,6 +52,17 @@ describe('User Edit Page', () => {
       expect(UserFormPage.actionMenuButton.isPresent).to.be.false;
     });
 
+    describe('clicking on the open action menu', function () {
+      beforeEach(async function () {
+        await UserFormPage.actionMenuButton.click();
+      });
+      it('should display links to create request, feefines and patronblock', () => {
+        expect(UserFormPage.actionMenuCreateRequestButton.isPresent).to.be.true;
+        expect(UserFormPage.actionMenuCreateFeeFinesButton.isPresent).to.be.true;
+        expect(UserFormPage.actionMenuCreatePatronBlocksButton.isPresent).to.be.true;
+      });
+    });
+
     describe('validating user barcode', () => {
       beforeEach(async function () {
         await UserFormPage.barcodeField.fillAndBlur(user2.barcode);

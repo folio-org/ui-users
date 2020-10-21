@@ -333,6 +333,7 @@ class UserDetail extends React.Component {
           <IfPermission perm="ui-users.edit">
             <Button
               buttonStyle="dropdownItem"
+              data-test-actions-menu-edit
               id="clickable-edituser"
               onClick={() => {
                 onToggle();

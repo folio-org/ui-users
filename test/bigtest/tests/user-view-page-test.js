@@ -40,6 +40,20 @@ describe('User view', () => {
       expect(InstanceViewPage.actionMenuButton.isPresent).to.be.true;
     });
 
+    describe('clicking on the open action menu', function () {
+      beforeEach(async function () {
+        await InstanceViewPage.actionMenuButton.click();
+      });
+      it('should display links to create request, feefines and patronblock', () => {
+        expect(InstanceViewPage.actionMenuCreateRequestButton.isPresent).to.be.true;
+        expect(InstanceViewPage.actionMenuCreateFeeFinesButton.isPresent).to.be.true;
+        expect(InstanceViewPage.actionMenuCreatePatronBlocksButton.isPresent).to.be.true;
+      });
+      it('should display link to edit user', () => {
+        expect(InstanceViewPage.actionMenuCreateRequestButton.isPresent).to.be.true;
+      });
+    });
+
     describe('request preferences section', () => {
       it('should display hold shelf value', () => {
         expect(InstanceViewPage.holdShelf).to.equal('Hold shelf - Yes');
