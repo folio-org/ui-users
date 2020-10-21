@@ -6,10 +6,7 @@ import { FormattedMessage } from 'react-intl';
 import { get } from 'lodash';
 import { Field } from 'redux-form';
 
-import {
-  AppIcon,
-  IfPermission,
-} from '@folio/stripes/core';
+import { AppIcon } from '@folio/stripes/core';
 import {
   Paneset,
   Pane,
@@ -36,6 +33,7 @@ import {
   EditServicePoints,
 } from '../../components/EditSections';
 import { getFullName } from '../../components/util';
+import ActionMenuCreateButtons from '../../components/util/actionMenu';
 import PermissionsAccordion from '../../components/PermissionsAccordion';
 import {
   statusFilterConfig,
@@ -421,8 +419,6 @@ class UserForm extends React.Component {
     );
   }
 
-
-
   getActionMenu = ({ onToggle }) => {
     const showActionMenu = this.props.stripes.hasPerm('ui-users.patron_blocks')
       || this.props.stripes.hasPerm('ui-users.feesfines.actions.all')
@@ -431,34 +427,11 @@ class UserForm extends React.Component {
     if (showActionMenu) {
       return (
         <>
-          <IfPermission perm="ui-requests.all">
-            <Button
-              buttonStyle="dropdownItem"
-              to={{ pathname: `/requests/?layer=create&userBarcode=${this.props.initialValues.barcode}` }}
-              onClick={onToggle}
-            >
-              <FormattedMessage id="ui-users.requests.createRequest" />
-            </Button>
-          </IfPermission>
-          <IfPermission perm="ui-users.feesfines.actions.all">
-            <Button
-              buttonStyle="dropdownItem"
-              to={{ pathname: `/users/${this.props.match.params.id}/charge` }}
-              onClick={onToggle}
-            >
-              <FormattedMessage id="ui-users.accounts.chargeManual" />
-            </Button>
-          </IfPermission>
-          <IfPermission perm="ui-users.patron_blocks">
-            <Button
-              buttonStyle="dropdownItem"
-              id="create-patron-block"
-              to={{ pathname: `/users/${this.props.match.params.id}/patronblocks/create` }}
-              onClick={onToggle}
-            >
-              <FormattedMessage id="ui-users.blocks.buttons.add" />
-            </Button>
-          </IfPermission>
+          <ActionMenuCreateButtons
+            barcode={this.props.initialValues.barcode}
+            onToggle={onToggle}
+            userId={this.props.match.params.id}
+          />
         </>
       );
     } else {

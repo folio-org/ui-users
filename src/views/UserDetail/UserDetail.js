@@ -7,7 +7,6 @@ import {
   concat,
 } from 'lodash';
 import { FormattedMessage } from 'react-intl';
-import queryString from 'query-string';
 import {
   AppIcon,
   IfPermission,
@@ -62,6 +61,7 @@ import {
   getFullName,
   // eachPromise
 } from '../../components/util';
+import ActionMenuCreateButtons from '../../components/util/actionMenu';
 import { departmentsShape } from '../../shapes';
 
 class UserDetail extends React.Component {
@@ -322,41 +322,14 @@ class UserDetail extends React.Component {
     || this.props.stripes.hasPerm('ui-users.feesfines.actions.all')
     || this.props.stripes.hasPerm('ui-requests.all');
 
-    const linkToCreateRequest = barcode ?
-      `/requests/?${queryString.stringify({ layer: 'create', userBarcode: barcode })}` :
-      `/requests/?${queryString.stringify({ layer: 'create' })}`;
-
     if (showActionMenu) {
       return (
         <>
-          <IfPermission perm="ui-requests.all">
-            <Button
-              buttonStyle="dropdownItem"
-              to={linkToCreateRequest}
-              onClick={onToggle}
-            >
-              <FormattedMessage id="ui-users.requests.createRequest" />
-            </Button>
-          </IfPermission>
-          <IfPermission perm="ui-users.feesfines.actions.all">
-            <Button
-              buttonStyle="dropdownItem"
-              to={{ pathname: `/users/${this.props.match.params.id}/charge` }}
-              onClick={onToggle}
-            >
-              <FormattedMessage id="ui-users.accounts.chargeManual" />
-            </Button>
-          </IfPermission>
-          <IfPermission perm="ui-users.patron_blocks">
-            <Button
-              buttonStyle="dropdownItem"
-              id="create-patron-block"
-              to={{ pathname: `/users/${this.props.match.params.id}/patronblocks/create` }}
-              onClick={onToggle}
-            >
-              <FormattedMessage id="ui-users.blocks.buttons.add" />
-            </Button>
-          </IfPermission>
+          <ActionMenuCreateButtons
+            barcode={barcode}
+            onToggle={onToggle}
+            userId={this.props.match.params.id}
+          />
           <IfPermission perm="ui-users.edit">
             <Button
               buttonStyle="dropdownItem"
