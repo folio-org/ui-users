@@ -5,6 +5,7 @@
 * Fix bug showing duplicated service points in add service point dialog. Fixes UIU-1892.
 * Add report icon for report menu items. Refs UIU-1505.
 * Allow search by username. Refs UIU-1707.
+* Allow cancel fee/fine as error only if any 'actions' has not been applied. Refs UIU-1894.
 
 ## [5.0.1](https://github.com/folio-org/ui-users/tree/v5.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.0...v5.0.1)

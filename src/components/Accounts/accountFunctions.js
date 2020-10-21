@@ -142,3 +142,7 @@ export function calculateOwedFeeFines(accounts = []) {
     return account?.status?.name === 'Open' ? parseFloat(owed + account.remaining) : owed;
   }, 0);
 }
+
+export function isCancelAllowed(account) {
+  return account.paymentStatus.name === 'Outstanding';
+}
