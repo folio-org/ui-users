@@ -70,7 +70,7 @@ class LoanDetailContainer extends React.Component {
     loanAccountsActions: {
       type: 'okapi',
       records: 'accounts',
-      path: 'accounts?query=(loanId=:{loanid})&limit=1000',
+      path: 'accounts?query=(loanId==:{loanid})&limit=1000',
       resourceShouldRefresh: true,
       shouldRefresh: (_, action, refresh) => refresh || (action?.meta?.path ?? '').match(/circulation/),
     },

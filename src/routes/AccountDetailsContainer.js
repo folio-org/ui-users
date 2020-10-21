@@ -38,7 +38,7 @@ class AccountDetailsContainer extends React.Component {
       records: 'accounts',
       path: 'accounts',
       params: {
-        query: 'userId=:{id}',
+        query: 'userId==:{id}',
         limit: '1000',
       },
     },
