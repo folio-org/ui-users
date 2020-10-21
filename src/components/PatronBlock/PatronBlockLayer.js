@@ -142,7 +142,7 @@ class PatronBlockLayer extends React.Component {
       renewals: true,
       requests: true,
     };
-    
+
     const initialValues = {
       desc: '',
       staffInformation: '',
