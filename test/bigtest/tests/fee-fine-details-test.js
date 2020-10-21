@@ -85,10 +85,6 @@ describe('Test Fee/Fine details', () => {
       expect(FeeFineDetails.isPresent).to.be.true;
     });
 
-    it('displays error button active', () => {
-      expect(FeeFineDetails.errorButtonIsDisabled).to.be.true;
-    }).timeout(2000);
-
     describe('Pay fee/fine', () => {
       beforeEach(async () => {
         await FeeFineDetails.payButton.click();
