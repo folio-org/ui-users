@@ -48,6 +48,10 @@ describe('User Edit Page', () => {
       expect(UserFormPage.departmentName.items.length).to.equal(0);
     });
 
+    it('should display action menu', () => {
+      expect(UserFormPage.actionMenuButton.isPresent).to.be.false;
+    });
+
     describe('validating user barcode', () => {
       beforeEach(async function () {
         await UserFormPage.barcodeField.fillAndBlur(user2.barcode);

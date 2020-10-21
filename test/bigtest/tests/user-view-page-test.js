@@ -36,6 +36,10 @@ describe('User view', () => {
       expect(InstanceViewPage.departmentName).to.equal('-');
     });
 
+    it('should display action menu', () => {
+      expect(InstanceViewPage.actionMenuButton.isPresent).to.be.true;
+    });
+
     describe('request preferences section', () => {
       it('should display hold shelf value', () => {
         expect(InstanceViewPage.holdShelf).to.equal('Hold shelf - Yes');

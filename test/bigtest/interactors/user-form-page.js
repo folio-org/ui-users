@@ -117,6 +117,7 @@ import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/P
   cancelButton = new ButtonInteractor('[data-test-user-form-cancel-button]');
   submitButton = new ButtonInteractor('[data-test-user-form-submit-button]');
   submitButtonIsDisabled = property('[data-test-user-form-submit-button]', 'disabled');
+  actionMenuButton = scoped('[data-test-actions-menu]');
 
   toggleSPAccordionButton = scoped('#accordion-toggle-button-servicePoints');
   addServicePointButton = scoped('#add-service-point-btn');

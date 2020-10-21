@@ -20,7 +20,7 @@ class ActionMenuCreateButtons extends React.Component {
       `/requests/?${queryString.stringify({ layer: 'create' })}`;
 
     return (
-      <>
+      <div data-test-actions-menu>
         <IfPermission perm="ui-requests.all">
           <Button
             buttonStyle="dropdownItem"
@@ -49,7 +49,7 @@ class ActionMenuCreateButtons extends React.Component {
             <FormattedMessage id="ui-users.blocks.buttons.add" />
           </Button>
         </IfPermission>
-      </>
+      </div>
     );
   }
 }

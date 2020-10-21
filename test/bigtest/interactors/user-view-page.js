@@ -54,6 +54,7 @@ import proxyItemCSS from '../../../src/components/ProxyGroup/ProxyItem/ProxyItem
   userInfo = new AccordionSection('#userInformationSection');
   contactInfo = new AccordionSection('#contactInfoSection');
   departmentName = text('[data-test-department-name]');
+  actionMenuButton = scoped('[data-test-actions-menu]');
 
   whenLoaded() {
     return this.when(() => this.isPresent).timeout(5000);
