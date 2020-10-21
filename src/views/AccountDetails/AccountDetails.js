@@ -27,6 +27,7 @@ import {
 import {
   calculateTotalPaymentAmount,
   isRefundAllowed,
+  isCancelAllowed,
 } from '../../components/Accounts/accountFunctions';
 
 import css from './AccountDetails.css';
@@ -295,6 +296,7 @@ class AccountDetails extends React.Component {
 
     const totalPaidAmount = calculateTotalPaymentAmount(resources?.accounts?.records);
     const refundAllowed = isRefundAllowed(account);
+    const cancelAllowed = isCancelAllowed(account);
 
     return (
       <Paneset isRoot>
@@ -346,7 +348,7 @@ class AccountDetails extends React.Component {
               </Button>
               <Button
                 id="errorAccountActionsHistory"
-                disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending}
+                disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending || !cancelAllowed}
                 buttonStyle="primary"
                 onClick={this.error}
               >

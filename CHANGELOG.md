@@ -4,6 +4,7 @@
 
 * Qualify queries to `feefineactions`, `feefines` from "Open fee/fine" page. Refs UIU-1895.
 * Use more efficient queries for `accounts` records. Refs UIU-1913.
+* Allow cancel fee/fine as error only if any 'actions' has not been applied. Refs UIU-1894.
 
 ## [5.0.4](https://github.com/folio-org/ui-users/tree/v5.0.4) (2020-11-09)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.3...v5.0.4)
