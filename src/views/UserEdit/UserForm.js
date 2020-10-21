@@ -420,11 +420,13 @@ class UserForm extends React.Component {
   }
 
   getActionMenu = ({ onToggle }) => {
-    const showActionMenu = this.props.stripes.hasPerm('ui-users.patron_blocks')
-      || this.props.stripes.hasPerm('ui-users.feesfines.actions.all')
-      || this.props.stripes.hasPerm('ui-requests.all');
+    const { initialValues, stripes } = this.props;
+    const showActionMenu = stripes.hasPerm('ui-users.patron_blocks')
+      || stripes.hasPerm('ui-users.feesfines.actions.all')
+      || stripes.hasPerm('ui-requests.all');
 
-    if (showActionMenu) {
+    const isEditing = initialValues && initialValues.id;
+    if (showActionMenu && isEditing) {
       return (
         <>
           <ActionMenuCreateButtons
