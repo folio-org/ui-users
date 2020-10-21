@@ -9,108 +9,125 @@ import setupApplication from '../helpers/setup-application';
 import InstanceViewPage from '../interactors/user-view-page';
 
 describe('User view', () => {
-  setupApplication();
-
   let user;
 
-  describe('visit users-details', () => {
-    beforeEach(async function () {
-      user = this.server.create('user');
-      this.server.create('requestPreference', {
-        userId: user.id,
-        delivery: true,
-        defaultServicePointId: 'servicepointId1',
-        defaultDeliveryAddressTypeId: 'Type1',
-        fulfillment: 'Delivery',
-      });
+  describe('with all permissions', () => {
+    setupApplication();
 
-      this.visit(`/users/view/${user.id}`);
-      await InstanceViewPage.whenLoaded();
-    });
-
-    it('displays the instance title in the pane header', () => {
-      expect(InstanceViewPage.title).to.equal(user.username);
-    });
-
-    it('should display empty department name', () => {
-      expect(InstanceViewPage.departmentName).to.equal('-');
-    });
-
-    it('should display action menu', () => {
-      expect(InstanceViewPage.actionMenuButton.isPresent).to.be.true;
-    });
-
-    describe('clicking on the open action menu', function () {
+    describe('visit users-details', () => {
       beforeEach(async function () {
-        await InstanceViewPage.actionMenuButton.click();
+        user = this.server.create('user');
+        this.server.create('requestPreference', {
+          userId: user.id,
+          delivery: true,
+          defaultServicePointId: 'servicepointId1',
+          defaultDeliveryAddressTypeId: 'Type1',
+          fulfillment: 'Delivery',
+        });
+
+        this.visit(`/users/view/${user.id}`);
+        await InstanceViewPage.whenLoaded();
       });
-      it('should display links to create request, feefines and patronblock', () => {
-        expect(InstanceViewPage.actionMenuCreateRequestButton.isPresent).to.be.true;
-        expect(InstanceViewPage.actionMenuCreateFeeFinesButton.isPresent).to.be.true;
-        expect(InstanceViewPage.actionMenuCreatePatronBlocksButton.isPresent).to.be.true;
+
+      it('displays the instance title in the pane header', () => {
+        expect(InstanceViewPage.title).to.equal(user.username);
       });
-      it('should display link to edit user', () => {
-        expect(InstanceViewPage.actionMenuCreateRequestButton.isPresent).to.be.true;
+
+      it('should display empty department name', () => {
+        expect(InstanceViewPage.departmentName).to.equal('-');
+      });
+
+      it('should display action menu', () => {
+        expect(InstanceViewPage.actionMenuButton.isPresent).to.be.true;
+      });
+
+      describe('clicking on the open action menu', function () {
+        beforeEach(async function () {
+          await InstanceViewPage.actionMenuButton.click();
+        });
+        it('should display links to create request, feefines and patronblock', () => {
+          expect(InstanceViewPage.actionMenuCreateRequestButton.isPresent).to.be.true;
+          expect(InstanceViewPage.actionMenuCreateFeeFinesButton.isPresent).to.be.true;
+          expect(InstanceViewPage.actionMenuCreatePatronBlocksButton.isPresent).to.be.true;
+        });
+        it('should display link to edit user', () => {
+          expect(InstanceViewPage.actionMenuCreateRequestButton.isPresent).to.be.true;
+        });
+      });
+
+      describe('request preferences section', () => {
+        it('should display hold shelf value', () => {
+          expect(InstanceViewPage.holdShelf).to.equal('Hold shelf - Yes');
+        });
+        it('should display whether delivery is checked', () => {
+          expect(InstanceViewPage.delivery).to.equal('Delivery - Yes');
+        });
+        it('should display fulfillment preference', () => {
+          expect(InstanceViewPage.fulfillmentPreference).to.equal('Delivery');
+        });
+        it('should display default delivery address', () => {
+          expect(InstanceViewPage.defaultDeliveryAddress).to.equal('Claim');
+        });
+      });
+
+      describe('when custom fields are in stock', () => {
+        it('should display custom fields accordion', () => {
+          expect(InstanceViewPage.customFieldsSection.isPresent).to.be.true;
+        });
+
+        it('should display correct accordion title', () => {
+          expect(InstanceViewPage.customFieldsSection.label).to.equal('Custom Fields Test');
+        });
       });
     });
 
-    describe('request preferences section', () => {
-      it('should display hold shelf value', () => {
-        expect(InstanceViewPage.holdShelf).to.equal('Hold shelf - Yes');
+    describe('when custom fields are not in stock', () => {
+      beforeEach(async function () {
+        user = this.server.create('user');
+        this.server.get('/custom-fields', {
+          customFields: [],
+        });
+
+        this.visit(`/users/view/${user.id}`);
+        await InstanceViewPage.whenLoaded();
       });
-      it('should display whether delivery is checked', () => {
-        expect(InstanceViewPage.delivery).to.equal('Delivery - Yes');
-      });
-      it('should display fulfillment preference', () => {
-        expect(InstanceViewPage.fulfillmentPreference).to.equal('Delivery');
-      });
-      it('should display default delivery address', () => {
-        expect(InstanceViewPage.defaultDeliveryAddress).to.equal('Claim');
+
+      it('should not display custom fields accordion', () => {
+        expect(InstanceViewPage.customFieldsSection.isPresent).to.be.false;
       });
     });
 
-    describe('when custom fields are in stock', () => {
-      it('should display custom fields accordion', () => {
-        expect(InstanceViewPage.customFieldsSection.isPresent).to.be.true;
+    describe('when user has departments', () => {
+      beforeEach(async function () {
+        const departments = this.server.createList('department', 2);
+
+        this.server.get('/departments', { departments });
+        user = this.server.create('user', {
+          departments: departments.map(({ id }) => id),
+        });
+
+        this.visit(`/users/view/${user.id}`);
+        await InstanceViewPage.whenLoaded();
       });
 
-      it('should display correct accordion title', () => {
-        expect(InstanceViewPage.customFieldsSection.label).to.equal('Custom Fields Test');
+      it('should display department name value', () => {
+        expect(InstanceViewPage.departmentName).to.equal('TestName0, TestName1');
       });
     });
   });
 
-  describe('when custom fields are not in stock', () => {
-    beforeEach(async function () {
-      user = this.server.create('user');
-      this.server.get('/custom-fields', {
-        customFields: [],
-      });
-
-      this.visit(`/users/view/${user.id}`);
-      await InstanceViewPage.whenLoaded();
+  describe('User without permission for create requests, feesfines, patronblock and edit', () => {
+    setupApplication({
+      permissions: {
+        'ui-requests.all': false,
+        'ui-users.feesfines.actions.all': false,
+        'ui-users.patron_blocks': false,
+        'ui-users.edit': false,
+      }
     });
 
-    it('should not display custom fields accordion', () => {
-      expect(InstanceViewPage.customFieldsSection.isPresent).to.be.false;
-    });
-  });
-
-  describe('when user has departments', () => {
-    beforeEach(async function () {
-      const departments = this.server.createList('department', 2);
-
-      this.server.get('/departments', { departments });
-      user = this.server.create('user', {
-        departments: departments.map(({ id }) => id),
-      });
-
-      this.visit(`/users/view/${user.id}`);
-      await InstanceViewPage.whenLoaded();
-    });
-
-    it('should display department name value', () => {
-      expect(InstanceViewPage.departmentName).to.equal('TestName0, TestName1');
+    it('should not display action menu', () => {
+      expect(InstanceViewPage.actionMenuButton.isPresent).to.be.false;
     });
   });
 });

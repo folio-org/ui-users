@@ -304,6 +304,20 @@ describe('User Edit Page', () => {
       expect(UserFormPage.resetPasswordLink.isPresent).to.be.false;
     });
   });
+
+  describe('User without permission for create requests, feesfines and patronblock', () => {
+    setupApplication({
+      permissions: {
+        'ui-requests.all': false,
+        'ui-users.feesfines.actions.all': false,
+        'ui-users.patron_blocks': false,
+      }
+    });
+
+    it('should not display action menu', () => {
+      expect(UserFormPage.actionMenuButton.isPresent).to.be.false;
+    });
+  });
 });
 
 describe('when custom fields are not in stock', () => {
