@@ -384,6 +384,7 @@ class UserSearch extends React.Component {
             queryGetter={queryGetter}
             onComponentWillUnmount={onComponentWillUnmount}
             initialSearch={initialSearch}
+            initialSearchState={{ query: '' }}
           >
             {
               ({
