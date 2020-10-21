@@ -40,6 +40,12 @@ function getFullName(user) {
   return `${lastName}${firstName ? ', ' : ' '}${firstName} ${middleName}`;
 }
 
+const rawSearchableIndexes = [
+  { label: 'ui-users.index.all', value: '' },
+  { label: 'ui-users.index.username', value: 'username' },
+];
+let searchableIndexes;
+
 class UserSearch extends React.Component {
   static propTypes = {
     children: PropTypes.node,
@@ -59,12 +65,18 @@ class UserSearch extends React.Component {
       records: PropTypes.object,
       patronGroups: PropTypes.object,
       departments: PropTypes.object,
+      query: PropTypes.shape({
+        qindex: PropTypes.string,
+      }).isRequired,
     }).isRequired,
     mutator: PropTypes.shape({
       loans: PropTypes.object,
       resultOffset: PropTypes.shape({
         replace: PropTypes.func.isRequired,
       }),
+      query: PropTypes.shape({
+        update: PropTypes.func.isRequired,
+      }).isRequired,
     }).isRequired,
     source: PropTypes.object,
     visibleColumns: PropTypes.arrayOf(PropTypes.string),
@@ -200,7 +212,9 @@ class UserSearch extends React.Component {
             this.generateReport(this.props, 'overdue');
           }}
         >
-          <FormattedMessage id="ui-users.reports.overdue.label" />
+          <Icon icon="report">
+            <FormattedMessage id="ui-users.reports.overdue.label" />
+          </Icon>
         </Button>
       </IfPermission>
       <Button
@@ -211,7 +225,9 @@ class UserSearch extends React.Component {
           this.generateReport(this.props, 'claimedReturned');
         }}
       >
-        <FormattedMessage id="ui-users.reports.claimReturned.label" />
+        <Icon icon="report">
+          <FormattedMessage id="ui-users.reports.claimReturned.label" />
+        </Icon>
       </Button>
     </>
   );
@@ -281,6 +297,11 @@ class UserSearch extends React.Component {
     history.push('/users/create');
   }
 
+  onChangeIndex = (e) => {
+    const index = e.target.value;
+    this.props.mutator.query.update({ qindex: index });
+  };
+
   shortcuts = [
     {
       name: 'new',
@@ -312,6 +333,12 @@ class UserSearch extends React.Component {
       contentRef,
       mutator: { resultOffset },
     } = this.props;
+
+    if (!searchableIndexes) {
+      searchableIndexes = rawSearchableIndexes.map(x => (
+        { value: x.value, label: this.props.intl.formatMessage({ id: x.label }) }
+      ));
+    }
 
     const users = get(resources, 'records.records', []);
     const patronGroups = (resources.patronGroups || {}).records || [];
@@ -357,7 +384,6 @@ class UserSearch extends React.Component {
             queryGetter={queryGetter}
             onComponentWillUnmount={onComponentWillUnmount}
             initialSearch={initialSearch}
-            initialSearchState={{ qindex: '', query: '' }}
           >
             {
               ({
@@ -405,6 +431,9 @@ class UserSearch extends React.Component {
                                         }
                                       }}
                                       value={searchValue.query}
+                                      searchableIndexes={searchableIndexes}
+                                      selectedIndex={get(resources.query, 'qindex')}
+                                      onChangeIndex={this.onChangeIndex}
                                       marginBottom0
                                       data-test-user-search-input
                                     />
