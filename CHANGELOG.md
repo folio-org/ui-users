@@ -4,6 +4,7 @@
 
 * Fix bug showing duplicated service points in add service point dialog. Fixes UIU-1892.
 * Add report icon for report menu items. Refs UIU-1505.
+* Allow search by username. Refs UIU-1707.
 
 ## [5.0.1](https://github.com/folio-org/ui-users/tree/v5.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.0...v5.0.1)

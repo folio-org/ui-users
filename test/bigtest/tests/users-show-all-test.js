@@ -65,6 +65,19 @@ describe('Users', () => {
       });
     });
 
+    describe('search by username index', function () {
+      beforeEach(async function () {
+        const userItem = users[0];
+        await usersInteractor.chooseSearchOption('Username');
+        await usersInteractor.searchField.fill(userItem.username);
+        await usersInteractor.searchButton.click();
+      });
+
+      it('should find user with given username', () => {
+        expect(usersInteractor.instances().length).to.be.equal(1);
+      });
+    });
+
     describe('click clear status filter', () => {
       beforeEach(async function () {
         await usersInteractor.clearStatusFilter();
