@@ -147,6 +147,7 @@ export default function config() {
       const filterField = 'active';
       const departmentsField = 'departments';
       const usernameField = 'username';
+      const lastNameField = 'personal.lastName';
       if (/^%28/.test(query)) {
         query = decodeURIComponent(query);
       }
@@ -172,6 +173,14 @@ export default function config() {
       if (field === usernameField) {
         return users.where({
           [usernameField]: term.replace('*', '')
+        });
+      }
+      if (field === lastNameField) {
+        return users.where(u => {
+          if (u.personal.lastName === term.replace('*', '')) {
+            return true;
+          }
+          return false;
         });
       }
     }
