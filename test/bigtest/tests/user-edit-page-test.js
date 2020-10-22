@@ -314,6 +314,13 @@ describe('User Edit Page', () => {
       }
     });
 
+    beforeEach(async function () {
+      const user = this.server.create('user');
+
+      this.visit(`/users/${user.id}/edit`);
+      await UserFormPage.whenLoaded();
+    });
+
     it('should not display action menu', () => {
       expect(UserFormPage.actionMenuButton.isPresent).to.be.false;
     });
