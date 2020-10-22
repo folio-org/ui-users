@@ -62,12 +62,7 @@ const ExtendedInfo = (props) => {
         </Col>
       </Row>
       <Row>
-        <Col xs={3}>
-          <KeyValue label={<FormattedMessage id="ui-users.information.username" />}>
-            {get(user, ['username'], '')}
-          </KeyValue>
-        </Col>
-        <Col xs={9}>
+        <Col xs={12} md={9}>
           <RequestPreferencesView
             requestPreferences={requestPreferences}
             defaultServicePointName={defaultServicePointName}
@@ -84,6 +79,13 @@ const ExtendedInfo = (props) => {
             <span data-test-department-name>
               {departments.length ? departments.join(', ') : <NoValue />}
             </span>
+          </KeyValue>
+        </Col>
+      </Row>
+      <Row>
+        <Col xs={12} md={6}>
+          <KeyValue label={<FormattedMessage id="ui-users.information.username" />}>
+            {get(user, ['username'], '')}
           </KeyValue>
         </Col>
       </Row>
