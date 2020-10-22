@@ -177,10 +177,7 @@ export default function config() {
       }
       if (field === lastNameField) {
         return users.where(u => {
-          if (u.personal.lastName === term.replace('*', '')) {
-            return true;
-          }
-          return false;
+          return (u.personal.lastName === term.replace('*', ''));
         });
       }
     }
