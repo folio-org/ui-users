@@ -33,7 +33,7 @@ import {
   EditServicePoints,
 } from '../../components/EditSections';
 import { getFullName } from '../../components/util';
-import ActionMenuCreateButtons from '../../components/util/ActionMenuCreateButtons';
+import RequestFeeFineBlockActionDialog from '../../components/ActionDialog/RequestFeeFineBlockActionDialog';
 import PermissionsAccordion from '../../components/PermissionsAccordion';
 import {
   statusFilterConfig,
@@ -429,7 +429,7 @@ class UserForm extends React.Component {
     if (showActionMenu && isEditing) {
       return (
         <>
-          <ActionMenuCreateButtons
+          <RequestFeeFineBlockActionDialog
             barcode={this.props.initialValues.barcode}
             onToggle={onToggle}
             userId={this.props.match.params.id}

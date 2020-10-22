@@ -61,7 +61,7 @@ import {
   getFullName,
   // eachPromise
 } from '../../components/util';
-import ActionMenuCreateButtons from '../../components/util/ActionMenuCreateButtons';
+import RequestFeeFineBlockActionDialog from '../../components/ActionDialog/RequestFeeFineBlockActionDialog';
 import { departmentsShape } from '../../shapes';
 
 class UserDetail extends React.Component {
@@ -325,7 +325,7 @@ class UserDetail extends React.Component {
     if (showActionMenu) {
       return (
         <>
-          <ActionMenuCreateButtons
+          <RequestFeeFineBlockActionDialog
             barcode={barcode}
             onToggle={onToggle}
             userId={this.props.match.params.id}
