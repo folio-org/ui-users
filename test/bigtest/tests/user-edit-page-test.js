@@ -307,11 +307,11 @@ describe('User Edit Page', () => {
 
   describe('User without permission for create requests, feesfines and patronblock', () => {
     setupApplication({
+      hasAllPerms: false,
       permissions: {
-        'ui-requests.all': false,
-        'ui-users.feesfines.actions.all': false,
-        'ui-users.patron_blocks': false,
-      }
+        'module.users.enabled': true,
+        'ui-users.edit': true,
+      },
     });
 
     beforeEach(async function () {

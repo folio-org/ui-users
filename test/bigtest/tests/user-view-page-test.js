@@ -118,12 +118,18 @@ describe('User view', () => {
 
   describe('User without permission for create requests, feesfines, patronblock and edit', () => {
     setupApplication({
+      hasAllPerms: false,
       permissions: {
-        'ui-requests.all': false,
-        'ui-users.feesfines.actions.all': false,
-        'ui-users.patron_blocks': false,
-        'ui-users.edit': false,
-      }
+        'module.users.enabled': true,
+        'ui-users.view': true,
+      },
+    });
+
+    beforeEach(async function () {
+      user = this.server.create('user');
+
+      this.visit(`/users/view/${user.id}`);
+      await InstanceViewPage.whenLoaded();
     });
 
     it('should not display action menu', () => {
