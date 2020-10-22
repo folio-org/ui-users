@@ -102,7 +102,7 @@ class PatronBlock extends React.Component {
       accordionId,
       automatedPatronBlocks,
     } = this.props;
-    const query = `userId=${user.id}`;
+    const query = `userId==${user.id}`;
 
     manualPatronBlocks.reset();
     manualPatronBlocks.GET({ params: { query } })
