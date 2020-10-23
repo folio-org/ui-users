@@ -9,6 +9,7 @@ import { Response } from 'miragejs';
 import setupApplication from '../helpers/setup-application';
 import OpenLoansInteractor from '../interactors/open-loans';
 import LoanActionsHistory from '../interactors/loan-actions-history';
+import FeeFineHistoryInteractor from '../interactors/fee-fine-history';
 
 describe('Claim returned', () => {
   setupApplication({
@@ -25,7 +26,10 @@ describe('Claim returned', () => {
     let loan;
 
     beforeEach(async function () {
-      loan = this.server.create('loan', { status: { name: 'Open' } });
+      loan = this.server.create('loan', {
+        status: { name: 'Open' },
+        item: { status: { name: 'Checked out' } }
+      });
 
       this.visit(`/users/${loan.userId}/loans/open`);
 
@@ -95,107 +99,19 @@ describe('Claim returned', () => {
           });
 
           describe('clicking confirm button', () => {
-            describe('Loan with Lost item fee or Lost item processing fee with Payment Status = Transferred Partially', () => {
-              let loanClaimedReturned;
-              beforeEach(async function () {
-                loanClaimedReturned = this.server.create('loan', {
-                  status: { name: 'Open' },
-                  loanPolicyId: 'test',
-                  action: 'Declared Lost',
-                  item: { status: { name: 'Declared Lost' } },
-                  itemStatus: 'Declared Lost',
-                  claimedReturnedDate: new Date().toISOString(),
-                });
-
-                this.server.create('user', { id: loanClaimedReturned.userId });
-                this.server.create('loanaction', {
-                  loan: {
-                    ...loanClaimedReturned.attrs,
-                  },
-                });
-
-                this.server.get('/accounts', () => {
-                  const accounts = [{
-                    id:'b7def5a0-4139-4abb-ba75-7f5eb02c0354',
-                    userId: loanClaimedReturned.userId,
-                    status: {
-                      name: 'Open',
-                    },
-                    paymentStatus: {
-                      name: 'Transferred partially',
-                    },
-                    amount: 180,
-                    balance: 20,
-                    feeFineType: 'Lost item fee',
-                    loanId: loanClaimedReturned.id,
-                  }, {
-                    id:'b7def5a0-4139-4abb-ba75-7f5eb02c0355',
-                    userId: loanClaimedReturned.userId,
-                    status: {
-                      name: 'Open',
-                    },
-                    paymentStatus: {
-                      name: 'Transferred partially',
-                    },
-                    amount: 180,
-                    balance: 20,
-                    feeFineType: 'Lost item processing fee',
-                    loanId: loanClaimedReturned.id,
-                  }];
-                  return { accounts };
-                });
-
-                this.visit(`/users/${loanClaimedReturned.userId}/loans/view/${loanClaimedReturned.id}`);
-
-                await LoanActionsHistory.whenLoaded();
+            beforeEach(async function () {
+              this.server.post(`/circulation/loans/${loan.id}/claim-item-returned`, (_, request) => {
+                parsedRequestBody = JSON.parse(request.requestBody);
+                return new Response(204, {});
               });
 
-              it('should show empty fine incurred amount', () => {
-                expect(LoanActionsHistory.feeFines.text).to.equal('-');
-              });
-
-              describe('With Refund and Credit Action', () => {
-                beforeEach(function () {
-                  this.server.get('/accounts', () => {
-                    const accounts = [{
-                      userId: loanClaimedReturned.userId,
-                      transactionInformation: 'Refunded to Community',
-                      typeAction: 'Refunded fully-Claim returned',
-                      accountId: 'b7def5a0-4139-4abb-ba75-7f5eb02c0354',
-                      amount: 180,
-                      balance: 200,
-                      loanId: loanClaimedReturned.id,
-                    },
-                    {
-                      userId: loanClaimedReturned.userId,
-                      transactionInformation: 'Refunded to Community',
-                      typeAction: 'Credited fully-Claim returned',
-                      accountId: 'b7def5a0-4139-4abb-ba75-7f5eb02c0354',
-                      amount: 180,
-                      balance: 0,
-                      loanId: loanClaimedReturned.id,
-                    }];
-                    return { accounts };
-                  });
-                });
-              });
+              await OpenLoansInteractor.claimReturnedDialog.confirmButton.click();
             });
-
-            describe('Without Fees/Fines and submit claimed returned', () => {
-              beforeEach(async function () {
-                this.server.post(`/circulation/loans/${loan.id}/claim-item-returned`, (_, request) => {
-                  parsedRequestBody = JSON.parse(request.requestBody);
-                  return new Response(204, {});
-                });
-
-                await OpenLoansInteractor.claimReturnedDialog.confirmButton.click();
-              });
-              it('should send correct request body', () => {
-                expect(parsedRequestBody.comment).to.equal(additionalInfoText);
-              });
-              it('should hide claim returned dialog', () => {
-                expect(OpenLoansInteractor.claimReturnedDialog.isPresent).to.be.false;
-              });
+            it('should send correct request body', () => {
+              expect(parsedRequestBody.comment).to.equal(additionalInfoText);
+            });
+            it('should hide claim returned dialog', () => {
+              expect(OpenLoansInteractor.claimReturnedDialog.isPresent).to.be.false;
             });
           });
         });
@@ -352,6 +268,172 @@ describe('Claim returned', () => {
       it('should show declare lost button', () => {
         expect(LoanActionsHistory.declareLostButton.isPresent).to.be.true;
       }).timeout(5000);
+    });
+  });
+
+  describe('**** Visiting open loans list page with declared lost item', () => {
+   
+    let user;
+    beforeEach(async function () {
+      user = this.server.create('user', { id: 'ce0e0d5b-b5f3-4ad5-bccb-49c0784298fd' });
+
+      const loan = this.server.create('loan', {
+        id:'64a57e60-f54a-474c-800d-469c601f0cb2',
+        userId: user.id,
+        status: { name: 'Open' },
+        loanPolicyId: 'test',
+        action: 'Declared Lost',
+        item: {
+          id: '4428a37c-8bae-4f0d-865d-970d83d5ad55',
+          status: { name: 'Declared Lost' }
+        },
+      });
+
+      this.server.create('account', {
+        id:'f2881912-899b-490b-9433-f38a0ec15476',
+        userId: loan.userId,
+        status: {
+          name: 'Open',
+        },
+        paymentStatus: {
+          name: 'Transferred partially',
+        },
+        amount: 200,
+        remaining: 20,
+        feeFineType: 'Lost item fee',
+        loanId: loan.id,
+      });
+
+      this.server.create('feefineaction', {
+        userId: user.id,
+        typeAction: 'Lost item fee',
+        accountId: 'f2881912-899b-490b-9433-f38a0ec15476',
+        amountAction: 200,
+        balance: 200
+      });
+      this.server.create('feefineaction', {
+        userId: user.id,
+        typeAction: 'Transferred partially',
+        accountId: 'f2881912-899b-490b-9433-f38a0ec15476',
+        amountAction: 180,
+        balance: 20
+      });
+
+      this.server.get('/accounts');
+      this.server.get('/feefineactions');
+
+      this.visit(`/users/${loan.userId}/loans/open`);
+      await OpenLoansInteractor.whenLoaded();
+    });
+
+    it('should display open loans list', () => {
+      expect(OpenLoansInteractor.isPresent).to.be.true;
+    });
+
+    it('icon button should be presented', () => {
+      expect(OpenLoansInteractor.actionDropdowns(0).isPresent).to.be.true;
+    });
+
+    describe('opening dropdown for not claimed returned item', () => {
+      beforeEach(async () => {
+        await OpenLoansInteractor.actionDropdowns(0).click('button');
+      });
+
+      it('should display claim returned button', () => {
+        expect(OpenLoansInteractor.actionDropdownClaimReturnedButton.isPresent).to.be.true;
+      });
+
+      describe('clicking claim returned button', () => {
+        beforeEach(async () => {
+          await OpenLoansInteractor.actionDropdownClaimReturnedButton.click();
+        });
+
+        it('should display claim returned dialog', () => {
+          expect(OpenLoansInteractor.claimReturnedDialog.isVisible).to.be.true;
+        });
+
+        it('should display disabled confirm button', () => {
+          expect(OpenLoansInteractor.claimReturnedDialog.confirmButton.isPresent).to.be.true;
+          expect(OpenLoansInteractor.claimReturnedDialog.isConfirmButtonDisabled).to.be.true;
+        });
+
+        it('should display cancel button', () => {
+          expect(OpenLoansInteractor.claimReturnedDialog.cancelButton.isPresent).to.be.true;
+        });
+
+        it('should display additional information textarea', () => {
+          expect(OpenLoansInteractor.claimReturnedDialog.additionalInfoTextArea.isPresent).to.be.true;
+        });
+
+        describe('clicking cancel button', () => {
+          beforeEach(async () => {
+            await OpenLoansInteractor.claimReturnedDialog.cancelButton.click();
+          });
+
+          it('should hide claim returned dialog', () => {
+            expect(OpenLoansInteractor.claimReturnedDialog.isPresent).to.be.false;
+          });
+        });
+
+        describe('filling additional information textarea', () => {
+          const additionalInfoText = 'text';
+          let parsedRequestBody;
+          let body;
+
+          beforeEach(async () => {
+            await OpenLoansInteractor.claimReturnedDialog.additionalInfoTextArea.focus();
+            await OpenLoansInteractor.claimReturnedDialog.additionalInfoTextArea.fill(additionalInfoText);
+          });
+
+          it('should enable confirm button', () => {
+            expect(OpenLoansInteractor.claimReturnedDialog.isConfirmButtonDisabled).to.be.false;
+          });
+
+          describe('clicking confirm button', () => {
+            beforeEach(async function () {
+              this.server.get('/feefineactions');
+
+              this.server.post('/feefineactions', (schema, request) => {
+                body = JSON.parse(request.requestBody);
+
+                return schema.feefineactions.create(body);
+              });
+
+              this.server.post('/circulation/loans/64a57e60-f54a-474c-800d-469c601f0cb2/claim-item-returned', (_, request) => {
+                parsedRequestBody = JSON.parse(request.requestBody);
+                return new Response(204, {});
+              });
+
+              await OpenLoansInteractor.claimReturnedDialog.confirmButton.click();
+            });
+            it('should send correct request body', () => {
+              expect(parsedRequestBody.comment).to.equal(additionalInfoText);
+            });
+            it('should hide claim returned dialog', () => {
+              expect(OpenLoansInteractor.claimReturnedDialog.isPresent).to.be.false;
+            });
+          });
+        });
+      });
+    });
+
+    describe('** visit Fee/fine details Lost Item Fee', () => {
+      beforeEach(async function () {
+        this.server.get('/feefineactions');
+
+        this.visit('/users/preview/ce0e0d5b-b5f3-4ad5-bccb-49c0784298fd');
+        await FeeFineHistoryInteractor.whenSectionLoaded();
+        await FeeFineHistoryInteractor.sectionFeesFinesSection.click();
+        await FeeFineHistoryInteractor.openAccounts.click();
+      });
+
+      it('renders proper amount of rows', () => {
+        expect(FeeFineHistoryInteractor.mclViewFeesFines.rowCount).to.equal(1);
+      });
+
+      it('renders proper amount of cells', () => {
+        expect(FeeFineHistoryInteractor.mclViewFeesFines.rows(0).cellCount).to.equal(14);
+      });
     });
   });
 });

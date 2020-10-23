@@ -77,9 +77,7 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
 
       const pathParts = [
         'accounts?query=',
-        `barcode=="${itemBarcode}"`,
-        ` and loanId=="${loanId}"`,
-        ` and userId=="${userId}"`,
+        `loanId=="${loanId}"`,
         ` and (feeFineType=="${lostStatus}"`,
         ` or feeFineType=="${processingStatus}")`
       ];
