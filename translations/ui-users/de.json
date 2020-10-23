@@ -741,5 +741,6 @@
     "reports.item.holdingsRecordId": "Holdings ID",
     "reports.itemId": "Item ID",
     "reports.feeFine": "Gebühr/Bußgeld",
-    "reports.inProgress": "Export in progress"
+    "reports.inProgress": "Export in progress",
+    "departments": "Departments"
 }

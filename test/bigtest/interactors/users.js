@@ -7,6 +7,7 @@ import {
   isPresent,
   isVisible,
   scoped,
+  selectable,
 } from '@bigtest/interactor';
 
 import MultiSelectInteractor from '@folio/stripes-components/lib/MultiSelection/tests/interactor';
@@ -47,6 +48,7 @@ export default @interactor class UsersInteractor {
   searchField = new SearchFieldInteractor();
   searchButton = new Interactor('[data-test-user-search-submit]');
   searchFocused = isPresent('[data-test-user-search-input]:focus');
+  chooseSearchOption = selectable('#input-user-search-qindex');
   paneHeaderFocused = is('#users-search-results-pane [class*=paneHeader---]', ':focus');
   patronGroupsPresent = isPresent('#clickable-filter-pg-faculty');
   instancePresent = isPresent('[data-test-instance-details]');

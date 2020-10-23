@@ -741,5 +741,6 @@
     "reports.item.holdingsRecordId": "ID des collections",
     "reports.itemId": "ID de l'article",
     "reports.feeFine": "Frais / Amende",
-    "reports.inProgress": "Export en cours"
+    "reports.inProgress": "Export en cours",
+    "departments": "Départements/Services"
 }

@@ -42,7 +42,7 @@ class Actions extends React.Component {
     feefineactions: {
       type: 'okapi',
       records: 'feefineactions',
-      path: `feefineactions?limit=${MAX_RECORDS}`,
+      path: `feefineactions?query=(userId==%{user.id})&limit=${MAX_RECORDS}`,
       shouldRefresh: (resource, action, refresh) => {
         return refresh || action.meta.path === 'accounts';
       },

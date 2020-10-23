@@ -741,5 +741,6 @@
     "reports.item.holdingsRecordId": "ID do holdings",
     "reports.itemId": "ID do item",
     "reports.feeFine": "Taxa/Multa",
-    "reports.inProgress": "Exportação em andamento"
+    "reports.inProgress": "Exportação em andamento",
+    "departments": "Departamentos"
 }
