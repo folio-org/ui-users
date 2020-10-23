@@ -4,7 +4,6 @@ import {
   it,
 } from '@bigtest/mocha';
 import { expect } from 'chai';
-import faker from 'faker';
 
 import translations from '../../../translations/ui-users/en';
 import setupApplication from '../helpers/setup-application';
@@ -49,7 +48,9 @@ describe('Test Patron Blocks section', () => {
             await PatronBlocksInteractor.patronBlockDesc.blurTextArea();
             await PatronBlocksInteractor.patronBlockStaff.fillTextArea('Staff information');
             await PatronBlocksInteractor.patronBlockPatron.fillTextArea('Message to Patron');
-            await PatronBlocksInteractor.patronBlockExpirationDate.fillInput(faker.date.future(2));
+            await PatronBlocksInteractor.patronBlockExpirationDate.calendarButton.click();
+            await PatronBlocksInteractor.patronBlockExpirationDate.calendar.nextYear();
+            await PatronBlocksInteractor.patronBlockExpirationDate.calendar.days(7).click();
             await PatronBlocksInteractor.patronBlockBorrowing.clickAndBlur();
             await PatronBlocksInteractor.patronBlockRenewals.clickAndBlur();
             await PatronBlocksInteractor.patronBlockSave();
