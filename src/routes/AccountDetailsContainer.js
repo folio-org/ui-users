@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { first } from 'lodash';
+import {
+  first,
+  isEmpty,
+} from 'lodash';
 import { FormattedMessage } from 'react-intl';
 
 import { stripesConnect } from '@folio/stripes/core';
@@ -35,7 +38,7 @@ class AccountDetailsContainer extends React.Component {
       records: 'accounts',
       path: 'accounts',
       params: {
-        query: 'userId=:{id}',
+        query: 'userId==:{id}',
         limit: '1000',
       },
     },
@@ -151,9 +154,13 @@ class AccountDetailsContainer extends React.Component {
       updateInstanceId({ instanceId: account.instanceId });
     }
 
-    const instance = first(resources?.instance?.records || []) || { contributors: [] };
+    const instance = account?.instanceId
+      ? first(resources?.instance?.records)
+      : [];
     const loanRecords = resources?.loans?.records ?? [];
-    const contributors = instance.contributors.map(({ name }) => name.split(',').reverse().join(', '));
+    const contributors = !isEmpty(instance)
+      ? instance.contributors.map(({ name }) => name.split(',').reverse().join(', '))
+      : [];
     const loanId = account?.loanId;
 
     if (loanId === '0') return { contributors };

@@ -49,7 +49,6 @@ describe('Test Fee/Fine details', () => {
       expect(FeeFineDetails.contributors.label.text).to.equal(translations['reports.overdue.item.contributors']);
       expect(FeeFineDetails.contributors.value.text).to.equal('-');
     });
-
     describe('Overdue policy link', () => {
       beforeEach(async function () {
         await FeeFineDetails.overduePolicyClick();
@@ -236,7 +235,7 @@ describe('Test Fee/Fine details', () => {
       });
     });
 
-    describe('Refund fee/fine', () => {
+    describe.skip('Refund fee/fine', () => {
       beforeEach(async () => {
         await FeeFineDetails.refundButton.click();
       });

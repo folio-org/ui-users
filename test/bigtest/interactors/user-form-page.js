@@ -19,6 +19,7 @@ import RepeatableFieldInteractor from '@folio/stripes-components/lib/RepeatableF
 import ModalInteractor from '@folio/stripes-components/lib/Modal/tests/interactor'; // eslint-disable-line
 import SelectInteractor from '@folio/stripes-components/lib/Select/tests/interactor'; // eslint-disable-line
 import PermissionsModal from './permissions-modal';
+import ServicePointsModal from './service-points-modal';
 import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/ProxyEditItem.css';
 
 
@@ -92,6 +93,10 @@ import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/P
   label = text('[class*="labelArea---"]');
 }
 
+@interactor class ServicePointInteractor {
+  deleteServicePoint = clickable('[id*=clickable-remove-service-point-]')
+}
+
 @interactor class UserFormPage {
   // isLoaded = isPresent('[class*=paneTitleLabel---]');
 
@@ -112,6 +117,12 @@ import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/P
   cancelButton = new ButtonInteractor('[data-test-user-form-cancel-button]');
   submitButton = new ButtonInteractor('[data-test-user-form-submit-button]');
   submitButtonIsDisabled = property('[data-test-user-form-submit-button]', 'disabled');
+
+  toggleSPAccordionButton = scoped('#accordion-toggle-button-servicePoints');
+  addServicePointButton = scoped('#add-service-point-btn');
+  servicePoints = collection('[data-test-service-point]', ServicePointInteractor);
+  servicePointsModal = new ServicePointsModal();
+
   togglePermissionAccordionButton = scoped('#accordion-toggle-button-permissions');
   addPermissionButton = scoped('#clickable-add-permission');
   permissionsModal = new PermissionsModal();

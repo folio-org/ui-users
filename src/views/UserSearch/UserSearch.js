@@ -28,7 +28,7 @@ import {
   CollapseFilterPaneButton,
 } from '@folio/stripes/smart-components';
 
-import OverdueLoanReport from '../../components/data/reports';
+import CsvReport from '../../components/data/reports';
 import Filters from './Filters';
 import css from './UserSearch.css';
 
@@ -39,6 +39,12 @@ function getFullName(user) {
 
   return `${lastName}${firstName ? ', ' : ' '}${firstName} ${middleName}`;
 }
+
+const rawSearchableIndexes = [
+  { label: 'ui-users.index.all', value: '' },
+  { label: 'ui-users.index.username', value: 'username' },
+];
+let searchableIndexes;
 
 class UserSearch extends React.Component {
   static propTypes = {
@@ -58,12 +64,19 @@ class UserSearch extends React.Component {
     resources: PropTypes.shape({
       records: PropTypes.object,
       patronGroups: PropTypes.object,
+      departments: PropTypes.object,
+      query: PropTypes.shape({
+        qindex: PropTypes.string,
+      }).isRequired,
     }).isRequired,
     mutator: PropTypes.shape({
       loans: PropTypes.object,
       resultOffset: PropTypes.shape({
         replace: PropTypes.func.isRequired,
       }),
+      query: PropTypes.shape({
+        update: PropTypes.func.isRequired,
+      }).isRequired,
     }).isRequired,
     source: PropTypes.object,
     visibleColumns: PropTypes.arrayOf(PropTypes.string),
@@ -89,7 +102,7 @@ class UserSearch extends React.Component {
     this.SRStatusRef = createRef();
 
     const { formatMessage } = props.intl;
-    this.overdueLoanReport = new OverdueLoanReport({
+    this.CsvReport = new CsvReport({
       formatMessage
     });
   }
@@ -145,8 +158,9 @@ class UserSearch extends React.Component {
       filterPaneIsVisible: !curState.filterPaneIsVisible,
     }));
   }
+  // now generates both overdue and claims returned reports
 
-  generateOverdueLoanReport = props => {
+  generateReport = (props, type) => {
     const { exportInProgress } = this.state;
 
     if (exportInProgress) {
@@ -154,9 +168,17 @@ class UserSearch extends React.Component {
     }
 
     this.setState({ exportInProgress: true }, async () => {
-      this.context.sendCallout({ message: <FormattedMessage id="ui-users.reports.overdue.inProgress" /> });
-      await this.overdueLoanReport.generate(props.mutator.loans);
-      if (this._mounted) {
+      this.context.sendCallout({ message: <FormattedMessage id="ui-users.reports.inProgress" /> });
+      let reportError = false;
+      try {
+        await this.CsvReport.generate(props.mutator.loans, type, this.context);
+      } catch (error) {
+        if (error.message === 'noItemsFound') {
+          reportError = true;
+          this.context.sendCallout({ type: 'error', message: <FormattedMessage id="ui-users.reports.noItemsFound" /> });
+        }
+      }
+      if (this._mounted || reportError === true) {
         this.setState({ exportInProgress: false });
       }
     });
@@ -181,15 +203,31 @@ class UserSearch extends React.Component {
           </FormattedMessage>
         </PaneMenu>
       </IfPermission>
+      <IfPermission perm="ui-users.loans.view">
+        <Button
+          buttonStyle="dropdownItem"
+          id="export-overdue-loan-report"
+          onClick={() => {
+            onToggle();
+            this.generateReport(this.props, 'overdue');
+          }}
+        >
+          <Icon icon="report">
+            <FormattedMessage id="ui-users.reports.overdue.label" />
+          </Icon>
+        </Button>
+      </IfPermission>
       <Button
         buttonStyle="dropdownItem"
-        id="export-overdue-loan-report"
+        id="export-claimed-returned-loan-report"
         onClick={() => {
           onToggle();
-          this.generateOverdueLoanReport(this.props);
+          this.generateReport(this.props, 'claimedReturned');
         }}
       >
-        <FormattedMessage id="ui-users.reports.overdue.label" />
+        <Icon icon="report">
+          <FormattedMessage id="ui-users.reports.claimReturned.label" />
+        </Icon>
       </Button>
     </>
   );
@@ -259,6 +297,11 @@ class UserSearch extends React.Component {
     history.push('/users/create');
   }
 
+  onChangeIndex = (e) => {
+    const index = e.target.value;
+    this.props.mutator.query.update({ qindex: index });
+  };
+
   shortcuts = [
     {
       name: 'new',
@@ -290,6 +333,12 @@ class UserSearch extends React.Component {
       contentRef,
       mutator: { resultOffset },
     } = this.props;
+
+    if (!searchableIndexes) {
+      searchableIndexes = rawSearchableIndexes.map(x => (
+        { value: x.value, label: this.props.intl.formatMessage({ id: x.label }) }
+      ));
+    }
 
     const users = get(resources, 'records.records', []);
     const patronGroups = (resources.patronGroups || {}).records || [];
@@ -335,7 +384,6 @@ class UserSearch extends React.Component {
             queryGetter={queryGetter}
             onComponentWillUnmount={onComponentWillUnmount}
             initialSearch={initialSearch}
-            initialSearchState={{ qindex: '', query: '' }}
           >
             {
               ({
@@ -383,6 +431,9 @@ class UserSearch extends React.Component {
                                         }
                                       }}
                                       value={searchValue.query}
+                                      searchableIndexes={searchableIndexes}
+                                      selectedIndex={get(resources.query, 'qindex')}
+                                      onChangeIndex={this.onChangeIndex}
                                       marginBottom0
                                       data-test-user-search-input
                                     />

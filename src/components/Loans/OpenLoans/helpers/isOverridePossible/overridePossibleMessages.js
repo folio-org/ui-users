@@ -31,4 +31,8 @@ export default [
     message: 'renewal date falls outside of date ranges in the loan policy',
     showDueDatePicker: true,
   },
+  {
+    message: 'renewal would not change the due date',
+    showDueDatePicker: true,
+  },
 ];

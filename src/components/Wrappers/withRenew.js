@@ -48,7 +48,9 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
     this.connectedBulkRenewalDialog = props.stripes.connect(BulkRenewalDialog);
     this.state = {
       loans: [],
+      // eslint-disable-next-line react/no-unused-state
       errors: [],
+      // eslint-disable-next-line react/no-unused-state
       bulkRenewal: false,
       bulkRenewalDialogOpen: false,
       renewSuccess: [],
@@ -100,6 +102,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
   _isMounted = false;
 
   renewItem = (loan, patron, bulkRenewal, silent) => {
+    // eslint-disable-next-line react/no-unused-state
     this.setState({ bulkRenewal });
     const params = {
       itemBarcode: loan.item.barcode,
@@ -116,7 +119,6 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
             resp.json()
               .then((error) => {
                 const errors = this.handleErrors(error);
-
                 reject(this.getMessage(errors));
               });
           } else {
@@ -137,6 +139,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
     const bulkRenewal = (loansSize > 1);
 
     if (!isEmpty(countRenew)) {
+      // eslint-disable-next-line react/no-unused-state
       return this.setState({ patronBlockedModal: true });
     }
 
@@ -188,6 +191,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
 
   handleErrors = (error) => {
     const { errors } = error;
+    // eslint-disable-next-line react/no-unused-state
     this.setState({ errors });
     return errors;
   };

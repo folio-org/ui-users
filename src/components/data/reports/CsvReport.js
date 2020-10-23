@@ -1,55 +1,34 @@
 import { get } from 'lodash';
 import { exportCsv } from '@folio/stripes/util';
-import moment from 'moment';
+import settings from './settings';
+import { reportColumns } from '../../../constants';
 
-const columns = [
-  'borrower.name',
-  'borrower.barcode',
-  'borrowerId',
-  'dueDate',
-  'loanDate',
-  'loanPolicy.name',
-  'loanPolicyId',
-  'loanId',
-  'feeFine',
-  'item.title',
-  'item.materialType.name',
-  'item.status.name',
-  'item.barcode',
-  'item.callNumberComponents.prefix',
-  'item.callNumberComponents.callNumber',
-  'item.callNumberComponents.suffix',
-  'item.volume',
-  'item.enumeration',
-  'item.chronology',
-  'item.copyNumber',
-  'item.contributors',
-  'item.location.name',
-  'item.instanceId',
-  'item.holdingsRecordId',
-  'itemId',
-];
 
-class OverdueLoanReport {
+
+class CsvReport {
   constructor(options) {
     const { formatMessage } = options;
+    this.formatMessage = formatMessage;
+  }
+
+  setUp(type) {
+    this.queryString = settings[type].queryString();
+    const columns = reportColumns;
 
     this.columnsMap = columns.map(value => ({
-      label: formatMessage({ id: `ui-users.reports.overdue.${value}` }),
+      label: this.formatMessage({ id: `ui-users.reports.${value}` }),
       value
     }));
   }
 
   async fetchData(mutator) {
     const { GET, reset } = mutator;
-    const overDueDate = moment().tz('UTC').format();
-    const query = `(status.name=="Open" and dueDate < "${overDueDate}") sortby metadata.updatedDate desc`;
+    const query = this.queryString;
     const limit = 1000;
     const data = [];
 
     let offset = 0;
     let hasData = true;
-
     while (hasData) {
       try {
         reset();
@@ -68,9 +47,12 @@ class OverdueLoanReport {
     return data;
   }
 
-  async generate(mutator) {
+  async generate(mutator, type) {
+    this.setUp(type);
     const loans = await this.fetchData(mutator);
-    this.toCSV(loans);
+    if (loans.length !== 0) {
+      this.toCSV(loans);
+    } else { throw new Error('noItemsFound'); }
   }
 
   parse(records) {
@@ -100,4 +82,4 @@ class OverdueLoanReport {
   }
 }
 
-export default OverdueLoanReport;
+export default CsvReport;

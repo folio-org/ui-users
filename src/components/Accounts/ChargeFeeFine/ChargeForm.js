@@ -57,7 +57,7 @@ class ChargeForm extends React.Component {
     form: PropTypes.object.isRequired,
     onClickCancel: PropTypes.func,
     onChangeOwner: PropTypes.func.isRequired,
-    onClickPay: PropTypes.func.isRequired,
+    onChangeFeeFine: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     onClickSelectItem: PropTypes.func.isRequired,
     onFindShared: PropTypes.func.isRequired,
@@ -81,40 +81,37 @@ class ChargeForm extends React.Component {
     this.onChangeFeeFine = this.onChangeFeeFine.bind(this);
     this.onChangeOwner = this.onChangeOwner.bind(this);
     this.query = 0;
-  }
-
-  componentDidMount() {
-    const { initialValues } = this.props;
-    if (initialValues) {
-      this.props.onChangeOwner({ target: { value: initialValues.ownerId } });
-    }
+    this.feeFineId = null;
   }
 
   componentDidUpdate(prevProps) {
     const {
       owners,
-      initialValues,
-      onFindShared
+      onFindShared,
     } = this.props;
-    const {
-      owners: prevOwners,
-    } = prevProps;
+    const { owners: prevOwners } = prevProps;
 
     if (prevOwners !== owners) {
       const shared = (owners.find(o => o.owner === 'Shared') || {}).id;
       onFindShared(shared);
     }
-    if (initialValues && initialValues.ownerId !== prevProps.initialValues.ownerId) {
-      this.props.onChangeOwner({ target: { value: initialValues.ownerId } });
-    }
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  onChangeFeeFine(amount, id) {
-    const { feefines, form: { change } } = this.props;
-    if (id) {
-      const feefine = feefines.find(f => f.id === id) || {};
+  onChangeFeeFine(e) {
+    const {
+      feefines,
+      form: { change },
+    } = this.props;
+
+    if (e.target.value) {
+      const feeFineId = e.target.value;
+      this.props.onChangeFeeFine(e);
+      const feefine = feefines.find(f => f.id === feeFineId) || {};
       change('feeFineId', feefine.id);
+      this.amount = feefine.defaultAmount || 0;
+      this.amount = parseFloat(this.amount).toFixed(2);
+      const defaultAmount = parseFloat(feefine.defaultAmount || 0).toFixed(2);
+      change('amount', defaultAmount);
     }
   }
 
@@ -141,10 +138,10 @@ class ChargeForm extends React.Component {
   render() {
     const {
       user,
-      initialValues,
       selectedLoan: selectedLoanProp,
       onSubmit,
       handleSubmit,
+      initialValues,
       form,
       form : {
         getState,
@@ -193,7 +190,7 @@ class ChargeForm extends React.Component {
     let showNotify = false;
     const feefine = this.props.feefines.find(f => f.id === feeFineId) || {};
     const owner = this.props.owners.find(o => o.id === ownerId) || {};
-    if (feefine.actionNoticeId || owner.defaultActionNoticeId) {
+    if (feefine?.chargeNoticeId || owner?.defaultChargeNoticeId) {
       showNotify = true;
     }
 
@@ -249,8 +246,8 @@ class ChargeForm extends React.Component {
           >
             <FeeFineInfo
               form={form}
-              initialValues={initialValues}
               stripes={stripes}
+              initialValues={initialValues}
               ownerOptions={ownerOptions}
               isPending={isPending}
               onChangeOwner={this.onChangeOwner}
@@ -281,9 +278,8 @@ class ChargeForm extends React.Component {
                       component={Checkbox}
                       type="checkbox"
                       inline
+                      label={<FormattedMessage id="ui-users.accounts.notifyPatron" />}
                     />
-                    {' '}
-                    <FormattedMessage id="ui-users.accounts.notifyPatron" />
                   </Col>
                 </Row>
               </div>
