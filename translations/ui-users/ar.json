@@ -742,5 +742,8 @@
     "reports.itemId": "معرّف المادة",
     "reports.feeFine": "الرسم/الغرامة",
     "reports.inProgress": "التصدير قيد التقدم",
-    "departments": "الأقسام"
+    "departments": "الأقسام",
+    "index.username": "اسم المستخدم",
+    "index.all": "الكلمة المفتاحية (العنوان، البريد الإلكتروني، المعرّف)",
+    "index.lastName": "Last name"
 }
