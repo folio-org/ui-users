@@ -148,6 +148,7 @@ export default function config() {
       const departmentsField = 'departments';
       const usernameField = 'username';
       const lastNameField = 'personal.lastName';
+      const barcodeField = 'barcode';
       if (/^%28/.test(query)) {
         query = decodeURIComponent(query);
       }
@@ -178,6 +179,11 @@ export default function config() {
       if (field === lastNameField) {
         return users.where(u => {
           return (u.personal.lastName === term.replace('*', ''));
+        });
+      }
+      if (field === barcodeField) {
+        return users.where({
+          [barcodeField]: term.replace('*', '')
         });
       }
     }
