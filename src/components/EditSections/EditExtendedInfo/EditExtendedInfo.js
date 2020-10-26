@@ -125,33 +125,6 @@ class EditExtendedInfo extends Component {
             md={6}
           >
             <Row>
-              <Col
-                xs={12}
-                md={6}
-              >
-                <Field
-                  label={<FormattedMessage id="ui-users.information.username" />}
-                  name="username"
-                  id="adduser_username"
-                  component={TextField}
-                  fullWidth
-                  validStylesEnabled
-                />
-              </Col>
-              <IfPermission perm="ui-users.reset.password">
-                {isEditForm && username &&
-                  (
-                    <CreateResetPasswordControl
-                      userId={userId}
-                      email={userEmail}
-                      name={userFirstName}
-                      username={username}
-                    />
-                  )
-                }
-              </IfPermission>
-            </Row>
-            <Row>
               <RequestPreferencesEdit addressTypes={addressTypes} />
             </Row>
           </Col>
@@ -161,6 +134,33 @@ class EditExtendedInfo extends Component {
           >
             <DepartmentsNameEdit departments={departments} />
           </Col>
+        </Row>
+        <Row>
+          <Col
+            xs={12}
+            md={3}
+          >
+            <Field
+              label={<FormattedMessage id="ui-users.information.username" />}
+              name="username"
+              id="adduser_username"
+              component={TextField}
+              fullWidth
+              validStylesEnabled
+            />
+          </Col>
+          <IfPermission perm="ui-users.reset.password">
+            {isEditForm && username &&
+              (
+                <CreateResetPasswordControl
+                  userId={userId}
+                  email={userEmail}
+                  name={userFirstName}
+                  username={username}
+                />
+              )
+            }
+          </IfPermission>
         </Row>
         <br />
       </Accordion>

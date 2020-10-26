@@ -43,6 +43,7 @@ function getFullName(user) {
 const rawSearchableIndexes = [
   { label: 'ui-users.index.all', value: '' },
   { label: 'ui-users.index.username', value: 'username' },
+  { label: 'ui-users.index.lastName', value: 'personal.lastName' },
 ];
 let searchableIndexes;
 
@@ -384,6 +385,7 @@ class UserSearch extends React.Component {
             queryGetter={queryGetter}
             onComponentWillUnmount={onComponentWillUnmount}
             initialSearch={initialSearch}
+            initialSearchState={{ query: '' }}
           >
             {
               ({
