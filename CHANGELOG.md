@@ -7,6 +7,7 @@
 * Add report icon for report menu items. Refs UIU-1505.
 * Allow search by username. Refs UIU-1707.
 * Use more efficient queries for `accounts` records. Refs UIU-1913.
+* Relocate the username/password in the create/edit and detail view screens. Refs UIU-1035.
 
 ## [5.0.1](https://github.com/folio-org/ui-users/tree/v5.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.0...v5.0.1)
