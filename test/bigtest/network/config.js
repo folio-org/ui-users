@@ -857,4 +857,59 @@ export default function config() {
       amount : 40.00
     };
   });
+
+  this.post('/accounts-bulk/check-refund', ({ accounts }, request) => {
+    return {
+      amounts: [
+        {
+          accountId: 'r1',
+          amount: 100
+        },
+        {
+          accountId: 'r2',
+          amount: 200
+        },
+        {
+          accountId: 'r3',
+          amount: 100
+        }
+      ],
+      allowed: true,
+      amount: 400,
+      remainingAmount: 100
+    };
+  });
+
+  this.post('/accounts-bulk/refund', ({ accounts }, request) => {
+    return {
+      accountIds: ['r1', 'r2', 'r3'],
+      feefineactions: [
+        {
+          typeAction: 'Refunded fully',
+          amountAction: 100.0,
+          balance: 500.0,
+          accountId: 'r1',
+          userId: 'user1',
+          id: 'w1'
+        },
+        {
+          typeAction: 'Refunded fully',
+          amountAction: 200.0,
+          balance: 400.0,
+          accountId: 'r2',
+          userId: 'user1',
+          id: 'w2'
+        },
+        {
+          typeAction: 'Refunded fully',
+          amountAction: 100.0,
+          balance: 500.0,
+          accountId: 'r3',
+          userId: 'user1',
+          id: 'w3'
+        },
+      ],
+      amount : 400.00
+    };
+  });
 }
