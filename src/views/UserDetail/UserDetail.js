@@ -61,7 +61,7 @@ import {
   getFullName,
   // eachPromise
 } from '../../components/util';
-import RequestFeeFineBlockActionDialog from '../../components/ActionDialog/RequestFeeFineBlockActionDialog';
+import RequestFeeFineBlockActionDialog from '../../components/RequestFeeFineBlockActionDialog';
 import { departmentsShape } from '../../shapes';
 
 class UserDetail extends React.Component {

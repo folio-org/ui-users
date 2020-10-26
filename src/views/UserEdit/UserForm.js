@@ -33,7 +33,7 @@ import {
   EditServicePoints,
 } from '../../components/EditSections';
 import { getFullName } from '../../components/util';
-import RequestFeeFineBlockActionDialog from '../../components/ActionDialog/RequestFeeFineBlockActionDialog';
+import RequestFeeFineBlockActionDialog from '../../components/RequestFeeFineBlockActionDialog';
 import PermissionsAccordion from '../../components/PermissionsAccordion';
 import {
   statusFilterConfig,
