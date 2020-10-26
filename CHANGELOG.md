@@ -1,5 +1,10 @@
 # Change history for ui-users
 
+## [5.0.3](https://github.com/folio-org/ui-users/tree/v5.0.3) (2020-10-27)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.2...v5.0.3)
+
+* Add user's fees/fines permissions. Refs UIU-1918.
+
 ## [5.0.2](https://github.com/folio-org/ui-users/tree/v5.0.2) (2020-10-27)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.1...v5.0.2)
 
