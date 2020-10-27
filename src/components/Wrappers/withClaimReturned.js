@@ -12,12 +12,14 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
     this.state = {
       claimReturnedDialogOpen: false,
       loan: null,
+      itemRequestCount: 0,
     };
   }
 
-  openClaimReturnedDialog = loan => {
+  openClaimReturnedDialog = (loan, itemRequestCount) => {
     this.setState({
       loan,
+      itemRequestCount,
       claimReturnedDialogOpen: true,
     });
   }
@@ -30,9 +32,10 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
     const {
       claimReturnedDialogOpen,
       loan,
+      itemRequestCount,
     } = this.state;
 
-    const modalLabel = <FormattedMessage id="ui-users.loans.confirmClaimReturned" />;
+    const modalLabel = <FormattedMessage id="ui-users.loans.confirmClaimedReturned" />;
 
     return (
       <>
@@ -43,6 +46,7 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
         { loan &&
           <LoanActionDialog
             loan={loan}
+            itemRequestCount={itemRequestCount}
             loanAction={loanActionMutators.CLAIMED_RETURNED}
             modalLabel={modalLabel}
             open={claimReturnedDialogOpen}
