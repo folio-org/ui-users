@@ -284,48 +284,5 @@ describe('Test Fee/Fine details', () => {
         });
       });
     });
-
-    describe('Cancel fee/fine', () => {
-      beforeEach(async () => {
-        await FeeFineDetails.errorButton.click();
-      });
-
-      it('displays error modal', () => {
-        expect(FeeFineDetails.errorModal.isPresent).to.be.true;
-      });
-
-      it('displays error modal submit button', () => {
-        expect(FeeFineDetails.errorModalSubmit.isPresent).to.be.true;
-      });
-
-      it('displays error modal comment field', () => {
-        expect(FeeFineDetails.errorComment.isPresent).to.be.true;
-      });
-
-      describe('Fill cancel reason', () => {
-        beforeEach(async () => {
-          await FeeFineDetails.errorComment.focusTextArea();
-          await FeeFineDetails.errorComment.fillAndBlur('Cancellation reason');
-        });
-
-        it('displays cancel reason value', () => {
-          expect(FeeFineDetails.errorComment.val).to.equal('Cancellation reason');
-        });
-
-        it('displays active submit cancel button', () => {
-          expect(FeeFineDetails.errorModalSubmitIsDisabled).to.be.false;
-        });
-
-        describe('cancel fine', () => {
-          beforeEach(async () => {
-            await FeeFineDetails.errorModalSubmit.click();
-          });
-
-          it('show successfull callout', () => {
-            expect(FeeFineDetails.callout.successCalloutIsPresent).to.be.true;
-          });
-        });
-      });
-    });
   });
 });

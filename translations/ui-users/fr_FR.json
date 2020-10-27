@@ -742,5 +742,8 @@
     "reports.itemId": "ID de l'article",
     "reports.feeFine": "Frais / Amende",
     "reports.inProgress": "Export en cours",
-    "departments": "Départements/Services"
+    "departments": "Départements/Services",
+    "index.username": "Username",
+    "index.all": "Keyword (name, email, identifier)",
+    "index.lastName": "Last name"
 }
