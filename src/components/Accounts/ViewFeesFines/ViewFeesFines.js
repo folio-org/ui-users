@@ -20,7 +20,10 @@ import {
   nav,
 } from '../../util';
 
-import { isRefundAllowed } from '../accountFunctions';
+import {
+  isRefundAllowed,
+  isCancelAllowed,
+} from '../accountFunctions';
 
 class ViewFeesFines extends React.Component {
   static propTypes = {
@@ -320,7 +323,7 @@ class ViewFeesFines extends React.Component {
       pay: disabled,
       waive: disabled,
       transfer: disabled,
-      error: disabled,
+      error: disabled || !isCancelAllowed(a),
       loan: (a.loanId === '0' || !a.loanId),
       refund: !isRefundAllowed(a, feeFineActions),
     };

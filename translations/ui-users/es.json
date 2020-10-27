@@ -742,5 +742,8 @@
     "reports.itemId": "ID de artículo",
     "reports.feeFine": "Tarifa/Multa",
     "reports.inProgress": "Exportación en curso",
-    "departments": "Departamentos"
+    "departments": "Departamentos",
+    "index.username": "Username",
+    "index.all": "Keyword (name, email, identifier)",
+    "index.lastName": "Last name"
 }

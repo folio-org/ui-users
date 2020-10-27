@@ -43,6 +43,8 @@ function getFullName(user) {
 const rawSearchableIndexes = [
   { label: 'ui-users.index.all', value: '' },
   { label: 'ui-users.index.username', value: 'username' },
+  { label: 'ui-users.index.lastName', value: 'personal.lastName' },
+  { label: 'ui-users.index.barcode', value: 'barcode' },
 ];
 let searchableIndexes;
 
@@ -337,7 +339,12 @@ class UserSearch extends React.Component {
     if (!searchableIndexes) {
       searchableIndexes = rawSearchableIndexes.map(x => (
         { value: x.value, label: this.props.intl.formatMessage({ id: x.label }) }
-      ));
+      )).sort((a, b) => a.label.localeCompare(b.label));
+      // searchableIndexes is sorted now, but we need to keep the default value (no explicit index) at the beginning of the array
+      searchableIndexes = [
+        ...searchableIndexes.filter(({ value }) => !value || value.length === 0),
+        ...searchableIndexes.filter(({ value }) => value)
+      ];
     }
 
     const users = get(resources, 'records.records', []);
@@ -384,6 +391,7 @@ class UserSearch extends React.Component {
             queryGetter={queryGetter}
             onComponentWillUnmount={onComponentWillUnmount}
             initialSearch={initialSearch}
+            initialSearchState={{ query: '' }}
           >
             {
               ({
