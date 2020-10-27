@@ -1,5 +1,10 @@
 # Change history for ui-users
 
+## [5.0.2](https://github.com/folio-org/ui-users/tree/v5.0.2) (2020-10-27)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.1...v5.0.2)
+
+* Use correct `dateFormat` for `<Datepicker>`. Refs UIU-1896.
+
 ## [5.0.1](https://github.com/folio-org/ui-users/tree/v5.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.0...v5.0.1)
 
