@@ -88,7 +88,6 @@ class PatronBlock extends React.Component {
         formatMessage({ id: 'ui-users.blocks.columns.blocked' }),
       ],
       sortDirection: ['desc', 'asc'],
-      submitting: false,
     };
   }
 
@@ -108,7 +107,7 @@ class PatronBlock extends React.Component {
     manualPatronBlocks.reset();
     manualPatronBlocks.GET({ params: { query } })
       .then(records => {
-        const blocks = records.filter(p => moment(moment(p.expirationDate).format()).isSameOrAfter(moment().format()));
+        const blocks = records.filter(p => moment(moment(p.expirationDate).endOf('day')).isSameOrAfter(moment().endOf('day')));
         if ((blocks.length > 0 && !expanded) || (!blocks.length && expanded)) {
           onToggle({ id: accordionId });
         }
@@ -119,26 +118,6 @@ class PatronBlock extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
-    const prevPatronBlocks = prevProps.patronBlocks;
-    const { submitting } = this.state;
-    const prevExpirated = prevPatronBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
-    const expirated = prevPatronBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
-
-    if (prevExpirated.length > 0 && expirated.length === 0) {
-      // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({ submitting: false });
-    }
-
-    if (expirated.length > 0 && !submitting) {
-      // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({ submitting: true });
-      expirated.forEach(p => {
-        this.props.mutator.activeRecord.update({ blockId: p.id });
-        this.props.mutator.manualPatronBlocks.DELETE({ id: p.id });
-      });
-    }
-  }
 
   onSort(e, meta) {
     if (!this.sortMap[meta.alias]) return;
@@ -217,7 +196,7 @@ class PatronBlock extends React.Component {
       sortOrder,
       sortDirection
     } = this.state;
-    let contentData = patronBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrAfter(moment().format()));
+    let contentData = patronBlocks.filter(p => moment(moment(p.expirationDate).endOf('day')).isSameOrAfter(moment().endOf('day')));
     contentData = _.orderBy(contentData, ['metadata.createdDate'], ['desc']);
     const visibleColumns = [
       'Type',
