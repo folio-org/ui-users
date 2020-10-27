@@ -614,9 +614,6 @@
       {
         "permissionName": "ui-users.loans.anonymize",
         "displayName": "Users: User loans anonymize",
-        "subPermissions": [
-          "ui-users.view"
-        ],
         "visible": true
       },
       {
