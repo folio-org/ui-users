@@ -816,6 +816,7 @@
   "bulkClaimReturned.items.notOk": "{numItems} item(s) <strong>not</strong> claimed returned.",
   "bulkClaimReturned.moreInfoPlaceholder": "Enter more information about the claim (required)",
 
+  "index.barcode": "Barcode",
   "index.lastName": "Last name",
   "index.username": "Username",
   "index.all": "Keyword (name, email, identifier)"
