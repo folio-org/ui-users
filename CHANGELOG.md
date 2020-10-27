@@ -6,6 +6,7 @@
 * Add report icon for report menu items. Refs UIU-1505.
 * Allow search by username. Refs UIU-1707.
 * Use more efficient queries for `accounts` records. Refs UIU-1913.
+* Work with multiple and single `refund` action. Refs UIU-1897.
 
 ## [5.0.1](https://github.com/folio-org/ui-users/tree/v5.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.0...v5.0.1)

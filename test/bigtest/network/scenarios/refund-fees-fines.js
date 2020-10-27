@@ -1,21 +1,6 @@
 /* istanbul ignore file */
-import CQLParser from '../cql';
-
 export default (server) => {
   const user = server.create('user', { id: 'user1' });
-  // server.create('account', { userId: user.id });
-  // const loan = server.create('loan', {
-  //   id: '8e9f211b-6024-4828-8c14-ace39c6c2863',
-  //   userId: user.id,
-  //   overdueFinePolicyId: () => 'a6130d37-0468-48ca-a336-c2bde575768d',
-  //   lostItemPolicyId: () => '48a3115d-d476-4582-b6a8-55c09eed7ec7',
-  //   overdueFinePolicy: {
-  //     name: () => 'Overdue Fine Policy name',
-  //   },
-  //   lostItemPolicy: {
-  //     name: () => 'Lost Item Policy name',
-  //   },
-  // });
   const owner = server.create('owner');
   server.create('payment', {
     nameMethod: 'visa',
@@ -23,7 +8,6 @@ export default (server) => {
   });
   const feeFine = server.create('feefine', { ownerId: owner.id });
   server.create('waife', { nameReason : 'waiveReason' });
-  // server.create('transfer', { accountName : 'transferAccount' });
   server.create('refund', { nameReason: 'Overpaid' });
   const partiallyPaidAccount1 = server.create('account', {
     id: 'r1',
@@ -156,50 +140,4 @@ export default (server) => {
     return schema.accounts.find(request.params.id).attrs;
   });
   server.get('/feefineactions');
-  // server.get('/feefineactions', (schema, request) => {
-  //   const url = new URL(request.url);
-  //   const cqlQuery = url.searchParams.get('query');
-  //
-  //   if (cqlQuery != null) {
-  //     const cqlParser = new CQLParser();
-  //     cqlParser.parse(cqlQuery);
-  //
-  //     if (cqlParser.tree.term) {
-  //       return schema.feefineactions.where({
-  //         accountId: cqlParser.tree.term
-  //       });
-  //     }
-  //   }
-  //
-  //   return schema.feefineactions.all();
-  // });
-  // server.get('/loans');
-  //
-  // server.post('/loans', (schema, request) => {
-  //   const body = JSON.parse(request.requestBody);
-  //
-  //   return schema.feefineactions.create(body);
-  // });
-  //
-  // server.get('/loans', (schema, request) => {
-  //   const url = new URL(request.url);
-  //   const cqlQuery = url.searchParams.get('query');
-  //
-  //   if (cqlQuery != null) {
-  //     const cqlParser = new CQLParser();
-  //     cqlParser.parse(cqlQuery);
-  //
-  //     if (cqlParser.tree.term) {
-  //       return schema.feefineactions.where({
-  //         accountId: cqlParser.tree.term
-  //       });
-  //     }
-  //   }
-  //
-  //   return schema.feefineactions.all();
-  // });
-
-  // server.get('/loans/:id', (schema, request) => {
-  //   return schema.loans.find(request.params.id);
-  // });
 };

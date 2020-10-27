@@ -8,7 +8,7 @@ import { expect } from 'chai';
 import setupApplication from '../helpers/setup-application';
 import FeeFineHistoryInteractor from '../interactors/fee-fine-history';
 
-describe.only('Refund multiple Fees/Fines', () => {
+describe('Refund multiple Fees/Fines', () => {
   setupApplication({
     scenarios: ['refund-fees-fines'],
     currentUser: {
@@ -50,10 +50,6 @@ describe.only('Refund multiple Fees/Fines', () => {
 
         it('displays refund amount', () => {
           expect(FeeFineHistoryInteractor.actionModalAmountField.value).to.equal('400.00');
-        });
-
-        it('displays refund button disabled', () => {
-          expect(FeeFineHistoryInteractor.actionModalSubmitButtonIsDisabled).to.be.true;
         });
 
         describe('fill refund modal', () => {

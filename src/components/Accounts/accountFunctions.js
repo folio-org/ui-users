@@ -109,16 +109,13 @@ export function accountRefundInfo(account, feeFineActions = []) {
   });
 
   const paidAmount = (parseFloat(account.amount - account.remaining) * 100) / 100;
-  console.log('account.amount ', account.amount);
-  console.log('account.remaining ', account.remaining);
+
   return { hasBeenPaid, paidAmount };
 }
 
 export function isRefundAllowed(account, feeFineActions) {
-  console.log('feeFineActions ', feeFineActions);
   const { hasBeenPaid, paidAmount } = accountRefundInfo(account, feeFineActions);
-  console.log('hasBeenPaid ', hasBeenPaid);
-  console.log('paidAmount ', paidAmount);
+
   return hasBeenPaid && paidAmount > 0;
 }
 
