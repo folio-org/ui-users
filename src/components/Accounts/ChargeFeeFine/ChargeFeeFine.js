@@ -17,7 +17,10 @@ import ChargeForm from './ChargeForm';
 import ItemLookup from './ItemLookup';
 import ActionModal from '../Actions/ActionModal';
 import { getFullName } from '../../util';
-import { loadServicePoints } from '../accountFunctions';
+import {
+  loadServicePoints,
+  deleteOptionalActionFields,
+} from '../accountFunctions';
 
 class ChargeFeeFine extends React.Component {
   static propTypes = {
@@ -62,7 +65,7 @@ class ChargeFeeFine extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      ownerId: '0',
+      ownerId: '',
       feeFineTypeId: null,
       lookup: false,
       pay: false,
@@ -128,14 +131,14 @@ class ChargeFeeFine extends React.Component {
     type.callNumber = item.callNumber;
     type.location = item?.location?.name || item?.effectiveLocation?.name;
     type.materialType = (item.materialType || {}).name;
-    type.materialTypeId = (selectedLoan.id) ? '0' : (item.materialType || {}).id || '0';
+    type.materialTypeId = (selectedLoan.id) ? undefined : (item.materialType || {}).id || undefined;
 
     if (selectedLoan.dueDate) type.dueDate = selectedLoan.dueDate;
     if (selectedLoan.returnDate) type.returnedDate = selectedLoan.returnDate;
     type.id = uuid();
-    type.loanId = selectedLoan.id || '0';
+    type.loanId = selectedLoan.id;
     type.userId = this.props.user.id;
-    type.itemId = this.item.id || '0';
+    type.itemId = this.item.id;
     let commentInfo = '';
     const tagStaff = formatMessage({ id: 'ui-users.accounts.actions.tag.staff' });
     const tagPatron = formatMessage({ id: 'ui-users.accounts.actions.tag.patron' });
@@ -159,6 +162,14 @@ class ChargeFeeFine extends React.Component {
       typeAction,
       commentInfo,
     } = this.onFormAccountData(type);
+
+    deleteOptionalActionFields(
+      typeAction,
+      'itemId',
+      'materialTypeId',
+      'materialType',
+      'loanId'
+    );
 
     return this.props.mutator.accounts.POST(typeAction)
       .then(() => this.newAction({}, typeAction.id, typeAction.feeFineType, typeAction.amount, commentInfo, typeAction.remaining, 0, typeAction.feeFineOwner));
@@ -232,7 +243,7 @@ class ChargeFeeFine extends React.Component {
 
     if (_.get(resources, ['activeRecord', 'shared']) === undefined) {
       const owners = _.get(resources, ['owners', 'records'], []);
-      const shared = (owners.find(o => o.owner === 'Shared') || {}).id || '0';
+      const shared = (owners.find(o => o.owner === 'Shared') || {}).id || '';
       mutator.activeRecord.update({ shared });
     }
     mutator.activeRecord.update({ ownerId });
@@ -427,7 +438,7 @@ class ChargeFeeFine extends React.Component {
         if (owner !== undefined) { list.push(owner); }
       }
     });
-    const feefines = (this.state.ownerId !== '0') ? (resources.feefines || {}).records || [] : [];
+    const feefines = (this.state.ownerId !== '') ? (resources.feefines || {}).records || [] : [];
     const payments = _.get(resources, ['payments', 'records'], []).filter(p => p.ownerId === this.state.ownerId);
     const accounts = _.get(resources, ['accounts', 'records'], []);
     const settings = _.get(resources, ['commentRequired', 'records', 0], {});
@@ -461,7 +472,7 @@ class ChargeFeeFine extends React.Component {
 
     const items = _.get(resources, ['items', 'records'], []);
     const servicePointOwnerId = loadServicePoints({ owners: (shared ? owners : list), defaultServicePointId, servicePointsIds });
-    const initialOwnerId = ownerId !== '0' ? ownerId : servicePointOwnerId;
+    const initialOwnerId = ownerId !== '' ? ownerId : servicePointOwnerId;
     const selectedFeeFine = feefines.find(f => f.id === feeFineTypeId);
     const selectedOwner = owners.find(o => o.id === initialOwnerId);
     const initialChargeValues = {
