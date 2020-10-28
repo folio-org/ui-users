@@ -5,7 +5,6 @@ import {
 } from '@bigtest/mocha';
 import { expect } from 'chai';
 import { Response } from 'miragejs';
-
 import setupApplication from '../helpers/setup-application';
 import OpenLoansInteractor from '../interactors/open-loans';
 import LoanActionsHistory from '../interactors/loan-actions-history';
@@ -271,8 +270,7 @@ describe('Claim returned', () => {
     });
   });
 
-  describe('**** Visiting open loans list page with declared lost item', () => {
-   
+  describe('Visiting open loans list page with declared lost item', () => {
     let user;
     beforeEach(async function () {
       user = this.server.create('user', { id: 'ce0e0d5b-b5f3-4ad5-bccb-49c0784298fd' });
@@ -416,24 +414,287 @@ describe('Claim returned', () => {
         });
       });
     });
+  });
 
-    describe('** visit Fee/fine details Lost Item Fee', () => {
+  describe('Visiting loan details page with claimed returned ítem, fee fine incurred and transferred actions', () => {
+    let user;
+    beforeEach(async function () {
+      user = this.server.create('user', { id: 'ce0e0d5b-b5f3-4ad5-bccb-49c0784298fd' });
+      const loan = this.server.create('loan', {
+        status: { name: 'Open' },
+        loanPolicyId: 'test',
+        action: 'claimedReturned',
+        actionComment: 'Claim returned confirmation',
+        item: { status: { name: 'Claimed returned' } },
+        itemStatus: 'Claimed returned',
+        claimedReturnedDate: new Date().toISOString(),
+        userId: user.id,
+      });
+
+
+      this.server.create('loanaction', {
+        loan: {
+          ...loan.attrs,
+        },
+      });
+
+      this.server.create('account', {
+        id:'f2881912-899b-490b-9433-f38a0ec15476',
+        userId: loan.userId,
+        status: {
+          name: 'Open',
+        },
+        paymentStatus: {
+          name: 'Suspended claim returned',
+        },
+        amount: 200,
+        remaining: 20,
+        feeFineType: 'Lost item fee',
+        loanId: loan.id,
+      });
+
+      this.server.create('feefineaction', {
+        userId: user.id,
+        typeAction: 'Lost item fee',
+        accountId: 'f2881912-899b-490b-9433-f38a0ec15476',
+        amountAction: 200,
+        balance: 200
+      });
+      this.server.create('feefineaction', {
+        userId: user.id,
+        typeAction: 'Transferred partially',
+        accountId: 'f2881912-899b-490b-9433-f38a0ec15476',
+        amountAction: 180,
+        balance: 20
+      });
+      this.server.create('feefineaction', {
+        userId: user.id,
+        transactionInformation: 'Refunded to Community',
+        typeAction: 'Refunded fully-Claim returned',
+        accountId: 'f2881912-899b-490b-9433-f38a0ec15476',
+        amount: 100,
+        remaining: 100,
+      });
+      this.server.create('feefineaction', {
+        userId: user.id,
+        transactionInformation: 'Refunded to Community',
+        typeAction: 'Credited fully-Claim returned',
+        accountId: 'f2881912-899b-490b-9433-f38a0ec15476',
+        amount: 0,
+        remaining: 0,
+      });
+
+      this.visit(`/users/${loan.userId}/loans/view/${loan.id}`);
+    });
+
+    it('should display disabled renew button', () => {
+      expect(LoanActionsHistory.isRenewButtonDisabled).to.be.true;
+    });
+
+    it('should hide claim returned button', () => {
+      expect(LoanActionsHistory.claimReturnedButton.isPresent).to.be.false;
+    });
+
+    it('should display disabled change due date button', () => {
+      expect(LoanActionsHistory.isChangeDueDateButtonDisabled).to.be.true;
+    });
+
+    it('should display the claimed returned date in `Claimed returned` field', () => {
+      expect(LoanActionsHistory.claimedReturnedDate.value.text).to.not.equal('-');
+    });
+
+    it('loan action should be Claimed Returned', () => {
+      expect(LoanActionsHistory.loanActions.rows(0).cells(1).text).to.equal('Claimed returned');
+    });
+
+
+    describe('show resolve claim menu with actions', () => {
       beforeEach(async function () {
-        this.server.get('/feefineactions');
-
-        this.visit('/users/preview/ce0e0d5b-b5f3-4ad5-bccb-49c0784298fd');
-        await FeeFineHistoryInteractor.whenSectionLoaded();
-        await FeeFineHistoryInteractor.sectionFeesFinesSection.click();
-        await FeeFineHistoryInteractor.openAccounts.click();
+        await LoanActionsHistory.resolveClaimMenu.click();
       });
 
-      it('renders proper amount of rows', () => {
-        expect(FeeFineHistoryInteractor.mclViewFeesFines.rowCount).to.equal(1);
+      it('should show declare lost button', () => {
+        expect(LoanActionsHistory.declareLostButton.isPresent).to.be.true;
+      }).timeout(5000);
+    });
+  });
+
+
+  describe('Visiting fee fine (credit and refund) when incurred after claim returned item', () => {
+    let user;
+    beforeEach(async function () {
+      user = this.server.create('user', { id: 'ce0e0d5b-b5f3-4ad5-bccb-49c0784298fd' });
+      const loan = this.server.create('loan', {
+        status: { name: 'Open' },
+        loanPolicyId: 'test',
+        action: 'claimedReturned',
+        actionComment: 'Claim returned confirmation',
+        item: { status: { name: 'Claimed returned' } },
+        itemStatus: 'Claimed returned',
+        claimedReturnedDate: new Date().toISOString(),
+        userId: user.id,
       });
 
-      it('renders proper amount of cells', () => {
-        expect(FeeFineHistoryInteractor.mclViewFeesFines.rows(0).cellCount).to.equal(14);
+
+      this.server.create('loanaction', {
+        loan: {
+          ...loan.attrs,
+        },
       });
+
+      this.server.create('account', {
+        id:'f2881912-899b-490b-9433-f38a0ec15476',
+        userId: loan.userId,
+        status: {
+          name: 'Open',
+        },
+        paymentStatus: {
+          name: 'Suspended claim returned',
+        },
+        amount: 200,
+        remaining: 20,
+        feeFineType: 'Lost item fee',
+        loanId: loan.id,
+      });
+
+      this.server.create('feefineaction', {
+        userId: user.id,
+        typeAction: 'Lost item fee',
+        accountId: 'f2881912-899b-490b-9433-f38a0ec15476',
+        amountAction: 200,
+        balance: 200
+      });
+      this.server.create('feefineaction', {
+        userId: user.id,
+        typeAction: 'Transferred partially',
+        accountId: 'f2881912-899b-490b-9433-f38a0ec15476',
+        amountAction: 180,
+        balance: 20
+      });
+      this.server.create('feefineaction', {
+        userId: user.id,
+        transactionInformation: 'Refunded to Community',
+        typeAction: 'Refunded fully-Claim returned',
+        accountId: 'f2881912-899b-490b-9433-f38a0ec15476',
+        amount: 100,
+        remaining: 100,
+      });
+      this.server.create('feefineaction', {
+        userId: user.id,
+        transactionInformation: 'Refunded to Community',
+        typeAction: 'Credited fully-Claim returned',
+        accountId: 'f2881912-899b-490b-9433-f38a0ec15476',
+        amount: 0,
+        remaining: 0,
+      });
+      this.server.get('/accounts');
+      this.server.get('/feefineactions');
+
+
+      this.visit('/users/preview/ce0e0d5b-b5f3-4ad5-bccb-49c0784298fd');
+      await FeeFineHistoryInteractor.whenSectionLoaded();
+      await FeeFineHistoryInteractor.sectionFeesFinesSection.click();
+      await FeeFineHistoryInteractor.openAccounts.click();
+    });
+
+    it('renders proper amount of rows', () => {
+      expect(FeeFineHistoryInteractor.mclViewFeesFines.rowCount).to.equal(1);
+    });
+
+    it('Suspended claim returned payment status', () => {
+      expect(FeeFineHistoryInteractor.mclViewFeesFines.rows(0).cells(6).text).to.equal('Suspended claim returned');
+    });
+  });
+
+  describe('visit Fee/fine details', () => {
+    let user;
+    beforeEach(async function () {
+      user = this.server.create('user', { id: 'ce0e0d5b-b5f3-4ad5-bccb-49c0784298fd' });
+      const loan = this.server.create('loan', {
+        status: { name: 'Open' },
+        loanPolicyId: 'test',
+        action: 'claimedReturned',
+        actionComment: 'Claim returned confirmation',
+        item: { status: { name: 'Claimed returned' } },
+        itemStatus: 'Claimed returned',
+        claimedReturnedDate: new Date().toISOString(),
+        userId: user.id,
+      });
+
+
+      this.server.create('loanaction', {
+        loan: {
+          ...loan.attrs,
+        },
+      });
+
+      this.server.create('account', {
+        id:'f2881912-899b-490b-9433-f38a0ec15476',
+        userId: loan.userId,
+        status: {
+          name: 'Open',
+        },
+        paymentStatus: {
+          name: 'Suspended claim returned',
+        },
+        amount: 200,
+        remaining: 20,
+        feeFineType: 'Lost item fee',
+        loanId: loan.id,
+      });
+
+      this.server.create('feefineaction', {
+        userId: user.id,
+        typeAction: 'Lost item fee',
+        accountId: 'f2881912-899b-490b-9433-f38a0ec15476',
+        amountAction: 200,
+        balance: 200
+      });
+      this.server.create('feefineaction', {
+        userId: user.id,
+        typeAction: 'Transferred partially',
+        accountId: 'f2881912-899b-490b-9433-f38a0ec15476',
+        amountAction: 180,
+        balance: 20
+      });
+      this.server.create('feefineaction', {
+        userId: user.id,
+        transactionInformation: 'Refunded to Community',
+        typeAction: 'Refunded fully-Claim returned',
+        accountId: 'f2881912-899b-490b-9433-f38a0ec15476',
+        amountAction: 180,
+        balance: 200,
+      });
+      this.server.create('feefineaction', {
+        userId: user.id,
+        transactionInformation: 'Refund to Community',
+        typeAction: 'Credited fully-Claim returned',
+        accountId: 'f2881912-899b-490b-9433-f38a0ec15476',
+        amountAction: 180,
+        balance: 0
+      });
+
+
+      this.server.get('/accounts');
+      this.server.get('/feefineactions');
+      this.visit('/users/preview/ce0e0d5b-b5f3-4ad5-bccb-49c0784298fd');
+      await FeeFineHistoryInteractor.whenSectionLoaded();
+      await FeeFineHistoryInteractor.sectionFeesFinesSection.click();
+      await FeeFineHistoryInteractor.openAccounts.click();
+      await FeeFineHistoryInteractor.rows(0).click();
+    });
+    it('Refunded fully-Claim returned  Action', () => {
+      expect(FeeFineHistoryInteractor.mclAccountActions.rows(2).cells(1).text).to.equal('Refunded fully-Claim returned');
+    });
+
+    it('Credited fully-Claim returned  Action', () => {
+      expect(FeeFineHistoryInteractor.mclAccountActions.rows(3).cells(1).text).to.equal('Credited fully-Claim returned');
+    });
+    it('Credited fully-Claim returned Balance', () => {
+      expect(FeeFineHistoryInteractor.mclAccountActions.rows(3).cells(3).text).to.equal('-');
+    });
+    it('Credited fully-Claim returned  Amount', () => {
+      expect(FeeFineHistoryInteractor.mclAccountActions.rows(3).cells(2).text).to.equal('180.00');
     });
   });
 });
