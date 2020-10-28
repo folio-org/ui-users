@@ -3,9 +3,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Button,
-  Row,
   Col,
   PaneHeader,
+  Row,
 } from '@folio/stripes/components';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
@@ -23,6 +23,7 @@ const Menu = (props) => {
     balance,
     selected,
     selectedAccounts,
+    feeFineActions,
     actions,
   } = props;
 
@@ -30,7 +31,7 @@ const Menu = (props) => {
   const showSelected = (selected !== 0 && selected !== parseFloat(0).toFixed(2))
     && outstanding > parseFloat(0).toFixed(2);
   const buttonDisabled = !props.stripes.hasPerm('ui-users.feesfines.actions.all');
-  const canRefund = selectedAccounts.some(isRefundAllowed);
+  const canRefund = selectedAccounts.some((a) => isRefundAllowed(a, feeFineActions));
 
   const type = <FormattedMessage id={`ui-users.accounts.${params.accountstatus}`} />;
 
@@ -139,6 +140,7 @@ Menu.propTypes = {
   match: PropTypes.object,
   patronGroup: PropTypes.object,
   selectedAccounts: PropTypes.arrayOf(PropTypes.object).isRequired,
+  feeFineActions: PropTypes.arrayOf(PropTypes.object).isRequired,
   onChangeActions: PropTypes.func,
 };
 

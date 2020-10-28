@@ -11,6 +11,7 @@
 * Add user's fees/fines permissions. Refs UIU-1918.
 * Allow cancel fee/fine as error only if any 'actions' has not been applied. Refs UIU-1894.
 * Allow search by barcode. Refs UIU-1708.
+* Work with multiple and single `refund` action. Refs UIU-1897.
 * Show the number of open requests in `LoanActionDialog`. Refs UIU-1890.
 
 ## [5.0.1](https://github.com/folio-org/ui-users/tree/v5.0.1) (2020-10-15)
