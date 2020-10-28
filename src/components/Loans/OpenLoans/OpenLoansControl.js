@@ -214,10 +214,11 @@ class OpenLoansControl extends React.Component {
     const {
       loan,
       action,
+      itemRequestCount,
     } = itemMeta;
 
     if (action && this[action]) {
-      this[action](loan);
+      this[action](loan, itemRequestCount);
     }
   };
 
@@ -243,11 +244,11 @@ class OpenLoansControl extends React.Component {
     });
   };
 
-  declareLost = loan => this.props.declareLost(loan);
+  declareLost = (loan, itemRequestCount) => this.props.declareLost(loan, itemRequestCount);
 
-  claimReturned = loan => this.props.claimReturned(loan);
+  claimReturned = (loan, itemRequestCount) => this.props.claimReturned(loan, itemRequestCount);
 
-  markAsMissing = loan => this.props.markAsMissing(loan);
+  markAsMissing = (loan, itemRequestCount) => this.props.markAsMissing(loan, itemRequestCount);
 
   feefineDetails = (loan, e) => {
     const {
