@@ -7,10 +7,14 @@ import { expect } from 'chai';
 import { Response } from 'miragejs';
 
 import setupApplication from '../helpers/setup-application';
+import DummyComponent from '../helpers/DummyComponent';
 import OpenLoansInteractor from '../interactors/open-loans';
 import LoanActionsHistory from '../interactors/loan-actions-history';
 
 describe('Declare Lost', () => {
+  const requestsPath = '/requests';
+  const requestsAmount = 5;
+
   setupApplication({
     permissions: {
       'manualblocks.collection.get': true,
@@ -19,6 +23,16 @@ describe('Declare Lost', () => {
     currentUser: {
       curServicePoint: { id: 1 },
     },
+    modules: [{
+      type: 'app',
+      name: '@folio/ui-requests',
+      displayName: 'requests',
+      route: requestsPath,
+      module: DummyComponent,
+    }],
+    translations: {
+      'requests': 'Requests'
+    },
   });
 
   describe('Visiting open loans list page with not declared lost item', () => {
@@ -26,6 +40,7 @@ describe('Declare Lost', () => {
 
     beforeEach(async function () {
       loan = this.server.create('loan', { status: { name: 'Open' } });
+      this.server.createList('request', requestsAmount, { itemId: loan.itemId });
 
       this.visit(`/users/${loan.userId}/loans/open`);
 
@@ -69,6 +84,21 @@ describe('Declare Lost', () => {
 
         it('should display additional information textarea', () => {
           expect(OpenLoansInteractor.declareLostDialog.additionalInfoTextArea.isPresent).to.be.true;
+        });
+
+        it('should display open requests number', () => {
+          expect(OpenLoansInteractor.declareLostDialog.openRequestsNumber.text).to.equal(requestsAmount.toString());
+        });
+
+        describe('clicking on the open requests number link', () => {
+          beforeEach(async () => {
+            await OpenLoansInteractor.declareLostDialog.openRequestsNumber.click();
+          });
+
+          it('should redirect to "requests"', function () {
+            expect(this.location.pathname).to.equal(requestsPath);
+            expect(this.location.search).includes(loan.itemId);
+          });
         });
 
         describe('clicking cancel button', () => {

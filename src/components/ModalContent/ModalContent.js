@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+import { Link } from 'react-router-dom';
 
 import {
   Button,
@@ -11,6 +12,8 @@ import {
 } from '@folio/stripes/components';
 import { stripesConnect } from '@folio/stripes/core';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
+
+import { getOpenRequestsPath } from '../util';
 
 import { loanActionMutators } from '../../constants';
 
@@ -57,11 +60,13 @@ class ModalContent extends React.Component {
       user: PropTypes.shape({
         user: PropTypes.object,
       }).isRequired,
+      hasPerm: PropTypes.func.isRequired,
     }).isRequired,
     loanAction: PropTypes.string.isRequired,
     loan: PropTypes.object.isRequired,
     onClose: PropTypes.func.isRequired,
     disableButton: PropTypes.func,
+    itemRequestCount: PropTypes.number.isRequired,
   };
 
   static defaultProps = {
@@ -124,12 +129,21 @@ class ModalContent extends React.Component {
 
   render() {
     const {
+      stripes,
       loan,
       loanAction,
       onClose,
+      itemRequestCount,
     } = this.props;
 
     const { additionalInfo } = this.state;
+
+    const openRequestValue = <Link to={getOpenRequestsPath(loan.itemId)}>{itemRequestCount}</Link>;
+
+    // The countIndex variable is used here for:
+    //  - either to determine the content of the message about open requests
+    //  - or whether to show this message at all.
+    const countIndex = stripes.hasPerm('ui-users.requests.all') ? itemRequestCount : -1;
 
     return (
       <div>
@@ -139,6 +153,8 @@ class ModalContent extends React.Component {
             title: loan?.item?.title,
             materialType: loan?.item?.materialType?.name,
             barcode: loan?.item?.barcode,
+            openRequestValue,
+            countIndex,
           }}
         />
         <Row>

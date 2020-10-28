@@ -422,7 +422,7 @@ class LoanDetails extends React.Component {
                           buttonStyle="dropdownItem"
                           data-test-declare-lost-button
                           disabled={buttonDisabled || isDeclaredLostItem}
-                          onClick={() => declareLost(loan)}
+                          onClick={() => declareLost(loan, itemRequestCount)}
                         >
                           <FormattedMessage id="ui-users.loans.declareLost" />
                         </Button>
@@ -431,7 +431,7 @@ class LoanDetails extends React.Component {
                         <Button
                           buttonStyle="dropdownItem"
                           data-test-dropdown-content-mark-as-missing-button
-                          onClick={() => markAsMissing(loan)}
+                          onClick={() => markAsMissing(loan, itemRequestCount)}
                         >
                           <FormattedMessage id="ui-users.loans.markAsMissing" />
                         </Button>
@@ -445,7 +445,7 @@ class LoanDetails extends React.Component {
                       data-test-claim-returned-button
                       disabled={buttonDisabled}
                       buttonStyle="primary"
-                      onClick={() => claimReturned(loan)}
+                      onClick={() => claimReturned(loan, itemRequestCount)}
                     >
                       <FormattedMessage id="ui-users.loans.claimReturned" />
                     </Button>
@@ -471,7 +471,7 @@ class LoanDetails extends React.Component {
                     data-test-declare-lost-button
                     disabled={declarationInProgress || buttonDisabled || isDeclaredLostItem}
                     buttonStyle="primary"
-                    onClick={() => declareLost(loan)}
+                    onClick={() => declareLost(loan, itemRequestCount)}
                   >
                     <FormattedMessage id="ui-users.loans.declareLost" />
                   </Button>

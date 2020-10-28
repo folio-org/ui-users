@@ -26,6 +26,7 @@ class ActionsDropdown extends React.Component {
     stripes: stripesShape.isRequired,
     loan: PropTypes.object.isRequired,
     requestQueue: PropTypes.bool.isRequired,
+    itemRequestCount: PropTypes.number.isRequired,
     handleOptionsChange: PropTypes.func.isRequired,
     disableFeeFineDetails: PropTypes.bool,
     match: PropTypes.shape({
@@ -38,6 +39,7 @@ class ActionsDropdown extends React.Component {
       loan,
       handleOptionsChange,
       requestQueue,
+      itemRequestCount,
       stripes,
       disableFeeFineDetails,
       match: { params },
@@ -78,7 +80,7 @@ class ActionsDropdown extends React.Component {
               buttonStyle="dropdownItem"
               data-test-dropdown-content-claim-returned-button
               onClick={e => {
-                handleOptionsChange({ loan, action:'claimReturned' });
+                handleOptionsChange({ loan, action:'claimReturned', itemRequestCount });
                 onToggle(e);
               }}
             >
@@ -108,7 +110,7 @@ class ActionsDropdown extends React.Component {
               buttonStyle="dropdownItem"
               data-test-dropdown-content-declare-lost-button
               onClick={e => {
-                handleOptionsChange({ loan, action:'declareLost' });
+                handleOptionsChange({ loan, action:'declareLost', itemRequestCount });
                 onToggle(e);
               }}
             >
@@ -122,7 +124,7 @@ class ActionsDropdown extends React.Component {
             buttonStyle="dropdownItem"
             data-test-dropdown-content-mark-as-missing-button
             onClick={e => {
-              handleOptionsChange({ loan, action:'markAsMissing' });
+              handleOptionsChange({ loan, action:'markAsMissing', itemRequestCount });
               onToggle(e);
             }}
           >
