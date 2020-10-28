@@ -65,7 +65,7 @@ class ChargeFeeFine extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      ownerId: '',
+      ownerId: '0',
       feeFineTypeId: null,
       lookup: false,
       pay: false,
@@ -243,7 +243,7 @@ class ChargeFeeFine extends React.Component {
 
     if (_.get(resources, ['activeRecord', 'shared']) === undefined) {
       const owners = _.get(resources, ['owners', 'records'], []);
-      const shared = (owners.find(o => o.owner === 'Shared') || {}).id || '';
+      const shared = (owners.find(o => o.owner === 'Shared') || {}).id || '0';
       mutator.activeRecord.update({ shared });
     }
     mutator.activeRecord.update({ ownerId });
@@ -438,7 +438,7 @@ class ChargeFeeFine extends React.Component {
         if (owner !== undefined) { list.push(owner); }
       }
     });
-    const feefines = (this.state.ownerId !== '') ? (resources.feefines || {}).records || [] : [];
+    const feefines = (this.state.ownerId !== '0') ? (resources.feefines || {}).records || [] : [];
     const payments = _.get(resources, ['payments', 'records'], []).filter(p => p.ownerId === this.state.ownerId);
     const accounts = _.get(resources, ['accounts', 'records'], []);
     const settings = _.get(resources, ['commentRequired', 'records', 0], {});
@@ -472,7 +472,7 @@ class ChargeFeeFine extends React.Component {
 
     const items = _.get(resources, ['items', 'records'], []);
     const servicePointOwnerId = loadServicePoints({ owners: (shared ? owners : list), defaultServicePointId, servicePointsIds });
-    const initialOwnerId = ownerId !== '' ? ownerId : servicePointOwnerId;
+    const initialOwnerId = ownerId !== '0' ? ownerId : servicePointOwnerId;
     const selectedFeeFine = feefines.find(f => f.id === feeFineTypeId);
     const selectedOwner = owners.find(o => o.id === initialOwnerId);
     const initialChargeValues = {
