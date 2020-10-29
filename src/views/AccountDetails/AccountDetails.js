@@ -8,20 +8,20 @@ import {
 } from 'react-intl';
 
 import {
-  Paneset,
-  Pane,
   Button,
-  Row,
   Col,
   KeyValue,
   MultiColumnList,
   NoValue,
+  Pane,
+  Paneset,
+  Row,
 } from '@folio/stripes/components';
 
 import Actions from '../../components/Accounts/Actions/FeeFineActions';
 import {
-  getFullName,
   calculateSortParams,
+  getFullName,
 } from '../../components/util';
 
 import {
@@ -279,6 +279,7 @@ class AccountDetails extends React.Component {
 
     const isAccountsPending = _.get(resources, ['accounts', 'isPending'], true);
     const isActionsPending = _.get(resources, ['accountActions', 'isPending'], true);
+    const feeFineActions = _.get(resources, ['accountActions', 'records'], []);
 
     const actions = this.state.data || [];
     const actionsSort = _.orderBy(actions, [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
@@ -294,8 +295,8 @@ class AccountDetails extends React.Component {
     const lostItemPolicyName = itemDetails?.lostItemPolicyName;
     const contributors = itemDetails?.contributors.join(', ');
 
-    const totalPaidAmount = calculateTotalPaymentAmount(resources?.accounts?.records);
-    const refundAllowed = isRefundAllowed(account);
+    const totalPaidAmount = calculateTotalPaymentAmount(resources?.accounts?.records, feeFineActions);
+    const refundAllowed = isRefundAllowed(account, feeFineActions);
     const cancelAllowed = isCancelAllowed(account);
 
     return (

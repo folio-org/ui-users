@@ -209,7 +209,7 @@ describe('User Edit Page', () => {
         expect(UserFormPage.customFieldsSection.fields().length).to.equal(3);
       });
 
-      it('should display popover for the first field', () => {
+      it.skip('should display popover for the first field', () => {
         expect(UserFormPage.customFieldsSection.fields(0).popoverIsPresent).to.be.true;
       });
 
