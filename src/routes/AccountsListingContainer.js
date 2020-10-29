@@ -71,6 +71,9 @@ class AccountsListingContainer extends React.Component {
       type: 'okapi',
       records: 'feefineactions',
       path: 'feefineactions?query=(userId==:{id} and comments=*)&limit=%{activeRecord.comments}',
+      shouldRefresh: (resource, action, refresh) => {
+        return refresh || action.meta.path === 'accounts' || action.meta.path === 'accounts-bulk';
+      },
     },
     filter: {
       type: 'okapi',
