@@ -14,6 +14,7 @@
 * Work with multiple and single `refund` action. Refs UIU-1897.
 * Show the number of open requests in `LoanActionDialog`. Refs UIU-1890.
 * Remove optional `action` fields if no value was setted. Refs UIU-1773.
+* Show the number of open requests in the Claim returned bulk action modal. Refs UIU-1891.
 
 ## [5.0.1](https://github.com/folio-org/ui-users/tree/v5.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.0...v5.0.1)
