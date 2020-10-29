@@ -137,5 +137,5 @@ export function isCancelAllowed(account) {
 }
 
 export function deleteOptionalActionFields(actionData, ...fields) {
-  fields.map((field) => (!actionData[field] ? delete actionData[field] : null));
+  fields.forEach((field) => (!actionData[field] ? delete actionData[field] : null));
 }
