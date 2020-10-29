@@ -135,3 +135,7 @@ export function calculateOwedFeeFines(accounts = []) {
 export function isCancelAllowed(account) {
   return account.paymentStatus.name === 'Outstanding';
 }
+
+export function deleteOptionalActionFields(actionData, ...fields) {
+  fields.forEach((field) => (!actionData[field] ? delete actionData[field] : null));
+}

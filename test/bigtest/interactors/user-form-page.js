@@ -22,7 +22,6 @@ import PermissionsModal from './permissions-modal';
 import ServicePointsModal from './service-points-modal';
 import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/ProxyEditItem.css';
 
-
 @interactor class InputFieldInteractor {
   clickInput = clickable();
   fillInput = fillable();
@@ -86,7 +85,7 @@ import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/P
           .blurInput();
       }
     }),
-    popoverIsPresent: isPresent('[class^=popoverTarget---]'),
+    popoverIsPresent: isPresent('[class^=infoPopover---]'),
     validationMessage: text('[class^=feedbackError---]'),
   });
 
