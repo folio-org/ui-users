@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedDate, injectIntl } from 'react-intl';
+import { Link } from 'react-router-dom';
 import { isEmpty } from 'lodash';
 import moment from 'moment';
 
@@ -15,6 +16,8 @@ import {
   TextArea,
 } from '@folio/stripes-components';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
+
+import { getOpenRequestsPath } from '../../../../util';
 
 import css from '../../../../ModalContent';
 
@@ -32,6 +35,7 @@ class BulkClaimReturnedModal extends React.Component {
   });
 
   static propTypes = {
+    stripes: PropTypes.object.isRequired,
     checkedLoansIndex: PropTypes.object.isRequired,
     intl: PropTypes.object.isRequired,
     mutator: PropTypes.shape({
@@ -61,7 +65,26 @@ class BulkClaimReturnedModal extends React.Component {
   // requestCounts is an object of the form {<item id>: <number of requests>},
   // with keys present only if the item in question has >0 requests. Thus, if
   // none of the selected items have any requests on them, requestCounts === {}.
-  getRequestCountForItem = id => this.props.requestCounts[id] || 0;
+  getRequestCountForItem = id => {
+    const {
+      requestCounts,
+      stripes,
+    } = this.props;
+
+    const itemRequestCount = requestCounts[id] || 0;
+
+    if (itemRequestCount && stripes.hasPerm('ui-users.requests.all')) {
+      return (
+        <Link
+          data-test-item-request-count
+          to={getOpenRequestsPath(id)}
+        >
+          {itemRequestCount}
+        </Link>);
+    }
+
+    return itemRequestCount;
+  }
 
   handleAdditionalInfoChange = e => {
     this.setState({ additionalInfo: e.target.value });
