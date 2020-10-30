@@ -44,7 +44,7 @@
     },
     "optionalOkapiInterfaces": {
       "circulation": "9.0",
-      "feesfines": "15.0",
+      "feesfines": "16.0",
       "notes": "1.0"
     },
     "permissionSets": [
