@@ -564,7 +564,7 @@
     "data.loanActionMap.declaredLost": "Declarado perdido",
     "confirm": "Confirmar",
     "loans.declareLost": "Declarar perdido",
-    "loans.declareLostDialogBody": "<strong>{title} ({materialType})</strong> (Código de barras: {barcode}) será <strong>declarado perdido</strong>",
+    "loans.declareLostDialogBody": "<strong> {title} ({materialType}) </strong> (Barcode: {barcode}) será <strong>Declarado perdido</strong>. {countIndex, plural, =-1 {Pode haver solicitações em aberto para este item. } =0 {} one { Há {openRequestValue} pedido aberto para este item.} other {Existem {openRequestValue} pedidos abertos para este item. }}",
     "loans.confirmLostState": "Confirmar estado de declarado perdido",
     "loans.declareLost.additionalInfoPlaceholder": "Digite mais informações sobre o item perdido (obrigatório)",
     "userSearch": "Pesquisa de usuário",
@@ -577,7 +577,7 @@
     "filters.status.inactive": "Inativo",
     "data.loanActionMap.claimedReturned": "Alegou ter devolvido",
     "loans.claimReturned": "Alegar devolução",
-    "loans.claimReturnedDialogBody": "<strong>{title} ({materialType}) </strong> (Código de barras: {barcode}) será <strong>alegado como devolvido</strong>",
+    "loans.claimReturnedDialogBody": "<strong> {title} ({materialType}) </strong> (Código de barras: {barcode}) será <strong>Reivindicado devolvido</strong> . {countIndex, plural, =-1 { Pode haver solicitações em aberto para este item. } =0 {} one {Há {openRequestValue} pedido aberto para este item. } other {Existem {openRequestValue} pedidos abertos para este item. }}",
     "loans.confirmClaimReturned": "Confirmar alegação de devolução",
     "renewInProgress": "Renovação em andamento",
     "item.callNumberComponents.prefix": "Prefixo do número de chamada",
@@ -650,7 +650,7 @@
     "permission.settings.limits": "Configurações (Usuários): Pode criar, editar e remover limites de blocos de usuários",
     "data.loanActionMap.markedAsMissing": "Marcado como desaparecido",
     "loans.markAsMissing": "Marcar como desaparecido",
-    "loans.markAsMissingDialogBody": "<strong>{title} ({materialType})</strong> (Código de barras: {barcode}) será marcado como <strong>desaparecido</strong> e o usuário não será cobrado",
+    "loans.markAsMissingDialogBody": "<strong> {title} ({materialType}) </strong> (Código de barras: {barcode} ) será marcado como <strong>ausente</strong> e o usuário não será cobrado. {countIndex, plural, =-1 {Pode haver solicitações em aberto para este item. } =0 {} one { Há {openRequestValue} pedido aberto para este item. } other {Existem {openRequestValue} pedidos abertos para este item. }}",
     "loans.confirmAsMissing": "Confirmar item como desaparecido",
     "data.loanActionMap.closedLoan": "Empréstimo encerrado",
     "loans.numClaimedReturnedLoans": "({count, number} {count, plural, one {alegou ter devolvido} other {alegou ter devolvido}} )",
@@ -745,5 +745,9 @@
     "departments": "Departamentos",
     "index.username": "Nome de usuário",
     "index.all": "Palavra-chave (nome, e-mail, identificador)",
-    "index.lastName": "Last name"
+    "index.lastName": "Sobrenome",
+    "index.barcode": "Código de barras",
+    "loans.confirmDeclaredLost": "Confirme o status do item: Declarado perdido",
+    "loans.confirmClaimedReturned": "Confirme o status do item: Declarado como devolvido",
+    "loans.confirmMissing": "Confirme o status do item: Não encontrado"
 }
