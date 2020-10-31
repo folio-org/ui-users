@@ -1,6 +1,6 @@
 # Change history for ui-users
 
-## 5.1.0 (IN PROGRESS)
+## 6.0.0 (IN PROGRESS)
 
 * Add create request, create fee/fine and create block options to the actions menu. Refs UIU-775.
 * Fix bug showing duplicated service points in add service point dialog. Fixes UIU-1892.
