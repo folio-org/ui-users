@@ -6,7 +6,7 @@ import queryString from 'query-string';
 import { Button } from '@folio/stripes/components';
 import { IfPermission } from '@folio/stripes/core';
 
-class RequestFeeFineBlockActionDialog extends React.Component {
+class RequestFeeFineBlockButtons extends React.Component {
   static propTypes = {
     barcode: PropTypes.string,
     onToggle: PropTypes.func,
@@ -57,4 +57,4 @@ class RequestFeeFineBlockActionDialog extends React.Component {
   }
 }
 
-export default RequestFeeFineBlockActionDialog;
+export default RequestFeeFineBlockButtons;
