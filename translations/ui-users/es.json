@@ -747,7 +747,8 @@
     "index.all": "Keyword (name, email, identifier)",
     "index.lastName": "Last name",
     "index.barcode": "Barcode",
-    "loans.confirmDeclaredLost": "Confirm item status: Declared lost",
-    "loans.confirmClaimedReturned": "Confirm item status: Claimed returned",
-    "loans.confirmMissing": "Confirm item status: Missing"
+    "loans.confirmDeclaredLost": "Confirme el estado del artículo: Declarado perdido",
+    "loans.confirmClaimedReturned": "Confirmar el estado del artículo: Reclamado devuelto",
+    "loans.confirmMissing": "Confirme el estado del artículo: Desaparecido",
+    "information.patronGroup.expirationOffset": "Expiration date offset (days)"
 }
