@@ -33,6 +33,10 @@ describe('User Create Page', () => {
         expect(UserFormPage.cancelButton.rendersDefault).to.be.true;
       });
 
+      it('should not display action menu', () => {
+        expect(UserFormPage.actionMenuButton.isPresent).to.be.false;
+      });
+
       describe('clicking on cancel button', () => {
         beforeEach(async () => {
           await UserFormPage.cancelButton.click();

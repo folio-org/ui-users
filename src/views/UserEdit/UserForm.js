@@ -33,6 +33,7 @@ import {
   EditServicePoints,
 } from '../../components/EditSections';
 import { getFullName } from '../../components/util';
+import RequestFeeFineBlockButtons from '../../components/RequestFeeFineBlockButtons';
 import PermissionsAccordion from '../../components/PermissionsAccordion';
 import {
   statusFilterConfig,
@@ -219,6 +220,7 @@ class UserForm extends React.Component {
     onSubmit: PropTypes.func.isRequired,
     initialValues: PropTypes.object.isRequired,
     servicePoints: PropTypes.object.isRequired,
+    stripes: PropTypes.object,
   };
 
   static defaultProps = {
@@ -417,6 +419,28 @@ class UserForm extends React.Component {
     );
   }
 
+  getActionMenu = ({ onToggle }) => {
+    const { initialValues, stripes } = this.props;
+    const showActionMenu = stripes.hasPerm('ui-users.patron_blocks')
+      || stripes.hasPerm('ui-users.feesfines.actions.all')
+      || stripes.hasPerm('ui-requests.all');
+
+    const isEditing = initialValues && initialValues.id;
+    if (showActionMenu && isEditing) {
+      return (
+        <>
+          <RequestFeeFineBlockButtons
+            barcode={this.props.initialValues.barcode}
+            onToggle={onToggle}
+            userId={this.props.match.params.id}
+          />
+        </>
+      );
+    } else {
+      return null;
+    }
+  }
+
   render() {
     const {
       initialValues,
@@ -445,6 +469,7 @@ class UserForm extends React.Component {
         >
           <Paneset>
             <Pane
+              actionMenu={this.getActionMenu}
               firstMenu={firstMenu}
               footer={footer}
               centerContent

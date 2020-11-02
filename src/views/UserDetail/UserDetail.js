@@ -17,6 +17,7 @@ import {
 import {
   Pane,
   PaneMenu,
+  Icon,
   IconButton,
   expandAllFunction,
   ExpandAllButton,
@@ -60,6 +61,7 @@ import {
   getFullName,
   // eachPromise
 } from '../../components/util';
+import RequestFeeFineBlockButtons from '../../components/RequestFeeFineBlockButtons';
 import { departmentsShape } from '../../shapes';
 
 class UserDetail extends React.Component {
@@ -314,6 +316,43 @@ class UserDetail extends React.Component {
     );
   }
 
+  getActionMenu = barcode => ({ onToggle }) => {
+    const showActionMenu = this.props.stripes.hasPerm('ui-users.edit')
+    || this.props.stripes.hasPerm('ui-users.patron_blocks')
+    || this.props.stripes.hasPerm('ui-users.feesfines.actions.all')
+    || this.props.stripes.hasPerm('ui-requests.all');
+
+    if (showActionMenu) {
+      return (
+        <>
+          <RequestFeeFineBlockButtons
+            barcode={barcode}
+            onToggle={onToggle}
+            userId={this.props.match.params.id}
+          />
+          <IfPermission perm="ui-users.edit">
+            <Button
+              buttonStyle="dropdownItem"
+              data-test-actions-menu-edit
+              id="clickable-edituser"
+              onClick={() => {
+                onToggle();
+                this.goToEdit();
+              }}
+              buttonRef={this.editButton}
+            >
+              <Icon icon="edit">
+                <FormattedMessage id="ui-users.edit" />
+              </Icon>
+            </Button>
+          </IfPermission>
+        </>
+      );
+    } else {
+      return null;
+    }
+  }
+
   checkScope = () => true;
 
   goToEdit = () => {
@@ -431,7 +470,7 @@ class UserDetail extends React.Component {
                   {getFullName(user)}
                 </span>
               }
-              lastMenu={this.renderDetailMenu(user)}
+              actionMenu={this.getActionMenu(get(user, 'barcode', ''))}
               dismissible
               onClose={this.onClose}
             >

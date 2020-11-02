@@ -48,6 +48,21 @@ describe('User Edit Page', () => {
       expect(UserFormPage.departmentName.items.length).to.equal(0);
     });
 
+    it('should display action menu', () => {
+      expect(UserFormPage.actionMenuButton.isPresent).to.be.false;
+    });
+
+    describe('clicking on the open action menu', function () {
+      beforeEach(async function () {
+        await UserFormPage.actionMenuButton.click();
+      });
+      it('should display links to create request, feefines and patronblock', () => {
+        expect(UserFormPage.actionMenuCreateRequestButton.isPresent).to.be.true;
+        expect(UserFormPage.actionMenuCreateFeeFinesButton.isPresent).to.be.true;
+        expect(UserFormPage.actionMenuCreatePatronBlocksButton.isPresent).to.be.true;
+      });
+    });
+
     describe('validating user barcode', () => {
       beforeEach(async function () {
         await UserFormPage.barcodeField.fillAndBlur(user2.barcode);
@@ -194,7 +209,7 @@ describe('User Edit Page', () => {
         expect(UserFormPage.customFieldsSection.fields().length).to.equal(3);
       });
 
-      it.skip('should display popover for the first field', () => {
+      it('should display popover for the first field', () => {
         expect(UserFormPage.customFieldsSection.fields(0).popoverIsPresent).to.be.true;
       });
 
@@ -287,6 +302,27 @@ describe('User Edit Page', () => {
 
     it('should not display create/reset password link', () => {
       expect(UserFormPage.resetPasswordLink.isPresent).to.be.false;
+    });
+  });
+
+  describe('User without permission for create requests, feesfines and patronblock', () => {
+    setupApplication({
+      hasAllPerms: false,
+      permissions: {
+        'module.users.enabled': true,
+        'ui-users.edit': true,
+      },
+    });
+
+    beforeEach(async function () {
+      const user = this.server.create('user');
+
+      this.visit(`/users/${user.id}/edit`);
+      await UserFormPage.whenLoaded();
+    });
+
+    it('should not display action menu', () => {
+      expect(UserFormPage.actionMenuButton.isPresent).to.be.false;
     });
   });
 });
