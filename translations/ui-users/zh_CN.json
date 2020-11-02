@@ -749,5 +749,6 @@
     "index.barcode": "条码",
     "loans.confirmDeclaredLost": "确认单件状态：声称遗失",
     "loans.confirmClaimedReturned": "确认单件状态：声称已还",
-    "loans.confirmMissing": "确认单件状态：缺少"
+    "loans.confirmMissing": "确认单件状态：缺少",
+    "information.patronGroup.expirationOffset": "Expiration date offset (days)"
 }

@@ -412,7 +412,7 @@
     "blocks.reason": "Reason for block",
     "blocks.modal.header": "Patron blocked from renewing",
     "blocks.detailsButton": "View block details",
-    "blocks.closeButton": "Close",
+    "blocks.closeButton": "閉じる",
     "cancel": "キャンセル",
     "brd.overrideAndRenew": "Override & renew",
     "brd.header.newDueDate": "New due date",
@@ -749,5 +749,6 @@
     "index.barcode": "バーコード",
     "loans.confirmDeclaredLost": "Confirm item status: Declared lost",
     "loans.confirmClaimedReturned": "Confirm item status: Claimed returned",
-    "loans.confirmMissing": "Confirm item status: Missing"
+    "loans.confirmMissing": "Confirm item status: Missing",
+    "information.patronGroup.expirationOffset": "Expiration date offset (days)"
 }
