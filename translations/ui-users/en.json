@@ -264,6 +264,7 @@
   "information.username": "Username",
   "information.selectPatronGroup": "Select patron group",
   "information.patronGroup.users": "Users",
+  "information.patronGroup.expirationOffset": "Expiration date offset (days)",
   "information.profile.label": "Display profile pictures",
   "proxy.addProxy": "Add",
   "proxy.relationshipCreated": "Relationship Created",
