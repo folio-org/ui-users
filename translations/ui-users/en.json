@@ -722,6 +722,7 @@
   "reports.item.chronology": "Chronology",
   "reports.item.copyNumber": "Copy number",
   "reports.item.volume": "Volume",
+  "reports.item.contributors": "Contributors",
   "reports.overdue.item.contributors": "Contributors",
   "reports.item.location.name": "Location",
   "reports.item.instanceId": "Instance ID",
