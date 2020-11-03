@@ -236,9 +236,7 @@ class ChargeFeeFine extends React.Component {
       mutator.activeRecord.update({ shared });
     }
     mutator.activeRecord.update({ ownerId });
-    this.setState({
-      ownerId,
-    });
+    this.setState({ ownerId });
   }
 
   onChangeFeeFine(e) {
@@ -466,7 +464,7 @@ class ChargeFeeFine extends React.Component {
     const selectedFeeFine = feefines.find(f => f.id === feeFineTypeId);
     const selectedOwner = owners.find(o => o.id === initialOwnerId);
     const initialChargeValues = {
-      ownerId: '',
+      ownerId: resources.activeRecord.ownerId || '',
       notify: !!(selectedFeeFine?.chargeNoticeId || selectedOwner?.defaultChargeNoticeId),
       feeFineId: '',
       amount: ''
