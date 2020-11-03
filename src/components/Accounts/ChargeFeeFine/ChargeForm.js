@@ -103,7 +103,7 @@ class ChargeForm extends React.Component {
       form: { change },
     } = this.props;
 
-    if (e.target.value) {
+    if (e?.target?.value) {
       const feeFineId = e.target.value;
       this.props.onChangeFeeFine(e);
       const feefine = feefines.find(f => f.id === feeFineId) || {};
