@@ -17,6 +17,7 @@
 * Remove optional `action` fields if no value was setted. Refs UIU-1773.
 * Show the number of open requests in the Claim returned bulk action modal. Refs UIU-1891.
 * Add column 'Expiration date offset (days)' to patron group table. Refs UIU-1908.
+* On `Create Fee/fine` page `ConfirmationModal` shows again. Refs UIU-1933.
 
 ## [5.0.1](https://github.com/folio-org/ui-users/tree/v5.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.0...v5.0.1)
