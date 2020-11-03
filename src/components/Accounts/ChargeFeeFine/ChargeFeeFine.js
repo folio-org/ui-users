@@ -426,6 +426,7 @@ class ChargeFeeFine extends React.Component {
     const {
       ownerId,
       feeFineTypeId,
+      pay,
     } = this.state;
     this.item = _.get(resources, ['items', 'records', [0]], {});
     const allfeefines = _.get(resources, ['allfeefines', 'records'], []);
@@ -519,24 +520,28 @@ class ChargeFeeFine extends React.Component {
           onChangeItem={this.onChangeItem}
           onClose={this.onCloseModal}
         />
-        <ActionModal
-          intl={intl}
-          action="payment"
-          form="payment-modals"
-          label="nameMethod"
-          initialValues={initialActionValues}
-          open={this.state.pay}
-          commentRequired={settings.paid}
-          onClose={this.onClosePayModal}
-          accounts={[this.type]}
-          balance={this.type.amount}
-          data={payments}
-          stripes={stripes}
-          onSubmit={(values) => { this.showConfirmDialog(values); }}
-          owners={owners}
-          okapi={this.props.okapi}
-          checkAmount="check-pay"
-        />
+        {pay &&
+          <ActionModal
+            intl={intl}
+            action="payment"
+            form="payment-modals"
+            label="nameMethod"
+            initialValues={initialActionValues}
+            open
+            commentRequired={settings.paid}
+            onClose={this.onClosePayModal}
+            accounts={[this.type]}
+            balance={this.type.amount}
+            data={payments}
+            stripes={stripes}
+            onSubmit={(values) => {
+              this.showConfirmDialog(values);
+            }}
+            owners={owners}
+            okapi={this.props.okapi}
+            checkAmount="check-pay"
+          />
+        }
         <Callout ref={(ref) => { this.callout = ref; }} />
         <ConfirmationModal
           open={this.state.showConfirmDialog}
