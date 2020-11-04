@@ -19,6 +19,7 @@
 * Add column 'Expiration date offset (days)' to patron group table. Refs UIU-1908.
 * On `Create Fee/fine` page `ConfirmationModal` shows again. Refs UIU-1933.
 * Fix incorrect display of the header for `Contributors` column in `Overdue loans report`. Fixes UIU-1937.
+* Fix filtering by tags. Fixes UITAG-34.
 * Manual patron block not fully going away after expired. Refs UIU-1943.
 
 ## [5.0.1](https://github.com/folio-org/ui-users/tree/v5.0.1) (2020-10-15)
