@@ -4,6 +4,7 @@
 
 * Fix bug showing duplicated service points in add service point dialog. Fixes UIU-1892.
 * On `Create Fee/fine` page `ConfirmationModal` shows again. Refs UIU-1933.
+* Fix incorrect display of the header for `Contributors` column in `Overdue loans report`. Fixes UIU-1937.
 
 ## [5.0.3](https://github.com/folio-org/ui-users/tree/v5.0.3) (2020-10-27)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.2...v5.0.3)
