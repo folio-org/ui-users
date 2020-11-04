@@ -16,6 +16,7 @@ const filterConfig = [
     name: 'tags',
     cql: 'tags.tagList',
     values: [],
+    operator: '=',
   },
   {
     name: 'departments',
