@@ -87,7 +87,7 @@ describe('Declare Lost', () => {
         });
 
         it('should display open requests number', () => {
-          expect(OpenLoansInteractor.declareLostDialog.openRequestsNumber.text).to.equal(requestsAmount.toString());
+          expect(OpenLoansInteractor.declareLostDialog.openRequestsNumber.text).to.equal(`${requestsAmount} open requests`);
         });
 
         describe('clicking on the open requests number link', () => {
