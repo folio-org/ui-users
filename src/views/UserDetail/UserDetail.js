@@ -273,7 +273,7 @@ class UserDetail extends React.Component {
     return patronGroups.find(g => g.id === patronGroupId) || { group: '' };
   }
 
-  renderDetailMenu(user) {
+  renderDetailsLastMenu(user) {
     const {
       tagsEnabled,
     } = this.props;
@@ -282,23 +282,6 @@ class UserDetail extends React.Component {
 
     return (
       <PaneMenu>
-        <IfPermission perm="ui-users.edit">
-          <FormattedMessage id="ui-users.crud.editUser">
-            {ariaLabel => (
-              user &&
-              <Button
-                id="clickable-edituser"
-                buttonStyle="primary"
-                to={this.getEditLink()}
-                buttonRef={this.editButton}
-                aria-label={ariaLabel}
-                marginBottom0
-              >
-                <FormattedMessage id="ui-users.edit" />
-              </Button>
-            )}
-          </FormattedMessage>
-        </IfPermission>
         {
           tagsEnabled &&
           <FormattedMessage id="ui-users.showTags">
@@ -422,7 +405,6 @@ class UserDetail extends React.Component {
     const hasPatronBlocks = totalPatronBlocks > 0;
     const hasPatronBlocksPermissions = stripes.hasPerm('automated-patron-blocks.collection.get') || stripes.hasPerm('manualblocks.collection.get');
     const patronGroup = this.getPatronGroup(user);
-    // const detailMenu = this.renderDetailMenu(user);
     const requestPreferences = get(resources, 'requestPreferences.records.[0].requestPreferences[0]', {});
     const allServicePoints = get(resources, 'servicePoints.records', [{}]);
     const defaultServicePointName = get(
@@ -469,6 +451,7 @@ class UserDetail extends React.Component {
                 </span>
               }
               actionMenu={this.getActionMenu(get(user, 'barcode', ''))}
+              lastMenu={this.renderDetailsLastMenu(user)}
               dismissible
               onClose={this.onClose}
             >
