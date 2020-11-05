@@ -231,6 +231,7 @@ class PatronBlockForm extends React.Component {
                         dateFormat="YYYY-MM-DD"
                         label={<FormattedMessage id="ui-users.blocks.form.label.date" />}
                         backendDateStandard="YYYY-MM-DD"
+                        timeZone="UTC"
                       />
                     </Col>
                   </Row>
