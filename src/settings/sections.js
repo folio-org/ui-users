@@ -17,6 +17,7 @@ import CustomFieldsSettingsPane from './CustomFieldsSettings';
 import ConditionsSettings from './ConditionsSettings';
 import LimitsSettings from './LimitsSettings';
 import DepartmentsSettings from './DepartmentsSettings';
+import BlockTemplates from './patronBlocks/BlockTemplates';
 
 const settingsGeneral = [
   {
@@ -114,6 +115,12 @@ const settingsPatronBlocks = [
     label: <FormattedMessage id="ui-users.settings.limits" />,
     component: LimitsSettings,
     perm: 'ui-users.settings.limits',
+  },
+  {
+    route: 'manual-block-templates',
+    label: <FormattedMessage id="ui-users.settings.manualBlockTemplates" />,
+    component: BlockTemplates,
+    perm: 'ui-users.settings.patron-block-templates',
   }
 ];
 
