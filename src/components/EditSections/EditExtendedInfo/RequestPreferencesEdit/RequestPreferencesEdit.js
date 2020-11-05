@@ -238,6 +238,7 @@ const selectNonEmptyAddresses = fp.pipe([
 const selectServicePointsWithPickupLocation = fp.pipe([
   fp.getOr([], 'folio_users_service_points.records'),
   fp.filter(servicePoint => servicePoint.pickupLocation),
+  fp.uniqBy('id'),
   fp.sortBy('name'),
 ]);
 

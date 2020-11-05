@@ -2,6 +2,7 @@
 
 ## 6.0.0 (IN PROGRESS)
 
+* Add create request, create fee/fine and create block options to the actions menu. Refs UIU-775.
 * Fix bug showing duplicated service points in add service point dialog. Fixes UIU-1892.
 * Add report icon for report menu items. Refs UIU-1505.
 * Allow search by username. Refs UIU-1707.
@@ -15,6 +16,11 @@
 * Show the number of open requests in `LoanActionDialog`. Refs UIU-1890.
 * Remove optional `action` fields if no value was setted. Refs UIU-1773.
 * Show the number of open requests in the Claim returned bulk action modal. Refs UIU-1891.
+* Add column 'Expiration date offset (days)' to patron group table. Refs UIU-1908.
+* On `Create Fee/fine` page `ConfirmationModal` shows again. Refs UIU-1933.
+* Fix incorrect display of the header for `Contributors` column in `Overdue loans report`. Fixes UIU-1937.
+* Fix filtering by tags. Fixes UITAG-34.
+* Manual patron block not fully going away after expired. Refs UIU-1943.
 
 ## [5.0.1](https://github.com/folio-org/ui-users/tree/v5.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.0...v5.0.1)
