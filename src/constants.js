@@ -61,12 +61,14 @@ export const MAX_RECORDS = '10000';
 
 export const refundClaimReturned = {
   PAYMENT_STATUS: 'Suspended claim returned',
-  LOST_STATUS: 'Lost item fee',
-  PROCESSING_STATUS: 'Lost item processing fee',
+  LOST_ITEM_FEE: 'Lost item fee',
+  LOST_ITEM_PROCESSING_FEE: 'Lost item processing fee',
   TYPE_ACTION: 'Transferred',
   CREDITED_ACTION: 'Credited fully-Claim returned',
   REFUNDED_ACTION: 'Refunded fully-Claim returned',
   TRANSACTION_CREDITED: 'Credited',
+  TRANSACTION_VERB_REFUND: 'Refund',
+  TRANSACTION_VERB_REFUNDED: 'Refunded',
 };
 
 export const paymentStatusesAllowedToRefund = [
@@ -79,6 +81,11 @@ export const paymentStatusesAllowedToRefund = [
 export const waiveStatuses = [
   'Waived fully',
   'Waived partially'
+];
+
+export const refundStatuses = [
+  'Refunded fully',
+  'Refunded partially',
 ];
 
 export const reportColumns = [

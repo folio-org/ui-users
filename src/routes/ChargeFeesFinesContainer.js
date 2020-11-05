@@ -74,7 +74,7 @@ class ChargeFeesFinesContainer extends React.Component {
     feefineactions: {
       type: 'okapi',
       records: 'feefineactions',
-      path: `feefineactions?limit=${MAX_RECORDS}`,
+      path: `feefineactions?query=(userId==:{id})&limit=${MAX_RECORDS}`,
     },
     accounts: {
       type: 'okapi',

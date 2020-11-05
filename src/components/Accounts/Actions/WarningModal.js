@@ -6,17 +6,17 @@ import {
 } from 'react-intl';
 
 import {
-  Row,
-  Col,
   Button,
+  Col,
   Modal,
   MultiColumnList,
+  Row,
 } from '@folio/stripes/components';
 
 import {
   omit,
-  size,
   orderBy,
+  size,
 } from 'lodash';
 
 import { calculateSortParams } from '../../util';
@@ -27,6 +27,7 @@ import css from './modal.css';
 class WarningModal extends React.Component {
   static propTypes = {
     accounts: PropTypes.arrayOf(PropTypes.object),
+    feeFineActions: PropTypes.arrayOf(PropTypes.object),
     onChangeAccounts: PropTypes.func.isRequired,
     open: PropTypes.bool,
     label: PropTypes.string,
@@ -107,6 +108,7 @@ class WarningModal extends React.Component {
     const {
       intl: { formatMessage },
       label,
+      feeFineActions,
     } = this.props;
 
     const warningMessage = (
@@ -116,7 +118,7 @@ class WarningModal extends React.Component {
     );
 
     const showWarning = label === formatMessage({ id: 'ui-users.accounts.actions.refundFeeFine' })
-      ? !isRefundAllowed(a)
+      ? !isRefundAllowed(a, feeFineActions)
       : a?.status?.name === 'Closed';
 
     return showWarning ? warningMessage : '';
@@ -159,12 +161,13 @@ class WarningModal extends React.Component {
       intl: {
         formatMessage,
       },
+      feeFineActions,
     } = this.props;
 
     let action;
     let invalidItemsAmount = accounts.filter(a => a.status && a.status.name === 'Closed').length;
     let reason = <FormattedMessage id="ui-users.accounts.actions.warning.closedItems" />;
-    const notAllowedToRefundItemsAmount = accounts.filter(a => !isRefundAllowed(a)).length;
+    const notAllowedToRefundItemsAmount = accounts.filter(a => !isRefundAllowed(a, feeFineActions)).length;
     const selectedItemsAmount = accounts.length;
 
     switch (label) {
@@ -201,6 +204,7 @@ class WarningModal extends React.Component {
     const {
       intl: { formatMessage },
       label,
+      feeFineActions,
     } = this.props;
 
     const {
@@ -224,7 +228,7 @@ class WarningModal extends React.Component {
 
     const hasInvalidAccounts = values.some(a => {
       return label === formatMessage({ id: 'ui-users.accounts.actions.refundFeeFine' })
-        ? !isRefundAllowed(a)
+        ? !isRefundAllowed(a, feeFineActions)
         : a?.status?.name === 'Closed';
     });
 

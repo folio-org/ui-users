@@ -100,6 +100,7 @@ import CalloutInteractor from '@folio/stripes-components/lib/Callout/tests/inter
   waiveModal = new ModalInteractor('#waive-modal');
   cancelModal = new ModalInteractor('#error-modal');
   transferModal = new ModalInteractor('#transfer-modal');
+  refundModal = new ModalInteractor('#refund-modal');
   actionModal = new ModalInteractor('[data-test-fee-fine-action-modal]');
   actionModalSubmitButton = new ButtonInteractor('[data-test-fee-fine-action-modal] #submit-button');
   actionModalSubmitButtonIsDisabled = is('[data-test-fee-fine-action-modal] #submit-button[disabled]');
@@ -127,6 +128,7 @@ import CalloutInteractor from '@folio/stripes-components/lib/Callout/tests/inter
   payButton = new ButtonInteractor('#open-closed-all-pay-button');
   waiveButton = new ButtonInteractor('#open-closed-all-wave-button');
   transferButton = new ButtonInteractor('#open-closed-all-transfer-button');
+  refundButton = new ButtonInteractor('#open-closed-all-refund-button');
   searchField = new SearchFieldInteractor('[class*=searchFieldWrap---]');
   checkList = collection('[class*=filterList---] [class*=listItem---]', CheckboxInteractor);
   col = new CheckboxInteractor('#column-item-0');

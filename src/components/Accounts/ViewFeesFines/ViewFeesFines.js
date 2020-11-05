@@ -3,16 +3,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Button,
-  MultiColumnList,
   Dropdown,
-  MenuItem,
   DropdownMenu,
+  MenuItem,
+  MultiColumnList,
 } from '@folio/stripes/components';
 
 import {
+  FormattedDate,
   FormattedMessage,
   FormattedTime,
-  FormattedDate,
 } from 'react-intl';
 
 import {
@@ -20,7 +20,10 @@ import {
   nav,
 } from '../../util';
 
-import { isRefundAllowed } from '../accountFunctions';
+import {
+  isRefundAllowed,
+  isCancelAllowed,
+} from '../accountFunctions';
 
 class ViewFeesFines extends React.Component {
   static propTypes = {
@@ -43,6 +46,7 @@ class ViewFeesFines extends React.Component {
     onChangeActions: PropTypes.func.isRequired,
     onChangeSelected: PropTypes.func.isRequired,
     accounts: PropTypes.arrayOf(PropTypes.object),
+    feeFineActions: PropTypes.arrayOf(PropTypes.object),
     loans: PropTypes.arrayOf(PropTypes.object),
     match: PropTypes.object,
     history: PropTypes.object,
@@ -313,14 +317,15 @@ class ViewFeesFines extends React.Component {
   }
 
   renderActions(a) {
+    const { feeFineActions = [] } = this.props;
     const disabled = (a.status.name === 'Closed');
     const elipsis = {
       pay: disabled,
       waive: disabled,
       transfer: disabled,
-      error: disabled,
+      error: disabled || !isCancelAllowed(a),
       loan: (a.loanId === '0' || !a.loanId),
-      refund: !isRefundAllowed(a),
+      refund: !isRefundAllowed(a, feeFineActions),
     };
 
     const buttonDisabled = !this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
@@ -391,7 +396,6 @@ class ViewFeesFines extends React.Component {
       'dueDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' }),
       'returnedDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' }),
     };
-
 
     return (
       <MultiColumnList

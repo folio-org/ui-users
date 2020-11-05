@@ -14,6 +14,7 @@ class LoanActionDialog extends React.Component {
     modalLabel: PropTypes.object.isRequired,
     disableButton: PropTypes.func,
     validateAction: PropTypes.func,
+    itemRequestCount: PropTypes.number.isRequired,
   };
 
   render() {
@@ -25,6 +26,7 @@ class LoanActionDialog extends React.Component {
       modalLabel,
       disableButton,
       validateAction,
+      itemRequestCount,
     } = this.props;
 
     if (!loan) return null;
@@ -43,6 +45,7 @@ class LoanActionDialog extends React.Component {
           validateAction={validateAction}
           loanAction={loanAction}
           loan={loan}
+          itemRequestCount={itemRequestCount}
           onClose={onClose}
           disableButton={disableButton}
         />

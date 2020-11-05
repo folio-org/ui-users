@@ -577,7 +577,7 @@
     "filters.status.inactive": "inattivo",
     "data.loanActionMap.claimedReturned": "Dichiarato reso",
     "loans.claimReturned": "Dichiarato reso",
-    "loans.claimReturnedDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be <strong>claimed returned</strong>",
+    "loans.claimReturnedDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be <strong>Claimed returned</strong>. {countIndex, plural, =-1 {There may be open requests for this item.} =0 {} one {There is {openRequestValue} open request for this item.} other {There are {openRequestValue} open requests for this item.}}",
     "loans.confirmClaimReturned": "Conferma Dichiarato reso",
     "renewInProgress": "Rinnovo in corso",
     "item.callNumberComponents.prefix": "Prefisso collocazione",
@@ -650,7 +650,7 @@
     "permission.settings.limits": "Settings (Users): Can create, edit and remove patron blocks limits",
     "data.loanActionMap.markedAsMissing": "Marked as missing",
     "loans.markAsMissing": "Segna come smarrito",
-    "loans.markAsMissingDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be marked <strong>Missing</strong> and patron will not be billed",
+    "loans.markAsMissingDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be marked as <strong>Missing</strong>, and the patron will not be billed. {countIndex, plural, =-1 {There may be open requests for this item.} =0 {} one {There is {openRequestValue} open request for this item.} other {There are {openRequestValue} open requests for this item.}}",
     "loans.confirmAsMissing": "Conferma item come smarrito",
     "data.loanActionMap.closedLoan": "Prestito chiuso",
     "loans.numClaimedReturnedLoans": "({count, number} {count, plural, one {claimed returned} other {claimed returned}})",
@@ -742,5 +742,12 @@
     "reports.itemId": "Item ID",
     "reports.feeFine": "Fee/Fine",
     "reports.inProgress": "Export in progress",
-    "departments": "Departments"
+    "departments": "Departments",
+    "index.username": "Username",
+    "index.all": "Keyword (name, email, identifier)",
+    "index.lastName": "Last name",
+    "index.barcode": "Barcode",
+    "loans.confirmDeclaredLost": "Confirm item status: Declared lost",
+    "loans.confirmClaimedReturned": "Confirm item status: Claimed returned",
+    "loans.confirmMissing": "Confirm item status: Missing"
 }

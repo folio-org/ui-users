@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedDate, injectIntl } from 'react-intl';
-import { isEmpty } from 'lodash';
+import { Link } from 'react-router-dom';
+import { cloneDeep, orderBy, isEmpty } from 'lodash';
 import moment from 'moment';
 
 import {
@@ -15,6 +16,9 @@ import {
   TextArea,
 } from '@folio/stripes-components';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
+import { refundClaimReturned } from '../../../../../constants';
+
+import { getOpenRequestsPath } from '../../../../util';
 
 import css from '../../../../ModalContent';
 
@@ -28,6 +32,23 @@ class BulkClaimReturnedModal extends React.Component {
         path: 'circulation/loans/%{loanId}/claim-item-returned',
       },
     },
+    feefineactions: {
+      type: 'okapi',
+      records: 'feefineactions',
+      path: 'feefineactions',
+      fetch: false,
+      accumulate: true,
+    },
+    accounts: {
+      type: 'okapi',
+      records: 'accounts',
+      PUT: {
+        path: 'accounts/%{activeAccount.id}',
+      },
+      fetch: false,
+      accumulate: true,
+    },
+    activeAccount: {},
     loanId: {},
   });
 
@@ -41,6 +62,24 @@ class BulkClaimReturnedModal extends React.Component {
       loanId: PropTypes.shape({
         replace: PropTypes.func.isRequired,
       }).isRequired,
+      accounts: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+        PUT: PropTypes.func.isRequired,
+      }),
+      feefineactions: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+        POST: PropTypes.func.isRequired,
+      }),
+      activeAccount: PropTypes.shape({
+        update: PropTypes.func,
+      }).isRequired,
+    }).isRequired,
+    okapi: PropTypes.shape({
+      currentUser: PropTypes.object.isRequired,
+    }).isRequired,
+    stripes: PropTypes.shape({
+      connect: PropTypes.func.isRequired,
+      hasPerm: PropTypes.func,
     }),
     onCancel: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
@@ -61,11 +100,178 @@ class BulkClaimReturnedModal extends React.Component {
   // requestCounts is an object of the form {<item id>: <number of requests>},
   // with keys present only if the item in question has >0 requests. Thus, if
   // none of the selected items have any requests on them, requestCounts === {}.
-  getRequestCountForItem = id => this.props.requestCounts[id] || 0;
+  getRequestCountForItem = id => {
+    const {
+      requestCounts,
+      stripes,
+    } = this.props;
+
+    const itemRequestCount = requestCounts[id] || 0;
+
+    if (itemRequestCount && stripes.hasPerm('ui-users.requests.all')) {
+      return (
+        <Link
+          data-test-item-request-count
+          to={getOpenRequestsPath(id)}
+        >
+          {itemRequestCount}
+        </Link>);
+    }
+
+    return itemRequestCount;
+  }
 
   handleAdditionalInfoChange = e => {
     this.setState({ additionalInfo: e.target.value });
   };
+
+
+  refundTransfers = async (loan) => {
+    const getAccounts = () => {
+      const {
+        mutator: {
+          accounts: {
+            GET,
+          },
+        }
+      } = this.props;
+
+      const lostStatus = refundClaimReturned.LOST_ITEM_FEE;
+      const processingStatus = refundClaimReturned.LOST_ITEM_PROCESSING_FEE;
+
+      const pathParts = [
+        'accounts?query=',
+        `loanId=="${loan.id}"`,
+        ` and (feeFineType=="${lostStatus}"`,
+        ` or feeFineType=="${processingStatus}")`
+      ];
+      const path = pathParts.reduce((acc, val) => acc + val, '');
+      return GET({ path });
+    };
+
+    const setPaymentStatus = record => {
+      const updatedRec = cloneDeep(record);
+      updatedRec.paymentStatus.name = refundClaimReturned.PAYMENT_STATUS;
+      return updatedRec;
+    };
+
+    const persistAccountRecord = record => {
+      const {
+        mutator: {
+          activeAccount: {
+            update,
+          },
+          accounts: {
+            PUT,
+          }
+        }
+      } = this.props;
+      update({ id: record.id });
+      return PUT(record);
+    };
+
+    const getAccountActions = account => {
+      const {
+        mutator: {
+          feefineactions: {
+            GET,
+          }
+        }
+      } = this.props;
+      const path = `feefineactions?query=(accountId==${account.id})&orderBy=dateAction&order=desc`;
+      return GET({ path });
+    };
+
+    const filterTransferredActions = actions => actions
+      .filter(
+        record => record.typeAction && record.typeAction.startsWith(refundClaimReturned.TYPE_ACTION)
+      );
+
+    const persistRefundAction = action => {
+      const {
+        mutator: {
+          feefineactions: {
+            POST,
+          },
+        },
+      } = this.props;
+      return POST(action);
+    };
+
+    const createRefundActionTemplate = (account, transferredActions, type) => {
+      const {
+        okapi: {
+          currentUser: {
+            id: currentUserId,
+            curServicePoint: {
+              id: servicePointId
+            }
+          },
+        },
+      } = this.props;
+      const orderedActions = orderBy(transferredActions, ['dateAction'], ['desc']);
+      const now = moment().format();
+      const amount = transferredActions.reduce((acc, record) => acc + record.amountAction, 0.0);
+      const lastBalance = orderedActions[0].balance + amount;
+      const balanceTotal = type.startsWith(refundClaimReturned.TRANSACTION_CREDITED)
+        ? 0.0
+        : lastBalance;
+      const transactionVerb = type.startsWith(refundClaimReturned.TRANSACTION_CREDITED)
+        ? refundClaimReturned.TRANSACTION_VERB_REFUND
+        : refundClaimReturned.TRANSACTION_VERB_REFUNDED;
+
+      const newAction = {
+        dateAction: now,
+        typeAction: type,
+        comments: '',
+        notify: false,
+        amountAction: amount,
+        balance: balanceTotal,
+        transactionInformation: `${transactionVerb} to ${orderedActions[0].paymentMethod}`,
+        source: orderedActions[0].source,
+        paymentMethod: '',
+        accountId: account.id,
+        userId: currentUserId,
+        createdAt: servicePointId,
+      };
+      return persistRefundAction(newAction);
+    };
+
+    const createRefunds = (account, actions) => {
+      if (actions.length > 0) {
+        createRefundActionTemplate(account, actions, refundClaimReturned.REFUNDED_ACTION).then(
+          createRefundActionTemplate(account, actions, refundClaimReturned.CREDITED_ACTION)
+        );
+      }
+    };
+
+    const processAccounts = async () => {
+      const accounts = await getAccounts();
+      const updatedAccounts = await Promise.all(
+        accounts
+          .map(setPaymentStatus)
+          .map(persistAccountRecord)
+      );
+      const accountsActions = await Promise.all(
+        updatedAccounts
+          .map(getAccountActions)
+      );
+      const transferredActions = accountsActions
+        .map(filterTransferredActions);
+      const accountsWithTransferredActions = accounts
+        .map((account, index) => {
+          return {
+            account,
+            actions: transferredActions[index]
+          };
+        });
+      await Promise.all(accountsWithTransferredActions
+        .map(({ account, actions }) => createRefunds(account, actions)));
+    };
+
+    await processAccounts();
+  }
+
 
   claimItemReturned = (loan) => {
     if (!loan) return null;
@@ -82,7 +288,7 @@ class BulkClaimReturnedModal extends React.Component {
   claimAllReturned = () => {
     const promises = Object
       .values(this.props.checkedLoansIndex)
-      .map(loan => this.claimItemReturned(loan).catch(e => e));
+      .map(loan => this.claimItemReturned(loan).then(this.refundTransfers(loan)).catch(e => e));
     Promise.all(promises)
       .then(results => this.finishClaims(results));
   }
@@ -145,6 +351,7 @@ class BulkClaimReturnedModal extends React.Component {
       <ModalFooter>
         <Layout className="textRight">
           <Button
+            data-test-bulk-cr-close-button
             buttonStyle="primary"
             onClick={this.onCancel}
           >
@@ -224,6 +431,7 @@ class BulkClaimReturnedModal extends React.Component {
         {operationState === 'pre' &&
           <Col sm={12} className={css.additionalInformation}>
             <TextArea
+              data-test-bulk-claim-returned-additionalInfo
               label={<FormattedMessage id="ui-users.additionalInfo.label" />}
               placeholder={intl.formatMessage({ id: 'ui-users.bulkClaimReturned.moreInfoPlaceholder' })}
               required

@@ -577,7 +577,7 @@
     "filters.status.inactive": "Inactif",
     "data.loanActionMap.claimedReturned": "Claimed returned",
     "loans.claimReturned": "Claim returned",
-    "loans.claimReturnedDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be <strong>claimed returned</strong>",
+    "loans.claimReturnedDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be <strong>Claimed returned</strong>. {countIndex, plural, =-1 {There may be open requests for this item.} =0 {} one {There is {openRequestValue} open request for this item.} other {There are {openRequestValue} open requests for this item.}}",
     "loans.confirmClaimReturned": "Confirmer le retour (?)",
     "renewInProgress": "Renouvellement en cours",
     "item.callNumberComponents.prefix": "Préfixe de la cote",
@@ -650,7 +650,7 @@
     "permission.settings.limits": "Paramètres (utilisateurs): peut créer, modifier et supprimer les limites des suspensions d'utilisateurs",
     "data.loanActionMap.markedAsMissing": "Marqué comme manquant",
     "loans.markAsMissing": "Marquer comme manquant",
-    "loans.markAsMissingDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be marked <strong>Missing</strong> and patron will not be billed",
+    "loans.markAsMissingDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be marked as <strong>Missing</strong>, and the patron will not be billed. {countIndex, plural, =-1 {There may be open requests for this item.} =0 {} one {There is {openRequestValue} open request for this item.} other {There are {openRequestValue} open requests for this item.}}",
     "loans.confirmAsMissing": "Confirmer l’article comme manquant",
     "data.loanActionMap.closedLoan": "Prêt fermé",
     "loans.numClaimedReturnedLoans": "({count, number} {count, plural, one {claimed returned} other {claimed returned}})",
@@ -742,5 +742,12 @@
     "reports.itemId": "ID de l'article",
     "reports.feeFine": "Frais / Amende",
     "reports.inProgress": "Export en cours",
-    "departments": "Départements/Services"
+    "departments": "Départements/Services",
+    "index.username": "Username",
+    "index.all": "Keyword (name, email, identifier)",
+    "index.lastName": "Nom",
+    "index.barcode": "Code-barres",
+    "loans.confirmDeclaredLost": "Confirmer l'état de l'élément: déclaré perdu",
+    "loans.confirmClaimedReturned": "Confirm item status: Claimed returned",
+    "loans.confirmMissing": "Confirmer l'état de l'élément: manquant"
 }

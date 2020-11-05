@@ -742,5 +742,12 @@
     "reports.itemId": "Item ID",
     "reports.feeFine": "Fee/Fine",
     "reports.inProgress": "Export in progress",
-    "departments": "Departments"
+    "departments": "Departments",
+    "index.username": "Username",
+    "index.all": "Keyword (name, email, identifier)",
+    "index.lastName": "Last name",
+    "index.barcode": "Barcode",
+    "loans.confirmDeclaredLost": "Confirm item status: Declared lost",
+    "loans.confirmClaimedReturned": "Confirm item status: Claimed returned",
+    "loans.confirmMissing": "Confirm item status: Missing"
 }

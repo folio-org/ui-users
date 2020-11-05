@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "5.0.1",
+  "version": "6.0.0",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -44,7 +44,7 @@
     },
     "optionalOkapiInterfaces": {
       "circulation": "9.0",
-      "feesfines": "15.0",
+      "feesfines": "16.0",
       "notes": "1.0"
     },
     "permissionSets": [
@@ -481,7 +481,16 @@
         "subPermissions": [
           "ui-users.manual_charge",
           "ui-users.manual_pay",
-          "ui-users.manual_waive"
+          "ui-users.manual_waive",
+          "accounts.check-pay.post",
+          "accounts.check-waive.post",
+          "accounts.check-transfer.post",
+          "accounts.check-refund.post",
+          "accounts.pay.post",
+          "accounts.waive.post",
+          "accounts.transfer.post",
+          "accounts.cancel.post",
+          "accounts.refund.post"
         ],
         "visible": true
       },

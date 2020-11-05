@@ -59,11 +59,13 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
     this.state = {
       claimReturnedDialogOpen: false,
       loan: null,
+      itemRequestCount: 0,
     };
   }
 
+
   refundTransfers = async () => {
-    const getAccounts = (itemBarcode, userId, loanId) => {
+    const getAccounts = (loanId) => {
       const {
         mutator: {
           accounts: {
@@ -72,8 +74,8 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
         }
       } = this.props;
 
-      const lostStatus = refundClaimReturned.LOST_STATUS;
-      const processingStatus = refundClaimReturned.PROCESSING_STATUS;
+      const lostStatus = refundClaimReturned.LOST_ITEM_FEE;
+      const processingStatus = refundClaimReturned.LOST_ITEM_PROCESSING_FEE;
 
       const pathParts = [
         'accounts?query=',
@@ -153,10 +155,8 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
         ? 0.0
         : lastBalance;
       const transactionVerb = type.startsWith(refundClaimReturned.TRANSACTION_CREDITED)
-        ? 'Refund'
-        : 'Refunded';
-
-
+        ? refundClaimReturned.TRANSACTION_VERB_REFUND
+        : refundClaimReturned.TRANSACTION_VERB_REFUNDED;
       const newAction = {
         dateAction: now,
         typeAction: type,
@@ -171,7 +171,6 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
         userId: currentUserId,
         createdAt: servicePointId,
       };
-
       return persistRefundAction(newAction);
     };
 
@@ -183,34 +182,24 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
       }
     };
 
-
     const processAccounts = async () => {
       const {
         loan: {
-          item: {
-            barcode: loanItemBarcode,
-          },
-          userId: loanUserId,
           id: loanId,
         },
       } = this.props;
-
-      const accounts = await getAccounts(loanItemBarcode, loanUserId, loanId);
-
+      const accounts = await getAccounts(loanId);
       const updatedAccounts = await Promise.all(
         accounts
           .map(setPaymentStatus)
           .map(persistAccountRecord)
       );
-
       const accountsActions = await Promise.all(
         updatedAccounts
           .map(getAccountActions)
       );
-
       const transferredActions = accountsActions
         .map(filterTransferredActions);
-
       const accountsWithTransferredActions = accounts
         .map((account, index) => {
           return {
@@ -218,8 +207,6 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
             actions: transferredActions[index]
           };
         });
-
-
       await Promise.all(accountsWithTransferredActions
         .map(({ account, actions }) => createRefunds(account, actions)));
     };
@@ -227,9 +214,10 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
     await processAccounts();
   }
 
-  openClaimReturnedDialog = loan => {
+  openClaimReturnedDialog = (loan, itemRequestCount) => {
     this.setState({
       loan,
+      itemRequestCount,
       claimReturnedDialogOpen: true,
     });
   }
@@ -242,9 +230,10 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
     const {
       claimReturnedDialogOpen,
       loan,
+      itemRequestCount,
     } = this.state;
 
-    const modalLabel = <FormattedMessage id="ui-users.loans.confirmClaimReturned" />;
+    const modalLabel = <FormattedMessage id="ui-users.loans.confirmClaimedReturned" />;
 
     return (
       <>
@@ -256,6 +245,7 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
           <LoanActionDialog
             validateAction={this.refundTransfers}
             loan={loan}
+            itemRequestCount={itemRequestCount}
             loanAction={loanActionMutators.CLAIMED_RETURNED}
             modalLabel={modalLabel}
             open={claimReturnedDialogOpen}
