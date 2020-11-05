@@ -400,7 +400,7 @@ class Actions extends React.Component {
     mutator.activeRecord.update({ id: account.id });
     const payload = this.buildActionBody(values);
 
-    if (action === 'payment') {
+    if (action === 'pay') {
       payload.transactionInfo = values.transaction || '-';
     }
 
