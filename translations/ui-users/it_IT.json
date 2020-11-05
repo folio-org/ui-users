@@ -577,7 +577,7 @@
     "filters.status.inactive": "inattivo",
     "data.loanActionMap.claimedReturned": "Dichiarato reso",
     "loans.claimReturned": "Dichiarato reso",
-    "loans.claimReturnedDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be <strong>Claimed returned</strong>. {countIndex, plural, =-1 {There may be open requests for this item.} =0 {} one {There is {openRequestValue} open request for this item.} other {There are {openRequestValue} open requests for this item.}}",
+    "loans.claimReturnedDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be <strong>Claimed returned</strong>. {countIndex, plural, =-1 {There may be open requests for this item.} =0 {} one {There is {openRequestValue} for this item.} other {There are {openRequestValue} for this item.}}",
     "loans.confirmClaimReturned": "Conferma Dichiarato reso",
     "renewInProgress": "Rinnovo in corso",
     "item.callNumberComponents.prefix": "Prefisso collocazione",
@@ -650,7 +650,7 @@
     "permission.settings.limits": "Settings (Users): Can create, edit and remove patron blocks limits",
     "data.loanActionMap.markedAsMissing": "Marked as missing",
     "loans.markAsMissing": "Segna come smarrito",
-    "loans.markAsMissingDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be marked as <strong>Missing</strong>, and the patron will not be billed. {countIndex, plural, =-1 {There may be open requests for this item.} =0 {} one {There is {openRequestValue} open request for this item.} other {There are {openRequestValue} open requests for this item.}}",
+    "loans.markAsMissingDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be marked as <strong>Missing</strong>, and the patron will not be billed. {countIndex, plural, =-1 {There may be open requests for this item.} =0 {} one {There is {openRequestValue} for this item.} other {There are {openRequestValue} for this item.}}",
     "loans.confirmAsMissing": "Conferma item come smarrito",
     "data.loanActionMap.closedLoan": "Prestito chiuso",
     "loans.numClaimedReturnedLoans": "({count, number} {count, plural, one {claimed returned} other {claimed returned}})",
@@ -712,7 +712,7 @@
     "accounts.refund.error.select": "Refund reason is required",
     "accounts.actions.refundFeeFine": "Refund fees/fines",
     "accounts.actions.warning.refundAction": "refunded",
-    "accounts.actions.warning.closedItems": "are already closed",
+    "accounts.actions.warning.closedItems": "sono già chiusi",
     "accounts.actions.warning.unpaidItems": "were not paid",
     "accounts.actions.refund": "refund",
     "reports.noItemsFound": "No items found.",
@@ -750,5 +750,6 @@
     "loans.confirmDeclaredLost": "Confirm item status: Declared lost",
     "loans.confirmClaimedReturned": "Confirm item status: Claimed returned",
     "loans.confirmMissing": "Confirm item status: Missing",
-    "information.patronGroup.expirationOffset": "Expiration date offset (days)"
+    "information.patronGroup.expirationOffset": "Expiration date offset (days)",
+    "reports.item.contributors": "Contributors"
 }
