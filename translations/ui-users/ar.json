@@ -749,5 +749,6 @@
     "index.barcode": "الباركود",
     "loans.confirmDeclaredLost": "تأكيد حالة المادة: تم الإعلان عن ضياعها",
     "loans.confirmClaimedReturned": "تأكيد حالة المادة: تم إدعاء إعادتها",
-    "loans.confirmMissing": "تأكيد حالة المادة: مفقودة"
+    "loans.confirmMissing": "تأكيد حالة المادة: مفقودة",
+    "information.patronGroup.expirationOffset": "Expiration date offset (days)"
 }

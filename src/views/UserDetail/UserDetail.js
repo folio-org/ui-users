@@ -6,6 +6,7 @@ import {
   cloneDeep,
   concat,
 } from 'lodash';
+import moment from 'moment';
 import { FormattedMessage } from 'react-intl';
 import {
   AppIcon,
@@ -17,6 +18,7 @@ import {
 import {
   Pane,
   PaneMenu,
+  Icon,
   IconButton,
   expandAllFunction,
   ExpandAllButton,
@@ -60,6 +62,7 @@ import {
   getFullName,
   // eachPromise
 } from '../../components/util';
+import RequestFeeFineBlockButtons from '../../components/RequestFeeFineBlockButtons';
 import { departmentsShape } from '../../shapes';
 
 class UserDetail extends React.Component {
@@ -314,6 +317,43 @@ class UserDetail extends React.Component {
     );
   }
 
+  getActionMenu = barcode => ({ onToggle }) => {
+    const showActionMenu = this.props.stripes.hasPerm('ui-users.edit')
+      || this.props.stripes.hasPerm('ui-users.patron_blocks')
+      || this.props.stripes.hasPerm('ui-users.feesfines.actions.all')
+      || this.props.stripes.hasPerm('ui-requests.all');
+
+    if (showActionMenu) {
+      return (
+        <>
+          <RequestFeeFineBlockButtons
+            barcode={barcode}
+            onToggle={onToggle}
+            userId={this.props.match.params.id}
+          />
+          <IfPermission perm="ui-users.edit">
+            <Button
+              buttonStyle="dropdownItem"
+              data-test-actions-menu-edit
+              id="clickable-edituser"
+              onClick={() => {
+                onToggle();
+                this.goToEdit();
+              }}
+              buttonRef={this.editButton}
+            >
+              <Icon icon="edit">
+                <FormattedMessage id="ui-users.edit" />
+              </Icon>
+            </Button>
+          </IfPermission>
+        </>
+      );
+    } else {
+      return null;
+    }
+  }
+
   checkScope = () => true;
 
   goToEdit = () => {
@@ -374,15 +414,12 @@ class UserDetail extends React.Component {
     const proxies = this.props.getProxies();
     const servicePoints = this.props.getUserServicePoints();
     const preferredServicePoint = this.props.getPreferredServicePoint();
-    const hasManualPatronBlocks = (get(resources, ['hasManualPatronBlocks', 'isPending'], true)) ? -1 : 1;
-    const hasAutomatedPatronBlocks = (get(resources, ['hasAutomatedPatronBlocks', 'isPending'], true)) ? -1 : 1;
-    const totalManualPatronBlocks = get(resources, ['hasManualPatronBlocks', 'other', 'totalRecords'], 0);
-    const totalAutomatedPatronBlocks = get(resources, ['hasAutomatedPatronBlocks', 'records'], []);
-    const totalPatronBlocks = totalManualPatronBlocks + totalAutomatedPatronBlocks.length;
-    const manualPatronBlocks = get(resources, ['hasManualPatronBlocks', 'records'], []);
+    const manualPatronBlocks = get(resources, ['hasManualPatronBlocks', 'records'], [])
+      .filter(p => moment(moment(p.expirationDate).format()).isSameOrAfter(moment().format()));
     const automatedPatronBlocks = get(resources, ['hasAutomatedPatronBlocks', 'records'], []);
+    const totalPatronBlocks = manualPatronBlocks.length + automatedPatronBlocks.length;
     const patronBlocks = concat(automatedPatronBlocks, manualPatronBlocks);
-    const hasPatronBlocks = (hasManualPatronBlocks === 1 || hasAutomatedPatronBlocks === 1) && totalPatronBlocks > 0;
+    const hasPatronBlocks = totalPatronBlocks > 0;
     const hasPatronBlocksPermissions = stripes.hasPerm('automated-patron-blocks.collection.get') || stripes.hasPerm('manualblocks.collection.get');
     const patronGroup = this.getPatronGroup(user);
     // const detailMenu = this.renderDetailMenu(user);
@@ -431,7 +468,7 @@ class UserDetail extends React.Component {
                   {getFullName(user)}
                 </span>
               }
-              lastMenu={this.renderDetailMenu(user)}
+              actionMenu={this.getActionMenu(get(user, 'barcode', ''))}
               dismissible
               onClose={this.onClose}
             >
@@ -467,18 +504,18 @@ class UserDetail extends React.Component {
                 />
                 <IfInterface name="feesfines">
                   {hasPatronBlocksPermissions &&
-                    <PatronBlock
-                      accordionId="patronBlocksSection"
-                      user={user}
-                      hasPatronBlocks={hasPatronBlocks}
-                      patronBlocks={patronBlocks}
-                      automatedPatronBlocks={automatedPatronBlocks}
-                      expanded={sections.patronBlocksSection}
-                      onToggle={this.handleSectionToggle}
-                      onClickViewPatronBlock={this.onClickViewPatronBlock}
-                      addRecord={this.state.addRecord}
-                      {...this.props}
-                    />
+                  <PatronBlock
+                    accordionId="patronBlocksSection"
+                    user={user}
+                    hasPatronBlocks={hasPatronBlocks}
+                    patronBlocks={patronBlocks}
+                    automatedPatronBlocks={automatedPatronBlocks}
+                    expanded={sections.patronBlocksSection}
+                    onToggle={this.handleSectionToggle}
+                    onClickViewPatronBlock={this.onClickViewPatronBlock}
+                    addRecord={this.state.addRecord}
+                    {...this.props}
+                  />
                   }
                 </IfInterface>
                 <ExtendedInfo

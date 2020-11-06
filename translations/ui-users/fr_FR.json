@@ -749,5 +749,6 @@
     "index.barcode": "Code-barres",
     "loans.confirmDeclaredLost": "Confirmer l'état de l'élément: déclaré perdu",
     "loans.confirmClaimedReturned": "Confirm item status: Claimed returned",
-    "loans.confirmMissing": "Confirmer l'état de l'élément: manquant"
+    "loans.confirmMissing": "Confirmer l'état de l'élément: manquant",
+    "information.patronGroup.expirationOffset": "Expiration date offset (days)"
 }

@@ -140,7 +140,7 @@ class ModalContent extends React.Component {
 
     const { additionalInfo } = this.state;
 
-    const openRequestValue = <Link to={getOpenRequestsPath(loan.itemId)}>{itemRequestCount}</Link>;
+    const openRequestValue = <Link to={getOpenRequestsPath(loan.itemId)}>{`${itemRequestCount} open request${itemRequestCount === 1 ? '' : 's'}`}</Link>;
 
     // The countIndex variable is used here for:
     //  - either to determine the content of the message about open requests
