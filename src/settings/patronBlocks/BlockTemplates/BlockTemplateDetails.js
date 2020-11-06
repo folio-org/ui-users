@@ -53,7 +53,7 @@ function BlockTemplateDetails(props) {
   };
 
   return (
-    <>
+    <div data-test-block-template-details>
       <Row end="xs">
         <Col xs>
           <ExpandAllButton accordionStatus={sections} onToggle={setSections} />
@@ -160,7 +160,7 @@ function BlockTemplateDetails(props) {
           </Col>
         </Row>
       </Accordion>
-    </>
+    </div>
   );
 }
 
