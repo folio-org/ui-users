@@ -6,7 +6,6 @@ import {
 } from 'react-intl';
 import {
   get,
-  sortBy,
 } from 'lodash';
 
 import {
@@ -58,7 +57,7 @@ class Filters extends React.Component {
   getValuesFromResources = (type, labelKey, valueKey) => {
     const items = get(this.props.resources, `${type}.records`, [])
       .map(item => ({ label: item[labelKey], value: item[valueKey] }));
-    return sortBy(items, 'label');
+    return items.sort((a, b) => a.label.localeCompare((b.label)));
   };
 
   handleFilterChange = (filter) => {
