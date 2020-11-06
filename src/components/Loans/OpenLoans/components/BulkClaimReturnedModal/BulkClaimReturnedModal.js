@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedDate, injectIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { cloneDeep, orderBy, isEmpty } from 'lodash';
+import { isEmpty } from 'lodash';
 import moment from 'moment';
 
 import {
@@ -16,9 +16,9 @@ import {
   TextArea,
 } from '@folio/stripes-components';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
-import { refundClaimReturned } from '../../../../../constants';
 
 import { getOpenRequestsPath } from '../../../../util';
+import refundTransferClaimReturned from '../../../../util/refundTransferClaimReturned';
 
 import css from '../../../../ModalContent';
 
@@ -125,154 +125,6 @@ class BulkClaimReturnedModal extends React.Component {
     this.setState({ additionalInfo: e.target.value });
   };
 
-
-  refundTransfers = async (loan) => {
-    const getAccounts = () => {
-      const {
-        mutator: {
-          accounts: {
-            GET,
-          },
-        }
-      } = this.props;
-
-      const lostStatus = refundClaimReturned.LOST_ITEM_FEE;
-      const processingStatus = refundClaimReturned.LOST_ITEM_PROCESSING_FEE;
-
-      const pathParts = [
-        'accounts?query=',
-        `loanId=="${loan.id}"`,
-        ` and (feeFineType=="${lostStatus}"`,
-        ` or feeFineType=="${processingStatus}")`
-      ];
-      const path = pathParts.reduce((acc, val) => acc + val, '');
-      return GET({ path });
-    };
-
-    const setPaymentStatus = record => {
-      const updatedRec = cloneDeep(record);
-      updatedRec.paymentStatus.name = refundClaimReturned.PAYMENT_STATUS;
-      return updatedRec;
-    };
-
-    const persistAccountRecord = record => {
-      const {
-        mutator: {
-          activeAccount: {
-            update,
-          },
-          accounts: {
-            PUT,
-          }
-        }
-      } = this.props;
-      update({ id: record.id });
-      return PUT(record);
-    };
-
-    const getAccountActions = account => {
-      const {
-        mutator: {
-          feefineactions: {
-            GET,
-          }
-        }
-      } = this.props;
-      const path = `feefineactions?query=(accountId==${account.id})&orderBy=dateAction&order=desc`;
-      return GET({ path });
-    };
-
-    const filterTransferredActions = actions => actions
-      .filter(
-        record => record.typeAction && record.typeAction.startsWith(refundClaimReturned.TYPE_ACTION)
-      );
-
-    const persistRefundAction = action => {
-      const {
-        mutator: {
-          feefineactions: {
-            POST,
-          },
-        },
-      } = this.props;
-      return POST(action);
-    };
-
-    const createRefundActionTemplate = (account, transferredActions, type) => {
-      const {
-        okapi: {
-          currentUser: {
-            id: currentUserId,
-            curServicePoint: {
-              id: servicePointId
-            }
-          },
-        },
-      } = this.props;
-      const orderedActions = orderBy(transferredActions, ['dateAction'], ['desc']);
-      const now = moment().format();
-      const amount = transferredActions.reduce((acc, record) => acc + record.amountAction, 0.0);
-      const lastBalance = orderedActions[0].balance + amount;
-      const balanceTotal = type.startsWith(refundClaimReturned.TRANSACTION_CREDITED)
-        ? 0.0
-        : lastBalance;
-      const transactionVerb = type.startsWith(refundClaimReturned.TRANSACTION_CREDITED)
-        ? refundClaimReturned.TRANSACTION_VERB_REFUND
-        : refundClaimReturned.TRANSACTION_VERB_REFUNDED;
-
-      const newAction = {
-        dateAction: now,
-        typeAction: type,
-        comments: '',
-        notify: false,
-        amountAction: amount,
-        balance: balanceTotal,
-        transactionInformation: `${transactionVerb} to ${orderedActions[0].paymentMethod}`,
-        source: orderedActions[0].source,
-        paymentMethod: '',
-        accountId: account.id,
-        userId: currentUserId,
-        createdAt: servicePointId,
-      };
-      return persistRefundAction(newAction);
-    };
-
-    const createRefunds = (account, actions) => {
-      if (actions.length > 0) {
-        createRefundActionTemplate(account, actions, refundClaimReturned.REFUNDED_ACTION).then(
-          createRefundActionTemplate(account, actions, refundClaimReturned.CREDITED_ACTION)
-        );
-      }
-    };
-
-    const processAccounts = async () => {
-      const accounts = await getAccounts();
-      const updatedAccounts = await Promise.all(
-        accounts
-          .map(setPaymentStatus)
-          .map(persistAccountRecord)
-      );
-      const accountsActions = await Promise.all(
-        updatedAccounts
-          .map(getAccountActions)
-      );
-      const transferredActions = accountsActions
-        .map(filterTransferredActions);
-      const accountsWithTransferredActions = accounts
-        .map((account, index) => {
-          return {
-            account,
-            actions: transferredActions[index]
-          };
-        });
-      await Promise.all(accountsWithTransferredActions
-        .map(({ account, actions }) => createRefunds(account, actions)));
-    };
-
-    await processAccounts();
-  }
-
-
   claimItemReturned = (loan) => {
     if (!loan) return null;
 
@@ -288,7 +140,9 @@ class BulkClaimReturnedModal extends React.Component {
   claimAllReturned = () => {
     const promises = Object
       .values(this.props.checkedLoansIndex)
-      .map(loan => this.claimItemReturned(loan).then(this.refundTransfers(loan)).catch(e => e));
+      .map(loan => this.claimItemReturned(loan)
+      .then(refundTransferClaimReturned.refundTransfers(loan, this.props))
+      .catch(e => e));
     Promise.all(promises)
       .then(results => this.finishClaims(results));
   }
