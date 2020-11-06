@@ -141,8 +141,8 @@ class BulkClaimReturnedModal extends React.Component {
     const promises = Object
       .values(this.props.checkedLoansIndex)
       .map(loan => this.claimItemReturned(loan)
-      .then(refundTransferClaimReturned.refundTransfers(loan, this.props))
-      .catch(e => e));
+        .then(refundTransferClaimReturned.refundTransfers(loan, this.props))
+        .catch(e => e));
     Promise.all(promises)
       .then(results => this.finishClaims(results));
   }

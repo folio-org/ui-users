@@ -7,10 +7,8 @@ import { refundClaimReturned } from '../../constants';
 
 
 class RefundTransferCR {
-
 refundTransfers = async (loan, props) => {
   const getAccounts = () => {
-    console.log(JSON.stringify(props));
     const {
       mutator: {
         accounts: {
