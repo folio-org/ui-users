@@ -678,7 +678,7 @@
     "settings.default": "الافتراضي",
     "permissions.proxy.sponsor": "النائب/الراعي",
     "accounts.title.feeFine": "الرسوم/الغرامات",
-    "data.loanActionMap.itemAgedToLost": "تأخر وتم اعتباره ضائعاً",
+    "data.loanActionMap.itemAgedToLost": "تقادمت وتم اعتبارها ضائعة",
     "data.loanActionMap.unknownAction": "إجراء غير معروف",
     "item.chronology": "التسلسل الزمني",
     "settings.departments": "أقسام",
@@ -750,5 +750,6 @@
     "loans.confirmDeclaredLost": "تأكيد حالة المادة: تم الإعلان عن ضياعها",
     "loans.confirmClaimedReturned": "تأكيد حالة المادة: تم إدعاء إعادتها",
     "loans.confirmMissing": "تأكيد حالة المادة: مفقودة",
-    "information.patronGroup.expirationOffset": "Expiration date offset (days)"
+    "information.patronGroup.expirationOffset": "تعديل تاريخ الانتهاء (يوماً)",
+    "reports.item.contributors": "المساهمون"
 }

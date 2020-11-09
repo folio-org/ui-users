@@ -259,7 +259,7 @@
     "accounts.history.columns.remaining": "Remaining",
     "accounts.history.columns.barcode": "バーコード",
     "accounts.history.columns.created": "作成日",
-    "accounts.history.columns.updated": "Date updated",
+    "accounts.history.columns.updated": "更新日",
     "accounts.history.columns.type": "Fee/fine type",
     "accounts.history.columns.owner": "Fee/fine owner",
     "accounts.history.columns.number": "Call number",
@@ -564,7 +564,7 @@
     "data.loanActionMap.declaredLost": "Declared lost",
     "confirm": "Confirm",
     "loans.declareLost": "Declare lost",
-    "loans.declareLostDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be <strong>Declared lost</strong>. {countIndex, plural, =-1 {There may be open requests for this item.} =0 {} one {There is {openRequestValue} open request for this item.} other {There are {openRequestValue} open requests for this item.}}",
+    "loans.declareLostDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be <strong>Declared lost</strong>. {countIndex, plural, =-1 {There may be open requests for this item.} =0 {} one {There is {openRequestValue} for this item.} other {There are {openRequestValue} for this item.}}",
     "loans.confirmLostState": "紛失ステータスの宣言を確定",
     "loans.declareLost.additionalInfoPlaceholder": "Enter more information about the lost item (required)",
     "userSearch": "ユーザー検索",
@@ -577,7 +577,7 @@
     "filters.status.inactive": "無効",
     "data.loanActionMap.claimedReturned": "Claimed returned",
     "loans.claimReturned": "Claim returned",
-    "loans.claimReturnedDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be <strong>Claimed returned</strong>. {countIndex, plural, =-1 {There may be open requests for this item.} =0 {} one {There is {openRequestValue} open request for this item.} other {There are {openRequestValue} open requests for this item.}}",
+    "loans.claimReturnedDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be <strong>Claimed returned</strong>. {countIndex, plural, =-1 {There may be open requests for this item.} =0 {} one {There is {openRequestValue} for this item.} other {There are {openRequestValue} for this item.}}",
     "loans.confirmClaimReturned": "返却済みの申し立てを確定",
     "renewInProgress": "Renew in progress",
     "item.callNumberComponents.prefix": "Call number prefix",
@@ -650,7 +650,7 @@
     "permission.settings.limits": "設定（ユーザー）：利用者ブロックの制限を作成、編集、削除できます",
     "data.loanActionMap.markedAsMissing": "Marked as missing",
     "loans.markAsMissing": "Mark as missing",
-    "loans.markAsMissingDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be marked as <strong>Missing</strong>, and the patron will not be billed. {countIndex, plural, =-1 {There may be open requests for this item.} =0 {} one {There is {openRequestValue} open request for this item.} other {There are {openRequestValue} open requests for this item.}}",
+    "loans.markAsMissingDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be marked as <strong>Missing</strong>, and the patron will not be billed. {countIndex, plural, =-1 {There may be open requests for this item.} =0 {} one {There is {openRequestValue} for this item.} other {There are {openRequestValue} for this item.}}",
     "loans.confirmAsMissing": "資料が見つからないと確定",
     "data.loanActionMap.closedLoan": "Closed loan",
     "loans.numClaimedReturnedLoans": "({count, number} {count, plural, one {claimed returned} other {claimed returned}})",
@@ -750,5 +750,6 @@
     "loans.confirmDeclaredLost": "Confirm item status: Declared lost",
     "loans.confirmClaimedReturned": "Confirm item status: Claimed returned",
     "loans.confirmMissing": "Confirm item status: Missing",
-    "information.patronGroup.expirationOffset": "Expiration date offset (days)"
+    "information.patronGroup.expirationOffset": "Expiration date offset (days)",
+    "reports.item.contributors": "Contributors"
 }
