@@ -750,5 +750,6 @@
     "loans.confirmDeclaredLost": "Confirm item status: Declared lost",
     "loans.confirmClaimedReturned": "Confirm item status: Claimed returned",
     "loans.confirmMissing": "Confirm item status: Missing",
-    "information.patronGroup.expirationOffset": "Expiration date offset (days)"
+    "information.patronGroup.expirationOffset": "Expiration date offset (days)",
+    "reports.item.contributors": "Contributors"
 }
