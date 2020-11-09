@@ -1,6 +1,7 @@
 # Change history for ui-users
 
-## 5.0.4 IN PROGRESS
+## [5.0.4](https://github.com/folio-org/ui-users/tree/v5.0.4) (2020-11-09)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.3...v5.0.4)
 
 * Fix bug showing duplicated service points in add service point dialog. Fixes UIU-1892.
 * On `Create Fee/fine` page `ConfirmationModal` shows again. Refs UIU-1933.
