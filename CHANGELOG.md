@@ -22,6 +22,8 @@
 * Fix filtering by tags. Fixes UITAG-34.
 * Manual patron block not fully going away after expired. Refs UIU-1943.
 * Manual patron block expiration date changing when patron block viewed. Refs UIU-1942.
+* Case-insensitive sort of filter options. Refs UIIN-1948.
+* Increment `@folio/stripes` to `^5.0.2`. Refs UIU-1932, UIU-1935.
 
 ## [5.0.1](https://github.com/folio-org/ui-users/tree/v5.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.0...v5.0.1)
