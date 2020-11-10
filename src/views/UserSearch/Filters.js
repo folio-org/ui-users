@@ -84,6 +84,7 @@ class Filters extends React.Component {
         pg = [],
         tags = [],
         departments = [],
+        permissions = [],
       },
       onChangeHandlers: { clearGroup },
       intl: { formatMessage },
@@ -154,6 +155,21 @@ class Filters extends React.Component {
             dataOptions={this.getValuesFromResources('tags', 'label', 'label')}
             name="tags"
             selectedValues={tags}
+            onChange={this.handleFilterChange}
+          />
+        </Accordion>
+        <Accordion
+          displayClearButton
+          id="users-filter-accordion-permissions"
+          header={FilterAccordionHeader}
+          label={formatMessage({ id: 'ui-users.permissions' })}
+          separator={false}
+          onClearFilter={() => clearGroup('permissions')}
+        >
+          <MultiSelectionFilter
+            dataOptions={this.getValuesFromResources('permsPermissions', 'permissionName')}
+            name="permissions"
+            selectedValues={permissions}
             onChange={this.handleFilterChange}
           />
         </Accordion>

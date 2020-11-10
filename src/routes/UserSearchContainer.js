@@ -85,6 +85,30 @@ class UserSearchContainer extends React.Component {
       path: 'departments',
       records: 'departments',
     },
+    permsPermissions: {
+      type: 'okapi',
+      path: 'perms/permissions',
+      records: 'permissions',
+      // limit: 0,
+      throwErrors: false,
+    },
+    permsUsers: {
+      type: 'okapi',
+      path: 'perms/users',
+      records: 'permissionUsers',
+      throwErrors: false,
+    },
+    blUsers: {
+      type: 'okapi',
+      path: 'bl-users',
+      records: 'compositeUsers',
+      limit: '80',
+      // params: {
+      //   query: 'cql.allRecords=1',
+      //   limit: '80',
+      // },
+      throwErrors: false,
+    },
   });
 
   static propTypes = {

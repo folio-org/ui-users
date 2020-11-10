@@ -67,6 +67,15 @@ class UserSearch extends React.Component {
       records: PropTypes.object,
       patronGroups: PropTypes.object,
       departments: PropTypes.object,
+      permsUsers: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      permsPermissions: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      blUsers: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
       query: PropTypes.shape({
         qindex: PropTypes.string,
       }).isRequired,
@@ -382,6 +391,13 @@ class UserSearch extends React.Component {
       username: user => user.username,
       email: user => get(user, ['personal', 'email']),
     };
+
+    // const permsUsers = (resources.permsUsers || {}).records || [];
+    // const permsPermissions = (resources.permsPermissions || {}).records || [];
+    // const blUsers = (resources.blUsers || {}).records || [];
+    // console.log(permsUsers);
+    // console.log(permsPermissions);
+    // console.log(blUsers);
 
     return (
       <HasCommand commands={this.shortcuts}>
