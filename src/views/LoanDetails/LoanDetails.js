@@ -647,7 +647,7 @@ class LoanDetails extends React.Component {
             <PatronBlockModal
               open={patronBlockedModal}
               onClose={this.onClosePatronBlockedModal}
-              patronBlocks={patronBlocks}
+              patronBlocks={patronBlocks.filter(p => p.renewals || p.blockRenewals)}
               viewUserPath={`/users/view/${(user || {}).id}?filters=pg.${patronGroup.group}&sort=name`}
             />
             { this.props.user && this.renderChangeDueDateDialog() }
