@@ -3,6 +3,7 @@
   "user.pluralized": "{count} {count, plural, one {user} other {users}}",
   "meta.title": "Users",
 
+  "showColumns": "Show columns",
   "loading": "Loading...",
   "search": "Search",
   "userSearch": "User search",
