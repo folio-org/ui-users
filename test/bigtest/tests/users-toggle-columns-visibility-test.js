@@ -9,7 +9,7 @@ import { expect } from 'chai';
 import setupApplication from '../helpers/setup-application';
 import UsersInteractor from '../interactors/users';
 
-describe.only('Columns visibility', () => {
+describe('Users list columns visibility', () => {
   setupApplication();
 
   const users = new UsersInteractor();
