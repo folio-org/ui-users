@@ -19,6 +19,13 @@
 * Add column 'Expiration date offset (days)' to patron group table. Refs UIU-1908.
 * On `Create Fee/fine` page `ConfirmationModal` shows again. Refs UIU-1933.
 * Fix incorrect display of the header for `Contributors` column in `Overdue loans report`. Fixes UIU-1937.
+* Fix filtering by tags. Fixes UITAG-34.
+* Manual patron block not fully going away after expired. Refs UIU-1943.
+* Manual patron block expiration date changing when patron block viewed. Refs UIU-1942.
+* Case-insensitive sort of filter options. Refs UIIN-1948.
+* Increment `@folio/stripes` to `^5.0.2`. Refs UIU-1932, UIU-1935.
+* Allow override for not loanable items when loan policy is not recognised. Fixes UIU-1930.
+* Show correct number of due date changes. Fixes UIU-1952.
 
 ## [5.0.1](https://github.com/folio-org/ui-users/tree/v5.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.0...v5.0.1)

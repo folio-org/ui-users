@@ -6,6 +6,7 @@ import {
   cloneDeep,
   concat,
 } from 'lodash';
+import moment from 'moment';
 import { FormattedMessage } from 'react-intl';
 import {
   AppIcon,
@@ -272,7 +273,7 @@ class UserDetail extends React.Component {
     return patronGroups.find(g => g.id === patronGroupId) || { group: '' };
   }
 
-  renderDetailMenu(user) {
+  renderDetailsLastMenu(user) {
     const {
       tagsEnabled,
     } = this.props;
@@ -281,23 +282,6 @@ class UserDetail extends React.Component {
 
     return (
       <PaneMenu>
-        <IfPermission perm="ui-users.edit">
-          <FormattedMessage id="ui-users.crud.editUser">
-            {ariaLabel => (
-              user &&
-              <Button
-                id="clickable-edituser"
-                buttonStyle="primary"
-                to={this.getEditLink()}
-                buttonRef={this.editButton}
-                aria-label={ariaLabel}
-                marginBottom0
-              >
-                <FormattedMessage id="ui-users.edit" />
-              </Button>
-            )}
-          </FormattedMessage>
-        </IfPermission>
         {
           tagsEnabled &&
           <FormattedMessage id="ui-users.showTags">
@@ -318,9 +302,9 @@ class UserDetail extends React.Component {
 
   getActionMenu = barcode => ({ onToggle }) => {
     const showActionMenu = this.props.stripes.hasPerm('ui-users.edit')
-    || this.props.stripes.hasPerm('ui-users.patron_blocks')
-    || this.props.stripes.hasPerm('ui-users.feesfines.actions.all')
-    || this.props.stripes.hasPerm('ui-requests.all');
+      || this.props.stripes.hasPerm('ui-users.patron_blocks')
+      || this.props.stripes.hasPerm('ui-users.feesfines.actions.all')
+      || this.props.stripes.hasPerm('ui-requests.all');
 
     if (showActionMenu) {
       return (
@@ -413,18 +397,14 @@ class UserDetail extends React.Component {
     const proxies = this.props.getProxies();
     const servicePoints = this.props.getUserServicePoints();
     const preferredServicePoint = this.props.getPreferredServicePoint();
-    const hasManualPatronBlocks = (get(resources, ['hasManualPatronBlocks', 'isPending'], true)) ? -1 : 1;
-    const hasAutomatedPatronBlocks = (get(resources, ['hasAutomatedPatronBlocks', 'isPending'], true)) ? -1 : 1;
-    const totalManualPatronBlocks = get(resources, ['hasManualPatronBlocks', 'other', 'totalRecords'], 0);
-    const totalAutomatedPatronBlocks = get(resources, ['hasAutomatedPatronBlocks', 'records'], []);
-    const totalPatronBlocks = totalManualPatronBlocks + totalAutomatedPatronBlocks.length;
-    const manualPatronBlocks = get(resources, ['hasManualPatronBlocks', 'records'], []);
+    const manualPatronBlocks = get(resources, ['hasManualPatronBlocks', 'records'], [])
+      .filter(p => moment(moment(p.expirationDate).format()).isSameOrAfter(moment().format()));
     const automatedPatronBlocks = get(resources, ['hasAutomatedPatronBlocks', 'records'], []);
+    const totalPatronBlocks = manualPatronBlocks.length + automatedPatronBlocks.length;
     const patronBlocks = concat(automatedPatronBlocks, manualPatronBlocks);
-    const hasPatronBlocks = (hasManualPatronBlocks === 1 || hasAutomatedPatronBlocks === 1) && totalPatronBlocks > 0;
+    const hasPatronBlocks = totalPatronBlocks > 0;
     const hasPatronBlocksPermissions = stripes.hasPerm('automated-patron-blocks.collection.get') || stripes.hasPerm('manualblocks.collection.get');
     const patronGroup = this.getPatronGroup(user);
-    // const detailMenu = this.renderDetailMenu(user);
     const requestPreferences = get(resources, 'requestPreferences.records.[0].requestPreferences[0]', {});
     const allServicePoints = get(resources, 'servicePoints.records', [{}]);
     const defaultServicePointName = get(
@@ -471,6 +451,7 @@ class UserDetail extends React.Component {
                 </span>
               }
               actionMenu={this.getActionMenu(get(user, 'barcode', ''))}
+              lastMenu={this.renderDetailsLastMenu(user)}
               dismissible
               onClose={this.onClose}
             >
@@ -506,18 +487,18 @@ class UserDetail extends React.Component {
                 />
                 <IfInterface name="feesfines">
                   {hasPatronBlocksPermissions &&
-                    <PatronBlock
-                      accordionId="patronBlocksSection"
-                      user={user}
-                      hasPatronBlocks={hasPatronBlocks}
-                      patronBlocks={patronBlocks}
-                      automatedPatronBlocks={automatedPatronBlocks}
-                      expanded={sections.patronBlocksSection}
-                      onToggle={this.handleSectionToggle}
-                      onClickViewPatronBlock={this.onClickViewPatronBlock}
-                      addRecord={this.state.addRecord}
-                      {...this.props}
-                    />
+                  <PatronBlock
+                    accordionId="patronBlocksSection"
+                    user={user}
+                    hasPatronBlocks={hasPatronBlocks}
+                    patronBlocks={patronBlocks}
+                    automatedPatronBlocks={automatedPatronBlocks}
+                    expanded={sections.patronBlocksSection}
+                    onToggle={this.handleSectionToggle}
+                    onClickViewPatronBlock={this.onClickViewPatronBlock}
+                    addRecord={this.state.addRecord}
+                    {...this.props}
+                  />
                   }
                 </IfInterface>
                 <ExtendedInfo
