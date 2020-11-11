@@ -1,11 +1,18 @@
 import {
+  attribute,
   collection,
-  contains,
   interactor,
   isPresent,
   scoped,
-  text,
 } from '@bigtest/interactor';
+
+@interactor class BoxInteractor {
+  class = attribute('class');
+}
+
+@interactor class AccordionInteractor {
+  expanded = attribute('aria-expanded');
+}
 
 @interactor
 class TemplateDetails {
@@ -15,9 +22,16 @@ class TemplateDetails {
   }
 
   instance = scoped('[data-test-block-template-details]');
-  // containsContent = contains('#templateInformation');
-  // generalInformationAccordion = new AccordionInteractor('#generalFixedDueDateScheduleDetail');
-  // expandAll = scoped('[data-tast-expand-button]')
+
+  templateInfoAccordion = scoped('#templateInformation');
+  blockInfoAccordion = scoped('#blockInformation');
+
+  borrowingIcon = new BoxInteractor('#block-template-borrowing > svg');
+  renewalsIcon = new BoxInteractor('#block-template-renewals > svg');
+  requestsIcon = new BoxInteractor('#block-template-requests > svg');
+
+  templateInfoAccordionButton = new AccordionInteractor('#accordion-toggle-button-templateInformation');
+  blockInfoAccordionButton = new AccordionInteractor('#accordion-toggle-button-blockInformation');
 }
 
 @interactor

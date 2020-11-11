@@ -12,7 +12,9 @@ import BlockTemplateForm from './BlockTemplateForm';
 function validate(values) {
   const errors = {};
   if (!values.name) {
-    errors.displayName = <FormattedMessage id="ui-users.permissions.emptyField" />;
+    errors.displayName = (
+      <FormattedMessage id="ui-users.permissions.emptyField" />
+    );
   }
   return errors;
 }

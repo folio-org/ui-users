@@ -10,7 +10,7 @@ export default Factory.extend({
     desc: (i) => 'Manual block' + i,
     patronMessage: (i) => 'Patron message of mb' + i,
     borrowing: () => true,
-    renewals: () => true,
+    renewals: () => false,
     requests: () => true,
   },
   metadata: {

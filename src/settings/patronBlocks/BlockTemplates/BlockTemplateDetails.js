@@ -34,17 +34,17 @@ function BlockTemplateDetails(props) {
     return (
       <>
         <div>
-          <Icon icon={blockTemplate.borrowing ? 'select-all' : 'deselect-all'}>
+          <Icon id="block-template-borrowing" icon={blockTemplate?.borrowing ? 'select-all' : 'deselect-all'}>
             <FormattedMessage id="ui-users.blocks.columns.borrowing" />
           </Icon>
         </div>
         <div>
-          <Icon icon={blockTemplate.renewals ? 'select-all' : 'deselect-all'}>
+          <Icon id="block-template-renewals" icon={blockTemplate?.renewals ? 'select-all' : 'deselect-all'}>
             <FormattedMessage id="ui-users.blocks.columns.renewals" />
           </Icon>
         </div>
         <div>
-          <Icon icon={blockTemplate.requests ? 'select-all' : 'deselect-all'}>
+          <Icon id="block-template-requests" icon={blockTemplate?.requests ? 'select-all' : 'deselect-all'}>
             <FormattedMessage id="ui-users.blocks.columns.requests" />
           </Icon>
         </div>

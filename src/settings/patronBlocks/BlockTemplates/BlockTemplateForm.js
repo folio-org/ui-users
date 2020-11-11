@@ -34,13 +34,7 @@ function BlockTemplateForm(props) {
     blockInformation: true,
   });
   const [confirmDelete, setConfirmDelete] = useState(false);
-  const {
-    handleSubmit,
-    initialValues,
-    onCancel,
-    pristine,
-    submitting,
-  } = props;
+  const { handleSubmit, initialValues, onCancel, pristine, submitting } = props;
 
   const addFirstMenu = () => {
     return (
@@ -113,7 +107,7 @@ function BlockTemplateForm(props) {
         <PaneMenu>
           <IfPermission perm="manual-block-templates.item.delete">
             <Button
-              id="clickable-delete-set"
+              id="clickable-delete-block-template"
               buttonStyle="danger"
               onClick={beginDelete}
               disabled={confirmDelete}
@@ -137,7 +131,11 @@ function BlockTemplateForm(props) {
     if (currentTemplate.id) {
       return (
         <FormattedMessage id="ui-users.edit">
-          {(editLabel) => `${editLabel}: ${currentTemplate.name}`}
+          {(editLabel) => (
+            <span data-test-block-template-edit>
+              {`${editLabel}: ${currentTemplate.name}`}
+            </span>
+          )}
         </FormattedMessage>
       );
     }
