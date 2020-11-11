@@ -133,7 +133,7 @@
   "settings.departments.code.required": "Code is required",
   "settings.departments.users": "Users",
 
-  "settings.manualBlockTemplates": "Manual block templates",
+  "settings.manualBlockTemplates": "Patron block templates",
   "manualBlockTemplates.templateInformation": "Template information",
   "manualBlockTemplates.templateName": "Template name",
   "manualBlockTemplates.blockCode": "Block code",
