@@ -84,7 +84,7 @@ describe('Claim returned', () => {
         });
 
         it('should display open requests number', () => {
-          expect(OpenLoansInteractor.claimReturnedDialog.openRequestsNumber.text).to.equal(requestsAmount.toString());
+          expect(OpenLoansInteractor.claimReturnedDialog.openRequestsNumber.text).to.equal(`${requestsAmount} open requests`);
         });
 
         describe('clicking on the open requests number link', () => {

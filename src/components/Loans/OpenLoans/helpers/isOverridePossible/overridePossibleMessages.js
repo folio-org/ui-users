@@ -35,4 +35,8 @@ export default [
     message: 'renewal would not change the due date',
     showDueDatePicker: true,
   },
+  {
+    message: 'profile "" in the loan policy is not recognised',
+    showDueDatePicker: true,
+  },
 ];
