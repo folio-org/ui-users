@@ -151,17 +151,22 @@ class UserSearch extends React.Component {
     };
   }
 
-  getInitialVisibleColumns = () => {
-    const stored = sessionStorage.getItem(VISIBLE_COLUMNS_STORAGE_KEY);
-    return stored ? JSON.parse(stored) : TOGGLEABLE_COLUMNS;
-  }
-
   handleToggleColumn = ({ target: { value: key } }) => {
     this.setState(({ visibleColumns }) => ({
       visibleColumns: visibleColumns.includes(key) ? visibleColumns.filter(k => key !== k) : [...visibleColumns, key]
     }), () => {
       sessionStorage.setItem(VISIBLE_COLUMNS_STORAGE_KEY, JSON.stringify(this.state.visibleColumns));
     });
+  }
+
+  getInitialVisibleColumns = () => {
+    const stored = sessionStorage.getItem(VISIBLE_COLUMNS_STORAGE_KEY);
+    return stored ? JSON.parse(stored) : TOGGLEABLE_COLUMNS;
+  }
+
+  getVisibleColumns = () => {
+    const visibleColumns = new Set(this.state.visibleColumns);
+    return ['name', ...TOGGLEABLE_COLUMNS.filter(key => visibleColumns.has(key))]
   }
 
   onSearchComplete = records => {
@@ -387,8 +392,7 @@ class UserSearch extends React.Component {
       contentRef,
       mutator: { resultOffset },
     } = this.props;
-
-    const { visibleColumns } = this.state;
+    const visibleColumns = this.getVisibleColumns();
 
     if (!searchableIndexes) {
       searchableIndexes = rawSearchableIndexes.map(x => (
@@ -546,7 +550,7 @@ class UserSearch extends React.Component {
                     >
                       <MultiColumnList
                         id="list-users"
-                        visibleColumns={['name', ...visibleColumns]}
+                        visibleColumns={visibleColumns}
                         rowUpdater={this.rowUpdater}
                         contentData={users}
                         totalCount={count}
