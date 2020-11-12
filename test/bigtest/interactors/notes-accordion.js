@@ -36,5 +36,4 @@ import {
   }
 }
 
-
 export default NotesAccordion;

@@ -16,7 +16,6 @@ import TextFieldInteractor from '@folio/stripes-components/lib/TextField/tests/i
 import TextAreaInteractor from '@folio/stripes-components/lib/TextArea/tests/interactor'; // eslint-disable-line
 import SelectInteractor from '@folio/stripes-components/lib/Select/tests/interactor'; // eslint-disable-line
 
-
 @interactor class CellInteractor {
   content = text();
   selectOneWarning = clickable('input[type="checkbox"]');
@@ -49,7 +48,6 @@ import SelectInteractor from '@folio/stripes-components/lib/Select/tests/interac
   comment = new TextAreaInteractor('[class*=textArea---]');
   notify = new CheckboxInteractor('[class*=checkbox---]')
 
-
   confirmation = new ConfirmationModalInteractor('[id*=confirmation-]');
   mclAll = new MultiColumnListInteractor('#list-accounts-history-view-feesfines');
   mclOpen = new MultiColumnListInteractor('#list-accounts-history-view-feesfines');
@@ -58,7 +56,6 @@ import SelectInteractor from '@folio/stripes-components/lib/Select/tests/interac
   warningTransferContinue = clickable('#warningTransferContinue');
 
   confirmationModal = new ConfirmationModalInteractor();
-
 
   selectCheckbox = clickable('#checkbox');
 

@@ -80,7 +80,6 @@ class PatronBlock extends React.Component {
       [formatMessage({ id: 'ui-users.blocks.columns.blocked' })]: f => f.renewals,
     };
 
-
     this.state = {
       sortOrder: [
         formatMessage({ id: 'ui-users.blocks.columns.type' }),
@@ -117,7 +116,6 @@ class PatronBlock extends React.Component {
       onToggle({ id: accordionId });
     }
   }
-
 
   onSort(e, meta) {
     if (!this.sortMap[meta.alias]) return;
