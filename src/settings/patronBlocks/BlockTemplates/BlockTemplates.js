@@ -79,7 +79,6 @@ BlockTemplates.propTypes = {
       records: PropTypes.arrayOf(PropTypes.object),
     }),
   }),
-  id: PropTypes.string.isRequired,
   mutator: PropTypes.shape({
     manualBlockTemplates: PropTypes.shape({
       POST: PropTypes.func,
