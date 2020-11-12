@@ -51,7 +51,6 @@ export default (server) => {
     return model.attrs;
   });
 
-
   server.get('owners');
 
   server.post('owners', (schema, request) => {

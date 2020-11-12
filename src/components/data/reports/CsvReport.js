@@ -3,8 +3,6 @@ import { exportCsv } from '@folio/stripes/util';
 import settings from './settings';
 import { reportColumns } from '../../../constants';
 
-
-
 class CsvReport {
   constructor(options) {
     const { formatMessage } = options;

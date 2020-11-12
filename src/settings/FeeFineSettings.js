@@ -14,7 +14,6 @@ import {
 import { ControlledVocab } from '@folio/stripes/smart-components';
 import { stripesConnect, withStripes } from '@folio/stripes/core';
 
-
 import { validate } from '../components/util';
 import {
   Owners,
@@ -207,7 +206,6 @@ class FeeFineSettings extends React.Component {
     return itemErrors;
   }
 
-
   getOwners = () => {
     const items = _.get(this.props.resources, ['feefines', 'records'], []);
     const filterOwners = [];
@@ -295,7 +293,6 @@ class FeeFineSettings extends React.Component {
       'chargeNoticeId': ({ chargeNoticeId }) => this.getNotice(chargeNoticeId, 'Charge'),
       'actionNoticeId': ({ actionNoticeId }) => this.getNotice(actionNoticeId, 'Action'),
     };
-
 
     const preCreateHook = (item) => {
       item.ownerId = ownerId;

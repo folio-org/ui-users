@@ -4,7 +4,7 @@ import {
   injectIntl,
 } from 'react-intl';
 import PropTypes from 'prop-types';
-import { get, uniqBy } from 'lodash';
+import { uniqBy } from 'lodash';
 import { Field, FieldArray } from 'redux-form';
 import {
   Icon,

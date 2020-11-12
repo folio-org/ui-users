@@ -28,7 +28,6 @@ const CustomFieldsSettings = ({
   const backendModuleName = 'users';
   const entityType = 'user';
 
-
   if (!permissions.canView) {
     history.replace('/settings/users');
   }
