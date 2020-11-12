@@ -26,6 +26,7 @@
 * Increment `@folio/stripes` to `^5.0.2`. Refs UIU-1932, UIU-1935.
 * Allow override for not loanable items when loan policy is not recognised. Fixes UIU-1930.
 * Show correct number of due date changes. Fixes UIU-1952.
+* Create manual patron block templates in settings. Refs UIU-1909.
 
 ## [5.0.1](https://github.com/folio-org/ui-users/tree/v5.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.0...v5.0.1)
