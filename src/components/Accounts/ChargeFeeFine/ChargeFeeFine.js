@@ -17,7 +17,10 @@ import ChargeForm from './ChargeForm';
 import ItemLookup from './ItemLookup';
 import ActionModal from '../Actions/ActionModal';
 import { getFullName } from '../../util';
-import { loadServicePoints } from '../accountFunctions';
+import {
+  loadServicePoints,
+  deleteOptionalActionFields,
+} from '../accountFunctions';
 
 class ChargeFeeFine extends React.Component {
   static propTypes = {
@@ -128,14 +131,14 @@ class ChargeFeeFine extends React.Component {
     type.callNumber = item.callNumber;
     type.location = item?.location?.name || item?.effectiveLocation?.name;
     type.materialType = (item.materialType || {}).name;
-    type.materialTypeId = (selectedLoan.id) ? '0' : (item.materialType || {}).id || '0';
+    type.materialTypeId = (selectedLoan.id) ? undefined : (item.materialType || {}).id || undefined;
 
     if (selectedLoan.dueDate) type.dueDate = selectedLoan.dueDate;
     if (selectedLoan.returnDate) type.returnedDate = selectedLoan.returnDate;
     type.id = uuid();
-    type.loanId = selectedLoan.id || '0';
+    type.loanId = selectedLoan.id;
     type.userId = this.props.user.id;
-    type.itemId = this.item.id || '0';
+    type.itemId = this.item.id;
     let commentInfo = '';
     const tagStaff = formatMessage({ id: 'ui-users.accounts.actions.tag.staff' });
     const tagPatron = formatMessage({ id: 'ui-users.accounts.actions.tag.patron' });
@@ -159,6 +162,14 @@ class ChargeFeeFine extends React.Component {
       typeAction,
       commentInfo,
     } = this.onFormAccountData(type);
+
+    deleteOptionalActionFields(
+      typeAction,
+      'itemId',
+      'materialTypeId',
+      'materialType',
+      'loanId'
+    );
 
     return this.props.mutator.accounts.POST(typeAction)
       .then(() => this.newAction({}, typeAction.id, typeAction.feeFineType, typeAction.amount, commentInfo, typeAction.remaining, 0, typeAction.feeFineOwner));
@@ -236,9 +247,7 @@ class ChargeFeeFine extends React.Component {
       mutator.activeRecord.update({ shared });
     }
     mutator.activeRecord.update({ ownerId });
-    this.setState({
-      ownerId,
-    });
+    this.setState({ ownerId });
   }
 
   onChangeFeeFine(e) {
@@ -415,6 +424,7 @@ class ChargeFeeFine extends React.Component {
     const {
       ownerId,
       feeFineTypeId,
+      pay,
     } = this.state;
     this.item = _.get(resources, ['items', 'records', [0]], {});
     const allfeefines = _.get(resources, ['allfeefines', 'records'], []);
@@ -465,7 +475,7 @@ class ChargeFeeFine extends React.Component {
     const selectedFeeFine = feefines.find(f => f.id === feeFineTypeId);
     const selectedOwner = owners.find(o => o.id === initialOwnerId);
     const initialChargeValues = {
-      ownerId: '',
+      ownerId: resources.activeRecord.ownerId || '',
       notify: !!(selectedFeeFine?.chargeNoticeId || selectedOwner?.defaultChargeNoticeId),
       feeFineId: '',
       amount: ''
@@ -508,24 +518,28 @@ class ChargeFeeFine extends React.Component {
           onChangeItem={this.onChangeItem}
           onClose={this.onCloseModal}
         />
-        <ActionModal
-          intl={intl}
-          action="payment"
-          form="payment-modals"
-          label="nameMethod"
-          initialValues={initialActionValues}
-          open={this.state.pay}
-          commentRequired={settings.paid}
-          onClose={this.onClosePayModal}
-          accounts={[this.type]}
-          balance={this.type.amount}
-          data={payments}
-          stripes={stripes}
-          onSubmit={(values) => { this.showConfirmDialog(values); }}
-          owners={owners}
-          okapi={this.props.okapi}
-          checkAmount="check-pay"
-        />
+        {pay &&
+          <ActionModal
+            intl={intl}
+            action="payment"
+            form="payment-modals"
+            label="nameMethod"
+            initialValues={initialActionValues}
+            open
+            commentRequired={settings.paid}
+            onClose={this.onClosePayModal}
+            accounts={[this.type]}
+            balance={this.type.amount}
+            data={payments}
+            stripes={stripes}
+            onSubmit={(values) => {
+              this.showConfirmDialog(values);
+            }}
+            owners={owners}
+            okapi={this.props.okapi}
+            checkAmount="check-pay"
+          />
+        }
         <Callout ref={(ref) => { this.callout = ref; }} />
         <ConfirmationModal
           open={this.state.showConfirmDialog}

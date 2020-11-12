@@ -77,6 +77,7 @@ class Modals extends React.Component {
           viewUserPath={`/users/view/${(user || {}).id}?filters=pg.${patronGroup.group}&sort=name`}
         />
         <this.connectedBulkClaimReturnedDialog
+          stripes={stripes}
           checkedLoansIndex={checkedLoans}
           requestCounts={requestCounts}
           open={showBulkClaimReturnedModal}

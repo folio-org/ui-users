@@ -341,6 +341,7 @@ class UserEdit extends React.Component {
         match={this.props.match}
         location={location}
         history={history}
+        stripes={this.props.stripes}
       />
     );
   }

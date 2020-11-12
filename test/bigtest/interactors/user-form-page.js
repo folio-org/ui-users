@@ -22,7 +22,6 @@ import PermissionsModal from './permissions-modal';
 import ServicePointsModal from './service-points-modal';
 import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/ProxyEditItem.css';
 
-
 @interactor class InputFieldInteractor {
   clickInput = clickable();
   fillInput = fillable();
@@ -86,7 +85,7 @@ import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/P
           .blurInput();
       }
     }),
-    popoverIsPresent: isPresent('[class^=popoverTarget---]'),
+    popoverIsPresent: isPresent('[class^=infoPopover---]'),
     validationMessage: text('[class^=feedbackError---]'),
   });
 
@@ -117,6 +116,10 @@ import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/P
   cancelButton = new ButtonInteractor('[data-test-user-form-cancel-button]');
   submitButton = new ButtonInteractor('[data-test-user-form-submit-button]');
   submitButtonIsDisabled = property('[data-test-user-form-submit-button]', 'disabled');
+  actionMenuButton = new ButtonInteractor('[data-test-actions-menu]');
+  actionMenuCreateRequestButton = scoped('[data-test-actions-menu-create-request]');
+  actionMenuCreateFeeFinesButton = scoped('[data-test-actions-menu-create-feesfines]');
+  actionMenuCreatePatronBlocksButton = scoped('[data-test-actions-menu-create-patronblocks]');
 
   toggleSPAccordionButton = scoped('#accordion-toggle-button-servicePoints');
   addServicePointButton = scoped('#add-service-point-btn');

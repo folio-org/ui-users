@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "5.0.1",
+  "version": "6.0.0",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -44,7 +44,7 @@
     },
     "optionalOkapiInterfaces": {
       "circulation": "9.0",
-      "feesfines": "15.0",
+      "feesfines": "16.0",
       "notes": "1.0"
     },
     "permissionSets": [
@@ -562,6 +562,8 @@
           "circulation.requests.collection.get",
           "circulation-storage.loan-policies.collection.get",
           "circulation-storage.loans-history.collection.get",
+          "circulation-storage.circulation-rules.get",
+          "circulation-storage.fixed-due-date-schedules.collection.get",
           "accounts.collection.get",
           "comments.collection.get"
         ],
@@ -574,7 +576,9 @@
         "subPermissions": [
           "circulation.loans.item.put",
           "circulation.renew-by-barcode.post",
-          "circulation-storage.loans.item.get"
+          "circulation-storage.loans.item.get",
+          "circulation-storage.circulation-rules.get",
+          "circulation-storage.fixed-due-date-schedules.collection.get"
         ],
         "visible": true
       },
@@ -598,6 +602,8 @@
           "circulation-storage.loan-policies.collection.get",
           "circulation-storage.loan-policies.item.get",
           "circulation-storage.loans.item.get",
+          "circulation-storage.circulation-rules.get",
+          "circulation-storage.fixed-due-date-schedules.collection.get",
           "accounts.collection.get",
           "feefineactions.collection.get",
           "owners.collection.get",
@@ -634,6 +640,8 @@
           "circulation-storage.requests.collection.delete",
           "circulation-storage.requests.item.get",
           "circulation-storage.requests.item.delete",
+          "circulation-storage.circulation-rules.get",
+          "circulation-storage.fixed-due-date-schedules.collection.get",
           "inventory.items.collection.get",
           "inventory.items.item.get",
           "inventory.instances.item.get",
@@ -784,7 +792,7 @@
     "uuid": "^3.0.1"
   },
   "peerDependencies": {
-    "@folio/stripes": "^5.0.0",
+    "@folio/stripes": "^5.0.2",
     "react": "*",
     "react-intl": "^5.8.0",
     "react-router": "^5.2.0",

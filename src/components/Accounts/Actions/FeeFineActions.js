@@ -8,13 +8,9 @@ import {
 } from 'react-intl';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import { stripesConnect } from '@folio/stripes/core';
-
 // eslint-disable-next-line import/no-extraneous-dependencies
 import moment from 'moment';
-import {
-  Callout,
-  ConfirmationModal
-} from '@folio/stripes/components';
+import { Callout, ConfirmationModal } from '@folio/stripes/components';
 
 import CancellationModal from './CancellationModal';
 import CommentModal from './CommentModal';
@@ -400,7 +396,7 @@ class Actions extends React.Component {
     mutator.activeRecord.update({ id: account.id });
     const payload = this.buildActionBody(values);
 
-    if (action === 'payment') {
+    if (action === 'pay') {
       payload.transactionInfo = values.transaction || '-';
     }
 
@@ -617,8 +613,7 @@ class Actions extends React.Component {
     } = this.state;
 
     const account = this.props.accounts[0] || {};
-    const feeFineActions = _.get(resources, ['feefineactions', 'records'], [])
-      .filter(({ accountId }) => account.id === accountId);
+    const feeFineActions = _.get(resources, ['feefineactions', 'records'], []);
     const defaultServicePointId = _.get(resources, ['curUserServicePoint', 'records', 0, 'defaultServicePointId'], '-');
     const servicePointsIds = _.get(resources, ['curUserServicePoint', 'records', 0, 'servicePointsIds'], []);
     const payments = _.get(resources, ['payments', 'records'], []);
@@ -629,7 +624,7 @@ class Actions extends React.Component {
     const transfers = _.get(resources, ['transfers', 'records'], []);
     const settings = _.get(resources, ['commentRequired', 'records', 0], {});
     const hasInvalidAccounts = accounts.some(a => {
-      return actions.refundMany ? !isRefundAllowed(a) : a?.status?.name === 'Closed';
+      return actions.refundMany ? !isRefundAllowed(a, feeFineActions) : a?.status?.name === 'Closed';
     });
     const isWarning = hasInvalidAccounts
         && (actions.regular || actions.waiveMany || actions.transferMany || actions.refundMany)
@@ -713,6 +708,7 @@ class Actions extends React.Component {
           open={isWarning && !submitting}
           label={formatMessage({ id: warningModalLabelId })}
           accounts={accounts}
+          feeFineActions={feeFineActions}
           onChangeAccounts={this.onChangeAccounts}
           stripes={stripes}
           onClose={this.onCloseWarning}
