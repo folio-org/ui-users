@@ -590,7 +590,7 @@
           "circulation.loans.declare-item-lost.post",
           "circulation.loans.claim-item-returned.post",
           "circulation.loans.declare-claimed-returned-item-as-missing.post",
-          "circulation.loans.collection.anonymize.user.post",
+          "ui-users.loans.anonymize",
           "ui-users.loans.renew-override",
           "circulation.loans.item.put",
           "circulation.renew-by-barcode.post",
@@ -614,6 +614,9 @@
       {
         "permissionName": "ui-users.loans.anonymize",
         "displayName": "Users: User loans anonymize",
+        "subPermissions": [
+          "circulation.loans.collection.anonymize.user.post"
+        ],
         "visible": true
       },
       {
