@@ -6,3 +6,8 @@ yarn.lock
 yarn-error.log
 ModuleDescriptor.json
 artifacts
+*.idea*
+
+# stripes
+.stripesclirc
+stripes.config.js.local

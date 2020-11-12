@@ -562,6 +562,8 @@
           "circulation.requests.collection.get",
           "circulation-storage.loan-policies.collection.get",
           "circulation-storage.loans-history.collection.get",
+          "circulation-storage.circulation-rules.get",
+          "circulation-storage.fixed-due-date-schedules.collection.get",
           "accounts.collection.get",
           "comments.collection.get"
         ],
@@ -574,7 +576,9 @@
         "subPermissions": [
           "circulation.loans.item.put",
           "circulation.renew-by-barcode.post",
-          "circulation-storage.loans.item.get"
+          "circulation-storage.loans.item.get",
+          "circulation-storage.circulation-rules.get",
+          "circulation-storage.fixed-due-date-schedules.collection.get"
         ],
         "visible": true
       },
@@ -590,15 +594,16 @@
           "circulation.loans.declare-item-lost.post",
           "circulation.loans.claim-item-returned.post",
           "circulation.loans.declare-claimed-returned-item-as-missing.post",
-          "circulation.loans.collection.anonymize.user.post",
+          "ui-users.loans.anonymize",
           "ui-users.loans.renew-override",
           "circulation.loans.item.put",
           "circulation.renew-by-barcode.post",
           "circulation-storage.loans-history.collection.get",
-          "circulation-storage.loans.collection.anonymize.user.post",
           "circulation-storage.loan-policies.collection.get",
           "circulation-storage.loan-policies.item.get",
           "circulation-storage.loans.item.get",
+          "circulation-storage.circulation-rules.get",
+          "circulation-storage.fixed-due-date-schedules.collection.get",
           "accounts.collection.get",
           "feefineactions.collection.get",
           "owners.collection.get",
@@ -608,6 +613,14 @@
           "inventory-storage.locations.collection.get",
           "inventory-storage.location-units.libraries.collection.get",
           "inventory-storage.material-types.collection.get"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.loans.anonymize",
+        "displayName": "Users: User loans anonymize",
+        "subPermissions": [
+          "circulation.loans.collection.anonymize.user.post"
         ],
         "visible": true
       },
@@ -627,6 +640,8 @@
           "circulation-storage.requests.collection.delete",
           "circulation-storage.requests.item.get",
           "circulation-storage.requests.item.delete",
+          "circulation-storage.circulation-rules.get",
+          "circulation-storage.fixed-due-date-schedules.collection.get",
           "inventory.items.collection.get",
           "inventory.items.item.get",
           "inventory.instances.item.get",

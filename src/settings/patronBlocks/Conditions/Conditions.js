@@ -8,7 +8,6 @@ import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import ConditionsForm from './ConditionsForm';
 import css from '../patronBlocks.css';
 
-
 class Conditions extends Component {
   static manifest = Object.freeze({
     patronBlockCondition: {
@@ -69,7 +68,6 @@ class Conditions extends Component {
       }
     });
   }
-
 
   shouldRenderCondition = () => {
     return !!this.props?.resources?.patronBlockCondition?.records.length;

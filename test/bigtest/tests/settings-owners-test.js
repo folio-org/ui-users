@@ -96,7 +96,6 @@ describe('Settings owners', () => {
       });
     });
 
-
     describe('add a owner', () => {
       beforeEach(async () => {
         await FeeFineInteractor.newItemButton.click();

@@ -32,7 +32,6 @@ class UsersRouting extends React.Component {
 
   static actionNames = ['stripesHome', 'usersSortByName'];
 
-
   componentDidMount() {
     const {
       location,
