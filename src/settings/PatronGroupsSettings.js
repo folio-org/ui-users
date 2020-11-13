@@ -38,7 +38,10 @@ class PatronGroupsSettings extends React.Component {
   }
 
   isPositiveInteger = (n) => {
-    return !Number.isNaN(n) && Number.parseInt(n, 10) >= 1;
+    // match integer by regular expression as backend does not accept input like '5.0'
+    const isInteger = val => /^\d+$/.test(val);
+    const isGreaterEqualOne = val => Number.parseInt(val, 10) >= 1;
+    return isInteger(n) && isGreaterEqualOne(n);
   };
 
   isValidExpirationOffset = (n) => {
