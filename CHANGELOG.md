@@ -1,6 +1,7 @@
 # Change history for ui-users
 
-## 5.0.5 IN PROGRESS
+## [5.0.5](https://github.com/folio-org/ui-users/tree/v5.0.5) (2020-11-13)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.4...v5.0.5)
 
 * Qualify queries to `feefineactions`, `feefines` from "Open fee/fine" page. Refs UIU-1895.
 * Use more efficient queries for `accounts` records. Refs UIU-1913.
