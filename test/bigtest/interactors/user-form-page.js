@@ -86,7 +86,7 @@ import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/P
           .blurInput();
       }
     }),
-    popoverIsPresent: isPresent('[class^=popoverTarget---]'),
+    popoverIsPresent: isPresent('[class^=infoPopover---]'),
     validationMessage: text('[class^=feedbackError---]'),
   });
 
