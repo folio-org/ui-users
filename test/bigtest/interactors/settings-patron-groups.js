@@ -5,6 +5,7 @@ import {
   fillable,
   interactor,
   isPresent,
+  property,
   text
 } from '@bigtest/interactor';
 
@@ -35,6 +36,7 @@ class FirstRowInteractor {
 
   isFeedbackErrorPresent = isPresent('[class^="feedbackError---"]');
   feedbackError = text('[class^="feedbackError---"]');
+  submitButtonIsDisabled = property('#clickable-save-patrongroups-0', 'disabled');
 }
 
 @interactor

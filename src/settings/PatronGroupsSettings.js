@@ -41,8 +41,15 @@ class PatronGroupsSettings extends React.Component {
     return !Number.isNaN(n) && Number.parseInt(n, 10) >= 1;
   };
 
+  isValidExpirationOffset = (n) => {
+    if (n) {
+      return this.isPositiveInteger(n);
+    }
+    return true;
+  }
+
   validateFields = (item, _index, _items) => ({
-    expirationOffsetInDays: this.isPositiveInteger(item.expirationOffsetInDays)
+    expirationOffsetInDays: this.isValidExpirationOffset(item.expirationOffsetInDays)
       ? undefined
       : this.props.intl.formatMessage({ id: 'ui-users.information.patronGroup.expirationOffset.error' }),
   });

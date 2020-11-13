@@ -34,6 +34,7 @@ describe('Patron group settings', () => {
         expect(interactor.firstRow.feedbackError).to.equal(
           'Must be a number > 0'
         );
+        expect(interactor.firstRow.submitButtonIsDisabled).to.be.true;
       });
     });
 
@@ -47,6 +48,7 @@ describe('Patron group settings', () => {
         expect(interactor.firstRow.feedbackError).to.equal(
           'Must be a number > 0'
         );
+        expect(interactor.firstRow.submitButtonIsDisabled).to.be.true;
       });
     });
 
@@ -60,12 +62,24 @@ describe('Patron group settings', () => {
         expect(interactor.firstRow.feedbackError).to.equal(
           'Must be a number > 0'
         );
+        expect(interactor.firstRow.submitButtonIsDisabled).to.be.true;
       });
     });
 
     describe('enter valid expiration offset', () => {
       beforeEach(async function () {
         await interactor.firstRow.expirationOffset.fillAndBlur(365);
+      });
+
+      it('expect no validation error', () => {
+        expect(interactor.firstRow.isFeedbackErrorPresent).to.be.false;
+        expect(interactor.firstRow.submitButtonIsDisabled).to.be.false;
+      });
+    });
+
+    describe('clear expiration offset', () => {
+      beforeEach(async function () {
+        await interactor.firstRow.expirationOffset.fillAndBlur(null);
       });
 
       it('expect no validation error', () => {
