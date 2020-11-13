@@ -37,6 +37,16 @@ class PatronGroupsSettings extends React.Component {
     this.connectedControlledVocab = props.stripes.connect(ControlledVocab);
   }
 
+  isPositiveInteger = (n) => {
+    return !Number.isNaN(n) && Number.parseInt(n, 10) >= 1;
+  };
+
+  validateFields = (item, _index, _items) => ({
+    expirationOffsetInDays: this.isPositiveInteger(item.expirationOffsetInDays)
+      ? undefined
+      : this.props.intl.formatMessage({ id: 'ui-users.information.patronGroup.expirationOffset.error' }),
+  });
+
   render() {
     const { intl } = this.props;
 
@@ -58,6 +68,7 @@ class PatronGroupsSettings extends React.Component {
           desc: intl.formatMessage({ id: 'ui-users.description' }),
           expirationOffsetInDays: intl.formatMessage({ id: 'ui-users.information.patronGroup.expirationOffset' }),
         }}
+        validate={this.validateFields}
         nameKey="group"
         id="patrongroups"
         sortby="group"
