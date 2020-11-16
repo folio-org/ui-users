@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## 5.0.6
+
+* New Fee/Fine page not listing Fee/Fine Types for selected Fee/Fine Owner. Refs UIU-1968.
+
 ## [5.0.5](https://github.com/folio-org/ui-users/tree/v5.0.5) (2020-11-13)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.4...v5.0.5)
 
