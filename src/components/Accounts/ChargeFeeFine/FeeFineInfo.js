@@ -17,7 +17,6 @@ class FeeFineInfo extends React.Component {
     onChangeOwner: PropTypes.func,
     ownerOptions: PropTypes.arrayOf(PropTypes.object),
     onChangeFeeFine: PropTypes.func,
-    feefines: PropTypes.arrayOf(PropTypes.object),
     isPending: PropTypes.object,
   };
 
