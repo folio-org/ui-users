@@ -208,5 +208,4 @@ const withProxy = WrappedComponent => class WithProxyComponent extends React.Com
     }
 };
 
-
 export default withProxy;

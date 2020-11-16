@@ -606,12 +606,11 @@
           "circulation.loans.declare-item-lost.post",
           "circulation.loans.claim-item-returned.post",
           "circulation.loans.declare-claimed-returned-item-as-missing.post",
-          "circulation.loans.collection.anonymize.user.post",
+          "ui-users.loans.anonymize",
           "ui-users.loans.renew-override",
           "circulation.loans.item.put",
           "circulation.renew-by-barcode.post",
           "circulation-storage.loans-history.collection.get",
-          "circulation-storage.loans.collection.anonymize.user.post",
           "circulation-storage.loan-policies.collection.get",
           "circulation-storage.loan-policies.item.get",
           "circulation-storage.loans.item.get",
@@ -626,6 +625,14 @@
           "inventory-storage.locations.collection.get",
           "inventory-storage.location-units.libraries.collection.get",
           "inventory-storage.material-types.collection.get"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.loans.anonymize",
+        "displayName": "Users: User loans anonymize",
+        "subPermissions": [
+          "circulation.loans.collection.anonymize.user.post"
         ],
         "visible": true
       },
