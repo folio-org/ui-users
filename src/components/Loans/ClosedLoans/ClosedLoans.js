@@ -425,13 +425,15 @@ class ClosedLoans extends React.Component {
             <IntlConsumer>
               {intl => (
                 <div>
-                  <Button
-                    marginBottom0
-                    id="anonymize-all"
-                    onClick={this.anonymizeLoans}
-                  >
-                    {anonymizeString}
-                  </Button>
+                  <IfPermission perm="ui-users.loans.anonymize">
+                    <Button
+                      marginBottom0
+                      id="anonymize-all"
+                      onClick={this.anonymizeLoans}
+                    >
+                      {anonymizeString}
+                    </Button>
+                  </IfPermission>
                   <ExportCsv
                     data={recordsToCSV}
                     onlyFields={this.columnHeadersMap}

@@ -504,7 +504,6 @@ export default function config() {
     });
   });
 
-
   this.put('/note-links/type/:type/id/:id', ({ notes }, { params, requestBody }) => {
     const body = JSON.parse(requestBody);
 
@@ -808,7 +807,7 @@ export default function config() {
     return { accountId: account.id };
   });
 
-  this.post('/accounts-bulk/check-transfer', ({ accounts }, request) => {
+  this.post('/accounts-bulk/check-transfer', () => {
     return {
       amounts: [
         {
@@ -826,7 +825,7 @@ export default function config() {
     };
   });
 
-  this.post('/accounts-bulk/transfer', ({ accounts }, request) => {
+  this.post('/accounts-bulk/transfer', () => {
     return {
       accountIds: ['id1', 'id2', 'id3', 'id4'],
       feefineactions: [
@@ -871,7 +870,7 @@ export default function config() {
     };
   });
 
-  this.post('/accounts-bulk/check-refund', ({ accounts }, request) => {
+  this.post('/accounts-bulk/check-refund', () => {
     return {
       amounts: [
         {
@@ -893,7 +892,7 @@ export default function config() {
     };
   });
 
-  this.post('/accounts-bulk/refund', ({ accounts }, request) => {
+  this.post('/accounts-bulk/refund', () => {
     return {
       accountIds: ['r1', 'r2', 'r3'],
       feefineactions: [

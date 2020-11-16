@@ -11,7 +11,6 @@ module.exports.test = function foo(uiTestCtx) {
     let staffid = null;
     const wait = 1111;
 
-
     before((done) => {
       login(nightmare, config, done); // logs in with the default admin credentials
     });
