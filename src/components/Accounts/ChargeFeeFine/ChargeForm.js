@@ -73,6 +73,7 @@ class ChargeForm extends React.Component {
     history: PropTypes.object,
     initialValues: PropTypes.object,
     match: PropTypes.object,
+    feeFineTypeOptions: PropTypes.arrayOf(PropTypes.object).isRequired,
   }
 
   constructor(props) {
@@ -97,7 +98,7 @@ class ChargeForm extends React.Component {
     }
   }
 
-  onChangeFeeFine(e) {
+  async onChangeFeeFine(e) {
     const {
       feefines,
       form: { change },
@@ -105,7 +106,7 @@ class ChargeForm extends React.Component {
 
     if (e?.target?.value) {
       const feeFineId = e.target.value;
-      this.props.onChangeFeeFine(e);
+      await this.props.onChangeFeeFine(e);
       const feefine = feefines.find(f => f.id === feeFineId) || {};
       change('feeFineId', feefine.id);
       this.amount = feefine.defaultAmount || 0;
@@ -142,6 +143,7 @@ class ChargeForm extends React.Component {
       onSubmit,
       handleSubmit,
       initialValues,
+      feeFineTypeOptions,
       form,
       form : {
         getState,
@@ -180,7 +182,7 @@ class ChargeForm extends React.Component {
       if (own.owner !== 'Shared') ownerOptions.push({ label: own.owner, value: own.id });
     });
 
-    this.props.feefines.forEach((feefineItem) => {
+    feeFineTypeOptions.forEach((feefineItem) => {
       const fee = {};
       fee.label = feefineItem.feeFineType;
       fee.value = feefineItem.id;
@@ -252,7 +254,6 @@ class ChargeForm extends React.Component {
               isPending={isPending}
               onChangeOwner={this.onChangeOwner}
               onChangeFeeFine={this.onChangeFeeFine}
-              feefines={this.props.feefines}
               feefineList={feefineList}
             />
             <br />
