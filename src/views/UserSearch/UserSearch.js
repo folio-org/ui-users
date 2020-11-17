@@ -228,7 +228,7 @@ class UserSearch extends React.Component {
 
     return (
       <>
-        <MenuSection label="Actions" id="actions-menu-section">
+        <MenuSection label={intl.formatMessage({ id: 'ui-users.actions' })} id="actions-menu-section">
           <IfPermission perm="users.item.post,login.item.post,perms.users.item.post">
             <PaneMenu>
               <FormattedMessage id="stripes-smart-components.addNew">
