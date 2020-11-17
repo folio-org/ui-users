@@ -13,7 +13,6 @@ import BulkRenewalDialog from '../BulkRenewalDialog';
 import isOverridePossible from '../Loans/OpenLoans/helpers/isOverridePossible';
 import { requestStatuses } from '../../constants';
 
-
 // HOC used to manage renew
 const withRenew = WrappedComponent => class WithRenewComponent extends React.Component {
   static propTypes = {

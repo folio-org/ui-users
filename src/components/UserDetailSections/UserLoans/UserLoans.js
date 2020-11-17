@@ -161,7 +161,8 @@ class UserLoans extends React.Component {
                 </Link>
                 {item.claimedReturnedCount > 0 &&
                   <span id="claimed-returned-count">
-                    {' '}<FormattedMessage id="ui-users.loans.numClaimedReturnedLoans" values={{ count: item.claimedReturnedCount }} />
+                    {' '}
+                    <FormattedMessage id="ui-users.loans.numClaimedReturnedLoans" values={{ count: item.claimedReturnedCount }} />
                   </span>
                 }
               </li>)}
