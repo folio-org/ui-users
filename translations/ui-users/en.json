@@ -283,6 +283,10 @@
   "information.patronGroup.expirationOffset": "Expiration date offset (days)",
   "information.patronGroup.expirationOffset.error": "Must be empty or an integer > 0",
   "information.profile.label": "Display profile pictures",
+  "information.recalculate.expirationDate": "Recalculate",
+  "information.recalculate.modal.text": "Users with patron group {group} usually expire after {offset} days. Do you want to change the expiration date accordingly?",
+  "information.recalculate.modal.label": "Recalculate expiration date?",
+  
   "proxy.addProxy": "Add",
   "proxy.relationshipCreated": "Relationship Created",
   "proxy.relationshipStatus": "Relationship Status",

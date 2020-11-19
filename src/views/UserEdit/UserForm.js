@@ -503,6 +503,7 @@ class UserForm extends React.Component {
                   onToggle={this.handleSectionToggle}
                   initialValues={initialValues}
                   patronGroups={formData.patronGroups}
+                  stripes={this.props.stripes}
                 />
                 <EditExtendedInfo
                   accordionId="extendedInfo"

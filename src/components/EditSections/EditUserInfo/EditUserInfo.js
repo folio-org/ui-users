@@ -1,10 +1,14 @@
+import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Field } from 'redux-form';
+import { connect } from 'react-redux';
+import { change, Field, formValueSelector } from 'redux-form';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import moment from 'moment-timezone';
 
 import { ViewMetaData } from '@folio/stripes/smart-components';
 import {
+  Button,
   Select,
   TextField,
   Row,
@@ -12,6 +16,8 @@ import {
   Accordion,
   Datepicker,
   Headline,
+  Modal,
+  ModalFooter,
 } from '@folio/stripes/components';
 
 import css from './EditUserInfo.css';
@@ -24,6 +30,50 @@ class EditUserInfo extends React.Component {
     intl: PropTypes.object.isRequired,
     onToggle: PropTypes.func,
     patronGroups: PropTypes.arrayOf(PropTypes.object),
+    selectedPatronGroup: PropTypes.string,
+    stripes: PropTypes.shape({
+      store: PropTypes.shape({
+        dispatch: PropTypes.func.isRequired,
+      }),
+    }).isRequired,
+  };
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      showInfoModal: false,
+    };
+  }
+
+  componentDidUpdate(prevProps) {
+    const offsetOfSelectedPatronGroup = this.getPatronGroupOffset();
+    if (this.props.selectedPatronGroup !== prevProps.selectedPatronGroup && offsetOfSelectedPatronGroup !== '') {
+      this.showModal(true);
+    }
+  }
+
+  showModal = (val) => {
+    this.setState({
+      showInfoModal: val,
+    });
+  }
+
+  handleClose = () => {
+    this.setState({ showInfoModal: false });
+  }
+
+  recalculateExpirationDate = () => {
+    const offsetOfSelectedPatronGroup = this.props.selectedPatronGroup ? this.getPatronGroupOffset() : '';
+    const recalculatedDate = (moment().add(offsetOfSelectedPatronGroup, 'd').format('YYYY-MM-DD'));
+    this.props.stripes.store.dispatch(change('userForm', 'expirationDate', recalculatedDate));
+    this.setState({ showInfoModal: false });
+  }
+
+  getPatronGroupOffset = () => {
+    const selectedPatronGroup = this.props.patronGroups.find(i => i.id === this.props.selectedPatronGroup);
+    const offsetOfSelectedPatronGroup = _.get(selectedPatronGroup, 'expirationOffsetInDays', '');
+    return offsetOfSelectedPatronGroup;
   };
 
   render() {
@@ -46,6 +96,17 @@ class EditUserInfo extends React.Component {
       let statusFieldDisabled = false;
       statusFieldDisabled = isUserExpired();
       return statusFieldDisabled;
+    };
+
+    const checkShowRecalculateButton = () => {
+      let showRecalculateButton = false;
+      const offsetOfSelectedPatronGroup = this.props.selectedPatronGroup ? this.getPatronGroupOffset() : '';
+      if (offsetOfSelectedPatronGroup === '') {
+        showRecalculateButton = false;
+      } else {
+        showRecalculateButton = true;
+      }
+      return showRecalculateButton;
     };
 
     const patronGroupOptions = [
@@ -71,112 +132,154 @@ class EditUserInfo extends React.Component {
       }
     ];
 
+    const offset = this.getPatronGroupOffset();
+    const group = _.get(this.props.patronGroups.find(i => i.id === this.props.selectedPatronGroup), 'group', '');
+    const footer = (
+      <ModalFooter>
+        <Button onClick={this.recalculateExpirationDate}>
+          <FormattedMessage id="ui-users.information.recalculate.expirationDate" />
+        </Button>
+        <Button onClick={this.handleClose}>
+          <FormattedMessage id="ui-users.cancel" />
+        </Button>
+      </ModalFooter>
+    );
+
     return (
-      <Accordion
-        label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.information.userInformation" /></Headline>}
-        open={expanded}
-        id={accordionId}
-        onToggle={onToggle}
-      >
+      <>
+        <Accordion
+          label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.information.userInformation" /></Headline>}
+          open={expanded}
+          id={accordionId}
+          onToggle={onToggle}
+        >
 
-        { initialValues.metadata && <ViewMetaData metadata={initialValues.metadata} /> }
+          { initialValues.metadata && <ViewMetaData metadata={initialValues.metadata} /> }
 
-        <Row>
-          <Col xs={12} md={3}>
-            <Field
-              label={<FormattedMessage id="ui-users.information.lastName" />}
-              name="personal.lastName"
-              id="adduser_lastname"
-              component={TextField}
-              required
-              fullWidth
-            />
-          </Col>
-          <Col xs={12} md={3}>
-            <Field
-              label={<FormattedMessage id="ui-users.information.firstName" />}
-              name="personal.firstName"
-              id="adduser_firstname"
-              component={TextField}
-              fullWidth
-            />
-          </Col>
-          <Col xs={12} md={3}>
-            <Field
-              label={<FormattedMessage id="ui-users.information.middleName" />}
-              name="personal.middleName"
-              id="adduser_middlename"
-              component={TextField}
-              fullWidth
-            />
-          </Col>
-          <Col xs={12} md={3}>
-            <Field
-              label={<FormattedMessage id="ui-users.information.preferredName" />}
-              name="personal.preferredFirstName"
-              id="adduser_preferredname"
-              component={TextField}
-              fullWidth
-            />
-          </Col>
-        </Row>
+          <Row>
+            <Col xs={12} md={3}>
+              <Field
+                label={<FormattedMessage id="ui-users.information.lastName" />}
+                name="personal.lastName"
+                id="adduser_lastname"
+                component={TextField}
+                required
+                fullWidth
+              />
+            </Col>
+            <Col xs={12} md={3}>
+              <Field
+                label={<FormattedMessage id="ui-users.information.firstName" />}
+                name="personal.firstName"
+                id="adduser_firstname"
+                component={TextField}
+                fullWidth
+              />
+            </Col>
+            <Col xs={12} md={3}>
+              <Field
+                label={<FormattedMessage id="ui-users.information.middleName" />}
+                name="personal.middleName"
+                id="adduser_middlename"
+                component={TextField}
+                fullWidth
+              />
+            </Col>
+            <Col xs={12} md={3}>
+              <Field
+                label={<FormattedMessage id="ui-users.information.preferredName" />}
+                name="personal.preferredFirstName"
+                id="adduser_preferredname"
+                component={TextField}
+                fullWidth
+              />
+            </Col>
+          </Row>
 
-        <Row>
-          <Col xs={12} md={3}>
-            <Field
-              label={<FormattedMessage id="ui-users.information.patronGroup" />}
-              name="patronGroup"
-              id="adduser_group"
-              component={Select}
-              selectClass={css.patronGroup}
-              fullWidth
-              dataOptions={patronGroupOptions}
-              defaultValue={initialValues.patronGroup}
-              aria-required="true"
-              required
+          <Row>
+            <Col xs={12} md={3}>
+              <Field
+                label={<FormattedMessage id="ui-users.information.patronGroup" />}
+                name="patronGroup"
+                id="adduser_group"
+                component={Select}
+                selectClass={css.patronGroup}
+                fullWidth
+                dataOptions={patronGroupOptions}
+                defaultValue={initialValues.patronGroup}
+                aria-required="true"
+                required
+              />
+            </Col>
+            <Col xs={12} md={3}>
+              <Field
+                label={<FormattedMessage id="ui-users.information.status" />}
+                name="active"
+                id="useractive"
+                component={Select}
+                fullWidth
+                disabled={isStatusFieldDisabled()}
+                dataOptions={statusOptions}
+                defaultValue={initialValues.active}
+                aria-required="true"
+                required
+              />
+              {isUserExpired() && (
+                <span className={css.expiredMessage}>
+                  <FormattedMessage id="ui-users.errors.userExpired" />
+                </span>
+              )}
+            </Col>
+            <Col xs={12} md={3}>
+              <Field
+                component={Datepicker}
+                label={<FormattedMessage id="ui-users.expirationDate" />}
+                dateFormat="YYYY-MM-DD"
+                defaultValue={initialValues.expirationDate}
+                name="expirationDate"
+                id="adduser_expirationdate"
+              />
+              {checkShowRecalculateButton() && (
+                <Button
+                  id="recalculate-expirationDate-btn"
+                  onClick={this.recalculateExpirationDate}
+                >
+                  <FormattedMessage id="ui-users.information.recalculate.expirationDate" />
+                </Button>
+              )}
+            </Col>
+            <Col xs={12} md={3}>
+              <Field
+                label={<FormattedMessage id="ui-users.information.barcode" />}
+                name="barcode"
+                id="adduser_barcode"
+                component={TextField}
+                fullWidth
+              />
+            </Col>
+          </Row>
+        </Accordion>
+        <Modal
+          footer={footer}
+          label={<FormattedMessage id="ui-users.information.recalculate.modal.label" />}
+          open={this.state.showInfoModal}
+        >
+          <div>
+            <FormattedMessage
+              id="ui-users.information.recalculate.modal.text"
+              values={{ group, offset }}
             />
-          </Col>
-          <Col xs={12} md={3}>
-            <Field
-              label={<FormattedMessage id="ui-users.information.status" />}
-              name="active"
-              id="useractive"
-              component={Select}
-              fullWidth
-              disabled={isStatusFieldDisabled()}
-              dataOptions={statusOptions}
-              defaultValue={initialValues.active}
-              aria-required="true"
-              required
-            />
-            {isUserExpired() && (
-              <span className={css.expiredMessage}>
-                <FormattedMessage id="ui-users.errors.userExpired" />
-              </span>
-            )}
-          </Col>
-          <Col xs={12} md={3}>
-            <Field
-              component={Datepicker}
-              label={<FormattedMessage id="ui-users.expirationDate" />}
-              dateFormat="YYYY-MM-DD"
-              name="expirationDate"
-              id="adduser_expirationdate"
-            />
-          </Col>
-          <Col xs={12} md={3}>
-            <Field
-              label={<FormattedMessage id="ui-users.information.barcode" />}
-              name="barcode"
-              id="adduser_barcode"
-              component={TextField}
-              fullWidth
-            />
-          </Col>
-        </Row>
-      </Accordion>
+          </div>
+        </Modal>
+      </>
     );
   }
 }
 
-export default injectIntl(EditUserInfo);
+const selectFormValue = formValueSelector('userForm');
+
+export default connect(
+  store => ({
+    selectedPatronGroup: selectFormValue(store, 'patronGroup'),
+  })
+)(injectIntl(EditUserInfo));
