@@ -751,5 +751,6 @@
     "loans.confirmClaimedReturned": "确认单件状态：声称已还",
     "loans.confirmMissing": "确认单件状态：缺少",
     "information.patronGroup.expirationOffset": "Expiration date offset (days)",
-    "reports.item.contributors": "Contributors"
+    "reports.item.contributors": "Contributors",
+    "permission.loans.anonymize": "Users: User loans anonymize"
 }

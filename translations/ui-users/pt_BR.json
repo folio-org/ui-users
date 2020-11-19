@@ -751,5 +751,6 @@
     "loans.confirmClaimedReturned": "Confirme o status do item: Declarado como devolvido",
     "loans.confirmMissing": "Confirme o status do item: Não encontrado",
     "information.patronGroup.expirationOffset": "Compensação da data de expiração (dias)",
-    "reports.item.contributors": "Contribuidores"
+    "reports.item.contributors": "Contribuidores",
+    "permission.loans.anonymize": "Usuários: Anonimizar os empréstimos de usuário"
 }

@@ -751,5 +751,6 @@
     "loans.confirmClaimedReturned": "Confirmar el estado del artículo: Reclamado devuelto",
     "loans.confirmMissing": "Confirme el estado del artículo: Desaparecido",
     "information.patronGroup.expirationOffset": "Expiration date offset (days)",
-    "reports.item.contributors": "Contributors"
+    "reports.item.contributors": "Contributors",
+    "permission.loans.anonymize": "Users: User loans anonymize"
 }

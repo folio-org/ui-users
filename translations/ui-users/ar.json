@@ -751,5 +751,6 @@
     "loans.confirmClaimedReturned": "تأكيد حالة المادة: تم إدعاء إعادتها",
     "loans.confirmMissing": "تأكيد حالة المادة: مفقودة",
     "information.patronGroup.expirationOffset": "تعديل تاريخ الانتهاء (يوماً)",
-    "reports.item.contributors": "المساهمون"
+    "reports.item.contributors": "المساهمون",
+    "permission.loans.anonymize": "المستخدمين: عدم تعريف هوية إعارات المستخدم"
 }
