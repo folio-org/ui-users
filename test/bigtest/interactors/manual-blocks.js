@@ -12,6 +12,7 @@ import CheckboxInteractor from '@folio/stripes-components/lib/Checkbox/tests/int
 import MultiColumnListInteractor from '@folio/stripes-components/lib/MultiColumnList/tests/interactor'; // eslint-disable-line
 import ConfirmationModalInteractor from '@folio/stripes-components/lib/ConfirmationModal/tests/interactor'; // eslint-disable-line
 import TextFieldInteractor from '@folio/stripes-components/lib/TextField/tests/interactor'; // eslint-disable-line
+import SelectionInteractor from '@folio/stripes-components/lib/Selection/tests/interactor'; // eslint-disable-line
 
 @interactor class PatronBlocksSection {
   sectionIsPresent = isPresent('#accordion-toggle-button-patronBlocksSection');
@@ -55,6 +56,8 @@ import TextFieldInteractor from '@folio/stripes-components/lib/TextField/tests/i
   mclPatronBlock = new MultiColumnListInteractor('#patron-block-mcl');
 
   confirmationModal = new ConfirmationModalInteractor('#patron-block-confirmation-modal');
+
+  templateSelection = new SelectionInteractor('#patronBlockForm-templateSelection');
 
   // CollapseButton
   collapseButton = clickable('#accordion-toggle-button-blockInformationSection');

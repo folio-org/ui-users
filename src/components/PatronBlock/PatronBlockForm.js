@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _, { get, isNil } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -14,7 +14,8 @@ import {
   PaneHeaderIconButton,
   TextArea,
   Checkbox,
-  Datepicker
+  Datepicker,
+  Selection
 } from '@folio/stripes/components';
 import {
   AppIcon,
@@ -57,6 +58,14 @@ const showValidationErrors = ({
   return errors;
 };
 
+const BLOCK_TEMPLATE_FIELDS_MAP = {
+  'desc': 'blockTemplate.desc',
+  'patronMessage': 'blockTemplate.patronMessage',
+  'borrowing': 'blockTemplate.borrowing',
+  'renewals': 'blockTemplate.renewals',
+  'requests': 'blockTemplate.requests',
+};
+
 class PatronBlockForm extends React.Component {
   static propTypes = {
     user: PropTypes.object,
@@ -71,6 +80,7 @@ class PatronBlockForm extends React.Component {
     intl: PropTypes.object.isRequired,
     stripes: PropTypes.object,
     initialValues: PropTypes.object,
+    blockTemplates: PropTypes.arrayOf(PropTypes.shape())
   };
 
   constructor(props) {
@@ -142,6 +152,44 @@ class PatronBlockForm extends React.Component {
     );
   }
 
+  getBlockTemplatesForSelect = (blockTemplates) => {
+    const empty = { label: '', value: null };
+
+    const options = blockTemplates.map(b => (
+      {
+        value: b.id,
+        label: b.code ? `${b.name} (${b.code})` : b.name
+      }
+    ));
+    return [empty, ...options];
+  }
+
+  onChangeTemplate = (id) => {
+    const { form: { batch, change, getRegisteredFields }, blockTemplates } = this.props;
+    const template = blockTemplates.find(t => t.id === id) || {};
+    
+    batch(() => {
+      change('type', 'Manual');
+      change('desc', null);
+      change('code', null);
+      change('staffInformation', null);
+      change('patronMessage', null);
+      change('expirationDate', null);
+      change('borrowing', true);
+      change('renewals', true);
+      change('requests', true);
+    });
+
+    getRegisteredFields()
+      .forEach(field => {
+        const templateField = BLOCK_TEMPLATE_FIELDS_MAP[field] || field;
+        const templateFieldValue = get(template, templateField);
+        if (!isNil(templateFieldValue)) {
+          change(field, templateFieldValue);
+        }
+      });
+  }
+
   render() {
     const {
       intl,
@@ -149,9 +197,11 @@ class PatronBlockForm extends React.Component {
       initialValues,
       handleSubmit,
       user = {},
+      blockTemplates = [],
     } = this.props;
     const title = params.patronblockid ? getFullName(user) : intl.formatMessage({ id: 'ui-users.blocks.layer.newBlockTitle' });
     const userD = !params.patronblockid ? <UserInfo user={user} /> : '';
+
 
     return (
       <form
@@ -172,6 +222,19 @@ class PatronBlockForm extends React.Component {
             <Row end="xs">
               <Col xs id="collapse-patron-block">
                 <ExpandAllButton accordionStatus={this.state.sections} onToggle={this.handleExpandAll} />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={6} md={6} lg={3}>
+                <div id="patronBlockForm-templateSelection">
+                  <Selection
+                    
+                    dataOptions={this.getBlockTemplatesForSelect(blockTemplates)}
+                    label="TEMPLATE NAME"
+                    label={<FormattedMessage id="ui-users.blocks.form.label.template" />}
+                    onChange={this.onChangeTemplate}
+                  />
+                </div>
               </Col>
             </Row>
             <Row>

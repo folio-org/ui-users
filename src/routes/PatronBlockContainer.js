@@ -26,6 +26,11 @@ class PatronBlockContainer extends React.Component {
         path: 'manualblocks/%{activeRecord.blockid}',
       }
     },
+    blockTemplates: {
+      type: 'okapi',
+      records: 'manualBlockTemplates',
+      path:'manual-block-templates',
+    },
     activeRecord: {},
   });
 
