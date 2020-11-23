@@ -265,6 +265,7 @@
   "information.selectPatronGroup": "Select patron group",
   "information.patronGroup.users": "Users",
   "information.patronGroup.expirationOffset": "Expiration date offset (days)",
+  "information.patronGroup.expirationOffset.error": "Must be empty or an integer > 0",
   "information.profile.label": "Display profile pictures",
   "proxy.addProxy": "Add",
   "proxy.relationshipCreated": "Relationship Created",
