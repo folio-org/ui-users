@@ -11,8 +11,8 @@ import {
   withStripes
 } from '@folio/stripes/core';
 
-import ProxyEditList from '../../ProxyGroup/ProxyEditList';
-import ProxyEditItem from '../../ProxyGroup/ProxyEditItem';
+import ProxyEditList from '../../../../components/ProxyGroup/ProxyEditList';
+import ProxyEditItem from '../../../../components/ProxyGroup/ProxyEditItem';
 
 const EditProxy = (props) => {
   const {

@@ -23,9 +23,9 @@ import {
   Label,
 } from '@folio/stripes/components';
 
-import { deliveryFulfillmentValues } from '../../../../constants';
-import { addressTypesShape } from '../../../../shapes';
-import { nullOrStringIsRequiredTypeValidator } from '../../../../customTypeValidators';
+import { deliveryFulfillmentValues } from '../../../../../constants';
+import { addressTypesShape } from '../../../../../shapes';
+import { nullOrStringIsRequiredTypeValidator } from '../../../../../customTypeValidators';
 import styles from './RequestPreferencesEdit.css';
 
 class RequestPreferencesEdit extends Component {

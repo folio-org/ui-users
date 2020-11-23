@@ -31,7 +31,7 @@ import {
   EditContactInfo,
   EditProxy,
   EditServicePoints,
-} from '../../components/EditSections';
+} from './sections';
 import { getFullName } from '../../components/util';
 import RequestFeeFineBlockButtons from '../../components/RequestFeeFineBlockButtons';
 import PermissionsAccordion from '../../components/PermissionsAccordion';

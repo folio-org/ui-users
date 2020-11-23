@@ -23,7 +23,7 @@ import {
   IfPermission,
 } from '@folio/stripes/core';
 
-import AddServicePointModal from '../../AddServicePointModal';
+import AddServicePointModal from '../../../../components/AddServicePointModal';
 
 class EditServicePoints extends React.Component {
   static propTypes = {

@@ -13,7 +13,7 @@ import {
   RepeatableField,
 } from '@folio/stripes/components';
 
-import { departmentsShape } from '../../../../shapes';
+import { departmentsShape } from '../../../../../shapes';
 
 import css from './DepartmentsNameEdit.css';
 

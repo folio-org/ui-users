@@ -17,7 +17,7 @@ import { IfPermission } from '@folio/stripes/core';
 import {
   addressTypesShape,
   departmentsShape,
-} from '../../../shapes';
+} from '../../../../shapes';
 
 import CreateResetPasswordControl from './CreateResetPasswordControl';
 import RequestPreferencesEdit from './RequestPreferencesEdit';
