@@ -438,7 +438,6 @@ class ChargeFeeFine extends React.Component {
       }
     });
     const feefines = _.get(resources, ['allfeefines', 'records'], []);
-    const payments = _.get(resources, ['payments', 'records'], []).filter(p => p.ownerId === this.state.ownerId);
     const accounts = _.get(resources, ['accounts', 'records'], []);
     const settings = _.get(resources, ['commentRequired', 'records', 0], {});
     const barcode = _.get(resources, 'activeRecord.barcode');
@@ -475,6 +474,10 @@ class ChargeFeeFine extends React.Component {
     const selectedFeeFine = feefines.find(f => f.id === feeFineTypeId);
     const currentOwnerFeeFineTypes = feefines.filter(f => f.ownerId === resources.activeRecord.ownerId);
     const selectedOwner = owners.find(o => o.id === initialOwnerId);
+    const payments = _.get(resources, ['payments', 'records'], []).filter(
+      p => p.ownerId === this.state.ownerId || resources.activeRecord.ownerId
+    );
+
     const initialChargeValues = {
       ownerId: resources.activeRecord.ownerId || '',
       notify: !!(selectedFeeFine?.chargeNoticeId || selectedOwner?.defaultChargeNoticeId),
