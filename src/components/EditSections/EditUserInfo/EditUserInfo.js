@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { change, Field, formValueSelector } from 'redux-form';
+import { change, Field, formValueSelector, getFormValues } from 'redux-form';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import moment from 'moment-timezone';
 
@@ -34,6 +34,7 @@ class EditUserInfo extends React.Component {
     stripes: PropTypes.shape({
       store: PropTypes.shape({
         dispatch: PropTypes.func.isRequired,
+        getState: PropTypes.func,
       }),
     }).isRequired,
   };
@@ -90,6 +91,15 @@ class EditUserInfo extends React.Component {
       const expirationDate = new Date(initialValues.expirationDate);
       const now = Date.now();
       return expirationDate <= now;
+    };
+
+    const willUserExtend = () => {
+      const { store } = this.props.stripes;
+      const state = store.getState();
+      const formValues = getFormValues('userForm')(state) || {};
+      const currentExpirationDate = new Date(_.get(formValues, 'expirationDate', ''));
+      const now = Date.now();
+      return currentExpirationDate >= now;
     };
 
     const isStatusFieldDisabled = () => {
@@ -228,6 +238,11 @@ class EditUserInfo extends React.Component {
                 <span className={css.expiredMessage}>
                   <FormattedMessage id="ui-users.errors.userExpired" />
                 </span>
+              )}
+              {isUserExpired() && willUserExtend() && (
+                <p className={css.expiredMessage}>
+                  <FormattedMessage id="ui-users.information.recalculate.will.reactivate.user" />
+                </p>
               )}
             </Col>
             <Col xs={12} md={3}>
