@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { IfPermission } from '@folio/stripes/core';
+import { IfInterface, IfPermission } from '@folio/stripes/core';
 import {
   Headline,
   NavList,
@@ -19,8 +19,35 @@ export default class Settings extends Component {
     match: PropTypes.object.isRequired,
   };
 
+  renderSectionPageItem = (setting) => {
+    const {
+      match: { path },
+    } = this.props;
+    let sectionItem = (
+      <NavListItem to={`${path}/${setting.route}`}>
+        {setting.label}
+      </NavListItem>
+    );
+
+    if (setting.interface) {
+      sectionItem = <IfInterface name={setting.interface}>{sectionItem}</IfInterface>;
+    }
+
+    if (setting.perm) {
+      sectionItem = (
+        <IfPermission key={setting.route} perm={setting.perm}>
+          {sectionItem}
+        </IfPermission>
+      );
+    }
+
+    return sectionItem;
+  };
+
   render() {
-    const { children, match: { path } } = this.props;
+    const {
+      children,
+    } = this.props;
 
     return (
       <>
@@ -31,20 +58,12 @@ export default class Settings extends Component {
               <FormattedMessage id="ui-users.settings.label" />
             </Headline>
           }
-          firstMenu={(
-            <PaneBackLink to="/settings" />
-          )}
+          firstMenu={<PaneBackLink to="/settings" />}
         >
           <NavList>
             {sections.map((section, index) => (
               <NavListSection key={index} label={section.label}>
-                {section.pages.map(setting => (setting.perm ? (
-                  <IfPermission key={setting.route} perm={setting.perm}>
-                    <NavListItem to={`${path}/${setting.route}`}>{setting.label}</NavListItem>
-                  </IfPermission>
-                ) : (
-                  <NavListItem key={setting.route} to={`${path}/${setting.route}`}>{setting.label}</NavListItem>
-                )))}
+                {section.pages.map((setting) => this.renderSectionPageItem(setting))}
               </NavListSection>
             ))}
           </NavList>
