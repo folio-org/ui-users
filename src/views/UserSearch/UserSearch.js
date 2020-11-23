@@ -30,6 +30,8 @@ import {
   CollapseFilterPaneButton,
 } from '@folio/stripes/smart-components';
 
+import RefundsReportModal from '../../components/RefundsReportModal/RefundsReportModal';
+
 import CsvReport from '../../components/data/reports';
 import Filters from './Filters';
 import css from './UserSearch.css';
@@ -90,6 +92,7 @@ class UserSearch extends React.Component {
       }).isRequired,
     }).isRequired,
     source: PropTypes.object,
+    handleRefundsReportSubmit: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
@@ -106,6 +109,7 @@ class UserSearch extends React.Component {
       exportInProgress: false,
       searchPending: false,
       visibleColumns: this.getInitialVisibleColumns(),
+      showRefundsReportModal: false,
     };
 
     this.resultsPaneTitleRef = createRef();
@@ -141,6 +145,10 @@ class UserSearch extends React.Component {
   componentWillUnmount() {
     this._mounted = false;
   }
+  
+  changeRefundReportModalState = (modalState) => {
+    this.setState({ showRefundsReportModal: modalState });
+  };
 
   getColumnMapping = () => {
     const { intl } = this.props;
@@ -278,6 +286,18 @@ class UserSearch extends React.Component {
               <FormattedMessage id="ui-users.reports.claimReturned.label" />
             </Icon>
           </Button>
+          <Button
+            buttonStyle="dropdownItem"
+            id="export-refunds-report"
+            onClick={() => {
+              onToggle();
+              this.changeRefundReportModalState(true);
+            }}
+          >
+            <Icon icon="download">
+              <FormattedMessage id="ui-users.reports.refunds.label" />
+            </Icon>
+          </Button>
         </MenuSection>
         <MenuSection label={intl.formatMessage({ id: 'ui-users.showColumns' })} id="columns-menu-section">
           {TOGGLEABLE_COLUMNS.map(key => (
@@ -381,6 +401,11 @@ class UserSearch extends React.Component {
     });
 
     onSubmit(e);
+  }
+
+  handleRefundsReportFormSubmit = (data) => {
+    this.changeRefundReportModalState(false);
+    this.props.handleRefundsReportSubmit(data);
   }
 
   render() {
@@ -580,6 +605,14 @@ class UserSearch extends React.Component {
                 );
               }}
           </SearchAndSortQuery>
+          { this.state.showRefundsReportModal && (
+            <RefundsReportModal 
+              open
+              onClose={() => { this.changeRefundReportModalState(false) }}
+              label={this.props.intl.formatMessage({ id:'ui-users.reports.refunds.modal.label' })}
+              onSubmit={this.handleRefundsReportFormSubmit}
+            />
+          )}
         </div>
       </HasCommand>);
   }

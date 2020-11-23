@@ -85,6 +85,20 @@ class UserSearchContainer extends React.Component {
       path: 'departments',
       records: 'departments',
     },
+    accounts: {
+      type: 'okapi',
+      records: 'accounts',
+      path: `accounts`,
+      fetch: false,
+    },
+    feefineactions: {
+      type: 'okapi',
+      records: 'feefineactions',
+      path: `feefineactions?query=dateAction > %{refundReportData.startDate} and dateAction < %{refundReportData.endDate}`,
+      fetch: false,
+      accumulate: true,
+    },
+    refundReportData: {}
   });
 
   static propTypes = {
@@ -114,6 +128,12 @@ class UserSearchContainer extends React.Component {
       }),
       resultOffset: PropTypes.shape({
         replace: PropTypes.func.isRequired,
+      }),
+      refundReportData: PropTypes.shape({
+        update: PropTypes.func.isRequired,
+      }),
+      feefineactions: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
       }),
     }).isRequired,
     stripes: PropTypes.shape({
@@ -181,6 +201,18 @@ class UserSearchContainer extends React.Component {
     return get(this.props.resources, 'query', {});
   }
 
+  handleRefundsReportSubmit = async ({ startDate, endDate }) => {
+    const { 
+      mutator: { 
+        refundReportData,
+        feefineactions
+      },
+    } = this.props;
+
+    refundReportData.update({ startDate, endDate });
+    const actions = await feefineactions.GET();
+  }
+
   render() {
     if (this.source) {
       this.source.update(this.props);
@@ -193,6 +225,7 @@ class UserSearchContainer extends React.Component {
         onNeedMoreData={this.onNeedMoreData}
         queryGetter={this.queryGetter}
         querySetter={this.querySetter}
+        handleRefundsReportSubmit={this.handleRefundsReportSubmit}
         {...this.props}
       >
         { this.props.children }
