@@ -32,7 +32,7 @@ describe('Patron group settings', () => {
       it('expect validation error', () => {
         expect(interactor.firstRow.isFeedbackErrorPresent).to.be.true;
         expect(interactor.firstRow.feedbackError).to.equal(
-          'Must be a integer > 0'
+          'Must be empty or an integer > 0'
         );
         expect(interactor.firstRow.submitButtonIsDisabled).to.be.true;
       });
@@ -46,7 +46,7 @@ describe('Patron group settings', () => {
       it('expect validation error', () => {
         expect(interactor.firstRow.isFeedbackErrorPresent).to.be.true;
         expect(interactor.firstRow.feedbackError).to.equal(
-          'Must be a integer > 0'
+          'Must be empty or an integer > 0'
         );
         expect(interactor.firstRow.submitButtonIsDisabled).to.be.true;
       });
@@ -60,7 +60,7 @@ describe('Patron group settings', () => {
       it('expect validation error', () => {
         expect(interactor.firstRow.isFeedbackErrorPresent).to.be.true;
         expect(interactor.firstRow.feedbackError).to.equal(
-          'Must be a integer > 0'
+          'Must be empty or an integer > 0'
         );
         expect(interactor.firstRow.submitButtonIsDisabled).to.be.true;
       });
@@ -74,7 +74,7 @@ describe('Patron group settings', () => {
       it('expect validation error', () => {
         expect(interactor.firstRow.isFeedbackErrorPresent).to.be.true;
         expect(interactor.firstRow.feedbackError).to.equal(
-          'Must be a integer > 0'
+          'Must be empty or an integer > 0'
         );
         expect(interactor.firstRow.submitButtonIsDisabled).to.be.true;
       });
