@@ -768,6 +768,7 @@
     "faker": "^4.1.0",
     "miragejs": "^0.1.32",
     "mocha": "^5.2.0",
+    "moment": "~2.29.0",
     "react": "^16.5.0",
     "react-dom": "^16.5.0",
     "react-intl": "^5.8.0",
@@ -781,7 +782,6 @@
     "@folio/react-intl-safe-html": "^2.0.0",
     "hashcode": "^1.0.3",
     "lodash": "^4.17.4",
-    "moment": "~2.24.0",
     "prop-types": "^15.5.10",
     "query-string": "^5.0.0",
     "react-final-form": "^6.3.0",
@@ -793,6 +793,7 @@
   },
   "peerDependencies": {
     "@folio/stripes": "^5.0.2",
+    "moment": "~2.29.0",
     "react": "*",
     "react-intl": "^5.8.0",
     "react-router": "^5.2.0",
