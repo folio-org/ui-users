@@ -246,7 +246,7 @@ describe('Test Patron Blocks section', () => {
             expect(PatronBlocksInteractor.patronBlockRenewals.isChecked).to.equal(blockTemplates[0].attrs.blockTemplate.renewals);
           });
 
-          it('borrowing is set by template', () => {
+          it('requests is set by template', () => {
             expect(PatronBlocksInteractor.patronBlockRequests.isChecked).to.equal(blockTemplates[0].attrs.blockTemplate.requests);
           });
         });

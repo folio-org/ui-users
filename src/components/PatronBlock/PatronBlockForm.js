@@ -228,9 +228,7 @@ class PatronBlockForm extends React.Component {
               <Col xs={6} md={6} lg={3}>
                 <div id="patronBlockForm-templateSelection">
                   <Selection
-                    
                     dataOptions={this.getBlockTemplatesForSelect(blockTemplates)}
-                    label="TEMPLATE NAME"
                     label={<FormattedMessage id="ui-users.blocks.form.label.template" />}
                     onChange={this.onChangeTemplate}
                   />
