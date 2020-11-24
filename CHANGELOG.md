@@ -30,6 +30,7 @@
 * New Fee/Fine page not listing Fee/Fine Types for selected Fee/Fine Owner. Refs UIU-1968.
 * Validate 'Expiration date offset (days)' of patron groups. Refs UIU-1951.
 * Create manual patron block templates in settings. Refs UIU-1909.
+* Use patron block templates to populate fields in create block screen. Refs UIU-1910.
 
 ## [5.0.1](https://github.com/folio-org/ui-users/tree/v5.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.0...v5.0.1)
