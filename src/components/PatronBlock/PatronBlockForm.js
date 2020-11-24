@@ -160,18 +160,19 @@ class PatronBlockForm extends React.Component {
         value: b.id,
         label: b.code ? `${b.name} (${b.code})` : b.name
       }
-    ));
+    )).sort((a, b) => a.label.localeCompare(b.label));
     return [empty, ...options];
   }
 
   onChangeTemplate = (id) => {
     const { form: { batch, change, getRegisteredFields }, blockTemplates } = this.props;
     const template = blockTemplates.find(t => t.id === id) || {};
-    
+    const code = get(template, 'code', null);
+
     batch(() => {
       change('type', 'Manual');
       change('desc', null);
-      change('code', null);
+      change('code', code);
       change('staffInformation', null);
       change('patronMessage', null);
       change('expirationDate', null);
