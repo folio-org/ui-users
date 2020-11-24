@@ -31,6 +31,7 @@
 * `Limits` not refreshing when `Patron group` added, modified or deleted. Refs UIU-1944.
 * Validate 'Expiration date offset (days)' of patron groups. Refs UIU-1951.
 * Create manual patron block templates in settings. Refs UIU-1909.
+* Show an error message, not a spinner, when a loan is missing. Refs UIU-1045.
 
 ## [5.0.1](https://github.com/folio-org/ui-users/tree/v5.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.0...v5.0.1)
