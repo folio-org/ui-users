@@ -35,7 +35,11 @@ import Filters from './Filters';
 import css from './UserSearch.css';
 
 const VISIBLE_COLUMNS_STORAGE_KEY = 'users-visible-columns';
-const TOGGLEABLE_COLUMNS = ['active', 'barcode', 'patronGroup', 'username', 'email'];
+
+// Note: This also determines the order of the columns
+const ALL_COLUMNS = ['active', 'name', 'barcode', 'patronGroup', 'username', 'email'];
+const NON_TOGGLEABLE_COLUMNS = ['name'];
+const TOGGLEABLE_COLUMNS = ALL_COLUMNS.filter(column => !NON_TOGGLEABLE_COLUMNS.includes(column));
 
 function getFullName(user) {
   const lastName = get(user, ['personal', 'lastName'], '');
@@ -165,8 +169,8 @@ class UserSearch extends React.Component {
   }
 
   getVisibleColumns = () => {
-    const visibleColumns = new Set(this.state.visibleColumns);
-    return ['name', ...TOGGLEABLE_COLUMNS.filter(key => visibleColumns.has(key))]
+    const visibleColumns = new Set([...this.state.visibleColumns, ...NON_TOGGLEABLE_COLUMNS]);
+    return ALL_COLUMNS.filter(key => visibleColumns.has(key));
   }
 
   onSearchComplete = records => {
