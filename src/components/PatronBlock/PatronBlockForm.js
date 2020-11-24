@@ -80,7 +80,12 @@ class PatronBlockForm extends React.Component {
     intl: PropTypes.object.isRequired,
     stripes: PropTypes.object,
     initialValues: PropTypes.object,
-    blockTemplates: PropTypes.arrayOf(PropTypes.shape())
+    blockTemplates: PropTypes.arrayOf(PropTypes.shape()),
+    form: PropTypes.shape({
+      batch: PropTypes.func.isRequired,
+      change: PropTypes.func.isRequired,
+      getRegisteredFields: PropTypes.func.isRequired,
+    }).isRequired,
   };
 
   constructor(props) {
