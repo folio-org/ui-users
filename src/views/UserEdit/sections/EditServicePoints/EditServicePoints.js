@@ -5,7 +5,7 @@ import {
 } from 'react-intl';
 import PropTypes from 'prop-types';
 import { uniqBy } from 'lodash';
-import { Field, FieldArray } from 'redux-form';
+import { FieldArray } from 'redux-form';
 import {
   Icon,
   Button,
@@ -24,6 +24,7 @@ import {
 } from '@folio/stripes/core';
 
 import AddServicePointModal from '../../../../components/AddServicePointModal';
+import { Field } from '../../components';
 
 class EditServicePoints extends React.Component {
   static propTypes = {

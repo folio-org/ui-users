@@ -4,7 +4,6 @@ import {
   useIntl,
 } from 'react-intl';
 import {
-  Field,
   FieldArray,
 } from 'redux-form';
 
@@ -14,6 +13,7 @@ import {
 } from '@folio/stripes/components';
 
 import { departmentsShape } from '../../../../../shapes';
+import { Field } from '../../../components';
 
 import css from './DepartmentsNameEdit.css';
 

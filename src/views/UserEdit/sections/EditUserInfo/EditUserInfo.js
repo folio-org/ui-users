@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Field } from 'redux-form';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
 import { ViewMetaData } from '@folio/stripes/smart-components';
@@ -13,6 +12,8 @@ import {
   Datepicker,
   Headline,
 } from '@folio/stripes/components';
+
+import { Field } from '../../components';
 
 import css from './EditUserInfo.css';
 

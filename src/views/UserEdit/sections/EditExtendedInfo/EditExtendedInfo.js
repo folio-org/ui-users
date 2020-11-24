@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { Field } from 'redux-form';
 
 import {
   TextField,
@@ -18,6 +17,7 @@ import {
   addressTypesShape,
   departmentsShape,
 } from '../../../../shapes';
+import { Field } from '../../components';
 
 import CreateResetPasswordControl from './CreateResetPasswordControl';
 import RequestPreferencesEdit from './RequestPreferencesEdit';

@@ -4,7 +4,6 @@ import {
   injectIntl,
 } from 'react-intl';
 import PropTypes from 'prop-types';
-import { Field } from 'redux-form';
 import {
   Select,
   TextField,
@@ -17,6 +16,7 @@ import { AddressEditList } from '@folio/stripes/smart-components';
 
 import { toAddressTypeOptions } from '../../../../components/data/converters/address_type';
 import contactTypes from '../../../../components/data/static/contactTypes';
+import { Field } from '../../components';
 
 const EditContactInfo = ({
   expanded,

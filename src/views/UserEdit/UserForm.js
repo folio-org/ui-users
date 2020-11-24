@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { FormattedMessage } from 'react-intl';
 import { get } from 'lodash';
-import { Field } from 'redux-form';
 
 import { AppIcon } from '@folio/stripes/core';
 import {
@@ -41,6 +40,7 @@ import {
 } from '../../components/PermissionsAccordion/helpers/filtersConfig';
 import { addressTypesShape } from '../../shapes';
 
+import { Form, Field } from './components';
 import css from './UserForm.css';
 
 function validate(values, props) {
@@ -461,11 +461,12 @@ class UserForm extends React.Component {
 
     return (
       <HasCommand commands={this.keyboardCommands}>
-        <form
+        <Form
           data-test-form-page
           className={css.UserFormRoot}
           id="form-user"
           onSubmit={handleSubmit}
+          autoFocusField="personal.lastName"
         >
           <Paneset>
             <Pane
@@ -578,7 +579,7 @@ class UserForm extends React.Component {
               </AccordionSet>
             </Pane>
           </Paneset>
-        </form>
+        </Form>
       </HasCommand>
     );
   }

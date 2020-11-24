@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import {
-  Field,
   formValueSelector,
   change,
 } from 'redux-form';
@@ -26,6 +25,8 @@ import {
 import { deliveryFulfillmentValues } from '../../../../../constants';
 import { addressTypesShape } from '../../../../../shapes';
 import { nullOrStringIsRequiredTypeValidator } from '../../../../../customTypeValidators';
+import { Field } from '../../../components';
+
 import styles from './RequestPreferencesEdit.css';
 
 class RequestPreferencesEdit extends Component {
