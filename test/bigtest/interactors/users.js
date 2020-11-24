@@ -10,6 +10,7 @@ import {
   selectable,
 } from '@bigtest/interactor';
 
+import CheckboxInteractor  from '@folio/stripes-components/lib/Checkbox/tests/interactor'; // eslint-disable-line
 import MultiSelectInteractor from '@folio/stripes-components/lib/MultiSelection/tests/interactor';
 
 @interactor class ActiveUserCheckbox {
@@ -33,6 +34,9 @@ import MultiSelectInteractor from '@folio/stripes-components/lib/MultiSelection/
   clickExportToCSV = clickable('#export-overdue-loan-report');
   exportBtnIsVisible = isVisible('#export-overdue-loan-report');
   isExportBtnPresent = isPresent('#export-overdue-loan-report');
+  columnCheckbox = function columnCheckbox(key) {
+    return new Interactor(`#users-search-column-checkbox-${key}`);
+  }
 }
 
 @interactor class SearchFieldInteractor {
@@ -62,6 +66,9 @@ export default @interactor class UsersInteractor {
   instance = scoped('[data-test-instance-details]');
   instances = collection('[role=rowgroup] [data-row-inner]');
   clearStatusFilter = clickable('[data-test-clear-button]');
+  column = function column(key) {
+    return new Interactor(`#list-column-${key}`);
+  }
 
   whenInstanceLoaded() {
     return this.when(() => this.instancePresent).timeout(5000);
