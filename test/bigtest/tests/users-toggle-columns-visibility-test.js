@@ -1,4 +1,5 @@
 import {
+  afterEach,
   beforeEach,
   describe,
   it,
@@ -46,13 +47,13 @@ describe('Users list columns visibility', () => {
         await users.headerDropdownMenu.columnCheckbox('active').click();
       });
 
-      afterEach(async function() {
+      afterEach(async function () {
         await sessionStorage.clear();
       });
-  
+
       it('re-enables the "active"-column', () => {
         expect(users.column('active').isPresent).to.be.true;
       });
     });
-  })
+  });
 });
