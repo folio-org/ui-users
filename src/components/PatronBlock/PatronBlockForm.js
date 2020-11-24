@@ -1,4 +1,4 @@
-import _, { get, isNil } from 'lodash';
+import _, { get, isEmpty, isNil } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -174,6 +174,8 @@ class PatronBlockForm extends React.Component {
     const template = blockTemplates.find(t => t.id === id) || {};
     const code = get(template, 'code', null);
 
+    // if no template is selected, all blockActions are set to true (default behavior when creating a block)
+    const blockActions = isEmpty(template);
     batch(() => {
       change('type', 'Manual');
       change('desc', null);
@@ -181,9 +183,9 @@ class PatronBlockForm extends React.Component {
       change('staffInformation', null);
       change('patronMessage', null);
       change('expirationDate', null);
-      change('borrowing', true);
-      change('renewals', true);
-      change('requests', true);
+      change('borrowing', blockActions);
+      change('renewals', blockActions);
+      change('requests', blockActions);
     });
 
     getRegisteredFields()
