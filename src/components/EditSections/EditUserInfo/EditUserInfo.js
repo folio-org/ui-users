@@ -276,6 +276,7 @@ class EditUserInfo extends React.Component {
         </Accordion>
         <Modal
           footer={footer}
+          id="recalculate_expirationdate_modal"
           label={<FormattedMessage id="ui-users.information.recalculate.modal.label" />}
           open={this.state.showInfoModal}
         >

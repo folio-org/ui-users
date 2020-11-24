@@ -626,6 +626,23 @@ export default function config() {
     return this.serializerOrRegistry.serialize(patronBlockLimits.all());
   });
 
+  this.get('/patron-groups', ({ patronGroups }) => {
+    return patronGroups.all();
+  });
+
+  this.get('/patron-groups/:id', (schema, request) => {
+    return schema.patronGroups.find(request.params.id).attrs;
+  });
+
+  this.put('/patron-groups/:id', { // /settings/users/groups
+    patronGroup: {
+      id: '1',
+      group: 'staff',
+      desc: 'Staff Member',
+      expirationOffsetInDays: 730,
+    },
+  });
+
   this.get('/custom-fields', {
     'customFields': [{
       'id': '1',
