@@ -1,5 +1,10 @@
 # Change history for ui-users
 
+## [5.0.7](https://github.com/folio-org/ui-users/tree/v5.0.7) (2020-11-24)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.6...v5.0.7)
+
+* Fix empty payments select. Refs UIU-1975.
+
 ## [5.0.6](https://github.com/folio-org/ui-users/tree/v5.0.6) (2020-11-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.5...v5.0.6)
 
