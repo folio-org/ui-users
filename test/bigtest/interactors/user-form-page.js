@@ -149,6 +149,9 @@ import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/P
   patronGroupField = new SelectFieldInteractor('#adduser_group');
   recalculateExpirationdateModal = new ModalInteractor('#recalculate_expirationdate_modal');
   recalculateExpirationdateButton = scoped('#recalculate-expirationDate-btn');
+  expirationdateModalCancelButton = new ButtonInteractor('#expirationDate-modal-recalculate-btn');
+  expirationdateModalRecalculateButton = new ButtonInteractor('#expirationDate-modal-cancel-btn');
+  usersExpirationdateField = scoped('#adduser_expirationdate');
   customFieldsSection = scoped('#customFields', CustomFieldsSectionInteractor);
   departmentName = new RepeatableFieldInteractor('#department-name');
 }

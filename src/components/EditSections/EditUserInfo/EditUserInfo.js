@@ -146,10 +146,16 @@ class EditUserInfo extends React.Component {
     const group = _.get(this.props.patronGroups.find(i => i.id === this.props.selectedPatronGroup), 'group', '');
     const footer = (
       <ModalFooter>
-        <Button onClick={this.recalculateExpirationDate}>
+        <Button
+          id="expirationDate-modal-recalculate-btn"
+          onClick={this.recalculateExpirationDate}
+        >
           <FormattedMessage id="ui-users.information.recalculate.expirationDate" />
         </Button>
-        <Button onClick={this.handleClose}>
+        <Button
+          id="expirationDate-modal-cancel-btn"
+          onClick={this.handleClose}
+        >
           <FormattedMessage id="ui-users.cancel" />
         </Button>
       </ModalFooter>

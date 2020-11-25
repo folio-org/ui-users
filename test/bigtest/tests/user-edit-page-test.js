@@ -4,6 +4,7 @@ import {
   it,
 } from '@bigtest/mocha';
 import { expect } from 'chai';
+import moment from 'moment';
 
 import translations from '../../../translations/ui-users/en';
 
@@ -248,35 +249,59 @@ describe('User Edit Page', () => {
 
     describe('recalculation of expiration date', () => {
       describe('edit user with expiration offset days is NOT empty', () => {
+        const GROUP_WITH_EXPIRATIONDATE = 'group6'; // group staff with expirationOffsetInDays of 730
         beforeEach(async function () {
           const user = this.server.create('user', {
-            patronGroup: 'group6',
-          }, 'withPatronGroup', {
-            id: 'group6', // is group staff with expirationOffsetInDays of 730
-          });
+            patronGroup: GROUP_WITH_EXPIRATIONDATE,
+          }, 'withPatronGroup', { id: GROUP_WITH_EXPIRATIONDATE });
+
           this.visit(`/users/${user.id}/edit`);
-          console.log(user);
           await UserFormPage.whenLoaded();
         });
+
         it('should display recalculation button', () => {
           expect(UserFormPage.recalculateExpirationdateButton.isPresent).to.be.true;
         });
+
+        describe('click recalculation button', () => {
+          const RECALCULATED_EXPIRATION_DATE = moment().add(730, 'd').format('YYYY-MM-DD');
+          beforeEach(async function () {
+            await UserFormPage.recalculateExpirationdateButton.click();
+          });
+
+          it('recalculation modal should be closed and expirationDate should be recalculated', () => {
+            expect(UserFormPage.recalculateExpirationdateModal.isPresent).to.be.false;
+            expect(UserFormPage.usersExpirationdateField.value).to.equal(RECALCULATED_EXPIRATION_DATE);
+          });
+        });
       });
+
       describe('edit user and select patronGroup with expiration offset days is NOT empty', () => {
+        const GROUP_WITHOUT_EXPIRATIONDATE = 'group5';
         beforeEach(async function () {
           const user = this.server.create('user', {
-            patronGroup: 'group5',
-          }, 'withPatronGroup', {
-            id: 'group5', // is group with empty expirationOffsetInDays
-          });
+            patronGroup: GROUP_WITHOUT_EXPIRATIONDATE,
+          }, 'withPatronGroup', { id: GROUP_WITHOUT_EXPIRATIONDATE });
+
           this.visit(`/users/${user.id}/edit`);
-          console.log(user);
           await UserFormPage.whenLoaded();
-          await UserFormPage.patronGroupField.selectAndBlur('staff (Staff Member)').timeout(6000);
+          await UserFormPage.patronGroupField.selectAndBlur('staff (Staff Member)');
         });
 
-        it('should display recalculation modal', () => {
+        it('should display recalculation modal with buttons', () => {
           expect(UserFormPage.recalculateExpirationdateModal.isPresent).to.be.true;
+          expect(UserFormPage.expirationdateModalCancelButton.isPresent).to.be.true;
+          expect(UserFormPage.expirationdateModalRecalculateButton.isPresent).to.be.true;
+        });
+
+        describe('click cancel button', () => {
+          beforeEach(async function () {
+            await UserFormPage.expirationdateModalCancelButton.click();
+          });
+
+          it('recalculation modal should be closed', () => {
+            expect(UserFormPage.recalculateExpirationdateModal.isPresent).to.be.false;
+          });
         });
       });
     });
@@ -288,7 +313,6 @@ describe('User Edit Page', () => {
           await UserFormPage.submitButton.click();
           await InstanceViewPage.whenLoaded();
         });
-
         it('should display inactive status', () => {
           expect(InstanceViewPage.userInfo.keyValues(5).text).to.equal('Inactive');
         }).timeout(6000);
@@ -301,7 +325,6 @@ describe('User Edit Page', () => {
           await UserFormPage.submitButton.click();
           await InstanceViewPage.whenLoaded();
         });
-
         it('should display active status', () => {
           expect(InstanceViewPage.userInfo.keyValues(5).text).to.equal('Active');
         }).timeout(6000);

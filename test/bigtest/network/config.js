@@ -103,7 +103,7 @@ export default function config() {
       'group': 'staff',
       'desc': 'Staff Member',
       'id': 'group6',
-      'expirationOffsetInDays': '730',
+      'expirationOffsetInDays': 730,
     }, {
       'group': 'undergrad',
       'desc': 'Undergraduate Student',
@@ -626,23 +626,6 @@ export default function config() {
   this.get('/patron-block-limits', ({ patronBlockLimits }) => {
     return this.serializerOrRegistry.serialize(patronBlockLimits.all());
   });
-
-  // this.get('/groups', ({ patronGroups }) => {
-  //   return patronGroups.all();
-  // });
-
-  // this.get('/groups/:id', (schema, request) => {
-  //   return schema.patronGroups.find(request.params.id).attrs;
-  // });
-
-  // this.put('/groups/:id', {
-  //   patronGroup: {
-  //     id: '1',
-  //     group: 'staff',
-  //     desc: 'Staff Member',
-  //     expirationOffsetInDays: 730,
-  //   },
-  // });
 
   this.get('/custom-fields', {
     'customFields': [{
