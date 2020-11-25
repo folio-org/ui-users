@@ -3,6 +3,8 @@
   "user.pluralized": "{count} {count, plural, one {user} other {users}}",
   "meta.title": "Users",
 
+  "actions": "Actions",
+  "showColumns": "Show columns",
   "loading": "Loading...",
   "search": "Search",
   "userSearch": "User search",
@@ -839,5 +841,6 @@
   "index.barcode": "Barcode",
   "index.lastName": "Last name",
   "index.username": "Username",
-  "index.all": "Keyword (name, email, identifier)"
+  "index.all": "Keyword (name, email, identifier)",
+  "loan404": "The requested loan could not be retrieved."
 }
