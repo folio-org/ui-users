@@ -197,55 +197,55 @@ describe('User Edit Page', () => {
       });
     });
 
-    // describe('when custom fields are in stock', () => {
-    //   it('should show custom fields accordion', () => {
-    //     expect(UserFormPage.customFieldsSection.isPresent).to.be.true;
-    //   });
+    describe('when custom fields are in stock', () => {
+      it('should show custom fields accordion', () => {
+        expect(UserFormPage.customFieldsSection.isPresent).to.be.true;
+      });
 
-    //   it('should display correct accordion label', () => {
-    //     expect(UserFormPage.customFieldsSection.label).to.equal('Custom Fields Test');
-    //   });
+      it('should display correct accordion label', () => {
+        expect(UserFormPage.customFieldsSection.label).to.equal('Custom Fields Test');
+      });
 
-    //   it('should display all visible custom fields', () => {
-    //     expect(UserFormPage.customFieldsSection.fields().length).to.equal(3);
-    //   });
+      it('should display all visible custom fields', () => {
+        expect(UserFormPage.customFieldsSection.fields().length).to.equal(3);
+      });
 
-    //   it('should display popover for the first field', () => {
-    //     expect(UserFormPage.customFieldsSection.fields(0).popoverIsPresent).to.be.true;
-    //   });
+      it('should display popover for the first field', () => {
+        expect(UserFormPage.customFieldsSection.fields(0).popoverIsPresent).to.be.true;
+      });
 
-    //   describe('when set empty falue to required field', () => {
-    //     beforeEach(async () => {
-    //       await UserFormPage.customFieldsSection.fields(0).input.fillAndBlur('');
-    //     });
+      describe('when set empty falue to required field', () => {
+        beforeEach(async () => {
+          await UserFormPage.customFieldsSection.fields(0).input.fillAndBlur('');
+        });
 
-    //     it('should show validation message', () => {
-    //       expect(UserFormPage.customFieldsSection.fields(0).validationMessage).to.equal('Textbox 1 is required');
-    //     });
-    //   });
+        it('should show validation message', () => {
+          expect(UserFormPage.customFieldsSection.fields(0).validationMessage).to.equal('Textbox 1 is required');
+        });
+      });
 
-    //   describe('when set value to textbox out of length limit', () => {
-    //     beforeEach(async () => {
-    //       await UserFormPage.customFieldsSection.fields(0).input.fillAndBlur((new Array(151)).fill('a').join(''));
-    //     });
+      describe('when set value to textbox out of length limit', () => {
+        beforeEach(async () => {
+          await UserFormPage.customFieldsSection.fields(0).input.fillAndBlur((new Array(151)).fill('a').join(''));
+        });
 
-    //     it('should show validation message', () => {
-    //       expect(UserFormPage.customFieldsSection.fields(0).validationMessage)
-    //         .to.equal('Textbox 1 character limit has been exceeded. Please revise.');
-    //     });
-    //   });
+        it('should show validation message', () => {
+          expect(UserFormPage.customFieldsSection.fields(0).validationMessage)
+            .to.equal('Textbox 1 character limit has been exceeded. Please revise.');
+        });
+      });
 
-    //   describe('when set to textarea value out of length limit', () => {
-    //     beforeEach(async () => {
-    //       await UserFormPage.customFieldsSection.fields(2).input.fillAndBlur((new Array(1501)).fill('a').join(''));
-    //     });
+      describe('when set to textarea value out of length limit', () => {
+        beforeEach(async () => {
+          await UserFormPage.customFieldsSection.fields(2).input.fillAndBlur((new Array(1501)).fill('a').join(''));
+        });
 
-    //     it('should show validation message', () => {
-    //       expect(UserFormPage.customFieldsSection.fields(2).validationMessage)
-    //         .to.equal('Textarea 4 character limit has been exceeded. Please revise.');
-    //     });
-    //   });
-    // });
+        it('should show validation message', () => {
+          expect(UserFormPage.customFieldsSection.fields(2).validationMessage)
+            .to.equal('Textarea 4 character limit has been exceeded. Please revise.');
+        });
+      });
+    });
 
     describe('recalculation of expiration date', () => {
       describe('edit user with expiration offset days is NOT empty', () => {
