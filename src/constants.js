@@ -71,10 +71,10 @@ export const waiveStatuses = [
   'Waived partially'
 ];
 
-export const refundStatuses = [
-  'Refunded fully',
-  'Refunded partially',
-];
+export const refundStatuses = {
+  RefundedFully:'Refunded fully',
+  RefundedPartially: 'Refunded partially',
+};
 
 export const reportColumns = [
   'borrower.name',
