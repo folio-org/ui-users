@@ -28,6 +28,7 @@
 * Show correct number of due date changes. Fixes UIU-1952.
 * Add "Users: User loans anonymize" permission. Refs UIU-1535.
 * New Fee/Fine page not listing Fee/Fine Types for selected Fee/Fine Owner. Refs UIU-1968.
+* Populate expiration date based on pre-defined offset for patron group. Refs UIU-1907.
 
 ## [5.0.1](https://github.com/folio-org/ui-users/tree/v5.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.0...v5.0.1)
