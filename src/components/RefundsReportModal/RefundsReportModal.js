@@ -53,6 +53,10 @@ const RefundsReportModal = (props) => {
     return disabled;
   };
 
+  const parseDate = (date) => {
+    return moment(date).format('YYYY-MM-DD');
+  };
+
   const footer = (
     <ModalFooter>
       <Button
@@ -97,6 +101,7 @@ const RefundsReportModal = (props) => {
               name="startDate"
               component={Datepicker}
               autoFocus
+              parse={parseDate}
             />
           </Col>
           <Col xs={6}>
@@ -104,6 +109,7 @@ const RefundsReportModal = (props) => {
               label={<FormattedMessage id="ui-users.reports.refunds.modal.endDate" />}
               name="endDate"
               component={Datepicker}
+              parse={parseDate}
             />
           </Col>
         </Row>

@@ -33,6 +33,7 @@ import {
 import RefundsReportModal from '../../components/RefundsReportModal/RefundsReportModal';
 
 import CsvReport from '../../components/data/reports';
+import RefundsReport from '../../components/data/reports/RefundReport';
 import Filters from './Filters';
 import css from './UserSearch.css';
 
@@ -92,7 +93,6 @@ class UserSearch extends React.Component {
       }).isRequired,
     }).isRequired,
     source: PropTypes.object,
-    handleRefundsReportSubmit: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
@@ -403,9 +403,20 @@ class UserSearch extends React.Component {
     onSubmit(e);
   }
 
-  handleRefundsReportFormSubmit = (data) => {
+  handleRefundsReportFormSubmit = async ({ startDate, endDate }) => {
     this.changeRefundReportModalState(false);
-    this.props.handleRefundsReportSubmit(data);
+    const { 
+      mutator: { 
+        refundReportData,
+        refundsReport
+      },
+      intl: { formatMessage }
+    } = this.props;
+
+    refundReportData.update({ startDate, endDate });
+    const actions = await refundsReport.GET();
+    const report = new RefundsReport({ data: reportData, formatMessage });
+    report.toCSV();
   }
 
   render() {
