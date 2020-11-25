@@ -247,27 +247,36 @@ describe('User Edit Page', () => {
     });
 
     describe('recalculation of expiration date', () => {
-      describe('expiration offset days is NOT empty', () => {
+      describe('edit user with expiration offset days is NOT empty', () => {
         beforeEach(async function () {
           const user = this.server.create('user', {
-            patronGroup: 1,
+            patronGroup: 'group6',
           }, 'withPatronGroup', {
-            group: 'staff',
-            desc: 'Staff Member',
-            id: 1,
-            expirationOffsetInDays: 730,
+            id: 'group6', // is group staff with expirationOffsetInDays of 730
           });
           this.visit(`/users/${user.id}/edit`);
-          // console.log(user);
+          console.log(user);
           await UserFormPage.whenLoaded();
-          await UserFormPage.patronGroupField.selectAndBlur('staff (Staff Member)');
+        });
+        it('should display recalculation button', () => {
+          expect(UserFormPage.recalculateExpirationdateButton.isPresent).to.be.true;
+        });
+      });
+      describe('edit user and select patronGroup with expiration offset days is NOT empty', () => {
+        beforeEach(async function () {
+          const user = this.server.create('user', {
+            patronGroup: 'group5',
+          }, 'withPatronGroup', {
+            id: 'group5', // is group with empty expirationOffsetInDays
+          });
+          this.visit(`/users/${user.id}/edit`);
+          console.log(user);
+          await UserFormPage.whenLoaded();
+          await UserFormPage.patronGroupField.selectAndBlur('staff (Staff Member)').timeout(6000);
         });
 
         it('should display recalculation modal', () => {
           expect(UserFormPage.recalculateExpirationdateModal.isPresent).to.be.true;
-        });
-        it('should display recalculation button', () => {
-          expect(UserFormPage.recalculateExpirationdateButton.isPresent).to.be.true;
         });
       });
     });
