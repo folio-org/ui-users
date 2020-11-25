@@ -16,6 +16,8 @@ import {
 
 import css from './EditUserInfo.css';
 
+const autoFocusThisField = { autoFocus: true };
+
 class EditUserInfo extends React.Component {
   static propTypes = {
     accordionId: PropTypes.string.isRequired,
@@ -88,6 +90,7 @@ class EditUserInfo extends React.Component {
               name="personal.lastName"
               id="adduser_lastname"
               component={TextField}
+              props={autoFocusThisField}
               required
               fullWidth
             />
