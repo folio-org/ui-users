@@ -246,7 +246,7 @@ class EditUserInfo extends React.Component {
                 </span>
               )}
               {isUserExpired() && willUserExtend() && (
-                <p className={css.expiredMessage}>
+                <p className={css.expiredMessage} id="saving-will-reactivate-user">
                   <FormattedMessage id="ui-users.information.recalculate.will.reactivate.user" />
                 </p>
               )}

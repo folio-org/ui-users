@@ -152,6 +152,7 @@ import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/P
   expirationdateModalCancelButton = new ButtonInteractor('#expirationDate-modal-recalculate-btn');
   expirationdateModalRecalculateButton = new ButtonInteractor('#expirationDate-modal-cancel-btn');
   usersExpirationdateField = scoped('#adduser_expirationdate');
+  userWillReactivateMessage = scoped('#saving-will-reactivate-user');
   customFieldsSection = scoped('#customFields', CustomFieldsSectionInteractor);
   departmentName = new RepeatableFieldInteractor('#department-name');
 }
