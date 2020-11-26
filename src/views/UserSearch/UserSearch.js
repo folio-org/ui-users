@@ -110,6 +110,7 @@ class UserSearch extends React.Component {
       searchPending: false,
       visibleColumns: this.getInitialVisibleColumns(),
       showRefundsReportModal: false,
+      refundExportInProgress: false,
     };
 
     this.resultsPaneTitleRef = createRef();
@@ -404,7 +405,15 @@ class UserSearch extends React.Component {
   }
 
   handleRefundsReportFormSubmit = async ({ startDate, endDate }) => {
-    this.changeRefundReportModalState(false);
+    if (this.state.refundExportInProgress) {
+      return;
+    }
+
+    this.setState({
+      refundExportInProgress: true, 
+      showRefundsReportModal: false,
+    });
+    
     const { 
       mutator: { 
         refundReportData,
@@ -415,7 +424,8 @@ class UserSearch extends React.Component {
 
     refundReportData.update({ startDate, endDate });
     const actions = await refundsReport.GET();
-    const report = new RefundsReport({ data: reportData, formatMessage });
+    this.setState({ refundExportInProgress: false });
+    const report = new RefundsReport({ data: actions, formatMessage });
     report.toCSV();
   }
 

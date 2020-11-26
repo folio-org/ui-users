@@ -60,6 +60,7 @@ const RefundsReportModal = (props) => {
   const footer = (
     <ModalFooter>
       <Button
+        data-test-refunds-report-save-btn
         disabled={calculateSubmitState()}
         marginBottom0
         buttonStyle="primary"
@@ -68,6 +69,7 @@ const RefundsReportModal = (props) => {
         <FormattedMessage id="ui-users.saveAndClose" />
       </Button>
       <Button
+        data-test-refunds-report-cancel-btn
         marginBottom0
         buttonStyle="default"
         onClick={props.onClose}
@@ -95,7 +97,10 @@ const RefundsReportModal = (props) => {
           <FormattedMessage id="ui-users.reports.refunds.modal.message" />
         </Label>
         <Row>
-          <Col xs={6}>
+          <Col
+            data-test-refunds-report-start-date
+            xs={6}
+          >
             <Field
               label={<FormattedMessage id="ui-users.reports.refunds.modal.startDate" />}
               name="startDate"
@@ -104,7 +109,10 @@ const RefundsReportModal = (props) => {
               parse={parseDate}
             />
           </Col>
-          <Col xs={6}>
+          <Col
+            data-test-refunds-report-end-date
+            xs={6}
+          >
             <Field
               label={<FormattedMessage id="ui-users.reports.refunds.modal.endDate" />}
               name="endDate"
