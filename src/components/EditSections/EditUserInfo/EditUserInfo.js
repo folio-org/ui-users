@@ -73,8 +73,7 @@ class EditUserInfo extends React.Component {
 
   getPatronGroupOffset = () => {
     const selectedPatronGroup = this.props.patronGroups.find(i => i.id === this.props.selectedPatronGroup);
-    const offsetOfSelectedPatronGroup = _.get(selectedPatronGroup, 'expirationOffsetInDays', '');
-    return offsetOfSelectedPatronGroup;
+    return _.get(selectedPatronGroup, 'expirationOffsetInDays', '');
   };
 
   render() {
@@ -94,7 +93,7 @@ class EditUserInfo extends React.Component {
     };
 
     const willUserExtend = () => {
-      const { store } = this.props.stripes;
+      const { stripes: { store } } = this.props;
       const state = store.getState();
       const formValues = getFormValues('userForm')(state) || {};
       const currentExpirationDate = new Date(_.get(formValues, 'expirationDate', ''));
@@ -109,14 +108,8 @@ class EditUserInfo extends React.Component {
     };
 
     const checkShowRecalculateButton = () => {
-      let showRecalculateButton = false;
       const offsetOfSelectedPatronGroup = this.props.selectedPatronGroup ? this.getPatronGroupOffset() : '';
-      if (offsetOfSelectedPatronGroup === '') {
-        showRecalculateButton = false;
-      } else {
-        showRecalculateButton = true;
-      }
-      return showRecalculateButton;
+      return offsetOfSelectedPatronGroup !== '';
     };
 
     const patronGroupOptions = [
@@ -144,7 +137,7 @@ class EditUserInfo extends React.Component {
 
     const offset = this.getPatronGroupOffset();
     const group = _.get(this.props.patronGroups.find(i => i.id === this.props.selectedPatronGroup), 'group', '');
-    const footer = (
+    const modalFooter = (
       <ModalFooter>
         <Button
           id="expirationDate-modal-recalculate-btn"
@@ -281,7 +274,7 @@ class EditUserInfo extends React.Component {
           </Row>
         </Accordion>
         <Modal
-          footer={footer}
+          footer={modalFooter}
           id="recalculate_expirationdate_modal"
           label={<FormattedMessage id="ui-users.information.recalculate.modal.label" />}
           open={this.state.showRecalculateModal}
