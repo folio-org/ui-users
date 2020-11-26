@@ -90,7 +90,7 @@ describe('Charge and pay fee/fine', () => {
           expect(chargeFeeFine.amountField.val).to.equal('500.00');
         });
 
-        describe('Charge and pay fee/fine', () => {
+        describe.skip('Charge and pay fee/fine', () => {
           beforeEach(async () => {
             await chargeFeeFine.submitChargeAndPay.click();
           });
