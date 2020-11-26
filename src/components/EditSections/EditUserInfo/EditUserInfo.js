@@ -43,7 +43,7 @@ class EditUserInfo extends React.Component {
     super(props);
 
     this.state = {
-      showInfoModal: false,
+      showRecalculateModal: false,
     };
   }
 
@@ -56,19 +56,19 @@ class EditUserInfo extends React.Component {
 
   showModal = (val) => {
     this.setState({
-      showInfoModal: val,
+      showRecalculateModal: val,
     });
   }
 
   handleClose = () => {
-    this.setState({ showInfoModal: false });
+    this.setState({ showRecalculateModal: false });
   }
 
   recalculateExpirationDate = () => {
     const offsetOfSelectedPatronGroup = this.props.selectedPatronGroup ? this.getPatronGroupOffset() : '';
     const recalculatedDate = (moment().add(offsetOfSelectedPatronGroup, 'd').format('YYYY-MM-DD'));
     this.props.stripes.store.dispatch(change('userForm', 'expirationDate', recalculatedDate));
-    this.setState({ showInfoModal: false });
+    this.setState({ showRecalculateModal: false });
   }
 
   getPatronGroupOffset = () => {
@@ -284,7 +284,7 @@ class EditUserInfo extends React.Component {
           footer={footer}
           id="recalculate_expirationdate_modal"
           label={<FormattedMessage id="ui-users.information.recalculate.modal.label" />}
-          open={this.state.showInfoModal}
+          open={this.state.showRecalculateModal}
         >
           <div>
             <FormattedMessage
