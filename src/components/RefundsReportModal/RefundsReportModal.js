@@ -132,7 +132,4 @@ RefundsReportModal.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
 };
 
-export default stripesFinalForm({
-  validate,
-  subscription: { values: true },
-})(RefundsReportModal);
+export default stripesFinalForm({ validate })(RefundsReportModal);

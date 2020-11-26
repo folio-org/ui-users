@@ -1,13 +1,19 @@
-import { beforeEach, afterEach, describe, it } from '@bigtest/mocha';
-import { expect } from 'chai';
 import sinon from 'sinon';
+
+import { expect } from 'chai';
+import {
+  afterEach,
+  beforeEach,
+  describe,
+  it,
+} from '@bigtest/mocha';
 
 import setupApplication from '../helpers/setup-application';
 import UsersInteractor from '../interactors/users';
 
 import translations from '../../../translations/ui-users/en';
 
-describe.only('RefundsReport', () => {
+describe('RefundsReport', () => {
   const users = new UsersInteractor();
   let xhr;
   let requests = [];
