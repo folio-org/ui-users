@@ -13,7 +13,7 @@ import UsersInteractor from '../interactors/users';
 
 import translations from '../../../translations/ui-users/en';
 
-describe.only('RefundsReport', () => {
+describe('RefundsReport', () => {
   const users = new UsersInteractor();
 
   setupApplication();
