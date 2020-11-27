@@ -91,6 +91,13 @@ class UserSearch extends React.Component {
       query: PropTypes.shape({
         update: PropTypes.func.isRequired,
       }).isRequired,
+      refundReportData: PropTypes.shape({
+        update: PropTypes.func.isRequired,
+      }).isRequired,
+      refundsReport: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+        reset: PropTypes.func,
+      }).isRequired,
     }).isRequired,
     source: PropTypes.object,
   }
@@ -146,7 +153,7 @@ class UserSearch extends React.Component {
   componentWillUnmount() {
     this._mounted = false;
   }
-  
+
   changeRefundReportModalState = (modalState) => {
     this.setState({ showRefundsReportModal: modalState });
   };
@@ -410,23 +417,29 @@ class UserSearch extends React.Component {
     }
 
     this.setState({
-      refundExportInProgress: true, 
+      refundExportInProgress: true,
       showRefundsReportModal: false,
     });
-    
-    const { 
-      mutator: { 
+
+    const {
+      mutator: {
         refundReportData,
-        refundsReport
+        refundsReport,
       },
       intl: { formatMessage }
     } = this.props;
 
     refundReportData.update({ startDate, endDate });
-    const actions = await refundsReport.GET();
-    this.setState({ refundExportInProgress: false });
-    const report = new RefundsReport({ data: actions, formatMessage });
-    report.toCSV();
+    try {
+      refundsReport.reset();
+      const actions = await refundsReport.GET();
+      const report = new RefundsReport({ data: actions, formatMessage });
+      report.toCSV();
+    } catch (e) {
+      throw new Error(e);
+    } finally {
+      this.setState({ refundExportInProgress: false });
+    }
   }
 
   render() {
@@ -627,9 +640,9 @@ class UserSearch extends React.Component {
               }}
           </SearchAndSortQuery>
           { this.state.showRefundsReportModal && (
-            <RefundsReportModal 
+            <RefundsReportModal
               open
-              onClose={() => { this.changeRefundReportModalState(false) }}
+              onClose={() => { this.changeRefundReportModalState(false); }}
               label={this.props.intl.formatMessage({ id:'ui-users.reports.refunds.modal.label' })}
               onSubmit={this.handleRefundsReportFormSubmit}
             />

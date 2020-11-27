@@ -9,7 +9,7 @@ import DatepickerInteractor from '@folio/stripes-components/lib/Datepicker/tests
 
 @interactor class RefundsReportInteractor {
   static defaultScope = '#refunds-report-modal';
-  
+
   startDate = new DatepickerInteractor('[data-test-refunds-report-start-date]');
   startDateError = text('[data-test-refunds-report-start-date] [class*=feedbackError--]');
   endDate = new DatepickerInteractor('[data-test-refunds-report-end-date]');

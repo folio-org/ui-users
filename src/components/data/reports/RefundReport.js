@@ -19,7 +19,7 @@ class RefundsReport {
         ...row,
         patronId: `=HYPERLINK("${origin}/users/preview/${row.patronId}", "${row.patronId}")`,
         feeFineId: `=HYPERLINK("${origin}/users/${row.patronId}/accounts/view/${row.feeFineId}", "${row.feeFineId}")`,
-      }
+      };
     });
   }
 
@@ -27,7 +27,7 @@ class RefundsReport {
     const parsedData = this.parse();
 
     exportCsv(parsedData, {
-      onlyFields: this.columnsMap, 
+      onlyFields: this.columnsMap,
       filename: 'refunds-to-process-manually'
     });
   }

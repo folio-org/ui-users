@@ -21,9 +21,9 @@ import css from './RefundsReportModal.css';
 
 const validate = ({ startDate, endDate }) => {
   const errors = {};
-  
+
   if (isEmpty(startDate) && endDate) {
-    errors.startDate = <FormattedMessage id="ui-users.reports.refunds.validation.startDate" />
+    errors.startDate = <FormattedMessage id="ui-users.reports.refunds.validation.startDate" />;
   }
 
   if ((!isEmpty(startDate) && !isEmpty(endDate)) && (moment(startDate).isAfter(moment(endDate)))) {
@@ -31,22 +31,22 @@ const validate = ({ startDate, endDate }) => {
   }
 
   return errors;
-}
+};
 
 const RefundsReportModal = (props) => {
   const calculateSubmitState = () => {
     let disabled = true;
 
     const {
-      dirty, 
+      dirty,
       values: {
         startDate,
         endDate,
       },
       valid,
     } = props.form.getState();
-    
-    if (dirty && valid || (valid && !isEmpty(startDate) && !isEmpty(endDate))) {
+
+    if ((dirty && valid) || (valid && !isEmpty(startDate) && !isEmpty(endDate))) {
       disabled = false;
     }
 
@@ -127,8 +127,9 @@ const RefundsReportModal = (props) => {
 };
 
 RefundsReportModal.propTypes = {
-  open: PropTypes.bool,
-  onClose: PropTypes.func,
+  form: PropTypes.object.isRequired,
+  label: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
 };
 

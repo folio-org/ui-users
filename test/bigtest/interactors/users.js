@@ -35,12 +35,12 @@ import RefundsReportModal from './refunds-report-modal';
   clickExportToCSV = clickable('#export-overdue-loan-report');
   exportBtnIsVisible = isVisible('#export-overdue-loan-report');
   isExportBtnPresent = isPresent('#export-overdue-loan-report');
+  clickRefundsReportCSV = clickable('#export-refunds-report');
+  isRefundReportBtnVisible = isVisible('#export-refunds-report');
+  isRefundsReportButtonPresent = isPresent('#export-refunds-report');
   columnCheckbox = function columnCheckbox(key) {
     return new Interactor(`#users-search-column-checkbox-${key}`);
   }
-  clickRefundsReportCSV = clickable("#export-refunds-report");
-  isRefundReportBtnVisible = isVisible("#export-refunds-report");
-  isRefundsReportButtonPresent = isPresent("#export-refunds-report");
 }
 
 @interactor class SearchFieldInteractor {

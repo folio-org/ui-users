@@ -13,10 +13,8 @@ import UsersInteractor from '../interactors/users';
 
 import translations from '../../../translations/ui-users/en';
 
-describe('RefundsReport', () => {
+describe.only('RefundsReport', () => {
   const users = new UsersInteractor();
-  let xhr;
-  let requests = [];
 
   setupApplication();
 
@@ -28,11 +26,6 @@ describe('RefundsReport', () => {
 
     describe('Click refunds report button', function () {
       beforeEach(async function () {
-        requests = [];
-        xhr = sinon.useFakeXMLHttpRequest();
-        xhr.onCreate = function (req) {
-          requests.push(req);
-        };
         await users.headerDropdown.click();
         await users.headerDropdownMenu.clickRefundsReportCSV();
         await users.refundsReportModal.startDate.calendarButton.click();
@@ -42,16 +35,8 @@ describe('RefundsReport', () => {
         await users.refundsReportModal.saveButton.click();
       });
 
-      afterEach(async function () {
-        await xhr.restore();
-      });
-
       it('hides dropdown menu', () => {
         expect(users.headerDropdownMenu.isRefundReportBtnVisible).to.be.false;
-      });
-
-      it('requests data', () => {
-        expect(requests.length).to.equal(1);
       });
     });
 

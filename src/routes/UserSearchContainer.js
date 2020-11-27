@@ -88,7 +88,7 @@ class UserSearchContainer extends React.Component {
     refundsReport: {
       type: 'okapi',
       records: 'reportData',
-      path: `feefine-reports/refund?startDate=%{refundReportData.startDate}&endDate=%{refundReportData.endDate}`,
+      path: 'feefine-reports/refund?startDate=%{refundReportData.startDate}&endDate=%{refundReportData.endDate}',
       fetch: false,
       accumulate: true,
     },
