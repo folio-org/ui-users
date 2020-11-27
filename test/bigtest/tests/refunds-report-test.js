@@ -1,8 +1,5 @@
-import sinon from 'sinon';
-
 import { expect } from 'chai';
 import {
-  afterEach,
   beforeEach,
   describe,
   it,
