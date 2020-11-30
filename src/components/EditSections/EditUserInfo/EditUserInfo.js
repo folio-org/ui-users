@@ -90,6 +90,7 @@ class EditUserInfo extends React.Component {
               component={TextField}
               required
               fullWidth
+              autoFocus
             />
           </Col>
           <Col xs={12} md={3}>

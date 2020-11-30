@@ -33,6 +33,7 @@ class LimitsSettings extends Component {
         query: 'cql.allRecords=1 sortby group',
         limit: '200',
       },
+      resourceShouldRefresh: true,
     },
     patronBlockCondition: {
       type: 'okapi',

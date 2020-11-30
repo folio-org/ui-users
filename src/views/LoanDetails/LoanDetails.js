@@ -73,6 +73,7 @@ class LoanDetails extends React.Component {
       }),
     }).isRequired,
     loan: PropTypes.object,
+    loanIsMissing: PropTypes.bool,
     patronGroup: PropTypes.object,
     user: PropTypes.object,
     loanActionsWithUser: PropTypes.arrayOf(PropTypes.object),
@@ -301,11 +302,33 @@ class LoanDetails extends React.Component {
       markAsMissing,
       claimReturned,
       declarationInProgress,
+      loanIsMissing,
     } = this.props;
 
     const {
       patronBlockedModal,
     } = this.state;
+
+    if (loanIsMissing) {
+      return (
+        <Paneset isRoot>
+          <Pane
+            id="pane-loandetails-404"
+            defaultWidth="100%"
+            dismissible
+            onClose={this.handleClose}
+            paneTitle={(
+              <FormattedMessage id="ui-users.loans.loanDetails">
+                {(loanDetails) => `${loanDetails} - ${getFullName(user)} (${upperFirst(patronGroup.group)})`}
+              </FormattedMessage>
+            )}
+          >
+            <FormattedMessage id="ui-users.loan404" />
+          </Pane>
+        </Paneset>
+      );
+    }
+
 
     if (!loan || !user || (loan.userId !== user.id)) {
       return (
@@ -316,6 +339,7 @@ class LoanDetails extends React.Component {
         />
       );
     }
+
 
     const loanPolicyName = isEmpty(loanPolicies)
       ? '-'
