@@ -116,9 +116,9 @@ export function accountRefundInfo(account, feeFineActions = []) {
   return { hasBeenPaid, paidAmount };
 }
 
-export function hasBeenRefunded(accountId, feeFineActions) {
+export function hasBeenFullyRefunded(accountId, feeFineActions) {
   const refundActions = feeFineActions.filter(action => {
-    return action.accountId === accountId && refundStatuses.includes(action.typeAction);
+    return action.accountId === accountId && action.typeAction === refundStatuses.RefundedFully;
   });
 
   return !isEmpty(refundActions);
@@ -126,7 +126,7 @@ export function hasBeenRefunded(accountId, feeFineActions) {
 
 export function isRefundAllowed(account, feeFineActions) {
   const { hasBeenPaid, paidAmount } = accountRefundInfo(account, feeFineActions);
-  const isAccountRefunded = hasBeenRefunded(account.id, feeFineActions);
+  const isAccountRefunded = hasBeenFullyRefunded(account.id, feeFineActions);
 
   return !isAccountRefunded && hasBeenPaid && paidAmount > 0;
 }
