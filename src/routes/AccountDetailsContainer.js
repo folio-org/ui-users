@@ -9,8 +9,8 @@ import { FormattedMessage } from 'react-intl';
 import { stripesConnect } from '@folio/stripes/core';
 import { LoadingView } from '@folio/stripes/components';
 
+import { MAX_RECORDS } from '../constants';
 import { calculateOwedFeeFines } from '../components/Accounts/accountFunctions';
-
 import { AccountDetails } from '../views';
 
 class AccountDetailsContainer extends React.Component {
@@ -39,14 +39,14 @@ class AccountDetailsContainer extends React.Component {
       path: 'accounts',
       params: {
         query: 'userId==:{id}',
-        limit: '1000',
+        limit: MAX_RECORDS,
       },
     },
     accountActions: {
       type: 'okapi',
       records: 'feefineactions',
       accumulate: 'true',
-      path: 'feefineactions?query=(accountId==:{accountid})&limit=10000',
+      path: `feefineactions?query=(accountId==:{accountid})&limit=${MAX_RECORDS}`,
     },
     activeRecord: {
       accountId: '0',
