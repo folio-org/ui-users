@@ -51,13 +51,13 @@ class LoansListingContainer extends React.Component {
     hasManualPatronBlocks: {
       type: 'okapi',
       records: 'manualblocks',
-      path: 'manualblocks?query=(userId==:{id})&limit=100',
+      path: 'manualblocks?query=(userId==:{id})&limit=1000',
       permissionsRequired: 'manualblocks.collection.get',
     },
     hasAutomatedPatronBlocks: {
       type: 'okapi',
       records: 'automatedPatronBlocks',
-      path: 'automated-patron-blocks/:{id}?limit=100',
+      path: 'automated-patron-blocks/:{id}?limit=1000',
       permissionsRequired: 'automated-patron-blocks.collection.get',
     },
     requests: {
