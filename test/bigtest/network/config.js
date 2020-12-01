@@ -456,6 +456,8 @@ export default function config() {
     return server.create('feefineaction', ffAction);
   });
 
+  this.get('/feefines');
+
   this.get('/owners', ({ owners }) => {
     return this.serializerOrRegistry.serialize(owners.all());
   });

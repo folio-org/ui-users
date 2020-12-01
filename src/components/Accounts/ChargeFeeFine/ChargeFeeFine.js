@@ -437,8 +437,8 @@ class ChargeFeeFine extends React.Component {
         if (owner !== undefined) { list.push(owner); }
       }
     });
-    const feefines = (this.state.ownerId !== '0') ? (resources.feefines || {}).records || [] : [];
-    const payments = _.get(resources, ['payments', 'records'], []).filter(p => p.ownerId === this.state.ownerId);
+    const feefines = _.get(resources, ['allfeefines', 'records'], []);
+    const payments = _.get(resources, ['payments', 'records'], []);
     const accounts = _.get(resources, ['accounts', 'records'], []);
     const settings = _.get(resources, ['commentRequired', 'records', 0], {});
     const barcode = _.get(resources, 'activeRecord.barcode');
@@ -473,7 +473,9 @@ class ChargeFeeFine extends React.Component {
     const servicePointOwnerId = loadServicePoints({ owners: (shared ? owners : list), defaultServicePointId, servicePointsIds });
     const initialOwnerId = ownerId !== '0' ? ownerId : servicePointOwnerId;
     const selectedFeeFine = feefines.find(f => f.id === feeFineTypeId);
+    const currentOwnerFeeFineTypes = feefines.filter(f => f.ownerId === resources.activeRecord.ownerId);
     const selectedOwner = owners.find(o => o.id === initialOwnerId);
+
     const initialChargeValues = {
       ownerId: resources.activeRecord.ownerId || '',
       notify: !!(selectedFeeFine?.chargeNoticeId || selectedOwner?.defaultChargeNoticeId),
@@ -493,6 +495,7 @@ class ChargeFeeFine extends React.Component {
           form="feeFineChargeForm"
           initialValues={initialChargeValues}
           defaultServicePointId={defaultServicePointId}
+          feeFineTypeOptions={currentOwnerFeeFineTypes}
           servicePointsIds={servicePointsIds}
           onSubmit={this.onSubmitCharge}
           user={user}

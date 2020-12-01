@@ -108,6 +108,7 @@ class LoanDetailContainer extends React.Component {
     resources: PropTypes.shape({
       loanHistory: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
+        hasLoaded: PropTypes.bool.isRequired,
       }),
       hasManualPatronBlocks: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
@@ -187,6 +188,7 @@ class LoanDetailContainer extends React.Component {
     const {
       resources : {
         loanActions,
+        loanHistory,
         users,
       }
     } = this.props;
@@ -202,6 +204,7 @@ class LoanDetailContainer extends React.Component {
         loans={isEmpty(loan) ? [] : [loan]}
         loanActionsWithUser={loanActionsWithUser}
         loan={loan}
+        loanIsMissing={isEmpty(loan) && loanHistory.hasLoaded}
         user={this.getUser()}
         patronGroup={this.getPatronGroup()}
         patronBlocks={this.getPatronBlocks()}

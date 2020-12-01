@@ -79,16 +79,22 @@ class ChargeFeesFinesContainer extends React.Component {
     accounts: {
       type: 'okapi',
       records: 'accounts',
-      path: 'accounts',
+      GET: {
+        path: `accounts?query=(userId==:{id})&limit=${MAX_RECORDS}`,
+      },
       PUT: {
         path: 'accounts/%{activeRecord.id}'
+      },
+      POST: {
+        path: 'accounts'
       },
     },
     account: {
       type: 'okapi',
       resource: 'accounts',
       accumulate: 'true',
-      path: `accounts?limit=${MAX_RECORDS}`,
+      fetch: false,
+      path: 'accounts',
     },
     owners: {
       type: 'okapi',

@@ -44,7 +44,7 @@
     },
     "optionalOkapiInterfaces": {
       "circulation": "9.0",
-      "feesfines": "16.0",
+      "feesfines": "16.1",
       "notes": "1.0"
     },
     "permissionSets": [
@@ -459,6 +459,18 @@
           "patron-block-conditions.item.post",
           "patron-block-conditions.item.put",
           "patron-block-conditions.item.delete"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.patron-block-templates",
+        "displayName": "Settings (Users): Can create, edit and remove patron blocks templates",
+        "subPermissions": [
+          "manual-block-templates.collection.get",
+          "manual-block-templates.item.get",
+          "manual-block-templates.item.post",
+          "manual-block-templates.item.put",
+          "manual-block-templates.item.delete"
         ],
         "visible": true
       },

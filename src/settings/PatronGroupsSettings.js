@@ -37,6 +37,26 @@ class PatronGroupsSettings extends React.Component {
     this.connectedControlledVocab = props.stripes.connect(ControlledVocab);
   }
 
+  isPositiveInteger = (n) => {
+    // match integer by regular expression as backend does not accept input like '5.0'
+    const isInteger = val => /^\d+$/.test(val);
+    const isGreaterEqualOne = val => Number.parseInt(val, 10) >= 1;
+    return isInteger(n) && isGreaterEqualOne(n);
+  };
+
+  isValidExpirationOffset = (n) => {
+    if (n) {
+      return this.isPositiveInteger(n);
+    }
+    return true;
+  }
+
+  validateFields = (item, _index, _items) => ({
+    expirationOffsetInDays: this.isValidExpirationOffset(item.expirationOffsetInDays)
+      ? undefined
+      : this.props.intl.formatMessage({ id: 'ui-users.information.patronGroup.expirationOffset.error' }),
+  });
+
   render() {
     const { intl } = this.props;
 
@@ -58,6 +78,7 @@ class PatronGroupsSettings extends React.Component {
           desc: intl.formatMessage({ id: 'ui-users.description' }),
           expirationOffsetInDays: intl.formatMessage({ id: 'ui-users.information.patronGroup.expirationOffset' }),
         }}
+        validate={this.validateFields}
         nameKey="group"
         id="patrongroups"
         sortby="group"
