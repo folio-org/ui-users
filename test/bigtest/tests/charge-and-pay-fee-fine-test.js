@@ -21,7 +21,8 @@ describe('Charge and pay fee/fine', () => {
   });
 
   describe('from the user detail view', () => {
-    let user, account;
+    let user;
+    let account;
     beforeEach(async function () {
       const owner = this.server.create('owner', {
         owner: 'testOwner',
