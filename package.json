@@ -582,9 +582,9 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.loans.edit",
-        "displayName": "Users: User loan edit",
-        "description": "Also includes backend permissions to perform loan edit",
+        "permissionName": "ui-users.loans.change-due-date",
+        "displayName": "Users: User loans change due date",
+        "description": "Also includes backend permissions to perform change due date",
         "subPermissions": [
           "circulation.loans.item.put",
           "circulation.renew-by-barcode.post",
