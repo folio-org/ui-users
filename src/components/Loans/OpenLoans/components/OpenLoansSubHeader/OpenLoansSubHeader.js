@@ -209,7 +209,7 @@ class OpenLoansSubHeader extends React.Component {
             >
               <FormattedMessage id="ui-users.loans.claimReturned" />
             </Button>
-            <IfPermission perm="ui-users.loans.edit">
+            <IfPermission perm="ui-users.loans.change-due-date">
               <Button
                 marginBottom0
                 id="change-due-date-all"
