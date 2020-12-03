@@ -53,6 +53,7 @@ import TextFieldInteractor from '@folio/stripes-components/lib/TextField/tests/i
   patronBlockRequests = new CheckboxInteractor('#patronBlockForm-requests');
 
   mclPatronBlock = new MultiColumnListInteractor('#patron-block-mcl');
+  patronBlockReasonLabel = text('[data-test-patron-block-reason]')
 
   confirmationModal = new ConfirmationModalInteractor('#patron-block-confirmation-modal');
 
