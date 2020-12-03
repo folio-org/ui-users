@@ -29,7 +29,7 @@ describe('Test Patron Blocks Renewals', () => {
     });
 
     describe('open modal block', () => {
-      beforeEach(async function() {
+      beforeEach(async function () {
         await PatronBlocksInteractor.selectAllCheckbox();
         await PatronBlocksInteractor.patronBlockModalRenewLoan();
       });
@@ -37,7 +37,6 @@ describe('Test Patron Blocks Renewals', () => {
       it('check if the modal only shows blocks for renewals', () => {
         expect(PatronBlocksInteractor.patronBlockReasonLabel).to.equal('Block for renewals');
       }).timeout(4000);
-      
     });
   });
 });

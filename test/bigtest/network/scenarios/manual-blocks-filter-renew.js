@@ -3,9 +3,9 @@ import CQLParser from '../cql';
 export default (server) => {
   const usertmp = server.create('user', { id: '1ad737b0-d847-11e6-bf26-cec0c932ce02' });
 
-  server.createList('manualblock', 2, { userId: usertmp.id, renewals: false, desc: "No block renewals"});
-  server.create('manualblock', { userId: usertmp.id, renewals: false, desc: "Block for borrowing"});
-  server.create('manualblock', { userId: usertmp.id, desc: "Block for renewals"});
+  server.createList('manualblock', 2, { userId: usertmp.id, renewals: false, desc: 'No block renewals' });
+  server.create('manualblock', { userId: usertmp.id, renewals: false, desc: 'Block for borrowing' });
+  server.create('manualblock', { userId: usertmp.id, desc: 'Block for renewals' });
 
 
   server.get('/manualblocks', (schema, request) => {
