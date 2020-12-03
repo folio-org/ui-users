@@ -11,7 +11,7 @@ import {
   import LoansInteractor from '../interactors/open-loans';
   import { async } from 'regenerator-runtime';
   
-  describe.only('Test Patron Blocks Renewals', () => {
+  describe('Test Patron Blocks Renewals', () => {
     setupApplication({
       scenarios: ['manual-blocks-filter-renew'],
       permissions: {
