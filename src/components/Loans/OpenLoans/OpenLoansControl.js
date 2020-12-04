@@ -333,7 +333,7 @@ class OpenLoansControl extends React.Component {
             patronBlockedModal={patronBlockedModal}
             onClosePatronBlockedModal={this.onClosePatronBlockedModal}
             openPatronBlockedModal={this.openPatronBlockedModal}
-            patronBlocks={patronBlocks}
+            patronBlocks={patronBlocks.filter(p => p.renewals || p.blockRenewals)}
             patronGroup={patronGroup}
             buildRecords={this.buildRecords}
             visibleColumns={visibleColumns}
