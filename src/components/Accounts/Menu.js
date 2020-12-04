@@ -12,6 +12,8 @@ import { FormattedMessage } from 'react-intl';
 import { getFullName } from '../util';
 import { isRefundAllowed } from './accountFunctions';
 
+import { refundClaimReturned } from '../../constants';
+
 import css from './Menu.css';
 
 const Menu = (props) => {
@@ -27,7 +29,24 @@ const Menu = (props) => {
     actions,
   } = props;
 
-  const outstanding = parseFloat(balance).toFixed(2);
+
+  var accounts = JSON.parse(JSON.stringify(props.resources.feefineshistory.records));
+  let balanceOutstanding = 0;
+  let balanceSuspended = 0;
+  accounts.forEach((a) => {
+    if (a.paymentStatus.name === refundClaimReturned.PAYMENT_STATUS) {
+      balanceSuspended += (parseFloat(a.remaining) * 100);
+    }
+    else {
+      balanceOutstanding += (parseFloat(a.remaining) * 100);
+    }
+  });
+  balanceOutstanding /= 100;
+  balanceSuspended /= 100;
+  const suspended = parseFloat(balanceSuspended).toFixed(2);
+
+  const outstanding = parseFloat(balanceOutstanding).toFixed(2);
+
   const showSelected = (selected !== 0 && selected !== parseFloat(0).toFixed(2))
     && outstanding > parseFloat(0).toFixed(2);
   const buttonDisabled = !props.stripes.hasPerm('ui-users.feesfines.actions.all');
@@ -59,6 +78,14 @@ const Menu = (props) => {
                 amount: outstanding
               }}
             />
+            {' ('}
+            <FormattedMessage
+              id="ui-users.accounts.suspended"
+              values={{
+                amountsuspended: suspended
+              }}
+            />
+            {')'}
           </div>
         </Col>
         <Col className={css.firstMenuItems}>

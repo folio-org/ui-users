@@ -40,6 +40,8 @@ import {
   ViewFeesFines,
 } from '../../components/Accounts';
 
+import { refundClaimReturned } from '../../constants';
+
 const filterConfig = [
   {
     label: <FormattedMessage id="ui-users.accounts.history.columns.owner" />,
@@ -479,10 +481,19 @@ class AccountsHistory extends React.Component {
     const selected = parseFloat(this.state.selected) || 0;
 
     let balance = 0;
+    let balanceSuspended = 0;
     accounts.forEach((a) => {
-      balance += (parseFloat(a.remaining) * 100);
+      if (a.paymentStatus.name === refundClaimReturned.PAYMENT_STATUS) {
+        console.log('accounts-a: ' + JSON.stringify(a.paymentStatus.name));
+        balanceSuspended += (parseFloat(a.remaining) * 100);
+      }
+      else {
+        balance += (parseFloat(a.remaining) * 100);
+      }
     });
     balance /= 100;
+    balanceSuspended /= 100;
+
 
     const totalPaidAmount = calculateTotalPaymentAmount(resources?.feefineshistory?.records, feeFineActions);
     const uncheckedAccounts = _.differenceWith(
@@ -495,6 +506,10 @@ class AccountsHistory extends React.Component {
 
     const outstandingBalance = userOwned
       ? parseFloat(balance || 0).toFixed(2)
+      : '0.00';
+
+    const suspendedBalance = userOwned
+      ? parseFloat(balanceSuspended || 0).toFixed(2)
       : '0.00';
 
     const visibleColumns = this.getVisibleColumns();
@@ -515,7 +530,9 @@ class AccountsHistory extends React.Component {
           )}
           paneSub={(
             <FormattedMessage id="ui-users.accounts.outstandingBalance">
-              {(title) => `${title} ${outstandingBalance}`}
+              {(title) => (
+                `${title} ${outstandingBalance} | ${title} ${suspendedBalance} `
+              )}
             </FormattedMessage>
           )}
         >
@@ -550,7 +567,7 @@ class AccountsHistory extends React.Component {
                 handleOptionsChange={this.handleOptionsChange}
               />
               <div className={css.paneContent}>
-                { params.accountstatus === 'open' &&
+                {params.accountstatus === 'open' &&
                   (<ViewFeesFines
                     {...this.props}
                     accounts={this.filterAccountsByStatus(accounts, 'open')}
@@ -561,7 +578,7 @@ class AccountsHistory extends React.Component {
                     onChangeActions={this.onChangeActions}
                   />)
                 }
-                { params.accountstatus === 'closed' &&
+                {params.accountstatus === 'closed' &&
                   (<ViewFeesFines
                     {...this.props}
                     accounts={this.filterAccountsByStatus(accounts, 'closed')}
@@ -572,7 +589,7 @@ class AccountsHistory extends React.Component {
                     onChangeActions={this.onChangeActions}
                   />)
                 }
-                { params.accountstatus === 'all' &&
+                {params.accountstatus === 'all' &&
                   (<ViewFeesFines
                     {...this.props}
                     accounts={userOwned ? accounts : []}
