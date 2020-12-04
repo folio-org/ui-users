@@ -54,6 +54,7 @@ import SelectionInteractor from '@folio/stripes-components/lib/Selection/tests/i
   patronBlockRequests = new CheckboxInteractor('#patronBlockForm-requests');
 
   mclPatronBlock = new MultiColumnListInteractor('#patron-block-mcl');
+  patronBlockReasonLabel = text('[data-test-patron-block-reason]')
 
   confirmationModal = new ConfirmationModalInteractor('#patron-block-confirmation-modal');
 
