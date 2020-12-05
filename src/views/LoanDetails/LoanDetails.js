@@ -475,7 +475,7 @@ class LoanDetails extends React.Component {
                     </Button>
                   </IfPermission>
                 }
-                <IfPermission perm="ui-users.loans.edit">
+                <IfPermission perm="ui-users.loans.change-due-date">
                   <Button
                     data-test-change-due-date-button
                     disabled={
@@ -671,7 +671,7 @@ class LoanDetails extends React.Component {
             <PatronBlockModal
               open={patronBlockedModal}
               onClose={this.onClosePatronBlockedModal}
-              patronBlocks={patronBlocks}
+              patronBlocks={patronBlocks.filter(p => p.renewals || p.blockRenewals)}
               viewUserPath={`/users/view/${(user || {}).id}?filters=pg.${patronGroup.group}&sort=name`}
             />
             { this.props.user && this.renderChangeDueDateDialog() }

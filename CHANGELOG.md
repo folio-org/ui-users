@@ -32,6 +32,8 @@
 * Validate 'Expiration date offset (days)' of patron groups. Refs UIU-1951.
 * Create manual patron block templates in settings. Refs UIU-1909.
 * Show an error message, not a spinner, when a loan is missing. Refs UIU-1045.
+* Remove "Users: User loan edit" permission.
+* Add "Users: User loans change due date" permission.
 * Change `limit=100` to `limit=1000` across the board; patrons have more than 100 things. All. The. Time. Refs UIU-1987.
 
 ## [5.0.1](https://github.com/folio-org/ui-users/tree/v5.0.1) (2020-10-15)
