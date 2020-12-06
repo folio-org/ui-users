@@ -60,6 +60,7 @@ class UserRecordContainer extends React.Component {
       params: {
         query: 'cql.allRecords=1 sortby addressType',
         limit: '2000',
+      },
       records: 'addressTypes',
     },
     departments: {
