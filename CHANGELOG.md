@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## 5.0.9 IN PROGRESS
+
+* Change `limit=100` to `limit=2000` across the board; patrons have more than 100 things. All. The. Time. Refs UIU-1987.
+
 ## [5.0.8](https://github.com/folio-org/ui-users/tree/v5.0.8) (2020-11-25)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.7...v5.0.8)
 
