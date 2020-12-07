@@ -9,7 +9,7 @@ export default Factory.extend({
   comments: (i) => 'This is a comment' + i,
   createdAt: 'Main Circ',
   dateAction: '2019-04-22T22:07:07.343+0000',
-  source: 'ADMINISTRATOR, DIKU',
+  source: 'User, Test',
   transactionInformation: '-',
   typeAction: 'Late',
   userId: '2da52ef1-81b8-4d7d-9b56-aba7f6885a72'
