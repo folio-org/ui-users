@@ -37,6 +37,7 @@
 * Add "Users: User loans change due date" permission.
 * Show correct source of fee/fine in payment 'action' for 'Charge & pay now'. Refs UIU-1981.
 * Change `limit=100` to `limit=2000` across the board; patrons have more than 100 things. All. The. Time. Refs UIU-1987.
+* Fix the selection of service points from the `Add service points` popup to display in the user record. Fixes UIU-1912.
 
 ## [5.0.1](https://github.com/folio-org/ui-users/tree/v5.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.0...v5.0.1)

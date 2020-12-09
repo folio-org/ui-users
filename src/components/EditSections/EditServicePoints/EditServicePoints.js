@@ -46,11 +46,10 @@ class EditServicePoints extends React.Component {
     };
   }
 
-  onAddServicePoints = (newServicePoints) => {
-    const userServicePoints = uniqBy([
-      ...this.userServicePoints.getAll(),
-      ...newServicePoints,
-    ], 'id').sort(((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true })));
+  onAddServicePoints = newServicePoints => {
+    const userServicePoints = newServicePoints.sort(
+      (a, b) => a.name.localeCompare(b.name, undefined, { numeric: true })
+    );
 
     this.userServicePoints.removeAll();
     userServicePoints.map(sp => this.userServicePoints.push(sp));
