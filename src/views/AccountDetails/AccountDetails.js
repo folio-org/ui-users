@@ -123,7 +123,6 @@ class AccountDetails extends React.Component {
       sortOrder: ['date', 'date'],
       sortDirection: ['desc', 'desc'],
       remaining: 0,
-      paymentStatus: '',
     };
   }
 

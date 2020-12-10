@@ -24,27 +24,30 @@ const Menu = (props) => {
     filters,
     balance,
     selected,
+    resources,
     selectedAccounts,
     feeFineActions,
     actions,
   } = props;
 
-
-  var accounts = JSON.parse(JSON.stringify(props.resources.feefineshistory.records));
   let balanceOutstanding = 0;
   let balanceSuspended = 0;
-  accounts.forEach((a) => {
-    if (a.paymentStatus.name === refundClaimReturned.PAYMENT_STATUS) {
-      balanceSuspended += (parseFloat(a.remaining) * 100);
-    }
-    else {
-      balanceOutstanding += (parseFloat(a.remaining) * 100);
-    }
-  });
+  if (balance === 0 && params.accountstatus === 'closed') {
+    balanceOutstanding = balance;
+    balanceSuspended = balance;
+  } else {
+    const accounts = _.get(resources, ['feefineshistory', 'records'], []);
+    accounts.forEach((a) => {
+      if (a.paymentStatus.name === refundClaimReturned.PAYMENT_STATUS) {
+        balanceSuspended += (parseFloat(a.remaining) * 100);
+      } else {
+        balanceOutstanding += (parseFloat(a.remaining) * 100);
+      }
+    });
+  }
   balanceOutstanding /= 100;
   balanceSuspended /= 100;
   const suspended = parseFloat(balanceSuspended).toFixed(2);
-
   const outstanding = parseFloat(balanceOutstanding).toFixed(2);
 
   const showSelected = (selected !== 0 && selected !== parseFloat(0).toFixed(2))
@@ -78,14 +81,14 @@ const Menu = (props) => {
                 amount: outstanding
               }}
             />
-            {' ('}
+            &nbsp; (
             <FormattedMessage
               id="ui-users.accounts.suspended"
               values={{
                 amountsuspended: suspended
               }}
             />
-            {')'}
+            )
           </div>
         </Col>
         <Col className={css.firstMenuItems}>
@@ -169,6 +172,7 @@ Menu.propTypes = {
   selectedAccounts: PropTypes.arrayOf(PropTypes.object).isRequired,
   feeFineActions: PropTypes.arrayOf(PropTypes.object).isRequired,
   onChangeActions: PropTypes.func,
+  resources: PropTypes.object.isRequired,
 };
 
 export default Menu;

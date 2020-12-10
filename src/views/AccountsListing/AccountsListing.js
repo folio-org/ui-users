@@ -484,10 +484,8 @@ class AccountsHistory extends React.Component {
     let balanceSuspended = 0;
     accounts.forEach((a) => {
       if (a.paymentStatus.name === refundClaimReturned.PAYMENT_STATUS) {
-        console.log('accounts-a: ' + JSON.stringify(a.paymentStatus.name));
         balanceSuspended += (parseFloat(a.remaining) * 100);
-      }
-      else {
+      } else {
         balance += (parseFloat(a.remaining) * 100);
       }
     });
@@ -529,11 +527,15 @@ class AccountsHistory extends React.Component {
             </FormattedMessage>
           )}
           paneSub={(
-            <FormattedMessage id="ui-users.accounts.outstandingBalance">
-              {(title) => (
-                `${title} ${outstandingBalance} | ${title} ${suspendedBalance} `
-              )}
-            </FormattedMessage>
+            <div id="outstanding-balance">
+              <FormattedMessage id="ui-users.accounts.outstandingBalance">
+                {(title) => `${title} ${outstandingBalance}`}
+              </FormattedMessage>
+              &nbsp; | &nbsp;
+              <FormattedMessage id="ui-users.accounts.suspendedBalance">
+                {(title) => `${title} ${suspendedBalance}`}
+              </FormattedMessage>
+            </div>
           )}
         >
           <Paneset>
