@@ -29,20 +29,20 @@ class UserRecordContainer extends React.Component {
     hasManualPatronBlocks: {
       type: 'okapi',
       records: 'manualblocks',
-      path: 'manualblocks?query=(userId==:{id})&limit=1000',
+      path: 'manualblocks?query=(userId==:{id})&limit=2000',
       permissionsRequired: 'manualblocks.collection.get',
     },
     hasAutomatedPatronBlocks: {
       type: 'okapi',
       records: 'automatedPatronBlocks',
       path: 'automated-patron-blocks/:{id}',
-      params: { limit: '100' },
+      params: { limit: '2000' },
       permissionsRequired: 'automated-patron-blocks.collection.get',
     },
     loansHistory: {
       type: 'okapi',
       records: 'loans',
-      path: 'circulation/loans?query=(userId==:{id}) sortby id&limit=1000',
+      path: 'circulation/loans?query=(userId==:{id}) sortby id&limit=2000',
       permissionsRequired: 'circulation.loans.collection.get',
     },
     patronGroups: {
@@ -50,13 +50,17 @@ class UserRecordContainer extends React.Component {
       path: 'groups',
       params: {
         query: 'cql.allRecords=1 sortby group',
-        limit: '200',
+        limit: '2000',
       },
       records: 'usergroups',
     },
     addressTypes: {
       type: 'okapi',
-      path: 'addresstypes?query=cql.allRecords=1 sortby desc',
+      path: 'addresstypes',
+      params: {
+        query: 'cql.allRecords=1 sortby addressType',
+        limit: '2000',
+      },
       records: 'addressTypes',
     },
     departments: {

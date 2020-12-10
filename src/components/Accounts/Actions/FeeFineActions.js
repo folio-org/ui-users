@@ -75,7 +75,7 @@ class Actions extends React.Component {
     transfers: {
       type: 'okapi',
       records: 'transfers',
-      path: 'transfers?limit=1000',
+      path: 'transfers?limit=2000',
     },
     curUserServicePoint: {
       type: 'okapi',
