@@ -10,6 +10,7 @@ import { expect } from 'chai';
 
 import setupApplication from '../helpers/setup-application';
 import ChargeFeeFineInteractor from '../interactors/charge-fee-fine';
+import FeeFineHistoryInteractor from '../interactors/fee-fine-history';
 
 describe('Charge and pay fee/fine', () => {
   const chargeFeeFine = new ChargeFeeFineInteractor();
@@ -21,6 +22,7 @@ describe('Charge and pay fee/fine', () => {
 
   describe('from the user detail view', () => {
     let user;
+    let account;
     beforeEach(async function () {
       const owner = this.server.create('owner', {
         owner: 'testOwner',
@@ -37,7 +39,7 @@ describe('Charge and pay fee/fine', () => {
         defaultAmount: 500
       });
       user = this.server.create('user');
-      const account = this.server.create('account', { userId: user.id });
+      account = this.server.create('account', { userId: user.id });
       this.server.create('feefineaction', {
         accountId: account.id,
         amountAction: 500,
@@ -90,7 +92,7 @@ describe('Charge and pay fee/fine', () => {
           expect(chargeFeeFine.amountField.val).to.equal('500.00');
         });
 
-        describe.skip('Charge and pay fee/fine', () => {
+        describe('Charge and pay fee/fine', () => {
           beforeEach(async () => {
             await chargeFeeFine.submitChargeAndPay.click();
           });
@@ -134,6 +136,17 @@ describe('Charge and pay fee/fine', () => {
 
                 it('show successfull callout', () => {
                   expect(chargeFeeFine.callout.successCalloutIsPresent).to.be.true;
+                });
+
+                describe('visit created Fee/Fine details page', () => {
+                  beforeEach(function () {
+                    visit(`/users/${user.id}/accounts/view/${account.id}`);
+                  });
+
+                  it('displays source of fee/fine', () => {
+                    expect(FeeFineHistoryInteractor.mclAccountActions.rows(0).cells(6).content).to.equal('User, Test');
+                    expect(FeeFineHistoryInteractor.mclAccountActions.rows(1).cells(6).content).to.equal('User, Test');
+                  });
                 });
               });
             });
