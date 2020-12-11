@@ -27,6 +27,7 @@
 * Allow override for not loanable items when loan policy is not recognised. Fixes UIU-1930.
 * Show correct number of due date changes. Fixes UIU-1952.
 * Add "Users: User loans anonymize" permission. Refs UIU-1535.
+* Refund fees/fines: Report of refunds to process manually. Refs UIU-1164.
 * New Fee/Fine page not listing Fee/Fine Types for selected Fee/Fine Owner. Refs UIU-1968.
 * `Limits` not refreshing when `Patron group` added, modified or deleted. Refs UIU-1944.
 * Validate 'Expiration date offset (days)' of patron groups. Refs UIU-1951.
