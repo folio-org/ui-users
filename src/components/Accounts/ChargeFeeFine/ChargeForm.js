@@ -207,8 +207,7 @@ class ChargeForm extends React.Component {
         </Button>
         <Button
           id="chargeAndPay"
-          disabled
-          // disabled={pristine || submitting || !valid}
+          disabled={pristine || submitting || !valid}
           onClick={() => {
             change('pay', true);
             handleSubmit(data => onSubmit(data));

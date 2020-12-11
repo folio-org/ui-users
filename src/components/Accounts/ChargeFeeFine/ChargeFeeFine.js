@@ -317,11 +317,11 @@ class ChargeFeeFine extends React.Component {
     const {
       intl: { formatMessage },
       okapi: {
+        currentUser,
         currentUser: {
           curServicePoint: { id: servicePointId }
         },
       },
-      user,
       mutator,
     } = this.props;
     const tagStaff = formatMessage({ id: 'ui-users.accounts.actions.tag.staff' });
@@ -353,7 +353,7 @@ class ChargeFeeFine extends React.Component {
         amount: values.amount,
         notifyPatron: values.notify,
         servicePointId,
-        userName: getFullName(user),
+        userName: `${currentUser.lastName}, ${currentUser.firstName}`,
         paymentMethod: values.method,
         comments: comment,
         transactionInfo: values.transaction
