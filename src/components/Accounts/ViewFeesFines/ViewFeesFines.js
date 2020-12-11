@@ -5,7 +5,6 @@ import {
   Button,
   Dropdown,
   DropdownMenu,
-  MenuItem,
   MultiColumnList,
 } from '@folio/stripes/components';
 
@@ -24,6 +23,7 @@ import {
   isRefundAllowed,
   isCancelAllowed,
 } from '../accountFunctions';
+
 
 class ViewFeesFines extends React.Component {
   static propTypes = {
@@ -262,14 +262,11 @@ class ViewFeesFines extends React.Component {
     (accounts.findIndex(a => a.id === f.id) !== -1);
   };
 
-  handleOptionsChange(itemMeta, e) {
-    e.preventDefault();
-    e.stopPropagation();
-
-    const { a, action } = itemMeta;
+  handleOptionsChange(itemMeta) {
+    const { account, action } = itemMeta;
 
     if (action && this[action]) {
-      this[action](a);
+      this[action](account);
     }
   }
   // ellipsis actions
@@ -316,10 +313,37 @@ class ViewFeesFines extends React.Component {
     nav.onClickViewLoanActionsHistory(e, { id: a.loanId }, history, params);
   }
 
+  renderToggle = ({ triggerRef, onToggle, ariaProps, keyHandler }) => (
+    <Button
+      data-test-ellipsis-button
+      ref={triggerRef}
+      onClick={onToggle}
+      onKeyDown={keyHandler}
+      buttonStyle="hover dropdownActive"
+      {...ariaProps}
+    >
+      <strong>•••</strong>
+    </Button>
+  );
+
+  MenuButton = ({ disabled, account, action, children }) => {
+    const onClick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      this.handleOptionsChange({ account, action });
+    };
+
+    return (
+      <Button disabled={disabled} buttonStyle="dropdownItem" onClick={onClick}>
+        {children}
+      </Button>
+    );
+  };
+
   renderActions(a) {
     const { feeFineActions = [] } = this.props;
     const disabled = (a.status.name === 'Closed');
-    const elipsis = {
+    const ellipsis = {
       pay: disabled,
       waive: disabled,
       transfer: disabled,
@@ -332,43 +356,29 @@ class ViewFeesFines extends React.Component {
 
     return (
       <Dropdown
-        onSelectItem={this.handleOptionsChange}
+        renderTrigger={this.renderToggle}
+        usePortal
       >
-        <Button data-test-ellipsis-button data-role="toggle" buttonStyle="hover dropdownActive">
-          <strong>•••</strong>
-        </Button>
-        <DropdownMenu id="ellipsis-drop-down" data-role="menu">
-          <MenuItem itemMeta={{ a, action: 'pay' }}>
-            <Button disabled={!((elipsis.pay === false) && (buttonDisabled === false))} buttonStyle="dropdownItem">
-              <FormattedMessage id="ui-users.accounts.history.button.pay" />
-            </Button>
-          </MenuItem>
-          <MenuItem itemMeta={{ a, action: 'waive' }}>
-            <Button disabled={!((elipsis.waive === false) && (buttonDisabled === false))} buttonStyle="dropdownItem">
-              <FormattedMessage id="ui-users.accounts.history.button.waive" />
-            </Button>
-          </MenuItem>
-          <MenuItem itemMeta={{ a, action: 'refund' }}>
-            <Button disabled={!((elipsis.refund === false) && (buttonDisabled === false))} buttonStyle="dropdownItem">
-              <FormattedMessage id="ui-users.accounts.history.button.refund" />
-            </Button>
-          </MenuItem>
-          <MenuItem itemMeta={{ a, action: 'transfer' }}>
-            <Button disabled={!((elipsis.transfer === false) && (buttonDisabled === false))} buttonStyle="dropdownItem">
-              <FormattedMessage id="ui-users.accounts.history.button.transfer" />
-            </Button>
-          </MenuItem>
-          <MenuItem itemMeta={{ a, action: 'cancel' }}>
-            <Button disabled={!((elipsis.error === false) && (buttonDisabled === false))} buttonStyle="dropdownItem">
-              <FormattedMessage id="ui-users.accounts.button.error" />
-            </Button>
-          </MenuItem>
+        <DropdownMenu id="ellipsis-drop-down">
+          <this.MenuButton disabled={!((ellipsis.pay === false) && (buttonDisabled === false))} account={a} action="pay">
+            <FormattedMessage id="ui-users.accounts.history.button.pay" />
+          </this.MenuButton>
+          <this.MenuButton disabled={!((ellipsis.waive === false) && (buttonDisabled === false))} account={a} action="waive">
+            <FormattedMessage id="ui-users.accounts.history.button.waive" />
+          </this.MenuButton>
+          <this.MenuButton disabled={!((ellipsis.refund === false) && (buttonDisabled === false))} account={a} action="refund">
+            <FormattedMessage id="ui-users.accounts.history.button.refund" />
+          </this.MenuButton>
+          <this.MenuButton disabled={!((ellipsis.transfer === false) && (buttonDisabled === false))} account={a} action="transfer">
+            <FormattedMessage id="ui-users.accounts.history.button.transfer" />
+          </this.MenuButton>
+          <this.MenuButton disabled={!((ellipsis.error === false) && (buttonDisabled === false))} account={a} action="cancel">
+            <FormattedMessage id="ui-users.accounts.button.error" />
+          </this.MenuButton>
           <hr />
-          <MenuItem itemMeta={{ a, action: 'loanDetails' }}>
-            <Button disabled={elipsis.loan} buttonStyle="dropdownItem">
-              <FormattedMessage id="ui-users.accounts.history.button.loanDetails" />
-            </Button>
-          </MenuItem>
+          <this.MenuButton disabled={!((ellipsis.loan === false) && (buttonDisabled === false))} account={a} action="loanDetails">
+            <FormattedMessage id="ui-users.accounts.history.button.loanDetails" />
+          </this.MenuButton>
         </DropdownMenu>
       </Dropdown>
     );
