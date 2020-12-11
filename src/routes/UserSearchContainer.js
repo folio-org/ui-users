@@ -78,6 +78,10 @@ class UserSearchContainer extends React.Component {
       throwErrors: false,
       type: 'okapi',
       path: 'tags',
+      params: {
+        query: 'cql.allRecords=1 sortby label',
+        limit: '10000',
+      },
       records: 'tags',
     },
     departments: {
