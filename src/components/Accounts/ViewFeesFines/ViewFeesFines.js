@@ -313,6 +313,10 @@ class ViewFeesFines extends React.Component {
     nav.onClickViewLoanActionsHistory(e, { id: a.loanId }, history, params);
   }
 
+  /**
+   * renderToggle
+   * trigger for the ellipses menu
+   */
   renderToggle = ({ triggerRef, onToggle, ariaProps, keyHandler }) => (
     <Button
       data-test-ellipsis-button
@@ -326,6 +330,10 @@ class ViewFeesFines extends React.Component {
     </Button>
   );
 
+  /**
+   * MenuButton
+   * inner-class for an element on the ellipses-menu
+   */
   MenuButton = ({ disabled, account, action, children }) => {
     const onClick = (e) => {
       e.preventDefault();
@@ -340,18 +348,26 @@ class ViewFeesFines extends React.Component {
     );
   };
 
+  /**
+   * renderActions
+   * return the ellipses menu, a <Dropdown>
+   * @param a object: an account
+   */
   renderActions(a) {
     const { feeFineActions = [] } = this.props;
-    const disabled = (a.status.name === 'Closed');
-    const ellipsis = {
-      pay: disabled,
-      waive: disabled,
-      transfer: disabled,
-      error: disabled || !isCancelAllowed(a),
+
+    // disable ellipses menu actions based on account-status
+    const isClosed = (a.status.name === 'Closed');
+    const isDisabled = {
+      pay: isClosed,
+      waive: isClosed,
+      transfer: isClosed,
+      error: isClosed || !isCancelAllowed(a),
       loan: (a.loanId === '0' || !a.loanId),
       refund: !isRefundAllowed(a, feeFineActions),
     };
 
+    // disable ellipses menu actions based on permissions
     const buttonDisabled = !this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
 
     return (
@@ -360,23 +376,23 @@ class ViewFeesFines extends React.Component {
         usePortal
       >
         <DropdownMenu id="ellipsis-drop-down">
-          <this.MenuButton disabled={!((ellipsis.pay === false) && (buttonDisabled === false))} account={a} action="pay">
+          <this.MenuButton disabled={isDisabled.pay || buttonDisabled} account={a} action="pay">
             <FormattedMessage id="ui-users.accounts.history.button.pay" />
           </this.MenuButton>
-          <this.MenuButton disabled={!((ellipsis.waive === false) && (buttonDisabled === false))} account={a} action="waive">
+          <this.MenuButton disabled={isDisabled.waive || buttonDisabled} account={a} action="waive">
             <FormattedMessage id="ui-users.accounts.history.button.waive" />
           </this.MenuButton>
-          <this.MenuButton disabled={!((ellipsis.refund === false) && (buttonDisabled === false))} account={a} action="refund">
+          <this.MenuButton disabled={isDisabled.refund || buttonDisabled} account={a} action="refund">
             <FormattedMessage id="ui-users.accounts.history.button.refund" />
           </this.MenuButton>
-          <this.MenuButton disabled={!((ellipsis.transfer === false) && (buttonDisabled === false))} account={a} action="transfer">
+          <this.MenuButton disabled={isDisabled.transfer || buttonDisabled} account={a} action="transfer">
             <FormattedMessage id="ui-users.accounts.history.button.transfer" />
           </this.MenuButton>
-          <this.MenuButton disabled={!((ellipsis.error === false) && (buttonDisabled === false))} account={a} action="cancel">
+          <this.MenuButton disabled={isDisabled.error || buttonDisabled} account={a} action="cancel">
             <FormattedMessage id="ui-users.accounts.button.error" />
           </this.MenuButton>
           <hr />
-          <this.MenuButton disabled={!((ellipsis.loan === false) && (buttonDisabled === false))} account={a} action="loanDetails">
+          <this.MenuButton disabled={isDisabled.loan || buttonDisabled} account={a} action="loanDetails">
             <FormattedMessage id="ui-users.accounts.history.button.loanDetails" />
           </this.MenuButton>
         </DropdownMenu>
