@@ -27,6 +27,7 @@
 * Allow override for not loanable items when loan policy is not recognised. Fixes UIU-1930.
 * Show correct number of due date changes. Fixes UIU-1952.
 * Add "Users: User loans anonymize" permission. Refs UIU-1535.
+* Refund fees/fines: Report of refunds to process manually. Refs UIU-1164.
 * New Fee/Fine page not listing Fee/Fine Types for selected Fee/Fine Owner. Refs UIU-1968.
 * `Limits` not refreshing when `Patron group` added, modified or deleted. Refs UIU-1944.
 * Validate 'Expiration date offset (days)' of patron groups. Refs UIU-1951.
@@ -39,6 +40,8 @@
 * Change `limit=100` to `limit=2000` across the board; patrons have more than 100 things. All. The. Time. Refs UIU-1987.
 * Fix the selection of service points from the `Add service points` popup to display in the user record. Fixes UIU-1912.
 * Retrieve up to 10k tags instead of 10. Refs UIU-2003
+* Increment `notes` interface to `2.0`
+* Refactor to avoid deprecated props to `<Dropdown>`. Refs UIU-2007, STCOM-791.
 
 ## [5.0.1](https://github.com/folio-org/ui-users/tree/v5.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.0...v5.0.1)
