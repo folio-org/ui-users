@@ -104,6 +104,33 @@ export const reportColumns = [
   'itemId'
 ];
 
+export const refundReportColumns = [
+  'patronName',
+  'patronBarcode',
+  'patronId',
+  'patronGroup',
+  'feeFineType',
+  'dateBilled',
+  'billedAmount',
+  'paidAmount',
+  'paymentMethod',
+  'transactionInfo',
+  'transferredAmount',
+  'transferAccount',
+  'feeFineId',
+  'refundDate',
+  'refundAmount',
+  'refundAction',
+  'refundReason',
+  'staffInfo',
+  'patronInfo',
+  'itemBarcode',
+  'instance',
+  'actionCompletionDate',
+  'staffMemberName',
+  'actionTaken'
+];
+
 export const refundClaimReturned = {
   PAYMENT_STATUS: 'Suspended claim returned',
   LOST_ITEM_FEE: 'Lost item fee',
