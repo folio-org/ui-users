@@ -103,6 +103,7 @@ export default function config() {
       'group': 'staff',
       'desc': 'Staff Member',
       'id': 'group6',
+      'expirationOffsetInDays': 730,
     }, {
       'group': 'undergrad',
       'desc': 'Undergraduate Student',
