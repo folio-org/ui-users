@@ -1,4 +1,4 @@
-import { Factory } from 'miragejs';
+import { Factory, trait } from 'miragejs';
 import faker from 'faker';
 
 export default Factory.extend({
@@ -50,5 +50,10 @@ export default Factory.extend({
     user.update('username', `${personal.lastName}, ${personal.firstName}`);
     user.update('personal', personal.toJSON());
     user.save();
-  }
+  },
+  withPatronGroup: trait({
+    afterCreate(patronGroup, server) {
+      server.create('patron-group', { patronGroup });
+    }
+  }),
 });

@@ -417,14 +417,12 @@ class AccountsHistory extends React.Component {
           className={css.dropDownStyle}
           group
           pullRight
+          label={<FormattedMessage id="ui-users.accounts.history.button.select" />}
+          buttonProps={{
+            'data-test-select-columns': true,
+            'bottomMargin0': true,
+          }}
         >
-          <Button
-            data-test-select-columns
-            data-role="toggle"
-            bottomMargin0
-          >
-            <FormattedMessage id="ui-users.accounts.history.button.select" />
-          </Button>
           <DropdownMenu data-role="menu">
             <ul>
               {this.renderCheckboxList(columnMapping)}
