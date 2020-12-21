@@ -44,7 +44,9 @@ class Actions extends React.Component {
       records: 'feefineactions',
       path: `feefineactions?query=(userId==%{user.id})&limit=${MAX_RECORDS}`,
       shouldRefresh: (resource, action, refresh) => {
-        return refresh || action.meta.path === 'accounts';
+        const { path } = action.meta;
+
+        return refresh || path === 'accounts' || path === 'accounts-bulk';
       },
     },
     payments: {
