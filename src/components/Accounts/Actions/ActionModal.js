@@ -290,7 +290,7 @@ class ActionModal extends React.Component {
     }
 
     if (!_.isEmpty(actionOptions) && !value) {
-      error = <FormattedMessage id={`ui-users.feefines.modal.error`} />;
+      error = <FormattedMessage id={"ui-users.feefines.modal.error"} />;
     }
 
     return error;
