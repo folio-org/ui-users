@@ -109,6 +109,7 @@
 * Make the assigned service points for the user have been checked in the Add service points modal. Fixes UIU-1560.
 * Add Departments filter. Refs UIU-1355.
 * Always show the `Title` field for a loan, even if it is empty. Fixes UIU-1573.
+* Wrong error message appears when required field not selected on Pay/Waive/Transfer modal. Refs UIU-1991.
 
 ## [4.0.0](https://github.com/folio-org/ui-users/tree/v4.0.0) (2020-06-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v3.0.0...v4.0.0)

@@ -275,10 +275,22 @@ class ActionModal extends React.Component {
 
   validateMethod = (value) => {
     let error;
-    const { action } = this.props;
+    const {
+      action,
+      data,
+      accounts,
+    } = this.props;
 
-    if (!value) {
+    const actionOptions = action === 'payment'
+      ? data.filter((d) => d.ownerId === accounts[0].ownerId)
+      : data;
+
+    if (_.isEmpty(actionOptions)) {
       error = <FormattedMessage id={`ui-users.accounts.${action}.error.select`} />;
+    }
+
+    if (!_.isEmpty(actionOptions) && !value) {
+      error = <FormattedMessage id={`ui-users.feefines.modal.error`} />;
     }
 
     return error;
