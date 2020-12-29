@@ -83,9 +83,12 @@ class ChargeForm extends React.Component {
     this.onChangeOwner = this.onChangeOwner.bind(this);
     this.query = 0;
     this.feeFineId = null;
+    this.state = {
+      submitting: false,
+    };
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     const {
       owners,
       onFindShared,
@@ -218,10 +221,11 @@ class ChargeForm extends React.Component {
         </Button>
         <Button
           id="chargeOnly"
-          disabled={pristine || submitting || !valid}
+          disabled={pristine || this.state.submitting || !valid}
           onClick={() => {
             change('pay', false);
             handleSubmit(data => onSubmit(data));
+            this.setState({ submitting: true });
           }}
           marginBottom0
         >
