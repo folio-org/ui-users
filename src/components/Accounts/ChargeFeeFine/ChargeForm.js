@@ -86,7 +86,7 @@ class ChargeForm extends React.Component {
     this.feeFineId = null;
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     const {
       owners,
       onFindShared,

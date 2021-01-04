@@ -175,8 +175,11 @@ class ChargeFeeFine extends React.Component {
 
     return this.props.mutator.accounts.POST(typeAction)
       .then(() => this.newAction({}, typeAction.id, typeAction.feeFineType, typeAction.amount, commentInfo, typeAction.remaining, 0, typeAction.feeFineOwner))
-      .then(() => this.formSubmitting = false);
+      .then(() => {
+        this.formSubmitting = false;
 
+        return;
+      });
   }
 
   newAction = (action, id, typeAction, amount, comment, balance, transaction) => {
