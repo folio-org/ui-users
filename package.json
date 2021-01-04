@@ -255,7 +255,8 @@
           "feefines.item.get",
           "feefines.item.post",
           "feefines.item.put",
-          "settings.users.enabled"
+          "settings.users.enabled",
+          "feefine-reports.refund.get"
         ],
         "visible": true
       },
@@ -794,6 +795,7 @@
     "hashcode": "^1.0.3",
     "lodash": "^4.17.4",
     "moment": "~2.24.0",
+    "moment-timezone": "^0.5.14",
     "prop-types": "^15.5.10",
     "query-string": "^5.0.0",
     "react-final-form": "^6.3.0",
