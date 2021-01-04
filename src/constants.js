@@ -115,3 +115,30 @@ export const reportColumns = [
   'item.holdingsRecordId',
   'itemId'
 ];
+
+export const refundReportColumns = [
+  'patronName',
+  'patronBarcode',
+  'patronId',
+  'patronGroup',
+  'feeFineType',
+  'dateBilled',
+  'billedAmount',
+  'paidAmount',
+  'paymentMethod',
+  'transactionInfo',
+  'transferredAmount',
+  'transferAccount',
+  'feeFineId',
+  'refundDate',
+  'refundAmount',
+  'refundAction',
+  'refundReason',
+  'staffInfo',
+  'patronInfo',
+  'itemBarcode',
+  'instance',
+  'actionCompletionDate',
+  'staffMemberName',
+  'actionTaken'
+];

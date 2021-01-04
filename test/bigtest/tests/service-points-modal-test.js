@@ -66,6 +66,19 @@ describe('Service points modal', () => {
             expect(UserFormPage.servicePoints().length).to.equal(2);
           });
 
+          describe('when unchecking all service points', () => {
+            beforeEach(async function () {
+              await UserFormPage.addServicePointButton.click();
+              await UserFormPage.servicePointsModal.checkBoxes(1).clickInput();
+              await UserFormPage.servicePointsModal.checkBoxes(2).clickInput();
+              await UserFormPage.servicePointsModal.saveButton.click();
+            });
+
+            it('service points should not be displayed', () => {
+              expect(UserFormPage.servicePoints().length).to.equal(0);
+            });
+          });
+
           describe('when deleting all service points', () => {
             beforeEach(async function () {
               await UserFormPage.servicePoints(1).deleteServicePoint();

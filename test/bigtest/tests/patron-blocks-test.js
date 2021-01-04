@@ -198,4 +198,59 @@ describe('Test Patron Blocks section', () => {
       });
     });
   });
+
+  describe('Manual blocks by template', () => {
+    setupApplication({
+      scenarios: ['manual-blocks'],
+      permissions: {
+        'manualblocks.collection.get': true
+      },
+    });
+
+    let blockTemplates;
+    describe('visit user details', () => {
+      beforeEach(async function () {
+        blockTemplates = this.server.createList('manual-block-template', 3);
+        this.visit('/users/view/1ad737b0-d847-11e6-bf26-cec0c932ce02');
+        await PatronBlocksInteractor.whenSectionLoaded();
+        await PatronBlocksInteractor.whenBlocksLoaded();
+      });
+
+      describe('add patron block', () => {
+        beforeEach(async () => {
+          await PatronBlocksInteractor.createButton();
+        });
+
+        it('displays button label', () => {
+          expect(PatronBlocksInteractor.patronBlockSaveButtonLabel).to.equal('Save & close');
+        });
+
+        describe('select first template', () => {
+          beforeEach(async function () {
+            await PatronBlocksInteractor.templateSelection.expandAndClick(1);
+          });
+
+          it('description is filled by template', () => {
+            expect(PatronBlocksInteractor.patronBlockDesc.val).to.equal(blockTemplates[0].attrs.blockTemplate.desc);
+          });
+
+          it('patron message is filled by template', () => {
+            expect(PatronBlocksInteractor.patronBlockPatron.val).to.equal(blockTemplates[0].attrs.blockTemplate.patronMessage);
+          });
+
+          it('borrowing is set by template', () => {
+            expect(PatronBlocksInteractor.patronBlockBorrowing.isChecked).to.equal(blockTemplates[0].attrs.blockTemplate.borrowing);
+          });
+
+          it('renewals is set by template', () => {
+            expect(PatronBlocksInteractor.patronBlockRenewals.isChecked).to.equal(blockTemplates[0].attrs.blockTemplate.renewals);
+          });
+
+          it('requests is set by template', () => {
+            expect(PatronBlocksInteractor.patronBlockRequests.isChecked).to.equal(blockTemplates[0].attrs.blockTemplate.requests);
+          });
+        });
+      });
+    });
+  });
 });

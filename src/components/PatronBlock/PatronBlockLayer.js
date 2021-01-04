@@ -151,6 +151,8 @@ class PatronBlockLayer extends React.Component {
       ...patronBlockSettings,
     };
 
+    const blockTemplates = _get(resources, 'blockTemplates.records', []);
+
     const message = !_isEmpty(selectedItem) ?
       <span>
         <strong>{selectedItem.desc}</strong>
@@ -169,6 +171,7 @@ class PatronBlockLayer extends React.Component {
           onSubmit={this.onSubmit}
           initialValues={initialValues}
           params={params}
+          blockTemplates={blockTemplates}
         />
         <ConfirmationModal
           id="patron-block-confirmation-modal"

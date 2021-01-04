@@ -78,6 +78,10 @@ class UserSearchContainer extends React.Component {
       throwErrors: false,
       type: 'okapi',
       path: 'tags',
+      params: {
+        query: 'cql.allRecords=1 sortby label',
+        limit: '10000',
+      },
       records: 'tags',
     },
     departments: {
@@ -85,6 +89,14 @@ class UserSearchContainer extends React.Component {
       path: 'departments',
       records: 'departments',
     },
+    refundsReport: {
+      type: 'okapi',
+      records: 'reportData',
+      path: 'feefine-reports/refund?startDate=%{refundReportData.startDate}&endDate=%{refundReportData.endDate}',
+      fetch: false,
+      accumulate: true,
+    },
+    refundReportData: {}
   });
 
   static propTypes = {
@@ -114,6 +126,12 @@ class UserSearchContainer extends React.Component {
       }),
       resultOffset: PropTypes.shape({
         replace: PropTypes.func.isRequired,
+      }),
+      refundReportData: PropTypes.shape({
+        update: PropTypes.func.isRequired,
+      }),
+      refundsReport: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
       }),
     }).isRequired,
     stripes: PropTypes.shape({

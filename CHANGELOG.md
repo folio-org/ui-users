@@ -27,15 +27,22 @@
 * Allow override for not loanable items when loan policy is not recognised. Fixes UIU-1930.
 * Show correct number of due date changes. Fixes UIU-1952.
 * Add "Users: User loans anonymize" permission. Refs UIU-1535.
+* Refund fees/fines: Report of refunds to process manually. Refs UIU-1164.
 * New Fee/Fine page not listing Fee/Fine Types for selected Fee/Fine Owner. Refs UIU-1968.
 * `Limits` not refreshing when `Patron group` added, modified or deleted. Refs UIU-1944.
 * Validate 'Expiration date offset (days)' of patron groups. Refs UIU-1951.
 * Create manual patron block templates in settings. Refs UIU-1909.
 * Show an error message, not a spinner, when a loan is missing. Refs UIU-1045.
+* Populate expiration date based on pre-defined offset for patron group. Refs UIU-1907.
 * Remove "Users: User loan edit" permission.
 * Add "Users: User loans change due date" permission.
 * Show correct source of fee/fine in payment 'action' for 'Charge & pay now'. Refs UIU-1981.
 * Change `limit=100` to `limit=2000` across the board; patrons have more than 100 things. All. The. Time. Refs UIU-1987.
+* Fix the selection of service points from the `Add service points` popup to display in the user record. Fixes UIU-1912.
+* Retrieve up to 10k tags instead of 10. Refs UIU-2003
+* Increment `notes` interface to `2.0`
+* Refactor to avoid deprecated props to `<Dropdown>`. Refs UIU-2007, STCOM-791.
+* Use patron block templates to populate fields in create block screen. Refs UIU-1910.
 
 ## [5.0.1](https://github.com/folio-org/ui-users/tree/v5.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.0...v5.0.1)

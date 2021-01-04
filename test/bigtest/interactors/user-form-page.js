@@ -146,6 +146,13 @@ import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/P
   secondAddressTypeField = new SelectFieldInteractor('[name="personal.addresses[1].addressType"]');
   defaultAddressTypeField = new SelectFieldInteractor('[data-test-default-delivery-address-field] select');
   statusField = new SelectFieldInteractor('#useractive');
+  patronGroupField = new SelectFieldInteractor('#adduser_group');
+  recalculateExpirationdateModal = new ModalInteractor('#recalculate_expirationdate_modal');
+  recalculateExpirationdateButton = scoped('#recalculate-expirationDate-btn');
+  expirationdateModalCancelButton = new ButtonInteractor('#expirationDate-modal-recalculate-btn');
+  expirationdateModalRecalculateButton = new ButtonInteractor('#expirationDate-modal-cancel-btn');
+  usersExpirationdateField = scoped('#adduser_expirationdate');
+  userWillReactivateMessage = scoped('#saving-will-reactivate-user');
   customFieldsSection = scoped('#customFields', CustomFieldsSectionInteractor);
   departmentName = new RepeatableFieldInteractor('#department-name');
 }
