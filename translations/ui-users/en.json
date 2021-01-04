@@ -600,6 +600,7 @@
   "blocks.form.label.borrowing": "Borrowing",
   "blocks.form.label.renewals": "Renewals",
   "blocks.form.label.requests": "Requests",
+  "blocks.form.label.template": "Template name",
   "blocks.form.placeholder.desc": "Enter a short description (required)",
   "blocks.form.placeholder.information": "Enter addition information (optional)",
   "blocks.form.placeholder.message": "Enter a message to the patron (optional)",

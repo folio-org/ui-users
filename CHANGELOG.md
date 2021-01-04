@@ -42,6 +42,7 @@
 * Retrieve up to 10k tags instead of 10. Refs UIU-2003
 * Increment `notes` interface to `2.0`
 * Refactor to avoid deprecated props to `<Dropdown>`. Refs UIU-2007, STCOM-791.
+* Use patron block templates to populate fields in create block screen. Refs UIU-1910.
 
 ## [5.0.1](https://github.com/folio-org/ui-users/tree/v5.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.0...v5.0.1)
