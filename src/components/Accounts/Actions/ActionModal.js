@@ -278,11 +278,12 @@ class ActionModal extends React.Component {
     const {
       action,
       data,
-      accounts,
+      form: { getState }
     } = this.props;
+    const { values: { ownerId: selectedOwnerId } } = getState();
 
     const actionOptions = action === 'payment'
-      ? data.filter((d) => d.ownerId === accounts[0].ownerId)
+      ? data.filter((d) => d.ownerId === selectedOwnerId)
       : data;
 
     if (_.isEmpty(actionOptions)) {
