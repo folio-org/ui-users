@@ -64,6 +64,7 @@ class ChargeFeeFine extends React.Component {
 
   constructor(props) {
     super(props);
+    this.formSubmitting = false;
     this.state = {
       ownerId: '0',
       feeFineTypeId: null,
@@ -162,6 +163,7 @@ class ChargeFeeFine extends React.Component {
       typeAction,
       commentInfo,
     } = this.onFormAccountData(type);
+    this.formSubmitting = true;
 
     deleteOptionalActionFields(
       typeAction,
@@ -172,7 +174,9 @@ class ChargeFeeFine extends React.Component {
     );
 
     return this.props.mutator.accounts.POST(typeAction)
-      .then(() => this.newAction({}, typeAction.id, typeAction.feeFineType, typeAction.amount, commentInfo, typeAction.remaining, 0, typeAction.feeFineOwner));
+      .then(() => this.newAction({}, typeAction.id, typeAction.feeFineType, typeAction.amount, commentInfo, typeAction.remaining, 0, typeAction.feeFineOwner))
+      .then(() => this.formSubmitting = false);
+
   }
 
   newAction = (action, id, typeAction, amount, comment, balance, transaction) => {
@@ -394,18 +398,15 @@ class ChargeFeeFine extends React.Component {
   }
 
   onSubmitCharge = (data) => {
-    const { history } = this.props;
-
     if (data.pay) {
       delete data.pay;
       this.type.remaining = data.amount;
       this.chargeAction(data)
-        .then(() => this.payAction(data))
-        .then(() => history.goBack());
+        .then(() => this.payAction(data));
     } else {
       delete data.pay;
       this.chargeAction(data)
-        .then(() => history.goBack());
+        .then(() => this.showCalloutMessage(data));
     }
   }
 
@@ -497,6 +498,7 @@ class ChargeFeeFine extends React.Component {
           defaultServicePointId={defaultServicePointId}
           feeFineTypeOptions={currentOwnerFeeFineTypes}
           servicePointsIds={servicePointsIds}
+          formSubmitting={this.formSubmitting}
           onSubmit={this.onSubmitCharge}
           user={user}
           ownerList={(shared) ? owners : list}
