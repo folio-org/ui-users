@@ -178,7 +178,7 @@ class ChargeFeeFine extends React.Component {
       .then(() => {
         this.formSubmitting = false;
 
-        return;
+        return undefined;
       });
   }
 
