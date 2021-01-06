@@ -20,7 +20,7 @@ import {
 } from '@folio/stripes/components';
 
 import { calculateSelectedAmount } from '../accountFunctions';
-import { feeFineActions } from '../../../constants';
+import { FEE_FINE_ACTIONS } from '../../../constants';
 
 import css from './PayWaive.css';
 
@@ -162,22 +162,20 @@ class ActionModal extends React.Component {
         <Row>
           <Col xs id="action-selection">
             {_.isEmpty(actionOptions)
-              ?
-              <Field
-                name="method"
-                component={Select}
-                dataOptions={options}
-                placeholder={formatMessage({ id: `ui-users.accounts.${action}.method.placeholder` })}
-                error={formatMessage ({ id: `ui-users.accounts.${action}.error.select` })}
-              />
-              :
-              <Field
-                name="method"
-                component={Select}
-                dataOptions={options}
-                placeholder={formatMessage({ id: `ui-users.accounts.${action}.method.placeholder` })}
-                validate={this.validateMethod}
-              />
+              ? <Field
+                  name="method"
+                  component={Select}
+                  dataOptions={options}
+                  placeholder={formatMessage({ id: `ui-users.accounts.${action}.method.placeholder` })}
+                  error={formatMessage({ id: `ui-users.accounts.${action}.error.select` })}
+                />
+              : <Field
+                  name="method"
+                  component={Select}
+                  dataOptions={options}
+                  placeholder={formatMessage({ id: `ui-users.accounts.${action}.method.placeholder` })}
+                  validate={this.validateMethod}
+                />
             }
           </Col>
         </Row>
@@ -186,11 +184,11 @@ class ActionModal extends React.Component {
   }
 
   isPaymentAction = (action) => {
-    return action === feeFineActions.PAYMENT;
+    return action === FEE_FINE_ACTIONS.PAYMENT;
   }
 
   isRefundAction = (action) => {
-    return action === feeFineActions.REFUND;
+    return action === FEE_FINE_ACTIONS.REFUND;
   }
 
   onChangeOwner = ({ target: { value } }) => {

@@ -76,7 +76,7 @@ export const refundStatuses = {
   RefundedPartially: 'Refunded partially',
 };
 
-export const feeFineActions = {
+export const FEE_FINE_ACTIONS = {
   PAYMENT: 'payment',
   WAIVE: 'waive',
   TRANSFER: 'transfer',
