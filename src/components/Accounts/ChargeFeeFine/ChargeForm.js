@@ -55,7 +55,6 @@ class ChargeForm extends React.Component {
     ownerList: PropTypes.arrayOf(PropTypes.object),
     feefines: PropTypes.arrayOf(PropTypes.object),
     form: PropTypes.object.isRequired,
-    formSubmitting: PropTypes.bool.isRequired,
     onClickCancel: PropTypes.func,
     onChangeOwner: PropTypes.func.isRequired,
     onChangeFeeFine: PropTypes.func.isRequired,
@@ -154,7 +153,6 @@ class ChargeForm extends React.Component {
       pristine,
       isPending,
       stripes,
-      formSubmitting,
     } = this.props;
     const {
       valid,
@@ -209,7 +207,7 @@ class ChargeForm extends React.Component {
         </Button>
         <Button
           id="chargeAndPay"
-          disabled={pristine || submitting || !valid || formSubmitting}
+          disabled={pristine || submitting || !valid}
           onClick={() => {
             change('pay', true);
             handleSubmit(data => onSubmit(data));
@@ -220,7 +218,7 @@ class ChargeForm extends React.Component {
         </Button>
         <Button
           id="chargeOnly"
-          disabled={pristine || submitting || !valid || formSubmitting}
+          disabled={pristine || submitting || !valid}
           onClick={() => {
             change('pay', false);
             handleSubmit(data => onSubmit(data));
