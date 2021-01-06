@@ -76,6 +76,13 @@ export const refundStatuses = {
   RefundedPartially: 'Refunded partially',
 };
 
+export const feeFineActions = {
+  PAYMENT: 'payment',
+  WAIVE: 'waive',
+  TRANSFER: 'transfer',
+  REFUND: 'refund',
+};
+
 export const reportColumns = [
   'borrower.name',
   'borrower.barcode',

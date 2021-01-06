@@ -20,6 +20,7 @@ import {
 } from '@folio/stripes/components';
 
 import { calculateSelectedAmount } from '../accountFunctions';
+import { feeFineActions } from '../../../constants';
 
 import css from './PayWaive.css';
 
@@ -140,8 +141,16 @@ class ActionModal extends React.Component {
   renderMethod = (options) => {
     const {
       action,
-      intl: { formatMessage }
+      data: actionInfo,
+      intl: { formatMessage },
+      form: { getState },
     } = this.props;
+    const { values: { ownerId: selectedOwnerId } } = getState();
+
+    const actionOptions = this.isPaymentAction(action)
+      ? actionInfo.filter((selectedAction) => selectedAction.ownerId === selectedOwnerId)
+      : actionInfo;
+
     return (
       <Col xs={this.isPaymentAction(action) ? 3 : 7}>
         <Row>
@@ -152,13 +161,24 @@ class ActionModal extends React.Component {
         </Row>
         <Row>
           <Col xs id="action-selection">
-            <Field
-              name="method"
-              component={Select}
-              dataOptions={options}
-              placeholder={formatMessage({ id: `ui-users.accounts.${action}.method.placeholder` })}
-              validate={this.validateMethod}
-            />
+            {_.isEmpty(actionOptions)
+              ?
+              <Field
+                name="method"
+                component={Select}
+                dataOptions={options}
+                placeholder={formatMessage({ id: `ui-users.accounts.${action}.method.placeholder` })}
+                error={formatMessage ({ id: `ui-users.accounts.${action}.error.select` })}
+              />
+              :
+              <Field
+                name="method"
+                component={Select}
+                dataOptions={options}
+                placeholder={formatMessage({ id: `ui-users.accounts.${action}.method.placeholder` })}
+                validate={this.validateMethod}
+              />
+            }
           </Col>
         </Row>
       </Col>
@@ -166,11 +186,11 @@ class ActionModal extends React.Component {
   }
 
   isPaymentAction = (action) => {
-    return action === 'payment';
+    return action === feeFineActions.PAYMENT;
   }
 
   isRefundAction = (action) => {
-    return action === 'refund';
+    return action === feeFineActions.REFUND;
   }
 
   onChangeOwner = ({ target: { value } }) => {
@@ -275,22 +295,8 @@ class ActionModal extends React.Component {
 
   validateMethod = (value) => {
     let error;
-    const {
-      action,
-      data,
-      form: { getState }
-    } = this.props;
-    const { values: { ownerId: selectedOwnerId } } = getState();
 
-    const actionOptions = action === 'payment'
-      ? data.filter((d) => d.ownerId === selectedOwnerId)
-      : data;
-
-    if (_.isEmpty(actionOptions)) {
-      error = <FormattedMessage id={`ui-users.accounts.${action}.error.select`} />;
-    }
-
-    if (!_.isEmpty(actionOptions) && !value) {
+    if (!value) {
       error = <FormattedMessage id="ui-users.feefines.modal.error" />;
     }
 
