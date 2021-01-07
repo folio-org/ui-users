@@ -804,5 +804,6 @@
     "information.recalculate.expirationDate": "重新计算",
     "information.recalculate.modal.text": "具有{group}用户组的用户通常在{offset}天后过期。要相应更改失效日期吗？",
     "information.recalculate.modal.label": "重新计算过期日期？",
-    "information.recalculate.will.reactivate.user": "保存后用户将重新激活"
+    "information.recalculate.will.reactivate.user": "保存后用户将重新激活",
+    "blocks.form.label.template": "Template name"
 }

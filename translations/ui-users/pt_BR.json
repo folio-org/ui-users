@@ -804,5 +804,6 @@
     "information.recalculate.expirationDate": "Recalcular",
     "information.recalculate.modal.text": "Os usuários com grupo de usuário {group} geralmente expiram após {offset} dias. Deseja alterar a data de validade de acordo?",
     "information.recalculate.modal.label": "Recalcular a data de expiração?",
-    "information.recalculate.will.reactivate.user": "O usuário irá reativar após salvar"
+    "information.recalculate.will.reactivate.user": "O usuário irá reativar após salvar",
+    "blocks.form.label.template": "Template name"
 }
