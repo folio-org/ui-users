@@ -52,7 +52,10 @@ class LoanActionDialog extends React.Component {
 
     const footer = (
       <ModalFooter>
-        <Button onClick={this.clearErrorMessage}>
+        <Button
+          data-test-close-button
+          onClick={this.clearErrorMessage}
+        >
           <FormattedMessage id="ui-users.blocks.closeButton" />
         </Button>
       </ModalFooter>
