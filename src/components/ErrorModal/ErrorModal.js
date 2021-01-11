@@ -21,6 +21,7 @@ const ErrorModal = (props) => {
 
   return (
     <Modal
+      data-test-error-modal
       size="small"
       footer={footer}
       dismissible

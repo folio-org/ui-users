@@ -394,18 +394,17 @@ class ChargeFeeFine extends React.Component {
   }
 
   onSubmitCharge = (data) => {
-    const { history } = this.props;
-
     if (data.pay) {
       delete data.pay;
       this.type.remaining = data.amount;
-      this.chargeAction(data)
-        .then(() => this.payAction(data))
-        .then(() => history.goBack());
+
+      return this.chargeAction(data)
+        .then(() => this.payAction(data));
     } else {
       delete data.pay;
-      this.chargeAction(data)
-        .then(() => history.goBack());
+
+      return this.chargeAction(data)
+        .then(() => this.showCalloutMessage(data));
     }
   }
 
