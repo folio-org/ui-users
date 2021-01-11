@@ -31,6 +31,7 @@ class ModalContent extends React.Component {
     declareLost: {
       type: 'okapi',
       fetch: false,
+      throwErrors: false,
       POST: {
         path: 'circulation/loans/!{loan.id}/declare-item-lost',
       },
@@ -65,6 +66,7 @@ class ModalContent extends React.Component {
     loanAction: PropTypes.string.isRequired,
     loan: PropTypes.object.isRequired,
     onClose: PropTypes.func.isRequired,
+    handleError: PropTypes.func.isRequired,
     disableButton: PropTypes.func,
     validateAction: PropTypes.func,
     itemRequestCount: PropTypes.number.isRequired,
@@ -124,10 +126,26 @@ class ModalContent extends React.Component {
 
     disableButton();
 
-    await POST(requestData);
+    try {
+      await POST(requestData);
+    } catch (error) {
+      this.processError(error);
+    }
 
     onClose();
   };
+
+  processError(resp) {
+    const { handleError } = this.props;
+
+    const contentType = resp.headers.get('Content-Type') || '';
+
+    if (contentType.startsWith('application/json')) {
+      resp.json().then(error => handleError(error.errors[0].message));
+    } else {
+      resp.text().then(handleError);
+    }
+  }
 
   render() {
     const {
