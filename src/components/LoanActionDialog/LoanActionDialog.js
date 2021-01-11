@@ -76,7 +76,7 @@ class LoanActionDialog extends React.Component {
         : null;
 
     return (
-
+      <>
         <Modal
           id={`${loanAction}-modal`}
           size="small"
