@@ -12,6 +12,7 @@ import {
 
 import CheckboxInteractor  from '@folio/stripes-components/lib/Checkbox/tests/interactor'; // eslint-disable-line
 import MultiSelectInteractor from '@folio/stripes-components/lib/MultiSelection/tests/interactor';
+import RefundsReportModal from './refunds-report-modal';
 
 @interactor class ActiveUserCheckbox {
   clickActive = clickable('#clickable-filter-active-active');
@@ -34,6 +35,9 @@ import MultiSelectInteractor from '@folio/stripes-components/lib/MultiSelection/
   clickExportToCSV = clickable('#export-overdue-loan-report');
   exportBtnIsVisible = isVisible('#export-overdue-loan-report');
   isExportBtnPresent = isPresent('#export-overdue-loan-report');
+  clickRefundsReportCSV = clickable('#export-refunds-report');
+  isRefundReportBtnVisible = isVisible('#export-refunds-report');
+  isRefundsReportButtonPresent = isPresent('#export-refunds-report');
   columnCheckbox = function columnCheckbox(key) {
     return new Interactor(`#users-search-column-checkbox-${key}`);
   }
@@ -46,6 +50,7 @@ import MultiSelectInteractor from '@folio/stripes-components/lib/MultiSelection/
 export default @interactor class UsersInteractor {
   static defaultScope = '[data-test-user-instances]';
 
+  refundsReportModal = new RefundsReportModal();
   activeUserCheckbox = new ActiveUserCheckbox();
   departmentsFilter = new DepartmentsFilter();
   headerDropdownMenu = new HeaderDropdownMenu();

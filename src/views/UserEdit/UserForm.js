@@ -449,6 +449,7 @@ class UserForm extends React.Component {
       change, // from redux-form...
       servicePoints,
       onCancel,
+      stripes,
     } = this.props;
 
     const { sections } = this.state;
@@ -503,6 +504,7 @@ class UserForm extends React.Component {
                   onToggle={this.handleSectionToggle}
                   initialValues={initialValues}
                   patronGroups={formData.patronGroups}
+                  stripes={stripes}
                 />
                 <EditExtendedInfo
                   accordionId="extendedInfo"

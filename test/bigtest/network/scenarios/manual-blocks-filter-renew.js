@@ -1,11 +1,12 @@
-/* istanbul ignore file */
 import CQLParser from '../cql';
 
 export default (server) => {
   const usertmp = server.create('user', { id: '1ad737b0-d847-11e6-bf26-cec0c932ce02' });
 
-  server.createList('manualblock', 3, { userId: usertmp.id });
-  server.create('manualblock', { userId: usertmp.id, expirationDate: '2019-05-23T00:00:00Z' });
+  server.createList('manualblock', 2, { userId: usertmp.id, renewals: false, desc: 'No block renewals' });
+  server.create('manualblock', { userId: usertmp.id, renewals: false, desc: 'Block for borrowing' });
+  server.create('manualblock', { userId: usertmp.id, desc: 'Block for renewals' });
+
 
   server.get('/manualblocks', (schema, request) => {
     const url = new URL(request.url);
@@ -38,6 +39,4 @@ export default (server) => {
     const body = JSON.parse(request.requestBody);
     return schema.manualblocks.create(body);
   });
-
-  server.get('/manual-block-templates');
 };

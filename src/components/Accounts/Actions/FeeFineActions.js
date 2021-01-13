@@ -44,7 +44,9 @@ class Actions extends React.Component {
       records: 'feefineactions',
       path: `feefineactions?query=(userId==%{user.id})&limit=${MAX_RECORDS}`,
       shouldRefresh: (resource, action, refresh) => {
-        return refresh || action.meta.path === 'accounts';
+        const { path } = action.meta;
+
+        return refresh || path === 'accounts' || path === 'accounts-bulk';
       },
     },
     payments: {
@@ -75,7 +77,7 @@ class Actions extends React.Component {
     transfers: {
       type: 'okapi',
       records: 'transfers',
-      path: 'transfers?limit=100',
+      path: 'transfers?limit=2000',
     },
     curUserServicePoint: {
       type: 'okapi',

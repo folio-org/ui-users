@@ -166,19 +166,14 @@ class OpenLoansSubHeader extends React.Component {
               pullRight
               onToggle={this.onDropdownClick}
               open={toggleDropdownState}
+              label={<FormattedMessage id="ui-users.selectColumns" />}
+              buttonProps={{
+                align: 'end',
+                bottomMargin0: true,
+                'aria-haspopup': true,
+              }}
             >
-              <Button
-                data-role="toggle"
-                align="end"
-                bottomMargin0
-                aria-haspopup="true"
-              >
-                <FormattedMessage id="ui-users.selectColumns" />
-              </Button>
-              <DropdownMenu
-                data-role="menu"
-                aria-label="available permissions"
-              >
+              <DropdownMenu aria-label="available permissions">
                 <ul>
                   {this.renderCheckboxList(columnMapping)}
                 </ul>
@@ -209,7 +204,7 @@ class OpenLoansSubHeader extends React.Component {
             >
               <FormattedMessage id="ui-users.loans.claimReturned" />
             </Button>
-            <IfPermission perm="ui-users.loans.edit">
+            <IfPermission perm="ui-users.loans.change-due-date">
               <Button
                 marginBottom0
                 id="change-due-date-all"
