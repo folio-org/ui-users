@@ -106,8 +106,7 @@ class CancellationModal extends React.Component {
           <br />
           <Row>
             <Col xs>
-              <FormattedMessage id="ui-users.accounts.commentStaff" />
-              {'*'}
+              <FormattedMessage id="ui-users.accounts.commentStaff" />*
             </Col>
           </Row>
           <Row>
