@@ -398,7 +398,10 @@ class AccountDetails extends React.Component {
                 value={parseFloat(this.state.remaining).toFixed(2)}
               />
             </Col>
-            <Col xs={1.5}>
+            <Col
+              data-test-latestPaymentStatus
+              xs={1.5}
+            >
               <KeyValue
                 label={<FormattedMessage id="ui-users.details.field.latest" />}
                 value={latestPaymentStatus}

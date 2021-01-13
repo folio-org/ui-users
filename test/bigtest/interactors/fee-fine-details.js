@@ -51,6 +51,7 @@ import KeyValue from './KeyValue';
 @interactor class FeeFineDetails {
   static defaultScope = '[data-test-fee-fine-details]';
 
+  latestPaymentStatus = scoped('[data-test-latestPaymentStatus] div', KeyValue);
   overduePolicy = scoped('[data-test-overdue-policy] div', KeyValue);
   overduePolicyClick = clickable('[data-test-overdue-policy] a');
   lostItemPolicy = scoped('[data-test-lost-item-policy] div', KeyValue);
