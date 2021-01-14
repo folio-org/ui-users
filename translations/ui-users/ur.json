@@ -266,7 +266,6 @@
     "accounts.history.columns.status": "ادائیگی کی حیثیت",
     "accounts.history.columns.due": "اخری تاریخ",
     "accounts.history.columns.returned": "اخری تاریخ",
-    "accounts.cancellation.field.reason": "Reason for cancellation*",
     "accounts.cancellation.field.feefinewill": "fee/fine will be",
     "accounts.cancellation.field.cancelled": "cancelled",
     "accounts.cancellation.field.confirmcancelled": "Confirm fee/fine cancellation",

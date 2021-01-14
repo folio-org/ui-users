@@ -266,7 +266,6 @@
     "accounts.history.columns.status": "Payment status",
     "accounts.history.columns.due": "Due date",
     "accounts.history.columns.returned": "Returned date",
-    "accounts.cancellation.field.reason": "Reason for cancellation*",
     "accounts.cancellation.field.feefinewill": "fee/fine will be",
     "accounts.cancellation.field.cancelled": "abgebrochen",
     "accounts.cancellation.field.confirmcancelled": "Confirm fee/fine cancellation",

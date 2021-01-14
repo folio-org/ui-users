@@ -266,7 +266,6 @@
     "accounts.history.columns.status": "支払い状況",
     "accounts.history.columns.due": "Due date",
     "accounts.history.columns.returned": "Returned date",
-    "accounts.cancellation.field.reason": "キャンセルの理由*",
     "accounts.cancellation.field.feefinewill": "料金/罰金は",
     "accounts.cancellation.field.cancelled": "キャンセル",
     "accounts.cancellation.field.confirmcancelled": "料金/罰金キャンセルの確認",
