@@ -266,7 +266,6 @@
     "accounts.history.columns.status": "Status płatności",
     "accounts.history.columns.due": "Termin zwrotu",
     "accounts.history.columns.returned": "Data zwrotu",
-    "accounts.cancellation.field.reason": "Powód anulowania *",
     "accounts.cancellation.field.feefinewill": "opłata/kara będzie",
     "accounts.cancellation.field.cancelled": "anulowane",
     "accounts.cancellation.field.confirmcancelled": "Potwierdź anulowanie opłaty/kary",

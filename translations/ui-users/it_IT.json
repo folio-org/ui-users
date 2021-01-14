@@ -266,7 +266,6 @@
     "accounts.history.columns.status": "Stato pagamento",
     "accounts.history.columns.due": "Data di scadenza",
     "accounts.history.columns.returned": "Data di restituzione",
-    "accounts.cancellation.field.reason": "Motivo cancellazione*",
     "accounts.cancellation.field.feefinewill": "tariffa/multa sarà",
     "accounts.cancellation.field.cancelled": "cancellato",
     "accounts.cancellation.field.confirmcancelled": "Conferma cancellazione tariffa/multa",
