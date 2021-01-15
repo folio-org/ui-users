@@ -266,7 +266,6 @@
     "accounts.history.columns.status": "Status do pagamento",
     "accounts.history.columns.due": "Data de vencimento",
     "accounts.history.columns.returned": "Data da devolução",
-    "accounts.cancellation.field.reason": "Motivo do cancelamento*",
     "accounts.cancellation.field.feefinewill": "taxa/multa será",
     "accounts.cancellation.field.cancelled": "cancelado",
     "accounts.cancellation.field.confirmcancelled": "Confirmar o cancelamento da taxa/multa",

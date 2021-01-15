@@ -266,7 +266,6 @@
     "accounts.history.columns.status": "fizetés állapota",
     "accounts.history.columns.due": "határidő",
     "accounts.history.columns.returned": "visszahozatali dátum",
-    "accounts.cancellation.field.reason": "A törlés oka*",
     "accounts.cancellation.field.feefinewill": "Díj/bírság lesz",
     "accounts.cancellation.field.cancelled": "törölve",
     "accounts.cancellation.field.confirmcancelled": "Erősítse meg a díj/bírság lemondását",

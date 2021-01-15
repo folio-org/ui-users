@@ -266,7 +266,6 @@
     "accounts.history.columns.status": "支付状态",
     "accounts.history.columns.due": "到期日",
     "accounts.history.columns.returned": "已归还日期",
-    "accounts.cancellation.field.reason": "取消原因",
     "accounts.cancellation.field.feefinewill": "费用/罚款为",
     "accounts.cancellation.field.cancelled": "已取消",
     "accounts.cancellation.field.confirmcancelled": "确认取消费用/罚款",

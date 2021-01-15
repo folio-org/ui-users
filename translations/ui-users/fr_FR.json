@@ -266,7 +266,6 @@
     "accounts.history.columns.status": "Statut du paiement",
     "accounts.history.columns.due": "Date d'échéance",
     "accounts.history.columns.returned": "Date de retour",
-    "accounts.cancellation.field.reason": "Raison de l'annulation*",
     "accounts.cancellation.field.feefinewill": "Les frais / l'amende sera de",
     "accounts.cancellation.field.cancelled": "Annulé",
     "accounts.cancellation.field.confirmcancelled": "Confirmer l'annulation des frais/amendes",
