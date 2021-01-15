@@ -53,6 +53,14 @@ import DialogInteractor from './dialog';
   confirmButton = clickable('[data-test-bulk-cr-continue-button]');
 }
 
+@interactor class ErrorModal {
+  static defaultScope = '[data-test-error-modal]';
+
+  headline = text('[data-test-headline]');
+  content = text('[class^="modalContent---"] p');
+  closeButton = new ButtonInteractor('[data-test-close-button]');
+}
+
 @interactor class OpenLoans {
   static defaultScope = '[data-test-open-loans]';
 
@@ -74,6 +82,7 @@ import DialogInteractor from './dialog';
   patronBlockModal = new PatronBlockModal();
   changeDueDateOverlay = new ChangeDueDateOverlay();
   bulkClaimReturnedModal = new BulkClaimReturnedModal();
+  errorModal = new ErrorModal();
   declareLostDialog = new DialogInteractor('#declareLost-modal');
   claimReturnedDialog = new DialogInteractor('#claimReturned-modal');
   markAsMissingDialog = new DialogInteractor('#markAsMissing-modal');

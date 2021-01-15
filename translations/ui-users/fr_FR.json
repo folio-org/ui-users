@@ -266,7 +266,6 @@
     "accounts.history.columns.status": "Statut du paiement",
     "accounts.history.columns.due": "Date d'échéance",
     "accounts.history.columns.returned": "Date de retour",
-    "accounts.cancellation.field.reason": "Raison de l'annulation*",
     "accounts.cancellation.field.feefinewill": "Les frais / l'amende sera de",
     "accounts.cancellation.field.cancelled": "Annulé",
     "accounts.cancellation.field.confirmcancelled": "Confirmer l'annulation des frais/amendes",
@@ -805,5 +804,8 @@
     "information.recalculate.modal.text": "Users with patron group {group} usually expire after {offset} days. Do you want to change the expiration date accordingly?",
     "information.recalculate.modal.label": "Recalculer la date d'expiration?",
     "information.recalculate.will.reactivate.user": "User will reactivate after saving",
-    "blocks.form.label.template": "Nom du modèle"
+    "blocks.form.label.template": "Nom du modèle",
+    "feefines.errors.notBilledTitle": "Frais d'objets perdus non facturés à l'utilisateur",
+    "feefines.errors.notBilledMessage": "Lost item fee(s) not billed to patron because 'Fee/fine owner' not found for item's 'Primary service point' in Setting 'Fee/fine: Owners'.<div><b>Need to bill lost item fee(s) manually.</b></div>",
+    "feefines.errors.updateOwnerMessage": "To avoid error in future, please request that appropriate administrator at institution update 'Fee/fine owner' setting to associate 'Primary service point' to 'Fee/fine owner'."
 }

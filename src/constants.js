@@ -137,3 +137,5 @@ export const refundReportColumns = [
   'staffMemberName',
   'actionTaken'
 ];
+
+export const NO_FEE_FINE_OWNER_FOUND_MESSAGE = 'No fee/fine owner found for item\'s permanent location';

@@ -106,10 +106,9 @@ class CancellationModal extends React.Component {
           <br />
           <Row>
             <Col xs>
-              <FormattedMessage id="ui-users.accounts.cancellation.field.reason" />
+              <FormattedMessage id="ui-users.accounts.commentStaff" />*
             </Col>
           </Row>
-          <br />
           <Row>
             <Col xs>
               <Field
@@ -142,7 +141,6 @@ class CancellationModal extends React.Component {
                   <FormattedMessage id="ui-users.accounts.field.infoPatron" />
                 </Col>
               </Row>
-              <br />
               <Row>
                 <Col xs>
                   <Field
@@ -151,9 +149,9 @@ class CancellationModal extends React.Component {
                   />
                 </Col>
               </Row>
+              <br />
             </div>
           }
-          <br />
           <Row>
             <Col xs>
               <Button

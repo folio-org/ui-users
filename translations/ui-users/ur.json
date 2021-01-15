@@ -266,7 +266,6 @@
     "accounts.history.columns.status": "ادائیگی کی حیثیت",
     "accounts.history.columns.due": "اخری تاریخ",
     "accounts.history.columns.returned": "اخری تاریخ",
-    "accounts.cancellation.field.reason": "Reason for cancellation*",
     "accounts.cancellation.field.feefinewill": "fee/fine will be",
     "accounts.cancellation.field.cancelled": "cancelled",
     "accounts.cancellation.field.confirmcancelled": "Confirm fee/fine cancellation",
@@ -805,5 +804,8 @@
     "information.recalculate.modal.text": "Users with patron group {group} usually expire after {offset} days. Do you want to change the expiration date accordingly?",
     "information.recalculate.modal.label": "Recalculate expiration date?",
     "information.recalculate.will.reactivate.user": "User will reactivate after saving",
-    "blocks.form.label.template": "Template name"
+    "blocks.form.label.template": "Template name",
+    "feefines.errors.notBilledTitle": "Lost item fee(s) not billed to patron",
+    "feefines.errors.notBilledMessage": "Lost item fee(s) not billed to patron because 'Fee/fine owner' not found for item's 'Primary service point' in Setting 'Fee/fine: Owners'.<div><b>Need to bill lost item fee(s) manually.</b></div>",
+    "feefines.errors.updateOwnerMessage": "To avoid error in future, please request that appropriate administrator at institution update 'Fee/fine owner' setting to associate 'Primary service point' to 'Fee/fine owner'."
 }
