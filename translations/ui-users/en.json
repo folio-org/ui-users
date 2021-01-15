@@ -739,6 +739,7 @@
   "reports.refunds.patronId": "Patron ID",
   "reports.refunds.patronGroup": "Patron Group",
   "reports.refunds.feeFineType": "Fee/fine type",
+  "reports.refunds.feeFineOwner": "Fee/fine owner",
   "reports.refunds.dateBilled": "Date billed",
   "reports.refunds.billedAmount": "Billed amount",
   "reports.refunds.paidAmount": "Paid amount",
