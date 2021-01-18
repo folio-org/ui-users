@@ -120,6 +120,15 @@ const Menu = (props) => {
       >
         <FormattedMessage id="ui-users.accounts.history.button.transfer" />
       </Button>
+      <Button
+        id="open-closed-all-export-button"
+        marginBottom0
+        disabled={_.isEmpty(feeFineActions)}
+        buttonStyle="primary"
+        onClick={props.onExportFeesFinesReport}
+      >
+        <FormattedMessage id="ui-users.export.button" />
+      </Button>
     </div>);
 
   return (
@@ -142,6 +151,7 @@ Menu.propTypes = {
   selectedAccounts: PropTypes.arrayOf(PropTypes.object).isRequired,
   feeFineActions: PropTypes.arrayOf(PropTypes.object).isRequired,
   onChangeActions: PropTypes.func,
+  onExportFeesFinesReport: PropTypes.func.isRequired,
 };
 
 export default Menu;

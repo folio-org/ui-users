@@ -26,6 +26,7 @@ import css from './AccountsListing.css';
 
 import { getFullName } from '../../components/util';
 import Actions from '../../components/Accounts/Actions/FeeFineActions';
+import FeeFineReport from '../../components/data/reports/FeeFineReport';
 import {
   calculateOwedFeeFines,
   calculateTotalPaymentAmount,
@@ -359,6 +360,44 @@ class AccountsHistory extends React.Component {
     return [];
   }
 
+  buildFeesFinesReport = () => {
+    const {
+      user, // name, barcode
+      patronGroup: { group },
+      okapi: {
+        currentUser: {
+          servicePoints
+        }
+      },
+      resources: {
+        comments,
+        feefineshistory,
+        loans,
+      },
+      intl,
+    } = this.props;
+    const feeFineActions = _.get(comments, 'records', []);
+    const accounts = _.get(feefineshistory, 'records', []);
+    const loansList = _.get(loans, 'records', []);
+
+    const reportData = {
+      intl,
+      data: {
+        user,
+        patronGroup: group,
+        servicePoints,
+        feeFineActions,
+        accounts,
+        loans: loansList
+      }
+    };
+
+    const report = new FeeFineReport(reportData);
+    const x = report.buildReport();
+    console.log('reportData', reportData);
+    console.log('x', x);
+  }
+
   render() {
     const {
       location,
@@ -544,6 +583,7 @@ class AccountsHistory extends React.Component {
                 actions={this.state.actions}
                 query={query}
                 onChangeActions={this.onChangeActions}
+                onExportFeesFinesReport={this.buildFeesFinesReport}
                 patronGroup={patronGroup}
                 handleOptionsChange={this.handleOptionsChange}
               />
