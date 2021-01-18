@@ -21,6 +21,7 @@ import {
   PaneMenu,
   Paneset,
   Row,
+  Callout,
 } from '@folio/stripes/components';
 import css from './AccountsListing.css';
 
@@ -145,6 +146,7 @@ class AccountsHistory extends React.Component {
     }));
 
     this.state = {
+      exportReportInProgress: false,
       visibleColumns,
       toggleDropdownState: false,
       showFilters: false,
@@ -188,6 +190,7 @@ class AccountsHistory extends React.Component {
 
     const initialQuery = queryString.parse(props.location.search) || {};
     this.initialFilters = initialQuery.f;
+    this.callout = null;
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -360,9 +363,15 @@ class AccountsHistory extends React.Component {
     return [];
   }
 
-  buildFeesFinesReport = () => {
+  generateFeesFinesReport = () => {
+    const { exportReportInProgress } = this.state;
+
+    if (exportReportInProgress) {
+      return;
+    }
+
     const {
-      user, // name, barcode
+      user,
       patronGroup: { group },
       okapi: {
         currentUser: {
@@ -392,10 +401,28 @@ class AccountsHistory extends React.Component {
       }
     };
 
-    const report = new FeeFineReport(reportData);
-    const x = report.buildReport();
-    console.log('reportData', reportData);
-    console.log('x', x);
+    this.setState({ exportReportInProgress: true }, async () => {
+      this.callout.sendCallout({
+        type: 'success',
+        message: <FormattedMessage id="ui-users.reports.inProgress" />
+      });
+      let reportError = false;
+      try {
+        const report = new FeeFineReport(reportData);
+        await report.toCSV();
+      } catch (error) {
+        if (error.message === 'noItemsFound') {
+          reportError = true;
+          this.callout.sendCallout({
+            type: 'error',
+            message: <FormattedMessage id="ui-users.settings.limits.callout.error" />
+          });
+        }
+      }
+      if (this._mounted || reportError === true) {
+        this.setState({ exportReportInProgress: false });
+      }
+    });
   }
 
   render() {
@@ -583,7 +610,7 @@ class AccountsHistory extends React.Component {
                 actions={this.state.actions}
                 query={query}
                 onChangeActions={this.onChangeActions}
-                onExportFeesFinesReport={this.buildFeesFinesReport}
+                onExportFeesFinesReport={this.generateFeesFinesReport}
                 patronGroup={patronGroup}
                 handleOptionsChange={this.handleOptionsChange}
               />
@@ -637,6 +664,7 @@ class AccountsHistory extends React.Component {
                 balance={balance}
                 handleEdit={this.handleEdit}
               />
+              <Callout ref={(ref) => { this.callout = ref; }} />
             </section>
           </Paneset>
         </Pane>

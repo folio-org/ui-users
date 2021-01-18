@@ -1,7 +1,7 @@
 import { exportCsv } from '@folio/stripes/util';
 
 import { feeFineReportColumns } from '../../../constants';
-import _ from 'lodash';
+import { isEmpty, map } from 'lodash';
 import {
   getFullName,
   formatActionDescription,
@@ -9,6 +9,29 @@ import {
   formatDateAndTime,
   getServicePointOfCurrentAction,
 } from '../../util';
+
+const getValue = (value) => value || '';
+
+const extractComments = (action) => {
+  const replacer = (comment, regexp) => comment.replace(regexp, '').trim();
+  const comments = {
+    actionInfoStaff: '',
+    actionInfoPatron: ''
+  };
+  const actionComments = action.comments ? action.comments.split('\n') : [];
+
+  actionComments.forEach((comment, index) => {
+    switch (index) {
+      case 0:
+        comments.actionInfoStaff = replacer(comment, /STAFF :/i);
+        break;
+      case 1:
+        comments.actionInfoPatron = replacer(comment, /PATRON :/i);
+    }
+  });
+
+  return comments;
+};
 
 class FeeFineReport {
   constructor({ data, intl: { formatMessage, formatTime } }) {
@@ -18,7 +41,7 @@ class FeeFineReport {
     //  accounts: [] - GET: 'accounts?query=(userId==:{id})&limit=${MAX_RECORDS}',
     //  loans: [] - GET: 'circulation/loans?query=(userId==:{id})&limit=1000',
     //  servicePoints: [] - props.okapi.currentUser.servicePoints
-    //  patronGroup: patronGroup,
+    //  patronGroup: 'group' - string,
     //  user: user - GET: 'users/:{id}',
     // }
     this.data = data;
@@ -32,6 +55,7 @@ class FeeFineReport {
   }
 
   buildReport() {
+    const reportData = [];
     const {
       user = {},
       patronGroup = '',
@@ -41,47 +65,51 @@ class FeeFineReport {
       loans = [],
     } = this.data;
 
-    if (_.isEmpty(feeFineActions)) {
+    if (isEmpty(feeFineActions)) {
       return;
     }
 
-    const reportData = [];
-    const regexpStaff = /STAFF :/i; // utils
-    const regexpPatron = /PATRON :/i; //utils
-
-    _.map(feeFineActions, (action) => {
+    map(feeFineActions, (action) => {
       const account = accounts.find(({ id }) => id === action.accountId);
-      const loan = account.loanId ? loans.find(({ id }) => id === account.loanId) : '';
-      console.log('currentAccount ', account);
+      const loan = account.loanId ? loans.find(({ id }) => id === account.loanId) : {};
+      const { actionInfoStaff, actionInfoPatron } = extractComments(action);
+
       const reportRowFormatter = {
+        patronId: user.id,
         patronName: getFullName(user),
-        patronBarcode: user.barcode, // link
+        patronBarcode: user.barcode,
         patronGroup,
         actionDate: formatDateAndTime(action.dateAction, this.formatTime),
-        actionDescription: formatActionDescription(action), // вынести в утилс
+        actionDescription: formatActionDescription(action),
         actionAmount: formatCurrencyAmount(action.amountAction),
         actionBalance: formatCurrencyAmount(action.balance),
         actionTransactionInfo: action.transactionInformation !== '-' ? action.transactionInformation : '',
         actionCreatedAt: getServicePointOfCurrentAction(action, servicePoints),
         actionSource: action.source,
-        actionInfoStaff: action.comments ? action.comments.split('\n')[0].replace(regexpStaff, '').trim() : '',
-        actionInfoPatron: action.comments ? action.comments.split('\n')[1].replace(regexpPatron, '').trim() : '',
+        actionInfoStaff,
+        actionInfoPatron,
         type: account.feeFineType,
         owner: account.feeFineOwner,
         billedDate: formatDateAndTime(account.metadata.createdDate, this.formatTime),
         billedAmount: account.amount ? formatCurrencyAmount(account.amount) : '',
         remainingAmount: formatCurrencyAmount(account.remaining),
         latestPaymentStatus: account.paymentStatus.name,
-        itemInstance: account.title || '',
-        itemMaterialType: account.materialType || '',
-        itemBarcode: account.barcode || '',
-        itemCallNumber: account.callNumber || '',
-        itemLocation: account.location || '',
+        itemInstance: getValue(account.title),
+        itemMaterialType: getValue(account.materialType),
+        itemBarcode: account.barcode ? account.barcode : '',
+        itemId: getValue(account.itemId),
+        itemInstanceId: getValue(account.instanceId),
+        itemHoldingsRecordId: getValue(account.holdingsRecordId),
+        itemCallNumber: getValue(account.callNumber),
+        itemLocation: getValue(account.location),
         itemDueDate: account.dueDate ? formatDateAndTime(account.dueDate, this.formatTime) : '',
         itemReturnedDate: account.returnedDate ? formatDateAndTime(account.returnedDate, this.formatTime) : '',
-        itemOverduePolicy: loan ? loan.overdueFinePolicy.name : '',
-        itemLostPolicy: loan ? loan.lostItemPolicy.name : '',
-        itemLoanDetail: loan ? loan.id : ''
+        itemOverduePolicy: loan.overdueFinePolicy ? loan.overdueFinePolicy.name : '',
+        itemOverduePolicyId: '',
+        itemLostPolicy: loan.itemLostPolicy ? loan.itemLostPolicy.name : '',
+        itemLostPolicyId: '',
+        itemLoanDetail: getValue(loan.id),
+        loanId: getValue(account.loanId),
       };
 
       reportData.push(reportRowFormatter);
@@ -93,16 +121,15 @@ class FeeFineReport {
   parse() {
     this.reportData = this.buildReport();
     const origin = window.location.origin;
-    // console.log('reportData ', this.reportData);
 
     return this.reportData.map(row => {
       return {
         ...row,
-        patronBarcode: `=HYPERLINK("${origin}/users/preview/${row.patronId}", "${row.patronId}")`,
-        itemBarcode: `=HYPERLINK("${origin}/users")`,
-        itemOverduePolicy: `=HYPERLINK("${origin}/users")`,
-        itemLostPolicy: `=HYPERLINK("${origin}/users")`,
-        itemLoanDetails: `=HYPERLINK("${origin}/users")`,
+        patronBarcode: `=HYPERLINK("${origin}/users/preview/${row.patronId}", "${row.patronBarcode}")`,
+        itemBarcode: `=HYPERLINK("${origin}/inventory/view/${row.itemInstanceId}/${row.itemHoldingsRecordId}/${row.itemId}", ${row.itemBarcode})`,
+        itemOverduePolicy: `=HYPERLINK("${origin}//settings/circulation/fine-policies/${row.itemOverduePolicyId}", "${row.itemOverduePolicy}")`,
+        itemLostPolicy: `=HYPERLINK("${origin}/settings/circulation/lost-item-fee-policy/${row.itemLostPolicyId}", "${row.itemLostPolicy}")`,
+        itemLoanDetails: `=HYPERLINK("${origin}/users/${row.patronId}/loans/view/${row.loanId}", "${row.loanId}")`,
       };
     });
   }
