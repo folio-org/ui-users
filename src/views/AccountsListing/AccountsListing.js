@@ -110,6 +110,9 @@ class AccountsHistory extends React.Component {
       comments: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
+      loans: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
       query: PropTypes.object,
     }),
     okapi: PropTypes.object,

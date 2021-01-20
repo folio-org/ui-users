@@ -20,7 +20,7 @@ export const formatActionDescription = (action) => {
     (action.paymentMethod
       ? ('-' + action.paymentMethod)
       : ' '
-    )
+    );
 };
 
 export const formatCurrencyAmount = (amount = 0) => parseFloat(amount).toFixed(2);
