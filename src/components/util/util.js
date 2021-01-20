@@ -33,6 +33,8 @@ export const getServicePointOfCurrentAction = (action, servicePoints = []) => {
   return servicePoint ? servicePoint.name : action.createdAt;
 };
 
+export const calculateRemainingAmount = (remaining) => (parseFloat(remaining) * 100) / 100;
+
 export function validate(item, index, items, field, label) {
   const error = {};
   for (let i = 0; i < items.length; i++) {

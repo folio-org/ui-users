@@ -8,6 +8,7 @@ import {
   formatCurrencyAmount,
   formatDateAndTime,
   getServicePointOfCurrentAction,
+  calculateRemainingAmount,
 } from '../../util';
 
 const getValue = (value) => value || '';
@@ -73,7 +74,6 @@ class FeeFineReport {
       const account = accounts.find(({ id }) => id === action.accountId);
       const loan = account.loanId ? loans.find(({ id }) => id === account.loanId) : {};
       const { actionInfoStaff, actionInfoPatron } = extractComments(action);
-
       const reportRowFormatter = {
         patronId: user.id,
         patronName: getFullName(user),
@@ -92,7 +92,7 @@ class FeeFineReport {
         owner: account.feeFineOwner,
         billedDate: formatDateAndTime(account.metadata.createdDate, this.formatTime),
         billedAmount: account.amount ? formatCurrencyAmount(account.amount) : '',
-        remainingAmount: formatCurrencyAmount(account.remaining),
+        remainingAmount: calculateRemainingAmount(account.remaining),
         latestPaymentStatus: account.paymentStatus.name,
         itemInstance: getValue(account.title),
         itemMaterialType: getValue(account.materialType),
@@ -105,9 +105,9 @@ class FeeFineReport {
         itemDueDate: account.dueDate ? formatDateAndTime(account.dueDate, this.formatTime) : '',
         itemReturnedDate: account.returnedDate ? formatDateAndTime(account.returnedDate, this.formatTime) : '',
         itemOverduePolicy: loan.overdueFinePolicy ? loan.overdueFinePolicy.name : '',
-        itemOverduePolicyId: '',
-        itemLostPolicy: loan.itemLostPolicy ? loan.itemLostPolicy.name : '',
-        itemLostPolicyId: '',
+        itemOverduePolicyId: loan.overdueFinePolicyId ? loan.overdueFinePolicyId : '',
+        itemLostPolicy: loan.lostItemPolicy ? loan.lostItemPolicy.name : '',
+        itemLostPolicyId: loan.lostItemPolicyId ? loan.lostItemPolicyId : '',
         itemLoanDetail: getValue(loan.id),
         loanId: getValue(account.loanId),
       };
@@ -126,8 +126,8 @@ class FeeFineReport {
       return {
         ...row,
         patronBarcode: `=HYPERLINK("${origin}/users/preview/${row.patronId}", "${row.patronBarcode}")`,
-        itemBarcode: `=HYPERLINK("${origin}/inventory/view/${row.itemInstanceId}/${row.itemHoldingsRecordId}/${row.itemId}", ${row.itemBarcode})`,
-        itemOverduePolicy: `=HYPERLINK("${origin}//settings/circulation/fine-policies/${row.itemOverduePolicyId}", "${row.itemOverduePolicy}")`,
+        itemBarcode: `=HYPERLINK("${origin}/inventory/view/${row.itemInstanceId}/${row.itemHoldingsRecordId}/${row.itemId}", "${row.itemBarcode}")`,
+        itemOverduePolicy: `=HYPERLINK("${origin}/settings/circulation/fine-policies/${row.itemOverduePolicyId}", "${row.itemOverduePolicy}")`,
         itemLostPolicy: `=HYPERLINK("${origin}/settings/circulation/lost-item-fee-policy/${row.itemLostPolicyId}", "${row.itemLostPolicy}")`,
         itemLoanDetails: `=HYPERLINK("${origin}/users/${row.patronId}/loans/view/${row.loanId}", "${row.loanId}")`,
       };

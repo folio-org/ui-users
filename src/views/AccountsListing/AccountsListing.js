@@ -411,7 +411,7 @@ class AccountsHistory extends React.Component {
         const report = new FeeFineReport(reportData);
         await report.toCSV();
       } catch (error) {
-        if (error.message === 'noItemsFound') {
+        if (error.message) {
           reportError = true;
           this.callout.sendCallout({
             type: 'error',
@@ -419,7 +419,7 @@ class AccountsHistory extends React.Component {
           });
         }
       }
-      if (this._mounted || reportError === true) {
+      if (reportError) {
         this.setState({ exportReportInProgress: false });
       }
     });
