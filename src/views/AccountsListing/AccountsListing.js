@@ -406,20 +406,18 @@ class AccountsHistory extends React.Component {
         type: 'success',
         message: <FormattedMessage id="ui-users.reports.inProgress" />
       });
-      let reportError = false;
+
       try {
         const report = new FeeFineReport(reportData);
         await report.toCSV();
       } catch (error) {
         if (error.message) {
-          reportError = true;
           this.callout.sendCallout({
             type: 'error',
             message: <FormattedMessage id="ui-users.settings.limits.callout.error" />
           });
         }
-      }
-      if (reportError) {
+      } finally {
         this.setState({ exportReportInProgress: false });
       }
     });

@@ -121,7 +121,7 @@ const Menu = (props) => {
         <FormattedMessage id="ui-users.accounts.history.button.transfer" />
       </Button>
       <Button
-        id="open-closed-all-export-button"
+        id="fee-fine-report-export-button"
         marginBottom0
         disabled={_.isEmpty(feeFineActions)}
         buttonStyle="primary"

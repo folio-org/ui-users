@@ -44,6 +44,7 @@
 * Refactor to avoid deprecated props to `<Dropdown>`. Refs UIU-2007, STCOM-791.
 * Use patron block templates to populate fields in create block screen. Refs UIU-1910.
 * Set informative message when error declaring item lost. Fixes UIU-2004.
+* Create fees/fines EXPORT spreadsheet for single patron and add EXPORT option to Fees/Fines History. Refs UIU-1955, UIU-1958.
 
 ## [5.0.1](https://github.com/folio-org/ui-users/tree/v5.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.0...v5.0.1)
