@@ -613,7 +613,6 @@
 
   "accounts.cancelError": "Cancelled as error",
 
-  "accounts.cancellation.field.reason": "Reason for cancellation*",
   "accounts.cancellation.field.feefinewill": "fee/fine will be",
   "accounts.cancellation.field.cancelled": "cancelled",
   "accounts.cancellation.field.confirmcancelled": "Confirm fee/fine cancellation",

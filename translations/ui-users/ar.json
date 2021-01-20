@@ -266,7 +266,6 @@
     "accounts.history.columns.status": "حالة السداد",
     "accounts.history.columns.due": "تاريخ الاستحقاق",
     "accounts.history.columns.returned": "تاريخ الإعادة",
-    "accounts.cancellation.field.reason": "سبب الإلغاء*",
     "accounts.cancellation.field.feefinewill": "ستكون الرسم/الغرامة",
     "accounts.cancellation.field.cancelled": "ملغي",
     "accounts.cancellation.field.confirmcancelled": "تأكيد إلغاء الرسم/الغرامة",

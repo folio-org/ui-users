@@ -266,7 +266,6 @@
     "accounts.history.columns.status": "Статус платежа",
     "accounts.history.columns.due": "Срок выполнения",
     "accounts.history.columns.returned": "Дата возврата",
-    "accounts.cancellation.field.reason": "Причина отмены *",
     "accounts.cancellation.field.feefinewill": "оплата будет",
     "accounts.cancellation.field.cancelled": "Отменен",
     "accounts.cancellation.field.confirmcancelled": "Подтвердить отмену оплаты",
