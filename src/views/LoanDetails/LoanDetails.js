@@ -164,6 +164,8 @@ class LoanDetails extends React.Component {
     const { stripes, resources } = this.props;
     const records = resources?.loanAccountsActions?.records ?? [];
     const total = records.reduce((acc, { amount }) => (acc + parseFloat(amount)), 0);
+    const suspendedAction = records.filter(a => a?.paymentStatus?.name === 'Suspended claim returned') || [];
+    const suspendedStatus = (suspendedAction.length > 0) ? 'Suspended' : '';
 
     if (total === 0) return '-';
 
@@ -171,15 +173,25 @@ class LoanDetails extends React.Component {
 
     return stripes.hasPerm('ui-users.accounts')
       ? (
-        <button
-          className={css.feefineButton}
-          onClick={(e) => this.feefinedetails(e)}
-          type="button"
-        >
-          {value}
-        </button>
+        <>
+          <button
+            className={css.feefineButton}
+            onClick={(e) => this.feefinedetails(e)}
+            type="button"
+          >
+            {value}
+          </button>
+          <br />
+          {suspendedStatus}
+        </>
       )
-      : value;
+      : (
+        <>
+          {value}
+          <br />
+          {suspendedStatus}
+        </>
+      );
   }
 
   feefinedetails = (e) => {

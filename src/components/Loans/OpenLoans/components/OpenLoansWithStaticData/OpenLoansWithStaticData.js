@@ -176,13 +176,17 @@ class OpenLoansWithStaticData extends React.Component {
     const { resources } = this.props;
     const accounts = get(resources, ['loanAccount', 'records'], []);
     const accountsLoan = accounts.filter(a => a.loanId === loan.id) || [];
+    let suspendedStatus = '';
     let remaining = 0;
 
+    accountsLoan.forEach(a => {
+      suspendedStatus = (a.paymentStatus.name === 'Suspended claim returned') ? '\nSuspended' : '';
+    });
     accountsLoan.forEach(a => {
       remaining += parseFloat(a.remaining);
     });
 
-    return (remaining === 0) ? '-' : remaining.toFixed(2);
+    return (remaining === 0) ? '-' : (remaining.toFixed(2) + suspendedStatus);
   };
 
   getContributorslist = (loan) => {
