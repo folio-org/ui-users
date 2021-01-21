@@ -266,7 +266,6 @@
     "accounts.history.columns.status": "Status do pagamento",
     "accounts.history.columns.due": "Data de vencimento",
     "accounts.history.columns.returned": "Data da devolução",
-    "accounts.cancellation.field.reason": "Motivo do cancelamento*",
     "accounts.cancellation.field.feefinewill": "taxa/multa será",
     "accounts.cancellation.field.cancelled": "cancelado",
     "accounts.cancellation.field.confirmcancelled": "Confirmar o cancelamento da taxa/multa",
@@ -804,5 +803,9 @@
     "information.recalculate.expirationDate": "Recalcular",
     "information.recalculate.modal.text": "Os usuários com grupo de usuário {group} geralmente expiram após {offset} dias. Deseja alterar a data de validade de acordo?",
     "information.recalculate.modal.label": "Recalcular a data de expiração?",
-    "information.recalculate.will.reactivate.user": "O usuário irá reativar após salvar"
+    "information.recalculate.will.reactivate.user": "O usuário irá reativar após salvar",
+    "blocks.form.label.template": "Nome do modelo",
+    "feefines.errors.notBilledTitle": "Taxas de itens perdidos não cobradas do usuário",
+    "feefines.errors.notBilledMessage": "Taxa(s) de item(s) perdido(s) não cobrado(s) ao cliente porque não se encontrou \"Proprietário da Multa/Taxa\" para o item \"Ponto de serviço principal\" em Definir \"Taxa/multa\": Proprietários'.<div><b>Precisa faturar manualmente a(s) taxa(s) de item(s) perdido(s).</b></div>",
+    "feefines.errors.updateOwnerMessage": "Para evitar erros no futuro, solicite que o administrador apropriado na instituição atualize a configuração 'Proprietário da Multa/Taxa' para associar 'Ponto de Serviço Principal' para 'Proprietário da Multa/Taxa'."
 }

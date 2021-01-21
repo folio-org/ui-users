@@ -266,7 +266,6 @@
     "accounts.history.columns.status": "حالة السداد",
     "accounts.history.columns.due": "تاريخ الاستحقاق",
     "accounts.history.columns.returned": "تاريخ الإعادة",
-    "accounts.cancellation.field.reason": "سبب الإلغاء*",
     "accounts.cancellation.field.feefinewill": "ستكون الرسم/الغرامة",
     "accounts.cancellation.field.cancelled": "ملغي",
     "accounts.cancellation.field.confirmcancelled": "تأكيد إلغاء الرسم/الغرامة",
@@ -804,5 +803,9 @@
     "information.recalculate.expirationDate": "إعادة حساب",
     "information.recalculate.modal.text": "عادةً ما ينتهي المستخدمون من مجموعة المستفيد {group} بعد {offset} يوماً. هل تريد تغيير تاريخ الانتهاء وفقًا لذلك؟",
     "information.recalculate.modal.label": "إعادة حساب تاريخ الانتهاء؟",
-    "information.recalculate.will.reactivate.user": "ستتم إعادة تفعيل المستخدم بعد الحفظ"
+    "information.recalculate.will.reactivate.user": "ستتم إعادة تفعيل المستخدم بعد الحفظ",
+    "blocks.form.label.template": "اسم القالب",
+    "feefines.errors.notBilledTitle": "لم تتم فوترة رسوم المادة الضائعة إلى المستفيد",
+    "feefines.errors.notBilledMessage": "لم تتم فوترة رسوم المادة الضائعة إلى المستفيد لأنه لم يتم العثور على 'مالك الرسم/ الغرامة' ل'نقطة الخدمة الأساسية' للمادة في الإعداد 'الرسم/الغرامة: المالكين'<div><b>يجب فوترة رسوم المادة الضائعة يدوياً</b></div>",
+    "feefines.errors.updateOwnerMessage": "لتجنب حدوث أخطاء في المستقبل، يرجى مطالبة المسؤول المناسب في المؤسسة بتحديث إعداد 'مالك الرسم/الغرامة' بربط 'نقطة الخدمة الأساسية' بـ 'مالك الرسم/الغرامة'."
 }

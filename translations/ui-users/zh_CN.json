@@ -266,7 +266,6 @@
     "accounts.history.columns.status": "支付状态",
     "accounts.history.columns.due": "到期日",
     "accounts.history.columns.returned": "已归还日期",
-    "accounts.cancellation.field.reason": "取消原因",
     "accounts.cancellation.field.feefinewill": "费用/罚款为",
     "accounts.cancellation.field.cancelled": "已取消",
     "accounts.cancellation.field.confirmcancelled": "确认取消费用/罚款",
@@ -804,5 +803,9 @@
     "information.recalculate.expirationDate": "重新计算",
     "information.recalculate.modal.text": "具有{group}用户组的用户通常在{offset}天后过期。要相应更改失效日期吗？",
     "information.recalculate.modal.label": "重新计算过期日期？",
-    "information.recalculate.will.reactivate.user": "保存后用户将重新激活"
+    "information.recalculate.will.reactivate.user": "保存后用户将重新激活",
+    "blocks.form.label.template": "Template name",
+    "feefines.errors.notBilledTitle": "Lost item fee(s) not billed to patron",
+    "feefines.errors.notBilledMessage": "Lost item fee(s) not billed to patron because 'Fee/fine owner' not found for item's 'Primary service point' in Setting 'Fee/fine: Owners'.<div><b>Need to bill lost item fee(s) manually.</b></div>",
+    "feefines.errors.updateOwnerMessage": "To avoid error in future, please request that appropriate administrator at institution update 'Fee/fine owner' setting to associate 'Primary service point' to 'Fee/fine owner'."
 }

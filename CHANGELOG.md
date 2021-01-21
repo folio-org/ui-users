@@ -42,7 +42,11 @@
 * Retrieve up to 10k tags instead of 10. Refs UIU-2003
 * Increment `notes` interface to `2.0`
 * Refactor to avoid deprecated props to `<Dropdown>`. Refs UIU-2007, STCOM-791.
+* Use patron block templates to populate fields in create block screen. Refs UIU-1910.
+* Set informative message when error declaring item lost. Fixes UIU-2004.
+* Change 'Reason for cancellation' to 'Additional information for staff' on Cancel Fee/Fine page. Refs UIU-1999.
 * Accessibility: Invalid ARIA attribute. Refs UIU-1685.
+
 ## [5.0.1](https://github.com/folio-org/ui-users/tree/v5.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.0...v5.0.1)
 
@@ -109,6 +113,7 @@
 * Make the assigned service points for the user have been checked in the Add service points modal. Fixes UIU-1560.
 * Add Departments filter. Refs UIU-1355.
 * Always show the `Title` field for a loan, even if it is empty. Fixes UIU-1573.
+* Hitting 'Charge only' button multiple times results in more than one fee/fine being created. Refs UIU-1993.
 
 ## [4.0.0](https://github.com/folio-org/ui-users/tree/v4.0.0) (2020-06-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v3.0.0...v4.0.0)
