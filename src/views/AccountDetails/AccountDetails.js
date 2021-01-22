@@ -126,7 +126,6 @@ class AccountDetails extends React.Component {
       sortOrder: ['date', 'date'],
       sortDirection: ['desc', 'desc'],
       remaining: 0,
-      paymentStatus: '',
     };
   }
 
@@ -279,6 +278,7 @@ class AccountDetails extends React.Component {
     const isAccountsPending = _.get(resources, ['accounts', 'isPending'], true);
     const isActionsPending = _.get(resources, ['accountActions', 'isPending'], true);
     const feeFineActions = _.get(resources, ['accountActions', 'records'], []);
+    const latestPaymentStatus = account.paymentStatus.name;
 
     const actions = this.state.data || [];
     const actionsSort = _.orderBy(actions, [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
@@ -397,10 +397,13 @@ class AccountDetails extends React.Component {
                 value={formatCurrencyAmount(this.state.remaining)}
               />
             </Col>
-            <Col xs={1.5}>
+            <Col
+              data-test-latestPaymentStatus
+              xs={1.5}
+            >
               <KeyValue
                 label={<FormattedMessage id="ui-users.details.field.latest" />}
-                value={this.state.paymentStatus}
+                value={latestPaymentStatus}
               />
             </Col>
             <Col
