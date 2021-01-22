@@ -48,9 +48,12 @@ import DialogInteractor from './dialog';
 @interactor class BulkClaimReturnedModal {
   static defaultScope = '[data-test-bulk-claim-returned-modal]';
 
+  additionalInfo = new Interactor('[data-test-bulk-claim-returned-additionalInfo]');
   openRequestsNumber = new Interactor('[data-test-item-request-count]');
-  cancelButton = clickable('[data-test-bulk-cr-cancel-button]');
-  confirmButton = clickable('[data-test-bulk-cr-continue-button]');
+  cancelButton = new ButtonInteractor('[data-test-bulk-cr-cancel-button]');
+  confirmButton = new ButtonInteractor('[data-test-bulk-cr-confirm-button]');
+  closeButton = new ButtonInteractor('[data-test-bulk-cr-close-button]');
+  isConfirmButtonDisabled = property('[data-test-bulk-cr-confirm-button]', 'disabled');
 }
 
 @interactor class ErrorModal {

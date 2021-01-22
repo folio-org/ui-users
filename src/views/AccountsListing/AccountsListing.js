@@ -665,7 +665,7 @@ class AccountsHistory extends React.Component {
                 balance={balance}
                 handleEdit={this.handleEdit}
               />
-              <Callout ref={(ref) => { this.callout = ref; }} />
+              {/* <Callout ref={(ref) => { this.callout = ref; }} /> */}
             </section>
           </Paneset>
         </Pane>

@@ -1,7 +1,11 @@
+import {
+  isEmpty,
+  map,
+} from 'lodash';
+
 import { exportCsv } from '@folio/stripes/util';
 
 import { feeFineReportColumns } from '../../../constants';
-import { isEmpty, map } from 'lodash';
 import {
   getFullName,
   formatActionDescription,
