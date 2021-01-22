@@ -144,15 +144,3 @@ export const refundReportColumns = [
 ];
 
 export const NO_FEE_FINE_OWNER_FOUND_MESSAGE = 'No fee/fine owner found for item\'s permanent location';
-
-export const refundClaimReturned = {
-  PAYMENT_STATUS: 'Suspended claim returned',
-  LOST_ITEM_FEE: 'Lost item fee',
-  LOST_ITEM_PROCESSING_FEE: 'Lost item processing fee',
-  TYPE_ACTION: 'Transferred',
-  CREDITED_ACTION: 'Credited fully-Claim returned',
-  REFUNDED_ACTION: 'Refunded fully-Claim returned',
-  TRANSACTION_CREDITED: 'Credited',
-  TRANSACTION_VERB_REFUND: 'Refund',
-  TRANSACTION_VERB_REFUNDED: 'Refunded',
-};
