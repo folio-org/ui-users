@@ -20,6 +20,7 @@ import {
 } from '@folio/stripes/components';
 
 import { calculateSelectedAmount } from '../accountFunctions';
+import { FEE_FINE_ACTIONS } from '../../../constants';
 
 import css from './PayWaive.css';
 
@@ -140,8 +141,9 @@ class ActionModal extends React.Component {
   renderMethod = (options) => {
     const {
       action,
-      intl: { formatMessage }
+      intl: { formatMessage },
     } = this.props;
+
     return (
       <Col xs={this.isPaymentAction(action) ? 3 : 7}>
         <Row>
@@ -152,13 +154,22 @@ class ActionModal extends React.Component {
         </Row>
         <Row>
           <Col xs id="action-selection">
-            <Field
-              name="method"
-              component={Select}
-              dataOptions={options}
-              placeholder={formatMessage({ id: `ui-users.accounts.${action}.method.placeholder` })}
-              validate={this.validateMethod}
-            />
+            {_.isEmpty(options)
+              ? <Field
+                name="method"
+                component={Select}
+                dataOptions={options}
+                placeholder={formatMessage({ id: `ui-users.accounts.${action}.method.placeholder` })}
+                error={formatMessage({ id: `ui-users.accounts.${action}.error.select` })}
+              />
+              : <Field
+                name="method"
+                component={Select}
+                dataOptions={options}
+                placeholder={formatMessage({ id: `ui-users.accounts.${action}.method.placeholder` })}
+                validate={this.validateMethod}
+              />
+            }
           </Col>
         </Row>
       </Col>
@@ -166,11 +177,11 @@ class ActionModal extends React.Component {
   }
 
   isPaymentAction = (action) => {
-    return action === 'payment';
+    return action === FEE_FINE_ACTIONS.PAYMENT;
   }
 
   isRefundAction = (action) => {
-    return action === 'refund';
+    return action === FEE_FINE_ACTIONS.REFUND;
   }
 
   onChangeOwner = ({ target: { value } }) => {
@@ -275,10 +286,9 @@ class ActionModal extends React.Component {
 
   validateMethod = (value) => {
     let error;
-    const { action } = this.props;
 
     if (!value) {
-      error = <FormattedMessage id={`ui-users.accounts.${action}.error.select`} />;
+      error = <FormattedMessage id="ui-users.feefines.modal.error" />;
     }
 
     return error;
