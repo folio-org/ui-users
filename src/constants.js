@@ -22,9 +22,9 @@ export const loanStatuses = {
 
 export const loanActions = {
   CLAIMED_RETURNED: 'claimedReturned',
-  DECLARED_LOST:'declaredLost',
-  AGED_TO_LOST:'itemAgedToLost',
-  CLOSED_LOAN:'closedLoan',
+  DECLARED_LOST: 'declaredLost',
+  AGED_TO_LOST: 'itemAgedToLost',
+  CLOSED_LOAN: 'closedLoan',
 };
 
 // The names of the mutators which can executed on a given loan.
@@ -84,8 +84,15 @@ export const waiveStatuses = [
 ];
 
 export const refundStatuses = {
-  RefundedFully:'Refunded fully',
+  RefundedFully: 'Refunded fully',
   RefundedPartially: 'Refunded partially',
+};
+
+export const FEE_FINE_ACTIONS = {
+  PAYMENT: 'payment',
+  WAIVE: 'waive',
+  TRANSFER: 'transfer',
+  REFUND: 'refund',
 };
 
 export const reportColumns = [
