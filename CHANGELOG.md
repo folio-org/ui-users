@@ -50,6 +50,7 @@
 * Accessibility: Invalid ARIA attribute. Refs UIU-1685.
 * Wrong error message appears when required field not selected on Pay/Waive/Transfer modal. Refs UIU-1991.
 * Create fees/fines EXPORT spreadsheet for single patron and add EXPORT option to Fees/Fines History. Refs UIU-1955, UIU-1958.
+* Add 'User: Can override patron blocks' permission. Refs UIU-2025.
 
 ## [5.0.1](https://github.com/folio-org/ui-users/tree/v5.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.0...v5.0.1)
