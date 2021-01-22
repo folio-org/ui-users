@@ -19,10 +19,7 @@ const getValue = (value) => value || '';
 
 const extractComments = (action) => {
   const replacer = (comment, regexp) => comment.replace(regexp, '').trim();
-  const comments = {
-    actionInfoStaff: '',
-    actionInfoPatron: ''
-  };
+  const comments = {};
   const actionComments = action.comments ? action.comments.split('\n') : [];
 
   actionComments.forEach((comment, index) => {
@@ -32,6 +29,10 @@ const extractComments = (action) => {
         break;
       case 1:
         comments.actionInfoPatron = replacer(comment, /PATRON :/i);
+        break;
+      default:
+        comments.actionInfoStaff = '';
+        comments.actionInfoPatron = '';
     }
   });
 
@@ -54,7 +55,7 @@ class FeeFineReport {
     this.formatTime = formatTime;
     this.reportData = null;
     this.columnsMap = feeFineReportColumns.map(value => ({
-      label: this.formatMessage({ id: `ui-users.reports.feeFine.${value}`}),
+      label: this.formatMessage({ id: `ui-users.reports.feeFine.${value}` }),
       value
     }));
   }
@@ -71,7 +72,7 @@ class FeeFineReport {
     } = this.data;
 
     if (isEmpty(feeFineActions)) {
-      return;
+      return undefined;
     }
 
     map(feeFineActions, (action) => {
