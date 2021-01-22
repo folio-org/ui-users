@@ -68,6 +68,7 @@ class ModalContent extends React.Component {
     onClose: PropTypes.func.isRequired,
     handleError: PropTypes.func.isRequired,
     disableButton: PropTypes.func,
+    validateAction: PropTypes.func,
     itemRequestCount: PropTypes.number.isRequired,
   };
 
@@ -77,7 +78,7 @@ class ModalContent extends React.Component {
 
   constructor(props) {
     super(props);
-
+    this.validateAction = this.props.validateAction;
     this.state = {
       additionalInfo: '',
     };
@@ -115,6 +116,7 @@ class ModalContent extends React.Component {
 
     if (loanAction === loanActionMutators.CLAIMED_RETURNED) {
       requestData.itemClaimedReturnedDateTime = new Date().toISOString();
+      this.validateAction();
     }
 
     if (loanAction === loanActionMutators.DECLARE_LOST) {

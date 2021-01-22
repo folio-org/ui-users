@@ -22,6 +22,7 @@ class LoanActionDialog extends React.Component {
     loanAction: PropTypes.string.isRequired,
     modalLabel: PropTypes.object.isRequired,
     disableButton: PropTypes.func,
+    validateAction: PropTypes.func,
     itemRequestCount: PropTypes.number.isRequired,
   };
 
@@ -37,6 +38,7 @@ class LoanActionDialog extends React.Component {
       loanAction,
       modalLabel,
       disableButton,
+      validateAction,
       itemRequestCount,
     } = this.props;
 
@@ -85,6 +87,7 @@ class LoanActionDialog extends React.Component {
           onClose={onClose}
         >
           <ModalContent
+            validateAction={validateAction}
             loanAction={loanAction}
             loan={loan}
             itemRequestCount={itemRequestCount}
