@@ -43,13 +43,12 @@
 * Increment `notes` interface to `2.0`
 * Refactor to avoid deprecated props to `<Dropdown>`. Refs UIU-2007, STCOM-791.
 * Use patron block templates to populate fields in create block screen. Refs UIU-1910.
-<<<<<<< HEAD
-* Wrong error message appears when required field not selected on Pay/Waive/Transfer modal. Refs UIU-1991.
 * Hitting 'Charge only' button multiple times results in more than one fee/fine being created. Refs UIU-1993.
-=======
 * Set informative message when error declaring item lost. Fixes UIU-2004.
 * Change 'Reason for cancellation' to 'Additional information for staff' on Cancel Fee/Fine page. Refs UIU-1999.
->>>>>>> bf1dfdc0088f562d0248214cffd52f7a1dbe2544
+* Increment `react-redux` to `v7`, `redux-form` to `v8`. Refs UIU-2017, STRIPES=721.
+* Accessibility: Invalid ARIA attribute. Refs UIU-1685.
+* Wrong error message appears when required field not selected on Pay/Waive/Transfer modal. Refs UIU-1991.
 
 ## [5.0.1](https://github.com/folio-org/ui-users/tree/v5.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.0...v5.0.1)

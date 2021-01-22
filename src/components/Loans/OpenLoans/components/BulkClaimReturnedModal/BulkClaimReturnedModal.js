@@ -18,6 +18,7 @@ import {
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 import { getOpenRequestsPath } from '../../../../util';
+import refundTransferClaimReturned from '../../../../util/refundTransferClaimReturned';
 
 import css from '../../../../ModalContent';
 
@@ -31,11 +32,27 @@ class BulkClaimReturnedModal extends React.Component {
         path: 'circulation/loans/%{loanId}/claim-item-returned',
       },
     },
+    feefineactions: {
+      type: 'okapi',
+      records: 'feefineactions',
+      path: 'feefineactions',
+      fetch: false,
+      accumulate: true,
+    },
+    accounts: {
+      type: 'okapi',
+      records: 'accounts',
+      PUT: {
+        path: 'accounts/%{activeAccount.id}',
+      },
+      fetch: false,
+      accumulate: true,
+    },
+    activeAccount: {},
     loanId: {},
   });
 
   static propTypes = {
-    stripes: PropTypes.object.isRequired,
     checkedLoansIndex: PropTypes.object.isRequired,
     intl: PropTypes.object.isRequired,
     mutator: PropTypes.shape({
@@ -45,6 +62,24 @@ class BulkClaimReturnedModal extends React.Component {
       loanId: PropTypes.shape({
         replace: PropTypes.func.isRequired,
       }).isRequired,
+      accounts: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+        PUT: PropTypes.func.isRequired,
+      }),
+      feefineactions: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+        POST: PropTypes.func.isRequired,
+      }),
+      activeAccount: PropTypes.shape({
+        update: PropTypes.func,
+      }).isRequired,
+    }).isRequired,
+    okapi: PropTypes.shape({
+      currentUser: PropTypes.object.isRequired,
+    }).isRequired,
+    stripes: PropTypes.shape({
+      connect: PropTypes.func.isRequired,
+      hasPerm: PropTypes.func,
     }),
     onCancel: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
@@ -105,7 +140,9 @@ class BulkClaimReturnedModal extends React.Component {
   claimAllReturned = () => {
     const promises = Object
       .values(this.props.checkedLoansIndex)
-      .map(loan => this.claimItemReturned(loan).catch(e => e));
+      .map(loan => this.claimItemReturned(loan)
+        .then(refundTransferClaimReturned.refundTransfers(loan, this.props))
+        .catch(e => e));
     Promise.all(promises)
       .then(results => this.finishClaims(results));
   }
@@ -168,6 +205,7 @@ class BulkClaimReturnedModal extends React.Component {
       <ModalFooter>
         <Layout className="textRight">
           <Button
+            data-test-bulk-cr-close-button
             buttonStyle="primary"
             onClick={this.onCancel}
           >
@@ -247,6 +285,7 @@ class BulkClaimReturnedModal extends React.Component {
         {operationState === 'pre' &&
           <Col sm={12} className={css.additionalInformation}>
             <TextArea
+              data-test-bulk-claim-returned-additionalInfo
               label={<FormattedMessage id="ui-users.additionalInfo.label" />}
               placeholder={intl.formatMessage({ id: 'ui-users.bulkClaimReturned.moreInfoPlaceholder' })}
               required

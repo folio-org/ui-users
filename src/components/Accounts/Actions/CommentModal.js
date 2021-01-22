@@ -1,12 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+import { Field } from 'react-final-form';
 
-import {
-  Field,
-  reduxForm,
-} from 'redux-form';
-
+import stripesFinalForm from '@folio/stripes/final-form';
 import {
   Row,
   Col,
@@ -33,13 +30,13 @@ class CommentModal extends React.Component {
     invalid: PropTypes.bool,
     onClose: PropTypes.func,
     handleSubmit: PropTypes.func,
-    reset: PropTypes.func,
+    form: PropTypes.object.isRequired,
   };
 
   onSubmit = () => {
     const {
       handleSubmit,
-      reset,
+      form: { reset },
     } = this.props;
 
     handleSubmit();
@@ -49,7 +46,7 @@ class CommentModal extends React.Component {
   handleClose = () => {
     const {
       onClose,
-      reset,
+      form: { reset },
     } = this.props;
 
     onClose();
@@ -75,7 +72,7 @@ class CommentModal extends React.Component {
         size="small"
         dismissible
       >
-        <form>
+        <form onSubmit={this.onSubmit}>
           <Row>
             <Col xs>
               <FormattedMessage id="ui-users.accounts.comment.field.comment" />
@@ -114,8 +111,8 @@ class CommentModal extends React.Component {
   }
 }
 
-export default reduxForm({
-  form: 'comment',
+export default stripesFinalForm({
+  navigationCheck: true,
+  subscription: { values: true },
   validate,
-  fields: [],
 })(CommentModal);

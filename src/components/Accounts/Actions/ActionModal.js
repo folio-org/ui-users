@@ -141,15 +141,8 @@ class ActionModal extends React.Component {
   renderMethod = (options) => {
     const {
       action,
-      data: actionInfo,
       intl: { formatMessage },
-      form: { getState },
     } = this.props;
-    const { values: { ownerId: selectedOwnerId } } = getState();
-
-    const actionOptions = this.isPaymentAction(action)
-      ? actionInfo.filter((selectedAction) => selectedAction.ownerId === selectedOwnerId)
-      : actionInfo;
 
     return (
       <Col xs={this.isPaymentAction(action) ? 3 : 7}>
@@ -161,7 +154,7 @@ class ActionModal extends React.Component {
         </Row>
         <Row>
           <Col xs id="action-selection">
-            {_.isEmpty(actionOptions)
+            {_.isEmpty(options)
               ? <Field
                 name="method"
                 component={Select}
