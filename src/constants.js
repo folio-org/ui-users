@@ -59,6 +59,18 @@ export const statusFilter = [
 export const feeFineBalanceId = 'cf7a0d5f-a327-4ca1-aa9e-dc55ec006b8a';
 export const MAX_RECORDS = '10000';
 
+export const refundClaimReturned = {
+  PAYMENT_STATUS: 'Suspended claim returned',
+  LOST_ITEM_FEE: 'Lost item fee',
+  LOST_ITEM_PROCESSING_FEE: 'Lost item processing fee',
+  TYPE_ACTION: 'Transferred',
+  CREDITED_ACTION: 'Credited fully-Claim returned',
+  REFUNDED_ACTION: 'Refunded fully-Claim returned',
+  TRANSACTION_CREDITED: 'Credited',
+  TRANSACTION_VERB_REFUND: 'Refund',
+  TRANSACTION_VERB_REFUNDED: 'Refunded',
+};
+
 export const paymentStatusesAllowedToRefund = [
   'Paid fully',
   'Paid partially',

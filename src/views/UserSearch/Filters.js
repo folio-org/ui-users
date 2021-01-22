@@ -155,6 +155,7 @@ class Filters extends React.Component {
             name="tags"
             selectedValues={tags}
             onChange={this.handleFilterChange}
+            aria-labelledby="users-filter-accordion-tags"
           />
         </Accordion>
       </AccordionSet>

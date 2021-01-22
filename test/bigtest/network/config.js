@@ -446,6 +446,7 @@ export default function config() {
   this.post('/perms/users/:id/permissions?indexField=userId');
 
   this.post('/circulation/loans/:loanId/declare-item-lost', []);
+  this.post('/circulation/loans/:loanId/claim-item-returned', []);
 
   this.get('/feefineactions', ({ feefineactions }) => {
     return this.serializerOrRegistry.serialize(feefineactions.all());
