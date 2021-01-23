@@ -807,5 +807,7 @@
     "blocks.form.label.template": "Nome do modelo",
     "feefines.errors.notBilledTitle": "Taxas de itens perdidos não cobradas do usuário",
     "feefines.errors.notBilledMessage": "Taxa(s) de item(s) perdido(s) não cobrado(s) ao cliente porque não se encontrou \"Proprietário da Multa/Taxa\" para o item \"Ponto de serviço principal\" em Definir \"Taxa/multa\": Proprietários'.<div><b>Precisa faturar manualmente a(s) taxa(s) de item(s) perdido(s).</b></div>",
-    "feefines.errors.updateOwnerMessage": "Para evitar erros no futuro, solicite que o administrador apropriado na instituição atualize a configuração 'Proprietário da Multa/Taxa' para associar 'Ponto de Serviço Principal' para 'Proprietário da Multa/Taxa'."
+    "feefines.errors.updateOwnerMessage": "Para evitar erros no futuro, solicite que o administrador apropriado na instituição atualize a configuração 'Proprietário da Multa/Taxa' para associar 'Ponto de Serviço Principal' para 'Proprietário da Multa/Taxa'.",
+    "accounts.suspendedBalance": "Saldo suspenso: ",
+    "accounts.suspended": "Saldo suspenso: {amountsuspended}"
 }

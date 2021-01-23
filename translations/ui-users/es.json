@@ -807,5 +807,7 @@
     "blocks.form.label.template": "Template name",
     "feefines.errors.notBilledTitle": "Lost item fee(s) not billed to patron",
     "feefines.errors.notBilledMessage": "Lost item fee(s) not billed to patron because 'Fee/fine owner' not found for item's 'Primary service point' in Setting 'Fee/fine: Owners'.<div><b>Need to bill lost item fee(s) manually.</b></div>",
-    "feefines.errors.updateOwnerMessage": "To avoid error in future, please request that appropriate administrator at institution update 'Fee/fine owner' setting to associate 'Primary service point' to 'Fee/fine owner'."
+    "feefines.errors.updateOwnerMessage": "To avoid error in future, please request that appropriate administrator at institution update 'Fee/fine owner' setting to associate 'Primary service point' to 'Fee/fine owner'.",
+    "accounts.suspendedBalance": "Suspended balance: ",
+    "accounts.suspended": "Suspended balance: {amountsuspended}"
 }
