@@ -406,7 +406,7 @@ class AccountsHistory extends React.Component {
       }
     };
 
-    this.setState({ exportReportInProgress: true }, async () => {
+    this.setState({ exportReportInProgress: true }, () => {
       this.callout.sendCallout({
         type: 'success',
         message: <FormattedMessage id="ui-users.reports.inProgress" />
@@ -414,7 +414,7 @@ class AccountsHistory extends React.Component {
 
       try {
         const report = new FeeFineReport(reportData);
-        await report.toCSV();
+        report.toCSV();
       } catch (error) {
         if (error.message) {
           this.callout.sendCallout({

@@ -109,12 +109,12 @@ class FeeFineReport {
         itemLocation: getValue(account.location),
         itemDueDate: account.dueDate ? formatDateAndTime(account.dueDate, this.formatTime) : '',
         itemReturnedDate: account.returnedDate ? formatDateAndTime(account.returnedDate, this.formatTime) : '',
-        itemOverduePolicy: loan.overdueFinePolicy ? loan.overdueFinePolicy.name : '',
-        itemOverduePolicyId: loan.overdueFinePolicyId ? loan.overdueFinePolicyId : '',
-        itemLostPolicy: loan.lostItemPolicy ? loan.lostItemPolicy.name : '',
-        itemLostPolicyId: loan.lostItemPolicyId ? loan.lostItemPolicyId : '',
-        itemLoanDetail: getValue(loan.id),
-        loanId: getValue(account.loanId),
+        itemOverduePolicy: loan?.overdueFinePolicy ? loan.overdueFinePolicy.name : '',
+        itemOverduePolicyId: loan?.overdueFinePolicyId ? loan.overdueFinePolicyId : '',
+        itemLostPolicy: loan?.lostItemPolicy ? loan.lostItemPolicy.name : '',
+        itemLostPolicyId: loan?.lostItemPolicyId ? loan.lostItemPolicyId : '',
+        itemLoanDetail: getValue(loan?.id),
+        loanId: (!account?.loanId || account?.loanId === '0') ? '' : account.loanId,
       };
 
       reportData.push(reportRowFormatter);
