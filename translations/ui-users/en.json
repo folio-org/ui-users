@@ -825,6 +825,7 @@
   "permission.settings.departments.delete": "Settings (Users): Delete departments",
   "permission.settings.departments.create.edit.view": "Settings (Users): Create, edit, and view departments",
   "permission.settings.departments.all": "Settings (Users): Create, edit, view, and delete departments",
+  "permission.overridePatronBlock":"User: Can override patron blocks for use with override of patron blocks when borrowing, renewing and requesting",
   "bulkClaimReturned.item.title": "Title",
   "bulkClaimReturned.preConfirm": "Confirm claim returned",
   "bulkClaimReturned.postConfirm": "Claim returned confirmation",
