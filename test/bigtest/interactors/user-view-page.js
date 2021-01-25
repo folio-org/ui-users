@@ -9,6 +9,8 @@ import {
   ButtonInteractor,
 } from '@bigtest/interactor';
 
+import CalloutInteractor from '@folio/stripes-components/lib/Callout/tests/interactor'; // eslint-disable-line
+
 import proxyItemCSS from '../../../src/components/ProxyGroup/ProxyItem/ProxyItem.css';
 
 @interactor class AccordionSection {
@@ -59,6 +61,10 @@ import proxyItemCSS from '../../../src/components/ProxyGroup/ProxyItem/ProxyItem
   actionMenuCreateFeeFinesButton = scoped('[data-test-actions-menu-create-feesfines]');
   actionMenuCreatePatronBlocksButton = scoped('[data-test-actions-menu-create-patronblocks]');
   actionMenuEditUserButton = scoped('[data-test-actions-menu-edit]');
+  actionMenuExportFeeFineReport = scoped('[data-test-export-fee-fine-report]');
+  actionMenuExportFeeFineReportButton = scoped('[data-test-export-fee-fine-report]', ButtonInteractor);
+
+  callout = new CalloutInteractor();
 
   whenLoaded() {
     return this.when(() => this.isPresent).timeout(5000);
