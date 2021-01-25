@@ -2,8 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Field } from 'react-final-form';
-import { FormattedMessage } from 'react-intl';
 import { isEmpty } from 'lodash';
+import { 
+  FormattedMessage, 
+  injectIntl,
+} from 'react-intl';
 
 import stripesFinalForm from '@folio/stripes/final-form';
 
@@ -15,6 +18,7 @@ import {
   Modal,
   Row,
   ModalFooter,
+  MultiSelection,
 } from '@folio/stripes/components';
 
 import css from './RefundsReportModal.css';
@@ -56,6 +60,11 @@ const RefundsReportModal = (props) => {
   const parseDate = (date) => {
     return moment(date).format('YYYY-MM-DD');
   };
+
+  const feeFineOwners = props.owners.map(({ id, owner }) => ({
+    value: id,
+    label: owner,
+  }));
 
   const footer = (
     <ModalFooter>
@@ -120,6 +129,16 @@ const RefundsReportModal = (props) => {
               parse={parseDate}
             />
           </Col>
+          <Col xs={12}>
+          <Field
+            id="feefine-owners"
+            name="owners"
+            component={MultiSelection}
+            label={<FormattedMessage id="ui-users.reports.refunds.modal.owner" />}
+            placeholder={props.intl.formatMessage({ id: 'ui-users.reports.refunds.modal.owner.placeholder' })}
+            dataOptions={feeFineOwners}
+          />
+          </Col>
         </Row>
       </form>
     </Modal>
@@ -128,9 +147,13 @@ const RefundsReportModal = (props) => {
 
 RefundsReportModal.propTypes = {
   form: PropTypes.object.isRequired,
+  intl: PropTypes.object.isRequired,
   label: PropTypes.string.isRequired,
+  owners: PropTypes.arrayOf(PropTypes.object).isRequired,
   onClose: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
 };
 
-export default stripesFinalForm({ validate })(RefundsReportModal);
+export default stripesFinalForm({
+  validate 
+})(injectIntl(RefundsReportModal));

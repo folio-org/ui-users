@@ -79,6 +79,7 @@ class UserSearch extends React.Component {
       records: PropTypes.object,
       patronGroups: PropTypes.object,
       departments: PropTypes.object,
+      owners: PropTypes.object,
       query: PropTypes.shape({
         qindex: PropTypes.string,
       }).isRequired,
@@ -91,12 +92,12 @@ class UserSearch extends React.Component {
       query: PropTypes.shape({
         update: PropTypes.func.isRequired,
       }).isRequired,
-      refundReportData: PropTypes.shape({
+      /* refundReportData: PropTypes.shape({
         update: PropTypes.func.isRequired,
-      }).isRequired,
+      }).isRequired, */
       refundsReport: PropTypes.shape({
-        GET: PropTypes.func.isRequired,
-        reset: PropTypes.func,
+        POST: PropTypes.func.isRequired,
+        // reset: PropTypes.func,
       }).isRequired,
     }).isRequired,
     source: PropTypes.object,
@@ -411,7 +412,7 @@ class UserSearch extends React.Component {
     onSubmit(e);
   }
 
-  handleRefundsReportFormSubmit = async ({ startDate, endDate }) => {
+  handleRefundsReportFormSubmit = async ({ startDate, endDate, owners }) => {
     if (this.state.refundExportInProgress) {
       return;
     }
@@ -423,17 +424,19 @@ class UserSearch extends React.Component {
 
     const {
       mutator: {
-        refundReportData,
         refundsReport,
       },
       intl: { formatMessage }
     } = this.props;
 
-    refundReportData.update({ startDate, endDate });
+    const feeFineOwners = owners.reduce((ids, owner) => {
+      ids.push(owner.value);
+      return ids;
+    }, []);
+
     try {
-      refundsReport.reset();
-      const actions = await refundsReport.GET();
-      const report = new RefundsReport({ data: actions, formatMessage });
+      const { reportData } = await refundsReport.POST({ startDate, endDate, feeFineOwners });
+      const report = new RefundsReport({ data: reportData, formatMessage });
       report.toCSV();
     } catch (e) {
       throw new Error(e);
@@ -469,6 +472,7 @@ class UserSearch extends React.Component {
     }
 
     const users = get(resources, 'records.records', []);
+    const owners = resources.owners.records;
     const patronGroups = (resources.patronGroups || {}).records || [];
     const query = queryGetter ? queryGetter() || {} : {};
     const count = source ? source.totalCount() : 0;
@@ -642,8 +646,9 @@ class UserSearch extends React.Component {
           { this.state.showRefundsReportModal && (
             <RefundsReportModal
               open
-              onClose={() => { this.changeRefundReportModalState(false); }}
               label={this.props.intl.formatMessage({ id:'ui-users.reports.refunds.modal.label' })}
+              owners={owners}
+              onClose={() => { this.changeRefundReportModalState(false); }}
               onSubmit={this.handleRefundsReportFormSubmit}
             />
           )}
