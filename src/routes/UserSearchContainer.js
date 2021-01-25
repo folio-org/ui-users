@@ -93,17 +93,15 @@ class UserSearchContainer extends React.Component {
     owners: {
       type: 'okapi',
       records: 'owners',
-      clientGeneratePk: false,
       path: `owners?query=cql.allRecords=1&limit=${MAX_RECORDS}`,
     },
     refundsReport: {
       type: 'okapi',
       records: 'reportData',
       path: 'feefine-reports/refund',
+      clientGeneratePk: false,
       fetch: false,
-      // accumulate: true,
     },
-    // refundReportData: {}
   });
 
   static propTypes = {
@@ -134,9 +132,6 @@ class UserSearchContainer extends React.Component {
       resultOffset: PropTypes.shape({
         replace: PropTypes.func.isRequired,
       }),
-      /* refundReportData: PropTypes.shape({
-        update: PropTypes.func.isRequired,
-      }), */
       refundsReport: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }),

@@ -92,12 +92,8 @@ class UserSearch extends React.Component {
       query: PropTypes.shape({
         update: PropTypes.func.isRequired,
       }).isRequired,
-      /* refundReportData: PropTypes.shape({
-        update: PropTypes.func.isRequired,
-      }).isRequired, */
       refundsReport: PropTypes.shape({
         POST: PropTypes.func.isRequired,
-        // reset: PropTypes.func,
       }).isRequired,
     }).isRequired,
     source: PropTypes.object,

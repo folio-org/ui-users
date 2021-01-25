@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Field } from 'react-final-form';
 import { isEmpty } from 'lodash';
-import { 
-  FormattedMessage, 
+import {
+  FormattedMessage,
   injectIntl,
 } from 'react-intl';
 
@@ -130,14 +130,14 @@ const RefundsReportModal = (props) => {
             />
           </Col>
           <Col xs={12}>
-          <Field
-            id="feefine-owners"
-            name="owners"
-            component={MultiSelection}
-            label={<FormattedMessage id="ui-users.reports.refunds.modal.owner" />}
-            placeholder={props.intl.formatMessage({ id: 'ui-users.reports.refunds.modal.owner.placeholder' })}
-            dataOptions={feeFineOwners}
-          />
+            <Field
+              id="feefine-owners"
+              name="owners"
+              component={MultiSelection}
+              label={<FormattedMessage id="ui-users.reports.refunds.modal.owner" />}
+              placeholder={props.intl.formatMessage({ id: 'ui-users.reports.refunds.modal.owner.placeholder' })}
+              dataOptions={feeFineOwners}
+            />
           </Col>
         </Row>
       </form>
@@ -155,5 +155,5 @@ RefundsReportModal.propTypes = {
 };
 
 export default stripesFinalForm({
-  validate 
+  validate,
 })(injectIntl(RefundsReportModal));
