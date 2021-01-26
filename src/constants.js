@@ -22,9 +22,9 @@ export const loanStatuses = {
 
 export const loanActions = {
   CLAIMED_RETURNED: 'claimedReturned',
-  DECLARED_LOST:'declaredLost',
-  AGED_TO_LOST:'itemAgedToLost',
-  CLOSED_LOAN:'closedLoan',
+  DECLARED_LOST: 'declaredLost',
+  AGED_TO_LOST: 'itemAgedToLost',
+  CLOSED_LOAN: 'closedLoan',
 };
 
 // The names of the mutators which can executed on a given loan.
@@ -59,6 +59,18 @@ export const statusFilter = [
 export const feeFineBalanceId = 'cf7a0d5f-a327-4ca1-aa9e-dc55ec006b8a';
 export const MAX_RECORDS = '10000';
 
+export const refundClaimReturned = {
+  PAYMENT_STATUS: 'Suspended claim returned',
+  LOST_ITEM_FEE: 'Lost item fee',
+  LOST_ITEM_PROCESSING_FEE: 'Lost item processing fee',
+  TYPE_ACTION: 'Transferred',
+  CREDITED_ACTION: 'Credited fully-Claim returned',
+  REFUNDED_ACTION: 'Refunded fully-Claim returned',
+  TRANSACTION_CREDITED: 'Credited',
+  TRANSACTION_VERB_REFUND: 'Refund',
+  TRANSACTION_VERB_REFUNDED: 'Refunded',
+};
+
 export const paymentStatusesAllowedToRefund = [
   'Paid fully',
   'Paid partially',
@@ -72,8 +84,15 @@ export const waiveStatuses = [
 ];
 
 export const refundStatuses = {
-  RefundedFully:'Refunded fully',
+  RefundedFully: 'Refunded fully',
   RefundedPartially: 'Refunded partially',
+};
+
+export const FEE_FINE_ACTIONS = {
+  PAYMENT: 'payment',
+  WAIVE: 'waive',
+  TRANSFER: 'transfer',
+  REFUND: 'refund',
 };
 
 export const reportColumns = [
@@ -130,6 +149,37 @@ export const refundReportColumns = [
   'actionCompletionDate',
   'staffMemberName',
   'actionTaken'
+];
+
+export const feeFineReportColumns = [
+  'patronName',
+  'patronBarcode',
+  'patronGroup',
+  'actionDate',
+  'actionDescription',
+  'actionAmount',
+  'actionBalance',
+  'actionTransactionInfo',
+  'actionCreatedAt',
+  'actionSource',
+  'actionInfoStaff',
+  'actionInfoPatron',
+  'type',
+  'owner',
+  'billedDate',
+  'billedAmount',
+  'remainingAmount',
+  'latestPaymentStatus',
+  'itemInstance',
+  'itemMaterialType',
+  'itemBarcode',
+  'itemCallNumber',
+  'itemLocation',
+  'itemDueDate',
+  'itemReturnedDate',
+  'itemOverduePolicy',
+  'itemLostPolicy',
+  'itemLoanDetails'
 ];
 
 export const NO_FEE_FINE_OWNER_FOUND_MESSAGE = 'No fee/fine owner found for item\'s permanent location';

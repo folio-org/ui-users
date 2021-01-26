@@ -25,6 +25,10 @@ describe('Test Fee/Fine History', () => {
       expect(FeeFineHistoryInteractor.section).to.equal('Fees/fines');
     });
 
+    it('displays active Export button', () => {
+      expect(FeeFineHistoryInteractor.exportButtonIsDisabled).to.be.false;
+    });
+
     describe('displays section Fees/Fines', () => {
       beforeEach(async () => {
         await FeeFineHistoryInteractor.sectionFeesFinesSection.click();
@@ -44,8 +48,10 @@ describe('Test Fee/Fine History', () => {
         it('displays the pane title menu', () => {
           expect(FeeFineHistoryInteractor.paneTitle).to.string('Fees/fines -');
           expect(FeeFineHistoryInteractor.paneSub).to.string('Outstanding Balance');
+          expect(FeeFineHistoryInteractor.paneSub).to.string('Suspended balance');
           expect(FeeFineHistoryInteractor.labelMenu).to.string('Open fees/fines for');
           expect(FeeFineHistoryInteractor.outstandingMenu).to.string('Outstanding Balance');
+          expect(FeeFineHistoryInteractor.outstandingMenu).to.string('Suspended balance');
         });
 
         describe('displays open fees/fines rows', () => {
@@ -249,6 +255,16 @@ describe('Test Fee/Fine History', () => {
               });
             });
           });
+
+          describe('Export Fees/Fines report', () => {
+            beforeEach(async () => {
+              await FeeFineHistoryInteractor.exportButton.click();
+            });
+
+            it('show successfull callout', () => {
+              expect(FeeFineHistoryInteractor.callout.successCalloutIsPresent).to.be.true;
+            });
+          });
         });
 
         describe('selects all accounts', () => {
@@ -371,3 +387,4 @@ describe('Test Fee/Fine History', () => {
     });
   });
 });
+
