@@ -129,6 +129,7 @@ export const refundReportColumns = [
   'patronId',
   'patronGroup',
   'feeFineType',
+  'feeFineOwner',
   'dateBilled',
   'billedAmount',
   'paidAmount',

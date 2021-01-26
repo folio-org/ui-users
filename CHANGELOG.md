@@ -46,6 +46,7 @@
 * Hitting 'Charge only' button multiple times results in more than one fee/fine being created. Refs UIU-1993.
 * Set informative message when error declaring item lost. Fixes UIU-2004.
 * Change 'Reason for cancellation' to 'Additional information for staff' on Cancel Fee/Fine page. Refs UIU-1999.
+* Add fee/fine owner column to refund report. Refs UIU-2016.
 * Increment `react-redux` to `v7`, `redux-form` to `v8`. Refs UIU-2017, STRIPES=721.
 * Accessibility: Invalid ARIA attribute. Refs UIU-1685.
 * Wrong error message appears when required field not selected on Pay/Waive/Transfer modal. Refs UIU-1991.
