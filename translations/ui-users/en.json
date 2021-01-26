@@ -352,6 +352,7 @@
   "accounts.numClosedAccounts": "{count, number} {count, plural, one {closed fee/fine} other {closed fees/fines}}",
   "accounts.chargeManual": "Create fee/fine",
   "accounts.viewAllFeesFines": "View all fees/fines",
+  "accounts.exportFeesFines": "Export fees/fines",
   "accounts.loading": "Loading accounts",
   "contextMenu.homePage": "Home page",
   "contextMenu.settings": "Settings",
