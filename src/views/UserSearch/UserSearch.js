@@ -408,7 +408,7 @@ class UserSearch extends React.Component {
     onSubmit(e);
   }
 
-  handleRefundsReportFormSubmit = async ({ startDate, endDate, owners }) => {
+  handleRefundsReportFormSubmit = async ({ startDate, endDate, owners = [] }) => {
     if (this.state.refundExportInProgress) {
       return;
     }

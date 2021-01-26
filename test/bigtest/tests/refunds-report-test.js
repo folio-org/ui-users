@@ -17,6 +17,7 @@ describe('RefundsReport', () => {
 
   describe('Visit user list', () => {
     beforeEach(async function () {
+      this.server.createList('owner', 2);
       this.visit('/users?sort=Name');
       await users.whenLoaded();
     });
@@ -73,6 +74,24 @@ describe('RefundsReport', () => {
 
       it('save button should be disabled', () => {
         expect(users.refundsReportModal.isSaveButtonDisabled).to.be.true;
+      });
+    });
+
+    describe('Submit form', function () {
+      beforeEach(async function () {
+        await users.headerDropdown.click();
+        await users.headerDropdownMenu.clickRefundsReportCSV();
+        await users.refundsReportModal.startDate.calendarButton.click();
+        await users.refundsReportModal.startDate.calendar.days(1).click();
+        await users.refundsReportModal.endDate.calendarButton.click();
+        await users.refundsReportModal.endDate.calendar.days(2).click();
+        await users.refundsReportModal.endDate.input.blur();
+        await users.refundsReportModal.owners.clickOption(1);
+        await users.refundsReportModal.saveButton.click();
+      });
+
+      it('should hide refund modal', () => {
+        expect(users.isRefundsReportModalPresent).to.be.false;
       });
     });
   });

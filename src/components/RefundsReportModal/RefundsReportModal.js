@@ -129,9 +129,11 @@ const RefundsReportModal = (props) => {
               parse={parseDate}
             />
           </Col>
-          <Col xs={12}>
+          <Col
+            data-test-refunds-report-owners
+            xs={12}
+          >
             <Field
-              id="feefine-owners"
               name="owners"
               component={MultiSelection}
               label={<FormattedMessage id="ui-users.reports.refunds.modal.owner" />}
