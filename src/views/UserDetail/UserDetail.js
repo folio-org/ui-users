@@ -8,13 +8,13 @@ import {
 } from 'lodash';
 import moment from 'moment';
 import { FormattedMessage } from 'react-intl';
+
 import {
   AppIcon,
   IfPermission,
   IfInterface,
   TitleManager,
 } from '@folio/stripes/core';
-
 import {
   Pane,
   PaneMenu,
@@ -23,6 +23,7 @@ import {
   expandAllFunction,
   ExpandAllButton,
   Button,
+  Callout,
   Row,
   Col,
   Headline,
@@ -30,7 +31,6 @@ import {
   LoadingPane,
   HasCommand,
 } from '@folio/stripes/components';
-
 import {
   NotesSmartAccordion,
   ViewCustomFieldsRecord,
@@ -50,20 +50,19 @@ import {
 } from '../../components/UserDetailSections';
 
 import HelperApp from '../../components/HelperApp';
-
 import {
   PatronBlockMessage
 } from '../../components/PatronBlock';
 import {
   getFormAddressList,
-  // toUserAddresses
 } from '../../components/data/converters/address';
 import {
   getFullName,
-  // eachPromise
 } from '../../components/util';
 import RequestFeeFineBlockButtons from '../../components/RequestFeeFineBlockButtons';
 import { departmentsShape } from '../../shapes';
+
+import ExportFeesFinesReportButton from './components';
 
 class UserDetail extends React.Component {
   static propTypes = {
@@ -103,6 +102,11 @@ class UserDetail extends React.Component {
       params: PropTypes.shape({
         id: PropTypes.string,
       }),
+    }).isRequired,
+    okapi: PropTypes.shape({
+      currentUser: PropTypes.shape({
+        servicePoints: PropTypes.string.isRequired,
+      }).isRequired,
     }).isRequired,
     onClose: PropTypes.func,
     tagsToggle: PropTypes.func,
@@ -157,6 +161,8 @@ class UserDetail extends React.Component {
         customFields: false,
       },
     };
+
+    this.callout = null;
   }
 
   getUser = () => {
@@ -301,6 +307,29 @@ class UserDetail extends React.Component {
   }
 
   getActionMenu = barcode => ({ onToggle }) => {
+    const {
+      okapi: {
+        currentUser: {
+          servicePoints,
+        },
+      },
+      resources,
+    } = this.props;
+    const user = this.getUser();
+    const patronGroup = this.getPatronGroup(user);
+    const feeFineActions = get(resources, ['feefineactions', 'records'], []);
+    const accounts = get(resources, ['accounts', 'records'], []);
+    const loans = get(resources, ['loanRecords', 'records'], []);
+
+    const feesFinesReportData = {
+      user,
+      patronGroup: patronGroup.group,
+      servicePoints,
+      feeFineActions,
+      accounts,
+      loans,
+    };
+
     const showActionMenu = this.props.stripes.hasPerm('ui-users.edit')
       || this.props.stripes.hasPerm('ui-users.patron_blocks')
       || this.props.stripes.hasPerm('ui-users.feesfines.actions.all')
@@ -313,6 +342,11 @@ class UserDetail extends React.Component {
             barcode={barcode}
             onToggle={onToggle}
             userId={this.props.match.params.id}
+          />
+          <ExportFeesFinesReportButton
+            feesFinesReportData={feesFinesReportData}
+            onToggle={onToggle}
+            callout={this.callout}
           />
           <IfPermission perm="ui-users.edit">
             <Button
@@ -628,6 +662,7 @@ class UserDetail extends React.Component {
               </AccordionSet>
             </Pane>
             { helperApp && <HelperApp appName={helperApp} onClose={this.closeHelperApp} /> }
+            <Callout ref={(ref) => { this.callout = ref; }} />
           </>
         </HasCommand>
       );

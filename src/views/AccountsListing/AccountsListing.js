@@ -21,11 +21,13 @@ import {
   PaneMenu,
   Paneset,
   Row,
+  Callout,
 } from '@folio/stripes/components';
 import css from './AccountsListing.css';
 
 import { getFullName } from '../../components/util';
 import Actions from '../../components/Accounts/Actions/FeeFineActions';
+import FeeFineReport from '../../components/data/reports/FeeFineReport';
 import {
   calculateOwedFeeFines,
   calculateTotalPaymentAmount,
@@ -110,6 +112,9 @@ class AccountsHistory extends React.Component {
       comments: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
+      loans: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
       query: PropTypes.object,
     }),
     okapi: PropTypes.object,
@@ -146,6 +151,7 @@ class AccountsHistory extends React.Component {
     }));
 
     this.state = {
+      exportReportInProgress: false,
       visibleColumns,
       toggleDropdownState: false,
       showFilters: false,
@@ -189,6 +195,7 @@ class AccountsHistory extends React.Component {
 
     const initialQuery = queryString.parse(props.location.search) || {};
     this.initialFilters = initialQuery.f;
+    this.callout = null;
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -359,6 +366,66 @@ class AccountsHistory extends React.Component {
       return res;
     }
     return [];
+  }
+
+  generateFeesFinesReport = () => {
+    const { exportReportInProgress } = this.state;
+
+    if (exportReportInProgress) {
+      return;
+    }
+
+    const {
+      user,
+      patronGroup: { group },
+      okapi: {
+        currentUser: {
+          servicePoints
+        }
+      },
+      resources: {
+        comments,
+        feefineshistory,
+        loans,
+      },
+      intl,
+    } = this.props;
+    const feeFineActions = _.get(comments, 'records', []);
+    const accounts = _.get(feefineshistory, 'records', []);
+    const loansList = _.get(loans, 'records', []);
+
+    const reportData = {
+      intl,
+      data: {
+        user,
+        patronGroup: group,
+        servicePoints,
+        feeFineActions,
+        accounts,
+        loans: loansList
+      }
+    };
+
+    this.setState({ exportReportInProgress: true }, () => {
+      this.callout.sendCallout({
+        type: 'success',
+        message: <FormattedMessage id="ui-users.reports.inProgress" />
+      });
+
+      try {
+        const report = new FeeFineReport(reportData);
+        report.toCSV();
+      } catch (error) {
+        if (error.message) {
+          this.callout.sendCallout({
+            type: 'error',
+            message: <FormattedMessage id="ui-users.settings.limits.callout.error" />
+          });
+        }
+      } finally {
+        this.setState({ exportReportInProgress: false });
+      }
+    });
   }
 
   render() {
@@ -563,6 +630,7 @@ class AccountsHistory extends React.Component {
                 actions={this.state.actions}
                 query={query}
                 onChangeActions={this.onChangeActions}
+                onExportFeesFinesReport={this.generateFeesFinesReport}
                 patronGroup={patronGroup}
                 handleOptionsChange={this.handleOptionsChange}
               />
@@ -616,6 +684,7 @@ class AccountsHistory extends React.Component {
                 balance={balance}
                 handleEdit={this.handleEdit}
               />
+              <Callout ref={(ref) => { this.callout = ref; }} />
             </section>
           </Paneset>
         </Pane>

@@ -754,6 +754,23 @@
           "ui-users.settings.departments.delete"
         ],
         "visible": true
+      },
+      {
+        "permissionName": "ui-users.overridePatronBlock",
+        "displayName": "User: Can override patron blocks for use with override of patron blocks when borrowing, renewing and requesting",
+        "subPermissions": [
+          "circulation.override-patron-block"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.overrideItemBlock",
+        "displayName": "User: Can override item blocks for use with override of item blocks when borrowing",
+        "subPermissions": [
+          "circulation.override-item-limit-block",
+          "circulation.override-item-not-loanable-block"
+        ],
+        "visible": true
       }
     ]
   },

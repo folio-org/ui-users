@@ -22,6 +22,9 @@ import Actions from '../../components/Accounts/Actions/FeeFineActions';
 import {
   calculateSortParams,
   getFullName,
+  formatActionDescription,
+  formatCurrencyAmount,
+  getServicePointOfCurrentAction,
 } from '../../components/util';
 
 import {
@@ -263,15 +266,11 @@ class AccountDetails extends React.Component {
     const accountActionsFormatter = {
       // Action: aa => loanActionMap[la.action],
       date: action => <FormattedTime value={action.dateAction} day="numeric" month="numeric" year="numeric" />,
-      action: action => action.typeAction + (action.paymentMethod ? ('-' + action.paymentMethod) : ' '),
-      amount: action => (action.amountAction > 0 ? parseFloat(action.amountAction).toFixed(2) : '-'),
-      balance: action => (action.balance > 0 ? parseFloat(action.balance).toFixed(2) : '-'),
+      action: action => formatActionDescription(action),
+      amount: action => (action.amountAction > 0 ? formatCurrencyAmount(action.amountAction) : '-'),
+      balance: action => (action.balance > 0 ? formatCurrencyAmount(action.balance) : '-'),
       transactioninfo: action => action.transactionInformation || '-',
-      created: action => {
-        const servicePoint = this.props.okapi.currentUser.servicePoints.find(sp => sp.id === action.createdAt);
-
-        return servicePoint ? servicePoint.name : action.createdAt;
-      },
+      created: action => getServicePointOfCurrentAction(action, this.props.okapi.currentUser.servicePoints),
       source: action => action.source,
       comments: action => (action.comments ? (<div>{action.comments.split('\n').map(c => (<Row><Col>{c}</Col></Row>))}</div>) : ''),
     };
@@ -283,7 +282,7 @@ class AccountDetails extends React.Component {
 
     const actions = this.state.data || [];
     const actionsSort = _.orderBy(actions, [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
-    const amount = (account.amount) ? parseFloat(account.amount).toFixed(2) : '-';
+    const amount = account.amount ? formatCurrencyAmount(account.amount) : '-';
     const loanId = account.loanId || '';
     const disabled = account.remaining === 0;
     const isAccountId = actions[0] && actions[0].accountId === account.id;
@@ -395,7 +394,7 @@ class AccountDetails extends React.Component {
             <Col xs={1.5}>
               <KeyValue
                 label={<FormattedMessage id="ui-users.details.field.remainingamount" />}
-                value={parseFloat(this.state.remaining).toFixed(2)}
+                value={formatCurrencyAmount(this.state.remaining)}
               />
             </Col>
             <Col

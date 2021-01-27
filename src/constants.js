@@ -129,6 +129,7 @@ export const refundReportColumns = [
   'patronId',
   'patronGroup',
   'feeFineType',
+  'feeFineOwner',
   'dateBilled',
   'billedAmount',
   'paidAmount',
@@ -148,6 +149,37 @@ export const refundReportColumns = [
   'actionCompletionDate',
   'staffMemberName',
   'actionTaken'
+];
+
+export const feeFineReportColumns = [
+  'patronName',
+  'patronBarcode',
+  'patronGroup',
+  'actionDate',
+  'actionDescription',
+  'actionAmount',
+  'actionBalance',
+  'actionTransactionInfo',
+  'actionCreatedAt',
+  'actionSource',
+  'actionInfoStaff',
+  'actionInfoPatron',
+  'type',
+  'owner',
+  'billedDate',
+  'billedAmount',
+  'remainingAmount',
+  'latestPaymentStatus',
+  'itemInstance',
+  'itemMaterialType',
+  'itemBarcode',
+  'itemCallNumber',
+  'itemLocation',
+  'itemDueDate',
+  'itemReturnedDate',
+  'itemOverduePolicy',
+  'itemLostPolicy',
+  'itemLoanDetails'
 ];
 
 export const NO_FEE_FINE_OWNER_FOUND_MESSAGE = 'No fee/fine owner found for item\'s permanent location';

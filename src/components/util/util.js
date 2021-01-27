@@ -15,6 +15,26 @@ export function getFullName(user) {
   return `${lastName}${firstName ? ', ' : ' '}${firstName}${middleName ? ' ' : ''}${middleName}`;
 }
 
+export const formatActionDescription = (action) => {
+  return action.typeAction +
+    (action.paymentMethod
+      ? ('-' + action.paymentMethod)
+      : ' '
+    );
+};
+
+export const formatCurrencyAmount = (amount = 0) => parseFloat(amount).toFixed(2);
+
+export const formatDateAndTime = (date, formatter) => formatter(date, { day: 'numeric', month: 'numeric', year: 'numeric' });
+
+export const getServicePointOfCurrentAction = (action, servicePoints = []) => {
+  const servicePoint = servicePoints.find(sp => sp.id === action.createdAt);
+
+  return servicePoint ? servicePoint.name : action.createdAt;
+};
+
+export const calculateRemainingAmount = (remaining) => (parseFloat(remaining) * 100) / 100;
+
 export function validate(item, index, items, field, label) {
   const error = {};
   for (let i = 0; i < items.length; i++) {

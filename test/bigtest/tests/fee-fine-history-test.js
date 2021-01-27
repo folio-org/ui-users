@@ -25,6 +25,10 @@ describe('Test Fee/Fine History', () => {
       expect(FeeFineHistoryInteractor.section).to.equal('Fees/fines');
     });
 
+    it('displays active Export button', () => {
+      expect(FeeFineHistoryInteractor.exportButtonIsDisabled).to.be.false;
+    });
+
     describe('displays section Fees/Fines', () => {
       beforeEach(async () => {
         await FeeFineHistoryInteractor.sectionFeesFinesSection.click();
@@ -251,6 +255,16 @@ describe('Test Fee/Fine History', () => {
               });
             });
           });
+
+          describe('Export Fees/Fines report', () => {
+            beforeEach(async () => {
+              await FeeFineHistoryInteractor.exportButton.click();
+            });
+
+            it('show successfull callout', () => {
+              expect(FeeFineHistoryInteractor.callout.successCalloutIsPresent).to.be.true;
+            });
+          });
         });
 
         describe('selects all accounts', () => {
@@ -373,3 +387,4 @@ describe('Test Fee/Fine History', () => {
     });
   });
 });
+
