@@ -667,6 +667,8 @@
   "reports.refunds.modal.label": "Refunds to process manually",
   "reports.refunds.modal.message": "Specify date refund entered range",
   "reports.refunds.modal.startDate": "Start date",
+  "reports.refunds.modal.owner": "Fee/fine owner",
+  "reports.refunds.modal.owner.placeholder": "Select Fee/fine owner(s)",
   "reports.refunds.validation.startDate": "Must enter Start date if End date provided",
   "reports.refunds.validation.endDate": "End date must be after Start date",
   "reports.refunds.patronName": "Patron name",
