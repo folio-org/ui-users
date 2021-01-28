@@ -5,10 +5,12 @@ import { Link } from 'react-router-dom';
 import {
   FormattedMessage,
   FormattedTime,
+  injectIntl,
 } from 'react-intl';
 
 import {
   Button,
+  Callout,
   Col,
   KeyValue,
   MultiColumnList,
@@ -32,6 +34,7 @@ import {
   isRefundAllowed,
   isCancelAllowed,
 } from '../../components/Accounts/accountFunctions';
+import FeeFineReport from '../../components/data/reports/FeeFineReport';
 
 import css from './AccountDetails.css';
 
@@ -63,6 +66,8 @@ class AccountDetails extends React.Component {
     resources: PropTypes.shape({
       accountActions: PropTypes.object,
       accounts: PropTypes.object.isRequired,
+      feefineactions: PropTypes.object.isRequired,
+      loans: PropTypes.object.isRequired,
     }),
     mutator: PropTypes.shape({
       activeRecord: PropTypes.shape({
@@ -76,14 +81,23 @@ class AccountDetails extends React.Component {
       }),
     }),
     num: PropTypes.number.isRequired,
-    user: PropTypes.object,
+    user: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }).isRequired,
     history: PropTypes.object,
     match: PropTypes.object,
-    patronGroup: PropTypes.object,
+    patronGroup: PropTypes.shape({
+      group: PropTypes.string.isRequired,
+    }).isRequired,
     itemDetails: PropTypes.object,
-    okapi: PropTypes.object,
+    okapi: PropTypes.shape({
+      currentUser: PropTypes.shape({
+        servicePoints: PropTypes.arrayOf(PropTypes.object).isRequired,
+      }).isRequired,
+    }).isRequired,
     account: PropTypes.object,
     owedAmount: PropTypes.number,
+    intl: PropTypes.object.isRequired,
   };
 
   static defaultProps = {
@@ -126,7 +140,10 @@ class AccountDetails extends React.Component {
       sortOrder: ['date', 'date'],
       sortDirection: ['desc', 'desc'],
       remaining: 0,
+      exportReportInProgress: false,
     };
+
+    this.callout = null;
   }
 
   static getDerivedStateFromProps(props) {
@@ -183,6 +200,73 @@ class AccountDetails extends React.Component {
   refund = () => {
     this.onChangeActions({ refundModal: true });
   }
+
+  getFeesFinesReportData = () => {
+    const {
+      user,
+      okapi: {
+        currentUser: {
+          servicePoints,
+        },
+      },
+      patronGroup: {
+        group,
+      },
+      resources,
+      intl,
+    } = this.props;
+    const feeFineActions = _.get(resources, ['feefineactions', 'records'], []);
+    const accounts = _.get(resources, ['accounts', 'records'], []);
+    const loans = _.get(resources, ['loans', 'records'], []);
+
+    return {
+      intl,
+      data: {
+        user,
+        servicePoints,
+        patronGroup: group,
+        accounts,
+        loans,
+        feeFineActions,
+      },
+    };
+  }
+
+  generateFeesFinesReport = () => {
+    const feesFinesReportData = this.getFeesFinesReportData();
+    const {
+      exportReportInProgress,
+    } = this.state;
+
+    if (exportReportInProgress) {
+      return;
+    }
+
+    this.setState({
+      exportReportInProgress: true,
+    }, () => {
+      this.callout.sendCallout({
+        type: 'success',
+        message: <FormattedMessage id="ui-users.reports.inProgress" />,
+      });
+
+      try {
+        const report = new FeeFineReport(feesFinesReportData);
+        report.toCSV();
+      } catch (error) {
+        if (error) {
+          this.callout.sendCallout({
+            type: 'error',
+            message: <FormattedMessage id="ui-users.settings.limits.callout.error" />,
+          });
+        }
+      } finally {
+        this.setState({
+          exportReportInProgress: false,
+        });
+      }
+    });
+  };
 
   onSort(e, meta) {
     if (!this.sortMap[meta.name] || e.target.type === 'button' || e.target.id === 'button') return;
@@ -278,6 +362,7 @@ class AccountDetails extends React.Component {
     const isAccountsPending = _.get(resources, ['accounts', 'isPending'], true);
     const isActionsPending = _.get(resources, ['accountActions', 'isPending'], true);
     const feeFineActions = _.get(resources, ['accountActions', 'records'], []);
+    const allFeeFineActions = _.get(resources, ['feefineactions', 'records'], []);
     const latestPaymentStatus = account.paymentStatus.name;
 
     const actions = this.state.data || [];
@@ -353,6 +438,15 @@ class AccountDetails extends React.Component {
                 onClick={this.error}
               >
                 <FormattedMessage id="ui-users.accounts.button.error" />
+              </Button>
+              <Button
+                id="exportAccountActionsHistoryReport"
+                data-test-export-account-actions-history-report
+                buttonStyle="primary"
+                disabled={_.isEmpty(allFeeFineActions)}
+                onClick={this.generateFeesFinesReport}
+              >
+                <FormattedMessage id="ui-users.export.button" />
               </Button>
             </Col>
           </Row>
@@ -558,11 +652,11 @@ class AccountDetails extends React.Component {
               this.props.mutator.accountActions.GET();
             }}
           />
-
+          <Callout ref={(ref) => { this.callout = ref; }} />
         </Pane>
       </Paneset>
     );
   }
 }
 
-export default AccountDetails;
+export default injectIntl(AccountDetails);

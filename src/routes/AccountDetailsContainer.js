@@ -48,6 +48,11 @@ class AccountDetailsContainer extends React.Component {
       accumulate: 'true',
       path: `feefineactions?query=(accountId==:{accountid})&limit=${MAX_RECORDS}`,
     },
+    feefineactions: {
+      type: 'okapi',
+      records: 'feefineactions',
+      path: `feefineactions?query=(userId==:{id})&limit=${MAX_RECORDS}`,
+    },
     activeRecord: {
       accountId: '0',
       instanceId: '',
