@@ -841,5 +841,6 @@
     "export.button": "تصدير",
     "permission.overridePatronBlock": "المستخدم: إمكانية تخطي كتل المستفيد لاستخدامها مع تخطي كتل المستفيد عند الاستعارة، التجديد والطلب",
     "permission.overrideItemBlock": "المستخدم: إمكانية تخطي كتل المواد لاستخدامها مع تخطي كتل المواد عند الاستعارة",
-    "reports.refunds.feeFineOwner": "مالك الغرامة/الرسم"
+    "reports.refunds.feeFineOwner": "مالك الغرامة/الرسم",
+    "accounts.exportFeesFines": "تصدير الرسوم/الغرامات"
 }
