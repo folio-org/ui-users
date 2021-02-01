@@ -1,10 +1,10 @@
-import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
   FormattedMessage,
   injectIntl,
 } from 'react-intl';
+import _ from 'lodash';
 import moment from 'moment';
 
 import {
@@ -137,7 +137,9 @@ class PatronBlock extends React.Component {
   onRowClick(e, row) {
     const {
       history,
-      match: { params }
+      match: {
+        params,
+      },
     } = this.props;
 
     if (!row.type) {
@@ -154,7 +156,7 @@ class PatronBlock extends React.Component {
   getPatronFormatter() {
     const {
       intl: {
-        formatMessage
+        formatMessage,
       },
     } = this.props;
 
@@ -183,16 +185,17 @@ class PatronBlock extends React.Component {
 
   render() {
     const {
-      expanded,
       onToggle,
       accordionId,
       patronBlocks,
       hasPatronBlocks,
-      match: { params },
+      match: {
+        params,
+      },
     } = this.props;
     const {
       sortOrder,
-      sortDirection
+      sortDirection,
     } = this.state;
     let contentData = patronBlocks.filter(p => moment(moment(p.expirationDate).endOf('day')).isSameOrAfter(moment().endOf('day')));
     contentData = _.orderBy(contentData, ['metadata.createdDate'], ['desc']);
@@ -204,7 +207,11 @@ class PatronBlock extends React.Component {
 
     const buttonDisabled = this.props.stripes.hasPerm('ui-users.patron_blocks');
     const displayWhenOpen =
-      <Button id="create-patron-block" disabled={!buttonDisabled} to={{ pathname: `/users/${params.id}/patronblocks/create` }}>
+      <Button
+        id="create-patron-block"
+        disabled={!buttonDisabled}
+        to={{ pathname: `/users/${params.id}/patronblocks/create` }}
+      >
         <FormattedMessage id="ui-users.blocks.buttons.add" />
       </Button>;
     const items =
@@ -225,22 +232,25 @@ class PatronBlock extends React.Component {
         }}
       />;
     const title =
-      <Headline size="large" tag="h3">
+      <Headline
+        size="large"
+        tag="h3"
+      >
         <FormattedMessage id="ui-users.settings.patronBlocks" />
         {(hasPatronBlocks) ? <Icon size="medium" icon="exclamation-circle" status="error" /> : ''}
       </Headline>;
 
     return (
       <Accordion
-        open={expanded}
+        data-test-patron-blocks-accordion
         id={accordionId}
+        open={!_.isEmpty(patronBlocks)}
         onToggle={onToggle}
         label={title}
         displayWhenOpen={displayWhenOpen}
       >
         <Row><Col xs>{items}</Col></Row>
       </Accordion>
-
     );
   }
 }

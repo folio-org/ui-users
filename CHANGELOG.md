@@ -56,6 +56,7 @@
 * Add Fee/fine owner as criteria for 'Refunds to process manually report'. Refs UIU-2013.
 * Add EXPORT option to User Information. Refs UIU-1957.
 * Add EXPORT option to fees/fines Details. Refs UIU-1956.
+* Patron block accordion should be open if patron block exists and closed if not. Refs UIU-1996.
 
 ## [5.0.1](https://github.com/folio-org/ui-users/tree/v5.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.0...v5.0.1)
