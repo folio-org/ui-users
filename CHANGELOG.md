@@ -56,6 +56,7 @@
 * Add Fee/fine owner as criteria for 'Refunds to process manually report'. Refs UIU-2013.
 * Add EXPORT option to User Information. Refs UIU-1957.
 * Add EXPORT option to fees/fines Details. Refs UIU-1956.
+* Add plus-sign to create buttons in action menu and switch button order. Refs UIU-2031.
 
 ## [5.0.1](https://github.com/folio-org/ui-users/tree/v5.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.0...v5.0.1)
