@@ -172,7 +172,7 @@ class OpenLoansControl extends React.Component {
     }));
   };
 
-  renewSelected = async () => {
+  renewSelected = async (additionalInfo = '') => {
     const { checkedLoans } = this.state;
     const {
       renew,
@@ -181,7 +181,8 @@ class OpenLoansControl extends React.Component {
     const selectedLoans = Object.values(checkedLoans);
 
     this.setState({ renewing: true });
-    await renew(selectedLoans, user);
+
+    await renew(selectedLoans, user, additionalInfo);
     this.setState({ checkedLoans: {}, allChecked: false, renewing: false });
   };
 
@@ -233,6 +234,7 @@ class OpenLoansControl extends React.Component {
     if (isEmpty(countRenew)) {
       renew([loan], user);
     } else {
+      this.setState({ checkedLoans: [loan] });
       this.openPatronBlockedModal();
     }
   };

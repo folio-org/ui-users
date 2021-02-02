@@ -34,6 +34,7 @@ class BulkOverrideInfo extends React.Component {
   });
 
   static propTypes = {
+    additionalInfo: PropTypes.string.isRequired,
     stripes: stripesShape.isRequired,
     mutator: PropTypes.shape({
       renew: PropTypes.shape({
@@ -68,6 +69,14 @@ class BulkOverrideInfo extends React.Component {
     };
     this.INVALIDE_DATE_MESSAGE = 'Invalid date';
     this.connectedLoanList = props.stripes.connect(BulkOverrideLoansList);
+  }
+
+  componentDidMount() {
+    const {
+      additionalInfo,
+    } = this.props;
+
+    this.handleAdditionalInfoChange(additionalInfo);
   }
 
   toggleAll = (e) => {
@@ -114,8 +123,8 @@ class BulkOverrideInfo extends React.Component {
     }
   };
 
-  handleAdditionalInfoChange = (event) => {
-    this.setState({ additionalInfo: event.target.value });
+  handleAdditionalInfoChange = (value) => {
+    this.setState({ additionalInfo: value });
   };
 
   submitOverride = () => {
@@ -226,7 +235,8 @@ class BulkOverrideInfo extends React.Component {
                   label={<FormattedMessage id="ui-users.additionalInfo.label" />}
                   placeholder={placeholder}
                   required
-                  onChange={this.handleAdditionalInfoChange}
+                  value={additionalInfo}
+                  onChange={(event) => this.handleAdditionalInfoChange(event.target.value)}
                 />
               )}
             </FormattedMessage>

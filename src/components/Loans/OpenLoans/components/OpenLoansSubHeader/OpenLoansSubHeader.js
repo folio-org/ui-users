@@ -190,7 +190,7 @@ class OpenLoansSubHeader extends React.Component {
                 disabled={noSelectedLoans || onlyClaimedReturnedItemsSelected}
                 onClick={!isEmpty(countRenews)
                   ? openPatronBlockedModal
-                  : renewSelected
+                  : () => renewSelected()
                 }
               >
                 <FormattedMessage id="ui-users.renew" />
