@@ -235,10 +235,10 @@
     "details.columns.created": "Creado En",
     "details.columns.source": "Fuente",
     "meta.title": "Usuarios",
-    "search": "Search",
+    "search": "Buscar",
     "resultCount": "{count, number} {count, plural, one {record found} other {records found}}",
-    "active": "Active",
-    "inactive": "Inactive",
+    "active": "Activo",
+    "inactive": "Inactivo",
     "okay": "OK",
     "itemDetails": "Detalles del ítem",
     "details.field.loan": "Ver",
@@ -842,5 +842,7 @@
     "permission.overridePatronBlock": "User: Can override patron blocks for use with override of patron blocks when borrowing, renewing and requesting",
     "permission.overrideItemBlock": "User: Can override item blocks for use with override of item blocks when borrowing",
     "reports.refunds.feeFineOwner": "Fee/fine owner",
-    "accounts.exportFeesFines": "Export fees/fines"
+    "accounts.exportFeesFines": "Export fees/fines",
+    "reports.refunds.modal.owner": "Fee/fine owner",
+    "reports.refunds.modal.owner.placeholder": "Select Fee/fine owner(s)"
 }
