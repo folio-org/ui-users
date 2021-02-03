@@ -757,7 +757,7 @@
       },
       {
         "permissionName": "ui-users.overridePatronBlock",
-        "displayName": "User: Can override patron blocks for use with override of patron blocks when borrowing, renewing and requesting",
+        "displayName": "User: Can override patron blocks",
         "subPermissions": [
           "circulation.override-patron-block"
         ],
@@ -765,7 +765,7 @@
       },
       {
         "permissionName": "ui-users.overrideItemBlock",
-        "displayName": "User: Can override item blocks for use with override of item blocks when borrowing",
+        "displayName": "User: Can override item blocks",
         "subPermissions": [
           "circulation.override-item-limit-block",
           "circulation.override-item-not-loanable-block"
