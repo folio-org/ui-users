@@ -64,6 +64,8 @@ import KeyValue from './KeyValue';
   refundButton = new ButtonInteractor('#refundAccountActionsHistory');
   errorButton = new ButtonInteractor('#errorAccountActionsHistory');
   errorButtonIsDisabled = is('#errorAccountActionsHistory[disabled]');
+  exportAccountActionsHistoryReport = scoped('[data-test-export-account-actions-history-report]');
+  exportAccountActionsHistoryReportButton = scoped('[data-test-export-account-actions-history-report]', ButtonInteractor);
   errorModal = new ModalInteractor('#error-modal');
   errorComment = new TextAreaInteractor('[class*=textArea---]');
   errorModalSubmit = new ButtonInteractor('[data-test-error-submit]');

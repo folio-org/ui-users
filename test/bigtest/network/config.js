@@ -928,7 +928,7 @@ export default function config() {
     };
   });
 
-  this.get('/feefine-reports/refund', {
+  this.post('/feefine-reports/refund', {
     reportData: [
       {
         patronName: 'Ellis, James S',

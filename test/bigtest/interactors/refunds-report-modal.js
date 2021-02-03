@@ -6,6 +6,7 @@ import {
 
 import ButtonInteractor from '@folio/stripes-components/lib/Button/tests/interactor';
 import DatepickerInteractor from '@folio/stripes-components/lib/Datepicker/tests/interactor';
+import MultiSelectionInteractor from '@folio/stripes-components/lib/MultiSelection/tests/interactor';
 
 @interactor class RefundsReportInteractor {
   static defaultScope = '#refunds-report-modal';
@@ -17,6 +18,7 @@ import DatepickerInteractor from '@folio/stripes-components/lib/Datepicker/tests
   saveButton = new ButtonInteractor('[data-test-refunds-report-save-btn]');
   cancelButton = new ButtonInteractor('[data-test-refunds-report-cancel-btn]');
   isSaveButtonDisabled = property('[data-test-refunds-report-save-btn]', 'disabled');
+  owners = new MultiSelectionInteractor('[data-test-refunds-report-owners]');
 }
 
 export default RefundsReportInteractor;
