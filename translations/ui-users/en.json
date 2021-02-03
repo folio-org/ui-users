@@ -742,6 +742,7 @@
   "reports.feeFine.billedAmount": "Fee/fine billed amount",
   "reports.feeFine.remainingAmount": "Fee/fine remaining amount",
   "reports.feeFine.latestPaymentStatus": "Fee/fine latest payment status",
+  "reports.feeFine.details": "Fee/fine details",
   "reports.feeFine.itemInstance": "Item instance",
   "reports.feeFine.itemMaterialType": "Item material type",
   "reports.feeFine.itemBarcode": "Item barcode",

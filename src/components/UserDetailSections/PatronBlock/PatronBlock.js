@@ -232,7 +232,7 @@ class PatronBlock extends React.Component {
 
     return (
       <Accordion
-        open={expanded}
+        open={!_.isEmpty(patronBlocks)}
         id={accordionId}
         onToggle={onToggle}
         label={title}
