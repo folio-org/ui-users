@@ -170,6 +170,7 @@ export const feeFineReportColumns = [
   'billedAmount',
   'remainingAmount',
   'latestPaymentStatus',
+  'details',
   'itemInstance',
   'itemMaterialType',
   'itemBarcode',
