@@ -4,7 +4,7 @@ import {
   FormattedMessage,
   injectIntl,
 } from 'react-intl';
-import { ControlledVocab } from '@folio/stripes/smart-components';
+import { ControlledVocabSwr as ControlledVocab } from '@folio/stripes/smart-components';
 import { withStripes } from '@folio/stripes/core';
 
 class AddressTypesSettings extends React.Component {
