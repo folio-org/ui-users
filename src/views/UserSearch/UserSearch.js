@@ -97,6 +97,9 @@ class UserSearch extends React.Component {
       }).isRequired,
     }).isRequired,
     source: PropTypes.object,
+    stripes: PropTypes.shape({
+      timezone: PropTypes.string.isRequired,
+    }),
   }
 
   static defaultProps = {
@@ -453,6 +456,7 @@ class UserSearch extends React.Component {
       resources,
       contentRef,
       mutator: { resultOffset },
+      stripes: { timezone },
     } = this.props;
     const visibleColumns = this.getVisibleColumns();
 
@@ -646,6 +650,7 @@ class UserSearch extends React.Component {
               owners={owners}
               onClose={() => { this.changeRefundReportModalState(false); }}
               onSubmit={this.handleRefundsReportFormSubmit}
+              timezone={timezone}
             />
           )}
         </div>
