@@ -58,6 +58,7 @@
 * Add EXPORT option to fees/fines Details. Refs UIU-1956.
 * Change Overdue loans and Claims reports icons in action menu. Refs UIU-2030.
 * Add plus-sign to create buttons in action menu and switch button order. Refs UIU-2031.
+* Calculate new exp. date not only from today. Refs UIU-2046.
 
 ## [5.0.1](https://github.com/folio-org/ui-users/tree/v5.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.0...v5.0.1)
