@@ -3,7 +3,10 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import queryString from 'query-string';
 
-import { Button } from '@folio/stripes/components';
+import {
+  Button,
+  Icon,
+} from '@folio/stripes/components';
 import { IfPermission } from '@folio/stripes/core';
 
 class RequestFeeFineBlockButtons extends React.Component {
@@ -28,7 +31,9 @@ class RequestFeeFineBlockButtons extends React.Component {
             to={linkToCreateRequest}
             onClick={onToggle}
           >
-            <FormattedMessage id="ui-users.requests.createRequest" />
+            <Icon icon="plus-sign">
+              <FormattedMessage id="ui-users.requests.createRequest" />
+            </Icon>
           </Button>
         </IfPermission>
         <IfPermission perm="ui-users.feesfines.actions.all">
@@ -38,7 +43,9 @@ class RequestFeeFineBlockButtons extends React.Component {
             to={{ pathname: `/users/${userId}/charge` }}
             onClick={onToggle}
           >
-            <FormattedMessage id="ui-users.accounts.chargeManual" />
+            <Icon icon="plus-sign">
+              <FormattedMessage id="ui-users.accounts.chargeManual" />
+            </Icon>
           </Button>
         </IfPermission>
         <IfPermission perm="ui-users.patron_blocks">
@@ -49,7 +56,9 @@ class RequestFeeFineBlockButtons extends React.Component {
             to={{ pathname: `/users/${userId}/patronblocks/create` }}
             onClick={onToggle}
           >
-            <FormattedMessage id="ui-users.blocks.buttons.add" />
+            <Icon icon="plus-sign">
+              <FormattedMessage id="ui-users.blocks.buttons.add" />
+            </Icon>
           </Button>
         </IfPermission>
       </div>

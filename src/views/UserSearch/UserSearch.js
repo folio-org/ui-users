@@ -75,6 +75,7 @@ class UserSearch extends React.Component {
       records: PropTypes.object,
       patronGroups: PropTypes.object,
       departments: PropTypes.object,
+      owners: PropTypes.object,
       query: PropTypes.shape({
         qindex: PropTypes.string,
       }).isRequired,
@@ -87,15 +88,14 @@ class UserSearch extends React.Component {
       query: PropTypes.shape({
         update: PropTypes.func.isRequired,
       }).isRequired,
-      refundReportData: PropTypes.shape({
-        update: PropTypes.func.isRequired,
-      }).isRequired,
       refundsReport: PropTypes.shape({
-        GET: PropTypes.func.isRequired,
-        reset: PropTypes.func,
+        POST: PropTypes.func.isRequired,
       }).isRequired,
     }).isRequired,
     source: PropTypes.object,
+    stripes: PropTypes.shape({
+      timezone: PropTypes.string.isRequired,
+    }),
   }
 
   static defaultProps = {
@@ -252,7 +252,7 @@ class UserSearch extends React.Component {
                 this.generateReport(this.props, 'overdue');
               }}
             >
-              <Icon icon="report">
+              <Icon icon="download">
                 <FormattedMessage id="ui-users.reports.overdue.label" />
               </Icon>
             </Button>
@@ -265,7 +265,7 @@ class UserSearch extends React.Component {
               this.generateReport(this.props, 'claimedReturned');
             }}
           >
-            <Icon icon="report">
+            <Icon icon="download">
               <FormattedMessage id="ui-users.reports.claimReturned.label" />
             </Icon>
           </Button>
@@ -374,7 +374,7 @@ class UserSearch extends React.Component {
     onSubmit(e);
   }
 
-  handleRefundsReportFormSubmit = async ({ startDate, endDate }) => {
+  handleRefundsReportFormSubmit = async ({ startDate, endDate, owners = [] }) => {
     if (this.state.refundExportInProgress) {
       return;
     }
@@ -386,17 +386,19 @@ class UserSearch extends React.Component {
 
     const {
       mutator: {
-        refundReportData,
         refundsReport,
       },
       intl: { formatMessage }
     } = this.props;
 
-    refundReportData.update({ startDate, endDate });
+    const feeFineOwners = owners.reduce((ids, owner) => {
+      ids.push(owner.value);
+      return ids;
+    }, []);
+
     try {
-      refundsReport.reset();
-      const actions = await refundsReport.GET();
-      const report = new RefundsReport({ data: actions, formatMessage });
+      const { reportData } = await refundsReport.POST({ startDate, endDate, feeFineOwners });
+      const report = new RefundsReport({ data: reportData, formatMessage });
       report.toCSV();
     } catch (e) {
       throw new Error(e);
@@ -417,6 +419,7 @@ class UserSearch extends React.Component {
       resources,
       contentRef,
       mutator: { resultOffset },
+      stripes: { timezone },
     } = this.props;
     if (!searchableIndexes) {
       searchableIndexes = rawSearchableIndexes.map(x => (
@@ -431,6 +434,7 @@ class UserSearch extends React.Component {
 
     const columnMapping = this.getColumnMapping();
     const users = get(resources, 'records.records', []);
+    const owners = resources.owners.records;
     const patronGroups = (resources.patronGroups || {}).records || [];
     const query = queryGetter ? queryGetter() || {} : {};
     const count = source ? source.totalCount() : 0;
@@ -611,9 +615,11 @@ class UserSearch extends React.Component {
           { this.state.showRefundsReportModal && (
             <RefundsReportModal
               open
-              onClose={() => { this.changeRefundReportModalState(false); }}
               label={this.props.intl.formatMessage({ id:'ui-users.reports.refunds.modal.label' })}
+              owners={owners}
+              onClose={() => { this.changeRefundReportModalState(false); }}
               onSubmit={this.handleRefundsReportFormSubmit}
+              timezone={timezone}
             />
           )}
         </div>

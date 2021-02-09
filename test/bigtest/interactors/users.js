@@ -51,6 +51,7 @@ export default @interactor class UsersInteractor {
   static defaultScope = '[data-test-user-instances]';
 
   refundsReportModal = new RefundsReportModal();
+  isRefundsReportModalPresent = isPresent('#refunds-report-modal');
   activeUserCheckbox = new ActiveUserCheckbox();
   departmentsFilter = new DepartmentsFilter();
   headerDropdownMenu = new HeaderDropdownMenu();
