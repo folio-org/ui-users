@@ -844,5 +844,6 @@
     "reports.refunds.feeFineOwner": "费用/罚款所有者",
     "accounts.exportFeesFines": "导出费用/罚款",
     "reports.refunds.modal.owner": "费用/罚款所有者",
-    "reports.refunds.modal.owner.placeholder": "选择费用/罚款所有者"
+    "reports.refunds.modal.owner.placeholder": "选择费用/罚款所有者",
+    "reports.feeFine.details": "Fee/fine details"
 }
