@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { Field } from 'react-final-form';
 import { isEmpty } from 'lodash';
 import {
@@ -57,9 +57,7 @@ const RefundsReportModal = (props) => {
     return disabled;
   };
 
-  const parseDate = (date) => {
-    return moment(date).format('YYYY-MM-DD');
-  };
+  const parseDate = (date) => moment.tz(date, props.timezone).format('YYYY-MM-DD');
 
   const feeFineOwners = props.owners.map(({ id, owner }) => ({
     value: id,
@@ -154,6 +152,7 @@ RefundsReportModal.propTypes = {
   owners: PropTypes.arrayOf(PropTypes.object).isRequired,
   onClose: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
+  timezone: PropTypes.string.isRequired,
 };
 
 export default stripesFinalForm({
