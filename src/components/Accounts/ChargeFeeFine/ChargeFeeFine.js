@@ -196,10 +196,11 @@ class ChargeFeeFine extends React.Component {
         userId: user.id,
         amountAction: parseFloat(amount || 0).toFixed(2),
         balance: parseFloat(balance || 0).toFixed(2),
-        transactionInformation: transaction || '-',
+        transactionInformation: transaction || '',
         comments: comment,
         notify,
       };
+
       mutator.feefineactions.POST(Object.assign(action, newAction));
     });
   }
@@ -356,7 +357,7 @@ class ChargeFeeFine extends React.Component {
         userName: `${currentUser.lastName}, ${currentUser.firstName}`,
         paymentMethod: values.method,
         comments: comment,
-        transactionInfo: values.transaction
+        transactionInfo: values?.transaction ?? '',
       };
 
       return mutator.pay.POST(payBody)
