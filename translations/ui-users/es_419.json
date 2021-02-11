@@ -844,5 +844,6 @@
     "reports.refunds.feeFineOwner": "Fee/fine owner",
     "accounts.exportFeesFines": "Export fees/fines",
     "reports.refunds.modal.owner": "Fee/fine owner",
-    "reports.refunds.modal.owner.placeholder": "Select Fee/fine owner(s)"
+    "reports.refunds.modal.owner.placeholder": "Select Fee/fine owner(s)",
+    "reports.feeFine.details": "Fee/fine details"
 }

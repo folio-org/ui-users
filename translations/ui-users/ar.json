@@ -563,7 +563,7 @@
     "data.loanActionMap.declaredLost": "تم الإعلان عن ضياعه",
     "confirm": "تأكيد",
     "loans.declareLost": "الإعلان عن فقدانه",
-    "loans.declareLostDialogBody": "سيتم <strong>إعلان فقد</strong> <strong>{title} {materialType}</strong> (باركود: {barcode})",
+    "loans.declareLostDialogBody": "سيتم <strong>إعلان فقد</strong> <strong>{title} {materialType}</strong> (باركود: {barcode}). {countIndex, plural, =-1 {قد يكون هناك طلبات مفتوحة لهذه المادة.} =0 {} one {يوجد {openRequestValue} لهذه المادة.} other {يوجد {openRequestValue} لهذه المادة.}}",
     "loans.confirmLostState": "تأكيد حالة تم الإعلان عن ضياعه",
     "loans.declareLost.additionalInfoPlaceholder": "قم بإدخال المزيد من المعلومات حول المادة الضائعة (مطلوب)",
     "userSearch": "بحث المستخدم",
@@ -839,10 +839,11 @@
     "reports.feeFine.itemLostPolicy": "سياسة المادة الضائعة للمادة",
     "reports.feeFine.itemLoanDetails": "تفاصيل إعارة المادة",
     "export.button": "تصدير",
-    "permission.overridePatronBlock": "المستخدم: إمكانية تخطي كتل المستفيد لاستخدامها مع تخطي كتل المستفيد عند الاستعارة، التجديد والطلب",
-    "permission.overrideItemBlock": "المستخدم: إمكانية تخطي كتل المواد لاستخدامها مع تخطي كتل المواد عند الاستعارة",
+    "permission.overridePatronBlock": "المستخدم: إمكانية تخطي كتل المستفيد",
+    "permission.overrideItemBlock": "المستخدم: إمكانية تخطي كتل المواد",
     "reports.refunds.feeFineOwner": "مالك الغرامة/الرسم",
     "accounts.exportFeesFines": "تصدير الرسوم/الغرامات",
     "reports.refunds.modal.owner": "مالك الغرامة/الرسم",
-    "reports.refunds.modal.owner.placeholder": "اختر مالك الغرامة/الرسم"
+    "reports.refunds.modal.owner.placeholder": "اختر مالك الغرامة/الرسم",
+    "reports.feeFine.details": "تفاصيل الرسم/الغرامة"
 }
