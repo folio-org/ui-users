@@ -97,6 +97,9 @@ class UserSearch extends React.Component {
       }).isRequired,
     }).isRequired,
     source: PropTypes.object,
+    stripes: PropTypes.shape({
+      timezone: PropTypes.string.isRequired,
+    }),
   }
 
   static defaultProps = {
@@ -274,7 +277,7 @@ class UserSearch extends React.Component {
                 this.generateReport(this.props, 'overdue');
               }}
             >
-              <Icon icon="report">
+              <Icon icon="download">
                 <FormattedMessage id="ui-users.reports.overdue.label" />
               </Icon>
             </Button>
@@ -287,7 +290,7 @@ class UserSearch extends React.Component {
               this.generateReport(this.props, 'claimedReturned');
             }}
           >
-            <Icon icon="report">
+            <Icon icon="download">
               <FormattedMessage id="ui-users.reports.claimReturned.label" />
             </Icon>
           </Button>
@@ -453,6 +456,7 @@ class UserSearch extends React.Component {
       resources,
       contentRef,
       mutator: { resultOffset },
+      stripes: { timezone },
     } = this.props;
     const visibleColumns = this.getVisibleColumns();
 
@@ -646,6 +650,7 @@ class UserSearch extends React.Component {
               owners={owners}
               onClose={() => { this.changeRefundReportModalState(false); }}
               onSubmit={this.handleRefundsReportFormSubmit}
+              timezone={timezone}
             />
           )}
         </div>

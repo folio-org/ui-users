@@ -343,11 +343,6 @@ class UserDetail extends React.Component {
             onToggle={onToggle}
             userId={this.props.match.params.id}
           />
-          <ExportFeesFinesReportButton
-            feesFinesReportData={feesFinesReportData}
-            onToggle={onToggle}
-            callout={this.callout}
-          />
           <IfPermission perm="ui-users.edit">
             <Button
               buttonStyle="dropdownItem"
@@ -364,6 +359,11 @@ class UserDetail extends React.Component {
               </Icon>
             </Button>
           </IfPermission>
+          <ExportFeesFinesReportButton
+            feesFinesReportData={feesFinesReportData}
+            onToggle={onToggle}
+            callout={this.callout}
+          />
         </>
       );
     } else {
