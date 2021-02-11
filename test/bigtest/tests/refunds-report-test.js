@@ -24,6 +24,17 @@ describe('RefundsReport', () => {
       await users.whenLoaded();
     });
 
+    describe('Show refunds report modal', function () {
+      beforeEach(async function () {
+        await users.headerDropdown.click();
+        await users.headerDropdownMenu.clickRefundsReportCSV();
+      });
+
+      it('save button should not be disabled', () => {
+        expect(users.refundsReportModal.isSaveButtonDisabled).to.be.false;
+      });
+    });
+
     describe('Click refunds report button', function () {
       beforeEach(async function () {
         await users.headerDropdown.click();
