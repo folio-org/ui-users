@@ -59,7 +59,11 @@
 * Change Overdue loans and Claims reports icons in action menu. Refs UIU-2030.
 * Add plus-sign to create buttons in action menu and switch button order. Refs UIU-2031.
 * Unable to select today's date for refund report. Refs UIU-2033.
+<<<<<<< HEAD
 * Inconsistent behavior of payment action when transaction info is blank. Refs UIU-2048.
+=======
+* Increment `@folio/stripes-cli` to `v2`. Refs UIU-2047.
+>>>>>>> a280f36db88c56418fb6d60b84b91a8003ff2737
 
 ## [5.0.1](https://github.com/folio-org/ui-users/tree/v5.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.0...v5.0.1)
