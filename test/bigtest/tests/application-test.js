@@ -21,6 +21,28 @@ describe('Application', function () {
     });
   });
 
+  describe('visit users-app', () => {
+    beforeEach(function () {
+      this.visit('/users?sort=Name');
+    });
+
+    it('renders context button', () => {
+      expect(app.appContextButton.isPresent).to.be.true;
+    });
+    it('renders keyboard shortcuts item', () => {
+      expect(app.appContextMenu.keyboardShortcutsItem.isPresent).to.be.true;
+    });
+
+    describe('click keyboard shortcuts item', () => {
+      beforeEach(async () => {
+        await app.appContextMenu.clickKeyboardShortcutsItem.click();
+      });
+      it('renders keyboard shortcuts modal', () => {
+        expect(app.keyboardShortcutsModal.isPresent).to.be.true;
+      });
+    });
+  });
+
   describe('redirect: loan detail', () => {
     let user;
     let loan;

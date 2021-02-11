@@ -157,7 +157,10 @@ class UsersRouting extends React.Component {
           {(handleToggle) => (
             <NavList>
               <NavListSection>
-                <NavListItem onClick={() => { this.shortcutModalToggle(handleToggle); }}>
+                <NavListItem
+                  id="keyboard-shortcuts-item"
+                  onClick={() => { this.shortcutModalToggle(handleToggle); }}
+                >
                   <FormattedMessage id="ui-users.appMenu.keyboardShortcuts" />
                 </NavListItem>
               </NavListSection>
@@ -166,6 +169,7 @@ class UsersRouting extends React.Component {
         </AppContextMenu>
         <Modal
           footer={modalFooter}
+          id="keyboard-shortcuts-modal"
           label={<FormattedMessage id="ui-users.appMenu.keyboardShortcuts" />}
           open={this.state.showInfoModal}
         >
