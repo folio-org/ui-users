@@ -4,7 +4,7 @@ import {
   FormattedMessage,
   injectIntl,
 } from 'react-intl';
-import { Field, reduxForm } from 'redux-form';
+import { Field } from 'react-final-form';
 
 import {
   Row,
@@ -15,6 +15,7 @@ import {
   Modal,
   RadioButtonGroup,
 } from '@folio/stripes/components';
+import stripesFinalForm from '@folio/stripes/final-form';
 
 import css from './FeeFinesTable.css';
 
@@ -35,14 +36,14 @@ class CopyForm extends React.Component {
   static propTypes = {
     owners: PropTypes.arrayOf(PropTypes.object),
     onClose: PropTypes.func,
-    initialize: PropTypes.func.isRequired,
+    form: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired,
   };
 
   constructor(props) {
     super(props);
-    props.initialize({ option: 'true' });
+    props.form.initialize({ option: 'true' });
   }
 
   render() {
@@ -93,10 +94,9 @@ class CopyForm extends React.Component {
   }
 }
 
-const CopyFeeFines = reduxForm({
-  form: 'copy-fee-fines',
+const CopyFeeFines = stripesFinalForm({
+  navigationCheck: false,
   validate,
-  fields: [],
 })(injectIntl(CopyForm));
 
 const CopyModal = props => (
