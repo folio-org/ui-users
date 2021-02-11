@@ -5,7 +5,7 @@ import queryString from 'query-string';
 import { hot } from 'react-hot-loader';
 
 import { AppContextMenu, Route, Switch, IfPermission } from '@folio/stripes/core';
-import { NavList, NavListItem, NavListSection, CommandList, HasCommand } from '@folio/stripes/components';
+import { Button, NavList, NavListItem, NavListSection, CommandList, HasCommand, Modal, ModalFooter } from '@folio/stripes/components';
 
 import * as Routes from './routes';
 
@@ -31,6 +31,14 @@ class UsersRouting extends React.Component {
   }
 
   static actionNames = ['stripesHome', 'usersSortByName'];
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      showInfoModal: false,
+    };
+  }
 
   componentDidMount() {
     const {
@@ -103,6 +111,15 @@ class UsersRouting extends React.Component {
     return document.body.contains(document.activeElement);
   }
 
+  shortcutModalToggle(handleToggle) {
+    handleToggle();
+    this.setState({ showInfoModal: true });
+  }
+
+  handleClose = () => {
+    this.setState({ showInfoModal: false });
+  }
+
   render() {
     const {
       showSettings,
@@ -112,6 +129,14 @@ class UsersRouting extends React.Component {
 
     this.shortcutScope = document.body;
     const base = '/users';
+
+    const modalFooter = (
+      <ModalFooter>
+        <Button onClick={this.handleClose}>
+          <FormattedMessage id="ui-users.blocks.closeButton" />
+        </Button>
+      </ModalFooter>
+    );
 
     if (showSettings) {
       return (
@@ -132,13 +157,20 @@ class UsersRouting extends React.Component {
           {(handleToggle) => (
             <NavList>
               <NavListSection>
-                <NavListItem>
+                <NavListItem onClick={() => { this.shortcutModalToggle(handleToggle); }}>
                   <FormattedMessage id="ui-users.appMenu.keyboardShortcuts" />
                 </NavListItem>
               </NavListSection>
             </NavList>
           )}
         </AppContextMenu>
+        <Modal
+          footer={modalFooter}
+          label={<FormattedMessage id="ui-users.appMenu.keyboardShortcuts" />}
+          open={this.state.showInfoModal}
+        >
+          <div />
+        </Modal>
         <CommandList commands={commands}>
           <HasCommand
             commands={this.shortcuts}
