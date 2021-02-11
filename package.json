@@ -787,7 +787,7 @@
     "@bigtest/react": "^0.1.2",
     "@folio/eslint-config-stripes": "^5.2.0",
     "@folio/stripes": "^6.0.0",
-    "@folio/stripes-cli": "^1.18.0",
+    "@folio/stripes-cli": "^2.0.0",
     "@folio/stripes-components": "^9.0.0",
     "@folio/stripes-core": "^7.0.0",
     "@folio/stripes-final-form": "^5.0.0",
