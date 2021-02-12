@@ -61,6 +61,7 @@
 * Calculate new exp. date not only from today. Refs UIU-2046.
 * Unable to select today's date for refund report. Refs UIU-2033.
 * Increment `@folio/stripes-cli` to `v2`. Refs UIU-2047.
+* Inconsistent behavior of payment action when transaction info is blank. Refs UIU-2048.
 
 ## [5.0.1](https://github.com/folio-org/ui-users/tree/v5.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.0...v5.0.1)
