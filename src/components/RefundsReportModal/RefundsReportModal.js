@@ -57,7 +57,7 @@ const RefundsReportModal = (props) => {
     return disabled;
   };
 
-  const parseDate = (date) => moment.tz(date, props.timezone).format('YYYY-MM-DD');
+  const parseDate = (date) => (date ? moment.tz(date, props.timezone).format('YYYY-MM-DD') : date);
 
   const feeFineOwners = props.owners.map(({ id, owner }) => ({
     value: id,
