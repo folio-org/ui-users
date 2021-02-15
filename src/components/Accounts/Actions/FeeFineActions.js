@@ -298,10 +298,11 @@ class Actions extends React.Component {
       userId: this.props.user.id,
       amountAction: parseFloat(amount || 0).toFixed(2),
       balance: parseFloat(balance || 0).toFixed(2),
-      transactionInformation: transaction || '-',
+      transactionInformation: transaction || '',
       comments: comment,
       notify,
     };
+
     return this.props.mutator.feefineactions.POST(Object.assign(action, newAction));
   }
 
@@ -399,7 +400,7 @@ class Actions extends React.Component {
     const payload = this.buildActionBody(values);
 
     if (action === 'pay') {
-      payload.transactionInfo = values.transaction || '-';
+      payload.transactionInfo = values?.transaction ?? '';
     }
 
     mutator[action].POST(payload, ['id'])
@@ -422,7 +423,7 @@ class Actions extends React.Component {
     };
 
     if (action === 'bulkPay') {
-      payload.transactionInfo = values.transaction || '-';
+      payload.transactionInfo = values?.transaction ?? '';
     }
 
     mutator[action].POST(payload, ['id'])
