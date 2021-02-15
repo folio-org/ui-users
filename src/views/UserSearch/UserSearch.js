@@ -4,8 +4,12 @@ import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
 import { matchPath } from 'react-router';
 
-import noop from 'lodash/noop';
-import get from 'lodash/get';
+import {
+  assign,
+  get,
+  each,
+  noop,
+} from 'lodash';
 import { Link } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { IfPermission, AppIcon, CalloutContext } from '@folio/stripes/core';
@@ -433,9 +437,23 @@ class UserSearch extends React.Component {
       return ids;
     }, []);
 
+    const getRequestData = (refundsReportRequestData) => {
+      const refundsReportRequestParameter = {};
+
+      each(refundsReportRequestData, (val, key) => {
+        if (val) {
+          assign(refundsReportRequestParameter, { [key]: val });
+        }
+      });
+
+      return refundsReportRequestParameter;
+    };
+
     try {
-      const { reportData } = await refundsReport.POST({ startDate, endDate, feeFineOwners });
+      const requestData = getRequestData({ startDate, endDate, feeFineOwners });
+      const { reportData } = await refundsReport.POST(requestData);
       const report = new RefundsReport({ data: reportData, formatMessage });
+
       report.toCSV();
     } catch (e) {
       throw new Error(e);
