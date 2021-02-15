@@ -61,6 +61,7 @@
 * Calculate new expiration date not only from today. Refs UIU-2046.
 * Unable to select today's date for refund report. Refs UIU-2033.
 * Add app dropdown menu. Refs UIU-1915.
+* Add Modal with Shortcut Keys List. Refs UIU-1916.
 * Increment `@folio/stripes-cli` to `v2`. Refs UIU-2047.
 * Inconsistent behavior of payment action when transaction info is blank. Refs UIU-2048.
 
