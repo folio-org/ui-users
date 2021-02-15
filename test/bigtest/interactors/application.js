@@ -7,6 +7,11 @@ import {
 
 @interactor class KeyboardShortcutsModal {
   static defaultScope = '#keyboard-shortcuts-modal';
+
+  modalLabel = scoped('#keyboard-shortcuts-modal-label');
+  columnheaderAction = scoped('#list-column-action');
+  columnheaderShortcut = scoped('#list-column-shortcut');
+  clickShortcutsModalCloseButton = scoped('#keyboard-shortcuts-modal-close', ButtonInteractor);
 }
 
 @interactor class ApplicationContextButton {

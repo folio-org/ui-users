@@ -142,7 +142,10 @@ class UsersRouting extends React.Component {
 
     const modalFooter = (
       <ModalFooter>
-        <Button onClick={this.handleClose}>
+        <Button
+          id="keyboard-shortcuts-modal-close"
+          onClick={this.handleClose}
+        >
           <FormattedMessage id="ui-users.blocks.closeButton" />
         </Button>
       </ModalFooter>
@@ -215,6 +218,7 @@ class UsersRouting extends React.Component {
             <MultiColumnList
               columnMapping={columnMapping}
               contentData={shortcuts}
+              interactive={false}
             />
           </div>
         </Modal>

@@ -40,6 +40,20 @@ describe('Application', function () {
       it('renders keyboard shortcuts modal', () => {
         expect(app.keyboardShortcutsModal.isPresent).to.be.true;
       });
+      it('renders all elements in modal', () => {
+        expect(app.keyboardShortcutsModal.modalLabel.isPresent).to.be.true;
+        expect(app.keyboardShortcutsModal.columnheaderAction.isPresent).to.be.true;
+        expect(app.keyboardShortcutsModal.columnheaderShortcut.isPresent).to.be.true;
+        expect(app.keyboardShortcutsModal.clickShortcutsModalCloseButton.isPresent).to.be.true;
+      });
+      describe('click close button', () => {
+        beforeEach(async () => {
+          await app.keyboardShortcutsModal.clickShortcutsModalCloseButton.click();
+        });
+        it('keyboard shortcuts modal should be colsed', () => {
+          expect(app.keyboardShortcutsModal.isPresent).to.be.false;
+        });
+      });
     });
   });
 
