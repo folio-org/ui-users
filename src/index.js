@@ -5,7 +5,17 @@ import queryString from 'query-string';
 import { hot } from 'react-hot-loader';
 
 import { AppContextMenu, Route, Switch, IfPermission } from '@folio/stripes/core';
-import { Button, NavList, NavListItem, NavListSection, CommandList, HasCommand, Modal, ModalFooter } from '@folio/stripes/components';
+import {
+  Button,
+  NavList,
+  NavListItem,
+  NavListSection,
+  CommandList,
+  HasCommand,
+  Modal,
+  ModalFooter,
+  MultiColumnList,
+} from '@folio/stripes/components';
 
 import * as Routes from './routes';
 
@@ -138,6 +148,34 @@ class UsersRouting extends React.Component {
       </ModalFooter>
     );
 
+    const platform = window.navigator.platform;
+    let operatingSystem;
+    if (platform.includes('Mac')) {
+      operatingSystem = 'Mac';
+    } else {
+      operatingSystem = 'Windows';
+    }
+
+    const shortcuts = [
+      { action: <FormattedMessage id="ui-users.shortcut.createRecord" />, shortcut: <FormattedMessage id={`ui-users.shortcut.${operatingSystem}.createRecord`} /> },
+      { action: <FormattedMessage id="ui-users.shortcut.editRecord" />, shortcut: <FormattedMessage id={`ui-users.shortcut.${operatingSystem}.editRecord`} /> },
+      { action: <FormattedMessage id="ui-users.shortcut.saveRecord" />, shortcut: <FormattedMessage id={`ui-users.shortcut.${operatingSystem}.saveRecord`} /> },
+      { action: <FormattedMessage id="ui-users.shortcut.expandCollapse" />, shortcut: <FormattedMessage id={`ui-users.shortcut.${operatingSystem}.expandCollapse`} /> },
+      { action: <FormattedMessage id="ui-users.shortcut.expandAll" />, shortcut: <FormattedMessage id={`ui-users.shortcut.${operatingSystem}.expandAll`} /> },
+      { action: <FormattedMessage id="ui-users.shortcut.collapseAll" />, shortcut: <FormattedMessage id={`ui-users.shortcut.${operatingSystem}.collapseAll`} /> },
+      { action: <FormattedMessage id="ui-users.shortcut.goToSearchFilter" />, shortcut: <FormattedMessage id={`ui-users.shortcut.${operatingSystem}.goToSearchFilter`} /> },
+      { action: <FormattedMessage id="ui-users.shortcut.closeModal" />, shortcut: <FormattedMessage id={`ui-users.shortcut.${operatingSystem}.closeModal`} /> },
+      { action: <FormattedMessage id="ui-users.shortcut.copy" />, shortcut: <FormattedMessage id={`ui-users.shortcut.${operatingSystem}.copy`} /> },
+      { action: <FormattedMessage id="ui-users.shortcut.cut" />, shortcut: <FormattedMessage id={`ui-users.shortcut.${operatingSystem}.cut`} /> },
+      { action: <FormattedMessage id="ui-users.shortcut.paste" />, shortcut: <FormattedMessage id={`ui-users.shortcut.${operatingSystem}.paste`} /> },
+      { action: <FormattedMessage id="ui-users.shortcut.find" />, shortcut: <FormattedMessage id={`ui-users.shortcut.${operatingSystem}.find`} /> },
+    ];
+
+    const columnMapping = {
+      action: <FormattedMessage id="ui-users.shortcut.action" />,
+      shortcut: <FormattedMessage id="ui-users.shortcut.shortcut" />,
+    };
+
     if (showSettings) {
       return (
         <Route path={path} component={Settings}>
@@ -173,7 +211,12 @@ class UsersRouting extends React.Component {
           label={<FormattedMessage id="ui-users.appMenu.keyboardShortcuts" />}
           open={this.state.showInfoModal}
         >
-          <div />
+          <div>
+            <MultiColumnList
+              columnMapping={columnMapping}
+              contentData={shortcuts}
+            />
+          </div>
         </Modal>
         <CommandList commands={commands}>
           <HasCommand
