@@ -6,15 +6,11 @@ import { hot } from 'react-hot-loader';
 
 import { AppContextMenu, Route, Switch, IfPermission } from '@folio/stripes/core';
 import {
-  Button,
   NavList,
   NavListItem,
   NavListSection,
   CommandList,
   HasCommand,
-  Modal,
-  ModalFooter,
-  MultiColumnList,
 } from '@folio/stripes/components';
 
 import * as Routes from './routes';
@@ -28,6 +24,7 @@ import {
   NoteViewPage,
   NoteEditPage
 } from './views';
+import KeyboardShortcutsModal from './components/KeyboardShortcutsModal';
 
 class UsersRouting extends React.Component {
   static propTypes = {
@@ -46,7 +43,7 @@ class UsersRouting extends React.Component {
     super(props);
 
     this.state = {
-      showInfoModal: false,
+      showKeyboardShortcutsModal: false,
     };
   }
 
@@ -123,12 +120,12 @@ class UsersRouting extends React.Component {
 
   shortcutModalToggle(handleToggle) {
     handleToggle();
-    this.setState({ showInfoModal: true });
+    this.changeKeyboardShortcutsModal(true);
   }
 
-  handleClose = () => {
-    this.setState({ showInfoModal: false });
-  }
+  changeKeyboardShortcutsModal = (modalState) => {
+    this.setState({ showKeyboardShortcutsModal: modalState });
+  };
 
   render() {
     const {
@@ -139,45 +136,6 @@ class UsersRouting extends React.Component {
 
     this.shortcutScope = document.body;
     const base = '/users';
-
-    const modalFooter = (
-      <ModalFooter>
-        <Button
-          id="keyboard-shortcuts-modal-close"
-          onClick={this.handleClose}
-        >
-          <FormattedMessage id="ui-users.blocks.closeButton" />
-        </Button>
-      </ModalFooter>
-    );
-
-    const platform = window.navigator.platform;
-    let operatingSystem;
-    if (platform.includes('Mac')) {
-      operatingSystem = 'Mac';
-    } else {
-      operatingSystem = 'Windows';
-    }
-
-    const shortcuts = [
-      { action: <FormattedMessage id="ui-users.shortcut.createRecord" />, shortcut: <FormattedMessage id={`ui-users.shortcut.${operatingSystem}.createRecord`} /> },
-      { action: <FormattedMessage id="ui-users.shortcut.editRecord" />, shortcut: <FormattedMessage id={`ui-users.shortcut.${operatingSystem}.editRecord`} /> },
-      { action: <FormattedMessage id="ui-users.shortcut.saveRecord" />, shortcut: <FormattedMessage id={`ui-users.shortcut.${operatingSystem}.saveRecord`} /> },
-      { action: <FormattedMessage id="ui-users.shortcut.expandCollapse" />, shortcut: <FormattedMessage id={`ui-users.shortcut.${operatingSystem}.expandCollapse`} /> },
-      { action: <FormattedMessage id="ui-users.shortcut.expandAll" />, shortcut: <FormattedMessage id={`ui-users.shortcut.${operatingSystem}.expandAll`} /> },
-      { action: <FormattedMessage id="ui-users.shortcut.collapseAll" />, shortcut: <FormattedMessage id={`ui-users.shortcut.${operatingSystem}.collapseAll`} /> },
-      { action: <FormattedMessage id="ui-users.shortcut.goToSearchFilter" />, shortcut: <FormattedMessage id={`ui-users.shortcut.${operatingSystem}.goToSearchFilter`} /> },
-      { action: <FormattedMessage id="ui-users.shortcut.closeModal" />, shortcut: <FormattedMessage id={`ui-users.shortcut.${operatingSystem}.closeModal`} /> },
-      { action: <FormattedMessage id="ui-users.shortcut.copy" />, shortcut: <FormattedMessage id={`ui-users.shortcut.${operatingSystem}.copy`} /> },
-      { action: <FormattedMessage id="ui-users.shortcut.cut" />, shortcut: <FormattedMessage id={`ui-users.shortcut.${operatingSystem}.cut`} /> },
-      { action: <FormattedMessage id="ui-users.shortcut.paste" />, shortcut: <FormattedMessage id={`ui-users.shortcut.${operatingSystem}.paste`} /> },
-      { action: <FormattedMessage id="ui-users.shortcut.find" />, shortcut: <FormattedMessage id={`ui-users.shortcut.${operatingSystem}.find`} /> },
-    ];
-
-    const columnMapping = {
-      action: <FormattedMessage id="ui-users.shortcut.action" />,
-      shortcut: <FormattedMessage id="ui-users.shortcut.shortcut" />,
-    };
 
     if (showSettings) {
       return (
@@ -208,20 +166,6 @@ class UsersRouting extends React.Component {
             </NavList>
           )}
         </AppContextMenu>
-        <Modal
-          footer={modalFooter}
-          id="keyboard-shortcuts-modal"
-          label={<FormattedMessage id="ui-users.appMenu.keyboardShortcuts" />}
-          open={this.state.showInfoModal}
-        >
-          <div>
-            <MultiColumnList
-              columnMapping={columnMapping}
-              contentData={shortcuts}
-              interactive={false}
-            />
-          </div>
-        </Modal>
         <CommandList commands={commands}>
           <HasCommand
             commands={this.shortcuts}
@@ -279,6 +223,12 @@ class UsersRouting extends React.Component {
             </Switch>
           </HasCommand>
         </CommandList>
+        { this.state.showKeyboardShortcutsModal && (
+          <KeyboardShortcutsModal
+            open
+            onClose={() => { this.changeKeyboardShortcutsModal(false); }}
+          />
+        )}
       </ >
     );
   }
