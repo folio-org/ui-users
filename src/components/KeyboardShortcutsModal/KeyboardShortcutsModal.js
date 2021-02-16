@@ -8,6 +8,8 @@ import {
   MultiColumnList,
 } from '@folio/stripes/components';
 
+import shortcuts from '../../shortcuts';
+
 class KeyboardShortcutsModal extends React.Component {
   static propTypes = {
     onClose: PropTypes.func.isRequired,
@@ -26,27 +28,23 @@ class KeyboardShortcutsModal extends React.Component {
     );
 
     const platform = window.navigator.platform;
-    let operatingSystem;
-    if (platform.includes('Mac')) {
-      operatingSystem = 'Mac';
-    } else {
-      operatingSystem = 'Windows';
-    }
+    const shortcutsData = [];
+    shortcuts.forEach(key => {
+      let value = {};
 
-    const shortcuts = [
-      { action: <FormattedMessage id="ui-users.shortcut.createRecord" />, shortcut: <FormattedMessage id={`ui-users.shortcut.${operatingSystem}.createRecord`} /> },
-      { action: <FormattedMessage id="ui-users.shortcut.editRecord" />, shortcut: <FormattedMessage id={`ui-users.shortcut.${operatingSystem}.editRecord`} /> },
-      { action: <FormattedMessage id="ui-users.shortcut.saveRecord" />, shortcut: <FormattedMessage id={`ui-users.shortcut.${operatingSystem}.saveRecord`} /> },
-      { action: <FormattedMessage id="ui-users.shortcut.expandCollapse" />, shortcut: <FormattedMessage id={`ui-users.shortcut.${operatingSystem}.expandCollapse`} /> },
-      { action: <FormattedMessage id="ui-users.shortcut.expandAll" />, shortcut: <FormattedMessage id={`ui-users.shortcut.${operatingSystem}.expandAll`} /> },
-      { action: <FormattedMessage id="ui-users.shortcut.collapseAll" />, shortcut: <FormattedMessage id={`ui-users.shortcut.${operatingSystem}.collapseAll`} /> },
-      { action: <FormattedMessage id="ui-users.shortcut.goToSearchFilter" />, shortcut: <FormattedMessage id={`ui-users.shortcut.${operatingSystem}.goToSearchFilter`} /> },
-      { action: <FormattedMessage id="ui-users.shortcut.closeModal" />, shortcut: <FormattedMessage id={`ui-users.shortcut.${operatingSystem}.closeModal`} /> },
-      { action: <FormattedMessage id="ui-users.shortcut.copy" />, shortcut: <FormattedMessage id={`ui-users.shortcut.${operatingSystem}.copy`} /> },
-      { action: <FormattedMessage id="ui-users.shortcut.cut" />, shortcut: <FormattedMessage id={`ui-users.shortcut.${operatingSystem}.cut`} /> },
-      { action: <FormattedMessage id="ui-users.shortcut.paste" />, shortcut: <FormattedMessage id={`ui-users.shortcut.${operatingSystem}.paste`} /> },
-      { action: <FormattedMessage id="ui-users.shortcut.find" />, shortcut: <FormattedMessage id={`ui-users.shortcut.${operatingSystem}.find`} /> },
-    ];
+      if (platform.includes('Mac')) {
+        value = {
+          'action': key.label,
+          'shortcut': key.shortcut.replace('ctrl', 'cmd').replace('alt', 'Option'),
+        };
+      } else {
+        value = {
+          'action': key.label,
+          'shortcut': key.shortcut,
+        };
+      }
+      shortcutsData.push(value);
+    });
 
     const columnMapping = {
       action: <FormattedMessage id="ui-users.shortcut.action" />,
@@ -55,17 +53,18 @@ class KeyboardShortcutsModal extends React.Component {
 
     return (
       <Modal
+        autosize
+        dismissible
         footer={footer}
         id="keyboard-shortcuts-modal"
         label={<FormattedMessage id="ui-users.appMenu.keyboardShortcuts" />}
-        dismissible
-        open
         onClose={this.props.onClose}
+        open
       >
         <div>
           <MultiColumnList
             columnMapping={columnMapping}
-            contentData={shortcuts}
+            contentData={shortcutsData}
             interactive={false}
           />
         </div>
