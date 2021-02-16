@@ -838,7 +838,7 @@
     "reports.feeFine.itemOverduePolicy": "Item overdue policy",
     "reports.feeFine.itemLostPolicy": "Item lost item policy",
     "reports.feeFine.itemLoanDetails": "Item loan details",
-    "export.button": "Export",
+    "export.button": "Exportar",
     "permission.overridePatronBlock": "User: Can override patron blocks",
     "permission.overrideItemBlock": "User: Can override item blocks",
     "reports.refunds.feeFineOwner": "Fee/fine owner",
