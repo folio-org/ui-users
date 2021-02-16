@@ -8,7 +8,8 @@ import {
   MultiColumnList,
 } from '@folio/stripes/components';
 
-import shortcuts from '../../shortcuts';
+import commands from '../../commands';
+import commandsGeneral from '../../commandsGeneral';
 
 class KeyboardShortcutsModal extends React.Component {
   static propTypes = {
@@ -27,20 +28,21 @@ class KeyboardShortcutsModal extends React.Component {
       </ModalFooter>
     );
 
+    const allCommands = commands.concat(commandsGeneral);
     const platform = window.navigator.platform;
     const shortcutsData = [];
-    shortcuts.forEach(key => {
+    allCommands.forEach(key => {
       let value = {};
 
       if (platform.includes('Mac')) {
         value = {
           'action': key.label,
-          'shortcut': key.shortcut.replace('ctrl', 'cmd').replace('alt', 'Option'),
+          'shortcut': key.shortcut.replace('mod', 'cmd').replace('alt', 'Option'),
         };
       } else {
         value = {
           'action': key.label,
-          'shortcut': key.shortcut,
+          'shortcut': key.shortcut.replace('mod', 'ctrl'),
         };
       }
       shortcutsData.push(value);
@@ -49,6 +51,11 @@ class KeyboardShortcutsModal extends React.Component {
     const columnMapping = {
       action: <FormattedMessage id="ui-users.shortcut.action" />,
       shortcut: <FormattedMessage id="ui-users.shortcut.shortcut" />,
+    };
+
+    const columnWidths = {
+      'action': '50%',
+      'shortcut': '50%',
     };
 
     return (
@@ -64,6 +71,7 @@ class KeyboardShortcutsModal extends React.Component {
         <div>
           <MultiColumnList
             columnMapping={columnMapping}
+            columnWidths={columnWidths}
             contentData={shortcutsData}
             interactive={false}
           />
