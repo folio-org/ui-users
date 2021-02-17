@@ -9,6 +9,7 @@ import {
   get,
   each,
   noop,
+  isEmpty,
 } from 'lodash';
 import { Link } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -450,13 +451,28 @@ class UserSearch extends React.Component {
     };
 
     try {
+      this.context.sendCallout({ message: <FormattedMessage id="ui-users.reports.inProgress" /> });
+
       const requestData = getRequestData({ startDate, endDate, feeFineOwners });
       const { reportData } = await refundsReport.POST(requestData);
-      const report = new RefundsReport({ data: reportData, formatMessage });
 
-      report.toCSV();
-    } catch (e) {
-      throw new Error(e);
+      if (isEmpty(reportData)) {
+        this.context.sendCallout({
+          type: 'error',
+          message: <FormattedMessage id="ui-users.reports.noItemsFound" />,
+        });
+      } else {
+        const report = new RefundsReport({ data: reportData, formatMessage });
+
+        report.toCSV();
+      }
+    } catch (error) {
+      if (error) {
+        this.context.sendCallout({
+          type: 'error',
+          message: <FormattedMessage id="ui-users.reports.callout.error" />,
+        });
+      }
     } finally {
       this.setState({ refundExportInProgress: false });
     }
