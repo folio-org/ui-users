@@ -10,8 +10,8 @@ describe('Patron blocks limits form', () => {
   let condition;
   let conditionData;
 
-  const validationMessage = 'Must be blank or a number from 1 to 999,999';
-  const feeFineValidationMessage = 'Must be blank or a number from 0.01 to 999,999.99';
+  const validationMessage = 'Must be blank or a number from 0 to 999,999';
+  const feeFineValidationMessage = 'Must be blank or a number from 0.00 to 999,999.99';
 
   setupApplication();
 
@@ -106,8 +106,7 @@ describe('Patron blocks limits form', () => {
 
     describe('save float limit value for fee fine limit', () => {
       beforeEach(async function () {
-        await SettingsLimitsForm.limitField(5)
-          .fillAndBlur(12.5);
+        await SettingsLimitsForm.limitField(5).fillAndBlur(12.5);
         await SettingsLimitsForm.saveButton.click();
       });
 
