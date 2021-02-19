@@ -838,12 +838,13 @@
     "reports.feeFine.itemOverduePolicy": "Item overdue policy",
     "reports.feeFine.itemLostPolicy": "Item lost item policy",
     "reports.feeFine.itemLoanDetails": "Item loan details",
-    "export.button": "Export",
+    "export.button": "Exportar",
     "permission.overridePatronBlock": "User: Can override patron blocks",
     "permission.overrideItemBlock": "User: Can override item blocks",
     "reports.refunds.feeFineOwner": "Fee/fine owner",
     "accounts.exportFeesFines": "Export fees/fines",
     "reports.refunds.modal.owner": "Fee/fine owner",
     "reports.refunds.modal.owner.placeholder": "Select Fee/fine owner(s)",
-    "reports.feeFine.details": "Fee/fine details"
+    "reports.feeFine.details": "Fee/fine details",
+    "reports.callout.error": "Something went wrong."
 }
