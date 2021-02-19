@@ -843,7 +843,8 @@
     "permission.overrideItemBlock": "Użytkownik: Może nadpisywać blokady egzemplarzy podczas wypożyczania",
     "reports.refunds.feeFineOwner": "Właściciel opłaty/kary",
     "accounts.exportFeesFines": "Eksport opłat/kar",
-    "reports.refunds.modal.owner": "Fee/fine owner",
-    "reports.refunds.modal.owner.placeholder": "Select Fee/fine owner(s)",
-    "reports.feeFine.details": "Fee/fine details"
+    "reports.refunds.modal.owner": "Właściciel opłaty/kary",
+    "reports.refunds.modal.owner.placeholder": "Wybierz właściciela opłaty/kary",
+    "reports.feeFine.details": "Szczegóły opłaty/kary",
+    "reports.callout.error": "Something went wrong."
 }

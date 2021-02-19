@@ -845,5 +845,6 @@
     "accounts.exportFeesFines": "تصدير الرسوم/الغرامات",
     "reports.refunds.modal.owner": "مالك الغرامة/الرسم",
     "reports.refunds.modal.owner.placeholder": "اختر مالك الغرامة/الرسم",
-    "reports.feeFine.details": "تفاصيل الرسم/الغرامة"
+    "reports.feeFine.details": "تفاصيل الرسم/الغرامة",
+    "reports.callout.error": "لقد حدث خطأ ما."
 }
