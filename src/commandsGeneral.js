@@ -12,19 +12,19 @@ const commandsGeneral = [
   },
   {
     label: (<FormattedMessage id="ui-users.shortcut.copy" />),
-    shortcut: 'mod + c'
+    shortcut: 'mod+c'
   },
   {
     label: (<FormattedMessage id="ui-users.shortcut.cut" />),
-    shortcut: 'mod + x'
+    shortcut: 'mod+x'
   },
   {
     label: (<FormattedMessage id="ui-users.shortcut.paste" />),
-    shortcut: 'mod + v'
+    shortcut: 'mod+v'
   },
   {
     label: (<FormattedMessage id="ui-users.shortcut.find" />),
-    shortcut: 'mod + f'
+    shortcut: 'mod+f'
   }
 ];
 
