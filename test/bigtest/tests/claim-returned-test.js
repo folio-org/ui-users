@@ -468,4 +468,303 @@ describe('Claim returned', () => {
       });
     });
   });
+
+  describe('Visiting open loans list page with aged to lost item', () => {
+    let user;
+    let loan;
+    beforeEach(async function () {
+      user = this.server.create('user');
+
+      loan = this.server.create('loan', {
+        userId: user.id,
+        status: { name: 'Open' },
+        loanPolicyId: 'test',
+        item: {
+          status: { name: 'Aged to lost' }
+        },
+      });
+
+      const lostItemFee = this.server.create('account', {
+        userId: loan.userId,
+        status: {
+          name: 'Open',
+        },
+        paymentStatus: {
+          name: 'Transferred partially',
+        },
+        amount: 200,
+        remaining: 20,
+        feeFineType: 'Lost item fee',
+        loanId: loan.id,
+      });
+
+      this.server.create('feefineaction', {
+        userId: user.id,
+        typeAction: 'Lost item fee',
+        accountId: lostItemFee.id,
+        amountAction: 200,
+        balance: 200
+      });
+      this.server.create('feefineaction', {
+        userId: user.id,
+        typeAction: 'Transferred partially',
+        accountId: lostItemFee.id,
+        amountAction: 180,
+        balance: 20
+      });
+
+      this.server.get('/accounts');
+      this.server.get('/feefineactions');
+
+      this.visit(`/users/${loan.userId}/loans/view/${loan.id}`);
+      await LoanActionsHistory.whenLoaded();
+    });
+
+
+    it('should display enabled claim returned button', () => {
+      expect(LoanActionsHistory.claimReturnedButton.isPresent).to.be.true;
+      expect(LoanActionsHistory.isClaimReturnedButtonDisabled).to.be.false;
+    });
+
+    it('should display dash in `Claimed returned` field', () => {
+      expect(LoanActionsHistory.claimedReturnedDate.value.text).to.equal('-');
+    });
+
+    describe('clicking on claim returned button', () => {
+      beforeEach(async function () {
+        await LoanActionsHistory.claimReturnedButton.click();
+      });
+
+      describe('filling additional information textarea', () => {
+        const additionalInfoText = 'text';
+
+        beforeEach(async () => {
+          await OpenLoansInteractor.claimReturnedDialog.additionalInfoTextArea.focus();
+          await OpenLoansInteractor.claimReturnedDialog.additionalInfoTextArea.fill(additionalInfoText);
+        });
+
+        it('should enable confirm button', () => {
+          expect(OpenLoansInteractor.claimReturnedDialog.isConfirmButtonDisabled).to.be.false;
+        });
+
+        describe('clicking confirm button', () => {
+          beforeEach(async function () {
+            await OpenLoansInteractor.claimReturnedDialog.confirmButton.click();
+          });
+          it('should hide claim returned dialog', () => {
+            expect(OpenLoansInteractor.claimReturnedDialog.isPresent).to.be.false;
+          });
+
+          describe('Visiting fee fine (credit and refund) when incurred after claim returned item', () => {
+            beforeEach(async function () {
+              this.server.create('loanaction', {
+                loan: {
+                  ...loan.attrs,
+                },
+              });
+              this.server.get('/accounts');
+              this.visit(`/users/preview/${loan.userId}`);
+              await FeeFineHistoryInteractor.whenSectionLoaded();
+              await FeeFineHistoryInteractor.sectionFeesFinesSection.click();
+              await FeeFineHistoryInteractor.openAccounts.click();
+            });
+
+            it('renders proper amount of rows', () => {
+              expect(FeeFineHistoryInteractor.mclViewFeesFines.rowCount).to.equal(1);
+            });
+
+            it('Suspended claim returned payment status', () => {
+              expect(FeeFineHistoryInteractor.mclViewFeesFines.rows(0).cells(6).text).to.equal(refundClaimReturned.PAYMENT_STATUS);
+            });
+
+            describe('visit Fee/fine details', () => {
+              beforeEach(async function () {
+                this.server.get('/feefineactions');
+                await FeeFineHistoryInteractor.rows(0).click();
+              });
+              it('Refunded fully-Claim returned  Action', () => {
+                expect(FeeFineHistoryInteractor.mclAccountActions.rows(0).cells(1).text).to.equal(refundClaimReturned.REFUNDED_ACTION);
+              });
+
+              it('Credited fully-Claim returned  Action', () => {
+                expect(FeeFineHistoryInteractor.mclAccountActions.rows(1).cells(1).text).to.equal(refundClaimReturned.CREDITED_ACTION);
+              });
+              it('Credited fully-Claim returned Balance', () => {
+                expect(FeeFineHistoryInteractor.mclAccountActions.rows(0).cells(3).text).to.equal('200.00');
+              });
+              it('Credited fully-Claim returned  Amount', () => {
+                expect(FeeFineHistoryInteractor.mclAccountActions.rows(0).cells(2).text).to.equal('180.00');
+              });
+              it('Refunded fully-Claim returned Balance', () => {
+                expect(FeeFineHistoryInteractor.mclAccountActions.rows(1).cells(3).text).to.equal('-');
+              });
+              it('Refunded fully-Claim returned  Amount', () => {
+                expect(FeeFineHistoryInteractor.mclAccountActions.rows(1).cells(2).text).to.equal('180.00');
+              });
+            });
+          });
+        });
+      });
+    });
+  });
+
+  describe('Visiting open loans list page with aged to lost item with separate refund for each Transfer Account', () => {
+    let user;
+    let loan;
+    beforeEach(async function () {
+      user = this.server.create('user');
+
+      loan = this.server.create('loan', {
+        userId: user.id,
+        status: { name: 'Open' },
+        loanPolicyId: 'test',
+        item: {
+          status: { name: 'Aged to lost' }
+        },
+      });
+
+      const lostItemFeeOwnerId1 = this.server.create('account', {
+        userId: loan.userId,
+        id: 1,
+        status: {
+          name: 'Open',
+        },
+        paymentStatus: {
+          name: 'Transferred partially',
+        },
+        amount: 200,
+        remaining: 20,
+        feeFineType: 'Lost item fee',
+        loanId: loan.id,
+      });
+
+      this.server.create('feefineaction', {
+        userId: user.id,
+        typeAction: 'Lost item fee',
+        accountId: lostItemFeeOwnerId1.id,
+        amountAction: 200,
+        balance: 200
+      });
+      this.server.create('feefineaction', {
+        userId: user.id,
+        typeAction: 'Transferred partially',
+        accountId: lostItemFeeOwnerId1.id,
+        amountAction: 180,
+        balance: 20
+      });
+
+      const lostItemFeeOwnerId2 = this.server.create('account', {
+        userId: loan.userId,
+        id: 2,
+        status: {
+          name: 'Open',
+        },
+        paymentStatus: {
+          name: 'Transferred partially',
+        },
+        amount: 200,
+        remaining: 20,
+        feeFineType: 'Lost item fee',
+        loanId: loan.id,
+      });
+
+      this.server.create('feefineaction', {
+        userId: user.id,
+        typeAction: 'Lost item fee',
+        accountId: lostItemFeeOwnerId2.id,
+        amountAction: 200,
+        balance: 200
+      });
+      this.server.create('feefineaction', {
+        userId: user.id,
+        typeAction: 'Transferred partially',
+        accountId: lostItemFeeOwnerId2.id,
+        amountAction: 180,
+        balance: 20
+      });
+
+      this.server.get('/accounts');
+      this.server.get('/feefineactions');
+
+      this.visit(`/users/${loan.userId}/loans/view/${loan.id}`);
+      await LoanActionsHistory.whenLoaded();
+    });
+
+    it('should display enabled claim returned button', () => {
+      expect(LoanActionsHistory.claimReturnedButton.isPresent).to.be.true;
+      expect(LoanActionsHistory.isClaimReturnedButtonDisabled).to.be.false;
+    });
+
+    it('should display dash in `Claimed returned` field', () => {
+      expect(LoanActionsHistory.claimedReturnedDate.value.text).to.equal('-');
+    });
+
+    describe('clicking on claim returned button', () => {
+      beforeEach(async function () {
+        await LoanActionsHistory.claimReturnedButton.click();
+      });
+
+      describe('filling additional information textarea', () => {
+        const additionalInfoText = 'text';
+
+        beforeEach(async () => {
+          await OpenLoansInteractor.claimReturnedDialog.additionalInfoTextArea.focus();
+          await OpenLoansInteractor.claimReturnedDialog.additionalInfoTextArea.fill(additionalInfoText);
+        });
+
+        it('should enable confirm button', () => {
+          expect(OpenLoansInteractor.claimReturnedDialog.isConfirmButtonDisabled).to.be.false;
+        });
+
+        describe('clicking confirm button', () => {
+          beforeEach(async function () {
+            await OpenLoansInteractor.claimReturnedDialog.confirmButton.click();
+          });
+          it('should hide claim returned dialog', () => {
+            expect(OpenLoansInteractor.claimReturnedDialog.isPresent).to.be.false;
+          });
+
+          describe('Visiting fee fine (credit and refund) when incurred after claim returned item', () => {
+            beforeEach(async function () {
+              this.server.create('loanaction', {
+                loan: {
+                  ...loan.attrs,
+                },
+              });
+              this.server.get('/accounts');
+              this.visit(`/users/preview/${loan.userId}`);
+              await FeeFineHistoryInteractor.whenSectionLoaded();
+              await FeeFineHistoryInteractor.sectionFeesFinesSection.click();
+              await FeeFineHistoryInteractor.openAccounts.click();
+            });
+
+            it('renders proper amount of rows', () => {
+              expect(FeeFineHistoryInteractor.mclViewFeesFines.rowCount).to.equal(2);
+            });
+
+            it('Suspended claim returned payment status', () => {
+              expect(FeeFineHistoryInteractor.mclViewFeesFines.rows(0).cells(6).text).to.equal(refundClaimReturned.PAYMENT_STATUS);
+            });
+
+            describe('visit Fee/fine details', () => {
+              beforeEach(async function () {
+                this.server.get('/feefineactions');
+                await FeeFineHistoryInteractor.rows(0).click();
+              });
+              it('Refunded fully-Claim returned  Action', () => {
+                expect(FeeFineHistoryInteractor.mclAccountActions.rows(0).cells(1).text).to.equal(refundClaimReturned.REFUNDED_ACTION);
+              });
+
+              it('Credited fully-Claim returned  Action', () => {
+                expect(FeeFineHistoryInteractor.mclAccountActions.rows(1).cells(1).text).to.equal(refundClaimReturned.CREDITED_ACTION);
+              });
+              it('Refunded fully-Claim returned Balance', () => {
+                expect(FeeFineHistoryInteractor.mclAccountActions.rows(1).cells(3).text).to.equal('-');
+              });
+            });
+          });
+        });
+      });
+    });
+  });
 });

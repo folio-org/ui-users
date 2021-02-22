@@ -1,9 +1,6 @@
-import {
-  cloneDeep,
-  orderBy
-} from 'lodash';
+import _ from 'lodash';
 import moment from 'moment';
-import { refundClaimReturned } from '../../constants';
+import { refundClaimReturned, itemStatuses } from '../../constants';
 
 
 class RefundTransferCR {
@@ -31,7 +28,7 @@ refundTransfers = async (loan, props) => {
   };
 
   const setPaymentStatus = record => {
-    const updatedRec = cloneDeep(record);
+    const updatedRec = _.cloneDeep(record);
     updatedRec.paymentStatus.name = refundClaimReturned.PAYMENT_STATUS;
     return updatedRec;
   };
@@ -90,7 +87,7 @@ refundTransfers = async (loan, props) => {
         },
       },
     } = props;
-    const orderedActions = orderBy(transferredActions, ['dateAction'], ['desc']);
+    const orderedActions = _.orderBy(transferredActions, ['dateAction'], ['desc']);
     const now = moment().format();
     const amount = transferredActions.reduce((acc, record) => acc + record.amountAction, 0.0);
     const lastBalance = orderedActions[0].balance + amount;
@@ -126,28 +123,87 @@ refundTransfers = async (loan, props) => {
     }
   };
 
+  const getLoanStorage = () => {
+    const {
+      mutator: {
+        loanstorage: {
+          GET,
+        }
+      }
+    } = props;
+    const path = `loan-storage/loans/${loan.id}`;
+    return GET({ path });
+  };
+
+  const updateLoanStorage = record => {
+    const {
+      mutator: {
+        activeLoanStorage: {
+          update,
+        },
+        loanstorage: {
+          PUT,
+        }
+      }
+    } = props;
+    update({ id: record.id });
+    return PUT(record);
+  };
+
+  const setAgedToLostBlank = record => {
+    const updatedRec = _.cloneDeep(record);
+    updatedRec.agedToLostDelayedBilling.lostItemHasBeenBilled = '';
+    updatedRec.agedToLostDelayedBilling.dateLostItemShouldbeBilled = '';
+    return updatedRec;
+  };
+
+  const updateAgedToLostLoan = async () => {
+    const loanStorage = await getLoanStorage();
+    const updateRecord = setAgedToLostBlank(loanStorage);
+    updateLoanStorage(updateRecord);
+  };
+
   const processAccounts = async () => {
-    const accounts = await getAccounts();
-    const updatedAccounts = await Promise.all(
-      accounts
-        .map(setPaymentStatus)
-        .map(persistAccountRecord)
-    );
-    const accountsActions = await Promise.all(
-      updatedAccounts
-        .map(getAccountActions)
-    );
-    const transferredActions = accountsActions
-      .map(filterTransferredActions);
-    const accountsWithTransferredActions = accounts
-      .map((account, index) => {
-        return {
-          account,
-          actions: transferredActions[index]
-        };
-      });
-    await Promise.all(accountsWithTransferredActions
-      .map(({ account, actions }) => createRefunds(account, actions)));
+    const validateItemStatus = loan.item.status.name;
+    const isDeclaredLostItem = validateItemStatus === itemStatuses.DECLARED_LOST;
+    const isAgedToLostItem = validateItemStatus === itemStatuses.AGED_TO_LOST;
+
+    if (isAgedToLostItem) {
+      updateAgedToLostLoan();
+    }
+
+    if (isAgedToLostItem || isDeclaredLostItem) {
+      const accounts = await getAccounts();
+      const updatedAccounts = await Promise.all(
+        accounts
+          .map(setPaymentStatus)
+          .map(persistAccountRecord)
+      );
+      const accountsActions = await Promise.all(
+        updatedAccounts
+          .map(getAccountActions)
+      );
+      const transferredActions = accountsActions
+        .map(filterTransferredActions);
+      const accountsWithTransferredActions = accounts
+        .map((account, index) => {
+          return {
+            idFeeFineOwner: account.ownerId,
+            account,
+            actions: transferredActions[index]
+          };
+        });
+      const groupByOwner = _(accountsWithTransferredActions)
+        .groupBy('idFeeFineOwner')
+        .map((accountsByOwner, idOwner) => {
+          return {
+            idFeeFineOwner: idOwner,
+            accountsO: accountsByOwner,
+          };
+        }).value();
+
+      await Promise.all(groupByOwner.map(a => a.accountsO.map(({ account, actions }) => createRefunds(account, actions))));
+    }
   };
 
   await processAccounts();
