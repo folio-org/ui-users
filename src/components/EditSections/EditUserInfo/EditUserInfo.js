@@ -65,8 +65,19 @@ class EditUserInfo extends React.Component {
   }
 
   recalculateExpirationDate = () => {
+    const { initialValues } = this.props;
+
+    const expirationDate = new Date(initialValues.expirationDate);
+    const now = Date.now();
     const offsetOfSelectedPatronGroup = this.props.selectedPatronGroup ? this.getPatronGroupOffset() : '';
-    const recalculatedDate = (moment().add(offsetOfSelectedPatronGroup, 'd').format('YYYY-MM-DD'));
+    let recalculatedDate;
+
+    if (initialValues.expirationDate === undefined || expirationDate <= now) {
+      recalculatedDate = (moment().add(offsetOfSelectedPatronGroup, 'd').format('YYYY-MM-DD'));
+    } else {
+      recalculatedDate = (moment(expirationDate).add(offsetOfSelectedPatronGroup, 'd').format('YYYY-MM-DD'));
+    }
+
     this.props.stripes.store.dispatch(change('userForm', 'expirationDate', recalculatedDate));
     this.setState({ showRecalculateModal: false });
   }

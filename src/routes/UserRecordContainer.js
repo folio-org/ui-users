@@ -68,6 +68,21 @@ class UserRecordContainer extends React.Component {
       path: `departments?query=cql.allRecords=1 sortby name&limit=${MAX_RECORDS}`,
       records: 'departments',
     },
+    feefineactions: {
+      type: 'okapi',
+      records: 'feefineactions',
+      path: `feefineactions?query=(userId==:{id})&limit=${MAX_RECORDS}`,
+    },
+    accounts: {
+      type: 'okapi',
+      records: 'accounts',
+      path: `accounts?query=(userId==:{id})&limit=${MAX_RECORDS}`,
+    },
+    loanRecords: {
+      type: 'okapi',
+      records: 'loans',
+      path: 'circulation/loans?query=(userId==:{id})&limit=1000',
+    },
     uniquenessValidator: {
       type: 'okapi',
       records: 'users',
@@ -176,6 +191,15 @@ class UserRecordContainer extends React.Component {
       loansHistory: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
+      feefineactions: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object).isRequired,
+      }).isRequired,
+      accounts: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object).isRequired,
+      }).isRequired,
+      loanRecords: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object).isRequired,
+      }).isRequired,
     }),
     mutator: PropTypes.shape({
       selUser: PropTypes.shape({

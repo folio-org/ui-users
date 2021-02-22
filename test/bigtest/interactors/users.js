@@ -10,7 +10,7 @@ import {
   selectable,
 } from '@bigtest/interactor';
 
-import CheckboxInteractor  from '@folio/stripes-components/lib/Checkbox/tests/interactor'; // eslint-disable-line
+import CalloutInteractor from '@folio/stripes-components/lib/Callout/tests/interactor'; // eslint-disable-line
 import MultiSelectInteractor from '@folio/stripes-components/lib/MultiSelection/tests/interactor';
 import RefundsReportModal from './refunds-report-modal';
 
@@ -51,6 +51,7 @@ export default @interactor class UsersInteractor {
   static defaultScope = '[data-test-user-instances]';
 
   refundsReportModal = new RefundsReportModal();
+  isRefundsReportModalPresent = isPresent('#refunds-report-modal');
   activeUserCheckbox = new ActiveUserCheckbox();
   departmentsFilter = new DepartmentsFilter();
   headerDropdownMenu = new HeaderDropdownMenu();
@@ -74,6 +75,8 @@ export default @interactor class UsersInteractor {
   column = function column(key) {
     return new Interactor(`#list-column-${key}`);
   }
+
+  callout = new CalloutInteractor();
 
   whenInstanceLoaded() {
     return this.when(() => this.instancePresent).timeout(5000);

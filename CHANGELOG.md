@@ -46,12 +46,25 @@
 * Hitting 'Charge only' button multiple times results in more than one fee/fine being created. Refs UIU-1993.
 * Set informative message when error declaring item lost. Fixes UIU-2004.
 * Change 'Reason for cancellation' to 'Additional information for staff' on Cancel Fee/Fine page. Refs UIU-1999.
+* Add fee/fine owner column to refund report. Refs UIU-2016.
 * Increment `react-redux` to `v7`, `redux-form` to `v8`. Refs UIU-2017, STRIPES=721.
 * Accessibility: Invalid ARIA attribute. Refs UIU-1685.
 * Wrong error message appears when required field not selected on Pay/Waive/Transfer modal. Refs UIU-1991.
 * Create fees/fines EXPORT spreadsheet for single patron and add EXPORT option to Fees/Fines History. Refs UIU-1955, UIU-1958.
 * Add 'User: Can override patron blocks' permission. Refs UIU-2025.
 * Add 'User: Can override item blocks' permission. Refs UIU-2019.
+* Add Fee/fine owner as criteria for 'Refunds to process manually report'. Refs UIU-2013.
+* Add EXPORT option to User Information. Refs UIU-1957.
+* Add EXPORT option to fees/fines Details. Refs UIU-1956.
+* Change Overdue loans and Claims reports icons in action menu. Refs UIU-2030.
+* Add plus-sign to create buttons in action menu and switch button order. Refs UIU-2031.
+* Calculate new expiration date not only from today. Refs UIU-2046.
+* Unable to select today's date for refund report. Refs UIU-2033.
+* Increment `@folio/stripes-cli` to `v2`. Refs UIU-2047.
+* Inconsistent behavior of payment action when transaction info is blank. Refs UIU-2048.
+* Fix wrong value on reset data for Refunds to process manually report (CSV). Refs UIU-2050.
+* Add Callout for Refund report. Refs UIU-2035.
+* Allow 0 as valid entry for Patron Block Limits. Refs UIU-1998.
 
 ## [5.0.1](https://github.com/folio-org/ui-users/tree/v5.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.0...v5.0.1)

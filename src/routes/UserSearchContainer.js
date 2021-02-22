@@ -14,6 +14,7 @@ import {
 
 import filterConfig from './filterConfig';
 import { UserSearch } from '../views';
+import { MAX_RECORDS } from '../constants';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
@@ -89,14 +90,18 @@ class UserSearchContainer extends React.Component {
       path: 'departments',
       records: 'departments',
     },
+    owners: {
+      type: 'okapi',
+      records: 'owners',
+      path: `owners?query=cql.allRecords=1&limit=${MAX_RECORDS}`,
+    },
     refundsReport: {
       type: 'okapi',
       records: 'reportData',
-      path: 'feefine-reports/refund?startDate=%{refundReportData.startDate}&endDate=%{refundReportData.endDate}',
+      path: 'feefine-reports/refund',
+      clientGeneratePk: false,
       fetch: false,
-      accumulate: true,
     },
-    refundReportData: {}
   });
 
   static propTypes = {
@@ -127,11 +132,8 @@ class UserSearchContainer extends React.Component {
       resultOffset: PropTypes.shape({
         replace: PropTypes.func.isRequired,
       }),
-      refundReportData: PropTypes.shape({
-        update: PropTypes.func.isRequired,
-      }),
       refundsReport: PropTypes.shape({
-        GET: PropTypes.func.isRequired,
+        POST: PropTypes.func.isRequired,
       }),
     }).isRequired,
     stripes: PropTypes.shape({

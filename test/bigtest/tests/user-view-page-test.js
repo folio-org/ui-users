@@ -12,7 +12,9 @@ describe('User view', () => {
   let user;
 
   describe('with all permissions', () => {
-    setupApplication();
+    setupApplication({
+      scenarios: ['fee-fine-actions'],
+    });
 
     describe('visit users-details', () => {
       beforeEach(async function () {
@@ -52,6 +54,21 @@ describe('User view', () => {
         });
         it('should display link to edit user', () => {
           expect(InstanceViewPage.actionMenuCreateRequestButton.isPresent).to.be.true;
+        });
+
+        it('should display export fee fine report button', () => {
+          expect(InstanceViewPage.actionMenuExportFeeFineReport.isPresent).to.be.true;
+        });
+      });
+
+      describe('Export Fees/Fines report', () => {
+        beforeEach(async () => {
+          await InstanceViewPage.actionMenuButton.click();
+          await InstanceViewPage.actionMenuExportFeeFineReportButton.click();
+        });
+
+        it('show successfull callout', () => {
+          expect(InstanceViewPage.callout.successCalloutIsPresent).to.be.true;
         });
       });
 

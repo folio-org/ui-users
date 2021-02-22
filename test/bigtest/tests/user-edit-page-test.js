@@ -253,6 +253,7 @@ describe('User Edit Page', () => {
         beforeEach(async function () {
           const user = this.server.create('user', {
             patronGroup: GROUP_WITH_EXPIRATIONOFFSET,
+            expirationDate: '2019-02-05',
           }, 'withPatronGroup', { id: GROUP_WITH_EXPIRATIONOFFSET });
 
           this.visit(`/users/${user.id}/edit`);
@@ -263,7 +264,7 @@ describe('User Edit Page', () => {
           expect(UserFormPage.recalculateExpirationdateButton.isPresent).to.be.true;
         });
 
-        describe('click recalculation button', () => {
+        describe('click recalculation button with expirationDate in the past', () => {
           const RECALCULATED_EXPIRATION_DATE = moment().add(730, 'd').format('YYYY-MM-DD');
           beforeEach(async function () {
             await UserFormPage.recalculateExpirationdateButton.click();

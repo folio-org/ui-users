@@ -4,8 +4,13 @@ import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
 import { matchPath } from 'react-router';
 
-import noop from 'lodash/noop';
-import get from 'lodash/get';
+import {
+  assign,
+  get,
+  each,
+  noop,
+  isEmpty,
+} from 'lodash';
 import { Link } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { IfPermission, AppIcon, CalloutContext } from '@folio/stripes/core';
@@ -79,6 +84,7 @@ class UserSearch extends React.Component {
       records: PropTypes.object,
       patronGroups: PropTypes.object,
       departments: PropTypes.object,
+      owners: PropTypes.object,
       query: PropTypes.shape({
         qindex: PropTypes.string,
       }).isRequired,
@@ -91,15 +97,14 @@ class UserSearch extends React.Component {
       query: PropTypes.shape({
         update: PropTypes.func.isRequired,
       }).isRequired,
-      refundReportData: PropTypes.shape({
-        update: PropTypes.func.isRequired,
-      }).isRequired,
       refundsReport: PropTypes.shape({
-        GET: PropTypes.func.isRequired,
-        reset: PropTypes.func,
+        POST: PropTypes.func.isRequired,
       }).isRequired,
     }).isRequired,
     source: PropTypes.object,
+    stripes: PropTypes.shape({
+      timezone: PropTypes.string.isRequired,
+    }),
   }
 
   static defaultProps = {
@@ -277,7 +282,7 @@ class UserSearch extends React.Component {
                 this.generateReport(this.props, 'overdue');
               }}
             >
-              <Icon icon="report">
+              <Icon icon="download">
                 <FormattedMessage id="ui-users.reports.overdue.label" />
               </Icon>
             </Button>
@@ -290,7 +295,7 @@ class UserSearch extends React.Component {
               this.generateReport(this.props, 'claimedReturned');
             }}
           >
-            <Icon icon="report">
+            <Icon icon="download">
               <FormattedMessage id="ui-users.reports.claimReturned.label" />
             </Icon>
           </Button>
@@ -411,7 +416,7 @@ class UserSearch extends React.Component {
     onSubmit(e);
   }
 
-  handleRefundsReportFormSubmit = async ({ startDate, endDate }) => {
+  handleRefundsReportFormSubmit = async ({ startDate, endDate, owners = [] }) => {
     if (this.state.refundExportInProgress) {
       return;
     }
@@ -423,20 +428,51 @@ class UserSearch extends React.Component {
 
     const {
       mutator: {
-        refundReportData,
         refundsReport,
       },
       intl: { formatMessage }
     } = this.props;
 
-    refundReportData.update({ startDate, endDate });
+    const feeFineOwners = owners.reduce((ids, owner) => {
+      ids.push(owner.value);
+      return ids;
+    }, []);
+
+    const getRequestData = (refundsReportRequestData) => {
+      const refundsReportRequestParameter = {};
+
+      each(refundsReportRequestData, (val, key) => {
+        if (val) {
+          assign(refundsReportRequestParameter, { [key]: val });
+        }
+      });
+
+      return refundsReportRequestParameter;
+    };
+
     try {
-      refundsReport.reset();
-      const actions = await refundsReport.GET();
-      const report = new RefundsReport({ data: actions, formatMessage });
-      report.toCSV();
-    } catch (e) {
-      throw new Error(e);
+      this.context.sendCallout({ message: <FormattedMessage id="ui-users.reports.inProgress" /> });
+
+      const requestData = getRequestData({ startDate, endDate, feeFineOwners });
+      const { reportData } = await refundsReport.POST(requestData);
+
+      if (isEmpty(reportData)) {
+        this.context.sendCallout({
+          type: 'error',
+          message: <FormattedMessage id="ui-users.reports.noItemsFound" />,
+        });
+      } else {
+        const report = new RefundsReport({ data: reportData, formatMessage });
+
+        report.toCSV();
+      }
+    } catch (error) {
+      if (error) {
+        this.context.sendCallout({
+          type: 'error',
+          message: <FormattedMessage id="ui-users.reports.callout.error" />,
+        });
+      }
     } finally {
       this.setState({ refundExportInProgress: false });
     }
@@ -454,6 +490,7 @@ class UserSearch extends React.Component {
       resources,
       contentRef,
       mutator: { resultOffset },
+      stripes: { timezone },
     } = this.props;
     const visibleColumns = this.getVisibleColumns();
 
@@ -469,6 +506,7 @@ class UserSearch extends React.Component {
     }
 
     const users = get(resources, 'records.records', []);
+    const owners = resources.owners.records;
     const patronGroups = (resources.patronGroups || {}).records || [];
     const query = queryGetter ? queryGetter() || {} : {};
     const count = source ? source.totalCount() : 0;
@@ -642,9 +680,11 @@ class UserSearch extends React.Component {
           { this.state.showRefundsReportModal && (
             <RefundsReportModal
               open
-              onClose={() => { this.changeRefundReportModalState(false); }}
               label={this.props.intl.formatMessage({ id:'ui-users.reports.refunds.modal.label' })}
+              owners={owners}
+              onClose={() => { this.changeRefundReportModalState(false); }}
               onSubmit={this.handleRefundsReportFormSubmit}
+              timezone={timezone}
             />
           )}
         </div>
