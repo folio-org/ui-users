@@ -669,7 +669,7 @@
     "permission.reset.password": "Users: Create/reset password",
     "errors.proxies.duplicateUserMessage": "Duplicate proxy has been entered.",
     "errors.sponsors.duplicateUserMessage": "Duplicate sponsor has been entered.",
-    "settings.limits.validation.message": "Must be blank or a number from {min, number} to {max, number}",
+    "settings.limits.validation.message": "Must be blank or a number from {min} to {max, number}",
     "blocks.form.label.requests": "Reservationer",
     "information.preferredName": "Preferred first name",
     "contact.contactInfo": "Contact information",
@@ -845,5 +845,6 @@
     "accounts.exportFeesFines": "Export fees/fines",
     "reports.refunds.modal.owner": "Fee/fine owner",
     "reports.refunds.modal.owner.placeholder": "Select Fee/fine owner(s)",
-    "reports.feeFine.details": "Fee/fine details"
+    "reports.feeFine.details": "Fee/fine details",
+    "reports.callout.error": "Something went wrong."
 }
