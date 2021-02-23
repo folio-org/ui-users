@@ -846,5 +846,5 @@
     "reports.refunds.modal.owner": "Właściciel opłaty/kary",
     "reports.refunds.modal.owner.placeholder": "Wybierz właściciela opłaty/kary",
     "reports.feeFine.details": "Szczegóły opłaty/kary",
-    "reports.callout.error": "Something went wrong."
+    "reports.callout.error": "Coś poszło nie tak."
 }
