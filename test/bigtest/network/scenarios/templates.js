@@ -16,7 +16,13 @@ export default (server) => {
 
   // server.get('/feefines', (schema) => schema.feefines.all());
 
-  server.delete('feefines/:id', () => {
+  server.delete('feefines/:id', (schema, request) => {
+    const {
+      params: { id },
+    } = request;
+
+    const model = schema.feefines.find(id);
+    model.destroy();
     return {};
   });
 
