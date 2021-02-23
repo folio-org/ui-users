@@ -1,14 +1,16 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
+import { Field } from 'react-final-form';
+
 import {
   Button,
   Row,
   Col,
   Select,
 } from '@folio/stripes/components';
-import { FormattedMessage } from 'react-intl';
-import { Field, reduxForm } from 'redux-form';
+import stripesFinalForm from '@folio/stripes/final-form';
 
 import css from './FeeFinesTable.css';
 
@@ -37,11 +39,11 @@ Item.propTypes = {
 class ChargeNotice extends React.Component {
   static propTypes = {
     owner: PropTypes.object,
-    initialize: PropTypes.func,
     handleSubmit: PropTypes.func,
     templateCharge: PropTypes.arrayOf(PropTypes.object),
     templateAction: PropTypes.arrayOf(PropTypes.object),
     templates: PropTypes.arrayOf(PropTypes.object),
+    form: PropTypes.object,
   };
 
   constructor(props) {
@@ -54,7 +56,7 @@ class ChargeNotice extends React.Component {
   componentDidUpdate(prevProps) {
     const { owner } = this.props;
     if (!_.isEqual(prevProps.owner, owner)) {
-      this.props.initialize({
+      this.props.form.initialize({
         defaultChargeNoticeId: owner.defaultChargeNoticeId,
         defaultActionNoticeId: owner.defaultActionNoticeId
       });
@@ -76,7 +78,14 @@ class ChargeNotice extends React.Component {
 
   render() {
     const { edit } = this.state;
-    const { templateCharge, templateAction, owner, templates } = this.props;
+    const {
+      templateCharge,
+      templateAction,
+      owner,
+      templates,
+      handleSubmit,
+    } = this.props;
+
     const buttonLabel = (edit) ? <FormattedMessage id="ui-users.comment.save" /> : <FormattedMessage id="ui-users.edit" />;
     const buttonAction = this.onToggleEdit;
 
@@ -84,7 +93,7 @@ class ChargeNotice extends React.Component {
     const defaultActionNoticeId = (templates.find(t => t.id === owner.defaultActionNoticeId) || {}).name;
 
     return (
-      <form>
+      <form onSubmit={handleSubmit}>
         <Row>
           <Col xs={4}>
             <div className={css.customCol}>
@@ -124,6 +133,9 @@ class ChargeNotice extends React.Component {
   }
 }
 
-export default reduxForm({
-  form: 'charge-notice'
+
+export default stripesFinalForm({
+  navigationCheck: false,
+  enableReinitialize: false,
 })(ChargeNotice);
+

@@ -1,7 +1,10 @@
-import _ from 'lodash';
+import {
+  omit,
+  sortBy,
+} from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import { EntryManager } from '@folio/stripes/smart-components';
 import { stripesConnect } from '@folio/stripes/core';
@@ -53,37 +56,47 @@ class PermissionSets extends React.Component {
         DELETE: PropTypes.func,
       }),
     }).isRequired,
+    intl: PropTypes.object,
   };
+
+  beforeSave = (data) => {
+    const filtered = omit(data, ['childOf', 'grantedTo', 'dummy', 'deprecated']);
+    const permSet = {
+      ...filtered,
+      mutable: true,
+      subPermissions: (data.subPermissions || []).map(p => p.permissionName),
+    };
+
+    return permSet;
+  }
 
   render() {
     const {
       mutator,
       resources: { entries },
+      intl: { formatMessage },
     } = this.props;
 
     return (
-      <FormattedMessage id="ui-users.permissionSet">
-        {(entryLabel) => (
-          <EntryManager
-            {...this.props}
-            parentMutator={mutator}
-            entryList={_.sortBy((entries || {}).records || [], ['displayName'])}
-            detailComponent={PermissionSetDetails}
-            paneTitle={<FormattedMessage id="ui-users.settings.permissionSet" />}
-            entryLabel={entryLabel}
-            entryFormComponent={PermissionSetForm}
-            validate={validate}
-            nameKey="displayName"
-            permissions={{
-              put: 'perms.permissions.item.post',
-              post: 'perms.permissions.item.post',
-              delete: 'perms.permissions.item.delete',
-            }}
-          />
-        )}
-      </FormattedMessage>
+      <EntryManager
+        {...this.props}
+        parentMutator={mutator}
+        entryList={sortBy((entries || {}).records || [], ['displayName'])}
+        detailComponent={PermissionSetDetails}
+        paneTitle={<FormattedMessage id="ui-users.settings.permissionSet" />}
+        entryLabel={formatMessage({ id: 'ui-users.permissionSet' })}
+        entryFormComponent={PermissionSetForm}
+        validate={validate}
+        onBeforeSave={this.beforeSave}
+        nameKey="displayName"
+        permissions={{
+          put: 'perms.permissions.item.post',
+          post: 'perms.permissions.item.post',
+          delete: 'perms.permissions.item.delete',
+        }}
+      />
     );
   }
 }
 
-export default stripesConnect(PermissionSets);
+export default stripesConnect(injectIntl(PermissionSets));
