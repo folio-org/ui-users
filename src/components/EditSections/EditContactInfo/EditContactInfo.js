@@ -4,7 +4,7 @@ import {
   injectIntl,
 } from 'react-intl';
 import PropTypes from 'prop-types';
-import { Field } from 'redux-form';
+import { Field } from 'react-final-form';
 import {
   Select,
   TextField,
@@ -27,13 +27,15 @@ const EditContactInfo = ({
   intl,
 }) => {
   const contactTypeOptions = (contactTypes || []).map(g => {
-    const selected = preferredContactTypeId === g.id;
     return (
       <FormattedMessage key={g.id} id={g.desc}>
-        {(message) => <option selected={selected} value={g.id}>{message}</option>}
+        {(message) => <option value={g.id}>{message}</option>}
       </FormattedMessage>
     );
   });
+
+  const selectedContactTypeId = contactTypeOptions.find(c => preferredContactTypeId === c.id)?.id;
+
   const addressFields = {
     addressType: {
       component: Select,
@@ -90,6 +92,7 @@ const EditContactInfo = ({
             fullWidth
             aria-required="true"
             required
+            defaultValue={selectedContactTypeId}
           >
             <FormattedMessage id="ui-users.contact.selectContactType">
               {(message) => <option value="">{message}</option>}
@@ -99,7 +102,12 @@ const EditContactInfo = ({
         </Col>
       </Row>
       <br />
-      <AddressEditList name="personal.addresses" fieldComponents={addressFields} canDelete />
+      <AddressEditList
+        name="personal.addresses"
+        fieldComponents={addressFields}
+        canDelete
+        formType="final-form"
+      />
     </Accordion>
   );
 };
