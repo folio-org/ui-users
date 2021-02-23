@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { upperFirst } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
@@ -38,12 +38,12 @@ class KeyboardShortcutsModal extends React.Component {
       if (platform.includes('Mac')) {
         value = {
           'action': key.label,
-          'shortcut': _.upperFirst(key.shortcut.replace('mod', 'cmd').replace('alt', 'Option')),
+          'shortcut': upperFirst(key.shortcut.replace('mod', 'cmd').replace('alt', 'Option')),
         };
       } else {
         value = {
           'action': key.label,
-          'shortcut': _.upperFirst(key.shortcut.replace('mod', 'ctrl')),
+          'shortcut': upperFirst(key.shortcut.replace('mod', 'ctrl')),
         };
       }
       shortcutsData.push(value);
