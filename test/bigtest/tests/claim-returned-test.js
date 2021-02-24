@@ -484,6 +484,12 @@ describe('Claim returned', () => {
         },
       });
 
+      this.server.create('loanstorage', {
+        loan: {
+          ...loan.attrs,
+        },
+      });
+
       const lostItemFee = this.server.create('account', {
         userId: loan.userId,
         status: {
@@ -620,6 +626,12 @@ describe('Claim returned', () => {
         loanPolicyId: 'test',
         item: {
           status: { name: 'Aged to lost' }
+        },
+      });
+
+      this.server.create('loanstorage', {
+        loan: {
+          ...loan.attrs,
         },
       });
 
