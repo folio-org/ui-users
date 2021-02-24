@@ -65,6 +65,7 @@
 * Fix wrong value on reset data for Refunds to process manually report (CSV). Refs UIU-2050.
 * Add Callout for Refund report. Refs UIU-2035.
 * Allow 0 as valid entry for Patron Block Limits. Refs UIU-1998.
+* Add "Save and close" button should be active immediately on refund report criteria modal. Refs UIU-2034.
 
 ## [5.0.1](https://github.com/folio-org/ui-users/tree/v5.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.0...v5.0.1)
