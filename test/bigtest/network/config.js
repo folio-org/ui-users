@@ -271,9 +271,8 @@ export default function config() {
     return this.serializerOrRegistry.serialize(loans.all());
   });
 
-  this.get('loan-storage/loans/:loanid', {
-    loans: [],
-    totalRecords: 0
+  this.get('/loan-storage/loans/:id', ({ loans }, request) => {
+    return loans.find(request.params.id).attrs;
   });
 
   this.get('loan-storage/loan-history', ({ loanactions }, request) => {
@@ -303,7 +302,7 @@ export default function config() {
     };
   });
 
-  this.put('/loan-storage/loans/:loanid', ({ loans }, { params, requestBody }) => {
+  this.put('/loan-storage/loans/:id', ({ loans }, { params, requestBody }) => {
     const loanS = JSON.parse(requestBody);
     return loans.find(params.id).update(loanS);
   });
