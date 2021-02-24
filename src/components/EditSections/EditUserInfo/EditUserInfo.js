@@ -153,7 +153,7 @@ class EditUserInfo extends React.Component {
           id="expirationDate-modal-recalculate-btn"
           onClick={this.recalculateExpirationDate}
         >
-          <FormattedMessage id="ui-users.information.recalculate.expirationDate" />
+          <FormattedMessage id="ui-users.information.recalculate.modal.button" />
         </Button>
         <Button
           id="expirationDate-modal-cancel-btn"
