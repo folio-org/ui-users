@@ -484,9 +484,11 @@ describe('Claim returned', () => {
         },
       });
 
-      this.server.create('loanstorage', {
-        loan: {
-          ...loan.attrs,
+      this.server.create('loan-storage', {
+        id : loan.id,
+        agedToLostDelayedBilling: {
+          lostItemHasBeenBilled: () => false,
+          dateLostItemShouldBeBilled: () => 'date',
         },
       });
 
@@ -629,9 +631,11 @@ describe('Claim returned', () => {
         },
       });
 
-      this.server.create('loanstorage', {
-        loan: {
-          ...loan.attrs,
+      this.server.create('loan-storage', {
+        id : loan.id,
+        agedToLostDelayedBilling: {
+          lostItemHasBeenBilled: () => false,
+          dateLostItemShouldBeBilled: () => 'date',
         },
       });
 

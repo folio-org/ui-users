@@ -303,9 +303,9 @@ export default function config() {
     };
   });
 
-  this.put('/loan-storage/loans/:loanid', ({ loanStorage }, { params, requestBody }) => {
+  this.put('/loan-storage/loans/:loanid', ({ loans }, { params, requestBody }) => {
     const loanS = JSON.parse(requestBody);
-    return loanStorage.find(params.id).update(loanS);
+    return loans.find(params.id).update(loanS);
   });
 
   this.get('/circulation/requests', function ({ requests }) {
