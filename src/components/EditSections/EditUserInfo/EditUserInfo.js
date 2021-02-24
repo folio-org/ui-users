@@ -159,7 +159,7 @@ class EditUserInfo extends React.Component {
 
     const offset = this.getPatronGroupOffset();
     const group = _.get(this.props.patronGroups.find(i => i.id === this.state.selectedPatronGroup), 'group', '');
-    const date = moment(this.calculateNewExpirationDate()).format('MMMM Do YYYY');
+    const date = moment(this.calculateNewExpirationDate()).format('LL');
 
     const modalFooter = (
       <ModalFooter>
