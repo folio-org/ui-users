@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
 
 import {
   Button,
@@ -16,6 +17,8 @@ import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import { getOpenRequestsPath } from '../util';
 
 import { loanActionMutators } from '../../constants';
+
+import { MAX_RECORDS } from '../../constants';
 
 import css from './ModalContent.css';
 
@@ -43,6 +46,13 @@ class ModalContent extends React.Component {
         path: 'circulation/loans/!{loan.id}/declare-claimed-returned-item-as-missing',
       },
     },
+    cancel: {
+      type: 'okapi',
+      path: 'accounts/%{activeRecord.id}/cancel',
+      fetch: false,
+      clientGeneratePk: false,
+    },
+    activeRecord: {},
   });
 
   static propTypes = {
@@ -56,7 +66,16 @@ class ModalContent extends React.Component {
       markAsMissing: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }).isRequired,
+      cancel: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      })
     }).isRequired,
+    /*resources: PropTypes.shape({
+      accountActions: PropTypes.object,
+      accounts: PropTypes.object.isRequired,
+      feefineactions: PropTypes.object.isRequired,
+      loans: PropTypes.object.isRequired,
+    }),*/
     stripes: PropTypes.shape({
       user: PropTypes.shape({
         user: PropTypes.object,
@@ -70,6 +89,7 @@ class ModalContent extends React.Component {
     disableButton: PropTypes.func,
     validateAction: PropTypes.func,
     itemRequestCount: PropTypes.number.isRequired,
+    activeRecord: PropTypes.object,
   };
 
   static defaultProps = {
@@ -93,6 +113,7 @@ class ModalContent extends React.Component {
 
     const {
       loanAction,
+      resources,
       stripes: {
         user: {
           user: {
@@ -101,7 +122,8 @@ class ModalContent extends React.Component {
         },
       },
     } = this.props;
-
+    console.log(this.props);
+    
     const {
       mutator: {
         [loanAction]: {
@@ -124,16 +146,80 @@ class ModalContent extends React.Component {
       requestData.declaredLostDateTime = new Date().toISOString();
     }
 
-    disableButton();
+    const accounts = _.get(resources, ['accounts', 'records'], []);
 
-    try {
-      await POST(requestData);
-    } catch (error) {
-      this.processError(error);
+    console.log(accounts);
+
+    await this.addFeeFine(loanAction, "819dabe1-910d-4dad-a1d4-f14e36b7c93c", additionalInfo, this.props.loan.feesAndFines.amountRemainingToPay);
+
+    if(loanAction === loanActionMutators.MARK_AS_MISSING) {
+      
     }
 
-    onClose();
+    if(loanAction === loanActionMutators.DECLARE_LOST) {
+
+    }
+
+    //disableButton();
+    try {
+      console.log("Entro al click");
+      console.log(requestData);
+      console.log(loanAction);
+
+      //await POST(requestData);
+    } catch (error) {
+      //this.processError(error);
+    }
+
+    //onClose();
   };
+
+  addFeeFine(loanAction, accountId, additionalInfo, amount) {
+
+    const {
+      mutator,
+      intl: { formatMessage },
+    } = this.props;
+
+    mutator.activeRecord.update({ id: accountId });
+    
+    const {
+      okapi: {
+        currentUser: {
+          firstName = '',
+          lastName = '',
+          curServicePoint: { id: servicePointId }
+        },
+      }
+    } = this.props;
+
+    const body = {};
+
+    //body.amount = amount;
+    body.notifyPatron = false;
+    body.comments = additionalInfo
+    body.servicePointId = servicePointId;
+    body.userName = `${lastName}, ${firstName}`;
+    
+    mutator.cancel.POST(body)
+
+    /*const createAt = new Date().toISOString();
+    const newAction = {
+      typeAction: {},
+      source: `${this.props.okapi.currentUser.lastName}, ${this.props.okapi.currentUser.firstName}`,
+      createdAt: createAt,
+      accountId,
+      dateAction: moment().format(),
+      userId: this.props.loan.userId,
+      amountAction: parseFloat(amount || 0).toFixed(2),
+      balance: parseFloat(0).toFixed(2),
+      transactionInformation: '-',
+      comments: additionalInfo,
+      notify: ''
+    };
+    console.log();
+    return this.props.mutator.cancel.POST(Object.assign(loanAction, newAction));*/
+  }
 
   processError(resp) {
     const { handleError } = this.props;
@@ -155,6 +241,8 @@ class ModalContent extends React.Component {
       onClose,
       itemRequestCount,
     } = this.props;
+
+    console.log(this.props);
 
     const { additionalInfo } = this.state;
 
