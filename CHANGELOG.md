@@ -66,6 +66,7 @@
 * Add Callout for Refund report. Refs UIU-2035.
 * Allow 0 as valid entry for Patron Block Limits. Refs UIU-1998.
 * Add "Save and close" button should be active immediately on refund report criteria modal. Refs UIU-2034.
+* Expiration date modal opens every time when editing a user. Refs UIU-2059.
 * Rewording for text on expiration date modal. Refs UIU-2058.
 
 ## [5.0.1](https://github.com/folio-org/ui-users/tree/v5.0.1) (2020-10-15)

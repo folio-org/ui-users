@@ -53,12 +53,6 @@ class EditUserInfo extends React.Component {
     };
   }
 
-  componentDidMount() {
-    if (this.getPatronGroupOffset()) {
-      this.showModal(true);
-    }
-  }
-
   showModal = (val) => {
     this.setState({
       showRecalculateModal: val,
