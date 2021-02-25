@@ -9,11 +9,8 @@ import {
   MultiColumnList,
 } from '@folio/stripes/components';
 
-import commands from '../../commands';
-import commandsGeneral from '../../commandsGeneral';
-
 function KeyboardShortcutsModal(props) {
-  const { onClose } = props;
+  const { onClose, allCommands } = props;
 
   const footer = (
     <ModalFooter>
@@ -26,7 +23,6 @@ function KeyboardShortcutsModal(props) {
     </ModalFooter>
   );
 
-  const allCommands = commands.concat(commandsGeneral);
   const platform = window.navigator.platform;
   const shortcutsData = [];
   allCommands.forEach(key => {
@@ -79,6 +75,7 @@ function KeyboardShortcutsModal(props) {
 }
 
 KeyboardShortcutsModal.propTypes = {
+  allCommands: PropTypes.object,
   onClose: PropTypes.func.isRequired,
 };
 

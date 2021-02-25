@@ -17,6 +17,7 @@ import * as Routes from './routes';
 
 import pkg from '../package';
 import commands from './commands';
+import commandsGeneral from './commandsGeneral';
 import Settings from './settings';
 import sections from './settings/sections';
 import {
@@ -227,6 +228,7 @@ class UsersRouting extends React.Component {
           <KeyboardShortcutsModal
             open
             onClose={() => { this.changeKeyboardShortcutsModal(false); }}
+            allCommands={commands.concat(commandsGeneral)}
           />
         )}
       </ >
