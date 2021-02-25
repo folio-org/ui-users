@@ -6,6 +6,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import moment from 'moment-timezone';
 import { OnChange } from 'react-final-form-listeners';
 
+import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import { ViewMetaData } from '@folio/stripes/smart-components';
 import {
   Button,
@@ -315,7 +316,7 @@ class EditUserInfo extends React.Component {
           open={this.state.showRecalculateModal}
         >
           <div>
-            <FormattedMessage
+            <SafeHTMLMessage
               id="ui-users.information.recalculate.modal.text"
               values={{ group, offset, date }}
             />
