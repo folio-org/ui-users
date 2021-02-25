@@ -6,6 +6,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import moment from 'moment-timezone';
 import { OnChange } from 'react-final-form-listeners';
 
+import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import { ViewMetaData } from '@folio/stripes/smart-components';
 import {
   Button,
@@ -68,8 +69,16 @@ class EditUserInfo extends React.Component {
     this.setState({ showRecalculateModal: false });
   }
 
-  recalculateExpirationDate = () => {
-    const { form: { change }, initialValues } = this.props;
+  setRecalculatedExpirationDate = () => {
+    const { form: { change } } = this.props;
+    const recalculatedDate = this.calculateNewExpirationDate();
+
+    change('expirationDate', recalculatedDate);
+    this.setState({ showRecalculateModal: false });
+  }
+
+  calculateNewExpirationDate = () => {
+    const { initialValues } = this.props;
     const expirationDate = new Date(initialValues.expirationDate);
     const now = Date.now();
     const offsetOfSelectedPatronGroup = this.state.selectedPatronGroup ? this.getPatronGroupOffset() : '';
@@ -80,9 +89,7 @@ class EditUserInfo extends React.Component {
     } else {
       recalculatedDate = (moment(expirationDate).add(offsetOfSelectedPatronGroup, 'd').format('YYYY-MM-DD'));
     }
-
-    change('expirationDate', recalculatedDate);
-    this.setState({ showRecalculateModal: false });
+    return recalculatedDate;
   }
 
   getPatronGroupOffset = () => {
@@ -153,13 +160,15 @@ class EditUserInfo extends React.Component {
 
     const offset = this.getPatronGroupOffset();
     const group = _.get(this.props.patronGroups.find(i => i.id === this.state.selectedPatronGroup), 'group', '');
+    const date = moment(this.calculateNewExpirationDate()).format('LL');
+
     const modalFooter = (
       <ModalFooter>
         <Button
           id="expirationDate-modal-recalculate-btn"
-          onClick={this.recalculateExpirationDate}
+          onClick={this.setRecalculatedExpirationDate}
         >
-          <FormattedMessage id="ui-users.information.recalculate.expirationDate" />
+          <FormattedMessage id="ui-users.information.recalculate.modal.button" />
         </Button>
         <Button
           id="expirationDate-modal-cancel-btn"
@@ -282,7 +291,7 @@ class EditUserInfo extends React.Component {
               {checkShowRecalculateButton() && (
                 <Button
                   id="recalculate-expirationDate-btn"
-                  onClick={this.recalculateExpirationDate}
+                  onClick={this.setRecalculatedExpirationDate}
                 >
                   <FormattedMessage id="ui-users.information.recalculate.expirationDate" />
                 </Button>
@@ -307,9 +316,9 @@ class EditUserInfo extends React.Component {
           open={this.state.showRecalculateModal}
         >
           <div>
-            <FormattedMessage
+            <SafeHTMLMessage
               id="ui-users.information.recalculate.modal.text"
-              values={{ group, offset }}
+              values={{ group, offset, date }}
             />
           </div>
         </Modal>
