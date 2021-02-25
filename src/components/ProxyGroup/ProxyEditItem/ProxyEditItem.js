@@ -10,6 +10,8 @@ import {
 } from 'lodash';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { Field } from 'react-final-form';
+import { OnChange } from 'react-final-form-listeners';
 import {
   Row,
   Col,
@@ -17,12 +19,10 @@ import {
   LayoutHeader,
   Select,
 } from '@folio/stripes/components';
-import {
-  Field,
-  getFormValues,
-} from 'redux-form';
 
 import { getFullName } from '../../util';
+import getWarning from '../../util/getProxySponsorWarning';
+
 import css from './ProxyEditItem.css';
 
 class ProxyEditItem extends React.Component {
@@ -32,9 +32,8 @@ class ProxyEditItem extends React.Component {
     namespace: PropTypes.string, // sponsors or proxies
     name: PropTypes.string,
     onDelete: PropTypes.func,
-    stripes: PropTypes.object,
     change: PropTypes.func.isRequired,
-    getWarning: PropTypes.func.isRequired,
+    formValues: PropTypes.object,
   };
 
   constructor() {
@@ -43,8 +42,7 @@ class ProxyEditItem extends React.Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const { stripes: { store } } = nextProps;
-    const formValues = getFormValues('userForm')(store.getState());
+    const { formValues } = nextProps;
     if (!isEqual(prevState.formValues, formValues)) {
       return { formValues };
     }
@@ -96,11 +94,11 @@ class ProxyEditItem extends React.Component {
   updateStatus() {
     const {
       index,
-      getWarning,
       namespace,
     } = this.props;
 
     const formValues = this.state.formValues;
+
     this.toggleStatus(!getWarning(formValues, namespace, index));
   }
 
@@ -157,12 +155,21 @@ class ProxyEditItem extends React.Component {
                 <Col xs={12} data-test-proxy-relationship-status>
                   <Field
                     disabled={this.state.statusDisabled}
-                    label={<FormattedMessage id="ui-users.proxy.relationshipStatus" />}
                     name={`${name}.proxy.status`}
-                    component={Select}
                     fullWidth
                   >
-                    {relationStatusOptions}
+                    {({ input, meta }) => {
+                      return (
+                        <Select
+                          {...input}
+                          error={!meta?.data?.warning && meta?.data?.error ? meta.data.error : undefined}
+                          warning={meta?.data?.warning ? meta?.data?.warning : undefined}
+                          label={<FormattedMessage id="ui-users.proxy.relationshipStatus" />}
+                        >
+                          {relationStatusOptions}
+                        </Select>
+                      );
+                    }}
                   </Field>
                 </Col>
               </Row>
@@ -175,9 +182,11 @@ class ProxyEditItem extends React.Component {
                     label={<FormattedMessage id="ui-users.expirationDate" />}
                     dateFormat="YYYY-MM-DD"
                     name={`${name}.proxy.expirationDate`}
-                    onChange={() => defer(() => this.updateStatus())}
                   />
                 </Col>
+                <OnChange name={`${name}.proxy.expirationDate`}>
+                  {() => defer(() => this.updateStatus())}
+                </OnChange>
               </Row>
             </Col>
           </Row>

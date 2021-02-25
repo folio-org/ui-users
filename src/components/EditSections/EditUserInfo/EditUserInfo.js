@@ -1,10 +1,10 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { change, Field, formValueSelector, getFormValues } from 'redux-form';
+import { Field } from 'react-final-form';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import moment from 'moment-timezone';
+import { OnChange } from 'react-final-form-listeners';
 
 import { ViewMetaData } from '@folio/stripes/smart-components';
 import {
@@ -20,6 +20,8 @@ import {
   ModalFooter,
 } from '@folio/stripes/components';
 
+import asyncValidateField from '../../validators/asyncValidateField';
+
 import css from './EditUserInfo.css';
 
 class EditUserInfo extends React.Component {
@@ -30,26 +32,28 @@ class EditUserInfo extends React.Component {
     intl: PropTypes.object.isRequired,
     onToggle: PropTypes.func,
     patronGroups: PropTypes.arrayOf(PropTypes.object),
-    selectedPatronGroup: PropTypes.string,
     stripes: PropTypes.shape({
       store: PropTypes.shape({
         dispatch: PropTypes.func.isRequired,
         getState: PropTypes.func,
       }),
     }).isRequired,
+    form: PropTypes.object,
+    uniquenessValidator: PropTypes.object,
   };
 
   constructor(props) {
     super(props);
 
+    const { initialValues: { patronGroup } } = props;
     this.state = {
       showRecalculateModal: false,
+      selectedPatronGroup: patronGroup,
     };
   }
 
-  componentDidUpdate(prevProps) {
-    const offsetOfSelectedPatronGroup = this.getPatronGroupOffset();
-    if (this.props.selectedPatronGroup !== prevProps.selectedPatronGroup && offsetOfSelectedPatronGroup !== '') {
+  componentDidMount() {
+    if (this.getPatronGroupOffset()) {
       this.showModal(true);
     }
   }
@@ -65,14 +69,24 @@ class EditUserInfo extends React.Component {
   }
 
   recalculateExpirationDate = () => {
-    const offsetOfSelectedPatronGroup = this.props.selectedPatronGroup ? this.getPatronGroupOffset() : '';
-    const recalculatedDate = (moment().add(offsetOfSelectedPatronGroup, 'd').format('YYYY-MM-DD'));
-    this.props.stripes.store.dispatch(change('userForm', 'expirationDate', recalculatedDate));
+    const { form: { change }, initialValues } = this.props;
+    const expirationDate = new Date(initialValues.expirationDate);
+    const now = Date.now();
+    const offsetOfSelectedPatronGroup = this.state.selectedPatronGroup ? this.getPatronGroupOffset() : '';
+    let recalculatedDate;
+
+    if (initialValues.expirationDate === undefined || expirationDate <= now) {
+      recalculatedDate = (moment().add(offsetOfSelectedPatronGroup, 'd').format('YYYY-MM-DD'));
+    } else {
+      recalculatedDate = (moment(expirationDate).add(offsetOfSelectedPatronGroup, 'd').format('YYYY-MM-DD'));
+    }
+
+    change('expirationDate', recalculatedDate);
     this.setState({ showRecalculateModal: false });
   }
 
   getPatronGroupOffset = () => {
-    const selectedPatronGroup = this.props.patronGroups.find(i => i.id === this.props.selectedPatronGroup);
+    const selectedPatronGroup = this.props.patronGroups.find(i => i.id === this.state.selectedPatronGroup);
     return _.get(selectedPatronGroup, 'expirationOffsetInDays', '');
   };
 
@@ -84,7 +98,10 @@ class EditUserInfo extends React.Component {
       onToggle,
       accordionId,
       intl,
+      uniquenessValidator,
     } = this.props;
+
+    const { barcode } = initialValues;
 
     const isUserExpired = () => {
       const expirationDate = new Date(initialValues.expirationDate);
@@ -93,10 +110,9 @@ class EditUserInfo extends React.Component {
     };
 
     const willUserExtend = () => {
-      const { stripes: { store } } = this.props;
-      const state = store.getState();
-      const formValues = getFormValues('userForm')(state) || {};
-      const currentExpirationDate = new Date(_.get(formValues, 'expirationDate', ''));
+      const { form } = this.props;
+      const expirationDate = form.getFieldState('expirationDate')?.value ?? '';
+      const currentExpirationDate = new Date(expirationDate);
       const now = Date.now();
       return currentExpirationDate >= now;
     };
@@ -108,7 +124,7 @@ class EditUserInfo extends React.Component {
     };
 
     const checkShowRecalculateButton = () => {
-      const offsetOfSelectedPatronGroup = this.props.selectedPatronGroup ? this.getPatronGroupOffset() : '';
+      const offsetOfSelectedPatronGroup = this.state.selectedPatronGroup ? this.getPatronGroupOffset() : '';
       return offsetOfSelectedPatronGroup !== '';
     };
 
@@ -136,7 +152,7 @@ class EditUserInfo extends React.Component {
     ];
 
     const offset = this.getPatronGroupOffset();
-    const group = _.get(this.props.patronGroups.find(i => i.id === this.props.selectedPatronGroup), 'group', '');
+    const group = _.get(this.props.patronGroups.find(i => i.id === this.state.selectedPatronGroup), 'group', '');
     const modalFooter = (
       <ModalFooter>
         <Button
@@ -220,6 +236,15 @@ class EditUserInfo extends React.Component {
                 aria-required="true"
                 required
               />
+              <OnChange name="patronGroup">
+                {(selectedPatronGroup) => {
+                  this.setState({ selectedPatronGroup }, () => {
+                    if (this.getPatronGroupOffset()) {
+                      this.showModal(true);
+                    }
+                  });
+                }}
+              </OnChange>
             </Col>
             <Col xs={12} md={3}>
               <Field
@@ -269,6 +294,7 @@ class EditUserInfo extends React.Component {
                 name="barcode"
                 id="adduser_barcode"
                 component={TextField}
+                validate={asyncValidateField('barcode', barcode, uniquenessValidator)}
                 fullWidth
               />
             </Col>
@@ -292,10 +318,4 @@ class EditUserInfo extends React.Component {
   }
 }
 
-const selectFormValue = formValueSelector('userForm');
-
-export default connect(
-  store => ({
-    selectedPatronGroup: selectFormValue(store, 'patronGroup'),
-  })
-)(injectIntl(EditUserInfo));
+export default injectIntl(EditUserInfo);

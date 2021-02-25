@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { Field } from 'react-final-form';
 import { isEmpty } from 'lodash';
 import {
@@ -38,28 +38,11 @@ const validate = ({ startDate, endDate }) => {
 };
 
 const RefundsReportModal = (props) => {
-  const calculateSubmitState = () => {
-    let disabled = true;
+  const {
+    valid,
+  } = props.form.getState();
 
-    const {
-      dirty,
-      values: {
-        startDate,
-        endDate,
-      },
-      valid,
-    } = props.form.getState();
-
-    if ((dirty && valid) || (valid && !isEmpty(startDate) && !isEmpty(endDate))) {
-      disabled = false;
-    }
-
-    return disabled;
-  };
-
-  const parseDate = (date) => {
-    return moment(date).format('YYYY-MM-DD');
-  };
+  const parseDate = (date) => (date ? moment.tz(date, props.timezone).format('YYYY-MM-DD') : date);
 
   const feeFineOwners = props.owners.map(({ id, owner }) => ({
     value: id,
@@ -70,7 +53,7 @@ const RefundsReportModal = (props) => {
     <ModalFooter>
       <Button
         data-test-refunds-report-save-btn
-        disabled={calculateSubmitState()}
+        disabled={!valid}
         marginBottom0
         buttonStyle="primary"
         onClick={props.form.submit}
@@ -154,6 +137,7 @@ RefundsReportModal.propTypes = {
   owners: PropTypes.arrayOf(PropTypes.object).isRequired,
   onClose: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
+  timezone: PropTypes.string.isRequired,
 };
 
 export default stripesFinalForm({

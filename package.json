@@ -787,7 +787,7 @@
     "@bigtest/react": "^0.1.2",
     "@folio/eslint-config-stripes": "^5.2.0",
     "@folio/stripes": "^6.0.0",
-    "@folio/stripes-cli": "^1.18.0",
+    "@folio/stripes-cli": "^2.0.0",
     "@folio/stripes-components": "^9.0.0",
     "@folio/stripes-core": "^7.0.0",
     "@folio/stripes-final-form": "^5.0.0",
@@ -809,6 +809,7 @@
   },
   "dependencies": {
     "@folio/react-intl-safe-html": "^3.0.0",
+    "final-form-set-field-data": "^1.0.2",
     "hashcode": "^1.0.3",
     "lodash": "^4.17.4",
     "moment": "~2.24.0",
@@ -816,10 +817,10 @@
     "prop-types": "^15.5.10",
     "query-string": "^5.0.0",
     "react-final-form": "^6.3.0",
-    "final-form-set-field-data": "^1.0.2",
+    "react-final-form-listeners": "^1.0.3",
+    "react-final-form-arrays": "^3.1.0",
     "react-hot-loader": "^4.3.12",
     "react-router-prop-types": "^1.0.4",
-    "redux-form": "^8.3.7",
     "uuid": "^3.0.1"
   },
   "peerDependencies": {

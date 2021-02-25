@@ -4,8 +4,13 @@ import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
 import { matchPath } from 'react-router';
 
-import noop from 'lodash/noop';
-import get from 'lodash/get';
+import {
+  assign,
+  get,
+  each,
+  noop,
+  isEmpty,
+} from 'lodash';
 import { Link } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { IfPermission, AppIcon, CalloutContext } from '@folio/stripes/core';
@@ -97,6 +102,9 @@ class UserSearch extends React.Component {
       }).isRequired,
     }).isRequired,
     source: PropTypes.object,
+    stripes: PropTypes.shape({
+      timezone: PropTypes.string.isRequired,
+    }),
   }
 
   static defaultProps = {
@@ -430,12 +438,41 @@ class UserSearch extends React.Component {
       return ids;
     }, []);
 
+    const getRequestData = (refundsReportRequestData) => {
+      const refundsReportRequestParameter = {};
+
+      each(refundsReportRequestData, (val, key) => {
+        if (val) {
+          assign(refundsReportRequestParameter, { [key]: val });
+        }
+      });
+
+      return refundsReportRequestParameter;
+    };
+
     try {
-      const { reportData } = await refundsReport.POST({ startDate, endDate, feeFineOwners });
-      const report = new RefundsReport({ data: reportData, formatMessage });
-      report.toCSV();
-    } catch (e) {
-      throw new Error(e);
+      this.context.sendCallout({ message: <FormattedMessage id="ui-users.reports.inProgress" /> });
+
+      const requestData = getRequestData({ startDate, endDate, feeFineOwners });
+      const { reportData } = await refundsReport.POST(requestData);
+
+      if (isEmpty(reportData)) {
+        this.context.sendCallout({
+          type: 'error',
+          message: <FormattedMessage id="ui-users.reports.noItemsFound" />,
+        });
+      } else {
+        const report = new RefundsReport({ data: reportData, formatMessage });
+
+        report.toCSV();
+      }
+    } catch (error) {
+      if (error) {
+        this.context.sendCallout({
+          type: 'error',
+          message: <FormattedMessage id="ui-users.reports.callout.error" />,
+        });
+      }
     } finally {
       this.setState({ refundExportInProgress: false });
     }
@@ -453,6 +490,7 @@ class UserSearch extends React.Component {
       resources,
       contentRef,
       mutator: { resultOffset },
+      stripes: { timezone },
     } = this.props;
     const visibleColumns = this.getVisibleColumns();
 
@@ -646,6 +684,7 @@ class UserSearch extends React.Component {
               owners={owners}
               onClose={() => { this.changeRefundReportModalState(false); }}
               onSubmit={this.handleRefundsReportFormSubmit}
+              timezone={timezone}
             />
           )}
         </div>

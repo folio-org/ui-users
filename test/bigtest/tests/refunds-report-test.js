@@ -13,13 +13,26 @@ import translations from '../../../translations/ui-users/en';
 describe('RefundsReport', () => {
   const users = new UsersInteractor();
 
-  setupApplication();
+  setupApplication({
+    scenarios: 'feefine-refund',
+  });
 
   describe('Visit user list', () => {
     beforeEach(async function () {
       this.server.createList('owner', 2);
       this.visit('/users?sort=Name');
       await users.whenLoaded();
+    });
+
+    describe('Show refunds report modal', function () {
+      beforeEach(async function () {
+        await users.headerDropdown.click();
+        await users.headerDropdownMenu.clickRefundsReportCSV();
+      });
+
+      it('save button should not be disabled', () => {
+        expect(users.refundsReportModal.isSaveButtonDisabled).to.be.false;
+      });
     });
 
     describe('Click refunds report button', function () {
@@ -92,6 +105,62 @@ describe('RefundsReport', () => {
 
       it('should hide refund modal', () => {
         expect(users.isRefundsReportModalPresent).to.be.false;
+      });
+
+      it('show successfull callout', () => {
+        expect(users.callout.successCalloutIsPresent).to.be.true;
+      });
+    });
+  });
+
+  describe('Handle error case', () => {
+    describe('Data not found', () => {
+      setupApplication({
+        scenarios: 'feefine-refund-not-found',
+      });
+
+      beforeEach(async function () {
+        this.server.createList('owner', 2);
+        this.visit('/users?sort=Name');
+        await users.whenLoaded();
+      });
+
+      describe('Submit form', function () {
+        beforeEach(async function () {
+          await users.headerDropdown.click();
+          await users.headerDropdownMenu.clickRefundsReportCSV();
+          await users.refundsReportModal.owners.clickOption(1);
+          await users.refundsReportModal.saveButton.click();
+        });
+
+        it('show error callout', () => {
+          expect(users.callout.errorCalloutIsPresent).to.be.true;
+        });
+      });
+    });
+
+    describe('Generation error', () => {
+      setupApplication({
+        scenarios: 'feefine-refund-error',
+      });
+
+      beforeEach(async function () {
+        this.server.createList('owner', 2);
+        this.visit('/users?sort=Name');
+        await users.whenLoaded();
+      });
+
+      describe('Submit form', function () {
+        beforeEach(async function () {
+          await users.headerDropdown.click();
+          await users.headerDropdownMenu.clickRefundsReportCSV();
+          await users.refundsReportModal.owners.clickOption(1);
+          await users.refundsReportModal.saveButton.click();
+        });
+
+        it('show error callout', () => {
+          expect(users.callout.errorCalloutIsPresent).to.be.true;
+        });
       });
     });
   });

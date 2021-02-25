@@ -26,32 +26,47 @@ function isInteger(value) {
   return value % 1 === 0;
 }
 
-function validation(value, min, max) {
-  const numberValue = toNumber(value);
-  const errorMessage = (
+function getErrorMessage(min, max) {
+  return (
     <FormattedMessage
       id="ui-users.settings.limits.validation.message"
       values={{ min, max }}
     />
   );
+}
+
+function limitsValidation(value) {
+  const min = 0;
+  const max = 999999;
+  const numberValue = toNumber(value);
+  const errorMessage = getErrorMessage(min, max);
 
   if (numberValue < min || numberValue > max) {
     return errorMessage;
   }
 
-  if (isInteger(min) && !isInteger(numberValue) && !Number.isNaN(numberValue)) {
+  if (!isInteger(numberValue) && !Number.isNaN(numberValue)) {
     return errorMessage;
   }
 
   return null;
 }
 
-function limitsValidation(value) {
-  return validation(value, 1, 999999);
-}
-
 function feeFineLimitsValidation(value) {
-  return validation(value, 0.01, 999999.99);
+  const min = '0.00';
+  const max = 999999.99;
+  const numberValue = toNumber(value);
+  const errorMessage = getErrorMessage(min, max);
+
+  if (numberValue < toNumber(min) || numberValue > max) {
+    return errorMessage;
+  }
+
+  if (String(numberValue).split('.')[1]?.length > 2) {
+    return errorMessage;
+  }
+
+  return null;
 }
 
 class LimitsForm extends Component {
