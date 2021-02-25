@@ -273,7 +273,7 @@
   "information.profile.label": "Display profile pictures",
   "information.recalculate.expirationDate": "Re-set",
   "information.recalculate.modal.button": "Set",
-  "information.recalculate.modal.text": "Library accounts with patron group <b>{group}</b> expire in <b>{offset}</b> days. Do you want to set this user’s account to expire on <b>{date}</b>?",
+  "information.recalculate.modal.text": "Library accounts with patron group <b>{group}</b> expire in <b>{offset} days</b>. Do you want to set this user’s account to expire on <b>{date}</b>?",
   "information.recalculate.modal.label": "Set expiration date?",
   "information.recalculate.will.reactivate.user": "User will reactivate after saving",
 
