@@ -63,6 +63,8 @@
 * Increment `@folio/stripes-cli` to `v2`. Refs UIU-2047.
 * Inconsistent behavior of payment action when transaction info is blank. Refs UIU-2048.
 * Fix wrong value on reset data for Refunds to process manually report (CSV). Refs UIU-2050.
+* Add app dropdown menu. Refs UIU-1915.
+* Add Modal with Shortcut Keys List. Refs UIU-1916.
 * Add Callout for Refund report. Refs UIU-2035.
 * Allow 0 as valid entry for Patron Block Limits. Refs UIU-1998.
 * Add "Save and close" button should be active immediately on refund report criteria modal. Refs UIU-2034.
