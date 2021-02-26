@@ -153,7 +153,7 @@ refundTransfers = async (loan, props) => {
   const setAgedToLostBlank = record => {
     const updatedRec = _.cloneDeep(record);
     updatedRec.agedToLostDelayedBilling.lostItemHasBeenBilled = '';
-    updatedRec.agedToLostDelayedBilling.dateLostItemShouldbeBilled = '';
+    updatedRec.agedToLostDelayedBilling.dateLostItemShouldBeBilled = '';
     return updatedRec;
   };
 
