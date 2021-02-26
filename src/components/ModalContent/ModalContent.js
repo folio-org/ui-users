@@ -1,8 +1,8 @@
+import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { makeQueryFunction } from '@folio/stripes/smart-components';
 
 import {
   Button,
@@ -77,6 +77,7 @@ class ModalContent extends React.Component {
       feefineshistory: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
+      activeRecord: PropTypes.object,
     }).isRequired,
     stripes: PropTypes.shape({
       user: PropTypes.shape({
@@ -92,6 +93,9 @@ class ModalContent extends React.Component {
     validateAction: PropTypes.func,
     itemRequestCount: PropTypes.number.isRequired,
     activeRecord: PropTypes.object,
+    user: PropTypes.object,
+    resources: PropTypes.object,
+    okapi: PropTypes.object
   };
 
   static defaultProps = {
@@ -123,7 +127,7 @@ class ModalContent extends React.Component {
         },
       },
     } = this.props;
-    
+
     const {
       mutator: {
         [loanAction]: {
@@ -146,10 +150,10 @@ class ModalContent extends React.Component {
       requestData.declaredLostDateTime = new Date().toISOString();
     }
 
-    if(this.props.loan.action == loanActions.CLAIMED_RETURNED && (loanAction === loanActionMutators.MARK_AS_MISSING || loanAction === loanActionMutators.DECLARE_LOST)) {
-      let feeFines = this.getFeeFines(this.props.loan.id);
+    if (this.props.loan.action === loanActions.CLAIMED_RETURNED && (loanAction === loanActionMutators.MARK_AS_MISSING || loanAction === loanActionMutators.DECLARE_LOST)) {
+      const feeFines = this.getFeeFines(this.props.loan.id);
       feeFines.forEach((feeFine) => {
-        this.cancelFeeFine(feeFine.id, additionalInfo)
+        this.cancelFeeFine(feeFine.id, additionalInfo);
       });
     }
 
@@ -163,7 +167,7 @@ class ModalContent extends React.Component {
     onClose();
   };
 
-  getFeeFines (loanId) {
+  getFeeFines(loanId) {
     const {
       mutator,
       user,
@@ -171,17 +175,17 @@ class ModalContent extends React.Component {
     } = this.props;
 
     mutator.activeRecord.update({ userId: user.id });
-    let feeFines = [];
+    const feeFines = [];
     _.get(resources, ['feefineshistory', 'records'], []).forEach((currentFeeFine) => {
-      if(currentFeeFine.loanId == loanId && currentFeeFine.status.name == "Open" && 
-        (currentFeeFine.feeFineType == refundClaimReturned.LOST_ITEM_FEE || currentFeeFine.feeFineType == refundClaimReturned.LOST_ITEM_PROCESSING_FEE)) {
+      if (currentFeeFine.loanId === loanId && currentFeeFine.status.name === 'Open' &&
+        (currentFeeFine.feeFineType === refundClaimReturned.LOST_ITEM_FEE || currentFeeFine.feeFineType === refundClaimReturned.LOST_ITEM_PROCESSING_FEE)) {
         feeFines.push(currentFeeFine);
       }
     });
     return feeFines;
   }
 
-  cancelFeeFine = async (accountId, additionalInfo)  => {
+  cancelFeeFine = async (accountId, additionalInfo) => {
     const {
       mutator
     } = this.props;
@@ -201,11 +205,11 @@ class ModalContent extends React.Component {
     const body = {};
 
     body.notifyPatron = false;
-    body.comments = additionalInfo
+    body.comments = additionalInfo;
     body.servicePointId = servicePointId;
     body.userName = `${lastName}, ${firstName}`;
-    
-    await mutator.cancel.POST(body)
+
+    await mutator.cancel.POST(body);
   }
 
   processError(resp) {
