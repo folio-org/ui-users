@@ -4,13 +4,20 @@ import PropTypes from 'prop-types';
 import queryString from 'query-string';
 import { hot } from 'react-hot-loader';
 
-import { Route, Switch, IfPermission } from '@folio/stripes/core';
-import { CommandList, HasCommand } from '@folio/stripes/components';
+import { AppContextMenu, Route, Switch, IfPermission } from '@folio/stripes/core';
+import {
+  NavList,
+  NavListItem,
+  NavListSection,
+  CommandList,
+  HasCommand,
+} from '@folio/stripes/components';
 
 import * as Routes from './routes';
 
 import pkg from '../package';
 import commands from './commands';
+import commandsGeneral from './commandsGeneral';
 import Settings from './settings';
 import sections from './settings/sections';
 import {
@@ -18,6 +25,7 @@ import {
   NoteViewPage,
   NoteEditPage
 } from './views';
+import KeyboardShortcutsModal from './components/KeyboardShortcutsModal';
 
 class UsersRouting extends React.Component {
   static propTypes = {
@@ -31,6 +39,14 @@ class UsersRouting extends React.Component {
   }
 
   static actionNames = ['stripesHome', 'usersSortByName'];
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      showKeyboardShortcutsModal: false,
+    };
+  }
 
   componentDidMount() {
     const {
@@ -103,6 +119,15 @@ class UsersRouting extends React.Component {
     return document.body.contains(document.activeElement);
   }
 
+  shortcutModalToggle(handleToggle) {
+    handleToggle();
+    this.changeKeyboardShortcutsModal(true);
+  }
+
+  changeKeyboardShortcutsModal = (modalState) => {
+    this.setState({ showKeyboardShortcutsModal: modalState });
+  };
+
   render() {
     const {
       showSettings,
@@ -127,63 +152,86 @@ class UsersRouting extends React.Component {
     }
 
     return (
-      <CommandList commands={commands}>
-        <HasCommand
-          commands={this.shortcuts}
-          isWithinScope={this.checkScope}
-          scope={this.shortcutScope}
-        >
-          <Switch>
-            <Route
-              path={`${base}/:id/loans/view/:loanid`}
-              render={(props) => (
-                <IfPermission perm="ui-users.loans.view">
-                  <Routes.LoanDetailContainer {...props} />
-                </IfPermission>
-              )}
-            />
-            <Route
-              path={`${base}/:id/loans/:loanstatus`}
-              render={(props) => (
-                <IfPermission perm="ui-users.loans.view">
-                  <Routes.LoansListingContainer {...props} />
-                </IfPermission>
-              )}
-            />
-            <Route
-              path={`${base}/:id/accounts/view/:accountid`}
-              render={(props) => (
-                <IfPermission perm="ui-users.feesfines.actions.all">
-                  <Routes.AccountDetailsContainer {...props} />
-                </IfPermission>
-              )}
-            />
-            <Route
-              path={`${base}/:id/accounts/:accountstatus`}
-              exact
-              component={Routes.AccountsListingContainer}
-              render={(props) => (
-                <IfPermission perm="ui-users.feesfines.actions.all">
-                  <Routes.AccountsListingContainer {...props} />
-                </IfPermission>
-              )}
-            />
-            <Route path={`${base}/:id/charge/:loanid?`} component={Routes.ChargeFeesFinesContainer} />
-            <Route path={`${base}/:id/patronblocks/edit/:patronblockid`} component={Routes.PatronBlockContainer} />
-            <Route path={`${base}/:id/patronblocks/create`} component={Routes.PatronBlockContainer} />
-            <Route path={`${base}/create`} component={Routes.UserEditContainer} />
-            <Route path={`${base}/:id/edit`} component={Routes.UserEditContainer} />
-            <Route path={`${base}/view/:id`} component={Routes.UserDetailFullscreenContainer} />
-            <Route path={`${base}/notes/new`} exact component={NoteCreatePage} />
-            <Route path={`${base}/notes/:id`} exact component={NoteViewPage} />
-            <Route path={`${base}/notes/:id/edit`} exact component={NoteEditPage} />
-            <Route path={base} component={Routes.UserSearchContainer}>
-              <Route path={`${base}/preview/:id`} component={Routes.UserDetailContainer} />
-            </Route>
-            <Route render={this.noMatch} />
-          </Switch>
-        </HasCommand>
-      </CommandList>
+      <>
+        <AppContextMenu>
+          {(handleToggle) => (
+            <NavList>
+              <NavListSection>
+                <NavListItem
+                  id="keyboard-shortcuts-item"
+                  onClick={() => { this.shortcutModalToggle(handleToggle); }}
+                >
+                  <FormattedMessage id="ui-users.appMenu.keyboardShortcuts" />
+                </NavListItem>
+              </NavListSection>
+            </NavList>
+          )}
+        </AppContextMenu>
+        <CommandList commands={commands}>
+          <HasCommand
+            commands={this.shortcuts}
+            isWithinScope={this.checkScope}
+            scope={this.shortcutScope}
+          >
+            <Switch>
+              <Route
+                path={`${base}/:id/loans/view/:loanid`}
+                render={(props) => (
+                  <IfPermission perm="ui-users.loans.view">
+                    <Routes.LoanDetailContainer {...props} />
+                  </IfPermission>
+                )}
+              />
+              <Route
+                path={`${base}/:id/loans/:loanstatus`}
+                render={(props) => (
+                  <IfPermission perm="ui-users.loans.view">
+                    <Routes.LoansListingContainer {...props} />
+                  </IfPermission>
+                )}
+              />
+              <Route
+                path={`${base}/:id/accounts/view/:accountid`}
+                render={(props) => (
+                  <IfPermission perm="ui-users.feesfines.actions.all">
+                    <Routes.AccountDetailsContainer {...props} />
+                  </IfPermission>
+                )}
+              />
+              <Route
+                path={`${base}/:id/accounts/:accountstatus`}
+                exact
+                component={Routes.AccountsListingContainer}
+                render={(props) => (
+                  <IfPermission perm="ui-users.feesfines.actions.all">
+                    <Routes.AccountsListingContainer {...props} />
+                  </IfPermission>
+                )}
+              />
+              <Route path={`${base}/:id/charge/:loanid?`} component={Routes.ChargeFeesFinesContainer} />
+              <Route path={`${base}/:id/patronblocks/edit/:patronblockid`} component={Routes.PatronBlockContainer} />
+              <Route path={`${base}/:id/patronblocks/create`} component={Routes.PatronBlockContainer} />
+              <Route path={`${base}/create`} component={Routes.UserEditContainer} />
+              <Route path={`${base}/:id/edit`} component={Routes.UserEditContainer} />
+              <Route path={`${base}/view/:id`} component={Routes.UserDetailFullscreenContainer} />
+              <Route path={`${base}/notes/new`} exact component={NoteCreatePage} />
+              <Route path={`${base}/notes/:id`} exact component={NoteViewPage} />
+              <Route path={`${base}/notes/:id/edit`} exact component={NoteEditPage} />
+              <Route path={base} component={Routes.UserSearchContainer}>
+                <Route path={`${base}/preview/:id`} component={Routes.UserDetailContainer} />
+              </Route>
+              <Route render={this.noMatch} />
+            </Switch>
+          </HasCommand>
+        </CommandList>
+        { this.state.showKeyboardShortcutsModal && (
+          <KeyboardShortcutsModal
+            open
+            onClose={() => { this.changeKeyboardShortcutsModal(false); }}
+            allCommands={commands.concat(commandsGeneral)}
+          />
+        )}
+      </ >
     );
   }
 }
