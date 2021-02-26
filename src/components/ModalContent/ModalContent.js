@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
-import moment from 'moment';
+import { makeQueryFunction } from '@folio/stripes/smart-components';
 
 import {
   Button,
@@ -16,9 +16,7 @@ import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 import { getOpenRequestsPath } from '../util';
 
-import { loanActionMutators } from '../../constants';
-
-import { MAX_RECORDS } from '../../constants';
+import { loanActionMutators, refundClaimReturned, loanActions } from '../../constants';
 
 import css from './ModalContent.css';
 
@@ -52,6 +50,13 @@ class ModalContent extends React.Component {
       fetch: false,
       clientGeneratePk: false,
     },
+    feefineshistory: {
+      type: 'okapi',
+      records: 'accounts',
+      GET: {
+        path: 'accounts?query=(userId==:{id})&limit=10000',
+      },
+    },
     activeRecord: {},
   });
 
@@ -68,14 +73,11 @@ class ModalContent extends React.Component {
       }).isRequired,
       cancel: PropTypes.shape({
         POST: PropTypes.func.isRequired,
-      })
+      }),
+      feefineshistory: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
     }).isRequired,
-    /*resources: PropTypes.shape({
-      accountActions: PropTypes.object,
-      accounts: PropTypes.object.isRequired,
-      feefineactions: PropTypes.object.isRequired,
-      loans: PropTypes.object.isRequired,
-    }),*/
     stripes: PropTypes.shape({
       user: PropTypes.shape({
         user: PropTypes.object,
@@ -113,7 +115,6 @@ class ModalContent extends React.Component {
 
     const {
       loanAction,
-      resources,
       stripes: {
         user: {
           user: {
@@ -122,7 +123,6 @@ class ModalContent extends React.Component {
         },
       },
     } = this.props;
-    console.log(this.props);
     
     const {
       mutator: {
@@ -146,43 +146,48 @@ class ModalContent extends React.Component {
       requestData.declaredLostDateTime = new Date().toISOString();
     }
 
-    const accounts = _.get(resources, ['accounts', 'records'], []);
-
-    console.log(accounts);
-
-    await this.addFeeFine(loanAction, "819dabe1-910d-4dad-a1d4-f14e36b7c93c", additionalInfo, this.props.loan.feesAndFines.amountRemainingToPay);
-
-    if(loanAction === loanActionMutators.MARK_AS_MISSING) {
-      
+    if(this.props.loan.action == loanActions.CLAIMED_RETURNED && (loanAction === loanActionMutators.MARK_AS_MISSING || loanAction === loanActionMutators.DECLARE_LOST)) {
+      let feeFines = this.getFeeFines(this.props.loan.id);
+      feeFines.forEach((feeFine) => {
+        this.cancelFeeFine(feeFine.id, additionalInfo)
+      });
     }
 
-    if(loanAction === loanActionMutators.DECLARE_LOST) {
-
-    }
-
-    //disableButton();
+    disableButton();
     try {
-      console.log("Entro al click");
-      console.log(requestData);
-      console.log(loanAction);
-
-      //await POST(requestData);
+      await POST(requestData);
     } catch (error) {
-      //this.processError(error);
+      this.processError(error);
     }
 
-    //onClose();
+    onClose();
   };
 
-  addFeeFine(loanAction, accountId, additionalInfo, amount) {
-
+  getFeeFines (loanId) {
     const {
       mutator,
-      intl: { formatMessage },
+      user,
+      resources
+    } = this.props;
+
+    mutator.activeRecord.update({ userId: user.id });
+    let feeFines = [];
+    _.get(resources, ['feefineshistory', 'records'], []).forEach((currentFeeFine) => {
+      if(currentFeeFine.loanId == loanId && currentFeeFine.status.name == "Open" && 
+        (currentFeeFine.feeFineType == refundClaimReturned.LOST_ITEM_FEE || currentFeeFine.feeFineType == refundClaimReturned.LOST_ITEM_PROCESSING_FEE)) {
+        feeFines.push(currentFeeFine);
+      }
+    });
+    return feeFines;
+  }
+
+  cancelFeeFine = async (accountId, additionalInfo)  => {
+    const {
+      mutator
     } = this.props;
 
     mutator.activeRecord.update({ id: accountId });
-    
+
     const {
       okapi: {
         currentUser: {
@@ -195,30 +200,12 @@ class ModalContent extends React.Component {
 
     const body = {};
 
-    //body.amount = amount;
     body.notifyPatron = false;
     body.comments = additionalInfo
     body.servicePointId = servicePointId;
     body.userName = `${lastName}, ${firstName}`;
     
-    mutator.cancel.POST(body)
-
-    /*const createAt = new Date().toISOString();
-    const newAction = {
-      typeAction: {},
-      source: `${this.props.okapi.currentUser.lastName}, ${this.props.okapi.currentUser.firstName}`,
-      createdAt: createAt,
-      accountId,
-      dateAction: moment().format(),
-      userId: this.props.loan.userId,
-      amountAction: parseFloat(amount || 0).toFixed(2),
-      balance: parseFloat(0).toFixed(2),
-      transactionInformation: '-',
-      comments: additionalInfo,
-      notify: ''
-    };
-    console.log();
-    return this.props.mutator.cancel.POST(Object.assign(loanAction, newAction));*/
+    await mutator.cancel.POST(body)
   }
 
   processError(resp) {
@@ -241,8 +228,6 @@ class ModalContent extends React.Component {
       onClose,
       itemRequestCount,
     } = this.props;
-
-    console.log(this.props);
 
     const { additionalInfo } = this.state;
 
