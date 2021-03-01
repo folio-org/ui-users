@@ -302,9 +302,8 @@ export default function config() {
     };
   });
 
-  this.put('/loan-storage/loans/:id', ({ loans }, { params, requestBody }) => {
-    const loanS = JSON.parse(requestBody);
-    return loans.find(params.id).update(loanS);
+  this.put('/loan-storage/loans/:id', (_, request) => {
+    return JSON.parse(request.requestBody);
   });
 
   this.get('/circulation/requests', function ({ requests }) {

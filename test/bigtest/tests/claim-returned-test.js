@@ -482,10 +482,6 @@ describe('Claim returned', () => {
         item: {
           status: { name: 'Aged to lost' }
         },
-      });
-
-      this.server.create('loan-storage', {
-        id : loan.id,
         agedToLostDelayedBilling: {
           lostItemHasBeenBilled: () => false,
           dateLostItemShouldBeBilled: () => 'date',
@@ -629,10 +625,6 @@ describe('Claim returned', () => {
         item: {
           status: { name: 'Aged to lost' }
         },
-      });
-
-      this.server.create('loan-storage', {
-        id : loan.id,
         agedToLostDelayedBilling: {
           lostItemHasBeenBilled: () => false,
           dateLostItemShouldBeBilled: () => 'date',
