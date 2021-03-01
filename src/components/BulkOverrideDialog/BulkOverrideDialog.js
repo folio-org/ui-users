@@ -9,6 +9,7 @@ import BulkOverrideInfo from './BulkOverrideInfo';
 
 class BulkOverrideDialog extends React.Component {
   static propTypes = {
+    additionalInfo: PropTypes.string.isRequired,
     stripes: stripesShape.isRequired,
     failedRenewals: PropTypes.arrayOf(
       PropTypes.object
@@ -31,6 +32,7 @@ class BulkOverrideDialog extends React.Component {
 
   render() {
     const {
+      additionalInfo,
       open,
       user,
       stripes,
@@ -57,6 +59,7 @@ class BulkOverrideDialog extends React.Component {
         onClose={onClose}
       >
         <this.connectedBulkOverrideInfo
+          additionalInfo={additionalInfo}
           user={user}
           stripes={stripes}
           showDueDatePicker={showDueDatePicker}
