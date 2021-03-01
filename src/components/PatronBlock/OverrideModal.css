@@ -1,0 +1,13 @@
+@import "@folio/stripes-components/lib/variables";
+
+.overridePatronBlockHeader {
+  font-weight: bolder;
+}
+
+.patronBlock {
+  font-weight: bold;
+}
+
+.overridePatronBlock {
+  margin-bottom: var(--control-margin-bottom);
+}
