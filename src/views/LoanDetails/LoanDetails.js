@@ -37,6 +37,7 @@ import {
   getFullName,
   nav,
   getOpenRequestsPath,
+  getRenewalPatronBlocksFromPatronBlocks,
 } from '../../components/util';
 import { itemStatuses, loanActions } from '../../constants';
 import {
@@ -163,7 +164,7 @@ class LoanDetails extends React.Component {
     const {
       patronBlocks,
     } = this.props;
-    const countRenew = patronBlocks.filter(p => p.renewals || p.blockRenewals);
+    const countRenew = getRenewalPatronBlocksFromPatronBlocks(patronBlocks);
 
     if (!isEmpty(countRenew)) {
       return this.setState({
@@ -425,7 +426,7 @@ class LoanDetails extends React.Component {
         />
       </p>
     );
-    const patronBlocksForModal = patronBlocks.filter(p => p.renewals || p.blockRenewals);
+    const patronBlocksForModal = getRenewalPatronBlocksFromPatronBlocks(patronBlocks);
 
     return (
       <div data-test-loan-actions-history>
