@@ -12,7 +12,10 @@ import { FormattedMessage } from 'react-intl';
 import { stripesShape } from '@folio/stripes/core';
 import { LoadingView } from '@folio/stripes/components';
 
-import { nav } from '../../util';
+import {
+  nav,
+  getRenewalPatronBlocksFromPatronBlocks,
+} from '../../util';
 import {
   withRenew,
   withDeclareLost,
@@ -335,7 +338,7 @@ class OpenLoansControl extends React.Component {
             patronBlockedModal={patronBlockedModal}
             onClosePatronBlockedModal={this.onClosePatronBlockedModal}
             openPatronBlockedModal={this.openPatronBlockedModal}
-            patronBlocks={patronBlocks.filter(p => p.renewals || p.blockRenewals)}
+            patronBlocks={getRenewalPatronBlocksFromPatronBlocks(patronBlocks)}
             patronGroup={patronGroup}
             buildRecords={this.buildRecords}
             visibleColumns={visibleColumns}
