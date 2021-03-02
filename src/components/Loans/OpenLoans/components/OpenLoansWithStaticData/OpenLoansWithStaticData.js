@@ -272,6 +272,8 @@ class OpenLoansWithStaticData extends React.Component {
           patronBlocks={patronBlocks}
           checkedLoans={checkedLoans}
           patronBlockedModal={patronBlockedModal}
+          openPatronBlockedModal={openPatronBlockedModal}
+          renewSelected={renewSelected}
           changeDueDateDialogOpen={changeDueDateDialogOpen}
           hideChangeDueDateDialog={hideChangeDueDateDialog}
           onClosePatronBlockedModal={onClosePatronBlockedModal}

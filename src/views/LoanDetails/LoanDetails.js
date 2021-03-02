@@ -32,11 +32,12 @@ import {
 import { IfPermission, stripesConnect } from '@folio/stripes/core';
 import { effectiveCallNumber } from '@folio/stripes/util';
 
-import PatronBlockModal from '../../components/PatronBlock/PatronBlockModal';
+import PatronBlockModalWithOverrideModal from '../../components/PatronBlock/PatronBlockModalWithOverrideModal';
 import {
   getFullName,
   nav,
   getOpenRequestsPath,
+  getRenewalPatronBlocksFromPatronBlocks,
 } from '../../components/util';
 import { itemStatuses, loanActions } from '../../constants';
 import {
@@ -145,20 +146,34 @@ class LoanDetails extends React.Component {
     this.setState({ nonRenewedLoansModalOpen: false });
   }
 
-  renew = async () => {
+  onRenew = async (additionalInfo = '') => {
     const {
       loan,
       user,
-      patronBlocks,
       renew,
-      mutator: { renewals },
+      mutator: {
+        renewals,
+      },
     } = this.props;
-    const countRenew = patronBlocks.filter(p => p.renewals || p.blockRenewals);
 
-    if (!isEmpty(countRenew)) return this.setState({ patronBlockedModal: true });
+    await renew([loan], user, additionalInfo);
 
-    await renew([loan], user);
     return renewals.replace({ ts: new Date().getTime() });
+  }
+
+  renew = async () => {
+    const {
+      patronBlocks,
+    } = this.props;
+    const countRenew = getRenewalPatronBlocksFromPatronBlocks(patronBlocks);
+
+    if (!isEmpty(countRenew)) {
+      return this.setState({
+        patronBlockedModal: true,
+      });
+    }
+
+    return await this.onRenew();
   }
 
   viewFeeFine() {
@@ -204,6 +219,10 @@ class LoanDetails extends React.Component {
     if (accountRemaining === 0) {
       nav.onClickViewClosedAccounts(e, loan, history, params);
     }
+  };
+
+  onOpenPatronBlockedModal = () => {
+    this.setState({ patronBlockedModal: true });
   };
 
   onClosePatronBlockedModal = () => {
@@ -412,6 +431,7 @@ class LoanDetails extends React.Component {
         />
       </p>
     );
+    const patronBlocksForModal = getRenewalPatronBlocksFromPatronBlocks(patronBlocks);
 
     return (
       <div data-test-loan-actions-history>
@@ -673,10 +693,12 @@ class LoanDetails extends React.Component {
                   </li>))
             }
             </Modal>
-            <PatronBlockModal
-              open={patronBlockedModal}
-              onClose={this.onClosePatronBlockedModal}
-              patronBlocks={patronBlocks.filter(p => p.renewals || p.blockRenewals)}
+            <PatronBlockModalWithOverrideModal
+              patronBlockedModalOpen={patronBlockedModal}
+              onClosePatronBlockedModal={this.onClosePatronBlockedModal}
+              onOpenPatronBlockedModal={this.onOpenPatronBlockedModal}
+              onRenew={this.onRenew}
+              patronBlocks={patronBlocksForModal}
               viewUserPath={`/users/view/${(user || {}).id}?filters=pg.${patronGroup.group}&sort=name`}
             />
             { this.props.user && this.renderChangeDueDateDialog() }

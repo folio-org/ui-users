@@ -12,7 +12,10 @@ import { FormattedMessage } from 'react-intl';
 import { stripesShape } from '@folio/stripes/core';
 import { LoadingView } from '@folio/stripes/components';
 
-import { nav } from '../../util';
+import {
+  nav,
+  getRenewalPatronBlocksFromPatronBlocks,
+} from '../../util';
 import {
   withRenew,
   withDeclareLost,
@@ -172,7 +175,7 @@ class OpenLoansControl extends React.Component {
     }));
   };
 
-  renewSelected = async () => {
+  renewSelected = async (additionalInfo = '') => {
     const { checkedLoans } = this.state;
     const {
       renew,
@@ -181,7 +184,8 @@ class OpenLoansControl extends React.Component {
     const selectedLoans = Object.values(checkedLoans);
 
     this.setState({ renewing: true });
-    await renew(selectedLoans, user);
+
+    await renew(selectedLoans, user, additionalInfo);
     this.setState({ checkedLoans: {}, allChecked: false, renewing: false });
   };
 
@@ -233,6 +237,7 @@ class OpenLoansControl extends React.Component {
     if (isEmpty(countRenew)) {
       renew([loan], user);
     } else {
+      this.setState({ checkedLoans: [loan] });
       this.openPatronBlockedModal();
     }
   };
@@ -333,7 +338,7 @@ class OpenLoansControl extends React.Component {
             patronBlockedModal={patronBlockedModal}
             onClosePatronBlockedModal={this.onClosePatronBlockedModal}
             openPatronBlockedModal={this.openPatronBlockedModal}
-            patronBlocks={patronBlocks.filter(p => p.renewals || p.blockRenewals)}
+            patronBlocks={getRenewalPatronBlocksFromPatronBlocks(patronBlocks)}
             patronGroup={patronGroup}
             buildRecords={this.buildRecords}
             visibleColumns={visibleColumns}
