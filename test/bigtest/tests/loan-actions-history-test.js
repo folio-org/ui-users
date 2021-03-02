@@ -58,7 +58,8 @@ describe('loans actions history', () => {
         expect(LoanActionsHistory.isPresent).to.be.true;
       });
 
-      it('having loan without fees/fines incurred should display the "-"', () => {
+      it('having loan without fees/fines incurred should display the -', () => {
+        expect(LoanActionsHistory.feeFineIncurredButton.isPresent).to.be.false;
         expect(LoanActionsHistory.feeFines.text).to.equal('-');
       });
 
@@ -119,7 +120,18 @@ describe('loans actions history', () => {
     describe('having loan with fees/fines incurred', () => {
       beforeEach(function () {
         this.server.get('/accounts', {
-          accounts: [{ amount: 200 }],
+          accounts: [{
+            id: 'account1',
+            amount : '200.0',
+            remaining : '0.0',
+            status : { name : 'Closed' },
+            paymentStatus : { name : 'Paid fully' },
+            metadata: { createdDate: '2021-03-02T13:19:31.316+00:00' },
+            barcode : openLoan.item.barcode,
+            loanId : openLoan.id,
+            userId : openLoan.userId,
+            itemId : openLoan.item.id
+          }],
           totalRecords: 1,
         });
 
@@ -127,7 +139,71 @@ describe('loans actions history', () => {
       });
 
       it('should display the fees/fines value', () => {
-        expect(LoanActionsHistory.feeFines.text).to.equal('-');
+        expect(LoanActionsHistory.feeFineIncurredButton.isPresent).to.be.true;
+        expect(LoanActionsHistory.feeFineIncurredButton.text).to.equal('200.00');
+      });
+
+      describe('click on the fees/fines incurred value', () => {
+        beforeEach(async () => {
+          await LoanActionsHistory.feeFineIncurredButton.click();
+          await LoanActionsHistory.whenFeesFinesDetailsPageLoaded();
+        });
+
+        it('should navigate to closed Fees/fines page', function () {
+          const path = `/users/${openLoan.userId}/accounts/view/account1`;
+
+          expect(this.location.pathname.endsWith(path)).to.be.true;
+        });
+      });
+    });
+
+    describe('having loan with few fees/fines incurred', () => {
+      beforeEach(function () {
+        this.server.get('/accounts', {
+          accounts: [{
+            amount : '200.0',
+            remaining : '0.0',
+            status : { name : 'Closed' },
+            paymentStatus : { name : 'Paid fully' },
+            metadata: { createdDate: '2021-03-02T13:19:32.316+00:00' },
+            barcode : openLoan.item.barcode,
+            loanId : openLoan.id,
+            userId : openLoan.userId,
+            itemId : openLoan.item.id
+          },
+          {
+            amount : '20.0',
+            remaining : '20.0',
+            status : { name : 'Open' },
+            paymentStatus : { name : 'Outstanding' },
+            metadata: { createdDate: '2021-03-02T13:19:33.316+00:00' },
+            barcode : openLoan.item.barcode,
+            loanId : openLoan.id,
+            userId : openLoan.userId,
+            itemId : openLoan.item.id
+          }],
+          totalRecords: 1,
+        });
+
+        this.visit(`/users/${openLoan.userId}/loans/view/${openLoan.id}`);
+      });
+
+      it('should display the fees/fines value', () => {
+        expect(LoanActionsHistory.feeFineIncurredButton.isPresent).to.be.true;
+        expect(LoanActionsHistory.feeFineIncurredButton.text).to.equal('220.00');
+      });
+
+      describe('click on the fees/fines incurred value', () => {
+        beforeEach(async () => {
+          await LoanActionsHistory.feeFineIncurredButton.click();
+          await LoanActionsHistory.whenFeesFinesHistoryPageLoaded();
+        });
+
+        it('should navigate to closed Fees/fines page', function () {
+          const path = `/users/${openLoan.userId}/accounts/open`;
+
+          expect(this.location.pathname.endsWith(path)).to.be.true;
+        });
       });
     });
 

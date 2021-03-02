@@ -38,6 +38,7 @@ import {
   nav,
   getOpenRequestsPath,
   getRenewalPatronBlocksFromPatronBlocks,
+  getAllAccountsAmount,
 } from '../../components/util';
 import { itemStatuses, loanActions } from '../../constants';
 import {
@@ -187,6 +188,7 @@ class LoanDetails extends React.Component {
     return stripes.hasPerm('ui-users.accounts')
       ? (
         <button
+          data-test-fee-fine-details-link
           className={css.feefineButton}
           onClick={(e) => this.feefinedetails(e)}
           type="button"
@@ -203,22 +205,25 @@ class LoanDetails extends React.Component {
       match: { params },
       loanAccountActions,
     } = this.props;
-    const account = loanAccountActions[0];
-    const loan = this.loan || {};
-    const accountAmount = parseFloat(account.amount);
-    const accountRemaining = parseFloat(account.remaining);
 
-    if (accountAmount === accountRemaining) {
-      nav.onClickViewAccountActionsHistory(e, { id: account.id }, history, params);
+    if (loanAccountActions.length === 1) {
+      nav.onClickViewAccountActionsHistory(e, { id: loanAccountActions[0].id }, history, params);
+      return undefined;
     }
+
+    const accountAmount = getAllAccountsAmount(loanAccountActions, 'amount');
+    const accountRemaining = getAllAccountsAmount(loanAccountActions, 'remaining');
+    const loan = this.loan || {};
 
     if (accountAmount > accountRemaining) {
       nav.onClickViewOpenAccounts(e, loan, history, params);
+    } else if (accountRemaining === 0) {
+      nav.onClickViewClosedAccounts(e, loan, history, params);
+    } else {
+      nav.onClickViewAllAccounts(e, loan, history, params);
     }
 
-    if (accountRemaining === 0) {
-      nav.onClickViewClosedAccounts(e, loan, history, params);
-    }
+    return undefined;
   };
 
   onOpenPatronBlockedModal = () => {
