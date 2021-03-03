@@ -3,11 +3,12 @@
 
 name: buildNPM CI
 
-on: push
-      paths-ignore:
+on: 
+  push:
+    paths-ignore:
       - 'translations/**'
-    pull_request
-      paths-ignore:
+  pull_request:
+     paths-ignore:
       - 'translations/**'
 
 jobs:
