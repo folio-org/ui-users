@@ -32,12 +32,10 @@ jobs:
       - uses: folio-org/checkout@v2
       - run: yarn config set @folio:registry $FOLIO_NPM_REGISTRY
       - run: git clone https://github.com/folio-org/folio-tools.git
-      - run: echo ${{env.GITHUB_RUN_NUMBER}} 
-      - run: echo $GITHUB_RUN_NUMBER
       - name: Set FOLIO NPM snapshot version
         run: npm --no-git-tag-version version `folio-tools/github-actions-scripts/folioci_npmver.sh`
         env: 
-          JOB_ID: ${{env.GITHUB_RUN_NUMBER}}
+          JOB_ID: $GITHUB_RUN_NUMBER
       - run: rm -rf folio-tools
       - run: echo $JOB_ID
           
