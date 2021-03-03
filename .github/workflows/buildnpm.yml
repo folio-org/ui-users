@@ -12,12 +12,11 @@ on:
       - 'translations/**'
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
   env:
     FOLIO_NPM_REGISTRY:  https://repository.folio.org/repository/npm-folioci/
     YARN_TEST_OPTIONS: '--bundle --karma.singleRun --karma.browsers ChromeDocker --karma.reporters mocha junit --coverage'
-    
+  build:
+    runs-on: ubuntu-latest
     steps:
       - uses: folio-org/checkout@v2
       - run: yarn config set @folio:registry $FOLIO_REGISTRY
