@@ -1,5 +1,11 @@
-# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+# This workflow will do a clean install of node dependencies, build the source code 
+# and run tests across different versions of node.  
+# For more information see: 
+# https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+# FOLIO configurable env:
+#   - YARN_TEST_OPTIONS
+
 
 name: buildNPM CI
 
@@ -23,7 +29,9 @@ jobs:
       - run: yarn config set @folio:registry $FOLIO_NPM_REGISTRY
       - run: git clone https://github.com/folio-org/folio-tools.git
       - run: npm --no-git-tag-version version `folio-tools/resources/org/folio/folioci_npmver.sh`
-        env: GITHUB_RUN_NUMBER
+        env: 
+          JOB_ID: ${{ env.GITHUB_RUN_NUMBER }}
+      - run: echo ${{ env.JOB_ID }}
       - name: Yarn lint
         id: lint
         run: yarn lint
