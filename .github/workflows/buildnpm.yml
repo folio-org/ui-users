@@ -25,6 +25,7 @@ jobs:
       YARN_TEST_OPTIONS: '--bundle --karma.singleRun --karma.browsers ChromeDocker --karma.reporters mocha junit --coverage'
       SONAR_SRC_DIR: './src'
       FOLIO_NPM_REGISTRY:  https://repository.folio.org/repository/npm-folioci/
+      JOB_ID: ${{ github.run_number }}
 
 
     runs-on: ubuntu-latest
@@ -34,8 +35,6 @@ jobs:
       - run: git clone https://github.com/folio-org/folio-tools.git
       - name: Set FOLIO NPM snapshot version
         run: npm --no-git-tag-version version `folio-tools/github-actions-scripts/folioci_npmver.sh`
-        env: 
-          JOB_ID: env.GITHUB_RUN_NUMBER
       - run: rm -rf folio-tools
       - run: echo $JOB_ID
           
