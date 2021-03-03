@@ -34,3 +34,10 @@ jobs:
           rm -rf folio-tools
         env: 
           JOB_ID: ${{ github.run_number }}
+      - name: Yarn install
+        run: yarn install
+      - name: Yarn list
+        run: yarn list --pattern @folio
+      - name: Yarn lint
+        run: yarn lint
+        continue-on-error: true
