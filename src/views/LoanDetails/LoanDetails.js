@@ -38,7 +38,7 @@ import {
   nav,
   getOpenRequestsPath,
   getRenewalPatronBlocksFromPatronBlocks,
-  getAllAccountsAmount,
+  checkFeesFinesStatus,
 } from '../../components/util';
 import { itemStatuses, loanActions } from '../../constants';
 import {
@@ -211,14 +211,12 @@ class LoanDetails extends React.Component {
       return undefined;
     }
 
-    const accountAmount = getAllAccountsAmount(loanAccountActions, 'amount');
-    const accountRemaining = getAllAccountsAmount(loanAccountActions, 'remaining');
     const loan = this.loan || {};
 
-    if (accountAmount > accountRemaining) {
-      nav.onClickViewOpenAccounts(e, loan, history, params);
-    } else if (accountRemaining === 0) {
+    if (checkFeesFinesStatus(loanAccountActions, 'closed')) {
       nav.onClickViewClosedAccounts(e, loan, history, params);
+    } else if (checkFeesFinesStatus(loanAccountActions, 'open')) {
+      nav.onClickViewOpenAccounts(e, loan, history, params);
     } else {
       nav.onClickViewAllAccounts(e, loan, history, params);
     }
