@@ -101,7 +101,7 @@ class OpenLoansWithStaticData extends React.Component {
     'dueDate',
     'requests',
     'barcode',
-    'feefine',
+    'feefineIncurred',
     'callNumber',
     'contributors',
     'renewals',
@@ -176,13 +176,13 @@ class OpenLoansWithStaticData extends React.Component {
     const { resources } = this.props;
     const accounts = get(resources, ['loanAccount', 'records'], []);
     const accountsLoan = accounts.filter(a => a.loanId === loan.id) || [];
-    let remaining = 0;
+    let amount = 0;
 
     accountsLoan.forEach(a => {
-      remaining += parseFloat(a.remaining);
+      amount += parseFloat(a.amount);
     });
 
-    return (remaining === 0) ? '-' : remaining.toFixed(2);
+    return (amount === 0) ? '-' : amount.toFixed(2);
   };
 
   getContributorslist = (loan) => {
