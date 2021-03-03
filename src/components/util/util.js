@@ -138,6 +138,6 @@ export function hasAnyLoanItemStatus(loans, itemStatuses) {
   return _.every(Object.values(loans), loan => itemStatuses.includes(loan?.item?.status?.name));
 }
 
-export function checkFeesFinesStatus(accounts, status) {
+export function accountsMatchStatus(accounts, status) {
   return accounts.every((account) => account.status.name.toLowerCase() === status.toLowerCase());
 }
