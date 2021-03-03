@@ -5,6 +5,7 @@
 
 # FOLIO configurable env:
 #   - YARN_TEST_OPTIONS
+#   - SONAR_SRC_DIR
 
 
 name: buildNPM CI
@@ -21,7 +22,9 @@ jobs:
   build:
     env:
       YARN_TEST_OPTIONS: '--bundle --karma.singleRun --karma.browsers ChromeDocker --karma.reporters mocha junit --coverage'
+      SONAR_SRC_DIR: './src'
       FOLIO_NPM_REGISTRY:  https://repository.folio.org/repository/npm-folioci/
+
 
     runs-on: ubuntu-latest
     steps:
@@ -32,74 +35,17 @@ jobs:
         run: npm --no-git-tag-version version `folio-tools/github-actions-scripts/folioci_npmver.sh`
         env: 
           JOB_ID: ${{ env.GITHUB_RUN_NUMBER }}
-      - run: echo ${{ env.JOB_ID }}
-      - name: Yarn lint
-        id: lint
-        run: yarn lint
-        continue-on-error: true
+      - run: echo $JOB_ID
       - name: Yarn install
         id: install
         run: yarn install
       - name: Yarn list
         id: list
         run: yarn list --pattern @folio
-      - name: Yarn test
-        id: test
-        run: xvfb-run --server-args="-screen 0 1024x768x24" yarn test $YARN_TEST_OPTIONS
-      - uses: actions/upload-artifact@v2
-        with: 
-          if: failure()
-          name: yarn.lock
-          path: yarn.lock
-          retention-days: 5
+      - name: Yarn lint
+        id: lint
+        run: yarn lint
+        continue-on-error: true
       - run: rm -rf folio-tools
           
-  sonarQube:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.REF }}
-      - if: github.REF != 'master'
-        uses: sonarsource/sonarcloud-github-action@master
-        with:
-          args: >
-            -Dsonar.projectKey=org.folio:${{ github.event.repository.name }}
-            -Dsonar.projectName=${{ github.event.repository.name }}
-            -Dsonar.branch.name=${GITHUB_REF}
-            -Dsonar.sources=./src 
-            -Dsonar.language=js 
-            -Dsonar.javascript.lcov.reportPaths=artifacts/coverage/lcov.info,coverage/lcov.info
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      - if: github.REF == 'master'
-        uses: sonarsource/sonarcloud-github-action@master
-        with:
-          args: >
-            -Dsonar.organization=folio-org 
-            -Dsonar.projectKey=org.folio:${{ github.event.repository.name }}
-            -Dsonar.projectName=${{ github.event.repository.name }}
-            -Dsonar.branch.name=${GITHUB_REF}
-            -Dsonar.sources=./src
-            -Dsonar.language=js
-            -Dsonar.exclusions=**/platform/alias-service.js,**/docs/**,**/node_modules/**,**/examples/**,**/artifacts/**,**/ci/**,Jenkinsfile,**/LICENSE,**/*.css,**/*.md,**/*.json,**/tests/**,**/stories/*.js,**/test/**,**/.stories.js,**/resources/bigtest/interactors/**,**/resources/bigtest/network/**,**/*-test.js,**/*.test.js,**/*-spec.js,**/karma.conf.js,**/jest.config.js
-            -Dsonar.javascript.lcov.reportPaths=artifacts/coverage/lcov.info,coverage/lcov.info
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-  publishModDescriptor:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.REF }}
-      - if: github.REF == 'master'
-        run: > 
-          echo "Generating stripes module descriptor from package.json" && mkdir -p artifacts/md && 
-          stripes mod descriptor --full --strict | jq '.[]' > artifacts/md/$folioName.json
-        env:
-          folioName: folio_orders
-      - run: echo "Step completed.."
-
       
