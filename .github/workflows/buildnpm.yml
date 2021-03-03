@@ -28,7 +28,8 @@ jobs:
       - uses: folio-org/checkout@v2
       - run: yarn config set @folio:registry $FOLIO_NPM_REGISTRY
       - run: git clone https://github.com/folio-org/folio-tools.git
-      - run: npm --no-git-tag-version version `folio-tools/resources/org/folio/folioci_npmver.sh`
+      - name: Set FOLIO NPM snapshot version
+        run: npm --no-git-tag-version version `folio-tools/github-actions-scripts/folioci_npmver.sh`
         env: 
           JOB_ID: ${{ env.GITHUB_RUN_NUMBER }}
       - run: echo ${{ env.JOB_ID }}
@@ -39,7 +40,7 @@ jobs:
       - name: Yarn install
         id: install
         run: yarn install
-      - name: Yarn List
+      - name: Yarn list
         id: list
         run: yarn list --pattern @folio
       - name: Yarn test
