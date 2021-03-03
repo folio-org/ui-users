@@ -9,12 +9,10 @@
 
 
 name: buildNPM CI
-
 on: 
   push:
     paths-ignore:
       - 'translations/**'
-
 #  pull_request:
 #     paths-ignore:
 #      - 'translations/**'
@@ -29,9 +27,10 @@ jobs:
     steps:
       - uses: folio-org/checkout@v2
       - run: yarn config set @folio:registry $FOLIO_NPM_REGISTRY
-      - run: git clone https://github.com/folio-org/folio-tools.git
       - name: Set FOLIO NPM snapshot version
-        run: npm --no-git-tag-version version `folio-tools/github-actions-scripts/folioci_npmver.sh`
+        run: | 
+          git clone https://github.com/folio-org/folio-tools.git
+          npm --no-git-tag-version version `folio-tools/github-actions-scripts/folioci_npmver.sh`
+          rm -rf folio-tools
         env: 
           JOB_ID: ${{ github.run_number }}
-      - run: rm -rf folio-tools
