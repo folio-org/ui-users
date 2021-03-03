@@ -34,18 +34,8 @@ jobs:
       - name: Set FOLIO NPM snapshot version
         run: npm --no-git-tag-version version `folio-tools/github-actions-scripts/folioci_npmver.sh`
         env: 
-          JOB_ID: ${{ env.GITHUB_RUN_NUMBER }}
-      - run: echo $JOB_ID
-      - name: Yarn install
-        id: install
-        run: yarn install
-      - name: Yarn list
-        id: list
-        run: yarn list --pattern @folio
-      - name: Yarn lint
-        id: lint
-        run: yarn lint
-        continue-on-error: true
+          JOB_ID: $GITHUB_RUN_NUMBER
       - run: rm -rf folio-tools
+      - run: echo $JOB_ID
           
       
