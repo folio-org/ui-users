@@ -34,11 +34,22 @@ import KeyValue from './KeyValue';
   isChangeDueDateButtonDisabled = property('[data-test-change-due-date-button]', 'disabled');
   loanActions = scoped('#list-loanactions', MultiColumnListInteractor);
   patronBlockModal = new PatronBlockModal();
+  feeFineIncurredButton = scoped('[data-test-fee-fine-details-link]', ButtonInteractor);
+  feeFinesHistoryPresent = isPresent('#list-accounts-history-view-feesfines');
+  feeFinesDetailsPresent = isPresent('[data-test-fee-fine-details]');
 
   resolveClaimMenu = scoped('#resolve-claim-menu button');
 
   whenLoaded() {
     return this.when(() => this.actionHistoryPresent).timeout(5000);
+  }
+
+  whenFeesFinesHistoryPageLoaded() {
+    return this.when(() => this.feeFinesHistoryPresent).timeout(5000);
+  }
+
+  whenFeesFinesDetailsPageLoaded() {
+    return this.when(() => this.feeFinesDetailsPresent).timeout(5000);
   }
 }
 

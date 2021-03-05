@@ -38,6 +38,7 @@ import {
   nav,
   getOpenRequestsPath,
   getRenewalPatronBlocksFromPatronBlocks,
+  accountsMatchStatus,
 } from '../../components/util';
 import { itemStatuses, loanActions } from '../../constants';
 import {
@@ -55,7 +56,6 @@ class LoanDetails extends React.Component {
   static propTypes = {
     stripes: PropTypes.object.isRequired,
     resources: PropTypes.shape({
-      loanAccountsActions: PropTypes.object,
       loanActions: PropTypes.object,
       loanActionsWithUser: PropTypes.object,
     }).isRequired,
@@ -78,6 +78,7 @@ class LoanDetails extends React.Component {
     patronGroup: PropTypes.object,
     user: PropTypes.object,
     loanActionsWithUser: PropTypes.arrayOf(PropTypes.object),
+    loanAccountActions: PropTypes.arrayOf(PropTypes.object),
     loanPolicies: PropTypes.object,
     requestCounts: PropTypes.object,
     renew: PropTypes.func,
@@ -95,6 +96,7 @@ class LoanDetails extends React.Component {
 
   static defaultProps = {
     enableButton: () => {},
+    loanAccountActions: [],
   };
 
   constructor(props) {
@@ -176,9 +178,8 @@ class LoanDetails extends React.Component {
   }
 
   viewFeeFine() {
-    const { stripes, resources } = this.props;
-    const records = resources?.loanAccountsActions?.records ?? [];
-    const total = records.reduce((acc, { amount }) => (acc + parseFloat(amount)), 0);
+    const { stripes, loanAccountActions } = this.props;
+    const total = loanAccountActions.reduce((acc, { amount }) => (acc + parseFloat(amount)), 0);
 
     if (total === 0) return '-';
 
@@ -187,6 +188,7 @@ class LoanDetails extends React.Component {
     return stripes.hasPerm('ui-users.accounts')
       ? (
         <button
+          data-test-fee-fine-details-link
           className={css.feefineButton}
           onClick={(e) => this.feefinedetails(e)}
           type="button"
@@ -198,22 +200,28 @@ class LoanDetails extends React.Component {
   }
 
   feefinedetails = (e) => {
-    const { history, match: { params }, resources } = this.props;
-    const accounts = resources?.loanAccountsActions?.records ?? [];
+    const {
+      history,
+      match: { params },
+      loanAccountActions,
+    } = this.props;
+
+    if (loanAccountActions.length === 1) {
+      nav.onClickViewAccountActionsHistory(e, { id: loanAccountActions[0].id }, history, params);
+      return undefined;
+    }
+
     const loan = this.loan || {};
 
-    if (accounts.length === 1) {
-      nav.onClickViewAccountActionsHistory(e, { id: accounts[0].id }, history, params);
-    } else if (accounts.length > 1) {
-      const open = accounts.filter(a => a?.status?.name === 'Open') || [];
-      if (open.length === accounts.length) {
-        nav.onClickViewOpenAccounts(e, loan, history, params);
-      } else if (open.length === 0) {
-        nav.onClickViewClosedAccounts(e, loan, history, params);
-      } else {
-        nav.onClickViewAllAccounts(e, loan, history, params);
-      }
+    if (accountsMatchStatus(loanAccountActions, 'closed')) {
+      nav.onClickViewClosedAccounts(e, loan, history, params);
+    } else if (accountsMatchStatus(loanAccountActions, 'open')) {
+      nav.onClickViewOpenAccounts(e, loan, history, params);
+    } else {
+      nav.onClickViewAllAccounts(e, loan, history, params);
     }
+
+    return undefined;
   };
 
   onOpenPatronBlockedModal = () => {
@@ -632,7 +640,7 @@ class LoanDetails extends React.Component {
               <Col xs={2}>
                 <KeyValue
                   data-test-loan-fees-fines
-                  label={<FormattedMessage id="ui-users.loans.details.fine" />}
+                  label={<FormattedMessage id="ui-users.loans.details.fineIncurred" />}
                   value={this.viewFeeFine()}
                 />
               </Col>

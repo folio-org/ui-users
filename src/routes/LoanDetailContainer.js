@@ -122,6 +122,9 @@ class LoanDetailContainer extends React.Component {
       selUser: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
+      loanAccountsActions: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
       loanActions: PropTypes.object,
       users: PropTypes.object,
     }),
@@ -139,6 +142,18 @@ class LoanDetailContainer extends React.Component {
     if (userLoans.length === 0 || !loanid) return undefined;
     const loan = userLoans.find(l => l.id === loanid) || {};
     return loan;
+  }
+
+  getLoanAccountActions = () => {
+    const {
+      resources,
+      match: {
+        params: { loanid }
+      }
+    } = this.props;
+    const loanAccountActions = (resources.loanAccountsActions || {}).records || [];
+
+    return loanAccountActions.filter(l => l.loanId === loanid) || [];
   }
 
   getUser = () => {
@@ -204,6 +219,7 @@ class LoanDetailContainer extends React.Component {
         loans={isEmpty(loan) ? [] : [loan]}
         loanActionsWithUser={loanActionsWithUser}
         loan={loan}
+        loanAccountActions={this.getLoanAccountActions()}
         loanIsMissing={isEmpty(loan) && loanHistory.hasLoaded}
         user={this.getUser()}
         patronGroup={this.getPatronGroup()}
