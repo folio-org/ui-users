@@ -37,7 +37,6 @@
     "loans.details.lost": "Perso",
     "loans.details.borrower": "Utente",
     "loans.details.renewalCount": "Conteggio rinnovi",
-    "loans.details.fine": "Multa ricevuta",
     "loans.details.proxyBorrower": "Utente proxy",
     "permissions.empty": "Nessun permesso trovato",
     "permissions.removePermission": "Rimuovi permesso",
@@ -147,7 +146,6 @@
     "brd.itemNotRenewed": "<strong>{count}</strong> {count, plural, one {item} other {items}} <b>non</b> rinnovato.",
     "brd.itemSuccessfullyRenewed": "<strong>{count}</strong> {count, plural, one {item} other {items}} rinnovato <b>con successo</b>",
     "loans.newFeeFine": "Nuova tariffa/multa",
-    "loans.columns.feefine": "Tariffa/Multa",
     "permissions.noSponsorsFound": "Nessun garante trovato",
     "permissions.noProxiesFound": "Nessun proxy trovato",
     "errors.missingRequiredPreferredServicePoint": "Compila per continuare",
@@ -862,5 +860,10 @@
     "shortcut.copy": "Copy",
     "shortcut.cut": "Cut",
     "shortcut.paste": "Paste",
-    "shortcut.find": "Find"
+    "shortcut.find": "Find",
+    "blocks.modal.comment": "Comment",
+    "blocks.modal.overridePatronBlock.header": "Override patron block",
+    "blocks.overrideButton": "Override",
+    "loans.columns.feefineIncurred": "Fees/fines incurred",
+    "loans.details.fineIncurred": "Fees/fines incurred"
 }
