@@ -37,7 +37,6 @@
     "loans.details.lost": "Perdido",
     "loans.details.borrower": "Prestatario",
     "loans.details.renewalCount": "Recuento de renovación",
-    "loans.details.fine": "Multa incurrida",
     "loans.details.proxyBorrower": "Prestatario Proxy",
     "permissions.empty": "No se encontraron permisos",
     "permissions.removePermission": "Quitar permiso",
@@ -147,7 +146,6 @@
     "brd.itemNotRenewed": "<strong> {count} </strong> {count, plural, one {artículo} other {artículos}} <b>no</b> renovado",
     "brd.itemSuccessfullyRenewed": "<strong> {count} </strong> {count, plural, one {artículo} other {artículos}} <b>con éxito</b> renovado",
     "loans.newFeeFine": "Nueva tarifa/multa",
-    "loans.columns.feefine": "Tarifa/Multa",
     "permissions.noSponsorsFound": "No se han encontrado patrocinadores",
     "permissions.noProxiesFound": "No se han encontrado proxies",
     "errors.missingRequiredPreferredServicePoint": "Por favor complete ésto para continuar",
@@ -862,5 +860,10 @@
     "shortcut.copy": "Copy",
     "shortcut.cut": "Cut",
     "shortcut.paste": "Paste",
-    "shortcut.find": "Find"
+    "shortcut.find": "Find",
+    "blocks.modal.comment": "Comment",
+    "blocks.modal.overridePatronBlock.header": "Override patron block",
+    "blocks.overrideButton": "Override",
+    "loans.columns.feefineIncurred": "Fees/fines incurred",
+    "loans.details.fineIncurred": "Fees/fines incurred"
 }

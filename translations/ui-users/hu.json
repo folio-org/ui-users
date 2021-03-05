@@ -37,7 +37,6 @@
     "loans.details.lost": "Elveszett",
     "loans.details.borrower": "Kölcsönző",
     "loans.details.renewalCount": "Meghosszabbítások száma",
-    "loans.details.fine": "Bírság áll fenn",
     "loans.details.proxyBorrower": "Meghatalmazott kölcsönző",
     "permissions.empty": "Nem található engedély",
     "permissions.removePermission": "Engedélyek eltávolítása",
@@ -147,7 +146,6 @@
     "brd.itemNotRenewed": "<strong>{count}</strong> {count, plural, one {tétel} other {tételek}} <b>nincsenek</b> megújítva.",
     "brd.itemSuccessfullyRenewed": "<strong>{count}</strong> {count, plural, one {tétel} other {tételek}} <b>sikeresen</b> megújítva",
     "loans.newFeeFine": "Új díj/bírság",
-    "loans.columns.feefine": "Díj/bírság",
     "permissions.noSponsorsFound": "Nem található szponzor",
     "permissions.noProxiesFound": "Nem található meghatalmazott",
     "errors.missingRequiredPreferredServicePoint": "Kérem, töltse ki ezt a folytatáshoz",
@@ -408,7 +406,7 @@
     "accounts.actions.warning.waiveAction": "waived",
     "accounts.error.exceeds": "Pay amount exceeds the selected amount",
     "accounts.warning.itemSelected": "{total, number} items selected. {items, number} {items, plural, one {item} other {items}} cannot be {action} because they are already closed.",
-    "blocks.reason": "Reason for block",
+    "blocks.reason": "Reason for block:",
     "blocks.modal.header": "Patron blocked from renewing",
     "blocks.detailsButton": "View block details",
     "blocks.closeButton": "Close",
@@ -862,5 +860,10 @@
     "shortcut.copy": "Copy",
     "shortcut.cut": "Cut",
     "shortcut.paste": "Paste",
-    "shortcut.find": "Find"
+    "shortcut.find": "Find",
+    "blocks.modal.comment": "Comment",
+    "blocks.modal.overridePatronBlock.header": "Override patron block",
+    "blocks.overrideButton": "Override",
+    "loans.columns.feefineIncurred": "Fees/fines incurred",
+    "loans.details.fineIncurred": "Fees/fines incurred"
 }

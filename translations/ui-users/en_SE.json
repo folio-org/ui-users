@@ -37,7 +37,6 @@
     "loans.details.lost": "Lost",
     "loans.details.borrower": "Borrower",
     "loans.details.renewalCount": "Renewal count",
-    "loans.details.fine": "Fine incurred",
     "loans.details.proxyBorrower": "Proxy borrower",
     "permissions.empty": "No permissions found",
     "permissions.removePermission": "Remove permission",
@@ -147,7 +146,6 @@
     "brd.itemNotRenewed": "<strong>{count}</strong> {count, plural, one {item} other {items}} <b>not</b> renewed. ",
     "brd.itemSuccessfullyRenewed": "<strong>{count}</strong> {count, plural, one {item} other {items}} <b>successfully</b> renewed",
     "loans.newFeeFine": "New fee/fine",
-    "loans.columns.feefine": "Fee/Fine",
     "permissions.noSponsorsFound": "No sponsors found",
     "permissions.noProxiesFound": "No proxies found",
     "errors.missingRequiredPreferredServicePoint": "Please fill this in to continue",
@@ -862,5 +860,10 @@
     "shortcut.copy": "Copy",
     "shortcut.cut": "Cut",
     "shortcut.paste": "Paste",
-    "shortcut.find": "Find"
+    "shortcut.find": "Find",
+    "blocks.modal.comment": "Comment",
+    "blocks.modal.overridePatronBlock.header": "Override patron block",
+    "blocks.overrideButton": "Override",
+    "loans.columns.feefineIncurred": "Fees/fines incurred",
+    "loans.details.fineIncurred": "Fees/fines incurred"
 }

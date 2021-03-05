@@ -37,7 +37,6 @@
     "loans.details.lost": "분실",
     "loans.details.borrower": "대출자",
     "loans.details.renewalCount": "갱신 횟수",
-    "loans.details.fine": "벌금 발생",
     "loans.details.proxyBorrower": "대리 대출자",
     "permissions.empty": "사용 권한이 없습니다.",
     "permissions.removePermission": "권한 제거",
@@ -147,7 +146,6 @@
     "brd.itemNotRenewed": "<strong>{count}</strong> {count, plural, one {item} other {items}} <b>not</b> renewed. ",
     "brd.itemSuccessfullyRenewed": "<strong>{count}</strong> {count, plural, one {item} other {items}} <b>successfully</b> renewed",
     "loans.newFeeFine": "New fee/fine",
-    "loans.columns.feefine": "Fee/Fine",
     "permissions.noSponsorsFound": "No sponsors found",
     "permissions.noProxiesFound": "No proxies found",
     "errors.missingRequiredPreferredServicePoint": "Please fill this in to continue",
@@ -408,7 +406,7 @@
     "accounts.actions.warning.waiveAction": "waived",
     "accounts.error.exceeds": "Pay amount exceeds the selected amount",
     "accounts.warning.itemSelected": "{total, number} items selected. {items, number} {items, plural, one {item} other {items}} cannot be {action} because they are already closed.",
-    "blocks.reason": "Reason for block",
+    "blocks.reason": "Reason for block:",
     "blocks.modal.header": "Patron blocked from renewing",
     "blocks.detailsButton": "View block details",
     "blocks.closeButton": "Close",
@@ -862,5 +860,10 @@
     "shortcut.copy": "Copy",
     "shortcut.cut": "Cut",
     "shortcut.paste": "Paste",
-    "shortcut.find": "Find"
+    "shortcut.find": "Find",
+    "blocks.modal.comment": "Comment",
+    "blocks.modal.overridePatronBlock.header": "Override patron block",
+    "blocks.overrideButton": "Override",
+    "loans.columns.feefineIncurred": "Fees/fines incurred",
+    "loans.details.fineIncurred": "Fees/fines incurred"
 }

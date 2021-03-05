@@ -37,7 +37,6 @@
     "loans.details.lost": "丢失",
     "loans.details.borrower": "借阅者",
     "loans.details.renewalCount": "续借计数",
-    "loans.details.fine": "产生的罚款",
     "loans.details.proxyBorrower": "代理借阅者",
     "permissions.empty": "未找到权限",
     "permissions.removePermission": "移除权限",
@@ -147,7 +146,6 @@
     "brd.itemNotRenewed": "<strong>{count}</strong> {count, plural, one {item} other {items}} <b>未</b>续借。",
     "brd.itemSuccessfullyRenewed": "<strong>{count}</strong> {count, plural, one {item} other {items}} <b>成功</b>续借。",
     "loans.newFeeFine": "新增费用/罚款",
-    "loans.columns.feefine": "费用/罚款",
     "permissions.noSponsorsFound": "未找到厂商",
     "permissions.noProxiesFound": "找不到代理",
     "errors.missingRequiredPreferredServicePoint": "请填写此内容以继续",
@@ -862,5 +860,10 @@
     "shortcut.copy": "复制",
     "shortcut.cut": "剪切",
     "shortcut.paste": "粘贴",
-    "shortcut.find": "查找"
+    "shortcut.find": "查找",
+    "blocks.modal.comment": "Comment",
+    "blocks.modal.overridePatronBlock.header": "Override patron block",
+    "blocks.overrideButton": "Override",
+    "loans.columns.feefineIncurred": "Fees/fines incurred",
+    "loans.details.fineIncurred": "Fees/fines incurred"
 }

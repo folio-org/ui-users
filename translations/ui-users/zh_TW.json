@@ -37,7 +37,6 @@
     "loans.details.lost": "遺失",
     "loans.details.borrower": "借閱者",
     "loans.details.renewalCount": "續借次數",
-    "loans.details.fine": "產生的罰款",
     "loans.details.proxyBorrower": "代理借閱者",
     "permissions.empty": "未找到使用者權限",
     "permissions.removePermission": "移除權限",
@@ -147,7 +146,6 @@
     "brd.itemNotRenewed": "<strong>{count}</strong> {count, plural, one {item} other {items}} <b>未</b>續借。",
     "brd.itemSuccessfullyRenewed": "<strong>{count}</strong> {count, plural, one {item} other {items}} <b>成功</b>續借。",
     "loans.newFeeFine": "新增 費用 / 罰款",
-    "loans.columns.feefine": "費用 / 罰款",
     "permissions.noSponsorsFound": "未找到保證人",
     "permissions.noProxiesFound": "找不到代理人",
     "errors.missingRequiredPreferredServicePoint": "請填妥內容以繼續",
@@ -862,5 +860,10 @@
     "shortcut.copy": "Copy",
     "shortcut.cut": "Cut",
     "shortcut.paste": "Paste",
-    "shortcut.find": "Find"
+    "shortcut.find": "Find",
+    "blocks.modal.comment": "Comment",
+    "blocks.modal.overridePatronBlock.header": "Override patron block",
+    "blocks.overrideButton": "Override",
+    "loans.columns.feefineIncurred": "Fees/fines incurred",
+    "loans.details.fineIncurred": "Fees/fines incurred"
 }
