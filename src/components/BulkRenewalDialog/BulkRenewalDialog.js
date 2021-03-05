@@ -9,6 +9,7 @@ import BulkRenewInfo from './BulkRenewInfo';
 
 class BulkRenewalDialog extends React.Component {
   static propTypes = {
+    additionalInfo: PropTypes.string.isRequired,
     stripes: stripesShape.isRequired,
     onClose: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
@@ -22,6 +23,7 @@ class BulkRenewalDialog extends React.Component {
 
   render() {
     const {
+      additionalInfo,
       stripes,
       successRenewals,
       failedRenewals,
@@ -47,6 +49,7 @@ class BulkRenewalDialog extends React.Component {
         onClose={onClose}
       >
         <BulkRenewInfo
+          additionalInfo={additionalInfo}
           user={user}
           stripes={stripes}
           errorMessages={errorMessages}

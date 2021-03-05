@@ -70,6 +70,8 @@
 * Add "Save and close" button should be active immediately on refund report criteria modal. Refs UIU-2034.
 * Expiration date modal opens every time when editing a user. Refs UIU-2059.
 * Rewording for text on expiration date modal. Refs UIU-2058.
+* Patron blocks: Allow for override of Renewing when logged in user has credentials. Refs UIU-1954.
+* Loan Details no longer displays Fines incurred. Refs UIU-2045.
 
 ## [5.0.1](https://github.com/folio-org/ui-users/tree/v5.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.0...v5.0.1)
