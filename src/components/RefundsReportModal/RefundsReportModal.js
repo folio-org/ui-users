@@ -38,26 +38,11 @@ const validate = ({ startDate, endDate }) => {
 };
 
 const RefundsReportModal = (props) => {
-  const calculateSubmitState = () => {
-    let disabled = true;
+  const {
+    valid,
+  } = props.form.getState();
 
-    const {
-      dirty,
-      values: {
-        startDate,
-        endDate,
-      },
-      valid,
-    } = props.form.getState();
-
-    if ((dirty && valid) || (valid && !isEmpty(startDate) && !isEmpty(endDate))) {
-      disabled = false;
-    }
-
-    return disabled;
-  };
-
-  const parseDate = (date) => moment.tz(date, props.timezone).format('YYYY-MM-DD');
+  const parseDate = (date) => (date ? moment.tz(date, props.timezone).format('YYYY-MM-DD') : date);
 
   const feeFineOwners = props.owners.map(({ id, owner }) => ({
     value: id,
@@ -68,7 +53,7 @@ const RefundsReportModal = (props) => {
     <ModalFooter>
       <Button
         data-test-refunds-report-save-btn
-        disabled={calculateSubmitState()}
+        disabled={!valid}
         marginBottom0
         buttonStyle="primary"
         onClick={props.form.submit}

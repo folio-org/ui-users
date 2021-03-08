@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
@@ -15,7 +16,7 @@ import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 import { getOpenRequestsPath } from '../util';
 
-import { loanActionMutators } from '../../constants';
+import { loanActionMutators, refundClaimReturned, loanActions } from '../../constants';
 
 import css from './ModalContent.css';
 
@@ -43,6 +44,20 @@ class ModalContent extends React.Component {
         path: 'circulation/loans/!{loan.id}/declare-claimed-returned-item-as-missing',
       },
     },
+    cancel: {
+      type: 'okapi',
+      path: 'accounts/%{activeRecord.id}/cancel',
+      fetch: false,
+      clientGeneratePk: false,
+    },
+    feefineshistory: {
+      type: 'okapi',
+      records: 'accounts',
+      GET: {
+        path: 'accounts?query=(userId==:{id})&limit=10000',
+      },
+    },
+    activeRecord: {},
   });
 
   static propTypes = {
@@ -56,6 +71,13 @@ class ModalContent extends React.Component {
       markAsMissing: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }).isRequired,
+      cancel: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      feefineshistory: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      activeRecord: PropTypes.object,
     }).isRequired,
     stripes: PropTypes.shape({
       user: PropTypes.shape({
@@ -70,6 +92,10 @@ class ModalContent extends React.Component {
     disableButton: PropTypes.func,
     validateAction: PropTypes.func,
     itemRequestCount: PropTypes.number.isRequired,
+    activeRecord: PropTypes.object,
+    user: PropTypes.object,
+    resources: PropTypes.object,
+    okapi: PropTypes.object
   };
 
   static defaultProps = {
@@ -124,8 +150,14 @@ class ModalContent extends React.Component {
       requestData.declaredLostDateTime = new Date().toISOString();
     }
 
-    disableButton();
+    if (this.props.loan.action === loanActions.CLAIMED_RETURNED && (loanAction === loanActionMutators.MARK_AS_MISSING || loanAction === loanActionMutators.DECLARE_LOST)) {
+      const feeFines = this.getFeeFines(this.props.loan.id);
+      feeFines.forEach((feeFine) => {
+        this.cancelFeeFine(feeFine.id, additionalInfo);
+      });
+    }
 
+    disableButton();
     try {
       await POST(requestData);
     } catch (error) {
@@ -134,6 +166,51 @@ class ModalContent extends React.Component {
 
     onClose();
   };
+
+  getFeeFines(loanId) {
+    const {
+      mutator,
+      user,
+      resources
+    } = this.props;
+
+    mutator.activeRecord.update({ userId: user.id });
+    const feeFines = [];
+    _.get(resources, ['feefineshistory', 'records'], []).forEach((currentFeeFine) => {
+      if (currentFeeFine.loanId === loanId && currentFeeFine.status.name === 'Open' &&
+        (currentFeeFine.feeFineType === refundClaimReturned.LOST_ITEM_FEE || currentFeeFine.feeFineType === refundClaimReturned.LOST_ITEM_PROCESSING_FEE)) {
+        feeFines.push(currentFeeFine);
+      }
+    });
+    return feeFines;
+  }
+
+  cancelFeeFine = async (accountId, additionalInfo) => {
+    const {
+      mutator
+    } = this.props;
+
+    mutator.activeRecord.update({ id: accountId });
+
+    const {
+      okapi: {
+        currentUser: {
+          firstName = '',
+          lastName = '',
+          curServicePoint: { id: servicePointId }
+        },
+      }
+    } = this.props;
+
+    const body = {};
+
+    body.notifyPatron = false;
+    body.comments = additionalInfo;
+    body.servicePointId = servicePointId;
+    body.userName = `${lastName}, ${firstName}`;
+
+    await mutator.cancel.POST(body);
+  }
 
   processError(resp) {
     const { handleError } = this.props;

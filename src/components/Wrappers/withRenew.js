@@ -46,6 +46,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
 
     this.connectedBulkRenewalDialog = props.stripes.connect(BulkRenewalDialog);
     this.state = {
+      additionalInfo: '',
       loans: [],
       // eslint-disable-next-line react/no-unused-state
       errors: [],
@@ -100,13 +101,20 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
   // condition in those methods to determine whether it is safe to update state.
   _isMounted = false;
 
-  renewItem = (loan, patron, bulkRenewal, silent) => {
+  renewItem = (loan, patron, bulkRenewal, silent, additionalInfo) => {
     // eslint-disable-next-line react/no-unused-state
     this.setState({ bulkRenewal });
     const params = {
       itemBarcode: loan.item.barcode,
       userBarcode: patron.barcode,
     };
+
+    if (additionalInfo) {
+      params.overrideBlocks = {
+        patronBlock: {},
+        comment: additionalInfo,
+      };
+    }
 
     return new Promise((resolve, reject) => {
       this.props.mutator.renew.POST(params, { silent })
@@ -128,26 +136,21 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
     });
   };
 
-  renew = async (loans, patron) => {
-    const { patronBlocks } = this.props;
+  renew = async (loans, patron, additionalInfo = '') => {
     const renewSuccess = [];
     const renewFailure = [];
     const errorMsg = {};
-    const countRenew = patronBlocks.filter(p => p.renewals);
     const loansSize = loans.length;
     const bulkRenewal = (loansSize > 1);
-
-    if (!isEmpty(countRenew)) {
-      // eslint-disable-next-line react/no-unused-state
-      return this.setState({ patronBlockedModal: true });
-    }
 
     for (const [index, loan] of loans.entries()) {
       try {
         // We actually want to execute it in a sequence so turning off eslint warning
         // https://issues.folio.org/browse/UIU-1299
         // eslint-disable-next-line no-await-in-loop
-        renewSuccess.push(await this.renewItem(loan, patron, bulkRenewal, index !== loansSize - 1));
+        renewSuccess.push(
+          await this.renewItem(loan, patron, bulkRenewal, index !== loansSize - 1, additionalInfo)
+        );
       } catch (error) {
         const stringErrorMessage = get(error, 'props.values.message', '');
 
@@ -169,7 +172,8 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
       errorMsg,
       renewSuccess,
       renewFailure,
-      bulkRenewalDialogOpen: true
+      bulkRenewalDialogOpen: true,
+      additionalInfo,
     });
 
     return renewSuccess;
@@ -325,6 +329,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
   render() {
     const {
       bulkRenewalDialogOpen,
+      additionalInfo,
       renewSuccess,
       renewFailure,
       errorMsg,
@@ -346,6 +351,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
           {...this.props}
         />
         <this.connectedBulkRenewalDialog
+          additionalInfo={additionalInfo}
           user={user}
           stripes={stripes}
           errorMessages={errorMsg}

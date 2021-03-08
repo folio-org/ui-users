@@ -94,6 +94,7 @@ class LoanActionDialog extends React.Component {
             onClose={onClose}
             disableButton={disableButton}
             handleError={this.setErrorMessage}
+            {...this.props}
           />
         </Modal>
         {errorModal}

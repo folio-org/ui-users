@@ -21,7 +21,11 @@ import {
 
 import ActionsBar from '../../../components/ActionsBar/ActionsBar';
 import { itemStatuses } from '../../../../../constants';
-import { hasEveryLoanItemStatus, hasAnyLoanItemStatus } from '../../../../util';
+import {
+  hasEveryLoanItemStatus,
+  hasAnyLoanItemStatus,
+  getRenewalPatronBlocksFromPatronBlocks,
+} from '../../../../util';
 
 import css from './OpenLoansSubHeader.css';
 
@@ -144,7 +148,7 @@ class OpenLoansSubHeader extends React.Component {
     const claimedReturnedCount = loans.filter(l => l?.item?.status?.name === itemStatuses.CLAIMED_RETURNED).length;
     const clonedLoans = cloneDeep(loans);
     const recordsToCSV = buildRecords(clonedLoans);
-    const countRenews = patronBlocks.filter(p => p.renewals === true);
+    const countRenews = getRenewalPatronBlocksFromPatronBlocks(patronBlocks);
     const onlyClaimedReturnedItemsSelected = hasEveryLoanItemStatus(checkedLoans, itemStatuses.CLAIMED_RETURNED);
     const onlyLostyItemsSelected = hasAnyLoanItemStatus(checkedLoans, lostItemStatuses);
 
@@ -190,7 +194,7 @@ class OpenLoansSubHeader extends React.Component {
                 disabled={noSelectedLoans || onlyClaimedReturnedItemsSelected}
                 onClick={!isEmpty(countRenews)
                   ? openPatronBlockedModal
-                  : renewSelected
+                  : () => renewSelected()
                 }
               >
                 <FormattedMessage id="ui-users.renew" />

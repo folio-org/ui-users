@@ -15,6 +15,7 @@ import { Callout } from '@folio/stripes/components';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 import LimitsForm from './LimitsForm';
+
 import css from '../patronBlocks.css';
 
 class Limits extends Component {
@@ -102,7 +103,7 @@ class Limits extends Component {
   }
 
   normializeValue = (value) => {
-    if (!isNumber(value) || value === 0) {
+    if (!isNumber(value)) {
       return null;
     }
 

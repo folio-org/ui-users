@@ -2,8 +2,8 @@ import { cloneDeep } from 'lodash';
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, FormattedMessage } from 'react-intl';
-import { Field } from 'redux-form';
-import stripesForm from '@folio/stripes/form';
+import { Field } from 'react-final-form';
+import stripesFinalForm from '@folio/stripes/final-form';
 import {
   Accordion,
   AccordionSet,
@@ -121,10 +121,6 @@ function BlockTemplateForm(props) {
     );
   };
 
-  const saveTemplate = (data) => {
-    props.onSave(data);
-  };
-
   const renderPaneTitle = () => {
     const currentTemplate = initialValues || {};
 
@@ -205,7 +201,7 @@ function BlockTemplateForm(props) {
     <form
       id="form-block-templates"
       className={css.BlockTemplateFormRoot}
-      onSubmit={handleSubmit(saveTemplate)}
+      onSubmit={handleSubmit}
     >
       <Paneset isRoot>
         <Pane
@@ -384,7 +380,6 @@ BlockTemplateForm.propTypes = {
   initialValues: PropTypes.object,
   intl: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  onSave: PropTypes.func,
   onCancel: PropTypes.func,
   onRemove: PropTypes.func,
   pristine: PropTypes.bool,
@@ -392,8 +387,7 @@ BlockTemplateForm.propTypes = {
 };
 
 export default injectIntl(
-  stripesForm({
-    form: 'blockTemplateForm',
+  stripesFinalForm({
     navigationCheck: true,
     enableReinitialize: false,
   })(BlockTemplateForm)
