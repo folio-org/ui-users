@@ -101,7 +101,7 @@ class OpenLoansWithStaticData extends React.Component {
     'dueDate',
     'requests',
     'barcode',
-    'feefine',
+    'feefineIncurred',
     'callNumber',
     'contributors',
     'renewals',
@@ -176,17 +176,17 @@ class OpenLoansWithStaticData extends React.Component {
     const { resources } = this.props;
     const accounts = get(resources, ['loanAccount', 'records'], []);
     const accountsLoan = accounts.filter(a => a.loanId === loan.id) || [];
+    let amount = 0;
     let suspendedStatus = '';
-    let remaining = 0;
 
     accountsLoan.forEach(a => {
       suspendedStatus = (a.paymentStatus.name === 'Suspended claim returned') ? '\nSuspended' : '';
     });
     accountsLoan.forEach(a => {
-      remaining += parseFloat(a.remaining);
+      amount += parseFloat(a.amount);
     });
 
-    return (remaining === 0) ? '-' : (remaining.toFixed(2) + suspendedStatus);
+    return (amount === 0) ? '-' : (amount.toFixed(2)  + suspendedStatus);
   };
 
   getContributorslist = (loan) => {
@@ -276,6 +276,8 @@ class OpenLoansWithStaticData extends React.Component {
           patronBlocks={patronBlocks}
           checkedLoans={checkedLoans}
           patronBlockedModal={patronBlockedModal}
+          openPatronBlockedModal={openPatronBlockedModal}
+          renewSelected={renewSelected}
           changeDueDateDialogOpen={changeDueDateDialogOpen}
           hideChangeDueDateDialog={hideChangeDueDateDialog}
           onClosePatronBlockedModal={onClosePatronBlockedModal}

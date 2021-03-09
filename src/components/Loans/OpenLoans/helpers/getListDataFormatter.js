@@ -61,9 +61,9 @@ export default function getListDataFormatter(
       formatter: loan => get(loan, ['item', 'barcode'], ''),
       sorter: loan => get(loan, ['item', 'barcode']),
     },
-    'feefine': {
-      key:'Fee/Fine',
-      view: formatMessage({ id: 'ui-users.loans.columns.feefine' }),
+    'feefineIncurred': {
+      key:'feefineIncurred',
+      view: formatMessage({ id: 'ui-users.loans.columns.feefineIncurred' }),
       formatter: loan => getFeeFine(loan, resources),
       sorter: loan => getFeeFine(loan, resources),
     },

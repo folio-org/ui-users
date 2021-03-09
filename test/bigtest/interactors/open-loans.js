@@ -16,6 +16,7 @@ import CalloutInteractor from '@folio/stripes-components/lib/Callout/tests/inter
 import CheckboxInteractor from '@folio/stripes-components/lib/Checkbox/tests/interactor';
 
 import PatronBlockModal from './parton-blocks/modal';
+import OverridePatronBlockModal from './parton-blocks/override-patron-block-modal';
 import DialogInteractor from './dialog';
 
 @interactor class BulkOverrideModal {
@@ -83,6 +84,7 @@ import DialogInteractor from './dialog';
   bulkRenewalModal = new BulkRenewalModal();
   bulkOverrideModal = new BulkOverrideModal();
   patronBlockModal = new PatronBlockModal();
+  overridePatronBlockModal = new OverridePatronBlockModal();
   changeDueDateOverlay = new ChangeDueDateOverlay();
   bulkClaimReturnedModal = new BulkClaimReturnedModal();
   errorModal = new ErrorModal();

@@ -63,8 +63,15 @@
 * Increment `@folio/stripes-cli` to `v2`. Refs UIU-2047.
 * Inconsistent behavior of payment action when transaction info is blank. Refs UIU-2048.
 * Fix wrong value on reset data for Refunds to process manually report (CSV). Refs UIU-2050.
+* Add app dropdown menu. Refs UIU-1915.
+* Add Modal with Shortcut Keys List. Refs UIU-1916.
 * Add Callout for Refund report. Refs UIU-2035.
 * Allow 0 as valid entry for Patron Block Limits. Refs UIU-1998.
+* Add "Save and close" button should be active immediately on refund report criteria modal. Refs UIU-2034.
+* Expiration date modal opens every time when editing a user. Refs UIU-2059.
+* Rewording for text on expiration date modal. Refs UIU-2058.
+* Patron blocks: Allow for override of Renewing when logged in user has credentials. Refs UIU-1954.
+* Loan Details no longer displays Fines incurred. Refs UIU-2045.
 
 ## [5.0.1](https://github.com/folio-org/ui-users/tree/v5.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.0...v5.0.1)

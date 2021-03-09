@@ -4,6 +4,7 @@
 node_modules
 yarn.lock
 yarn-error.log
+debug.log
 ModuleDescriptor.json
 artifacts
 *.idea*

@@ -64,6 +64,7 @@ const withDeclareLost = WrappedComponent => class WithDeclareLost extends React.
             open={declareLostDialogOpen}
             onClose={this.hideDeclareLostDialog}
             disableButton={this.disableButton}
+            {...this.props}
           />
         }
       </>

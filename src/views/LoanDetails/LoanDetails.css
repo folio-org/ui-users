@@ -4,6 +4,10 @@
   color: var(--primary) !important;
 }
 
+.feefineButton:active {
+  outline: none;
+}
+
 .cursor {
   cursor: pointer;
 }

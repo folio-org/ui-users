@@ -23,7 +23,16 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
       fetch: false,
       accumulate: true,
     },
+    loanstorage: {
+      type: 'okapi',
+      PUT: {
+        path: 'loan-storage/loans/%{activeLoanStorage.id}'
+      },
+      fetch: false,
+      accumulate: true,
+    },
     activeAccount: {},
+    activeLoanStorage: {},
   });
 
   static propTypes = {
@@ -36,7 +45,14 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
         GET: PropTypes.func.isRequired,
         POST: PropTypes.func.isRequired,
       }),
+      loanstorage: PropTypes.shape({
+        PUT: PropTypes.func.isRequired,
+        GET: PropTypes.func.isRequired,
+      }).isRequired,
       activeAccount: PropTypes.shape({
+        update: PropTypes.func,
+      }).isRequired,
+      activeLoanStorage: PropTypes.shape({
         update: PropTypes.func,
       }).isRequired,
     }).isRequired,
