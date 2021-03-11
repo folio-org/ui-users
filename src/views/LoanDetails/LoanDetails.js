@@ -174,7 +174,7 @@ class LoanDetails extends React.Component {
       });
     }
 
-    return await this.onRenew();
+    return this.onRenew();
   }
 
   viewFeeFine() {
