@@ -72,6 +72,7 @@
 * Rewording for text on expiration date modal. Refs UIU-2058.
 * Patron blocks: Allow for override of Renewing when logged in user has credentials. Refs UIU-1954.
 * Loan Details no longer displays Fines incurred. Refs UIU-2045.
+* Fix eslint error in `LoanDetails.js`. Refs UIU-2068.
 
 ## [5.0.1](https://github.com/folio-org/ui-users/tree/v5.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.0...v5.0.1)
