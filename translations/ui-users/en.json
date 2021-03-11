@@ -199,6 +199,7 @@
   "loans.details.checkinServicePoint": "Check in service point",
   "loans.details.overduePolicy": "Overdue policy",
   "loans.details.lostItemPolicy": "Lost item policy",
+  "loans.details.accounts.suspended": "{amount} {suspended}",
   "requests.title": "Requests",
   "requests.createRequest": "Create request",
   "requests.numOpenRequests": "{count, number} {count, plural, one {open request} other {open requests}}",

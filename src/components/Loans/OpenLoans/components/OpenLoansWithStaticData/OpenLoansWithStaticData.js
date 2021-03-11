@@ -8,12 +8,16 @@ import {
   injectIntl,
 } from 'react-intl';
 
+import SafeHTMLMessage from '@folio/react-intl-safe-html';
+
 import { stripesShape } from '@folio/stripes/core';
 
 import OpenLoans from '../../OpenLoans';
 import Modals from '../Modals/Modals';
 import OpenLoansSubHeader from '../OpenLoansSubHeader/OpenLoansSubHeader';
 import getListDataFormatter from '../../helpers/getListDataFormatter';
+import { refundClaimReturned } from '../../../../../constants';
+
 
 class OpenLoansWithStaticData extends React.Component {
   static propTypes = {
@@ -176,17 +180,22 @@ class OpenLoansWithStaticData extends React.Component {
     const { resources } = this.props;
     const accounts = get(resources, ['loanAccount', 'records'], []);
     const accountsLoan = accounts.filter(a => a.loanId === loan.id) || [];
+    const suspendedStatus = accountsLoan.filter(a => a?.paymentStatus?.name === refundClaimReturned.PAYMENT_STATUS) || [];
+    const suspendedMessage = (suspendedStatus.length > 0) ? 'Suspended' : '';
     let amount = 0;
-    let suspendedStatus = '';
 
-    accountsLoan.forEach(a => {
-      suspendedStatus = (a.paymentStatus.name === 'Suspended claim returned') ? '\nSuspended' : '';
-    });
     accountsLoan.forEach(a => {
       amount += parseFloat(a.amount);
     });
 
-    return (amount === 0) ? '-' : (amount.toFixed(2)  + suspendedStatus);
+    return (amount === 0) ? '-' :
+    <SafeHTMLMessage
+      id="ui-users.loans.details.accounts.suspended"
+      values={{
+        amount,
+        suspended: suspendedMessage
+      }}
+    />;
   };
 
   getContributorslist = (loan) => {

@@ -40,7 +40,7 @@ import {
   getRenewalPatronBlocksFromPatronBlocks,
   accountsMatchStatus,
 } from '../../components/util';
-import { itemStatuses, loanActions } from '../../constants';
+import { itemStatuses, loanActions, refundClaimReturned } from '../../constants';
 import {
   withRenew,
   withDeclareLost,
@@ -178,42 +178,28 @@ class LoanDetails extends React.Component {
   }
 
   viewFeeFine() {
-
-
     const { stripes, loanAccountActions } = this.props;
     const total = loanAccountActions.reduce((acc, { amount }) => (acc + parseFloat(amount)), 0);
-    const suspendedAction = loanAccountActions.filter(a => a?.paymentStatus?.name === 'Suspended claim returned') || [];
-    const suspendedStatus = (suspendedAction.length > 0) ? 'Suspended' : '';
-
+    const suspendedAction = loanAccountActions.filter(a => a?.paymentStatus?.name === refundClaimReturned.PAYMENT_STATUS) || [];
+    const suspendedMessage = (suspendedAction.length > 0) ? 'Suspended' : '';
 
     if (total === 0) return '-';
 
     const value = parseFloat(total).toFixed(2);
-
-    return stripes.hasPerm('ui-users.accounts')
-      ? (
-
-        <>      
+    const valueDisplay = stripes.hasPerm('ui-users.accounts')
+      ?
         <button
           data-test-fee-fine-details-link
           className={css.feefineButton}
           onClick={(e) => this.feefinedetails(e)}
           type="button"
         >
-          {value}
+          { value }
         </button>
-        <br />
-          {suspendedStatus}
-        </>
+      :
+      { value };
 
-      )
-      : (
-        <>
-          {value}
-          <br />
-          {suspendedStatus}
-        </>
-      );
+    return <>{ valueDisplay }<br />{ suspendedMessage }</>;
   }
 
   feefinedetails = (e) => {
