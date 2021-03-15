@@ -864,6 +864,6 @@
     "blocks.modal.comment": "Komentarz",
     "blocks.modal.overridePatronBlock.header": "Zastąp blokadę czytelnika",
     "blocks.overrideButton": "Zastąp",
-    "loans.columns.feefineIncurred": "Fees/fines incurred",
-    "loans.details.fineIncurred": "Fees/fines incurred"
+    "loans.columns.feefineIncurred": "Poniesione opłaty/kary",
+    "loans.details.fineIncurred": "Poniesione opłaty/kary"
 }

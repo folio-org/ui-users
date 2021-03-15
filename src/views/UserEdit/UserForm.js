@@ -430,6 +430,7 @@ class UserForm extends React.Component {
                   entityType="user"
                   finalFormCustomFieldsValues={form.getState().values.customFields}
                   fieldComponent={Field}
+                  changeFinalFormField={form.change}
                 />
                 {initialValues.id &&
                   <div>
