@@ -36,7 +36,7 @@ describe('Test Fee/Fine History', () => {
 
       it('It should render with the labels', () => {
         expect(FeeFineHistoryInteractor.openFeesFines).to.string('open fees/fines');
-        expect(FeeFineHistoryInteractor.closedFeesFines).to.string('closed fees/fines');
+        expect(FeeFineHistoryInteractor.closedFeesFines).to.string('1 closed fee/fine');
         expect(FeeFineHistoryInteractor.allFeesFines).to.string('View all fees/fines');
       });
 
