@@ -20,9 +20,9 @@ export const loanStatuses = {
   CLOSED: 'Closed',
 };
 
-export const accountStatues = {
+export const accountStatuses = {
   CLOSED: 'Closed',
-  OPEN: 'OPEN',
+  OPEN: 'Open',
 };
 
 export const loanActions = {

@@ -13,7 +13,7 @@ import {
 } from '@folio/stripes/components';
 import { useStripes } from '@folio/stripes/core';
 
-import { accountStatues } from '../../../constants';
+import { accountStatuses } from '../../../constants';
 
 
 /**
@@ -49,8 +49,8 @@ const UserAccounts = ({
   const displayWhenOpen = (<Button disabled={buttonDisabled} to={{ pathname: `/users/${params.id}/charge` }}><FormattedMessage id="ui-users.accounts.chargeManual" /></Button>);
 
   useEffect(() => {
-    const open = records.filter(account => account?.status?.name !== accountStatues.CLOSED);
-    const closed = records.filter(account => account?.status?.name === accountStatues.CLOSED);
+    const open = records.filter(account => account?.status?.name !== accountStatuses.CLOSED);
+    const closed = records.filter(account => account?.status?.name === accountStatuses.CLOSED);
     const openTotal = open.reduce((acc, { remaining }) => (acc + parseFloat(remaining)), 0);
 
     setTotals({
