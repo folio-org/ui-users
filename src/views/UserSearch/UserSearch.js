@@ -41,6 +41,7 @@ import CsvReport from '../../components/data/reports';
 import RefundsReport from '../../components/data/reports/RefundReport';
 import Filters from './Filters';
 import css from './UserSearch.css';
+import CashReport from '../../components/data/reports/CashReportPdf';
 
 const VISIBLE_COLUMNS_STORAGE_KEY = 'users-visible-columns';
 
@@ -246,6 +247,44 @@ class UserSearch extends React.Component {
     });
   }
 
+  downloadCashPDFReport = () => {
+    const cashReportData = {
+      data: [],
+      intl: this.props.intl,
+    };
+    const { exportInProgress } = this.state;
+
+    if (exportInProgress) {
+      return;
+    }
+
+    this.setState({
+      exportInProgress: true,
+    }, () => {
+      this.context.sendCallout({
+        type: 'success',
+        message: <FormattedMessage id="ui-users.reports.inProgress" />,
+      });
+
+      try {
+        const report = new CashReport(cashReportData);
+        report.toPDF();
+      } catch (error) {
+        if (error) {
+          console.log('error ', error);
+          this.context.sendCallout({
+            type: 'error',
+            message: <FormattedMessage id="ui-users.settings.limits.callout.error" />,
+          });
+        }
+      } finally {
+        this.setState({
+          exportInProgress: false,
+        });
+      }
+    });
+  }
+
   getActionMenu = ({ onToggle }) => {
     const { intl } = this.props;
     const { visibleColumns } = this.state;
@@ -309,6 +348,18 @@ class UserSearch extends React.Component {
           >
             <Icon icon="download">
               <FormattedMessage id="ui-users.reports.refunds.label" />
+            </Icon>
+          </Button>
+          <Button
+            buttonStyle="dropdownItem"
+            id="export-cash-report"
+            onClick={() => {
+              onToggle();
+              this.downloadCashPDFReport();
+            }}
+          >
+            <Icon icon="download">
+              Cash drawer reconciliation report (CSV, PDF)
             </Icon>
           </Button>
         </MenuSection>

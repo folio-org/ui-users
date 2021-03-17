@@ -811,6 +811,8 @@
     "@folio/react-intl-safe-html": "^3.0.0",
     "final-form-set-field-data": "^1.0.2",
     "hashcode": "^1.0.3",
+    "jspdf": "^2.3.1",
+    "jspdf-autotable": "^3.5.14",
     "lodash": "^4.17.4",
     "moment": "~2.24.0",
     "moment-timezone": "^0.5.14",

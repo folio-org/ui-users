@@ -183,4 +183,45 @@ export const feeFineReportColumns = [
   'itemLoanDetails'
 ];
 
+export const cashMainReportColumns = [
+  'source',
+  'paymentMethod',
+  'paymentAmount',
+  'feeFineOwner',
+  'feeFineType',
+  'paymentDateTime',
+  'paymentStatus',
+  'transactionInfo',
+  'paymentStaffInfo',
+  'paymentPatronInfo'
+];
+
+export const cashSourceReportColumns = [
+  'source',
+  'totalAmount',
+  'totalCount'
+];
+
+export const cashSourceReportFooter = [
+  'sourceTotal'
+];
+
+export const cashPaymentMethodReportColumns = [
+  'paymentMethod',
+  'totalAmount',
+  'totalCount'
+];
+
+export const cashFeeFineTypeReportColumns = [
+  'feeFineType',
+  'totalAmount',
+  'totalCount'
+];
+
+export const cashFeeFineOwnerReportColumns = [
+  'feeFineOwner',
+  'totalAmount',
+  'totalCount'
+];
+
 export const NO_FEE_FINE_OWNER_FOUND_MESSAGE = 'No fee/fine owner found for item\'s permanent location';
