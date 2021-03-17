@@ -20,6 +20,11 @@ export const loanStatuses = {
   CLOSED: 'Closed',
 };
 
+export const accountStatuses = {
+  CLOSED: 'Closed',
+  OPEN: 'Open',
+};
+
 export const loanActions = {
   CLAIMED_RETURNED: 'claimedReturned',
   DECLARED_LOST: 'declaredLost',

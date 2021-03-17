@@ -77,6 +77,9 @@ class UserDetail extends React.Component {
     resources: PropTypes.shape({
       selUser: PropTypes.object,
       user: PropTypes.arrayOf(PropTypes.object),
+      accounts: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
       addressTypes: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
@@ -417,7 +420,6 @@ class UserDetail extends React.Component {
     const {
       sections,
       helperApp,
-      addRecord
     } = this.state;
 
     const user = this.getUser();
@@ -455,6 +457,7 @@ class UserDetail extends React.Component {
     const departments = resources?.departments?.records || [];
     const userDepartments = (user?.departments || [])
       .map(departmentId => departments.find(({ id }) => id === departmentId)?.name);
+    const accounts = resources?.accounts;
 
     if (!user) {
       return (
@@ -530,7 +533,6 @@ class UserDetail extends React.Component {
                     expanded={sections.patronBlocksSection}
                     onToggle={this.handleSectionToggle}
                     onClickViewPatronBlock={this.onClickViewPatronBlock}
-                    addRecord={this.state.addRecord}
                     {...this.props}
                   />
                   }
@@ -579,8 +581,8 @@ class UserDetail extends React.Component {
                       expanded={sections.accountsSection}
                       onToggle={this.handleSectionToggle}
                       accordionId="accountsSection"
-                      addRecord={addRecord}
                       location={location}
+                      accounts={accounts}
                       match={match}
                     />
                   </IfPermission>
