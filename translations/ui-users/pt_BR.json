@@ -844,7 +844,7 @@
     "reports.refunds.modal.owner": "Proprietário de taxa/multa",
     "reports.refunds.modal.owner.placeholder": "Selecione o(s) proprietário(s) da taxa/multa",
     "reports.feeFine.details": "Detalhes da taxa/multa",
-    "reports.callout.error": "Something went wrong.",
+    "reports.callout.error": "Algo deu errado.",
     "information.recalculate.modal.button": "Definir",
     "appMenu.keyboardShortcuts": "Atalhos do teclado",
     "shortcut.action": "Ação",
@@ -853,8 +853,8 @@
     "shortcut.editRecord": "Editar um registro",
     "shortcut.saveRecord": "Salvar um registro",
     "shortcut.expandCollapse": "Expand or collapse an accordion",
-    "shortcut.expandAll": "Expand all accordions",
-    "shortcut.collapseAll": "Collapse all accordions",
+    "shortcut.expandAll": "Expandir todos os acordeões",
+    "shortcut.collapseAll": "Recolher todos os acordeões",
     "shortcut.goToSearchFilter": "Go to Search & Filter pane",
     "shortcut.closeModal": "Fechar um modal ou pop-up",
     "shortcut.copy": "Copiar",
@@ -864,6 +864,6 @@
     "blocks.modal.comment": "Comentário",
     "blocks.modal.overridePatronBlock.header": "Sobrescrever bloqueio de usuário",
     "blocks.overrideButton": "Sobrescrever",
-    "loans.columns.feefineIncurred": "Fees/fines incurred",
-    "loans.details.fineIncurred": "Fees/fines incurred"
+    "loans.columns.feefineIncurred": "Taxas/multas incorridas",
+    "loans.details.fineIncurred": "Taxas/multas incorridas"
 }
