@@ -11,7 +11,7 @@ import OpenLoansInteractor from '../interactors/open-loans';
 import UsersInteractor from '../interactors/users';
 import LoansListingPane from '../interactors/loans-listing-pane';
 
-describe.only('Open Loans', () => {
+describe('Open Loans', () => {
   const requestsPath = '/requests';
   const requestsAmount = 2;
 
