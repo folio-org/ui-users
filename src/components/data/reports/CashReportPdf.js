@@ -1,10 +1,6 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import {
-  isEmpty,
-  map,
-  values,
-} from 'lodash';
+import { values } from 'lodash';
 
 import {
   cashMainReportColumns,
@@ -14,14 +10,6 @@ import {
   cashFeeFineOwnerReportColumns,
   cashSourceReportFooter,
 } from '../../../constants';
-import {
-  getFullName,
-  formatActionDescription,
-  formatCurrencyAmount,
-  formatDateAndTime,
-  getServicePointOfCurrentAction,
-  calculateRemainingAmount,
-} from '../../util';
 
 const pdfOptions = {
   orientation: 'l',
@@ -34,18 +22,8 @@ const pdfOptions = {
   printHeaders: true
 };
 
-
 class CashReport {
   constructor({ data, intl: { formatMessage, formatTime } }) {
-    // data model:
-    // data = {
-    //  feeFineActions: [] - GET: 'feefineactions?query=(userId==:{id}&limit=${MAX_RECORDS})',
-    //  accounts: [] - GET: 'accounts?query=(userId==:{id})&limit=${MAX_RECORDS}',
-    //  loans: [] - GET: 'circulation/loans?query=(userId==:{id})&limit=1000',
-    //  servicePoints: [] - props.okapi.currentUser.servicePoints
-    //  patronGroup: 'group' - string,
-    //  user: user - GET: 'users/:{id}',
-    // }
     this.data = data;
     this.formatMessage = formatMessage;
     this.formatTime = formatTime;
@@ -191,14 +169,12 @@ class CashReport {
 
   parseMainReport() {
     this.mainReportData = this.buildMainReport();
-    const origin = window.location.origin;
 
     return this.mainReportData.map(row => values(row));
   }
 
   parseSourceReport() {
     this.sourceReportData = this.buildSourceReport();
-    const origin = window.location.origin;
 
     return this.sourceReportData.map(row => values(row));
   }
@@ -233,11 +209,6 @@ class CashReport {
     };
 
     console.log('this.doc ', this.doc);
-    // read only
-    // this.doc.securityHandlers({
-    //   userPassword: 'test'
-    // });
-
 
     this.doc.text('Cash Drawer Reconciliation Report for Service Point Source(s) - 12/10/2020 to 15/10/2020', 15, 10);
     autoTable(this.doc, {
