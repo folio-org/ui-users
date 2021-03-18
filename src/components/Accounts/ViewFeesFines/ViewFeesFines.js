@@ -217,7 +217,7 @@ class ViewFeesFines extends React.Component {
     values.forEach((v) => {
       selected += (v.remaining * 100);
       const loan = this.getLoan(v);
-      someIsClaimReturnedItem = (someIsClaimReturnedItem || (loan.item.status.name === itemStatuses.CLAIMED_RETURNED));
+      someIsClaimReturnedItem = (someIsClaimReturnedItem || (loan.item && loan.item.status.name === itemStatuses.CLAIMED_RETURNED));
     });
 
     selected /= 100;
@@ -228,7 +228,7 @@ class ViewFeesFines extends React.Component {
     this.props.onChangeActions({
       waive: open && !someIsClaimReturnedItem,
       transfer: open && !someIsClaimReturnedItem,
-      refund: (open || closed) && !someIsClaimReturnedItem,
+      refund: ((open && !someIsClaimReturnedItem) || closed),
       regularpayment: open && !someIsClaimReturnedItem,
     });
   }
@@ -245,7 +245,7 @@ class ViewFeesFines extends React.Component {
     values.forEach((v) => {
       selected += (v.remaining * 100);
       const loan = this.getLoan(v);
-      someIsClaimReturnedItem = (someIsClaimReturnedItem || (loan.item.status.name === itemStatuses.CLAIMED_RETURNED));
+      someIsClaimReturnedItem = (someIsClaimReturnedItem || (loan.item &&  loan.item.status.name === itemStatuses.CLAIMED_RETURNED));
     });
     selected /= 100;
     this.props.onChangeSelected(parseFloat(selected).toFixed(2), values);
@@ -255,7 +255,7 @@ class ViewFeesFines extends React.Component {
     this.props.onChangeActions({
       waive: open && !someIsClaimReturnedItem,
       transfer: open && !someIsClaimReturnedItem,
-      refund: (open || closed) && !someIsClaimReturnedItem,
+      refund: ((open && !someIsClaimReturnedItem) || closed),
       regularpayment: open && !someIsClaimReturnedItem,
     });
 
