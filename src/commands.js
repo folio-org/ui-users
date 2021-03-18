@@ -31,6 +31,11 @@ const commands = [
     name: 'search',
     label: (<FormattedMessage id="ui-users.shortcut.goToSearchFilter" />),
     shortcut: 'mod+alt+h',
+  },
+  {
+    name: 'openShortcutModal',
+    label: (<FormattedMessage id="ui-users.shortcut.openShortcutModal" />),
+    shortcut: 'mod+shift+7',
   }
 ];
 
