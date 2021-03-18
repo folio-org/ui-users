@@ -14,6 +14,8 @@ import {
   FormattedTime,
 } from 'react-intl';
 
+import { itemStatuses } from '../../../constants';
+
 import {
   calculateSortParams,
   nav,
@@ -211,8 +213,11 @@ class ViewFeesFines extends React.Component {
     this.setState({ allChecked });
     const values = Object.values(checkedAccounts);
     let selected = 0;
+    let someIsClaimReturnedItem = false;
     values.forEach((v) => {
       selected += (v.remaining * 100);
+      const loan = this.getLoan(v);
+      someIsClaimReturnedItem = (someIsClaimReturnedItem || (loan.item.status.name === itemStatuses.CLAIMED_RETURNED));
     });
 
     selected /= 100;
@@ -221,10 +226,10 @@ class ViewFeesFines extends React.Component {
     const open = selected > 0;
     const closed = values.length > 0;
     this.props.onChangeActions({
-      waive: open,
-      transfer: open,
-      refund: open || closed,
-      regularpayment: open,
+      waive: open && !someIsClaimReturnedItem,
+      transfer: open && !someIsClaimReturnedItem,
+      refund: (open || closed) && !someIsClaimReturnedItem,
+      regularpayment: open && !someIsClaimReturnedItem,
     });
   }
 
@@ -236,8 +241,11 @@ class ViewFeesFines extends React.Component {
     const values = Object.values(checkedAccounts);
 
     let selected = 0;
+    let someIsClaimReturnedItem = false;
     values.forEach((v) => {
       selected += (v.remaining * 100);
+      const loan = this.getLoan(v);
+      someIsClaimReturnedItem = (someIsClaimReturnedItem || (loan.item.status.name === itemStatuses.CLAIMED_RETURNED));
     });
     selected /= 100;
     this.props.onChangeSelected(parseFloat(selected).toFixed(2), values);
@@ -245,10 +253,10 @@ class ViewFeesFines extends React.Component {
     const open = selected > 0;
     const closed = values.length > 0;
     this.props.onChangeActions({
-      waive: open,
-      transfer: open,
-      refund: open || closed,
-      regularpayment: open,
+      waive: open && !someIsClaimReturnedItem,
+      transfer: open && !someIsClaimReturnedItem,
+      refund: (open || closed) && !someIsClaimReturnedItem,
+      regularpayment: open && !someIsClaimReturnedItem,
     });
 
     this.setState(({ allChecked }) => ({
