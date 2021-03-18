@@ -193,7 +193,7 @@ class ViewFeesFines extends React.Component {
       'callNumber': f => (f.callNumber ? f.callNumber : '-'),
       'dueDate': f => (f.dueDate ? this.formatDateTime(f.dueDate) : '-'),
       'returnedDate': f => (this.getLoan(f).returnDate ? this.formatDateTime(this.getLoan(f).returnDate) : '-'),
-      ' ': f => this.renderActions(f),
+      ' ': f => this.renderActions(f, this.getLoan(f)),
     };
   }
 
@@ -361,7 +361,7 @@ class ViewFeesFines extends React.Component {
    * return the ellipses menu, a <Dropdown>
    * @param a object: an account
    */
-  renderActions(a) {
+  renderActions(a, loan) {
     const { feeFineActions = [] } = this.props;
 
     // disable ellipses menu actions based on account-status
@@ -377,6 +377,7 @@ class ViewFeesFines extends React.Component {
 
     // disable ellipses menu actions based on permissions
     const buttonDisabled = !this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
+    const isClaimReturnedItem = (loan.item && loan.item.status.name === itemStatuses.CLAIMED_RETURNED);
 
     return (
       <Dropdown
@@ -384,19 +385,19 @@ class ViewFeesFines extends React.Component {
         usePortal
       >
         <DropdownMenu id="ellipsis-drop-down">
-          <this.MenuButton disabled={isDisabled.pay || buttonDisabled} account={a} action="pay">
+          <this.MenuButton disabled={isDisabled.pay || buttonDisabled || isClaimReturnedItem} account={a} action="pay">
             <FormattedMessage id="ui-users.accounts.history.button.pay" />
           </this.MenuButton>
-          <this.MenuButton disabled={isDisabled.waive || buttonDisabled} account={a} action="waive">
+          <this.MenuButton disabled={isDisabled.waive || buttonDisabled || isClaimReturnedItem} account={a} action="waive">
             <FormattedMessage id="ui-users.accounts.history.button.waive" />
           </this.MenuButton>
-          <this.MenuButton disabled={isDisabled.refund || buttonDisabled} account={a} action="refund">
+          <this.MenuButton disabled={isDisabled.refund || buttonDisabled || isClaimReturnedItem} account={a} action="refund">
             <FormattedMessage id="ui-users.accounts.history.button.refund" />
           </this.MenuButton>
-          <this.MenuButton disabled={isDisabled.transfer || buttonDisabled} account={a} action="transfer">
+          <this.MenuButton disabled={isDisabled.transfer || buttonDisabled || isClaimReturnedItem} account={a} action="transfer">
             <FormattedMessage id="ui-users.accounts.history.button.transfer" />
           </this.MenuButton>
-          <this.MenuButton disabled={isDisabled.error || buttonDisabled} account={a} action="cancel">
+          <this.MenuButton disabled={isDisabled.error || buttonDisabled || isClaimReturnedItem} account={a} action="cancel">
             <FormattedMessage id="ui-users.accounts.button.error" />
           </this.MenuButton>
           <hr />
