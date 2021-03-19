@@ -217,7 +217,7 @@ class ViewFeesFines extends React.Component {
     values.forEach((v) => {
       selected += (v.remaining * 100);
       const loan = this.getLoan(v);
-      someIsClaimReturnedItem = (someIsClaimReturnedItem || (loan.item && loan.item.status.name === itemStatuses.CLAIMED_RETURNED));
+      someIsClaimReturnedItem = (someIsClaimReturnedItem || (loan.item && loan.item.status && loan.item.status.name && loan.item.status.name === itemStatuses.CLAIMED_RETURNED));
     });
 
     selected /= 100;
@@ -245,7 +245,7 @@ class ViewFeesFines extends React.Component {
     values.forEach((v) => {
       selected += (v.remaining * 100);
       const loan = this.getLoan(v);
-      someIsClaimReturnedItem = (someIsClaimReturnedItem || (loan.item && loan.item.status.name === itemStatuses.CLAIMED_RETURNED));
+      someIsClaimReturnedItem = (someIsClaimReturnedItem || (loan.item && loan.item.status && loan.item.status.name && loan.item.status.name === itemStatuses.CLAIMED_RETURNED));
     });
     selected /= 100;
     this.props.onChangeSelected(parseFloat(selected).toFixed(2), values);
@@ -377,7 +377,7 @@ class ViewFeesFines extends React.Component {
 
     // disable ellipses menu actions based on permissions
     const buttonDisabled = !this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
-    const isClaimReturnedItem = (loan.item && loan.item.status.name === itemStatuses.CLAIMED_RETURNED);
+    const isClaimReturnedItem = (loan.item && loan.item.status && loan.item.status.name && loan.item.status.name === itemStatuses.CLAIMED_RETURNED);
 
     return (
       <Dropdown
