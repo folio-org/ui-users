@@ -186,10 +186,12 @@ class OpenLoansWithStaticData extends React.Component {
       amount += parseFloat(a.amount);
     });
 
-    return (amount > 0 && suspendedStatus.length > 0) ?
+    if (amount === 0) return '-';
+
+    return (suspendedStatus.length > 0) ?
       <FormattedMessage id="ui-users.loans.details.accounts.suspended" values={{ amount }} />
       :
-      (amount === 0) ? '-' : amount;
+      amount;
   };
 
   getContributorslist = (loan) => {
