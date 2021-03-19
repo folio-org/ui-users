@@ -6,9 +6,8 @@ import {
 import PropTypes from 'prop-types';
 import {
   injectIntl,
+  FormattedMessage,
 } from 'react-intl';
-
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 import { stripesShape } from '@folio/stripes/core';
 
@@ -181,21 +180,16 @@ class OpenLoansWithStaticData extends React.Component {
     const accounts = get(resources, ['loanAccount', 'records'], []);
     const accountsLoan = accounts.filter(a => a.loanId === loan.id) || [];
     const suspendedStatus = accountsLoan.filter(a => a?.paymentStatus?.name === refundClaimReturned.PAYMENT_STATUS) || [];
-    const suspendedMessage = (suspendedStatus.length > 0) ? 'Suspended' : '';
     let amount = 0;
 
     accountsLoan.forEach(a => {
       amount += parseFloat(a.amount);
     });
 
-    return (amount === 0) ? '-' :
-    <SafeHTMLMessage
-      id="ui-users.loans.details.accounts.suspended"
-      values={{
-        amount,
-        suspended: suspendedMessage
-      }}
-    />;
+    return (amount > 0 && suspendedStatus.length > 0) ?
+      <FormattedMessage id="ui-users.loans.details.accounts.suspended" values={{ amount }} />
+      :
+      (amount === 0) ? '-' : amount;
   };
 
   getContributorslist = (loan) => {
