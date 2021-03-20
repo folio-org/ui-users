@@ -211,26 +211,7 @@ class ViewFeesFines extends React.Component {
 
     const allChecked = _.size(checkedAccounts) === this.props.accounts.length;
     this.setState({ allChecked });
-    const values = Object.values(checkedAccounts);
-    let selected = 0;
-    let someIsClaimReturnedItem = false;
-    values.forEach((v) => {
-      selected += (v.remaining * 100);
-      const loan = this.getLoan(v);
-      someIsClaimReturnedItem = (someIsClaimReturnedItem || (loan.item && loan.item.status && loan.item.status.name && loan.item.status.name === itemStatuses.CLAIMED_RETURNED));
-    });
-
-    selected /= 100;
-    this.props.onChangeSelected(parseFloat(selected).toFixed(2), values);
-
-    const open = selected > 0;
-    const closed = values.length > 0;
-    this.props.onChangeActions({
-      waive: open && !someIsClaimReturnedItem,
-      transfer: open && !someIsClaimReturnedItem,
-      refund: ((open && !someIsClaimReturnedItem) || closed),
-      regularpayment: open && !someIsClaimReturnedItem,
-    });
+    this.updateToggle(checkedAccounts);
   }
 
   toggleAll(e) {
@@ -238,6 +219,14 @@ class ViewFeesFines extends React.Component {
     const checkedAccounts = (e.target.checked)
       ? accounts.reduce((memo, a) => (Object.assign(memo, { [a.id]: a })), {})
       : {};
+
+    this.updateToggle(checkedAccounts);
+    this.setState(({ allChecked }) => ({
+      allChecked: !allChecked
+    }));
+  }
+
+  updateToggle(checkedAccounts) {
     const values = Object.values(checkedAccounts);
 
     let selected = 0;
@@ -258,10 +247,6 @@ class ViewFeesFines extends React.Component {
       refund: ((open && !someIsClaimReturnedItem) || closed),
       regularpayment: open && !someIsClaimReturnedItem,
     });
-
-    this.setState(({ allChecked }) => ({
-      allChecked: !allChecked
-    }));
   }
 
   rowUpdater = (f) => {
