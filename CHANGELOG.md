@@ -1,6 +1,7 @@
 # Change history for ui-users
 
-## 6.0.0 (IN PROGRESS)
+## [6.0.0](https://github.com/folio-org/ui-users/tree/v6.0.0) (2021-03-18)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.9...v6.0.0)
 
 * Add create request, create fee/fine and create block options to the actions menu. Refs UIU-775.
 * Fix bug showing duplicated service points in add service point dialog. Fixes UIU-1892.
@@ -75,6 +76,57 @@
 * Fix eslint error in `LoanDetails.js`. Refs UIU-2068.
 * Improve fetching account data by making sure fetch happens only once. Fixes UIU-2063.
 * Adapt shortcut modal. Refs UIU-2076.
+* Update `@folio/plugin-find-user` for compatibility with `@folio/stripes` `v6`.
+
+## [5.0.9](https://github.com/folio-org/ui-users/tree/v5.0.9) (2020-12-10)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.8...v5.0.9)
+
+* Change `limit=100` to `limit=2000` across the board; patrons have more than 100 things. All. The. Time. Refs UIU-1987.
+
+## [5.0.8](https://github.com/folio-org/ui-users/tree/v5.0.8) (2020-11-25)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.7...v5.0.8)
+
+* Disable `Charge & pay` button. Refs UIU-1980.
+
+## [5.0.7](https://github.com/folio-org/ui-users/tree/v5.0.7) (2020-11-24)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.6...v5.0.7)
+
+* Fix empty payments select. Refs UIU-1975.
+
+## [5.0.6](https://github.com/folio-org/ui-users/tree/v5.0.6) (2020-11-17)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.5...v5.0.6)
+
+* New Fee/Fine page not listing Fee/Fine Types for selected Fee/Fine Owner. Refs UIU-1968.
+
+## [5.0.5](https://github.com/folio-org/ui-users/tree/v5.0.5) (2020-11-13)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.4...v5.0.5)
+
+* Qualify queries to `feefineactions`, `feefines` from "Open fee/fine" page. Refs UIU-1895.
+* Use more efficient queries for `accounts` records. Refs UIU-1913.
+* Fix filtering by tags. Fixes UITAG-34.
+* Show correct number of due date changes. Fixes UIU-1952.
+* Allow cancel fee/fine as error only if any 'actions' has not been applied. Refs UIU-1894.
+
+## [5.0.4](https://github.com/folio-org/ui-users/tree/v5.0.4) (2020-11-09)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.3...v5.0.4)
+
+* Fix bug showing duplicated service points in add service point dialog. Fixes UIU-1892.
+* On `Create Fee/fine` page `ConfirmationModal` shows again. Refs UIU-1933.
+* Fix incorrect display of the header for `Contributors` column in `Overdue loans report`. Fixes UIU-1937.
+* Manual patron block not fully going away after expired. Refs UIU-1943.
+* Manual patron block expiration date changing when patron block viewed. Refs UIU-1942.
+* Case-insensitive sort of filter options. Refs UIIN-1948.
+* Increment `@folio/stripes` to `^5.0.2`. Refs UIU-1932, UIU-1935.
+
+## [5.0.3](https://github.com/folio-org/ui-users/tree/v5.0.3) (2020-10-27)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.2...v5.0.3)
+
+* Add user's fees/fines permissions. Refs UIU-1918.
+
+## [5.0.2](https://github.com/folio-org/ui-users/tree/v5.0.2) (2020-10-27)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.1...v5.0.2)
+
+* Use correct `dateFormat` for `<Datepicker>`. Refs UIU-1896.
 
 ## [5.0.1](https://github.com/folio-org/ui-users/tree/v5.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.0...v5.0.1)
