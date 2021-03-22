@@ -25,7 +25,6 @@ import {
   SearchField,
   SRStatus,
   MenuSection,
-  Checkbox
 } from '@folio/stripes/components';
 
 import {
@@ -33,6 +32,7 @@ import {
   SearchAndSortNoResultsMessage as NoResultsMessage,
   ExpandFilterPaneButton,
   CollapseFilterPaneButton,
+  ColumnManager,
 } from '@folio/stripes/smart-components';
 
 import RefundsReportModal from '../../components/RefundsReportModal/RefundsReportModal';
@@ -43,11 +43,7 @@ import Filters from './Filters';
 import css from './UserSearch.css';
 
 const VISIBLE_COLUMNS_STORAGE_KEY = 'users-visible-columns';
-
-// Note: This also determines the order of the columns
-const ALL_COLUMNS = ['active', 'name', 'barcode', 'patronGroup', 'username', 'email'];
 const NON_TOGGLEABLE_COLUMNS = ['name'];
-const TOGGLEABLE_COLUMNS = ALL_COLUMNS.filter(column => !NON_TOGGLEABLE_COLUMNS.includes(column));
 
 function getFullName(user) {
   const lastName = get(user, ['personal', 'lastName'], '');
@@ -120,7 +116,6 @@ class UserSearch extends React.Component {
       selectedId: null,
       exportInProgress: false,
       searchPending: false,
-      visibleColumns: this.getInitialVisibleColumns(),
       showRefundsReportModal: false,
       refundExportInProgress: false,
     };
@@ -176,24 +171,6 @@ class UserSearch extends React.Component {
     };
   }
 
-  handleToggleColumn = ({ target: { value: key } }) => {
-    this.setState(({ visibleColumns }) => ({
-      visibleColumns: visibleColumns.includes(key) ? visibleColumns.filter(k => key !== k) : [...visibleColumns, key]
-    }), () => {
-      sessionStorage.setItem(VISIBLE_COLUMNS_STORAGE_KEY, JSON.stringify(this.state.visibleColumns));
-    });
-  }
-
-  getInitialVisibleColumns = () => {
-    const stored = sessionStorage.getItem(VISIBLE_COLUMNS_STORAGE_KEY);
-    return stored ? JSON.parse(stored) : TOGGLEABLE_COLUMNS;
-  }
-
-  getVisibleColumns = () => {
-    const visibleColumns = new Set([...this.state.visibleColumns, ...NON_TOGGLEABLE_COLUMNS]);
-    return ALL_COLUMNS.filter(key => visibleColumns.has(key));
-  }
-
   onSearchComplete = records => {
     const { intl } = this.props;
     const headerEl = this.resultsPaneTitleRef.current;
@@ -246,10 +223,8 @@ class UserSearch extends React.Component {
     });
   }
 
-  getActionMenu = ({ onToggle }) => {
+  getActionMenu = renderColumnsMenu => ({ onToggle }) => {
     const { intl } = this.props;
-    const { visibleColumns } = this.state;
-    const columnMapping = this.getColumnMapping();
 
     return (
       <>
@@ -312,19 +287,7 @@ class UserSearch extends React.Component {
             </Icon>
           </Button>
         </MenuSection>
-        <MenuSection label={intl.formatMessage({ id: 'ui-users.showColumns' })} id="columns-menu-section">
-          {TOGGLEABLE_COLUMNS.map(key => (
-            <Checkbox
-              key={key}
-              name={key}
-              label={columnMapping[key]}
-              id={`users-search-column-checkbox-${key}`}
-              checked={visibleColumns.includes(key)}
-              value={key}
-              onChange={this.handleToggleColumn}
-            />
-          ))}
-        </MenuSection>
+        {renderColumnsMenu}
       </>
     );
   }
@@ -492,8 +455,6 @@ class UserSearch extends React.Component {
       mutator: { resultOffset },
       stripes: { timezone },
     } = this.props;
-    const visibleColumns = this.getVisibleColumns();
-
     if (!searchableIndexes) {
       searchableIndexes = rawSearchableIndexes.map(x => (
         { value: x.value, label: this.props.intl.formatMessage({ id: x.label }) }
@@ -505,6 +466,7 @@ class UserSearch extends React.Component {
       ];
     }
 
+    const columnMapping = this.getColumnMapping();
     const users = get(resources, 'records.records', []);
     const owners = resources.owners.records;
     const patronGroups = (resources.patronGroups || {}).records || [];
@@ -638,40 +600,47 @@ class UserSearch extends React.Component {
                         </form>
                       </Pane>
                     }
-                    <Pane
-                      id="users-search-results-pane"
-                      firstMenu={this.renderResultsFirstMenu(activeFilters)}
-                      paneTitleRef={this.resultsPaneTitleRef}
-                      paneTitle={<FormattedMessage id="ui-users.userSearchResults" />}
-                      paneSub={resultPaneSub}
-                      defaultWidth="fill"
-                      actionMenu={this.getActionMenu}
-                      padContent={false}
-                      noOverflow
+                    <ColumnManager
+                      id={VISIBLE_COLUMNS_STORAGE_KEY}
+                      columnMapping={columnMapping}
+                      excludeKeys={NON_TOGGLEABLE_COLUMNS}
                     >
-                      <MultiColumnList
-                        id="list-users"
-                        visibleColumns={visibleColumns}
-                        rowUpdater={this.rowUpdater}
-                        contentData={users}
-                        totalCount={count}
-                        columnMapping={this.getColumnMapping()}
-                        formatter={resultsFormatter}
-                        rowFormatter={this.anchoredRowFormatter}
-                        onNeedMoreData={onNeedMoreData}
-                        onHeaderClick={onSort}
-                        sortOrder={sortOrder.replace(/^-/, '').replace(/,.*/, '')}
-                        sortDirection={sortOrder.startsWith('-') ? 'descending' : 'ascending'}
-                        isEmptyMessage={resultsStatusMessage}
-                        isSelected={this.isSelected}
-                        autosize
-                        virtualize
-                        hasMargin
-                        pageAmount={100}
-                        pagingType="click"
-                      />
-
-                    </Pane>
+                      {({ renderColumnsMenu, visibleColumns }) => (
+                        <Pane
+                          id="users-search-results-pane"
+                          firstMenu={this.renderResultsFirstMenu(activeFilters)}
+                          paneTitleRef={this.resultsPaneTitleRef}
+                          paneTitle={<FormattedMessage id="ui-users.userSearchResults" />}
+                          paneSub={resultPaneSub}
+                          defaultWidth="fill"
+                          actionMenu={this.getActionMenu(renderColumnsMenu)}
+                          padContent={false}
+                          noOverflow
+                        >
+                          <MultiColumnList
+                            id="list-users"
+                            visibleColumns={visibleColumns}
+                            rowUpdater={this.rowUpdater}
+                            contentData={users}
+                            totalCount={count}
+                            columnMapping={columnMapping}
+                            formatter={resultsFormatter}
+                            rowFormatter={this.anchoredRowFormatter}
+                            onNeedMoreData={onNeedMoreData}
+                            onHeaderClick={onSort}
+                            sortOrder={sortOrder.replace(/^-/, '').replace(/,.*/, '')}
+                            sortDirection={sortOrder.startsWith('-') ? 'descending' : 'ascending'}
+                            isEmptyMessage={resultsStatusMessage}
+                            isSelected={this.isSelected}
+                            autosize
+                            virtualize
+                            hasMargin
+                            pageAmount={100}
+                            pagingType="click"
+                          />
+                        </Pane>
+                      )}
+                    </ColumnManager>
                     { this.props.children }
                   </Paneset>
                 );
