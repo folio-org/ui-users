@@ -39,7 +39,7 @@ import RefundsReportModal from './refunds-report-modal';
   isRefundReportBtnVisible = isVisible('#export-refunds-report');
   isRefundsReportButtonPresent = isPresent('#export-refunds-report');
   columnCheckbox = function columnCheckbox(key) {
-    return new Interactor(`#users-search-column-checkbox-${key}`);
+    return new Interactor(`[data-test-column-manager-checkbox="${key}"]`);
   }
 }
 
