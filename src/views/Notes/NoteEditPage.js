@@ -17,26 +17,11 @@ export default class NoteEditRoute extends Component {
     }).isRequired,
   };
 
-  goToNoteView = () => {
-    const {
-      match,
-      history,
-      location,
-    } = this.props;
-
-    const { id } = match.params;
-    const noteViewUrl = `/users/notes/${id}`;
-
-    history.replace({
-      pathname: noteViewUrl,
-      state: location.state,
-    });
-  }
-
   render() {
     const {
       match,
       location: { state },
+      history,
     } = this.props;
 
     const noteId = match.params.id;
@@ -49,7 +34,7 @@ export default class NoteEditRoute extends Component {
         entityTypePluralizedTranslationKeys={{ user: 'ui-users.user.pluralized' }}
         paneHeaderAppIcon="users"
         domain="users"
-        navigateBack={this.goToNoteView}
+        navigateBack={history.goBack}
         noteId={noteId}
       />
     );
