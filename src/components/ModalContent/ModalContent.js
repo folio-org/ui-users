@@ -174,7 +174,10 @@ class ModalContent extends React.Component {
       resources
     } = this.props;
 
-    mutator.activeRecord.update({ userId: user.id });
+    if (user) {
+      mutator.activeRecord.update({ userId: user.id });
+    }
+
     const feeFines = [];
     _.get(resources, ['feefineshistory', 'records'], []).forEach((currentFeeFine) => {
       if (currentFeeFine.loanId === loanId && currentFeeFine.status.name === 'Open' &&
