@@ -1,0 +1,11 @@
+:root {
+  --top-bottom-indent: 5px;
+  --left-right-indent: 10px;
+}
+
+.pointerWrapper {
+  flex-grow: 1;
+  margin: calc(-1 * var(--top-bottom-indent)) calc(-1 * var(--left-right-indent));
+  padding: var(--top-bottom-indent) var(--left-right-indent);
+  cursor: pointer;
+}

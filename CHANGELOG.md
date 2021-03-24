@@ -5,6 +5,7 @@
 * Configure Jest/RTL. Refs UIU-2112.
 * Show user-readable message when user is not found. Fixes UIU-2081.
 * Fix Custom Fields error message by adding a missing permission. Fixes UIU-2104.
+* Add changes to indicate clickable for cursor. Refs UIU-2052.
 
 ## [6.0.0](https://github.com/folio-org/ui-users/tree/v6.0.0) (2021-03-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.9...v6.0.0)
