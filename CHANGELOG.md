@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## [6.0.1](IN PROGRESS)
+
+* Fix Note Edit Page - doesn't return to record page after click on `Save&Close`. Fixes UIU-2087.
+
 ## [6.0.0](https://github.com/folio-org/ui-users/tree/v6.0.0) (2021-03-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.9...v6.0.0)
 
