@@ -18,6 +18,7 @@ import ConditionsSettings from './ConditionsSettings';
 import LimitsSettings from './LimitsSettings';
 import DepartmentsSettings from './DepartmentsSettings';
 import BlockTemplates from './patronBlocks/BlockTemplates';
+import TransferCriteriaSettings from './TransferCriteriaSettings';
 
 const settingsGeneral = [
   {
@@ -100,6 +101,12 @@ const settingsFeefines = [
     label: <FormattedMessage id="ui-users.settings.transferAccounts" />,
     component: TransferAccountsSettings,
     perm: 'ui-users.settings.transfers',
+  },
+  {
+    route: 'transfer-criteria',
+    label: <FormattedMessage id="ui-users.settings.transferCriteria" />,
+    component: TransferCriteriaSettings,
+    perm: 'ui-plugin-bursar-export.bursar-exports.all',
   },
 ];
 
