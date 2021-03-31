@@ -406,7 +406,7 @@
     "accounts.actions.warning.waiveAction": "豁免",
     "accounts.error.exceeds": "付款金额超过所选金额",
     "accounts.warning.itemSelected": "{total, number} 单件已选。 {items, number} {items, plural, one {item} 其他 {items}} 无法 {action} 因为已关闭。",
-    "blocks.reason": "冻结原因",
+    "blocks.reason": "冻结原因：",
     "blocks.modal.header": "读者续借被冻结",
     "blocks.detailsButton": "查看冻结详情",
     "blocks.closeButton": "关闭",
@@ -861,9 +861,9 @@
     "shortcut.cut": "剪切",
     "shortcut.paste": "粘贴",
     "shortcut.find": "查找",
-    "blocks.modal.comment": "Comment",
-    "blocks.modal.overridePatronBlock.header": "Override patron block",
-    "blocks.overrideButton": "Override",
-    "loans.columns.feefineIncurred": "Fees/fines incurred",
-    "loans.details.fineIncurred": "Fees/fines incurred"
+    "blocks.modal.comment": "备注",
+    "blocks.modal.overridePatronBlock.header": "越权读者冻结",
+    "blocks.overrideButton": "越权",
+    "loans.columns.feefineIncurred": "产生的费用/罚款",
+    "loans.details.fineIncurred": "产生的费用/罚款"
 }
