@@ -810,8 +810,7 @@
     "karma-chrome-launcher": "3.1.0",
     "karma-coverage-istanbul-reporter": "3.0.3",
     "karma-junit-reporter": "2.0.1",
-    "karma-mocha": "2.0.1",
-    "karma-webpack": "5.0.0"
+    "karma-mocha": "2.0.1"
   },
   "dependencies": {
     "@folio/react-intl-safe-html": "^3.0.0",
@@ -845,7 +844,6 @@
     "karma-chrome-launcher": "3.1.0",
     "karma-coverage-istanbul-reporter": "3.0.3",
     "karma-junit-reporter": "2.0.1",
-    "karma-mocha": "2.0.1",
-    "karma-webpack": "5.0.0"
+    "karma-mocha": "2.0.1"
   }
 }
