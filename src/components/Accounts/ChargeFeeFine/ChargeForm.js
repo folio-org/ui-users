@@ -83,6 +83,9 @@ class ChargeForm extends React.Component {
     this.onChangeOwner = this.onChangeOwner.bind(this);
     this.query = 0;
     this.feeFineId = null;
+    this.state = {
+      hasResetted: false
+    };
   }
 
   componentDidUpdate(prevProps) {
@@ -104,6 +107,8 @@ class ChargeForm extends React.Component {
       form: { change },
     } = this.props;
 
+    this.setState({ hasResetted: false });
+
     if (e?.target?.value) {
       const feeFineId = e.target.value;
       await this.props.onChangeFeeFine(e);
@@ -118,6 +123,7 @@ class ChargeForm extends React.Component {
 
   onChangeOwner(e) {
     const { form: { change, reset } } = this.props;
+    this.setState({ hasResetted: false });
     reset();
     const ownerId = e.target.value;
 
@@ -136,19 +142,68 @@ class ChargeForm extends React.Component {
     history.push(`/users/${id}/accounts/open`);
   }
 
+  goToNewFeeFine = () => {
+    const {
+      history,
+      match: {
+        params: { id },
+      },
+      form: { reset },
+    } = this.props;
+
+    history.push(`/users/${id}/charge`);
+    reset();
+  }
+
+  handleChargePay = (hasPayAction = false) => {
+    const {
+      onSubmit,
+      handleSubmit,
+      form: {
+        change,
+        reset,
+      },
+      selectedLoan,
+    } = this.props;
+
+    change('pay', hasPayAction);
+    handleSubmit(data => onSubmit(data))
+      .then(() => this.setState({ hasResetted: true }))
+      .then(() => (selectedLoan ? this.goToNewFeeFine() : reset()));
+  }
+
+  getItem = () => {
+    const { selectedLoan: selectedLoanProp } = this.props;
+    const selectedLoan = selectedLoanProp || {};
+    let editable = !(selectedLoan.id);
+    const itemLoan = {
+      id: selectedLoan.itemId,
+      instance: (selectedLoan.item || {}).title,
+      barcode: (selectedLoan.item || {}).barcode,
+      itemStatus: ((selectedLoan.item || {}).status || {}).name,
+      callNumber: (selectedLoan.item || {}).callNumber,
+      location: selectedLoan?.item?.effectiveLocation?.name,
+      type: ((selectedLoan.item || {}).materialType || {}).name
+    };
+
+    let item = (editable) ? this.props.item : itemLoan;
+
+    if (this.state.hasResetted) {
+      item = {};
+      editable = true;
+    }
+
+    return { item, editable };
+  }
+
   render() {
     const {
       user,
-      selectedLoan: selectedLoanProp,
-      onSubmit,
       handleSubmit,
       initialValues,
       feeFineTypeOptions,
       form,
-      form : {
-        getState,
-        change,
-      },
+      form : { getState },
       submitting,
       pristine,
       isPending,
@@ -162,19 +217,7 @@ class ChargeForm extends React.Component {
         notify,
       }
     } = getState();
-
-    const selectedLoan = selectedLoanProp || {};
-    const editable = !(selectedLoan.id);
-    const itemLoan = {
-      id: selectedLoan.itemId,
-      instance: (selectedLoan.item || {}).title,
-      barcode: (selectedLoan.item || {}).barcode,
-      itemStatus: ((selectedLoan.item || {}).status || {}).name,
-      callNumber: (selectedLoan.item || {}).callNumber,
-      location: selectedLoan?.item?.effectiveLocation?.name,
-      type: ((selectedLoan.item || {}).materialType || {}).name
-    };
-    const item = (editable) ? this.props.item : itemLoan;
+    const { item, editable } = this.getItem();
     const feefineList = [];
     const ownerOptions = [];
 
@@ -208,10 +251,7 @@ class ChargeForm extends React.Component {
         <Button
           id="chargeAndPay"
           disabled={pristine || submitting || !valid}
-          onClick={() => {
-            change('pay', true);
-            handleSubmit(data => onSubmit(data));
-          }}
+          onClick={() => this.handleChargePay(true)}
           marginBottom0
         >
           <FormattedMessage id="ui-users.charge.Pay" />
@@ -219,10 +259,7 @@ class ChargeForm extends React.Component {
         <Button
           id="chargeOnly"
           disabled={pristine || submitting || !valid}
-          onClick={() => {
-            change('pay', false);
-            handleSubmit(data => onSubmit(data));
-          }}
+          onClick={() => this.handleChargePay(false)}
           marginBottom0
         >
           <FormattedMessage id="ui-users.charge.onlyCharge" />

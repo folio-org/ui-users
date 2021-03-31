@@ -138,6 +138,15 @@ describe('Charge and pay fee/fine', () => {
                   expect(chargeFeeFine.callout.successCalloutIsPresent).to.be.true;
                 });
 
+                it('should close payment modal', () => {
+                  expect(chargeFeeFine.paymentModal.isPresent).to.be.false;
+                });
+
+                it('should reset form values (fee/fine type and amount)', () => {
+                  expect(chargeFeeFine.typeSelect.value).to.equal('');
+                  expect(chargeFeeFine.amountField.value).to.equal('');
+                });
+
                 describe('visit created Fee/Fine details page', () => {
                   beforeEach(function () {
                     visit(`/users/${user.id}/accounts/view/${account.id}`);

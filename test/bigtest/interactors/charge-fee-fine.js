@@ -65,6 +65,8 @@ export default @interactor class ChargeFeeFineInteractor {
   clickSubmitChargeAndPay = clickable('#chargeAndPay');
   chargeAndPayButtonIsDisabled = is('#payment-modal #chargeAndPay[disabled]');
   submitChargeAndPay = new ButtonInteractor('#chargeAndPay');
+  isDisabledChargeButton = is('#chargeOnly[disabled]');
+  isDisabledChargeAndPayButton = is('#chargeAndPay[disabled]');
   clickSubmitCharge = clickable('#chargeOnly');
   confirmationModal = new ConfirmationModalInteractor();
   paymentModal = new ModalInteractor('#payment-modal');

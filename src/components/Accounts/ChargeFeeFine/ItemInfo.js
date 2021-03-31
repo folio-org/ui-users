@@ -62,6 +62,7 @@ class ItemInfo extends React.Component {
                   placeholder={placeholder}
                   disabled={!this.props.editable}
                   onChange={this.onChangeSelectItem}
+                  value={barcode}
                 />
               )}
             </FormattedMessage>

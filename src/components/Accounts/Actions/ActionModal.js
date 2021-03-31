@@ -6,7 +6,6 @@ import { Field } from 'react-final-form';
 import setFieldData from 'final-form-set-field-data';
 
 import stripesFinalForm from '@folio/stripes/final-form';
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import {
   Row,
   Col,
@@ -99,7 +98,7 @@ class ActionModal extends React.Component {
       : formatMessage({ id: `ui-users.accounts.${action}.summary.fully` });
 
     return (
-      <SafeHTMLMessage
+      <FormattedMessage
         id="ui-users.accounts.summary"
         values={{
           count: accounts.length,
