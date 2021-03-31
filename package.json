@@ -840,6 +840,12 @@
     "@folio/plugin-find-user": "^5.0.0"
   },
   "resolutions": {
-    "moment": "~2.24.0"
+    "moment": "~2.24.0",
+    "karma": "6.3.1",
+    "karma-chrome-launcher": "3.1.0",
+    "karma-coverage-istanbul-reporter": "3.0.3",
+    "karma-junit-reporter": "2.0.1",
+    "karma-mocha": "2.0.1",
+    "karma-webpack": "5.0.0"
   }
 }
