@@ -35,7 +35,7 @@ const commands = [
   {
     name: 'openShortcutModal',
     label: (<FormattedMessage id="ui-users.shortcut.openShortcutModal" />),
-    shortcut: 'mod+shift+7',
+    shortcut: 'mod+alt+k',
   }
 ];
 
