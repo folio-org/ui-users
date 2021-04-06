@@ -667,7 +667,7 @@
     "permission.reset.password": "사용자 : 비밀번호 생성 / 재설정",
     "errors.proxies.duplicateUserMessage": "중복 프록시가 입력되었습니다.",
     "errors.sponsors.duplicateUserMessage": "중복 스폰서가 입력되었습니다.",
-    "settings.limits.validation.message": "공백이거나 {min, number} 에서 {max, number} 의 숫자 여야합니다.",
+    "settings.limits.validation.message": "공백이거나 {min} 에서 {max, number} 의 숫자 여야합니다.",
     "blocks.form.label.requests": "요청",
     "information.preferredName": "선호하는 이름",
     "contact.contactInfo": "연락처 정보",
