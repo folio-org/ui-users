@@ -56,12 +56,12 @@ class Actions extends React.Component {
     waives: {
       type: 'okapi',
       records: 'waivers',
-      path: 'waives',
+      path: `waives?limit=${MAX_RECORDS}`,
     },
     refunds: {
       type: 'okapi',
       records: 'refunds',
-      path: 'refunds',
+      path: `refunds?limit=${MAX_RECORDS}`,
     },
     owners: {
       type: 'okapi',
@@ -76,7 +76,7 @@ class Actions extends React.Component {
     transfers: {
       type: 'okapi',
       records: 'transfers',
-      path: 'transfers?limit=2000',
+      path: `transfers?limit=${MAX_RECORDS}`,
     },
     curUserServicePoint: {
       type: 'okapi',
