@@ -1,11 +1,11 @@
 import stripesComponentsTranslations from '@folio/stripes-components/translations/stripes-components/en';
 import stripesCoreTranslations from '@folio/stripes-core/translations/stripes-core/en';
 
-import translations from '../../../translations/ui-circulation/en';
+import translations from '../../../translations/ui-users/en';
 
 const translationsProperties = [
   {
-    prefix: 'ui-circulation',
+    prefix: 'ui-users',
     translations,
   },
   {
