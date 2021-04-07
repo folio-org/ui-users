@@ -63,6 +63,7 @@ import RequestFeeFineBlockButtons from '../../components/RequestFeeFineBlockButt
 import { departmentsShape } from '../../shapes';
 
 import ExportFeesFinesReportButton from './components';
+import ErrorPane from '../../components/ErrorPane';
 
 class UserDetail extends React.Component {
   static propTypes = {
@@ -407,6 +408,10 @@ class UserDetail extends React.Component {
     });
   }
 
+  userNotFound = () => {
+    return this.props.resources?.selUser?.failed?.httpStatus === 404;
+  }
+
   render() {
     const {
       resources,
@@ -458,6 +463,20 @@ class UserDetail extends React.Component {
     const userDepartments = (user?.departments || [])
       .map(departmentId => departments.find(({ id }) => id === departmentId)?.name);
     const accounts = resources?.accounts;
+
+    if (this.userNotFound()) {
+      return (
+        <ErrorPane
+          id="pane-user-not-found"
+          defaultWidth={paneWidth}
+          paneTitle={<FormattedMessage id="ui-users.information.userDetails" />}
+          dismissible
+          onClose={this.onClose}
+        >
+          <FormattedMessage id="ui-users.errors.userNotFound" />
+        </ErrorPane>
+      );
+    }
 
     if (!user) {
       return (
