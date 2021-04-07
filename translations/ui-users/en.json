@@ -326,6 +326,7 @@
   "errors.sponsors.duplicateUserMessage": "Duplicate sponsor has been entered.",
   "errors.reviewBeforeRenewal": "{message} Please review {policyName} before retrying renewal.",
   "errors.loanNotRenewedReason": "Loan cannot be renewed because: {message}.",
+  "errors.userNotFound": "User not found",
   "hide": "Hide",
   "show": "Show",
   "active": "Active",

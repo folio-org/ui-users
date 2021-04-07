@@ -667,7 +667,7 @@
     "permission.reset.password": "Użytkownicy: Tworzenie/resetowanie hasła",
     "errors.proxies.duplicateUserMessage": "Wprowadzono podwójne pełnomocnictwo.",
     "errors.sponsors.duplicateUserMessage": "Podwójnie wprowadzono podopiecznego.",
-    "settings.limits.validation.message": "Musi być puste lub liczbą z zakresu od {min, liczba} do {max., liczba}",
+    "settings.limits.validation.message": "Musi być puste lub liczbą z zakresu od {min} do {max, number}",
     "blocks.form.label.requests": "Zamówienia",
     "information.preferredName": "Preferowane imię",
     "contact.contactInfo": "Informacje kontaktowe",
