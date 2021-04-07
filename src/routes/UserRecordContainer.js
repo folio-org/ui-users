@@ -25,6 +25,7 @@ class UserRecordContainer extends React.Component {
         const { path } = action.meta;
         return refresh || (path && path.match(/link/));
       },
+      throwErrors: false,
     },
     hasManualPatronBlocks: {
       type: 'okapi',
