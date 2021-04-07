@@ -343,7 +343,7 @@
     "permissions.emptyField": "Bitte ausfüllen, um fortzufahren",
     "status": "Status",
     "accounts.outstandingBalance": "Outstanding Balance: ",
-    "accounts.header": "Gebührendetails - {userName} ({PatronGruppe})",
+    "accounts.header": "Gebührendetails - {userName} ({patronGroup})",
     "owners.error": "Error",
     "owners.warning": "Warning: Overdue fines/lost item fees will not be collected without a service point",
     "feefines.singular": "Fee/Fine Type",
