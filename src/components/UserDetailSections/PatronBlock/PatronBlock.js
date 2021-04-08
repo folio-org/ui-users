@@ -20,6 +20,8 @@ import { stripesConnect } from '@folio/stripes/core';
 
 import { calculateSortParams } from '../../util';
 
+import css from './PatronBlock.css';
+
 class PatronBlock extends React.Component {
   static manifest = Object.freeze({
     manualPatronBlocks: {
@@ -158,9 +160,23 @@ class PatronBlock extends React.Component {
       },
     } = this.props;
 
+    const pointerWrapper = (content, isManual) => (
+      isManual
+        ? <div className={css.pointerWrapper}>{content}</div>
+        : content
+    );
+
     return {
-      'Type': f => f?.type ?? <FormattedMessage id="ui-users.blocks.columns.automated.type" />,
-      'Display description': f => f.desc || f.message,
+      'Type': f => {
+        const type = f?.type ?? <FormattedMessage id="ui-users.blocks.columns.automated.type" />;
+
+        return pointerWrapper(type, f?.type);
+      },
+      'Display description': f => {
+        const description = f.desc || f.message;
+
+        return pointerWrapper(description, f?.type);
+      },
       'Blocked actions': f => {
         const blockedActions = [];
 
@@ -176,7 +192,7 @@ class PatronBlock extends React.Component {
           blockedActions.push([formatMessage({ id: 'ui-users.blocks.columns.requests' })]);
         }
 
-        return blockedActions.join(', ');
+        return pointerWrapper(blockedActions.join(', '), f?.type);
       }
     };
   }
