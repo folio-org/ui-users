@@ -3,6 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
 import { hot } from 'react-hot-loader';
+import { getFirstFocusable } from '@folio/stripes-components/util/getFocusableElements';
 
 import { AppContextMenu, Route, Switch, IfPermission } from '@folio/stripes/core';
 import {
@@ -26,6 +27,18 @@ import {
   NoteEditPage
 } from './views';
 import KeyboardShortcutsModal from './components/KeyboardShortcutsModal';
+import { PatronBlockMessage } from './components/PatronBlock';
+
+const modifiedCommands = [...commands,
+  {
+    name: 'nextPane',
+    shortcut: 'shift + pagedown'
+  },
+  {
+    name: 'previousPane',
+    shortcut: 'shift + pageup'
+  },
+];
 
 class UsersRouting extends React.Component {
   static propTypes = {
@@ -108,11 +121,73 @@ class UsersRouting extends React.Component {
     }
   }
 
+  focusNextPane = () => {
+    const panesets = document.querySelectorAll('[class^="paneset-"]');
+    let activePS;
+    let candidatePane;
+    panesets.forEach((ps) => {
+      if (ps.contains(document.activeElement)) {
+        activePS = ps;
+      }
+    });
+    const panes = activePS.querySelectorAll('[class^="pane-"]');
+    panes.forEach((p, i) => {
+      if (p.contains(document.activeElement)) {
+        if (i === panes.length - 1) {
+          candidatePane = panes[0];
+        } else {
+          candidatePane = panes[i + 1];
+        }
+      }
+    });
+    const content = candidatePane.querySelector('[class^="paneContent-"]');
+    let elem = getFirstFocusable(content);
+    if (!elem) {
+      elem = candidatePane.querySelector('[class^="paneHeader-"]');
+    }
+    elem.focus();
+  }
+
+  focusPrevPane = () => {
+    const panesets = document.querySelectorAll('[class^="paneset-"]');
+    let activePS;
+    let candidatePane;
+    panesets.forEach((ps) => {
+      if (ps.contains(document.activeElement)) {
+        activePS = ps;
+      }
+    });
+    const panes = activePS.querySelectorAll('[class^="pane-"]');
+    panes.forEach((p, i) => {
+      if (p.contains(document.activeElement)) {
+        if (i === 0) {
+          candidatePane = panes[panes.length - 1];
+        } else {
+          candidatePane = panes[i - 1];
+        }
+      }
+    });
+    const content = candidatePane.querySelector('[class^="paneContent-"]');
+    let elem = getFirstFocusable(content);
+    if (!elem) {
+      elem = candidatePane.querySelector('[class^="paneHeader-"]');
+    }
+    elem.focus();
+  }
+
   shortcuts = [
     {
       name: 'search',
       handler: this.focusSearchField
     },
+    {
+      name: 'nextPane',
+      handler: this.focusNextPane
+    },
+    {
+      name: 'previousPane',
+      handler: this.focusPrevPane
+    }
   ];
 
   checkScope = () => {
@@ -167,7 +242,7 @@ class UsersRouting extends React.Component {
             </NavList>
           )}
         </AppContextMenu>
-        <CommandList commands={commands}>
+        <CommandList commands={modifiedCommands}>
           <HasCommand
             commands={this.shortcuts}
             isWithinScope={this.checkScope}
@@ -228,7 +303,7 @@ class UsersRouting extends React.Component {
           <KeyboardShortcutsModal
             open
             onClose={() => { this.changeKeyboardShortcutsModal(false); }}
-            allCommands={commands.concat(commandsGeneral)}
+            allCommands={modifiedCommands.concat(commandsGeneral)}
           />
         )}
       </ >
