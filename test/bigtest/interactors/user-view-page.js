@@ -63,11 +63,16 @@ import proxyItemCSS from '../../../src/components/ProxyGroup/ProxyItem/ProxyItem
   actionMenuEditUserButton = scoped('[data-test-actions-menu-edit]');
   actionMenuExportFeeFineReport = scoped('[data-test-export-fee-fine-report]');
   actionMenuExportFeeFineReportButton = scoped('[data-test-export-fee-fine-report]', ButtonInteractor);
+  userNotFoundPanePresent = isPresent('#pane-user-not-found-content');
 
   callout = new CalloutInteractor();
 
   whenLoaded() {
     return this.when(() => this.isPresent).timeout(5000);
+  }
+
+  whenNotFoundPaneLoaded() {
+    return this.when(() => this.userNotFoundPanePresent);
   }
 }
 

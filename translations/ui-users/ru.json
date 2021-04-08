@@ -667,7 +667,7 @@
     "permission.reset.password": "Пользователи: Создавать/сбрасывать пароль",
     "errors.proxies.duplicateUserMessage": "Введён дубликат прокси.",
     "errors.sponsors.duplicateUserMessage": "Введён дубликат спонсора.",
-    "settings.limits.validation.message": "Должно быть пустым или числом от {min, number} до {max, number}",
+    "settings.limits.validation.message": "Должно быть пустым или числом от {min} до {max, number}",
     "blocks.form.label.requests": "Запросы",
     "information.preferredName": "Предпочитаемое имя",
     "contact.contactInfo": "Контактная информация",
