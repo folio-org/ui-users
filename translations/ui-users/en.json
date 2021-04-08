@@ -854,6 +854,8 @@
   "permission.settings.departments.all": "Settings (Users): Create, edit, view, and delete departments",
   "permission.overridePatronBlock":"User: Can override patron blocks",
   "permission.overrideItemBlock":"User: Can override item blocks",
+  "permission.cashDrawerReport":"Users: Create and download Cash drawer reconciliation report",
+  "permission.financialTransactionReport":"Users: Create and download Financial transaction detail report",
   "bulkClaimReturned.item.title": "Title",
   "bulkClaimReturned.preConfirm": "Confirm claim returned",
   "bulkClaimReturned.postConfirm": "Claim returned confirmation",
