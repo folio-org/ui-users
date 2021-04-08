@@ -1,7 +1,9 @@
 # Change history for ui-users
 
-## (6.1.0) IN PROGRESS
+## 6.1.0 (IN PROGRESS)
 
+* Configure Jest/RTL. Refs UIU-2112.
+* Show user-readable message when user is not found. Fixes UIU-2081.
 * Move Tenant/Bursar exports to Users/Transfer criteria. Refs UIU-2098.
 
 ## [6.0.0](https://github.com/folio-org/ui-users/tree/v6.0.0) (2021-03-18)
