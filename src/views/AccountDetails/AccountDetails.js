@@ -600,8 +600,11 @@ class AccountDetails extends React.Component {
                 }
               />
             </Col>
-            <Col xs={1.5}>
-              {(loanId !== '0' && user.id === account.userId) ?
+            <Col
+              data-test-loan-details
+              xs={1.5}
+            >
+              {(loanId && user.id === account.userId) ?
                 <KeyValue
                   label={<FormattedMessage id="ui-users.details.label.loanDetails" />}
                   value={(
