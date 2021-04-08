@@ -772,6 +772,22 @@
           "circulation.override-item-not-loanable-block"
         ],
         "visible": true
+      },
+      {
+        "permissionName": "ui-users.cashDrawerReport",
+        "displayName": "Users: Create and download Cash drawer reconciliation report",
+        "subPermissions": [
+          "feefine-reports.cash-drawer-reconciliation.post"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.financialTransactionReport",
+        "displayName": "Users: Create and download Financial transaction detail report",
+        "subPermissions": [
+          "feefine-reports.financial-transactions-detail.post"
+        ],
+        "visible": true
       }
     ]
   },
