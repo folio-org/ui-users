@@ -81,6 +81,7 @@
 * Fix eslint error in `LoanDetails.js`. Refs UIU-2068.
 * Improve fetching account data by making sure fetch happens only once. Fixes UIU-2063.
 * Update `@folio/plugin-find-user` for compatibility with `@folio/stripes` `v6`.
+* Fix behavior of Confirm button when `Mark as missing` option is selected in `Resolve claim` menu. Fixes UIU-2077.
 
 ## [5.0.9](https://github.com/folio-org/ui-users/tree/v5.0.9) (2020-12-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.8...v5.0.9)
