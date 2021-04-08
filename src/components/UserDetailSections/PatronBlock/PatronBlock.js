@@ -22,6 +22,12 @@ import { calculateSortParams } from '../../util';
 
 import css from './PatronBlock.css';
 
+const PATRON_BLOCKS_COLUMNS = {
+  type: 'type',
+  displayDescription: 'displayDescription',
+  blockedActions: 'blockedActions',
+};
+
 class PatronBlock extends React.Component {
   static manifest = Object.freeze({
     manualPatronBlocks: {
@@ -167,17 +173,17 @@ class PatronBlock extends React.Component {
     );
 
     return {
-      'Type': f => {
+      [PATRON_BLOCKS_COLUMNS.type]: f => {
         const type = f?.type ?? <FormattedMessage id="ui-users.blocks.columns.automated.type" />;
 
         return pointerWrapper(type, f?.type);
       },
-      'Display description': f => {
+      [PATRON_BLOCKS_COLUMNS.displayDescription]: f => {
         const description = f.desc || f.message;
 
         return pointerWrapper(description, f?.type);
       },
-      'Blocked actions': f => {
+      [PATRON_BLOCKS_COLUMNS.blockedActions]: f => {
         const blockedActions = [];
 
         if (f.borrowing || f.blockBorrowing) {
@@ -197,6 +203,24 @@ class PatronBlock extends React.Component {
     };
   }
 
+  columnMapping = {
+    [PATRON_BLOCKS_COLUMNS.type]: <FormattedMessage id="ui-users.blocks.columns.type" />,
+    [PATRON_BLOCKS_COLUMNS.displayDescription]: <FormattedMessage id="ui-users.blocks.columns.desc" />,
+    [PATRON_BLOCKS_COLUMNS.blockedActions]: <FormattedMessage id="ui-users.blocks.columns.blocked" />,
+  };
+
+  columnWidths = {
+    [PATRON_BLOCKS_COLUMNS.type]: '100px',
+    [PATRON_BLOCKS_COLUMNS.displayDescription]: '350px',
+    [PATRON_BLOCKS_COLUMNS.blockedActions]: '250px',
+  };
+
+  visibleColumns = [
+    PATRON_BLOCKS_COLUMNS.type,
+    PATRON_BLOCKS_COLUMNS.displayDescription,
+    PATRON_BLOCKS_COLUMNS.blockedActions,
+  ];
+
   render() {
     const {
       expanded,
@@ -212,11 +236,6 @@ class PatronBlock extends React.Component {
     } = this.state;
     let contentData = patronBlocks.filter(p => moment(moment(p.expirationDate).endOf('day')).isSameOrAfter(moment().endOf('day')));
     contentData = _.orderBy(contentData, ['metadata.createdDate'], ['desc']);
-    const visibleColumns = [
-      'Type',
-      'Display description',
-      'Blocked actions',
-    ];
 
     const buttonDisabled = this.props.stripes.hasPerm('ui-users.patron_blocks');
     const displayWhenOpen =
@@ -229,16 +248,13 @@ class PatronBlock extends React.Component {
         interactive={false}
         contentData={contentData}
         formatter={this.getPatronFormatter()}
-        visibleColumns={visibleColumns}
+        visibleColumns={this.visibleColumns}
         onHeaderClick={this.onSort}
         sortOrder={sortOrder[0]}
         sortDirection={`${sortDirection[0]}ending`}
         onRowClick={this.onRowClick}
-        columnWidths={{
-          'Type': '100px',
-          'Display description': '350px',
-          'Blocked actions': '250px'
-        }}
+        columnMapping={this.columnMapping}
+        columnWidths={this.columnWidths}
       />;
     const title =
       <Headline size="large" tag="h3">
