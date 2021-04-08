@@ -274,6 +274,32 @@ class UserSearch extends React.Component {
               <FormattedMessage id="ui-users.reports.claimReturned.label" />
             </Icon>
           </Button>
+          <IfPermission perm="ui-users.cashDrawerReport">
+            <Button
+              buttonStyle="dropdownItem"
+              id="cash-drawer-report"
+              onClick={() => {
+                onToggle();
+              }}
+            >
+              <Icon icon="download">
+                <FormattedMessage id="ui-users.reports.cashDrawer.label" />
+              </Icon>
+            </Button>
+          </IfPermission>
+          <IfPermission perm="ui-users.financialTransactionReport">
+            <Button
+              buttonStyle="dropdownItem"
+              id="financial-transaction-report"
+              onClick={() => {
+                onToggle();
+              }}
+            >
+              <Icon icon="download">
+                <FormattedMessage id="ui-users.reports.financialTransaction.label" />
+              </Icon>
+            </Button>
+          </IfPermission>
           <Button
             buttonStyle="dropdownItem"
             id="export-refunds-report"
