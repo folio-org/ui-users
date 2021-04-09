@@ -17,11 +17,21 @@ export default class NoteEditRoute extends Component {
     }).isRequired,
   };
 
+  navigateBack = () => {
+    const {
+      location: { state },
+      history,
+    } = this.props;
+
+    const path = state?.entityId ? `/users/preview/${state.entityId}` : '/users';
+
+    history.push(path);
+  }
+
   render() {
     const {
       match,
       location: { state },
-      history,
     } = this.props;
 
     const noteId = match.params.id;
@@ -34,7 +44,7 @@ export default class NoteEditRoute extends Component {
         entityTypePluralizedTranslationKeys={{ user: 'ui-users.user.pluralized' }}
         paneHeaderAppIcon="users"
         domain="users"
-        navigateBack={history.goBack}
+        navigateBack={this.navigateBack}
         noteId={noteId}
       />
     );
