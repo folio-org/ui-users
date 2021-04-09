@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## 6.0.2 (IN PROGRESS)
+
+* Close "New fee/fine" page after fee/fine created. Refs UIU-2117.
+
 ## [6.0.1](https://github.com/folio-org/ui-users/tree/v6.0.1) (2021-04-19)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.0.1)
 
