@@ -38,6 +38,8 @@ describe('Test Fee/Fine History', () => {
         expect(FeeFineHistoryInteractor.openFeesFines).to.string('open fees/fines');
         expect(FeeFineHistoryInteractor.closedFeesFines).to.string('1 closed fee/fine');
         expect(FeeFineHistoryInteractor.allFeesFines).to.string('View all fees/fines');
+        expect(FeeFineHistoryInteractor.refundedFeesFines).to.string('0 refunded fees/fines (Total: 0.00)');
+        expect(FeeFineHistoryInteractor.claimFeesFines).to.string('0 suspended claim returned fees/fines (Total: 0.00)');
       });
 
       describe('select open fees/fines', () => {
