@@ -218,6 +218,12 @@ class ChargeFeeFine extends React.Component {
     });
   }
 
+  goBack = () => {
+    const { history } = this.props;
+
+    history.goBack();
+  }
+
   onClosePayModal() {
     this.setState({
       pay: false,
@@ -400,12 +406,14 @@ class ChargeFeeFine extends React.Component {
       this.type.remaining = data.amount;
 
       return this.chargeAction(data)
-        .then(() => this.payAction(data));
+        .then(() => this.payAction(data))
+        .then(() => this.goBack());
     } else {
       delete data.pay;
 
       return this.chargeAction(data)
-        .then(() => this.showCalloutMessage(data));
+        .then(() => this.showCalloutMessage(data))
+        .then(() => this.goBack());
     }
   }
 
@@ -530,7 +538,7 @@ class ChargeFeeFine extends React.Component {
             initialValues={initialActionValues}
             open
             commentRequired={settings.paid}
-            onClose={this.onClosePayModal}
+            onClose={this.goBack}
             accounts={[this.type]}
             balance={this.type.amount}
             data={payments}
