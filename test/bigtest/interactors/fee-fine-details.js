@@ -56,6 +56,8 @@ import KeyValue from './KeyValue';
   overduePolicyClick = clickable('[data-test-overdue-policy] a');
   lostItemPolicy = scoped('[data-test-lost-item-policy] div', KeyValue);
   lostItemPolicyClick = clickable('[data-test-lost-item-policy] a');
+  loanDetails = scoped('[data-test-loan-details] div', KeyValue);
+  loanDetailsClick = clickable('[data-test-loan-details] a');
   instanceAndType = scoped('[data-test-instance] div', KeyValue);
   contributors = scoped('[data-test-contributors] div', KeyValue);
   payButton = new ButtonInteractor('#payAccountActionsHistory');

@@ -1,5 +1,15 @@
 # Change history for ui-users
 
+## 6.1.0 (IN PROGRESS)
+
+* Configure Jest/RTL. Refs UIU-2112.
+* Show user-readable message when user is not found. Fixes UIU-2081.
+* Fix Custom Fields error message by adding a missing permission. Fixes UIU-2104.
+* Add changes to indicate clickable for cursor. Refs UIU-2052.
+* Migrate from string notation to column mapping for PatronBlock. Refs UIU-2091.
+* Add Cash Drawer Reconciliaton report & Financial transactions detail report permissions to reports. Refs UIU-2088.
+* Add new fee/fine reports as options to User Actions drop-down. Refs UIU-2083.
+
 ## [6.0.0](https://github.com/folio-org/ui-users/tree/v6.0.0) (2021-03-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.9...v6.0.0)
 
@@ -76,6 +86,7 @@
 * Fix eslint error in `LoanDetails.js`. Refs UIU-2068.
 * Improve fetching account data by making sure fetch happens only once. Fixes UIU-2063.
 * Update `@folio/plugin-find-user` for compatibility with `@folio/stripes` `v6`.
+* Fix behavior of Confirm button when `Mark as missing` option is selected in `Resolve claim` menu. Fixes UIU-2077.
 
 ## [5.0.9](https://github.com/folio-org/ui-users/tree/v5.0.9) (2020-12-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.8...v5.0.9)
