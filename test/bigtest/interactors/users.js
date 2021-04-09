@@ -35,6 +35,8 @@ import RefundsReportModal from './refunds-report-modal';
   clickExportToCSV = clickable('#export-overdue-loan-report');
   exportBtnIsVisible = isVisible('#export-overdue-loan-report');
   isExportBtnPresent = isPresent('#export-overdue-loan-report');
+  isCashDrawerReportBtnPresent = isPresent('#cash-drawer-report');
+  isFinancialTransactionReportBtnPresent = isPresent('#financial-transaction-report');
   clickRefundsReportCSV = clickable('#export-refunds-report');
   isRefundReportBtnVisible = isVisible('#export-refunds-report');
   isRefundsReportButtonPresent = isPresent('#export-refunds-report');
