@@ -8,6 +8,7 @@ import {
   ModalFooter,
   MultiColumnList,
 } from '@folio/stripes/components';
+import { AppIcon } from '@folio/stripes/core';
 
 function KeyboardShortcutsModal(props) {
   const { onClose, allCommands } = props;
@@ -58,7 +59,7 @@ function KeyboardShortcutsModal(props) {
       dismissible
       footer={footer}
       id="keyboard-shortcuts-modal"
-      label={<FormattedMessage id="ui-users.appMenu.keyboardShortcuts" />}
+      label={<AppIcon app="users" size="small"><FormattedMessage id="ui-users.appMenu.keyboardShortcuts" /></AppIcon>}
       onClose={onClose}
       open
     >
