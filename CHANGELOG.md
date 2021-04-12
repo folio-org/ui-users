@@ -9,6 +9,7 @@
 * Migrate from string notation to column mapping for PatronBlock. Refs UIU-2091.
 * Add Cash Drawer Reconciliaton report & Financial transactions detail report permissions to reports. Refs UIU-2088.
 * Add new fee/fine reports as options to User Actions drop-down. Refs UIU-2083.
+* Fix Note Edit Page - doesn't return to record page after click on `Save&Close`. Fixes UIU-2087.
 
 ## [6.0.0](https://github.com/folio-org/ui-users/tree/v6.0.0) (2021-03-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.9...v6.0.0)
