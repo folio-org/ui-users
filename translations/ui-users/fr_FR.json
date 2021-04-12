@@ -865,5 +865,10 @@
     "blocks.modal.overridePatronBlock.header": "Remplacer le blocage utilisateur",
     "blocks.overrideButton": "Substituer",
     "loans.columns.feefineIncurred": "Frais / amendes encourus",
-    "loans.details.fineIncurred": "Frais / amendes encourus"
+    "loans.details.fineIncurred": "Frais / amendes encourus",
+    "errors.userNotFound": "Utilisateur non trouvé",
+    "permission.cashDrawerReport": "Users: Create and download Cash drawer reconciliation report",
+    "permission.financialTransactionReport": "Users: Create and download Financial transaction detail report",
+    "reports.cashDrawer.label": "Rapport de rapprochement de caisse (CSV, PDF)",
+    "reports.financialTransaction.label": "Rapport détaillé des transactions financières (CSV)"
 }
