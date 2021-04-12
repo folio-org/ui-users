@@ -865,5 +865,10 @@
     "blocks.modal.overridePatronBlock.header": "تخطي حظر المستفيد",
     "blocks.overrideButton": "تخطي",
     "loans.columns.feefineIncurred": "الرسوم/الغرامات المتكبدة",
-    "loans.details.fineIncurred": "الرسوم/الغرامات المتكبدة"
+    "loans.details.fineIncurred": "الرسوم/الغرامات المتكبدة",
+    "errors.userNotFound": "لم يتم العثور على المستخدم",
+    "permission.cashDrawerReport": "المستخدمون: أنشئ ونزّل تقرير تسوية درج النقدية",
+    "permission.financialTransactionReport": "المستخدمون: أنشئ ونزّل تقرير تفاصيل المعاملات المالية",
+    "reports.cashDrawer.label": "تقرير تسوية درج النقدية (CSV، PDF)",
+    "reports.financialTransaction.label": "تقرير تفاصيل المعاملات المالية (CSV)"
 }
