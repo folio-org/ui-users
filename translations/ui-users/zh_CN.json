@@ -865,5 +865,10 @@
     "blocks.modal.overridePatronBlock.header": "越权读者冻结",
     "blocks.overrideButton": "越权",
     "loans.columns.feefineIncurred": "产生的费用/罚款",
-    "loans.details.fineIncurred": "产生的费用/罚款"
+    "loans.details.fineIncurred": "产生的费用/罚款",
+    "errors.userNotFound": "User not found",
+    "permission.cashDrawerReport": "Users: Create and download Cash drawer reconciliation report",
+    "permission.financialTransactionReport": "Users: Create and download Financial transaction detail report",
+    "reports.cashDrawer.label": "Cash drawer reconciliation report (CSV, PDF)",
+    "reports.financialTransaction.label": "Financial transaction detail report (CSV)"
 }

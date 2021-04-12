@@ -12,6 +12,7 @@
   "shortcut.expandAll": "Expand all accordions",
   "shortcut.collapseAll": "Collapse all accordions",
   "shortcut.goToSearchFilter": "Go to Search & Filter pane",
+  "shortcut.openShortcutModal": "Open keyboard shortcuts modal",
   "shortcut.closeModal": "Close a modal or pop-up",
   "shortcut.copy": "Copy",
   "shortcut.cut": "Cut",
