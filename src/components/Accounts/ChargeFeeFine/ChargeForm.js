@@ -116,12 +116,11 @@ class ChargeForm extends React.Component {
     }
   }
 
-  onChangeOwner(e) {
+  onChangeOwner(ownerId) {
     const { form: { change, reset } } = this.props;
     reset();
-    const ownerId = e.target.value;
 
-    this.props.onChangeOwner(e);
+    this.props.onChangeOwner(ownerId);
     change('ownerId', ownerId);
   }
 
