@@ -12,6 +12,7 @@
 * Show claimed returned report only if user has necessary permission. Refs UIU-1884.
 * Fix Note Edit Page - doesn't return to record page after click on `Save&Close`. Fixes UIU-2087.
 * Fix Notify patron box behavior for New fee/fine when default patron notice is set. Refs UIU-2111.
+* Close "New fee/fine" page after fee/fine created. Refs UIU-2117.
 
 ## [6.0.0](https://github.com/folio-org/ui-users/tree/v6.0.0) (2021-03-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.9...v6.0.0)
@@ -88,7 +89,6 @@
 * Loan Details no longer displays Fines incurred. Refs UIU-2045.
 * Fix eslint error in `LoanDetails.js`. Refs UIU-2068.
 * Improve fetching account data by making sure fetch happens only once. Fixes UIU-2063.
-* Adapt shortcut modal. Refs UIU-2076.
 * Update `@folio/plugin-find-user` for compatibility with `@folio/stripes` `v6`.
 * Fix behavior of Confirm button when `Mark as missing` option is selected in `Resolve claim` menu. Fixes UIU-2077.
 
