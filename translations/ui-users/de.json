@@ -550,7 +550,7 @@
     "requests.defaultDeliveryAddress": "Default delivery address",
     "requests.deliveryYes": "Delivery - Yes",
     "requests.deliveryNo": "Delivery - No",
-    "requests.holdShelf": "Hold Shelf",
+    "requests.holdShelf": "Abholregal",
     "requests.delivery": "Delivery",
     "requests.holdShelfYes": "Hold shelf - Yes",
     "requests.holdShelfNo": "Hold shelf - No",
@@ -799,7 +799,7 @@
     "reports.refunds.actionTaken": "Action taken",
     "reports.refunds.modal.endDate": "End date",
     "information.recalculate.expirationDate": "Re-set",
-    "information.recalculate.modal.text": "Die Nutzungsberechtigung von Personen mit der Personengruppe {group} verfallen normalerweise nach {offset} Tagen. Möchten Sie das Ablaufdatum entsprechend ändern?",
+    "information.recalculate.modal.text": "Library accounts with patron group <b>{group}</b> expire in <b>{offset} days</b>. Do you want to set this user’s account to expire on <b>{date}</b>?",
     "information.recalculate.modal.label": "Set expiration date?",
     "information.recalculate.will.reactivate.user": "Person wird nach dem Speichern wieder aktiviert",
     "blocks.form.label.template": "Template name",
@@ -865,5 +865,10 @@
     "blocks.modal.overridePatronBlock.header": "Override patron block",
     "blocks.overrideButton": "Override",
     "loans.columns.feefineIncurred": "Fees/fines incurred",
-    "loans.details.fineIncurred": "Fees/fines incurred"
+    "loans.details.fineIncurred": "Fees/fines incurred",
+    "errors.userNotFound": "User not found",
+    "permission.cashDrawerReport": "Users: Create and download Cash drawer reconciliation report",
+    "permission.financialTransactionReport": "Users: Create and download Financial transaction detail report",
+    "reports.cashDrawer.label": "Cash drawer reconciliation report (CSV, PDF)",
+    "reports.financialTransaction.label": "Financial transaction detail report (CSV)"
 }

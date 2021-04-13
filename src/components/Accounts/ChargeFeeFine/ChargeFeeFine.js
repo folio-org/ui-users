@@ -241,8 +241,7 @@ class ChargeFeeFine extends React.Component {
     }
   }
 
-  onChangeOwner(e) {
-    const ownerId = e.target.value;
+  onChangeOwner(ownerId) {
     const {
       resources,
       mutator,
