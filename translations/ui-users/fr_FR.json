@@ -792,7 +792,7 @@
     "reports.refunds.refundReason": "Motif du remboursement",
     "reports.refunds.staffInfo": "Additional information for staff from refund 'action'",
     "reports.refunds.patronInfo": "Additional information for patron from refund 'action'",
-    "reports.refunds.itemBarcode": "Code-barres de l'article",
+    "reports.refunds.itemBarcode": "Code-barres de l'exemplaire",
     "reports.refunds.instance": "Instance",
     "reports.refunds.actionCompletionDate": "Date de fin de l'action",
     "reports.refunds.staffMemberName": "Nom du membre du personnel",
@@ -870,5 +870,6 @@
     "permission.cashDrawerReport": "Users: Create and download Cash drawer reconciliation report",
     "permission.financialTransactionReport": "Users: Create and download Financial transaction detail report",
     "reports.cashDrawer.label": "Rapport de rapprochement de caisse (CSV, PDF)",
-    "reports.financialTransaction.label": "Rapport détaillé des transactions financières (CSV)"
+    "reports.financialTransaction.label": "Rapport détaillé des transactions financières (CSV)",
+    "shortcut.openShortcutModal": "Ouvrir les raccourcis clavier modaux"
 }

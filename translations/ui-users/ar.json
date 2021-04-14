@@ -870,5 +870,6 @@
     "permission.cashDrawerReport": "المستخدمون: أنشئ ونزّل تقرير تسوية درج النقدية",
     "permission.financialTransactionReport": "المستخدمون: أنشئ ونزّل تقرير تفاصيل المعاملات المالية",
     "reports.cashDrawer.label": "تقرير تسوية درج النقدية (CSV، PDF)",
-    "reports.financialTransaction.label": "تقرير تفاصيل المعاملات المالية (CSV)"
+    "reports.financialTransaction.label": "تقرير تفاصيل المعاملات المالية (CSV)",
+    "shortcut.openShortcutModal": "فتح اختصارات لوحة المفاتيح"
 }
