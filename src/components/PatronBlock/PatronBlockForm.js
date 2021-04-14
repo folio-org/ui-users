@@ -350,7 +350,10 @@ class PatronBlockForm extends React.Component {
 export default stripesFinalForm({
   initialValuesEqual: (a, b) => _.isEqual(a, b),
   navigationCheck: true,
-  subscription: { values: true },
+  subscription: {
+    invalid: true,
+    values: true,
+  },
   mutators: { setFieldData },
   validate: showValidationErrors,
 })(PatronBlockForm);

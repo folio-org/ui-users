@@ -13,6 +13,7 @@
 * Fix Note Edit Page - doesn't return to record page after click on `Save&Close`. Fixes UIU-2087.
 * Fix Notify patron box behavior for New fee/fine when default patron notice is set. Refs UIU-2111.
 * Close "New fee/fine" page after fee/fine created. Refs UIU-2117.
+* Fix disabling "Save & close" button for Manual patron block. Refs UIU-2123.
 
 ## [6.0.0](https://github.com/folio-org/ui-users/tree/v6.0.0) (2021-03-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.9...v6.0.0)
