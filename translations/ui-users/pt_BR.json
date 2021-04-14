@@ -866,9 +866,10 @@
     "blocks.overrideButton": "Sobrescrever",
     "loans.columns.feefineIncurred": "Taxas/multas incorridas",
     "loans.details.fineIncurred": "Taxas/multas incorridas",
-    "errors.userNotFound": "User not found",
+    "errors.userNotFound": "Usuário não encontrado",
     "permission.cashDrawerReport": "Users: Create and download Cash drawer reconciliation report",
     "permission.financialTransactionReport": "Users: Create and download Financial transaction detail report",
     "reports.cashDrawer.label": "Cash drawer reconciliation report (CSV, PDF)",
-    "reports.financialTransaction.label": "Financial transaction detail report (CSV)"
+    "reports.financialTransaction.label": "Financial transaction detail report (CSV)",
+    "shortcut.openShortcutModal": "Abrir o modal de atalhos de teclado"
 }
