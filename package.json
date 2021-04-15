@@ -256,7 +256,7 @@
           "feefines.item.post",
           "feefines.item.put",
           "settings.users.enabled",
-          "feefine-reports.refund.get"
+          "feefine-reports.refund.post"
         ],
         "visible": true
       },
