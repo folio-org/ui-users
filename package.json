@@ -43,7 +43,7 @@
       "automated-patron-blocks": "0.1"
     },
     "optionalOkapiInterfaces": {
-      "circulation": "9.0",
+      "circulation": "9.0 10.0",
       "feesfines": "16.1",
       "notes": "2.0"
     },
