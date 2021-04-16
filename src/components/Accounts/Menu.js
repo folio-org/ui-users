@@ -22,7 +22,6 @@ const Menu = (props) => {
     showFilters,
     match: { params },
     filters,
-    balance,
     selected,
     resources,
     selectedAccounts,
@@ -32,10 +31,7 @@ const Menu = (props) => {
 
   let balanceOutstanding = 0;
   let balanceSuspended = 0;
-  if (balance === 0 && params.accountstatus === 'closed') {
-    balanceOutstanding = balance;
-    balanceSuspended = balance;
-  } else {
+  if (params.accountstatus !== 'closed') {
     const accounts = _.get(resources, ['feefineshistory', 'records'], []);
     accounts.forEach((a) => {
       if (a.paymentStatus.name === refundClaimReturned.PAYMENT_STATUS) {
@@ -76,30 +72,24 @@ const Menu = (props) => {
         <Col className={css.firstMenuItems}>
           <div id="outstanding-balance">
             <FormattedMessage
-              id="ui-users.accounts.outstanding"
-              values={{
-                amount: outstanding
-              }}
+              id="ui-users.accounts.outstanding.page"
+              values={{ amount: outstanding }}
             />
-            &nbsp; (
+            &nbsp;|&nbsp;
             <FormattedMessage
-              id="ui-users.accounts.suspended"
-              values={{
-                amountsuspended: suspended
-              }}
+              id="ui-users.accounts.suspended.page"
+              values={{ amount: suspended }}
             />
-            )
+            {showSelected &&
+            <span>
+              &nbsp;|&nbsp;
+              <FormattedMessage
+                id="ui-users.accounts.selected.balance"
+                values={{ amount: parseFloat(selected).toFixed(2) }}
+              />
+            </span>
+            }
           </div>
-        </Col>
-        <Col className={css.firstMenuItems}>
-          {showSelected &&
-            <FormattedMessage
-              id="ui-users.accounts.selected"
-              values={{
-                amount: parseFloat(selected).toFixed(2)
-              }}
-            />
-          }
         </Col>
       </Row>
     </div>);
@@ -172,7 +162,6 @@ Menu.propTypes = {
     hasPerm: PropTypes.func,
   }),
   showFilters: PropTypes.bool,
-  balance: PropTypes.number,
   selected: PropTypes.number,
   filters: PropTypes.object,
   actions: PropTypes.object,
