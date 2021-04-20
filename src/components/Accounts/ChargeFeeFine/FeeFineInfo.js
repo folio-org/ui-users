@@ -14,11 +14,27 @@ class FeeFineInfo extends React.Component {
   static propTypes = {
     feefineList: PropTypes.arrayOf(PropTypes.object),
     form: PropTypes.object.isRequired,
-    onChangeOwner: PropTypes.func,
+    initialValues: PropTypes.shape({
+      ownerId: PropTypes.string,
+    }).isRequired,
+    onChangeOwner: PropTypes.func.isRequired,
     ownerOptions: PropTypes.arrayOf(PropTypes.object),
     onChangeFeeFine: PropTypes.func,
     isPending: PropTypes.object,
   };
+
+  componentDidMount() {
+    const {
+      initialValues: {
+        ownerId,
+      },
+      onChangeOwner,
+    } = this.props;
+
+    if (ownerId) {
+      onChangeOwner(ownerId);
+    }
+  }
 
   constructor(props) {
     super(props);
@@ -68,7 +84,7 @@ class FeeFineInfo extends React.Component {
                           fullWidth
                           disabled={isPending.owners}
                           dataOptions={ownerOptions}
-                          onChange={onChangeOwner}
+                          onChange={(e) => onChangeOwner(e.target.value)}
                           placeholder={placeholder}
                         />
                       )}

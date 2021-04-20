@@ -9,6 +9,14 @@
 * Migrate from string notation to column mapping for PatronBlock. Refs UIU-2091.
 * Add Cash Drawer Reconciliaton report & Financial transactions detail report permissions to reports. Refs UIU-2088.
 * Add new fee/fine reports as options to User Actions drop-down. Refs UIU-2083.
+* Show claimed returned report only if user has necessary permission. Refs UIU-1884.
+* Fix Note Edit Page - doesn't return to record page after click on `Save&Close`. Fixes UIU-2087.
+* Fix Notify patron box behavior for New fee/fine when default patron notice is set. Refs UIU-2111.
+* Close "New fee/fine" page after fee/fine created. Refs UIU-2117.
+* Fix disabling "Save & close" button for Manual patron block. Refs UIU-2123.
+* Fix the possibility of create manual patron block with expiration date of today. Refs UIU-2122.
+* Fix permission error for "Refunds to Process Manually" report. Refs UIU-2126.
+* Also support `circulation` `10.0`. Refs UIU-2135.
 * Show the "Refunds to process manually" report conditionally based on permissions. Refs UIU-2125.
 
 ## [6.0.0](https://github.com/folio-org/ui-users/tree/v6.0.0) (2021-03-18)

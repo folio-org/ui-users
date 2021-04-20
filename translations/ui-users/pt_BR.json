@@ -667,7 +667,7 @@
     "permission.reset.password": "Usuários: Criar/redefinir senha",
     "errors.proxies.duplicateUserMessage": "Foi inserido um proxy duplicado.",
     "errors.sponsors.duplicateUserMessage": "Foi inserido um financiador duplicado.",
-    "settings.limits.validation.message": "Deve estar em branco ou um número de {min, number} a {max, number}",
+    "settings.limits.validation.message": "Deve estar em branco ou um número de {min} a {max, number}",
     "blocks.form.label.requests": "Requisições",
     "information.preferredName": "Nome preferido",
     "contact.contactInfo": "Informações de contato",
@@ -799,7 +799,7 @@
     "reports.refunds.actionTaken": "Ação realizada",
     "reports.refunds.modal.endDate": "Data final",
     "information.recalculate.expirationDate": "Recalcular",
-    "information.recalculate.modal.text": "Os usuários com grupo de usuário {group} geralmente expiram após {offset} dias. Deseja alterar a data de validade de acordo?",
+    "information.recalculate.modal.text": "Library accounts with patron group <b>{group}</b> expire in <b>{offset} days</b>. Do you want to set this user’s account to expire on <b>{date}</b>?",
     "information.recalculate.modal.label": "Recalcular a data de expiração?",
     "information.recalculate.will.reactivate.user": "O usuário irá reativar após salvar",
     "blocks.form.label.template": "Nome do modelo",
@@ -865,5 +865,11 @@
     "blocks.modal.overridePatronBlock.header": "Sobrescrever bloqueio de usuário",
     "blocks.overrideButton": "Sobrescrever",
     "loans.columns.feefineIncurred": "Taxas/multas incorridas",
-    "loans.details.fineIncurred": "Taxas/multas incorridas"
+    "loans.details.fineIncurred": "Taxas/multas incorridas",
+    "errors.userNotFound": "Usuário não encontrado",
+    "permission.cashDrawerReport": "Users: Create and download Cash drawer reconciliation report",
+    "permission.financialTransactionReport": "Users: Create and download Financial transaction detail report",
+    "reports.cashDrawer.label": "Cash drawer reconciliation report (CSV, PDF)",
+    "reports.financialTransaction.label": "Financial transaction detail report (CSV)",
+    "shortcut.openShortcutModal": "Abrir o modal de atalhos de teclado"
 }

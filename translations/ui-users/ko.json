@@ -865,5 +865,11 @@
     "blocks.modal.overridePatronBlock.header": "Override patron block",
     "blocks.overrideButton": "Override",
     "loans.columns.feefineIncurred": "Fees/fines incurred",
-    "loans.details.fineIncurred": "Fees/fines incurred"
+    "loans.details.fineIncurred": "Fees/fines incurred",
+    "errors.userNotFound": "User not found",
+    "permission.cashDrawerReport": "Users: Create and download Cash drawer reconciliation report",
+    "permission.financialTransactionReport": "Users: Create and download Financial transaction detail report",
+    "reports.cashDrawer.label": "Cash drawer reconciliation report (CSV, PDF)",
+    "reports.financialTransaction.label": "Financial transaction detail report (CSV)",
+    "shortcut.openShortcutModal": "Open keyboard shortcuts modal"
 }
