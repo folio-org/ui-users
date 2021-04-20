@@ -1,6 +1,7 @@
 # Change history for ui-users
 
-## 6.1.0 (IN PROGRESS)
+## [6.0.1](https://github.com/folio-org/ui-users/tree/v6.0.1) (2021-04-19)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.0.1)
 
 * Configure Jest/RTL. Refs UIU-2112.
 * Lock stripes-cli to ~2.1.1, and thus stripes-webpack to ~1.1.0. Refs UIU-2137.
