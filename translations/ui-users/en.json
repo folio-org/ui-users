@@ -857,6 +857,7 @@
   "permission.overrideItemBlock":"User: Can override item blocks",
   "permission.cashDrawerReport":"Users: Create and download Cash drawer reconciliation report",
   "permission.financialTransactionReport":"Users: Create and download Financial transaction detail report",
+  "permission.manualProcessRefundsReport":"Users: Create and download Refunds to process manually report",
   "bulkClaimReturned.item.title": "Title",
   "bulkClaimReturned.preConfirm": "Confirm claim returned",
   "bulkClaimReturned.postConfirm": "Claim returned confirmation",

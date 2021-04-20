@@ -94,6 +94,7 @@ class UserSearchContainer extends React.Component {
       type: 'okapi',
       records: 'owners',
       path: `owners?query=cql.allRecords=1&limit=${MAX_RECORDS}`,
+      permissionsRequired: 'owners.collection.get',
     },
     refundsReport: {
       type: 'okapi',
