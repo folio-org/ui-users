@@ -342,11 +342,13 @@ class UserDetail extends React.Component {
     if (showActionMenu) {
       return (
         <>
-          <RequestFeeFineBlockButtons
-            barcode={barcode}
-            onToggle={onToggle}
-            userId={this.props.match.params.id}
-          />
+          <IfInterface name="feesfines">
+            <RequestFeeFineBlockButtons
+              barcode={barcode}
+              onToggle={onToggle}
+              userId={this.props.match.params.id}
+            />
+          </IfInterface>
           <IfPermission perm="ui-users.edit">
             <Button
               buttonStyle="dropdownItem"
@@ -363,11 +365,13 @@ class UserDetail extends React.Component {
               </Icon>
             </Button>
           </IfPermission>
-          <ExportFeesFinesReportButton
-            feesFinesReportData={feesFinesReportData}
-            onToggle={onToggle}
-            callout={this.callout}
-          />
+          <IfInterface name="feesfines">
+            <ExportFeesFinesReportButton
+              feesFinesReportData={feesFinesReportData}
+              onToggle={onToggle}
+              callout={this.callout}
+            />
+          </IfInterface>
         </>
       );
     } else {
