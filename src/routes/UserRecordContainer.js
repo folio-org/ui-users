@@ -72,16 +72,19 @@ class UserRecordContainer extends React.Component {
       type: 'okapi',
       records: 'feefineactions',
       path: `feefineactions?query=(userId==:{id})&limit=${MAX_RECORDS}`,
+      permissionsRequired: 'feefineactions.collection.get',
     },
     accounts: {
       type: 'okapi',
       records: 'accounts',
       path: `accounts?query=(userId==:{id})&limit=${MAX_RECORDS}`,
+      permissionsRequired: 'accounts.collection.get',
     },
     loanRecords: {
       type: 'okapi',
       records: 'loans',
       path: 'circulation/loans?query=(userId==:{id})&limit=1000',
+      permissionsRequired: 'circulation.loans.collection.get',
     },
     uniquenessValidator: {
       type: 'okapi',
