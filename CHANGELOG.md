@@ -1,5 +1,12 @@
 # Change history for ui-users
 
+## [6.0.2](https://github.com/folio-org/ui-users/tree/v6.0.2) (2021-04-22)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.1...v6.0.2)
+
+* Close "New fee/fine" page after fee/fine created. Refs UIU-2117.
+* Fix the possibility of create manual patron block with expiration date of today. Refs UIU-2122.
+* Outstanding balance displays incorrectly on closed fee/fines pane. UIU-2085.
+
 ## [6.0.1](https://github.com/folio-org/ui-users/tree/v6.0.1) (2021-04-19)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.0.1)
 

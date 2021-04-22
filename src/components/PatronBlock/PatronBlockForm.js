@@ -51,7 +51,7 @@ const showValidationErrors = ({
     errors.renewals = patronBlockError;
     errors.requests = patronBlockError;
   }
-  if (moment(moment(expirationDate).endOf('day')).isBefore(moment().endOf('day'))) {
+  if (expirationDate && moment(moment(expirationDate).endOf('day')).isBefore(moment().endOf('day').add(1, 'days'))) {
     errors.expirationDate = <FormattedMessage id="ui-users.blocks.form.validate.future" />;
   }
 
