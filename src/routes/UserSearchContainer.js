@@ -96,6 +96,7 @@ class UserSearchContainer extends React.Component {
       records: 'owners',
       path: `owners?query=cql.allRecords=1&limit=${MAX_RECORDS}`,
       fetch: props => (!!props.stripes.hasInterface('feesfines')),
+      permissionsRequired: 'owners.collection.get',
     },
     refundsReport: {
       type: 'okapi',

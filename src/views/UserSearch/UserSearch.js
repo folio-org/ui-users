@@ -303,18 +303,20 @@ class UserSearch extends React.Component {
                 </Icon>
               </Button>
             </IfPermission>
-            <Button
-              buttonStyle="dropdownItem"
-              id="export-refunds-report"
-              onClick={() => {
-                onToggle();
-                this.changeRefundReportModalState(true);
-              }}
-            >
-              <Icon icon="download">
-                <FormattedMessage id="ui-users.reports.refunds.label" />
-              </Icon>
-            </Button>
+            <IfPermission perm="ui-users.manualProcessRefundsReport">
+              <Button
+                buttonStyle="dropdownItem"
+                id="export-refunds-report"
+                onClick={() => {
+                  onToggle();
+                  this.changeRefundReportModalState(true);
+                }}
+              >
+                <Icon icon="download">
+                  <FormattedMessage id="ui-users.reports.refunds.label" />
+                </Icon>
+              </Button>
+            </IfPermission>
           </IfInterface>
         </MenuSection>
         {renderColumnsMenu}

@@ -788,6 +788,16 @@
           "feefine-reports.financial-transactions-detail.post"
         ],
         "visible": true
+      },
+      {
+        "permissionName": "ui-users.manualProcessRefundsReport",
+        "displayName": "Users: Create and download Refunds to process manually report",
+        "subPermissions": [
+          "ui-users.view",
+          "feefine-reports.refund.post",
+          "owners.collection.get"
+        ],
+        "visible": true
       }
     ]
   },

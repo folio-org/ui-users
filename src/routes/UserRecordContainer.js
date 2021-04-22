@@ -77,18 +77,21 @@ class UserRecordContainer extends React.Component {
       records: 'feefineactions',
       path: `feefineactions?query=(userId==:{id})&limit=${MAX_RECORDS}`,
       fetch: props => (!!props.stripes.hasInterface('feesfines')),
+      permissionsRequired: 'feefineactions.collection.get',
     },
     accounts: {
       type: 'okapi',
       records: 'accounts',
       path: `accounts?query=(userId==:{id})&limit=${MAX_RECORDS}`,
       fetch: props => (!!props.stripes.hasInterface('feesfines')),
+      permissionsRequired: 'accounts.collection.get',
     },
     loanRecords: {
       type: 'okapi',
       records: 'loans',
       path: 'circulation/loans?query=(userId==:{id})&limit=1000',
       fetch: props => (!!props.stripes.hasInterface('circulation')),
+      permissionsRequired: 'circulation.loans.collection.get',
     },
     uniquenessValidator: {
       type: 'okapi',
