@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## 6.0.7 IN PROGRESS
+
+* Handle search of ASTified translation values. Refs UIU-2142.
+
 ## [6.0.6](https://github.com/folio-org/ui-users/tree/v6.0.6) (2021-06-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.5...v6.0.6)
 
