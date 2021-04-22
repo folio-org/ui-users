@@ -74,6 +74,7 @@ class UserSearchContainer extends React.Component {
       accumulate: true,
       path: () => 'circulation/loans',
       permissionsRequired: 'circulation.loans.collection.get,accounts.collection.get',
+      fetch: props => (!!props.stripes.hasInterface('circulation')),
     },
     tags: {
       throwErrors: false,
@@ -94,6 +95,7 @@ class UserSearchContainer extends React.Component {
       type: 'okapi',
       records: 'owners',
       path: `owners?query=cql.allRecords=1&limit=${MAX_RECORDS}`,
+      fetch: props => (!!props.stripes.hasInterface('feesfines')),
       permissionsRequired: 'owners.collection.get',
     },
     refundsReport: {

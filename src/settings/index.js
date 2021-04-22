@@ -61,11 +61,14 @@ export default class Settings extends Component {
           firstMenu={<PaneBackLink to="/settings" />}
         >
           <NavList>
-            {sections.map((section, index) => (
-              <NavListSection key={index} label={section.label}>
-                {section.pages.map((setting) => this.renderSectionPageItem(setting))}
-              </NavListSection>
-            ))}
+            {sections.map((section, index) => {
+              const sectionInner = (
+                <NavListSection key={index} label={section.label}>
+                  {section.pages.map((setting) => this.renderSectionPageItem(setting))}
+                </NavListSection>
+              );
+              return section.interface ? <IfInterface name={section.interface}>sectionInner</IfInterface> : sectionInner;
+            })}
           </NavList>
         </Pane>
         {children}
