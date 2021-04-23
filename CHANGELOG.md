@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## 6.0.3 (IN PROGRESS)
+
+* Include missing `limit` clause in request-count query. Refs UIU-2143.
+
 ## [6.0.2](https://github.com/folio-org/ui-users/tree/v6.0.2) (2021-04-22)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.1...v6.0.2)
 
