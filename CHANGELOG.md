@@ -1,6 +1,7 @@
 # Change history for ui-users
 
-## 6.0.3 (IN PROGRESS)
+## [6.0.3](https://github.com/folio-org/ui-users/tree/v6.0.3) (2021-04-23)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.2...v6.0.3)
 
 * Include missing `limit` clause in request-count query. Refs UIU-2143.
 * Fetch some search container routes conditionally based on permissions. Refs UIU-2132.
