@@ -11,7 +11,7 @@ import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 import BulkRenewalDialog from '../BulkRenewalDialog';
 import isOverridePossible from '../Loans/OpenLoans/helpers/isOverridePossible';
-import { requestStatuses } from '../../constants';
+import { requestStatuses, MAX_RECORDS } from '../../constants';
 
 // HOC used to manage renew
 const withRenew = WrappedComponent => class WithRenewComponent extends React.Component {
@@ -271,7 +271,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
         .join(' or ');
       const query = `(itemId==(${q})) and status==(${statusList}) sortby requestDate desc`;
       reset();
-      GET({ params: { query } })
+      GET({ params: { query, limit: MAX_RECORDS } })
         .then((requestRecords) => {
           const requestCountObject = requestRecords.reduce((map, record) => {
             map[record.itemId] = map[record.itemId]

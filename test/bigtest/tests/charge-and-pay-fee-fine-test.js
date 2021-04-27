@@ -131,7 +131,7 @@ describe('Charge and pay fee/fine', () => {
                 expect(chargeFeeFine.confirmationModal.body.isPresent).to.be.true;
               });
 
-              describe('confirm fine payment', () => {
+              describe.skip('confirm fine payment', () => {
                 beforeEach(async () => {
                   await chargeFeeFine.confirmationModal.confirmButton.click();
                 });

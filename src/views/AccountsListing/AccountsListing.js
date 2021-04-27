@@ -441,6 +441,7 @@ class AccountsHistory extends React.Component {
     } = this.props;
     const query = location.search ? queryString.parse(location.search) : {};
     let accounts = _.get(resources, ['feefineshistory', 'records'], []);
+    const allAccounts = accounts;
     const feeFineActions = _.get(resources, ['comments', 'records'], []);
     if (query.loan) {
       accounts = accounts.filter(a => a.loanId === query.loan);
@@ -453,7 +454,7 @@ class AccountsHistory extends React.Component {
     // else if (query.layer === 'closed-accounts') badgeCount = closed.length;
     const filters = filterState(this.queryParam('f'));
     const selectedAccounts = this.state.selectedAccounts.map(a => accounts.find(ac => ac.id === a.id) || {});
-    const userOwned = (user && user.id === (accounts[0] || {}).userId);
+    const userOwned = (user && user.id === (allAccounts[0] || {}).userId);
 
     const columnMapping = {
       'metadata.createdDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' }),
@@ -547,7 +548,7 @@ class AccountsHistory extends React.Component {
 
     let balance = 0;
     let balanceSuspended = 0;
-    accounts.forEach((a) => {
+    allAccounts.forEach((a) => {
       if (a.paymentStatus.name === refundClaimReturned.PAYMENT_STATUS) {
         balanceSuspended += (parseFloat(a.remaining) * 100);
       } else {
@@ -593,13 +594,15 @@ class AccountsHistory extends React.Component {
           )}
           paneSub={(
             <div id="outstanding-balance">
-              <FormattedMessage id="ui-users.accounts.outstandingBalance">
-                {(title) => `${title} ${outstandingBalance}`}
-              </FormattedMessage>
-              &nbsp; | &nbsp;
-              <FormattedMessage id="ui-users.accounts.suspendedBalance">
-                {(title) => `${title} ${suspendedBalance}`}
-              </FormattedMessage>
+              <FormattedMessage
+                id="ui-users.accounts.outstanding.total"
+                values={{ amount: outstandingBalance }}
+              />
+              &nbsp;|&nbsp;
+              <FormattedMessage
+                id="ui-users.accounts.suspended.total"
+                values={{ amount: suspendedBalance }}
+              />
             </div>
           )}
         >
@@ -623,7 +626,6 @@ class AccountsHistory extends React.Component {
                 user={user}
                 showFilters={this.state.showFilters}
                 filters={filters}
-                balance={userOwned ? balance : 0}
                 selected={selected}
                 selectedAccounts={selectedAccounts}
                 feeFineActions={feeFineActions}

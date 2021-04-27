@@ -13,7 +13,7 @@ import {
 } from 'lodash';
 import { Link } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { IfPermission, AppIcon, CalloutContext } from '@folio/stripes/core';
+import { IfPermission, IfInterface, AppIcon, CalloutContext } from '@folio/stripes/core';
 import {
   Button,
   HasCommand,
@@ -248,44 +248,76 @@ class UserSearch extends React.Component {
               </FormattedMessage>
             </PaneMenu>
           </IfPermission>
-          <IfPermission perm="ui-users.loans.view">
-            <Button
-              buttonStyle="dropdownItem"
-              id="export-overdue-loan-report"
-              onClick={() => {
-                onToggle();
-                this.generateReport(this.props, 'overdue');
-              }}
-            >
-              <Icon icon="download">
-                <FormattedMessage id="ui-users.reports.overdue.label" />
-              </Icon>
-            </Button>
-          </IfPermission>
-          <Button
-            buttonStyle="dropdownItem"
-            id="export-claimed-returned-loan-report"
-            onClick={() => {
-              onToggle();
-              this.generateReport(this.props, 'claimedReturned');
-            }}
-          >
-            <Icon icon="download">
-              <FormattedMessage id="ui-users.reports.claimReturned.label" />
-            </Icon>
-          </Button>
-          <Button
-            buttonStyle="dropdownItem"
-            id="export-refunds-report"
-            onClick={() => {
-              onToggle();
-              this.changeRefundReportModalState(true);
-            }}
-          >
-            <Icon icon="download">
-              <FormattedMessage id="ui-users.reports.refunds.label" />
-            </Icon>
-          </Button>
+          <IfInterface name="circulation">
+            <IfPermission perm="ui-users.loans.view">
+              <Button
+                buttonStyle="dropdownItem"
+                id="export-overdue-loan-report"
+                onClick={() => {
+                  onToggle();
+                  this.generateReport(this.props, 'overdue');
+                }}
+              >
+                <Icon icon="download">
+                  <FormattedMessage id="ui-users.reports.overdue.label" />
+                </Icon>
+              </Button>
+              <Button
+                buttonStyle="dropdownItem"
+                id="export-claimed-returned-loan-report"
+                onClick={() => {
+                  onToggle();
+                  this.generateReport(this.props, 'claimedReturned');
+                }}
+              >
+                <Icon icon="download">
+                  <FormattedMessage id="ui-users.reports.claimReturned.label" />
+                </Icon>
+              </Button>
+            </IfPermission>
+          </IfInterface>
+          <IfInterface name="feesfines">
+            <IfPermission perm="ui-users.cashDrawerReport">
+              <Button
+                buttonStyle="dropdownItem"
+                id="cash-drawer-report"
+                onClick={() => {
+                  onToggle();
+                }}
+              >
+                <Icon icon="download">
+                  <FormattedMessage id="ui-users.reports.cashDrawer.label" />
+                </Icon>
+              </Button>
+            </IfPermission>
+            <IfPermission perm="ui-users.financialTransactionReport">
+              <Button
+                buttonStyle="dropdownItem"
+                id="financial-transaction-report"
+                onClick={() => {
+                  onToggle();
+                }}
+              >
+                <Icon icon="download">
+                  <FormattedMessage id="ui-users.reports.financialTransaction.label" />
+                </Icon>
+              </Button>
+            </IfPermission>
+            <IfPermission perm="ui-users.manualProcessRefundsReport">
+              <Button
+                buttonStyle="dropdownItem"
+                id="export-refunds-report"
+                onClick={() => {
+                  onToggle();
+                  this.changeRefundReportModalState(true);
+                }}
+              >
+                <Icon icon="download">
+                  <FormattedMessage id="ui-users.reports.refunds.label" />
+                </Icon>
+              </Button>
+            </IfPermission>
+          </IfInterface>
         </MenuSection>
         {renderColumnsMenu}
       </>

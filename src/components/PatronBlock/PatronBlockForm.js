@@ -51,7 +51,7 @@ const showValidationErrors = ({
     errors.renewals = patronBlockError;
     errors.requests = patronBlockError;
   }
-  if (moment(moment(expirationDate).endOf('day')).isBefore(moment().endOf('day'))) {
+  if (expirationDate && moment(moment(expirationDate).endOf('day')).isBefore(moment().endOf('day').add(1, 'days'))) {
     errors.expirationDate = <FormattedMessage id="ui-users.blocks.form.validate.future" />;
   }
 
@@ -350,7 +350,10 @@ class PatronBlockForm extends React.Component {
 export default stripesFinalForm({
   initialValuesEqual: (a, b) => _.isEqual(a, b),
   navigationCheck: true,
-  subscription: { values: true },
+  subscription: {
+    invalid: true,
+    values: true,
+  },
   mutators: { setFieldData },
   validate: showValidationErrors,
 })(PatronBlockForm);
