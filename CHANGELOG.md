@@ -1,6 +1,7 @@
 # Change history for ui-users
 
-## 6.0.4 IN PROGRESS
+## [6.0.4](https://github.com/folio-org/ui-users/tree/v6.0.4) (2021-04-27)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.3...v6.0.4)
 
 * Show user-readable message when user is not found. Fixes UIU-2081.
 
