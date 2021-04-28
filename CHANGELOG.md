@@ -22,6 +22,7 @@
 * Handle search of ASTified translation values. Refs UIU-2142.
 * Fix optional dependencies to be actually optional and add a few. UIU-2140.
 * Include missing `limit` clause in request-count query. Refs UIU-2143.
+* Replace local KeyboardShortcutsModal component with import. Refs UIU-2151.
 
 ## [6.0.0](https://github.com/folio-org/ui-users/tree/v6.0.0) (2021-03-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.9...v6.0.0)
