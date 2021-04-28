@@ -11,6 +11,7 @@ import {
   NavListSection,
   CommandList,
   HasCommand,
+  KeyboardShortcutsModal,
 } from '@folio/stripes/components';
 
 import * as Routes from './routes';
@@ -25,7 +26,6 @@ import {
   NoteViewPage,
   NoteEditPage
 } from './views';
-import KeyboardShortcutsModal from './components/KeyboardShortcutsModal';
 
 class UsersRouting extends React.Component {
   static propTypes = {
