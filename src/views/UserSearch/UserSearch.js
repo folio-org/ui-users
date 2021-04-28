@@ -35,7 +35,8 @@ import {
   ColumnManager,
 } from '@folio/stripes/smart-components';
 
-import RefundsReportModal from '../../components/RefundsReportModal/RefundsReportModal';
+import RefundsReportModal from '../../components/ReportModals/RefundsReportModal';
+import CashDrawerReportModal from '../../components/ReportModals/CashDrawerReportModal';
 
 import CsvReport from '../../components/data/reports';
 import RefundsReport from '../../components/data/reports/RefundReport';
@@ -81,6 +82,7 @@ class UserSearch extends React.Component {
       patronGroups: PropTypes.object,
       departments: PropTypes.object,
       owners: PropTypes.object,
+      servicePointsUsers: PropTypes.object.isRequired,
       query: PropTypes.shape({
         qindex: PropTypes.string,
       }).isRequired,
@@ -96,7 +98,15 @@ class UserSearch extends React.Component {
       refundsReport: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }).isRequired,
+      cashDrawerReport: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }).isRequired,
     }).isRequired,
+    okapi: PropTypes.shape({
+      currentUser: PropTypes.shape({
+        servicePoints: PropTypes.arrayOf(PropTypes.object),
+      }),
+    }),
     source: PropTypes.object,
     stripes: PropTypes.shape({
       timezone: PropTypes.string.isRequired,
@@ -118,6 +128,8 @@ class UserSearch extends React.Component {
       searchPending: false,
       showRefundsReportModal: false,
       refundExportInProgress: false,
+      showCashDrawerReportModal: false,
+      cashDrawerReportInProgress: false,
     };
 
     this.resultsPaneTitleRef = createRef();
@@ -157,6 +169,10 @@ class UserSearch extends React.Component {
   changeRefundReportModalState = (modalState) => {
     this.setState({ showRefundsReportModal: modalState });
   };
+
+  changeCashDrawerReportModalState = (modalState) => {
+    this.setState({ showCashDrawerReportModal: modalState });
+  }
 
   getColumnMapping = () => {
     const { intl } = this.props;
@@ -283,6 +299,7 @@ class UserSearch extends React.Component {
                 id="cash-drawer-report"
                 onClick={() => {
                   onToggle();
+                  this.changeCashDrawerReportModalState(true);
                 }}
               >
                 <Icon icon="download">
@@ -473,6 +490,62 @@ class UserSearch extends React.Component {
     }
   }
 
+  handleCashDrawerReportFormSubmit = async (data) => {
+    const {
+      startDate,
+      endDate,
+      servicePoint,
+      sources = [],
+      format,
+    } = data;
+
+    if (this.state.cashDrawerReportInProgress) {
+      return;
+    }
+
+    this.setState({
+      cashDrawerReportInProgress: true,
+      showCashDrawerReportModal: false,
+    });
+
+    console.log('servicePoint', servicePoint);
+    const {
+      mutator: { cashDrawerReport },
+      intl: { formatMessage }
+    } = this.props;
+
+    const reportData = {
+      createdAt: servicePoint,
+      sources,
+      startDate,
+      endDate,
+    };
+
+    try {
+      this.context.sendCallout({ message: <FormattedMessage id="ui-users.reports.inProgress" /> });
+      const report = await cashDrawerReport.POST(reportData);
+
+      if (isEmpty(report)) {
+        this.context.sendCallout({
+          type: 'error',
+          message: <FormattedMessage id="ui-users.reports.noItemsFound" />,
+        });
+      } else {
+        console.log('format ', format);
+        // form the report depends on format
+      }
+    } catch (error) {
+      if (error) {
+        this.context.sendCallout({
+          type: 'error',
+          message: <FormattedMessage id="ui-users.reports.callout.error" />,
+        });
+      }
+    } finally {
+      this.setState({ cashDrawerReportInProgress: false });
+    }
+  }
+
   render() {
     const {
       onComponentWillUnmount,
@@ -486,6 +559,7 @@ class UserSearch extends React.Component {
       contentRef,
       mutator: { resultOffset },
       stripes: { timezone },
+      okapi: { currentUser },
     } = this.props;
     if (!searchableIndexes) {
       searchableIndexes = rawSearchableIndexes.map(x => (
@@ -501,10 +575,14 @@ class UserSearch extends React.Component {
     const columnMapping = this.getColumnMapping();
     const users = get(resources, 'records.records', []);
     const owners = resources.owners.records;
+    const servicePoints = currentUser.servicePoints;
     const patronGroups = (resources.patronGroups || {}).records || [];
     const query = queryGetter ? queryGetter() || {} : {};
     const count = source ? source.totalCount() : 0;
     const sortOrder = query.sort || '';
+    const initialCashDrawerReportValues = {
+      format: 'both'
+    };
     const resultsStatusMessage = source ? (
       <div data-test-user-search-no-results-message>
         <NoResultsMessage
@@ -686,6 +764,18 @@ class UserSearch extends React.Component {
               onClose={() => { this.changeRefundReportModalState(false); }}
               onSubmit={this.handleRefundsReportFormSubmit}
               timezone={timezone}
+            />
+          )}
+          { this.state.showCashDrawerReportModal && (
+            <CashDrawerReportModal
+              open
+              label={this.props.intl.formatMessage({ id:'ui-users.reports.cash.drawer.modal.label' })}
+              servicePoints={servicePoints}
+              onClose={() => { this.changeCashDrawerReportModalState(false); }}
+              onSubmit={this.handleCashDrawerReportFormSubmit}
+              mutator={this.props.mutator}
+              timezone={timezone}
+              initialValues={initialCashDrawerReportValues}
             />
           )}
         </div>

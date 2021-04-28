@@ -105,6 +105,13 @@ class UserSearchContainer extends React.Component {
       clientGeneratePk: false,
       fetch: false,
     },
+    cashDrawerReport: {
+      type: 'okapi',
+      records: 'cashDrawerReport',
+      path: 'feefine-reports/cash-drawer-reconciliation',
+      clientGeneratePk: false,
+      fetch: false,
+    }
   });
 
   static propTypes = {
@@ -136,6 +143,9 @@ class UserSearchContainer extends React.Component {
         replace: PropTypes.func.isRequired,
       }),
       refundsReport: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      cashDrawerReport: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }),
     }).isRequired,
