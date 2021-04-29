@@ -1,5 +1,10 @@
 # Change history for ui-users
 
+## [6.0.5](https://github.com/folio-org/ui-users/tree/v6.0.5) (2021-04-29)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.4...v6.0.5)
+
+* Import `react` because we are building without new JSX transforms. Refs UIU-2081.
+
 ## [6.0.4](https://github.com/folio-org/ui-users/tree/v6.0.4) (2021-04-27)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.3...v6.0.4)
 
