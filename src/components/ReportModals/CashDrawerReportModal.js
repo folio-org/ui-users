@@ -55,15 +55,28 @@ const validate = (options) => {
 
 const CashDrawerReportModal = (props) => {
   const { valid } = props.form.getState();
-  const { values, values: { servicePoint: servicePointsValues = '' } } = props;
-  console.log('prooops ', props);
-  console.log('values ', values);
-
+  const { values: { servicePoint: servicePointsValue = '' } } = props;
+  const sources = [];
   const parseDate = (date) => (date ? moment.tz(date, props.timezone).format(DATE_FORMAT) : date);
   const servicePoints = props.servicePoints.map(({ id, name }) => ({
     value: id,
     label: name,
   }));
+
+  if (servicePointsValue) {
+    // const feefineactions = resources?.feefineactions?.records ?? [];
+    // const servicePointActions = feefineactions.filter((action) => action.createdAt === servicePointsValue);
+    //
+    // uniqBy(servicePointActions, 'source')
+    //   .forEach((action) => sources.push({
+    //     value: action.source, // should be source id
+    //     label: action.source,
+    //   }));
+
+    // TODO: get list of all payments on chosen Service Point with unique sources
+    // TODO: (we need name and id of source)
+    // TODO: probably this list should come from BE
+  }
 
   const footer = (
     <ModalFooter>
@@ -89,6 +102,7 @@ const CashDrawerReportModal = (props) => {
 
   return (
     <Modal
+      data-test-cash-drawer-report-modal
       id="cash-drawer-report-modal"
       size="small"
       footer={footer}
@@ -146,8 +160,8 @@ const CashDrawerReportModal = (props) => {
               component={MultiSelection}
               label={<FormattedMessage id="ui-users.reports.cash.drawer.sources" />}
               placeholder={props.intl.formatMessage({ id: 'ui-users.reports.cash.drawer.sources.placeholder' })}
-              dataOptions={[]}
-              disabled={!servicePointsValues || isEmpty(servicePointsValues)}
+              dataOptions={sources}
+              disabled={!servicePointsValue}
             />
           </Col>
           <Col
@@ -193,6 +207,11 @@ CashDrawerReportModal.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   timezone: PropTypes.string.isRequired,
   values: PropTypes.object.isRequired,
+  resources: PropTypes.shape({
+    feefineactions: PropTypes.shape({
+      records: PropTypes.arrayOf(PropTypes.object),
+    }),
+  }).isRequired,
 };
 
 export default stripesFinalForm({

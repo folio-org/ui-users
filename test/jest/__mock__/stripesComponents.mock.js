@@ -13,6 +13,13 @@ jest.mock('@folio/stripes/components', () => ({
       </span>
     </button>
   )),
+  Col: jest.fn(({ children }) => <div className="col">{ children }</div>),
+  Datepicker: jest.fn(({ ref, children, ...rest }) => (
+    <div ref={ref} {...rest}>
+      {children}
+      <input type="text" />
+    </div>
+  )),
   Icon: jest.fn((props) => (props && props.children ? props.children : <span />)),
   IconButton: jest.fn(({
     buttonProps,
@@ -24,8 +31,68 @@ jest.mock('@folio/stripes/components', () => ({
       <span {...rest} />
     </button>
   )),
+  Label: jest.fn(({ children, ...rest }) => (
+    <span {...rest}>{children}</span>
+  )),
+  Modal: jest.fn(({ children, label, ...rest }) => (
+    <div
+      dismissible
+      {...rest}
+    >
+      <h1>{label}</h1>
+      {children}
+    </div>
+  )),
+  ModalFooter: jest.fn((props) => (
+    <div>{props.children}</div>
+  )),
+  MultiSelection: jest.fn(({ children, dataOptions }) => (
+    <div>
+      <select multiple>
+        {dataOptions.forEach((option, i) => (
+          <option
+            value={option.value}
+            key={option.id || `option-${i}`}
+          >
+            {option.label}
+          </option>))}
+      </select>
+      {children}
+    </div>
+  )),
   PaneFooter: jest.fn(({ ref, children, ...rest }) => (
     <div ref={ref} {...rest}>{children}</div>
   )),
   PaneMenu: jest.fn((props) => <div>{props.children}</div>),
+  RadioButton: jest.fn(({ label, name, ...rest }) => (
+    <div>
+      <label htmlFor="male">{label}</label>
+      <input
+        type="radio"
+        name={name}
+        {...rest}
+      />
+    </div>
+  )),
+  RadioButtonGroup: jest.fn(({ label, children, ...rest }) => (
+    <fieldset {...rest}>
+      <legend>{label}</legend>
+      {children}
+    </fieldset>
+  )),
+  Row: jest.fn(({ children }) => <div className="row">{ children }</div>),
+  Select: jest.fn(({ children, dataOptions }) => (
+    <div>
+      <select>
+        {dataOptions.forEach((option, i) => (
+          <option
+            value={option.value}
+            key={option.id || `option-${i}`}
+          >
+            {option.label}
+          </option>))}
+      </select>
+      {children}
+    </div>
+  )),
 }));

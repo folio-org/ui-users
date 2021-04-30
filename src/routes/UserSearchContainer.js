@@ -111,7 +111,12 @@ class UserSearchContainer extends React.Component {
       path: 'feefine-reports/cash-drawer-reconciliation',
       clientGeneratePk: false,
       fetch: false,
-    }
+    },
+    feefineactions: {
+      type: 'okapi',
+      records: 'feefineactions',
+      path: `feefineactions?limit=${MAX_RECORDS}`,
+    },
   });
 
   static propTypes = {
@@ -121,6 +126,9 @@ class UserSearchContainer extends React.Component {
     history: PropTypes.object,
     resources: PropTypes.shape({
       patronGroups: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      feefineactions: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }).isRequired,

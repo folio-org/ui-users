@@ -508,12 +508,7 @@ class UserSearch extends React.Component {
       showCashDrawerReportModal: false,
     });
 
-    console.log('servicePoint', servicePoint);
-    const {
-      mutator: { cashDrawerReport },
-      intl: { formatMessage }
-    } = this.props;
-
+    const { mutator: { cashDrawerReport } } = this.props;
     const reportData = {
       createdAt: servicePoint,
       sources,
@@ -531,8 +526,7 @@ class UserSearch extends React.Component {
           message: <FormattedMessage id="ui-users.reports.noItemsFound" />,
         });
       } else {
-        console.log('format ', format);
-        // form the report depends on format
+        // TODO: form the report depends on format
       }
     } catch (error) {
       if (error) {
@@ -576,6 +570,7 @@ class UserSearch extends React.Component {
     const users = get(resources, 'records.records', []);
     const owners = resources.owners.records;
     const servicePoints = currentUser.servicePoints;
+    console.log('servicePoints', servicePoints);
     const patronGroups = (resources.patronGroups || {}).records || [];
     const query = queryGetter ? queryGetter() || {} : {};
     const count = source ? source.totalCount() : 0;
@@ -773,9 +768,9 @@ class UserSearch extends React.Component {
               servicePoints={servicePoints}
               onClose={() => { this.changeCashDrawerReportModalState(false); }}
               onSubmit={this.handleCashDrawerReportFormSubmit}
-              mutator={this.props.mutator}
               timezone={timezone}
               initialValues={initialCashDrawerReportValues}
+              resources={resources}
             />
           )}
         </div>
