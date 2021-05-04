@@ -120,6 +120,7 @@ class EditServicePoints extends React.Component {
   }
 
   renderPreferredServicePointSelect() {
+    const { intl } = this.props;
     const { userServicePoints } = this.state;
 
     if (userServicePoints.length === 0) return null;
@@ -135,22 +136,14 @@ class EditServicePoints extends React.Component {
     return (
       <Row>
         <Col xs={12} md={6}>
-          <FormattedMessage id="ui-users.sp.selectServicePoint">
-            {placeholder => (
-              <Field
-                label={(
-                  <FormattedMessage id="ui-users.sp.servicePointPreference">
-                    {(msg) => msg + ' *'}
-                  </FormattedMessage>
-                )}
-                name="preferredServicePoint"
-                id="servicePointPreference"
-                component={Select}
-                placeholder={placeholder}
-                dataOptions={dataOptions}
-              />
-            )}
-          </FormattedMessage>
+          <Field
+            label={`${ intl.formatMessage({ id: 'ui-users.sp.servicePointPreference' })} } *`}
+            name="preferredServicePoint"
+            id="servicePointPreference"
+            component={Select}
+            placeholder={intl.formatMessage({ id: 'ui-users.sp.selectServicePoint' })}
+            dataOptions={dataOptions}
+          />
         </Col>
       </Row>
     );
