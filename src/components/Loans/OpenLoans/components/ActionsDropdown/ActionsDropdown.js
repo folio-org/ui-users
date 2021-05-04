@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router-dom';
 
 import {
@@ -32,6 +32,7 @@ class ActionsDropdown extends React.Component {
     match: PropTypes.shape({
       params: PropTypes.object
     }),
+    intl: PropTypes.object.isRequired,
   };
 
   renderMenu = ({ onToggle }) => {
@@ -170,12 +171,14 @@ class ActionsDropdown extends React.Component {
   };
 
   render() {
+    const { intl: { formatMessage } } = this.props;
     return (
       <Dropdown
         renderTrigger={({ getTriggerProps }) => (
           <IconButton
             {...getTriggerProps()}
             icon="ellipsis"
+            aria-label={formatMessage({ id: 'ui-users.action' })}
           />
         )}
         renderMenu={this.renderMenu}
@@ -184,4 +187,4 @@ class ActionsDropdown extends React.Component {
   }
 }
 
-export default withRouter(ActionsDropdown);
+export default withRouter(injectIntl(ActionsDropdown));
