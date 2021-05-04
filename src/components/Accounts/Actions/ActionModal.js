@@ -175,7 +175,7 @@ class ActionModal extends React.Component {
       </Col>
     );
   }
-  
+
   isPaymentAction = (action) => {
     return action === FEE_FINE_ACTIONS.PAYMENT;
   }
@@ -345,11 +345,11 @@ class ActionModal extends React.Component {
     } = getState();
 
     const selected = calculateSelectedAmount(accounts, this.isRefundAction(action), feeFineActions);
-    let ownersServicePoint = [];
+    const ownersServicePoint = [];
     owners.forEach((item) => {
-      if(item.servicePointOwner.filter(s => s.value === curServicePoint.id).length > 0) {
+      if (item.servicePointOwner.filter(s => s.value === curServicePoint.id).length > 0) {
         ownersServicePoint.push(item);
-      } 
+      }
     });
     const ownerOptions = ownersServicePoint.filter(o => o.owner !== 'Shared').map(o => ({ value: o.id, label: o.owner }));
 

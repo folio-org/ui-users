@@ -644,8 +644,8 @@ class Actions extends React.Component {
     const currentFeeFineType = feefines.find(({ feeFineType }) => feeFineType === account?.feeFineType);
     const currentOwnerId = servicePointOwnerId || currentFeeFineType?.ownerId || account?.ownerId;
     const currentOwner = owners.find(o => o.id === currentOwnerId) || {};
-    let accountTypes = this.props.accounts.map(a => a.feeFineType);
-    let checkSomeNotify = feefines.filter(feeFine => feeFine.actionNoticeId && accountTypes.includes(feeFine.feeFineType));
+    const accountTypes = this.props.accounts.map(a => a.feeFineType);
+    const checkSomeNotify = feefines.filter(feeFine => feeFine.actionNoticeId && accountTypes.includes(feeFine.feeFineType));
     const initialValues = {
       ownerId: currentOwnerId,
       amount: calculateSelectedAmount(this.props.accounts),
