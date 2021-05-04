@@ -109,7 +109,7 @@ class UserDetail extends React.Component {
     }).isRequired,
     okapi: PropTypes.shape({
       currentUser: PropTypes.shape({
-        servicePoints: PropTypes.string.isRequired,
+        servicePoints: PropTypes.arrayOf(PropTypes.object).isRequired,
       }).isRequired,
     }).isRequired,
     onClose: PropTypes.func,
