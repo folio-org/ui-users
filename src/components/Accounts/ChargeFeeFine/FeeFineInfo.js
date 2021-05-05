@@ -23,6 +23,12 @@ class FeeFineInfo extends React.Component {
     isPending: PropTypes.object,
   };
 
+  constructor(props) {
+    super(props);
+    this.onChangeAmount = this.onChangeAmount.bind(this);
+    this.amount = 0;
+  }
+
   componentDidMount() {
     const {
       initialValues: {
@@ -34,12 +40,6 @@ class FeeFineInfo extends React.Component {
     if (ownerId) {
       onChangeOwner(ownerId);
     }
-  }
-
-  constructor(props) {
-    super(props);
-    this.onChangeAmount = this.onChangeAmount.bind(this);
-    this.amount = 0;
   }
 
   onChangeAmount(e) {

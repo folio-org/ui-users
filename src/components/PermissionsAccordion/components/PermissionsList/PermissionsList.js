@@ -140,7 +140,7 @@ PermissionsList.propTypes = {
   filteredPermissions: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
-      displayName: PropTypes.string.isRequired,
+      displayName: PropTypes.string,
       permissionName: PropTypes.string.isRequired,
       subPermissions: PropTypes.arrayOf(PropTypes.string).isRequired,
       dummy: PropTypes.bool.isRequired,
