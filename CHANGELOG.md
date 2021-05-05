@@ -25,6 +25,7 @@
 * Replace local KeyboardShortcutsModal component with import. Refs UIU-2151.
 * Clean up prop-types that generate bogus console warnings. Refs UIU-2158.
 * Provide useful `aria-label` values to loan action (ellipses) menues. Refs UIU-1635.
+* Allow a user to assign an existing permission set to a permission set. Refs UIU-1630.
 
 ## [6.0.0](https://github.com/folio-org/ui-users/tree/v6.0.0) (2021-03-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.9...v6.0.0)
