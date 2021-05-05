@@ -842,8 +842,6 @@
     "reports.callout.error": "Something went wrong.",
     "information.recalculate.modal.button": "Set",
     "appMenu.keyboardShortcuts": "Keyboard shortcuts",
-    "shortcut.action": "Acción",
-    "shortcut.shortcut": "Atajo",
     "shortcut.createRecord": "Create a new record",
     "shortcut.editRecord": "Edit a record",
     "shortcut.saveRecord": "Guardar el registro",

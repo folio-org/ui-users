@@ -842,8 +842,6 @@
     "reports.callout.error": "لقد حدث خطأ ما.",
     "information.recalculate.modal.button": "تعيين",
     "appMenu.keyboardShortcuts": "اختصارات لوحة المفاتيح",
-    "shortcut.action": "الإجراء",
-    "shortcut.shortcut": "اختصار",
     "shortcut.createRecord": "إنشاء تسجيلة جديدة",
     "shortcut.editRecord": "تحرير تسجيلة",
     "shortcut.saveRecord": "حفظ تسجيلة",

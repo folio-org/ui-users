@@ -842,8 +842,6 @@
     "reports.callout.error": "Coś poszło nie tak.",
     "information.recalculate.modal.button": "Ustaw",
     "appMenu.keyboardShortcuts": "Skróty klawiszowe",
-    "shortcut.action": "Akcja",
-    "shortcut.shortcut": "Skrót",
     "shortcut.createRecord": "Utwórz nowy rekord",
     "shortcut.editRecord": "Edytuj rekord",
     "shortcut.saveRecord": "Zapisz rekord",
