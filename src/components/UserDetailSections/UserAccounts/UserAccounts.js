@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
-import { get } from 'lodash';
 
 import {
   Row,
@@ -64,8 +63,7 @@ const UserAccounts = ({
     const open = records.filter(account => account?.status?.name !== accountStatuses.CLOSED);
     const closed = records.filter(account => account?.status?.name === accountStatuses.CLOSED);
     const refunded = records.filter(account => (account?.paymentStatus?.name === refundStatuses.RefundedFully || account?.paymentStatus?.name === refundStatuses.RefundedPartially));
-    const loansClaim = get(resources, ['loansHistory', 'records'], []).filter(loan => loan?.action === loanActions.CLAIMED_RETURNED);
-
+    const loansClaim = resources.loansHistory.records?.filter(loan => loan?.action === loanActions.CLAIMED_RETURNED);
     let claim = [];
     loansClaim.forEach((loan) => {
       claim = claim.concat(records.filter(account => account?.loanId === loan.id));
