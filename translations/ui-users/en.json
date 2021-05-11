@@ -3,8 +3,6 @@
   "user.pluralized": "{count} {count, plural, one {user} other {users}}",
   "meta.title": "Users",
   "appMenu.keyboardShortcuts": "Keyboard shortcuts",
-  "shortcut.action": "Action",
-  "shortcut.shortcut": "Shortcut",
   "shortcut.createRecord": "Create a new record",
   "shortcut.editRecord": "Edit a record",
   "shortcut.saveRecord": "Save a record",

@@ -7,7 +7,7 @@ import {
   concat,
 } from 'lodash';
 import moment from 'moment';
-import { FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 import {
   AppIcon,
@@ -109,7 +109,7 @@ class UserDetail extends React.Component {
     }).isRequired,
     okapi: PropTypes.shape({
       currentUser: PropTypes.shape({
-        servicePoints: PropTypes.string.isRequired,
+        servicePoints: PropTypes.arrayOf(PropTypes.object).isRequired,
       }).isRequired,
     }).isRequired,
     onClose: PropTypes.func,
@@ -122,6 +122,7 @@ class UserDetail extends React.Component {
     getPreferredServicePoint: PropTypes.func,
     tagsEnabled: PropTypes.bool,
     paneWidth: PropTypes.string,
+    intl: PropTypes.object.isRequired,
   };
 
   static defaultProps = {
@@ -286,6 +287,7 @@ class UserDetail extends React.Component {
   renderDetailsLastMenu(user) {
     const {
       tagsEnabled,
+      intl,
     } = this.props;
 
     const tags = ((user && user.tags) || {}).tagList || [];
@@ -294,17 +296,13 @@ class UserDetail extends React.Component {
       <PaneMenu>
         {
           tagsEnabled &&
-          <FormattedMessage id="ui-users.showTags">
-            {ariaLabel => (
-              <IconButton
-                icon="tag"
-                id="clickable-show-tags"
-                onClick={() => { this.showHelperApp('tags'); }}
-                badgeCount={tags.length}
-                aria-label={ariaLabel}
-              />
-            )}
-          </FormattedMessage>
+            <IconButton
+              icon="tag"
+              id="clickable-show-tags"
+              onClick={() => { this.showHelperApp('tags'); }}
+              badgeCount={tags.length}
+              aria-label={intl.formatMessage({ id: 'ui-users.showTags' })}
+            />
         }
       </PaneMenu>
     );
@@ -462,7 +460,7 @@ class UserDetail extends React.Component {
       'addressType',
       '',
     );
-    const customFields = user?.customFields || [];
+    const customFields = user?.customFields || {};
     const departments = resources?.departments?.records || [];
     const userDepartments = (user?.departments || [])
       .map(departmentId => departments.find(({ id }) => id === departmentId)?.name);
@@ -695,4 +693,4 @@ class UserDetail extends React.Component {
   }
 }
 
-export default UserDetail;
+export default injectIntl(UserDetail);

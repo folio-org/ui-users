@@ -181,6 +181,8 @@ class ClosedLoans extends React.Component {
   }
 
   getLoansFormatter() {
+    const { intl: { formatMessage } } = this.props;
+
     return {
       'title': loan => _.get(loan, ['item', 'title'], ''),
       'dueDate': loan => {
@@ -243,6 +245,7 @@ class ClosedLoans extends React.Component {
             <IconButton
               {...getTriggerProps()}
               icon="ellipsis"
+              aria-label={formatMessage({ id: 'ui-users.action' })}
             />
           )}
           renderMenu={this.renderDropDownMenu(loan)}
