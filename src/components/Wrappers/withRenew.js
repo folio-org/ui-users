@@ -295,13 +295,6 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
    * loan-policy.id => loan-policy.name in state.
    */
   fetchLoanPolicyNames = () => {
-    // get a list of unique policy IDs to retrieve. multiple loans may share
-    // the same policy; we only need to retrieve that policy once.
-    const ids = [...new Set(this.state.loans
-      .filter(loan => loan.loanPolicyId)
-      .map(loan => loan.loanPolicyId))]
-      .join(' or ');
-    const query = `id==(${ids})`;
     const {
       mutator: {
         loanPolicies: {
@@ -311,19 +304,28 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
       },
     } = this.props;
 
-    reset();
-    GET({ params: { query } })
-      .then((loanPolicies) => {
-        const loanPolicyObject = loanPolicies.reduce((map, loanPolicy) => {
-          map[loanPolicy.id] = loanPolicy.name;
+    // get a list of unique policy IDs to retrieve. multiple loans may share
+    // the same policy; we only need to retrieve that policy once.
+    const ids = [...new Set(this.state.loans
+      .filter(loan => loan.loanPolicyId)
+      .map(loan => loan.loanPolicyId))]
+      .join(' or ');
 
-          return map;
-        }, {});
+    if (ids.length) {
+      reset();
+      GET({ params: { query: `id==(${ids})` } })
+        .then((loanPolicies) => {
+          const loanPolicyObject = loanPolicies.reduce((map, loanPolicy) => {
+            map[loanPolicy.id] = loanPolicy.name;
 
-        if (this._isMounted) {
-          this.setState({ loanPolicies: loanPolicyObject });
-        }
-      });
+            return map;
+          }, {});
+
+          if (this._isMounted) {
+            this.setState({ loanPolicies: loanPolicyObject });
+          }
+        });
+    }
   };
 
   render() {
