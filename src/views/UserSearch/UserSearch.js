@@ -296,20 +296,20 @@ class UserSearch extends React.Component {
             </IfPermission>
           </IfInterface>
           <IfInterface name="feesfines">
-            {/* <IfPermission perm="ui-users.cashDrawerReport"> */}
-            <Button
-              buttonStyle="dropdownItem"
-              id="cash-drawer-report"
-              onClick={() => {
-                onToggle();
-                this.changeCashDrawerReportModalState(true);
-              }}
-            >
-              <Icon icon="download">
-                <FormattedMessage id="ui-users.reports.cashDrawer.label" />
-              </Icon>
-            </Button>
-            {/* </IfPermission> */}
+            <IfPermission perm="ui-users.cashDrawerReport">
+              <Button
+                buttonStyle="dropdownItem"
+                id="cash-drawer-report"
+                onClick={() => {
+                  onToggle();
+                  this.changeCashDrawerReportModalState(true);
+                }}
+              >
+                <Icon icon="download">
+                  <FormattedMessage id="ui-users.reports.cashDrawer.label" />
+                </Icon>
+              </Button>
+            </IfPermission>
             <IfPermission perm="ui-users.financialTransactionReport">
               <Button
                 buttonStyle="dropdownItem"
@@ -499,7 +499,6 @@ class UserSearch extends React.Component {
       endDate,
       servicePoint,
       sources = [],
-      format,
     } = data;
 
     if (this.state.cashDrawerReportInProgress) {

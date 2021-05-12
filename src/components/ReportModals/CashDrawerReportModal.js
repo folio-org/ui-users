@@ -81,13 +81,12 @@ const CashDrawerReportModal = (props) => {
     return undefined;
   };
 
-  // eslint-disable-next-line no-unused-vars
-  const sourcesForCurrentSP = useMemo(() => getSources(servicePointsValue), [servicePointsValue]);
+  useMemo(() => getSources(servicePointsValue), [servicePointsValue])
+    .then(response => response);
 
   const footer = (
     <ModalFooter>
       <Button
-        data-test-cash-drawer-report-save-btn
         disabled={!valid}
         marginBottom0
         buttonStyle="primary"
@@ -96,7 +95,6 @@ const CashDrawerReportModal = (props) => {
         <FormattedMessage id="ui-users.saveAndClose" />
       </Button>
       <Button
-        data-test-cash-drawer-report-cancel-btn
         marginBottom0
         buttonStyle="default"
         onClick={props.onClose}
@@ -121,7 +119,6 @@ const CashDrawerReportModal = (props) => {
         <Row>
           <Col xs={6}>
             <Field
-              data-test-cash-drawer-report-start-date
               label={<FormattedMessage id="ui-users.reports.refunds.modal.startDate" />}
               name="startDate"
               required
@@ -132,7 +129,6 @@ const CashDrawerReportModal = (props) => {
           </Col>
           <Col xs={6}>
             <Field
-              data-testid="data-test-cash-drawer-report-end-date"
               label={<FormattedMessage id="ui-users.reports.refunds.modal.endDate" />}
               name="endDate"
               required
@@ -140,10 +136,7 @@ const CashDrawerReportModal = (props) => {
               parse={parseDate}
             />
           </Col>
-          <Col
-            data-test-cash-drawer-report-service-points
-            xs={12}
-          >
+          <Col xs={12}>
             <Field
               name="servicePoint"
               component={Select}
@@ -153,10 +146,7 @@ const CashDrawerReportModal = (props) => {
               required
             />
           </Col>
-          <Col
-            data-test-cash-drawer-report-sources
-            xs={12}
-          >
+          <Col xs={12}>
             <Field
               name="sources"
               component={MultiSelection}
@@ -166,10 +156,7 @@ const CashDrawerReportModal = (props) => {
               disabled={!servicePointsValue}
             />
           </Col>
-          <Col
-            data-test-cash-drawer-report-formats
-            xs={12}
-          >
+          <Col xs={12}>
             <Label>
               <FormattedMessage id="ui-users.reports.cash.drawer.report.format" />
             </Label>
