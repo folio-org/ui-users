@@ -46,6 +46,7 @@ export default class NoteEditRoute extends Component {
         domain="users"
         navigateBack={this.navigateBack}
         noteId={noteId}
+        showDisplayAsPopupOptions
       />
     );
   }
