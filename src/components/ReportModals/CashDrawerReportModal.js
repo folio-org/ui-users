@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import { Field } from 'react-final-form';
@@ -55,28 +55,34 @@ const validate = (options) => {
 
 const CashDrawerReportModal = (props) => {
   const { valid } = props.form.getState();
-  const { values: { servicePoint: servicePointsValue = '' } } = props;
-  const sources = [];
+  const {
+    values: { servicePoint: servicePointsValue = '' },
+    cashDrawerReportSources,
+  } = props;
+  const [sources, setSources] = useState([]);
   const parseDate = (date) => (date ? moment.tz(date, props.timezone).format(DATE_FORMAT) : date);
   const servicePoints = props.servicePoints.map(({ id, name }) => ({
     value: id,
     label: name,
   }));
+  const getSources = async (value) => {
+    if (!value) {
+      return undefined;
+    }
 
-  if (servicePointsValue) {
-    // const feefineactions = resources?.feefineactions?.records ?? [];
-    // const servicePointActions = feefineactions.filter((action) => action.createdAt === servicePointsValue);
-    //
-    // uniqBy(servicePointActions, 'source')
-    //   .forEach((action) => sources.push({
-    //     value: action.source, // should be source id
-    //     label: action.source,
-    //   }));
+    const response = await cashDrawerReportSources.POST({ createdAt: value });
+    const responseSources = response?.sources ?? [];
+    const formatSources = responseSources.map((sourceName, index) => ({
+      value: `source-${index}`,
+      label: sourceName,
+    }));
+    setSources(formatSources || []);
 
-    // TODO: get list of all payments on chosen Service Point with unique sources
-    // TODO: (we need name and id of source)
-    // TODO: probably this list should come from BE
-  }
+    return undefined;
+  };
+
+  // eslint-disable-next-line no-unused-vars
+  const sourcesForCurrentSP = useMemo(() => getSources(servicePointsValue), [servicePointsValue]);
 
   const footer = (
     <ModalFooter>
@@ -113,11 +119,9 @@ const CashDrawerReportModal = (props) => {
     >
       <form onSubmit={props.handleSubmit}>
         <Row>
-          <Col
-            data-test-cash-drawer-report-start-date
-            xs={6}
-          >
+          <Col xs={6}>
             <Field
+              data-test-cash-drawer-report-start-date
               label={<FormattedMessage id="ui-users.reports.refunds.modal.startDate" />}
               name="startDate"
               required
@@ -126,11 +130,9 @@ const CashDrawerReportModal = (props) => {
               parse={parseDate}
             />
           </Col>
-          <Col
-            data-test-cash-drawer-report-end-date
-            xs={6}
-          >
+          <Col xs={6}>
             <Field
+              data-testid="data-test-cash-drawer-report-end-date"
               label={<FormattedMessage id="ui-users.reports.refunds.modal.endDate" />}
               name="endDate"
               required
@@ -211,6 +213,9 @@ CashDrawerReportModal.propTypes = {
     feefineactions: PropTypes.shape({
       records: PropTypes.arrayOf(PropTypes.object),
     }),
+  }).isRequired,
+  cashDrawerReportSources: PropTypes.shape({
+    POST: PropTypes.func.isRequired,
   }).isRequired,
 };
 

@@ -101,6 +101,9 @@ class UserSearch extends React.Component {
       cashDrawerReport: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }).isRequired,
+      cashDrawerReportSources: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }).isRequired,
     }).isRequired,
     okapi: PropTypes.shape({
       currentUser: PropTypes.shape({
@@ -293,20 +296,20 @@ class UserSearch extends React.Component {
             </IfPermission>
           </IfInterface>
           <IfInterface name="feesfines">
-            <IfPermission perm="ui-users.cashDrawerReport">
-              <Button
-                buttonStyle="dropdownItem"
-                id="cash-drawer-report"
-                onClick={() => {
-                  onToggle();
-                  this.changeCashDrawerReportModalState(true);
-                }}
-              >
-                <Icon icon="download">
-                  <FormattedMessage id="ui-users.reports.cashDrawer.label" />
-                </Icon>
-              </Button>
-            </IfPermission>
+            {/* <IfPermission perm="ui-users.cashDrawerReport"> */}
+            <Button
+              buttonStyle="dropdownItem"
+              id="cash-drawer-report"
+              onClick={() => {
+                onToggle();
+                this.changeCashDrawerReportModalState(true);
+              }}
+            >
+              <Icon icon="download">
+                <FormattedMessage id="ui-users.reports.cashDrawer.label" />
+              </Icon>
+            </Button>
+            {/* </IfPermission> */}
             <IfPermission perm="ui-users.financialTransactionReport">
               <Button
                 buttonStyle="dropdownItem"
@@ -509,18 +512,18 @@ class UserSearch extends React.Component {
     });
 
     const { mutator: { cashDrawerReport } } = this.props;
-    const reportData = {
+    const reportParameters = {
       createdAt: servicePoint,
-      sources,
+      sources: sources.map(s => s.label),
       startDate,
       endDate,
     };
 
     try {
       this.context.sendCallout({ message: <FormattedMessage id="ui-users.reports.inProgress" /> });
-      const report = await cashDrawerReport.POST(reportData);
+      const { reportData } = await cashDrawerReport.POST(reportParameters);
 
-      if (isEmpty(report)) {
+      if (isEmpty(reportData)) {
         this.context.sendCallout({
           type: 'error',
           message: <FormattedMessage id="ui-users.reports.noItemsFound" />,
@@ -551,7 +554,7 @@ class UserSearch extends React.Component {
       onNeedMoreData,
       resources,
       contentRef,
-      mutator: { resultOffset },
+      mutator: { resultOffset, cashDrawerReportSources },
       stripes: { timezone },
       okapi: { currentUser },
     } = this.props;
@@ -570,7 +573,6 @@ class UserSearch extends React.Component {
     const users = get(resources, 'records.records', []);
     const owners = resources.owners.records;
     const servicePoints = currentUser.servicePoints;
-    console.log('servicePoints', servicePoints);
     const patronGroups = (resources.patronGroups || {}).records || [];
     const query = queryGetter ? queryGetter() || {} : {};
     const count = source ? source.totalCount() : 0;
@@ -771,6 +773,7 @@ class UserSearch extends React.Component {
               timezone={timezone}
               initialValues={initialCashDrawerReportValues}
               resources={resources}
+              cashDrawerReportSources={cashDrawerReportSources}
             />
           )}
         </div>

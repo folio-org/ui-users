@@ -15,14 +15,14 @@ const renderCashDrawerReportModal = ({
   label = modalHeader,
   onClose = jest.fn(),
   handleSubmit = jest.fn(),
-  values = {
-    format: 'both',
-    servicePoint:'Online'
-  },
+  values = {},
   resources = {
     feefineactions: {
       records: [],
     },
+  },
+  cashDrawerReportSources = {
+    POST: jest.fn()
   },
   intl = {},
   form = {},
@@ -30,7 +30,8 @@ const renderCashDrawerReportModal = ({
     { name: 'Online', id: 'id1' },
     { name: 'Circ Desc 1', id: 'id2' },
     { name: 'Circ Desc 2', id: 'id3' }
-  ]
+  ],
+  initialValues = {},
 }) => {
   const history = createMemoryHistory();
   return render(
@@ -42,11 +43,12 @@ const renderCashDrawerReportModal = ({
         timezone="America/New_York"
         onClose={onClose}
         onSubmit={handleSubmit}
-        initialValues={{ format: 'both' }}
         resources={resources}
+        initialValues={initialValues}
         values={values}
         intl={intl}
         form={form}
+        cashDrawerReportSources={cashDrawerReportSources}
       />
     </Router>
   );
@@ -55,23 +57,120 @@ const renderCashDrawerReportModal = ({
 describe('Cash drawer reconciliation modal', () => {
   let cashDrawerModal;
 
-  beforeEach(() => {
-    cashDrawerModal = renderCashDrawerReportModal({});
+  describe('with correct data', () => {
+    beforeEach(() => {
+      cashDrawerModal = renderCashDrawerReportModal({
+        initialValues: {
+          format: 'both',
+          servicePoint: 'Online',
+          sources: ['ADMIN'],
+          startDate: '2020-05-11',
+          endDate: '2021-05-11'
+        }
+      });
+    });
+
+    afterEach(cleanup);
+
+    it('should be rendered', () => {
+      const { container } = cashDrawerModal;
+      const modalContent = container.querySelector('[data-test-cash-drawer-report-modal]');
+      const modalMainHeader = container.querySelector('[data-test-cash-drawer-report-modal] h1');
+      const form = container.querySelector('form');
+
+      expect(container).toBeVisible();
+      expect(modalContent).toBeVisible();
+      expect(modalMainHeader).toBeVisible();
+      expect(form).toBeVisible();
+      expect(screen.getByText(modalHeader)).toBeInTheDocument();
+    });
   });
 
-  afterEach(cleanup);
+  describe('with format', () => {
+    beforeEach(() => {
+      cashDrawerModal = renderCashDrawerReportModal({
+        initialValues: {
+          sources: [],
+          startDate: '2020-05-11',
+          endDate: '2021-05-11'
+        }
+      });
+    });
 
-  it('should be rendered', () => {
-    const { container } = cashDrawerModal;
-    const modalContent = container.querySelector('[data-test-cash-drawer-report-modal]');
-    const modalMainHeader = container.querySelector('[data-test-cash-drawer-report-modal] h1');
-    const form = container.querySelector('form');
+    afterEach(cleanup);
 
-    expect(container).toBeVisible();
-    expect(modalContent).toBeVisible();
-    expect(modalMainHeader).toBeVisible();
-    expect(form).toBeVisible();
-    // expect(screen.getByDisplayValue(modalHeader)).toBeInTheDocument();
-    expect(screen.getByText(modalHeader)).toBeInTheDocument();
+    it('should be rendered', () => {
+      const { container } = cashDrawerModal;
+      const form = container.querySelector('form');
+
+      expect(container).toBeVisible();
+      expect(form).toBeVisible();
+    });
+  });
+
+  describe('with empty dates', () => {
+    beforeEach(() => {
+      cashDrawerModal = renderCashDrawerReportModal({
+        initialValues: {
+          sources: [],
+          startDate: '',
+          endDate: ''
+        }
+      });
+    });
+
+    afterEach(cleanup);
+
+    it('should be rendered', () => {
+      const { container } = cashDrawerModal;
+      const form = container.querySelector('form');
+
+      expect(container).toBeVisible();
+      expect(form).toBeVisible();
+    });
+  });
+
+  describe('with empty start date', () => {
+    beforeEach(() => {
+      cashDrawerModal = renderCashDrawerReportModal({
+        initialValues: {
+          sources: [],
+          startDate: '',
+          endDate: '2021-05-11'
+        }
+      });
+    });
+
+    afterEach(cleanup);
+
+    it('should be rendered', () => {
+      const { container } = cashDrawerModal;
+      const form = container.querySelector('form');
+
+      expect(container).toBeVisible();
+      expect(form).toBeVisible();
+    });
+  });
+
+  describe('with empty start date after end date', () => {
+    beforeEach(() => {
+      cashDrawerModal = renderCashDrawerReportModal({
+        initialValues: {
+          sources: [],
+          startDate: '2025-05-12',
+          endDate: '2021-05-11'
+        }
+      });
+    });
+
+    afterEach(cleanup);
+
+    it('should be rendered', () => {
+      const { container } = cashDrawerModal;
+      const form = container.querySelector('form');
+
+      expect(container).toBeVisible();
+      expect(form).toBeVisible();
+    });
   });
 });
