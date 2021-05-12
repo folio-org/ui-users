@@ -2,7 +2,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import isEqual from 'lodash/isEqual';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import { Field, FormSpy } from 'react-final-form';
 import setFieldData from 'final-form-set-field-data';
 
@@ -110,6 +110,7 @@ class UserForm extends React.Component {
     servicePoints: PropTypes.object,
     stripes: PropTypes.object,
     form: PropTypes.object, // provided by final-form
+    intl: PropTypes.object,
   };
 
   static defaultProps = {
@@ -184,19 +185,17 @@ class UserForm extends React.Component {
   }
 
   getAddFirstMenu() {
+    const { intl } = this.props;
+
     return (
       <PaneMenu>
-        <FormattedMessage id="ui-users.crud.closeNewUserDialog">
-          {ariaLabel => (
-            <PaneHeaderIconButton
-              id="clickable-closenewuserdialog"
-              onClick={this.handleCancel}
-              ref={this.closeButton}
-              aria-label={ariaLabel}
-              icon="times"
-            />
-          )}
-        </FormattedMessage>
+        <PaneHeaderIconButton
+          id="clickable-closenewuserdialog"
+          onClick={this.handleCancel}
+          ref={this.closeButton}
+          aria-label={intl.formatMessage({ id: 'ui-users.crud.closeNewUserDialog' })}
+          icon="times"
+        />
       </PaneMenu>
     );
   }
@@ -507,4 +506,4 @@ export default stripesFinalForm({
   initialValuesEqual: (a, b) => isEqual(a, b),
   navigationCheck: true,
   enableReinitialize: true,
-})(UserForm);
+})(injectIntl(UserForm));

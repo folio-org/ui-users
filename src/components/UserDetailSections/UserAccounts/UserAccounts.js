@@ -111,7 +111,7 @@ const UserAccounts = ({
 };
 
 UserAccounts.propTypes = {
-  accounts: PropTypes.arrayOf(PropTypes.object),
+  accounts: PropTypes.object,
   accordionId: PropTypes.string,
   expanded: PropTypes.bool,
   onToggle: PropTypes.func,
