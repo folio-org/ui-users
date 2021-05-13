@@ -40,6 +40,7 @@ import CashDrawerReportModal from '../../components/ReportModals/CashDrawerRepor
 
 import CsvReport from '../../components/data/reports';
 import RefundsReport from '../../components/data/reports/RefundReport';
+import CashDrawerReconciliationReport from '../../components/data/reports/cashDrawerReconciliationReport';
 import Filters from './Filters';
 import css from './UserSearch.css';
 
@@ -296,7 +297,7 @@ class UserSearch extends React.Component {
             </IfPermission>
           </IfInterface>
           <IfInterface name="feesfines">
-            <IfPermission perm="ui-users.cashDrawerReport">
+            {/* <IfPermission perm="ui-users.cashDrawerReport"> */}
               <Button
                 buttonStyle="dropdownItem"
                 id="cash-drawer-report"
@@ -309,7 +310,7 @@ class UserSearch extends React.Component {
                   <FormattedMessage id="ui-users.reports.cashDrawer.label" />
                 </Icon>
               </Button>
-            </IfPermission>
+            {/* </IfPermission> */}
             <IfPermission perm="ui-users.financialTransactionReport">
               <Button
                 buttonStyle="dropdownItem"
@@ -510,7 +511,11 @@ class UserSearch extends React.Component {
       showCashDrawerReportModal: false,
     });
 
-    const { mutator: { cashDrawerReport } } = this.props;
+    const {
+      mutator: { cashDrawerReport },
+      okapi: { currentUser },
+      intl,
+    } = this.props;
     const reportParameters = {
       createdAt: servicePoint,
       sources: sources.map(s => s.label),
@@ -520,7 +525,7 @@ class UserSearch extends React.Component {
 
     try {
       this.context.sendCallout({ message: <FormattedMessage id="ui-users.reports.inProgress" /> });
-      const { reportData } = await cashDrawerReport.POST(reportParameters);
+      const reportData = await cashDrawerReport.POST(reportParameters);
 
       if (isEmpty(reportData)) {
         this.context.sendCallout({
@@ -528,10 +533,25 @@ class UserSearch extends React.Component {
           message: <FormattedMessage id="ui-users.reports.noItemsFound" />,
         });
       } else {
-        // TODO: form the report depends on format
+        const servicePoints = currentUser.servicePoints;
+        const chosenServicePoint = servicePoints.find(sp => sp.id === servicePoint);
+        const headerData = {
+          ...reportParameters,
+          createdAt: chosenServicePoint?.name ?? '',
+          sources: reportParameters.sources.join(', '),
+        };
+
+        const report = new CashDrawerReconciliationReport({
+          data: reportData,
+          intl,
+          headerData,
+        });
+
+        report.toPDF();
       }
     } catch (error) {
       if (error) {
+        console.log('error.message ', error.message);
         this.context.sendCallout({
           type: 'error',
           message: <FormattedMessage id="ui-users.reports.callout.error" />,
