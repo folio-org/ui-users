@@ -16,11 +16,6 @@ const renderCashDrawerReportModal = ({
   onClose = jest.fn(),
   handleSubmit = jest.fn(),
   values = {},
-  resources = {
-    feefineactions: {
-      records: [],
-    },
-  },
   cashDrawerReportSources = {
     POST: jest.fn()
   },
@@ -43,7 +38,6 @@ const renderCashDrawerReportModal = ({
         timezone="America/New_York"
         onClose={onClose}
         onSubmit={handleSubmit}
-        resources={resources}
         initialValues={initialValues}
         values={values}
         intl={intl}
