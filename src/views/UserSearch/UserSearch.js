@@ -771,7 +771,6 @@ class UserSearch extends React.Component {
               onSubmit={this.handleCashDrawerReportFormSubmit}
               timezone={timezone}
               initialValues={initialCashDrawerReportValues}
-              resources={resources}
               cashDrawerReportSources={cashDrawerReportSources}
             />
           )}

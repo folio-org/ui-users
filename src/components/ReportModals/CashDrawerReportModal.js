@@ -196,11 +196,6 @@ CashDrawerReportModal.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   timezone: PropTypes.string.isRequired,
   values: PropTypes.object.isRequired,
-  resources: PropTypes.shape({
-    feefineactions: PropTypes.shape({
-      records: PropTypes.arrayOf(PropTypes.object),
-    }),
-  }).isRequired,
   cashDrawerReportSources: PropTypes.shape({
     POST: PropTypes.func.isRequired,
   }).isRequired,
