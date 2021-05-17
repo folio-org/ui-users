@@ -30,6 +30,7 @@
 * Avoid querying for an empty list of loan policies. Refs UIU-2163.
 * Show `Pop-up on User` and `Pop-up on Checkout` fields to Notes forms. Refs UIU-2155.
 * Show loading indicator on Loans details screen. Fixes UIU-2120.
+* Add type column to users settings permissions sets. Refs UIU-2167.
 
 ## [6.0.0](https://github.com/folio-org/ui-users/tree/v6.0.0) (2021-03-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.9...v6.0.0)
