@@ -67,7 +67,7 @@ export default class Settings extends Component {
                   {section.pages.map((setting) => this.renderSectionPageItem(setting))}
                 </NavListSection>
               );
-              return section.interface ? <IfInterface name={section.interface}>sectionInner</IfInterface> : sectionInner;
+              return section.interface ? <IfInterface name={section.interface}>{sectionInner}</IfInterface> : sectionInner;
             })}
           </NavList>
         </Pane>

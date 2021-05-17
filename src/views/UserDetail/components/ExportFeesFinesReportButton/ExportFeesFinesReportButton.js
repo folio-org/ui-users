@@ -24,7 +24,12 @@ class ExportFeesFinesReportButton extends React.Component {
         id: PropTypes.string.isRequired,
       }).isRequired,
     }).isRequired,
-    callout: PropTypes.func,
+    // callout is a ref, either a callback (func) or an object
+    // with "current" assigned to a DOM object (Element)
+    callout: PropTypes.oneOfType([
+      PropTypes.func,
+      PropTypes.shape({ current: PropTypes.instanceOf(Element) })
+    ]),
     onToggle: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired,
   };

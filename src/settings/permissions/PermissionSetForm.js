@@ -25,7 +25,10 @@ import stripesFinalForm from '@folio/stripes/final-form';
 import { Field } from 'react-final-form';
 
 import PermissionsAccordion from '../../components/PermissionsAccordion';
-import { statusFilterConfig } from '../../components/PermissionsAccordion/helpers/filtersConfig';
+import {
+  statusFilterConfig,
+  permissionTypeFilterConfig,
+} from '../../components/PermissionsAccordion/helpers/filtersConfig';
 
 import styles from './PermissionSetForm.css';
 
@@ -281,7 +284,10 @@ class PermissionSetForm extends React.Component {
               confirmLabel={<FormattedMessage id="ui-users.delete" />}
             />
             <PermissionsAccordion
-              filtersConfig={[statusFilterConfig]}
+              filtersConfig={[
+                permissionTypeFilterConfig,
+                statusFilterConfig,
+              ]}
               expanded={sections.permSection}
               visibleColumns={[
                 'selected',
@@ -296,7 +302,6 @@ class PermissionSetForm extends React.Component {
               permToModify="perms.permissions.item.put"
               formName="permissionSetForm"
               permissionsField="subPermissions"
-              excludePermissionSets
               form={form}
             />
           </Pane>
