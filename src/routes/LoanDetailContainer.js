@@ -199,9 +199,28 @@ class LoanDetailContainer extends React.Component {
     return [];
   }
 
+  isLoading = () => {
+    const {
+      resources: {
+        loanActions,
+        loanHistory,
+        users,
+      },
+    } = this.props;
+    const loan = this.getLoan();
+    const user = this.getUser();
+
+    return !loanActions.hasLoaded ||
+      !loanHistory.hasLoaded ||
+      !users.hasLoaded ||
+      !loan ||
+      !user ||
+      loan?.userId !== user?.id;
+  }
+
   render() {
     const {
-      resources : {
+      resources: {
         loanActions,
         loanHistory,
         users,
@@ -224,6 +243,7 @@ class LoanDetailContainer extends React.Component {
         user={this.getUser()}
         patronGroup={this.getPatronGroup()}
         patronBlocks={this.getPatronBlocks()}
+        isLoading={this.isLoading()}
         {...this.props}
       />
     );
