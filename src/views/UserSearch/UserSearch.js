@@ -40,7 +40,7 @@ import CashDrawerReportModal from '../../components/ReportModals/CashDrawerRepor
 
 import CsvReport from '../../components/data/reports';
 import RefundsReport from '../../components/data/reports/RefundReport';
-import CashDrawerReconciliationReport from '../../components/data/reports/cashDrawerReconciliationReport';
+import CashDrawerReconciliationReportPDF from '../../components/data/reports/cashDrawerReconciliationReportPDF';
 import Filters from './Filters';
 import css from './UserSearch.css';
 
@@ -297,7 +297,7 @@ class UserSearch extends React.Component {
             </IfPermission>
           </IfInterface>
           <IfInterface name="feesfines">
-            {/* <IfPermission perm="ui-users.cashDrawerReport"> */}
+            <IfPermission perm="ui-users.cashDrawerReport">
               <Button
                 buttonStyle="dropdownItem"
                 id="cash-drawer-report"
@@ -310,7 +310,7 @@ class UserSearch extends React.Component {
                   <FormattedMessage id="ui-users.reports.cashDrawer.label" />
                 </Icon>
               </Button>
-            {/* </IfPermission> */}
+            </IfPermission>
             <IfPermission perm="ui-users.financialTransactionReport">
               <Button
                 buttonStyle="dropdownItem"
@@ -500,6 +500,7 @@ class UserSearch extends React.Component {
       endDate,
       servicePoint,
       sources = [],
+      format,
     } = data;
 
     if (this.state.cashDrawerReportInProgress) {
@@ -541,17 +542,27 @@ class UserSearch extends React.Component {
           sources: reportParameters.sources.join(', '),
         };
 
-        const report = new CashDrawerReconciliationReport({
+        const report = new CashDrawerReconciliationReportPDF({
           data: reportData,
           intl,
           headerData,
         });
 
-        report.toPDF();
+        switch (format) {
+          case 'pdf':
+            report.toPDF();
+            break;
+          case 'csv':
+            break;
+          case 'both':
+            report.toPDF();
+            break;
+          default:
+            report.toPDF();
+        }
       }
     } catch (error) {
       if (error) {
-        console.log('error.message ', error.message);
         this.context.sendCallout({
           type: 'error',
           message: <FormattedMessage id="ui-users.reports.callout.error" />,

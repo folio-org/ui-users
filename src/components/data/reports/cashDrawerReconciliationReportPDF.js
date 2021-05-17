@@ -1,6 +1,7 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { values } from 'lodash';
+import moment from 'moment';
 
 import {
   cashMainReportColumns,
@@ -24,13 +25,12 @@ const pdfOptions = {
   printHeaders: true
 };
 
-class CashDrawerReconciliationReport {
+class CashDrawerReconciliationReportPDF {
   constructor({ data, intl: { formatMessage, formatTime }, headerData }) {
     this.data = data;
     this.formatMessage = formatMessage;
     this.formatTime = formatTime;
     this.headerData = headerData;
-    this.reportData = null;
     this.mainReportColumnsMap = this.generateTableColumns(cashMainReportColumns);
     this.sourceReportColumnsMap = this.generateTableColumns(cashSourceReportColumns);
     this.sourceReportFooterMap = this.generateTableColumns(cashSourceReportFooter);
@@ -51,19 +51,6 @@ class CashDrawerReconciliationReport {
       dataKey: this.formatMessage({ id: `ui-users.reports.cash.${value}` })
     }));
   }
-
-  // getColumnWidth(data) {
-  //   const settingsColumnWidth = {};
-  //
-  //   data.forEach((column, index) => {
-  //     settingsColumnWidth[column] = {
-  //       cellWidth: 'auto'
-  //     };
-  //   });
-  //
-  //   console.log('settingsColumnWidth  ', settingsColumnWidth);
-  //   return settingsColumnWidth;
-  // }
 
   parseData(data, containsFooter = true) {
     const parsedData = data.map((row) => [...values(row)]);
@@ -98,7 +85,7 @@ class CashDrawerReconciliationReport {
     ];
   }
 
-  formatDate(date) {
+  formatDate(date = '') {
     return date.split('-').join('/');
   }
 
@@ -137,7 +124,7 @@ class CashDrawerReconciliationReport {
     };
 
     this.doc.text(
-      `Cash Drawer Reconciliation Report for ${this.headerData.createdAt}, Source(s) ${this.formatDate(this.headerData.sources)} - ${this.formatDate(this.headerData.startDate)} to ${this.formatDate(this.headerData.endDate)}`,
+      `Cash Drawer Reconciliation Report for ${this.headerData.createdAt}, Source(s) ${this.formatDate(this.headerData.sources)} - ${this.formatDate(this.headerData.startDate)} to ${this.formatDate(this.headerData.endDate) || moment().format('YYYY/MM/DD')}`,
       15,
       10
     );
@@ -204,4 +191,4 @@ class CashDrawerReconciliationReport {
   }
 }
 
-export default CashDrawerReconciliationReport;
+export default CashDrawerReconciliationReportPDF;
