@@ -32,6 +32,7 @@
 * Show loading indicator on Loans details screen. Fixes UIU-2120.
 * Add type column to users settings permissions sets. Refs UIU-2167.
 * Add modal for 'Cash drawer reconciliation report'. Refs UIU-1959.
+* Provide `key` when rendering list elements. Refs UIU-2168.
 
 ## [6.0.0](https://github.com/folio-org/ui-users/tree/v6.0.0) (2021-03-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.9...v6.0.0)

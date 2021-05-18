@@ -12,6 +12,7 @@ import {
 } from '@folio/stripes/components';
 
 import sections from './sections';
+import SectionPageItem from './SectionPageItem';
 
 export default class Settings extends Component {
   static propTypes = {
@@ -24,7 +25,7 @@ export default class Settings extends Component {
       match: { path },
     } = this.props;
     let sectionItem = (
-      <NavListItem to={`${path}/${setting.route}`}>
+      <NavListItem to={`${path}/${setting.route}`} key={`${path}/${setting.route}`}>
         {setting.label}
       </NavListItem>
     );
@@ -47,6 +48,7 @@ export default class Settings extends Component {
   render() {
     const {
       children,
+      match: { path }
     } = this.props;
 
     return (
@@ -64,10 +66,10 @@ export default class Settings extends Component {
             {sections.map((section, index) => {
               const sectionInner = (
                 <NavListSection key={index} label={section.label}>
-                  {section.pages.map((setting) => this.renderSectionPageItem(setting))}
+                  {section.pages.map((setting) => <SectionPageItem setting={setting} path={path} key={setting.route} />)}
                 </NavListSection>
               );
-              return section.interface ? <IfInterface name={section.interface}>{sectionInner}</IfInterface> : sectionInner;
+              return section.interface ? <IfInterface name={section.interface} key={index}>{sectionInner}</IfInterface> : sectionInner;
             })}
           </NavList>
         </Pane>
