@@ -3,7 +3,6 @@ import { Router } from 'react-router-dom';
 import {
   render,
   cleanup,
-  screen,
 } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { FormattedMessage } from 'react-intl';
@@ -11,7 +10,6 @@ import { FormattedMessage } from 'react-intl';
 import '../../test/jest/__mock__';
 import SectionPageItem from './SectionPageItem';
 
-const modalHeader = 'Cash drawer reconciliation modal';
 const renderSectionPageItem = ({ setting, path }) => {
   const history = createMemoryHistory();
   return render(
@@ -45,6 +43,7 @@ describe('Settings SectionPageItem', () => {
       const { container } = sectionPageItem;
       const sectionContent = container.querySelector('[data-test-SectionPageItem-NavListItem]');
       expect(container).toBeVisible();
+      expect(sectionContent).toBeVisible();
     });
   });
 
@@ -57,7 +56,7 @@ describe('Settings SectionPageItem', () => {
           route: 'some-route',
           label: <FormattedMessage id="foo" />,
           component: <div />,
-          interface: "interface",
+          interface: 'interface',
         },
         path: 'funky-chicken'
       });
@@ -80,7 +79,7 @@ describe('Settings SectionPageItem', () => {
           route: 'some-route',
           label: <FormattedMessage id="foo" />,
           component: <div />,
-          interface: "asdf",
+          interface: 'asdf',
         },
         path: 'funky-chicken'
       });
@@ -92,7 +91,7 @@ describe('Settings SectionPageItem', () => {
       const { container } = sectionPageItem;
       const sectionContent = container.querySelector('[data-test-SectionPageItem-NavListItem]');
       expect(container).toBeVisible();
-      expect(sectionContent).toBeNull;
+      expect(sectionContent).toBeNull();
     });
   });
 
@@ -103,7 +102,7 @@ describe('Settings SectionPageItem', () => {
           route: 'some-route',
           label: <FormattedMessage id="foo" />,
           component: <div />,
-          perm: "permission",
+          perm: 'permission',
         },
         path: 'funky-chicken'
       });
@@ -126,7 +125,7 @@ describe('Settings SectionPageItem', () => {
           route: 'some-route',
           label: <FormattedMessage id="foo" />,
           component: <div />,
-          perm: "asdf",
+          perm: 'asdf',
         },
         path: 'funky-chicken'
       });
@@ -138,7 +137,7 @@ describe('Settings SectionPageItem', () => {
       const { container } = sectionPageItem;
       const sectionContent = container.querySelector('[data-test-SectionPageItem-NavListItem]');
       expect(container).toBeVisible();
-      expect(sectionContent).toBeNull;
+      expect(sectionContent).toBeNull();
     });
   });
 
