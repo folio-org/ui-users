@@ -292,6 +292,7 @@ class PermissionSetForm extends React.Component {
               visibleColumns={[
                 'selected',
                 'permissionName',
+                'type',
                 'status',
               ]}
               headlineContent={<FormattedMessage id="ui-users.permissions.assignedPermissions" />}
