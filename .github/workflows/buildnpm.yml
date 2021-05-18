@@ -153,13 +153,13 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       
       - name: Generate Module descriptor
-        if: ${{ env.BRANCH }} == 'master'
+        if: contains(github.REF, "master")
         run: stripes mod descriptor --full --strict | jq '.[]' > ${{ env.MODULE_DESCRIPTOR_DIR }}/${{ env.FOLIO_NAME }}.json
       
       
       - name: Publish Module descriptor
         uses: fjogeleit/http-request-action@master
-        if: ${{ env.BRANCH }} == 'master'
+        if: contains(github.REF, "master")
         with:
           url: 'http://ec2-3-88-110-24.compute-1.amazonaws.com'
           method: 'POST'
