@@ -45,7 +45,7 @@ jobs:
         run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
       
       - name: Extract Branch Name
-        run: echo "::set-env name=BRANCH::$(echo ${GITHUB_REF##*/})"
+        run: echo "BRANCH_NAME=$(${GITHUB_REF##*/})" >> $GITHUB_ENV
 
       - name: Use Node.js
         uses: actions/setup-node@v2
