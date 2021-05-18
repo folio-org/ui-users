@@ -145,7 +145,7 @@ class ActionModal extends React.Component {
     } = this.props;
 
     return (
-      <Col xs={this.isPaymentAction(action) ? 3 : 7}>
+      <Col xs={(this.isPaymentAction(action) || this.isTransferAction(action)) ? 3 : 7}>
         <Row>
           <Col xs>
             <FormattedMessage id={`ui-users.accounts.${action}.method`} />
@@ -182,6 +182,10 @@ class ActionModal extends React.Component {
 
   isRefundAction = (action) => {
     return action === FEE_FINE_ACTIONS.REFUND;
+  }
+
+  isTransferAction = (action) => {
+    return action === FEE_FINE_ACTIONS.TRANSFER;
   }
 
   onChangeOwner = ({ target: { value } }) => {
@@ -312,6 +316,11 @@ class ActionModal extends React.Component {
       action,
       balance,
       initialValues,
+      okapi: {
+        currentUser: {
+          curServicePoint,
+        }
+      },
       totalPaidAmount,
       owedAmount,
       commentRequired,
@@ -336,9 +345,16 @@ class ActionModal extends React.Component {
     } = getState();
 
     const selected = calculateSelectedAmount(accounts, this.isRefundAction(action), feeFineActions);
-    const ownerOptions = owners.filter(o => o.owner !== 'Shared').map(o => ({ value: o.id, label: o.owner }));
+    const ownersServicePoint = [];
+    owners.forEach((item) => {
+      if (item.servicePointOwner.filter(s => s.value === curServicePoint.id).length > 0) {
+        ownersServicePoint.push(item);
+      }
+    });
+    const ownerOptions = ownersServicePoint.filter(o => o.owner !== 'Shared').map(o => ({ value: o.id, label: o.owner }));
 
     let options = (this.isPaymentAction(action)) ? data.filter(d => (d.ownerId === (accounts.length > 1 ? ownerId : (accounts[0] || {}).ownerId))) : data;
+    options = (this.isTransferAction(action)) ? data.filter(d => (d.ownerId === (ownersServicePoint[0] || {}).id)) : options;
     options = _.uniqBy(options.map(o => ({ id: o.id, label: o[label] })), 'label');
 
     const showNotify = initialValues.notify;
@@ -434,7 +450,7 @@ class ActionModal extends React.Component {
                 </Row>
               )}
             </Col>
-            {(this.isPaymentAction(action) && accounts.length > 1) &&
+            {((this.isPaymentAction(action) && accounts.length > 1) || this.isTransferAction(action)) &&
               <Col xs={4}>
                 <Row>
                   <Col xs>
