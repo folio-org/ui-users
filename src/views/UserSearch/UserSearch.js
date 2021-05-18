@@ -13,7 +13,7 @@ import {
 } from 'lodash';
 import { Link } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { IfPermission, AppIcon, CalloutContext } from '@folio/stripes/core';
+import { IfPermission, IfInterface, AppIcon, CalloutContext } from '@folio/stripes/core';
 import {
   Button,
   HasCommand,
@@ -35,7 +35,8 @@ import {
   ColumnManager,
 } from '@folio/stripes/smart-components';
 
-import RefundsReportModal from '../../components/RefundsReportModal/RefundsReportModal';
+import RefundsReportModal from '../../components/ReportModals/RefundsReportModal';
+import CashDrawerReportModal from '../../components/ReportModals/CashDrawerReportModal';
 
 import CsvReport from '../../components/data/reports';
 import RefundsReport from '../../components/data/reports/RefundReport';
@@ -81,6 +82,7 @@ class UserSearch extends React.Component {
       patronGroups: PropTypes.object,
       departments: PropTypes.object,
       owners: PropTypes.object,
+      servicePointsUsers: PropTypes.object.isRequired,
       query: PropTypes.shape({
         qindex: PropTypes.string,
       }).isRequired,
@@ -96,7 +98,18 @@ class UserSearch extends React.Component {
       refundsReport: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }).isRequired,
+      cashDrawerReport: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }).isRequired,
+      cashDrawerReportSources: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }).isRequired,
     }).isRequired,
+    okapi: PropTypes.shape({
+      currentUser: PropTypes.shape({
+        servicePoints: PropTypes.arrayOf(PropTypes.object),
+      }),
+    }),
     source: PropTypes.object,
     stripes: PropTypes.shape({
       timezone: PropTypes.string.isRequired,
@@ -118,6 +131,8 @@ class UserSearch extends React.Component {
       searchPending: false,
       showRefundsReportModal: false,
       refundExportInProgress: false,
+      showCashDrawerReportModal: false,
+      cashDrawerReportInProgress: false,
     };
 
     this.resultsPaneTitleRef = createRef();
@@ -157,6 +172,10 @@ class UserSearch extends React.Component {
   changeRefundReportModalState = (modalState) => {
     this.setState({ showRefundsReportModal: modalState });
   };
+
+  changeCashDrawerReportModalState = (modalState) => {
+    this.setState({ showCashDrawerReportModal: modalState });
+  }
 
   getColumnMapping = () => {
     const { intl } = this.props;
@@ -248,44 +267,77 @@ class UserSearch extends React.Component {
               </FormattedMessage>
             </PaneMenu>
           </IfPermission>
-          <IfPermission perm="ui-users.loans.view">
-            <Button
-              buttonStyle="dropdownItem"
-              id="export-overdue-loan-report"
-              onClick={() => {
-                onToggle();
-                this.generateReport(this.props, 'overdue');
-              }}
-            >
-              <Icon icon="download">
-                <FormattedMessage id="ui-users.reports.overdue.label" />
-              </Icon>
-            </Button>
-          </IfPermission>
-          <Button
-            buttonStyle="dropdownItem"
-            id="export-claimed-returned-loan-report"
-            onClick={() => {
-              onToggle();
-              this.generateReport(this.props, 'claimedReturned');
-            }}
-          >
-            <Icon icon="download">
-              <FormattedMessage id="ui-users.reports.claimReturned.label" />
-            </Icon>
-          </Button>
-          <Button
-            buttonStyle="dropdownItem"
-            id="export-refunds-report"
-            onClick={() => {
-              onToggle();
-              this.changeRefundReportModalState(true);
-            }}
-          >
-            <Icon icon="download">
-              <FormattedMessage id="ui-users.reports.refunds.label" />
-            </Icon>
-          </Button>
+          <IfInterface name="circulation">
+            <IfPermission perm="ui-users.loans.view">
+              <Button
+                buttonStyle="dropdownItem"
+                id="export-overdue-loan-report"
+                onClick={() => {
+                  onToggle();
+                  this.generateReport(this.props, 'overdue');
+                }}
+              >
+                <Icon icon="download">
+                  <FormattedMessage id="ui-users.reports.overdue.label" />
+                </Icon>
+              </Button>
+              <Button
+                buttonStyle="dropdownItem"
+                id="export-claimed-returned-loan-report"
+                onClick={() => {
+                  onToggle();
+                  this.generateReport(this.props, 'claimedReturned');
+                }}
+              >
+                <Icon icon="download">
+                  <FormattedMessage id="ui-users.reports.claimReturned.label" />
+                </Icon>
+              </Button>
+            </IfPermission>
+          </IfInterface>
+          <IfInterface name="feesfines">
+            <IfPermission perm="ui-users.cashDrawerReport">
+              <Button
+                buttonStyle="dropdownItem"
+                id="cash-drawer-report"
+                onClick={() => {
+                  onToggle();
+                  this.changeCashDrawerReportModalState(true);
+                }}
+              >
+                <Icon icon="download">
+                  <FormattedMessage id="ui-users.reports.cashDrawer.label" />
+                </Icon>
+              </Button>
+            </IfPermission>
+            <IfPermission perm="ui-users.financialTransactionReport">
+              <Button
+                buttonStyle="dropdownItem"
+                id="financial-transaction-report"
+                onClick={() => {
+                  onToggle();
+                }}
+              >
+                <Icon icon="download">
+                  <FormattedMessage id="ui-users.reports.financialTransaction.label" />
+                </Icon>
+              </Button>
+            </IfPermission>
+            <IfPermission perm="ui-users.manualProcessRefundsReport">
+              <Button
+                buttonStyle="dropdownItem"
+                id="export-refunds-report"
+                onClick={() => {
+                  onToggle();
+                  this.changeRefundReportModalState(true);
+                }}
+              >
+                <Icon icon="download">
+                  <FormattedMessage id="ui-users.reports.refunds.label" />
+                </Icon>
+              </Button>
+            </IfPermission>
+          </IfInterface>
         </MenuSection>
         {renderColumnsMenu}
       </>
@@ -441,6 +493,55 @@ class UserSearch extends React.Component {
     }
   }
 
+  handleCashDrawerReportFormSubmit = async (data) => {
+    const {
+      startDate,
+      endDate,
+      servicePoint,
+      sources = [],
+    } = data;
+
+    if (this.state.cashDrawerReportInProgress) {
+      return;
+    }
+
+    this.setState({
+      cashDrawerReportInProgress: true,
+      showCashDrawerReportModal: false,
+    });
+
+    const { mutator: { cashDrawerReport } } = this.props;
+    const reportParameters = {
+      createdAt: servicePoint,
+      sources: sources.map(s => s.label),
+      startDate,
+      endDate,
+    };
+
+    try {
+      this.context.sendCallout({ message: <FormattedMessage id="ui-users.reports.inProgress" /> });
+      const { reportData } = await cashDrawerReport.POST(reportParameters);
+
+      if (isEmpty(reportData)) {
+        this.context.sendCallout({
+          type: 'error',
+          message: <FormattedMessage id="ui-users.reports.noItemsFound" />,
+        });
+      } else {
+        // TODO: form the report depends on format
+      }
+    } catch (error) {
+      if (error) {
+        this.context.sendCallout({
+          type: 'error',
+          message: <FormattedMessage id="ui-users.reports.callout.error" />,
+        });
+      }
+    } finally {
+      this.setState({ cashDrawerReportInProgress: false });
+    }
+  }
+
   render() {
     const {
       onComponentWillUnmount,
@@ -452,8 +553,9 @@ class UserSearch extends React.Component {
       onNeedMoreData,
       resources,
       contentRef,
-      mutator: { resultOffset },
+      mutator: { resultOffset, cashDrawerReportSources },
       stripes: { timezone },
+      okapi: { currentUser },
     } = this.props;
     if (!searchableIndexes) {
       searchableIndexes = rawSearchableIndexes.map(x => (
@@ -469,10 +571,14 @@ class UserSearch extends React.Component {
     const columnMapping = this.getColumnMapping();
     const users = get(resources, 'records.records', []);
     const owners = resources.owners.records;
+    const servicePoints = currentUser.servicePoints;
     const patronGroups = (resources.patronGroups || {}).records || [];
     const query = queryGetter ? queryGetter() || {} : {};
     const count = source ? source.totalCount() : 0;
     const sortOrder = query.sort || '';
+    const initialCashDrawerReportValues = {
+      format: 'both'
+    };
     const resultsStatusMessage = source ? (
       <div data-test-user-search-no-results-message>
         <NoResultsMessage
@@ -654,6 +760,18 @@ class UserSearch extends React.Component {
               onClose={() => { this.changeRefundReportModalState(false); }}
               onSubmit={this.handleRefundsReportFormSubmit}
               timezone={timezone}
+            />
+          )}
+          { this.state.showCashDrawerReportModal && (
+            <CashDrawerReportModal
+              open
+              label={this.props.intl.formatMessage({ id:'ui-users.reports.cash.drawer.modal.label' })}
+              servicePoints={servicePoints}
+              onClose={() => { this.changeCashDrawerReportModalState(false); }}
+              onSubmit={this.handleCashDrawerReportFormSubmit}
+              timezone={timezone}
+              initialValues={initialCashDrawerReportValues}
+              cashDrawerReportSources={cashDrawerReportSources}
             />
           )}
         </div>

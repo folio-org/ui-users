@@ -49,11 +49,10 @@ describe('Test Fee/Fine History', () => {
 
         it('displays the pane title menu', () => {
           expect(FeeFineHistoryInteractor.paneTitle).to.string('Fees/fines -');
-          expect(FeeFineHistoryInteractor.paneSub).to.string('Outstanding Balance');
-          expect(FeeFineHistoryInteractor.paneSub).to.string('Suspended balance');
+          expect(FeeFineHistoryInteractor.paneSub).to.string('Outstanding balance for page');
+          expect(FeeFineHistoryInteractor.paneSub).to.string('Suspended balance for page');
           expect(FeeFineHistoryInteractor.labelMenu).to.string('Open fees/fines for');
-          expect(FeeFineHistoryInteractor.outstandingMenu).to.string('Outstanding Balance');
-          expect(FeeFineHistoryInteractor.outstandingMenu).to.string('Suspended balance');
+          expect(FeeFineHistoryInteractor.outstandingMenu).to.string('Total outstanding balance: 560.00 | Total suspended balance: 0.00');
         });
 
         describe('displays open fees/fines rows', () => {
