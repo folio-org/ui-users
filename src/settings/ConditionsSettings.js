@@ -31,7 +31,7 @@ class ConditionsSettings extends Component {
     }).isRequired,
     mutator: PropTypes.shape({
       patronBlockConditions: PropTypes.shape({
-        GET: PropTypes.func.isRequired,
+        GET: PropTypes.func,
       }).isRequired,
     }).isRequired,
   };
