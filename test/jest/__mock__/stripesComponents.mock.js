@@ -60,6 +60,9 @@ jest.mock('@folio/stripes/components', () => ({
       {children}
     </div>
   )),
+  NavListItem: jest.fn(({ children, className, ...rest }) => (
+    <div className={className} {...rest}>{children}</div>
+  )),
   PaneFooter: jest.fn(({ ref, children, ...rest }) => (
     <div ref={ref} {...rest}>{children}</div>
   )),
