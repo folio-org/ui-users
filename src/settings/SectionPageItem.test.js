@@ -140,5 +140,4 @@ describe('Settings SectionPageItem', () => {
       expect(sectionContent).toBeNull();
     });
   });
-
 });
