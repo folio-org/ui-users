@@ -31,7 +31,7 @@ class EditExtendedInfo extends Component {
     expanded: PropTypes.bool.isRequired,
     departments: departmentsShape,
     userId: PropTypes.string,
-    userEmail: PropTypes.string.isRequired,
+    userEmail: PropTypes.string,
     accordionId: PropTypes.string.isRequired,
     userFirstName: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,

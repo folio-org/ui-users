@@ -11,7 +11,7 @@ import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 import BulkRenewalDialog from '../BulkRenewalDialog';
 import isOverridePossible from '../Loans/OpenLoans/helpers/isOverridePossible';
-import { requestStatuses } from '../../constants';
+import { requestStatuses, MAX_RECORDS } from '../../constants';
 
 // HOC used to manage renew
 const withRenew = WrappedComponent => class WithRenewComponent extends React.Component {
@@ -271,7 +271,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
         .join(' or ');
       const query = `(itemId==(${q})) and status==(${statusList}) sortby requestDate desc`;
       reset();
-      GET({ params: { query } })
+      GET({ params: { query, limit: MAX_RECORDS } })
         .then((requestRecords) => {
           const requestCountObject = requestRecords.reduce((map, record) => {
             map[record.itemId] = map[record.itemId]
@@ -295,13 +295,6 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
    * loan-policy.id => loan-policy.name in state.
    */
   fetchLoanPolicyNames = () => {
-    // get a list of unique policy IDs to retrieve. multiple loans may share
-    // the same policy; we only need to retrieve that policy once.
-    const ids = [...new Set(this.state.loans
-      .filter(loan => loan.loanPolicyId)
-      .map(loan => loan.loanPolicyId))]
-      .join(' or ');
-    const query = `id==(${ids})`;
     const {
       mutator: {
         loanPolicies: {
@@ -311,19 +304,28 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
       },
     } = this.props;
 
-    reset();
-    GET({ params: { query } })
-      .then((loanPolicies) => {
-        const loanPolicyObject = loanPolicies.reduce((map, loanPolicy) => {
-          map[loanPolicy.id] = loanPolicy.name;
+    // get a list of unique policy IDs to retrieve. multiple loans may share
+    // the same policy; we only need to retrieve that policy once.
+    const ids = [...new Set(this.state.loans
+      .filter(loan => loan.loanPolicyId)
+      .map(loan => loan.loanPolicyId))]
+      .join(' or ');
 
-          return map;
-        }, {});
+    if (ids.length) {
+      reset();
+      GET({ params: { query: `id==(${ids})` } })
+        .then((loanPolicies) => {
+          const loanPolicyObject = loanPolicies.reduce((map, loanPolicy) => {
+            map[loanPolicy.id] = loanPolicy.name;
 
-        if (this._isMounted) {
-          this.setState({ loanPolicies: loanPolicyObject });
-        }
-      });
+            return map;
+          }, {});
+
+          if (this._isMounted) {
+            this.setState({ loanPolicies: loanPolicyObject });
+          }
+        });
+    }
   };
 
   render() {

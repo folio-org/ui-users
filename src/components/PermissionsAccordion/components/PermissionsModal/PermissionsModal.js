@@ -165,7 +165,18 @@ class PermissionsModal extends React.Component {
     // in the translation key, e.g. ui-users.permission.loans.all, before looking for the
     // search query.
     const matchedPermTranslations = pickBy(translations, (label, key) => {
-      return /\.permission\./.test(key) && label.toLowerCase().match(query.toLowerCase());
+      // non-AST translations are key-value pairs and the value is a string.
+      // AST-ified translations are key-value pairs and the value is an array.
+      // when that array has only a single element, it contains an object with
+      // the property "value" that contains the translation value.
+      // multi-value arrays correspond to translations with substitutions, html, etc.,
+      // but those are not relevent here.
+      if (typeof label === 'string') {
+        return /\.permission\./.test(key) && label.toLowerCase().match(query.toLowerCase());
+      } else if (Array.isArray(label) && label.length === 1) {
+        return /\.permission\./.test(key) && label[0].value.toLowerCase().match(query.toLowerCase());
+      }
+      return false;
     });
 
     // Matched permissions may not have a displayName value. We have to compare a permission's

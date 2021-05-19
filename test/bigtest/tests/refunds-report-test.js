@@ -164,4 +164,43 @@ describe('RefundsReport', () => {
       });
     });
   });
+
+  describe('When patron has view manual-process refunds report permissions', () => {
+    setupApplication({
+      hasAllPerms: false,
+      permissions: {
+        'module.users.enabled': true,
+        'ui-users.manualProcessRefundsReport': true,
+      },
+    });
+
+    beforeEach(async function () {
+      this.visit('/users?sort=Name');
+      await users.whenLoaded();
+      await users.headerDropdown.click();
+    });
+
+    it('"Refunds to process manually" should be present', () => {
+      expect(users.headerDropdownMenu.isRefundsReportButtonPresent).to.be.true;
+    });
+  });
+
+  describe('When patron does not have view manual-process refunds report permissions', () => {
+    setupApplication({
+      hasAllPerms: false,
+      permissions: {
+        'module.users.enabled': true,
+      },
+    });
+
+    beforeEach(async function () {
+      this.visit('/users?sort=Name');
+      await users.whenLoaded();
+      await users.headerDropdown.click();
+    });
+
+    it('"Refunds to process manually" should not be present', () => {
+      expect(users.headerDropdownMenu.isRefundsReportButtonPresent).to.be.false;
+    });
+  });
 });

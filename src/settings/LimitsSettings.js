@@ -105,6 +105,7 @@ class LimitsSettings extends Component {
       const renderLimits = () => {
         return (
           <Limits
+            key={id}
             patronGroupId={id}
             patronGroup={capitilizedPatronGroup}
             patronBlockConditions={this.getPatronBlockConditions()}

@@ -140,9 +140,11 @@ export default [
   {
     label: <FormattedMessage id="ui-users.settings.feefine" />,
     pages: sortBy(settingsFeefines, ['label']),
+    interface: 'feesfines',
   },
   {
     label: <FormattedMessage id="ui-users.settings.patronBlocks" />,
     pages: sortBy(settingsPatronBlocks, ['label']),
+    interface: 'circulation',
   },
 ];

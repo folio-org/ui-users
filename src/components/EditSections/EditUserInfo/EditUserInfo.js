@@ -259,6 +259,7 @@ class EditUserInfo extends React.Component {
                 disabled={isStatusFieldDisabled()}
                 dataOptions={statusOptions}
                 defaultValue={initialValues.active}
+                format={v => v.toString()}
                 aria-required="true"
                 required
               />
