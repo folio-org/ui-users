@@ -340,6 +340,7 @@
   "saveAndClose": "Save & close",
   "save": "Save",
   "edit": "Edit",
+  "checkDelete": "Check for open transactions/delete user",
   "okay": "OK",
   "cancel": "Cancel",
   "description": "Description",

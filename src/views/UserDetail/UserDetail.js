@@ -60,6 +60,7 @@ import {
   getFullName,
 } from '../../components/util';
 import RequestFeeFineBlockButtons from '../../components/RequestFeeFineBlockButtons';
+import CheckDeleteUserModal from '../../components/CheckDeleteUserModal';
 import { departmentsShape } from '../../shapes';
 
 import ExportFeesFinesReportButton from './components';
@@ -151,6 +152,7 @@ class UserDetail extends React.Component {
 
     this.state = {
       lastUpdate: null,
+      showCheckDeleteModal: false,
       sections: {
         userInformationSection: true,
         extendedInfoSection: false,
@@ -268,6 +270,18 @@ class UserDetail extends React.Component {
     return `/users/${params.id}/edit${search}`;
   }
 
+  doShowCheckDelete = () => {
+    this.setState({
+      showCheckDeleteModal: true,
+    });
+  };
+
+  doCloseCheckDelete = () => {
+    this.setState({
+      showCheckDeleteModal: false,
+    });
+  };
+
   onClose = () => {
     const {
       history,
@@ -370,6 +384,20 @@ class UserDetail extends React.Component {
               callout={this.callout}
             />
           </IfInterface>
+          <Button
+            buttonStyle="dropdownItem"
+            data-test-actions-menu-edit
+            id="clickable-edituser"
+            onClick={() => {
+              onToggle();
+              this.doShowCheckDelete();
+            }}
+            buttonRef={this.editButton}
+          >
+            <Icon icon="trash">
+              <FormattedMessage id="ui-users.checkDelete" />
+            </Icon>
+          </Button>
         </>
       );
     } else {
@@ -686,6 +714,11 @@ class UserDetail extends React.Component {
             </Pane>
             { helperApp && <HelperApp appName={helperApp} onClose={this.closeHelperApp} /> }
             <Callout ref={(ref) => { this.callout = ref; }} />
+            <CheckDeleteUserModal
+              onCloseModal={this.doCloseCheckDelete}
+              open={this.state.showCheckDeleteModal}
+              stripes={stripes}
+            />
           </>
         </HasCommand>
       );
