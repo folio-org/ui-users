@@ -11,6 +11,7 @@ import {
   NavListSection,
   CommandList,
   HasCommand,
+  KeyboardShortcutsModal,
 } from '@folio/stripes/components';
 
 import * as Routes from './routes';
@@ -25,7 +26,6 @@ import {
   NoteViewPage,
   NoteEditPage
 } from './views';
-import KeyboardShortcutsModal from './components/KeyboardShortcutsModal';
 
 class UsersRouting extends React.Component {
   static propTypes = {
@@ -108,17 +108,6 @@ class UsersRouting extends React.Component {
     }
   }
 
-  shortcuts = [
-    {
-      name: 'search',
-      handler: this.focusSearchField
-    },
-  ];
-
-  checkScope = () => {
-    return document.body.contains(document.activeElement);
-  }
-
   shortcutModalToggle(handleToggle) {
     handleToggle();
     this.changeKeyboardShortcutsModal(true);
@@ -127,6 +116,21 @@ class UsersRouting extends React.Component {
   changeKeyboardShortcutsModal = (modalState) => {
     this.setState({ showKeyboardShortcutsModal: modalState });
   };
+
+  shortcuts = [
+    {
+      name: 'search',
+      handler: this.focusSearchField
+    },
+    {
+      name: 'openShortcutModal',
+      handler: this.changeKeyboardShortcutsModal
+    },
+  ];
+
+  checkScope = () => {
+    return document.body.contains(document.activeElement);
+  }
 
   render() {
     const {
@@ -153,26 +157,26 @@ class UsersRouting extends React.Component {
 
     return (
       <>
-        <AppContextMenu>
-          {(handleToggle) => (
-            <NavList>
-              <NavListSection>
-                <NavListItem
-                  id="keyboard-shortcuts-item"
-                  onClick={() => { this.shortcutModalToggle(handleToggle); }}
-                >
-                  <FormattedMessage id="ui-users.appMenu.keyboardShortcuts" />
-                </NavListItem>
-              </NavListSection>
-            </NavList>
-          )}
-        </AppContextMenu>
         <CommandList commands={commands}>
           <HasCommand
             commands={this.shortcuts}
             isWithinScope={this.checkScope}
             scope={this.shortcutScope}
           >
+            <AppContextMenu>
+              {(handleToggle) => (
+                <NavList>
+                  <NavListSection>
+                    <NavListItem
+                      id="keyboard-shortcuts-item"
+                      onClick={() => { this.shortcutModalToggle(handleToggle); }}
+                    >
+                      <FormattedMessage id="ui-users.appMenu.keyboardShortcuts" />
+                    </NavListItem>
+                  </NavListSection>
+                </NavList>
+              )}
+            </AppContextMenu>
             <Switch>
               <Route
                 path={`${base}/:id/loans/view/:loanid`}

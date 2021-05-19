@@ -30,6 +30,7 @@ export default class NoteCreateRoute extends Component {
         paneHeaderAppIcon="users"
         domain="users"
         navigateBack={history.goBack}
+        showDisplayAsPopupOptions
       />
     );
   }

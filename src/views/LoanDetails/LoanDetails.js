@@ -40,7 +40,7 @@ import {
   getRenewalPatronBlocksFromPatronBlocks,
   accountsMatchStatus,
 } from '../../components/util';
-import { itemStatuses, loanActions } from '../../constants';
+import { itemStatuses, loanActions, refundClaimReturned } from '../../constants';
 import {
   withRenew,
   withDeclareLost,
@@ -54,6 +54,7 @@ import css from './LoanDetails.css';
 
 class LoanDetails extends React.Component {
   static propTypes = {
+    isLoading: PropTypes.bool,
     stripes: PropTypes.object.isRequired,
     resources: PropTypes.shape({
       loanActions: PropTypes.object,
@@ -180,23 +181,26 @@ class LoanDetails extends React.Component {
   viewFeeFine() {
     const { stripes, loanAccountActions } = this.props;
     const total = loanAccountActions.reduce((acc, { amount }) => (acc + parseFloat(amount)), 0);
+    const suspendedAction = loanAccountActions.filter(a => a?.paymentStatus?.name === refundClaimReturned.PAYMENT_STATUS) || [];
+    const suspendedMessage = (suspendedAction.length > 0) ? <FormattedMessage id="ui-users.accounts.suspended" /> : '';
 
     if (total === 0) return '-';
 
     const value = parseFloat(total).toFixed(2);
-
-    return stripes.hasPerm('ui-users.accounts')
-      ? (
+    const valueDisplay = stripes.hasPerm('ui-users.accounts')
+      ?
         <button
           data-test-fee-fine-details-link
           className={css.feefineButton}
           onClick={(e) => this.feefinedetails(e)}
           type="button"
         >
-          {value}
+          { value }
         </button>
-      )
-      : value;
+      :
+      { value };
+
+    return <>{ valueDisplay }<br />{ suspendedMessage }</>;
   }
 
   feefinedetails = (e) => {
@@ -330,11 +334,22 @@ class LoanDetails extends React.Component {
       claimReturned,
       declarationInProgress,
       loanIsMissing,
+      isLoading,
     } = this.props;
 
     const {
       patronBlockedModal,
     } = this.state;
+
+    if (isLoading) {
+      return (
+        <LoadingView
+          id="pane-loandetails"
+          defaultWidth="100%"
+          paneTitle={<FormattedMessage id="ui-users.loans.history" />}
+        />
+      );
+    }
 
     if (loanIsMissing) {
       return (
@@ -355,18 +370,6 @@ class LoanDetails extends React.Component {
         </Paneset>
       );
     }
-
-
-    if (!loan || !user || (loan.userId !== user.id)) {
-      return (
-        <LoadingView
-          id="pane-loandetails"
-          defaultWidth="100%"
-          paneTitle={<FormattedMessage id="ui-users.loans.history" />}
-        />
-      );
-    }
-
 
     const loanPolicyName = isEmpty(loanPolicies)
       ? '-'

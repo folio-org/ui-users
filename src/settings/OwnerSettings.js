@@ -138,7 +138,7 @@ class OwnerSettings extends React.Component {
     const formatter = {
       'servicePointOwner': (value) => {
         const asp = value.servicePointOwner || [];
-        const items = asp.map(a => <li>{a.label}</li>);
+        const items = asp.map(a => <li key={a.label}>{a.label}</li>);
         return <ul>{items}</ul>;
       }
     };

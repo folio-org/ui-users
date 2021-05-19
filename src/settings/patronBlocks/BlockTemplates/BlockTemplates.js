@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import { EntryManager } from '@folio/stripes/smart-components';
 import { stripesConnect } from '@folio/stripes/core';
@@ -21,36 +21,33 @@ function validate(values) {
 
 function BlockTemplates(props) {
   const {
+    intl: { formatMessage },
     mutator,
     resources: { manualBlockTemplates },
   } = props;
 
   return (
-    <FormattedMessage id="ui-users.manualBlockTemplate">
-      {(entryLabel) => (
-        <EntryManager
-          {...props}
-          parentMutator={mutator}
-          entryList={_.sortBy((manualBlockTemplates || {}).records || [], [
-            'name',
-          ])}
-          resourceKey="manualBlockTemplates"
-          detailComponent={BlockTemplateDetails}
-          paneTitle={
-            <FormattedMessage id="ui-users.settings.manualBlockTemplates" />
-          }
-          entryLabel={entryLabel}
-          entryFormComponent={BlockTemplateForm}
-          validate={validate}
-          nameKey="name"
-          permissions={{
-            put: 'manual-block-templates.item.put',
-            post: 'manual-block-templates.item.post',
-            delete: 'manual-block-templates.item.delete',
-          }}
-        />
-      )}
-    </FormattedMessage>
+    <EntryManager
+      {...props}
+      parentMutator={mutator}
+      entryList={_.sortBy((manualBlockTemplates || {}).records || [], [
+        'name',
+      ])}
+      resourceKey="manualBlockTemplates"
+      detailComponent={BlockTemplateDetails}
+      paneTitle={
+        <FormattedMessage id="ui-users.settings.manualBlockTemplates" />
+      }
+      entryLabel={formatMessage({ id: 'ui-users.manualBlockTemplate' })}
+      entryFormComponent={BlockTemplateForm}
+      validate={validate}
+      nameKey="name"
+      permissions={{
+        put: 'manual-block-templates.item.put',
+        post: 'manual-block-templates.item.post',
+        delete: 'manual-block-templates.item.delete',
+      }}
+    />
   );
 }
 
@@ -63,6 +60,7 @@ BlockTemplates.manifest = Object.freeze({
 });
 
 BlockTemplates.propTypes = {
+  intl: PropTypes.object,
   resources: PropTypes.shape({
     manualBlockTemplates: PropTypes.shape({
       records: PropTypes.arrayOf(PropTypes.object),
@@ -77,4 +75,4 @@ BlockTemplates.propTypes = {
   }).isRequired,
 };
 
-export default stripesConnect(BlockTemplates);
+export default injectIntl(stripesConnect(BlockTemplates));

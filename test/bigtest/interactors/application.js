@@ -12,6 +12,7 @@ import {
   columnheaderAction = scoped('#list-column-action');
   columnheaderShortcut = scoped('#list-column-shortcut');
   clickShortcutsModalCloseButton = scoped('#keyboard-shortcuts-modal-close', ButtonInteractor);
+  modalIcon = scoped('[class*=appIcon]');
 }
 
 @interactor class ApplicationContextButton {
