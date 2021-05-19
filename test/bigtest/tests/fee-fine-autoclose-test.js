@@ -112,6 +112,59 @@ describe('Test autoclose feefine after missing or declare lost (claim returned)'
       });
     });
 
+    describe('Check actions when item is claim returned', () => {
+      describe('Select one feefine and chack actions', () => {
+        beforeEach(async function () {
+          await FeeFineHistoryInteractor.rows(0).cells(0).selectOne();
+        });
+        it('Check payButton is disable', () => {
+          expect(FeeFineHistoryInteractor.payButton.isDisabled).to.be.true;
+        });
+
+        it('Check waiveButton is disable', () => {
+          expect(FeeFineHistoryInteractor.waiveButton.isDisabled).to.be.true;
+        });
+
+        it('Check transferButton is disable', () => {
+          expect(FeeFineHistoryInteractor.transferButton.isDisabled).to.be.true;
+        });
+
+        it('Check transferButton is disable', () => {
+          expect(FeeFineHistoryInteractor.refundButton.isDisabled).to.be.true;
+        });
+
+        it('Check exportButton is enable', () => {
+          expect(FeeFineHistoryInteractor.exportButton.isDisabled).to.be.false;
+        });
+      });
+
+      describe('Select all checkboxes', () => {
+        beforeEach(async function () {
+          await FeeFineHistoryInteractor.selectAllCheckbox();
+        });
+
+        it('Check payButton is disable', () => {
+          expect(FeeFineHistoryInteractor.payButton.isDisabled).to.be.true;
+        });
+
+        it('Check waiveButton is disable', () => {
+          expect(FeeFineHistoryInteractor.waiveButton.isDisabled).to.be.true;
+        });
+
+        it('Check transferButton is disable', () => {
+          expect(FeeFineHistoryInteractor.transferButton.isDisabled).to.be.true;
+        });
+
+        it('Check transferButton is disable', () => {
+          expect(FeeFineHistoryInteractor.refundButton.isDisabled).to.be.true;
+        });
+
+        it('Check exportButton is enable', () => {
+          expect(FeeFineHistoryInteractor.exportButton.isDisabled).to.be.false;
+        });
+      });
+    });
+
     describe('Go to loan details', () => {
       beforeEach(async function () {
         await this.visit(`/users/${loan.userId}/loans/view/${loan.id}`);

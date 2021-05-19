@@ -64,7 +64,7 @@ export default function getListDataFormatter(
     'feefineIncurred': {
       key:'feefineIncurred',
       view: formatMessage({ id: 'ui-users.loans.columns.feefineIncurred' }),
-      formatter: loan => getFeeFine(loan, resources),
+      formatter:  loan => (<div data-test-feefine-incurred>{getFeeFine(loan, resources)}</div>),
       sorter: loan => getFeeFine(loan, resources),
     },
     'loanDate': {

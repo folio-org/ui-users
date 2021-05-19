@@ -177,6 +177,25 @@ describe('loans actions history', () => {
       });
     });
 
+    describe('having loan with fees/fines incurred with Suspended payment status', () => {
+      beforeEach(function () {
+        this.server.get('/accounts', {
+          accounts: [{
+            ...accounts[0],
+            status : { name : 'Open' },
+            paymentStatus : { name : 'Suspended claim returned' },
+          }],
+          totalRecords: 1,
+        });
+
+        this.visit(`/users/${openLoan.userId}/loans/view/${openLoan.id}`);
+      });
+
+      it('should display the fees/fines value', () => {
+        expect(LoanActionsHistory.feeFines.text).to.equal('200.00Suspended');
+      });
+    });
+
     describe('having loan with few close and open fees/fines', () => {
       beforeEach(function () {
         this.server.get('/accounts', {
