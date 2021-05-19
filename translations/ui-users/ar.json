@@ -870,5 +870,18 @@
     "accounts.outstanding.page": "الرصيد المستحق للصفحة: {amount}",
     "accounts.suspended.page": "الرصيد المعلق للصفحة: {amount}",
     "accounts.selected.balance": "رصيد الرسوم/ الغرامات المحددة: {amount}",
-    "permission.manualProcessRefundsReport": "المستخدمون: أنشئ ونزّل استردادات الأموال لمعالجة التقرير يدوياً"
+    "permission.manualProcessRefundsReport": "المستخدمون: أنشئ ونزّل استردادات الأموال لمعالجة التقرير يدوياً",
+    "reports.cash.drawer.modal.label": "تقرير تسوية درج النقدية",
+    "reports.cash.drawer.servicePoint": "نقطة الخدمة",
+    "reports.cash.drawer.servicePoint.placeholder": "حدد نقطة خدمة",
+    "reports.cash.drawer.sources": "مصادر",
+    "reports.cash.drawer.sources.placeholder": "حدد المصادر",
+    "reports.cash.drawer.report.format": "تنسيق التقرير",
+    "reports.cash.drawer.report.format.csv": "CSV",
+    "reports.cash.drawer.report.format.pdf": "PDF (للقراءة فقط)",
+    "reports.cash.drawer.report.format.both": "كلاهما",
+    "reports.cash.drawer.report.startDate.error": "\"تاريخ البدء\" مطلوب",
+    "reports.cash.drawer.report.endDateWithoutStart.error": "\"تاريخ البدء\" مطلوب إذا تم إدخال \"تاريخ الانتهاء\"",
+    "reports.cash.drawer.report.endDate.error": "يجب أن يكون \"تاريخ الانتهاء\" أكبر من \"تاريخ البدء\" أو مساوياً له",
+    "reports.cash.drawer.report.servicePoint.error": "\"نقطة الخدمة\" مطلوبة"
 }
