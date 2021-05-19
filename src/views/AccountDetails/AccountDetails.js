@@ -35,6 +35,7 @@ import {
   isCancelAllowed,
 } from '../../components/Accounts/accountFunctions';
 import FeeFineReport from '../../components/data/reports/FeeFineReport';
+import { itemStatuses } from '../../constants';
 
 import css from './AccountDetails.css';
 
@@ -364,6 +365,7 @@ class AccountDetails extends React.Component {
     const feeFineActions = _.get(resources, ['accountActions', 'records'], []);
     const allFeeFineActions = _.get(resources, ['feefineactions', 'records'], []);
     const latestPaymentStatus = account.paymentStatus.name;
+    const isClaimReturnedItem = (itemDetails?.statusItemName === itemStatuses.CLAIMED_RETURNED);
 
     const actions = this.state.data || [];
     const actionsSort = _.orderBy(actions, [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
@@ -401,7 +403,7 @@ class AccountDetails extends React.Component {
             <Col xs={12}>
               <Button
                 id="payAccountActionsHistory"
-                disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending}
+                disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending || isClaimReturnedItem}
                 buttonStyle="primary"
                 onClick={this.pay}
               >
@@ -409,7 +411,7 @@ class AccountDetails extends React.Component {
               </Button>
               <Button
                 id="waiveAccountActionsHistory"
-                disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending}
+                disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending || isClaimReturnedItem}
                 buttonStyle="primary"
                 onClick={this.waive}
               >
@@ -417,7 +419,7 @@ class AccountDetails extends React.Component {
               </Button>
               <Button
                 id="refundAccountActionsHistory"
-                disabled={!refundAllowed || buttonDisabled || isActionsPending || isAccountsPending}
+                disabled={!refundAllowed || buttonDisabled || isActionsPending || isAccountsPending || isClaimReturnedItem}
                 buttonStyle="primary"
                 onClick={this.refund}
               >
@@ -425,7 +427,7 @@ class AccountDetails extends React.Component {
               </Button>
               <Button
                 id="transferAccountActionsHistory"
-                disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending}
+                disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending || isClaimReturnedItem}
                 buttonStyle="primary"
                 onClick={this.transfer}
               >
@@ -433,7 +435,7 @@ class AccountDetails extends React.Component {
               </Button>
               <Button
                 id="errorAccountActionsHistory"
-                disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending || !cancelAllowed}
+                disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending || !cancelAllowed || isClaimReturnedItem}
                 buttonStyle="primary"
                 onClick={this.error}
               >
