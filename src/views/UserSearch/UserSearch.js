@@ -40,6 +40,7 @@ import CashDrawerReportModal from '../../components/ReportModals/CashDrawerRepor
 
 import CsvReport from '../../components/data/reports';
 import RefundsReport from '../../components/data/reports/RefundReport';
+import CashDrawerReconciliationReportPDF from '../../components/data/reports/cashDrawerReconciliationReportPDF';
 import Filters from './Filters';
 import css from './UserSearch.css';
 
@@ -499,6 +500,7 @@ class UserSearch extends React.Component {
       endDate,
       servicePoint,
       sources = [],
+      format,
     } = data;
 
     if (this.state.cashDrawerReportInProgress) {
@@ -510,7 +512,11 @@ class UserSearch extends React.Component {
       showCashDrawerReportModal: false,
     });
 
-    const { mutator: { cashDrawerReport } } = this.props;
+    const {
+      mutator: { cashDrawerReport },
+      okapi: { currentUser },
+      intl,
+    } = this.props;
     const reportParameters = {
       createdAt: servicePoint,
       sources: sources.map(s => s.label),
@@ -520,7 +526,7 @@ class UserSearch extends React.Component {
 
     try {
       this.context.sendCallout({ message: <FormattedMessage id="ui-users.reports.inProgress" /> });
-      const { reportData } = await cashDrawerReport.POST(reportParameters);
+      const reportData = await cashDrawerReport.POST(reportParameters);
 
       if (isEmpty(reportData)) {
         this.context.sendCallout({
@@ -528,7 +534,32 @@ class UserSearch extends React.Component {
           message: <FormattedMessage id="ui-users.reports.noItemsFound" />,
         });
       } else {
-        // TODO: form the report depends on format
+        const servicePoints = currentUser.servicePoints;
+        const chosenServicePoint = servicePoints.find(sp => sp.id === servicePoint);
+        const headerData = {
+          ...reportParameters,
+          createdAt: chosenServicePoint?.name ?? '',
+          sources: reportParameters.sources.join(', '),
+        };
+
+        const report = new CashDrawerReconciliationReportPDF({
+          data: reportData,
+          intl,
+          headerData,
+        });
+
+        switch (format) {
+          case 'pdf':
+            report.toPDF();
+            break;
+          case 'csv':
+            break;
+          case 'both':
+            report.toPDF();
+            break;
+          default:
+            report.toPDF();
+        }
       }
     } catch (error) {
       if (error) {

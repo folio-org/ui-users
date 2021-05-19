@@ -38,7 +38,7 @@ const validate = (options) => {
     errors.startDate = <FormattedMessage id="ui-users.reports.cash.drawer.report.endDateWithoutStart.error" />;
   }
 
-  if ((!isEmpty(startDate) && !isEmpty(endDate)) && (moment(startDate).isAfter(moment(endDate)))) {
+  if ((!isEmpty(startDate) && !isEmpty(endDate)) && (moment(startDate).isAfter(moment(endDate)) || moment(endDate).isAfter(moment()))) {
     errors.endDate = <FormattedMessage id="ui-users.reports.cash.drawer.report.endDate.error" />;
   }
 
