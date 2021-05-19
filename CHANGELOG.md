@@ -30,7 +30,9 @@
 * Avoid querying for an empty list of loan policies. Refs UIU-2163.
 * Show `Pop-up on User` and `Pop-up on Checkout` fields to Notes forms. Refs UIU-2155.
 * Show loading indicator on Loans details screen. Fixes UIU-2120.
+* Add type column to users settings permissions sets. Refs UIU-2167.
 * Add modal for 'Cash drawer reconciliation report'. Refs UIU-1959.
+* Provide `key` when rendering list elements. Refs UIU-2168.
 * Create 'Cash drawer reconciliation report' in PDF format. Refs UIU-2084.
 
 ## [6.0.0](https://github.com/folio-org/ui-users/tree/v6.0.0) (2021-03-18)

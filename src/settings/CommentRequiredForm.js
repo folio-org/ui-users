@@ -44,7 +44,7 @@ const Setting = ({
 );
 
 Setting.propTypes = {
-  label: PropTypes.string,
+  label: PropTypes.element,
   name: PropTypes.string,
   intl: PropTypes.object,
 };
