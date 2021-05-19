@@ -207,6 +207,7 @@ export const cashMainReportColumns = [
 
 export const cashMainReportColumnsCSV = [
   ...cashMainReportColumns,
+  'feeFineDetails',
 ];
 
 export const cashSourceReportColumns = [

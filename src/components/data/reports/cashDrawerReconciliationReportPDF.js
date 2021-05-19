@@ -14,6 +14,7 @@ import {
   cashPaymentReportFooter,
   cashTypeReportFooter,
 } from '../../../constants';
+import { formatDate } from '../../util';
 
 const pdfOptions = {
   orientation: 'l',
@@ -85,10 +86,6 @@ class CashDrawerReconciliationReportPDF {
     ];
   }
 
-  formatDate(date = '') {
-    return date.split('-').join('/');
-  }
-
   toPDF() {
     const getMainReportValues = this.parseData(this.data.reportData, false);
     const getSourceReportValues = this.parseData(this.data.reportStats.bySource);
@@ -124,7 +121,7 @@ class CashDrawerReconciliationReportPDF {
     };
 
     this.doc.text(
-      `Cash Drawer Reconciliation Report for ${this.headerData.createdAt}, Source(s) ${this.formatDate(this.headerData.sources)} - ${this.formatDate(this.headerData.startDate)} to ${this.formatDate(this.headerData.endDate) || moment().format('YYYY/MM/DD')}`,
+      `Cash Drawer Reconciliation Report for ${this.headerData.createdAt}, Source(s) ${formatDate(this.headerData.sources)} - ${formatDate(this.headerData.startDate)} to ${formatDate(this.headerData.endDate) || moment().format('YYYY/MM/DD')}`,
       15,
       10
     );

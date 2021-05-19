@@ -41,6 +41,7 @@ import CashDrawerReportModal from '../../components/ReportModals/CashDrawerRepor
 import CsvReport from '../../components/data/reports';
 import RefundsReport from '../../components/data/reports/RefundReport';
 import CashDrawerReconciliationReportPDF from '../../components/data/reports/cashDrawerReconciliationReportPDF';
+import CashDrawerReconciliationReportCSV from '../../components/data/reports/cashDrawerReconciliationReportCSV';
 import Filters from './Filters';
 import css from './UserSearch.css';
 
@@ -542,7 +543,12 @@ class UserSearch extends React.Component {
           sources: reportParameters.sources.join(', '),
         };
 
-        const report = new CashDrawerReconciliationReportPDF({
+        const reportPDF = new CashDrawerReconciliationReportPDF({
+          data: reportData,
+          intl,
+          headerData,
+        });
+        const reportCSV = new CashDrawerReconciliationReportCSV({
           data: reportData,
           intl,
           headerData,
@@ -550,15 +556,17 @@ class UserSearch extends React.Component {
 
         switch (format) {
           case 'pdf':
-            report.toPDF();
+            reportPDF.toPDF();
             break;
           case 'csv':
+            reportCSV.toCSV();
             break;
           case 'both':
-            report.toPDF();
+            reportCSV.toCSV();
+            reportPDF.toPDF();
             break;
           default:
-            report.toPDF();
+            reportPDF.toPDF();
         }
       }
     } catch (error) {

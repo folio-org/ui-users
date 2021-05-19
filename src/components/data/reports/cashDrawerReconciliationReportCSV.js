@@ -1,29 +1,54 @@
+import { isEmpty } from 'lodash';
+import moment from 'moment';
+
 import { exportCsv } from '@folio/stripes/util';
 
+import { cashMainReportColumnsCSV } from '../../../constants';
 import {
-  cashMainReportColumns,
-  cashSourceReportColumns,
-  cashPaymentMethodReportColumns,
-  cashFeeFineTypeReportColumns,
-  cashFeeFineOwnerReportColumns,
-  cashSourceReportFooter,
-  cashOwnerReportFooter,
-  cashPaymentReportFooter,
-  cashTypeReportFooter,
-} from '../../../constants';
-import { isEmpty } from 'lodash';
+  getValue,
+  formatDate,
+  formatDateAndTime,
+  formatCurrencyAmount,
+} from '../../util';
 
-class cashDrawerReconciliationReportCSV {
+class CashDrawerReconciliationReportCSV {
   constructor({ data, intl: { formatMessage, formatTime }, headerData }) {
     this.data = data;
     this.formatMessage = formatMessage;
     this.formatTime = formatTime;
     this.headerData = headerData;
 
-    this.columnsMap = cashMainReportColumns.map(value => ({
+    this.columnsMap = cashMainReportColumnsCSV.map(value => ({
       label: this.formatMessage({ id: `ui-users.reports.cash.${value}` }),
       value
     }));
+  }
+
+  generateTranslation(value) {
+    return this.formatMessage({ id: `ui-users.reports.cash.${value}` });
+  }
+
+  createTable(container, dataToParse, firstColumnName) {
+    const emptyLine = { source: '' };
+
+    container.push(emptyLine);
+    container.push({
+      source: this.generateTranslation(firstColumnName),
+      paymentMethod: this.generateTranslation('totalAmount'),
+      paymentAmount: this.generateTranslation('totalCount'),
+    });
+
+    dataToParse.forEach((row) => {
+      const rowValues = {
+        source: getValue(row.name),
+        paymentMethod: formatCurrencyAmount(row.totalAmount),
+        paymentAmount: getValue(row.totalCount),
+      };
+
+      container.push(rowValues);
+    });
+
+    return container;
   }
 
   buildReport() {
@@ -42,34 +67,83 @@ class cashDrawerReconciliationReportCSV {
       return undefined;
     }
 
-    reportData.map((row) => {
-      console.log('row ', row);
-      const reportRowFormatter = {
+    reportData.forEach((row) => {
+      const reportDataRowFormatter = {
+        patronId: getValue(row.patronId),
+        feeFineId: getValue(row.feeFineId),
+        source: getValue(row.source),
+        paymentMethod: getValue(row.paymentMethod),
+        paymentAmount: formatCurrencyAmount(row.paidAmount),
+        feeFineOwner: getValue(row.feeFineOwner),
+        feeFineType: getValue(row.feeFineType),
+        paymentDateTime: formatDateAndTime(row.paymentDate, this.formatTime),
+        paymentStatus: getValue(row.paymentStatus),
+        transactionInfo: getValue(row.transactionInfo),
+        additionalStaffInfo: getValue(row.additionalStaffInfo),
+        additionalPatronInfo: getValue(row.additionalPatronInfo),
+      };
 
+      data.push(reportDataRowFormatter);
+    });
+
+    this.createTable(data, bySource, 'source');
+    this.createTable(data, byPaymentMethod, 'paymentMethod');
+    this.createTable(data, byFeeFineType, 'feeFineType');
+    this.createTable(data, byFeeFineOwner, 'feeFineOwner');
+
+    return data;
+  }
+
+  buildHeader() {
+    return this.formatMessage(
+      { id: 'ui-users.reports.cash.header' },
+      {
+        servicePoint: this.headerData.createdAt,
+        sources: formatDate(this.headerData.sources),
+        startDate: formatDate(this.headerData.startDate),
+        endDate: formatDate(this.headerData.endDate) || moment().format('YYYY/MM/DD')
       }
-
-      data.push(reportRowFormatter);
-    })
+    );
   }
 
   parse() {
+    const report = [];
     this.reportData = this.buildReport();
     const origin = window.location.origin;
+    // const buildHeader = this.formatMessage(
+    //   { id: 'ui-users.reports.cash.header' },
+    //   {
+    //     servicePoint: this.headerData.createdAt,
+    //     sources: formatDate(this.headerData.sources),
+    //     startDate: formatDate(this.headerData.startDate),
+    //     endDate: formatDate(this.headerData.endDate) || moment().format('YYYY/MM/DD')
+    //   }
+    // );
 
-    return this.reportData.map(row => {
-      return {
-        ...row,
-        patronBarcode: `=HYPERLINK("${origin}/users/preview/${row.patronId}", "${row.patronBarcode}")`,
-        details: `=HYPERLINK("${origin}/users/${row.patronId}/accounts/view/${row.details}", "${row.details}")`,
-        itemBarcode: `=HYPERLINK("${origin}/inventory/view/${row.itemInstanceId}/${row.itemHoldingsRecordId}/${row.itemId}", "${row.itemBarcode}")`,
-        itemOverduePolicy: `=HYPERLINK("${origin}/settings/circulation/fine-policies/${row.itemOverduePolicyId}", "${row.itemOverduePolicy}")`,
-        itemLostPolicy: `=HYPERLINK("${origin}/settings/circulation/lost-item-fee-policy/${row.itemLostPolicyId}", "${row.itemLostPolicy}")`,
-        itemLoanDetails: `=HYPERLINK("${origin}/users/${row.patronId}/loans/view/${row.loanId}", "${row.loanId}")`,
-      };
+    const partOfReport = this.reportData.map(row => {
+      if (row.feeFineId) {
+        return {
+          ...row,
+          feeFineDetails: `=HYPERLINK("${origin}/users/${row.patronId}/accounts/view/${row.feeFineId}", "${row.feeFineId}")`,
+        };
+      } else {
+        return row;
+      }
     });
+
+    partOfReport.forEach((row) => report.push({ ...row }));
+
+    return report;
   }
 
+  toCSV() {
+    const parsedData = this.parse();
 
+    exportCsv(parsedData, {
+      onlyFields: this.columnsMap,
+      filename: 'Cash-Drawer-Reconciliation-Report',
+    });
+  }
 }
 
-export default cashDrawerReconciliationReportCSV;
+export default CashDrawerReconciliationReportCSV;
