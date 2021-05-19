@@ -22,7 +22,7 @@ const pdfOptions = {
   compress: true,
   fontSize: 10,
   lineHeight: 1,
-  printHeaders: true
+  printHeaders: true,
 };
 
 class CashDrawerReconciliationReportPDF {
@@ -153,6 +153,7 @@ class CashDrawerReconciliationReportPDF {
         data.cell.styles.lineColor = 'black';
         data.cell.styles.lineWidth = 0.1;
       },
+      pageBreak: 'avoid'
     });
 
     autoTable(this.doc, {
@@ -165,6 +166,8 @@ class CashDrawerReconciliationReportPDF {
         data.cell.styles.lineColor = 'black';
         data.cell.styles.lineWidth = 0.1;
       },
+      tableWidth: 'wrap',
+      pageBreak: 'avoid'
     });
 
     autoTable(this.doc, {
@@ -177,6 +180,8 @@ class CashDrawerReconciliationReportPDF {
         data.cell.styles.lineColor = 'black';
         data.cell.styles.lineWidth = 0.1;
       },
+      tableWidth: 'wrap',
+      pageBreak: 'avoid'
     });
 
     autoTable(this.doc, {
@@ -189,6 +194,8 @@ class CashDrawerReconciliationReportPDF {
         data.cell.styles.lineColor = 'black';
         data.cell.styles.lineWidth = 0.1;
       },
+      tableWidth: 'wrap',
+      pageBreak: 'avoid'
     });
 
     autoTable(this.doc, {
@@ -201,6 +208,8 @@ class CashDrawerReconciliationReportPDF {
         data.cell.styles.lineColor = 'black';
         data.cell.styles.lineWidth = 0.1;
       },
+      tableWidth: 'wrap',
+      pageBreak: 'avoid'
     });
 
     this.doc.save(`${this.buildDocumentName()}.pdf`);
