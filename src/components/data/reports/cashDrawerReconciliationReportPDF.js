@@ -139,10 +139,11 @@ class CashDrawerReconciliationReportPDF {
     };
 
     this.doc.text(
-      this.buildHeader(),
+      `${this.buildHeader()}`,
       15,
       10
     );
+
     autoTable(this.doc, {
       ...autoTableOptions,
       startY: 15,
