@@ -7,7 +7,7 @@ import {
 import { createMemoryHistory } from 'history';
 import { FormattedMessage } from 'react-intl';
 
-import '../../test/jest/__mock__';
+import '../../../test/jest/__mock__';
 import SectionPageItem from './SectionPageItem';
 
 const renderSectionPageItem = ({ setting, path }) => {
@@ -41,7 +41,7 @@ describe('Settings SectionPageItem', () => {
 
     it('should be rendered', () => {
       const { container } = sectionPageItem;
-      const sectionContent = container.querySelector('[data-test-SectionPageItem-NavListItem]');
+      const sectionContent = container.querySelector('[data-test-sectionpageitem]');
       expect(container).toBeVisible();
       expect(sectionContent).toBeVisible();
     });
@@ -66,7 +66,7 @@ describe('Settings SectionPageItem', () => {
 
     it('should be rendered', () => {
       const { container } = sectionPageItem;
-      const sectionContent = container.querySelector('[data-test-SectionPageItem-NavListItem]');
+      const sectionContent = container.querySelector('[data-test-sectionpageitem]');
       expect(container).toBeVisible();
       expect(sectionContent).toBeVisible();
     });
@@ -89,7 +89,7 @@ describe('Settings SectionPageItem', () => {
 
     it('should not be rendered', () => {
       const { container } = sectionPageItem;
-      const sectionContent = container.querySelector('[data-test-SectionPageItem-NavListItem]');
+      const sectionContent = container.querySelector('[data-test-sectionpageitem]');
       expect(container).toBeVisible();
       expect(sectionContent).toBeNull();
     });
@@ -112,7 +112,7 @@ describe('Settings SectionPageItem', () => {
 
     it('should be rendered', () => {
       const { container } = sectionPageItem;
-      const sectionContent = container.querySelector('[data-test-SectionPageItem-NavListItem]');
+      const sectionContent = container.querySelector('[data-test-sectionpageitem]');
       expect(container).toBeVisible();
       expect(sectionContent).toBeVisible();
     });
@@ -135,7 +135,7 @@ describe('Settings SectionPageItem', () => {
 
     it('should not be rendered', () => {
       const { container } = sectionPageItem;
-      const sectionContent = container.querySelector('[data-test-SectionPageItem-NavListItem]');
+      const sectionContent = container.querySelector('[data-test-sectionpageitem]');
       expect(container).toBeVisible();
       expect(sectionContent).toBeNull();
     });

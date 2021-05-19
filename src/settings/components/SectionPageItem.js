@@ -6,7 +6,7 @@ import {
 
 const SectionPageItem = ({ setting, path }) => {
   let sectionItem = (
-    <NavListItem to={`${path}/${setting.route}`} data-test-SectionPageItem-NavListItem>
+    <NavListItem to={`${path}/${setting.route}`} data-test-sectionpageitem>
       {setting.label}
     </NavListItem>
   );
