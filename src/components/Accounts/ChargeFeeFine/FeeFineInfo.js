@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Field } from 'react-final-form';
 
 import {
@@ -20,6 +20,7 @@ class FeeFineInfo extends React.Component {
     onChangeOwner: PropTypes.func.isRequired,
     ownerOptions: PropTypes.arrayOf(PropTypes.object),
     onChangeFeeFine: PropTypes.func,
+    intl: PropTypes.object,
     isPending: PropTypes.object,
   };
 
@@ -54,6 +55,7 @@ class FeeFineInfo extends React.Component {
 
   render() {
     const {
+      intl,
       isPending,
       ownerOptions,
       feefineList,
@@ -74,21 +76,17 @@ class FeeFineInfo extends React.Component {
                 </Row>
                 <Row>
                   <Col xs={12}>
-                    <FormattedMessage id="ui-users.feefines.modal.placeholder">
-                      {placeholder => (
-                        <Field
-                          name="ownerId"
-                          id="ownerId"
-                          type="select"
-                          component={Select}
-                          fullWidth
-                          disabled={isPending.owners}
-                          dataOptions={ownerOptions}
-                          onChange={(e) => onChangeOwner(e.target.value)}
-                          placeholder={placeholder}
-                        />
-                      )}
-                    </FormattedMessage>
+                    <Field
+                      name="ownerId"
+                      id="ownerId"
+                      type="select"
+                      component={Select}
+                      fullWidth
+                      disabled={isPending.owners}
+                      dataOptions={ownerOptions}
+                      onChange={(e) => onChangeOwner(e.target.value)}
+                      placeholder={intl.formatMessage({ id: 'ui-users.feefines.modal.placeholder' })}
+                    />
                     {isPending.owners && <FormattedMessage id="ui-users.loading" />}
                   </Col>
                 </Row>
@@ -101,21 +99,17 @@ class FeeFineInfo extends React.Component {
                 </Row>
                 <Row>
                   <Col xs={12}>
-                    <FormattedMessage id="ui-users.feefines.modal.placeholder">
-                      {placeholder => (
-                        <Field
-                          name="feeFineId"
-                          id="feeFineType"
-                          type="select"
-                          component={Select}
-                          fullWidth
-                          disabled={isPending.feefines}
-                          dataOptions={feefineList}
-                          placeholder={placeholder}
-                          onChange={onChangeFeeFine}
-                        />
-                      )}
-                    </FormattedMessage>
+                    <Field
+                      name="feeFineId"
+                      id="feeFineType"
+                      type="select"
+                      component={Select}
+                      fullWidth
+                      disabled={isPending.feefines}
+                      dataOptions={feefineList}
+                      placeholder={intl.formatMessage({ id: 'ui-users.feefines.modal.placeholder' })}
+                      onChange={onChangeFeeFine}
+                    />
                     {isPending.feefines && <FormattedMessage id="ui-users.loading" />}
                   </Col>
                 </Row>
@@ -148,4 +142,4 @@ class FeeFineInfo extends React.Component {
   }
 }
 
-export default FeeFineInfo;
+export default injectIntl(FeeFineInfo);

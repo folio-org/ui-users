@@ -54,6 +54,7 @@ import css from './LoanDetails.css';
 
 class LoanDetails extends React.Component {
   static propTypes = {
+    isLoading: PropTypes.bool,
     stripes: PropTypes.object.isRequired,
     resources: PropTypes.shape({
       loanActions: PropTypes.object,
@@ -333,11 +334,22 @@ class LoanDetails extends React.Component {
       claimReturned,
       declarationInProgress,
       loanIsMissing,
+      isLoading,
     } = this.props;
 
     const {
       patronBlockedModal,
     } = this.state;
+
+    if (isLoading) {
+      return (
+        <LoadingView
+          id="pane-loandetails"
+          defaultWidth="100%"
+          paneTitle={<FormattedMessage id="ui-users.loans.history" />}
+        />
+      );
+    }
 
     if (loanIsMissing) {
       return (
@@ -358,18 +370,6 @@ class LoanDetails extends React.Component {
         </Paneset>
       );
     }
-
-
-    if (!loan || !user || (loan.userId !== user.id)) {
-      return (
-        <LoadingView
-          id="pane-loandetails"
-          defaultWidth="100%"
-          paneTitle={<FormattedMessage id="ui-users.loans.history" />}
-        />
-      );
-    }
-
 
     const loanPolicyName = isEmpty(loanPolicies)
       ? '-'
