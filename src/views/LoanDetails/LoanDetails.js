@@ -182,7 +182,7 @@ class LoanDetails extends React.Component {
     const { stripes, loanAccountActions } = this.props;
     const total = loanAccountActions.reduce((acc, { amount }) => (acc + parseFloat(amount)), 0);
     const suspendedAction = loanAccountActions.filter(a => a?.paymentStatus?.name === refundClaimReturned.PAYMENT_STATUS) || [];
-    const suspendedMessage = (suspendedAction.length > 0) ? 'Suspended' : '';
+    const suspendedMessage = (suspendedAction.length > 0) ? <FormattedMessage id="ui-users.accounts.suspended" /> : '';
 
     if (total === 0) return '-';
 
