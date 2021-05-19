@@ -788,6 +788,8 @@
   "reports.feeFine.itemOverduePolicy": "Item overdue policy",
   "reports.feeFine.itemLostPolicy": "Item lost item policy",
   "reports.feeFine.itemLoanDetails": "Item loan details",
+  "reports.cash.document.name": "Cash Drawer Reconciliation Report",
+  "reports.cash.header": "Cash Drawer Reconciliation Report for {servicePoint}, Source(s) {sources} - {startDate} to {endDate}",
   "reports.cash.source": "Source",
   "reports.cash.paymentMethod": "Payment method",
   "reports.cash.paymentAmount": "Payment amount",

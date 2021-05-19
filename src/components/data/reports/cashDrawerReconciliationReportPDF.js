@@ -26,10 +26,11 @@ const pdfOptions = {
 };
 
 class CashDrawerReconciliationReportPDF {
-  constructor({ data, intl: { formatMessage, formatTime }, headerData }) {
+  constructor({ data, intl: { formatMessage, formatTime, formatDate }, headerData }) {
     this.data = data;
     this.formatMessage = formatMessage;
     this.formatTime = formatTime;
+    this.formatDate = formatDate;
     this.headerData = headerData;
     this.mainReportColumnsMap = this.generateTableColumns(cashMainReportColumns);
     this.sourceReportColumnsMap = this.generateTableColumns(cashSourceReportColumns);
@@ -43,6 +44,24 @@ class CashDrawerReconciliationReportPDF {
 
     // eslint-disable-next-line new-cap
     this.doc = new jsPDF(pdfOptions);
+  }
+
+  buildHeader() {
+    return this.formatMessage(
+      { id: 'ui-users.reports.cash.header' },
+      {
+        servicePoint: this.headerData.createdAt,
+        sources: this.headerData.sources,
+        startDate: this.formatDate(this.headerData.startDate),
+        endDate: this.formatDate(this.headerData.endDate) || moment().format('YYYY/MM/DD') // if no endDate then show date='today'
+      }
+    );
+  }
+
+  buildDocumentName() {
+    const name = this.formatMessage({ id: 'ui-users.reports.cash.document.name' });
+
+    return name.split(' ').join('-');
   }
 
   generateTableColumns(columns) {
@@ -85,10 +104,6 @@ class CashDrawerReconciliationReportPDF {
     ];
   }
 
-  formatDate(date = '') {
-    return date.split('-').join('/');
-  }
-
   toPDF() {
     const getMainReportValues = this.parseData(this.data.reportData, false);
     const getSourceReportValues = this.parseData(this.data.reportStats.bySource);
@@ -124,7 +139,7 @@ class CashDrawerReconciliationReportPDF {
     };
 
     this.doc.text(
-      `Cash Drawer Reconciliation Report for ${this.headerData.createdAt}, Source(s) ${this.formatDate(this.headerData.sources)} - ${this.formatDate(this.headerData.startDate)} to ${this.formatDate(this.headerData.endDate) || moment().format('YYYY/MM/DD')}`,
+      this.buildHeader(),
       15,
       10
     );
@@ -187,7 +202,7 @@ class CashDrawerReconciliationReportPDF {
       },
     });
 
-    this.doc.save('Cash-Drawer-Reconciliation-Report.pdf');
+    this.doc.save(`${this.buildDocumentName()}.pdf`);
   }
 }
 
