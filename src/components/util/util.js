@@ -145,7 +145,3 @@ export function accountsMatchStatus(accounts, status) {
 export function getValue(value) {
   return value || '';
 }
-
-export function formatDate(date = '') {
-  return date.split('-').join('/');
-}

@@ -529,7 +529,7 @@ class UserSearch extends React.Component {
       this.context.sendCallout({ message: <FormattedMessage id="ui-users.reports.inProgress" /> });
       const reportData = await cashDrawerReport.POST(reportParameters);
 
-      if (isEmpty(reportData)) {
+      if (isEmpty(reportData?.reportData)) {
         this.context.sendCallout({
           type: 'error',
           message: <FormattedMessage id="ui-users.reports.noItemsFound" />,

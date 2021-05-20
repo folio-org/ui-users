@@ -20,6 +20,8 @@ jest.mock('@folio/stripes/components', () => ({
       <input type="text" />
     </div>
   )),
+  Headline: jest.fn(({ children }) => <div>{ children }</div>),
+
   Icon: jest.fn((props) => (props && props.children ? props.children : <span />)),
   IconButton: jest.fn(({
     buttonProps,
@@ -34,11 +36,8 @@ jest.mock('@folio/stripes/components', () => ({
   Label: jest.fn(({ children, ...rest }) => (
     <span {...rest}>{children}</span>
   )),
-  Modal: jest.fn(({ children, label, ...rest }) => (
-    <div
-      dismissible
-      {...rest}
-    >
+  Modal: jest.fn(({ children, label, dismissible, ...rest }) => (
+    <div {...rest}>
       <h1>{label}</h1>
       {children}
     </div>
@@ -60,9 +59,22 @@ jest.mock('@folio/stripes/components', () => ({
       {children}
     </div>
   )),
+  NavList: jest.fn(({ children, className, ...rest }) => (
+    <div className={className} {...rest}>{children}</div>
+  )),
+  NavListItem: jest.fn(({ children, className, ...rest }) => (
+    <div className={className} {...rest}>{children}</div>
+  )),
+  NavListSection: jest.fn(({ children, className, ...rest }) => (
+    <div className={className} {...rest}>{children}</div>
+  )),
+  Pane: jest.fn(({ children, className, defaultWidth, paneTitle, firstMenu, ...rest }) => (
+    <div className={className} {...rest}>{children}</div>
+  )),
   PaneFooter: jest.fn(({ ref, children, ...rest }) => (
     <div ref={ref} {...rest}>{children}</div>
   )),
+  PaneBackLink: jest.fn(() => <span />),
   PaneMenu: jest.fn((props) => <div>{props.children}</div>),
   RadioButton: jest.fn(({ label, name, ...rest }) => (
     <div>

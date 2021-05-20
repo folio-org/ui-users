@@ -1,7 +1,6 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { values } from 'lodash';
-import moment from 'moment';
 
 import {
   cashMainReportColumns,
@@ -14,7 +13,8 @@ import {
   cashPaymentReportFooter,
   cashTypeReportFooter,
 } from '../../../constants';
-import { formatDate } from '../../util';
+
+import CashDrawerReconciliationReport from './CashDrawerReconciliationReport';
 
 const pdfOptions = {
   orientation: 'l',
@@ -23,15 +23,13 @@ const pdfOptions = {
   compress: true,
   fontSize: 10,
   lineHeight: 1,
-  printHeaders: true
+  printHeaders: true,
 };
 
-class CashDrawerReconciliationReportPDF {
-  constructor({ data, intl: { formatMessage, formatTime }, headerData }) {
+class CashDrawerReconciliationReportPDF extends CashDrawerReconciliationReport {
+  constructor({ data, intl, headerData }) {
+    super({ intl, headerData });
     this.data = data;
-    this.formatMessage = formatMessage;
-    this.formatTime = formatTime;
-    this.headerData = headerData;
     this.mainReportColumnsMap = this.generateTableColumns(cashMainReportColumns);
     this.sourceReportColumnsMap = this.generateTableColumns(cashSourceReportColumns);
     this.sourceReportFooterMap = this.generateTableColumns(cashSourceReportFooter);
@@ -121,10 +119,11 @@ class CashDrawerReconciliationReportPDF {
     };
 
     this.doc.text(
-      `Cash Drawer Reconciliation Report for ${this.headerData.createdAt}, Source(s) ${formatDate(this.headerData.sources)} - ${formatDate(this.headerData.startDate)} to ${formatDate(this.headerData.endDate) || moment().format('YYYY/MM/DD')}`,
+      `${this.buildHeader()}`,
       15,
       10
     );
+
     autoTable(this.doc, {
       ...autoTableOptions,
       startY: 15,
@@ -134,6 +133,7 @@ class CashDrawerReconciliationReportPDF {
         data.cell.styles.lineColor = 'black';
         data.cell.styles.lineWidth = 0.1;
       },
+      pageBreak: 'avoid'
     });
 
     autoTable(this.doc, {
@@ -146,6 +146,8 @@ class CashDrawerReconciliationReportPDF {
         data.cell.styles.lineColor = 'black';
         data.cell.styles.lineWidth = 0.1;
       },
+      tableWidth: 'wrap',
+      pageBreak: 'avoid'
     });
 
     autoTable(this.doc, {
@@ -158,6 +160,8 @@ class CashDrawerReconciliationReportPDF {
         data.cell.styles.lineColor = 'black';
         data.cell.styles.lineWidth = 0.1;
       },
+      tableWidth: 'wrap',
+      pageBreak: 'avoid'
     });
 
     autoTable(this.doc, {
@@ -170,6 +174,8 @@ class CashDrawerReconciliationReportPDF {
         data.cell.styles.lineColor = 'black';
         data.cell.styles.lineWidth = 0.1;
       },
+      tableWidth: 'wrap',
+      pageBreak: 'avoid'
     });
 
     autoTable(this.doc, {
@@ -182,9 +188,11 @@ class CashDrawerReconciliationReportPDF {
         data.cell.styles.lineColor = 'black';
         data.cell.styles.lineWidth = 0.1;
       },
+      tableWidth: 'wrap',
+      pageBreak: 'avoid'
     });
 
-    this.doc.save('Cash-Drawer-Reconciliation-Report.pdf');
+    this.doc.save(`${this.buildDocumentName()}.pdf`);
   }
 }
 

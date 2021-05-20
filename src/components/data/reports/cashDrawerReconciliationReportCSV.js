@@ -1,22 +1,19 @@
 import { isEmpty } from 'lodash';
-import moment from 'moment';
 
 import { exportCsv } from '@folio/stripes/util';
 
 import { cashMainReportColumnsCSV } from '../../../constants';
 import {
   getValue,
-  formatDate,
   formatDateAndTime,
   formatCurrencyAmount,
 } from '../../util';
+import CashDrawerReconciliationReport from './CashDrawerReconciliationReport';
 
-class CashDrawerReconciliationReportCSV {
-  constructor({ data, intl: { formatMessage, formatTime }, headerData }) {
+class CashDrawerReconciliationReportCSV extends CashDrawerReconciliationReport {
+  constructor({ data, intl, headerData }) {
+    super({ intl, headerData });
     this.data = data;
-    this.formatMessage = formatMessage;
-    this.formatTime = formatTime;
-    this.headerData = headerData;
 
     this.columnsMap = cashMainReportColumnsCSV.map(value => ({
       label: this.formatMessage({ id: `ui-users.reports.cash.${value}` }),
@@ -86,6 +83,9 @@ class CashDrawerReconciliationReportCSV {
       data.push(reportDataRowFormatter);
     });
 
+    data.push({ source: '' });
+    data.push({ source: this.buildHeader() });
+
     this.createTable(data, bySource, 'source');
     this.createTable(data, byPaymentMethod, 'paymentMethod');
     this.createTable(data, byFeeFineType, 'feeFineType');
@@ -94,31 +94,10 @@ class CashDrawerReconciliationReportCSV {
     return data;
   }
 
-  buildHeader() {
-    return this.formatMessage(
-      { id: 'ui-users.reports.cash.header' },
-      {
-        servicePoint: this.headerData.createdAt,
-        sources: formatDate(this.headerData.sources),
-        startDate: formatDate(this.headerData.startDate),
-        endDate: formatDate(this.headerData.endDate) || moment().format('YYYY/MM/DD')
-      }
-    );
-  }
-
   parse() {
     const report = [];
     this.reportData = this.buildReport();
     const origin = window.location.origin;
-    // const buildHeader = this.formatMessage(
-    //   { id: 'ui-users.reports.cash.header' },
-    //   {
-    //     servicePoint: this.headerData.createdAt,
-    //     sources: formatDate(this.headerData.sources),
-    //     startDate: formatDate(this.headerData.startDate),
-    //     endDate: formatDate(this.headerData.endDate) || moment().format('YYYY/MM/DD')
-    //   }
-    // );
 
     const partOfReport = this.reportData.map(row => {
       if (row.feeFineId) {
@@ -141,7 +120,7 @@ class CashDrawerReconciliationReportCSV {
 
     exportCsv(parsedData, {
       onlyFields: this.columnsMap,
-      filename: 'Cash-Drawer-Reconciliation-Report',
+      filename: this.buildDocumentName(),
     });
   }
 }

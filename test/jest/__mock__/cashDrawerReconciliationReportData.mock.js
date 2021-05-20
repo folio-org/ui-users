@@ -71,8 +71,9 @@ const options = {
     }
   },
   intl: {
-    formatMessage: jest.fn(),
-    formatTime: jest.fn()
+    formatMessage: jest.fn(() => ''),
+    formatTime: jest.fn(),
+    formatDate: jest.fn(),
   },
   headerData: {
     createdAt: 'Online',
