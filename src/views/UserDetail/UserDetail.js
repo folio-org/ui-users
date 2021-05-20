@@ -386,13 +386,12 @@ class UserDetail extends React.Component {
           </IfInterface>
           <Button
             buttonStyle="dropdownItem"
-            data-test-actions-menu-edit
-            id="clickable-edituser"
+            data-test-actions-menu-check-delete
+            id="clickable-checkdeleteuser"
             onClick={() => {
               onToggle();
               this.doShowCheckDelete();
             }}
-            buttonRef={this.editButton}
           >
             <Icon icon="trash">
               <FormattedMessage id="ui-users.checkDelete" />
@@ -719,6 +718,7 @@ class UserDetail extends React.Component {
               onCloseModal={this.doCloseCheckDelete}
               open={this.state.showCheckDeleteModal}
               stripes={stripes}
+              username={getFullName(user)}
             />
           </>
         </HasCommand>

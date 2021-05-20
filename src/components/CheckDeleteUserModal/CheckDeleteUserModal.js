@@ -10,6 +10,7 @@ import {
 function CheckDeleteUserModal({
   onCloseModal,
   open,
+  username,
 }) {
   // const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [showCloseModal, setShowCloseModal] = useState(false);
@@ -47,16 +48,20 @@ function CheckDeleteUserModal({
           </ModalFooter>
         }
       >
-        Are you sure you want to delete this user [last name], [first name]?
+        <FormattedMessage
+          id="ui-users.checkDelete.confirmation"
+          values={{ name: username }}
+        />
       </Modal>
     </>
   );
 }
 
 CheckDeleteUserModal.propTypes = {
-  handlers: PropTypes.shape({}).isRequired,
+  // handlers: PropTypes.shape({}).isRequired,
   onCloseModal: PropTypes.func.isRequired,
   open: PropTypes.bool,
+  username: PropTypes.string,
 };
 
 export default injectIntl(CheckDeleteUserModal);

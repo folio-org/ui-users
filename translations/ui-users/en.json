@@ -342,6 +342,7 @@
   "save": "Save",
   "edit": "Edit",
   "checkDelete": "Check for open transactions/delete user",
+  "checkDelete.confirmation": "Are you sure you want to delete this user <strong>{name}</strong>?",
   "okay": "OK",
   "cancel": "Cancel",
   "description": "Description",
