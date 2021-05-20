@@ -91,6 +91,8 @@ import CalloutInteractor from '@folio/stripes-components/lib/Callout/tests/inter
   openFeesFines = text('#clickable-viewcurrentaccounts');
   closedFeesFines = text('#clickable-viewclosedaccounts');
   allFeesFines = text('#clickable-viewallaccounts');
+  claimFeesFines = text('#no-clickable-claim');
+  refundedFeesFines = text('#no-clickable-refunded');
 
   accountActionIsPresent = isPresent('#paneHeaderpane-account-action-history-pane-title');
   ellipsisMenuIsPresent = isPresent('#OverlayContainer #ellipsis-drop-down');
