@@ -71,6 +71,7 @@ jobs:
           git clone https://github.com/folio-org/folio-tools.git
           npm --no-git-tag-version version `folio-tools/github-actions-scripts/folioci_npmver.sh`
           rm -rf folio-tools
+          npm publish
         env:
           JOB_ID: ${{ github.run_number }}
           NODE_AUTH_TOKEN: ${{ secrets.FOLIO_NEXUS_NPM_TOKEN }}
