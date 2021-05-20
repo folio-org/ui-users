@@ -62,8 +62,8 @@ jobs:
 
       
       - name: Set FOLIO NPM snapshot version and publish to NPM snapshot repository
-        uses: actions/setup-node@v2
         if: contains(github.REF, 'master')
+        uses: actions/setup-node@v2
         with:
           node-version: ${{ env.NODEJS_VERSION }}
           registry-url: https://repository.folio.org/repository/npm-folioci-test/
