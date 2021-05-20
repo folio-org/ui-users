@@ -67,10 +67,11 @@ jobs:
         with:
           node-version: ${{ env.NODEJS_VERSION }}
           registry-url: https://repository.folio.org/repository/npm-folioci-test/
-        run: |
+      - run: |
           git clone https://github.com/folio-org/folio-tools.git
           npm --no-git-tag-version version `folio-tools/github-actions-scripts/folioci_npmver.sh`
           rm -rf folio-tools
+          npm install
           npm publish
         env:
           JOB_ID: ${{ github.run_number }}
