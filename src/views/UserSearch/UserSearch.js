@@ -84,7 +84,7 @@ class UserSearch extends React.Component {
       patronGroups: PropTypes.object,
       departments: PropTypes.object,
       owners: PropTypes.object,
-      servicePointsUsers: PropTypes.object.isRequired,
+      servicePointsUsers: PropTypes.object,
       query: PropTypes.shape({
         qindex: PropTypes.string,
       }).isRequired,
@@ -562,8 +562,8 @@ class UserSearch extends React.Component {
             reportCSV.toCSV();
             break;
           case 'both':
-            reportCSV.toCSV();
             reportPDF.toPDF();
+            reportCSV.toCSV();
             break;
           default:
             reportPDF.toPDF();
