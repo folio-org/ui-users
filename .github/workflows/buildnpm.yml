@@ -24,7 +24,7 @@ jobs:
     env:
       YARN_TEST_OPTIONS: '--ci --coverage --colors'
       FOLIO_NAME: 'folio_users'
-      FOLIO_NPM_REGISTRY: 'https://repository.folio.org/repository/npm-folioci/'
+      FOLIO_NPM_REGISTRY: 'https://repository.folio.org/repository/npm-folioci-test/'
       NODEJS_VERSION: '12'
       MODULE_DESCRIPTOR_DIR: 'artifacts/md'
       JEST_JUNIT_OUTPUT_DIR: 'artifacts/jest-junit'
