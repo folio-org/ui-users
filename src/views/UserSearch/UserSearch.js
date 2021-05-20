@@ -542,17 +542,13 @@ class UserSearch extends React.Component {
           createdAt: chosenServicePoint?.name ?? '',
           sources: reportParameters.sources.join(', '),
         };
-
-        const reportPDF = new CashDrawerReconciliationReportPDF({
+        const reportParams = {
           data: reportData,
           intl,
           headerData,
-        });
-        const reportCSV = new CashDrawerReconciliationReportCSV({
-          data: reportData,
-          intl,
-          headerData,
-        });
+        };
+        const reportPDF = new CashDrawerReconciliationReportPDF(reportParams);
+        const reportCSV = new CashDrawerReconciliationReportCSV(reportParams);
 
         switch (format) {
           case 'pdf':
