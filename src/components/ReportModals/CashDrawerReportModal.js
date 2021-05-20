@@ -65,24 +65,20 @@ const CashDrawerReportModal = (props) => {
     value: id,
     label: name,
   }));
-  const getSources = async (value) => {
-    if (!value) {
-      return undefined;
+
+  useMemo(() => {
+    if (servicePointsValue) {
+      cashDrawerReportSources.POST({ createdAt: servicePointsValue })
+        .then(response => {
+          const responseSources = response?.sources ?? [];
+          const formatSources = responseSources.map((sourceName, index) => ({
+            value: `source-${index}`,
+            label: sourceName,
+          }));
+          setSources(formatSources || []);
+        });
     }
-
-    const response = await cashDrawerReportSources.POST({ createdAt: value });
-    const responseSources = response?.sources ?? [];
-    const formatSources = responseSources.map((sourceName, index) => ({
-      value: `source-${index}`,
-      label: sourceName,
-    }));
-    setSources(formatSources || []);
-
-    return undefined;
-  };
-
-  useMemo(() => getSources(servicePointsValue), [servicePointsValue])
-    .then(response => response);
+  }, [cashDrawerReportSources, servicePointsValue]);
 
   const footer = (
     <ModalFooter>
