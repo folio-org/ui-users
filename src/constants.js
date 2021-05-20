@@ -205,6 +205,11 @@ export const cashMainReportColumns = [
   'additionalPatronInfo'
 ];
 
+export const cashMainReportColumnsCSV = [
+  ...cashMainReportColumns,
+  'feeFineDetails',
+];
+
 export const cashSourceReportColumns = [
   'source',
   'totalAmount',
