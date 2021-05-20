@@ -605,6 +605,7 @@ class UserDetail extends React.Component {
                       location={location}
                       accounts={accounts}
                       match={match}
+                      {...this.props}
                     />
                   </IfPermission>
                 </IfInterface>

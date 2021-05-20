@@ -156,6 +156,8 @@
     "accounts.all": "All",
     "accounts.numOpenAccounts": "{count, number} {count, plural, one {open fee/fine} other {open fees/fines}}",
     "accounts.numClosedAccounts": "{count, number} {count, plural, one {closed fee/fine} other {closed fees/fines}}",
+    "accounts.numClaimAccounts": "{count, number} {count, plural, one {suspended claim returned fee/fine} other {suspended claim returned fees/fines}}",
+    "accounts.numRefundedAccounts": "{count, number} {count, plural, one {refunded fee/fine} other {refunded fees/fines}}",
     "accounts.chargeManual": "Create fee/fine",
     "feefines.title": "Fee/fine: Manual charges",
     "feefines.callout": "The Fee/Fine Type <strong>{feefine}</strong> was successfully <strong>deleted</strong>.",

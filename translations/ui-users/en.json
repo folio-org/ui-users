@@ -368,6 +368,8 @@
   "accounts.numOpenAccounts": "{count, number} {count, plural, one {open fee/fine} other {open fees/fines}}",
   "accounts.totalOpenAccounts": "(Total: {amount})",
   "accounts.numClosedAccounts": "{count, number} {count, plural, one {closed fee/fine} other {closed fees/fines}}",
+  "accounts.numClaimAccounts": "{count, number} {count, plural, one {suspended claim returned fee/fine} other {suspended claim returned fees/fines}}",
+  "accounts.numRefundedAccounts": "{count, number} {count, plural, one {refunded fee/fine} other {refunded fees/fines}}",
   "accounts.chargeManual": "Create fee/fine",
   "accounts.viewAllFeesFines": "View all fees/fines",
   "accounts.exportFeesFines": "Export fees/fines",
