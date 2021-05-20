@@ -5,7 +5,7 @@ import {
   Button,
   Modal,
   ModalFooter,
-} from '@folio/stripes-components';
+} from '@folio/stripes/components';
 
 function CheckDeleteUserModal({
   onCloseModal,
@@ -23,7 +23,6 @@ function CheckDeleteUserModal({
     <>
       <Modal
         id="delete-user-modal"
-        closeOnBackgroundClick
         data-test-delete-user-modal
         open={open}
         label={<FormattedMessage id="ui-users.checkDelete" />}
