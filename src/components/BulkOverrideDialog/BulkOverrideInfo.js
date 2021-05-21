@@ -22,13 +22,17 @@ import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 import BulkOverrideLoansList from './BulkOverrideLoansList';
 
+import {
+  OVERRIDE_BLOCKS_FIELDS,
+} from '../../constants';
+
 class BulkOverrideInfo extends React.Component {
   static manifest = Object.freeze({
     renew: {
       type: 'okapi',
       fetch: false,
       POST: {
-        path: 'circulation/override-renewal-by-barcode',
+        path: 'circulation/renew-by-barcode',
       },
     },
   });
@@ -135,6 +139,7 @@ class BulkOverrideInfo extends React.Component {
     } = this.state;
 
     const {
+      additionalInfo: additionalInfoFromPatronBlocksOverrideDialog,
       mutator: {
         renew: {
           POST,
@@ -164,9 +169,23 @@ class BulkOverrideInfo extends React.Component {
           {
             userBarcode,
             itemBarcode: barcode,
-            comment: additionalInfo,
             servicePointId: curServicePoint?.id,
-            ...(datetime && { dueDate: datetime }),
+            [OVERRIDE_BLOCKS_FIELDS.OVERRIDE_BLOCKS]: {
+              ...(additionalInfoFromPatronBlocksOverrideDialog && {
+                [OVERRIDE_BLOCKS_FIELDS.PATRON_BLOCK]: {},
+              }),
+              [OVERRIDE_BLOCKS_FIELDS.COMMENT]: additionalInfo,
+              ...(datetime
+                ? {
+                  [OVERRIDE_BLOCKS_FIELDS.RENEWAL_DUE_DATE_REQUIRED_BLOCK]: {
+                    [OVERRIDE_BLOCKS_FIELDS.RENEWAL_DUE_DATE]: datetime,
+                  },
+                }
+                : {
+                  [OVERRIDE_BLOCKS_FIELDS.RENEWAL_BLOCK]: {},
+                }
+              ),
+            },
           }
         );
       }

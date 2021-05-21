@@ -72,6 +72,7 @@ import DialogInteractor from './dialog';
   list = scoped('[data-test-open-loans-list]');
   requests = collection('[data-test-list-requests]');
   callNumbers = collection('[data-test-list-call-numbers]');
+  feeFineIncurred = new Interactor('[data-test-open-loans-list] [data-test-feefine-incurred]');
   actionDropdowns = collection('[data-test-actions-dropdown]');
   actionDropdownContainer = new Interactor('[class*=DropdownMenu---]');
   actionDropdownRequestQueue = new Interactor('[data-test-dropdown-content-request-queue]');

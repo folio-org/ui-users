@@ -141,3 +141,7 @@ export function hasAnyLoanItemStatus(loans, itemStatuses) {
 export function accountsMatchStatus(accounts, status) {
   return accounts.every((account) => account.status.name.toLowerCase() === status.toLowerCase());
 }
+
+export function getValue(value) {
+  return value || '';
+}

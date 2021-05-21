@@ -870,5 +870,18 @@
     "accounts.outstanding.page": "Saldo pendente para página: {amount}",
     "accounts.suspended.page": "Saldo suspenso para a página: {amount}",
     "accounts.selected.balance": "Saldo de taxas / multas selecionadas: {amount}",
-    "permission.manualProcessRefundsReport": "Usuários: Criar e baixar reembolsos para processar relatórios manualmente"
+    "permission.manualProcessRefundsReport": "Usuários: Criar e baixar reembolsos para processar relatórios manualmente",
+    "reports.cash.drawer.modal.label": "Cash drawer reconciliation report",
+    "reports.cash.drawer.servicePoint": "Service point",
+    "reports.cash.drawer.servicePoint.placeholder": "Select service point",
+    "reports.cash.drawer.sources": "Sources",
+    "reports.cash.drawer.sources.placeholder": "Select sources",
+    "reports.cash.drawer.report.format": "Report format",
+    "reports.cash.drawer.report.format.csv": "CSV",
+    "reports.cash.drawer.report.format.pdf": "PDF (Read only)",
+    "reports.cash.drawer.report.format.both": "Both",
+    "reports.cash.drawer.report.startDate.error": "\"Start date\" is required",
+    "reports.cash.drawer.report.endDateWithoutStart.error": "\"Start date\" is required if \"End date\" entered\n",
+    "reports.cash.drawer.report.endDate.error": "\"End date\" must be greater than or equal to \"Start date\"",
+    "reports.cash.drawer.report.servicePoint.error": "\"Service point\" is required"
 }

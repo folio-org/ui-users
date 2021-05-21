@@ -190,4 +190,71 @@ export const feeFineReportColumns = [
 
 export const NO_FEE_FINE_OWNER_FOUND_MESSAGE = 'No fee/fine owner found for item\'s permanent location';
 
+export const OVERRIDE_BLOCKS_FIELDS = {
+  OVERRIDE_BLOCKS: 'overrideBlocks',
+  COMMENT: 'comment',
+  PATRON_BLOCK: 'patronBlock',
+  RENEWAL_BLOCK: 'renewalBlock',
+  RENEWAL_DUE_DATE_REQUIRED_BLOCK: 'renewalDueDateRequiredBlock',
+  RENEWAL_DUE_DATE: 'dueDate',
+};
+
 export const DATE_FORMAT = 'YYYY-MM-DD';
+
+export const cashMainReportColumns = [
+  'source',
+  'paymentMethod',
+  'paymentAmount',
+  'feeFineOwner',
+  'feeFineType',
+  'paymentDateTime',
+  'paymentStatus',
+  'transactionInfo',
+  'additionalStaffInfo',
+  'additionalPatronInfo'
+];
+
+export const cashMainReportColumnsCSV = [
+  ...cashMainReportColumns,
+  'feeFineDetails',
+];
+
+export const cashSourceReportColumns = [
+  'source',
+  'totalAmount',
+  'totalCount'
+];
+
+export const cashSourceReportFooter = [
+  'sourceTotal'
+];
+
+export const cashOwnerReportFooter = [
+  'ownerTotal'
+];
+
+export const cashTypeReportFooter = [
+  'typeTotal'
+];
+
+export const cashPaymentReportFooter = [
+  'paymentTotal'
+];
+
+export const cashPaymentMethodReportColumns = [
+  'paymentMethod',
+  'totalAmount',
+  'totalCount'
+];
+
+export const cashFeeFineTypeReportColumns = [
+  'feeFineType',
+  'totalAmount',
+  'totalCount'
+];
+
+export const cashFeeFineOwnerReportColumns = [
+  'feeFineOwner',
+  'totalAmount',
+  'totalCount'
+];
