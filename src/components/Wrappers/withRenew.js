@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import {
   isEmpty,
-  get,
 } from 'lodash';
 
 import { Callout } from '@folio/stripes/components';
@@ -11,7 +10,11 @@ import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 import BulkRenewalDialog from '../BulkRenewalDialog';
 import isOverridePossible from '../Loans/OpenLoans/helpers/isOverridePossible';
-import { requestStatuses, MAX_RECORDS } from '../../constants';
+import {
+  requestStatuses,
+  MAX_RECORDS,
+  OVERRIDE_BLOCKS_FIELDS,
+} from '../../constants';
 
 // HOC used to manage renew
 const withRenew = WrappedComponent => class WithRenewComponent extends React.Component {
@@ -110,9 +113,9 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
     };
 
     if (additionalInfo) {
-      params.overrideBlocks = {
-        patronBlock: {},
-        comment: additionalInfo,
+      params[OVERRIDE_BLOCKS_FIELDS.OVERRIDE_BLOCKS] = {
+        [OVERRIDE_BLOCKS_FIELDS.PATRON_BLOCK]: {},
+        [OVERRIDE_BLOCKS_FIELDS.COMMENT]: additionalInfo,
       };
     }
 
@@ -152,12 +155,10 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
           await this.renewItem(loan, patron, bulkRenewal, index !== loansSize - 1, additionalInfo)
         );
       } catch (error) {
-        const stringErrorMessage = get(error, 'props.values.message', '');
-
         renewFailure.push(loan);
         errorMsg[loan.id] = {
           ...error,
-          ...isOverridePossible(stringErrorMessage),
+          ...isOverridePossible(this.state.errors),
         };
       }
     }
