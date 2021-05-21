@@ -67,13 +67,10 @@ describe('Cash drawer reconciliation modal', () => {
     afterEach(cleanup);
 
     it('should be rendered', () => {
-
       const { container } = cashDrawerModal;
       const modalContent = container.querySelector('[data-test-cash-drawer-report-modal]');
       const modalMainHeader = container.querySelector('[data-test-cash-drawer-report-modal] h1');
       const form = container.querySelector('form');
-
-
 
       expect(container).toBeVisible();
       expect(modalContent).toBeVisible();
