@@ -1,8 +1,8 @@
 import React from 'react';
 import { Router } from 'react-router-dom';
 import {
-  render,
   cleanup,
+  render,
   screen,
 } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -17,7 +17,7 @@ const renderCashDrawerReportModal = ({
   handleSubmit = jest.fn(),
   values = {},
   cashDrawerReportSources = {
-    POST: jest.fn()
+    POST: jest.fn(() => Promise.resolve({ data: {} })),
   },
   intl = {},
   form = {},
@@ -57,7 +57,6 @@ describe('Cash drawer reconciliation modal', () => {
       cashDrawerModal = renderCashDrawerReportModal({
         initialValues: {
           format: 'both',
-          servicePoint: 'Online',
           sources: ['ADMIN'],
           startDate: '2020-05-11',
           endDate: '2021-05-11'
@@ -68,10 +67,13 @@ describe('Cash drawer reconciliation modal', () => {
     afterEach(cleanup);
 
     it('should be rendered', () => {
+
       const { container } = cashDrawerModal;
       const modalContent = container.querySelector('[data-test-cash-drawer-report-modal]');
       const modalMainHeader = container.querySelector('[data-test-cash-drawer-report-modal] h1');
       const form = container.querySelector('form');
+
+
 
       expect(container).toBeVisible();
       expect(modalContent).toBeVisible();
