@@ -106,7 +106,7 @@ const CashDrawerReportModal = (props) => {
       id="cash-drawer-report-modal"
       size="small"
       footer={footer}
-      dismissible="true"
+      dismissible
       open
       label={props.label}
       onClose={props.onClose}

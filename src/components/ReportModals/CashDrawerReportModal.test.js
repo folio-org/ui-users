@@ -17,7 +17,7 @@ const renderCashDrawerReportModal = ({
   handleSubmit = jest.fn(),
   values = {},
   cashDrawerReportSources = {
-    POST: jest.fn(() => Promise.resolve({ data: {} })),
+    POST: jest.fn()
   },
   intl = {},
   form = {},
