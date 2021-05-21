@@ -37,10 +37,7 @@ jest.mock('@folio/stripes/components', () => ({
     <span {...rest}>{children}</span>
   )),
   Modal: jest.fn(({ children, label, ...rest }) => (
-    <div
-      dismissible="true"
-      {...rest}
-    >
+    <div {...rest}>
       <h1>{label}</h1>
       {children}
     </div>

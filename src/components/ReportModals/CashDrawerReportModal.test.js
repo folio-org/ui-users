@@ -43,6 +43,7 @@ const renderCashDrawerReportModal = ({
         intl={intl}
         form={form}
         cashDrawerReportSources={cashDrawerReportSources}
+        dismissible="true"
       />
     </Router>
   );
