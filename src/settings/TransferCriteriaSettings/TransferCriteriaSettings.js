@@ -7,7 +7,7 @@ import { Pane } from '@folio/stripes/components';
 const TransferCriteriaSettings = () => {
   return (
     <Pluggable type="bursar-export">
-      <Pane>
+      <Pane data-test-transfercriteriasettings>
         <FormattedMessage id="ui-users.settings.transferCriteria.notAvailable" />
       </Pane>
     </Pluggable>
