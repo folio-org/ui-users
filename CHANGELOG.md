@@ -35,6 +35,8 @@
 * Provide `key` when rendering list elements. Refs UIU-2168.
 * Create 'Cash drawer reconciliation report' in PDF format. Refs UIU-2084.
 * Create 'Cash drawer reconciliation report' in CSV format. Refs UIU-1961.
+* Added `NotePopupModal` to User Details page. Refs UIU-2008.
+
 
 ## [6.0.0](https://github.com/folio-org/ui-users/tree/v6.0.0) (2021-03-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.9...v6.0.0)
