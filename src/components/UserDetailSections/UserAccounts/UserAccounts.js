@@ -181,6 +181,7 @@ UserAccounts.propTypes = {
     loansHistory: PropTypes.shape({
       records: PropTypes.arrayOf(PropTypes.object),
     }),
-  }) };
+  }),
+};
 
 export default UserAccounts;
