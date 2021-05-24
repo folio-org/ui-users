@@ -69,7 +69,8 @@ jest.mock('@folio/stripes/components', () => ({
             key={option.id || `option-${i}`}
           >
             {option.label}
-          </option>))}
+          </option>
+        ))}
       </select>
       {children}
     </div>
