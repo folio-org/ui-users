@@ -21,7 +21,6 @@ jest.mock('@folio/stripes/components', () => ({
     </div>
   )),
   Headline: jest.fn(({ children }) => <div>{ children }</div>),
-
   Icon: jest.fn((props) => (props && props.children ? props.children : <span />)),
   IconButton: jest.fn(({
     buttonProps,
@@ -36,12 +35,28 @@ jest.mock('@folio/stripes/components', () => ({
   Label: jest.fn(({ children, ...rest }) => (
     <span {...rest}>{children}</span>
   )),
-  Modal: jest.fn(({ children, label, ...rest }) => (
-    <div {...rest}>
-      <h1>{label}</h1>
-      {children}
-    </div>
-  )),
+  // oy, dismissible. we need to pull it out of props so it doesn't
+  // get applied to the div as an attribute, which must have a string-value,
+  // which will shame you in the console:
+  //
+  //     Warning: Received `true` for a non-boolean attribute `dismissible`.
+  //     If you want to write it to the DOM, pass a string instead: dismissible="true" or dismissible={value.toString()}.
+  //         in div (created by mockConstructor)
+  //
+  // is there a better way to throw it away? If we don't destructure and
+  // instead access props.label and props.children, then we get a test
+  // failure that the modal isn't visible. oy, dismissible.
+  Modal: jest.fn(({ children, label, dismissible, ...rest }) => {
+    return (
+      <div
+        data-test={dismissible ? '' : ''}
+        {...rest}
+      >
+        <h1>{label}</h1>
+        {children}
+      </div>
+    );
+  }),
   ModalFooter: jest.fn((props) => (
     <div>{props.children}</div>
   )),
@@ -54,7 +69,8 @@ jest.mock('@folio/stripes/components', () => ({
             key={option.id || `option-${i}`}
           >
             {option.label}
-          </option>))}
+          </option>
+        ))}
       </select>
       {children}
     </div>
@@ -68,11 +84,27 @@ jest.mock('@folio/stripes/components', () => ({
   NavListSection: jest.fn(({ children, className, ...rest }) => (
     <div className={className} {...rest}>{children}</div>
   )),
-  Pane: jest.fn(({ children, className, defaultWidth, paneTitle, firstMenu, ...rest }) => (
-    <div className={className} {...rest}>{children}</div>
-  )),
+  Pane: jest.fn(({ children, className, defaultWidth, paneTitle, firstMenu, lastMenu, ...rest }) => {
+    return (
+      <div className={className} {...rest} style={{ width: defaultWidth }}>
+        <div>
+          {firstMenu ?? null}
+          {paneTitle}
+          {lastMenu ?? null}
+        </div>
+        {children}
+      </div>
+    );
+  }),
   PaneFooter: jest.fn(({ ref, children, ...rest }) => (
     <div ref={ref} {...rest}>{children}</div>
+  )),
+  PaneHeader: jest.fn(({ paneTitle, firstMenu, lastMenu }) => (
+    <div>
+      {firstMenu ?? null}
+      {paneTitle}
+      {lastMenu ?? null}
+    </div>
   )),
   PaneBackLink: jest.fn(() => <span />),
   PaneMenu: jest.fn((props) => <div>{props.children}</div>),
