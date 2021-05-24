@@ -36,6 +36,8 @@
 * Create 'Cash drawer reconciliation report' in PDF format. Refs UIU-2084.
 * Create 'Cash drawer reconciliation report' in CSV format. Refs UIU-1961.
 * Migrate to `renew-by-barcode`. Refs UIU-2096.
+* Move Tenant/Bursar exports to Users/Transfer criteria. Refs UIU-2098.
+* Add possible for enter correct values for Fee/Fine amount. Refs UIU-2156.
 
 ## [6.0.0](https://github.com/folio-org/ui-users/tree/v6.0.0) (2021-03-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.9...v6.0.0)

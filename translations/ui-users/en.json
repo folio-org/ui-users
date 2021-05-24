@@ -123,6 +123,8 @@
   "settings.refundReasons": "Refund reasons",
   "settings.commentRequired": "Comment required",
   "settings.transferAccounts": "Transfer accounts",
+  "settings.transferCriteria": "Transfer criteria",
+  "settings.transferCriteria.notAvailable": "No plugin available!",
   "settings.customFields": "Custom fields",
   "settings.conditions": "Conditions",
   "settings.block.borrowing": "Block borrowing",
