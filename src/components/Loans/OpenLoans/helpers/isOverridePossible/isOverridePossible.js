@@ -1,30 +1,36 @@
-import overridePossibleMessages from './overridePossibleMessages';
+import { get } from 'lodash';
 
-const isOverridableMessage = (errorMessage, data) => {
-  for (const { message, showDueDatePicker } of overridePossibleMessages) {
-    const canBeOverridden = errorMessage.includes(message);
+import {
+  OVERRIDE_BLOCKS_FIELDS,
+} from '../../../../../constants';
 
-    if (canBeOverridden) {
-      if (showDueDatePicker) {
-        data.autoNewDueDate = false;
-      }
+const overridePossibleBlockName = [
+  OVERRIDE_BLOCKS_FIELDS.RENEWAL_DUE_DATE_REQUIRED_BLOCK,
+  OVERRIDE_BLOCKS_FIELDS.RENEWAL_BLOCK,
+  OVERRIDE_BLOCKS_FIELDS.PATRON_BLOCK,
+];
 
-      return true;
+const isOverridableMessage = (error, data) => {
+  const overridableBlockName = get(error, ['overridableBlock', 'name'], '');
+
+  if (overridePossibleBlockName.includes(overridableBlockName)) {
+    if (overridableBlockName === OVERRIDE_BLOCKS_FIELDS.RENEWAL_DUE_DATE_REQUIRED_BLOCK) {
+      data.autoNewDueDate = false;
     }
+
+    return true;
   }
 
   return false;
 };
 
-export default (text) => {
+export default (errors) => {
   const data = {
     overridable: false,
     autoNewDueDate: true,
   };
 
-  const errorMessages = text.split(',');
-
-  data.overridable = errorMessages.every((errorMessage) => isOverridableMessage(errorMessage, data));
+  data.overridable = errors.every((error) => isOverridableMessage(error, data));
 
   return data;
 };

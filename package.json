@@ -40,7 +40,7 @@
     },
     "optionalOkapiInterfaces": {
       "automated-patron-blocks": "0.1",
-      "circulation": "9.0 10.0",
+      "circulation": "9.0 10.0 11.0",
       "feesfines": "16.1",
       "loan-policy-storage": "1.0 2.0",
       "loan-storage": "4.0 5.0 6.0 7.0",
@@ -523,7 +523,7 @@
         "displayName": "Users: User loans renew through override",
         "description": "Also includes backend permissions to perform loans renew through override",
         "subPermissions": [
-          "circulation.override-renewal-by-barcode.post"
+          "circulation.override-renewal-block"
         ],
         "visible": true
       },
@@ -835,7 +835,9 @@
     "faker": "^4.1.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^26.6.3",
+    "jest-canvas-mock": "^2.3.0",
     "jest-junit": "^12.0.0",
+    "history": "^5.0.0",
     "miragejs": "^0.1.32",
     "mocha": "^5.2.0",
     "react": "^16.5.0",
@@ -861,7 +863,9 @@
     "react-final-form-listeners": "^1.0.3",
     "react-hot-loader": "^4.3.12",
     "react-router-prop-types": "^1.0.4",
-    "uuid": "^3.0.1"
+    "uuid": "^3.0.1",
+    "jspdf": "^2.3.1",
+    "jspdf-autotable": "^3.5.14"
   },
   "peerDependencies": {
     "@folio/stripes": "^6.0.0",

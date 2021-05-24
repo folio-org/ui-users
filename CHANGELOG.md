@@ -28,6 +28,16 @@
 * Allow a user to assign an existing permission set to a permission set. Refs UIU-1630.
 * Add permissions type filter to users settings permissions sets. Refs UIU-2164.
 * Avoid querying for an empty list of loan policies. Refs UIU-2163.
+* Show `Pop-up on User` and `Pop-up on Checkout` fields to Notes forms. Refs UIU-2155.
+* Show loading indicator on Loans details screen. Fixes UIU-2120.
+* Add type column to users settings permissions sets. Refs UIU-2167.
+* Add modal for 'Cash drawer reconciliation report'. Refs UIU-1959.
+* Provide `key` when rendering list elements. Refs UIU-2168.
+* Create 'Cash drawer reconciliation report' in PDF format. Refs UIU-2084.
+* Create 'Cash drawer reconciliation report' in CSV format. Refs UIU-1961.
+* Migrate to `renew-by-barcode`. Refs UIU-2096.
+* Move Tenant/Bursar exports to Users/Transfer criteria. Refs UIU-2098.
+* Add possible for enter correct values for Fee/Fine amount. Refs UIU-2156.
 
 ## [6.0.0](https://github.com/folio-org/ui-users/tree/v6.0.0) (2021-03-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.9...v6.0.0)
