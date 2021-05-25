@@ -30,6 +30,7 @@ refundTransfers = async (loan, props) => {
   const setPaymentStatus = record => {
     const updatedRec = _.cloneDeep(record);
     updatedRec.paymentStatus.name = refundClaimReturned.PAYMENT_STATUS;
+    updatedRec.remaining = record.amount;
     return updatedRec;
   };
 
@@ -115,11 +116,13 @@ refundTransfers = async (loan, props) => {
     return persistRefundAction(newAction);
   };
 
-  const createRefunds = (account, actions) => {
+  const createRefunds = async (account, actions) => {
     if (actions.length > 0) {
-      createRefundActionTemplate(account, actions, refundClaimReturned.REFUNDED_ACTION).then(
-        createRefundActionTemplate(account, actions, refundClaimReturned.CREDITED_ACTION)
+      createRefundActionTemplate(account, actions, refundClaimReturned.CREDITED_ACTION).then(
+        createRefundActionTemplate(account, actions, refundClaimReturned.REFUNDED_ACTION)
       );
+      const updateRecord = setPaymentStatus(account);
+      persistAccountRecord(updateRecord);
     }
   };
 
@@ -174,13 +177,8 @@ refundTransfers = async (loan, props) => {
 
     if (isAgedToLostItem || isDeclaredLostItem) {
       const accounts = await getAccounts();
-      const updatedAccounts = await Promise.all(
-        accounts
-          .map(setPaymentStatus)
-          .map(persistAccountRecord)
-      );
       const accountsActions = await Promise.all(
-        updatedAccounts
+        accounts
           .map(getAccountActions)
       );
       const transferredActions = accountsActions
@@ -190,7 +188,7 @@ refundTransfers = async (loan, props) => {
           return {
             idFeeFineOwner: account.ownerId,
             account,
-            actions: transferredActions[index]
+            actions: transferredActions[index],
           };
         });
       const groupByOwner = _(accountsWithTransferredActions)
