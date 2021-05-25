@@ -1,7 +1,6 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { values } from 'lodash';
-import moment from 'moment';
 
 import {
   cashMainReportColumns,
@@ -15,6 +14,8 @@ import {
   cashTypeReportFooter,
 } from '../../../constants';
 
+import CashDrawerReconciliationReport from './CashDrawerReconciliationReport';
+
 const pdfOptions = {
   orientation: 'l',
   unit: 'mm',
@@ -25,13 +26,10 @@ const pdfOptions = {
   printHeaders: true,
 };
 
-class CashDrawerReconciliationReportPDF {
-  constructor({ data, intl: { formatMessage, formatTime, formatDate }, headerData }) {
+class CashDrawerReconciliationReportPDF extends CashDrawerReconciliationReport {
+  constructor({ data, intl, headerData }) {
+    super({ intl, headerData });
     this.data = data;
-    this.formatMessage = formatMessage;
-    this.formatTime = formatTime;
-    this.formatDate = formatDate;
-    this.headerData = headerData;
     this.mainReportColumnsMap = this.generateTableColumns(cashMainReportColumns);
     this.sourceReportColumnsMap = this.generateTableColumns(cashSourceReportColumns);
     this.sourceReportFooterMap = this.generateTableColumns(cashSourceReportFooter);
@@ -44,24 +42,6 @@ class CashDrawerReconciliationReportPDF {
 
     // eslint-disable-next-line new-cap
     this.doc = new jsPDF(pdfOptions);
-  }
-
-  buildHeader() {
-    return this.formatMessage(
-      { id: 'ui-users.reports.cash.header' },
-      {
-        servicePoint: this.headerData.createdAt,
-        sources: this.headerData.sources,
-        startDate: this.formatDate(this.headerData.startDate),
-        endDate: this.formatDate(this.headerData.endDate) || moment().format('YYYY/MM/DD') // if no endDate then show date='today'
-      }
-    );
-  }
-
-  buildDocumentName() {
-    const name = this.formatMessage({ id: 'ui-users.reports.cash.document.name' });
-
-    return name.split(' ').join('-');
   }
 
   generateTableColumns(columns) {
