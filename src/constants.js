@@ -190,6 +190,15 @@ export const feeFineReportColumns = [
 
 export const NO_FEE_FINE_OWNER_FOUND_MESSAGE = 'No fee/fine owner found for item\'s permanent location';
 
+export const OVERRIDE_BLOCKS_FIELDS = {
+  OVERRIDE_BLOCKS: 'overrideBlocks',
+  COMMENT: 'comment',
+  PATRON_BLOCK: 'patronBlock',
+  RENEWAL_BLOCK: 'renewalBlock',
+  RENEWAL_DUE_DATE_REQUIRED_BLOCK: 'renewalDueDateRequiredBlock',
+  RENEWAL_DUE_DATE: 'dueDate',
+};
+
 export const DATE_FORMAT = 'YYYY-MM-DD';
 
 export const cashMainReportColumns = [

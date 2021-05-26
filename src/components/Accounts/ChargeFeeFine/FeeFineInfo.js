@@ -125,6 +125,7 @@ class FeeFineInfo extends React.Component {
                     <Field
                       name="amount"
                       id="amount"
+                      type="number"
                       component={TextField}
                       fullWidth
                       required
