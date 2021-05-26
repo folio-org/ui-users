@@ -526,6 +526,7 @@
   "accounts.history.button.refund": "Refund",
   "accounts.history.button.transfer": "Transfer",
   "accounts.history.button.loanDetails": " Loan details",
+  "accounts.history.button.loanAnonymized": "Loan details (anonymized)",
   "accounts.history.comment": "Additional information",
   "accounts.history.of": "of",
   "accounts.history.filter": "Search & Filter",
