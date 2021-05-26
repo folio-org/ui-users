@@ -36,6 +36,18 @@ export default (server) => {
     ownerId: owners[0].id,
     feeFineId: feefines[0].id
   });
+  server.create('account', {
+    userId: user.id,
+    status: {
+      name: 'Open'
+    },
+    amount: 100,
+    remaining: 100,
+    ownerId: owners[0].id,
+    feeFineId: feefines[0].id,
+    loanId: '0'
+  });
+
   server.create('comment');
   server.createList('waiver', 4);
   server.createList('payment', 4, { ownerId: owners[0].id });

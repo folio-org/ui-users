@@ -52,7 +52,7 @@ describe('Test Fee/Fine History', () => {
           expect(FeeFineHistoryInteractor.paneSub).to.string('Outstanding balance for page');
           expect(FeeFineHistoryInteractor.paneSub).to.string('Suspended balance for page');
           expect(FeeFineHistoryInteractor.labelMenu).to.string('Open fees/fines for');
-          expect(FeeFineHistoryInteractor.outstandingMenu).to.string('Total outstanding balance: 560.00 | Total suspended balance: 0.00');
+          expect(FeeFineHistoryInteractor.outstandingMenu).to.string('Total outstanding balance: 660.00 | Total suspended balance: 0.00');
         });
 
         describe('displays open fees/fines rows', () => {
@@ -62,7 +62,7 @@ describe('Test Fee/Fine History', () => {
           });
 
           it('renders proper amount of rows', () => {
-            expect(FeeFineHistoryInteractor.mclViewFeesFines.rowCount).to.equal(5);
+            expect(FeeFineHistoryInteractor.mclViewFeesFines.rowCount).to.equal(6);
           });
 
           describe('activate the Search & filter', () => {
@@ -382,6 +382,15 @@ describe('Test Fee/Fine History', () => {
             it('show the loan details modal', () => {
               expect(FeeFineHistoryInteractor.loanDetailsIsPresent).to.be.true;
             });
+          });
+        });
+
+        describe('est the ellipsis menu (anonymized)', () => {
+          beforeEach(async () => {
+            await FeeFineHistoryInteractor.rows(5).cells(13).selectEllipsis();
+          });
+          it('Check text on loan details option', () => {
+            expect(FeeFineHistoryInteractor.dropDownEllipsisOptions(5).text).to.string('Loan details (anonymized)');
           });
         });
       });

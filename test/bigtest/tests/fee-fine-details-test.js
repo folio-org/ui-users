@@ -251,7 +251,7 @@ describe('Test Fee/Fine details', () => {
         });
       });
     });
-    /*
+
     describe('Refund fee/fine', () => {
       beforeEach(async () => {
         await FeeFineDetails.refundButton.click();
@@ -301,6 +301,5 @@ describe('Test Fee/Fine details', () => {
         });
       });
     });
-    */
   });
 });
