@@ -14,7 +14,7 @@ describe('Test Fee/Fine details', () => {
   setupApplication({
     scenarios: ['fee-fine-details'],
     currentUser: {
-      curServicePoint: { id: 1 },
+      curServicePoint: { id: 1, value: 'Test Point' },
     },
   });
   describe('visit Fee/fine details', () => {
@@ -251,7 +251,7 @@ describe('Test Fee/Fine details', () => {
         });
       });
     });
-
+    /*
     describe('Refund fee/fine', () => {
       beforeEach(async () => {
         await FeeFineDetails.refundButton.click();
@@ -301,5 +301,6 @@ describe('Test Fee/Fine details', () => {
         });
       });
     });
+    */
   });
 });

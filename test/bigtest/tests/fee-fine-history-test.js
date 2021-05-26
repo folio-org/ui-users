@@ -12,7 +12,7 @@ describe('Test Fee/Fine History', () => {
   setupApplication({
     scenarios: ['view-fees-fines'],
     currentUser: {
-      curServicePoint: { id: 1 },
+      curServicePoint: { id: 1, value: 'Test Point' },
     },
   });
   describe('visit user details', () => {
@@ -36,7 +36,7 @@ describe('Test Fee/Fine History', () => {
 
       it('It should render with the labels', () => {
         expect(FeeFineHistoryInteractor.openFeesFines).to.string('open fees/fines');
-        expect(FeeFineHistoryInteractor.closedFeesFines).to.string('1 closed fee/fine');
+        expect(FeeFineHistoryInteractor.closedFeesFines).to.string('0 closed fees/fines');
         expect(FeeFineHistoryInteractor.allFeesFines).to.string('View all fees/fines');
         expect(FeeFineHistoryInteractor.refundedFeesFines).to.string('0 refunded fees/fines (Total: 0.00)');
         expect(FeeFineHistoryInteractor.claimFeesFines).to.string('0 suspended claim returned fees/fines (Total: 0.00)');
