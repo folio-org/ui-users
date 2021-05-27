@@ -641,7 +641,7 @@ class Actions extends React.Component {
           : 'ui-users.accounts.actions.refundFeeFine';
 
     const servicePointOwnerId = loadServicePoints({ owners, defaultServicePointId, servicePointsIds });
-    const currentFeeFineType = feefines.find(({ feeFineType }) => feeFineType === account?.feeFineType);
+    const currentFeeFineType = feefines.find(({ id }) => id === account?.feeFineId);
     const currentOwnerId = servicePointOwnerId || currentFeeFineType?.ownerId || account?.ownerId;
     const currentOwner = owners.find(o => o.id === currentOwnerId) || {};
     const accountTypes = this.props.accounts.map(a => a.feeFineType);
