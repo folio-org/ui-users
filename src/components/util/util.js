@@ -15,10 +15,25 @@ export function getFullName(user) {
   return `${lastName}${firstName ? ', ' : ' '}${firstName}${middleName ? ' ' : ''}${middleName}`;
 }
 
-export function eachPromise(arr, fn) {
-  if (!Array.isArray(arr)) return Promise.reject(new Error('Array not found'));
-  return arr.reduce((prev, cur) => (prev.then(() => fn(cur))), Promise.resolve());
-}
+export const formatActionDescription = (action) => {
+  return action.typeAction +
+    (action.paymentMethod
+      ? ('-' + action.paymentMethod)
+      : ' '
+    );
+};
+
+export const formatCurrencyAmount = (amount = 0) => parseFloat(amount).toFixed(2);
+
+export const formatDateAndTime = (date, formatter) => formatter(date, { day: 'numeric', month: 'numeric', year: 'numeric' });
+
+export const getServicePointOfCurrentAction = (action, servicePoints = []) => {
+  const servicePoint = servicePoints.find(sp => sp.id === action.createdAt);
+
+  return servicePoint ? servicePoint.name : action.createdAt;
+};
+
+export const calculateRemainingAmount = (remaining) => (parseFloat(remaining) * 100) / 100;
 
 export function validate(item, index, items, field, label) {
   const error = {};
@@ -82,10 +97,10 @@ export function getOpenRequestStatusesFilterString() {
   return getFilterStatusesString(openStatusesArr);
 }
 
-export function getOpenRequestsPath(barcode) {
+export function getOpenRequestsPath(itemId) {
   const filterString = getOpenRequestStatusesFilterString();
 
-  return `/requests?filters=${filterString}&query=${barcode}&sort=Request Date`;
+  return `/requests?filters=${filterString}&query=${itemId}&sort=Request Date`;
 }
 
 export function getChargeFineToLoanPath(userId, loanId) {
@@ -113,6 +128,20 @@ export function calculateSortParams({
   return sortParams;
 }
 
+// Return true if every item in loans has the status itemStatus
 export function hasEveryLoanItemStatus(loans, itemStatus) {
   return _.every(Object.values(loans), loan => loan?.item?.status?.name === itemStatus);
+}
+
+// Return true if every item in loans has one of the statuses in the itemStatuses array
+export function hasAnyLoanItemStatus(loans, itemStatuses) {
+  return _.every(Object.values(loans), loan => itemStatuses.includes(loan?.item?.status?.name));
+}
+
+export function accountsMatchStatus(accounts, status) {
+  return accounts.every((account) => account.status.name.toLowerCase() === status.toLowerCase());
+}
+
+export function getValue(value) {
+  return value || '';
 }

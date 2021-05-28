@@ -5,7 +5,7 @@ import {
   injectIntl,
 } from 'react-intl';
 import { compose } from 'redux';
-import Link from 'react-router-dom/Link';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   get,
@@ -29,16 +29,18 @@ import {
   Dropdown,
   DropdownMenu,
 } from '@folio/stripes/components';
-import { IfPermission } from '@folio/stripes/core';
+import { IfPermission, stripesConnect } from '@folio/stripes/core';
 import { effectiveCallNumber } from '@folio/stripes/util';
 
-import PatronBlockModal from '../../components/PatronBlock/PatronBlockModal';
+import PatronBlockModalWithOverrideModal from '../../components/PatronBlock/PatronBlockModalWithOverrideModal';
 import {
   getFullName,
   nav,
   getOpenRequestsPath,
+  getRenewalPatronBlocksFromPatronBlocks,
+  accountsMatchStatus,
 } from '../../components/util';
-import { itemStatuses } from '../../constants';
+import { itemStatuses, loanActions, refundClaimReturned } from '../../constants';
 import {
   withRenew,
   withDeclareLost,
@@ -52,6 +54,7 @@ import css from './LoanDetails.css';
 
 class LoanDetails extends React.Component {
   static propTypes = {
+    isLoading: PropTypes.bool,
     stripes: PropTypes.object.isRequired,
     resources: PropTypes.shape({
       loanActions: PropTypes.object,
@@ -72,20 +75,29 @@ class LoanDetails extends React.Component {
       }),
     }).isRequired,
     loan: PropTypes.object,
+    loanIsMissing: PropTypes.bool,
     patronGroup: PropTypes.object,
     user: PropTypes.object,
     loanActionsWithUser: PropTypes.arrayOf(PropTypes.object),
+    loanAccountActions: PropTypes.arrayOf(PropTypes.object),
     loanPolicies: PropTypes.object,
     requestCounts: PropTypes.object,
     renew: PropTypes.func,
     declareLost: PropTypes.func,
     markAsMissing: PropTypes.func,
     claimReturned: PropTypes.func,
+    enableButton: PropTypes.func,
+    declarationInProgress: PropTypes.bool,
     patronBlocks: PropTypes.arrayOf(PropTypes.object),
     intl: PropTypes.object.isRequired,
     match: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
+  };
+
+  static defaultProps = {
+    enableButton: () => {},
+    loanAccountActions: [],
   };
 
   constructor(props) {
@@ -104,9 +116,16 @@ class LoanDetails extends React.Component {
       nonRenewedLoanItems: [],
       nonRenewedLoansModalOpen: false,
       changeDueDateDialogOpen: false,
-      feesFines: {},
       patronBlockedModal: false,
     };
+  }
+
+  componentDidUpdate(prevProps) {
+    const prevItemStatus = prevProps.loan?.item?.status?.name;
+    const thistItemStatus = this.props.loan?.item?.status?.name;
+    if (prevItemStatus && prevItemStatus !== thistItemStatus) {
+      this.props.enableButton();
+    }
   }
 
   getContributorslist(loan) {
@@ -129,60 +148,88 @@ class LoanDetails extends React.Component {
     this.setState({ nonRenewedLoansModalOpen: false });
   }
 
-  renew = async () => {
+  onRenew = async (additionalInfo = '') => {
     const {
       loan,
       user,
-      patronBlocks,
       renew,
-      mutator: { renewals },
+      mutator: {
+        renewals,
+      },
     } = this.props;
-    const countRenew = patronBlocks.filter(p => p.renewals || p.blockRenewals);
 
-    if (!isEmpty(countRenew)) return this.setState({ patronBlockedModal: true });
+    await renew([loan], user, additionalInfo);
 
-    await renew([loan], user);
     return renewals.replace({ ts: new Date().getTime() });
   }
 
+  renew = async () => {
+    const {
+      patronBlocks,
+    } = this.props;
+    const countRenew = getRenewalPatronBlocksFromPatronBlocks(patronBlocks);
+
+    if (!isEmpty(countRenew)) {
+      return this.setState({
+        patronBlockedModal: true,
+      });
+    }
+
+    return this.onRenew();
+  }
+
   viewFeeFine() {
-    const { stripes, resources } = this.props;
-    const records = resources?.loanAccountsActions?.records ?? [];
-    const total = records.reduce((acc, { amount }) => (acc + parseFloat(amount)), 0);
+    const { stripes, loanAccountActions } = this.props;
+    const total = loanAccountActions.reduce((acc, { amount }) => (acc + parseFloat(amount)), 0);
+    const suspendedAction = loanAccountActions.filter(a => a?.paymentStatus?.name === refundClaimReturned.PAYMENT_STATUS) || [];
+    const suspendedMessage = (suspendedAction.length > 0) ? <FormattedMessage id="ui-users.accounts.suspended" /> : '';
 
     if (total === 0) return '-';
 
     const value = parseFloat(total).toFixed(2);
-
-    return stripes.hasPerm('ui-users.accounts')
-      ? (
+    const valueDisplay = stripes.hasPerm('ui-users.accounts')
+      ?
         <button
+          data-test-fee-fine-details-link
           className={css.feefineButton}
           onClick={(e) => this.feefinedetails(e)}
           type="button"
         >
-          {value}
+          { value }
         </button>
-      )
-      : value;
+      :
+      { value };
+
+    return <>{ valueDisplay }<br />{ suspendedMessage }</>;
   }
 
   feefinedetails = (e) => {
-    const { history, match: { params } } = this.props;
-    const { feesFines: { accounts } } = this.state;
-    const loan = this.loan || {};
-    if (accounts.length === 1) {
-      nav.onClickViewAccountActionsHistory(e, { id: accounts[0].id }, history, params);
-    } else if (accounts.length > 1) {
-      const open = accounts.filter(a => a.status.name === 'Open') || [];
-      if (open.length === accounts.length) {
-        nav.onClickViewOpenAccounts(e, loan, history, params);
-      } else if (open.length === 0) {
-        nav.onClickViewClosedAccounts(e, loan, history, params);
-      } else {
-        nav.onClickViewAllAccounts(e, loan, history, params);
-      }
+    const {
+      history,
+      match: { params },
+      loanAccountActions,
+    } = this.props;
+
+    if (loanAccountActions.length === 1) {
+      nav.onClickViewAccountActionsHistory(e, { id: loanAccountActions[0].id }, history, params);
+      return undefined;
     }
+
+    const loan = this.loan || {};
+
+    if (accountsMatchStatus(loanAccountActions, 'closed')) {
+      nav.onClickViewClosedAccounts(e, loan, history, params);
+    } else if (accountsMatchStatus(loanAccountActions, 'open')) {
+      nav.onClickViewOpenAccounts(e, loan, history, params);
+    } else {
+      nav.onClickViewAllAccounts(e, loan, history, params);
+    }
+
+    return undefined;
+  };
+
+  onOpenPatronBlockedModal = () => {
+    this.setState({ patronBlockedModal: true });
   };
 
   onClosePatronBlockedModal = () => {
@@ -231,7 +278,11 @@ class LoanDetails extends React.Component {
         )}
       />;
     }
-    return '-';
+
+    return <KeyValue
+      label={<FormattedMessage id="ui-users.loans.columns.title" />}
+      value="-"
+    />;
   }
 
   renderChangeDueDateDialog() {
@@ -259,7 +310,7 @@ class LoanDetails extends React.Component {
       history.push(`/users/${params.id}/accounts/view/${params.accountid}`);
     }
 
-    const loanStatus = loan.status ? loan.status.name.toLowerCase() : 'open';
+    const loanStatus = loan?.status ? loan.status?.name?.toLowerCase() : 'open';
 
     history.push({
       pathname: `/users/${params.id}/loans/${loanStatus}`,
@@ -281,19 +332,42 @@ class LoanDetails extends React.Component {
       declareLost,
       markAsMissing,
       claimReturned,
+      declarationInProgress,
+      loanIsMissing,
+      isLoading,
     } = this.props;
 
     const {
       patronBlockedModal,
     } = this.state;
 
-    if (!loan || !user || (loan.userId !== user.id)) {
+    if (isLoading) {
       return (
         <LoadingView
           id="pane-loandetails"
           defaultWidth="100%"
           paneTitle={<FormattedMessage id="ui-users.loans.history" />}
         />
+      );
+    }
+
+    if (loanIsMissing) {
+      return (
+        <Paneset isRoot>
+          <Pane
+            id="pane-loandetails-404"
+            defaultWidth="100%"
+            dismissible
+            onClose={this.handleClose}
+            paneTitle={(
+              <FormattedMessage id="ui-users.loans.loanDetails">
+                {(loanDetails) => `${loanDetails} - ${getFullName(user)} (${upperFirst(patronGroup.group)})`}
+              </FormattedMessage>
+            )}
+          >
+            <FormattedMessage id="ui-users.loan404" />
+          </Pane>
+        </Paneset>
       );
     }
 
@@ -307,17 +381,21 @@ class LoanDetails extends React.Component {
 
     const { nonRenewedLoanItems } = this.state;
     const loanActionsFormatter = {
-      action: la => <FormattedMessage id={loanActionMap[la.action]} />,
+      action: la => <FormattedMessage id={loanActionMap[la.action] ?? loanActionMap.unknownAction} />,
       actionDate: la => <FormattedTime value={get(la, ['metadata', 'updatedDate'], '-')} day="numeric" month="numeric" year="numeric" />,
       dueDate: la => <FormattedTime value={la.dueDate} day="numeric" month="numeric" year="numeric" />,
       itemStatus: la => la.itemStatus,
-      source: la => <Link to={`/users/view/${la.user?.id}`}>{getFullName(la.user)}</Link>,
+      source: la => {
+        return la.user ?
+          <Link to={`/users/view/${la.user?.id}`}>{getFullName(la.user)}</Link> :
+          <FormattedMessage id="ui-users.loans.action.source.system" />;
+      },
       comments: ({ actionComment }) => (actionComment || '-'),
     };
 
     const itemRequestCount = requestCounts[this.props.loan.itemId] || 0;
     const requestQueueValue = (itemRequestCount && stripes.hasPerm('ui-users.requests.all,ui-requests.all'))
-      ? (<Link to={getOpenRequestsPath(loan.item.barcode)}>{itemRequestCount}</Link>)
+      ? (<Link to={getOpenRequestsPath(loan.itemId)}>{itemRequestCount}</Link>)
       : itemRequestCount;
     const contributorsList = this.getContributorslist(loan);
     const contributorsListString = contributorsList.join(' ');
@@ -329,11 +407,18 @@ class LoanDetails extends React.Component {
     const claimedReturnedDate = itemStatus === itemStatuses.CLAIMED_RETURNED && loan.claimedReturnedDate;
     const isClaimedReturnedItem = itemStatus === itemStatuses.CLAIMED_RETURNED;
     const isDeclaredLostItem = itemStatus === itemStatuses.DECLARED_LOST;
+    const isAgedToLostItem = itemStatus === itemStatuses.AGED_TO_LOST;
+    const isLostAndPaid = itemStatus === itemStatuses.LOST_AND_PAID;
     let lostDate;
-    const declaredLostActions = loanActionsWithUser.filter(currentAction => get(currentAction, ['action'], '') === 'declaredLost');
-
+    const declaredLostActions = loanActionsWithUser.filter(currentAction => get(currentAction, ['action'], '') === loanActions.DECLARED_LOST);
+    const agedTolostLostActions = loanActionsWithUser.filter(currentAction => get(currentAction, ['action'], '') === loanActions.AGED_TO_LOST);
+    const lostAndPaidActions = loanActionsWithUser.filter(currentAction => get(currentAction, ['action'], '') === loanActions.CLOSED_LOAN);
     if (isDeclaredLostItem && declaredLostActions.length) {
       lostDate = get(declaredLostActions[0], ['metadata', 'updatedDate']);
+    } else if (isAgedToLostItem && agedTolostLostActions.length) {
+      lostDate = get(agedTolostLostActions[0], ['metadata', 'updatedDate']);
+    } else if (isLostAndPaid) {
+      lostDate = get(lostAndPaidActions[0], ['declaredLostDate']);
     }
 
     const buttonDisabled = (loanStatus && loanStatus === 'Closed');
@@ -352,6 +437,7 @@ class LoanDetails extends React.Component {
         />
       </p>
     );
+    const patronBlocksForModal = getRenewalPatronBlocksFromPatronBlocks(patronBlocks);
 
     return (
       <div data-test-loan-actions-history>
@@ -391,7 +477,7 @@ class LoanDetails extends React.Component {
                           buttonStyle="dropdownItem"
                           data-test-declare-lost-button
                           disabled={buttonDisabled || isDeclaredLostItem}
-                          onClick={() => declareLost(loan)}
+                          onClick={() => declareLost(loan, itemRequestCount)}
                         >
                           <FormattedMessage id="ui-users.loans.declareLost" />
                         </Button>
@@ -400,7 +486,7 @@ class LoanDetails extends React.Component {
                         <Button
                           buttonStyle="dropdownItem"
                           data-test-dropdown-content-mark-as-missing-button
-                          onClick={() => markAsMissing(loan)}
+                          onClick={() => markAsMissing(loan, itemRequestCount)}
                         >
                           <FormattedMessage id="ui-users.loans.markAsMissing" />
                         </Button>
@@ -414,16 +500,21 @@ class LoanDetails extends React.Component {
                       data-test-claim-returned-button
                       disabled={buttonDisabled}
                       buttonStyle="primary"
-                      onClick={() => claimReturned(loan)}
+                      onClick={() => claimReturned(loan, itemRequestCount)}
                     >
                       <FormattedMessage id="ui-users.loans.claimReturned" />
                     </Button>
                   </IfPermission>
                 }
-                <IfPermission perm="ui-users.loans.edit">
+                <IfPermission perm="ui-users.loans.change-due-date">
                   <Button
                     data-test-change-due-date-button
-                    disabled={buttonDisabled || isDeclaredLostItem || isClaimedReturnedItem}
+                    disabled={
+                      buttonDisabled ||
+                      isDeclaredLostItem ||
+                      isClaimedReturnedItem ||
+                      isAgedToLostItem
+                    }
                     buttonStyle="primary"
                     onClick={this.showChangeDueDateDialog}
                   >
@@ -433,9 +524,9 @@ class LoanDetails extends React.Component {
                 <IfPermission perm="ui-users.loans.declare-item-lost">
                   <Button
                     data-test-declare-lost-button
-                    disabled={buttonDisabled || isDeclaredLostItem}
+                    disabled={declarationInProgress || buttonDisabled || isDeclaredLostItem}
                     buttonStyle="primary"
-                    onClick={() => declareLost(loan)}
+                    onClick={() => declareLost(loan, itemRequestCount)}
                   >
                     <FormattedMessage id="ui-users.loans.declareLost" />
                   </Button>
@@ -552,7 +643,7 @@ class LoanDetails extends React.Component {
               <Col xs={2}>
                 <KeyValue
                   data-test-loan-fees-fines
-                  label={<FormattedMessage id="ui-users.loans.details.fine" />}
+                  label={<FormattedMessage id="ui-users.loans.details.fineIncurred" />}
                   value={this.viewFeeFine()}
                 />
               </Col>
@@ -608,10 +699,12 @@ class LoanDetails extends React.Component {
                   </li>))
             }
             </Modal>
-            <PatronBlockModal
-              open={patronBlockedModal}
-              onClose={this.onClosePatronBlockedModal}
-              patronBlocks={patronBlocks}
+            <PatronBlockModalWithOverrideModal
+              patronBlockedModalOpen={patronBlockedModal}
+              onClosePatronBlockedModal={this.onClosePatronBlockedModal}
+              onOpenPatronBlockedModal={this.onOpenPatronBlockedModal}
+              onRenew={this.onRenew}
+              patronBlocks={patronBlocksForModal}
               viewUserPath={`/users/view/${(user || {}).id}?filters=pg.${patronGroup.group}&sort=name`}
             />
             { this.props.user && this.renderChangeDueDateDialog() }
@@ -626,6 +719,7 @@ export default compose(
   injectIntl,
   withRenew,
   withDeclareLost,
+  stripesConnect,
   withClaimReturned,
   withMarkAsMissing,
 )(LoanDetails);

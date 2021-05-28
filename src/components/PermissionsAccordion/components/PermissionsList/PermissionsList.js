@@ -94,6 +94,7 @@ const PermissionsList = (props) => {
             <CheckboxColumn
               permissionName={permission.permissionName}
               value={permission.id}
+              // eslint-disable-next-line react/prop-types
               checked={assignedPermissionIds.includes(permission.id)}
               onChange={() => togglePermission(permission.id)}
             />
@@ -106,6 +107,7 @@ const PermissionsList = (props) => {
           ),
           status: permission => {
             const statusText = `ui-users.permissions.modal.${
+              // eslint-disable-next-line react/prop-types
               assignedPermissionIds.includes(permission.id)
                 ? 'assigned'
                 : 'unassigned'
@@ -138,7 +140,7 @@ PermissionsList.propTypes = {
   filteredPermissions: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
-      displayName: PropTypes.string.isRequired,
+      displayName: PropTypes.string,
       permissionName: PropTypes.string.isRequired,
       subPermissions: PropTypes.arrayOf(PropTypes.string).isRequired,
       dummy: PropTypes.bool.isRequired,

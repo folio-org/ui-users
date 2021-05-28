@@ -5,14 +5,14 @@ import {
   injectIntl,
   FormattedMessage,
 } from 'react-intl';
-import { Field } from 'redux-form';
+import { Field } from 'react-final-form';
 import {
   Select,
   Label,
+  NoValue,
 } from '@folio/stripes/components';
 import { ControlledVocab } from '@folio/stripes/smart-components';
 import { stripesConnect, withStripes } from '@folio/stripes/core';
-
 
 import { validate } from '../components/util';
 import {
@@ -93,13 +93,12 @@ class FeeFineSettings extends React.Component {
     this.state = {
       ownerId: '',
       owners: [],
-      templates: []
+      templates: [],
     };
 
     this.connectedControlledVocab = props.stripes.connect(ControlledVocab);
     this.onChangeOwner = this.onChangeOwner.bind(this);
     this.onCopyFeeFines = this.onCopyFeeFines.bind(this);
-    this.onUpdateOwner = this.onUpdateOwner.bind(this);
     this.hideCopyDialog = this.hideCopyDialog.bind(this);
   }
 
@@ -206,7 +205,6 @@ class FeeFineSettings extends React.Component {
     return itemErrors;
   }
 
-
   getOwners = () => {
     const items = _.get(this.props.resources, ['feefines', 'records'], []);
     const filterOwners = [];
@@ -221,13 +219,41 @@ class FeeFineSettings extends React.Component {
     return filterOwners;
   }
 
-  onUpdateOwner(item) {
+  getDefaultNotices = () => {
+    const { owners, ownerId } = this.state;
+    const { defaultActionNoticeId, defaultChargeNoticeId } = owners.find(o => o.id === ownerId) || {};
+
+    return {
+      defaultChargeNoticeId,
+      defaultActionNoticeId,
+    };
+  }
+
+  onUpdateOwner = (item) => {
     const { owners, ownerId } = this.state;
     const owner = owners.find(o => o.id === ownerId) || {};
     owner.defaultChargeNoticeId = item.defaultChargeNoticeId;
     owner.defaultActionNoticeId = item.defaultActionNoticeId;
     this.props.mutator.activeRecord.update({ ownerId });
     return this.props.mutator.owners.PUT(owner);
+  }
+
+  getNotice = (noticeTypeId, noticeType) => {
+    const { templates } = this.state;
+    const defaultNotices = this.getDefaultNotices();
+    const defaultNoticeId = defaultNotices[`default${noticeType}NoticeId`];
+    const defaultMessage = <FormattedMessage id="ui-users.settings.default" />;
+    let templateName = templates.find(t => t.id === noticeTypeId) || {};
+
+    if (noticeTypeId) {
+      templateName = templateName?.name;
+    } else if (!noticeTypeId && defaultNoticeId) {
+      templateName = defaultMessage;
+    } else {
+      templateName = <NoValue />;
+    }
+
+    return templateName;
   }
 
   render() {
@@ -262,11 +288,10 @@ class FeeFineSettings extends React.Component {
     };
 
     const formatter = {
-      'defaultAmount': (value) => (value.defaultAmount ? parseFloat(value.defaultAmount).toFixed(2) : '-'),
-      'chargeNoticeId': (value) => (value.chargeNoticeId ? ((templates.find(t => t.id === value.chargeNoticeId) || {}).name) : '-'),
-      'actionNoticeId': (value) => (value.actionNoticeId ? ((templates.find(t => t.id === value.actionNoticeId) || {}).name) : '-'),
+      'defaultAmount': (value) => (value.defaultAmount ? parseFloat(value.defaultAmount).toFixed(2) : <NoValue />),
+      'chargeNoticeId': ({ chargeNoticeId }) => this.getNotice(chargeNoticeId, 'Charge'),
+      'actionNoticeId': ({ actionNoticeId }) => this.getNotice(actionNoticeId, 'Action'),
     };
-
 
     const preCreateHook = (item) => {
       item.ownerId = ownerId;
@@ -283,7 +308,13 @@ class FeeFineSettings extends React.Component {
     const rowFilter =
       <div>
         <Owners filterShared={false} dataOptions={owners} onChange={this.onChangeOwner} />
-        <ChargeNotice owner={owner} templates={templates} templateCharge={templateCharge} templateAction={templateAction} onSubmit={(values) => { this.onUpdateOwner(values); }} />
+        <ChargeNotice
+          owner={owner}
+          templates={templates}
+          templateCharge={templateCharge}
+          templateAction={templateAction}
+          onSubmit={this.onUpdateOwner}
+        />
         <CopyModal
           {...this.props}
           openModal={this.state.showCopyDialog}
@@ -314,6 +345,7 @@ class FeeFineSettings extends React.Component {
         sortby="feeFineType"
         validate={this.validate}
         visibleFields={['feeFineType', 'defaultAmount', 'chargeNoticeId', 'actionNoticeId']}
+        formType="final-form"
       />
     );
   }

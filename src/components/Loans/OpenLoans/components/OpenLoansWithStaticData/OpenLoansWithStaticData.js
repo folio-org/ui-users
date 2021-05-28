@@ -6,6 +6,7 @@ import {
 import PropTypes from 'prop-types';
 import {
   injectIntl,
+  FormattedMessage,
 } from 'react-intl';
 
 import { stripesShape } from '@folio/stripes/core';
@@ -14,6 +15,8 @@ import OpenLoans from '../../OpenLoans';
 import Modals from '../Modals/Modals';
 import OpenLoansSubHeader from '../OpenLoansSubHeader/OpenLoansSubHeader';
 import getListDataFormatter from '../../helpers/getListDataFormatter';
+import { refundClaimReturned } from '../../../../../constants';
+
 
 class OpenLoansWithStaticData extends React.Component {
   static propTypes = {
@@ -101,7 +104,7 @@ class OpenLoansWithStaticData extends React.Component {
     'dueDate',
     'requests',
     'barcode',
-    'feefine',
+    'feefineIncurred',
     'callNumber',
     'contributors',
     'renewals',
@@ -176,13 +179,19 @@ class OpenLoansWithStaticData extends React.Component {
     const { resources } = this.props;
     const accounts = get(resources, ['loanAccount', 'records'], []);
     const accountsLoan = accounts.filter(a => a.loanId === loan.id) || [];
-    let remaining = 0;
+    const suspendedStatus = accountsLoan.filter(a => a?.paymentStatus?.name === refundClaimReturned.PAYMENT_STATUS) || [];
+    let amount = 0;
 
     accountsLoan.forEach(a => {
-      remaining += parseFloat(a.remaining);
+      amount += parseFloat(a.amount);
     });
 
-    return (remaining === 0) ? '-' : remaining.toFixed(2);
+    if (amount === 0) return '-';
+
+    return (suspendedStatus.length > 0) ?
+      <FormattedMessage id="ui-users.loans.details.accounts.suspended" values={{ amount }} />
+      :
+      amount;
   };
 
   getContributorslist = (loan) => {
@@ -272,6 +281,8 @@ class OpenLoansWithStaticData extends React.Component {
           patronBlocks={patronBlocks}
           checkedLoans={checkedLoans}
           patronBlockedModal={patronBlockedModal}
+          openPatronBlockedModal={openPatronBlockedModal}
+          renewSelected={renewSelected}
           changeDueDateDialogOpen={changeDueDateDialogOpen}
           hideChangeDueDateDialog={hideChangeDueDateDialog}
           onClosePatronBlockedModal={onClosePatronBlockedModal}

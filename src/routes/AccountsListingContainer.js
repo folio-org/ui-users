@@ -71,6 +71,9 @@ class AccountsListingContainer extends React.Component {
       type: 'okapi',
       records: 'feefineactions',
       path: 'feefineactions?query=(userId==:{id} and comments=*)&limit=%{activeRecord.comments}',
+      shouldRefresh: (resource, action, refresh) => {
+        return refresh || action.meta.path === 'accounts' || action.meta.path === 'accounts-bulk';
+      },
     },
     filter: {
       type: 'okapi',
@@ -81,7 +84,7 @@ class AccountsListingContainer extends React.Component {
     loans: {
       type: 'okapi',
       records: 'loans',
-      path: 'circulation/loans?query=(userId==:{id}) sortby id&limit=100',
+      path: 'circulation/loans?query=(userId==:{id}) sortby id&limit=2000',
       permissionsRequired: 'circulation.loans.collection.get',
     },
     feefineshistory: {
@@ -103,6 +106,9 @@ class AccountsListingContainer extends React.Component {
           ),
         },
         staticFallback: { params: {} },
+      },
+      shouldRefresh: (resource, action, refresh) => {
+        return refresh || action.meta.path === 'accounts-bulk';
       },
     },
     activeRecord: { records: 10000 },

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { Field } from 'redux-form';
+import { Field } from 'react-final-form';
 
 import {
   Pane,
@@ -11,7 +11,7 @@ import {
   Select,
   PaneFooter,
 } from '@folio/stripes/components';
-import stripesForm from '@folio/stripes/form';
+import stripesFinalForm from '@folio/stripes/final-form';
 
 const styles = {
   form: {
@@ -44,7 +44,7 @@ const Setting = ({
 );
 
 Setting.propTypes = {
-  label: PropTypes.string,
+  label: PropTypes.element,
   name: PropTypes.string,
   intl: PropTypes.object,
 };
@@ -116,9 +116,6 @@ CommentRequiredForm.propTypes = {
   submitting: PropTypes.bool,
 };
 
-export default stripesForm({
-  form: 'requireComment',
+export default stripesFinalForm({
   navigationCheck: true,
-  enableReinitialize: true,
-  destroyOnUnmount: false,
 })(CommentRequiredForm);

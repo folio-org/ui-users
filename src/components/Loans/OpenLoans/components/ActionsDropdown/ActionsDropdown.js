@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router-dom';
 
 import {
@@ -26,11 +26,13 @@ class ActionsDropdown extends React.Component {
     stripes: stripesShape.isRequired,
     loan: PropTypes.object.isRequired,
     requestQueue: PropTypes.bool.isRequired,
+    itemRequestCount: PropTypes.number.isRequired,
     handleOptionsChange: PropTypes.func.isRequired,
     disableFeeFineDetails: PropTypes.bool,
     match: PropTypes.shape({
       params: PropTypes.object
     }),
+    intl: PropTypes.object.isRequired,
   };
 
   renderMenu = ({ onToggle }) => {
@@ -38,6 +40,7 @@ class ActionsDropdown extends React.Component {
       loan,
       handleOptionsChange,
       requestQueue,
+      itemRequestCount,
       stripes,
       disableFeeFineDetails,
       match: { params },
@@ -78,7 +81,7 @@ class ActionsDropdown extends React.Component {
               buttonStyle="dropdownItem"
               data-test-dropdown-content-claim-returned-button
               onClick={e => {
-                handleOptionsChange({ loan, action:'claimReturned' });
+                handleOptionsChange({ loan, action:'claimReturned', itemRequestCount });
                 onToggle(e);
               }}
             >
@@ -86,9 +89,10 @@ class ActionsDropdown extends React.Component {
             </Button>
           }
         </IfPermission>
-        <IfPermission perm="ui-users.loans.edit">
+        <IfPermission perm="ui-users.loans.change-due-date">
           { itemStatusName !== itemStatuses.DECLARED_LOST &&
             itemStatusName !== itemStatuses.CLAIMED_RETURNED &&
+            itemStatusName !== itemStatuses.AGED_TO_LOST &&
             <Button
               buttonStyle="dropdownItem"
               data-test-dropdown-content-change-due-date-button
@@ -107,7 +111,7 @@ class ActionsDropdown extends React.Component {
               buttonStyle="dropdownItem"
               data-test-dropdown-content-declare-lost-button
               onClick={e => {
-                handleOptionsChange({ loan, action:'declareLost' });
+                handleOptionsChange({ loan, action:'declareLost', itemRequestCount });
                 onToggle(e);
               }}
             >
@@ -121,7 +125,7 @@ class ActionsDropdown extends React.Component {
             buttonStyle="dropdownItem"
             data-test-dropdown-content-mark-as-missing-button
             onClick={e => {
-              handleOptionsChange({ loan, action:'markAsMissing' });
+              handleOptionsChange({ loan, action:'markAsMissing', itemRequestCount });
               onToggle(e);
             }}
           >
@@ -157,7 +161,7 @@ class ActionsDropdown extends React.Component {
           <Button
             buttonStyle="dropdownItem"
             data-test-dropdown-content-request-queue
-            to={getOpenRequestsPath(loan?.item?.barcode)}
+            to={getOpenRequestsPath(loan?.itemId)}
           >
             <FormattedMessage id="ui-users.loans.details.requestQueue" />
           </Button>
@@ -167,12 +171,14 @@ class ActionsDropdown extends React.Component {
   };
 
   render() {
+    const { intl: { formatMessage } } = this.props;
     return (
       <Dropdown
         renderTrigger={({ getTriggerProps }) => (
           <IconButton
             {...getTriggerProps()}
             icon="ellipsis"
+            aria-label={formatMessage({ id: 'ui-users.action' })}
           />
         )}
         renderMenu={this.renderMenu}
@@ -181,4 +187,4 @@ class ActionsDropdown extends React.Component {
   }
 }
 
-export default withRouter(ActionsDropdown);
+export default withRouter(injectIntl(ActionsDropdown));

@@ -8,3 +8,7 @@
 .alertDetails {
   color: var(--error);
 }
+
+.lastRow {
+  padding-top: var(--gutter-static-two-thirds);
+}

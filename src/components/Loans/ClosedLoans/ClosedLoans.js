@@ -67,8 +67,8 @@ class ClosedLoans extends React.Component {
     this.anonymizeLoans = this.anonymizeLoans.bind(this);
     const { intl } = props;
     this.headers = ['action', 'dueDate', 'loanDate', 'returnDate', 'systemReturnDate', 'item.barcode', 'item.callNumberComponents.prefix',
-      'item.callNumberComponents.callNumber', 'item.callNumberComponents.suffix', 'item.enumeration', 'item.volume', 'item.contributors',
-      'item.holdingsRecordId', 'item.instanceId', 'item.status.name', 'item.title', 'item.materialType.name',
+      'item.callNumberComponents.callNumber', 'item.callNumberComponents.suffix', 'item.volume', 'item.enumeration', 'item.chronology',
+      'item.copyNumber', 'item.contributors', 'item.holdingsRecordId', 'item.instanceId', 'item.status.name', 'item.title', 'item.materialType.name',
       'item.location.name', 'metaData.createdByUserId', 'metadata.updatedDate', 'metadata.updatedByUserId', 'loanPolicyId'];
 
     // Map to pass into exportCsv
@@ -82,7 +82,7 @@ class ClosedLoans extends React.Component {
     this.columnMapping = {
       'title': intl.formatMessage({ id: 'ui-users.loans.columns.title' }),
       'barcode': intl.formatMessage({ id: 'ui-users.loans.columns.barcode' }),
-      'Fee/Fine': intl.formatMessage({ id: 'ui-users.loans.columns.feefine' }),
+      'feefineIncurred': intl.formatMessage({ id: 'ui-users.loans.columns.feefineIncurred' }),
       'loanDate': intl.formatMessage({ id: 'ui-users.loans.columns.loanDate' }),
       'dueDate': intl.formatMessage({ id: 'ui-users.loans.columns.dueDate' }),
       'returnDate': intl.formatMessage({ id: 'ui-users.loans.columns.returnDate' }),
@@ -90,12 +90,13 @@ class ClosedLoans extends React.Component {
       'callNumber': intl.formatMessage({ id: 'ui-users.loans.details.effectiveCallNumber' }),
       'Contributors': intl.formatMessage({ id: 'ui-users.loans.columns.contributors' }),
       'checkinServicePoint': intl.formatMessage({ id: 'ui-users.loans.details.checkinServicePoint' }),
+      ' ': intl.formatMessage({ id: 'ui-users.action' }),
     };
 
     this.sortMap = {
       [this.columnMapping.title]: loan => _.get(loan, ['item', 'title']),
       [this.columnMapping.barcode]: loan => _.get(loan, ['item', 'barcode']),
-      [this.columnMapping['Fee/Fine']]: loan => this.getFeeFine(loan),
+      [this.columnMapping.feefineIncurred]: loan => this.getFeeFine(loan),
       [this.columnMapping.loanDate]: loan => loan.loanDate,
       [this.columnMapping.callNumber]: loan => effectiveCallNumber(loan),
       [this.columnMapping.Contributors]: loan => {
@@ -113,7 +114,7 @@ class ClosedLoans extends React.Component {
       sortOrder: [
         this.columnMapping.title,
         this.columnMapping.barcode,
-        this.columnMapping['Fee/Fine'],
+        this.columnMapping.feefineIncurred,
         this.columnMapping.loanDate,
         this.columnMapping.dueDate,
         this.columnMapping.callNumber,
@@ -180,6 +181,8 @@ class ClosedLoans extends React.Component {
   }
 
   getLoansFormatter() {
+    const { intl: { formatMessage } } = this.props;
+
     return {
       'title': loan => _.get(loan, ['item', 'title'], ''),
       'dueDate': loan => {
@@ -191,7 +194,7 @@ class ClosedLoans extends React.Component {
         />;
       },
       'barcode': loan => _.get(loan, ['item', 'barcode'], ''),
-      'Fee/Fine': loan => this.getFeeFine(loan),
+      'feefineIncurred': loan => this.getFeeFine(loan),
       'callNumber': loan => (<div data-test-list-call-numbers>{effectiveCallNumber(loan)}</div>),
       'Contributors': (loan) => {
         const contributorsList = this.getContributorslist(loan);
@@ -242,6 +245,7 @@ class ClosedLoans extends React.Component {
             <IconButton
               {...getTriggerProps()}
               icon="ellipsis"
+              aria-label={formatMessage({ id: 'ui-users.action' })}
             />
           )}
           renderMenu={this.renderDropDownMenu(loan)}
@@ -387,12 +391,27 @@ class ClosedLoans extends React.Component {
       loans,
     } = this.props;
 
-    const visibleColumns = ['title', 'dueDate', 'barcode', 'Fee/Fine', 'callNumber', 'Contributors', 'renewals', 'loanDate', 'returnDate', 'checkinServicePoint', ' '];
+    const visibleColumns = ['title', 'dueDate', 'barcode', 'feefineIncurred', 'callNumber', 'Contributors', 'renewals', 'loanDate', 'returnDate', 'checkinServicePoint', ' '];
     const anonymizeString = <FormattedMessage id="ui-users.anonymize" />;
     const loansSorted = _.orderBy(loans,
       [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
     const clonedLoans = _.cloneDeep(loans);
     const recordsToCSV = this.buildRecords(clonedLoans);
+
+    const columnWidths = {
+      'title': { max: 200 },
+      'dueDate': { max: 150 },
+      'barcode': { max: 140 },
+      'feefineIncurred': { max: 100 },
+      'callNumber': { max: 110 },
+      'Contributors': { max: 170 },
+      'renewals': { max: 90 },
+      'loanDate': { max: 150 },
+      'returnDate': { max: 150 },
+      'checkinServicePoint': { max: 150 },
+      ' ': { max: 35 }
+    };
+
     return (
       <div data-test-closed-loans>
         <ActionsBar
@@ -409,13 +428,15 @@ class ClosedLoans extends React.Component {
             <IntlConsumer>
               {intl => (
                 <div>
-                  <Button
-                    marginBottom0
-                    id="anonymize-all"
-                    onClick={this.anonymizeLoans}
-                  >
-                    {anonymizeString}
-                  </Button>
+                  <IfPermission perm="ui-users.loans.anonymize">
+                    <Button
+                      marginBottom0
+                      id="anonymize-all"
+                      onClick={this.anonymizeLoans}
+                    >
+                      {anonymizeString}
+                    </Button>
+                  </IfPermission>
                   <ExportCsv
                     data={recordsToCSV}
                     onlyFields={this.columnHeadersMap}
@@ -439,7 +460,7 @@ class ClosedLoans extends React.Component {
           id="list-loanshistory"
           fullWidth
           formatter={this.getLoansFormatter()}
-          columnWidths={{ 'title': 200, 'dueDate': 150, 'barcode': 140, 'Fee/Fine': 100, 'callNumber': 110, 'Contributors': 170, 'renewals': 90, 'loanDate': 150, 'returnDate': 150, 'checkinServicePoint': 150, ' ': 35 }}
+          columnWidths={columnWidths}
           visibleColumns={visibleColumns}
           columnMapping={this.columnMapping}
           onHeaderClick={this.onSort}

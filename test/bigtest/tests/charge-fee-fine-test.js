@@ -50,6 +50,16 @@ describe('Charge fee/fine', () => {
         expect(chargeForm.form.isPresent).to.be.true;
       });
 
+      describe('cancel the charge', () => {
+        beforeEach(async () => {
+          await chargeForm.clickCancel();
+        });
+
+        it('navigate to previous page', function () {
+          expect(this.location.pathname).to.equal(`/users/${loan.userId}/accounts/open`);
+        });
+      });
+
       describe('set the owner', () => {
         beforeEach(async () => {
           await chargeForm.ownerSelect.selectAndBlur('testOwner');
@@ -66,17 +76,6 @@ describe('Charge fee/fine', () => {
 
           it('should apply the amount', () => {
             expect(chargeForm.amountField.value).to.equal('500.00');
-          });
-
-          describe('cancel the charge', () => {
-            beforeEach(async () => {
-              await chargeForm.clickCancel();
-              await chargeForm.clickConfirmCancel();
-            });
-
-            it('navigate to previous page', function () {
-              expect(this.location.pathname).to.equal(`/users/${loan.userId}/accounts/open`);
-            });
           });
 
           describe('submit the charge', () => {

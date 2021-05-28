@@ -23,6 +23,9 @@ class Conditions extends Component {
   });
 
   static propTypes = {
+    resources: PropTypes.shape({
+      patronBlockCondition: PropTypes.object
+    }),
     id: PropTypes.string.isRequired,
     mutator: PropTypes.shape({
       patronBlockCondition: PropTypes.shape({
@@ -65,7 +68,6 @@ class Conditions extends Component {
       }
     });
   }
-
 
   shouldRenderCondition = () => {
     return !!this.props?.resources?.patronBlockCondition?.records.length;

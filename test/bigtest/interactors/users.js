@@ -7,11 +7,24 @@ import {
   isPresent,
   isVisible,
   scoped,
+  selectable,
 } from '@bigtest/interactor';
+
+import CalloutInteractor from '@folio/stripes-components/lib/Callout/tests/interactor'; // eslint-disable-line
+import MultiSelectInteractor from '@folio/stripes-components/lib/MultiSelection/tests/interactor';
+import RefundsReportModal from './refunds-report-modal';
 
 @interactor class ActiveUserCheckbox {
   clickActive = clickable('#clickable-filter-active-active');
   clickInactive= clickable('#clickable-filter-active-inactive');
+}
+
+@interactor class DepartmentsFilter {
+  multiSelect = new MultiSelectInteractor('#departments-filter');
+  isAccordionPresent = isPresent('#users-filter-accordion-departments');
+  whenLoaded() {
+    return this.when(() => isPresent('#departments-filter'));
+  }
 }
 
 @interactor class HeaderDropdown {
@@ -21,6 +34,15 @@ import {
 @interactor class HeaderDropdownMenu {
   clickExportToCSV = clickable('#export-overdue-loan-report');
   exportBtnIsVisible = isVisible('#export-overdue-loan-report');
+  isExportBtnPresent = isPresent('#export-overdue-loan-report');
+  isCashDrawerReportBtnPresent = isPresent('#cash-drawer-report');
+  isFinancialTransactionReportBtnPresent = isPresent('#financial-transaction-report');
+  clickRefundsReportCSV = clickable('#export-refunds-report');
+  isRefundReportBtnVisible = isVisible('#export-refunds-report');
+  isRefundsReportButtonPresent = isPresent('#export-refunds-report');
+  columnCheckbox = function columnCheckbox(key) {
+    return new Interactor(`[data-test-column-manager-checkbox="${key}"]`);
+  }
 }
 
 @interactor class SearchFieldInteractor {
@@ -30,11 +52,15 @@ import {
 export default @interactor class UsersInteractor {
   static defaultScope = '[data-test-user-instances]';
 
+  refundsReportModal = new RefundsReportModal();
+  isRefundsReportModalPresent = isPresent('#refunds-report-modal');
   activeUserCheckbox = new ActiveUserCheckbox();
+  departmentsFilter = new DepartmentsFilter();
   headerDropdownMenu = new HeaderDropdownMenu();
   searchField = new SearchFieldInteractor();
   searchButton = new Interactor('[data-test-user-search-submit]');
   searchFocused = isPresent('[data-test-user-search-input]:focus');
+  chooseSearchOption = selectable('#input-user-search-qindex');
   paneHeaderFocused = is('#users-search-results-pane [class*=paneHeader---]', ':focus');
   patronGroupsPresent = isPresent('#clickable-filter-pg-faculty');
   instancePresent = isPresent('[data-test-instance-details]');
@@ -48,6 +74,11 @@ export default @interactor class UsersInteractor {
   instance = scoped('[data-test-instance-details]');
   instances = collection('[role=rowgroup] [data-row-inner]');
   clearStatusFilter = clickable('[data-test-clear-button]');
+  column = function column(key) {
+    return new Interactor(`#list-column-${key}`);
+  }
+
+  callout = new CalloutInteractor();
 
   whenInstanceLoaded() {
     return this.when(() => this.instancePresent).timeout(5000);

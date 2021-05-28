@@ -8,13 +8,13 @@ import {
   cloneDeep,
   find,
   omit,
-  differenceBy,
   get,
+  compact,
 } from 'lodash';
 
 import { LoadingView } from '@folio/stripes/components';
 
-import { eachPromise, getRecordObject } from '../../components/util';
+import { getRecordObject } from '../../components/util';
 
 import UserForm from './UserForm';
 import { toUserAddresses, getFormAddressList } from '../../components/data/converters/address';
@@ -82,6 +82,7 @@ class UserEdit extends React.Component {
       active: true,
       personal: {
         addresses: [],
+        firstName: '',
         preferredContactTypeId: (find(contactTypes, { 'name': 'email' }) || {}).id,
       },
       requestPreferences: {
@@ -89,7 +90,8 @@ class UserEdit extends React.Component {
         delivery: false,
         defaultServicePointId: null,
         defaultDeliveryAddressTypeId: null,
-      }
+      },
+      username: '',
     };
 
     if (!match.params.id) return initialFormValues;
@@ -130,6 +132,7 @@ class UserEdit extends React.Component {
       'patronGroups',
       'addressTypes',
       'servicePoints',
+      'departments',
     );
 
     return formData;
@@ -168,6 +171,7 @@ class UserEdit extends React.Component {
     const user = { ...userData, id: uuid() };
     user.personal.addresses = toUserAddresses(user.personal.addresses);
     user.personal.email = user.personal.email.trim();
+    user.departments = compact(user.departments);
 
     mutator.records.POST(user)
       .then(() => {
@@ -218,6 +222,7 @@ class UserEdit extends React.Component {
 
     user.personal.addresses = toUserAddresses(user.personal.addresses); // eslint-disable-line no-param-reassign
     user.personal.email = user.personal.email.trim();
+    user.departments = compact(user.departments);
 
     const { proxies, sponsors, permissions, servicePoints, preferredServicePoint } = user;
 
@@ -227,7 +232,7 @@ class UserEdit extends React.Component {
     }
 
     if (permissions) {
-      this.updatePermissions(permissions);
+      this.updatePermissions(user.id, permissions);
     }
 
     if (servicePoints && stripes.hasPerm('inventory-storage.service-points-users.item.post,inventory-storage.service-points-users.item.put')) {
@@ -260,14 +265,42 @@ class UserEdit extends React.Component {
     });
   }
 
-  async updatePermissions(perms) {
-    const mutator = this.props.mutator.permissions;
-    const prevPerms = (this.props.resources.permissions || {}).records || [];
-    const removedPerms = differenceBy(prevPerms, perms, 'id');
-    const addedPerms = differenceBy(perms, prevPerms, 'id');
+  async updatePermissions(userId, perms) {
+    const {
+      permissions: permissionsMutator,
+      perms: permUserMutator,
+      permUserId,
+    } = this.props.mutator;
 
-    await eachPromise(removedPerms, mutator.DELETE);
-    await eachPromise(addedPerms, mutator.POST);
+    const { perms: permUserRecords } = this.props.resources;
+    // the perms parameter is an array of permission objects, but the permissions API
+    // wants an array of permission names.
+    const permissionNames = Object.values(perms).map(p => p.permissionName);
+
+    // If the user record has never had any associated permissions, a user permissions
+    // record may not exist. The PUT operation will fail if that's the case; thus,
+    // if no record is found, one has to be created before we assign the permissions
+    // as the last step.
+    if (permUserRecords.records.length === 1) {
+      const record = permUserRecords.records[0];
+
+      // N.B. permUserId is the id of the *permissions user* record, not the regular
+      // user record!
+      permUserId.replace(record.id);
+      record.permissions = permissionNames;
+
+      // Currently there is a bug (https://issues.folio.org/browse/MODPERMS-100) that
+      // requires us to remove the metadata object before sending the request.
+      delete record.metadata;
+
+      permissionsMutator.PUT(record);
+    } else {
+      // Create a new permissions user record first
+      await permUserMutator.POST({ userId }).then(record => {
+        record.permissions = permissionNames;
+        permissionsMutator.PUT(record);
+      });
+    }
   }
 
   render() {
@@ -278,7 +311,7 @@ class UserEdit extends React.Component {
       match: { params },
     } = this.props;
 
-    if (!resourcesLoaded(resources, ['uniquenessValidator'])) {
+    if (!resourcesLoaded(resources, ['uniquenessValidator']) || (!this.getUser() && this.props.match.params.id)) {
       return (
         <LoadingView
           data-test-form-page
@@ -310,6 +343,7 @@ class UserEdit extends React.Component {
         match={this.props.match}
         location={location}
         history={history}
+        stripes={this.props.stripes}
       />
     );
   }

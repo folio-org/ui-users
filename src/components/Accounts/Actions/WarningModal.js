@@ -6,26 +6,28 @@ import {
 } from 'react-intl';
 
 import {
-  Row,
-  Col,
   Button,
+  Col,
   Modal,
   MultiColumnList,
+  Row,
 } from '@folio/stripes/components';
 
 import {
   omit,
-  size,
   orderBy,
+  size,
 } from 'lodash';
 
 import { calculateSortParams } from '../../util';
+import { isRefundAllowed } from '../accountFunctions';
 
 import css from './modal.css';
 
 class WarningModal extends React.Component {
   static propTypes = {
     accounts: PropTypes.arrayOf(PropTypes.object),
+    feeFineActions: PropTypes.arrayOf(PropTypes.object),
     onChangeAccounts: PropTypes.func.isRequired,
     open: PropTypes.bool,
     label: PropTypes.string,
@@ -42,7 +44,7 @@ class WarningModal extends React.Component {
       sortDirection: ['desc', 'asc']
     };
     this.sortMap = {
-      'Alert details': a => ((a.status || {}).name === 'Closed' ? <FormattedMessage id="ui-users.accounts.actions.warning.deselect" /> : ''),
+      'Alert details': this.getAlertDetailsFormatter,
       'Fee/Fine type': a => a.feeFineType,
       'Remainig': a => a.remaining,
       'Payment Status': a => (a.paymentStatus || {}).name,
@@ -102,6 +104,26 @@ class WarningModal extends React.Component {
     }));
   };
 
+  getAlertDetailsFormatter = (a) => {
+    const {
+      intl: { formatMessage },
+      label,
+      feeFineActions,
+    } = this.props;
+
+    const warningMessage = (
+      <span className={css.alertDetails}>
+        <FormattedMessage id="ui-users.accounts.actions.warning.deselect" />
+      </span>
+    );
+
+    const showWarning = label === formatMessage({ id: 'ui-users.accounts.actions.refundFeeFine' })
+      ? !isRefundAllowed(a, feeFineActions)
+      : a?.status?.name === 'Closed';
+
+    return showWarning ? warningMessage : '';
+  };
+
   getAccountsFormatter() {
     const { checkedAccounts } = this.state;
     return {
@@ -112,14 +134,7 @@ class WarningModal extends React.Component {
           type="checkbox"
         />
       ),
-      'Alert details': a => (
-        (a?.status?.name === 'Closed')
-          ?
-            <span className={css.alertDetails}>
-              <FormattedMessage id="ui-users.accounts.actions.warning.deselect" />
-            </span>
-          : ''
-      ),
+      'Alert details': this.getAlertDetailsFormatter,
       'Fee/Fine type': a => a.feeFineType || '',
       'Remaining': a => parseFloat(a.remaining).toFixed(2) || '0.00',
       'Payment Status': a => (a.paymentStatus || {}).name || '-',
@@ -146,35 +161,59 @@ class WarningModal extends React.Component {
       intl: {
         formatMessage,
       },
+      feeFineActions,
     } = this.props;
 
+    let action;
+    let invalidItemsAmount = accounts.filter(a => a.status && a.status.name === 'Closed').length;
+    let reason = <FormattedMessage id="ui-users.accounts.actions.warning.closedItems" />;
+    const notAllowedToRefundItemsAmount = accounts.filter(a => !isRefundAllowed(a, feeFineActions)).length;
     const selectedItemsAmount = accounts.length;
-    const closedItemsAmount = accounts.filter(a => a.status && a.status.name === 'Closed').length;
-    const action = label === formatMessage({ id: 'ui-users.accounts.actions.payFeeFine' })
-      ? <FormattedMessage id="ui-users.accounts.actions.warning.paymentAction" />
-      : (label === formatMessage({ id: 'ui-users.accounts.actions.waiveFeeFine' }))
-        ? <FormattedMessage id="ui-users.accounts.actions.warning.waiveAction" />
-        : <FormattedMessage id="ui-users.accounts.actions.warning.transferAction" />;
+
+    switch (label) {
+      case formatMessage({ id: 'ui-users.accounts.actions.payFeeFine' }):
+        action = <FormattedMessage id="ui-users.accounts.actions.warning.paymentAction" />;
+        break;
+      case formatMessage({ id: 'ui-users.accounts.actions.waiveFeeFine' }):
+        action = <FormattedMessage id="ui-users.accounts.actions.warning.waiveAction" />;
+        break;
+      case formatMessage({ id: 'ui-users.accounts.actions.transferFeeFine' }):
+        action = <FormattedMessage id="ui-users.accounts.actions.warning.transferAction" />;
+        break;
+      default:
+        action = <FormattedMessage id="ui-users.accounts.actions.warning.refundAction" />;
+        invalidItemsAmount = notAllowedToRefundItemsAmount;
+        reason = <FormattedMessage id="ui-users.accounts.actions.warning.unpaidItems" />;
+        break;
+    }
+
     return (
       <FormattedMessage
         id="ui-users.accounts.actions.warning.summary"
         values={{
           selectedItemsAmount,
-          closedItemsAmount,
+          invalidItemsAmount,
           action,
+          reason,
         }}
       />
     );
   }
 
   render() {
-    const { formatMessage } = this.props.intl;
+    const {
+      intl: { formatMessage },
+      label,
+      feeFineActions,
+    } = this.props;
+
     const {
       sortOrder,
       sortDirection,
       allChecked,
       checkedAccounts,
     } = this.state;
+
     const accountOrdered = orderBy(this.props.accounts, [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
     const columnMapping = {
       ' ': <input id="warning-checkbox" type="checkbox" checked={allChecked} name="check-all" onChange={this.toggleAll} />,
@@ -186,7 +225,12 @@ class WarningModal extends React.Component {
     };
 
     const values = Object.values(checkedAccounts);
-    const hasClosedAccounts = values.some(a => a.status && a.status.name === 'Closed');
+
+    const hasInvalidAccounts = values.some(a => {
+      return label === formatMessage({ id: 'ui-users.accounts.actions.refundFeeFine' })
+        ? !isRefundAllowed(a, feeFineActions)
+        : a?.status?.name === 'Closed';
+    });
 
     return (
       <Modal
@@ -218,10 +262,25 @@ class WarningModal extends React.Component {
             />
           </Col>
         </Row>
-        <Row end="xs">
+        <Row
+          end="xs"
+          className={css.lastRow}
+        >
           <Col xs>
-            <Button id="warningTransferCancel" onClick={this.props.onClose}><FormattedMessage id="ui-users.feefines.modal.cancel" /></Button>
-            <Button id="warningTransferContinue" disabled={hasClosedAccounts || values.length === 0} buttonStyle="primary" onClick={this.onClickContinue}><FormattedMessage id="ui-users.feefines.modal.submit" /></Button>
+            <Button
+              id="warningTransferCancel"
+              onClick={this.props.onClose}
+            >
+              <FormattedMessage id="ui-users.feefines.modal.cancel" />
+            </Button>
+            <Button
+              id="warningTransferContinue"
+              disabled={hasInvalidAccounts || values.length === 0}
+              buttonStyle="primary"
+              onClick={this.onClickContinue}
+            >
+              <FormattedMessage id="ui-users.feefines.modal.submit" />
+            </Button>
           </Col>
         </Row>
       </Modal>

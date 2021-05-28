@@ -4,7 +4,6 @@ import {
   get,
   template,
 } from 'lodash';
-import moment from 'moment';
 import { stripesConnect } from '@folio/stripes/core';
 
 import {
@@ -15,17 +14,15 @@ import {
 
 import filterConfig from './filterConfig';
 import { UserSearch } from '../views';
+import { MAX_RECORDS } from '../constants';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
-const MAX_LIMIT = 2147483647; // from https://s3.amazonaws.com/foliodocs/api/mod-circulation/p/circulation.html#circulation_loans_get
 
 const compileQuery = template(
-  '(username="%{query}*" or personal.firstName="%{query}*" or personal.lastName="%{query}*" or personal.email="%{query}*" or barcode="%{query}*" or id="%{query}*" or externalSystemId="%{query}*")',
+  '(username="%{query}*" or personal.firstName="%{query}*" or personal.preferredFirstName="%{query}*" or personal.lastName="%{query}*" or personal.email="%{query}*" or barcode="%{query}*" or id="%{query}*" or externalSystemId="%{query}*")',
   { interpolate: /%{([\s\S]+?)}/g }
 );
-
-const getLoansOverdueDate = () => moment().tz('UTC').format();
 
 class UserSearchContainer extends React.Component {
   static manifest = Object.freeze({
@@ -75,14 +72,52 @@ class UserSearchContainer extends React.Component {
       type: 'okapi',
       records: 'loans',
       accumulate: true,
-      path: () => `circulation/loans?query=(status="Open" and dueDate < ${getLoansOverdueDate()})&limit=${MAX_LIMIT}`,
+      path: () => 'circulation/loans',
       permissionsRequired: 'circulation.loans.collection.get,accounts.collection.get',
+      fetch: props => (!!props.stripes.hasInterface('circulation')),
     },
     tags: {
       throwErrors: false,
       type: 'okapi',
       path: 'tags',
+      params: {
+        query: 'cql.allRecords=1 sortby label',
+        limit: '10000',
+      },
       records: 'tags',
+    },
+    departments: {
+      type: 'okapi',
+      path: 'departments',
+      records: 'departments',
+    },
+    owners: {
+      type: 'okapi',
+      records: 'owners',
+      path: `owners?query=cql.allRecords=1&limit=${MAX_RECORDS}`,
+      fetch: props => (!!props.stripes.hasInterface('feesfines')),
+      permissionsRequired: 'owners.collection.get',
+    },
+    refundsReport: {
+      type: 'okapi',
+      records: 'reportData',
+      path: 'feefine-reports/refund',
+      clientGeneratePk: false,
+      fetch: false,
+    },
+    cashDrawerReport: {
+      type: 'okapi',
+      records: 'cashDrawerReport',
+      path: 'feefine-reports/cash-drawer-reconciliation',
+      clientGeneratePk: false,
+      fetch: false,
+    },
+    cashDrawerReportSources: {
+      type: 'okapi',
+      records: 'cashDrawerReportSources',
+      path: 'feefine-reports/cash-drawer-reconciliation/sources',
+      clientGeneratePk: false,
+      fetch: false,
     },
   });
 
@@ -113,6 +148,15 @@ class UserSearchContainer extends React.Component {
       }),
       resultOffset: PropTypes.shape({
         replace: PropTypes.func.isRequired,
+      }),
+      refundsReport: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      cashDrawerReport: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      cashDrawerReportSources: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
       }),
     }).isRequired,
     stripes: PropTypes.shape({

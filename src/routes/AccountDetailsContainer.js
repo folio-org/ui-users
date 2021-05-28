@@ -1,10 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {
+  first,
+  isEmpty,
+} from 'lodash';
 import { FormattedMessage } from 'react-intl';
 
 import { stripesConnect } from '@folio/stripes/core';
 import { LoadingView } from '@folio/stripes/components';
 
+import { MAX_RECORDS } from '../constants';
+import { calculateOwedFeeFines } from '../components/Accounts/accountFunctions';
 import { AccountDetails } from '../views';
 
 class AccountDetailsContainer extends React.Component {
@@ -27,30 +33,48 @@ class AccountDetailsContainer extends React.Component {
       },
       records: 'usergroups',
     },
-    accountHistory: {
+    accounts: {
       type: 'okapi',
-      resource: 'accounts',
-      path: 'accounts/:{accountid}',
+      records: 'accounts',
+      path: 'accounts',
+      params: {
+        query: 'userId==:{id}',
+        limit: MAX_RECORDS,
+      },
     },
     accountActions: {
       type: 'okapi',
       records: 'feefineactions',
       accumulate: 'true',
-      path: 'feefineactions?query=(accountId==:{accountid})&limit=10000',
+      path: `feefineactions?query=(accountId==:{accountid})&limit=${MAX_RECORDS}`,
+    },
+    feefineactions: {
+      type: 'okapi',
+      records: 'feefineactions',
+      path: `feefineactions?query=(userId==:{id})&limit=${MAX_RECORDS}`,
     },
     activeRecord: {
       accountId: '0',
+      instanceId: '',
     },
     loans: {
       type: 'okapi',
       records: 'loans',
       path: 'circulation/loans?query=(userId==:{id})&limit=1000',
     },
+    instance: {
+      type: 'okapi',
+      path: 'instance-storage/instances/%{activeRecord.instanceId}',
+    }
   });
 
   static propTypes = {
     resources: PropTypes.shape({
-      accountHistory: PropTypes.shape({
+      loans: PropTypes.object,
+      activeRecord: PropTypes.shape({
+        instanceId: PropTypes.string,
+      }),
+      accounts: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
       patronGroups: PropTypes.shape({
@@ -59,12 +83,20 @@ class AccountDetailsContainer extends React.Component {
       selUser: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
+      instance: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
     }),
     match: PropTypes.shape({
       params: PropTypes.shape({
         accountid: PropTypes.string,
         id: PropTypes.string,
       })
+    }),
+    mutator: PropTypes.shape({
+      activeRecord: PropTypes.shape({
+        update: PropTypes.func.isRequired
+      }).isRequired
     }),
   }
 
@@ -80,10 +112,13 @@ class AccountDetailsContainer extends React.Component {
 
   getAccount = () => {
     const { resources, match: { params: { accountid } } } = this.props;
-    const account = (resources.accountHistory || {}).records || [];
+    const accounts = resources?.accounts?.records || [];
 
-    if (account.length === 0 || !accountid) return null;
-    return account.find(a => a.id === accountid);
+    if (accounts.length === 0 || !accountid) {
+      return null;
+    }
+
+    return accounts.find(a => a.id === accountid);
   }
 
   getPatronGroup = () => {
@@ -94,14 +129,43 @@ class AccountDetailsContainer extends React.Component {
     return groups.filter(g => g.id === user.patronGroup)[0] || {};
   }
 
+  getOwedAmount = () => {
+    const {
+      match: {
+        params: {
+          accountid,
+        }
+      },
+      resources,
+    } = this.props;
+
+    const accounts = resources?.accounts?.records || [];
+
+    return calculateOwedFeeFines(accounts.filter(account => account.id !== accountid));
+  }
+
   getItemDetails = () => {
-    const { resources } = this.props;
+    const {
+      mutator: {
+        activeRecord: {
+          update: updateInstanceId,
+        }
+      },
+      resources,
+    } = this.props;
+
     const account = this.getAccount();
+    if (account?.instanceId && account.instanceId !== resources.activeRecord.instanceId) {
+      updateInstanceId({ instanceId: account.instanceId });
+    }
+
+    const instance = account?.instanceId
+      ? first(resources?.instance?.records)
+      : [];
     const loanRecords = resources?.loans?.records ?? [];
-    const itemId = account?.itemId;
-    const item = loanRecords.filter((loan) => loan.itemId === itemId);
-    const contributorRecords = item[0]?.item?.contributors ?? [];
-    const contributors = contributorRecords.map(({ name }) => name.split(',').reverse().join(', ')) || [];
+    const contributors = !isEmpty(instance)
+      ? instance.contributors.map(({ name }) => name.split(',').reverse().join(', '))
+      : [];
     const loanId = account?.loanId;
 
     if (loanId === '0') return { contributors };
@@ -111,6 +175,7 @@ class AccountDetailsContainer extends React.Component {
     const overdueFinePolicyId = currentRecord[0]?.overdueFinePolicyId;
     const lostItemPolicyName = currentRecord[0]?.lostItemPolicy?.name;
     const lostItemPolicyId = currentRecord[0]?.lostItemPolicyId;
+    const statusItemName = currentRecord[0]?.item.status?.name;
 
     return {
       overdueFinePolicyId,
@@ -118,6 +183,7 @@ class AccountDetailsContainer extends React.Component {
       contributors,
       overdueFinePolicyName,
       lostItemPolicyName,
+      statusItemName,
     };
   }
 
@@ -126,6 +192,7 @@ class AccountDetailsContainer extends React.Component {
     const account = this.getAccount();
     const patronGroup = this.getPatronGroup();
     const itemDetails = this.getItemDetails();
+    const owedAmount = this.getOwedAmount();
 
     if (!account) {
       return (
@@ -140,6 +207,7 @@ class AccountDetailsContainer extends React.Component {
       <AccountDetails
         user={user}
         account={account}
+        owedAmount={owedAmount}
         patronGroup={patronGroup}
         itemDetails={itemDetails}
         {...this.props}

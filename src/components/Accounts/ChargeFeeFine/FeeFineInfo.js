@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
-import { Field, change } from 'redux-form';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import { Field } from 'react-final-form';
+
 import {
   Row,
   Col,
@@ -12,46 +13,54 @@ import {
 class FeeFineInfo extends React.Component {
   static propTypes = {
     feefineList: PropTypes.arrayOf(PropTypes.object),
-    onChangeOwner: PropTypes.func,
+    form: PropTypes.object.isRequired,
+    initialValues: PropTypes.shape({
+      ownerId: PropTypes.string,
+    }).isRequired,
+    onChangeOwner: PropTypes.func.isRequired,
     ownerOptions: PropTypes.arrayOf(PropTypes.object),
     onChangeFeeFine: PropTypes.func,
-    feefines: PropTypes.arrayOf(PropTypes.object),
+    intl: PropTypes.object,
     isPending: PropTypes.object,
-    initialValues: PropTypes.object,
-    dispatch: PropTypes.func,
   };
 
   constructor(props) {
     super(props);
     this.onChangeAmount = this.onChangeAmount.bind(this);
-    this.onChangeFeeFine = this.onChangeFeeFine.bind(this);
     this.amount = 0;
+  }
+
+  componentDidMount() {
+    const {
+      initialValues: {
+        ownerId,
+      },
+      onChangeOwner,
+    } = this.props;
+
+    if (ownerId) {
+      onChangeOwner(ownerId);
+    }
   }
 
   onChangeAmount(e) {
     this.amount = parseFloat(e.target.value || 0).toFixed(2);
-    this.props.onChangeFeeFine(this.amount || 0);
+    this.props.onChangeFeeFine(this.amount);
   }
 
-  onChangeFeeFine(e) {
-    const feeFineId = e.target.value;
-    const feefine = this.props.feefines.find(f => f.id === feeFineId) || {};
-    this.amount = feefine.defaultAmount || 0;
-    this.amount = parseFloat(this.amount).toFixed(2);
-    this.props.onChangeFeeFine(parseFloat(feefine.defaultAmount || 0).toFixed(2), feeFineId);
-  }
-
-  onBlurAmount = (e) => {
-    const { dispatch } = this.props;
-    const amount = parseFloat(e.target.value || 0).toFixed(2);
-    e.preventDefault();
-    dispatch(change('chargefeefine', 'amount', amount));
+  onBlurAmount = () => {
+    const { form: { change } } = this.props;
+    change('amount', this.amount);
   }
 
   render() {
     const {
-      initialValues,
-      isPending
+      intl,
+      isPending,
+      ownerOptions,
+      feefineList,
+      onChangeOwner,
+      onChangeFeeFine,
     } = this.props;
 
     return (
@@ -67,21 +76,17 @@ class FeeFineInfo extends React.Component {
                 </Row>
                 <Row>
                   <Col xs={12}>
-                    <FormattedMessage id="ui-users.feefines.modal.placeholder">
-                      {placeholder => (
-                        <Field
-                          name="ownerId"
-                          id="ownerId"
-                          component={Select}
-                          fullWidth
-                          value={initialValues ? initialValues.ownerId : undefined}
-                          disabled={this.props.isPending.owners}
-                          dataOptions={this.props.ownerOptions}
-                          onChange={this.props.onChangeOwner}
-                          placeholder={placeholder}
-                        />
-                      )}
-                    </FormattedMessage>
+                    <Field
+                      name="ownerId"
+                      id="ownerId"
+                      type="select"
+                      component={Select}
+                      fullWidth
+                      disabled={isPending.owners}
+                      dataOptions={ownerOptions}
+                      onChange={(e) => onChangeOwner(e.target.value)}
+                      placeholder={intl.formatMessage({ id: 'ui-users.feefines.modal.placeholder' })}
+                    />
                     {isPending.owners && <FormattedMessage id="ui-users.loading" />}
                   </Col>
                 </Row>
@@ -94,20 +99,17 @@ class FeeFineInfo extends React.Component {
                 </Row>
                 <Row>
                   <Col xs={12}>
-                    <FormattedMessage id="ui-users.feefines.modal.placeholder">
-                      {placeholder => (
-                        <Field
-                          name="feeFineId"
-                          id="feeFineType"
-                          component={Select}
-                          fullWidth
-                          disabled={this.props.isPending.feefines}
-                          dataOptions={this.props.feefineList}
-                          placeholder={placeholder}
-                          onChange={this.onChangeFeeFine}
-                        />
-                      )}
-                    </FormattedMessage>
+                    <Field
+                      name="feeFineId"
+                      id="feeFineType"
+                      type="select"
+                      component={Select}
+                      fullWidth
+                      disabled={isPending.feefines}
+                      dataOptions={feefineList}
+                      placeholder={intl.formatMessage({ id: 'ui-users.feefines.modal.placeholder' })}
+                      onChange={onChangeFeeFine}
+                    />
                     {isPending.feefines && <FormattedMessage id="ui-users.loading" />}
                   </Col>
                 </Row>
@@ -123,6 +125,7 @@ class FeeFineInfo extends React.Component {
                     <Field
                       name="amount"
                       id="amount"
+                      type="number"
                       component={TextField}
                       fullWidth
                       required
@@ -140,4 +143,4 @@ class FeeFineInfo extends React.Component {
   }
 }
 
-export default FeeFineInfo;
+export default injectIntl(FeeFineInfo);

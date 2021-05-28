@@ -6,21 +6,24 @@ import {
   cloneDeep,
   concat,
 } from 'lodash';
-import { FormattedMessage } from 'react-intl';
+import moment from 'moment';
+import { injectIntl, FormattedMessage } from 'react-intl';
+
 import {
   AppIcon,
   IfPermission,
   IfInterface,
   TitleManager,
 } from '@folio/stripes/core';
-
 import {
   Pane,
   PaneMenu,
+  Icon,
   IconButton,
   expandAllFunction,
   ExpandAllButton,
   Button,
+  Callout,
   Row,
   Col,
   Headline,
@@ -28,10 +31,10 @@ import {
   LoadingPane,
   HasCommand,
 } from '@folio/stripes/components';
-
 import {
   NotesSmartAccordion,
   ViewCustomFieldsRecord,
+  NotePopupModal,
 } from '@folio/stripes/smart-components';
 
 import {
@@ -48,18 +51,20 @@ import {
 } from '../../components/UserDetailSections';
 
 import HelperApp from '../../components/HelperApp';
-
 import {
   PatronBlockMessage
 } from '../../components/PatronBlock';
 import {
   getFormAddressList,
-  // toUserAddresses
 } from '../../components/data/converters/address';
 import {
   getFullName,
-  // eachPromise
 } from '../../components/util';
+import RequestFeeFineBlockButtons from '../../components/RequestFeeFineBlockButtons';
+import { departmentsShape } from '../../shapes';
+
+import ExportFeesFinesReportButton from './components';
+import ErrorPane from '../../components/ErrorPane';
 
 class UserDetail extends React.Component {
   static propTypes = {
@@ -74,8 +79,14 @@ class UserDetail extends React.Component {
     resources: PropTypes.shape({
       selUser: PropTypes.object,
       user: PropTypes.arrayOf(PropTypes.object),
+      accounts: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
       addressTypes: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      departments: PropTypes.shape({
+        records: departmentsShape,
       }),
       permissions: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
@@ -97,6 +108,11 @@ class UserDetail extends React.Component {
         id: PropTypes.string,
       }),
     }).isRequired,
+    okapi: PropTypes.shape({
+      currentUser: PropTypes.shape({
+        servicePoints: PropTypes.arrayOf(PropTypes.object).isRequired,
+      }).isRequired,
+    }).isRequired,
     onClose: PropTypes.func,
     tagsToggle: PropTypes.func,
     location: PropTypes.object,
@@ -107,6 +123,7 @@ class UserDetail extends React.Component {
     getPreferredServicePoint: PropTypes.func,
     tagsEnabled: PropTypes.bool,
     paneWidth: PropTypes.string,
+    intl: PropTypes.object.isRequired,
   };
 
   static defaultProps = {
@@ -150,6 +167,8 @@ class UserDetail extends React.Component {
         customFields: false,
       },
     };
+
+    this.callout = null;
   }
 
   getUser = () => {
@@ -266,48 +285,97 @@ class UserDetail extends React.Component {
     return patronGroups.find(g => g.id === patronGroupId) || { group: '' };
   }
 
-  renderDetailMenu(user) {
+  renderDetailsLastMenu(user) {
     const {
       tagsEnabled,
+      intl,
     } = this.props;
 
     const tags = ((user && user.tags) || {}).tagList || [];
 
     return (
       <PaneMenu>
-        <IfPermission perm="ui-users.edit">
-          <FormattedMessage id="ui-users.crud.editUser">
-            {ariaLabel => (
-              user &&
-              <Button
-                id="clickable-edituser"
-                buttonStyle="primary"
-                to={this.getEditLink()}
-                buttonRef={this.editButton}
-                aria-label={ariaLabel}
-                marginBottom0
-              >
-                <FormattedMessage id="ui-users.edit" />
-              </Button>
-            )}
-          </FormattedMessage>
-        </IfPermission>
         {
           tagsEnabled &&
-          <FormattedMessage id="ui-users.showTags">
-            {ariaLabel => (
-              <IconButton
-                icon="tag"
-                id="clickable-show-tags"
-                onClick={() => { this.showHelperApp('tags'); }}
-                badgeCount={tags.length}
-                aria-label={ariaLabel}
-              />
-            )}
-          </FormattedMessage>
+            <IconButton
+              icon="tag"
+              id="clickable-show-tags"
+              onClick={() => { this.showHelperApp('tags'); }}
+              badgeCount={tags.length}
+              aria-label={intl.formatMessage({ id: 'ui-users.showTags' })}
+            />
         }
       </PaneMenu>
     );
+  }
+
+  getActionMenu = barcode => ({ onToggle }) => {
+    const {
+      okapi: {
+        currentUser: {
+          servicePoints,
+        },
+      },
+      resources,
+    } = this.props;
+    const user = this.getUser();
+    const patronGroup = this.getPatronGroup(user);
+    const feeFineActions = get(resources, ['feefineactions', 'records'], []);
+    const accounts = get(resources, ['accounts', 'records'], []);
+    const loans = get(resources, ['loanRecords', 'records'], []);
+
+    const feesFinesReportData = {
+      user,
+      patronGroup: patronGroup.group,
+      servicePoints,
+      feeFineActions,
+      accounts,
+      loans,
+    };
+
+    const showActionMenu = this.props.stripes.hasPerm('ui-users.edit')
+      || this.props.stripes.hasPerm('ui-users.patron_blocks')
+      || this.props.stripes.hasPerm('ui-users.feesfines.actions.all')
+      || this.props.stripes.hasPerm('ui-requests.all');
+
+    if (showActionMenu) {
+      return (
+        <>
+          <IfInterface name="feesfines">
+            <RequestFeeFineBlockButtons
+              barcode={barcode}
+              onToggle={onToggle}
+              userId={this.props.match.params.id}
+            />
+          </IfInterface>
+          <IfPermission perm="ui-users.edit">
+            <Button
+              buttonStyle="dropdownItem"
+              data-test-actions-menu-edit
+              id="clickable-edituser"
+              onClick={() => {
+                onToggle();
+                this.goToEdit();
+              }}
+              buttonRef={this.editButton}
+            >
+              <Icon icon="edit">
+                <FormattedMessage id="ui-users.edit" />
+              </Icon>
+            </Button>
+          </IfPermission>
+          <IfInterface name="feesfines">
+            <ExportFeesFinesReportButton
+              feesFinesReportData={feesFinesReportData}
+              onToggle={onToggle}
+              callout={this.callout}
+            />
+          </IfInterface>
+        </>
+      );
+    } else {
+      return null;
+    }
   }
 
   checkScope = () => true;
@@ -343,6 +411,10 @@ class UserDetail extends React.Component {
     });
   }
 
+  userNotFound = () => {
+    return this.props.resources?.selUser?.failed?.httpStatus === 404;
+  }
+
   render() {
     const {
       resources,
@@ -356,7 +428,6 @@ class UserDetail extends React.Component {
     const {
       sections,
       helperApp,
-      addRecord
     } = this.state;
 
     const user = this.getUser();
@@ -370,18 +441,14 @@ class UserDetail extends React.Component {
     const proxies = this.props.getProxies();
     const servicePoints = this.props.getUserServicePoints();
     const preferredServicePoint = this.props.getPreferredServicePoint();
-    const hasManualPatronBlocks = (get(resources, ['hasManualPatronBlocks', 'isPending'], true)) ? -1 : 1;
-    const hasAutomatedPatronBlocks = (get(resources, ['hasAutomatedPatronBlocks', 'isPending'], true)) ? -1 : 1;
-    const totalManualPatronBlocks = get(resources, ['hasManualPatronBlocks', 'other', 'totalRecords'], 0);
-    const totalAutomatedPatronBlocks = get(resources, ['hasAutomatedPatronBlocks', 'records'], []);
-    const totalPatronBlocks = totalManualPatronBlocks + totalAutomatedPatronBlocks.length;
-    const manualPatronBlocks = get(resources, ['hasManualPatronBlocks', 'records'], []);
+    const manualPatronBlocks = get(resources, ['hasManualPatronBlocks', 'records'], [])
+      .filter(p => moment(moment(p.expirationDate).format()).isSameOrAfter(moment().format()));
     const automatedPatronBlocks = get(resources, ['hasAutomatedPatronBlocks', 'records'], []);
+    const totalPatronBlocks = manualPatronBlocks.length + automatedPatronBlocks.length;
     const patronBlocks = concat(automatedPatronBlocks, manualPatronBlocks);
-    const hasPatronBlocks = (hasManualPatronBlocks === 1 || hasAutomatedPatronBlocks === 1) && totalPatronBlocks > 0;
+    const hasPatronBlocks = totalPatronBlocks > 0;
     const hasPatronBlocksPermissions = stripes.hasPerm('automated-patron-blocks.collection.get') || stripes.hasPerm('manualblocks.collection.get');
     const patronGroup = this.getPatronGroup(user);
-    // const detailMenu = this.renderDetailMenu(user);
     const requestPreferences = get(resources, 'requestPreferences.records.[0].requestPreferences[0]', {});
     const allServicePoints = get(resources, 'servicePoints.records', [{}]);
     const defaultServicePointName = get(
@@ -394,7 +461,25 @@ class UserDetail extends React.Component {
       'addressType',
       '',
     );
-    const customFields = user?.customFields || [];
+    const customFields = user?.customFields || {};
+    const departments = resources?.departments?.records || [];
+    const userDepartments = (user?.departments || [])
+      .map(departmentId => departments.find(({ id }) => id === departmentId)?.name);
+    const accounts = resources?.accounts;
+
+    if (this.userNotFound()) {
+      return (
+        <ErrorPane
+          id="pane-user-not-found"
+          defaultWidth={paneWidth}
+          paneTitle={<FormattedMessage id="ui-users.information.userDetails" />}
+          dismissible
+          onClose={this.onClose}
+        >
+          <FormattedMessage id="ui-users.errors.userNotFound" />
+        </ErrorPane>
+      );
+    }
 
     if (!user) {
       return (
@@ -424,7 +509,8 @@ class UserDetail extends React.Component {
                   {getFullName(user)}
                 </span>
               }
-              lastMenu={this.renderDetailMenu(user)}
+              actionMenu={this.getActionMenu(get(user, 'barcode', ''))}
+              lastMenu={this.renderDetailsLastMenu(user)}
               dismissible
               onClose={this.onClose}
             >
@@ -460,18 +546,17 @@ class UserDetail extends React.Component {
                 />
                 <IfInterface name="feesfines">
                   {hasPatronBlocksPermissions &&
-                    <PatronBlock
-                      accordionId="patronBlocksSection"
-                      user={user}
-                      hasPatronBlocks={hasPatronBlocks}
-                      patronBlocks={patronBlocks}
-                      automatedPatronBlocks={automatedPatronBlocks}
-                      expanded={sections.patronBlocksSection}
-                      onToggle={this.handleSectionToggle}
-                      onClickViewPatronBlock={this.onClickViewPatronBlock}
-                      addRecord={this.state.addRecord}
-                      {...this.props}
-                    />
+                  <PatronBlock
+                    accordionId="patronBlocksSection"
+                    user={user}
+                    hasPatronBlocks={hasPatronBlocks}
+                    patronBlocks={patronBlocks}
+                    automatedPatronBlocks={automatedPatronBlocks}
+                    expanded={sections.patronBlocksSection}
+                    onToggle={this.handleSectionToggle}
+                    onClickViewPatronBlock={this.onClickViewPatronBlock}
+                    {...this.props}
+                  />
                   }
                 </IfInterface>
                 <ExtendedInfo
@@ -482,6 +567,7 @@ class UserDetail extends React.Component {
                   defaultServicePointName={defaultServicePointName}
                   defaultDeliveryAddressTypeName={defaultDeliveryAddressTypeName}
                   onToggle={this.handleSectionToggle}
+                  departments={userDepartments}
                 />
                 <ContactInfo
                   accordionId="contactInfoSection"
@@ -517,9 +603,10 @@ class UserDetail extends React.Component {
                       expanded={sections.accountsSection}
                       onToggle={this.handleSectionToggle}
                       accordionId="accountsSection"
-                      addRecord={addRecord}
                       location={location}
+                      accounts={accounts}
                       match={match}
+                      {...this.props}
                     />
                   </IfPermission>
                 </IfInterface>
@@ -600,6 +687,14 @@ class UserDetail extends React.Component {
               </AccordionSet>
             </Pane>
             { helperApp && <HelperApp appName={helperApp} onClose={this.closeHelperApp} /> }
+            <Callout ref={(ref) => { this.callout = ref; }} />
+            <NotePopupModal
+              id="user-popup-note-modal"
+              domainName="users"
+              entityType="user"
+              popUpPropertyName="popUpOnUser"
+              entityId={user?.id}
+            />
           </>
         </HasCommand>
       );
@@ -607,4 +702,4 @@ class UserDetail extends React.Component {
   }
 }
 
-export default UserDetail;
+export default injectIntl(UserDetail);

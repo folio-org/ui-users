@@ -3,18 +3,28 @@ import CQLParser from '../cql';
 
 export default (server) => {
   const user = server.create('user', { id: 'ce0e0d5b-b5f3-4ad5-bccb-49c0784298fd' });
-  server.createList('owner', 3);
-  server.createList('feefine', 5);
-  const account = server.create('account', { userId: user.id });
+  const owners = server.createList('owner', 3, { servicePointOwner: [{ value: 1, label: 'Test Point' }] });
+
+  const feefines = server.createList('feefine', 5, { ownerId: owners[0].id });
+  const account = server.create('account', {
+    userId: user.id,
+    ownerId: owners[0].id
+  });
   server.createList('feefineaction', 1, { accountId: account.id });
-  server.createList('account', 3, { userId: user.id });
+  server.createList('account', 3, {
+    userId: user.id,
+    ownerId: owners[0].id,
+    feeFineId: feefines[0].id,
+  });
   server.create('account', {
     userId: user.id,
     status: {
       name: 'Open'
     },
     amount: 100,
-    remaining: 100
+    remaining: 100,
+    ownerId: owners[0].id,
+    feeFineId: feefines[0].id
   });
   server.create('account', {
     userId: user.id,
@@ -22,12 +32,26 @@ export default (server) => {
       name: 'Closed'
     },
     amount: 0,
-    remaining: 0
+    remaining: 0,
+    ownerId: owners[0].id,
+    feeFineId: feefines[0].id
   });
+  server.create('account', {
+    userId: user.id,
+    status: {
+      name: 'Open'
+    },
+    amount: 100,
+    remaining: 100,
+    ownerId: owners[0].id,
+    feeFineId: feefines[0].id,
+    loanId: '0'
+  });
+
   server.create('comment');
   server.createList('waiver', 4);
-  server.createList('payment', 4);
-  server.createList('transfer', 4);
+  server.createList('payment', 4, { ownerId: owners[0].id });
+  server.createList('transfer', 4, { ownerId: owners[0].id });
   server.get('/accounts');
   server.get('/accounts/:id', (schema, request) => {
     return schema.accounts.find(request.params.id).attrs;

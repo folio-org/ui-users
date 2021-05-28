@@ -4,6 +4,7 @@ import {
   it,
 } from '@bigtest/mocha';
 import { expect } from 'chai';
+import moment from 'moment';
 
 import translations from '../../../translations/ui-users/en';
 
@@ -42,6 +43,25 @@ describe('User Edit Page', () => {
     it('should display create password link', () => {
       expect(UserFormPage.resetPasswordLink.isPresent).to.be.true;
       expect(UserFormPage.resetPasswordLink.text).to.equal(translations['extended.sendResetPassword']);
+    });
+
+    it('should display department name without fields', () => {
+      expect(UserFormPage.departmentName.items.length).to.equal(0);
+    });
+
+    it('should display action menu', () => {
+      expect(UserFormPage.actionMenuButton.isPresent).to.be.false;
+    });
+
+    describe('clicking on the open action menu', function () {
+      beforeEach(async function () {
+        await UserFormPage.actionMenuButton.click();
+      });
+      it('should display links to create request, feefines and patronblock', () => {
+        expect(UserFormPage.actionMenuCreateRequestButton.isPresent).to.be.true;
+        expect(UserFormPage.actionMenuCreateFeeFinesButton.isPresent).to.be.true;
+        expect(UserFormPage.actionMenuCreatePatronBlocksButton.isPresent).to.be.true;
+      });
     });
 
     describe('validating user barcode', () => {
@@ -167,6 +187,16 @@ describe('User Edit Page', () => {
       });
     });
 
+    describe('department name', () => {
+      beforeEach(() => {
+        UserFormPage.departmentName.clickAddButton();
+      });
+
+      it('should add new select field', () => {
+        expect(UserFormPage.departmentName.items.length).to.equal(0);
+      });
+    });
+
     describe('when custom fields are in stock', () => {
       it('should show custom fields accordion', () => {
         expect(UserFormPage.customFieldsSection.isPresent).to.be.true;
@@ -217,6 +247,84 @@ describe('User Edit Page', () => {
       });
     });
 
+    describe('recalculation of expiration date', () => {
+      describe('edit user with expiration offset days is NOT empty', () => {
+        const GROUP_WITH_EXPIRATIONOFFSET = 'group6'; // group staff with expirationOffsetInDays of 730
+        beforeEach(async function () {
+          const user = this.server.create('user', {
+            patronGroup: GROUP_WITH_EXPIRATIONOFFSET,
+            expirationDate: '2019-02-05',
+          }, 'withPatronGroup', { id: GROUP_WITH_EXPIRATIONOFFSET });
+
+          this.visit(`/users/${user.id}/edit`);
+          await UserFormPage.whenLoaded();
+        });
+
+        it('should display recalculation button', () => {
+          expect(UserFormPage.recalculateExpirationdateButton.isPresent).to.be.true;
+        });
+
+        describe('click recalculation button with expirationDate in the past', () => {
+          const RECALCULATED_EXPIRATION_DATE = moment().add(730, 'd').format('YYYY-MM-DD');
+          beforeEach(async function () {
+            await UserFormPage.recalculateExpirationdateButton.click();
+          });
+
+          it('recalculation modal should be closed and expirationDate should be recalculated', () => {
+            expect(UserFormPage.recalculateExpirationdateModal.isPresent).to.be.false;
+            expect(UserFormPage.usersExpirationdateField.value).to.equal(RECALCULATED_EXPIRATION_DATE);
+          });
+        });
+      });
+
+      describe('edit user and select patronGroup with expiration offset days is NOT empty', () => {
+        const GROUP_WITHOUT_EXPIRATIONOFFSET = 'group5';
+        beforeEach(async function () {
+          const user = this.server.create('user', {
+            patronGroup: GROUP_WITHOUT_EXPIRATIONOFFSET,
+          }, 'withPatronGroup', { id: GROUP_WITHOUT_EXPIRATIONOFFSET });
+
+          this.visit(`/users/${user.id}/edit`);
+          await UserFormPage.whenLoaded();
+          await UserFormPage.patronGroupField.selectAndBlur('staff (Staff Member)');
+        });
+
+        it('should display recalculation modal with buttons', () => {
+          expect(UserFormPage.recalculateExpirationdateModal.isPresent).to.be.true;
+          expect(UserFormPage.expirationdateModalCancelButton.isPresent).to.be.true;
+          expect(UserFormPage.expirationdateModalRecalculateButton.isPresent).to.be.true;
+        });
+
+        describe('click cancel button', () => {
+          beforeEach(async function () {
+            await UserFormPage.expirationdateModalCancelButton.click();
+          });
+
+          it('recalculation modal should be closed', () => {
+            expect(UserFormPage.recalculateExpirationdateModal.isPresent).to.be.false;
+          });
+        });
+      });
+    });
+
+    describe('user will be extend', () => {
+      const GROUP_WITH_EXPIRATIONOFFSET = 'group6';
+      beforeEach(async function () {
+        const user = this.server.create('user', {
+          patronGroup: GROUP_WITH_EXPIRATIONOFFSET,
+          expirationDate: '2019-02-05',
+        });
+
+        this.visit(`/users/${user.id}/edit`);
+        await UserFormPage.whenLoaded();
+        await UserFormPage.recalculateExpirationdateButton.click();
+      });
+
+      it('should display message for reactivate user', () => {
+        expect(UserFormPage.userWillReactivateMessage.isPresent).to.be.true;
+      });
+    });
+
     describe('changing status field', () => {
       describe('changing status to inactive', () => {
         beforeEach(async function () {
@@ -224,7 +332,6 @@ describe('User Edit Page', () => {
           await UserFormPage.submitButton.click();
           await InstanceViewPage.whenLoaded();
         });
-
         it('should display inactive status', () => {
           expect(InstanceViewPage.userInfo.keyValues(5).text).to.equal('Inactive');
         }).timeout(6000);
@@ -237,7 +344,6 @@ describe('User Edit Page', () => {
           await UserFormPage.submitButton.click();
           await InstanceViewPage.whenLoaded();
         });
-
         it('should display active status', () => {
           expect(InstanceViewPage.userInfo.keyValues(5).text).to.equal('Active');
         }).timeout(6000);
@@ -273,6 +379,27 @@ describe('User Edit Page', () => {
 
     it('should not display create/reset password link', () => {
       expect(UserFormPage.resetPasswordLink.isPresent).to.be.false;
+    });
+  });
+
+  describe('User without permission for create requests, feesfines and patronblock', () => {
+    setupApplication({
+      hasAllPerms: false,
+      permissions: {
+        'module.users.enabled': true,
+        'ui-users.edit': true,
+      },
+    });
+
+    beforeEach(async function () {
+      const user = this.server.create('user');
+
+      this.visit(`/users/${user.id}/edit`);
+      await UserFormPage.whenLoaded();
+    });
+
+    it('should not display action menu', () => {
+      expect(UserFormPage.actionMenuButton.isPresent).to.be.false;
     });
   });
 });

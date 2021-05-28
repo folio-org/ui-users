@@ -269,7 +269,6 @@ export function isConvergence(obj) {
     'run' in obj && typeof obj.run === 'function';
 }
 
-
 /**
  * Runs a single function from a convergence queue with `arg` as the
  * function's argument. Adds simple stats to the `stats` object.

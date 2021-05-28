@@ -1,10 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  arrayRemove, change,
-  FieldArray,
-} from 'redux-form';
-import { connect as reduxConnect } from 'react-redux';
+import { FieldArray } from 'react-final-form-arrays';
+
 import {
   FormattedMessage,
   injectIntl,
@@ -31,7 +28,6 @@ import css from './PermissionsAccordion.css';
 class PermissionsAccordion extends React.Component {
   static propTypes = {
     expanded: PropTypes.bool.isRequired,
-    initialValues: PropTypes.object,
     intl: PropTypes.shape({
       formatMessage: PropTypes.func.isRequired,
     }),
@@ -44,17 +40,6 @@ class PermissionsAccordion extends React.Component {
     // eslint-disable-next-line react/no-unused-prop-types
     formName: PropTypes.string.isRequired,
     permissionsField: PropTypes.string.isRequired,
-    assignedPermissions: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        displayName: PropTypes.string.isRequired,
-        permissionName: PropTypes.string.isRequired,
-        subPermissions: PropTypes.arrayOf(PropTypes.string).isRequired,
-        dummy: PropTypes.bool.isRequired,
-        mutable: PropTypes.bool.isRequired,
-        visible: PropTypes.bool.isRequired,
-      })
-    ).isRequired,
     filtersConfig: PropTypes.arrayOf(
       PropTypes.shape({
         label: PropTypes.node.isRequired,
@@ -72,13 +57,11 @@ class PermissionsAccordion extends React.Component {
     ).isRequired,
     visibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
     headlineContent: PropTypes.element.isRequired,
-    unassignPermission: PropTypes.func.isRequired,
-    addPermissions: PropTypes.func.isRequired,
     excludePermissionSets: PropTypes.bool,
+    form: PropTypes.object,
   };
 
   static defaultProps = {
-    initialValues: {},
     excludePermissionSets: false,
   };
 
@@ -90,7 +73,16 @@ class PermissionsAccordion extends React.Component {
     };
   }
 
-  renderItem(item, index, showPerms) {
+  addPermissions = (permissions) => {
+    const {
+      permissionsField,
+      form: { change },
+    } = this.props;
+
+    change(permissionsField, permissions);
+  }
+
+  renderItem(item, index, fields, showPerms) {
     return (
       <li
         key={item.id}
@@ -105,7 +97,7 @@ class PermissionsAccordion extends React.Component {
                 align="end"
                 type="button"
                 id={`clickable-remove-permission-${item.permissionName}`}
-                onClick={() => this.removePermission(index)}
+                onClick={() => fields.remove(index)}
                 aria-label={`${aria}: ${item.permissionName}`}
               >
                 <Icon
@@ -121,17 +113,30 @@ class PermissionsAccordion extends React.Component {
     );
   }
 
+  getAssignedPermissions = () => {
+    const {
+      form: { getFieldState },
+      permissionsField,
+    } = this.props;
+
+    return getFieldState(permissionsField)?.value ?? [];
+  }
+
   renderList = ({ fields }) => {
     const {
-      assignedPermissions,
       intl: { formatMessage },
     } = this.props;
     const showPerms = this.props.stripes?.config?.showPerms;
+    const assignedPermissions = this.getAssignedPermissions();
 
-    const listFormatter = (_fieldName, index) => (
-      this.renderItem(fields.get(index), index, this.props.stripes?.config?.showPerms)
-    );
-    const sortedItems = (assignedPermissions || []).sort((a, b) => {
+    const listFormatter = (_fieldName, index) => {
+      if (fields.value[index]) {
+        return this.renderItem(fields.value[index], index, fields, showPerms);
+      }
+      return null;
+    };
+
+    const sortedItems = (assignedPermissions).sort((a, b) => {
       const permA = getPermissionLabelString(a, formatMessage, showPerms);
       const permB = getPermissionLabelString(b, formatMessage, showPerms);
 
@@ -146,10 +151,6 @@ class PermissionsAccordion extends React.Component {
       />
     );
   };
-
-  removePermission(index) {
-    this.props.unassignPermission(index);
-  }
 
   openPermissionModal = (e) => {
     e.preventDefault();
@@ -166,23 +167,20 @@ class PermissionsAccordion extends React.Component {
       accordionId,
       expanded,
       onToggle,
-      initialValues,
       permToModify,
       permissionsField,
       filtersConfig,
       visibleColumns,
       headlineContent,
-      assignedPermissions,
-      addPermissions,
       excludePermissionSets,
     } = this.props;
 
     const { permissionModalOpen } = this.state;
-    const permissions = (initialValues || {}).subPermissions || [];
+    const assignedPermissions = this.getAssignedPermissions();
 
     if (!this.props.stripes.hasPerm(this.props.permToRead)) return null;
 
-    const size = assignedPermissions ? assignedPermissions.length : permissions.length;
+    const size = assignedPermissions.length;
 
     return (
       <Accordion
@@ -214,7 +212,7 @@ class PermissionsAccordion extends React.Component {
             permissionModalOpen &&
             <PermissionModal
               assignedPermissions={assignedPermissions}
-              addPermissions={addPermissions}
+              addPermissions={this.addPermissions}
               open={permissionModalOpen}
               excludePermissionSets={excludePermissionSets}
               visibleColumns={visibleColumns}
@@ -228,13 +226,4 @@ class PermissionsAccordion extends React.Component {
   }
 }
 
-const mapStateToProps = (state, { formName, permissionsField }) => ({
-  assignedPermissions: state.form[formName].values[permissionsField] || [],
-});
-
-const mapDispatchToProps = (dispatch, { formName, permissionsField }) => ({
-  unassignPermission: (index) => dispatch(arrayRemove(formName, permissionsField, index)),
-  addPermissions: (permissions) => dispatch(change(formName, permissionsField, permissions)),
-});
-
-export default stripesConnect(reduxConnect(mapStateToProps, mapDispatchToProps)(injectIntl(PermissionsAccordion)));
+export default stripesConnect(injectIntl(PermissionsAccordion));

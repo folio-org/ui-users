@@ -3,22 +3,53 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Button,
-  Row,
   Col,
   PaneHeader,
+  Row,
 } from '@folio/stripes/components';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import { getFullName } from '../util';
+import { isRefundAllowed } from './accountFunctions';
+
+import { refundClaimReturned } from '../../constants';
 
 import css from './Menu.css';
 
 const Menu = (props) => {
-  const { user, showFilters, match: { params }, filters, balance, selected, actions } = props;
-  const outstanding = parseFloat(balance).toFixed(2);
+  const {
+    user,
+    showFilters,
+    match: { params },
+    filters,
+    selected,
+    resources,
+    selectedAccounts,
+    feeFineActions,
+    actions,
+  } = props;
+
+  let balanceOutstanding = 0;
+  let balanceSuspended = 0;
+  if (params.accountstatus !== 'closed') {
+    const accounts = _.get(resources, ['feefineshistory', 'records'], []);
+    accounts.forEach((a) => {
+      if (a.paymentStatus.name === refundClaimReturned.PAYMENT_STATUS) {
+        balanceSuspended += (parseFloat(a.remaining) * 100);
+      } else {
+        balanceOutstanding += (parseFloat(a.remaining) * 100);
+      }
+    });
+  }
+  balanceOutstanding /= 100;
+  balanceSuspended /= 100;
+  const suspended = parseFloat(balanceSuspended).toFixed(2);
+  const outstanding = parseFloat(balanceOutstanding).toFixed(2);
+
   const showSelected = (selected !== 0 && selected !== parseFloat(0).toFixed(2))
     && outstanding > parseFloat(0).toFixed(2);
   const buttonDisabled = !props.stripes.hasPerm('ui-users.feesfines.actions.all');
+  const canRefund = selectedAccounts.some((a) => isRefundAllowed(a, feeFineActions));
 
   const type = <FormattedMessage id={`ui-users.accounts.${params.accountstatus}`} />;
 
@@ -41,22 +72,24 @@ const Menu = (props) => {
         <Col className={css.firstMenuItems}>
           <div id="outstanding-balance">
             <FormattedMessage
-              id="ui-users.accounts.outstanding"
-              values={{
-                amount: outstanding
-              }}
+              id="ui-users.accounts.outstanding.page"
+              values={{ amount: outstanding }}
             />
-          </div>
-        </Col>
-        <Col className={css.firstMenuItems}>
-          {showSelected &&
+            &nbsp;|&nbsp;
             <FormattedMessage
-              id="ui-users.accounts.selected"
-              values={{
-                amount: parseFloat(selected).toFixed(2)
-              }}
+              id="ui-users.accounts.suspended.page"
+              values={{ amount: suspended }}
             />
-          }
+            {showSelected &&
+            <span>
+              &nbsp;|&nbsp;
+              <FormattedMessage
+                id="ui-users.accounts.selected.balance"
+                values={{ amount: parseFloat(selected).toFixed(2) }}
+              />
+            </span>
+            }
+          </div>
         </Col>
       </Row>
     </div>);
@@ -92,8 +125,9 @@ const Menu = (props) => {
       <Button
         id="open-closed-all-refund-button"
         marginBottom0
-        disabled
+        disabled={!((actions.refund === true) && (buttonDisabled === false) && (canRefund === true))}
         buttonStyle="primary"
+        onClick={() => { props.onChangeActions({ refundMany: true }); }}
       >
         <FormattedMessage id="ui-users.accounts.history.button.refund" />
       </Button>
@@ -105,6 +139,15 @@ const Menu = (props) => {
         onClick={() => { props.onChangeActions({ transferMany: true }); }}
       >
         <FormattedMessage id="ui-users.accounts.history.button.transfer" />
+      </Button>
+      <Button
+        id="fee-fine-report-export-button"
+        marginBottom0
+        disabled={_.isEmpty(feeFineActions)}
+        buttonStyle="primary"
+        onClick={props.onExportFeesFinesReport}
+      >
+        <FormattedMessage id="ui-users.export.button" />
       </Button>
     </div>);
 
@@ -119,13 +162,16 @@ Menu.propTypes = {
     hasPerm: PropTypes.func,
   }),
   showFilters: PropTypes.bool,
-  balance: PropTypes.number,
   selected: PropTypes.number,
   filters: PropTypes.object,
   actions: PropTypes.object,
   match: PropTypes.object,
   patronGroup: PropTypes.object,
+  selectedAccounts: PropTypes.arrayOf(PropTypes.object).isRequired,
+  feeFineActions: PropTypes.arrayOf(PropTypes.object).isRequired,
   onChangeActions: PropTypes.func,
+  onExportFeesFinesReport: PropTypes.func.isRequired,
+  resources: PropTypes.object.isRequired,
 };
 
 export default Menu;

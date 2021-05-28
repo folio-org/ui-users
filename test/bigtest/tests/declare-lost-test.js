@@ -7,10 +7,16 @@ import { expect } from 'chai';
 import { Response } from 'miragejs';
 
 import setupApplication from '../helpers/setup-application';
+import DummyComponent from '../helpers/DummyComponent';
 import OpenLoansInteractor from '../interactors/open-loans';
 import LoanActionsHistory from '../interactors/loan-actions-history';
 
+import translations from '../../../translations/ui-users/en';
+
 describe('Declare Lost', () => {
+  const requestsPath = '/requests';
+  const requestsAmount = 5;
+
   setupApplication({
     permissions: {
       'manualblocks.collection.get': true,
@@ -19,6 +25,16 @@ describe('Declare Lost', () => {
     currentUser: {
       curServicePoint: { id: 1 },
     },
+    modules: [{
+      type: 'app',
+      name: '@folio/ui-requests',
+      displayName: 'requests',
+      route: requestsPath,
+      module: DummyComponent,
+    }],
+    translations: {
+      'requests': 'Requests'
+    },
   });
 
   describe('Visiting open loans list page with not declared lost item', () => {
@@ -26,6 +42,7 @@ describe('Declare Lost', () => {
 
     beforeEach(async function () {
       loan = this.server.create('loan', { status: { name: 'Open' } });
+      this.server.createList('request', requestsAmount, { itemId: loan.itemId });
 
       this.visit(`/users/${loan.userId}/loans/open`);
 
@@ -71,6 +88,21 @@ describe('Declare Lost', () => {
           expect(OpenLoansInteractor.declareLostDialog.additionalInfoTextArea.isPresent).to.be.true;
         });
 
+        it('should display open requests number', () => {
+          expect(OpenLoansInteractor.declareLostDialog.openRequestsNumber.text).to.equal(`${requestsAmount} open requests`);
+        });
+
+        describe('clicking on the open requests number link', () => {
+          beforeEach(async () => {
+            await OpenLoansInteractor.declareLostDialog.openRequestsNumber.click();
+          });
+
+          it('should redirect to "requests"', function () {
+            expect(this.location.pathname).to.equal(requestsPath);
+            expect(this.location.search).includes(loan.itemId);
+          });
+        });
+
         describe('clicking cancel button', () => {
           beforeEach(async () => {
             await OpenLoansInteractor.declareLostDialog.cancelButton.click();
@@ -112,6 +144,44 @@ describe('Declare Lost', () => {
 
             it('should hide declare lost dialog', () => {
               expect(OpenLoansInteractor.declareLostDialog.isPresent).to.be.false;
+            });
+          });
+
+          describe('when no fee/fine owner found', () => {
+            const errorMessage = 'No fee/fine owner found for item\'s permanent location';
+
+            beforeEach(async function () {
+              this.server.post(`/circulation/loans/${loan.id}/declare-item-lost`, () => {
+                return new Response(422, { 'Content-Type': 'application/json' }, {
+                  errors: [{
+                    message: errorMessage,
+                  }]
+                });
+              });
+
+              await OpenLoansInteractor.declareLostDialog.confirmButton.click();
+            });
+
+            it('should display error modal', () => {
+              expect(OpenLoansInteractor.errorModal.isPresent).to.be.true;
+            });
+
+            it('error modal should have title', () => {
+              expect(OpenLoansInteractor.errorModal.headline).to.equal(translations['feefines.errors.notBilledTitle']);
+            });
+
+            it('error modal should have content', () => {
+              expect(OpenLoansInteractor.errorModal.content).to.include(translations['feefines.errors.updateOwnerMessage']);
+            });
+
+            describe('clicking close button', () => {
+              beforeEach(async () => {
+                await OpenLoansInteractor.errorModal.closeButton.click();
+              });
+
+              it('should not display error modal', () => {
+                expect(OpenLoansInteractor.errorModal.isPresent).to.be.false;
+              });
             });
           });
         });
@@ -234,7 +304,7 @@ describe('Declare Lost', () => {
     });
 
     it('should update fine incurred amount', () => {
-      expect(LoanActionsHistory.feeFines.text).to.equal('250.00');
+      expect(LoanActionsHistory.feeFines.text).to.equal('-');
     });
   });
 
@@ -269,6 +339,39 @@ describe('Declare Lost', () => {
 
     it('should display the lost date in lost field', () => {
       expect(LoanActionsHistory.lostDate.value.text).to.not.equal('-');
+    });
+  });
+
+  describe('Visiting loan details page with checked out item', () => {
+    beforeEach(async function () {
+      const loan = this.server.create('loan', {
+        status: { name: 'Open' },
+        loanPolicyId: 'test',
+        action: 'checkedOut',
+        actionComment: 'Checked out confirmation',
+        item: { status: { name: 'Checked out' } },
+        itemStatus: 'Checked out',
+      });
+
+      this.visit(`/users/${loan.userId}/loans/view/${loan.id}`);
+    });
+
+    describe('clicking on declare lost button twice', () => {
+      beforeEach(async function () {
+        await LoanActionsHistory.declareLostButton.click();
+        await OpenLoansInteractor.declareLostDialog.additionalInfoTextArea.focus();
+        await OpenLoansInteractor.declareLostDialog.additionalInfoTextArea.fill('some text');
+        await OpenLoansInteractor.declareLostDialog.confirmButton.click();
+        await LoanActionsHistory.declareLostButton.click();
+      });
+
+      it('should display disabled declare lost button', () => {
+        expect(LoanActionsHistory.isDeclareLostButtonDisabled).to.be.true;
+      });
+
+      it('should not display declare lost dialog', () => {
+        expect(OpenLoansInteractor.declareLostDialog.isPresent).to.be.false;
+      });
     });
   });
 });

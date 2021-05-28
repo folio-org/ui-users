@@ -14,9 +14,15 @@ export const addressTypesShape = PropTypes.arrayOf(PropTypes.shape({
 }));
 
 export const requestPreferencesShape = PropTypes.shape({
-  holdShelf: PropTypes.bool.isRequired,
-  delivery: PropTypes.bool.isRequired,
+  holdShelf: PropTypes.bool,
+  delivery: PropTypes.bool,
   defaultDeliveryAddressTypeId: nullOrStringIsRequiredTypeValidator,
   defaultServicePointId: PropTypes.string,
   fulfillment: PropTypes.oneOf([HOLD_SHELF, DELIVERY])
 });
+
+export const departmentsShape = PropTypes.arrayOf(PropTypes.shape({
+  id: PropTypes.string.isRequired,
+  code: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+}));

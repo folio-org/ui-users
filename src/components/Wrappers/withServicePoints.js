@@ -10,12 +10,18 @@ import {
   coreEvents as events,
 } from '@folio/stripes/core';
 
+import { MAX_RECORDS } from '../../constants';
+
 const withServicePoints = WrappedComponent => class WithServicePointsComponent extends React.Component {
     static manifest = {
       ...WrappedComponent.manifest,
       servicePoints: {
         type: 'okapi',
-        path: 'service-points?query=cql.allRecords=1 sortby name&limit=1000',
+        path: 'service-points',
+        params: {
+          query: 'cql.allRecords=1 sortby name',
+          limit: MAX_RECORDS,
+        },
         records: 'servicepoints',
         accumulate: true,
         fetch: false,
@@ -23,7 +29,7 @@ const withServicePoints = WrappedComponent => class WithServicePointsComponent e
       servicePointUserId: '',
       servicePointsUsers: {
         type: 'okapi',
-        path: 'service-points-users?query=(userId==:{id})',
+        path: `service-points-users?query=(userId==:{id})&limit=${MAX_RECORDS}`,
         records: 'servicePointsUsers',
         accumulate: true,
         fetch: false,
@@ -44,7 +50,10 @@ const withServicePoints = WrappedComponent => class WithServicePointsComponent e
         servicePointsUsers: PropTypes.shape({
           records: PropTypes.arrayOf(PropTypes.object),
         }),
-        servicePointUserId: PropTypes.string,
+        servicePointUserId: PropTypes.oneOfType([
+          PropTypes.object,
+          PropTypes.string,
+        ]),
       }),
       match: PropTypes.shape({
         params: PropTypes.shape({
@@ -78,7 +87,7 @@ const withServicePoints = WrappedComponent => class WithServicePointsComponent e
       // Save the id of the record in the service-points-users table for later use when mutating it.
       const servicePointUserId = get(nextProps.resources.servicePointsUsers, ['records', 0, 'id'], '');
       const localServicePointUserId = nextProps.resources.servicePointUserId;
-      if (servicePointUserId !== localServicePointUserId) {
+      if (servicePointUserId && servicePointUserId !== localServicePointUserId) {
         nextProps.mutator.servicePointUserId.replace(servicePointUserId);
       }
 

@@ -38,4 +38,6 @@ export default (server) => {
     const body = JSON.parse(request.requestBody);
     return schema.manualblocks.create(body);
   });
+
+  server.get('/manual-block-templates');
 };

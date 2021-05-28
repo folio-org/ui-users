@@ -16,6 +16,7 @@ import CalloutInteractor from '@folio/stripes-components/lib/Callout/tests/inter
 import CheckboxInteractor from '@folio/stripes-components/lib/Checkbox/tests/interactor';
 
 import PatronBlockModal from './parton-blocks/modal';
+import OverridePatronBlockModal from './parton-blocks/override-patron-block-modal';
 import DialogInteractor from './dialog';
 
 @interactor class BulkOverrideModal {
@@ -48,8 +49,20 @@ import DialogInteractor from './dialog';
 @interactor class BulkClaimReturnedModal {
   static defaultScope = '[data-test-bulk-claim-returned-modal]';
 
-  cancelButton = clickable('[data-test-bulk-cr-cancel-button]');
-  confirmButton = clickable('[data-test-bulk-cr-continue-button]');
+  additionalInfo = new Interactor('[data-test-bulk-claim-returned-additionalInfo]');
+  openRequestsNumber = new Interactor('[data-test-item-request-count]');
+  cancelButton = new ButtonInteractor('[data-test-bulk-cr-cancel-button]');
+  confirmButton = new ButtonInteractor('[data-test-bulk-cr-confirm-button]');
+  closeButton = new ButtonInteractor('[data-test-bulk-cr-close-button]');
+  isConfirmButtonDisabled = property('[data-test-bulk-cr-confirm-button]', 'disabled');
+}
+
+@interactor class ErrorModal {
+  static defaultScope = '[data-test-error-modal]';
+
+  headline = text('[data-test-headline]');
+  content = text('[class^="modalContent---"] p');
+  closeButton = new ButtonInteractor('[data-test-close-button]');
 }
 
 @interactor class OpenLoans {
@@ -59,6 +72,7 @@ import DialogInteractor from './dialog';
   list = scoped('[data-test-open-loans-list]');
   requests = collection('[data-test-list-requests]');
   callNumbers = collection('[data-test-list-call-numbers]');
+  feeFineIncurred = new Interactor('[data-test-open-loans-list] [data-test-feefine-incurred]');
   actionDropdowns = collection('[data-test-actions-dropdown]');
   actionDropdownContainer = new Interactor('[class*=DropdownMenu---]');
   actionDropdownRequestQueue = new Interactor('[data-test-dropdown-content-request-queue]');
@@ -71,8 +85,10 @@ import DialogInteractor from './dialog';
   bulkRenewalModal = new BulkRenewalModal();
   bulkOverrideModal = new BulkOverrideModal();
   patronBlockModal = new PatronBlockModal();
+  overridePatronBlockModal = new OverridePatronBlockModal();
   changeDueDateOverlay = new ChangeDueDateOverlay();
   bulkClaimReturnedModal = new BulkClaimReturnedModal();
+  errorModal = new ErrorModal();
   declareLostDialog = new DialogInteractor('#declareLost-modal');
   claimReturnedDialog = new DialogInteractor('#claimReturned-modal');
   markAsMissingDialog = new DialogInteractor('#markAsMissing-modal');

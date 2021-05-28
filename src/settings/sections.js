@@ -16,7 +16,9 @@ import TransferAccountsSettings from './TransferAccountsSettings';
 import CustomFieldsSettingsPane from './CustomFieldsSettings';
 import ConditionsSettings from './ConditionsSettings';
 import LimitsSettings from './LimitsSettings';
-
+import DepartmentsSettings from './DepartmentsSettings';
+import BlockTemplates from './patronBlocks/BlockTemplates';
+import TransferCriteriaSettings from './TransferCriteriaSettings';
 
 const settingsGeneral = [
   {
@@ -36,6 +38,12 @@ const settingsGeneral = [
     label: <FormattedMessage id="ui-users.settings.addressTypes" />,
     component: AddressTypesSettings,
     perm: 'ui-users.settings.addresstypes',
+  },
+  {
+    route: 'departments',
+    label: <FormattedMessage id="ui-users.settings.departments" />,
+    component: DepartmentsSettings,
+    perm: 'ui-users.settings.departments.view'
   },
   {
     route: 'profilepictures',
@@ -94,6 +102,12 @@ const settingsFeefines = [
     component: TransferAccountsSettings,
     perm: 'ui-users.settings.transfers',
   },
+  {
+    route: 'transfer-criteria',
+    label: <FormattedMessage id="ui-users.settings.transferCriteria" />,
+    component: TransferCriteriaSettings,
+    perm: 'ui-plugin-bursar-export.bursar-exports.all',
+  },
 ];
 
 const settingsPatronBlocks = [
@@ -108,7 +122,14 @@ const settingsPatronBlocks = [
     label: <FormattedMessage id="ui-users.settings.limits" />,
     component: LimitsSettings,
     perm: 'ui-users.settings.limits',
-  }
+  },
+  {
+    route: 'manual-block-templates',
+    label: <FormattedMessage id="ui-users.settings.manualBlockTemplates" />,
+    component: BlockTemplates,
+    perm: 'ui-users.settings.patron-block-templates',
+    interface: 'feesfines',
+  },
 ];
 
 export default [
@@ -119,9 +140,11 @@ export default [
   {
     label: <FormattedMessage id="ui-users.settings.feefine" />,
     pages: sortBy(settingsFeefines, ['label']),
+    interface: 'feesfines',
   },
   {
     label: <FormattedMessage id="ui-users.settings.patronBlocks" />,
     pages: sortBy(settingsPatronBlocks, ['label']),
+    interface: 'circulation',
   },
 ];
