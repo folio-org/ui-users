@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import moment from 'moment';
-import { refundClaimReturned, itemStatuses } from '../../constants';
+import { refundClaimReturned, itemStatuses, accountStatuses } from '../../constants';
 
 
 class RefundTransferCR {
@@ -31,7 +31,7 @@ refundTransfers = async (loan, props) => {
     const updatedRec = _.cloneDeep(record);
     updatedRec.paymentStatus.name = refundClaimReturned.PAYMENT_STATUS;
     updatedRec.remaining = record.amount;
-    updatedRec.status.name = 'Open';
+    updatedRec.status.name = accountStatuses.OPEN;
     return updatedRec;
   };
 
