@@ -31,6 +31,7 @@ refundTransfers = async (loan, props) => {
     const updatedRec = _.cloneDeep(record);
     updatedRec.paymentStatus.name = refundClaimReturned.PAYMENT_STATUS;
     updatedRec.remaining = record.amount;
+    updatedRec.status.name = 'Open';
     return updatedRec;
   };
 
