@@ -34,6 +34,7 @@ import {
 import {
   NotesSmartAccordion,
   ViewCustomFieldsRecord,
+  NotePopupModal,
 } from '@folio/stripes/smart-components';
 
 import {
@@ -687,6 +688,13 @@ class UserDetail extends React.Component {
             </Pane>
             { helperApp && <HelperApp appName={helperApp} onClose={this.closeHelperApp} /> }
             <Callout ref={(ref) => { this.callout = ref; }} />
+            <NotePopupModal
+              id="user-popup-note-modal"
+              domainName="users"
+              entityType="user"
+              popUpPropertyName="popUpOnUser"
+              entityId={user?.id}
+            />
           </>
         </HasCommand>
       );
