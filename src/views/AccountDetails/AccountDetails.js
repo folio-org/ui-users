@@ -620,7 +620,7 @@ class AccountDetails extends React.Component {
                 :
                 <KeyValue
                   label={<FormattedMessage id="ui-users.details.label.loanDetails" />}
-                  value="-"
+                  value={<FormattedMessage id="ui-users.details.label.loanAnonymized" />}
                 />
               }
             </Col>
