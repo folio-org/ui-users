@@ -82,6 +82,7 @@ class UserEdit extends React.Component {
       active: true,
       personal: {
         addresses: [],
+        firstName: '',
         preferredContactTypeId: (find(contactTypes, { 'name': 'email' }) || {}).id,
       },
       requestPreferences: {
@@ -89,7 +90,8 @@ class UserEdit extends React.Component {
         delivery: false,
         defaultServicePointId: null,
         defaultDeliveryAddressTypeId: null,
-      }
+      },
+      username: '',
     };
 
     if (!match.params.id) return initialFormValues;

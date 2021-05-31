@@ -19,6 +19,9 @@ describe('Bulk claim returned modal', () => {
     permissions: {
       'circulation.loans.collection.get': true,
     },
+    currentUser: {
+      curServicePoint: { id: 1 },
+    },
     modules: [{
       type: 'app',
       name: '@folio/ui-requests',
@@ -194,6 +197,10 @@ describe('Bulk claim returned modal', () => {
 
             it('Suspended claim returned payment status', () => {
               expect(FeeFineHistoryInteractor.mclViewFeesFines.rows(0).cells(6).text).to.equal(refundClaimReturned.PAYMENT_STATUS);
+            });
+
+            it('Remaining claim returned', () => {
+              expect(FeeFineHistoryInteractor.mclViewFeesFines.rows(0).cells(5).text).to.equal('200.00');
             });
           });
         });

@@ -34,6 +34,7 @@ import {
 import {
   NotesSmartAccordion,
   ViewCustomFieldsRecord,
+  NotePopupModal,
 } from '@folio/stripes/smart-components';
 
 import {
@@ -719,6 +720,13 @@ class UserDetail extends React.Component {
               open={this.state.showCheckDeleteModal}
               stripes={stripes}
               username={getFullName(user)}
+            />
+            <NotePopupModal
+              id="user-popup-note-modal"
+              domainName="users"
+              entityType="user"
+              popUpPropertyName="popUpOnUser"
+              entityId={user?.id}
             />
           </>
         </HasCommand>

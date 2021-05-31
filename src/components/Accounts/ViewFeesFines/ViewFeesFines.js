@@ -363,7 +363,7 @@ class ViewFeesFines extends React.Component {
     // disable ellipses menu actions based on permissions
     const buttonDisabled = !this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
     const isClaimReturnedItem = (loan.item && loan.item.status && loan.item.status.name && loan.item.status.name === itemStatuses.CLAIMED_RETURNED);
-
+    const loanText = isDisabled.loan ? 'ui-users.accounts.history.button.loanAnonymized' : 'ui-users.accounts.history.button.loanDetails';
     return (
       <Dropdown
         renderTrigger={this.renderToggle}
@@ -387,7 +387,7 @@ class ViewFeesFines extends React.Component {
           </this.MenuButton>
           <hr />
           <this.MenuButton disabled={isDisabled.loan || buttonDisabled} account={a} action="loanDetails">
-            <FormattedMessage id="ui-users.accounts.history.button.loanDetails" />
+            <FormattedMessage id={loanText} />
           </this.MenuButton>
         </DropdownMenu>
       </Dropdown>

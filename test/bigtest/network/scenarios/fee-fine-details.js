@@ -16,7 +16,7 @@ export default (server) => {
       name: () => 'Lost Item Policy name',
     },
   });
-  const owner = server.create('owner');
+  const owner = server.create('owner', { servicePointOwner: [{ value: 1, label: 'Test Point' }] });
   server.create('payment', {
     nameMethod: 'visa',
     ownerId: owner.id,
@@ -27,10 +27,11 @@ export default (server) => {
     defaultAmount: 10
   });
   server.create('waife', { nameReason : 'waiveReason' });
-  server.create('transfer', { accountName : 'transferAccount' });
+  server.create('transfer', { accountName : 'transferAccount', ownerId: owner.id });
   server.create('refund', { nameReason: 'Overpaid' });
   server.createList('account', 3, {
     userId: user.id,
+    ownerId: owner.id
   });
   const openAccount = server.create('account', {
     userId: user.id,

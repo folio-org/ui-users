@@ -14,7 +14,7 @@ describe('Test Fee/Fine details', () => {
   setupApplication({
     scenarios: ['fee-fine-details'],
     currentUser: {
-      curServicePoint: { id: 1 },
+      curServicePoint: { id: 1, value: 'Test Point' },
     },
   });
   describe('visit Fee/fine details', () => {
