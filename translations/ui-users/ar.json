@@ -908,5 +908,7 @@
     "accounts.numClaimAccounts": "{count, number} {count, plural, one {رسم/غرامة إدعاء إعادة معلقة} other {رسم/غرامة إدعاء غرامة معلقة}}",
     "accounts.numRefundedAccounts": "{count, number} {count, plural, one {رسم/غرامة تم استراداها} other {رسم/غرامة تم استردادها}}",
     "settings.transferCriteria": "معايير التحويل",
-    "settings.transferCriteria.notAvailable": "لا توجد برامج مساعدة!"
+    "settings.transferCriteria.notAvailable": "لا توجد برامج مساعدة!",
+    "details.label.loanAnonymized": "بدون تعريف",
+    "accounts.history.button.loanAnonymized": "تفاصيل الإعارة (بدون تعريف)"
 }

@@ -285,7 +285,6 @@
     "details.columns.transactioninfo": "Transaction information",
     "details.paneTitle.feeFineDetails": "Fee/fine details",
     "details.label.loanDetails": "Loan details",
-    "details.label.loanAnonymized": "Anonymized",
     "accounts.button.new": " New fee/fine",
     "accounts.button.error": "Error",
     "accounts.error.field": "Please fill this field in to continue",
@@ -297,7 +296,6 @@
     "accounts.history.button.refund": "Refund",
     "accounts.history.button.transfer": "Transfer",
     "accounts.history.button.loanDetails": " Loan details",
-    "accounts.history.button.loanAnonymized": "Loan details (anonymized)",
     "accounts.history.comment": "Additional information",
     "accounts.history.of": "of",
     "accounts.waive.error.amount": "Waive amount must be > 0",
@@ -910,5 +908,7 @@
     "accounts.numClaimAccounts": "{count, number} {count, plural, one {suspended claim returned fee/fine} other {suspended claim returned fees/fines}}",
     "accounts.numRefundedAccounts": "{count, number} {count, plural, one {refunded fee/fine} other {refunded fees/fines}}",
     "settings.transferCriteria": "Transfer criteria",
-    "settings.transferCriteria.notAvailable": "No plugin available!"
+    "settings.transferCriteria.notAvailable": "No plugin available!",
+    "details.label.loanAnonymized": "Anonymized",
+    "accounts.history.button.loanAnonymized": "Loan details (anonymized)"
 }
