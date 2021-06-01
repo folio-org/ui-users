@@ -10,7 +10,7 @@ import {
 
 class CheckDeleteUserModal extends React.Component {
   static propTypes = {
-    onToggle: PropTypes.func,
+    // onToggle: PropTypes.func,
     username: PropTypes.string,
     userId: PropTypes.string,
     stripes: PropTypes.shape({
@@ -34,6 +34,12 @@ class CheckDeleteUserModal extends React.Component {
 
     this.state = {
       showCheckDeleteModal: false,
+      showOpenTransactionsModal: false,
+      openLoans: 0,
+      openRequests: 0,
+      openFeesFines: 0,
+      openBlocks: 0,
+      openUnexpiredProxy: 0,
     };
   }
 
@@ -41,12 +47,8 @@ class CheckDeleteUserModal extends React.Component {
     const { userId, stripes } = this.props;
     const okapiUrl = stripes.okapi.url;
 
-    // this.setState({
-    //   showCheckDeleteModal: true,
-    // });
     // this.props.onToggle();
 
-    // console.log(this.httpHeaders);
     // check if user has open transactions
     fetch(`${okapiUrl}/bl-users/by-id/${userId}/open-transactions`, {
       method: 'GET',
@@ -54,10 +56,28 @@ class CheckDeleteUserModal extends React.Component {
     })
       .then((response) => {
         if (response.status >= 400) {
-          console.log('>= 400');
-          console.log(response);
+          // show error
         } else {
-          console.log(response);
+          // show success
+          response.json().then((json) => {
+            const hasOpenTransactions = json.hasOpenTransactions;
+            if (!hasOpenTransactions) {
+              // no open transactions
+              this.setState({
+                showCheckDeleteModal: true,
+              });
+            } else {
+              // get open transactions
+              this.setState({
+                showOpenTransactionsModal: true,
+                openLoans: json.loans,
+                openRequests: json.requests,
+                openFeesFines: json.feesFines,
+                openBlocks: json.blocks,
+                openUnexpiredProxy: json.proxies,
+              });
+            }
+          });
         }
       })
       .catch((err) => {
@@ -86,14 +106,14 @@ class CheckDeleteUserModal extends React.Component {
           }}
         >
           <Icon icon="trash">
-            <FormattedMessage id="ui-users.checkDelete" />
+            <FormattedMessage id="ui-users.details.checkDelete" />
           </Icon>
         </Button>
         <Modal
           id="delete-user-modal"
           data-test-delete-user-modal
           open={this.state.showCheckDeleteModal}
-          label={<FormattedMessage id="ui-users.checkDelete" />}
+          label={<FormattedMessage id="ui-users.details.checkDelete" />}
           footer={
             <ModalFooter>
               <Button
@@ -115,9 +135,38 @@ class CheckDeleteUserModal extends React.Component {
           }
         >
           <FormattedMessage
-            id="ui-users.checkDelete.confirmation"
+            id="ui-users.details.checkDelete.confirmation"
             values={{ name: username }}
           />
+        </Modal>
+        <Modal
+          id="open-transactions-modal"
+          data-test-open-transactions-modal
+          open={this.state.showOpenTransactionsModal}
+          label={<FormattedMessage id="ui-users.details.openTransactions" />}
+          footer={
+            <ModalFooter>
+              <Button
+                id="close-open-transactions-button"
+                onClick={() => { this.setState({ showOpenTransactionsModal: false }); }}
+              >
+                <FormattedMessage id="ui-users.okay" />
+              </Button>
+            </ModalFooter>
+          }
+        >
+          <FormattedMessage
+            id="ui-users.details.openTransactions.info"
+            values={{ name: username }}
+          />
+          <ul>
+            <li><FormattedMessage id="ui-users.details.openLoans" />: {this.state.openLoans}</li>
+            <li><FormattedMessage id="ui-users.details.openRequests" />: {this.state.openRequests}</li>
+            <li><FormattedMessage id="ui-users.details.openFeesFines" />: {this.state.openFeesFines}</li>
+            <li><FormattedMessage id="ui-users.details.openBlocks" />: {this.state.openBlocks}</li>
+            <li><FormattedMessage id="ui-users.details.openUnexpiredProxy" />: {this.state.openUnexpiredProxy}</li>
+          </ul>
+          <FormattedMessage id="ui-users.details.openTransactions.resolve" />
         </Modal>
       </>
     );
