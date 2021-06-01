@@ -375,6 +375,8 @@ class UserDetail extends React.Component {
           <CheckDeleteUserModal
             onToggle={onToggle}
             username={getFullName(user)}
+            userId={this.props.match.params.id}
+            stripes={this.props.stripes}
           />
         </>
       );

@@ -10,12 +10,27 @@ import {
 
 class CheckDeleteUserModal extends React.Component {
   static propTypes = {
-    onToggle: PropTypes.func.isRequired,
+    onToggle: PropTypes.func,
     username: PropTypes.string,
+    userId: PropTypes.string,
+    stripes: PropTypes.shape({
+      okapi: PropTypes.shape({
+        tenant: PropTypes.string.isRequired,
+        token: PropTypes.string.isRequired,
+        url: PropTypes.string,
+      }).isRequired,
+      store: PropTypes.object.isRequired,
+    }).isRequired,
   };
 
   constructor(props) {
     super(props);
+
+    this.httpHeaders = {
+      'X-Okapi-Tenant': props.stripes.okapi.tenant,
+      'X-Okapi-Token': props.stripes.store.getState().okapi.token,
+      'Content-Type': 'application/json'
+    };
 
     this.state = {
       showCheckDeleteModal: false,
@@ -23,10 +38,31 @@ class CheckDeleteUserModal extends React.Component {
   }
 
   showCheckDeleteModal = () => {
-    this.setState({
-      showCheckDeleteModal: true,
-    });
+    const { userId, stripes } = this.props;
+    const okapiUrl = stripes.okapi.url;
+
+    // this.setState({
+    //   showCheckDeleteModal: true,
+    // });
     // this.props.onToggle();
+
+    // console.log(this.httpHeaders);
+    // check if user has open transactions
+    fetch(`${okapiUrl}/bl-users/by-id/${userId}/open-transactions`, {
+      method: 'GET',
+      headers: this.httpHeaders,
+    })
+      .then((response) => {
+        if (response.status >= 400) {
+          console.log('>= 400');
+          console.log(response);
+        } else {
+          console.log(response);
+        }
+      })
+      .catch((err) => {
+        throw new Error('Error while deleting custom report. ' + err.message);
+      });
   };
 
   closeCheckDeleteModal = () => {
