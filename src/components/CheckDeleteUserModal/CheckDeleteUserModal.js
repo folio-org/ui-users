@@ -1,34 +1,62 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import {
   Button,
+  Icon,
   Modal,
   ModalFooter,
 } from '@folio/stripes/components';
 
 class CheckDeleteUserModal extends React.Component {
   static propTypes = {
-    onCloseModal: PropTypes.func.isRequired,
-    open: PropTypes.bool,
+    onToggle: PropTypes.func.isRequired,
     username: PropTypes.string,
   };
 
-  render() {
-    const { onCloseModal, open, username } = this.props;
-    // const [showConfirmDelete, setShowConfirmDelete] = useState(false);
-    // const [showCloseModal, setShowCloseModal] = useState(false);
+  constructor(props) {
+    super(props);
 
-    // const handleCloseModal = () => {
-    //   setShowCloseModal(false);
-    // };
+    this.state = {
+      showCheckDeleteModal: false,
+    };
+  }
+
+  showCheckDeleteModal = () => {
+    this.setState({
+      showCheckDeleteModal: true,
+    });
+    // this.props.onToggle();
+  };
+
+  closeCheckDeleteModal = () => {
+    this.setState({
+      showCheckDeleteModal: false,
+    });
+  };
+
+  render() {
+    const { username } = this.props;
 
     return (
       <>
+        <Button
+          buttonStyle="dropdownItem"
+          data-test-actions-menu-check-delete
+          id="clickable-checkdeleteuser"
+          onClick={() => {
+            this.showCheckDeleteModal();
+            // this.props.onToggle();
+          }}
+        >
+          <Icon icon="trash">
+            <FormattedMessage id="ui-users.checkDelete" />
+          </Icon>
+        </Button>
         <Modal
           id="delete-user-modal"
           data-test-delete-user-modal
-          open={open}
+          open={this.state.showCheckDeleteModal}
           label={<FormattedMessage id="ui-users.checkDelete" />}
           footer={
             <ModalFooter>
@@ -42,8 +70,7 @@ class CheckDeleteUserModal extends React.Component {
               <Button
                 id="close-delete-user-button"
                 onClick={() => {
-                  // setShowCloseModal(false);
-                  onCloseModal();
+                  this.closeCheckDeleteModal();
                 }}
               >
                 <FormattedMessage id="ui-users.no" />
