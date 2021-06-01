@@ -76,6 +76,10 @@ class UserDetail extends React.Component {
       logger: PropTypes.shape({
         log: PropTypes.func.isRequired,
       }).isRequired,
+      okapi: PropTypes.shape({
+        url: PropTypes.string.isRequired,
+        tenant: PropTypes.string.isRequired,
+      }).isRequired,
     }).isRequired,
     resources: PropTypes.shape({
       selUser: PropTypes.object,

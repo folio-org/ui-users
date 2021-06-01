@@ -16,7 +16,7 @@ class CheckDeleteUserModal extends React.Component {
     stripes: PropTypes.shape({
       okapi: PropTypes.shape({
         tenant: PropTypes.string.isRequired,
-        token: PropTypes.string.isRequired,
+        // token: PropTypes.string.isRequired,
         url: PropTypes.string,
       }).isRequired,
       store: PropTypes.object.isRequired,
