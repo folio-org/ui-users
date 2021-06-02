@@ -58,9 +58,7 @@ class CheckDeleteUserModal extends React.Component {
       headers: this.httpHeaders,
     })
       .then((response) => {
-        if (response.status >= 400) {
-          // show error
-        } else {
+        if (response.status < 400) {
           // show success
           response.json().then((json) => {
             const hasOpenTransactions = json.hasOpenTransactions;
@@ -82,9 +80,6 @@ class CheckDeleteUserModal extends React.Component {
             }
           });
         }
-      })
-      .catch((err) => {
-        throw new Error('Error while deleting custom report. ' + err.message);
       });
   };
 
