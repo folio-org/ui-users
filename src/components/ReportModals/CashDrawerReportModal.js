@@ -26,7 +26,7 @@ import {
 
 import { DATE_FORMAT } from '../../constants';
 
-const validate = (options) => {
+export const validate = (options) => {
   const errors = {};
   const { startDate, endDate, servicePoint } = options;
 
@@ -38,16 +38,12 @@ const validate = (options) => {
     errors.startDate = <FormattedMessage id="ui-users.reports.cash.drawer.report.endDateWithoutStart.error" />;
   }
 
-  if ((!isEmpty(startDate) && !isEmpty(endDate)) && (moment(startDate).isAfter(moment(endDate)) || moment(endDate).isAfter(moment()))) {
+  if ((!isEmpty(startDate) && !isEmpty(endDate)) && (moment(startDate).isAfter(moment(endDate)))) {
     errors.endDate = <FormattedMessage id="ui-users.reports.cash.drawer.report.endDate.error" />;
   }
 
   if (!servicePoint) {
     errors.servicePoint = <FormattedMessage id="ui-users.reports.cash.drawer.report.servicePoint.error" />;
-  }
-
-  if (!options.format) {
-    options.format = 'both';
   }
 
   return errors;

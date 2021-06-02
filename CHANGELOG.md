@@ -40,6 +40,7 @@
 * Add possible for enter correct values for Fee/Fine amount. Refs UIU-2156.
 * Added `NotePopupModal` to User Details page. Refs UIU-2008.
 * Fix selecting current fee fine type. Refs UIU-2157.
+* Fix validation error with END DATE for `Cash drawer reconciliation report` modal. Refs UIU-2175.
 
 ## [6.0.0](https://github.com/folio-org/ui-users/tree/v6.0.0) (2021-03-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.9...v6.0.0)
