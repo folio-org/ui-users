@@ -381,6 +381,8 @@ class UserDetail extends React.Component {
             username={getFullName(user)}
             userId={this.props.match.params.id}
             stripes={this.props.stripes}
+            location={this.props.location}
+            history={this.props.history}
           />
         </>
       );

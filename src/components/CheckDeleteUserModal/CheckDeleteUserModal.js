@@ -13,10 +13,13 @@ class CheckDeleteUserModal extends React.Component {
     // onToggle: PropTypes.func,
     username: PropTypes.string,
     userId: PropTypes.string,
+    history: PropTypes.shape({
+      push: PropTypes.func.isRequired,
+    }).isRequired,
+    location: PropTypes.object,
     stripes: PropTypes.shape({
       okapi: PropTypes.shape({
         tenant: PropTypes.string.isRequired,
-        // token: PropTypes.string.isRequired,
         url: PropTypes.string,
       }).isRequired,
       store: PropTypes.object.isRequired,
@@ -91,6 +94,19 @@ class CheckDeleteUserModal extends React.Component {
     });
   };
 
+  deleteUser = () => {
+    const { userId, history, location, stripes } = this.props;
+    const okapiUrl = stripes.okapi.url;
+
+    fetch(`${okapiUrl}/bl-users/by-id/${userId}`, {
+      method: 'DELETE',
+      headers: this.httpHeaders,
+    })
+      .then(() => {
+        history.push(`/users${location.search}`);
+      });
+  };
+
   render() {
     const { username } = this.props;
 
@@ -119,7 +135,7 @@ class CheckDeleteUserModal extends React.Component {
               <Button
                 buttonStyle="danger"
                 id="delete-user-button"
-                // onClick={}
+                onClick={() => { this.deleteUser(); }}
               >
                 <FormattedMessage id="ui-users.yes" />
               </Button>
