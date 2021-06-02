@@ -83,6 +83,7 @@ class UserDetail extends React.Component {
     }).isRequired,
     resources: PropTypes.shape({
       selUser: PropTypes.object,
+      delUser: PropTypes.object,
       user: PropTypes.arrayOf(PropTypes.object),
       accounts: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
@@ -129,6 +130,7 @@ class UserDetail extends React.Component {
     tagsEnabled: PropTypes.bool,
     paneWidth: PropTypes.string,
     intl: PropTypes.object.isRequired,
+    mutator: PropTypes.object,
   };
 
   static defaultProps = {
@@ -185,6 +187,13 @@ class UserDetail extends React.Component {
     // console.log(`getUser: found ${selUser.length} users, id '${selUser[0].id}' ${selUser[0].id === id ? '==' : '!='} '${id}'`);
     return selUser.find(u => u.id === id);
   }
+
+  handleDeleteUser = (id) => {
+    const { history, location, mutator } = this.props;
+    mutator.delUser.DELETE({ id }).then(() => {
+      history.push(`/users${location.search}`);
+    });
+  };
 
   checkScope = () => {
     return document.getElementById('ModuleContainer').contains(document.activeElement);
@@ -383,6 +392,7 @@ class UserDetail extends React.Component {
             stripes={this.props.stripes}
             location={this.props.location}
             history={this.props.history}
+            deleteUser={this.handleDeleteUser}
           />
         </>
       );

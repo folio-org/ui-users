@@ -27,6 +27,11 @@ class UserRecordContainer extends React.Component {
       },
       throwErrors: false,
     },
+    delUser: {
+      type: 'okapi',
+      path: 'bl-users/by-id/:{id}',
+      shouldRefresh: () => false,
+    },
     hasManualPatronBlocks: {
       type: 'okapi',
       records: 'manualblocks',
@@ -212,6 +217,9 @@ class UserRecordContainer extends React.Component {
       }).isRequired,
     }),
     mutator: PropTypes.shape({
+      delUser: PropTypes.shape({
+        DELETE: PropTypes.func.isRequired,
+      }).isRequired,
       selUser: PropTypes.shape({
         PUT: PropTypes.func.isRequired,
       }),
