@@ -355,7 +355,8 @@ class UserDetail extends React.Component {
     const showActionMenu = this.props.stripes.hasPerm('ui-users.edit')
       || this.props.stripes.hasPerm('ui-users.patron_blocks')
       || this.props.stripes.hasPerm('ui-users.feesfines.actions.all')
-      || this.props.stripes.hasPerm('ui-requests.all');
+      || this.props.stripes.hasPerm('ui-requests.all')
+      || this.props.stripes.hasPerm('ui-users.delete,ui-users.opentransactions');
 
     if (showActionMenu) {
       return (
@@ -390,15 +391,16 @@ class UserDetail extends React.Component {
               callout={this.callout}
             />
           </IfInterface>
-          <CheckDeleteUserModal
-            onToggle={onToggle}
-            username={getFullName(user)}
-            userId={this.props.match.params.id}
-            stripes={this.props.stripes}
-            location={this.props.location}
-            history={this.props.history}
-            deleteUser={this.handleDeleteUser}
-          />
+          <IfPermission perm="ui-users.delete,ui-users.opentransactions">
+            <CheckDeleteUserModal
+              onToggle={onToggle}
+              username={getFullName(user)}
+              userId={this.props.match.params.id}
+              stripes={this.props.stripes}
+              history={this.props.history}
+              deleteUser={this.handleDeleteUser}
+            />
+          </IfPermission>
         </>
       );
     } else {
