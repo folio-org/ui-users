@@ -908,5 +908,7 @@
     "accounts.numClaimAccounts": "{count, number} {count, plural, one {suspended claim returned fee/fine} other {suspended claim returned fees/fines}}",
     "accounts.numRefundedAccounts": "{count, number} {count, plural, one {refunded fee/fine} other {refunded fees/fines}}",
     "settings.transferCriteria": "Transfer criteria",
-    "settings.transferCriteria.notAvailable": "No plugin available!"
+    "settings.transferCriteria.notAvailable": "No plugin available!",
+    "details.label.loanAnonymized": "Anonymized",
+    "accounts.history.button.loanAnonymized": "Loan details (anonymized)"
 }

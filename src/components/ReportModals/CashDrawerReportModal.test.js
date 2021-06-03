@@ -6,9 +6,10 @@ import {
   screen,
 } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
+import { forEach } from 'lodash';
 
 import '../../../test/jest/__mock__';
-import CashDrawerReportModal from './CashDrawerReportModal';
+import CashDrawerReportModal, { validate } from './CashDrawerReportModal';
 
 const modalHeader = 'Cash drawer reconciliation modal';
 const renderCashDrawerReportModal = ({
@@ -165,6 +166,83 @@ describe('Cash drawer reconciliation modal', () => {
 
       expect(container).toBeVisible();
       expect(form).toBeVisible();
+    });
+  });
+
+  describe('Validation', () => {
+    const customRender = (options) => {
+      let validationError = '';
+
+      forEach(validate(options), (error) => {
+        validationError = error;
+      });
+
+      return render(
+        <div data-testid="validation-error">
+          {
+            validationError
+          }
+        </div>,
+      );
+    };
+
+    it('should return validation error for start date', () => {
+      const options = {
+        startDate: '',
+        endDate: '',
+        servicePoint: [],
+      };
+
+      customRender(options);
+
+      expect(screen.getByTestId('validation-error').textContent).toBe('ui-users.reports.cash.drawer.report.startDate.error');
+    });
+
+    it('should return validation error for end date without start date', () => {
+      const options = {
+        startDate: '',
+        endDate: '2021-06-15',
+        servicePoint: [],
+      };
+
+      customRender(options);
+
+      expect(screen.getByTestId('validation-error').textContent).toBe('ui-users.reports.cash.drawer.report.endDateWithoutStart.error');
+    });
+
+    it('should return validation error for end date', () => {
+      const options = {
+        startDate: '2021-06-30',
+        endDate: '2021-06-15',
+        servicePoint: [],
+      };
+
+      customRender(options);
+
+      expect(screen.getByTestId('validation-error').textContent).toBe('ui-users.reports.cash.drawer.report.endDate.error');
+    });
+
+    it('should return validation error for service point', () => {
+      const options = {
+        startDate: '2021-06-15',
+        endDate: '2021-06-30',
+      };
+
+      customRender(options);
+
+      expect(screen.getByTestId('validation-error').textContent).toBe('ui-users.reports.cash.drawer.report.servicePoint.error');
+    });
+
+    it('should not return validation error', () => {
+      const options = {
+        startDate: '2021-06-15',
+        endDate: '2021-06-30',
+        servicePoint: [],
+      };
+
+      customRender(options);
+
+      expect(screen.getByTestId('validation-error').textContent).toBe('');
     });
   });
 });
