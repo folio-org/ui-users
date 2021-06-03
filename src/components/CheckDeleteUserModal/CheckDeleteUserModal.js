@@ -16,7 +16,6 @@ class CheckDeleteUserModal extends React.Component {
     history: PropTypes.shape({
       push: PropTypes.func.isRequired,
     }).isRequired,
-    // location: PropTypes.object,
     deleteUser: PropTypes.func,
     stripes: PropTypes.shape({
       okapi: PropTypes.shape({
@@ -89,19 +88,6 @@ class CheckDeleteUserModal extends React.Component {
       showCheckDeleteModal: false,
     });
   };
-
-  // deleteUser = () => {
-  //   const { userId, history, location, stripes } = this.props;
-  //   const okapiUrl = stripes.okapi.url;
-
-  //   fetch(`${okapiUrl}/bl-users/by-id/${userId}`, {
-  //     method: 'DELETE',
-  //     headers: this.httpHeaders,
-  //   })
-  //     .then(() => {
-  //       history.push(`/users${location.search}`);
-  //     });
-  // };
 
   deleteUser() {
     this.props.deleteUser(this.props.userId);

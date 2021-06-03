@@ -136,7 +136,6 @@ class UserSearchContainer extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }).isRequired,
-    usersReloadCount: PropTypes.number.isRequired,
     mutator: PropTypes.shape({
       usersReloadToggle: PropTypes.shape({
         replace: PropTypes.func.isRequired,
@@ -234,7 +233,7 @@ class UserSearchContainer extends React.Component {
   }
 
   render() {
-    const usersReloadCount = get(this.propsresources, 'usersReloadToggle', 0);
+    const usersReloadCount = get(this.props.resources, 'usersReloadToggle', 0);
 
     if (this.source) {
       this.source.update(this.props);
