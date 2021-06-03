@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import {
   Button,
   Icon,
@@ -13,9 +13,6 @@ class CheckDeleteUserModal extends React.Component {
     // onToggle: PropTypes.func,
     username: PropTypes.string,
     userId: PropTypes.string,
-    history: PropTypes.shape({
-      push: PropTypes.func.isRequired,
-    }).isRequired,
     deleteUser: PropTypes.func,
     stripes: PropTypes.shape({
       okapi: PropTypes.shape({
@@ -175,4 +172,4 @@ class CheckDeleteUserModal extends React.Component {
   }
 }
 
-export default injectIntl(CheckDeleteUserModal);
+export default CheckDeleteUserModal;
