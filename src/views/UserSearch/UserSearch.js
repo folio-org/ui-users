@@ -106,7 +106,11 @@ class UserSearch extends React.Component {
       cashDrawerReportSources: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }).isRequired,
+      usersReloadToggle: PropTypes.shape({
+        replace: PropTypes.func.isRequired,
+      }).isRequired,
     }).isRequired,
+    usersReloadCount: PropTypes.number.isRequired,
     okapi: PropTypes.shape({
       currentUser: PropTypes.shape({
         servicePoints: PropTypes.arrayOf(PropTypes.object),
@@ -165,11 +169,22 @@ class UserSearch extends React.Component {
       !this.props.resources.records.isPending) {
       this.onSearchComplete(this.props.resources.records);
     }
+
+    const prevDeletedUserId = get(prevProps, 'location.state.deletedUserId', '');
+    const currentDeletedUserId = get(this.props, 'location.state.deletedUserId', '');
+    if (prevDeletedUserId !== currentDeletedUserId) {
+      this.reloadUsers();
+    }
   }
 
   componentWillUnmount() {
     this._mounted = false;
   }
+
+  reloadUsers = () => {
+    const oldCount = this.props.usersReloadCount;
+    this.props.mutator.usersReloadToggle.replace(oldCount + 1);
+  };
 
   changeRefundReportModalState = (modalState) => {
     this.setState({ showRefundsReportModal: modalState });

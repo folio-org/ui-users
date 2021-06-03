@@ -11,6 +11,7 @@ import { injectIntl, FormattedMessage } from 'react-intl';
 
 import {
   AppIcon,
+  CalloutContext,
   IfPermission,
   IfInterface,
   TitleManager,
@@ -137,6 +138,8 @@ class UserDetail extends React.Component {
     paneWidth: '44%'
   };
 
+  static contextType = CalloutContext;
+
   constructor(props) {
     super(props);
 
@@ -190,9 +193,20 @@ class UserDetail extends React.Component {
 
   handleDeleteUser = (id) => {
     const { history, location, mutator } = this.props;
-    mutator.delUser.DELETE({ id }).then(() => {
-      history.push(`/users${location.search}`);
-    });
+    mutator.delUser.DELETE({ id })
+      // .then(() => {
+      //   history.push(`/users${location.search}`);
+      // });
+      .then(() => history.replace(
+        {
+          pathname: '/users',
+          search: `${location.search}`,
+          state: { deletedUserId: id }
+        }
+      ))
+      .then(() => {
+        this.context.sendCallout({ message: <FormattedMessage id="ui-users.delete.success" /> });
+      });
   };
 
   checkScope = () => {

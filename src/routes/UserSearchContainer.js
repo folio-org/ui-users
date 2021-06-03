@@ -35,7 +35,7 @@ class UserSearchContainer extends React.Component {
       records: 'users',
       resultOffset: '%{resultOffset}',
       perRequest: 100,
-      path: 'users',
+      path: 'users?unused=%{usersReloadToggle}',
       GET: {
         params: {
           query: makeQueryFunction(
@@ -119,6 +119,11 @@ class UserSearchContainer extends React.Component {
       clientGeneratePk: false,
       fetch: false,
     },
+    usersReloadToggle: {
+      // We mutate this when we delete a user, to force a stripes-connect reload.
+      // Thanks to Mike Taylor.
+      initialValue: 0,
+    },
   });
 
   static propTypes = {
@@ -131,7 +136,11 @@ class UserSearchContainer extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }).isRequired,
+    usersReloadCount: PropTypes.number.isRequired,
     mutator: PropTypes.shape({
+      usersReloadToggle: PropTypes.shape({
+        replace: PropTypes.func.isRequired,
+      }).isRequired,
       initializedFilterConfig: PropTypes.shape({
         replace: PropTypes.func.isRequired,
       }),
@@ -225,6 +234,8 @@ class UserSearchContainer extends React.Component {
   }
 
   render() {
+    const usersReloadCount = get(this.propsresources, 'usersReloadToggle', 0);
+
     if (this.source) {
       this.source.update(this.props);
     }
@@ -236,6 +247,7 @@ class UserSearchContainer extends React.Component {
         onNeedMoreData={this.onNeedMoreData}
         queryGetter={this.queryGetter}
         querySetter={this.querySetter}
+        usersReloadCount={usersReloadCount}
         {...this.props}
       >
         { this.props.children }
