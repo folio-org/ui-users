@@ -61,7 +61,9 @@ import {
   getFullName,
 } from '../../components/util';
 import RequestFeeFineBlockButtons from '../../components/RequestFeeFineBlockButtons';
-import CheckDeleteUserModal from '../../components/CheckDeleteUserModal';
+// import CheckDeleteUserModal from '../../components/CheckDeleteUserModal';
+import OpenTransactionModal from '../../components/CheckDeleteUserModal/OpenTransactionModal';
+import DeleteUserModal from '../../components/CheckDeleteUserModal/DeleteUserModal';
 import { departmentsShape } from '../../shapes';
 
 import ExportFeesFinesReportButton from './components';
@@ -80,6 +82,7 @@ class UserDetail extends React.Component {
         url: PropTypes.string.isRequired,
         tenant: PropTypes.string.isRequired,
       }).isRequired,
+      store: PropTypes.object.isRequired,
     }).isRequired,
     resources: PropTypes.shape({
       selUser: PropTypes.object,
@@ -140,6 +143,12 @@ class UserDetail extends React.Component {
   constructor(props) {
     super(props);
 
+    this.httpHeaders = {
+      'X-Okapi-Tenant': props.stripes.okapi.tenant,
+      'X-Okapi-Token': props.stripes.store.getState().okapi.token,
+      'Content-Type': 'application/json'
+    };
+
     this.editButton = React.createRef();
 
     this.keyboardCommands = [
@@ -159,6 +168,8 @@ class UserDetail extends React.Component {
 
     this.state = {
       lastUpdate: null,
+      showOpenTransactionModal: false,
+      showDeleteUserModal: false,
       sections: {
         userInformationSection: true,
         extendedInfoSection: false,
@@ -328,6 +339,54 @@ class UserDetail extends React.Component {
     );
   }
 
+  showOpenTransactionsModal(json) {
+    this.setState({
+      showOpenTransactionModal: true,
+      openTransactions: json,
+    });
+  }
+
+  showDeleteUserModal(json) {
+    this.setState({
+      showDeleteUserModal: true,
+      openTransactions: json,
+    });
+  }
+
+  doClose = () => {
+    this.setState({
+      showDeleteUserModal: false,
+      showOpenTransactionModal: false,
+    });
+  }
+
+  selectModal(transactions) {
+    if (!transactions.hasOpenTransactions) {
+      this.showDeleteUserModal();
+    } else {
+      this.showOpenTransactionsModal(transactions);
+    }
+  }
+
+  doFetch() {
+    const { stripes } = this.props;
+    const okapiUrl = stripes.okapi.url;
+    const userId = this.props.match.params.id;
+
+    fetch(`${okapiUrl}/bl-users/by-id/${userId}/open-transactions`, {
+      method: 'GET',
+      headers: this.httpHeaders,
+    })
+      .then((response) => {
+        if (response.status < 400) {
+          // show success
+          response.json().then((json) => {
+            this.selectModal(json);
+          });
+        }
+      });
+  }
+
   getActionMenu = barcode => ({ onToggle }) => {
     const {
       okapi: {
@@ -392,14 +451,27 @@ class UserDetail extends React.Component {
             />
           </IfInterface>
           <IfPermission perm="ui-users.delete,ui-users.opentransactions">
-            <CheckDeleteUserModal
+            {/* <CheckDeleteUserModal
               onToggle={onToggle}
               username={getFullName(user)}
               userId={this.props.match.params.id}
               stripes={this.props.stripes}
               history={this.props.history}
               deleteUser={this.handleDeleteUser}
-            />
+            /> */}
+            <Button
+              buttonStyle="dropdownItem"
+              data-test-actions-menu-check-delete
+              id="clickable-checkdeleteuser"
+              onClick={() => {
+                this.doFetch();
+                onToggle();
+              }}
+            >
+              <Icon icon="trash">
+                <FormattedMessage id="ui-users.details.checkDelete" />
+              </Icon>
+            </Button>
           </IfPermission>
         </>
       );
@@ -461,6 +533,8 @@ class UserDetail extends React.Component {
     } = this.state;
 
     const user = this.getUser();
+    const username = getFullName(user);
+    const userId = this.props.match.params.id;
 
     const addressTypes = (resources.addressTypes || {}).records || [];
     const addresses = getFormAddressList(get(user, 'personal.addresses', []));
@@ -725,6 +799,21 @@ class UserDetail extends React.Component {
               popUpPropertyName="popUpOnUser"
               entityId={user?.id}
             />
+            {this.state.showDeleteUserModal &&
+            <DeleteUserModal
+              onCloseModal={this.doClose}
+              username={username}
+              userId={userId}
+              deleteUser={this.handleDeleteUser}
+            />
+            }
+            {this.state.showOpenTransactionModal &&
+            <OpenTransactionModal
+              onCloseModal={this.doClose}
+              openTransactions={this.state.openTransactions}
+              username={username}
+            />
+            }
           </>
         </HasCommand>
       );

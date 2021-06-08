@@ -100,8 +100,8 @@ class CheckDeleteUserModal extends React.Component {
           data-test-actions-menu-check-delete
           id="clickable-checkdeleteuser"
           onClick={() => {
-            this.showCheckDeleteModal();
             // this.props.onToggle();
+            this.showCheckDeleteModal();
           }}
         >
           <Icon icon="trash">
