@@ -123,7 +123,6 @@ const CashDrawerReportModal = (props) => {
             <Field
               label={<FormattedMessage id="ui-users.reports.refunds.modal.endDate" />}
               name="endDate"
-              required
               component={Datepicker}
               parse={parseDate}
             />
