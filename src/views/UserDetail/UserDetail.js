@@ -61,11 +61,10 @@ import {
   getFullName,
 } from '../../components/util';
 import RequestFeeFineBlockButtons from '../../components/RequestFeeFineBlockButtons';
-// import CheckDeleteUserModal from '../../components/CheckDeleteUserModal';
-import OpenTransactionModal from '../../components/CheckDeleteUserModal/OpenTransactionModal';
-import DeleteUserModal from '../../components/CheckDeleteUserModal/DeleteUserModal';
 import { departmentsShape } from '../../shapes';
 
+import OpenTransactionModal from './components/OpenTransactionModal';
+import DeleteUserModal from './components/DeleteUserModal';
 import ExportFeesFinesReportButton from './components';
 import ErrorPane from '../../components/ErrorPane';
 
