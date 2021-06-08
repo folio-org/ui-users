@@ -99,18 +99,20 @@ class CashDrawerReconciliationReportCSV extends CashDrawerReconciliationReport {
     this.reportData = this.buildReport();
     const origin = window.location.origin;
 
-    const partOfReport = this.reportData.map(row => {
-      if (row.feeFineId) {
-        return {
-          ...row,
-          feeFineDetails: `=HYPERLINK("${origin}/users/${row.patronId}/accounts/view/${row.feeFineId}", "${row.feeFineId}")`,
-        };
-      } else {
-        return row;
-      }
-    });
+    if (this.reportData) {
+      const partOfReport = this.reportData.map(row => {
+        if (row.feeFineId) {
+          return {
+            ...row,
+            feeFineDetails: `=HYPERLINK("${origin}/users/${row.patronId}/accounts/view/${row.feeFineId}", "${row.feeFineId}")`,
+          };
+        } else {
+          return row;
+        }
+      });
 
-    partOfReport.forEach((row) => report.push({ ...row }));
+      partOfReport.forEach((row) => report.push({ ...row }));
+    }
 
     return report;
   }
