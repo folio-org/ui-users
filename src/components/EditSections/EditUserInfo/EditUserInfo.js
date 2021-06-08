@@ -34,6 +34,7 @@ class EditUserInfo extends React.Component {
     onToggle: PropTypes.func,
     patronGroups: PropTypes.arrayOf(PropTypes.object),
     stripes: PropTypes.shape({
+      timezone: PropTypes.string.isRequired,
       store: PropTypes.shape({
         dispatch: PropTypes.func.isRequired,
         getState: PropTypes.func,
@@ -89,6 +90,18 @@ class EditUserInfo extends React.Component {
   getPatronGroupOffset = () => {
     const selectedPatronGroup = this.props.patronGroups.find(i => i.id === this.state.selectedPatronGroup);
     return _.get(selectedPatronGroup, 'expirationOffsetInDays', '');
+  };
+
+  parseExpirationDate = (expirationDate) => {
+    const {
+      stripes: {
+        timezone,
+      },
+    } = this.props;
+
+    return expirationDate
+      ? moment.tz(expirationDate, timezone).endOf('day').format()
+      : expirationDate;
   };
 
   render() {
@@ -282,6 +295,7 @@ class EditUserInfo extends React.Component {
                 defaultValue={initialValues.expirationDate}
                 name="expirationDate"
                 id="adduser_expirationdate"
+                parse={this.parseExpirationDate}
               />
               {checkShowRecalculateButton() && (
                 <Button
