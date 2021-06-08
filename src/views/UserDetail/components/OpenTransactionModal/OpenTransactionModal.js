@@ -10,6 +10,18 @@ import {
 function OpenTransactionModal(props) {
   const { openTransactions, onCloseModal, username } = props;
 
+  const renderFooter = (
+    <ModalFooter>
+      <Button
+        data-test-open-transactions-button-ok
+        id="close-open-transactions-button"
+        onClick={onCloseModal}
+      >
+        <FormattedMessage id="ui-users.okay" />
+      </Button>
+    </ModalFooter>
+  );
+
   return (
     <>
       <Modal
@@ -17,16 +29,7 @@ function OpenTransactionModal(props) {
         data-test-open-transactions-modal
         open
         label={<FormattedMessage id="ui-users.details.openTransactions" />}
-        footer={
-          <ModalFooter>
-            <Button
-              id="close-open-transactions-button"
-              onClick={onCloseModal}
-            >
-              <FormattedMessage id="ui-users.okay" />
-            </Button>
-          </ModalFooter>
-        }
+        footer={renderFooter}
       >
         <FormattedMessage
           id="ui-users.details.openTransactions.info"
