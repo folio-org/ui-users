@@ -316,11 +316,6 @@ class ActionModal extends React.Component {
       action,
       balance,
       initialValues,
-      okapi: {
-        currentUser: {
-          curServicePoint,
-        }
-      },
       totalPaidAmount,
       owedAmount,
       commentRequired,
@@ -345,16 +340,12 @@ class ActionModal extends React.Component {
     } = getState();
 
     const selected = calculateSelectedAmount(accounts, this.isRefundAction(action), feeFineActions);
-    const ownersServicePoint = [];
-    owners.forEach((item) => {
-      if (item.servicePointOwner.filter(s => s.value === curServicePoint.id).length > 0) {
-        ownersServicePoint.push(item);
-      }
-    });
-    const ownerOptions = ownersServicePoint.filter(o => o.owner !== 'Shared').map(o => ({ value: o.id, label: o.owner }));
+    const ownerOptions = owners.filter(o => o.owner !== 'Shared').map(o => ({ value: o.id, label: o.owner }));
 
     let options = (this.isPaymentAction(action)) ? data.filter(d => (d.ownerId === (accounts.length > 1 ? ownerId : (accounts[0] || {}).ownerId))) : data;
-    options = (this.isTransferAction(action)) ? data.filter(d => (d.ownerId === (ownersServicePoint[0] || {}).id)) : options;
+    options = (this.isTransferAction(action))
+      ? data.filter(d => (d.ownerId === ownerId))
+      : options;
     options = _.uniqBy(options.map(o => ({ id: o.id, label: o[label] })), 'label');
 
     const showNotify = initialValues.notify;
