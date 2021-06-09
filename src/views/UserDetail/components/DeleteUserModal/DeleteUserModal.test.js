@@ -1,6 +1,6 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { StripesContext } from '@folio/stripes-core/src/StripesContext';
 
@@ -48,7 +48,7 @@ const renderDeleteUserModal = () => {
 
 describe('render DeleteUserModal', () => {
   beforeEach(() => {
-    renderDeleteUserModal();
+    renderDeleteUserModal({ deleteUser, onCloseModal });
   });
   test('DeleteUserModal should be present', async () => {
     expect(document.querySelector('#delete-user-modal')).toBeInTheDocument();
@@ -64,19 +64,12 @@ describe('render DeleteUserModal', () => {
     expect(screen.getByRole('button', { name: 'ui-users.no' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'ui-users.yes' })).toBeInTheDocument();
   });
-});
-
-describe('click buttons', () => {
-  beforeEach(() => {
-    renderDeleteUserModal({ deleteUser, onCloseModal });
-  });
-
-  it('should call deleteUser', () => {
+  test('clicking yes button should call deleteUser', () => {
     userEvent.click(screen.getByRole('button', { name: 'ui-users.yes' }));
     expect(deleteUser).toHaveBeenCalled();
   });
-  test('should call onCloseModal', async () => {
+  test('clicking no button should call onCloseModal', () => {
     userEvent.click(screen.getByRole('button', { name: 'ui-users.no' }));
-    await waitFor(() => expect(onCloseModal).toHaveBeenCalled());
+    expect(onCloseModal).toHaveBeenCalled();
   });
 });

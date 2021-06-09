@@ -1,15 +1,30 @@
 import React from 'react';
+import { MemoryRouter } from 'react-router-dom';
 import { act, render, screen } from '@testing-library/react';
-// import { MemoryRouter } from 'react-router-dom';
-import '../../../../../test/jest/__mock__';
 import userEvent from '@testing-library/user-event';
-import { useStripes } from '@folio/stripes/core';
 import { StripesContext } from '@folio/stripes-core/src/StripesContext';
-// import { server, rest } from '../../../../../test/jest/testServer';
+
+import '../../../../../test/jest/__mock__';
 import OpenTransactionModal from './OpenTransactionModal';
 
+const fakeStripes = {
+  okapi: {
+    url: '',
+    tenant: 'diku',
+  },
+  store: {
+    getState: () => ({
+      okapi: {
+        token: 'abc',
+      },
+    }),
+    dispatch: () => {},
+    subscribe: () => {},
+    replaceReducer: () => {},
+  },
+};
+
 const username = 'rick, psych';
-// const userId = '74d6a937-c17d-4045-b294-ab7458988a33';
 
 const openTransactions = {
   'userId' : 'a94a8a9b-3aa6-4999-be67-c065ef874602',
@@ -23,52 +38,37 @@ const openTransactions = {
 
 const onCloseModal = jest.fn();
 
-const renderOpenTransactionModal = (stripes) => {
+const renderOpenTransactionModal = () => {
   return act(() => {
     render(
-      <StripesContext.Provider value={stripes}>
-        <OpenTransactionModal
-          username={username}
-          openTransactions={openTransactions}
-          onCloseModal={onCloseModal}
-          open
-        />
+      <StripesContext.Provider value={fakeStripes}>
+        <MemoryRouter>
+          <OpenTransactionModal
+            username={username}
+            openTransactions={openTransactions}
+            onCloseModal={onCloseModal}
+            open
+          />
+        </MemoryRouter>
       </StripesContext.Provider>
     );
   });
 };
 
 describe('render OpenTransactionModal', () => {
-  describe('render OpenTransactionModal', () => {
-    beforeEach(() => {
-      renderOpenTransactionModal();
-    });
-    test('DeleteUserModal should be not present', async () => {
-      expect(document.querySelector('#delete-user-modal')).not.toBeInTheDocument();
-    });
-    test('OpenTransactionsModal should be present', async () => {
-      expect(document.querySelector('#open-transactions-modal')).toBeInTheDocument();
-    });
-    test('Button should be present', () => {
-      expect(screen.getByRole('button', { name: 'ui-users.okay' })).toBeInTheDocument();
-    });
-    // it('should display name', () => {
-    //   expect(screen.getByLabelText('Are you sure you want to delete this user rick, psych?')).toBeInTheDocument();
-    // });
-  });
-});
-
-describe('click button', () => {
-  let stripes;
   beforeEach(() => {
-    beforeEach(() => {
-      stripes = useStripes();
-    });
+    renderOpenTransactionModal();
   });
-
-  test('should call closeModal', async () => {
-    renderOpenTransactionModal(stripes);
-
+  test('DeleteUserModal should be not present', async () => {
+    expect(document.querySelector('#delete-user-modal')).not.toBeInTheDocument();
+  });
+  test('OpenTransactionsModal should be present', async () => {
+    expect(document.querySelector('#open-transactions-modal')).toBeInTheDocument();
+  });
+  test('Button should be present', () => {
+    expect(screen.getByRole('button', { name: 'ui-users.okay' })).toBeInTheDocument();
+  });
+  test('clicking ok button should call closeModal', async () => {
     const heading = screen.queryByRole('heading', { name: 'ui-users.details.openTransactions' });
     expect(heading).toBeVisible();
 
@@ -76,7 +76,5 @@ describe('click button', () => {
     userEvent.click(cancel);
 
     expect(onCloseModal).toHaveBeenCalled();
-    // TODO: expected result:
-    // await waitFor(() => expect(heading).not.toBeVisible());
   });
 });
