@@ -287,6 +287,20 @@ class UserSearch extends React.Component {
               </Icon>
             </Button>
           </IfPermission>
+          <IfPermission perm="ui-users.loans.view">
+            <Button
+              buttonStyle="dropdownItem"
+              id="export-claimed-returned-loan-report"
+              onClick={() => {
+                onToggle();
+                this.generateReport(this.props, 'claimedReturned');
+              }}
+            >
+              <Icon icon="download">
+                <FormattedMessage id="ui-users.reports.claimReturned.label" />
+              </Icon>
+            </Button>
+          </IfPermission>
           <IfPermission perm="ui-users.manualProcessRefundsReport">
             <Button
               buttonStyle="dropdownItem"
