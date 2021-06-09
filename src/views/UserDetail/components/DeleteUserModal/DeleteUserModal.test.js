@@ -1,24 +1,47 @@
 import React from 'react';
-import { act, render, screen } from '@testing-library/react'; // screen, waitFor
-// import userEvent from '@testing-library/user-event';
+import { MemoryRouter } from 'react-router-dom';
+import { act, render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { StripesContext } from '@folio/stripes-core/src/StripesContext';
 
 import '../../../../../test/jest/__mock__';
 import DeleteUserModal from './DeleteUserModal';
 
 const deleteUser = jest.fn();
-const closeModal = jest.fn();
+const onCloseModal = jest.fn();
 const username = 'rick, psych';
 const userId = '74d6a937-c17d-4045-b294-ab7458988a33';
+
+const fakeStripes = {
+  okapi: {
+    url: '',
+    tenant: 'diku',
+  },
+  store: {
+    getState: () => ({
+      okapi: {
+        token: 'abc',
+      },
+    }),
+    dispatch: () => {},
+    subscribe: () => {},
+    replaceReducer: () => {},
+  },
+};
 
 const renderDeleteUserModal = () => {
   return act(() => {
     render(
-      <DeleteUserModal
-        username={username}
-        userId={userId}
-        deleteUser={deleteUser}
-        onCloseModal={closeModal}
-      />
+      <StripesContext.Provider value={fakeStripes}>
+        <MemoryRouter>
+          <DeleteUserModal
+            username={username}
+            userId={userId}
+            deleteUser={jest.fn()}
+            onCloseModal={jest.fn()}
+          />
+        </MemoryRouter>
+      </StripesContext.Provider>
     );
   });
 };
@@ -29,6 +52,10 @@ describe('render DeleteUserModal', () => {
   });
   test('DeleteUserModal should be present', async () => {
     expect(document.querySelector('#delete-user-modal')).toBeInTheDocument();
+    const heading = screen.queryByRole('heading', {
+      name: 'ui-users.details.checkDelete',
+    });
+    expect(heading).toBeVisible();
   });
   test('OpenTransactionsModal should not be present', async () => {
     expect(document.querySelector('#open-transactions-modal')).not.toBeInTheDocument();
@@ -37,19 +64,21 @@ describe('render DeleteUserModal', () => {
     expect(screen.getByRole('button', { name: 'ui-users.no' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'ui-users.yes' })).toBeInTheDocument();
   });
-  // it('should display name', () => {
-  //   expect(screen.getByLabelText('Are you sure you want to delete this user rick, psych?')).toBeInTheDocument();
-  // });
-  // test('click ok', async () => {
-  //   const heading = screen.queryByRole('heading', {
-  //     name: 'ui-users.details.checkDelete',
-  //   });
-  //   expect(heading).toBeVisible();
+});
 
-  //   const cancel = screen.getByRole('button', {
-  //     name: 'OK',
-  //   });
-  //   userEvent.click(cancel);
-  //   await waitFor(() => expect(heading).not.toBeVisible());
-  // });
+describe('click buttons', () => {
+  beforeEach(() => {
+    renderDeleteUserModal({ deleteUser, onCloseModal });
+  });
+
+  it('should call deleteUser', () => {
+    userEvent.click(screen.getByRole('button', { name: 'ui-users.yes' }));
+    // TODO: expected result:
+    expect(deleteUser).toHaveBeenCalled();
+  });
+  test('should call onCloseModal', async () => {
+    userEvent.click(screen.getByRole('button', { name: 'ui-users.no' }));
+    // TODO: expected result:
+    await waitFor(() => expect(onCloseModal).toBeCalled());
+  });
 });
