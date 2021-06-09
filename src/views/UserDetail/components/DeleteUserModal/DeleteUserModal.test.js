@@ -37,8 +37,8 @@ const renderDeleteUserModal = () => {
           <DeleteUserModal
             username={username}
             userId={userId}
-            deleteUser={jest.fn()}
-            onCloseModal={jest.fn()}
+            deleteUser={deleteUser}
+            onCloseModal={onCloseModal}
           />
         </MemoryRouter>
       </StripesContext.Provider>
@@ -73,12 +73,10 @@ describe('click buttons', () => {
 
   it('should call deleteUser', () => {
     userEvent.click(screen.getByRole('button', { name: 'ui-users.yes' }));
-    // TODO: expected result:
     expect(deleteUser).toHaveBeenCalled();
   });
   test('should call onCloseModal', async () => {
     userEvent.click(screen.getByRole('button', { name: 'ui-users.no' }));
-    // TODO: expected result:
-    await waitFor(() => expect(onCloseModal).toBeCalled());
+    await waitFor(() => expect(onCloseModal).toHaveBeenCalled());
   });
 });
