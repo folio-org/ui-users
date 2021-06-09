@@ -1,5 +1,5 @@
 import React from 'react';
-import { act, render } from '@testing-library/react'; // screen
+import { act, render, screen } from '@testing-library/react';
 // import { MemoryRouter } from 'react-router-dom';
 // import { useStripes } from '@folio/stripes/core';
 import '../../../../../test/jest/__mock__';
@@ -52,14 +52,6 @@ const renderOpenTransactionModal = () => {
         onCloseModal={onCloseModal}
         open
       />
-      // <MemoryRouter>
-      //   <OpenTransactionModal
-      //     username={username}
-      //     openTransactions={openTransactions}
-      //     onCloseModal={onCloseModal}
-      //     open
-      //   />
-      // </MemoryRouter>
     );
   });
 };
@@ -80,6 +72,9 @@ describe('render OpenTransactionModal', () => {
     });
     test('OpenTransactionsModal should be present', async () => {
       expect(document.querySelector('#open-transactions-modal')).toBeInTheDocument();
+    });
+    test('Button should be present', () => {
+      expect(screen.getByRole('button', { name: 'ui-users.okay' })).toBeInTheDocument();
     });
     // test('xxx button should be present', async () => {
     //   expect(document.querySelector('#close-open-transactions-button')).toBeInTheDocument();

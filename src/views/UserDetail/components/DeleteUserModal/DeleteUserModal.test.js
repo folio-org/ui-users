@@ -1,5 +1,5 @@
 import React from 'react';
-import { act, render } from '@testing-library/react'; // screen, waitFor
+import { act, render, screen } from '@testing-library/react'; // screen, waitFor
 // import userEvent from '@testing-library/user-event';
 
 import '../../../../../test/jest/__mock__';
@@ -33,10 +33,10 @@ describe('render DeleteUserModal', () => {
   test('OpenTransactionsModal should not be present', async () => {
     expect(document.querySelector('#open-transactions-modal')).not.toBeInTheDocument();
   });
-  // test('Delete button should be present', async () => {
-  //   // expect(document.querySelector('#close-delete-user-button')).toBeInTheDocument();
-  //   expect(document.querySelector('ui-users.details.checkDelete')).toBeInTheDocument();
-  // });
+  test('Buttons should be present', () => {
+    expect(screen.getByRole('button', { name: 'ui-users.no' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'ui-users.yes' })).toBeInTheDocument();
+  });
   // it('should display name', () => {
   //   expect(screen.getByLabelText('Are you sure you want to delete this user rick, psych?')).toBeInTheDocument();
   // });
