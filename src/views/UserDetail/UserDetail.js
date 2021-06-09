@@ -378,7 +378,6 @@ class UserDetail extends React.Component {
     })
       .then((response) => {
         if (response.status < 400) {
-          // show success
           response.json().then((json) => {
             this.selectModal(json);
           });
@@ -450,14 +449,6 @@ class UserDetail extends React.Component {
             />
           </IfInterface>
           <IfPermission perm="ui-users.delete,ui-users.opentransactions">
-            {/* <CheckDeleteUserModal
-              onToggle={onToggle}
-              username={getFullName(user)}
-              userId={this.props.match.params.id}
-              stripes={this.props.stripes}
-              history={this.props.history}
-              deleteUser={this.handleDeleteUser}
-            /> */}
             <Button
               buttonStyle="dropdownItem"
               data-test-actions-menu-check-delete
