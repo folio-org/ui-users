@@ -315,18 +315,6 @@ class UserSearch extends React.Component {
               </Icon>
             </Button>
           </IfPermission>
-          <Button
-            buttonStyle="dropdownItem"
-            id="export-refunds-report"
-            onClick={() => {
-              onToggle();
-              this.changeRefundReportModalState(true);
-            }}
-          >
-            <Icon icon="download">
-              <FormattedMessage id="ui-users.reports.refunds.label" />
-            </Icon>
-          </Button>
         </MenuSection>
         <MenuSection label={intl.formatMessage({ id: 'ui-users.showColumns' })} id="columns-menu-section">
           {TOGGLEABLE_COLUMNS.map(key => (
