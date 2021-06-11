@@ -352,7 +352,7 @@ class UserDetail extends React.Component {
     });
   }
 
-  doClose = () => {
+  doCloseTransactionDeleteModal = () => {
     this.setState({
       showDeleteUserModal: false,
       showOpenTransactionModal: false,
@@ -367,7 +367,7 @@ class UserDetail extends React.Component {
     }
   }
 
-  doFetch() {
+  doFetchOpenTransactions() {
     const { stripes } = this.props;
     const okapiUrl = stripes.okapi.url;
     const userId = this.props.match.params.id;
@@ -454,7 +454,7 @@ class UserDetail extends React.Component {
               data-test-actions-menu-check-delete
               id="clickable-checkdeleteuser"
               onClick={() => {
-                this.doFetch();
+                this.doFetchOpenTransactions();
                 onToggle();
               }}
             >
@@ -524,7 +524,7 @@ class UserDetail extends React.Component {
 
     const user = this.getUser();
     const username = getFullName(user);
-    const userId = this.props.match.params.id;
+    const userId = match.params.id;
 
     const addressTypes = (resources.addressTypes || {}).records || [];
     const addresses = getFormAddressList(get(user, 'personal.addresses', []));
@@ -791,7 +791,7 @@ class UserDetail extends React.Component {
             />
             {this.state.showDeleteUserModal &&
             <DeleteUserModal
-              onCloseModal={this.doClose}
+              onCloseModal={this.doCloseTransactionDeleteModal}
               username={username}
               userId={userId}
               deleteUser={this.handleDeleteUser}
@@ -799,7 +799,7 @@ class UserDetail extends React.Component {
             }
             {this.state.showOpenTransactionModal &&
             <OpenTransactionModal
-              onCloseModal={this.doClose}
+              onCloseModal={this.doCloseTransactionDeleteModal}
               openTransactions={this.state.openTransactions}
               username={username}
             />
