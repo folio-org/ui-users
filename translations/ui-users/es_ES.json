@@ -394,7 +394,7 @@
     "accounts.actions.calloutMessage": "La {feeFineType} tarifa/multa de {amount} ha sido {paymentStatus} con éxito para {name}.",
     "accounts.actions.payFeeFine": "Pagar tarifa/multa",
     "accounts.actions.waiveFeeFine": "Renunciar tarifa/multa",
-    "accounts.actions.warning.summary": "{selectedItemsAmount} elementos seleccionados. {closedItemsAmount} no pueden ser {action} porque ya están cerrados",
+    "accounts.actions.warning.summary": "{selectedItemsAmount} items selected. {invalidItemsAmount} items cannot be {action} because they {reason}.",
     "accounts.actions.warning.alertDetails": "Detalles de la alerta",
     "accounts.actions.warning.feeFineType": "Tipo de tarifa/multa",
     "accounts.actions.warning.remaining": "Pendiente",

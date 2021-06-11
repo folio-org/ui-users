@@ -394,7 +394,7 @@
     "accounts.actions.calloutMessage": "The {feeFineType} fee/fine of {amount} has been successfully {paymentStatus} for {name}.",
     "accounts.actions.payFeeFine": "Pay fees/fines",
     "accounts.actions.waiveFeeFine": "Waive fees/fines",
-    "accounts.actions.warning.summary": "{selectedItemsAmount} itens selecionados. {closedItemsAmount} itens não podem ser {action} porque já estão fechados",
+    "accounts.actions.warning.summary": "{selectedItemsAmount} items selected. {invalidItemsAmount} items cannot be {action} because they {reason}.",
     "accounts.actions.warning.alertDetails": "Alert details",
     "accounts.actions.warning.feeFineType": "Fee/Fine type",
     "accounts.actions.warning.remaining": "Remainig",
