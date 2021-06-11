@@ -394,7 +394,7 @@
     "accounts.actions.calloutMessage": "{feeFineType} оплата в размере {amount} была успешно {paymentStatus} совершена для {name}",
     "accounts.actions.payFeeFine": "Оплатить",
     "accounts.actions.waiveFeeFine": "Отказаться от оплаты",
-    "accounts.actions.warning.summary": "{selectedItemsAmount} сборов/штрафов выбрано. Отмените выбор оплаченных сборов/штрафов, чтобы продолжить.",
+    "accounts.actions.warning.summary": "{selectedItemsAmount} items selected. {invalidItemsAmount} items cannot be {action} because they {reason}.",
     "accounts.actions.warning.alertDetails": "Подробности оповещения",
     "accounts.actions.warning.feeFineType": "Тип оплаты",
     "accounts.actions.warning.remaining": "Осталось",
