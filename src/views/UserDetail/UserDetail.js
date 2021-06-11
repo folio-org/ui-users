@@ -77,11 +77,6 @@ class UserDetail extends React.Component {
       logger: PropTypes.shape({
         log: PropTypes.func.isRequired,
       }).isRequired,
-      okapi: PropTypes.shape({
-        url: PropTypes.string.isRequired,
-        tenant: PropTypes.string.isRequired,
-      }).isRequired,
-      store: PropTypes.object.isRequired,
     }).isRequired,
     resources: PropTypes.shape({
       selUser: PropTypes.object,
@@ -142,12 +137,6 @@ class UserDetail extends React.Component {
 
   constructor(props) {
     super(props);
-
-    this.httpHeaders = {
-      'X-Okapi-Tenant': props.stripes.okapi.tenant,
-      'X-Okapi-Token': props.stripes.store.getState().okapi.token,
-      'Content-Type': 'application/json'
-    };
 
     this.editButton = React.createRef();
 
