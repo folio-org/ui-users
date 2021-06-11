@@ -86,6 +86,7 @@ class UserDetail extends React.Component {
     resources: PropTypes.shape({
       selUser: PropTypes.object,
       delUser: PropTypes.object,
+      openTransactions: PropTypes.object,
       user: PropTypes.arrayOf(PropTypes.object),
       accounts: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
@@ -368,20 +369,12 @@ class UserDetail extends React.Component {
   }
 
   doFetchOpenTransactions() {
-    const { stripes } = this.props;
-    const okapiUrl = stripes.okapi.url;
+    const { mutator } = this.props;
     const userId = this.props.match.params.id;
 
-    fetch(`${okapiUrl}/bl-users/by-id/${userId}/open-transactions`, {
-      method: 'GET',
-      headers: this.httpHeaders,
-    })
+    mutator.openTransactions.GET({ userId })
       .then((response) => {
-        if (response.status < 400) {
-          response.json().then((json) => {
-            this.selectModal(json);
-          });
-        }
+        this.selectModal(response);
       });
   }
 
