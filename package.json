@@ -98,38 +98,18 @@
       {
         "permissionName": "ui-users.delete",
         "displayName": "Users: Can delete user profile",
-        "description": "Some subperms can be deleted later when bl does updates and ModulePermissions can be used",
+        "description": "Delete user when user does not have any open transactions",
         "subPermissions": [
-          "users-bl.item.delete",
-          "ui-users.view",
-          "users-bl.item.put",
-          "users.item.get",
-          "users.item.delete",
-          "circulation-storage.loans.collection.get",
-          "circulation-storage.requests.collection.get",
-          "accounts.collection.get",
-          "manualblocks.collection.get",
-          "proxiesfor.collection.get",
-          "tags.collection.get",
-          "tags.item.post"
+          "users-bl.item.delete"
         ],
         "visible": true
       },
       {
         "permissionName": "ui-users.opentransactions",
         "displayName": "Users: Can check open transactions",
-        "description": "",
+        "description": "Check if user does have any open transactions",
         "subPermissions": [
-          "users-bl.transactions.get",
-          "ui-users.view",
-          "users-bl.item.put",
-          "users.item.get",
-          "users.collection.get",
-          "circulation-storage.loans.collection.get",
-          "circulation-storage.requests.collection.get",
-          "accounts.collection.get",
-          "manualblocks.collection.get",
-          "proxiesfor.collection.get"
+          "users-bl.transactions.get"
         ],
         "visible": true
       },
