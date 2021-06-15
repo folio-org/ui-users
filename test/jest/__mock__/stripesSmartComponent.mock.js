@@ -6,5 +6,7 @@ jest.mock('@folio/stripes/smart-components', () => ({
   NotesSmartAccordion: () => <div>NotesSmartAccordion</div>,
   ViewMetaData: () => <div>ViewMetaData</div>,
   AddressEditList: () => <div>AddressEditList</div>,
+  NotePopupModal: () => <div>NotePopupModal</div>,
+  ViewCustomFieldsRecord: () => <div>ViewCustomFieldsRecord</div>
 }),
 { virtual: true });
