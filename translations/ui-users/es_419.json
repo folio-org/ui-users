@@ -910,5 +910,5 @@
     "settings.transferCriteria": "Transfer criteria",
     "settings.transferCriteria.notAvailable": "No plugin available!",
     "details.label.loanAnonymized": "Anonymized",
-    "accounts.history.button.loanAnonymized": "Loan details (anonymized)"
+    "accounts.history.button.loanAnonymized": "Detalles del préstamo (anonimizados)"
 }
