@@ -14,6 +14,43 @@ jest.mock('@folio/stripes/components', () => ({
     </button>
   )),
   Col: jest.fn(({ children }) => <div className="col">{ children }</div>),
+  // CurrencySelect: jest.fn(({ children, dataOptions }) => (
+  //   <div>
+  //     <select>
+  //       {dataOptions.forEach((option, i) => (
+  //         <option
+  //           value={option.value}
+  //           key={option.id || `option-${i}`}
+  //         >
+  //           {option.label}
+  //         </option>))}
+  //     </select>
+  //     {children}
+  //   </div>
+  // )),
+  ExpandAllButton: jest.fn(({ children, ...rest }) => (
+    <span {...rest}>{children}</span>
+  )),
+  AccordionSet: jest.fn(({ children, ...rest }) => (
+    <span {...rest}>{children}</span>
+  )),
+  Accordion: jest.fn(({ children, ...rest }) => (
+    <span {...rest}>{children}</span>
+  )),
+  Callout: jest.fn(({ children, ...rest }) => (
+    <span {...rest}>{children}</span>
+  )),
+  HasCommand: jest.fn(({ children, ...rest }) => (
+    <span {...rest}>{children}</span>
+  )),
+  KeyValue: jest.fn(({ label, children, value }) => (
+    <>
+      <span>{label}</span>
+      <span>{value || children}</span>
+    </>
+  )),
+  NoValue: jest.fn(({ ariaLabel }) => (<span>{ariaLabel}</span>)),
+  Loading: () => <div>Loading</div>,
   Datepicker: jest.fn(({ ref, children, ...rest }) => (
     <div ref={ref} {...rest}>
       {children}
