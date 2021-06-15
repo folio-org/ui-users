@@ -21,7 +21,7 @@ import appIcon from '../../../../icons/app.png';
 class UserInfo extends React.Component {
   static propTypes = {
     expanded: PropTypes.bool,
-    // stripes: PropTypes.object.isRequired,
+    stripes: PropTypes.object.isRequired,
     onToggle: PropTypes.func,
     accordionId: PropTypes.string.isRequired,
     user: PropTypes.object.isRequired,
@@ -29,11 +29,11 @@ class UserInfo extends React.Component {
     settings: PropTypes.arrayOf(PropTypes.object).isRequired,
   };
 
-  // constructor(props) {
-  //   super(props);
+  constructor(props) {
+    super(props);
 
-  //   this.cViewMetaData = props.stripes.connect(ViewMetaData);
-  // }
+    this.cViewMetaData = props.stripes.connect(ViewMetaData);
+  }
 
   render() {
     const {
@@ -64,8 +64,8 @@ class UserInfo extends React.Component {
       >
         <Row>
           <Col xs={12}>
-            {/* <this.cViewMetaData metadata={user.metadata} /> */}
-            <ViewMetaData metadata={user.metadata} />
+            <this.cViewMetaData metadata={user.metadata} />
+            {/* <ViewMetaData metadata={user.metadata} /> */}
           </Col>
         </Row>
         <Row>

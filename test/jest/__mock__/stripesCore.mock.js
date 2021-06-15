@@ -1,30 +1,3 @@
-// import React from 'react';
-
-// const STRIPES = {};
-// jest.mock('@folio/stripes/core', () => ({
-//   AppIcon: jest.fn(({ ariaLabel }) => (<span>{ariaLabel}</span>)),
-//   TitleManager: jest.fn(({ children, ...rest }) => (
-//     <span {...rest}>{children}</span>
-//   )),
-//   IfInterface: jest.fn(({ name, children }) => {
-//     return name === 'interface' ? children : null;
-//   }),
-//   IfPermission: jest.fn(({ perm, children }) => {
-//     return perm === 'permission' ? children : null;
-//   }),
-//   Pluggable: jest.fn(({ children }) => [children]),
-//   stripesConnect: Component => props => <Component {...props} />,
-
-//   useStripes: () => STRIPES,
-//   // eslint-disable-next-line react/prop-types
-//   withStripes: Component => ({ stripes, ...rest }) => {
-//     const fakeStripes = stripes || STRIPES;
-
-//     return <Component {...rest} stripes={fakeStripes} />;
-//   },
-//   hasPerm: jest.fn(() => true),
-// }));
-
 import React from 'react';
 
 jest.mock('@folio/stripes/core', () => {
@@ -80,7 +53,13 @@ jest.mock('@folio/stripes/core', () => {
       return name === 'interface' ? children : null;
     }),
     IfPermission: jest.fn(({ perm, children }) => {
-      return perm === 'permission' ? children : null;
+      if (perm === 'permission') {
+        return children;
+      } else if (perm.startsWith('ui-users')) {
+        return children;
+      } else {
+        return null;
+      }
     }),
     Pluggable: jest.fn(({ children }) => [children]),
     stripesConnect: (Component) => (props) => <Component {...props} />,

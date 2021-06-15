@@ -184,15 +184,15 @@ describe('render UserDetail', () => {
       expect(document.querySelector('#pane-userdetails')).toBeInTheDocument();
     });
 
-    // test('should render action menu button', async () => {
-    //   renderUserDetail(stripes);
-    //   expect(screen.getByRole('button', { name: 'ui-users.actions' })).toBeVisible();
-    // });
+    test('should render action menu button', async () => {
+      renderUserDetail(stripes);
+      expect(screen.getByRole('button', { name: 'ui-users.details.checkDelete' })).toBeVisible();
+    });
 
     // describe('test action menu', () => {
     //   beforeEach(() => {
-    //     renderUserDetail();
-    //     userEvent.click(screen.getByRole('button', { name: 'ui-users.actions' }));
+    //     renderUserDetail(stripes);
+    //     userEvent.click(screen.getByRole('button', { name: 'ui-users.details.checkDelete' }));
     //   });
 
     //   test('should render action menu with checkdelete', async () => {

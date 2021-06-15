@@ -14,20 +14,6 @@ jest.mock('@folio/stripes/components', () => ({
     </button>
   )),
   Col: jest.fn(({ children }) => <div className="col">{ children }</div>),
-  // CurrencySelect: jest.fn(({ children, dataOptions }) => (
-  //   <div>
-  //     <select>
-  //       {dataOptions.forEach((option, i) => (
-  //         <option
-  //           value={option.value}
-  //           key={option.id || `option-${i}`}
-  //         >
-  //           {option.label}
-  //         </option>))}
-  //     </select>
-  //     {children}
-  //   </div>
-  // )),
   ExpandAllButton: jest.fn(({ children, ...rest }) => (
     <span {...rest}>{children}</span>
   )),
@@ -122,12 +108,13 @@ jest.mock('@folio/stripes/components', () => ({
   NavListSection: jest.fn(({ children, className, ...rest }) => (
     <div className={className} {...rest}>{children}</div>
   )),
-  Pane: jest.fn(({ children, className, defaultWidth, paneTitle, firstMenu, lastMenu, ...rest }) => {
+  Pane: jest.fn(({ children, className, defaultWidth, paneTitle, firstMenu, lastMenu, actionMenu, ...rest }) => {
     return (
       <div className={className} {...rest} style={{ width: defaultWidth }}>
         <div>
           {firstMenu ?? null}
           {paneTitle}
+          {actionMenu ? actionMenu(jest.fn()) : null}
           {lastMenu ?? null}
         </div>
         {children}
@@ -137,10 +124,11 @@ jest.mock('@folio/stripes/components', () => ({
   PaneFooter: jest.fn(({ ref, children, ...rest }) => (
     <div ref={ref} {...rest}>{children}</div>
   )),
-  PaneHeader: jest.fn(({ paneTitle, firstMenu, lastMenu }) => (
-    <div>
+  PaneHeader: jest.fn(({ paneTitle, firstMenu, lastMenu, actionMenu }) => (
+    <div actionMenu={actionMenu}>
       {firstMenu ?? null}
       {paneTitle}
+      {actionMenu ? actionMenu(jest.fn()) : null}
       {lastMenu ?? null}
     </div>
   )),
