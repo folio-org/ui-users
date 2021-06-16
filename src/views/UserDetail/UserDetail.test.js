@@ -1,6 +1,6 @@
 import React from 'react';
 // import { MemoryRouter } from 'react-router-dom';
-// import userEvent from '@testing-library/user-event';
+import userEvent from '@testing-library/user-event';
 import { render, screen } from '@testing-library/react'; // screen
 import { useStripes } from '@folio/stripes/core';
 import { StripesContext } from '@folio/stripes-core/src/StripesContext';
@@ -66,9 +66,15 @@ const resources = {
   uniquenessValidator: {},
 };
 
+// const onToggle = jest.fn;
+// const actionMenu = { onToggle: jest.fn() };
+const doFetchOpenTransactions = jest.fn(() => Promise.resolve());
 const mutator = {
   delUser: jest.fn,
-  openTransactions: jest.fn,
+  // openTransactions: jest.fn,
+  openTransactions: {
+    GET: doFetchOpenTransactions,
+  },
 };
 
 // const manualblocks = [
@@ -166,6 +172,7 @@ const renderUserDetail = (stripes) => {
         getUserServicePoints={getUserServicePoints}
         getPreferredServicePoint={getPreferredServicePoint}
         okapi={okapi}
+        // actionMenu={actionMenu}
       />
     </StripesContext.Provider>
   );
@@ -189,16 +196,17 @@ describe('render UserDetail', () => {
       expect(screen.getByRole('button', { name: 'ui-users.details.checkDelete' })).toBeVisible();
     });
 
-    // describe('test action menu', () => {
-    //   beforeEach(() => {
-    //     renderUserDetail(stripes);
-    //     userEvent.click(screen.getByRole('button', { name: 'ui-users.details.checkDelete' }));
-    //   });
+    describe('test action menu', () => {
+      beforeEach(() => {
+        renderUserDetail(stripes);
+        userEvent.click(screen.getByRole('button', { name: 'ui-users.details.checkDelete' }));
+      });
 
-    //   test('should render action menu with checkdelete', async () => {
-    //     expect(document.querySelector('#clickable-checkdeleteuser')).not.toBeInTheDocument();
-    //   });
-    // });
+      test('should render action menu with checkdelete', async () => {
+        // expect(document.querySelector('#clickable-checkdeleteuser')).not.toBeInTheDocument();
+        expect(doFetchOpenTransactions).toHaveBeenCalled();
+      });
+    });
   });
 
   // describe('render UserDetail with NO openTransactions', () => {
@@ -220,7 +228,8 @@ describe('render UserDetail', () => {
   //         }
   //       )
   //     );
-  //     renderUserDetail();
+  //     renderUserDetail(stripes);
+  //     await userEvent.click(screen.getByRole('button', { name: 'ui-users.details.checkDelete' }));
   //     expect(document.querySelector('#delete-user-modal')).toBeInTheDocument();
   //     expect(document.querySelector('#open-transactions-modal')).not.toBeInTheDocument();
   //   });
