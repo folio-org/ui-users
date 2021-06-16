@@ -1,6 +1,6 @@
 import React from 'react';
 // import { MemoryRouter } from 'react-router-dom';
-// import userEvent from '@testing-library/user-event';
+import userEvent from '@testing-library/user-event';
 import { render, screen } from '@testing-library/react'; // screen
 import { useStripes } from '@folio/stripes/core';
 import { StripesContext } from '@folio/stripes-core/src/StripesContext';
@@ -196,17 +196,17 @@ describe('render UserDetail', () => {
       expect(screen.getByRole('button', { name: 'ui-users.details.checkDelete' })).toBeVisible();
     });
 
-    // describe('test action menu', () => {
-    //   beforeEach(() => {
-    //     renderUserDetail(stripes);
-    //     userEvent.click(screen.getByRole('button', { name: 'ui-users.details.checkDelete' }));
-    //   });
+    describe('test action menu', () => {
+      beforeEach(() => {
+        renderUserDetail(stripes);
+        userEvent.click(screen.getByRole('button', { name: 'ui-users.details.checkDelete' }));
+      });
 
-    //   test('should render action menu with checkdelete', async () => {
-    //     // expect(document.querySelector('#clickable-checkdeleteuser')).not.toBeInTheDocument();
-    //     expect(doFetchOpenTransactions).toHaveBeenCalled();
-    //   });
-    // });
+      test('should render action menu with checkdelete', async () => {
+        // expect(document.querySelector('#clickable-checkdeleteuser')).not.toBeInTheDocument();
+        expect(doFetchOpenTransactions).toHaveBeenCalled();
+      });
+    });
   });
 
   // describe('render UserDetail with NO openTransactions', () => {

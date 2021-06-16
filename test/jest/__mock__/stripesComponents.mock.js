@@ -114,10 +114,7 @@ jest.mock('@folio/stripes/components', () => ({
         <div>
           {firstMenu ?? null}
           {paneTitle}
-          {/* onToggle is missing: */}
-          {actionMenu ? actionMenu(jest.fn()) : null}
-          {/* buttons will not rendered: */}
-          {/* {actionMenu ? (onToggle = jest.fn) => (actionMenu(jest.fn(), onToggle)) : null} */}
+          {actionMenu ? actionMenu({ onToggle: jest.fn() }) : null}
           {lastMenu ?? null}
         </div>
         {children}
@@ -131,8 +128,7 @@ jest.mock('@folio/stripes/components', () => ({
     <div actionMenu={actionMenu}>
       {firstMenu ?? null}
       {paneTitle}
-      {actionMenu ? actionMenu(jest.fn()) : null}
-      {/* {actionMenu ? (onToggle = jest.fn) => (actionMenu(jest.fn(), onToggle)) : null} */}
+      {actionMenu ? actionMenu({ onToggle: jest.fn() }) : null}
       {lastMenu ?? null}
     </div>
   )),
