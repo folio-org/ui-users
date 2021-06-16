@@ -436,8 +436,8 @@ class UserDetail extends React.Component {
               data-test-actions-menu-check-delete
               id="clickable-checkdeleteuser"
               onClick={() => {
-                this.doFetchOpenTransactions(onToggle);
-                // onToggle();
+                this.doFetchOpenTransactions();
+                onToggle();
               }}
             >
               <Icon icon="trash">

@@ -108,17 +108,16 @@ jest.mock('@folio/stripes/components', () => ({
   NavListSection: jest.fn(({ children, className, ...rest }) => (
     <div className={className} {...rest}>{children}</div>
   )),
-  Pane: jest.fn(({ children, className, defaultWidth, paneTitle, firstMenu, lastMenu, actionMenu, onToggle, ...rest }) => {
+  Pane: jest.fn(({ children, className, defaultWidth, paneTitle, firstMenu, lastMenu, actionMenu, ...rest }) => {
     return (
       <div className={className} {...rest} style={{ width: defaultWidth }}>
         <div>
           {firstMenu ?? null}
           {paneTitle}
           {/* onToggle is missing: */}
-          {/* {actionMenu ? actionMenu(jest.fn()) : null} */}
+          {actionMenu ? actionMenu(jest.fn()) : null}
           {/* buttons will not rendered: */}
           {/* {actionMenu ? (onToggle = jest.fn) => (actionMenu(jest.fn(), onToggle)) : null} */}
-          {actionMenu ? actionMenu(jest.fn(), onToggle) : null}
           {lastMenu ?? null}
         </div>
         {children}
@@ -128,13 +127,12 @@ jest.mock('@folio/stripes/components', () => ({
   PaneFooter: jest.fn(({ ref, children, ...rest }) => (
     <div ref={ref} {...rest}>{children}</div>
   )),
-  PaneHeader: jest.fn(({ paneTitle, firstMenu, lastMenu, actionMenu, onToggle }) => (
+  PaneHeader: jest.fn(({ paneTitle, firstMenu, lastMenu, actionMenu }) => (
     <div actionMenu={actionMenu}>
       {firstMenu ?? null}
       {paneTitle}
-      {/* {actionMenu ? actionMenu(jest.fn()) : null} */}
+      {actionMenu ? actionMenu(jest.fn()) : null}
       {/* {actionMenu ? (onToggle = jest.fn) => (actionMenu(jest.fn(), onToggle)) : null} */}
-      {actionMenu ? actionMenu(jest.fn(), onToggle) : null}
       {lastMenu ?? null}
     </div>
   )),
