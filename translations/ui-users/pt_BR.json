@@ -903,7 +903,7 @@
     "reports.cash.typeTotal": "Totais de tipos de taxa/multa",
     "reports.cash.ownerTotal": "Total de donos de taxas/multas",
     "reports.cash.paymentTotal": "Totais do método de pagamento",
-    "loans.details.accounts.suspended": "{quantidade} suspenso",
+    "loans.details.accounts.suspended": "{amount} suspenso",
     "accounts.suspended": "Suspenso",
     "accounts.numClaimAccounts": "{count, number} {count, plural, one { suspensão da reivindicação de taxa/multa } other { suspensão da reivindicação de taxas/multas }}",
     "accounts.numRefundedAccounts": "{count, number} {count, plural, one {taxa/multa reembolsada} other {taxas/multas reembolsadas}}",
