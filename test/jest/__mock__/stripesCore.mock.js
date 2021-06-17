@@ -2,8 +2,6 @@ import React from 'react';
 
 jest.mock('@folio/stripes/core', () => {
   const STRIPES = {
-    actionNames: [],
-    clone: () => ({ ...STRIPES }),
     connect: (Component) => Component,
     config: {},
     currency: 'USD',
@@ -17,13 +15,6 @@ jest.mock('@folio/stripes/core', () => {
       tenant: 'diku',
       url: 'https://folio-testing-okapi.dev.folio.org',
     },
-    plugins: {},
-    setBindings: () => {},
-    setCurrency: () => {},
-    setLocale: () => {},
-    setSinglePlugin: () => {},
-    setTimezone: () => {},
-    setToken: () => {},
     store: {
       getState: () => ({
         okapi: {

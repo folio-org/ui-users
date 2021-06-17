@@ -1,10 +1,8 @@
 import React from 'react';
-// import { MemoryRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
-import { render, screen } from '@testing-library/react'; // screen
+import { render, screen } from '@testing-library/react';
 import { useStripes } from '@folio/stripes/core';
 import { StripesContext } from '@folio/stripes-core/src/StripesContext';
-// import { server, rest } from '../../../test/jest/testServer';
 import '../../../test/jest/__mock__';
 import UserDetail from './UserDetail';
 
@@ -66,36 +64,13 @@ const resources = {
   uniquenessValidator: {},
 };
 
-// const onToggle = jest.fn;
-// const actionMenu = { onToggle: jest.fn() };
 const doFetchOpenTransactions = jest.fn(() => Promise.resolve());
 const mutator = {
   delUser: jest.fn,
-  // openTransactions: jest.fn,
   openTransactions: {
     GET: doFetchOpenTransactions,
   },
 };
-
-// const manualblocks = [
-//   {
-//     'type' : 'Manual',
-//     'desc' : 'desc',
-//     'staffInformation' : 'info',
-//     'patronMessage' : '',
-//     'borrowing' : true,
-//     'renewals' : true,
-//     'requests' : true,
-//     'userId' : '84954cee-c6f9-4478-8ebd-80f04bc8571d',
-//     'metadata' : {
-//       'createdDate' : '2021-06-02T06:51:30.194+00:00',
-//       'createdByUserId' : 'd88b5896-fcd2-5a3b-bc63-7749a913b786',
-//       'updatedDate' : '2021-06-02T06:51:30.194+00:00',
-//       'updatedByUserId' : 'd88b5896-fcd2-5a3b-bc63-7749a913b786'
-//     },
-//     'id' : 'f1f7018c-5301-450c-9edd-8514aa6f2604'
-//   },
-// ];
 
 jest.mock(
   '@folio/stripes-components/util/currencies.js',
@@ -110,20 +85,6 @@ jest.mock(
     return () => <span>AppIcon</span>;
   }
 );
-
-// jest.mock(
-//   '@folio/stripes-core/src/components/AppIcon/AppIcon.js',
-//   () => {
-//     return () => <span>AppIcon</span>;
-//   }
-// );
-
-// jest.mock(
-//   '../../components/UserDetailSections/ViewCustomFieldsRecord',
-//   () => {
-//     return () => <span>ViewCustomFieldsRecord</span>;
-//   }
-// );
 
 const match = {
   isExact: false,
@@ -172,13 +133,12 @@ const renderUserDetail = (stripes) => {
         getUserServicePoints={getUserServicePoints}
         getPreferredServicePoint={getPreferredServicePoint}
         okapi={okapi}
-        // actionMenu={actionMenu}
       />
     </StripesContext.Provider>
   );
 };
 
-describe('render UserDetail', () => {
+describe('UserDetail', () => {
   let stripes;
 
   beforeEach(() => {
@@ -186,52 +146,25 @@ describe('render UserDetail', () => {
   });
 
   describe('render UserDetail', () => {
-    test('UserDetail should be present', async () => {
+    test('UserDetail pane should be present', async () => {
       renderUserDetail(stripes);
       expect(document.querySelector('#pane-userdetails')).toBeInTheDocument();
     });
 
-    test('should render action menu button', async () => {
+    test('should render checkDelete button in action menu ', async () => {
       renderUserDetail(stripes);
       expect(screen.getByRole('button', { name: 'ui-users.details.checkDelete' })).toBeVisible();
     });
 
-    describe('test action menu', () => {
+    describe('click checkDelete button', () => {
       beforeEach(() => {
         renderUserDetail(stripes);
         userEvent.click(screen.getByRole('button', { name: 'ui-users.details.checkDelete' }));
       });
 
-      test('should render action menu with checkdelete', async () => {
-        // expect(document.querySelector('#clickable-checkdeleteuser')).not.toBeInTheDocument();
+      test('should call doFetchOpenTransactions', async () => {
         expect(doFetchOpenTransactions).toHaveBeenCalled();
       });
     });
   });
-
-  // describe('render UserDetail with NO openTransactions', () => {
-  //   test('check opent transactions', async () => {
-  //     server.use(
-  //       rest.get(
-  //         // hasNoOpenTransactions
-  //         'https://folio-testing-okapi.dev.folio.org/bl-users/by-id/84954cee-c6f9-4478-8ebd-80f04bc8571d/open-transactions',
-  //         (req, res, ctx) => {
-  //           return res(ctx.status(200), ctx.body({
-  //             'userId' : '84954cee-c6f9-4478-8ebd-80f04bc8571d',
-  //             'hasOpenTransactions' : false,
-  //             'loans' : 0,
-  //             'requests' : 0,
-  //             'feesFines' : 0,
-  //             'proxies' : 0,
-  //             'blocks' : 0
-  //           }));
-  //         }
-  //       )
-  //     );
-  //     renderUserDetail(stripes);
-  //     await userEvent.click(screen.getByRole('button', { name: 'ui-users.details.checkDelete' }));
-  //     expect(document.querySelector('#delete-user-modal')).toBeInTheDocument();
-  //     expect(document.querySelector('#open-transactions-modal')).not.toBeInTheDocument();
-  //   });
-  // });
 });

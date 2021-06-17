@@ -65,7 +65,6 @@ class UserInfo extends React.Component {
         <Row>
           <Col xs={12}>
             <this.cViewMetaData metadata={user.metadata} />
-            {/* <ViewMetaData metadata={user.metadata} /> */}
           </Col>
         </Row>
         <Row>
