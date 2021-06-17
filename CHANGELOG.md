@@ -1,5 +1,10 @@
 # Change history for ui-users
 
+## [6.0.6](https://github.com/folio-org/ui-users/tree/v6.0.6) (2021-06-17)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.5...v6.0.6)
+
+Restore missing "Claimed returned" report button. Refs UIU-2188.
+
 ## [6.0.5](https://github.com/folio-org/ui-users/tree/v6.0.5) (2021-04-29)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.4...v6.0.5)
 
