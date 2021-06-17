@@ -807,7 +807,8 @@
     "lint": "eslint .",
     "test": "yarn run test:jest",
     "test:bigtest": "stripes test karma",
-    "test:jest": "jest"
+    "test:jest": "jest",
+    "formatjs-compile": "formatjs compile-folder --ast --format simple ./translations/ui-users ./translations/users/compiled"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.13.0",
